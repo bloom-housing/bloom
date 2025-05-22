@@ -6,7 +6,7 @@ import { ListingBrowseDeprecated } from "../components/browse/ListingBrowseDepre
 import {
   decodeQueryToFilterData,
   encodeFilterDataToBackendFilters,
-  getFilterQueryFromURL,
+  isFiltered,
 } from "../components/listing/FilterDrawerHelper"
 import { useRouter } from "next/router"
 
@@ -50,8 +50,9 @@ export default function ListingsPage(props: ListingsProps) {
 export async function getServerSideProps(context: { req: any; query: any }) {
   let openListings
   let closedListings
-  if (context.req.url.includes("filters")) {
-    const filterData = decodeQueryToFilterData(getFilterQueryFromURL(context.req.url))
+
+  if (isFiltered(context.query)) {
+    const filterData = decodeQueryToFilterData(context.query)
     const filters = encodeFilterDataToBackendFilters(filterData)
     openListings = await fetchOpenListings(context.req, Number(context.query.page) || 1, filters)
   } else {

@@ -1,4 +1,3 @@
-import qs from "qs"
 import {
   EnumListingFilterParamsComparison,
   FilterAvailabilityEnum,
@@ -14,6 +13,7 @@ import { UseFormMethods } from "react-hook-form"
 import { Grid } from "@bloom-housing/ui-seeds"
 import { Field, t } from "@bloom-housing/ui-components"
 import { isTrue } from "../../lib/helpers"
+import { encode, ParsedUrlQuery } from "querystring"
 
 export interface FilterData {
   availability?: Record<FilterAvailabilityEnum, boolean | "true" | "false">
@@ -169,9 +169,10 @@ export const RentSection = (props: RentSectionProps) => (
 )
 
 // built to support filtering by url decoding and filtering by state directly from form data
-export const encodeFilterDataToBackendFilters = (data: FilterData): ListingFilterParams[] => {
+export const encodeFilterDataToBackendFilters = (data: FilterData = {}): ListingFilterParams[] => {
   const filters: ListingFilterParams[] = []
   Object.entries(data).forEach(([filterType, userSelections]) => {
+    // individual filters not yet implemented
     if (indvidualFilters.includes(ListingFilterKeys[filterType])) {
       Object.entries(userSelections).forEach((field) => {
         if (field[1]) {
@@ -231,23 +232,59 @@ export const encodeFilterDataToBackendFilters = (data: FilterData): ListingFilte
   return filters
 }
 
-export const getFilterQueryFromURL = (url = ""): string => {
-  let filterQuery = ""
-  // clean up next's context.req.url encoding that is unhelpful for our pattern
-  const cleanedUrl = url.replace("%3A", ":")
-  if (cleanedUrl.includes("filters:")) {
-    filterQuery = cleanedUrl.slice(cleanedUrl.indexOf("filters:") + "filters:".length)
-  }
-  return filterQuery
+export const isFiltered = (contextQuery: ParsedUrlQuery) => {
+  return Object.keys(contextQuery).some((param) => Object.keys(ListingFilterKeys).includes(param))
+}
+
+export const getFilterQueryFromURL = (url: ParsedUrlQuery) => {
+  delete url["page"]
+  return encode(url)
 }
 
 export const encodeFilterDataToQuery = (data: FilterData): string => {
+  const queryArr = []
   const cleanedFilterData = removeUnselectedFilterData(data)
-  return qs.stringify(cleanedFilterData)
+  Object.entries(cleanedFilterData).forEach(([filterType, userSelections]) => {
+    if (arrayFilters.includes(ListingFilterKeys[filterType])) {
+      const arrParam = `${ListingFilterKeys[filterType]}=${Object.keys(userSelections).join(",")}`
+      queryArr.push(arrParam)
+    } else if (booleanFilters.includes(ListingFilterKeys[filterType])) {
+      const booleanParam = `${ListingFilterKeys[filterType]}=true`
+      queryArr.push(booleanParam)
+    } else if (
+      (filterType === ListingFilterKeys.monthlyRent && userSelections["minRent"]) ||
+      userSelections["maxRent"]
+    ) {
+      const rentParam = `${ListingFilterKeys[filterType]}=${Object.values(userSelections).join(
+        "-"
+      )}`
+      queryArr.push(rentParam)
+    }
+  })
+  return queryArr.join("&")
 }
 
-export const decodeQueryToFilterData = (queryString: string): FilterData => {
-  return qs.parse(queryString)
+export const decodeQueryToFilterData = (parsedQuery: ParsedUrlQuery): FilterData => {
+  const filterData = {}
+  Object.entries(parsedQuery).forEach(([filterType, userSelections]) => {
+    if (arrayFilters.includes(ListingFilterKeys[filterType])) {
+      typeof userSelections === "string" &&
+        userSelections.split(",").forEach((userSelection) => {
+          if (filterData[filterType]) {
+            filterData[filterType][userSelection] = true
+          } else {
+            filterData[filterType] = { [userSelection]: true }
+          }
+        })
+    } else if (booleanFilters.includes(ListingFilterKeys[filterType]) && isTrue(userSelections)) {
+      filterData[filterType] = true
+    } else if (filterType === ListingFilterKeys.monthlyRent && typeof userSelections === "string") {
+      //custom separator to avoid conflicts with higher values with commas
+      const rentArr = userSelections.split("-")
+      filterData[filterType] = { minRent: rentArr[0], maxRent: rentArr[1] }
+    }
+  })
+  return filterData
 }
 
 export const removeUnselectedFilterData = (data: FilterData): FilterData => {

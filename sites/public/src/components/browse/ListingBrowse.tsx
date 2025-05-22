@@ -62,7 +62,7 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
   const pageTitle = `${t("pageTitle.rent")} - ${t("nav.siteTitle")}`
   const metaDescription = t("pageDescription.welcome", { regionName: t("region.name") })
 
-  const filterQuery = getFilterQueryFromURL(router.asPath)
+  const filterQuery = getFilterQueryFromURL(router.query)
   const enableFiltering = isFeatureFlagOn(props.jurisdiction, "enableListingsFiltering")
 
   useEffect(() => {
@@ -82,9 +82,9 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
   }, [profile, props.listings, setFavoriteListingIds, userService])
 
   useEffect(() => {
-    const filterData = decodeQueryToFilterData(filterQuery)
+    const filterData = decodeQueryToFilterData(router.query)
     setFilterState(filterData)
-  }, [router.asPath, filterQuery])
+  }, [router.asPath, router.query])
 
   const saveFavoriteFn = (listingId: string) => {
     return (listingFavorited) => {
@@ -128,8 +128,8 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
     if (updatedFilterQuery != filterQuery) {
       setIsLoading(true)
       router.pathname.includes("listings-closed")
-        ? void router.push(`/listings-closed?filters:${updatedFilterQuery}`)
-        : void router.push(`/listings?filters:${updatedFilterQuery}`)
+        ? void router.push(`/listings-closed?${updatedFilterQuery}`)
+        : void router.push(`/listings?${updatedFilterQuery}`)
     }
   }
 
@@ -236,9 +236,9 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
                           props.paginationData.currentPage > 0 &&
                             router.push({
                               pathname: router.pathname,
-                              query: `page=${(props.paginationData.currentPage - 1).toString()}${
-                                filterQuery ? `&filters:${filterQuery}` : ""
-                              }`,
+                              query: `page=${(
+                                props.paginationData.currentPage - 1
+                              ).toString()}&${filterQuery}`,
                             })
                         }}
                         variant="primary-outlined"
@@ -261,9 +261,9 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
                           props.paginationData.currentPage < props.paginationData.totalPages &&
                             router.push({
                               pathname: router.pathname,
-                              query: `page=${(props.paginationData.currentPage + 1).toString()}${
-                                filterQuery ? `&filters:${filterQuery}` : ""
-                              }`,
+                              query: `page=${(
+                                props.paginationData.currentPage + 1
+                              ).toString()}&${filterQuery}`,
                             })
                         }}
                         variant="primary-outlined"

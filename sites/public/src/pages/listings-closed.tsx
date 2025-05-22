@@ -5,7 +5,7 @@ import { ListingsProps } from "./listings"
 import {
   decodeQueryToFilterData,
   encodeFilterDataToBackendFilters,
-  getFilterQueryFromURL,
+  isFiltered,
 } from "../components/listing/FilterDrawerHelper"
 import { useRouter } from "next/router"
 
@@ -26,8 +26,9 @@ export default function ListingsPageClosed(props: ListingsProps) {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function getServerSideProps(context: { req: any; query: any }) {
   let closedListings
-  if (context.req.url.includes("filters")) {
-    const filterData = decodeQueryToFilterData(getFilterQueryFromURL(context.req.url))
+
+  if (isFiltered(context.query)) {
+    const filterData = decodeQueryToFilterData(context.query)
     const filters = encodeFilterDataToBackendFilters(filterData)
     closedListings = await fetchClosedListings(
       context.req,
