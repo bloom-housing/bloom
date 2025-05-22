@@ -236,9 +236,9 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
                           props.paginationData.currentPage > 0 &&
                             router.push({
                               pathname: router.pathname,
-                              query: `page=${(
-                                props.paginationData.currentPage - 1
-                              ).toString()}&${filterQuery}`,
+                              query: `page=${(props.paginationData.currentPage - 1).toString()}${
+                                filterQuery ? `&${filterQuery}` : ""
+                              }`,
                             })
                         }}
                         variant="primary-outlined"
@@ -261,9 +261,9 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
                           props.paginationData.currentPage < props.paginationData.totalPages &&
                             router.push({
                               pathname: router.pathname,
-                              query: `page=${(
-                                props.paginationData.currentPage + 1
-                              ).toString()}&${filterQuery}`,
+                              query: `page=${(props.paginationData.currentPage + 1).toString()}${
+                                filterQuery ? `&${filterQuery}` : ""
+                              }`,
                             })
                         }}
                         variant="primary-outlined"
