@@ -1,6 +1,6 @@
 import { FormProvider, useForm } from "react-hook-form"
 import { useState } from "react"
-import { BloomCard, CustomIconMap } from "@bloom-housing/shared-helpers"
+import { BloomCard, CustomIconMap, listingFeatures } from "@bloom-housing/shared-helpers"
 import { RegionEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { ProgressNav, StepHeader, t } from "@bloom-housing/ui-components"
 import { Button, Heading, Icon } from "@bloom-housing/ui-seeds"
@@ -8,6 +8,7 @@ import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import FinderMultiselectQuestion from "./FinderMultiselectQuestion"
 import FinderRentQuestion from "./FinderRentQuestion"
 import styles from "./RentalsFinder.module.scss"
+import FinderDisclaimer from "./FinderDisclaimer"
 
 type FinderStep = {
   content: React.ReactNode
@@ -16,9 +17,17 @@ type FinderStep = {
 }
 
 type FinderSection = {
-  sectionTitle: string
+  sectionTitle?: string
   sectionSteps: FinderStep[]
 }
+
+const buildingTypes = [
+  'withDisabilities',
+  'senior55',
+  'senior62',
+  'homeless',
+  'veterans'
+]
 
 export default function RentalsFinder() {
   const [stepIndex, setStepIndex] = useState<number>(0)
@@ -75,11 +84,6 @@ export default function RentalsFinder() {
             />
           ),
         },
-      ],
-    },
-    {
-      sectionTitle: t("finder.rentSectionTitle"),
-      sectionSteps: [
         {
           question: t("finder.rent.question"),
           subtitle: t("finder.rent.subtitle"),
@@ -87,9 +91,53 @@ export default function RentalsFinder() {
         },
       ],
     },
+    {
+      sectionTitle: t("t.accessibility"),
+      sectionSteps: [{
+        question: t("finder.accessibility.question"),
+        subtitle: t("finder.accessibility.subtitle"),
+        content: (
+          <FinderMultiselectQuestion
+            legend={t("finder.multiselectLegend")}
+            fieldGroupName="accessibility"
+            options={listingFeatures.map((feature) => ({
+              label: t(`eligibility.accessibility.${feature}`),
+              value: feature,
+            }))}
+          />)
+      }],
+    },
+    {
+      sectionTitle: t("finder.buildingSectionTitle"),
+      sectionSteps: [{
+        question: t('finder.building.question'),
+        subtitle: t('finder.building.subtitle'),
+        content: (
+          <FinderMultiselectQuestion
+            legend={t('')}
+            fieldGroupName="communityType"
+            options={buildingTypes.map((type) => ({
+              label: t(`finder.building.${type}`),
+              value: type,
+            }))}
+          />
+        )
+      }]
+    },
+    {
+      sectionSteps: [{
+        question: t("finder.disclaimer.question"),
+        subtitle: t("finder.disclaimer.subtitle"),
+        content: <FinderDisclaimer />
+      }]
+    }
   ]
 
-  const sectionLabels = rentalFinderSections.map((section) => section.sectionTitle)
+  const sectionLabels = rentalFinderSections.filter(
+    (section) => !!section.sectionTitle
+  ).map(
+    (section) => section.sectionTitle
+  )
 
   const activeQuestion = rentalFinderSections[sectionIndex]?.sectionSteps[stepIndex]
   const isLastSection = sectionIndex === rentalFinderSections.length - 1
@@ -130,14 +178,14 @@ export default function RentalsFinder() {
             removeSrHeader
             mounted={true}
           />
-          <StepHeader
+          {sectionIndex <= sectionLabels.length - 1 && <StepHeader
             currentStep={sectionIndex + 1}
-            totalSteps={rentalFinderSections.length}
+            totalSteps={sectionLabels.length}
             stepPreposition={t("finder.progress.stepPreposition")}
             stepLabeling={sectionLabels}
             priority={2}
             className={styles["step-header"]}
-          />
+          />}
         </div>
         <BloomCard
           className={styles["questionnaire-card"]}
