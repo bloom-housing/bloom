@@ -8,6 +8,7 @@ import {
   ListingEventsTypeEnum,
   ListingsStatusEnum,
   MarketingTypeEnum,
+  MultiselectQuestionsApplicationSectionEnum,
   Prisma,
   RegionEnum,
   ReviewOrderTypeEnum,
@@ -562,10 +563,28 @@ describe('Listing Controller Tests', () => {
     let jurisdictionB;
     let jurisdictionC;
     let jurisdictionDWithUnitGroups;
+    let multiselectQuestionPreference;
+    let multiselectQuestionProgram;
 
     beforeAll(async () => {
       jurisdictionB = await prisma.jurisdictions.create({
         data: jurisdictionFactory(),
+      });
+      multiselectQuestionPreference = await prisma.multiselectQuestions.create({
+        data: multiselectQuestionFactory(jurisdictionB.id, {
+          multiselectQuestion: {
+            applicationSection:
+              MultiselectQuestionsApplicationSectionEnum.preferences,
+          },
+        }),
+      });
+      multiselectQuestionProgram = await prisma.multiselectQuestions.create({
+        data: multiselectQuestionFactory(jurisdictionB.id, {
+          multiselectQuestion: {
+            applicationSection:
+              MultiselectQuestionsApplicationSectionEnum.programs,
+          },
+        }),
       });
       const listing1Input = await listingFactory(jurisdictionB.id, prisma, {
         listing: {
@@ -575,6 +594,7 @@ describe('Listing Controller Tests', () => {
           region: RegionEnum.Eastside,
           section8Acceptance: false,
         } as Prisma.ListingsCreateInput,
+        multiselectQuestions: [multiselectQuestionPreference],
         optionalFeatures: {
           acInUnit: true,
         },
@@ -601,6 +621,7 @@ describe('Listing Controller Tests', () => {
           region: RegionEnum.Southwest,
           section8Acceptance: true,
         } as Prisma.ListingsCreateInput,
+        multiselectQuestions: [multiselectQuestionProgram],
         optionalFeatures: {
           acInUnit: false,
         },
@@ -1503,6 +1524,79 @@ describe('Listing Controller Tests', () => {
       expect(ids).toContain(listing4WithUnitGroups.id);
       expect(ids).toContain(listing5WithUnitGroups.id);
       expect(ids).toContain(listing6WithUnitGroups.id);
+    });
+    it('should return a listing based on filter multiselectQuestions', async () => {
+      const queryPrefence: ListingsQueryBody = {
+        page: 1,
+        view: ListingViews.base,
+        filter: [
+          {
+            $comparison: Compare.IN,
+            multiselectQuestions: [multiselectQuestionPreference.id],
+          },
+          {
+            $comparison: Compare['='],
+            jurisdiction: jurisdictionB.id,
+          },
+        ],
+      };
+
+      const queryProgram: ListingsQueryBody = {
+        page: 1,
+        view: ListingViews.base,
+        filter: [
+          {
+            $comparison: Compare.IN,
+            multiselectQuestions: [multiselectQuestionProgram.id],
+          },
+          {
+            $comparison: Compare['='],
+            jurisdiction: jurisdictionB.id,
+          },
+        ],
+      };
+
+      const resPreference = await request(app.getHttpServer())
+        .post(`/listings/list`)
+        .send(queryPrefence)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .expect(201);
+
+      expect(resPreference.body.meta).toEqual({
+        currentPage: 1,
+        itemCount: 1,
+        itemsPerPage: 10,
+        totalItems: 1,
+        totalPages: 1,
+      });
+
+      expect(resPreference.body.items.length).toBeGreaterThanOrEqual(1);
+
+      const foundId1 = resPreference.body.items.some(
+        (elem) => elem.id === listing1WithUnits.id,
+      );
+      expect(foundId1).toEqual(true);
+
+      const resProgram = await request(app.getHttpServer())
+        .post(`/listings/list`)
+        .send(queryProgram)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .expect(201);
+
+      expect(resProgram.body.meta).toEqual({
+        currentPage: 1,
+        itemCount: 1,
+        itemsPerPage: 10,
+        totalItems: 1,
+        totalPages: 1,
+      });
+
+      expect(resProgram.body.items.length).toBeGreaterThanOrEqual(1);
+
+      const foundId2 = resProgram.body.items.some(
+        (elem) => elem.id === listing2WithUnits.id,
+      );
+      expect(foundId2).toEqual(true);
     });
     it('should return a listing based on filter monthlyRent - units', async () => {
       const query: ListingsQueryBody = {

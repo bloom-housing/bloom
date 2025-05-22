@@ -2019,6 +2019,35 @@ describe('Testing listing service', () => {
       });
     });
 
+    it('should return a where clause for filter multiselectQuestions', () => {
+      const uuids = [randomUUID(), randomUUID()];
+      const filter = [
+        {
+          $comparison: 'IN',
+          multiselectQuestions: uuids,
+        } as ListingFilterParams,
+      ];
+      const whereClause = service.buildWhereClause(filter, '');
+
+      expect(whereClause).toStrictEqual({
+        AND: [
+          {
+            OR: [
+              {
+                listingMultiselectQuestions: {
+                  some: {
+                    multiselectQuestionId: {
+                      in: uuids,
+                    },
+                  },
+                },
+              },
+            ],
+          },
+        ],
+      });
+    });
+
     it('should return a where clause for filter name', () => {
       const name = 'listingName';
       const filter = [

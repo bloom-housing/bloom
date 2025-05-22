@@ -2825,6 +2825,9 @@ export interface ListingFilterParams {
   monthlyRent?: number
 
   /**  */
+  multiselectQuestions?: string[]
+
+  /**  */
   name?: string
 
   /**  */
