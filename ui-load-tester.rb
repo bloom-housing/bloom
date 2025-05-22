@@ -8,7 +8,7 @@
 #   check out how `ab` works. On mac you can run `man ab` in a terminal to get the man page for ab
 #   you can change the n arguments on these calls to increase the total number of requests
 #   you can change the c arguments on these calls to increase the throughput basically (number of requests made concurrently)
-#   you can change the url arguments on these calls to direct which url will recieve the traffic
+#   you can change the url arguments on these calls to direct which url will receive the traffic
 #   to execute once your changes are made from the root directory run `ruby tester.rb`
 #   In order to test mem usage you can attach the node debugger to either the public or partner sites and track mem usage that way 
 #   You can also track cpu usage, or track it through a cpu activity monitor
