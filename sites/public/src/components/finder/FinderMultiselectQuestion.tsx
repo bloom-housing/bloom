@@ -3,7 +3,6 @@ import { Field } from "@bloom-housing/ui-components"
 import styles from "./FinderMultiselectQuestion.module.scss"
 import finderStyles from "./RentalsFinder.module.scss"
 
-
 export type FinderQuestion = {
   label: string
   value: string | boolean
