@@ -20,7 +20,7 @@ export const buildWhereClause = (
       */
     params.search
       .split(' ')
-      .filter((str) => str !== '')
+      .filter((str) => str.length > 1)
       .forEach((word) => {
         namesClause.push({
           OR: [

@@ -256,6 +256,79 @@ describe('Testing user service', () => {
       });
     });
 
+    it("shouldn't return users from list() when single characters are used", async () => {
+      const date = new Date();
+      const mockedValue = mockUserSet(0, date);
+      prisma.userAccounts.findMany = jest.fn().mockResolvedValue(mockedValue);
+      prisma.userAccounts.count = jest.fn().mockResolvedValue(0);
+
+      expect(
+        await service.list(
+          {
+            search: 'a b',
+            page: 1,
+            limit: 5,
+            filter: [
+              {
+                isPortalUser: true,
+              },
+            ],
+          },
+          null,
+        ),
+      ).toEqual({
+        items: mockedValue,
+        meta: {
+          currentPage: 1,
+          itemCount: 0,
+          itemsPerPage: 5,
+          totalItems: 0,
+          totalPages: 0,
+        },
+      });
+
+      expect(prisma.userAccounts.findMany).toHaveBeenCalledWith({
+        include: {
+          jurisdictions: true,
+          listings: true,
+          userRoles: true,
+          favoriteListings: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+        },
+        orderBy: [{ firstName: 'asc' }, { lastName: 'asc' }],
+        skip: 0,
+        take: 5,
+        where: {
+          AND: [
+            {
+              OR: [
+                {
+                  email: {
+                    contains: 'a b',
+                    mode: 'insensitive',
+                  },
+                },
+                {
+                  listings: {
+                    some: {
+                      name: {
+                        contains: 'a b',
+                        mode: 'insensitive',
+                      },
+                    },
+                  },
+                },
+              ],
+            },
+          ],
+        },
+      });
+    });
+
     it('should return first page if params are more than count', async () => {
       const date = new Date();
       const mockedValue = mockUserSet(3, date);
