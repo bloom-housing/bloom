@@ -181,11 +181,11 @@ export default function RentalsFinder() {
 
     Object.entries(formData).forEach((entry) => {
       const [key, value] = entry
-      if (Array.isArray(value)) {
-        urlQueryElements.push(`${key}=${value.join(",")}`)
+      if (Array.isArray(value) && value.length) {
+          urlQueryElements.push(`${key}=${value.join(",")}`)
       } else if (typeof value === "boolean") {
         urlQueryElements.push(`${key}=${(value as boolean).toString()}`)
-      } else {
+      } else if(!Array.isArray(value) && value) {
         urlQueryElements.push(`${key}=${value}`)
       }
     })
