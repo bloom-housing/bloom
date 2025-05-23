@@ -9,6 +9,7 @@ import FinderMultiselectQuestion from "./FinderMultiselectQuestion"
 import FinderRentQuestion from "./FinderRentQuestion"
 import styles from "./RentalsFinder.module.scss"
 import FinderDisclaimer from "./FinderDisclaimer"
+import { useRouter } from "next/router"
 
 type FinderStep = {
   content: React.ReactNode
@@ -24,6 +25,7 @@ type FinderSection = {
 const buildingTypes = ["withDisabilities", "senior55", "senior62", "homeless", "veterans"]
 
 export default function RentalsFinder() {
+  const router = useRouter()
   const [stepIndex, setStepIndex] = useState<number>(0)
   const [sectionIndex, setSectionIndex] = useState<number>(0)
   const [formData, setFormData] = useState({})
@@ -168,7 +170,21 @@ export default function RentalsFinder() {
   }, [])
 
   const onSubmit = useCallback(() => {
-    console.log(formData)
+    let urlQueryElements = []
+
+
+    Object.entries(formData).forEach((entry) => {
+      const [key, value] = entry
+      if (Array.isArray(value)) {
+        urlQueryElements.push(`${key}=${value.join(',')}`)
+      } else if (typeof value === 'boolean') {
+        urlQueryElements.push(`${key}=${(value as boolean).toString()}`)
+      } else {
+        urlQueryElements.push(`${key}=${value}`)
+      }
+    })
+
+    router.push(urlQueryElements.length ? `/listings?${urlQueryElements.join('&')}` : '/listings')
   }, [formData])
 
 
