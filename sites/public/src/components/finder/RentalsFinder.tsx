@@ -1,15 +1,15 @@
 import { FormProvider, useForm } from "react-hook-form"
+import { useRouter } from "next/router"
 import { useCallback, useMemo, useState } from "react"
 import { BloomCard, CustomIconMap, listingFeatures } from "@bloom-housing/shared-helpers"
 import { RegionEnum, UnitTypeEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { Form, ProgressNav, StepHeader, t } from "@bloom-housing/ui-components"
 import { Button, Heading, Icon } from "@bloom-housing/ui-seeds"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
+import FinderDisclaimer from "./FinderDisclaimer"
 import FinderMultiselectQuestion from "./FinderMultiselectQuestion"
 import FinderRentQuestion from "./FinderRentQuestion"
 import styles from "./RentalsFinder.module.scss"
-import FinderDisclaimer from "./FinderDisclaimer"
-import { useRouter } from "next/router"
 
 type FinderStep = {
   content: React.ReactNode
@@ -36,100 +36,107 @@ export default function RentalsFinder() {
   // No SRO as based on the filter drawer code by Colin
   const cleanUnits = useMemo(
     () => Object.values(UnitTypeEnum).filter((key) => key !== UnitTypeEnum.SRO),
-    [])
+    []
+  )
 
-  const rentalFinderSections: FinderSection[] = useMemo(() => [
-    {
-      sectionTitle: t("finder.housingSectionTitle"),
-      sectionSteps: [
-        {
-          question: t("finder.bedrooms.question"),
-          subtitle: t("finder.bedrooms.subtitle"),
-          content: (
-            <FinderMultiselectQuestion
-              legend={t("finder.multiselectLegend")}
-              fieldGroupName="bedrooms_count"
-              options={cleanUnits.map((unit) => ({
-                label: t(`application.household.preferredUnit.options.${unit}`),
-                value: unit,
-              }))}
-            />
-          ),
-        },
-        {
-          question: t("finder.region.question"),
-          subtitle: t("finder.region.subtitle"),
-          content: (
-            <FinderMultiselectQuestion
-              legend={t("finder.multiselectLegend")}
-              fieldGroupName="region"
-              options={Object.keys(RegionEnum).map((region) => ({
-                label: region.replace("_", " "),
-                value: region,
-              }))}
-            />
-          ),
-        },
-        {
-          question: t("finder.rent.question"),
-          subtitle: t("finder.rent.subtitle"),
-          content: <FinderRentQuestion />,
-        },
-      ],
-    },
-    {
-      sectionTitle: t("t.accessibility"),
-      sectionSteps: [
-        {
-          question: t("finder.accessibility.question"),
-          subtitle: t("finder.accessibility.subtitle"),
-          content: (
-            <FinderMultiselectQuestion
-              legend={t("finder.multiselectLegend")}
-              fieldGroupName="accessibility"
-              options={listingFeatures.map((feature) => ({
-                label: t(`eligibility.accessibility.${feature}`),
-                value: feature,
-              }))}
-            />
-          ),
-        },
-      ],
-    },
-    {
-      sectionTitle: t("finder.buildingSectionTitle"),
-      sectionSteps: [
-        {
-          question: t("finder.building.question"),
-          subtitle: t("finder.building.subtitle"),
-          content: (
-            <FinderMultiselectQuestion
-              legend={t("finder.multiselectLegend")}
-              fieldGroupName="communityType"
-              options={buildingTypes.map((type) => ({
-                label: t(`finder.building.${type}`),
-                value: type,
-              }))}
-            />
-          ),
-        },
-      ],
-    },
-    {
-      sectionSteps: [
-        {
-          question: t("finder.disclaimer.question"),
-          subtitle: t("finder.disclaimer.subtitle"),
-          content: <FinderDisclaimer />,
-        },
-      ],
-    },
-  ], [])
+  const rentalFinderSections: FinderSection[] = useMemo(
+    () => [
+      {
+        sectionTitle: t("finder.housingSectionTitle"),
+        sectionSteps: [
+          {
+            question: t("finder.bedrooms.question"),
+            subtitle: t("finder.bedrooms.subtitle"),
+            content: (
+              <FinderMultiselectQuestion
+                legend={t("finder.multiselectLegend")}
+                fieldGroupName="bedrooms_count"
+                options={cleanUnits.map((unit) => ({
+                  label: t(`application.household.preferredUnit.options.${unit}`),
+                  value: unit,
+                }))}
+              />
+            ),
+          },
+          {
+            question: t("finder.region.question"),
+            subtitle: t("finder.region.subtitle"),
+            content: (
+              <FinderMultiselectQuestion
+                legend={t("finder.multiselectLegend")}
+                fieldGroupName="region"
+                options={Object.keys(RegionEnum).map((region) => ({
+                  label: region.replace("_", " "),
+                  value: region,
+                }))}
+              />
+            ),
+          },
+          {
+            question: t("finder.rent.question"),
+            subtitle: t("finder.rent.subtitle"),
+            content: <FinderRentQuestion />,
+          },
+        ],
+      },
+      {
+        sectionTitle: t("t.accessibility"),
+        sectionSteps: [
+          {
+            question: t("finder.accessibility.question"),
+            subtitle: t("finder.accessibility.subtitle"),
+            content: (
+              <FinderMultiselectQuestion
+                legend={t("finder.multiselectLegend")}
+                fieldGroupName="accessibility"
+                options={listingFeatures.map((feature) => ({
+                  label: t(`eligibility.accessibility.${feature}`),
+                  value: feature,
+                }))}
+              />
+            ),
+          },
+        ],
+      },
+      {
+        sectionTitle: t("finder.buildingSectionTitle"),
+        sectionSteps: [
+          {
+            question: t("finder.building.question"),
+            subtitle: t("finder.building.subtitle"),
+            content: (
+              <FinderMultiselectQuestion
+                legend={t("finder.multiselectLegend")}
+                fieldGroupName="communityType"
+                options={buildingTypes.map((type) => ({
+                  label: t(`finder.building.${type}`),
+                  value: type,
+                }))}
+              />
+            ),
+          },
+        ],
+      },
+      {
+        sectionSteps: [
+          {
+            question: t("finder.disclaimer.question"),
+            subtitle: t("finder.disclaimer.subtitle"),
+            content: <FinderDisclaimer />,
+          },
+        ],
+      },
+    ],
+    []
+  )
 
-  const sectionLabels = useMemo(() => rentalFinderSections
-    .filter((section) => !!section.sectionTitle)
-    .map((section) => section.sectionTitle),
-    [])
+  const sectionLabels = useMemo(
+    () =>
+      rentalFinderSections
+        .filter((section) => !!section.sectionTitle)
+        .map((section) => section.sectionTitle),
+    []
+  )
 
   const activeQuestion = rentalFinderSections[sectionIndex]?.sectionSteps[stepIndex]
   const isLastSection = sectionIndex === rentalFinderSections.length - 1
@@ -172,21 +179,19 @@ export default function RentalsFinder() {
   const onSubmit = useCallback(() => {
     let urlQueryElements = []
 
-
     Object.entries(formData).forEach((entry) => {
       const [key, value] = entry
       if (Array.isArray(value)) {
-        urlQueryElements.push(`${key}=${value.join(',')}`)
-      } else if (typeof value === 'boolean') {
+        urlQueryElements.push(`${key}=${value.join(",")}`)
+      } else if (typeof value === "boolean") {
         urlQueryElements.push(`${key}=${(value as boolean).toString()}`)
       } else {
         urlQueryElements.push(`${key}=${value}`)
       }
     })
 
-    router.push(urlQueryElements.length ? `/listings?${urlQueryElements.join('&')}` : '/listings')
+    router.push(urlQueryElements.length ? `/listings?${urlQueryElements.join("&")}` : "/listings")
   }, [formData])
-
 
   return (
     <div className={styles["finder-container"]}>
@@ -243,16 +248,22 @@ export default function RentalsFinder() {
             <CardSection className={styles["button-section"]} divider="flush">
               <div className={styles["button-wrapper"]}>
                 {isLastSection && isLastStep ? (
-                  <Button key="submit" type="submit">{t("t.finish")}</Button>
+                  <Button key="submit" type="submit">
+                    {t("t.finish")}
+                  </Button>
                 ) : (
-                  <Button key="next" onClick={onNextClick}>{t("t.next")}</Button>
+                  <Button key="next" onClick={onNextClick}>
+                    {t("t.next")}
+                  </Button>
                 )}
               </div>
             </CardSection>
             {sectionIndex <= sectionLabels.length - 1 && (
               <CardSection>
                 <div className={styles["footer"]}>
-                  <Button variant="text" onClick={onSkipClick}>{t("finder.skip")}</Button>
+                  <Button variant="text" onClick={onSkipClick}>
+                    {t("finder.skip")}
+                  </Button>
                 </div>
               </CardSection>
             )}
