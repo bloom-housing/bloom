@@ -123,7 +123,7 @@ const BuildingFeatures = (props: BuildingFeaturesProps) => {
                 name="accessibilityFeatures"
                 fields={featureOptions}
                 register={register}
-                fieldGroupClassName="grid grid-cols-3 mt-4"
+                fieldGroupClassName="grid grid-cols-3 mt-4 gap-x-4"
               />
             </FieldValue>
           </Grid.Row>

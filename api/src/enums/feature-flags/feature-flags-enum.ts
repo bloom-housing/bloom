@@ -2,17 +2,17 @@
 // Note, these are just used to keep backend and frontend in sync. We store feature flags as strings so this list might not include every flag.
 // Keep alphabetized for readability.
 export enum FeatureFlagEnum {
-  example = 'example', // sample feature flag for testing purposes
   disableCommonApplication = 'disableCommonApplication',
   disableJurisdictionalAdmin = 'disableJurisdictionalAdmin',
   enableAccessibilityFeatures = 'enableAccessibilityFeatures',
+  enableCompanyWebsite = 'enableCompanyWebsite',
   enableGeocodingPreferences = 'enableGeocodingPreferences',
   enableGeocodingRadiusMethod = 'enableGeocodingRadiusMethod',
   enableHomeType = 'enableHomeType',
   enableIsVerified = 'enableIsVerified',
   enableListingFavoriting = 'enableListingFavoriting',
   enableListingOpportunity = 'enableListingOpportunity',
-  enableListingsPagination = 'enableListingPagination',
+  enableListingPagination = 'enableListingPagination',
   enableMarketingStatus = 'enableMarketingStatus',
   enableNeighborhoodAmenities = 'enableNeighborhoodAmenities',
   enablePartnerDemographics = 'enablePartnerDemographics',
@@ -22,6 +22,8 @@ export enum FeatureFlagEnum {
   enableSingleUseCode = 'enableSingleUseCode',
   enableUnitGroups = 'enableUnitGroups',
   enableUtilitiesIncluded = 'enableUtilitiesIncluded',
+  enableAdditionalResources = 'enableAdditionalResources',
+  example = 'example', // sample feature flag for testing purposes
   hideCloseListingButton = 'hideCloseListingButton',
   swapCommunityTypeWithPrograms = 'swapCommunityTypeWithPrograms',
 }
@@ -43,6 +45,11 @@ export const featureFlagMap: { name: string; description: string }[] = [
     name: FeatureFlagEnum.enableAccessibilityFeatures,
     description:
       "When true, the 'accessibility features' section is displayed in listing creation/edit and the public listing view",
+  },
+  {
+    name: FeatureFlagEnum.enableCompanyWebsite,
+    description:
+      'When true, allows partners to add company website information',
   },
   {
     name: FeatureFlagEnum.enableGeocodingPreferences,
@@ -74,7 +81,7 @@ export const featureFlagMap: { name: string; description: string }[] = [
       "When true, any newly published listing will send a gov delivery email to everyone that has signed up for the 'listing alerts'",
   },
   {
-    name: FeatureFlagEnum.enableListingsPagination,
+    name: FeatureFlagEnum.enableListingPagination,
     description:
       'When true listings browser will display pagination controls section',
   },

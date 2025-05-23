@@ -6,17 +6,21 @@ import styles from "./HomeSection.module.scss"
 interface HomeSectionProps {
   sectionTitle: string
   sectionIcon?: CustomIconType
+  layoutClassName?: string
 }
 
 export const HomeSection = ({
   sectionIcon,
   sectionTitle,
   children,
+  layoutClassName,
 }: React.PropsWithChildren<HomeSectionProps>) => {
   const customIcon = sectionIcon ? CustomIconMap[sectionIcon] : undefined
+  const className = [styles["muted-background"]]
+  if (layoutClassName) className.push(layoutClassName)
 
   return (
-    <MaxWidthLayout className={styles["muted-background"]}>
+    <MaxWidthLayout className={className.join(" ")}>
       <div className={styles["section-header"]}>
         {customIcon && (
           <Icon outlined size="xl" className={styles["section-header-icon"]}>

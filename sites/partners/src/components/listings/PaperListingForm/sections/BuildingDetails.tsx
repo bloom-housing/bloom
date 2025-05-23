@@ -206,15 +206,17 @@ const BuildingDetails = ({
                 <Select
                   name={"neighborhood"}
                   id={"neighborhood"}
-                  placeholder={t("listings.sections.neighborhoodPlaceholder")}
                   inputProps={{
                     className: "w-full",
                   }}
                   register={register}
-                  options={neighborhoodRegions.map((entry) => ({
-                    value: entry.name,
-                    label: entry.name,
-                  }))}
+                  options={[
+                    { value: "", label: t("listings.sections.neighborhoodPlaceholder") },
+                    ...neighborhoodRegions.map((entry) => ({
+                      value: entry.name,
+                      label: entry.name,
+                    })),
+                  ]}
                 />
               </FieldValue>
             ) : (
@@ -323,16 +325,18 @@ const BuildingDetails = ({
                 <Select
                   id="region"
                   name="region"
-                  placeholder={t("listings.sections.regionPlaceholder")}
                   register={register}
                   inputProps={{
                     className: "w-full",
                     onChange: () => setValue("neighborhood", undefined),
                   }}
-                  options={Object.keys(RegionEnum).map((entry) => ({
-                    value: entry,
-                    label: entry.toString().replace("_", " "),
-                  }))}
+                  options={[
+                    { value: "", label: t("listings.sections.regionPlaceholder") },
+                    ...Object.keys(RegionEnum).map((entry) => ({
+                      value: entry,
+                      label: entry.toString().replace("_", " "),
+                    })),
+                  ]}
                 />
               </FieldValue>
             ) : (

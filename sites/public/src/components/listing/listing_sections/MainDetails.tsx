@@ -1,11 +1,13 @@
 import React, { Dispatch, SetStateAction } from "react"
+import { CheckIcon } from "@heroicons/react/16/solid"
 import {
+  FeatureFlagEnum,
   Jurisdiction,
   Listing,
   MarketingTypeEnum,
   ReviewOrderTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { Heading, Link, Tag } from "@bloom-housing/ui-seeds"
+import { Heading, Link, Tag, Icon } from "@bloom-housing/ui-seeds"
 import { TagVariant } from "@bloom-housing/ui-seeds/src/text/Tag"
 import { ImageCard, t } from "@bloom-housing/ui-components"
 import {
@@ -30,14 +32,24 @@ type MainDetailsProps = {
 type ListingTag = {
   title: string
   variant: TagVariant
+  icon?: React.ReactNode
 }
 
 export const getListingTags = (
   listing: Listing,
   hideReviewTags?: boolean,
-  hideHomeTypeTag?: boolean
+  hideHomeTypeTag?: boolean,
+  enableIsVerified?: boolean
 ): ListingTag[] => {
   const listingTags: ListingTag[] = []
+
+  if (enableIsVerified && listing.isVerified) {
+    listingTags.push({
+      title: t("listings.verifiedListing"),
+      variant: "warn-inverse",
+      icon: <CheckIcon />,
+    })
+  }
 
   if (!hideHomeTypeTag && listing.homeType) {
     listingTags.push({
@@ -86,10 +98,13 @@ export const MainDetails = ({
   showHomeType,
 }: MainDetailsProps) => {
   if (!listing) return
+  const enableIsVerified = jurisdiction.featureFlags.find(
+    (flag) => flag.name === FeatureFlagEnum.enableIsVerified
+  )?.active
 
   const googleMapsHref =
     "https://www.google.com/maps/place/" + oneLineAddress(listing.listingsBuildingAddress)
-  const listingTags = getListingTags(listing, true, !showHomeType)
+  const listingTags = getListingTags(listing, true, !showHomeType, enableIsVerified)
   return (
     <div>
       <ImageCard
@@ -134,8 +149,11 @@ export const MainDetails = ({
           <div className={`${styles["listing-tags"]} seeds-m-bs-3`} data-testid={"listing-tags"}>
             {listingTags.map((tag, index) => {
               return (
-                <Tag variant={tag.variant} key={index}>
-                  {tag.title}
+                <Tag variant={tag.variant} key={index} className={styles["tag"]}>
+                  <span>
+                    {tag.icon && <Icon>{tag.icon}</Icon>}
+                    {tag.title}
+                  </span>
                 </Tag>
               )
             })}

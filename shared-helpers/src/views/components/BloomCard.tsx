@@ -17,6 +17,7 @@ interface BloomCardProps {
   id?: string
   subtitle?: string | React.ReactNode
   title?: string
+  altHeading?: boolean
   variant?: "form" | "block"
 }
 
@@ -40,7 +41,11 @@ const BloomCard = (props: BloomCardProps) => {
         )
       }
       return (
-        <Heading size="2xl" priority={props.headingPriority || 1}>
+        <Heading
+          size="2xl"
+          priority={props.headingPriority || 1}
+          className={props.altHeading ? styles["card-alt-heading-font"] : undefined}
+        >
           {props.title}
         </Heading>
       )
@@ -56,8 +61,10 @@ const BloomCard = (props: BloomCardProps) => {
         <Card.Header divider={props.variant === "block" ? undefined : "inset"}>
           {customIcon && (
             <Icon
-              size="2xl"
-              className={`${styles["card-icon"]} ${props.iconClass ? props.iconClass : ""}`}
+              size={props.altHeading ? undefined : "2xl"}
+              className={`${styles["card-icon"]} ${props.iconClass ? props.iconClass : ""} ${
+                props.altHeading ? styles["card-circled-icon"] : ""
+              }`}
               outlined={props.iconOutlined}
             >
               {customIcon}

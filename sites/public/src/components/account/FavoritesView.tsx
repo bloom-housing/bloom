@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react"
 import Head from "next/head"
 import {
   AuthContext,
+  BloomCard,
   MessageContext,
   PageView,
   pushGtmEvent,
@@ -13,7 +14,7 @@ import {
   Jurisdiction,
   Listing,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { LoadingOverlay, t } from "@bloom-housing/ui-components"
+import { t } from "@bloom-housing/ui-components"
 import Layout from "../../layouts/application"
 import { MetaTags } from "../shared/MetaTags"
 import { UserStatus } from "../../lib/constants"
@@ -23,7 +24,7 @@ import favoritesStyles from "./FavoritesView.module.scss"
 import { useProfileFavoriteListings } from "../../lib/hooks"
 import { isFeatureFlagOn, saveListingFavorite } from "../../lib/helpers"
 import { PageHeaderLayout } from "../../patterns/PageHeaderLayout"
-import { Button, Heading } from "@bloom-housing/ui-seeds"
+import { Button, Card, LoadingState } from "@bloom-housing/ui-seeds"
 
 interface FavoritesViewProps {
   jurisdiction: Jurisdiction
@@ -80,54 +81,57 @@ const FavoritesView = ({ jurisdiction }: FavoritesViewProps) => {
           inverse
           className={listings.length === 0 ? favoritesStyles["favorites-none-layout"] : ""}
         >
-          <LoadingOverlay isLoading={loading}>
-            <>
-              {!loading && listings.length === 0 ? (
-                <div style={{ display: "grid", gap: "var(--seeds-s4)" }}>
-                  <Heading priority={2} size="3xl" className="font-alt-sans">
-                    {t("account.noFavorites")}
-                  </Heading>
+          <LoadingState loading={loading}>
+            {!loading && listings.length === 0 ? (
+              <BloomCard
+                iconOutlined
+                iconSymbol="listBullet"
+                variant="block"
+                title={t("account.noFavorites")}
+                headingPriority={2}
+                altHeading
+              >
+                <Card.Section>
                   <p>
                     <Button size="sm" variant="primary-outlined" href="/listings">
                       {t("listings.browseListings")}
                     </Button>
                   </p>
+                </Card.Section>
+              </BloomCard>
+            ) : (
+              <div className={styles["listing-directory"]}>
+                <div
+                  className={[
+                    styles["content-wrapper"],
+                    favoritesStyles["favorites-listings"],
+                  ].join(" ")}
+                >
+                  <ul>
+                    {listings.map((listing, index) => {
+                      return (
+                        <ListingCard
+                          key={index}
+                          listing={listing}
+                          jurisdiction={jurisdiction}
+                          showFavoriteButton={isFeatureFlagOn(
+                            jurisdiction,
+                            FeatureFlagEnum.enableListingFavoriting
+                          )}
+                          favorited={favoriteListings.some((item) => item.id === listing.id)}
+                          setFavorited={saveFavoriteFn(listing)}
+                          showHomeType={isFeatureFlagOn(
+                            jurisdiction,
+                            FeatureFlagEnum.enableHomeType
+                          )}
+                        />
+                      )
+                    })}
+                  </ul>
                 </div>
-              ) : (
-                <div className={styles["listing-directory"]}>
-                  <div
-                    className={[
-                      styles["content-wrapper"],
-                      favoritesStyles["favorites-listings"],
-                    ].join(" ")}
-                  >
-                    <ul>
-                      {listings.map((listing, index) => {
-                        return (
-                          <ListingCard
-                            key={index}
-                            listing={listing}
-                            jurisdiction={jurisdiction}
-                            showFavoriteButton={isFeatureFlagOn(
-                              jurisdiction,
-                              FeatureFlagEnum.enableListingFavoriting
-                            )}
-                            favorited={favoriteListings.some((item) => item.id === listing.id)}
-                            setFavorited={saveFavoriteFn(listing)}
-                            showHomeType={isFeatureFlagOn(
-                              jurisdiction,
-                              FeatureFlagEnum.enableHomeType
-                            )}
-                          />
-                        )
-                      })}
-                    </ul>
-                  </div>
-                </div>
-              )}
-              {loading && <div style={{ minBlockSize: "var(--seeds-s56)" }}></div>}
-            </>
-          </LoadingOverlay>
+              </div>
+            )}
+          </LoadingState>
         </PageHeaderLayout>
       </Layout>
     </RequireLogin>
