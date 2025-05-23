@@ -172,6 +172,7 @@ export default function RentalsFinder() {
   }, [formData, stepIndex, sectionIndex])
 
   const onSkipClick = useCallback(() => {
+    setFormData({})
     setSectionIndex(rentalFinderSections.length - 1)
     setStepIndex(0)
   }, [])
@@ -182,10 +183,10 @@ export default function RentalsFinder() {
     Object.entries(formData).forEach((entry) => {
       const [key, value] = entry
       if (Array.isArray(value) && value.length) {
-          urlQueryElements.push(`${key}=${value.join(",")}`)
+        urlQueryElements.push(`${key}=${value.join(",")}`)
       } else if (typeof value === "boolean") {
         urlQueryElements.push(`${key}=${(value as boolean).toString()}`)
-      } else if(!Array.isArray(value) && value) {
+      } else if (!Array.isArray(value) && value) {
         urlQueryElements.push(`${key}=${value}`)
       }
     })
