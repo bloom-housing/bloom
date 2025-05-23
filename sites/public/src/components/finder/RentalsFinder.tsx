@@ -1,8 +1,8 @@
 import { FormProvider, useForm } from "react-hook-form"
-import { useMemo, useState } from "react"
+import { useCallback, useMemo, useState } from "react"
 import { BloomCard, CustomIconMap, listingFeatures } from "@bloom-housing/shared-helpers"
-import { RegionEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { ProgressNav, StepHeader, t } from "@bloom-housing/ui-components"
+import { RegionEnum, UnitTypeEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { Form, ProgressNav, StepHeader, t } from "@bloom-housing/ui-components"
 import { Button, Heading, Icon } from "@bloom-housing/ui-seeds"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import FinderMultiselectQuestion from "./FinderMultiselectQuestion"
@@ -26,7 +26,10 @@ const buildingTypes = ["withDisabilities", "senior55", "senior62", "homeless", "
 export default function RentalsFinder() {
   const [stepIndex, setStepIndex] = useState<number>(0)
   const [sectionIndex, setSectionIndex] = useState<number>(0)
+  const [formData, setFormData] = useState({})
   const formMethods = useForm()
+
+  const { reset, handleSubmit, getValues } = formMethods
 
   // No SRO as based on the filter drawer code by Colin
   const cleanUnits = useMemo(
@@ -121,24 +124,34 @@ export default function RentalsFinder() {
     },
   ], [])
 
-  const sectionLabels = rentalFinderSections
+  const sectionLabels = useMemo(() => rentalFinderSections
     .filter((section) => !!section.sectionTitle)
-    .map((section) => section.sectionTitle)
+    .map((section) => section.sectionTitle),
+    [])
 
   const activeQuestion = rentalFinderSections[sectionIndex]?.sectionSteps[stepIndex]
   const isLastSection = sectionIndex === rentalFinderSections.length - 1
   const isLastStep = stepIndex === rentalFinderSections[sectionIndex]?.sectionSteps.length - 1
 
-  const onNextClick = () => {
+  const onNextClick = useCallback(() => {
+    setFormData((prev) => ({ ...prev, ...getValues() }))
     if (isLastStep) {
       setSectionIndex((prev) => prev + 1)
       setStepIndex(0)
     } else {
       setStepIndex((prev) => prev + 1)
     }
-  }
+  }, [isLastStep])
 
-  const onPreviousClick = () => {
+  const onPreviousClick = useCallback(() => {
+    if (JSON.stringify(getValues()) !== JSON.stringify(formData)) {
+      const newFormData = { ...formData, ...getValues() }
+      setFormData(newFormData)
+      reset(newFormData)
+    } else {
+      reset(formData)
+    }
+
     if (stepIndex == 0) {
       const prevSectionIndex = sectionIndex - 1
       const numberOfSteps = rentalFinderSections[prevSectionIndex]?.sectionSteps.length
@@ -147,12 +160,18 @@ export default function RentalsFinder() {
     } else {
       setStepIndex((prev) => prev - 1)
     }
-  }
+  }, [formData, stepIndex, sectionIndex])
 
-  const onSkipClick = () => {
+  const onSkipClick = useCallback(() => {
     setSectionIndex(rentalFinderSections.length - 1)
     setStepIndex(0)
-  }
+  }, [])
+
+  const onSubmit = useCallback(() => {
+    console.log(formData)
+  }, [formData])
+
+
   return (
     <div className={styles["finder-container"]}>
       <div className={styles["questionnaire-container"]}>
@@ -199,7 +218,7 @@ export default function RentalsFinder() {
           subtitle={activeQuestion.subtitle}
           headingPriority={2}
         >
-          <>
+          <Form id="finderForm" onSubmit={handleSubmit(onSubmit)}>
             <CardSection className={styles["questions-section"]} divider="flush">
               <div className={styles["questions-wrapper"]}>
                 <FormProvider {...formMethods}>{activeQuestion.content}</FormProvider>
@@ -208,9 +227,9 @@ export default function RentalsFinder() {
             <CardSection className={styles["button-section"]} divider="flush">
               <div className={styles["button-wrapper"]}>
                 {isLastSection && isLastStep ? (
-                  <Button>{t("t.finish")}</Button>
+                  <Button key="submit" type="submit">{t("t.finish")}</Button>
                 ) : (
-                  <Button onClick={onNextClick}>{t("t.next")}</Button>
+                  <Button key="next" onClick={onNextClick}>{t("t.next")}</Button>
                 )}
               </div>
             </CardSection>
@@ -221,7 +240,7 @@ export default function RentalsFinder() {
                 </div>
               </CardSection>
             )}
-          </>
+          </Form>
         </BloomCard>
       </div>
     </div>
