@@ -28,6 +28,11 @@ export default function RentalsFinder() {
   const [sectionIndex, setSectionIndex] = useState<number>(0)
   const formMethods = useForm()
 
+  // No SRO as based on the filter drawer code by Colin
+  const cleanUnits = useMemo(
+    () => Object.values(UnitTypeEnum).filter((key) => key !== UnitTypeEnum.SRO),
+    [])
+
   const rentalFinderSections: FinderSection[] = useMemo(() => [
     {
       sectionTitle: t("finder.housingSectionTitle"),
@@ -39,28 +44,10 @@ export default function RentalsFinder() {
             <FinderMultiselectQuestion
               legend={t("finder.multiselectLegend")}
               fieldGroupName="bedrooms_count"
-              options={[
-                {
-                  label: t("application.household.preferredUnit.options.studio"),
-                  value: "studio",
-                },
-                {
-                  label: t("application.household.preferredUnit.options.oneBdrm"),
-                  value: "oneBdrm",
-                },
-                {
-                  label: t("application.household.preferredUnit.options.twoBdrm"),
-                  value: "twoBdrm",
-                },
-                {
-                  label: t("application.household.preferredUnit.options.threeBdrm"),
-                  value: "threBdrm",
-                },
-                {
-                  label: t("finder.bedrooms.fourMoreBdrm"),
-                  value: "fourMoreBdrm",
-                },
-              ]}
+              options={cleanUnits.map((unit) => ({
+                label: t(`application.household.preferredUnit.options.${unit}`),
+                value: unit,
+              }))}
             />
           ),
         },
