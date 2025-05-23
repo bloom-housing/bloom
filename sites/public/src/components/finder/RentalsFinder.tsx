@@ -22,7 +22,7 @@ type FinderSection = {
   sectionSteps: FinderStep[]
 }
 
-const buildingTypes = ["withDisabilities", "senior55", "senior62", "homeless", "veterans"]
+const communityTypes = ["withDisabilities", "senior55", "senior62", "homeless", "veterans"]
 
 export default function RentalsFinder() {
   const router = useRouter()
@@ -108,7 +108,7 @@ export default function RentalsFinder() {
               <FinderMultiselectQuestion
                 legend={t("finder.multiselectLegend")}
                 fieldGroupName="communityType"
-                options={buildingTypes.map((type) => ({
+                options={communityTypes.map((type) => ({
                   label: t(`finder.building.${type}`),
                   value: type,
                 }))}
