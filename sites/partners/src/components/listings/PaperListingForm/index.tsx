@@ -196,7 +196,7 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
 
   // Set the active feature flags depending on if/what jurisdiction is selected
   useEffect(() => {
-    const newFeatureFlags = profile.jurisdictions?.reduce((featureFlags, juris) => {
+    const newFeatureFlags = profile?.jurisdictions?.reduce((featureFlags, juris) => {
       if (!selectedJurisdiction || selectedJurisdiction === juris.id) {
         // filter only the active feature flags
         const jurisFeatureFlags = juris.featureFlags?.filter((value) => value.active)
@@ -206,7 +206,7 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
       return featureFlags
     }, [])
     setActiveFeatureFlags(newFeatureFlags)
-  }, [profile.jurisdictions, selectedJurisdiction])
+  }, [profile?.jurisdictions, selectedJurisdiction])
 
   const triggerSubmitWithStatus: SubmitFunction = (action, status, newData) => {
     if (action !== "redirect" && status === ListingsStatusEnum.active) {
@@ -362,7 +362,7 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
                           <Tabs.Tab>Application Process</Tabs.Tab>
                         </Tabs.TabList>
                         <Tabs.TabPanel>
-                          <ListingIntro jurisdictions={profile.jurisdictions} />
+                          <ListingIntro jurisdictions={profile?.jurisdictions || []} />
                           <ListingPhotos />
                           <BuildingDetails
                             listing={listing}

@@ -14,6 +14,7 @@ import {
   ListingsStatusEnum,
   User,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import userEvent from "@testing-library/user-event"
 
 afterEach(cleanup)
 
@@ -99,11 +100,13 @@ const ListingFormActionsComponent = ({
   listingStatus,
   formActionType,
   lotteryOptIn,
+  submitFormWithStatus,
 }: {
   user: User
   listingStatus: ListingsStatusEnum
   formActionType: ListingFormActionsType
   lotteryOptIn?: boolean
+  submitFormWithStatus?: () => void
 }) => {
   return (
     <AuthContext.Provider
@@ -115,7 +118,7 @@ const ListingFormActionsComponent = ({
       <ListingContext.Provider
         value={{ ...listing, status: listingStatus, lotteryOptIn: lotteryOptIn, listingEvents: [] }}
       >
-        <ListingFormActions type={formActionType} />
+        <ListingFormActions type={formActionType} submitFormWithStatus={submitFormWithStatus} />
       </ListingContext.Provider>
     </AuthContext.Provider>
   )
@@ -580,6 +583,22 @@ describe("<ListingFormActions>", () => {
         expect(screen.getByRole("button", { name: "Unpublish" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Post Results" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Exit" })).toBeInTheDocument()
+      })
+
+      it("click approve and publish in edit mode", async () => {
+        const submitMock = jest.fn()
+        render(
+          <ListingFormActionsComponent
+            user={adminUser}
+            listingStatus={ListingsStatusEnum.pendingReview}
+            formActionType={ListingFormActionsType.edit}
+            submitFormWithStatus={submitMock}
+          />
+        )
+
+        await userEvent.click(screen.getByRole("button", { name: "Approve & Publish" }))
+        expect(submitMock).toBeCalledWith("redirect", ListingsStatusEnum.active)
+        screen.debug()
       })
     })
     describe("as a jurisdictional admin", () => {
