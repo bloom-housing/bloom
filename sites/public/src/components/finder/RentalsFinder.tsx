@@ -31,6 +31,7 @@ export default function RentalsFinder() {
   const [formData, setFormData] = useState({})
   const formMethods = useForm()
 
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   const { reset, handleSubmit, getValues } = formMethods
 
   // No SRO as based on the filter drawer code by Colin
@@ -127,7 +128,7 @@ export default function RentalsFinder() {
         ],
       },
     ],
-    []
+    [cleanUnits]
   )
 
   const sectionLabels = useMemo(
@@ -135,7 +136,7 @@ export default function RentalsFinder() {
       rentalFinderSections
         .filter((section) => !!section.sectionTitle)
         .map((section) => section.sectionTitle),
-    []
+    [rentalFinderSections]
   )
 
   const activeQuestion = rentalFinderSections[sectionIndex]?.sectionSteps[stepIndex]
@@ -150,7 +151,7 @@ export default function RentalsFinder() {
     } else {
       setStepIndex((prev) => prev + 1)
     }
-  }, [isLastStep])
+  }, [isLastStep, getValues])
 
   const onPreviousClick = useCallback(() => {
     if (JSON.stringify(getValues()) !== JSON.stringify(formData)) {
@@ -169,13 +170,13 @@ export default function RentalsFinder() {
     } else {
       setStepIndex((prev) => prev - 1)
     }
-  }, [formData, stepIndex, sectionIndex])
+  }, [formData, stepIndex, sectionIndex, getValues, rentalFinderSections, reset])
 
   const onSkipClick = useCallback(() => {
     setFormData({})
     setSectionIndex(rentalFinderSections.length - 1)
     setStepIndex(0)
-  }, [])
+  }, [rentalFinderSections.length])
 
   const onSubmit = useCallback(() => {
     let urlQueryElements = []
@@ -191,8 +192,10 @@ export default function RentalsFinder() {
       }
     })
 
-    router.push(urlQueryElements.length ? `/listings?${urlQueryElements.join("&")}` : "/listings")
-  }, [formData])
+    void router.push(
+      urlQueryElements.length ? `/listings?${urlQueryElements.join("&")}` : "/listings"
+    )
+  }, [formData, router])
 
   return (
     <div className={styles["finder-container"]}>
