@@ -7,7 +7,7 @@ export default function FinderDisclaimer() {
       <AlertBox type="notice" closeable>
         {t("finder.disclaimer.alert")}
       </AlertBox>
-      <ul className={styles["disclaimer-info-list"]}>
+      <ul data-testid="disclaimers-list" className={styles["disclaimer-info-list"]}>
         {[1, 2, 3, 4, 5].map((num) => (
           <li key={`disclaimer_${num}`} className={styles["disclaimer-info-point"]}>
             {t(`finder.disclaimer.info${num}`)}

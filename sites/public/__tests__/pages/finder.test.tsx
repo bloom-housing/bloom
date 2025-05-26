@@ -22,11 +22,13 @@ describe("<RentalsFinder>", () => {
 
     const finderHeader = finderHeaderTitle.parentElement
 
-    const [sectionOne, sectionTwo] = within(finderHeader).getAllByRole("listitem")
+    const [sectionOne, sectionTwo, sectionThree] = within(finderHeader).getAllByRole("listitem")
     expect(within(sectionOne).getByText(/housing needs/i)).toBeInTheDocument()
     expect(sectionOne).toHaveClass("is-active")
-    expect(within(sectionTwo).getByText(/rent/i)).toBeInTheDocument()
+    expect(within(sectionTwo).getByText(/accessibility/i)).toBeInTheDocument()
     expect(sectionTwo).toHaveClass("is-disabled")
+    expect(within(sectionThree).getByText(/building types/i)).toBeInTheDocument()
+    expect(sectionThree).toHaveClass("is-disabled")
 
     const stepHeader = within(finderHeader).getByRole("heading", { level: 2 })
     expect(within(stepHeader).getByText(/housing needs/i)).toBeInTheDocument()
@@ -45,7 +47,9 @@ describe("<RentalsFinder>", () => {
     expect(screen.getByRole("checkbox", { name: /1 bedroom/i })).toBeInTheDocument()
     expect(screen.getByRole("checkbox", { name: /2 bedroom/i })).toBeInTheDocument()
     expect(screen.getByRole("checkbox", { name: /3 bedroom/i })).toBeInTheDocument()
-    expect(screen.getByRole("checkbox", { name: /4 or more bedroom/i })).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: /4 bedroom/i })).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: /5 bedroom/i })).toBeInTheDocument()
+
     expect(screen.getByRole("button", { name: /next/i })).toBeInTheDocument()
     expect(
       screen.getByRole("button", { name: /skip this and show me listings/i })
@@ -65,26 +69,38 @@ describe("<RentalsFinder>", () => {
     expect(finderHeaderTitle).toBeInTheDocument()
 
     const finderHeader = finderHeaderTitle.parentElement
+    const [sectionOne, sectionTwo, sectionThree] = within(finderHeader).getAllByRole("listitem")
 
-    const [sectionOne, sectionTwo] = within(finderHeader).getAllByRole("listitem")
+    // ----------- Section 1 - Housing Needs | Step 1 - Bedrooms -------------------
     expect(within(sectionOne).getByText(/housing needs/i)).toBeInTheDocument()
     expect(sectionOne).toHaveClass("is-active")
-    expect(within(sectionTwo).getByText(/rent/i)).toBeInTheDocument()
+    expect(within(sectionTwo).getByText(/accessibility/i)).toBeInTheDocument()
     expect(sectionTwo).toHaveClass("is-disabled")
+    expect(within(sectionThree).getByText(/building types/i)).toBeInTheDocument()
+    expect(sectionThree).toHaveClass("is-disabled")
 
     const stepHeader = within(finderHeader).getByRole("heading", { level: 2 })
     expect(within(stepHeader).getByText(/housing needs/i)).toBeInTheDocument()
     expect(within(stepHeader).getByText(/of \d/i)).toBeInTheDocument()
     expect(within(stepHeader).getByText("1")).toBeInTheDocument()
 
+    expect(screen.queryByRole("button", { name: /finish/i })).not.toBeInTheDocument()
+    expect(screen.queryByRole("button", { name: /back/i })).not.toBeInTheDocument()
+    expect(
+      screen.getByRole("button", { name: /skip this and show me listings/i })
+    ).toBeInTheDocument()
+
     const nextButton = screen.getByRole("button", { name: /next/i })
     expect(nextButton).toBeInTheDocument()
     await act(() => userEvent.click(nextButton))
 
+    // ----------- Section 1 - Housing Needs | Step 2 - Regions -------------------
     expect(within(sectionOne).getByText(/housing needs/i)).toBeInTheDocument()
     expect(sectionOne).toHaveClass("is-active")
-    expect(within(sectionTwo).getByText(/rent/i)).toBeInTheDocument()
+    expect(within(sectionTwo).getByText(/accessibility/i)).toBeInTheDocument()
     expect(sectionTwo).toHaveClass("is-disabled")
+    expect(within(sectionThree).getByText(/building types/i)).toBeInTheDocument()
+    expect(sectionThree).toHaveClass("is-disabled")
 
     expect(within(stepHeader).getByText(/housing needs/i)).toBeInTheDocument()
     expect(within(stepHeader).getByText("1")).toBeInTheDocument()
@@ -105,22 +121,24 @@ describe("<RentalsFinder>", () => {
     expect(screen.getByRole("checkbox", { name: /eastside/i })).toBeInTheDocument()
     expect(screen.getByRole("checkbox", { name: /southwest/i })).toBeInTheDocument()
     expect(screen.getByRole("checkbox", { name: /westside/i })).toBeInTheDocument()
+
+    expect(screen.queryByRole("button", { name: /finish/i })).not.toBeInTheDocument()
     expect(screen.getByRole("button", { name: /back/i })).toBeInTheDocument()
     expect(
       screen.getByRole("button", { name: /skip this and show me listings/i })
     ).toBeInTheDocument()
-    expect(screen.queryByRole("button", { name: /finish/i })).not.toBeInTheDocument()
-
     await act(() => userEvent.click(nextButton))
 
+    // ----------- Section 1 - Housing Needs | Step 3 - Rent -------------------
     expect(within(sectionOne).getByText(/housing needs/i)).toBeInTheDocument()
-    expect(sectionOne).not.toHaveClass("is-active")
-    expect(sectionOne).not.toHaveClass("is-disabled")
-    expect(within(sectionTwo).getByText(/rent/i)).toBeInTheDocument()
-    expect(sectionTwo).toHaveClass("is-active")
+    expect(sectionOne).toHaveClass("is-active")
+    expect(within(sectionTwo).getByText(/accessibility/i)).toBeInTheDocument()
+    expect(sectionTwo).toHaveClass("is-disabled")
+    expect(within(sectionThree).getByText(/building types/i)).toBeInTheDocument()
+    expect(sectionThree).toHaveClass("is-disabled")
 
-    expect(within(stepHeader).getByText(/rent/i)).toBeInTheDocument()
-    expect(within(stepHeader).getByText("2")).toBeInTheDocument()
+    expect(within(stepHeader).getByText(/housing needs/i)).toBeInTheDocument()
+    expect(within(stepHeader).getByText("1")).toBeInTheDocument()
 
     expect(
       screen.getByRole("heading", { name: /how much rent can you afford to pay\?/i, level: 2 })
@@ -141,23 +159,163 @@ describe("<RentalsFinder>", () => {
         name: /include rentals that accept section 8 housing choice vouchers/i,
       })
     ).toBeInTheDocument()
-    expect(screen.getByRole("button", { name: /finish/i })).toBeInTheDocument()
-    expect(screen.queryByRole("button", { name: /next/i })).not.toBeInTheDocument()
 
-    const backButton = screen.getByRole("button", { name: /back/i })
-    expect(backButton).toBeInTheDocument()
-    await act(() => userEvent.click(backButton))
+    expect(screen.queryByRole("button", { name: /finish/i })).not.toBeInTheDocument()
+    expect(screen.getByRole("button", { name: /back/i })).toBeInTheDocument()
+    expect(
+      screen.getByRole("button", { name: /skip this and show me listings/i })
+    ).toBeInTheDocument()
+    await act(() => userEvent.click(nextButton))
+
+    // ----------- Section 2 - Accessibility | Step 1 - Listing Features -------------------
+    expect(within(sectionOne).getByText(/housing needs/i)).toBeInTheDocument()
+    expect(sectionOne).not.toHaveClass("is-active")
+    expect(sectionOne).not.toHaveClass("is-disabled")
+    expect(within(sectionTwo).getByText(/accessibility/i)).toBeInTheDocument()
+    expect(sectionTwo).toHaveClass("is-active")
+    expect(within(sectionThree).getByText(/building types/i)).toBeInTheDocument()
+    expect(sectionThree).toHaveClass("is-disabled")
+
+    expect(within(stepHeader).getByText(/accessibility/i)).toBeInTheDocument()
+    expect(within(stepHeader).getByText("2")).toBeInTheDocument()
 
     expect(
       screen.getByRole("heading", {
-        name: /what areas would you like to live in\?/i,
+        name: /do you or anyone in your household need any of the following accessibility features\?/i,
         level: 2,
       })
     ).toBeInTheDocument()
     expect(
       screen.getByText(
-        /we will use your selections to find you rentals that may match your housing needs./i
+        /accessibility features include many designed specifically for residents with disabilities as well as a number of other building and unit amenities./i
       )
     ).toBeInTheDocument()
+    expect(screen.getByText(/select all that apply/i)).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: /wheelchair ramp/i })).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: /elevator/i })).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: /service animals allowed/i })).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: /accessible parking spots/i })).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: /parking on site/i })).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: /in-unit washer\/dryer/i })).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: /laundry in building/i })).toBeInTheDocument()
+    expect(
+      screen.getByRole("checkbox", { name: /barrier-free \(no-step\) property/i })
+    ).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: /roll-in showers/i })).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: /grab bars in bathrooms/i })).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: /heating in unit/i })).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: /ac in unit/i })).toBeInTheDocument()
+    expect(
+      screen.getByRole("checkbox", { name: /units for those with hearing disabilities/i })
+    ).toBeInTheDocument()
+    expect(
+      screen.getByRole("checkbox", { name: /units for those with mobility disabilities/i })
+    ).toBeInTheDocument()
+    expect(
+      screen.getByRole("checkbox", { name: /units for those with visual disabilities/i })
+    ).toBeInTheDocument()
+    expect(
+      screen.getByRole("checkbox", { name: /barrier-free \(no-step\) unit entrances/i })
+    ).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: /lowered light switches/i })).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: /barrier-free bathrooms/i })).toBeInTheDocument()
+    expect(
+      screen.getByRole("checkbox", { name: /wide unit doorways for wheelchairs/i })
+    ).toBeInTheDocument()
+    expect(
+      screen.getByRole("checkbox", { name: /lowered cabinets and countertops/i })
+    ).toBeInTheDocument()
+
+    expect(screen.queryByRole("button", { name: /finish/i })).not.toBeInTheDocument()
+    expect(screen.getByRole("button", { name: /back/i })).toBeInTheDocument()
+    expect(
+      screen.getByRole("button", { name: /skip this and show me listings/i })
+    ).toBeInTheDocument()
+    await act(() => userEvent.click(nextButton))
+
+    // ----------- Section 3 - Building Types | Step 1 - Community Types -------------------
+
+    expect(within(sectionOne).getByText(/housing needs/i)).toBeInTheDocument()
+    expect(sectionOne).not.toHaveClass("is-active")
+    expect(sectionOne).not.toHaveClass("is-disabled")
+    expect(within(sectionTwo).getByText(/accessibility/i)).toBeInTheDocument()
+    expect(sectionTwo).not.toHaveClass("is-active")
+    expect(sectionTwo).not.toHaveClass("is-disabled")
+    expect(within(sectionThree).getByText(/building types/i)).toBeInTheDocument()
+    expect(sectionThree).toHaveClass("is-active")
+
+    expect(within(stepHeader).getByText(/building types/i)).toBeInTheDocument()
+    expect(within(stepHeader).getByText("3")).toBeInTheDocument()
+
+    expect(
+      screen.getByRole("heading", {
+        name: /are you looking for one of the following rental types\?/i,
+        level: 2,
+      })
+    ).toBeInTheDocument()
+    expect(
+      screen.getByText(
+        /some affordable housing rental properties are dedicated to specific populations, like seniors. We will use your selections to find you rentals that may match your housing needs./i
+      )
+    ).toBeInTheDocument()
+    expect(screen.getByText(/select all that apply/i)).toBeInTheDocument()
+    expect(
+      screen.getByRole("checkbox", { name: /rentals for residents with disabilities/i })
+    ).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: /rentals for Seniors 55\+/i })).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: /rentals for Seniors 62\+/i })).toBeInTheDocument()
+    expect(
+      screen.getByRole("checkbox", { name: /supportive housing for the homeless/i })
+    ).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: /rentals for veterans/i })).toBeInTheDocument()
+
+    expect(screen.queryByRole("button", { name: /finish/i })).not.toBeInTheDocument()
+    expect(screen.getByRole("button", { name: /back/i })).toBeInTheDocument()
+    expect(
+      screen.getByRole("button", { name: /skip this and show me listings/i })
+    ).toBeInTheDocument()
+    await act(() => userEvent.click(nextButton))
+
+    // --------------------------- Disclaimer --------------------------------------
+    expect(within(sectionOne).getByText(/housing needs/i)).toBeInTheDocument()
+    expect(sectionOne).not.toHaveClass("is-active")
+    expect(sectionOne).not.toHaveClass("is-disabled")
+    expect(within(sectionTwo).getByText(/accessibility/i)).toBeInTheDocument()
+    expect(sectionTwo).not.toHaveClass("is-active")
+    expect(sectionTwo).not.toHaveClass("is-disabled")
+    expect(within(sectionThree).getByText(/building types/i)).toBeInTheDocument()
+    expect(sectionTwo).not.toHaveClass("is-active")
+    expect(sectionTwo).not.toHaveClass("is-disabled")
+
+    expect(within(finderHeader).queryByRole("heading", { level: 2 })).not.toBeInTheDocument()
+
+    const alertBox = screen.getByTestId("alert-box")
+    expect(
+      within(alertBox).getByText(
+        "Disclaimer: The information in this personalized rental finder should be used for informational purposes only. Due to the changing nature of property information, the best way to see if you qualify for a property or if it has any availability is by contacting the property itself."
+      )
+    )
+
+    const disclaimerList = screen.getByTestId("disclaimers-list")
+    expect(disclaimerList).toBeInTheDocument()
+    const disclaimerItems = within(disclaimerList).getAllByRole("listitem")
+    expect(disclaimerItems).toHaveLength(5)
+
+    const disclaimerPatterns = [
+      /detroit home connect will show you regulated affordable rentals, meaning they are affordable because of governmental funding./i,
+      /with this funding, these kinds of rentals often have restrictions about who can live in a property./i,
+      /many buildings serve moderate- or lower-income households, so applicants cannot make more money than specific income limits./i,
+      /some buildings are only reserved for seniors./i,
+      /at these kinds of rentals, property management staff will help you determine your eligibility./i,
+    ]
+
+    disclaimerItems.forEach((item, index) => {
+      const matchingPattern = disclaimerPatterns[index]
+      expect(item).toHaveTextContent(matchingPattern)
+    })
+
+    expect(screen.queryByRole("button", { name: /next/i })).not.toBeInTheDocument()
+    expect(screen.getByRole("button", { name: /back/i })).toBeInTheDocument()
+    expect(screen.getByRole("button", { name: /finish/i })).toBeInTheDocument()
   })
 })
