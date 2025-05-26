@@ -1,7 +1,7 @@
 import React from "react"
 import RentalsFinder from "../../src/components/finder/RentalsFinder"
 import { render, screen } from "../testUtils"
-import { mockNextRouter, within } from "../../../partners/__tests__/testUtils"
+import { mockNextRouter, waitFor, within } from "../../../partners/__tests__/testUtils"
 import userEvent from "@testing-library/user-event"
 import { act } from "react-dom/test-utils"
 
@@ -151,9 +151,9 @@ describe("<RentalsFinder>", () => {
     const minRentInput = screen.getByRole("textbox", { name: /minimum rent/i })
     expect(minRentInput).toBeInTheDocument()
     expect(minRentInput).toHaveAttribute("placeholder", "No Minimum Rent")
-    const maxRentInput = screen.getByRole("textbox", { name: /minimum rent/i })
+    const maxRentInput = screen.getByRole("textbox", { name: /maximum rent/i })
     expect(maxRentInput).toBeInTheDocument()
-    expect(maxRentInput).toHaveAttribute("placeholder", "No Minimum Rent")
+    expect(maxRentInput).toHaveAttribute("placeholder", "No Maximum Rent")
     expect(
       screen.getByRole("checkbox", {
         name: /include rentals that accept section 8 housing choice vouchers/i,
@@ -317,5 +317,224 @@ describe("<RentalsFinder>", () => {
     expect(screen.queryByRole("button", { name: /next/i })).not.toBeInTheDocument()
     expect(screen.getByRole("button", { name: /back/i })).toBeInTheDocument()
     expect(screen.getByRole("button", { name: /finish/i })).toBeInTheDocument()
+  })
+
+  it("should persist selection when switching steps", async () => {
+    render(<RentalsFinder />)
+
+    let studioCheckbox = screen.getByRole("checkbox", { name: /studio/i })
+    let oneBdrmCheckbox = screen.getByRole("checkbox", { name: /1 bedroom/i })
+    expect(studioCheckbox).toBeInTheDocument()
+    expect(oneBdrmCheckbox).toBeInTheDocument()
+
+    // should not be checked by defualt
+    expect(studioCheckbox).not.toBeChecked()
+    expect(oneBdrmCheckbox).not.toBeChecked()
+
+    await act(async () => {
+      await userEvent.click(studioCheckbox)
+      await userEvent.click(oneBdrmCheckbox)
+    })
+
+    // should be checked aftert user interaction
+    expect(studioCheckbox).toBeChecked()
+    expect(oneBdrmCheckbox).toBeChecked()
+
+    const nextButton = screen.getByRole("button", { name: /next/i })
+    expect(nextButton).toBeInTheDocument()
+
+    await act(() => userEvent.click(nextButton))
+
+    let eastsideCheckbox = screen.getByRole("checkbox", { name: /eastside/i })
+    expect(eastsideCheckbox).toBeInTheDocument()
+    expect(eastsideCheckbox).not.toBeChecked()
+
+    await act(() => userEvent.click(eastsideCheckbox))
+    expect(eastsideCheckbox).toBeChecked()
+
+    const backButton = screen.getByRole("button", { name: /back/i })
+    expect(backButton).toBeInTheDocument()
+
+    await act(() => userEvent.click(backButton))
+
+    studioCheckbox = screen.getByRole("checkbox", { name: /studio/i })
+    oneBdrmCheckbox = screen.getByRole("checkbox", { name: /1 bedroom/i })
+    expect(studioCheckbox).toBeInTheDocument()
+    expect(oneBdrmCheckbox).toBeInTheDocument()
+    expect(studioCheckbox).toBeChecked()
+    expect(oneBdrmCheckbox).toBeChecked()
+
+    await act(() => userEvent.click(nextButton))
+
+    eastsideCheckbox = screen.getByRole("checkbox", { name: /eastside/i })
+    expect(eastsideCheckbox).toBeInTheDocument()
+    expect(eastsideCheckbox).toBeChecked()
+  })
+
+  it("should skip to disclaimer on skip button click", async () => {
+    render(<RentalsFinder />)
+
+    const skipButton = screen.getByRole("button", { name: /skip this and show me listings/i })
+    expect(skipButton).toBeInTheDocument()
+
+    await act(() => userEvent.click(skipButton))
+
+    const finderHeaderTitle = screen.getByRole("heading", {
+      name: /find listings for you/i,
+      level: 1,
+    })
+    expect(finderHeaderTitle).toBeInTheDocument()
+
+    const finderHeader = finderHeaderTitle.parentElement
+    const [sectionOne, sectionTwo, sectionThree] = within(finderHeader).getAllByRole("listitem")
+
+    expect(within(sectionOne).getByText(/housing needs/i)).toBeInTheDocument()
+    expect(sectionOne).not.toHaveClass("is-active")
+    expect(sectionOne).not.toHaveClass("is-disabled")
+    expect(within(sectionTwo).getByText(/accessibility/i)).toBeInTheDocument()
+    expect(sectionTwo).not.toHaveClass("is-active")
+    expect(sectionTwo).not.toHaveClass("is-disabled")
+    expect(within(sectionThree).getByText(/building types/i)).toBeInTheDocument()
+    expect(sectionTwo).not.toHaveClass("is-active")
+    expect(sectionTwo).not.toHaveClass("is-disabled")
+
+    expect(within(finderHeader).queryByRole("heading", { level: 2 })).not.toBeInTheDocument()
+
+    const alertBox = screen.getByTestId("alert-box")
+    expect(
+      within(alertBox).getByText(
+        "Disclaimer: The information in this personalized rental finder should be used for informational purposes only. Due to the changing nature of property information, the best way to see if you qualify for a property or if it has any availability is by contacting the property itself."
+      )
+    )
+
+    const disclaimerList = screen.getByTestId("disclaimers-list")
+    expect(disclaimerList).toBeInTheDocument()
+    const disclaimerItems = within(disclaimerList).getAllByRole("listitem")
+    expect(disclaimerItems).toHaveLength(5)
+
+    const disclaimerPatterns = [
+      /detroit home connect will show you regulated affordable rentals, meaning they are affordable because of governmental funding./i,
+      /with this funding, these kinds of rentals often have restrictions about who can live in a property./i,
+      /many buildings serve moderate- or lower-income households, so applicants cannot make more money than specific income limits./i,
+      /some buildings are only reserved for seniors./i,
+      /at these kinds of rentals, property management staff will help you determine your eligibility./i,
+    ]
+
+    disclaimerItems.forEach((item, index) => {
+      const matchingPattern = disclaimerPatterns[index]
+      expect(item).toHaveTextContent(matchingPattern)
+    })
+  })
+
+  describe("should navigate with filter querry", () => {
+    it("should nagvigate withouth query params when no option selected", async () => {
+      const { pushMock } = mockNextRouter()
+      render(<RentalsFinder />)
+
+      while (!screen.queryByRole("button", { name: /finish/i })) {
+        const nextButton = screen.getByRole("button", { name: /next/i })
+        await act(() => userEvent.click(nextButton))
+      }
+
+      const finishButton = screen.getByRole("button", { name: /finish/i })
+      expect(finishButton).toBeInTheDocument()
+
+      await act(() => userEvent.click(finishButton))
+
+      await waitFor(() => {
+        expect(pushMock).toBeCalledWith("/listings")
+      })
+    })
+
+    it("should navigate with formatted query params", async () => {
+      const { pushMock } = mockNextRouter()
+
+      render(<RentalsFinder />)
+
+      // ----------- Section 1 - Housing Needs | Step 1 - Bedrooms -------------------
+
+      const studioCheckbox = screen.getByRole("checkbox", { name: /studio/i })
+      const oneBdrmCheckbox = screen.getByRole("checkbox", { name: /1 bedroom/i })
+      expect(studioCheckbox).toBeInTheDocument()
+      expect(oneBdrmCheckbox).toBeInTheDocument()
+
+      await act(async () => {
+        await userEvent.click(studioCheckbox)
+        await userEvent.click(oneBdrmCheckbox)
+      })
+
+      const nextButton = screen.getByRole("button", { name: /next/i })
+      expect(nextButton).toBeInTheDocument()
+      await act(() => userEvent.click(nextButton))
+
+      // ----------- Section 1 - Housing Needs | Step 2 - Regions -------------------
+
+      const greaterDowntownCheckbox = screen.getByRole("checkbox", { name: /greater downtown/i })
+      const westsideCheckbox = screen.getByRole("checkbox", { name: /westside/i })
+      expect(greaterDowntownCheckbox).toBeInTheDocument()
+      expect(westsideCheckbox).toBeInTheDocument()
+
+      await act(async () => {
+        await userEvent.click(greaterDowntownCheckbox)
+        await userEvent.click(westsideCheckbox)
+        await userEvent.click(nextButton)
+      })
+
+      // ----------- Section 1 - Housing Needs | Step 3 - Rent -------------------
+
+      const minRentInput = screen.getByRole("textbox", { name: /minimum rent/i })
+      const maxRentInput = screen.getByRole("textbox", { name: /maximum rent/i })
+      const section8Button = screen.getByRole("checkbox", {
+        name: /include rentals that accept section 8 housing choice vouchers/i,
+      })
+
+      expect(minRentInput).toBeInTheDocument()
+      expect(maxRentInput).toBeInTheDocument()
+      expect(section8Button).toBeInTheDocument()
+
+      await act(async () => {
+        await userEvent.type(minRentInput, "1500")
+        await userEvent.type(maxRentInput, "3000")
+        await userEvent.click(section8Button)
+        await userEvent.click(nextButton)
+      })
+
+      // ----------- Section 2 - Accessibility | Step 1 - Listing Features -------------------
+      const wheelchairCheckbox = screen.getByRole("checkbox", { name: /wheelchair ramp/i })
+      const elevatorCheckbox = screen.getByRole("checkbox", { name: /elevator/i })
+      const animalCheckbox = screen.getByRole("checkbox", { name: /service animals allowed/i })
+
+      expect(wheelchairCheckbox).toBeInTheDocument()
+      expect(elevatorCheckbox).toBeInTheDocument()
+      expect(animalCheckbox).toBeInTheDocument()
+
+      await act(async () => {
+        await userEvent.click(wheelchairCheckbox)
+        await userEvent.click(elevatorCheckbox)
+        await userEvent.click(animalCheckbox)
+        await userEvent.click(nextButton)
+      })
+
+      // ----------- Section 3 - Building Types | Step 1 - Community Types -------------------
+      const veteranCheckbox = screen.getByRole("checkbox", { name: /rentals for veterans/i })
+      expect(veteranCheckbox).toBeInTheDocument()
+
+      await act(async () => {
+        await userEvent.click(veteranCheckbox)
+        await userEvent.click(nextButton)
+      })
+
+      // --------------------------- Disclaimer --------------------------------------
+      const finishButton = screen.getByRole("button", { name: /finish/i })
+      expect(finishButton).toBeInTheDocument()
+
+      await act(() => userEvent.click(finishButton))
+
+      await waitFor(() => {
+        expect(pushMock).toBeCalledWith(
+          "/listings?bedrooms=studio,oneBdrm&regions=Greater_Downtown,Westside&monthlyRent=1500-3000&section8Acceptance=true&listingFeatures=wheelchairRamp,elevator,serviceAnimalsAllowed&reservedCommunityTypes=veterans"
+        )
+      })
+    })
   })
 })

@@ -197,9 +197,13 @@ export default function RentalsFinder() {
       const [key, value] = entry
       if (Array.isArray(value) && value.length) {
         urlQueryElements.push(`${key}=${value.join(",")}`)
-      } else if (typeof value === "boolean") {
+      } else if (typeof value === "boolean" && value) {
         urlQueryElements.push(`${key}=${value.toString()}`)
-      } else if (typeof value === "object" && ("minRent" in value || "maxRent" in value)) {
+      } else if (
+        typeof value === "object" &&
+        ("minRent" in value || "maxRent" in value) &&
+        (value?.minRent || value?.maxRent)
+      ) {
         urlQueryElements.push(`${key}=${Object.values(value).join("-")}`)
       }
     })
