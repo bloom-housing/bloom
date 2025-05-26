@@ -17,7 +17,7 @@ export default function FinderRentQuestion() {
         <Field
           register={register}
           type="currency"
-          name="minRent"
+          name="monthlyRent.minRent"
           label={t("finder.rent.minRent")}
           placeholder={t("finder.rent.noMinRent")}
           prepend={"$"}
@@ -25,7 +25,7 @@ export default function FinderRentQuestion() {
         <Field
           register={register}
           type="currency"
-          name="maxRent"
+          name="monthlyRent.maxRent"
           label={t("finder.rent.maxRent")}
           placeholder={t("finder.rent.noMaxRent")}
           prepend={"$"}
@@ -35,7 +35,7 @@ export default function FinderRentQuestion() {
         register={register}
         type="checkbox"
         bordered
-        name="includeSection8"
+        name="section8Acceptance"
         label={t("finder.rent.section8")}
         className={finderStyles["question-checkbox"]}
         labelClassName={finderStyles["question-label"]}

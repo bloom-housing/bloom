@@ -22,14 +22,26 @@ type FinderSection = {
   sectionSteps: FinderStep[]
 }
 
-const communityTypes = ["withDisabilities", "senior55", "senior62", "homeless", "veterans"]
+type FinderFormData = {
+  bedrooms?: string[]
+  regions?: string[]
+  listingFeatures?: string[]
+  monthlyRent?: {
+    minRent?: number
+    maxRent?: number
+  }
+  section8Acceptance?: boolean
+  reservedCommunityTypes?: string[]
+}
+
+const reservedCommunityTypes = ["withDisabilities", "senior55", "senior62", "homeless", "veterans"]
 
 export default function RentalsFinder() {
   const router = useRouter()
   const [stepIndex, setStepIndex] = useState<number>(0)
   const [sectionIndex, setSectionIndex] = useState<number>(0)
-  const [formData, setFormData] = useState({})
-  const formMethods = useForm()
+  const [formData, setFormData] = useState<FinderFormData>({})
+  const formMethods = useForm<FinderFormData>()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { reset, handleSubmit, getValues } = formMethods
@@ -51,7 +63,7 @@ export default function RentalsFinder() {
             content: (
               <FinderMultiselectQuestion
                 legend={t("finder.multiselectLegend")}
-                fieldGroupName="bedrooms_count"
+                fieldGroupName="bedrooms"
                 options={cleanUnits.map((unit) => ({
                   label: t(`application.household.preferredUnit.options.${unit}`),
                   value: unit,
@@ -65,7 +77,7 @@ export default function RentalsFinder() {
             content: (
               <FinderMultiselectQuestion
                 legend={t("finder.multiselectLegend")}
-                fieldGroupName="region"
+                fieldGroupName="regions"
                 options={Object.keys(RegionEnum).map((region) => ({
                   label: region.replace("_", " "),
                   value: region,
@@ -89,7 +101,7 @@ export default function RentalsFinder() {
             content: (
               <FinderMultiselectQuestion
                 legend={t("finder.multiselectLegend")}
-                fieldGroupName="accessibility"
+                fieldGroupName="listingFeatures"
                 options={listingFeatures.map((feature) => ({
                   label: t(`eligibility.accessibility.${feature}`),
                   value: feature,
@@ -108,8 +120,8 @@ export default function RentalsFinder() {
             content: (
               <FinderMultiselectQuestion
                 legend={t("finder.multiselectLegend")}
-                fieldGroupName="communityType"
-                options={communityTypes.map((type) => ({
+                fieldGroupName="reservedCommunityTypes"
+                options={reservedCommunityTypes.map((type) => ({
                   label: t(`finder.building.${type}`),
                   value: type,
                 }))}
@@ -179,16 +191,16 @@ export default function RentalsFinder() {
   }, [rentalFinderSections.length])
 
   const onSubmit = useCallback(() => {
-    let urlQueryElements = []
+    const urlQueryElements = []
 
     Object.entries(formData).forEach((entry) => {
       const [key, value] = entry
       if (Array.isArray(value) && value.length) {
         urlQueryElements.push(`${key}=${value.join(",")}`)
       } else if (typeof value === "boolean") {
-        urlQueryElements.push(`${key}=${(value as boolean).toString()}`)
-      } else if (!Array.isArray(value) && value) {
-        urlQueryElements.push(`${key}=${value}`)
+        urlQueryElements.push(`${key}=${value.toString()}`)
+      } else if (typeof value === "object" && ("minRent" in value || "maxRent" in value)) {
+        urlQueryElements.push(`${key}=${Object.values(value).join("-")}`)
       }
     })
 
