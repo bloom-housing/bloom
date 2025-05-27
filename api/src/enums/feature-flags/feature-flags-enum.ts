@@ -23,6 +23,7 @@ export enum FeatureFlagEnum {
   enableSingleUseCode = 'enableSingleUseCode',
   enableUnitGroups = 'enableUnitGroups',
   enableUtilitiesIncluded = 'enableUtilitiesIncluded',
+  enableAdditionalResources = 'enableAdditionalResources',
   example = 'example', // sample feature flag for testing purposes
   hideCloseListingButton = 'hideCloseListingButton',
   swapCommunityTypeWithPrograms = 'swapCommunityTypeWithPrograms',
@@ -86,7 +87,7 @@ export const featureFlagMap: { name: string; description: string }[] = [
       "When true, any newly published listing will send a gov delivery email to everyone that has signed up for the 'listing alerts'",
   },
   {
-    name: FeatureFlagEnum.enableListingsPagination,
+    name: FeatureFlagEnum.enableListingPagination,
     description:
       'When true listings browser will display pagination controls section',
   },

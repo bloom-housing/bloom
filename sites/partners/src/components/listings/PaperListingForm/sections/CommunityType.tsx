@@ -28,7 +28,8 @@ const CommunityType = ({ listing }: CommunityTypeProps) => {
 
   const swapCommunityTypeWithPrograms = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.swapCommunityTypeWithPrograms,
-    jurisdiction
+    jurisdiction,
+    !jurisdiction
   )
 
   const [options, setOptions] = useState([])
@@ -36,14 +37,22 @@ const CommunityType = ({ listing }: CommunityTypeProps) => {
     listing?.reservedCommunityTypes?.id
   )
 
-  const { data: reservedCommunityTypes = [] } = useReservedCommunityTypeList()
+  const { data: reservedCommunityTypes = [], loading } = useReservedCommunityTypeList()
 
   useEffect(() => {
-    const optionsTranslated = reservedCommunityTypes.map((communityType) => {
-      return { ...communityType, name: t(`listings.reservedCommunityTypes.${communityType.name}`) }
-    })
-    setOptions(["", ...arrayToFormOptions<ReservedCommunityType>(optionsTranslated, "name", "id")])
-  }, [reservedCommunityTypes])
+    if (!options.length && !loading) {
+      const optionsTranslated = reservedCommunityTypes.map((communityType) => {
+        return {
+          ...communityType,
+          name: t(`listings.reservedCommunityTypes.${communityType.name}`),
+        }
+      })
+      setOptions([
+        "",
+        ...arrayToFormOptions<ReservedCommunityType>(optionsTranslated, "name", "id"),
+      ])
+    }
+  }, [options, reservedCommunityTypes, loading])
 
   useEffect(() => {
     setValue("reservedCommunityTypes.id", currentCommunityType)
