@@ -63,7 +63,10 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
   const metaDescription = t("pageDescription.welcome", { regionName: t("region.name") })
 
   const filterQuery = getFilterQueryFromURL(router.query)
-  const enableFiltering = isFeatureFlagOn(props.jurisdiction, "enableListingsFiltering")
+  const enableFiltering = isFeatureFlagOn(
+    props.jurisdiction,
+    FeatureFlagEnum.enableListingFiltering
+  )
 
   useEffect(() => {
     pushGtmEvent<ListingList>({
