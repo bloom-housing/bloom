@@ -9,6 +9,7 @@ import HomeModernIcon from "@heroicons/react/24/outline/HomeModernIcon"
 import HouseIcon from "@heroicons/react/24/outline/HomeIcon"
 import EnvelopeIcon from "@heroicons/react/24/outline/EnvelopeIcon"
 import MapPinIcon from "@heroicons/react/24/outline/MapPinIcon"
+import QuestionMarkCircleIcon from "@heroicons/react/24/outline/QuestionMarkCircleIcon"
 import ListBulletIcon from "@heroicons/react/24/outline/ListBulletIcon"
 import QuestionMarkIcon from "@heroicons/react/24/outline/QuestionMarkCircleIcon"
 
@@ -25,6 +26,7 @@ export const CustomIconMap = {
   envelope: <EnvelopeIcon />,
   mapPin: <MapPinIcon />,
   house: <HouseIcon />,
+  questionMarkCircle: <QuestionMarkCircleIcon />,
   listBullet: <ListBulletIcon />,
   questionMark: <QuestionMarkIcon></QuestionMarkIcon>,
 }

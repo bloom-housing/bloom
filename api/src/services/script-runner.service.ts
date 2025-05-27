@@ -3,23 +3,24 @@ import {
   LanguagesEnum,
   MultiselectQuestionsApplicationSectionEnum,
   Prisma,
-  PrismaClient,
   ReviewOrderTypeEnum,
 } from '@prisma/client';
 import { Request as ExpressRequest } from 'express';
+import https from 'https';
 import { AmiChartService } from './ami-chart.service';
 import { EmailService } from './email.service';
 import { FeatureFlagService } from './feature-flag.service';
+import { MultiselectQuestionService } from './multiselect-question.service';
 import { PrismaService } from './prisma.service';
 import { SuccessDTO } from '../dtos/shared/success.dto';
 import { User } from '../dtos/users/user.dto';
 import { mapTo } from '../utilities/mapTo';
-import { DataTransferDTO } from '../dtos/script-runner/data-transfer.dto';
 import { BulkApplicationResendDTO } from '../dtos/script-runner/bulk-application-resend.dto';
 import { Application } from '../dtos/applications/application.dto';
 import { AmiChartImportDTO } from '../dtos/script-runner/ami-chart-import.dto';
 import { AmiChartCreate } from '../dtos/ami-charts/ami-chart-create.dto';
 import { AmiChartUpdate } from '../dtos/ami-charts/ami-chart-update.dto';
+import MultiselectQuestion from '../dtos/multiselect-questions/multiselect-question.dto';
 import { AmiChartUpdateImportDTO } from '../dtos/script-runner/ami-chart-update-import.dto';
 
 /**
@@ -32,49 +33,9 @@ export class ScriptRunnerService {
     private amiChartService: AmiChartService,
     private emailService: EmailService,
     private featureFlagService: FeatureFlagService,
+    private multiselectQuestionService: MultiselectQuestionService,
     private prisma: PrismaService,
   ) {}
-
-  /**
-   *
-   * @param req incoming request object
-   * @param dataTransferDTO data transfer endpoint args. Should contain foreign db connection string
-   * @returns successDTO
-   * @description transfers data from foreign data into the database this api normally connects to
-   */
-  async dataTransfer(
-    req: ExpressRequest,
-    dataTransferDTO: DataTransferDTO,
-    prisma?: PrismaClient,
-  ): Promise<SuccessDTO> {
-    // script runner standard start up
-    const requestingUser = mapTo(User, req['user']);
-    await this.markScriptAsRunStart('data transfer', requestingUser);
-
-    // connect to foreign db based on incoming connection string
-    const client =
-      prisma ||
-      new PrismaClient({
-        datasources: {
-          db: {
-            url: dataTransferDTO.connectionString,
-          },
-        },
-      });
-    await client.$connect();
-
-    // get data
-    const res =
-      await client.$queryRaw`SELECT id, name FROM jurisdictions WHERE name = 'San Mateo'`;
-    console.log(res);
-
-    // disconnect from foreign db
-    await client.$disconnect();
-
-    // script runner standard spin down
-    await this.markScriptAsComplete('data transfer', requestingUser);
-    return { success: true };
-  }
 
   /**
    *
@@ -516,6 +477,181 @@ export class ScriptRunnerService {
   }
 
   /**
+   *
+   * @param req incoming request object
+   * @returns successDTO
+   * @description migrates the preferences and programs in Detroit to the multiselectQuestions table
+   */
+  async migrateDetroitToMultiselectQuestions(
+    req: ExpressRequest,
+  ): Promise<SuccessDTO> {
+    const requestingUser = mapTo(User, req['user']);
+    await this.markScriptAsRunStart(
+      'migrate Detroit to multiselect questions',
+      requestingUser,
+    );
+    const translationURLs = [
+      {
+        url: 'https://raw.githubusercontent.com/bloom-housing/bloom/dev/ui-components/src/locales/general.json',
+        key: 'generalCore',
+      },
+      {
+        url: 'https://raw.githubusercontent.com/bloom-housing/bloom/dev/sites/partners/page_content/locale_overrides/general.json',
+        key: 'generalPartners',
+      },
+      {
+        url: 'https://raw.githubusercontent.com/bloom-housing/bloom/dev/sites/public/page_content/locale_overrides/general.json',
+        key: 'generalPublic',
+      },
+      {
+        url: 'https://raw.githubusercontent.com/CityOfDetroit/bloom/9f2084c107ec865e3c13393e600a5ac45ee5f424/detroit-ui-components/src/locales/general.json',
+        key: 'detroitCore',
+      },
+      {
+        url: 'https://raw.githubusercontent.com/CityOfDetroit/bloom/dev/sites/partners/src/page_content/locale_overrides/general.json',
+        key: 'detroitPartners',
+      },
+      {
+        url: 'https://raw.githubusercontent.com/CityOfDetroit/bloom/dev/sites/public/src/page_content/locale_overrides/general.json',
+        key: 'detroitPublic',
+      },
+    ];
+
+    const translations = {};
+
+    for (let i = 0; i < translationURLs.length; i++) {
+      const { url, key } = translationURLs[i];
+      translations[key] = await this.getTranslationFile(url);
+    }
+
+    // begin migration from preferences
+    const preferences: {
+      id;
+      title;
+      subtitle;
+      description;
+      links;
+      form_metadata;
+    }[] = await this.prisma.$queryRawUnsafe(`
+      SELECT 
+        p.id,
+        p.title,
+        p.subtitle,
+        p.description,
+        p.links,
+        p.form_metadata
+      FROM preferences p
+    `);
+
+    for (let i = 0; i < preferences.length; i++) {
+      const pref = preferences[i];
+      const jurisInfo: { id; name }[] = await this.prisma.$queryRawUnsafe(`
+          SELECT
+            j.id,
+            j.name
+          FROM jurisdictions_preferences_preferences jp
+            JOIN jurisdictions j ON jp.jurisdictions_id = j.id
+          WHERE jp.preferences_id = '${pref.id}'
+      `);
+      const { optOutText, options } = this.resolveOptionValues(
+        pref.form_metadata,
+        'preferences',
+        jurisInfo?.length ? jurisInfo[0].name : '',
+        translations,
+      );
+      await this.multiselectQuestionService.create({
+        text: pref.title,
+        subText: pref.subtitle,
+        description: pref.description,
+        links: pref.links ?? null,
+        hideFromListing: this.resolveHideFromListings(pref),
+        optOutText: optOutText ?? null,
+        options: options,
+        applicationSection:
+          MultiselectQuestionsApplicationSectionEnum.preferences,
+        jurisdictions: jurisInfo.map((juris) => {
+          return { id: juris.id };
+        }),
+      });
+    }
+
+    // begin migration from programs
+    const programs: {
+      id;
+      title;
+      subtitle;
+      description;
+      form_metadata;
+    }[] = await this.prisma.$queryRawUnsafe(`
+      SELECT 
+        p.id,
+        p.title,
+        p.subtitle,
+        p.description,
+        p.form_metadata
+      FROM programs p
+    `);
+
+    for (let i = 0; i < programs.length; i++) {
+      const prog = programs[i];
+      const jurisInfo: { id; name }[] = await this.prisma.$queryRawUnsafe(`
+          SELECT
+            j.id,
+            j.name
+          FROM jurisdictions_programs_programs jp
+            JOIN jurisdictions j ON jp.jurisdictions_id = j.id
+          WHERE jp.programs_id = '${prog.id}'
+        `);
+
+      const res: MultiselectQuestion =
+        await this.multiselectQuestionService.create({
+          text: prog.title,
+          subText: prog.subtitle,
+          description: prog.description,
+          links: null,
+          hideFromListing: this.resolveHideFromListings(prog),
+          optOutText: null,
+          options: null,
+          applicationSection:
+            MultiselectQuestionsApplicationSectionEnum.programs,
+          jurisdictions: jurisInfo.map((juris) => {
+            return { id: juris.id };
+          }),
+        });
+
+      const listingsInfo: { ordinal; listing_id }[] = await this.prisma
+        .$queryRawUnsafe(`
+        SELECT
+          ordinal,
+          listing_id
+        FROM listing_programs
+        WHERE program_id = '${prog.id}';
+      `);
+      for (const listingInfo of listingsInfo) {
+        await this.prisma.listings.update({
+          data: {
+            listingMultiselectQuestions: {
+              create: {
+                ordinal: listingInfo.ordinal,
+                multiselectQuestionId: res.id,
+              },
+            },
+          },
+          where: {
+            id: listingInfo.listing_id,
+          },
+        });
+      }
+    }
+
+    await this.markScriptAsComplete(
+      'migrate Detroit to multiselect questions',
+      requestingUser,
+    );
+    return { success: true };
+  }
+
+  /**
     this is simply an example
   */
   async example(req: ExpressRequest): Promise<SuccessDTO> {
@@ -870,4 +1006,140 @@ export class ScriptRunnerService {
       active: false,
     },
   ];
+
+  resolveHideFromListings(pref): boolean {
+    if (pref.form_metadata && 'hideFromListing' in pref.form_metadata) {
+      if (pref.form_metadata.hideFromListing) {
+        return true;
+      }
+      return false;
+    }
+    return null;
+  }
+
+  resolveOptionValues(formMetaData, type, juris, translations) {
+    let optOutText = null;
+    const options = [];
+    let shouldPush = true;
+
+    formMetaData?.options?.forEach((option, index) => {
+      const toPush: Record<string, any> = {
+        ordinal: index + 1,
+        text: this.getTranslated(
+          type,
+          formMetaData.key,
+          option.key === 'preferNotToSay'
+            ? 'preferNotToSay'
+            : `${option.key}.label`,
+          juris,
+          translations,
+        ),
+      };
+
+      if (
+        option.exclusive &&
+        formMetaData.hideGenericDecline &&
+        index !== formMetaData.options.length - 1
+      ) {
+        // for all but the last exlusive option push into options array
+        toPush.exclusive = true;
+      } else if (
+        option.exclusive &&
+        formMetaData.hideGenericDecline &&
+        index === formMetaData.options.length - 1
+      ) {
+        // for the last exclusive option add as optOutText
+        optOutText = this.getTranslated(
+          type,
+          formMetaData.key,
+          option.key === 'preferNotToSay'
+            ? 'preferNotToSay'
+            : `${option.key}.label`,
+          juris,
+          translations,
+        );
+        shouldPush = false;
+      }
+
+      if (option.description) {
+        toPush.description = this.getTranslated(
+          type,
+          formMetaData.key,
+          option.key === 'preferNotToSay'
+            ? 'preferNotToSay'
+            : `${option.key}.description`,
+          juris,
+          translations,
+        );
+      }
+
+      if (option?.extraData.some((extraData) => extraData.type === 'address')) {
+        toPush.collectAddress = true;
+      }
+
+      if (shouldPush) {
+        options.push(toPush);
+      } else {
+        shouldPush = true;
+      }
+    });
+
+    return {
+      optOutText,
+      options: options.length ? options : null,
+    };
+  }
+
+  getTranslated(type, prefKey, translationKey, juris, translations) {
+    let searchKey = `application.${type}.${prefKey}.${translationKey}`;
+    if (translationKey === 'preferNotToSay') {
+      searchKey = 't.preferNotToSay';
+    }
+
+    if (juris === 'Detroit') {
+      if (translations['detroitPublic'][searchKey]) {
+        return translations['detroitPublic'][searchKey];
+      } else if (translations['detroitPartners'][searchKey]) {
+        return translations['detroitPartners'][searchKey];
+      } else if (translations['detroitCore'][searchKey]) {
+        return translations['detroitCore'][searchKey];
+      }
+    }
+
+    if (translations['generalPublic'][searchKey]) {
+      return translations['generalPublic'][searchKey];
+    } else if (translations['generalPartners'][searchKey]) {
+      return translations['generalPartners'][searchKey];
+    } else if (translations['generalCore'][searchKey]) {
+      return translations['generalCore'][searchKey];
+    }
+    return 'no translation';
+  }
+
+  getTranslationFile(url) {
+    return new Promise((resolve, reject) =>
+      https
+        .get(url, (res) => {
+          let body = '';
+
+          res.on('data', (chunk) => {
+            body += chunk;
+          });
+
+          res.on('end', () => {
+            try {
+              const json = JSON.parse(body);
+              resolve(json);
+            } catch (error) {
+              console.error('on end error:', error.message);
+              reject(`parsing broke: ${url}`);
+            }
+          });
+        })
+        .on('error', (error) => {
+          console.error('on error error:', error.message);
+          reject(`getting broke: ${url}`);
+        }),
+    );
+  }
 }
