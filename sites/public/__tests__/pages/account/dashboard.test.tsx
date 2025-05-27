@@ -175,7 +175,7 @@ describe("<Dashboard>", () => {
       within(accountSettingsCard).getByRole("heading", { level: 2, name: /account settings/i })
     ).toBeInTheDocument()
     expect(
-      within(accountSettingsCard).getByText("Account settings, email and password")
+      within(accountSettingsCard).getByText("Account Settings, email and password")
     ).toBeInTheDocument()
 
     // My applications card not present
