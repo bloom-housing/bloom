@@ -186,7 +186,7 @@ export const RentSection = (props: RentSectionProps) => (
           />
         </Grid.Cell>
       </Grid.Row>
-      <Grid.Row key="0">
+      <Grid.Row>
         <Grid.Cell>
           <Field
             id={ListingFilterKeys.section8Acceptance}
