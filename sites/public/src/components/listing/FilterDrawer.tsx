@@ -3,9 +3,7 @@ import { Button, Drawer } from "@bloom-housing/ui-seeds"
 import { useForm } from "react-hook-form"
 import { listingFeatures } from "@bloom-housing/shared-helpers"
 import {
-  FilterAvailabilityEnum,
   RegionEnum,
-  UnitTypeEnum,
   HomeTypeEnum,
   ListingFilterKeys,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
