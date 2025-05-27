@@ -1219,16 +1219,11 @@ export class ListingService implements OnModuleInit {
       });
     }
 
-    dto.unitsAvailable =
-      dto.reviewOrderType !== ReviewOrderTypeEnum.waitlist && dto.units
-        ? dto.units.length
-        : dto.unitGroups
-        ? dto.unitGroups.reduce(
-            (unitsAvailable, { totalAvailable }) =>
-              unitsAvailable + totalAvailable,
-            0,
-          )
-        : 0;
+    dto.unitsAvailable = this.calculateUnitsAvailable(
+      dto.reviewOrderType,
+      dto.units,
+      dto.unitGroups,
+    );
 
     // Remove requiredFields property before saving to database
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -1902,18 +1897,11 @@ export class ListingService implements OnModuleInit {
       });
     }
 
-    //For unit groups it will return 0 (as we don't use it for it)
-    incomingDto.unitsAvailable =
-      incomingDto.reviewOrderType !== ReviewOrderTypeEnum.waitlist &&
-      incomingDto.units
-        ? incomingDto.units.length
-        : incomingDto.unitGroups
-        ? incomingDto.unitGroups.reduce(
-            (unitsAvailable, { totalAvailable }) =>
-              unitsAvailable + totalAvailable,
-            0,
-          )
-        : 0;
+    incomingDto.unitsAvailable = this.calculateUnitsAvailable(
+      incomingDto.reviewOrderType,
+      incomingDto.units,
+      incomingDto.unitGroups,
+    );
 
     // We need to save the assets before saving it to the listing_images table
     let allAssets = [];
@@ -2500,6 +2488,26 @@ export class ListingService implements OnModuleInit {
     }
     return listing;
   };
+
+  /*
+    calculates the number of units available for a listing
+    For unit groups it will return 0 (as we don't use it for it)
+  */
+  private calculateUnitsAvailable(
+    reviewOrderType: ReviewOrderTypeEnum,
+    units?: any[],
+    unitGroups?: any[],
+  ): number {
+    return reviewOrderType !== ReviewOrderTypeEnum.waitlist && units
+      ? units.length
+      : unitGroups
+      ? unitGroups.reduce(
+          (unitsAvailable, { totalAvailable }) =>
+            unitsAvailable + totalAvailable,
+          0,
+        )
+      : 0;
+  }
 
   /*
     returns id, name of listing given a multiselect question id
