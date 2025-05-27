@@ -234,10 +234,6 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
     void onSubmit(formData, action === "continue")
   }
 
-  const enableUnitGroups =
-    activeFeatureFlags?.find((flag) => flag.name === FeatureFlagEnum.enableUnitGroups)?.active ||
-    false
-
   const onSubmit = useCallback(
     async (formData: FormListing, continueEditing: boolean) => {
       if (!loading) {
