@@ -13,6 +13,7 @@ describe("filter drawer helpers", () => {
     })
   })
   describe("buildDefaultFilterFields", () => {
+    // const existingFilterData
     // it("should return correct fields when labelInfo passed as string", () => {})
     // it("should return correct fields when labelInfo passed as string array", () => {})
   })

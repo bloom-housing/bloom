@@ -119,17 +119,14 @@ export const buildDefaultFilterFields = (
   labelInfo: string | string[],
   keyArr: string[],
   existingData: FilterData
-): FilterField[] => {
-  console.log(existingData)
-
-  return keyArr.map((key, idx) => {
+): FilterField[] =>
+  keyArr.map((key, idx) => {
     return {
       key: `${filterType}.${key}`,
       label: Array.isArray(labelInfo) ? labelInfo[idx] : t(`${labelInfo}.${key}`),
       defaultChecked: isTrue(existingData?.[filterType]?.[key]),
     }
   })
-}
 
 export const CheckboxGroup = (props: CheckboxGroupProps) => {
   return (
