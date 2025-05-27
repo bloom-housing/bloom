@@ -627,18 +627,18 @@ export class ScriptRunnerService {
         FROM listing_programs
         WHERE program_id = '${prog.id}';
       `);
-      for (let i = 0; i < listingsInfo.length; i++) {
+      for (const listingInfo of listingsInfo) {
         await this.prisma.listings.update({
           data: {
             listingMultiselectQuestions: {
               create: {
-                ordinal: listingsInfo[i].ordinal,
+                ordinal: listingInfo.ordinal,
                 multiselectQuestionId: res.id,
               },
             },
           },
           where: {
-            id: listingsInfo[i].listing_id,
+            id: listingInfo.listing_id,
           },
         });
       }
