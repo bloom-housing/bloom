@@ -5,8 +5,8 @@ import {
   Jurisdiction,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { t } from "@bloom-housing/ui-components"
-import { Button, Card, Grid, Heading } from "@bloom-housing/ui-seeds"
-import { PageView, pushGtmEvent, AuthContext, BloomCard } from "@bloom-housing/shared-helpers"
+import { Button, Heading } from "@bloom-housing/ui-seeds"
+import { PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../../lib/constants"
 import Layout from "../../layouts/application"
 import { ConfirmationModal } from "../../components/account/ConfirmationModal"
@@ -15,6 +15,7 @@ import MaxWidthLayout from "../../layouts/max-width"
 import styles from "./Home.module.scss"
 import { HomeSection } from "./HomeSection"
 import { HomeRegions } from "./HomeRegions"
+import { HomeResources } from "./HomeResources"
 
 interface HomeProps {
   jurisdiction: Jurisdiction
@@ -62,56 +63,13 @@ export const Home = (props: HomeProps) => {
             <HomeRegions />
           </HomeSection>
         )}
-        <MaxWidthLayout className={styles["resource-container"]}>
-          <Grid spacing="lg">
-            <Grid.Row columns={2}>
-              {props.jurisdiction && props.jurisdiction.notificationsSignUpUrl && (
-                <Grid.Cell>
-                  <BloomCard
-                    iconSymbol={"envelope"}
-                    title={t("welcome.signUp")}
-                    variant={"block"}
-                    headingPriority={2}
-                    className={styles["resource"]}
-                    iconClass={styles["resource-icon"]}
-                  >
-                    <Card.Section>
-                      <Button
-                        key={"sign-up"}
-                        href={props.jurisdiction.notificationsSignUpUrl}
-                        variant="primary-outlined"
-                        size={"sm"}
-                      >
-                        {t("welcome.signUpToday")}
-                      </Button>
-                    </Card.Section>
-                  </BloomCard>
-                </Grid.Cell>
-              )}
-              <Grid.Cell>
-                <BloomCard
-                  iconSymbol="house"
-                  title={t("welcome.seeMoreOpportunitiesTruncated")}
-                  variant={"block"}
-                  headingPriority={2}
-                  className={styles["resource"]}
-                  iconClass={styles["resource-icon"]}
-                >
-                  <Card.Section>
-                    <Button
-                      key={"additional-resources"}
-                      href="/additional-resources"
-                      variant="primary-outlined"
-                      size={"sm"}
-                    >
-                      {t("welcome.viewAdditionalHousingTruncated")}
-                    </Button>
-                  </Card.Section>
-                </BloomCard>
-              </Grid.Cell>
-            </Grid.Row>
-          </Grid>
-        </MaxWidthLayout>
+        <HomeSection
+          sectionTitle={t("welcome.resources")}
+          sectionIcon="listBullet"
+          layoutClassName={styles["resource-container"]}
+        >
+          <HomeResources jurisdiction={props.jurisdiction} />
+        </HomeSection>
         <ConfirmationModal />
       </div>
     </Layout>
