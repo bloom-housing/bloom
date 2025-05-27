@@ -76,6 +76,7 @@ const availabilityOrdering = {
 }
 
 export const getAvailabilityValues = () => {
+  // TODO: https://github.com/metrotranscom/doorway/issues/1278
   const availabilityFiltered = Object.keys(FilterAvailabilityEnum).filter(
     (elem) => elem != FilterAvailabilityEnum.waitlistOpen
   )
