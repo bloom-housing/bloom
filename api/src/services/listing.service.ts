@@ -2493,7 +2493,7 @@ export class ListingService implements OnModuleInit {
     calculates the number of units available for a listing
     For unit groups it will return 0 (as we don't use it for it)
   */
-  private calculateUnitsAvailable(
+  calculateUnitsAvailable(
     reviewOrderType: ReviewOrderTypeEnum,
     units?: any[],
     unitGroups?: any[],
