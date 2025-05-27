@@ -1230,10 +1230,14 @@ export class ListingService implements OnModuleInit {
           )
         : 0;
 
+    // Remove requiredFields property before saving to database
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { requiredFields, ...listingData } = dto;
+
     const rawListing = await this.prisma.listings.create({
       include: views.details,
       data: {
-        ...dto,
+        ...listingData,
         assets: dto.assets
           ? {
               create: dto.assets.map((asset) => ({
@@ -1854,7 +1858,9 @@ export class ListingService implements OnModuleInit {
     update a listing
   */
   async update(dto: ListingUpdate, requestingUser: User): Promise<Listing> {
-    const incomingDto = { ...dto, requiredFields: undefined };
+    // Remove requiredFields property before saving to database
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { requiredFields, ...incomingDto } = dto;
     const storedListing = await this.findOrThrow(
       incomingDto.id,
       ListingViews.details,
@@ -2441,7 +2447,7 @@ export class ListingService implements OnModuleInit {
     clears the listing cache of either 1 listing or all listings
      @param storedListingStatus the status that was stored for the listing
      @param incomingListingStatus the incoming "new" status for a listing
-     @param savedResponseId the id of the listing   
+     @param savedResponseId the id of the listing
   */
   async cachePurge(
     storedListingStatus: ListingsStatusEnum | undefined,
@@ -2585,7 +2591,7 @@ export class ListingService implements OnModuleInit {
 
   /**
     marks the db record for this cronjob as begun or creates a cronjob that
-    is marked as begun if one does not already exist 
+    is marked as begun if one does not already exist
   */
   async markCronJobAsStarted(cronJobName: string): Promise<void> {
     const job = await this.prisma.cronJob.findFirst({

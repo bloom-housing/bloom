@@ -33,11 +33,9 @@ import { UnitTypeSort } from '../../../src/utilities/unit-utilities';
 import { Listing } from '../../../src/dtos/listings/listing.dto';
 import { ListingViews } from '../../../src/enums/listings/view-enum';
 import { TranslationService } from '../../../src/services/translation.service';
-import { GoogleTranslateService } from '../../../src/services/google-translate.service';
 import { ListingCreate } from '../../../src/dtos/listings/listing-create.dto';
 import { ListingUpdate } from '../../../src/dtos/listings/listing-update.dto';
-import { ListingPublishedCreate } from '../../../src/dtos/listings/listing-published-create.dto';
-import { ListingPublishedUpdate } from '../../../src/dtos/listings/listing-published-update.dto';
+import { GoogleTranslateService } from '../../../src/services/google-translate.service';
 import { ApplicationFlaggedSetService } from '../../../src/services/application-flagged-set.service';
 import { User } from '../../../src/dtos/users/user.dto';
 import { EmailService } from '../../../src/services/email.service';
@@ -315,7 +313,7 @@ describe('Testing listing service', () => {
   const constructFullListingData = (
     listingId?: string,
     useUnitGroups = false,
-  ): ListingPublishedCreate | ListingPublishedUpdate => {
+  ): ListingCreate | ListingUpdate => {
     return {
       id: listingId ?? undefined,
       assets: [exampleAsset],

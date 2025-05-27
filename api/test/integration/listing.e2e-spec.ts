@@ -30,7 +30,8 @@ import { ListingOrderByKeys } from '../../src/enums/listings/order-by-enum';
 import { OrderByEnum } from '../../src/enums/shared/order-by-enum';
 import { ListingViews } from '../../src/enums/listings/view-enum';
 import { IdDTO } from '../../src/dtos/shared/id.dto';
-import { ListingPublishedUpdate } from '../../src/dtos/listings/listing-published-update.dto';
+import { ListingCreate } from '../../src/dtos/listings/listing-create.dto';
+import { ListingUpdate } from '../../src/dtos/listings/listing-update.dto';
 import {
   unitTypeFactoryAll,
   unitTypeFactorySingle,
@@ -46,7 +47,6 @@ import {
   reservedCommunityTypeFactoryAll,
   reservedCommunityTypeFactoryGet,
 } from '../../prisma/seed-helpers/reserved-community-type-factory';
-import { ListingPublishedCreate } from '../../src/dtos/listings/listing-published-create.dto';
 import { addressFactory } from '../../prisma/seed-helpers/address-factory';
 import { AddressCreate } from '../../src/dtos/addresses/address-create.dto';
 import { EmailService } from '../../src/services/email.service';
@@ -164,7 +164,7 @@ describe('Listing Controller Tests', () => {
   const constructFullListingData = async (
     listingId?: string,
     jurisdictionId?: string,
-  ): Promise<ListingPublishedCreate | ListingPublishedUpdate> => {
+  ): Promise<ListingCreate | ListingUpdate> => {
     let jurisdictionA: IdDTO = { id: '' };
 
     if (jurisdictionId) {

@@ -155,7 +155,7 @@ export class ListingController {
   @Post()
   @ApiOperation({ summary: 'Create listing', operationId: 'create' })
   @UseInterceptors(ClassSerializerInterceptor)
-  @UsePipes(new ListingCreateUpdateValidationPipe(defaultValidationPipeOptions))
+  @UsePipes(ListingCreateUpdateValidationPipe)
   @ApiOkResponse({ type: Listing })
   @UseGuards(ApiKeyGuard)
   async create(
@@ -171,7 +171,7 @@ export class ListingController {
   @Post('duplicate')
   @ApiOperation({ summary: 'Duplicate listing', operationId: 'duplicate' })
   @UseInterceptors(ClassSerializerInterceptor)
-  @UsePipes(new ListingCreateUpdateValidationPipe(defaultValidationPipeOptions))
+  @UsePipes(ListingCreateUpdateValidationPipe)
   @ApiOkResponse({ type: Listing })
   @UseGuards(ApiKeyGuard)
   async duplicate(
@@ -207,7 +207,7 @@ export class ListingController {
 
   @Put(':id')
   @ApiOperation({ summary: 'Update listing by id', operationId: 'update' })
-  @UsePipes(new ListingCreateUpdateValidationPipe(defaultValidationPipeOptions))
+  @UsePipes(ListingCreateUpdateValidationPipe)
   @ApiOkResponse({ type: Listing })
   @UseGuards(ApiKeyGuard)
   async update(

@@ -1,89 +1,66 @@
-import {
-  ArgumentMetadata,
-  BadRequestException,
-  ValidationPipe,
-} from '@nestjs/common';
-import { ListingsStatusEnum, ReviewOrderTypeEnum } from '@prisma/client';
+import { ArgumentMetadata, Injectable, ValidationPipe } from '@nestjs/common';
 import { ListingUpdate } from '../dtos/listings/listing-update.dto';
-import { ListingPublishedUpdate } from '../dtos/listings/listing-published-update.dto';
 import { ListingCreate } from '../dtos/listings/listing-create.dto';
-import { ListingPublishedCreate } from '../dtos/listings/listing-published-create.dto';
 import { PrismaService } from '../services/prisma.service';
+import { defaultValidationPipeOptions } from '../utilities/default-validation-pipe-options';
 
+@Injectable()
 export class ListingCreateUpdateValidationPipe extends ValidationPipe {
-  statusToListingValidationModelMapForUpdate: Record<
-    ListingsStatusEnum,
-    typeof ListingUpdate
-  > = {
-    [ListingsStatusEnum.closed]: ListingUpdate,
-    [ListingsStatusEnum.pending]: ListingUpdate,
-    [ListingsStatusEnum.active]: ListingPublishedUpdate,
-    [ListingsStatusEnum.pendingReview]: ListingUpdate,
-    [ListingsStatusEnum.changesRequested]: ListingUpdate,
-  };
+  // Default required fields if jurisdiction doesn't specify any
+  private defaultRequiredFields = [
+    'listingsBuildingAddress',
+    'assets',
+    'developer',
+    'digitalApplication',
+    'listingImages',
+    'leasingAgentEmail',
+    'leasingAgentName',
+    'leasingAgentPhone',
+    'name',
+    'paperApplication',
+    'referralOpportunity',
+    'rentalAssistance',
+  ];
 
-  statusToListingValidationModelMapForCreate: Record<
-    ListingsStatusEnum,
-    typeof ListingCreate
-  > = {
-    [ListingsStatusEnum.closed]: ListingCreate,
-    [ListingsStatusEnum.pending]: ListingCreate,
-    [ListingsStatusEnum.active]: ListingPublishedCreate,
-    [ListingsStatusEnum.pendingReview]: ListingCreate,
-    [ListingsStatusEnum.changesRequested]: ListingCreate,
-  };
+  constructor(private prisma: PrismaService) {
+    super(defaultValidationPipeOptions);
+  }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async transform(value: any, metadata: ArgumentMetadata): Promise<any> {
-    if (metadata.type === 'body') {
-      if (!value.jurisdictions?.id) {
-        return await super.transform(value, {
-          ...metadata,
-          metatype: ListingCreate,
-        });
-      }
-      const prisma = new PrismaService();
-      const jurisdictionRequiredFields = await prisma.jurisdictions.findFirst({
-        select: { requiredListingFields: true },
-        where: { id: value.jurisdictions.id },
-      });
-
-      // example list for demonstration
-      const defaultRequiredFields = [
-        'listingsBuildingAddress',
-        'assets',
-        'developer',
-        'digitalApplication',
-        'listingImages',
-        'leasingAgentEmail',
-        'leasingAgentName',
-        'leasingAgentPhone',
-        'name',
-        'paperApplication',
-        'referralOpportunity',
-        'rentalAssistance',
-      ];
-
-      // defaultRequiredFields.forEach((field: string) => {
-      //   // console.log('value', value);
-      //   if (!value[field]) {
-      //     throw new BadRequestException([`${field} is required`]);
-      //   }
-      // });
-
-      const transformed = await super.transform(
-        {
-          ...value,
-          requiredFields: defaultRequiredFields,
-        },
-        {
-          ...metadata,
-          metatype: value.id ? ListingUpdate : ListingCreate,
-        },
-      );
-      // console.log(transformed);
-      return transformed;
+    if (metadata.type !== 'body') {
+      return await super.transform(value, metadata);
     }
-    return await super.transform(value, metadata);
+
+    // For non-jurisdiction requests, use base validation
+    if (!value.jurisdictions?.id) {
+      return await super.transform(value, {
+        ...metadata,
+        metatype: value.id ? ListingUpdate : ListingCreate,
+      });
+    }
+
+    // Get jurisdiction's required fields
+    const jurisdiction = await this.prisma.jurisdictions.findFirst({
+      where: { id: value.jurisdictions.id },
+      select: { requiredListingFields: true },
+    });
+
+    // Use jurisdiction's required fields, falling back to defaults if none specified
+    const requiredFields = jurisdiction?.requiredListingFields?.length
+      ? jurisdiction.requiredListingFields
+      : this.defaultRequiredFields;
+
+    // Add required fields to the value being validated
+    const transformedValue = {
+      ...value,
+      requiredFields,
+    };
+
+    // Transform using the appropriate DTO
+    return await super.transform(transformedValue, {
+      ...metadata,
+      metatype: value.id ? ListingUpdate : ListingCreate,
+    });
   }
 }

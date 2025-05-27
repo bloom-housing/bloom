@@ -1,5 +1,7 @@
 import { Expose, Transform, TransformFnParams, Type } from 'class-transformer';
 import {
+  ArrayMaxSize,
+  ArrayMinSize,
   IsArray,
   IsBoolean,
   IsDate,
@@ -7,6 +9,7 @@ import {
   IsEmail,
   IsEnum,
   IsNumber,
+  IsPhoneNumber,
   IsString,
   IsUrl,
   MaxLength,
@@ -50,15 +53,23 @@ import { ApplicationLotteryTotal } from '../applications/application-lottery-tot
 import { ListingNeighborhoodAmenities } from './listing-neighborhood-amenities.dto';
 import { ValidateListingPublish } from '../../decorators/validate-listing-publish.decorator';
 import { UnitGroupsSummarized } from '../unit-groups/unit-groups-summarized.dto';
+import { ValidateUnitsRequired } from '../../decorators/validate-units-required.decorator';
 
 class Listing extends AbstractDTO {
   @Expose()
+  @ValidateListingPublish('additionalApplicationSubmissionNotes', {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   additionalApplicationSubmissionNotes?: string;
 
   @Expose()
+  @ValidateListingPublish('digitalApplication', {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   digitalApplication?: boolean;
 
@@ -68,33 +79,54 @@ class Listing extends AbstractDTO {
   commonDigitalApplication?: boolean;
 
   @Expose()
+  @ValidateListingPublish('paperApplication', {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   paperApplication?: boolean;
 
   @Expose()
+  @ValidateListingPublish('referralOpportunity', {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   referralOpportunity?: boolean;
 
   @Expose()
+  @ValidateListingPublish('accessibility', {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   accessibility?: string;
 
   @Expose()
+  @ValidateListingPublish('amenities', {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   amenities?: string;
 
   @Expose()
+  @ValidateListingPublish('buildingTotalUnits', {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   buildingTotalUnits?: number;
 
   @Expose()
+  @ValidateListingPublish('developer', {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(256, { groups: [ValidationsGroupsEnum.default] })
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   developer?: string;
 
@@ -109,11 +141,17 @@ class Listing extends AbstractDTO {
   householdSizeMin?: number;
 
   @Expose()
+  @ValidateListingPublish('neighborhood', {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   neighborhood?: string;
 
   @Expose()
+  @ValidateListingPublish('region', {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional({
     enum: RegionEnum,
@@ -122,63 +160,99 @@ class Listing extends AbstractDTO {
   region?: RegionEnum;
 
   @Expose()
+  @ValidateListingPublish('petPolicy', {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   petPolicy?: string;
 
   @Expose()
+  @ValidateListingPublish('smokingPolicy', {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   smokingPolicy?: string;
 
   @Expose()
+  @ValidateListingPublish('unitsAvailable', {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   unitsAvailable?: number;
 
   @Expose()
+  @ValidateListingPublish('unitAmenities', {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   unitAmenities?: string;
 
   @Expose()
+  @ValidateListingPublish('servicesOffered', {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   servicesOffered?: string;
 
   @Expose()
+  @ValidateListingPublish('yearBuilt', {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   yearBuilt?: number;
 
   @Expose()
+  @ValidateListingPublish('applicationDueDate', {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @IsDate({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Date)
   @ApiPropertyOptional()
   applicationDueDate?: Date;
 
   @Expose()
+  @ValidateListingPublish('applicationOpenDate', {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @IsDate({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Date)
   @ApiPropertyOptional()
   applicationOpenDate?: Date;
 
   @Expose()
+  @ValidateListingPublish('applicationFee', {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   applicationFee?: string;
 
   @Expose()
+  @ValidateListingPublish('applicationOrganization', {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   applicationOrganization?: string;
 
   @Expose()
+  @ValidateListingPublish('applicationPickUpAddressOfficeHours', {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   applicationPickUpAddressOfficeHours?: string;
 
   @Expose()
+  @ValidateListingPublish('applicationPickUpAddressType', {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @IsEnum(ApplicationAddressTypeEnum, {
     groups: [ValidationsGroupsEnum.default],
   })
@@ -189,11 +263,17 @@ class Listing extends AbstractDTO {
   applicationPickUpAddressType?: ApplicationAddressTypeEnum;
 
   @Expose()
+  @ValidateListingPublish('applicationDropOffAddressOfficeHours', {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   applicationDropOffAddressOfficeHours?: string;
 
   @Expose()
+  @ValidateListingPublish('applicationDropOffAddressType', {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @IsEnum(ApplicationAddressTypeEnum, {
     groups: [ValidationsGroupsEnum.default],
   })
@@ -204,6 +284,9 @@ class Listing extends AbstractDTO {
   applicationDropOffAddressType?: ApplicationAddressTypeEnum;
 
   @Expose()
+  @ValidateListingPublish('applicationMailingAddressType', {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @IsEnum(ApplicationAddressTypeEnum, {
     groups: [ValidationsGroupsEnum.default],
   })
@@ -214,6 +297,9 @@ class Listing extends AbstractDTO {
   applicationMailingAddressType?: ApplicationAddressTypeEnum;
 
   @Expose()
+  @ValidateListingPublish('buildingSelectionCriteria', {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   @IsUrl(
@@ -223,67 +309,115 @@ class Listing extends AbstractDTO {
   buildingSelectionCriteria?: string;
 
   @Expose()
+  @ValidateListingPublish('costsNotIncluded', {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   costsNotIncluded?: string;
 
   @Expose()
+  @ValidateListingPublish('creditHistory', {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   creditHistory?: string;
 
   @Expose()
+  @ValidateListingPublish('criminalBackground', {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   criminalBackground?: string;
 
   @Expose()
+  @ValidateListingPublish('depositMin', {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @MaxLength(64, { groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   depositMin?: string;
 
   @Expose()
+  @ValidateListingPublish('depositMax', {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @MaxLength(64, { groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   depositMax?: string;
 
   @Expose()
+  @ValidateListingPublish('depositHelperText', {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   depositHelperText?: string;
 
   @Expose()
+  @ValidateListingPublish('disableUnitsAccordion', {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   disableUnitsAccordion?: boolean;
 
   @Expose()
+  @ValidateListingPublish('leasingAgentEmail', {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @IsEmail({}, { groups: [ValidationsGroupsEnum.default] })
+  @MaxLength(256, { groups: [ValidationsGroupsEnum.default] })
   @EnforceLowerCase()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   leasingAgentEmail?: string;
 
   @Expose()
+  @ValidateListingPublish('leasingAgentName', {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @MaxLength(256, { groups: [ValidationsGroupsEnum.default] })
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   leasingAgentName?: string;
 
   @Expose()
+  @ValidateListingPublish('leasingAgentOfficeHours', {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   leasingAgentOfficeHours?: string;
 
   @Expose()
+  @ValidateListingPublish('leasingAgentPhone', {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @IsPhoneNumber('US', { groups: [ValidationsGroupsEnum.default] })
+  @MaxLength(64, { groups: [ValidationsGroupsEnum.default] })
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   leasingAgentPhone?: string;
 
   @Expose()
+  @ValidateListingPublish('leasingAgentTitle', {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   leasingAgentTitle?: string;
 
   @Expose()
+  @ValidateListingPublish('managementWebsite', {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   @IsUrl(
@@ -293,58 +427,94 @@ class Listing extends AbstractDTO {
   managementWebsite?: string;
 
   @Expose()
+  @ValidateListingPublish('name', {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @MaxLength(256, { groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
   name: string;
 
   @Expose()
+  @ValidateListingPublish('postmarkedApplicationsReceivedByDate', {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @IsDate({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Date)
   @ApiPropertyOptional()
   postmarkedApplicationsReceivedByDate?: Date;
 
   @Expose()
+  @ValidateListingPublish('programRules', {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   programRules?: string;
 
   @Expose()
+  @ValidateListingPublish('rentalAssistance', {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @MaxLength(4096, { groups: [ValidationsGroupsEnum.default] })
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   rentalAssistance?: string;
 
   @Expose()
+  @ValidateListingPublish('rentalHistory', {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   rentalHistory?: string;
 
   @Expose()
+  @ValidateListingPublish('requiredDocuments', {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   requiredDocuments?: string;
 
   @Expose()
+  @ValidateListingPublish('specialNotes', {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   specialNotes?: string;
 
   @Expose()
+  @ValidateListingPublish('waitlistCurrentSize', {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   waitlistCurrentSize?: number;
 
   @Expose()
+  @ValidateListingPublish('waitlistMaxSize', {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   waitlistMaxSize?: number;
 
   @Expose()
+  @ValidateListingPublish('whatToExpect', {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   whatToExpect?: string;
 
   @Expose()
+  @ValidateListingPublish('status', {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @IsEnum(ListingsStatusEnum, { groups: [ValidationsGroupsEnum.default] })
   @ApiProperty({
     enum: ListingsStatusEnum,
@@ -353,6 +523,9 @@ class Listing extends AbstractDTO {
   status: ListingsStatusEnum;
 
   @Expose()
+  @ValidateListingPublish('reviewOrderType', {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @IsEnum(ReviewOrderTypeEnum, { groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional({
     enum: ReviewOrderTypeEnum,
@@ -361,10 +534,16 @@ class Listing extends AbstractDTO {
   reviewOrderType?: ReviewOrderTypeEnum;
 
   @Expose()
+  @ValidateListingPublish('applicationConfig', {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @ApiPropertyOptional()
   applicationConfig?: Record<string, unknown>;
 
   @Expose()
+  @ValidateListingPublish('displayWaitlistSize', {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
@@ -381,33 +560,51 @@ class Listing extends AbstractDTO {
   }
 
   @Expose()
+  @ValidateListingPublish('reservedCommunityDescription', {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(4096, { groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   reservedCommunityDescription?: string;
 
   @Expose()
+  @ValidateListingPublish('reservedCommunityMinAge', {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   reservedCommunityMinAge?: number;
 
   @Expose()
+  @ValidateListingPublish('resultLink', {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(4096, { groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   resultLink?: string;
 
   @Expose()
+  @ValidateListingPublish('isWaitlistOpen', {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   isWaitlistOpen?: boolean;
 
   @Expose()
+  @ValidateListingPublish('waitlistOpenSpots', {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   waitlistOpenSpots?: number;
 
   @Expose()
+  @ValidateListingPublish('customMapPin', {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   customMapPin?: boolean;
@@ -465,6 +662,9 @@ class Listing extends AbstractDTO {
   lastApplicationUpdateAt?: Date;
 
   @Expose()
+  @ValidateListingPublish('listingMultiselectQuestions', {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => ListingMultiselectQuestion)
   @ApiPropertyOptional({
@@ -474,6 +674,9 @@ class Listing extends AbstractDTO {
   listingMultiselectQuestions?: ListingMultiselectQuestion[];
 
   @Expose()
+  @ValidateListingPublish('applicationMethods', {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => ApplicationMethod)
@@ -490,6 +693,9 @@ class Listing extends AbstractDTO {
 
   // This is no longer needed and should be removed https://github.com/bloom-housing/bloom/issues/3747
   @Expose()
+  @ValidateListingPublish('assets', {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => Asset)
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
@@ -497,6 +703,9 @@ class Listing extends AbstractDTO {
   assets: Asset[];
 
   @Expose()
+  @ValidateListingPublish('listingEvents', {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @Validate(LotteryDateParamValidator, {
     groups: [ValidationsGroupsEnum.default],
   })
@@ -517,36 +726,54 @@ class Listing extends AbstractDTO {
   listingsBuildingAddress: Address;
 
   @Expose()
+  @ValidateListingPublish('listingsApplicationPickUpAddress', {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Address)
   @ApiPropertyOptional({ type: Address })
   listingsApplicationPickUpAddress?: Address;
 
   @Expose()
+  @ValidateListingPublish('listingsApplicationDropOffAddress', {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Address)
   @ApiPropertyOptional({ type: Address })
   listingsApplicationDropOffAddress?: Address;
 
   @Expose()
+  @ValidateListingPublish('listingsApplicationMailingAddress', {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Address)
   @ApiPropertyOptional({ type: Address })
   listingsApplicationMailingAddress?: Address;
 
   @Expose()
+  @ValidateListingPublish('listingsLeasingAgentAddress', {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Address)
   @ApiPropertyOptional({ type: Address })
   listingsLeasingAgentAddress?: Address;
 
   @Expose()
+  @ValidateListingPublish('listingsBuildingSelectionCriteriaFile', {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Asset)
   @ApiPropertyOptional({ type: Asset })
   listingsBuildingSelectionCriteriaFile?: Asset;
 
   @Expose()
+  @ValidateListingPublish('jurisdictions', {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => IdDTO)
@@ -560,52 +787,85 @@ class Listing extends AbstractDTO {
   listingsResult?: Asset;
 
   @Expose()
+  @ValidateListingPublish('reservedCommunityTypes', {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => IdDTO)
   @ApiPropertyOptional({ type: IdDTO })
   reservedCommunityTypes?: IdDTO;
 
   @Expose()
+  @ValidateListingPublish('listingImages', {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => ListingImage)
+  @ArrayMinSize(1, { groups: [ValidationsGroupsEnum.default] })
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional({ type: ListingImage, isArray: true })
   listingImages?: ListingImage[];
 
   @Expose()
+  @ValidateListingPublish('listingFeatures', {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => ListingFeatures)
   @ApiPropertyOptional({ type: ListingFeatures })
   listingFeatures?: ListingFeatures;
 
   @Expose()
+  @ValidateListingPublish('listingUtilities', {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => ListingUtilities)
   @ApiPropertyOptional({ type: ListingUtilities })
   listingUtilities?: ListingUtilities;
 
   @Expose()
+  @ValidateListingPublish('units', {
+    groups: [ValidationsGroupsEnum.default],
+  })
+  @ValidateUnitsRequired({
+    groups: [ValidationsGroupsEnum.default],
+  })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => Unit)
+  @ArrayMaxSize(256, { groups: [ValidationsGroupsEnum.default] })
   @ApiProperty({ type: Unit, isArray: true })
   units: Unit[];
 
   @Expose()
+  @ValidateListingPublish('unitGroups', {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => UnitGroup)
   @ApiPropertyOptional({ type: UnitGroup, isArray: true })
   unitGroups?: UnitGroup[];
 
   @Expose()
+  @ValidateListingPublish('unitsSummarized', {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @ApiPropertyOptional({ type: UnitsSummarized })
   unitsSummarized?: UnitsSummarized;
 
   @Expose()
+  @ValidateListingPublish('unitGroupsSummarized', {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @ApiPropertyOptional({ type: UnitGroupsSummarized })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => UnitGroupsSummarized)
   unitGroupsSummarized?: UnitGroupsSummarized;
 
   @Expose()
+  @ValidateListingPublish('unitsSummary', {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @ApiPropertyOptional({ type: UnitsSummary, isArray: true })
   @Type(() => UnitsSummary)
@@ -644,11 +904,17 @@ class Listing extends AbstractDTO {
   requestedChangesUser?: IdDTO;
 
   @Expose()
+  @ValidateListingPublish('lotteryOptIn', {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   lotteryOptIn?: boolean;
 
   @Expose()
+  @ValidateListingPublish('applicationLotteryTotals', {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @IsArray({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
@@ -657,6 +923,9 @@ class Listing extends AbstractDTO {
   applicationLotteryTotals: ApplicationLotteryTotal[];
 
   @Expose()
+  @ValidateListingPublish('includeCommunityDisclaimer', {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @ApiPropertyOptional()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   includeCommunityDisclaimer?: boolean;
@@ -680,6 +949,9 @@ class Listing extends AbstractDTO {
   communityDisclaimerDescription?: string;
 
   @Expose()
+  @ValidateListingPublish('marketingType', {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @IsEnum(MarketingTypeEnum, { groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional({
     enum: MarketingTypeEnum,
@@ -688,6 +960,9 @@ class Listing extends AbstractDTO {
   marketingType?: MarketingTypeEnum;
 
   @Expose()
+  @ValidateListingPublish('marketingDate', {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @Type(() => Date)
   @ValidateIf((o) => o.marketingType === MarketingTypeEnum.comingSoon, {
     groups: [ValidationsGroupsEnum.default],
@@ -698,6 +973,9 @@ class Listing extends AbstractDTO {
   marketingDate?: Date | null;
 
   @Expose()
+  @ValidateListingPublish('marketingSeason', {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @IsEnum(MarketingSeasonEnum, { groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional({
     enum: MarketingSeasonEnum,
@@ -706,6 +984,9 @@ class Listing extends AbstractDTO {
   marketingSeason?: MarketingSeasonEnum | null;
 
   @Expose()
+  @ValidateListingPublish('homeType', {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @IsEnum(HomeTypeEnum, {
     groups: [ValidationsGroupsEnum.default],
   })
@@ -721,11 +1002,17 @@ class Listing extends AbstractDTO {
   isVerified?: boolean;
 
   @Expose()
-  @ApiPropertyOptional()
+  @ValidateListingPublish('section8Acceptance', {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
   section8Acceptance?: boolean;
 
   @Expose()
+  @ValidateListingPublish('listingNeighborhoodAmenities', {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => ListingNeighborhoodAmenities)
   @ApiPropertyOptional({ type: ListingNeighborhoodAmenities })

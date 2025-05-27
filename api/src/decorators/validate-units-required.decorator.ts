@@ -4,11 +4,11 @@ import {
   ValidationArguments,
 } from 'class-validator';
 import { PrismaService } from '../services/prisma.service';
-import { ListingPublishedUpdate } from '../dtos/listings/listing-published-update.dto';
+import { ListingUpdate } from '../dtos/listings/listing-update.dto';
 import { FeatureFlagEnum } from '../enums/feature-flags/feature-flags-enum';
 
 /*
-  Validates if validated value is array with at least 1 element 
+  Validates if validated value is array with at least 1 element
   only when the jurisdiction has the feature flag enableUnitGroups enabled.
   (used for units as they should not be required when unitGroups are used)
 */
@@ -22,8 +22,8 @@ export function ValidateUnitsRequired(validationOptions?: ValidationOptions) {
       async: true,
       validator: {
         async validate(value: unknown[], args: ValidationArguments) {
-          const jurisdictionId = (args.object as ListingPublishedUpdate)
-            .jurisdictions?.id;
+          const jurisdictionId = (args.object as ListingUpdate).jurisdictions
+            ?.id;
           if (!jurisdictionId) return true;
 
           const prisma = new PrismaService();
