@@ -98,3 +98,4 @@ dump.rdb
 
 # Development planning files
 memory-bank/
+.github/copilot-instructions.md
