@@ -69,7 +69,7 @@ export const Home = (props: HomeProps) => {
         )}
         <MaxWidthLayout className={styles["resource-container"]}>
           <Grid spacing="lg">
-            <Grid.Row columns={2}>
+            <Grid.Row>
               {props.jurisdiction && props.jurisdiction.notificationsSignUpUrl && (
                 <Grid.Cell>
                   <BloomCard
@@ -110,6 +110,27 @@ export const Home = (props: HomeProps) => {
                       size={"sm"}
                     >
                       {t("welcome.viewAdditionalHousingTruncated")}
+                    </Button>
+                  </Card.Section>
+                </BloomCard>
+              </Grid.Cell>
+              <Grid.Cell>
+                <BloomCard
+                  iconSymbol="questionMark"
+                  title={t("welcome.learnHousingBasics")}
+                  variant={"block"}
+                  headingPriority={2}
+                  className={styles["resource"]}
+                  iconClass={styles["resource-icon"]}
+                >
+                  <Card.Section>
+                    <Button
+                      key={"housing-basics"}
+                      href="/housing-basics"
+                      variant="primary-outlined"
+                      size={"sm"}
+                    >
+                      {t("t.learnMore")}
                     </Button>
                   </Card.Section>
                 </BloomCard>
