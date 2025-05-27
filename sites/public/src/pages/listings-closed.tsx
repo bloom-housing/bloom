@@ -6,7 +6,7 @@ import {
   decodeQueryToFilterData,
   encodeFilterDataToBackendFilters,
   isFiltered,
-} from "../components/listing/FilterDrawerHelper"
+} from "../components/browse/FilterDrawerHelpers"
 import { useRouter } from "next/router"
 
 export default function ListingsPageClosed(props: ListingsProps) {

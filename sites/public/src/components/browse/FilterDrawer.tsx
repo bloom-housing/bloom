@@ -16,7 +16,7 @@ import {
   RentSection,
   unitTypeMapping,
   unitTypesSorted,
-} from "./FilterDrawerHelper"
+} from "./FilterDrawerHelpers"
 import { isTrue } from "../../lib/helpers"
 
 export interface FilterDrawerProps {

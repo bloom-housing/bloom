@@ -8,12 +8,12 @@ import {
   RegionEnum,
   UnitTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import styles from "./FilterDrawer.module.scss"
 import { UseFormMethods } from "react-hook-form"
 import { Grid } from "@bloom-housing/ui-seeds"
 import { Field, t } from "@bloom-housing/ui-components"
-import { isTrue } from "../../lib/helpers"
 import { encode, ParsedUrlQuery } from "querystring"
+import { isTrue } from "../../lib/helpers"
+import styles from "./FilterDrawer.module.scss"
 
 export interface FilterData {
   availability?: Record<FilterAvailabilityEnum, boolean | "true" | "false">
@@ -119,14 +119,17 @@ export const buildDefaultFilterFields = (
   labelInfo: string | string[],
   keyArr: string[],
   existingData: FilterData
-): FilterField[] =>
-  keyArr.map((key, idx) => {
+): FilterField[] => {
+  console.log(existingData)
+
+  return keyArr.map((key, idx) => {
     return {
       key: `${filterType}.${key}`,
       label: Array.isArray(labelInfo) ? labelInfo[idx] : t(`${labelInfo}.${key}`),
       defaultChecked: isTrue(existingData?.[filterType]?.[key]),
     }
   })
+}
 
 export const CheckboxGroup = (props: CheckboxGroupProps) => {
   return (

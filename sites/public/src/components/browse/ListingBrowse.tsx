@@ -20,13 +20,13 @@ import Layout from "../../layouts/application"
 import MaxWidthLayout from "../../layouts/max-width"
 import { UserStatus } from "../../lib/constants"
 import { fetchFavoriteListingIds, isFeatureFlagOn, saveListingFavorite } from "../../lib/helpers"
-import { FilterDrawer } from "../listing/FilterDrawer"
+import { FilterDrawer } from "./FilterDrawer"
 import {
   decodeQueryToFilterData,
   encodeFilterDataToQuery,
   FilterData,
   getFilterQueryFromURL,
-} from "../listing/FilterDrawerHelper"
+} from "./FilterDrawerHelpers"
 import { PageHeaderSection } from "../../patterns/PageHeaderLayout"
 import { ListingCard } from "./ListingCard"
 import styles from "./ListingBrowse.module.scss"
