@@ -36,7 +36,7 @@ export interface CheckboxGroupProps {
   groupLabel: string
   fields: FilterField[]
   register: UseFormMethods["register"]
-  customRowNumber?: number
+  customColumnNumber?: number
 }
 
 export interface RentSectionProps {
@@ -62,30 +62,67 @@ const booleanFilters: ListingFilterKeys[] = [
 ]
 
 // two filters below have yet to be implemented, captured in part 4
-const indvidualFilters: ListingFilterKeys[] = [
+const individualFilters: ListingFilterKeys[] = [
   ListingFilterKeys.bathrooms,
   ListingFilterKeys.jurisdiction,
 ]
 
-export const unitTypeMapping = {
-  [UnitTypeEnum.studio]: 0,
-  [UnitTypeEnum.oneBdrm]: 1,
-  [UnitTypeEnum.twoBdrm]: 2,
-  [UnitTypeEnum.threeBdrm]: 3,
-  [UnitTypeEnum.fourBdrm]: 4,
-  [UnitTypeEnum.fiveBdrm]: 5,
+// customizations to base enums
+const availabilityOrdering = {
+  [FilterAvailabilityEnum.unitsAvailable]: { ordinal: 0 },
+  [FilterAvailabilityEnum.openWaitlist]: { ordinal: 1 },
+  [FilterAvailabilityEnum.closedWaitlist]: { ordinal: 2 },
+  [FilterAvailabilityEnum.comingSoon]: { ordinal: 3 },
 }
+
+export const getAvailabilityValues = () => {
+  const availabilityFiltered = Object.keys(FilterAvailabilityEnum).filter(
+    (elem) => elem != FilterAvailabilityEnum.waitlistOpen
+  )
+  const availabilityOrdered = availabilityFiltered.sort((a, b) => {
+    return availabilityOrdering[a].ordinal - availabilityOrdering[b].ordinal
+  })
+  return availabilityOrdered
+}
+
+export const unitTypeMapping = {
+  [UnitTypeEnum.studio]: { value: 0, ordinal: 0, label: t("listings.unitTypes.studio") },
+  [UnitTypeEnum.SRO]: { value: 0, ordinal: 1, label: t("listings.unitTypes.SRO") },
+  [UnitTypeEnum.oneBdrm]: { value: 1, ordinal: 2, label: t("listings.unitTypes.expanded.oneBdrm") },
+  [UnitTypeEnum.twoBdrm]: { value: 2, ordinal: 3, label: t("listings.unitTypes.expanded.twoBdrm") },
+  [UnitTypeEnum.threeBdrm]: {
+    value: 3,
+    ordinal: 4,
+    label: t("listings.unitTypes.expanded.threeBdrm"),
+  },
+  [UnitTypeEnum.fourBdrm]: {
+    value: 4,
+    ordinal: 5,
+    label: t("listings.unitTypes.expanded.fourBdrm"),
+  },
+  [UnitTypeEnum.fiveBdrm]: {
+    value: 5,
+    ordinal: 6,
+    label: t("listings.unitTypes.expanded.fiveBdrm"),
+  },
+}
+
+export const unitTypesSorted = Object.keys(UnitTypeEnum).sort(
+  (a, b) => unitTypeMapping[a].ordinal - unitTypeMapping[b].ordinal
+)
 
 export const buildDefaultFilterFields = (
   filterType: ListingFilterKeys,
-  stringBase: string,
+  // string if all translations have consistent translation key base in json
+  // array for strings to be passed in manually for special cases
+  labelInfo: string | string[],
   keyArr: string[],
   existingData: FilterData
 ): FilterField[] =>
-  keyArr.map((key) => {
+  keyArr.map((key, idx) => {
     return {
       key: `${filterType}.${key}`,
-      label: t(`${stringBase}.${key}`),
+      label: Array.isArray(labelInfo) ? labelInfo[idx] : t(`${labelInfo}.${key}`),
       defaultChecked: isTrue(existingData?.[filterType]?.[key]),
     }
   })
@@ -95,7 +132,7 @@ export const CheckboxGroup = (props: CheckboxGroupProps) => {
     <fieldset className={styles["filter-section"]}>
       <legend className={styles["filter-section-label"]}>{props.groupLabel}</legend>
       <Grid spacing="sm">
-        <Grid.Row columns={props.customRowNumber ?? 3}>
+        <Grid.Row columns={props.customColumnNumber ?? 3}>
           {props.fields.map((field) => {
             return (
               <Grid.Cell key={`${field.key}-cell`}>
@@ -133,7 +170,7 @@ export const RentSection = (props: RentSectionProps) => (
             getValues={props.getValues}
             setValue={props.setValue}
             defaultValue={props.filterState?.[ListingFilterKeys.monthlyRent]?.minRent}
-          ></Field>
+          />
         </Grid.Cell>
         <Grid.Cell>
           <Field
@@ -146,7 +183,7 @@ export const RentSection = (props: RentSectionProps) => (
             getValues={props.getValues}
             setValue={props.setValue}
             defaultValue={props.filterState?.[ListingFilterKeys.monthlyRent]?.maxRent}
-          ></Field>
+          />
         </Grid.Cell>
       </Grid.Row>
       <Grid.Row key="0">
@@ -161,7 +198,7 @@ export const RentSection = (props: RentSectionProps) => (
             inputProps={{
               defaultChecked: isTrue(props.filterState?.[ListingFilterKeys.section8Acceptance]),
             }}
-          ></Field>
+          />
         </Grid.Cell>
       </Grid.Row>
     </Grid>
@@ -173,7 +210,7 @@ export const encodeFilterDataToBackendFilters = (data: FilterData = {}): Listing
   const filters: ListingFilterParams[] = []
   Object.entries(data).forEach(([filterType, userSelections]) => {
     // individual filters not yet implemented
-    if (indvidualFilters.includes(ListingFilterKeys[filterType])) {
+    if (individualFilters.includes(ListingFilterKeys[filterType])) {
       Object.entries(userSelections).forEach((field) => {
         if (field[1]) {
           const filter = {

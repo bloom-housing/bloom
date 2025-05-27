@@ -4,7 +4,7 @@
 
   .filter-section {
     padding-block-end: var(--seeds-spacer-content);
-    border-bottom-width: var(--seeds-border-1);
+    border-block-end-width: var(--seeds-border-1);
   }
 
   .filter-section:not(:first-of-type) {

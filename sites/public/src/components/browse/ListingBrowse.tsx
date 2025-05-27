@@ -16,13 +16,10 @@ import {
 } from "@bloom-housing/shared-helpers"
 import { t } from "@bloom-housing/ui-components"
 import { MetaTags } from "../../components/shared/MetaTags"
-import { UserStatus } from "../../lib/constants"
 import Layout from "../../layouts/application"
 import MaxWidthLayout from "../../layouts/max-width"
+import { UserStatus } from "../../lib/constants"
 import { fetchFavoriteListingIds, isFeatureFlagOn, saveListingFavorite } from "../../lib/helpers"
-import { PageHeaderSection } from "../../patterns/PageHeaderLayout"
-import { ListingCard } from "./ListingCard"
-import styles from "./ListingBrowse.module.scss"
 import { FilterDrawer } from "../listing/FilterDrawer"
 import {
   decodeQueryToFilterData,
@@ -30,6 +27,9 @@ import {
   FilterData,
   getFilterQueryFromURL,
 } from "../listing/FilterDrawerHelper"
+import { PageHeaderSection } from "../../patterns/PageHeaderLayout"
+import { ListingCard } from "./ListingCard"
+import styles from "./ListingBrowse.module.scss"
 
 export enum TabsIndexEnum {
   open,
@@ -125,7 +125,7 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
   const onFilterSubmit = (data: FilterData) => {
     const updatedFilterQuery = encodeFilterDataToQuery(data)
     setIsFilterDrawerOpen(false)
-    if (updatedFilterQuery != filterQuery) {
+    if (updatedFilterQuery !== filterQuery) {
       setIsLoading(true)
       router.pathname.includes("listings-closed")
         ? void router.push(`/listings-closed?${updatedFilterQuery}`)

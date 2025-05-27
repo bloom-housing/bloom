@@ -14,7 +14,10 @@ import {
   buildDefaultFilterFields,
   CheckboxGroup,
   FilterData,
+  getAvailabilityValues,
   RentSection,
+  unitTypeMapping,
+  unitTypesSorted,
 } from "./FilterDrawerHelper"
 import { isTrue } from "../../lib/helpers"
 
@@ -24,16 +27,6 @@ export interface FilterDrawerProps {
   onClose: () => void
   onSubmit: (data: FilterData) => void
 }
-
-// remove doorway specific enum references
-const filterAvailabilityCleaned = Object.keys(FilterAvailabilityEnum).filter(
-  (elem) => elem != FilterAvailabilityEnum.waitlistOpen
-)
-
-//todo: should we include sro?
-const unitTypeCleaned = Object.keys(UnitTypeEnum).filter(
-  (unitType) => unitType !== UnitTypeEnum.SRO
-)
 
 const FilterDrawer = (props: FilterDrawerProps) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -60,14 +53,14 @@ const FilterDrawer = (props: FilterDrawerProps) => {
               },
             ]}
             register={register}
-            customRowNumber={1}
+            customColumnNumber={1}
           />
           <CheckboxGroup
             groupLabel={t("t.availability")}
             fields={buildDefaultFilterFields(
               ListingFilterKeys.availabilities,
               "listings.availability",
-              filterAvailabilityCleaned,
+              getAvailabilityValues(),
               props.filterState
             )}
             register={register}
@@ -86,8 +79,8 @@ const FilterDrawer = (props: FilterDrawerProps) => {
             groupLabel={t("listings.unitTypes.bedroomSize")}
             fields={buildDefaultFilterFields(
               ListingFilterKeys.bedroomTypes,
-              "listings.unitTypes.expanded",
-              unitTypeCleaned,
+              unitTypesSorted.map((unitType) => unitTypeMapping[unitType].label),
+              unitTypesSorted,
               props.filterState
             )}
             register={register}
