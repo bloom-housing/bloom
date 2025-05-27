@@ -14,6 +14,7 @@ import {
   ListingsStatusEnum,
   User,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import userEvent from "@testing-library/user-event"
 
 afterEach(cleanup)
 
@@ -99,11 +100,13 @@ const ListingFormActionsComponent = ({
   listingStatus,
   formActionType,
   lotteryOptIn,
+  submitFormWithStatus,
 }: {
   user: User
   listingStatus: ListingsStatusEnum
   formActionType: ListingFormActionsType
   lotteryOptIn?: boolean
+  submitFormWithStatus?: () => void
 }) => {
   return (
     <AuthContext.Provider
@@ -115,7 +118,7 @@ const ListingFormActionsComponent = ({
       <ListingContext.Provider
         value={{ ...listing, status: listingStatus, lotteryOptIn: lotteryOptIn, listingEvents: [] }}
       >
-        <ListingFormActions type={formActionType} />
+        <ListingFormActions type={formActionType} submitFormWithStatus={submitFormWithStatus} />
       </ListingContext.Provider>
     </AuthContext.Provider>
   )
@@ -580,6 +583,22 @@ describe("<ListingFormActions>", () => {
         expect(screen.getByRole("button", { name: "Unpublish" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Post Results" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Exit" })).toBeInTheDocument()
+      })
+
+      it("click approve and publish in edit mode", async () => {
+        const submitMock = jest.fn()
+        render(
+          <ListingFormActionsComponent
+            user={adminUser}
+            listingStatus={ListingsStatusEnum.pendingReview}
+            formActionType={ListingFormActionsType.edit}
+            submitFormWithStatus={submitMock}
+          />
+        )
+
+        await userEvent.click(screen.getByRole("button", { name: "Approve & Publish" }))
+        expect(submitMock).toBeCalledWith("redirect", ListingsStatusEnum.active)
+        screen.debug()
       })
     })
     describe("as a jurisdictional admin", () => {
@@ -1734,16 +1753,11 @@ describe("<ListingFormActions>", () => {
       })
       it("renders correct buttons in a closed detail state", () => {
         render(
-          <AuthContext.Provider
-            value={{
-              profile: jurisdictionAdminUser,
-              doJurisdictionsHaveFeatureFlagOn,
-            }}
-          >
-            <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.closed }}>
-              <ListingFormActions type={ListingFormActionsType.details} />
-            </ListingContext.Provider>
-          </AuthContext.Provider>
+          <ListingFormActionsComponent
+            user={jurisdictionAdminUser}
+            listingStatus={ListingsStatusEnum.closed}
+            formActionType={ListingFormActionsType.details}
+          />
         )
         expect(screen.queryByText("Edit")).toBeFalsy()
         expect(screen.getByRole("link", { name: "Preview" })).toBeInTheDocument()
@@ -1800,19 +1814,45 @@ describe("<ListingFormActions>", () => {
     })
   })
 
-  describe("as admin with hideCloseListingButton flag enabled", () => {
+  describe("with hideCloseListingButton flag enabled", () => {
     beforeAll(() => {
       doJurisdictionsHaveFeatureFlagOn = () => true
     })
-    it("should not render the close button", () => {
-      render(
-        <ListingFormActionsComponent
-          user={adminUser}
-          listingStatus={ListingsStatusEnum.active}
-          formActionType={ListingFormActionsType.edit}
-        />
-      )
-      expect(screen.queryByText("Close")).toBeFalsy()
+    describe("as admin", () => {
+      it("should not render the close button", () => {
+        render(
+          <ListingFormActionsComponent
+            user={adminUser}
+            listingStatus={ListingsStatusEnum.active}
+            formActionType={ListingFormActionsType.edit}
+          />
+        )
+        expect(screen.queryByText("Close")).toBeFalsy()
+      })
+    })
+    describe("as partner", () => {
+      it("should not render the close button", () => {
+        render(
+          <ListingFormActionsComponent
+            user={partnerUser}
+            listingStatus={ListingsStatusEnum.active}
+            formActionType={ListingFormActionsType.edit}
+          />
+        )
+        expect(screen.queryByText("Close")).toBeFalsy()
+      })
+    })
+    describe("as jurisdiction admin", () => {
+      it("should not render the close button", () => {
+        render(
+          <ListingFormActionsComponent
+            user={jurisdictionAdminUser}
+            listingStatus={ListingsStatusEnum.active}
+            formActionType={ListingFormActionsType.edit}
+          />
+        )
+        expect(screen.queryByText("Close")).toBeFalsy()
+      })
     })
   })
 })

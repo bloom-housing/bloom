@@ -8,12 +8,14 @@ import ChevronRightIcon from "@heroicons/react/20/solid/ChevronRightIcon"
 import { AuthContext, MessageContext, listingSectionQuestions } from "@bloom-housing/shared-helpers"
 import {
   FeatureFlag,
+  FeatureFlagEnum,
   ListingCreate,
   ListingEventsTypeEnum,
   ListingUpdate,
   ListingsStatusEnum,
   MultiselectQuestion,
   MultiselectQuestionsApplicationSectionEnum,
+  YesNoEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { useForm, FormProvider } from "react-hook-form"
 import {
@@ -145,6 +147,14 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
   const [submitForApprovalDialog, setSubmitForApprovalDialog] = useState(false)
   const [requestChangesDialog, setRequestChangesDialog] = useState(false)
 
+  const enableUnitGroups =
+    activeFeatureFlags?.find((flag) => flag.name === FeatureFlagEnum.enableUnitGroups)?.active ||
+    false
+
+  const enableSection8 =
+    activeFeatureFlags?.find((flag) => flag.name === FeatureFlagEnum.enableSection8Question)
+      ?.active || false
+
   useEffect(() => {
     if (listing?.units) {
       const tempUnits = listing.units.map((unit, i) => ({
@@ -196,7 +206,7 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
 
   // Set the active feature flags depending on if/what jurisdiction is selected
   useEffect(() => {
-    const newFeatureFlags = profile.jurisdictions?.reduce((featureFlags, juris) => {
+    const newFeatureFlags = profile?.jurisdictions?.reduce((featureFlags, juris) => {
       if (!selectedJurisdiction || selectedJurisdiction === juris.id) {
         // filter only the active feature flags
         const jurisFeatureFlags = juris.featureFlags?.filter((value) => value.active)
@@ -206,7 +216,7 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
       return featureFlags
     }, [])
     setActiveFeatureFlags(newFeatureFlags)
-  }, [profile.jurisdictions, selectedJurisdiction])
+  }, [profile?.jurisdictions, selectedJurisdiction])
 
   const triggerSubmitWithStatus: SubmitFunction = (action, status, newData) => {
     if (action !== "redirect" && status === ListingsStatusEnum.active) {
@@ -232,12 +242,16 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
           clearErrors()
           const successful = await formMethods.trigger()
 
+          if (!enableSection8) {
+            formData.listingSection8Acceptance = YesNoEnum.no
+          }
+
           if (successful) {
             const dataPipeline = new ListingDataPipeline(formData, {
               preferences,
               programs,
-              units,
-              unitGroups,
+              units: !enableUnitGroups ? units : [], // Clear existing units if unit groups flag has been enabled
+              unitGroups: enableUnitGroups ? unitGroups : [], // Clear existing unit groups if the unit groups flag has been disabled
               openHouseEvents,
               profile: profile,
               latLong,
@@ -331,6 +345,7 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
       setError,
       profile,
       addToast,
+      enableUnitGroups,
     ]
   )
 
@@ -362,7 +377,7 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
                           <Tabs.Tab>Application Process</Tabs.Tab>
                         </Tabs.TabList>
                         <Tabs.TabPanel>
-                          <ListingIntro jurisdictions={profile.jurisdictions} />
+                          <ListingIntro jurisdictions={profile?.jurisdictions || []} />
                           <ListingPhotos />
                           <BuildingDetails
                             listing={listing}
