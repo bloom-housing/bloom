@@ -1,4 +1,5 @@
 import React from "react"
+import { t } from "@bloom-housing/ui-components"
 import { ClickableCard, imageUrlFromListing, oneLineAddress } from "@bloom-housing/shared-helpers"
 import {
   FeatureFlagEnum,
@@ -8,7 +9,6 @@ import {
 import { Icon, Link, Tag } from "@bloom-housing/ui-seeds"
 import { getListingStatusMessage, isFeatureFlagOn } from "../../lib/helpers"
 import { getListingTags } from "../listing/listing_sections/MainDetails"
-import { t } from "@bloom-housing/ui-components"
 import styles from "./MinimalListingCard.module.scss"
 
 interface MinimalListingCardProps {
