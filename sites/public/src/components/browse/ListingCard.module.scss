@@ -74,7 +74,7 @@
           margin-block-start: var(--seeds-s3);
           margin-block-end: calc(-1 * var(--seeds-s1));
           .tag {
-            margin-block-end: var(--seeds-s1);
+            margin-block-end: var(--seeds-s2);
             &:not(:last-child) {
               margin-inline-end: var(--seeds-s2);
             }
