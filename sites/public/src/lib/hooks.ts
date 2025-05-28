@@ -6,6 +6,7 @@ import {
   EnumListingFilterParamsComparison,
   EnumMultiselectQuestionFilterParamsComparison,
   FeatureFlagEnum,
+  FilterAvailabilityEnum,
   Jurisdiction,
   Listing,
   ListingFilterParams,
@@ -209,6 +210,25 @@ export async function fetchClosedListings(
       orderBy: [ListingOrderByKeys.mostRecentlyClosed],
       orderDir: [OrderByEnum.desc],
       limit: process.env.maxBrowseListings,
+    },
+    req
+  )
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function fetchLimitedUnderConstructionListings(req: any, limit: number) {
+  return await fetchBaseListingData(
+    {
+      additionalFilters: [
+        {
+          $comparison: EnumListingFilterParamsComparison["="],
+          status: ListingsStatusEnum.active,
+          availability: FilterAvailabilityEnum.comingSoon,
+        },
+      ],
+      orderBy: [ListingOrderByKeys.mostRecentlyPublished],
+      orderDir: [OrderByEnum.desc],
+      limit: limit.toString(),
     },
     req
   )

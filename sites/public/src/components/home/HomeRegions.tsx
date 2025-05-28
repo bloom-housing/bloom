@@ -15,7 +15,7 @@ export const HomeRegions = () => {
     <Grid>
       <GridRow columns={4}>
         {availableRegions.map((region) => (
-          <GridCell className={styles["region-entry"]} key={region.enum}>
+          <GridCell key={region.enum}>
             <ClickableCard className={styles["region-card"]}>
               <div className={styles["region-card-image"]}>
                 <img src={"/images/listing-fallback.png"} alt={region.title} />
