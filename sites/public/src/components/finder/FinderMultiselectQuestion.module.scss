@@ -1,0 +1,11 @@
+.fieldset {
+  display: grid;
+  grid-template-columns: 1fr;
+  row-gap: var(--seeds-s3);
+
+  .fieldset-legend {
+    color: var(--seeds-text-color-light);
+    margin-block-end: var(--seeds-s3);
+  }
+}
+

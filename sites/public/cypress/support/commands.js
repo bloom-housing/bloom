@@ -15,8 +15,14 @@ Cypress.Commands.add("signIn", (email, password) => {
 })
 
 Cypress.Commands.add("signOut", () => {
-  cy.get(`[data-testid="My Account-3"]`).trigger("mouseover")
-  cy.get(`[data-testid="Sign Out-3"]`).trigger("click")
+  // TODO: once the favorites feature is being tested, this is Sign Out-4:
+  if (Cypress.env("showSeedsDesign")) {
+    cy.get(`[data-testid="My Account-3"]`).trigger("click")
+    cy.get(`[data-testid="Sign Out-4"]`).trigger("click")
+  } else {
+    cy.get(`[data-testid="My Account-3"]`).trigger("mouseover")
+    cy.get(`[data-testid="Sign Out-3"]`).trigger("click")
+  }
 })
 
 Cypress.Commands.add("goNext", () => {
@@ -45,7 +51,12 @@ Cypress.Commands.add("checkErrorMessages", (command) => {
 
 Cypress.Commands.add("beginApplicationRejectAutofill", (listingName) => {
   cy.visit("/listings")
-  cy.get(".is-card-link").contains(listingName).click()
+  if (Cypress.env("showSeedsDesign")) {
+    cy.getByID("listing-seeds-link").contains(listingName)
+    cy.getByID("listing-seeds-link").eq(1).click()
+  } else {
+    cy.get(".is-card-link").contains(listingName).click()
+  }
   cy.getByID("listing-view-apply-button").eq(1).click()
   cy.getByID("app-choose-language-sign-in-button").click()
   cy.get("[data-testid=sign-in-email-field]").type("admin@example.com")
@@ -68,7 +79,12 @@ Cypress.Commands.add("beginApplicationRejectAutofill", (listingName) => {
 
 Cypress.Commands.add("beginApplicationSignedIn", (listingName, autofill) => {
   cy.visit("/listings")
-  cy.get(".is-card-link").contains(listingName).click()
+  if (Cypress.env("showSeedsDesign")) {
+    cy.getByID("listing-seeds-link").contains(listingName)
+    cy.getByID("listing-seeds-link").eq(1).click()
+  } else {
+    cy.get(".is-card-link").contains(listingName).click()
+  }
   cy.getByID("listing-view-apply-button").eq(1).click()
   cy.getByID("app-choose-language-button").eq(0).click()
   cy.getByID("app-next-step-button").click()
@@ -83,7 +99,9 @@ Cypress.Commands.add("step1PrimaryApplicantName", (application, autofill) => {
   if (!autofill) {
     cy.getByTestId("app-primary-first-name").type(application.applicant.firstName)
     if (application.applicant.middleName) {
-      cy.getByTestId("app-primary-middle-name").type(application.applicant.middleName)
+      cy.getByTestId("app-primary-middle-name").type(application.applicant.middleName, {
+        force: true,
+      })
     }
     cy.getByTestId("app-primary-last-name").type(application.applicant.lastName)
     cy.getByTestId("dob-field-month").type(application.applicant.birthMonth)
@@ -708,8 +726,11 @@ Cypress.Commands.add("step18Summary", (application, verify) => {
           })
       })
   }
-  pushMultiselect("preferences")
-  pushMultiselect("programs")
+
+  if (!Cypress.env("showSeedsDesign")) {
+    pushMultiselect("preferences")
+    pushMultiselect("programs")
+  }
 
   if (verify) {
     fields.forEach(({ id, fieldValue }) => {
