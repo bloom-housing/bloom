@@ -77,6 +77,10 @@ const availabilityOrdering = {
   [FilterAvailabilityEnum.comingSoon]: { ordinal: 3 },
 }
 
+/**
+ *
+ * @returns an array of availability keys in the displayed order
+ */
 export const getAvailabilityValues = () => {
   // TODO: https://github.com/metrotranscom/doorway/issues/1278
   const availabilityFiltered = Object.keys(FilterAvailabilityEnum).filter(
@@ -114,10 +118,18 @@ export const unitTypesSorted = Object.keys(UnitTypeEnum).sort(
   (a, b) => unitTypeMapping[a].ordinal - unitTypeMapping[b].ordinal
 )
 
+/**
+ * Generates field data to mantain consistency across all filter fields 
+ * 
+ * @param filterType key to connect individual options to filtering type
+ * @param labelInfo string if all translations have consistent translation key base in json
+   array for strings to be passed in manually for special cases
+ * @param keyArr array of individual filter selection keys
+ * @param existingData filter data to inform defaultChecked field
+ * @returns array of formatted field data which will be passed to each individual filter field
+ */
 export const buildDefaultFilterFields = (
   filterType: ListingFilterKeys,
-  // string if all translations have consistent translation key base in json
-  // array for strings to be passed in manually for special cases
   labelInfo: string | string[],
   keyArr: string[],
   existingData: FilterData
@@ -208,7 +220,13 @@ export const RentSection = (props: RentSectionProps) => (
   </fieldset>
 )
 
-// built to support filtering by url decoding and filtering by state directly from form data
+/**
+ * Transforms filter data to backend filter formatting
+ * Note: built to support filtering by url decoding and filtering by state directly from form data
+ *
+ * @param data object containing form selections or url params decoded
+ * @returns array of formatted backend filters
+ */
 export const encodeFilterDataToBackendFilters = (data: FilterData = {}): ListingFilterParams[] => {
   const filters: ListingFilterParams[] = []
   Object.entries(data).forEach(([filterType, userSelections]) => {
@@ -272,15 +290,33 @@ export const encodeFilterDataToBackendFilters = (data: FilterData = {}): Listing
   return filters
 }
 
+/**
+ * Checks if url query contains filtering information
+ *
+ * @param contextQuery ParsedUrlQuery from context.query in getServerSideProps call
+ * @returns boolean if any filter params are passed
+ */
 export const isFiltered = (contextQuery: ParsedUrlQuery) => {
   return Object.keys(contextQuery).some((param) => Object.keys(ListingFilterKeys).includes(param))
 }
 
+/**
+ * Removes pagination information from url to isolate filter query
+ *
+ * @param contextQuery ParsedUrlQuery from context.query in getServerSideProps call
+ * @returns string of url params related to filtering
+ */
 export const getFilterQueryFromURL = (url: ParsedUrlQuery) => {
   delete url["page"]
   return encode(url)
 }
 
+/**
+ * Transforms data from filter submission into url query
+ *
+ * @param data form data capturing user selections
+ * @returns string of user's selections in url param format
+ */
 export const encodeFilterDataToQuery = (data: FilterData): string => {
   const queryArr = []
   const cleanedFilterData = removeUnselectedFilterData(data)
@@ -304,6 +340,12 @@ export const encodeFilterDataToQuery = (data: FilterData): string => {
   return queryArr.join("&")
 }
 
+/**
+ * Transforms url query into filter data to repopulate filter form with current selections
+ *
+ * @param data form data capturing user selections
+ * @returns FilterData of selections reflected in url params
+ */
 export const decodeQueryToFilterData = (parsedQuery: ParsedUrlQuery): FilterData => {
   const filterData = {}
   Object.entries(parsedQuery).forEach(([filterType, userSelections]) => {
@@ -327,6 +369,12 @@ export const decodeQueryToFilterData = (parsedQuery: ParsedUrlQuery): FilterData
   return filterData
 }
 
+/**
+ * Isolates selected fields from full filter data
+ *
+ * @param data form data capturing all fields
+ * @returns FilterData including only the user's selections
+ */
 export const removeUnselectedFilterData = (data: FilterData): FilterData => {
   const cleanedFilterData: FilterData = {}
   Object.entries(data).forEach(([filterType, userSelections]) => {
