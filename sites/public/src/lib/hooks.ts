@@ -151,7 +151,7 @@ export async function fetchBaseListingData(
     const response = await axios.post(`${process.env.listingServiceUrl}/list`, params, {
       headers: {
         passkey: process.env.API_PASS_KEY,
-        "x-forwarded-for": req.headers["x-forwarded-for"] ?? req.socket.remoteAddress,
+        "x-forwarded-for": req?.headers["x-forwarded-for"] ?? req?.socket?.remoteAddress,
       },
     })
 
@@ -216,7 +216,7 @@ export async function fetchClosedListings(
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function fetchLimitedUnderConstructionListings(req: any, limit: number) {
+export async function fetchLimitedUnderConstructionListings(req?: any, limit?: number) {
   return await fetchBaseListingData(
     {
       additionalFilters: [
