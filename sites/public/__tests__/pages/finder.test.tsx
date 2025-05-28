@@ -48,7 +48,7 @@ describe("<RentalsFinder>", () => {
     expect(screen.getByRole("checkbox", { name: /4 or more bedroom/i })).toBeInTheDocument()
     expect(screen.getByRole("button", { name: /next/i })).toBeInTheDocument()
     expect(
-      screen.getByRole("button", { name: /skip this and show me listings/i })
+      screen.getByRole("button", { name: /skip this and show me rentals/i })
     ).toBeInTheDocument()
 
     expect(screen.queryByRole("button", { name: /finish/i })).not.toBeInTheDocument()
@@ -91,7 +91,7 @@ describe("<RentalsFinder>", () => {
 
     expect(
       screen.getByRole("heading", {
-        name: /what areas would you like to live in\?/i,
+        name: /what areas of Detroit would you like to live in\?/i,
         level: 2,
       })
     ).toBeInTheDocument()
@@ -107,7 +107,7 @@ describe("<RentalsFinder>", () => {
     expect(screen.getByRole("checkbox", { name: /westside/i })).toBeInTheDocument()
     expect(screen.getByRole("button", { name: /back/i })).toBeInTheDocument()
     expect(
-      screen.getByRole("button", { name: /skip this and show me listings/i })
+      screen.getByRole("button", { name: /skip this and show me rentals/i })
     ).toBeInTheDocument()
     expect(screen.queryByRole("button", { name: /finish/i })).not.toBeInTheDocument()
 
@@ -150,7 +150,7 @@ describe("<RentalsFinder>", () => {
 
     expect(
       screen.getByRole("heading", {
-        name: /what areas would you like to live in\?/i,
+        name: /what areas of Detroit would you like to live in\?/i,
         level: 2,
       })
     ).toBeInTheDocument()
