@@ -228,7 +228,7 @@ export async function fetchLimitedUnderConstructionListings(req?: any, limit?: n
       ],
       orderBy: [ListingOrderByKeys.mostRecentlyPublished],
       orderDir: [OrderByEnum.desc],
-      limit: limit.toString(),
+      limit: limit ? limit.toString() : "3",
     },
     req
   )
