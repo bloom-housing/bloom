@@ -2261,28 +2261,6 @@ export class ScriptRunnerService {
     })
   }
   /**
-   * A script that pulls data from one source into the current db
-   */
-  dataTransfer(
-    params: {
-      /** requestBody */
-      body?: DataTransferDTO
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<SuccessDTO> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/scriptRunner/dataTransfer"
-
-      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
    * A script that resends application confirmations to applicants of a listing
    */
   bulkApplicationResend(
@@ -2472,6 +2450,22 @@ export class ScriptRunnerService {
   addFeatureFlags(options: IRequestOptions = {}): Promise<SuccessDTO> {
     return new Promise((resolve, reject) => {
       let url = basePath + "/scriptRunner/addFeatureFlags"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = null
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * A script that moves preferences and programs to multiselect questions in Detroit db
+   */
+  migrateDetroitToMultiselectQuestions(options: IRequestOptions = {}): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/scriptRunner/migrateDetroitToMultiselectQuestions"
 
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
 
@@ -6740,11 +6734,6 @@ export interface MapLayer {
 
   /**  */
   jurisdictionId: string
-}
-
-export interface DataTransferDTO {
-  /**  */
-  connectionString: string
 }
 
 export interface BulkApplicationResendDTO {
