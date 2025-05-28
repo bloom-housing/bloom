@@ -15,15 +15,17 @@ import { encode, ParsedUrlQuery } from "querystring"
 import { isTrue } from "../../lib/helpers"
 import styles from "./FilterDrawer.module.scss"
 
+type BooleanOrBooleanString = boolean | "true" | "false"
+
 export interface FilterData {
-  availability?: Record<FilterAvailabilityEnum, boolean | "true" | "false">
-  bedroomTypes?: Record<UnitTypeEnum, boolean | "true" | "false">
-  homeType?: Record<HomeTypeEnum, boolean | "true" | "false">
-  isVerified?: boolean | "true" | "false"
-  listingFeatures?: Record<keyof ListingFeatures, boolean | "true" | "false">
+  availability?: Record<FilterAvailabilityEnum, BooleanOrBooleanString>
+  bedroomTypes?: Record<UnitTypeEnum, BooleanOrBooleanString>
+  homeType?: Record<HomeTypeEnum, BooleanOrBooleanString>
+  isVerified?: BooleanOrBooleanString
+  listingFeatures?: Record<keyof ListingFeatures, BooleanOrBooleanString>
   monthlyRent?: Record<"maxRent" | "minRent", string>
-  regions?: Record<RegionEnum, boolean | "true" | "false">
-  section8Acceptance?: boolean | "true" | "false"
+  regions?: Record<RegionEnum, BooleanOrBooleanString>
+  section8Acceptance?: BooleanOrBooleanString
 }
 
 export interface FilterField {
@@ -61,7 +63,7 @@ const booleanFilters: ListingFilterKeys[] = [
   ListingFilterKeys.section8Acceptance,
 ]
 
-// two filters below have yet to be implemented, captured in part 4
+// https://github.com/bloom-housing/bloom/issues/4795
 const individualFilters: ListingFilterKeys[] = [
   ListingFilterKeys.bathrooms,
   ListingFilterKeys.jurisdiction,
@@ -242,7 +244,7 @@ export const encodeFilterDataToBackendFilters = (data: FilterData = {}): Listing
     } else if (
       booleanFilters.includes(ListingFilterKeys[filterType]) &&
       // filter data direct from form is boolean, decoded from url is string
-      (userSelections == true || userSelections === "true")
+      (userSelections === true || userSelections === "true")
     ) {
       const filter = {
         $comparison: EnumListingFilterParamsComparison["="],
