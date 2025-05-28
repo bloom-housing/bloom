@@ -23,7 +23,9 @@ export class ListingCreateUpdateValidationPipe extends ValidationPipe {
   ];
 
   constructor(private prisma: PrismaService) {
-    super(defaultValidationPipeOptions);
+    super({
+      ...defaultValidationPipeOptions,
+    });
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -57,10 +59,15 @@ export class ListingCreateUpdateValidationPipe extends ValidationPipe {
       requiredFields,
     };
 
-    // Transform using the appropriate DTO
+    // Transform using the appropriate DTO with validation groups
     return await super.transform(transformedValue, {
       ...metadata,
       metatype: value.id ? ListingUpdate : ListingCreate,
     });
+
+    // Return the transformed DTO
+    // Use MapperService to apply default values if necessary
+    // Assuming MapperService is a utility to map DTOs and apply default values
+    // return MapperServicemap.defaultValues(transformedDto)
   }
 }

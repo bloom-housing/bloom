@@ -69,7 +69,6 @@ class Listing extends AbstractDTO {
     groups: [ValidationsGroupsEnum.default],
   })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   digitalApplication?: boolean;
 
@@ -83,7 +82,6 @@ class Listing extends AbstractDTO {
     groups: [ValidationsGroupsEnum.default],
   })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   paperApplication?: boolean;
 
@@ -92,7 +90,6 @@ class Listing extends AbstractDTO {
     groups: [ValidationsGroupsEnum.default],
   })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   referralOpportunity?: boolean;
 
@@ -126,7 +123,6 @@ class Listing extends AbstractDTO {
   })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(256, { groups: [ValidationsGroupsEnum.default] })
-  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   developer?: string;
 
@@ -373,7 +369,6 @@ class Listing extends AbstractDTO {
   @IsEmail({}, { groups: [ValidationsGroupsEnum.default] })
   @MaxLength(256, { groups: [ValidationsGroupsEnum.default] })
   @EnforceLowerCase()
-  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   leasingAgentEmail?: string;
 
@@ -383,7 +378,6 @@ class Listing extends AbstractDTO {
   })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(256, { groups: [ValidationsGroupsEnum.default] })
-  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   leasingAgentName?: string;
 
@@ -402,7 +396,6 @@ class Listing extends AbstractDTO {
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @IsPhoneNumber('US', { groups: [ValidationsGroupsEnum.default] })
   @MaxLength(64, { groups: [ValidationsGroupsEnum.default] })
-  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   leasingAgentPhone?: string;
 
@@ -430,7 +423,6 @@ class Listing extends AbstractDTO {
   @ValidateListingPublish('name', {
     groups: [ValidationsGroupsEnum.default],
   })
-  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(256, { groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
@@ -459,7 +451,6 @@ class Listing extends AbstractDTO {
   })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(4096, { groups: [ValidationsGroupsEnum.default] })
-  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   rentalAssistance?: string;
 
@@ -545,7 +536,6 @@ class Listing extends AbstractDTO {
     groups: [ValidationsGroupsEnum.default],
   })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
   displayWaitlistSize: boolean;
 
@@ -678,7 +668,6 @@ class Listing extends AbstractDTO {
     groups: [ValidationsGroupsEnum.default],
   })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => ApplicationMethod)
   @ApiProperty({ type: ApplicationMethod, isArray: true })
   applicationMethods: ApplicationMethod[];
@@ -698,9 +687,8 @@ class Listing extends AbstractDTO {
   })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => Asset)
-  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty({ type: Asset, isArray: true })
-  assets: Asset[];
+  assets: Asset[] = [];
 
   @Expose()
   @ValidateListingPublish('listingEvents', {
@@ -711,7 +699,6 @@ class Listing extends AbstractDTO {
   })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => ListingEvent)
-  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty({ type: ListingEvent, isArray: true })
   listingEvents: ListingEvent[];
 
@@ -719,7 +706,6 @@ class Listing extends AbstractDTO {
   @ValidateListingPublish('listingsBuildingAddress', {
     groups: [ValidationsGroupsEnum.default],
   })
-  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Address)
   @ApiProperty({ type: Address })
@@ -775,7 +761,6 @@ class Listing extends AbstractDTO {
     groups: [ValidationsGroupsEnum.default],
   })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => IdDTO)
   @ApiProperty({ type: IdDTO })
   jurisdictions: IdDTO;
@@ -802,7 +787,6 @@ class Listing extends AbstractDTO {
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => ListingImage)
   @ArrayMinSize(1, { groups: [ValidationsGroupsEnum.default] })
-  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional({ type: ListingImage, isArray: true })
   listingImages?: ListingImage[];
 
@@ -915,7 +899,6 @@ class Listing extends AbstractDTO {
   @ValidateListingPublish('applicationLotteryTotals', {
     groups: [ValidationsGroupsEnum.default],
   })
-  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @IsArray({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => ApplicationLotteryTotal)
@@ -960,9 +943,6 @@ class Listing extends AbstractDTO {
   marketingType?: MarketingTypeEnum;
 
   @Expose()
-  @ValidateListingPublish('marketingDate', {
-    groups: [ValidationsGroupsEnum.default],
-  })
   @Type(() => Date)
   @ValidateIf((o) => o.marketingType === MarketingTypeEnum.comingSoon, {
     groups: [ValidationsGroupsEnum.default],

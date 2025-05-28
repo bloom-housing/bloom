@@ -1,9 +1,8 @@
 import { ApiPropertyOptional, OmitType } from '@nestjs/swagger';
-import { Expose, Type } from 'class-transformer';
+import { Expose, Transform, Type } from 'class-transformer';
 import {
   ArrayMaxSize,
   ArrayMinSize,
-  IsDefined,
   Validate,
   ValidateNested,
 } from 'class-validator';
@@ -128,7 +127,6 @@ export class ListingUpdate extends OmitType(Listing, [
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => ListingImageCreate)
   @ArrayMinSize(1, { groups: [ValidationsGroupsEnum.default] })
-  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional({ type: ListingImageCreate, isArray: true })
   listingImages?: ListingImageCreate[];
 
@@ -174,7 +172,6 @@ export class ListingUpdate extends OmitType(Listing, [
   })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AddressCreate)
-  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional({ type: AddressCreate })
   listingsBuildingAddress?: AddressCreate;
 
@@ -202,7 +199,6 @@ export class ListingUpdate extends OmitType(Listing, [
   })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => ListingEventCreate)
-  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty({ type: ListingEventCreate, isArray: true })
   listingEvents: ListingEventCreate[];
 

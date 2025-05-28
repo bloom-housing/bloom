@@ -1233,6 +1233,7 @@ export class ListingService implements OnModuleInit {
       include: views.details,
       data: {
         ...listingData,
+        displayWaitlistSize: dto.displayWaitlistSize ?? false,
         assets: dto.assets
           ? {
               create: dto.assets.map((asset) => ({
@@ -1240,7 +1241,7 @@ export class ListingService implements OnModuleInit {
                 label: asset.label,
               })),
             }
-          : undefined,
+          : Prisma.JsonNullValueInput.JsonNull,
         applicationMethods: dto.applicationMethods
           ? {
               create: dto.applicationMethods.map((applicationMethod) => ({

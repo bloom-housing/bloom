@@ -2468,6 +2468,121 @@ describe('Listing Controller Tests', () => {
     });
   });
 
+  describe('dynamic required fields validation', () => {
+    let customJurisdiction;
+    let defaultJurisdiction;
+
+    beforeAll(async () => {
+      // Create a jurisdiction with custom required fields
+      customJurisdiction = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(randomName(), {
+          requiredListingFields: ['name', 'listingsBuildingAddress'],
+        }),
+      });
+
+      // Create a jurisdiction without specified required fields (should use default strict validation)
+      defaultJurisdiction = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(randomName()),
+      });
+    });
+
+    it('should allow saving active listing with requiredListingFields declared in jurisdiction', async () => {
+      const listingData = {
+        name: 'Detroit Minimal Listing',
+        status: ListingsStatusEnum.active,
+        listingsBuildingAddress: addressFactory() as AddressCreate,
+        jurisdictions: {
+          id: customJurisdiction.id,
+        },
+      };
+
+      const res = await request(app.getHttpServer())
+        .post('/listings')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send(listingData)
+        .set('Cookie', adminAccessToken)
+        .expect(201);
+
+      expect(res.body.name).toEqual(listingData.name);
+      expect(res.body.status).toEqual(ListingsStatusEnum.active);
+    });
+
+    it('should fail saving active listing without requiredListingFields declared in jurisdictions', async () => {
+      const incompleteData = {
+        name: 'Detroit Minimal Listing',
+        status: ListingsStatusEnum.active,
+        jurisdictions: {
+          id: customJurisdiction.id,
+        },
+      };
+
+      // Should fail due to missing required fields from requiredListingFields
+      await request(app.getHttpServer())
+        .post('/listings')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send(incompleteData)
+        .set('Cookie', adminAccessToken)
+        .expect(400);
+    });
+
+    it('should enforce default strict validation when jurisdiction has no requiredListingFields', async () => {
+      const incompleteData = {
+        name: 'Default Jurisdiction Listing',
+        status: ListingsStatusEnum.active,
+        listingsBuildingAddress: addressFactory() as AddressCreate,
+        jurisdictions: {
+          id: defaultJurisdiction.id,
+        },
+      };
+
+      // Should fail due to missing required fields from default validation
+      await request(app.getHttpServer())
+        .post('/listings')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send(incompleteData)
+        .set('Cookie', adminAccessToken)
+        .expect(400);
+    });
+
+    it('should allow saving non-active listing with only name field', async () => {
+      const minimalData = {
+        name: 'Minimal Draft Listing',
+        status: ListingsStatusEnum.pending,
+        jurisdictions: {
+          id: defaultJurisdiction.id,
+        },
+      };
+
+      const res = await request(app.getHttpServer())
+        .post('/listings')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send(minimalData)
+        .set('Cookie', adminAccessToken)
+        .expect(201);
+
+      expect(res.body.name).toEqual(minimalData.name);
+      expect(res.body.status).toEqual(ListingsStatusEnum.pending);
+    });
+
+    it('should validate optional fields when provided even if not required', async () => {
+      const invalidOptionalData = {
+        name: 'Invalid Optional Fields',
+        status: ListingsStatusEnum.pending,
+        jurisdictions: {
+          id: customJurisdiction.id,
+        },
+        leasingAgentEmail: 'not-a-valid-email', // Optional but should be validated if provided
+      };
+
+      await request(app.getHttpServer())
+        .post('/listings')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send(invalidOptionalData)
+        .set('Cookie', adminAccessToken)
+        .expect(400);
+    });
+  });
+
   describe('mapMarkers endpoint', () => {
     it('should find all active listings', async () => {
       const listingData = await listingFactory(jurisdictionAId, prisma);
