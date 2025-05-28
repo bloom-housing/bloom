@@ -65,7 +65,7 @@ export const Home = (props: HomeProps) => {
             </Button>
           </div>
         </MaxWidthLayout>
-        {enableUnderConstruction && (
+        {enableUnderConstruction && props.underConstructionListings.length > 0 && (
           <HomeSection
             sectionTitle={t("listings.underConstruction")}
             sectionIcon="clock"
