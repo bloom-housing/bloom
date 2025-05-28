@@ -87,24 +87,24 @@ export const getAvailabilityValues = () => {
 }
 
 export const unitTypeMapping = {
-  [UnitTypeEnum.studio]: { value: 0, ordinal: 0, label: t("listings.unitTypes.studio") },
-  [UnitTypeEnum.SRO]: { value: 0, ordinal: 1, label: t("listings.unitTypes.SRO") },
-  [UnitTypeEnum.oneBdrm]: { value: 1, ordinal: 2, label: t("listings.unitTypes.expanded.oneBdrm") },
-  [UnitTypeEnum.twoBdrm]: { value: 2, ordinal: 3, label: t("listings.unitTypes.expanded.twoBdrm") },
+  [UnitTypeEnum.studio]: { value: 0, ordinal: 0, labelKey: "listings.unitTypes.studio" },
+  [UnitTypeEnum.SRO]: { value: 0, ordinal: 1, labelKey: "listings.unitTypes.SRO" },
+  [UnitTypeEnum.oneBdrm]: { value: 1, ordinal: 2, labelKey: "listings.unitTypes.expanded.oneBdrm" },
+  [UnitTypeEnum.twoBdrm]: { value: 2, ordinal: 3, labelKey: "listings.unitTypes.expanded.twoBdrm" },
   [UnitTypeEnum.threeBdrm]: {
     value: 3,
     ordinal: 4,
-    label: t("listings.unitTypes.expanded.threeBdrm"),
+    labelKey: "listings.unitTypes.expanded.threeBdrm",
   },
   [UnitTypeEnum.fourBdrm]: {
     value: 4,
     ordinal: 5,
-    label: t("listings.unitTypes.expanded.fourBdrm"),
+    labelKey: "listings.unitTypes.expanded.fourBdrm",
   },
   [UnitTypeEnum.fiveBdrm]: {
     value: 5,
     ordinal: 6,
-    label: t("listings.unitTypes.expanded.fiveBdrm"),
+    labelKey: "listings.unitTypes.expanded.fiveBdrm",
   },
 }
 
@@ -226,7 +226,7 @@ export const encodeFilterDataToBackendFilters = (data: FilterData = {}): Listing
       Object.entries(userSelections).forEach((field) => {
         if (field[1]) {
           if (filterType === ListingFilterKeys.bedroomTypes) {
-            selectedFields.push(unitTypeMapping[field[0]])
+            selectedFields.push(unitTypeMapping[field[0]]?.value)
           } else {
             selectedFields.push(field[0])
           }

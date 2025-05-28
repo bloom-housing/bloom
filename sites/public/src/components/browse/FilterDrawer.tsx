@@ -77,7 +77,7 @@ const FilterDrawer = (props: FilterDrawerProps) => {
             groupLabel={t("listings.unitTypes.bedroomSize")}
             fields={buildDefaultFilterFields(
               ListingFilterKeys.bedroomTypes,
-              unitTypesSorted.map((unitType) => unitTypeMapping[unitType].label),
+              unitTypesSorted.map((unitType) => t(unitTypeMapping[unitType].labelKey)),
               unitTypesSorted,
               props.filterState
             )}

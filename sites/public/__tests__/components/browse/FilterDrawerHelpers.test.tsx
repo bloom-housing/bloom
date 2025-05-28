@@ -1,5 +1,5 @@
+import { FilterAvailabilityEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { getAvailabilityValues } from "../../../src/components/browse/FilterDrawerHelpers"
-import { FilterAvailabilityEnum } from "../../../../../api/dist/src/enums/listings/filter-availability-enum"
 
 describe("filter drawer helpers", () => {
   describe("getAvailabilityValues", () => {
