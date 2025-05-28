@@ -194,38 +194,8 @@ export const ElmVillageApplication: Application = {
     {
       ...idDefaults,
       id: "dff3ff70-7085-4dab-afd9-de4b33e0ec1e",
-      name: "SRO" as UnitTypeEnum,
-      numBedrooms: 0,
-    },
-    {
-      ...idDefaults,
-      id: "dff3ff70-7085-4dab-afd9-de4b33e0ec1e",
-      name: "Studio" as UnitTypeEnum,
-      numBedrooms: 0,
-    },
-    {
-      ...idDefaults,
-      id: "dff3ff70-7085-4dab-afd9-de4b33e0ec1e",
-      name: "1 Bedroom" as UnitTypeEnum,
-      numBedrooms: 1,
-    },
-    {
-      ...idDefaults,
-      id: "dff3ff70-7085-4dab-afd9-de4b33e0ec1e",
       name: "2 Bedroom" as UnitTypeEnum,
       numBedrooms: 2,
-    },
-    {
-      ...idDefaults,
-      id: "dff3ff70-7085-4dab-afd9-de4b33e0ec1e",
-      name: "3 Bedroom" as UnitTypeEnum,
-      numBedrooms: 3,
-    },
-    {
-      ...idDefaults,
-      id: "dff3ff70-7085-4dab-afd9-de4b33e0ec1e",
-      name: "4 Bedroom" as UnitTypeEnum,
-      numBedrooms: 3,
     },
   ],
   demographics: {
