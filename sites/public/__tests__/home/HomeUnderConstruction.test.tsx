@@ -32,8 +32,8 @@ describe("<HomeUnderConstruction>", () => {
         jurisdiction={jurisdiction}
       />
     )
-    expect(screen.getByText(/ListingA/i)).toBeInTheDocument()
-    expect(screen.getByText(/ListingB/i)).toBeInTheDocument()
-    expect(screen.getByText(/ListingC/i)).toBeInTheDocument()
+    expect(screen.getByRole("link", { name: "ListingA" })).toBeInTheDocument()
+    expect(screen.getByRole("link", { name: "ListingB" })).toBeInTheDocument()
+    expect(screen.getByRole("link", { name: "ListingC" })).toBeInTheDocument()
   })
 })

@@ -61,7 +61,7 @@ describe("<Home>", () => {
         }}
       />
     )
-    expect(screen.getByText(/Regions/i)).toBeInTheDocument()
+    expect(screen.getByRole("heading", { level: 2, name: /Regions/i })).toBeInTheDocument()
   })
   it("shows under construction if toggled on", () => {
     render(
@@ -75,7 +75,9 @@ describe("<Home>", () => {
         }}
       />
     )
-    expect(screen.getByText(/Under Construction/i)).toBeInTheDocument()
+    expect(
+      screen.getByRole("heading", { level: 2, name: /Under Construction/i })
+    ).toBeInTheDocument()
   })
   it("does not show under construction if toggled on but with no results for listings", () => {
     render(
