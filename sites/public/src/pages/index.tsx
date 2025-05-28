@@ -1,4 +1,5 @@
 import React from "react"
+import { GetStaticProps } from "next"
 import { Jurisdiction, Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { Home } from "../components/home/Home"
 import { HomeDeprecated } from "../components/home/HomeDeprecated"
@@ -24,15 +25,15 @@ export default function HomePage(props: HomePageProps) {
   )
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function getServerSideProps(context: { req: any; query: any }) {
-  const underConstructionListings = await fetchLimitedUnderConstructionListings(context.req, 3)
-  const jurisdiction = await fetchJurisdictionByName(context.req)
+export const getStaticProps: GetStaticProps = async () => {
+  const underConstructionListings = await fetchLimitedUnderConstructionListings(undefined, 3)
+  const jurisdiction = await fetchJurisdictionByName()
 
   return {
     props: {
       underConstructionListings: underConstructionListings?.items || [],
       jurisdiction: jurisdiction,
     },
+    revalidate: Number(process.env.cacheRevalidate),
   }
 }
