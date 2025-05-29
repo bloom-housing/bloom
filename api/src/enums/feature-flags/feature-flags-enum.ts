@@ -27,6 +27,7 @@ export enum FeatureFlagEnum {
   example = 'example', // sample feature flag for testing purposes
   hideCloseListingButton = 'hideCloseListingButton',
   swapCommunityTypeWithPrograms = 'swapCommunityTypeWithPrograms',
+  enableWaitlistAdditionalFields = 'enableWaitlistAdditionalFields',
 }
 
 // List of all of existing flags and their descriptions.
@@ -156,5 +157,10 @@ export const featureFlagMap: { name: string; description: string }[] = [
     name: FeatureFlagEnum.swapCommunityTypeWithPrograms,
     description:
       'When true, the programs section on the frontend is displayed as community types.',
+  },
+  {
+    name: FeatureFlagEnum.enableWaitlistAdditionalFields,
+    description:
+      'When true, the waitlist additional fields are displayed in the waitlist section of the listing form',
   },
 ];

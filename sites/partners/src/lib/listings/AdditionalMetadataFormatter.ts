@@ -72,7 +72,10 @@ export default class AdditionalMetadataFormatter extends Formatter {
         ? ReviewOrderTypeEnum.lottery
         : ReviewOrderTypeEnum.firstComeFirstServe
 
-    if (this.data.listingAvailabilityQuestion === "openWaitlist") {
+    if (
+      this.data.listingAvailabilityQuestion === "openWaitlist" &&
+      !this.metadata.enableUnitGroups
+    ) {
       this.data.reviewOrderType = ReviewOrderTypeEnum.waitlist
     }
 
