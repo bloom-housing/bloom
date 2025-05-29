@@ -3,6 +3,12 @@ import { Jurisdiction, Listing } from "@bloom-housing/shared-helpers/src/types/b
 import { fetchClosedListings, fetchJurisdictionByName, fetchOpenListings } from "../lib/hooks"
 import { ListingBrowse, TabsIndexEnum } from "../components/browse/ListingBrowse"
 import { ListingBrowseDeprecated } from "../components/browse/ListingBrowseDeprecated"
+import {
+  decodeQueryToFilterData,
+  encodeFilterDataToBackendFilters,
+  isFiltered,
+} from "../components/browse/FilterDrawerHelpers"
+import { useRouter } from "next/router"
 
 export interface ListingsProps {
   openListings: Listing[]
@@ -18,6 +24,8 @@ export interface ListingsProps {
 }
 
 export default function ListingsPage(props: ListingsProps) {
+  const router = useRouter()
+
   return (
     <>
       {process.env.showNewSeedsDesigns ? (
@@ -26,6 +34,7 @@ export default function ListingsPage(props: ListingsProps) {
           tab={TabsIndexEnum.open}
           jurisdiction={props.jurisdiction}
           paginationData={props.paginationData}
+          key={router.asPath}
         />
       ) : (
         <ListingBrowseDeprecated
@@ -39,8 +48,17 @@ export default function ListingsPage(props: ListingsProps) {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function getServerSideProps(context: { req: any; query: any }) {
-  const openListings = await fetchOpenListings(context.req, Number(context.query.page) || 1)
-  const closedListings = await fetchClosedListings(context.req, Number(context.query.page) || 1)
+  let openListings
+  let closedListings
+
+  if (isFiltered(context.query)) {
+    const filterData = decodeQueryToFilterData(context.query)
+    const filters = encodeFilterDataToBackendFilters(filterData)
+    openListings = await fetchOpenListings(context.req, Number(context.query.page) || 1, filters)
+  } else {
+    openListings = await fetchOpenListings(context.req, Number(context.query.page) || 1)
+    closedListings = await fetchClosedListings(context.req, Number(context.query.page) || 1)
+  }
   const jurisdiction = await fetchJurisdictionByName(context.req)
 
   return {

@@ -11,6 +11,7 @@ export enum FeatureFlagEnum {
   enableHomeType = 'enableHomeType',
   enableIsVerified = 'enableIsVerified',
   enableListingFavoriting = 'enableListingFavoriting',
+  enableListingFiltering = 'enableListingFiltering',
   enableListingOpportunity = 'enableListingOpportunity',
   enableListingPagination = 'enableListingPagination',
   enableMarketingStatus = 'enableMarketingStatus',
@@ -26,6 +27,7 @@ export enum FeatureFlagEnum {
   example = 'example', // sample feature flag for testing purposes
   hideCloseListingButton = 'hideCloseListingButton',
   swapCommunityTypeWithPrograms = 'swapCommunityTypeWithPrograms',
+  enableWaitlistAdditionalFields = 'enableWaitlistAdditionalFields',
 }
 
 // List of all of existing flags and their descriptions.
@@ -74,6 +76,11 @@ export const featureFlagMap: { name: string; description: string }[] = [
     name: FeatureFlagEnum.enableListingFavoriting,
     description:
       'When true, a Favorite button is shown for public listings and users can view their favorited listings',
+  },
+  {
+    name: FeatureFlagEnum.enableListingFiltering,
+    description:
+      'When true, a filter button is shown on listings browse and users can filter with the options in the drawer',
   },
   {
     name: FeatureFlagEnum.enableListingOpportunity,
@@ -135,5 +142,10 @@ export const featureFlagMap: { name: string; description: string }[] = [
     name: FeatureFlagEnum.swapCommunityTypeWithPrograms,
     description:
       'When true, the programs section on the frontend is displayed as community types.',
+  },
+  {
+    name: FeatureFlagEnum.enableWaitlistAdditionalFields,
+    description:
+      'When true, the waitlist additional fields are displayed in the waitlist section of the listing form',
   },
 ];
