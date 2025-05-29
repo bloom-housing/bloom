@@ -5,7 +5,6 @@ import { BloomCard, CustomIconMap, listingFeatures } from "@bloom-housing/shared
 import {
   ListingFilterKeys,
   RegionEnum,
-  UnitTypeEnum
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { Form, ProgressNav, StepHeader, t } from "@bloom-housing/ui-components"
 import { Button, Heading, Icon } from "@bloom-housing/ui-seeds"
@@ -43,7 +42,6 @@ export default function RentalsFinder() {
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { reset, handleSubmit, getValues } = formMethods
-
 
   const rentalFinderSections: FinderSection[] = useMemo(
     () => [
