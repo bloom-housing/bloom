@@ -132,4 +132,59 @@ describe("<Dashboard>", () => {
     expect(viewFavoritesButton).toBeInTheDocument()
     expect(viewFavoritesButton).toHaveAttribute("href", "/account/favorites")
   })
+
+  it("should not render My applications dashboard card if flag enabled", () => {
+    render(
+      <AuthContext.Provider
+        value={{
+          profile: {
+            ...user,
+            listings: [],
+            jurisdictions: [],
+          },
+        }}
+      >
+        <Dashboard
+          jurisdiction={{
+            ...jurisdiction,
+            featureFlags: [
+              ...jurisdiction.featureFlags,
+              {
+                name: FeatureFlagEnum.disableCommonApplication,
+                createdAt: new Date(),
+                updatedAt: new Date(),
+                id: "3ac85a8b-c319-4257-bedb-2db95133fab3",
+                description:
+                  "When true, the digital common application is not an option for listings",
+                active: true,
+                jurisdictions: [],
+              },
+            ],
+          }}
+        />
+      </AuthContext.Provider>
+    )
+
+    const dashboardCards = screen.getAllByRole("gridcell")
+    expect(dashboardCards).toHaveLength(1)
+
+    const [accountSettingsCard] = dashboardCards
+
+    //Account settings card
+    expect(
+      within(accountSettingsCard).getByRole("heading", { level: 2, name: /account settings/i })
+    ).toBeInTheDocument()
+    expect(
+      within(accountSettingsCard).getByText("Account Settings, email and password")
+    ).toBeInTheDocument()
+
+    // My applications card not present
+    expect(
+      screen.queryByRole("heading", { level: 2, name: /my applications/i })
+    ).not.toBeInTheDocument()
+    expect(
+      screen.queryByText("See lottery dates and listings for properties for which you've applied")
+    ).not.toBeInTheDocument()
+    expect(screen.queryByRole("link", { name: /view applications/i })).not.toBeInTheDocument()
+  })
 })
