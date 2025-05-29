@@ -17,6 +17,15 @@ import styles from "./FilterDrawer.module.scss"
 
 type BooleanOrBooleanString = boolean | "true" | "false"
 
+// TODO: Fetch reserved community types from th backend when an endpoint is created
+export enum ReservedCommunityTypes {
+  "withDisabilities" = "withDisabilities",
+  "senior55" = "senior55",
+  "senior62" = "senior62",
+  "homeless" = "homeless",
+  "veterans" = "veterans",
+}
+
 export interface FilterData {
   availability?: Record<FilterAvailabilityEnum, BooleanOrBooleanString>
   bedroomTypes?: Record<UnitTypeEnum, BooleanOrBooleanString>
@@ -26,6 +35,7 @@ export interface FilterData {
   monthlyRent?: Record<"maxRent" | "minRent", string>
   regions?: Record<RegionEnum, BooleanOrBooleanString>
   section8Acceptance?: BooleanOrBooleanString
+  reservedCommunityTypes?: Record<ReservedCommunityTypes, BooleanOrBooleanString>
 }
 
 export interface FilterField {

@@ -2,7 +2,11 @@ import { FormProvider, useForm } from "react-hook-form"
 import { useRouter } from "next/router"
 import { useCallback, useMemo, useState } from "react"
 import { BloomCard, CustomIconMap, listingFeatures } from "@bloom-housing/shared-helpers"
-import { RegionEnum, UnitTypeEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  ListingFilterKeys,
+  RegionEnum,
+  UnitTypeEnum
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { Form, ProgressNav, StepHeader, t } from "@bloom-housing/ui-components"
 import { Button, Heading, Icon } from "@bloom-housing/ui-seeds"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
@@ -10,6 +14,14 @@ import FinderDisclaimer from "./FinderDisclaimer"
 import FinderMultiselectQuestion from "./FinderMultiselectQuestion"
 import FinderRentQuestion from "./FinderRentQuestion"
 import styles from "./RentalsFinder.module.scss"
+import {
+  buildDefaultFilterFields,
+  encodeFilterDataToQuery,
+  FilterData,
+  ReservedCommunityTypes,
+  unitTypeMapping,
+  unitTypesSorted,
+} from "../browse/FilterDrawerHelpers"
 
 type FinderStep = {
   content: React.ReactNode
@@ -22,36 +34,16 @@ type FinderSection = {
   sectionSteps: FinderStep[]
 }
 
-type FinderFormData = {
-  bedrooms?: string[]
-  regions?: string[]
-  listingFeatures?: string[]
-  monthlyRent?: {
-    minRent?: number
-    maxRent?: number
-  }
-  section8Acceptance?: boolean
-  reservedCommunityTypes?: string[]
-}
-
-// TODO: Fetch reserved community types from th backend when an endpoint is created
-const reservedCommunityTypes = ["withDisabilities", "senior55", "senior62", "homeless", "veterans"]
-
 export default function RentalsFinder() {
   const router = useRouter()
   const [stepIndex, setStepIndex] = useState<number>(0)
   const [sectionIndex, setSectionIndex] = useState<number>(0)
-  const [formData, setFormData] = useState<FinderFormData>({})
-  const formMethods = useForm<FinderFormData>()
+  const [formData, setFormData] = useState<FilterData>({})
+  const formMethods = useForm<FilterData>()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { reset, handleSubmit, getValues } = formMethods
 
-  // No SRO as based on the filter drawer code by Colin
-  const cleanUnits = useMemo(
-    () => Object.values(UnitTypeEnum).filter((key) => key !== UnitTypeEnum.SRO),
-    []
-  )
 
   const rentalFinderSections: FinderSection[] = useMemo(
     () => [
@@ -65,10 +57,12 @@ export default function RentalsFinder() {
               <FinderMultiselectQuestion
                 legend={t("finder.multiselectLegend")}
                 fieldGroupName="bedrooms"
-                options={cleanUnits.map((unit) => ({
-                  label: t(`application.household.preferredUnit.options.${unit}`),
-                  value: unit,
-                }))}
+                options={buildDefaultFilterFields(
+                  ListingFilterKeys.bedroomTypes,
+                  unitTypesSorted.map((unitType) => t(unitTypeMapping[unitType].labelKey)),
+                  unitTypesSorted,
+                  {}
+                )}
               />
             ),
           },
@@ -80,8 +74,9 @@ export default function RentalsFinder() {
                 legend={t("finder.multiselectLegend")}
                 fieldGroupName="regions"
                 options={Object.keys(RegionEnum).map((region) => ({
+                  key: `${ListingFilterKeys.regions}.${region}`,
                   label: region.replace("_", " "),
-                  value: region,
+                  defaultChecked: false,
                 }))}
               />
             ),
@@ -103,10 +98,12 @@ export default function RentalsFinder() {
               <FinderMultiselectQuestion
                 legend={t("finder.multiselectLegend")}
                 fieldGroupName="listingFeatures"
-                options={listingFeatures.map((feature) => ({
-                  label: t(`eligibility.accessibility.${feature}`),
-                  value: feature,
-                }))}
+                options={buildDefaultFilterFields(
+                  ListingFilterKeys.listingFeatures,
+                  "eligibility.accessibility",
+                  listingFeatures,
+                  {}
+                )}
               />
             ),
           },
@@ -122,9 +119,10 @@ export default function RentalsFinder() {
               <FinderMultiselectQuestion
                 legend={t("finder.multiselectLegend")}
                 fieldGroupName="reservedCommunityTypes"
-                options={reservedCommunityTypes.map((type) => ({
+                options={Object.values(ReservedCommunityTypes).map((type) => ({
+                  key: `${ListingFilterKeys.reservedCommunityTypes}.${type}`,
                   label: t(`finder.building.${type}`),
-                  value: type,
+                  defaultChecked: false,
                 }))}
               />
             ),
@@ -141,7 +139,7 @@ export default function RentalsFinder() {
         ],
       },
     ],
-    [cleanUnits]
+    []
   )
 
   const sectionLabels = useMemo(
@@ -191,26 +189,8 @@ export default function RentalsFinder() {
   }, [rentalFinderSections.length])
 
   const onSubmit = useCallback(() => {
-    const urlQueryElements = []
-
-    Object.entries(formData).forEach((entry) => {
-      const [key, value] = entry
-      if (Array.isArray(value) && value.length) {
-        urlQueryElements.push(`${key}=${value.join(",")}`)
-      } else if (typeof value === "boolean" && value) {
-        urlQueryElements.push(`${key}=${value.toString()}`)
-      } else if (
-        typeof value === "object" &&
-        ("minRent" in value || "maxRent" in value) &&
-        (value?.minRent || value?.maxRent)
-      ) {
-        urlQueryElements.push(`${key}=${Object.values(value).join("-")}`)
-      }
-    })
-
-    void router.push(
-      urlQueryElements.length ? `/listings?${urlQueryElements.join("&")}` : "/listings"
-    )
+    const searchQuery = encodeFilterDataToQuery(formData)
+    void router.push(searchQuery ? `/listings?${searchQuery}` : "/listings")
   }, [formData, router])
 
   return (
