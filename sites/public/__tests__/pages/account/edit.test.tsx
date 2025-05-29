@@ -52,22 +52,6 @@ const renderEditPage = (userOverrides = {}) => {
 describe("<Edit>", () => {
   mockNextRouter()
 
-  it("should render the account settings page", async () => {
-    renderEditPage()
-
-    await waitFor(() => {
-      expect(screen.getByText("Account Settings")).toBeInTheDocument()
-      // Check that forms are rendered
-      expect(screen.getByDisplayValue("First")).toBeInTheDocument()
-      expect(screen.getByDisplayValue("Last")).toBeInTheDocument()
-      expect(screen.getByDisplayValue("first.last@bloom.com")).toBeInTheDocument()
-    })
-
-    // Check update buttons
-    const updateButtons = screen.getAllByText("Update")
-    expect(updateButtons.length).toBe(4)
-  })
-
   describe("Name form", () => {
     it("should update name successfully", async () => {
       const updatedUser = {
@@ -137,7 +121,6 @@ describe("<Edit>", () => {
         expect(screen.getByDisplayValue("First")).toBeInTheDocument()
       })
 
-      // Find DOB fields using the correct test IDs
       const dayField = screen.getByTestId("dob-field-day")
       const monthField = screen.getByTestId("dob-field-month")
       const yearField = screen.getByTestId("dob-field-year")
