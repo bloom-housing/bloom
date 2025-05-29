@@ -302,7 +302,7 @@ describe("<RentalsFinder>", () => {
     expect(disclaimerItems).toHaveLength(5)
 
     const disclaimerPatterns = [
-      /detroit home connect will show you regulated affordable rentals, meaning they are affordable because of governmental funding./i,
+      /this website will show you regulated affordable rentals, meaning they are affordable because of governmental funding./i,
       /with this funding, these kinds of rentals often have restrictions about who can live in a property./i,
       /many buildings serve moderate- or lower-income households, so applicants cannot make more money than specific income limits./i,
       /some buildings are only reserved for seniors./i,
@@ -413,7 +413,7 @@ describe("<RentalsFinder>", () => {
     expect(disclaimerItems).toHaveLength(5)
 
     const disclaimerPatterns = [
-      /detroit home connect will show you regulated affordable rentals, meaning they are affordable because of governmental funding./i,
+      /this website will show you regulated affordable rentals, meaning they are affordable because of governmental funding./i,
       /with this funding, these kinds of rentals often have restrictions about who can live in a property./i,
       /many buildings serve moderate- or lower-income households, so applicants cannot make more money than specific income limits./i,
       /some buildings are only reserved for seniors./i,
