@@ -1,6 +1,5 @@
 import { useContext, useEffect, useState } from "react"
 import axios from "axios"
-import qs from "qs"
 import { useRouter } from "next/router"
 import {
   EnumListingFilterParamsComparison,
@@ -163,11 +162,7 @@ export async function fetchBaseListingData(
       params.orderDir = orderDir
     }
 
-    const response = await axios.get(runtimeConfig.getListingServiceUrl(), {
-      params,
-      paramsSerializer: (params) => {
-        return qs.stringify(params)
-      },
+    const response = await axios.post(runtimeConfig.getListingServiceUrl(), params, {
       headers: {
         passkey: process.env.API_PASS_KEY,
         "x-forwarded-for": req.headers["x-forwarded-for"] ?? req.socket.remoteAddress,
@@ -186,8 +181,12 @@ export async function fetchBaseListingData(
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function fetchOpenListings(req: any, page: number) {
+export async function fetchOpenListings(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  req: any,
+  page: number,
+  additionalFilters: ListingFilterParams[] = []
+) {
   return await fetchBaseListingData(
     {
       page: page,
@@ -196,6 +195,7 @@ export async function fetchOpenListings(req: any, page: number) {
           $comparison: EnumListingFilterParamsComparison["="],
           status: ListingsStatusEnum.active,
         },
+        ...additionalFilters,
       ],
       orderBy: [ListingOrderByKeys.mostRecentlyPublished],
       orderDir: [OrderByEnum.desc],
@@ -205,8 +205,12 @@ export async function fetchOpenListings(req: any, page: number) {
   )
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function fetchClosedListings(req: any, page: number) {
+export async function fetchClosedListings(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  req: any,
+  page: number,
+  additionalFilters: ListingFilterParams[] = []
+) {
   return await fetchBaseListingData(
     {
       page: page,
@@ -215,6 +219,7 @@ export async function fetchClosedListings(req: any, page: number) {
           $comparison: EnumListingFilterParamsComparison["="],
           status: ListingsStatusEnum.closed,
         },
+        ...additionalFilters,
       ],
       orderBy: [ListingOrderByKeys.mostRecentlyClosed],
       orderDir: [OrderByEnum.desc],

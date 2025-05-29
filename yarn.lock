@@ -2081,6 +2081,26 @@
     react-tabs "^6.0.0"
     typescript "^4.4.2"
 
+"@bloom-housing/ui-seeds@1.22.1":
+  version "1.22.1"
+  resolved "https://registry.yarnpkg.com/@bloom-housing/ui-seeds/-/ui-seeds-1.22.1.tgz#b4ecb2d1e6a5ad30c1ec4dd74159189fa9d46756"
+  integrity sha512-v9J8eaUSmRFLIoMM3eNhmr44s/R6OrKZB0ZOXrA7AC5MBw46C+MJw79BjC0YRvKP6BNacy6ntIba+sZxWuJZNA==
+  dependencies:
+    "@fortawesome/fontawesome-svg-core" "^6.3.0"
+    "@fortawesome/react-fontawesome" "^0.2.0"
+    "@heroicons/react" "^2.0.18"
+    "@types/markdown-to-jsx" "^6.11.2"
+    "@types/mdx" "^2.0.3"
+    "@types/node" "^16.7.13"
+    "@types/react" "^18.0.0"
+    "@types/react-dom" "^18.0.0"
+    focus-trap-react "^11.0.3"
+    markdown-to-jsx "^6.11.4"
+    react "^18.2.0"
+    react-dom "^18.2.0"
+    react-tabs "^6.0.0"
+    typescript "^4.4.2"
+
 "@cnakazawa/watch@^1.0.3":
   version "1.0.4"
   resolved "https://registry.npmjs.org/@cnakazawa/watch/-/watch-1.0.4.tgz"
