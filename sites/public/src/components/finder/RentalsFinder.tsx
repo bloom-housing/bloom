@@ -185,7 +185,6 @@ export default function RentalsFinder() {
   }, [formData, stepIndex, sectionIndex, getValues, rentalFinderSections, reset])
 
   const onSkipClick = useCallback(() => {
-    setFormData({})
     setSectionIndex(rentalFinderSections.length - 1)
     setStepIndex(0)
   }, [rentalFinderSections.length])
