@@ -10,7 +10,7 @@ updates:
       - "/sites/partners"
     schedule: # how often to check for new versions
       interval: "weekly"
-    group: # All updates for dependencies that match a rule are combined in a single pull request.
+    groups: # All updates for dependencies that match a rule are combined in a single pull request.
       # Any outdated dependencies that do not match a rule are updated in individual pull requests. In this case, major updates
       minor-security:
         applies-to: security-updates
