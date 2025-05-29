@@ -69,7 +69,7 @@ const FormUnits = ({
   const homeTypes = [
     "",
     ...Object.values(HomeTypeEnum).map((val) => {
-      return { value: val, label: t(`homeType.${val}`) }
+      return { value: val, label: t(`listings.homeType.${val}`) }
     }),
   ]
 

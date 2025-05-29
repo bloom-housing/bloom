@@ -53,7 +53,7 @@ export const getListingTags = (
 
   if (!hideHomeTypeTag && listing.homeType) {
     listingTags.push({
-      title: t(`homeType.${listing.homeType}`),
+      title: t(`listings.homeType.${listing.homeType}`),
       variant: "highlight-cool",
     })
   }
