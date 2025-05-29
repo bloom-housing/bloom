@@ -18,7 +18,7 @@ import Layout from "../../layouts/application"
 import { MetaTags } from "../../components/shared/MetaTags"
 import { UserStatus } from "../../lib/constants"
 import MaxWidthLayout from "../../layouts/max-width"
-import { isFeatureFlagOn } from "../../lib/helpers"
+import { isFeatureFlagOn, setFeatureFlagLocalStorage } from "../../lib/helpers"
 import { fetchJurisdictionByName } from "../../lib/hooks"
 
 import styles from "./account.module.scss"
@@ -45,11 +45,15 @@ function Dashboard(props: DashboardProps) {
       setAlertMessage(alert)
     }
 
-    window.localStorage.setItem(
-      "bloom-show-favorites-menu-item",
-      (
-        isFeatureFlagOn(props.jurisdiction, FeatureFlagEnum.enableListingFavoriting) === true
-      ).toString()
+    setFeatureFlagLocalStorage(
+      props.jurisdiction,
+      FeatureFlagEnum.enableListingFavoriting,
+      "show-favorites-menu-item"
+    )
+    setFeatureFlagLocalStorage(
+      props.jurisdiction,
+      FeatureFlagEnum.disableCommonApplication,
+      "hide-applications-menu-item"
     )
   }, [router, props.jurisdiction, profile])
 
@@ -75,26 +79,30 @@ function Dashboard(props: DashboardProps) {
             <h1 className={"sr-only"}>{t("nav.myDashboard")}</h1>
             <Grid spacing="lg" className={styles["account-card-container"]}>
               <Grid.Row columns={2}>
-                <Grid.Cell>
-                  <BloomCard
-                    iconSymbol="application"
-                    title={t("account.myApplications")}
-                    subtitle={t("account.myApplicationsSubtitle")}
-                    variant={"block"}
-                    headingPriority={2}
-                  >
-                    <Card.Section>
-                      <Button
-                        size="sm"
-                        href={"/account/applications"}
-                        variant="primary-outlined"
-                        id="account-dashboard-applications"
-                      >
-                        {t("account.viewApplications")}
-                      </Button>
-                    </Card.Section>
-                  </BloomCard>
-                </Grid.Cell>
+                {isFeatureFlagOn(props.jurisdiction, FeatureFlagEnum.disableCommonApplication) ? (
+                  <></>
+                ) : (
+                  <Grid.Cell>
+                    <BloomCard
+                      iconSymbol="application"
+                      title={t("account.myApplications")}
+                      subtitle={t("account.myApplicationsSubtitle")}
+                      variant={"block"}
+                      headingPriority={2}
+                    >
+                      <Card.Section>
+                        <Button
+                          size="sm"
+                          href={"/account/applications"}
+                          variant="primary-outlined"
+                          id="account-dashboard-applications"
+                        >
+                          {t("account.viewApplications")}
+                        </Button>
+                      </Card.Section>
+                    </BloomCard>
+                  </Grid.Cell>
+                )}
                 <Grid.Cell>
                   <BloomCard
                     iconSymbol="profile"
