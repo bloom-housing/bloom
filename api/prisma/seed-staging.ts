@@ -107,15 +107,11 @@ export const stagingSeed = async (
       featureFlags: [
         FeatureFlagEnum.enableGeocodingPreferences,
         FeatureFlagEnum.enableGeocodingRadiusMethod,
+        FeatureFlagEnum.enableListingFiltering,
         FeatureFlagEnum.enableListingOpportunity,
         FeatureFlagEnum.enableListingPagination,
         FeatureFlagEnum.enablePartnerDemographics,
         FeatureFlagEnum.enablePartnerSettings,
-<<<<<<< HEAD
-        FeatureFlagEnum.enableListingFiltering,
-        FeatureFlagEnum.enableListingPagination,
-=======
->>>>>>> ecb40d4d6 (feat: under construction home page)
       ],
       languages: [LanguagesEnum.en, LanguagesEnum.es, LanguagesEnum.vi],
     }),
