@@ -442,3 +442,7 @@ export const RenderIf = (props: { language: string; children: JSX.Element }) => 
   }
   return null
 }
+
+export const isTrue = (value) => {
+  return value === true || value === "true"
+}
