@@ -4,6 +4,7 @@ import { render, screen } from "../testUtils"
 import { mockNextRouter, waitFor, within } from "../../../partners/__tests__/testUtils"
 import userEvent from "@testing-library/user-event"
 import { act } from "react-dom/test-utils"
+import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 beforeAll(() => {
   mockNextRouter()
@@ -11,7 +12,14 @@ beforeAll(() => {
 
 describe("<RentalsFinder>", () => {
   it("renders all page elements", () => {
-    render(<RentalsFinder />)
+    render(
+      <RentalsFinder
+        activeFeatureFalgs={[
+          FeatureFlagEnum.enableRegions,
+          FeatureFlagEnum.enableAccessibilityFeatures,
+        ]}
+      />
+    )
 
     // Check header content
     const finderHeaderTitle = screen.getByRole("heading", {
@@ -60,7 +68,14 @@ describe("<RentalsFinder>", () => {
   })
 
   it("should update content on next button click", async () => {
-    render(<RentalsFinder />)
+    render(
+      <RentalsFinder
+        activeFeatureFalgs={[
+          FeatureFlagEnum.enableRegions,
+          FeatureFlagEnum.enableAccessibilityFeatures,
+        ]}
+      />
+    )
 
     const finderHeaderTitle = screen.getByRole("heading", {
       name: /find listings for you/i,
@@ -320,7 +335,14 @@ describe("<RentalsFinder>", () => {
   })
 
   it("should persist selection when switching steps", async () => {
-    render(<RentalsFinder />)
+    render(
+      <RentalsFinder
+        activeFeatureFalgs={[
+          FeatureFlagEnum.enableRegions,
+          FeatureFlagEnum.enableAccessibilityFeatures,
+        ]}
+      />
+    )
 
     let studioCheckbox = screen.getByRole("checkbox", { name: /studio/i })
     let oneBdrmCheckbox = screen.getByRole("checkbox", { name: /1 bedroom/i })
@@ -372,7 +394,14 @@ describe("<RentalsFinder>", () => {
   })
 
   it("should skip to disclaimer on skip button click", async () => {
-    render(<RentalsFinder />)
+    render(
+      <RentalsFinder
+        activeFeatureFalgs={[
+          FeatureFlagEnum.enableRegions,
+          FeatureFlagEnum.enableAccessibilityFeatures,
+        ]}
+      />
+    )
 
     const skipButton = screen.getByRole("button", { name: /skip this and show me listings/i })
     expect(skipButton).toBeInTheDocument()
@@ -429,7 +458,14 @@ describe("<RentalsFinder>", () => {
   describe("should navigate with filter querry", () => {
     it("should nagvigate withouth query params when no option selected", async () => {
       const { pushMock } = mockNextRouter()
-      render(<RentalsFinder />)
+      render(
+        <RentalsFinder
+          activeFeatureFalgs={[
+            FeatureFlagEnum.enableRegions,
+            FeatureFlagEnum.enableAccessibilityFeatures,
+          ]}
+        />
+      )
 
       while (!screen.queryByRole("button", { name: /finish/i })) {
         const nextButton = screen.getByRole("button", { name: /next/i })
@@ -449,7 +485,14 @@ describe("<RentalsFinder>", () => {
     it("should navigate with formatted query params", async () => {
       const { pushMock } = mockNextRouter()
 
-      render(<RentalsFinder />)
+      render(
+        <RentalsFinder
+          activeFeatureFalgs={[
+            FeatureFlagEnum.enableRegions,
+            FeatureFlagEnum.enableAccessibilityFeatures,
+          ]}
+        />
+      )
 
       // ----------- Section 1 - Housing Needs | Step 1 - Bedrooms -------------------
 
