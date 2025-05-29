@@ -22,7 +22,7 @@ export default function FinderRentQuestion() {
           getValues={getValues}
           setValue={setValue}
           type="currency"
-          label={t("listings.minRent")}
+          label={t("finder.rent.minRent")}
           placeholder={t("finder.rent.noMinRent")}
           prepend={"$"}
         />
@@ -33,7 +33,7 @@ export default function FinderRentQuestion() {
           getValues={getValues}
           setValue={setValue}
           type="currency"
-          label={t("listings.maxRent")}
+          label={t("finder.rent.maxRent")}
           placeholder={t("finder.rent.noMaxRent")}
           prepend={"$"}
         />
