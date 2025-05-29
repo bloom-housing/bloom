@@ -34,6 +34,7 @@ type FinderFormData = {
   reservedCommunityTypes?: string[]
 }
 
+// TODO: Fetch reserved community types from th backend when an endpoint is created
 const reservedCommunityTypes = ["withDisabilities", "senior55", "senior62", "homeless", "veterans"]
 
 export default function RentalsFinder() {
