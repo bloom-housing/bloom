@@ -1,0 +1,34 @@
+sequenceDiagram
+    participant A as Housing Applicant
+    participant S as Housing Staff
+    participant C as CasaLingua System
+    participant LLM as Local LLM
+    participant DB as Knowledge Base
+
+    %% Applicant Flow
+    A->>C: Upload housing document
+    C->>C: Parse and classify document
+    C->>LLM: Request simplification
+    LLM->>DB: Query relevant terms/policies
+    DB-->>LLM: Return context data
+    LLM-->>C: Return simplified document
+    C->>C: Format and prepare UI view
+    C-->>A: Display simplified document
+    A->>C: Request voice readout
+    C-->>A: Provide audio version
+    A->>C: Submit feedback on clarity
+    C->>DB: Store feedback for model improvement
+
+    %% Staff Flow
+    S->>C: Upload complex policy document
+    C->>C: Parse and classify document
+    C->>LLM: Request simplification
+    LLM->>DB: Query relevant terms/policies
+    DB-->>LLM: Return context data
+    LLM-->>C: Return simplified document
+    C-->>S: Show original vs. simplified preview
+    S->>C: Submit edits and clarifications
+    C->>C: Apply manual edits
+    S->>C: Approve final version
+    C->>C: Store approved version
+    C-->>A: Make document available to applicants
