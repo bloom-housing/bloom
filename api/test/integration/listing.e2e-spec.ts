@@ -473,14 +473,14 @@ describe('Listing Controller Tests', () => {
 
     it('should get listings from list endpoint when params are sent', async () => {
       const listing1 = await listingFactory(jurisdictionAId, prisma, {
-        listing: { name: 'filterListing1' } as Prisma.ListingsCreateInput,
+        listing: { name: randomName() } as Prisma.ListingsCreateInput,
       });
       const listing1Created = await prisma.listings.create({
         data: listing1,
       });
 
       const listing2 = await listingFactory(jurisdictionAId, prisma, {
-        listing: { name: 'filterListing2' } as Prisma.ListingsCreateInput,
+        listing: { name: randomName() } as Prisma.ListingsCreateInput,
       });
       const listing2Created = await prisma.listings.create({
         data: listing2,
@@ -2304,7 +2304,7 @@ describe('Listing Controller Tests', () => {
       adminAccessToken;
     beforeAll(async () => {
       jurisdictionA = await prisma.jurisdictions.create({
-        data: jurisdictionFactory('jurisdictionA', {
+        data: jurisdictionFactory(randomName(), {
           listingApprovalPermissions: [
             UserRoleEnum.admin,
             UserRoleEnum.jurisdictionAdmin,
@@ -2312,7 +2312,7 @@ describe('Listing Controller Tests', () => {
         }),
       });
       const jurisdictionB = await prisma.jurisdictions.create({
-        data: jurisdictionFactory('jurisdictionB'),
+        data: jurisdictionFactory(randomName()),
       });
       adminUser = await prisma.userAccounts.create({
         data: await userFactory({

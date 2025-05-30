@@ -171,7 +171,7 @@ export class ListingController {
   @Post('duplicate')
   @ApiOperation({ summary: 'Duplicate listing', operationId: 'duplicate' })
   @UseInterceptors(ClassSerializerInterceptor)
-  @UsePipes(ListingCreateUpdateValidationPipe)
+  @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
   @ApiOkResponse({ type: Listing })
   @UseGuards(ApiKeyGuard)
   async duplicate(

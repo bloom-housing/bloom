@@ -64,10 +64,5 @@ export class ListingCreateUpdateValidationPipe extends ValidationPipe {
       ...metadata,
       metatype: value.id ? ListingUpdate : ListingCreate,
     });
-
-    // Return the transformed DTO
-    // Use MapperService to apply default values if necessary
-    // Assuming MapperService is a utility to map DTOs and apply default values
-    // return MapperServicemap.defaultValues(transformedDto)
   }
 }
