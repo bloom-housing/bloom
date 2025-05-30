@@ -4,6 +4,7 @@ import { useRouter } from "next/router"
 import {
   EnumListingFilterParamsComparison,
   FeatureFlagEnum,
+  FilterAvailabilityEnum,
   Jurisdiction,
   Listing,
   ListingFilterParams,
@@ -146,7 +147,7 @@ export async function fetchBaseListingData(
     const response = await axios.post(`${process.env.listingServiceUrl}/list`, params, {
       headers: {
         passkey: process.env.API_PASS_KEY,
-        "x-forwarded-for": req.headers["x-forwarded-for"] ?? req.socket.remoteAddress,
+        "x-forwarded-for": req?.headers["x-forwarded-for"] ?? req?.socket?.remoteAddress,
       },
     })
 
@@ -205,6 +206,25 @@ export async function fetchClosedListings(
       orderBy: [ListingOrderByKeys.mostRecentlyClosed],
       orderDir: [OrderByEnum.desc],
       limit: process.env.maxBrowseListings,
+    },
+    req
+  )
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function fetchLimitedUnderConstructionListings(req?: any, limit?: number) {
+  return await fetchBaseListingData(
+    {
+      additionalFilters: [
+        {
+          $comparison: EnumListingFilterParamsComparison["="],
+          status: ListingsStatusEnum.active,
+          availability: FilterAvailabilityEnum.comingSoon,
+        },
+      ],
+      orderBy: [ListingOrderByKeys.mostRecentlyPublished],
+      orderDir: [OrderByEnum.desc],
+      limit: limit ? limit.toString() : "3",
     },
     req
   )
