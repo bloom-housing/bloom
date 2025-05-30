@@ -2,16 +2,12 @@ import { useFormContext } from "react-hook-form"
 import { Field } from "@bloom-housing/ui-components"
 import styles from "./FinderMultiselectQuestion.module.scss"
 import finderStyles from "./RentalsFinder.module.scss"
-
-export type FinderQuestion = {
-  label: string
-  value: string | boolean
-}
+import { FilterField } from "../browse/FilterDrawerHelpers"
 
 type FinderMultiselectQuestionProps = {
   legend: string
   fieldGroupName: string
-  options: FinderQuestion[]
+  options: FilterField[]
 }
 
 export default function FinderMultiselectQuestion(props: FinderMultiselectQuestionProps) {
@@ -25,17 +21,14 @@ export default function FinderMultiselectQuestion(props: FinderMultiselectQuesti
       <legend className={styles["fieldset-legend"]}>{props.legend}</legend>
       {props.options.map((option) => (
         <Field
-          type="checkbox"
-          name={props.fieldGroupName}
-          id={option.label}
-          key={option.label}
+          name={option.key}
+          id={option.key}
+          key={option.key}
           label={option.label}
           register={register}
+          type="checkbox"
           className={finderStyles["question-checkbox"]}
           labelClassName={finderStyles["question-label"]}
-          inputProps={{
-            value: option.value,
-          }}
           bordered
         />
       ))}
