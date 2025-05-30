@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext, useRef } from "react"
-import axios from "axios"
+import { isAxiosError } from "axios"
 import { useRouter } from "next/router"
 import { useForm } from "react-hook-form"
 import { Field, Form, t, AlertBox } from "@bloom-housing/ui-components"
@@ -69,7 +69,7 @@ const ResetPassword = () => {
       setOpenTermsModal(false)
       setChecked(true)
       const { status, data } = error.response || {}
-      const responseMessage = axios.isAxiosError(error) ? error.response?.data.message : ""
+      const responseMessage = isAxiosError(error) ? error.response?.data.message : ""
 
       if (status === 400 && responseMessage?.includes("has not accepted the terms of service")) {
         setOpenTermsModal(true)

@@ -2066,6 +2066,27 @@ export class UserService {
     })
   }
   /**
+   * Get the ids of the user favorites
+   */
+  favoriteListings(
+    params: {
+      /**  */
+      id: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<IdDTO[]> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user/favoriteListings/{id}"
+      url = url.replace("{id}", params["id"] + "")
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
    * Add or remove a listing from user favorites
    */
   modifyFavoriteListings(
@@ -2797,6 +2818,22 @@ export class FeatureFlagsService {
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
 
       let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Add all new feature flags
+   */
+  addAllNewFeatureFlags(options: IRequestOptions = {}): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/featureFlags/addAllNew"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = null
 
       configs.data = data
 
@@ -3642,6 +3679,85 @@ export interface Unit {
   unitAmiChartOverrides?: UnitAmiChartOverride
 }
 
+export interface UnitGroupAmiLevel {
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  amiPercentage?: number
+
+  /**  */
+  monthlyRentDeterminationType?: EnumUnitGroupAmiLevelMonthlyRentDeterminationType
+
+  /**  */
+  percentageOfIncomeValue?: number
+
+  /**  */
+  flatRentValue?: number
+
+  /**  */
+  amiChart?: AmiChart
+}
+
+export interface UnitGroup {
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  maxOccupancy?: number
+
+  /**  */
+  minOccupancy?: number
+
+  /**  */
+  floorMin?: number
+
+  /**  */
+  floorMax?: number
+
+  /**  */
+  totalCount?: number
+
+  /**  */
+  totalAvailable?: number
+
+  /**  */
+  bathroomMin?: number
+
+  /**  */
+  bathroomMax?: number
+
+  /**  */
+  openWaitlist?: boolean
+
+  /**  */
+  sqFeetMin?: number
+
+  /**  */
+  sqFeetMax?: number
+
+  /**  */
+  unitAccessibilityPriorityTypes?: UnitAccessibilityPriorityType
+
+  /**  */
+  unitGroupAmiLevels?: UnitGroupAmiLevel[]
+
+  /**  */
+  unitTypes?: UnitType[]
+}
+
 export interface MinMaxCurrency {
   /**  */
   min: string
@@ -3723,6 +3839,104 @@ export interface UnitsSummarized {
   hmi: HMI
 }
 
+export interface UnitGroupSummary {
+  /**  */
+  unitTypes?: string[]
+
+  /**  */
+  rentAsPercentIncomeRange?: MinMax
+
+  /**  */
+  rentRange?: MinMaxCurrency
+
+  /**  */
+  amiPercentageRange: MinMax
+
+  /**  */
+  openWaitlist: boolean
+
+  /**  */
+  unitVacancies: number
+
+  /**  */
+  floorRange?: MinMax
+
+  /**  */
+  sqFeetRange?: MinMax
+
+  /**  */
+  bathroomRange?: MinMax
+}
+
+export interface HMIColumns {
+  /**  */
+  "20"?: number
+
+  /**  */
+  "25"?: number
+
+  /**  */
+  "30"?: number
+
+  /**  */
+  "35"?: number
+
+  /**  */
+  "40"?: number
+
+  /**  */
+  "45"?: number
+
+  /**  */
+  "50"?: number
+
+  /**  */
+  "55"?: number
+
+  /**  */
+  "60"?: number
+
+  /**  */
+  "70"?: number
+
+  /**  */
+  "80"?: number
+
+  /**  */
+  "100"?: number
+
+  /**  */
+  "120"?: number
+
+  /**  */
+  "125"?: number
+
+  /**  */
+  "140"?: number
+
+  /**  */
+  "150"?: number
+
+  /**  */
+  householdSize: string
+}
+
+export interface HouseholdMaxIncomeSummary {
+  /**  */
+  columns: HMIColumns
+
+  /**  */
+  rows: HMIColumns[]
+}
+
+export interface UnitGroupsSummarized {
+  /**  */
+  unitGroupSummary: UnitGroupSummary[]
+
+  /**  */
+  householdMaxIncomeSummary: HouseholdMaxIncomeSummary
+}
+
 export interface UnitsSummary {
   /**  */
   id: string
@@ -3787,6 +4001,26 @@ export interface ApplicationLotteryTotal {
   total: number
 }
 
+export interface ListingNeighborhoodAmenities {
+  /**  */
+  groceryStores?: string
+
+  /**  */
+  publicTransportation?: string
+
+  /**  */
+  schools?: string
+
+  /**  */
+  parksAndCommunityCenters?: string
+
+  /**  */
+  pharmacies?: string
+
+  /**  */
+  healthCareResources?: string
+}
+
 export interface Listing {
   /**  */
   id: string
@@ -3832,6 +4066,9 @@ export interface Listing {
 
   /**  */
   neighborhood?: string
+
+  /**  */
+  region?: RegionEnum
 
   /**  */
   petPolicy?: string
@@ -4059,7 +4296,13 @@ export interface Listing {
   units: Unit[]
 
   /**  */
+  unitGroups?: UnitGroup[]
+
+  /**  */
   unitsSummarized?: UnitsSummarized
+
+  /**  */
+  unitGroupsSummarized?: UnitGroupsSummarized
 
   /**  */
   unitsSummary?: UnitsSummary[]
@@ -4095,7 +4338,25 @@ export interface Listing {
   communityDisclaimerDescription?: string
 
   /**  */
+  marketingType?: MarketingTypeEnum
+
+  /**  */
+  marketingDate?: Date
+
+  /**  */
+  marketingSeason?: MarketingSeasonEnum
+
+  /**  */
   homeType?: HomeTypeEnum
+
+  /**  */
+  isVerified?: boolean
+
+  /**  */
+  section8Acceptance?: boolean
+
+  /**  */
+  listingNeighborhoodAmenities?: ListingNeighborhoodAmenities
 }
 
 export interface PaginationMeta {
@@ -4196,6 +4457,67 @@ export interface UnitCreate {
 
   /**  */
   unitAmiChartOverrides?: UnitAmiChartOverrideCreate
+}
+
+export interface UnitGroupAmiLevelCreate {
+  /**  */
+  amiPercentage?: number
+
+  /**  */
+  monthlyRentDeterminationType?: EnumUnitGroupAmiLevelCreateMonthlyRentDeterminationType
+
+  /**  */
+  percentageOfIncomeValue?: number
+
+  /**  */
+  flatRentValue?: number
+
+  /**  */
+  amiChart?: IdDTO
+}
+
+export interface UnitGroupCreate {
+  /**  */
+  maxOccupancy?: number
+
+  /**  */
+  minOccupancy?: number
+
+  /**  */
+  floorMin?: number
+
+  /**  */
+  floorMax?: number
+
+  /**  */
+  totalCount?: number
+
+  /**  */
+  totalAvailable?: number
+
+  /**  */
+  bathroomMin?: number
+
+  /**  */
+  bathroomMax?: number
+
+  /**  */
+  openWaitlist?: boolean
+
+  /**  */
+  sqFeetMin?: number
+
+  /**  */
+  sqFeetMax?: number
+
+  /**  */
+  unitAccessibilityPriorityTypes?: IdDTO
+
+  /**  */
+  unitTypes?: IdDTO[]
+
+  /**  */
+  unitGroupAmiLevels?: UnitGroupAmiLevelCreate[]
 }
 
 export interface AssetCreate {
@@ -4388,6 +4710,9 @@ export interface ListingCreate {
   neighborhood?: string
 
   /**  */
+  region?: RegionEnum
+
+  /**  */
   petPolicy?: string
 
   /**  */
@@ -4571,13 +4896,34 @@ export interface ListingCreate {
   communityDisclaimerDescription?: string
 
   /**  */
+  marketingType?: MarketingTypeEnum
+
+  /**  */
+  marketingDate?: Date
+
+  /**  */
+  marketingSeason?: MarketingSeasonEnum
+
+  /**  */
   homeType?: HomeTypeEnum
+
+  /**  */
+  isVerified?: boolean
+
+  /**  */
+  section8Acceptance?: boolean
+
+  /**  */
+  listingNeighborhoodAmenities?: ListingNeighborhoodAmenities
 
   /**  */
   listingMultiselectQuestions?: IdDTO[]
 
   /**  */
   units?: UnitCreate[]
+
+  /**  */
+  unitGroups?: UnitGroupCreate[]
 
   /**  */
   applicationMethods?: ApplicationMethodCreate[]
@@ -4677,6 +5023,9 @@ export interface ListingUpdate {
   neighborhood?: string
 
   /**  */
+  region?: RegionEnum
+
+  /**  */
   petPolicy?: string
 
   /**  */
@@ -4860,13 +5209,34 @@ export interface ListingUpdate {
   communityDisclaimerDescription?: string
 
   /**  */
+  marketingType?: MarketingTypeEnum
+
+  /**  */
+  marketingDate?: Date
+
+  /**  */
+  marketingSeason?: MarketingSeasonEnum
+
+  /**  */
   homeType?: HomeTypeEnum
+
+  /**  */
+  isVerified?: boolean
+
+  /**  */
+  section8Acceptance?: boolean
+
+  /**  */
+  listingNeighborhoodAmenities?: ListingNeighborhoodAmenities
 
   /**  */
   listingMultiselectQuestions?: IdDTO[]
 
   /**  */
   units?: UnitCreate[]
+
+  /**  */
+  unitGroups?: UnitGroupCreate[]
 
   /**  */
   applicationMethods?: ApplicationMethodCreate[]
@@ -6769,6 +7139,9 @@ export interface PublicLotteryTotal {
 }
 
 export enum FilterAvailabilityEnum {
+  "closedWaitlist" = "closedWaitlist",
+  "comingSoon" = "comingSoon",
+  "openWaitlist" = "openWaitlist",
   "waitlistOpen" = "waitlistOpen",
   "unitsAvailable" = "unitsAvailable",
 }
@@ -6897,6 +7270,22 @@ export enum UnitRentTypeEnum {
   "percentageOfIncome" = "percentageOfIncome",
 }
 
+export enum EnumUnitGroupAmiLevelMonthlyRentDeterminationType {
+  "flatRent" = "flatRent",
+  "percentageOfIncome" = "percentageOfIncome",
+}
+export enum MarketingTypeEnum {
+  "marketing" = "marketing",
+  "comingSoon" = "comingSoon",
+}
+
+export enum MarketingSeasonEnum {
+  "spring" = "spring",
+  "summer" = "summer",
+  "fall" = "fall",
+  "winter" = "winter",
+}
+
 export enum AfsView {
   "pending" = "pending",
   "pendingNameAndDoB" = "pendingNameAndDoB",
@@ -6980,7 +7369,22 @@ export enum FeatureFlagEnum {
   "enableHomeType" = "enableHomeType",
   "enableAccessibilityFeatures" = "enableAccessibilityFeatures",
   "enableUtilitiesIncluded" = "enableUtilitiesIncluded",
+  "enableIsVerified" = "enableIsVerified",
+  "enableNeighborhoodAmenities" = "enableNeighborhoodAmenities",
   "hideCloseListingButton" = "hideCloseListingButton",
+  "enableMarketingStatus" = "enableMarketingStatus",
+  "enableRegions" = "enableRegions",
+  "enableSection8Question" = "enableSection8Question",
+  "enableUnitGroups" = "enableUnitGroups",
+  "enableListingPagination" = "enableListingPagination",
+  "enableSingleUseCode" = "enableSingleUseCode",
+  "enableGeocodingPreferences" = "enableGeocodingPreferences",
+  "enableGeocodingRadiusMethod" = "enableGeocodingRadiusMethod",
+  "enableListingOpportunity" = "enableListingOpportunity",
+  "enablePartnerDemographics" = "enablePartnerDemographics",
+  "enablePartnerSettings" = "enablePartnerSettings",
+  "disableJurisdictionalAdmin" = "disableJurisdictionalAdmin",
+  "enableListingFavoriting" = "enableListingFavoriting",
 }
 export enum EnumMultiselectQuestionFilterParamsComparison {
   "=" = "=",

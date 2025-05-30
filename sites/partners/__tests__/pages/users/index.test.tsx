@@ -24,7 +24,7 @@ afterAll(() => server.close())
 describe("users", () => {
   it("should render the error text when api call fails", async () => {
     server.use(
-      rest.get("http://localhost:3100/listings", (_req, res, ctx) => {
+      rest.post("http://localhost:3100/listings/list", (_req, res, ctx) => {
         return res(ctx.json([]))
       }),
       rest.get("http://localhost:3100/user/list", (_req, res, ctx) => {
@@ -45,7 +45,7 @@ describe("users", () => {
 
   it("should render user table when data is returned", async () => {
     server.use(
-      rest.get("http://localhost:3100/listings", (_req, res, ctx) => {
+      rest.post("http://localhost:3100/listings/list", (_req, res, ctx) => {
         return res(ctx.json([]))
       }),
       rest.get("http://localhost/api/adapter/listings", (_req, res, ctx) => {

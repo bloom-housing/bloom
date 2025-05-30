@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { t, AlertTypes } from "@bloom-housing/ui-components"
-import axios, { AxiosError } from "axios"
+import { AxiosError, isAxiosError } from "axios"
 
 export type NetworkStatus = {
   content: NetworkStatusContent
@@ -108,7 +108,7 @@ export const useCatchNetworkError = () => {
     status,
     error: AxiosError<CatchNetworkError>
   ) => {
-    const responseMessage = axios.isAxiosError(error) ? error.response?.data.message || "" : ""
+    const responseMessage = isAxiosError(error) ? error.response?.data.message || "" : ""
     switch (status) {
       case 401:
         check401Error(responseMessage, error)

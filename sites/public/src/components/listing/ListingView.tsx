@@ -42,8 +42,12 @@ import {
 } from "@bloom-housing/shared-helpers"
 import dayjs from "dayjs"
 import { ErrorPage } from "../../pages/_error"
-import { useGetApplicationStatusProps } from "../../lib/hooks"
-import { getGenericAddress, isFeatureFlagOn, openInFuture } from "../../lib/helpers"
+import {
+  getGenericAddress,
+  getListingApplicationStatus,
+  openInFuture,
+  isFeatureFlagOn,
+} from "../../lib/helpers"
 import { GetApplication } from "./GetApplication"
 import { SubmitApplication } from "./SubmitApplication"
 import { ListingGoogleMap } from "./ListingGoogleMap"
@@ -103,8 +107,8 @@ export const ListingView = (props: ListingProps) => {
   const { initialStateLoaded, profile } = useContext(AuthContext)
   let buildingSelectionCriteria, preferencesSection, programsSection
   const { listing } = props
-  const { content: appStatusContent, subContent: appStatusSubContent } =
-    useGetApplicationStatusProps(listing)
+
+  const statusContent = getListingApplicationStatus(listing)
 
   const appOpenInFuture = openInFuture(listing)
   const hasNonReferralMethods = listing?.applicationMethods
@@ -618,7 +622,7 @@ export const ListingView = (props: ListingProps) => {
   }
 
   const getApplicationStatus = () => {
-    if (appStatusContent || appStatusSubContent) {
+    if (statusContent?.content || statusContent?.subContent) {
       return (
         <Message
           className="doorway-message application-status"
@@ -629,11 +633,11 @@ export const ListingView = (props: ListingProps) => {
             </Icon>
           }
         >
-          {appStatusContent}
-          {appStatusSubContent && (
+          {statusContent?.content}
+          {statusContent?.subContent && (
             <>
               <br />
-              {appStatusSubContent}
+              {statusContent?.subContent}
             </>
           )}
         </Message>
@@ -743,10 +747,21 @@ export const ListingView = (props: ListingProps) => {
               responsiveCollapse={true}
             />
           )}
+          {listing.section8Acceptance && (
+            <div className="my-2">
+              <Markdown className="custom-counter__subtitle">
+                {t("listings.section8VoucherInfo")}
+              </Markdown>
+            </div>
+          )}
         </div>
       </div>
       <div className="w-full md:w-2/3 md:mt-3 md:hidden md:mx-3 border-gray-400 border-b">
         {getApplicationStatus()}
+        {/* <ApplicationStatus
+          content={statusContent?.content}
+          subContent={statusContent?.subContent}
+        /> */}
         <div className="mx-4">
           <DownloadLotteryResults
             resultsDate={dayjs(lotteryResults?.startTime).format("MMMM D, YYYY")}
@@ -797,7 +812,18 @@ export const ListingView = (props: ListingProps) => {
 
             <ListSection
               title={t("listings.householdMaximumIncome")}
-              subtitle={householdMaximumIncomeSubheader}
+              subtitle={
+                <div>
+                  {householdMaximumIncomeSubheader}
+                  {listing.section8Acceptance && (
+                    <>
+                      <br />
+                      <br />
+                      <Markdown>{t("listings.section8VoucherInfo")}</Markdown>
+                    </>
+                  )}
+                </div>
+              }
             >
               <StandardTable
                 className="table-container"
@@ -899,6 +925,10 @@ export const ListingView = (props: ListingProps) => {
           <aside className="w-full static md:absolute md:right-0 md:w-1/3 md:top-0 sm:w-2/3 md:ml-2 h-full md:border border-gray-400 bg-white">
             <div className="hidden md:block">
               {getApplicationStatus()}
+              {/* <ApplicationStatus
+                content={statusContent?.content}
+                subContent={statusContent?.subContent}
+              /> */}
               <DownloadLotteryResults
                 resultsDate={dayjs(lotteryResults?.startTime).format("MMMM D, YYYY")}
                 pdfURL={pdfUrlFromListingEvents(

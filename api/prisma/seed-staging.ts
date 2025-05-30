@@ -1,15 +1,12 @@
 import {
-  ApplicationAddressTypeEnum,
-  ApplicationMethodsTypeEnum,
   ApplicationSubmissionTypeEnum,
   LanguagesEnum,
-  ListingEventsTypeEnum,
   ListingsStatusEnum,
+  MonthlyRentDeterminationTypeEnum,
   MultiselectQuestions,
   MultiselectQuestionsApplicationSectionEnum,
   Prisma,
   PrismaClient,
-  ReviewOrderTypeEnum,
   UserRoleEnum,
 } from '@prisma/client';
 import dayjs from 'dayjs';
@@ -17,37 +14,43 @@ import { randomInt } from 'node:crypto';
 import { ValidationMethod } from '../src/enums/multiselect-questions/validation-method-enum';
 import {
   realBayAreaPlaces,
-  rockyMountainAddress,
   stagingRealisticAddresses,
-  yosemiteAddress,
 } from './seed-helpers/address-factory';
 import { amiChartFactory } from './seed-helpers/ami-chart-factory';
 import { applicationFactory } from './seed-helpers/application-factory';
 import { randomBoolean } from './seed-helpers/boolean-generator';
 import { householdMemberFactorySingle } from './seed-helpers/household-member-factory';
 import { jurisdictionFactory } from './seed-helpers/jurisdiction-factory';
-import {
-  featuresAndUtilites,
-  listingFactory,
-} from './seed-helpers/listing-factory';
+import { listingFactory } from './seed-helpers/listing-factory';
+import { userFactory } from './seed-helpers/user-factory';
+import { unitTypeFactoryAll } from './seed-helpers/unit-type-factory';
+import { unitAccessibilityPriorityTypeFactoryAll } from './seed-helpers/unit-accessibility-priority-type-factory';
+import { multiselectQuestionFactory } from './seed-helpers/multiselect-question-factory';
+import { translationFactory } from './seed-helpers/translation-factory';
+import { reservedCommunityTypeFactoryAll } from './seed-helpers/reserved-community-type-factory';
 import {
   mapLayerFactory,
   redlinedMap,
   simplifiedDCMap,
 } from './seed-helpers/map-layer-factory';
-import { multiselectQuestionFactory } from './seed-helpers/multiselect-question-factory';
-import { reservedCommunityTypeFactoryAll } from './seed-helpers/reserved-community-type-factory';
-import { translationFactory } from './seed-helpers/translation-factory';
-import { unitAccessibilityPriorityTypeFactoryAll } from './seed-helpers/unit-accessibility-priority-type-factory';
-import { unitTypeFactoryAll } from './seed-helpers/unit-type-factory';
-import { userFactory } from './seed-helpers/user-factory';
-import { featureFlagFactory } from './seed-helpers/feature-flag-factory';
+import { createAllFeatureFlags } from './seed-helpers/feature-flag-factory';
+import { FeatureFlagEnum } from '../src/enums/feature-flags/feature-flags-enum';
+import { hollywoodHillsHeights } from './seed-helpers/listing-data/hollywood-hills-heights';
+import { districtViewApartments } from './seed-helpers/listing-data/district-view-apartments';
+import { blueSkyApartments } from './seed-helpers/listing-data/blue-sky-apartments';
+import { valleyHeightsSeniorCommunity } from './seed-helpers/listing-data/valley-heights-senior-community';
+import { littleVillageApartments } from './seed-helpers/listing-data/little-village-apartments';
+import { elmVillage } from './seed-helpers/listing-data/elm-village';
+import { lakeviewVilla } from './seed-helpers/listing-data/lakeview-villa';
+import { sunshineFlats } from './seed-helpers/listing-data/sunshine-flats';
 
 export const stagingSeed = async (
   prismaClient: PrismaClient,
   jurisdictionName: string,
   largeSeed?: boolean,
 ) => {
+  // Seed feature flags
+  await createAllFeatureFlags(prismaClient);
   //doorway-specific permissions
   const listingApprovalPermissions = [UserRoleEnum.admin];
   const duplicateListingPermissions = [
@@ -59,73 +62,67 @@ export const stagingSeed = async (
   // create main jurisdiction
   const jurisdiction = await prismaClient.jurisdictions.create({
     data: {
-      ...jurisdictionFactory(
-        jurisdictionName || 'Bay Area',
+      ...jurisdictionFactory(jurisdictionName || 'Bay Area', {
         listingApprovalPermissions,
         duplicateListingPermissions,
-      ),
+      }),
       allowSingleUseCodeLogin: true,
     },
   });
   // add another jurisdiction
   const additionalJurisdiction = await prismaClient.jurisdictions.create({
-    data: jurisdictionFactory(
-      'Contra Costa',
+    data: jurisdictionFactory('Contra Costa', {
       listingApprovalPermissions,
       duplicateListingPermissions,
-    ),
+    }),
   });
   const alamedaCounty = await prismaClient.jurisdictions.create({
-    data: jurisdictionFactory('Alameda', [UserRoleEnum.admin]),
+    data: jurisdictionFactory('Alameda', {
+      listingApprovalPermissions,
+      duplicateListingPermissions,
+    }),
   });
   const marinCounty = await prismaClient.jurisdictions.create({
-    data: jurisdictionFactory(
-      'Marin',
+    data: jurisdictionFactory('Marin', {
       listingApprovalPermissions,
       duplicateListingPermissions,
-    ),
+    }),
   });
   const napaCounty = await prismaClient.jurisdictions.create({
-    data: jurisdictionFactory(
-      'Napa',
+    data: jurisdictionFactory('Napa', {
       listingApprovalPermissions,
       duplicateListingPermissions,
-    ),
+    }),
   });
   const sanMateoCounty = await prismaClient.jurisdictions.create({
-    data: jurisdictionFactory(
-      'San Mateo',
+    data: jurisdictionFactory('San Mateo', {
       listingApprovalPermissions,
       duplicateListingPermissions,
-    ),
+    }),
   });
   const santaClaraCounty = await prismaClient.jurisdictions.create({
-    data: jurisdictionFactory(
-      'Santa Clara',
+    data: jurisdictionFactory('Santa Clara', {
       listingApprovalPermissions,
       duplicateListingPermissions,
-    ),
+    }),
   });
   const solanaCounty = await prismaClient.jurisdictions.create({
-    data: jurisdictionFactory(
-      'Solano',
+    data: jurisdictionFactory('Solano', {
       listingApprovalPermissions,
       duplicateListingPermissions,
-    ),
+    }),
   });
   const sonomaCounty = await prismaClient.jurisdictions.create({
-    data: jurisdictionFactory(
-      'Sonoma',
+    data: jurisdictionFactory('Sonoma', {
       listingApprovalPermissions,
       duplicateListingPermissions,
-    ),
+    }),
   });
   const sanFranciscoCounty = await prismaClient.jurisdictions.create({
-    data: jurisdictionFactory(
-      'San Francisco',
+    data: jurisdictionFactory('San Francisco', {
       listingApprovalPermissions,
       duplicateListingPermissions,
-    ),
+    }),
   });
   const jurisdictionNameMap = {
     Alameda: alamedaCounty.id,
@@ -138,30 +135,73 @@ export const stagingSeed = async (
     Sonoma: sonomaCounty.id,
     'San Francisco': sanFranciscoCounty.id,
   };
-  // Seed feature flags
-  await prismaClient.featureFlags.create({
-    data: featureFlagFactory(
-      'enableHomeType',
-      true,
-      "When true, the 'Home Type' section is displayed in listing creation/edit and the public listing view",
-      [jurisdiction.id],
-    ),
+  // create main jurisdiction with as many feature flags turned on as possible
+  const mainJurisdiction = await prismaClient.jurisdictions.create({
+    data: jurisdictionFactory(jurisdictionName, {
+      listingApprovalPermissions: [UserRoleEnum.admin],
+      featureFlags: [
+        FeatureFlagEnum.enableHomeType,
+        FeatureFlagEnum.enableAccessibilityFeatures,
+        FeatureFlagEnum.enableUtilitiesIncluded,
+        FeatureFlagEnum.enableIsVerified,
+        FeatureFlagEnum.enableNeighborhoodAmenities,
+        FeatureFlagEnum.enableMarketingStatus,
+        FeatureFlagEnum.enableSection8Question,
+        FeatureFlagEnum.enableSingleUseCode,
+        FeatureFlagEnum.enableGeocodingPreferences,
+        FeatureFlagEnum.enableGeocodingRadiusMethod,
+        FeatureFlagEnum.enableListingOpportunity,
+        FeatureFlagEnum.enablePartnerDemographics,
+        FeatureFlagEnum.enablePartnerSettings,
+        FeatureFlagEnum.enableListingsPagination,
+        FeatureFlagEnum.enableListingFavoriting,
+      ],
+    }),
   });
-  await prismaClient.featureFlags.create({
-    data: featureFlagFactory(
-      'enableAccessibilityFeatures',
-      true,
-      "When true, the 'accessibility features' section is displayed in listing creation/edit and the public listing view",
-      [jurisdiction.id],
-    ),
+  // jurisdiction with unit groups enabled
+  const lakeviewJurisdiction = await prismaClient.jurisdictions.create({
+    data: jurisdictionFactory('Lakeview', {
+      featureFlags: [
+        FeatureFlagEnum.enableUnitGroups,
+        FeatureFlagEnum.hideCloseListingButton,
+        FeatureFlagEnum.enableHomeType,
+        FeatureFlagEnum.enableAccessibilityFeatures,
+        FeatureFlagEnum.enableUtilitiesIncluded,
+        FeatureFlagEnum.enableIsVerified,
+        FeatureFlagEnum.enableNeighborhoodAmenities,
+        FeatureFlagEnum.enableMarketingStatus,
+        FeatureFlagEnum.enableRegions,
+        FeatureFlagEnum.enableSection8Question,
+        FeatureFlagEnum.enableSingleUseCode,
+        FeatureFlagEnum.enableGeocodingPreferences,
+        FeatureFlagEnum.enableGeocodingRadiusMethod,
+        FeatureFlagEnum.enableListingOpportunity,
+        FeatureFlagEnum.enablePartnerDemographics,
+        FeatureFlagEnum.enablePartnerSettings,
+        FeatureFlagEnum.enableListingsPagination,
+        FeatureFlagEnum.disableJurisdictionalAdmin,
+        FeatureFlagEnum.enableListingFavoriting,
+      ],
+    }),
   });
-  await prismaClient.featureFlags.create({
-    data: featureFlagFactory(
-      'enableUtilitiesIncluded',
-      true,
-      "When true, the 'utilities included' section is displayed in listing creation/edit and the public listing view",
-      [jurisdiction.id],
-    ),
+  // Basic configuration jurisdiction
+  const bridgeBayJurisdiction = await prismaClient.jurisdictions.create({
+    data: jurisdictionFactory('Bridge Bay', {
+      featureFlags: [
+        FeatureFlagEnum.enableGeocodingPreferences,
+        FeatureFlagEnum.enableGeocodingRadiusMethod,
+        FeatureFlagEnum.enableListingOpportunity,
+        FeatureFlagEnum.enablePartnerDemographics,
+        FeatureFlagEnum.enablePartnerSettings,
+        FeatureFlagEnum.enableListingsPagination,
+      ],
+    }),
+  });
+  // Jurisdiction with no feature flags enabled
+  const nadaHill = await prismaClient.jurisdictions.create({
+    data: jurisdictionFactory('Nada Hill', {
+      featureFlags: [],
+    }),
   });
   // create admin user
   await prismaClient.userAccounts.create({
@@ -243,7 +283,28 @@ export const stagingSeed = async (
       password: 'abcdef',
     }),
   });
+  await prismaClient.userAccounts.create({
+    data: await userFactory({
+      roles: {
+        isAdmin: false,
+        isPartner: true,
+        isJurisdictionalAdmin: false,
+      },
+      email: `partner-user@example.com`,
+      confirmedAt: new Date(),
+      jurisdictionIds: [
+        mainJurisdiction.id,
+        lakeviewJurisdiction.id,
+        bridgeBayJurisdiction.id,
+        nadaHill.id,
+      ],
+      acceptedTerms: true,
+    }),
+  });
   // add jurisdiction specific translations and default ones
+  await prismaClient.translations.create({
+    data: translationFactory(jurisdiction.id, jurisdiction.name),
+  });
   await prismaClient.translations.create({
     data: translationFactory(undefined, undefined, LanguagesEnum.es),
   });
@@ -366,101 +427,11 @@ export const stagingSeed = async (
   const unitTypes = await unitTypeFactoryAll(prismaClient);
   await unitAccessibilityPriorityTypeFactoryAll(prismaClient);
   await reservedCommunityTypeFactoryAll(jurisdiction.id, prismaClient);
-  for (const juris in jurisdictionNameMap) {
-    await reservedCommunityTypeFactoryAll(
-      jurisdictionNameMap[juris],
-      prismaClient,
-    );
-  }
   // list of predefined listings WARNING: images only work if image setup is cloudinary on exygy account
   [
     {
-      listing: {
-        additionalApplicationSubmissionNotes: null,
-        digitalApplication: true,
-        commonDigitalApplication: true,
-        paperApplication: false,
-        referralOpportunity: false,
-        assets: [],
-        accessibility: null,
-        amenities: null,
-        buildingTotalUnits: 0,
-        developer: 'Bloom',
-        householdSizeMax: 0,
-        householdSizeMin: 0,
-        neighborhood: 'Hollywood',
-        petPolicy: null,
-        smokingPolicy: null,
-        unitAmenities: null,
-        servicesOffered: null,
-        yearBuilt: null,
-        applicationDueDate: null,
-        applicationOpenDate: dayjs(new Date()).subtract(70, 'days').toDate(),
-        applicationFee: null,
-        applicationOrganization: null,
-        applicationPickUpAddressOfficeHours: null,
-        applicationPickUpAddressType: null,
-        applicationDropOffAddressOfficeHours: null,
-        applicationDropOffAddressType: null,
-        applicationMailingAddressType: null,
-        buildingSelectionCriteria: null,
-        costsNotIncluded: null,
-        creditHistory: null,
-        criminalBackground: null,
-        depositMin: '0',
-        depositMax: '0',
-        depositHelperText:
-          "or one month's rent may be higher for lower credit scores",
-        disableUnitsAccordion: false,
-        leasingAgentEmail: 'bloom@exygy.com',
-        leasingAgentName: 'Bloom Bloomington',
-        leasingAgentOfficeHours: null,
-        leasingAgentPhone: '(555) 555-5555',
-        leasingAgentTitle: null,
-        name: 'Hollywood Hills Heights',
-        postmarkedApplicationsReceivedByDate: null,
-        programRules: null,
-        rentalAssistance:
-          'Housing Choice Vouchers, Section 8 and other valid rental assistance programs will be considered for this property. In the case of a valid rental subsidy, the required minimum income will be based on the portion of the rent that the tenant pays after use of the subsidy.',
-        rentalHistory: null,
-        requiredDocuments: null,
-        specialNotes: null,
-        waitlistCurrentSize: null,
-        waitlistMaxSize: null,
-        whatToExpect:
-          'Applicants will be contacted by the property agent in rank order until vacancies are filled. All of the information that you have provided will be verified and your eligibility confirmed. Your application will be removed from the waitlist if you have made any fraudulent statements. If we cannot verify a housing preference that you have claimed, you will not receive the preference but will not be otherwise penalized. Should your application be chosen, be prepared to fill out a more detailed application and provide required supporting documents.',
-        status: ListingsStatusEnum.active,
-        reviewOrderType: ReviewOrderTypeEnum.waitlist,
-        unitsAvailable: 0,
-        displayWaitlistSize: false,
-        reservedCommunityDescription: null,
-        reservedCommunityMinAge: null,
-        resultLink: null,
-        isWaitlistOpen: false,
-        waitlistOpenSpots: null,
-        customMapPin: false,
-        contentUpdatedAt: new Date(),
-        publishedAt: new Date(),
-        listingsBuildingAddress: {
-          create: stagingRealisticAddresses[0],
-        },
-        listingsApplicationPickUpAddress: undefined,
-        listingsLeasingAgentAddress: undefined,
-        listingsApplicationDropOffAddress: undefined,
-        listingsApplicationMailingAddress: undefined,
-        reservedCommunityTypes: undefined,
-        listingImages: {
-          create: {
-            ordinal: 0,
-            assets: {
-              create: {
-                label: 'cloudinaryBuilding',
-                fileId: 'dev/apartment_building_2_b7ujdd',
-              },
-            },
-          },
-        },
-      },
+      jurisdictionId: jurisdiction.id,
+      listing: hollywoodHillsHeights,
       units: [
         {
           amiPercentage: '30',
@@ -506,89 +477,8 @@ export const stagingSeed = async (
       applications: [await applicationFactory(), await applicationFactory()],
     },
     {
-      listing: {
-        additionalApplicationSubmissionNotes: null,
-        digitalApplication: true,
-        commonDigitalApplication: true,
-        paperApplication: false,
-        referralOpportunity: false,
-        assets: [],
-        accessibility: null,
-        amenities: null,
-        buildingTotalUnits: 0,
-        developer: 'ABS Housing',
-        householdSizeMax: 0,
-        householdSizeMin: 0,
-        neighborhood: null,
-        petPolicy: 'Pets are not permitted on the property. ',
-        smokingPolicy: null,
-        unitAmenities: 'Each unit comes with included central AC.',
-        servicesOffered: null,
-        yearBuilt: 2021,
-        applicationDueDate: dayjs(new Date()).add(30, 'days').toDate(),
-        applicationOpenDate: dayjs(new Date()).subtract(7, 'days').toDate(),
-        applicationFee: '35',
-        applicationOrganization: null,
-        applicationPickUpAddressOfficeHours: null,
-        applicationPickUpAddressType: null,
-        applicationDropOffAddressOfficeHours: null,
-        applicationDropOffAddressType: null,
-        applicationMailingAddressType: null,
-        buildingSelectionCriteria: null,
-        costsNotIncluded: null,
-        creditHistory: null,
-        criminalBackground: null,
-        depositMin: '500',
-        depositMax: '0',
-        depositHelperText:
-          "or one month's rent may be higher for lower credit scores",
-        disableUnitsAccordion: false,
-        leasingAgentEmail: 'sgates@abshousing.com',
-        leasingAgentName: 'Samuel Gates',
-        leasingAgentOfficeHours: null,
-        leasingAgentPhone: '(888) 888-8888',
-        leasingAgentTitle: 'Property Manager',
-        name: 'District View Apartments',
-        postmarkedApplicationsReceivedByDate: null,
-        programRules: null,
-        rentalAssistance:
-          'Housing Choice Vouchers, Section 8 and other valid rental assistance programs will be considered for this property. In the case of a valid rental subsidy, the required minimum income will be based on the portion of the rent that the tenant pays after use of the subsidy.',
-        rentalHistory: null,
-        requiredDocuments: null,
-        specialNotes: null,
-        waitlistCurrentSize: null,
-        waitlistMaxSize: null,
-        whatToExpect:
-          'Applicants will be contacted by the property agent in rank order until vacancies are filled. All of the information that you have provided will be verified and your eligibility confirmed. Your application will be removed from the waitlist if you have made any fraudulent statements. If we cannot verify a housing preference that you have claimed, you will not receive the preference but will not be otherwise penalized. Should your application be chosen, be prepared to fill out a more detailed application and provide required supporting documents.',
-        status: ListingsStatusEnum.active,
-        reviewOrderType: ReviewOrderTypeEnum.lottery,
-        lotteryOptIn: true,
-        displayWaitlistSize: false,
-        reservedCommunityDescription: null,
-        reservedCommunityMinAge: null,
-        resultLink: null,
-        isWaitlistOpen: false,
-        waitlistOpenSpots: null,
-        customMapPin: false,
-        contentUpdatedAt: new Date(),
-        publishedAt: new Date(),
-        listingsApplicationPickUpAddress: undefined,
-        listingsApplicationDropOffAddress: undefined,
-        listingsApplicationMailingAddress: undefined,
-        reservedCommunityTypes: undefined,
-        listingEvents: {
-          create: [
-            {
-              type: ListingEventsTypeEnum.publicLottery,
-              startDate: new Date(),
-              startTime: new Date(),
-              endTime: new Date(),
-            },
-          ],
-        },
-        listingFeatures: undefined,
-        listingUtilities: undefined,
-      },
+      jurisdictionId: jurisdiction.id,
+      listing: districtViewApartments,
       units: [
         {
           amiPercentage: '30',
@@ -774,107 +664,8 @@ export const stagingSeed = async (
       ],
     },
     {
-      listing: {
-        additionalApplicationSubmissionNotes: null,
-        digitalApplication: true,
-        commonDigitalApplication: true,
-        paperApplication: true,
-        referralOpportunity: false,
-        assets: [],
-        accessibility: null,
-        amenities: null,
-        buildingTotalUnits: 0,
-        developer: 'Cielo Housing',
-        householdSizeMax: 0,
-        householdSizeMin: 0,
-        neighborhood: 'North End',
-        petPolicy: null,
-        smokingPolicy: null,
-        unitAmenities: null,
-        servicesOffered: null,
-        yearBuilt: 1900,
-        applicationDueDate: null,
-        applicationOpenDate: dayjs(new Date()).subtract(1, 'days').toDate(),
-        applicationFee: '60',
-        applicationOrganization: null,
-        applicationPickUpAddressOfficeHours: null,
-        applicationPickUpAddressType: ApplicationAddressTypeEnum.leasingAgent,
-        applicationDropOffAddressOfficeHours: null,
-        applicationDropOffAddressType: ApplicationAddressTypeEnum.leasingAgent,
-        applicationMailingAddressType: ApplicationAddressTypeEnum.leasingAgent,
-        applicationMethods: {
-          create: {
-            type: ApplicationMethodsTypeEnum.Internal,
-          },
-        },
-        buildingSelectionCriteria: null,
-        costsNotIncluded: null,
-        creditHistory: null,
-        criminalBackground: null,
-        depositMin: '0',
-        depositMax: '50',
-        depositHelperText:
-          "or one month's rent may be higher for lower credit scores",
-        disableUnitsAccordion: false,
-        leasingAgentEmail: 'joe@smithrealty.com',
-        leasingAgentName: 'Joe Smith',
-        leasingAgentOfficeHours: '9:00am - 5:00pm, Monday-Friday',
-        leasingAgentPhone: '(773) 580-5897',
-        leasingAgentTitle: 'Senior Leasing Agent',
-        name: 'Blue Sky Apartments',
-        postmarkedApplicationsReceivedByDate: '2025-06-06T23:00:00.000Z',
-        programRules: null,
-        rentalAssistance:
-          'Housing Choice Vouchers, Section 8 and other valid rental assistance programs will be considered for this property. ',
-        rentalHistory: null,
-        requiredDocuments: null,
-        specialNotes: null,
-        waitlistCurrentSize: null,
-        waitlistMaxSize: null,
-        whatToExpect:
-          'Applicants will be contacted by the property agent in rank order until vacancies are filled. All of the information that you have provided will be verified and your eligibility confirmed. Your application will be removed from the waitlist if you have made any fraudulent statements. If we cannot verify a housing preference that you have claimed, you will not receive the preference but will not be otherwise penalized. Should your application be chosen, be prepared to fill out a more detailed application and provide required supporting documents.',
-        status: ListingsStatusEnum.active,
-        reviewOrderType: ReviewOrderTypeEnum.firstComeFirstServe,
-        displayWaitlistSize: false,
-        reservedCommunityDescription:
-          'Seniors over 55 are eligible for this property ',
-        reservedCommunityMinAge: null,
-        resultLink: null,
-        isWaitlistOpen: false,
-        waitlistOpenSpots: null,
-        customMapPin: false,
-        contentUpdatedAt: new Date(),
-        publishedAt: new Date(),
-        listingsBuildingAddress: {
-          create: stagingRealisticAddresses[1],
-        },
-        listingsApplicationMailingAddress: {
-          create: rockyMountainAddress,
-        },
-        listingsApplicationPickUpAddress: {
-          create: yosemiteAddress,
-        },
-        listingsLeasingAgentAddress: {
-          create: rockyMountainAddress,
-        },
-        listingsApplicationDropOffAddress: {
-          create: yosemiteAddress,
-        },
-        reservedCommunityTypes: undefined,
-        listingImages: {
-          create: [
-            {
-              ordinal: 0,
-              assets: {
-                create: {
-                  label: 'cloudinaryBuilding',
-                  fileId: 'dev/trayan-xIOYJSVEZ8c-unsplash_f1axsg',
-                },
-              },
-            },
-          ],
-        },
-      },
+      jurisdictionId: jurisdiction.id,
+      listing: blueSkyApartments,
       units: [
         {
           amiPercentage: '30',
@@ -897,294 +688,17 @@ export const stagingSeed = async (
       ],
     },
     {
-      listing: {
-        additionalApplicationSubmissionNotes: null,
-        digitalApplication: true,
-        commonDigitalApplication: true,
-        paperApplication: false,
-        referralOpportunity: false,
-        assets: [],
-        accessibility: null,
-        amenities: 'Includes handicap accessible entry and parking spots. ',
-        buildingTotalUnits: 17,
-        developer: 'ABS Housing',
-        householdSizeMax: 0,
-        householdSizeMin: 0,
-        neighborhood: null,
-        petPolicy: null,
-        smokingPolicy: 'No smoking is allowed on the property.',
-        unitAmenities: null,
-        servicesOffered: null,
-        yearBuilt: 2019,
-        applicationDueDate: null,
-        applicationOpenDate: dayjs(new Date()).subtract(100, 'days').toDate(),
-        applicationFee: '50',
-        applicationOrganization: null,
-        applicationPickUpAddressOfficeHours: null,
-        applicationPickUpAddressType: null,
-        applicationDropOffAddressOfficeHours: null,
-        applicationDropOffAddressType: null,
-        applicationMailingAddressType: null,
-        buildingSelectionCriteria: null,
-        costsNotIncluded: 'Residents are responsible for gas and electric. ',
-        creditHistory: null,
-        criminalBackground: null,
-        depositMin: '0',
-        depositMax: '0',
-        depositHelperText:
-          "or one month's rent may be higher for lower credit scores",
-        disableUnitsAccordion: false,
-        leasingAgentEmail: 'valleysenior@vpm.com',
-        leasingAgentName: 'Valley Property Management',
-        leasingAgentOfficeHours: '10 am - 6 pm Monday through Friday',
-        leasingAgentPhone: '(919) 999-9999',
-        leasingAgentTitle: 'Property Manager',
-        name: 'Valley Heights Senior Community',
-        postmarkedApplicationsReceivedByDate: null,
-        programRules: null,
-        rentalAssistance:
-          'Housing Choice Vouchers, Section 8 and other valid rental assistance programs will be considered for this property. In the case of a valid rental subsidy, the required minimum income will be based on the portion of the rent that the tenant pays after use of the subsidy.',
-        rentalHistory: null,
-        requiredDocuments: null,
-        specialNotes: null,
-        waitlistCurrentSize: null,
-        waitlistMaxSize: null,
-        whatToExpect:
-          'Applicants will be contacted by the property agent in rank order until vacancies are filled. All of the information that you have provided will be verified and your eligibility confirmed. Your application will be removed from the waitlist if you have made any fraudulent statements. If we cannot verify a housing preference that you have claimed, you will not receive the preference but will not be otherwise penalized. Should your application be chosen, be prepared to fill out a more detailed application and provide required supporting documents.',
-        status: ListingsStatusEnum.closed,
-        reviewOrderType: ReviewOrderTypeEnum.waitlist,
-        displayWaitlistSize: false,
-        reservedCommunityDescription:
-          'Residents must be over the age of 55 at the time of move in.',
-        reservedCommunityMinAge: null,
-        resultLink: null,
-        isWaitlistOpen: false,
-        waitlistOpenSpots: null,
-        customMapPin: false,
-        contentUpdatedAt: dayjs(new Date()).subtract(1, 'days').toDate(),
-        publishedAt: dayjs(new Date()).subtract(3, 'days').toDate(),
-        closedAt: dayjs(new Date()).subtract(5, 'days').toDate(),
-        listingsApplicationPickUpAddress: undefined,
-        listingsLeasingAgentAddress: undefined,
-        listingsApplicationDropOffAddress: undefined,
-        listingsApplicationMailingAddress: undefined,
-        listingImages: {
-          create: [
-            {
-              ordinal: 0,
-              assets: {
-                create: {
-                  label: 'cloudinaryBuilding',
-                  fileId: 'dev/apartment_ez3yyz',
-                },
-              },
-            },
-            {
-              ordinal: 1,
-              assets: {
-                create: {
-                  label: 'cloudinaryBuilding',
-                  fileId: 'dev/interior_mc9erd',
-                },
-              },
-            },
-            {
-              ordinal: 2,
-              assets: {
-                create: {
-                  label: 'cloudinaryBuilding',
-                  fileId: 'dev/inside_qo9wre',
-                },
-              },
-            },
-          ],
-        },
-      },
+      jurisdictionId: jurisdiction.id,
+      listing: valleyHeightsSeniorCommunity,
     },
     {
-      listing: {
-        additionalApplicationSubmissionNotes: null,
-        digitalApplication: true,
-        commonDigitalApplication: false,
-        paperApplication: false,
-        referralOpportunity: false,
-        assets: [],
-        accessibility: null,
-        amenities: null,
-        buildingTotalUnits: 0,
-        developer: 'La Villita Listings',
-        householdSizeMax: 0,
-        householdSizeMin: 0,
-        neighborhood: 'Koreatown',
-        petPolicy: null,
-        smokingPolicy: null,
-        unitAmenities: null,
-        servicesOffered: null,
-        yearBuilt: 1996,
-        applicationDueDate: null,
-        applicationOpenDate: dayjs(new Date()).subtract(30, 'days').toDate(),
-        applicationFee: null,
-        applicationOrganization: null,
-        applicationPickUpAddressOfficeHours: null,
-        applicationPickUpAddressType: null,
-        applicationDropOffAddressOfficeHours: null,
-        applicationDropOffAddressType: null,
-        applicationMailingAddressType: null,
-        buildingSelectionCriteria: null,
-        costsNotIncluded: null,
-        creditHistory: null,
-        criminalBackground: null,
-        depositMin: '0',
-        depositMax: '0',
-        depositHelperText:
-          "or one month's rent may be higher for lower credit scores",
-        disableUnitsAccordion: false,
-        leasingAgentEmail: 'joe@smith.com',
-        leasingAgentName: 'Joe Smith',
-        leasingAgentOfficeHours: null,
-        leasingAgentPhone: '(619) 591-5987',
-        leasingAgentTitle: null,
-        name: 'Little Village Apartments',
-        postmarkedApplicationsReceivedByDate: null,
-        programRules: null,
-        rentalAssistance:
-          'Housing Choice Vouchers, Section 8 and other valid rental assistance programs will be considered for this property. In the case of a valid rental subsidy, the required minimum income will be based on the portion of the rent that the tenant pays after use of the subsidy.',
-        rentalHistory: null,
-        requiredDocuments: null,
-        specialNotes: null,
-        waitlistCurrentSize: null,
-        waitlistMaxSize: null,
-        whatToExpect:
-          'Applicants will be contacted by the property agent in rank order until vacancies are filled. All of the information that you have provided will be verified and your eligibility confirmed. Your application will be removed from the waitlist if you have made any fraudulent statements. If we cannot verify a housing preference that you have claimed, you will not receive the preference but will not be otherwise penalized. Should your application be chosen, be prepared to fill out a more detailed application and provide required supporting documents.',
-        status: ListingsStatusEnum.pending,
-        reviewOrderType: ReviewOrderTypeEnum.waitlist,
-        displayWaitlistSize: false,
-        reservedCommunityDescription: null,
-        reservedCommunityMinAge: null,
-        resultLink: null,
-        isWaitlistOpen: true,
-        waitlistOpenSpots: 6,
-        customMapPin: false,
-        contentUpdatedAt: new Date(),
-        publishedAt: new Date(),
-        listingsApplicationPickUpAddress: undefined,
-        listingsApplicationDropOffAddress: undefined,
-        listingsApplicationMailingAddress: undefined,
-        listingImages: {
-          create: [
-            {
-              ordinal: 0,
-              assets: {
-                create: {
-                  label: 'cloudinaryBuilding',
-                  fileId: 'dev/dillon-kydd-2keCPb73aQY-unsplash_lm7krp',
-                },
-              },
-            },
-          ],
-        },
-      },
+      jurisdictionId: jurisdiction.id,
+      listing: littleVillageApartments,
       multiselectQuestions: [workInCityQuestion],
     },
     {
-      listing: {
-        additionalApplicationSubmissionNotes: null,
-        digitalApplication: true,
-        commonDigitalApplication: true,
-        paperApplication: false,
-        referralOpportunity: false,
-        assets: [],
-        accessibility: null,
-        amenities: null,
-        buildingTotalUnits: 25,
-        developer: 'Johnson Realtors',
-        householdSizeMax: 0,
-        householdSizeMin: 0,
-        neighborhood: 'Hyde Park',
-        petPolicy: null,
-        smokingPolicy: null,
-        unitAmenities: null,
-        servicesOffered: null,
-        yearBuilt: 1988,
-        applicationMethods: {
-          create: {
-            type: ApplicationMethodsTypeEnum.Internal,
-          },
-        },
-        applicationDueDate: dayjs(new Date()).add(6, 'months').toDate(),
-        applicationOpenDate: dayjs(new Date()).subtract(1, 'days').toDate(),
-        applicationFee: null,
-        applicationOrganization: null,
-        applicationPickUpAddressOfficeHours: null,
-        applicationPickUpAddressType: null,
-        applicationDropOffAddressOfficeHours: null,
-        applicationDropOffAddressType: null,
-        applicationMailingAddressType: null,
-        buildingSelectionCriteria: null,
-        costsNotIncluded: null,
-        creditHistory: null,
-        criminalBackground: null,
-        depositMin: '0',
-        depositMax: '0',
-        depositHelperText:
-          "or one month's rent may be higher for lower credit scores",
-        disableUnitsAccordion: true,
-        leasingAgentEmail: 'jenny@gold.com',
-        leasingAgentName: 'Jenny Gold',
-        leasingAgentOfficeHours: null,
-        leasingAgentPhone: '(208) 772-2856',
-        leasingAgentTitle: 'Lead Agent',
-        name: 'Elm Village',
-        postmarkedApplicationsReceivedByDate: null,
-        programRules: null,
-        rentalAssistance:
-          'Housing Choice Vouchers, Section 8 and other valid rental assistance programs will be considered for this property. In the case of a valid rental subsidy, the required minimum income will be based on the portion of the rent that the tenant pays after use of the subsidy.',
-        rentalHistory: null,
-        requiredDocuments: 'Please bring proof of income and a recent paystub.',
-        specialNotes: null,
-        waitlistCurrentSize: null,
-        waitlistMaxSize: null,
-        whatToExpect:
-          'Applicants will be contacted by the property agent in rank order until vacancies are filled. All of the information that you have provided will be verified and your eligibility confirmed. Your application will be removed from the waitlist if you have made any fraudulent statements. If we cannot verify a housing preference that you have claimed, you will not receive the preference but will not be otherwise penalized. Should your application be chosen, be prepared to fill out a more detailed application and provide required supporting documents.',
-        status: ListingsStatusEnum.active,
-        reviewOrderType: ReviewOrderTypeEnum.lottery,
-        lotteryOptIn: false,
-        displayWaitlistSize: false,
-        reservedCommunityDescription: null,
-        reservedCommunityMinAge: null,
-        resultLink: null,
-        isWaitlistOpen: false,
-        waitlistOpenSpots: null,
-        customMapPin: false,
-        contentUpdatedAt: new Date(),
-        publishedAt: new Date(),
-        listingsApplicationPickUpAddress: undefined,
-        listingsApplicationDropOffAddress: undefined,
-        reservedCommunityTypes: undefined,
-        ...featuresAndUtilites(),
-        listingImages: {
-          create: [
-            {
-              ordinal: 0,
-              assets: {
-                create: {
-                  label: 'cloudinaryBuilding',
-                  fileId: 'dev/krzysztof-hepner-V7Q0Oh3Az-c-unsplash_xoj7sr',
-                },
-              },
-            },
-            {
-              ordinal: 1,
-              assets: {
-                create: {
-                  label: 'cloudinaryBuilding',
-                  fileId: 'dev/blake-wheeler-zBHU08hdzhY-unsplash_swqash',
-                },
-              },
-            },
-          ],
-        },
-      },
+      jurisdictionId: jurisdiction.id,
+      listing: elmVillage,
       applications: [
         await applicationFactory({
           multiselectQuestions: [workInCityQuestion, cityEmployeeQuestion],
@@ -1323,23 +837,115 @@ export const stagingSeed = async (
         },
       ],
     },
+    // lakeview listings shouldn't be in Doorway, but keeping here for keeping the same as Core
+    // {
+    //   jurisdictionId: lakeviewJurisdiction.id,
+    //   listing: lakeviewVilla,
+    //   unitGroups: [
+    //     {
+    //       floorMin: 1,
+    //       floorMax: 2,
+    //       maxOccupancy: 3,
+    //       minOccupancy: 1,
+    //       bathroomMin: 1,
+    //       bathroomMax: 1,
+    //       totalCount: 10,
+    //       totalAvailable: 5,
+    //       sqFeetMin: '750.00',
+    //       sqFeetMax: '1000.00',
+    //       unitGroupAmiLevels: {
+    //         create: {
+    //           amiPercentage: 30,
+    //           monthlyRentDeterminationType:
+    //             MonthlyRentDeterminationTypeEnum.flatRent,
+    //           flatRentValue: 1400.0,
+    //           amiChart: { connect: { id: amiChart.id } },
+    //         },
+    //       },
+    //       unitTypes: {
+    //         connect: {
+    //           id: unitTypes[0].id,
+    //         },
+    //       },
+    //     },
+    //   ],
+    // },
+    // {
+    //   jurisdictionId: lakeviewJurisdiction.id,
+    //   listing: sunshineFlats,
+    //   unitGroups: [
+    //     {
+    //       floorMin: 1,
+    //       floorMax: 1,
+    //       maxOccupancy: 6,
+    //       minOccupancy: 1,
+    //       bathroomMin: 1,
+    //       bathroomMax: 2,
+    //       totalCount: 12,
+    //       totalAvailable: 12,
+    //       sqFeetMin: '750.00',
+    //       sqFeetMax: '1600.00',
+    //       unitGroupAmiLevels: {
+    //         create: {
+    //           amiPercentage: 45,
+    //           monthlyRentDeterminationType:
+    //             MonthlyRentDeterminationTypeEnum.percentageOfIncome,
+    //           percentageOfIncomeValue: 30.0,
+    //           amiChart: { connect: { id: amiChart.id } },
+    //         },
+    //       },
+    //       unitTypes: {
+    //         connect: {
+    //           id: unitTypes[1].id,
+    //         },
+    //       },
+    //     },
+    //     {
+    //       floorMin: 2,
+    //       floorMax: 2,
+    //       maxOccupancy: 6,
+    //       minOccupancy: 3,
+    //       bathroomMin: 2,
+    //       bathroomMax: 2,
+    //       totalCount: 6,
+    //       totalAvailable: 6,
+    //       sqFeetMin: '1200.00',
+    //       sqFeetMax: '1800.00',
+    //       unitGroupAmiLevels: {
+    //         create: {
+    //           amiPercentage: 45,
+    //           monthlyRentDeterminationType:
+    //             MonthlyRentDeterminationTypeEnum.flatRent,
+    //           flatRentValue: 1800.0,
+    //           amiChart: { connect: { id: amiChart.id } },
+    //         },
+    //       },
+    //       unitTypes: {
+    //         connect: {
+    //           id: unitTypes[3].id,
+    //         },
+    //       },
+    //     },
+    //   ],
+    // },
   ].map(
     async (
       value: {
+        jurisdictionId: string;
         listing: Prisma.ListingsCreateInput;
         units?: Prisma.UnitsCreateWithoutListingsInput[];
+        unitGroups?: Prisma.UnitGroupCreateWithoutListingsInput[];
         multiselectQuestions?: MultiselectQuestions[];
         applications?: Prisma.ApplicationsCreateInput[];
       },
       index,
     ) => {
-      const jurisdictionId =
-        index > 2 ? additionalJurisdiction.id : jurisdiction.id;
-      const listing = await listingFactory(jurisdictionId, prismaClient, {
+      const listing = await listingFactory(value.jurisdictionId, prismaClient, {
         amiChart: amiChart,
-        numberOfUnits: index,
+        numberOfUnits: (!value.unitGroups && index) || 0,
         listing: value.listing,
         units: value.units,
+        unitGroups: value.unitGroups,
         multiselectQuestions: value.multiselectQuestions,
         applications: value.applications,
         afsLastRunSetInPast: true,
@@ -1348,22 +954,22 @@ export const stagingSeed = async (
       const savedListing = await prismaClient.listings.create({
         data: listing,
       });
-      if (index === 0) {
-        await prismaClient.userAccounts.create({
-          data: await userFactory({
-            roles: {
-              isAdmin: false,
-              isPartner: true,
-              isJurisdictionalAdmin: false,
-            },
-            email: 'partner-user@example.com',
-            confirmedAt: new Date(),
-            jurisdictionIds: [jurisdiction.id, additionalJurisdiction.id],
-            acceptedTerms: true,
-            listings: [savedListing.id],
-          }),
-        });
-      }
+      await prismaClient.userAccounts.create({
+        data: await userFactory({
+          roles: {
+            isAdmin: false,
+            isPartner: true,
+            isJurisdictionalAdmin: false,
+          },
+          email: `partner-user-${savedListing.name
+            .toLowerCase()
+            .replace(' ', '')}@example.com`,
+          confirmedAt: new Date(),
+          jurisdictionIds: [savedListing.jurisdictionId],
+          acceptedTerms: true,
+          listings: [savedListing.id],
+        }),
+      });
     },
   );
   // Creating a bunch of admin accounts if the environment variable is set to do load testing

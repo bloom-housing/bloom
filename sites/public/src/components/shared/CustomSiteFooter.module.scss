@@ -12,11 +12,9 @@
 }
 
 .footer-content-container {
-  padding-inline: var(--seeds-s6);
   padding-block: var(--seeds-s12);
   width: 100%;
   @media (--md-down) {
-    padding-inline: var(--seeds-s6);
     padding-block: var(--seeds-s8);
   }
 }

@@ -25,7 +25,7 @@ import SignUpBenefitsHeadingGroup from "../components/account/SignUpBenefitsHead
 import { TermsModal } from "../components/shared/TermsModal"
 import { LanguagesEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
-export default () => {
+const CreateAccount = () => {
   const { createUser, resendConfirmation } = useContext(AuthContext)
   const [confirmationResent, setConfirmationResent] = useState<boolean>(false)
   const signUpCopy = process.env.showMandatedAccounts
@@ -103,18 +103,18 @@ export default () => {
   }
 
   return (
-    <FormsLayout className={signUpCopy && "sm:max-w-lg md:max-w-full"}>
-      <div className={signUpCopy && signUpBenefitsStyles["benefits-container"]}>
+    <FormsLayout className={signUpCopy ? "sm:max-w-lg md:max-w-full" : undefined}>
+      <div className={signUpCopy ? signUpBenefitsStyles["benefits-container"] : undefined}>
         {signUpCopy && (
           <div className={signUpBenefitsStyles["benefits-display-hide"]}>
             <SignUpBenefitsHeadingGroup mobileView={true} />
           </div>
         )}
-        <div className={signUpCopy && signUpBenefitsStyles["benefits-form-container"]}>
+        <div className={signUpCopy ? signUpBenefitsStyles["benefits-form-container"] : undefined}>
           <BloomCard customIcon="profile" title={t("account.createAccount")} headingPriority={1}>
             <>
               {requestError && (
-                <AlertBox className="" onClose={() => setRequestError(undefined)} type="alert">
+                <AlertBox onClose={() => setRequestError(undefined)} type="alert">
                   {requestError}
                 </AlertBox>
               )}
@@ -123,53 +123,55 @@ export default () => {
                   divider={"inset"}
                   className={BloomCardStyles["account-card-settings-section"]}
                 >
-                  <label className={accountStyles["create-account-header"]} htmlFor="firstName">
-                    {t("application.name.yourName")}
-                  </label>
+                  <fieldset id="userName">
+                    <legend className={accountStyles["create-account-header"]}>
+                      {t("application.name.yourName")}
+                    </legend>
 
-                  <label className={accountStyles["create-account-field"]} htmlFor="firstName">
-                    {t("application.name.firstOrGivenName")}
-                  </label>
-                  <Field
-                    controlClassName={accountStyles["create-account-input"]}
-                    name="firstName"
-                    validation={{ required: true, maxLength: 64 }}
-                    error={errors.givenName}
-                    errorMessage={
-                      errors.givenName?.type === "maxLength"
-                        ? t("errors.maxLength", { length: 64 })
-                        : t("errors.firstNameError")
-                    }
-                    register={register}
-                  />
+                    <label className={accountStyles["create-account-field"]} htmlFor="firstName">
+                      {t("application.name.firstOrGivenName")}
+                    </label>
+                    <Field
+                      controlClassName={accountStyles["create-account-input"]}
+                      name="firstName"
+                      validation={{ required: true, maxLength: 64 }}
+                      error={errors.firstName}
+                      errorMessage={
+                        errors.firstName?.type === "maxLength"
+                          ? t("errors.maxLength", { length: 64 })
+                          : t("errors.firstNameError")
+                      }
+                      register={register}
+                    />
 
-                  <label className={accountStyles["create-account-field"]} htmlFor="middleName">
-                    {t("application.name.middleNameOptional")}
-                  </label>
-                  <Field
-                    name="middleName"
-                    register={register}
-                    error={errors.middleName}
-                    validation={{ maxLength: 64 }}
-                    errorMessage={t("errors.maxLength", { length: 64 })}
-                    controlClassName={accountStyles["create-account-input"]}
-                  />
+                    <label className={accountStyles["create-account-field"]} htmlFor="middleName">
+                      {t("application.name.middleNameOptional")}
+                    </label>
+                    <Field
+                      name="middleName"
+                      register={register}
+                      error={errors.middleName}
+                      validation={{ maxLength: 64 }}
+                      errorMessage={t("errors.maxLength", { length: 64 })}
+                      controlClassName={accountStyles["create-account-input"]}
+                    />
 
-                  <label className={accountStyles["create-account-field"]} htmlFor="lastName">
-                    {t("application.name.lastOrFamilyName")}
-                  </label>
-                  <Field
-                    name="lastName"
-                    validation={{ required: true, maxLength: 64 }}
-                    error={errors.lastName}
-                    register={register}
-                    errorMessage={
-                      errors.lastName?.type === "maxLength"
-                        ? t("errors.maxLength", { length: 64 })
-                        : t("errors.lastNameError")
-                    }
-                    controlClassName={accountStyles["create-account-input"]}
-                  />
+                    <label className={accountStyles["create-account-field"]} htmlFor="lastName">
+                      {t("application.name.lastOrFamilyName")}
+                    </label>
+                    <Field
+                      name="lastName"
+                      validation={{ required: true, maxLength: 64 }}
+                      error={errors.lastName}
+                      register={register}
+                      errorMessage={
+                        errors.lastName?.type === "maxLength"
+                          ? t("errors.maxLength", { length: 64 })
+                          : t("errors.lastNameError")
+                      }
+                      controlClassName={accountStyles["create-account-input"]}
+                    />
+                  </fieldset>
                 </CardSection>
                 <CardSection
                   divider={"inset"}
@@ -360,3 +362,5 @@ export default () => {
     </FormsLayout>
   )
 }
+
+export default CreateAccount

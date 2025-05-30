@@ -1,12 +1,15 @@
 import React from "react"
 import dayjs from "dayjs"
-import { ApplicationStatusType, StatusBarType, t } from "@bloom-housing/ui-components"
 import { ListingCard } from "@bloom-housing/doorway-ui-components"
+import InfoIcon from "@heroicons/react/20/solid/InformationCircleIcon"
+import { t, ApplicationStatusType, StatusBarType } from "@bloom-housing/ui-components"
 import {
   imageUrlFromListing,
   getSummariesTable,
   IMAGE_FALLBACK_URL,
   cleanMultiselectString,
+  getStackedSummariesTable,
+  ResponseException,
 } from "@bloom-housing/shared-helpers"
 import {
   Address,
@@ -14,9 +17,16 @@ import {
   Jurisdiction,
   Listing,
   ListingsStatusEnum,
+  MarketingSeasonEnum,
+  MarketingTypeEnum,
+  ModificationEnum,
   ReviewOrderTypeEnum,
   UnitsSummarized,
+  UserService,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { CommonMessageVariant } from "@bloom-housing/ui-seeds/src/blocks/shared/CommonMessage"
+import { Icon, Message } from "@bloom-housing/ui-seeds"
+import styles from "./helpers.module.scss"
 
 export const getGenericAddress = (bloomAddress: Address) => {
   return bloomAddress
@@ -44,7 +54,7 @@ const getListingCardSubtitle = (address: Address) => {
   return address ? `${street}, ${city} ${state}, ${zipCode}` : null
 }
 
-const getListingTableData = (
+export const getListingTableData = (
   unitsSummarized: UnitsSummarized,
   listingReviewOrder: ReviewOrderTypeEnum,
   includeRentandMinimumIncome: boolean
@@ -66,7 +76,18 @@ export const getListingUrl = (listing: Listing) => {
   }
 }
 
-export const getListingApplicationStatus = (listing: Listing): StatusBarType => {
+export const getListingStackedTableData = (unitsSummarized: UnitsSummarized) => {
+  return unitsSummarized !== undefined
+    ? getStackedSummariesTable(unitsSummarized.byUnitTypeAndRent)
+    : []
+}
+
+export const getListingApplicationStatus = (
+  listing: Listing,
+  hideTime?: boolean,
+  hideReviewOrder?: boolean
+): StatusBarType => {
+  if (!listing) return
   let content = ""
   let subContent = ""
   let formattedDate = ""
@@ -84,25 +105,31 @@ export const getListingApplicationStatus = (listing: Listing): StatusBarType => 
     } else if (listing.applicationDueDate) {
       const dueDate = dayjs(listing.applicationDueDate)
       formattedDate = dueDate.format("MMM DD, YYYY")
-      formattedDate = formattedDate + ` ${t("t.at")} ` + dueDate.format("h:mmA")
+      formattedDate = !hideTime
+        ? formattedDate + ` ${t("t.at")} ` + dueDate.format("h:mmA")
+        : formattedDate
 
       // if due date is in future, listing is open
       if (dayjs() < dueDate) {
-        content = t("listings.applicationDeadline")
+        content = t("listings.applicationDue")
       } else {
         status = ApplicationStatusType.Closed
         content = t("listings.applicationsClosed")
       }
+    } else {
+      content = t("listings.applicationOpenPeriod")
     }
   }
 
-  if (formattedDate != "") {
+  if (formattedDate !== "") {
     content = content + `: ${formattedDate}`
   }
 
-  if (listing.reviewOrderType === ReviewOrderTypeEnum.firstComeFirstServe) {
-    subContent = content
-    content = t("listings.applicationFCFS")
+  if (!hideReviewOrder) {
+    if (listing.reviewOrderType === ReviewOrderTypeEnum.firstComeFirstServe) {
+      subContent = content
+      content = t("listings.applicationFCFS")
+    }
   }
 
   return {
@@ -110,6 +137,124 @@ export const getListingApplicationStatus = (listing: Listing): StatusBarType => 
     content,
     subContent,
   }
+}
+
+export const getStatusPrefix = (
+  listing: Listing,
+  enableMarketingStatus: boolean
+): { label: string; variant: CommonMessageVariant } => {
+  if (
+    listing.status === ListingsStatusEnum.closed ||
+    (listing.applicationDueDate && dayjs() > dayjs(listing.applicationDueDate))
+  ) {
+    return { label: t("listings.applicationsClosed"), variant: "secondary-inverse" }
+  }
+  if (enableMarketingStatus && listing.marketingType === MarketingTypeEnum.comingSoon)
+    return { label: t("listings.underConstruction"), variant: "warn" }
+
+  switch (listing.reviewOrderType) {
+    case ReviewOrderTypeEnum.lottery:
+      return { label: t("listings.lottery"), variant: "primary" }
+    case ReviewOrderTypeEnum.waitlist:
+      return { label: t("listings.waitlist.open"), variant: "secondary" }
+    default:
+      return { label: t("listings.applicationFCFS"), variant: "primary" }
+  }
+}
+
+export const getListingStatusMessageContent = (
+  status: ListingsStatusEnum,
+  applicationDueDate: Date,
+  enableMarketingStatus: boolean,
+  marketingType: MarketingTypeEnum,
+  marketingSeason: MarketingSeasonEnum,
+  marketingDate: Date,
+  hideTime?: boolean
+) => {
+  let content = ""
+  let formattedDate = ""
+  if (status !== ListingsStatusEnum.closed) {
+    if (applicationDueDate) {
+      const dueDate = dayjs(applicationDueDate)
+      formattedDate = dueDate.format("MMM DD, YYYY")
+      formattedDate = !hideTime
+        ? formattedDate + ` ${t("t.at")} ` + dueDate.format("h:mmA")
+        : formattedDate
+
+      if (dayjs() < dueDate) {
+        content = t("listings.applicationDue")
+        if (formattedDate) content = content + ": "
+      }
+    } else {
+      content = t("listings.applicationOpenPeriod")
+    }
+
+    if (formattedDate !== "") {
+      content = content + `${formattedDate}`
+    }
+
+    if (marketingType === MarketingTypeEnum.comingSoon && enableMarketingStatus) {
+      content = getApplicationSeason(marketingSeason, marketingDate)
+    }
+  }
+  return content
+}
+
+export const getListingStatusMessage = (
+  listing: Listing,
+  jurisdiction: Jurisdiction,
+  content?: React.ReactNode,
+  hideTime?: boolean,
+  hideDate?: boolean
+) => {
+  if (!listing) return
+
+  const enableMarketingStatus = isFeatureFlagOn(jurisdiction, "enableMarketingStatus")
+  const prefix = getStatusPrefix(listing, enableMarketingStatus)
+
+  return (
+    <Message
+      className={styles["status-bar"]}
+      customIcon={
+        <Icon size="md" className={styles["primary-color-icon"]}>
+          <InfoIcon />
+        </Icon>
+      }
+      variant={prefix.variant}
+    >
+      {content ? (
+        content
+      ) : (
+        <div className={styles["due-date-content"]}>
+          <div className={styles["date-review-order"]}>{prefix.label}</div>
+          {!hideDate && (
+            <div>
+              {getListingStatusMessageContent(
+                listing.status,
+                listing.applicationDueDate,
+                enableMarketingStatus,
+                listing.marketingType,
+                listing.marketingSeason,
+                listing.marketingDate,
+                hideTime
+              )}
+            </div>
+          )}
+        </div>
+      )}
+    </Message>
+  )
+}
+
+export const getApplicationSeason = (marketingSeason: MarketingSeasonEnum, marketingDate: Date) => {
+  let label = t("listings.apply.applicationSeason")
+  if (marketingSeason) {
+    label = label.concat(` ${t(`seasons.${marketingSeason}`)}`)
+  }
+  if (marketingDate) {
+    label = label.concat(` ${dayjs(marketingDate).year()}`)
+  }
+  return label
 }
 
 const unitSummariesHeaders = {
@@ -293,5 +438,30 @@ export const getBoundsZoomLevel = (bounds: google.maps.LatLngBounds) => {
 }
 
 export const isFeatureFlagOn = (jurisdiction: Jurisdiction, featureFlag: string) => {
-  return jurisdiction.featureFlags?.some((flag) => flag.name === featureFlag && flag.active)
+  return jurisdiction?.featureFlags?.some((flag) => flag.name === featureFlag && flag.active)
+}
+
+/**
+ * @throws {ResponseError}
+ */
+export const saveListingFavorite = async (
+  userService: UserService,
+  listingId: string,
+  favorited: boolean
+) => {
+  try {
+    await userService.modifyFavoriteListings({
+      body: {
+        id: listingId,
+        action: favorited ? ModificationEnum.add : ModificationEnum.remove,
+      },
+    })
+  } catch (err) {
+    console.error(err)
+    throw new ResponseException(t("listings.favoriteSaveError"))
+  }
+}
+
+export const fetchFavoriteListingIds = async (userId: string, userService: UserService) => {
+  return (await userService.favoriteListings({ id: userId })).map((item) => item.id)
 }

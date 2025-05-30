@@ -1,5 +1,6 @@
 import React, { useCallback, useContext, useEffect, useState } from "react"
 import { useRouter } from "next/router"
+import dayjs from "dayjs"
 import { ImageCard, t } from "@bloom-housing/ui-components"
 import {
   imageUrlFromListing,
@@ -22,12 +23,11 @@ import {
   AppSubmissionContext,
   retrieveApplicationConfig,
 } from "../../../lib/applications/AppSubmissionContext"
-import { useGetApplicationStatusProps } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
 import ApplicationFormLayout from "../../../layouts/application-form"
+import { getListingApplicationStatus } from "../../../lib/helpers"
 import styles from "../../../layouts/application-form.module.scss"
 import { runtimeConfig } from "../../../lib/runtime-config"
-import dayjs from "dayjs"
 
 const loadListing = async (
   listingId,
@@ -141,7 +141,7 @@ const ApplicationChooseLanguage = (props: ChooseLanguageProps) => {
     [conductor, context, listingId, router, listingsService, isPreview]
   )
 
-  const { content: appStatusContent } = useGetApplicationStatusProps(listing)
+  const statusContent = getListingApplicationStatus(listing)
 
   return (
     <FormsLayout>
@@ -168,7 +168,7 @@ const ApplicationChooseLanguage = (props: ChooseLanguageProps) => {
               }
               fullwidth
             >
-              {appStatusContent}
+              {statusContent?.content}
             </Message>
           </CardSection>
         )}

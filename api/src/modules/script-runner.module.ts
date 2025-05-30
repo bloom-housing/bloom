@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { ScirptRunnerController } from '../controllers/script-runner.controller';
+import { ScriptRunnerController } from '../controllers/script-runner.controller';
 import { ScriptRunnerService } from '../services/script-runner.service';
 import { AmiChartModule } from './ami-chart.module';
 import { FeatureFlagModule } from './feature-flag.module';
@@ -15,8 +15,8 @@ import { AssetModule } from './asset.module';
     PrismaModule,
     AssetModule,
   ],
-  controllers: [ScirptRunnerController],
+  controllers: [ScriptRunnerController],
   providers: [ScriptRunnerService],
   exports: [ScriptRunnerService],
 })
-export class ScirptRunnerModule {}
+export class ScriptRunnerModule {}

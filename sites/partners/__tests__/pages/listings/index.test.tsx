@@ -26,7 +26,7 @@ describe("listings", () => {
     window.URL.createObjectURL = jest.fn()
     document.cookie = "access-token-available=True"
     server.use(
-      rest.get("http://localhost:3100/listings", (_req, res, ctx) => {
+      rest.post("http://localhost:3100/listings/list", (_req, res, ctx) => {
         return res(ctx.json({ items: [listing], meta: { totalItems: 1, totalPages: 1 } }))
       }),
       rest.get("http://localhost/api/adapter/listings", (_req, res, ctx) => {

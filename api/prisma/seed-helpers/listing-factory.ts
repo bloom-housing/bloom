@@ -88,16 +88,29 @@ export const listingFactory = async (
     publishedAt?: Date;
     reviewOrderType?: ReviewOrderTypeEnum;
     status?: ListingsStatusEnum;
+    unitGroups?: Prisma.UnitGroupCreateWithoutListingsInput[];
     units?: Prisma.UnitsCreateWithoutListingsInput[];
   },
 ): Promise<Prisma.ListingsCreateInput> => {
   const previousListing = optionalParams?.listing || {};
+  const unitGroups = optionalParams?.unitGroups;
   let units = optionalParams?.units;
   if (!units && optionalParams?.numberOfUnits) {
     units = await unitFactoryMany(optionalParams.numberOfUnits, prismaClient, {
       randomizePriorityType: true,
       amiChart: optionalParams?.amiChart,
     });
+  }
+
+  let unitsAvailable = 0;
+
+  if (units) {
+    unitsAvailable = units.length;
+  } else if (unitGroups) {
+    unitsAvailable = unitGroups.reduce(
+      (unitsAvailable, { totalAvailable }) => unitsAvailable + totalAvailable,
+      0,
+    );
   }
 
   let reservedCommunityType: ReservedCommunityTypes;
@@ -150,7 +163,7 @@ export const listingFactory = async (
       optionalParams?.reviewOrderType ??
       ReviewOrderTypeEnum.firstComeFirstServe,
     status: optionalParams?.status || ListingsStatusEnum.active,
-    unitsAvailable: units?.length || 0,
+    unitsAvailable: unitsAvailable,
 
     applicationMethods: digitalApp
       ? {
@@ -237,6 +250,7 @@ export const listingFactory = async (
           },
         }
       : {},
+    unitGroups: unitGroups ? { create: unitGroups } : undefined,
     units: units
       ? {
           create: units,

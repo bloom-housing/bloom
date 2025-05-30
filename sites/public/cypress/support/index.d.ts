@@ -3,7 +3,7 @@ declare namespace Cypress {
 
   interface Chainable {
     beginApplicationRejectAutofill(listingName: string): Chainable
-    beginApplicationSignedIn(listingName: string): Chainable
+    beginApplicationSignedIn(listingName: string, autofill?: boolean): Chainable
     checkErrorAlert(command: string): Chainable
     checkErrorMessages(command: string): Chainable
     getByTestId(testId: string): Chainable<Element>
@@ -13,27 +13,33 @@ declare namespace Cypress {
     isNextRouteValid(currentStep: string, skip?: number): Chainable
     signIn(email?: string, password?: string): Chainable
     signOut(): Chainable
-    step1PrimaryApplicantName(application: Application): Chainable
-    step2PrimaryApplicantAddresses(application: Application): Chainable
-    step3AlternateContactType(application: Application): Chainable
-    step4AlternateContactName(application: Application): Chainable
-    step5AlternateContactInfo(application: Application): Chainable
+    step1PrimaryApplicantName(application: Application, autofill?: boolean): Chainable
+    step2PrimaryApplicantAddresses(application: Application, autofill?: boolean): Chainable
+    step3AlternateContactType(application: Application, autofill?: boolean): Chainable
+    step4AlternateContactName(application: Application, autofill?: boolean): Chainable
+    step5AlternateContactInfo(application: Application, autofill?: boolean): Chainable
     step6HouseholdSize(application: Application): Chainable
-    step7AddHouseholdMembers(application: Application): Chainable
-    step8PreferredUnits(application: Application): Chainable
-    step9Accessibility(application: Application): Chainable
-    step10Programs(application: Application): Chainable
-    step10Changes(application: Application): Chainable
-    step11Student(application: Application, programsExist: boolean): Chainable
-    step12Student(application: Application): Chainable
+    step7AddHouseholdMembers(application: Application, autofill?: boolean): Chainable
+    step8PreferredUnits(application: Application, autofill?: boolean): Chainable
+    step9Accessibility(application: Application, autofill?: boolean): Chainable
+    step10Programs(application: Application, autofill?: boolean): Chainable
+    step10Changes(application: Application, autofill?: boolean): Chainable
+    step11Student(application: Application, programsExist: boolean, autofill?: boolean): Chainable
+    step12Student(application: Application, autofill?: boolean): Chainable
     step12Programs(application: Application): Chainable
-    step13IncomeVouchers(application: Application): Chainable
-    step14Income(application: Application): Chainable
+    step13IncomeVouchers(application: Application, autofill?: boolean): Chainable
+    step14Income(application: Application, autofill?: boolean): Chainable
     step15SelectPreferences(application: Application): Chainable
     step16GeneralPool(): Chainable
-    step17Demographics(application: Application): Chainable
-    step18Summary(application: Application): Chainable
+    step17Demographics(application: Application, autofill?: boolean): Chainable
+    step18Summary(application: Application, verify?: boolean): Chainable
     step19TermsAndSubmit(application: Application): Chainable
-    submitApplication(listingName: string, application: Application, verify?: boolean)
+    submitApplication(
+      listingName: string,
+      application: Application,
+      signedIn: boolean,
+      verify?: boolean,
+      autofill?: boolean
+    )
   }
 }
