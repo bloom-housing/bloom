@@ -96,6 +96,10 @@ let partnerUser: User = {
   userRoles: { isPartner: true },
 }
 
+let doJurisdictionsHaveFeatureFlagOn = () => {
+  return false
+}
+
 describe("<ListingFormActions>", () => {
   beforeAll(() => {
     mockNextRouter()
@@ -105,7 +109,12 @@ describe("<ListingFormActions>", () => {
     beforeAll(() => (adminUser = { ...adminUser, jurisdictions: [mockBaseJurisdiction] }))
     it("renders correct buttons in a new listing edit state", () => {
       const { getByText } = render(
-        <AuthContext.Provider value={{ profile: adminUser }}>
+        <AuthContext.Provider
+          value={{
+            profile: adminUser,
+            doJurisdictionsHaveFeatureFlagOn,
+          }}
+        >
           <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.pending }}>
             <ListingFormActions type={ListingFormActionsType.add} />
           </ListingContext.Provider>
@@ -118,7 +127,12 @@ describe("<ListingFormActions>", () => {
 
     it("renders correct buttons in a draft detail state", () => {
       const { getByText } = render(
-        <AuthContext.Provider value={{ profile: adminUser }}>
+        <AuthContext.Provider
+          value={{
+            profile: adminUser,
+            doJurisdictionsHaveFeatureFlagOn,
+          }}
+        >
           <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.pending }}>
             <ListingFormActions type={ListingFormActionsType.details} />
           </ListingContext.Provider>
@@ -131,7 +145,12 @@ describe("<ListingFormActions>", () => {
 
     it("renders correct buttons in a draft edit state", () => {
       const { getByText } = render(
-        <AuthContext.Provider value={{ profile: adminUser }}>
+        <AuthContext.Provider
+          value={{
+            profile: adminUser,
+            doJurisdictionsHaveFeatureFlagOn,
+          }}
+        >
           <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.pending }}>
             <ListingFormActions type={ListingFormActionsType.edit} />
           </ListingContext.Provider>
@@ -144,7 +163,12 @@ describe("<ListingFormActions>", () => {
 
     it("renders correct buttons in an open detail state", () => {
       const { getByText } = render(
-        <AuthContext.Provider value={{ profile: adminUser }}>
+        <AuthContext.Provider
+          value={{
+            profile: adminUser,
+            doJurisdictionsHaveFeatureFlagOn,
+          }}
+        >
           <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.active }}>
             <ListingFormActions type={ListingFormActionsType.details} />
           </ListingContext.Provider>
@@ -157,7 +181,12 @@ describe("<ListingFormActions>", () => {
 
     it("renders correct buttons in an open edit state", () => {
       const { getByText } = render(
-        <AuthContext.Provider value={{ profile: adminUser }}>
+        <AuthContext.Provider
+          value={{
+            profile: adminUser,
+            doJurisdictionsHaveFeatureFlagOn,
+          }}
+        >
           <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.active }}>
             <ListingFormActions type={ListingFormActionsType.edit} />
           </ListingContext.Provider>
@@ -171,7 +200,12 @@ describe("<ListingFormActions>", () => {
 
     it("renders correct buttons in a closed detail state", () => {
       const { getByText } = render(
-        <AuthContext.Provider value={{ profile: adminUser }}>
+        <AuthContext.Provider
+          value={{
+            profile: adminUser,
+            doJurisdictionsHaveFeatureFlagOn,
+          }}
+        >
           <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.closed }}>
             <ListingFormActions type={ListingFormActionsType.details} />
           </ListingContext.Provider>
@@ -184,7 +218,12 @@ describe("<ListingFormActions>", () => {
 
     it("renders correct buttons in a closed edit state", () => {
       const { getByText } = render(
-        <AuthContext.Provider value={{ profile: adminUser }}>
+        <AuthContext.Provider
+          value={{
+            profile: adminUser,
+            doJurisdictionsHaveFeatureFlagOn,
+          }}
+        >
           <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.closed }}>
             <ListingFormActions type={ListingFormActionsType.edit} />
           </ListingContext.Provider>
@@ -208,7 +247,12 @@ describe("<ListingFormActions>", () => {
       )
       it("renders correct buttons in a new listing edit state", () => {
         const { getByText } = render(
-          <AuthContext.Provider value={{ profile: adminUser }}>
+          <AuthContext.Provider
+            value={{
+              profile: adminUser,
+              doJurisdictionsHaveFeatureFlagOn,
+            }}
+          >
             <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.pending }}>
               <ListingFormActions type={ListingFormActionsType.add} />
             </ListingContext.Provider>
@@ -221,7 +265,12 @@ describe("<ListingFormActions>", () => {
 
       it("renders correct buttons in a draft detail state", () => {
         const { getByText } = render(
-          <AuthContext.Provider value={{ profile: adminUser }}>
+          <AuthContext.Provider
+            value={{
+              profile: adminUser,
+              doJurisdictionsHaveFeatureFlagOn,
+            }}
+          >
             <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.pending }}>
               <ListingFormActions type={ListingFormActionsType.details} />
             </ListingContext.Provider>
@@ -234,7 +283,12 @@ describe("<ListingFormActions>", () => {
 
       it("renders correct buttons in a draft edit state", () => {
         const { getByText } = render(
-          <AuthContext.Provider value={{ profile: adminUser }}>
+          <AuthContext.Provider
+            value={{
+              profile: adminUser,
+              doJurisdictionsHaveFeatureFlagOn,
+            }}
+          >
             <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.pending }}>
               <ListingFormActions type={ListingFormActionsType.edit} />
             </ListingContext.Provider>
@@ -247,7 +301,12 @@ describe("<ListingFormActions>", () => {
 
       it("renders correct buttons in a pending approval detail state", () => {
         const { getByText } = render(
-          <AuthContext.Provider value={{ profile: adminUser }}>
+          <AuthContext.Provider
+            value={{
+              profile: adminUser,
+              doJurisdictionsHaveFeatureFlagOn,
+            }}
+          >
             <ListingContext.Provider
               value={{ ...listing, status: ListingsStatusEnum.pendingReview }}
             >
@@ -263,7 +322,12 @@ describe("<ListingFormActions>", () => {
 
       it("renders correct buttons in a pending approval edit state", () => {
         const { getByText } = render(
-          <AuthContext.Provider value={{ profile: adminUser }}>
+          <AuthContext.Provider
+            value={{
+              profile: adminUser,
+              doJurisdictionsHaveFeatureFlagOn,
+            }}
+          >
             <ListingContext.Provider
               value={{ ...listing, status: ListingsStatusEnum.pendingReview }}
             >
@@ -279,7 +343,12 @@ describe("<ListingFormActions>", () => {
 
       it("renders correct buttons in a changes requested detail state", () => {
         const { getByText } = render(
-          <AuthContext.Provider value={{ profile: adminUser }}>
+          <AuthContext.Provider
+            value={{
+              profile: adminUser,
+              doJurisdictionsHaveFeatureFlagOn,
+            }}
+          >
             <ListingContext.Provider
               value={{ ...listing, status: ListingsStatusEnum.changesRequested }}
             >
@@ -295,7 +364,12 @@ describe("<ListingFormActions>", () => {
 
       it("renders correct buttons in a changes requested edit state", () => {
         const { getByText } = render(
-          <AuthContext.Provider value={{ profile: adminUser }}>
+          <AuthContext.Provider
+            value={{
+              profile: adminUser,
+              doJurisdictionsHaveFeatureFlagOn,
+            }}
+          >
             <ListingContext.Provider
               value={{ ...listing, status: ListingsStatusEnum.changesRequested }}
             >
@@ -309,7 +383,12 @@ describe("<ListingFormActions>", () => {
       })
       it("renders correct buttons in an open detail state", () => {
         const { getByText } = render(
-          <AuthContext.Provider value={{ profile: adminUser }}>
+          <AuthContext.Provider
+            value={{
+              profile: adminUser,
+              doJurisdictionsHaveFeatureFlagOn,
+            }}
+          >
             <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.active }}>
               <ListingFormActions type={ListingFormActionsType.details} />
             </ListingContext.Provider>
@@ -322,7 +401,12 @@ describe("<ListingFormActions>", () => {
 
       it("renders correct buttons in an open edit state", () => {
         const { getByText } = render(
-          <AuthContext.Provider value={{ profile: adminUser }}>
+          <AuthContext.Provider
+            value={{
+              profile: adminUser,
+              doJurisdictionsHaveFeatureFlagOn,
+            }}
+          >
             <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.active }}>
               <ListingFormActions type={ListingFormActionsType.edit} />
             </ListingContext.Provider>
@@ -336,7 +420,12 @@ describe("<ListingFormActions>", () => {
 
       it("renders correct buttons in a closed detail state", () => {
         const { getByText } = render(
-          <AuthContext.Provider value={{ profile: adminUser }}>
+          <AuthContext.Provider
+            value={{
+              profile: adminUser,
+              doJurisdictionsHaveFeatureFlagOn,
+            }}
+          >
             <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.closed }}>
               <ListingFormActions type={ListingFormActionsType.details} />
             </ListingContext.Provider>
@@ -349,7 +438,12 @@ describe("<ListingFormActions>", () => {
 
       it("renders correct buttons in a closed edit state", () => {
         const { getByText } = render(
-          <AuthContext.Provider value={{ profile: adminUser }}>
+          <AuthContext.Provider
+            value={{
+              profile: adminUser,
+              doJurisdictionsHaveFeatureFlagOn,
+            }}
+          >
             <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.closed }}>
               <ListingFormActions type={ListingFormActionsType.edit} />
             </ListingContext.Provider>
@@ -373,7 +467,12 @@ describe("<ListingFormActions>", () => {
       )
       it("renders correct buttons in a new listing edit state", () => {
         const { getByText } = render(
-          <AuthContext.Provider value={{ profile: jurisdictionAdminUser }}>
+          <AuthContext.Provider
+            value={{
+              profile: jurisdictionAdminUser,
+              doJurisdictionsHaveFeatureFlagOn,
+            }}
+          >
             <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.pending }}>
               <ListingFormActions type={ListingFormActionsType.add} />
             </ListingContext.Provider>
@@ -386,7 +485,12 @@ describe("<ListingFormActions>", () => {
 
       it("renders correct buttons in a draft detail state", () => {
         const { getByText } = render(
-          <AuthContext.Provider value={{ profile: jurisdictionAdminUser }}>
+          <AuthContext.Provider
+            value={{
+              profile: jurisdictionAdminUser,
+              doJurisdictionsHaveFeatureFlagOn,
+            }}
+          >
             <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.pending }}>
               <ListingFormActions type={ListingFormActionsType.details} />
             </ListingContext.Provider>
@@ -399,7 +503,12 @@ describe("<ListingFormActions>", () => {
 
       it("renders correct buttons in a draft edit state", () => {
         const { getByText } = render(
-          <AuthContext.Provider value={{ profile: jurisdictionAdminUser }}>
+          <AuthContext.Provider
+            value={{
+              profile: jurisdictionAdminUser,
+              doJurisdictionsHaveFeatureFlagOn,
+            }}
+          >
             <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.pending }}>
               <ListingFormActions type={ListingFormActionsType.edit} />
             </ListingContext.Provider>
@@ -412,7 +521,12 @@ describe("<ListingFormActions>", () => {
 
       it("renders correct buttons in a pending approval detail state", () => {
         const { getByText, queryByText } = render(
-          <AuthContext.Provider value={{ profile: jurisdictionAdminUser }}>
+          <AuthContext.Provider
+            value={{
+              profile: jurisdictionAdminUser,
+              doJurisdictionsHaveFeatureFlagOn,
+            }}
+          >
             <ListingContext.Provider
               value={{ ...listing, status: ListingsStatusEnum.pendingReview }}
             >
@@ -427,7 +541,12 @@ describe("<ListingFormActions>", () => {
 
       it("renders correct buttons in a changes requested detail state", () => {
         const { getByText } = render(
-          <AuthContext.Provider value={{ profile: jurisdictionAdminUser }}>
+          <AuthContext.Provider
+            value={{
+              profile: jurisdictionAdminUser,
+              doJurisdictionsHaveFeatureFlagOn,
+            }}
+          >
             <ListingContext.Provider
               value={{ ...listing, status: ListingsStatusEnum.changesRequested }}
             >
@@ -442,7 +561,12 @@ describe("<ListingFormActions>", () => {
 
       it("renders correct buttons in a changes requested edit state", () => {
         const { getByText } = render(
-          <AuthContext.Provider value={{ profile: jurisdictionAdminUser }}>
+          <AuthContext.Provider
+            value={{
+              profile: jurisdictionAdminUser,
+              doJurisdictionsHaveFeatureFlagOn,
+            }}
+          >
             <ListingContext.Provider
               value={{ ...listing, status: ListingsStatusEnum.changesRequested }}
             >
@@ -457,7 +581,12 @@ describe("<ListingFormActions>", () => {
 
       it("renders correct buttons in an open detail state", () => {
         const { getByText } = render(
-          <AuthContext.Provider value={{ profile: jurisdictionAdminUser }}>
+          <AuthContext.Provider
+            value={{
+              profile: jurisdictionAdminUser,
+              doJurisdictionsHaveFeatureFlagOn,
+            }}
+          >
             <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.active }}>
               <ListingFormActions type={ListingFormActionsType.details} />
             </ListingContext.Provider>
@@ -470,7 +599,12 @@ describe("<ListingFormActions>", () => {
 
       it("renders correct buttons in an open edit state", () => {
         const { getByText } = render(
-          <AuthContext.Provider value={{ profile: jurisdictionAdminUser }}>
+          <AuthContext.Provider
+            value={{
+              profile: jurisdictionAdminUser,
+              doJurisdictionsHaveFeatureFlagOn,
+            }}
+          >
             <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.active }}>
               <ListingFormActions type={ListingFormActionsType.edit} />
             </ListingContext.Provider>
@@ -484,7 +618,12 @@ describe("<ListingFormActions>", () => {
 
       it("renders correct buttons in a closed detail state", () => {
         const { getByText } = render(
-          <AuthContext.Provider value={{ profile: jurisdictionAdminUser }}>
+          <AuthContext.Provider
+            value={{
+              profile: jurisdictionAdminUser,
+              doJurisdictionsHaveFeatureFlagOn,
+            }}
+          >
             <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.closed }}>
               <ListingFormActions type={ListingFormActionsType.details} />
             </ListingContext.Provider>
@@ -497,7 +636,12 @@ describe("<ListingFormActions>", () => {
 
       it("renders correct buttons in a closed edit state", () => {
         const { getByText, queryByText } = render(
-          <AuthContext.Provider value={{ profile: jurisdictionAdminUser }}>
+          <AuthContext.Provider
+            value={{
+              profile: jurisdictionAdminUser,
+              doJurisdictionsHaveFeatureFlagOn,
+            }}
+          >
             <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.closed }}>
               <ListingFormActions type={ListingFormActionsType.edit} />
             </ListingContext.Provider>
@@ -518,7 +662,12 @@ describe("<ListingFormActions>", () => {
       )
       it("renders correct buttons in a new listing edit state", () => {
         const { getByText } = render(
-          <AuthContext.Provider value={{ profile: partnerUser }}>
+          <AuthContext.Provider
+            value={{
+              profile: partnerUser,
+              doJurisdictionsHaveFeatureFlagOn,
+            }}
+          >
             <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.pending }}>
               <ListingFormActions type={ListingFormActionsType.add} />
             </ListingContext.Provider>
@@ -531,7 +680,12 @@ describe("<ListingFormActions>", () => {
 
       it("renders correct buttons in a draft detail state", () => {
         const { getByText, queryByText } = render(
-          <AuthContext.Provider value={{ profile: partnerUser }}>
+          <AuthContext.Provider
+            value={{
+              profile: partnerUser,
+              doJurisdictionsHaveFeatureFlagOn,
+            }}
+          >
             <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.pending }}>
               <ListingFormActions type={ListingFormActionsType.details} />
             </ListingContext.Provider>
@@ -544,7 +698,12 @@ describe("<ListingFormActions>", () => {
 
       it("renders correct buttons in a draft edit state", () => {
         const { getByText } = render(
-          <AuthContext.Provider value={{ profile: partnerUser }}>
+          <AuthContext.Provider
+            value={{
+              profile: partnerUser,
+              doJurisdictionsHaveFeatureFlagOn,
+            }}
+          >
             <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.pending }}>
               <ListingFormActions type={ListingFormActionsType.edit} />
             </ListingContext.Provider>
@@ -557,7 +716,12 @@ describe("<ListingFormActions>", () => {
 
       it("renders correct buttons in a pending approval detail state", () => {
         const { getByText, queryByText } = render(
-          <AuthContext.Provider value={{ profile: partnerUser }}>
+          <AuthContext.Provider
+            value={{
+              profile: partnerUser,
+              doJurisdictionsHaveFeatureFlagOn,
+            }}
+          >
             <ListingContext.Provider
               value={{ ...listing, status: ListingsStatusEnum.pendingReview }}
             >
@@ -572,7 +736,12 @@ describe("<ListingFormActions>", () => {
 
       it("renders correct buttons in a changes requested detail state", () => {
         const { getByText, queryByText } = render(
-          <AuthContext.Provider value={{ profile: partnerUser }}>
+          <AuthContext.Provider
+            value={{
+              profile: partnerUser,
+              doJurisdictionsHaveFeatureFlagOn,
+            }}
+          >
             <ListingContext.Provider
               value={{ ...listing, status: ListingsStatusEnum.changesRequested }}
             >
@@ -587,7 +756,12 @@ describe("<ListingFormActions>", () => {
 
       it("renders correct buttons in a changes requested edit state", () => {
         const { getByText } = render(
-          <AuthContext.Provider value={{ profile: partnerUser }}>
+          <AuthContext.Provider
+            value={{
+              profile: partnerUser,
+              doJurisdictionsHaveFeatureFlagOn,
+            }}
+          >
             <ListingContext.Provider
               value={{ ...listing, status: ListingsStatusEnum.changesRequested }}
             >
@@ -602,7 +776,12 @@ describe("<ListingFormActions>", () => {
 
       it("renders correct buttons in an open detail state", () => {
         const { getByText, queryByText } = render(
-          <AuthContext.Provider value={{ profile: partnerUser }}>
+          <AuthContext.Provider
+            value={{
+              profile: partnerUser,
+              doJurisdictionsHaveFeatureFlagOn,
+            }}
+          >
             <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.active }}>
               <ListingFormActions type={ListingFormActionsType.details} />
             </ListingContext.Provider>
@@ -615,7 +794,12 @@ describe("<ListingFormActions>", () => {
 
       it("renders correct buttons in an open edit state", () => {
         const { getByText } = render(
-          <AuthContext.Provider value={{ profile: partnerUser }}>
+          <AuthContext.Provider
+            value={{
+              profile: partnerUser,
+              doJurisdictionsHaveFeatureFlagOn,
+            }}
+          >
             <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.active }}>
               <ListingFormActions type={ListingFormActionsType.edit} />
             </ListingContext.Provider>
@@ -629,7 +813,12 @@ describe("<ListingFormActions>", () => {
 
       it("renders correct buttons in a closed detail state", () => {
         const { getByText, queryByText } = render(
-          <AuthContext.Provider value={{ profile: partnerUser }}>
+          <AuthContext.Provider
+            value={{
+              profile: partnerUser,
+              doJurisdictionsHaveFeatureFlagOn,
+            }}
+          >
             <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.closed }}>
               <ListingFormActions type={ListingFormActionsType.details} />
             </ListingContext.Provider>
@@ -642,7 +831,12 @@ describe("<ListingFormActions>", () => {
 
       it("renders correct buttons in a closed edit state", () => {
         const { getByText, queryByText } = render(
-          <AuthContext.Provider value={{ profile: partnerUser }}>
+          <AuthContext.Provider
+            value={{
+              profile: partnerUser,
+              doJurisdictionsHaveFeatureFlagOn,
+            }}
+          >
             <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.closed }}>
               <ListingFormActions type={ListingFormActionsType.edit} />
             </ListingContext.Provider>
@@ -670,7 +864,12 @@ describe("<ListingFormActions>", () => {
       )
       it("renders correct buttons in a new listing edit state", () => {
         const { getByText } = render(
-          <AuthContext.Provider value={{ profile: adminUser }}>
+          <AuthContext.Provider
+            value={{
+              profile: adminUser,
+              doJurisdictionsHaveFeatureFlagOn,
+            }}
+          >
             <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.pending }}>
               <ListingFormActions type={ListingFormActionsType.add} />
             </ListingContext.Provider>
@@ -683,7 +882,12 @@ describe("<ListingFormActions>", () => {
 
       it("renders correct buttons in a draft detail state", () => {
         const { getByText } = render(
-          <AuthContext.Provider value={{ profile: adminUser }}>
+          <AuthContext.Provider
+            value={{
+              profile: adminUser,
+              doJurisdictionsHaveFeatureFlagOn,
+            }}
+          >
             <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.pending }}>
               <ListingFormActions type={ListingFormActionsType.details} />
             </ListingContext.Provider>
@@ -696,7 +900,12 @@ describe("<ListingFormActions>", () => {
 
       it("renders correct buttons in a draft edit state", () => {
         const { getByText } = render(
-          <AuthContext.Provider value={{ profile: adminUser }}>
+          <AuthContext.Provider
+            value={{
+              profile: adminUser,
+              doJurisdictionsHaveFeatureFlagOn,
+            }}
+          >
             <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.pending }}>
               <ListingFormActions type={ListingFormActionsType.edit} />
             </ListingContext.Provider>
@@ -709,7 +918,12 @@ describe("<ListingFormActions>", () => {
 
       it("renders correct buttons in a pending approval detail state", () => {
         const { getByText } = render(
-          <AuthContext.Provider value={{ profile: adminUser }}>
+          <AuthContext.Provider
+            value={{
+              profile: adminUser,
+              doJurisdictionsHaveFeatureFlagOn,
+            }}
+          >
             <ListingContext.Provider
               value={{ ...listing, status: ListingsStatusEnum.pendingReview }}
             >
@@ -725,7 +939,12 @@ describe("<ListingFormActions>", () => {
 
       it("renders correct buttons in a pending approval edit state", () => {
         const { getByText } = render(
-          <AuthContext.Provider value={{ profile: adminUser }}>
+          <AuthContext.Provider
+            value={{
+              profile: adminUser,
+              doJurisdictionsHaveFeatureFlagOn,
+            }}
+          >
             <ListingContext.Provider
               value={{ ...listing, status: ListingsStatusEnum.pendingReview }}
             >
@@ -741,7 +960,12 @@ describe("<ListingFormActions>", () => {
 
       it("renders correct buttons in a changes requested detail state", () => {
         const { getByText } = render(
-          <AuthContext.Provider value={{ profile: adminUser }}>
+          <AuthContext.Provider
+            value={{
+              profile: adminUser,
+              doJurisdictionsHaveFeatureFlagOn,
+            }}
+          >
             <ListingContext.Provider
               value={{ ...listing, status: ListingsStatusEnum.changesRequested }}
             >
@@ -757,7 +981,12 @@ describe("<ListingFormActions>", () => {
 
       it("renders correct buttons in a changes requested edit state", () => {
         const { getByText } = render(
-          <AuthContext.Provider value={{ profile: adminUser }}>
+          <AuthContext.Provider
+            value={{
+              profile: adminUser,
+              doJurisdictionsHaveFeatureFlagOn,
+            }}
+          >
             <ListingContext.Provider
               value={{ ...listing, status: ListingsStatusEnum.changesRequested }}
             >
@@ -771,7 +1000,12 @@ describe("<ListingFormActions>", () => {
       })
       it("renders correct buttons in an open detail state", () => {
         const { getByText } = render(
-          <AuthContext.Provider value={{ profile: adminUser }}>
+          <AuthContext.Provider
+            value={{
+              profile: adminUser,
+              doJurisdictionsHaveFeatureFlagOn,
+            }}
+          >
             <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.active }}>
               <ListingFormActions type={ListingFormActionsType.details} />
             </ListingContext.Provider>
@@ -784,7 +1018,12 @@ describe("<ListingFormActions>", () => {
 
       it("renders correct buttons in an open edit state", () => {
         const { getByText } = render(
-          <AuthContext.Provider value={{ profile: adminUser }}>
+          <AuthContext.Provider
+            value={{
+              profile: adminUser,
+              doJurisdictionsHaveFeatureFlagOn,
+            }}
+          >
             <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.active }}>
               <ListingFormActions type={ListingFormActionsType.edit} />
             </ListingContext.Provider>
@@ -798,7 +1037,12 @@ describe("<ListingFormActions>", () => {
 
       it("renders correct buttons in a closed detail state", () => {
         const { getByText } = render(
-          <AuthContext.Provider value={{ profile: adminUser }}>
+          <AuthContext.Provider
+            value={{
+              profile: adminUser,
+              doJurisdictionsHaveFeatureFlagOn,
+            }}
+          >
             <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.closed }}>
               <ListingFormActions type={ListingFormActionsType.details} />
             </ListingContext.Provider>
@@ -811,7 +1055,7 @@ describe("<ListingFormActions>", () => {
 
       it("renders correct buttons in a closed edit state", () => {
         const { getByText, queryAllByText } = render(
-          <AuthContext.Provider value={{ profile: adminUser }}>
+          <AuthContext.Provider value={{ profile: adminUser, doJurisdictionsHaveFeatureFlagOn }}>
             <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.closed }}>
               <ListingFormActions type={ListingFormActionsType.edit} />
             </ListingContext.Provider>
@@ -826,7 +1070,7 @@ describe("<ListingFormActions>", () => {
       it("renders correct buttons in a closed edit state if lottery is turned on", () => {
         process.env.showLottery = "TRUE"
         const { getByText } = render(
-          <AuthContext.Provider value={{ profile: adminUser }}>
+          <AuthContext.Provider value={{ profile: adminUser, doJurisdictionsHaveFeatureFlagOn }}>
             <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.closed }}>
               <ListingFormActions type={ListingFormActionsType.edit} />
             </ListingContext.Provider>
@@ -849,7 +1093,12 @@ describe("<ListingFormActions>", () => {
       )
       it("renders correct buttons in a new listing edit state", () => {
         const { getByText } = render(
-          <AuthContext.Provider value={{ profile: jurisdictionAdminUser }}>
+          <AuthContext.Provider
+            value={{
+              profile: jurisdictionAdminUser,
+              doJurisdictionsHaveFeatureFlagOn,
+            }}
+          >
             <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.pending }}>
               <ListingFormActions type={ListingFormActionsType.add} />
             </ListingContext.Provider>
@@ -862,7 +1111,12 @@ describe("<ListingFormActions>", () => {
 
       it("renders correct buttons in a draft detail state", () => {
         const { getByText } = render(
-          <AuthContext.Provider value={{ profile: jurisdictionAdminUser }}>
+          <AuthContext.Provider
+            value={{
+              profile: jurisdictionAdminUser,
+              doJurisdictionsHaveFeatureFlagOn,
+            }}
+          >
             <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.pending }}>
               <ListingFormActions type={ListingFormActionsType.details} />
             </ListingContext.Provider>
@@ -875,7 +1129,12 @@ describe("<ListingFormActions>", () => {
 
       it("renders correct buttons in a draft edit state", () => {
         const { getByText } = render(
-          <AuthContext.Provider value={{ profile: jurisdictionAdminUser }}>
+          <AuthContext.Provider
+            value={{
+              profile: jurisdictionAdminUser,
+              doJurisdictionsHaveFeatureFlagOn,
+            }}
+          >
             <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.pending }}>
               <ListingFormActions type={ListingFormActionsType.edit} />
             </ListingContext.Provider>
@@ -888,7 +1147,12 @@ describe("<ListingFormActions>", () => {
 
       it("renders correct buttons in a pending approval detail state", () => {
         const { getByText } = render(
-          <AuthContext.Provider value={{ profile: jurisdictionAdminUser }}>
+          <AuthContext.Provider
+            value={{
+              profile: jurisdictionAdminUser,
+              doJurisdictionsHaveFeatureFlagOn,
+            }}
+          >
             <ListingContext.Provider
               value={{ ...listing, status: ListingsStatusEnum.pendingReview }}
             >
@@ -904,7 +1168,12 @@ describe("<ListingFormActions>", () => {
 
       it("renders correct buttons in a pending approval edit state", () => {
         const { getByText } = render(
-          <AuthContext.Provider value={{ profile: jurisdictionAdminUser }}>
+          <AuthContext.Provider
+            value={{
+              profile: jurisdictionAdminUser,
+              doJurisdictionsHaveFeatureFlagOn,
+            }}
+          >
             <ListingContext.Provider
               value={{ ...listing, status: ListingsStatusEnum.pendingReview }}
             >
@@ -920,7 +1189,12 @@ describe("<ListingFormActions>", () => {
 
       it("renders correct buttons in a changes requested detail state", () => {
         const { getByText } = render(
-          <AuthContext.Provider value={{ profile: jurisdictionAdminUser }}>
+          <AuthContext.Provider
+            value={{
+              profile: jurisdictionAdminUser,
+              doJurisdictionsHaveFeatureFlagOn,
+            }}
+          >
             <ListingContext.Provider
               value={{ ...listing, status: ListingsStatusEnum.changesRequested }}
             >
@@ -936,7 +1210,12 @@ describe("<ListingFormActions>", () => {
 
       it("renders correct buttons in a changes requested edit state", () => {
         const { getByText } = render(
-          <AuthContext.Provider value={{ profile: jurisdictionAdminUser }}>
+          <AuthContext.Provider
+            value={{
+              profile: jurisdictionAdminUser,
+              doJurisdictionsHaveFeatureFlagOn,
+            }}
+          >
             <ListingContext.Provider
               value={{ ...listing, status: ListingsStatusEnum.changesRequested }}
             >
@@ -950,7 +1229,12 @@ describe("<ListingFormActions>", () => {
       })
       it("renders correct buttons in an open detail state", () => {
         const { getByText } = render(
-          <AuthContext.Provider value={{ profile: jurisdictionAdminUser }}>
+          <AuthContext.Provider
+            value={{
+              profile: jurisdictionAdminUser,
+              doJurisdictionsHaveFeatureFlagOn,
+            }}
+          >
             <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.active }}>
               <ListingFormActions type={ListingFormActionsType.details} />
             </ListingContext.Provider>
@@ -963,7 +1247,12 @@ describe("<ListingFormActions>", () => {
 
       it("renders correct buttons in an open edit state", () => {
         const { getByText } = render(
-          <AuthContext.Provider value={{ profile: jurisdictionAdminUser }}>
+          <AuthContext.Provider
+            value={{
+              profile: jurisdictionAdminUser,
+              doJurisdictionsHaveFeatureFlagOn,
+            }}
+          >
             <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.active }}>
               <ListingFormActions type={ListingFormActionsType.edit} />
             </ListingContext.Provider>
@@ -977,7 +1266,12 @@ describe("<ListingFormActions>", () => {
 
       it("renders correct buttons in a closed detail state", () => {
         const { getByText } = render(
-          <AuthContext.Provider value={{ profile: jurisdictionAdminUser }}>
+          <AuthContext.Provider
+            value={{
+              profile: jurisdictionAdminUser,
+              doJurisdictionsHaveFeatureFlagOn,
+            }}
+          >
             <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.closed }}>
               <ListingFormActions type={ListingFormActionsType.details} />
             </ListingContext.Provider>
@@ -990,7 +1284,12 @@ describe("<ListingFormActions>", () => {
 
       it("renders correct buttons in a closed edit state", () => {
         const { getByText } = render(
-          <AuthContext.Provider value={{ profile: jurisdictionAdminUser }}>
+          <AuthContext.Provider
+            value={{
+              profile: jurisdictionAdminUser,
+              doJurisdictionsHaveFeatureFlagOn,
+            }}
+          >
             <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.closed }}>
               <ListingFormActions type={ListingFormActionsType.edit} />
             </ListingContext.Provider>
@@ -1011,7 +1310,12 @@ describe("<ListingFormActions>", () => {
       )
       it("renders correct buttons in a new listing edit state", () => {
         const { getByText } = render(
-          <AuthContext.Provider value={{ profile: partnerUser }}>
+          <AuthContext.Provider
+            value={{
+              profile: partnerUser,
+              doJurisdictionsHaveFeatureFlagOn,
+            }}
+          >
             <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.pending }}>
               <ListingFormActions type={ListingFormActionsType.add} />
             </ListingContext.Provider>
@@ -1024,7 +1328,12 @@ describe("<ListingFormActions>", () => {
 
       it("renders correct buttons in a draft detail state", () => {
         const { getByText, queryByText } = render(
-          <AuthContext.Provider value={{ profile: partnerUser }}>
+          <AuthContext.Provider
+            value={{
+              profile: partnerUser,
+              doJurisdictionsHaveFeatureFlagOn,
+            }}
+          >
             <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.pending }}>
               <ListingFormActions type={ListingFormActionsType.details} />
             </ListingContext.Provider>
@@ -1037,7 +1346,12 @@ describe("<ListingFormActions>", () => {
 
       it("renders correct buttons in a draft edit state", () => {
         const { getByText } = render(
-          <AuthContext.Provider value={{ profile: partnerUser }}>
+          <AuthContext.Provider
+            value={{
+              profile: partnerUser,
+              doJurisdictionsHaveFeatureFlagOn,
+            }}
+          >
             <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.pending }}>
               <ListingFormActions type={ListingFormActionsType.edit} />
             </ListingContext.Provider>
@@ -1050,7 +1364,12 @@ describe("<ListingFormActions>", () => {
 
       it("renders correct buttons in a pending approval detail state", () => {
         const { getByText, queryByText } = render(
-          <AuthContext.Provider value={{ profile: partnerUser }}>
+          <AuthContext.Provider
+            value={{
+              profile: partnerUser,
+              doJurisdictionsHaveFeatureFlagOn,
+            }}
+          >
             <ListingContext.Provider
               value={{ ...listing, status: ListingsStatusEnum.pendingReview }}
             >
@@ -1065,7 +1384,12 @@ describe("<ListingFormActions>", () => {
 
       it("renders correct buttons in a changes requested detail state", () => {
         const { getByText, queryByText } = render(
-          <AuthContext.Provider value={{ profile: partnerUser }}>
+          <AuthContext.Provider
+            value={{
+              profile: partnerUser,
+              doJurisdictionsHaveFeatureFlagOn,
+            }}
+          >
             <ListingContext.Provider
               value={{ ...listing, status: ListingsStatusEnum.changesRequested }}
             >
@@ -1080,7 +1404,12 @@ describe("<ListingFormActions>", () => {
 
       it("renders correct buttons in a changes requested edit state", () => {
         const { getByText } = render(
-          <AuthContext.Provider value={{ profile: partnerUser }}>
+          <AuthContext.Provider
+            value={{
+              profile: partnerUser,
+              doJurisdictionsHaveFeatureFlagOn,
+            }}
+          >
             <ListingContext.Provider
               value={{ ...listing, status: ListingsStatusEnum.changesRequested }}
             >
@@ -1095,7 +1424,12 @@ describe("<ListingFormActions>", () => {
 
       it("renders correct buttons in an open detail state", () => {
         const { getByText, queryByText } = render(
-          <AuthContext.Provider value={{ profile: partnerUser }}>
+          <AuthContext.Provider
+            value={{
+              profile: partnerUser,
+              doJurisdictionsHaveFeatureFlagOn,
+            }}
+          >
             <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.active }}>
               <ListingFormActions type={ListingFormActionsType.details} />
             </ListingContext.Provider>
@@ -1108,7 +1442,12 @@ describe("<ListingFormActions>", () => {
 
       it("renders correct buttons in an open edit state", () => {
         const { getByText } = render(
-          <AuthContext.Provider value={{ profile: partnerUser }}>
+          <AuthContext.Provider
+            value={{
+              profile: partnerUser,
+              doJurisdictionsHaveFeatureFlagOn,
+            }}
+          >
             <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.active }}>
               <ListingFormActions type={ListingFormActionsType.edit} />
             </ListingContext.Provider>
@@ -1122,7 +1461,12 @@ describe("<ListingFormActions>", () => {
 
       it("renders correct buttons in a closed detail state", () => {
         const { getByText, queryByText } = render(
-          <AuthContext.Provider value={{ profile: partnerUser }}>
+          <AuthContext.Provider
+            value={{
+              profile: partnerUser,
+              doJurisdictionsHaveFeatureFlagOn,
+            }}
+          >
             <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.closed }}>
               <ListingFormActions type={ListingFormActionsType.details} />
             </ListingContext.Provider>
@@ -1135,7 +1479,12 @@ describe("<ListingFormActions>", () => {
 
       it("renders correct buttons in a closed edit state", () => {
         const { getByText, queryByText } = render(
-          <AuthContext.Provider value={{ profile: partnerUser }}>
+          <AuthContext.Provider
+            value={{
+              profile: partnerUser,
+              doJurisdictionsHaveFeatureFlagOn,
+            }}
+          >
             <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.closed }}>
               <ListingFormActions type={ListingFormActionsType.edit} />
             </ListingContext.Provider>
@@ -1159,7 +1508,12 @@ describe("<ListingFormActions>", () => {
 
     it("renders correct buttons in a closed edit state with lottery opted in", () => {
       const { queryByText } = render(
-        <AuthContext.Provider value={{ profile: adminUser }}>
+        <AuthContext.Provider
+          value={{
+            profile: adminUser,
+            doJurisdictionsHaveFeatureFlagOn,
+          }}
+        >
           <ListingContext.Provider
             value={{
               ...listing,
@@ -1177,7 +1531,12 @@ describe("<ListingFormActions>", () => {
 
     it("renders correct buttons in a closed edit state with lottery opted out", () => {
       const { queryByText } = render(
-        <AuthContext.Provider value={{ profile: adminUser }}>
+        <AuthContext.Provider
+          value={{
+            profile: adminUser,
+            doJurisdictionsHaveFeatureFlagOn,
+          }}
+        >
           <ListingContext.Provider
             value={{
               ...listing,
@@ -1202,7 +1561,12 @@ describe("<ListingFormActions>", () => {
       })
       it("renders correct buttons in a draft detail state", () => {
         const { getByText } = render(
-          <AuthContext.Provider value={{ profile: adminUser }}>
+          <AuthContext.Provider
+            value={{
+              profile: adminUser,
+              doJurisdictionsHaveFeatureFlagOn,
+            }}
+          >
             <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.pending }}>
               <ListingFormActions type={ListingFormActionsType.details} />
             </ListingContext.Provider>
@@ -1215,7 +1579,12 @@ describe("<ListingFormActions>", () => {
 
       it("renders correct buttons in a detail state", () => {
         const { getByText } = render(
-          <AuthContext.Provider value={{ profile: adminUser }}>
+          <AuthContext.Provider
+            value={{
+              profile: adminUser,
+              doJurisdictionsHaveFeatureFlagOn,
+            }}
+          >
             <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.active }}>
               <ListingFormActions type={ListingFormActionsType.details} />
             </ListingContext.Provider>
@@ -1227,7 +1596,12 @@ describe("<ListingFormActions>", () => {
       })
       it("renders correct buttons in a closed detail state", () => {
         const { getByText } = render(
-          <AuthContext.Provider value={{ profile: adminUser }}>
+          <AuthContext.Provider
+            value={{
+              profile: adminUser,
+              doJurisdictionsHaveFeatureFlagOn,
+            }}
+          >
             <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.closed }}>
               <ListingFormActions type={ListingFormActionsType.details} />
             </ListingContext.Provider>
@@ -1248,7 +1622,12 @@ describe("<ListingFormActions>", () => {
       })
       it("renders correct buttons in a draft detail state", () => {
         const { getByText } = render(
-          <AuthContext.Provider value={{ profile: jurisdictionAdminUser }}>
+          <AuthContext.Provider
+            value={{
+              profile: jurisdictionAdminUser,
+              doJurisdictionsHaveFeatureFlagOn,
+            }}
+          >
             <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.pending }}>
               <ListingFormActions type={ListingFormActionsType.details} />
             </ListingContext.Provider>
@@ -1261,7 +1640,12 @@ describe("<ListingFormActions>", () => {
 
       it("renders correct buttons in a detail state", () => {
         const { getByText } = render(
-          <AuthContext.Provider value={{ profile: jurisdictionAdminUser }}>
+          <AuthContext.Provider
+            value={{
+              profile: jurisdictionAdminUser,
+              doJurisdictionsHaveFeatureFlagOn,
+            }}
+          >
             <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.active }}>
               <ListingFormActions type={ListingFormActionsType.details} />
             </ListingContext.Provider>
@@ -1273,7 +1657,12 @@ describe("<ListingFormActions>", () => {
       })
       it("renders correct buttons in a closed detail state", () => {
         const { getByText } = render(
-          <AuthContext.Provider value={{ profile: jurisdictionAdminUser }}>
+          <AuthContext.Provider
+            value={{
+              profile: jurisdictionAdminUser,
+              doJurisdictionsHaveFeatureFlagOn,
+            }}
+          >
             <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.closed }}>
               <ListingFormActions type={ListingFormActionsType.details} />
             </ListingContext.Provider>
@@ -1294,7 +1683,9 @@ describe("<ListingFormActions>", () => {
       })
       it("renders correct buttons in a draft detail state", () => {
         const { getByText } = render(
-          <AuthContext.Provider value={{ profile: limitedJurisdictionAdminUser }}>
+          <AuthContext.Provider
+            value={{ profile: limitedJurisdictionAdminUser, doJurisdictionsHaveFeatureFlagOn }}
+          >
             <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.pending }}>
               <ListingFormActions type={ListingFormActionsType.details} />
             </ListingContext.Provider>
@@ -1307,7 +1698,9 @@ describe("<ListingFormActions>", () => {
 
       it("renders correct buttons in a detail state", () => {
         const { getByText } = render(
-          <AuthContext.Provider value={{ profile: limitedJurisdictionAdminUser }}>
+          <AuthContext.Provider
+            value={{ profile: limitedJurisdictionAdminUser, doJurisdictionsHaveFeatureFlagOn }}
+          >
             <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.active }}>
               <ListingFormActions type={ListingFormActionsType.details} />
             </ListingContext.Provider>
@@ -1319,7 +1712,9 @@ describe("<ListingFormActions>", () => {
       })
       it("renders correct buttons in a closed detail state", () => {
         const { getByText } = render(
-          <AuthContext.Provider value={{ profile: limitedJurisdictionAdminUser }}>
+          <AuthContext.Provider
+            value={{ profile: limitedJurisdictionAdminUser, doJurisdictionsHaveFeatureFlagOn }}
+          >
             <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.closed }}>
               <ListingFormActions type={ListingFormActionsType.details} />
             </ListingContext.Provider>
@@ -1337,7 +1732,12 @@ describe("<ListingFormActions>", () => {
       })
       it("renders correct buttons in a draft detail state", () => {
         const { getByText } = render(
-          <AuthContext.Provider value={{ profile: partnerUser }}>
+          <AuthContext.Provider
+            value={{
+              profile: partnerUser,
+              doJurisdictionsHaveFeatureFlagOn,
+            }}
+          >
             <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.pending }}>
               <ListingFormActions type={ListingFormActionsType.details} />
             </ListingContext.Provider>
@@ -1350,7 +1750,12 @@ describe("<ListingFormActions>", () => {
 
       it("renders correct buttons in a detail state", () => {
         const { getByText } = render(
-          <AuthContext.Provider value={{ profile: partnerUser }}>
+          <AuthContext.Provider
+            value={{
+              profile: partnerUser,
+              doJurisdictionsHaveFeatureFlagOn,
+            }}
+          >
             <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.active }}>
               <ListingFormActions type={ListingFormActionsType.details} />
             </ListingContext.Provider>
@@ -1362,7 +1767,12 @@ describe("<ListingFormActions>", () => {
       })
       it("renders correct buttons in a closed detail state", () => {
         const { getByText } = render(
-          <AuthContext.Provider value={{ profile: partnerUser }}>
+          <AuthContext.Provider
+            value={{
+              profile: partnerUser,
+              doJurisdictionsHaveFeatureFlagOn,
+            }}
+          >
             <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.closed }}>
               <ListingFormActions type={ListingFormActionsType.details} />
             </ListingContext.Provider>
@@ -1385,7 +1795,12 @@ describe("<ListingFormActions>", () => {
       })
       it("renders correct buttons in a closed detail state", () => {
         const { getByText } = render(
-          <AuthContext.Provider value={{ profile: adminUser }}>
+          <AuthContext.Provider
+            value={{
+              profile: adminUser,
+              doJurisdictionsHaveFeatureFlagOn,
+            }}
+          >
             <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.closed }}>
               <ListingFormActions type={ListingFormActionsType.details} />
             </ListingContext.Provider>
@@ -1398,7 +1813,12 @@ describe("<ListingFormActions>", () => {
 
       it("renders correct buttons in a closed edit state", () => {
         const { getByText, queryByText } = render(
-          <AuthContext.Provider value={{ profile: adminUser }}>
+          <AuthContext.Provider
+            value={{
+              profile: adminUser,
+              doJurisdictionsHaveFeatureFlagOn,
+            }}
+          >
             <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.closed }}>
               <ListingFormActions type={ListingFormActionsType.edit} />
             </ListingContext.Provider>
@@ -1421,7 +1841,12 @@ describe("<ListingFormActions>", () => {
       })
       it("renders correct buttons in a closed detail state", () => {
         const { getByText, queryByText } = render(
-          <AuthContext.Provider value={{ profile: jurisdictionAdminUser }}>
+          <AuthContext.Provider
+            value={{
+              profile: jurisdictionAdminUser,
+              doJurisdictionsHaveFeatureFlagOn,
+            }}
+          >
             <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.closed }}>
               <ListingFormActions type={ListingFormActionsType.details} />
             </ListingContext.Provider>
@@ -1434,7 +1859,9 @@ describe("<ListingFormActions>", () => {
 
       it("renders correct buttons in a closed edit state", () => {
         const { getByText, queryByText } = render(
-          <AuthContext.Provider value={{ profile: jurisdictionAdminUser }}>
+          <AuthContext.Provider
+            value={{ profile: jurisdictionAdminUser, doJurisdictionsHaveFeatureFlagOn }}
+          >
             <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.closed }}>
               <ListingFormActions type={ListingFormActionsType.edit} />
             </ListingContext.Provider>
@@ -1457,7 +1884,9 @@ describe("<ListingFormActions>", () => {
       })
       it("renders correct buttons in a closed detail state", () => {
         const { getByText, queryByText } = render(
-          <AuthContext.Provider value={{ profile: limitedJurisdictionAdminUser }}>
+          <AuthContext.Provider
+            value={{ profile: limitedJurisdictionAdminUser, doJurisdictionsHaveFeatureFlagOn }}
+          >
             <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.closed }}>
               <ListingFormActions type={ListingFormActionsType.details} />
             </ListingContext.Provider>
@@ -1470,7 +1899,9 @@ describe("<ListingFormActions>", () => {
 
       it("renders correct buttons in a closed edit state", () => {
         const { getByText, queryByText } = render(
-          <AuthContext.Provider value={{ profile: limitedJurisdictionAdminUser }}>
+          <AuthContext.Provider
+            value={{ profile: limitedJurisdictionAdminUser, doJurisdictionsHaveFeatureFlagOn }}
+          >
             <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.closed }}>
               <ListingFormActions type={ListingFormActionsType.edit} />
             </ListingContext.Provider>
@@ -1491,7 +1922,12 @@ describe("<ListingFormActions>", () => {
 
       it("renders correct buttons in a closed detail state", () => {
         const { getByText, queryByText } = render(
-          <AuthContext.Provider value={{ profile: partnerUser }}>
+          <AuthContext.Provider
+            value={{
+              profile: partnerUser,
+              doJurisdictionsHaveFeatureFlagOn,
+            }}
+          >
             <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.closed }}>
               <ListingFormActions type={ListingFormActionsType.details} />
             </ListingContext.Provider>
@@ -1505,7 +1941,12 @@ describe("<ListingFormActions>", () => {
 
       it("renders correct buttons in a closed edit state", () => {
         const { getByText, queryByText } = render(
-          <AuthContext.Provider value={{ profile: adminUser }}>
+          <AuthContext.Provider
+            value={{
+              profile: adminUser,
+              doJurisdictionsHaveFeatureFlagOn,
+            }}
+          >
             <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.closed }}>
               <ListingFormActions type={ListingFormActionsType.edit} />
             </ListingContext.Provider>
@@ -1517,6 +1958,26 @@ describe("<ListingFormActions>", () => {
         expect(getByText("Post Results")).toBeTruthy()
         expect(getByText("Exit")).toBeTruthy()
       })
+    })
+  })
+  describe("as admin with hideCloseListingButton flag enabled", () => {
+    beforeAll(() => {
+      doJurisdictionsHaveFeatureFlagOn = () => true
+    })
+    it("should not render the close button", () => {
+      const { queryByText } = render(
+        <AuthContext.Provider
+          value={{
+            profile: adminUser,
+            doJurisdictionsHaveFeatureFlagOn,
+          }}
+        >
+          <ListingContext.Provider value={{ ...listing, status: ListingsStatusEnum.active }}>
+            <ListingFormActions type={ListingFormActionsType.edit} />
+          </ListingContext.Provider>
+        </AuthContext.Provider>
+      )
+      expect(queryByText("Close")).toBeFalsy()
     })
   })
 })

@@ -4,6 +4,7 @@ import {
   occupancyTable,
   getOccupancyDescription,
   getOccupancy,
+  stackedOccupancyTable,
 } from "../src/views/occupancyFormatting"
 import { t } from "@bloom-housing/ui-components"
 import { Listing, UnitType, UnitsSummarized } from "../src/types/backend-swagger"
@@ -161,6 +162,25 @@ describe("occupancy formatting helper", () => {
       ] as UnitType[],
     }
     expect(getOccupancyDescription(testListing3)).toBe(t("listings.occupancyDescriptionAllSro"))
+  })
+})
+
+describe("occupancy formatting helper stacked table", () => {
+  it("properly creates occupancy table", () => {
+    expect(stackedOccupancyTable(testListing)).toStrictEqual([
+      {
+        occupancy: { cellText: "2-6 people" },
+        unitType: { cellText: "3 beds" },
+      },
+      {
+        occupancy: { cellText: "at least 1 person" },
+        unitType: { cellText: "2 beds" },
+      },
+      {
+        occupancy: { cellText: "1 person" },
+        unitType: { cellText: "SRO" },
+      },
+    ])
   })
 })
 

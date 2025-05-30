@@ -12,8 +12,9 @@ import {
   FeatureFlagEnum,
   HomeTypeEnum,
   ReviewOrderTypeEnum,
+  YesNoEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { MessageContext } from "@bloom-housing/shared-helpers"
+import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
 import UnitForm from "../UnitForm"
 import { useFormContext, useWatch } from "react-hook-form"
 import { TempUnit } from "../../../../lib/listings/formTypes"
@@ -40,6 +41,7 @@ const FormUnits = ({
   const [unitDeleteModal, setUnitDeleteModal] = useState<number | null>(null)
   const [defaultUnit, setDefaultUnit] = useState<TempUnit | null>(null)
   const [homeTypeEnabled, setHomeTypeEnabled] = useState(false)
+  const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
 
   const formMethods = useFormContext()
   // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -186,6 +188,11 @@ const FormUnits = ({
     },
   ]
 
+  const enableSection8Question = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableSection8Question,
+    listing?.jurisdictions?.id
+  )
+
   return (
     <>
       <hr className="spacer-section-above spacer-section" />
@@ -276,6 +283,33 @@ const FormUnits = ({
             </Button>
           </Grid.Cell>
         </Grid.Row>
+        {enableSection8Question && (
+          <Grid.Row>
+            <FieldValue label={t("listings.section8Title")}>
+              <FieldGroup
+                name="listingSection8Acceptance"
+                type="radio"
+                register={register}
+                fields={[
+                  {
+                    id: "listingSection8AcceptanceYes",
+                    dataTestId: "listingSection8AcceptanceYes",
+                    label: t("t.yes"),
+                    value: YesNoEnum.yes,
+                    defaultChecked: listing?.section8Acceptance,
+                  },
+                  {
+                    id: "listingSection8AcceptanceNo",
+                    dataTestId: "listingSection8AcceptanceNo",
+                    label: t("t.no"),
+                    value: YesNoEnum.no,
+                    defaultChecked: !listing?.section8Acceptance,
+                  },
+                ]}
+              />
+            </FieldValue>
+          </Grid.Row>
+        )}
       </SectionWithGrid>
 
       <p className="field-sub-note">{t("listings.requiredToPublish")}</p>

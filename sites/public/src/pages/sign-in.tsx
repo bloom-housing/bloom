@@ -1,9 +1,8 @@
 import React, { useContext, useEffect, useRef, useState, useCallback } from "react"
-import axios from "axios"
+import { isAxiosError } from "axios"
 import { useRouter } from "next/router"
 import { GoogleReCaptcha } from "react-google-recaptcha-v3"
 import { useForm } from "react-hook-form"
-import { SuccessDTO } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import {
   PageView,
   pushGtmEvent,
@@ -18,15 +17,25 @@ import {
   FormSignInPwdless,
 } from "@bloom-housing/shared-helpers"
 import { t, useMutate } from "@bloom-housing/ui-components"
+import {
+  FeatureFlagEnum,
+  Jurisdiction,
+  SuccessDTO,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { UserStatus } from "../lib/constants"
+import { fetchJurisdictionByName, useRedirectToPrevPage } from "../lib/hooks"
 import SignUpBenefits from "../components/account/SignUpBenefits"
 import SignUpBenefitsHeadingGroup from "../components/account/SignUpBenefitsHeadingGroup"
 import { FormSignInValues, TermsModal } from "../components/shared/TermsModal"
 import FormsLayout from "../layouts/forms"
-import { UserStatus } from "../lib/constants"
-import { useRedirectToPrevPage } from "../lib/hooks"
 import signUpBenefitsStyles from "../../styles/sign-up-benefits.module.scss"
+import { isFeatureFlagOn } from "../lib/helpers"
 
-const SignIn = () => {
+interface SignInProps {
+  jurisdiction: Jurisdiction
+}
+
+const SignIn = (props: SignInProps) => {
   const { addToast } = useContext(MessageContext)
   const router = useRouter()
 
@@ -67,13 +76,31 @@ const SignIn = () => {
     isLoading: isResendConfirmationLoading,
   } = useMutate<SuccessDTO>()
 
+  const setLocalStorage = () => {
+    window.localStorage.setItem(
+      "bloom-show-favorites-menu-item",
+      (
+        isFeatureFlagOn(props.jurisdiction, FeatureFlagEnum.enableListingFavoriting) === true
+      ).toString()
+    )
+  }
+
   useEffect(() => {
     pushGtmEvent<PageView>({
       event: "pageView",
       pageTitle: "Sign In",
       status: UserStatus.NotLoggedIn,
     })
+    if (props.jurisdiction) {
+      setLocalStorage()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  useEffect(() => {
+    setLocalStorage()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [props.jurisdiction])
 
   const onVerify = useCallback((token) => {
     setReCaptchaToken(token)
@@ -134,7 +161,7 @@ const SignIn = () => {
         await singleUseCodeFlow(email, true)
       }
       const { status } = error.response || {}
-      const responseMessage = axios.isAxiosError(error) ? error.response?.data.message : ""
+      const responseMessage = isAxiosError(error) ? error.response?.data.message : ""
       if (status === 400 && responseMessage?.includes("has not accepted the terms of service")) {
         setOpenTermsModal(true)
       } else {
@@ -173,7 +200,7 @@ const SignIn = () => {
           await singleUseCodeFlow(email, true)
         }
         const { status } = error.response || {}
-        const responseMessage = axios.isAxiosError(error) ? error.response?.data.message : ""
+        const responseMessage = isAxiosError(error) ? error.response?.data.message : ""
         if (status === 400 && responseMessage?.includes("has not accepted the terms of service")) {
           setOpenTermsModal(true)
         } else {
@@ -328,3 +355,12 @@ const SignIn = () => {
 }
 
 export { SignIn as default, SignIn }
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function getStaticProps() {
+  const jurisdiction = await fetchJurisdictionByName()
+
+  return {
+    props: { jurisdiction },
+  }
+}

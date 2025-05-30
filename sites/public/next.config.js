@@ -43,6 +43,7 @@ module.exports = withBundleAnalyzer({
     cloudinaryCloudName: process.env.CLOUDINARY_CLOUD_NAME,
     showProfessionalPartners: process.env.SHOW_PROFESSIONAL_PARTNERS === "TRUE",
     showPublicLottery: process.env.SHOW_PUBLIC_LOTTERY === "TRUE",
+    showNewSeedsDesigns: process.env.SHOW_NEW_SEEDS_DESIGNS === "TRUE",
     showMandatedAccounts: process.env.SHOW_MANDATED_ACCOUNTS === "TRUE",
     showPwdless: process.env.SHOW_PWDLESS === "TRUE",
     notificationsSignUpUrl: process.env.NOTIFICATIONS_SIGN_UP_URL || null,
@@ -56,6 +57,8 @@ module.exports = withBundleAnalyzer({
     fileService: process.env.FILE_SERVICE,
     reCaptchaKey: process.env.RECAPTCHA_KEY,
     maxClosedListings: process.env.MAX_CLOSED_LISTINGS,
+    maxOpenListings: process.env.MAX_OPEN_LISTINGS,
+    rtlLanguages: process.env.RTL_LANGUAGES || "ar",
   },
   i18n: {
     locales: process.env.LANGUAGES ? process.env.LANGUAGES.split(",") : ["en"],

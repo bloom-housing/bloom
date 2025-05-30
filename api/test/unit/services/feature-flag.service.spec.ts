@@ -1,3 +1,4 @@
+import { Logger } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { randomUUID } from 'crypto';
 import { FeatureFlagAssociate } from '../../../src/dtos/feature-flags/feature-flag-associate.dto';
@@ -32,7 +33,12 @@ describe('Testing feature flag service', () => {
 
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [FeatureFlagService, JurisdictionService, PrismaService],
+      providers: [
+        FeatureFlagService,
+        JurisdictionService,
+        PrismaService,
+        Logger,
+      ],
     }).compile();
 
     service = module.get<FeatureFlagService>(FeatureFlagService);

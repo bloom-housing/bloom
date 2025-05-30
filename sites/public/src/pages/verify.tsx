@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from "react"
-import axios from "axios"
+import { isAxiosError } from "axios"
 import { useForm } from "react-hook-form"
 import { useRouter } from "next/router"
 import { Button, Alert, Dialog, Message } from "@bloom-housing/ui-seeds"
@@ -85,7 +85,7 @@ const Verify = () => {
       setOpenTermsModal(false)
       setChecked(true)
       const { status } = error.response || {}
-      const responseMessage = axios.isAxiosError(error) ? error.response?.data.message : ""
+      const responseMessage = isAxiosError(error) ? error.response?.data.message : ""
       if (status === 400 && responseMessage?.includes("has not accepted the terms of service")) {
         setOpenTermsModal(true)
       } else {

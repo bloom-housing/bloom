@@ -7,6 +7,7 @@ import {
   MultiselectQuestion,
   PaperApplication,
   PaperApplicationCreate,
+  RegionEnum,
   Unit,
   User,
   YesNoEnum,
@@ -47,6 +48,7 @@ export type FormListing = Omit<Listing, "countyCode"> & {
   referralOpportunityChoice?: YesNoEnum
   criteriaAttachType?: string
   includeCommunityDisclaimerQuestion?: YesNoEnum
+  listingSection8Acceptance?: YesNoEnum
   communityDisclaimerTitle?: string
   communityDisclaimerDescription?: string
   lotteryDate?: {
@@ -70,6 +72,7 @@ export type FormListing = Omit<Listing, "countyCode"> & {
     day: string
     year: string
   }
+  marketingStartDate?: number
   reviewOrderQuestion?: string
   lotteryOptInQuestion?: YesNoEnum
   listingAvailabilityQuestion?: string
@@ -119,6 +122,7 @@ export const formDefaults: FormListing = {
   listingEvents: [],
   listingImages: [],
   listingFeatures: null,
+  listingNeighborhoodAmenities: null,
   listingUtilities: null,
   listingsLeasingAgentAddress: null,
   leasingAgentEmail: null,
@@ -149,7 +153,8 @@ export const formDefaults: FormListing = {
   developer: null,
   householdSizeMax: 0,
   householdSizeMin: 0,
-  neighborhood: "",
+  neighborhood: undefined,
+  region: RegionEnum.Greater_Downtown,
   petPolicy: "",
   smokingPolicy: "",
   unitsAvailable: 0,

@@ -57,15 +57,19 @@ const views: Partial<Record<UserViews, Prisma.UserAccountsInclude>> = {
   },
 };
 
-views.full = {
-  ...views.base,
-  listings: true,
+views.favorites = {
   favoriteListings: {
     select: {
       id: true,
       name: true,
     },
   },
+};
+
+views.full = {
+  ...views.base,
+  ...views.favorites,
+  listings: true,
 };
 
 type findByOptions = {
@@ -980,6 +984,20 @@ export class UserService {
     );
 
     return { success: true };
+  }
+
+  /**
+   * Returns the names & ids of any listings a user has favorited
+   * @param userId - typically the user who is logged in
+   * @returns an array of Id DTOs
+   */
+  async favoriteListings(userId: string): Promise<IdDTO[]> {
+    const rawUser = await this.findUserOrError(
+      { userId: userId },
+      UserViews.favorites,
+    );
+
+    return mapTo(IdDTO, rawUser.favoriteListings);
   }
 
   async modifyFavoriteListings(dto: UserFavoriteListing, requestingUser: User) {

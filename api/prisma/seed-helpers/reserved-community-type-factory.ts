@@ -1,7 +1,19 @@
 import { Prisma, PrismaClient, ReservedCommunityTypes } from '@prisma/client';
 import { randomInt } from 'crypto';
 
-const reservedCommunityTypeOptions = ['senior', 'senior62', 'veteran'];
+const reservedCommunityTypeOptions = [
+  'specialNeeds',
+  'senior',
+  'senior55',
+  'senior62',
+  'specialNeeds',
+  'developmentalDisability',
+  'tay',
+  'veteran',
+  'schoolEmployee',
+  'farmworkerHousing',
+  'housingVoucher',
+];
 
 export const reservedCommunityTypeFactory = (
   jurisdictionId: string,
@@ -32,7 +44,7 @@ export const reservedCommunityTypeFactoryAll = async (
 
 export const reservedCommunityTypeFactoryGet = async (
   prismaClient: PrismaClient,
-  jurisdictionId: string,
+  jurisdictionId?: string,
   name?: string,
 ): Promise<ReservedCommunityTypes> => {
   // if name is not given pick one randomly from the above list
@@ -47,9 +59,11 @@ export const reservedCommunityTypeFactoryGet = async (
         name: {
           equals: chosenName,
         },
-        jurisdictionId: {
-          equals: jurisdictionId,
-        },
+        jurisdictionId: jurisdictionId
+          ? {
+              equals: jurisdictionId,
+            }
+          : undefined,
       },
     });
 
@@ -67,12 +81,11 @@ export const reservedCommunityTypesFindOrCreate = async (
 ): Promise<ReservedCommunityTypes> => {
   const reservedCommunityType = await reservedCommunityTypeFactoryGet(
     prismaClient,
-    jurisdictionId,
   );
   if (reservedCommunityType) {
-    return await reservedCommunityTypeFactoryGet(prismaClient, jurisdictionId);
+    return reservedCommunityType;
   }
 
   await reservedCommunityTypeFactoryAll(jurisdictionId, prismaClient);
-  return await reservedCommunityTypeFactoryGet(prismaClient, jurisdictionId);
+  return await reservedCommunityTypeFactoryGet(prismaClient);
 };
