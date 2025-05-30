@@ -256,6 +256,7 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
               profile: profile,
               latLong,
               customMapPositionChosen,
+              enableUnitGroups,
             })
             const formattedData = await dataPipeline.run()
             let result
