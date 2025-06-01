@@ -2061,26 +2061,6 @@
     tailwindcss-rtl "^0.9.0"
     typesafe-actions "^5.1.0"
 
-"@bloom-housing/ui-seeds@1.19.1":
-  version "1.19.1"
-  resolved "https://registry.yarnpkg.com/@bloom-housing/ui-seeds/-/ui-seeds-1.19.1.tgz#7ebb17f1c07c5e59f126fafd0442479be0206d72"
-  integrity sha512-+cPy67q/UaGpAi71Uf4i38wDfT3U2wTXgqk5wCyFftaDlbw38kVd0m6dS0tVt+eMLZlmWSX2s3RWPcHkT/Ahjw==
-  dependencies:
-    "@fortawesome/fontawesome-svg-core" "^6.3.0"
-    "@fortawesome/react-fontawesome" "^0.2.0"
-    "@heroicons/react" "^2.0.18"
-    "@types/markdown-to-jsx" "^6.11.2"
-    "@types/mdx" "^2.0.3"
-    "@types/node" "^16.7.13"
-    "@types/react" "^18.0.0"
-    "@types/react-dom" "^18.0.0"
-    focus-trap-react "^10.2.1"
-    markdown-to-jsx "^6.11.4"
-    react "^18.2.0"
-    react-dom "^18.2.0"
-    react-tabs "^6.0.0"
-    typescript "^4.4.2"
-
 "@bloom-housing/ui-seeds@1.20.1":
   version "1.20.1"
   resolved "https://registry.yarnpkg.com/@bloom-housing/ui-seeds/-/ui-seeds-1.20.1.tgz#f42be32fb4e224e0872e3cba8f680c2ac9428261"
@@ -8010,14 +7990,6 @@ focus-lock@^0.11.6:
   integrity sha512-KSuV3ur4gf2KqMNoZx3nXNVhqCkn42GuTYCX4tXPEwf0MjpFQmNMiN6m7dXaUXgIoivL6/65agoUMg4RLS0Vbg==
   dependencies:
     tslib "^2.0.3"
-
-focus-trap-react@^10.2.1:
-  version "10.2.3"
-  resolved "https://registry.yarnpkg.com/focus-trap-react/-/focus-trap-react-10.2.3.tgz#a5a2ea7fbb042ffa4337fde72758325ed0fb793a"
-  integrity sha512-YXBpFu/hIeSu6NnmV2xlXzOYxuWkoOtar9jzgp3lOmjWLWY59C/b8DtDHEAV4SPU07Nd/t+nS/SBNGkhUBFmEw==
-  dependencies:
-    focus-trap "^7.5.4"
-    tabbable "^6.2.0"
 
 focus-trap-react@^11.0.3:
   version "11.0.3"
