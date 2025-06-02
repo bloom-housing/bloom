@@ -244,6 +244,7 @@ export async function fetchJurisdictionByName(req?: any) {
 
   return jurisdiction
 }
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function fetchMultiselectData(req: any, jurisdictionId: string) {
   try {

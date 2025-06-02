@@ -1,4 +1,5 @@
 import React from "react"
+import { useRouter } from "next/router"
 import {
   FeatureFlagEnum,
   Jurisdiction,
@@ -18,7 +19,6 @@ import {
   encodeFilterDataToBackendFilters,
   isFiltered,
 } from "../components/browse/FilterDrawerHelpers"
-import { useRouter } from "next/router"
 import { isFeatureFlagOn } from "../lib/helpers"
 
 export interface ListingsProps {
