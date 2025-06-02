@@ -66,6 +66,10 @@ export const Availability = ({ listing, jurisdiction }: AvailabilityProps) => {
     jurisdiction,
     FeatureFlagEnum.swapCommunityTypeWithPrograms
   )
+  const showAdditionalWaitlistFields = isFeatureFlagOn(
+    jurisdiction,
+    FeatureFlagEnum.enableWaitlistAdditionalFields
+  )
 
   const statusMessage = getListingStatusMessageContent(
     listing.status,
@@ -77,11 +81,18 @@ export const Availability = ({ listing, jurisdiction }: AvailabilityProps) => {
     false
   )
   const content = getAvailabilityContent(listing.reviewOrderType, listing.status)
-  const subheading = getAvailabilitySubheading(listing.waitlistOpenSpots, listing.unitsAvailable)
+  const unitsAvailable = listing.unitGroups
+    ? listing.unitGroups.reduce((acc, curr) => acc + curr.totalAvailable, 0)
+    : listing.unitsAvailable
+  const subheading = getAvailabilitySubheading(
+    showAdditionalWaitlistFields ? null : listing.waitlistOpenSpots,
+    unitsAvailable
+  )
 
   const hideAvailabilityDetails =
     listing.status === ListingsStatusEnum.closed ||
     (enableMarketingStatus && listing.marketingType === MarketingTypeEnum.comingSoon)
+
   return (
     <>
       <div className={styles["status-messages"]}>
@@ -119,6 +130,40 @@ export const Availability = ({ listing, jurisdiction }: AvailabilityProps) => {
           {content && <p className={"seeds-m-bs-label"}>{content}</p>}
           {subheading && <p className={`seeds-m-bs-label`}>{subheading}</p>}
         </Card.Section>
+        {showAdditionalWaitlistFields && (
+          <Card.Section divider="flush">
+            <Heading size={"md"} priority={3}>
+              {t("listings.waitlist.open")}
+            </Heading>
+            <p className={styles["bold-subheader"]}>
+              {listing.isWaitlistOpen
+                ? t("listings.waitlist.isOpen")
+                : t("listings.waitlist.isClosed")}
+            </p>
+            {listing.isWaitlistOpen && (
+              <p className={`${listingStyles["thin-heading-sm"]} seeds-m-b-label`}>
+                {t("listings.waitlist.submitForWaitlist")}
+              </p>
+            )}
+            {listing.waitlistCurrentSize && (
+              <p className={"seeds-m-be-text"}>
+                {`${listing.waitlistCurrentSize} ${t(
+                  "listings.waitlist.currentSize"
+                ).toLowerCase()}`}
+              </p>
+            )}
+            {listing.waitlistOpenSpots && (
+              <p className={`seeds-m-be-text ${styles["bold-text"]}`}>
+                {`${listing.waitlistOpenSpots} ${t("listings.waitlist.openSlots").toLowerCase()}`}
+              </p>
+            )}
+            {listing.waitlistMaxSize && (
+              <p>{`${listing.waitlistMaxSize} ${t(
+                "listings.waitlist.finalSize"
+              ).toLowerCase()}`}</p>
+            )}
+          </Card.Section>
+        )}
         {!swapCommunityTypeWithPrograms && listing.reservedCommunityTypes && (
           <Card.Section divider="flush">
             <Heading size={"md"} priority={3}>
