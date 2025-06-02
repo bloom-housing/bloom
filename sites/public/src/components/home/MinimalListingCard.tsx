@@ -43,7 +43,10 @@ export const MinimalListingCard = ({ listing, jurisdiction }: MinimalListingCard
       </div>
       <div className={styles["card-content"]}>
         <div className={styles["listing-info"]}>
-          <Link href={"/listings"} className={styles["listing-name"]}>
+          <Link
+            href={`/listing/${listing.id}/${listing.urlSlug}`}
+            className={styles["listing-name"]}
+          >
             {listing.name}
           </Link>
           <div className={"seeds-m-bs-2"}>{oneLineAddress(listing.listingsBuildingAddress)}</div>
