@@ -344,4 +344,16 @@ export class ScriptRunnerController {
   ): Promise<SuccessDTO> {
     return await this.scriptRunnerService.resetMissingTranslations(req);
   }
+
+  @Put('updateForgotEmailTranslations')
+  @ApiOperation({
+    summary: 'Script to update the forgot email translations',
+    operationId: 'updateForgotEmailTranslations',
+  })
+  @ApiOkResponse({ type: SuccessDTO })
+  async updateForgotEmailTranslations(
+    @Request() req: ExpressRequest,
+  ): Promise<SuccessDTO> {
+    return await this.scriptRunnerService.updateForgotEmailTranslations(req);
+  }
 }

@@ -1685,6 +1685,161 @@ export class ScriptRunnerService {
   }
 
   /**
+   *
+   * @param req incoming request object
+   * @returns successDTO
+   * @description updates forgot email translations to match new Doorway copy
+   */
+  async updateForgotEmailTranslations(
+    req: ExpressRequest,
+  ): Promise<SuccessDTO> {
+    const requestingUser = mapTo(User, req['user']);
+    await this.markScriptAsRunStart(
+      'update forgot email translations',
+      requestingUser,
+    );
+
+    const translationsEN = await this.prisma.translations.findFirst({
+      where: { language: 'en', jurisdictionId: null },
+    });
+    const translationsENJSON =
+      translationsEN.translations as unknown as Prisma.JsonArray;
+
+    await this.prisma.translations.update({
+      where: { id: translationsEN.id },
+      data: {
+        translations: {
+          ...translationsENJSON,
+          forgotPassword: {
+            subject: 'Forgot your password?',
+            callToAction:
+              'If you did make this request, please click on the following link to choose a new password:',
+            passwordInfo:
+              "Note your password won't change until you click that link.",
+            resetRequest:
+              'We received a request to reset your Doorway Housing Portal password.',
+            ignoreRequest:
+              "If you didn't request this, please ignore this email.",
+            changePassword: 'Change my password',
+          },
+        },
+      },
+    });
+
+    const translationsES = await this.prisma.translations.findFirst({
+      where: { language: 'es', jurisdictionId: null },
+    });
+    const translationsESJSON =
+      translationsES.translations as unknown as Prisma.JsonArray;
+
+    await this.prisma.translations.update({
+      where: { id: translationsES.id },
+      data: {
+        translations: {
+          ...translationsESJSON,
+          forgotPassword: {
+            subject: '¿Olvidaste tu contraseña?',
+            callToAction:
+              'Si realizó esta solicitud, haga clic en el siguiente enlace para elegir una nueva contraseña:',
+            passwordInfo:
+              'Tenga en cuenta que su contraseña no cambiará hasta que haga clic en ese enlace.',
+            resetRequest:
+              'Recibimos una solicitud para restablecer su contraseña de Doorway Housing Portal.',
+            ignoreRequest:
+              'Si no solicitó esto, ignore este correo electrónico.',
+            changePassword: 'Cambiar mi contraseña',
+          },
+        },
+      },
+    });
+
+    const translationsTL = await this.prisma.translations.findFirst({
+      where: { language: 'tl', jurisdictionId: null },
+    });
+    const translationsTLJSON =
+      translationsTL.translations as unknown as Prisma.JsonArray;
+
+    await this.prisma.translations.update({
+      where: { id: translationsTL.id },
+      data: {
+        translations: {
+          ...translationsTLJSON,
+          forgotPassword: {
+            subject: 'Nakalimutan ang iyong password?',
+            callToAction:
+              'Kung ginawa mo ang kahilingan na ito, mangyaring mag -click sa sumusunod na link upang pumili ng isang bagong password:',
+            passwordInfo:
+              'Tandaan ang iyong password ay hindi magbabago hanggang sa i -click mo ang link na iyon.',
+            resetRequest:
+              'Nakatanggap kami ng isang kahilingan upang i -reset ang iyong Doorway Housing Portal password.',
+            ignoreRequest:
+              'Kung hindi mo ito hiniling, mangyaring huwag pansinin ang email na ito.',
+            changePassword: 'Baguhin ang aking password',
+          },
+        },
+      },
+    });
+
+    const translationsVI = await this.prisma.translations.findFirst({
+      where: { language: 'vi', jurisdictionId: null },
+    });
+    const translationsVIJSON =
+      translationsVI.translations as unknown as Prisma.JsonArray;
+
+    await this.prisma.translations.update({
+      where: { id: translationsVI.id },
+      data: {
+        translations: {
+          ...translationsVIJSON,
+          forgotPassword: {
+            subject: 'Quên mật khẩu của bạn?',
+            callToAction:
+              'Nếu bạn đã thực hiện yêu cầu này, vui lòng nhấp vào liên kết sau để chọn mật khẩu mới:',
+            passwordInfo:
+              'Lưu ý mật khẩu của bạn sẽ không thay đổi cho đến khi bạn nhấp vào liên kết đó.',
+            resetRequest:
+              'Chúng tôi đã nhận được yêu cầu đặt lại mật khẩu Doorway Housing Portal của bạn.',
+            ignoreRequest:
+              'Nếu bạn không yêu cầu điều này, vui lòng bỏ qua email này.',
+            changePassword: 'Thay đổi mật khẩu của tôi',
+          },
+        },
+      },
+    });
+
+    const translationsZH = await this.prisma.translations.findFirst({
+      where: { language: 'zh', jurisdictionId: null },
+    });
+    const translationsZHJSON =
+      translationsZH.translations as unknown as Prisma.JsonArray;
+
+    await this.prisma.translations.update({
+      where: { id: translationsZH.id },
+      data: {
+        translations: {
+          ...translationsZHJSON,
+          forgotPassword: {
+            subject: '忘記密碼了嗎?',
+            callToAction:
+              '如果您確實提出了此請求, 請單擊以下鏈接以選擇一個新密碼:',
+            passwordInfo: '注意, 直到您單擊該鏈接, 您的密碼才會更改。',
+            resetRequest:
+              '我們收到了一個請求, 以重置您的Doorway Housing Portal密碼。',
+            ignoreRequest: '如果您沒有要求此信息, 請忽略此電子郵件。',
+            changePassword: '更改我的密碼',
+          },
+        },
+      },
+    });
+
+    await this.markScriptAsComplete(
+      'update forgot email translations',
+      requestingUser,
+    );
+    return { success: true };
+  }
+
+  /**
     this is simply an example
   */
   async example(req: ExpressRequest): Promise<SuccessDTO> {
