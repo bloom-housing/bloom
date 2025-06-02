@@ -877,6 +877,26 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
     if (
       doAnyJurisdictionHaveFeatureFlagSet(
         user.jurisdictions,
+        FeatureFlagEnum.enableWaitlistAdditionalFields,
+      )
+    ) {
+      headers.push({
+        path: 'waitlistMaxSize',
+        label: 'Max Waitlist Size',
+      });
+      headers.push({
+        path: 'waitlistCurrentSize',
+        label: 'How many people on the current waitlist?',
+      });
+      headers.push({
+        path: 'waitlistOpenSpots',
+        label: 'How many open spots on the waitlist?',
+      });
+    }
+
+    if (
+      doAnyJurisdictionHaveFeatureFlagSet(
+        user.jurisdictions,
         FeatureFlagEnum.enableMarketingStatus,
       )
     ) {

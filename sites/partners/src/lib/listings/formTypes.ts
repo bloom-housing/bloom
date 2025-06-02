@@ -204,4 +204,5 @@ export type FormMetadata = {
   profile: User
   latLong: LatitudeLongitude
   customMapPositionChosen: boolean
+  enableUnitGroups: boolean
 }
