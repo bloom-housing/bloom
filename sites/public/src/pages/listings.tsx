@@ -6,12 +6,6 @@ import {
   Listing,
   MultiselectQuestion,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import {
-  fetchClosedListings,
-  fetchJurisdictionByName,
-  fetchMultiselectData,
-  fetchOpenListings,
-} from "../lib/hooks"
 import { ListingBrowse, TabsIndexEnum } from "../components/browse/ListingBrowse"
 import { ListingBrowseDeprecated } from "../components/browse/ListingBrowseDeprecated"
 import {
@@ -20,6 +14,12 @@ import {
   isFiltered,
 } from "../components/browse/FilterDrawerHelpers"
 import { isFeatureFlagOn } from "../lib/helpers"
+import {
+  fetchClosedListings,
+  fetchJurisdictionByName,
+  fetchMultiselectData,
+  fetchOpenListings,
+} from "../lib/hooks"
 
 export interface ListingsProps {
   openListings: Listing[]
