@@ -21,7 +21,6 @@ import { PrismaService } from '../../../src/services/prisma.service';
 import { ScriptRunnerService } from '../../../src/services/script-runner.service';
 import { AssetModule } from '../../../src/modules/asset.module';
 import { PrismaModule } from '../../../src/modules/prisma.module';
-import exp from 'constants';
 
 const externalPrismaClient = mockDeep<PrismaClient>();
 
