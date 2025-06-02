@@ -616,7 +616,7 @@ describe("stackedUnitGroupsSummariesTable", () => {
     expect(stackedUnitGroupsSummariesTable(groupRentNoRanges)).toEqual([
       {
         rent: { cellSubText: "per month", cellText: "$1,200" },
-        unitType: { cellSubText: "", cellText: "1 BR" },
+        unitType: { cellSubText: "", cellText: "1 bed" },
         availability: { cellText: "Not available" },
       },
     ])
@@ -625,7 +625,7 @@ describe("stackedUnitGroupsSummariesTable", () => {
     expect(stackedUnitGroupsSummariesTable(groupRentRanges)).toEqual([
       {
         rent: { cellSubText: "per month", cellText: "$1,200 to $1,500" },
-        unitType: { cellSubText: "", cellText: "1 BR" },
+        unitType: { cellSubText: "", cellText: "1 bed" },
         availability: { cellText: "Not available" },
       },
     ])
@@ -634,7 +634,7 @@ describe("stackedUnitGroupsSummariesTable", () => {
     expect(stackedUnitGroupsSummariesTable(groupPercentageRentNoRanges)).toEqual([
       {
         rent: { cellSubText: "per month", cellText: "30% of income" },
-        unitType: { cellSubText: "", cellText: "1 BR" },
+        unitType: { cellSubText: "", cellText: "1 bed" },
         availability: { cellText: "Not available" },
       },
     ])
@@ -643,7 +643,7 @@ describe("stackedUnitGroupsSummariesTable", () => {
     expect(stackedUnitGroupsSummariesTable(groupPercentageRent)).toEqual([
       {
         rent: { cellSubText: "per month", cellText: "5% to 20% of income" },
-        unitType: { cellSubText: "", cellText: "1 BR" },
+        unitType: { cellSubText: "", cellText: "1 bed" },
         availability: { cellText: "Not available" },
       },
     ])
@@ -652,7 +652,7 @@ describe("stackedUnitGroupsSummariesTable", () => {
     expect(stackedUnitGroupsSummariesTable(groupMixedRentUnits)).toEqual([
       {
         rent: { cellSubText: "per month", cellText: "% of income, or up to $750" },
-        unitType: { cellSubText: "", cellText: "1 BR - 3 BR" },
+        unitType: { cellSubText: "", cellText: "1 bed - 3 beds" },
         availability: { cellText: "Not available" },
       },
     ])
@@ -661,7 +661,7 @@ describe("stackedUnitGroupsSummariesTable", () => {
     expect(stackedUnitGroupsSummariesTable(groupNoRentData)).toEqual([
       {
         rent: { cellSubText: "", cellText: "n/a" },
-        unitType: { cellSubText: "", cellText: "1 BR" },
+        unitType: { cellSubText: "", cellText: "1 bed" },
         availability: { cellText: "Not available" },
       },
     ])
@@ -670,7 +670,7 @@ describe("stackedUnitGroupsSummariesTable", () => {
     expect(stackedUnitGroupsSummariesTable(groupMultipleUnitTypes)).toEqual([
       {
         rent: { cellSubText: "per month", cellText: "$1,200 to $1,500" },
-        unitType: { cellSubText: "", cellText: "1 BR - 2 BR" },
+        unitType: { cellSubText: "", cellText: "1 bed - 2 beds" },
         availability: { cellText: "Not available" },
       },
     ])
@@ -692,7 +692,7 @@ describe("stackedUnitGroupsSummariesTable", () => {
     expect(stackedUnitGroupsSummariesTable(openWaitlistGroup)).toEqual([
       {
         rent: { cellSubText: "", cellText: "n/a" },
-        unitType: { cellSubText: "", cellText: "1 BR" },
+        unitType: { cellSubText: "", cellText: "1 bed" },
         availability: { cellText: "Open Waitlist" },
       },
     ])
@@ -714,7 +714,7 @@ describe("stackedUnitGroupsSummariesTable", () => {
     expect(stackedUnitGroupsSummariesTable(vacantUnitsGroup)).toEqual([
       {
         rent: { cellSubText: "", cellText: "n/a" },
-        unitType: { cellSubText: "", cellText: "1 BR" },
+        unitType: { cellSubText: "", cellText: "1 bed" },
         availability: {
           cellText: "3 Vacant Units",
         },
@@ -737,7 +737,7 @@ describe("stackedUnitGroupsSummariesTable", () => {
     expect(stackedUnitGroupsSummariesTable(comingSoonGroup, true)).toEqual([
       {
         rent: { cellSubText: "", cellText: "n/a" },
-        unitType: { cellSubText: "", cellText: "1 BR" },
+        unitType: { cellSubText: "", cellText: "1 bed" },
         availability: { cellText: "Under Construction" },
       },
     ])
