@@ -81,9 +81,10 @@ export const Availability = ({ listing, jurisdiction }: AvailabilityProps) => {
     false
   )
   const content = getAvailabilityContent(listing.reviewOrderType, listing.status)
-  const unitsAvailable = listing.unitGroups
-    ? listing.unitGroups.reduce((acc, curr) => acc + curr.totalAvailable, 0)
-    : listing.unitsAvailable
+  const unitsAvailable =
+    listing.unitGroups.length > 0
+      ? listing.unitGroups.reduce((acc, curr) => acc + curr.totalAvailable, 0)
+      : listing.unitsAvailable
   const subheading = getAvailabilitySubheading(
     showAdditionalWaitlistFields ? null : listing.waitlistOpenSpots,
     unitsAvailable
