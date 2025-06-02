@@ -96,10 +96,13 @@ describe("<FormUserManage>", () => {
           expect(screen.getByRole("textbox", { name: "First Name" })).toBeInTheDocument()
           expect(screen.getByRole("textbox", { name: "Last Name" })).toBeInTheDocument()
           expect(screen.getByRole("textbox", { name: "Email" })).toBeInTheDocument()
-          // "Role" select should have all three role option
+          // "Role" select should have all four role option
           expect(screen.getByRole("combobox", { name: "Role" })).toBeInTheDocument()
           expect(screen.getByRole("option", { name: "Administrator" })).toBeInTheDocument()
           expect(screen.getByRole("option", { name: "Jurisdictional Admin" })).toBeInTheDocument()
+          expect(
+            screen.getByRole("option", { name: "Jurisdictional Admin - No PII" })
+          ).toBeInTheDocument()
           expect(screen.getByRole("option", { name: "Partner" })).toBeInTheDocument()
           expect(screen.getByRole("button", { name: "Invite" })).toBeInTheDocument()
           await userEvent.type(screen.getByRole("textbox", { name: "First Name" }), "firstName")
@@ -167,6 +170,9 @@ describe("<FormUserManage>", () => {
           expect(screen.getByRole("combobox", { name: "Role" })).toBeInTheDocument()
           expect(screen.getByRole("option", { name: "Administrator" })).toBeInTheDocument()
           expect(screen.getByRole("option", { name: "Jurisdictional Admin" })).toBeInTheDocument()
+          expect(
+            screen.getByRole("option", { name: "Jurisdictional Admin - No PII" })
+          ).toBeInTheDocument()
           expect(screen.getByRole("option", { name: "Partner" })).toBeInTheDocument()
           await userEvent.type(screen.getByRole("textbox", { name: "First Name" }), "firstName")
           await userEvent.type(screen.getByRole("textbox", { name: "Last Name" }), "lastName")
@@ -248,10 +254,13 @@ describe("<FormUserManage>", () => {
           )
 
           await waitFor(() => screen.getByText("Jurisdictional Admin"))
-          // "Role" select should have all three role option
+          // "Role" select should have all four role option
           expect(screen.getByRole("combobox", { name: "Role" })).toBeInTheDocument()
           expect(screen.getByRole("option", { name: "Administrator" })).toBeInTheDocument()
           expect(screen.getByRole("option", { name: "Jurisdictional Admin" })).toBeInTheDocument()
+          expect(
+            screen.getByRole("option", { name: "Jurisdictional Admin - No PII" })
+          ).toBeInTheDocument()
           expect(screen.getByRole("option", { name: "Partner" })).toBeInTheDocument()
           await userEvent.type(screen.getByRole("textbox", { name: "First Name" }), "firstName")
           await userEvent.type(screen.getByRole("textbox", { name: "Last Name" }), "lastName")
@@ -335,6 +344,9 @@ describe("<FormUserManage>", () => {
           await waitFor(() => screen.getByText("Jurisdictional Admin"))
           expect(screen.queryByRole("option", { name: "Administrator" })).not.toBeInTheDocument()
           expect(screen.getByRole("option", { name: "Jurisdictional Admin" })).toBeInTheDocument()
+          expect(
+            screen.getByRole("option", { name: "Jurisdictional Admin - No PII" })
+          ).toBeInTheDocument()
           expect(screen.getByRole("option", { name: "Partner" })).toBeInTheDocument()
         })
       })
@@ -383,6 +395,9 @@ describe("<FormUserManage>", () => {
         expect(screen.getByRole("combobox", { name: "Role" })).toBeInTheDocument()
         expect(screen.getByRole("option", { name: "Administrator" })).toBeInTheDocument()
         expect(screen.getByRole("option", { name: "Jurisdictional Admin" })).toBeInTheDocument()
+        expect(
+          screen.getByRole("option", { name: "Jurisdictional Admin - No PII" })
+        ).toBeInTheDocument()
         expect(screen.getByRole("option", { name: "Partner" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Invite" })).toBeInTheDocument()
 
@@ -448,6 +463,9 @@ describe("<FormUserManage>", () => {
         expect(screen.getByRole("option", { name: "Partner" })).toBeInTheDocument()
         expect(
           screen.queryByRole("option", { name: "Jurisdictional Admin" })
+        ).not.toBeInTheDocument()
+        expect(
+          screen.queryByRole("option", { name: "Jurisdictional Admin - No PII" })
         ).not.toBeInTheDocument()
       })
     })
