@@ -1,4 +1,5 @@
 import React from "react"
+import { act } from "react-dom/test-utils"
 import { render, screen, waitFor, mockNextRouter } from "../../testUtils"
 import userEvent from "@testing-library/user-event"
 import Edit from "../../../src/pages/account/edit"
@@ -69,16 +70,17 @@ describe("<Edit>", () => {
         expect(screen.getByDisplayValue("First")).toBeInTheDocument()
       })
 
-      const firstNameField = screen.getByTestId("account-first-name")
-      const lastNameField = screen.getByTestId("account-last-name")
+      const firstNameField = screen.getByLabelText(/given name/i, { selector: "input" })
+      const lastNameField = screen.getByLabelText(/family name/i, { selector: "input" })
       const updateButtons = screen.getAllByText("Update")
 
-      await userEvent.clear(firstNameField)
-      await userEvent.type(firstNameField, "Jane")
-      await userEvent.clear(lastNameField)
-      await userEvent.type(lastNameField, "Smith")
-
-      await userEvent.click(updateButtons[0])
+      await act(async () => {
+        await userEvent.clear(firstNameField)
+        await userEvent.type(firstNameField, "Jane")
+        await userEvent.clear(lastNameField)
+        await userEvent.type(lastNameField, "Smith")
+        await userEvent.click(updateButtons[0])
+      })
 
       await waitFor(() => {
         expect(mockUserService.update).toHaveBeenCalledWith({ body: updatedUser })
@@ -95,7 +97,10 @@ describe("<Edit>", () => {
       })
 
       const updateButtons = screen.getAllByText("Update")
-      await userEvent.click(updateButtons[0])
+
+      await act(async () => {
+        await userEvent.click(updateButtons[0])
+      })
 
       await waitFor(() => {
         expect(
@@ -121,19 +126,23 @@ describe("<Edit>", () => {
         expect(screen.getByDisplayValue("First")).toBeInTheDocument()
       })
 
-      const dayField = screen.getByTestId("dob-field-day")
-      const monthField = screen.getByTestId("dob-field-month")
-      const yearField = screen.getByTestId("dob-field-year")
+      const dayField = screen.getByLabelText(/day/i, { selector: "input" })
+      const monthField = screen.getByLabelText(/month/i, { selector: "input" })
+      const yearField = screen.getByLabelText(/year/i, { selector: "input" })
       const updateButtons = screen.getAllByText("Update")
 
-      await userEvent.clear(monthField)
-      await userEvent.type(monthField, "05")
-      await userEvent.clear(dayField)
-      await userEvent.type(dayField, "15")
-      await userEvent.clear(yearField)
-      await userEvent.type(yearField, "1990")
+      await act(async () => {
+        await userEvent.clear(monthField)
+        await userEvent.type(monthField, "05")
+        await userEvent.clear(dayField)
+        await userEvent.type(dayField, "15")
+        await userEvent.clear(yearField)
+        await userEvent.type(yearField, "1990")
+      })
 
-      await userEvent.click(updateButtons[1])
+      await act(async () => {
+        await userEvent.click(updateButtons[1])
+      })
 
       await waitFor(() => {
         expect(mockUserService.update).toHaveBeenCalledWith({
@@ -153,19 +162,23 @@ describe("<Edit>", () => {
         expect(screen.getByDisplayValue("First")).toBeInTheDocument()
       })
 
-      const dayField = screen.getByTestId("dob-field-day")
-      const monthField = screen.getByTestId("dob-field-month")
-      const yearField = screen.getByTestId("dob-field-year")
+      const dayField = screen.getByLabelText(/day/i, { selector: "input" })
+      const monthField = screen.getByLabelText(/month/i, { selector: "input" })
+      const yearField = screen.getByLabelText(/year/i, { selector: "input" })
       const updateButtons = screen.getAllByText("Update")
 
-      await userEvent.clear(monthField)
-      await userEvent.type(monthField, "01")
-      await userEvent.clear(dayField)
-      await userEvent.type(dayField, "01")
-      await userEvent.clear(yearField)
-      await userEvent.type(yearField, "1990")
+      await act(async () => {
+        await userEvent.clear(monthField)
+        await userEvent.type(monthField, "01")
+        await userEvent.clear(dayField)
+        await userEvent.type(dayField, "01")
+        await userEvent.clear(yearField)
+        await userEvent.type(yearField, "1990")
+      })
 
-      await userEvent.click(updateButtons[1])
+      await act(async () => {
+        await userEvent.click(updateButtons[1])
+      })
 
       await waitFor(() => {
         expect(
@@ -185,19 +198,23 @@ describe("<Edit>", () => {
       const currentYear = new Date().getFullYear()
       const underageYear = currentYear - 16 // 16 years old
 
-      const dayField = screen.getByTestId("dob-field-day")
-      const monthField = screen.getByTestId("dob-field-month")
-      const yearField = screen.getByTestId("dob-field-year")
+      const dayField = screen.getByLabelText(/day/i, { selector: "input" })
+      const monthField = screen.getByLabelText(/month/i, { selector: "input" })
+      const yearField = screen.getByLabelText(/year/i, { selector: "input" })
       const updateButtons = screen.getAllByText("Update")
 
-      await userEvent.clear(monthField)
-      await userEvent.type(monthField, "01")
-      await userEvent.clear(dayField)
-      await userEvent.type(dayField, "01")
-      await userEvent.clear(yearField)
-      await userEvent.type(yearField, underageYear.toString())
+      await act(async () => {
+        await userEvent.clear(monthField)
+        await userEvent.type(monthField, "01")
+        await userEvent.clear(dayField)
+        await userEvent.type(dayField, "01")
+        await userEvent.clear(yearField)
+        await userEvent.type(yearField, underageYear.toString())
+      })
 
-      await userEvent.click(updateButtons[1])
+      await act(async () => {
+        await userEvent.click(updateButtons[1])
+      })
 
       await waitFor(() => {
         expect(
@@ -225,12 +242,17 @@ describe("<Edit>", () => {
         expect(screen.getByDisplayValue("first.last@bloom.com")).toBeInTheDocument()
       })
 
-      const emailField = screen.getByTestId("account-email")
+      const emailField = screen.getByLabelText(/email/i, { selector: "input" })
       const updateButtons = screen.getAllByText("Update")
 
-      await userEvent.clear(emailField)
-      await userEvent.type(emailField, "new.email@example.com")
-      await userEvent.click(updateButtons[2])
+      await act(async () => {
+        await userEvent.clear(emailField)
+        await userEvent.type(emailField, "new.email@example.com")
+      })
+
+      await act(async () => {
+        await userEvent.click(updateButtons[2])
+      })
 
       await waitFor(() => {
         expect(mockUserService.update).toHaveBeenCalledWith({ body: updatedUser })
@@ -244,12 +266,17 @@ describe("<Edit>", () => {
         expect(screen.getByDisplayValue("first.last@bloom.com")).toBeInTheDocument()
       })
 
-      const emailField = screen.getByTestId("account-email")
+      const emailField = screen.getByLabelText(/email/i, { selector: "input" })
       const updateButtons = screen.getAllByText("Update")
 
-      await userEvent.clear(emailField)
-      await userEvent.type(emailField, "invalid-email")
-      await userEvent.click(updateButtons[2])
+      await act(async () => {
+        await userEvent.clear(emailField)
+        await userEvent.type(emailField, "invalid-email")
+      })
+
+      await act(async () => {
+        await userEvent.click(updateButtons[2])
+      })
 
       await waitFor(() => {
         expect(screen.getByText(/Please enter an email address/i)).toBeInTheDocument()
@@ -265,18 +292,24 @@ describe("<Edit>", () => {
       renderEditPage()
 
       await waitFor(() => {
-        expect(screen.getByTestId("account-current-password")).toBeInTheDocument()
+        expect(
+          screen.getByLabelText(/current password/i, { selector: "input" })
+        ).toBeInTheDocument()
       })
 
-      const currentPasswordField = screen.getByTestId("account-current-password")
-      const newPasswordField = screen.getByTestId("account-password")
-      const confirmPasswordField = screen.getByTestId("account-password-confirmation")
+      const currentPasswordField = screen.getByLabelText(/current password/i, { selector: "input" })
+      const newPasswordField = screen.getByLabelText(/^new password$/i, { selector: "input" })
+      const confirmPasswordField = screen.getByLabelText(/^confirm new password$/i, {
+        selector: "input",
+      })
       const updateButtons = screen.getAllByText("Update")
 
-      await userEvent.type(currentPasswordField, "currentPassword123!")
-      await userEvent.type(newPasswordField, "newPassword123!")
-      await userEvent.type(confirmPasswordField, "newPassword123!")
-      await userEvent.click(updateButtons[3])
+      await act(async () => {
+        await userEvent.type(currentPasswordField, "currentPassword123!")
+        await userEvent.type(newPasswordField, "newPassword123!")
+        await userEvent.type(confirmPasswordField, "newPassword123!")
+        await userEvent.click(updateButtons[3])
+      })
 
       await waitFor(() => {
         expect(mockUserService.update).toHaveBeenCalled()
@@ -287,21 +320,47 @@ describe("<Edit>", () => {
       renderEditPage()
 
       await waitFor(() => {
-        expect(screen.getByTestId("account-current-password")).toBeInTheDocument()
+        expect(
+          screen.getByLabelText(/current password/i, { selector: "input" })
+        ).toBeInTheDocument()
       })
 
-      const currentPasswordField = screen.getByTestId("account-current-password")
-      const newPasswordField = screen.getByTestId("account-password")
-      const confirmPasswordField = screen.getByTestId("account-password-confirmation")
+      const currentPasswordField = screen.getByLabelText(/current password/i, { selector: "input" })
+      const newPasswordField = screen.getByLabelText(/^new password$/i, { selector: "input" })
+      const confirmPasswordField = screen.getByLabelText(/^confirm new password$/i, {
+        selector: "input",
+      })
       const updateButtons = screen.getAllByText("Update")
 
-      await userEvent.type(currentPasswordField, "currentPassword123!")
-      await userEvent.type(newPasswordField, "newPassword123!")
-      await userEvent.type(confirmPasswordField, "differentPassword123!")
-      await userEvent.click(updateButtons[3])
+      await act(async () => {
+        await userEvent.type(currentPasswordField, "currentPassword123!")
+        await userEvent.type(newPasswordField, "newPassword123!")
+        await userEvent.type(confirmPasswordField, "differentPassword123!")
+        await userEvent.click(updateButtons[3])
+      })
 
       await waitFor(() => {
         expect(screen.getByText(/The passwords do not match/i)).toBeInTheDocument()
+      })
+    })
+
+    it("should show error when password fields are empty", async () => {
+      renderEditPage()
+
+      await waitFor(() => {
+        expect(
+          screen.getByLabelText(/current password/i, { selector: "input" })
+        ).toBeInTheDocument()
+      })
+
+      const updateButtons = screen.getAllByText("Update")
+
+      await act(async () => {
+        await userEvent.click(updateButtons[3])
+      })
+
+      await waitFor(() => {
+        expect(screen.getByText(/Password fields may not be empty/i)).toBeInTheDocument()
       })
     })
 
@@ -313,18 +372,27 @@ describe("<Edit>", () => {
       renderEditPage()
 
       await waitFor(() => {
-        expect(screen.getByTestId("account-current-password")).toBeInTheDocument()
+        expect(
+          screen.getByLabelText(/current password/i, { selector: "input" })
+        ).toBeInTheDocument()
       })
 
-      const currentPasswordField = screen.getByTestId("account-current-password")
-      const newPasswordField = screen.getByTestId("account-password")
-      const confirmPasswordField = screen.getByTestId("account-password-confirmation")
+      const currentPasswordField = screen.getByLabelText(/current password/i, { selector: "input" })
+      const newPasswordField = screen.getByLabelText(/^new password$/i, { selector: "input" })
+      const confirmPasswordField = screen.getByLabelText(/^confirm new password$/i, {
+        selector: "input",
+      })
       const updateButtons = screen.getAllByText("Update")
 
-      await userEvent.type(currentPasswordField, "wrongPassword")
-      await userEvent.type(newPasswordField, "newPassword123!")
-      await userEvent.type(confirmPasswordField, "newPassword123!")
-      await userEvent.click(updateButtons[3])
+      await act(async () => {
+        await userEvent.type(currentPasswordField, "wrongPassword")
+        await userEvent.type(newPasswordField, "newPassword123!")
+        await userEvent.type(confirmPasswordField, "newPassword123!")
+      })
+
+      await act(async () => {
+        await userEvent.click(updateButtons[3])
+      })
 
       await waitFor(() => {
         expect(screen.getByText(/Invalid current password. Please try again./i)).toBeInTheDocument()
