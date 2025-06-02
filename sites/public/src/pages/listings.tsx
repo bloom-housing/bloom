@@ -6,13 +6,13 @@ import {
   Listing,
   MultiselectQuestion,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { ListingBrowse, TabsIndexEnum } from "../components/browse/ListingBrowse"
-import { ListingBrowseDeprecated } from "../components/browse/ListingBrowseDeprecated"
 import {
   decodeQueryToFilterData,
   encodeFilterDataToBackendFilters,
   isFiltered,
 } from "../components/browse/FilterDrawerHelpers"
+import { ListingBrowse, TabsIndexEnum } from "../components/browse/ListingBrowse"
+import { ListingBrowseDeprecated } from "../components/browse/ListingBrowseDeprecated"
 import { isFeatureFlagOn } from "../lib/helpers"
 import {
   fetchClosedListings,
