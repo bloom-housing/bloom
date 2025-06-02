@@ -1015,6 +1015,8 @@
   "users.userDeleted": "Usuario eliminado",
   "users.userUpdated": "Usuario actualizado",
   "welcome.allApplicationClosed": "Todas las solicitudes están cerradas actualmente pero puede ver listados cerrados.",
+  "welcome.learnHousingBasics": "Conozca cómo puede calificar y solicitar una vivienda asequible",
+  "welcome.learnMore": "Obtener más información",
   "welcome.seeMoreOpportunities": "Ver más oportunidades de alquiler y propiedad de vivienda",
   "welcome.seeMoreOpportunitiesTruncated": "Ver más oportunidades y recursos de vivienda",
   "welcome.seeRentalListings": "Ver viviendas en alquiler",
@@ -1023,7 +1025,7 @@
   "welcome.subtitle": "Su recurso para encontrar viviendas multifamiliares según sus ingresos y necesidades del hogar",
   "welcome.title": "Haga su solicitud de vivienda de precio accesible en",
   "welcome.viewAdditionalHousing": "Vea Oportunidades y recursos adicionales de vivienda",
-  "welcome.viewAdditionalHousingTruncated": "Ver oportunidades y recursos",
+  "welcome.viewAdditionalHousingTruncated": "Ver recursos",
   "whatToExpect.default": "Los solicitantes serán contactados por el agente de la propiedad en orden de clasificación hasta que se hayan llenado todas las vacantes. Toda la información que usted ha proporcionado será verificada y su elegibilidad será confirmada. Su solicitud será retirada de la lista de espera si usted hizo alguna declaración fraudulenta. Si nos es imposible verificar una preferencia de vivienda que usted haya solicitado, no recibirá la preferencia pero no será penalizado de ninguna otra manera. Si su solicitud fuera elegida, esté preparado para llenar una solicitud más detallada y proporcionar los documentos de apoyo requeridos.",
   "whatToExpect.label": "Lo que puede esperar"
 }
