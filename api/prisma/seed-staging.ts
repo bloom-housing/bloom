@@ -166,6 +166,7 @@ export const stagingSeed = async (
         FeatureFlagEnum.hideCloseListingButton,
         FeatureFlagEnum.enableHomeType,
         FeatureFlagEnum.enableAccessibilityFeatures,
+        FeatureFlagEnum.enableAdditionalResources,
         FeatureFlagEnum.enableUtilitiesIncluded,
         FeatureFlagEnum.enableIsVerified,
         FeatureFlagEnum.enableNeighborhoodAmenities,
