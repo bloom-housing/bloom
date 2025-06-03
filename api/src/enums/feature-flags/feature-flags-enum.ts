@@ -5,6 +5,7 @@ export enum FeatureFlagEnum {
   disableCommonApplication = 'disableCommonApplication',
   disableJurisdictionalAdmin = 'disableJurisdictionalAdmin',
   enableAccessibilityFeatures = 'enableAccessibilityFeatures',
+  enableAdditionalResources = 'enableAdditionalResources',
   enableCompanyWebsite = 'enableCompanyWebsite',
   enableGeocodingPreferences = 'enableGeocodingPreferences',
   enableGeocodingRadiusMethod = 'enableGeocodingRadiusMethod',
@@ -21,9 +22,9 @@ export enum FeatureFlagEnum {
   enableRegions = 'enableRegions',
   enableSection8Question = 'enableSection8Question',
   enableSingleUseCode = 'enableSingleUseCode',
+  enableUnderConstructionHome = 'enableUnderConstructionHome',
   enableUnitGroups = 'enableUnitGroups',
   enableUtilitiesIncluded = 'enableUtilitiesIncluded',
-  enableAdditionalResources = 'enableAdditionalResources',
   example = 'example', // sample feature flag for testing purposes
   hideCloseListingButton = 'hideCloseListingButton',
   swapCommunityTypeWithPrograms = 'swapCommunityTypeWithPrograms',
@@ -129,6 +130,11 @@ export const featureFlagMap: { name: string; description: string }[] = [
     name: FeatureFlagEnum.enableSingleUseCode,
     description:
       'When true, the backend allows for logging into this jurisdiction using the single use code flow',
+  },
+  {
+    name: FeatureFlagEnum.enableUnderConstructionHome,
+    description:
+      "When true, the 'under construction' section is displayed on the home page",
   },
   {
     name: FeatureFlagEnum.enableUnitGroups,
