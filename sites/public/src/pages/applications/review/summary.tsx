@@ -146,7 +146,7 @@ const ApplicationSummary = () => {
             <p className="field-note text-gray-800">{t("application.review.lastChanceToEdit")}</p>
           </CardSection>
 
-          <CardSection className={"bg-primary-lighter"}>
+          <CardSection className={styles["application-form-action-footer"]}>
             <Button
               variant={"primary"}
               id={"app-summary-confirm"}
