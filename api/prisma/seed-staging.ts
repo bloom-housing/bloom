@@ -349,6 +349,14 @@ export const stagingSeed = async (
       },
     }),
   });
+
+  [...new Array(3)].forEach(
+    async () =>
+      await prismaClient.multiselectQuestions.create({
+        data: multiselectQuestionFactory(lakeviewJurisdiction.id),
+      }),
+  );
+
   // create pre-determined values
   const unitTypes = await unitTypeFactoryAll(prismaClient);
   await unitAccessibilityPriorityTypeFactoryAll(prismaClient);
