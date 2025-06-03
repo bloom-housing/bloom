@@ -44,6 +44,7 @@
     }
 
     .desktop-nav {
+      --bloom-color-primary: var(--seeds-color-primary);
       display: block;
       @media (max-width: theme("screens.sm")) {
         display: none;
@@ -51,6 +52,7 @@
     }
 
     .mobile-nav {
+      --bloom-color-primary: var(--seeds-color-primary);
       display: none;
       @media (max-width: theme("screens.sm")) {
         display: block;
