@@ -1,6 +1,12 @@
 .home-page {
   font-family: var(--seeds-font-alt-sans);
   margin-block-start: var(--seeds-s4);
+  .surface-background {
+    background-color: var(--seeds-bg-color-surface);
+  }
+  .muted-background {
+    background-color: var(--seeds-bg-color-muted);
+  }
   .hero-container {
     background-color: var(--seeds-bg-color-surface-primary-inverse);
     background-image: url("/images/hero-main.jpg");
@@ -54,7 +60,6 @@
     }
   }
   .resource-container {
-    background-color: var(--seeds-bg-color-surface);
     padding-block: var(--seeds-spacer-container);
     .resource {
       height: 100%;
