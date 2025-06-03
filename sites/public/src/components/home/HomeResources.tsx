@@ -1,20 +1,22 @@
 import { BloomCard } from "@bloom-housing/shared-helpers"
 import { Button, Card, Grid } from "@bloom-housing/ui-seeds"
+import { t } from "@bloom-housing/ui-components"
 import {
   FeatureFlagEnum,
   Jurisdiction,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { t } from "@bloom-housing/ui-components"
+import { isFeatureFlagOn } from "../../lib/helpers"
 import styles from "./HomeResources.module.scss"
+
 interface HomeResourcesProps {
   jurisdiction: Jurisdiction
 }
 
 export const HomeResources = (props: HomeResourcesProps) => {
-  const enableAdditionalResources =
-    props.jurisdiction?.featureFlags.find(
-      (flag) => flag.name === FeatureFlagEnum.enableAdditionalResources
-    )?.active || false
+  const enableAdditionalResources = isFeatureFlagOn(
+    props.jurisdiction,
+    FeatureFlagEnum.enableAdditionalResources
+  )
 
   return (
     <Grid spacing="lg">

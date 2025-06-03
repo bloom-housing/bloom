@@ -16,11 +16,11 @@ export const HomeSection = ({
   layoutClassName,
 }: React.PropsWithChildren<HomeSectionProps>) => {
   const customIcon = sectionIcon ? CustomIconMap[sectionIcon] : undefined
-  const className = [styles["muted-background"]]
+  const className = [styles["section-container"]]
   if (layoutClassName) className.push(layoutClassName)
 
   return (
-    <MaxWidthLayout className={className.join(" ")}>
+    <MaxWidthLayout className={`home-section ${className.join(" ")}`}>
       <div className={styles["section-header"]}>
         {customIcon && (
           <Icon outlined size="xl" className={styles["section-header-icon"]}>
