@@ -10,7 +10,9 @@
       "shared-helpers"
     ],
     "nohoist": [
-      "**/@anchan828/nest-sendgrid"
+      "**/@anchan828/nest-sendgrid",
+      "**/sites",
+      "**/sites/**"
     ]
   },
   "repository": {
