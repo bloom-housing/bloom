@@ -15,11 +15,17 @@ interface ClickableCardProps {
   children: React.ReactNode
   /** Additional CSS classes */
   className?: string
+  /** Additional container CSS classes */
+  containerClassName?: string
 }
 
 export const ClickableCard = (props: ClickableCardProps) => {
   return (
-    <div className={styles["container"]}>
+    <div
+      className={`${styles["container"]} ${
+        props.containerClassName ? props.containerClassName : ""
+      }`}
+    >
       <Card
         className={`${styles["clickable-card"]} ${props.className ? props.className : ""}`}
         {...props.cardProps}
