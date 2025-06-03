@@ -35,10 +35,10 @@ type FinderSection = {
 }
 
 export type RentalsFinderProps = {
-  activeFeatureFalgs: FeatureFlagEnum[]
+  activeFeatureFlags: FeatureFlagEnum[]
 }
 
-export default function RentalsFinder({ activeFeatureFalgs }: RentalsFinderProps) {
+export default function RentalsFinder({ activeFeatureFlags }: RentalsFinderProps) {
   const router = useRouter()
   const [stepIndex, setStepIndex] = useState<number>(0)
   const [sectionIndex, setSectionIndex] = useState<number>(0)
@@ -69,7 +69,7 @@ export default function RentalsFinder({ activeFeatureFalgs }: RentalsFinderProps
               />
             ),
           },
-          ...(activeFeatureFalgs.some((flag) => flag == FeatureFlagEnum.enableRegions)
+          ...(activeFeatureFlags.some((flag) => flag == FeatureFlagEnum.enableRegions)
             ? [
                 {
                   question: t("finder.region.question"),
@@ -95,7 +95,7 @@ export default function RentalsFinder({ activeFeatureFalgs }: RentalsFinderProps
           },
         ],
       },
-      ...(activeFeatureFalgs.some((flag) => flag == FeatureFlagEnum.enableAccessibilityFeatures)
+      ...(activeFeatureFlags.some((flag) => flag == FeatureFlagEnum.enableAccessibilityFeatures)
         ? [
             {
               sectionTitle: t("t.accessibility"),
@@ -150,7 +150,7 @@ export default function RentalsFinder({ activeFeatureFalgs }: RentalsFinderProps
         ],
       },
     ],
-    []
+    [activeFeatureFlags]
   )
 
   const sectionLabels = useMemo(

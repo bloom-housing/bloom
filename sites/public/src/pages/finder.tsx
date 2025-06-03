@@ -15,7 +15,7 @@ export default function Finder({ jurisdiction }: { jurisdiction: Jurisdiction })
 
   return (
     <Layout>
-      <RentalsFinder activeFeatureFalgs={activeFeatureFlags} />
+      <RentalsFinder activeFeatureFlags={activeFeatureFlags} />
     </Layout>
   )
 }

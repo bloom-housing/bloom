@@ -14,7 +14,7 @@ describe("<RentalsFinder>", () => {
   it("renders all page elements", () => {
     render(
       <RentalsFinder
-        activeFeatureFalgs={[
+        activeFeatureFlags={[
           FeatureFlagEnum.enableRegions,
           FeatureFlagEnum.enableAccessibilityFeatures,
         ]}
@@ -69,7 +69,7 @@ describe("<RentalsFinder>", () => {
 
   describe("should hide toggle sections based on feature flags", () => {
     it("should hide regions section if not toggled on", async () => {
-      render(<RentalsFinder activeFeatureFalgs={[FeatureFlagEnum.enableAccessibilityFeatures]} />)
+      render(<RentalsFinder activeFeatureFlags={[FeatureFlagEnum.enableAccessibilityFeatures]} />)
 
       const finderHeaderTitle = screen.getByRole("heading", {
         name: /find listings for you/i,
@@ -140,7 +140,7 @@ describe("<RentalsFinder>", () => {
     })
 
     it("should hide accessibility section if not toggled on", async () => {
-      render(<RentalsFinder activeFeatureFalgs={[FeatureFlagEnum.enableRegions]} />)
+      render(<RentalsFinder activeFeatureFlags={[FeatureFlagEnum.enableRegions]} />)
 
       const finderHeaderTitle = screen.getByRole("heading", {
         name: /find listings for you/i,
@@ -257,7 +257,7 @@ describe("<RentalsFinder>", () => {
   it("should update content on next button click", async () => {
     render(
       <RentalsFinder
-        activeFeatureFalgs={[
+        activeFeatureFlags={[
           FeatureFlagEnum.enableRegions,
           FeatureFlagEnum.enableAccessibilityFeatures,
         ]}
@@ -524,7 +524,7 @@ describe("<RentalsFinder>", () => {
   it("should persist selection when switching steps", async () => {
     render(
       <RentalsFinder
-        activeFeatureFalgs={[
+        activeFeatureFlags={[
           FeatureFlagEnum.enableRegions,
           FeatureFlagEnum.enableAccessibilityFeatures,
         ]}
@@ -583,7 +583,7 @@ describe("<RentalsFinder>", () => {
   it("should skip to disclaimer on skip button click", async () => {
     render(
       <RentalsFinder
-        activeFeatureFalgs={[
+        activeFeatureFlags={[
           FeatureFlagEnum.enableRegions,
           FeatureFlagEnum.enableAccessibilityFeatures,
         ]}
@@ -647,7 +647,7 @@ describe("<RentalsFinder>", () => {
       const { pushMock } = mockNextRouter()
       render(
         <RentalsFinder
-          activeFeatureFalgs={[
+          activeFeatureFlags={[
             FeatureFlagEnum.enableRegions,
             FeatureFlagEnum.enableAccessibilityFeatures,
           ]}
@@ -674,7 +674,7 @@ describe("<RentalsFinder>", () => {
 
       render(
         <RentalsFinder
-          activeFeatureFalgs={[
+          activeFeatureFlags={[
             FeatureFlagEnum.enableRegions,
             FeatureFlagEnum.enableAccessibilityFeatures,
           ]}
