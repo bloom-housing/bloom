@@ -22,6 +22,7 @@ import {
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import ApplicationFormLayout from "../../../layouts/application-form"
 import { Button, Dialog } from "@bloom-housing/ui-seeds"
+import styles from "../../../layouts/application-form.module.scss"
 
 const ApplicationTerms = () => {
   const router = useRouter()
@@ -222,7 +223,7 @@ const ApplicationTerms = () => {
               </div>
             </div>
           </CardSection>
-          <CardSection className={"bg-primary-lighter"}>
+          <CardSection className={styles["application-form-action-footer"]}>
             <Button
               loadingMessage={
                 submitting ? t("application.review.terms.submittingApplication") : null
