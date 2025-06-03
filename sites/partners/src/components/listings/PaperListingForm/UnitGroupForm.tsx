@@ -103,12 +103,13 @@ const UnitGroupForm = ({
       id: "true",
       label: t("listings.listingStatus.active"),
       value: "true",
-      defaultChecked: true,
+      defaultChecked: defaultUnitGroup?.openWaitlist === true || !defaultUnitGroup,
     },
     {
       id: "false",
       label: t("listings.listingStatus.closed"),
       value: "false",
+      defaultChecked: defaultUnitGroup?.openWaitlist === false,
     },
   ]
 

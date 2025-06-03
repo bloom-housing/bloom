@@ -94,6 +94,8 @@ export const Availability = ({ listing, jurisdiction }: AvailabilityProps) => {
     listing.status === ListingsStatusEnum.closed ||
     (enableMarketingStatus && listing.marketingType === MarketingTypeEnum.comingSoon)
 
+  const hasUnitGroupsWaitlistOpen = listing.unitGroups.some((group) => group.openWaitlist)
+
   return (
     <>
       <div className={styles["status-messages"]}>
@@ -137,11 +139,11 @@ export const Availability = ({ listing, jurisdiction }: AvailabilityProps) => {
               {t("listings.waitlist.open")}
             </Heading>
             <p className={styles["bold-subheader"]}>
-              {listing.isWaitlistOpen
+              {hasUnitGroupsWaitlistOpen
                 ? t("listings.waitlist.isOpen")
                 : t("listings.waitlist.isClosed")}
             </p>
-            {listing.isWaitlistOpen && (
+            {hasUnitGroupsWaitlistOpen && (
               <p className={`${listingStyles["thin-heading-sm"]} seeds-m-b-label`}>
                 {t("listings.waitlist.submitForWaitlist")}
               </p>
