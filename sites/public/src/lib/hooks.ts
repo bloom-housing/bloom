@@ -1,14 +1,19 @@
 import { useContext, useEffect, useState } from "react"
 import axios from "axios"
 import { useRouter } from "next/router"
+import qs from "qs"
 import {
   EnumListingFilterParamsComparison,
+  EnumMultiselectQuestionFilterParamsComparison,
   FeatureFlagEnum,
+  FilterAvailabilityEnum,
   Jurisdiction,
   Listing,
   ListingFilterParams,
   ListingOrderByKeys,
   ListingsStatusEnum,
+  MultiselectQuestionsApplicationSectionEnum,
+  MultiselectQuestionFilterParams,
   OrderByEnum,
   PaginatedListing,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -146,7 +151,7 @@ export async function fetchBaseListingData(
     const response = await axios.post(`${process.env.listingServiceUrl}/list`, params, {
       headers: {
         passkey: process.env.API_PASS_KEY,
-        "x-forwarded-for": req.headers["x-forwarded-for"] ?? req.socket.remoteAddress,
+        "x-forwarded-for": req?.headers["x-forwarded-for"] ?? req?.socket?.remoteAddress,
       },
     })
 
@@ -210,6 +215,25 @@ export async function fetchClosedListings(
   )
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function fetchLimitedUnderConstructionListings(req?: any, limit?: number) {
+  return await fetchBaseListingData(
+    {
+      additionalFilters: [
+        {
+          $comparison: EnumListingFilterParamsComparison["="],
+          status: ListingsStatusEnum.active,
+          availability: FilterAvailabilityEnum.comingSoon,
+        },
+      ],
+      orderBy: [ListingOrderByKeys.mostRecentlyPublished],
+      orderDir: [OrderByEnum.desc],
+      limit: limit ? limit.toString() : "3",
+    },
+    req
+  )
+}
+
 let jurisdiction: Jurisdiction | null = null
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -239,4 +263,43 @@ export async function fetchJurisdictionByName(req?: any) {
   }
 
   return jurisdiction
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function fetchMultiselectData(req: any, jurisdictionId: string) {
+  try {
+    const headers = {
+      passkey: process.env.API_PASS_KEY,
+    }
+    if (req) {
+      headers["x-forwarded-for"] = req.headers["x-forwarded-for"] ?? req.socket.remoteAddress
+    }
+
+    const params: {
+      filter: MultiselectQuestionFilterParams[]
+    } = {
+      filter: [
+        {
+          $comparison: EnumMultiselectQuestionFilterParamsComparison["="],
+          applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
+        },
+        {
+          $comparison: EnumMultiselectQuestionFilterParamsComparison["IN"],
+          jurisdiction: jurisdictionId && jurisdictionId !== "" ? jurisdictionId : undefined,
+        },
+      ],
+    }
+
+    const paramsString = qs.stringify(params)
+
+    const multiselectDataResponse = await axios.get(
+      `${process.env.backendApiBase}/multiselectQuestions?${paramsString}`,
+      {
+        headers,
+      }
+    )
+    return multiselectDataResponse?.data
+  } catch (error) {
+    console.log("error = ", error)
+  }
 }
