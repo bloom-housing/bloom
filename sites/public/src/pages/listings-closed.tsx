@@ -1,13 +1,15 @@
 import React from "react"
-import { fetchClosedListings, fetchJurisdictionByName } from "../lib/hooks"
-import { ListingBrowse, TabsIndexEnum } from "../components/browse/ListingBrowse"
-import { ListingsProps } from "./listings"
+import { useRouter } from "next/router"
+import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import {
   decodeQueryToFilterData,
   encodeFilterDataToBackendFilters,
   isFiltered,
 } from "../components/browse/FilterDrawerHelpers"
-import { useRouter } from "next/router"
+import { ListingBrowse, TabsIndexEnum } from "../components/browse/ListingBrowse"
+import { isFeatureFlagOn } from "../lib/helpers"
+import { fetchClosedListings, fetchJurisdictionByName, fetchMultiselectData } from "../lib/hooks"
+import { ListingsProps } from "./listings"
 
 export default function ListingsPageClosed(props: ListingsProps) {
   const router = useRouter()
@@ -39,12 +41,19 @@ export async function getServerSideProps(context: { req: any; query: any }) {
     closedListings = await fetchClosedListings(context.req, Number(context.query.page) || 1)
   }
   const jurisdiction = await fetchJurisdictionByName(context.req)
+  const multiselectData = isFeatureFlagOn(
+    jurisdiction,
+    FeatureFlagEnum.swapCommunityTypeWithPrograms
+  )
+    ? await fetchMultiselectData(context.req, jurisdiction?.id)
+    : undefined
 
   return {
     props: {
       closedListings: closedListings?.items || [],
       paginationData: closedListings?.items?.length ? closedListings.meta : null,
       jurisdiction: jurisdiction,
+      multiselectData: multiselectData,
     },
   }
 }
