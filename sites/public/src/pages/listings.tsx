@@ -77,7 +77,7 @@ export async function getServerSideProps(context: { req: any; query: any }) {
     FeatureFlagEnum.swapCommunityTypeWithPrograms
   )
     ? await fetchMultiselectData(context.req, jurisdiction?.id)
-    : undefined
+    : null
 
   return {
     props: {
