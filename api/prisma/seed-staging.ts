@@ -162,7 +162,6 @@ export const stagingSeed = async (
   const lakeviewJurisdiction = await prismaClient.jurisdictions.create({
     data: jurisdictionFactory('Lakeview', {
       featureFlags: [
-        FeatureFlagEnum.disableCommonApplication,
         FeatureFlagEnum.disableJurisdictionalAdmin,
         FeatureFlagEnum.enableAccessibilityFeatures,
         FeatureFlagEnum.enableAdditionalResources,
