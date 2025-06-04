@@ -35,7 +35,6 @@ const ApplicationDates = ({
   listing,
   openHouseEvents,
   setOpenHouseEvents,
-  disableDueDate,
 }: ApplicationDatesProps) => {
   const openHouseHeaders = {
     date: "t.date",
