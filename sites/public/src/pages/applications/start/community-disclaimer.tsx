@@ -3,6 +3,7 @@ import { Form, t } from "@bloom-housing/ui-components"
 import React, { useContext, useEffect } from "react"
 
 import ApplicationFormLayout from "../../../layouts/application-form"
+import styles from "../../../layouts/application-form.module.scss"
 import { Button } from "@bloom-housing/ui-seeds"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import FormsLayout from "../../../layouts/forms"
@@ -49,7 +50,7 @@ const ApplicationCommunityDisclaimer = () => {
           <br />
         </CardSection>
 
-        <CardSection className="bg-primary-lighter">
+        <CardSection className={styles["application-form-action-footer"]}>
           <Form onSubmit={handleSubmit(onSubmit)}>
             <Button type="submit" variant="primary" id="app-next-step-button">
               {t("t.next")}

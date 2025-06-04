@@ -1,8 +1,6 @@
 import { ClickableCard } from "@bloom-housing/shared-helpers"
 import { RegionEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { GridCell } from "@bloom-housing/ui-components"
 import { Grid, Link } from "@bloom-housing/ui-seeds"
-import { GridRow } from "@bloom-housing/ui-seeds/src/layout/Grid"
 import styles from "./HomeRegions.module.scss"
 
 export const HomeRegions = () => {
@@ -13,9 +11,9 @@ export const HomeRegions = () => {
 
   return (
     <Grid>
-      <GridRow columns={4}>
+      <Grid.Row columns={4}>
         {availableRegions.map((region) => (
-          <GridCell className={styles["region-entry"]} key={region.enum}>
+          <Grid.Cell key={region.enum}>
             <ClickableCard className={styles["region-card"]}>
               <div className={styles["region-card-image"]}>
                 <img src={"/images/listing-fallback.png"} alt={region.title} />
@@ -24,9 +22,9 @@ export const HomeRegions = () => {
                 {region.title}
               </Link>
             </ClickableCard>
-          </GridCell>
+          </Grid.Cell>
         ))}
-      </GridRow>
+      </Grid.Row>
     </Grid>
   )
 }
