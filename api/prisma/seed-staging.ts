@@ -350,11 +350,19 @@ export const stagingSeed = async (
     }),
   });
 
-  [...new Array(3)].forEach(
-    async () =>
-      await prismaClient.multiselectQuestions.create({
-        data: multiselectQuestionFactory(lakeviewJurisdiction.id),
-      }),
+  // add extra programs to support filtering by "community type"
+  await Promise.all(
+    [...new Array(3)].map(
+      async () =>
+        await prismaClient.multiselectQuestions.create({
+          data: multiselectQuestionFactory(lakeviewJurisdiction.id, {
+            multiselectQuestion: {
+              applicationSection:
+                MultiselectQuestionsApplicationSectionEnum.programs,
+            },
+          }),
+        }),
+    ),
   );
 
   // create pre-determined values
