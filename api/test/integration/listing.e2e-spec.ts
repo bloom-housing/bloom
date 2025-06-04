@@ -132,7 +132,7 @@ describe('Listing Controller Tests', () => {
     );
     await createAllFeatureFlags(prisma);
     const jurisdiction = await prisma.jurisdictions.create({
-      data: jurisdictionFactory(),
+      data: jurisdictionFactory(randomName()),
     });
     jurisdictionAId = jurisdiction.id;
     await reservedCommunityTypeFactoryAll(jurisdictionAId, prisma);
@@ -171,7 +171,7 @@ describe('Listing Controller Tests', () => {
       jurisdictionA.id = jurisdictionId;
     } else {
       jurisdictionA = await prisma.jurisdictions.create({
-        data: jurisdictionFactory(),
+        data: jurisdictionFactory(randomName()),
       });
     }
 
@@ -568,7 +568,7 @@ describe('Listing Controller Tests', () => {
 
     beforeAll(async () => {
       jurisdictionB = await prisma.jurisdictions.create({
-        data: jurisdictionFactory(),
+        data: jurisdictionFactory(randomName()),
       });
       multiselectQuestionPreference = await prisma.multiselectQuestions.create({
         data: multiselectQuestionFactory(jurisdictionB.id, {
@@ -641,14 +641,14 @@ describe('Listing Controller Tests', () => {
       });
 
       jurisdictionC = await prisma.jurisdictions.create({
-        data: jurisdictionFactory(),
+        data: jurisdictionFactory(randomName()),
       });
       const listing3Input = await listingFactory(jurisdictionC.id, prisma);
       listing3WithUnits = await prisma.listings.create({
         data: listing3Input,
       });
       jurisdictionDWithUnitGroups = await prisma.jurisdictions.create({
-        data: jurisdictionFactory(),
+        data: jurisdictionFactory(randomName()),
       });
       const listing4Input = await listingFactory(
         jurisdictionDWithUnitGroups.id,
@@ -1930,7 +1930,7 @@ describe('Listing Controller Tests', () => {
 
     it('should delete listing', async () => {
       const jurisdictionA = await prisma.jurisdictions.create({
-        data: jurisdictionFactory(),
+        data: jurisdictionFactory(randomName()),
       });
       await reservedCommunityTypeFactoryAll(jurisdictionA.id, prisma);
       const listingData = await listingFactory(jurisdictionA.id, prisma, {
@@ -1975,7 +1975,7 @@ describe('Listing Controller Tests', () => {
 
     it('should update listing', async () => {
       const jurisdictionA = await prisma.jurisdictions.create({
-        data: jurisdictionFactory(),
+        data: jurisdictionFactory(randomName()),
       });
       await reservedCommunityTypeFactoryAll(jurisdictionA.id, prisma);
       const listingData = await listingFactory(jurisdictionA.id, prisma);
@@ -2119,7 +2119,7 @@ describe('Listing Controller Tests', () => {
 
     it('should duplicate listing, exclude units', async () => {
       const jurisdictionA = await prisma.jurisdictions.create({
-        data: jurisdictionFactory(),
+        data: jurisdictionFactory(randomName()),
       });
       await reservedCommunityTypeFactoryAll(jurisdictionA.id, prisma);
       const listingData = await listingFactory(jurisdictionA.id, prisma, {
@@ -2160,7 +2160,7 @@ describe('Listing Controller Tests', () => {
 
     it('should duplicate listing, exclude units with unit groups', async () => {
       const jurisdictionA = await prisma.jurisdictions.create({
-        data: jurisdictionFactory(),
+        data: jurisdictionFactory(randomName()),
       });
       await reservedCommunityTypeFactoryAll(jurisdictionA.id, prisma);
       const listingData = await listingFactory(jurisdictionA.id, prisma, {
@@ -2206,7 +2206,7 @@ describe('Listing Controller Tests', () => {
   describe('process endpoint', () => {
     it('should successfully process listings that are past due', async () => {
       const jurisdictionA = await prisma.jurisdictions.create({
-        data: jurisdictionFactory(),
+        data: jurisdictionFactory(randomName()),
       });
       await reservedCommunityTypeFactoryAll(jurisdictionA.id, prisma);
       const listingData = await listingFactory(jurisdictionA.id, prisma, {
@@ -2236,7 +2236,7 @@ describe('Listing Controller Tests', () => {
 
     it('should only process listings that are past due', async () => {
       const jurisdictionA = await prisma.jurisdictions.create({
-        data: jurisdictionFactory(),
+        data: jurisdictionFactory(randomName()),
       });
       await reservedCommunityTypeFactoryAll(jurisdictionA.id, prisma);
       const pastDueListingData = await listingFactory(
