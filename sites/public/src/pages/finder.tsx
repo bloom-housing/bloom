@@ -28,5 +28,6 @@ export async function getStaticProps() {
     props: {
       jurisdiction: jurisdiction,
     },
+    revalidate: Number(process.env.cacheRevalidate),
   }
 }
