@@ -5662,6 +5662,9 @@ export interface JurisdictionCreate {
 
   /**  */
   duplicateListingPermissions: UserRoleEnum[]
+
+  /**  */
+  requiredListingFields: []
 }
 
 export interface JurisdictionUpdate {
@@ -5709,6 +5712,9 @@ export interface JurisdictionUpdate {
 
   /**  */
   duplicateListingPermissions: UserRoleEnum[]
+
+  /**  */
+  requiredListingFields: []
 }
 
 export interface FeatureFlag {
@@ -5791,6 +5797,9 @@ export interface Jurisdiction {
 
   /**  */
   featureFlags: FeatureFlag[]
+
+  /**  */
+  requiredListingFields: []
 }
 
 export interface MultiselectQuestionCreate {
@@ -7094,27 +7103,27 @@ export enum UserRoleEnum {
 }
 
 export enum FeatureFlagEnum {
-  "example" = "example",
   "disableCommonApplication" = "disableCommonApplication",
   "disableJurisdictionalAdmin" = "disableJurisdictionalAdmin",
   "enableAccessibilityFeatures" = "enableAccessibilityFeatures",
+  "enableCompanyWebsite" = "enableCompanyWebsite",
   "enableGeocodingPreferences" = "enableGeocodingPreferences",
   "enableGeocodingRadiusMethod" = "enableGeocodingRadiusMethod",
   "enableHomeType" = "enableHomeType",
   "enableIsVerified" = "enableIsVerified",
+  "enableListingFavoriting" = "enableListingFavoriting",
   "enableListingOpportunity" = "enableListingOpportunity",
-  "enableListingPagination" = "enableListingPagination",
+  "enableListingsPagination" = "enableListingsPagination",
   "enableMarketingStatus" = "enableMarketingStatus",
   "enableNeighborhoodAmenities" = "enableNeighborhoodAmenities",
   "enablePartnerDemographics" = "enablePartnerDemographics",
   "enablePartnerSettings" = "enablePartnerSettings",
-  "enableListingFavoriting" = "enableListingFavoriting",
-  "enableCompanyWebsite" = "enableCompanyWebsite",
   "enableRegions" = "enableRegions",
   "enableSection8Question" = "enableSection8Question",
   "enableSingleUseCode" = "enableSingleUseCode",
   "enableUnitGroups" = "enableUnitGroups",
   "enableUtilitiesIncluded" = "enableUtilitiesIncluded",
+  "example" = "example",
   "hideCloseListingButton" = "hideCloseListingButton",
   "swapCommunityTypeWithPrograms" = "swapCommunityTypeWithPrograms",
 }
