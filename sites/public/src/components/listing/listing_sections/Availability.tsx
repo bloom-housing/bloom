@@ -134,9 +134,7 @@ export const Availability = ({ listing, jurisdiction }: AvailabilityProps) => {
     showAdditionalWaitlistFields
   )
 
-  const hasWaitlistOpen = enableUnitGroups
-    ? listing.unitGroups.some((group) => group.openWaitlist)
-    : listing.reviewOrderType === ReviewOrderTypeEnum.waitlist
+  const hasUnitGroupsWaitlistOpen = listing.unitGroups.some((group) => group.openWaitlist)
 
   return (
     <>
@@ -181,9 +179,11 @@ export const Availability = ({ listing, jurisdiction }: AvailabilityProps) => {
               {t("listings.waitlist.open")}
             </Heading>
             <p className={styles["bold-subheader"]}>
-              {hasWaitlistOpen ? t("listings.waitlist.isOpen") : t("listings.waitlist.isClosed")}
+              {hasUnitGroupsWaitlistOpen
+                ? t("listings.waitlist.isOpen")
+                : t("listings.waitlist.isClosed")}
             </p>
-            {hasWaitlistOpen && (
+            {hasUnitGroupsWaitlistOpen && (
               <p className={`${listingStyles["thin-heading-sm"]} seeds-m-bs-label`}>
                 {t("listings.waitlist.submitForWaitlist")}
               </p>
