@@ -113,7 +113,7 @@ const FilterDrawer = (props: FilterDrawerProps) => {
             )}
             register={register}
           />
-          <SearchSection register={register} filterState={props.filterState} />
+          <SearchSection register={register} nameState={props.filterState?.name} />
           {props.multiselectData?.length > 0 && (
             <CheckboxGroup
               groupLabel={t("listings.communityTypes")}

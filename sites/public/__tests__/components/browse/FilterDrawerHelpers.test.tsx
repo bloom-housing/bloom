@@ -1,3 +1,5 @@
+import React from "react"
+import { screen } from "@testing-library/dom"
 import {
   FilterAvailabilityEnum,
   HomeTypeEnum,
@@ -7,6 +9,7 @@ import {
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import {
   buildDefaultFilterFields,
+  CheckboxGroup,
   decodeQueryToFilterData,
   encodeFilterDataToBackendFilters,
   encodeFilterDataToQuery,
@@ -15,7 +18,12 @@ import {
   getFilterQueryFromURL,
   isFiltered,
   removeUnselectedFilterData,
+  RentSection,
+  SearchSection,
 } from "../../../src/components/browse/FilterDrawerHelpers"
+import { mockNextRouter, render } from "../../testUtils"
+import { useForm } from "react-hook-form"
+import { t } from "@bloom-housing/ui-components"
 
 describe("filter drawer helpers", () => {
   const emptyFormData: FilterData = {
@@ -654,25 +662,188 @@ describe("filter drawer helpers", () => {
 
   // components
   describe("CheckboxGroup", () => {
-    it.todo("should show the correct number of columns when a customColumnNumber is added")
-    it.todo("should show the correct number of columns when no customColumnNumber is added")
-    it.todo("should show all fields passed into component correctly when no filter state passed")
-    it.todo(
-      "should show all fields passed into component correctly when a filter state with previous selections is passed"
-    )
+    beforeEach(() => {
+      mockNextRouter()
+    })
+    const DefaultCheckBoxGroup = () => {
+      // eslint-disable-next-line @typescript-eslint/unbound-method
+      const { register } = useForm()
+
+      return (
+        <CheckboxGroup
+          groupLabel={t("listings.homeType.lower")}
+          fields={buildDefaultFilterFields(
+            ListingFilterKeys.homeTypes,
+            "listings.homeType",
+            Object.keys(HomeTypeEnum),
+            {}
+          )}
+          register={register}
+        />
+      )
+    }
+
+    const CustomnColumnCheckBoxGroup = () => {
+      // eslint-disable-next-line @typescript-eslint/unbound-method
+      const { register } = useForm()
+
+      return (
+        <CheckboxGroup
+          groupLabel={t("listings.homeType.lower")}
+          fields={buildDefaultFilterFields(
+            ListingFilterKeys.homeTypes,
+            "listings.homeType",
+            Object.keys(HomeTypeEnum),
+            {}
+          )}
+          register={register}
+          customColumnNumber={1}
+        />
+      )
+    }
+
+    const CheckBoxGroupWithSelections = () => {
+      // eslint-disable-next-line @typescript-eslint/unbound-method
+      const { register } = useForm()
+
+      return (
+        <CheckboxGroup
+          groupLabel={t("listings.homeType.lower")}
+          fields={buildDefaultFilterFields(
+            ListingFilterKeys.homeTypes,
+            "listings.homeType",
+            Object.keys(HomeTypeEnum),
+            {
+              [ListingFilterKeys.homeTypes]: {
+                [HomeTypeEnum.apartment]: true,
+                [HomeTypeEnum.duplex]: true,
+              },
+            }
+          )}
+          register={register}
+        />
+      )
+    }
+    it("should show the correct number of columns when no customColumnNumber is added", () => {
+      render(<DefaultCheckBoxGroup />)
+      expect(screen.getByRole("row")).toHaveAttribute("data-columns", "3")
+      expect(screen.getByLabelText("Apartment"))
+      expect(screen.getByRole("checkbox", { name: "Apartment" })).not.toBeChecked()
+      expect(screen.getByLabelText("Duplex"))
+      expect(screen.getByRole("checkbox", { name: "Duplex" })).not.toBeChecked()
+      expect(screen.getByLabelText("Single family house"))
+      expect(screen.getByRole("checkbox", { name: "Single family house" })).not.toBeChecked()
+      expect(screen.getByLabelText("Townhome"))
+      expect(screen.getByRole("checkbox", { name: "Townhome" })).not.toBeChecked()
+    })
+    it("should show the correct number of columns when a customColumnNumber is added", () => {
+      render(<CustomnColumnCheckBoxGroup />)
+      expect(screen.getByRole("row")).toHaveAttribute("data-columns", "1")
+      expect(screen.getByLabelText("Apartment"))
+      expect(screen.getByRole("checkbox", { name: "Apartment" })).not.toBeChecked()
+      expect(screen.getByLabelText("Duplex"))
+      expect(screen.getByRole("checkbox", { name: "Duplex" })).not.toBeChecked()
+      expect(screen.getByLabelText("Single family house"))
+      expect(screen.getByRole("checkbox", { name: "Single family house" })).not.toBeChecked()
+      expect(screen.getByLabelText("Townhome"))
+      expect(screen.getByRole("checkbox", { name: "Townhome" })).not.toBeChecked()
+    })
+
+    it("should show all fields passed into component correctly when a filter state with previous selections is passed", () => {
+      render(<CheckBoxGroupWithSelections />)
+      expect(screen.getByRole("row")).toHaveAttribute("data-columns", "3")
+      expect(screen.getByLabelText("Apartment"))
+      expect(screen.getByRole("checkbox", { name: "Apartment" })).toBeChecked()
+      expect(screen.getByLabelText("Duplex"))
+      expect(screen.getByRole("checkbox", { name: "Duplex" })).toBeChecked()
+      expect(screen.getByLabelText("Single family house"))
+      expect(screen.getByRole("checkbox", { name: "Single family house" })).not.toBeChecked()
+      expect(screen.getByLabelText("Townhome"))
+      expect(screen.getByRole("checkbox", { name: "Townhome" })).not.toBeChecked()
+    })
   })
 
   describe("RentSection", () => {
-    it.todo("should display all fields correctly when an empty filterState is passed")
-    it.todo(
-      "should display all fields correctly when a filterState with previous selections is passed"
-    )
+    const DefaultRentSection = () => {
+      // eslint-disable-next-line @typescript-eslint/unbound-method
+      const { register, getValues, setValue } = useForm()
+
+      return (
+        <RentSection
+          register={register}
+          getValues={getValues}
+          setValue={setValue}
+          filterState={{}}
+        />
+      )
+    }
+    const RentSectionWithSelections = () => {
+      // eslint-disable-next-line @typescript-eslint/unbound-method
+      const { register, getValues, setValue } = useForm()
+
+      return (
+        <RentSection
+          register={register}
+          getValues={getValues}
+          setValue={setValue}
+          filterState={{
+            [ListingFilterKeys.monthlyRent]: { minRent: "500.00", maxRent: "900.00" },
+            [ListingFilterKeys.section8Acceptance]: true,
+          }}
+        />
+      )
+    }
+    it("should display all fields correctly when an empty filterState is passed", () => {
+      render(<DefaultRentSection />)
+      expect(screen.getByRole("group", { name: "Rent" }))
+      expect(screen.getByLabelText("Min rent"))
+      expect(screen.getByRole("textbox", { name: "Min rent" })).toHaveValue("")
+      expect(screen.getByLabelText("Max rent"))
+      expect(screen.getByRole("textbox", { name: "Max rent" })).toHaveValue("")
+      expect(screen.getByLabelText("Accepts Section 8 Housing Choice vouchers"))
+      expect(
+        screen.getByRole("checkbox", { name: "Accepts Section 8 Housing Choice vouchers" })
+      ).not.toBeChecked()
+    })
+
+    it("should display all fields correctly when a filterState with previous selections passed", () => {
+      render(<RentSectionWithSelections />)
+      expect(screen.getByRole("group", { name: "Rent" }))
+      expect(screen.getByLabelText("Min rent"))
+      expect(screen.getByRole("textbox", { name: "Min rent" })).toHaveValue("500.00")
+      expect(screen.getByLabelText("Max rent"))
+      expect(screen.getByRole("textbox", { name: "Max rent" })).toHaveValue("900.00")
+      expect(screen.getByLabelText("Accepts Section 8 Housing Choice vouchers"))
+      expect(
+        screen.getByRole("checkbox", { name: "Accepts Section 8 Housing Choice vouchers" })
+      ).toBeChecked()
+    })
   })
 
   describe("SearchSection", () => {
-    it.todo("should display all fields correctly when an empty filterState is passed")
-    it.todo(
-      "should display all fields correctly when a filterState with previous selections is passed"
-    )
+    const DefaultSearchSection = () => {
+      // eslint-disable-next-line @typescript-eslint/unbound-method
+      const { register } = useForm()
+
+      return <SearchSection register={register} nameState={""} />
+    }
+    const SearchSectionWithExistingSearch = () => {
+      // eslint-disable-next-line @typescript-eslint/unbound-method
+      const { register } = useForm()
+
+      return <SearchSection register={register} nameState={"example listing"} />
+    }
+    it("should display all fields correctly when an empty filterState is passed", () => {
+      render(<DefaultSearchSection />)
+      expect(screen.getByLabelText("Listing name"))
+      expect(screen.getByRole("textbox", { name: "Listing name" })).toHaveValue("")
+      expect(screen.getByText("Enter full or partial listing name"))
+    })
+    it("should display all fields correctly when a filterState with previous selections is passed", () => {
+      render(<SearchSectionWithExistingSearch />)
+      expect(screen.getByLabelText("Listing name"))
+      expect(screen.getByRole("textbox", { name: "Listing name" })).toHaveValue("example listing")
+      expect(screen.getByText("Enter full or partial listing name"))
+    })
   })
 })

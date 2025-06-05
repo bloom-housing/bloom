@@ -62,7 +62,7 @@ export interface RentSectionProps {
 
 export interface SearchSectionProps {
   register: UseFormMethods["register"]
-  filterState: FilterData
+  nameState: string
 }
 
 const arrayFilters: ListingFilterKeys[] = [
@@ -241,7 +241,7 @@ export const SearchSection = (props: SearchSectionProps) => (
       subNote={t("listings.search.subNote")}
       type="text"
       register={props.register}
-      defaultValue={props.filterState?.[ListingFilterKeys.name]}
+      defaultValue={props.nameState}
     />
   </div>
 )
