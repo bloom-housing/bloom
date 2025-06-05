@@ -175,7 +175,7 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
                       totalCount: props.paginationData.totalItems,
                     })}
                 </span>
-                {enableFiltering && (
+                {enableFiltering && props.listings?.length !== 0 && (
                   <span>
                     <Button
                       size={"sm"}

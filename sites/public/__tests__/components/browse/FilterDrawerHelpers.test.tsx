@@ -726,6 +726,7 @@ describe("filter drawer helpers", () => {
     }
     it("should show the correct number of columns when no customColumnNumber is added", () => {
       render(<DefaultCheckBoxGroup />)
+      expect(screen.getByRole("group", { name: "Home type" }))
       expect(screen.getByRole("row")).toHaveAttribute("data-columns", "3")
       expect(screen.getByLabelText("Apartment"))
       expect(screen.getByRole("checkbox", { name: "Apartment" })).not.toBeChecked()
@@ -738,6 +739,7 @@ describe("filter drawer helpers", () => {
     })
     it("should show the correct number of columns when a customColumnNumber is added", () => {
       render(<CustomnColumnCheckBoxGroup />)
+      expect(screen.getByRole("group", { name: "Home type" }))
       expect(screen.getByRole("row")).toHaveAttribute("data-columns", "1")
       expect(screen.getByLabelText("Apartment"))
       expect(screen.getByRole("checkbox", { name: "Apartment" })).not.toBeChecked()
@@ -751,6 +753,7 @@ describe("filter drawer helpers", () => {
 
     it("should show all fields passed into component correctly when a filter state with previous selections is passed", () => {
       render(<CheckBoxGroupWithSelections />)
+      expect(screen.getByRole("group", { name: "Home type" }))
       expect(screen.getByRole("row")).toHaveAttribute("data-columns", "3")
       expect(screen.getByLabelText("Apartment"))
       expect(screen.getByRole("checkbox", { name: "Apartment" })).toBeChecked()

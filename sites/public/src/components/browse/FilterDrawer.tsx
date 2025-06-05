@@ -116,7 +116,7 @@ const FilterDrawer = (props: FilterDrawerProps) => {
           <SearchSection register={register} nameState={props.filterState?.name} />
           {props.multiselectData?.length > 0 && (
             <CheckboxGroup
-              groupLabel={t("listings.communityTypes")}
+              groupLabel={t("t.community")}
               fields={buildDefaultFilterFields(
                 ListingFilterKeys.multiselectQuestions,
                 props.multiselectData?.map((multi) => multi.text),
