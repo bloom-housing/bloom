@@ -136,6 +136,7 @@ const UnitGroupForm = ({
 
       reset({
         ...defaultUnitGroup,
+        openWaitlist: defaultUnitGroup.openWaitlist ? YesNoEnum.yes : YesNoEnum.no,
         unitTypes: defaultUnitGroup?.unitTypes?.map((elem) => elem.id ?? elem.toString()),
       })
     }
