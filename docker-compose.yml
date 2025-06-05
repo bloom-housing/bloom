@@ -1,0 +1,71 @@
+# docker-compose.yml
+
+services:
+  db:
+    image: postgres:13
+    container_name: bloom-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: bloom_prisma
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    container_name: bloom-api
+    env_file:
+      - ./api/.env
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      # to reset + seed on startup:
+      RESET_DB: "true"
+      RUN_SEED: "true"
+      SEED_ENV: "staging"           # or "production" / "development"
+      JURISDICTION_NAME: "Bloomington"
+    ports:
+      - "3100:3100"
+    depends_on:
+      - db
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  public:
+    build:
+      context: .
+      dockerfile: sites/public/Dockerfile
+    container_name: bloom-public
+    env_file:
+      - ./sites/public/.env
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api
+    volumes:
+      - ./sites/public:/usr/src/public:cached
+      - ./shared-helpers:/usr/src/shared-helpers:cached
+
+  partners:
+    build:
+      context: .
+      dockerfile: sites/partners/Dockerfile
+    container_name: bloom-partners
+    env_file:
+      - ./sites/partners/.env
+    ports:
+      - "3001:3001"
+    depends_on:
+      - api
+    volumes:
+      - ./sites/partners:/usr/src/partners:cached
+      - ./shared-helpers:/usr/src/shared-helpers:cached
+
+volumes:
+  db_data:
+
