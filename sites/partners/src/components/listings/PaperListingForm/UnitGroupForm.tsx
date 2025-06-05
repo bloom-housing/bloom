@@ -268,6 +268,7 @@ const UnitGroupForm = ({
       createdAt: undefined,
       updatedAt: undefined,
       ...data,
+      openWaitlist: data.openWaitlist === YesNoEnum.yes,
       tempId: draft ? nextId : defaultUnitGroup.tempId,
       unitGroupAmiLevels: amiLevelsData,
     }
