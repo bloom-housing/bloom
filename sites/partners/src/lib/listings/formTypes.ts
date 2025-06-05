@@ -186,8 +186,9 @@ export type TempAmiLevel = UnitGroupAmiLevel & {
   tempId?: number
 }
 
-export type TempUnitGroup = Omit<UnitGroup, "unitGroupAmiLevels"> & {
+export type TempUnitGroup = Omit<UnitGroup, "unitGroupAmiLevels" | "openWaitlist"> & {
   tempId?: number
+  openWaitlist?: YesNoEnum
   unitGroupAmiLevels: TempAmiLevel[]
 }
 

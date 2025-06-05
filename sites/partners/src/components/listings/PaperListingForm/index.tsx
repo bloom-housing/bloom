@@ -167,6 +167,7 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
     if (listing?.unitGroups) {
       const tempUnitGroups = listing.unitGroups.map((unitGroup, i) => ({
         ...unitGroup,
+        openWaitlist: unitGroup.openWaitlist ? YesNoEnum.yes : YesNoEnum.no,
         unitGroupAmiLevels: unitGroup.unitGroupAmiLevels.map((amiEntry, i) => ({
           ...amiEntry,
           tempId: i + 1,
