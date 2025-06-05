@@ -7,7 +7,7 @@
     border-block-end-width: var(--seeds-border-1);
   }
 
-  .filter-section:not(:first-of-type) {
+  .filter-section:not(:first-child) {
     margin-block-start: var(--seeds-spacer-content);
   }
 
