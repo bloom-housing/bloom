@@ -178,7 +178,7 @@ const UnitGroupForm = ({
   const amiLevelsTableData = useMemo(
     () =>
       amiLevels?.map((ami) => {
-        const selectedAmiChart = amiChartsOptions.find((chart) => chart.value === ami.amiChart.id)
+        const selectedAmiChart = amiChartsOptions.find((chart) => chart.value === ami.amiChart?.id)
 
         let rentValue = undefined
         let monthlyRentDeterminationType = undefined
