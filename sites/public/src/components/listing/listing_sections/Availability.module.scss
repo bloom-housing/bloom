@@ -9,3 +9,20 @@
     margin-inline: var(--seeds-s4);
   }
 }
+
+.bold-text {
+  font-weight: var(--seeds-font-weight-bold);
+  color: var(--seeds-text-color-light);
+}
+
+.waitlist-size-container {
+  & > * {
+    margin-block-end: var(--seeds-spacer-text);
+    &:first-child {
+      margin-block-start: var(--seeds-spacer-label);
+    }
+    &:last-child {
+      margin-block-end: 0;
+    }
+  }
+}
