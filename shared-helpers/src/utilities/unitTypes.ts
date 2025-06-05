@@ -1,4 +1,4 @@
-import { Unit, UnitType } from "../types/backend-swagger"
+import { Unit, UnitGroup, UnitType } from "../types/backend-swagger"
 
 type GetUnitTypeNamesReturn = {
   id: string
@@ -46,5 +46,34 @@ export const getUniqueUnitTypes = (units: Unit[]): GetUnitTypeNamesReturn[] => {
   return sorted
 }
 
+export const getUniqueUnitGroupUnitTypes = (unitGroups: UnitGroup[]): GetUnitTypeNamesReturn[] => {
+  if (!unitGroups) return []
+
+  const unitTypes = unitGroups.reduce((acc, group) => {
+    const groupUnitTypes = group.unitTypes || []
+
+    groupUnitTypes.forEach((unitType: UnitType) => {
+      const { id, name } = unitType || {}
+
+      if (!id || !name) return
+
+      const unitTypeExists = acc.some((item: GetUnitTypeNamesReturn) => item.id === id)
+
+      if (!unitTypeExists) {
+        acc.push({
+          id,
+          name,
+        })
+      }
+    })
+
+    return acc
+  }, [] as GetUnitTypeNamesReturn[])
+
+  const sorted = sortUnitTypes(unitTypes)
+
+  return sorted
+}
+
 // It creates array of objects with the id property
-export const createUnitTypeId = (unitIds: string[]) => unitIds?.map((id) => ({ id } ?? []))
+export const createUnitTypeId = (unitIds: string[]) => unitIds?.map((id) => ({ id })) || []
