@@ -9,7 +9,7 @@ import { fetchJurisdictionByName } from "../lib/hooks"
 export default function Finder({ jurisdiction }: { jurisdiction: Jurisdiction }) {
   const activeFeatureFlags: FeatureFlagEnum[] =
     jurisdiction?.featureFlags?.reduce(
-      (acc, featureFlag) => featureFlag.active && [...acc, featureFlag.name],
+      (acc, featureFlag) => (featureFlag.active ? [...acc, featureFlag.name] : acc),
       []
     ) || []
 
