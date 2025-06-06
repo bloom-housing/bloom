@@ -99,8 +99,6 @@ export const ListingView = (props: ListingProps) => {
     listing?.jurisdictions?.id
   )
 
-  console.log(enableListingPreferences, listing?.jurisdictions?.id)
-
   const appOpenInFuture = openInFuture(listing)
   const hasNonReferralMethods = listing?.applicationMethods
     ? listing.applicationMethods.some(
