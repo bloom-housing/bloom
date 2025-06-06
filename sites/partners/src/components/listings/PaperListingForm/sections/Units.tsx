@@ -408,7 +408,7 @@ const FormUnits = ({
                 clearErrors("units")
               }}
             >
-              {t(enableUnitGroups ? "listings.unitGroupd.add" : "listings.unit.add")}
+              {t(enableUnitGroups ? "listings.unitGroup.add" : "listings.unit.add")}
             </Button>
           </Grid.Cell>
         </Grid.Row>
@@ -454,7 +454,7 @@ const FormUnits = ({
         ariaLabelledBy="units-drawer-header"
       >
         <Drawer.Header id="units-drawer-header">
-          {t(enableUnitGroups ? "listings.unitGroupd.add" : "listings.unit.add")}
+          {t(enableUnitGroups ? "listings.unitGroup.add" : "listings.unit.add")}
           <Tag
             variant={
               units.some((unit) => unit.tempId === defaultUnit?.tempId)

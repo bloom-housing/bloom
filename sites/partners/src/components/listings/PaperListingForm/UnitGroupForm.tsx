@@ -16,6 +16,7 @@ import {
   AmiChart,
   EnumUnitGroupAmiLevelMonthlyRentDeterminationType,
   UnitAccessibilityPriorityType,
+  YesNoEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { arrayToFormOptions, fieldHasError } from "../../../lib/helpers"
 import { TempAmiLevel, TempUnitGroup } from "../../../lib/listings/formTypes"
@@ -98,20 +99,6 @@ const UnitGroupForm = ({
     { label: "5", value: "5" },
   ]
 
-  const waitlistStatusOptions = [
-    {
-      id: "true",
-      label: t("listings.listingStatus.active"),
-      value: "true",
-      defaultChecked: true,
-    },
-    {
-      id: "false",
-      label: t("listings.listingStatus.closed"),
-      value: "false",
-    },
-  ]
-
   // sets the options for the ami charts
   useEffect(() => {
     if (amiCharts.length === 0 || amiChartsOptions.length) return
@@ -149,6 +136,7 @@ const UnitGroupForm = ({
 
       reset({
         ...defaultUnitGroup,
+        openWaitlist: defaultUnitGroup.openWaitlist ? YesNoEnum.yes : YesNoEnum.no,
         unitTypes: defaultUnitGroup?.unitTypes?.map((elem) => elem.id ?? elem.toString()),
       })
     }
@@ -190,7 +178,7 @@ const UnitGroupForm = ({
   const amiLevelsTableData = useMemo(
     () =>
       amiLevels?.map((ami) => {
-        const selectedAmiChart = amiChartsOptions.find((chart) => chart.value === ami.amiChart.id)
+        const selectedAmiChart = amiChartsOptions.find((chart) => chart.value === ami.amiChart?.id)
 
         let rentValue = undefined
         let monthlyRentDeterminationType = undefined
@@ -280,6 +268,7 @@ const UnitGroupForm = ({
       createdAt: undefined,
       updatedAt: undefined,
       ...data,
+      openWaitlist: data.openWaitlist === YesNoEnum.yes,
       tempId: draft ? nextId : defaultUnitGroup.tempId,
       unitGroupAmiLevels: amiLevelsData,
     }
@@ -531,7 +520,20 @@ const UnitGroupForm = ({
                   <FieldGroup
                     name="openWaitlist"
                     type="radio"
-                    fields={waitlistStatusOptions}
+                    fields={[
+                      {
+                        id: "waitlistStatusOpen",
+                        dataTestId: "waitlistStatusOpen",
+                        label: t("listings.listingStatus.active"),
+                        value: YesNoEnum.yes,
+                      },
+                      {
+                        id: "waitlistStatusClosed",
+                        dataTestId: "waitlistStatusClosed",
+                        label: t("listings.listingStatus.closed"),
+                        value: YesNoEnum.no,
+                      },
+                    ]}
                     register={register}
                     fieldClassName="m-0"
                     fieldGroupClassName="flex h-12 items-center"
