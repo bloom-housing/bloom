@@ -1,0 +1,23 @@
+.resource {
+  height: 100%;
+
+  --card-content-padding-block: var(--seeds-s6);
+  --card-content-padding-inline: var(--seeds-s8);
+
+  h2 {
+    font-family: var(--seeds-font-alt-sans);
+    font-weight: var(--seeds-font-weight-semibold);
+    font-size: var(--seeds-font-size-xl);
+  }
+
+  .resource-icon {
+    color: var(--seeds-color-primary);
+    background-color: var(--seeds-bg-color-surface-primary);
+    border-radius: var(--seeds-rounded-full);
+    padding: var(--seeds-s2);
+    svg {
+      fill: none;
+      stroke-width: 1px;
+    }
+  }
+}

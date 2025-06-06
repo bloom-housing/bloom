@@ -27,7 +27,7 @@ import {
 import SignUpBenefits from "../components/account/SignUpBenefits"
 import signUpBenefitsStyles from "../../styles/sign-up-benefits.module.scss"
 import SignUpBenefitsHeadingGroup from "../components/account/SignUpBenefitsHeadingGroup"
-import { isFeatureFlagOn } from "../lib/helpers"
+import { setFeatureFlagLocalStorage } from "../lib/helpers"
 
 interface SignInProps {
   jurisdiction: Jurisdiction
@@ -72,15 +72,6 @@ const SignIn = (props: SignInProps) => {
     isLoading: isResendConfirmationLoading,
   } = useMutate<SuccessDTO>()
 
-  const setLocalStorage = () => {
-    window.localStorage.setItem(
-      "bloom-show-favorites-menu-item",
-      (
-        isFeatureFlagOn(props.jurisdiction, FeatureFlagEnum.enableListingFavoriting) === true
-      ).toString()
-    )
-  }
-
   useEffect(() => {
     pushGtmEvent<PageView>({
       event: "pageView",
@@ -88,13 +79,31 @@ const SignIn = (props: SignInProps) => {
       status: UserStatus.NotLoggedIn,
     })
     if (props.jurisdiction) {
-      setLocalStorage()
+      setFeatureFlagLocalStorage(
+        props.jurisdiction,
+        FeatureFlagEnum.enableListingFavoriting,
+        "show-favorites-menu-item"
+      )
+      setFeatureFlagLocalStorage(
+        props.jurisdiction,
+        FeatureFlagEnum.disableCommonApplication,
+        "hide-applications-menu-item"
+      )
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
-    setLocalStorage()
+    setFeatureFlagLocalStorage(
+      props.jurisdiction,
+      FeatureFlagEnum.enableListingFavoriting,
+      "show-favorites-menu-item"
+    )
+    setFeatureFlagLocalStorage(
+      props.jurisdiction,
+      FeatureFlagEnum.disableCommonApplication,
+      "hide-applications-menu-item"
+    )
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.jurisdiction])
 

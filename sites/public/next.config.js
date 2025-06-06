@@ -38,6 +38,7 @@ module.exports = withBundleAnalyzer({
     gtmKey: process.env.GTM_KEY || "",
     idleTimeout: process.env.IDLE_TIMEOUT,
     jurisdictionName: process.env.JURISDICTION_NAME,
+    cacheRevalidate: process.env.CACHE_REVALIDATE || "30",
     cloudinaryCloudName: process.env.CLOUDINARY_CLOUD_NAME,
     showPublicLottery: process.env.SHOW_PUBLIC_LOTTERY === "TRUE" ? "TRUE" : "",
     showNewSeedsDesigns: process.env.SHOW_NEW_SEEDS_DESIGNS === "TRUE" ? "TRUE" : "",

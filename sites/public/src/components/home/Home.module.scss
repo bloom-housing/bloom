@@ -1,5 +1,11 @@
 .home-page {
   font-family: var(--seeds-font-alt-sans);
+  .surface-background {
+    background-color: var(--seeds-bg-color-surface);
+  }
+  .muted-background {
+    background-color: var(--seeds-bg-color-muted);
+  }
   .hero-container {
     background-color: var(--seeds-bg-color-surface-primary-inverse);
     padding-block: var(--seeds-s24);
@@ -36,7 +42,6 @@
     }
   }
   .resource-container {
-    background-color: var(--seeds-bg-color-canvas);
     padding-block: var(--seeds-spacer-container);
     .resource {
       height: 100%;

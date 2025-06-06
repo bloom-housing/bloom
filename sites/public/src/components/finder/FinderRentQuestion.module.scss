@@ -1,0 +1,11 @@
+.rent-input-wrapper {
+  display: flex;
+  flex-direction: row;
+  gap: var(--seeds-s4);
+
+  @media (--md-down) {
+    flex-direction: column;
+    gap: 0;
+    margin-block: var(--seeds-s4);
+  }
+}

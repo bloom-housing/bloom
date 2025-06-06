@@ -1,0 +1,24 @@
+.filter-drawer {
+  --drawer-width: var(--seeds-width-xl);
+  font-family: var(--seeds-font-alt-sans);
+
+  .filter-section {
+    padding-block-end: var(--seeds-spacer-content);
+    border-block-end-width: var(--seeds-border-1);
+  }
+
+  .filter-section:not(:first-of-type) {
+    margin-block-start: var(--seeds-spacer-content);
+  }
+
+  .filter-section-label {
+    font-size: var(--seeds-type-label-size);
+    padding-block-end: var(--seeds-spacer-label);
+  }
+
+  .filter-checkbox-label {
+    color: var(--seeds-text-color-darker);
+    font-weight: 400;
+    padding-bottom: 0;
+  }
+}

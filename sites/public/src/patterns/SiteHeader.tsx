@@ -50,6 +50,8 @@ interface HeaderLinkProps {
   firstItem: boolean
   /** If this is the last item in the list of links  */
   lastItem: boolean
+  /** Current item index in the list */
+  index: number
   /** Link data, including the URL/onClick and label  */
   link: HeaderLink
   /** If this link's submenu is open  */
@@ -165,6 +167,7 @@ const HeaderLink = (props: HeaderLinkProps) => {
               }
             }
           }}
+          data-testid={`${props.link.label}-${props.index}`}
         >
           {props.link.label}
           <Icon size={"md"} className={styles["dropdown-icon"]}>
@@ -198,6 +201,7 @@ const HeaderLink = (props: HeaderLinkProps) => {
                       }}
                       id={`submenu-link-${index}`}
                       aria-current={props.currentPath === submenuLink.href}
+                      data-testid={`${submenuLink.label}-${index}`}
                     >
                       {submenuLink.label}
                     </LinkComponent>
@@ -220,6 +224,7 @@ const HeaderLink = (props: HeaderLinkProps) => {
                         )
                       }}
                       id={`submenu-link-${index}`}
+                      data-testid={`${submenuLink.label}-${index}`}
                     >
                       {submenuLink.label}
                     </button>
@@ -243,6 +248,7 @@ const HeaderLink = (props: HeaderLinkProps) => {
             onKeyDown={(event) => {
               menuKeyDown(event, props.firstItem, props.lastItem, props.setMobileMenuOpen)
             }}
+            data-testid={`${props.link.label}-${props.index}`}
           >
             {props.link.label}
           </LinkComponent>
@@ -257,6 +263,7 @@ const HeaderLink = (props: HeaderLinkProps) => {
             onKeyDown={(event) => {
               menuKeyDown(event, props.firstItem, props.lastItem, props.setMobileMenuOpen)
             }}
+            data-testid={`${props.link.label}-${props.index}`}
           >
             {props.link.label}
           </button>
@@ -413,6 +420,7 @@ export const SiteHeader = (props: SiteHeaderProps) => {
                     currentPath={currentPath}
                     firstItem={index === 0}
                     key={index}
+                    index={index}
                     lastItem={index === props.links?.length - 1}
                     link={link}
                     openSubmenu={openSubmenu}
@@ -460,6 +468,7 @@ export const SiteHeader = (props: SiteHeaderProps) => {
                     firstItem={index === 0}
                     key={index}
                     lastItem={index === props.links?.length - 1}
+                    index={index}
                     link={link}
                     openSubmenu={openSubmenu}
                     setMobileMenuOpen={setMobileMenuOpen}

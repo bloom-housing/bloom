@@ -1,0 +1,13 @@
+.disclaimer-info-list {
+  padding-block: var(--seeds-spacer-container);
+  display: flex;
+  flex-direction: column;
+  gap: var(--seeds-s4);
+  list-style-type: disc;
+  list-style-position: inside;
+
+  .disclaimer-info-point {
+    padding-inline-start: var(--seeds-s2);
+    color: var(--seeds-text-color-dark);
+  }
+}

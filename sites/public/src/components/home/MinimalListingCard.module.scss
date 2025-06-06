@@ -1,0 +1,56 @@
+.full-height-card {
+  height: 100%;
+  .image {
+    height: 100%;
+    max-height: fit-content;
+  }
+  .image-background {
+    width: 100%;
+    background-size: cover;
+    background-position: center;
+    height: var(--seeds-s52);
+  }
+}
+.minimal-listing-card {
+  font-family: var(--seeds-font-alt-sans);
+  height: 100%;
+  .card-content {
+    padding: var(--seeds-s4);
+    font-size: var(--seeds-type-label-size);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+
+    .listing-info {
+      display: flex;
+      flex-direction: column;
+      .listing-name {
+        color: var(--seeds-color-blue-500);
+        text-decoration: underline;
+        font-size: var(--seeds-type-heading-size-xl);
+        font-weight: var(--seeds-font-weight-bold);
+      }
+
+      .tags {
+        margin-block-start: var(--seeds-s2);
+        margin-block-end: calc(-1 * var(--seeds-s1));
+        .tag {
+          margin-block-end: var(--seeds-s2);
+          &:not(:last-child) {
+            margin-inline-end: var(--seeds-s2);
+          }
+          svg {
+            margin-inline-end: var(--seeds-s1);
+          }
+        }
+      }
+    }
+    .listing-status {
+      display: flex;
+      [class*="seeds-message"] {
+        width: 100%;
+      }
+    }
+  }
+}

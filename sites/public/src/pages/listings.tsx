@@ -1,8 +1,25 @@
 import React from "react"
-import { Jurisdiction, Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { fetchClosedListings, fetchJurisdictionByName, fetchOpenListings } from "../lib/hooks"
+import { useRouter } from "next/router"
+import {
+  FeatureFlagEnum,
+  Jurisdiction,
+  Listing,
+  MultiselectQuestion,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  decodeQueryToFilterData,
+  encodeFilterDataToBackendFilters,
+  isFiltered,
+} from "../components/browse/FilterDrawerHelpers"
 import { ListingBrowse, TabsIndexEnum } from "../components/browse/ListingBrowse"
 import { ListingBrowseDeprecated } from "../components/browse/ListingBrowseDeprecated"
+import { isFeatureFlagOn } from "../lib/helpers"
+import {
+  fetchClosedListings,
+  fetchJurisdictionByName,
+  fetchMultiselectData,
+  fetchOpenListings,
+} from "../lib/hooks"
 
 export interface ListingsProps {
   openListings: Listing[]
@@ -15,9 +32,12 @@ export interface ListingsProps {
     totalPages: number
   }
   jurisdiction: Jurisdiction
+  multiselectData: MultiselectQuestion[]
 }
 
 export default function ListingsPage(props: ListingsProps) {
+  const router = useRouter()
+
   return (
     <>
       {process.env.showNewSeedsDesigns ? (
@@ -26,6 +46,7 @@ export default function ListingsPage(props: ListingsProps) {
           tab={TabsIndexEnum.open}
           jurisdiction={props.jurisdiction}
           paginationData={props.paginationData}
+          key={router.asPath}
         />
       ) : (
         <ListingBrowseDeprecated
@@ -39,9 +60,24 @@ export default function ListingsPage(props: ListingsProps) {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function getServerSideProps(context: { req: any; query: any }) {
-  const openListings = await fetchOpenListings(context.req, Number(context.query.page) || 1)
-  const closedListings = await fetchClosedListings(context.req, Number(context.query.page) || 1)
+  let openListings
+  let closedListings
+
+  if (isFiltered(context.query)) {
+    const filterData = decodeQueryToFilterData(context.query)
+    const filters = encodeFilterDataToBackendFilters(filterData)
+    openListings = await fetchOpenListings(context.req, Number(context.query.page) || 1, filters)
+  } else {
+    openListings = await fetchOpenListings(context.req, Number(context.query.page) || 1)
+    closedListings = await fetchClosedListings(context.req, Number(context.query.page) || 1)
+  }
   const jurisdiction = await fetchJurisdictionByName(context.req)
+  const multiselectData = isFeatureFlagOn(
+    jurisdiction,
+    FeatureFlagEnum.swapCommunityTypeWithPrograms
+  )
+    ? await fetchMultiselectData(context.req, jurisdiction?.id)
+    : null
 
   return {
     props: {
@@ -49,6 +85,7 @@ export async function getServerSideProps(context: { req: any; query: any }) {
       closedListings: closedListings?.items || [],
       paginationData: openListings?.items?.length ? openListings.meta : null,
       jurisdiction: jurisdiction,
+      multiselectData: multiselectData,
     },
   }
 }

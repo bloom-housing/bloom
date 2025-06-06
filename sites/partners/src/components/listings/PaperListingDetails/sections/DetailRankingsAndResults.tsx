@@ -5,13 +5,27 @@ dayjs.extend(utc)
 import { t } from "@bloom-housing/ui-components"
 import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { ListingContext } from "../../ListingContext"
-import { getLotteryEvent } from "@bloom-housing/shared-helpers"
-import { ReviewOrderTypeEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { AuthContext, getLotteryEvent } from "@bloom-housing/shared-helpers"
+import {
+  FeatureFlagEnum,
+  ReviewOrderTypeEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { getDetailFieldNumber, getDetailFieldString, getDetailBoolean } from "./helpers"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 const DetailRankingsAndResults = () => {
   const listing = useContext(ListingContext)
+  const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
+
+  const enableWaitlistAdditionalFields = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableWaitlistAdditionalFields,
+    listing.jurisdictions.id
+  )
+
+  const enableUnitGroups = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableUnitGroups,
+    listing.jurisdictions.id
+  )
 
   const lotteryEvent = getLotteryEvent(listing)
   const getReviewOrderType = () => {
@@ -23,7 +37,7 @@ const DetailRankingsAndResults = () => {
   }
   return (
     <SectionWithGrid heading={t("listings.sections.rankingsResultsTitle")} inset>
-      {listing.reviewOrderType !== ReviewOrderTypeEnum.waitlist && (
+      {(listing.reviewOrderType !== ReviewOrderTypeEnum.waitlist || enableUnitGroups) && (
         <Grid.Row>
           <FieldValue id="reviewOrderQuestion" label={t("listings.reviewOrderQuestion")}>
             {getReviewOrderType() === ReviewOrderTypeEnum.firstComeFirstServe
@@ -63,7 +77,7 @@ const DetailRankingsAndResults = () => {
           </Grid.Row>
         </>
       )}
-      {listing.reviewOrderType === ReviewOrderTypeEnum.waitlist && (
+      {(listing.reviewOrderType === ReviewOrderTypeEnum.waitlist || enableUnitGroups) && (
         <>
           <Grid.Row>
             <FieldValue id="waitlist.openQuestion" label={t("listings.waitlist.openQuestion")}>
@@ -71,6 +85,16 @@ const DetailRankingsAndResults = () => {
             </FieldValue>
           </Grid.Row>
           <Grid.Row>
+            {enableWaitlistAdditionalFields && (
+              <>
+                <FieldValue id="waitlistMaxSize" label={t("listings.waitlist.maxSize")}>
+                  {getDetailFieldNumber(listing.waitlistMaxSize)}
+                </FieldValue>
+                <FieldValue id="waitlistCurrentSize" label={t("listings.waitlist.currentSize")}>
+                  {getDetailFieldNumber(listing.waitlistCurrentSize)}
+                </FieldValue>
+              </>
+            )}
             <FieldValue id="waitlistOpenSpots" label={t("listings.waitlist.openSize")}>
               {getDetailFieldNumber(listing.waitlistOpenSpots)}
             </FieldValue>
