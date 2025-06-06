@@ -58,7 +58,7 @@ jobs:
       - checkout
       - run: yarn install --frozen-lockfile
       - save_cache:
-          key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
+          key: build-cache-2-{{ .Environment.CIRCLE_SHA1 }}
           paths:
             - ~/
   setup-backend:
@@ -67,7 +67,7 @@ jobs:
       - checkout
       - run: yarn backend:new:install
       - save_cache:
-          key: build-cache-new-{{ .Environment.CIRCLE_SHA1 }}
+          key: build-cache-2-new-{{ .Environment.CIRCLE_SHA1 }}
           paths:
             - ~/
   cypress-public:
@@ -76,15 +76,15 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
+          key: build-cache-2-{{ .Environment.CIRCLE_SHA1 }}
       - node/install-packages:
           app-dir: sites/public
           pkg-manager: yarn
-          cache-version: build-cache-{{ .Environment.CIRCLE_SHA1 }}
+          cache-version: build-cache-2-{{ .Environment.CIRCLE_SHA1 }}
       - node/install-packages:
           app-dir: api
           pkg-manager: yarn
-          cache-version: build-cache-{{ .Environment.CIRCLE_SHA1 }}
+          cache-version: build-cache-2-{{ .Environment.CIRCLE_SHA1 }}
       - run:
           name: setup db and seed
           command: yarn test:backend:new:dbsetup:withseed
@@ -116,15 +116,15 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
+          key: build-cache-2-{{ .Environment.CIRCLE_SHA1 }}
       - node/install-packages:
           app-dir: sites/public
           pkg-manager: yarn
-          cache-version: build-cache-{{ .Environment.CIRCLE_SHA1 }}
+          cache-version: build-cache-2-{{ .Environment.CIRCLE_SHA1 }}
       - node/install-packages:
           app-dir: api
           pkg-manager: yarn
-          cache-version: build-cache-{{ .Environment.CIRCLE_SHA1 }}
+          cache-version: build-cache-2-{{ .Environment.CIRCLE_SHA1 }}
       - run:
           name: setup db and seed
           command: |
@@ -159,15 +159,15 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
+          key: build-cache-2-{{ .Environment.CIRCLE_SHA1 }}
       - node/install-packages:
           app-dir: sites/partners
           pkg-manager: yarn
-          cache-version: build-cache-{{ .Environment.CIRCLE_SHA1 }}
+          cache-version: build-cache-2-{{ .Environment.CIRCLE_SHA1 }}
       - node/install-packages:
           app-dir: api
           pkg-manager: yarn
-          cache-version: build-cache-{{ .Environment.CIRCLE_SHA1 }}
+          cache-version: build-cache-2-{{ .Environment.CIRCLE_SHA1 }}
       - run:
           name: setup db and seed
           command: yarn test:backend:new:dbsetup:withseed
@@ -197,44 +197,44 @@ jobs:
     executor: standard-node
     steps:
       - restore_cache:
-          key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
+          key: build-cache-2-{{ .Environment.CIRCLE_SHA1 }}
       - run: yarn build:app:public
   build-partners:
     executor: standard-node
     steps:
       - restore_cache:
-          key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
+          key: build-cache-2-{{ .Environment.CIRCLE_SHA1 }}
       - run: yarn build:app:partners
   unit-test-partners:
     executor: standard-node
     steps:
       - restore_cache:
-          key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
+          key: build-cache-2-{{ .Environment.CIRCLE_SHA1 }}
       - run: yarn test:app:partners:unit
   unit-test-public:
     executor: standard-node
     steps:
       - restore_cache:
-          key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
+          key: build-cache-2-{{ .Environment.CIRCLE_SHA1 }}
       - run: yarn test:app:public:unit
   lint:
     executor: standard-node
     steps:
       - restore_cache:
-          key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
+          key: build-cache-2-{{ .Environment.CIRCLE_SHA1 }}
       - run: yarn lint
   jest-shared-helpers:
     executor: standard-node
     steps:
       - restore_cache:
-          key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
+          key: build-cache-2-{{ .Environment.CIRCLE_SHA1 }}
       - run: yarn test:shared:helpers
   jest-backend:
     executor: standard-node
     steps:
       - checkout
       - restore_cache:
-          key: build-cache-new-{{ .Environment.CIRCLE_SHA1 }}
+          key: build-cache-2-new-{{ .Environment.CIRCLE_SHA1 }}
       - run:
           name: DB Setup + New Backend Core Tests
           working_directory: api
