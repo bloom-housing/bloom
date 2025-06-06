@@ -3,6 +3,7 @@ import { useRouter } from "next/router"
 import { useCallback, useMemo, useState } from "react"
 import { BloomCard, CustomIconMap, listingFeatures } from "@bloom-housing/shared-helpers"
 import {
+  FeatureFlagEnum,
   ListingFilterKeys,
   RegionEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -33,7 +34,11 @@ type FinderSection = {
   sectionSteps: FinderStep[]
 }
 
-export default function RentalsFinder() {
+export type RentalsFinderProps = {
+  activeFeatureFlags: FeatureFlagEnum[]
+}
+
+export default function RentalsFinder({ activeFeatureFlags }: RentalsFinderProps) {
   const router = useRouter()
   const [stepIndex, setStepIndex] = useState<number>(0)
   const [sectionIndex, setSectionIndex] = useState<number>(0)
@@ -64,21 +69,25 @@ export default function RentalsFinder() {
               />
             ),
           },
-          {
-            question: t("finder.region.question"),
-            subtitle: t("finder.region.subtitle"),
-            content: (
-              <FinderMultiselectQuestion
-                legend={t("finder.multiselectLegend")}
-                fieldGroupName="regions"
-                options={Object.keys(RegionEnum).map((region) => ({
-                  key: `${ListingFilterKeys.regions}.${region}`,
-                  label: region.replace("_", " "),
-                  defaultChecked: false,
-                }))}
-              />
-            ),
-          },
+          ...(activeFeatureFlags.some((flag) => flag == FeatureFlagEnum.enableRegions)
+            ? [
+                {
+                  question: t("finder.region.question"),
+                  subtitle: t("finder.region.subtitle"),
+                  content: (
+                    <FinderMultiselectQuestion
+                      legend={t("finder.multiselectLegend")}
+                      fieldGroupName="regions"
+                      options={Object.keys(RegionEnum).map((region) => ({
+                        key: `${ListingFilterKeys.regions}.${region}`,
+                        label: region.replace("_", " "),
+                        defaultChecked: false,
+                      }))}
+                    />
+                  ),
+                },
+              ]
+            : []),
           {
             question: t("finder.rent.question"),
             subtitle: t("finder.rent.subtitle"),
@@ -86,27 +95,31 @@ export default function RentalsFinder() {
           },
         ],
       },
-      {
-        sectionTitle: t("t.accessibility"),
-        sectionSteps: [
-          {
-            question: t("finder.accessibility.question"),
-            subtitle: t("finder.accessibility.subtitle"),
-            content: (
-              <FinderMultiselectQuestion
-                legend={t("finder.multiselectLegend")}
-                fieldGroupName="listingFeatures"
-                options={buildDefaultFilterFields(
-                  ListingFilterKeys.listingFeatures,
-                  "eligibility.accessibility",
-                  listingFeatures,
-                  {}
-                )}
-              />
-            ),
-          },
-        ],
-      },
+      ...(activeFeatureFlags.some((flag) => flag == FeatureFlagEnum.enableAccessibilityFeatures)
+        ? [
+            {
+              sectionTitle: t("t.accessibility"),
+              sectionSteps: [
+                {
+                  question: t("finder.accessibility.question"),
+                  subtitle: t("finder.accessibility.subtitle"),
+                  content: (
+                    <FinderMultiselectQuestion
+                      legend={t("finder.multiselectLegend")}
+                      fieldGroupName="listingFeatures"
+                      options={buildDefaultFilterFields(
+                        ListingFilterKeys.listingFeatures,
+                        "eligibility.accessibility",
+                        listingFeatures,
+                        {}
+                      )}
+                    />
+                  ),
+                },
+              ],
+            },
+          ]
+        : []),
       {
         sectionTitle: t("finder.buildingSectionTitle"),
         sectionSteps: [
@@ -137,7 +150,7 @@ export default function RentalsFinder() {
         ],
       },
     ],
-    []
+    [activeFeatureFlags]
   )
 
   const sectionLabels = useMemo(
