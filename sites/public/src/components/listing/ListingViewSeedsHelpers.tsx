@@ -311,6 +311,11 @@ export const getEligibilitySections = (
     FeatureFlagEnum.swapCommunityTypeWithPrograms
   )
 
+  const enableListingPreferences = isFeatureFlagOn(
+    jurisdiction,
+    FeatureFlagEnum.enableListingPreferences
+  )
+
   // Reserved community type
   if (!swapCommunityTypeWithPrograms && listing.reservedCommunityTypes) {
     eligibilityFeatures.push({
@@ -370,7 +375,7 @@ export const getEligibilitySections = (
     listing.listingMultiselectQuestions,
     MultiselectQuestionsApplicationSectionEnum.preferences
   )
-  if (preferences?.length > 0) {
+  if (preferences?.length > 0 && enableListingPreferences) {
     eligibilityFeatures.push({
       header: t("listings.sections.housingPreferencesTitle"),
       subheader: t("listings.sections.housingPreferencesSubtitle"),
