@@ -132,6 +132,15 @@ export const devSeeding = async (
     ),
   });
 
+  await prismaClient.featureFlags.create({
+    data: featureFlagFactory(
+      'enableListingPreferences',
+      true,
+      'When true listings can have preferences set',
+      [jurisdiction.id],
+    ),
+  });
+
   for (let index = 0; index < LISTINGS_TO_SEED; index++) {
     const applications = [];
 
