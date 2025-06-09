@@ -26,6 +26,7 @@ import {
   cloudinaryPdfFromId,
   getOccupancyDescription,
   stackedOccupancyTable,
+  stackedUnitGroupsOccupancyTable,
 } from "@bloom-housing/shared-helpers"
 import { downloadExternalPDF, isFeatureFlagOn } from "../../lib/helpers"
 import { CardList, ContentCardProps } from "../../patterns/CardList"
@@ -236,6 +237,50 @@ export const getStackedHmiData = (listing: Listing) => {
   )
 }
 
+export const getStackedUnitGroupsHmiData = (listing: Listing) => {
+  if (listing.unitGroups !== undefined && listing.unitGroups.length > 0) {
+    const { rows } = listing.unitGroupsSummarized.householdMaxIncomeSummary
+
+    return rows.map((row) => {
+      const obj = {}
+
+      for (const key in row) {
+        if (key === "householdSize") {
+          obj[key] = {
+            cellText: `${row[key]} ${row[key] === "1" ? t("t.person") : t("t.people")}`,
+          }
+        } else {
+          obj[key] = {
+            cellText: `$${row[key].toLocaleString("en")} ${t("t.perYear")}`,
+          }
+        }
+      }
+
+      return obj
+    })
+  }
+
+  return []
+}
+
+export const getUnitGroupsHmiHeaders = (listing: Listing): TableHeaders => {
+  const hmiHeaders: TableHeaders = {}
+
+  if (listing.unitGroups !== undefined && listing.unitGroups.length > 0) {
+    const { columns } = listing.unitGroupsSummarized.householdMaxIncomeSummary
+
+    for (const key in columns) {
+      if (key === "householdSize") {
+        hmiHeaders[key] = t(`listings.householdSize`)
+      } else {
+        hmiHeaders[key] = t("listings.percentAMIUnit", { percent: key.replace("percentage", "") })
+      }
+    }
+  }
+
+  return hmiHeaders
+}
+
 export type AddressLocation = "dropOff" | "pickUp" | "mailIn"
 
 export const getAddress = (
@@ -310,6 +355,7 @@ export const getEligibilitySections = (
     jurisdiction,
     FeatureFlagEnum.swapCommunityTypeWithPrograms
   )
+  const enableUnitGroups = isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableUnitGroups)
 
   // Reserved community type
   if (!swapCommunityTypeWithPrograms && listing.reservedCommunityTypes) {
@@ -336,8 +382,14 @@ export const getEligibilitySections = (
       : t("listings.forIncomeCalculations"),
     content: (
       <StackedTable
-        headers={(listing?.unitsSummarized?.hmi?.columns || []) as TableHeaders}
-        stackedData={getStackedHmiData(listing)}
+        headers={
+          enableUnitGroups
+            ? getUnitGroupsHmiHeaders(listing)
+            : ((listing?.unitsSummarized?.hmi?.columns || []) as TableHeaders)
+        }
+        stackedData={
+          enableUnitGroups ? getStackedUnitGroupsHmiData(listing) : getStackedHmiData(listing)
+        }
       />
     ),
   })
@@ -345,14 +397,18 @@ export const getEligibilitySections = (
   // Occupancy
   eligibilityFeatures.push({
     header: t("t.occupancy"),
-    subheader: getOccupancyDescription(listing),
+    subheader: getOccupancyDescription(listing, enableUnitGroups),
     content: (
       <StackedTable
         headers={{
           unitType: "t.unitType",
           occupancy: "t.occupancy",
         }}
-        stackedData={stackedOccupancyTable(listing)}
+        stackedData={
+          enableUnitGroups
+            ? stackedUnitGroupsOccupancyTable(listing)
+            : stackedOccupancyTable(listing)
+        }
       />
     ),
   })
