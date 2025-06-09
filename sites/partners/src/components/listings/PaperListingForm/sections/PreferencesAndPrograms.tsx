@@ -38,8 +38,8 @@ const ProgramsAndPreferences = ({
     jurisdiction
   )
 
-  const enablePreferences = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableListingPreferences,
+  const disableListingPreferences = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.disableListingPreferences,
     jurisdiction
   )
 
@@ -76,7 +76,7 @@ const ProgramsAndPreferences = ({
 
   return (
     <>
-      {enablePreferences && (
+      {!disableListingPreferences && (
         <SelectAndOrder
           addText={t("listings.addPreference")}
           drawerTitle={t("listings.addPreferences")}

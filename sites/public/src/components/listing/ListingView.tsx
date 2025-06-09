@@ -94,8 +94,8 @@ export const ListingView = (props: ListingProps) => {
 
   const statusContent = getListingApplicationStatus(listing)
 
-  const enableListingPreferences = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableListingPreferences,
+  const disableListingPreferences = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.disableListingPreferences,
     listing?.jurisdictions?.id
   )
 
@@ -256,7 +256,7 @@ export const ListingView = (props: ListingProps) => {
     )
   }
 
-  if (listingPreferences && listingPreferences?.length > 0 && enableListingPreferences) {
+  if (listingPreferences && listingPreferences?.length > 0 && !disableListingPreferences) {
     preferencesSection = (
       <ListSection
         title={t("listings.sections.housingPreferencesTitle")}
