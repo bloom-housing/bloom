@@ -40,7 +40,8 @@ const ProgramsAndPreferences = ({
 
   const disableListingPreferences = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.disableListingPreferences,
-    jurisdiction
+    jurisdiction,
+    !jurisdiction
   )
 
   const programComponent = !swapCommunityTypeWithPrograms ? (
