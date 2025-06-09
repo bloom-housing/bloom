@@ -43,8 +43,6 @@ describe("add listing", () => {
         value={{
           doJurisdictionsHaveFeatureFlagOn: (featureFlag: FeatureFlagEnum) => {
             switch (featureFlag) {
-              case FeatureFlagEnum.enableListingPreferences:
-                return true
               case FeatureFlagEnum.swapCommunityTypeWithPrograms:
                 return false
               default:

@@ -16,7 +16,6 @@ export enum FeatureFlagEnum {
   enableListingFiltering = 'enableListingFiltering',
   enableListingOpportunity = 'enableListingOpportunity',
   enableListingPagination = 'enableListingPagination',
-  enableListingPreferences = 'enableListingPreferences',
   enableMarketingStatus = 'enableMarketingStatus',
   enableNeighborhoodAmenities = 'enableNeighborhoodAmenities',
   enablePartnerDemographics = 'enablePartnerDemographics',
@@ -104,10 +103,6 @@ export const featureFlagMap: { name: string; description: string }[] = [
     name: FeatureFlagEnum.enableListingPagination,
     description:
       'When true listings browser will display pagination controls section',
-  },
-  {
-    name: FeatureFlagEnum.enableListingPreferences,
-    description: 'When true listings can have preferences set',
   },
   {
     name: FeatureFlagEnum.enableMarketingStatus,
