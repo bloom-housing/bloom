@@ -1,5 +1,6 @@
 import React, { useEffect, useContext } from "react"
 import Head from "next/head"
+import { GetStaticPaths, GetStaticProps } from "next"
 import axios, { AxiosResponse } from "axios"
 import { t } from "@bloom-housing/ui-components"
 import {
@@ -83,10 +84,14 @@ export default function ListingPage(props: ListingProps) {
   )
 }
 
-export async function getServerSideProps(context: {
+export const getStaticPaths: GetStaticPaths = () => {
+  return { paths: [], fallback: "blocking" }
+}
+
+export const getStaticProps: GetStaticProps = async (context: {
   params: Record<string, string>
   locale: string
-}) {
+}) => {
   let response: AxiosResponse
   try {
     const extUrl = `${process.env.BLOOM_API_BASE}/listings/external/${context.params.id}`
@@ -104,5 +109,6 @@ export async function getServerSideProps(context: {
       googleMapsApiKey: runtimeConfig.getGoogleMapsApiKey() || null,
       googleMapsMapId: runtimeConfig.getGoogleMapsMapId() || null,
     },
+    revalidate: Number(process.env.cacheRevalidate),
   }
 }

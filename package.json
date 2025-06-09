@@ -56,7 +56,8 @@
     "test:backend:new:dbsetup:withseed": "cd api && yarn db:migration:run && yarn db:seed:staging",
     "test:backend:new:dbsetup:withseed:large": "cd api && yarn db:migration:run && yarn db:seed:staging-large",
     "backend:new:install": "cd api && yarn install",
-    "prettier": "prettier --write \"./**/*.{js,jsx,ts,tsx,json}\""
+    "prettier": "prettier --write \"./**/*.{js,jsx,ts,tsx,json}\"",
+    "ui-load-test": "ruby ./utilities/ui-load-tester.rb"
   },
   "devDependencies": {
     "@commitlint/cli": "^13.1.0",
