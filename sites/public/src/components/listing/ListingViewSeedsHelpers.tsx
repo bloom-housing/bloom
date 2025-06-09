@@ -343,6 +343,7 @@ export type EligibilitySection = {
   subheader?: string
   content?: React.ReactNode
   note?: string
+  hide?: boolean
 }
 
 export const getEligibilitySections = (
@@ -392,6 +393,7 @@ export const getEligibilitySections = (
         }
       />
     ),
+    hide: enableUnitGroups && listing.unitGroups?.length === 0,
   })
 
   // Occupancy
@@ -411,6 +413,7 @@ export const getEligibilitySections = (
         }
       />
     ),
+    hide: enableUnitGroups && listing.unitGroups?.length === 0,
   })
 
   // Rental Assistance
