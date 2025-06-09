@@ -92,7 +92,7 @@ export const stackedUnitGroupsOccupancyTable = (listing: Listing) => {
   return tableRows
 }
 
-export const getOccupancyDescription = (listing: Listing, enableUnitGroups: boolean) => {
+export const getOccupancyDescription = (listing: Listing, enableUnitGroups?: boolean) => {
   if (enableUnitGroups) {
     const hasSRO = listing.unitGroups?.some((unitGroup) =>
       unitGroup.unitTypes?.some((unitType) => unitType.name === UnitTypeEnum.SRO)
