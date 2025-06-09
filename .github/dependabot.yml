@@ -6,6 +6,7 @@ updates:
     directories: # Locations of package manifests
       - "/"
       - "/api"
+      - "shared-helpers"
       - "/sites/public"
       - "/sites/partners"
     schedule: # how often to check for new versions

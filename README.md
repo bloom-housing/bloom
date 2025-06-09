@@ -130,7 +130,7 @@ As a reviewer on a PR, try not to leave only comments, but a clear next step act
 
 Dependabot is enabled for this repo. Dependabot is responsible for raising security and version upgrade PRs for the application's dependencies.
 
-The configuration file is located in `.github/dependabot.yaml`. It scans all npm package.json files within the top level, `api`, `sites/partners` and `sites/public` directories.
+The configuration file is located in `.github/dependabot.yaml`. It scans all npm package.json files within the top level, `api`, `shared-helpers`, `sites/partners` and `sites/public` directories.
 
 Current configuration dictates:
 
