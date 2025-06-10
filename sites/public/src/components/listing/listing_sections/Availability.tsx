@@ -125,6 +125,7 @@ export const Availability = ({ listing, jurisdiction }: AvailabilityProps) => {
     listing.unitGroups.length > 0
       ? listing.unitGroups.reduce((acc, curr) => acc + curr.totalAvailable, 0)
       : listing.unitsAvailable
+
   const subheading = getAvailabilitySubheading(
     enableUnitGroups ? null : listing.waitlistOpenSpots,
     unitsAvailable,
@@ -200,9 +201,14 @@ export const Availability = ({ listing, jurisdiction }: AvailabilityProps) => {
     if (enableMarketingStatus && listing.marketingType === MarketingTypeEnum.comingSoon)
       return [constructionContent]
     if (!enableUnitGroups) {
-      if (listing.reviewOrderType === ReviewOrderTypeEnum.firstComeFirstServe) return [fcfsContent]
-      if (listing.reviewOrderType === ReviewOrderTypeEnum.lottery) return [lotteryContent]
-      if (listing.reviewOrderType === ReviewOrderTypeEnum.waitlist) return [waitlistContent]
+      switch (listing.reviewOrderType) {
+        case ReviewOrderTypeEnum.lottery:
+          return [lotteryContent]
+        case ReviewOrderTypeEnum.waitlist:
+          return [waitlistContent]
+        default:
+          return [fcfsContent]
+      }
     } else {
       const sections = []
       if (unitsAvailable && listing.reviewOrderType === ReviewOrderTypeEnum.firstComeFirstServe)
@@ -217,13 +223,13 @@ export const Availability = ({ listing, jurisdiction }: AvailabilityProps) => {
 
   return (
     <>
-      <div className={styles["status-messages"]}>
-        {hideAvailabilityDetails && (
+      {hideAvailabilityDetails && (
+        <div className={styles["status-messages"]}>
           <div className={"seeds-m-be-content"}>
             {getListingStatusMessage(listing, jurisdiction, null, false, true)}
           </div>
-        )}
-      </div>
+        </div>
+      )}
       {sections?.length ? (
         <Card className={`${listingStyles["mobile-full-width-card"]}`}>
           <Card.Section divider="flush">
