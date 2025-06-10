@@ -121,7 +121,6 @@ export const Availability = ({ listing, jurisdiction }: AvailabilityProps) => {
     listing.marketingDate,
     false
   )
-  const content = getAvailabilityContent(listing.reviewOrderType, listing.status)
   const unitsAvailable =
     listing.unitGroups.length > 0
       ? listing.unitGroups.reduce((acc, curr) => acc + curr.totalAvailable, 0)
@@ -136,6 +135,86 @@ export const Availability = ({ listing, jurisdiction }: AvailabilityProps) => {
 
   const hasUnitGroupsWaitlistOpen = listing.unitGroups.some((group) => group.openWaitlist)
 
+  const getCardSection = (
+    title: string,
+    subtitle?: string,
+    content?: string,
+    subheading?: React.ReactNode,
+    additionalContent?: React.ReactNode
+  ) => {
+    return (
+      <Card.Section divider={"flush"}>
+        <Heading priority={3} size={"md"}>
+          {title}
+        </Heading>
+        {!hideAvailabilityDetails && subtitle && (
+          <p className={styles["bold-subheader"]}>{subtitle}</p>
+        )}
+        {statusMessage && (
+          <p className={`${listingStyles["thin-heading-sm"]} seeds-m-bs-label`}>{statusMessage}</p>
+        )}
+        {content && <p className={"seeds-m-bs-label"}>{content}</p>}
+        {subheading && subheading}
+        {additionalContent && additionalContent}
+      </Card.Section>
+    )
+  }
+
+  const constructionContent = getCardSection(
+    t("listings.underConstruction"),
+    null,
+    !enableUnitGroups ? getAvailabilityContent(listing.reviewOrderType, listing.status) : null,
+    subheading
+  )
+
+  const fcfsContent = getCardSection(
+    t("listings.applicationFCFS"),
+    t("listings.vacantUnitsAvailable"),
+    t("listings.eligibleApplicants.FCFS"),
+    subheading
+  )
+
+  const waitlistContent = getCardSection(
+    t("listings.waitlist.label"),
+    t("listings.waitlist.isOpen"),
+    listing.status !== ListingsStatusEnum.closed ? t("listings.waitlist.submitForWaitlist") : null,
+    !enableUnitGroups ? subheading : null,
+    enableUnitGroups
+      ? getWaitlistSizeFields(
+          listing.waitlistCurrentSize,
+          listing.waitlistOpenSpots,
+          listing.waitlistMaxSize,
+          showAdditionalWaitlistFields
+        )
+      : null
+  )
+
+  const lotteryContent = getCardSection(
+    t("listings.lottery"),
+    t("listings.vacantUnitsAvailable"),
+    t("listings.availableUnitsDescription"),
+    subheading
+  )
+
+  const getSections = () => {
+    if (enableMarketingStatus && listing.marketingType === MarketingTypeEnum.comingSoon)
+      return [constructionContent]
+    if (!enableUnitGroups) {
+      if (listing.reviewOrderType === ReviewOrderTypeEnum.firstComeFirstServe) return [fcfsContent]
+      if (listing.reviewOrderType === ReviewOrderTypeEnum.lottery) return [lotteryContent]
+      if (listing.reviewOrderType === ReviewOrderTypeEnum.waitlist) return [waitlistContent]
+    } else {
+      const sections = []
+      if (unitsAvailable && listing.reviewOrderType === ReviewOrderTypeEnum.firstComeFirstServe)
+        sections.push(fcfsContent)
+      if (listing.reviewOrderType === ReviewOrderTypeEnum.lottery) sections.push(lotteryContent)
+      if (hasUnitGroupsWaitlistOpen) sections.push(waitlistContent)
+      return sections
+    }
+  }
+
+  const sections = getSections()
+
   return (
     <>
       <div className={styles["status-messages"]}>
@@ -145,71 +224,31 @@ export const Availability = ({ listing, jurisdiction }: AvailabilityProps) => {
           </div>
         )}
       </div>
-      <Card className={`${listingStyles["mobile-full-width-card"]}`}>
-        <Card.Section divider="flush">
-          <Heading priority={2} size={"lg"}>
-            {t("t.availability")}
-          </Heading>
-        </Card.Section>
-
-        <Card.Section divider={"flush"}>
-          <Heading priority={3} size={"md"}>
-            {enableMarketingStatus && listing.marketingType === MarketingTypeEnum.comingSoon
-              ? t("listings.underConstruction")
-              : getAvailabilityHeading(listing.reviewOrderType)}
-          </Heading>
-          {!hideAvailabilityDetails && (
-            <p className={styles["bold-subheader"]}>
-              {listing.reviewOrderType === ReviewOrderTypeEnum.waitlist
-                ? t("listings.waitlist.isOpen")
-                : t("listings.vacantUnitsAvailable")}
-            </p>
-          )}
-          {statusMessage && (
-            <p className={`${listingStyles["thin-heading-sm"]} seeds-m-bs-label`}>
-              {statusMessage}
-            </p>
-          )}
-          {content && <p className={"seeds-m-bs-label"}>{content}</p>}
-          {subheading}
-        </Card.Section>
-        {enableUnitGroups && (
+      {sections?.length ? (
+        <Card className={`${listingStyles["mobile-full-width-card"]}`}>
           <Card.Section divider="flush">
-            <Heading size={"md"} priority={3}>
-              {t("listings.waitlist.open")}
+            <Heading priority={2} size={"lg"}>
+              {t("t.availability")}
             </Heading>
-            <p className={styles["bold-subheader"]}>
-              {hasUnitGroupsWaitlistOpen
-                ? t("listings.waitlist.isOpen")
-                : t("listings.waitlist.isClosed")}
-            </p>
-            {hasUnitGroupsWaitlistOpen && (
-              <p className={`${listingStyles["thin-heading-sm"]} seeds-m-bs-label`}>
-                {t("listings.waitlist.submitForWaitlist")}
+          </Card.Section>
+          {sections?.map((section) => {
+            return section
+          })}
+          {!swapCommunityTypeWithPrograms && listing.reservedCommunityTypes && (
+            <Card.Section divider="flush">
+              <Heading size={"md"} priority={3}>
+                {t("listings.reservedCommunityTitleDefault")}
+              </Heading>
+              <p className={styles["bold-subheader"]}>
+                {t(`listings.reservedCommunityTypes.${listing.reservedCommunityTypes.name}`)}
               </p>
-            )}
-            {getWaitlistSizeFields(
-              listing.waitlistCurrentSize,
-              listing.waitlistOpenSpots,
-              listing.waitlistMaxSize,
-              showAdditionalWaitlistFields
-            )}
-          </Card.Section>
-        )}
-        {!swapCommunityTypeWithPrograms && listing.reservedCommunityTypes && (
-          <Card.Section divider="flush">
-            <Heading size={"md"} priority={3}>
-              {t("listings.reservedCommunityTitleDefault")}
-            </Heading>
-            <p className={styles["bold-subheader"]}>
-              {t(`listings.reservedCommunityTypes.${listing.reservedCommunityTypes.name}`)}
-            </p>
-            {listing.reservedCommunityDescription && (
-              <p className={"seeds-m-bs-label"}>{listing.reservedCommunityDescription}</p>
-            )}
-          </Card.Section>
-        )}
-      </Card>
+              {listing.reservedCommunityDescription && (
+                <p className={"seeds-m-bs-label"}>{listing.reservedCommunityDescription}</p>
+              )}
+            </Card.Section>
+          )}
+        </Card>
+      ) : null}
     </>
   )
 }
