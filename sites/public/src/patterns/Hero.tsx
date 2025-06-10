@@ -1,8 +1,7 @@
 import React from "react"
-import { t } from "@bloom-housing/ui-components"
 import { Heading } from "@bloom-housing/ui-seeds"
-import styles from "./Hero.module.scss"
 import MaxWidthLayout from "../layouts/max-width"
+import styles from "./Hero.module.scss"
 
 export interface HeroProps {
   /** A clear call to action, most typically a button */
