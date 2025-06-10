@@ -219,7 +219,7 @@ describe("PreferencesAndPrograms", () => {
           },
         ]
         const setFn = jest.fn()
-        const results = render(
+        render(
           <AuthContext.Provider
             value={{
               doJurisdictionsHaveFeatureFlagOn: () => {
@@ -238,14 +238,12 @@ describe("PreferencesAndPrograms", () => {
           </AuthContext.Provider>
         )
 
-        expect(results.getByText("Housing Programs")).toBeInTheDocument()
+        expect(screen.getByText("Housing Programs")).toBeInTheDocument()
         expect(
-          results.getByText(
-            "Tell us about any additional housing programs related to this listing."
-          )
+          screen.getByText("Tell us about any additional housing programs related to this listing.")
         ).toBeInTheDocument()
-        expect(results.getByText("Edit Programs")).toBeInTheDocument()
-        expect(results.queryByText("Community", { exact: false })).toBeFalsy()
+        expect(screen.getByText("Edit Programs")).toBeInTheDocument()
+        expect(screen.queryByText("Community", { exact: false })).toBeFalsy()
       })
 
       it.todo("should show drawer copy as programs")
@@ -264,7 +262,7 @@ describe("PreferencesAndPrograms", () => {
           },
         ]
         const setFn = jest.fn()
-        const results = render(
+        render(
           <AuthContext.Provider
             value={{
               doJurisdictionsHaveFeatureFlagOn: () => {
@@ -283,17 +281,17 @@ describe("PreferencesAndPrograms", () => {
           </AuthContext.Provider>
         )
 
-        expect(results.getByText("Community Types")).toBeInTheDocument()
+        expect(screen.getByText("Community Types")).toBeInTheDocument()
         expect(
-          results.getByText("Tell us about any additional community types related to this listing.")
+          screen.getByText("Tell us about any additional community types related to this listing.")
         ).toBeInTheDocument()
         expect(
-          results.getByText(
+          screen.getByText(
             "Please choose the populations your building serves, based on your building's financing and regulatory agreements."
           )
         ).toBeInTheDocument()
-        expect(results.getByText("Edit Communities")).toBeInTheDocument()
-        expect(results.queryByText("Program", { exact: false })).toBeFalsy()
+        expect(screen.getByText("Edit Communities")).toBeInTheDocument()
+        expect(screen.queryByText("Program", { exact: false })).toBeFalsy()
       })
 
       it.todo("should show drawer copy as community types")
