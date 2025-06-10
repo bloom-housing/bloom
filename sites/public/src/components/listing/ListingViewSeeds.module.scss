@@ -57,6 +57,11 @@
   flex-direction: column;
   flex-basis: calc(100% / 3);
   margin-block-end: var(--seeds-spacer-section);
+  article {
+    &:not(:last-child) {
+      margin-block-end: var(--seeds-spacer-content);
+    }
+  }
 }
 
 .left-bar {
