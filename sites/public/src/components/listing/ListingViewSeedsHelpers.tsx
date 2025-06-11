@@ -376,6 +376,7 @@ export const getEligibilitySections = (
   }
 
   // HMI
+  const stackedUnitGroupsHmiData = getStackedUnitGroupsHmiData(listing)
   eligibilityFeatures.push({
     header: t("listings.householdMaximumIncome"),
     subheader: listing?.units[0]?.bmrProgramChart
@@ -388,15 +389,15 @@ export const getEligibilitySections = (
             ? getUnitGroupsHmiHeaders(listing)
             : ((listing?.unitsSummarized?.hmi?.columns || []) as TableHeaders)
         }
-        stackedData={
-          enableUnitGroups ? getStackedUnitGroupsHmiData(listing) : getStackedHmiData(listing)
-        }
+        stackedData={enableUnitGroups ? stackedUnitGroupsHmiData : getStackedHmiData(listing)}
       />
     ),
-    hide: enableUnitGroups && listing.unitGroups?.length === 0,
+    hide: enableUnitGroups && stackedUnitGroupsHmiData.length === 0,
   })
 
   // Occupancy
+  const stackedUnitGroupsOccupancyData = stackedUnitGroupsOccupancyTable(listing)
+
   eligibilityFeatures.push({
     header: t("t.occupancy"),
     subheader: getOccupancyDescription(listing, enableUnitGroups),
@@ -407,13 +408,11 @@ export const getEligibilitySections = (
           occupancy: "t.occupancy",
         }}
         stackedData={
-          enableUnitGroups
-            ? stackedUnitGroupsOccupancyTable(listing)
-            : stackedOccupancyTable(listing)
+          enableUnitGroups ? stackedUnitGroupsOccupancyData : stackedOccupancyTable(listing)
         }
       />
     ),
-    hide: enableUnitGroups && listing.unitGroups?.length === 0,
+    hide: enableUnitGroups && stackedUnitGroupsOccupancyData.length === 0,
   })
 
   // Rental Assistance
