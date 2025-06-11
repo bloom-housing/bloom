@@ -22,6 +22,6 @@ describe("404 page", () => {
     expect(
       screen.getByText("Sorry, we couldn't find the page you're looking for.")
     ).toBeInTheDocument()
-    expect(screen.getByRole("link", { name: "Back to home" })).toBeInTheDocument()
+    expect(screen.getByRole("link", { name: "Back to home" })).toHaveAttribute("href", "/")
   })
 })
