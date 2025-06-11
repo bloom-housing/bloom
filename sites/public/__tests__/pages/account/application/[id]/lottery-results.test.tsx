@@ -1,6 +1,6 @@
 import React from "react"
 import { setupServer } from "msw/lib/node"
-import { mockNextRouter, render, screen, prettyDOM } from "../../../../testUtils"
+import { mockNextRouter, render, screen } from "../../../../testUtils"
 import LotteryResultsView from "../../../../../src/pages/account/application/[id]/lottery-results"
 import { application, listing, user } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import { rest } from "msw"
