@@ -93,6 +93,7 @@ export const stagingSeed = async (
         FeatureFlagEnum.enableCompanyWebsite,
         FeatureFlagEnum.disableCommonApplication,
       ],
+      requiredListingFields: ['name', 'description'],
     }),
   });
   // Basic configuration jurisdiction
