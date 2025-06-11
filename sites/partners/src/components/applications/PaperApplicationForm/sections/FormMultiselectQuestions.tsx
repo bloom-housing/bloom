@@ -195,7 +195,7 @@ const FormMultiselectQuestions = ({
           value: !!option.text,
           onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
             uncheckOptions(getAllOptions(question, applicationSection), setValue)
-            setValue(optionFieldName, e.target.value)
+            setValue(optionFieldName, e.target?.value)
           },
         }}
       />

@@ -263,7 +263,7 @@ const ApplicationDates = ({
                           fieldHasError(errors?.marketingStartDate) &&
                             clearErrors("marketingStartDate")
                           if (!setValue) return
-                          setValue("marketingStartDate", maskNumber(e.target.value))
+                          setValue("marketingStartDate", maskNumber(e.target?.value))
                         },
                         maxLength: 4,
                       }}
