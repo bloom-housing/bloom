@@ -514,7 +514,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                         ...methods,
                         referral: {
                           ...methods.referral,
-                          phoneNumber: e.target?.value,
+                          phoneNumber: e,
                         },
                       })
                     }}
