@@ -2517,12 +2517,16 @@ describe('Listing Controller Tests', () => {
       };
 
       // Should fail due to missing required fields from requiredListingFields
-      await request(app.getHttpServer())
+      const res = await request(app.getHttpServer())
         .post('/listings')
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send(incompleteData)
         .set('Cookie', adminAccessToken)
         .expect(400);
+
+      expect(res.body.message).toContain(
+        'listingsBuildingAddress is required when publishing the listing',
+      );
     });
 
     it('should enforce default strict validation when jurisdiction has no requiredListingFields', async () => {
@@ -2574,12 +2578,14 @@ describe('Listing Controller Tests', () => {
         leasingAgentEmail: 'not-a-valid-email', // Optional but should be validated if provided
       };
 
-      await request(app.getHttpServer())
+      const res = await request(app.getHttpServer())
         .post('/listings')
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send(invalidOptionalData)
         .set('Cookie', adminAccessToken)
         .expect(400);
+
+      expect(res.body.message).toContain('leasingAgentEmail must be an email');
     });
   });
 
