@@ -1,4 +1,3 @@
-
 import { act } from "react-test-renderer"
 import { render, screen, within } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
@@ -142,7 +141,7 @@ describe("<UnitGroupForm>", () => {
     expect(within(drawerContainer).getByText(/how is rent determined\?/i)).toBeInTheDocument()
 
     const fixedAmountOption = within(drawerContainer).getByLabelText(/fixed amount/i)
-    const percentageOption = within(drawerContainer).getByLabelText(/\% of income/i)
+    const percentageOption = within(drawerContainer).getByLabelText(/% of income/i)
     expect(fixedAmountOption).toBeInTheDocument()
     expect(percentageOption).toBeInTheDocument()
 
@@ -150,7 +149,7 @@ describe("<UnitGroupForm>", () => {
     expect(within(drawerContainer).getByLabelText(/monthly rent/i)).toBeInTheDocument()
 
     await act(() => userEvent.click(percentageOption))
-    expect(within(drawerContainer).getAllByLabelText(/\% of income/i)).toHaveLength(2)
+    expect(within(drawerContainer).getAllByLabelText(/% of income/i)).toHaveLength(2)
   })
 
   it("should render ami charts table", async () => {
@@ -198,7 +197,7 @@ describe("<UnitGroupForm>", () => {
     const rowTwoData = within(rows[1]).getAllByRole("cell")
     expect(rowTwoData[0]).toHaveTextContent("Mock AMI")
     expect(rowTwoData[1]).toHaveTextContent("10%")
-    expect(rowTwoData[2]).toHaveTextContent(/\% of income/i)
+    expect(rowTwoData[2]).toHaveTextContent(/% of income/i)
     expect(rowTwoData[3]).toHaveTextContent("20%")
     expect(within(rowTwoData[4]).getByRole("button", { name: /edit/i })).toBeInTheDocument()
     expect(within(rowTwoData[4]).getByRole("button", { name: /delete/i })).toBeInTheDocument()
