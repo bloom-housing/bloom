@@ -49,12 +49,12 @@ const loadListing = async (
   const jurisdictionResponse = await jurisdictionsService.retrieve({
     jurisdictionId: listingResponse.jurisdictions.id,
   })
-
   conductor.listing = listingResponse
   const applicationConfig = retrieveApplicationConfig(conductor.listing, isPreview) // TODO: load from backend
   conductor.config = {
     ...applicationConfig,
     languages: jurisdictionResponse.languages,
+    featureFlags: jurisdictionResponse.featureFlags,
   }
   stateFunction(conductor.listing)
   context.syncListing(conductor.listing)
