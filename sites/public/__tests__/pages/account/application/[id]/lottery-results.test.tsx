@@ -135,12 +135,14 @@ describe("Listing Lottery Results View", () => {
 
     expect(await screen.getByText(/Your lottery preference\(s\)/))
     expect(await screen.getByText(/^Preference 1/i)).toBeInTheDocument()
-    expect(await screen.getAllByText(/^Out of 12345 applicants on this list$/i).length).toStrictEqual(1)
+    expect(screen.getAllByText(/^Out of 12345 applicants on this list$/i).length).toStrictEqual(1)
 
     expect(await screen.getByText(/^Preference 2/i)).toBeInTheDocument()
-    expect(await screen.getAllByText(/^Out of 98765 applicants on this list$/i).length).toStrictEqual(1)
+    expect(screen.getAllByText(/^Out of 98765 applicants on this list$/i).length).toStrictEqual(1)
 
     // Normally we don't want to query DOM elements directly, but this is to verify the sort order:
-    expect(Array.from(container.querySelectorAll(".rank-number")).map(el => el.textContent)).toEqual(["#15", "#10"])
+    expect(
+      Array.from(container.querySelectorAll(".rank-number")).map((el) => el.textContent)
+    ).toEqual(["#15", "#10"])
   })
 })
