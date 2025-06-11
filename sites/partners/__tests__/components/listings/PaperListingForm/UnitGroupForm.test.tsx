@@ -12,7 +12,7 @@ import { TempUnitGroup } from "../../../../src/lib/listings/formTypes"
 import { FormProviderWrapper } from "../../applications/sections/helpers"
 import { rest } from "msw"
 import userEvent from "@testing-library/user-event"
-import { AuthProvider, unitSummariesTable } from "@bloom-housing/shared-helpers"
+import { AuthProvider } from "@bloom-housing/shared-helpers"
 import { act } from "react-test-renderer"
 
 const server = setupServer()
