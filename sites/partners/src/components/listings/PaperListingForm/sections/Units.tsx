@@ -399,11 +399,16 @@ const FormUnits = ({
               variant={fieldHasError(errors?.units) ? "alert" : "primary-outlined"}
               size="sm"
               onClick={() => {
-                editUnit(units.length + 1)
+                if (enableUnitGroups) {
+                  editUnitGroup(unitGroups.length + 1)
+                } else {
+                  editUnit(units.length + 1)
+                }
+
                 clearErrors("units")
               }}
             >
-              {t(enableUnitGroups ? "listings.unitGroupd.add" : "listings.unit.add")}
+              {t(enableUnitGroups ? "listings.unitGroup.add" : "listings.unit.add")}
             </Button>
           </Grid.Cell>
         </Grid.Row>
@@ -449,7 +454,7 @@ const FormUnits = ({
         ariaLabelledBy="units-drawer-header"
       >
         <Drawer.Header id="units-drawer-header">
-          {t(enableUnitGroups ? "listings.unitGroupd.add" : "listings.unit.add")}
+          {t(enableUnitGroups ? "listings.unitGroup.add" : "listings.unit.add")}
           <Tag
             variant={
               units.some((unit) => unit.tempId === defaultUnit?.tempId)
@@ -468,6 +473,7 @@ const FormUnits = ({
               saveUnitGroup(unitGroup)
             }}
             onClose={() => {
+              setDefaultUnitGroup(null)
               setUnitDrawerOpen(false)
             }}
             defaultUnitGroup={defaultUnitGroup}
