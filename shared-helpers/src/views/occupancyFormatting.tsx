@@ -99,7 +99,7 @@ export const getOccupancyDescription = (listing: Listing, enableUnitGroups?: boo
     )
     const unitTypes = listing.unitGroups?.map((unitGroup) => unitGroup.unitTypes)
     if (hasSRO) {
-      return unitTypes?.length == 1
+      return unitTypes?.length === 1
         ? t("listings.occupancyDescriptionAllSro")
         : t("listings.occupancyDescriptionSomeSro")
     } else {
@@ -112,7 +112,7 @@ export const getOccupancyDescription = (listing: Listing, enableUnitGroups?: boo
       unitsSummarized.unitTypes &&
       unitsSummarized.unitTypes.map((unitType) => unitType.name).includes(UnitTypeEnum.SRO)
     ) {
-      return unitsSummarized.unitTypes.length == 1
+      return unitsSummarized.unitTypes.length === 1
         ? t("listings.occupancyDescriptionAllSro")
         : t("listings.occupancyDescriptionSomeSro")
     } else {
