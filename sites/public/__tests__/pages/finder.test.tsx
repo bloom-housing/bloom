@@ -108,7 +108,7 @@ describe("<RentalsFinder>", () => {
       // ----------- Section 1 - Housing Needs | Step Skipped - Region  -------------------
       expect(
         screen.queryByRole("heading", {
-          name: /what areas would you like to live in\?/i,
+          name: /what areas of Detroit would you like to live in\?/i,
           level: 2,
         })
       ).not.toBeInTheDocument()
@@ -184,7 +184,7 @@ describe("<RentalsFinder>", () => {
 
       expect(
         screen.getByRole("heading", {
-          name: /what areas would you like to live in\?/i,
+          name: /what areas of Detroit would you like to live in\?/i,
           level: 2,
         })
       ).toBeInTheDocument()
