@@ -506,7 +506,10 @@ const ApplicationMember = () => {
             </div>
           </CardSection>
 
-          <CardSection divider={"flush"} className={"bg-primary-lighter border-none"}>
+          <CardSection
+            divider={"flush"}
+            className={`${styles["application-form-action-footer"]} border-none`}
+          >
             <Button id={"app-household-member-save"} type={"submit"} variant={"primary"}>
               {saveText}
             </Button>
