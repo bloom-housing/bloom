@@ -1,5 +1,5 @@
 import { ApiPropertyOptional, OmitType } from '@nestjs/swagger';
-import { Expose, Transform, Type } from 'class-transformer';
+import { Expose, Type } from 'class-transformer';
 import {
   ArrayMaxSize,
   ArrayMinSize,
