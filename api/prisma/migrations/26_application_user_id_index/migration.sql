@@ -1,4 +1,3 @@
--- CreateIndex
+-- CreateIndex (only if it doesn't exist)
 
-CREATE INDEX "applications_user_id_idx" ON "applications"("user_id");
-
+CREATE INDEX IF NOT EXISTS "applications_user_id_idx" ON "applications"("user_id");
