@@ -329,7 +329,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                         digital: {
                           ...methods.digital,
                           type: ApplicationMethodsTypeEnum.ExternalLink,
-                          externalReference: e.target.value,
+                          externalReference: e.target?.value,
                         },
                       })
                     },
@@ -461,27 +461,94 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
             {t("listings.isReferralOpportunity")}
           </p>
 
-          <FieldGroup
-            name="referralOpportunityChoice"
-            type="radio"
-            register={register}
-            groupSubNote={t("listings.requiredToPublish")}
-            error={
-              fieldHasError(errors?.referralOpportunity) && referralOpportunityChoice === null
-            }
-            errorMessage={fieldMessage(errors?.referralOpportunity)}
-            fields={[
-              {
-                ...yesNoRadioOptions[0],
-                id: "referralOpportunityYes",
-                defaultChecked: listing?.referralOpportunity === true ?? null,
-                inputProps: {
-                  onChange: () => {
+            <FieldGroup
+              name="referralOpportunityChoice"
+              type="radio"
+              register={register}
+              groupSubNote={t("listings.requiredToPublish")}
+              error={
+                fieldHasError(errors?.referralOpportunity) && referralOpportunityChoice === null
+              }
+              errorMessage={fieldMessage(errors?.referralOpportunity)}
+              fields={[
+                {
+                  ...yesNoRadioOptions[0],
+                  id: "referralOpportunityYes",
+                  defaultChecked: listing?.referralOpportunity === true ?? null,
+                  inputProps: {
+                    onChange: () => {
+                      setMethods({
+                        ...methods,
+                        referral: {
+                          ...methods.referral,
+                          type: ApplicationMethodsTypeEnum.Referral,
+                        },
+                      })
+                    },
+                  },
+                },
+                {
+                  ...yesNoRadioOptions[1],
+                  id: "referralOpportunityNo",
+                  defaultChecked: listing?.referralOpportunity === false ?? null,
+                  inputProps: {
+                    onChange: () => {
+                      setMethods({
+                        ...methods,
+                        referral: null,
+                      })
+                    },
+                  },
+                },
+              ]}
+            />
+          </Grid.Cell>
+        </Grid.Row>
+        {referralOpportunityChoice === YesNoEnum.yes && (
+          <Grid.Row columns={3}>
+            <Grid.Cell>
+              <PhoneField
+                label={t("listings.referralContactPhone")}
+                name="referralContactPhone"
+                id="referralContactPhone"
+                placeholder={t("t.phoneNumberPlaceholder")}
+                mask={() => (
+                  <PhoneMask
+                    name="referralContactPhone"
+                    value={methods.referral ? methods.referral.phoneNumber : ""}
+                    placeholder={t("t.phoneNumberPlaceholder")}
+                    onChange={(e) => {
+                      setMethods({
+                        ...methods,
+                        referral: {
+                          ...methods.referral,
+                          phoneNumber: e,
+                        },
+                      })
+                    }}
+                  />
+                )}
+                controlClassName={"control"}
+              />
+            </Grid.Cell>
+            <Grid.Cell className="seeds-grid-span-2">
+              <Textarea
+                label={t("listings.referralSummary")}
+                rows={3}
+                fullWidth={true}
+                placeholder={t("t.descriptionTitle")}
+                name="referralSummary"
+                id="referralSummary"
+                maxLength={500}
+                inputProps={{
+                  value: methods.referral ? methods.referral.externalReference : "",
+                  onChange: (e) => {
                     setMethods({
                       ...methods,
                       referral: {
                         ...methods.referral,
                         type: ApplicationMethodsTypeEnum.Referral,
+                        externalReference: e.target?.value,
                       },
                     })
                   },
@@ -587,7 +654,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                     validation={{ required: true }}
                     inputProps={{
                       onChange: (e) => {
-                        setSelectedLanguage(e.target.value)
+                        setSelectedLanguage(e.target?.value)
                       },
                     }}
                   />

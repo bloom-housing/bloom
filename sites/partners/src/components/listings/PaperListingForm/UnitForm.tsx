@@ -527,7 +527,7 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
                             setValue(`maxIncomeHouseholdSize${index + 1}`, undefined)
                           })
                           if (value?.target?.value && !loading && amiChartsOptions) {
-                            void fetchAmiChart(value.target.value)
+                            void fetchAmiChart(value.target?.value)
                             setIsAmiPercentageDirty(true)
                           }
                         },
