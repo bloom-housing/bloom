@@ -33,7 +33,7 @@ const Assistance = () => {
               iconClass={styles["item-icon"]}
             >
               <Card.Section className={styles["item-link"]}>
-                <Link href={"/how-it-works"}>{t("assistance.applyToHousingLink")}</Link>
+                <Link href={"/housing-basics"}>{t("assistance.applyToHousingLink")}</Link>
               </Card.Section>
             </BloomCard>
             <BloomCard
