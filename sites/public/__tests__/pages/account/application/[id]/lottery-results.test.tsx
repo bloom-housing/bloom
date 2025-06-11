@@ -119,8 +119,6 @@ describe("Listing Lottery Results View", () => {
       await screen.getByRole("link", { name: /view the original listing/i })
     ).toBeInTheDocument()
 
-    console.debug(prettyDOM(container.querySelector("main")))
-
     expect(
       await screen.findByRole("heading", { level: 2, name: /here are your lottery results/i })
     ).toBeInTheDocument()
@@ -136,14 +134,13 @@ describe("Listing Lottery Results View", () => {
     ).toBeInTheDocument()
 
     expect(await screen.getByText(/Your lottery preference\(s\)/))
-    expect(await screen.getAllByText(/#10/).length).toStrictEqual(1)
     expect(await screen.getByText(/^Preference 1/i)).toBeInTheDocument()
     expect(await screen.getAllByText(/^Out of 12345 applicants on this list$/i).length).toStrictEqual(1)
 
-    expect(await screen.getAllByText(/#15/).length).toStrictEqual(1)
     expect(await screen.getByText(/^Preference 2/i)).toBeInTheDocument()
     expect(await screen.getAllByText(/^Out of 98765 applicants on this list$/i).length).toStrictEqual(1)
 
-    expect(Array.from(container.querySelectorAll(".rank-number").map(el => el.textContent))).toEqual(["#15", "#10"])
+    // Normally we don't want to query DOM elements directly, but this is to verify the sort order:
+    expect(Array.from(container.querySelectorAll(".rank-number")).map(el => el.textContent)).toEqual(["#15", "#10"])
   })
 })
