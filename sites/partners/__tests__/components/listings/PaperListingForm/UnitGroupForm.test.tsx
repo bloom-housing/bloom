@@ -1,19 +1,20 @@
-import React from "react"
-import { setupServer } from "msw/lib/node"
-import { mockNextRouter } from "../../../testUtils"
+
+import { act } from "react-test-renderer"
 import { render, screen, within } from "@testing-library/react"
-import UnitGroupForm from "../../../../src/components/listings/PaperListingForm/UnitGroupForm"
+import userEvent from "@testing-library/user-event"
+import { rest } from "msw"
+import { setupServer } from "msw/lib/node"
+import React from "react"
+import { AuthProvider } from "@bloom-housing/shared-helpers"
 import {
   amiCharts,
   unitGroup,
   unitTypes,
 } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
-import { TempUnitGroup } from "../../../../src/lib/listings/formTypes"
+import { mockNextRouter } from "../../../testUtils"
 import { FormProviderWrapper } from "../../applications/sections/helpers"
-import { rest } from "msw"
-import userEvent from "@testing-library/user-event"
-import { AuthProvider } from "@bloom-housing/shared-helpers"
-import { act } from "react-test-renderer"
+import { TempUnitGroup } from "../../../../src/lib/listings/formTypes"
+import UnitGroupForm from "../../../../src/components/listings/PaperListingForm/UnitGroupForm"
 
 const server = setupServer()
 
