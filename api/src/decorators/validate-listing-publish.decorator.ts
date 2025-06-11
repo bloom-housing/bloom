@@ -1,14 +1,10 @@
-import { applyDecorators } from '@nestjs/common';
 import { ListingsStatusEnum } from '@prisma/client';
 import {
   ValidationOptions,
   ValidationArguments,
-  Validate,
   ValidatorConstraint,
   ValidatorConstraintInterface,
-  ValidateIf,
   registerDecorator,
-  IsDefined,
   ValidationTypes,
 } from 'class-validator';
 
