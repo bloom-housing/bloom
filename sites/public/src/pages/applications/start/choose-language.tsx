@@ -27,7 +27,6 @@ import { UserStatus } from "../../../lib/constants"
 import ApplicationFormLayout from "../../../layouts/application-form"
 import { getListingApplicationStatus } from "../../../lib/helpers"
 import styles from "../../../layouts/application-form.module.scss"
-import { runtimeConfig } from "../../../lib/runtime-config"
 
 const loadListing = async (
   listingId,
@@ -51,11 +50,7 @@ const loadListing = async (
   context.syncListing(conductor.listing)
 }
 
-type ChooseLanguageProps = {
-  backendApiBase: string
-}
-
-const ApplicationChooseLanguage = (props: ChooseLanguageProps) => {
+const ApplicationChooseLanguage = () => {
   const router = useRouter()
   const [listing, setListing] = useState(null)
   const context = useContext(AppSubmissionContext)
@@ -100,7 +95,6 @@ const ApplicationChooseLanguage = (props: ChooseLanguageProps) => {
     profile,
     listingsService,
     isPreview,
-    props,
   ])
 
   useEffect(() => {
@@ -235,11 +229,3 @@ const ApplicationChooseLanguage = (props: ChooseLanguageProps) => {
 }
 
 export default ApplicationChooseLanguage
-
-export function getServerSideProps() {
-  const backendApiBase = runtimeConfig.getBackendApiBase()
-
-  return {
-    props: { backendApiBase: backendApiBase },
-  }
-}
