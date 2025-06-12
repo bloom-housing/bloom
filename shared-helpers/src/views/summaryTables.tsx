@@ -452,8 +452,8 @@ export const getAvailabilityText = (
   }
   const hasVacantUnits = group.unitVacancies > 0
   const waitlistStatus = group.openWaitlist
-    ? t("listings.waitlist.open")
-    : t("listings.waitlist.closed")
+    ? t("listings.availability.openWaitlist")
+    : t("listings.availability.closedWaitlist")
 
   // Create an array of status elements to combine
   const statusElements = []
@@ -466,9 +466,7 @@ export const getAvailabilityText = (
     )
   }
 
-  if (group.openWaitlist) {
-    statusElements.push(waitlistStatus)
-  }
+  statusElements.push(waitlistStatus)
 
   // Combine statuses with proper formatting
   let availability = null

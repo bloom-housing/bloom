@@ -5,6 +5,7 @@ import {
   stackedUnitSummariesTable,
   mergeGroupSummaryRows,
   stackedUnitGroupsSummariesTable,
+  getAvailabilityText,
 } from "../../src/views/summaryTables"
 
 afterEach(cleanup)
@@ -741,5 +742,34 @@ describe("stackedUnitGroupsSummariesTable", () => {
         availability: { cellText: "Under Construction" },
       },
     ])
+  })
+})
+
+describe("getAvailabilityText", () => {
+  it("should show closed waitlist text", () => {
+    expect(getAvailabilityText(defaultUnitGroupSummary)).toEqual({ text: "Closed waitlist" })
+  })
+  it("should show open waitlist text", () => {
+    expect(getAvailabilityText({ ...defaultUnitGroupSummary, openWaitlist: true })).toEqual({
+      text: "Open waitlist",
+    })
+  })
+  it("should show plural units available text", () => {
+    expect(
+      getAvailabilityText({ ...defaultUnitGroupSummary, openWaitlist: true, unitVacancies: 10 })
+    ).toEqual({ text: "10 Vacant Units & Open waitlist" })
+  })
+  it("should show singular units available text", () => {
+    expect(
+      getAvailabilityText({ ...defaultUnitGroupSummary, openWaitlist: false, unitVacancies: 1 })
+    ).toEqual({ text: "1 Vacant Unit & Closed waitlist" })
+  })
+  it("should show under construction text", () => {
+    expect(
+      getAvailabilityText(
+        { ...defaultUnitGroupSummary, openWaitlist: true, unitVacancies: 10 },
+        true
+      )
+    ).toEqual({ text: "Under Construction" })
   })
 })
