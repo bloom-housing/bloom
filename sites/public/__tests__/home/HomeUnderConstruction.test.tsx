@@ -35,5 +35,6 @@ describe("<HomeUnderConstruction>", () => {
     expect(screen.getByRole("link", { name: "ListingA" })).toBeInTheDocument()
     expect(screen.getByRole("link", { name: "ListingB" })).toBeInTheDocument()
     expect(screen.getByRole("link", { name: "ListingC" })).toBeInTheDocument()
+    expect(screen.getByRole("link", { name: /See all under construction/i })).toBeInTheDocument()
   })
 })
