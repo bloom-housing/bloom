@@ -107,7 +107,8 @@ export const getStaticProps: GetStaticProps = async (context: {
       },
     })
   } catch (e) {
-    return { notFound: true }
+    console.error("slug notFound Error:", e)
+    return { notFound: true, revalidate: Number(process.env.cacheRevalidate) }
   }
   return {
     props: {
