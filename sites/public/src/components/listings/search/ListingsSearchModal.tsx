@@ -324,7 +324,7 @@ export function ListingsSearchModal(props: ListingsSearchModalProps) {
             type="text"
             id="propertyName"
             name="propertyName"
-            subNote={t("listings.propertyName.helper")}
+            subNote={t("listings.propertyName.helperModal")}
             register={register}
             onChange={validateSearchInput}
             defaultValue={formValues.propertyName}
