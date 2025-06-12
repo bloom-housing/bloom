@@ -133,6 +133,7 @@ export default class ApplicationConductor {
     sections: [],
     languages: [],
     steps: [],
+    featureFlags: [],
   }
   private _listing: Listing
 
