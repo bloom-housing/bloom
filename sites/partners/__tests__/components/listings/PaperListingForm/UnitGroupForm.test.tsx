@@ -1,5 +1,5 @@
 import { act } from "react-test-renderer"
-import { render, screen, within } from "@testing-library/react"
+import { render, screen, waitFor, within } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { rest } from "msw"
 import { setupServer } from "msw/lib/node"
@@ -186,21 +186,35 @@ describe("<UnitGroupForm>", () => {
     const rows = within(headerAndBody[1]).getAllByRole("row")
     expect(rows).toHaveLength(2)
 
-    const rowOneData = within(rows[0]).getAllByRole("cell")
-    expect(rowOneData[0]).toHaveTextContent("Mock AMI")
-    expect(rowOneData[1]).toHaveTextContent("30%")
-    expect(rowOneData[2]).toHaveTextContent(/fixed amount/i)
-    expect(rowOneData[3]).toHaveTextContent("$1500")
-    expect(within(rowOneData[4]).getByRole("button", { name: /edit/i })).toBeInTheDocument()
-    expect(within(rowOneData[4]).getByRole("button", { name: /delete/i })).toBeInTheDocument()
+    const [
+      amiChartRowOne,
+      amiLevelRowOne,
+      rentDeterminationRowOne,
+      monthlyRentRowOne,
+      actionsRowOne,
+    ] = within(rows[0]).getAllByRole("cell")
 
-    const rowTwoData = within(rows[1]).getAllByRole("cell")
-    expect(rowTwoData[0]).toHaveTextContent("Mock AMI")
-    expect(rowTwoData[1]).toHaveTextContent("10%")
-    expect(rowTwoData[2]).toHaveTextContent(/% of income/i)
-    expect(rowTwoData[3]).toHaveTextContent("20%")
-    expect(within(rowTwoData[4]).getByRole("button", { name: /edit/i })).toBeInTheDocument()
-    expect(within(rowTwoData[4]).getByRole("button", { name: /delete/i })).toBeInTheDocument()
+    expect(amiChartRowOne).toHaveTextContent("Mock AMI")
+    expect(amiLevelRowOne).toHaveTextContent("30%")
+    expect(rentDeterminationRowOne).toHaveTextContent(/fixed amount/i)
+    expect(monthlyRentRowOne).toHaveTextContent("$1500")
+    expect(within(actionsRowOne).getByRole("button", { name: /edit/i })).toBeInTheDocument()
+    expect(within(actionsRowOne).getByRole("button", { name: /delete/i })).toBeInTheDocument()
+
+    const [
+      amiChartRowTwo,
+      amiLevelRowTwo,
+      rentDeterminationRowTwo,
+      monthlyRentRowTwo,
+      actionsRowTwo,
+    ] = within(rows[1]).getAllByRole("cell")
+
+    expect(amiChartRowTwo).toHaveTextContent("Mock AMI")
+    expect(amiLevelRowTwo).toHaveTextContent("10%")
+    expect(rentDeterminationRowTwo).toHaveTextContent(/% of income/i)
+    expect(monthlyRentRowTwo).toHaveTextContent("20%")
+    expect(within(actionsRowTwo).getByRole("button", { name: /edit/i })).toBeInTheDocument()
+    expect(within(actionsRowTwo).getByRole("button", { name: /delete/i })).toBeInTheDocument()
   })
 
   it("should open pre-filled drawer on edit click", async () => {
@@ -254,14 +268,154 @@ describe("<UnitGroupForm>", () => {
     )
   })
 
-  it("should remove ami chart on delete click", async () => {
+  describe("ami levels table delete functionality", () => {
+    it("should remove ami chart on delete click", async () => {
+      render(
+        <AuthProvider>
+          <FormProviderWrapper>
+            <UnitGroupForm
+              onClose={jest.fn()}
+              onSubmit={jest.fn()}
+              defaultUnitGroup={tempUnitGroup}
+              draft={true}
+              nextId={1}
+            />
+          </FormProviderWrapper>
+        </AuthProvider>
+      )
+
+      const amiTable = screen.getByRole("table")
+      expect(amiTable).toBeInTheDocument()
+
+      const headAndBody = within(amiTable).getAllByRole("rowgroup")
+      expect(headAndBody).toHaveLength(2)
+
+      let rows = within(headAndBody[1]).getAllByRole("row")
+      expect(rows).toHaveLength(2)
+
+      let deleteButton = within(rows[0]).getByRole("button", { name: /delete/i })
+      expect(deleteButton).toBeInTheDocument()
+
+      await act(() => userEvent.click(deleteButton))
+
+      let deleteModalHeader = screen.getByRole("heading", {
+        level: 1,
+        name: /delete this ami level/i,
+      })
+      expect(deleteModalHeader).toBeInTheDocument()
+
+      let deleteModalContainer = deleteModalHeader.parentElement.parentElement
+      expect(
+        within(deleteModalContainer).getByText(/do you really want to delete this ami level\?/i)
+      ).toBeInTheDocument()
+      expect(
+        within(deleteModalContainer).getByRole("button", { name: /cancel/i })
+      ).toBeInTheDocument()
+
+      let confirmDeleteButton = within(deleteModalContainer).getByRole("button", {
+        name: /delete/i,
+      })
+
+      await act(() => userEvent.click(confirmDeleteButton))
+
+      rows = within(headAndBody[1]).getAllByRole("row")
+      expect(rows).toHaveLength(1)
+
+      deleteButton = within(rows[0]).getByRole("button", { name: /delete/i })
+      expect(deleteButton).toBeInTheDocument()
+
+      await act(() => userEvent.click(deleteButton))
+
+      deleteModalHeader = screen.getByRole("heading", {
+        level: 1,
+        name: /delete this ami level/i,
+      })
+      expect(deleteModalHeader).toBeInTheDocument()
+
+      deleteModalContainer = deleteModalHeader.parentElement.parentElement
+      confirmDeleteButton = within(deleteModalContainer).getByRole("button", {
+        name: /delete/i,
+      })
+
+      await act(() => userEvent.click(confirmDeleteButton))
+
+      expect(screen.queryByRole("table")).not.toBeInTheDocument()
+    })
+
+    it("should discard deletion process on modal cancel click", async () => {
+      render(
+        <AuthProvider>
+          <FormProviderWrapper>
+            <UnitGroupForm
+              onClose={jest.fn()}
+              onSubmit={jest.fn()}
+              defaultUnitGroup={{
+                ...tempUnitGroup,
+                unitGroupAmiLevels: [tempUnitGroup.unitGroupAmiLevels[0]],
+              }}
+              draft={true}
+              nextId={1}
+            />
+          </FormProviderWrapper>
+        </AuthProvider>
+      )
+
+      const amiTable = screen.getByRole("table")
+      expect(amiTable).toBeInTheDocument()
+
+      const headAndBody = within(amiTable).getAllByRole("rowgroup")
+      expect(headAndBody).toHaveLength(2)
+
+      const rows = within(headAndBody[1]).getAllByRole("row")
+      expect(rows).toHaveLength(1)
+
+      const deleteButton = within(rows[0]).getByRole("button", { name: /delete/i })
+      expect(deleteButton).toBeInTheDocument()
+
+      await act(() => userEvent.click(deleteButton))
+
+      let deleteModalHeader = screen.getByRole("heading", {
+        level: 1,
+        name: /delete this ami level/i,
+      })
+      expect(deleteModalHeader).toBeInTheDocument()
+
+      const closeModalButton = within(deleteModalHeader.parentElement).getByRole("button")
+      expect(closeModalButton).toBeInTheDocument()
+
+      await userEvent.click(closeModalButton)
+
+      // Verify that the table still exists, i.e no rows have been removed
+      expect(screen.getByRole("table")).toBeInTheDocument()
+
+      // Repeat the deletion process
+      await act(() => userEvent.click(deleteButton))
+
+      deleteModalHeader = screen.getByRole("heading", {
+        level: 1,
+        name: /delete this ami level/i,
+      })
+      expect(deleteModalHeader).toBeInTheDocument()
+
+      const cancelButton = within(deleteModalHeader.parentElement.parentElement).getByRole(
+        "button",
+        { name: /cancel/i }
+      )
+      await act(() => userEvent.click(cancelButton))
+
+      // Verify that the table still exists, i.e no rows have been removed
+      expect(screen.getByRole("table")).toBeInTheDocument()
+    })
+  })
+
+  it("should show errors when saved before any data input", async () => {
     render(
       <AuthProvider>
         <FormProviderWrapper>
           <UnitGroupForm
             onClose={jest.fn()}
             onSubmit={jest.fn()}
-            defaultUnitGroup={tempUnitGroup}
+            defaultUnitGroup={null}
             draft={true}
             nextId={1}
           />
@@ -269,61 +423,344 @@ describe("<UnitGroupForm>", () => {
       </AuthProvider>
     )
 
-    const amiTable = screen.getByRole("table")
-    expect(amiTable).toBeInTheDocument()
+    expect(await screen.findByLabelText(/studio/i)).toBeInTheDocument()
 
-    const headAndBody = within(amiTable).getAllByRole("rowgroup")
-    expect(headAndBody).toHaveLength(2)
+    const saveAndExitButton = screen.getByRole("button", { name: /save & exit/i })
+    expect(saveAndExitButton).toBeInTheDocument()
+    await act(() => userEvent.click(saveAndExitButton))
 
-    let rows = within(headAndBody[1]).getAllByRole("row")
-    expect(rows).toHaveLength(2)
+    expect(await screen.findByText(/this field is required/i))
+  })
 
-    let deleteButton = within(rows[0]).getByRole("button", { name: /delete/i })
-    expect(deleteButton).toBeInTheDocument()
+  it("should show errors on invalid inputs", async () => {
+    render(
+      <AuthProvider>
+        <FormProviderWrapper>
+          <UnitGroupForm
+            onClose={jest.fn()}
+            onSubmit={jest.fn()}
+            defaultUnitGroup={null}
+            draft={true}
+            nextId={1}
+          />
+        </FormProviderWrapper>
+      </AuthProvider>
+    )
 
-    await act(() => userEvent.click(deleteButton))
-
-    let deleteModalHeader = screen.getByRole("heading", {
-      level: 1,
-      name: /delete this ami level/i,
+    // ----------------------------- Occupancy Section -----------------------------
+    const minOccupancyInput = screen.getByRole("combobox", {
+      name: /minimum occupancy/i,
     })
-    expect(deleteModalHeader).toBeInTheDocument()
+    const maxOccupancyInput = screen.getByRole("combobox", {
+      name: /max occupancy/i,
+    })
 
-    let deleteModalContainer = deleteModalHeader.parentElement.parentElement
+    expect(minOccupancyInput).toBeInTheDocument()
+    expect(maxOccupancyInput).toBeInTheDocument()
+
+    await act(async () => {
+      await userEvent.selectOptions(minOccupancyInput, "7")
+      await userEvent.selectOptions(maxOccupancyInput, "1")
+    })
+
     expect(
-      within(deleteModalContainer).getByText(/do you really want to delete this ami level\?/i)
+      await screen.findByText(/max occupancy must be greater than or equal to minimum occupancy/i)
     ).toBeInTheDocument()
     expect(
-      within(deleteModalContainer).getByRole("button", { name: /cancel/i })
+      await screen.findByText(/minimum occupancy must be less than or equal to max occupancy/i)
     ).toBeInTheDocument()
 
-    let confirmDeleteButton = within(deleteModalContainer).getByRole("button", {
-      name: /delete/i,
+    // ----------------------------- Square Footage Section -----------------------------
+    const minSqftInput = screen.getByRole("spinbutton", {
+      name: /min square footage/i,
+    })
+    const maxSqftInput = screen.getByRole("spinbutton", {
+      name: /max square footage/i,
     })
 
-    await act(() => userEvent.click(confirmDeleteButton))
+    expect(minSqftInput).toBeInTheDocument()
+    expect(maxSqftInput).toBeInTheDocument()
 
-    rows = within(headAndBody[1]).getAllByRole("row")
-    expect(rows).toHaveLength(1)
-
-    deleteButton = within(rows[0]).getByRole("button", { name: /delete/i })
-    expect(deleteButton).toBeInTheDocument()
-
-    await act(() => userEvent.click(deleteButton))
-
-    deleteModalHeader = screen.getByRole("heading", {
-      level: 1,
-      name: /delete this ami level/i,
-    })
-    expect(deleteModalHeader).toBeInTheDocument()
-
-    deleteModalContainer = deleteModalHeader.parentElement.parentElement
-    confirmDeleteButton = within(deleteModalContainer).getByRole("button", {
-      name: /delete/i,
+    await act(async () => {
+      await userEvent.type(minSqftInput, "100")
+      await userEvent.type(maxSqftInput, "50")
     })
 
-    await act(() => userEvent.click(confirmDeleteButton))
+    expect(
+      await screen.findByText(
+        /minimum square footage must be less than or equal to max square footage/i
+      )
+    ).toBeInTheDocument()
+    expect(
+      await screen.findByText(
+        /max square footage must be greater than or equal to minimum square footage/i
+      )
+    ).toBeInTheDocument()
 
-    expect(screen.queryByRole("table")).not.toBeInTheDocument()
+    // ----------------------------- Floor Section -----------------------------
+    const minFloorInput = screen.getByRole("combobox", {
+      name: /minimum floor/i,
+    })
+    const maxFloorInput = screen.getByRole("combobox", {
+      name: /maximum floor/i,
+    })
+
+    expect(minFloorInput).toBeInTheDocument()
+    expect(maxFloorInput).toBeInTheDocument()
+
+    await act(async () => {
+      await userEvent.selectOptions(minFloorInput, "3")
+      await userEvent.selectOptions(maxFloorInput, "1")
+    })
+
+    expect(
+      await screen.findByText(/minimum floor must be less than or equal to max floor/i)
+    ).toBeInTheDocument()
+    expect(
+      await screen.findByText(/max floor must be greater than or equal to minimum floor/i)
+    ).toBeInTheDocument()
+
+    // ----------------------------- Bathroom Section -----------------------------
+    const minBathroomsInput = screen.getByRole("combobox", {
+      name: /min number of bathrooms/i,
+    })
+    const maxBathroomsInput = screen.getByRole("combobox", {
+      name: /max number of bathrooms/i,
+    })
+
+    expect(minBathroomsInput).toBeInTheDocument()
+    expect(maxBathroomsInput).toBeInTheDocument()
+
+    await act(async () => {
+      await userEvent.selectOptions(minBathroomsInput, "4")
+      await userEvent.selectOptions(maxBathroomsInput, "1")
+    })
+
+    expect(
+      await screen.findByText(
+        /minimum number of bathrooms must be less than or equal to max number of bathrooms/i
+      )
+    ).toBeInTheDocument()
+    expect(
+      await screen.findByText(
+        /max number of bathrooms must be greater than or equal to minimum number of bathrooms/i
+      )
+    ).toBeInTheDocument()
+
+    const addAmiButton = screen.getByRole("button", { name: /add ami level/i })
+    expect(addAmiButton).toBeInTheDocument()
+
+    await act(() => userEvent.click(addAmiButton))
+
+    const drawerHeader = screen.getByRole("heading", { level: 1, name: /add ami level/i })
+    expect(drawerHeader).toBeInTheDocument()
+
+    const drawerContainer = drawerHeader.parentElement.parentElement
+
+    const saveButton = within(drawerContainer).getByRole("button", { name: /save/i })
+    expect(saveButton).toBeInTheDocument()
+    await act(() => userEvent.click(saveButton))
+
+    expect(await within(drawerContainer).findAllByText(/this field is required/i)).toHaveLength(3)
+
+    const fixedAmountOption = within(drawerContainer).getByRole("radio", { name: /fixed amount/i })
+    expect(fixedAmountOption).toBeInTheDocument()
+    await act(async () => {
+      await userEvent.click(fixedAmountOption)
+      await userEvent.click(saveButton)
+    })
+
+    expect(await within(drawerContainer).findAllByText(/this field is required/i)).toHaveLength(3)
+  })
+
+  it("should callback form with proper values", async () => {
+    const mockSubmit = jest.fn()
+
+    server.use(
+      rest.get(
+        "http://localhost/api/adapter/amiCharts/4e64914b-3169-4d6f-a8ef-d4b11b34ebcd",
+        (_req, res, ctx) => {
+          return res(ctx.json(amiCharts[0]))
+        }
+      )
+    )
+
+    render(
+      <AuthProvider>
+        <FormProviderWrapper>
+          <UnitGroupForm
+            onClose={jest.fn()}
+            onSubmit={mockSubmit}
+            defaultUnitGroup={null}
+            draft={true}
+            nextId={1}
+          />
+        </FormProviderWrapper>
+      </AuthProvider>
+    )
+
+    const studioButton = await screen.findByLabelText(/studio/i)
+    expect(studioButton).toBeInTheDocument()
+    await act(() => userEvent.click(studioButton))
+
+    const quantityInput = screen.getByRole("spinbutton", {
+      name: /affordable unit group quantity/i,
+    })
+
+    await act(() => userEvent.type(quantityInput, "4"))
+
+    // ----------------------------- Occupancy Section -----------------------------
+    const minOccupancyInput = screen.getByRole("combobox", {
+      name: /minimum occupancy/i,
+    })
+    const maxOccupancyInput = screen.getByRole("combobox", {
+      name: /max occupancy/i,
+    })
+
+    expect(minOccupancyInput).toBeInTheDocument()
+    expect(maxOccupancyInput).toBeInTheDocument()
+
+    await act(async () => {
+      await userEvent.selectOptions(minOccupancyInput, "1")
+      await userEvent.selectOptions(maxOccupancyInput, "4")
+    })
+
+    // ----------------------------- Square Footage Section -----------------------------
+    const minSqftInput = screen.getByRole("spinbutton", {
+      name: /min square footage/i,
+    })
+    const maxSqftInput = screen.getByRole("spinbutton", {
+      name: /max square footage/i,
+    })
+
+    expect(minSqftInput).toBeInTheDocument()
+    expect(maxSqftInput).toBeInTheDocument()
+
+    await act(async () => {
+      await userEvent.type(minSqftInput, "380")
+      await userEvent.type(maxSqftInput, "720")
+    })
+
+    // ----------------------------- Floor Section -----------------------------
+    const minFloorInput = screen.getByRole("combobox", {
+      name: /minimum floor/i,
+    })
+    const maxFloorInput = screen.getByRole("combobox", {
+      name: /maximum floor/i,
+    })
+
+    expect(minFloorInput).toBeInTheDocument()
+    expect(maxFloorInput).toBeInTheDocument()
+
+    await act(async () => {
+      await userEvent.selectOptions(minFloorInput, "1")
+      await userEvent.selectOptions(maxFloorInput, "8")
+    })
+
+    // ----------------------------- Bathroom Section -----------------------------
+    const minBathroomsInput = screen.getByRole("combobox", {
+      name: /min number of bathrooms/i,
+    })
+    const maxBathroomsInput = screen.getByRole("combobox", {
+      name: /max number of bathrooms/i,
+    })
+
+    expect(minBathroomsInput).toBeInTheDocument()
+    expect(maxBathroomsInput).toBeInTheDocument()
+
+    await act(async () => {
+      await userEvent.selectOptions(minBathroomsInput, "1")
+      await userEvent.selectOptions(maxBathroomsInput, "2")
+    })
+
+    const vacanciesInput = screen.getByRole("spinbutton", { name: /unit group vacancies/i })
+    await act(() => userEvent.type(vacanciesInput, "3"))
+
+    const openWaitlistOption = screen.getByRole("radio", { name: /^open$/i })
+    await act(() => userEvent.click(openWaitlistOption))
+
+    // ---------------------- AMI DRAWER SECTION -------------------------
+
+    const addAmiButton = screen.getByRole("button", { name: /add ami level/i })
+    expect(addAmiButton).toBeInTheDocument()
+
+    await act(() => userEvent.click(addAmiButton))
+
+    const drawerHeader = screen.getByRole("heading", { level: 1, name: /add ami level/i })
+    expect(drawerHeader).toBeInTheDocument()
+
+    const drawerContainer = drawerHeader.parentElement.parentElement
+
+    expect(
+      within(drawerContainer).getByRole("heading", { level: 2, name: /^ami level$/i })
+    ).toBeInTheDocument()
+
+    const amiChartInput = within(drawerContainer).getByRole("combobox", { name: /ami chart/i })
+    expect(amiChartInput).toBeInTheDocument()
+
+    await act(() => userEvent.selectOptions(amiChartInput, "Mock AMI"))
+
+    const amiPercentageInput = within(drawerContainer).getByRole("combobox", {
+      name: /percentage of ami/i,
+    })
+    expect(amiPercentageInput).toBeInTheDocument()
+    await act(() => userEvent.selectOptions(amiPercentageInput, "30"))
+
+    const fixedAmountOption = within(drawerContainer).getByRole("radio", { name: /fixed amount/i })
+    expect(fixedAmountOption).toBeInTheDocument()
+    await act(() => userEvent.click(fixedAmountOption))
+
+    const monthlyRentInput = within(drawerContainer).getByRole("spinbutton", {
+      name: /monthly rent/i,
+    })
+    expect(monthlyRentInput).toBeInTheDocument()
+    await act(() => userEvent.type(monthlyRentInput, "1500"))
+
+    const saveButton = within(drawerContainer).getByRole("button", { name: /save/i })
+    expect(saveButton).toBeInTheDocument()
+    await act(() => userEvent.click(saveButton))
+
+    expect(await screen.findByRole("table")).toBeInTheDocument()
+
+    const saveAndExitButton = screen.getByRole("button", { name: /save & exit/i })
+    expect(saveAndExitButton).toBeInTheDocument()
+    await act(() => userEvent.click(saveAndExitButton))
+
+    await waitFor(() => {
+      expect(mockSubmit).toHaveBeenCalledWith(
+        expect.objectContaining({
+          bathroomMax: "2",
+          bathroomMin: "1",
+          floorMax: "8",
+          floorMin: "1",
+          maxOccupancy: "4",
+          minOccupancy: "1",
+          openWaitlist: true,
+          sqFeetMax: "720",
+          sqFeetMin: "380",
+          tempId: 1,
+          totalAvailable: "3",
+          totalCount: "4",
+          unitGroupAmiLevels: [
+            expect.objectContaining({
+              amiChart: expect.objectContaining({
+                id: "4e64914b-3169-4d6f-a8ef-d4b11b34ebcd",
+                name: "Mock AMI",
+              }),
+              amiPercentage: "30",
+              flatRentValue: "1500",
+              monthlyRentDeterminationType: "flatRent",
+              tempId: 1,
+            }),
+          ],
+          unitTypes: [
+            expect.objectContaining({
+              name: "studio",
+              numBedrooms: 0,
+            }),
+          ],
+        })
+      )
+    })
   })
 })
