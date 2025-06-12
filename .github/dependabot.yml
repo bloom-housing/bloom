@@ -1,0 +1,25 @@
+# Please see the documentation for all configuration options:
+# https://docs.github.com/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directories: # Locations of package manifests
+      - "/"
+      - "/api"
+      - "/shared-helpers"
+      - "/sites/public"
+      - "/sites/partners"
+    schedule: # how often to check for new versions
+      interval: "weekly"
+    groups: # All updates for dependencies that match a rule are combined in a single pull request.
+      # Any outdated dependencies that do not match a rule are updated in individual pull requests. In this case, major updates
+      minor-security:
+        applies-to: security-updates
+        update-types:
+          - "minor"
+          - "patch"
+      minor-versions:
+        applies-to: version-updates
+        update-types:
+          - "minor"
+          - "patch"
