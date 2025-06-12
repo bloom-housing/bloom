@@ -20,6 +20,9 @@ import {
   ListingEventsTypeEnum,
   ApplicationReviewStatusEnum,
   InputType,
+  UnitGroup,
+  EnumUnitGroupAmiLevelMonthlyRentDeterminationType,
+  UnitType,
 } from "../src/types/backend-swagger"
 
 export const multiselectQuestionPreference: MultiselectQuestion = {
@@ -381,6 +384,229 @@ export const unit: Unit = {
   updatedAt: new Date("2019-08-14T23:05:43.913Z"),
   monthlyRentAsPercentOfIncome: undefined,
 }
+
+export const unitTypes: UnitType[] = [
+  {
+    id: "782a29a6-ca80-4b1a-bcad-d816ce4c42e6",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    name: UnitTypeEnum.studio,
+    numBedrooms: 0,
+  },
+  {
+    id: "88872ac6-d8e4-460a-97fd-a57c4354f7c7",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    name: UnitTypeEnum.oneBdrm,
+    numBedrooms: 1,
+  },
+  {
+    id: "8e8fb9a3-63c3-4a27-b432-aeecafacc76d",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    name: UnitTypeEnum.twoBdrm,
+    numBedrooms: 2,
+  },
+  {
+    id: "41b0f6f9-af33-4bc1-b5c3-b6761e35075d",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    name: UnitTypeEnum.threeBdrm,
+    numBedrooms: 3,
+  },
+  {
+    id: "e1853e6c-4f36-4b0e-9589-1735deb6a34c",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    name: UnitTypeEnum.fourBdrm,
+    numBedrooms: 4,
+  },
+  {
+    id: "e98b54fe-1562-4ff2-9192-499faffb827b",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    name: UnitTypeEnum.SRO,
+    numBedrooms: 0,
+  },
+  {
+    id: "797e5f3e-0d30-4a9f-8985-d5864776ebb1",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    name: UnitTypeEnum.fiveBdrm,
+    numBedrooms: 5,
+  },
+]
+
+export const unitGroup: UnitGroup = {
+  id: "unit_group_id",
+  createdAt: new Date(),
+  updatedAt: new Date(),
+  maxOccupancy: 3,
+  minOccupancy: 1,
+  floorMin: 1,
+  floorMax: 4,
+  totalCount: 5,
+  totalAvailable: 5,
+  bathroomMin: 1,
+  bathroomMax: 2,
+  openWaitlist: true,
+  sqFeetMin: 370,
+  sqFeetMax: 840,
+  unitGroupAmiLevels: [
+    {
+      id: "4e64914b-3169-4d6f-a8ef-d4b11b34ebcd",
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      amiPercentage: 30,
+      monthlyRentDeterminationType: EnumUnitGroupAmiLevelMonthlyRentDeterminationType.flatRent,
+      flatRentValue: 1500,
+      amiChart: {
+        id: "4e64914b-3169-4d6f-a8ef-d4b11b34ebcd",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        items: [],
+        name: "Mock AMI ",
+        jurisdictions: {
+          id: "Uvbk5qurpB2WI9V6WnNdH",
+          name: "Test City",
+        },
+      },
+    },
+    {
+      id: "mock_ami_id_2",
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      amiPercentage: 10,
+      monthlyRentDeterminationType:
+        EnumUnitGroupAmiLevelMonthlyRentDeterminationType.percentageOfIncome,
+      percentageOfIncomeValue: 20,
+      amiChart: {
+        id: "4e64914b-3169-4d6f-a8ef-d4b11b34ebcd",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        items: [],
+        name: "Mock AMI",
+        jurisdictions: {
+          id: "Uvbk5qurpB2WI9V6WnNdH",
+          name: "Bloomington",
+        },
+      },
+    },
+  ],
+  unitTypes: [
+    {
+      id: "unit_id_1",
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      name: UnitTypeEnum.studio,
+      numBedrooms: 0,
+    },
+    {
+      id: "unit_id_2",
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      name: UnitTypeEnum.oneBdrm,
+      numBedrooms: 1,
+    },
+    {
+      id: "unit_id_3",
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      name: UnitTypeEnum.twoBdrm,
+      numBedrooms: 2,
+    },
+  ],
+}
+
+export const amiCharts = [
+  {
+    id: "4e64914b-3169-4d6f-a8ef-d4b11b34ebcd",
+    createdAt: "2025-06-09T17:15:41.062Z",
+    updatedAt: "2025-06-09T17:15:41.062Z",
+    items: [
+      {
+        percentOfAmi: 10,
+        householdSize: 1,
+        income: 12000,
+      },
+      {
+        percentOfAmi: 10,
+        householdSize: 2,
+        income: 24000,
+      },
+      {
+        percentOfAmi: 10,
+        householdSize: 3,
+        income: 36000,
+      },
+      {
+        percentOfAmi: 10,
+        householdSize: 4,
+        income: 48000,
+      },
+      {
+        percentOfAmi: 10,
+        householdSize: 5,
+        income: 60000,
+      },
+      {
+        percentOfAmi: 20,
+        householdSize: 1,
+        income: 24000,
+      },
+      {
+        percentOfAmi: 20,
+        householdSize: 2,
+        income: 36000,
+      },
+      {
+        percentOfAmi: 20,
+        householdSize: 3,
+        income: 48000,
+      },
+      {
+        percentOfAmi: 20,
+        householdSize: 4,
+        income: 60000,
+      },
+      {
+        percentOfAmi: 20,
+        householdSize: 5,
+        income: 72000,
+      },
+      {
+        percentOfAmi: 30,
+        householdSize: 1,
+        income: 36000,
+      },
+      {
+        percentOfAmi: 30,
+        householdSize: 2,
+        income: 48000,
+      },
+      {
+        percentOfAmi: 30,
+        householdSize: 3,
+        income: 60000,
+      },
+      {
+        percentOfAmi: 30,
+        householdSize: 4,
+        income: 72000,
+      },
+      {
+        percentOfAmi: 30,
+        householdSize: 5,
+        income: 84000,
+      },
+    ],
+    name: "Mock AMI",
+    jurisdictions: {
+      id: "Uvbk5qurpB2WI9V6WnNdH",
+      name: "Test City",
+    },
+  },
+]
 
 export const jurisdiction: Jurisdiction = {
   name: "Alameda",
