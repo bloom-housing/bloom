@@ -4,6 +4,8 @@ import { setupServer } from "msw/lib/node"
 import { mockNextRouter, render } from "../../../testUtils"
 import { rest } from "msw"
 import ListingForm from "../../../../src/components/listings/PaperListingForm"
+import { AuthContext } from "@bloom-housing/shared-helpers"
+import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 const server = setupServer()
 
@@ -36,7 +38,22 @@ describe("add listing", () => {
         return res(ctx.json([]))
       })
     )
-    render(<ListingForm />)
+    render(
+      <AuthContext.Provider
+        value={{
+          doJurisdictionsHaveFeatureFlagOn: (featureFlag: FeatureFlagEnum) => {
+            switch (featureFlag) {
+              case FeatureFlagEnum.swapCommunityTypeWithPrograms:
+                return false
+              default:
+                return false
+            }
+          },
+        }}
+      >
+        <ListingForm />
+      </AuthContext.Provider>
+    )
 
     // Listing Details Tab
     expect(screen.getByRole("button", { name: "Listing Details" }))
