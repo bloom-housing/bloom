@@ -3887,10 +3887,10 @@
   dependencies:
     "@types/jest" "*"
 
-"@types/tough-cookie@^4.0.2":
-  version "4.0.2"
-  resolved "https://registry.npmjs.org/@types/tough-cookie/-/tough-cookie-4.0.2.tgz"
-  integrity sha512-Q5vtl1W5ue16D+nIaW8JWebSSraJVlK+EthKn7e7UcD4KWsaSJ8BqGPXNaPghgtcn/fhvrN17Tv8ksUsQpiplw==
+"@types/tough-cookie@^4.0.5":
+  version "4.0.5"
+  resolved "https://registry.yarnpkg.com/@types/tough-cookie/-/tough-cookie-4.0.5.tgz#cb6e2a691b70cb177c6e3ae9c1d2e8b2ea8cd304"
+  integrity sha512-/Ad8+nIOV7Rl++6f1BdKxFSMgmoqEoYbHRpPcx3JEfv8VRsQe9Z4mCXeJBzxs7mbHY/XOZZuXlRNfhpVPbs6ZA==
 
 "@types/yargs-parser@*":
   version "21.0.0"
@@ -4219,12 +4219,17 @@ ag-grid-react@^26.0.0:
   dependencies:
     prop-types "^15.6.2"
 
-agent-base@6, agent-base@^6.0.2:
+agent-base@6:
   version "6.0.2"
   resolved "https://registry.npmjs.org/agent-base/-/agent-base-6.0.2.tgz"
   integrity sha512-RZNwNclF7+MS/8bDg70amg32dyeZGZxiDuQmZxKLAlQjr3jGyLx+4Kkk58UO7D2QdgFIQCovuSuZESne6RG6XQ==
   dependencies:
     debug "4"
+
+agent-base@^7.1.3:
+  version "7.1.3"
+  resolved "https://registry.yarnpkg.com/agent-base/-/agent-base-7.1.3.tgz#29435eb821bc4194633a5b89e5bc4703bafc25a1"
+  integrity sha512-jRR5wdylq8CkOe6hei19GGZnxM6rBGwFl3Bg0YItGDimvjGtAvdZk4Pu6Cl4u4Igsws4a1fd1Vq3ezrhn4KmFw==
 
 aggregate-error@^3.0.0:
   version "3.1.0"
@@ -4661,12 +4666,12 @@ axe-core@^4.10.0:
   resolved "https://registry.npmjs.org/axe-core/-/axe-core-4.10.0.tgz"
   integrity sha512-Mr2ZakwQ7XUAjp7pAwQWRhhK8mQQ6JAaNWSjmjxil0R8BPioMtQsTLOolGYkji1rcL++3dCqZA3zWqpT+9Ew6g==
 
-axios-cookiejar-support@4.0.6:
-  version "4.0.6"
-  resolved "https://registry.npmjs.org/axios-cookiejar-support/-/axios-cookiejar-support-4.0.6.tgz"
-  integrity sha512-lWDhgM6bc2xYAsHkXEhceLpTu9ytAeIz1VSuL5FoUgGx2lqcMNbNxTD9Hm4x5c8JF5Me0HfNrb06fhEGMC30mQ==
+axios-cookiejar-support@^5.0.5:
+  version "5.0.5"
+  resolved "https://registry.yarnpkg.com/axios-cookiejar-support/-/axios-cookiejar-support-5.0.5.tgz#6030e17b438a64e3967a5ca190ee4202481c0ecf"
+  integrity sha512-jJG+p7JnOYxkVrYkCDKBrLqUmcpwHZTNQrEcIEKr5qe7YVTyPAD9nCsi1cO5LDmQpQApfS430czO+oceI3g/3g==
   dependencies:
-    http-cookie-agent "^5.0.2"
+    http-cookie-agent "^6.0.8"
 
 axios@0.21.2:
   version "0.21.2"
@@ -7924,12 +7929,12 @@ http-cache-semantics@^4.0.0:
   resolved "https://registry.npmjs.org/http-cache-semantics/-/http-cache-semantics-4.1.1.tgz"
   integrity sha512-er295DKPVsV82j5kw1Gjt+ADA/XYHsajl82cGNQG2eyoPkvgUhX+nDIyelzhIWbbsXP39EHcI6l5tYs2FYqYXQ==
 
-http-cookie-agent@^5.0.2:
-  version "5.0.2"
-  resolved "https://registry.npmjs.org/http-cookie-agent/-/http-cookie-agent-5.0.2.tgz"
-  integrity sha512-BiBmZyIMGl5mLKmY7KH2uCVlcNUl1jexjdtWXFCUF4DFOrNZg1c5iPPTzWDzU7Ngfb6fB03DPpJQ80KQWmycsg==
+http-cookie-agent@^6.0.8:
+  version "6.0.8"
+  resolved "https://registry.yarnpkg.com/http-cookie-agent/-/http-cookie-agent-6.0.8.tgz#f2635638f4172c7de0c482396ea7313e9731a62b"
+  integrity sha512-qnYh3yLSr2jBsTYkw11elq+T361uKAJaZ2dR4cfYZChw1dt9uL5t3zSUwehoqqVb4oldk1BpkXKm2oat8zV+oA==
   dependencies:
-    agent-base "^6.0.2"
+    agent-base "^7.1.3"
 
 http-proxy-agent@^4.0.1:
   version "4.0.1"
@@ -13065,6 +13070,18 @@ tinyqueue@^2.0.3:
   resolved "https://registry.npmjs.org/tinyqueue/-/tinyqueue-2.0.3.tgz"
   integrity sha512-ppJZNDuKGgxzkHihX8v9v9G5f+18gzaTfrukGrq6ueg0lmH4nqVnA2IPG0AEH3jKEk2GRJCUhDoqpoiw3PHLBA==
 
+tldts-core@^6.1.84:
+  version "6.1.84"
+  resolved "https://registry.yarnpkg.com/tldts-core/-/tldts-core-6.1.84.tgz#f8ac2af9969bf9c2f7a99fa05d9c667b5e5b768c"
+  integrity sha512-NaQa1W76W2aCGjXybvnMYzGSM4x8fvG2AN/pla7qxcg0ZHbooOPhA8kctmOZUDfZyhDL27OGNbwAeig8P4p1vg==
+
+tldts@^6.1.32:
+  version "6.1.84"
+  resolved "https://registry.yarnpkg.com/tldts/-/tldts-6.1.84.tgz#fb58b1ceb70972a1ecd683606cea3d06c78f7238"
+  integrity sha512-aRGIbCIF3teodtUFAYSdQONVmDRy21REM3o6JnqWn5ZkQBJJ4gHxhw6OfwQ+WkSAi3ASamrS4N4nyazWx6uTYg==
+  dependencies:
+    tldts-core "^6.1.84"
+
 tmp@^0.0.33:
   version "0.0.33"
   resolved "https://registry.npmjs.org/tmp/-/tmp-0.0.33.tgz"
@@ -13126,7 +13143,7 @@ totalist@^1.0.0:
   resolved "https://registry.npmjs.org/totalist/-/totalist-1.1.0.tgz"
   integrity sha512-gduQwd1rOdDMGxFG1gEvhV88Oirdo2p+KjoYFU7k2g+i7n6AFFbDQ5kMPUsW0pNbfQsB/cwXvT1i4Bue0s9g5g==
 
-tough-cookie@4.1.3, tough-cookie@^4.0.0:
+tough-cookie@^4.0.0:
   version "4.1.3"
   resolved "https://registry.npmjs.org/tough-cookie/-/tough-cookie-4.1.3.tgz"
   integrity sha512-aX/y5pVRkfRnfmuX+OdbSdXvPe6ieKX/G2s7e98f4poJHnqH3281gDPm/metm6E/WRamfx7WC4HUqkWHfQHprw==
@@ -13135,6 +13152,13 @@ tough-cookie@4.1.3, tough-cookie@^4.0.0:
     punycode "^2.1.1"
     universalify "^0.2.0"
     url-parse "^1.5.3"
+
+tough-cookie@^5.1.2:
+  version "5.1.2"
+  resolved "https://registry.yarnpkg.com/tough-cookie/-/tough-cookie-5.1.2.tgz#66d774b4a1d9e12dc75089725af3ac75ec31bed7"
+  integrity sha512-FVDYdxtnj0G6Qm/DhNPSb8Ju59ULcup3tuJxkFb5K8Bv2pUXILbf0xZWU8PX8Ov19OXljbUyveOFwRMwkXzO+A==
+  dependencies:
+    tldts "^6.1.32"
 
 tough-cookie@~2.5.0:
   version "2.5.0"
