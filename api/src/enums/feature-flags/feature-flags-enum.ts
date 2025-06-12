@@ -48,7 +48,7 @@ export const featureFlagMap: { name: string; description: string }[] = [
   {
     name: FeatureFlagEnum.disableListingPreferences,
     description:
-      'When true listings will no longer support preferneces section',
+      'When true listings will no longer support preferences section',
   },
   {
     name: FeatureFlagEnum.enableAccessibilityFeatures,
