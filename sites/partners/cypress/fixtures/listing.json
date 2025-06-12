@@ -67,5 +67,6 @@
     ["elevator", "Elevator"],
     ["mobility", "Units for those with mobility disabilities"],
     ["visual", "Units for those with visual disabilities"]
-  ]
+  ],
+  "referralContactPhone": "520-245-8811"
 }
