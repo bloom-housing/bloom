@@ -8,6 +8,8 @@ export interface PageHeaderProps {
   heading: React.ReactNode
   /** Description below the heading */
   subheading?: React.ReactNode
+  /** Content to show below the subtitle */
+  content?: React.ReactNode
 }
 
 export interface PageHeaderLayoutProps extends PageHeaderProps {
@@ -25,7 +27,7 @@ export const PageHeaderSection = (props: Omit<PageHeaderLayoutProps, "children">
   if (props.className) classNames.push(props.className)
   return (
     <div className={classNames.join(" ")}>
-      <PageHeader heading={props.heading} subheading={props.subheading} />
+      <PageHeader heading={props.heading} subheading={props.subheading} content={props.content} />
     </div>
   )
 }
@@ -52,6 +54,7 @@ const PageHeader = (props: PageHeaderProps) => {
           </div>
         </MaxWidthLayout>
       </div>
+      {props.content && props.content}
     </div>
   )
 }

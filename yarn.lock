@@ -2013,10 +2013,10 @@
     tailwindcss-rtl "^0.9.0"
     typesafe-actions "^5.1.0"
 
-"@bloom-housing/ui-seeds@1.19.3":
-  version "1.19.3"
-  resolved "https://registry.yarnpkg.com/@bloom-housing/ui-seeds/-/ui-seeds-1.19.3.tgz#801a44803f94c05b7175dfddec9b8440a76e23c8"
-  integrity sha512-kK33J1PVkeA97woiJH34qzFMC5GD7ztnavPg/gwhmqCC079vVeJjPW3X4YqSCpN7ngKjzLEoCYE6sPr6JV+egA==
+"@bloom-housing/ui-seeds@1.20.1":
+  version "1.20.1"
+  resolved "https://registry.yarnpkg.com/@bloom-housing/ui-seeds/-/ui-seeds-1.20.1.tgz#f42be32fb4e224e0872e3cba8f680c2ac9428261"
+  integrity sha512-9bvcjWKVG92j+WhUPqQN77UjhVl2+2f0Z2C+v5JzNNsyonQXHC1tc4yXpCMym99xCp28qAgwQg4RDw9BAJlqPg==
   dependencies:
     "@fortawesome/fontawesome-svg-core" "^6.3.0"
     "@fortawesome/react-fontawesome" "^0.2.0"
@@ -2026,7 +2026,7 @@
     "@types/node" "^16.7.13"
     "@types/react" "^18.0.0"
     "@types/react-dom" "^18.0.0"
-    focus-trap-react "^10.2.1"
+    focus-trap-react "^11.0.3"
     markdown-to-jsx "^6.11.4"
     react "^18.2.0"
     react-dom "^18.2.0"
@@ -7193,18 +7193,18 @@ focus-lock@^0.11.6:
   dependencies:
     tslib "^2.0.3"
 
-focus-trap-react@^10.2.1:
-  version "10.2.3"
-  resolved "https://registry.npmjs.org/focus-trap-react/-/focus-trap-react-10.2.3.tgz"
-  integrity sha512-YXBpFu/hIeSu6NnmV2xlXzOYxuWkoOtar9jzgp3lOmjWLWY59C/b8DtDHEAV4SPU07Nd/t+nS/SBNGkhUBFmEw==
+focus-trap-react@^11.0.3:
+  version "11.0.3"
+  resolved "https://registry.yarnpkg.com/focus-trap-react/-/focus-trap-react-11.0.3.tgz#fe46bbe2a024379b3783cad73187197bafbadb88"
+  integrity sha512-tS1+enWS/gwCHk2WIF3KpM2oz7Y3HsnRImzHZNRgCBLWXzNG4XQVlJgbqdLr4lBKRXGdDBjQYitSh1bf2xe4Ag==
   dependencies:
-    focus-trap "^7.5.4"
+    focus-trap "^7.6.4"
     tabbable "^6.2.0"
 
-focus-trap@^7.5.4:
-  version "7.5.4"
-  resolved "https://registry.npmjs.org/focus-trap/-/focus-trap-7.5.4.tgz"
-  integrity sha512-N7kHdlgsO/v+iD/dMoJKtsSqs5Dz/dXZVebRgJw23LDk+jMi/974zyiOYDziY2JPp8xivq9BmUGwIJMiuSBi7w==
+focus-trap@^7.6.4:
+  version "7.6.4"
+  resolved "https://registry.yarnpkg.com/focus-trap/-/focus-trap-7.6.4.tgz#455ec5c51fee5ae99604ca15142409ffbbf84db9"
+  integrity sha512-xx560wGBk7seZ6y933idtjJQc1l+ck+pI3sKvhKozdBV1dRZoKhkW5xoCaFv9tQiX5RH1xfSxjuNu6g+lmN/gw==
   dependencies:
     tabbable "^6.2.0"
 
