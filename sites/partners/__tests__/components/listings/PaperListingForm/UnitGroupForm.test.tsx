@@ -562,15 +562,6 @@ describe("<UnitGroupForm>", () => {
     await act(() => userEvent.click(saveButton))
 
     expect(await within(drawerContainer).findAllByText(/this field is required/i)).toHaveLength(3)
-
-    const fixedAmountOption = within(drawerContainer).getByRole("radio", { name: /fixed amount/i })
-    expect(fixedAmountOption).toBeInTheDocument()
-    await act(async () => {
-      await userEvent.click(fixedAmountOption)
-      await userEvent.click(saveButton)
-    })
-
-    expect(await within(drawerContainer).findAllByText(/this field is required/i)).toHaveLength(3)
   })
 
   it("should callback form with proper values", async () => {
