@@ -159,7 +159,7 @@ describe("filter drawer helpers", () => {
         },
       ])
     })
-    it("should return correct fields when existindData is partial form object", () => {
+    it("should return correct fields when existingData is partial form object", () => {
       const partialFormObject: FilterData = {
         [ListingFilterKeys.homeTypes]: {
           [HomeTypeEnum.apartment]: true,
@@ -195,7 +195,7 @@ describe("filter drawer helpers", () => {
         },
       ])
     })
-    it("should return correct fields when existindData is the full form object", () => {
+    it("should return correct fields when existingData is the full form object", () => {
       const fullFormWithSelections: FilterData = {
         ...emptyFormData,
         [ListingFilterKeys.homeTypes]: {
@@ -330,7 +330,7 @@ describe("filter drawer helpers", () => {
       const backendFilters = encodeFilterDataToBackendFilters(filterData)
       expect(backendFilters).toStrictEqual([{ $comparison: "LIKE", name: "Listing Name" }])
     })
-    it("should returm correct BE filters for all comparison types combined", () => {
+    it("should return correct BE filters for all comparison types combined", () => {
       const filterData: FilterData = {
         [ListingFilterKeys.isVerified]: true,
         [ListingFilterKeys.availabilities]: {
@@ -515,7 +515,7 @@ describe("filter drawer helpers", () => {
         [ListingFilterKeys.isVerified]: true,
       })
     })
-    it("should return correct filter data with mutliple boolean filter query", () => {
+    it("should return correct filter data with multiple boolean filter query", () => {
       expect(
         decodeQueryToFilterData({ isVerified: "true", section8Acceptance: "true" })
       ).toStrictEqual({
@@ -683,7 +683,7 @@ describe("filter drawer helpers", () => {
       )
     }
 
-    const CustomnColumnCheckBoxGroup = () => {
+    const CustomColumnCheckBoxGroup = () => {
       // eslint-disable-next-line @typescript-eslint/unbound-method
       const { register } = useForm()
 
@@ -738,7 +738,7 @@ describe("filter drawer helpers", () => {
       expect(screen.getByRole("checkbox", { name: "Townhome" })).not.toBeChecked()
     })
     it("should show the correct number of columns when a customColumnNumber is added", () => {
-      render(<CustomnColumnCheckBoxGroup />)
+      render(<CustomColumnCheckBoxGroup />)
       expect(screen.getByRole("group", { name: "Home type" }))
       expect(screen.getByRole("row")).toHaveAttribute("data-columns", "1")
       expect(screen.getByLabelText("Apartment"))
