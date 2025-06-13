@@ -399,7 +399,12 @@ const FormUnits = ({
               variant={fieldHasError(errors?.units) ? "alert" : "primary-outlined"}
               size="sm"
               onClick={() => {
-                editUnit(units.length + 1)
+                if (enableUnitGroups) {
+                  editUnitGroup(unitGroups.length + 1)
+                } else {
+                  editUnit(units.length + 1)
+                }
+
                 clearErrors("units")
               }}
             >
@@ -468,6 +473,7 @@ const FormUnits = ({
               saveUnitGroup(unitGroup)
             }}
             onClose={() => {
+              setDefaultUnitGroup(null)
               setUnitDrawerOpen(false)
             }}
             defaultUnitGroup={defaultUnitGroup}
