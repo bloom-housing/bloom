@@ -477,7 +477,7 @@
   "listings.unit.unitTypes": "Unit Types",
   "listings.unit.groupVacancies": "Unit Group Vacancies",
   "listings.unit.waitlistStatus": "Waitlist Status",
-  "listings.unitGroupd.add": "Add Unit Group",
+  "listings.unitGroup.add": "Add Unit Group",
   "listings.unitGroup.delete": "Delete this Unit Group",
   "listings.unitGroup.deleteConf": "Do you really want to delete this unit group?",
   "listings.unitTypesOrIndividual": "Do you want to show unit types or individual units?",
