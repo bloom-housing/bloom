@@ -22,6 +22,7 @@ COPY .env ./
 
 # run build commands
 RUN yarn prisma generate
+RUN yarn db:setup:staging
 RUN yarn build
 
 # Expose port 3100 for api

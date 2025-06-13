@@ -1,0 +1,164 @@
+# FROM --platform=linux/amd64 node:18:19:0
+
+# The source stage will contain only the necessary source code
+FROM node:18.20-alpine AS source
+
+RUN ln -s /usr/lib/libssl.so.3 /lib/libssl.so.3
+
+# WORKDIR doesn't need to be fancy, but it needs to be consistent
+WORKDIR /app
+
+# Bring in backend code
+COPY --chown=node:node api ./api
+
+
+#####################
+##### NEW STAGE #####
+#####################
+
+# The deps stage installs full dependencies
+FROM source AS deps
+
+# Switch to api directory
+WORKDIR /app/api
+
+# Install dependencies
+RUN yarn install --frozen-lockfile
+
+RUN yarn prisma generate
+
+#####################
+##### NEW STAGE #####
+#####################
+
+# The test stage builds an image safe for running tests
+FROM deps AS test
+
+WORKDIR /app/api
+
+# When running this image, make sure to use the built-in node user
+USER root
+
+# yarn db commands require psql
+RUN apk update
+RUN apk add postgresql
+
+# This can be overridden with other test commands
+CMD ["yarn", "test:cov"]
+
+
+#####################
+##### NEW STAGE #####
+#####################
+
+# The build stage builds the code using the dependencies from the deps stage
+FROM node:18.20-alpine AS build
+
+RUN ln -s /usr/lib/libssl.so.3 /lib/libssl.so.3
+
+# Start in the root
+WORKDIR /app
+
+# We have to copy over all of the files due to the way dependencies are scattered across directories
+COPY --from=deps --chown=node:node /app .
+
+# Go into api to build
+WORKDIR /app/api
+
+# Build the app
+RUN yarn build
+
+
+#####################
+##### NEW STAGE #####
+#####################
+
+# The optimize stage contains only dependencies needed to run the service
+FROM node:18.20-alpine AS optimize
+
+RUN ln -s /usr/lib/libssl.so.3 /lib/libssl.so.3
+
+# No need to keep nested dirs since shared-helpers is only needed for testing
+WORKDIR /app
+
+# Pull in package files again
+COPY --from=source --chown=node:node \
+    /app/api/package*.json \
+    /app/api/tsconfig*.json \
+    /app/api/yarn*.lock \
+    /app/api/prisma ./
+
+# Set the NODE_ENV variable
+# Setting it to production can enable optimizations in code
+ARG NODE_ENV=production
+ENV NODE_ENV=${NODE_ENV}
+
+# Reinstall only dependencies required to run the application
+RUN yarn install --frozen-lockfile --only=production
+RUN yarn prisma generate
+
+
+#####################
+##### NEW STAGE #####
+#####################
+
+# The run stage contains an optimized image for running the application
+FROM node:18.20-alpine AS run
+
+RUN ln -s /usr/lib/libssl.so.3 /lib/libssl.so.3
+
+# No need to keep nested dirs since shared-helpers is only needed for testing
+WORKDIR /app
+
+# Pull in package files again
+COPY --from=source --chown=node:node \
+    /app/api/package*.json \
+    /app/api/tsconfig*.json \
+    /app/api/yarn*.lock \
+    /app/api/prisma ./
+
+# Add only dependencies required to run the application
+COPY --from=optimize --chown=node:node /app/node_modules ./node_modules
+RUN yarn prisma generate
+
+# Add the compiled code from the build image
+COPY --from=build --chown=node:node /app/api/dist ./dist
+RUN mkdir ./src
+RUN mkdir ./src/temp
+RUN chmod 777 ./src/temp
+
+# When running this image, make sure to use the built-in node user
+USER node
+
+RUN yarn prisma generate
+
+CMD ["yarn", "start:prod"]
+
+#####################
+##### NEW STAGE #####
+#####################
+
+# The run stage contains an optimized image for running the application
+FROM run AS migrate
+
+ENV SKIP_MIGRATIONS=TRUE
+
+WORKDIR /app
+
+# These parts have to be run as root
+USER root
+
+# yarn db commands require psql
+RUN apk update
+RUN apk add postgresql
+
+# Add src and types so migrations can run
+COPY --from=source --chown=node:node /app/api/src ./src
+COPY --from=source --chown=node:node /app/api/prisma ./prisma
+COPY --from=source --chown=node:node /app/api/scripts ./scripts
+
+## This CMD should be run as the node user
+USER node
+
+# We need to skip all migrations that are just for local development (changes already exist in deployed environment)
+CMD ["yarn", "db:migration:run"]

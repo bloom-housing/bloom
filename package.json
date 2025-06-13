@@ -6,7 +6,6 @@
   "workspaces": {
     "packages": [
       "sites/public",
-      "sites/partners",
       "shared-helpers"
     ],
     "nohoist": [

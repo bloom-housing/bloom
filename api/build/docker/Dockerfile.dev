@@ -1,0 +1,16 @@
+FROM node:18.20-alpine
+
+WORKDIR /usr/src/app
+RUN apk add --no-cache openssl
+
+COPY prisma/schema.prisma ./
+COPY package.json yarn.lock ./
+
+RUN yarn install
+
+RUN yarn prisma generate
+
+COPY . .
+
+CMD ["sh", "-c", "yarn dev"]
+

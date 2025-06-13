@@ -1,12 +1,55 @@
 services:
-  api:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: api
+  postgres_db:
+    image: postgres:15
+    hostname: postgres_db
+    container_name: postgres_db
+    restart: always
     environment:
-      - PORT=${PORT}
+      POSTGRES_DB: bloom_prisma
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: prisma
+    ports:
+      - '5433:5432'
+    networks:
+      - prisma-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d postgres"]
+      interval: 5s
+      timeout: 2s
+      retries: 20
+
+  server:
+    build: 
+      context: .  
+      dockerfile: build/docker/Dockerfile.dev
     ports:
       - '3100:3100'
-    extra_hosts:
-      - 'host.docker.internal:host-gateway'
+    stdin_open: true
+    tty: true  # Keeps the container running for debugging
+    depends_on:
+      postgres_db:
+        condition: service_healthy
+    env_file:
+      - .env
+    networks:
+      - prisma-network
+  # prisma-studio:
+  #   image: node:lts-alpine3.17
+  #   working_dir: /usr/src/app
+  #   volumes:
+  #     - .:/usr/src/app
+  #   command: npx prisma studio --port 5555 --browser none
+  #   ports:
+  #     - "5555:5555"
+  #   env_file:
+  #     - .env
+  #   networks:
+  #     - prisma-network
+  #   depends_on:
+  #     postgres_db:
+  #       condition: service_healthy
+  #     server:
+  #       condition: service_started
+networks:
+  prisma-network:
+    name: prisma-network
