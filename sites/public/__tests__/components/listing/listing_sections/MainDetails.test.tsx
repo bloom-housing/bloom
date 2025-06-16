@@ -31,6 +31,7 @@ describe("<MainDetails>", () => {
           ...listing,
           reviewOrderType: ReviewOrderTypeEnum.lottery,
           reservedCommunityTypes: null,
+          listingFeatures: {},
         }}
         dueDateContent={[]}
         jurisdiction={jurisdiction}
