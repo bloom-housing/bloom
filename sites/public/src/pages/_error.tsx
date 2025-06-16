@@ -1,13 +1,10 @@
 import React, { useEffect, useContext } from "react"
-import { Hero, t } from "@bloom-housing/ui-components"
 import { PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
-import { Button } from "@bloom-housing/ui-seeds"
+import { ContentError } from "../components/page/ContentError"
+import { ContentErrorDeprecated } from "../components/page/ContentErrorDeprecated"
 import { UserStatus } from "../lib/constants"
-import MaxWidthLayout from "../layouts/max-width"
 
 const ErrorPage = () => {
-  const pageTitle = t("errors.notFound.title")
-
   const { profile } = useContext(AuthContext)
 
   useEffect(() => {
@@ -18,23 +15,7 @@ const ErrorPage = () => {
     })
   }, [profile])
 
-  return (
-    <>
-      <Hero title={pageTitle} buttonTitle={t("welcome.seeRentalListings")} buttonLink="/listings">
-        {t("errors.notFound.message")}
-      </Hero>
-      <div className="homepage-extra">
-        <MaxWidthLayout className={"seeds-p-b-container"}>
-          <>
-            <p className={"seeds-m-be-header"}>{t("welcome.seeMoreOpportunities")}</p>
-            <Button variant="primary-outlined" href="/additional-resources">
-              {t("welcome.viewAdditionalHousing")}
-            </Button>
-          </>
-        </MaxWidthLayout>
-      </div>
-    </>
-  )
+  return <>{process.env.showNewSeedsDesigns ? <ContentError /> : <ContentErrorDeprecated />}</>
 }
 
 export { ErrorPage as default, ErrorPage }
