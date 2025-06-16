@@ -2,15 +2,19 @@
 
 services:
   db:
-    image: postgres:13
+    image: postgres:15
     container_name: bloom-db
     restart: unless-stopped
     environment:
       POSTGRES_DB: bloom_prisma
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_PASSWORD: prisma
+      PGPORT: 5433
+    ports:
+      - "5433:5433"
     volumes:
       - db_data:/var/lib/postgresql/data
+    command: -p 5433
 
   api:
     build:
@@ -21,9 +25,9 @@ services:
       - ./api/.env
     environment:
       DB_HOST: db
-      DB_PORT: 5432
+      DB_PORT: 5433
       DB_USER: postgres
-      DB_PASSWORD: postgres
+      DB_PASSWORD: prisma
       # to reset + seed on startup:
       RESET_DB: "true"
       RUN_SEED: "true"
@@ -50,7 +54,7 @@ services:
     volumes:
       - ./sites/public:/usr/src/public:cached
       - ./shared-helpers:/usr/src/shared-helpers:cached
-
+      
   partners:
     build:
       context: .

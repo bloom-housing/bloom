@@ -1,7 +1,7 @@
-FROM node:18
+FROM node:18.19
 
-RUN apt-get update \
-  && apt-get install -y postgresql-client \
+RUN apt-get update 
+RUN apt-get install -y postgresql-client \
   && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /usr/src/api
