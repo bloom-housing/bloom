@@ -1,16 +1,13 @@
 import {
   ApplicationSubmissionTypeEnum,
   LanguagesEnum,
-  ListingsStatusEnum,
   MonthlyRentDeterminationTypeEnum,
   MultiselectQuestions,
   MultiselectQuestionsApplicationSectionEnum,
   Prisma,
   PrismaClient,
-  ReviewOrderTypeEnum,
   UserRoleEnum,
 } from '@prisma/client';
-import dayjs from 'dayjs';
 import { jurisdictionFactory } from './seed-helpers/jurisdiction-factory';
 import { listingFactory } from './seed-helpers/listing-factory';
 import { amiChartFactory } from './seed-helpers/ami-chart-factory';
@@ -18,7 +15,6 @@ import { userFactory } from './seed-helpers/user-factory';
 import { unitTypeFactoryAll } from './seed-helpers/unit-type-factory';
 import { unitAccessibilityPriorityTypeFactoryAll } from './seed-helpers/unit-accessibility-priority-type-factory';
 import { multiselectQuestionFactory } from './seed-helpers/multiselect-question-factory';
-import { yellowstoneAddress } from './seed-helpers/address-factory';
 import { applicationFactory } from './seed-helpers/application-factory';
 import { translationFactory } from './seed-helpers/translation-factory';
 import { reservedCommunityTypeFactoryAll } from './seed-helpers/reserved-community-type-factory';
@@ -37,6 +33,8 @@ import { blueSkyApartments } from './seed-helpers/listing-data/blue-sky-apartmen
 import { valleyHeightsSeniorCommunity } from './seed-helpers/listing-data/valley-heights-senior-community';
 import { littleVillageApartments } from './seed-helpers/listing-data/little-village-apartments';
 import { elmVillage } from './seed-helpers/listing-data/elm-village';
+import { lakeviewVilla } from './seed-helpers/listing-data/lakeview-villa';
+import { sunshineFlats } from './seed-helpers/listing-data/sunshine-flats';
 
 export const stagingSeed = async (
   prismaClient: PrismaClient,
@@ -778,102 +776,7 @@ export const stagingSeed = async (
     },
     {
       jurisdictionId: lakeviewJurisdiction.id,
-      listing: {
-        additionalApplicationSubmissionNotes: null,
-        digitalApplication: true,
-        commonDigitalApplication: true,
-        paperApplication: false,
-        referralOpportunity: false,
-        assets: [],
-        accessibility: null,
-        amenities: null,
-        buildingTotalUnits: 0,
-        developer: 'Bloom',
-        householdSizeMax: 0,
-        householdSizeMin: 0,
-        neighborhood: 'Hollywood',
-        petPolicy: null,
-        smokingPolicy: null,
-        unitAmenities: null,
-        servicesOffered: null,
-        yearBuilt: null,
-        applicationDueDate: null,
-        applicationOpenDate: dayjs(new Date()).subtract(70, 'days').toDate(),
-        applicationFee: null,
-        applicationOrganization: null,
-        applicationPickUpAddressOfficeHours: null,
-        applicationPickUpAddressType: null,
-        applicationDropOffAddressOfficeHours: null,
-        applicationDropOffAddressType: null,
-        applicationMailingAddressType: null,
-        buildingSelectionCriteria: null,
-        costsNotIncluded: null,
-        creditHistory: null,
-        criminalBackground: null,
-        depositMin: '0',
-        depositMax: '0',
-        depositHelperText:
-          "or one month's rent may be higher for lower credit scores",
-        disableUnitsAccordion: false,
-        leasingAgentEmail: 'bloom@exygy.com',
-        leasingAgentName: 'Bloom Bloomington',
-        leasingAgentOfficeHours: null,
-        leasingAgentPhone: '(555) 555-5555',
-        leasingAgentTitle: null,
-        name: 'Lakeview Villa',
-        postmarkedApplicationsReceivedByDate: null,
-        programRules: null,
-        rentalAssistance:
-          'Housing Choice Vouchers, Section 8 and other valid rental assistance programs will be considered for this property. In the case of a valid rental subsidy, the required minimum income will be based on the portion of the rent that the tenant pays after use of the subsidy.',
-        rentalHistory: null,
-        requiredDocuments: null,
-        specialNotes: null,
-        waitlistCurrentSize: null,
-        waitlistMaxSize: null,
-        whatToExpect:
-          'Applicants will be contacted by the property agent in rank order until vacancies are filled. All of the information that you have provided will be verified and your eligibility confirmed. Your application will be removed from the waitlist if you have made any fraudulent statements. If we cannot verify a housing preference that you have claimed, you will not receive the preference but will not be otherwise penalized. Should your application be chosen, be prepared to fill out a more detailed application and provide required supporting documents.',
-        status: ListingsStatusEnum.active,
-        reviewOrderType: ReviewOrderTypeEnum.waitlist,
-        unitsAvailable: 0,
-        displayWaitlistSize: false,
-        reservedCommunityDescription: null,
-        reservedCommunityMinAge: null,
-        resultLink: null,
-        isWaitlistOpen: false,
-        waitlistOpenSpots: null,
-        customMapPin: false,
-        contentUpdatedAt: new Date(),
-        publishedAt: new Date(),
-        listingsBuildingAddress: {
-          create: yellowstoneAddress,
-        },
-        listingsApplicationPickUpAddress: undefined,
-        listingsLeasingAgentAddress: undefined,
-        listingsApplicationDropOffAddress: undefined,
-        listingsApplicationMailingAddress: undefined,
-        reservedCommunityTypes: undefined,
-        listingImages: {
-          create: {
-            ordinal: 0,
-            assets: {
-              create: {
-                label: 'cloudinaryBuilding',
-                fileId: 'dev/apartment_building_2_b7ujdd',
-              },
-            },
-          },
-        },
-        listingNeighborhoodAmenities: {
-          create: {
-            groceryStores: 'There are grocery stores',
-            pharmacies: 'There are pharmacies',
-            healthCareResources: 'There is health care',
-            parksAndCommunityCenters: 'There are parks',
-            schools: 'There are schools',
-            publicTransportation: 'There is public transportation',
-          },
-        },
-      },
+      listing: lakeviewVilla,
       unitGroups: [
         {
           floorMin: 1,
@@ -898,6 +801,64 @@ export const stagingSeed = async (
           unitTypes: {
             connect: {
               id: unitTypes[0].id,
+            },
+          },
+        },
+      ],
+    },
+    {
+      jurisdictionId: lakeviewJurisdiction.id,
+      listing: sunshineFlats,
+      unitGroups: [
+        {
+          floorMin: 1,
+          floorMax: 1,
+          maxOccupancy: 6,
+          minOccupancy: 1,
+          bathroomMin: 1,
+          bathroomMax: 2,
+          totalCount: 12,
+          totalAvailable: 12,
+          sqFeetMin: '750.00',
+          sqFeetMax: '1600.00',
+          unitGroupAmiLevels: {
+            create: {
+              amiPercentage: 45,
+              monthlyRentDeterminationType:
+                MonthlyRentDeterminationTypeEnum.percentageOfIncome,
+              percentageOfIncomeValue: 30.0,
+              amiChart: { connect: { id: amiChart.id } },
+            },
+          },
+          unitTypes: {
+            connect: {
+              id: unitTypes[1].id,
+            },
+          },
+        },
+        {
+          floorMin: 2,
+          floorMax: 2,
+          maxOccupancy: 6,
+          minOccupancy: 3,
+          bathroomMin: 2,
+          bathroomMax: 2,
+          totalCount: 6,
+          totalAvailable: 6,
+          sqFeetMin: '1200.00',
+          sqFeetMax: '1800.00',
+          unitGroupAmiLevels: {
+            create: {
+              amiPercentage: 45,
+              monthlyRentDeterminationType:
+                MonthlyRentDeterminationTypeEnum.flatRent,
+              flatRentValue: 1800.0,
+              amiChart: { connect: { id: amiChart.id } },
+            },
+          },
+          unitTypes: {
+            connect: {
+              id: unitTypes[3].id,
             },
           },
         },

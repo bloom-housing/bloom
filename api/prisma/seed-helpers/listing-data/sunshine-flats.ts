@@ -1,48 +1,33 @@
 import {
-  ApplicationMethodsTypeEnum,
-  ListingEventsTypeEnum,
   ListingsStatusEnum,
   ReviewOrderTypeEnum,
+  Prisma,
 } from '@prisma/client';
 import dayjs from 'dayjs';
-import { featuresAndUtilites } from '../listing-factory';
+import { glacierAddress } from '../address-factory';
 
-export const elmVillage = {
+export const sunshineFlats: Prisma.ListingsCreateInput = {
   additionalApplicationSubmissionNotes: null,
   digitalApplication: true,
-  listingEvents: {
-    create: [
-      {
-        type: ListingEventsTypeEnum.publicLottery,
-        startDate: dayjs(new Date()).add(7, 'months').toDate(),
-        startTime: dayjs(new Date()).add(7, 'months').add(1, 'hour').toDate(),
-        endTime: dayjs(new Date()).add(7, 'months').add(2, 'hour').toDate(),
-      },
-    ],
-  },
   commonDigitalApplication: true,
   paperApplication: false,
   referralOpportunity: false,
   assets: [],
   accessibility: null,
   amenities: null,
-  buildingTotalUnits: 25,
-  developer: 'Johnson Realtors',
-  householdSizeMax: 0,
-  householdSizeMin: 0,
-  neighborhood: 'Hyde Park',
+  buildingTotalUnits: 12,
+  developer: 'Sunny side realtors',
+  householdSizeMax: 4,
+  householdSizeMin: 1,
+  neighborhood: 'West End area',
+  region: 'Eastside',
   petPolicy: null,
   smokingPolicy: null,
   unitAmenities: null,
   servicesOffered: null,
-  yearBuilt: 1988,
-  applicationMethods: {
-    create: {
-      type: ApplicationMethodsTypeEnum.Internal,
-    },
-  },
-  applicationDueDate: dayjs(new Date()).add(6, 'months').toDate(),
-  applicationOpenDate: dayjs(new Date()).subtract(1, 'days').toDate(),
+  yearBuilt: null,
+  applicationDueDate: null,
+  applicationOpenDate: dayjs(new Date()).subtract(2, 'days').toDate(),
   applicationFee: null,
   applicationOrganization: null,
   applicationPickUpAddressOfficeHours: null,
@@ -58,27 +43,27 @@ export const elmVillage = {
   depositMax: '0',
   depositHelperText:
     "or one month's rent may be higher for lower credit scores",
-  disableUnitsAccordion: true,
-  leasingAgentEmail: 'jenny@gold.com',
-  leasingAgentName: 'Jenny Gold',
+  disableUnitsAccordion: false,
+  leasingAgentEmail: 'bloom@exygy.com',
+  leasingAgentName: 'Bloom Bloomington',
   leasingAgentOfficeHours: null,
-  leasingAgentPhone: '(208) 772-2856',
-  leasingAgentTitle: 'Lead Agent',
-  name: 'Elm Village',
+  leasingAgentPhone: '(313) 555-5555',
+  leasingAgentTitle: null,
+  name: 'Sunshine Flats',
   postmarkedApplicationsReceivedByDate: null,
   programRules: null,
   rentalAssistance:
     'Housing Choice Vouchers, Section 8 and other valid rental assistance programs will be considered for this property. In the case of a valid rental subsidy, the required minimum income will be based on the portion of the rent that the tenant pays after use of the subsidy.',
   rentalHistory: null,
-  requiredDocuments: 'Please bring proof of income and a recent paystub.',
+  requiredDocuments: null,
   specialNotes: null,
   waitlistCurrentSize: null,
   waitlistMaxSize: null,
   whatToExpect:
     'Applicants will be contacted by the property agent in rank order until vacancies are filled. All of the information that you have provided will be verified and your eligibility confirmed. Your application will be removed from the waitlist if you have made any fraudulent statements. If we cannot verify a housing preference that you have claimed, you will not receive the preference but will not be otherwise penalized. Should your application be chosen, be prepared to fill out a more detailed application and provide required supporting documents.',
   status: ListingsStatusEnum.active,
-  reviewOrderType: ReviewOrderTypeEnum.lottery,
-  lotteryOptIn: false,
+  reviewOrderType: ReviewOrderTypeEnum.firstComeFirstServe,
+  unitsAvailable: 0,
   displayWaitlistSize: false,
   reservedCommunityDescription: null,
   reservedCommunityMinAge: null,
@@ -88,30 +73,30 @@ export const elmVillage = {
   customMapPin: false,
   contentUpdatedAt: new Date(),
   publishedAt: new Date(),
+  listingsBuildingAddress: {
+    create: glacierAddress,
+  },
   listingsApplicationPickUpAddress: undefined,
+  listingsLeasingAgentAddress: undefined,
   listingsApplicationDropOffAddress: undefined,
+  listingsApplicationMailingAddress: undefined,
   reservedCommunityTypes: undefined,
-  ...featuresAndUtilites(),
   listingImages: {
-    create: [
-      {
-        ordinal: 0,
-        assets: {
-          create: {
-            label: 'cloudinaryBuilding',
-            fileId: 'dev/krzysztof-hepner-V7Q0Oh3Az-c-unsplash_xoj7sr',
-          },
+    create: {
+      ordinal: 0,
+      assets: {
+        create: {
+          label: 'cloudinaryBuilding',
+          fileId: 'dev/sunshine-flats_naated',
         },
       },
-      {
-        ordinal: 1,
-        assets: {
-          create: {
-            label: 'cloudinaryBuilding',
-            fileId: 'dev/blake-wheeler-zBHU08hdzhY-unsplash_swqash',
-          },
-        },
-      },
-    ],
+    },
+  },
+  listingNeighborhoodAmenities: {
+    create: {
+      groceryStores: 'Flower fresh',
+      schools: 'Lakeview middle school',
+      publicTransportation: 'A train, Y express bus',
+    },
   },
 };

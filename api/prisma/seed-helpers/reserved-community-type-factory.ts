@@ -4,9 +4,15 @@ import { randomInt } from 'crypto';
 const reservedCommunityTypeOptions = [
   'specialNeeds',
   'senior',
+  'senior55',
   'senior62',
+  'specialNeeds',
   'developmentalDisability',
+  'tay',
   'veteran',
+  'schoolEmployee',
+  'farmworkerHousing',
+  'housingVoucher',
 ];
 
 export const reservedCommunityTypeFactory = (
@@ -53,9 +59,11 @@ export const reservedCommunityTypeFactoryGet = async (
         name: {
           equals: chosenName,
         },
-        jurisdictionId: {
-          equals: jurisdictionId,
-        },
+        jurisdictionId: jurisdictionId
+          ? {
+              equals: jurisdictionId,
+            }
+          : undefined,
       },
     });
 
