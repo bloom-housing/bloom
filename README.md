@@ -54,6 +54,22 @@ If you don't have yarn installed, you can install homebrew with [these instructi
 
 Configuration of each app and service is read from environment variables. There is an `.env.template` file in `sites/public`, `sites/partners`, and `api` that must be copied to an `.env` at the same level. Some keys are secret and are internally available in a password manager - you can request access through the current team. The template files include default values and descriptions of each variable.
 
+### Running a local test server
+
+The following steps work only if all of the [environment variable](#3-local-environment-variables) are setup as well as the steps outlined in [api/README](https://github.com/bloom-housing/bloom/blob/main/api/README.md)
+
+Running `yarn dev:all` from root runs 3 processes for both apps and the backend services on 3 different ports:
+
+- 3000 for the public app
+- 3001 for the partners app
+- 3100 for the api
+
+You can also run each process individually from separate terminals with the following command in each directory: `yarn dev`.
+
+### Running via docker
+
+The application can also run via docker. Those instructions can be found in the [docker](https://github.com/bloom-housing/bloom/blob/main/docker.md) instructions
+
 ### VSCode Extensions
 
 If you use VSCode, these are some recommended extensions.
@@ -69,18 +85,6 @@ The [CSS variable autocomplete plugin](https://marketplace.visualstudio.com/item
 The [CSS module autocomplete plugin](https://marketplace.visualstudio.com/items?itemName=clinyong.vscode-css-modules) which provides autocomplete for CSS module files.
 
 The [axe Accessibility Linter plugin](https://marketplace.visualstudio.com/items?itemName=deque-systems.vscode-axe-linter) to automatically check for common accessibility issues.
-
-### Running a local test server
-
-Running `yarn dev:all` from root runs 3 processes for both apps and the backend services on 3 different ports:
-
-- 3000 for the public app
-- 3001 for the partners app
-- 3100 for the api
-
-You can also run each process individually from separate terminals with the following command in each directory: `yarn dev`.
-
-We have a number of default users seeded for local development, the most basic of which being (email: `admin@example.com`, password: `abcdef`) which will login to both the public and partners sites, but you can view other default seeded users and their permissions by checking out the user section of the [seed file](https://github.com/bloom-housing/bloom/blob/aed77bf06525be359ef9205044fabbea2ab2576d/api/prisma/seed-staging.ts#L67).
 
 ### Bloom UIC development
 

@@ -1,4 +1,4 @@
-FROM node:18
+FROM node:18.14-alpine
 # start in repo root
 WORKDIR /usr/src
 
