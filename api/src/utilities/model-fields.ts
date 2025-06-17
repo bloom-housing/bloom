@@ -35,7 +35,7 @@ export function getModelFields(modelName: string): ModelField[] {
  */
 export function fillModelStringFields(
   modelName: string,
-  data: Record<string, any>,
+  data: Record<string, string>,
 ): Record<string, string | null> {
   return Object.fromEntries(
     getModelFields(modelName)
