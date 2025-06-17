@@ -2013,10 +2013,10 @@
     tailwindcss-rtl "^0.9.0"
     typesafe-actions "^5.1.0"
 
-"@bloom-housing/ui-seeds@1.20.1":
-  version "1.20.1"
-  resolved "https://registry.yarnpkg.com/@bloom-housing/ui-seeds/-/ui-seeds-1.20.1.tgz#f42be32fb4e224e0872e3cba8f680c2ac9428261"
-  integrity sha512-9bvcjWKVG92j+WhUPqQN77UjhVl2+2f0Z2C+v5JzNNsyonQXHC1tc4yXpCMym99xCp28qAgwQg4RDw9BAJlqPg==
+"@bloom-housing/ui-seeds@1.22.3":
+  version "1.22.3"
+  resolved "https://registry.yarnpkg.com/@bloom-housing/ui-seeds/-/ui-seeds-1.22.3.tgz#93f378347656682acebcbde58b512a2d8245bd23"
+  integrity sha512-qs2doiAeTOS+jLmSA+vTDymxBbWzyidYBpgyGsOlW4ERPQH79R7jmYoDLcLFwuVQzk5DrMcdeFYRpDZCwXkjbg==
   dependencies:
     "@fortawesome/fontawesome-svg-core" "^6.3.0"
     "@fortawesome/react-fontawesome" "^0.2.0"
@@ -7199,17 +7199,17 @@ focus-lock@^0.11.6:
     tslib "^2.0.3"
 
 focus-trap-react@^11.0.3:
-  version "11.0.3"
-  resolved "https://registry.yarnpkg.com/focus-trap-react/-/focus-trap-react-11.0.3.tgz#fe46bbe2a024379b3783cad73187197bafbadb88"
-  integrity sha512-tS1+enWS/gwCHk2WIF3KpM2oz7Y3HsnRImzHZNRgCBLWXzNG4XQVlJgbqdLr4lBKRXGdDBjQYitSh1bf2xe4Ag==
+  version "11.0.4"
+  resolved "https://registry.yarnpkg.com/focus-trap-react/-/focus-trap-react-11.0.4.tgz#889315c28b86ca7f3e9978710eb73819c0bb9b2c"
+  integrity sha512-tC7jC/yqeAqhe4irNIzdyDf9XCtGSeECHiBSYJBO/vIN0asizbKZCt8TarB6/XqIceu42ajQ/U4lQJ9pZlWjrg==
   dependencies:
-    focus-trap "^7.6.4"
+    focus-trap "^7.6.5"
     tabbable "^6.2.0"
 
-focus-trap@^7.6.4:
-  version "7.6.4"
-  resolved "https://registry.yarnpkg.com/focus-trap/-/focus-trap-7.6.4.tgz#455ec5c51fee5ae99604ca15142409ffbbf84db9"
-  integrity sha512-xx560wGBk7seZ6y933idtjJQc1l+ck+pI3sKvhKozdBV1dRZoKhkW5xoCaFv9tQiX5RH1xfSxjuNu6g+lmN/gw==
+focus-trap@^7.6.5:
+  version "7.6.5"
+  resolved "https://registry.yarnpkg.com/focus-trap/-/focus-trap-7.6.5.tgz#56f0814286d43c1a2688e9bc4f31f17ae047fb76"
+  integrity sha512-7Ke1jyybbbPZyZXFxEftUtxFGLMpE2n6A+z//m4CRDlj0hW+o3iYSmh8nFlYMurOiJVDmJRilUQtJr08KfIxlg==
   dependencies:
     tabbable "^6.2.0"
 
