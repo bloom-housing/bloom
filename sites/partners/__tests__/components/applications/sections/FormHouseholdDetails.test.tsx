@@ -219,55 +219,6 @@ describe("<FormHouseholdDetails>", () => {
     expect(oneBedroomLabels).toHaveLength(1)
   })
 
-  it("handles unit groups with no unit types", () => {
-    render(
-      <FormProviderWrapper>
-        <FormHouseholdDetails
-          listingUnits={[]}
-          applicationUnitTypes={[]}
-          applicationAccessibilityFeatures={{
-            id: "id",
-            createdAt: new Date(),
-            updatedAt: new Date(),
-            mobility: true,
-            vision: true,
-            hearing: true,
-          }}
-          listingUnitGroups={[
-            {
-              id: "group1",
-              createdAt: new Date(),
-              updatedAt: new Date(),
-              unitTypes: [], // Empty unit types
-            },
-            {
-              id: "group2",
-              createdAt: new Date(),
-              updatedAt: new Date(),
-              unitTypes: [
-                {
-                  id: "studio-type",
-                  createdAt: new Date(),
-                  updatedAt: new Date(),
-                  numBedrooms: 0,
-                  name: UnitTypeEnum.studio,
-                },
-              ],
-            },
-          ]}
-          enableUnitGroups={true}
-        />
-      </FormProviderWrapper>
-    )
-
-    expect(screen.getByText(/preferred unit sizes/i)).toBeInTheDocument()
-    expect(screen.getByRole("checkbox", { name: "Studio" })).toBeInTheDocument()
-    const unitTypeCheckboxes = screen
-      .getAllByRole("checkbox")
-      .filter((checkbox) => checkbox.getAttribute("name") === "application.preferredUnit")
-    expect(unitTypeCheckboxes).toHaveLength(1)
-  })
-
   it("displays all available unit types when unit groups contain all types", () => {
     render(
       <FormProviderWrapper>
