@@ -21,11 +21,9 @@ Note: On some mac devices localhost will not work so it will have to be `DATABAS
 
 ### Full bloom application
 
-The entire Bloom application can also be run via a docker compose script. This starts up a database, the api, the partner site, and the public site all within docker. The application is still in dev mode so any changes will be picked up without needing to restart.
+The entire Bloom application can also be run via a docker compose script. This starts up a database, the api, the partner site, and the public site all within docker. The application is still in dev mode so any changes will be picked up without needing to restart. The backend also re-seeds the database on startup.
 
 This setup still uses the `.env` files from the respective packages. Any changes to those files will need a restart of the application to be picked up. Take note of the required changes for the database url in the above section.
-
-The backend also re-seeds the database on startup.
 
 #### Command to start:
 
