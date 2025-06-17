@@ -48,6 +48,11 @@ export const featureFlagMap: { name: string; description: string }[] = [
       "When true, the 'accessibility features' section is displayed in listing creation/edit and the public listing view",
   },
   {
+    name: FeatureFlagEnum.enableAdditionalResources,
+    description:
+      "When true, the 'learn more' section is displayed on the home page",
+  },
+  {
     name: FeatureFlagEnum.enableCompanyWebsite,
     description:
       'When true, allows partners to add company website information',
