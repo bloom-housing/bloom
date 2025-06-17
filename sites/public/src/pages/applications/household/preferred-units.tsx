@@ -6,11 +6,13 @@ import { Alert } from "@bloom-housing/ui-seeds"
 import {
   createUnitTypeId,
   getUniqueUnitTypes,
+  getUniqueUnitGroupUnitTypes,
   OnClientSide,
   PageView,
   pushGtmEvent,
   AuthContext,
 } from "@bloom-housing/shared-helpers"
+import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
 import ApplicationFormLayout from "../../../layouts/application-form"
@@ -24,6 +26,10 @@ const ApplicationPreferredUnits = () => {
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, handleSubmit, errors, trigger } = useForm()
+
+  const enableUnitGroups = conductor.config.featureFlags?.some(
+    (flag) => flag.name === FeatureFlagEnum.enableUnitGroups && flag.active
+  )
 
   const onSubmit = async (data) => {
     const validation = await trigger()
@@ -44,7 +50,9 @@ const ApplicationPreferredUnits = () => {
     window.scrollTo(0, 0)
   }
 
-  const unitTypes = getUniqueUnitTypes(listing?.units)
+  const unitTypes = enableUnitGroups
+    ? getUniqueUnitGroupUnitTypes(listing?.unitGroups)
+    : getUniqueUnitTypes(listing?.units)
 
   const preferredUnitOptions = unitTypes?.map((item) => ({
     id: item.id,

@@ -6,6 +6,7 @@ import {
   RegionEnum,
   HomeTypeEnum,
   ListingFilterKeys,
+  MultiselectQuestion,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import styles from "./FilterDrawer.module.scss"
 import {
@@ -14,6 +15,7 @@ import {
   FilterData,
   getAvailabilityValues,
   RentSection,
+  SearchSection,
   unitTypeMapping,
   unitTypesSorted,
 } from "./FilterDrawerHelpers"
@@ -24,6 +26,7 @@ export interface FilterDrawerProps {
   isOpen: boolean
   onClose: () => void
   onSubmit: (data: FilterData) => void
+  multiselectData: MultiselectQuestion[]
 }
 
 const FilterDrawer = (props: FilterDrawerProps) => {
@@ -110,6 +113,19 @@ const FilterDrawer = (props: FilterDrawerProps) => {
             )}
             register={register}
           />
+          <SearchSection register={register} nameState={props.filterState?.name} />
+          {props.multiselectData?.length > 0 && (
+            <CheckboxGroup
+              groupLabel={t("t.community")}
+              fields={buildDefaultFilterFields(
+                ListingFilterKeys.multiselectQuestions,
+                props.multiselectData?.map((multi) => multi.text),
+                props.multiselectData?.map((multi) => multi.id),
+                props.filterState
+              )}
+              register={register}
+            />
+          )}
         </Form>
       </Drawer.Content>
       <Drawer.Footer>
