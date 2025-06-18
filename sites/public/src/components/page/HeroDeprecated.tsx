@@ -1,6 +1,6 @@
 import React from "react"
 
-import styles from "./Hero.module.scss"
+import styles from "./HeroDeprecated.module.scss"
 
 const PageHeroHeader = (props) => {
   return <header className={styles["page-hero-header"]}>{props.children}</header>
