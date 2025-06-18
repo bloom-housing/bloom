@@ -13,6 +13,7 @@ const DetailsHouseholdDetails = () => {
     if (accessibility.mobility) labels.push(t("application.ada.mobility"))
     if (accessibility.vision) labels.push(t("application.ada.vision"))
     if (accessibility.hearing) labels.push(t("application.ada.hearing"))
+    //if feature flag, add other label
     if (labels.length === 0) labels.push(t("t.no"))
 
     return labels

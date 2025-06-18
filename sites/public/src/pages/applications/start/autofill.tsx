@@ -106,6 +106,7 @@ export default () => {
         <FormSummaryDetails
           application={previousApplication}
           listing={listing}
+          featureFlags={conductor.config.featureFlags}
           editMode={false}
           hidePreferences={true}
           hidePrograms={true}
