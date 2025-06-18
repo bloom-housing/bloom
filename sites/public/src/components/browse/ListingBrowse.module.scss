@@ -38,8 +38,19 @@
   }
 
   .empty-state {
+    display: flex;
+    flex-direction: column;
+    gap: var(--seeds-s3);
     @media (--sm-only) {
       padding: var(--seeds-spacer-content);
+    }
+
+    p {
+      color: var(--seeds-text-color-light);
+    }
+
+    .show-all-button {
+      width: fit-content;
     }
   }
 
