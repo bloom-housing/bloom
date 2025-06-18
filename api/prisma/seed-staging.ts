@@ -74,6 +74,7 @@ export const stagingSeed = async (
     data: jurisdictionFactory('Lakeview', {
       featureFlags: [
         FeatureFlagEnum.disableJurisdictionalAdmin,
+        FeatureFlagEnum.disableListingPreferences,
         FeatureFlagEnum.enableAccessibilityFeatures,
         FeatureFlagEnum.enableAdditionalResources,
         FeatureFlagEnum.enableCompanyWebsite,
@@ -349,6 +350,22 @@ export const stagingSeed = async (
       },
     }),
   });
+
+  // add extra programs to support filtering by "community type"
+  await Promise.all(
+    [...new Array(3)].map(
+      async () =>
+        await prismaClient.multiselectQuestions.create({
+          data: multiselectQuestionFactory(lakeviewJurisdiction.id, {
+            multiselectQuestion: {
+              applicationSection:
+                MultiselectQuestionsApplicationSectionEnum.programs,
+            },
+          }),
+        }),
+    ),
+  );
+
   // create pre-determined values
   const unitTypes = await unitTypeFactoryAll(prismaClient);
   await unitAccessibilityPriorityTypeFactoryAll(prismaClient);
