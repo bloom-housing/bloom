@@ -106,6 +106,16 @@ module.exports = withBundleAnalyzer({
       },
     ]
   },
+  redirects() {
+    return [
+      // get-assistance page doesn't exist in Doorway so re-route to the get started page
+      {
+        source: "/get-assistance",
+        destination: "/help/get-started",
+        permanent: true,
+      },
+    ]
+  },
   // Uncomment line below before building when using symlink for UI-C
   // experimental: { esmExternals: "loose" },
 })
