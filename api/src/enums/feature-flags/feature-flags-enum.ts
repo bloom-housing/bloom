@@ -12,6 +12,7 @@ export enum FeatureFlagEnum {
   enableHomeType = 'enableHomeType',
   enableIsVerified = 'enableIsVerified',
   enableListingFavoriting = 'enableListingFavoriting',
+  enableListingFiltering = 'enableListingFiltering',
   enableListingOpportunity = 'enableListingOpportunity',
   enableListingPagination = 'enableListingPagination',
   enableMarketingStatus = 'enableMarketingStatus',
@@ -80,6 +81,11 @@ export const featureFlagMap: { name: string; description: string }[] = [
     name: FeatureFlagEnum.enableListingFavoriting,
     description:
       'When true, a Favorite button is shown for public listings and users can view their favorited listings',
+  },
+  {
+    name: FeatureFlagEnum.enableListingFiltering,
+    description:
+      'When true, a filter button is shown on listings browse and users can filter with the options in the drawer',
   },
   {
     name: FeatureFlagEnum.enableListingOpportunity,

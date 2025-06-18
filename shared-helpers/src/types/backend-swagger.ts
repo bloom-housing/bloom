@@ -2976,6 +2976,11 @@ export interface ListingsQueryParams {
   search?: string
 }
 
+export interface ListingFilterKeyDTO {
+  /**  */
+  value?: ListingFilterKeys
+}
+
 export interface ListingsRetrieveParams {
   /**  */
   view?: ListingViews
@@ -6947,6 +6952,31 @@ export enum OrderByEnum {
   "desc" = "desc",
 }
 
+export enum ListingFilterKeys {
+  "availabilities" = "availabilities",
+  "availability" = "availability",
+  "bathrooms" = "bathrooms",
+  "bedrooms" = "bedrooms",
+  "bedroomTypes" = "bedroomTypes",
+  "city" = "city",
+  "counties" = "counties",
+  "homeTypes" = "homeTypes",
+  "ids" = "ids",
+  "isVerified" = "isVerified",
+  "jurisdiction" = "jurisdiction",
+  "leasingAgent" = "leasingAgent",
+  "listingFeatures" = "listingFeatures",
+  "monthlyRent" = "monthlyRent",
+  "multiselectQuestions" = "multiselectQuestions",
+  "name" = "name",
+  "neighborhood" = "neighborhood",
+  "regions" = "regions",
+  "reservedCommunityTypes" = "reservedCommunityTypes",
+  "section8Acceptance" = "section8Acceptance",
+  "status" = "status",
+  "zipCode" = "zipCode",
+}
+
 export enum ApplicationAddressTypeEnum {
   "leasingAgent" = "leasingAgent",
 }
@@ -7127,6 +7157,7 @@ export enum FeatureFlagEnum {
   "enableHomeType" = "enableHomeType",
   "enableIsVerified" = "enableIsVerified",
   "enableListingFavoriting" = "enableListingFavoriting",
+  "enableListingFiltering" = "enableListingFiltering",
   "enableListingOpportunity" = "enableListingOpportunity",
   "enableListingPagination" = "enableListingPagination",
   "enableMarketingStatus" = "enableMarketingStatus",
