@@ -14,5 +14,6 @@
   "resources.contactTitle": "Contact",
   "resources.contactDescription": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
   "resources.contactInfo": "Bloomington's Housing & Community Development Department",
-  "resources.contactEmail": "bloomington@housing.org"
+  "resources.contactEmail": "bloomington@housing.org",
+  "listings.showAll": "Show all lisitngs"
 }
