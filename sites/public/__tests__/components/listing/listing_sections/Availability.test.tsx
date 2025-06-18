@@ -47,6 +47,7 @@ describe("<Availability>", () => {
           status: ListingsStatusEnum.closed,
           unitsAvailable: 100,
           applicationDueDate: dueDate,
+          isWaitlistOpen: undefined,
         }}
         jurisdiction={jurisdiction}
       />
@@ -72,6 +73,7 @@ describe("<Availability>", () => {
           status: ListingsStatusEnum.active,
           unitsAvailable: 1,
           applicationDueDate: dueDate,
+          isWaitlistOpen: undefined,
         }}
         jurisdiction={jurisdiction}
       />
@@ -99,6 +101,7 @@ describe("<Availability>", () => {
           status: ListingsStatusEnum.closed,
           unitsAvailable: 100,
           applicationDueDate: dueDate,
+          isWaitlistOpen: undefined,
         }}
         jurisdiction={jurisdiction}
       />
@@ -127,6 +130,7 @@ describe("<Availability>", () => {
           status: ListingsStatusEnum.active,
           unitsAvailable: 100,
           applicationDueDate: dueDate,
+          isWaitlistOpen: undefined,
         }}
         jurisdiction={jurisdiction}
       />
