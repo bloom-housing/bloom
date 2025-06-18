@@ -145,4 +145,39 @@ describe("Listing Lottery Results View", () => {
       Array.from(container.querySelectorAll(".rank-number")).map((el) => el.textContent)
     ).toEqual(["#15", "#10"])
   })
+
+  it("should show error messaging when a network request fails", async () => {
+    // Only provide one initial response, then "fail" with a 500
+    server.use(
+      rest.get("http://localhost:3100/applications/application_1", (_req, res, ctx) => {
+        return res(
+          ctx.json({
+            ...application,
+            contactPreferences: ["email"],
+            accessibility: {
+              createdAt: new Date(),
+              updatedAt: new Date(),
+              id: "accessibility_id",
+              mobility: true,
+              vision: true,
+              hearing: true,
+            },
+          })
+        )
+      }),
+      rest.get("http://localhost/api/adapter/listings/Uvbk5qurpB2WI9V6WnNdH", (_req, res, ctx) => {
+        return res(ctx.status(500))
+      }),
+    )
+
+    renderApplicationView()
+
+    // Listing heading is an error
+    expect(
+      await screen.findByRole("heading", { level: 1, name: /error/i })
+    ).toBeInTheDocument()
+    expect(
+      await screen.getByText(/No application with that ID exists/i)
+    ).toBeInTheDocument()
+  })
 })
