@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useState } from "react"
+import React, { useEffect, useContext, useState, useCallback } from "react"
 import Head from "next/head"
 import { useRouter } from "next/router"
 import { Button, Heading, LoadingState, Tabs } from "@bloom-housing/ui-seeds"
@@ -51,6 +51,7 @@ export interface ListingBrowseProps {
   multiselectData: MultiselectQuestion[]
   paginationData?: PaginationData
   tab: TabsIndexEnum
+  areFiltersActive?: boolean
 }
 
 export const ListingBrowse = (props: ListingBrowseProps) => {
@@ -137,6 +138,10 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
         : void router.push(`/listings?${updatedFilterQuery}`)
     }
   }
+
+  const onShowAll = useCallback(async () => {
+    await router.replace(router.pathname)
+  }, [router])
 
   const ListingTabs = (
     <MaxWidthLayout>
@@ -225,6 +230,18 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
                           ? t("listings.noOpenListings")
                           : t("listings.noClosedListings")}
                       </Heading>
+                      {props.areFiltersActive && (
+                        <>
+                          <p>{t("listings.removeFilters")}</p>
+                          <Button
+                            className={styles["show-all-button"]}
+                            variant="primary-outlined"
+                            onClick={onShowAll}
+                          >
+                            {t("listings.showAll")}
+                          </Button>
+                        </>
+                      )}
                     </div>
                   )}
                 </>
