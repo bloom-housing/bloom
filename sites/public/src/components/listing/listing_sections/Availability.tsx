@@ -28,6 +28,7 @@ const getWaitlistSizeFields = (
   waitlistMaxSize?: number,
   showAdditionalWaitlistFields?: boolean
 ) => {
+  if (!waitlistOpenSpots && !waitlistCurrentSize && !waitlistMaxSize) return null
   return (
     <div className={styles["waitlist-size-container"]}>
       {waitlistCurrentSize && showAdditionalWaitlistFields && (
@@ -50,9 +51,15 @@ export const getAvailabilitySubheading = (
   unitsAvailable: number,
   waitlistCurrentSize?: number,
   waitlistMaxSize?: number,
-  showAdditionalWaitlistFields?: boolean
+  showAdditionalWaitlistFields?: boolean,
+  isWaitlistOpen?: boolean,
+  enableUnitGroups?: boolean
 ): React.ReactNode => {
-  if (waitlistOpenSpots) {
+  if (
+    isWaitlistOpen &&
+    !enableUnitGroups &&
+    (waitlistOpenSpots || waitlistCurrentSize || waitlistMaxSize)
+  ) {
     return getWaitlistSizeFields(
       waitlistCurrentSize,
       waitlistOpenSpots,
@@ -127,11 +134,13 @@ export const Availability = ({ listing, jurisdiction }: AvailabilityProps) => {
       : listing.unitsAvailable
 
   const subheading = getAvailabilitySubheading(
-    enableUnitGroups ? null : listing.waitlistOpenSpots,
+    listing.waitlistOpenSpots,
     unitsAvailable,
     listing.waitlistCurrentSize,
     listing.waitlistMaxSize,
-    showAdditionalWaitlistFields
+    showAdditionalWaitlistFields,
+    listing.isWaitlistOpen,
+    enableUnitGroups
   )
 
   const hasUnitGroupsWaitlistOpen = listing.unitGroups.some((group) => group.openWaitlist)
