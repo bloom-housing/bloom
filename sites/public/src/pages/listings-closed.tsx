@@ -19,6 +19,7 @@ export default function ListingsPageClosed(props: ListingsProps) {
       listings={props.closedListings}
       tab={TabsIndexEnum.closed}
       jurisdiction={props.jurisdiction}
+      multiselectData={props.multiselectData}
       paginationData={props.paginationData}
       key={router.asPath}
     />
@@ -46,7 +47,7 @@ export async function getServerSideProps(context: { req: any; query: any }) {
     FeatureFlagEnum.swapCommunityTypeWithPrograms
   )
     ? await fetchMultiselectData(context.req, jurisdiction?.id)
-    : undefined
+    : null
 
   return {
     props: {
