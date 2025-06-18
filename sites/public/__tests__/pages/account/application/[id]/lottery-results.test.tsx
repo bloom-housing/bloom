@@ -167,17 +167,13 @@ describe("Listing Lottery Results View", () => {
       }),
       rest.get("http://localhost/api/adapter/listings/Uvbk5qurpB2WI9V6WnNdH", (_req, res, ctx) => {
         return res(ctx.status(500))
-      }),
+      })
     )
 
     renderApplicationView()
 
     // Listing heading is an error
-    expect(
-      await screen.findByRole("heading", { level: 1, name: /error/i })
-    ).toBeInTheDocument()
-    expect(
-      await screen.getByText(/No application with that ID exists/i)
-    ).toBeInTheDocument()
+    expect(await screen.findByRole("heading", { level: 1, name: /error/i })).toBeInTheDocument()
+    expect(await screen.getByText(/No application with that ID exists/i)).toBeInTheDocument()
   })
 })
