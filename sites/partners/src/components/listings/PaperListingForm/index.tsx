@@ -155,6 +155,10 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
     activeFeatureFlags?.find((flag) => flag.name === FeatureFlagEnum.enableSection8Question)
       ?.active || false
 
+  const disableListingPreferences =
+    activeFeatureFlags?.find((flag) => flag.name === FeatureFlagEnum.disableListingPreferences)
+      ?.active || false
+
   useEffect(() => {
     if (listing?.units) {
       const tempUnits = listing.units.map((unit, i) => ({
@@ -248,7 +252,7 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
 
           if (successful) {
             const dataPipeline = new ListingDataPipeline(formData, {
-              preferences,
+              preferences: disableListingPreferences ? [] : preferences,
               programs,
               units: !enableUnitGroups ? units : [], // Clear existing units if unit groups flag has been enabled
               unitGroups: enableUnitGroups ? unitGroups : [], // Clear existing unit groups if the unit groups flag has been disabled

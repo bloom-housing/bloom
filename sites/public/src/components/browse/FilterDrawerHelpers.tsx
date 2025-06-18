@@ -27,15 +27,17 @@ export enum ReservedCommunityTypes {
 }
 
 export interface FilterData {
-  availability?: Record<FilterAvailabilityEnum, BooleanOrBooleanString>
-  bedroomTypes?: Record<UnitTypeEnum, BooleanOrBooleanString>
-  homeType?: Record<HomeTypeEnum, BooleanOrBooleanString>
+  availabilities?: { [K in FilterAvailabilityEnum]?: BooleanOrBooleanString }
+  bedroomTypes?: { [K in UnitTypeEnum]?: BooleanOrBooleanString }
+  homeTypes?: { [K in HomeTypeEnum]?: BooleanOrBooleanString }
   isVerified?: BooleanOrBooleanString
-  listingFeatures?: Record<keyof ListingFeatures, BooleanOrBooleanString>
-  monthlyRent?: Record<"maxRent" | "minRent", string>
-  regions?: Record<RegionEnum, BooleanOrBooleanString>
+  listingFeatures?: { [K in keyof ListingFeatures]?: BooleanOrBooleanString }
+  monthlyRent?: { [K in "maxRent" | "minRent"]?: string }
+  regions?: { [K in RegionEnum]: BooleanOrBooleanString }
   section8Acceptance?: BooleanOrBooleanString
-  reservedCommunityTypes?: Record<ReservedCommunityTypes, BooleanOrBooleanString>
+  reservedCommunityTypes?: { [K in ReservedCommunityTypes]?: BooleanOrBooleanString }
+  multiselectQuestions?: Record<string, BooleanOrBooleanString>
+  name?: string
 }
 
 export interface FilterField {
@@ -58,6 +60,11 @@ export interface RentSectionProps {
   filterState: FilterData
 }
 
+export interface SearchSectionProps {
+  register: UseFormMethods["register"]
+  nameState: string
+}
+
 const arrayFilters: ListingFilterKeys[] = [
   ListingFilterKeys.bedroomTypes,
   ListingFilterKeys.counties,
@@ -66,17 +73,12 @@ const arrayFilters: ListingFilterKeys[] = [
   ListingFilterKeys.regions,
   ListingFilterKeys.reservedCommunityTypes,
   ListingFilterKeys.availabilities,
+  ListingFilterKeys.multiselectQuestions,
 ]
 
 const booleanFilters: ListingFilterKeys[] = [
   ListingFilterKeys.isVerified,
   ListingFilterKeys.section8Acceptance,
-]
-
-// https://github.com/bloom-housing/bloom/issues/4795
-const individualFilters: ListingFilterKeys[] = [
-  ListingFilterKeys.bathrooms,
-  ListingFilterKeys.jurisdiction,
 ]
 
 // customizations to base enums
@@ -230,6 +232,20 @@ export const RentSection = (props: RentSectionProps) => (
   </fieldset>
 )
 
+export const SearchSection = (props: SearchSectionProps) => (
+  <div className={styles["filter-section"]}>
+    <Field
+      id={ListingFilterKeys.name}
+      name={ListingFilterKeys.name}
+      label={t("t.listingName")}
+      subNote={t("listings.search.subNote")}
+      type="text"
+      register={props.register}
+      defaultValue={props.nameState}
+    />
+  </div>
+)
+
 /**
  * Transforms filter data to backend filter formatting
  * Note: built to support filtering by url decoding and filtering by state directly from form data
@@ -237,21 +253,10 @@ export const RentSection = (props: RentSectionProps) => (
  * @param data object containing form selections or url params decoded
  * @returns array of formatted backend filters
  */
-export const encodeFilterDataToBackendFilters = (data: FilterData = {}): ListingFilterParams[] => {
+export const encodeFilterDataToBackendFilters = (data: FilterData): ListingFilterParams[] => {
   const filters: ListingFilterParams[] = []
   Object.entries(data).forEach(([filterType, userSelections]) => {
-    // individual filters not yet implemented
-    if (individualFilters.includes(ListingFilterKeys[filterType])) {
-      Object.entries(userSelections).forEach((field) => {
-        if (field[1]) {
-          const filter = {
-            $comparison: EnumListingFilterParamsComparison["="],
-          }
-          filter[filterType] = field[0]
-          filters.push(filter)
-        }
-      })
-    } else if (arrayFilters.includes(ListingFilterKeys[filterType])) {
+    if (arrayFilters.includes(ListingFilterKeys[filterType])) {
       const selectedFields = []
       Object.entries(userSelections).forEach((field) => {
         if (field[1]) {
@@ -295,8 +300,16 @@ export const encodeFilterDataToBackendFilters = (data: FilterData = {}): Listing
         filter[ListingFilterKeys.monthlyRent] = userSelections["maxRent"]?.replace(",", "")
         filters.push(filter)
       }
+    } else if (filterType === ListingFilterKeys.name) {
+      const filter = {
+        $comparison: EnumListingFilterParamsComparison["LIKE"],
+      }
+
+      filter[ListingFilterKeys.name] = userSelections
+      filters.push(filter)
     }
   })
+
   return filters
 }
 
@@ -345,6 +358,9 @@ export const encodeFilterDataToQuery = (data: FilterData): string => {
         "-"
       )}`
       queryArr.push(rentParam)
+    } else if (filterType === ListingFilterKeys.name) {
+      const nameParam = `${ListingFilterKeys[filterType]}=${userSelections}`
+      queryArr.push(nameParam)
     }
   })
   return queryArr.join("&")
@@ -373,7 +389,9 @@ export const decodeQueryToFilterData = (parsedQuery: ParsedUrlQuery): FilterData
     } else if (filterType === ListingFilterKeys.monthlyRent && typeof userSelections === "string") {
       //custom separator to avoid conflicts with higher values with commas
       const rentArr = userSelections.split("-")
-      filterData[filterType] = { minRent: rentArr[0], maxRent: rentArr[1] }
+      filterData[filterType] = { minRent: rentArr[0] ?? "", maxRent: rentArr[1] ?? "" }
+    } else if (filterType === ListingFilterKeys.name) {
+      filterData[filterType] = userSelections
     }
   })
   return filterData
@@ -404,6 +422,8 @@ export const removeUnselectedFilterData = (data: FilterData): FilterData => {
       (filterType === ListingFilterKeys.monthlyRent && userSelections["minRent"]) ||
       userSelections["maxRent"]
     ) {
+      cleanedFilterData[filterType] = userSelections
+    } else if (filterType === ListingFilterKeys.name && userSelections) {
       cleanedFilterData[filterType] = userSelections
     }
   })

@@ -38,6 +38,12 @@ const ProgramsAndPreferences = ({
     jurisdiction
   )
 
+  const disableListingPreferences = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.disableListingPreferences,
+    jurisdiction,
+    !jurisdiction
+  )
+
   const programComponent = !swapCommunityTypeWithPrograms ? (
     <SelectAndOrder
       addText={t("listings.addProgram")}
@@ -71,25 +77,26 @@ const ProgramsAndPreferences = ({
 
   return (
     <>
-      <SelectAndOrder
-        addText={t("listings.addPreference")}
-        drawerTitle={t("listings.addPreferences")}
-        drawerSubtitle={
-          process.env.showLottery && listing?.lotteryOptIn
-            ? t("listings.lotteryPreferenceSubtitle")
-            : null
-        }
-        editText={t("listings.editPreferences")}
-        listingData={preferences || []}
-        setListingData={setPreferences}
-        subtitle={t("listings.sections.housingPreferencesSubtext")}
-        title={t("listings.sections.housingPreferencesTitle")}
-        drawerButtonText={t("listings.selectPreferences")}
-        dataFetcher={useJurisdictionalMultiselectQuestionList}
-        formKey={"preference"}
-        applicationSection={MultiselectQuestionsApplicationSectionEnum.preferences}
-      />
-
+      {!disableListingPreferences && (
+        <SelectAndOrder
+          addText={t("listings.addPreference")}
+          drawerTitle={t("listings.addPreferences")}
+          drawerSubtitle={
+            process.env.showLottery && listing?.lotteryOptIn
+              ? t("listings.lotteryPreferenceSubtitle")
+              : null
+          }
+          editText={t("listings.editPreferences")}
+          listingData={preferences || []}
+          setListingData={setPreferences}
+          subtitle={t("listings.sections.housingPreferencesSubtext")}
+          title={t("listings.sections.housingPreferencesTitle")}
+          drawerButtonText={t("listings.selectPreferences")}
+          dataFetcher={useJurisdictionalMultiselectQuestionList}
+          formKey={"preference"}
+          applicationSection={MultiselectQuestionsApplicationSectionEnum.preferences}
+        />
+      )}
       {programComponent}
     </>
   )

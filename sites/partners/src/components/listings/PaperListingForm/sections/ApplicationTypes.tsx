@@ -324,7 +324,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                         ...methods,
                         digital: {
                           ...methods.digital,
-                          externalReference: e.target.value,
+                          externalReference: e.target?.value,
                         },
                       })
                     },
@@ -514,7 +514,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                         ...methods,
                         referral: {
                           ...methods.referral,
-                          phoneNumber: e.target.value,
+                          phoneNumber: e,
                         },
                       })
                     }}
@@ -539,7 +539,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                       ...methods,
                       referral: {
                         ...methods.referral,
-                        externalReference: e.target.value,
+                        externalReference: e.target?.value,
                       },
                     })
                   },
@@ -579,7 +579,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                     validation={{ required: true }}
                     inputProps={{
                       onChange: (e) => {
-                        setSelectedLanguage(e.target.value)
+                        setSelectedLanguage(e.target?.value)
                       },
                     }}
                   />
