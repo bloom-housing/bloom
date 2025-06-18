@@ -521,8 +521,9 @@ describe("Listing Management Tests", () => {
     cy.getByID("commonDigitalApplicationChoiceNo").should("be.checked")
     cy.getByID("customOnlineApplicationUrl").should("have.value", listing["url"])
     cy.getByID("paperApplicationNo").should("be.checked")
-    cy.getByID("referralOpportunityYes").should("be.checked")
-    cy.getByID("referralContactPhone").should("have.value", "(520) 245-8811")
+    // Referral opportunity not in Doorway
+    // cy.getByID("referralOpportunityYes").should("be.checked")
+    // cy.getByID("referralContactPhone").should("have.value", "(520) 245-8811")
     cy.getByID("listingsLeasingAgentAddress.street").should(
       "have.value",
       listing["leasingAgentAddress.street"]
