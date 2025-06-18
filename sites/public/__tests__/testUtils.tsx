@@ -73,12 +73,14 @@ export const mockNextRouter = (query?: any) => {
   const useRouter = jest.spyOn(require("next/router"), "useRouter")
   const pushMock = jest.fn()
   const backMock = jest.fn()
+  const replaceMock = jest.fn()
   useRouter.mockImplementation(() => ({
     pathname: "/",
     query: query ?? "",
     push: pushMock,
     back: backMock,
+    replace: replaceMock,
   }))
 
-  return { useRouter, pushMock, backMock }
+  return { useRouter, pushMock, backMock, replaceMock }
 }
