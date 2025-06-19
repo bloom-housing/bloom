@@ -25,11 +25,7 @@ import { MetaTags } from "../../../components/shared/MetaTags"
 import ListingGuard from "../../../components/shared/ListingGuard"
 import { NavigationHeader } from "../../../components/shared/NavigationHeader"
 import { ListingStatusBar } from "../../../components/listings/ListingStatusBar"
-import {
-  useFlaggedApplicationsMeta,
-  useLotteryActivityLog,
-  useSpreadsheetExport,
-} from "../../../lib/hooks"
+import { useFlaggedApplicationsMeta, useLotteryActivityLog, useZipExport } from "../../../lib/hooks"
 dayjs.extend(advancedFormat)
 
 import styles from "../../../../styles/lottery.module.scss"
@@ -62,13 +58,15 @@ const Lottery = (props: { listing: Listing | undefined }) => {
   const includeDemographicsPartner =
     profile?.userRoles?.isPartner && listingJurisdiction?.enablePartnerDemographics
 
-  const { onExport, exportLoading } = useSpreadsheetExport(
+  const { onExport, exportLoading } = useZipExport(
     listing?.id,
     (profile?.userRoles?.isAdmin ||
       profile?.userRoles?.isJurisdictionalAdmin ||
       includeDemographicsPartner) ??
       false,
-    true
+    true,
+    false,
+    !!process.env.useSecureDownloadPathway
   )
   const { data } = useFlaggedApplicationsMeta(listing?.id)
   const { lotteryActivityLogData } = useLotteryActivityLog(listing?.id)

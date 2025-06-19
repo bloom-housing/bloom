@@ -1,120 +1,39 @@
-import React, { useContext, useEffect } from "react"
-import Head from "next/head"
-import { t, ActionBlock } from "@bloom-housing/ui-components"
-import { Button, Heading, Icon } from "@bloom-housing/ui-seeds"
-import { PageView, pushGtmEvent, AuthContext, CustomIconMap } from "@bloom-housing/shared-helpers"
-import { UserStatus } from "../lib/constants"
-import Layout from "../layouts/application"
-import { ConfirmationModal } from "../components/account/ConfirmationModal"
-import { MetaTags } from "../components/shared/MetaTags"
-import { fetchJurisdictionByName } from "../lib/hooks"
-import { Jurisdiction } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import PageHero from "../components/page/Hero"
+import React from "react"
+import { GetStaticProps } from "next"
+import { Jurisdiction, Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { Home } from "../components/home/Home"
+import { HomeDeprecated } from "../components/home/HomeDeprecated"
+import { fetchJurisdictionByName, fetchLimitedUnderConstructionListings } from "../lib/hooks"
 
-interface IndexProps {
+interface HomePageProps {
   jurisdiction: Jurisdiction
+  underConstructionListings: Listing[]
 }
 
-export default function Home(props: IndexProps) {
-  const { profile } = useContext(AuthContext)
-
-  useEffect(() => {
-    pushGtmEvent<PageView>({
-      event: "pageView",
-      pageTitle: "Housing Portal",
-      status: profile ? UserStatus.LoggedIn : UserStatus.NotLoggedIn,
-    })
-  }, [profile])
-
-  const heroTitle = (
+export default function HomePage(props: HomePageProps) {
+  return (
     <>
-      {t("welcome.title")} <em>{t("region.name")}</em>
+      {process.env.showNewSeedsDesigns ? (
+        <Home
+          jurisdiction={props.jurisdiction}
+          underConstructionListings={props.underConstructionListings}
+        />
+      ) : (
+        <HomeDeprecated jurisdiction={props.jurisdiction} />
+      )}
     </>
   )
-
-  const metaDescription = t("pageDescription.welcome", { regionName: t("region.name") })
-  const metaImage = "" // TODO: replace with hero image
-
-  return (
-    <Layout>
-      <Head>
-        <title>{t("nav.siteTitle")}</title>
-      </Head>
-      <MetaTags title={t("nav.siteTitle")} image={metaImage} description={metaDescription} />
-      <PageHero>
-        <PageHero.Header>
-          <Heading>{heroTitle}</Heading>
-        </PageHero.Header>
-        <PageHero.Actions>
-          <Button href="/listings" variant="primary-outlined">
-            {t("welcome.seeRentalListings")}
-          </Button>
-        </PageHero.Actions>
-      </PageHero>
-      <div className="homepage-extra">
-        <div className="action-blocks mt-4 mb-4 w-full">
-          {props.jurisdiction && props.jurisdiction.notificationsSignUpUrl && (
-            <ActionBlock
-              className="flex-1"
-              header={
-                <Heading priority={2} size="2xl">
-                  {t("welcome.signUp")}
-                </Heading>
-              }
-              icon={
-                <Icon size="2xl" outlined>
-                  {CustomIconMap.envelope}
-                </Icon>
-              }
-              actions={[
-                <Button
-                  key={"sign-up"}
-                  href={props.jurisdiction.notificationsSignUpUrl}
-                  variant="primary-outlined"
-                  size="sm"
-                  className="m-2"
-                >
-                  {t("welcome.signUpToday")}
-                </Button>,
-              ]}
-            />
-          )}
-          <ActionBlock
-            className="flex-1"
-            header={
-              <Heading priority={2} size="2xl">
-                {t("welcome.seeMoreOpportunitiesTruncated")}
-              </Heading>
-            }
-            icon={
-              <Icon size="2xl" outlined>
-                {CustomIconMap.home}
-              </Icon>
-            }
-            actions={[
-              <Button
-                key={"additional-resources"}
-                href="/additional-resources"
-                variant="primary-outlined"
-                size="sm"
-                className="m-2"
-              >
-                {t("welcome.viewAdditionalHousingTruncated")}
-              </Button>,
-            ]}
-          />
-        </div>
-      </div>
-      <ConfirmationModal />
-    </Layout>
-  )
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function getStaticProps() {
+export const getStaticProps: GetStaticProps = async () => {
+  const underConstructionListings = await fetchLimitedUnderConstructionListings(undefined, 3)
   const jurisdiction = await fetchJurisdictionByName()
 
   return {
-    props: { jurisdiction },
+    props: {
+      underConstructionListings: underConstructionListings?.items || [],
+      jurisdiction: jurisdiction,
+    },
+    revalidate: Number(process.env.cacheRevalidate),
   }
 }

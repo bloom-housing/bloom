@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { useFormContext } from "react-hook-form"
 import { t, Select, Textarea, FieldGroup, Field } from "@bloom-housing/ui-components"
 import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
+import { AuthContext } from "@bloom-housing/shared-helpers"
 import {
+  FeatureFlagEnum,
   ReservedCommunityType,
   YesNoEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -17,25 +19,40 @@ type CommunityTypeProps = {
 
 const CommunityType = ({ listing }: CommunityTypeProps) => {
   const formMethods = useFormContext()
+  const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, setValue, watch, errors } = formMethods
-
+  const jurisdiction = watch("jurisdictions.id")
   const reservedCommunityType = watch("reservedCommunityTypes.id")
+
+  const swapCommunityTypeWithPrograms = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.swapCommunityTypeWithPrograms,
+    jurisdiction,
+    !jurisdiction
+  )
 
   const [options, setOptions] = useState([])
   const [currentCommunityType, setCurrentCommunityType] = useState(
     listing?.reservedCommunityTypes?.id
   )
 
-  const { data: reservedCommunityTypes = [] } = useReservedCommunityTypeList()
+  const { data: reservedCommunityTypes = [], loading } = useReservedCommunityTypeList()
 
   useEffect(() => {
-    const optionsTranslated = reservedCommunityTypes.map((communityType) => {
-      return { ...communityType, name: t(`listings.reservedCommunityTypes.${communityType.name}`) }
-    })
-    setOptions(["", ...arrayToFormOptions<ReservedCommunityType>(optionsTranslated, "name", "id")])
-  }, [reservedCommunityTypes])
+    if (!options.length && !loading) {
+      const optionsTranslated = reservedCommunityTypes.map((communityType) => {
+        return {
+          ...communityType,
+          name: t(`listings.reservedCommunityTypes.${communityType.name}`),
+        }
+      })
+      setOptions([
+        "",
+        ...arrayToFormOptions<ReservedCommunityType>(optionsTranslated, "name", "id"),
+      ])
+    }
+  }, [options, reservedCommunityTypes, loading])
 
   useEffect(() => {
     setValue("reservedCommunityTypes.id", currentCommunityType)
@@ -60,7 +77,7 @@ const CommunityType = ({ listing }: CommunityTypeProps) => {
     }
   }, [setValue, listing?.includeCommunityDisclaimer, watch, listing])
 
-  return (
+  return !swapCommunityTypeWithPrograms ? (
     <>
       <hr className="spacer-section-above spacer-section" />
       <SectionWithGrid
@@ -159,6 +176,8 @@ const CommunityType = ({ listing }: CommunityTypeProps) => {
         )}
       </SectionWithGrid>
     </>
+  ) : (
+    <></>
   )
 }
 

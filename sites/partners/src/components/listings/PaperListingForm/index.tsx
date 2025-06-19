@@ -8,12 +8,14 @@ import ChevronRightIcon from "@heroicons/react/20/solid/ChevronRightIcon"
 import { AuthContext, MessageContext, listingSectionQuestions } from "@bloom-housing/shared-helpers"
 import {
   FeatureFlag,
+  FeatureFlagEnum,
   ListingCreate,
   ListingEventsTypeEnum,
   ListingUpdate,
   ListingsStatusEnum,
   MultiselectQuestion,
   MultiselectQuestionsApplicationSectionEnum,
+  YesNoEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { useForm, FormProvider } from "react-hook-form"
 import {
@@ -21,6 +23,7 @@ import {
   FormListing,
   TempEvent,
   TempUnit,
+  TempUnitGroup,
   formDefaults,
 } from "../../../lib/listings/formTypes"
 import ListingDataPipeline from "../../../lib/listings/ListingDataPipeline"
@@ -39,11 +42,9 @@ import ApplicationAddress from "./sections/ApplicationAddress"
 import ApplicationDates from "./sections/ApplicationDates"
 import LotteryResults from "./sections/LotteryResults"
 import ApplicationTypes from "./sections/ApplicationTypes"
-import SelectAndOrder from "./sections/SelectAndOrder"
 import CommunityType from "./sections/CommunityType"
 import BuildingSelectionCriteria from "./sections/BuildingSelectionCriteria"
 import { getReadableErrorMessage } from "../PaperListingDetails/sections/helpers"
-import { useJurisdictionalMultiselectQuestionList } from "../../../lib/hooks"
 import { StatusBar } from "../../../components/shared/StatusBar"
 import { getListingStatusTag } from "../helpers"
 import RequestChangesDialog from "./dialogs/RequestChangesDialog"
@@ -52,6 +53,9 @@ import PublishListingDialog from "./dialogs/PublishListingDialog"
 import LiveConfirmationDialog from "./dialogs/LiveConfirmationDialog"
 import ListingApprovalDialog from "./dialogs/ListingApprovalDialog"
 import SaveBeforeExitDialog from "./dialogs/SaveBeforeExitDialog"
+import ListingVerification from "./sections/ListingVerification"
+import NeighborhoodAmenities from "./sections/NeighborhoodAmenities"
+import PreferencesAndPrograms from "./sections/PreferencesAndPrograms"
 
 type ListingFormProps = {
   listing?: FormListing
@@ -103,6 +107,7 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
   const [alert, setAlert] = useState<AlertErrorType | null>(null)
   const [loading, setLoading] = useState<boolean>(false)
   const [units, setUnits] = useState<TempUnit[]>([])
+  const [unitGroups, setUnitGroups] = useState<TempUnitGroup[]>([])
   const [openHouseEvents, setOpenHouseEvents] = useState<TempEvent[]>([])
   const [preferences, setPreferences] = useState<MultiselectQuestion[]>(
     listingSectionQuestions(listing, MultiselectQuestionsApplicationSectionEnum.preferences)?.map(
@@ -142,6 +147,18 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
   const [submitForApprovalDialog, setSubmitForApprovalDialog] = useState(false)
   const [requestChangesDialog, setRequestChangesDialog] = useState(false)
 
+  const enableUnitGroups =
+    activeFeatureFlags?.find((flag) => flag.name === FeatureFlagEnum.enableUnitGroups)?.active ||
+    false
+
+  const enableSection8 =
+    activeFeatureFlags?.find((flag) => flag.name === FeatureFlagEnum.enableSection8Question)
+      ?.active || false
+
+  const disableListingPreferences =
+    activeFeatureFlags?.find((flag) => flag.name === FeatureFlagEnum.disableListingPreferences)
+      ?.active || false
+
   useEffect(() => {
     if (listing?.units) {
       const tempUnits = listing.units.map((unit, i) => ({
@@ -149,6 +166,18 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
         tempId: i + 1,
       }))
       setUnits(tempUnits)
+    }
+
+    if (listing?.unitGroups) {
+      const tempUnitGroups = listing.unitGroups.map((unitGroup, i) => ({
+        ...unitGroup,
+        unitGroupAmiLevels: unitGroup.unitGroupAmiLevels.map((amiEntry, i) => ({
+          ...amiEntry,
+          tempId: i + 1,
+        })),
+        tempId: i + 1,
+      }))
+      setUnitGroups(tempUnitGroups)
     }
 
     if (listing?.listingEvents) {
@@ -165,7 +194,14 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
           .sort((a, b) => (dayjs(a.startTime).isAfter(b.startTime) ? 1 : -1))
       )
     }
-  }, [listing?.units, listing?.listingEvents, setUnits, setOpenHouseEvents])
+  }, [
+    listing?.units,
+    listing?.unitGroups,
+    listing?.listingEvents,
+    setUnits,
+    setUnitGroups,
+    setOpenHouseEvents,
+  ])
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { getValues, setError, clearErrors, reset, watch } = formMethods
@@ -174,7 +210,7 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
 
   // Set the active feature flags depending on if/what jurisdiction is selected
   useEffect(() => {
-    const newFeatureFlags = profile.jurisdictions?.reduce((featureFlags, juris) => {
+    const newFeatureFlags = profile?.jurisdictions?.reduce((featureFlags, juris) => {
       if (!selectedJurisdiction || selectedJurisdiction === juris.id) {
         // filter only the active feature flags
         const jurisFeatureFlags = juris.featureFlags?.filter((value) => value.active)
@@ -184,7 +220,7 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
       return featureFlags
     }, [])
     setActiveFeatureFlags(newFeatureFlags)
-  }, [profile.jurisdictions, selectedJurisdiction])
+  }, [profile?.jurisdictions, selectedJurisdiction])
 
   const triggerSubmitWithStatus: SubmitFunction = (action, status, newData) => {
     if (action !== "redirect" && status === ListingsStatusEnum.active) {
@@ -210,15 +246,21 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
           clearErrors()
           const successful = await formMethods.trigger()
 
+          if (!enableSection8) {
+            formData.listingSection8Acceptance = YesNoEnum.no
+          }
+
           if (successful) {
             const dataPipeline = new ListingDataPipeline(formData, {
-              preferences,
+              preferences: disableListingPreferences ? [] : preferences,
               programs,
-              units,
+              units: !enableUnitGroups ? units : [], // Clear existing units if unit groups flag has been enabled
+              unitGroups: enableUnitGroups ? unitGroups : [], // Clear existing unit groups if the unit groups flag has been disabled
               openHouseEvents,
               profile: profile,
               latLong,
               customMapPositionChosen,
+              enableUnitGroups,
             })
             const formattedData = await dataPipeline.run()
             let result
@@ -289,8 +331,10 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
         }
       }
     },
+    //eslint-disable-next-line react-hooks/exhaustive-deps
     [
       units,
+      unitGroups,
       openHouseEvents,
       editMode,
       listingsService,
@@ -306,6 +350,7 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
       setError,
       profile,
       addToast,
+      enableUnitGroups,
     ]
   )
 
@@ -337,7 +382,7 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
                           <Tabs.Tab>Application Process</Tabs.Tab>
                         </Tabs.TabList>
                         <Tabs.TabPanel>
-                          <ListingIntro jurisdictions={profile.jurisdictions} />
+                          <ListingIntro jurisdictions={profile?.jurisdictions || []} />
                           <ListingPhotos />
                           <BuildingDetails
                             listing={listing}
@@ -349,50 +394,26 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
                           <CommunityType listing={listing} />
                           <Units
                             units={units}
+                            unitGroups={unitGroups}
                             setUnits={setUnits}
+                            setUnitGroups={setUnitGroups}
                             disableUnitsAccordion={listing?.disableUnitsAccordion}
                             featureFlags={activeFeatureFlags}
                           />
-                          <SelectAndOrder
-                            addText={t("listings.addPreference")}
-                            drawerTitle={t("listings.addPreferences")}
-                            drawerSubtitle={
-                              process.env.showLottery && listing?.lotteryOptIn
-                                ? t("listings.lotteryPreferenceSubtitle")
-                                : null
-                            }
-                            editText={t("listings.editPreferences")}
-                            listingData={preferences || []}
-                            setListingData={setPreferences}
-                            subtitle={t("listings.sections.housingPreferencesSubtext")}
-                            title={t("listings.sections.housingPreferencesTitle")}
-                            drawerButtonText={t("listings.selectPreferences")}
-                            dataFetcher={useJurisdictionalMultiselectQuestionList}
-                            formKey={"preference"}
-                            applicationSection={
-                              MultiselectQuestionsApplicationSectionEnum.preferences
-                            }
-                          />
-                          <SelectAndOrder
-                            addText={"Add program"}
-                            drawerTitle={"Add programs"}
-                            editText={"Edit programs"}
-                            listingData={programs || []}
-                            setListingData={setPrograms}
-                            subtitle={
-                              "Tell us about any additional housing programs related to this listing."
-                            }
-                            title={"Housing Programs"}
-                            drawerButtonText={"Select programs"}
-                            dataFetcher={useJurisdictionalMultiselectQuestionList}
-                            formKey={"program"}
-                            applicationSection={MultiselectQuestionsApplicationSectionEnum.programs}
+                          <PreferencesAndPrograms
+                            listing={listing}
+                            preferences={preferences || []}
+                            setPreferences={setPreferences}
+                            programs={programs || []}
+                            setPrograms={setPrograms}
                           />
                           <AdditionalFees existingUtilities={listing?.listingUtilities} />
                           <BuildingFeatures existingFeatures={listing?.listingFeatures} />
+                          <NeighborhoodAmenities />
                           <AdditionalEligibility defaultText={listing?.rentalAssistance} />
                           <BuildingSelectionCriteria />
                           <AdditionalDetails />
+                          <ListingVerification />
                           <div className="text-right -mr-8 -mt-8 relative" style={{ top: "7rem" }}>
                             <Button
                               id="applicationProcessButton"

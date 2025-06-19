@@ -42,8 +42,6 @@ const mockListing = (): Listing => {
       publicUrl: '',
       emailFromAddress: '',
       rentalAssistanceDefault: '',
-      enableAccessibilityFeatures: true,
-      enableUtilitiesIncluded: true,
     },
     units: [],
     unitsSummarized: undefined,
@@ -145,12 +143,14 @@ describe('Testing translations service', () => {
   let service: TranslationService;
   let prisma: PrismaService;
   let googleTranslateServiceMock;
+  let mockConsoleWarn;
 
   beforeEach(async () => {
     googleTranslateServiceMock = {
       isConfigured: () => true,
       fetch: jest.fn(),
     };
+    mockConsoleWarn = jest.spyOn(console, 'warn').mockImplementation();
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         TranslationService,
@@ -164,6 +164,10 @@ describe('Testing translations service', () => {
 
     service = module.get<TranslationService>(TranslationService);
     prisma = module.get<PrismaService>(PrismaService);
+  });
+
+  afterEach(() => {
+    mockConsoleWarn.mockRestore();
   });
 
   it('Should fall back to english if language does not exist', async () => {
@@ -193,6 +197,9 @@ describe('Testing translations service', () => {
 
     expect(prisma.translations.findFirst).toHaveBeenCalledTimes(2);
     expect(result).toEqual(translations);
+    expect(mockConsoleWarn).toHaveBeenCalledWith(
+      `Fetching translations for es failed on jurisdiction ${jurisdictionId}, defaulting to english.`,
+    );
   });
 
   it('Should get unique translations by language and jurisdiction', async () => {

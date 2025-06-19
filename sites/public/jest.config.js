@@ -19,10 +19,10 @@ module.exports = {
   coverageDirectory: "test-coverage",
   coverageThreshold: {
     global: {
-      branches: 0,
-      functions: 0,
-      lines: 0,
-      statements: 0,
+      branches: 48,
+      functions: 45,
+      lines: 55,
+      statements: 55,
     },
   },
   preset: "ts-jest",
@@ -40,5 +40,6 @@ module.exports = {
   setupFilesAfterEnv: ["../public/.jest/setup-tests.js"],
   moduleNameMapper: {
     "\\.(scss|css|less)$": "identity-obj-proxy",
+    "\\.module\\.scss$": "identity-obj-proxy",
   },
 }

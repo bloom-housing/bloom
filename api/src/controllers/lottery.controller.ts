@@ -84,10 +84,31 @@ export class LotteryController {
     @Query(new ValidationPipe(defaultValidationPipeOptions))
     queryParams: ApplicationCsvQueryParams,
   ): Promise<StreamableFile> {
-    return await this.applicationExporterService.spreadsheetExport(
+    return await this.applicationExporterService.exporter(
       req,
-      res,
       queryParams,
+      true,
+      true,
+    );
+  }
+
+  @Get(`getLotteryResultsSecure`)
+  @ApiOperation({
+    summary: 'Get applications lottery results',
+    operationId: 'lotteryResultsSecure',
+  })
+  @UseInterceptors(ExportLogInterceptor)
+  async lotteryExportSecure(
+    @Request() req: ExpressRequest,
+    @Res({ passthrough: true }) res: Response,
+    @Query(new ValidationPipe(defaultValidationPipeOptions))
+    queryParams: ApplicationCsvQueryParams,
+  ): Promise<string> {
+    return await this.applicationExporterService.exporterSecure(
+      req,
+      queryParams,
+      true,
+      true,
     );
   }
 

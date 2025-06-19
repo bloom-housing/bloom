@@ -1,0 +1,11 @@
+.bold-subheader {
+  margin-block-start: var(--seeds-spacer-label);
+  color: var(--seeds-text-color-light);
+  font-weight: 700;
+}
+
+.status-messages {
+  @media (--sm-only) {
+    margin-inline: var(--seeds-s4);
+  }
+}

@@ -1,0 +1,24 @@
+.max-width-layout {
+  --max-width-layout-desktop-margin-block: 0;
+  --max-width-layout-mobile-margin-block: 0;
+
+  .layout-max-width-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin-block: var(--max-width-layout-mobile-margin-block);
+    padding-inline: var(--seeds-s4);
+
+    @media (--md-and-up) {
+      margin-block: var(--max-width-layout-desktop-margin-block);
+      padding-inline: var(--seeds-spacer-container);
+    }
+  }
+
+  .layout-max-width-content {
+    max-width: var(--seeds-screen-lg);
+    margin: auto;
+    width: 100%;
+  }
+}

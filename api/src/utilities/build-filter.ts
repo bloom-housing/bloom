@@ -28,11 +28,26 @@ export function buildFilter(filter: filter): any {
   }
 
   if (comparison === Compare.IN) {
-    toReturn.push({
-      in: String(filterValue)
+    let listValues;
+    if (
+      Array.isArray(filterValue) &&
+      filterValue.length > 0 &&
+      typeof filterValue[0] !== 'string'
+    ) {
+      listValues = filterValue;
+    } else {
+      listValues = String(filterValue)
         .split(',')
-        .map((s) => s.trim().toLowerCase())
-        .filter((s) => s.length !== 0),
+        .map((s) => {
+          if (!filter.caseSensitive) {
+            return s.trim().toLowerCase();
+          }
+          return s.trim();
+        })
+        .filter((s) => s.length !== 0);
+    }
+    toReturn.push({
+      in: listValues,
       ...mode,
     });
   } else if (comparison === Compare['<>']) {
@@ -55,6 +70,11 @@ export function buildFilter(filter: filter): any {
   } else if (comparison === Compare['<=']) {
     toReturn.push({
       lte: filterValue,
+      ...mode,
+    });
+  } else if (comparison === Compare['LIKE']) {
+    toReturn.push({
+      contains: filterValue,
       ...mode,
     });
   } else if (Compare.NA) {

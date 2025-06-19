@@ -2,9 +2,13 @@ import { Test, TestingModule } from '@nestjs/testing';
 import {
   ApplicationAddressTypeEnum,
   ApplicationMethodsTypeEnum,
+  HomeTypeEnum,
   LanguagesEnum,
   ListingEventsTypeEnum,
   ListingsStatusEnum,
+  MarketingTypeEnum,
+  MonthlyRentDeterminationTypeEnum,
+  RegionEnum,
   ReviewOrderTypeEnum,
   UnitTypeEnum,
   UserRoleEnum,
@@ -16,7 +20,7 @@ import { randomUUID } from 'crypto';
 import { HttpModule, HttpService } from '@nestjs/axios';
 import { of } from 'rxjs';
 import { PrismaService } from '../../../src/services/prisma.service';
-import { ListingService } from '../../../src/services/listing.service';
+import { ListingService, views } from '../../../src/services/listing.service';
 import { ListingsQueryParams } from '../../../src/dtos/listings/listings-query-params.dto';
 import { ListingOrderByKeys } from '../../../src/enums/listings/order-by-enum';
 import { OrderByEnum } from '../../../src/enums/shared/order-by-enum';
@@ -24,6 +28,7 @@ import { ListingFilterKeys } from '../../../src/enums/listings/filter-key-enum';
 import { Compare } from '../../../src/dtos/shared/base-filter.dto';
 import { ListingFilterParams } from '../../../src/dtos/listings/listings-filter-params.dto';
 import { Unit } from '../../../src/dtos/units/unit.dto';
+import { UnitGroup } from '../../../src/dtos/unit-groups/unit-group.dto';
 import { UnitTypeSort } from '../../../src/utilities/unit-utilities';
 import { Listing } from '../../../src/dtos/listings/listing.dto';
 import { ListingViews } from '../../../src/enums/listings/view-enum';
@@ -38,8 +43,10 @@ import { User } from '../../../src/dtos/users/user.dto';
 import { EmailService } from '../../../src/services/email.service';
 import { PermissionService } from '../../../src/services/permission.service';
 import { permissionActions } from '../../../src/enums/permissions/permission-actions-enum';
+import { FeatureFlagEnum } from '../../../src/enums/feature-flags/feature-flags-enum';
 import { ApplicationService } from '../../../src/services/application.service';
 import { GeocodingService } from '../../../src/services/geocoding.service';
+import { FilterAvailabilityEnum } from '../../../src/enums/listings/filter-availability-enum';
 
 /*
   generates a super simple mock listing for us to test logic with
@@ -47,62 +54,140 @@ import { GeocodingService } from '../../../src/services/geocoding.service';
 const mockListing = (
   pos: number,
   genUnits?: { numberToMake: number; date: Date },
+  useUnitGroups = false,
 ) => {
-  const toReturn = { id: pos, name: `listing ${pos + 1}`, units: undefined };
+  const toReturn = {
+    id: pos,
+    name: `listing ${pos + 1}`,
+    units: [],
+    unitGroups: [],
+  };
   if (genUnits) {
-    const units: Unit[] = [];
     const { numberToMake, date } = genUnits;
-    for (let i = 0; i < numberToMake; i++) {
-      units.push({
-        id: `unit ${i}`,
-        createdAt: date,
-        updatedAt: date,
-        amiPercentage: `${i}`,
-        annualIncomeMin: `${i}`,
-        monthlyIncomeMin: `${i}`,
-        floor: i,
-        annualIncomeMax: `${i}`,
-        maxOccupancy: i,
-        minOccupancy: i,
-        monthlyRent: `${i}`,
-        numBathrooms: i,
-        numBedrooms: i,
-        number: `unit ${i}`,
-        sqFeet: `${i}`,
-        monthlyRentAsPercentOfIncome: `${i % UnitTypeSort.length}`,
-        bmrProgramChart: !(i % 2),
-        unitTypes: {
-          id: `unitType ${i}`,
+    if (useUnitGroups) {
+      const unitGroups: UnitGroup[] = [];
+      for (let i = 0; i < numberToMake; i++) {
+        unitGroups.push({
+          id: `unitGroup ${i}`,
           createdAt: date,
           updatedAt: date,
-          name: UnitTypeSort[i % UnitTypeSort.length] as UnitTypeEnum,
-          numBedrooms: i,
-        },
-        unitAmiChartOverrides: {
-          id: `unitAmiChartOverrides ${i}`,
-          createdAt: date,
-          updatedAt: date,
-          items: [
+          maxOccupancy: i + 2,
+          minOccupancy: i + 1,
+          openWaitlist: i % 2 === 0,
+          totalCount: 10,
+          totalAvailable: 5,
+          bathroomMin: i,
+          bathroomMax: i + 1,
+          floorMin: i,
+          floorMax: i + 1,
+          sqFeetMin: i * 100,
+          sqFeetMax: i * 100 + 100,
+          unitTypes: [
             {
-              percentOfAmi: i,
-              householdSize: i,
-              income: i,
+              id: `unitType ${i}`,
+              createdAt: date,
+              updatedAt: date,
+              name: UnitTypeSort[i % UnitTypeSort.length] as UnitTypeEnum,
+              numBedrooms: i,
             },
           ],
-        },
-        amiChart: {
-          id: `AMI${i}`,
-          items: [],
-          name: `AMI Name ${i}`,
+          unitGroupAmiLevels: [
+            {
+              id: `unitGroupAmiLevel ${i}`,
+              createdAt: date,
+              updatedAt: date,
+              amiPercentage: i * 10,
+              monthlyRentDeterminationType:
+                MonthlyRentDeterminationTypeEnum.percentageOfIncome,
+              percentageOfIncomeValue: (i * 10) % 100,
+              amiChart: {
+                id: `AMI${i}`,
+                items: [],
+                name: `AMI Name ${i}`,
+                createdAt: date,
+                updatedAt: date,
+                jurisdictions: {
+                  id: 'jurisdiction ID',
+                },
+              },
+            },
+            {
+              id: `unitGroupAmiLevel ${i} 2`,
+              createdAt: date,
+              updatedAt: date,
+              amiPercentage: 30 + i * 10,
+              monthlyRentDeterminationType:
+                MonthlyRentDeterminationTypeEnum.percentageOfIncome,
+              percentageOfIncomeValue: 30 + ((i * 10) % 100),
+              amiChart: {
+                id: `AMI${i}`,
+                items: [],
+                name: `AMI Name ${i}`,
+                createdAt: date,
+                updatedAt: date,
+                jurisdictions: {
+                  id: 'jurisdiction ID',
+                },
+              },
+            },
+          ],
+        });
+      }
+      toReturn.unitGroups = unitGroups;
+    } else {
+      const units: Unit[] = [];
+      for (let i = 0; i < numberToMake; i++) {
+        units.push({
+          id: `unit ${i}`,
           createdAt: date,
           updatedAt: date,
-          jurisdictions: {
-            id: 'jurisdiction ID',
+          amiPercentage: `${i}`,
+          annualIncomeMin: `${i}`,
+          monthlyIncomeMin: `${i}`,
+          floor: i,
+          annualIncomeMax: `${i}`,
+          maxOccupancy: i,
+          minOccupancy: i,
+          monthlyRent: `${i}`,
+          numBathrooms: i,
+          numBedrooms: i,
+          number: `unit ${i}`,
+          sqFeet: `${i}`,
+          monthlyRentAsPercentOfIncome: `${i % UnitTypeSort.length}`,
+          bmrProgramChart: !(i % 2),
+          unitTypes: {
+            id: `unitType ${i}`,
+            createdAt: date,
+            updatedAt: date,
+            name: UnitTypeSort[i % UnitTypeSort.length] as UnitTypeEnum,
+            numBedrooms: i,
           },
-        },
-      });
+          unitAmiChartOverrides: {
+            id: `unitAmiChartOverrides ${i}`,
+            createdAt: date,
+            updatedAt: date,
+            items: [
+              {
+                percentOfAmi: i,
+                householdSize: i,
+                income: i,
+              },
+            ],
+          },
+          amiChart: {
+            id: `AMI${i}`,
+            items: [],
+            name: `AMI Name ${i}`,
+            createdAt: date,
+            updatedAt: date,
+            jurisdictions: {
+              id: 'jurisdiction ID',
+            },
+          },
+        });
+      }
+      toReturn.units = units;
     }
-    toReturn.units = units;
   }
 
   return toReturn;
@@ -111,10 +196,11 @@ const mockListing = (
 const mockListingSet = (
   pos: number,
   genUnits?: { numberToMake: number; date: Date },
+  useUnitGroups = false,
 ) => {
   const toReturn = [];
   for (let i = 0; i < pos; i++) {
-    toReturn.push(mockListing(i, genUnits));
+    toReturn.push(mockListing(i, genUnits, useUnitGroups));
   }
   return toReturn;
 };
@@ -228,6 +314,7 @@ describe('Testing listing service', () => {
 
   const constructFullListingData = (
     listingId?: string,
+    useUnitGroups = false,
   ): ListingPublishedCreate | ListingPublishedUpdate => {
     return {
       id: listingId ?? undefined,
@@ -251,45 +338,81 @@ describe('Testing listing service', () => {
       referralOpportunity: false,
       rentalAssistance: 'rental assistance',
       reviewOrderType: ReviewOrderTypeEnum.firstComeFirstServe,
-      units: [
-        {
-          amiPercentage: '1',
-          annualIncomeMin: '2',
-          monthlyIncomeMin: '3',
-          floor: 4,
-          annualIncomeMax: '5',
-          maxOccupancy: 6,
-          minOccupancy: 7,
-          monthlyRent: '8',
-          numBathrooms: 9,
-          numBedrooms: 10,
-          number: '11',
-          sqFeet: '12',
-          monthlyRentAsPercentOfIncome: '13',
-          bmrProgramChart: true,
-          unitTypes: {
-            id: randomUUID(),
-          },
-          amiChart: {
-            id: randomUUID(),
-          },
-          unitAccessibilityPriorityTypes: {
-            id: randomUUID(),
-          },
-          unitRentTypes: {
-            id: randomUUID(),
-          },
-          unitAmiChartOverrides: {
-            items: [
-              {
-                percentOfAmi: 10,
-                householdSize: 20,
-                income: 30,
+      units: useUnitGroups
+        ? []
+        : [
+            {
+              amiPercentage: '1',
+              annualIncomeMin: '2',
+              monthlyIncomeMin: '3',
+              floor: 4,
+              annualIncomeMax: '5',
+              maxOccupancy: 6,
+              minOccupancy: 7,
+              monthlyRent: '8',
+              numBathrooms: 9,
+              numBedrooms: 10,
+              number: '11',
+              sqFeet: '12',
+              monthlyRentAsPercentOfIncome: '13',
+              bmrProgramChart: true,
+              unitTypes: {
+                id: randomUUID(),
               },
-            ],
-          },
-        },
-      ],
+              amiChart: {
+                id: randomUUID(),
+              },
+              unitAccessibilityPriorityTypes: {
+                id: randomUUID(),
+              },
+              unitRentTypes: {
+                id: randomUUID(),
+              },
+              unitAmiChartOverrides: {
+                items: [
+                  {
+                    percentOfAmi: 10,
+                    householdSize: 20,
+                    income: 30,
+                  },
+                ],
+              },
+            },
+          ],
+      unitGroups: useUnitGroups
+        ? [
+            {
+              totalAvailable: 5,
+              totalCount: 10,
+              floorMin: 1,
+              floorMax: 5,
+              maxOccupancy: 3,
+              minOccupancy: 1,
+              sqFeetMin: 500,
+              sqFeetMax: 800,
+              bathroomMin: 1,
+              bathroomMax: 2,
+              openWaitlist: false,
+              unitTypes: [
+                {
+                  id: randomUUID(),
+                },
+              ],
+              unitGroupAmiLevels: [
+                {
+                  amiPercentage: 10,
+                  monthlyRentDeterminationType:
+                    MonthlyRentDeterminationTypeEnum.percentageOfIncome,
+                  percentageOfIncomeValue: 10,
+                  amiChart: {
+                    id: randomUUID(),
+                  },
+                },
+              ],
+            },
+          ]
+        : [],
+      section8Acceptance: true,
       listingMultiselectQuestions: [
         {
           id: randomUUID(),
@@ -311,30 +434,32 @@ describe('Testing listing service', () => {
           ],
         },
       ],
-      unitsSummary: [
-        {
-          unitTypes: {
-            id: randomUUID(),
-          },
-          monthlyRentMin: 1,
-          monthlyRentMax: 2,
-          monthlyRentAsPercentOfIncome: '3',
-          amiPercentage: 4,
-          minimumIncomeMin: '5',
-          minimumIncomeMax: '6',
-          maxOccupancy: 7,
-          minOccupancy: 8,
-          floorMin: 9,
-          floorMax: 10,
-          sqFeetMin: '11',
-          sqFeetMax: '12',
-          unitAccessibilityPriorityTypes: {
-            id: randomUUID(),
-          },
-          totalCount: 13,
-          totalAvailable: 14,
-        },
-      ],
+      unitsSummary: !useUnitGroups
+        ? [
+            {
+              unitTypes: {
+                id: randomUUID(),
+              },
+              monthlyRentMin: 1,
+              monthlyRentMax: 2,
+              monthlyRentAsPercentOfIncome: '3',
+              amiPercentage: 4,
+              minimumIncomeMin: '5',
+              minimumIncomeMax: '6',
+              maxOccupancy: 7,
+              minOccupancy: 8,
+              floorMin: 9,
+              floorMax: 10,
+              sqFeetMin: '11',
+              sqFeetMax: '12',
+              unitAccessibilityPriorityTypes: {
+                id: randomUUID(),
+              },
+              totalCount: 13,
+              totalAvailable: 14,
+            },
+          ]
+        : [],
       listingsApplicationPickUpAddress: exampleAddress,
       listingsApplicationMailingAddress: exampleAddress,
       listingsApplicationDropOffAddress: exampleAddress,
@@ -422,6 +547,11 @@ describe('Testing listing service', () => {
         hearing: true,
         visual: false,
         mobility: true,
+        barrierFreeUnitEntrance: false,
+        loweredLightSwitch: true,
+        barrierFreeBathroom: false,
+        wideDoorways: true,
+        loweredCabinets: false,
       },
       listingUtilities: {
         water: false,
@@ -434,6 +564,16 @@ describe('Testing listing service', () => {
         internet: true,
       },
       homeType: 'apartment',
+      isVerified: true,
+      listingNeighborhoodAmenities: {
+        groceryStores: 'stores',
+        pharmacies: 'pharmacies',
+        healthCareResources: 'health care',
+        parksAndCommunityCenters: 'parks',
+        schools: 'schools',
+        publicTransportation: 'public transportation',
+      },
+      marketingType: undefined,
     };
   };
 
@@ -473,6 +613,7 @@ describe('Testing listing service', () => {
           },
           listingFeatures: true,
           listingUtilities: true,
+          listingNeighborhoodAmenities: true,
           applicationMethods: {
             include: {
               paperApplications: {
@@ -503,6 +644,20 @@ describe('Testing listing service', () => {
                 include: {
                   jurisdictions: true,
                   unitGroupAmiLevels: true,
+                },
+              },
+            },
+          },
+          unitGroups: {
+            include: {
+              unitTypes: true,
+              unitGroupAmiLevels: {
+                include: {
+                  amiChart: {
+                    include: {
+                      jurisdictions: true,
+                    },
+                  },
                 },
               },
             },
@@ -552,6 +707,9 @@ describe('Testing listing service', () => {
           {
             name: 'asc',
           },
+          {
+            name: 'asc',
+          },
         ],
         where: {
           AND: [
@@ -572,7 +730,19 @@ describe('Testing listing service', () => {
                     some: {
                       numBedrooms: {
                         gte: 2,
-                        mode: 'insensitive',
+                      },
+                    },
+                  },
+                },
+                {
+                  unitGroups: {
+                    some: {
+                      unitTypes: {
+                        some: {
+                          numBedrooms: {
+                            gte: 2,
+                          },
+                        },
                       },
                     },
                   },
@@ -603,10 +773,25 @@ describe('Testing listing service', () => {
           },
           listingFeatures: true,
           listingUtilities: true,
+          listingNeighborhoodAmenities: true,
           units: {
             include: {
               unitTypes: true,
               unitAmiChartOverrides: true,
+            },
+          },
+          unitGroups: {
+            include: {
+              unitTypes: true,
+              unitGroupAmiLevels: {
+                include: {
+                  amiChart: {
+                    include: {
+                      jurisdictions: true,
+                    },
+                  },
+                },
+              },
             },
           },
         },
@@ -632,7 +817,19 @@ describe('Testing listing service', () => {
                     some: {
                       numBedrooms: {
                         gte: 2,
-                        mode: 'insensitive',
+                      },
+                    },
+                  },
+                },
+                {
+                  unitGroups: {
+                    some: {
+                      unitTypes: {
+                        some: {
+                          numBedrooms: {
+                            gte: 2,
+                          },
+                        },
                       },
                     },
                   },
@@ -674,6 +871,9 @@ describe('Testing listing service', () => {
           {
             name: 'asc',
           },
+          {
+            name: 'asc',
+          },
         ],
         where: {
           AND: [],
@@ -694,10 +894,25 @@ describe('Testing listing service', () => {
           },
           listingFeatures: true,
           listingUtilities: true,
+          listingNeighborhoodAmenities: true,
           units: {
             include: {
               unitTypes: true,
               unitAmiChartOverrides: true,
+            },
+          },
+          unitGroups: {
+            include: {
+              unitTypes: true,
+              unitGroupAmiLevels: {
+                include: {
+                  amiChart: {
+                    include: {
+                      jurisdictions: true,
+                    },
+                  },
+                },
+              },
             },
           },
         },
@@ -741,7 +956,19 @@ describe('Testing listing service', () => {
                   some: {
                     numBedrooms: {
                       gte: 2,
-                      mode: 'insensitive',
+                    },
+                  },
+                },
+              },
+              {
+                unitGroups: {
+                  some: {
+                    unitTypes: {
+                      some: {
+                        numBedrooms: {
+                          gte: 2,
+                        },
+                      },
                     },
                   },
                 },
@@ -796,7 +1023,15 @@ describe('Testing listing service', () => {
                   some: {
                     numBedrooms: {
                       gte: 2,
-                      mode: 'insensitive',
+                    },
+                  },
+                },
+              },
+              {
+                unitGroups: {
+                  some: {
+                    unitTypes: {
+                      some: { numBedrooms: { gte: 2 } },
                     },
                   },
                 },
@@ -979,6 +1214,9 @@ describe('Testing listing service', () => {
           {
             name: 'asc',
           },
+          {
+            name: 'asc',
+          },
         ],
         where: {
           AND: [
@@ -999,8 +1237,14 @@ describe('Testing listing service', () => {
                     some: {
                       numBedrooms: {
                         gte: 2,
-                        mode: 'insensitive',
                       },
+                    },
+                  },
+                },
+                {
+                  unitGroups: {
+                    some: {
+                      unitTypes: { some: { numBedrooms: { gte: 2 } } },
                     },
                   },
                 },
@@ -1030,10 +1274,25 @@ describe('Testing listing service', () => {
           },
           listingFeatures: true,
           listingUtilities: true,
+          listingNeighborhoodAmenities: true,
           units: {
             include: {
               unitTypes: true,
               unitAmiChartOverrides: true,
+            },
+          },
+          unitGroups: {
+            include: {
+              unitTypes: true,
+              unitGroupAmiLevels: {
+                include: {
+                  amiChart: {
+                    include: {
+                      jurisdictions: true,
+                    },
+                  },
+                },
+              },
             },
           },
         },
@@ -1059,8 +1318,14 @@ describe('Testing listing service', () => {
                     some: {
                       numBedrooms: {
                         gte: 2,
-                        mode: 'insensitive',
                       },
+                    },
+                  },
+                },
+                {
+                  unitGroups: {
+                    some: {
+                      unitTypes: { some: { numBedrooms: { gte: 2 } } },
                     },
                   },
                 },
@@ -1074,6 +1339,899 @@ describe('Testing listing service', () => {
             },
           ],
         },
+      });
+    });
+  });
+
+  describe('Test buildWhereClause helper', () => {
+    it('should return a where clause for filter availabilities - closedWaitlist', () => {
+      const filter = [
+        {
+          $comparison: 'IN',
+          availabilities: [FilterAvailabilityEnum.closedWaitlist],
+        } as ListingFilterParams,
+      ];
+      const whereClause = service.buildWhereClause(filter, '');
+
+      expect(whereClause).toStrictEqual({
+        AND: [
+          {
+            OR: [
+              {
+                AND: [
+                  {
+                    unitGroups: {
+                      some: { openWaitlist: { equals: false } },
+                    },
+                  },
+                  {
+                    marketingType: {
+                      not: { equals: MarketingTypeEnum.comingSoon },
+                    },
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      });
+    });
+
+    it('should return a where clause for filter availabilities - comingSoon', () => {
+      const filter = [
+        {
+          $comparison: 'IN',
+          availabilities: [FilterAvailabilityEnum.comingSoon],
+        } as ListingFilterParams,
+      ];
+      const whereClause = service.buildWhereClause(filter, '');
+
+      expect(whereClause).toStrictEqual({
+        AND: [
+          {
+            OR: [
+              {
+                marketingType: {
+                  equals: MarketingTypeEnum.comingSoon,
+                },
+              },
+            ],
+          },
+        ],
+      });
+    });
+
+    it('should return a where clause for filter availabilities - openWaitlist', () => {
+      const filter = [
+        {
+          $comparison: 'IN',
+          availabilities: [FilterAvailabilityEnum.openWaitlist],
+        } as ListingFilterParams,
+      ];
+      const whereClause = service.buildWhereClause(filter, '');
+
+      expect(whereClause).toStrictEqual({
+        AND: [
+          {
+            OR: [
+              {
+                AND: [
+                  {
+                    unitGroups: {
+                      some: { openWaitlist: { equals: true } },
+                    },
+                  },
+                  {
+                    marketingType: {
+                      not: { equals: MarketingTypeEnum.comingSoon },
+                    },
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      });
+    });
+
+    it('should return a where clause for filter availabilities - waitlistOpen', () => {
+      const filter = [
+        {
+          $comparison: 'IN',
+          availabilities: [FilterAvailabilityEnum.waitlistOpen],
+        } as ListingFilterParams,
+      ];
+      const whereClause = service.buildWhereClause(filter, '');
+
+      expect(whereClause).toStrictEqual({
+        AND: [
+          {
+            OR: [
+              {
+                reviewOrderType: {
+                  equals: ReviewOrderTypeEnum.waitlist,
+                },
+              },
+            ],
+          },
+        ],
+      });
+    });
+
+    it('should return a where clause for filter availabilities - unitsAvailable', () => {
+      const filter = [
+        {
+          $comparison: 'IN',
+          availabilities: [FilterAvailabilityEnum.unitsAvailable],
+        } as ListingFilterParams,
+      ];
+      const whereClause = service.buildWhereClause(filter, '');
+
+      expect(whereClause).toStrictEqual({
+        AND: [
+          {
+            OR: [
+              {
+                unitsAvailable: {
+                  gte: 1,
+                },
+              },
+            ],
+          },
+        ],
+      });
+    });
+
+    it('should return a where clause for filter availabilities - multiple', () => {
+      const filter = [
+        {
+          $comparison: 'IN',
+          availabilities: [
+            FilterAvailabilityEnum.openWaitlist,
+            FilterAvailabilityEnum.unitsAvailable,
+          ],
+        } as ListingFilterParams,
+      ];
+      const whereClause = service.buildWhereClause(filter, '');
+
+      expect(whereClause).toStrictEqual({
+        AND: [
+          {
+            OR: [
+              {
+                AND: [
+                  {
+                    unitGroups: {
+                      some: { openWaitlist: { equals: true } },
+                    },
+                  },
+                  {
+                    marketingType: {
+                      not: { equals: MarketingTypeEnum.comingSoon },
+                    },
+                  },
+                ],
+              },
+              {
+                unitsAvailable: {
+                  gte: 1,
+                },
+              },
+            ],
+          },
+        ],
+      });
+    });
+
+    it('should return a where clause for filter availability - closedWaitlist', () => {
+      const filter = [
+        {
+          $comparison: '=',
+          availability: FilterAvailabilityEnum.closedWaitlist,
+        } as ListingFilterParams,
+      ];
+      const whereClause = service.buildWhereClause(filter, '');
+
+      expect(whereClause).toStrictEqual({
+        AND: [
+          {
+            OR: [
+              {
+                AND: [
+                  {
+                    unitGroups: {
+                      some: { openWaitlist: { equals: false } },
+                    },
+                  },
+                  {
+                    marketingType: {
+                      not: { equals: MarketingTypeEnum.comingSoon },
+                    },
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      });
+    });
+
+    it('should return a where clause for filter availability - comingSoon', () => {
+      const filter = [
+        {
+          $comparison: '=',
+          availability: FilterAvailabilityEnum.comingSoon,
+        } as ListingFilterParams,
+      ];
+      const whereClause = service.buildWhereClause(filter, '');
+
+      expect(whereClause).toStrictEqual({
+        AND: [
+          {
+            OR: [
+              {
+                marketingType: {
+                  equals: MarketingTypeEnum.comingSoon,
+                },
+              },
+            ],
+          },
+        ],
+      });
+    });
+
+    it('should return a where clause for filter availability - openWaitlist', () => {
+      const filter = [
+        {
+          $comparison: '=',
+          availability: FilterAvailabilityEnum.openWaitlist,
+        } as ListingFilterParams,
+      ];
+      const whereClause = service.buildWhereClause(filter, '');
+
+      expect(whereClause).toStrictEqual({
+        AND: [
+          {
+            OR: [
+              {
+                AND: [
+                  {
+                    unitGroups: {
+                      some: { openWaitlist: { equals: true } },
+                    },
+                  },
+                  {
+                    marketingType: {
+                      not: { equals: MarketingTypeEnum.comingSoon },
+                    },
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      });
+    });
+
+    it('should return a where clause for filter availability - waitlistOpen', () => {
+      const filter = [
+        {
+          $comparison: '=',
+          availability: FilterAvailabilityEnum.waitlistOpen,
+        } as ListingFilterParams,
+      ];
+      const whereClause = service.buildWhereClause(filter, '');
+
+      expect(whereClause).toStrictEqual({
+        AND: [
+          {
+            OR: [
+              {
+                reviewOrderType: {
+                  equals: ReviewOrderTypeEnum.waitlist,
+                },
+              },
+            ],
+          },
+        ],
+      });
+    });
+
+    it('should return a where clause for filter availability - unitsAvailable', () => {
+      const filter = [
+        {
+          $comparison: '>=',
+          availability: FilterAvailabilityEnum.unitsAvailable,
+        } as ListingFilterParams,
+      ];
+      const whereClause = service.buildWhereClause(filter, '');
+
+      expect(whereClause).toStrictEqual({
+        AND: [
+          {
+            OR: [
+              {
+                unitsAvailable: {
+                  gte: 1,
+                },
+              },
+            ],
+          },
+        ],
+      });
+    });
+
+    it('should return a where clause for filter bathrooms', () => {
+      const filter = [
+        { $comparison: '=', bathrooms: 2 } as ListingFilterParams,
+      ];
+      const whereClause = service.buildWhereClause(filter, '');
+
+      expect(whereClause).toStrictEqual({
+        AND: [
+          {
+            OR: [
+              {
+                units: {
+                  some: {
+                    numBathrooms: {
+                      equals: 2,
+                    },
+                  },
+                },
+              },
+            ],
+          },
+        ],
+      });
+    });
+
+    it('should return a where clause for filter bedrooms', () => {
+      const filter = [{ $comparison: '=', bedrooms: 2 } as ListingFilterParams];
+      const whereClause = service.buildWhereClause(filter, '');
+
+      expect(whereClause).toStrictEqual({
+        AND: [
+          {
+            OR: [
+              {
+                units: {
+                  some: {
+                    numBedrooms: {
+                      equals: 2,
+                    },
+                  },
+                },
+              },
+              {
+                unitGroups: {
+                  some: {
+                    unitTypes: {
+                      some: {
+                        numBedrooms: {
+                          equals: 2,
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            ],
+          },
+        ],
+      });
+    });
+
+    it('should return a where clause for filter bedroomTypes', () => {
+      const filter = [
+        { $comparison: 'IN', bedroomTypes: [2, 4] } as ListingFilterParams,
+      ];
+      const whereClause = service.buildWhereClause(filter, '');
+
+      expect(whereClause).toStrictEqual({
+        AND: [
+          {
+            OR: [
+              {
+                units: {
+                  some: {
+                    numBedrooms: {
+                      in: [2, 4],
+                    },
+                  },
+                },
+              },
+              {
+                unitGroups: {
+                  some: {
+                    unitTypes: {
+                      some: {
+                        numBedrooms: {
+                          in: [2, 4],
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            ],
+          },
+        ],
+      });
+    });
+
+    it('should return a where clause for filter city', () => {
+      const cityName = 'cityName';
+      const filter = [
+        { $comparison: '=', city: cityName } as ListingFilterParams,
+      ];
+      const whereClause = service.buildWhereClause(filter, '');
+
+      expect(whereClause).toStrictEqual({
+        AND: [
+          {
+            OR: [
+              {
+                listingsBuildingAddress: {
+                  city: {
+                    equals: cityName,
+                    mode: 'insensitive',
+                  },
+                },
+              },
+            ],
+          },
+        ],
+      });
+    });
+
+    it('should return a where clause for filter counties', () => {
+      const counties = ['county1', 'county2'];
+      const filter = [
+        {
+          $comparison: 'IN',
+          counties: counties,
+        } as ListingFilterParams,
+      ];
+      const whereClause = service.buildWhereClause(filter, '');
+
+      expect(whereClause).toStrictEqual({
+        AND: [
+          {
+            OR: [
+              {
+                listingsBuildingAddress: {
+                  county: {
+                    in: counties,
+                    mode: 'insensitive',
+                  },
+                },
+              },
+            ],
+          },
+        ],
+      });
+    });
+
+    it('should return a where clause for filter homeTypes', () => {
+      const homeTypes = [HomeTypeEnum.apartment, HomeTypeEnum.house];
+      const filter = [
+        {
+          $comparison: 'IN',
+          homeTypes: homeTypes,
+        } as ListingFilterParams,
+      ];
+      const whereClause = service.buildWhereClause(filter, '');
+
+      expect(whereClause).toStrictEqual({
+        AND: [
+          {
+            OR: [
+              {
+                homeType: {
+                  in: homeTypes,
+                },
+              },
+            ],
+          },
+        ],
+      });
+    });
+
+    it('should return a where clause for filter ids', () => {
+      const uuids = [randomUUID(), randomUUID()];
+      const filter = [
+        {
+          $comparison: 'IN',
+          ids: uuids,
+        } as ListingFilterParams,
+      ];
+      const whereClause = service.buildWhereClause(filter, '');
+
+      expect(whereClause).toStrictEqual({
+        AND: [
+          {
+            OR: [
+              {
+                id: {
+                  in: uuids,
+                },
+              },
+            ],
+          },
+        ],
+      });
+    });
+
+    it('should return a where clause for filter isVerified', () => {
+      const filter = [
+        {
+          $comparison: '=',
+          isVerified: false,
+        } as ListingFilterParams,
+      ];
+      const whereClause = service.buildWhereClause(filter, '');
+
+      expect(whereClause).toStrictEqual({
+        AND: [
+          {
+            OR: [
+              {
+                isVerified: {
+                  equals: false,
+                },
+              },
+            ],
+          },
+        ],
+      });
+    });
+
+    it('should return a where clause for filter jurisdiction', () => {
+      const jurisdictionId = randomUUID();
+      const filter = [
+        {
+          $comparison: '=',
+          jurisdiction: jurisdictionId,
+        } as ListingFilterParams,
+      ];
+      const whereClause = service.buildWhereClause(filter, '');
+
+      expect(whereClause).toStrictEqual({
+        AND: [
+          {
+            OR: [
+              {
+                jurisdictionId: {
+                  equals: jurisdictionId,
+                },
+              },
+            ],
+          },
+        ],
+      });
+    });
+
+    it('should return a where clause for filter leasingAgent', () => {
+      const leasingAgentId = randomUUID();
+      const filter = [
+        {
+          $comparison: '=',
+          leasingAgent: leasingAgentId,
+        } as ListingFilterParams,
+      ];
+      const whereClause = service.buildWhereClause(filter, '');
+
+      expect(whereClause).toStrictEqual({
+        AND: [
+          {
+            OR: [
+              {
+                userAccounts: {
+                  some: {
+                    id: {
+                      equals: leasingAgentId,
+                    },
+                  },
+                },
+              },
+            ],
+          },
+        ],
+      });
+    });
+
+    it('should return a where clause for filter listingFeatures', () => {
+      const listingFeatures = ['hearing', 'acInUnit'];
+      const filter = [
+        {
+          $comparison: '=',
+          listingFeatures: listingFeatures,
+        } as ListingFilterParams,
+      ];
+      const whereClause = service.buildWhereClause(filter, '');
+
+      expect(whereClause).toStrictEqual({
+        AND: [
+          {
+            OR: [
+              {
+                listingFeatures: {
+                  hearing: true,
+                },
+              },
+              {
+                listingFeatures: {
+                  acInUnit: true,
+                },
+              },
+            ],
+          },
+        ],
+      });
+    });
+
+    it('should return a where clause for filter monthlyRent', () => {
+      const monthlyRent = '1500';
+      const filter = [
+        { $comparison: '=', monthlyRent: monthlyRent } as ListingFilterParams,
+      ];
+      const whereClause = service.buildWhereClause(filter, '');
+
+      expect(whereClause).toStrictEqual({
+        AND: [
+          {
+            OR: [
+              {
+                units: {
+                  some: {
+                    monthlyRent: {
+                      equals: monthlyRent,
+                    },
+                  },
+                },
+              },
+              {
+                unitGroups: {
+                  some: {
+                    unitGroupAmiLevels: {
+                      some: {
+                        OR: [
+                          {
+                            flatRentValue: {
+                              equals: monthlyRent,
+                            },
+                          },
+                          {
+                            percentageOfIncomeValue: {
+                              not: null,
+                            },
+                          },
+                        ],
+                      },
+                    },
+                  },
+                },
+              },
+            ],
+          },
+        ],
+      });
+    });
+
+    it('should return a where clause for filter multiselectQuestions', () => {
+      const uuids = [randomUUID(), randomUUID()];
+      const filter = [
+        {
+          $comparison: 'IN',
+          multiselectQuestions: uuids,
+        } as ListingFilterParams,
+      ];
+      const whereClause = service.buildWhereClause(filter, '');
+
+      expect(whereClause).toStrictEqual({
+        AND: [
+          {
+            OR: [
+              {
+                listingMultiselectQuestions: {
+                  some: {
+                    multiselectQuestionId: {
+                      in: uuids,
+                    },
+                  },
+                },
+              },
+            ],
+          },
+        ],
+      });
+    });
+
+    it('should return a where clause for filter name', () => {
+      const name = 'listingName';
+      const filter = [
+        { $comparison: 'LIKE', name: name } as ListingFilterParams,
+      ];
+      const whereClause = service.buildWhereClause(filter, '');
+
+      expect(whereClause).toStrictEqual({
+        AND: [
+          {
+            OR: [
+              {
+                name: {
+                  contains: name,
+                  mode: 'insensitive',
+                },
+              },
+            ],
+          },
+        ],
+      });
+    });
+
+    it('should return a where clause for filter neighborhood', () => {
+      const neighborhood = 'neighborhoodName';
+      const filter = [
+        { $comparison: '=', neighborhood: neighborhood } as ListingFilterParams,
+      ];
+      const whereClause = service.buildWhereClause(filter, '');
+
+      expect(whereClause).toStrictEqual({
+        AND: [
+          {
+            OR: [
+              {
+                neighborhood: {
+                  equals: neighborhood,
+                  mode: 'insensitive',
+                },
+              },
+            ],
+          },
+        ],
+      });
+    });
+
+    it('should return a where clause for filter regions', () => {
+      const regions = [RegionEnum.Eastside, RegionEnum.Greater_Downtown];
+      const filter = [
+        { $comparison: 'IN', regions: regions } as ListingFilterParams,
+      ];
+      const whereClause = service.buildWhereClause(filter, '');
+
+      expect(whereClause).toStrictEqual({
+        AND: [
+          {
+            OR: [
+              {
+                region: {
+                  in: regions,
+                },
+              },
+            ],
+          },
+        ],
+      });
+    });
+
+    it('should return a where clause for filter reservedCommunityTypes', () => {
+      const reservedCommunityTypes = ['Seniors', 'Veterans'];
+      const reservedLowerCase = reservedCommunityTypes.map((rct) =>
+        rct.toLowerCase(),
+      );
+      const filter = [
+        {
+          $comparison: 'IN',
+          reservedCommunityTypes: reservedCommunityTypes,
+        } as ListingFilterParams,
+      ];
+      const whereClause = service.buildWhereClause(filter, '');
+
+      expect(whereClause).toStrictEqual({
+        AND: [
+          {
+            OR: [
+              {
+                reservedCommunityTypes: {
+                  name: {
+                    in: reservedLowerCase,
+                    mode: 'insensitive',
+                  },
+                },
+              },
+            ],
+          },
+        ],
+      });
+    });
+
+    it('should return a where clause for filter section8Acceptance', () => {
+      const filter = [
+        {
+          $comparison: '=',
+          section8Acceptance: false,
+        } as ListingFilterParams,
+      ];
+      const whereClause = service.buildWhereClause(filter, '');
+
+      expect(whereClause).toStrictEqual({
+        AND: [
+          {
+            OR: [
+              {
+                section8Acceptance: {
+                  equals: false,
+                },
+              },
+            ],
+          },
+        ],
+      });
+    });
+
+    it('should return a where clause for filter status', () => {
+      const status = ListingsStatusEnum.active;
+      const filter = [
+        { $comparison: '=', status: status } as ListingFilterParams,
+      ];
+      const whereClause = service.buildWhereClause(filter, '');
+
+      expect(whereClause).toStrictEqual({
+        AND: [
+          {
+            OR: [
+              {
+                status: {
+                  equals: status,
+                },
+              },
+            ],
+          },
+        ],
+      });
+    });
+
+    it('should return a where clause for filter zipCode', () => {
+      const zipCode = '10101';
+      const filter = [
+        { $comparison: '=', zipCode: zipCode } as ListingFilterParams,
+      ];
+      const whereClause = service.buildWhereClause(filter, '');
+
+      expect(whereClause).toStrictEqual({
+        AND: [
+          {
+            OR: [
+              {
+                listingsBuildingAddress: {
+                  zipCode: {
+                    equals: zipCode,
+                    mode: 'insensitive',
+                  },
+                },
+              },
+            ],
+          },
+        ],
+      });
+    });
+
+    it('should return a where clause for search', () => {
+      const search = 'searchName';
+
+      const whereClause = service.buildWhereClause([], search);
+
+      expect(whereClause).toStrictEqual({
+        AND: [
+          {
+            name: {
+              contains: search,
+              mode: 'insensitive',
+            },
+          },
+        ],
       });
     });
   });
@@ -1104,10 +2262,25 @@ describe('Testing listing service', () => {
           },
           listingFeatures: true,
           listingUtilities: true,
+          listingNeighborhoodAmenities: true,
           units: {
             include: {
               unitTypes: true,
               unitAmiChartOverrides: true,
+            },
+          },
+          unitGroups: {
+            include: {
+              unitTypes: true,
+              unitGroupAmiLevels: {
+                include: {
+                  amiChart: {
+                    include: {
+                      jurisdictions: true,
+                    },
+                  },
+                },
+              },
             },
           },
         },
@@ -1147,6 +2320,7 @@ describe('Testing listing service', () => {
           },
           listingFeatures: true,
           listingUtilities: true,
+          listingNeighborhoodAmenities: true,
           applicationMethods: {
             include: {
               paperApplications: {
@@ -1177,6 +2351,20 @@ describe('Testing listing service', () => {
                 include: {
                   jurisdictions: true,
                   unitGroupAmiLevels: true,
+                },
+              },
+            },
+          },
+          unitGroups: {
+            include: {
+              unitTypes: true,
+              unitGroupAmiLevels: {
+                include: {
+                  amiChart: {
+                    include: {
+                      jurisdictions: true,
+                    },
+                  },
                 },
               },
             },
@@ -1530,10 +2718,25 @@ describe('Testing listing service', () => {
           },
           listingFeatures: true,
           listingUtilities: true,
+          listingNeighborhoodAmenities: true,
           units: {
             include: {
               unitTypes: true,
               unitAmiChartOverrides: true,
+            },
+          },
+          unitGroups: {
+            include: {
+              unitTypes: true,
+              unitGroupAmiLevels: {
+                include: {
+                  amiChart: {
+                    include: {
+                      jurisdictions: true,
+                    },
+                  },
+                },
+              },
             },
           },
         },
@@ -1632,6 +2835,7 @@ describe('Testing listing service', () => {
           },
           listingFeatures: true,
           listingUtilities: true,
+          listingNeighborhoodAmenities: true,
           applicationMethods: {
             include: {
               paperApplications: {
@@ -1666,6 +2870,20 @@ describe('Testing listing service', () => {
               },
             },
           },
+          unitGroups: {
+            include: {
+              unitTypes: true,
+              unitGroupAmiLevels: {
+                include: {
+                  amiChart: {
+                    include: {
+                      jurisdictions: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
         },
       });
 
@@ -1673,6 +2891,130 @@ describe('Testing listing service', () => {
         where: {
           id: {
             in: mockedListing.units.map((unit) => unit.amiChart.id),
+          },
+        },
+      });
+    });
+
+    it('should get records from findOne() with base view found and unitGroups', async () => {
+      const date = new Date();
+      const mockedListing = mockListing(
+        0,
+        {
+          numberToMake: 10,
+          date,
+        },
+        true,
+      );
+
+      prisma.listings.findUnique = jest.fn().mockResolvedValue(mockedListing);
+
+      const listing: Listing = await service.findOne(
+        'listingId',
+        LanguagesEnum.en,
+        ListingViews.base,
+      );
+
+      expect(listing.unitGroups).toEqual(mockedListing.unitGroups);
+      expect(listing.unitGroupsSummarized.unitGroupSummary[0]).toEqual({
+        unitTypes: [
+          {
+            id: 'unitType 0',
+            createdAt: date,
+            updatedAt: date,
+            name: 'SRO',
+            numBedrooms: 0,
+          },
+        ],
+        rentAsPercentIncomeRange: {
+          min: 0,
+          max: 30,
+        },
+        amiPercentageRange: {
+          min: 0,
+          max: 30,
+        },
+        openWaitlist: true,
+        unitVacancies: 5,
+        bathroomRange: {
+          min: 0,
+          max: 1,
+        },
+        floorRange: {
+          min: 0,
+          max: 1,
+        },
+        sqFeetRange: {
+          min: 0,
+          max: 100,
+        },
+      });
+      expect(listing.unitGroupsSummarized.unitGroupSummary[2]).toEqual({
+        unitTypes: [
+          {
+            id: 'unitType 2',
+            createdAt: date,
+            updatedAt: date,
+            name: 'oneBdrm',
+            numBedrooms: 2,
+          },
+        ],
+        rentAsPercentIncomeRange: {
+          min: 20,
+          max: 50,
+        },
+        amiPercentageRange: {
+          min: 20,
+          max: 50,
+        },
+        openWaitlist: true,
+        unitVacancies: 5,
+        bathroomRange: {
+          min: 2,
+          max: 3,
+        },
+        floorRange: {
+          min: 2,
+          max: 3,
+        },
+        sqFeetRange: {
+          min: 200,
+          max: 300,
+        },
+      });
+
+      expect(prisma.listings.findUnique).toHaveBeenCalledWith({
+        where: { id: 'listingId' },
+        include: {
+          jurisdictions: true,
+          listingsBuildingAddress: true,
+          reservedCommunityTypes: true,
+          listingImages: { include: { assets: true } },
+          listingMultiselectQuestions: {
+            include: { multiselectQuestions: true },
+          },
+          listingNeighborhoodAmenities: true,
+          listingFeatures: true,
+          listingUtilities: true,
+          unitGroups: {
+            include: {
+              unitTypes: true,
+              unitGroupAmiLevels: {
+                include: {
+                  amiChart: {
+                    include: {
+                      jurisdictions: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
+          units: {
+            include: {
+              unitTypes: true,
+              unitAmiChartOverrides: true,
+            },
           },
         },
       });
@@ -1736,6 +3078,7 @@ describe('Testing listing service', () => {
           displayWaitlistSize: false,
           unitsSummary: null,
           listingEvents: [],
+          isVerified: true,
         } as ListingCreate,
         user,
       );
@@ -1769,6 +3112,7 @@ describe('Testing listing service', () => {
             },
           },
           listingUtilities: true,
+          listingNeighborhoodAmenities: true,
           listingsApplicationDropOffAddress: true,
           listingsApplicationPickUpAddress: true,
           listingsApplicationMailingAddress: true,
@@ -1792,6 +3136,20 @@ describe('Testing listing service', () => {
               unitTypes: true,
             },
           },
+          unitGroups: {
+            include: {
+              unitTypes: true,
+              unitGroupAmiLevels: {
+                include: {
+                  amiChart: {
+                    include: {
+                      jurisdictions: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
         },
         data: {
           name: 'example listing name',
@@ -1810,6 +3168,7 @@ describe('Testing listing service', () => {
               id: expect.anything(),
             },
           },
+          section8Acceptance: false,
           status: ListingsStatusEnum.pending,
           displayWaitlistSize: false,
           unitsSummary: undefined,
@@ -1817,6 +3176,7 @@ describe('Testing listing service', () => {
           listingEvents: {
             create: [],
           },
+          isVerified: true,
         },
       });
 
@@ -1869,6 +3229,7 @@ describe('Testing listing service', () => {
             },
           },
           listingUtilities: true,
+          listingNeighborhoodAmenities: true,
           listingsApplicationDropOffAddress: true,
           listingsApplicationPickUpAddress: true,
           listingsApplicationMailingAddress: true,
@@ -1892,9 +3253,24 @@ describe('Testing listing service', () => {
               unitTypes: true,
             },
           },
+          unitGroups: {
+            include: {
+              unitTypes: true,
+              unitGroupAmiLevels: {
+                include: {
+                  amiChart: {
+                    include: {
+                      jurisdictions: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
         },
         data: {
           ...val,
+          isVerified: true,
           contentUpdatedAt: expect.anything(),
           publishedAt: expect.anything(),
           assets: {
@@ -2019,6 +3395,21 @@ describe('Testing listing service', () => {
               hearing: true,
               visual: false,
               mobility: true,
+              barrierFreeUnitEntrance: false,
+              loweredLightSwitch: true,
+              barrierFreeBathroom: false,
+              wideDoorways: true,
+              loweredCabinets: false,
+            },
+          },
+          listingNeighborhoodAmenities: {
+            create: {
+              groceryStores: 'stores',
+              pharmacies: 'pharmacies',
+              healthCareResources: 'health care',
+              parksAndCommunityCenters: 'parks',
+              schools: 'schools',
+              publicTransportation: 'public transportation',
             },
           },
           jurisdictions: {
@@ -2087,6 +3478,10 @@ describe('Testing listing service', () => {
               },
             ],
           },
+          unitGroups: {
+            create: [],
+          },
+          section8Acceptance: true,
           unitsSummary: {
             create: [
               {
@@ -2158,6 +3553,7 @@ describe('Testing listing service', () => {
           displayWaitlistSize: false,
           unitsSummary: null,
           listingEvents: [],
+          isVerified: false,
         } as ListingCreate,
         user,
         'original id',
@@ -2192,6 +3588,7 @@ describe('Testing listing service', () => {
             },
           },
           listingUtilities: true,
+          listingNeighborhoodAmenities: true,
           listingsApplicationDropOffAddress: true,
           listingsApplicationPickUpAddress: true,
           listingsApplicationMailingAddress: true,
@@ -2215,6 +3612,20 @@ describe('Testing listing service', () => {
               unitTypes: true,
             },
           },
+          unitGroups: {
+            include: {
+              unitTypes: true,
+              unitGroupAmiLevels: {
+                include: {
+                  amiChart: {
+                    include: {
+                      jurisdictions: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
         },
         data: {
           name: 'example listing name',
@@ -2233,6 +3644,7 @@ describe('Testing listing service', () => {
               id: expect.anything(),
             },
           },
+          isVerified: false,
           status: ListingsStatusEnum.pending,
           displayWaitlistSize: false,
           unitsSummary: undefined,
@@ -2240,6 +3652,7 @@ describe('Testing listing service', () => {
           listingEvents: {
             create: [],
           },
+          section8Acceptance: false,
           copyOf: {
             connect: {
               id: expect.anything(),
@@ -2254,6 +3667,317 @@ describe('Testing listing service', () => {
         permissionActions.create,
         {
           jurisdictionId: expect.anything(),
+        },
+      );
+    });
+
+    it('should create a listing with unit groups when enableUnitGroups is true', async () => {
+      prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue({
+        id: 'jurisdiction-id',
+        featureFlags: [
+          {
+            name: FeatureFlagEnum.enableUnitGroups,
+            active: true,
+          },
+        ],
+      });
+
+      prisma.listings.create = jest.fn().mockResolvedValue({
+        id: 'example id',
+        name: 'example name',
+      });
+
+      const val = constructFullListingData(undefined, true);
+
+      await service.create(val as ListingCreate, user);
+
+      expect(prisma.listings.create).toHaveBeenCalledWith({
+        include: {
+          applicationMethods: {
+            include: {
+              paperApplications: {
+                include: {
+                  assets: true,
+                },
+              },
+            },
+          },
+          jurisdictions: true,
+          listingEvents: {
+            include: {
+              assets: true,
+            },
+          },
+          listingFeatures: true,
+          listingImages: {
+            include: {
+              assets: true,
+            },
+          },
+          listingMultiselectQuestions: {
+            include: {
+              multiselectQuestions: true,
+            },
+          },
+          listingUtilities: true,
+          listingNeighborhoodAmenities: true,
+          listingsApplicationDropOffAddress: true,
+          listingsApplicationPickUpAddress: true,
+          listingsApplicationMailingAddress: true,
+          listingsBuildingAddress: true,
+          listingsBuildingSelectionCriteriaFile: true,
+          listingsLeasingAgentAddress: true,
+          listingsResult: true,
+          requestedChangesUser: true,
+          reservedCommunityTypes: true,
+          units: {
+            include: {
+              amiChart: {
+                include: {
+                  jurisdictions: true,
+                  unitGroupAmiLevels: true,
+                },
+              },
+              unitAccessibilityPriorityTypes: true,
+              unitAmiChartOverrides: true,
+              unitRentTypes: true,
+              unitTypes: true,
+            },
+          },
+          unitGroups: {
+            include: {
+              unitTypes: true,
+              unitGroupAmiLevels: {
+                include: {
+                  amiChart: {
+                    include: {
+                      jurisdictions: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        data: {
+          ...val,
+          isVerified: true,
+          contentUpdatedAt: expect.anything(),
+          publishedAt: expect.anything(),
+          assets: {
+            create: [exampleAsset],
+          },
+          applicationMethods: {
+            create: [
+              {
+                type: ApplicationMethodsTypeEnum.Internal,
+                label: 'example label',
+                externalReference: 'example reference',
+                acceptsPostmarkedApplications: false,
+                phoneNumber: '520-750-8811',
+                paperApplications: {
+                  create: [
+                    {
+                      language: LanguagesEnum.en,
+                      assets: {
+                        create: {
+                          ...exampleAsset,
+                        },
+                      },
+                    },
+                  ],
+                },
+              },
+            ],
+          },
+          listingEvents: {
+            create: [
+              {
+                type: ListingEventsTypeEnum.openHouse,
+                startDate: expect.anything(),
+                startTime: expect.anything(),
+                endTime: expect.anything(),
+                url: 'https://www.google.com',
+                note: 'example note',
+                label: 'example label',
+                assets: {
+                  create: {
+                    ...exampleAsset,
+                  },
+                },
+              },
+            ],
+          },
+          listingImages: {
+            create: [
+              {
+                assets: {
+                  create: {
+                    ...exampleAsset,
+                  },
+                },
+                ordinal: 0,
+              },
+            ],
+          },
+          listingMultiselectQuestions: {
+            create: [
+              {
+                ordinal: 0,
+                multiselectQuestions: {
+                  connect: {
+                    id: expect.anything(),
+                  },
+                },
+              },
+            ],
+          },
+          listingsApplicationDropOffAddress: {
+            create: {
+              ...exampleAddress,
+            },
+          },
+          reservedCommunityTypes: {
+            connect: {
+              id: expect.anything(),
+            },
+          },
+          listingsBuildingSelectionCriteriaFile: {
+            create: {
+              ...exampleAsset,
+            },
+          },
+          listingUtilities: {
+            create: {
+              water: false,
+              gas: true,
+              trash: false,
+              sewer: true,
+              electricity: false,
+              cable: true,
+              phone: false,
+              internet: true,
+            },
+          },
+          listingsApplicationMailingAddress: {
+            create: {
+              ...exampleAddress,
+            },
+          },
+          listingsLeasingAgentAddress: {
+            create: {
+              ...exampleAddress,
+            },
+          },
+          listingFeatures: {
+            create: {
+              elevator: true,
+              wheelchairRamp: false,
+              serviceAnimalsAllowed: true,
+              accessibleParking: false,
+              parkingOnSite: true,
+              inUnitWasherDryer: false,
+              laundryInBuilding: true,
+              barrierFreeEntrance: false,
+              rollInShower: true,
+              grabBars: false,
+              heatingInUnit: true,
+              acInUnit: false,
+              hearing: true,
+              visual: false,
+              mobility: true,
+              barrierFreeUnitEntrance: false,
+              loweredLightSwitch: true,
+              barrierFreeBathroom: false,
+              wideDoorways: true,
+              loweredCabinets: false,
+            },
+          },
+          listingNeighborhoodAmenities: {
+            create: {
+              groceryStores: 'stores',
+              pharmacies: 'pharmacies',
+              healthCareResources: 'health care',
+              parksAndCommunityCenters: 'parks',
+              schools: 'schools',
+              publicTransportation: 'public transportation',
+            },
+          },
+          jurisdictions: {
+            connect: {
+              id: expect.anything(),
+            },
+          },
+          listingsApplicationPickUpAddress: {
+            create: {
+              ...exampleAddress,
+            },
+          },
+          listingsBuildingAddress: {
+            create: {
+              ...exampleAddress,
+            },
+          },
+          units: {
+            create: [],
+          },
+          unitGroups: {
+            create: [
+              {
+                totalAvailable: 5,
+                totalCount: 10,
+                floorMin: 1,
+                floorMax: 5,
+                maxOccupancy: 3,
+                minOccupancy: 1,
+                sqFeetMin: 500,
+                sqFeetMax: 800,
+                bathroomMin: 1,
+                bathroomMax: 2,
+                openWaitlist: false,
+                unitTypes: {
+                  connect: [
+                    {
+                      id: expect.anything(),
+                    },
+                  ],
+                },
+
+                unitGroupAmiLevels: {
+                  create: [
+                    {
+                      amiPercentage: 10,
+                      monthlyRentDeterminationType:
+                        MonthlyRentDeterminationTypeEnum.percentageOfIncome,
+                      percentageOfIncomeValue: 10,
+                      flatRentValue: undefined,
+                      amiChart: {
+                        connect: { id: expect.anything() },
+                      },
+                    },
+                  ],
+                },
+              },
+            ],
+          },
+          section8Acceptance: true,
+          unitsSummary: {
+            create: [],
+          },
+          listingsResult: {
+            create: {
+              ...exampleAsset,
+            },
+          },
+        },
+      });
+
+      expect(canOrThrowMock).toHaveBeenCalledWith(
+        user,
+        'listing',
+        permissionActions.create,
+        {
+          jurisdictionId: expect.any(String),
         },
       );
     });
@@ -2324,6 +4048,7 @@ describe('Testing listing service', () => {
             },
           },
           listingUtilities: true,
+          listingNeighborhoodAmenities: true,
           listingsApplicationDropOffAddress: true,
           listingsApplicationPickUpAddress: true,
           listingsBuildingAddress: true,
@@ -2345,6 +4070,20 @@ describe('Testing listing service', () => {
               unitAmiChartOverrides: true,
               unitRentTypes: true,
               unitTypes: true,
+            },
+          },
+          unitGroups: {
+            include: {
+              unitTypes: true,
+              unitGroupAmiLevels: {
+                include: {
+                  amiChart: {
+                    include: {
+                      jurisdictions: true,
+                    },
+                  },
+                },
+              },
             },
           },
         },
@@ -2416,6 +4155,7 @@ describe('Testing listing service', () => {
             },
           },
           listingUtilities: true,
+          listingNeighborhoodAmenities: true,
           listingsApplicationDropOffAddress: true,
           listingsApplicationPickUpAddress: true,
           listingsBuildingAddress: true,
@@ -2437,6 +4177,20 @@ describe('Testing listing service', () => {
               unitAmiChartOverrides: true,
               unitRentTypes: true,
               unitTypes: true,
+            },
+          },
+          unitGroups: {
+            include: {
+              unitTypes: true,
+              unitGroupAmiLevels: {
+                include: {
+                  amiChart: {
+                    include: {
+                      jurisdictions: true,
+                    },
+                  },
+                },
+              },
             },
           },
         },
@@ -2499,6 +4253,7 @@ describe('Testing listing service', () => {
             },
           },
           listingUtilities: true,
+          listingNeighborhoodAmenities: true,
           listingsApplicationDropOffAddress: true,
           listingsApplicationPickUpAddress: true,
           listingsBuildingAddress: true,
@@ -2520,6 +4275,20 @@ describe('Testing listing service', () => {
               unitAmiChartOverrides: true,
               unitRentTypes: true,
               unitTypes: true,
+            },
+          },
+          unitGroups: {
+            include: {
+              unitTypes: true,
+              unitGroupAmiLevels: {
+                include: {
+                  amiChart: {
+                    include: {
+                      jurisdictions: true,
+                    },
+                  },
+                },
+              },
             },
           },
         },
@@ -2615,6 +4384,7 @@ describe('Testing listing service', () => {
             },
           },
           listingUtilities: true,
+          listingNeighborhoodAmenities: true,
           listingsBuildingAddress: true,
           reservedCommunityTypes: true,
         },
@@ -2714,6 +4484,7 @@ describe('Testing listing service', () => {
             },
           },
           listingUtilities: true,
+          listingNeighborhoodAmenities: true,
           listingsApplicationDropOffAddress: true,
           listingsApplicationPickUpAddress: true,
           listingsBuildingAddress: true,
@@ -2735,6 +4506,20 @@ describe('Testing listing service', () => {
               unitAmiChartOverrides: true,
               unitRentTypes: true,
               unitTypes: true,
+            },
+          },
+          unitGroups: {
+            include: {
+              unitTypes: true,
+              unitGroupAmiLevels: {
+                include: {
+                  amiChart: {
+                    include: {
+                      jurisdictions: true,
+                    },
+                  },
+                },
+              },
             },
           },
         },
@@ -2763,7 +4548,221 @@ describe('Testing listing service', () => {
           listingsBuildingSelectionCriteriaFile: {
             disconnect: true,
           },
+          listingNeighborhoodAmenities: {
+            upsert: {
+              create: {
+                groceryStores: null,
+                healthCareResources: null,
+                parksAndCommunityCenters: null,
+                pharmacies: null,
+                publicTransportation: null,
+                schools: null,
+              },
+              update: {
+                groceryStores: null,
+                healthCareResources: null,
+                parksAndCommunityCenters: null,
+                pharmacies: null,
+                publicTransportation: null,
+                schools: null,
+              },
+              where: {
+                id: undefined,
+              },
+            },
+          },
+          section8Acceptance: false,
           unitsAvailable: 0,
+          isVerified: false,
+        },
+        where: {
+          id: expect.anything(),
+        },
+      });
+
+      expect(canOrThrowMock).toHaveBeenCalledWith(
+        user,
+        'listing',
+        permissionActions.update,
+        {
+          id: 'example id',
+        },
+      );
+    });
+
+    it('should update a listing with unit groups when enableUnitGroups is true', async () => {
+      prisma.listings.findUnique = jest.fn().mockResolvedValue({
+        id: 'example id',
+        name: 'example name',
+      });
+      prisma.listings.update = jest.fn().mockResolvedValue({
+        id: 'example id',
+        name: 'example name',
+      });
+      prisma.listingEvents.findMany = jest.fn().mockResolvedValue([]);
+      prisma.listingEvents.update = jest.fn().mockResolvedValue({
+        id: 'example id',
+        name: 'example name',
+      });
+      prisma.assets.delete = jest.fn().mockResolvedValue({
+        id: 'example id',
+        name: 'example name',
+      });
+      prisma.$transaction = jest
+        .fn()
+        .mockResolvedValue([{ id: 'example id', name: 'example name' }]);
+      prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue({
+        id: 'jurisdiction-id',
+        featureFlags: [
+          {
+            name: FeatureFlagEnum.enableUnitGroups,
+            active: true,
+          },
+        ],
+      });
+
+      const unitTypes = [
+        {
+          id: 'unit-type-1',
+          name: UnitTypeEnum.studio,
+          numBedrooms: 0,
+        },
+      ];
+
+      await service.update(
+        {
+          id: randomUUID(),
+          name: 'example listing name',
+          depositMin: '5',
+          assets: [
+            {
+              fileId: randomUUID(),
+              label: 'example asset',
+            },
+          ],
+          jurisdictions: {
+            id: randomUUID(),
+          },
+          status: ListingsStatusEnum.pending,
+          displayWaitlistSize: false,
+          unitsSummary: null,
+          listingEvents: [],
+          unitGroups: [
+            {
+              totalAvailable: 5,
+              totalCount: 10,
+              floorMin: 1,
+              floorMax: 5,
+              maxOccupancy: 3,
+              minOccupancy: 1,
+              sqFeetMin: 500,
+              sqFeetMax: 800,
+              bathroomMin: 1,
+              bathroomMax: 2,
+              openWaitlist: false,
+              unitTypes: unitTypes,
+              unitGroupAmiLevels: [
+                {
+                  amiPercentage: 80,
+                  monthlyRentDeterminationType:
+                    MonthlyRentDeterminationTypeEnum.flatRent,
+                  percentageOfIncomeValue: null,
+                  flatRentValue: 1000,
+                  amiChart: { id: 'ami-chart-id' },
+                },
+              ],
+            },
+          ],
+        } as ListingUpdate,
+        user,
+      );
+
+      expect(prisma.listings.update).toHaveBeenCalledWith({
+        include: views.details,
+        data: {
+          name: 'example listing name',
+          contentUpdatedAt: expect.anything(),
+          depositMin: '5',
+          assets: [
+            {
+              fileId: expect.anything(),
+              label: 'example asset',
+            },
+          ],
+          jurisdictions: {
+            connect: {
+              id: expect.anything(),
+            },
+          },
+          listingNeighborhoodAmenities: {
+            upsert: {
+              create: {
+                groceryStores: null,
+                healthCareResources: null,
+                parksAndCommunityCenters: null,
+                pharmacies: null,
+                publicTransportation: null,
+                schools: null,
+              },
+              update: {
+                groceryStores: null,
+                healthCareResources: null,
+                parksAndCommunityCenters: null,
+                pharmacies: null,
+                publicTransportation: null,
+                schools: null,
+              },
+              where: {
+                id: undefined,
+              },
+            },
+          },
+          status: ListingsStatusEnum.pending,
+          displayWaitlistSize: false,
+          unitsSummary: undefined,
+          listingEvents: {
+            create: [],
+          },
+          listingsBuildingSelectionCriteriaFile: {
+            disconnect: true,
+          },
+          unitsAvailable: 5,
+          unitGroups: {
+            create: [
+              {
+                totalAvailable: 5,
+                totalCount: 10,
+                floorMin: 1,
+                floorMax: 5,
+                maxOccupancy: 3,
+                minOccupancy: 1,
+                sqFeetMin: 500,
+                sqFeetMax: 800,
+                bathroomMin: 1,
+                bathroomMax: 2,
+                openWaitlist: false,
+                unitTypes: {
+                  connect: [{ id: 'unit-type-1' }],
+                },
+                unitGroupAmiLevels: {
+                  create: [
+                    {
+                      amiPercentage: 80,
+                      monthlyRentDeterminationType:
+                        MonthlyRentDeterminationTypeEnum.flatRent,
+                      percentageOfIncomeValue: null,
+                      flatRentValue: 1000,
+                      amiChart: {
+                        connect: { id: 'ami-chart-id' },
+                      },
+                    },
+                  ],
+                },
+              },
+            ],
+          },
+          isVerified: false,
+          section8Acceptance: false,
         },
         where: {
           id: expect.anything(),
@@ -2823,6 +4822,47 @@ describe('Testing listing service', () => {
 
       await service.update(val as ListingUpdate, user);
 
+      const nestedUtilitiesUpdate = {
+        water: false,
+        gas: true,
+        trash: false,
+        sewer: true,
+        electricity: false,
+        cable: true,
+        phone: false,
+        internet: true,
+      };
+      const nestedFeaturesUpdate = {
+        elevator: true,
+        wheelchairRamp: false,
+        serviceAnimalsAllowed: true,
+        accessibleParking: false,
+        parkingOnSite: true,
+        inUnitWasherDryer: false,
+        laundryInBuilding: true,
+        barrierFreeEntrance: false,
+        rollInShower: true,
+        grabBars: false,
+        heatingInUnit: true,
+        acInUnit: false,
+        hearing: true,
+        visual: false,
+        mobility: true,
+        barrierFreeUnitEntrance: false,
+        loweredLightSwitch: true,
+        barrierFreeBathroom: false,
+        wideDoorways: true,
+        loweredCabinets: false,
+      };
+      const nestedNeighborhoodAmenities = {
+        groceryStores: 'stores',
+        pharmacies: 'pharmacies',
+        healthCareResources: 'health care',
+        parksAndCommunityCenters: 'parks',
+        schools: 'schools',
+        publicTransportation: 'public transportation',
+      };
+
       expect(prisma.listings.update).toHaveBeenCalledWith({
         include: {
           applicationMethods: {
@@ -2852,6 +4892,7 @@ describe('Testing listing service', () => {
             },
           },
           listingUtilities: true,
+          listingNeighborhoodAmenities: true,
           listingsApplicationDropOffAddress: true,
           listingsApplicationPickUpAddress: true,
           listingsApplicationMailingAddress: true,
@@ -2873,6 +4914,20 @@ describe('Testing listing service', () => {
               unitAmiChartOverrides: true,
               unitRentTypes: true,
               unitTypes: true,
+            },
+          },
+          unitGroups: {
+            include: {
+              unitTypes: true,
+              unitGroupAmiLevels: {
+                include: {
+                  amiChart: {
+                    include: {
+                      jurisdictions: true,
+                    },
+                  },
+                },
+              },
             },
           },
         },
@@ -2959,15 +5014,12 @@ describe('Testing listing service', () => {
             },
           },
           listingUtilities: {
-            create: {
-              water: false,
-              gas: true,
-              trash: false,
-              sewer: true,
-              electricity: false,
-              cable: true,
-              phone: false,
-              internet: true,
+            upsert: {
+              where: {
+                id: undefined,
+              },
+              create: nestedUtilitiesUpdate,
+              update: nestedUtilitiesUpdate,
             },
           },
           listingsApplicationMailingAddress: {
@@ -2981,22 +5033,21 @@ describe('Testing listing service', () => {
             },
           },
           listingFeatures: {
-            create: {
-              elevator: true,
-              wheelchairRamp: false,
-              serviceAnimalsAllowed: true,
-              accessibleParking: false,
-              parkingOnSite: true,
-              inUnitWasherDryer: false,
-              laundryInBuilding: true,
-              barrierFreeEntrance: false,
-              rollInShower: true,
-              grabBars: false,
-              heatingInUnit: true,
-              acInUnit: false,
-              hearing: true,
-              visual: false,
-              mobility: true,
+            upsert: {
+              where: {
+                id: undefined,
+              },
+              create: nestedFeaturesUpdate,
+              update: nestedFeaturesUpdate,
+            },
+          },
+          listingNeighborhoodAmenities: {
+            upsert: {
+              where: {
+                id: undefined,
+              },
+              create: nestedNeighborhoodAmenities,
+              update: nestedNeighborhoodAmenities,
             },
           },
           jurisdictions: {
@@ -3065,6 +5116,10 @@ describe('Testing listing service', () => {
               },
             ],
           },
+          unitGroups: {
+            create: [],
+          },
+          section8Acceptance: true,
           unitsSummary: {
             create: [
               {
@@ -3100,6 +5155,7 @@ describe('Testing listing service', () => {
               ...exampleAsset,
             },
           },
+          isVerified: true,
         },
         where: {
           id: expect.anything(),

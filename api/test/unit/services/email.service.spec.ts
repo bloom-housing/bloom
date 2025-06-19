@@ -16,6 +16,7 @@ import { yellowstoneAddress } from '../../../prisma/seed-helpers/address-factory
 import { Application } from '../../../src/dtos/applications/application.dto';
 import { User } from '../../../src/dtos/users/user.dto';
 import { ApplicationCreate } from '../../../src/dtos/applications/application-create.dto';
+import { Logger } from '@nestjs/common';
 
 let sendMock;
 const translationServiceMock = {
@@ -26,7 +27,7 @@ const translationServiceMock = {
 
 const jurisdictionServiceMock = {
   findOne: () => {
-    return { name: 'Jurisdiction 1' };
+    return { name: 'Jurisdiction 1', publicUrl: 'https://example.com' };
   },
 };
 
@@ -40,6 +41,7 @@ describe('Testing email service', () => {
       imports: [ConfigModule],
       providers: [
         EmailService,
+        Logger,
         SendGridService,
         MailService,
         {
@@ -463,6 +465,28 @@ describe('Testing email service', () => {
       );
       expect(emailMock.html).toMatch('Thank you,');
       expect(emailMock.html).toMatch('Bloom Housing Portal');
+    });
+  });
+
+  describe('lottery published for applicant', () => {
+    it('should generate html body', async () => {
+      const emailArr = ['testOne@xample.com', 'testTwo@example.com'];
+      const service = await module.resolve(EmailService);
+      await service.lotteryPublishedApplicant(
+        { name: 'listing name', id: 'listingId', juris: 'jurisdictionId' },
+        { en: emailArr },
+      );
+
+      expect(sendMock).toHaveBeenCalled();
+      const emailMock = sendMock.mock.calls[0][0];
+      expect(emailMock.to).toEqual(emailArr);
+      expect(emailMock.subject).toEqual(
+        'New Housing Lottery Results Available',
+      );
+      expect(emailMock.html).toMatch(
+        /href="https:\/\/example\.com\/en\/sign-in"/,
+      );
+      expect(emailMock.html).toMatch(/please visit https:\/\/example\.com/);
     });
   });
 });

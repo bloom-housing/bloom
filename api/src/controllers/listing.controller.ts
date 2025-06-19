@@ -36,6 +36,7 @@ import { ListingDuplicate } from '../dtos/listings/listing-duplicate.dto';
 import { ListingCsvQueryParams } from '../dtos/listings/listing-csv-query-params.dto';
 import { ListingFilterParams } from '../dtos/listings/listings-filter-params.dto';
 import { ListingMapMarker } from '../dtos/listings/listing-map-marker.dto';
+import { ListingsQueryBody } from '../dtos/listings/listings-query-body.dto';
 import { ListingsQueryParams } from '../dtos/listings/listings-query-params.dto';
 import { ListingsRetrieveParams } from '../dtos/listings/listings-retrieve-params.dto';
 import { ListingUpdate } from '../dtos/listings/listing-update.dto';
@@ -56,12 +57,15 @@ import { ListingCsvExporterService } from '../services/listing-csv-export.servic
 import { defaultValidationPipeOptions } from '../utilities/default-validation-pipe-options';
 import { mapTo } from '../utilities/mapTo';
 import { ListingCreateUpdateValidationPipe } from '../validation-pipes/listing-create-update-pipe';
+import { ListingFilterKeyDTO } from '../dtos/listings/listing-filter-key.dto';
 
 @Controller('listings')
 @ApiTags('listings')
 @ApiExtraModels(
+  ListingsQueryBody,
   ListingsQueryParams,
   ListingFilterParams,
+  ListingFilterKeyDTO,
   ListingsRetrieveParams,
   PaginationAllowsAllQueryParams,
   IdDTO,
@@ -85,6 +89,21 @@ export class ListingController {
   @UseInterceptors(ClassSerializerInterceptor)
   @ApiOkResponse({ type: PaginatedListingDto })
   public async getPaginatedSet(@Query() queryParams: ListingsQueryParams) {
+    return await this.listingService.list(queryParams);
+  }
+
+  @Post('list')
+  @ApiOperation({
+    summary: 'Get a paginated set of listings',
+    operationId: 'filterableList',
+  })
+  @PermissionAction(permissionActions.read)
+  @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
+  @UseInterceptors(ClassSerializerInterceptor)
+  @ApiOkResponse({ type: PaginatedListingDto })
+  public async getFilterablePaginatedSet(
+    @Body() queryParams: ListingsQueryBody,
+  ) {
     return await this.listingService.list(queryParams);
   }
 

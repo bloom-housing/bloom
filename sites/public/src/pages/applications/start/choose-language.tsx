@@ -1,5 +1,6 @@
 import React, { useCallback, useContext, useEffect, useState } from "react"
 import { useRouter } from "next/router"
+import dayjs from "dayjs"
 import { ImageCard, t } from "@bloom-housing/ui-components"
 import {
   imageUrlFromListing,
@@ -14,6 +15,7 @@ import {
   LanguagesEnum,
   ListingsStatusEnum,
   ListingsService,
+  JurisdictionsService,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { Heading, Icon, Button, Message } from "@bloom-housing/ui-seeds"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
@@ -22,11 +24,10 @@ import {
   AppSubmissionContext,
   retrieveApplicationConfig,
 } from "../../../lib/applications/AppSubmissionContext"
-import { useGetApplicationStatusProps } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
 import ApplicationFormLayout from "../../../layouts/application-form"
+import { getListingApplicationStatus } from "../../../lib/helpers"
 import styles from "../../../layouts/application-form.module.scss"
-import dayjs from "dayjs"
 
 const loadListing = async (
   listingId,
@@ -34,17 +35,26 @@ const loadListing = async (
   conductor,
   context,
   language,
-  listingsService: ListingsService
+  listingsService: ListingsService,
+  jurisdictionsService: JurisdictionsService
 ) => {
-  const response = await listingsService.retrieve(
+  const listingResponse = await listingsService.retrieve(
     { id: listingId },
     {
       headers: { language },
     }
   )
-  conductor.listing = response
+
+  const jurisdictionResponse = await jurisdictionsService.retrieve({
+    jurisdictionId: listingResponse.jurisdictions.id,
+  })
+  conductor.listing = listingResponse
   const applicationConfig = retrieveApplicationConfig(conductor.listing) // TODO: load from backend
-  conductor.config = applicationConfig
+  conductor.config = {
+    ...applicationConfig,
+    languages: jurisdictionResponse.languages,
+    featureFlags: jurisdictionResponse.featureFlags,
+  }
   stateFunction(conductor.listing)
   context.syncListing(conductor.listing)
 }
@@ -53,7 +63,8 @@ const ApplicationChooseLanguage = () => {
   const router = useRouter()
   const [listing, setListing] = useState(null)
   const context = useContext(AppSubmissionContext)
-  const { initialStateLoaded, profile, listingsService } = useContext(AuthContext)
+  const { initialStateLoaded, profile, listingsService, jurisdictionsService } =
+    useContext(AuthContext)
   const toastyRef = useToastyRef()
   const { conductor } = context
 
@@ -76,12 +87,29 @@ const ApplicationChooseLanguage = () => {
       }
     }
     if (!context.listing || context.listing.id !== listingId) {
-      void loadListing(listingId, setListing, conductor, context, "en", listingsService)
+      void loadListing(
+        listingId,
+        setListing,
+        conductor,
+        context,
+        "en",
+        listingsService,
+        jurisdictionsService
+      )
     } else {
       conductor.listing = context.listing
       setListing(context.listing)
     }
-  }, [router, conductor, context, listingId, initialStateLoaded, profile, listingsService])
+  }, [
+    router,
+    conductor,
+    context,
+    listingId,
+    initialStateLoaded,
+    profile,
+    listingsService,
+    jurisdictionsService,
+  ])
 
   useEffect(() => {
     const { addToast } = toastyRef.current
@@ -108,16 +136,22 @@ const ApplicationChooseLanguage = () => {
       conductor.currentStep.save({
         language,
       })
-      void loadListing(listingId, setListing, conductor, context, language, listingsService).then(
-        () => {
-          void router.push(conductor.determineNextUrl(), null, { locale: language })
-        }
-      )
+      void loadListing(
+        listingId,
+        setListing,
+        conductor,
+        context,
+        language,
+        listingsService,
+        jurisdictionsService
+      ).then(() => {
+        void router.push(conductor.determineNextUrl(), null, { locale: language })
+      })
     },
-    [conductor, context, listingId, router, listingsService]
+    [conductor, context, listingId, router, listingsService, jurisdictionsService]
   )
 
-  const { content: appStatusContent } = useGetApplicationStatusProps(listing)
+  const statusContent = getListingApplicationStatus(listing)
 
   return (
     <FormsLayout>
@@ -144,7 +178,7 @@ const ApplicationChooseLanguage = () => {
               }
               fullwidth
             >
-              {appStatusContent}
+              {statusContent?.content}
             </Message>
           </CardSection>
         )}
@@ -174,7 +208,7 @@ const ApplicationChooseLanguage = () => {
 
         {initialStateLoaded && !profile && (
           <>
-            <CardSection divider={"flush"} className={"bg-primary-lighter"}>
+            <CardSection divider={"flush"} className={styles["application-form-action-footer"]}>
               <Heading priority={2} size={"2xl"} className={"pb-4"}>
                 {t("account.haveAnAccount")}
               </Heading>
@@ -188,7 +222,7 @@ const ApplicationChooseLanguage = () => {
                 {t("nav.signIn")}
               </Button>
             </CardSection>
-            <CardSection divider={"flush"} className={"bg-primary-lighter"}>
+            <CardSection divider={"flush"} className={styles["application-form-action-footer"]}>
               <Heading priority={2} size={"2xl"} className={"pb-4"}>
                 {t("authentication.createAccount.noAccount")}
               </Heading>

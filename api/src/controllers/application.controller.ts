@@ -115,15 +115,19 @@ export class ApplicationController {
     summary: 'Get applications as csv',
     operationId: 'listAsCsv',
   })
-  @Header('Content-Type', 'text/csv')
+  @Header('Content-Type', 'application/zip')
   @UseInterceptors(ExportLogInterceptor)
   async listAsCsv(
     @Request() req: ExpressRequest,
-    @Res({ passthrough: true }) res: Response,
     @Query(new ValidationPipe(defaultValidationPipeOptions))
     queryParams: ApplicationCsvQueryParams,
   ): Promise<StreamableFile> {
-    return await this.applicationExportService.csvExport(req, res, queryParams);
+    return await this.applicationExportService.exporter(
+      req,
+      queryParams,
+      false,
+      false,
+    );
   }
 
   @Get(`spreadsheet`)
@@ -139,11 +143,50 @@ export class ApplicationController {
     @Query(new ValidationPipe(defaultValidationPipeOptions))
     queryParams: ApplicationCsvQueryParams,
   ): Promise<StreamableFile> {
-    return await this.applicationExportService.spreadsheetExport(
+    return await this.applicationExportService.exporter(
       req,
-      res,
       queryParams,
       false,
+      true,
+    );
+  }
+
+  @Get(`csvSecure`)
+  @ApiOperation({
+    summary: 'Get applications as csv',
+    operationId: 'listAsCsvSecure',
+  })
+  @UseInterceptors(ExportLogInterceptor)
+  async listAsCsvSecure(
+    @Request() req: ExpressRequest,
+    @Query(new ValidationPipe(defaultValidationPipeOptions))
+    queryParams: ApplicationCsvQueryParams,
+  ): Promise<string> {
+    return await this.applicationExportService.exporterSecure(
+      req,
+      queryParams,
+      false,
+      false,
+    );
+  }
+
+  @Get(`spreadsheetSecure`)
+  @ApiOperation({
+    summary: 'Get applications as spreadsheet',
+    operationId: 'listAsSpreadsheetSecure',
+  })
+  @UseInterceptors(ExportLogInterceptor)
+  async spreadsheetExportSecure(
+    @Request() req: ExpressRequest,
+    @Res({ passthrough: true }) res: Response,
+    @Query(new ValidationPipe(defaultValidationPipeOptions))
+    queryParams: ApplicationCsvQueryParams,
+  ): Promise<string> {
+    return await this.applicationExportService.exporterSecure(
+      req,
+      queryParams,
+      false,
+      true,
     );
   }
 

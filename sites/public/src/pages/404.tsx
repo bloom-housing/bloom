@@ -1,9 +1,10 @@
 import React, { useEffect, useContext } from "react"
-import Layout from "../layouts/application"
 import Head from "next/head"
-import { Hero, MarkdownSection, t } from "@bloom-housing/ui-components"
+import { t } from "@bloom-housing/ui-components"
 import { PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
-import { Button } from "@bloom-housing/ui-seeds"
+import Layout from "../layouts/application"
+import { Content404 } from "../components/page/Content404"
+import { Content404Deprecated } from "../components/page/Content404Deprecated"
 import { UserStatus } from "../lib/constants"
 
 const ErrorPage = () => {
@@ -24,19 +25,7 @@ const ErrorPage = () => {
       <Head>
         <title>{pageTitle}</title>
       </Head>
-      <Hero title={pageTitle} buttonTitle={t("welcome.seeRentalListings")} buttonLink="/listings">
-        {t("errors.notFound.message")}
-      </Hero>
-      <div className="homepage-extra">
-        <MarkdownSection fullwidth={true}>
-          <>
-            <p>{t("welcome.seeMoreOpportunities")}</p>
-            <Button variant="primary-outlined" href="/additional-resources">
-              {t("welcome.viewAdditionalHousing")}
-            </Button>
-          </>
-        </MarkdownSection>
-      </div>
+      {process.env.showNewSeedsDesigns ? <Content404 /> : <Content404Deprecated />}
     </Layout>
   )
 }

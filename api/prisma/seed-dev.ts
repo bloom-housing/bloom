@@ -17,6 +17,7 @@ import { translationFactory } from './seed-helpers/translation-factory';
 import { reservedCommunityTypeFactoryAll } from './seed-helpers/reserved-community-type-factory';
 import { householdMemberFactoryMany } from './seed-helpers/household-member-factory';
 import { APPLICATIONS_PER_LISTINGS, LISTINGS_TO_SEED } from './constants';
+import { featureFlagFactory } from './seed-helpers/feature-flag-factory';
 
 const listingStatusEnumArray = Object.values(ListingsStatusEnum);
 
@@ -94,8 +95,42 @@ export const devSeeding = async (
   const multiselectQuestions = await Promise.all(
     await createMultiselect(jurisdiction.id, prismaClient),
   );
-
+  await prismaClient.featureFlags.create({
+    data: featureFlagFactory(
+      'enableRegions',
+      false,
+      'When true, the region can be defined for the building address',
+      [jurisdiction.id],
+    ),
+  });
   await reservedCommunityTypeFactoryAll(jurisdiction.id, prismaClient);
+
+  await prismaClient.featureFlags.create({
+    data: featureFlagFactory(
+      'enableIsVerified',
+      false,
+      'When true, the listing can ba have its contents manually verified by a user',
+      [jurisdiction.id],
+    ),
+  });
+
+  await prismaClient.featureFlags.create({
+    data: featureFlagFactory(
+      'enableSection8Question',
+      false,
+      'When true, the Section 8 listing data will be visible',
+      [jurisdiction.id],
+    ),
+  });
+
+  await prismaClient.featureFlags.create({
+    data: featureFlagFactory(
+      'enableListingPagination',
+      false,
+      'When true listings browser will display pagination controls section',
+      [jurisdiction.id],
+    ),
+  });
 
   for (let index = 0; index < LISTINGS_TO_SEED; index++) {
     const applications = [];

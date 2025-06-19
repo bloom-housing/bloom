@@ -1,9 +1,10 @@
 import { Module } from '@nestjs/common';
-import { ScirptRunnerController } from '../controllers/script-runner.controller';
+import { ScriptRunnerController } from '../controllers/script-runner.controller';
 import { ScriptRunnerService } from '../services/script-runner.service';
 import { AmiChartModule } from './ami-chart.module';
 import { FeatureFlagModule } from './feature-flag.module';
 import { EmailModule } from './email.module';
+import { MultiselectQuestionModule } from './multiselect-question.module';
 import { PermissionModule } from './permission.module';
 import { PrismaModule } from './prisma.module';
 
@@ -12,11 +13,12 @@ import { PrismaModule } from './prisma.module';
     AmiChartModule,
     EmailModule,
     FeatureFlagModule,
+    MultiselectQuestionModule,
     PermissionModule,
     PrismaModule,
   ],
-  controllers: [ScirptRunnerController],
+  controllers: [ScriptRunnerController],
   providers: [ScriptRunnerService],
   exports: [ScriptRunnerService],
 })
-export class ScirptRunnerModule {}
+export class ScriptRunnerModule {}

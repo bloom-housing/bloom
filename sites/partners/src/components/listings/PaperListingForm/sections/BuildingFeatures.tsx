@@ -1,9 +1,12 @@
-import React, { useMemo, useContext } from "react"
+import React, { useMemo, useContext, useEffect } from "react"
 import { useFormContext } from "react-hook-form"
 import { t, Textarea, FieldGroup } from "@bloom-housing/ui-components"
 import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { listingFeatures, AuthContext } from "@bloom-housing/shared-helpers"
-import { ListingFeatures } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  FeatureFlagEnum,
+  ListingFeatures,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 type BuildingFeaturesProps = {
@@ -12,11 +15,11 @@ type BuildingFeaturesProps = {
 
 const BuildingFeatures = (props: BuildingFeaturesProps) => {
   const formMethods = useFormContext()
-  const { profile } = useContext(AuthContext)
+  const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, watch } = formMethods
-  const jurisdiction = watch("jurisdiction.id")
+  const { register, watch, setValue } = formMethods
+  const jurisdiction = watch("jurisdictions.id")
 
   const featureOptions = useMemo(() => {
     return listingFeatures.map((item) => ({
@@ -27,9 +30,17 @@ const BuildingFeatures = (props: BuildingFeaturesProps) => {
     }))
   }, [register, props.existingFeatures])
 
-  const enableAccessibilityFeatures = profile?.jurisdictions?.find(
-    (j) => j.id === jurisdiction
-  )?.enableAccessibilityFeatures
+  const enableAccessibilityFeatures = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableAccessibilityFeatures,
+    jurisdiction
+  )
+
+  useEffect(() => {
+    // clear the utilities values if the new jurisdiction doesn't have utilities included functionality
+    if (!enableAccessibilityFeatures) {
+      setValue("accessibilityFeatures", undefined)
+    }
+  }, [enableAccessibilityFeatures, setValue])
 
   return (
     <>
@@ -107,13 +118,12 @@ const BuildingFeatures = (props: BuildingFeaturesProps) => {
         {!enableAccessibilityFeatures ? null : (
           <Grid.Row>
             <FieldValue label={t("listings.sections.accessibilityFeatures")}>
-              {/* TODO: default checked doesn't appear to be working even on main*/}
               <FieldGroup
                 type="checkbox"
-                name="listingFeatures"
+                name="accessibilityFeatures"
                 fields={featureOptions}
                 register={register}
-                fieldGroupClassName="grid grid-cols-3 mt-4"
+                fieldGroupClassName="grid grid-cols-3 mt-4 gap-x-4"
               />
             </FieldValue>
           </Grid.Row>

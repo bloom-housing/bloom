@@ -1,0 +1,119 @@
+.list-item {
+  &:not(:last-child) {
+    margin-block-end: var(--seeds-spacer-content);
+  }
+
+  .listing-card-container {
+    --card-spacing: 0;
+
+    .name,
+    a {
+      color: var(--seeds-color-blue-500);
+    }
+
+    &:hover {
+      .name,
+      a {
+        color: var(--seeds-color-blue-900);
+      }
+    }
+
+    .listing-card-content {
+      display: flex;
+      flex-direction: row;
+      color: var(--seeds-text-color);
+      font-family: var(--seeds-font-alt-sans);
+      width: 100%;
+      @media (--md-down) {
+        flex-direction: column;
+      }
+
+      .image {
+        width: calc(100% / 7 * 3);
+        @media (--md-down) {
+          width: 100%;
+        }
+      }
+
+      .image-background {
+        height: 100%;
+        background-size: cover;
+        background-position: center;
+        @media (--md-down) {
+          min-height: var(--seeds-s96);
+        }
+        @media (--sm-only) {
+          min-height: var(--seeds-s56);
+        }
+      }
+
+      .details {
+        // The intent of setting this order is so that the listing name is read first by a screen reader instead of the image, even though the image would appear first in the DOM
+        order: 1;
+        width: calc(100% / 7 * 4);
+        padding: var(--seeds-spacer-content);
+        @media (--md-down) {
+          width: 100%;
+          padding: var(--seeds-s4);
+        }
+
+        .name {
+          font-size: var(--seeds-type-heading-size-3xl);
+          font-weight: var(--seeds-font-weight-semibold);
+          margin-block-end: var(--seeds-s1);
+          @media (--md-down) {
+            font-size: var(--seeds-type-heading-size-2xl);
+          }
+        }
+
+        .address {
+          color: var(--seeds-text-color-dark);
+        }
+
+        .tags {
+          margin-block-start: var(--seeds-s3);
+          margin-block-end: calc(-1 * var(--seeds-s1));
+          .tag {
+            margin-block-end: var(--seeds-s2);
+            &:not(:last-child) {
+              margin-inline-end: var(--seeds-s2);
+            }
+            svg {
+              margin-inline-end: var(--seeds-s1);
+            }
+          }
+        }
+
+        .unit-table {
+          margin-block-start: var(--seeds-s3);
+        }
+      }
+
+      .action-button {
+        text-decoration: none;
+        width: fit-content;
+        height: fit-content;
+        position: relative;
+        &:not(:last-child) {
+          margin-inline-end: var(--seeds-s3);
+          margin-block-end: var(--seeds-s3);
+        }
+
+        @media (--lg-and-up) {
+          &:not(:last-child) {
+            margin-block-end: 0;
+          }
+          min-width: fit-content;
+        }
+      }
+
+      .action-container {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        margin-block-start: var(--seeds-s3);
+        position: relative;
+      }
+    }
+  }
+}

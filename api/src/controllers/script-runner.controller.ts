@@ -14,7 +14,6 @@ import { defaultValidationPipeOptions } from '../utilities/default-validation-pi
 import { SuccessDTO } from '../dtos/shared/success.dto';
 import { OptionalAuthGuard } from '../guards/optional.guard';
 import { AdminOrJurisdictionalAdminGuard } from '../guards/admin-or-jurisdiction-admin.guard';
-import { DataTransferDTO } from '../dtos/script-runner/data-transfer.dto';
 import { BulkApplicationResendDTO } from '../dtos/script-runner/bulk-application-resend.dto';
 import { AmiChartImportDTO } from '../dtos/script-runner/ami-chart-import.dto';
 import { AmiChartUpdateImportDTO } from '../dtos/script-runner/ami-chart-update-import.dto';
@@ -25,7 +24,7 @@ import { ApiKeyGuard } from '../guards/api-key.guard';
 @ApiTags('scriptRunner')
 @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
 @UseGuards(ApiKeyGuard, OptionalAuthGuard, AdminOrJurisdictionalAdminGuard)
-export class ScirptRunnerController {
+export class ScriptRunnerController {
   constructor(private readonly scriptRunnerService: ScriptRunnerService) {}
 
   @Put('exampleScript')
@@ -36,19 +35,6 @@ export class ScirptRunnerController {
   @ApiOkResponse({ type: SuccessDTO })
   async update(@Request() req: ExpressRequest): Promise<SuccessDTO> {
     return await this.scriptRunnerService.example(req);
-  }
-
-  @Put('dataTransfer')
-  @ApiOperation({
-    summary: 'A script that pulls data from one source into the current db',
-    operationId: 'dataTransfer',
-  })
-  @ApiOkResponse({ type: SuccessDTO })
-  async dataTransfer(
-    @Body() dataTransferDTO: DataTransferDTO,
-    @Request() req: ExpressRequest,
-  ): Promise<SuccessDTO> {
-    return await this.scriptRunnerService.dataTransfer(req, dataTransferDTO);
   }
 
   @Put('bulkApplicationResend')
@@ -185,6 +171,19 @@ export class ScirptRunnerController {
     return await this.scriptRunnerService.hideProgramsFromListings(req);
   }
 
+  @Put('updatesWhatHappensInLotteryEmail')
+  @ApiOperation({
+    summary:
+      'A script that updates the "what happens next" content in lottery email',
+    operationId: 'updatesWhatHappensInLotteryEmail',
+  })
+  @ApiOkResponse({ type: SuccessDTO })
+  async updatesWhatHappensInLotteryEmail(
+    @Request() req: ExpressRequest,
+  ): Promise<SuccessDTO> {
+    return await this.scriptRunnerService.updatesWhatHappensInLotteryEmail(req);
+  }
+
   @Put('addFeatureFlags')
   @ApiOperation({
     summary:
@@ -194,5 +193,20 @@ export class ScirptRunnerController {
   @ApiOkResponse({ type: SuccessDTO })
   async addFeatureFlags(@Request() req: ExpressRequest): Promise<SuccessDTO> {
     return await this.scriptRunnerService.addFeatureFlags(req);
+  }
+
+  @Put('migrateDetroitToMultiselectQuestions')
+  @ApiOperation({
+    summary:
+      'A script that moves preferences and programs to multiselect questions in Detroit db',
+    operationId: 'migrateDetroitToMultiselectQuestions',
+  })
+  @ApiOkResponse({ type: SuccessDTO })
+  async migrateDetroitToMultiselectQuestions(
+    @Request() req: ExpressRequest,
+  ): Promise<SuccessDTO> {
+    return await this.scriptRunnerService.migrateDetroitToMultiselectQuestions(
+      req,
+    );
   }
 }

@@ -10,6 +10,8 @@ import { UnitType } from '../dtos/unit-types/unit-type.dto';
 import { UnitAccessibilityPriorityType } from '../dtos/unit-accessibility-priority-types/unit-accessibility-priority-type.dto';
 import { AmiChartItem } from '../dtos/units/ami-chart-item.dto';
 import { UnitAmiChartOverride } from '../dtos/units/ami-chart-override.dto';
+import { isEmpty } from 'class-validator';
+import UnitGroupAmiLevel from '../dtos/unit-groups/unit-group-ami-level.dto';
 
 type AnyDict = { [key: string]: unknown };
 type UnitMap = {
@@ -373,24 +375,33 @@ export const getUnitsSummary = (unit: Unit, existingSummary?: UnitSummary) => {
   const summary = existingSummary;
 
   // Income Range
-  summary.minIncomeRange = minMaxCurrency(
-    summary.minIncomeRange,
-    getRoundedNumber(unit.monthlyIncomeMin),
-  );
+  if (unit.monthlyIncomeMin) {
+    summary.minIncomeRange = minMaxCurrency(
+      summary.minIncomeRange,
+      getRoundedNumber(unit.monthlyIncomeMin),
+    );
+  }
 
   // Occupancy Range
-  summary.occupancyRange = minMax(summary.occupancyRange, unit.minOccupancy);
-  summary.occupancyRange = minMax(summary.occupancyRange, unit.maxOccupancy);
+  if (unit.minOccupancy) {
+    summary.occupancyRange = minMax(summary.occupancyRange, unit.minOccupancy);
+  }
+  if (unit.maxOccupancy) {
+    summary.occupancyRange = minMax(summary.occupancyRange, unit.maxOccupancy);
+  }
 
   // Rent Ranges
-  summary.rentAsPercentIncomeRange = minMax(
-    summary.rentAsPercentIncomeRange,
-    parseFloat(unit.monthlyRentAsPercentOfIncome),
-  );
-  summary.rentRange = minMaxCurrency(
-    summary.rentRange,
-    getRoundedNumber(unit.monthlyRent),
-  );
+  if (unit.monthlyRentAsPercentOfIncome) {
+    summary.rentAsPercentIncomeRange = minMax(
+      summary.rentAsPercentIncomeRange,
+      parseFloat(unit.monthlyRentAsPercentOfIncome),
+    );
+  }
+  if (unit.monthlyRent)
+    summary.rentRange = minMaxCurrency(
+      summary.rentRange,
+      getRoundedNumber(unit.monthlyRent),
+    );
 
   // Floor Range
   if (unit.floor) {
@@ -398,7 +409,9 @@ export const getUnitsSummary = (unit: Unit, existingSummary?: UnitSummary) => {
   }
 
   // Area Range
-  summary.areaRange = minMax(summary.areaRange, parseFloat(unit.sqFeet));
+  if (unit.sqFeet) {
+    summary.areaRange = minMax(summary.areaRange, parseFloat(unit.sqFeet));
+  }
 
   return summary;
 };
@@ -531,3 +544,52 @@ export const summarizeUnits = (
   );
   return data;
 };
+
+export const convertToTitleCase = (value: string): string => {
+  if (isEmpty(value)) return '';
+  const spacedValue = value.replace(/([A-Z])/g, (match) => ` ${match}`);
+  const result = spacedValue.charAt(0).toUpperCase() + spacedValue.slice(1);
+  return result;
+};
+
+export const getRentTypes = (amiLevels: UnitGroupAmiLevel[]): string => {
+  if (isEmpty(amiLevels)) return '';
+  const uniqueTypes = [];
+  amiLevels?.forEach((elem) => {
+    if (!uniqueTypes.includes(elem.monthlyRentDeterminationType))
+      uniqueTypes.push(elem.monthlyRentDeterminationType);
+  });
+  const formattedResults = uniqueTypes
+    .map((elem) => convertToTitleCase(elem))
+    .join(', ');
+  return formattedResults;
+};
+
+export const formatRange = (
+  min: string | number,
+  max: string | number,
+  prefix: string,
+  postfix: string,
+): string => {
+  if (isEmpty(min) && isEmpty(max)) return '';
+  if (min == max || isEmpty(max)) return `${prefix}${min}${postfix}`;
+  if (isEmpty(min)) return `${prefix}${max}${postfix}`;
+  return `${prefix}${min}${postfix} - ${prefix}${max}${postfix}`;
+};
+
+export function formatRentRange(
+  rent: MinMax | MinMaxCurrency,
+  percent: MinMax,
+): string {
+  let toReturn = '';
+  if (rent) {
+    toReturn += formatRange(rent.min, rent.max, '', '');
+  }
+  if (rent && percent) {
+    toReturn += ', ';
+  }
+  if (percent) {
+    toReturn += formatRange(percent.min, percent.max, '', '%');
+  }
+  return toReturn;
+}

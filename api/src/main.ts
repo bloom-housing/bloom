@@ -14,7 +14,7 @@ async function bootstrap() {
     logger:
       process.env.NODE_ENV === 'development'
         ? ['error', 'warn', 'log', 'debug']
-        : ['error', 'warn'],
+        : ['error', 'warn', 'log'],
   });
   const allowList = process.env.CORS_ORIGINS || [];
   const allowListRegex = process.env.CORS_REGEX
@@ -57,6 +57,20 @@ async function bootstrap() {
     .addTag('listings')
     .build();
   const document = SwaggerModule.createDocument(app, config);
+  // Add passkey as an optional header to all endpoints
+  Object.values(document.paths).forEach((path) => {
+    Object.values(path).forEach((method) => {
+      method.parameters = [
+        ...(method.parameters || []),
+        {
+          in: 'header',
+          name: 'passkey',
+          description: 'Pass key',
+          required: false,
+        },
+      ];
+    });
+  });
   SwaggerModule.setup('api', app, document);
   const configService: ConfigService = app.get(ConfigService);
 

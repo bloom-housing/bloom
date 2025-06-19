@@ -41,7 +41,7 @@
   "programRules": "Basic program rules",
   "specialNotes": "basic special notes",
   "leasingAgentName": "Basic Agent Name",
-  "leasingAgentEmail": "basicAgent@email.com",
+  "leasingAgentEmail": "basicagent@email.com",
   "leasingAgentPhone": "520-245-8811",
   "leasingAgentTitle": "Basic Agent Title",
   "leasingAgentOfficeHours": "Basic Agent Office Hours",
@@ -61,5 +61,12 @@
   "endTime.hours": "11",
   "endTime.minutes": "05",
   "note": "Basic Note",
-  "editedName": "Basic Listing Edited Name"
+  "editedName": "Basic Listing Edited Name",
+  "utilities": ["Water", "Trash", "Phone"],
+  "accessibilityFeatures": [
+    ["elevator", "Elevator"],
+    ["mobility", "Units for those with mobility disabilities"],
+    ["visual", "Units for those with visual disabilities"]
+  ],
+  "referralContactPhone": "520-245-8811"
 }
