@@ -36,6 +36,36 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
   const { register, setValue, watch, errors, getValues } = useFormContext()
   const { doJurisdictionsHaveFeatureFlagOn, getJurisdictionLanguages } = useContext(AuthContext)
 
+  const getDefaultMethods = () => {
+    const temp: Methods = {
+      digital: null,
+      paper: null,
+      referral: null,
+    }
+    const applicationMethods =
+      getValues()?.applicationMethods?.length > 0
+        ? getValues().applicationMethods
+        : listing?.applicationMethods
+
+    applicationMethods?.forEach((method) => {
+      switch (method.type) {
+        case ApplicationMethodsTypeEnum.Internal:
+        case ApplicationMethodsTypeEnum.ExternalLink:
+          temp["digital"] = method
+          break
+        case ApplicationMethodsTypeEnum.FileDownload:
+          temp["paper"] = method
+          break
+        case ApplicationMethodsTypeEnum.Referral:
+          temp["referral"] = method
+          break
+        default:
+          break
+      }
+    })
+    return temp
+  }
+
   // watch fields
   const jurisdiction: string = watch("jurisdictions.id")
   const digitalApplicationChoice = watch("digitalApplicationChoice")
@@ -46,11 +76,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
   /*
     Set state for methods, drawer, upload progress, and more
   */
-  const [methods, setMethods] = useState<Methods>({
-    digital: null,
-    paper: null,
-    referral: null,
-  })
+  const [methods, setMethods] = useState<Methods>(getDefaultMethods())
   const [selectedLanguage, setSelectedLanguage] = useState("")
   const [drawerState, setDrawerState] = useState(false)
   const [progressValue, setProgressValue] = useState(0)
@@ -147,41 +173,6 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
   }
 
   /**
-   * set initial methods
-   */
-  useEffect(() => {
-    // set methods here
-    const temp: Methods = {
-      digital: null,
-      paper: null,
-      referral: null,
-    }
-    const applicationMethods =
-      getValues()?.applicationMethods?.length > 0
-        ? getValues().applicationMethods
-        : listing?.applicationMethods
-
-    applicationMethods?.forEach((method) => {
-      switch (method.type) {
-        case ApplicationMethodsTypeEnum.Internal:
-        case ApplicationMethodsTypeEnum.ExternalLink:
-          temp["digital"] = method
-          break
-        case ApplicationMethodsTypeEnum.FileDownload:
-          temp["paper"] = method
-          break
-        case ApplicationMethodsTypeEnum.Referral:
-          temp["referral"] = method
-          break
-        default:
-          break
-      }
-    })
-    setMethods(temp)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  /**
    * set application methods value when any of the methods change
    */
   useEffect(() => {
@@ -225,7 +216,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                 {
                   ...yesNoRadioOptions[0],
                   id: "digitalApplicationChoiceYes",
-                  defaultChecked: listing?.digitalApplication === true ?? null,
+                  defaultChecked: listing?.digitalApplication === true,
                   inputProps: {
                     onChange: () => {
                       setMethods({
@@ -243,7 +234,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                 {
                   ...yesNoRadioOptions[1],
                   id: "digitalApplicationChoiceNo",
-                  defaultChecked: listing?.digitalApplication === false ?? null,
+                  defaultChecked: listing?.digitalApplication === false,
                   inputProps: {
                     onChange: () => {
                       setMethods({
@@ -268,8 +259,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                   {
                     ...yesNoRadioOptions[0],
                     id: "commonDigitalApplicationChoiceYes",
-                    defaultChecked:
-                      methods?.digital?.type === ApplicationMethodsTypeEnum.Internal ?? null,
+                    defaultChecked: methods.digital.type === ApplicationMethodsTypeEnum.Internal,
                     inputProps: {
                       onChange: () => {
                         setMethods({
@@ -286,7 +276,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                     ...yesNoRadioOptions[1],
                     id: "commonDigitalApplicationChoiceNo",
                     defaultChecked:
-                      methods?.digital?.type === ApplicationMethodsTypeEnum.ExternalLink ?? null,
+                      methods.digital.type === ApplicationMethodsTypeEnum.ExternalLink,
                     inputProps: {
                       onChange: () => {
                         setMethods({
@@ -324,7 +314,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                         ...methods,
                         digital: {
                           ...methods.digital,
-                          externalReference: e.target.value,
+                          externalReference: e.target?.value,
                         },
                       })
                     },
@@ -358,7 +348,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                 {
                   ...yesNoRadioOptions[0],
                   id: "paperApplicationYes",
-                  defaultChecked: listing?.paperApplication === true ?? null,
+                  defaultChecked: listing?.paperApplication === true,
                   inputProps: {
                     onChange: () => {
                       setMethods({
@@ -374,7 +364,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                 {
                   ...yesNoRadioOptions[1],
                   id: "paperApplicationNo",
-                  defaultChecked: listing?.paperApplication === false ?? null,
+                  defaultChecked: listing?.paperApplication === false,
                   inputProps: {
                     onChange: () => {
                       setMethods({
@@ -466,7 +456,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                 {
                   ...yesNoRadioOptions[0],
                   id: "referralOpportunityYes",
-                  defaultChecked: listing?.referralOpportunity === true ?? null,
+                  defaultChecked: listing?.referralOpportunity === true,
                   inputProps: {
                     onChange: () => {
                       setMethods({
@@ -482,7 +472,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                 {
                   ...yesNoRadioOptions[1],
                   id: "referralOpportunityNo",
-                  defaultChecked: listing?.referralOpportunity === false ?? null,
+                  defaultChecked: listing?.referralOpportunity === false,
                   inputProps: {
                     onChange: () => {
                       setMethods({
@@ -514,7 +504,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                         ...methods,
                         referral: {
                           ...methods.referral,
-                          phoneNumber: e.target.value,
+                          phoneNumber: e,
                         },
                       })
                     }}
@@ -539,7 +529,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                       ...methods,
                       referral: {
                         ...methods.referral,
-                        externalReference: e.target.value,
+                        externalReference: e.target?.value,
                       },
                     })
                   },
@@ -579,7 +569,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                     validation={{ required: true }}
                     inputProps={{
                       onChange: (e) => {
-                        setSelectedLanguage(e.target.value)
+                        setSelectedLanguage(e.target?.value)
                       },
                     }}
                   />

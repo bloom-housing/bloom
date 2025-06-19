@@ -45,6 +45,7 @@ export default function ListingsPage(props: ListingsProps) {
           listings={props.openListings}
           tab={TabsIndexEnum.open}
           jurisdiction={props.jurisdiction}
+          multiselectData={props.multiselectData}
           paginationData={props.paginationData}
           key={router.asPath}
         />
