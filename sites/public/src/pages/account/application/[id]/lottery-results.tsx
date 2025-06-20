@@ -48,24 +48,27 @@ export default () => {
                     })
                     .catch((err) => {
                       console.error(`Error fetching lottery totals: ${err}`)
+                      setNoApplication(true)
                     })
                 })
                 .catch((err) => {
                   console.error(`Error fetching lottery results: ${err}`)
+                  setNoApplication(true)
                 })
             })
             .catch((err) => {
               console.error(`Error fetching listing: ${err}`)
+              setNoApplication(true)
             })
         })
         .catch((err) => {
           console.error(`Error fetching application: ${err}`)
           const { status } = err.response || {}
-          if (status === 404) {
-            setNoApplication(true)
-          }
+
           if (status === 403) {
             setUnauthorized(true)
+          } else {
+            setNoApplication(true)
           }
         })
     }
