@@ -15,7 +15,7 @@ if (process.env.NODE_ENV !== "production") {
 }
 
 // Set up app-wide constants
-let BACKEND_API_BASE = "http://localhost:3100"
+let BACKEND_API_BASE = "http://127.0.0.1:3100"
 if (process.env.INCOMING_HOOK_BODY && process.env.INCOMING_HOOK_BODY.startsWith("http")) {
   // This is a value that can get set via a Netlify webhook for branch deploys
   BACKEND_API_BASE = decodeURIComponent(process.env.INCOMING_HOOK_BODY)
@@ -41,17 +41,18 @@ module.exports = withBundleAnalyzer(
       backendProxyBase: BACKEND_PROXY_BASE,
       listingServiceUrl: BACKEND_API_BASE + LISTINGS_QUERY,
       idleTimeout: process.env.IDLE_TIMEOUT,
-      showSmsMfa: (process.env.SHOW_SMS_MFA || "TRUE") === "TRUE", // SMS on by default
+      showSmsMfa: !process.env.SHOW_SMS_MFA || process.env.SHOW_SMS_MFA === "TRUE" ? "TRUE" : "", // SMS on by default
       cloudinaryCloudName: process.env.CLOUDINARY_CLOUD_NAME,
       cloudinaryKey: process.env.CLOUDINARY_KEY,
       cloudinarySignedPreset: process.env.CLOUDINARY_SIGNED_PRESET,
       mapBoxToken: MAPBOX_TOKEN,
       reCaptchaKey: process.env.RECAPTCHA_KEY,
-      showLottery: process.env.SHOW_LOTTERY === "TRUE",
+      showLottery: process.env.SHOW_LOTTERY === "TRUE" ? "TRUE" : "",
       lotteryDaysTillExpiry: process.env.LOTTERY_DAYS_TILL_EXPIRY,
-      applicationExportAsSpreadsheet: process.env.APPLICATION_EXPORT_AS_SPREADSHEET === "TRUE",
-      useSecureDownloadPathway: process.env.USE_SECURE_DOWNLOAD_PATHWAY === "TRUE",
-      limitClosedListingActions: process.env.LIMIT_CLOSED_LISTING_ACTIONS === "TRUE",
+      applicationExportAsSpreadsheet:
+        process.env.APPLICATION_EXPORT_AS_SPREADSHEET === "TRUE" ? "TRUE" : "",
+      useSecureDownloadPathway: process.env.USE_SECURE_DOWNLOAD_PATHWAY === "TRUE" ? "TRUE" : "",
+      limitClosedListingActions: process.env.LIMIT_CLOSED_LISTING_ACTIONS === "TRUE" ? "TRUE" : "",
     },
     i18n: {
       locales: process.env.LANGUAGES ? process.env.LANGUAGES.split(",") : ["en"],
