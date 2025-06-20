@@ -27,9 +27,9 @@
     "@testing-library/react": "14.0.0",
     "@types/jest": "^26.0.14",
     "@types/node-polyglot": "^2.5.0",
-    "@types/react": "18.0.33",
+    "@types/react": "^18.0.32",
     "@types/react-beautiful-dnd": "^13.1.1",
-    "@types/react-dom": "^16.9.5",
+    "@types/react-dom": "^18.0.11",
     "@types/react-tabs": "^2.3.2",
     "@types/react-test-renderer": "18.0.0",
     "@types/react-text-mask": "^5.4.6",
@@ -39,11 +39,18 @@
     "identity-obj-proxy": "^3.0.0",
     "jest": "^26.5.3",
     "next": "^14.2.25",
-    "react": "18.2.0",
+    "react": "^18.2.0",
     "react-dom": "18.2.0",
     "react-test-renderer": "18.2.0",
     "ts-jest": "^26.4.1",
     "ts-loader": "^9.5.2",
     "typescript": "^4.8.4"
+  },
+  "resolutions": {
+    "@types/react": "^18.0.32",
+    "@types/react-dom": "^18.0.11",
+    "react": "^18.2.0",
+    "typescript": "^4.8.4",
+    "react-dom": "^18.2.0"
   }
 }

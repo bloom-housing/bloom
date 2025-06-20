@@ -75,7 +75,7 @@
     "jest": "^26.5.3",
     "lint-staged": "^10.4.0",
     "prettier": "^2.8.8",
-    "react": "18.2.0",
+    "react": "^18.2.0",
     "react-test-renderer": "18.2.0",
     "ts-jest": "^26.4.1",
     "typescript": "^4.8.4",
@@ -85,6 +85,13 @@
     "singleQuote": false,
     "printWidth": 100,
     "semi": false
+  },
+  "resolutions": {
+    "@types/react": "^18.0.32",
+    "@types/react-dom": "^18.0.11",
+    "react": "^18.2.0",
+    "typescript": "^4.8.4",
+    "react-dom": "^18.2.0"
   },
   "husky": {
     "hooks": {
