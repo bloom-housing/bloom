@@ -524,6 +524,7 @@ const UnitGroupForm = ({
                         dataTestId: "waitlistStatusOpen",
                         label: t("listings.listingStatus.active"),
                         value: YesNoEnum.yes,
+                        defaultChecked: !defaultUnitGroup,
                       },
                       {
                         id: "waitlistStatusClosed",
