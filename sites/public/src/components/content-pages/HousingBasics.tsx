@@ -1,5 +1,4 @@
 import { useState } from "react"
-import Link from "next/link"
 import Head from "next/head"
 import { Card, Dialog, Grid, Heading } from "@bloom-housing/ui-seeds"
 import { t } from "@bloom-housing/ui-components"

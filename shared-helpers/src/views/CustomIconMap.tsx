@@ -11,7 +11,6 @@ import EnvelopeIcon from "@heroicons/react/24/outline/EnvelopeIcon"
 import MapPinIcon from "@heroicons/react/24/outline/MapPinIcon"
 import QuestionMarkCircleIcon from "@heroicons/react/24/outline/QuestionMarkCircleIcon"
 import ListBulletIcon from "@heroicons/react/24/outline/ListBulletIcon"
-import QuestionMarkIcon from "@heroicons/react/24/outline/QuestionMarkCircleIcon"
 
 export const CustomIconMap = {
   application: Application,
@@ -28,7 +27,7 @@ export const CustomIconMap = {
   house: <HouseIcon />,
   questionMarkCircle: <QuestionMarkCircleIcon />,
   listBullet: <ListBulletIcon />,
-  questionMark: <QuestionMarkIcon></QuestionMarkIcon>,
+  questionMark: <QuestionMarkCircleIcon />,
 }
 
 export type CustomIconType = keyof typeof CustomIconMap
