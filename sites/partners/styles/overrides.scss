@@ -1,4 +1,96 @@
+@import "../public/static/fonts/Montserrat.css";
+
 :root {
+  // Seeds token overrides
+
+  --seeds-color-primary-darker: #133a35;
+  --seeds-color-primary-dark: #1f6058;
+  --seeds-color-primary: #297e73;
+  --seeds-color-primary-light: #c5ece7;
+  --seeds-color-primary-lighter: #ecf9f7;
+  --seeds-bg-color-surface-primary: var(--seeds-color-primary-lighter);
+  --seeds-bg-color-surface-primary-inverse: var(--seeds-color-primary-dark);
+
+  // Map some old UIC tokens to updated Seeds tokens
+  --bloom-color-primary-dark: var(--seeds-color-primary-dark);
+  --ag-row-hover-color: var(--seeds-color-primary-lighter);
+
+  // Seeds component & class token overrides
+  .seeds-button {
+    --button-border-radius-sm: var(--seeds-rounded-3xl);
+    --button-border-radius-md: var(--seeds-rounded-3xl);
+  }
+
+  // UIC and miscellaneous overrides
+  .seeds-button {
+    -webkit-font-smoothing: antialiased; // restore macOS styling that had been unset
+  }
+
+  .main-container {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+  }
+
+  .styled-stacked-table {
+    // Temporary until we have Seeds tables to manipulate UIC StackedTable component
+    [class*="stacked-table"] {
+      --bloom-font-size-base: var(--seeds-type-label-size);
+      .stacked-table-subtext {
+        color: var(--seeds-text-color);
+      }
+      tr {
+        background-color: var(--seeds-bg-color-muted);
+        margin-bottom: 0;
+      }
+      tr:nth-of-type(even) {
+        background-color: var(--seeds-color-white);
+      }
+      tr:first-child {
+        margin-block-end: 0;
+      }
+      @media (min-width: theme("screens.md")) {
+        td:last-child {
+          text-align: left;
+          > div {
+            text-align: left;
+          }
+        }
+        th:last-child {
+          text-align: left;
+        }
+      }
+
+      th {
+        background-color: white;
+        padding-block: var(--seeds-s1);
+        padding-inline: var(--seeds-s2);
+        letter-spacing: normal;
+        text-transform: capitalize;
+      }
+      ::before {
+        text-transform: capitalize;
+      }
+      td {
+        padding: var(--seeds-s2);
+      }
+      td,
+      th {
+        font-size: var(--seeds-type-caption-size);
+      }
+    }
+  }
+
+  --text-caps-spaced-letter-spacing: var(--bloom-letter-spacing-tight);
+  --text-caps-spaced-font-weight: 700;
+  .text__caps-spaced {
+    text-transform: none;
+    color: var(--seeds-input-text-label-color);
+  }
+  .label.text__caps-spaced {
+    margin-bottom: var(--seeds-s1);
+  }
+
   .field-value-error {
     --field-value-label-color: var(--seeds-color-alert);
   }
@@ -15,7 +107,7 @@
   }
 
   #seeds-toast-stack {
-    --toast-stack-inset-top: var(--seeds-s28);
+    --toast-stack-inset-top: var(--seeds-s32);
   }
 
   .seeds-button {
@@ -25,6 +117,24 @@
   .seeds-button[data-variant="primary"] {
     color: white; // AG grid styling from UIC was messing up our primary button
   }
+}
+
+.site-header {
+  --detroit-navbar-height: 92px;
+  --bloom-color-primary: var(--seeds-color-primary);
+
+  --logo-desktop-height: 150px;
+  --logo-width-med: 275px;
+  --logo-image-max-height: 3rem;
+  --logo-image-desktop-max-height: 5rem;
+  --base-height: var(--detroit-navbar-height);
+  --base-max-height: var(--detroit-navbar-height);
+  --navbar-menu-desktop-height: var(--detroit-navbar-height);
+}
+
+.ag-theme-bloom .button {
+  --normal-rounded: var(--seeds-rounded-3xl);
+  --bloom-color-primary: var(--seeds-color-primary);
 }
 
 .section-with-grid hgroup p {
@@ -117,7 +227,7 @@
 }
 
 .grid-inset-section {
-  background: var(--seeds-bg-color-surface-primary);
+  background: var(--seeds-bg-color-muted);
   padding: var(--seeds-spacer-section);
 }
 

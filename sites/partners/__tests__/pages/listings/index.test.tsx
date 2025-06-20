@@ -65,7 +65,7 @@ describe("listings", () => {
     )
 
     const { findByText, queryByText } = render(<ListingsList />)
-    const header = await findByText("Partners Portal")
+    const header = await findByText("Detroit Partner Portal")
     expect(header).toBeInTheDocument()
     const exportButton = queryByText("Export to CSV")
     expect(exportButton).not.toBeInTheDocument()
@@ -94,7 +94,7 @@ describe("listings", () => {
     )
 
     const { findByText, getByText } = render(<ListingsList />)
-    const header = await findByText("Partners Portal")
+    const header = await findByText("Detroit Partner Portal")
     expect(header).toBeInTheDocument()
     const exportButton = getByText("Export to CSV")
     expect(exportButton).toBeInTheDocument()
@@ -137,7 +137,7 @@ describe("listings", () => {
         <ListingsList />
       </MessageProvider>
     )
-    const header = await findByText("Partners Portal")
+    const header = await findByText("Detroit Partner Portal")
     expect(header).toBeInTheDocument()
     const exportButton = getByText("Export to CSV")
     expect(exportButton).toBeInTheDocument()
