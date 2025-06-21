@@ -20,7 +20,7 @@ import styles from "../../../layouts/application-form.module.scss"
 import { Button } from "@bloom-housing/ui-seeds"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 
-export const Autofill = () => {
+const Autofill = () => {
   const router = useRouter()
   const context = useFormConductor("autofill")
   const { conductor, application, listing } = context
@@ -146,3 +146,5 @@ export const Autofill = () => {
     <FormsLayout></FormsLayout>
   )
 }
+
+export default Autofill

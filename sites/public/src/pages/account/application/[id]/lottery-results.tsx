@@ -17,7 +17,7 @@ import {
 } from "../../../../components/account/ApplicationCards"
 import styles from "../../../../../styles/lottery-results.module.scss"
 
-export const LotteryResults = () => {
+const LotteryResults = () => {
   const router = useRouter()
   const applicationId = router.query.id as string
   const { applicationsService, listingsService, profile, lotteryService } = useContext(AuthContext)
@@ -218,3 +218,5 @@ export const LotteryResults = () => {
     </>
   )
 }
+
+export default LotteryResults
