@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react"
-import { useRouter } from "next/router"
+import { useRouter } from "next/compat/router"
 import { t, Form, AlertBox, LoadingOverlay } from "@bloom-housing/ui-components"
 import { Tag } from "@bloom-housing/ui-seeds"
 import { AuthContext, MessageContext, listingSectionQuestions } from "@bloom-housing/shared-helpers"

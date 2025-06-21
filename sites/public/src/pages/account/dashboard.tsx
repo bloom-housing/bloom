@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from "react"
 import Head from "next/head"
-import { useRouter } from "next/router"
+import { useRouter } from "next/compat/router"
 import {
   FeatureFlagEnum,
   Jurisdiction,

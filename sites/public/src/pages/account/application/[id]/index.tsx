@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from "react"
 import { t } from "@bloom-housing/ui-components"
-import { useRouter } from "next/router"
+import { useRouter } from "next/compat/router"
 import { AuthContext, RequireLogin } from "@bloom-housing/shared-helpers"
 import { LoadingState } from "@bloom-housing/ui-seeds"
 import {
@@ -12,7 +12,7 @@ import { SubmittedApplicationView } from "../../../../components/applications/Su
 import { ApplicationError } from "../../../../components/account/ApplicationCards"
 import FormsLayout from "../../../../layouts/forms"
 
-export default () => {
+export const AccountApplication = () => {
   const router = useRouter()
   const applicationId = router.query.id as string
   const { applicationsService, listingsService, profile } = useContext(AuthContext)

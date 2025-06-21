@@ -1,6 +1,6 @@
 import React, { useContext, useState, useRef, useEffect, useCallback } from "react"
 import { useForm } from "react-hook-form"
-import { useRouter } from "next/router"
+import { useRouter } from "next/compat/router"
 import { GoogleReCaptcha } from "react-google-recaptcha-v3"
 import {
   useCatchNetworkError,

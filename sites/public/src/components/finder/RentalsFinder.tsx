@@ -1,5 +1,5 @@
 import { FormProvider, useForm } from "react-hook-form"
-import { useRouter } from "next/router"
+import { useRouter } from "next/compat/router"
 import { useCallback, useMemo, useState } from "react"
 import { BloomCard, CustomIconMap, listingFeatures } from "@bloom-housing/shared-helpers"
 import {

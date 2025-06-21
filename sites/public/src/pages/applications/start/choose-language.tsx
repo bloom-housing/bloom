@@ -1,5 +1,5 @@
 import React, { useCallback, useContext, useEffect, useState } from "react"
-import { useRouter } from "next/router"
+import { useRouter } from "next/compat/router"
 import dayjs from "dayjs"
 import { ImageCard, t } from "@bloom-housing/ui-components"
 import {

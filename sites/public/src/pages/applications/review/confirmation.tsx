@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useMemo } from "react"
-import { useRouter } from "next/router"
+import { useRouter } from "next/compat/router"
 import Markdown from "markdown-to-jsx"
 import { t, ApplicationTimeline } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"

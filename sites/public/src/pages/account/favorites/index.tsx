@@ -1,5 +1,5 @@
 import React, { useEffect } from "react"
-import { useRouter } from "next/router"
+import { useRouter } from "next/compat/router"
 import FavoritesView from "../../../components/account/FavoritesView"
 import {
   FeatureFlagEnum,

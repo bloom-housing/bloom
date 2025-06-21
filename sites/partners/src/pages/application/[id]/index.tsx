@@ -1,5 +1,5 @@
 import React, { useMemo, useState, useContext } from "react"
-import { useRouter } from "next/router"
+import { useRouter } from "next/compat/router"
 import Head from "next/head"
 import { t, AlertBox, Breadcrumbs, BreadcrumbLink } from "@bloom-housing/ui-components"
 import { Tag } from "@bloom-housing/ui-seeds"
@@ -26,7 +26,7 @@ import {
   MultiselectQuestionsApplicationSectionEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
-export default function ApplicationsList() {
+export const ApplicationsList = () => {
   const router = useRouter()
   const applicationId = router.query.id as string
   const { application } = useSingleApplicationData(applicationId)

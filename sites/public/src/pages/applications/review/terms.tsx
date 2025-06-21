@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useMemo, useState } from "react"
-import { useRouter } from "next/router"
+import { useRouter } from "next/compat/router"
 import { useForm } from "react-hook-form"
 import Markdown from "markdown-to-jsx"
 import { t, FieldGroup, Form, AlertBox } from "@bloom-housing/ui-components"

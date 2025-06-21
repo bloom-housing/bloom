@@ -1,5 +1,5 @@
 import React from "react"
-import { useRouter } from "next/router"
+import { useRouter } from "next/compat/router"
 import { t, SideNav } from "@bloom-housing/ui-components"
 import { useFlaggedApplicationsMeta } from "../../lib/hooks"
 

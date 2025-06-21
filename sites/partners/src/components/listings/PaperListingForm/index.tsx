@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useContext, useEffect } from "react"
-import { useRouter } from "next/router"
+import { useRouter } from "next/compat/router"
 import dayjs from "dayjs"
 import { t, Form, AlertBox, LoadingOverlay, LatitudeLongitude } from "@bloom-housing/ui-components"
 import { Button, Icon, Tabs } from "@bloom-housing/ui-seeds"

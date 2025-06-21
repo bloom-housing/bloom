@@ -6,7 +6,7 @@ import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import dayjs from "dayjs"
 import customParseFormat from "dayjs/plugin/customParseFormat"
 dayjs.extend(customParseFormat)
-import { useRouter } from "next/router"
+import { useRouter } from "next/compat/router"
 import {
   PageView,
   pushGtmEvent,

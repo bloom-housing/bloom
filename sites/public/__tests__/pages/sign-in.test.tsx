@@ -1,6 +1,6 @@
 import React from "react"
 import { render, fireEvent, waitFor, act } from "@testing-library/react"
-import { useRouter } from "next/router"
+import { useRouter } from "next/compat/router"
 import { MessageContext, AuthContext } from "@bloom-housing/shared-helpers"
 import { User, UserService } from "../../../../shared-helpers/src/types/backend-swagger"
 import { SignIn as SignInComponent } from "../../src/pages/sign-in"

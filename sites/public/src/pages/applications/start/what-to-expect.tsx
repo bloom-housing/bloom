@@ -1,5 +1,5 @@
 import React, { useEffect, useContext, useMemo } from "react"
-import { useRouter } from "next/router"
+import { useRouter } from "next/compat/router"
 import { useForm } from "react-hook-form"
 import Markdown from "markdown-to-jsx"
 import { ReviewOrderTypeEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"

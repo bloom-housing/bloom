@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from "react"
-import { useRouter } from "next/router"
+import { useRouter } from "next/compat/router"
 import { t } from "@bloom-housing/ui-components"
 import { AuthContext, BloomCard, CustomIconMap, RequireLogin } from "@bloom-housing/shared-helpers"
 import {
@@ -17,7 +17,7 @@ import {
 } from "../../../../components/account/ApplicationCards"
 import styles from "../../../../../styles/lottery-results.module.scss"
 
-export default () => {
+export const LotteryResults = () => {
   const router = useRouter()
   const applicationId = router.query.id as string
   const { applicationsService, listingsService, profile, lotteryService } = useContext(AuthContext)

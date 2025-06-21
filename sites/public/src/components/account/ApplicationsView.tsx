@@ -1,6 +1,6 @@
 import React, { useEffect, useState, Fragment, useContext } from "react"
 import Head from "next/head"
-import { useRouter } from "next/router"
+import { useRouter } from "next/compat/router"
 import { t } from "@bloom-housing/ui-components"
 import { Button, Card, LoadingState, Heading, Tabs } from "@bloom-housing/ui-seeds"
 import {

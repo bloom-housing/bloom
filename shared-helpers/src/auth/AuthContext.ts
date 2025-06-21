@@ -36,7 +36,7 @@ import {
   LanguagesEnum,
 } from "../types/backend-swagger"
 import { getListingRedirectUrl } from "../utilities/getListingRedirectUrl"
-import { useRouter } from "next/router"
+import { useRouter } from "next/compat/router"
 
 type ContextProps = {
   amiChartsService: AmiChartsService
