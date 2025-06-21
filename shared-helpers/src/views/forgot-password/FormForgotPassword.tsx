@@ -7,7 +7,7 @@ import type { UseFormMethods } from "react-hook-form"
 import { BloomCard } from "../components/BloomCard"
 import { emailRegex } from "../../utilities/regex"
 import styles from "./FormForgotPassword.module.scss"
-import { useRouter } from "next/compat/router"
+import { useRouter } from "next/router"
 
 export type FormForgotPasswordProps = {
   control: FormForgotPasswordControl

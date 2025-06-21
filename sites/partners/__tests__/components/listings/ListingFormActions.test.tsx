@@ -598,7 +598,6 @@ describe("<ListingFormActions>", () => {
 
         await userEvent.click(screen.getByRole("button", { name: "Approve & Publish" }))
         expect(submitMock).toBeCalledWith("redirect", ListingsStatusEnum.active)
-        screen.debug()
       })
     })
     describe("as a jurisdictional admin", () => {

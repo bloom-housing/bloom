@@ -1,5 +1,5 @@
 import React from "react"
-import { useRouter } from "next/compat/router"
+import { useRouter } from "next/router"
 import Head from "next/head"
 import dayjs from "dayjs"
 import utc from "dayjs/plugin/utc"

@@ -1,5 +1,5 @@
 import React, { useEffect } from "react"
-import { useRouter } from "next/compat/router"
+import { useRouter } from "next/router"
 import ApplicationsView, {
   ApplicationsIndexEnum,
 } from "../../../components/account/ApplicationsView"

@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react"
 import axios from "axios"
-import { useRouter } from "next/compat/router"
+import { useRouter } from "next/router"
 import qs from "qs"
 import {
   EnumListingFilterParamsComparison,

@@ -1,5 +1,5 @@
 import React, { useContext, useMemo } from "react"
-import { useRouter } from "next/compat/router"
+import { useRouter } from "next/router"
 import dayjs from "dayjs"
 import { t, StatusMessages } from "@bloom-housing/ui-components"
 import { Button, Link, Grid, Icon } from "@bloom-housing/ui-seeds"

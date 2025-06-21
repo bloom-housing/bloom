@@ -1,5 +1,5 @@
 import React, { useState, useContext, useRef } from "react"
-import { useRouter } from "next/compat/router"
+import { useRouter } from "next/router"
 import { useForm } from "react-hook-form"
 import { Button, Icon } from "@bloom-housing/ui-seeds"
 import { Field, Form, FormCard, t, AlertBox } from "@bloom-housing/ui-components"

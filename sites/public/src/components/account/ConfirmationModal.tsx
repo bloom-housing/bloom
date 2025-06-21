@@ -1,7 +1,7 @@
 import { t, Form, Field } from "@bloom-housing/ui-components"
 import { Button, Dialog } from "@bloom-housing/ui-seeds"
 import { AuthContext, useToastyRef, emailRegex } from "@bloom-housing/shared-helpers"
-import { useRouter } from "next/compat/router"
+import { useRouter } from "next/router"
 import { useContext, useEffect, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
 

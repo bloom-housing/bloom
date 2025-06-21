@@ -1,5 +1,5 @@
 import React, { useContext } from "react"
-import { useRouter } from "next/compat/router"
+import { useRouter } from "next/router"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 
 type AuthGuardProps = {

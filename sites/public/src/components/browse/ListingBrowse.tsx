@@ -1,6 +1,6 @@
 import React, { useEffect, useContext, useState } from "react"
 import Head from "next/head"
-import { useRouter } from "next/compat/router"
+import { useRouter } from "next/router"
 import { Button, Heading, LoadingState, Tabs } from "@bloom-housing/ui-seeds"
 import {
   Jurisdiction,

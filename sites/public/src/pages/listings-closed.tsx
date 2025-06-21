@@ -1,5 +1,5 @@
 import React from "react"
-import { useRouter } from "next/compat/router"
+import { useRouter } from "next/router"
 import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import {
   decodeQueryToFilterData,

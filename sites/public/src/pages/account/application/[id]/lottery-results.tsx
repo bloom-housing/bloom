@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from "react"
-import { useRouter } from "next/compat/router"
+import { useRouter } from "next/router"
 import { t } from "@bloom-housing/ui-components"
 import { AuthContext, BloomCard, CustomIconMap, RequireLogin } from "@bloom-housing/shared-helpers"
 import {

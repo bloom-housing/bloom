@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from "react"
 import { t } from "@bloom-housing/ui-components"
-import { useRouter } from "next/compat/router"
+import { useRouter } from "next/router"
 import { AuthContext, RequireLogin } from "@bloom-housing/shared-helpers"
 import { LoadingState } from "@bloom-housing/ui-seeds"
 import {

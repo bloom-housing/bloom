@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from "react"
 import { useForm } from "react-hook-form"
-import { useRouter } from "next/compat/router"
+import { useRouter } from "next/router"
 import { Button } from "@bloom-housing/ui-seeds"
 import { t, Form } from "@bloom-housing/ui-components"
 import { OnClientSide, PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"

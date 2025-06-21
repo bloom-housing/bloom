@@ -1,6 +1,6 @@
 import React from "react"
 import Head from "next/head"
-import { useRouter } from "next/compat/router"
+import { useRouter } from "next/router"
 import { t, Breadcrumbs, BreadcrumbLink } from "@bloom-housing/ui-components"
 import Layout from "../../../layouts"
 import PaperApplicationForm from "../../../components/applications/PaperApplicationForm/PaperApplicationForm"

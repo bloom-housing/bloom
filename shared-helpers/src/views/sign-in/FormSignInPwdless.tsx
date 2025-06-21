@@ -1,5 +1,5 @@
 import React, { useContext } from "react"
-import { useRouter } from "next/compat/router"
+import { useRouter } from "next/router"
 import type { UseFormMethods } from "react-hook-form"
 import { Field, Form, NavigationContext, t } from "@bloom-housing/ui-components"
 import { Button } from "@bloom-housing/ui-seeds"

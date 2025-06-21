@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect, useCallback } from "react"
-import { useRouter } from "next/compat/router"
+import { useRouter } from "next/router"
 import { useForm } from "react-hook-form"
 import { Form, t } from "@bloom-housing/ui-components"
 import {

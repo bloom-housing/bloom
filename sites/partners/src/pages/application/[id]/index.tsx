@@ -1,5 +1,5 @@
 import React, { useMemo, useState, useContext } from "react"
-import { useRouter } from "next/compat/router"
+import { useRouter } from "next/router"
 import Head from "next/head"
 import { t, AlertBox, Breadcrumbs, BreadcrumbLink } from "@bloom-housing/ui-components"
 import { Tag } from "@bloom-housing/ui-seeds"

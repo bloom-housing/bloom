@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from "react"
 import { useForm } from "react-hook-form"
-import { useRouter } from "next/compat/router"
+import { useRouter } from "next/router"
 import { Button, Alert, Dialog, Message } from "@bloom-housing/ui-seeds"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import {
