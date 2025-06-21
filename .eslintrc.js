@@ -19,11 +19,6 @@ module.exports = {
     "plugin:jsx-a11y/recommended",
     "plugin:prettier/recommended", // Enables eslint-plugin-prettier and displays prettier errors as ESLint errors. Make sure this is always the last configuration in the extends array.
   ],
-  settings: {
-    next: {
-      rootDir: ["sites/public", "sites/partners"],
-    },
-  },
   rules: {
     // Place to specify ESLint rules. Can be used to overwrite rules specified from the extended configs
     "@typescript-eslint/camelcase": "off",
