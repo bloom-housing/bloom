@@ -45,6 +45,17 @@
       padding: var(--seeds-spacer-content);
     }
 
+    &-icon {
+      color: var(--seeds-color-primary);
+      background-color: var(--seeds-bg-color-surface-primary);
+      border-radius: var(--seeds-rounded-full);
+      padding: var(--seeds-s2);
+      svg {
+        fill: none;
+        stroke-width: 1px;
+      }
+    }
+
     p {
       color: var(--seeds-text-color-light);
     }

@@ -1,7 +1,7 @@
 import React, { useEffect, useContext, useState, useCallback } from "react"
 import Head from "next/head"
 import { useRouter } from "next/router"
-import { Button, Heading, LoadingState, Tabs } from "@bloom-housing/ui-seeds"
+import { Button, Card, Heading, LoadingState, Tabs } from "@bloom-housing/ui-seeds"
 import {
   Jurisdiction,
   Listing,
@@ -10,6 +10,7 @@ import {
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import {
   AuthContext,
+  BloomCard,
   ListingList,
   MessageContext,
   pushGtmEvent,
@@ -225,12 +226,38 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
                     </ul>
                   ) : (
                     <div className={styles["empty-state"]}>
-                      <Heading size={"xl"} priority={2} className={styles["empty-heading"]}>
-                        {props.tab === TabsIndexEnum.open
-                          ? t("listings.noOpenListings")
-                          : t("listings.noClosedListings")}
-                      </Heading>
-                      {props.areFiltersActive && (
+                      {props.areFiltersActive ? (
+                        <BloomCard
+                          title={
+                            props.tab === TabsIndexEnum.open
+                              ? t("listings.noOpenListings")
+                              : t("listings.noClosedListings")
+                          }
+                          subtitle={t("listings.removeFilters")}
+                          variant="block"
+                          iconSymbol="listBullet"
+                          iconClass={styles["empty-state-icon"]}
+                          headingPriority={2}
+                        >
+                          <Card.Section>
+                            <Button
+                              className={styles["show-all-button"]}
+                              variant="primary-outlined"
+                              onClick={onShowAll}
+                            >
+                              {t("listings.showAll")}
+                            </Button>
+                          </Card.Section>
+                        </BloomCard>
+                      ) : (
+                        <Heading size={"xl"} priority={2} className={styles["empty-heading"]}>
+                          {props.tab === TabsIndexEnum.open
+                            ? t("listings.noOpenListings")
+                            : t("listings.noClosedListings")}
+                        </Heading>
+                      )}
+
+                      {/* {props.areFiltersActive && (
                         <>
                           <p>{t("listings.removeFilters")}</p>
                           <Button
@@ -241,7 +268,7 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
                             {t("listings.showAll")}
                           </Button>
                         </>
-                      )}
+                      )} */}
                     </div>
                   )}
                 </>
