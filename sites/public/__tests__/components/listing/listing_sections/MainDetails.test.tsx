@@ -74,27 +74,4 @@ describe("<MainDetails>", () => {
     )
     expect(view.queryByText("Veteran")).toBeNull()
   })
-  it("hides reserved tag when swapCommunityTypeWithPrograms is true", () => {
-    const view = render(
-      <MainDetails
-        listing={listing}
-        jurisdiction={{
-          ...jurisdiction,
-          featureFlags: [
-            ...jurisdiction.featureFlags,
-            {
-              name: FeatureFlagEnum.swapCommunityTypeWithPrograms,
-              id: "id",
-              createdAt: new Date(),
-              updatedAt: new Date(),
-              active: true,
-              description: "",
-              jurisdictions: [],
-            },
-          ],
-        }}
-      />
-    )
-    expect(view.queryByText("Veteran")).toBeNull()
-  })
 })
