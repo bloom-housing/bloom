@@ -38,6 +38,7 @@ executors:
       CLOUDINARY_KEY: "key"
       CLOUDINARY_SIGNED_PRESET: "signedpreset"
       CLOUDINARY_CLOUD_NAME: "exygy"
+      ELECTRON_EXTRA_LAUNCH_ARGS: '--disable-gpu'
 
   standard-node:
     docker:
