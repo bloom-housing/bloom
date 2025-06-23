@@ -1,5 +1,5 @@
 import React, { Dispatch, SetStateAction } from "react"
-import { CheckIcon } from "@heroicons/react/16/solid"
+import { CheckIcon, HandRaisedIcon } from "@heroicons/react/16/solid"
 import {
   FeatureFlagEnum,
   Jurisdiction,
@@ -39,6 +39,7 @@ export const getListingTags = (
   listing: Listing,
   hideReviewTags?: boolean,
   hideHomeTypeTag?: boolean,
+  hideAccessibilityTag?: boolean,
   enableIsVerified?: boolean
 ): ListingTag[] => {
   const listingTags: ListingTag[] = []
@@ -82,6 +83,40 @@ export const getListingTags = (
       listingTags.push({
         title: t("listings.underConstruction"),
         variant: "secondary",
+      })
+    }
+  }
+
+  if (!hideAccessibilityTag) {
+    if (listing.listingFeatures.visual && listing.listingFeatures.hearing) {
+      listingTags.push({
+        title: t("listing.tags.visionAndHearingUnits"),
+        variant: "secondary",
+      })
+    } else if (listing.listingFeatures.hearing) {
+      listingTags.push({
+        title: t("listing.tags.hearingUnits"),
+        variant: "secondary",
+      })
+    } else if (listing.listingFeatures.visual) {
+      listingTags.push({
+        title: t("listing.tags.visionUnits"),
+        variant: "secondary",
+      })
+    }
+
+    if (listing.listingFeatures.mobility) {
+      listingTags.push({
+        title: t("listing.tags.mobilityUnits"),
+        variant: "secondary",
+      })
+    }
+
+    if (Object.values(listing.listingFeatures).some((feature) => feature)) {
+      listingTags.push({
+        title: t("listing.tags.accessible"),
+        variant: "warn",
+        icon: <HandRaisedIcon />,
       })
     }
   }
