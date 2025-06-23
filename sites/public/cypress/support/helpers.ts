@@ -1,7 +1,7 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 import { Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
-export const listingsUrl = "http://localhost:3100/listings?limit=all"
+export const listingsUrl = "http://127.0.0.1:3100/listings?limit=all"
 
 type GetIncomeReturn = {
   monthlyMin: number
