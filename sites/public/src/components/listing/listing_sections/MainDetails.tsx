@@ -112,10 +112,19 @@ export const MainDetails = ({
   const enableIsVerified = jurisdiction.featureFlags.find(
     (flag) => flag.name === FeatureFlagEnum.enableIsVerified
   )?.active
+  const enableAccessibilityFeatures = jurisdiction.featureFlags.find(
+    (flag) => flag.name === FeatureFlagEnum.enableAccessibilityFeatures
+  )?.active
 
   const googleMapsHref =
     "https://www.google.com/maps/place/" + oneLineAddress(listing.listingsBuildingAddress)
-  const listingTags = getListingTags(listing, true, !showHomeType, enableIsVerified)
+  const listingTags = getListingTags(
+    listing,
+    true,
+    !showHomeType,
+    !enableAccessibilityFeatures,
+    enableIsVerified
+  )
   return (
     <div>
       <ImageCard

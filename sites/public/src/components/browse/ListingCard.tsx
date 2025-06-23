@@ -38,8 +38,17 @@ export const ListingCard = ({
   const enableIsVerified = jurisdiction.featureFlags.find(
     (flag) => flag.name === FeatureFlagEnum.enableIsVerified
   )?.active
+  const enableAccessibilityFeatures = jurisdiction.featureFlags.find(
+    (flag) => flag.name === FeatureFlagEnum.enableAccessibilityFeatures
+  )?.active
   const imageUrl = imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize))[0]
-  const listingTags = getListingTags(listing, true, !showHomeType, enableIsVerified)
+  const listingTags = getListingTags(
+    listing,
+    true,
+    !showHomeType,
+    !enableAccessibilityFeatures,
+    enableIsVerified
+  )
   const status = getListingApplicationStatus(listing, true, true)
   const actions = []
 
