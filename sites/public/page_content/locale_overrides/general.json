@@ -18,10 +18,6 @@
   "resources.immediateHousingSubtitle": "If you're fleeing domestic violence, sexual assault or human trafficking and in immediate danger, call 911.",
   "resources.immediateHousingTitle": "Immediate housing assistance",
   "resources.mockCardDescription": "Lorem ipsum dolor sit amet consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-  "resources.contactTitle": "Contact",
-  "resources.contactDescription": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-  "resources.contactInfo": "Bloomington's Housing & Community Development Department",
-  "resources.contactEmail": "bloomington@housing.org",
   "listings.showAll": "Show all listings",
   "resources.mockCardTitle": "Lorem Ipsum",
   "t.formSubmitted": "Submitting form, wait"
