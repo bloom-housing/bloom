@@ -81,10 +81,12 @@ describe("<ListingBrowse>", () => {
       })
     ).toBeInTheDocument()
     expect(
-      screen.getByText(/try removing some of your filters or show all listing/i)
+      screen.getByText(
+        /try removing some of your filters or view other affordable housing resources/i
+      )
     ).toBeInTheDocument()
 
-    const showAllButton = screen.getByRole("button", { name: /^show all listings$/i })
+    const showAllButton = screen.getByRole("button", { name: /^view housing resources$/i })
     expect(showAllButton).toBeInTheDocument()
 
     await userEvent.click(showAllButton)
@@ -112,10 +114,12 @@ describe("<ListingBrowse>", () => {
       })
     ).toBeInTheDocument()
     expect(
-      screen.getByText(/try removing some of your filters or show all listings/i)
+      screen.getByText(
+        /try removing some of your filters or view other affordable housing resources/i
+      )
     ).toBeInTheDocument()
 
-    const showAllButton = screen.getByRole("button", { name: /^show all listings$/i })
+    const showAllButton = screen.getByRole("button", { name: /^view housing resources$/i })
     expect(showAllButton).toBeInTheDocument()
 
     await userEvent.click(showAllButton)
