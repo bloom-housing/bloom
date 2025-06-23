@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useMemo } from "react"
 import {
   FeatureFlagEnum,
   Jurisdiction,
@@ -38,6 +38,11 @@ export const ListingCard = ({
   const enableIsVerified = jurisdiction.featureFlags.find(
     (flag) => flag.name === FeatureFlagEnum.enableIsVerified
   )?.active
+
+  const enableUnitGroups = jurisdiction.featureFlags.find(
+    (flag) => flag.name === FeatureFlagEnum.enableUnitGroups
+  )?.active
+
   const imageUrl = imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize))[0]
   const listingTags = getListingTags(listing, true, !showHomeType, enableIsVerified)
   const status = getListingApplicationStatus(listing, true, true)
@@ -54,6 +59,48 @@ export const ListingCard = ({
       </FavoriteButton>
     )
   }
+
+  const unitsPreviewTable = useMemo(() => {
+    const hasData = listing.unitGroups.length || listing.units.length
+
+    if (!hasData) {
+      return
+    }
+
+    if (enableUnitGroups && listing.unitGroups?.length > 0) {
+      return (
+        <StackedTable
+          headers={{
+            unitType: "t.unitType",
+            rent: "t.rent",
+            availability: "t.availability",
+          }}
+          stackedData={getListingStackedGroupTableData(
+            listing.unitGroupsSummarized,
+            listing.marketingType === MarketingTypeEnum.comingSoon
+          )}
+        />
+      )
+    } else {
+      return (
+        <StackedTable
+          headers={{
+            unitType: "t.unitType",
+            minimumIncome: "t.minimumIncome",
+            rent: "t.rent",
+          }}
+          stackedData={getListingStackedTableData(listing.unitsSummarized)}
+        />
+      )
+    }
+  }, [
+    listing.units,
+    listing.unitGroups,
+    listing.marketingType,
+    listing.unitGroupsSummarized,
+    listing.unitsSummarized,
+    enableUnitGroups,
+  ])
 
   return (
     <li className={styles["list-item"]}>
@@ -94,30 +141,8 @@ export const ListingCard = ({
                 </div>
               )}
               <div className={`${styles["unit-table"]} styled-stacked-table`}>
-                {listing.unitGroups?.length > 0 ? (
-                  <StackedTable
-                    headers={{
-                      unitType: "t.unitType",
-                      rent: "t.rent",
-                      availability: "t.availability",
-                    }}
-                    stackedData={getListingStackedGroupTableData(
-                      listing.unitGroupsSummarized,
-                      listing.marketingType === MarketingTypeEnum.comingSoon
-                    )}
-                  />
-                ) : (
-                  <StackedTable
-                    headers={{
-                      unitType: "t.unitType",
-                      minimumIncome: "t.minimumIncome",
-                      rent: "t.rent",
-                    }}
-                    stackedData={getListingStackedTableData(listing.unitsSummarized)}
-                  />
-                )}
+                {unitsPreviewTable}
               </div>
-
               {actions.length > 0 && (
                 <div className={styles["action-container"]}>{actions.map((action) => action)}</div>
               )}
