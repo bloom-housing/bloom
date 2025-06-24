@@ -28,18 +28,23 @@ const getWaitlistSizeFields = (
   waitlistMaxSize?: number,
   showAdditionalWaitlistFields?: boolean
 ) => {
-  if (!waitlistOpenSpots && !waitlistCurrentSize && !waitlistMaxSize) return null
+  if (
+    waitlistOpenSpots == undefined &&
+    waitlistCurrentSize == undefined &&
+    waitlistMaxSize == undefined
+  )
+    return null
   return (
     <div className={styles["waitlist-size-container"]}>
-      {waitlistCurrentSize && showAdditionalWaitlistFields && (
+      {waitlistCurrentSize !== undefined && showAdditionalWaitlistFields && (
         <p>{`${waitlistCurrentSize} ${t("listings.waitlist.currentSize").toLowerCase()}`}</p>
       )}
-      {waitlistOpenSpots && (
+      {waitlistOpenSpots !== undefined && (
         <p className={`${showAdditionalWaitlistFields ? styles["bold-text"] : ""}`}>
           {`${waitlistOpenSpots} ${t("listings.waitlist.openSlots").toLowerCase()}`}
         </p>
       )}
-      {waitlistMaxSize && showAdditionalWaitlistFields && (
+      {waitlistMaxSize !== undefined && showAdditionalWaitlistFields && (
         <p>{`${waitlistMaxSize} ${t("listings.waitlist.finalSize").toLowerCase()}`}</p>
       )}
     </div>
@@ -58,7 +63,9 @@ export const getAvailabilitySubheading = (
   if (
     isWaitlistOpen &&
     !enableUnitGroups &&
-    (waitlistOpenSpots || waitlistCurrentSize || waitlistMaxSize)
+    (waitlistOpenSpots !== undefined ||
+      waitlistCurrentSize !== undefined ||
+      waitlistMaxSize !== undefined)
   ) {
     return getWaitlistSizeFields(
       waitlistCurrentSize,
