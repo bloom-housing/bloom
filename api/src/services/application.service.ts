@@ -426,7 +426,9 @@ export class ApplicationService {
         if (params.filterType === ApplicationsFilterEnum.open)
           displayApplications.push(app);
       } else if (
-        app.listings?.lotteryStatus === LotteryStatusEnum.publishedToPublic &&
+        // NOTE: Allowing expired lotteries to show temporarily
+        (app.listings?.lotteryStatus === LotteryStatusEnum.publishedToPublic ||
+          app.listings?.lotteryStatus === LotteryStatusEnum.expired) &&
         params.includeLotteryApps
       ) {
         lottery++;
