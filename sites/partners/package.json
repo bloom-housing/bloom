@@ -32,6 +32,8 @@
     "@bloom-housing/shared-helpers": "^7.7.1",
     "@bloom-housing/ui-components": "12.7.7",
     "@bloom-housing/ui-seeds": "2.0.0",
+    "@google/genai": "^1.5.1",
+    "@google/generative-ai": "^0.24.1",
     "@heroicons/react": "^2.2.0",
     "@mapbox/mapbox-sdk": "^0.13.0",
     "@tiptap/core": "^2.24.0",
@@ -55,6 +57,8 @@
     "react-dom": "18.2.0",
     "react-google-recaptcha-v3": "^1.10.1",
     "react-hook-form": "^6.15.5",
+    "react-markdown": "^10.1.0",
+    "recharts": "^2.15.3",
     "swr": "^2.1.2",
     "tailwindcss": "2.2.10"
   },
