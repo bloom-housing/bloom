@@ -156,7 +156,13 @@ export const stagingSeed = async (
         FeatureFlagEnum.enableUtilitiesIncluded,
         FeatureFlagEnum.enableWaitlistAdditionalFields,
       ],
-      languages: Object.values(LanguagesEnum),
+      languages: [
+        LanguagesEnum.en,
+        LanguagesEnum.es,
+        LanguagesEnum.zh,
+        LanguagesEnum.vi,
+        LanguagesEnum.tl,
+      ],
     }),
   });
   // jurisdiction with unit groups enabled
