@@ -13,9 +13,6 @@ COPY . .
 RUN yarn prisma generate
 RUN yarn build
 
-COPY entrypoint.sh .
-RUN chmod +x entrypoint.sh
-
 EXPOSE 3100
-ENTRYPOINT ["./entrypoint.sh"]
+ENTRYPOINT ["yarn", "start:prod"]
 
