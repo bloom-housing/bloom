@@ -87,31 +87,7 @@ export const getListingTags = (
     }
   }
 
-  if (!hideAccessibilityTag) {
-    if (listing.listingFeatures.visual && listing.listingFeatures.hearing) {
-      listingTags.push({
-        title: t("listing.tags.visionAndHearingUnits"),
-        variant: "secondary",
-      })
-    } else if (listing.listingFeatures.hearing) {
-      listingTags.push({
-        title: t("listing.tags.hearingUnits"),
-        variant: "secondary",
-      })
-    } else if (listing.listingFeatures.visual) {
-      listingTags.push({
-        title: t("listing.tags.visionUnits"),
-        variant: "secondary",
-      })
-    }
-
-    if (listing.listingFeatures.mobility) {
-      listingTags.push({
-        title: t("listing.tags.mobilityUnits"),
-        variant: "secondary",
-      })
-    }
-
+  if (!hideAccessibilityTag && listing.listingFeatures) {
     if (Object.values(listing.listingFeatures).some((feature) => feature)) {
       listingTags.push({
         title: t("listing.tags.accessible"),
@@ -136,10 +112,19 @@ export const MainDetails = ({
   const enableIsVerified = jurisdiction.featureFlags.find(
     (flag) => flag.name === FeatureFlagEnum.enableIsVerified
   )?.active
+  const enableAccessibilityFeatures = jurisdiction.featureFlags.find(
+    (flag) => flag.name === FeatureFlagEnum.enableAccessibilityFeatures
+  )?.active
 
   const googleMapsHref =
     "https://www.google.com/maps/place/" + oneLineAddress(listing.listingsBuildingAddress)
-  const listingTags = getListingTags(listing, true, !showHomeType, enableIsVerified)
+  const listingTags = getListingTags(
+    listing,
+    true,
+    !showHomeType,
+    !enableAccessibilityFeatures,
+    enableIsVerified
+  )
   return (
     <div>
       <ImageCard
