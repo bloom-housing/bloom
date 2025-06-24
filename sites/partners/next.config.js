@@ -52,6 +52,7 @@ module.exports = withBundleAnalyzer(
       applicationExportAsSpreadsheet: process.env.APPLICATION_EXPORT_AS_SPREADSHEET === "TRUE",
       useSecureDownloadPathway: process.env.USE_SECURE_DOWNLOAD_PATHWAY === "TRUE",
       limitClosedListingActions: process.env.LIMIT_CLOSED_LISTING_ACTIONS === "TRUE",
+      geminiAPIKey: process.env.GEMINI_KEY,
     },
     i18n: {
       locales: process.env.LANGUAGES ? process.env.LANGUAGES.split(",") : ["en"],

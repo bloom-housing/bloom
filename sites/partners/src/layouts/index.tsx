@@ -23,6 +23,12 @@ const Layout = (props) => {
       title: t("nav.listings"),
       href: "/",
     })
+
+    // Add Data Explorer menu item
+    menuLinks.push({
+      title: "Data Explorer",
+      href: "/explore",
+    })
   }
   if (profile?.userRoles?.isAdmin || profile?.userRoles?.isJurisdictionalAdmin) {
     menuLinks.push({
