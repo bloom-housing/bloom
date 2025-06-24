@@ -33,10 +33,11 @@ const ApplicationAda = () => {
   >({
     defaultValues: {
       none:
-        application.accessibility.mobility === false &&
-        application.accessibility.vision === false &&
-        application.accessibility.hearing === false &&
-        !application.accessibility.other,
+        (application.accessibility.mobility === false &&
+          application.accessibility.vision === false &&
+          application.accessibility.hearing === false &&
+          !enableAdaOtherOption) ||
+        (!enableAdaOtherOption && application.accessibility.other),
     },
     shouldFocusError: false,
   })
@@ -49,7 +50,7 @@ const ApplicationAda = () => {
         mobility: !!data["app-accessibility-mobility"],
         vision: !!data["app-accessibility-vision"],
         hearing: !!data["app-accessibility-hearing"],
-        other: !!data["app-accessibility-other"],
+        other: enableAdaOtherOption ? !!data["app-accessibility-other"] : null,
       },
     })
     conductor.sync()
