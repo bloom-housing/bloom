@@ -136,7 +136,7 @@ describe("when unit groups enabled", () => {
 
     const { container } = render(<div>{result}</div>)
     expect(container.textContent).not.toContain("open waitlist slots")
-    expect(container.textContent).toContain("10 units")
+    expect(container.textContent).not.toContain("units")
   })
 
   describe("when units are available", () => {
