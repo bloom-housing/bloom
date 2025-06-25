@@ -2261,28 +2261,6 @@ export class ScriptRunnerService {
     })
   }
   /**
-   * A script that pulls data from one source into the current db
-   */
-  dataTransfer(
-    params: {
-      /** requestBody */
-      body?: DataTransferDTO
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<SuccessDTO> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/scriptRunner/dataTransfer"
-
-      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
    * A script that resends application confirmations to applicants of a listing
    */
   bulkApplicationResend(
@@ -2472,6 +2450,22 @@ export class ScriptRunnerService {
   addFeatureFlags(options: IRequestOptions = {}): Promise<SuccessDTO> {
     return new Promise((resolve, reject) => {
       let url = basePath + "/scriptRunner/addFeatureFlags"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = null
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * A script that moves preferences and programs to multiselect questions in Detroit db
+   */
+  migrateDetroitToMultiselectQuestions(options: IRequestOptions = {}): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/scriptRunner/migrateDetroitToMultiselectQuestions"
 
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
 
@@ -2946,6 +2940,11 @@ export interface ListingsQueryParams {
 
   /**  */
   search?: string
+}
+
+export interface ListingFilterKeyDTO {
+  /**  */
+  value?: ListingFilterKeys
 }
 
 export interface ListingsRetrieveParams {
@@ -6751,11 +6750,6 @@ export interface MapLayer {
   jurisdictionId: string
 }
 
-export interface DataTransferDTO {
-  /**  */
-  connectionString: string
-}
-
 export interface BulkApplicationResendDTO {
   /**  */
   listingId: string
@@ -6909,11 +6903,12 @@ export enum EnumListingFilterParamsComparison {
   "NA" = "NA",
 }
 export enum ListingViews {
-  "fundamentals" = "fundamentals",
   "base" = "base",
-  "full" = "full",
-  "details" = "details",
   "csv" = "csv",
+  "details" = "details",
+  "full" = "full",
+  "fundamentals" = "fundamentals",
+  "name" = "name",
 }
 
 export enum ListingOrderByKeys {
@@ -6931,6 +6926,31 @@ export enum ListingOrderByKeys {
 export enum OrderByEnum {
   "asc" = "asc",
   "desc" = "desc",
+}
+
+export enum ListingFilterKeys {
+  "availabilities" = "availabilities",
+  "availability" = "availability",
+  "bathrooms" = "bathrooms",
+  "bedrooms" = "bedrooms",
+  "bedroomTypes" = "bedroomTypes",
+  "city" = "city",
+  "counties" = "counties",
+  "homeTypes" = "homeTypes",
+  "ids" = "ids",
+  "isVerified" = "isVerified",
+  "jurisdiction" = "jurisdiction",
+  "leasingAgent" = "leasingAgent",
+  "listingFeatures" = "listingFeatures",
+  "monthlyRent" = "monthlyRent",
+  "multiselectQuestions" = "multiselectQuestions",
+  "name" = "name",
+  "neighborhood" = "neighborhood",
+  "regions" = "regions",
+  "reservedCommunityTypes" = "reservedCommunityTypes",
+  "section8Acceptance" = "section8Acceptance",
+  "status" = "status",
+  "zipCode" = "zipCode",
 }
 
 export enum ApplicationAddressTypeEnum {
@@ -7105,13 +7125,16 @@ export enum UserRoleEnum {
 export enum FeatureFlagEnum {
   "disableCommonApplication" = "disableCommonApplication",
   "disableJurisdictionalAdmin" = "disableJurisdictionalAdmin",
+  "disableListingPreferences" = "disableListingPreferences",
   "enableAccessibilityFeatures" = "enableAccessibilityFeatures",
+  "enableAdditionalResources" = "enableAdditionalResources",
   "enableCompanyWebsite" = "enableCompanyWebsite",
   "enableGeocodingPreferences" = "enableGeocodingPreferences",
   "enableGeocodingRadiusMethod" = "enableGeocodingRadiusMethod",
   "enableHomeType" = "enableHomeType",
   "enableIsVerified" = "enableIsVerified",
   "enableListingFavoriting" = "enableListingFavoriting",
+  "enableListingFiltering" = "enableListingFiltering",
   "enableListingOpportunity" = "enableListingOpportunity",
   "enableListingsPagination" = "enableListingsPagination",
   "enableMarketingStatus" = "enableMarketingStatus",
@@ -7121,11 +7144,13 @@ export enum FeatureFlagEnum {
   "enableRegions" = "enableRegions",
   "enableSection8Question" = "enableSection8Question",
   "enableSingleUseCode" = "enableSingleUseCode",
+  "enableUnderConstructionHome" = "enableUnderConstructionHome",
   "enableUnitGroups" = "enableUnitGroups",
   "enableUtilitiesIncluded" = "enableUtilitiesIncluded",
   "example" = "example",
   "hideCloseListingButton" = "hideCloseListingButton",
   "swapCommunityTypeWithPrograms" = "swapCommunityTypeWithPrograms",
+  "enableWaitlistAdditionalFields" = "enableWaitlistAdditionalFields",
 }
 export enum EnumMultiselectQuestionFilterParamsComparison {
   "=" = "=",

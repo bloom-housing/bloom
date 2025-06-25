@@ -133,7 +133,7 @@ const getHeaderLinks = (
   profile: User,
   signOut: () => Promise<void>,
   addToast: (message: string, props: ToastProps) => void,
-  showFavorites: boolean
+  linksBehindFlags: Record<string, boolean>
 ) => {
   const headerLinks: HeaderLink[] = [
     {
@@ -155,11 +155,15 @@ const getHeaderLinks = (
           label: t("nav.myDashboard"),
           href: "/account/dashboard",
         },
-        {
-          label: t("account.myApplications"),
-          href: "/account/applications",
-        },
-        ...(showFavorites
+        ...(linksBehindFlags["applications"]
+          ? [
+              {
+                label: t("account.myApplications"),
+                href: "/account/applications",
+              },
+            ]
+          : []),
+        ...(linksBehindFlags["favorites"]
           ? [
               {
                 label: t("account.myFavorites"),
@@ -199,12 +203,12 @@ const Layout = (props) => {
   const router = useRouter()
 
   const [showFavorites, setShowFavorites] = useState(false)
+  const [showApplications, setShowApplications] = useState(true)
 
   useEffect(() => {
-    if (window.localStorage.getItem("bloom-show-favorites-menu-item") === "true") {
-      setShowFavorites(true)
-    }
-  }, [setShowFavorites])
+    setShowFavorites(window.localStorage.getItem("bloom-show-favorites-menu-item") === "true")
+    setShowApplications(window.localStorage.getItem("bloom-hide-applications-menu-item") !== "true")
+  }, [setShowFavorites, setShowApplications])
 
   const languages =
     router?.locales?.map((item) => ({
@@ -229,7 +233,10 @@ const Layout = (props) => {
                 active: t("config.routePrefix") === lang.prefix,
               }
             })}
-            links={getHeaderLinks(router, profile, signOut, addToast, showFavorites)}
+            links={getHeaderLinks(router, profile, signOut, addToast, {
+              applications: showApplications,
+              favorites: showFavorites,
+            })}
             titleLink={"/"}
             logo={
               <Icon size={"lg"}>

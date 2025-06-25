@@ -16,7 +16,7 @@ import {
   ReviewOrderTypeEnum,
   YesNoEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
+import { MessageContext } from "@bloom-housing/shared-helpers"
 import UnitForm from "../UnitForm"
 import { useFormContext, useWatch } from "react-hook-form"
 import { TempUnit, TempUnitGroup } from "../../../../lib/listings/formTypes"
@@ -48,24 +48,18 @@ const FormUnits = ({
   const [defaultUnit, setDefaultUnit] = useState<TempUnit | null>(null)
   const [defaultUnitGroup, setDefaultUnitGroup] = useState<TempUnitGroup | null>(null)
   const [homeTypeEnabled, setHomeTypeEnabled] = useState(false)
-  const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
 
   const formMethods = useFormContext()
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, errors, clearErrors, getValues, control, setValue } = formMethods
   const listing = getValues()
 
-  const enableSection8Question = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableSection8Question,
-    listing?.jurisdictions?.id,
-    !listing.jurisdictions?.id
-  )
+  const enableSection8Question =
+    featureFlags?.find((flag) => flag.name === FeatureFlagEnum.enableSection8Question)?.active ||
+    false
 
-  const enableUnitGroups = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableUnitGroups,
-    listing?.jurisdictions?.id,
-    !listing.jurisdictions?.id
-  )
+  const enableUnitGroups =
+    featureFlags?.find((flag) => flag.name === FeatureFlagEnum.enableUnitGroups)?.active || false
 
   const listingAvailability = useWatch({
     control,
@@ -75,7 +69,7 @@ const FormUnits = ({
   const homeTypes = [
     "",
     ...Object.values(HomeTypeEnum).map((val) => {
-      return { value: val, label: t(`homeType.${val}`) }
+      return { value: val, label: t(`listings.homeType.${val}`) }
     }),
   ]
 
@@ -405,11 +399,16 @@ const FormUnits = ({
               variant={fieldHasError(errors?.units) ? "alert" : "primary-outlined"}
               size="sm"
               onClick={() => {
-                editUnit(units.length + 1)
+                if (enableUnitGroups) {
+                  editUnitGroup(unitGroups.length + 1)
+                } else {
+                  editUnit(units.length + 1)
+                }
+
                 clearErrors("units")
               }}
             >
-              {t(enableUnitGroups ? "listings.unitGroupd.add" : "listings.unit.add")}
+              {t(enableUnitGroups ? "listings.unitGroup.add" : "listings.unit.add")}
             </Button>
           </Grid.Cell>
         </Grid.Row>
@@ -455,7 +454,7 @@ const FormUnits = ({
         ariaLabelledBy="units-drawer-header"
       >
         <Drawer.Header id="units-drawer-header">
-          {t(enableUnitGroups ? "listings.unitGroupd.add" : "listings.unit.add")}
+          {t(enableUnitGroups ? "listings.unitGroup.add" : "listings.unit.add")}
           <Tag
             variant={
               units.some((unit) => unit.tempId === defaultUnit?.tempId)
@@ -474,6 +473,7 @@ const FormUnits = ({
               saveUnitGroup(unitGroup)
             }}
             onClose={() => {
+              setDefaultUnitGroup(null)
               setUnitDrawerOpen(false)
             }}
             defaultUnitGroup={defaultUnitGroup}

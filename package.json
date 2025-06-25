@@ -29,12 +29,12 @@
     "dev:app:public": "wait-on \"http-get://localhost:${PORT:-3100}/\" && cd sites/public && yarn dev",
     "test:app:public": "wait-on \"http-get://localhost:${PORT:-3100}/\" && cd sites/public && yarn test",
     "test:app:public:headless": "wait-on \"http-get://localhost:${PORT:-3100}/\" && cd sites/public && yarn test:headless",
-    "test:app:public:unit": "cd sites/public && yarn test:unit",
+    "test:app:public:unit": "cd sites/public && yarn test:unit:coverage",
     "build:app:public": "cd sites/public && yarn build",
     "dev:app:partners": "wait-on \"http-get://localhost:${PORT:-3100}/\" && cd sites/partners && yarn dev",
     "test:app:partners": "wait-on \"http-get://localhost:${PORT:-3100}/\" && cd sites/partners && yarn test",
     "test:app:partners:headless": "wait-on \"http-get://localhost:${PORT:-3100}/\" && cd sites/partners && yarn test:headless",
-    "test:app:partners:unit": "cd sites/partners && yarn test:unit",
+    "test:app:partners:unit": "cd sites/partners && yarn test:unit:coverage",
     "build:app:partners": "cd sites/partners && yarn build",
     "dev:backend": "cd api && yarn dev",
     "dev:all": "concurrently --names \" BACKEND_API,APP_PUBLIC,APP_PARTNERS\" --prefix \"{name}\" \"yarn dev:backend\" \"yarn dev:app:public\" \"yarn dev:app:partners\"",
@@ -51,7 +51,8 @@
     "test:backend:new:dbsetup": "cd api && yarn db:migration:run",
     "test:backend:new:dbsetup:withseed": "cd api && yarn db:migration:run && yarn db:seed:staging --jurisdictionName Bloomington",
     "backend:new:install": "cd api && yarn install",
-    "prettier": "prettier --write \"./**/*.{js,jsx,ts,tsx,json}\""
+    "prettier": "prettier --write \"./**/*.{js,jsx,ts,tsx,json}\"",
+    "ui-load-test": "ruby ./utilities/ui-load-tester.rb"
   },
   "devDependencies": {
     "@commitlint/cli": "^13.1.0",

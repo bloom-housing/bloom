@@ -34,120 +34,9 @@ interface Methods {
 const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, setValue, watch, errors, getValues } = useFormContext()
-  const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
+  const { doJurisdictionsHaveFeatureFlagOn, getJurisdictionLanguages } = useContext(AuthContext)
 
-  // watch fields
-  const jurisdiction: string = watch("jurisdictions.id")
-  const digitalApplicationChoice = watch("digitalApplicationChoice")
-  const commonDigitalApplicationChoice = watch("commonDigitalApplicationChoice")
-  const paperApplicationChoice = watch("paperApplicationChoice")
-  const referralOpportunityChoice = watch("referralOpportunityChoice")
-
-  /*
-    Set state for methods, drawer, upload progress, and more
-  */
-  const [methods, setMethods] = useState<Methods>({
-    digital: null,
-    paper: null,
-    referral: null,
-  })
-  const [selectedLanguage, setSelectedLanguage] = useState(LanguagesEnum.en)
-  const [drawerState, setDrawerState] = useState(false)
-  const [progressValue, setProgressValue] = useState(0)
-  const [cloudinaryData, setCloudinaryData] = useState({
-    id: "",
-    url: "",
-  })
-  const resetDrawerState = () => {
-    setProgressValue(0)
-    setCloudinaryData({
-      id: "",
-      url: "",
-    })
-    setDrawerState(false)
-  }
-
-  const disableCommonApplication = jurisdiction
-    ? doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.disableCommonApplication, jurisdiction)
-    : false
-
-  const yesNoRadioOptions = [
-    {
-      label: t("t.yes"),
-      value: YesNoEnum.yes,
-    },
-    {
-      label: t("t.no"),
-      value: YesNoEnum.no,
-    },
-  ]
-
-  const paperApplicationsTableHeaders = {
-    fileName: "t.fileName",
-    language: "t.language",
-    actions: "",
-  }
-
-  const savePaperApplication = () => {
-    const paperApplications = methods.paper?.paperApplications ?? []
-    paperApplications.push({
-      assets: {
-        fileId: cloudinaryData.id,
-        label: selectedLanguage,
-      },
-      language: selectedLanguage,
-    })
-    setMethods({
-      ...methods,
-      paper: {
-        ...methods.paper,
-        paperApplications,
-      },
-    })
-  }
-
-  /*
-    Pass the file for the dropzone callback along to the uploader
-  */
-  const pdfUploader = async (file: File) => {
-    void (await cloudinaryFileUploader({ file, setCloudinaryData, setProgressValue }))
-  }
-
-  /*
-    Show a preview of the uploaded file within the drawer
-  */
-  const previewPaperApplicationsTableRows: StandardTableData = []
-  if (cloudinaryData.url != "") {
-    previewPaperApplicationsTableRows.push({
-      fileName: { content: `${cloudinaryData.id.split("/").slice(-1).join()}.pdf` },
-      language: { content: t(`languages.${selectedLanguage}`) },
-      actions: {
-        content: (
-          <Button
-            type="button"
-            size="sm"
-            className="font-semibold text-alert"
-            onClick={() => {
-              setCloudinaryData({
-                id: "",
-                url: "",
-              })
-              setProgressValue(0)
-            }}
-            variant="text"
-          >
-            {t("t.delete")}
-          </Button>
-        ),
-      },
-    })
-  }
-
-  /**
-   * set initial methods
-   */
-  useEffect(() => {
-    // set methods here
+  const getDefaultMethods = () => {
     const temp: Methods = {
       digital: null,
       paper: null,
@@ -174,9 +63,114 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
           break
       }
     })
-    setMethods(temp)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+    return temp
+  }
+
+  // watch fields
+  const jurisdiction: string = watch("jurisdictions.id")
+  const digitalApplicationChoice = watch("digitalApplicationChoice")
+  const commonDigitalApplicationChoice = watch("commonDigitalApplicationChoice")
+  const paperApplicationChoice = watch("paperApplicationChoice")
+  const referralOpportunityChoice = watch("referralOpportunityChoice")
+
+  /*
+    Set state for methods, drawer, upload progress, and more
+  */
+  const [methods, setMethods] = useState<Methods>(getDefaultMethods())
+  const [selectedLanguage, setSelectedLanguage] = useState("")
+  const [drawerState, setDrawerState] = useState(false)
+  const [progressValue, setProgressValue] = useState(0)
+  const [cloudinaryData, setCloudinaryData] = useState({
+    id: "",
+    url: "",
+  })
+  const resetDrawerState = () => {
+    setProgressValue(0)
+    setCloudinaryData({
+      id: "",
+      url: "",
+    })
+    setDrawerState(false)
+  }
+
+  const disableCommonApplication = jurisdiction
+    ? doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.disableCommonApplication, jurisdiction)
+    : false
+
+  const availableJurisdictionLanguages = jurisdiction ? getJurisdictionLanguages(jurisdiction) : []
+
+  const yesNoRadioOptions = [
+    {
+      label: t("t.yes"),
+      value: YesNoEnum.yes,
+    },
+    {
+      label: t("t.no"),
+      value: YesNoEnum.no,
+    },
+  ]
+
+  const paperApplicationsTableHeaders = {
+    fileName: "t.fileName",
+    language: "t.language",
+    actions: "",
+  }
+
+  const savePaperApplication = () => {
+    const paperApplications = methods.paper?.paperApplications ?? []
+    paperApplications.push({
+      assets: {
+        fileId: cloudinaryData.id,
+        label: selectedLanguage,
+      },
+      language: selectedLanguage as LanguagesEnum,
+    })
+    setMethods({
+      ...methods,
+      paper: {
+        ...methods.paper,
+        paperApplications,
+      },
+    })
+  }
+
+  /*
+    Pass the file for the dropzone callback along to the uploader
+  */
+  const pdfUploader = async (file: File) => {
+    void (await cloudinaryFileUploader({ file, setCloudinaryData, setProgressValue }))
+  }
+
+  /*
+    Show a preview of the uploaded file within the drawer
+  */
+
+  const previewPaperApplicationsTableRows: StandardTableData = []
+  if (cloudinaryData.url != "") {
+    previewPaperApplicationsTableRows.push({
+      fileName: { content: `${cloudinaryData.id.split("/").slice(-1).join()}.pdf` },
+      language: { content: selectedLanguage ? t(`languages.${selectedLanguage}`) : "" },
+      actions: {
+        content: (
+          <Button
+            type="button"
+            size="sm"
+            className="font-semibold text-alert"
+            onClick={() => {
+              setCloudinaryData({
+                id: "",
+                url: "",
+              })
+              setProgressValue(0)
+            }}
+            variant="text"
+          >
+            {t("t.delete")}
+          </Button>
+        ),
+      },
+    })
+  }
 
   /**
    * set application methods value when any of the methods change
@@ -222,7 +216,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                 {
                   ...yesNoRadioOptions[0],
                   id: "digitalApplicationChoiceYes",
-                  defaultChecked: listing?.digitalApplication === true ?? null,
+                  defaultChecked: listing?.digitalApplication === true,
                   inputProps: {
                     onChange: () => {
                       setMethods({
@@ -240,7 +234,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                 {
                   ...yesNoRadioOptions[1],
                   id: "digitalApplicationChoiceNo",
-                  defaultChecked: listing?.digitalApplication === false ?? null,
+                  defaultChecked: listing?.digitalApplication === false,
                   inputProps: {
                     onChange: () => {
                       setMethods({
@@ -265,8 +259,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                   {
                     ...yesNoRadioOptions[0],
                     id: "commonDigitalApplicationChoiceYes",
-                    defaultChecked:
-                      methods?.digital?.type === ApplicationMethodsTypeEnum.Internal ?? null,
+                    defaultChecked: methods.digital.type === ApplicationMethodsTypeEnum.Internal,
                     inputProps: {
                       onChange: () => {
                         setMethods({
@@ -283,7 +276,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                     ...yesNoRadioOptions[1],
                     id: "commonDigitalApplicationChoiceNo",
                     defaultChecked:
-                      methods?.digital?.type === ApplicationMethodsTypeEnum.ExternalLink ?? null,
+                      methods.digital.type === ApplicationMethodsTypeEnum.ExternalLink,
                     inputProps: {
                       onChange: () => {
                         setMethods({
@@ -321,7 +314,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                         ...methods,
                         digital: {
                           ...methods.digital,
-                          externalReference: e.target.value,
+                          externalReference: e.target?.value,
                         },
                       })
                     },
@@ -355,7 +348,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                 {
                   ...yesNoRadioOptions[0],
                   id: "paperApplicationYes",
-                  defaultChecked: listing?.paperApplication === true ?? null,
+                  defaultChecked: listing?.paperApplication === true,
                   inputProps: {
                     onChange: () => {
                       setMethods({
@@ -371,7 +364,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                 {
                   ...yesNoRadioOptions[1],
                   id: "paperApplicationNo",
-                  defaultChecked: listing?.paperApplication === false ?? null,
+                  defaultChecked: listing?.paperApplication === false,
                   inputProps: {
                     onChange: () => {
                       setMethods({
@@ -394,7 +387,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                   headers={paperApplicationsTableHeaders}
                   data={methods.paper.paperApplications.map((item) => ({
                     fileName: { content: `${item.assets.fileId.split("/").slice(-1).join()}.pdf` },
-                    language: { content: t(`languages.${item.language}`) },
+                    language: { content: item.language ? t(`languages.${item.language}`) : "" },
                     actions: {
                       content: (
                         <div className="flex">
@@ -430,8 +423,6 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                 variant="primary-outlined"
                 size="sm"
                 onClick={() => {
-                  // default the application to English:
-                  setSelectedLanguage(LanguagesEnum.en)
                   setDrawerState(true)
                 }}
               >
@@ -465,7 +456,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                 {
                   ...yesNoRadioOptions[0],
                   id: "referralOpportunityYes",
-                  defaultChecked: listing?.referralOpportunity === true ?? null,
+                  defaultChecked: listing?.referralOpportunity === true,
                   inputProps: {
                     onChange: () => {
                       setMethods({
@@ -481,7 +472,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                 {
                   ...yesNoRadioOptions[1],
                   id: "referralOpportunityNo",
-                  defaultChecked: listing?.referralOpportunity === false ?? null,
+                  defaultChecked: listing?.referralOpportunity === false,
                   inputProps: {
                     onChange: () => {
                       setMethods({
@@ -513,7 +504,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                         ...methods,
                         referral: {
                           ...methods.referral,
-                          phoneNumber: e.target.value,
+                          phoneNumber: e,
                         },
                       })
                     }}
@@ -538,7 +529,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                       ...methods,
                       referral: {
                         ...methods.referral,
-                        externalReference: e.target.value,
+                        externalReference: e.target?.value,
                       },
                     })
                   },
@@ -567,14 +558,18 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                   </p>
                   <Select
                     name="paperApplicationLanguage"
-                    options={Object.values(LanguagesEnum).map((item) => ({
-                      label: t(`languages.${item}`),
-                      value: item,
-                    }))}
+                    options={[
+                      ...availableJurisdictionLanguages.map((item) => ({
+                        label: t(`languages.${item}`),
+                        value: item,
+                      })),
+                    ]}
+                    placeholder={t("t.selectLanguage")}
                     defaultValue={selectedLanguage}
+                    validation={{ required: true }}
                     inputProps={{
                       onChange: (e) => {
-                        setSelectedLanguage(e.target.value)
+                        setSelectedLanguage(e.target?.value)
                       },
                     }}
                   />

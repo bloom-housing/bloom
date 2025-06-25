@@ -137,7 +137,7 @@ const DetailUnits = ({ setUnitDrawer }: DetailUnitsProps) => {
       {enableHomeType && (
         <Grid.Row>
           <FieldValue id="homeType" label={t("listings.homeType")}>
-            {listing.homeType ? t(`homeType.${listing.homeType}`) : t("t.none")}
+            {listing.homeType ? t(`listings.homeType.${listing.homeType}`) : t("t.none")}
           </FieldValue>
         </Grid.Row>
       )}

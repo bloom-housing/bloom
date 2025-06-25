@@ -1,4 +1,5 @@
 {
+  "t.selectLanguage": "Select language",
   "actions.copy": "Copy",
   "application.add.addHouseholdMember": "Add Household Member",
   "application.add.applicationAddError": "You’ll need to resolve any errors before moving on.",
@@ -460,7 +461,7 @@
   "listings.unit.unitTypes": "Unit Types",
   "listings.unit.groupVacancies": "Unit Group Vacancies",
   "listings.unit.waitlistStatus": "Waitlist Status",
-  "listings.unitGroupd.add": "Add Unit Group",
+  "listings.unitGroup.add": "Add Unit Group",
   "listings.unitGroup.delete": "Delete this Unit Group",
   "listings.unitGroup.deleteConf": "Do you really want to delete this unit group?",
   "listings.unitTypesOrIndividual": "Do you want to show unit types or individual units?",
@@ -591,6 +592,7 @@
   "t.updated": "Updated",
   "t.url": "URL",
   "t.view": "View",
+  "t.recommended": "Recommended",
   "users.addPassword": "Add a Password",
   "users.addUser": "Add User",
   "users.administrator": "Administrator",
