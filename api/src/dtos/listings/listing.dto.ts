@@ -420,9 +420,7 @@ class Listing extends AbstractDTO {
   managementWebsite?: string;
 
   @Expose()
-  @ValidateListingPublish('name', {
-    groups: [ValidationsGroupsEnum.default],
-  })
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(256, { groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
@@ -757,9 +755,7 @@ class Listing extends AbstractDTO {
   listingsBuildingSelectionCriteriaFile?: Asset;
 
   @Expose()
-  @ValidateListingPublish('jurisdictions', {
-    groups: [ValidationsGroupsEnum.default],
-  })
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => IdDTO)
   @ApiProperty({ type: IdDTO })

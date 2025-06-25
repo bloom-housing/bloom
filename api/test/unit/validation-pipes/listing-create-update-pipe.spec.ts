@@ -166,17 +166,15 @@ describe('ListingCreateUpdateValidationPipe', () => {
 
       const expectedDefaultFields = [
         'listingsBuildingAddress',
-        'assets',
+        'name',
         'developer',
-        'digitalApplication',
         'listingImages',
         'leasingAgentEmail',
         'leasingAgentName',
         'leasingAgentPhone',
-        'name',
-        'paperApplication',
-        'referralOpportunity',
-        'rentalAssistance',
+        'jurisdictions',
+        'units',
+        'unitGroups',
       ];
 
       const expectedTransformedValue = {
@@ -210,17 +208,15 @@ describe('ListingCreateUpdateValidationPipe', () => {
 
       const expectedDefaultFields = [
         'listingsBuildingAddress',
-        'assets',
+        'name',
         'developer',
-        'digitalApplication',
         'listingImages',
         'leasingAgentEmail',
         'leasingAgentName',
         'leasingAgentPhone',
-        'name',
-        'paperApplication',
-        'referralOpportunity',
-        'rentalAssistance',
+        'jurisdictions',
+        'units',
+        'unitGroups',
       ];
 
       const expectedTransformedValue = {
@@ -252,17 +248,15 @@ describe('ListingCreateUpdateValidationPipe', () => {
 
       const expectedDefaultFields = [
         'listingsBuildingAddress',
-        'assets',
+        'name',
         'developer',
-        'digitalApplication',
         'listingImages',
         'leasingAgentEmail',
         'leasingAgentName',
         'leasingAgentPhone',
-        'name',
-        'paperApplication',
-        'referralOpportunity',
-        'rentalAssistance',
+        'jurisdictions',
+        'units',
+        'unitGroups',
       ];
 
       const expectedTransformedValue = {

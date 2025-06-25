@@ -7136,7 +7136,7 @@ export enum FeatureFlagEnum {
   "enableListingFavoriting" = "enableListingFavoriting",
   "enableListingFiltering" = "enableListingFiltering",
   "enableListingOpportunity" = "enableListingOpportunity",
-  "enableListingsPagination" = "enableListingsPagination",
+  "enableListingPagination" = "enableListingPagination",
   "enableMarketingStatus" = "enableMarketingStatus",
   "enableNeighborhoodAmenities" = "enableNeighborhoodAmenities",
   "enablePartnerDemographics" = "enablePartnerDemographics",

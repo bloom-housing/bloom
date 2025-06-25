@@ -98,7 +98,7 @@ export const stagingSeed = async (
         FeatureFlagEnum.hideCloseListingButton,
         FeatureFlagEnum.swapCommunityTypeWithPrograms,
       ],
-      requiredListingFields: ['name', 'description'],
+      requiredListingFields: ['name', 'listingsBuildingAddress'],
     }),
   });
   // Basic configuration jurisdiction

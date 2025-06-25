@@ -578,6 +578,7 @@ export const constructFullListingData = async (
         },
       },
     ],
+    unitGroups: [],
     listingMultiselectQuestions: [
       {
         id: multiselectQuestion.id,

@@ -9,17 +9,15 @@ export class ListingCreateUpdateValidationPipe extends ValidationPipe {
   // Default required fields if jurisdiction doesn't specify any
   private defaultRequiredFields = [
     'listingsBuildingAddress',
-    'assets',
+    'name',
     'developer',
-    'digitalApplication',
     'listingImages',
     'leasingAgentEmail',
     'leasingAgentName',
     'leasingAgentPhone',
-    'name',
-    'paperApplication',
-    'referralOpportunity',
-    'rentalAssistance',
+    'jurisdictions',
+    'units',
+    'unitGroups',
   ];
 
   constructor(private prisma: PrismaService) {
