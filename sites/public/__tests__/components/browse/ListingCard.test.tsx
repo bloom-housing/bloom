@@ -18,7 +18,21 @@ describe("<ListingCard>", () => {
           status: ListingsStatusEnum.active,
           applicationDueDate: dayjs(new Date()).add(5, "days").toDate(),
         }}
-        jurisdiction={jurisdiction}
+        jurisdiction={{
+          ...jurisdiction,
+          featureFlags: [
+            ...jurisdiction.featureFlags,
+            {
+              id: "id_2",
+              name: FeatureFlagEnum.enableAccessibilityFeatures,
+              createdAt: new Date(),
+              updatedAt: new Date(),
+              active: true,
+              jurisdictions: [],
+              description: "",
+            },
+          ],
+        }}
       />
     )
     const tags = getListingTags(listing, true)
