@@ -1,7 +1,6 @@
 import React from "react"
 import RentalsFinder from "../../src/components/finder/RentalsFinder"
-import { render, screen } from "../testUtils"
-import { mockNextRouter, waitFor, within } from "../../../partners/__tests__/testUtils"
+import { render, screen, mockNextRouter, waitFor, within } from "../testUtils"
 import userEvent from "@testing-library/user-event"
 import { act } from "react-dom/test-utils"
 import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
