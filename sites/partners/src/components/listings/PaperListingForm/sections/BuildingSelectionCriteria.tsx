@@ -218,7 +218,11 @@ const BuildingSelectionCriteria = () => {
           <Grid.Cell>
             {(listingCriteriaURL && listingCriteriaURL != "") ||
             (listingCriteriaFile?.fileId && listingCriteriaFile.fileId != "") ? (
-              <MinimalTable headers={criteriaTableHeaders} data={criteriaTableRows}></MinimalTable>
+              <MinimalTable
+                headers={criteriaTableHeaders}
+                data={criteriaTableRows}
+                id="buildingSelectionCriteriaTable"
+              />
             ) : (
               <Button
                 id="addBuildingSelectionCriteriaButton"

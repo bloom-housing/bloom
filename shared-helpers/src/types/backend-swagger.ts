@@ -3089,6 +3089,9 @@ export interface ListingFilterParams {
   $comparison: EnumListingFilterParamsComparison
 
   /**  */
+  availabilities?: FilterAvailabilityEnum[]
+
+  /**  */
   availability?: FilterAvailabilityEnum
 
   /**  */
@@ -3096,6 +3099,9 @@ export interface ListingFilterParams {
 
   /**  */
   bedrooms?: number
+
+  /**  */
+  bedroomTypes?: []
 
   /**  */
   city?: string
@@ -3123,6 +3129,9 @@ export interface ListingFilterParams {
 
   /**  */
   monthlyRent?: number
+
+  /**  */
+  multiselectQuestions?: string[]
 
   /**  */
   name?: string
@@ -3190,6 +3199,11 @@ export interface ListingsQueryParams {
 
   /**  */
   search?: string
+}
+
+export interface ListingFilterKeyDTO {
+  /**  */
+  value?: ListingFilterKeys
 }
 
 export interface ListingsRetrieveParams {
@@ -3509,6 +3523,21 @@ export interface ListingFeatures {
 
   /**  */
   mobility?: boolean
+
+  /**  */
+  barrierFreeUnitEntrance?: boolean
+
+  /**  */
+  loweredLightSwitch?: boolean
+
+  /**  */
+  barrierFreeBathroom?: boolean
+
+  /**  */
+  wideDoorways?: boolean
+
+  /**  */
+  loweredCabinets?: boolean
 }
 
 export interface ListingUtilities {
@@ -3857,7 +3886,7 @@ export interface UnitsSummarized {
 
 export interface UnitGroupSummary {
   /**  */
-  unitTypes?: string[]
+  unitTypes?: UnitType[]
 
   /**  */
   rentAsPercentIncomeRange?: MinMax
@@ -4169,6 +4198,9 @@ export interface Listing {
 
   /**  */
   leasingAgentTitle?: string
+
+  /**  */
+  managementWebsite?: string
 
   /**  */
   name: string
@@ -4813,6 +4845,9 @@ export interface ListingCreate {
   leasingAgentTitle?: string
 
   /**  */
+  managementWebsite?: string
+
+  /**  */
   name: string
 
   /**  */
@@ -5124,6 +5159,9 @@ export interface ListingUpdate {
 
   /**  */
   leasingAgentTitle?: string
+
+  /**  */
+  managementWebsite?: string
 
   /**  */
   name: string
@@ -7217,6 +7255,31 @@ export enum OrderByEnum {
   "desc" = "desc",
 }
 
+export enum ListingFilterKeys {
+  "availabilities" = "availabilities",
+  "availability" = "availability",
+  "bathrooms" = "bathrooms",
+  "bedrooms" = "bedrooms",
+  "bedroomTypes" = "bedroomTypes",
+  "city" = "city",
+  "counties" = "counties",
+  "homeTypes" = "homeTypes",
+  "ids" = "ids",
+  "isVerified" = "isVerified",
+  "jurisdiction" = "jurisdiction",
+  "leasingAgent" = "leasingAgent",
+  "listingFeatures" = "listingFeatures",
+  "monthlyRent" = "monthlyRent",
+  "multiselectQuestions" = "multiselectQuestions",
+  "name" = "name",
+  "neighborhood" = "neighborhood",
+  "regions" = "regions",
+  "reservedCommunityTypes" = "reservedCommunityTypes",
+  "section8Acceptance" = "section8Acceptance",
+  "status" = "status",
+  "zipCode" = "zipCode",
+}
+
 export enum ApplicationAddressTypeEnum {
   "leasingAgent" = "leasingAgent",
 }
@@ -7383,26 +7446,34 @@ export enum UserRoleEnum {
 }
 
 export enum FeatureFlagEnum {
-  "example" = "example",
-  "enableHomeType" = "enableHomeType",
+  "disableCommonApplication" = "disableCommonApplication",
+  "disableJurisdictionalAdmin" = "disableJurisdictionalAdmin",
+  "disableListingPreferences" = "disableListingPreferences",
   "enableAccessibilityFeatures" = "enableAccessibilityFeatures",
-  "enableUtilitiesIncluded" = "enableUtilitiesIncluded",
-  "enableIsVerified" = "enableIsVerified",
-  "enableNeighborhoodAmenities" = "enableNeighborhoodAmenities",
-  "hideCloseListingButton" = "hideCloseListingButton",
-  "enableMarketingStatus" = "enableMarketingStatus",
-  "enableRegions" = "enableRegions",
-  "enableSection8Question" = "enableSection8Question",
-  "enableUnitGroups" = "enableUnitGroups",
-  "enableListingPagination" = "enableListingPagination",
-  "enableSingleUseCode" = "enableSingleUseCode",
+  "enableAdditionalResources" = "enableAdditionalResources",
+  "enableCompanyWebsite" = "enableCompanyWebsite",
   "enableGeocodingPreferences" = "enableGeocodingPreferences",
   "enableGeocodingRadiusMethod" = "enableGeocodingRadiusMethod",
+  "enableHomeType" = "enableHomeType",
+  "enableIsVerified" = "enableIsVerified",
+  "enableListingFavoriting" = "enableListingFavoriting",
+  "enableListingFiltering" = "enableListingFiltering",
   "enableListingOpportunity" = "enableListingOpportunity",
+  "enableListingPagination" = "enableListingPagination",
+  "enableMarketingStatus" = "enableMarketingStatus",
+  "enableNeighborhoodAmenities" = "enableNeighborhoodAmenities",
   "enablePartnerDemographics" = "enablePartnerDemographics",
   "enablePartnerSettings" = "enablePartnerSettings",
-  "disableJurisdictionalAdmin" = "disableJurisdictionalAdmin",
-  "enableListingFavoriting" = "enableListingFavoriting",
+  "enableRegions" = "enableRegions",
+  "enableSection8Question" = "enableSection8Question",
+  "enableSingleUseCode" = "enableSingleUseCode",
+  "enableUnderConstructionHome" = "enableUnderConstructionHome",
+  "enableUnitGroups" = "enableUnitGroups",
+  "enableUtilitiesIncluded" = "enableUtilitiesIncluded",
+  "example" = "example",
+  "hideCloseListingButton" = "hideCloseListingButton",
+  "swapCommunityTypeWithPrograms" = "swapCommunityTypeWithPrograms",
+  "enableWaitlistAdditionalFields" = "enableWaitlistAdditionalFields",
 }
 export enum EnumMultiselectQuestionFilterParamsComparison {
   "=" = "=",

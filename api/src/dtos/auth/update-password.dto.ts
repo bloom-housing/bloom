@@ -25,7 +25,6 @@ export class UpdatePassword {
   @Expose()
   @ApiProperty()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @MaxLength(256, { groups: [ValidationsGroupsEnum.default] })
   token: string;
 
   @Expose()

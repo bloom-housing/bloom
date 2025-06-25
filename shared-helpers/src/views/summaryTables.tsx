@@ -7,7 +7,15 @@ import {
   StackedTableRow,
 } from "@bloom-housing/ui-components"
 import { ContentAccordion } from "@bloom-housing/doorway-ui-components"
-import { MinMax, ReviewOrderTypeEnum, Unit, UnitSummary } from "../types/backend-swagger"
+import {
+  MarketingTypeEnum,
+  MinMax,
+  ReviewOrderTypeEnum,
+  Unit,
+  UnitGroupSummary,
+  UnitSummary,
+  Listing,
+} from "../types/backend-swagger"
 import { numberOrdinal } from "../utilities/numberOrdinal"
 
 const getTranslationFromCurrencyString = (value: string) => {
@@ -47,6 +55,7 @@ export const unitSummariesTable = (
           </>
         )
     }
+
     const getRent = (rentMin: string, rentMax: string, percent = false) => {
       const unit = percent ? `% ${t("t.income")}` : ` ${t("t.perMonth")}`
       return rentMin == rentMax ? (
@@ -187,6 +196,17 @@ type StackedSummary = {
   maxUnitName: string | null
 }
 
+type StackedGroupSummary = {
+  minDollarRent: number | null
+  maxDollarRent: number | null
+  minPercentageRent: number | null
+  maxPercentageRent: number | null
+  minUnitType: number | null
+  maxUnitType: number | null
+  minUnitName?: string | null
+  maxUnitName?: string | null
+}
+
 // Replace an old value with a new one if the new one exceeds the defined limit (either less or more) and is valid
 export const replaceIfExceeds = (less: boolean, current: number | null, updated: number | null) => {
   const isValid = (test: number | null) => {
@@ -280,6 +300,74 @@ export const mergeSummaryRows = (summaries: UnitSummary[]): StackedSummary => {
     )
 }
 
+// Massage the data in an array of unit group summaries to calculate the min and max values of each data point across the full set
+// This is essentially a new type of unit summary. We should move this to the backend when we rewrite summaries.
+export const mergeGroupSummaryRows = (summaries: UnitGroupSummary[]): StackedGroupSummary => {
+  return summaries.reduce(
+    (acc, curr) => {
+      const updatedMinUnitType = replaceIfExceeds(
+        true,
+        acc.minUnitType,
+        curr.unitTypes?.[0]?.numBedrooms ?? null
+      )
+      const updatedMaxUnitType = replaceIfExceeds(
+        false,
+        acc.maxUnitType,
+        curr.unitTypes?.[curr.unitTypes.length - 1]?.numBedrooms ?? null
+      )
+
+      return {
+        minDollarRent: replaceIfExceeds(
+          true,
+          acc.minDollarRent,
+          curr.rentRange?.min ? parseInt(curr.rentRange.min.replace(/[$,]+/g, "")) : null
+        ),
+        maxDollarRent: replaceIfExceeds(
+          false,
+          acc.maxDollarRent,
+          curr.rentRange?.max ? parseInt(curr.rentRange.max.replace(/[$,]+/g, "")) : null
+        ),
+        minPercentageRent: replaceIfExceeds(
+          true,
+          acc.minPercentageRent,
+          curr.rentAsPercentIncomeRange?.min ?? null
+        ),
+        maxPercentageRent: replaceIfExceeds(
+          false,
+          acc.maxPercentageRent,
+          curr.rentAsPercentIncomeRange?.max ?? null
+        ),
+        minUnitType: replaceIfExceeds(
+          true,
+          acc.minUnitType,
+          curr.unitTypes?.[0]?.numBedrooms ?? null
+        ),
+        maxUnitType: replaceIfExceeds(
+          false,
+          acc.maxUnitType,
+          curr.unitTypes?.[curr.unitTypes.length - 1]?.numBedrooms ?? null
+        ),
+        minUnitName:
+          updatedMinUnitType !== acc.minUnitType ? curr.unitTypes?.[0].name : acc.minUnitName,
+        maxUnitName:
+          updatedMaxUnitType !== acc.maxUnitType
+            ? curr.unitTypes?.[curr.unitTypes.length - 1].name
+            : acc.maxUnitName,
+      }
+    },
+    {
+      minDollarRent: null,
+      maxDollarRent: null,
+      minPercentageRent: null,
+      maxPercentageRent: null,
+      minUnitType: null,
+      maxUnitType: null,
+      minUnitName: null,
+      maxUnitName: null,
+    }
+  )
+}
+
 export const stackedUnitSummariesTable = (
   summaries: UnitSummary[]
 ): Record<string, StackedTableRow>[] => {
@@ -353,6 +441,172 @@ export const stackedUnitSummariesTable = (
   return [rowData]
 }
 
+export const getAvailabilityText = (
+  group: UnitGroupSummary,
+  isComingSoon?: boolean
+): { text: string } => {
+  if (isComingSoon) {
+    return {
+      text: t("listings.underConstruction"),
+    }
+  }
+  const hasVacantUnits = group.unitVacancies > 0
+  const waitlistStatus = group.openWaitlist
+    ? t("listings.waitlist.open")
+    : t("listings.waitlist.closed")
+
+  // Create an array of status elements to combine
+  const statusElements = []
+
+  if (hasVacantUnits) {
+    statusElements.push(
+      `${group.unitVacancies} ${
+        group.unitVacancies === 1 ? t("listings.vacantUnit") : t("listings.vacantUnits")
+      }`
+    )
+  }
+
+  if (group.openWaitlist) {
+    statusElements.push(waitlistStatus)
+  }
+
+  // Combine statuses with proper formatting
+  let availability = null
+  if (statusElements.length > 0) {
+    if (statusElements.length >= 3) {
+      const lastElement = statusElements.pop()
+      availability = `${statusElements.join(", ")} & ${lastElement}`
+    } else {
+      availability = statusElements.join(" & ")
+    }
+  }
+
+  const text = availability ?? t("listings.unitsSummary.notAvailable")
+
+  return { text }
+}
+
+export const getAvailabilityTextForGroup = (
+  groups: UnitGroupSummary[],
+  isComingSoon?: boolean
+): { text: string } => {
+  // Add coming soon status if needed
+  if (isComingSoon) {
+    return {
+      text: t("listings.underConstruction"),
+    }
+  }
+  // Track all statuses across groups
+  const statusSet = new Set<string>()
+  let totalVacantUnits = 0
+
+  // Collect information from all groups
+  groups.forEach((group) => {
+    if (group.openWaitlist) {
+      statusSet.add(t("listings.waitlist.open"))
+    }
+
+    if (group.unitVacancies > 0) {
+      totalVacantUnits += group.unitVacancies
+    }
+  })
+
+  const statusElements = Array.from(statusSet)
+  if (totalVacantUnits > 0) {
+    statusElements.unshift(
+      `${totalVacantUnits} ${
+        totalVacantUnits === 1 ? t("listings.vacantUnit") : t("listings.vacantUnits")
+      }`
+    )
+  }
+
+  // Combine statuses with proper formatting
+  let availability = null
+  if (statusElements.length > 0) {
+    if (statusElements.length >= 3) {
+      const lastElement = statusElements.pop()
+      availability = `${statusElements.join(", ")} & ${lastElement}`
+    } else {
+      availability = statusElements.join(" & ")
+    }
+  }
+
+  const text = availability ?? t("listings.unitsSummary.notAvailable")
+
+  return { text }
+}
+
+export const stackedUnitGroupsSummariesTable = (
+  summaries: UnitGroupSummary[],
+  isComingSoon?: boolean
+): Record<string, StackedTableRow>[] => {
+  const ranges = mergeGroupSummaryRows(summaries)
+
+  const getUnitText = (ranges: StackedGroupSummary) => {
+    if (ranges.minUnitType === ranges.maxUnitType)
+      return t(`listings.unitTypes.${ranges.minUnitName}`)
+    return `${t(`listings.unitTypes.${ranges.minUnitName}`)} - ${t(
+      `listings.unitTypes.${ranges.maxUnitName}`
+    )}`
+  }
+  const getRentText = (ranges: StackedGroupSummary) => {
+    const hasPercentUnits = ranges.minPercentageRent !== null && ranges.maxPercentageRent !== null
+    const hasCurrencyUnits = ranges.minDollarRent !== null && ranges.maxDollarRent !== null
+
+    // If a listing has mixed rent type units, show more generic information
+    if (hasPercentUnits && hasCurrencyUnits) {
+      return `${t("t.ofIncome")}, ${t("t.orUpTo")} $${ranges.maxDollarRent?.toLocaleString()}`
+    }
+
+    // Otherwise show more specific ranges
+    if (hasPercentUnits && !hasCurrencyUnits) {
+      if (ranges.minPercentageRent === ranges.maxPercentageRent) {
+        return t("t.numOfIncome", { num: ranges.minPercentageRent })
+      } else {
+        return t("t.rangeOfIncome", {
+          min: ranges.minPercentageRent,
+          max: ranges.maxPercentageRent,
+        })
+      }
+    }
+
+    if (!hasPercentUnits && hasCurrencyUnits) {
+      if (ranges.minDollarRent !== null && ranges.maxDollarRent !== null) {
+        if (ranges.minDollarRent === ranges.maxDollarRent) {
+          return `$${ranges.minDollarRent.toLocaleString()}`
+        } else {
+          return `$${ranges.minDollarRent.toLocaleString()} ${t(
+            "t.to"
+          )} $${ranges.maxDollarRent.toLocaleString()}`
+        }
+      }
+    }
+
+    return t("t.n/a")
+  }
+
+  const availability =
+    summaries.length > 0
+      ? getAvailabilityTextForGroup(summaries, isComingSoon)
+      : { text: t("t.n/a"), subText: "" }
+
+  const rowData = {
+    unitType: {
+      cellText: getUnitText(ranges),
+      cellSubText: "",
+    },
+    rent: {
+      cellText: getRentText(ranges),
+      cellSubText: getRentText(ranges) !== t("t.n/a") ? t("t.perMonth") : "",
+    },
+    availability: {
+      cellText: availability.text,
+    },
+  }
+
+  return [rowData]
+}
+
 export const getSummariesTable = (
   summaries: UnitSummary[],
   listingReviewOrder: ReviewOrderTypeEnum,
@@ -373,6 +627,18 @@ export const getStackedSummariesTable = (
 
   if (summaries?.length > 0) {
     unitSummaries = stackedUnitSummariesTable(summaries)
+  }
+  return unitSummaries
+}
+
+export const getStackedGroupSummariesTable = (
+  summaries: UnitGroupSummary[],
+  isComingSoon?: boolean
+): Record<string, StackedTableRow>[] => {
+  let unitSummaries: Record<string, StackedTableRow>[] = []
+
+  if (summaries?.length > 0) {
+    unitSummaries = stackedUnitGroupsSummariesTable(summaries, isComingSoon)
   }
   return unitSummaries
 }
@@ -605,4 +871,85 @@ export const UnitTables = (props: UnitTablesProps) => {
       })}
     </>
   )
+}
+
+export const getUnitGroupSummariesTable = (listing: Listing) => {
+  const unitGroupsSummariesHeaders = {
+    unitType: t("t.unitType"),
+    rent: t("t.rent"),
+    availability: t("t.availability"),
+    ami: "ami",
+  }
+  let groupedUnitData = null
+
+  // unit group summary
+  groupedUnitData = listing?.unitGroupsSummarized?.unitGroupSummary.map((group) => {
+    const isComingSoon =
+      listing.marketingType && listing.marketingType === MarketingTypeEnum.comingSoon
+
+    let rentRange = null
+    let rentAsPercentIncomeRange = null
+    if (group.rentRange && group.rentRange.min === group.rentRange.max) {
+      rentRange = group.rentRange.min
+    } else if (group.rentRange) {
+      rentRange = `${group.rentRange.min} - ${group.rentRange.max}`
+    }
+
+    if (
+      group.rentAsPercentIncomeRange &&
+      group.rentAsPercentIncomeRange.min === group.rentAsPercentIncomeRange.max
+    ) {
+      rentAsPercentIncomeRange = group.rentAsPercentIncomeRange.min
+    } else if (group.rentAsPercentIncomeRange) {
+      rentAsPercentIncomeRange = `${group.rentAsPercentIncomeRange.min} - ${group.rentAsPercentIncomeRange.max}`
+    }
+
+    if (rentAsPercentIncomeRange) {
+      rentAsPercentIncomeRange = `${rentAsPercentIncomeRange}% ${t("t.income")}`
+    }
+
+    let rent = null
+
+    if (rentRange && rentAsPercentIncomeRange) {
+      rent = `${rentRange}, ${rentAsPercentIncomeRange}`
+    } else if (rentRange) {
+      rent = rentRange
+    } else if (rentAsPercentIncomeRange) {
+      rent = rentAsPercentIncomeRange
+    }
+
+    let ami = null
+
+    if (
+      group.amiPercentageRange?.min &&
+      group.amiPercentageRange.min === group.amiPercentageRange.max
+    ) {
+      ami = `${group.amiPercentageRange.min}%`
+    } else if (group.amiPercentageRange?.min && group.amiPercentageRange?.max) {
+      ami = `${group.amiPercentageRange.min} - ${group.amiPercentageRange.max}%`
+    }
+
+    const availability = getAvailabilityText(group, isComingSoon)
+
+    return {
+      unitType: {
+        cellText: group.unitTypes?.map((type) => t(`listings.unitTypes.${type.name}`)).join(", "),
+      },
+      rent: {
+        cellText: rent ?? t("listings.unitsSummary.notAvailable"),
+        cellSubText: rent ? t("t.perMonth") : "",
+      },
+      availability: {
+        cellText: availability.text,
+      },
+      ami: {
+        cellText: ami ?? t("listings.unitsSummary.notAvailable"),
+      },
+    }
+  })
+
+  return {
+    headers: unitGroupsSummariesHeaders,
+    data: groupedUnitData,
+  }
 }

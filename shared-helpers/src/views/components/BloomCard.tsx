@@ -22,6 +22,7 @@ interface BloomCardProps {
   iconClass?: string
   iconOutlined?: boolean
   iconSymbol?: CustomIconType
+  altHeading?: boolean
 }
 
 const BloomCard = (props: BloomCardProps) => {
@@ -48,7 +49,7 @@ const BloomCard = (props: BloomCardProps) => {
         <Heading
           size="2xl"
           priority={props.headingPriority || 1}
-          className={styles["card-heading"]}
+          className={props.altHeading ? styles["card-alt-heading-font"] : undefined}
         >
           {props.title}
         </Heading>
@@ -65,8 +66,10 @@ const BloomCard = (props: BloomCardProps) => {
         <Card.Header divider={props.variant === "block" ? undefined : "inset"}>
           {props?.customIcon && (
             <Icon
-              size="2xl"
-              className={`${styles["card-icon"]} ${props.iconClass ? props.iconClass : ""}`}
+              size={props.altHeading ? undefined : "2xl"}
+              className={`${styles["card-icon"]} ${props.iconClass ? props.iconClass : ""} ${
+                props.altHeading ? styles["card-circled-icon"] : ""
+              }`}
               outlined={props.iconOutlined}
             >
               {CustomIconMap[props?.customIcon]}

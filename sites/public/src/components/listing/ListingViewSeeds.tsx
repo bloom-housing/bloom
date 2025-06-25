@@ -187,6 +187,11 @@ export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: Li
         officeHours={listing.leasingAgentOfficeHours}
         phone={listing.leasingAgentPhone}
         title={listing.leasingAgentTitle}
+        managementWebsite={
+          isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableCompanyWebsite)
+            ? listing.managementWebsite
+            : undefined
+        }
       />
     </>
   )
@@ -210,11 +215,12 @@ export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: Li
             reviewOrderType={listing.reviewOrderType}
             unitsSummarized={listing.unitsSummarized}
             section8Acceptance={listing.section8Acceptance}
+            listing={listing}
           />
           <div className={styles["main-content"]}>
             <div className={styles["hide-desktop"]}>{ApplyBar}</div>
             <Eligibility
-              eligibilitySections={getEligibilitySections(listing)}
+              eligibilitySections={getEligibilitySections(jurisdiction, listing)}
               section8Acceptance={listing.section8Acceptance}
             />
             <Features features={getFeatures(listing, jurisdiction)}>{UnitFeatures}</Features>

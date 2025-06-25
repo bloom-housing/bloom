@@ -1,14 +1,24 @@
 import React, { useContext } from "react"
 import { t, MinimalTable, StandardTableData } from "@bloom-housing/ui-components"
 import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
-import { ApplicationMethodsTypeEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  ApplicationMethodsTypeEnum,
+  FeatureFlagEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { ListingContext } from "../../ListingContext"
 import { getDetailBoolean } from "./helpers"
 import { pdfFileNameFromFileId } from "../../../../lib/helpers"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
+import { AuthContext } from "@bloom-housing/shared-helpers"
 
 const DetailApplicationTypes = () => {
   const listing = useContext(ListingContext)
+  const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
+
+  const disableCommonApplication = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.disableCommonApplication,
+    listing?.jurisdictions?.id
+  )
 
   const digitalMethod = listing.applicationMethods.find(
     (method) =>
@@ -41,7 +51,7 @@ const DetailApplicationTypes = () => {
         <FieldValue id="digitalApplication" label={t("listings.applicationType.onlineApplication")}>
           {getDetailBoolean(listing.digitalApplication)}
         </FieldValue>
-        {digitalMethod && (
+        {!disableCommonApplication && digitalMethod && (
           <FieldValue
             id="digitalMethod.type"
             label={t("listings.applicationType.digitalApplication")}

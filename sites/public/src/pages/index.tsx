@@ -14,7 +14,8 @@ export default function HomePage(props: HomePageProps) {
   return (
     <>
       {process.env.showNewSeedsDesigns ? (
-        <Home jurisdiction={props.jurisdiction} />
+        // Doorway doesn't have under construction listings hardcoding to empty array
+        <Home jurisdiction={props.jurisdiction} underConstructionListings={[]} />
       ) : (
         <HomeDeprecated
           jurisdiction={props.jurisdiction}

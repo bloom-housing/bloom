@@ -12,6 +12,7 @@ import {
 } from "@bloom-housing/shared-helpers"
 import { Button, Heading, Link } from "@bloom-housing/ui-seeds"
 import FormsLayout from "../../../layouts/forms"
+import styles from "../../../layouts/application-form.module.scss"
 import { AppSubmissionContext } from "../../../lib/applications/AppSubmissionContext"
 import { UserStatus } from "../../../lib/constants"
 import { ReviewOrderTypeEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -120,7 +121,10 @@ const ApplicationConfirmation = () => {
           )}
 
           {initialStateLoaded && !profile && (
-            <CardSection className={"bg-primary-lighter border-none"} divider={"flush"}>
+            <CardSection
+              className={`${styles["application-form-action-footer"]} border-none`}
+              divider={"flush"}
+            >
               <Button
                 variant={"primary"}
                 onClick={() => {

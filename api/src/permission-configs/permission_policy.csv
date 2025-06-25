@@ -18,6 +18,7 @@ p, admin, multiselectQuestion, true, .*
 p, jurisdictionAdmin, multiselectQuestion, true, .*
 p, limitedJurisdictionAdmin, multiselectQuestion, true, .*
 p, partner, multiselectQuestion, true, .*
+p, anonymous, multiselectQuestion, true, read
 
 p, admin, applicationMethod, true, .*
 p, jurisdictionAdmin, applicationMethod, true, .*

@@ -1,0 +1,12 @@
+.resource-card {
+  padding: var(--seeds-spacer-content);
+  .resource-card-title {
+    font-size: var(--seeds-type-heading-size-lg);
+    font-weight: var(--seeds-font-weight-bold);
+    margin-block-end: var(--seeds-spacer-header);
+  }
+
+  .resource-card-content {
+    color: var(--seeds-text-color-light)
+  }
+}

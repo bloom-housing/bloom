@@ -56,8 +56,7 @@ module.exports = withBundleAnalyzer({
     awsRegion: process.env.AWS_REGION,
     fileService: process.env.FILE_SERVICE,
     reCaptchaKey: process.env.RECAPTCHA_KEY,
-    maxClosedListings: process.env.MAX_CLOSED_LISTINGS,
-    maxOpenListings: process.env.MAX_OPEN_LISTINGS,
+    maxBrowseListings: process.env.MAX_BROWSE_LISTINGS,
     rtlLanguages: process.env.RTL_LANGUAGES || "ar",
   },
   i18n: {
@@ -104,6 +103,16 @@ module.exports = withBundleAnalyzer({
             value: `frame-ancestors 'none';`,
           },
         ],
+      },
+    ]
+  },
+  redirects() {
+    return [
+      // get-assistance page doesn't exist in Doorway so re-route to the get started page
+      {
+        source: "/get-assistance",
+        destination: "/help/get-started",
+        permanent: true,
       },
     ]
   },

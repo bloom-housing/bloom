@@ -1,10 +1,16 @@
 import React from "react"
-import { Jurisdiction, Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  FeatureFlagEnum,
+  Jurisdiction,
+  Listing,
+  MarketingTypeEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { imageUrlFromListing, oneLineAddress, ClickableCard } from "@bloom-housing/shared-helpers"
 import { StackedTable, t } from "@bloom-housing/ui-components"
-import { Card, Heading, Link, Tag } from "@bloom-housing/ui-seeds"
+import { Card, Heading, Link, Tag, Icon } from "@bloom-housing/ui-seeds"
 import {
   getListingApplicationStatus,
+  getListingStackedGroupTableData,
   getListingStackedTableData,
   getListingStatusMessage,
 } from "../../lib/helpers"
@@ -29,8 +35,11 @@ export const ListingCard = ({
   setFavorited,
   showHomeType,
 }: ListingCardProps) => {
+  const enableIsVerified = jurisdiction.featureFlags.find(
+    (flag) => flag.name === FeatureFlagEnum.enableIsVerified
+  )?.active
   const imageUrl = imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize))[0]
-  const listingTags = getListingTags(listing, true, !showHomeType)
+  const listingTags = getListingTags(listing, true, !showHomeType, enableIsVerified)
   const status = getListingApplicationStatus(listing, true, true)
   const actions = []
 
@@ -53,6 +62,7 @@ export const ListingCard = ({
           <div className={styles["listing-card-content"]}>
             <div className={styles["details"]}>
               <Link
+                id="listing-seeds-link"
                 className={styles["main-link"]}
                 href={`/listing/${listing.id}/${listing.urlSlug}`}
               >
@@ -69,7 +79,10 @@ export const ListingCard = ({
                   {listingTags.map((tag, index) => {
                     return (
                       <Tag variant={tag.variant} key={index} className={styles["tag"]}>
-                        {tag.title}
+                        <span>
+                          {tag.icon && <Icon>{tag.icon}</Icon>}
+                          {tag.title}
+                        </span>
                       </Tag>
                     )
                   })}
@@ -81,14 +94,28 @@ export const ListingCard = ({
                 </div>
               )}
               <div className={`${styles["unit-table"]} styled-stacked-table`}>
-                <StackedTable
-                  headers={{
-                    unitType: "t.unitType",
-                    minimumIncome: "t.minimumIncome",
-                    rent: "t.rent",
-                  }}
-                  stackedData={getListingStackedTableData(listing.unitsSummarized)}
-                />
+                {listing.unitGroups?.length > 0 ? (
+                  <StackedTable
+                    headers={{
+                      unitType: "t.unitType",
+                      rent: "t.rent",
+                      availability: "t.availability",
+                    }}
+                    stackedData={getListingStackedGroupTableData(
+                      listing.unitGroupsSummarized,
+                      listing.marketingType === MarketingTypeEnum.comingSoon
+                    )}
+                  />
+                ) : (
+                  <StackedTable
+                    headers={{
+                      unitType: "t.unitType",
+                      minimumIncome: "t.minimumIncome",
+                      rent: "t.rent",
+                    }}
+                    stackedData={getListingStackedTableData(listing.unitsSummarized)}
+                  />
+                )}
               </div>
 
               {actions.length > 0 && (

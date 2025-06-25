@@ -2,7 +2,7 @@ import React from "react"
 import { setupServer } from "msw/lib/node"
 import { fireEvent, render, screen, waitFor } from "@testing-library/react"
 import { listing, jurisdiction } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
-import { ListingBrowse } from "../../../src/components/browse/ListingBrowse"
+import { ListingBrowse, TabsIndexEnum } from "../../../src/components/browse/ListingBrowse"
 import { mockNextRouter } from "../../testUtils"
 
 const server = setupServer()
@@ -17,9 +17,17 @@ afterEach(() => server.resetHandlers())
 afterAll(() => server.close())
 
 describe("<ListingBrowse>", () => {
-  it("shows empty state", () => {
-    render(<ListingBrowse openListings={[]} closedListings={[]} jurisdiction={jurisdiction} />)
+  it("shows empty state, open listings", () => {
+    render(<ListingBrowse listings={[]} tab={TabsIndexEnum.open} jurisdiction={jurisdiction} />)
     expect(screen.getByText("No listings currently have open applications.")).toBeDefined()
+    expect(screen.queryByRole("button", { name: /previous/i })).not.toBeInTheDocument()
+    expect(screen.queryByRole("button", { name: /next/i })).not.toBeInTheDocument()
+    expect(screen.queryByText(/page \d* of \d*/i)).not.toBeInTheDocument()
+  })
+
+  it("shows empty state, closed listings", () => {
+    render(<ListingBrowse listings={[]} tab={TabsIndexEnum.closed} jurisdiction={jurisdiction} />)
+    expect(screen.getByText("No listings currently have closed applications.")).toBeDefined()
     expect(screen.queryByRole("button", { name: /previous/i })).not.toBeInTheDocument()
     expect(screen.queryByRole("button", { name: /next/i })).not.toBeInTheDocument()
     expect(screen.queryByText(/page \d* of \d*/i)).not.toBeInTheDocument()
@@ -28,11 +36,11 @@ describe("<ListingBrowse>", () => {
   it("shows multiple open listings without pagination", () => {
     const view = render(
       <ListingBrowse
-        openListings={[
+        listings={[
           { ...listing, name: "ListingA" },
           { ...listing, name: "ListingB" },
         ]}
-        closedListings={[]}
+        tab={TabsIndexEnum.open}
         paginationData={{
           currentPage: 1,
           totalPages: 1,
@@ -57,11 +65,11 @@ describe("<ListingBrowse>", () => {
 
       const view = render(
         <ListingBrowse
-          openListings={[
+          listings={[
             { ...listing, name: "ListingA" },
             { ...listing, name: "ListingB" },
           ]}
-          closedListings={[]}
+          tab={TabsIndexEnum.open}
           jurisdiction={jurisdiction}
           paginationData={{
             currentPage: 1,
@@ -91,11 +99,11 @@ describe("<ListingBrowse>", () => {
 
       const view = render(
         <ListingBrowse
-          openListings={[
+          listings={[
             { ...listing, name: "ListingA" },
             { ...listing, name: "ListingB" },
           ]}
-          closedListings={[]}
+          tab={TabsIndexEnum.open}
           jurisdiction={jurisdiction}
           paginationData={{
             currentPage: 2,
@@ -125,11 +133,11 @@ describe("<ListingBrowse>", () => {
 
       const view = render(
         <ListingBrowse
-          openListings={[
+          listings={[
             { ...listing, name: "ListingA" },
             { ...listing, name: "ListingB" },
           ]}
-          closedListings={[]}
+          tab={TabsIndexEnum.open}
           jurisdiction={jurisdiction}
           paginationData={{
             currentPage: 2,

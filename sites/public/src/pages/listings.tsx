@@ -1,6 +1,7 @@
 import React from "react"
 import Head from "next/head"
 import { APIProvider } from "@vis.gl/react-google-maps"
+import { Jurisdiction, Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { Heading } from "@bloom-housing/ui-seeds"
 import { t } from "@bloom-housing/ui-components"
 import { MetaTags } from "../components/shared/MetaTags"
@@ -11,8 +12,19 @@ import ListingsSearchCombinedDeprecated from "../components/listings/search/List
 import { FormOption } from "../components/listings/search/ListingsSearchModal"
 import { runtimeConfig } from "../lib/runtime-config"
 import Layout from "../layouts/application"
-
 export interface ListingsProps {
+  openListings: Listing[]
+  closedListings: Listing[]
+  paginationData: {
+    currentPage: number
+    itemCount: number
+    itemsPerPage: number
+    totalItems: number
+    totalPages: number
+  }
+  jurisdiction: Jurisdiction
+}
+export interface DoorwayListingsProps {
   listingsEndpoint: string
   googleMapsApiKey: string
   googleMapsMapId: string
@@ -21,7 +33,7 @@ export interface ListingsProps {
   bathrooms: FormOption[]
 }
 
-export default function ListingsPage(props: ListingsProps) {
+export default function ListingsPage(props: DoorwayListingsProps) {
   const pageTitle = `${t("pageTitle.rent")} - ${t("nav.siteTitle")}`
   const metaDescription = t("pageDescription.welcome")
   const metaImage = "" // TODO: replace with hero image
