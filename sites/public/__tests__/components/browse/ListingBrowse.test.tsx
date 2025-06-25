@@ -6,9 +6,11 @@ import { ListingBrowse, TabsIndexEnum } from "../../../src/components/browse/Lis
 import { mockNextRouter } from "../../testUtils"
 import {
   EnumUnitGroupAmiLevelMonthlyRentDeterminationType,
+  FeatureFlag,
   FeatureFlagEnum,
   UnitTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import userEvent from "@testing-library/user-event"
 
 const server = setupServer()
 
@@ -23,7 +25,14 @@ afterAll(() => server.close())
 
 describe("<ListingBrowse>", () => {
   it("shows empty state, open listings", () => {
-    render(<ListingBrowse listings={[]} tab={TabsIndexEnum.open} jurisdiction={jurisdiction} />)
+    render(
+      <ListingBrowse
+        listings={[]}
+        tab={TabsIndexEnum.open}
+        jurisdiction={jurisdiction}
+        multiselectData={[]}
+      />
+    )
     expect(screen.getByText("No listings currently have open applications.")).toBeDefined()
     expect(screen.queryByRole("button", { name: /previous/i })).not.toBeInTheDocument()
     expect(screen.queryByRole("button", { name: /next/i })).not.toBeInTheDocument()
@@ -31,7 +40,14 @@ describe("<ListingBrowse>", () => {
   })
 
   it("shows empty state, closed listings", () => {
-    render(<ListingBrowse listings={[]} tab={TabsIndexEnum.closed} jurisdiction={jurisdiction} />)
+    render(
+      <ListingBrowse
+        listings={[]}
+        tab={TabsIndexEnum.closed}
+        jurisdiction={jurisdiction}
+        multiselectData={[]}
+      />
+    )
     expect(screen.getByText("No listings currently have closed applications.")).toBeDefined()
     expect(screen.queryByRole("button", { name: /previous/i })).not.toBeInTheDocument()
     expect(screen.queryByRole("button", { name: /next/i })).not.toBeInTheDocument()
@@ -342,6 +358,7 @@ describe("<ListingBrowse>", () => {
           itemCount: 2,
         }}
         jurisdiction={jurisdiction}
+        multiselectData={[]}
       />
     )
     expect(view.queryByText("No listings currently have open applications.")).toBeNull()
@@ -371,6 +388,7 @@ describe("<ListingBrowse>", () => {
             totalItems: 4,
             itemCount: 2,
           }}
+          multiselectData={[]}
         />
       )
       expect(view.queryByText("No listings currently have open applications.")).toBeNull()
@@ -405,6 +423,7 @@ describe("<ListingBrowse>", () => {
             totalItems: 4,
             itemCount: 2,
           }}
+          multiselectData={[]}
         />
       )
       expect(view.queryByText("No listings currently have open applications.")).toBeNull()
@@ -439,6 +458,7 @@ describe("<ListingBrowse>", () => {
             totalItems: 6,
             itemCount: 2,
           }}
+          multiselectData={[]}
         />
       )
       expect(view.queryByText("No listings currently have open applications.")).toBeNull()
@@ -460,6 +480,105 @@ describe("<ListingBrowse>", () => {
       await waitFor(() => {
         expect(pushMock).toBeCalledWith({ pathname: "/", query: "page=1" })
       })
+    })
+  })
+
+  it("opens filter drawer and applies selections to url on submit", async () => {
+    const { pushMock } = mockNextRouter()
+    const filterEnabledJurisdiction = {
+      ...jurisdiction,
+      featureFlags: [
+        ...jurisdiction.featureFlags,
+        {
+          name: FeatureFlagEnum.enableListingFiltering,
+          active: true,
+        } as FeatureFlag,
+      ],
+    }
+    render(
+      <ListingBrowse
+        listings={[
+          { ...listing, name: "ListingA" },
+          { ...listing, name: "ListingB" },
+        ]}
+        tab={TabsIndexEnum.open}
+        jurisdiction={filterEnabledJurisdiction}
+        paginationData={{
+          currentPage: 2,
+          totalPages: 3,
+          itemsPerPage: 2,
+          totalItems: 6,
+          itemCount: 2,
+        }}
+        multiselectData={[]}
+      />
+    )
+    const filterButton = screen.getByRole("button", { name: "Filter" })
+    expect(filterButton).toBeInTheDocument()
+    fireEvent.click(filterButton)
+
+    expect(screen.getByLabelText("Close")).toBeInTheDocument()
+    expect(screen.getByRole("heading", { level: 1, name: "Filter" })).toBeInTheDocument()
+
+    expect(screen.getByRole("group", { name: "Confirmed listings" })).toBeInTheDocument()
+    expect(screen.getByLabelText("Only show listings confirmed by property")).toBeInTheDocument()
+    const isVerifiedCheckbox = screen.getByRole("checkbox", {
+      name: "Only show listings confirmed by property",
+    })
+    expect(isVerifiedCheckbox).not.toBeChecked()
+    fireEvent.click(isVerifiedCheckbox)
+    expect(isVerifiedCheckbox).toBeChecked()
+
+    expect(screen.getByRole("group", { name: "Availability" })).toBeInTheDocument()
+    expect(screen.getByLabelText("Units available")).toBeInTheDocument()
+    const unitsAvailableCheckbox = screen.getByRole("checkbox", { name: "Units available" })
+    expect(unitsAvailableCheckbox).not.toBeChecked()
+    fireEvent.click(unitsAvailableCheckbox)
+    expect(unitsAvailableCheckbox).toBeChecked()
+
+    expect(screen.getByRole("group", { name: "Home type" })).toBeInTheDocument()
+    expect(screen.getByLabelText("Apartment")).toBeInTheDocument()
+    const apartmentCheckbox = screen.getByRole("checkbox", { name: "Apartment" })
+    expect(screen.getByLabelText("Townhome")).toBeInTheDocument()
+    const townhomeCheckbox = screen.getByRole("checkbox", { name: "Townhome" })
+    expect(apartmentCheckbox).not.toBeChecked()
+    expect(townhomeCheckbox).not.toBeChecked()
+    fireEvent.click(apartmentCheckbox)
+    fireEvent.click(townhomeCheckbox)
+    expect(apartmentCheckbox).toBeChecked()
+    expect(townhomeCheckbox).toBeChecked()
+
+    expect(screen.getByRole("group", { name: "Rent" })).toBeInTheDocument()
+    expect(screen.getByLabelText("Min rent")).toBeInTheDocument()
+    const minRentField = screen.getByRole("textbox", { name: "Min rent" })
+    expect(screen.getByLabelText("Max rent")).toBeInTheDocument()
+    const maxRentField = screen.getByRole("textbox", { name: "Max rent" })
+    expect(minRentField).toHaveValue("")
+    expect(maxRentField).toHaveValue("")
+    await waitFor(async () => {
+      await userEvent.type(minRentField, "500.00")
+      await userEvent.type(maxRentField, "900.00")
+    })
+    expect(minRentField).toHaveValue("500.00")
+    expect(maxRentField).toHaveValue("900.00")
+
+    expect(screen.getByLabelText("Listing name")).toBeInTheDocument()
+    expect(screen.getByText("Enter full or partial listing name")).toBeInTheDocument()
+    const listingNameField = screen.getByRole("textbox", { name: "Listing name" })
+    expect(listingNameField).toHaveValue("")
+    await waitFor(async () => {
+      await userEvent.type(listingNameField, "Test Search")
+    })
+    expect(listingNameField).toHaveValue("Test Search")
+
+    expect(screen.getByRole("button", { name: "Cancel" })).toBeInTheDocument()
+    const showMatchingButton = screen.getByRole("button", { name: "Show matching listings" })
+    expect(showMatchingButton).toBeInTheDocument()
+    fireEvent.click(showMatchingButton)
+    await waitFor(() => {
+      expect(pushMock).toHaveBeenCalledWith(
+        "/listings?isVerified=true&availabilities=unitsAvailable&homeTypes=apartment,townhome&monthlyRent=500.00-900.00&name=Test Search"
+      )
     })
   })
 })

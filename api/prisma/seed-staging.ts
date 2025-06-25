@@ -64,7 +64,6 @@ export const stagingSeed = async (
         FeatureFlagEnum.enableSection8Question,
         FeatureFlagEnum.enableSingleUseCode,
         FeatureFlagEnum.enableUtilitiesIncluded,
-        FeatureFlagEnum.enableWaitlistAdditionalFields,
       ],
       languages: Object.values(LanguagesEnum),
     }),
@@ -350,6 +349,22 @@ export const stagingSeed = async (
       },
     }),
   });
+
+  // add extra programs to support filtering by "community type"
+  await Promise.all(
+    [...new Array(3)].map(
+      async () =>
+        await prismaClient.multiselectQuestions.create({
+          data: multiselectQuestionFactory(lakeviewJurisdiction.id, {
+            multiselectQuestion: {
+              applicationSection:
+                MultiselectQuestionsApplicationSectionEnum.programs,
+            },
+          }),
+        }),
+    ),
+  );
+
   // create pre-determined values
   const unitTypes = await unitTypeFactoryAll(prismaClient);
   await unitAccessibilityPriorityTypeFactoryAll(prismaClient);
