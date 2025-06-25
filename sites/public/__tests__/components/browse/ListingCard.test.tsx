@@ -54,4 +54,27 @@ describe("<ListingCard>", () => {
     expect(view.getByText("$150")).toBeDefined()
     expect(view.getByText("% of income, or up to $1,200")).toBeDefined()
   })
+  it("hides reserved tag when swapCommunityTypeWithPrograms is true", () => {
+    const view = render(
+      <ListingCard
+        listing={listing}
+        jurisdiction={{
+          ...jurisdiction,
+          featureFlags: [
+            ...jurisdiction.featureFlags,
+            {
+              name: FeatureFlagEnum.swapCommunityTypeWithPrograms,
+              id: "id",
+              createdAt: new Date(),
+              updatedAt: new Date(),
+              active: true,
+              description: "",
+              jurisdictions: [],
+            },
+          ],
+        }}
+      />
+    )
+    expect(view.queryByText("Veteran")).toBeNull()
+  })
 })
