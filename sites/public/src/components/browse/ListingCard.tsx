@@ -13,6 +13,7 @@ import {
   getListingStackedGroupTableData,
   getListingStackedTableData,
   getListingStatusMessage,
+  isFeatureFlagOn,
 } from "../../lib/helpers"
 import { getListingTags } from "../listing/listing_sections/MainDetails"
 import styles from "./ListingCard.module.scss"
@@ -35,19 +36,14 @@ export const ListingCard = ({
   setFavorited,
   showHomeType,
 }: ListingCardProps) => {
-  const enableIsVerified = jurisdiction.featureFlags.find(
-    (flag) => flag.name === FeatureFlagEnum.enableIsVerified
-  )?.active
-  const enableAccessibilityFeatures = jurisdiction.featureFlags.find(
-    (flag) => flag.name === FeatureFlagEnum.enableAccessibilityFeatures
-  )?.active
   const imageUrl = imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize))[0]
   const listingTags = getListingTags(
     listing,
     true,
     !showHomeType,
-    !enableAccessibilityFeatures,
-    enableIsVerified
+    !isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableAccessibilityFeatures),
+    isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableIsVerified),
+    isFeatureFlagOn(jurisdiction, FeatureFlagEnum.swapCommunityTypeWithPrograms)
   )
   const status = getListingApplicationStatus(listing, true, true)
   const actions = []
