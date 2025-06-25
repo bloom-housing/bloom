@@ -209,4 +209,17 @@ export class ScriptRunnerController {
       req,
     );
   }
+
+  @Put('markTransferedData')
+  @ApiOperation({
+    summary:
+      'A script that marks transferred data in Doorway as externally created',
+    operationId: 'markTransferedData',
+  })
+  @ApiOkResponse({ type: SuccessDTO })
+  async markTransferedData(
+    @Request() req: ExpressRequest,
+  ): Promise<SuccessDTO> {
+    return await this.scriptRunnerService.markTransferedData(req);
+  }
 }

@@ -6,6 +6,7 @@ import {
   ReviewOrderTypeEnum,
 } from '@prisma/client';
 import { randomUUID } from 'crypto';
+import dayjs from 'dayjs';
 import { Request as ExpressRequest } from 'express';
 import { User } from '../../../src/dtos/users/user.dto';
 import { AmiChartService } from '../../../src/services/ami-chart.service';
@@ -48,6 +49,15 @@ describe('Testing script runner service', () => {
             create: jest.fn().mockResolvedValue({
               id: 'new id',
             }),
+            list: jest.fn().mockResolvedValue([
+              {
+                id: 'new id',
+                createdAt: dayjs(
+                  '2024-10-22 00:00',
+                  'YYYY-MM-DD HH:mm Z',
+                ).toDate(),
+              },
+            ]),
           },
         },
       ],
@@ -829,6 +839,78 @@ describe('Testing script runner service', () => {
       },
     });
   }, 100000);
+
+  it('should mark transfered data', async () => {
+    const id = randomUUID();
+    const scriptName = 'mark transfered data';
+
+    prisma.scriptRuns.findUnique = jest.fn().mockResolvedValue(null);
+    prisma.scriptRuns.create = jest.fn().mockResolvedValue(null);
+    prisma.scriptRuns.update = jest.fn().mockResolvedValue(null);
+    prisma.multiselectQuestions.findMany = jest.fn().mockResolvedValue(null);
+    prisma.applications.updateMany = jest.fn().mockResolvedValue(null);
+    prisma.listings.updateMany = jest.fn().mockResolvedValue(null);
+    prisma.multiselectQuestions.updateMany = jest.fn().mockResolvedValue(null);
+
+    const res = await service.markTransferedData({
+      user: {
+        id,
+      } as unknown as User,
+    } as unknown as ExpressRequest);
+
+    expect(res.success).toBe(true);
+
+    expect(prisma.scriptRuns.findUnique).toHaveBeenCalledWith({
+      where: {
+        scriptName,
+      },
+    });
+    expect(prisma.scriptRuns.create).toHaveBeenCalledWith({
+      data: {
+        scriptName,
+        triggeringUser: id,
+      },
+    });
+    expect(prisma.scriptRuns.update).toHaveBeenCalledWith({
+      data: {
+        didScriptRun: true,
+        triggeringUser: id,
+      },
+      where: {
+        scriptName,
+      },
+    });
+    expect(prisma.applications.updateMany).toHaveBeenCalledTimes(2);
+    expect(prisma.applications.updateMany).toHaveBeenCalledWith({
+      data: {
+        wasCreatedExternally: true,
+      },
+      where: {
+        appUrl: expect.anything(),
+      },
+    });
+
+    expect(prisma.listings.updateMany).toHaveBeenCalledTimes(2);
+    expect(prisma.listings.updateMany).toHaveBeenCalledWith({
+      data: {
+        wasCreatedExternally: true,
+      },
+      where: {
+        createdAt: { lt: expect.anything() },
+        jurisdictionId: expect.anything(),
+      },
+    });
+
+    expect(multiselectQuestionService.list).toHaveBeenCalledTimes(2);
+    expect(prisma.multiselectQuestions.updateMany).toHaveBeenCalledWith({
+      data: {
+        wasCreatedExternally: true,
+      },
+      where: {
+        id: { in: ['new id'] },
+      },
+    });
+  });
 
   // | ---------- HELPER TESTS BELOW ---------- | //
   it('should mark script run as started if no script run present in db', async () => {
