@@ -12,11 +12,13 @@ import SectionWithGrid from "../../../shared/SectionWithGrid"
 type FormHouseholdMembersProps = {
   householdMembers: HouseholdMember[]
   setHouseholdMembers: (members: HouseholdMember[]) => void
+  enableFullTimeStudentQuestion?: boolean
 }
 
 const FormHouseholdMembers = ({
   householdMembers,
   setHouseholdMembers,
+  enableFullTimeStudentQuestion,
 }: FormHouseholdMembersProps) => {
   type MembersDrawer = HouseholdMember | null
 
@@ -29,6 +31,9 @@ const FormHouseholdMembers = ({
     dob: "application.household.member.dateOfBirth",
     sameResidence: "application.add.sameResidence",
     workInRegion: "application.details.workInRegion",
+    ...(enableFullTimeStudentQuestion && {
+      fullTimeStudent: "application.details.fullTimeStudent",
+    }),
     action: "",
   }
 
@@ -84,6 +89,7 @@ const FormHouseholdMembers = ({
       const { birthMonth, birthDay, birthYear } = member
       const sameResidence = member.sameAddress
       const workInRegion = member.workInRegion
+      const fullTimeStudent = member.fullTimeStudent
 
       return {
         name: {
@@ -104,6 +110,9 @@ const FormHouseholdMembers = ({
         },
         sameResidence: { content: chooseAddressStatus(sameResidence) },
         workInRegion: { content: chooseAddressStatus(workInRegion) },
+        ...(enableFullTimeStudentQuestion && {
+          fullTimeStudent: { content: chooseAddressStatus(fullTimeStudent) },
+        }),
         action: {
           content: (
             <div className="flex gap-3">
@@ -128,7 +137,7 @@ const FormHouseholdMembers = ({
         },
       }
     })
-  }, [editMember, householdMembers])
+  }, [editMember, enableFullTimeStudentQuestion, householdMembers])
 
   return (
     <>
@@ -166,6 +175,7 @@ const FormHouseholdMembers = ({
           onClose={() => setMembersDrawer(null)}
           members={householdMembers}
           editedMemberId={membersDrawer?.orderId}
+          enableFullTimeStudentQuestion={enableFullTimeStudentQuestion}
         />
       </Drawer>
 

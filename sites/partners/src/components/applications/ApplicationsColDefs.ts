@@ -34,7 +34,7 @@ function compareStrings(a, b, node, nextNode, isInverted) {
   }
 }
 
-export function getColDefs(maxHouseholdSize: number) {
+export function getColDefs(maxHouseholdSize: number, enableFullTimeStudentQuestion?: boolean) {
   const defs = [
     {
       headerName: t("application.details.submittedDate"),
@@ -575,6 +575,20 @@ export function getColDefs(maxHouseholdSize: number) {
         },
       }
     )
+    if (enableFullTimeStudentQuestion) {
+      householdCols.push({
+        headerName: `${t("application.details.fullTimeStudent")} HH:${householdIndex}`,
+        field: "householdMember",
+        sortable: false,
+        filter: false,
+        width: 90,
+        minWidth: 50,
+        valueFormatter: ({ value }) => {
+          if (value?.length < householdIndex) return ""
+          return formatYesNoLabel(value[i]?.fullTimeStudent)
+        },
+      })
+    }
   }
 
   const duplicateCols = [

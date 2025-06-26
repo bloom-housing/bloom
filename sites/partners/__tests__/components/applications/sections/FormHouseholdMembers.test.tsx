@@ -22,6 +22,7 @@ const mockHouseholdMember = {
   birthDay: "28",
   workInRegion: YesNoEnum.yes,
   sameAddress: YesNoEnum.no,
+  fullTimeStudent: null,
   householdMemberAddress: {
     id: "address_1_id",
     createdAt: new Date(),
@@ -330,5 +331,31 @@ describe("<FormHouseholdMembers>", () => {
         updatedAt: undefined,
       },
     ])
+  })
+
+  it("should render the full time student question in drawer", async () => {
+    const mockSetHouseholdMembers = jest.fn()
+    render(
+      <FormProviderWrapper>
+        <FormHouseholdMembers
+          householdMembers={[]}
+          setHouseholdMembers={mockSetHouseholdMembers}
+          enableFullTimeStudentQuestion={true}
+        />
+      </FormProviderWrapper>
+    )
+
+    const addMemberButton = screen.getByRole("button", { name: /add household member/i })
+    expect(addMemberButton).toBeInTheDocument()
+
+    await act(() => userEvent.click(addMemberButton))
+
+    const drawerTitle = screen.getByRole("heading", { level: 1, name: /^household member$/i })
+    expect(drawerTitle).toBeInTheDocument()
+
+    const drawerContainer = drawerTitle.parentElement.parentElement
+    expect(within(drawerContainer).getByText(/full-time student\?/i)).toBeInTheDocument()
+    expect(within(drawerContainer).getAllByLabelText(/yes/i)).toHaveLength(3)
+    expect(within(drawerContainer).getAllByLabelText(/no/i)).toHaveLength(3)
   })
 })

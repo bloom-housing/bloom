@@ -188,6 +188,7 @@ export const application: Application = {
     phoneNumberType: "home",
     noPhone: false,
     workInRegion: YesNoEnum.yes,
+    fullTimeStudent: YesNoEnum.no,
     applicantWorkAddress: {
       id: "applicant_work_address_id",
       createdAt: new Date(),
@@ -249,6 +250,7 @@ export const application: Application = {
       relationship: HouseholdMemberRelationship.friend,
       sameAddress: YesNoEnum.no,
       workInRegion: YesNoEnum.yes,
+      fullTimeStudent: YesNoEnum.no,
       householdMemberAddress: {
         id: "member_address_id",
         createdAt: new Date(),

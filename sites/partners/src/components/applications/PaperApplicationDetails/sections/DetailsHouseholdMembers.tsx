@@ -8,9 +8,13 @@ import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 type DetailsHouseholdMembersProps = {
   setMembersDrawer: (member: MembersDrawer) => void
+  enableFullTimeStudentQuestion?: boolean
 }
 
-const DetailsHouseholdMembers = ({ setMembersDrawer }: DetailsHouseholdMembersProps) => {
+const DetailsHouseholdMembers = ({
+  setMembersDrawer,
+  enableFullTimeStudentQuestion,
+}: DetailsHouseholdMembersProps) => {
   const application = useContext(ApplicationContext)
 
   const householdMembersHeaders = {
@@ -19,6 +23,9 @@ const DetailsHouseholdMembers = ({ setMembersDrawer }: DetailsHouseholdMembersPr
     birth: "application.household.member.dateOfBirth",
     sameResidence: "application.add.sameResidence",
     workInRegion: "application.details.workInRegion",
+    ...(enableFullTimeStudentQuestion && {
+      fullTimeStudent: "application.details.fullTimeStudent",
+    }),
     action: "",
   }
 
@@ -50,6 +57,9 @@ const DetailsHouseholdMembers = ({ setMembersDrawer }: DetailsHouseholdMembersPr
       },
       sameResidence: { content: checkAvailablility(item.sameAddress) },
       workInRegion: { content: checkAvailablility(item.workInRegion) },
+      ...(enableFullTimeStudentQuestion && {
+        fullTimeStudent: { content: checkAvailablility(item.fullTimeStudent) },
+      }),
       action: {
         content: (
           <Button
@@ -63,7 +73,7 @@ const DetailsHouseholdMembers = ({ setMembersDrawer }: DetailsHouseholdMembersPr
         ),
       },
     }))
-  }, [application, setMembersDrawer])
+  }, [application, setMembersDrawer, enableFullTimeStudentQuestion])
 
   return (
     <SectionWithGrid heading={t("application.household.householdMembers")} bypassGrid inset>

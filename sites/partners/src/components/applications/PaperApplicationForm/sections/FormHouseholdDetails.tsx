@@ -15,12 +15,14 @@ type FormHouseholdDetailsProps = {
   listingUnits: Unit[]
   applicationUnitTypes: UnitType[]
   applicationAccessibilityFeatures: Accessibility
+  enableFullTimeStudentQuestion?: boolean
 }
 
 const FormHouseholdDetails = ({
   listingUnits,
   applicationUnitTypes,
   applicationAccessibilityFeatures,
+  enableFullTimeStudentQuestion,
 }: FormHouseholdDetailsProps) => {
   const formMethods = useFormContext()
 
@@ -116,7 +118,13 @@ const FormHouseholdDetails = ({
           </FieldValue>
         </Grid.Row>
         <Grid.Row columns="3">
-          <FieldValue label={t("application.household.householdStudent.title")}>
+          <FieldValue
+            label={
+              enableFullTimeStudentQuestion
+                ? t("application.household.householdStudentAll.title")
+                : t("application.household.householdStudent.title")
+            }
+          >
             <div className="flex h-12 items-center">
               <Field
                 id="application.householdStudentYes"
