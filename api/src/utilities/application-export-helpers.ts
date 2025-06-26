@@ -241,6 +241,10 @@ export const getExportHeaders = (
         label: 'Accessibility Hearing',
       },
       {
+        path: 'accessibility.other',
+        label: 'Accessibility Other',
+      },
+      {
         path: 'householdExpectingChanges',
         label: 'Expecting Household Changes',
       },

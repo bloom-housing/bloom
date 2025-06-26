@@ -217,6 +217,10 @@ describe('Testing application export helpers', () => {
       label: 'Accessibility Hearing',
     },
     {
+      path: 'accessibility.other',
+      label: 'Accessibility Other',
+    },
+    {
       path: 'householdExpectingChanges',
       label: 'Expecting Household Changes',
     },
