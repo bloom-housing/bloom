@@ -47,24 +47,23 @@ export const stagingSeed = async (
     data: jurisdictionFactory(jurisdictionName, {
       listingApprovalPermissions: [UserRoleEnum.admin],
       featureFlags: [
-        FeatureFlagEnum.enableHomeType,
         FeatureFlagEnum.enableAccessibilityFeatures,
-        FeatureFlagEnum.enableUtilitiesIncluded,
-        FeatureFlagEnum.enableIsVerified,
-        FeatureFlagEnum.enableNeighborhoodAmenities,
-        FeatureFlagEnum.enableMarketingStatus,
-        FeatureFlagEnum.enableSection8Question,
-        FeatureFlagEnum.enableSingleUseCode,
+        FeatureFlagEnum.enableCompanyWebsite,
         FeatureFlagEnum.enableGeocodingPreferences,
         FeatureFlagEnum.enableGeocodingRadiusMethod,
-        FeatureFlagEnum.enableListingOpportunity,
-        FeatureFlagEnum.enablePartnerDemographics,
-        FeatureFlagEnum.enablePartnerSettings,
-        FeatureFlagEnum.enableListingPagination,
+        FeatureFlagEnum.enableHomeType,
+        FeatureFlagEnum.enableIsVerified,
         FeatureFlagEnum.enableListingFavoriting,
         FeatureFlagEnum.enableListingFiltering,
-        FeatureFlagEnum.enableCompanyWebsite,
-        FeatureFlagEnum.enableWaitlistAdditionalFields,
+        FeatureFlagEnum.enableListingOpportunity,
+        FeatureFlagEnum.enableListingPagination,
+        FeatureFlagEnum.enableMarketingStatus,
+        FeatureFlagEnum.enableNeighborhoodAmenities,
+        FeatureFlagEnum.enablePartnerDemographics,
+        FeatureFlagEnum.enablePartnerSettings,
+        FeatureFlagEnum.enableSection8Question,
+        FeatureFlagEnum.enableSingleUseCode,
+        FeatureFlagEnum.enableUtilitiesIncluded,
       ],
       languages: Object.values(LanguagesEnum),
     }),
@@ -73,30 +72,31 @@ export const stagingSeed = async (
   const lakeviewJurisdiction = await prismaClient.jurisdictions.create({
     data: jurisdictionFactory('Lakeview', {
       featureFlags: [
-        FeatureFlagEnum.enableUnitGroups,
-        FeatureFlagEnum.hideCloseListingButton,
-        FeatureFlagEnum.enableHomeType,
+        FeatureFlagEnum.disableJurisdictionalAdmin,
+        FeatureFlagEnum.disableListingPreferences,
         FeatureFlagEnum.enableAccessibilityFeatures,
-        FeatureFlagEnum.enableUtilitiesIncluded,
+        FeatureFlagEnum.enableAdditionalResources,
+        FeatureFlagEnum.enableCompanyWebsite,
+        FeatureFlagEnum.enableGeocodingRadiusMethod,
+        FeatureFlagEnum.enableHomeType,
         FeatureFlagEnum.enableIsVerified,
-        FeatureFlagEnum.enableNeighborhoodAmenities,
+        FeatureFlagEnum.enableListingFavoriting,
+        FeatureFlagEnum.enableListingFiltering,
+        FeatureFlagEnum.enableListingOpportunity,
+        FeatureFlagEnum.enableListingPagination,
         FeatureFlagEnum.enableMarketingStatus,
+        FeatureFlagEnum.enableNeighborhoodAmenities,
+        FeatureFlagEnum.enablePartnerDemographics,
+        FeatureFlagEnum.enablePartnerSettings,
         FeatureFlagEnum.enableRegions,
         FeatureFlagEnum.enableSection8Question,
         FeatureFlagEnum.enableSingleUseCode,
-        FeatureFlagEnum.enableGeocodingPreferences,
-        FeatureFlagEnum.enableGeocodingRadiusMethod,
-        FeatureFlagEnum.enableListingOpportunity,
-        FeatureFlagEnum.enablePartnerDemographics,
-        FeatureFlagEnum.enablePartnerSettings,
-        FeatureFlagEnum.enableListingPagination,
-        FeatureFlagEnum.disableJurisdictionalAdmin,
-        FeatureFlagEnum.swapCommunityTypeWithPrograms,
-        FeatureFlagEnum.enableListingFavoriting,
-        FeatureFlagEnum.enableListingFiltering,
-        FeatureFlagEnum.enableCompanyWebsite,
-        FeatureFlagEnum.disableCommonApplication,
+        FeatureFlagEnum.enableUnderConstructionHome,
+        FeatureFlagEnum.enableUnitGroups,
+        FeatureFlagEnum.enableUtilitiesIncluded,
         FeatureFlagEnum.enableWaitlistAdditionalFields,
+        FeatureFlagEnum.hideCloseListingButton,
+        FeatureFlagEnum.swapCommunityTypeWithPrograms,
       ],
     }),
   });
@@ -106,11 +106,11 @@ export const stagingSeed = async (
       featureFlags: [
         FeatureFlagEnum.enableGeocodingPreferences,
         FeatureFlagEnum.enableGeocodingRadiusMethod,
+        FeatureFlagEnum.enableListingFiltering,
         FeatureFlagEnum.enableListingOpportunity,
+        FeatureFlagEnum.enableListingPagination,
         FeatureFlagEnum.enablePartnerDemographics,
         FeatureFlagEnum.enablePartnerSettings,
-        FeatureFlagEnum.enableListingFiltering,
-        FeatureFlagEnum.enableListingPagination,
       ],
       languages: [LanguagesEnum.en, LanguagesEnum.es, LanguagesEnum.vi],
     }),
@@ -349,6 +349,22 @@ export const stagingSeed = async (
       },
     }),
   });
+
+  // add extra programs to support filtering by "community type"
+  await Promise.all(
+    [...new Array(3)].map(
+      async () =>
+        await prismaClient.multiselectQuestions.create({
+          data: multiselectQuestionFactory(lakeviewJurisdiction.id, {
+            multiselectQuestion: {
+              applicationSection:
+                MultiselectQuestionsApplicationSectionEnum.programs,
+            },
+          }),
+        }),
+    ),
+  );
+
   // create pre-determined values
   const unitTypes = await unitTypeFactoryAll(prismaClient);
   await unitAccessibilityPriorityTypeFactoryAll(prismaClient);

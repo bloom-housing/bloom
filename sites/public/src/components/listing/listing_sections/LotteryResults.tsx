@@ -21,9 +21,7 @@ export const LotteryResults = ({
 }: LotteryResultsProps) => {
   if (!lotteryResultsPdfUrl || listingStatus !== ListingsStatusEnum.closed) return
   return (
-    <Card
-      className={`${styles["mobile-full-width-card"]} ${styles["mobile-no-bottom-border"]} seeds-m-bs-content`}
-    >
+    <Card className={`${styles["mobile-full-width-card"]} ${styles["mobile-no-bottom-border"]}`}>
       <Card.Section>
         <HeadingGroup
           headingPriority={3}

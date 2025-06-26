@@ -48,12 +48,12 @@ const loadListing = async (
   const jurisdictionResponse = await jurisdictionsService.retrieve({
     jurisdictionId: listingResponse.jurisdictions.id,
   })
-
   conductor.listing = listingResponse
   const applicationConfig = retrieveApplicationConfig(conductor.listing) // TODO: load from backend
   conductor.config = {
     ...applicationConfig,
     languages: jurisdictionResponse.languages,
+    featureFlags: jurisdictionResponse.featureFlags,
   }
   stateFunction(conductor.listing)
   context.syncListing(conductor.listing)
@@ -208,7 +208,7 @@ const ApplicationChooseLanguage = () => {
 
         {initialStateLoaded && !profile && (
           <>
-            <CardSection divider={"flush"} className={"bg-primary-lighter"}>
+            <CardSection divider={"flush"} className={styles["application-form-action-footer"]}>
               <Heading priority={2} size={"2xl"} className={"pb-4"}>
                 {t("account.haveAnAccount")}
               </Heading>
@@ -222,7 +222,7 @@ const ApplicationChooseLanguage = () => {
                 {t("nav.signIn")}
               </Button>
             </CardSection>
-            <CardSection divider={"flush"} className={"bg-primary-lighter"}>
+            <CardSection divider={"flush"} className={styles["application-form-action-footer"]}>
               <Heading priority={2} size={"2xl"} className={"pb-4"}>
                 {t("authentication.createAccount.noAccount")}
               </Heading>

@@ -10,6 +10,7 @@ import {
   ReviewOrderTypeEnum,
 } from '@prisma/client';
 import { randomInt } from 'crypto';
+import dayjs from 'dayjs';
 import { randomName } from './word-generator';
 import { addressFactory } from './address-factory';
 import { reservedCommunityTypesFindOrCreate } from './reserved-community-type-factory';
@@ -129,7 +130,9 @@ export const listingFactory = async (
     afsLastRunAt: optionalParams?.afsLastRunSetInPast
       ? new Date(0)
       : new Date(),
-    applicationDueDate: optionalParams?.applicationDueDate ?? undefined,
+    applicationDueDate:
+      optionalParams?.applicationDueDate ??
+      dayjs(new Date()).add(30, 'days').toDate(),
     assets: [],
     closedAt: optionalParams?.closedAt
       ? optionalParams?.closedAt

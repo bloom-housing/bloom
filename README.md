@@ -52,7 +52,7 @@ If you don't have yarn installed, you can install homebrew with [these instructi
 
 ### Local environment variables
 
-Configuration of each app and service is read from environment variables. There is an `.env.template` file in `sites/public`, `sites/partners`, and `api` that must be copied to an `.env` at the same level. Some keys are secret and are internally available. The template files include default values and descriptions of each variable.
+Configuration of each app and service is read from environment variables. There is an `.env.template` file in `sites/public`, `sites/partners`, and `api` that must be copied to an `.env` at the same level. Some keys are secret and are internally available in a password manager - you can request access through the current team. The template files include default values and descriptions of each variable.
 
 ### VSCode Extensions
 
@@ -77,6 +77,8 @@ Running `yarn dev:all` from root runs 3 processes for both apps and the backend 
 - 3100 for the api
 
 You can also run each process individually from separate terminals with the following command in each directory: `yarn dev`.
+
+We have a number of default users seeded for local development, the most basic of which being (email: `admin@example.com`, password: `abcdef`) which will login to both the public and partners sites, but you can view other default seeded users and their permissions by checking out the user section of the [seed file](https://github.com/bloom-housing/bloom/blob/aed77bf06525be359ef9205044fabbea2ab2576d/api/prisma/seed-staging.ts#L67).
 
 ### Bloom UIC development
 
@@ -123,3 +125,26 @@ Pull requests are opened to the main branch. When opening a pull request please 
 When your PR is ready for review, add the `needs review(s)` label to surface it to our internal team. If you put up a PR that is not yet ready for eyes, add the `wip` label.
 
 As a reviewer on a PR, try not to leave only comments, but a clear next step action. If the PR requires further discussion or changes, mark it with Requested Changes. If a PR looks good to you (or even if there are small changes requested that won't require an additional review), please mark it with Approved and comment on the last few changes needed. This helps other reviewers better understand the state of PRs at the list view and prevents an additional unnecessary review cycle.
+
+## CI/CD
+
+### Dependabot
+
+Dependabot is enabled for this repo. Dependabot is responsible for raising security and version upgrade PRs for the application's dependencies.
+
+The configuration file is located in `.github/dependabot.yaml`. It scans all npm package.json files within the top level, `api`, `shared-helpers`, `sites/partners` and `sites/public` directories.
+
+Current configuration dictates:
+
+- Scans occur weekly
+- `major` security and version upgrades will have their own PRs. `minor` and `patch` upgrades will be grouped together in weekly PRs, security and version are separate groupings. This is done to try to reduce overwhelming number of PRs but may increase testing difficulty.
+
+Default Configurations:
+
+- Only scans the default branch
+- All pull requests have a `dependencies` label.
+- Generate branch names of the form: `dependabot/PACKAGE_MANAGER/DEPENDENCY`
+- If five pull requests with version updates are open, no further pull requests are raised until some of those open requests are merged or closed.
+- Security updates have a separate, internal limit of ten open pull requests which cannot be changed.
+
+For more information on Dependabot read the [general documentation](https://docs.github.com/en/code-security/dependabot) or the [config file documentation](https://docs.github.com/en/code-security/dependabot/working-with-dependabot/dependabot-options-reference)

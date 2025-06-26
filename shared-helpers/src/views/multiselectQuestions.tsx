@@ -135,11 +135,11 @@ const getRadioField = (
         inputProps={{
           value: !!option.text,
           onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
-            if (e.target.checked && trigger) {
+            if (e.target?.checked && trigger) {
               void trigger()
             }
             uncheckOptions(allOptions, setValue)
-            setValue(optionFieldName, e.target.value)
+            setValue(optionFieldName, e.target?.value)
           },
         }}
         dataTestId={"app-question-option"}

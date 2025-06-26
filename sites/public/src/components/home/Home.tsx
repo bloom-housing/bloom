@@ -3,22 +3,26 @@ import Head from "next/head"
 import {
   FeatureFlagEnum,
   Jurisdiction,
+  Listing,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { t } from "@bloom-housing/ui-components"
-import { Button, Heading } from "@bloom-housing/ui-seeds"
+import { Button } from "@bloom-housing/ui-seeds"
 import { PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../../lib/constants"
 import Layout from "../../layouts/application"
 import { ConfirmationModal } from "../../components/account/ConfirmationModal"
 import { MetaTags } from "../../components/shared/MetaTags"
-import MaxWidthLayout from "../../layouts/max-width"
-import styles from "./Home.module.scss"
+import { isFeatureFlagOn } from "../../lib/helpers"
+import { Hero } from "../../patterns/Hero"
 import { HomeSection } from "./HomeSection"
 import { HomeRegions } from "./HomeRegions"
 import { HomeResources } from "./HomeResources"
+import { HomeUnderConstruction } from "./HomeUnderConstruction"
+import styles from "./Home.module.scss"
 
 interface HomeProps {
   jurisdiction: Jurisdiction
+  underConstructionListings: Listing[]
 }
 
 export const Home = (props: HomeProps) => {
@@ -36,9 +40,12 @@ export const Home = (props: HomeProps) => {
 
   const metaDescription = t("pageDescription.welcome", { regionName: t("region.name") })
 
-  const enableRegions =
-    props.jurisdiction?.featureFlags.find((flag) => flag.name === FeatureFlagEnum.enableRegions)
-      ?.active || false
+  const enableRegions = isFeatureFlagOn(props.jurisdiction, FeatureFlagEnum.enableRegions)
+
+  const enableUnderConstruction = isFeatureFlagOn(
+    props.jurisdiction,
+    FeatureFlagEnum.enableUnderConstructionHome
+  )
 
   return (
     <Layout>
@@ -47,26 +54,44 @@ export const Home = (props: HomeProps) => {
       </Head>
       <MetaTags title={t("nav.siteTitle")} description={metaDescription} />
       <div className={styles["home-page"]}>
-        <MaxWidthLayout className={styles["hero-container"]}>
-          <div className={styles["hero"]}>
-            <Heading priority={1} className={styles["heading"]}>
-              {heroTitle}
-            </Heading>
-            <p className={styles["subtitle"]}>{t("welcome.subtitle")}</p>
-            <Button href="/listings" variant="primary-outlined" className={styles["hero-button"]}>
+        <Hero
+          title={heroTitle}
+          subtitle={t("welcome.subtitle")}
+          action={
+            <Button href="/listings" variant="primary-outlined">
               {t("welcome.seeRentalListings")}
             </Button>
-          </div>
-        </MaxWidthLayout>
+          }
+        />
+        {enableUnderConstruction && props.underConstructionListings.length > 0 && (
+          <HomeSection
+            sectionTitle={t("listings.underConstruction")}
+            sectionIcon="clock"
+            layoutClassName={styles["surface-background"]}
+          >
+            <HomeUnderConstruction
+              listings={props.underConstructionListings}
+              jurisdiction={props.jurisdiction}
+            />
+          </HomeSection>
+        )}
         {enableRegions && (
-          <HomeSection sectionTitle={t("welcome.cityRegions")} sectionIcon="mapPin">
+          <HomeSection
+            sectionTitle={t("welcome.cityRegions")}
+            sectionIcon="mapPin"
+            layoutClassName={`${styles["muted-background"]}`}
+          >
             <HomeRegions />
           </HomeSection>
         )}
         <HomeSection
           sectionTitle={t("welcome.resources")}
           sectionIcon="listBullet"
-          layoutClassName={styles["resource-container"]}
+          layoutClassName={`${styles["resource-container"]} ${
+            !enableRegions && !enableRegions
+              ? styles["muted-background"]
+              : styles["surface-background"]
+          }`}
         >
           <HomeResources jurisdiction={props.jurisdiction} />
         </HomeSection>
