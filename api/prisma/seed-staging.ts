@@ -66,6 +66,21 @@ export const stagingSeed = async (
         FeatureFlagEnum.enableUtilitiesIncluded,
       ],
       languages: Object.values(LanguagesEnum),
+      requiredListingFields: [
+        'listingsBuildingAddress',
+        'name',
+        'developer',
+        'listingImages',
+        'leasingAgentEmail',
+        'leasingAgentName',
+        'leasingAgentPhone',
+        'jurisdictions',
+        'units',
+        'digitalApplication',
+        'paperApplication',
+        'referralOpportunity',
+        'rentalAssistance',
+      ],
     }),
   });
   // jurisdiction with unit groups enabled

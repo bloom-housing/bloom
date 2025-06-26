@@ -6,6 +6,7 @@ import {
 import { PrismaService } from '../services/prisma.service';
 import { ListingUpdate } from '../dtos/listings/listing-update.dto';
 import { FeatureFlagEnum } from '../enums/feature-flags/feature-flags-enum';
+import { ListingsStatusEnum } from '@prisma/client';
 
 /*
   Validates if validated value is array with at least 1 element
@@ -22,8 +23,17 @@ export function ValidateUnitsRequired(validationOptions?: ValidationOptions) {
       async: true,
       validator: {
         async validate(value: unknown[], args: ValidationArguments) {
-          const jurisdictionId = (args.object as ListingUpdate).jurisdictions
-            ?.id;
+          const object = args.object as ListingUpdate;
+          // At least 1 unit or unit group is only required if publishing the listing
+          if (
+            !(
+              ListingsStatusEnum.active === object.status ||
+              ListingsStatusEnum.pendingReview === object.status
+            )
+          ) {
+            return true;
+          }
+          const jurisdictionId = object.jurisdictions?.id;
           if (!jurisdictionId) return true;
 
           const prisma = new PrismaService();
