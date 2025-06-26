@@ -5,7 +5,11 @@ import { sortUnitTypes } from "@bloom-housing/shared-helpers"
 import { ApplicationContext } from "../../ApplicationContext"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 
-const DetailsHouseholdDetails = () => {
+type DetailsHouseholdDetailsProps = {
+  enableAdaOtherOption: boolean
+}
+
+const DetailsHouseholdDetails = ({ enableAdaOtherOption }: DetailsHouseholdDetailsProps) => {
   const application = useContext(ApplicationContext)
 
   const accessibilityLabels = (accessibility) => {
@@ -13,7 +17,7 @@ const DetailsHouseholdDetails = () => {
     if (accessibility.mobility) labels.push(t("application.ada.mobility"))
     if (accessibility.vision) labels.push(t("application.ada.vision"))
     if (accessibility.hearing) labels.push(t("application.ada.hearing"))
-    //if feature flag, add other label
+    if (enableAdaOtherOption && accessibility.other) labels.push(t("application.ada.other"))
     if (labels.length === 0) labels.push(t("t.no"))
 
     return labels
