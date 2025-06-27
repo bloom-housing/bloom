@@ -120,14 +120,14 @@ describe("admin", () => {
       })
     )
     render(<Admin />)
-    await screen.findByRole("heading", { level: 1, name: "Administration" })
+    await screen.findByRole("cell", { name: "jurisdiction 1" })
+    expect(screen.getByRole("heading", { level: 1, name: "Administration" })).toBeInTheDocument()
     expect(screen.getByRole("tab", { name: "By Jurisdiction" })).toBeInTheDocument()
     expect(screen.getByRole("tabpanel", { name: "By Jurisdiction" })).toBeInTheDocument()
     expect(screen.getByRole("tab", { name: "By Feature Flag" })).toBeInTheDocument()
     expect(screen.getByRole("tabpanel", { name: "By Feature Flag" })).toBeInTheDocument()
 
     expect(screen.getByRole("button", { name: "Add All New Feature Flags" })).toBeInTheDocument()
-    await screen.findByRole("cell", { name: "jurisdiction 1" })
 
     // Table
     const table = screen.getByRole("table")
