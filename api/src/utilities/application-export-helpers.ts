@@ -7,6 +7,9 @@ import { MultiselectQuestion } from '../dtos/multiselect-questions/multiselect-q
 import { UnitType } from '../dtos/unit-types/unit-type.dto';
 import { CsvHeader } from '../types/CsvExportInterface';
 import { formatLocalDate } from '../utilities/format-local-date';
+import { User } from 'src/dtos/users/user.dto';
+import { doAnyJurisdictionHaveFeatureFlagSet } from './feature-flag-utilities';
+import { FeatureFlagEnum } from 'src/enums/feature-flags/feature-flags-enum';
 
 /**
  *
@@ -22,10 +25,15 @@ export const getExportHeaders = (
   maxHouseholdMembers: number,
   multiSelectQuestions: MultiselectQuestion[],
   timeZone: string,
+  user: User,
   includeDemographics = false,
   forLottery = false,
   dateFormat = 'MM-DD-YYYY hh:mm:ssA z',
 ): CsvHeader[] => {
+  const enableAdaOtherOption = doAnyJurisdictionHaveFeatureFlagSet(
+    user.jurisdictions,
+    FeatureFlagEnum.enableAdaOtherOption,
+  );
   const headers: CsvHeader[] = [
     {
       path: 'id',
@@ -240,10 +248,14 @@ export const getExportHeaders = (
         path: 'accessibility.hearing',
         label: 'Accessibility Hearing',
       },
-      {
-        path: 'accessibility.other',
-        label: 'Accessibility Other',
-      },
+      ...(enableAdaOtherOption
+        ? [
+            {
+              path: 'accessibility.other',
+              label: 'Accessibility Other',
+            },
+          ]
+        : []),
       {
         path: 'householdExpectingChanges',
         label: 'Expecting Household Changes',
