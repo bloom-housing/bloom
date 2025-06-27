@@ -155,8 +155,8 @@ const DetailApplicationDates = () => {
             </FieldValue>
             <FieldValue id="marketingSeasonDate" label={t("listings.marketingSection.date")}>
               {listing.marketingSeason && t(`seasons.${listing.marketingSeason}`)}{" "}
-              {listing.marketingDate && dayjs(listing.marketingDate).year()}
-              {!listing.marketingSeason && !listing.marketingDate && t("t.none")}
+              {listing.marketingDateYear && listing.marketingDateYear}
+              {!listing.marketingSeason && !listing.marketingDateYear && t("t.none")}
             </FieldValue>
           </Grid.Row>
         )}

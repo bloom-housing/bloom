@@ -693,6 +693,11 @@ class Listing extends AbstractDTO {
   marketingDate?: Date | null;
 
   @Expose()
+  @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  marketingDateYear?: number;
+
+  @Expose()
   @IsEnum(MarketingSeasonEnum, { groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional({
     enum: MarketingSeasonEnum,
