@@ -472,11 +472,33 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
         path: 'yearBuilt',
         label: 'Building Year Built',
       },
-      {
-        path: 'reservedCommunityTypes.name',
-        label: 'Reserved Community Types',
-        format: (val: string): string => formatCommunityType[val] || '',
-      },
+      ...(doAnyJurisdictionHaveFeatureFlagSet(
+        user.jurisdictions,
+        FeatureFlagEnum.swapCommunityTypeWithPrograms,
+      )
+        ? [
+            {
+              path: 'listingMultiselectQuestions',
+              label: 'Community Types',
+              format: (val: ListingMultiselectQuestion[]): string => {
+                return val
+                  .filter(
+                    (question) =>
+                      question.multiselectQuestions.applicationSection ===
+                      'programs',
+                  )
+                  .map((question) => question.multiselectQuestions.text)
+                  .join(',');
+              },
+            },
+          ]
+        : [
+            {
+              path: 'reservedCommunityTypes.name',
+              label: 'Reserved Community Types',
+              format: (val: string): string => formatCommunityType[val] || '',
+            },
+          ]),
       {
         path: 'listingsBuildingAddress.latitude',
         label: 'Latitude',
@@ -672,20 +694,27 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
               .join(',');
           },
         },
-        {
-          path: 'listingMultiselectQuestions',
-          label: 'Housing Programs',
-          format: (val: ListingMultiselectQuestion[]): string => {
-            return val
-              .filter(
-                (question) =>
-                  question.multiselectQuestions.applicationSection ===
-                  'programs',
-              )
-              .map((question) => question.multiselectQuestions.text)
-              .join(',');
-          },
-        },
+        ...(doAnyJurisdictionHaveFeatureFlagSet(
+          user.jurisdictions,
+          FeatureFlagEnum.swapCommunityTypeWithPrograms,
+        )
+          ? []
+          : [
+              {
+                path: 'listingMultiselectQuestions',
+                label: 'Housing Programs',
+                format: (val: ListingMultiselectQuestion[]): string => {
+                  return val
+                    .filter(
+                      (question) =>
+                        question.multiselectQuestions.applicationSection ===
+                        'programs',
+                    )
+                    .map((question) => question.multiselectQuestions.text)
+                    .join(',');
+                },
+              },
+            ]),
         {
           path: 'applicationFee',
           label: 'Application Fee',
