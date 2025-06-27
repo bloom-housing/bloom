@@ -33,7 +33,12 @@ describe("<ListingBrowse>", () => {
         multiselectData={[]}
       />
     )
-    expect(screen.getByText("No listings currently have open applications.")).toBeDefined()
+    expect(
+      screen.queryAllByRole("heading", {
+        level: 2,
+        name: /no listings currently have open applications/i,
+      })
+    ).toBeDefined()
     expect(screen.queryByRole("button", { name: /previous/i })).not.toBeInTheDocument()
     expect(screen.queryByRole("button", { name: /next/i })).not.toBeInTheDocument()
     expect(screen.queryByText(/page \d* of \d*/i)).not.toBeInTheDocument()
@@ -48,10 +53,81 @@ describe("<ListingBrowse>", () => {
         multiselectData={[]}
       />
     )
-    expect(screen.getByText("No listings currently have closed applications.")).toBeDefined()
+    expect(
+      screen.queryByRole("heading", {
+        level: 2,
+        name: /no listings currently have closed applications/i,
+      })
+    ).toBeDefined()
     expect(screen.queryByRole("button", { name: /previous/i })).not.toBeInTheDocument()
     expect(screen.queryByRole("button", { name: /next/i })).not.toBeInTheDocument()
     expect(screen.queryByText(/page \d* of \d*/i)).not.toBeInTheDocument()
+  })
+
+  it("shows empty state, open listings with filters", async () => {
+    const { replaceMock } = mockNextRouter({ bedroomTypes: "fiveBdrm" })
+    render(
+      <ListingBrowse
+        listings={[]}
+        tab={TabsIndexEnum.open}
+        jurisdiction={jurisdiction}
+        multiselectData={[]}
+        areFiltersActive={true}
+      />
+    )
+
+    expect(
+      screen.getByRole("heading", {
+        level: 2,
+        name: /no listings currently have open applications/i,
+      })
+    ).toBeInTheDocument()
+    expect(
+      screen.getByText(
+        /try removing some of your filters or view other affordable housing resources/i
+      )
+    ).toBeInTheDocument()
+
+    const showAllButton = screen.getByRole("button", { name: /^view housing resources$/i })
+    expect(showAllButton).toBeInTheDocument()
+
+    await userEvent.click(showAllButton)
+    await waitFor(() => {
+      expect(replaceMock).toBeCalledWith("/")
+    })
+  })
+
+  it("shows empty state, closed listings with filters", async () => {
+    const { replaceMock } = mockNextRouter({ bedroomTypes: "fiveBdrm" })
+    render(
+      <ListingBrowse
+        listings={[]}
+        tab={TabsIndexEnum.closed}
+        jurisdiction={jurisdiction}
+        multiselectData={[]}
+        areFiltersActive={true}
+      />
+    )
+
+    expect(
+      screen.getByRole("heading", {
+        level: 2,
+        name: /no listings currently have closed applications/i,
+      })
+    ).toBeInTheDocument()
+    expect(
+      screen.getByText(
+        /try removing some of your filters or view other affordable housing resources/i
+      )
+    ).toBeInTheDocument()
+
+    const showAllButton = screen.getByRole("button", { name: /^view housing resources$/i })
+    expect(showAllButton).toBeInTheDocument()
+
+    await userEvent.click(showAllButton)
+    await waitFor(() => {
+      expect(replaceMock).toBeCalledWith("/")
+    })
   })
 
   describe("listing unit previews", () => {
@@ -343,7 +419,7 @@ describe("<ListingBrowse>", () => {
   })
 
   it("shows multiple open listings without pagination", () => {
-    const view = render(
+    render(
       <ListingBrowse
         listings={[
           { ...listing, name: "ListingA" },
@@ -361,9 +437,9 @@ describe("<ListingBrowse>", () => {
         multiselectData={[]}
       />
     )
-    expect(view.queryByText("No listings currently have open applications.")).toBeNull()
-    expect(view.getByText("ListingA")).toBeDefined()
-    expect(view.getByText("ListingB")).toBeDefined()
+    expect(screen.queryByText("No listings currently have open applications.")).toBeNull()
+    expect(screen.getByText("ListingA")).toBeDefined()
+    expect(screen.getByText("ListingB")).toBeDefined()
     expect(screen.queryByRole("button", { name: /previous/i })).not.toBeInTheDocument()
     expect(screen.queryByRole("button", { name: /next/i })).not.toBeInTheDocument()
     expect(screen.getByText(/page 1 of 1/i)).toBeInTheDocument()
@@ -373,7 +449,7 @@ describe("<ListingBrowse>", () => {
     it("show only next button when on first page", async () => {
       const { pushMock } = mockNextRouter()
 
-      const view = render(
+      render(
         <ListingBrowse
           listings={[
             { ...listing, name: "ListingA" },
@@ -391,9 +467,9 @@ describe("<ListingBrowse>", () => {
           multiselectData={[]}
         />
       )
-      expect(view.queryByText("No listings currently have open applications.")).toBeNull()
-      expect(view.getByText("ListingA")).toBeDefined()
-      expect(view.getByText("ListingB")).toBeDefined()
+      expect(screen.queryByText("No listings currently have open applications.")).toBeNull()
+      expect(screen.getByText("ListingA")).toBeDefined()
+      expect(screen.getByText("ListingB")).toBeDefined()
       expect(screen.queryByRole("button", { name: /previous/i })).not.toBeInTheDocument()
       const nextPageButton = screen.getByRole("button", { name: /next/i })
       expect(nextPageButton).toBeInTheDocument()
@@ -408,7 +484,7 @@ describe("<ListingBrowse>", () => {
     it("show only previous button when on last page", async () => {
       const { pushMock } = mockNextRouter()
 
-      const view = render(
+      render(
         <ListingBrowse
           listings={[
             { ...listing, name: "ListingA" },
@@ -426,9 +502,9 @@ describe("<ListingBrowse>", () => {
           multiselectData={[]}
         />
       )
-      expect(view.queryByText("No listings currently have open applications.")).toBeNull()
-      expect(view.getByText("ListingA")).toBeDefined()
-      expect(view.getByText("ListingB")).toBeDefined()
+      expect(screen.queryByText("No listings currently have open applications.")).toBeNull()
+      expect(screen.getByText("ListingA")).toBeDefined()
+      expect(screen.getByText("ListingB")).toBeDefined()
       expect(screen.queryByRole("button", { name: /next/i })).not.toBeInTheDocument()
       const previousPageButton = screen.getByRole("button", { name: /previous/i })
       expect(previousPageButton).toBeInTheDocument()
@@ -443,7 +519,7 @@ describe("<ListingBrowse>", () => {
     it("show only both navigation button when on midpoint page", async () => {
       const { pushMock } = mockNextRouter()
 
-      const view = render(
+      render(
         <ListingBrowse
           listings={[
             { ...listing, name: "ListingA" },
@@ -461,9 +537,9 @@ describe("<ListingBrowse>", () => {
           multiselectData={[]}
         />
       )
-      expect(view.queryByText("No listings currently have open applications.")).toBeNull()
-      expect(view.getByText("ListingA")).toBeDefined()
-      expect(view.getByText("ListingB")).toBeDefined()
+      expect(screen.queryByText("No listings currently have open applications.")).toBeNull()
+      expect(screen.getByText("ListingA")).toBeDefined()
+      expect(screen.getByText("ListingB")).toBeDefined()
 
       const previousPageButton = screen.getByRole("button", { name: /previous/i })
       expect(previousPageButton).toBeInTheDocument()
