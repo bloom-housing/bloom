@@ -550,6 +550,7 @@
   "t.export": "Export",
   "t.exportSuccess": "File exported successfully",
   "t.exportToCSV": "Export to CSV",
+  "t.featureFlag": "Feature Flag",
   "t.fileName": "File Name",
   "t.filter": "Filter",
   "t.formSubmitted": "Submitting form, wait",
