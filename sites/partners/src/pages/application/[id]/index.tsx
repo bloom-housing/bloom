@@ -23,6 +23,7 @@ import { DetailsTerms } from "../../../components/applications/PaperApplicationD
 import { Aside } from "../../../components/applications/Aside"
 import {
   ApplicationStatusEnum,
+  FeatureFlagEnum,
   MultiselectQuestionsApplicationSectionEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
@@ -36,7 +37,13 @@ export default function ApplicationsList() {
   }
   const { listingDto } = useSingleListingData(application?.listings?.id)
 
-  const { applicationsService } = useContext(AuthContext)
+  const { applicationsService, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
+
+  const enableAdaOtherOption = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableAdaOtherOption,
+    listingDto?.jurisdictions.id
+  )
+
   const [errorAlert, setErrorAlert] = useState(false)
 
   const [membersDrawer, setMembersDrawer] = useState<MembersDrawer>(null)
@@ -138,7 +145,7 @@ export default function ApplicationsList() {
 
                 <DetailsHouseholdMembers setMembersDrawer={setMembersDrawer} />
 
-                <DetailsHouseholdDetails />
+                <DetailsHouseholdDetails enableAdaOtherOption={enableAdaOtherOption} />
 
                 <DetailsMultiselectQuestions
                   listingId={application?.listings?.id}

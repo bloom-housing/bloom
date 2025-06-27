@@ -49,7 +49,7 @@ const FormHouseholdDetails = ({
 
     return {
       id: item,
-      label: t(`application.add.${item}`),
+      label: t(`application.ada.${item}`),
       value: item,
       defaultChecked: isChecked,
       dataTestId: `adaFeature.${item}`,

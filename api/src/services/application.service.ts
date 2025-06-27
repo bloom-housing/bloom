@@ -107,6 +107,7 @@ export const view: Partial<
         mobility: true,
         vision: true,
         hearing: true,
+        other: true,
       },
     },
     applicationsMailingAddress: {
