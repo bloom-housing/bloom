@@ -1,43 +1,66 @@
-import { ArgumentMetadata, ValidationPipe } from '@nestjs/common';
-import { ListingsStatusEnum } from '@prisma/client';
+import { ArgumentMetadata, Injectable, ValidationPipe } from '@nestjs/common';
 import { ListingUpdate } from '../dtos/listings/listing-update.dto';
-import { ListingPublishedUpdate } from '../dtos/listings/listing-published-update.dto';
 import { ListingCreate } from '../dtos/listings/listing-create.dto';
-import { ListingPublishedCreate } from '../dtos/listings/listing-published-create.dto';
+import { PrismaService } from '../services/prisma.service';
+import { defaultValidationPipeOptions } from '../utilities/default-validation-pipe-options';
 
+@Injectable()
 export class ListingCreateUpdateValidationPipe extends ValidationPipe {
-  statusToListingValidationModelMapForUpdate: Record<
-    ListingsStatusEnum,
-    typeof ListingUpdate
-  > = {
-    [ListingsStatusEnum.closed]: ListingUpdate,
-    [ListingsStatusEnum.pending]: ListingUpdate,
-    [ListingsStatusEnum.active]: ListingPublishedUpdate,
-    [ListingsStatusEnum.pendingReview]: ListingUpdate,
-    [ListingsStatusEnum.changesRequested]: ListingUpdate,
-  };
+  // Default required fields if jurisdiction doesn't specify any
+  private defaultRequiredFields = [
+    'listingsBuildingAddress',
+    'name',
+    'developer',
+    'listingImages',
+    'leasingAgentEmail',
+    'leasingAgentName',
+    'leasingAgentPhone',
+    'jurisdictions',
+    'units',
+    'unitGroups',
+  ];
 
-  statusToListingValidationModelMapForCreate: Record<
-    ListingsStatusEnum,
-    typeof ListingCreate
-  > = {
-    [ListingsStatusEnum.closed]: ListingCreate,
-    [ListingsStatusEnum.pending]: ListingCreate,
-    [ListingsStatusEnum.active]: ListingPublishedCreate,
-    [ListingsStatusEnum.pendingReview]: ListingCreate,
-    [ListingsStatusEnum.changesRequested]: ListingCreate,
-  };
+  constructor(private prisma: PrismaService) {
+    super({
+      ...defaultValidationPipeOptions,
+    });
+  }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async transform(value: any, metadata: ArgumentMetadata): Promise<any> {
-    if (metadata.type === 'body') {
+    if (metadata.type !== 'body') {
+      return await super.transform(value, metadata);
+    }
+
+    // For non-jurisdiction requests, use base validation
+    if (!value.jurisdictions?.id) {
       return await super.transform(value, {
         ...metadata,
-        metatype: value.id
-          ? this.statusToListingValidationModelMapForUpdate[value.status]
-          : this.statusToListingValidationModelMapForCreate[value.status],
+        metatype: value.id ? ListingUpdate : ListingCreate,
       });
     }
-    return await super.transform(value, metadata);
+
+    // Get jurisdiction's required fields
+    const jurisdiction = await this.prisma.jurisdictions.findFirst({
+      where: { id: value.jurisdictions.id },
+      select: { requiredListingFields: true },
+    });
+
+    // Use jurisdiction's required fields, falling back to defaults if none specified
+    const requiredFields = jurisdiction?.requiredListingFields?.length
+      ? jurisdiction.requiredListingFields
+      : this.defaultRequiredFields;
+
+    // Add required fields to the value being validated
+    const transformedValue = {
+      ...value,
+      requiredFields,
+    };
+
+    // Transform using the appropriate DTO with validation groups
+    return await super.transform(transformedValue, {
+      ...metadata,
+      metatype: value.id ? ListingUpdate : ListingCreate,
+    });
   }
 }

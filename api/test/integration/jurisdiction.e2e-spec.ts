@@ -131,6 +131,7 @@ describe('Jurisdiction Controller Tests', () => {
       allowSingleUseCodeLogin: true,
       listingApprovalPermissions: [],
       duplicateListingPermissions: [],
+      requiredListingFields: [],
     };
     const res = await request(app.getHttpServer())
       .post('/jurisdictions')
@@ -157,6 +158,7 @@ describe('Jurisdiction Controller Tests', () => {
       allowSingleUseCodeLogin: true,
       listingApprovalPermissions: [],
       duplicateListingPermissions: [],
+      requiredListingFields: [],
     };
     const res = await request(app.getHttpServer())
       .put(`/jurisdictions/${id}`)
@@ -187,6 +189,7 @@ describe('Jurisdiction Controller Tests', () => {
       allowSingleUseCodeLogin: true,
       listingApprovalPermissions: [],
       duplicateListingPermissions: [],
+      requiredListingFields: [],
     };
 
     const res = await request(app.getHttpServer())
