@@ -201,7 +201,7 @@ export class ApplicationExporterService {
       },
     });
 
-    const featureFlags = await this.prisma.jurisdictions.findFirst({
+    const jurisdiction = await this.prisma.jurisdictions.findFirst({
       select: {
         featureFlags: true,
       },
@@ -214,8 +214,10 @@ export class ApplicationExporterService {
       },
     });
 
-    const enableFullTimeStudentQuestion = featureFlags.featureFlags.some(
-      (flag) => flag.name === FeatureFlagEnum.enableFullTimeStudentQuestion,
+    const enableFullTimeStudentQuestion = jurisdiction.featureFlags.some(
+      (flag) =>
+        flag.name === FeatureFlagEnum.enableFullTimeStudentQuestion &&
+        flag.active,
     );
 
     // get all multiselect questions for a listing to build csv headers
@@ -544,7 +546,7 @@ export class ApplicationExporterService {
       },
     });
 
-    const featureFlags = await this.prisma.jurisdictions.findFirst({
+    const jurisdiction = await this.prisma.jurisdictions.findFirst({
       select: {
         featureFlags: true,
       },
@@ -557,8 +559,10 @@ export class ApplicationExporterService {
       },
     });
 
-    const enableFullTimeStudentQuestion = featureFlags.featureFlags.some(
-      (flag) => flag.name === FeatureFlagEnum.enableFullTimeStudentQuestion,
+    const enableFullTimeStudentQuestion = jurisdiction.featureFlags.some(
+      (flag) =>
+        flag.name === FeatureFlagEnum.enableFullTimeStudentQuestion &&
+        flag.active,
     );
 
     // get all multiselect questions for a listing to build csv headers
