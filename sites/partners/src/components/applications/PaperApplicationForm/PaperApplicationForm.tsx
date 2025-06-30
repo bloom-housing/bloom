@@ -42,6 +42,7 @@ type AlertErrorType = "api" | "form"
 const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormProps) => {
   const { listingDto } = useSingleListingData(listingId)
   const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
+
   const preferences = listingSectionQuestions(
     listingDto,
     MultiselectQuestionsApplicationSectionEnum.preferences
@@ -50,6 +51,11 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
   const programs = listingSectionQuestions(
     listingDto,
     MultiselectQuestionsApplicationSectionEnum.programs
+  )
+
+  const enableUnitGroups = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableUnitGroups,
+    listingDto?.jurisdictions.id
   )
 
   const enableFullTimeStudentQuestion = doJurisdictionsHaveFeatureFlagOn(
@@ -236,8 +242,10 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
 
                     <FormHouseholdDetails
                       listingUnits={units}
+                      listingUnitGroups={listingDto?.unitGroups}
                       applicationUnitTypes={application?.preferredUnitTypes}
                       applicationAccessibilityFeatures={application?.accessibility}
+                      enableUnitGroups={enableUnitGroups}
                       enableFullTimeStudentQuestion={enableFullTimeStudentQuestion}
                     />
 
