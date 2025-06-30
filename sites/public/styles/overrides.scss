@@ -239,6 +239,7 @@
 
   .seeds-dialog {
     max-height: 100dvh;
+    --overlay-footer-background-color: var(--seeds-color-blue-100);
   }
 
   .seeds-dialog.listings-search-dialog {
