@@ -57,10 +57,6 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
     listingDto?.jurisdictions.id
   )
 
-  console.log("profile", profile)
-  console.log("listingDto", listingDto)
-  console.log("enableFullTimeStudentQuestion", enableFullTimeStudentQuestion)
-
   const units = listingDto?.units
 
   const defaultValues = editMode ? mapApiToForm(application, listingDto) : {}

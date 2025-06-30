@@ -25,6 +25,7 @@ export const getExportHeaders = (
   includeDemographics = false,
   forLottery = false,
   dateFormat = 'MM-DD-YYYY hh:mm:ssA z',
+  enableFullTimeStudentQuestion?: boolean,
 ): CsvHeader[] => {
   const headers: CsvHeader[] = [
     {
@@ -110,6 +111,18 @@ export const getExportHeaders = (
         path: 'contactPreferences',
         label: 'Primary Applicant Preferred Contact Type',
       },
+    ],
+  );
+
+  if (enableFullTimeStudentQuestion) {
+    headers.push({
+      path: 'fullTimeStudent',
+      label: 'Primary Applicant Full-Time Student?',
+    });
+  }
+
+  headers.push(
+    ...[
       {
         path: 'applicant.applicantAddress.street',
         label: `Primary Applicant Street`,
@@ -285,7 +298,12 @@ export const getExportHeaders = (
 
   // add household member headers to csv
   if (maxHouseholdMembers) {
-    headers.push(...getHouseholdCsvHeaders(maxHouseholdMembers));
+    headers.push(
+      ...getHouseholdCsvHeaders(
+        maxHouseholdMembers,
+        enableFullTimeStudentQuestion,
+      ),
+    );
   }
 
   headers.push(
@@ -475,6 +493,7 @@ export const addressToString = (address: Address): string => {
  */
 export const getHouseholdCsvHeaders = (
   maxHouseholdMembers: number,
+  enableFullTimeStudentQuestion?: boolean,
 ): CsvHeader[] => {
   const headers = [];
   for (let i = 0; i < maxHouseholdMembers; i++) {
@@ -520,6 +539,14 @@ export const getHouseholdCsvHeaders = (
         path: `householdMember.${i}.workInRegion`,
         label: `Household Member (${j}) Work in Region`,
       },
+    );
+    if (enableFullTimeStudentQuestion) {
+      headers.push({
+        path: `householdMember.${i}.fullTimeStudent`,
+        label: `Household Member (${j}) Full-Time Student?`,
+      });
+    }
+    headers.push(
       {
         path: `householdMember.${i}.householdMemberAddress.street`,
         label: `Household Member (${j}) Street`,

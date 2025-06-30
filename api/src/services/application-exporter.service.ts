@@ -23,6 +23,7 @@ import { Request as ExpressRequest } from 'express';
 import { User } from '../dtos/users/user.dto';
 import { view } from './application.service';
 import { zipExport, zipExportSecure } from '../utilities/zip-export';
+import { FeatureFlagEnum } from '../enums/feature-flags/feature-flags-enum';
 
 view.csv = {
   ...view.details,
@@ -61,6 +62,9 @@ export class ApplicationExporterService {
   ): Promise<StreamableFile> {
     const user = mapTo(User, req['user']);
     await this.authorizeExport(user, queryParams.id);
+
+    console.log(queryParams);
+    console.log(user);
 
     let filename: string;
     let readStream: ReadStream;
@@ -200,6 +204,23 @@ export class ApplicationExporterService {
       },
     });
 
+    const featureFlags = await this.prisma.jurisdictions.findFirst({
+      select: {
+        featureFlags: true,
+      },
+      where: {
+        listings: {
+          some: {
+            id: queryParams.id,
+          },
+        },
+      },
+    });
+
+    const enableFullTimeStudentQuestion = featureFlags.featureFlags.some(
+      (flag) => flag.name === FeatureFlagEnum.enableFullTimeStudentQuestion,
+    );
+
     // get all multiselect questions for a listing to build csv headers
     const multiSelectQuestions =
       await this.multiselectQuestionService.findByListingId(queryParams.id);
@@ -219,6 +240,7 @@ export class ApplicationExporterService {
       queryParams.includeDemographics,
       false,
       this.dateFormat,
+      enableFullTimeStudentQuestion,
     );
 
     return this.csvExportHelper(
@@ -524,6 +546,24 @@ export class ApplicationExporterService {
         markedAsDuplicate: forLottery ? false : undefined,
       },
     });
+
+    const featureFlags = await this.prisma.jurisdictions.findFirst({
+      select: {
+        featureFlags: true,
+      },
+      where: {
+        listings: {
+          some: {
+            id: queryParams.id,
+          },
+        },
+      },
+    });
+
+    const enableFullTimeStudentQuestion = featureFlags.featureFlags.some(
+      (flag) => flag.name === FeatureFlagEnum.enableFullTimeStudentQuestion,
+    );
+
     // get all multiselect questions for a listing to build csv headers
     const multiSelectQuestions =
       await this.multiselectQuestionService.findByListingId(queryParams.id);
@@ -542,6 +582,8 @@ export class ApplicationExporterService {
       queryParams.timeZone,
       queryParams.includeDemographics,
       forLottery,
+      undefined,
+      enableFullTimeStudentQuestion,
     );
 
     if (forLottery) {
