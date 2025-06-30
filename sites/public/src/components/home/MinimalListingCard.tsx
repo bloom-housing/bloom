@@ -22,7 +22,8 @@ export const MinimalListingCard = ({ listing, jurisdiction }: MinimalListingCard
     true,
     !isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableHomeType),
     !isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableAccessibilityFeatures),
-    isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableIsVerified)
+    isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableIsVerified),
+    isFeatureFlagOn(jurisdiction, FeatureFlagEnum.swapCommunityTypeWithPrograms)
   )
 
   return (

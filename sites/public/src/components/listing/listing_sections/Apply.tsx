@@ -105,7 +105,7 @@ export const Apply = ({ listing, preview, setShowDownloadModal }: ApplyProps) =>
         !applicationsClosed &&
         listing.status !== ListingsStatusEnum.closed && (
           <Card
-            className={`${listingStyles["mobile-full-width-card"]} ${listingStyles["mobile-no-bottom-border"]} seeds-m-bs-content`}
+            className={`${listingStyles["mobile-full-width-card"]} ${listingStyles["mobile-no-bottom-border"]}`}
           >
             <Card.Section divider="flush" className={styles["card-section-background"]}>
               <Heading priority={2} size={"lg"} className={"seeds-m-be-header"}>
