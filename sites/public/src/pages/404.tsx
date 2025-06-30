@@ -1,6 +1,6 @@
 import React, { useEffect, useContext } from "react"
 import Head from "next/head"
-import { Hero, t } from "@bloom-housing/ui-components"
+import { t } from "@bloom-housing/ui-components"
 import { PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
 import Layout from "../layouts/application"
 import { Content404 } from "../components/page/Content404"
