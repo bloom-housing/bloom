@@ -279,6 +279,36 @@ export function getColDefs(maxHouseholdSize: number, enableFullTimeStudentQuesti
       },
     },
     {
+      headerName: t("application.details.workInRegion"),
+      field: "applicant.workInRegion",
+      sortable: false,
+      filter: false,
+      width: 110,
+      minWidth: 50,
+      valueFormatter: ({ value }) => {
+        if (!value) return ""
+        return formatYesNoLabel(value)
+      },
+    },
+  ]
+
+  if (enableFullTimeStudentQuestion) {
+    defs.push({
+      headerName: t("application.details.fullTimeStudent"),
+      field: "applicant.fullTimeStudent",
+      sortable: false,
+      filter: false,
+      width: 110,
+      minWidth: 50,
+      valueFormatter: ({ value }) => {
+        if (!value) return ""
+        return formatYesNoLabel(value)
+      },
+    })
+  }
+
+  defs.push(
+    {
       headerName: t("applications.table.residenceStreet"),
       field: "applicant.applicantAddress.street",
       sortable: false,
@@ -484,8 +514,8 @@ export function getColDefs(maxHouseholdSize: number, enableFullTimeStudentQuesti
       filter: false,
       width: 110,
       minWidth: 50,
-    },
-  ]
+    }
+  )
 
   const householdCols = []
 

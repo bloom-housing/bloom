@@ -111,12 +111,16 @@ export const getExportHeaders = (
         path: 'contactPreferences',
         label: 'Primary Applicant Preferred Contact Type',
       },
+      {
+        path: 'applicant.workInRegion',
+        label: 'Primary Applicant Work in Region',
+      },
     ],
   );
 
   if (enableFullTimeStudentQuestion) {
     headers.push({
-      path: 'fullTimeStudent',
+      path: 'applicant.fullTimeStudent',
       label: 'Primary Applicant Full-Time Student?',
     });
   }
