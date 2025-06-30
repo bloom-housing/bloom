@@ -41,7 +41,7 @@ type AlertErrorType = "api" | "form"
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormProps) => {
   const { listingDto } = useSingleListingData(listingId)
-  const { doJurisdictionsHaveFeatureFlagOn, profile } = useContext(AuthContext)
+  const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
   const preferences = listingSectionQuestions(
     listingDto,
     MultiselectQuestionsApplicationSectionEnum.preferences

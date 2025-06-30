@@ -263,7 +263,9 @@ export const getExportHeaders = (
       },
       {
         path: 'householdStudent',
-        label: 'Household Includes Student or Member Nearing 18',
+        label: enableFullTimeStudentQuestion
+          ? 'Are all household members students?'
+          : 'Household Includes Student or Member Nearing 18',
       },
       {
         path: 'incomeVouchers',
