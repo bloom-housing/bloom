@@ -63,9 +63,6 @@ export class ApplicationExporterService {
     const user = mapTo(User, req['user']);
     await this.authorizeExport(user, queryParams.id);
 
-    console.log(queryParams);
-    console.log(user);
-
     let filename: string;
     let readStream: ReadStream;
     let zipFilename: string;
