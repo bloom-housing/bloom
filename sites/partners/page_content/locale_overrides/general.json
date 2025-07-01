@@ -1,6 +1,9 @@
 {
   "t.selectLanguage": "Select language",
   "actions.copy": "Copy",
+  "admin.addFeatureFlags": "Add all new feature flags",
+  "admin.byJurisdiction": "By jurisdiction",
+  "admin.byFeatureFlag": "By feature flag",
   "application.add.addHouseholdMember": "Add Household Member",
   "application.add.applicationAddError": "You’ll need to resolve any errors before moving on.",
   "application.add.applicationSubmitted": "Application Submitted",
@@ -557,6 +560,7 @@
   "t.hide": "hide",
   "t.invite": "Invite",
   "t.jurisdiction": "Jurisdiction",
+  "t.jurisdictions": "Jurisdictions",
   "t.label": "Label",
   "t.language": "Language",
   "t.link": "Link",

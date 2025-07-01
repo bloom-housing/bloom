@@ -159,14 +159,14 @@ const Admin = () => {
               className={"seeds-m-be-content"}
             >
               <Tabs.TabList>
-                <Tabs.Tab>{"By jurisdiction"}</Tabs.Tab>
-                <Tabs.Tab>{"By feature flag"}</Tabs.Tab>
+                <Tabs.Tab>{t("admin.byJurisdiction")}</Tabs.Tab>
+                <Tabs.Tab>{t("admin.byFeatureFlag")}</Tabs.Tab>
               </Tabs.TabList>
 
               <Tabs.TabPanel>
                 <Card.Header className={"seeds-m-be-header"}>
                   <Heading size="2xl" priority={2}>
-                    Feature flags
+                    {t("t.jurisdictions")}
                   </Heading>
                 </Card.Header>
                 <Card.Section>
@@ -181,7 +181,7 @@ const Admin = () => {
               <Tabs.TabPanel>
                 <Card.Header className={"seeds-m-be-header"}>
                   <Heading size="2xl" priority={2}>
-                    Jurisdictions
+                    {t("t.featureFlag")}
                   </Heading>
                 </Card.Header>
                 <Card.Section>
@@ -199,7 +199,7 @@ const Admin = () => {
                 </Card.Section>
               </Tabs.TabPanel>
             </Tabs>
-            <Button onClick={onAddAll}>Add all new feature flags</Button>
+            <Button onClick={onAddAll}>{t("admin.addFeatureFlags")}</Button>
           </article>
         </section>
       </Layout>
