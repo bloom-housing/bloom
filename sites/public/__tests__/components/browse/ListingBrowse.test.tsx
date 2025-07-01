@@ -8,9 +8,11 @@ import {
   EnumUnitGroupAmiLevelMonthlyRentDeterminationType,
   FeatureFlag,
   FeatureFlagEnum,
+  MarketingTypeEnum,
   UnitTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import userEvent from "@testing-library/user-event"
+import dayjs from "dayjs"
 
 const server = setupServer()
 
@@ -68,6 +70,7 @@ describe("<ListingBrowse>", () => {
             itemCount: 2,
           }}
           jurisdiction={jurisdiction}
+          multiselectData={[]}
         />
       )
 
@@ -119,6 +122,7 @@ describe("<ListingBrowse>", () => {
             itemCount: 2,
           }}
           jurisdiction={jurisdiction}
+          multiselectData={[]}
         />
       )
 
@@ -267,6 +271,7 @@ describe("<ListingBrowse>", () => {
               },
             ],
           }}
+          multiselectData={[]}
         />
       )
 
@@ -331,6 +336,7 @@ describe("<ListingBrowse>", () => {
               },
             ],
           }}
+          multiselectData={[]}
         />
       )
 
@@ -580,5 +586,40 @@ describe("<ListingBrowse>", () => {
         "/listings?isVerified=true&availabilities=unitsAvailable&homeTypes=apartment,townhome&monthlyRent=500.00-900.00&name=Test Search"
       )
     })
+  })
+  it("shows under construction listings at the top", () => {
+    const view = render(
+      <ListingBrowse
+        listings={[
+          {
+            ...listing,
+            name: "ListingA",
+            marketingType: MarketingTypeEnum.comingSoon,
+            publishedAt: dayjs(new Date()).subtract(5, "days").toDate(),
+          },
+          {
+            ...listing,
+            name: "ListingB",
+            marketingType: MarketingTypeEnum.marketing,
+            publishedAt: dayjs(new Date()).subtract(1, "days").toDate(),
+          },
+        ]}
+        tab={TabsIndexEnum.open}
+        paginationData={{
+          currentPage: 1,
+          totalPages: 1,
+          itemsPerPage: 2,
+          totalItems: 2,
+          itemCount: 2,
+        }}
+        jurisdiction={jurisdiction}
+        multiselectData={[]}
+      />
+    )
+    expect(view.queryByText("No listings currently have open applications.")).toBeNull()
+    const itemA = screen.getByText("ListingA")
+    const itemB = screen.getByText("ListingB")
+    // Expects B follows A
+    expect(itemA.compareDocumentPosition(itemB)).toEqual(Node.DOCUMENT_POSITION_FOLLOWING)
   })
 })

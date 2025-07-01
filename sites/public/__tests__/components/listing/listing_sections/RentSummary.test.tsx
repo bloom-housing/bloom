@@ -8,7 +8,7 @@ afterEach(cleanup)
 
 describe("<RentSummary>", () => {
   it("shows all content for one percentage", () => {
-    const { getAllByText, getByText } = render(
+    const { getAllByText, getByText, queryByText } = render(
       <RentSummary
         amiValues={[30]}
         reviewOrderType={ReviewOrderTypeEnum.firstComeFirstServe}
@@ -29,6 +29,7 @@ describe("<RentSummary>", () => {
     expect(getByText("Unit Type")).toBeDefined()
     expect(getByText("Minimum Income")).toBeDefined()
     expect(getByText("Availability")).toBeDefined()
+    expect(queryByText("Section 8 Housing Choice Voucher")).toBeNull()
   })
   it("shows all content for multiple percentages", () => {
     const { getAllByText, getByText } = render(
@@ -48,7 +49,7 @@ describe("<RentSummary>", () => {
           hmi: null,
         }}
         listing={listing}
-        section8Acceptance={false}
+        section8Acceptance={true}
       />
     )
     expect(getAllByText("Rent").length).toBeGreaterThan(0)
@@ -57,5 +58,26 @@ describe("<RentSummary>", () => {
     expect(getAllByText("Unit Type").length).toBe(2)
     expect(getAllByText("Minimum Income").length).toBe(2)
     expect(getAllByText("Availability").length).toBe(2)
+    expect(getByText("Section 8 Housing Choice Voucher")).toBeDefined()
+  })
+  it("shows nothing if no data", () => {
+    const { queryByText } = render(
+      <RentSummary
+        amiValues={[]}
+        reviewOrderType={ReviewOrderTypeEnum.firstComeFirstServe}
+        unitsSummarized={{
+          unitTypes: [],
+          priorityTypes: [],
+          amiPercentages: [],
+          byUnitTypeAndRent: [],
+          byUnitType: [],
+          byAMI: [],
+          hmi: null,
+        }}
+        listing={{ ...listing, units: [] }}
+        section8Acceptance={false}
+      />
+    )
+    expect(queryByText("Rent")).toBeNull()
   })
 })
