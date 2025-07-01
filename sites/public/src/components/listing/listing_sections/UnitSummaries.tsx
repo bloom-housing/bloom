@@ -1,7 +1,6 @@
 import * as React from "react"
 import { Unit, UnitSummary } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { Heading } from "@bloom-housing/ui-seeds"
-import { StackedTable, t } from "@bloom-housing/ui-components"
+import { StackedTable } from "@bloom-housing/ui-components"
 import {
   getStackedUnitTableData,
   getUnitTableData,
