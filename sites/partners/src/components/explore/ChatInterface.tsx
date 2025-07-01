@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react"
 import { Button } from "@bloom-housing/ui-seeds"
 import { chatWithAI } from "../../lib/ai/conversational-ai"
 import { reportDataOption1 as reportData } from "../../lib/explore/data-explorer"
-import Markdown from "react-markdown"
+// import Markdown from "react-markdown"
 
 export interface Message {
   id: string
@@ -95,7 +95,7 @@ const ChatInterface: React.FC = () => {
                 message.isUser ? "bg-blue-500 text-white" : "bg-gray-100 text-gray-900"
               }`}
             >
-              <Markdown>{message.content}</Markdown>
+              {message.content}
             </div>
           </div>
         ))}

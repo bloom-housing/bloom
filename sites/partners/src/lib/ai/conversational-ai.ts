@@ -1,9 +1,11 @@
-import { GoogleGenerativeAI } from "@google/generative-ai"
+import OpenAI from "openai"
 import { Message } from "../../components/explore/ChatInterface"
 
-console.log("key:", process.env.geminiAPIKey)
-
-const genAI = new GoogleGenerativeAI(process.env.geminiAPIKey || "")
+const openai = new OpenAI({
+  apiKey: process.env.geminiAPIKey || "",
+  baseURL: "https://generativelanguage.googleapis.com/v1beta/",
+  dangerouslyAllowBrowser: true,
+})
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const systemPrompt = (data: any) => {
@@ -41,36 +43,34 @@ export const chatWithAI = async (
   applicationData: any
 ): Promise<string> => {
   try {
-    console.log("Calling Gemini API with user message:", userMessage)
-    console.log("Conversation history:", conversationHistory)
-    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" })
-
+    const systemMessageText: string = systemPrompt(applicationData)
     // Always start with system prompt as the first message in history
     const systemMessage = {
-      role: "user" as const,
-      parts: [{ text: systemPrompt(applicationData) }],
+      role: "system" as const,
+      content: systemMessageText,
     }
 
     // Build conversation history starting with system context
     const history = [
       systemMessage,
       ...conversationHistory.map((msg) => ({
-        role: msg.isUser ? "user" : "model",
-        parts: [{ text: msg.content }],
+        role: msg.isUser ? ("user" as const) : ("assistant" as const),
+        content: msg.content,
       })),
+      {
+        role: "user" as const,
+        content: userMessage,
+      },
     ]
 
-    const chat = model.startChat({
-      history,
-      generationConfig: {
-        temperature: 0.7,
-        maxOutputTokens: 500,
-      },
+    const response = await openai.chat.completions.create({
+      model: "gemini-1.5-flash",
+      messages: [systemMessage, ...history],
     })
 
-    const result = await chat.sendMessage(userMessage)
-    const response = result.response
-    return response.text()
+    // Get the response text
+    const fullText = response.choices[0]?.message?.content || ""
+    return fullText
   } catch (error) {
     console.error("Error calling Gemini API:", error)
     return "I'm sorry, I'm having trouble connecting to the AI service right now. Please try again later."
