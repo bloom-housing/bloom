@@ -2,7 +2,6 @@ import React from "react"
 import dayjs from "dayjs"
 import { render } from "@testing-library/react"
 import {
-  EnumUnitGroupAmiLevelCreateMonthlyRentDeterminationType,
   EnumUnitGroupAmiLevelMonthlyRentDeterminationType,
   ListingsStatusEnum,
   MarketingSeasonEnum,
@@ -16,11 +15,6 @@ import {
   getListingStatusMessageContent,
   getStatusPrefix,
 } from "../../src/lib/helpers"
-
-const defaultValues = {
-  createdAt: new Date(),
-  updatedAt: new Date(),
-}
 
 describe("helpers", () => {
   describe("getStatusPrefix", () => {
