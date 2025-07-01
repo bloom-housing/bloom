@@ -33,7 +33,6 @@ import {
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { CommonMessageVariant } from "@bloom-housing/ui-seeds/src/blocks/shared/CommonMessage"
 import { Icon, Message } from "@bloom-housing/ui-seeds"
-import { useRouter } from "next/router"
 import styles from "./helpers.module.scss"
 
 export const getGenericAddress = (bloomAddress: Address) => {

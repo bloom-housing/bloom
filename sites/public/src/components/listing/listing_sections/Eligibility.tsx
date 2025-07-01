@@ -4,7 +4,6 @@ import { CollapsibleSection } from "../../../patterns/CollapsibleSection"
 import { OrderedSection } from "../../../patterns/OrderedSection"
 import { EligibilitySection } from "../ListingViewSeedsHelpers"
 import styles from "./Eligibility.module.scss"
-import Markdown from "markdown-to-jsx"
 
 type EligibilityProps = {
   eligibilitySections: EligibilitySection[]

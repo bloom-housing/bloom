@@ -23,9 +23,6 @@ export const UnitSummaries = ({
   if (!unitSummary?.length) return
   return (
     <>
-      <Heading size={"lg"} className={"seeds-m-be-header"} priority={3}>
-        {t("t.unitFeatures")}
-      </Heading>
       {unitSummary.map((summary, index) => {
         const unitTableData = getUnitTableData(units, summary)
         return (
