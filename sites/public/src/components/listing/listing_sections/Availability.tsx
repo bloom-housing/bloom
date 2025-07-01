@@ -160,7 +160,7 @@ export const Availability = ({ listing, jurisdiction }: AvailabilityProps) => {
     additionalContent?: React.ReactNode
   ) => {
     return (
-      <Card.Section divider={"flush"}>
+      <Card.Section divider={"flush"} key={title}>
         <Heading priority={3} size={"md"}>
           {title}
         </Heading>
