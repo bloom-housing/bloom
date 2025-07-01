@@ -53,7 +53,10 @@ import { ApplicationLotteryTotal } from '../applications/application-lottery-tot
 import { ListingNeighborhoodAmenities } from './listing-neighborhood-amenities.dto';
 import { ValidateListingPublish } from '../../decorators/validate-listing-publish.decorator';
 import { UnitGroupsSummarized } from '../unit-groups/unit-groups-summarized.dto';
-import { ValidateUnitsRequired } from '../../decorators/validate-units-required.decorator';
+import {
+  ValidateAtLeastOneUnit,
+  ValidateOnlyUnitsOrUnitGroups,
+} from '../../decorators/validate-units-required.decorator';
 
 class Listing extends AbstractDTO {
   @Expose()
@@ -805,10 +808,10 @@ class Listing extends AbstractDTO {
   listingUtilities?: ListingUtilities;
 
   @Expose()
-  @ValidateListingPublish('units', {
+  @ValidateAtLeastOneUnit({
     groups: [ValidationsGroupsEnum.default],
   })
-  @ValidateUnitsRequired({
+  @ValidateOnlyUnitsOrUnitGroups({
     groups: [ValidationsGroupsEnum.default],
   })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
@@ -818,7 +821,10 @@ class Listing extends AbstractDTO {
   units: Unit[];
 
   @Expose()
-  @ValidateListingPublish('unitGroups', {
+  @ValidateAtLeastOneUnit({
+    groups: [ValidationsGroupsEnum.default],
+  })
+  @ValidateOnlyUnitsOrUnitGroups({
     groups: [ValidationsGroupsEnum.default],
   })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })

@@ -22,7 +22,10 @@ import { ListingUtilities } from './listing-utility.dto';
 import { LotteryDateParamValidator } from '../../utilities/lottery-date-validator';
 import { UnitGroupCreate } from '../unit-groups/unit-group-create.dto';
 import { ValidateListingPublish } from '../../decorators/validate-listing-publish.decorator';
-import { ValidateUnitsRequired } from '../../decorators/validate-units-required.decorator';
+import {
+  ValidateAtLeastOneUnit,
+  ValidateOnlyUnitsOrUnitGroups,
+} from '../../decorators/validate-units-required.decorator';
 
 export class ListingUpdate extends OmitType(Listing, [
   // fields get their type changed
@@ -69,10 +72,10 @@ export class ListingUpdate extends OmitType(Listing, [
   listingMultiselectQuestions?: IdDTO[];
 
   @Expose()
-  @ValidateListingPublish('units', {
+  @ValidateAtLeastOneUnit({
     groups: [ValidationsGroupsEnum.default],
   })
-  @ValidateUnitsRequired({
+  @ValidateOnlyUnitsOrUnitGroups({
     groups: [ValidationsGroupsEnum.default],
   })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
@@ -82,7 +85,10 @@ export class ListingUpdate extends OmitType(Listing, [
   units?: UnitCreate[];
 
   @Expose()
-  @ValidateListingPublish('unitGroups', {
+  @ValidateAtLeastOneUnit({
+    groups: [ValidationsGroupsEnum.default],
+  })
+  @ValidateOnlyUnitsOrUnitGroups({
     groups: [ValidationsGroupsEnum.default],
   })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })

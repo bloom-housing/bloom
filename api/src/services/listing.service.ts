@@ -1466,7 +1466,7 @@ export class ListingService implements OnModuleInit {
                 totalAvailable: group.totalAvailable,
                 totalCount: group.totalCount,
                 unitGroupAmiLevels: {
-                  create: group.unitGroupAmiLevels.map((level) => ({
+                  create: group.unitGroupAmiLevels?.map((level) => ({
                     amiPercentage: level.amiPercentage,
                     monthlyRentDeterminationType:
                       level.monthlyRentDeterminationType,

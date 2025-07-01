@@ -17,7 +17,6 @@ export class ListingCreateUpdateValidationPipe extends ValidationPipe {
     'leasingAgentPhone',
     'jurisdictions',
     'units',
-    'unitGroups',
   ];
 
   constructor(private prisma: PrismaService) {
@@ -54,6 +53,8 @@ export class ListingCreateUpdateValidationPipe extends ValidationPipe {
     // Add required fields to the value being validated
     const transformedValue = {
       ...value,
+      units: value.units || [],
+      unitGroups: value.unitGroups || [],
       requiredFields,
     };
 

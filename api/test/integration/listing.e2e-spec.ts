@@ -2486,6 +2486,7 @@ describe('Listing Controller Tests', () => {
   describe('dynamic required fields validation', () => {
     let customJurisdiction;
     let defaultJurisdiction;
+    let unitGroupJurisdiction;
 
     beforeAll(async () => {
       // Create a jurisdiction with custom required fields
@@ -2499,11 +2500,22 @@ describe('Listing Controller Tests', () => {
       defaultJurisdiction = await prisma.jurisdictions.create({
         data: jurisdictionFactory(`dynamic required default ${randomName()}`),
       });
+
+      // Create a unit group jurisdiction
+      unitGroupJurisdiction = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(
+          `dynamic required unit group ${randomName()}`,
+          {
+            featureFlags: [FeatureFlagEnum.enableUnitGroups],
+            requiredListingFields: ['name', 'unitGroups'],
+          },
+        ),
+      });
     });
 
     it('should allow saving active listing with requiredListingFields declared in jurisdiction', async () => {
       const listingData = {
-        name: 'Detroit Minimal Listing',
+        name: 'Minimal Listing for custom jurisdiction',
         status: ListingsStatusEnum.active,
         listingsBuildingAddress: addressFactory() as AddressCreate,
         jurisdictions: {
@@ -2524,7 +2536,7 @@ describe('Listing Controller Tests', () => {
 
     it('should fail saving active listing without requiredListingFields declared in jurisdictions', async () => {
       const incompleteData = {
-        name: 'Detroit Minimal Listing',
+        name: 'Minimal Listing for custom jurisdiction',
         status: ListingsStatusEnum.active,
         jurisdictions: {
           id: customJurisdiction.id,
@@ -2555,15 +2567,27 @@ describe('Listing Controller Tests', () => {
       };
 
       // Should fail due to missing required fields from default validation
-      await request(app.getHttpServer())
+      const response = await request(app.getHttpServer())
         .post('/listings')
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send(incompleteData)
         .set('Cookie', adminAccessToken)
         .expect(400);
+
+      expect(response.body.message).toHaveLength(6);
+      expect(response.body.message.sort()).toEqual(
+        [
+          'listingImages is required when publishing the listing',
+          'developer is required when publishing the listing',
+          'leasingAgentEmail is required when publishing the listing',
+          'leasingAgentName is required when publishing the listing',
+          'leasingAgentPhone is required when publishing the listing',
+          'units must contain at least 1 element',
+        ].sort(),
+      );
     });
 
-    it('should allow saving non-active listing with only name field', async () => {
+    it('should allow saving non-active listing with only name and jurisdiction field', async () => {
       const minimalData = {
         name: 'Minimal Draft Listing',
         status: ListingsStatusEnum.pending,
@@ -2601,6 +2625,85 @@ describe('Listing Controller Tests', () => {
         .expect(400);
 
       expect(res.body.message).toContain('leasingAgentEmail must be an email');
+    });
+
+    it('should error if sending units on a unit group', async () => {
+      const wrongData = {
+        name: 'Minimal Listing for unit group jurisdiction',
+        status: ListingsStatusEnum.active,
+        jurisdictions: {
+          id: unitGroupJurisdiction.id,
+        },
+        units: [{}],
+      };
+      // Should fail due to missing required fields from requiredListingFields
+      const res = await request(app.getHttpServer())
+        .post('/listings')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send(wrongData)
+        .set('Cookie', adminAccessToken)
+        .expect(400);
+      expect(res.body.message).toContain(
+        'units cannot exist on this jurisdiction',
+      );
+    });
+
+    it('should error if sending unit groups on a unit jurisdiction', async () => {
+      const wrongData = {
+        name: 'Minimal Listing for unit group jurisdiction',
+        status: ListingsStatusEnum.active,
+        jurisdictions: {
+          id: customJurisdiction.id,
+        },
+        unitGroups: [{}],
+      };
+      // Should fail due to missing required fields from requiredListingFields
+      const res = await request(app.getHttpServer())
+        .post('/listings')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send(wrongData)
+        .set('Cookie', adminAccessToken)
+        .expect(400);
+      expect(res.body.message).toContain(
+        'unitGroups cannot exist on this jurisdiction',
+      );
+    });
+
+    it('should validate length of unit groups if a required field', async () => {
+      const incompleteData = {
+        name: 'partial unit group',
+        status: ListingsStatusEnum.active,
+        jurisdictions: {
+          id: unitGroupJurisdiction.id,
+        },
+      };
+      // Should fail due to missing required fields from requiredListingFields
+      const res = await request(app.getHttpServer())
+        .post('/listings')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send(incompleteData)
+        .set('Cookie', adminAccessToken)
+        .expect(400);
+      expect(res.body.message).toContain(
+        'unitGroups must contain at least 1 element',
+      );
+    });
+
+    it('should ignore unit group validation if not active', async () => {
+      const incompleteData = {
+        name: 'partial unit group',
+        status: ListingsStatusEnum.pending,
+        jurisdictions: {
+          id: unitGroupJurisdiction.id,
+        },
+      };
+      // Should pass since not publishing
+      await request(app.getHttpServer())
+        .post('/listings')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send(incompleteData)
+        .set('Cookie', adminAccessToken)
+        .expect(201);
     });
   });
 
