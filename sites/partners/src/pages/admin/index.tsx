@@ -1,8 +1,9 @@
 import { useContext, useEffect, useMemo, useState } from "react"
 import Head from "next/head"
 import { AuthContext } from "@bloom-housing/shared-helpers"
+import PencilSquareIcon from "@heroicons/react/24/solid/PencilSquareIcon"
 import { Field, Hero, MinimalTable, t } from "@bloom-housing/ui-components"
-import { Button, Card, Drawer, Heading, Tabs } from "@bloom-housing/ui-seeds"
+import { Button, Card, Drawer, Heading, Icon, Tabs } from "@bloom-housing/ui-seeds"
 import Layout from "../../layouts"
 import { NavigationHeader } from "../../components/shared/NavigationHeader"
 
@@ -61,9 +62,17 @@ const Admin = () => {
         },
         actions: {
           content: (
-            <Button size="sm" onClick={() => setSelectedJurisdiction(juris.id)}>
-              Edit
-            </Button>
+            <div className={"flex justify-end gap-5"}>
+              <button
+                className="text-primary"
+                onClick={() => setSelectedJurisdiction(juris.id)}
+                aria-label={"Edit"}
+              >
+                <Icon size="md">
+                  <PencilSquareIcon />
+                </Icon>
+              </button>
+            </div>
           ),
         },
       }
@@ -81,9 +90,17 @@ const Admin = () => {
         },
         actions: {
           content: (
-            <Button size="sm" onClick={() => setSelectedFeatureFlag(flag.id)}>
-              Edit
-            </Button>
+            <div className={"flex justify-end gap-5"}>
+              <button
+                className="text-primary"
+                onClick={() => setSelectedFeatureFlag(flag.id)}
+                aria-label={"Edit"}
+              >
+                <Icon size="md">
+                  <PencilSquareIcon />
+                </Icon>
+              </button>
+            </div>
           ),
         },
       }
@@ -139,54 +156,50 @@ const Admin = () => {
                 setViewBy(value)
               }}
               selectedIndex={viewBy}
+              className={"seeds-m-be-content"}
             >
               <Tabs.TabList>
-                <Tabs.Tab>{"By Jurisdiction"}</Tabs.Tab>
-                <Tabs.Tab>{"By Feature Flag"}</Tabs.Tab>
+                <Tabs.Tab>{"By jurisdiction"}</Tabs.Tab>
+                <Tabs.Tab>{"By feature flag"}</Tabs.Tab>
               </Tabs.TabList>
 
               <Tabs.TabPanel>
-                <Card>
-                  <Card.Header>
-                    <Heading size="2xl">Feature Flags</Heading>
-                  </Card.Header>
-                  <Card.Section>
-                    <MinimalTable
-                      headers={{ jurisdiction: "t.jurisdiction", actions: "" }}
-                      data={jurisdictionTableData}
-                      cellClassName={"px-5 py-3"}
-                      flushRight={true}
-                    ></MinimalTable>
-                  </Card.Section>
-                  <Card.Footer>
-                    <Button onClick={onAddAll}>Add All New Feature Flags</Button>
-                  </Card.Footer>
-                </Card>
+                <Card.Header className={"seeds-m-be-header"}>
+                  <Heading size="2xl" priority={2}>
+                    Feature flags
+                  </Heading>
+                </Card.Header>
+                <Card.Section>
+                  <MinimalTable
+                    headers={{ jurisdiction: "t.jurisdiction", actions: "" }}
+                    data={jurisdictionTableData}
+                    cellClassName={"px-5 py-3"}
+                    flushRight={true}
+                  />
+                </Card.Section>
               </Tabs.TabPanel>
               <Tabs.TabPanel>
-                <Card>
-                  <Card.Header>
-                    <Heading size="2xl">Jurisdictions</Heading>
-                  </Card.Header>
-                  <Card.Section>
-                    {viewBy === TabsIndexEnum.featureFlag && (
-                      <MinimalTable
-                        headers={{
-                          featureFlag: "t.featureFlag",
-                          description: "t.descriptionTitle",
-                          actions: "",
-                        }}
-                        data={featureFlagTableData}
-                        cellClassName={"px-5 py-3"}
-                      ></MinimalTable>
-                    )}
-                  </Card.Section>
-                  <Card.Footer>
-                    <Button onClick={onAddAll}>Add All New Feature Flags</Button>
-                  </Card.Footer>
-                </Card>
+                <Card.Header className={"seeds-m-be-header"}>
+                  <Heading size="2xl" priority={2}>
+                    Jurisdictions
+                  </Heading>
+                </Card.Header>
+                <Card.Section>
+                  {viewBy === TabsIndexEnum.featureFlag && (
+                    <MinimalTable
+                      headers={{
+                        featureFlag: "t.featureFlag",
+                        description: "t.descriptionTitle",
+                        actions: "",
+                      }}
+                      data={featureFlagTableData}
+                      cellClassName={"px-5 py-3"}
+                    />
+                  )}
+                </Card.Section>
               </Tabs.TabPanel>
             </Tabs>
+            <Button onClick={onAddAll}>Add all new feature flags</Button>
           </article>
         </section>
       </Layout>
@@ -197,8 +210,8 @@ const Admin = () => {
         <Drawer.Content>
           <div>
             {featureFlags.map((flag) => (
-              <div key={flag.id}>
-                <legend>{flag.name}</legend>
+              <div key={flag.id} className={"seeds-m-be-content"}>
+                <legend className={"seeds-m-be-text"}>{flag.name}</legend>
                 <Field
                   type="checkbox"
                   id={flag.id}
@@ -224,7 +237,7 @@ const Admin = () => {
         <Drawer.Content>
           <div>
             {jurisdictions.map((juris) => (
-              <div key={juris.id}>
+              <div key={juris.id} className={"seeds-m-be-content"}>
                 <Field
                   type="checkbox"
                   id={juris.id}
