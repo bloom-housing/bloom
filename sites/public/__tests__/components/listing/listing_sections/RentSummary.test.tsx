@@ -1,6 +1,7 @@
 import React from "react"
 import { render, cleanup } from "@testing-library/react"
 import { RentSummary } from "../../../../src/components/listing/listing_sections/RentSummary"
+import { listing } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import { ReviewOrderTypeEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 afterEach(cleanup)
@@ -20,6 +21,8 @@ describe("<RentSummary>", () => {
           byAMI: [],
           hmi: null,
         }}
+        listing={listing}
+        section8Acceptance={false}
       />
     )
     expect(getAllByText("Rent").length).toBeGreaterThan(0)
@@ -44,6 +47,8 @@ describe("<RentSummary>", () => {
           ],
           hmi: null,
         }}
+        listing={listing}
+        section8Acceptance={false}
       />
     )
     expect(getAllByText("Rent").length).toBeGreaterThan(0)

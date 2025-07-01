@@ -1,6 +1,7 @@
 import * as React from "react"
 import { Unit, UnitSummary } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { StackedTable } from "@bloom-housing/ui-components"
+import { Heading } from "@bloom-housing/ui-seeds"
+import { StackedTable, t } from "@bloom-housing/ui-components"
 import {
   getStackedUnitTableData,
   getUnitTableData,
@@ -22,6 +23,9 @@ export const UnitSummaries = ({
   if (!unitSummary?.length) return
   return (
     <>
+      <Heading size={"lg"} className={"seeds-m-be-header"} priority={3}>
+        {t("t.unitFeatures")}
+      </Heading>
       {unitSummary.map((summary, index) => {
         const unitTableData = getUnitTableData(units, summary)
         return (
