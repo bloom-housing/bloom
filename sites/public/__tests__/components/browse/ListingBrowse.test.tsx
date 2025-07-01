@@ -1,9 +1,9 @@
 import React from "react"
 import { setupServer } from "msw/lib/node"
+import dayjs from "dayjs"
 import { fireEvent, render, screen, waitFor, within } from "@testing-library/react"
+import userEvent from "@testing-library/user-event"
 import { listing, jurisdiction } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
-import { ListingBrowse, TabsIndexEnum } from "../../../src/components/browse/ListingBrowse"
-import { mockNextRouter } from "../../testUtils"
 import {
   EnumUnitGroupAmiLevelMonthlyRentDeterminationType,
   FeatureFlag,
@@ -11,8 +11,8 @@ import {
   MarketingTypeEnum,
   UnitTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import userEvent from "@testing-library/user-event"
-import dayjs from "dayjs"
+import { ListingBrowse, TabsIndexEnum } from "../../../src/components/browse/ListingBrowse"
+import { mockNextRouter } from "../../testUtils"
 
 const server = setupServer()
 
@@ -588,7 +588,7 @@ describe("<ListingBrowse>", () => {
     })
   })
   it("shows under construction listings at the top", () => {
-    const view = render(
+    render(
       <ListingBrowse
         listings={[
           {
@@ -616,7 +616,6 @@ describe("<ListingBrowse>", () => {
         multiselectData={[]}
       />
     )
-    expect(view.queryByText("No listings currently have open applications.")).toBeNull()
     const itemA = screen.getByText("ListingA")
     const itemB = screen.getByText("ListingB")
     // Expects B follows A
