@@ -122,12 +122,12 @@ describe("admin", () => {
     render(<Admin />)
     await screen.findByRole("cell", { name: "jurisdiction 1" })
     expect(screen.getByRole("heading", { level: 1, name: "Administration" })).toBeInTheDocument()
-    expect(screen.getByRole("tab", { name: "By Jurisdiction" })).toBeInTheDocument()
-    expect(screen.getByRole("tabpanel", { name: "By Jurisdiction" })).toBeInTheDocument()
-    expect(screen.getByRole("tab", { name: "By Feature Flag" })).toBeInTheDocument()
-    expect(screen.getByRole("tabpanel", { name: "By Feature Flag" })).toBeInTheDocument()
+    expect(screen.getByRole("tab", { name: "By jurisdiction" })).toBeInTheDocument()
+    expect(screen.getByRole("tabpanel", { name: "By jurisdiction" })).toBeInTheDocument()
+    expect(screen.getByRole("tab", { name: "By feature flag" })).toBeInTheDocument()
+    expect(screen.getByRole("tabpanel", { name: "By feature flag" })).toBeInTheDocument()
 
-    expect(screen.getByRole("button", { name: "Add All New Feature Flags" })).toBeInTheDocument()
+    expect(screen.getByRole("button", { name: "Add all new feature flags" })).toBeInTheDocument()
 
     // Table
     const table = screen.getByRole("table")
@@ -145,15 +145,15 @@ describe("admin", () => {
     // Validate first row
     const [jurisdiction, actions] = within(rows[0]).getAllByRole("cell")
     expect(jurisdiction).toHaveTextContent("jurisdiction 1")
-    expect(actions).toHaveTextContent("Edit")
+    expect(within(actions).getByRole("button", { name: "Edit" })).toBeInTheDocument()
     // Validate second row
     const [jurisdiction2, actions2] = within(rows[1]).getAllByRole("cell")
     expect(jurisdiction2).toHaveTextContent("jurisdiction 2")
-    expect(actions2).toHaveTextContent("Edit")
+    expect(within(actions2).getByRole("button", { name: "Edit" })).toBeInTheDocument()
     // Validate third row
     const [jurisdiction3, actions3] = within(rows[2]).getAllByRole("cell")
     expect(jurisdiction3).toHaveTextContent("jurisdiction 3")
-    expect(actions3).toHaveTextContent("Edit")
+    expect(within(actions3).getByRole("button", { name: "Edit" })).toBeInTheDocument()
   })
 
   it("should display the feature flag page when superadmin for by feature flag", async () => {
@@ -183,7 +183,7 @@ describe("admin", () => {
     await screen.findByRole("cell", { name: "jurisdiction 1" })
 
     // Switch to the "by feature flag" tab
-    fireEvent.click(screen.getByRole("tab", { name: "By Feature Flag" }))
+    fireEvent.click(screen.getByRole("tab", { name: "By feature flag" }))
 
     await screen.findByRole("cell", { name: "featureFlag1" })
 
@@ -205,17 +205,17 @@ describe("admin", () => {
     const [featureFlag, description, actions] = within(rows[0]).getAllByRole("cell")
     expect(featureFlag).toHaveTextContent("featureFlag1")
     expect(description).toHaveTextContent("featureFlag1 description")
-    expect(actions).toHaveTextContent("Edit")
+    expect(within(actions).getByRole("button", { name: "Edit" })).toBeInTheDocument()
     // Validate second row
     const [featureFlag2, description2, actions2] = within(rows[1]).getAllByRole("cell")
     expect(featureFlag2).toHaveTextContent("featureFlag2")
     expect(description2).toHaveTextContent("featureFlag2 description")
-    expect(actions2).toHaveTextContent("Edit")
+    expect(within(actions2).getByRole("button", { name: "Edit" })).toBeInTheDocument()
     // Validate third row
     const [featureFlag3, description3, actions3] = within(rows[2]).getAllByRole("cell")
     expect(featureFlag3).toHaveTextContent("featureFlag3")
     expect(description3).toHaveTextContent("featureFlag3 description")
-    expect(actions3).toHaveTextContent("Edit")
+    expect(within(actions3).getByRole("button", { name: "Edit" })).toBeInTheDocument()
   })
 
   it("should open and associate feature flag for jurisdiction", async () => {
@@ -334,7 +334,7 @@ describe("admin", () => {
     await screen.findByRole("cell", { name: "jurisdiction 1" })
 
     // Switch to the "by feature flag" tab
-    fireEvent.click(screen.getByRole("tab", { name: "By Feature Flag" }))
+    fireEvent.click(screen.getByRole("tab", { name: "By feature flag" }))
 
     fireEvent.click(screen.getAllByRole("button", { name: "Edit" })[0])
 
