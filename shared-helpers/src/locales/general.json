@@ -676,6 +676,7 @@
   "listings.communityTypesNote": "Affordable housing properties often receive funding to house specific populations, like seniors, residents with disabilities, etc. Properties can serve more than one population. Contact this property if you are unsure if you qualify.",
   "listings.confirmedListings": "Confirmed listings",
   "listings.confirmedListingsOnly": "Only show listings confirmed by property",
+  "listings.costsNotIncluded": "Costs not included",
   "listings.confirmedPreferenceList": "Confirmed %{preference} List",
   "listings.creditHistory": "Credit History",
   "listings.criminalBackground": "Criminal Background",
