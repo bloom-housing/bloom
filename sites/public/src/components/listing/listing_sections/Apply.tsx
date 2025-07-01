@@ -110,19 +110,34 @@ export const Apply = ({ listing, preview, setShowDownloadModal }: ApplyProps) =>
     </Button>
   )
 
+  const hasPrimaryApplicationMethod = onlineApplicationUrl || hasPaperApplication
+
+  const hasApplicationMethod =
+    getHasNonReferralMethods(listing) ||
+    applicationMailingAddress ||
+    applicationPickUpAddress ||
+    applicationDropOffAddress
+
   return (
     <>
-      {getHasNonReferralMethods(listing) &&
+      {hasApplicationMethod &&
         !applicationsClosed &&
         listing.status !== ListingsStatusEnum.closed && (
           <Card
             className={`${listingStyles["mobile-full-width-card"]} ${listingStyles["mobile-no-bottom-border"]}`}
           >
-            <Card.Section divider="flush" className={styles["card-section-background"]}>
+            <Card.Section
+              divider="flush"
+              className={`${
+                hasPrimaryApplicationMethod ? styles["card-section-background"] : null
+              }`}
+            >
               <Heading priority={2} size={"lg"} className={"seeds-m-be-header"}>
                 {t("listings.apply.howToApply")}
               </Heading>
-              {onlineApplicationUrl ? ApplyOnlineButton : DownloadApplicationButton}
+              {hasPrimaryApplicationMethod && (
+                <>{onlineApplicationUrl ? ApplyOnlineButton : DownloadApplicationButton}</>
+              )}
             </Card.Section>
             {((hasPaperApplication &&
               (onlineApplicationUrl ||

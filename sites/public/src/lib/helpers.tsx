@@ -153,7 +153,8 @@ export const getListingApplicationStatus = (
 
 export const getStatusPrefix = (
   listing: Listing,
-  enableMarketingStatus: boolean
+  enableMarketingStatus: boolean,
+  enableUnitGroups: boolean
 ): { label: string; variant: CommonMessageVariant } => {
   if (
     listing.status === ListingsStatusEnum.closed ||
@@ -164,13 +165,26 @@ export const getStatusPrefix = (
   if (enableMarketingStatus && listing.marketingType === MarketingTypeEnum.comingSoon)
     return { label: t("listings.underConstruction"), variant: "warn" }
 
-  switch (listing.reviewOrderType) {
-    case ReviewOrderTypeEnum.lottery:
+  if (enableUnitGroups) {
+    const hasUnitGroupsWaitlistOpen = listing.unitGroups.some((group) => group.openWaitlist)
+    const unitsAvailable =
+      listing.unitGroups.length > 0
+        ? listing.unitGroups.reduce((acc, curr) => acc + curr.totalAvailable, 0)
+        : listing.unitsAvailable
+    if (listing.reviewOrderType === ReviewOrderTypeEnum.lottery)
       return { label: t("listings.lottery"), variant: "primary" }
-    case ReviewOrderTypeEnum.waitlist:
+    if (unitsAvailable) return { label: t("listings.applicationFCFS"), variant: "primary" }
+    if (hasUnitGroupsWaitlistOpen)
       return { label: t("listings.waitlist.open"), variant: "secondary" }
-    default:
-      return { label: t("listings.applicationFCFS"), variant: "primary" }
+  } else {
+    switch (listing.reviewOrderType) {
+      case ReviewOrderTypeEnum.lottery:
+        return { label: t("listings.lottery"), variant: "primary" }
+      case ReviewOrderTypeEnum.waitlist:
+        return { label: t("listings.waitlist.open"), variant: "secondary" }
+      default:
+        return { label: t("listings.applicationFCFS"), variant: "primary" }
+    }
   }
 }
 
@@ -222,7 +236,8 @@ export const getListingStatusMessage = (
   if (!listing) return
 
   const enableMarketingStatus = isFeatureFlagOn(jurisdiction, "enableMarketingStatus")
-  const prefix = getStatusPrefix(listing, enableMarketingStatus)
+  const enableUnitGroups = isFeatureFlagOn(jurisdiction, "enableUnitGroups")
+  const prefix = getStatusPrefix(listing, enableMarketingStatus, enableUnitGroups)
 
   return (
     <Message
@@ -232,13 +247,13 @@ export const getListingStatusMessage = (
           <InfoIcon />
         </Icon>
       }
-      variant={prefix.variant}
+      variant={prefix?.variant}
     >
       {content ? (
         content
       ) : (
         <div className={styles["due-date-content"]}>
-          <div className={styles["date-review-order"]}>{prefix.label}</div>
+          <div className={styles["date-review-order"]}>{prefix?.label}</div>
           {!hideDate && (
             <div>
               {getListingStatusMessageContent(

@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
+import Markdown from "markdown-to-jsx"
 import {
   FeatureFlagEnum,
   Jurisdiction,
@@ -134,7 +135,9 @@ export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: Li
     <>
       {listing.whatToExpect && (
         <InfoCard heading={t("whatToExpect.label")}>
-          <div>{listing.whatToExpect}</div>
+          <div>
+            <Markdown>{listing.whatToExpect}</Markdown>
+          </div>
         </InfoCard>
       )}
     </>
@@ -219,10 +222,7 @@ export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: Li
           />
           <div className={styles["main-content"]}>
             <div className={styles["hide-desktop"]}>{ApplyBar}</div>
-            <Eligibility
-              eligibilitySections={getEligibilitySections(jurisdiction, listing)}
-              section8Acceptance={listing.section8Acceptance}
-            />
+            <Eligibility eligibilitySections={getEligibilitySections(jurisdiction, listing)} />
             <Features features={getFeatures(listing, jurisdiction)}>{UnitFeatures}</Features>
             <Neighborhood
               address={listing.listingsBuildingAddress}

@@ -202,8 +202,8 @@ export async function fetchOpenListings(
         },
         ...additionalFilters,
       ],
-      orderBy: [ListingOrderByKeys.mostRecentlyPublished],
-      orderDir: [OrderByEnum.desc],
+      orderBy: [ListingOrderByKeys.marketingType, ListingOrderByKeys.mostRecentlyPublished],
+      orderDir: [OrderByEnum.desc, OrderByEnum.desc],
       limit: process.env.maxBrowseListings,
     },
     req
