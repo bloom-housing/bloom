@@ -106,11 +106,16 @@ const getUnhiddenMultiselectQuestions = (
 }
 
 export const ListingView = (props: ListingProps) => {
-  const { initialStateLoaded, profile } = useContext(AuthContext)
+  const { initialStateLoaded, profile, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
   let buildingSelectionCriteria, preferencesSection, programsSection
   const { listing } = props
 
   const statusContent = getListingApplicationStatus(listing)
+
+  const disableListingPreferences = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.disableListingPreferences,
+    listing?.jurisdictions?.id
+  )
 
   const appOpenInFuture = openInFuture(listing)
   const hasNonReferralMethods = listing?.applicationMethods
@@ -269,7 +274,7 @@ export const ListingView = (props: ListingProps) => {
     )
   }
 
-  if (listingPreferences && listingPreferences?.length > 0) {
+  if (listingPreferences && listingPreferences?.length > 0 && !disableListingPreferences) {
     preferencesSection = (
       <ListSection
         title={t("listings.sections.housingPreferencesTitle")}

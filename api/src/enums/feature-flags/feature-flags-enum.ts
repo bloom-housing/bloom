@@ -5,6 +5,7 @@ export enum FeatureFlagEnum {
   example = 'example', // sample feature flag for testing purposes
   disableCommonApplication = 'disableCommonApplication',
   disableJurisdictionalAdmin = 'disableJurisdictionalAdmin',
+  disableListingPreferences = 'disableListingPreferences',
   enableAccessibilityFeatures = 'enableAccessibilityFeatures',
   enableCompanyWebsite = 'enableCompanyWebsite',
   enableGeocodingPreferences = 'enableGeocodingPreferences',
@@ -42,6 +43,11 @@ export const featureFlagMap: { name: string; description: string }[] = [
   {
     name: FeatureFlagEnum.disableJurisdictionalAdmin,
     description: 'When true, jurisdictional admins cannot be created',
+  },
+  {
+    name: FeatureFlagEnum.disableListingPreferences,
+    description:
+      'When true listings will no longer support preferences section',
   },
   {
     name: FeatureFlagEnum.enableAccessibilityFeatures,
