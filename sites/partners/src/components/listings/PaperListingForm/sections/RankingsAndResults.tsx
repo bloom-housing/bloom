@@ -15,7 +15,7 @@ import {
   YesNoEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
-import TextEditor from "../../../shared/TextEditor"
+import { TextEditor } from "../../../shared/TextEditor"
 
 type RankingsAndResultsProps = {
   listing?: FormListing
@@ -351,7 +351,7 @@ const RankingsAndResults = ({
         <Grid.Row columns={3}>
           <Grid.Cell className="seeds-grid-span-2">
             <label className={"textarea-label"}>{t("listings.whatToExpectLabel")}</label>
-            <TextEditor editor={whatToExpectEditor} />
+            <TextEditor editor={whatToExpectEditor} editorId={"whatToExpect"} />
           </Grid.Cell>
         </Grid.Row>
         <Grid.Row columns={3}>
@@ -359,7 +359,10 @@ const RankingsAndResults = ({
             <label className={"textarea-label"}>
               {t("listings.whatToExpectLabelAdditionalText")}
             </label>
-            <TextEditor editor={whatToExpectAdditionalTextEditor} />
+            <TextEditor
+              editor={whatToExpectAdditionalTextEditor}
+              editorId={"whatToExpectAdditionalText"}
+            />
           </Grid.Cell>
         </Grid.Row>
       </SectionWithGrid>

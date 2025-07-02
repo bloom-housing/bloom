@@ -4,14 +4,14 @@ import utc from "dayjs/plugin/utc"
 dayjs.extend(utc)
 import { t } from "@bloom-housing/ui-components"
 import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
-import { ListingContext } from "../../ListingContext"
 import { AuthContext, getLotteryEvent } from "@bloom-housing/shared-helpers"
 import {
   FeatureFlagEnum,
   ReviewOrderTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { getDetailFieldNumber, getDetailFieldString, getDetailBoolean } from "./helpers"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
+import { ListingContext } from "../../ListingContext"
+import { getDetailFieldNumber, getDetailBoolean, getDetailFieldRichText } from "./helpers"
 
 const DetailRankingsAndResults = () => {
   const listing = useContext(ListingContext)
@@ -103,16 +103,13 @@ const DetailRankingsAndResults = () => {
       )}
 
       <Grid.Row>
-        <FieldValue id="whatToExpect" label={t("listings.whatToExpectLabel")}>
-          {getDetailFieldString(listing.whatToExpect)}
+        <FieldValue label={t("listings.whatToExpectLabel")}>
+          {getDetailFieldRichText(listing.whatToExpect, "whatToExpect")}
         </FieldValue>
       </Grid.Row>
       <Grid.Row>
-        <FieldValue
-          id="whatToExpectAdditionalText"
-          label={t("listings.whatToExpectLabelAdditionalText")}
-        >
-          {getDetailFieldString(listing.whatToExpectAdditionalText)}
+        <FieldValue label={t("listings.whatToExpectLabelAdditionalText")}>
+          {getDetailFieldRichText(listing.whatToExpectAdditionalText, "whatToExpectAdditionalText")}
         </FieldValue>
       </Grid.Row>
     </SectionWithGrid>

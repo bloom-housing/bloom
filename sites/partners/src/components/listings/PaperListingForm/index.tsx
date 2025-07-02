@@ -45,7 +45,7 @@ import LotteryResults from "./sections/LotteryResults"
 import ApplicationTypes from "./sections/ApplicationTypes"
 import CommunityType from "./sections/CommunityType"
 import BuildingSelectionCriteria from "./sections/BuildingSelectionCriteria"
-import { getReadableErrorMessage } from "../PaperListingDetails/sections/helpers"
+import { cleanRichText, getReadableErrorMessage } from "../PaperListingDetails/sections/helpers"
 import { StatusBar } from "../../../components/shared/StatusBar"
 import { getListingStatusTag } from "../helpers"
 import RequestChangesDialog from "./dialogs/RequestChangesDialog"
@@ -153,12 +153,12 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
 
   const whatToExpectEditor = useEditor({
     extensions,
-    content: listing.whatToExpect,
+    content: listing?.whatToExpect,
   })
 
   const whatToExpectAdditionalTextEditor = useEditor({
     extensions,
-    content: listing.whatToExpectAdditionalText,
+    content: listing?.whatToExpectAdditionalText,
   })
 
   const enableUnitGroups =
@@ -264,8 +264,10 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
             formData.listingSection8Acceptance = YesNoEnum.no
           }
 
-          formData.whatToExpect = whatToExpectEditor.getHTML()
-          formData.whatToExpectAdditionalText = whatToExpectAdditionalTextEditor.getHTML()
+          formData.whatToExpect = cleanRichText(whatToExpectEditor.getHTML())
+          formData.whatToExpectAdditionalText = cleanRichText(
+            whatToExpectAdditionalTextEditor.getHTML()
+          )
 
           if (successful) {
             const dataPipeline = new ListingDataPipeline(formData, {

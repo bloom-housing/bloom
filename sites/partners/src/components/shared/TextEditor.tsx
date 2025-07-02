@@ -1,4 +1,5 @@
 import React, { useCallback } from "react"
+import Markdown from "markdown-to-jsx"
 import { EditorContent, Editor } from "@tiptap/react"
 import { StarterKit } from "@tiptap/starter-kit"
 import { Link as LinkExtension } from "@tiptap/extension-link"
@@ -157,15 +158,27 @@ const MenuBar = ({ editor }) => {
 
 type TextEditorProps = {
   editor: Editor
+  editorId?: string
 }
 
-const TextEditor = ({ editor }: TextEditorProps) => {
+export const TextEditor = ({ editor, editorId }: TextEditorProps) => {
   return (
     <div className={styles["editor"]}>
       <MenuBar editor={editor} />
-      <EditorContent editor={editor} />
+      <EditorContent editor={editor} id={editorId} />
     </div>
   )
 }
 
-export default TextEditor
+type TextEditorContentProps = {
+  content: string
+  contentId?: string
+}
+
+export const TextEditorContent = ({ content, contentId }: TextEditorContentProps) => {
+  return (
+    <div className={styles["editor"]} id={contentId}>
+      <Markdown>{content}</Markdown>
+    </div>
+  )
+}
