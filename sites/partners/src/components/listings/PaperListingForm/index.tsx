@@ -2,7 +2,6 @@ import React, { useState, useCallback, useContext, useEffect } from "react"
 import { useRouter } from "next/router"
 import dayjs from "dayjs"
 import { useEditor } from "@tiptap/react"
-import { StarterKit } from "@tiptap/starter-kit"
 import { t, Form, AlertBox, LoadingOverlay, LatitudeLongitude } from "@bloom-housing/ui-components"
 import { Button, Icon, Tabs } from "@bloom-housing/ui-seeds"
 import ChevronLeftIcon from "@heroicons/react/20/solid/ChevronLeftIcon"
@@ -58,8 +57,9 @@ import SaveBeforeExitDialog from "./dialogs/SaveBeforeExitDialog"
 import ListingVerification from "./sections/ListingVerification"
 import NeighborhoodAmenities from "./sections/NeighborhoodAmenities"
 import PreferencesAndPrograms from "./sections/PreferencesAndPrograms"
+import { EditorExtensions } from "../../shared/TextEditor"
 
-const extensions = [StarterKit]
+const extensions = EditorExtensions
 
 type ListingFormProps = {
   listing?: FormListing

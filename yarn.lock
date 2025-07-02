@@ -2443,6 +2443,11 @@
   resolved "https://registry.npmjs.org/@heroicons/react/-/react-2.1.1.tgz"
   integrity sha512-JyyN9Lo66kirbCMuMMRPtJxtKJoIsXKS569ebHGGRKbl8s4CtUfLnyKJxteA+vIKySocO4s1SkTkGS4xtG/yEA==
 
+"@heroicons/react@^2.2.0":
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/@heroicons/react/-/react-2.2.0.tgz#0c05124af50434a800773abec8d3af6a297d904b"
+  integrity sha512-LMcepvRaS9LYHJGsF0zzmgKCUim/X3N/DQKc4jepAXJ7l8QxJ1PmxJzqplF2Z3FE4PqBAIGyJAQ/w4B5dsqbtQ==
+
 "@humanwhocodes/config-array@^0.13.0":
   version "0.13.0"
   resolved "https://registry.npmjs.org/@humanwhocodes/config-array/-/config-array-0.13.0.tgz"
@@ -3719,6 +3724,13 @@
   version "2.23.1"
   resolved "https://registry.yarnpkg.com/@tiptap/extension-italic/-/extension-italic-2.23.1.tgz#860b1a1273de6d5f6efaebaa87d190095bfaa5f6"
   integrity sha512-a+cPzffaC/1AKMmZ1Ka6l81xmTgcalf8NXfBuFCUTf5r7uI9NIgXnLo9hg+jR9F4K+bwhC4/UbMvQQzAjh0c0A==
+
+"@tiptap/extension-link@^2.23.1":
+  version "2.23.1"
+  resolved "https://registry.yarnpkg.com/@tiptap/extension-link/-/extension-link-2.23.1.tgz#fd30862964c84fc900e71ae442c050ba83ab2d32"
+  integrity sha512-zMD0V8djkvwRYACzd8EvFXXNLQH5poJt6aHC9/8uest6njRhlrRjSjwG5oa+xHW4A76XfAH0A5BPj6ZxZnAUQg==
+  dependencies:
+    linkifyjs "^4.2.0"
 
 "@tiptap/extension-list-item@^2.23.1":
   version "2.23.1"
@@ -10113,6 +10125,11 @@ linkify-it@^5.0.0:
   integrity sha512-5aHCbzQRADcdP+ATqnDuhhJ/MRIqDkZX5pyjFHRRysS8vZ5AbqGEoFIb6pYHPZ+L/OC2Lc+xT8uHVVR5CAK/wQ==
   dependencies:
     uc.micro "^2.0.0"
+
+linkifyjs@^4.2.0:
+  version "4.3.1"
+  resolved "https://registry.yarnpkg.com/linkifyjs/-/linkifyjs-4.3.1.tgz#1f246ebf4be040002accd1f4535b6af7c7e37898"
+  integrity sha512-DRSlB9DKVW04c4SUdGvKK5FR6be45lTU9M76JnngqPeeGDqPwYc0zdUErtsNVMtxPXgUWV4HbXbnC4sNyBxkYg==
 
 lint-staged@^10.4.0:
   version "10.4.0"

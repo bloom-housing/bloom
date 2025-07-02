@@ -1,5 +1,5 @@
 .editor {
-  padding: var(--seeds-s2);
+  padding: var(--seeds-s3);
   border: 1px solid var(--seeds-color-gray-500);
   border-radius: var(--seeds-s1);
   :first-child {
@@ -30,15 +30,21 @@
 
   .editor-menu {
     button {
-      border: 1px solid var(--seeds-color-gray-500);
+      border: 2px solid var(--seeds-color-primary);
       border-radius: var(--seeds-s1);
       padding: var(--seeds-s1);
+      background-color: var(--seeds-color-white);
+      svg {
+        color: var(--seeds-color-primary);
+      }
       &:hover {
-        background-color: var(--seeds-color-gray-100);
-        outline: 2px solid var(--seeds-color-gray-500);
+        background-color: var(--seeds-color-primary);
+        svg {
+          color: var(--seeds-color-white);
+        }
       }
     }
-    margin-bottom: var(--seeds-s1);
+    margin-bottom: var(--seeds-s2);
     display: flex;
     flex-wrap: wrap;
     gap: var(--seeds-s1);
@@ -48,5 +54,9 @@
     border-radius: var(--seeds-s1);
     background-color: var(--seeds-color-gray-200);
     padding: var(--seeds-s2);
+    &:focus {
+      outline: var(--seeds-focus-ring-outline);
+      box-shadow: var(--seeds-focus-ring-box-shadow);
+    }
   }
 }
