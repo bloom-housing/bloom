@@ -350,6 +350,17 @@ const RankingsAndResults = ({ listing, isAdmin }: RankingsAndResultsProps) => {
             />
           </Grid.Cell>
         </Grid.Row>
+        <Grid.Row columns={3}>
+          <Grid.Cell className="seeds-grid-span-2">
+            <Textarea
+              label={t("listings.whatToExpectLabelAdditionalText")}
+              name={"whatToExpectAdditionalText"}
+              id={"whatToExpectAdditionalText"}
+              fullWidth={true}
+              register={register}
+            />
+          </Grid.Cell>
+        </Grid.Row>
       </SectionWithGrid>
     </>
   )

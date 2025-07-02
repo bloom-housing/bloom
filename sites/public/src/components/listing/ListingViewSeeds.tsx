@@ -19,6 +19,7 @@ import {
 import { Heading } from "@bloom-housing/ui-seeds"
 import { ErrorPage } from "../../pages/_error"
 import { fetchFavoriteListingIds, isFeatureFlagOn, saveListingFavorite } from "../../lib/helpers"
+import { ReadMore } from "../../patterns/ReadMore"
 import {
   getAdditionalInformation,
   getAmiValues,
@@ -135,9 +136,14 @@ export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: Li
     <>
       {listing.whatToExpect && (
         <InfoCard heading={t("whatToExpect.label")}>
-          <div>
+          {listing.whatToExpectAdditionalText ? (
+            <ReadMore
+              content={listing.whatToExpect}
+              truncatedContent={listing.whatToExpectAdditionalText}
+            />
+          ) : (
             <Markdown>{listing.whatToExpect}</Markdown>
-          </div>
+          )}
         </InfoCard>
       )}
     </>

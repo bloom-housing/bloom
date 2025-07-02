@@ -107,6 +107,14 @@ const DetailRankingsAndResults = () => {
           {getDetailFieldString(listing.whatToExpect)}
         </FieldValue>
       </Grid.Row>
+      <Grid.Row>
+        <FieldValue
+          id="whatToExpectAdditionalText"
+          label={t("listings.whatToExpectLabelAdditionalText")}
+        >
+          {getDetailFieldString(listing.whatToExpectAdditionalText)}
+        </FieldValue>
+      </Grid.Row>
     </SectionWithGrid>
   )
 }
