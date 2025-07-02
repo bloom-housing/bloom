@@ -156,11 +156,6 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
     content: listing?.whatToExpect,
   })
 
-  const whatToExpectAdditionalTextEditor = useEditor({
-    extensions,
-    content: listing?.whatToExpectAdditionalText,
-  })
-
   const enableUnitGroups =
     activeFeatureFlags?.find((flag) => flag.name === FeatureFlagEnum.enableUnitGroups)?.active ||
     false
@@ -265,9 +260,6 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
           }
 
           formData.whatToExpect = cleanRichText(whatToExpectEditor.getHTML())
-          formData.whatToExpectAdditionalText = cleanRichText(
-            whatToExpectAdditionalTextEditor.getHTML()
-          )
 
           if (successful) {
             const dataPipeline = new ListingDataPipeline(formData, {
@@ -457,7 +449,6 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
                             listing={listing}
                             isAdmin={profile?.userRoles.isAdmin}
                             whatToExpectEditor={whatToExpectEditor}
-                            whatToExpectAdditionalTextEditor={whatToExpectAdditionalTextEditor}
                           />
                           <LeasingAgent />
                           <ApplicationTypes listing={listing} />

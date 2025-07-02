@@ -5,18 +5,7 @@ export function SanitizeHtml() {
   return Transform((params: TransformFnParams) => {
     return params.value
       ? sanitizeHtml(params.value, {
-          allowedTags: [
-            'b',
-            'i',
-            'em',
-            'strong',
-            'a',
-            'hr',
-            'p',
-            'ol',
-            'ul',
-            'li',
-          ],
+          allowedTags: ['b', 'strong', 'a', 'hr', 'p', 'ol', 'ul', 'li', 'br'],
           allowedAttributes: {
             a: ['href'],
           },

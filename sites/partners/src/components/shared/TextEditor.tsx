@@ -3,23 +3,36 @@ import Markdown from "markdown-to-jsx"
 import { EditorContent, Editor } from "@tiptap/react"
 import { StarterKit } from "@tiptap/starter-kit"
 import { Link as LinkExtension } from "@tiptap/extension-link"
+import { CharacterCount as CharacterCountExtension } from "@tiptap/extension-character-count"
 import BoldIcon from "@heroicons/react/16/solid/BoldIcon"
 import BulletListIcon from "@heroicons/react/16/solid/ListBulletIcon"
 import OrderedListIcon from "@heroicons/react/16/solid/NumberedListIcon"
-import ItalicIcon from "@heroicons/react/16/solid/ItalicIcon"
 import DividerIcon from "@heroicons/react/16/solid/MinusIcon"
 import LinkIcon from "@heroicons/react/16/solid/LinkIcon"
 import UnlinkIcon from "@heroicons/react/16/solid/LinkSlashIcon"
 import { Icon } from "@bloom-housing/ui-seeds"
+import { t } from "@bloom-housing/ui-components"
 import styles from "./TextEditor.module.scss"
 
+const CHARACTER_LIMIT = 4096
+
 export const EditorExtensions = [
-  StarterKit,
+  StarterKit.configure({
+    heading: false,
+  }),
+  CharacterCountExtension.configure({
+    limit: CHARACTER_LIMIT,
+  }),
   LinkExtension.configure({
     openOnClick: true,
     autolink: true,
     defaultProtocol: "https",
-    protocols: ["http", "https"],
+    protocols: [
+      "http",
+      "https",
+      { scheme: "mailto", optionalSlashes: true },
+      { scheme: "tel", optionalSlashes: true },
+    ],
     isAllowedUri: (url, ctx) => {
       try {
         // construct URL
@@ -92,17 +105,6 @@ const MenuBar = ({ editor }) => {
         </Icon>
       </button>
       <button
-        onClick={() => editor.chain().focus().toggleItalic().run()}
-        disabled={!editor.can().chain().focus().toggleItalic().run()}
-        className={editor.isActive("italic") ? "is-active" : ""}
-        type="button"
-        aria-label={"Italic"}
-      >
-        <Icon>
-          <ItalicIcon />
-        </Icon>
-      </button>
-      <button
         onClick={() => editor.chain().focus().toggleBulletList().run()}
         className={editor.isActive("bulletList") ? "is-active" : ""}
         type="button"
@@ -162,10 +164,25 @@ type TextEditorProps = {
 }
 
 export const TextEditor = ({ editor, editorId }: TextEditorProps) => {
+  if (!editor) {
+    return null
+  }
+
   return (
     <div className={styles["editor"]}>
       <MenuBar editor={editor} />
       <EditorContent editor={editor} id={editorId} />
+      <div
+        className={`${styles["character-count"]} ${
+          editor?.storage.characterCount.characters() > CHARACTER_LIMIT
+            ? styles["character-count-warning"]
+            : ""
+        }`}
+      >
+        {t("t.characters", {
+          count: `${editor?.storage.characterCount.characters()} / ${CHARACTER_LIMIT}`,
+        })}
+      </div>
     </div>
   )
 }

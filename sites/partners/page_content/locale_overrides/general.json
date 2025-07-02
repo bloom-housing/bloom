@@ -534,6 +534,7 @@
   "t.areYouSure": "Are you sure?",
   "t.automatic": "Automatic",
   "t.cancel": "Cancel",
+  "t.characters": "%{count} characters",
   "t.copy": "Make a Copy",
   "t.custom": "Custom",
   "t.date": "Date",

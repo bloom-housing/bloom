@@ -3,9 +3,10 @@ import { Expose, Type } from 'class-transformer';
 import {
   ArrayMaxSize,
   ArrayMinSize,
+  IsString,
+  MaxLength,
   Validate,
   ValidateNested,
-  IsString,
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
@@ -240,6 +241,7 @@ export class ListingUpdate extends OmitType(Listing, [
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @MaxLength(4096, { groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   @SanitizeHtml()
   whatToExpect?: string;

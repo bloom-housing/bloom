@@ -4,6 +4,7 @@
   padding: var(--seeds-s3);
   border: 1px solid var(--border-color);
   border-radius: var(--seeds-s1);
+  font-family: var(--seeds-font-alt-sans);
   :first-child {
     margin-top: 0;
   }
@@ -36,6 +37,14 @@
     &:hover {
       cursor: pointer;
     }
+  }
+
+  .character-count {
+    font-size: var(--seeds-type-label-size);
+  }
+
+  .character-count-warning {
+    color: var(--seeds-color-alert);
   }
 
   .editor-menu {
