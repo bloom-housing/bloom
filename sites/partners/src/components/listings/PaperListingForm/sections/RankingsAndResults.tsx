@@ -2,6 +2,7 @@ import React, { useContext } from "react"
 import dayjs from "dayjs"
 import utc from "dayjs/plugin/utc"
 dayjs.extend(utc)
+import { Editor } from "@tiptap/react"
 import { useFormContext, useWatch } from "react-hook-form"
 import { t, Field, FieldGroup, Textarea, DateField, TimeField } from "@bloom-housing/ui-components"
 import { Grid } from "@bloom-housing/ui-seeds"
@@ -14,13 +15,21 @@ import {
   YesNoEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
+import TextEditor from "../../../shared/TextEditor"
 
 type RankingsAndResultsProps = {
   listing?: FormListing
   isAdmin?: boolean
+  whatToExpectEditor: Editor
+  whatToExpectAdditionalTextEditor: Editor
 }
 
-const RankingsAndResults = ({ listing, isAdmin }: RankingsAndResultsProps) => {
+const RankingsAndResults = ({
+  listing,
+  isAdmin,
+  whatToExpectEditor,
+  whatToExpectAdditionalTextEditor,
+}: RankingsAndResultsProps) => {
   const formMethods = useFormContext()
   const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
 
@@ -341,24 +350,16 @@ const RankingsAndResults = ({ listing, isAdmin }: RankingsAndResultsProps) => {
           )}
         <Grid.Row columns={3}>
           <Grid.Cell className="seeds-grid-span-2">
-            <Textarea
-              label={t("listings.whatToExpectLabel")}
-              name={"whatToExpect"}
-              id={"whatToExpect"}
-              fullWidth={true}
-              register={register}
-            />
+            <label className={"textarea-label"}>{t("listings.whatToExpectLabel")}</label>
+            <TextEditor editor={whatToExpectEditor} />
           </Grid.Cell>
         </Grid.Row>
         <Grid.Row columns={3}>
           <Grid.Cell className="seeds-grid-span-2">
-            <Textarea
-              label={t("listings.whatToExpectLabelAdditionalText")}
-              name={"whatToExpectAdditionalText"}
-              id={"whatToExpectAdditionalText"}
-              fullWidth={true}
-              register={register}
-            />
+            <label className={"textarea-label"}>
+              {t("listings.whatToExpectLabelAdditionalText")}
+            </label>
+            <TextEditor editor={whatToExpectAdditionalTextEditor} />
           </Grid.Cell>
         </Grid.Row>
       </SectionWithGrid>

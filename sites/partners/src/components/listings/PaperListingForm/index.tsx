@@ -1,6 +1,8 @@
 import React, { useState, useCallback, useContext, useEffect } from "react"
 import { useRouter } from "next/router"
 import dayjs from "dayjs"
+import { useEditor } from "@tiptap/react"
+import { StarterKit } from "@tiptap/starter-kit"
 import { t, Form, AlertBox, LoadingOverlay, LatitudeLongitude } from "@bloom-housing/ui-components"
 import { Button, Icon, Tabs } from "@bloom-housing/ui-seeds"
 import ChevronLeftIcon from "@heroicons/react/20/solid/ChevronLeftIcon"
@@ -56,6 +58,8 @@ import SaveBeforeExitDialog from "./dialogs/SaveBeforeExitDialog"
 import ListingVerification from "./sections/ListingVerification"
 import NeighborhoodAmenities from "./sections/NeighborhoodAmenities"
 import PreferencesAndPrograms from "./sections/PreferencesAndPrograms"
+
+const extensions = [StarterKit]
 
 type ListingFormProps = {
   listing?: FormListing
@@ -146,6 +150,16 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
   const [listingIsAlreadyLiveDialog, setListingIsAlreadyLiveDialog] = useState(false)
   const [submitForApprovalDialog, setSubmitForApprovalDialog] = useState(false)
   const [requestChangesDialog, setRequestChangesDialog] = useState(false)
+
+  const whatToExpectEditor = useEditor({
+    extensions,
+    content: listing.whatToExpect,
+  })
+
+  const whatToExpectAdditionalTextEditor = useEditor({
+    extensions,
+    content: listing.whatToExpectAdditionalText,
+  })
 
   const enableUnitGroups =
     activeFeatureFlags?.find((flag) => flag.name === FeatureFlagEnum.enableUnitGroups)?.active ||
@@ -249,6 +263,9 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
           if (!enableSection8) {
             formData.listingSection8Acceptance = YesNoEnum.no
           }
+
+          formData.whatToExpect = whatToExpectEditor.getHTML()
+          formData.whatToExpectAdditionalText = whatToExpectAdditionalTextEditor.getHTML()
 
           if (successful) {
             const dataPipeline = new ListingDataPipeline(formData, {
@@ -437,6 +454,8 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
                           <RankingsAndResults
                             listing={listing}
                             isAdmin={profile?.userRoles.isAdmin}
+                            whatToExpectEditor={whatToExpectEditor}
+                            whatToExpectAdditionalTextEditor={whatToExpectAdditionalTextEditor}
                           />
                           <LeasingAgent />
                           <ApplicationTypes listing={listing} />
