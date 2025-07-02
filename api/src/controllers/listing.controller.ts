@@ -157,7 +157,7 @@ export class ListingController {
   @Post()
   @ApiOperation({ summary: 'Create listing', operationId: 'create' })
   @UseInterceptors(ClassSerializerInterceptor)
-  @UsePipes(ListingCreateUpdateValidationPipe)
+  @UsePipes(ListingCreateUpdateValidationPipe) // Extra DTO manipulation for validation
   @ApiOkResponse({ type: Listing })
   @UseGuards(ApiKeyGuard)
   async create(
@@ -209,7 +209,7 @@ export class ListingController {
 
   @Put(':id')
   @ApiOperation({ summary: 'Update listing by id', operationId: 'update' })
-  @UsePipes(ListingCreateUpdateValidationPipe)
+  @UsePipes(ListingCreateUpdateValidationPipe) // Extra DTO manipulation for validation
   @ApiOkResponse({ type: Listing })
   @UseGuards(ApiKeyGuard)
   async update(

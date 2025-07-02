@@ -4,6 +4,13 @@ import { ListingCreate } from '../dtos/listings/listing-create.dto';
 import { PrismaService } from '../services/prisma.service';
 import { defaultValidationPipeOptions } from '../utilities/default-validation-pipe-options';
 
+/**
+ * Validation pipe for creating or editing a listing
+ * This does two steps:
+ *  1. Select whether the validation DTO should be an update or create
+ *  2. Add the required fields for the jurisdiction to the listing object.
+ *     This can then be for the validate-listing-publish validate-units-require decorators
+ */
 @Injectable()
 export class ListingCreateUpdateValidationPipe extends ValidationPipe {
   // Default required fields if jurisdiction doesn't specify any
