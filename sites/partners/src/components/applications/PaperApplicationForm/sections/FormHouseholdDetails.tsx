@@ -2,11 +2,16 @@ import React from "react"
 import { useFormContext } from "react-hook-form"
 import { t, Field, FieldGroup } from "@bloom-housing/ui-components"
 import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
-import { getUniqueUnitTypes, adaFeatureKeys } from "@bloom-housing/shared-helpers"
+import {
+  getUniqueUnitTypes,
+  adaFeatureKeys,
+  getUniqueUnitGroupUnitTypes,
+} from "@bloom-housing/shared-helpers"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 import {
   Accessibility,
   Unit,
+  UnitGroup,
   UnitType,
   YesNoEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -15,22 +20,38 @@ type FormHouseholdDetailsProps = {
   listingUnits: Unit[]
   applicationUnitTypes: UnitType[]
   applicationAccessibilityFeatures: Accessibility
+  listingUnitGroups: UnitGroup[]
+  enableUnitGroups: boolean
 }
 
 const FormHouseholdDetails = ({
   listingUnits,
   applicationUnitTypes,
   applicationAccessibilityFeatures,
+  listingUnitGroups,
+  enableUnitGroups,
 }: FormHouseholdDetailsProps) => {
   const formMethods = useFormContext()
-
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register } = formMethods
 
   const unitTypes = getUniqueUnitTypes(listingUnits)
+  const unitGroupUnitTypes = getUniqueUnitGroupUnitTypes(listingUnitGroups)
 
   const preferredUnitOptions = unitTypes?.map((item) => {
-    const isChecked = !!applicationUnitTypes?.find((unit) => unit.id === item.id) ?? false
+    const isChecked = !!applicationUnitTypes?.find((unit) => unit.id === item.id)
+
+    return {
+      id: item.id,
+      label: t(`application.household.preferredUnit.options.${item.name}`),
+      value: item.id,
+      defaultChecked: isChecked,
+      dataTestId: `preferredUnit.${item.name}`,
+    }
+  })
+
+  const preferredUnitGroupOptions = unitGroupUnitTypes?.map((item) => {
+    const isChecked = !!applicationUnitTypes?.find((unit) => unit.id === item.id)
 
     return {
       id: item.id,
@@ -65,7 +86,7 @@ const FormHouseholdDetails = ({
             <FieldGroup
               type="checkbox"
               name="application.preferredUnit"
-              fields={preferredUnitOptions}
+              fields={enableUnitGroups ? preferredUnitGroupOptions : preferredUnitOptions}
               groupLabel={t("application.details.preferredUnitSizes")}
               register={register}
               fieldGroupClassName="grid grid-cols-1 mt-4"
