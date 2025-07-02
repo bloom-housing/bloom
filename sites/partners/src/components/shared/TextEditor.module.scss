@@ -28,6 +28,11 @@
     margin: var(--seeds-spacer-label) 0;
   }
 
+  a {
+    color: var(--seeds-color-blue-500);
+    text-decoration: underline;
+  }
+
   .editor-menu {
     button {
       border: 2px solid var(--seeds-color-primary);
@@ -55,6 +60,7 @@
         svg {
           color: var(--seeds-color-gray-450);
         }
+        cursor: default;
       }
     }
     margin-bottom: var(--seeds-s2);
