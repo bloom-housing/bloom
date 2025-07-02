@@ -112,7 +112,7 @@ describe('ListingCreateUpdateValidationPipe', () => {
       });
     });
 
-    it('should validate with Detroit minimal fields when jurisdiction specifies them', async () => {
+    it('should validate with minimal fields when jurisdiction specifies them', async () => {
       const jurisdictionId = randomUUID();
       const value = {
         name: 'Test Listing',
@@ -125,13 +125,15 @@ describe('ListingCreateUpdateValidationPipe', () => {
         jurisdictions: { id: jurisdictionId },
       };
 
-      // Mock jurisdiction with minimal required fields (Detroit scenario)
+      // Mock jurisdiction with minimal required field
       mockPrisma.jurisdictions.findFirst.mockResolvedValue({
         requiredListingFields: ['name', 'listingsBuildingAddress'],
       });
 
       const expectedTransformedValue = {
         ...value,
+        units: [],
+        unitGroups: [],
         requiredFields: ['name', 'listingsBuildingAddress'],
       };
       mockSuperTransform.mockResolvedValue(expectedTransformedValue);
@@ -174,11 +176,12 @@ describe('ListingCreateUpdateValidationPipe', () => {
         'leasingAgentPhone',
         'jurisdictions',
         'units',
-        'unitGroups',
       ];
 
       const expectedTransformedValue = {
         ...value,
+        units: [],
+        unitGroups: [],
         requiredFields: expectedDefaultFields,
       };
       mockSuperTransform.mockResolvedValue(expectedTransformedValue);
@@ -216,11 +219,12 @@ describe('ListingCreateUpdateValidationPipe', () => {
         'leasingAgentPhone',
         'jurisdictions',
         'units',
-        'unitGroups',
       ];
 
       const expectedTransformedValue = {
         ...value,
+        units: [],
+        unitGroups: [],
         requiredFields: expectedDefaultFields,
       };
       mockSuperTransform.mockResolvedValue(expectedTransformedValue);
@@ -256,11 +260,12 @@ describe('ListingCreateUpdateValidationPipe', () => {
         'leasingAgentPhone',
         'jurisdictions',
         'units',
-        'unitGroups',
       ];
 
       const expectedTransformedValue = {
         ...value,
+        units: [],
+        unitGroups: [],
         requiredFields: expectedDefaultFields,
       };
       mockSuperTransform.mockResolvedValue(expectedTransformedValue);
@@ -296,6 +301,8 @@ describe('ListingCreateUpdateValidationPipe', () => {
 
       const expectedTransformedValue = {
         ...value,
+        units: [],
+        unitGroups: [],
         requiredFields: ['name', 'leasingAgentEmail', 'digitalApplication'],
       };
       mockSuperTransform.mockResolvedValue(expectedTransformedValue);
@@ -342,6 +349,74 @@ describe('ListingCreateUpdateValidationPipe', () => {
         ...metadata,
         metatype: ListingCreate,
       });
+    });
+
+    it('should keep the unit data', async () => {
+      const jurisdictionId = randomUUID();
+      const listingId = randomUUID();
+      const value = {
+        id: listingId,
+        name: 'Updated Test Listing',
+        jurisdictions: { id: jurisdictionId },
+        units: [{ id: 'id1' }],
+      };
+
+      // Mock jurisdiction with custom required fields
+      mockPrisma.jurisdictions.findFirst.mockResolvedValue({
+        requiredListingFields: ['name'],
+      });
+
+      const expectedTransformedValue = {
+        ...value,
+        units: [{ id: 'id1' }],
+        unitGroups: [],
+        requiredFields: ['name'],
+      };
+      mockSuperTransform.mockResolvedValue(expectedTransformedValue);
+
+      await pipe.transform(value, metadata);
+
+      expect(mockSuperTransform).toHaveBeenCalledWith(
+        expectedTransformedValue,
+        {
+          ...metadata,
+          metatype: ListingUpdate,
+        },
+      );
+    });
+
+    it('should keep the unit group data', async () => {
+      const jurisdictionId = randomUUID();
+      const listingId = randomUUID();
+      const value = {
+        id: listingId,
+        name: 'Updated Test Listing',
+        jurisdictions: { id: jurisdictionId },
+        unitGroups: [{ id: 'id1' }],
+      };
+
+      // Mock jurisdiction with custom required fields
+      mockPrisma.jurisdictions.findFirst.mockResolvedValue({
+        requiredListingFields: ['name'],
+      });
+
+      const expectedTransformedValue = {
+        ...value,
+        units: [],
+        unitGroups: [{ id: 'id1' }],
+        requiredFields: ['name'],
+      };
+      mockSuperTransform.mockResolvedValue(expectedTransformedValue);
+
+      await pipe.transform(value, metadata);
+
+      expect(mockSuperTransform).toHaveBeenCalledWith(
+        expectedTransformedValue,
+        {
+          ...metadata,
+          metatype: ListingUpdate,
+        },
+      );
     });
   });
 });
