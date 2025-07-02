@@ -16,7 +16,7 @@ import styles from "./TextEditor.module.scss"
 export const EditorExtensions = [
   StarterKit,
   LinkExtension.configure({
-    openOnClick: false,
+    openOnClick: true,
     autolink: true,
     defaultProtocol: "https",
     protocols: ["http", "https"],

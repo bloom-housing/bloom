@@ -107,11 +107,12 @@ const DetailRankingsAndResults = () => {
           {getDetailFieldRichText(listing.whatToExpect, "whatToExpect")}
         </FieldValue>
       </Grid.Row>
-      <Grid.Row>
+      {/* Toggled off pending design decision on whether or not we want to surface this field */}
+      {/* <Grid.Row>
         <FieldValue label={t("listings.whatToExpectLabelAdditionalText")}>
           {getDetailFieldRichText(listing.whatToExpectAdditionalText, "whatToExpectAdditionalText")}
         </FieldValue>
-      </Grid.Row>
+      </Grid.Row> */}
     </SectionWithGrid>
   )
 }

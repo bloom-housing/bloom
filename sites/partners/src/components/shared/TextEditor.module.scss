@@ -31,6 +31,9 @@
   a {
     color: var(--seeds-color-blue-500);
     text-decoration: underline;
+    &:hover {
+      cursor: pointer;
+    }
   }
 
   .editor-menu {

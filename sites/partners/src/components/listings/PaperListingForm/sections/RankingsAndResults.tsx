@@ -354,7 +354,8 @@ const RankingsAndResults = ({
             <TextEditor editor={whatToExpectEditor} editorId={"whatToExpect"} />
           </Grid.Cell>
         </Grid.Row>
-        <Grid.Row columns={3}>
+        {/* Toggled off pending design decision on whether or not we want to surface this field */}
+        {/* <Grid.Row columns={3}>
           <Grid.Cell className="seeds-grid-span-2">
             <label className={"textarea-label"}>
               {t("listings.whatToExpectLabelAdditionalText")}
@@ -364,7 +365,7 @@ const RankingsAndResults = ({
               editorId={"whatToExpectAdditionalText"}
             />
           </Grid.Cell>
-        </Grid.Row>
+        </Grid.Row> */}
       </SectionWithGrid>
     </>
   )
