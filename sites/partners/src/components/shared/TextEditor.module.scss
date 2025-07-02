@@ -43,6 +43,19 @@
           color: var(--seeds-color-white);
         }
       }
+      &:focus-visible {
+        outline: var(--seeds-focus-ring-outline);
+        box-shadow: var(--seeds-focus-ring-box-shadow);
+      }
+      &[disabled],
+      &[disabled]:hover {
+        background-color: var(--seeds-color-bg-color-surface);
+        border-color: var(--seeds-color-gray-450);
+        color: var(--seeds-color-gray-450);
+        svg {
+          color: var(--seeds-color-gray-450);
+        }
+      }
     }
     margin-bottom: var(--seeds-s2);
     display: flex;
