@@ -64,7 +64,6 @@ export const stagingSeed = async (
         FeatureFlagEnum.enableSection8Question,
         FeatureFlagEnum.enableSingleUseCode,
         FeatureFlagEnum.enableUtilitiesIncluded,
-        FeatureFlagEnum.enableWaitlistAdditionalFields,
       ],
       languages: Object.values(LanguagesEnum),
     }),
@@ -120,6 +119,22 @@ export const stagingSeed = async (
   const nadaHill = await prismaClient.jurisdictions.create({
     data: jurisdictionFactory('Nada Hill', {
       featureFlags: [],
+    }),
+  });
+  // create super admin user
+  await prismaClient.userAccounts.create({
+    data: await userFactory({
+      roles: { isSuperAdmin: true, isAdmin: true },
+      email: 'superadmin@example.com',
+      confirmedAt: new Date(),
+      jurisdictionIds: [
+        mainJurisdiction.id,
+        lakeviewJurisdiction.id,
+        bridgeBayJurisdiction.id,
+        nadaHill.id,
+      ],
+      acceptedTerms: true,
+      password: 'abcdef',
     }),
   });
   // create admin user

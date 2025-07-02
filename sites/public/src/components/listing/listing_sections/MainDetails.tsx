@@ -1,5 +1,5 @@
 import React, { Dispatch, SetStateAction } from "react"
-import { CheckIcon } from "@heroicons/react/16/solid"
+import { CheckIcon, HandRaisedIcon } from "@heroicons/react/16/solid"
 import {
   FeatureFlagEnum,
   Jurisdiction,
@@ -19,6 +19,7 @@ import FavoriteButton from "../../shared/FavoriteButton"
 import { Availability } from "./Availability"
 import listingStyles from "../ListingViewSeeds.module.scss"
 import styles from "./MainDetails.module.scss"
+import { isFeatureFlagOn } from "../../../lib/helpers"
 
 type MainDetailsProps = {
   listing: Listing
@@ -39,7 +40,9 @@ export const getListingTags = (
   listing: Listing,
   hideReviewTags?: boolean,
   hideHomeTypeTag?: boolean,
-  enableIsVerified?: boolean
+  hideAccessibilityTag?: boolean,
+  enableIsVerified?: boolean,
+  swapCommunityTypeWithPrograms?: boolean
 ): ListingTag[] => {
   const listingTags: ListingTag[] = []
 
@@ -58,7 +61,7 @@ export const getListingTags = (
     })
   }
 
-  if (listing.reservedCommunityTypes) {
+  if (!swapCommunityTypeWithPrograms && listing.reservedCommunityTypes) {
     listingTags.push({
       title: t(`listings.reservedCommunityTypes.${listing.reservedCommunityTypes.name}`),
       variant: "highlight-warm",
@@ -86,6 +89,16 @@ export const getListingTags = (
     }
   }
 
+  if (!hideAccessibilityTag && listing.listingFeatures) {
+    if (Object.values(listing.listingFeatures).some((feature) => feature)) {
+      listingTags.push({
+        title: t("listing.tags.accessible"),
+        variant: "warn",
+        icon: <HandRaisedIcon />,
+      })
+    }
+  }
+
   return listingTags
 }
 
@@ -98,13 +111,17 @@ export const MainDetails = ({
   showHomeType,
 }: MainDetailsProps) => {
   if (!listing) return
-  const enableIsVerified = jurisdiction.featureFlags.find(
-    (flag) => flag.name === FeatureFlagEnum.enableIsVerified
-  )?.active
 
   const googleMapsHref =
     "https://www.google.com/maps/place/" + oneLineAddress(listing.listingsBuildingAddress)
-  const listingTags = getListingTags(listing, true, !showHomeType, enableIsVerified)
+  const listingTags = getListingTags(
+    listing,
+    true,
+    !showHomeType,
+    !isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableAccessibilityFeatures),
+    isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableIsVerified),
+    isFeatureFlagOn(jurisdiction, FeatureFlagEnum.swapCommunityTypeWithPrograms)
+  )
   return (
     <div>
       <ImageCard
