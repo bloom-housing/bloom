@@ -142,7 +142,7 @@ export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: Li
               truncatedContent={listing.whatToExpectAdditionalText}
             />
           ) : (
-            <Markdown>{listing.whatToExpect}</Markdown>
+            <Markdown className={"bloom-markdown"}>{listing.whatToExpect}</Markdown>
           )}
         </InfoCard>
       )}

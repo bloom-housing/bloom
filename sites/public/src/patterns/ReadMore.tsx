@@ -37,7 +37,7 @@ export const ReadMore = (props: ReadMoreProps) => {
 
   return (
     <div className={styles["read-more"]} aria-live={"polite"}>
-      <Markdown id={"read-more-content"}>
+      <Markdown id={"read-more-content"} className={"bloom-markdown"}>
         {expanded ? props.content.concat(props.truncatedContent ?? "") : contentTruncated}
       </Markdown>
       {shouldTruncate && (
