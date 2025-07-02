@@ -102,7 +102,7 @@ const DetailRankingsAndResults = () => {
         </>
       )}
       <Grid.Row>
-        <FieldValue label={t("listings.whatToExpectLabel")}>
+        <FieldValue id="whatToExpect" label={t("listings.whatToExpectLabel")}>
           {getDetailFieldRichText(listing.whatToExpect, "whatToExpect")}
         </FieldValue>
       </Grid.Row>

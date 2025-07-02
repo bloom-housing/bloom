@@ -96,7 +96,7 @@ const MenuBar = ({ editor }) => {
       <button
         onClick={() => editor.chain().focus().toggleBold().run()}
         disabled={!editor.can().chain().focus().toggleBold().run()}
-        className={editor.isActive("bold") ? "is-active" : ""}
+        className={editor.isActive("bold") ? styles["is-active"] : ""}
         type="button"
         aria-label={"Bold"}
       >
@@ -106,7 +106,7 @@ const MenuBar = ({ editor }) => {
       </button>
       <button
         onClick={() => editor.chain().focus().toggleBulletList().run()}
-        className={editor.isActive("bulletList") ? "is-active" : ""}
+        className={editor.isActive("bulletList") ? styles["is-active"] : ""}
         type="button"
         aria-label={"Bullet list"}
       >
@@ -116,7 +116,7 @@ const MenuBar = ({ editor }) => {
       </button>
       <button
         onClick={() => editor.chain().focus().toggleOrderedList().run()}
-        className={editor.isActive("orderedList") ? "is-active" : ""}
+        className={editor.isActive("orderedList") ? styles["is-active"] : ""}
         type="button"
         aria-label={"Numbered list"}
       >
@@ -136,7 +136,7 @@ const MenuBar = ({ editor }) => {
       </button>
       <button
         onClick={setLink}
-        className={editor.isActive("link") ? "is-active" : ""}
+        className={editor.isActive("link") ? styles["is-active"] : ""}
         type="button"
         aria-label={"Set link"}
       >

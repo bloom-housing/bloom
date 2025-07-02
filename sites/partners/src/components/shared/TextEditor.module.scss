@@ -77,6 +77,13 @@
         cursor: default;
       }
     }
+
+    .is-active {
+      background-color: var(--seeds-color-primary);
+      svg {
+        color: var(--seeds-color-white);
+      }
+    }
     margin-bottom: var(--seeds-s2);
     display: flex;
     flex-wrap: wrap;

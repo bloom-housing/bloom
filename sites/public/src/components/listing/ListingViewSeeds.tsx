@@ -136,14 +136,7 @@ export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: Li
     <>
       {listing.whatToExpect && (
         <InfoCard heading={t("whatToExpect.label")}>
-          {listing.whatToExpectAdditionalText ? (
-            <ReadMore
-              content={listing.whatToExpect}
-              truncatedContent={listing.whatToExpectAdditionalText}
-            />
-          ) : (
-            <Markdown className={"bloom-markdown"}>{listing.whatToExpect}</Markdown>
-          )}
+          <Markdown className={"bloom-markdown"}>{listing.whatToExpect}</Markdown>
         </InfoCard>
       )}
     </>

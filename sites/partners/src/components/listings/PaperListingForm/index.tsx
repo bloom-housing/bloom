@@ -28,6 +28,7 @@ import {
   formDefaults,
 } from "../../../lib/listings/formTypes"
 import ListingDataPipeline from "../../../lib/listings/ListingDataPipeline"
+import { EditorExtensions } from "../../shared/TextEditor"
 import ListingFormActions, { ListingFormActionsType } from "../ListingFormActions"
 import AdditionalDetails from "./sections/AdditionalDetails"
 import AdditionalEligibility from "./sections/AdditionalEligibility"
@@ -57,7 +58,6 @@ import SaveBeforeExitDialog from "./dialogs/SaveBeforeExitDialog"
 import ListingVerification from "./sections/ListingVerification"
 import NeighborhoodAmenities from "./sections/NeighborhoodAmenities"
 import PreferencesAndPrograms from "./sections/PreferencesAndPrograms"
-import { EditorExtensions } from "../../shared/TextEditor"
 
 const extensions = EditorExtensions
 
