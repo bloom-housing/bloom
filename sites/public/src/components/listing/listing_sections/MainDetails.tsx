@@ -1,5 +1,5 @@
 import React, { Dispatch, SetStateAction } from "react"
-import { CheckIcon } from "@heroicons/react/16/solid"
+import { CheckIcon, HandRaisedIcon } from "@heroicons/react/16/solid"
 import {
   FeatureFlagEnum,
   Jurisdiction,
@@ -39,6 +39,7 @@ export const getListingTags = (
   listing: Listing,
   hideReviewTags?: boolean,
   hideHomeTypeTag?: boolean,
+  hideAccessibilityTag?: boolean,
   enableIsVerified?: boolean
 ): ListingTag[] => {
   const listingTags: ListingTag[] = []
@@ -86,6 +87,16 @@ export const getListingTags = (
     }
   }
 
+  if (!hideAccessibilityTag && listing.listingFeatures) {
+    if (Object.values(listing.listingFeatures).some((feature) => feature)) {
+      listingTags.push({
+        title: t("listing.tags.accessible"),
+        variant: "warn",
+        icon: <HandRaisedIcon />,
+      })
+    }
+  }
+
   return listingTags
 }
 
@@ -101,10 +112,19 @@ export const MainDetails = ({
   const enableIsVerified = jurisdiction.featureFlags.find(
     (flag) => flag.name === FeatureFlagEnum.enableIsVerified
   )?.active
+  const enableAccessibilityFeatures = jurisdiction.featureFlags.find(
+    (flag) => flag.name === FeatureFlagEnum.enableAccessibilityFeatures
+  )?.active
 
   const googleMapsHref =
     "https://www.google.com/maps/place/" + oneLineAddress(listing.listingsBuildingAddress)
-  const listingTags = getListingTags(listing, true, !showHomeType, enableIsVerified)
+  const listingTags = getListingTags(
+    listing,
+    true,
+    !showHomeType,
+    !enableAccessibilityFeatures,
+    enableIsVerified
+  )
   return (
     <div>
       <ImageCard
