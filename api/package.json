@@ -82,6 +82,7 @@
     "reflect-metadata": "~0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "~7.8.1",
+    "sanitize-html": "^2.17.0",
     "swagger-axios-codegen": "~0.15.12",
     "twilio": "^4.15.0"
   },

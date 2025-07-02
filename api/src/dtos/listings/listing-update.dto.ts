@@ -5,9 +5,11 @@ import {
   ArrayMinSize,
   Validate,
   ValidateNested,
+  IsString,
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
+import { SanitizeHtml } from '../../../src/decorators/sanitize-html.decorator';
 import { IdDTO } from '../shared/id.dto';
 import { Listing } from './listing.dto';
 import { UnitCreate } from '../units/unit-create.dto';
@@ -47,6 +49,7 @@ export class ListingUpdate extends OmitType(Listing, [
   'listingFeatures',
   'listingUtilities',
   'requestedChangesUser',
+  'whatToExpect',
 
   // fields removed entirely
   'createdAt',
@@ -234,4 +237,10 @@ export class ListingUpdate extends OmitType(Listing, [
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => IdDTO)
   requestedChangesUser?: IdDTO;
+
+  @Expose()
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  @SanitizeHtml()
+  whatToExpect?: string;
 }

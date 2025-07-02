@@ -21,15 +21,9 @@ type RankingsAndResultsProps = {
   listing?: FormListing
   isAdmin?: boolean
   whatToExpectEditor: Editor
-  whatToExpectAdditionalTextEditor: Editor
 }
 
-const RankingsAndResults = ({
-  listing,
-  isAdmin,
-  whatToExpectEditor,
-  whatToExpectAdditionalTextEditor,
-}: RankingsAndResultsProps) => {
+const RankingsAndResults = ({ listing, isAdmin, whatToExpectEditor }: RankingsAndResultsProps) => {
   const formMethods = useFormContext()
   const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
 
@@ -354,18 +348,6 @@ const RankingsAndResults = ({
             <TextEditor editor={whatToExpectEditor} editorId={"whatToExpect"} />
           </Grid.Cell>
         </Grid.Row>
-        {/* Toggled off pending design decision on whether or not we want to surface this field */}
-        {/* <Grid.Row columns={3}>
-          <Grid.Cell className="seeds-grid-span-2">
-            <label className={"textarea-label"}>
-              {t("listings.whatToExpectLabelAdditionalText")}
-            </label>
-            <TextEditor
-              editor={whatToExpectAdditionalTextEditor}
-              editorId={"whatToExpectAdditionalText"}
-            />
-          </Grid.Cell>
-        </Grid.Row> */}
       </SectionWithGrid>
     </>
   )
