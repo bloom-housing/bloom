@@ -84,6 +84,7 @@ const MenuBar = ({ editor }) => {
         disabled={!editor.can().chain().focus().toggleBold().run()}
         className={editor.isActive("bold") ? "is-active" : ""}
         type="button"
+        aria-label={"Bold"}
       >
         <Icon>
           <BoldIcon />
@@ -94,6 +95,7 @@ const MenuBar = ({ editor }) => {
         disabled={!editor.can().chain().focus().toggleItalic().run()}
         className={editor.isActive("italic") ? "is-active" : ""}
         type="button"
+        aria-label={"Italic"}
       >
         <Icon>
           <ItalicIcon />
@@ -103,6 +105,7 @@ const MenuBar = ({ editor }) => {
         onClick={() => editor.chain().focus().toggleBulletList().run()}
         className={editor.isActive("bulletList") ? "is-active" : ""}
         type="button"
+        aria-label={"Bullet list"}
       >
         <Icon>
           <BulletListIcon />
@@ -112,13 +115,18 @@ const MenuBar = ({ editor }) => {
         onClick={() => editor.chain().focus().toggleOrderedList().run()}
         className={editor.isActive("orderedList") ? "is-active" : ""}
         type="button"
+        aria-label={"Numbered list"}
       >
         <Icon>
           <OrderedListIcon />
         </Icon>
       </button>
 
-      <button onClick={() => editor.chain().focus().setHorizontalRule().run()} type="button">
+      <button
+        onClick={() => editor.chain().focus().setHorizontalRule().run()}
+        type="button"
+        aria-label={"Line break"}
+      >
         <Icon>
           <DividerIcon />
         </Icon>
@@ -127,6 +135,7 @@ const MenuBar = ({ editor }) => {
         onClick={setLink}
         className={editor.isActive("link") ? "is-active" : ""}
         type="button"
+        aria-label={"Set link"}
       >
         <Icon>
           <LinkIcon />
@@ -136,6 +145,7 @@ const MenuBar = ({ editor }) => {
         onClick={() => editor.chain().focus().unsetLink().run()}
         disabled={!editor.isActive("link")}
         type="button"
+        aria-label={"Unlink"}
       >
         <Icon>
           <UnlinkIcon />
