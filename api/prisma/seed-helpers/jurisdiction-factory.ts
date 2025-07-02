@@ -7,6 +7,7 @@ export const jurisdictionFactory = (
     listingApprovalPermissions?: UserRoleEnum[];
     duplicateListingPermissions?: UserRoleEnum[];
     featureFlags?: string[];
+    requiredListingFields?: string[];
     languages?: LanguagesEnum[];
   },
 ): Prisma.JurisdictionsCreateInput => ({
@@ -35,4 +36,5 @@ export const jurisdictionFactory = (
         }),
       }
     : undefined,
+  requiredListingFields: optionalFields?.requiredListingFields || [],
 });

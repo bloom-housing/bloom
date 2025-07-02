@@ -362,6 +362,7 @@ model Jurisdictions {
   user_accounts               UserAccounts[]
   listingApprovalPermissions  UserRoleEnum[]           @map("listing_approval_permission")
   duplicateListingPermissions UserRoleEnum[]           @map("duplicate_listing_permissions")
+  requiredListingFields       String[]                 @default([]) @map("required_listing_fields")
 
   @@map("jurisdictions")
 }

@@ -155,12 +155,21 @@ export const stagingSeed = async (
         FeatureFlagEnum.enableSingleUseCode,
         FeatureFlagEnum.enableUtilitiesIncluded,
       ],
-      languages: [
-        LanguagesEnum.en,
-        LanguagesEnum.es,
-        LanguagesEnum.zh,
-        LanguagesEnum.vi,
-        LanguagesEnum.tl,
+      languages: Object.values(LanguagesEnum),
+      requiredListingFields: [
+        'listingsBuildingAddress',
+        'name',
+        'developer',
+        'listingImages',
+        'leasingAgentEmail',
+        'leasingAgentName',
+        'leasingAgentPhone',
+        'jurisdictions',
+        'units',
+        'digitalApplication',
+        'paperApplication',
+        'referralOpportunity',
+        'rentalAssistance',
       ],
     }),
   });
@@ -195,6 +204,7 @@ export const stagingSeed = async (
         FeatureFlagEnum.swapCommunityTypeWithPrograms,
         FeatureFlagEnum.enableFullTimeStudentQuestion,
       ],
+      requiredListingFields: ['name', 'listingsBuildingAddress'],
     }),
   });
   // Basic configuration jurisdiction

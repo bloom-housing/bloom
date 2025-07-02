@@ -33,11 +33,9 @@ import { UnitTypeSort } from '../../../src/utilities/unit-utilities';
 import { Listing } from '../../../src/dtos/listings/listing.dto';
 import { ListingViews } from '../../../src/enums/listings/view-enum';
 import { TranslationService } from '../../../src/services/translation.service';
-import { GoogleTranslateService } from '../../../src/services/google-translate.service';
 import { ListingCreate } from '../../../src/dtos/listings/listing-create.dto';
 import { ListingUpdate } from '../../../src/dtos/listings/listing-update.dto';
-import { ListingPublishedCreate } from '../../../src/dtos/listings/listing-published-create.dto';
-import { ListingPublishedUpdate } from '../../../src/dtos/listings/listing-published-update.dto';
+import { GoogleTranslateService } from '../../../src/services/google-translate.service';
 import { ApplicationFlaggedSetService } from '../../../src/services/application-flagged-set.service';
 import { User } from '../../../src/dtos/users/user.dto';
 import { EmailService } from '../../../src/services/email.service';
@@ -315,7 +313,7 @@ describe('Testing listing service', () => {
   const constructFullListingData = (
     listingId?: string,
     useUnitGroups = false,
-  ): ListingPublishedCreate | ListingPublishedUpdate => {
+  ): ListingCreate | ListingUpdate => {
     return {
       id: listingId ?? undefined,
       assets: [exampleAsset],
@@ -4344,6 +4342,162 @@ describe('Testing listing service', () => {
           },
         },
       });
+    });
+
+    it('should do a complete listing update', async () => {
+      prisma.listings.findUnique = jest.fn().mockResolvedValue({
+        id: 'example id',
+        name: 'example name',
+        reservedCommunityTypes: {
+          id: randomUUID(),
+        },
+      });
+      prisma.listings.update = jest.fn().mockResolvedValue({
+        id: 'example id',
+        name: 'example name',
+      });
+      prisma.listingEvents.findMany = jest.fn().mockResolvedValue([]);
+      prisma.listingEvents.update = jest.fn().mockResolvedValue({
+        id: 'example id',
+        name: 'example name',
+      });
+      prisma.assets.delete = jest.fn().mockResolvedValue({
+        id: 'example id',
+        name: 'example name',
+      });
+      const updateMock = jest
+        .fn()
+        .mockResolvedValue({ id: 'example id', name: 'example name' });
+
+      prisma.$transaction = jest
+        .fn()
+        .mockResolvedValue([
+          jest.fn(),
+          jest.fn(),
+          jest.fn(),
+          jest.fn(),
+          jest.fn(),
+          updateMock,
+        ]);
+
+      const val = constructFullListingData(randomUUID());
+      prisma.assets.create = jest.fn().mockResolvedValue({ id: randomUUID() });
+      prisma.address.create = jest.fn().mockResolvedValue({ id: randomUUID() });
+      val.reservedCommunityTypes = null;
+
+      await service.update(val as ListingUpdate, user);
+
+      const nestedUtilitiesUpdate = {
+        water: false,
+        gas: true,
+        trash: false,
+        sewer: true,
+        electricity: false,
+        cable: true,
+        phone: false,
+        internet: true,
+      };
+      const nestedFeaturesUpdate = {
+        elevator: true,
+        wheelchairRamp: false,
+        serviceAnimalsAllowed: true,
+        accessibleParking: false,
+        parkingOnSite: true,
+        inUnitWasherDryer: false,
+        laundryInBuilding: true,
+        barrierFreeEntrance: false,
+        rollInShower: true,
+        grabBars: false,
+        heatingInUnit: true,
+        acInUnit: false,
+        hearing: true,
+        visual: false,
+        mobility: true,
+        barrierFreeUnitEntrance: false,
+        loweredLightSwitch: true,
+        barrierFreeBathroom: false,
+        wideDoorways: true,
+        loweredCabinets: false,
+      };
+      const nestedNeighborhoodAmenities = {
+        groceryStores: 'stores',
+        pharmacies: 'pharmacies',
+        healthCareResources: 'health care',
+        parksAndCommunityCenters: 'parks',
+        schools: 'schools',
+        publicTransportation: 'public transportation',
+      };
+
+      const calculatedUnitsAvailable = service.calculateUnitsAvailable(
+        val.reviewOrderType,
+        val.units,
+        val.unitGroups,
+      );
+
+      // Capture mock call arguments instead of using expect.anything()
+      expect(prisma.listings.update).toHaveBeenCalledTimes(1);
+      const updateCall = (prisma.listings.update as jest.Mock).mock.calls[0][0];
+
+      // Test key properties
+      expect(updateCall.data.unitsAvailable).toBe(calculatedUnitsAvailable);
+      expect(updateCall.data.publishedAt).toBeInstanceOf(Date);
+      expect(updateCall.data.contentUpdatedAt).toBeInstanceOf(Date);
+      expect(updateCall.data.assets).toEqual([exampleAsset]);
+      expect(updateCall.data.section8Acceptance).toBe(true);
+      expect(updateCall.data.isVerified).toBe(true);
+
+      // Test nested structures
+      expect(updateCall.data.applicationMethods.create).toHaveLength(1);
+      expect(updateCall.data.applicationMethods.create[0].type).toBe(
+        ApplicationMethodsTypeEnum.Internal,
+      );
+      expect(updateCall.data.listingEvents.create).toHaveLength(1);
+      expect(updateCall.data.listingEvents.create[0].type).toBe(
+        ListingEventsTypeEnum.openHouse,
+      );
+      expect(updateCall.data.units.create).toHaveLength(1);
+      expect(updateCall.data.units.create[0].amiPercentage).toBe('1');
+      expect(updateCall.data.units.create[0].bmrProgramChart).toBe(true);
+      expect(updateCall.data.unitGroups.create).toEqual([]);
+      expect(updateCall.data.listingUtilities.upsert.create).toEqual(
+        nestedUtilitiesUpdate,
+      );
+      expect(updateCall.data.listingUtilities.upsert.update).toEqual(
+        nestedUtilitiesUpdate,
+      );
+      expect(updateCall.data.listingFeatures.upsert.create).toEqual(
+        nestedFeaturesUpdate,
+      );
+      expect(updateCall.data.listingFeatures.upsert.update).toEqual(
+        nestedFeaturesUpdate,
+      );
+      expect(
+        updateCall.data.listingNeighborhoodAmenities.upsert.create,
+      ).toEqual(nestedNeighborhoodAmenities);
+      expect(
+        updateCall.data.listingNeighborhoodAmenities.upsert.update,
+      ).toEqual(nestedNeighborhoodAmenities);
+      expect(updateCall.data.unitsSummary.create).toHaveLength(1);
+      expect(updateCall.data.unitsSummary.create[0].monthlyRentMin).toBe(1);
+      expect(updateCall.data.unitsSummary.create[0].totalCount).toBe(13);
+
+      // Test ID types instead of exact values
+      expect(typeof updateCall.where.id).toBe('string');
+      expect(typeof updateCall.data.units.create[0].unitTypes.connect.id).toBe(
+        'string',
+      );
+      expect(
+        typeof updateCall.data.unitsSummary.create[0].unitTypes.connect.id,
+      ).toBe('string');
+
+      expect(canOrThrowMock).toHaveBeenCalledWith(
+        user,
+        'listing',
+        permissionActions.update,
+        {
+          id: 'example id',
+        },
+      );
     });
   });
 
