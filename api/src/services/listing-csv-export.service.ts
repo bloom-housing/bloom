@@ -472,11 +472,18 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
         path: 'yearBuilt',
         label: 'Building Year Built',
       },
-      ...(doAnyJurisdictionHaveFeatureFlagSet(
+      ...(doAnyJurisdictionHaveFalsyFeatureFlagValue(
         user.jurisdictions,
         FeatureFlagEnum.swapCommunityTypeWithPrograms,
       )
         ? [
+            {
+              path: 'reservedCommunityTypes.name',
+              label: 'Reserved Community Types',
+              format: (val: string): string => formatCommunityType[val] || '',
+            },
+          ]
+        : [
             {
               path: 'listingMultiselectQuestions',
               label: 'Community Types',
@@ -490,13 +497,6 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
                   .map((question) => question.multiselectQuestions.text)
                   .join(',');
               },
-            },
-          ]
-        : [
-            {
-              path: 'reservedCommunityTypes.name',
-              label: 'Reserved Community Types',
-              format: (val: string): string => formatCommunityType[val] || '',
             },
           ]),
       {
@@ -694,12 +694,11 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
               .join(',');
           },
         },
-        ...(doAnyJurisdictionHaveFeatureFlagSet(
+        ...(doAnyJurisdictionHaveFalsyFeatureFlagValue(
           user.jurisdictions,
           FeatureFlagEnum.swapCommunityTypeWithPrograms,
         )
-          ? []
-          : [
+          ? [
               {
                 path: 'listingMultiselectQuestions',
                 label: 'Housing Programs',
@@ -714,7 +713,8 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
                     .join(',');
                 },
               },
-            ]),
+            ]
+          : []),
         {
           path: 'applicationFee',
           label: 'Application Fee',
