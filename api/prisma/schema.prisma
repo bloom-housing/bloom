@@ -17,6 +17,7 @@ model Accessibility {
   mobility     Boolean?
   vision       Boolean?
   hearing      Boolean?
+  other        Boolean?
   applications Applications?
 
   @@map("accessibility")

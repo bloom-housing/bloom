@@ -5085,6 +5085,9 @@ export interface Accessibility {
 
   /**  */
   hearing?: boolean
+
+  /**  */
+  other?: boolean
 }
 
 export interface Demographic {
@@ -6142,6 +6145,9 @@ export interface AccessibilityUpdate {
 
   /**  */
   hearing?: boolean
+
+  /**  */
+  other?: boolean
 }
 
 export interface DemographicUpdate {
@@ -7130,6 +7136,7 @@ export enum FeatureFlagEnum {
   "disableJurisdictionalAdmin" = "disableJurisdictionalAdmin",
   "disableListingPreferences" = "disableListingPreferences",
   "enableAccessibilityFeatures" = "enableAccessibilityFeatures",
+  "enableAdaOtherOption" = "enableAdaOtherOption",
   "enableAdditionalResources" = "enableAdditionalResources",
   "enableCompanyWebsite" = "enableCompanyWebsite",
   "enableGeocodingPreferences" = "enableGeocodingPreferences",
