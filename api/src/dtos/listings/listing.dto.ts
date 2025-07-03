@@ -500,6 +500,7 @@ class Listing extends AbstractDTO {
     groups: [ValidationsGroupsEnum.default],
   })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @MaxLength(4096, { groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   whatToExpect?: string;
 
