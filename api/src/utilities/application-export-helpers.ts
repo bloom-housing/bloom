@@ -121,7 +121,7 @@ export const getExportHeaders = (
   if (enableFullTimeStudentQuestion) {
     headers.push({
       path: 'applicant.fullTimeStudent',
-      label: 'Primary Applicant Full-Time Student?',
+      label: 'Primary Applicant Full-Time Student',
     });
   }
 
@@ -549,7 +549,7 @@ export const getHouseholdCsvHeaders = (
     if (enableFullTimeStudentQuestion) {
       headers.push({
         path: `householdMember.${i}.fullTimeStudent`,
-        label: `Household Member (${j}) Full-Time Student?`,
+        label: `Household Member (${j}) Full-Time Student`,
       });
     }
     headers.push(

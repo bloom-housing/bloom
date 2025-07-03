@@ -349,7 +349,7 @@ describe("<FormHouseholdDetails>", () => {
       </FormProviderWrapper>
     )
 
-    expect(screen.getByText(/are all household members students/i)).toBeInTheDocument()
+    expect(screen.getByText(/All Household Members Students/i)).toBeInTheDocument()
     expect(screen.getAllByRole("radio", { name: "Yes" })).toHaveLength(2)
     expect(screen.getAllByRole("radio", { name: "No" })).toHaveLength(2)
   })

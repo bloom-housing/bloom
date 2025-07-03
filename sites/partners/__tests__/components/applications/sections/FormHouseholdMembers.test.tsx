@@ -354,7 +354,7 @@ describe("<FormHouseholdMembers>", () => {
     expect(drawerTitle).toBeInTheDocument()
 
     const drawerContainer = drawerTitle.parentElement.parentElement
-    expect(within(drawerContainer).getByText(/full-time student\?/i)).toBeInTheDocument()
+    expect(within(drawerContainer).getByText(/Full-time Student/i)).toBeInTheDocument()
     expect(within(drawerContainer).getAllByLabelText(/yes/i)).toHaveLength(3)
     expect(within(drawerContainer).getAllByLabelText(/no/i)).toHaveLength(3)
   })
