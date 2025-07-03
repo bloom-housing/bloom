@@ -8,6 +8,7 @@ import fs, { createReadStream, ReadStream } from 'fs';
 import { generatePresignedGetURL, uploadToS3 } from '../utilities/s3-helpers';
 import { getExportHeaders } from '../utilities/application-export-helpers';
 import { IdDTO } from '../dtos/shared/id.dto';
+import { Jurisdiction } from '../dtos/jurisdictions/jurisdiction.dto';
 import { Injectable, StreamableFile } from '@nestjs/common';
 import { join } from 'path';
 import { ListingService } from './listing.service';
@@ -24,6 +25,7 @@ import { User } from '../dtos/users/user.dto';
 import { view } from './application.service';
 import { zipExport, zipExportSecure } from '../utilities/zip-export';
 import { FeatureFlagEnum } from '../enums/feature-flags/feature-flags-enum';
+import { doJurisdictionHaveFeatureFlagSet } from 'src/utilities/feature-flag-utilities';
 
 view.csv = {
   ...view.details,
@@ -214,10 +216,9 @@ export class ApplicationExporterService {
       },
     });
 
-    const enableFullTimeStudentQuestion = jurisdiction.featureFlags.some(
-      (flag) =>
-        flag.name === FeatureFlagEnum.enableFullTimeStudentQuestion &&
-        flag.active,
+    const enableFullTimeStudentQuestion = doJurisdictionHaveFeatureFlagSet(
+      jurisdiction as Jurisdiction,
+      FeatureFlagEnum.enableFullTimeStudentQuestion,
     );
 
     // get all multiselect questions for a listing to build csv headers
@@ -559,10 +560,9 @@ export class ApplicationExporterService {
       },
     });
 
-    const enableFullTimeStudentQuestion = jurisdiction.featureFlags.some(
-      (flag) =>
-        flag.name === FeatureFlagEnum.enableFullTimeStudentQuestion &&
-        flag.active,
+    const enableFullTimeStudentQuestion = doJurisdictionHaveFeatureFlagSet(
+      jurisdiction as Jurisdiction,
+      FeatureFlagEnum.enableFullTimeStudentQuestion,
     );
 
     // get all multiselect questions for a listing to build csv headers
