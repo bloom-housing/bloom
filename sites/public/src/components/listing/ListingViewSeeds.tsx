@@ -19,7 +19,6 @@ import {
 import { Heading } from "@bloom-housing/ui-seeds"
 import { ErrorPage } from "../../pages/_error"
 import { fetchFavoriteListingIds, isFeatureFlagOn, saveListingFavorite } from "../../lib/helpers"
-import { ReadMore } from "../../patterns/ReadMore"
 import {
   getAdditionalInformation,
   getAmiValues,
