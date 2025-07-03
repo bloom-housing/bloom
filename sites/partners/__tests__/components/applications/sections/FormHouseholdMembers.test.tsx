@@ -210,22 +210,22 @@ describe("<FormHouseholdMembers>", () => {
 
     const tableHeaders = within(head).getAllByRole("columnheader")
     expect(tableHeaders).toHaveLength(6)
-    const [name, relationship, dob, residence, work, action] = tableHeaders
+    const [name, dob, relationship, residence, work, action] = tableHeaders
     expect(name).toHaveTextContent(/name/i)
-    expect(relationship).toHaveTextContent(/relationship/i)
     expect(dob).toHaveTextContent(/date of birth/i)
+    expect(relationship).toHaveTextContent(/relationship/i)
     expect(residence).toHaveTextContent(/same residence/i)
     expect(work).toHaveTextContent(/work in region/i)
     expect(action).toHaveTextContent(/actions/i)
 
     const tableBodyRows = within(body).getAllByRole("row")
     expect(tableBodyRows).toHaveLength(1)
-    const [nameVal, relationshipVal, dobVal, residenceVal, workVal, actionVal] = within(
+    const [nameVal, dobVal, relationshipVal, residenceVal, workVal, actionVal] = within(
       tableBodyRows[0]
     ).getAllByRole("cell")
     expect(nameVal).toHaveTextContent("John Smith")
-    expect(relationshipVal).toHaveTextContent("Cousin")
     expect(dobVal).toHaveTextContent("3/28/1998")
+    expect(relationshipVal).toHaveTextContent("Cousin")
     expect(residenceVal).toHaveTextContent("No")
     expect(workVal).toHaveTextContent("Yes")
     expect(within(actionVal).getByRole("button", { name: /edit/i }))

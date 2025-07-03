@@ -27,8 +27,8 @@ const FormHouseholdMembers = ({
 
   const memberTableHeaders = {
     name: "t.name",
-    relationship: "t.relationship",
     dob: "application.household.member.dateOfBirth",
+    relationship: "t.relationship",
     sameResidence: "application.add.sameResidence",
     workInRegion: "application.details.workInRegion",
     ...(enableFullTimeStudentQuestion && {
@@ -97,16 +97,16 @@ const FormHouseholdMembers = ({
             ? `${member.firstName} ${member.lastName}`
             : t("t.n/a"),
         },
-        relationship: {
-          content: member.relationship
-            ? t(`application.form.options.relationship.${member.relationship}`)
-            : t("t.n/a"),
-        },
         dob: {
           content:
             birthMonth && birthDay && birthYear
               ? `${member.birthMonth}/${member.birthDay}/${member.birthYear}`
               : t("t.n/a"),
+        },
+        relationship: {
+          content: member.relationship
+            ? t(`application.form.options.relationship.${member.relationship}`)
+            : t("t.n/a"),
         },
         sameResidence: { content: chooseAddressStatus(sameResidence) },
         workInRegion: { content: chooseAddressStatus(workInRegion) },

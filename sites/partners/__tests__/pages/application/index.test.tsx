@@ -267,10 +267,10 @@ describe("partners_application_index", () => {
     const tableHeaders = within(table).getAllByRole("columnheader")
     expect(tableHeaders).toHaveLength(6)
 
-    const [name, relationship, dob, residence, work, actions] = tableHeaders
+    const [name, dob, relationship, residence, work, actions] = tableHeaders
     expect(name).toHaveTextContent(/name/i)
-    expect(relationship).toHaveTextContent(/relationship/i)
     expect(dob).toHaveTextContent(/date of birth/i)
+    expect(relationship).toHaveTextContent(/relationship/i)
     expect(residence).toHaveTextContent(/same residence/i)
     expect(work).toHaveTextContent(/work in region/i)
     expect(actions).toHaveTextContent(/actions/i)
@@ -279,13 +279,13 @@ describe("partners_application_index", () => {
     const tableBodyRows = within(table).getAllByRole("row")
     expect(tableBodyRows).toHaveLength(2) // 1 for the header row + 1 for the Household member row
 
-    const [nameVal, relationshipVal, dobVal, residenceVal, workVal, actionsVal] = within(
+    const [nameVal, dobVal, relationshipVal, residenceVal, workVal, actionsVal] = within(
       tableBodyRows[1]
     ).getAllByRole("cell")
 
     expect(nameVal).toHaveTextContent("Household First Household Last")
-    expect(relationshipVal).toHaveTextContent("Friend")
     expect(dobVal).toHaveTextContent("11/25/1966")
+    expect(relationshipVal).toHaveTextContent("Friend")
     expect(residenceVal).toHaveTextContent("No")
     expect(workVal).toHaveTextContent("Yes")
     expect(within(actionsVal).getByText("View")).toBeInTheDocument()
@@ -309,10 +309,10 @@ describe("partners_application_index", () => {
     const tableHeaders = within(table).getAllByRole("columnheader")
     expect(tableHeaders).toHaveLength(7)
 
-    const [name, relationship, dob, residence, work, student, actions] = tableHeaders
+    const [name, dob, relationship, residence, work, student, actions] = tableHeaders
     expect(name).toHaveTextContent(/name/i)
-    expect(relationship).toHaveTextContent(/relationship/i)
     expect(dob).toHaveTextContent(/date of birth/i)
+    expect(relationship).toHaveTextContent(/relationship/i)
     expect(residence).toHaveTextContent(/same residence/i)
     expect(work).toHaveTextContent(/work in region/i)
     expect(student).toHaveTextContent("Full-time Student")
@@ -322,12 +322,12 @@ describe("partners_application_index", () => {
     const tableBodyRows = within(table).getAllByRole("row")
     expect(tableBodyRows).toHaveLength(2) // 1 for the header row + 1 for the Household member row
 
-    const [nameVal, relationshipVal, dobVal, residenceVal, workVal, studentVal, actionsVal] =
+    const [nameVal, dobVal, relationshipVal, residenceVal, workVal, studentVal, actionsVal] =
       within(tableBodyRows[1]).getAllByRole("cell")
 
     expect(nameVal).toHaveTextContent("Household First Household Last")
-    expect(relationshipVal).toHaveTextContent("Friend")
     expect(dobVal).toHaveTextContent("11/25/1966")
+    expect(relationshipVal).toHaveTextContent("Friend")
     expect(residenceVal).toHaveTextContent("No")
     expect(workVal).toHaveTextContent("Yes")
     expect(studentVal).toHaveTextContent("No")

@@ -19,8 +19,8 @@ const DetailsHouseholdMembers = ({
 
   const householdMembersHeaders = {
     name: "t.name",
-    relationship: "t.relationship",
     birth: "application.household.member.dateOfBirth",
+    relationship: "t.relationship",
     sameResidence: "application.add.sameResidence",
     workInRegion: "application.details.workInRegion",
     ...(enableFullTimeStudentQuestion && {
@@ -44,16 +44,16 @@ const DetailsHouseholdMembers = ({
     )
     return orderedHouseholdMembers?.map((item) => ({
       name: { content: `${item.firstName} ${item.middleName || ""} ${item.lastName}` },
-      relationship: {
-        content: item.relationship
-          ? t(`application.form.options.relationship.${item.relationship}`)
-          : t("t.n/a"),
-      },
       birth: {
         content:
           item.birthMonth && item.birthDay && item.birthYear
             ? `${item.birthMonth}/${item.birthDay}/${item.birthYear}`
             : t("t.n/a"),
+      },
+      relationship: {
+        content: item.relationship
+          ? t(`application.form.options.relationship.${item.relationship}`)
+          : t("t.n/a"),
       },
       sameResidence: { content: checkAvailablility(item.sameAddress) },
       workInRegion: { content: checkAvailablility(item.workInRegion) },

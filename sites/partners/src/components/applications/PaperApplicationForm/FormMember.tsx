@@ -242,20 +242,6 @@ const FormMember = ({
                     />
                   </Grid.Cell>
 
-                  {enableFullTimeStudentQuestion && (
-                    <Grid.Cell>
-                      <FieldGroup
-                        name="fullTimeStudent"
-                        type="radio"
-                        register={register}
-                        groupLabel={t("application.add.fullTimeStudent")}
-                        fields={fullTimeStudentOptions}
-                        fieldClassName="m-0"
-                        fieldGroupClassName="flex h-12 items-center"
-                      />
-                    </Grid.Cell>
-                  )}
-
                   <Grid.Cell>
                     <FieldGroup
                       name="sameAddress"
@@ -279,6 +265,20 @@ const FormMember = ({
                       fieldGroupClassName="flex h-12 items-center"
                     />
                   </Grid.Cell>
+
+                  {enableFullTimeStudentQuestion && (
+                    <Grid.Cell>
+                      <FieldGroup
+                        name="fullTimeStudent"
+                        type="radio"
+                        register={register}
+                        groupLabel={t("application.add.fullTimeStudent")}
+                        fields={fullTimeStudentOptions}
+                        fieldClassName="m-0"
+                        fieldGroupClassName="flex h-12 items-center"
+                      />
+                    </Grid.Cell>
+                  )}
                 </Grid.Row>
               </SectionWithGrid>
 

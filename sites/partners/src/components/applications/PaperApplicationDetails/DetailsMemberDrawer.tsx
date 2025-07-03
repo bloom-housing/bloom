@@ -63,6 +63,15 @@ const DetailsMemberDrawer = ({
                 />
 
                 <FieldValue
+                  label={t("t.relationship")}
+                  children={
+                    membersDrawer?.relationship
+                      ? t(`application.form.options.relationship.${membersDrawer?.relationship}`)
+                      : t("t.n/a")
+                  }
+                />
+
+                <FieldValue
                   label={t("application.add.sameAddressAsPrimary")}
                   children={
                     membersDrawer?.sameAddress === YesNoEnum.yes
@@ -84,14 +93,6 @@ const DetailsMemberDrawer = ({
                   }
                 />
 
-                <FieldValue
-                  label={t("t.relationship")}
-                  children={
-                    membersDrawer?.relationship
-                      ? t(`application.form.options.relationship.${membersDrawer?.relationship}`)
-                      : t("t.n/a")
-                  }
-                />
                 {enableFullTimeStudentQuestion && (
                   <FieldValue
                     label={t("application.details.fullTimeStudent")}
