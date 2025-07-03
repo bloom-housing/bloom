@@ -14,7 +14,7 @@ import { Icon } from "@bloom-housing/ui-seeds"
 import { t } from "@bloom-housing/ui-components"
 import styles from "./TextEditor.module.scss"
 
-const CHARACTER_LIMIT = 4096
+const CHARACTER_LIMIT = 4000
 
 export const EditorExtensions = [
   StarterKit.configure({
