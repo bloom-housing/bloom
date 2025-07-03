@@ -358,7 +358,7 @@ describe("partners_application_index", () => {
       </ApplicationContext.Provider>
     )
 
-    expect(getByText("Are all household members students?")).toBeInTheDocument()
+    expect(getByText("All Household Members Students")).toBeInTheDocument()
     expect(getByText("Yes")).toBeInTheDocument()
     expect(getByText("No")).toBeInTheDocument()
   })

@@ -264,7 +264,7 @@ export const getExportHeaders = (
       {
         path: 'householdStudent',
         label: enableFullTimeStudentQuestion
-          ? 'Are all household members students?'
+          ? 'All Household Members Students'
           : 'Household Includes Student or Member Nearing 18',
       },
       {
