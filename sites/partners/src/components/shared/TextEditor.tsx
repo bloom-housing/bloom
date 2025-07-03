@@ -99,6 +99,7 @@ const MenuBar = ({ editor }) => {
         className={editor.isActive("bold") ? styles["is-active"] : ""}
         type="button"
         aria-label={"Bold"}
+        id={"editor-bold"}
       >
         <Icon>
           <BoldIcon />
@@ -109,6 +110,7 @@ const MenuBar = ({ editor }) => {
         className={editor.isActive("bulletList") ? styles["is-active"] : ""}
         type="button"
         aria-label={"Bullet list"}
+        id={"editor-bullet-list"}
       >
         <Icon>
           <BulletListIcon />
@@ -119,6 +121,7 @@ const MenuBar = ({ editor }) => {
         className={editor.isActive("orderedList") ? styles["is-active"] : ""}
         type="button"
         aria-label={"Numbered list"}
+        id={"editor-numbered-list"}
       >
         <Icon>
           <OrderedListIcon />
@@ -129,6 +132,7 @@ const MenuBar = ({ editor }) => {
         onClick={() => editor.chain().focus().setHorizontalRule().run()}
         type="button"
         aria-label={"Line break"}
+        id={"editor-line-break"}
       >
         <Icon>
           <DividerIcon />
@@ -171,7 +175,7 @@ export const TextEditor = ({ editor, editorId }: TextEditorProps) => {
   return (
     <div className={styles["editor"]}>
       <MenuBar editor={editor} />
-      <EditorContent editor={editor} id={editorId} />
+      <EditorContent editor={editor} id={editorId} data-testid={editorId} />
       <div
         className={`${styles["character-count"]} ${
           editor?.storage.characterCount.characters() > CHARACTER_LIMIT
