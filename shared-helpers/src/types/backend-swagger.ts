@@ -5160,6 +5160,9 @@ export interface Applicant {
   workInRegion?: YesNoEnum
 
   /**  */
+  fullTimeStudent?: YesNoEnum
+
+  /**  */
   applicantWorkAddress: Address
 
   /**  */
@@ -5240,6 +5243,9 @@ export interface HouseholdMember {
 
   /**  */
   workInRegion?: YesNoEnum
+
+  /**  */
+  fullTimeStudent?: YesNoEnum
 
   /**  */
   householdMemberWorkAddress?: Address
@@ -6101,6 +6107,9 @@ export interface ApplicantUpdate {
   workInRegion?: YesNoEnum
 
   /**  */
+  fullTimeStudent?: YesNoEnum
+
+  /**  */
   applicantAddress: AddressCreate
 
   /**  */
@@ -6191,6 +6200,9 @@ export interface HouseholdMemberUpdate {
 
   /**  */
   workInRegion?: YesNoEnum
+
+  /**  */
+  fullTimeStudent?: YesNoEnum
 
   /**  */
   id?: string
@@ -7154,6 +7166,7 @@ export enum FeatureFlagEnum {
   "hideCloseListingButton" = "hideCloseListingButton",
   "swapCommunityTypeWithPrograms" = "swapCommunityTypeWithPrograms",
   "enableWaitlistAdditionalFields" = "enableWaitlistAdditionalFields",
+  "enableFullTimeStudentQuestion" = "enableFullTimeStudentQuestion",
 }
 export enum EnumMultiselectQuestionFilterParamsComparison {
   "=" = "=",

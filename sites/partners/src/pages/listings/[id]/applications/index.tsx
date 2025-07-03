@@ -6,6 +6,7 @@ import { Button, Dialog } from "@bloom-housing/ui-seeds"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import {
   ApplicationOrderByKeys,
+  FeatureFlagEnum,
   ListingsStatusEnum,
   LotteryStatusEnum,
   OrderByEnum,
@@ -24,7 +25,7 @@ import { ApplicationsSideNav } from "../../../../components/applications/Applica
 import { NavigationHeader } from "../../../../components/shared/NavigationHeader"
 
 const ApplicationsList = () => {
-  const { profile } = useContext(AuthContext)
+  const { profile, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
   const router = useRouter()
   const listingId = router.query.id as string
 
@@ -39,6 +40,10 @@ const ApplicationsList = () => {
 
   const listingJurisdiction = profile?.jurisdictions.find(
     (jurisdiction) => jurisdiction.id === listingDto?.jurisdictions.id
+  )
+  const enableFullTimeStudentQuestion = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableFullTimeStudentQuestion,
+    listingDto?.jurisdictions.id
   )
   const includeDemographicsPartner =
     profile?.userRoles?.isPartner && listingJurisdiction?.enablePartnerDemographics
@@ -104,8 +109,8 @@ const ApplicationsList = () => {
   }, [applications])
 
   const columnDefs = useMemo(() => {
-    return getColDefs(maxHouseholdSize)
-  }, [maxHouseholdSize])
+    return getColDefs(maxHouseholdSize, enableFullTimeStudentQuestion)
+  }, [maxHouseholdSize, enableFullTimeStudentQuestion])
 
   const gridComponents = {
     formatLinkCell,

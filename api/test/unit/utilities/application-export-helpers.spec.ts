@@ -87,6 +87,10 @@ describe('Testing application export helpers', () => {
       label: 'Primary Applicant Preferred Contact Type',
     },
     {
+      path: 'applicant.workInRegion',
+      label: `Primary Applicant Work in Region`,
+    },
+    {
       path: 'applicant.applicantAddress.street',
       label: `Primary Applicant Street`,
     },

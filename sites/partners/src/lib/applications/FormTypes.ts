@@ -51,6 +51,7 @@ export type ApplicationTypes = {
     lastName?: string
     emailAddress?: string
     workInRegion?: YesNoEnum
+    fullTimeStudent?: YesNoEnum
     applicantAddress: Address
     applicantWorkAddress: Address
     phoneNumberType?: string

@@ -143,6 +143,35 @@ describe("partners_application_index", () => {
     expect(getAllByText("Zip Code")).toHaveLength(3)
   })
 
+  it("should display Primary Applicant section info with full time student question", () => {
+    const { getByText, getAllByText } = render(
+      <ApplicationContext.Provider value={application}>
+        <DetailsPrimaryApplicant enableFullTimeStudentQuestion={true} />
+      </ApplicationContext.Provider>
+    )
+
+    expect(getByText("Primary Applicant")).toBeInTheDocument()
+    expect(getByText("First Name")).toBeInTheDocument()
+    expect(getByText("Middle Name")).toBeInTheDocument()
+    expect(getByText("Last Name")).toBeInTheDocument()
+    expect(getByText("Date of Birth")).toBeInTheDocument()
+    expect(getByText("Email")).toBeInTheDocument()
+    expect(getByText("Phone")).toBeInTheDocument()
+    expect(getByText("Second Phone")).toBeInTheDocument()
+    expect(getByText("Preferred Contact")).toBeInTheDocument()
+    expect(getByText("Work in Region")).toBeInTheDocument()
+    expect(getByText("Residence Address")).toBeInTheDocument()
+    expect(getByText("Mailing Address")).toBeInTheDocument()
+    expect(getByText("Work Address")).toBeInTheDocument()
+    expect(getAllByText("Street Address")).toHaveLength(3)
+    expect(getAllByText("Apt or Unit #")).toHaveLength(3)
+    expect(getAllByText("City")).toHaveLength(3)
+    expect(getAllByText("State")).toHaveLength(3)
+    expect(getAllByText("Zip Code")).toHaveLength(3)
+    expect(getByText("Full-time Student")).toBeInTheDocument()
+    expect(getByText("No")).toBeInTheDocument()
+  })
+
   it("should display no contact Alternate Contact section info", () => {
     const { getByText, queryByText, getAllByText } = render(
       <ApplicationContext.Provider
@@ -223,25 +252,86 @@ describe("partners_application_index", () => {
   })
 
   it("should display Houshold Members section table", () => {
-    const { getByText, getAllByText } = render(
+    const { getByRole, queryByText } = render(
       <ApplicationContext.Provider value={application}>
         {/* eslint-disable-next-line @typescript-eslint/no-empty-function */}
         <DetailsHouseholdMembers setMembersDrawer={() => {}} />
       </ApplicationContext.Provider>
     )
 
-    expect(getByText("Household Members")).toBeInTheDocument()
-    expect(getByText("Name")).toBeInTheDocument()
-    expect(getByText("Household First Household Last")).toBeInTheDocument()
-    expect(getByText("Relationship")).toBeInTheDocument()
-    expect(getByText("Friend")).toBeInTheDocument()
-    expect(getByText("Date of Birth")).toBeInTheDocument()
-    expect(getByText("11/25/1966")).toBeInTheDocument()
-    expect(getByText("Same Residence")).toBeInTheDocument()
-    expect(getByText("No")).toBeInTheDocument()
-    expect(getByText("Work in Region")).toBeInTheDocument()
-    expect(getByText("Yes")).toBeInTheDocument()
-    expect(getAllByText("View")).toHaveLength(1)
+    // Check the section header
+    expect(getByRole("heading", { name: "Household Members" })).toBeInTheDocument()
+
+    // Get the table and check headers
+    const table = getByRole("table")
+    const tableHeaders = within(table).getAllByRole("columnheader")
+    expect(tableHeaders).toHaveLength(6)
+
+    const [name, dob, relationship, residence, work, actions] = tableHeaders
+    expect(name).toHaveTextContent(/name/i)
+    expect(dob).toHaveTextContent(/date of birth/i)
+    expect(relationship).toHaveTextContent(/relationship/i)
+    expect(residence).toHaveTextContent(/same residence/i)
+    expect(work).toHaveTextContent(/work in region/i)
+    expect(actions).toHaveTextContent(/actions/i)
+
+    // Check table body rows
+    const tableBodyRows = within(table).getAllByRole("row")
+    expect(tableBodyRows).toHaveLength(2) // 1 for the header row + 1 for the Household member row
+
+    const [nameVal, dobVal, relationshipVal, residenceVal, workVal, actionsVal] = within(
+      tableBodyRows[1]
+    ).getAllByRole("cell")
+
+    expect(nameVal).toHaveTextContent("Household First Household Last")
+    expect(dobVal).toHaveTextContent("11/25/1966")
+    expect(relationshipVal).toHaveTextContent("Friend")
+    expect(residenceVal).toHaveTextContent("No")
+    expect(workVal).toHaveTextContent("Yes")
+    expect(within(actionsVal).getByText("View")).toBeInTheDocument()
+
+    expect(queryByText("Full-time Student")).not.toBeInTheDocument()
+  })
+
+  it("should display Houshold Members section table with full time student question", () => {
+    const { getByRole } = render(
+      <ApplicationContext.Provider value={application}>
+        {/* eslint-disable-next-line @typescript-eslint/no-empty-function */}
+        <DetailsHouseholdMembers setMembersDrawer={() => {}} enableFullTimeStudentQuestion={true} />
+      </ApplicationContext.Provider>
+    )
+
+    // Check the section header
+    expect(getByRole("heading", { name: "Household Members" })).toBeInTheDocument()
+
+    // Get the table and check headers
+    const table = getByRole("table")
+    const tableHeaders = within(table).getAllByRole("columnheader")
+    expect(tableHeaders).toHaveLength(7)
+
+    const [name, dob, relationship, residence, work, student, actions] = tableHeaders
+    expect(name).toHaveTextContent(/name/i)
+    expect(dob).toHaveTextContent(/date of birth/i)
+    expect(relationship).toHaveTextContent(/relationship/i)
+    expect(residence).toHaveTextContent(/same residence/i)
+    expect(work).toHaveTextContent(/work in region/i)
+    expect(student).toHaveTextContent("Full-time Student")
+    expect(actions).toHaveTextContent(/actions/i)
+
+    // Check table body rows
+    const tableBodyRows = within(table).getAllByRole("row")
+    expect(tableBodyRows).toHaveLength(2) // 1 for the header row + 1 for the Household member row
+
+    const [nameVal, dobVal, relationshipVal, residenceVal, workVal, studentVal, actionsVal] =
+      within(tableBodyRows[1]).getAllByRole("cell")
+
+    expect(nameVal).toHaveTextContent("Household First Household Last")
+    expect(dobVal).toHaveTextContent("11/25/1966")
+    expect(relationshipVal).toHaveTextContent("Friend")
+    expect(residenceVal).toHaveTextContent("No")
+    expect(workVal).toHaveTextContent("Yes")
+    expect(studentVal).toHaveTextContent("No")
+    expect(within(actionsVal).getByText("View")).toBeInTheDocument()
   })
 
   it("should display Houshold Details info", () => {
@@ -278,6 +368,36 @@ describe("partners_application_index", () => {
     expect(getByText("No")).toBeInTheDocument()
     expect(getByText("ADA Priorities Selected")).toBeInTheDocument()
     expect(getByText("For Vision Impairments")).toBeInTheDocument()
+  })
+
+  it("should display Houshold Details info with full time student question", () => {
+    const { getByText } = render(
+      <ApplicationContext.Provider
+        value={{
+          ...application,
+          householdExpectingChanges: true,
+          preferredUnitTypes: [
+            {
+              id: "unit",
+              createdAt: new Date(),
+              updatedAt: new Date(),
+              name: UnitTypeEnum.studio,
+              numBedrooms: 1,
+            },
+          ],
+          accessibility: {
+            ...application.accessibility,
+            vision: true,
+          },
+        }}
+      >
+        <DetailsHouseholdDetails enableFullTimeStudentQuestion={true} />
+      </ApplicationContext.Provider>
+    )
+
+    expect(getByText("All Household Members Students")).toBeInTheDocument()
+    expect(getByText("Yes")).toBeInTheDocument()
+    expect(getByText("No")).toBeInTheDocument()
   })
 
   it("should display Declared Houshold Income info", () => {
