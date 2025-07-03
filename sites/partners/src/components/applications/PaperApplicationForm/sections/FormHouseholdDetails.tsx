@@ -20,8 +20,8 @@ type FormHouseholdDetailsProps = {
   listingUnits: Unit[]
   applicationUnitTypes: UnitType[]
   applicationAccessibilityFeatures: Accessibility
-  listingUnitGroups: UnitGroup[]
-  enableUnitGroups: boolean
+  listingUnitGroups?: UnitGroup[]
+  enableUnitGroups?: boolean
   enableFullTimeStudentQuestion?: boolean
 }
 

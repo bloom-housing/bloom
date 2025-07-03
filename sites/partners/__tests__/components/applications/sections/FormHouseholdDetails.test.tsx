@@ -59,8 +59,8 @@ describe("<FormHouseholdDetails>", () => {
 
     expect(screen.getByText(/expecting household changes/i)).toBeInTheDocument()
     expect(screen.getByText(/household includes student or member nearing 18/i)).toBeInTheDocument()
-    expect(screen.getAllByLabelText(/yes/i)).toHaveLength(2)
-    expect(screen.getAllByLabelText(/no/i)).toHaveLength(2)
+    expect(screen.getAllByRole("radio", { name: "Yes" })).toHaveLength(2)
+    expect(screen.getAllByRole("radio", { name: "No" })).toHaveLength(2)
   })
 
   it("renders the form with unit groups when enabled", () => {
@@ -143,8 +143,8 @@ describe("<FormHouseholdDetails>", () => {
 
     expect(screen.getByText(/expecting household changes/i)).toBeInTheDocument()
     expect(screen.getByText(/household includes student or member nearing 18/i)).toBeInTheDocument()
-    expect(screen.getAllByLabelText(/yes/i)).toHaveLength(2)
-    expect(screen.getAllByLabelText(/no/i)).toHaveLength(2)
+    expect(screen.getAllByRole("radio", { name: "Yes" })).toHaveLength(2)
+    expect(screen.getAllByRole("radio", { name: "No" })).toHaveLength(2)
   })
 
   it("handles unit groups with duplicate unit types", () => {
@@ -350,7 +350,7 @@ describe("<FormHouseholdDetails>", () => {
     )
 
     expect(screen.getByText(/are all household members students/i)).toBeInTheDocument()
-    expect(screen.getAllByLabelText(/yes/i)).toHaveLength(2)
-    expect(screen.getAllByLabelText(/no/i)).toHaveLength(2)
+    expect(screen.getAllByRole("radio", { name: "Yes" })).toHaveLength(2)
+    expect(screen.getAllByRole("radio", { name: "No" })).toHaveLength(2)
   })
 })
