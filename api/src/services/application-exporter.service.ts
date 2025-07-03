@@ -25,7 +25,7 @@ import { User } from '../dtos/users/user.dto';
 import { view } from './application.service';
 import { zipExport, zipExportSecure } from '../utilities/zip-export';
 import { FeatureFlagEnum } from '../enums/feature-flags/feature-flags-enum';
-import { doJurisdictionHaveFeatureFlagSet } from 'src/utilities/feature-flag-utilities';
+import { doJurisdictionHaveFeatureFlagSet } from '../utilities/feature-flag-utilities';
 
 view.csv = {
   ...view.details,

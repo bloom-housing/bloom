@@ -534,12 +534,12 @@ export const getHouseholdCsvHeaders = (
         label: `Household Member (${j}) Birth Year`,
       },
       {
-        path: `householdMember.${i}.sameAddress`,
-        label: `Household Member (${j}) Same as Primary Applicant`,
-      },
-      {
         path: `householdMember.${i}.relationship`,
         label: `Household Member (${j}) Relationship`,
+      },
+      {
+        path: `householdMember.${i}.sameAddress`,
+        label: `Household Member (${j}) Same as Primary Applicant`,
       },
       {
         path: `householdMember.${i}.workInRegion`,
