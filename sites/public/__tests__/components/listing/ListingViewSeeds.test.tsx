@@ -14,4 +14,17 @@ describe("<ListingViewSeeds>", () => {
     const view = render(<ListingViewSeeds listing={listing} jurisdiction={jurisdiction} />)
     expect(view.getByRole("heading", { level: 1 })).toHaveTextContent(listing.name)
   })
+
+  it("renders markdown in what to expect", () => {
+    const view = render(
+      <ListingViewSeeds
+        listing={{
+          ...listing,
+          whatToExpect: `<div><div className="mb-3">If you are interested in applying for this property, please get in touch in one of these ways:</div><div><ul class="list-disc pl-6"><li>Phone</li><li>Email</li><li>In-person</li><li>In some instances, the property has a link directly to an application</li></ul></div><div className="mt-2">Once you contact a property, ask if they have any available units if you are looking to move in immediately.</div><div className="mt-2"><strong>Waitlists</strong>:<div>If none are available, but you are still interested in eventually living at the property, ask how you can be placed on their waitlist.</div>`,
+        }}
+        jurisdiction={jurisdiction}
+      />
+    )
+    expect(view.queryByText("<", { exact: false })).toBeNull()
+  })
 })

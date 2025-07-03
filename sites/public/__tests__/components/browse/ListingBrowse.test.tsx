@@ -1,16 +1,18 @@
 import React from "react"
 import { setupServer } from "msw/lib/node"
+import dayjs from "dayjs"
 import { fireEvent, render, screen, waitFor, within } from "@testing-library/react"
+import userEvent from "@testing-library/user-event"
 import { listing, jurisdiction } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
-import { ListingBrowse, TabsIndexEnum } from "../../../src/components/browse/ListingBrowse"
-import { mockNextRouter } from "../../testUtils"
 import {
   EnumUnitGroupAmiLevelMonthlyRentDeterminationType,
   FeatureFlag,
   FeatureFlagEnum,
+  MarketingTypeEnum,
   UnitTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import userEvent from "@testing-library/user-event"
+import { ListingBrowse, TabsIndexEnum } from "../../../src/components/browse/ListingBrowse"
+import { mockNextRouter } from "../../testUtils"
 
 const server = setupServer()
 
@@ -68,6 +70,7 @@ describe("<ListingBrowse>", () => {
             itemCount: 2,
           }}
           jurisdiction={jurisdiction}
+          multiselectData={[]}
         />
       )
 
@@ -119,6 +122,7 @@ describe("<ListingBrowse>", () => {
             itemCount: 2,
           }}
           jurisdiction={jurisdiction}
+          multiselectData={[]}
         />
       )
 
@@ -267,6 +271,7 @@ describe("<ListingBrowse>", () => {
               },
             ],
           }}
+          multiselectData={[]}
         />
       )
 
@@ -331,6 +336,7 @@ describe("<ListingBrowse>", () => {
               },
             ],
           }}
+          multiselectData={[]}
         />
       )
 
@@ -580,5 +586,39 @@ describe("<ListingBrowse>", () => {
         "/listings?isVerified=true&availabilities=unitsAvailable&homeTypes=apartment,townhome&monthlyRent=500.00-900.00&name=Test Search"
       )
     })
+  })
+  it("shows under construction listings at the top", () => {
+    render(
+      <ListingBrowse
+        listings={[
+          {
+            ...listing,
+            name: "ListingA",
+            marketingType: MarketingTypeEnum.comingSoon,
+            publishedAt: dayjs(new Date()).subtract(5, "days").toDate(),
+          },
+          {
+            ...listing,
+            name: "ListingB",
+            marketingType: MarketingTypeEnum.marketing,
+            publishedAt: dayjs(new Date()).subtract(1, "days").toDate(),
+          },
+        ]}
+        tab={TabsIndexEnum.open}
+        paginationData={{
+          currentPage: 1,
+          totalPages: 1,
+          itemsPerPage: 2,
+          totalItems: 2,
+          itemCount: 2,
+        }}
+        jurisdiction={jurisdiction}
+        multiselectData={[]}
+      />
+    )
+    const itemA = screen.getByText("ListingA")
+    const itemB = screen.getByText("ListingB")
+    // Expects B follows A
+    expect(itemA.compareDocumentPosition(itemB)).toEqual(Node.DOCUMENT_POSITION_FOLLOWING)
   })
 })
