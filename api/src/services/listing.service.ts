@@ -1529,9 +1529,6 @@ export class ListingService implements OnModuleInit {
             }
           : undefined,
         isVerified: !!dto.isVerified,
-        marketingDateYear: dto.marketingDate
-          ? dto.marketingDate.getFullYear()
-          : null,
       },
     });
 
@@ -2374,9 +2371,6 @@ export class ListingService implements OnModuleInit {
               },
             },
           },
-          marketingDateYear: dto.marketingDate
-            ? dto.marketingDate.getFullYear()
-            : null,
         },
         include: views.details,
         where: {

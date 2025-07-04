@@ -32,15 +32,12 @@ export default class DatesFormatter extends Formatter {
     this.data.marketingType = MarketingTypeEnum[this.data.marketingType]
 
     if (this.data.marketingType === MarketingTypeEnum.comingSoon) {
-      this.data.marketingDate = this.data.marketingStartDate
-        ? dayjs().set("year", this.data.marketingStartDate).toDate()
-        : null
-
+      this.data.marketingYear = this.data.marketingYear ? Number(this.data.marketingYear) : null
       this.data.marketingSeason = this.data.marketingSeason
         ? MarketingSeasonEnum[this.data.marketingSeason]
         : null
     } else {
-      this.data.marketingDate = null
+      this.data.marketingYear = null
       this.data.marketingSeason = null
     }
   }

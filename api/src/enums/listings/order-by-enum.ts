@@ -8,5 +8,5 @@ export enum ListingOrderByKeys {
   status = 'status',
   unitsAvailable = 'unitsAvailable',
   marketingType = 'marketingType',
-  marketingDateYear = 'marketingDateYear',
+  marketingYear = 'marketingYear',
 }

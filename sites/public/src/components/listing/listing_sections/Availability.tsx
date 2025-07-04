@@ -73,7 +73,7 @@ export const Availability = ({ listing, jurisdiction }: AvailabilityProps) => {
     enableMarketingStatus,
     listing.marketingType,
     listing.marketingSeason,
-    listing.marketingDate,
+    listing.marketingYear,
     false
   )
   const content = getAvailabilityContent(listing.reviewOrderType, listing.status)
