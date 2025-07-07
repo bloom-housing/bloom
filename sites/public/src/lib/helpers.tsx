@@ -255,7 +255,10 @@ export const getListingStatusMessage = (
   )
 }
 
-export const getApplicationSeason = (marketingSeason: MarketingSeasonEnum, marketingYear: number) => {
+export const getApplicationSeason = (
+  marketingSeason: MarketingSeasonEnum,
+  marketingYear: number
+) => {
   let label = t("listings.apply.applicationSeason")
   if (marketingSeason) {
     label = label.concat(` ${t(`seasons.${marketingSeason}`)}`)

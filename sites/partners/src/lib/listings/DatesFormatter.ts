@@ -5,7 +5,7 @@ import {
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import Formatter from "./Formatter"
 import { createDate, createTime } from "../helpers"
-import dayjs from "dayjs"
+
 export default class DatesFormatter extends Formatter {
   /** Set dates/times for certain fields */
   process() {
