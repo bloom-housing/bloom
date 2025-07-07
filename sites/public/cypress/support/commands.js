@@ -17,11 +17,11 @@ Cypress.Commands.add("signIn", (email, password) => {
 Cypress.Commands.add("signOut", () => {
   // TODO: once the favorites feature is being tested, this is Sign Out-4:
   if (Cypress.env("showSeedsDesign")) {
-    cy.get(`[data-testid="My Account-2"]`).trigger("click")
-    cy.get(`[data-testid="Sign Out-4"]`).trigger("click")
+    cy.get(`[data-testid="My Account"]`).trigger("click")
+    cy.get(`[data-testid="Sign Out"]`).trigger("click")
   } else {
-    cy.get(`[data-testid="My Account-2"]`).trigger("mouseover")
-    cy.get(`[data-testid="Sign Out-3"]`).trigger("click")
+    cy.get(`[data-testid="My Account"]`).trigger("mouseover")
+    cy.get(`[data-testid="Sign Out"]`).trigger("click")
   }
 })
 
