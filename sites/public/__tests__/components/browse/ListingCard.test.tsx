@@ -6,7 +6,6 @@ import { getListingTags } from "../../../src/components/listing/listing_sections
 import {
   FeatureFlagEnum,
   ListingsStatusEnum,
-  MultiselectQuestionsApplicationSectionEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import dayjs from "dayjs"
 
