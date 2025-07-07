@@ -6,6 +6,7 @@ import { getListingTags } from "../../../src/components/listing/listing_sections
 import {
   FeatureFlagEnum,
   ListingsStatusEnum,
+  MultiselectQuestionsApplicationSectionEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import dayjs from "dayjs"
 
@@ -76,5 +77,29 @@ describe("<ListingCard>", () => {
       />
     )
     expect(view.queryByText("Veteran")).toBeNull()
+  })
+  it("shows programs tags when swapCommunityTypeWithPrograms is true", () => {
+    const view = render(
+      <ListingCard
+        listing={listing}
+        jurisdiction={{
+          ...jurisdiction,
+          featureFlags: [
+            ...jurisdiction.featureFlags,
+            {
+              name: FeatureFlagEnum.swapCommunityTypeWithPrograms,
+              id: "id",
+              createdAt: new Date(),
+              updatedAt: new Date(),
+              active: true,
+              description: "",
+              jurisdictions: [],
+            },
+          ],
+        }}
+      />
+    )
+    expect(view.getByText("Program 1")).toBeDefined()
+    expect(view.getByText("Program 2")).toBeDefined()
   })
 })
