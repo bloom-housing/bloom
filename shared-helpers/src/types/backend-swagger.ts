@@ -6912,6 +6912,7 @@ export enum ListingOrderByKeys {
   "unitsAvailable" = "unitsAvailable",
   "marketingType" = "marketingType",
   "marketingYear" = "marketingYear",
+  "marketingSeason" = "marketingSeason",
 }
 
 export enum OrderByEnum {
