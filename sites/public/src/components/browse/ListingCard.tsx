@@ -45,7 +45,8 @@ export const ListingCard = ({
     !showHomeType,
     !isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableAccessibilityFeatures),
     isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableIsVerified),
-    isFeatureFlagOn(jurisdiction, FeatureFlagEnum.swapCommunityTypeWithPrograms)
+    isFeatureFlagOn(jurisdiction, FeatureFlagEnum.swapCommunityTypeWithPrograms),
+    true
   )
   const status = getListingApplicationStatus(listing, true, true)
   const actions = []

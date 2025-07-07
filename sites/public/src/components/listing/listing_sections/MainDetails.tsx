@@ -43,7 +43,8 @@ export const getListingTags = (
   hideHomeTypeTag?: boolean,
   hideAccessibilityTag?: boolean,
   enableIsVerified?: boolean,
-  swapCommunityTypeWithPrograms?: boolean
+  swapCommunityTypeWithPrograms?: boolean,
+  translatePrograms?: boolean
 ): ListingTag[] => {
   const listingTags: ListingTag[] = []
 
@@ -69,7 +70,9 @@ export const getListingTags = (
         MultiselectQuestionsApplicationSectionEnum.programs
       ) {
         listingTags.push({
-          title: question.multiselectQuestions.text,
+          title: translatePrograms
+            ? t(`listingFilters.program.${question.multiselectQuestions.text}`)
+            : question.multiselectQuestions.text,
           variant: "highlight-warm",
         })
       }
