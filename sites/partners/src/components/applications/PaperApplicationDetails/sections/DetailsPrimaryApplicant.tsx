@@ -6,7 +6,13 @@ import { DetailsAddressColumns, AddressColsType } from "../DetailsAddressColumns
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 import { YesNoEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
-const DetailsPrimaryApplicant = () => {
+type DetailsPrimaryApplicantProps = {
+  enableFullTimeStudentQuestion?: boolean
+}
+
+const DetailsPrimaryApplicant = ({
+  enableFullTimeStudentQuestion,
+}: DetailsPrimaryApplicantProps) => {
   const application = useContext(ApplicationContext)
 
   return (
@@ -86,6 +92,20 @@ const DetailsPrimaryApplicant = () => {
           })()}
         </FieldValue>
       </Grid.Row>
+
+      {enableFullTimeStudentQuestion && (
+        <Grid.Row>
+          <FieldValue label={t("application.details.fullTimeStudent")} testId="fullTimeStudent">
+            {(() => {
+              if (!application.applicant.fullTimeStudent) return t("t.n/a")
+
+              return application.applicant.fullTimeStudent === YesNoEnum.yes
+                ? t("t.yes")
+                : t("t.no")
+            })()}
+          </FieldValue>
+        </Grid.Row>
+      )}
 
       <SectionWithGrid.HeadingRow>
         {t("application.details.residenceAddress")}

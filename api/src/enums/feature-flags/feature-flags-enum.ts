@@ -30,6 +30,7 @@ export enum FeatureFlagEnum {
   hideCloseListingButton = 'hideCloseListingButton',
   swapCommunityTypeWithPrograms = 'swapCommunityTypeWithPrograms',
   enableWaitlistAdditionalFields = 'enableWaitlistAdditionalFields',
+  enableFullTimeStudentQuestion = 'enableFullTimeStudentQuestion',
 }
 
 // List of all of existing flags and their descriptions.
@@ -64,6 +65,11 @@ export const featureFlagMap: { name: string; description: string }[] = [
     name: FeatureFlagEnum.enableCompanyWebsite,
     description:
       'When true, allows partners to add company website information',
+  },
+  {
+    name: FeatureFlagEnum.enableFullTimeStudentQuestion,
+    description:
+      'When true, the full time student question is displayed in the application form',
   },
   {
     name: FeatureFlagEnum.enableGeocodingPreferences,
