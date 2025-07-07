@@ -20,7 +20,9 @@ Cypress.Commands.add("signOut", () => {
     cy.get(`[data-testid="My Account"]`).trigger("click")
     cy.get(`[data-testid="Sign Out"]`).trigger("click")
   } else {
-    cy.get(`[data-testid="My Account"]`).trigger("mouseover")
+    // data-testid for SiteHeader in this path is set in ui-components
+    // See https://github.com/bloom-housing/ui-components/blob/c35c094554e8199f202d67a405272035189060ec/src/headers/SiteHeader.tsx#L175
+    cy.get(`[data-testid="My Account-2"]`).trigger("mouseover")
     cy.get(`[data-testid="Sign Out"]`).trigger("click")
   }
 })
