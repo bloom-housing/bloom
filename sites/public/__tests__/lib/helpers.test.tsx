@@ -2,10 +2,12 @@ import React from "react"
 import dayjs from "dayjs"
 import { render } from "@testing-library/react"
 import {
+  EnumUnitGroupAmiLevelMonthlyRentDeterminationType,
   ListingsStatusEnum,
   MarketingSeasonEnum,
   MarketingTypeEnum,
   ReviewOrderTypeEnum,
+  UnitTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { listing, jurisdiction } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import {
@@ -17,7 +19,9 @@ import {
 describe("helpers", () => {
   describe("getStatusPrefix", () => {
     it("should return correctly for closed listings", () => {
-      expect(getStatusPrefix({ ...listing, status: ListingsStatusEnum.closed }, false)).toEqual({
+      expect(
+        getStatusPrefix({ ...listing, status: ListingsStatusEnum.closed }, false, false)
+      ).toEqual({
         label: "Applications Closed",
         variant: "secondary-inverse",
       })
@@ -32,6 +36,7 @@ describe("helpers", () => {
             applicationDueDate: dayjs(new Date()).add(5, "days").toDate(),
             marketingType: MarketingTypeEnum.comingSoon,
           },
+          false,
           false
         )
       ).toEqual({
@@ -49,7 +54,8 @@ describe("helpers", () => {
             applicationDueDate: dayjs(new Date()).add(5, "days").toDate(),
             marketingType: MarketingTypeEnum.comingSoon,
           },
-          true
+          true,
+          false
         )
       ).toEqual({
         label: "Under Construction",
@@ -64,6 +70,7 @@ describe("helpers", () => {
             reviewOrderType: ReviewOrderTypeEnum.firstComeFirstServe,
             status: ListingsStatusEnum.active,
           },
+          false,
           false
         )
       ).toEqual({
@@ -80,6 +87,7 @@ describe("helpers", () => {
             status: ListingsStatusEnum.active,
             applicationDueDate: dayjs(new Date()).add(5, "days").toDate(),
           },
+          false,
           false
         )
       ).toEqual({
@@ -96,11 +104,177 @@ describe("helpers", () => {
             status: ListingsStatusEnum.active,
             applicationDueDate: dayjs(new Date()).add(5, "days").toDate(),
           },
+          false,
           false
         )
       ).toEqual({
         label: "Open Waitlist",
         variant: "secondary",
+      })
+    })
+    it("should return correctly for lottery listings with unit groups on", () => {
+      expect(
+        getStatusPrefix(
+          {
+            ...listing,
+            reviewOrderType: ReviewOrderTypeEnum.lottery,
+            status: ListingsStatusEnum.active,
+            applicationDueDate: dayjs(new Date()).add(5, "days").toDate(),
+          },
+          false,
+          true
+        )
+      ).toEqual({
+        label: "Lottery",
+        variant: "primary",
+      })
+    })
+    it("should return correctly for waitlist listings with unit groups on", () => {
+      expect(
+        getStatusPrefix(
+          {
+            ...listing,
+            unitGroups: [
+              {
+                id: "1d4971f5-b651-430c-9a2f-4655534f1bda",
+                createdAt: new Date(),
+                updatedAt: new Date(),
+                maxOccupancy: 4,
+                minOccupancy: 1,
+                floorMin: 1,
+                floorMax: 4,
+                totalCount: 2,
+                totalAvailable: null,
+                bathroomMin: 1,
+                bathroomMax: 3,
+                openWaitlist: true,
+                sqFeetMin: 340,
+                sqFeetMax: 725,
+                unitGroupAmiLevels: [
+                  {
+                    id: "8025f0c3-4103-4321-8261-da536e489572",
+                    createdAt: new Date(),
+                    updatedAt: new Date(),
+                    amiPercentage: 20,
+                    monthlyRentDeterminationType:
+                      EnumUnitGroupAmiLevelMonthlyRentDeterminationType.flatRent,
+                    percentageOfIncomeValue: null,
+                    flatRentValue: 1500,
+                    amiChart: {
+                      id: "cf8574bb-599f-40fa-9468-87c1e16be898",
+                      createdAt: new Date(),
+                      updatedAt: new Date(),
+                      items: [],
+                      name: "Divine Orchard",
+                      jurisdictions: {
+                        id: "e674b260-d26f-462a-9090-abaabe939cae",
+                        name: "Bloomington",
+                      },
+                    },
+                  },
+                ],
+                unitTypes: [
+                  {
+                    id: "d20ada5f-3b33-4ec6-86b8-ce9412bb8844",
+                    createdAt: new Date(),
+                    updatedAt: new Date(),
+                    name: UnitTypeEnum.studio,
+                    numBedrooms: 0,
+                  },
+                  {
+                    id: "a7195b0a-2311-494c-9765-7304a3637312",
+                    createdAt: new Date(),
+                    updatedAt: new Date(),
+                    name: UnitTypeEnum.oneBdrm,
+                    numBedrooms: 1,
+                  },
+                ],
+              },
+            ],
+            reviewOrderType: ReviewOrderTypeEnum.firstComeFirstServe,
+            status: ListingsStatusEnum.active,
+            applicationDueDate: dayjs(new Date()).add(5, "days").toDate(),
+          },
+          false,
+          true
+        )
+      ).toEqual({
+        label: "Open Waitlist",
+        variant: "secondary",
+      })
+    })
+    it("should return correctly for fcfs listings with unit groups on", () => {
+      expect(
+        getStatusPrefix(
+          {
+            ...listing,
+            unitGroups: [
+              {
+                id: "1d4971f5-b651-430c-9a2f-4655534f1bda",
+                createdAt: new Date(),
+                updatedAt: new Date(),
+                maxOccupancy: 4,
+                minOccupancy: 1,
+                floorMin: 1,
+                floorMax: 4,
+                totalCount: 2,
+                totalAvailable: 10,
+                bathroomMin: 1,
+                bathroomMax: 3,
+                openWaitlist: true,
+                sqFeetMin: 340,
+                sqFeetMax: 725,
+                unitGroupAmiLevels: [
+                  {
+                    id: "8025f0c3-4103-4321-8261-da536e489572",
+                    createdAt: new Date(),
+                    updatedAt: new Date(),
+                    amiPercentage: 20,
+                    monthlyRentDeterminationType:
+                      EnumUnitGroupAmiLevelMonthlyRentDeterminationType.flatRent,
+                    percentageOfIncomeValue: null,
+                    flatRentValue: 1500,
+                    amiChart: {
+                      id: "cf8574bb-599f-40fa-9468-87c1e16be898",
+                      createdAt: new Date(),
+                      updatedAt: new Date(),
+                      items: [],
+                      name: "Divine Orchard",
+                      jurisdictions: {
+                        id: "e674b260-d26f-462a-9090-abaabe939cae",
+                        name: "Bloomington",
+                      },
+                    },
+                  },
+                ],
+                unitTypes: [
+                  {
+                    id: "d20ada5f-3b33-4ec6-86b8-ce9412bb8844",
+                    createdAt: new Date(),
+                    updatedAt: new Date(),
+                    name: UnitTypeEnum.studio,
+                    numBedrooms: 0,
+                  },
+                  {
+                    id: "a7195b0a-2311-494c-9765-7304a3637312",
+                    createdAt: new Date(),
+                    updatedAt: new Date(),
+                    name: UnitTypeEnum.oneBdrm,
+                    numBedrooms: 1,
+                  },
+                ],
+              },
+            ],
+            reviewOrderType: ReviewOrderTypeEnum.firstComeFirstServe,
+            status: ListingsStatusEnum.active,
+            applicationDueDate: dayjs(new Date()).add(5, "days").toDate(),
+          },
+          false,
+          true
+        )
+      ).toEqual({
+        label: "First Come First Serve",
+        variant: "primary",
       })
     })
   })

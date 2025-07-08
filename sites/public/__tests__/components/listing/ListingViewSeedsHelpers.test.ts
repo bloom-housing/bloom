@@ -182,6 +182,20 @@ describe("ListingViewSeedsHelpers", () => {
         content: expect.anything(),
       })
     })
+    it("should return nothing if no data", () => {
+      const eligibilitySections = getEligibilitySections(jurisdiction, {
+        ...listing,
+        units: null,
+        reservedCommunityTypes: null,
+        listingMultiselectQuestions: [],
+        creditHistory: null,
+        rentalHistory: null,
+        buildingSelectionCriteria: null,
+        rentalAssistance: null,
+        criminalBackground: null,
+      })
+      expect(eligibilitySections).toEqual([])
+    })
   })
   describe("getAdditionalInformation", () => {
     it.todo("tests")
