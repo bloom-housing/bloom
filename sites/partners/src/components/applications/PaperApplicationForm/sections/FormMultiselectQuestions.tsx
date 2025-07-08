@@ -54,7 +54,7 @@ const FormMultiselectQuestions = ({
   const allOptionFieldNames = useMemo(() => {
     const keys = []
     questions?.forEach((listingQuestion) =>
-      listingQuestion?.multiselectQuestions.options.forEach((option) =>
+      listingQuestion?.multiselectQuestions?.options?.forEach((option) =>
         keys.push(
           fieldName(
             listingQuestion?.multiselectQuestions.text,

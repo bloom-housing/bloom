@@ -12,11 +12,13 @@ import SectionWithGrid from "../../../shared/SectionWithGrid"
 type FormHouseholdMembersProps = {
   householdMembers: HouseholdMember[]
   setHouseholdMembers: (members: HouseholdMember[]) => void
+  enableFullTimeStudentQuestion?: boolean
 }
 
 const FormHouseholdMembers = ({
   householdMembers,
   setHouseholdMembers,
+  enableFullTimeStudentQuestion,
 }: FormHouseholdMembersProps) => {
   type MembersDrawer = HouseholdMember | null
 
@@ -25,10 +27,13 @@ const FormHouseholdMembers = ({
 
   const memberTableHeaders = {
     name: "t.name",
-    relationship: "t.relationship",
     dob: "application.household.member.dateOfBirth",
+    relationship: "t.relationship",
     sameResidence: "application.add.sameResidence",
     workInRegion: "application.details.workInRegion",
+    ...(enableFullTimeStudentQuestion && {
+      fullTimeStudent: "application.details.fullTimeStudent",
+    }),
     action: "",
   }
 
@@ -84,16 +89,12 @@ const FormHouseholdMembers = ({
       const { birthMonth, birthDay, birthYear } = member
       const sameResidence = member.sameAddress
       const workInRegion = member.workInRegion
+      const fullTimeStudent = member.fullTimeStudent
 
       return {
         name: {
           content: (member.firstName + member.lastName).length
             ? `${member.firstName} ${member.lastName}`
-            : t("t.n/a"),
-        },
-        relationship: {
-          content: member.relationship
-            ? t(`application.form.options.relationship.${member.relationship}`)
             : t("t.n/a"),
         },
         dob: {
@@ -102,8 +103,16 @@ const FormHouseholdMembers = ({
               ? `${member.birthMonth}/${member.birthDay}/${member.birthYear}`
               : t("t.n/a"),
         },
+        relationship: {
+          content: member.relationship
+            ? t(`application.form.options.relationship.${member.relationship}`)
+            : t("t.n/a"),
+        },
         sameResidence: { content: chooseAddressStatus(sameResidence) },
         workInRegion: { content: chooseAddressStatus(workInRegion) },
+        ...(enableFullTimeStudentQuestion && {
+          fullTimeStudent: { content: chooseAddressStatus(fullTimeStudent) },
+        }),
         action: {
           content: (
             <div className="flex gap-3">
@@ -128,7 +137,7 @@ const FormHouseholdMembers = ({
         },
       }
     })
-  }, [editMember, householdMembers])
+  }, [editMember, enableFullTimeStudentQuestion, householdMembers])
 
   return (
     <>
@@ -166,6 +175,7 @@ const FormHouseholdMembers = ({
           onClose={() => setMembersDrawer(null)}
           members={householdMembers}
           editedMemberId={membersDrawer?.orderId}
+          enableFullTimeStudentQuestion={enableFullTimeStudentQuestion}
         />
       </Drawer>
 
