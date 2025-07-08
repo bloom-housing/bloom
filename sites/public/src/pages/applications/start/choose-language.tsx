@@ -191,7 +191,7 @@ const ApplicationChooseLanguage = () => {
           </CardSection>
         )}
 
-        {listing?.applicationConfig.languages.length > 1 && (
+        {listing?.applicationConfig?.languages?.length && (
           <CardSection divider={"flush"}>
             <>
               <Heading priority={2} size={"lg"} className={"mb-10"}>
