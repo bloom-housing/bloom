@@ -144,6 +144,8 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
     await router.replace(router.pathname)
   }, [router])
 
+  const numberOfFilters = Object.values(filterState).filter((entry) => !!entry).length
+
   const ListingTabs = (
     <MaxWidthLayout>
       <Tabs className={styles["tabs"]} onSelect={selectionHandler} selectedIndex={props.tab}>
@@ -189,6 +191,7 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
                       variant={"primary-outlined"}
                     >
                       {t("t.filter")}
+                      {numberOfFilters ? ` ${numberOfFilters}` : ""}
                     </Button>
                   </span>
                 )}
