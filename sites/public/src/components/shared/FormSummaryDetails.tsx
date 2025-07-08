@@ -24,23 +24,23 @@ import styles from "./FormSummaryDetails.module.scss"
 type FormSummaryDetailsProps = {
   application: Application
   listing: Listing
-  featureFlags: FeatureFlag[]
   editMode?: boolean
   hidePreferences?: boolean
   hidePrograms?: boolean
   validationError?: boolean
   enableUnitGroups?: boolean
+  enableAdaOtherOption?: boolean
 }
 
 const FormSummaryDetails = ({
   application,
   listing,
-  featureFlags,
   editMode = false,
   hidePreferences = false,
   hidePrograms = false,
   validationError = false,
   enableUnitGroups = false,
+  enableAdaOtherOption = false,
 }: FormSummaryDetailsProps) => {
   // fix for rehydration
   const [hasMounted, setHasMounted] = useState(false)
@@ -52,9 +52,6 @@ const FormSummaryDetails = ({
   }
 
   const accessibilityLabels = () => {
-    const enableAdaOtherOption = featureFlags?.some(
-      (flag) => flag.name === FeatureFlagEnum.enableAdaOtherOption && flag.active
-    )
     const labels = []
     if (application.accessibility.mobility) labels.push(t("application.ada.mobility"))
     if (application.accessibility.vision) labels.push(t("application.ada.vision"))
