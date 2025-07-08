@@ -14,9 +14,13 @@ import { useFormConductor } from "../../../lib/hooks"
 import FormSummaryDetails from "../../../components/shared/FormSummaryDetails"
 import AutofillCleaner from "../../../lib/applications/appAutofill"
 import { UserStatus } from "../../../lib/constants"
-import { Application } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  Application,
+  FeatureFlagEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import ApplicationFormLayout from "../../../layouts/application-form"
 import styles from "../../../layouts/application-form.module.scss"
+import { isFeatureFlagOn } from "../../../lib/helpers"
 import { Button } from "@bloom-housing/ui-seeds"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 
@@ -109,6 +113,7 @@ export default () => {
           editMode={false}
           hidePreferences={true}
           hidePrograms={true}
+          enableUnitGroups={isFeatureFlagOn(conductor.config, FeatureFlagEnum.enableUnitGroups)}
         />
         <Form onSubmit={handleSubmit(onSubmit)}>
           <CardSection

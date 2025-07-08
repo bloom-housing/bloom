@@ -188,6 +188,7 @@ export const application: Application = {
     phoneNumberType: "home",
     noPhone: false,
     workInRegion: YesNoEnum.yes,
+    fullTimeStudent: YesNoEnum.no,
     applicantWorkAddress: {
       id: "applicant_work_address_id",
       createdAt: new Date(),
@@ -249,6 +250,7 @@ export const application: Application = {
       relationship: HouseholdMemberRelationship.friend,
       sameAddress: YesNoEnum.no,
       workInRegion: YesNoEnum.yes,
+      fullTimeStudent: YesNoEnum.no,
       householdMemberAddress: {
         id: "member_address_id",
         createdAt: new Date(),
@@ -841,7 +843,7 @@ export const listing: Listing = {
     {
       ordinal: 1,
       multiselectQuestions: {
-        id: "id",
+        id: "pref_id_1",
         createdAt: new Date(),
         updatedAt: new Date(),
         text: "Preference 1",
@@ -852,7 +854,7 @@ export const listing: Listing = {
     {
       ordinal: 2,
       multiselectQuestions: {
-        id: "id",
+        id: "pref_id_2",
         createdAt: new Date(),
         updatedAt: new Date(),
         text: "Preference 2",
@@ -863,7 +865,7 @@ export const listing: Listing = {
     {
       ordinal: 1,
       multiselectQuestions: {
-        id: "id",
+        id: "prog_id_1",
         createdAt: new Date(),
         updatedAt: new Date(),
         text: "Program 1",
@@ -874,7 +876,7 @@ export const listing: Listing = {
     {
       ordinal: 2,
       multiselectQuestions: {
-        id: "id",
+        id: "prog_id_2",
         createdAt: new Date(),
         updatedAt: new Date(),
         text: "Program 2",
