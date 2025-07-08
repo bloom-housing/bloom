@@ -4,6 +4,7 @@ import { t } from "@bloom-housing/ui-components"
 import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import dayjs from "dayjs"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
+import { TextEditorContent } from "../../../shared/TextEditor"
 
 export const getDetailFieldNumber = (listingNumber: number) => {
   return listingNumber ? listingNumber.toString() : t("t.none")
@@ -11,6 +12,14 @@ export const getDetailFieldNumber = (listingNumber: number) => {
 
 export const getDetailFieldString = (listingString: string) => {
   return listingString && listingString !== "" ? listingString : t("t.none")
+}
+
+export const getDetailFieldRichText = (listingString: string, fieldId: string) => {
+  return listingString && listingString !== "" ? (
+    <TextEditorContent content={listingString} contentId={fieldId} />
+  ) : (
+    t("t.none")
+  )
 }
 
 export const getDetailFieldDate = (listingDate: Date) => {
@@ -23,6 +32,11 @@ export const getDetailFieldTime = (listingTime: Date) => {
 
 export const getDetailBoolean = (listingBool: boolean) => {
   return listingBool === true ? t("t.yes") : listingBool === false ? t("t.no") : t("t.n/a")
+}
+
+export const cleanRichText = (listingString: string) => {
+  if (listingString === `<p></p>`) return null
+  return listingString
 }
 
 export const getReadableErrorMessage = (errorMessage: string | undefined) => {
