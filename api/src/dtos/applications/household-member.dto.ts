@@ -83,6 +83,11 @@ export class HouseholdMember extends AbstractDTO {
   workInRegion?: YesNoEnum;
 
   @Expose()
+  @IsEnum(YesNoEnum, { groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional({ enum: YesNoEnum, enumName: 'YesNoEnum' })
+  fullTimeStudent?: YesNoEnum;
+
+  @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Address)
   @ApiPropertyOptional({ type: Address })

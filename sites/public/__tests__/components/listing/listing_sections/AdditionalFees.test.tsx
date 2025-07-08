@@ -22,7 +22,7 @@ describe("<AdditionalFees>", () => {
     const { getByText } = render(
       <AdditionalFees
         applicationFee={"50"}
-        costsNotIncluded={"Costs not included"}
+        costsNotIncluded={"Gas, internet"}
         depositHelperText={"Deposit helper text"}
         depositMax={"200"}
         depositMin={"100"}
@@ -38,6 +38,8 @@ describe("<AdditionalFees>", () => {
     expect(getByText("$100 – $200", { exact: false })).toBeDefined()
     expect(getByText("Utilities Included")).toBeDefined()
     expect(getByText("Water, Electricity")).toBeDefined()
+    expect(getByText("Costs not included")).toBeDefined()
+    expect(getByText("Gas, internet")).toBeDefined()
   })
   it("renders all content except utilities included", () => {
     const { getByText, queryByText } = render(
