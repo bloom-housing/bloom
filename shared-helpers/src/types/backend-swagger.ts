@@ -6441,6 +6441,9 @@ export interface UserRole {
 
   /**  */
   isPartner?: boolean
+
+  /**  */
+  isSuperAdmin?: boolean
 }
 
 export interface User {

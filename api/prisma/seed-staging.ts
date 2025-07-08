@@ -129,6 +129,22 @@ export const stagingSeed = async (
       featureFlags: [],
     }),
   });
+  // create super admin user
+  await prismaClient.userAccounts.create({
+    data: await userFactory({
+      roles: { isSuperAdmin: true, isAdmin: true },
+      email: 'superadmin@example.com',
+      confirmedAt: new Date(),
+      jurisdictionIds: [
+        mainJurisdiction.id,
+        lakeviewJurisdiction.id,
+        bridgeBayJurisdiction.id,
+        nadaHill.id,
+      ],
+      acceptedTerms: true,
+      password: 'abcdef',
+    }),
+  });
   // create admin user
   await prismaClient.userAccounts.create({
     data: await userFactory({
