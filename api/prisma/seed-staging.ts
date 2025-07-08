@@ -137,11 +137,9 @@ export const stagingSeed = async (
       confirmedAt: new Date(),
       jurisdictionIds: [
         mainJurisdiction.id,
-
         lakeviewJurisdiction.id,
         bridgeBayJurisdiction.id,
         nadaHill.id,
-        ,
         sanMateoJurisdiction.id,
         sanJoseJurisdiction.id,
       ],
