@@ -1,3 +1,5 @@
+import axios from "axios"
+
 export interface ReportFilters {
   dateRange: string
 }
@@ -97,6 +99,20 @@ export const conversationalSystemContext = {
     data_presentation: "use specific numbers and percentages when relevant",
     recommendations: "always include actionable next steps",
   },
+}
+
+const API_BASE_URL = "http://127.0.0.1:8000"
+export const getReportDataFastAPI = async () => {
+  console.log("Fetching data from API...")
+  try {
+    const response = await axios.get(`${API_BASE_URL}/generate-report`)
+    console.log("Data returned from API:", response.data)
+    return response.data as ReportData
+  } catch (error) {
+    console.error("Error returning data:", error)
+    console.log("Falling back to default report data")
+    return reportDataOption1
+  }
 }
 
 // ── Option 1: Balanced distribution (more random) ─────────────────────────────

@@ -9,18 +9,24 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts"
-import { reportDataOption1 as reportData } from "../../lib/explore/data-explorer"
+import { IncomeHouseholdSizeCrossTab } from "../../lib/explore/data-explorer"
 
-export default function HouseholdIncomeReport() {
-  const crossTab = reportData.products.incomeHouseholdSizeCrossTab
+interface HouseholdIncomeReportProps {
+  chartData: {
+    incomeHouseholdSizeCrossTab: IncomeHouseholdSizeCrossTab
+  }
+}
+
+export default function HouseholdIncomeReport({ chartData }: HouseholdIncomeReportProps) {
+  const crossTab = chartData.incomeHouseholdSizeCrossTab
   const hhSizes = Object.keys(crossTab)
-  const amiRanges = Object.keys(crossTab[hhSizes[0]])
+  const amiRanges = Object.keys(crossTab[hhSizes[0]] || {})
 
   // build data for bars grouped by AMI range
-  const chartData = amiRanges.map((range) => {
+  const barChartData = amiRanges.map((range) => {
     const entry: Record<string, string | number> = { amiRange: range }
     hhSizes.forEach((size) => {
-      entry[`${size} bedroom`] = crossTab[size][range]
+      entry[`${size} bedroom`] = crossTab[size]?.[range] || 0
     })
     return entry
   })
@@ -50,7 +56,7 @@ export default function HouseholdIncomeReport() {
         <div className="w-full h-96 p-4">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart
-              data={chartData}
+              data={barChartData}
               margin={{ top: 20, right: 30, left: 20, bottom: 50 }}
               onMouseMove={handleBarMouseOver}
               onMouseLeave={handleBarMouseOut}
