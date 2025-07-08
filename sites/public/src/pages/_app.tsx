@@ -112,7 +112,7 @@ function BloomApp({ Component, router, pageProps }: AppProps) {
       <AuthProvider>
         <MessageProvider>
           <LoggedInUserIdleTimeout onTimeout={() => conductor.reset()} />
-          <div className={`${process.env.NODE_ENV !== "production" ? jurisdictionClassname : ""}`}>
+          <div className={jurisdictionClassname}>
             <Component {...pageProps} />
           </div>
         </MessageProvider>
