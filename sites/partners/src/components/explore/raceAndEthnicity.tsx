@@ -1,9 +1,16 @@
 import React from "react"
 import { BarChart, Bar, XAxis, YAxis, Tooltip as ReTooltip, ResponsiveContainer } from "recharts"
-import { reportDataOption1 as reportData } from "../../lib/explore/data-explorer"
+import { EthnicityFrequency, RaceFrequency } from "../../lib/explore/data-explorer"
 
-export default function DemographicsSection() {
-  const { raceFrequencies, ethnicityFrequencies } = reportData.products
+interface DemographicsSectionProps {
+  chartData: {
+    raceFrequencies: RaceFrequency[]
+    ethnicityFrequencies: EthnicityFrequency[]
+  }
+}
+
+export default function DemographicsSection({ chartData }: DemographicsSectionProps) {
+  const { raceFrequencies, ethnicityFrequencies } = chartData
 
   // const [activeBar, setActiveBar] = useState<string | null>(null)
 

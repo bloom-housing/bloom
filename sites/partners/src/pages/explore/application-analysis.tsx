@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import Head from "next/head"
 import { t } from "@bloom-housing/ui-components"
 import { Button } from "@bloom-housing/ui-seeds"
@@ -9,10 +9,42 @@ import DemographicsSection from "../../components/explore/raceAndEthnicity"
 import PrimaryApplicantSection from "../../components/explore/applicantAndHouseholdData"
 import { AiPermissionModal } from "../../components/explore/aiPermissionModal"
 import { AiInsightsPanel } from "../../components/explore/AIInsightsPanel"
+import { getReportDataFastAPI, ReportProducts } from "../../lib/explore/data-explorer"
 
 const ApplicationAnalysis = () => {
   const [genAIEnabled, setGenAIEnabled] = useState(false)
   const [showOnboardingModal, setShowOnboardingModal] = useState(false)
+  const [chartData, setChartData] = useState<ReportProducts>({
+    incomeHouseholdSizeCrossTab: {},
+    raceFrequencies: [],
+    ethnicityFrequencies: [],
+    residentialLocationFrequencies: [],
+    ageFrequencies: [],
+    languageFrequencies: [],
+    subsidyOrVoucherTypeFrequencies: [],
+    accessibilityTypeFrequencies: [],
+  })
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const reportData = await getReportDataFastAPI()
+        setChartData({
+          incomeHouseholdSizeCrossTab: reportData.products.incomeHouseholdSizeCrossTab,
+          raceFrequencies: reportData.products.raceFrequencies,
+          ethnicityFrequencies: reportData.products.ethnicityFrequencies,
+          residentialLocationFrequencies: reportData.products.residentialLocationFrequencies,
+          ageFrequencies: reportData.products.ageFrequencies,
+          languageFrequencies: reportData.products.languageFrequencies,
+          subsidyOrVoucherTypeFrequencies: reportData.products.subsidyOrVoucherTypeFrequencies,
+          accessibilityTypeFrequencies: reportData.products.accessibilityTypeFrequencies,
+        })
+      } catch (error) {
+        console.error("Error fetching report data:", error)
+      }
+    }
+    void fetchData()
+  }, [])
 
   const handleEnableGenAI = () => {
     setShowOnboardingModal(true)
@@ -31,9 +63,26 @@ const ApplicationAnalysis = () => {
       <NavigationHeader className="relative" title="Application Analysis" />
       <div className="flex flex-wrap-reverse bg-gray-100">
         <div className="w-2/3">
-          <HouseholdIncomeReport />
-          <DemographicsSection />
-          <PrimaryApplicantSection />
+          <>
+            <HouseholdIncomeReport
+              chartData={{ incomeHouseholdSizeCrossTab: chartData.incomeHouseholdSizeCrossTab }}
+            />
+            <DemographicsSection
+              chartData={{
+                raceFrequencies: chartData.raceFrequencies,
+                ethnicityFrequencies: chartData.ethnicityFrequencies,
+              }}
+            />
+            <PrimaryApplicantSection
+              chartData={{
+                residentialLocationFrequencies: chartData.residentialLocationFrequencies,
+                ageFrequencies: chartData.ageFrequencies,
+                languageFrequencies: chartData.languageFrequencies,
+                subsidyOrVoucherTypeFrequencies: chartData.subsidyOrVoucherTypeFrequencies,
+                accessibilityTypeFrequencies: chartData.accessibilityTypeFrequencies,
+              }}
+            />
+          </>
         </div>
         <div className="w-1/3 bg-white p-6 flex flex-col">
           {!genAIEnabled ? (

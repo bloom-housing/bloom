@@ -1,15 +1,33 @@
 import React from "react"
 import { BarChart, Bar, XAxis, YAxis, Tooltip as ReTooltip, ResponsiveContainer } from "recharts"
-import { reportDataOption1 as reportData } from "../../lib/explore/data-explorer"
+import {
+  AccessibilityFrequency,
+  AgeFrequency,
+  LanguageFrequency,
+  LocationFrequency,
+  SubsidyFrequency,
+} from "../../lib/explore/data-explorer"
 
-export default function PrimaryApplicantSection() {
+interface ChartData {
+  residentialLocationFrequencies: LocationFrequency[]
+  ageFrequencies: AgeFrequency[]
+  languageFrequencies: LanguageFrequency[]
+  subsidyOrVoucherTypeFrequencies: SubsidyFrequency[]
+  accessibilityTypeFrequencies: AccessibilityFrequency[]
+}
+
+interface PrimaryApplicantSectionProps {
+  chartData: ChartData
+}
+
+export default function PrimaryApplicantSection({ chartData }: PrimaryApplicantSectionProps) {
   const {
     residentialLocationFrequencies,
     ageFrequencies,
     languageFrequencies,
     subsidyOrVoucherTypeFrequencies,
     accessibilityTypeFrequencies,
-  } = reportData.products
+  } = chartData
 
   // const [activeBar, setActiveBar] = useState<string | null>(null)
 
