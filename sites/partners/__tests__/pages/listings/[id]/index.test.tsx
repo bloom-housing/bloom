@@ -13,6 +13,7 @@ import DetailPreferences from "../../../../src/components/listings/PaperListingD
 import {
   ApplicationAddressTypeEnum,
   ApplicationMethodsTypeEnum,
+  FeatureFlagEnum,
   LanguagesEnum,
   ListingEventsTypeEnum,
   ListingsStatusEnum,
@@ -72,6 +73,27 @@ afterEach(() => {
 afterAll(() => {
   server.close()
 })
+
+function mockJurisdictionsHaveFeatureFlagOn(
+  featureFlag: string,
+  enableHomeType = true,
+  enableSection8Question = true,
+  enableUnitGroups = false,
+  enableIsVerified = true
+) {
+  switch (featureFlag) {
+    case FeatureFlagEnum.enableHomeType:
+      return enableHomeType
+    case FeatureFlagEnum.enableSection8Question:
+      return enableSection8Question
+    case FeatureFlagEnum.enableUnitGroups:
+      return enableUnitGroups
+    case FeatureFlagEnum.enableIsVerified:
+      return enableIsVerified
+    default:
+      return true
+  }
+}
 
 describe("listing data", () => {
   describe("should display all listing data", () => {
@@ -290,7 +312,8 @@ describe("listing data", () => {
         <AuthContext.Provider
           value={{
             profile: { ...user, jurisdictions: [], listings: [] },
-            doJurisdictionsHaveFeatureFlagOn: () => true,
+            doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
+              mockJurisdictionsHaveFeatureFlagOn(featureFlag),
           }}
         >
           <ListingContext.Provider value={{ ...listing, region: RegionEnum.Southwest }}>
@@ -484,7 +507,8 @@ describe("listing data", () => {
         <AuthContext.Provider
           value={{
             profile: { ...user, jurisdictions: [], listings: [] },
-            doJurisdictionsHaveFeatureFlagOn: () => true,
+            doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
+              mockJurisdictionsHaveFeatureFlagOn(featureFlag),
           }}
         >
           <ListingContext.Provider
@@ -727,7 +751,8 @@ describe("listing data", () => {
                 jurisdictions: [],
                 listings: [],
               },
-              doJurisdictionsHaveFeatureFlagOn: () => true,
+              doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
+                mockJurisdictionsHaveFeatureFlagOn(featureFlag),
             }}
           >
             <ListingContext.Provider
@@ -749,6 +774,11 @@ describe("listing data", () => {
                   hearing: true,
                   visual: true,
                   mobility: true,
+                  barrierFreeUnitEntrance: true,
+                  loweredLightSwitch: true,
+                  barrierFreeBathroom: true,
+                  wideDoorways: true,
+                  loweredCabinets: true,
                 },
               }}
             >
@@ -760,18 +790,23 @@ describe("listing data", () => {
         expect(getByText("Elevator")).toBeInTheDocument()
         expect(getByText("Wheelchair Ramp")).toBeInTheDocument()
         expect(getByText("Service Animals Allowed")).toBeInTheDocument()
-        expect(getByText("Accessible Parking")).toBeInTheDocument()
+        expect(getByText("Accessible Parking Spots")).toBeInTheDocument()
         expect(getByText("Parking On Site")).toBeInTheDocument()
-        expect(getByText("In Unit Washer Dryer")).toBeInTheDocument()
+        expect(getByText("In-unit washer/dryer")).toBeInTheDocument()
         expect(getByText("Laundry in Building")).toBeInTheDocument()
-        expect(getByText("Barrier Free Entrance")).toBeInTheDocument()
-        expect(getByText("Roll in Shower")).toBeInTheDocument()
-        expect(getByText("Grab Bars")).toBeInTheDocument()
+        expect(getByText("Barrier-free (no-step) property entrance")).toBeInTheDocument()
+        expect(getByText("Roll-in showers")).toBeInTheDocument()
+        expect(getByText("Grab bars in bathrooms")).toBeInTheDocument()
         expect(getByText("Heating in Unit")).toBeInTheDocument()
         expect(getByText("AC in Unit")).toBeInTheDocument()
-        expect(getByText("Hearing")).toBeInTheDocument()
-        expect(getByText("Visual")).toBeInTheDocument()
-        expect(getByText("Mobility")).toBeInTheDocument()
+        expect(getByText("Units for those with hearing disabilities")).toBeInTheDocument()
+        expect(getByText("Units for those with visual disabilities")).toBeInTheDocument()
+        expect(getByText("Units for those with mobility disabilities")).toBeInTheDocument()
+        expect(getByText("Lowered cabinets and countertops")).toBeInTheDocument()
+        expect(getByText("Lowered light switches")).toBeInTheDocument()
+        expect(getByText("Wide unit doorways for wheelchairs")).toBeInTheDocument()
+        expect(getByText("Barrier-free bathrooms")).toBeInTheDocument()
+        expect(getByText("Barrier-free (no-step) unit entrances"))
       })
     })
 
@@ -1233,6 +1268,51 @@ describe("listing data", () => {
         expect(queryByText("Custom Online Application URL")).not.toBeInTheDocument()
         expect(queryByText("Test Refference")).not.toBeInTheDocument()
       })
+
+      it("should hide digital application choice when disable flag is on", () => {
+        const { getByText, getAllByText, queryByText } = render(
+          <AuthContext.Provider
+            value={{
+              profile: { ...user, jurisdictions: [], listings: [] },
+              doJurisdictionsHaveFeatureFlagOn: () => true,
+            }}
+          >
+            <ListingContext.Provider
+              value={{
+                ...listing,
+                applicationMethods: [
+                  {
+                    id: "method_id",
+                    createdAt: new Date(),
+                    updatedAt: new Date(),
+                    type: ApplicationMethodsTypeEnum.ExternalLink,
+                    externalReference: "https://example.com/application",
+                  },
+                ],
+                digitalApplication: false,
+                paperApplication: false,
+                referralOpportunity: false,
+              }}
+            >
+              <DetailApplicationTypes />
+            </ListingContext.Provider>
+          </AuthContext.Provider>
+        )
+
+        expect(getByText("Application Types")).toBeInTheDocument()
+        expect(getByText("Online Applications")).toBeInTheDocument()
+        expect(getByText("Paper Applications")).toBeInTheDocument()
+        expect(getByText("Custom Online Application URL")).toBeInTheDocument()
+        expect(getByText("https://example.com/application")).toBeInTheDocument()
+        // Referral question is not asked in Doorway
+        // expect(getByText("Referral")).toBeInTheDocument()
+        expect(getAllByText("No")).toHaveLength(2)
+        expect(queryByText("Common Digital Application")).not.toBeInTheDocument()
+        expect(queryByText("Referral Contact Phone")).not.toBeInTheDocument()
+        expect(queryByText("Referral Summary")).not.toBeInTheDocument()
+        expect(queryByText("File Name")).not.toBeInTheDocument()
+        expect(queryByText("Language")).not.toBeInTheDocument()
+      })
     })
 
     describe("should display Application Address section", () => {
@@ -1449,7 +1529,8 @@ describe("listing data", () => {
           <AuthContext.Provider
             value={{
               profile: { ...user, jurisdictions: [], listings: [] },
-              doJurisdictionsHaveFeatureFlagOn: () => false,
+              doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
+                mockJurisdictionsHaveFeatureFlagOn(featureFlag, true, true, false, false),
             }}
           >
             <ListingContext.Provider
@@ -1473,7 +1554,8 @@ describe("listing data", () => {
           <AuthContext.Provider
             value={{
               profile: { ...user, jurisdictions: [], listings: [] },
-              doJurisdictionsHaveFeatureFlagOn: () => true,
+              doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
+                mockJurisdictionsHaveFeatureFlagOn(featureFlag),
             }}
           >
             <ListingContext.Provider
@@ -1548,7 +1630,8 @@ describe("listing data", () => {
                 listings: [],
                 jurisdictions: [jurisdiction],
               },
-              doJurisdictionsHaveFeatureFlagOn: () => true,
+              doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
+                mockJurisdictionsHaveFeatureFlagOn(featureFlag),
             }}
           >
             <ListingDetail
@@ -1589,7 +1672,8 @@ describe("listing data", () => {
               listings: [],
               jurisdictions: [jurisdiction],
             },
-            doJurisdictionsHaveFeatureFlagOn: () => true,
+            doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
+              mockJurisdictionsHaveFeatureFlagOn(featureFlag),
           }}
         >
           <ListingDetail listing={result.props.listing} />
@@ -1624,7 +1708,8 @@ describe("listing data", () => {
                 listings: [],
                 jurisdictions: [jurisdiction],
               },
-              doJurisdictionsHaveFeatureFlagOn: () => true,
+              doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
+                mockJurisdictionsHaveFeatureFlagOn(featureFlag),
             }}
           >
             <ListingDetail listing={result.props.listing} />
@@ -1682,7 +1767,8 @@ describe("listing data", () => {
                 listings: [],
                 jurisdictions: [jurisdiction],
               },
-              doJurisdictionsHaveFeatureFlagOn: () => true,
+              doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
+                mockJurisdictionsHaveFeatureFlagOn(featureFlag),
             }}
           >
             <ListingDetail listing={result.props.listing} />
@@ -1732,7 +1818,8 @@ describe("listing data", () => {
               listings: [],
               jurisdictions: [{ ...jurisdiction, id: "id" }],
             },
-            doJurisdictionsHaveFeatureFlagOn: () => true,
+            doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
+              mockJurisdictionsHaveFeatureFlagOn(featureFlag),
           }}
         >
           <ListingDetail listing={result.props.listing} />
@@ -1767,7 +1854,8 @@ describe("listing data", () => {
             listings: [],
             jurisdictions: [jurisdiction],
           },
-          doJurisdictionsHaveFeatureFlagOn: () => true,
+          doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
+            mockJurisdictionsHaveFeatureFlagOn(featureFlag),
         }}
       >
         <ListingDetail

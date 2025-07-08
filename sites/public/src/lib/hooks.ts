@@ -1,15 +1,19 @@
 import { useContext, useEffect, useState } from "react"
 import axios from "axios"
-import qs from "qs"
 import { useRouter } from "next/router"
+import qs from "qs"
 import {
   EnumListingFilterParamsComparison,
+  EnumMultiselectQuestionFilterParamsComparison,
   FeatureFlagEnum,
+  FilterAvailabilityEnum,
   Jurisdiction,
   Listing,
   ListingFilterParams,
   ListingOrderByKeys,
   ListingsStatusEnum,
+  MultiselectQuestionsApplicationSectionEnum,
+  MultiselectQuestionFilterParams,
   OrderByEnum,
   PaginatedListing,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -163,14 +167,10 @@ export async function fetchBaseListingData(
       params.orderDir = orderDir
     }
 
-    const response = await axios.get(runtimeConfig.getListingServiceUrl(), {
-      params,
-      paramsSerializer: (params) => {
-        return qs.stringify(params)
-      },
+    const response = await axios.post(runtimeConfig.getListingServiceUrl(), params, {
       headers: {
         passkey: process.env.API_PASS_KEY,
-        "x-forwarded-for": req.headers["x-forwarded-for"] ?? req.socket.remoteAddress,
+        "x-forwarded-for": req?.headers["x-forwarded-for"] ?? req?.socket?.remoteAddress,
       },
     })
 
@@ -186,8 +186,12 @@ export async function fetchBaseListingData(
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function fetchOpenListings(req: any, page: number) {
+export async function fetchOpenListings(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  req: any,
+  page: number,
+  additionalFilters: ListingFilterParams[] = []
+) {
   return await fetchBaseListingData(
     {
       page: page,
@@ -196,17 +200,22 @@ export async function fetchOpenListings(req: any, page: number) {
           $comparison: EnumListingFilterParamsComparison["="],
           status: ListingsStatusEnum.active,
         },
+        ...additionalFilters,
       ],
       orderBy: [ListingOrderByKeys.mostRecentlyPublished],
       orderDir: [OrderByEnum.desc],
-      limit: process.env.maxOpenListings,
+      limit: process.env.maxBrowseListings,
     },
     req
   )
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function fetchClosedListings(req: any, page: number) {
+export async function fetchClosedListings(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  req: any,
+  page: number,
+  additionalFilters: ListingFilterParams[] = []
+) {
   return await fetchBaseListingData(
     {
       page: page,
@@ -215,10 +224,30 @@ export async function fetchClosedListings(req: any, page: number) {
           $comparison: EnumListingFilterParamsComparison["="],
           status: ListingsStatusEnum.closed,
         },
+        ...additionalFilters,
       ],
       orderBy: [ListingOrderByKeys.mostRecentlyClosed],
       orderDir: [OrderByEnum.desc],
-      limit: process.env.maxClosedListings,
+      limit: process.env.maxBrowseListings,
+    },
+    req
+  )
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function fetchLimitedUnderConstructionListings(req?: any, limit?: number) {
+  return await fetchBaseListingData(
+    {
+      additionalFilters: [
+        {
+          $comparison: EnumListingFilterParamsComparison["="],
+          status: ListingsStatusEnum.active,
+          availability: FilterAvailabilityEnum.comingSoon,
+        },
+      ],
+      orderBy: [ListingOrderByKeys.mostRecentlyPublished],
+      orderDir: [OrderByEnum.desc],
+      limit: limit ? limit.toString() : "3",
     },
     req
   )
@@ -259,4 +288,43 @@ export async function fetchJurisdictionByName(
   }
 
   return jurisdiction
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function fetchMultiselectData(req: any, jurisdictionId: string) {
+  try {
+    const headers = {
+      passkey: process.env.API_PASS_KEY,
+    }
+    if (req) {
+      headers["x-forwarded-for"] = req.headers["x-forwarded-for"] ?? req.socket.remoteAddress
+    }
+
+    const params: {
+      filter: MultiselectQuestionFilterParams[]
+    } = {
+      filter: [
+        {
+          $comparison: EnumMultiselectQuestionFilterParamsComparison["="],
+          applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
+        },
+        {
+          $comparison: EnumMultiselectQuestionFilterParamsComparison["IN"],
+          jurisdiction: jurisdictionId && jurisdictionId !== "" ? jurisdictionId : undefined,
+        },
+      ],
+    }
+
+    const paramsString = qs.stringify(params)
+
+    const multiselectDataResponse = await axios.get(
+      `${process.env.backendApiBase}/multiselectQuestions?${paramsString}`,
+      {
+        headers,
+      }
+    )
+    return multiselectDataResponse?.data
+  } catch (error) {
+    console.log("error = ", error)
+  }
 }

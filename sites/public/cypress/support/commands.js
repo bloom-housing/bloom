@@ -15,9 +15,14 @@ Cypress.Commands.add("signIn", (email, password) => {
 })
 
 Cypress.Commands.add("signOut", () => {
-  cy.get(`[data-testid="My Account-4"]`).trigger("mouseover")
   // TODO: once the favorites feature is being tested, this is Sign Out-4:
-  cy.get(`[data-testid="Sign Out-3"]`).trigger("click")
+  if (Cypress.env("showSeedsDesign")) {
+    cy.get(`[data-testid="My Account-4"]`).trigger("click")
+    cy.get(`[data-testid="Sign Out-4"]`).trigger("click")
+  } else {
+    cy.get(`[data-testid="My Account-4"]`).trigger("mouseover")
+    cy.get(`[data-testid="Sign Out-3"]`).trigger("click")
+  }
 })
 
 Cypress.Commands.add("goNext", () => {
@@ -47,9 +52,14 @@ Cypress.Commands.add("checkErrorMessages", (command) => {
 Cypress.Commands.add("beginApplicationRejectAutofill", (listingName) => {
   cy.visit("/")
   cy.getByTestId("View Listings-1").click()
-  cy.getByTestId("map-pagination").should("include.text", "(Page 1 of 10)")
-  cy.getByTestId("loading-overlay").should("not.exist")
-  cy.get(".is-card-link").contains(listingName).click({ force: true })
+  if (Cypress.env("showSeedsDesign")) {
+    cy.getByID("listing-seeds-link").contains(listingName)
+    cy.getByID("listing-seeds-link").eq(1).click()
+  } else {
+    cy.getByTestId("map-pagination").should("include.text", "(Page 1 of 10)")
+    cy.getByTestId("loading-overlay").should("not.exist")
+    cy.get(".is-card-link").contains(listingName).click({ force: true })
+  }
   cy.getByID("listing-view-apply-button").eq(1).click()
   cy.get("[data-testid=sign-in-email-field]").type("admin@example.com")
   cy.getByID("use-password-instead").click()
@@ -72,9 +82,14 @@ Cypress.Commands.add("beginApplicationRejectAutofill", (listingName) => {
 
 Cypress.Commands.add("beginApplicationSignedIn", (listingName, autofill) => {
   cy.visit("/listings")
-  cy.getByTestId("map-pagination").should("include.text", "(Page 1 of 10)")
-  cy.getByTestId("loading-overlay").should("not.exist")
-  cy.get(".is-card-link").contains(listingName).click({ force: true })
+  if (Cypress.env("showSeedsDesign")) {
+    cy.getByID("listing-seeds-link").contains(listingName)
+    cy.getByID("listing-seeds-link").eq(1).click()
+  } else {
+    cy.getByTestId("map-pagination").should("include.text", "(Page 1 of 10)")
+    cy.getByTestId("loading-overlay").should("not.exist")
+    cy.get(".is-card-link").contains(listingName).click({ force: true })
+  }
   cy.getByID("listing-view-apply-button").eq(1).click()
   cy.getByID("app-choose-language-button").eq(0).click()
   cy.getByID("app-next-step-button").click()
@@ -89,7 +104,9 @@ Cypress.Commands.add("step1PrimaryApplicantName", (application, autofill) => {
   if (!autofill) {
     cy.getByTestId("app-primary-first-name").type(application.applicant.firstName)
     if (application.applicant.middleName) {
-      cy.getByTestId("app-primary-middle-name").type(application.applicant.middleName)
+      cy.getByTestId("app-primary-middle-name").type(application.applicant.middleName, {
+        force: true,
+      })
     }
     cy.getByTestId("app-primary-last-name").type(application.applicant.lastName)
     cy.getByTestId("dob-field-month").type(application.applicant.birthMonth)
@@ -704,8 +721,11 @@ Cypress.Commands.add("step18Summary", (application, verify) => {
           })
       })
   }
-  pushMultiselect("preferences")
-  pushMultiselect("programs")
+
+  if (!Cypress.env("showSeedsDesign")) {
+    pushMultiselect("preferences")
+    pushMultiselect("programs")
+  }
 
   if (verify) {
     fields.forEach(({ id, fieldValue }) => {

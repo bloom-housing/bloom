@@ -1,29 +1,29 @@
-# To get started with Dependabot version updates, you'll need to specify which
-# package ecosystems to update and where the package manifests are located.
 # Please see the documentation for all configuration options:
 # https://docs.github.com/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
 version: 2
 updates:
-  - package-ecosystem: "npm" # See documentation for possible values
-    directory: "/" # Location of package manifests
-    schedule:
+  - package-ecosystem: "npm"
+    directories: # Locations of package manifests
+      - "/"
+      - "/api"
+      - "/doorway-ui-components"
+      - "/shared-helpers"
+      - "/sites/public"
+      - "/sites/partners"
+    schedule: # how often to check for new versions
       interval: "weekly"
-  - package-ecosystem: "npm" # See documentation for possible values
-    directory: "/api" # Location of package manifests
-    schedule:
-      interval: "weekly"
-  - package-ecosystem: "npm" # See documentation for possible values
-    directory: "/doorway-ui-components" # Location of package manifests
-    schedule:
-      interval: "weekly"
-  - package-ecosystem: "npm" # See documentation for possible values
-    directory: "/sites/public" # Location of package manifests
-    schedule:
-      interval: "weekly"
-  - package-ecosystem: "npm" # See documentation for possible values
-    directory: "/sites/partners" # Location of package manifests
-    schedule:
-      interval: "weekly"
+    groups: # All updates for dependencies that match a rule are combined in a single pull request.
+      # Any outdated dependencies that do not match a rule are updated in individual pull requests. In this case, major updates
+      minor-security:
+        applies-to: security-updates
+        update-types:
+          - "minor"
+          - "patch"
+      minor-versions:
+        applies-to: version-updates
+        update-types:
+          - "minor"
+          - "patch"
   - package-ecosystem: "docker" # See documentation for possible values
     directory: "/build/docker" # Location of package manifests
     schedule:

@@ -239,6 +239,7 @@
 
   .seeds-dialog {
     max-height: 100dvh;
+    --overlay-footer-background-color: var(--seeds-color-blue-100);
   }
 
   .seeds-dialog.listings-search-dialog {
@@ -375,6 +376,21 @@
     --padding-block: var(--seeds-s2) var(--seeds-s6);
     .doorway-button {
       padding: var(--seeds-s3) var(--seeds-s4);
+    }
+  }
+
+  // Used in core for theming testing purposes only
+  .lakeview {
+    --seeds-color-primary-darker: #4e2169;
+    --seeds-color-primary-dark: #6e2598;
+    --seeds-color-primary: #773e98;
+    --seeds-color-primary-light: #f2daff;
+    --seeds-color-primary-lighter: #f9f4fa;
+    --seeds-bg-color-surface-primary: var(--seeds-color-primary-lighter);
+    --seeds-bg-color-surface-primary-inverse: var(--seeds-color-primary-darker);
+    .seeds-button {
+      --button-border-radius-sm: var(--seeds-rounded-3xl);
+      --button-border-radius-md: var(--seeds-rounded-3xl);
     }
   }
 }

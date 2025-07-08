@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from "react"
 import Head from "next/head"
-import { NextRouter, withRouter } from "next/router"
+import { useRouter } from "next/router"
 import {
   FeatureFlagEnum,
   Jurisdiction,
@@ -18,19 +18,19 @@ import Layout from "../../layouts/application"
 import { MetaTags } from "../../components/shared/MetaTags"
 import { UserStatus } from "../../lib/constants"
 import MaxWidthLayout from "../../layouts/max-width"
-import { isFeatureFlagOn } from "../../lib/helpers"
+import { isFeatureFlagOn, setFeatureFlagLocalStorage } from "../../lib/helpers"
 import { fetchJurisdictionByName } from "../../lib/hooks"
 
 import styles from "./account.module.scss"
 
 interface DashboardProps {
-  router: NextRouter
   jurisdiction: Jurisdiction
 }
 
 function Dashboard(props: DashboardProps) {
   const { profile } = useContext(AuthContext)
   const [alertMessage, setAlertMessage] = useState<string | null>(null)
+  const router = useRouter()
 
   useEffect(() => {
     if (profile) {
@@ -40,23 +40,25 @@ function Dashboard(props: DashboardProps) {
         status: UserStatus.LoggedIn,
       })
     }
-    if (props.router.query?.alert) {
-      const alert = Array.isArray(props.router.query.alert)
-        ? props.router.query.alert[0]
-        : props.router.query.alert
+    if (router.query?.alert) {
+      const alert = Array.isArray(router.query.alert) ? router.query.alert[0] : router.query.alert
       setAlertMessage(alert)
     }
 
-    window.localStorage.setItem(
-      "bloom-show-favorites-menu-item",
-      (
-        isFeatureFlagOn(props.jurisdiction, FeatureFlagEnum.enableListingFavoriting) === true
-      ).toString()
+    setFeatureFlagLocalStorage(
+      props.jurisdiction,
+      FeatureFlagEnum.enableListingFavoriting,
+      "show-favorites-menu-item"
     )
-  }, [props.router, props.jurisdiction, profile])
+    setFeatureFlagLocalStorage(
+      props.jurisdiction,
+      FeatureFlagEnum.disableCommonApplication,
+      "hide-applications-menu-item"
+    )
+  }, [router, props.jurisdiction, profile])
 
   const closeAlert = () => {
-    void props.router.push("/account/dashboard", undefined, { shallow: true })
+    void router.push("/account/dashboard", undefined, { shallow: true })
     setAlertMessage(null)
   }
 
@@ -77,26 +79,30 @@ function Dashboard(props: DashboardProps) {
             <h1 className={"sr-only"}>{t("nav.myDashboard")}</h1>
             <Grid spacing="lg" className={styles["account-card-container"]}>
               <Grid.Row columns={2}>
-                <Grid.Cell>
-                  <BloomCard
-                    customIcon="application"
-                    title={t("account.myApplications")}
-                    subtitle={t("account.myApplicationsSubtitle")}
-                    variant={"block"}
-                    headingPriority={2}
-                  >
-                    <Card.Section>
-                      <Button
-                        size="sm"
-                        href={"/account/applications"}
-                        variant="primary-outlined"
-                        id="account-dashboard-applications"
-                      >
-                        {t("account.viewApplications")}
-                      </Button>
-                    </Card.Section>
-                  </BloomCard>
-                </Grid.Cell>
+                {isFeatureFlagOn(props.jurisdiction, FeatureFlagEnum.disableCommonApplication) ? (
+                  <></>
+                ) : (
+                  <Grid.Cell>
+                    <BloomCard
+                      customIcon="application"
+                      title={t("account.myApplications")}
+                      subtitle={t("account.myApplicationsSubtitle")}
+                      variant={"block"}
+                      headingPriority={2}
+                    >
+                      <Card.Section>
+                        <Button
+                          size="sm"
+                          href={"/account/applications"}
+                          variant="primary-outlined"
+                          id="account-dashboard-applications"
+                        >
+                          {t("account.viewApplications")}
+                        </Button>
+                      </Card.Section>
+                    </BloomCard>
+                  </Grid.Cell>
+                )}
                 <Grid.Cell>
                   <BloomCard
                     customIcon="profile"
@@ -153,7 +159,7 @@ function Dashboard(props: DashboardProps) {
   )
 }
 
-export default withRouter(Dashboard)
+export default Dashboard
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function getStaticProps() {

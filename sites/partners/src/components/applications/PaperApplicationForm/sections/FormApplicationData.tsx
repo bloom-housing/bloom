@@ -72,6 +72,7 @@ const FormApplicationData = (props: FormApplicationDataProps) => {
             errorMessage={t("errors.dateError")}
             required={!!isDateRequired}
             labelClass={"text__caps-spaced"}
+            dataTestId="dateSubmitted"
           />
         </Grid.Cell>
 
@@ -87,6 +88,7 @@ const FormApplicationData = (props: FormApplicationDataProps) => {
             disabled={!isDateFilled}
             required={!!isDateFilled}
             labelClass={"text__caps-spaced"}
+            dataTestId="timeSubmitted"
           />
         </Grid.Cell>
 

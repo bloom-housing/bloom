@@ -19,12 +19,12 @@ const Layout = (props: LayoutProps) => {
   const router = useRouter()
 
   const [showFavorites, setShowFavorites] = useState(false)
+  const [showApplications, setShowApplications] = useState(true)
 
   useEffect(() => {
-    if (window.localStorage.getItem("bloom-show-favorites-menu-item") === "true") {
-      setShowFavorites(true)
-    }
-  }, [setShowFavorites])
+    setShowFavorites(window.localStorage.getItem("bloom-show-favorites-menu-item") === "true")
+    setShowApplications(window.localStorage.getItem("bloom-hide-applications-menu-item") !== "true")
+  }, [setShowFavorites, setShowApplications])
 
   const languages =
     router?.locales?.map((item) => ({
@@ -91,10 +91,14 @@ const Layout = (props: LayoutProps) => {
             title: t("nav.myDashboard"),
             href: "/account/dashboard",
           },
-          {
-            title: t("account.myApplications"),
-            href: "/account/applications",
-          },
+          ...(showApplications
+            ? [
+                {
+                  title: t("account.myApplications"),
+                  href: "/account/applications",
+                },
+              ]
+            : []),
           ...(showFavorites
             ? [
                 {

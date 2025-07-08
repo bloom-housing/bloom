@@ -9,7 +9,7 @@
   }
 
   .section-header-icon {
-    color: var(--seeds-color-black)
+    color: var(--seeds-color-black);
   }
 
   .section-header-title {
@@ -19,8 +19,7 @@
   }
 }
 
-.muted-background {
-  background-color: var(--seeds-bg-color-muted);
+.section-container {
   padding-block: var(--seeds-spacer-container);
   @media (--sm-only) {
     padding-block: var(--seeds-spacer-content);

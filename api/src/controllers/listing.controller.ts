@@ -57,6 +57,7 @@ import { ListingCsvExporterService } from '../services/listing-csv-export.servic
 import { defaultValidationPipeOptions } from '../utilities/default-validation-pipe-options';
 import { mapTo } from '../utilities/mapTo';
 import { ListingCreateUpdateValidationPipe } from '../validation-pipes/listing-create-update-pipe';
+import { ListingFilterKeyDTO } from '../dtos/listings/listing-filter-key.dto';
 
 @Controller('listings')
 @ApiTags('listings')
@@ -64,6 +65,7 @@ import { ListingCreateUpdateValidationPipe } from '../validation-pipes/listing-c
   ListingsQueryBody,
   ListingsQueryParams,
   ListingFilterParams,
+  ListingFilterKeyDTO,
   ListingsRetrieveParams,
   PaginationAllowsAllQueryParams,
   IdDTO,

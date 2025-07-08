@@ -3,6 +3,7 @@ import {
   ReviewOrderTypeEnum,
   Prisma,
   RegionEnum,
+  ApplicationMethodsTypeEnum,
 } from '@prisma/client';
 import dayjs from 'dayjs';
 import { yellowstoneAddress } from '../address-factory';
@@ -10,7 +11,13 @@ import { yellowstoneAddress } from '../address-factory';
 export const lakeviewVilla: Prisma.ListingsCreateInput = {
   additionalApplicationSubmissionNotes: null,
   digitalApplication: true,
-  commonDigitalApplication: true,
+  commonDigitalApplication: false,
+  applicationMethods: {
+    create: {
+      type: ApplicationMethodsTypeEnum.ExternalLink,
+      externalReference: 'https://example.com/application',
+    },
+  },
   paperApplication: false,
   referralOpportunity: false,
   assets: [],
@@ -64,7 +71,6 @@ export const lakeviewVilla: Prisma.ListingsCreateInput = {
     'Applicants will be contacted by the property agent in rank order until vacancies are filled. All of the information that you have provided will be verified and your eligibility confirmed. Your application will be removed from the waitlist if you have made any fraudulent statements. If we cannot verify a housing preference that you have claimed, you will not receive the preference but will not be otherwise penalized. Should your application be chosen, be prepared to fill out a more detailed application and provide required supporting documents.',
   status: ListingsStatusEnum.active,
   reviewOrderType: ReviewOrderTypeEnum.waitlist,
-  unitsAvailable: 0,
   displayWaitlistSize: false,
   reservedCommunityDescription: null,
   reservedCommunityMinAge: null,

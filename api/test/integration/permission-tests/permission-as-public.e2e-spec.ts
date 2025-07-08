@@ -754,15 +754,15 @@ describe('Testing Permissioning of endpoints as public user', () => {
   });
 
   describe('Testing multiselect questions endpoints', () => {
-    it('should error as forbidden for list endpoint', async () => {
+    it('should succeed for list endpoint', async () => {
       await request(app.getHttpServer())
         .get(`/multiselectQuestions?`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
-        .expect(403);
+        .expect(200);
     });
 
-    it('should error as forbidden for retrieve endpoint', async () => {
+    it('should succeed for retrieve endpoint', async () => {
       const multiselectQuestionA = await prisma.multiselectQuestions.create({
         data: multiselectQuestionFactory(jurisdictionAId),
       });
@@ -771,7 +771,7 @@ describe('Testing Permissioning of endpoints as public user', () => {
         .get(`/multiselectQuestions/${multiselectQuestionA.id}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
-        .expect(403);
+        .expect(200);
     });
 
     it('should error as forbidden for create endpoint', async () => {

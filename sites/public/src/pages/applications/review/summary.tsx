@@ -9,7 +9,7 @@ import {
   PageView,
   pushGtmEvent,
   AuthContext,
-  MessageContext,
+  useToastyRef,
   listingSectionQuestions,
 } from "@bloom-housing/shared-helpers"
 import {
@@ -29,7 +29,7 @@ import dayjs from "dayjs"
 const ApplicationSummary = () => {
   const router = useRouter()
   const { profile, applicationsService } = useContext(AuthContext)
-  const { addToast } = useContext(MessageContext)
+  const toastyRef = useToastyRef()
   const [validationError, setValidationError] = useState(false)
   const { conductor, application, listing } = useFormConductor("summary")
   let currentPageSection = 4
@@ -51,6 +51,8 @@ const ApplicationSummary = () => {
   }, [profile])
 
   useEffect(() => {
+    const { addToast } = toastyRef.current
+
     if (listing && router.isReady) {
       const currentDate = dayjs()
       if (conductor.config.isPreview) {
@@ -60,11 +62,11 @@ const ApplicationSummary = () => {
         listing?.status !== ListingsStatusEnum.active ||
         (listing?.applicationDueDate && currentDate > dayjs(listing.applicationDueDate))
       ) {
-        // addToast(t("listings.applicationsClosedRedirect"), { variant: "alert" })
+        addToast(t("listings.applicationsClosedRedirect"), { variant: "alert" })
         void router.push(`/${router.locale}/listing/${listing?.id}/${listing.urlSlug}`)
       }
     }
-  }, [conductor.config.isPreview, listing, router, addToast])
+  }, [conductor.config.isPreview, listing, router, toastyRef])
 
   useEffect(() => {
     conductor.application.reachedReviewStep = true
@@ -146,7 +148,7 @@ const ApplicationSummary = () => {
             <p className="field-note text-gray-800">{t("application.review.lastChanceToEdit")}</p>
           </CardSection>
 
-          <CardSection className={"bg-primary-lighter"}>
+          <CardSection className={styles["application-form-action-footer"]}>
             <Button
               variant={"primary"}
               id={"app-summary-confirm"}

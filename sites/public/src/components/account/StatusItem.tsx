@@ -38,7 +38,12 @@ const StatusItem = (props: StatusItemProps) => {
   let tagVariant: "primary" | "secondary" | "success"
   let deadlineText = ""
   let dueDate = ""
-  if (props.lotteryStatus === LotteryStatusEnum.publishedToPublic && showPublicLottery) {
+  // NOTE: Allowing expired lotteries to show temporarily
+  if (
+    (props.lotteryStatus === LotteryStatusEnum.publishedToPublic ||
+      props.lotteryStatus === LotteryStatusEnum.expired) &&
+    showPublicLottery
+  ) {
     tagText = t("account.lotteryRun")
     tagVariant = "success"
     deadlineText = t("account.lotteryPosted")

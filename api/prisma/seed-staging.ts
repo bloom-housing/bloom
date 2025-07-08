@@ -2,7 +2,6 @@ import {
   ApplicationSubmissionTypeEnum,
   LanguagesEnum,
   ListingsStatusEnum,
-  MonthlyRentDeterminationTypeEnum,
   MultiselectQuestions,
   MultiselectQuestionsApplicationSectionEnum,
   Prisma,
@@ -41,8 +40,6 @@ import { blueSkyApartments } from './seed-helpers/listing-data/blue-sky-apartmen
 import { valleyHeightsSeniorCommunity } from './seed-helpers/listing-data/valley-heights-senior-community';
 import { littleVillageApartments } from './seed-helpers/listing-data/little-village-apartments';
 import { elmVillage } from './seed-helpers/listing-data/elm-village';
-import { lakeviewVilla } from './seed-helpers/listing-data/lakeview-villa';
-import { sunshineFlats } from './seed-helpers/listing-data/sunshine-flats';
 
 export const stagingSeed = async (
   prismaClient: PrismaClient,
@@ -140,21 +137,31 @@ export const stagingSeed = async (
     data: jurisdictionFactory(jurisdictionName, {
       listingApprovalPermissions: [UserRoleEnum.admin],
       featureFlags: [
-        FeatureFlagEnum.enableHomeType,
         FeatureFlagEnum.enableAccessibilityFeatures,
-        FeatureFlagEnum.enableUtilitiesIncluded,
-        FeatureFlagEnum.enableIsVerified,
-        FeatureFlagEnum.enableNeighborhoodAmenities,
-        FeatureFlagEnum.enableMarketingStatus,
-        FeatureFlagEnum.enableSection8Question,
-        FeatureFlagEnum.enableSingleUseCode,
+        FeatureFlagEnum.enableCompanyWebsite,
         FeatureFlagEnum.enableGeocodingPreferences,
         FeatureFlagEnum.enableGeocodingRadiusMethod,
+        FeatureFlagEnum.enableHomeType,
+        FeatureFlagEnum.enableIsVerified,
+        FeatureFlagEnum.enableListingFavoriting,
+        FeatureFlagEnum.enableListingFiltering,
         FeatureFlagEnum.enableListingOpportunity,
+        FeatureFlagEnum.enableListingPagination,
+        FeatureFlagEnum.enableMarketingStatus,
+        FeatureFlagEnum.enableNeighborhoodAmenities,
         FeatureFlagEnum.enablePartnerDemographics,
         FeatureFlagEnum.enablePartnerSettings,
-        FeatureFlagEnum.enableListingsPagination,
-        FeatureFlagEnum.enableListingFavoriting,
+        FeatureFlagEnum.enableSection8Question,
+        FeatureFlagEnum.enableSingleUseCode,
+        FeatureFlagEnum.enableUtilitiesIncluded,
+        FeatureFlagEnum.enableWaitlistAdditionalFields,
+      ],
+      languages: [
+        LanguagesEnum.en,
+        LanguagesEnum.es,
+        LanguagesEnum.zh,
+        LanguagesEnum.vi,
+        LanguagesEnum.tl,
       ],
     }),
   });
@@ -162,25 +169,31 @@ export const stagingSeed = async (
   const lakeviewJurisdiction = await prismaClient.jurisdictions.create({
     data: jurisdictionFactory('Lakeview', {
       featureFlags: [
-        FeatureFlagEnum.enableUnitGroups,
-        FeatureFlagEnum.hideCloseListingButton,
-        FeatureFlagEnum.enableHomeType,
+        FeatureFlagEnum.disableJurisdictionalAdmin,
+        FeatureFlagEnum.disableListingPreferences,
         FeatureFlagEnum.enableAccessibilityFeatures,
-        FeatureFlagEnum.enableUtilitiesIncluded,
+        FeatureFlagEnum.enableAdditionalResources,
+        FeatureFlagEnum.enableCompanyWebsite,
+        FeatureFlagEnum.enableGeocodingRadiusMethod,
+        FeatureFlagEnum.enableHomeType,
         FeatureFlagEnum.enableIsVerified,
-        FeatureFlagEnum.enableNeighborhoodAmenities,
+        FeatureFlagEnum.enableListingFavoriting,
+        FeatureFlagEnum.enableListingFiltering,
+        FeatureFlagEnum.enableListingOpportunity,
+        FeatureFlagEnum.enableListingPagination,
         FeatureFlagEnum.enableMarketingStatus,
+        FeatureFlagEnum.enableNeighborhoodAmenities,
+        FeatureFlagEnum.enablePartnerDemographics,
+        FeatureFlagEnum.enablePartnerSettings,
         FeatureFlagEnum.enableRegions,
         FeatureFlagEnum.enableSection8Question,
         FeatureFlagEnum.enableSingleUseCode,
-        FeatureFlagEnum.enableGeocodingPreferences,
-        FeatureFlagEnum.enableGeocodingRadiusMethod,
-        FeatureFlagEnum.enableListingOpportunity,
-        FeatureFlagEnum.enablePartnerDemographics,
-        FeatureFlagEnum.enablePartnerSettings,
-        FeatureFlagEnum.enableListingsPagination,
-        FeatureFlagEnum.disableJurisdictionalAdmin,
-        FeatureFlagEnum.enableListingFavoriting,
+        FeatureFlagEnum.enableUnderConstructionHome,
+        FeatureFlagEnum.enableUnitGroups,
+        FeatureFlagEnum.enableUtilitiesIncluded,
+        FeatureFlagEnum.enableWaitlistAdditionalFields,
+        FeatureFlagEnum.hideCloseListingButton,
+        FeatureFlagEnum.swapCommunityTypeWithPrograms,
       ],
     }),
   });
@@ -190,11 +203,13 @@ export const stagingSeed = async (
       featureFlags: [
         FeatureFlagEnum.enableGeocodingPreferences,
         FeatureFlagEnum.enableGeocodingRadiusMethod,
+        FeatureFlagEnum.enableListingFiltering,
         FeatureFlagEnum.enableListingOpportunity,
+        FeatureFlagEnum.enableListingPagination,
         FeatureFlagEnum.enablePartnerDemographics,
         FeatureFlagEnum.enablePartnerSettings,
-        FeatureFlagEnum.enableListingsPagination,
       ],
+      languages: [LanguagesEnum.en, LanguagesEnum.es, LanguagesEnum.vi],
     }),
   });
   // Jurisdiction with no feature flags enabled
@@ -306,7 +321,11 @@ export const stagingSeed = async (
     data: translationFactory(jurisdiction.id, jurisdiction.name),
   });
   await prismaClient.translations.create({
-    data: translationFactory(undefined, undefined, LanguagesEnum.es),
+    data: translationFactory(
+      mainJurisdiction.id,
+      mainJurisdiction.name,
+      LanguagesEnum.es,
+    ),
   });
   await prismaClient.translations.create({
     data: translationFactory(),
@@ -423,6 +442,21 @@ export const stagingSeed = async (
         },
       }),
     });
+  await prismaClient.multiselectQuestions.create({
+    data: multiselectQuestionFactory(lakeviewJurisdiction.id, {
+      multiselectQuestion: {
+        text: 'Seniors',
+        description:
+          'Are you or anyone in your household 65 years of age or older?',
+        applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
+        optOutText: 'Prefer not to say',
+        options: [
+          { text: 'Yes', exclusive: true, ordinal: 1 },
+          { text: 'No', exclusive: true, ordinal: 2 },
+        ],
+      },
+    }),
+  });
   // create pre-determined values
   const unitTypes = await unitTypeFactoryAll(prismaClient);
   await unitAccessibilityPriorityTypeFactoryAll(prismaClient);
@@ -963,7 +997,7 @@ export const stagingSeed = async (
           },
           email: `partner-user-${savedListing.name
             .toLowerCase()
-            .replace(' ', '')}@example.com`,
+            .replaceAll(' ', '-')}@example.com`,
           confirmedAt: new Date(),
           jurisdictionIds: [savedListing.jurisdictionId],
           acceptedTerms: true,

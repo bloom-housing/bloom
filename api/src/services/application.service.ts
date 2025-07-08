@@ -426,7 +426,9 @@ export class ApplicationService {
         if (params.filterType === ApplicationsFilterEnum.open)
           displayApplications.push(app);
       } else if (
-        app.listings?.lotteryStatus === LotteryStatusEnum.publishedToPublic &&
+        // NOTE: Allowing expired lotteries to show temporarily
+        (app.listings?.lotteryStatus === LotteryStatusEnum.publishedToPublic ||
+          app.listings?.lotteryStatus === LotteryStatusEnum.expired) &&
         params.includeLotteryApps
       ) {
         lottery++;
@@ -951,8 +953,13 @@ export class ApplicationService {
     });
 
     const listing = await this.prisma.listings.findFirst({
-      where: { id: dto.id },
-      include: { jurisdictions: true },
+      where: { id: dto.listings.id },
+      include: {
+        jurisdictions: true,
+        listingMultiselectQuestions: {
+          include: { multiselectQuestions: true },
+        },
+      },
     });
     const application = mapTo(Application, res);
 

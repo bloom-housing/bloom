@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useContext } from "react"
 import dayjs from "dayjs"
 import utc from "dayjs/plugin/utc"
 dayjs.extend(utc)
@@ -6,8 +6,9 @@ import { useFormContext, useWatch } from "react-hook-form"
 import { t, Field, FieldGroup, Textarea, DateField, TimeField } from "@bloom-housing/ui-components"
 import { Grid } from "@bloom-housing/ui-seeds"
 import { FormListing } from "../../../../lib/listings/formTypes"
-import { getLotteryEvent } from "@bloom-housing/shared-helpers"
+import { AuthContext, getLotteryEvent } from "@bloom-housing/shared-helpers"
 import {
+  FeatureFlagEnum,
   Listing,
   ReviewOrderTypeEnum,
   YesNoEnum,
@@ -22,6 +23,7 @@ type RankingsAndResultsProps = {
 
 const RankingsAndResults = ({ listing, disableDueDates, isAdmin }: RankingsAndResultsProps) => {
   const formMethods = useFormContext()
+  const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, setValue, watch, control, errors } = formMethods
@@ -52,9 +54,25 @@ const RankingsAndResults = ({ listing, disableDueDates, isAdmin }: RankingsAndRe
     name: "listingAvailabilityQuestion",
   })
 
+  const selectedJurisdictionId: string = useWatch({
+    control,
+    name: "jurisdictions.id",
+  })
+
+  const enableWaitlistAdditionalFields = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableWaitlistAdditionalFields,
+    selectedJurisdictionId
+  )
+
+  const enableUnitGroups = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableUnitGroups,
+    selectedJurisdictionId
+  )
+
   // Ensure the lottery fields only show when it's "available units" listing
   const showLotteryFields =
-    availabilityQuestion !== "openWaitlist" && reviewOrder === "reviewOrderLottery"
+    (availabilityQuestion !== "openWaitlist" || enableUnitGroups) &&
+    reviewOrder === "reviewOrderLottery"
 
   const yesNoRadioOptions = [
     {
@@ -73,7 +91,7 @@ const RankingsAndResults = ({ listing, disableDueDates, isAdmin }: RankingsAndRe
         heading={t("listings.sections.rankingsResultsTitle")}
         subheading={t("listings.sections.rankingsResultsSubtitle")}
       >
-        {availabilityQuestion !== "openWaitlist" && (
+        {(availabilityQuestion !== "openWaitlist" || enableUnitGroups) && (
           <Grid.Row columns={2} className={"flex items-center"}>
             <Grid.Cell>
               <p className="field-label m-4 ml-0">{t("listings.reviewOrderQuestion")}</p>
@@ -281,32 +299,53 @@ const RankingsAndResults = ({ listing, disableDueDates, isAdmin }: RankingsAndRe
                 {
                   ...yesNoRadioOptions[0],
                   id: "waitlistOpenYes",
-                  disabled: availabilityQuestion === "availableUnits",
+                  disabled: !enableUnitGroups && availabilityQuestion === "availableUnits",
                   defaultChecked: listing && listing.isWaitlistOpen === true,
                 },
-
                 {
                   ...yesNoRadioOptions[1],
                   id: "waitlistOpenNo",
-                  disabled: availabilityQuestion === "availableUnits",
+                  disabled: !enableUnitGroups && availabilityQuestion === "availableUnits",
                   defaultChecked: !listing || (listing && listing.isWaitlistOpen === false),
                 },
               ]}
             />
           </Grid.Cell>
         </Grid.Row>
-        {waitlistOpen === YesNoEnum.yes && availabilityQuestion === "openWaitlist" && (
-          <Grid.Row columns={3}>
-            <Field
-              name="waitlistOpenSpots"
-              id="waitlistOpenSpots"
-              register={register}
-              label={t("listings.waitlist.openSizeQuestion")}
-              placeholder={t("listings.waitlist.openSize")}
-              type={"number"}
-            />
-          </Grid.Row>
-        )}
+        {waitlistOpen === YesNoEnum.yes &&
+          (availabilityQuestion === "openWaitlist" || enableUnitGroups) && (
+            <Grid.Row columns={3}>
+              {enableWaitlistAdditionalFields && (
+                <>
+                  <Field
+                    name="waitlistMaxSize"
+                    id="waitlistMaxSize"
+                    register={register}
+                    label={t("listings.waitlist.maxSizeQuestion")}
+                    placeholder={t("listings.waitlist.maxSize")}
+                    type={"number"}
+                    subNote={t("t.recommended")}
+                  />
+                  <Field
+                    name="waitlistCurrentSize"
+                    id="waitlistCurrentSize"
+                    register={register}
+                    label={t("listings.waitlist.currentSizeQuestion")}
+                    placeholder={t("listings.waitlist.currentSize")}
+                    type={"number"}
+                  />
+                </>
+              )}
+              <Field
+                name="waitlistOpenSpots"
+                id="waitlistOpenSpots"
+                register={register}
+                label={t("listings.waitlist.openSizeQuestion")}
+                placeholder={t("listings.waitlist.openSize")}
+                type={"number"}
+              />
+            </Grid.Row>
+          )}
         <Grid.Row columns={3}>
           <Grid.Cell className="seeds-grid-span-2">
             <Textarea
