@@ -256,19 +256,6 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
                             : t("listings.noClosedListings")}
                         </Heading>
                       )}
-
-                      {/* {props.areFiltersActive && (
-                        <>
-                          <p>{t("listings.removeFilters")}</p>
-                          <Button
-                            className={styles["show-all-button"]}
-                            variant="primary-outlined"
-                            onClick={onShowAll}
-                          >
-                            {t("listings.showAll")}
-                          </Button>
-                        </>
-                      )} */}
                     </div>
                   )}
                 </>
