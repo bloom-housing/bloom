@@ -42,6 +42,6 @@ describe("<ListingViewSeeds>", () => {
         }}
       />
     )
-    expect(view.getAllByText("Listing Updated: Dec 31, 2019")).toBeDefined()
+    expect(view.getAllByText("Listing Updated: Dec 31, 2019")).toHaveLength(2)
   })
 })
