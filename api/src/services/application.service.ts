@@ -56,6 +56,7 @@ export const view: Partial<
         phoneNumberType: true,
         noPhone: true,
         workInRegion: true,
+        fullTimeStudent: true,
         applicantAddress: {
           select: {
             id: true,
@@ -99,6 +100,7 @@ export const view: Partial<
         sameAddress: true,
         relationship: true,
         workInRegion: true,
+        fullTimeStudent: true,
       },
     },
     accessibility: {
@@ -218,6 +220,7 @@ view.base = {
       sameAddress: true,
       relationship: true,
       workInRegion: true,
+      fullTimeStudent: true,
       householdMemberAddress: {
         select: {
           id: true,
@@ -660,6 +663,7 @@ export class ApplicationService {
                 birthYear: dto.applicant.birthYear
                   ? Number(dto.applicant.birthYear)
                   : undefined,
+                fullTimeStudent: dto.applicant.fullTimeStudent || YesNoEnum.no,
               },
             }
           : undefined,
@@ -742,6 +746,7 @@ export class ApplicationService {
                 birthYear: member.birthYear
                   ? Number(member.birthYear)
                   : undefined,
+                fullTimeStudent: member.fullTimeStudent || YesNoEnum.no,
               })),
             }
           : undefined,
@@ -843,6 +848,7 @@ export class ApplicationService {
                 birthYear: dto.applicant.birthYear
                   ? Number(dto.applicant.birthYear)
                   : undefined,
+                fullTimeStudent: dto.applicant.fullTimeStudent,
               },
             }
           : undefined,
@@ -925,6 +931,7 @@ export class ApplicationService {
                 birthYear: member.birthYear
                   ? Number(member.birthYear)
                   : undefined,
+                fullTimeStudent: member.fullTimeStudent,
               })),
             }
           : undefined,

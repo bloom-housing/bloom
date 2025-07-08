@@ -3,6 +3,7 @@ import { MultiLineAddress, t } from "@bloom-housing/ui-components"
 import { Card, FieldValue, Heading, Link } from "@bloom-housing/ui-seeds"
 import {
   getUniqueUnitTypes,
+  getUniqueUnitGroupUnitTypes,
   AddressHolder,
   cleanMultiselectString,
 } from "@bloom-housing/shared-helpers"
@@ -28,6 +29,7 @@ type FormSummaryDetailsProps = {
   hidePreferences?: boolean
   hidePrograms?: boolean
   validationError?: boolean
+  enableUnitGroups?: boolean
 }
 
 const FormSummaryDetails = ({
@@ -38,6 +40,7 @@ const FormSummaryDetails = ({
   hidePreferences = false,
   hidePrograms = false,
   validationError = false,
+  enableUnitGroups = false,
 }: FormSummaryDetailsProps) => {
   // fix for rehydration
   const [hasMounted, setHasMounted] = useState(false)
@@ -182,7 +185,9 @@ const FormSummaryDetails = ({
     )
   }
 
-  const allListingUnitTypes = getUniqueUnitTypes(listing?.units)
+  const allListingUnitTypes = enableUnitGroups
+    ? getUniqueUnitGroupUnitTypes(listing?.unitGroups)
+    : getUniqueUnitTypes(listing?.units)
 
   const preferredUnits = application.preferredUnitTypes?.map((unit) => {
     const unitDetails = allListingUnitTypes?.find(
@@ -425,7 +430,7 @@ const FormSummaryDetails = ({
         </Card.Header>
 
         <Card.Section className={styles["summary-section"]}>
-          {preferredUnits && (
+          {preferredUnits?.length > 0 && (
             <FieldValue
               testId={"app-summary-preferred-units"}
               id="householdUnitType"

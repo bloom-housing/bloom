@@ -37,6 +37,7 @@ const renderApplicationView = () =>
         },
         applicationsService: new ApplicationsService(),
         listingsService: new ListingsService(),
+        doJurisdictionsHaveFeatureFlagOn: () => false,
       }}
     >
       <ApplicationView />
