@@ -74,6 +74,13 @@ export const formatCommunityType = {
   senior55: 'Seniors 55+',
   senior62: 'Seniors 62+',
   specialNeeds: 'Special Needs',
+  developmentalDisability: 'Developmental Disability',
+  farmworkerHousing: 'Farmworker Housing',
+  housingVoucher: 'HCV/Section 8 Voucher',
+  senior: 'Seniors',
+  seniorVeterans: 'Senior Veteran',
+  veteran: 'Veteran',
+  schoolEmployee: 'School Employee',
 };
 
 @Injectable()
@@ -480,7 +487,7 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
             {
               path: 'reservedCommunityTypes.name',
               label: 'Reserved Community Types',
-              format: (val: string): string => formatCommunityType[val] || '',
+              format: (val: string): string => formatCommunityType[val] || val,
             },
           ]
         : [
