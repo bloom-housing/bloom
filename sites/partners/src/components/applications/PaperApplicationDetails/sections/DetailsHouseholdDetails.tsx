@@ -5,7 +5,13 @@ import { sortUnitTypes } from "@bloom-housing/shared-helpers"
 import { ApplicationContext } from "../../ApplicationContext"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 
-const DetailsHouseholdDetails = () => {
+type DetailsHouseholdDetailsProps = {
+  enableFullTimeStudentQuestion?: boolean
+}
+
+const DetailsHouseholdDetails = ({
+  enableFullTimeStudentQuestion,
+}: DetailsHouseholdDetailsProps) => {
   const application = useContext(ApplicationContext)
 
   const accessibilityLabels = (accessibility) => {
@@ -58,7 +64,11 @@ const DetailsHouseholdDetails = () => {
       <Grid.Row>
         <FieldValue
           id="householdStudent"
-          label={t("application.household.householdStudent.title")}
+          label={
+            enableFullTimeStudentQuestion
+              ? t("application.household.householdStudentAll.title")
+              : t("application.household.householdStudent.title")
+          }
           testId="householdStudent"
         >
           {application.householdStudent ? t("t.yes") : t("t.no")}

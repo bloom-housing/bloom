@@ -24,11 +24,11 @@ export const AdditionalFees = ({
 }: AdditionalFeesProps) => {
   return (
     <>
-      {(applicationFee ||
-        depositMin ||
-        depositMax ||
-        costsNotIncluded ||
-        utilitiesIncluded.length) && (
+      {applicationFee ||
+      depositMin ||
+      depositMax ||
+      costsNotIncluded ||
+      utilitiesIncluded.length ? (
         <Card className={"seeds-m-bs-header"}>
           <Card.Section>
             <Heading size={"lg"} priority={3} className={"seeds-m-be-header"}>
@@ -57,9 +57,16 @@ export const AdditionalFees = ({
                 </div>
               )}
             </div>
-            {costsNotIncluded && <div className={"seeds-m-be-content"}>{costsNotIncluded}</div>}
+            {costsNotIncluded && (
+              <div className={"seeds-m-b-content"}>
+                <Heading size={"md"} priority={4}>
+                  {t("listings.costsNotIncluded")}
+                </Heading>
+                {costsNotIncluded}
+              </div>
+            )}
             {!!utilitiesIncluded.length && (
-              <div className={"seeds-m-be-content"}>
+              <div className={"seeds-m-b-content"}>
                 <Heading size={"md"} priority={4}>
                   {t("listings.sections.utilities")}
                 </Heading>
@@ -68,7 +75,7 @@ export const AdditionalFees = ({
             )}
           </Card.Section>
         </Card>
-      )}
+      ) : null}
     </>
   )
 }

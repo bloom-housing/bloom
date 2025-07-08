@@ -47,6 +47,7 @@ describe("<Availability>", () => {
           status: ListingsStatusEnum.closed,
           unitsAvailable: 100,
           applicationDueDate: dueDate,
+          isWaitlistOpen: undefined,
         }}
         jurisdiction={jurisdiction}
       />
@@ -72,6 +73,7 @@ describe("<Availability>", () => {
           status: ListingsStatusEnum.active,
           unitsAvailable: 1,
           applicationDueDate: dueDate,
+          isWaitlistOpen: undefined,
         }}
         jurisdiction={jurisdiction}
       />
@@ -99,6 +101,7 @@ describe("<Availability>", () => {
           status: ListingsStatusEnum.closed,
           unitsAvailable: 100,
           applicationDueDate: dueDate,
+          isWaitlistOpen: undefined,
         }}
         jurisdiction={jurisdiction}
       />
@@ -127,6 +130,7 @@ describe("<Availability>", () => {
           status: ListingsStatusEnum.active,
           unitsAvailable: 100,
           applicationDueDate: dueDate,
+          isWaitlistOpen: undefined,
         }}
         jurisdiction={jurisdiction}
       />
@@ -255,7 +259,7 @@ describe("<Availability>", () => {
     expect(view.getByText("Availability")).toBeDefined()
     expect(view.getByText("Waitlist")).toBeDefined()
     expect(view.queryByText("Waitlist is open")).toBeNull()
-    expect(view.getByText("50 Open Waitlist Slots")).toBeDefined()
+    expect(view.getByText("50 open waitlist slots")).toBeDefined()
     expect(view.queryByText("Application Due:", { exact: false })).toBeNull()
     expect(view.queryByText("Submit an application for an open slot on the waitlist.")).toBeNull()
   })
@@ -277,7 +281,7 @@ describe("<Availability>", () => {
     expect(view.getByText("Availability")).toBeDefined()
     expect(view.getByText("Waitlist")).toBeDefined()
     expect(view.getByText("Waitlist is open")).toBeDefined()
-    expect(view.getByText("50 Open Waitlist Slots")).toBeDefined()
+    expect(view.getByText("50 open waitlist slots")).toBeDefined()
     expect(view.queryByText("Application Due:", { exact: false })).toBeNull()
     expect(view.getByText("Applications Open")).toBeDefined()
     expect(view.getByText("Submit an application for an open slot on the waitlist.")).toBeDefined()

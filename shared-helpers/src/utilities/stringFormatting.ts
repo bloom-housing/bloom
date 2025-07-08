@@ -9,8 +9,8 @@ export const getTimeRangeString = (start: Date, end: Date) => {
 }
 
 export const getCurrencyRange = (min: number | null, max: number | null) => {
-  const minString = min?.toString()
-  const maxString = max?.toString()
+  const minString = min || min === 0 ? min?.toString() : null
+  const maxString = max || max === 0 ? max?.toString() : null
   if (!!minString && !!maxString && minString !== maxString) {
     return `$${min} – $${max}`
   }
