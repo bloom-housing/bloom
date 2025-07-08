@@ -153,7 +153,8 @@ export default function ApplicationsList() {
 
                 <DetailsHouseholdDetails
                   enableFullTimeStudentQuestion={enableFullTimeStudentQuestion}
-                enableAdaOtherOption={enableAdaOtherOption} />
+                  enableAdaOtherOption={enableAdaOtherOption}
+                />
 
                 <DetailsMultiselectQuestions
                   listingId={application?.listings?.id}

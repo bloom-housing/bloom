@@ -10,7 +10,8 @@ type DetailsHouseholdDetailsProps = {
   enableFullTimeStudentQuestion?: boolean
 }
 
-const DetailsHouseholdDetails = ({ enableAdaOtherOption, enableFullTimeStudentQuestion }: DetailsHouseholdDetailsProps{
+const DetailsHouseholdDetails = ({
+  enableAdaOtherOption,
   enableFullTimeStudentQuestion,
 }: DetailsHouseholdDetailsProps) => {
   const application = useContext(ApplicationContext)
