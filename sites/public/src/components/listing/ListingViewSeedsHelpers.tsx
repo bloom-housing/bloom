@@ -225,11 +225,31 @@ export const getHmiData = (listing: Listing): StandardTableData => {
   })
 }
 
+const getCurrencyFromArgumentString = (content: string) => {
+  if (typeof content === "string") {
+    const paramIndex = content.indexOf(":")
+    if (paramIndex >= 0) {
+      return content.substring(paramIndex).replace(/-/g, " - ").replace(/:/g, "")
+    }
+  }
+  return content
+}
+
 export const getStackedHmiData = (listing: Listing) => {
   return (
     listing?.unitsSummarized?.hmi?.rows.map((row) => {
       const amiRows = Object.keys(row).reduce((acc, rowContent) => {
-        acc[rowContent] = { cellText: getTranslationWithArguments(row[rowContent].toString()) }
+        const content = getCurrencyFromArgumentString(row[rowContent])
+        console.log(rowContent)
+        acc[rowContent] = {
+          cellText: Number.isInteger(row[rowContent]) ? row[rowContent] : content,
+          cellSubText: rowContent.includes("Month")
+            ? t("t.perMonth")
+            : rowContent.includes("Year") ||
+              (typeof row[rowContent] === "string" && row[rowContent].includes("annual"))
+            ? t("t.perYear")
+            : null,
+        }
         return acc
       }, {})
 
