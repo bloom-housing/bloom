@@ -3,14 +3,13 @@ import { Address } from '../dtos/addresses/address.dto';
 import { ApplicationFlaggedSet } from '../dtos/application-flagged-sets/application-flagged-set.dto';
 import { ApplicationLotteryPosition } from '../dtos/applications/application-lottery-position.dto';
 import { ApplicationMultiselectQuestion } from '../dtos/applications/application-multiselect-question.dto';
+import { FeatureFlagEnum } from '../enums/feature-flags/feature-flags-enum';
 import { MultiselectQuestion } from '../dtos/multiselect-questions/multiselect-question.dto';
 import { UnitType } from '../dtos/unit-types/unit-type.dto';
 import { CsvHeader } from '../types/CsvExportInterface';
 import { formatLocalDate } from '../utilities/format-local-date';
 import { User } from 'src/dtos/users/user.dto';
 import { doAnyJurisdictionHaveFeatureFlagSet } from './feature-flag-utilities';
-import { FeatureFlagEnum } from 'src/enums/feature-flags/feature-flags-enum';
-
 /**
  *
  * @param maxHouseholdMembers the max number of household members on an application
