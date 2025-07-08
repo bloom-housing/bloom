@@ -239,6 +239,7 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
                           subtitle={t("listings.removeFilters")}
                           variant="block"
                           iconSymbol="listBullet"
+                          className={styles["empty-state-card"]}
                           iconClass={styles["empty-state-icon"]}
                           headingPriority={2}
                         >

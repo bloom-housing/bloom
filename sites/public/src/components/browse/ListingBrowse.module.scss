@@ -45,6 +45,14 @@
       padding: var(--seeds-spacer-content);
     }
 
+    &-card {
+      h2 {
+        font-family: var(--seeds-font-alt-sans);
+        font-weight: var(--seeds-font-weight-bold);
+        font-size: var(--seeds-font-size-2xl);
+      }
+    }
+
     &-icon {
       color: var(--seeds-color-primary);
       background-color: var(--seeds-bg-color-surface-primary);
