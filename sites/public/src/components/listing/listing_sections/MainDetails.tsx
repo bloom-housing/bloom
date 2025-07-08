@@ -19,6 +19,7 @@ import FavoriteButton from "../../shared/FavoriteButton"
 import { Availability } from "./Availability"
 import listingStyles from "../ListingViewSeeds.module.scss"
 import styles from "./MainDetails.module.scss"
+import { isFeatureFlagOn } from "../../../lib/helpers"
 
 type MainDetailsProps = {
   listing: Listing
@@ -40,7 +41,8 @@ export const getListingTags = (
   hideReviewTags?: boolean,
   hideHomeTypeTag?: boolean,
   hideAccessibilityTag?: boolean,
-  enableIsVerified?: boolean
+  enableIsVerified?: boolean,
+  swapCommunityTypeWithPrograms?: boolean
 ): ListingTag[] => {
   const listingTags: ListingTag[] = []
 
@@ -59,7 +61,7 @@ export const getListingTags = (
     })
   }
 
-  if (listing.reservedCommunityTypes) {
+  if (!swapCommunityTypeWithPrograms && listing.reservedCommunityTypes) {
     listingTags.push({
       title: t(`listings.reservedCommunityTypes.${listing.reservedCommunityTypes.name}`),
       variant: "highlight-warm",
@@ -109,12 +111,6 @@ export const MainDetails = ({
   showHomeType,
 }: MainDetailsProps) => {
   if (!listing) return
-  const enableIsVerified = jurisdiction.featureFlags.find(
-    (flag) => flag.name === FeatureFlagEnum.enableIsVerified
-  )?.active
-  const enableAccessibilityFeatures = jurisdiction.featureFlags.find(
-    (flag) => flag.name === FeatureFlagEnum.enableAccessibilityFeatures
-  )?.active
 
   const googleMapsHref =
     "https://www.google.com/maps/place/" + oneLineAddress(listing.listingsBuildingAddress)
@@ -122,8 +118,9 @@ export const MainDetails = ({
     listing,
     true,
     !showHomeType,
-    !enableAccessibilityFeatures,
-    enableIsVerified
+    !isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableAccessibilityFeatures),
+    isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableIsVerified),
+    isFeatureFlagOn(jurisdiction, FeatureFlagEnum.swapCommunityTypeWithPrograms)
   )
   return (
     <div>

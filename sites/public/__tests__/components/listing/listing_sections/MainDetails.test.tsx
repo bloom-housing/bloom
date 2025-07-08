@@ -3,7 +3,10 @@ import { render, cleanup } from "@testing-library/react"
 import { listing, jurisdiction } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import { MainDetails } from "../../../../src/components/listing/listing_sections/MainDetails"
 import { oneLineAddress } from "@bloom-housing/shared-helpers"
-import { ReviewOrderTypeEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  FeatureFlagEnum,
+  ReviewOrderTypeEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 afterEach(cleanup)
 
@@ -52,5 +55,28 @@ describe("<MainDetails>", () => {
     )
     expect(getByTestId("listing-tags")).toBeDefined()
     expect(getAllByText("Veteran").length).toBeGreaterThan(0)
+  })
+  it("hides reserved tag when swapCommunityTypeWithPrograms is true", () => {
+    const view = render(
+      <MainDetails
+        listing={listing}
+        jurisdiction={{
+          ...jurisdiction,
+          featureFlags: [
+            ...jurisdiction.featureFlags,
+            {
+              name: FeatureFlagEnum.swapCommunityTypeWithPrograms,
+              id: "id",
+              createdAt: new Date(),
+              updatedAt: new Date(),
+              active: true,
+              description: "",
+              jurisdictions: [],
+            },
+          ],
+        }}
+      />
+    )
+    expect(view.queryByText("Veteran")).toBeNull()
   })
 })
