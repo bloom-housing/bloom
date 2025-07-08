@@ -1,5 +1,5 @@
 import React from "react"
-import { fireEvent, screen } from "@testing-library/dom"
+import { screen } from "@testing-library/dom"
 import {
   FilterAvailabilityEnum,
   HomeTypeEnum,
