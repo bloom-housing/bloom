@@ -60,7 +60,7 @@ export interface RentSectionProps {
   filterState: FilterData
   setError: UseFormMethods["setError"]
   clearErrors: UseFormMethods["clearErrors"]
-  errors?: UseFormMethods["formState"]["errors"]
+  errors: UseFormMethods["formState"]["errors"]
 }
 
 export interface SearchSectionProps {
@@ -225,8 +225,8 @@ export const RentSection = (props: RentSectionProps) => {
               getValues={props.getValues}
               setValue={props.setValue}
               defaultValue={props.filterState?.[ListingFilterKeys.monthlyRent]?.minRent}
-              error={!!props.errors?.[ListingFilterKeys.monthlyRent]?.minRent}
-              errorMessage={props.errors?.[ListingFilterKeys.monthlyRent]?.minRent?.message}
+              error={!!props.errors[ListingFilterKeys.monthlyRent]?.minRent}
+              errorMessage={props.errors[ListingFilterKeys.monthlyRent]?.minRent?.message}
               inputProps={{
                 onBlur: () => {
                   validateRentValues()
@@ -245,8 +245,8 @@ export const RentSection = (props: RentSectionProps) => {
               getValues={props.getValues}
               setValue={props.setValue}
               defaultValue={props.filterState?.[ListingFilterKeys.monthlyRent]?.maxRent}
-              error={!!props.errors?.[ListingFilterKeys.monthlyRent]?.maxRent}
-              errorMessage={props.errors?.[ListingFilterKeys.monthlyRent]?.maxRent?.message}
+              error={!!props.errors[ListingFilterKeys.monthlyRent]?.maxRent}
+              errorMessage={props.errors[ListingFilterKeys.monthlyRent]?.maxRent?.message}
               inputProps={{
                 onBlur: () => {
                   validateRentValues()
