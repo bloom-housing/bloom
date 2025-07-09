@@ -224,9 +224,7 @@ export const RentSection = (props: RentSectionProps) => {
               error={!!props.errors[ListingFilterKeys.monthlyRent]?.minRent}
               errorMessage={props.errors[ListingFilterKeys.monthlyRent]?.minRent?.message}
               inputProps={{
-                onBlur: () => {
-                  validateRentValues()
-                },
+                onBlur: validateRentValues,
               }}
             />
           </Grid.Cell>
@@ -244,9 +242,7 @@ export const RentSection = (props: RentSectionProps) => {
               error={!!props.errors[ListingFilterKeys.monthlyRent]?.maxRent}
               errorMessage={props.errors[ListingFilterKeys.monthlyRent]?.maxRent?.message}
               inputProps={{
-                onBlur: () => {
-                  validateRentValues()
-                },
+                onBlur: validateRentValues,
               }}
             />
           </Grid.Cell>
