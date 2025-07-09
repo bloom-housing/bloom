@@ -239,17 +239,12 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
                           subtitle={t("listings.removeFilters")}
                           variant="block"
                           iconSymbol="listBullet"
-                          className={styles["empty-state-card"]}
                           iconClass={styles["empty-state-icon"]}
                           headingPriority={2}
                           altHeading
                         >
                           <Card.Section className={styles["button-wrapper"]}>
-                            <Button
-                              className={styles["show-all-button"]}
-                              variant="primary-outlined"
-                              onClick={onShowAll}
-                            >
+                            <Button variant="primary-outlined" onClick={onShowAll}>
                               {t("listings.showAll")}
                             </Button>
                           </Card.Section>
