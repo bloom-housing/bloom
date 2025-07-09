@@ -77,6 +77,7 @@ export class Member implements HouseholdMemberUpdate {
   sameAddress?: YesNoEnum
   relationship?: HouseholdMemberRelationship
   workInRegion?: YesNoEnum
+  fullTimeStudent?: YesNoEnum
 }
 
 const ApplicationMember = () => {

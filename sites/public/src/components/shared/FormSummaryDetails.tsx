@@ -301,7 +301,9 @@ const FormSummaryDetails = ({
             label={t("application.review.confirmation.fullTimeStudent")}
             className={styles["summary-value"]}
           >
-            {t(`t.${application.applicant.fullTimeStudent}`)}
+            {application.applicant.fullTimeStudent
+              ? t(`t.${application.applicant.fullTimeStudent}`)
+              : t("t.n/a")}
           </FieldValue>
         )}
       </Card.Section>
@@ -422,7 +424,7 @@ const FormSummaryDetails = ({
                     label={t("application.review.confirmation.fullTimeStudent")}
                     className={styles["summary-value"]}
                   >
-                    {t(`t.${member.fullTimeStudent}`)}
+                    {member.fullTimeStudent ? t(`t.${member.fullTimeStudent}`) : t("t.n/a")}
                   </FieldValue>
                 )}
               </div>
