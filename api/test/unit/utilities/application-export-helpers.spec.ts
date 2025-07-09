@@ -12,6 +12,7 @@ import {
   multiselectQuestionFormat,
   unitTypeToReadable,
 } from '../../../src/utilities/application-export-helpers';
+import { User } from 'src/dtos/users/user.dto';
 
 describe('Testing application export helpers', () => {
   const address = {
@@ -359,7 +360,19 @@ describe('Testing application export helpers', () => {
 
   describe('Testing getExportHeaders', () => {
     it('tests getCsvHeaders with no houshold members, multiselect questions or demographics', async () => {
-      const headers = await getExportHeaders(0, [], process.env.TIME_ZONE);
+      const requestingUser = {
+        firstName: 'requesting fName',
+        lastName: 'requesting lName',
+        email: 'requestingUser@email.com',
+        jurisdictions: [{ id: 'juris id' }],
+      } as unknown as User;
+
+      const headers = await getExportHeaders(
+        0,
+        [],
+        process.env.TIME_ZONE,
+        requestingUser,
+      );
       const testHeaders = [
         ...csvHeaders,
         {
@@ -382,7 +395,20 @@ describe('Testing application export helpers', () => {
     });
 
     it('tests getCsvHeaders with household members and no multiselect questions or demographics', async () => {
-      const headers = await getExportHeaders(3, [], process.env.TIME_ZONE);
+      const requestingUser = {
+        firstName: 'requesting fName',
+        lastName: 'requesting lName',
+        email: 'requestingUser@email.com',
+        jurisdictions: [{ id: 'juris id' }],
+      } as unknown as User;
+
+      const headers = await getExportHeaders(
+        3,
+        [],
+        process.env.TIME_ZONE,
+        requestingUser,
+      );
+
       const testHeaders = [
         ...csvHeaders,
         {

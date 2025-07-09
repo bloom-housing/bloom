@@ -225,6 +225,7 @@ export const mockCreateApplicationData = (
       mobility: false,
       vision: false,
       hearing: false,
+      other: false,
     },
     alternateContact: {
       type: AlternateContactRelationship.other,
@@ -360,6 +361,7 @@ const detailView = {
       mobility: true,
       vision: true,
       hearing: true,
+      other: true,
     },
   },
   applicationsMailingAddress: {
@@ -554,6 +556,7 @@ const baseView = {
       mobility: true,
       vision: true,
       hearing: true,
+      other: true,
     },
   },
   applicationsMailingAddress: {
@@ -1569,6 +1572,7 @@ describe('Testing application service', () => {
             mobility: false,
             vision: false,
             hearing: false,
+            other: false,
           },
         },
         alternateContact: {
@@ -1881,6 +1885,7 @@ describe('Testing application service', () => {
             mobility: false,
             vision: false,
             hearing: false,
+            other: false,
           },
         },
         alternateContact: {
@@ -2113,6 +2118,7 @@ describe('Testing application service', () => {
             mobility: false,
             vision: false,
             hearing: false,
+            other: false,
           },
         },
         alternateContact: {
@@ -2375,6 +2381,7 @@ describe('Testing application service', () => {
             mobility: true,
             vision: true,
             hearing: true,
+            other: true,
           },
         },
         applicationsMailingAddress: {

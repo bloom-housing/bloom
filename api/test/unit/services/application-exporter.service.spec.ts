@@ -118,7 +118,7 @@ describe('Testing application export service', () => {
           listingId: randomUUID(),
           includeDemographics: false,
         } as unknown as ApplicationCsvQueryParams,
-        requestingUser.id,
+        requestingUser,
       );
 
       const headerRow =
@@ -176,7 +176,7 @@ describe('Testing application export service', () => {
           listingId: 'test',
           includeDemographics: true,
         } as unknown as ApplicationCsvQueryParams,
-        requestingUser.id,
+        requestingUser,
       );
 
       const headerRow =
@@ -243,7 +243,7 @@ describe('Testing application export service', () => {
         .mockReturnValue('Studio');
       const exportResponse = await service.csvExport(
         { listingId: randomUUID() } as unknown as ApplicationCsvQueryParams,
-        requestingUser.id,
+        requestingUser,
       );
 
       const mockedStream = new PassThrough();
@@ -308,7 +308,7 @@ describe('Testing application export service', () => {
           listingId: randomUUID(),
           timeZone: 'America/New_York',
         } as unknown as ApplicationCsvQueryParams,
-        requestingUser.id,
+        requestingUser,
       );
 
       const mockedStream = new PassThrough();
@@ -376,7 +376,7 @@ describe('Testing application export service', () => {
           listingId: randomUUID(),
           timeZone: 'America/New_York',
         } as unknown as ApplicationCsvQueryParams,
-        requestingUser.id,
+        requestingUser,
       );
 
       const mockedStream = new PassThrough();
@@ -452,7 +452,19 @@ describe('Testing application export service', () => {
 
   describe('populateDataForEachHeader', () => {
     it('should populate the data for each header and output a string', async () => {
-      const headers = await getExportHeaders(0, [], 'America/Los_Angeles');
+      const requestingUser = {
+        firstName: 'requesting fName',
+        lastName: 'requesting lName',
+        email: 'requestingUser@email.com',
+        jurisdictions: [{ id: 'juris id' }],
+      } as unknown as User;
+
+      const headers = await getExportHeaders(
+        0,
+        [],
+        'America/Los_Angeles',
+        requestingUser,
+      );
       const id = randomUUID();
       const application = mockApplication({
         date: new Date('December 5, 2024 03:24:00 PST'),
@@ -469,7 +481,19 @@ describe('Testing application export service', () => {
       );
     });
     it('should populate the data for each header and output a string', async () => {
-      const headers = await getExportHeaders(0, [], 'America/Los_Angeles');
+      const requestingUser = {
+        firstName: 'requesting fName',
+        lastName: 'requesting lName',
+        email: 'requestingUser@email.com',
+        jurisdictions: [{ id: 'juris id' }],
+      } as unknown as User;
+
+      const headers = await getExportHeaders(
+        0,
+        [],
+        'America/Los_Angeles',
+        requestingUser,
+      );
       const id = randomUUID();
       const application = mockApplication({
         date: new Date('December 5, 2024 03:24:00 PST'),
