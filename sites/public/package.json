@@ -31,7 +31,7 @@
   "dependencies": {
     "@bloom-housing/doorway-ui-components": "^1.0.0",
     "@bloom-housing/shared-helpers": "^7.7.1",
-    "@bloom-housing/ui-components": "12.7.2",
+    "@bloom-housing/ui-components": "12.7.3",
     "@bloom-housing/ui-seeds": "1.22.1",
     "@googlemaps/markerclusterer": "^2.5.3",
     "@heroicons/react": "^2.1.1",
