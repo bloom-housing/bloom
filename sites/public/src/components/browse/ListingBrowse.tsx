@@ -191,7 +191,7 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
                       variant={"primary-outlined"}
                     >
                       {t("t.filter")}
-                      {numberOfFilters && <span>{numberOfFilters}</span>}
+                      {!!numberOfFilters && <span>{numberOfFilters}</span>}
                     </Button>
                   </span>
                 )}
