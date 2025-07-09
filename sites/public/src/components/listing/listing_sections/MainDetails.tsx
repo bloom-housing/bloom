@@ -64,19 +64,20 @@ export const getListingTags = (
   }
 
   if (swapCommunityTypeWithPrograms) {
-    listing.listingMultiselectQuestions.forEach((question) => {
-      if (
-        question.multiselectQuestions.applicationSection ===
-        MultiselectQuestionsApplicationSectionEnum.programs
-      ) {
+    listing.listingMultiselectQuestions
+      .filter(
+        (question) =>
+          question.multiselectQuestions.applicationSection ===
+          MultiselectQuestionsApplicationSectionEnum.programs
+      )
+      .forEach((question) => {
         listingTags.push({
           title: translatePrograms
             ? t(`listingFilters.program.${question.multiselectQuestions.text}`)
             : question.multiselectQuestions.text,
           variant: "highlight-warm",
         })
-      }
-    })
+      })
   } else if (listing.reservedCommunityTypes) {
     listingTags.push({
       title: t(`listings.reservedCommunityTypes.${listing.reservedCommunityTypes.name}`),
