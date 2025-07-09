@@ -33,6 +33,7 @@ import { AlternateContactRelationship } from '../../../src/enums/applications/al
 import { HouseholdMemberRelationship } from '../../../src/enums/applications/household-member-relationship-enum';
 import { PublicAppsViewQueryParams } from '../../../src/dtos/applications/public-apps-view-params.dto';
 import { ApplicationsFilterEnum } from '../../../src/enums/applications/filter-enum';
+import { FeatureFlagEnum } from '../../../src/enums/feature-flags/feature-flags-enum';
 
 export const mockApplication = (options: {
   date: Date;
@@ -732,7 +733,19 @@ describe('Testing application service', () => {
     firstName: 'requesting fName',
     lastName: 'requesting lName',
     email: 'requestingUser@email.com',
-    jurisdictions: [{ id: 'juris id' }],
+    jurisdictions: [
+      {
+        id: 'juris id',
+        featureFlags: [
+          {
+            name: FeatureFlagEnum.enableAdaOtherOption,
+            description: '',
+            active: true,
+            jurisdictions: [],
+          },
+        ],
+      },
+    ],
   } as unknown as User;
   const date = new Date();
 

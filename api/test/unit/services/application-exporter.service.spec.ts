@@ -74,7 +74,19 @@ describe('Testing application export service', () => {
         firstName: 'requesting fName',
         lastName: 'requesting lName',
         email: 'requestingUser@email.com',
-        jurisdictions: [{ id: 'juris id' }],
+        jurisdictions: [
+          {
+            id: 'juris id',
+            featureFlags: [
+              {
+                name: FeatureFlagEnum.enableAdaOtherOption,
+                description: '',
+                active: true,
+                jurisdictions: [],
+              },
+            ],
+          },
+        ],
       } as unknown as User;
 
       const applications = mockApplicationSet(5, new Date(), 1);
@@ -148,7 +160,19 @@ describe('Testing application export service', () => {
         firstName: 'requesting fName',
         lastName: 'requesting lName',
         email: 'requestingUser@email.com',
-        jurisdictions: [{ id: 'juris id' }],
+        jurisdictions: [
+          {
+            id: 'juris id',
+            featureFlags: [
+              {
+                name: FeatureFlagEnum.enableAdaOtherOption,
+                description: '',
+                active: true,
+                jurisdictions: [],
+              },
+            ],
+          },
+        ],
       } as unknown as User;
 
       const applications = mockApplicationSet(3, new Date());
@@ -208,7 +232,19 @@ describe('Testing application export service', () => {
         firstName: 'requesting fName',
         lastName: 'requesting lName',
         email: 'requestingUser@email.com',
-        jurisdictions: [{ id: 'juris id' }],
+        jurisdictions: [
+          {
+            id: 'juris id',
+            featureFlags: [
+              {
+                name: FeatureFlagEnum.enableAdaOtherOption,
+                description: '',
+                active: true,
+                jurisdictions: [],
+              },
+            ],
+          },
+        ],
       } as unknown as User;
 
       const applications = mockApplicationSet(5, new Date());
@@ -270,7 +306,19 @@ describe('Testing application export service', () => {
         firstName: 'requesting fName',
         lastName: 'requesting lName',
         email: 'requestingUser@email.com',
-        jurisdictions: [{ id: 'juris id' }],
+        jurisdictions: [
+          {
+            id: 'juris id',
+            featureFlags: [
+              {
+                name: FeatureFlagEnum.enableAdaOtherOption,
+                description: '',
+                active: true,
+                jurisdictions: [],
+              },
+            ],
+          },
+        ],
       } as unknown as User;
 
       const applications = mockApplicationSet(5, new Date());
@@ -335,7 +383,19 @@ describe('Testing application export service', () => {
         firstName: 'requesting fName',
         lastName: 'requesting lName',
         email: 'requestingUser@email.com',
-        jurisdictions: [{ id: 'juris id' }],
+        jurisdictions: [
+          {
+            id: 'juris id',
+            featureFlags: [
+              {
+                name: FeatureFlagEnum.enableAdaOtherOption,
+                description: '',
+                active: true,
+                jurisdictions: [],
+              },
+            ],
+          },
+        ],
       } as unknown as User;
 
       const applications = mockApplicationSet(5, new Date());
@@ -456,7 +516,19 @@ describe('Testing application export service', () => {
         firstName: 'requesting fName',
         lastName: 'requesting lName',
         email: 'requestingUser@email.com',
-        jurisdictions: [{ id: 'juris id' }],
+        jurisdictions: [
+          {
+            id: 'juris id',
+            featureFlags: [
+              {
+                name: FeatureFlagEnum.enableAdaOtherOption,
+                description: '',
+                active: true,
+                jurisdictions: [],
+              },
+            ],
+          },
+        ],
       } as unknown as User;
 
       const headers = await getExportHeaders(
@@ -485,7 +557,19 @@ describe('Testing application export service', () => {
         firstName: 'requesting fName',
         lastName: 'requesting lName',
         email: 'requestingUser@email.com',
-        jurisdictions: [{ id: 'juris id' }],
+        jurisdictions: [
+          {
+            id: 'juris id',
+            featureFlags: [
+              {
+                name: FeatureFlagEnum.enableAdaOtherOption,
+                description: '',
+                active: true,
+                jurisdictions: [],
+              },
+            ],
+          },
+        ],
       } as unknown as User;
 
       const headers = await getExportHeaders(
