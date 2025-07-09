@@ -51,7 +51,6 @@
       h2 {
         font-family: var(--seeds-font-alt-sans);
         font-weight: var(--seeds-font-weight-bold);
-        font-size: var(--seeds-font-size-2xl);
       }
     }
 
@@ -68,6 +67,10 @@
 
     p {
       color: var(--seeds-text-color-light);
+    }
+
+    .button-wrapper {
+      padding-block-start: var(--seeds-s6);
     }
 
     .show-all-button {

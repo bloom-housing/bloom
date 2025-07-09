@@ -242,8 +242,9 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
                           className={styles["empty-state-card"]}
                           iconClass={styles["empty-state-icon"]}
                           headingPriority={2}
+                          altHeading
                         >
-                          <Card.Section>
+                          <Card.Section className={styles["button-wrapper"]}>
                             <Button
                               className={styles["show-all-button"]}
                               variant="primary-outlined"
