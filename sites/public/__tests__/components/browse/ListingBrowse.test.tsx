@@ -81,7 +81,7 @@ describe("<ListingBrowse>", () => {
     expect(
       screen.getByRole("heading", {
         level: 2,
-        name: /no listings currently have open applications/i,
+        name: /no matching listings with open applications/i,
       })
     ).toBeInTheDocument()
     expect(
@@ -112,7 +112,7 @@ describe("<ListingBrowse>", () => {
     expect(
       screen.getByRole("heading", {
         level: 2,
-        name: /no listings currently have closed applications/i,
+        name: /no matching listings with closed applications/i,
       })
     ).toBeInTheDocument()
     expect(
