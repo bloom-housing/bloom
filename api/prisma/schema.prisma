@@ -206,6 +206,8 @@ model Applications {
   markedAsDuplicate            Boolean                       @default(false) @map("marked_as_duplicate")
   confirmationCode             String                        @map("confirmation_code")
   reviewStatus                 ApplicationReviewStatusEnum   @default(pending) @map("review_status")
+  // Used to denote when an application was transferred from another jurisdiction
+  wasCreatedExternally         Boolean                       @default(false) @map("was_created_externally")
   userId                       String?                       @map("user_id") @db.Uuid
   listingId                    String?                       @map("listing_id") @db.Uuid
   applicantId                  String?                       @unique() @map("applicant_id") @db.Uuid
@@ -578,6 +580,8 @@ model Listings {
   includeCommunityDisclaimer            Boolean?                      @map("include_community_disclaimer")
   communityDisclaimerTitle              String?                       @map("community_disclaimer_title")
   communityDisclaimerDescription        String?                       @map("community_disclaimer_description")
+  // Used to denote when a listing was transferred from another jurisdiction
+  wasCreatedExternally                  Boolean                       @default(false) @map("was_created_externally")
   // START DETROIT SPECIFIC
   hrdId                                 String?                       @map("hrd_id")
   ownerCompany                          String?                       @map("owner_company")
@@ -666,6 +670,8 @@ model MultiselectQuestions {
   options                     Json?
   optOutText                  String?                                    @map("opt_out_text")
   hideFromListing             Boolean?                                   @map("hide_from_listing")
+  // Used to denote when a multiselect question was transferred from another jurisdiction
+  wasCreatedExternally        Boolean                                    @default(false) @map("was_created_externally")
   applicationSection          MultiselectQuestionsApplicationSectionEnum @map("application_section")
   jurisdictions               Jurisdictions[]
   listings                    ListingMultiselectQuestions[]
