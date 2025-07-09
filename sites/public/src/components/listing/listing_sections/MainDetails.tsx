@@ -43,8 +43,7 @@ export const getListingTags = (
   hideHomeTypeTag?: boolean,
   hideAccessibilityTag?: boolean,
   enableIsVerified?: boolean,
-  swapCommunityTypeWithPrograms?: boolean,
-  translatePrograms?: boolean
+  swapCommunityTypeWithPrograms?: boolean
 ): ListingTag[] => {
   const listingTags: ListingTag[] = []
 
@@ -72,9 +71,9 @@ export const getListingTags = (
       )
       .forEach((question) => {
         listingTags.push({
-          title: translatePrograms
-            ? t(`listingFilters.program.${question.multiselectQuestions.text}`)
-            : question.multiselectQuestions.text,
+          title: question.multiselectQuestions.untranslatedText
+            ? t(`listingFilters.program.${question.multiselectQuestions.untranslatedText}`)
+            : t(`listingFilters.program.${question.multiselectQuestions.text}`),
           variant: "highlight-warm",
         })
       })
