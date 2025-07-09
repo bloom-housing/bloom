@@ -1870,13 +1870,6 @@
     core-js-pure "^3.0.0"
     regenerator-runtime "^0.13.4"
 
-"@babel/runtime-corejs3@^7.24.4":
-  version "7.27.4"
-  resolved "https://registry.yarnpkg.com/@babel/runtime-corejs3/-/runtime-corejs3-7.27.4.tgz#7bfea784d23d8747d94025b2c8e9bd0f35e30ff9"
-  integrity sha512-H7QhL0ucCGOObsUETNbB2PuzF4gAvN8p32P6r91bX7M/hk4bx+3yz2hTwHL9d/Efzwu1upeb4/cd7oSxCzup3w==
-  dependencies:
-    core-js-pure "^3.30.2"
-
 "@babel/runtime@^7.0.0", "@babel/runtime@^7.12.0", "@babel/runtime@^7.12.13", "@babel/runtime@^7.15.4", "@babel/runtime@^7.2.0", "@babel/runtime@^7.5.5", "@babel/runtime@^7.8.7", "@babel/runtime@^7.9.2":
   version "7.22.5"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.22.5.tgz#8564dd588182ce0047d55d7a75e93921107b57ec"
@@ -2032,10 +2025,10 @@
   resolved "https://registry.npmjs.org/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@bloom-housing/ui-components@12.7.2":
-  version "12.7.2"
-  resolved "https://registry.yarnpkg.com/@bloom-housing/ui-components/-/ui-components-12.7.2.tgz#70c737f6640c9d8be42c5fa91488741f7dc13304"
-  integrity sha512-ks7hloF2tv/NJ6RPxlnQCardou0N2phxGMRPTUM6a1Xdl5bB5GmtDo9aa57smnhl8C8Vb9FQAtibyHxf1odLnA==
+"@bloom-housing/ui-components@12.7.3":
+  version "12.7.3"
+  resolved "https://registry.yarnpkg.com/@bloom-housing/ui-components/-/ui-components-12.7.3.tgz#08f50949428c66cc09202837ea4ad22996fb0d1c"
+  integrity sha512-4CWpXXV5smfx/W5QAh5bAHYPSfjNaleYtKX0wop9Dnu51V/7vOUz9Gh3E0JCz6fxe1TBlGTkxONWQJllt0LJ0A==
   dependencies:
     "@fortawesome/fontawesome-svg-core" "^6.1.1"
     "@fortawesome/free-regular-svg-icons" "^6.1.1"
@@ -2058,11 +2051,11 @@
     react-dropzone "^11.3.2"
     react-focus-lock "^2.9.4"
     react-hook-form "^6.15.5"
-    react-imask "^7.6.1"
     react-map-gl "^6.1.16"
     react-media "^1.10.0"
     react-remove-scroll "2.5.4"
     react-tabs "^3.2.2"
+    react-text-mask "^5.5.0"
     react-transition-group "^4.4.1"
     tailwindcss "2.2.10"
     tailwindcss-rtl "^0.9.0"
@@ -6038,11 +6031,6 @@ core-js-pure@^3.0.0:
   resolved "https://registry.npmjs.org/core-js-pure/-/core-js-pure-3.8.3.tgz"
   integrity sha512-V5qQZVAr9K0xu7jXg1M7qTEwuxUgqr7dUOezGaNa7i+Xn9oXAU/d1fzqD9ObuwpVQOaorO5s70ckyi1woP9lVA==
 
-core-js-pure@^3.30.2:
-  version "3.42.0"
-  resolved "https://registry.yarnpkg.com/core-js-pure/-/core-js-pure-3.42.0.tgz#e86c45a7f3bdcb608823e872f73d1ad9ddf0531d"
-  integrity sha512-007bM04u91fF4kMgwom2I5cQxAFIy8jVulgr9eozILl/SZE53QOqnW/+vviC+wQWLv+AunBG+8Q0TLoeSsSxRQ==
-
 core-util-is@1.0.2:
   version "1.0.2"
   resolved "https://registry.npmjs.org/core-util-is/-/core-util-is-1.0.2.tgz"
@@ -8889,13 +8877,6 @@ image-meta@^0.1.1:
   version "0.1.1"
   resolved "https://registry.npmjs.org/image-meta/-/image-meta-0.1.1.tgz"
   integrity sha512-+oXiHwOEPr1IE5zY0tcBLED/CYcre15J4nwL50x3o0jxWqEkyjrusiKP3YSU+tr9fvJp33ZcP5Gpj2295g3aEw==
-
-imask@^7.6.1:
-  version "7.6.1"
-  resolved "https://registry.yarnpkg.com/imask/-/imask-7.6.1.tgz#04fa4693bf47a4a71bbf7325408e0d058a74dcad"
-  integrity sha512-sJlIFM7eathUEMChTh9Mrfw/IgiWgJqBKq2VNbyXvBZ7ev/IlO6/KQTKlV/Fm+viQMLrFLG/zCuudrLIwgK2dg==
-  dependencies:
-    "@babel/runtime-corejs3" "^7.24.4"
 
 immediate@~3.0.5:
   version "3.0.6"
@@ -12321,7 +12302,7 @@ prompts@^2.0.1:
     kleur "^3.0.3"
     sisteransi "^1.0.4"
 
-prop-types@^15.5.0, prop-types@^15.5.10, prop-types@^15.6.2, prop-types@^15.7.2, prop-types@^15.8.1:
+prop-types@^15.5.0, prop-types@^15.5.10, prop-types@^15.5.6, prop-types@^15.6.2, prop-types@^15.7.2, prop-types@^15.8.1:
   version "15.8.1"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.8.1.tgz#67d87bf1a694f48435cf332c24af10214a3140b5"
   integrity sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg==
@@ -12515,14 +12496,6 @@ react-hook-form@^6.15.5:
   resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-6.15.8.tgz#725c139d308c431c4611e4b9d85a49f01cfc0e7a"
   integrity sha512-prq82ofMbnRyj5wqDe8hsTRcdR25jQ+B8KtCS7BLCzjFHAwNuCjRwzPuP4eYLsEBjEIeYd6try+pdLdw0kPkpg==
 
-react-imask@^7.6.1:
-  version "7.6.1"
-  resolved "https://registry.yarnpkg.com/react-imask/-/react-imask-7.6.1.tgz#40dbb03f0c9b2652a16450ff29a53581b5ae773d"
-  integrity sha512-vLNfzcCz62Yzx/GRGh5tiCph9Gbh2cZu+Tz8OiO5it2eNuuhpA0DWhhSlOtVtSJ80+Bx+vFK5De8eQ9AmbkXzA==
-  dependencies:
-    imask "^7.6.1"
-    prop-types "^15.8.1"
-
 react-is@^16.12.0, react-is@^16.13.1, react-is@^16.7.0:
   version "16.13.1"
   resolved "https://registry.npmjs.org/react-is/-/react-is-16.13.1.tgz"
@@ -12639,6 +12612,13 @@ react-test-renderer@18.2.0:
     react-is "^18.2.0"
     react-shallow-renderer "^16.15.0"
     scheduler "^0.23.0"
+
+react-text-mask@^5.5.0:
+  version "5.5.0"
+  resolved "https://registry.yarnpkg.com/react-text-mask/-/react-text-mask-5.5.0.tgz#468ea690160b364981205f5633e7475e939383ff"
+  integrity sha512-SLJlJQxa0uonMXsnXRpv5abIepGmHz77ylQcra0GNd7Jtk4Wj2Mtp85uGQHv1avba2uI8ZvRpIEQPpJKsqRGYw==
+  dependencies:
+    prop-types "^15.5.6"
 
 react-transition-group@^4.4.1:
   version "4.4.5"
