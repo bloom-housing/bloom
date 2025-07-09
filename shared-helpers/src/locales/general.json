@@ -725,6 +725,8 @@
   "listings.noAvailableUnits": "There are no available units at this time.",
   "listings.noClosedListings": "No listings currently have closed applications",
   "listings.noOpenListings": "No listings currently have open applications",
+  "listings.noMatchingOpenListings": "No matching listings with open applications",
+  "listings.noMatchingClosedListings": "No matching listings with closed applications",
   "listings.removeFilters": "Try removing some of your filters or show all listings.",
   "listings.occupancyDescriptionAllSro": "Occupancy for this building is limited to 1 person per unit.",
   "listings.occupancyDescriptionNoSro": "Occupancy limits for this building are based on unit type.",

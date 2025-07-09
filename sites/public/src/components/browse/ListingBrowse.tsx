@@ -233,8 +233,8 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
                         <BloomCard
                           title={
                             props.tab === TabsIndexEnum.open
-                              ? t("listings.noOpenListings")
-                              : t("listings.noClosedListings")
+                              ? t("listings.noMatchingOpenListings")
+                              : t("listings.noMatchingClosedListings")
                           }
                           subtitle={t("listings.removeFilters")}
                           variant="block"
