@@ -186,26 +186,22 @@ export const CheckboxGroup = (props: CheckboxGroupProps) => {
 
 export const RentSection = (props: RentSectionProps) => {
   const validateRentValues = () => {
-    const minValue = props.getValues(`${ListingFilterKeys.monthlyRent}.minRent`)
-    const maxValue = props.getValues(`${ListingFilterKeys.monthlyRent}.maxRent`)
+    const minField = `${ListingFilterKeys.monthlyRent}.minRent`
+    const maxField = `${ListingFilterKeys.monthlyRent}.maxRent`
 
-    if (!minValue || !maxValue) return
+    const minValue = props.getValues(minField)
+    const maxValue = props.getValues(maxField)
 
-    const numericMinValue = parseFloat(minValue.replaceAll(",", ""))
-    const numericMaxValue = parseFloat(maxValue.replaceAll(",", ""))
+    props.clearErrors([minField, maxField])
 
-    if (numericMinValue > numericMaxValue) {
-      props.setError(`${ListingFilterKeys.monthlyRent}.minRent`, {
-        message: t("errors.minGreaterThanMaxRentError"),
-      })
-      props.setError(`${ListingFilterKeys.monthlyRent}.maxRent`, {
-        message: t("errors.maxLessThanMinRentError"),
-      })
-    } else {
-      props.clearErrors([
-        `${ListingFilterKeys.monthlyRent}.minRent`,
-        `${ListingFilterKeys.monthlyRent}.maxRent`,
-      ])
+    if (minValue && maxValue) {
+      const numericMin = parseFloat(minValue.replaceAll(",", ""))
+      const numericMax = parseFloat(maxValue.replaceAll(",", ""))
+
+      if (numericMin > numericMax) {
+        props.setError(minField, { message: t("errors.minGreaterThanMaxRentError") })
+        props.setError(maxField, { message: t("errors.maxLessThanMinRentError") })
+      }
     }
   }
 
