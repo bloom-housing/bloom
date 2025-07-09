@@ -21,8 +21,10 @@
         font-size: var(--seeds-type-heading-size-lg);
         font-weight: var(--seeds-font-weight-bold);
       }
+
       button {
         margin-inline-start: var(--seeds-s4);
+        gap: var(--seeds-s1);
       }
     }
   }
