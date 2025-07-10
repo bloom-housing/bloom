@@ -2281,6 +2281,9 @@ describe('Testing script runner service', () => {
     prisma.scriptRuns.update = jest.fn().mockResolvedValue(null);
     prisma.multiselectQuestions.findMany = jest.fn().mockResolvedValue(null);
     prisma.applications.updateMany = jest.fn().mockResolvedValue(null);
+    prisma.jurisdictions.findFirstOrThrow = jest
+      .fn()
+      .mockResolvedValue({ id: 'jurisId' });
     prisma.listings.updateMany = jest.fn().mockResolvedValue(null);
     prisma.multiselectQuestions.updateMany = jest.fn().mockResolvedValue(null);
 
@@ -2329,7 +2332,7 @@ describe('Testing script runner service', () => {
       },
       where: {
         createdAt: { lt: expect.anything() },
-        jurisdictionId: expect.anything(),
+        jurisdictionId: 'jurisId',
       },
     });
 
