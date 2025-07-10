@@ -58,6 +58,9 @@ export interface RentSectionProps {
   getValues: UseFormMethods["getValues"]
   setValue: UseFormMethods["setValue"]
   filterState: FilterData
+  setError: UseFormMethods["setError"]
+  clearErrors: UseFormMethods["clearErrors"]
+  errors: UseFormMethods["formState"]["errors"]
 }
 
 export interface SearchSectionProps {
@@ -181,56 +184,88 @@ export const CheckboxGroup = (props: CheckboxGroupProps) => {
   )
 }
 
-export const RentSection = (props: RentSectionProps) => (
-  <fieldset className={styles["filter-section"]}>
-    <legend className={styles["filter-section-label"]}>{t("t.rent")}</legend>
-    <Grid spacing="sm">
-      <Grid.Row>
-        <Grid.Cell>
-          <Field
-            id={`${ListingFilterKeys.monthlyRent}.minRent`}
-            name={`${ListingFilterKeys.monthlyRent}.minRent`}
-            label={t("listings.minRent")}
-            type="currency"
-            prepend="$"
-            register={props.register}
-            getValues={props.getValues}
-            setValue={props.setValue}
-            defaultValue={props.filterState?.[ListingFilterKeys.monthlyRent]?.minRent}
-          />
-        </Grid.Cell>
-        <Grid.Cell>
-          <Field
-            id={`${ListingFilterKeys.monthlyRent}.maxRent`}
-            name={`${ListingFilterKeys.monthlyRent}.maxRent`}
-            label={t("listings.maxRent")}
-            type="currency"
-            prepend="$"
-            register={props.register}
-            getValues={props.getValues}
-            setValue={props.setValue}
-            defaultValue={props.filterState?.[ListingFilterKeys.monthlyRent]?.maxRent}
-          />
-        </Grid.Cell>
-      </Grid.Row>
-      <Grid.Row>
-        <Grid.Cell>
-          <Field
-            id={ListingFilterKeys.section8Acceptance}
-            name={ListingFilterKeys.section8Acceptance}
-            label={t("listings.section8Acceptance")}
-            labelClassName={styles["filter-checkbox-label"]}
-            type="checkbox"
-            register={props.register}
-            inputProps={{
-              defaultChecked: isTrue(props.filterState?.[ListingFilterKeys.section8Acceptance]),
-            }}
-          />
-        </Grid.Cell>
-      </Grid.Row>
-    </Grid>
-  </fieldset>
-)
+export const RentSection = (props: RentSectionProps) => {
+  const validateRentValues = () => {
+    const minField = `${ListingFilterKeys.monthlyRent}.minRent`
+    const maxField = `${ListingFilterKeys.monthlyRent}.maxRent`
+
+    const minValue = props.getValues(minField)
+    const maxValue = props.getValues(maxField)
+
+    props.clearErrors([minField, maxField])
+
+    if (minValue && maxValue) {
+      const numericMin = parseFloat(minValue.replaceAll(",", ""))
+      const numericMax = parseFloat(maxValue.replaceAll(",", ""))
+
+      if (numericMin > numericMax) {
+        props.setError(minField, { message: t("errors.minGreaterThanMaxRentError") })
+        props.setError(maxField, { message: t("errors.maxLessThanMinRentError") })
+      }
+    }
+  }
+
+  return (
+    <fieldset className={styles["filter-section"]}>
+      <legend className={styles["filter-section-label"]}>{t("t.rent")}</legend>
+      <Grid spacing="sm">
+        <Grid.Row>
+          <Grid.Cell>
+            <Field
+              id={`${ListingFilterKeys.monthlyRent}.minRent`}
+              name={`${ListingFilterKeys.monthlyRent}.minRent`}
+              label={t("listings.minRent")}
+              type="currency"
+              prepend="$"
+              register={props.register}
+              getValues={props.getValues}
+              setValue={props.setValue}
+              defaultValue={props.filterState?.[ListingFilterKeys.monthlyRent]?.minRent}
+              error={!!props.errors[ListingFilterKeys.monthlyRent]?.minRent}
+              errorMessage={props.errors[ListingFilterKeys.monthlyRent]?.minRent?.message}
+              inputProps={{
+                onBlur: validateRentValues,
+              }}
+            />
+          </Grid.Cell>
+          <Grid.Cell>
+            <Field
+              id={`${ListingFilterKeys.monthlyRent}.maxRent`}
+              name={`${ListingFilterKeys.monthlyRent}.maxRent`}
+              label={t("listings.maxRent")}
+              type="currency"
+              prepend="$"
+              register={props.register}
+              getValues={props.getValues}
+              setValue={props.setValue}
+              defaultValue={props.filterState?.[ListingFilterKeys.monthlyRent]?.maxRent}
+              error={!!props.errors[ListingFilterKeys.monthlyRent]?.maxRent}
+              errorMessage={props.errors[ListingFilterKeys.monthlyRent]?.maxRent?.message}
+              inputProps={{
+                onBlur: validateRentValues,
+              }}
+            />
+          </Grid.Cell>
+        </Grid.Row>
+        <Grid.Row>
+          <Grid.Cell>
+            <Field
+              id={ListingFilterKeys.section8Acceptance}
+              name={ListingFilterKeys.section8Acceptance}
+              label={t("listings.section8Acceptance")}
+              labelClassName={styles["filter-checkbox-label"]}
+              type="checkbox"
+              register={props.register}
+              inputProps={{
+                defaultChecked: isTrue(props.filterState?.[ListingFilterKeys.section8Acceptance]),
+              }}
+            />
+          </Grid.Cell>
+        </Grid.Row>
+      </Grid>
+    </fieldset>
+  )
+}
 
 export const SearchSection = (props: SearchSectionProps) => (
   <div className={styles["filter-section"]}>
