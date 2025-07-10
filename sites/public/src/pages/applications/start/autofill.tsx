@@ -114,6 +114,10 @@ export default () => {
           hidePreferences={true}
           hidePrograms={true}
           enableUnitGroups={isFeatureFlagOn(conductor.config, FeatureFlagEnum.enableUnitGroups)}
+          enableFullTimeStudentQuestion={isFeatureFlagOn(
+            conductor.config,
+            FeatureFlagEnum.enableFullTimeStudentQuestion
+          )}
         />
         <Form onSubmit={handleSubmit(onSubmit)}>
           <CardSection

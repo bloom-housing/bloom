@@ -21,9 +21,10 @@ import {
   RentSection,
   SearchSection,
 } from "../../../src/components/browse/FilterDrawerHelpers"
-import { mockNextRouter, render } from "../../testUtils"
+import { act, mockNextRouter, render } from "../../testUtils"
 import { useForm } from "react-hook-form"
 import { t } from "@bloom-housing/ui-components"
+import userEvent from "@testing-library/user-event"
 
 describe("filter drawer helpers", () => {
   const emptyFormData: FilterData = {
@@ -769,7 +770,14 @@ describe("filter drawer helpers", () => {
   describe("RentSection", () => {
     const DefaultRentSection = () => {
       // eslint-disable-next-line @typescript-eslint/unbound-method
-      const { register, getValues, setValue } = useForm()
+      const {
+        register,
+        getValues,
+        setValue,
+        setError,
+        clearErrors,
+        formState: { errors },
+      } = useForm()
 
       return (
         <RentSection
@@ -777,12 +785,22 @@ describe("filter drawer helpers", () => {
           getValues={getValues}
           setValue={setValue}
           filterState={{}}
+          setError={setError}
+          clearErrors={clearErrors}
+          errors={errors}
         />
       )
     }
     const RentSectionWithSelections = () => {
       // eslint-disable-next-line @typescript-eslint/unbound-method
-      const { register, getValues, setValue } = useForm()
+      const {
+        register,
+        getValues,
+        setValue,
+        setError,
+        clearErrors,
+        formState: { errors },
+      } = useForm()
 
       return (
         <RentSection
@@ -793,6 +811,9 @@ describe("filter drawer helpers", () => {
             [ListingFilterKeys.monthlyRent]: { minRent: "500.00", maxRent: "900.00" },
             [ListingFilterKeys.section8Acceptance]: true,
           }}
+          setError={setError}
+          clearErrors={clearErrors}
+          errors={errors}
         />
       )
     }
@@ -820,6 +841,45 @@ describe("filter drawer helpers", () => {
       expect(
         screen.getByRole("checkbox", { name: "Accepts Section 8 Housing Choice vouchers" })
       ).toBeChecked()
+    })
+    it("should display error message when min rent is greater than max rent", async () => {
+      render(<DefaultRentSection />)
+      await act(async () => {
+        await userEvent.type(screen.getByRole("textbox", { name: "Min rent" }), "1000.00")
+        await userEvent.type(screen.getByRole("textbox", { name: "Max rent" }), "500.00")
+        await userEvent.tab()
+      })
+
+      expect(
+        screen.getByText("Min Rent must be less than or equal to Max Rent")
+      ).toBeInTheDocument()
+      expect(
+        screen.getByText("Max Rent must be greater than or equal to Min Rent")
+      ).toBeInTheDocument()
+    })
+    it("should clear error message when min rent is less than max rent", async () => {
+      render(<DefaultRentSection />)
+      await act(async () => {
+        await userEvent.type(screen.getByRole("textbox", { name: "Min rent" }), "1000.00")
+        await userEvent.type(screen.getByRole("textbox", { name: "Max rent" }), "500.00")
+        await userEvent.tab()
+      })
+
+      expect(
+        screen.getByText("Min Rent must be less than or equal to Max Rent")
+      ).toBeInTheDocument()
+
+      await act(async () => {
+        await userEvent.type(screen.getByRole("textbox", { name: "Max rent" }), "1500.00")
+        await userEvent.tab()
+      })
+
+      expect(
+        screen.queryByText("Min Rent must be less than or equal to Max Rent")
+      ).not.toBeInTheDocument()
+      expect(
+        screen.queryByText("Max Rent must be greater than or equal to Min Rent")
+      ).not.toBeInTheDocument()
     })
   })
 

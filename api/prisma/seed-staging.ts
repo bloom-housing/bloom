@@ -99,6 +99,7 @@ export const stagingSeed = async (
         FeatureFlagEnum.enableListingFiltering,
         FeatureFlagEnum.enableListingOpportunity,
         FeatureFlagEnum.enableListingPagination,
+        FeatureFlagEnum.enableListingUpdatedAt,
         FeatureFlagEnum.enableMarketingStatus,
         FeatureFlagEnum.enableNeighborhoodAmenities,
         FeatureFlagEnum.enablePartnerDemographics,
@@ -370,9 +371,9 @@ export const stagingSeed = async (
   await prismaClient.multiselectQuestions.create({
     data: multiselectQuestionFactory(lakeviewJurisdiction.id, {
       multiselectQuestion: {
-        text: 'Seniors',
+        text: 'Seniors 62+',
         description:
-          'Are you or anyone in your household 65 years of age or older?',
+          'Are you or anyone in your household 62 years of age or older?',
         applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
         optOutText: 'Prefer not to say',
         options: [
@@ -385,13 +386,14 @@ export const stagingSeed = async (
 
   // add extra programs to support filtering by "community type"
   await Promise.all(
-    [...new Array(3)].map(
-      async () =>
+    ['Seniors 55+', 'Families', 'Veterans'].map(
+      async (text) =>
         await prismaClient.multiselectQuestions.create({
           data: multiselectQuestionFactory(lakeviewJurisdiction.id, {
             multiselectQuestion: {
               applicationSection:
                 MultiselectQuestionsApplicationSectionEnum.programs,
+              text,
             },
           }),
         }),
