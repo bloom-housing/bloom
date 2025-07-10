@@ -16,7 +16,6 @@ import {
 import {
   FieldGroup,
   Form,
-  getTranslationWithArguments,
   StackedTable,
   StandardTableData,
   t,
