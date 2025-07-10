@@ -1,3 +1,4 @@
+import { GetStaticPaths } from "next"
 import {
   FeatureFlagEnum,
   Jurisdiction,
@@ -18,6 +19,10 @@ export default function Finder({ jurisdiction }: { jurisdiction: Jurisdiction })
       <RentalsFinder activeFeatureFlags={activeFeatureFlags} />
     </Layout>
   )
+}
+
+export const getStaticPaths: GetStaticPaths = () => {
+  return { paths: [], fallback: "blocking" }
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
