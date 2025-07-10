@@ -10,8 +10,14 @@ import PrimaryApplicantSection from "../../components/explore/applicantAndHouseh
 import { AiPermissionModal } from "../../components/explore/aiPermissionModal"
 import { AiInsightsPanel } from "../../components/explore/AIInsightsPanel"
 import { getReportDataFastAPI, ReportProducts } from "../../lib/explore/data-explorer"
+import { useRouter } from "next/router"
 
 const ApplicationAnalysis = () => {
+  const router = useRouter()
+  if (!process.env.enableHousingReports) {
+    void router.replace("/")
+  }
+
   const [genAIEnabled, setGenAIEnabled] = useState(false)
   const [showOnboardingModal, setShowOnboardingModal] = useState(false)
   const [chartData, setChartData] = useState<ReportProducts>({
