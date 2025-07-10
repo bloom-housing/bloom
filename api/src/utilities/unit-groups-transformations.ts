@@ -147,7 +147,31 @@ export const getHouseholdMaxIncomeSummary = (
   };
   const rows = [];
 
-  if (!amiCharts || (amiCharts && amiCharts.length === 0)) {
+  let occupancyRange: MinMax;
+  const amiPercentages = new Set<number>();
+
+  unitGroups.forEach((group) => {
+    if (occupancyRange === undefined) {
+      occupancyRange = {
+        min: group.minOccupancy,
+        max: group.maxOccupancy,
+      };
+    } else {
+      occupancyRange.min = Math.min(occupancyRange.min, group.minOccupancy);
+      occupancyRange.max = Math.max(occupancyRange.max, group.maxOccupancy);
+    }
+    group.unitGroupAmiLevels.forEach((level) => {
+      if (level.amiPercentage) {
+        amiPercentages.add(level.amiPercentage);
+      }
+    });
+  });
+
+  if (
+    !amiCharts ||
+    (amiCharts && amiCharts.length === 0) ||
+    (occupancyRange.min === null && occupancyRange.max === null)
+  ) {
     return {
       columns,
       rows,
@@ -155,33 +179,6 @@ export const getHouseholdMaxIncomeSummary = (
   }
 
   const amiChartItems = getMinMaxIncomeAmiChartItems(amiCharts);
-
-  let occupancyRange: MinMax;
-  const amiPercentages = new Set<number>();
-  // aggregate household sizes across all groups based off of the occupancy range
-  unitGroups.forEach((group) => {
-    if (occupancyRange === undefined) {
-      occupancyRange = {
-        min: group.minOccupancy || 1,
-        max: group.maxOccupancy || 1,
-      };
-    } else {
-      occupancyRange.min = Math.min(
-        occupancyRange.min,
-        group.minOccupancy || 1,
-      );
-      occupancyRange.max = Math.max(
-        occupancyRange.max,
-        group.maxOccupancy || 1,
-      );
-    }
-
-    group.unitGroupAmiLevels.forEach((level) => {
-      if (level.amiPercentage) {
-        amiPercentages.add(level.amiPercentage);
-      }
-    });
-  });
 
   Array.from(amiPercentages)
     .filter((percentage) => percentage !== null)
@@ -196,15 +193,16 @@ export const getHouseholdMaxIncomeSummary = (
   // for the occupancy range, get the max income per percentage of AMI across the AMI charts
   amiChartItems.forEach((item) => {
     if (
-      item.householdSize >= (occupancyRange?.min || 1) &&
-      item.householdSize <= (occupancyRange?.max || 1) &&
+      item.householdSize >= (occupancyRange?.min || item.householdSize) &&
+      item.householdSize <= (occupancyRange?.max || item.householdSize) &&
       amiPercentages.has(item.percentOfAmi)
     ) {
       if (hmiMap[item.householdSize] === undefined) {
         hmiMap[item.householdSize] = {};
       }
 
-      hmiMap[item.householdSize][item.percentOfAmi] = item.incomeString;
+      hmiMap[item.householdSize][item.percentOfAmi] =
+        item.incomeString ?? usd.format(item.income);
     }
   });
 
