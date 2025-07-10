@@ -15,9 +15,10 @@ import {
 import FormsLayout from "../../../layouts/forms"
 import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
-import { untranslateMultiselectQuestion } from "../../../lib/helpers"
+import { isFeatureFlagOn, untranslateMultiselectQuestion } from "../../../lib/helpers"
 import {
   ApplicationReviewStatusEnum,
+  FeatureFlagEnum,
   MultiselectQuestionsApplicationSectionEnum,
   ReviewOrderTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -52,6 +53,13 @@ const ApplicationTerms = () => {
       conductor.currentStep.save({ acceptedTerms })
       application.acceptedTerms = acceptedTerms
       application.completedSections = 6
+
+      if (!isFeatureFlagOn(conductor.config, FeatureFlagEnum.enableFullTimeStudentQuestion)) {
+        application.applicant.fullTimeStudent = null
+        application.householdMember.forEach((member) => {
+          member.fullTimeStudent = null
+        })
+      }
 
       if (application?.programs?.length) {
         untranslateMultiselectQuestion(application.programs, listing)

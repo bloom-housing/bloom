@@ -662,7 +662,7 @@ export class ApplicationService {
                 birthYear: dto.applicant.birthYear
                   ? Number(dto.applicant.birthYear)
                   : undefined,
-                fullTimeStudent: dto.applicant.fullTimeStudent || YesNoEnum.no,
+                fullTimeStudent: dto.applicant.fullTimeStudent,
               },
             }
           : undefined,
@@ -745,7 +745,7 @@ export class ApplicationService {
                 birthYear: member.birthYear
                   ? Number(member.birthYear)
                   : undefined,
-                fullTimeStudent: member.fullTimeStudent || YesNoEnum.no,
+                fullTimeStudent: member.fullTimeStudent,
               })),
             }
           : undefined,
