@@ -62,7 +62,6 @@ export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: Li
 
   const [showDownloadModal, setShowDownloadModal] = useState(false)
   const [listingFavorited, setListingFavorited] = useState(false)
-  console.log(listing)
 
   useEffect(() => {
     if (profile) {
