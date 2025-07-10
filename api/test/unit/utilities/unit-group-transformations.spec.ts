@@ -395,6 +395,64 @@ describe('Unit Group Transformations', () => {
         rows: [],
       });
     });
+    it('should return empty data with no occupancy information', () => {
+      const unitGroups: UnitGroup[] = [
+        {
+          ...defaultValues,
+          id: 'group1',
+          unitTypes: [
+            {
+              ...defaultValues,
+              id: 'type1',
+              name: UnitTypeEnum.studio,
+              numBedrooms: 0,
+            },
+          ],
+          unitGroupAmiLevels: [
+            {
+              ...defaultValues,
+              id: 'level1',
+              amiPercentage: 30,
+              monthlyRentDeterminationType:
+                MonthlyRentDeterminationTypeEnum.flatRent,
+              flatRentValue: 1000,
+            },
+          ],
+          minOccupancy: null,
+          maxOccupancy: null,
+        },
+        {
+          ...defaultValues,
+          id: 'group2',
+          unitTypes: [
+            {
+              ...defaultValues,
+              id: 'type2',
+              name: UnitTypeEnum.oneBdrm,
+              numBedrooms: 1,
+            },
+          ],
+          unitGroupAmiLevels: [
+            {
+              ...defaultValues,
+              id: 'level2',
+              amiPercentage: 50,
+              monthlyRentDeterminationType:
+                MonthlyRentDeterminationTypeEnum.percentageOfIncome,
+              percentageOfIncomeValue: 30,
+            },
+          ],
+          minOccupancy: null,
+          maxOccupancy: null,
+        },
+      ];
+
+      const result = getHouseholdMaxIncomeSummary(unitGroups, []);
+      expect(result).toEqual({
+        columns: { householdSize: 'householdSize' },
+        rows: [],
+      });
+    });
 
     it('should correctly generate household max income summary', () => {
       const unitGroups: UnitGroup[] = [

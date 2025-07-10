@@ -224,7 +224,7 @@ export const getHmiData = (listing: Listing): StandardTableData => {
   })
 }
 
-const getCurrencyFromArgumentString = (content: string) => {
+export const getCurrencyFromArgumentString = (content: string) => {
   if (typeof content === "string") {
     const paramIndex = content.indexOf(":")
     if (paramIndex >= 0) {
