@@ -40,41 +40,20 @@
   }
 
   .empty-state {
-    display: flex;
-    flex-direction: column;
-    gap: var(--seeds-s3);
-    @media (--sm-only) {
-      padding: var(--seeds-spacer-content);
-    }
-
-    &-card {
-      h2 {
-        font-family: var(--seeds-font-alt-sans);
-        font-weight: var(--seeds-font-weight-bold);
-      }
+    h2 {
+      font-family: var(--seeds-font-alt-sans);
+      font-weight: var(--seeds-font-weight-bold);
     }
 
     &-icon {
-      color: var(--seeds-color-primary);
-      background-color: var(--seeds-bg-color-surface-primary);
-      border-radius: var(--seeds-rounded-full);
-      padding: var(--seeds-s2);
       svg {
         fill: none;
         stroke-width: 1px;
       }
     }
 
-    p {
-      color: var(--seeds-text-color-light);
-    }
-
     .button-wrapper {
       padding-block-start: var(--seeds-s6);
-    }
-
-    .show-all-button {
-      width: fit-content;
     }
   }
 
