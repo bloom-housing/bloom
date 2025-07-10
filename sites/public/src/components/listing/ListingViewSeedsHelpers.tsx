@@ -277,7 +277,7 @@ export const getStackedUnitGroupsHmiData = (listing: Listing) => {
           }
         } else {
           obj[key] = {
-            cellText: `$${row[key].toLocaleString("en")}`,
+            cellText: `${row[key].toLocaleString("en")}`,
             cellSubText: t("t.perYear"),
           }
         }

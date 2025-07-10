@@ -7,6 +7,7 @@ import { MinMax } from '../dtos/shared/min-max.dto';
 import { MonthlyRentDeterminationTypeEnum } from '@prisma/client';
 import { AmiChartItem } from '../dtos/units/ami-chart-item.dto';
 import Listing from '../dtos/listings/listing.dto';
+import { usd } from './unit-utilities';
 
 // Helper function to set min and max values
 export const setMinMax = (range: MinMax, value: number): MinMax => {
@@ -86,9 +87,11 @@ export const getUnitGroupSummary = (
   return summary;
 };
 
-export const getMaxIncomeAmiChartItems = (
+export type MinMaxIncomeAmiChartItem = AmiChartItem & { incomeString?: string };
+
+export const getMinMaxIncomeAmiChartItems = (
   amiCharts: AmiChart[] = [],
-): AmiChartItem[] => {
+): MinMaxIncomeAmiChartItem[] => {
   if (!amiCharts || amiCharts.length === 0) {
     return [];
   }
@@ -97,18 +100,35 @@ export const getMaxIncomeAmiChartItems = (
     return amiCharts[0]?.items || [];
   }
 
-  const allItems = amiCharts.flatMap((chart) => chart?.items || []);
+  const allItems: MinMaxIncomeAmiChartItem[] = amiCharts.flatMap(
+    (chart) => chart?.items || [],
+  );
 
-  return allItems.reduce((result: AmiChartItem[], currentItem) => {
+  return allItems.reduce((result: MinMaxIncomeAmiChartItem[], currentItem) => {
     const existingItemIndex = result.findIndex(
       (item) =>
         item.percentOfAmi === currentItem.percentOfAmi &&
         item.householdSize === currentItem.householdSize,
     );
 
+    const income = currentItem.income;
+
     if (existingItemIndex === -1) {
+      currentItem.incomeString = usd.format(income);
       result.push(currentItem);
-    } else if (currentItem.income > result[existingItemIndex].income) {
+    } else {
+      const newIncome = result[existingItemIndex].income;
+
+      if (income > newIncome) {
+        currentItem.incomeString = `${usd.format(newIncome)} - ${usd.format(
+          income,
+        )}`;
+      }
+      if (income < newIncome) {
+        currentItem.incomeString = `${usd.format(income)} - ${usd.format(
+          newIncome,
+        )}`;
+      }
       result[existingItemIndex] = currentItem;
     }
 
@@ -134,7 +154,7 @@ export const getHouseholdMaxIncomeSummary = (
     };
   }
 
-  const amiChartItems = getMaxIncomeAmiChartItems(amiCharts);
+  const amiChartItems = getMinMaxIncomeAmiChartItems(amiCharts);
 
   let occupancyRange: MinMax;
   const amiPercentages = new Set<number>();
@@ -184,7 +204,7 @@ export const getHouseholdMaxIncomeSummary = (
         hmiMap[item.householdSize] = {};
       }
 
-      hmiMap[item.householdSize][item.percentOfAmi] = item.income;
+      hmiMap[item.householdSize][item.percentOfAmi] = item.incomeString;
     }
   });
 

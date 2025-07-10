@@ -28,7 +28,7 @@ export const UnitTypeSort = [
   UnitTypeEnum.fiveBdrm,
 ];
 
-const usd = new Intl.NumberFormat('en-US', {
+export const usd = new Intl.NumberFormat('en-US', {
   style: 'currency',
   currency: 'USD',
   minimumFractionDigits: 0,

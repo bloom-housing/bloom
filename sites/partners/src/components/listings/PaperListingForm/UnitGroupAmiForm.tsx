@@ -121,7 +121,7 @@ const UnitGroupAmiForm = ({
     if (amiLevel) {
       reset({ ...amiLevel })
     }
-  }, [amiLevels, currentTempId, reset, amiChartPercentageOptions])
+  }, [amiLevels, currentTempId, reset])
 
   return (
     <Form onSubmit={() => false}>
