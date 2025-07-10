@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState, useMemo } from "react"
 import { useForm } from "react-hook-form"
-import { Alert } from "@bloom-housing/ui-seeds"
+import { Alert, FormErrorMessage } from "@bloom-housing/ui-seeds"
 import { Field, Form, PhoneField, Select, t } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import {
@@ -13,7 +13,9 @@ import {
   AuthContext,
   mergeDeep,
 } from "@bloom-housing/shared-helpers"
+import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import FormsLayout from "../../../layouts/forms"
+import { isFeatureFlagOn } from "../../../lib/helpers"
 import { useFormConductor } from "../../../lib/hooks"
 import {
   FoundAddress,
@@ -33,6 +35,10 @@ const ApplicationAddress = () => {
   const { conductor, application, listing } = useFormConductor("primaryApplicantAddress")
   const currentPageSection = 1
 
+  const enableFullTimeStudentQuestion = isFeatureFlagOn(
+    conductor.config,
+    FeatureFlagEnum.enableFullTimeStudentQuestion
+  )
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { control, register, handleSubmit, setValue, watch, errors, trigger } = useForm<
     Record<string, any>
@@ -43,6 +49,9 @@ const ApplicationAddress = () => {
       additionalPhone: application.additionalPhone,
       "applicant.phoneNumberType": application.applicant.phoneNumberType,
       sendMailToMailingAddress: application.sendMailToMailingAddress,
+      ...(enableFullTimeStudentQuestion && {
+        "applicant.fullTimeStudent": application.applicant.fullTimeStudent,
+      }),
       "applicant.applicantAddress.state": application.applicant.applicantAddress.state,
     },
     shouldFocusError: false,
@@ -458,6 +467,56 @@ const ApplicationAddress = () => {
                     register={register}
                     dataTestId={"app-primary-mailing-address-zip"}
                   />
+                </fieldset>
+              </CardSection>
+            )}
+            {enableFullTimeStudentQuestion && (
+              <CardSection>
+                <fieldset>
+                  <legend
+                    className={`text__caps-spaced ${
+                      errors?.applicant?.fullTimeStudent ? "text-alert" : ""
+                    }`}
+                  >
+                    {t("application.contact.fullTimeStudent")}
+                  </legend>
+
+                  <Field
+                    className="mb-1"
+                    type="radio"
+                    id="fullTimeStudentYes"
+                    name="applicant.fullTimeStudent"
+                    label={t("t.yes")}
+                    register={register}
+                    validation={{ required: true }}
+                    error={errors?.applicant?.fullTimeStudent}
+                    inputProps={{
+                      value: "yes",
+                      defaultChecked: application.applicant.fullTimeStudent == "yes",
+                    }}
+                    dataTestId={"app-primary-full-time-student-yes"}
+                  />
+
+                  <Field
+                    className="mb-1"
+                    type="radio"
+                    id="fullTimeStudentNo"
+                    name="applicant.fullTimeStudent"
+                    label={t("t.no")}
+                    register={register}
+                    validation={{ required: true }}
+                    error={errors?.applicant?.fullTimeStudent}
+                    inputProps={{
+                      value: "no",
+                      defaultChecked: application.applicant.fullTimeStudent == "no",
+                    }}
+                    dataTestId={"app-primary-full-time-student-no"}
+                  />
+                  {errors?.applicant?.fullTimeStudent && (
+                    <FormErrorMessage id="applicant.fullTimeStudent-error">
+                      {t("errors.selectOption")}
+                    </FormErrorMessage>
+                  )}
                 </fieldset>
               </CardSection>
             )}

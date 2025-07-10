@@ -69,6 +69,9 @@ const SubmittedApplicationView = ({
           }
           editMode={false}
           enableUnitGroups={doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableUnitGroups)}
+          enableFullTimeStudentQuestion={doJurisdictionsHaveFeatureFlagOn(
+            FeatureFlagEnum.enableFullTimeStudentQuestion
+          )}
         />
         <Card.Section>
           <div className="hide-for-print">

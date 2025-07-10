@@ -27,6 +27,7 @@ type FormSummaryDetailsProps = {
   hidePrograms?: boolean
   validationError?: boolean
   enableUnitGroups?: boolean
+  enableFullTimeStudentQuestion?: boolean
 }
 
 const accessibilityLabels = (accessibility) => {
@@ -65,6 +66,7 @@ const FormSummaryDetails = ({
   hidePrograms = false,
   validationError = false,
   enableUnitGroups = false,
+  enableFullTimeStudentQuestion = false,
 }: FormSummaryDetailsProps) => {
   // fix for rehydration
   const [hasMounted, setHasMounted] = useState(false)
@@ -270,6 +272,18 @@ const FormSummaryDetails = ({
             <MultiLineAddress address={reformatAddress(application.applicationsMailingAddress)} />
           </FieldValue>
         )}
+        {enableFullTimeStudentQuestion && (
+          <FieldValue
+            testId={"app-summary-full-time-student"}
+            id="fullTimeStudent"
+            label={t("application.review.confirmation.fullTimeStudent")}
+            className={styles["summary-value"]}
+          >
+            {application.applicant.fullTimeStudent
+              ? t(`t.${application.applicant.fullTimeStudent}`)
+              : t("t.n/a")}
+          </FieldValue>
+        )}
       </Card.Section>
       {application.alternateContact.type && application.alternateContact.type !== "noContact" && (
         <>
@@ -384,6 +398,15 @@ const FormSummaryDetails = ({
                     {t("application.review.sameAddressAsApplicant")}
                   </p>
                 )}
+                {enableFullTimeStudentQuestion && (
+                  <FieldValue
+                    testId={"app-summary-household-member-full-time-student"}
+                    label={t("application.review.confirmation.fullTimeStudent")}
+                    className={styles["summary-value"]}
+                  >
+                    {member.fullTimeStudent ? t(`t.${member.fullTimeStudent}`) : t("t.n/a")}
+                  </FieldValue>
+                )}
               </div>
             ))}
           </Card.Section>
@@ -437,7 +460,11 @@ const FormSummaryDetails = ({
           <FieldValue
             testId={"app-summary-household-student"}
             id="householdStudent"
-            label={t("application.household.householdStudent.title")}
+            label={
+              enableFullTimeStudentQuestion
+                ? t("application.household.householdStudentAll.title")
+                : t("application.household.householdStudent.title")
+            }
             className={styles["summary-value"]}
           >
             {application.householdStudent ? t("t.yes") : t("t.no")}
