@@ -7,6 +7,8 @@ import {
   PrismaClient,
   ReviewOrderTypeEnum,
 } from '@prisma/client';
+import axios from 'axios';
+import dayjs from 'dayjs';
 import { Request as ExpressRequest } from 'express';
 import https from 'https';
 import { AmiChartService } from './ami-chart.service';
@@ -22,9 +24,9 @@ import { AmiChartCreate } from '../dtos/ami-charts/ami-chart-create.dto';
 import { AmiChartUpdate } from '../dtos/ami-charts/ami-chart-update.dto';
 import MultiselectQuestion from '../dtos/multiselect-questions/multiselect-question.dto';
 import { AmiChartUpdateImportDTO } from '../dtos/script-runner/ami-chart-update-import.dto';
+import { Compare } from '../dtos/shared/base-filter.dto';
 import { HouseholdMemberRelationship } from '../../src/enums/applications/household-member-relationship-enum';
 import { calculateSkip, calculateTake } from '../utilities/pagination-helpers';
-import axios from 'axios';
 import { AssetTransferDTO } from '../dtos/script-runner/asset-transfer.dto';
 import { AssetService } from './asset.service';
 import { OrderByEnum } from '../enums/shared/order-by-enum';
@@ -2015,6 +2017,118 @@ export class ScriptRunnerService {
       'migrate Detroit to multiselect questions',
       requestingUser,
     );
+    return { success: true };
+  }
+
+  /**
+   *
+   * @param req incoming request object
+   * @returns successDTO
+   * @description marks transferred data in Doorway as externally created
+   */
+  async markTransferedData(req: ExpressRequest): Promise<SuccessDTO> {
+    const requestingUser = mapTo(User, req['user']);
+    await this.markScriptAsRunStart('mark transfered data', requestingUser);
+
+    // Alameda ==========================================================
+    const alamedaMigrationDate = dayjs(
+      '2025-05-05 00:00',
+      'YYYY-MM-DD HH:mm Z',
+    ).toDate();
+
+    const alamedaJurisdiction =
+      await this.prisma.jurisdictions.findFirstOrThrow({
+        select: { id: true },
+        where: { name: 'Alameda' },
+      });
+
+    await this.prisma.applications.updateMany({
+      data: { wasCreatedExternally: true },
+      where: {
+        appUrl: 'https://housing.acgov.org',
+      },
+    });
+
+    await this.prisma.listings.updateMany({
+      data: { wasCreatedExternally: true },
+      where: {
+        createdAt: { lt: alamedaMigrationDate },
+        jurisdictionId: alamedaJurisdiction.id,
+      },
+    });
+
+    const alamedaMultiSelectQuestionIds = (
+      await this.multiselectQuestionService.list({
+        filter: [
+          {
+            $comparison: Compare['IN'],
+            jurisdiction: alamedaJurisdiction.id,
+          },
+        ],
+      })
+    )
+      .filter((question) => question.createdAt < alamedaMigrationDate)
+      .map((question) => question.id);
+
+    await this.prisma.multiselectQuestions.updateMany({
+      data: { wasCreatedExternally: true },
+      where: {
+        id: { in: alamedaMultiSelectQuestionIds },
+      },
+    });
+
+    console.log('Alameda data has been updated');
+
+    // San Mateo ==========================================================
+    const sanMateoBase = dayjs('2024-10-22 00:00', 'YYYY-MM-DD HH:mm Z');
+    const sanMateo22 = sanMateoBase.toDate();
+    const sanMateo24 = sanMateoBase.add(2, 'day').toDate();
+    const sanMateo25 = sanMateoBase.add(3, 'day').toDate();
+
+    const sanMateoJurisdiction =
+      await this.prisma.jurisdictions.findFirstOrThrow({
+        select: { id: true },
+        where: { name: 'San Mateo' },
+      });
+
+    await this.prisma.applications.updateMany({
+      data: { wasCreatedExternally: true },
+      where: {
+        appUrl: 'https://smc.housingbayarea.org',
+      },
+    });
+
+    await this.prisma.listings.updateMany({
+      data: { wasCreatedExternally: true },
+      where: {
+        createdAt: { lt: sanMateo25 },
+        jurisdictionId: sanMateoJurisdiction.id,
+      },
+    });
+
+    const sanMateoMultiSelectQuestionIds = (
+      await this.multiselectQuestionService.list({
+        filter: [
+          {
+            $comparison: Compare['IN'],
+            jurisdiction: sanMateoJurisdiction.id,
+          },
+        ],
+      })
+    )
+      .filter((question) => question.createdAt < sanMateo22)
+      .map((question) => question.id);
+
+    await this.prisma.multiselectQuestions.updateMany({
+      data: { wasCreatedExternally: true },
+      where: {
+        id: { in: sanMateoMultiSelectQuestionIds },
+      },
+    });
+
+    console.log('San Mateo data has been updated');
+
+    await this.markScriptAsComplete('mark transfered data', requestingUser);
     return { success: true };
   }
 
