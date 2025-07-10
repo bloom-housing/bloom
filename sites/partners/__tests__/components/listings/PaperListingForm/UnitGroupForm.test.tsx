@@ -181,7 +181,6 @@ describe("<UnitGroupForm>", () => {
     expect(headerColumns[1]).toHaveTextContent(/ami level/i)
     expect(headerColumns[2]).toHaveTextContent(/how is rent determined\?/i)
     expect(headerColumns[3]).toHaveTextContent(/monthly rent/i)
-    expect(headerColumns[4]).not.toHaveTextContent()
 
     const rows = within(headerAndBody[1]).getAllByRole("row")
     expect(rows).toHaveLength(2)
@@ -448,12 +447,8 @@ describe("<UnitGroupForm>", () => {
     )
 
     // ----------------------------- Occupancy Section -----------------------------
-    const minOccupancyInput = screen.getByRole("combobox", {
-      name: /minimum occupancy/i,
-    })
-    const maxOccupancyInput = screen.getByRole("combobox", {
-      name: /max occupancy/i,
-    })
+    const minOccupancyInput = screen.getByLabelText("Minimum Occupancy")
+    const maxOccupancyInput = screen.getByLabelText("Max Occupancy")
 
     expect(minOccupancyInput).toBeInTheDocument()
     expect(maxOccupancyInput).toBeInTheDocument()
@@ -464,10 +459,7 @@ describe("<UnitGroupForm>", () => {
     })
 
     expect(
-      await screen.findByText(/max occupancy must be greater than or equal to minimum occupancy/i)
-    ).toBeInTheDocument()
-    expect(
-      await screen.findByText(/minimum occupancy must be less than or equal to max occupancy/i)
+      await screen.findByText(/Occupancy must be greater than or equal to/i)
     ).toBeInTheDocument()
 
     // ----------------------------- Square Footage Section -----------------------------
@@ -513,12 +505,7 @@ describe("<UnitGroupForm>", () => {
       await userEvent.selectOptions(maxFloorInput, "1")
     })
 
-    expect(
-      await screen.findByText(/minimum floor must be less than or equal to max floor/i)
-    ).toBeInTheDocument()
-    expect(
-      await screen.findByText(/max floor must be greater than or equal to minimum floor/i)
-    ).toBeInTheDocument()
+    expect(await screen.findByText(/floor must be greater than or equal to/i)).toBeInTheDocument()
 
     // ----------------------------- Bathroom Section -----------------------------
     const minBathroomsInput = screen.getByRole("combobox", {

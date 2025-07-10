@@ -247,7 +247,7 @@ describe("ListingViewSeedsHelpers", () => {
             },
           } as UnitsSummarized,
         })
-      ).toBe([
+      ).toStrictEqual([
         {
           ami30: { cellSubText: "per year", cellText: "$36,000 - $60,000" },
           ami50: { cellSubText: "per year", cellText: "$84,000" },
@@ -297,7 +297,7 @@ describe("ListingViewSeedsHelpers", () => {
             },
           } as UnitsSummarized,
         })
-      ).toBe([
+      ).toStrictEqual([
         {
           maxIncomeMonth: { cellSubText: "per month", cellText: "$3,000 - $5,000" },
           maxIncomeYear: { cellSubText: "per year", cellText: "$36,000 - $60,000" },
@@ -347,7 +347,7 @@ describe("ListingViewSeedsHelpers", () => {
             },
           } as UnitsSummarized,
         })
-      ).toBe([
+      ).toStrictEqual([
         {
           maxIncomeMonth: { cellSubText: "per month", cellText: "$3,000" },
           maxIncomeYear: { cellSubText: "per year", cellText: "$36,000" },
@@ -397,7 +397,7 @@ describe("ListingViewSeedsHelpers", () => {
             },
           } as UnitsSummarized,
         })
-      ).toBe([
+      ).toStrictEqual([
         {
           ami30: { cellSubText: "per year", cellText: "$36,000" },
           ami60: { cellSubText: "per year", cellText: "$72,000" },
