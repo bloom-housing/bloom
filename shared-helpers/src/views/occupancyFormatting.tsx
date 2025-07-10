@@ -1,7 +1,6 @@
 import * as React from "react"
 import { StackedTableRow, StandardTableData, t } from "@bloom-housing/ui-components"
 import { Listing, UnitGroup, UnitType, UnitTypeEnum } from "../types/backend-swagger"
-import { unitGroup } from "../../__tests__/testHelpers"
 
 export const getOccupancy = (minOcc?: number | null, maxOcc?: number | null) => {
   if (minOcc && maxOcc && minOcc < maxOcc) {
