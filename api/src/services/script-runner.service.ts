@@ -2082,7 +2082,6 @@ export class ScriptRunnerService {
     // San Mateo ==========================================================
     const sanMateoBase = dayjs('2024-10-22 00:00', 'YYYY-MM-DD HH:mm Z');
     const sanMateo22 = sanMateoBase.toDate();
-    const sanMateo24 = sanMateoBase.add(2, 'day').toDate();
     const sanMateo25 = sanMateoBase.add(3, 'day').toDate();
 
     const sanMateoJurisdiction =
