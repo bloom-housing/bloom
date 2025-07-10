@@ -54,6 +54,7 @@ module.exports = withBundleAnalyzer(
       useSecureDownloadPathway: process.env.USE_SECURE_DOWNLOAD_PATHWAY === "TRUE" ? "TRUE" : "",
       limitClosedListingActions: process.env.LIMIT_CLOSED_LISTING_ACTIONS === "TRUE" ? "TRUE" : "",
       geminiAPIKey: process.env.GEMINI_KEY,
+      enableHousingReports: (process.env.ENABLE_HOUSING_REPORTS || "TRUE") === "TRUE", // Enable housing reports by default
     },
     i18n: {
       locales: process.env.LANGUAGES ? process.env.LANGUAGES.split(",") : ["en"],

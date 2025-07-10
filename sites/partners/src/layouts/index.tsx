@@ -24,11 +24,13 @@ const Layout = (props) => {
       href: "/",
     })
 
-    // Add Data Explorer menu item
-    menuLinks.push({
-      title: "Data Explorer",
-      href: "/explore",
-    })
+    if (process.env.enableHousingReports) {
+      // Add Data Explorer menu item
+      menuLinks.push({
+        title: "Data Explorer",
+        href: "/explore",
+      })
+    }
   }
   if (profile?.userRoles?.isAdmin || profile?.userRoles?.isJurisdictionalAdmin) {
     menuLinks.push({

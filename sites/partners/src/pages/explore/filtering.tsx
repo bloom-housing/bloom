@@ -8,6 +8,9 @@ import { NavigationHeader } from "../../components/shared/NavigationHeader"
 
 const DataExplorer = () => {
   const router = useRouter()
+  if (!process.env.enableHousingReports) {
+    void router.replace("/")
+  }
 
   return (
     <Layout>
