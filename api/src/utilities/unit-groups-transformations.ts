@@ -170,6 +170,7 @@ export const getHouseholdMaxIncomeSummary = (
   if (
     !amiCharts ||
     (amiCharts && amiCharts.length === 0) ||
+    !occupancyRange ||
     (occupancyRange.min === null && occupancyRange.max === null)
   ) {
     return {

@@ -240,7 +240,6 @@ export const getStackedHmiData = (listing: Listing) => {
     listing?.unitsSummarized?.hmi?.rows.map((row) => {
       const amiRows = Object.keys(row).reduce((acc, rowContent) => {
         const content = getCurrencyFromArgumentString(row[rowContent])
-        console.log(rowContent)
         acc[rowContent] = {
           cellText: Number.isInteger(row[rowContent]) ? row[rowContent] : content,
           cellSubText: rowContent.includes("Month")
