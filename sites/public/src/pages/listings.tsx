@@ -14,7 +14,12 @@ import {
 import { ListingBrowse, TabsIndexEnum } from "../components/browse/ListingBrowse"
 import { ListingBrowseDeprecated } from "../components/browse/ListingBrowseDeprecated"
 import { isFeatureFlagOn } from "../lib/helpers"
-import { fetchJurisdictionByName, fetchMultiselectData, fetchOpenListings } from "../lib/hooks"
+import {
+  fetchClosedListings,
+  fetchJurisdictionByName,
+  fetchMultiselectData,
+  fetchOpenListings,
+} from "../lib/hooks"
 
 export interface ListingsProps {
   openListings: Listing[]
@@ -69,6 +74,7 @@ export async function getServerSideProps(context: { req: any; query: any }) {
     areFiltersActive = true
   } else {
     openListings = await fetchOpenListings(context.req, Number(context.query.page) || 1)
+    closedListings = await fetchClosedListings(context.req, Number(context.query.page) || 1)
   }
   const jurisdiction = await fetchJurisdictionByName(context.req)
   const multiselectData = isFeatureFlagOn(
