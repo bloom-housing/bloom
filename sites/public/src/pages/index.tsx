@@ -1,5 +1,5 @@
 import React from "react"
-import { GetStaticProps } from "next"
+import { GetStaticPaths, GetStaticProps } from "next"
 import { Jurisdiction, Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { Home } from "../components/home/Home"
 import { HomeDeprecated } from "../components/home/HomeDeprecated"
@@ -23,6 +23,10 @@ export default function HomePage(props: HomePageProps) {
       )}
     </>
   )
+}
+
+export const getStaticPaths: GetStaticPaths = () => {
+  return { paths: [], fallback: "blocking" }
 }
 
 export const getStaticProps: GetStaticProps = async () => {
