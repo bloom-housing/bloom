@@ -14,8 +14,9 @@ import {
   AuthContext,
   mergeDeep,
 } from "@bloom-housing/shared-helpers"
+import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import FormsLayout from "../../../layouts/forms"
-import { disableContactFormOption } from "../../../lib/helpers"
+import { disableContactFormOption, isFeatureFlagOn } from "../../../lib/helpers"
 import { useFormConductor } from "../../../lib/hooks"
 import {
   FoundAddress,
@@ -35,6 +36,10 @@ const ApplicationAddress = () => {
   const { conductor, application, listing } = useFormConductor("primaryApplicantAddress")
   const currentPageSection = 1
 
+  const enableFullTimeStudentQuestion = isFeatureFlagOn(
+    conductor.config,
+    FeatureFlagEnum.enableFullTimeStudentQuestion
+  )
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { control, register, handleSubmit, setValue, watch, errors, trigger } = useForm<
     Record<string, any>
@@ -46,6 +51,9 @@ const ApplicationAddress = () => {
       "applicant.phoneNumberType": application.applicant.phoneNumberType,
       sendMailToMailingAddress: application.sendMailToMailingAddress,
       "applicant.workInRegion": application.applicant.workInRegion,
+      ...(enableFullTimeStudentQuestion && {
+        "applicant.fullTimeStudent": application.applicant.fullTimeStudent,
+      }),
       "applicant.applicantAddress.state": application.applicant.applicantAddress.state,
     },
     shouldFocusError: false,
@@ -495,7 +503,10 @@ const ApplicationAddress = () => {
               </fieldset>
             </CardSection>
 
-            <CardSection>
+            <CardSection
+              divider={"inset"}
+              className={enableFullTimeStudentQuestion ? "" : "border-none"}
+            >
               <fieldset>
                 <legend
                   className={`text__caps-spaced ${
@@ -640,6 +651,56 @@ const ApplicationAddress = () => {
                 </div>
               )}
             </CardSection>
+            {enableFullTimeStudentQuestion && (
+              <CardSection>
+                <fieldset>
+                  <legend
+                    className={`text__caps-spaced ${
+                      errors?.applicant?.fullTimeStudent ? "text-alert" : ""
+                    }`}
+                  >
+                    {t("application.contact.fullTimeStudent")}
+                  </legend>
+
+                  <Field
+                    className="mb-1"
+                    type="radio"
+                    id="fullTimeStudentYes"
+                    name="applicant.fullTimeStudent"
+                    label={t("t.yes")}
+                    register={register}
+                    validation={{ required: true }}
+                    error={errors?.applicant?.fullTimeStudent}
+                    inputProps={{
+                      value: "yes",
+                      defaultChecked: application.applicant.fullTimeStudent == "yes",
+                    }}
+                    dataTestId={"app-primary-full-time-student-yes"}
+                  />
+
+                  <Field
+                    className="mb-1"
+                    type="radio"
+                    id="fullTimeStudentNo"
+                    name="applicant.fullTimeStudent"
+                    label={t("t.no")}
+                    register={register}
+                    validation={{ required: true }}
+                    error={errors?.applicant?.fullTimeStudent}
+                    inputProps={{
+                      value: "no",
+                      defaultChecked: application.applicant.fullTimeStudent == "no",
+                    }}
+                    dataTestId={"app-primary-full-time-student-no"}
+                  />
+                  {errors?.applicant?.fullTimeStudent && (
+                    <FormErrorMessage id="applicant.fullTimeStudent-error">
+                      {t("errors.selectOption")}
+                    </FormErrorMessage>
+                  )}
+                </fieldset>
+              </CardSection>
+            )}
           </div>
           <CardSection>
             {verifyAddress && (
