@@ -500,9 +500,7 @@ export const getAvailabilityTextForGroup = (
 
   // Collect information from all groups
   groups.forEach((group) => {
-    if (group.openWaitlist) {
-      statusSet.add(t("listings.waitlist.open"))
-    }
+    statusSet.add(group.openWaitlist ? t("listings.waitlist.open") : t("listings.waitlist.closed"))
 
     if (group.unitVacancies > 0) {
       totalVacantUnits += group.unitVacancies
