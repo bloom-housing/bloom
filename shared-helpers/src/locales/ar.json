@@ -436,6 +436,8 @@
   "errors.householdTooBig": "حجم أسرتك كبير جدًا.",
   "errors.householdTooSmall": "حجم أسرتك صغير جدًا.",
   "errors.lastNameError": "الرجاء إدخال اسم العائلة",
+  "errors.maxLessThanMinRentError": "يجب أن يكون الحد الأقصى للإيجار أكبر من أو يساوي الحد الأدنى للإيجار",
+  "errors.minGreaterThanMaxRentError": "يجب أن يكون الحد الأدنى للإيجار أقل من أو يساوي الحد الأقصى للإيجار",
   "errors.multipleZipCodeError": "الرجاء إدخال رمز بريدي واحد أو أكثر مفصول بفواصل",
   "errors.noData": "لا تتوافر بيانات.",
   "errors.notFound.message": "عذرًا ، يبدو أننا لا نستطيع العثور على الصفحة التي تبحث عنها. حاول العودة إلى الصفحة السابقة أو انقر أدناه لتصفح القوائم.",

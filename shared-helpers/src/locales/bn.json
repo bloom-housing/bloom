@@ -434,6 +434,8 @@
   "errors.householdTooBig": "আপনার পরিবারের আকার অনেক বড়।",
   "errors.householdTooSmall": "আপনার পরিবারের আকার খুব ছোট।",
   "errors.lastNameError": "দয়া করে একটি শেষ নাম লিখুন",
+  "errors.maxLessThanMinRentError": "সর্বোচ্চ ভাড়া ন্যূনতম ভাড়ার চেয়ে বেশি বা সমান হতে হবে",
+  "errors.minGreaterThanMaxRentError": "সর্বনিম্ন ভাড়া সর্বোচ্চ ভাড়ার চেয়ে কম বা সমান হতে হবে",
   "errors.multipleZipCodeError": "অনুগ্রহ করে এক বা একাধিক কমা দ্বারা পৃথক পিন কোড লিখুন",
   "errors.noData": "কোন তথ্য নেই.",
   "errors.notFound.message": "ওহ, আপনি যে পৃষ্ঠাটি খুঁজছেন তা আমরা খুঁজে পাচ্ছি না। পূর্ববর্তী পৃষ্ঠায় ফিরে যাওয়ার চেষ্টা করুন অথবা তালিকাগুলি ব্রাউজ করতে নীচে ক্লিক করুন।",

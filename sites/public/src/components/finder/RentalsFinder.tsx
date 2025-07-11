@@ -226,7 +226,6 @@ export default function RentalsFinder({ activeFeatureFlags }: RentalsFinderProps
               stepPreposition={t("finder.progress.stepPreposition")}
               stepLabeling={sectionLabels}
               priority={2}
-              className={styles["step-header"]}
             />
           )}
         </div>
