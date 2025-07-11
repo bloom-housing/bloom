@@ -13,6 +13,7 @@
     margin-inline: auto;
 
     .questionnaire-header {
+      --bloom-color-primary: var(--seeds-color-primary);
       font-family: var(--seeds-font-alt-sans);
       margin-block-end: var(--seeds-s6);
       display: grid;

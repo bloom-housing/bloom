@@ -1567,7 +1567,6 @@ describe('Testing application service', () => {
             phoneNumberType: 'Cell',
             noPhone: false,
             workInRegion: YesNoEnum.yes,
-            fullTimeStudent: YesNoEnum.no,
             applicantAddress: {
               create: {
                 ...exampleAddress,
@@ -1648,7 +1647,6 @@ describe('Testing application service', () => {
               sameAddress: YesNoEnum.yes,
               relationship: HouseholdMemberRelationship.other,
               workInRegion: YesNoEnum.yes,
-              fullTimeStudent: YesNoEnum.no,
               householdMemberAddress: {
                 create: {
                   ...exampleAddress,
@@ -1880,7 +1878,6 @@ describe('Testing application service', () => {
             phoneNumberType: 'Cell',
             noPhone: false,
             workInRegion: YesNoEnum.yes,
-            fullTimeStudent: YesNoEnum.no,
             applicantAddress: {
               create: {
                 ...exampleAddress,
@@ -1961,7 +1958,6 @@ describe('Testing application service', () => {
               sameAddress: YesNoEnum.yes,
               relationship: HouseholdMemberRelationship.other,
               workInRegion: YesNoEnum.yes,
-              fullTimeStudent: YesNoEnum.no,
               householdMemberAddress: {
                 create: {
                   ...exampleAddress,

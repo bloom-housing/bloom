@@ -143,6 +143,10 @@ const ApplicationSummary = () => {
             editMode
             validationError={validationError}
             enableUnitGroups={isFeatureFlagOn(conductor.config, FeatureFlagEnum.enableUnitGroups)}
+            enableFullTimeStudentQuestion={isFeatureFlagOn(
+              conductor.config,
+              FeatureFlagEnum.enableFullTimeStudentQuestion
+            )}
             enableAdaOtherOption={isFeatureFlagOn(
               conductor.config,
               FeatureFlagEnum.enableAdaOtherOption
