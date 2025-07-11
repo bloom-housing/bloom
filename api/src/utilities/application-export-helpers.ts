@@ -28,12 +28,16 @@ export const getExportHeaders = (
   includeDemographics = false,
   forLottery = false,
   dateFormat = 'MM-DD-YYYY hh:mm:ssA z',
-  enableFullTimeStudentQuestion?: boolean,
 ): CsvHeader[] => {
   const enableAdaOtherOption = doAnyJurisdictionHaveFeatureFlagSet(
     user.jurisdictions,
     FeatureFlagEnum.enableAdaOtherOption,
   );
+  const enableFullTimeStudentQuestion = doAnyJurisdictionHaveFeatureFlagSet(
+    user.jurisdictions,
+    FeatureFlagEnum.enableFullTimeStudentQuestion,
+  );
+
   const headers: CsvHeader[] = [
     {
       path: 'id',

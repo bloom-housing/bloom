@@ -204,24 +204,6 @@ export class ApplicationExporterService {
       },
     });
 
-    const jurisdiction = await this.prisma.jurisdictions.findFirst({
-      select: {
-        featureFlags: true,
-      },
-      where: {
-        listings: {
-          some: {
-            id: queryParams.id,
-          },
-        },
-      },
-    });
-
-    const enableFullTimeStudentQuestion = doJurisdictionHaveFeatureFlagSet(
-      jurisdiction as Jurisdiction,
-      FeatureFlagEnum.enableFullTimeStudentQuestion,
-    );
-
     // get all multiselect questions for a listing to build csv headers
     const multiSelectQuestions =
       await this.multiselectQuestionService.findByListingId(queryParams.id);
@@ -242,7 +224,6 @@ export class ApplicationExporterService {
       queryParams.includeDemographics,
       false,
       this.dateFormat,
-      enableFullTimeStudentQuestion,
     );
 
     return this.csvExportHelper(
