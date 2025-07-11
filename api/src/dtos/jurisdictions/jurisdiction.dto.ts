@@ -138,7 +138,7 @@ export class Jurisdiction extends AbstractDTO {
   featureFlags: FeatureFlag[];
 
   @Expose()
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default], each: true })
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty({ isArray: true })
   requiredListingFields: string[];

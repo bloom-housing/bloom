@@ -210,6 +210,16 @@ class Listing extends AbstractDTO {
   @ValidateListingPublish('applicationDueDate', {
     groups: [ValidationsGroupsEnum.default],
   })
+  @ValidateIf(
+    (o) =>
+      !(
+        o.applicationDueDate == undefined &&
+        o.reviewOrderType == ReviewOrderTypeEnum.waitlist
+      ),
+    {
+      groups: [ValidationsGroupsEnum.default],
+    },
+  )
   @IsDate({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Date)
   @ApiPropertyOptional()
