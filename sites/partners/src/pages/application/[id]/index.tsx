@@ -40,14 +40,14 @@ export default function ApplicationsList() {
     listingDto?.jurisdictions.id
   )
 
-  const [errorAlert, setErrorAlert] = useState(false)
-
-  const [membersDrawer, setMembersDrawer] = useState<MembersDrawer>(null)
-
   const enableFullTimeStudentQuestion = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableFullTimeStudentQuestion,
     listingDto?.jurisdictions.id
   )
+
+  const [errorAlert, setErrorAlert] = useState(false)
+
+  const [membersDrawer, setMembersDrawer] = useState<MembersDrawer>(null)
 
   async function deleteApplication() {
     try {
