@@ -6,6 +6,7 @@ import { getListingTags } from "../../../src/components/listing/listing_sections
 import {
   FeatureFlagEnum,
   ListingsStatusEnum,
+  MultiselectQuestionsApplicationSectionEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import dayjs from "dayjs"
 
@@ -76,5 +77,55 @@ describe("<ListingCard>", () => {
       />
     )
     expect(view.queryByText("Veteran")).toBeNull()
+  })
+  it("shows programs tags when swapCommunityTypeWithPrograms is true", () => {
+    const view = render(
+      <ListingCard
+        listing={{
+          ...listing,
+          listingMultiselectQuestions: [
+            {
+              ordinal: 1,
+              multiselectQuestions: {
+                id: "prog_id_1",
+                createdAt: new Date(),
+                updatedAt: new Date(),
+                text: "Seniors 62+",
+                jurisdictions: [],
+                applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
+              },
+            },
+            {
+              ordinal: 2,
+              multiselectQuestions: {
+                id: "prog_id_2",
+                createdAt: new Date(),
+                updatedAt: new Date(),
+                text: "Supportive Housing for the Homeless",
+                jurisdictions: [],
+                applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
+              },
+            },
+          ],
+        }}
+        jurisdiction={{
+          ...jurisdiction,
+          featureFlags: [
+            ...jurisdiction.featureFlags,
+            {
+              name: FeatureFlagEnum.swapCommunityTypeWithPrograms,
+              id: "id",
+              createdAt: new Date(),
+              updatedAt: new Date(),
+              active: true,
+              description: "",
+              jurisdictions: [],
+            },
+          ],
+        }}
+      />
+    )
+    expect(view.getByText("Seniors 62+")).toBeDefined()
+    expect(view.getByText("Supportive Housing for the Homeless")).toBeDefined()
   })
 })
