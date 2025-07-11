@@ -22,6 +22,7 @@ export default function ListingsPageClosed(props: ListingsProps) {
       multiselectData={props.multiselectData}
       paginationData={props.paginationData}
       key={router.asPath}
+      areFiltersActive={props.areFiltersActive}
     />
   )
 }
@@ -29,6 +30,7 @@ export default function ListingsPageClosed(props: ListingsProps) {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function getServerSideProps(context: { req: any; query: any }) {
   let closedListings
+  let areFiltersActive = false
 
   if (isFiltered(context.query)) {
     const filterData = decodeQueryToFilterData(context.query)
@@ -38,6 +40,7 @@ export async function getServerSideProps(context: { req: any; query: any }) {
       Number(context.query.page) || 1,
       filters
     )
+    areFiltersActive = true
   } else {
     closedListings = await fetchClosedListings(context.req, Number(context.query.page) || 1)
   }
@@ -55,6 +58,7 @@ export async function getServerSideProps(context: { req: any; query: any }) {
       paginationData: closedListings?.items?.length ? closedListings.meta : null,
       jurisdiction: jurisdiction,
       multiselectData: multiselectData,
+      areFiltersActive,
     },
   }
 }
