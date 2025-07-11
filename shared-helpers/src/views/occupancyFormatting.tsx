@@ -1,6 +1,6 @@
 import * as React from "react"
 import { StackedTableRow, StandardTableData, t } from "@bloom-housing/ui-components"
-import { Listing, UnitType, UnitTypeEnum } from "../types/backend-swagger"
+import { Listing, UnitGroup, UnitType, UnitTypeEnum } from "../types/backend-swagger"
 
 export const getOccupancy = (minOcc?: number | null, maxOcc?: number | null) => {
   if (minOcc && maxOcc && minOcc < maxOcc) {
@@ -64,7 +64,38 @@ export const stackedUnitGroupsOccupancyTable = (listing: Listing) => {
     }, "")
   }
 
-  const sortedUnitGroups = listing.unitGroups
+  const mappedUnits = Object.values(
+    listing.unitGroups?.reduce((acc, unitGroup) => {
+      const key =
+        unitGroup.unitTypes
+          ?.map((unitType) => unitType.name)
+          .sort()
+          .join("") || ""
+
+      if (!key) {
+        return acc
+      }
+
+      const current = acc[key]
+      acc[key] = current
+        ? {
+            ...current,
+            minOccupancy: Math.min(
+              current.minOccupancy ?? Infinity,
+              unitGroup.minOccupancy ?? Infinity
+            ),
+            maxOccupancy: Math.max(
+              current.maxOccupancy ?? -Infinity,
+              unitGroup.maxOccupancy ?? -Infinity
+            ),
+          }
+        : unitGroup
+
+      return acc
+    }, {} as Record<string, UnitGroup>) ?? {}
+  )
+
+  const sortedUnitGroups = mappedUnits
     ?.sort((a, b) => {
       if (a.unitTypes && b.unitTypes) {
         return (
