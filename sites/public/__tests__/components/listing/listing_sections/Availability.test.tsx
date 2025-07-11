@@ -299,7 +299,7 @@ describe("<Availability>", () => {
           applicationDueDate: dueDate,
           marketingType: MarketingTypeEnum.comingSoon,
           marketingSeason: MarketingSeasonEnum.spring,
-          marketingDate: new Date(2026, 1, 1, 10, 30, 0),
+          marketingYear: 2026,
         }}
         jurisdiction={{
           ...jurisdiction,
@@ -333,7 +333,7 @@ describe("<Availability>", () => {
           applicationDueDate: dueDate,
           marketingType: MarketingTypeEnum.comingSoon,
           marketingSeason: MarketingSeasonEnum.spring,
-          marketingDate: new Date(2026, 1, 1, 10, 30, 0),
+          marketingYear: 2026,
         }}
         jurisdiction={{
           ...jurisdiction,

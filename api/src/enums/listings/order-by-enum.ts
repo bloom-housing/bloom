@@ -8,4 +8,6 @@ export enum ListingOrderByKeys {
   status = 'status',
   unitsAvailable = 'unitsAvailable',
   marketingType = 'marketingType',
+  marketingYear = 'marketingYear',
+  marketingSeason = 'marketingSeason',
 }

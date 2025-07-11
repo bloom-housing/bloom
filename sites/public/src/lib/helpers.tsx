@@ -192,7 +192,7 @@ export const getListingStatusMessageContent = (
   enableMarketingStatus: boolean,
   marketingType: MarketingTypeEnum,
   marketingSeason: MarketingSeasonEnum,
-  marketingDate: Date,
+  marketingYear: number,
   hideTime?: boolean
 ) => {
   let content = ""
@@ -218,7 +218,7 @@ export const getListingStatusMessageContent = (
     }
 
     if (marketingType === MarketingTypeEnum.comingSoon && enableMarketingStatus) {
-      content = getApplicationSeason(marketingSeason, marketingDate)
+      content = getApplicationSeason(marketingSeason, marketingYear)
     }
   }
   return content
@@ -260,7 +260,7 @@ export const getListingStatusMessage = (
                 enableMarketingStatus,
                 listing.marketingType,
                 listing.marketingSeason,
-                listing.marketingDate,
+                listing.marketingYear,
                 hideTime
               )}
             </div>
@@ -271,13 +271,16 @@ export const getListingStatusMessage = (
   )
 }
 
-export const getApplicationSeason = (marketingSeason: MarketingSeasonEnum, marketingDate: Date) => {
+export const getApplicationSeason = (
+  marketingSeason: MarketingSeasonEnum,
+  marketingYear: number
+) => {
   let label = t("listings.apply.applicationSeason")
   if (marketingSeason) {
     label = label.concat(` ${t(`seasons.${marketingSeason}`)}`)
   }
-  if (marketingDate) {
-    label = label.concat(` ${dayjs(marketingDate).year()}`)
+  if (marketingYear) {
+    label = label.concat(` ${marketingYear}`)
   }
   return label
 }

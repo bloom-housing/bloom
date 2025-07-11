@@ -132,7 +132,7 @@ export const Availability = ({ listing, jurisdiction }: AvailabilityProps) => {
     enableMarketingStatus,
     listing.marketingType,
     listing.marketingSeason,
-    listing.marketingDate,
+    listing.marketingYear,
     false
   )
   const unitsAvailable =
