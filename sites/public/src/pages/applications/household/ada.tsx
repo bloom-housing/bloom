@@ -15,10 +15,16 @@ import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
 import ApplicationFormLayout from "../../../layouts/application-form"
 import styles from "../../../layouts/application-form.module.scss"
+import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 const ApplicationAda = () => {
   const { profile } = useContext(AuthContext)
   const { conductor, application, listing } = useFormConductor("adaHouseholdMembers")
+  //todo figure out logic to only check for false/save as false if enabled
+  // does that matter?
+  const enableAdaOtherOption = conductor.config.featureFlags?.some(
+    (flag) => flag.name === FeatureFlagEnum.enableAdaOtherOption && flag.active
+  )
   const currentPageSection = 2
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -27,9 +33,11 @@ const ApplicationAda = () => {
   >({
     defaultValues: {
       none:
-        application.accessibility.mobility === false &&
-        application.accessibility.vision === false &&
-        application.accessibility.hearing === false,
+        (application.accessibility.mobility === false &&
+          application.accessibility.vision === false &&
+          application.accessibility.hearing === false &&
+          !enableAdaOtherOption) ||
+        (!enableAdaOtherOption && application.accessibility.other),
     },
     shouldFocusError: false,
   })
@@ -42,6 +50,7 @@ const ApplicationAda = () => {
         mobility: !!data["app-accessibility-mobility"],
         vision: !!data["app-accessibility-vision"],
         hearing: !!data["app-accessibility-hearing"],
+        other: enableAdaOtherOption ? !!data["app-accessibility-other"] : null,
       },
     })
     conductor.sync()
@@ -87,7 +96,8 @@ const ApplicationAda = () => {
     defaultChecked:
       application.accessibility["mobility"] === false &&
       application.accessibility["hearing"] === false &&
-      application.accessibility["vision"] === false,
+      application.accessibility["vision"] === false &&
+      !application.accessibility["other"],
     dataTestId: `app-ada-none`,
     uniqueName: true,
     inputProps: {
@@ -97,6 +107,7 @@ const ApplicationAda = () => {
           setValue("app-accessibility-mobility", false)
           setValue("app-accessibility-vision", false)
           setValue("app-accessibility-hearing", false)
+          setValue("app-accessibility-other", false)
           clearErrors()
         }
       },

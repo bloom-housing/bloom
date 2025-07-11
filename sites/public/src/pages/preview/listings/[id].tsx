@@ -44,10 +44,10 @@ export default function ListingPage(props: ListingProps) {
   )
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function getServerSideProps(context: {
   params: Record<string, string>
   locale: string
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   req: any
 }) {
   let response

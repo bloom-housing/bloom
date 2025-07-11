@@ -13,6 +13,8 @@ import {
   Application,
   ApplicationMultiselectQuestion,
   ApplicationMultiselectQuestionOption,
+  FeatureFlag,
+  FeatureFlagEnum,
   InputType,
   Listing,
   MultiselectQuestionsApplicationSectionEnum,
@@ -28,34 +30,7 @@ type FormSummaryDetailsProps = {
   validationError?: boolean
   enableUnitGroups?: boolean
   enableFullTimeStudentQuestion?: boolean
-}
-
-const accessibilityLabels = (accessibility) => {
-  const labels = []
-  if (accessibility.mobility) labels.push(t("application.ada.mobility"))
-  if (accessibility.vision) labels.push(t("application.ada.vision"))
-  if (accessibility.hearing) labels.push(t("application.ada.hearing"))
-  if (labels.length === 0) labels.push(t("t.no"))
-
-  return labels
-}
-
-const reformatAddress = (address: Address) => {
-  const { street, street2, city, state, zipCode } = address
-  const newAddress = {
-    placeName: street,
-    street: street2,
-    city,
-    state,
-    zipCode,
-  } as Address
-  if (newAddress.street === null || newAddress.street === "") {
-    if (newAddress.placeName) {
-      newAddress.street = newAddress.placeName
-      delete newAddress.placeName
-    }
-  }
-  return newAddress
+  enableAdaOtherOption?: boolean
 }
 
 const FormSummaryDetails = ({
@@ -66,6 +41,7 @@ const FormSummaryDetails = ({
   hidePrograms = false,
   validationError = false,
   enableUnitGroups = false,
+  enableAdaOtherOption = false,
   enableFullTimeStudentQuestion = false,
 }: FormSummaryDetailsProps) => {
   // fix for rehydration
@@ -75,6 +51,36 @@ const FormSummaryDetails = ({
   }, [])
   if (!hasMounted) {
     return null
+  }
+
+  const accessibilityLabels = () => {
+    const labels = []
+    if (application.accessibility.mobility) labels.push(t("application.ada.mobility"))
+    if (application.accessibility.vision) labels.push(t("application.ada.vision"))
+    if (application.accessibility.hearing) labels.push(t("application.ada.hearing"))
+    if (application.accessibility.other && enableAdaOtherOption)
+      labels.push(t("application.ada.other"))
+    if (labels.length === 0) labels.push(t("t.no"))
+
+    return labels
+  }
+
+  const reformatAddress = (address: Address) => {
+    const { street, street2, city, state, zipCode } = address
+    const newAddress = {
+      placeName: street,
+      street: street2,
+      city,
+      state,
+      zipCode,
+    } as Address
+    if (newAddress.street === null || newAddress.street === "") {
+      if (newAddress.placeName) {
+        newAddress.street = newAddress.placeName
+        delete newAddress.placeName
+      }
+    }
+    return newAddress
   }
 
   const alternateContactName = () => {
@@ -462,7 +468,7 @@ const FormSummaryDetails = ({
             label={t("application.ada.label")}
             className={styles["summary-value"]}
           >
-            {accessibilityLabels(application.accessibility).map((item) => (
+            {accessibilityLabels().map((item) => (
               <div key={item} data-testid={item}>
                 {item}
                 <br />
