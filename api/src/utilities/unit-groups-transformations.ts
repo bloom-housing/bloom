@@ -29,7 +29,7 @@ export const getUnitGroupSummary = (
 ): UnitGroupSummary[] => {
   const summary: UnitGroupSummary[] = [];
 
-  const sortedUnitGroups = unitGroups.sort((a, b) => {
+  const sortedUnitGroups = unitGroups?.sort((a, b) => {
     const unitTypeComparison =
       a.unitTypes.sort((c, d) => c.numBedrooms - d.numBedrooms)[0].numBedrooms -
       b.unitTypes.sort((e, f) => e.numBedrooms - f.numBedrooms)[0].numBedrooms;
