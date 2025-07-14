@@ -2042,20 +2042,24 @@ export class ScriptRunnerService {
         where: { name: 'Alameda' },
       });
 
-    await this.prisma.applications.updateMany({
+    const alamedaAppsCount = await this.prisma.applications.updateMany({
       data: { wasCreatedExternally: true },
       where: {
         appUrl: 'https://housing.acgov.org',
       },
     });
 
-    await this.prisma.listings.updateMany({
+    console.log(`Alameda applications updated: ${alamedaAppsCount}`);
+
+    const alamedaListingsCount = await this.prisma.listings.updateMany({
       data: { wasCreatedExternally: true },
       where: {
         createdAt: { lt: alamedaMigrationDate },
         jurisdictionId: alamedaJurisdiction.id,
       },
     });
+
+    console.log(`Alameda listings updated: ${alamedaListingsCount}`);
 
     const alamedaMultiSelectQuestionIds = (
       await this.multiselectQuestionService.list({
@@ -2070,12 +2074,17 @@ export class ScriptRunnerService {
       .filter((question) => question.createdAt < alamedaMigrationDate)
       .map((question) => question.id);
 
-    await this.prisma.multiselectQuestions.updateMany({
-      data: { wasCreatedExternally: true },
-      where: {
-        id: { in: alamedaMultiSelectQuestionIds },
-      },
-    });
+    const alamedaMultiselectCount =
+      await this.prisma.multiselectQuestions.updateMany({
+        data: { wasCreatedExternally: true },
+        where: {
+          id: { in: alamedaMultiSelectQuestionIds },
+        },
+      });
+
+    console.log(
+      `Alameda multiselectQuestions updated: ${alamedaMultiselectCount}`,
+    );
 
     console.log('Alameda data has been updated');
 
@@ -2090,20 +2099,24 @@ export class ScriptRunnerService {
         where: { name: 'San Mateo' },
       });
 
-    await this.prisma.applications.updateMany({
+    const sanMateoAppsCount = await this.prisma.applications.updateMany({
       data: { wasCreatedExternally: true },
       where: {
         appUrl: 'https://smc.housingbayarea.org',
       },
     });
 
-    await this.prisma.listings.updateMany({
+    console.log(`San Mateo applications updated: ${sanMateoAppsCount}`);
+
+    const sanMateoListingsCount = await this.prisma.listings.updateMany({
       data: { wasCreatedExternally: true },
       where: {
         createdAt: { lt: sanMateo25 },
         jurisdictionId: sanMateoJurisdiction.id,
       },
     });
+
+    console.log(`San Mateo listings updated: ${sanMateoListingsCount}`);
 
     const sanMateoMultiSelectQuestionIds = (
       await this.multiselectQuestionService.list({
@@ -2118,12 +2131,17 @@ export class ScriptRunnerService {
       .filter((question) => question.createdAt < sanMateo22)
       .map((question) => question.id);
 
-    await this.prisma.multiselectQuestions.updateMany({
-      data: { wasCreatedExternally: true },
-      where: {
-        id: { in: sanMateoMultiSelectQuestionIds },
-      },
-    });
+    const sanMateoMultiselectCount =
+      await this.prisma.multiselectQuestions.updateMany({
+        data: { wasCreatedExternally: true },
+        where: {
+          id: { in: sanMateoMultiSelectQuestionIds },
+        },
+      });
+
+    console.log(
+      `San Mateo multiselectQuestions updated: ${sanMateoMultiselectCount}`,
+    );
 
     console.log('San Mateo data has been updated');
 
