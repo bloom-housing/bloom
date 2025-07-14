@@ -2751,6 +2751,22 @@ export class ScriptRunnerService {
       axios(configs, resolve, reject)
     })
   }
+  /**
+   * A script that marks transferred data in Doorway as externally created
+   */
+  markTransferedData(options: IRequestOptions = {}): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/scriptRunner/markTransferedData"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = null
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
 }
 
 export class FeatureFlagsService {
