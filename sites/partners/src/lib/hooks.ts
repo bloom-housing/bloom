@@ -50,6 +50,7 @@ type UseListingsDataProps = PaginationProps & {
   sort?: ColumnOrder[]
   roles?: UserRole
   userJurisdictionIds?: string[]
+  view?: ListingViews
 }
 
 export function useSingleListingData(listingId: string) {
@@ -73,14 +74,15 @@ export function useListingsData({
   sort,
   roles,
   userJurisdictionIds,
+  view,
 }: UseListingsDataProps) {
   const params = {
     page,
     limit,
     filter: [],
     search,
-    view: ListingViews.base,
     $comparison: null,
+    view: view ?? ListingViews.base,
   }
 
   if (sort) {

@@ -7263,11 +7263,12 @@ export enum EnumListingFilterParamsComparison {
   "NA" = "NA",
 }
 export enum ListingViews {
-  "fundamentals" = "fundamentals",
   "base" = "base",
-  "full" = "full",
-  "details" = "details",
   "csv" = "csv",
+  "details" = "details",
+  "full" = "full",
+  "fundamentals" = "fundamentals",
+  "name" = "name",
 }
 
 export enum ListingOrderByKeys {

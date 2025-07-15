@@ -3,7 +3,7 @@ import Head from "next/head"
 import dayjs from "dayjs"
 import { useSWRConfig } from "swr"
 import { AgTable, useAgTable, t, AlertBox } from "@bloom-housing/ui-components"
-import { User } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { ListingViews, User } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { Button, Icon } from "@bloom-housing/ui-seeds"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import Layout from "../../layouts"
@@ -133,6 +133,7 @@ const Users = () => {
 
   const { listingDtos } = useListingsData({
     limit: "all",
+    view: ListingViews.name,
   })
 
   if (error) return <div>{t("t.errorOccurred")}</div>

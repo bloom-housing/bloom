@@ -2309,6 +2309,32 @@ describe('Testing listing service', () => {
       });
     });
 
+    it('should return records from findOne() with name view', async () => {
+      prisma.listings.findUnique = jest.fn().mockResolvedValue(mockListing(0));
+
+      await service.findOne('listingId', LanguagesEnum.en, ListingViews.name);
+
+      expect(prisma.listings.findUnique).toHaveBeenCalledWith({
+        where: {
+          id: 'listingId',
+        },
+        include: {
+          Listings: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+          jurisdictions: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+        },
+      });
+    });
+
     it('should handle no records returned when findOne() is called with details view', async () => {
       prisma.listings.findUnique = jest.fn().mockResolvedValue(null);
 

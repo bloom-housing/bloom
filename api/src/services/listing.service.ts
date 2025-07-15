@@ -94,6 +94,21 @@ export const views: Partial<Record<ListingViews, Prisma.ListingsInclude>> = {
   },
 };
 
+views.name = {
+  Listings: {
+    select: {
+      name: true,
+      id: true,
+    },
+  },
+  jurisdictions: {
+    select: {
+      id: true,
+      name: true,
+    },
+  },
+};
+
 views.base = {
   ...views.fundamentals,
   units: {
