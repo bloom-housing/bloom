@@ -26,6 +26,7 @@ export const getExportHeaders = (
   forLottery = false,
   dateFormat = 'MM-DD-YYYY hh:mm:ssA z',
   enableFullTimeStudentQuestion?: boolean,
+  swapCommunityTypeWithPrograms?: boolean,
 ): CsvHeader[] => {
   const headers: CsvHeader[] = [
     {
@@ -292,7 +293,7 @@ export const getExportHeaders = (
   // add programs to csv headers
   const programHeaders = constructMultiselectQuestionHeaders(
     'programs',
-    'Program',
+    swapCommunityTypeWithPrograms ? 'Community Type' : 'Program',
     multiSelectQuestions,
   );
   headers.push(...programHeaders);
