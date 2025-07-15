@@ -149,7 +149,7 @@ describe('Testing email service', () => {
     expect(sendMock.mock.calls[0][0].to).toEqual(user.email);
     expect(sendMock.mock.calls[0][0].subject).toEqual('Forgot your password?');
     expect(sendMock.mock.calls[0][0].html).toContain(
-      'A request to reset your Bloom Housing Portal website password for http://localhost:3001 has recently been made.',
+      'A request to reset your Detroit Home Connect website password for http://localhost:3001 has recently been made.',
     );
     expect(sendMock.mock.calls[0][0].html).toContain(
       'If you did make this request, please click on the link below to reset your password:',
@@ -177,7 +177,7 @@ describe('Testing email service', () => {
     expect(sendMock.mock.calls[0][0].to).toEqual(user.email);
     expect(sendMock.mock.calls[0][0].subject).toEqual('Forgot your password?');
     expect(sendMock.mock.calls[0][0].html).toContain(
-      'A request to reset your Bloom Housing Portal website password for http://localhost:3001 has recently been made.',
+      'A request to reset your Detroit Home Connect website password for http://localhost:3001 has recently been made.',
     );
     expect(sendMock.mock.calls[0][0].html).toContain(
       'If you did make this request, please click on the link below to reset your password:',
@@ -362,7 +362,7 @@ describe('Testing email service', () => {
       expect(emailMock.to).toEqual(emailArr);
       expect(emailMock.subject).toEqual('Listing approval requested');
       expect(emailMock.html).toMatch(
-        `<img src="https://res.cloudinary.com/exygy/image/upload/w_400,c_limit,q_65/dev/bloom_logo_generic_zgb4sg.jpg" alt="Bloom Housing Portal" height="137" width="auto" />`,
+        `<img src="https://detroitmi.gov/themes/custom/detroitminew/logo.svg" alt="Detroit Home Connect" height="137" width="auto" />`,
       );
 
       expect(emailMock.html).toMatch('Hello,');
@@ -384,7 +384,7 @@ describe('Testing email service', () => {
         /http:\/\/localhost:3001\/listings\/listingId/,
       );
       expect(emailMock.html).toMatch('Thank you,');
-      expect(emailMock.html).toMatch('Bloom Housing Portal');
+      expect(emailMock.html).toMatch('Detroit Home Connect');
     });
   });
 
@@ -404,7 +404,7 @@ describe('Testing email service', () => {
       expect(emailMock.to).toEqual(emailArr);
       expect(emailMock.subject).toEqual('Listing changes requested');
       expect(emailMock.html).toMatch(
-        `<img src="https://res.cloudinary.com/exygy/image/upload/w_400,c_limit,q_65/dev/bloom_logo_generic_zgb4sg.jpg" alt="Bloom Housing Portal" height="137" width="auto" />`,
+        `<img src="https://detroitmi.gov/themes/custom/detroitminew/logo.svg" alt="Detroit Home Connect" height="137" width="auto" />`,
       );
       expect(emailMock.html).toMatch('Listing changes requested');
       expect(emailMock.html).toMatch('Hello,');
@@ -429,7 +429,7 @@ describe('Testing email service', () => {
         /http:\/\/localhost:3001\/listings\/listingId/,
       );
       expect(emailMock.html).toMatch('Thank you,');
-      expect(emailMock.html).toMatch('Bloom Housing Portal');
+      expect(emailMock.html).toMatch('Detroit Home Connect');
     });
   });
 
@@ -449,7 +449,7 @@ describe('Testing email service', () => {
       expect(emailMock.to).toEqual(emailArr);
       expect(emailMock.subject).toEqual('New published listing');
       expect(emailMock.html).toMatch(
-        `<img src="https://res.cloudinary.com/exygy/image/upload/w_400,c_limit,q_65/dev/bloom_logo_generic_zgb4sg.jpg" alt="Bloom Housing Portal" height="137" width="auto" />`,
+        `<img src="https://detroitmi.gov/themes/custom/detroitminew/logo.svg" alt="Detroit Home Connect" height="137" width="auto" />`,
       );
       expect(emailMock.html).toMatch('New published listing');
       expect(emailMock.html).toMatch('Hello,');
@@ -464,7 +464,7 @@ describe('Testing email service', () => {
         /http:\/\/localhost:3000\/listing\/listingId/,
       );
       expect(emailMock.html).toMatch('Thank you,');
-      expect(emailMock.html).toMatch('Bloom Housing Portal');
+      expect(emailMock.html).toMatch('Detroit Home Connect');
     });
   });
 
