@@ -101,3 +101,11 @@
 .character-count-warning {
   color: var(--seeds-color-alert);
 }
+
+.editor-text {
+  padding: var(--seeds-s2) var(--seeds-s3);
+}
+
+.error {
+  outline: 2px solid var(--seeds-color-alert);
+}

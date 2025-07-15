@@ -14,15 +14,13 @@ import { Icon } from "@bloom-housing/ui-seeds"
 import { t } from "@bloom-housing/ui-components"
 import styles from "./TextEditor.module.scss"
 
-const CHARACTER_LIMIT = 4000
+const CHARACTER_LIMIT = 2000
 
 export const EditorExtensions = [
   StarterKit.configure({
     heading: false,
   }),
-  CharacterCountExtension.configure({
-    limit: CHARACTER_LIMIT,
-  }),
+  CharacterCountExtension,
   LinkExtension.configure({
     openOnClick: true,
     autolink: true,
@@ -161,7 +159,18 @@ const MenuBar = ({ editor }) => {
   )
 }
 
-const getCharacterString = (charactersRemaining: number) => {
+const getCharacterString = (characterCount: number) => {
+  const charactersRemaining = CHARACTER_LIMIT - characterCount
+  if (charactersRemaining === -1) {
+    return t("t.characterOver", {
+      count: charactersRemaining * -1,
+    })
+  }
+  if (charactersRemaining < 0) {
+    return t("t.charactersOver", {
+      count: charactersRemaining * -1,
+    })
+  }
   if (charactersRemaining === 1)
     return t("t.character", {
       count: charactersRemaining,
@@ -181,9 +190,12 @@ export const TextEditor = ({ editor, editorId }: TextEditorProps) => {
     return null
   }
 
+  const characterCount = editor?.storage?.characterCount?.characters()
+  const overLimit = CHARACTER_LIMIT - characterCount < 0
+
   return (
     <>
-      <div className={styles["editor"]}>
+      <div className={`${styles["editor"]} ${overLimit ? styles["error"] : ""}`}>
         <MenuBar editor={editor} />
         <EditorContent editor={editor} id={editorId} data-testid={editorId} />
       </div>
@@ -194,7 +206,7 @@ export const TextEditor = ({ editor, editorId }: TextEditorProps) => {
             : ""
         }`}
       >
-        {getCharacterString(editor?.storage.characterCount.characters())}
+        {getCharacterString(characterCount)}
       </div>
     </>
   )
@@ -207,7 +219,7 @@ type TextEditorContentProps = {
 
 export const TextEditorContent = ({ content, contentId }: TextEditorContentProps) => {
   return (
-    <div className={styles["editor"]} id={contentId}>
+    <div className={`${styles["editor"]} ${styles["editor-text"]}`} id={contentId}>
       <Markdown>{content}</Markdown>
     </div>
   )
