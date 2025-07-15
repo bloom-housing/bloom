@@ -489,7 +489,7 @@ export const getEligibilitySections = (
             ),
           }
         : {
-            header: t("listings.communityTypes"),
+            header: t("t.communityTypes"),
             subheader: t("listings.communityTypesDescription"),
             note: t("listings.communityTypesNote"),
             content: (

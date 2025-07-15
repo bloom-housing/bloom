@@ -28,6 +28,7 @@ type FormSummaryDetailsProps = {
   validationError?: boolean
   enableUnitGroups?: boolean
   enableFullTimeStudentQuestion?: boolean
+  swapCommunityTypeWithPrograms?: boolean
 }
 
 const accessibilityLabels = (accessibility) => {
@@ -67,6 +68,7 @@ const FormSummaryDetails = ({
   validationError = false,
   enableUnitGroups = false,
   enableFullTimeStudentQuestion = false,
+  swapCommunityTypeWithPrograms = false,
 }: FormSummaryDetailsProps) => {
   // fix for rehydration
   const [hasMounted, setHasMounted] = useState(false)
@@ -495,7 +497,7 @@ const FormSummaryDetails = ({
           multiselectQuestionSection(
             MultiselectQuestionsApplicationSectionEnum.programs,
             "/applications/programs/programs",
-            t("t.programs"),
+            swapCommunityTypeWithPrograms ? t("t.communityTypes") : t("t.programs"),
             application.programs.filter((item) => item.claimed == true).length == 0
               ? `${t("application.preferences.general.title", {
                   county: listing?.listingsBuildingAddress?.county || listing?.jurisdictions?.name,

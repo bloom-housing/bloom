@@ -72,6 +72,9 @@ const SubmittedApplicationView = ({
           enableFullTimeStudentQuestion={doJurisdictionsHaveFeatureFlagOn(
             FeatureFlagEnum.enableFullTimeStudentQuestion
           )}
+          swapCommunityTypeWithPrograms={doJurisdictionsHaveFeatureFlagOn(
+            FeatureFlagEnum.swapCommunityTypeWithPrograms
+          )}
         />
         <Card.Section>
           <div className="hide-for-print">

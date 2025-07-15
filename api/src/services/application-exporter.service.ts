@@ -221,6 +221,11 @@ export class ApplicationExporterService {
       FeatureFlagEnum.enableFullTimeStudentQuestion,
     );
 
+    const swapCommunityTypeWithPrograms = doJurisdictionHaveFeatureFlagSet(
+      jurisdiction as Jurisdiction,
+      FeatureFlagEnum.swapCommunityTypeWithPrograms,
+    );
+
     // get all multiselect questions for a listing to build csv headers
     const multiSelectQuestions =
       await this.multiselectQuestionService.findByListingId(queryParams.id);
@@ -241,6 +246,7 @@ export class ApplicationExporterService {
       false,
       this.dateFormat,
       enableFullTimeStudentQuestion,
+      swapCommunityTypeWithPrograms,
     );
 
     return this.csvExportHelper(
@@ -565,6 +571,11 @@ export class ApplicationExporterService {
       FeatureFlagEnum.enableFullTimeStudentQuestion,
     );
 
+    const swapCommunityTypeWithPrograms = doJurisdictionHaveFeatureFlagSet(
+      jurisdiction as Jurisdiction,
+      FeatureFlagEnum.swapCommunityTypeWithPrograms,
+    );
+
     // get all multiselect questions for a listing to build csv headers
     const multiSelectQuestions =
       await this.multiselectQuestionService.findByListingId(queryParams.id);
@@ -585,6 +596,7 @@ export class ApplicationExporterService {
       forLottery,
       undefined,
       enableFullTimeStudentQuestion,
+      swapCommunityTypeWithPrograms,
     );
 
     if (forLottery) {
