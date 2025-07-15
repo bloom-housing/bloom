@@ -261,11 +261,9 @@ export default class ApplicationConductor {
     let i = this.currentStepIndex + 1
     let nextUrl = ""
 
-    console.log("this.steps", this.steps)
     while (i < this.steps.length) {
       const nextStep = this.steps[i]
       if (nextStep && !nextStep.skipStep()) {
-        console.log("nextStep", nextStep)
         nextUrl = nextStep.url
         break
       } else {
