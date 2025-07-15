@@ -9,6 +9,25 @@ import ResourceSection from "./ResourceSection"
 import ResourceCard from "./ResourceCard"
 import styles from "./Resources.module.scss"
 
+import housingAndRevitalization from "./../../md_content/resources/housing_and_revitalization.md"
+import enforcePropertyConditions from "./../../md_content/resources/enforce_property_conditions.md"
+import housingNetwork from "./../../md_content/resources/housing_network.md"
+import evictionPrevention from "./../../md_content/resources/eviction_prevention.md"
+import housingCounseling from "./../../md_content/resources/housing_counseling.md"
+import homeRepair from "./../../md_content/resources/home_repair.md"
+import fairHousing from "./../../md_content/resources/fair_housing.md"
+import homelessnessServices from "./../../md_content/resources/homelessness_services.md"
+import utilitiesAssistance from "./../../md_content/resources/utilities_assistance.md"
+import taxForeclosurePrevention from "./../../md_content/resources/tax_foreclosure_prevention.md"
+import homeownerPropertyTaxRelief from "./../../md_content/resources/homeowner_property_tax_relief.md"
+import michigan211 from "./../../md_content/resources/michigan_211.md"
+import financialCounseling from "./../../md_content/resources/financial_counseling.md"
+import housingCommission from "./../../md_content/resources/housing_commission.md"
+import landBankAuthority from "./../../md_content/resources/land_bank_authority.md"
+import projectCleanSlate from "./../../md_content/resources/project_clean_slate.md"
+import civilRightsInclusionOpportunity from "./../../md_content/resources/civil_rights_inclusion_opportunity.md"
+import housingRelocationAssistance from "./../../md_content/resources/housing_relocation_assistance.md"
+
 const Resources = () => {
   const pageTitle = t("pageTitle.additionalResources")
 
@@ -34,54 +53,109 @@ const Resources = () => {
               <Grid spacing="sm">
                 <GridRow columns={2}>
                   <ResourceCard
-                    title={t("resources.mockCardTitle")}
+                    title={t("resources.revitalizationTitle")}
                     href="/"
-                    content={t("resources.mockCardDescription")}
+                    content={housingAndRevitalization.toString()}
                   />
                   <ResourceCard
-                    title={t("resources.mockCardTitle")}
+                    title={t("resources.propertyConditionsTitle")}
                     href="/"
-                    content={t("resources.mockCardDescription")}
-                  />
-                </GridRow>
-                <GridRow columns={2}>
-                  <ResourceCard
-                    title={t("resources.mockCardTitle")}
-                    href="/"
-                    content={t("resources.mockCardDescription")}
-                  />
-                  <ResourceCard
-                    title={t("resources.mockCardTitle")}
-                    href="/"
-                    content={t("resources.mockCardDescription")}
-                  />
-                </GridRow>
-              </Grid>
-            </ResourceSection>
-            <ResourceSection sectionTitle={t("resources.housingProgramsTitle")}>
-              <Grid>
-                <GridRow columns={2}>
-                  <ResourceCard
-                    title={t("resources.mockCardTitle")}
-                    href="/"
-                    content={t("resources.mockCardDescription")}
-                  />
-                  <ResourceCard
-                    title={t("resources.mockCardTitle")}
-                    href="/"
-                    content={t("resources.mockCardDescription")}
+                    content={enforcePropertyConditions.toString()}
                   />
                 </GridRow>
                 <GridRow columns={2}>
                   <ResourceCard
-                    title={t("resources.mockCardTitle")}
+                    title={t("resources.housingNetworkTitle")}
                     href="/"
-                    content={t("resources.mockCardDescription")}
+                    content={housingNetwork.toString()}
                   />
                   <ResourceCard
-                    title={t("resources.mockCardTitle")}
+                    title={t("resources.evictionPrevention")}
+                    content={evictionPrevention.toString()}
+                  />
+                </GridRow>
+                <GridRow columns={2}>
+                  <ResourceCard
+                    title={t("resources.housingCounseling")}
                     href="/"
-                    content={t("resources.mockCardDescription")}
+                    content={housingCounseling.toString()}
+                  />
+                  <ResourceCard
+                    title={t("resources.homeRepair")}
+                    href="/"
+                    content={homeRepair.toString()}
+                  />
+                </GridRow>
+                <GridRow columns={2}>
+                  <ResourceCard
+                    title={t("resources.fairHousing")}
+                    href="/"
+                    content={fairHousing.toString()}
+                  />
+                  <ResourceCard
+                    title={t("resources.homelessnessServices")}
+                    href="/"
+                    content={homelessnessServices.toString()}
+                  />
+                </GridRow>
+                <GridRow columns={2}>
+                  <ResourceCard
+                    title={t("resources.utilitiesAssistance")}
+                    href="/"
+                    content={utilitiesAssistance.toString()}
+                  />
+                  <ResourceCard
+                    title={t("resources.taxForeclosurePrevention")}
+                    href="/"
+                    content={taxForeclosurePrevention.toString()}
+                  />
+                </GridRow>
+                <GridRow columns={2}>
+                  <ResourceCard
+                    title={t("resources.homeownerPropertyTaxRelief")}
+                    href="/"
+                    content={homeownerPropertyTaxRelief.toString()}
+                  />
+                  <ResourceCard
+                    title={t("resources.michigan211")}
+                    href="/"
+                    content={michigan211.toString()}
+                  />
+                </GridRow>
+                <GridRow columns={2}>
+                  <ResourceCard
+                    title={t("resources.financialCounseling")}
+                    href="/"
+                    content={financialCounseling.toString()}
+                  />
+                  <ResourceCard
+                    title={t("resources.housingCommission")}
+                    href="/"
+                    content={housingCommission.toString()}
+                  />
+                </GridRow>
+                <GridRow columns={2}>
+                  <ResourceCard
+                    title={t("resources.landBankAuthority")}
+                    href="/"
+                    content={landBankAuthority.toString()}
+                  />
+                  <ResourceCard
+                    title={t("resources.projectCleanSlate")}
+                    href="/"
+                    content={projectCleanSlate.toString()}
+                  />
+                </GridRow>
+                <GridRow columns={2}>
+                  <ResourceCard
+                    title={t("resources.civilRightsInclusionOpportunity")}
+                    href="/"
+                    content={civilRightsInclusionOpportunity.toString()}
+                  />
+                  <ResourceCard
+                    title={t("resources.housingRelocationAssistance")}
+                    href="/"
+                    content={housingRelocationAssistance.toString()}
                   />
                 </GridRow>
               </Grid>
