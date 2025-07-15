@@ -113,7 +113,7 @@ const Users = () => {
 
   const { listingDtos } = useListingsData({
     limit: "all",
-    view: ListingViews.fundamentals,
+    view: ListingViews.name,
   })
 
   if (error) return <div>{t("t.errorOccurred")}</div>
