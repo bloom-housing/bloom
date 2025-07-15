@@ -13,6 +13,7 @@ import SelectedPreferencesStep from "./SelectedPreferencesStep"
 import PreferencesAllStep from "./PreferencesAllStep"
 import PreferredUnitSizeStep from "./PreferredUnitSizeStep"
 import ProgramsStep from "./ProgramsStep"
+import CommunityTypesStep from "./CommunityTypesStep"
 import { Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 export const loadApplicationFromAutosave = () => {
@@ -98,6 +99,10 @@ export default class ApplicationConductor {
     programs: {
       url: "/applications/programs/programs",
       definition: ProgramsStep,
+    },
+    communityTypes: {
+      url: "/applications/community-types/community-types",
+      definition: CommunityTypesStep,
     },
     vouchersSubsidies: {
       url: "/applications/financial/vouchers",
@@ -256,9 +261,11 @@ export default class ApplicationConductor {
     let i = this.currentStepIndex + 1
     let nextUrl = ""
 
+    console.log("this.steps", this.steps)
     while (i < this.steps.length) {
       const nextStep = this.steps[i]
       if (nextStep && !nextStep.skipStep()) {
+        console.log("nextStep", nextStep)
         nextUrl = nextStep.url
         break
       } else {

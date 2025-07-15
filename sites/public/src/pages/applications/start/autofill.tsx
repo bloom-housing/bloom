@@ -118,6 +118,10 @@ export default () => {
             conductor.config,
             FeatureFlagEnum.enableFullTimeStudentQuestion
           )}
+          swapCommunityTypeWithPrograms={isFeatureFlagOn(
+            conductor.config,
+            FeatureFlagEnum.swapCommunityTypeWithPrograms
+          )}
         />
         <Form onSubmit={handleSubmit(onSubmit)}>
           <CardSection
