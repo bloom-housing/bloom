@@ -127,17 +127,6 @@ const MenuBar = ({ editor }) => {
           <OrderedListIcon />
         </Icon>
       </button>
-
-      <button
-        onClick={() => editor.chain().focus().setHorizontalRule().run()}
-        type="button"
-        aria-label={"Line break"}
-        id={"editor-line-break"}
-      >
-        <Icon>
-          <DividerIcon />
-        </Icon>
-      </button>
       <button
         onClick={setLink}
         className={editor.isActive("link") ? styles["is-active"] : ""}
@@ -158,8 +147,28 @@ const MenuBar = ({ editor }) => {
           <UnlinkIcon />
         </Icon>
       </button>
+      <button
+        onClick={() => editor.chain().focus().setHorizontalRule().run()}
+        type="button"
+        aria-label={"Line break"}
+        id={"editor-line-break"}
+      >
+        <Icon>
+          <DividerIcon />
+        </Icon>
+      </button>
     </div>
   )
+}
+
+const getCharacterString = (charactersRemaining: number) => {
+  if (charactersRemaining === 1)
+    return t("t.character", {
+      count: charactersRemaining,
+    })
+  return t("t.characters", {
+    count: charactersRemaining,
+  })
 }
 
 type TextEditorProps = {
@@ -173,9 +182,11 @@ export const TextEditor = ({ editor, editorId }: TextEditorProps) => {
   }
 
   return (
-    <div className={styles["editor"]}>
-      <MenuBar editor={editor} />
-      <EditorContent editor={editor} id={editorId} data-testid={editorId} />
+    <>
+      <div className={styles["editor"]}>
+        <MenuBar editor={editor} />
+        <EditorContent editor={editor} id={editorId} data-testid={editorId} />
+      </div>
       <div
         className={`${styles["character-count"]} ${
           editor?.storage.characterCount.characters() > CHARACTER_LIMIT
@@ -183,11 +194,9 @@ export const TextEditor = ({ editor, editorId }: TextEditorProps) => {
             : ""
         }`}
       >
-        {t("t.characters", {
-          count: `${editor?.storage.characterCount.characters()} / ${CHARACTER_LIMIT}`,
-        })}
+        {getCharacterString(editor?.storage.characterCount.characters())}
       </div>
-    </div>
+    </>
   )
 }
 
