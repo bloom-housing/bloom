@@ -30,20 +30,22 @@ export const Eligibility = ({ eligibilitySections, section8Acceptance }: Eligibi
       contentClassName={styles["mobile-collapse-padding"]}
     >
       <ol>
-        {eligibilitySections.map((section, index) => {
-          return (
-            <OrderedSection
-              order={index + 1}
-              title={section.header}
-              subtitle={section.subheader}
-              note={section.note}
-              key={index}
-              divider={index < eligibilitySections.length - 1}
-            >
-              {section.content}
-            </OrderedSection>
-          )
-        })}
+        {eligibilitySections
+          .filter((section) => !section.hide)
+          .map((section, index) => {
+            return (
+              <OrderedSection
+                order={index + 1}
+                title={section.header}
+                subtitle={section.subheader}
+                note={section.note}
+                key={index}
+                divider={index < eligibilitySections.length - 1}
+              >
+                {section.content}
+              </OrderedSection>
+            )
+          })}
       </ol>
     </CollapsibleSection>
   )
