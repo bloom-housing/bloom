@@ -1147,6 +1147,7 @@
   "listings.waitlist.closed": "Waitlist Closed",
   "listings.waitlist.currentSize": "Current Waitlist Size",
   "listings.waitlist.finalSize": "Final Waitlist Size",
+  "listings.waitlist.isClosed": "Waitlist is closed",
   "listings.waitlist.isOpen": "Waitlist is open",
   "listings.waitlist.label": "Waitlist",
   "listings.waitlist.open": "Open Waitlist",
