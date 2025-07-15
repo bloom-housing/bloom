@@ -1378,6 +1378,28 @@ export class MultiselectQuestionsService {
   }
 }
 
+export class DataExplorerService {
+  generateReport(
+    params: {
+      jurisdictionId: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<DataExplorerReport> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/generate-report"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      configs.params = { jurisdictionId: params["jurisdictionId"], userId: "222" }
+
+      let data = null
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+}
 export class ApplicationsService {
   /**
    * Get a paginated set of applications

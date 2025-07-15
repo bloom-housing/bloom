@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useContext } from "react"
 import Head from "next/head"
 import { t } from "@bloom-housing/ui-components"
 import { Button } from "@bloom-housing/ui-seeds"
@@ -9,7 +9,8 @@ import DemographicsSection from "../../components/explore/raceAndEthnicity"
 import PrimaryApplicantSection from "../../components/explore/applicantAndHouseholdData"
 import { AiPermissionModal } from "../../components/explore/aiPermissionModal"
 import { AiInsightsPanel } from "../../components/explore/AIInsightsPanel"
-import { getReportDataFastAPI, ReportProducts } from "../../lib/explore/data-explorer"
+import { ReportProducts } from "../../lib/explore/data-explorer"
+import { AuthContext } from "@bloom-housing/shared-helpers"
 
 const ApplicationAnalysis = () => {
   const [genAIEnabled, setGenAIEnabled] = useState(false)
@@ -25,10 +26,13 @@ const ApplicationAnalysis = () => {
     accessibilityTypeFrequencies: [],
   })
 
+  const { dataExplorerService } = useContext(AuthContext)
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const reportData = await getReportDataFastAPI()
+        console.log("Fetching report data...")
+        const reportData = await dataExplorerService.generateReport({ jurisdictionId: "all" })
         setChartData({
           incomeHouseholdSizeCrossTab: reportData.products.incomeHouseholdSizeCrossTab,
           raceFrequencies: reportData.products.raceFrequencies,
@@ -44,7 +48,7 @@ const ApplicationAnalysis = () => {
       }
     }
     void fetchData()
-  }, [])
+  }, [dataExplorerService])
 
   const handleEnableGenAI = () => {
     setShowOnboardingModal(true)
