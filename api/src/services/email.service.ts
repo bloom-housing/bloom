@@ -632,7 +632,8 @@ export class EmailService {
     if (listing.reservedCommunityTypes?.name) {
       tableRows.push({
         label: this.polyglot.t('rentalOpportunity.community'),
-        value: this.formatCommunityType[listing.reservedCommunityTypes.name],
+        value:
+          this.formatCommunityType[listing.reservedCommunityTypes.name] || '',
       });
     }
     if (listing.applicationDueDate) {
@@ -891,5 +892,6 @@ export class EmailService {
     seniorVeterans: 'Senior Veteran',
     veteran: 'Veteran',
     schoolEmployee: 'School Employee',
+    tay: 'TAY - Transition Aged Youth',
   };
 }
