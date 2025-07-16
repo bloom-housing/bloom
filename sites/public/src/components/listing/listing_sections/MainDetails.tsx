@@ -5,6 +5,7 @@ import {
   Jurisdiction,
   Listing,
   MarketingTypeEnum,
+  MultiselectQuestionsApplicationSectionEnum,
   ReviewOrderTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { Heading, Link, Tag, Icon } from "@bloom-housing/ui-seeds"
@@ -19,6 +20,7 @@ import FavoriteButton from "../../shared/FavoriteButton"
 import { Availability } from "./Availability"
 import listingStyles from "../ListingViewSeeds.module.scss"
 import styles from "./MainDetails.module.scss"
+import { isFeatureFlagOn } from "../../../lib/helpers"
 
 type MainDetailsProps = {
   listing: Listing
@@ -40,7 +42,8 @@ export const getListingTags = (
   hideReviewTags?: boolean,
   hideHomeTypeTag?: boolean,
   hideAccessibilityTag?: boolean,
-  enableIsVerified?: boolean
+  enableIsVerified?: boolean,
+  swapCommunityTypeWithPrograms?: boolean
 ): ListingTag[] => {
   const listingTags: ListingTag[] = []
 
@@ -59,7 +62,22 @@ export const getListingTags = (
     })
   }
 
-  if (listing.reservedCommunityTypes) {
+  if (swapCommunityTypeWithPrograms) {
+    listing.listingMultiselectQuestions
+      .filter(
+        (question) =>
+          question.multiselectQuestions.applicationSection ===
+          MultiselectQuestionsApplicationSectionEnum.programs
+      )
+      .forEach((question) => {
+        listingTags.push({
+          title: question.multiselectQuestions.untranslatedText
+            ? t(`listingFilters.program.${question.multiselectQuestions.untranslatedText}`)
+            : t(`listingFilters.program.${question.multiselectQuestions.text}`),
+          variant: "highlight-warm",
+        })
+      })
+  } else if (listing.reservedCommunityTypes) {
     listingTags.push({
       title: t(`listings.reservedCommunityTypes.${listing.reservedCommunityTypes.name}`),
       variant: "highlight-warm",
@@ -87,31 +105,7 @@ export const getListingTags = (
     }
   }
 
-  if (!hideAccessibilityTag) {
-    if (listing.listingFeatures.visual && listing.listingFeatures.hearing) {
-      listingTags.push({
-        title: t("listing.tags.visionAndHearingUnits"),
-        variant: "secondary",
-      })
-    } else if (listing.listingFeatures.hearing) {
-      listingTags.push({
-        title: t("listing.tags.hearingUnits"),
-        variant: "secondary",
-      })
-    } else if (listing.listingFeatures.visual) {
-      listingTags.push({
-        title: t("listing.tags.visionUnits"),
-        variant: "secondary",
-      })
-    }
-
-    if (listing.listingFeatures.mobility) {
-      listingTags.push({
-        title: t("listing.tags.mobilityUnits"),
-        variant: "secondary",
-      })
-    }
-
+  if (!hideAccessibilityTag && listing.listingFeatures) {
     if (Object.values(listing.listingFeatures).some((feature) => feature)) {
       listingTags.push({
         title: t("listing.tags.accessible"),
@@ -133,13 +127,17 @@ export const MainDetails = ({
   showHomeType,
 }: MainDetailsProps) => {
   if (!listing) return
-  const enableIsVerified = jurisdiction.featureFlags.find(
-    (flag) => flag.name === FeatureFlagEnum.enableIsVerified
-  )?.active
 
   const googleMapsHref =
     "https://www.google.com/maps/place/" + oneLineAddress(listing.listingsBuildingAddress)
-  const listingTags = getListingTags(listing, true, !showHomeType, enableIsVerified)
+  const listingTags = getListingTags(
+    listing,
+    true,
+    !showHomeType,
+    !isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableAccessibilityFeatures),
+    isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableIsVerified),
+    isFeatureFlagOn(jurisdiction, FeatureFlagEnum.swapCommunityTypeWithPrograms)
+  )
   return (
     <div>
       <ImageCard

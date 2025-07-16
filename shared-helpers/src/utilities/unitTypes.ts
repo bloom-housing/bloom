@@ -51,6 +51,7 @@ export const getUniqueUnitGroupUnitTypes = (unitGroups: UnitGroup[]): GetUnitTyp
 
   const unitTypes = unitGroups.reduce((acc, group) => {
     const groupUnitTypes = group.unitTypes || []
+    if (!group.openWaitlist) return acc
 
     groupUnitTypes.forEach((unitType: UnitType) => {
       const { id, name } = unitType || {}

@@ -11,6 +11,7 @@ import LiveAloneStep from "./LiveAloneStep"
 import HouseholdMemberStep from "./HouseholdMemberStep"
 import SelectedPreferencesStep from "./SelectedPreferencesStep"
 import PreferencesAllStep from "./PreferencesAllStep"
+import PreferredUnitSizeStep from "./PreferredUnitSizeStep"
 import ProgramsStep from "./ProgramsStep"
 import { Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
@@ -83,6 +84,7 @@ export default class ApplicationConductor {
     },
     preferredUnitSize: {
       url: "/applications/household/preferred-units",
+      definition: PreferredUnitSizeStep,
     },
     adaHouseholdMembers: {
       url: "/applications/household/ada",

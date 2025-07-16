@@ -64,9 +64,23 @@ export const stagingSeed = async (
         FeatureFlagEnum.enableSection8Question,
         FeatureFlagEnum.enableSingleUseCode,
         FeatureFlagEnum.enableUtilitiesIncluded,
-        FeatureFlagEnum.enableWaitlistAdditionalFields,
       ],
       languages: Object.values(LanguagesEnum),
+      requiredListingFields: [
+        'listingsBuildingAddress',
+        'name',
+        'developer',
+        'listingImages',
+        'leasingAgentEmail',
+        'leasingAgentName',
+        'leasingAgentPhone',
+        'jurisdictions',
+        'units',
+        'digitalApplication',
+        'paperApplication',
+        'referralOpportunity',
+        'rentalAssistance',
+      ],
     }),
   });
   // jurisdiction with unit groups enabled
@@ -85,6 +99,7 @@ export const stagingSeed = async (
         FeatureFlagEnum.enableListingFiltering,
         FeatureFlagEnum.enableListingOpportunity,
         FeatureFlagEnum.enableListingPagination,
+        FeatureFlagEnum.enableListingUpdatedAt,
         FeatureFlagEnum.enableMarketingStatus,
         FeatureFlagEnum.enableNeighborhoodAmenities,
         FeatureFlagEnum.enablePartnerDemographics,
@@ -98,7 +113,9 @@ export const stagingSeed = async (
         FeatureFlagEnum.enableWaitlistAdditionalFields,
         FeatureFlagEnum.hideCloseListingButton,
         FeatureFlagEnum.swapCommunityTypeWithPrograms,
+        FeatureFlagEnum.enableFullTimeStudentQuestion,
       ],
+      requiredListingFields: ['name', 'listingsBuildingAddress'],
     }),
   });
   // Basic configuration jurisdiction
@@ -120,6 +137,22 @@ export const stagingSeed = async (
   const nadaHill = await prismaClient.jurisdictions.create({
     data: jurisdictionFactory('Nada Hill', {
       featureFlags: [],
+    }),
+  });
+  // create super admin user
+  await prismaClient.userAccounts.create({
+    data: await userFactory({
+      roles: { isSuperAdmin: true, isAdmin: true },
+      email: 'superadmin@example.com',
+      confirmedAt: new Date(),
+      jurisdictionIds: [
+        mainJurisdiction.id,
+        lakeviewJurisdiction.id,
+        bridgeBayJurisdiction.id,
+        nadaHill.id,
+      ],
+      acceptedTerms: true,
+      password: 'abcdef',
     }),
   });
   // create admin user
@@ -338,9 +371,9 @@ export const stagingSeed = async (
   await prismaClient.multiselectQuestions.create({
     data: multiselectQuestionFactory(lakeviewJurisdiction.id, {
       multiselectQuestion: {
-        text: 'Seniors',
+        text: 'Seniors 62+',
         description:
-          'Are you or anyone in your household 65 years of age or older?',
+          'Are you or anyone in your household 62 years of age or older?',
         applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
         optOutText: 'Prefer not to say',
         options: [
@@ -353,13 +386,14 @@ export const stagingSeed = async (
 
   // add extra programs to support filtering by "community type"
   await Promise.all(
-    [...new Array(3)].map(
-      async () =>
+    ['Seniors 55+', 'Families', 'Veterans'].map(
+      async (text) =>
         await prismaClient.multiselectQuestions.create({
           data: multiselectQuestionFactory(lakeviewJurisdiction.id, {
             multiselectQuestion: {
               applicationSection:
                 MultiselectQuestionsApplicationSectionEnum.programs,
+              text,
             },
           }),
         }),
