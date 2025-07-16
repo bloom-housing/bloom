@@ -179,7 +179,7 @@ const getCharacterString = (characterCount: number, characterLimit: number) => {
 }
 
 type TextEditorProps = {
-  characterLimit: number
+  characterLimit?: number
   editor: Editor
   editorId?: string
 }
