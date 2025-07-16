@@ -2152,11 +2152,7 @@ describe('Testing application service', () => {
           },
         },
         preferredUnitTypes: {
-          connect: [
-            {
-              id: expect.anything(),
-            },
-          ],
+          set: [{ id: expect.anything() }],
         },
         householdMember: {
           create: [
