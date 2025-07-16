@@ -56,19 +56,19 @@ const Resources = () => {
                 <GridRow columns={2}>
                   <ResourceCard
                     title={t("resources.revitalizationTitle")}
-                    href="/"
+                    href="https://detroitmi.gov/departments/housing-and-revitalization-department"
                     content={housingAndRevitalization.toString()}
                   />
                   <ResourceCard
                     title={t("resources.propertyConditionsTitle")}
-                    href="/"
+                    href="https://detroitmi.gov/departments/buildings-safety-engineering-and-environmental-department"
                     content={enforcePropertyConditions.toString()}
                   />
                 </GridRow>
                 <GridRow columns={2}>
                   <ResourceCard
                     title={t("resources.housingNetworkTitle")}
-                    href="/"
+                    href="https://detroithousingnetwork.org/"
                     content={housingNetwork.toString()}
                   />
                   <ResourceCard
@@ -79,84 +79,84 @@ const Resources = () => {
                 <GridRow columns={2}>
                   <ResourceCard
                     title={t("resources.housingCounseling")}
-                    href="/"
+                    href="https://housing.state.mi.us/webportal/default.aspx?page=counseling_start"
                     content={housingCounseling.toString()}
                   />
                   <ResourceCard
                     title={t("resources.homeRepair")}
-                    href="/"
+                    href="https://detroitmi.gov/departments/housing-and-revitalization-department/residents"
                     content={homeRepair.toString()}
                   />
                 </GridRow>
                 <GridRow columns={2}>
                   <ResourceCard
                     title={t("resources.fairHousing")}
-                    href="/"
+                    href="https://www.fairhousingdetroit.org/"
                     content={fairHousing.toString()}
                   />
                   <ResourceCard
                     title={t("resources.homelessnessServices")}
-                    href="/"
+                    href="http://www.camdetroit.org/"
                     content={homelessnessServices.toString()}
                   />
                 </GridRow>
                 <GridRow columns={2}>
                   <ResourceCard
                     title={t("resources.utilitiesAssistance")}
-                    href="/"
+                    href="https://www.waynemetro.org/energy-and-water-assistance/"
                     content={utilitiesAssistance.toString()}
                   />
                   <ResourceCard
                     title={t("resources.taxForeclosurePrevention")}
-                    href="/"
+                    href="http://www.uchcdetroit.org/"
                     content={taxForeclosurePrevention.toString()}
                   />
                 </GridRow>
                 <GridRow columns={2}>
                   <ResourceCard
                     title={t("resources.homeownerPropertyTaxRelief")}
-                    href="/"
+                    href="https://detroitmi.gov/government/boards/property-assessment-board-review/homeowners-property-exemption-hope"
                     content={homeownerPropertyTaxRelief.toString()}
                   />
                   <ResourceCard
                     title={t("resources.michigan211")}
-                    href="/"
+                    href="https://www.mi211.org/"
                     content={michigan211.toString()}
                   />
                 </GridRow>
                 <GridRow columns={2}>
                   <ResourceCard
                     title={t("resources.financialCounseling")}
-                    href="/"
+                    href="https://detroitmi.gov/departments/department-neighborhoods/financial-empowerment-center-fec"
                     content={financialCounseling.toString()}
                   />
                   <ResourceCard
                     title={t("resources.housingCommission")}
-                    href="/"
+                    href="https://www.dhcmi.org/Default.aspx"
                     content={housingCommission.toString()}
                   />
                 </GridRow>
                 <GridRow columns={2}>
                   <ResourceCard
                     title={t("resources.landBankAuthority")}
-                    href="/"
+                    href="https://buildingdetroit.org/"
                     content={landBankAuthority.toString()}
                   />
                   <ResourceCard
                     title={t("resources.projectCleanSlate")}
-                    href="/"
+                    href="https://detroitmi.gov/departments/law-department/project-clean-slate"
                     content={projectCleanSlate.toString()}
                   />
                 </GridRow>
                 <GridRow columns={2}>
                   <ResourceCard
                     title={t("resources.civilRightsInclusionOpportunity")}
-                    href="/"
+                    href="https://detroitmi.gov/departments/civil-rights-inclusion-opportunity-department"
                     content={civilRightsInclusionOpportunity.toString()}
                   />
                   <ResourceCard
                     title={t("resources.housingRelocationAssistance")}
-                    href="/"
+                    href="https://www.uchcdetroit.org/"
                     content={housingRelocationAssistance.toString()}
                   />
                 </GridRow>
