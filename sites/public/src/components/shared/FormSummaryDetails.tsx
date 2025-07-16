@@ -3,6 +3,7 @@ import { MultiLineAddress, t } from "@bloom-housing/ui-components"
 import { Card, FieldValue, Heading, Link } from "@bloom-housing/ui-seeds"
 import {
   getUniqueUnitTypes,
+  getUniqueUnitGroupUnitTypes,
   AddressHolder,
   cleanMultiselectString,
 } from "@bloom-housing/shared-helpers"
@@ -25,6 +26,8 @@ type FormSummaryDetailsProps = {
   hidePreferences?: boolean
   hidePrograms?: boolean
   validationError?: boolean
+  enableUnitGroups?: boolean
+  enableFullTimeStudentQuestion?: boolean
 }
 
 const accessibilityLabels = (accessibility) => {
@@ -62,6 +65,8 @@ const FormSummaryDetails = ({
   hidePreferences = false,
   hidePrograms = false,
   validationError = false,
+  enableUnitGroups = false,
+  enableFullTimeStudentQuestion = false,
 }: FormSummaryDetailsProps) => {
   // fix for rehydration
   const [hasMounted, setHasMounted] = useState(false)
@@ -173,7 +178,9 @@ const FormSummaryDetails = ({
     )
   }
 
-  const allListingUnitTypes = getUniqueUnitTypes(listing?.units)
+  const allListingUnitTypes = enableUnitGroups
+    ? getUniqueUnitGroupUnitTypes(listing?.unitGroups)
+    : getUniqueUnitTypes(listing?.units)
 
   const preferredUnits = application.preferredUnitTypes?.map((unit) => {
     const unitDetails = allListingUnitTypes?.find(
@@ -285,6 +292,18 @@ const FormSummaryDetails = ({
             className={styles["summary-value"]}
           >
             {application.contactPreferences?.map((item) => t(`t.${item}`)).join(", ")}
+          </FieldValue>
+        )}
+        {enableFullTimeStudentQuestion && (
+          <FieldValue
+            testId={"app-summary-full-time-student"}
+            id="fullTimeStudent"
+            label={t("application.review.confirmation.fullTimeStudent")}
+            className={styles["summary-value"]}
+          >
+            {application.applicant.fullTimeStudent
+              ? t(`t.${application.applicant.fullTimeStudent}`)
+              : t("t.n/a")}
           </FieldValue>
         )}
       </Card.Section>
@@ -399,6 +418,15 @@ const FormSummaryDetails = ({
                     {t("application.review.sameAddressAsApplicant")}
                   </p>
                 )}
+                {enableFullTimeStudentQuestion && (
+                  <FieldValue
+                    testId={"app-summary-household-member-full-time-student"}
+                    label={t("application.review.confirmation.fullTimeStudent")}
+                    className={styles["summary-value"]}
+                  >
+                    {member.fullTimeStudent ? t(`t.${member.fullTimeStudent}`) : t("t.n/a")}
+                  </FieldValue>
+                )}
               </div>
             ))}
           </Card.Section>
@@ -416,7 +444,7 @@ const FormSummaryDetails = ({
         </Card.Header>
 
         <Card.Section className={styles["summary-section"]}>
-          {preferredUnits && (
+          {preferredUnits?.length > 0 && (
             <FieldValue
               testId={"app-summary-preferred-units"}
               id="householdUnitType"
@@ -452,7 +480,11 @@ const FormSummaryDetails = ({
           <FieldValue
             testId={"app-summary-household-student"}
             id="householdStudent"
-            label={t("application.household.householdStudent.title")}
+            label={
+              enableFullTimeStudentQuestion
+                ? t("application.household.householdStudentAll.title")
+                : t("application.household.householdStudent.title")
+            }
             className={styles["summary-value"]}
           >
             {application.householdStudent ? t("t.yes") : t("t.no")}

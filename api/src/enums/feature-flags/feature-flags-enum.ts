@@ -16,6 +16,7 @@ export enum FeatureFlagEnum {
   enableListingFiltering = 'enableListingFiltering',
   enableListingOpportunity = 'enableListingOpportunity',
   enableListingPagination = 'enableListingPagination',
+  enableListingUpdatedAt = 'enableListingUpdatedAt',
   enableMarketingStatus = 'enableMarketingStatus',
   enableNeighborhoodAmenities = 'enableNeighborhoodAmenities',
   enablePartnerDemographics = 'enablePartnerDemographics',
@@ -30,6 +31,7 @@ export enum FeatureFlagEnum {
   hideCloseListingButton = 'hideCloseListingButton',
   swapCommunityTypeWithPrograms = 'swapCommunityTypeWithPrograms',
   enableWaitlistAdditionalFields = 'enableWaitlistAdditionalFields',
+  enableFullTimeStudentQuestion = 'enableFullTimeStudentQuestion',
 }
 
 // List of all of existing flags and their descriptions.
@@ -64,6 +66,11 @@ export const featureFlagMap: { name: string; description: string }[] = [
     name: FeatureFlagEnum.enableCompanyWebsite,
     description:
       'When true, allows partners to add company website information',
+  },
+  {
+    name: FeatureFlagEnum.enableFullTimeStudentQuestion,
+    description:
+      'When true, the full time student question is displayed in the application form',
   },
   {
     name: FeatureFlagEnum.enableGeocodingPreferences,
@@ -103,6 +110,10 @@ export const featureFlagMap: { name: string; description: string }[] = [
     name: FeatureFlagEnum.enableListingPagination,
     description:
       'When true listings browser will display pagination controls section',
+  },
+  {
+    name: FeatureFlagEnum.enableListingUpdatedAt,
+    description: 'When true, listings detail will display an updated at date',
   },
   {
     name: FeatureFlagEnum.enableMarketingStatus,
