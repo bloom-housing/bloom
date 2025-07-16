@@ -238,11 +238,4 @@ export class ListingUpdate extends OmitType(Listing, [
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => IdDTO)
   requestedChangesUser?: IdDTO;
-
-  @Expose()
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @MaxLength(4096, { groups: [ValidationsGroupsEnum.default] })
-  @ApiPropertyOptional()
-  @SanitizeHtml()
-  whatToExpect?: string;
 }

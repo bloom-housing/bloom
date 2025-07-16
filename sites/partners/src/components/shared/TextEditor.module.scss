@@ -4,6 +4,7 @@
   border: 1px solid var(--border-color);
   border-radius: var(--seeds-s1);
   font-family: var(--seeds-font-alt-sans);
+
   :first-child {
     margin-top: 0;
   }
@@ -11,9 +12,11 @@
   ol {
     list-style: decimal;
   }
+
   ul {
     list-style: disc;
   }
+
   p:not(li > *) {
     padding-block: 0.25em;
   }
@@ -80,6 +83,7 @@
       }
     }
   }
+
   [role="textbox"] {
     background-color: var(--seeds-color-gray-200);
     padding: var(--seeds-s2) var(--seeds-s3);
@@ -92,6 +96,7 @@
     }
   }
 }
+
 .character-count {
   margin-top: var(--seeds-s1);
   font-size: var(--seeds-type-caption-size);
