@@ -37,7 +37,7 @@ const ApplicationAda = () => {
           application.accessibility.vision === false &&
           application.accessibility.hearing === false &&
           !enableAdaOtherOption) ||
-        (!enableAdaOtherOption && application.accessibility.other),
+        (enableAdaOtherOption && application.accessibility.other),
     },
     shouldFocusError: false,
   })
@@ -68,26 +68,30 @@ const ApplicationAda = () => {
     })
   }, [profile])
 
-  const adaFeaturesOptions: FieldSingle[] = adaFeatureKeys.map((item) => {
-    const isChecked = application.accessibility[item]
+  const adaFeaturesOptions: FieldSingle[] = adaFeatureKeys
+    .filter((item) => {
+      return item === "other" ? enableAdaOtherOption : true
+    })
+    .map((item) => {
+      const isChecked = application.accessibility[item]
 
-    return {
-      id: item,
-      label: t(`application.ada.${item}`),
-      value: item,
-      defaultChecked: isChecked,
-      dataTestId: `app-ada-${item}`,
-      uniqueName: true,
-      inputProps: {
-        onChange: () => {
-          setTimeout(() => {
-            setValue("app-accessibility-no-features", false)
-            clearErrors()
-          }, 1)
+      return {
+        id: item,
+        label: t(`application.ada.${item}`),
+        value: item,
+        defaultChecked: isChecked,
+        dataTestId: `app-ada-${item}`,
+        uniqueName: true,
+        inputProps: {
+          onChange: () => {
+            setTimeout(() => {
+              setValue("app-accessibility-no-features", false)
+              clearErrors()
+            }, 1)
+          },
         },
-      },
-    }
-  })
+      }
+    })
 
   adaFeaturesOptions.push({
     id: "no-features",
