@@ -17,9 +17,11 @@ Cypress.Commands.add("signIn", (email, password) => {
 Cypress.Commands.add("signOut", () => {
   // TODO: once the favorites feature is being tested, this is Sign Out-4:
   if (Cypress.env("showSeedsDesign")) {
-    cy.get(`[data-testid="My Account-4"]`).trigger("click")
-    cy.get(`[data-testid="Sign Out-4"]`).trigger("click")
+    cy.get(`[data-testid="My Account"]`).trigger("click")
+    cy.get(`[data-testid="Sign Out"]`).trigger("click")
   } else {
+    // data-testid for SiteHeader in this path is set in ui-components
+    // See https://github.com/bloom-housing/ui-components/blob/c35c094554e8199f202d67a405272035189060ec/src/headers/SiteHeader.tsx#L175
     cy.get(`[data-testid="My Account-4"]`).trigger("mouseover")
     cy.get(`[data-testid="Sign Out-3"]`).trigger("click")
   }
