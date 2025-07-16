@@ -20,6 +20,7 @@ import {
 import {
   Address,
   ApplicationMultiselectQuestion,
+  FeatureFlag,
   Jurisdiction,
   Listing,
   ListingsStatusEnum,
@@ -399,7 +400,11 @@ export const downloadExternalPDF = async (fileURL: string, fileName: string) => 
   }
 }
 
-export const isFeatureFlagOn = (jurisdiction: Jurisdiction, featureFlag: string) => {
+export const isFeatureFlagOn = (
+  // optional type when no full jurisdiction data is available
+  jurisdiction: Jurisdiction | { featureFlags: FeatureFlag[] },
+  featureFlag: string
+) => {
   return jurisdiction?.featureFlags?.some((flag) => flag.name === featureFlag && flag.active)
 }
 

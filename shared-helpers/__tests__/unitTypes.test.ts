@@ -141,6 +141,7 @@ describe("unit type: getUniqueUnitGroupUnitTypes helper", () => {
               name: UnitTypeEnum.oneBdrm,
             },
           ],
+          openWaitlist: true,
         },
         {
           id: "group2",
@@ -162,6 +163,7 @@ describe("unit type: getUniqueUnitGroupUnitTypes helper", () => {
               name: UnitTypeEnum.twoBdrm,
             },
           ],
+          openWaitlist: true,
         },
       ])
     ).toStrictEqual([
@@ -187,6 +189,7 @@ describe("unit type: getUniqueUnitGroupUnitTypes helper", () => {
           createdAt: new Date(),
           updatedAt: new Date(),
           unitTypes: [],
+          openWaitlist: true,
         },
         {
           id: "group2",
@@ -201,6 +204,7 @@ describe("unit type: getUniqueUnitGroupUnitTypes helper", () => {
               name: UnitTypeEnum.studio,
             },
           ],
+          openWaitlist: true,
         },
       ])
     ).toStrictEqual([
@@ -209,5 +213,112 @@ describe("unit type: getUniqueUnitGroupUnitTypes helper", () => {
         name: UnitTypeEnum.studio,
       },
     ])
+  })
+  it("should exclude unit groups with openWaitlist = false", () => {
+    expect(
+      getUniqueUnitGroupUnitTypes([
+        {
+          id: "group0",
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          unitTypes: [
+            {
+              id: "studio-type",
+              createdAt: new Date(),
+              updatedAt: new Date(),
+              numBedrooms: 0,
+              name: UnitTypeEnum.studio,
+            },
+          ],
+          openWaitlist: false,
+        },
+        {
+          id: "group1",
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          unitTypes: [
+            {
+              id: "one-bdrm-type",
+              createdAt: new Date(),
+              updatedAt: new Date(),
+              numBedrooms: 1,
+              name: UnitTypeEnum.oneBdrm,
+            },
+          ],
+          openWaitlist: false,
+        },
+        {
+          id: "group2",
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          unitTypes: [
+            {
+              id: "one-bdrm-type",
+              createdAt: new Date(),
+              updatedAt: new Date(),
+              numBedrooms: 1,
+              name: UnitTypeEnum.oneBdrm,
+            },
+          ],
+          openWaitlist: true,
+        },
+        {
+          id: "group3",
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          unitTypes: [
+            {
+              id: "two-bdrm-type",
+              createdAt: new Date(),
+              updatedAt: new Date(),
+              numBedrooms: 2,
+              name: UnitTypeEnum.twoBdrm,
+            },
+          ],
+          openWaitlist: false,
+        },
+      ])
+    ).toStrictEqual([
+      {
+        id: "one-bdrm-type",
+        name: UnitTypeEnum.oneBdrm,
+      },
+    ])
+  })
+  it("should return empty array when all unit groups have openWaitlist = false", () => {
+    expect(
+      getUniqueUnitGroupUnitTypes([
+        {
+          id: "group1",
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          unitTypes: [
+            {
+              id: "studio-type",
+              createdAt: new Date(),
+              updatedAt: new Date(),
+              numBedrooms: 0,
+              name: UnitTypeEnum.studio,
+            },
+          ],
+          openWaitlist: false,
+        },
+        {
+          id: "group2",
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          unitTypes: [
+            {
+              id: "one-bdrm-type",
+              createdAt: new Date(),
+              updatedAt: new Date(),
+              numBedrooms: 1,
+              name: UnitTypeEnum.oneBdrm,
+            },
+          ],
+          openWaitlist: false,
+        },
+      ])
+    ).toStrictEqual([])
   })
 })
