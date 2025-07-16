@@ -14,7 +14,7 @@
   ul {
     list-style: disc;
   }
-  p:not(li *) {
+  p:not(li > *) {
     padding-block: 0.25em;
   }
 

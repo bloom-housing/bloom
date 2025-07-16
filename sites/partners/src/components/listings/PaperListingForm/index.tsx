@@ -255,11 +255,18 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
           clearErrors()
           const successful = await formMethods.trigger()
 
-          if (!enableSection8) {
-            formData.listingSection8Acceptance = YesNoEnum.no
+          const CHARACTER_LIMIT = 2000
+          if (whatToExpectEditor?.storage.characterCount.characters() > CHARACTER_LIMIT) {
+            setLoading(false)
+            setAlert("form")
+            return
           }
 
           formData.whatToExpect = cleanRichText(whatToExpectEditor.getHTML())
+
+          if (!enableSection8) {
+            formData.listingSection8Acceptance = YesNoEnum.no
+          }
 
           if (successful) {
             const dataPipeline = new ListingDataPipeline(formData, {

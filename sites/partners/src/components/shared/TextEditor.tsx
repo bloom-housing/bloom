@@ -14,8 +14,6 @@ import { Icon } from "@bloom-housing/ui-seeds"
 import { t } from "@bloom-housing/ui-components"
 import styles from "./TextEditor.module.scss"
 
-const CHARACTER_LIMIT = 2000
-
 export const EditorExtensions = [
   StarterKit.configure({
     heading: false,
@@ -159,8 +157,8 @@ const MenuBar = ({ editor }) => {
   )
 }
 
-const getCharacterString = (characterCount: number) => {
-  const charactersRemaining = CHARACTER_LIMIT - characterCount
+const getCharacterString = (characterCount: number, characterLimit: number) => {
+  const charactersRemaining = characterLimit - characterCount
   if (charactersRemaining === -1) {
     return t("t.characterOver", {
       count: charactersRemaining * -1,
@@ -181,17 +179,18 @@ const getCharacterString = (characterCount: number) => {
 }
 
 type TextEditorProps = {
+  characterLimit: number
   editor: Editor
   editorId?: string
 }
 
-export const TextEditor = ({ editor, editorId }: TextEditorProps) => {
+export const TextEditor = ({ characterLimit = 2000, editor, editorId }: TextEditorProps) => {
   if (!editor) {
     return null
   }
 
   const characterCount = editor?.storage?.characterCount?.characters()
-  const overLimit = CHARACTER_LIMIT - characterCount < 0
+  const overLimit = characterCount > characterCount
 
   return (
     <>
@@ -201,12 +200,10 @@ export const TextEditor = ({ editor, editorId }: TextEditorProps) => {
       </div>
       <div
         className={`${styles["character-count"]} ${
-          editor?.storage.characterCount.characters() > CHARACTER_LIMIT
-            ? styles["character-count-warning"]
-            : ""
+          overLimit ? styles["character-count-warning"] : ""
         }`}
       >
-        {getCharacterString(characterCount)}
+        {getCharacterString(characterCount, characterLimit)}
       </div>
     </>
   )
