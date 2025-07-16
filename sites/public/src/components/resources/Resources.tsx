@@ -1,5 +1,5 @@
-import Link from "next/link"
 import Head from "next/head"
+import Markdown from "markdown-to-jsx"
 import { Card, Grid, Heading } from "@bloom-housing/ui-seeds"
 import { t } from "@bloom-housing/ui-components"
 import { GridRow } from "@bloom-housing/ui-seeds/src/layout/Grid"
@@ -8,6 +8,7 @@ import Layout from "../../layouts/application"
 import ResourceSection from "./ResourceSection"
 import ResourceCard from "./ResourceCard"
 import styles from "./Resources.module.scss"
+import { RenderIf } from "../../lib/helpers"
 
 import housingAndRevitalization from "./../../md_content/resources/housing_and_revitalization.md"
 import enforcePropertyConditions from "./../../md_content/resources/enforce_property_conditions.md"
@@ -27,6 +28,7 @@ import landBankAuthority from "./../../md_content/resources/land_bank_authority.
 import projectCleanSlate from "./../../md_content/resources/project_clean_slate.md"
 import civilRightsInclusionOpportunity from "./../../md_content/resources/civil_rights_inclusion_opportunity.md"
 import housingRelocationAssistance from "./../../md_content/resources/housing_relocation_assistance.md"
+import contactInfo from "./../../md_content/resources/contact_info.md"
 
 const Resources = () => {
   const pageTitle = t("pageTitle.additionalResources")
@@ -167,16 +169,18 @@ const Resources = () => {
                 <Heading size="xl" priority={2}>
                   {t("resources.contactTitle")}
                 </Heading>
-                <p className={styles["contact-card-description"]}>
-                  {t("resources.contactDescription")}
-                </p>
-              </div>
-              <div className={styles["contact-card-subsection"]}>
                 <p className={styles["contact-card-info"]}>{t("resources.contactInfo")}</p>
-                <Link href={`mailto:${t("resources.contactEmail")}`}>
-                  {t("resources.contactEmail")}
-                </Link>
               </div>
+              <Markdown
+                options={{
+                  overrides: {
+                    RenderIf,
+                  },
+                }}
+                className={styles["contact-card-content"]}
+              >
+                {contactInfo.toString()}
+              </Markdown>
             </Card>
           </aside>
         </article>
