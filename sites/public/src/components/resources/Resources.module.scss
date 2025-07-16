@@ -19,10 +19,14 @@
       flex-direction: column;
       gap: var(--seeds-spacer-content);
 
-      .contact-card-subsection {
+      .contact-card-content {
         display: flex;
         flex-direction: column;
         gap: var(--seeds-s4);
+
+        p {
+          padding-block-start: var(--seeds-s4);
+        }
       }
 
       .contact-card-title {
@@ -43,7 +47,7 @@
       @media (--md-and-up) {
         padding-inline-start: var(--seeds-s8);
         margin-block-start: unset;
-        width: var(--seeds-width-6xl);
+        min-width: var(--seeds-width-sm);
       }
     }
   }
