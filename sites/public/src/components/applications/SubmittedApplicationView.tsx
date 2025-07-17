@@ -72,6 +72,9 @@ const SubmittedApplicationView = ({
           enableFullTimeStudentQuestion={doJurisdictionsHaveFeatureFlagOn(
             FeatureFlagEnum.enableFullTimeStudentQuestion
           )}
+          enableAdaOtherOption={doJurisdictionsHaveFeatureFlagOn(
+            FeatureFlagEnum.enableAdaOtherOption
+          )}
         />
         <Card.Section>
           <div className="hide-for-print">
