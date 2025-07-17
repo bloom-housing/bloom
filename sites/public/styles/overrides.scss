@@ -150,6 +150,28 @@
     }
   }
 
+  // Used in core for theming testing purposes only
+  .lakeview {
+    --seeds-color-primary-darker: #4e2169;
+    --seeds-color-primary-dark: #6e2598;
+    --seeds-color-primary: #773e98;
+    --seeds-color-primary-light: #f2daff;
+    --seeds-color-primary-lighter: #f9f4fa;
+    --seeds-bg-color-surface-primary: var(--seeds-color-primary-lighter);
+    --seeds-bg-color-surface-primary-inverse: var(--seeds-color-primary-darker);
+    .seeds-button {
+      --button-border-radius-sm: var(--seeds-rounded-3xl);
+      --button-border-radius-md: var(--seeds-rounded-3xl);
+    }
+  }
+
+  // The multi-image card overrides below exist outside of the jurisdictional class. This allows it to still get the lakeview overrides - if the class does exist, then apply the same overrides to its sibling.
+  .lakeview + div {
+    .image-card__gallery-modal {
+      @extend .lakeview;
+    }
+  }
+
   // These are temporary manual overrides for the UIC multi image modal to enable it to theme with Seeds while the new Seeds multi image modal is still in development
   .image-card__gallery-modal {
     --bloom-color-primary: var(--seeds-color-primary);
@@ -167,21 +189,6 @@
       @media (--sm-only) {
         margin-block-end: var(--seeds-s4);
       }
-    }
-  }
-
-  // Used in core for theming testing purposes only
-  .lakeview {
-    --seeds-color-primary-darker: #4e2169;
-    --seeds-color-primary-dark: #6e2598;
-    --seeds-color-primary: #773e98;
-    --seeds-color-primary-light: #f2daff;
-    --seeds-color-primary-lighter: #f9f4fa;
-    --seeds-bg-color-surface-primary: var(--seeds-color-primary-lighter);
-    --seeds-bg-color-surface-primary-inverse: var(--seeds-color-primary-darker);
-    .seeds-button {
-      --button-border-radius-sm: var(--seeds-rounded-3xl);
-      --button-border-radius-md: var(--seeds-rounded-3xl);
     }
   }
 }

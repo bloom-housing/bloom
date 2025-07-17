@@ -156,6 +156,7 @@ export const MainDetails = ({
         modalCloseLabel={t("t.backToListing")}
         modalCloseInContent
         fallbackImageUrl={IMAGE_FALLBACK_URL}
+        innerClassName={process.env.jurisdictionName.replace(" ", "-").toLowerCase()}
       />
       <div className={`${styles["listing-main-details"]} seeds-m-bs-header`}>
         <Heading
