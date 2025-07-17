@@ -2,13 +2,15 @@ import React from "react"
 import { useFormContext } from "react-hook-form"
 import { t, Field, SelectOption, Select } from "@bloom-housing/ui-components"
 import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
-import { fieldMessage, fieldHasError } from "../../../../lib/helpers"
+import { fieldMessage, fieldHasError, getRequiredSubNote } from "../../../../lib/helpers"
 import { Jurisdiction } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 interface ListingIntroProps {
   jurisdictions: Jurisdiction[]
+  requiredFields: string[]
 }
+
 const ListingIntro = (props: ListingIntroProps) => {
   const formMethods = useFormContext()
 
@@ -23,6 +25,8 @@ const ListingIntro = (props: ListingIntroProps) => {
     })),
   ]
   const defaultJurisdiction = props.jurisdictions.length === 1 ? props.jurisdictions[0].id : ""
+
+  console.log(props.requiredFields)
 
   return (
     <>
@@ -42,7 +46,7 @@ const ListingIntro = (props: ListingIntroProps) => {
                   fieldHasError(errors?.name) && clearErrors("name")
                 },
               }}
-              subNote={t("listings.requiredToPublish")}
+              subNote={getRequiredSubNote("name", props.requiredFields)}
               register={register}
               error={fieldHasError(errors?.name)}
               errorMessage={fieldMessage(errors?.name)}
@@ -97,7 +101,7 @@ const ListingIntro = (props: ListingIntroProps) => {
               name="developer"
               label={t("listings.developer")}
               placeholder={t("listings.developer")}
-              subNote={t("listings.requiredToPublish")}
+              subNote={getRequiredSubNote("developer", props.requiredFields)}
               error={fieldHasError(errors?.developer)}
               errorMessage={fieldMessage(errors?.developer)}
               inputProps={{

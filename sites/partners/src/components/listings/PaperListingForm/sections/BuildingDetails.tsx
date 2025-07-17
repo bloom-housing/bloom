@@ -15,7 +15,12 @@ import { FormListing } from "../../../../lib/listings/formTypes"
 import GeocodeService, {
   GeocodeService as GeocodeServiceType,
 } from "@mapbox/mapbox-sdk/services/geocoding"
-import { fieldHasError, fieldMessage } from "../../../../lib/helpers"
+import {
+  fieldHasError,
+  fieldIsRequired,
+  fieldMessage,
+  getRequiredSubNote,
+} from "../../../../lib/helpers"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 import {
   FeatureFlagEnum,
@@ -36,19 +41,21 @@ interface MapboxApiResponse {
 }
 
 type BuildingDetailsProps = {
-  listing?: FormListing
-  latLong?: LatitudeLongitude
-  setLatLong?: (latLong: LatitudeLongitude) => void
   customMapPositionChosen?: boolean
+  latLong?: LatitudeLongitude
+  listing?: FormListing
+  requiredFields: string[]
   setCustomMapPositionChosen?: (customMapPosition: boolean) => void
+  setLatLong?: (latLong: LatitudeLongitude) => void
 }
 
 const BuildingDetails = ({
-  listing,
-  setLatLong,
-  latLong,
   customMapPositionChosen,
+  latLong,
+  listing,
+  requiredFields,
   setCustomMapPositionChosen,
+  setLatLong,
 }: BuildingDetailsProps) => {
   const formMethods = useFormContext()
   const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
@@ -217,6 +224,9 @@ const BuildingDetails = ({
                       label: entry.name,
                     })),
                   ]}
+                  subNote={getRequiredSubNote("neighborhood", requiredFields)}
+                  error={fieldHasError(errors?.neighborhood)}
+                  errorMessage={fieldMessage(errors?.neighborhood)}
                 />
               </FieldValue>
             ) : (
@@ -226,6 +236,9 @@ const BuildingDetails = ({
                 id={"neighborhood"}
                 placeholder={t("t.neighborhood")}
                 register={register}
+                subNote={getRequiredSubNote("neighborhood", requiredFields)}
+                error={fieldHasError(errors?.neighborhood)}
+                errorMessage={fieldMessage(errors?.neighborhood)}
               />
             )}
           </GridCell>
@@ -254,7 +267,9 @@ const BuildingDetails = ({
               }}
               register={register}
             />
-            <p className="field-sub-note">{t("listings.requiredToPublish")}</p>
+            {fieldIsRequired("listingsBuildingAddress", requiredFields) && (
+              <p className="field-sub-note">{t("listings.requiredToPublish")}</p>
+            )}
           </Grid.Cell>
           <Grid.Cell>
             <FieldValue
@@ -337,6 +352,9 @@ const BuildingDetails = ({
                       label: entry.toString().replace("_", " "),
                     })),
                   ]}
+                  subNote={getRequiredSubNote("region", requiredFields)}
+                  error={fieldHasError(errors?.region)}
+                  errorMessage={fieldMessage(errors?.region)}
                 />
               </FieldValue>
             ) : (
@@ -347,6 +365,9 @@ const BuildingDetails = ({
                 placeholder={t("listings.yearBuilt")}
                 type={"number"}
                 register={register}
+                subNote={getRequiredSubNote("yearBuilt", requiredFields)}
+                error={fieldHasError(errors?.yearBuilt)}
+                errorMessage={fieldMessage(errors?.yearBuilt)}
               />
             )}
           </Grid.Cell>
@@ -361,6 +382,9 @@ const BuildingDetails = ({
                 placeholder={t("listings.yearBuilt")}
                 type={"number"}
                 register={register}
+                subNote={getRequiredSubNote("yearBuilt", requiredFields)}
+                error={fieldHasError(errors?.yearBuilt)}
+                errorMessage={fieldMessage(errors?.yearBuilt)}
               />
             </Grid.Cell>
           </Grid.Row>

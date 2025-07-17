@@ -9,15 +9,22 @@ import {
   YesNoEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { useReservedCommunityTypeList } from "../../../../lib/hooks"
-import { arrayToFormOptions } from "../../../../lib/helpers"
+import {
+  arrayToFormOptions,
+  fieldHasError,
+  fieldIsRequired,
+  fieldMessage,
+  getRequiredSubNote,
+} from "../../../../lib/helpers"
 import { FormListing } from "../../../../lib/listings/formTypes"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 type CommunityTypeProps = {
   listing?: FormListing
+  requiredFields: string[]
 }
 
-const CommunityType = ({ listing }: CommunityTypeProps) => {
+const CommunityType = ({ listing, requiredFields }: CommunityTypeProps) => {
   const formMethods = useFormContext()
   const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
 
@@ -77,6 +84,8 @@ const CommunityType = ({ listing }: CommunityTypeProps) => {
     }
   }, [setValue, listing?.includeCommunityDisclaimer, watch, listing])
 
+  const descriptionSubNote = getRequiredSubNote("reservedCommunityTypes", requiredFields)
+
   return !swapCommunityTypeWithPrograms ? (
     <>
       <hr className="spacer-section-above spacer-section" />
@@ -100,6 +109,9 @@ const CommunityType = ({ listing }: CommunityTypeProps) => {
                     setCurrentCommunityType(reservedCommunityType)
                   },
                 }}
+                subNote={getRequiredSubNote("reservedCommunityTypes", requiredFields)}
+                error={fieldHasError(errors?.reservedCommunityTypes)}
+                errorMessage={fieldMessage(errors?.reservedCommunityTypes)}
               />
             )}
           </FieldValue>
@@ -112,7 +124,10 @@ const CommunityType = ({ listing }: CommunityTypeProps) => {
               id={"reservedCommunityDescription"}
               fullWidth={true}
               register={register}
-              note={t("listings.appearsInListing")}
+              note={`${descriptionSubNote ? `${descriptionSubNote}, ` : ""}${t(
+                "listings.appearsInListing"
+              )} `}
+              errorMessage={fieldMessage(errors?.reservedCommunityDescription)}
             />
           </Grid.Cell>
         </Grid.Row>

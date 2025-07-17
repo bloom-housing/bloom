@@ -11,10 +11,14 @@ import {
 import { Button, Card, Drawer, Grid, Heading } from "@bloom-housing/ui-seeds"
 import { getUrlForListingImage, CLOUDINARY_BUILDING_LABEL } from "@bloom-housing/shared-helpers"
 import { Asset, ListingImage } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { cloudinaryFileUploader, fieldHasError } from "../../../../lib/helpers"
+import { cloudinaryFileUploader, fieldHasError, fieldIsRequired } from "../../../../lib/helpers"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 
-const ListingPhotos = () => {
+interface ListingPhotosProps {
+  requiredFields: string[]
+}
+
+const ListingPhotos = (props: ListingPhotosProps) => {
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -237,7 +241,9 @@ const ListingPhotos = () => {
           </Grid.Cell>
         </Grid.Row>
       </SectionWithGrid>
-      <p className="field-sub-note">{t("listings.requiredToPublish")}</p>
+      {fieldIsRequired("listingImages", props.requiredFields) && (
+        <p className="field-sub-note">{t("listings.requiredToPublish")}</p>
+      )}
       {fieldHasError(errors?.listingImages) && (
         <span className={"text-sm text-alert"} id="photos-error">
           {t("errors.requiredFieldError")}
