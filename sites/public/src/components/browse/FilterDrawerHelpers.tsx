@@ -184,27 +184,31 @@ export const CheckboxGroup = (props: CheckboxGroupProps) => {
   )
 }
 
-export const RentSection = (props: RentSectionProps) => {
-  const validateRentValues = () => {
-    const minField = `${ListingFilterKeys.monthlyRent}.minRent`
-    const maxField = `${ListingFilterKeys.monthlyRent}.maxRent`
+export const validateRentValues = (
+  getValues: UseFormMethods["getValues"],
+  clearErrors: UseFormMethods["clearErrors"],
+  setError: UseFormMethods["setError"]
+) => {
+  const minField = `${ListingFilterKeys.monthlyRent}.minRent`
+  const maxField = `${ListingFilterKeys.monthlyRent}.maxRent`
 
-    const minValue = props.getValues(minField)
-    const maxValue = props.getValues(maxField)
+  const minValue = getValues(minField)
+  const maxValue = getValues(maxField)
 
-    props.clearErrors([minField, maxField])
+  clearErrors([minField, maxField])
 
-    if (minValue && maxValue) {
-      const numericMin = parseFloat(minValue.replaceAll(",", ""))
-      const numericMax = parseFloat(maxValue.replaceAll(",", ""))
+  if (minValue && maxValue) {
+    const numericMin = parseFloat(minValue.replaceAll(",", ""))
+    const numericMax = parseFloat(maxValue.replaceAll(",", ""))
 
-      if (numericMin > numericMax) {
-        props.setError(minField, { message: t("errors.minGreaterThanMaxRentError") })
-        props.setError(maxField, { message: t("errors.maxLessThanMinRentError") })
-      }
+    if (numericMin > numericMax) {
+      setError(minField, { message: t("errors.minGreaterThanMaxRentError") })
+      setError(maxField, { message: t("errors.maxLessThanMinRentError") })
     }
   }
+}
 
+export const RentSection = (props: RentSectionProps) => {
   return (
     <fieldset className={styles["filter-section"]}>
       <legend className={styles["filter-section-label"]}>{t("t.rent")}</legend>
@@ -224,7 +228,8 @@ export const RentSection = (props: RentSectionProps) => {
               error={!!props.errors[ListingFilterKeys.monthlyRent]?.minRent}
               errorMessage={props.errors[ListingFilterKeys.monthlyRent]?.minRent?.message}
               inputProps={{
-                onBlur: validateRentValues,
+                onBlur: () =>
+                  validateRentValues(props.getValues, props.clearErrors, props.setError),
               }}
             />
           </Grid.Cell>
@@ -242,7 +247,8 @@ export const RentSection = (props: RentSectionProps) => {
               error={!!props.errors[ListingFilterKeys.monthlyRent]?.maxRent}
               errorMessage={props.errors[ListingFilterKeys.monthlyRent]?.maxRent?.message}
               inputProps={{
-                onBlur: validateRentValues,
+                onBlur: () =>
+                  validateRentValues(props.getValues, props.clearErrors, props.setError),
               }}
             />
           </Grid.Cell>
