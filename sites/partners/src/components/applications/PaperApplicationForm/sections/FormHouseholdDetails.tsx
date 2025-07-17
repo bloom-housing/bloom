@@ -21,6 +21,7 @@ type FormHouseholdDetailsProps = {
   applicationUnitTypes: UnitType[]
   applicationAccessibilityFeatures: Accessibility
   listingUnitGroups?: UnitGroup[]
+  enableOtherAdaOption?: boolean
   enableUnitGroups?: boolean
   enableFullTimeStudentQuestion?: boolean
 }
@@ -30,6 +31,7 @@ const FormHouseholdDetails = ({
   applicationUnitTypes,
   applicationAccessibilityFeatures,
   listingUnitGroups,
+  enableOtherAdaOption,
   enableUnitGroups,
   enableFullTimeStudentQuestion,
 }: FormHouseholdDetailsProps) => {
@@ -64,20 +66,22 @@ const FormHouseholdDetails = ({
     }
   })
 
-  const adaFeaturesOptions = adaFeatureKeys.map((item) => {
-    const isChecked =
-      applicationAccessibilityFeatures &&
-      Object.keys(applicationAccessibilityFeatures).includes(item) &&
-      applicationAccessibilityFeatures[item] === true
+  const adaFeaturesOptions = adaFeatureKeys
+    .filter((item) => (item === "other" ? enableOtherAdaOption : true))
+    .map((item) => {
+      const isChecked =
+        applicationAccessibilityFeatures &&
+        Object.keys(applicationAccessibilityFeatures).includes(item) &&
+        applicationAccessibilityFeatures[item] === true
 
-    return {
-      id: item,
-      label: t(`application.add.${item}`),
-      value: item,
-      defaultChecked: isChecked,
-      dataTestId: `adaFeature.${item}`,
-    }
-  })
+      return {
+        id: item,
+        label: t(`application.ada.${item}`),
+        value: item,
+        defaultChecked: isChecked,
+        dataTestId: `adaFeature.${item}`,
+      }
+    })
 
   return (
     <>

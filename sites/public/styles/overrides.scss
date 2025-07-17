@@ -35,6 +35,10 @@
     flex-direction: column;
   }
 
+  .fullscreen-alert {
+    --alert-max-width: calc(var(--seeds-screen-lg) - var(--seeds-s20));
+  }
+
   .styled-stacked-table {
     // Temporary until we have Seeds tables to manipulate UIC StackedTable component
     [class*="stacked-table"] {
