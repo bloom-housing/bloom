@@ -6,10 +6,12 @@ import { ApplicationContext } from "../../ApplicationContext"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 type DetailsHouseholdDetailsProps = {
+  enableAdaOtherOption: boolean
   enableFullTimeStudentQuestion?: boolean
 }
 
 const DetailsHouseholdDetails = ({
+  enableAdaOtherOption,
   enableFullTimeStudentQuestion,
 }: DetailsHouseholdDetailsProps) => {
   const application = useContext(ApplicationContext)
@@ -19,6 +21,7 @@ const DetailsHouseholdDetails = ({
     if (accessibility.mobility) labels.push(t("application.ada.mobility"))
     if (accessibility.vision) labels.push(t("application.ada.vision"))
     if (accessibility.hearing) labels.push(t("application.ada.hearing"))
+    if (enableAdaOtherOption && accessibility.other) labels.push(t("application.ada.other"))
     if (labels.length === 0) labels.push(t("t.no"))
 
     return labels
