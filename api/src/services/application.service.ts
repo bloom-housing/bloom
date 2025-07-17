@@ -918,7 +918,7 @@ export class ApplicationService {
           : undefined,
         preferredUnitTypes: dto.preferredUnitTypes
           ? {
-              connect: dto.preferredUnitTypes.map((unitType) => ({
+              set: dto.preferredUnitTypes.map((unitType) => ({
                 id: unitType.id,
               })),
             }
