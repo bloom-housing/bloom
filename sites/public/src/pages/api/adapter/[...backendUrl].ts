@@ -54,9 +54,12 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
     console.log("adapter response headers", response["headers"])
     // set up response from next api based on response from backend
+    console.log("process env backend_api_base", process.env.BACKEND_API_BASE)
     const cookies = await jar.getSetCookieStrings(process.env.BACKEND_API_BASE || "")
+    const cookiesFromHeaders = response["headers"]["set-cookie"]
+    console.log("cookies from headers", cookiesFromHeaders)
     console.log("response cookies", cookies)
-    res.setHeader("Set-Cookie", cookies)
+    res.setHeader("Set-Cookie", cookiesFromHeaders)
     res.statusMessage = response.statusText
     res.status(response.status).json(response.data)
   } catch (e) {
