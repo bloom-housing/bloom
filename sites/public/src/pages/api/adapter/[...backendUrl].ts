@@ -52,6 +52,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     // send request to backend
     const response = await axios.request(configs)
 
+    console.log("adapter response headers", response["headers"])
     // set up response from next api based on response from backend
     const cookies = await jar.getSetCookieStrings(process.env.BACKEND_API_BASE || "")
     console.log("response cookies", cookies)
