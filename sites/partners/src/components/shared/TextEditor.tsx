@@ -184,7 +184,7 @@ type TextEditorProps = {
   editorId?: string
 }
 
-export const TextEditor = ({ characterLimit = 2000, editor, editorId }: TextEditorProps) => {
+export const TextEditor = ({ characterLimit = 1000, editor, editorId }: TextEditorProps) => {
   if (!editor) {
     return null
   }
