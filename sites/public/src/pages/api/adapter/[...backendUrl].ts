@@ -37,6 +37,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     if (Array.isArray(backendUrl)) {
       backendUrl = backendUrl.join("/")
     }
+    console.log("backendUrl", backendUrl)
+    console.log("rest", rest)
     const configs = getConfigs(req.method || "", "application/json", backendUrl || "", {})
     let cookieString = ""
     console.log("request cookies", req.cookies)
