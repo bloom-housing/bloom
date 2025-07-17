@@ -31,7 +31,15 @@ export interface FilterDrawerProps {
 
 const FilterDrawer = (props: FilterDrawerProps) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, handleSubmit, getValues, setValue } = useForm()
+  const {
+    register,
+    handleSubmit,
+    getValues,
+    setValue,
+    setError,
+    clearErrors,
+    formState: { errors },
+  } = useForm({ mode: "onBlur" })
 
   return (
     <Drawer
@@ -91,6 +99,9 @@ const FilterDrawer = (props: FilterDrawerProps) => {
             getValues={getValues}
             setValue={setValue}
             filterState={props.filterState}
+            setError={setError}
+            clearErrors={clearErrors}
+            errors={errors}
           />
           <CheckboxGroup
             groupLabel={t("t.region")}
