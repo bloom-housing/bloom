@@ -317,6 +317,186 @@ describe('Unit Group Transformations', () => {
         },
       });
     });
+
+    it('should properly sort multiple unit groups by unit types and AMI percentage', () => {
+      const unitGroups: UnitGroup[] = [
+        {
+          ...defaultValues,
+          id: 'unit_group_1',
+          unitTypes: [
+            {
+              ...defaultValues,
+              id: 'type_1',
+              name: UnitTypeEnum.oneBdrm,
+              numBedrooms: 1,
+            },
+          ],
+          unitGroupAmiLevels: [
+            {
+              ...defaultValues,
+              id: 'level1',
+              amiPercentage: 30,
+              monthlyRentDeterminationType:
+                MonthlyRentDeterminationTypeEnum.percentageOfIncome,
+              flatRentValue: 30,
+            },
+          ],
+        },
+        {
+          ...defaultValues,
+          id: 'unit_group_2',
+          unitTypes: [
+            {
+              ...defaultValues,
+              id: 'type_3',
+              name: UnitTypeEnum.threeBdrm,
+              numBedrooms: 3,
+            },
+          ],
+          unitGroupAmiLevels: [
+            {
+              ...defaultValues,
+              id: 'level1',
+              amiPercentage: 20,
+              monthlyRentDeterminationType:
+                MonthlyRentDeterminationTypeEnum.percentageOfIncome,
+              flatRentValue: 30,
+            },
+          ],
+        },
+        {
+          ...defaultValues,
+          id: 'unit_group_3',
+          unitTypes: [
+            {
+              ...defaultValues,
+              id: 'type_1',
+              name: UnitTypeEnum.oneBdrm,
+              numBedrooms: 1,
+            },
+          ],
+          unitGroupAmiLevels: [
+            {
+              ...defaultValues,
+              id: 'level1',
+              amiPercentage: 60,
+              monthlyRentDeterminationType:
+                MonthlyRentDeterminationTypeEnum.percentageOfIncome,
+              flatRentValue: 30,
+            },
+          ],
+        },
+        {
+          ...defaultValues,
+          id: 'unit_group_1',
+          unitTypes: [
+            {
+              ...defaultValues,
+              id: 'type_2',
+              name: UnitTypeEnum.twoBdrm,
+              numBedrooms: 2,
+            },
+          ],
+          unitGroupAmiLevels: [
+            {
+              ...defaultValues,
+              id: 'level1',
+              amiPercentage: 50,
+              monthlyRentDeterminationType:
+                MonthlyRentDeterminationTypeEnum.percentageOfIncome,
+              flatRentValue: 30,
+            },
+          ],
+        },
+        {
+          ...defaultValues,
+          id: 'unit_group_1',
+          unitTypes: [
+            {
+              ...defaultValues,
+              id: 'type_1',
+              name: UnitTypeEnum.oneBdrm,
+              numBedrooms: 1,
+            },
+          ],
+          unitGroupAmiLevels: [
+            {
+              ...defaultValues,
+              id: 'level1',
+              amiPercentage: 10,
+              monthlyRentDeterminationType:
+                MonthlyRentDeterminationTypeEnum.percentageOfIncome,
+              flatRentValue: 30,
+            },
+          ],
+        },
+      ];
+
+      const result = getUnitGroupSummary(unitGroups);
+      expect(result).toHaveLength(5);
+
+      const [rowOne, rowTwo, rowThree, rowFour, rowFive] = result;
+      expect(rowOne).toMatchObject({
+        unitTypes: [
+          {
+            createdAt: expect.any(Date),
+            updatedAt: expect.any(Date),
+            id: 'type_1',
+            name: UnitTypeEnum.oneBdrm,
+            numBedrooms: 1,
+          },
+        ],
+        amiPercentageRange: { max: 10, min: 10 },
+      });
+      expect(rowTwo).toMatchObject({
+        unitTypes: [
+          {
+            createdAt: expect.any(Date),
+            updatedAt: expect.any(Date),
+            id: 'type_1',
+            name: UnitTypeEnum.oneBdrm,
+            numBedrooms: 1,
+          },
+        ],
+        amiPercentageRange: { max: 30, min: 30 },
+      });
+      expect(rowThree).toMatchObject({
+        unitTypes: [
+          {
+            createdAt: expect.any(Date),
+            updatedAt: expect.any(Date),
+            id: 'type_1',
+            name: UnitTypeEnum.oneBdrm,
+            numBedrooms: 1,
+          },
+        ],
+        amiPercentageRange: { max: 60, min: 60 },
+      });
+      expect(rowFour).toMatchObject({
+        unitTypes: [
+          {
+            createdAt: expect.any(Date),
+            updatedAt: expect.any(Date),
+            id: 'type_2',
+            name: UnitTypeEnum.twoBdrm,
+            numBedrooms: 2,
+          },
+        ],
+        amiPercentageRange: { max: 50, min: 50 },
+      });
+      expect(rowFive).toMatchObject({
+        unitTypes: [
+          {
+            createdAt: expect.any(Date),
+            updatedAt: expect.any(Date),
+            id: 'type_3',
+            name: UnitTypeEnum.threeBdrm,
+            numBedrooms: 3,
+          },
+        ],
+        amiPercentageRange: { max: 20, min: 20 },
+      });
+    });
   });
 
   describe('getHouseholdMaxIncomeSummary', () => {
