@@ -208,8 +208,6 @@ export class AuthService {
       ACCESS_TOKEN_AVAILABLE_OPTIONS,
     );
 
-    console.log('auth login response', res);
-
     return {
       success: true,
     } as SuccessDTO;

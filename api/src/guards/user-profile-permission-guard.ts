@@ -14,9 +14,6 @@ export class UserProfilePermissionGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const req = context.switchToHttp().getRequest();
     const user: User = req['user'];
-    console.log('user-profile-permission-guard user', user);
-    console.log('user-profile-permission-guard url', req['_parsedUrl']);
-    console.log('user-profile-permission-guard cookies', req['cookies']);
     const type = this.reflector.getAllAndOverride<string>('permission_type', [
       context.getClass(),
       context.getHandler(),
