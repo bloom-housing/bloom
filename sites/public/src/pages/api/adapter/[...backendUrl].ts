@@ -39,6 +39,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     }
     const configs = getConfigs(req.method || "", "application/json", backendUrl || "", {})
     let cookieString = ""
+    console.log("request cookies", req.cookies)
     Object.keys(req.cookies).forEach((cookieHeader) => {
       cookieString += `${cookieHeader}=${req.cookies[cookieHeader]};`
     })
@@ -51,6 +52,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
     // set up response from next api based on response from backend
     const cookies = await jar.getSetCookieStrings(process.env.BACKEND_API_BASE || "")
+    console.log("response cookies", cookies)
     res.setHeader("Set-Cookie", cookies)
     res.statusMessage = response.statusText
     res.status(response.status).json(response.data)
