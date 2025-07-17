@@ -20,7 +20,6 @@ const zipEndpoints = [
 ]
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-  const jar = new CookieJar()
   const axios = wrapper(
     axiosStatic.create({
       baseURL: process.env.BACKEND_API_BASE,
@@ -34,7 +33,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       paramsSerializer: (params) => {
         return qs.stringify(params)
       },
-      jar,
     })
   )
   try {
