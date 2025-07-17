@@ -70,7 +70,7 @@ export const countyKeys = [
   "Sonoma",
 ]
 
-export const adaFeatureKeys = ["mobility", "vision", "hearing"]
+export const adaFeatureKeys = ["mobility", "vision", "hearing", "other"]
 
 export const relationshipKeys = ["", ...Object.values(HouseholdMemberRelationship)]
 

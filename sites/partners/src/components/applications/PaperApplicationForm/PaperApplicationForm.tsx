@@ -63,6 +63,11 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
     listingDto?.jurisdictions.id
   )
 
+  const enableAdaOtherOption = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableAdaOtherOption,
+    listingDto?.jurisdictions.id
+  )
+
   const units = listingDto?.units
 
   const defaultValues = editMode ? mapApiToForm(application, listingDto) : {}
@@ -245,6 +250,7 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
                       listingUnitGroups={listingDto?.unitGroups}
                       applicationUnitTypes={application?.preferredUnitTypes}
                       applicationAccessibilityFeatures={application?.accessibility}
+                      enableOtherAdaOption={enableAdaOtherOption}
                       enableUnitGroups={enableUnitGroups}
                       enableFullTimeStudentQuestion={enableFullTimeStudentQuestion}
                     />
