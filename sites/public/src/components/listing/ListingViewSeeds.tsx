@@ -136,9 +136,7 @@ export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: Li
     <>
       {listing.whatToExpect && (
         <InfoCard heading={t("whatToExpect.label")}>
-          <div>
-            <Markdown>{listing.whatToExpect}</Markdown>
-          </div>
+          <Markdown className={"bloom-markdown"}>{listing.whatToExpect}</Markdown>
         </InfoCard>
       )}
     </>
