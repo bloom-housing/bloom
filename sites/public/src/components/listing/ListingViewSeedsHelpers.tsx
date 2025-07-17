@@ -224,6 +224,7 @@ export const getHmiData = (listing: Listing): StandardTableData => {
   })
 }
 
+// This unusual string modification has to do with the odd way the backend is sending this data (as a string with certain characters we need to split and parse). When the backend rewrites this generation we can update this!
 export const getCurrencyFromArgumentString = (content: string) => {
   if (typeof content === "string") {
     const paramIndex = content.indexOf(":")
@@ -241,6 +242,7 @@ export const getStackedHmiData = (listing: Listing) => {
         const content = getCurrencyFromArgumentString(row[rowContent])
         acc[rowContent] = {
           cellText: Number.isInteger(row[rowContent]) ? row[rowContent] : content,
+          // This unusual type checking has to do with the odd way the backend is sending this data (as a string with certain characters we need to split and parse). When the backend rewrites this generation we can update this!
           cellSubText: rowContent.includes("Month")
             ? t("t.perMonth")
             : rowContent.includes("Year") ||
