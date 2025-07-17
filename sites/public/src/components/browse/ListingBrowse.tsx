@@ -1,7 +1,7 @@
-import React, { useEffect, useContext, useState } from "react"
+import React, { useEffect, useContext, useState, useCallback } from "react"
 import Head from "next/head"
 import { useRouter } from "next/router"
-import { Button, Heading, LoadingState, Tabs } from "@bloom-housing/ui-seeds"
+import { Button, Card, Heading, LoadingState, Tabs } from "@bloom-housing/ui-seeds"
 import {
   Jurisdiction,
   Listing,
@@ -9,6 +9,7 @@ import {
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import {
   AuthContext,
+  BloomCard,
   ListingList,
   MessageContext,
   pushGtmEvent,
@@ -49,6 +50,7 @@ export interface ListingBrowseProps {
   jurisdiction: Jurisdiction
   paginationData?: PaginationData
   tab: TabsIndexEnum
+  areFiltersActive?: boolean
 }
 
 export const ListingBrowse = (props: ListingBrowseProps) => {
@@ -136,6 +138,12 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
     }
   }
 
+  const onShowAll = useCallback(async () => {
+    await router.replace(router.pathname)
+  }, [router])
+
+  const numberOfFilters = Object.values(filterState).filter((entry) => !!entry).length
+
   const ListingTabs = (
     <MaxWidthLayout>
       <Tabs className={styles["tabs"]} onSelect={selectionHandler} selectedIndex={props.tab}>
@@ -180,6 +188,7 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
                       variant={"primary-outlined"}
                     >
                       {t("t.filter")}
+                      {!!numberOfFilters && <span>{numberOfFilters}</span>}
                     </Button>
                   </span>
                 )}
@@ -217,11 +226,33 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
                     </ul>
                   ) : (
                     <div className={styles["empty-state"]}>
-                      <Heading size={"xl"} priority={2} className={styles["empty-heading"]}>
-                        {props.tab === TabsIndexEnum.open
-                          ? t("listings.noOpenListings")
-                          : t("listings.noClosedListings")}
-                      </Heading>
+                      {props.areFiltersActive ? (
+                        <BloomCard
+                          title={
+                            props.tab === TabsIndexEnum.open
+                              ? t("listings.noMatchingOpenListings")
+                              : t("listings.noMatchingClosedListings")
+                          }
+                          subtitle={t("listings.removeFilters")}
+                          variant="block"
+                          iconSymbol="listBullet"
+                          iconClass={styles["empty-state-icon"]}
+                          headingPriority={2}
+                          altHeading
+                        >
+                          <Card.Section className={styles["button-wrapper"]}>
+                            <Button variant="primary-outlined" onClick={onShowAll}>
+                              {t("listings.showAll")}
+                            </Button>
+                          </Card.Section>
+                        </BloomCard>
+                      ) : (
+                        <Heading size={"xl"} priority={2} className={styles["empty-heading"]}>
+                          {props.tab === TabsIndexEnum.open
+                            ? t("listings.noOpenListings")
+                            : t("listings.noClosedListings")}
+                        </Heading>
+                      )}
                     </div>
                   )}
                 </>
