@@ -30,12 +30,26 @@ export const getUnitGroupSummary = (
 ): UnitGroupSummary[] => {
   const summary: UnitGroupSummary[] = [];
 
-  //Sort unit groups by the lowest possible number of bedrooms in unit types (lowest to highest)
-  const sortedUnitGroups = unitGroups?.sort(
-    (a, b) =>
+  const sortedUnitGroups = unitGroups?.sort((a, b) => {
+    const unitTypeComparison =
       a.unitTypes.sort((c, d) => c.numBedrooms - d.numBedrooms)[0].numBedrooms -
-      b.unitTypes.sort((e, f) => e.numBedrooms - f.numBedrooms)[0].numBedrooms,
-  );
+      b.unitTypes.sort((e, f) => e.numBedrooms - f.numBedrooms)[0].numBedrooms;
+
+    if (unitTypeComparison === 0) {
+      return (
+        a.unitGroupAmiLevels.reduce(
+          (acc, curr) => (acc > curr.amiPercentage ? acc : curr.amiPercentage),
+          -Infinity,
+        ) -
+        b.unitGroupAmiLevels.reduce(
+          (acc, curr) => (acc > curr.amiPercentage ? acc : curr.amiPercentage),
+          -Infinity,
+        )
+      );
+    }
+
+    return unitTypeComparison;
+  });
 
   sortedUnitGroups?.forEach((group) => {
     let rentAsPercentIncomeRange: MinMax,
