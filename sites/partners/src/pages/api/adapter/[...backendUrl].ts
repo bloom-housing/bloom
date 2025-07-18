@@ -2,7 +2,6 @@ import axiosStatic from "axios"
 import type { NextApiRequest, NextApiResponse } from "next"
 import qs from "qs"
 import { wrapper } from "axios-cookiejar-support"
-import { CookieJar } from "tough-cookie"
 import { getConfigs } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { maskAxiosResponse } from "@bloom-housing/shared-helpers"
 
@@ -21,7 +20,6 @@ const zipEndpoints = [
 ]
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-  const jar = new CookieJar()
   const axios = wrapper(
     axiosStatic.create({
       baseURL: process.env.BACKEND_API_BASE,
@@ -35,7 +33,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       paramsSerializer: (params) => {
         return qs.stringify(params)
       },
-      jar,
     })
   )
   try {
@@ -64,8 +61,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         : undefined,
     })
     // set up response from next api based on response from backend
-    const cookies = await jar.getSetCookieStrings(process.env.BACKEND_API_BASE || "")
-    res.setHeader("Set-Cookie", cookies)
+    // The "Set-Cookie" response header needs to be forwarded to the front-end
+    const responseHeaders = response["headers"]
+    const cookiesFromHeaders = responseHeaders?.["set-cookie"] || []
+    res.setHeader("Set-Cookie", cookiesFromHeaders)
     res.statusMessage = response.statusText
     if (response.headers) {
       if (response.headers["content-type"]) {
