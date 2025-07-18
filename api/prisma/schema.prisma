@@ -592,7 +592,7 @@ model Listings {
   temporaryListingId                    Int?                          @map("temporary_listing_id")
   isVerified                            Boolean?                      @default(false) @map("is_verified")
   marketingType                         MarketingTypeEnum             @default(marketing) @map("marketing_type")
-  marketingDate                         DateTime?                     @map("marketing_date") @db.Timestamptz(6)
+  marketingYear                         Int?                          @map("marketing_year")
   marketingSeason                       MarketingSeasonEnum?          @map("marketing_season")
   whatToExpectAdditionalText            String?                       @map("what_to_expect_additional_text")
   section8Acceptance                    Boolean?                      @map("section8_acceptance")
