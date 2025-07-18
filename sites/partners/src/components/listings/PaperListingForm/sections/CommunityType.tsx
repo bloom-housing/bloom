@@ -12,7 +12,6 @@ import { useReservedCommunityTypeList } from "../../../../lib/hooks"
 import {
   arrayToFormOptions,
   fieldHasError,
-  fieldIsRequired,
   fieldMessage,
   getRequiredSubNote,
 } from "../../../../lib/helpers"
@@ -29,7 +28,7 @@ const CommunityType = ({ listing, requiredFields }: CommunityTypeProps) => {
   const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, setValue, watch, errors } = formMethods
+  const { register, setValue, watch, errors, clearErrors } = formMethods
   const jurisdiction = watch("jurisdictions.id")
   const reservedCommunityType = watch("reservedCommunityTypes.id")
 
@@ -107,6 +106,8 @@ const CommunityType = ({ listing, requiredFields }: CommunityTypeProps) => {
                 inputProps={{
                   onChange: () => {
                     setCurrentCommunityType(reservedCommunityType)
+                    fieldHasError(errors?.reservedCommunityTypes) &&
+                      clearErrors("reservedCommunityTypes")
                   },
                 }}
                 subNote={getRequiredSubNote("reservedCommunityTypes", requiredFields)}
@@ -128,6 +129,12 @@ const CommunityType = ({ listing, requiredFields }: CommunityTypeProps) => {
                 "listings.appearsInListing"
               )} `}
               errorMessage={fieldMessage(errors?.reservedCommunityDescription)}
+              inputProps={{
+                onChange: () => {
+                  fieldHasError(errors?.reservedCommunityDescription) &&
+                    clearErrors("reservedCommunityDescription")
+                },
+              }}
             />
           </Grid.Cell>
         </Grid.Row>
@@ -169,6 +176,12 @@ const CommunityType = ({ listing, requiredFields }: CommunityTypeProps) => {
                   error={errors.communityDisclaimerTitle}
                   placeholder={t("t.enterTitle")}
                   errorMessage={t("t.enterTitle")}
+                  inputProps={{
+                    onChange: () => {
+                      fieldHasError(errors?.communityDisclaimerTitle) &&
+                        clearErrors("communityDisclaimerTitle")
+                    },
+                  }}
                 />
               </Grid.Cell>
             </Grid.Row>
@@ -184,6 +197,12 @@ const CommunityType = ({ listing, requiredFields }: CommunityTypeProps) => {
                   note={t("listings.requiredToPublishAppearsAsFirstPage")}
                   placeholder={t("t.enterDescription")}
                   errorMessage={errors.communityDisclaimerDescription && t("t.enterDescription")}
+                  inputProps={{
+                    onChange: () => {
+                      fieldHasError(errors?.communityDisclaimerDescription) &&
+                        clearErrors("communityDisclaimerDescription")
+                    },
+                  }}
                 />
               </Grid.Cell>
             </Grid.Row>

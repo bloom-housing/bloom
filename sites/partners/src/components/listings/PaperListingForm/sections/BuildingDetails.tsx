@@ -215,6 +215,9 @@ const BuildingDetails = ({
                   id={"neighborhood"}
                   inputProps={{
                     className: "w-full",
+                    onChange: () => {
+                      fieldHasError(errors?.neighborhood) && clearErrors("neighborhood")
+                    },
                   }}
                   register={register}
                   options={[
@@ -239,6 +242,11 @@ const BuildingDetails = ({
                 subNote={getRequiredSubNote("neighborhood", requiredFields)}
                 error={fieldHasError(errors?.neighborhood)}
                 errorMessage={fieldMessage(errors?.neighborhood)}
+                inputProps={{
+                  onChange: () => {
+                    fieldHasError(errors?.neighborhood) && clearErrors("neighborhood")
+                  },
+                }}
               />
             )}
           </GridCell>
@@ -343,7 +351,10 @@ const BuildingDetails = ({
                   register={register}
                   inputProps={{
                     className: "w-full",
-                    onChange: () => setValue("neighborhood", undefined),
+                    onChange: () => {
+                      setValue("neighborhood", undefined)
+                      fieldHasError(errors?.neighborhood) && clearErrors("neighborhood")
+                    },
                   }}
                   options={[
                     { value: "", label: t("listings.sections.regionPlaceholder") },
@@ -368,6 +379,11 @@ const BuildingDetails = ({
                 subNote={getRequiredSubNote("yearBuilt", requiredFields)}
                 error={fieldHasError(errors?.yearBuilt)}
                 errorMessage={fieldMessage(errors?.yearBuilt)}
+                inputProps={{
+                  onChange: () => {
+                    fieldHasError(errors?.yearBuilt) && clearErrors("yearBuilt")
+                  },
+                }}
               />
             )}
           </Grid.Cell>
@@ -385,6 +401,11 @@ const BuildingDetails = ({
                 subNote={getRequiredSubNote("yearBuilt", requiredFields)}
                 error={fieldHasError(errors?.yearBuilt)}
                 errorMessage={fieldMessage(errors?.yearBuilt)}
+                inputProps={{
+                  onChange: () => {
+                    fieldHasError(errors?.yearBuilt) && clearErrors("yearBuilt")
+                  },
+                }}
               />
             </Grid.Cell>
           </Grid.Row>

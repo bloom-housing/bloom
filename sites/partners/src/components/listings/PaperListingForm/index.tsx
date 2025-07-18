@@ -422,12 +422,13 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
                           />
                           <CommunityType listing={listing} requiredFields={requiredFields} />
                           <Units
-                            units={units}
-                            unitGroups={unitGroups}
-                            setUnits={setUnits}
-                            setUnitGroups={setUnitGroups}
                             disableUnitsAccordion={listing?.disableUnitsAccordion}
                             featureFlags={activeFeatureFlags}
+                            requiredFields={requiredFields}
+                            setUnitGroups={setUnitGroups}
+                            setUnits={setUnits}
+                            unitGroups={unitGroups}
+                            units={units}
                           />
                           <PreferencesAndPrograms
                             listing={listing}

@@ -20,27 +20,29 @@ import { MessageContext } from "@bloom-housing/shared-helpers"
 import UnitForm from "../UnitForm"
 import { useFormContext, useWatch } from "react-hook-form"
 import { TempUnit, TempUnitGroup } from "../../../../lib/listings/formTypes"
-import { fieldHasError, fieldMessage } from "../../../../lib/helpers"
+import { fieldHasError, fieldMessage, getRequiredSubNote } from "../../../../lib/helpers"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 import { formatRange, formatRentRange, minMaxFinder } from "../../helpers"
 import UnitGroupForm from "../UnitGroupForm"
 
 type UnitProps = {
-  units: TempUnit[]
-  unitGroups: TempUnitGroup[]
-  setUnits: (units: TempUnit[]) => void
-  setUnitGroups: (unitGroups: TempUnitGroup[]) => void
   disableUnitsAccordion: boolean
   featureFlags?: FeatureFlag[]
+  requiredFields: string[]
+  setUnitGroups: (unitGroups: TempUnitGroup[]) => void
+  setUnits: (units: TempUnit[]) => void
+  unitGroups: TempUnitGroup[]
+  units: TempUnit[]
 }
 
 const FormUnits = ({
-  units,
-  unitGroups,
-  setUnits,
-  setUnitGroups,
   disableUnitsAccordion,
   featureFlags,
+  requiredFields,
+  setUnitGroups,
+  setUnits,
+  unitGroups,
+  units,
 }: UnitProps) => {
   const { addToast } = useContext(MessageContext)
   const [unitDrawerOpen, setUnitDrawerOpen] = useState(false)
@@ -337,6 +339,14 @@ const FormUnits = ({
                   register={register}
                   controlClassName="control"
                   options={homeTypes}
+                  subNote={getRequiredSubNote("homeType", requiredFields)}
+                  error={fieldHasError(errors?.homeType)}
+                  errorMessage={fieldMessage(errors?.homeType)}
+                  inputProps={{
+                    onChange: () => {
+                      fieldHasError(errors?.homeType) && clearErrors("homeType")
+                    },
+                  }}
                 />
               )}
             </FieldValue>
@@ -352,6 +362,7 @@ const FormUnits = ({
                 fields={disableUnitsAccordionOptions}
                 fieldClassName="m-0"
                 fieldGroupClassName="flex h-12 items-center"
+                groupSubNote={getRequiredSubNote("disableUnitsAccordion", requiredFields)}
               />
             </FieldValue>
             <FieldValue label={t("listings.listingAvailabilityQuestion")} className={"mb-1"}>
