@@ -96,7 +96,7 @@ const availabilityOrdering = {
  *
  * @returns an array of availability keys in the displayed order
  */
-export const getAvailabilityValues = () => {
+export const getAvailabilityValues = (enableUnitGroups: boolean) => {
   // TODO: https://github.com/metrotranscom/doorway/issues/1278
   const availabilityFiltered = Object.keys(FilterAvailabilityEnum).filter(
     (elem) => elem != FilterAvailabilityEnum.waitlistOpen
@@ -104,6 +104,13 @@ export const getAvailabilityValues = () => {
   const availabilityOrdered = availabilityFiltered.sort((a, b) => {
     return availabilityOrdering[a].ordinal - availabilityOrdering[b].ordinal
   })
+
+  if (enableUnitGroups) {
+    const index = availabilityOrdered.indexOf(FilterAvailabilityEnum.unitsAvailable)
+    if (index !== -1) {
+      availabilityOrdered[index] = "vacantUnits"
+    }
+  }
   return availabilityOrdered
 }
 
