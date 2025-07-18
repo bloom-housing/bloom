@@ -575,6 +575,64 @@ describe('Unit Group Transformations', () => {
         rows: [],
       });
     });
+    it('should return empty data with no occupancy information', () => {
+      const unitGroups: UnitGroup[] = [
+        {
+          ...defaultValues,
+          id: 'group1',
+          unitTypes: [
+            {
+              ...defaultValues,
+              id: 'type1',
+              name: UnitTypeEnum.studio,
+              numBedrooms: 0,
+            },
+          ],
+          unitGroupAmiLevels: [
+            {
+              ...defaultValues,
+              id: 'level1',
+              amiPercentage: 30,
+              monthlyRentDeterminationType:
+                MonthlyRentDeterminationTypeEnum.flatRent,
+              flatRentValue: 1000,
+            },
+          ],
+          minOccupancy: null,
+          maxOccupancy: null,
+        },
+        {
+          ...defaultValues,
+          id: 'group2',
+          unitTypes: [
+            {
+              ...defaultValues,
+              id: 'type2',
+              name: UnitTypeEnum.oneBdrm,
+              numBedrooms: 1,
+            },
+          ],
+          unitGroupAmiLevels: [
+            {
+              ...defaultValues,
+              id: 'level2',
+              amiPercentage: 50,
+              monthlyRentDeterminationType:
+                MonthlyRentDeterminationTypeEnum.percentageOfIncome,
+              percentageOfIncomeValue: 30,
+            },
+          ],
+          minOccupancy: null,
+          maxOccupancy: null,
+        },
+      ];
+
+      const result = getHouseholdMaxIncomeSummary(unitGroups, []);
+      expect(result).toEqual({
+        columns: { householdSize: 'householdSize' },
+        rows: [],
+      });
+    });
 
     it('should correctly generate household max income summary', () => {
       const unitGroups: UnitGroup[] = [
@@ -641,20 +699,20 @@ describe('Unit Group Transformations', () => {
 
       expect(result.rows[0]).toEqual({
         householdSize: '1',
-        percentage30: 34000,
-        percentage50: 36000,
+        percentage30: '$34,000',
+        percentage50: '$36,000',
       });
 
       expect(result.rows[1]).toEqual({
         householdSize: '2',
-        percentage30: 35000,
-        percentage50: 37000,
+        percentage30: '$35,000',
+        percentage50: '$37,000',
       });
 
       expect(result.rows[2]).toEqual({
         householdSize: '3',
-        percentage30: 36000,
-        percentage50: 38000,
+        percentage30: '$36,000',
+        percentage50: '$38,000',
       });
     });
 
@@ -761,23 +819,23 @@ describe('Unit Group Transformations', () => {
 
       expect(result.rows[0]).toEqual({
         householdSize: '1',
-        percentage30: 41000,
-        percentage50: 45000,
-        percentage80: 48000,
+        percentage30: '$31,000 - $41,000',
+        percentage50: '$35,000 - $45,000',
+        percentage80: '$38,000 - $48,000',
       });
 
       expect(result.rows[1]).toEqual({
         householdSize: '2',
-        percentage30: 42000,
-        percentage50: 46000,
-        percentage80: 49000,
+        percentage30: '$32,000 - $42,000',
+        percentage50: '$36,000 - $46,000',
+        percentage80: '$39,000 - $49,000',
       });
 
       expect(result.rows[2]).toEqual({
         householdSize: '3',
-        percentage30: 43000,
-        percentage50: 47000,
-        percentage80: 50000,
+        percentage30: '$33,000 - $43,000',
+        percentage50: '$37,000 - $47,000',
+        percentage80: '$40,000 - $50,000',
       });
     });
 
@@ -872,16 +930,16 @@ describe('Unit Group Transformations', () => {
 
       expect(result.rows[0]).toEqual({
         householdSize: '1',
-        percentage30: 31000,
-        percentage40: 36000,
-        percentage60: 38000,
+        percentage30: '$31,000',
+        percentage40: '$34,000 - $36,000',
+        percentage60: '$38,000',
       });
 
       expect(result.rows[1]).toEqual({
         householdSize: '2',
-        percentage30: 32000,
-        percentage40: 37000,
-        percentage60: 39000,
+        percentage30: '$32,000',
+        percentage40: '$35,000 - $37,000',
+        percentage60: '$39,000',
       });
     });
 
@@ -952,15 +1010,15 @@ describe('Unit Group Transformations', () => {
 
       expect(result.rows).toHaveLength(2); // For household sizes 1 and 2
 
-      // Should pick the higher income for each household size
+      // Should create a range from both charts
       expect(result.rows[0]).toEqual({
         householdSize: '1',
-        percentage30: 32000, // Higher value from amiChart2
+        percentage30: '$30,000 - $32,000',
       });
 
       expect(result.rows[1]).toEqual({
         householdSize: '2',
-        percentage30: 35000, // Higher value from amiChart1
+        percentage30: '$34,000 - $35,000',
       });
     });
   });
