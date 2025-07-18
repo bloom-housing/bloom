@@ -26,8 +26,6 @@ const ListingIntro = (props: ListingIntroProps) => {
   ]
   const defaultJurisdiction = props.jurisdictions.length === 1 ? props.jurisdictions[0].id : ""
 
-  console.log(props.requiredFields)
-
   return (
     <>
       <SectionWithGrid
