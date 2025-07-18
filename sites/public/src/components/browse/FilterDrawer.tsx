@@ -43,7 +43,7 @@ const FilterDrawer = (props: FilterDrawerProps) => {
     formState: { errors },
   } = useForm({ mode: "onBlur" })
 
-  const enableUnitGroups = !!props.activeFeatureFlags.find(
+  const enableUnitGroups = !!props.activeFeatureFlags?.find(
     (entry) => entry === FeatureFlagEnum.enableUnitGroups
   )
 
