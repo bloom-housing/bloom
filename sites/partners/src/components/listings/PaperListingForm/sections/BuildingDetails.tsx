@@ -19,6 +19,7 @@ import {
   fieldHasError,
   fieldIsRequired,
   fieldMessage,
+  getLabel,
   getRequiredSubNote,
 } from "../../../../lib/helpers"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
@@ -185,7 +186,11 @@ const BuildingDetails = ({
         <Grid.Row columns={3}>
           <Grid.Cell className="seeds-grid-span-2">
             <Field
-              label={t("application.contact.streetAddress")}
+              label={getLabel(
+                "listingsBuildingAddress",
+                requiredFields,
+                t("application.contact.streetAddress")
+              )}
               name={"listingsBuildingAddress.street"}
               id={"listingsBuildingAddress.street"}
               error={
@@ -198,54 +203,53 @@ const BuildingDetails = ({
                 "listingsBuildingAddress.street",
                 fieldMessage(errors?.listingsBuildingAddress?.street)
               )}
-              placeholder={t("application.contact.streetAddress")}
               inputProps={{
                 onChange: () =>
                   fieldHasError(errors?.listingsBuildingAddress?.street) &&
                   clearErrors("listingsBuildingAddress"),
+                "aria-required": fieldIsRequired("listingsBuildingAddress", requiredFields),
               }}
               register={register}
             />
           </Grid.Cell>
           <GridCell>
             {enableRegions ? (
-              <FieldValue label={t("t.neighborhood")}>
-                <Select
-                  name={"neighborhood"}
-                  id={"neighborhood"}
-                  inputProps={{
-                    className: "w-full",
-                    onChange: () => {
-                      fieldHasError(errors?.neighborhood) && clearErrors("neighborhood")
-                    },
-                  }}
-                  register={register}
-                  options={[
-                    { value: "", label: t("listings.sections.neighborhoodPlaceholder") },
-                    ...neighborhoodRegions.map((entry) => ({
-                      value: entry.name,
-                      label: entry.name,
-                    })),
-                  ]}
-                  subNote={getRequiredSubNote("neighborhood", requiredFields)}
-                  error={fieldHasError(errors?.neighborhood)}
-                  errorMessage={fieldMessage(errors?.neighborhood)}
-                />
-              </FieldValue>
-            ) : (
-              <Field
-                label={t("t.neighborhood")}
+              <Select
                 name={"neighborhood"}
                 id={"neighborhood"}
-                placeholder={t("t.neighborhood")}
+                label={getLabel("neighborhood", requiredFields, t("t.neighborhood"))}
+                inputProps={{
+                  className: "w-full",
+                  onChange: () => {
+                    fieldHasError(errors?.neighborhood) && clearErrors("neighborhood")
+                  },
+                  "aria-required": fieldIsRequired("neighborhood", requiredFields),
+                }}
+                controlClassName="control"
                 register={register}
-                subNote={getRequiredSubNote("neighborhood", requiredFields)}
+                options={[
+                  { value: "", label: t("listings.sections.neighborhoodPlaceholder") },
+                  ...neighborhoodRegions.map((entry) => ({
+                    value: entry.name,
+                    label: entry.name,
+                  })),
+                ]}
+                error={fieldHasError(errors?.neighborhood)}
+                errorMessage={fieldMessage(errors?.neighborhood)}
+              />
+            ) : (
+              <Field
+                label={getLabel("neighborhood", requiredFields, t("t.neighborhood"))}
+                name={"neighborhood"}
+                id={"neighborhood"}
+                register={register}
                 error={fieldHasError(errors?.neighborhood)}
                 errorMessage={fieldMessage(errors?.neighborhood)}
                 inputProps={{
                   onChange: () => {
                     fieldHasError(errors?.neighborhood) && clearErrors("neighborhood")
                   },
+                  "aria-required": fieldIsRequired("neighborhood", requiredFields),
                 }}
               />
             )}
@@ -254,7 +258,11 @@ const BuildingDetails = ({
         <Grid.Row columns={6}>
           <Grid.Cell className={"seeds-grid-span-2"}>
             <Field
-              label={t("application.contact.city")}
+              label={getLabel(
+                "listingsBuildingAddress",
+                requiredFields,
+                t("application.contact.city")
+              )}
               name={"listingsBuildingAddress.city"}
               id={"listingsBuildingAddress.city"}
               error={
@@ -267,63 +275,55 @@ const BuildingDetails = ({
                 "listingsBuildingAddress.city",
                 fieldMessage(errors?.listingsBuildingAddress?.city)
               )}
-              placeholder={t("application.contact.city")}
               inputProps={{
                 onChange: () =>
                   fieldHasError(errors?.listingsBuildingAddress?.city) &&
                   clearErrors("listingsBuildingAddress"),
+                "aria-required": fieldIsRequired("listingsBuildingAddress", requiredFields),
               }}
               register={register}
             />
-            {fieldIsRequired("listingsBuildingAddress", requiredFields) && (
-              <p className="field-sub-note">{t("listings.requiredToPublish")}</p>
-            )}
           </Grid.Cell>
           <Grid.Cell>
-            <FieldValue
-              label={t("application.contact.state")}
-              className={`mb-0 ${
-                getAddressErrorMessage(
+            <Select
+              id={`listingsBuildingAddress.state`}
+              name={`listingsBuildingAddress.state`}
+              error={
+                !!getAddressErrorMessage(
                   "listingsBuildingAddress.state",
                   fieldMessage(errors?.listingsBuildingAddress?.state)
                 )
-                  ? "field-value-error"
-                  : ""
-              }`}
-            >
-              <Select
-                id={`listingsBuildingAddress.state`}
-                name={`listingsBuildingAddress.state`}
-                error={
-                  !!getAddressErrorMessage(
-                    "listingsBuildingAddress.state",
-                    fieldMessage(errors?.listingsBuildingAddress?.state)
-                  )
-                }
-                errorMessage={getAddressErrorMessage(
-                  "listingsBuildingAddress.state",
-                  fieldMessage(errors?.listingsBuildingAddress?.state)
-                )}
-                label={t("application.contact.state")}
-                labelClassName="sr-only"
-                register={register}
-                controlClassName="control"
-                options={stateKeys}
-                keyPrefix="states"
-                inputProps={{
-                  onChange: () =>
-                    fieldHasError(errors?.listingsBuildingAddress?.state) &&
-                    clearErrors("listingsBuildingAddress"),
-                }}
-              />
-            </FieldValue>
+              }
+              errorMessage={getAddressErrorMessage(
+                "listingsBuildingAddress.state",
+                fieldMessage(errors?.listingsBuildingAddress?.state)
+              )}
+              label={getLabel(
+                "listingsBuildingAddress",
+                requiredFields,
+                t("application.contact.state")
+              )}
+              register={register}
+              controlClassName="control"
+              options={stateKeys}
+              keyPrefix="states"
+              inputProps={{
+                onChange: () =>
+                  fieldHasError(errors?.listingsBuildingAddress?.state) &&
+                  clearErrors("listingsBuildingAddress"),
+                "aria-required": fieldIsRequired("listingsBuildingAddress", requiredFields),
+              }}
+            />
           </Grid.Cell>
           <Grid.Cell>
             <Field
-              label={t("application.contact.zip")}
+              label={getLabel(
+                "listingsBuildingAddress",
+                requiredFields,
+                t("application.contact.zip")
+              )}
               name={"listingsBuildingAddress.zipCode"}
               id={"listingsBuildingAddress.zipCode"}
-              placeholder={t("application.contact.zip")}
               error={
                 !!getAddressErrorMessage(
                   "listingsBuildingAddress.zipCode",
@@ -338,51 +338,51 @@ const BuildingDetails = ({
                 onChange: () =>
                   fieldHasError(errors?.listingsBuildingAddress?.zipCode) &&
                   clearErrors("listingsBuildingAddress"),
+                "aria-required": fieldIsRequired("listingsBuildingAddress", requiredFields),
               }}
               register={register}
             />
           </Grid.Cell>
           <Grid.Cell className="seeds-grid-span-2">
             {enableRegions ? (
-              <FieldValue label={t("t.region")}>
-                <Select
-                  id="region"
-                  name="region"
-                  register={register}
-                  inputProps={{
-                    className: "w-full",
-                    onChange: () => {
-                      setValue("neighborhood", undefined)
-                      fieldHasError(errors?.neighborhood) && clearErrors("neighborhood")
-                    },
-                  }}
-                  options={[
-                    { value: "", label: t("listings.sections.regionPlaceholder") },
-                    ...Object.keys(RegionEnum).map((entry) => ({
-                      value: entry,
-                      label: entry.toString().replace("_", " "),
-                    })),
-                  ]}
-                  subNote={getRequiredSubNote("region", requiredFields)}
-                  error={fieldHasError(errors?.region)}
-                  errorMessage={fieldMessage(errors?.region)}
-                />
-              </FieldValue>
+              <Select
+                label={getLabel("region", requiredFields, t("t.region"))}
+                id="region"
+                name="region"
+                register={register}
+                controlClassName="control"
+                inputProps={{
+                  className: "w-full",
+                  onChange: () => {
+                    setValue("neighborhood", undefined)
+                    fieldHasError(errors?.neighborhood) && clearErrors("neighborhood")
+                  },
+                  "aria-required": fieldIsRequired("region", requiredFields),
+                }}
+                options={[
+                  { value: "", label: t("listings.sections.regionPlaceholder") },
+                  ...Object.keys(RegionEnum).map((entry) => ({
+                    value: entry,
+                    label: entry.toString().replace("_", " "),
+                  })),
+                ]}
+                error={fieldHasError(errors?.region)}
+                errorMessage={fieldMessage(errors?.region)}
+              />
             ) : (
               <Field
-                label={t("listings.yearBuilt")}
+                label={getLabel("yearBuilt", requiredFields, t("listings.yearBuilt"))}
                 name={"yearBuilt"}
                 id={"yearBuilt"}
-                placeholder={t("listings.yearBuilt")}
                 type={"number"}
                 register={register}
-                subNote={getRequiredSubNote("yearBuilt", requiredFields)}
                 error={fieldHasError(errors?.yearBuilt)}
                 errorMessage={fieldMessage(errors?.yearBuilt)}
                 inputProps={{
                   onChange: () => {
                     fieldHasError(errors?.yearBuilt) && clearErrors("yearBuilt")
                   },
+                  "aria-required": fieldIsRequired("yearBuilt", requiredFields),
                 }}
               />
             )}
@@ -405,6 +405,7 @@ const BuildingDetails = ({
                   onChange: () => {
                     fieldHasError(errors?.yearBuilt) && clearErrors("yearBuilt")
                   },
+                  "aria-required": fieldIsRequired("yearBuilt", requiredFields),
                 }}
               />
             </Grid.Cell>

@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react"
 import { useFormContext } from "react-hook-form"
 import { t, Select, Textarea, FieldGroup, Field } from "@bloom-housing/ui-components"
-import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
+import { Grid } from "@bloom-housing/ui-seeds"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import {
   FeatureFlagEnum,
@@ -12,8 +12,9 @@ import { useReservedCommunityTypeList } from "../../../../lib/hooks"
 import {
   arrayToFormOptions,
   fieldHasError,
+  fieldIsRequired,
   fieldMessage,
-  getRequiredSubNote,
+  getLabel,
 } from "../../../../lib/helpers"
 import { FormListing } from "../../../../lib/listings/formTypes"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
@@ -83,8 +84,6 @@ const CommunityType = ({ listing, requiredFields }: CommunityTypeProps) => {
     }
   }, [setValue, listing?.includeCommunityDisclaimer, watch, listing])
 
-  const descriptionSubNote = getRequiredSubNote("reservedCommunityTypes", requiredFields)
-
   return !swapCommunityTypeWithPrograms ? (
     <>
       <hr className="spacer-section-above spacer-section" />
@@ -93,74 +92,79 @@ const CommunityType = ({ listing, requiredFields }: CommunityTypeProps) => {
         subheading={t("listings.sections.communityTypeSubtitle")}
       >
         <Grid.Row columns={2}>
-          <FieldValue label={t("listings.reservedCommunityType")}>
-            {options && (
-              <Select
-                id={`reservedCommunityTypes.id`}
-                name={`reservedCommunityTypes.id`}
-                label={t("listings.reservedCommunityType")}
-                labelClassName="sr-only"
-                register={register}
-                controlClassName="control"
-                options={options}
-                inputProps={{
-                  onChange: () => {
-                    setCurrentCommunityType(reservedCommunityType)
-                    fieldHasError(errors?.reservedCommunityTypes) &&
-                      clearErrors("reservedCommunityTypes")
-                  },
-                }}
-                subNote={getRequiredSubNote("reservedCommunityTypes", requiredFields)}
-                error={fieldHasError(errors?.reservedCommunityTypes)}
-                errorMessage={fieldMessage(errors?.reservedCommunityTypes)}
-              />
-            )}
-          </FieldValue>
+          {options && (
+            <Select
+              id={`reservedCommunityTypes.id`}
+              name={`reservedCommunityTypes.id`}
+              label={getLabel(
+                "reservedCommunityTypes",
+                requiredFields,
+                t("listings.reservedCommunityType")
+              )}
+              register={register}
+              controlClassName="control"
+              options={options}
+              inputProps={{
+                onChange: () => {
+                  setCurrentCommunityType(reservedCommunityType)
+                  fieldHasError(errors?.reservedCommunityTypes) &&
+                    clearErrors("reservedCommunityTypes")
+                },
+                "aria-required": fieldIsRequired("reservedCommunityTypes", requiredFields),
+              }}
+              error={fieldHasError(errors?.reservedCommunityTypes)}
+              errorMessage={fieldMessage(errors?.reservedCommunityTypes)}
+            />
+          )}
         </Grid.Row>
         <Grid.Row columns={3}>
           <Grid.Cell className="seeds-grid-span-2">
             <Textarea
-              label={t("listings.reservedCommunityDescription")}
+              label={getLabel(
+                "reservedCommunityDescription",
+                requiredFields,
+                t("listings.reservedCommunityDescription")
+              )}
+              placeholder={""}
               name={"reservedCommunityDescription"}
               id={"reservedCommunityDescription"}
               fullWidth={true}
               register={register}
-              note={`${descriptionSubNote ? `${descriptionSubNote}, ` : ""}${t(
-                "listings.appearsInListing"
-              )} `}
+              note={t("listings.appearsInListing")}
               errorMessage={fieldMessage(errors?.reservedCommunityDescription)}
               inputProps={{
                 onChange: () => {
                   fieldHasError(errors?.reservedCommunityDescription) &&
                     clearErrors("reservedCommunityDescription")
                 },
+                "aria-required": fieldIsRequired("reservedCommunityDescription", requiredFields),
               }}
             />
           </Grid.Cell>
         </Grid.Row>
 
         <Grid.Row columns={1}>
-          <FieldValue label={t("listings.includeCommunityDisclaimer")}>
-            <FieldGroup
-              name="includeCommunityDisclaimerQuestion"
-              type="radio"
-              register={register}
-              fields={[
-                {
-                  label: t("t.yes"),
-                  value: YesNoEnum.yes,
-                  id: "includeCommunityDisclaimerYes",
-                  disabled: !currentCommunityType,
-                },
-                {
-                  label: t("t.no"),
-                  value: YesNoEnum.no,
-                  id: "includeCommunityDisclaimerNo",
-                  disabled: !currentCommunityType,
-                },
-              ]}
-            />
-          </FieldValue>
+          <FieldGroup
+            groupLabel={t("listings.includeCommunityDisclaimer")}
+            fieldLabelClassName={"field-label"}
+            name="includeCommunityDisclaimerQuestion"
+            type="radio"
+            register={register}
+            fields={[
+              {
+                label: t("t.yes"),
+                value: YesNoEnum.yes,
+                id: "includeCommunityDisclaimerYes",
+                disabled: !currentCommunityType,
+              },
+              {
+                label: t("t.no"),
+                value: YesNoEnum.no,
+                id: "includeCommunityDisclaimerNo",
+                disabled: !currentCommunityType,
+              },
+            ]}
+          />
         </Grid.Row>
 
         {watch("includeCommunityDisclaimerQuestion") === YesNoEnum.yes && currentCommunityType && (
