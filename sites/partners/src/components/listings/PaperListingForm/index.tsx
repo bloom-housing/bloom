@@ -132,6 +132,7 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
     listing?.customMapPin || false
   )
   const [activeFeatureFlags, setActiveFeatureFlags] = useState<FeatureFlag[]>(null)
+  const [requiredFields, setRequiredFields] = useState<string[]>([])
 
   const setLatitudeLongitude = (latlong: LatitudeLongitude) => {
     if (!loading) {
@@ -220,6 +221,10 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
       return featureFlags
     }, [])
     setActiveFeatureFlags(newFeatureFlags)
+    const selectedJurisdictionObj = profile?.jurisdictions?.find(
+      (juris) => selectedJurisdiction === juris.id
+    )
+    setRequiredFields(selectedJurisdictionObj ? selectedJurisdictionObj.requiredListingFields : [])
   }, [profile?.jurisdictions, selectedJurisdiction])
 
   const triggerSubmitWithStatus: SubmitFunction = (action, status, newData) => {
@@ -382,23 +387,31 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
                           <Tabs.Tab>Application Process</Tabs.Tab>
                         </Tabs.TabList>
                         <Tabs.TabPanel>
-                          <ListingIntro jurisdictions={profile?.jurisdictions || []} />
-                          <ListingPhotos />
-                          <BuildingDetails
-                            listing={listing}
-                            setLatLong={setLatitudeLongitude}
-                            latLong={latLong}
-                            customMapPositionChosen={customMapPositionChosen}
-                            setCustomMapPositionChosen={setCustomMapPositionChosen}
+                          <p className="field-label seeds-m-be-content">
+                            Fields marked with an asterisk (*) are required to publish.
+                          </p>
+                          <ListingIntro
+                            jurisdictions={profile?.jurisdictions || []}
+                            requiredFields={requiredFields}
                           />
-                          <CommunityType listing={listing} />
+                          <ListingPhotos requiredFields={requiredFields} />
+                          <BuildingDetails
+                            customMapPositionChosen={customMapPositionChosen}
+                            latLong={latLong}
+                            listing={listing}
+                            requiredFields={requiredFields}
+                            setCustomMapPositionChosen={setCustomMapPositionChosen}
+                            setLatLong={setLatitudeLongitude}
+                          />
+                          <CommunityType listing={listing} requiredFields={requiredFields} />
                           <Units
-                            units={units}
-                            unitGroups={unitGroups}
-                            setUnits={setUnits}
-                            setUnitGroups={setUnitGroups}
                             disableUnitsAccordion={listing?.disableUnitsAccordion}
                             featureFlags={activeFeatureFlags}
+                            requiredFields={requiredFields}
+                            setUnitGroups={setUnitGroups}
+                            setUnits={setUnits}
+                            unitGroups={unitGroups}
+                            units={units}
                           />
                           <PreferencesAndPrograms
                             listing={listing}
@@ -434,6 +447,9 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
                           </div>
                         </Tabs.TabPanel>
                         <Tabs.TabPanel>
+                          <p className="field-label seeds-m-be-content">
+                            Fields marked with an asterisk (*) are required to publish.
+                          </p>
                           <RankingsAndResults
                             listing={listing}
                             isAdmin={profile?.userRoles.isAdmin}

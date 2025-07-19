@@ -293,6 +293,18 @@ export const fieldHasError = (errorObj: FieldError) => {
   return errorObj !== undefined
 }
 
+export const fieldIsRequired = (fieldName: string, requiredFields: string[]) => {
+  return requiredFields.indexOf(fieldName) >= 0
+}
+
+export const getRequiredSubNote = (fieldName: string, requiredFields: string[]) => {
+  return fieldIsRequired(fieldName, requiredFields) ? t("listings.requiredToPublish") : null
+}
+
+export const getLabel = (fieldName: string, requiredFields: string[], label: string) => {
+  return fieldIsRequired(fieldName, requiredFields) ? `${label} *` : label
+}
+
 export const fieldMessage = (errorObj: FieldError) => {
   return errorObj?.message
 }
