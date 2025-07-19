@@ -387,6 +387,9 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
                           <Tabs.Tab>Application Process</Tabs.Tab>
                         </Tabs.TabList>
                         <Tabs.TabPanel>
+                          <p className="field-label seeds-m-be-content">
+                            Fields marked with an asterisk (*) are required to publish.
+                          </p>
                           <ListingIntro
                             jurisdictions={profile?.jurisdictions || []}
                             requiredFields={requiredFields}
@@ -444,6 +447,9 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
                           </div>
                         </Tabs.TabPanel>
                         <Tabs.TabPanel>
+                          <p className="field-label seeds-m-be-content">
+                            Fields marked with an asterisk (*) are required to publish.
+                          </p>
                           <RankingsAndResults
                             listing={listing}
                             isAdmin={profile?.userRoles.isAdmin}

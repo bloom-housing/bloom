@@ -2,7 +2,13 @@ import React from "react"
 import { useFormContext } from "react-hook-form"
 import { t, Field, SelectOption, Select } from "@bloom-housing/ui-components"
 import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
-import { fieldMessage, fieldHasError, getRequiredSubNote } from "../../../../lib/helpers"
+import {
+  fieldMessage,
+  fieldHasError,
+  getRequiredSubNote,
+  getLabel,
+  fieldIsRequired,
+} from "../../../../lib/helpers"
 import { Jurisdiction } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 
@@ -37,14 +43,13 @@ const ListingIntro = (props: ListingIntroProps) => {
             <Field
               id="name"
               name="name"
-              label={t("listings.listingName")}
-              placeholder={t("listings.listingName")}
+              label={getLabel("name", props.requiredFields, t("listings.listingName"))}
               inputProps={{
                 onChange: () => {
                   fieldHasError(errors?.name) && clearErrors("name")
                 },
+                "aria-required": fieldIsRequired("name", props.requiredFields),
               }}
-              subNote={getRequiredSubNote("name", props.requiredFields)}
               register={register}
               error={fieldHasError(errors?.name)}
               errorMessage={fieldMessage(errors?.name)}
@@ -53,57 +58,46 @@ const ListingIntro = (props: ListingIntroProps) => {
           </Grid.Cell>
         </Grid.Row>
         <Grid.Row columns={2}>
-          <FieldValue
-            label={t("t.jurisdiction")}
-            className={`${
-              fieldHasError(errors?.jurisdiction) || fieldHasError(errors?.["jurisdiction.id"])
-                ? "field-value-error"
-                : ""
-            } ${defaultJurisdiction ? "hidden" : ""}`}
-          >
-            <Select
-              id={"jurisdictions.id"}
-              defaultValue={defaultJurisdiction}
-              name={"jurisdictions.id"}
-              label={t("t.jurisdiction")}
-              labelClassName="sr-only"
-              register={register}
-              controlClassName={`control ${defaultJurisdiction ? "hidden" : ""}`}
-              error={
-                fieldHasError(errors?.jurisdictions) || fieldHasError(errors?.["jurisdictions.id"])
-              }
-              subNote={t("listings.requiredToPublish")}
-              errorMessage={
-                fieldMessage(errors?.jurisdictions) ??
-                fieldMessage(errors?.["jurisdictions.id"]) ??
-                undefined
-              }
-              keyPrefix={"jurisdictions"}
-              options={jurisdictionOptions}
-              inputProps={{
-                onChange: () => {
-                  if (
-                    fieldHasError(errors?.jurisdictions) ||
-                    fieldHasError(errors?.["jurisdictions.id"])
-                  ) {
-                    clearErrors("jurisdictions.id")
-                    clearErrors("jurisdictions")
-                  }
-                },
-              }}
-            />
-          </FieldValue>
+          <Select
+            id={"jurisdictions.id"}
+            defaultValue={defaultJurisdiction}
+            name={"jurisdictions.id"}
+            label={`${t("t.jurisdiction")} *`}
+            register={register}
+            controlClassName={`control ${defaultJurisdiction ? "hidden" : ""}`}
+            error={
+              fieldHasError(errors?.jurisdictions) || fieldHasError(errors?.["jurisdictions.id"])
+            }
+            errorMessage={
+              fieldMessage(errors?.jurisdictions) ??
+              fieldMessage(errors?.["jurisdictions.id"]) ??
+              undefined
+            }
+            keyPrefix={"jurisdictions"}
+            options={jurisdictionOptions}
+            inputProps={{
+              onChange: () => {
+                if (
+                  fieldHasError(errors?.jurisdictions) ||
+                  fieldHasError(errors?.["jurisdictions.id"])
+                ) {
+                  clearErrors("jurisdictions.id")
+                  clearErrors("jurisdictions")
+                }
+              },
+              "aria-required": fieldIsRequired("jurisdictions", props.requiredFields),
+            }}
+          />
           <Grid.Cell>
             <Field
               id="developer"
               name="developer"
-              label={t("listings.developer")}
-              placeholder={t("listings.developer")}
-              subNote={getRequiredSubNote("developer", props.requiredFields)}
+              label={getLabel("developer", props.requiredFields, t("listings.developer"))}
               error={fieldHasError(errors?.developer)}
               errorMessage={fieldMessage(errors?.developer)}
               inputProps={{
                 onChange: () => fieldHasError(errors?.developer) && clearErrors("developer"),
+                "aria-required": fieldIsRequired("developer", props.requiredFields),
               }}
               register={register}
             />

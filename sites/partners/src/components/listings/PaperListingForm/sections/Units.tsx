@@ -20,7 +20,13 @@ import { MessageContext } from "@bloom-housing/shared-helpers"
 import UnitForm from "../UnitForm"
 import { useFormContext, useWatch } from "react-hook-form"
 import { TempUnit, TempUnitGroup } from "../../../../lib/listings/formTypes"
-import { fieldHasError, fieldMessage, getRequiredSubNote } from "../../../../lib/helpers"
+import {
+  fieldHasError,
+  fieldIsRequired,
+  fieldMessage,
+  getLabel,
+  getRequiredSubNote,
+} from "../../../../lib/helpers"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 import { formatRange, formatRentRange, minMaxFinder } from "../../helpers"
 import UnitGroupForm from "../UnitGroupForm"
@@ -329,27 +335,24 @@ const FormUnits = ({
       >
         {homeTypeEnabled && (
           <Grid.Row columns={2}>
-            <FieldValue label={t("listings.homeType")}>
-              {homeTypes && (
-                <Select
-                  id={`homeType`}
-                  name={`homeType`}
-                  label={t("listings.homeType")}
-                  labelClassName="sr-only"
-                  register={register}
-                  controlClassName="control"
-                  options={homeTypes}
-                  subNote={getRequiredSubNote("homeType", requiredFields)}
-                  error={fieldHasError(errors?.homeType)}
-                  errorMessage={fieldMessage(errors?.homeType)}
-                  inputProps={{
-                    onChange: () => {
-                      fieldHasError(errors?.homeType) && clearErrors("homeType")
-                    },
-                  }}
-                />
-              )}
-            </FieldValue>
+            {homeTypes && (
+              <Select
+                id={`homeType`}
+                name={`homeType`}
+                label={getLabel("homeType", requiredFields, t("listings.homeType"))}
+                register={register}
+                controlClassName="control"
+                options={homeTypes}
+                error={fieldHasError(errors?.homeType)}
+                errorMessage={fieldMessage(errors?.homeType)}
+                inputProps={{
+                  onChange: () => {
+                    fieldHasError(errors?.homeType) && clearErrors("homeType")
+                  },
+                  "aria-required": fieldIsRequired("homeType", requiredFields),
+                }}
+              />
+            )}
           </Grid.Row>
         )}
         {!enableUnitGroups && (

@@ -11,7 +11,12 @@ import {
 import { Button, Card, Drawer, Grid, Heading } from "@bloom-housing/ui-seeds"
 import { getUrlForListingImage, CLOUDINARY_BUILDING_LABEL } from "@bloom-housing/shared-helpers"
 import { Asset, ListingImage } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { cloudinaryFileUploader, fieldHasError, fieldIsRequired } from "../../../../lib/helpers"
+import {
+  cloudinaryFileUploader,
+  fieldHasError,
+  fieldIsRequired,
+  getLabel,
+} from "../../../../lib/helpers"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 interface ListingPhotosProps {
@@ -212,16 +217,16 @@ const ListingPhotos = (props: ListingPhotosProps) => {
       <SectionWithGrid
         heading={t("listings.sections.photoTitle")}
         subheading={t("listings.sections.photoSubtitle")}
+        className={"gap-0"}
       >
-        <SectionWithGrid.HeadingRow>{t("listings.sections.photoTitle")}</SectionWithGrid.HeadingRow>
+        <div className={"field-label"}>
+          {getLabel("listingImages", props.requiredFields, "Photos")}
+        </div>
         <Grid.Row columns={1} className="grid-inset-section">
           <Grid.Cell>
             {listingFormPhotos.length > 0 && (
               <div className="mb-5" data-testid="photos-table">
-                <MinimalTable
-                  headers={photoTableHeaders}
-                  data={listingPhotoTableRows}
-                ></MinimalTable>
+                <MinimalTable headers={photoTableHeaders} data={listingPhotoTableRows} />
               </div>
             )}
 
@@ -240,15 +245,12 @@ const ListingPhotos = (props: ListingPhotosProps) => {
             </Button>
           </Grid.Cell>
         </Grid.Row>
+        {fieldHasError(errors?.listingImages) && (
+          <span className={"text-sm text-alert seeds-m-bs-text"} id="photos-error">
+            {t("errors.requiredFieldError")}
+          </span>
+        )}
       </SectionWithGrid>
-      {fieldIsRequired("listingImages", props.requiredFields) && (
-        <p className="field-sub-note">{t("listings.requiredToPublish")}</p>
-      )}
-      {fieldHasError(errors?.listingImages) && (
-        <span className={"text-sm text-alert"} id="photos-error">
-          {t("errors.requiredFieldError")}
-        </span>
-      )}
 
       {/* Image management and upload drawer */}
       <Drawer

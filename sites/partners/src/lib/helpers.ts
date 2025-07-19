@@ -301,6 +301,10 @@ export const getRequiredSubNote = (fieldName: string, requiredFields: string[]) 
   return fieldIsRequired(fieldName, requiredFields) ? t("listings.requiredToPublish") : null
 }
 
+export const getLabel = (fieldName: string, requiredFields: string[], label: string) => {
+  return fieldIsRequired(fieldName, requiredFields) ? `${label} *` : label
+}
+
 export const fieldMessage = (errorObj: FieldError) => {
   return errorObj?.message
 }

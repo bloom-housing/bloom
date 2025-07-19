@@ -2,11 +2,12 @@ import React from "react"
 import { Grid, Heading, HeadingGroup } from "@bloom-housing/ui-seeds"
 
 interface SectionWithGridProps {
-  heading: React.ReactNode
-  subheading?: React.ReactNode
-  inset?: boolean
   bypassGrid?: boolean
   children: React.ReactNode
+  className?: string
+  heading: React.ReactNode
+  inset?: boolean
+  subheading?: React.ReactNode
 }
 
 const HeadingRow = ({ children }) => {
@@ -33,11 +34,20 @@ const SectionWithGrid = (props: SectionWithGridProps) => {
       )}
 
       {props.bypassGrid ? (
-        <div className={props.inset ? "grid-inset-section" : "spacer-section-above"}>
+        <div
+          className={`${props.inset ? "grid-inset-section" : "spacer-section-above"} ${
+            props.className ? props.className : ""
+          }`}
+        >
           {props.children}
         </div>
       ) : (
-        <Grid spacing="lg" className={props.inset ? "grid-inset-section" : "spacer-section-above"}>
+        <Grid
+          spacing="lg"
+          className={`${props.inset ? "grid-inset-section" : "spacer-section-above"} ${
+            props.className ? props.className : ""
+          }`}
+        >
           {props.children}
         </Grid>
       )}
