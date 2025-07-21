@@ -40,7 +40,8 @@ function compareStrings(a, b, node, nextNode, isInverted) {
 
 export function getColDefs(
   maxHouseholdSize: number,
-  enableFullTimeStudentQuestion?: boolean
+  enableFullTimeStudentQuestion?: boolean,
+  disableWorkInRegion?: boolean
 ): ColDef[] {
   const defs: ColDef[] = [
     {
@@ -285,7 +286,10 @@ export function getColDefs(
         return value ? t(`application.contact.phoneNumberTypes.${value}`) : t("t.none")
       },
     },
-    {
+  ]
+
+  if (!disableWorkInRegion) {
+    defs.push({
       headerName: t("application.details.workInRegion"),
       field: "applicant.workInRegion",
       sortable: false,
@@ -296,8 +300,8 @@ export function getColDefs(
         if (!value) return ""
         return t(`t.${value}`)
       },
-    },
-  ]
+    })
+  }
 
   if (enableFullTimeStudentQuestion) {
     defs.push({
