@@ -70,7 +70,6 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
   const commonDigitalApplicationChoice = watch("commonDigitalApplicationChoice")
   const paperApplicationChoice = watch("paperApplicationChoice")
   const referralOpportunityChoice = watch("referralOpportunityChoice")
-  const referralContactPhone = watch("referralContactPhone")
 
   /*
     Set state for methods, drawer, upload progress, and more
