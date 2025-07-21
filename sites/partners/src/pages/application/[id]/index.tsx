@@ -32,10 +32,13 @@ export default function ApplicationsList() {
   const applicationId = router.query.id as string
   const { application } = useSingleApplicationData(applicationId)
   const { listingDto } = useSingleListingData(application?.listings?.id)
-  const { applicationsService, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
-  const [errorAlert, setErrorAlert] = useState(false)
 
-  const [membersDrawer, setMembersDrawer] = useState<MembersDrawer>(null)
+  const { applicationsService, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
+
+  const enableAdaOtherOption = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableAdaOtherOption,
+    listingDto?.jurisdictions.id
+  )
 
   const enableFullTimeStudentQuestion = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableFullTimeStudentQuestion,
@@ -46,6 +49,10 @@ export default function ApplicationsList() {
     FeatureFlagEnum.swapCommunityTypeWithPrograms,
     listingDto?.jurisdictions.id
   )
+
+  const [errorAlert, setErrorAlert] = useState(false)
+
+  const [membersDrawer, setMembersDrawer] = useState<MembersDrawer>(null)
 
   async function deleteApplication() {
     try {
@@ -151,6 +158,7 @@ export default function ApplicationsList() {
 
                 <DetailsHouseholdDetails
                   enableFullTimeStudentQuestion={enableFullTimeStudentQuestion}
+                  enableAdaOtherOption={enableAdaOtherOption}
                 />
 
                 <DetailsMultiselectQuestions

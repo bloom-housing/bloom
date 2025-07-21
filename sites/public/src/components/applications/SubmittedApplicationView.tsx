@@ -72,6 +72,9 @@ const SubmittedApplicationView = ({
           enableFullTimeStudentQuestion={doJurisdictionsHaveFeatureFlagOn(
             FeatureFlagEnum.enableFullTimeStudentQuestion
           )}
+          enableAdaOtherOption={doJurisdictionsHaveFeatureFlagOn(
+            FeatureFlagEnum.enableAdaOtherOption
+          )}
           swapCommunityTypeWithPrograms={doJurisdictionsHaveFeatureFlagOn(
             FeatureFlagEnum.swapCommunityTypeWithPrograms
           )}

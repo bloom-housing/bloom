@@ -1,4 +1,8 @@
-import { ListingsStatusEnum, ReviewOrderTypeEnum } from '@prisma/client';
+import {
+  ApplicationMethodsTypeEnum,
+  ListingsStatusEnum,
+  ReviewOrderTypeEnum,
+} from '@prisma/client';
 import dayjs from 'dayjs';
 
 export const littleVillageApartments = {
@@ -29,6 +33,11 @@ export const littleVillageApartments = {
   applicationDropOffAddressOfficeHours: null,
   applicationDropOffAddressType: null,
   applicationMailingAddressType: null,
+  applicationMethods: {
+    create: {
+      type: ApplicationMethodsTypeEnum.ExternalLink,
+    },
+  },
   buildingSelectionCriteria: null,
   costsNotIncluded: null,
   creditHistory: null,
