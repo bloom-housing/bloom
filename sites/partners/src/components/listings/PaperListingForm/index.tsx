@@ -61,6 +61,8 @@ import PreferencesAndPrograms from "./sections/PreferencesAndPrograms"
 
 const extensions = EditorExtensions
 
+const CHARACTER_LIMIT = 1000
+
 type ListingFormProps = {
   listing?: FormListing
   editMode?: boolean
@@ -255,7 +257,6 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
           clearErrors()
           const successful = await formMethods.trigger()
 
-          const CHARACTER_LIMIT = 1000
           if (whatToExpectEditor?.storage.characterCount.characters() > CHARACTER_LIMIT) {
             setLoading(false)
             setAlert("form")

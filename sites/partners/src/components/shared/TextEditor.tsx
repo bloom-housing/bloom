@@ -60,7 +60,7 @@ export const EditorExtensions = [
 
 const MenuBar = ({ editor }) => {
   const setLink = useCallback(() => {
-    const previousUrl = editor.getAttributes("link").href
+    const previousUrl = editor?.getAttributes("link").href
     const url = window.prompt("URL", previousUrl)
 
     // cancelled
@@ -70,14 +70,14 @@ const MenuBar = ({ editor }) => {
 
     // empty
     if (url === "") {
-      editor.chain().focus().extendMarkRange("link").unsetLink().run()
+      editor?.chain().focus().extendMarkRange("link").unsetLink().run()
 
       return
     }
 
     // update link
     try {
-      editor.chain().focus().extendMarkRange("link").setLink({ href: url }).run()
+      editor?.chain().focus().extendMarkRange("link").setLink({ href: url }).run()
     } catch (e) {
       alert(e.message)
     }
@@ -90,9 +90,9 @@ const MenuBar = ({ editor }) => {
   return (
     <div className={styles["editor-menu"]}>
       <button
-        onClick={() => editor.chain().focus().toggleBold().run()}
-        disabled={!editor.can().chain().focus().toggleBold().run()}
-        className={editor.isActive("bold") ? styles["is-active"] : ""}
+        onClick={() => editor?.chain().focus().toggleBold().run()}
+        disabled={!editor?.can().chain().focus().toggleBold().run()}
+        className={editor?.isActive("bold") ? styles["is-active"] : ""}
         type="button"
         aria-label={"Bold"}
         id={"editor-bold"}
@@ -102,8 +102,8 @@ const MenuBar = ({ editor }) => {
         </Icon>
       </button>
       <button
-        onClick={() => editor.chain().focus().toggleBulletList().run()}
-        className={editor.isActive("bulletList") ? styles["is-active"] : ""}
+        onClick={() => editor?.chain().focus().toggleBulletList().run()}
+        className={editor?.isActive("bulletList") ? styles["is-active"] : ""}
         type="button"
         aria-label={"Bullet list"}
         id={"editor-bullet-list"}
@@ -113,8 +113,8 @@ const MenuBar = ({ editor }) => {
         </Icon>
       </button>
       <button
-        onClick={() => editor.chain().focus().toggleOrderedList().run()}
-        className={editor.isActive("orderedList") ? styles["is-active"] : ""}
+        onClick={() => editor?.chain().focus().toggleOrderedList().run()}
+        className={editor?.isActive("orderedList") ? styles["is-active"] : ""}
         type="button"
         aria-label={"Numbered list"}
         id={"editor-numbered-list"}
@@ -125,7 +125,7 @@ const MenuBar = ({ editor }) => {
       </button>
       <button
         onClick={setLink}
-        className={editor.isActive("link") ? styles["is-active"] : ""}
+        className={editor?.isActive("link") ? styles["is-active"] : ""}
         type="button"
         aria-label={"Set link"}
       >
@@ -134,8 +134,8 @@ const MenuBar = ({ editor }) => {
         </Icon>
       </button>
       <button
-        onClick={() => editor.chain().focus().unsetLink().run()}
-        disabled={!editor.isActive("link")}
+        onClick={() => editor?.chain().focus().unsetLink().run()}
+        disabled={!editor?.isActive("link")}
         type="button"
         aria-label={"Unlink"}
       >
@@ -144,7 +144,7 @@ const MenuBar = ({ editor }) => {
         </Icon>
       </button>
       <button
-        onClick={() => editor.chain().focus().setHorizontalRule().run()}
+        onClick={() => editor?.chain().focus().setHorizontalRule().run()}
         type="button"
         aria-label={"Line break"}
         id={"editor-line-break"}
