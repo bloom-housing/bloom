@@ -8,8 +8,6 @@ import {
   MinimalTable,
   Select,
   Textarea,
-  PhoneField,
-  PhoneMask,
   StandardTableData,
 } from "@bloom-housing/ui-components"
 import { Button, Card, Drawer, Grid } from "@bloom-housing/ui-seeds"
@@ -72,6 +70,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
   const commonDigitalApplicationChoice = watch("commonDigitalApplicationChoice")
   const paperApplicationChoice = watch("paperApplicationChoice")
   const referralOpportunityChoice = watch("referralOpportunityChoice")
+  const referralContactPhone = watch("referralContactPhone")
 
   /*
     Set state for methods, drawer, upload progress, and more
@@ -84,6 +83,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
     id: "",
     url: "",
   })
+  const referralPhoneRef = React.useRef("")
   const resetDrawerState = () => {
     setProgressValue(0)
     setCloudinaryData({
@@ -489,28 +489,47 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
         {referralOpportunityChoice === YesNoEnum.yes && (
           <Grid.Row columns={3}>
             <Grid.Cell>
-              <PhoneField
+              <Field
                 label={t("listings.referralContactPhone")}
                 name="referralContactPhone"
                 id="referralContactPhone"
-                placeholder={t("t.phoneNumberPlaceholder")}
-                mask={() => (
-                  <PhoneMask
-                    name="referralContactPhone"
-                    value={methods.referral ? methods.referral.phoneNumber : ""}
-                    placeholder={t("t.phoneNumberPlaceholder")}
-                    onChange={(e) => {
-                      setMethods({
-                        ...methods,
-                        referral: {
-                          ...methods.referral,
-                          phoneNumber: e,
-                        },
-                      })
-                    }}
-                  />
-                )}
-                controlClassName={"control"}
+                defaultValue={methods.referral ? methods.referral.phoneNumber : ""}
+                register={register}
+                onChange={(e) => {
+                  // Limit characters to only values allowed and auto-add phone formatting
+                  // Format should be "(123) 456-7890"
+                  let newValue = e.target.value
+                  // Don't let non-number entered into appropriate spots
+                  ;[1, 2, 3, 6, 7, 8, 10, 11, 12, 13].forEach((value) => {
+                    if (newValue[value] < "0" || newValue[value] > "9") {
+                      newValue = `${newValue.slice(0, value)}${newValue.slice(value + 1)}`
+                    }
+                  })
+                  if (newValue.length > 0 && newValue[0] !== "(") {
+                    newValue = `(${newValue}`
+                  }
+                  if (newValue.length > 4 && newValue[4] !== ")") {
+                    newValue = `${newValue.slice(0, 4)})${newValue.slice(4)}`
+                  }
+                  if (newValue.length > 5 && newValue[5] !== " ") {
+                    newValue = `${newValue.slice(0, 5)} ${newValue.slice(5)}`
+                  }
+                  if (newValue.length > 9 && newValue[9] !== "-") {
+                    newValue = `${newValue.slice(0, 9)}-${newValue.slice(9)}`
+                  }
+                  if (newValue.length > 14) {
+                    newValue = referralPhoneRef.current
+                  }
+                  referralPhoneRef.current = newValue
+                  e.target.value = newValue
+                  setMethods({
+                    ...methods,
+                    referral: {
+                      ...methods.referral,
+                      phoneNumber: e.target.value,
+                    },
+                  })
+                }}
               />
             </Grid.Cell>
             <Grid.Cell className="seeds-grid-span-2">
