@@ -29,6 +29,72 @@ interface Methods {
   referral: ApplicationMethodCreate
 }
 
+/**
+ * Input for the phone fields need to be masked to make sure the format of
+ * "(123) 456-7890" is the only accepted form.
+ */
+export const phoneMask = (incomingNewValue: string, existingValue: string): string => {
+  // Limit characters to only values allowed and auto-add phone formatting
+  // Format should be "(123) 456-7890"
+  let newValue = incomingNewValue
+
+  if (newValue.length > 0 && newValue[0] !== "(") {
+    newValue = `(${newValue}`
+  }
+  const NUMBER = "number"
+
+  ;[
+    "(",
+    NUMBER,
+    NUMBER,
+    NUMBER,
+    ")",
+    " ",
+    NUMBER,
+    NUMBER,
+    NUMBER,
+    "-",
+    NUMBER,
+    NUMBER,
+    NUMBER,
+    NUMBER,
+  ].forEach((value, index) => {
+    if (newValue[index]) {
+      if (value === NUMBER) {
+        if (newValue[index] < "0" || newValue[index] > "9") {
+          newValue = `${newValue.slice(0, index)}${newValue.slice(index + 1)}`
+        }
+      } else if (value !== newValue[index]) {
+        newValue = `${newValue.slice(0, index)}${value}${newValue.slice(index)}`
+      }
+    }
+  })
+  // Don't let non-number entered into appropriate spots
+  // ;[1, 2, 3, 6, 7, 8, 10, 11, 12, 13].forEach((value) => {
+  //   if (newValue[value] < "0" || newValue[value] > "9") {
+  //     newValue = `${newValue.slice(0, value)}${newValue.slice(value + 1)}`
+  //   }
+  // })
+  // if (newValue.length > 4 && newValue[4] !== ")") {
+  //   newValue = `${newValue.slice(0, 4)})${newValue.slice(4)}`
+  // }
+  // if (newValue.length > 5 && newValue[5] !== " ") {
+  //   newValue = `${newValue.slice(0, 5)} ${newValue.slice(5)}`
+  // }
+  // if (newValue.length > 9 && newValue[9] !== "-") {
+  //   newValue = `${newValue.slice(0, 9)}-${newValue.slice(9)}`
+  // }
+  if (newValue.length > 14) {
+    newValue = newValue.slice(0, 14)
+  }
+  // ;[1, 2, 3, 6, 7, 8, 10, 11, 12, 13].forEach((value) => {
+  //   if (newValue[value] < "0" || newValue[value] > "9") {
+  //     newValue = `${newValue.slice(0, value)}${newValue.slice(value + 1)}`
+  //   }
+  // })
+  return newValue
+}
+
 const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, setValue, watch, errors, getValues } = useFormContext()
@@ -185,6 +251,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
   }, [methods, setValue])
   // register applicationMethods so we can set a value for it
   register("applicationMethods")
+
   return (
     <>
       <hr className="spacer-section-above spacer-section" />
@@ -495,30 +562,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                 defaultValue={methods.referral ? methods.referral.phoneNumber : ""}
                 register={register}
                 onChange={(e) => {
-                  // Limit characters to only values allowed and auto-add phone formatting
-                  // Format should be "(123) 456-7890"
-                  let newValue = e.target.value
-                  // Don't let non-number entered into appropriate spots
-                  ;[1, 2, 3, 6, 7, 8, 10, 11, 12, 13].forEach((value) => {
-                    if (newValue[value] < "0" || newValue[value] > "9") {
-                      newValue = `${newValue.slice(0, value)}${newValue.slice(value + 1)}`
-                    }
-                  })
-                  if (newValue.length > 0 && newValue[0] !== "(") {
-                    newValue = `(${newValue}`
-                  }
-                  if (newValue.length > 4 && newValue[4] !== ")") {
-                    newValue = `${newValue.slice(0, 4)})${newValue.slice(4)}`
-                  }
-                  if (newValue.length > 5 && newValue[5] !== " ") {
-                    newValue = `${newValue.slice(0, 5)} ${newValue.slice(5)}`
-                  }
-                  if (newValue.length > 9 && newValue[9] !== "-") {
-                    newValue = `${newValue.slice(0, 9)}-${newValue.slice(9)}`
-                  }
-                  if (newValue.length > 14) {
-                    newValue = referralPhoneRef.current
-                  }
+                  const newValue = phoneMask(e.target.value, referralPhoneRef.current)
                   referralPhoneRef.current = newValue
                   e.target.value = newValue
                   setMethods({
