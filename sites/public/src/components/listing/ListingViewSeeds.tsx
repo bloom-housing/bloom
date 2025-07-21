@@ -16,12 +16,13 @@ import {
   pdfUrlFromListingEvents,
   ResponseException,
 } from "@bloom-housing/shared-helpers"
-import { Heading } from "@bloom-housing/ui-seeds"
+import { Card, Heading } from "@bloom-housing/ui-seeds"
 import { ErrorPage } from "../../pages/_error"
 import { fetchFavoriteListingIds, isFeatureFlagOn, saveListingFavorite } from "../../lib/helpers"
 import {
   getAdditionalInformation,
   getAmiValues,
+  getDateString,
   getEligibilitySections,
   getFeatures,
   getPaperApplications,
@@ -135,9 +136,7 @@ export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: Li
     <>
       {listing.whatToExpect && (
         <InfoCard heading={t("whatToExpect.label")}>
-          <div>
-            <Markdown>{listing.whatToExpect}</Markdown>
-          </div>
+          <Markdown className={"bloom-markdown"}>{listing.whatToExpect}</Markdown>
         </InfoCard>
       )}
     </>
@@ -165,6 +164,24 @@ export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: Li
             : []
         }
       />
+    </>
+  )
+
+  const ListingUpdatedAt = (
+    <>
+      {isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableListingUpdatedAt) &&
+        listing.contentUpdatedAt && (
+          <Card
+            className={`${styles["mobile-full-width-card"]} ${styles["mobile-no-bottom-border"]}`}
+          >
+            <Card.Section>
+              <p>
+                {t("listings.listingUpdated")}:{" "}
+                {getDateString(listing.contentUpdatedAt, "MMM DD, YYYY")}
+              </p>
+            </Card.Section>
+          </Card>
+        )}
     </>
   )
 
@@ -197,6 +214,7 @@ export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: Li
             : undefined
         }
       />
+      {ListingUpdatedAt}
     </>
   )
 

@@ -90,6 +90,7 @@ export const stagingSeed = async (
         FeatureFlagEnum.disableJurisdictionalAdmin,
         FeatureFlagEnum.disableListingPreferences,
         FeatureFlagEnum.enableAccessibilityFeatures,
+        FeatureFlagEnum.enableAdaOtherOption,
         FeatureFlagEnum.enableAdditionalResources,
         FeatureFlagEnum.enableCompanyWebsite,
         FeatureFlagEnum.enableGeocodingRadiusMethod,
@@ -99,6 +100,7 @@ export const stagingSeed = async (
         FeatureFlagEnum.enableListingFiltering,
         FeatureFlagEnum.enableListingOpportunity,
         FeatureFlagEnum.enableListingPagination,
+        FeatureFlagEnum.enableListingUpdatedAt,
         FeatureFlagEnum.enableMarketingStatus,
         FeatureFlagEnum.enableNeighborhoodAmenities,
         FeatureFlagEnum.enablePartnerDemographics,
@@ -255,7 +257,13 @@ export const stagingSeed = async (
     data: amiChartFactory(10, mainJurisdiction.id),
   });
   await prismaClient.amiChart.create({
+    data: amiChartFactory(10, mainJurisdiction.id, 2),
+  });
+  const lakeviewAmiChart = await prismaClient.amiChart.create({
     data: amiChartFactory(8, lakeviewJurisdiction.id),
+  });
+  await prismaClient.amiChart.create({
+    data: amiChartFactory(8, lakeviewJurisdiction.id, 2),
   });
   // Create map layers
   await prismaClient.mapLayers.create({
@@ -370,9 +378,9 @@ export const stagingSeed = async (
   await prismaClient.multiselectQuestions.create({
     data: multiselectQuestionFactory(lakeviewJurisdiction.id, {
       multiselectQuestion: {
-        text: 'Seniors',
+        text: 'Seniors 62+',
         description:
-          'Are you or anyone in your household 65 years of age or older?',
+          'Are you or anyone in your household 62 years of age or older?',
         applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
         optOutText: 'Prefer not to say',
         options: [
@@ -385,13 +393,14 @@ export const stagingSeed = async (
 
   // add extra programs to support filtering by "community type"
   await Promise.all(
-    [...new Array(3)].map(
-      async () =>
+    ['Seniors 55+', 'Families', 'Veterans'].map(
+      async (text) =>
         await prismaClient.multiselectQuestions.create({
           data: multiselectQuestionFactory(lakeviewJurisdiction.id, {
             multiselectQuestion: {
               applicationSection:
                 MultiselectQuestionsApplicationSectionEnum.programs,
+              text,
             },
           }),
         }),
@@ -833,7 +842,7 @@ export const stagingSeed = async (
               monthlyRentDeterminationType:
                 MonthlyRentDeterminationTypeEnum.flatRent,
               flatRentValue: 1400.0,
-              amiChart: { connect: { id: amiChart.id } },
+              amiChart: { connect: { id: lakeviewAmiChart.id } },
             },
           },
           unitTypes: {
@@ -865,7 +874,7 @@ export const stagingSeed = async (
               monthlyRentDeterminationType:
                 MonthlyRentDeterminationTypeEnum.percentageOfIncome,
               percentageOfIncomeValue: 30.0,
-              amiChart: { connect: { id: amiChart.id } },
+              amiChart: { connect: { id: lakeviewAmiChart.id } },
             },
           },
           unitTypes: {
@@ -891,7 +900,7 @@ export const stagingSeed = async (
               monthlyRentDeterminationType:
                 MonthlyRentDeterminationTypeEnum.flatRent,
               flatRentValue: 1800.0,
-              amiChart: { connect: { id: amiChart.id } },
+              amiChart: { connect: { id: lakeviewAmiChart.id } },
             },
           },
           unitTypes: {

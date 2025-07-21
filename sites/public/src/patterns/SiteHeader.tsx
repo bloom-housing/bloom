@@ -167,7 +167,7 @@ const HeaderLink = (props: HeaderLinkProps) => {
               }
             }
           }}
-          data-testid={`${props.link.label}-${props.index}`}
+          data-testid={`${props.link.label}`}
         >
           {props.link.label}
           <Icon size={"md"} className={styles["dropdown-icon"]}>
@@ -201,7 +201,7 @@ const HeaderLink = (props: HeaderLinkProps) => {
                       }}
                       id={`submenu-link-${index}`}
                       aria-current={props.currentPath === submenuLink.href}
-                      data-testid={`${submenuLink.label}-${index}`}
+                      data-testid={`${submenuLink.label}`}
                     >
                       {submenuLink.label}
                     </LinkComponent>
@@ -224,7 +224,7 @@ const HeaderLink = (props: HeaderLinkProps) => {
                         )
                       }}
                       id={`submenu-link-${index}`}
-                      data-testid={`${submenuLink.label}-${index}`}
+                      data-testid={`${submenuLink.label}`}
                     >
                       {submenuLink.label}
                     </button>
@@ -248,7 +248,7 @@ const HeaderLink = (props: HeaderLinkProps) => {
             onKeyDown={(event) => {
               menuKeyDown(event, props.firstItem, props.lastItem, props.setMobileMenuOpen)
             }}
-            data-testid={`${props.link.label}-${props.index}`}
+            data-testid={`${props.link.label}`}
           >
             {props.link.label}
           </LinkComponent>
@@ -263,7 +263,7 @@ const HeaderLink = (props: HeaderLinkProps) => {
             onKeyDown={(event) => {
               menuKeyDown(event, props.firstItem, props.lastItem, props.setMobileMenuOpen)
             }}
-            data-testid={`${props.link.label}-${props.index}`}
+            data-testid={`${props.link.label}`}
           >
             {props.link.label}
           </button>
