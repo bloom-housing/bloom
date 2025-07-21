@@ -1,4 +1,8 @@
-import { ListingsStatusEnum, ReviewOrderTypeEnum } from '@prisma/client';
+import {
+  ApplicationMethodsTypeEnum,
+  ListingsStatusEnum,
+  ReviewOrderTypeEnum,
+} from '@prisma/client';
 import dayjs from 'dayjs';
 import { stagingRealisticAddresses } from '../address-factory';
 
@@ -30,6 +34,11 @@ export const hollywoodHillsHeights = {
   applicationDropOffAddressOfficeHours: null,
   applicationDropOffAddressType: null,
   applicationMailingAddressType: null,
+  applicationMethods: {
+    create: {
+      type: ApplicationMethodsTypeEnum.Internal,
+    },
+  },
   buildingSelectionCriteria: null,
   costsNotIncluded: null,
   creditHistory: null,
