@@ -1,10 +1,10 @@
 describe("Preference Management Tests", () => {
   beforeEach(() => {
-    cy.login()
+    cy.loginApi()
   })
 
   afterEach(() => {
-    cy.signOut()
+    cy.signOutApi()
   })
 
   beforeEach(() => {

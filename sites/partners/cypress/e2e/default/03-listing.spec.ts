@@ -1,10 +1,10 @@
 describe("Listing Management Tests", () => {
   beforeEach(() => {
-    cy.login()
+    cy.loginApi()
   })
 
   after(() => {
-    cy.signOut()
+    cy.signOutApi()
   })
 
   it("error messaging & save dialogs", () => {
