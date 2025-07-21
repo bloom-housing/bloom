@@ -422,6 +422,7 @@ describe("Listing Management Tests", () => {
     cy.getByID("openhouseHeader").contains("11:05 PM")
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   function verifyAutofill(cy: Cypress.cy, listing: any): void {
     cy.findAndOpenListing(listing["name"])
     cy.getByID("listingEditButton").contains("Edit").click()
