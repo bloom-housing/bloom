@@ -109,6 +109,7 @@ export const view: Partial<
         mobility: true,
         vision: true,
         hearing: true,
+        other: true,
       },
     },
     applicationsMailingAddress: {
@@ -900,7 +901,7 @@ export class ApplicationService {
           : undefined,
         preferredUnitTypes: dto.preferredUnitTypes
           ? {
-              connect: dto.preferredUnitTypes.map((unitType) => ({
+              set: dto.preferredUnitTypes.map((unitType) => ({
                 id: unitType.id,
               })),
             }

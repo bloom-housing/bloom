@@ -347,7 +347,10 @@ export const mapApiToForm = (applicationData: ApplicationUpdate, listing: Listin
       workInRegion,
     }
 
-    const preferredUnit = applicationData?.preferredUnitTypes?.map((unit) => unit.id)
+    const preferredUnit =
+      applicationData?.preferredUnitTypes?.length > 0
+        ? applicationData?.preferredUnitTypes?.map((unit) => unit.id)
+        : null
 
     const accessibility: string[] = adaFeatureKeys.filter(
       (feature) =>
