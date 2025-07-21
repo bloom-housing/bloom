@@ -14,6 +14,7 @@ export class GoogleTranslateService {
       {
         from: LanguagesEnum.en,
         to: language,
+        format: 'html',
       },
     );
   }
