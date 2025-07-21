@@ -917,7 +917,7 @@ export const ListingView = (props: ListingProps) => {
             )}
             {lotterySection}
             <ExpandableSection
-              content={listing.whatToExpect}
+              content={<Markdown className={"bloom-markdown"}>{listing.whatToExpect}</Markdown>}
               strings={{
                 title: t("whatToExpect.label"),
                 readMore: t("t.readMore"),

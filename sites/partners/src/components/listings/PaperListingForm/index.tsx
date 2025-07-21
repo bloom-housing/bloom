@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useContext, useEffect } from "react"
 import { useRouter } from "next/router"
 import dayjs from "dayjs"
+import { useEditor } from "@tiptap/react"
 import { t, Form, AlertBox, LoadingOverlay, LatitudeLongitude } from "@bloom-housing/ui-components"
 import { Button, Icon, Tabs } from "@bloom-housing/ui-seeds"
 import ChevronLeftIcon from "@heroicons/react/20/solid/ChevronLeftIcon"
@@ -27,6 +28,7 @@ import {
   formDefaults,
 } from "../../../lib/listings/formTypes"
 import ListingDataPipeline from "../../../lib/listings/ListingDataPipeline"
+import { EditorExtensions } from "../../shared/TextEditor"
 import ListingFormActions, { ListingFormActionsType } from "../ListingFormActions"
 import AdditionalDetails from "./sections/AdditionalDetails"
 import AdditionalEligibility from "./sections/AdditionalEligibility"
@@ -44,7 +46,7 @@ import LotteryResults from "./sections/LotteryResults"
 import ApplicationTypes from "./sections/ApplicationTypes"
 import CommunityType from "./sections/CommunityType"
 import BuildingSelectionCriteria from "./sections/BuildingSelectionCriteria"
-import { getReadableErrorMessage } from "../PaperListingDetails/sections/helpers"
+import { cleanRichText, getReadableErrorMessage } from "../PaperListingDetails/sections/helpers"
 import { StatusBar } from "../../../components/shared/StatusBar"
 import { getListingStatusTag } from "../helpers"
 import RequestChangesDialog from "./dialogs/RequestChangesDialog"
@@ -56,6 +58,10 @@ import SaveBeforeExitDialog from "./dialogs/SaveBeforeExitDialog"
 import ListingVerification from "./sections/ListingVerification"
 import NeighborhoodAmenities from "./sections/NeighborhoodAmenities"
 import PreferencesAndPrograms from "./sections/PreferencesAndPrograms"
+
+const extensions = EditorExtensions
+
+const CHARACTER_LIMIT = 1000
 
 type ListingFormProps = {
   listing?: FormListing
@@ -146,6 +152,11 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
   const [listingIsAlreadyLiveDialog, setListingIsAlreadyLiveDialog] = useState(false)
   const [submitForApprovalDialog, setSubmitForApprovalDialog] = useState(false)
   const [requestChangesDialog, setRequestChangesDialog] = useState(false)
+
+  const whatToExpectEditor = useEditor({
+    extensions,
+    content: !listing ? t("whatToExpect.default") : listing?.whatToExpect,
+  })
 
   const enableUnitGroups =
     activeFeatureFlags?.find((flag) => flag.name === FeatureFlagEnum.enableUnitGroups)?.active ||
@@ -245,6 +256,14 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
           setLoading(true)
           clearErrors()
           const successful = await formMethods.trigger()
+
+          if (whatToExpectEditor?.storage.characterCount.characters() > CHARACTER_LIMIT) {
+            setLoading(false)
+            setAlert("form")
+            return
+          }
+
+          formData.whatToExpect = cleanRichText(whatToExpectEditor.getHTML())
 
           if (!enableSection8) {
             formData.listingSection8Acceptance = YesNoEnum.no
@@ -437,6 +456,7 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
                           <RankingsAndResults
                             listing={listing}
                             isAdmin={profile?.userRoles.isAdmin}
+                            whatToExpectEditor={whatToExpectEditor}
                           />
                           <LeasingAgent />
                           <ApplicationTypes listing={listing} />
