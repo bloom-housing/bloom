@@ -48,7 +48,7 @@ export const Apply = ({ listing, preview, setShowDownloadModal }: ApplyProps) =>
 
   const onlineApplicationUrl = redirectIfLogInRequired()
     ? `/sign-in?redirectUrl=/applications/start/choose-language&listingId=${listing.id}`
-    : getOnlineApplicationURL(listing.applicationMethods, listing.id, preview)?.url
+    : onlineApplicationURLInfo.url
   const disableApplyButton = !preview && listing.status !== ListingsStatusEnum.active
 
   const paperApplications = getPaperApplications(listing.applicationMethods)
