@@ -169,18 +169,19 @@ export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: Li
 
   const ListingUpdatedAt = (
     <>
-      {isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableListingUpdatedAt) && (
-        <Card
-          className={`${styles["mobile-full-width-card"]} ${styles["mobile-no-bottom-border"]}`}
-        >
-          <Card.Section>
-            <p>
-              {t("listings.listingUpdated")}:{" "}
-              {getDateString(listing.contentUpdatedAt, "MMM DD, YYYY")}
-            </p>
-          </Card.Section>
-        </Card>
-      )}
+      {isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableListingUpdatedAt) &&
+        listing.contentUpdatedAt && (
+          <Card
+            className={`${styles["mobile-full-width-card"]} ${styles["mobile-no-bottom-border"]}`}
+          >
+            <Card.Section>
+              <p>
+                {t("listings.listingUpdated")}:{" "}
+                {getDateString(listing.contentUpdatedAt, "MMM DD, YYYY")}
+              </p>
+            </Card.Section>
+          </Card>
+        )}
     </>
   )
 
