@@ -217,11 +217,6 @@ export class ApplicationExporterService {
       },
     });
 
-    const enableFullTimeStudentQuestion = doJurisdictionHaveFeatureFlagSet(
-      jurisdiction as Jurisdiction,
-      FeatureFlagEnum.enableFullTimeStudentQuestion,
-    );
-
     const swapCommunityTypeWithPrograms = doJurisdictionHaveFeatureFlagSet(
       jurisdiction as Jurisdiction,
       FeatureFlagEnum.swapCommunityTypeWithPrograms,
@@ -247,7 +242,6 @@ export class ApplicationExporterService {
       queryParams.includeDemographics,
       false,
       this.dateFormat,
-      enableFullTimeStudentQuestion,
       swapCommunityTypeWithPrograms,
     );
 
@@ -570,11 +564,6 @@ export class ApplicationExporterService {
       },
     });
 
-    const enableFullTimeStudentQuestion = doJurisdictionHaveFeatureFlagSet(
-      jurisdiction as Jurisdiction,
-      FeatureFlagEnum.enableFullTimeStudentQuestion,
-    );
-
     const swapCommunityTypeWithPrograms = doJurisdictionHaveFeatureFlagSet(
       jurisdiction as Jurisdiction,
       FeatureFlagEnum.swapCommunityTypeWithPrograms,
@@ -600,7 +589,6 @@ export class ApplicationExporterService {
       queryParams.includeDemographics,
       forLottery,
       undefined,
-      enableFullTimeStudentQuestion,
       swapCommunityTypeWithPrograms,
     );
 

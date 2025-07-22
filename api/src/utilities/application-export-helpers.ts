@@ -28,7 +28,6 @@ export const getExportHeaders = (
   includeDemographics = false,
   forLottery = false,
   dateFormat = 'MM-DD-YYYY hh:mm:ssA z',
-  enableFullTimeStudentQuestion?: boolean,
   swapCommunityTypeWithPrograms?: boolean,
 ): CsvHeader[] => {
   const enableAdaOtherOption = doAnyJurisdictionHaveFeatureFlagSet(
