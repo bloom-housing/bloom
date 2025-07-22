@@ -1,11 +1,11 @@
 import React from "react"
 import { listing } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
+import userEvent from "@testing-library/user-event"
 import ApplicationTypes, {
   phoneMask,
 } from "../../../../../src/components/listings/PaperListingForm/sections/ApplicationTypes"
-import { act, fireEvent, mockNextRouter, render, screen, within } from "../../../../testUtils"
+import { act, mockNextRouter, render, screen, within } from "../../../../testUtils"
 import { FormProviderWrapper } from "../../../../components/applications/sections/helpers"
-import userEvent from "@testing-library/user-event"
 
 beforeAll(() => {
   mockNextRouter()
