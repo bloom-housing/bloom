@@ -13,7 +13,7 @@ dayjs.extend(advanced)
 dayjs.extend(customParseFormat)
 
 import { TempUnit } from "./listings/formTypes"
-import { FieldError } from "react-hook-form"
+import { FieldError, UseFormMethods } from "react-hook-form"
 import {
   Application,
   AssetsService,
@@ -302,7 +302,33 @@ export const getRequiredSubNote = (fieldName: string, requiredFields: string[]) 
 }
 
 export const getLabel = (fieldName: string, requiredFields: string[], label: string) => {
-  return fieldIsRequired(fieldName, requiredFields) ? `${label} *` : label
+  return fieldIsRequired(fieldName, requiredFields) ? addAsterisk(label) : label
+}
+
+export const addAsterisk = (label: string) => {
+  return `${label} *`
+}
+
+export const defaultFieldProps = (
+  fieldKey: string,
+  label: string,
+  requiredFields: string[],
+  errors: UseFormMethods["errors"],
+  clearErrors: (name?: string | string[]) => void,
+  forceRequired?: boolean
+) => {
+  const hasError = fieldHasError(errors ? errors[fieldKey] : null)
+  return {
+    id: fieldKey,
+    name: fieldKey,
+    label: forceRequired ? addAsterisk(label) : getLabel(fieldKey, requiredFields, label),
+    error: hasError,
+    errorMessage: fieldMessage(errors ? errors[fieldKey] : null),
+    inputProps: {
+      onChange: () => hasError && clearErrors(fieldKey),
+      "aria-required": forceRequired || fieldIsRequired(fieldKey, requiredFields),
+    },
+  }
 }
 
 export const fieldMessage = (errorObj: FieldError) => {

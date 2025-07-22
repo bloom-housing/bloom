@@ -58,6 +58,7 @@ import SaveBeforeExitDialog from "./dialogs/SaveBeforeExitDialog"
 import ListingVerification from "./sections/ListingVerification"
 import NeighborhoodAmenities from "./sections/NeighborhoodAmenities"
 import PreferencesAndPrograms from "./sections/PreferencesAndPrograms"
+import * as styles from "./ListingForm.module.scss"
 
 const extensions = EditorExtensions
 
@@ -386,7 +387,7 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
           <StatusBar>{getListingStatusTag(listing?.status)}</StatusBar>
 
           <FormProvider {...formMethods}>
-            <section className="bg-primary-lighter py-5">
+            <section className={`bg-primary-lighter py-5 ${styles["form-overrides"]}`}>
               <div className="max-w-screen-xl px-5 mx-auto">
                 {alert && (
                   <AlertBox className="mb-5" onClose={() => setAlert(null)} closeable type="alert">
@@ -440,8 +441,14 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
                             programs={programs || []}
                             setPrograms={setPrograms}
                           />
-                          <AdditionalFees existingUtilities={listing?.listingUtilities} />
-                          <BuildingFeatures existingFeatures={listing?.listingFeatures} />
+                          <AdditionalFees
+                            existingUtilities={listing?.listingUtilities}
+                            requiredFields={requiredFields}
+                          />
+                          <BuildingFeatures
+                            existingFeatures={listing?.listingFeatures}
+                            requiredFields={requiredFields}
+                          />
                           <NeighborhoodAmenities />
                           <AdditionalEligibility defaultText={listing?.rentalAssistance} />
                           <BuildingSelectionCriteria />

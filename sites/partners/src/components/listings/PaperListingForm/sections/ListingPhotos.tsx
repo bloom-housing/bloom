@@ -11,13 +11,9 @@ import {
 import { Button, Card, Drawer, Grid, Heading } from "@bloom-housing/ui-seeds"
 import { getUrlForListingImage, CLOUDINARY_BUILDING_LABEL } from "@bloom-housing/shared-helpers"
 import { Asset, ListingImage } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import {
-  cloudinaryFileUploader,
-  fieldHasError,
-  fieldIsRequired,
-  getLabel,
-} from "../../../../lib/helpers"
+import { cloudinaryFileUploader, fieldHasError, getLabel } from "../../../../lib/helpers"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
+import styles from "../ListingForm.module.scss"
 
 interface ListingPhotosProps {
   requiredFields: string[]
@@ -219,9 +215,14 @@ const ListingPhotos = (props: ListingPhotosProps) => {
         subheading={t("listings.sections.photoSubtitle")}
         className={"gap-0"}
       >
-        <div className={"field-label"}>
+        <div
+          className={`field-label ${
+            fieldHasError(errors?.listingImages) ? styles["label-error"] : ""
+          }`}
+        >
           {getLabel("listingImages", props.requiredFields, "Photos")}
         </div>
+
         <Grid.Row columns={1} className="grid-inset-section">
           <Grid.Cell>
             {listingFormPhotos.length > 0 && (

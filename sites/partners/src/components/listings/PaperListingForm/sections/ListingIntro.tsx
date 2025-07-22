@@ -1,13 +1,12 @@
 import React from "react"
 import { useFormContext } from "react-hook-form"
 import { t, Field, SelectOption, Select } from "@bloom-housing/ui-components"
-import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
+import { Grid } from "@bloom-housing/ui-seeds"
 import {
   fieldMessage,
   fieldHasError,
-  getRequiredSubNote,
-  getLabel,
   fieldIsRequired,
+  defaultFieldProps,
 } from "../../../../lib/helpers"
 import { Jurisdiction } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
@@ -41,19 +40,16 @@ const ListingIntro = (props: ListingIntroProps) => {
         <Grid.Row columns={1}>
           <Grid.Cell>
             <Field
-              id="name"
-              name="name"
-              label={getLabel("name", props.requiredFields, t("listings.listingName"))}
-              inputProps={{
-                onChange: () => {
-                  fieldHasError(errors?.name) && clearErrors("name")
-                },
-                "aria-required": fieldIsRequired("name", props.requiredFields),
-              }}
               register={register}
-              error={fieldHasError(errors?.name)}
-              errorMessage={fieldMessage(errors?.name)}
               dataTestId={"nameField"}
+              {...defaultFieldProps(
+                "name",
+                t("listings.listingName"),
+                props.requiredFields,
+                errors,
+                clearErrors,
+                true
+              )}
             />
           </Grid.Cell>
         </Grid.Row>
@@ -90,16 +86,14 @@ const ListingIntro = (props: ListingIntroProps) => {
           />
           <Grid.Cell>
             <Field
-              id="developer"
-              name="developer"
-              label={getLabel("developer", props.requiredFields, t("listings.developer"))}
-              error={fieldHasError(errors?.developer)}
-              errorMessage={fieldMessage(errors?.developer)}
-              inputProps={{
-                onChange: () => fieldHasError(errors?.developer) && clearErrors("developer"),
-                "aria-required": fieldIsRequired("developer", props.requiredFields),
-              }}
               register={register}
+              {...defaultFieldProps(
+                "developer",
+                t("listings.developer"),
+                props.requiredFields,
+                errors,
+                clearErrors
+              )}
             />
           </Grid.Cell>
         </Grid.Row>

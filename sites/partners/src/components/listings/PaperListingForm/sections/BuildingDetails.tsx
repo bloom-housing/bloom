@@ -16,11 +16,11 @@ import GeocodeService, {
   GeocodeService as GeocodeServiceType,
 } from "@mapbox/mapbox-sdk/services/geocoding"
 import {
+  defaultFieldProps,
   fieldHasError,
   fieldIsRequired,
   fieldMessage,
   getLabel,
-  getRequiredSubNote,
 } from "../../../../lib/helpers"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 import {
@@ -28,6 +28,7 @@ import {
   RegionEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { neighborhoodRegions } from "../../../../lib/listings/Neighborhoods"
+import styles from "../ListingForm.module.scss"
 
 interface MapBoxFeature {
   center: number[] // Index 0: longitude, Index 1: latitude
@@ -215,16 +216,6 @@ const BuildingDetails = ({
           <GridCell>
             {enableRegions ? (
               <Select
-                name={"neighborhood"}
-                id={"neighborhood"}
-                label={getLabel("neighborhood", requiredFields, t("t.neighborhood"))}
-                inputProps={{
-                  className: "w-full",
-                  onChange: () => {
-                    fieldHasError(errors?.neighborhood) && clearErrors("neighborhood")
-                  },
-                  "aria-required": fieldIsRequired("neighborhood", requiredFields),
-                }}
                 controlClassName="control"
                 register={register}
                 options={[
@@ -234,23 +225,24 @@ const BuildingDetails = ({
                     label: entry.name,
                   })),
                 ]}
-                error={fieldHasError(errors?.neighborhood)}
-                errorMessage={fieldMessage(errors?.neighborhood)}
+                {...defaultFieldProps(
+                  "neighborhood",
+                  t("t.neighborhood"),
+                  requiredFields,
+                  errors,
+                  clearErrors
+                )}
               />
             ) : (
               <Field
-                label={getLabel("neighborhood", requiredFields, t("t.neighborhood"))}
-                name={"neighborhood"}
-                id={"neighborhood"}
                 register={register}
-                error={fieldHasError(errors?.neighborhood)}
-                errorMessage={fieldMessage(errors?.neighborhood)}
-                inputProps={{
-                  onChange: () => {
-                    fieldHasError(errors?.neighborhood) && clearErrors("neighborhood")
-                  },
-                  "aria-required": fieldIsRequired("neighborhood", requiredFields),
-                }}
+                {...defaultFieldProps(
+                  "neighborhood",
+                  t("t.neighborhood"),
+                  requiredFields,
+                  errors,
+                  clearErrors
+                )}
               />
             )}
           </GridCell>
@@ -346,19 +338,8 @@ const BuildingDetails = ({
           <Grid.Cell className="seeds-grid-span-2">
             {enableRegions ? (
               <Select
-                label={getLabel("region", requiredFields, t("t.region"))}
-                id="region"
-                name="region"
                 register={register}
                 controlClassName="control"
-                inputProps={{
-                  className: "w-full",
-                  onChange: () => {
-                    setValue("neighborhood", undefined)
-                    fieldHasError(errors?.neighborhood) && clearErrors("neighborhood")
-                  },
-                  "aria-required": fieldIsRequired("region", requiredFields),
-                }}
                 options={[
                   { value: "", label: t("listings.sections.regionPlaceholder") },
                   ...Object.keys(RegionEnum).map((entry) => ({
@@ -366,24 +347,19 @@ const BuildingDetails = ({
                     label: entry.toString().replace("_", " "),
                   })),
                 ]}
-                error={fieldHasError(errors?.region)}
-                errorMessage={fieldMessage(errors?.region)}
+                {...defaultFieldProps("region", t("t.region"), requiredFields, errors, clearErrors)}
               />
             ) : (
               <Field
-                label={getLabel("yearBuilt", requiredFields, t("listings.yearBuilt"))}
-                name={"yearBuilt"}
-                id={"yearBuilt"}
                 type={"number"}
                 register={register}
-                error={fieldHasError(errors?.yearBuilt)}
-                errorMessage={fieldMessage(errors?.yearBuilt)}
-                inputProps={{
-                  onChange: () => {
-                    fieldHasError(errors?.yearBuilt) && clearErrors("yearBuilt")
-                  },
-                  "aria-required": fieldIsRequired("yearBuilt", requiredFields),
-                }}
+                {...defaultFieldProps(
+                  "yearBuilt",
+                  t("listings.yearBuilt"),
+                  requiredFields,
+                  errors,
+                  clearErrors
+                )}
               />
             )}
           </Grid.Cell>
@@ -392,21 +368,15 @@ const BuildingDetails = ({
           <Grid.Row columns={3}>
             <Grid.Cell>
               <Field
-                label={t("listings.yearBuilt")}
-                name={"yearBuilt"}
-                id={"yearBuilt"}
-                placeholder={t("listings.yearBuilt")}
                 type={"number"}
                 register={register}
-                subNote={getRequiredSubNote("yearBuilt", requiredFields)}
-                error={fieldHasError(errors?.yearBuilt)}
-                errorMessage={fieldMessage(errors?.yearBuilt)}
-                inputProps={{
-                  onChange: () => {
-                    fieldHasError(errors?.yearBuilt) && clearErrors("yearBuilt")
-                  },
-                  "aria-required": fieldIsRequired("yearBuilt", requiredFields),
-                }}
+                {...defaultFieldProps(
+                  "yearBuilt",
+                  t("listings.yearBuilt"),
+                  requiredFields,
+                  errors,
+                  clearErrors
+                )}
               />
             </Grid.Cell>
           </Grid.Row>
@@ -444,6 +414,7 @@ const BuildingDetails = ({
             <FieldGroup
               name="mapPinPosition"
               type="radio"
+              fieldLabelClassName={styles["label-option"]}
               fieldGroupClassName={"flex-col"}
               fieldClassName={"ml-0"}
               register={register}
