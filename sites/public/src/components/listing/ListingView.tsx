@@ -373,7 +373,7 @@ export const ListingView = (props: ListingProps) => {
 
   const getOnlineApplicationURL = () => {
     let onlineApplicationURL
-    let isCommonApp
+    let isCommonApp = false
     if (hasMethod(listing.applicationMethods, ApplicationMethodsTypeEnum.Internal)) {
       onlineApplicationURL = `/applications/start/choose-language?listingId=${listing.id}`
       onlineApplicationURL += `${props.preview ? "&preview=true" : ""}`
@@ -382,7 +382,6 @@ export const ListingView = (props: ListingProps) => {
       onlineApplicationURL =
         getMethod(listing.applicationMethods, ApplicationMethodsTypeEnum.ExternalLink)
           ?.externalReference || ""
-      isCommonApp = false
     }
     return { url: onlineApplicationURL, isCommonApp }
   }

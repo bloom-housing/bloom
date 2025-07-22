@@ -99,7 +99,7 @@ export const getOnlineApplicationURL = (
   preview: boolean
 ) => {
   let onlineApplicationURL
-  let isCommonApp
+  let isCommonApp = false
   if (hasMethod(applicationMethods, ApplicationMethodsTypeEnum.Internal)) {
     onlineApplicationURL = `/applications/start/choose-language?listingId=${listingId}`
     onlineApplicationURL += `${preview ? "&preview=true" : ""}`
@@ -108,7 +108,6 @@ export const getOnlineApplicationURL = (
     onlineApplicationURL =
       getMethod(applicationMethods, ApplicationMethodsTypeEnum.ExternalLink)?.externalReference ||
       ""
-    isCommonApp = false
   }
   return { url: onlineApplicationURL, isCommonApp }
 }
