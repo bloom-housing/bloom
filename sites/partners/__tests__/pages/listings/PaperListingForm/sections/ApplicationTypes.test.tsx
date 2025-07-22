@@ -3,7 +3,7 @@ import { listing } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import ApplicationTypes, {
   phoneMask,
 } from "../../../../../src/components/listings/PaperListingForm/sections/ApplicationTypes"
-import { fireEvent, mockNextRouter, render, screen, within } from "../../../../testUtils"
+import { act, fireEvent, mockNextRouter, render, screen, within } from "../../../../testUtils"
 import { FormProviderWrapper } from "../../../../components/applications/sections/helpers"
 import userEvent from "@testing-library/user-event"
 
@@ -56,26 +56,29 @@ describe("ApplicationTypes", () => {
     const referralApplication = screen.getByRole("row", {
       name: "Is there a referral opportunity? Yes No Required to publish",
     })
-    await userEvent.click(within(referralApplication).getByRole("radio", { name: "Yes" }))
+    await act(() =>
+      userEvent.click(within(referralApplication).getByRole("radio", { name: "Yes" }))
+    )
 
     const referralContactPhone = screen.getByRole("textbox", { name: "Referral Contact Phone" })
     expect(referralContactPhone).toBeInTheDocument()
     expect(screen.getByRole("textbox", { name: "Referral Summary" })).toBeInTheDocument()
 
     // validate that the phone mask works
-    await userEvent.type(referralContactPhone, "1234567890")
+    await act(() => userEvent.type(referralContactPhone, "1234567890"))
     expect(referralContactPhone).toHaveValue("(123) 456-7890")
   })
 
   describe("phoneMask", () => {
     it("should mask phone number and add proper character", () => {
-      expect(phoneMask("1234567890", "")).toEqual("(123) 456-7890")
-      expect(phoneMask("123", "")).toEqual("(123")
-      expect(phoneMask("S", "")).toEqual("(")
-      expect(phoneMask("(D", "")).toEqual("(")
-      expect(phoneMask("1234", "")).toEqual("(123) 4")
-      expect(phoneMask("12345678901234", "")).toEqual("(123) 456-7890")
-      expect(phoneMask("(123) -45-67", "")).toEqual("(123) 456-7")
+      expect(phoneMask("1234567890")).toEqual("(123) 456-7890")
+      expect(phoneMask("123")).toEqual("(123")
+      expect(phoneMask("S")).toEqual("(")
+      expect(phoneMask("(D")).toEqual("(")
+      expect(phoneMask("1234")).toEqual("(123) 4")
+      expect(phoneMask("12345678901234")).toEqual("(123) 456-7890")
+      expect(phoneMask("(123) -45-67")).toEqual("(123) 456-7")
+      expect(phoneMask("(123) g-45-67")).toEqual("(123) 456-7")
     })
   })
 })

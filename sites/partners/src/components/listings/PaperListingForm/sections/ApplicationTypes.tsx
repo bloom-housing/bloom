@@ -32,17 +32,15 @@ interface Methods {
 /**
  * Input for the phone fields need to be masked to make sure the format of
  * "(123) 456-7890" is the only accepted form.
+ * Limit characters to only values allowed and auto-add phone formatting
  */
-export const phoneMask = (incomingNewValue: string, existingValue: string): string => {
-  // Limit characters to only values allowed and auto-add phone formatting
-  // Format should be "(123) 456-7890"
-  let newValue = incomingNewValue
+export const phoneMask = (incomingNewValue: string): string => {
+  // Remove all non number characters
+  let newValue = incomingNewValue.replace(/[^0-9]/g, "")
 
-  if (newValue.length > 0 && newValue[0] !== "(") {
-    newValue = `(${newValue}`
-  }
   const NUMBER = "number"
 
+  // Add the additional characters to the proper spots
   ;[
     "(",
     NUMBER,
@@ -59,39 +57,16 @@ export const phoneMask = (incomingNewValue: string, existingValue: string): stri
     NUMBER,
     NUMBER,
   ].forEach((value, index) => {
-    if (newValue[index]) {
-      if (value === NUMBER) {
-        if (newValue[index] < "0" || newValue[index] > "9") {
-          newValue = `${newValue.slice(0, index)}${newValue.slice(index + 1)}`
-        }
-      } else if (value !== newValue[index]) {
+    if (newValue[index] || incomingNewValue.length > index) {
+      if (value !== NUMBER && value !== newValue[index]) {
         newValue = `${newValue.slice(0, index)}${value}${newValue.slice(index)}`
       }
     }
   })
-  // Don't let non-number entered into appropriate spots
-  // ;[1, 2, 3, 6, 7, 8, 10, 11, 12, 13].forEach((value) => {
-  //   if (newValue[value] < "0" || newValue[value] > "9") {
-  //     newValue = `${newValue.slice(0, value)}${newValue.slice(value + 1)}`
-  //   }
-  // })
-  // if (newValue.length > 4 && newValue[4] !== ")") {
-  //   newValue = `${newValue.slice(0, 4)})${newValue.slice(4)}`
-  // }
-  // if (newValue.length > 5 && newValue[5] !== " ") {
-  //   newValue = `${newValue.slice(0, 5)} ${newValue.slice(5)}`
-  // }
-  // if (newValue.length > 9 && newValue[9] !== "-") {
-  //   newValue = `${newValue.slice(0, 9)}-${newValue.slice(9)}`
-  // }
+  // Only allow a total of 14 character (10 numbers and 4 additional characters)
   if (newValue.length > 14) {
     newValue = newValue.slice(0, 14)
   }
-  // ;[1, 2, 3, 6, 7, 8, 10, 11, 12, 13].forEach((value) => {
-  //   if (newValue[value] < "0" || newValue[value] > "9") {
-  //     newValue = `${newValue.slice(0, value)}${newValue.slice(value + 1)}`
-  //   }
-  // })
   return newValue
 }
 
@@ -562,7 +537,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                 defaultValue={methods.referral ? methods.referral.phoneNumber : ""}
                 register={register}
                 onChange={(e) => {
-                  const newValue = phoneMask(e.target.value, referralPhoneRef.current)
+                  const newValue = phoneMask(e.target.value)
                   referralPhoneRef.current = newValue
                   e.target.value = newValue
                   setMethods({
