@@ -1,10 +1,17 @@
 import React, { useEffect, useState, useContext } from "react"
 import { useFormContext } from "react-hook-form"
 import { t, Textarea, Field, PhoneField, Select } from "@bloom-housing/ui-components"
-import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
+import { Grid } from "@bloom-housing/ui-seeds"
 import { stateKeys, AuthContext } from "@bloom-housing/shared-helpers"
 import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { fieldMessage, fieldHasError, defaultFieldProps } from "../../../../lib/helpers"
+import {
+  fieldMessage,
+  fieldHasError,
+  defaultFieldProps,
+  getLabel,
+  fieldIsRequired,
+  getAddressErrorMessage,
+} from "../../../../lib/helpers"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 type LeasingAgentProps = {
@@ -40,6 +47,18 @@ const LeasingAgent = (props: LeasingAgentProps) => {
     }
     setPhoneField(leasingAgentPhoneField)
   }, [leasingAgentPhoneField, clearErrors, phoneField])
+
+  const getError = (subfield: string) => {
+    return getAddressErrorMessage(
+      `listingsLeasingAgentAddress.${subfield}`,
+      "listingsLeasingAgentAddress",
+      fieldMessage(
+        errors?.listingsLeasingAgentAddress ? errors?.listingsLeasingAgentAddress[subfield] : null
+      ),
+      errors,
+      getValues
+    )
+  }
 
   return (
     <>
@@ -135,15 +154,22 @@ const LeasingAgent = (props: LeasingAgentProps) => {
         <Grid.Row columns={3}>
           <Grid.Cell className="seeds-grid-span-2">
             <Field
-              label={t("listings.streetAddressOrPOBox")}
+              label={getLabel(
+                "listingsLeasingAgentAddress",
+                props.requiredFields,
+                t("listings.streetAddressOrPOBox")
+              )}
               name={"listingsLeasingAgentAddress.street"}
               id={"listingsLeasingAgentAddress.street"}
               register={register}
-              placeholder={t("application.contact.streetAddress")}
-              errorMessage={getErrorMessage("leasingAgentAddress.street")}
-              error={!!getErrorMessage("leasingAgentAddress.street")}
+              errorMessage={getError("street")}
+              error={!!getError("street")}
               inputProps={{
-                onChange: () => clearErrors("leasingAgentAddress"),
+                onChange: () => clearErrors("listingsLeasingAgentAddress"),
+                "aria-required": fieldIsRequired(
+                  "listingsLeasingAgentAddress",
+                  props.requiredFields
+                ),
               }}
             />
           </Grid.Cell>
@@ -153,55 +179,75 @@ const LeasingAgent = (props: LeasingAgentProps) => {
               name={"listingsLeasingAgentAddress.street2"}
               id={"listingsLeasingAgentAddress.street2"}
               register={register}
-              placeholder={t("application.contact.apt")}
             />
           </Grid.Cell>
         </Grid.Row>
         <Grid.Row columns={7}>
           <Grid.Cell className="seeds-grid-span-3">
             <Field
-              label={t("application.contact.city")}
+              label={getLabel(
+                "listingsLeasingAgentAddress",
+                props.requiredFields,
+                t("application.contact.city")
+              )}
               name={"listingsLeasingAgentAddress.city"}
               id={"listingsLeasingAgentAddress.city"}
               register={register}
-              placeholder={t("application.contact.city")}
-              errorMessage={getErrorMessage("listingsLeasingAgentAddress.city")}
-              error={!!getErrorMessage("listingsLeasingAgentAddress.city")}
+              errorMessage={getError("city")}
+              error={!!getError("city")}
               inputProps={{
                 onChange: () => clearErrors("listingsLeasingAgentAddress"),
+                "aria-required": fieldIsRequired(
+                  "listingsLeasingAgentAddress",
+                  props.requiredFields
+                ),
               }}
             />
           </Grid.Cell>
 
-          <FieldValue label={t("application.contact.state")} className="seeds-grid-span-2">
+          <div className="seeds-grid-span-2">
             <Select
               id={`listingsLeasingAgentAddress.state`}
               name={`listingsLeasingAgentAddress.state`}
-              label={t("application.contact.state")}
-              labelClassName="sr-only"
+              label={getLabel(
+                "listingsLeasingAgentAddress",
+                props.requiredFields,
+                t("application.contact.state")
+              )}
               register={register}
               controlClassName="control"
               options={stateKeys}
               keyPrefix="states"
-              errorMessage={getErrorMessage("listingsLeasingAgentAddress.state")}
-              error={!!getErrorMessage("listingsLeasingAgentAddress.state")}
+              errorMessage={getError("state")}
+              error={!!getError("state")}
               inputProps={{
                 onChange: () => clearErrors("listingsLeasingAgentAddress"),
+                "aria-required": fieldIsRequired(
+                  "listingsLeasingAgentAddress",
+                  props.requiredFields
+                ),
               }}
             />
-          </FieldValue>
+          </div>
 
           <Grid.Cell className="seeds-grid-span-2">
             <Field
-              label={t("application.contact.zip")}
+              label={getLabel(
+                "listingsLeasingAgentAddress",
+                props.requiredFields,
+                t("application.contact.zip")
+              )}
               name={"listingsLeasingAgentAddress.zipCode"}
               id={"listingsLeasingAgentAddress.zipCode"}
-              placeholder={t("application.contact.zip")}
-              errorMessage={getErrorMessage("listingsLeasingAgentAddress.zipCode")}
-              error={!!getErrorMessage("listingsLeasingAgentAddress.zipCode")}
+              errorMessage={getError("zipCode")}
+              error={!!getError("zipCode")}
               register={register}
               inputProps={{
                 onChange: () => clearErrors("listingsLeasingAgentAddress"),
+                "aria-required": fieldIsRequired(
+                  "listingsLeasingAgentAddress",
+                  props.requiredFields
+                ),
               }}
             />
           </Grid.Cell>

@@ -331,6 +331,18 @@ export const defaultFieldProps = (
   }
 }
 
+export const getAddressErrorMessage = (
+  fieldKey: string,
+  rootKey: string,
+  defaultMessage: string,
+  errors: UseFormMethods["errors"],
+  getValues: UseFormMethods["getValues"]
+) => {
+  const hasError = errors ? errors[rootKey] : null
+  const message = hasError && !getValues(fieldKey) ? t("errors.partialAddress") : defaultMessage
+  return message
+}
+
 export const fieldMessage = (errorObj: FieldError) => {
   return errorObj?.message
 }

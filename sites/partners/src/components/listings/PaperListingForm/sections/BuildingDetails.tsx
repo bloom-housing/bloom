@@ -20,6 +20,7 @@ import {
   fieldHasError,
   fieldIsRequired,
   fieldMessage,
+  getAddressErrorMessage,
   getLabel,
 } from "../../../../lib/helpers"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
@@ -154,12 +155,6 @@ const BuildingDetails = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mapPinPosition])
 
-  const getAddressErrorMessage = (fieldKey: string, defaultMessage: string) => {
-    return errors?.listingsBuildingAddress && !getValues(fieldKey)
-      ? t("errors.partialAddress")
-      : defaultMessage
-  }
-
   const { neighborhood, region, jurisdictions } = watch(["neighborhood", "region", "jurisdictions"])
 
   const enableRegions = doJurisdictionsHaveFeatureFlagOn(
@@ -174,6 +169,19 @@ const BuildingDetails = ({
     }
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [neighborhood, setValue])
+
+  const getError = (subfield: string) => {
+    return getAddressErrorMessage(
+      `listingsBuildingAddress.${subfield}`,
+      "listingsBuildingAddress",
+      fieldMessage(
+        errors?.listingsBuildingAddress ? errors?.listingsBuildingAddress[subfield] : null
+      ),
+      errors,
+      getValues
+    )
+  }
+
   return (
     <>
       <hr className="spacer-section-above spacer-section" />
@@ -194,16 +202,8 @@ const BuildingDetails = ({
               )}
               name={"listingsBuildingAddress.street"}
               id={"listingsBuildingAddress.street"}
-              error={
-                !!getAddressErrorMessage(
-                  "listingsBuildingAddress.street",
-                  fieldMessage(errors?.listingsBuildingAddress?.street)
-                )
-              }
-              errorMessage={getAddressErrorMessage(
-                "listingsBuildingAddress.street",
-                fieldMessage(errors?.listingsBuildingAddress?.street)
-              )}
+              error={!!getError("street")}
+              errorMessage={getError("street")}
               inputProps={{
                 onChange: () =>
                   fieldHasError(errors?.listingsBuildingAddress?.street) &&
@@ -257,16 +257,8 @@ const BuildingDetails = ({
               )}
               name={"listingsBuildingAddress.city"}
               id={"listingsBuildingAddress.city"}
-              error={
-                !!getAddressErrorMessage(
-                  "listingsBuildingAddress.city",
-                  fieldMessage(errors?.listingsBuildingAddress?.city)
-                )
-              }
-              errorMessage={getAddressErrorMessage(
-                "listingsBuildingAddress.city",
-                fieldMessage(errors?.listingsBuildingAddress?.city)
-              )}
+              error={!!getError("city")}
+              errorMessage={getError("city")}
               inputProps={{
                 onChange: () =>
                   fieldHasError(errors?.listingsBuildingAddress?.city) &&
@@ -280,16 +272,8 @@ const BuildingDetails = ({
             <Select
               id={`listingsBuildingAddress.state`}
               name={`listingsBuildingAddress.state`}
-              error={
-                !!getAddressErrorMessage(
-                  "listingsBuildingAddress.state",
-                  fieldMessage(errors?.listingsBuildingAddress?.state)
-                )
-              }
-              errorMessage={getAddressErrorMessage(
-                "listingsBuildingAddress.state",
-                fieldMessage(errors?.listingsBuildingAddress?.state)
-              )}
+              error={!!getError("state")}
+              errorMessage={getError("state")}
               label={getLabel(
                 "listingsBuildingAddress",
                 requiredFields,
@@ -316,16 +300,8 @@ const BuildingDetails = ({
               )}
               name={"listingsBuildingAddress.zipCode"}
               id={"listingsBuildingAddress.zipCode"}
-              error={
-                !!getAddressErrorMessage(
-                  "listingsBuildingAddress.zipCode",
-                  fieldMessage(errors?.listingsBuildingAddress?.zipCode)
-                )
-              }
-              errorMessage={getAddressErrorMessage(
-                "listingsBuildingAddress.zipCode",
-                fieldMessage(errors?.listingsBuildingAddress?.zipCode)
-              )}
+              error={!!getError("zipCode")}
+              errorMessage={getError("zipCode")}
               inputProps={{
                 onChange: () =>
                   fieldHasError(errors?.listingsBuildingAddress?.zipCode) &&

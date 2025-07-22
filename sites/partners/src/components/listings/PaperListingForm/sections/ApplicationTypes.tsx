@@ -21,7 +21,12 @@ import {
   YesNoEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { AuthContext } from "@bloom-housing/shared-helpers"
-import { cloudinaryFileUploader, fieldMessage, fieldHasError } from "../../../../lib/helpers"
+import {
+  cloudinaryFileUploader,
+  fieldMessage,
+  fieldHasError,
+  getLabel,
+} from "../../../../lib/helpers"
 import { FormListing } from "../../../../lib/listings/formTypes"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 import styles from "../ListingForm.module.scss"
@@ -200,15 +205,21 @@ const ApplicationTypes = ({ listing, requiredFields }: ApplicationTypesProps) =>
         subheading={t("listings.sections.applicationTypesSubtitle")}
       >
         <Grid.Row columns={2}>
-          <Grid.Cell>
+          <Grid.Cell
+            className={fieldHasError(errors?.digitalApplication) ? styles["label-error"] : ""}
+          >
             <FieldGroup
               name="digitalApplicationChoice"
               type="radio"
               register={register}
-              groupLabel={t("listings.isDigitalApplication")}
+              groupLabel={getLabel(
+                "digitalApplication",
+                requiredFields,
+                t("listings.isDigitalApplication")
+              )}
               error={fieldHasError(errors?.digitalApplication) && digitalApplicationChoice === null}
               errorMessage={fieldMessage(errors?.digitalApplication)}
-              fieldLabelClassName={styles["label-option"]}
+              fieldLabelClassName={`${styles["label-option"]} seeds-m-bs-2`}
               fields={[
                 {
                   ...yesNoRadioOptions[0],
@@ -251,7 +262,7 @@ const ApplicationTypes = ({ listing, requiredFields }: ApplicationTypesProps) =>
                 type="radio"
                 groupLabel={t("listings.usingCommonDigitalApplication")}
                 register={register}
-                fieldLabelClassName={styles["label-option"]}
+                fieldLabelClassName={`${styles["label-option"]} seeds-m-bs-2`}
                 fields={[
                   {
                     ...yesNoRadioOptions[0],
@@ -323,25 +334,21 @@ const ApplicationTypes = ({ listing, requiredFields }: ApplicationTypesProps) =>
             </Grid.Row>
           )}
         <Grid.Row columns={2}>
-          <Grid.Cell>
-            <p
-              className={`field-label m-4 ml-0 ${
-                fieldHasError(errors?.paperApplication) &&
-                paperApplicationChoice === null &&
-                "text-alert"
-              }`}
-            >
-              {t("listings.isPaperApplication")}
-            </p>
-
+          <Grid.Cell
+            className={fieldHasError(errors?.paperApplication) ? styles["label-error"] : ""}
+          >
             <FieldGroup
               name="paperApplicationChoice"
               type="radio"
-              groupSubNote={t("listings.requiredToPublish")}
+              groupLabel={getLabel(
+                "paperApplication",
+                requiredFields,
+                t("listings.isPaperApplication")
+              )}
               error={fieldHasError(errors?.paperApplication) && paperApplicationChoice === null}
               errorMessage={fieldMessage(errors?.paperApplication)}
               register={register}
-              fieldLabelClassName={styles["label-option"]}
+              fieldLabelClassName={`${styles["label-option"]} seeds-m-bs-2`}
               fields={[
                 {
                   ...yesNoRadioOptions[0],
@@ -430,23 +437,15 @@ const ApplicationTypes = ({ listing, requiredFields }: ApplicationTypesProps) =>
           </Grid.Row>
         )}
         <Grid.Row columns={1}>
-          <Grid.Cell>
-            <p
-              className={`field-label m-4 ml-0 ${
-                fieldHasError(errors?.referralOpportunity) &&
-                referralOpportunityChoice === null &&
-                "text-alert"
-              }`}
-            >
-              {t("listings.isReferralOpportunity")}
-            </p>
-
+          <Grid.Cell
+            className={fieldHasError(errors?.referralOpportunity) ? styles["label-error"] : ""}
+          >
             <FieldGroup
               name="referralOpportunityChoice"
               type="radio"
               register={register}
-              fieldLabelClassName={styles["label-option"]}
-              groupSubNote={t("listings.requiredToPublish")}
+              fieldLabelClassName={`${styles["label-option"]} seeds-m-bs-2`}
+              groupLabel={t("listings.isReferralOpportunity")}
               error={
                 fieldHasError(errors?.referralOpportunity) && referralOpportunityChoice === null
               }

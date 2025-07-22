@@ -24,6 +24,9 @@
     color: var(--seeds-color-black);
   }
   .label-error {
+    label {
+      color: var(--seeds-color-alert);
+    }
     color: var(--seeds-color-alert);
   }
 }
