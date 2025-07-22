@@ -536,6 +536,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                 id="referralContactPhone"
                 defaultValue={methods.referral ? methods.referral.phoneNumber : ""}
                 register={register}
+                placeholder={t("t.phoneNumberPlaceholder")}
                 onChange={(e) => {
                   const newValue = phoneMask(e.target.value)
                   referralPhoneRef.current = newValue
