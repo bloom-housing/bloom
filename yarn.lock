@@ -2061,21 +2061,20 @@
     tailwindcss-rtl "^0.9.0"
     typesafe-actions "^5.1.0"
 
-"@bloom-housing/ui-seeds@1.22.1":
-  version "1.22.1"
-  resolved "https://registry.yarnpkg.com/@bloom-housing/ui-seeds/-/ui-seeds-1.22.1.tgz#b4ecb2d1e6a5ad30c1ec4dd74159189fa9d46756"
-  integrity sha512-v9J8eaUSmRFLIoMM3eNhmr44s/R6OrKZB0ZOXrA7AC5MBw46C+MJw79BjC0YRvKP6BNacy6ntIba+sZxWuJZNA==
+"@bloom-housing/ui-seeds@1.22.4":
+  version "1.22.4"
+  resolved "https://registry.yarnpkg.com/@bloom-housing/ui-seeds/-/ui-seeds-1.22.4.tgz#bc54c14154574c1a7a38a4da1af6d0c1d9e0909f"
+  integrity sha512-Z7IQk/qkuSAkl9cVP/qHXWEm96izz77QpmSpiv1LzGGLL7zj7gsg3KO+qqmt33ZRxESVEDKB1m09pucpeS81Jw==
   dependencies:
     "@fortawesome/fontawesome-svg-core" "^6.3.0"
     "@fortawesome/react-fontawesome" "^0.2.0"
     "@heroicons/react" "^2.0.18"
-    "@types/markdown-to-jsx" "^6.11.2"
     "@types/mdx" "^2.0.3"
     "@types/node" "^16.7.13"
     "@types/react" "^18.0.0"
     "@types/react-dom" "^18.0.0"
     focus-trap-react "^11.0.3"
-    markdown-to-jsx "^6.11.4"
+    markdown-to-jsx "^7.7.12"
     react "^18.2.0"
     react-dom "^18.2.0"
     react-tabs "^6.0.0"
@@ -11132,10 +11131,10 @@ markdown-to-jsx@7.1.8:
   resolved "https://registry.yarnpkg.com/markdown-to-jsx/-/markdown-to-jsx-7.1.8.tgz#49c3bb3c122aa714324034142c8829b93c889338"
   integrity sha512-rRSa1aFmFnpDRFAhv5vIkWM4nPaoB9vnzIjuIKa1wGupfn2hdCNeaQHKpu4/muoc8n8J7yowjTP2oncA4/Rbgg==
 
-markdown-to-jsx@^6.11.4:
-  version "6.11.4"
-  resolved "https://registry.yarnpkg.com/markdown-to-jsx/-/markdown-to-jsx-6.11.4.tgz#b4528b1ab668aef7fe61c1535c27e837819392c5"
-  integrity sha512-3lRCD5Sh+tfA52iGgfs/XZiw33f7fFX9Bn55aNnVNUd2GzLDkOWyKYYD8Yju2B1Vn+feiEdgJs8T6Tg0xNokPw==
+markdown-to-jsx@^7.7.12:
+  version "7.7.12"
+  resolved "https://registry.yarnpkg.com/markdown-to-jsx/-/markdown-to-jsx-7.7.12.tgz#78fbf5c93f0195a6a2c1177d16cc14ab1e815e42"
+  integrity sha512-Y5xNBqoaTooSLkmlg2P0fdbh53gp4MqW7zhvcweGCPUWvWI5BecWRYI8vPlzT8D7OULxsQg2qoRW9EsJlBWasQ==
   dependencies:
     prop-types "^15.6.2"
     unquote "^1.1.0"
