@@ -28,7 +28,7 @@ export const UnitTypeSort = [
   UnitTypeEnum.fiveBdrm,
 ];
 
-const usd = new Intl.NumberFormat('en-US', {
+export const usd = new Intl.NumberFormat('en-US', {
   style: 'currency',
   currency: 'USD',
   minimumFractionDigits: 0,
@@ -305,19 +305,25 @@ export const generateHmiData = (
               max: usd.format(firstChartValue),
             } as MinMaxCurrency,
           );
+
+          const yearRange =
+            maxIncomeRange.min !== maxIncomeRange.max
+              ? `listings.annualIncome*income:${maxIncomeRange.min}-${maxIncomeRange.max}`
+              : `listings.annualIncome*income:${maxIncomeRange.max}`;
+
+          const monthRange =
+            maxIncomeRange.min !== maxIncomeRange.max
+              ? `listings.monthlyIncome*income:${yearlyCurrencyStringToMonthly(
+                  maxIncomeRange.min,
+                )}-${yearlyCurrencyStringToMonthly(maxIncomeRange.max)}`
+              : `listings.monthlyIncome*income:${yearlyCurrencyStringToMonthly(
+                  maxIncomeRange.max,
+                )}`;
           if (allPercentages.length === 1) {
-            rowData[
-              'maxIncomeMonth'
-            ] = `listings.monthlyIncome*income:${yearlyCurrencyStringToMonthly(
-              maxIncomeRange.max,
-            )}`;
-            rowData[
-              'maxIncomeYear'
-            ] = `listings.annualIncome*income:${maxIncomeRange.max}`;
+            rowData['maxIncomeMonth'] = monthRange;
+            rowData['maxIncomeYear'] = yearRange;
           } else {
-            rowData[
-              `ami${currentAmiPercent}`
-            ] = `listings.annualIncome*income:${maxIncomeRange.max}`;
+            rowData[`ami${currentAmiPercent}`] = yearRange;
           }
           rowHasData = true;
         }

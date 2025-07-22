@@ -118,6 +118,10 @@ const Autofill = () => {
             conductor.config,
             FeatureFlagEnum.enableFullTimeStudentQuestion
           )}
+          enableAdaOtherOption={isFeatureFlagOn(
+            conductor.config,
+            FeatureFlagEnum.enableAdaOtherOption
+          )}
         />
         <Form onSubmit={handleSubmit(onSubmit)}>
           <CardSection

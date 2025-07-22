@@ -300,7 +300,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                   {
                     ...yesNoRadioOptions[0],
                     id: "commonDigitalApplicationChoiceYes",
-                    defaultChecked: methods.digital.type === ApplicationMethodsTypeEnum.Internal,
+                    defaultChecked: methods.digital?.type === ApplicationMethodsTypeEnum.Internal,
                     inputProps: {
                       onChange: () => {
                         setMethods({
@@ -317,7 +317,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                     ...yesNoRadioOptions[1],
                     id: "commonDigitalApplicationChoiceNo",
                     defaultChecked:
-                      methods.digital.type === ApplicationMethodsTypeEnum.ExternalLink,
+                      methods.digital?.type === ApplicationMethodsTypeEnum.ExternalLink,
                     inputProps: {
                       onChange: () => {
                         setMethods({

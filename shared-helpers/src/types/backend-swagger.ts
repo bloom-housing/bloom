@@ -4610,9 +4610,6 @@ export interface ListingCreate {
   waitlistMaxSize?: number
 
   /**  */
-  whatToExpect?: string
-
-  /**  */
   status: ListingsStatusEnum
 
   /**  */
@@ -4752,6 +4749,9 @@ export interface ListingCreate {
 
   /**  */
   requestedChangesUser?: IdDTO
+
+  /**  */
+  whatToExpect?: string
 }
 
 export interface ListingDuplicate {
@@ -4923,9 +4923,6 @@ export interface ListingUpdate {
   waitlistMaxSize?: number
 
   /**  */
-  whatToExpect?: string
-
-  /**  */
   status: ListingsStatusEnum
 
   /**  */
@@ -5065,6 +5062,9 @@ export interface ListingUpdate {
 
   /**  */
   requestedChangesUser?: IdDTO
+
+  /**  */
+  whatToExpect?: string
 }
 
 export interface Accessibility {
@@ -5085,6 +5085,9 @@ export interface Accessibility {
 
   /**  */
   hearing?: boolean
+
+  /**  */
+  other?: boolean
 }
 
 export interface Demographic {
@@ -6151,6 +6154,9 @@ export interface AccessibilityUpdate {
 
   /**  */
   hearing?: boolean
+
+  /**  */
+  other?: boolean
 }
 
 export interface DemographicUpdate {
@@ -7142,6 +7148,7 @@ export enum FeatureFlagEnum {
   "disableJurisdictionalAdmin" = "disableJurisdictionalAdmin",
   "disableListingPreferences" = "disableListingPreferences",
   "enableAccessibilityFeatures" = "enableAccessibilityFeatures",
+  "enableAdaOtherOption" = "enableAdaOtherOption",
   "enableAdditionalResources" = "enableAdditionalResources",
   "enableCompanyWebsite" = "enableCompanyWebsite",
   "enableGeocodingPreferences" = "enableGeocodingPreferences",
