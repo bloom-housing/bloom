@@ -21,6 +21,7 @@ import {
 import { arrayToFormOptions, fieldHasError } from "../../../lib/helpers"
 import { TempAmiLevel, TempUnitGroup } from "../../../lib/listings/formTypes"
 import UnitGroupAmiForm from "./UnitGroupAmiForm"
+import { UnitGroupTypeSort } from "@bloom-housing/shared-helpers/src/utilities/unitTypes"
 
 type UnitGroupFormProps = {
   onSubmit: (unit: TempUnitGroup) => void
@@ -117,13 +118,15 @@ const UnitGroupForm = ({
   useEffect(() => {
     if (unitTypes.length === 0 || unitTypesOptions.length) return
     setUnitTypesOptions(
-      unitTypes.map((unitType) => {
-        return {
-          id: unitType.id,
-          label: t(`listings.unit.typeOptions.${unitType.name}`),
-          value: unitType.id,
-        }
-      })
+      unitTypes
+        .filter((unitType) => UnitGroupTypeSort.includes(unitType.name))
+        .map((unitType) => {
+          return {
+            id: unitType.id,
+            label: t(`listings.unitGroup.typeOptions.${unitType.name}`),
+            value: unitType.id,
+          }
+        })
     )
   }, [unitTypesOptions, unitTypes])
 

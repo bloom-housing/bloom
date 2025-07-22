@@ -830,6 +830,7 @@
   "listings.unitsHaveAccessibilityFeaturesFor": "These units have accessibility features for people with %{type}.",
   "listings.unitsSummary.notAvailable": "Not available",
   "listings.unitTypes.bedroomSize": "Bedroom size",
+  "listings.unitTypes.expanded.fourPlusBdrm": "4+ bedroom",
   "listings.unitTypes.expanded.fiveBdrm": "5 bedroom",
   "listings.unitTypes.expanded.fourBdrm": "4 bedroom",
   "listings.unitTypes.expanded.oneBdrm": "1 bedroom",

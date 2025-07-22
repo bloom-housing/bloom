@@ -18,6 +18,8 @@ import {
   SearchSection,
   unitTypeMapping,
   unitTypesSorted,
+  unitTypesSortedByUnitGroups,
+  unitTypeUnitGroupsMapping,
 } from "./FilterDrawerHelpers"
 import { isTrue } from "../../lib/helpers"
 
@@ -27,6 +29,7 @@ export interface FilterDrawerProps {
   onClose: () => void
   onSubmit: (data: FilterData) => void
   multiselectData: MultiselectQuestion[]
+  enableUnitGroups?: boolean
 }
 
 const FilterDrawer = (props: FilterDrawerProps) => {
@@ -88,8 +91,12 @@ const FilterDrawer = (props: FilterDrawerProps) => {
             groupLabel={t("listings.unitTypes.bedroomSize")}
             fields={buildDefaultFilterFields(
               ListingFilterKeys.bedroomTypes,
-              unitTypesSorted.map((unitType) => t(unitTypeMapping[unitType].labelKey)),
-              unitTypesSorted,
+              props.enableUnitGroups
+                ? unitTypesSortedByUnitGroups.map((unitType) =>
+                    t(unitTypeUnitGroupsMapping[unitType].labelKey)
+                  )
+                : unitTypesSorted.map((unitType) => t(unitTypeMapping[unitType].labelKey)),
+              props.enableUnitGroups ? unitTypesSortedByUnitGroups : unitTypesSorted,
               props.filterState
             )}
             register={register}
