@@ -491,12 +491,10 @@ const ApplicationTypes = ({ listing, requiredFields }: ApplicationTypesProps) =>
                 label={t("listings.referralContactPhone")}
                 name="referralContactPhone"
                 id="referralContactPhone"
-                placeholder={t("t.phoneNumberPlaceholder")}
                 mask={() => (
                   <PhoneMask
                     name="referralContactPhone"
                     value={methods.referral ? methods.referral.phoneNumber : ""}
-                    placeholder={t("t.phoneNumberPlaceholder")}
                     onChange={(e) => {
                       setMethods({
                         ...methods,
@@ -516,7 +514,7 @@ const ApplicationTypes = ({ listing, requiredFields }: ApplicationTypesProps) =>
                 label={t("listings.referralSummary")}
                 rows={3}
                 fullWidth={true}
-                placeholder={t("t.descriptionTitle")}
+                placeholder={""}
                 name="referralSummary"
                 id="referralSummary"
                 maxLength={500}

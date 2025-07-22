@@ -488,7 +488,7 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
                           />
                           <LeasingAgent requiredFields={requiredFields} />
                           <ApplicationTypes listing={listing} requiredFields={requiredFields} />
-                          <ApplicationAddress listing={listing} />
+                          <ApplicationAddress listing={listing} requiredFields={requiredFields} />
                           <ApplicationDates
                             listing={listing}
                             openHouseEvents={openHouseEvents}
