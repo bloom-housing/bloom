@@ -450,9 +450,12 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
                             requiredFields={requiredFields}
                           />
                           <NeighborhoodAmenities />
-                          <AdditionalEligibility defaultText={listing?.rentalAssistance} />
+                          <AdditionalEligibility
+                            defaultText={listing?.rentalAssistance}
+                            requiredFields={requiredFields}
+                          />
                           <BuildingSelectionCriteria />
-                          <AdditionalDetails />
+                          <AdditionalDetails requiredFields={requiredFields} />
                           <ListingVerification />
                           <div className="text-right -mr-8 -mt-8 relative" style={{ top: "7rem" }}>
                             <Button
@@ -481,8 +484,9 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
                             listing={listing}
                             isAdmin={profile?.userRoles.isAdmin}
                             whatToExpectEditor={whatToExpectEditor}
+                            requiredFields={requiredFields}
                           />
-                          <LeasingAgent />
+                          <LeasingAgent requiredFields={requiredFields} />
                           <ApplicationTypes listing={listing} />
                           <ApplicationAddress listing={listing} />
                           <ApplicationDates

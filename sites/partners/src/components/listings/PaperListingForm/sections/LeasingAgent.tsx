@@ -4,10 +4,14 @@ import { t, Textarea, Field, PhoneField, Select } from "@bloom-housing/ui-compon
 import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { stateKeys, AuthContext } from "@bloom-housing/shared-helpers"
 import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { fieldMessage, fieldHasError } from "../../../../lib/helpers"
+import { fieldMessage, fieldHasError, defaultFieldProps } from "../../../../lib/helpers"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 
-const LeasingAgent = () => {
+type LeasingAgentProps = {
+  requiredFields: string[]
+}
+
+const LeasingAgent = (props: LeasingAgentProps) => {
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -47,80 +51,83 @@ const LeasingAgent = () => {
         <Grid.Row columns={3}>
           <Grid.Cell>
             <Field
-              label={t("leasingAgent.name")}
-              name={"leasingAgentName"}
-              id={"leasingAgentName"}
-              subNote={t("listings.requiredToPublish")}
-              error={fieldHasError(errors?.leasingAgentName)}
-              errorMessage={fieldMessage(errors?.leasingAgentName)}
-              placeholder={t("leasingAgent.namePlaceholder")}
               register={register}
-              inputProps={{
-                onChange: () => clearErrors("leasingAgentName"),
-              }}
+              {...defaultFieldProps(
+                "leasingAgentName",
+                t("leasingAgent.name"),
+                props.requiredFields,
+                errors,
+                clearErrors
+              )}
             />
           </Grid.Cell>
           <Grid.Cell>
             <Field
-              label={t("t.email")}
-              name={"leasingAgentEmail"}
-              id={"leasingAgentEmail"}
-              subNote={t("listings.requiredToPublish")}
-              error={fieldHasError(errors?.leasingAgentEmail)}
-              errorMessage={fieldMessage(errors?.leasingAgentEmail)}
-              placeholder={t("t.emailAddressPlaceholder")}
               register={register}
               inputProps={{
                 onChange: () => clearErrors("leasingAgentEmail"),
               }}
+              {...defaultFieldProps(
+                "leasingAgentEmail",
+                t("t.email"),
+                props.requiredFields,
+                errors,
+                clearErrors
+              )}
             />
           </Grid.Cell>
           <Grid.Cell>
             <PhoneField
-              label={t("t.phone")}
-              name={"leasingAgentPhone"}
-              id={"leasingAgentPhone"}
-              subNote={t("listings.requiredToPublish")}
-              error={fieldHasError(errors?.leasingAgentPhone)}
-              errorMessage={fieldMessage(errors?.leasingAgentPhone)}
-              placeholder={t("t.phoneNumberPlaceholder")}
               control={control}
               controlClassName={"control"}
+              {...defaultFieldProps(
+                "leasingAgentPhone",
+                t("t.phone"),
+                props.requiredFields,
+                errors,
+                clearErrors
+              )}
             />
           </Grid.Cell>
         </Grid.Row>
         <Grid.Row columns={3}>
           <Grid.Cell>
             <Field
-              label={t("leasingAgent.title")}
-              name={"leasingAgentTitle"}
-              id={"leasingAgentTitle"}
-              placeholder={t("leasingAgent.title")}
               register={register}
+              {...defaultFieldProps(
+                "leasingAgentTitle",
+                t("leasingAgent.title"),
+                props.requiredFields,
+                errors,
+                clearErrors
+              )}
             />
             {enableCompanyWebsite && (
               <Field
-                label={t("leasingAgent.managementWebsite")}
-                name={"managementWebsite"}
-                id={"managementWebsite"}
-                placeholder={t("leasingAgent.managementWebsitePlaceholder")}
                 register={register}
-                error={fieldHasError(errors?.managementWebsite)}
-                errorMessage={fieldMessage(errors?.managementWebsite)}
-                inputProps={{
-                  onChange: () => clearErrors("managementWebsite"),
-                }}
+                {...defaultFieldProps(
+                  "managementWebsite",
+                  t("leasingAgent.managementWebsite"),
+                  props.requiredFields,
+                  errors,
+                  clearErrors
+                )}
               />
             )}
           </Grid.Cell>
           <Grid.Cell className="seeds-grid-span-2">
             <Textarea
-              label={t("leasingAgent.officeHours")}
-              name={"leasingAgentOfficeHours"}
-              id={"leasingAgentOfficeHours"}
               fullWidth={true}
-              placeholder={t("leasingAgent.officeHoursPlaceholder")}
+              placeholder={""}
+              note={t("leasingAgent.officeHoursPlaceholder")}
               register={register}
+              {...defaultFieldProps(
+                "leasingAgentOfficeHours",
+                t("leasingAgent.officeHours"),
+                props.requiredFields,
+                errors,
+                clearErrors
+              )}
             />
           </Grid.Cell>
         </Grid.Row>

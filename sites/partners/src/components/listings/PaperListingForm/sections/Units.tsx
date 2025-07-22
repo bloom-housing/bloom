@@ -440,7 +440,7 @@ const FormUnits = ({
               type="radio"
               register={register}
               groupLabel={t("listings.section8Title")}
-              fieldLabelClassName={styles["label-option"]}
+              fieldLabelClassName={`${styles["label-option"]} seeds-m-bs-2`}
               fields={[
                 {
                   id: "listingSection8AcceptanceYes",

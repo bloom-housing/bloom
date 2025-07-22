@@ -149,7 +149,7 @@ const CommunityType = ({ listing, requiredFields }: CommunityTypeProps) => {
           <FieldGroup
             groupLabel={t("listings.includeCommunityDisclaimer")}
             name="includeCommunityDisclaimerQuestion"
-            fieldLabelClassName={styles["label-option"]}
+            fieldLabelClassName={`${styles["label-option"]} seeds-m-bs-2`}
             type="radio"
             register={register}
             fields={[

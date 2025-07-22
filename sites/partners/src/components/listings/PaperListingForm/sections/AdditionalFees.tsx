@@ -47,8 +47,6 @@ const AdditionalFees = (props: AdditionalFeesProps) => {
     }
   }, [enableUtilitiesIncluded, setValue])
 
-  console.log({ props })
-  console.log({ errors })
   return (
     <>
       <hr className="spacer-section-above spacer-section" />

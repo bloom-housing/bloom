@@ -13,7 +13,6 @@ import {
   StandardTableData,
 } from "@bloom-housing/ui-components"
 import { Button, Card, Drawer, Grid } from "@bloom-housing/ui-seeds"
-import { cloudinaryFileUploader, fieldMessage, fieldHasError } from "../../../../lib/helpers"
 import {
   ApplicationMethodCreate,
   ApplicationMethodsTypeEnum,
@@ -21,9 +20,11 @@ import {
   LanguagesEnum,
   YesNoEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { AuthContext } from "@bloom-housing/shared-helpers"
+import { cloudinaryFileUploader, fieldMessage, fieldHasError } from "../../../../lib/helpers"
 import { FormListing } from "../../../../lib/listings/formTypes"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
-import { AuthContext } from "@bloom-housing/shared-helpers"
+import styles from "../ListingForm.module.scss"
 
 interface Methods {
   digital: ApplicationMethodCreate
@@ -31,7 +32,12 @@ interface Methods {
   referral: ApplicationMethodCreate
 }
 
-const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
+type ApplicationTypesProps = {
+  listing: FormListing
+  requiredFields: string[]
+}
+
+const ApplicationTypes = ({ listing, requiredFields }: ApplicationTypesProps) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, setValue, watch, errors, getValues } = useFormContext()
   const { doJurisdictionsHaveFeatureFlagOn, getJurisdictionLanguages } = useContext(AuthContext)
@@ -195,23 +201,14 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
       >
         <Grid.Row columns={2}>
           <Grid.Cell>
-            <p
-              className={`field-label m-4 ml-0 ${
-                fieldHasError(errors?.digitalApplication) &&
-                digitalApplicationChoice === null &&
-                "text-alert"
-              }`}
-            >
-              {t("listings.isDigitalApplication")}
-            </p>
-
             <FieldGroup
               name="digitalApplicationChoice"
               type="radio"
               register={register}
+              groupLabel={t("listings.isDigitalApplication")}
               error={fieldHasError(errors?.digitalApplication) && digitalApplicationChoice === null}
               errorMessage={fieldMessage(errors?.digitalApplication)}
-              groupSubNote={t("listings.requiredToPublish")}
+              fieldLabelClassName={styles["label-option"]}
               fields={[
                 {
                   ...yesNoRadioOptions[0],
@@ -249,12 +246,12 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
           </Grid.Cell>
           {!disableCommonApplication && digitalApplicationChoice === YesNoEnum.yes && (
             <Grid.Cell>
-              <p className="field-label m-4 ml-0">{t("listings.usingCommonDigitalApplication")}</p>
-
               <FieldGroup
                 name="commonDigitalApplicationChoice"
                 type="radio"
+                groupLabel={t("listings.usingCommonDigitalApplication")}
                 register={register}
+                fieldLabelClassName={styles["label-option"]}
                 fields={[
                   {
                     ...yesNoRadioOptions[0],
@@ -344,6 +341,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
               error={fieldHasError(errors?.paperApplication) && paperApplicationChoice === null}
               errorMessage={fieldMessage(errors?.paperApplication)}
               register={register}
+              fieldLabelClassName={styles["label-option"]}
               fields={[
                 {
                   ...yesNoRadioOptions[0],
@@ -447,6 +445,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
               name="referralOpportunityChoice"
               type="radio"
               register={register}
+              fieldLabelClassName={styles["label-option"]}
               groupSubNote={t("listings.requiredToPublish")}
               error={
                 fieldHasError(errors?.referralOpportunity) && referralOpportunityChoice === null

@@ -1,7 +1,7 @@
 import React, { useMemo, useContext, useEffect } from "react"
 import { useFormContext } from "react-hook-form"
 import { t, Textarea, FieldGroup } from "@bloom-housing/ui-components"
-import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
+import { Grid } from "@bloom-housing/ui-seeds"
 import { listingFeatures, AuthContext } from "@bloom-housing/shared-helpers"
 import {
   FeatureFlagEnum,
@@ -9,6 +9,7 @@ import {
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 import { defaultFieldProps } from "../../../../lib/helpers"
+import styles from "../ListingForm.module.scss"
 
 type BuildingFeaturesProps = {
   existingFeatures: ListingFeatures
@@ -149,15 +150,15 @@ const BuildingFeatures = (props: BuildingFeaturesProps) => {
         </Grid.Row>
         {!enableAccessibilityFeatures ? null : (
           <Grid.Row>
-            <FieldValue label={t("listings.sections.accessibilityFeatures")}>
-              <FieldGroup
-                type="checkbox"
-                name="accessibilityFeatures"
-                fields={featureOptions}
-                register={register}
-                fieldGroupClassName="grid grid-cols-3 mt-4 gap-x-4"
-              />
-            </FieldValue>
+            <FieldGroup
+              type="checkbox"
+              name="accessibilityFeatures"
+              groupLabel={t("listings.sections.accessibilityFeatures")}
+              fields={featureOptions}
+              register={register}
+              fieldGroupClassName="grid grid-cols-3 mt-2 gap-x-4"
+              fieldLabelClassName={styles["label-option"]}
+            />
           </Grid.Row>
         )}
       </SectionWithGrid>
