@@ -870,8 +870,6 @@ export const getUnitGroupSummariesTable = (listing: Listing) => {
 
     const availability = getAvailabilityText(group, isComingSoon)
 
-    console.log("availability", availability)
-
     return {
       unitType: {
         cellText: group.unitTypes?.map((type) => t(`listings.unitTypes.${type.name}`)).join(", "),
