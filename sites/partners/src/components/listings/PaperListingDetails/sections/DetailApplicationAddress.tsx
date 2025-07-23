@@ -16,22 +16,26 @@ const DetailApplicationAddress = () => {
   return (
     <SectionWithGrid heading={t("listings.sections.applicationAddressTitle")} inset>
       <Grid.Row columns={3}>
-        <FieldValue
-          id="applicationMailingSection"
-          label={t("listings.applicationAddress.mailApplication")}
-        >
-          {listing.listingsApplicationMailingAddress || listing.applicationMailingAddressType
-            ? t("t.yes")
-            : t("t.no")}
-        </FieldValue>
-        {listing.applicationMailingAddressType && (
+        <Grid.Cell>
           <FieldValue
-            id="applicationMailingAddressType"
-            className="seeds-grid-span-2"
-            label={t("listings.applicationAddress.mailApplicationType")}
+            id="applicationMailingSection"
+            label={t("listings.applicationAddress.mailApplication")}
           >
-            {t("listings.leasingAgentAddress")}
+            {listing.listingsApplicationMailingAddress || listing.applicationMailingAddressType
+              ? t("t.yes")
+              : t("t.no")}
           </FieldValue>
+        </Grid.Cell>
+        {listing.applicationMailingAddressType && (
+          <Grid.Cell>
+            <FieldValue
+              id="applicationMailingAddressType"
+              className="seeds-grid-span-2"
+              label={t("listings.applicationAddress.mailApplicationType")}
+            >
+              {t("listings.leasingAgentAddress")}
+            </FieldValue>
+          </Grid.Cell>
         )}
       </Grid.Row>
 
@@ -45,19 +49,26 @@ const DetailApplicationAddress = () => {
       <hr />
 
       <Grid.Row columns={3}>
-        <FieldValue id="applicationPickupQuestion" label={t("listings.applicationPickupQuestion")}>
-          {listing.listingsApplicationPickUpAddress || listing.applicationPickUpAddressType
-            ? t("t.yes")
-            : t("t.no")}
-        </FieldValue>
-        {listing.applicationPickUpAddressType && (
+        <Grid.Cell>
           <FieldValue
-            id="applicationPickUpAddressType"
-            className="seeds-grid-span-2"
-            label={t("listings.wherePickupQuestion")}
+            id="applicationPickupQuestion"
+            label={t("listings.applicationPickupQuestion")}
           >
-            {t("listings.leasingAgentAddress")}
+            {listing.listingsApplicationPickUpAddress || listing.applicationPickUpAddressType
+              ? t("t.yes")
+              : t("t.no")}
           </FieldValue>
+        </Grid.Cell>
+        {listing.applicationPickUpAddressType && (
+          <Grid.Cell>
+            <FieldValue
+              id="applicationPickUpAddressType"
+              className="seeds-grid-span-2"
+              label={t("listings.wherePickupQuestion")}
+            >
+              {t("listings.leasingAgentAddress")}
+            </FieldValue>
+          </Grid.Cell>
         )}
       </Grid.Row>
 
@@ -69,13 +80,15 @@ const DetailApplicationAddress = () => {
             t("listings.pickupAddress")
           )}
           <Grid.Row columns={3}>
-            <FieldValue
-              id="applicationPickUpAddressOfficeHours"
-              className="seeds-grid-span-2"
-              label={t("leasingAgent.officeHours")}
-            >
-              {getDetailFieldString(listing.applicationPickUpAddressOfficeHours)}
-            </FieldValue>
+            <Grid.Cell>
+              <FieldValue
+                id="applicationPickUpAddressOfficeHours"
+                className="seeds-grid-span-2"
+                label={t("leasingAgent.officeHours")}
+              >
+                {getDetailFieldString(listing.applicationPickUpAddressOfficeHours)}
+              </FieldValue>
+            </Grid.Cell>
           </Grid.Row>
         </>
       )}
@@ -83,22 +96,26 @@ const DetailApplicationAddress = () => {
       <hr />
 
       <Grid.Row columns={3}>
-        <FieldValue
-          id="applicationDropOffQuestion"
-          label={t("listings.applicationDropOffQuestion")}
-        >
-          {listing.listingsApplicationDropOffAddress || listing.applicationDropOffAddressType
-            ? t("t.yes")
-            : t("t.no")}
-        </FieldValue>
-        {listing.applicationDropOffAddressType && (
+        <Grid.Cell>
           <FieldValue
-            id="applicationDropOffAddressType"
-            className="seeds-grid-span-2"
-            label={t("listings.whereDropOffQuestion")}
+            id="applicationDropOffQuestion"
+            label={t("listings.applicationDropOffQuestion")}
           >
-            {t("listings.leasingAgentAddress")}
+            {listing.listingsApplicationDropOffAddress || listing.applicationDropOffAddressType
+              ? t("t.yes")
+              : t("t.no")}
           </FieldValue>
+        </Grid.Cell>
+        {listing.applicationDropOffAddressType && (
+          <Grid.Cell>
+            <FieldValue
+              id="applicationDropOffAddressType"
+              className="seeds-grid-span-2"
+              label={t("listings.whereDropOffQuestion")}
+            >
+              {t("listings.leasingAgentAddress")}
+            </FieldValue>
+          </Grid.Cell>
         )}
       </Grid.Row>
 
@@ -110,13 +127,15 @@ const DetailApplicationAddress = () => {
             t("listings.dropOffAddress")
           )}
           <Grid.Row columns={3}>
-            <FieldValue
-              id="applicationDropOffAddressOfficeHours"
-              className="seeds-grid-span-2"
-              label={t("leasingAgent.officeHours")}
-            >
-              {getDetailFieldString(listing.applicationDropOffAddressOfficeHours)}
-            </FieldValue>
+            <Grid.Cell>
+              <FieldValue
+                id="applicationDropOffAddressOfficeHours"
+                className="seeds-grid-span-2"
+                label={t("leasingAgent.officeHours")}
+              >
+                {getDetailFieldString(listing.applicationDropOffAddressOfficeHours)}
+              </FieldValue>
+            </Grid.Cell>
           </Grid.Row>
         </>
       )}
@@ -124,41 +143,49 @@ const DetailApplicationAddress = () => {
       <hr />
 
       <Grid.Row>
-        <FieldValue
-          id="postmarksConsideredQuestion"
-          label={t("listings.postmarksConsideredQuestion")}
-        >
-          {listing.postmarkedApplicationsReceivedByDate ? t("t.yes") : t("t.no")}
-        </FieldValue>
+        <Grid.Cell>
+          <FieldValue
+            id="postmarksConsideredQuestion"
+            label={t("listings.postmarksConsideredQuestion")}
+          >
+            {listing.postmarkedApplicationsReceivedByDate ? t("t.yes") : t("t.no")}
+          </FieldValue>
+        </Grid.Cell>
       </Grid.Row>
 
       {listing.postmarkedApplicationsReceivedByDate && (
         <Grid.Row columns={2}>
-          <FieldValue
-            id="postmarkedApplicationsReceivedByDate"
-            label={t("listings.receivedByDate")}
-            testId={"postmark-date"}
-          >
-            {postMarkDateFormat(listing.postmarkedApplicationsReceivedByDate)}
-          </FieldValue>
+          <Grid.Cell>
+            <FieldValue
+              id="postmarkedApplicationsReceivedByDate"
+              label={t("listings.receivedByDate")}
+              testId={"postmark-date"}
+            >
+              {postMarkDateFormat(listing.postmarkedApplicationsReceivedByDate)}
+            </FieldValue>
+          </Grid.Cell>
 
-          <FieldValue
-            id="postmarkedApplicationsReceivedByDateTime"
-            label={t("listings.receivedByTime")}
-            testId={"postmark-time"}
-          >
-            {getDetailFieldTime(listing.postmarkedApplicationsReceivedByDate)}
-          </FieldValue>
+          <Grid.Cell>
+            <FieldValue
+              id="postmarkedApplicationsReceivedByDateTime"
+              label={t("listings.receivedByTime")}
+              testId={"postmark-time"}
+            >
+              {getDetailFieldTime(listing.postmarkedApplicationsReceivedByDate)}
+            </FieldValue>
+          </Grid.Cell>
         </Grid.Row>
       )}
 
       <Grid.Row>
-        <FieldValue
-          id="additionalApplicationSubmissionNotes"
-          label={t("listings.additionalApplicationSubmissionNotes")}
-        >
-          {getDetailFieldString(listing.additionalApplicationSubmissionNotes)}
-        </FieldValue>
+        <Grid.Cell>
+          <FieldValue
+            id="additionalApplicationSubmissionNotes"
+            label={t("listings.additionalApplicationSubmissionNotes")}
+          >
+            {getDetailFieldString(listing.additionalApplicationSubmissionNotes)}
+          </FieldValue>
+        </Grid.Cell>
       </Grid.Row>
     </SectionWithGrid>
   )

@@ -11,19 +11,25 @@ const DetailAdditionalDetails = () => {
   return (
     <SectionWithGrid heading={t("listings.sections.additionalDetails")} inset>
       <Grid.Row>
-        <FieldValue id="requiredDocuments" label={t("listings.requiredDocuments")}>
-          {getDetailFieldString(listing.requiredDocuments)}
-        </FieldValue>
+        <Grid.Cell>
+          <FieldValue id="requiredDocuments" label={t("listings.requiredDocuments")}>
+            {getDetailFieldString(listing.requiredDocuments)}
+          </FieldValue>
+        </Grid.Cell>
       </Grid.Row>
       <Grid.Row>
-        <FieldValue id="programRules" label={t("listings.importantProgramRules")}>
-          {getDetailFieldString(listing.programRules)}
-        </FieldValue>
+        <Grid.Cell>
+          <FieldValue id="programRules" label={t("listings.importantProgramRules")}>
+            {getDetailFieldString(listing.programRules)}
+          </FieldValue>
+        </Grid.Cell>
       </Grid.Row>
       <Grid.Row>
-        <FieldValue id="specialNotes" label={t("listings.specialNotes")}>
-          {getDetailFieldString(listing.specialNotes)}
-        </FieldValue>
+        <Grid.Cell>
+          <FieldValue id="specialNotes" label={t("listings.specialNotes")}>
+            {getDetailFieldString(listing.specialNotes)}
+          </FieldValue>
+        </Grid.Cell>
       </Grid.Row>
     </SectionWithGrid>
   )
