@@ -121,15 +121,17 @@ const AdditionalFees = (props: AdditionalFeesProps) => {
         </Grid.Row>
         {enableUtilitiesIncluded && (
           <Grid.Row>
-            <FieldValue label={t("listings.sections.utilities")}>
-              <FieldGroup
-                type="checkbox"
-                name="utilities"
-                fields={utilitiesFields}
-                register={register}
-                fieldGroupClassName="grid grid-cols-2 mt-4"
-              />
-            </FieldValue>
+            <Grid.Cell>
+              <FieldValue label={t("listings.sections.utilities")}>
+                <FieldGroup
+                  type="checkbox"
+                  name="utilities"
+                  fields={utilitiesFields}
+                  register={register}
+                  fieldGroupClassName="grid grid-cols-2 mt-4"
+                />
+              </FieldValue>
+            </Grid.Cell>
           </Grid.Row>
         )}
       </SectionWithGrid>

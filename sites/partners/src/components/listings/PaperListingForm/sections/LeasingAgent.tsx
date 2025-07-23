@@ -166,23 +166,25 @@ const LeasingAgent = () => {
             />
           </Grid.Cell>
 
-          <FieldValue label={t("application.contact.state")} className="seeds-grid-span-2">
-            <Select
-              id={`listingsLeasingAgentAddress.state`}
-              name={`listingsLeasingAgentAddress.state`}
-              label={t("application.contact.state")}
-              labelClassName="sr-only"
-              register={register}
-              controlClassName="control"
-              options={stateKeys}
-              keyPrefix="states"
-              errorMessage={getErrorMessage("listingsLeasingAgentAddress.state")}
-              error={!!getErrorMessage("listingsLeasingAgentAddress.state")}
-              inputProps={{
-                onChange: () => clearErrors("listingsLeasingAgentAddress"),
-              }}
-            />
-          </FieldValue>
+          <Grid.Cell>
+            <FieldValue label={t("application.contact.state")} className="seeds-grid-span-2">
+              <Select
+                id={`listingsLeasingAgentAddress.state`}
+                name={`listingsLeasingAgentAddress.state`}
+                label={t("application.contact.state")}
+                labelClassName="sr-only"
+                register={register}
+                controlClassName="control"
+                options={stateKeys}
+                keyPrefix="states"
+                errorMessage={getErrorMessage("listingsLeasingAgentAddress.state")}
+                error={!!getErrorMessage("listingsLeasingAgentAddress.state")}
+                inputProps={{
+                  onChange: () => clearErrors("listingsLeasingAgentAddress"),
+                }}
+              />
+            </FieldValue>
+          </Grid.Cell>
 
           <Grid.Cell className="seeds-grid-span-2">
             <Field

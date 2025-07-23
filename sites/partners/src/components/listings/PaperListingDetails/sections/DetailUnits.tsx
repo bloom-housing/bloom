@@ -136,29 +136,35 @@ const DetailUnits = ({ setUnitDrawer }: DetailUnitsProps) => {
     <SectionWithGrid heading={t("listings.units")} inset>
       {enableHomeType && (
         <Grid.Row>
-          <FieldValue id="homeType" label={t("listings.homeType")}>
-            {listing.homeType ? t(`listings.homeType.${listing.homeType}`) : t("t.none")}
-          </FieldValue>
+          <Grid.Cell>
+            <FieldValue id="homeType" label={t("listings.homeType")}>
+              {listing.homeType ? t(`listings.homeType.${listing.homeType}`) : t("t.none")}
+            </FieldValue>
+          </Grid.Cell>
         </Grid.Row>
       )}
       {!enableUnitGroups && (
         <Grid.Row>
-          <FieldValue
-            id="unitTypesOrIndividual"
-            testId={"unit-types-or-individual"}
-            label={t("listings.unitTypesOrIndividual")}
-            children={
-              listing.disableUnitsAccordion
-                ? t("listings.unit.unitTypes")
-                : t("listings.unit.individualUnits")
-            }
-          />
-          <FieldValue
-            id="listings.listingAvailabilityQuestion"
-            testId={"listing-availability-question"}
-            label={t("listings.listingAvailabilityQuestion")}
-            children={listingAvailabilityText}
-          />
+          <Grid.Cell>
+            <FieldValue
+              id="unitTypesOrIndividual"
+              testId={"unit-types-or-individual"}
+              label={t("listings.unitTypesOrIndividual")}
+              children={
+                listing.disableUnitsAccordion
+                  ? t("listings.unit.unitTypes")
+                  : t("listings.unit.individualUnits")
+              }
+            />
+          </Grid.Cell>
+          <Grid.Cell>
+            <FieldValue
+              id="listings.listingAvailabilityQuestion"
+              testId={"listing-availability-question"}
+              label={t("listings.listingAvailabilityQuestion")}
+              children={listingAvailabilityText}
+            />
+          </Grid.Cell>
         </Grid.Row>
       )}
       <Grid.Row>
@@ -175,13 +181,15 @@ const DetailUnits = ({ setUnitDrawer }: DetailUnitsProps) => {
       </Grid.Row>
       {enableSection8Question && (
         <Grid.Row>
-          <FieldValue
-            id="listings.section8Title"
-            testId="listing-section-8-acceptance"
-            label={t("listings.section8Title")}
-          >
-            {listing.section8Acceptance ? t("t.yes") : t("t.no")}
-          </FieldValue>
+          <Grid.Cell>
+            <FieldValue
+              id="listings.section8Title"
+              testId="listing-section-8-acceptance"
+              label={t("listings.section8Title")}
+            >
+              {listing.section8Acceptance ? t("t.yes") : t("t.no")}
+            </FieldValue>
+          </Grid.Cell>
         </Grid.Row>
       )}
     </SectionWithGrid>

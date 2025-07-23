@@ -76,7 +76,9 @@ export const getDetailAddress = (
     return (
       <>
         <SectionWithGrid.HeadingRow>{subtitle}</SectionWithGrid.HeadingRow>
-        <Grid.Row>{getDetailFieldString(null)}</Grid.Row>
+        <Grid.Row>
+          <Grid.Cell>{getDetailFieldString(null)}</Grid.Cell>
+        </Grid.Row>
       </>
     )
   }
@@ -84,45 +86,55 @@ export const getDetailAddress = (
     <>
       <SectionWithGrid.HeadingRow>{subtitle}</SectionWithGrid.HeadingRow>
       <Grid.Row>
-        <FieldValue
-          id={`${addressName}.street`}
-          label={t("listings.streetAddressOrPOBox")}
-          testId={`${addressName}.street`}
-        >
-          {getDetailFieldString(address?.street)}
-        </FieldValue>
-        <FieldValue
-          id={`${addressName}.street2`}
-          label={t("application.contact.apt")}
-          testId={`${addressName}.street2`}
-        >
-          {getDetailFieldString(address?.street2)}
-        </FieldValue>
+        <Grid.Cell>
+          <FieldValue
+            id={`${addressName}.street`}
+            label={t("listings.streetAddressOrPOBox")}
+            testId={`${addressName}.street`}
+          >
+            {getDetailFieldString(address?.street)}
+          </FieldValue>
+        </Grid.Cell>
+        <Grid.Cell>
+          <FieldValue
+            id={`${addressName}.street2`}
+            label={t("application.contact.apt")}
+            testId={`${addressName}.street2`}
+          >
+            {getDetailFieldString(address?.street2)}
+          </FieldValue>
+        </Grid.Cell>
       </Grid.Row>
       <Grid.Row columns={6}>
-        <FieldValue
-          id={`${addressName}.city`}
-          className="seeds-grid-span-2"
-          label={t("application.contact.city")}
-          testId={`${addressName}.city`}
-        >
-          {getDetailFieldString(address?.city)}
-        </FieldValue>
-        <FieldValue
-          id={`${addressName}.state`}
-          label={t("application.contact.state")}
-          testId={`${addressName}.state`}
-        >
-          {getDetailFieldString(address?.state)}
-        </FieldValue>
-        <FieldValue
-          id={`${addressName}.zipCode`}
-          className="seeds-grid-span-3"
-          label={t("application.contact.zip")}
-          testId={`${addressName}.zipCode`}
-        >
-          {getDetailFieldString(address?.zipCode)}
-        </FieldValue>
+        <Grid.Cell className={"seeds-grid-span-2"}>
+          <FieldValue
+            id={`${addressName}.city`}
+            className="seeds-grid-span-2"
+            label={t("application.contact.city")}
+            testId={`${addressName}.city`}
+          >
+            {getDetailFieldString(address?.city)}
+          </FieldValue>
+        </Grid.Cell>
+        <Grid.Cell className={"seeds-grid-span-1"}>
+          <FieldValue
+            id={`${addressName}.state`}
+            label={t("application.contact.state")}
+            testId={`${addressName}.state`}
+          >
+            {getDetailFieldString(address?.state)}
+          </FieldValue>
+        </Grid.Cell>
+        <Grid.Cell className={"seeds-grid-span-3"}>
+          <FieldValue
+            id={`${addressName}.zipCode`}
+            className="seeds-grid-span-3"
+            label={t("application.contact.zip")}
+            testId={`${addressName}.zipCode`}
+          >
+            {getDetailFieldString(address?.zipCode)}
+          </FieldValue>
+        </Grid.Cell>
       </Grid.Row>
     </>
   )

@@ -85,24 +85,26 @@ const CommunityType = ({ listing }: CommunityTypeProps) => {
         subheading={t("listings.sections.communityTypeSubtitle")}
       >
         <Grid.Row columns={2}>
-          <FieldValue label={t("listings.reservedCommunityType")}>
-            {options && (
-              <Select
-                id={`reservedCommunityTypes.id`}
-                name={`reservedCommunityTypes.id`}
-                label={t("listings.reservedCommunityType")}
-                labelClassName="sr-only"
-                register={register}
-                controlClassName="control"
-                options={options}
-                inputProps={{
-                  onChange: () => {
-                    setCurrentCommunityType(reservedCommunityType)
-                  },
-                }}
-              />
-            )}
-          </FieldValue>
+          <Grid.Cell>
+            <FieldValue label={t("listings.reservedCommunityType")}>
+              {options && (
+                <Select
+                  id={`reservedCommunityTypes.id`}
+                  name={`reservedCommunityTypes.id`}
+                  label={t("listings.reservedCommunityType")}
+                  labelClassName="sr-only"
+                  register={register}
+                  controlClassName="control"
+                  options={options}
+                  inputProps={{
+                    onChange: () => {
+                      setCurrentCommunityType(reservedCommunityType)
+                    },
+                  }}
+                />
+              )}
+            </FieldValue>
+          </Grid.Cell>
         </Grid.Row>
         <Grid.Row columns={3}>
           <Grid.Cell className="seeds-grid-span-2">
@@ -118,27 +120,29 @@ const CommunityType = ({ listing }: CommunityTypeProps) => {
         </Grid.Row>
 
         <Grid.Row columns={1}>
-          <FieldValue label={t("listings.includeCommunityDisclaimer")}>
-            <FieldGroup
-              name="includeCommunityDisclaimerQuestion"
-              type="radio"
-              register={register}
-              fields={[
-                {
-                  label: t("t.yes"),
-                  value: YesNoEnum.yes,
-                  id: "includeCommunityDisclaimerYes",
-                  disabled: !currentCommunityType,
-                },
-                {
-                  label: t("t.no"),
-                  value: YesNoEnum.no,
-                  id: "includeCommunityDisclaimerNo",
-                  disabled: !currentCommunityType,
-                },
-              ]}
-            />
-          </FieldValue>
+          <Grid.Cell>
+            <FieldValue label={t("listings.includeCommunityDisclaimer")}>
+              <FieldGroup
+                name="includeCommunityDisclaimerQuestion"
+                type="radio"
+                register={register}
+                fields={[
+                  {
+                    label: t("t.yes"),
+                    value: YesNoEnum.yes,
+                    id: "includeCommunityDisclaimerYes",
+                    disabled: !currentCommunityType,
+                  },
+                  {
+                    label: t("t.no"),
+                    value: YesNoEnum.no,
+                    id: "includeCommunityDisclaimerNo",
+                    disabled: !currentCommunityType,
+                  },
+                ]}
+              />
+            </FieldValue>
+          </Grid.Cell>
         </Grid.Row>
 
         {watch("includeCommunityDisclaimerQuestion") === YesNoEnum.yes && currentCommunityType && (
