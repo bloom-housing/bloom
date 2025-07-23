@@ -1,3 +1,7 @@
+afterEach(() => {
+  cy.axeWatcherFlush()
+})
+
 describe("Jurisdictional Admin User Mangement Tests", () => {
   beforeEach(() => {
     cy.loginApi("jurisdictionalAdmin")

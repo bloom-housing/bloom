@@ -1,3 +1,7 @@
+afterEach(() => {
+  cy.axeWatcherFlush()
+})
+
 describe("Listing Management Tests", () => {
   beforeEach(() => {
     cy.loginApi()

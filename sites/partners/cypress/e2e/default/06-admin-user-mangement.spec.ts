@@ -1,3 +1,7 @@
+afterEach(() => {
+  cy.axeWatcherFlush()
+})
+
 describe("Admin User Mangement Tests", () => {
   beforeEach(() => {
     cy.loginApi()

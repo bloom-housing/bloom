@@ -1,3 +1,7 @@
+afterEach(() => {
+  cy.axeWatcherFlush()
+})
+
 describe("Lottery Tests", () => {
   before(() => {
     cy.loginApi()

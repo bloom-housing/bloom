@@ -1,3 +1,7 @@
+afterEach(() => {
+  cy.axeWatcherFlush()
+})
+
 describe("Application Management Tests", () => {
   before(() => {
     cy.loginApi()

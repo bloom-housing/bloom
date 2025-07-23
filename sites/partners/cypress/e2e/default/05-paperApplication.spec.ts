@@ -1,3 +1,7 @@
+afterEach(() => {
+  cy.axeWatcherFlush()
+})
+
 describe("Paper Application Tests", () => {
   beforeEach(() => {
     cy.loginApi()

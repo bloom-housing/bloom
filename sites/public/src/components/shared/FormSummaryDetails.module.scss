@@ -2,7 +2,8 @@
   display: flex;
   justify-content: space-between;
   padding-block: var(--seeds-spacer-header);
-  background: var(--seeds-color-gray-300);
+  padding-block-start: var(--seeds-spacer-section);
+  border-block-start: 1px solid var(--seeds-border-color);
 }
 
 .summary-section {

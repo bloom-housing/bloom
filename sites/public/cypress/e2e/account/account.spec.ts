@@ -1,5 +1,9 @@
 import { publicUser, updatedPublicUser } from "../../mockData/userData"
 
+afterEach(() => {
+  cy.axeWatcherFlush()
+})
+
 describe("User accounts", () => {
   it("should allow users to update their account information", () => {
     cy.visit("/sign-in")

@@ -1,3 +1,7 @@
+afterEach(() => {
+  cy.axeWatcherFlush()
+})
+
 describe("Preference Management Tests", () => {
   beforeEach(() => {
     cy.loginApi()
