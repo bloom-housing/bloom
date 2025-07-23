@@ -501,7 +501,9 @@ export const getAvailabilityTextForGroup = (
   // Collect information from all groups
   groups.forEach((group) => {
     if (group.openWaitlist) {
-      statusSet.add(t("listings.waitlist.open"))
+      statusSet.add(t("listings.availability.openWaitlist"))
+    } else {
+      statusSet.add(t("listings.availability.closedWaitlist"))
     }
 
     if (group.unitVacancies > 0) {
@@ -867,6 +869,8 @@ export const getUnitGroupSummariesTable = (listing: Listing) => {
     }
 
     const availability = getAvailabilityText(group, isComingSoon)
+
+    console.log("availability", availability)
 
     return {
       unitType: {
