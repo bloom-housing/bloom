@@ -1,5 +1,9 @@
 import { ElmVillageApplication, autofillBlueSkyApplication } from "../../mockData/applicationData"
 
+afterEach(() => {
+  cy.axeWatcherFlush()
+})
+
 describe("Submit", function () {
   it("should submit an application for the Elm Village listing, then autofill and submit an application for Blue Sky Apartments", function () {
     cy.intercept("GET", "/geocoding/v5/**", { fixture: "address" })

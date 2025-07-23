@@ -68,6 +68,8 @@ The [CSS variable autocomplete plugin](https://marketplace.visualstudio.com/item
 
 The [CSS module autocomplete plugin](https://marketplace.visualstudio.com/items?itemName=clinyong.vscode-css-modules) which provides autocomplete for CSS module files.
 
+The [axe Accessibility Linter plugin](https://marketplace.visualstudio.com/items?itemName=deque-systems.vscode-axe-linter) to automatically check for common accessibility issues.
+
 ### Running a local test server
 
 Running `yarn dev:all` from root runs 3 processes for both apps and the backend services on 3 different ports:

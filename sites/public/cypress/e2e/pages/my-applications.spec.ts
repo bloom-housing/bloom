@@ -1,3 +1,7 @@
+afterEach(() => {
+  cy.axeWatcherFlush()
+})
+
 describe("My applications page", function () {
   it("renders the my applications page", function () {
     cy.visit("/sign-in")

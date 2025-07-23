@@ -60,6 +60,7 @@
     "tough-cookie": "^5.1.2"
   },
   "devDependencies": {
+    "@axe-core/watcher": "^3.22.0",
     "@babel/core": "^7.21.3",
     "@babel/preset-env": "^7.20.2",
     "@csstools/postcss-global-data": "^3.0.0",
