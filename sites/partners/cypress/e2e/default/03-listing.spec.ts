@@ -75,6 +75,31 @@ describe("Listing Management Tests", () => {
     cy.getByID("name").should("have.value", "Test - error messaging DISCARD")
   })
 
+  it("error messaging publish with minimal fields", () => {
+    cy.visit("/")
+    cy.get("a").contains("Add Listing").click()
+    cy.contains("New Listing")
+    cy.getByID("jurisdictions.id").select("Lakeview")
+    // Try to publish a listing and should show errors for appropriate fields
+    cy.getByID("publishButton").contains("Publish").click()
+    cy.getByID("publishButtonConfirm").contains("Publish").click()
+    cy.contains("Please resolve any errors before saving or publishing your listing.")
+    cy.getByID("name-error").contains("This field is required")
+    cy.getByID("developer-error").contains("This field is required").should("not.exist")
+    cy.getByID("listingsBuildingAddress.street-error").contains("Cannot enter a partial address")
+    cy.getByID("listingsBuildingAddress.city-error").contains("Cannot enter a partial address")
+    cy.getByID("listingsBuildingAddress.state-error").contains("Cannot enter a partial address")
+    cy.getByID("listingsBuildingAddress.zipCode-error").contains("Cannot enter a partial address")
+    cy.getByID("units-error").should("not.exist")
+    cy.getByID("applicationProcessButton").contains("Application Process").click()
+    cy.getByID("leasingAgentName-error").contains("This field is required").should("not.exist")
+    cy.getByID("leasingAgentEmail-error").contains("This field is required").should("not.exist")
+    cy.getByID("leasingAgentPhone-error").should("not.exist")
+    cy.getByID("digitalApplicationChoice-error").should("not.exist")
+    cy.getByID("paperApplicationChoice-error").should("not.exist")
+    cy.getByID("referralOpportunityChoice-error").should("not.exist")
+  })
+
   it("full listing publish", () => {
     cy.visit("/")
     cy.get("a").contains("Add Listing").click()
