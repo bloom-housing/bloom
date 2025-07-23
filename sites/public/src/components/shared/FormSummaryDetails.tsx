@@ -13,8 +13,6 @@ import {
   Application,
   ApplicationMultiselectQuestion,
   ApplicationMultiselectQuestionOption,
-  FeatureFlag,
-  FeatureFlagEnum,
   InputType,
   Listing,
   MultiselectQuestionsApplicationSectionEnum,
