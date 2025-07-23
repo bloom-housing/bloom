@@ -421,7 +421,7 @@ const ApplicationTypes = ({ listing, requiredFields }: ApplicationTypesProps) =>
                       ),
                     },
                   }))}
-                ></MinimalTable>
+                />
               )}
               <Button
                 type="button"
@@ -445,7 +445,11 @@ const ApplicationTypes = ({ listing, requiredFields }: ApplicationTypesProps) =>
               type="radio"
               register={register}
               fieldLabelClassName={`${styles["label-option"]} seeds-m-bs-2`}
-              groupLabel={t("listings.isReferralOpportunity")}
+              groupLabel={getLabel(
+                "referralOpportunity",
+                requiredFields,
+                t("listings.isReferralOpportunity")
+              )}
               error={
                 fieldHasError(errors?.referralOpportunity) && referralOpportunityChoice === null
               }

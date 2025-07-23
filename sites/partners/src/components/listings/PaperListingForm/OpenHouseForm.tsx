@@ -144,13 +144,7 @@ const OpenHouseForm = ({ onSubmit, currentEvent }: OpenHouseFormProps) => {
                 </Grid.Row>
                 <Grid.Row>
                   <Grid.Cell>
-                    <Field
-                      id="label"
-                      name="label"
-                      label={t("t.label")}
-                      placeholder={t("t.label")}
-                      register={register}
-                    />
+                    <Field id="label" name="label" label={t("t.label")} register={register} />
                   </Grid.Cell>
                 </Grid.Row>
                 <Grid.Row>
@@ -177,9 +171,8 @@ const OpenHouseForm = ({ onSubmit, currentEvent }: OpenHouseFormProps) => {
                       id="note"
                       name="note"
                       label={t("listings.events.openHouseNotes")}
-                      placeholder={t("t.notes")}
                       register={register}
-                      note={t("t.optional")}
+                      placeholder=""
                       rows={5}
                     />
                   </Grid.Cell>
