@@ -97,6 +97,8 @@
   "listing.tags.visionUnits": "Vision units",
   "listingFilters.resetButton": "Reset",
   "listings.showAll": "Show all listings",
+  "listings.unitTypes.expanded.fourBdrm": "4+ bedrooms",
+  "listings.unitTypes.fourBdrm": "4+ BR",
   "listings.verified": "Verified",
   "listings.verifiedListing": "Confirmed by property",
   "nav.listings": "Rentals",
