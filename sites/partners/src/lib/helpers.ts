@@ -294,7 +294,7 @@ export const fieldHasError = (errorObj: FieldError) => {
 }
 
 export const fieldIsRequired = (fieldName: string, requiredFields: string[]) => {
-  return requiredFields.indexOf(fieldName) >= 0
+  return requiredFields?.indexOf(fieldName) >= 0
 }
 
 export const getRequiredSubNote = (fieldName: string, requiredFields: string[]) => {

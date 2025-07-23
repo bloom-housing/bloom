@@ -352,6 +352,7 @@
   "listings.referralContactPhone": "Referral Contact Phone",
   "listings.referralSummary": "Referral Summary",
   "listings.requiredToPublish": "Required to publish",
+  "listings.requiredToPublishAsterisk": "Fields marked with an asterisk (*) are required to publish.",
   "listings.requiredToPublishAppearsAsFirstPage": "Required to publish, appears as first page of application",
   "listings.reservedCommunityDescription": "Reserved Community Description",
   "listings.reservedCommunityDisclaimer": "Reserved Community Disclaimer",

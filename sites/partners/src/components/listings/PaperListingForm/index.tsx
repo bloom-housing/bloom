@@ -409,7 +409,7 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
                         </Tabs.TabList>
                         <Tabs.TabPanel>
                           <p className="field-label seeds-m-be-content">
-                            Fields marked with an asterisk (*) are required to publish.
+                            {t("listings.requiredToPublishAsterisk")}
                           </p>
                           <ListingIntro
                             jurisdictions={profile?.jurisdictions || []}
@@ -478,7 +478,7 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
                         </Tabs.TabPanel>
                         <Tabs.TabPanel>
                           <p className="field-label seeds-m-be-content">
-                            Fields marked with an asterisk (*) are required to publish.
+                            {t("listings.requiredToPublishAsterisk")}
                           </p>
                           <RankingsAndResults
                             listing={listing}
