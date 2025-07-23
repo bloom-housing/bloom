@@ -33,7 +33,7 @@ export const imageUrlFromListing = (listing: Listing, size = 400): string[] => {
     ?.filter(
       (asset: Asset) => asset.label === CLOUDINARY_BUILDING_LABEL || asset.label === "building"
     )
-    ?.map((asset: Asset) => getUrlForListingImage(asset, size) as string)
+    ?.map((asset: Asset) => getUrlForListingImage(asset, size) || "")
 
-  return imageUrls?.length > 0 ? imageUrls : ["/images/listing-fallback.png"]
+  return imageUrls?.length > 0 ? imageUrls : [IMAGE_FALLBACK_URL]
 }
