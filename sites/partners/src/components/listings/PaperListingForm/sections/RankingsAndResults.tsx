@@ -14,7 +14,7 @@ import {
   ReviewOrderTypeEnum,
   YesNoEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { getLabel } from "../../../../lib/helpers"
+import { fieldHasError, fieldMessage, getLabel } from "../../../../lib/helpers"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 import { TextEditor } from "../../../shared/TextEditor"
 import styles from "../ListingForm.module.scss"
@@ -36,7 +36,7 @@ const RankingsAndResults = ({
   const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, setValue, watch, control, errors, clearErrors } = formMethods
+  const { register, setValue, watch, control, errors } = formMethods
 
   const lotteryEvent = getLotteryEvent(listing as unknown as Listing)
 
@@ -355,10 +355,13 @@ const RankingsAndResults = ({
           )}
         <Grid.Row columns={3}>
           <Grid.Cell className="seeds-grid-span-2">
-            <label className={"textarea-label"}>
-              {getLabel("whatToExpect", requiredFields, t("listings.whatToExpectLabel"))}
-            </label>
-            <TextEditor editor={whatToExpectEditor} editorId={"whatToExpect"} />
+            <TextEditor
+              editor={whatToExpectEditor}
+              editorId={"whatToExpect"}
+              error={fieldHasError(errors?.whatToExpect)}
+              label={getLabel("whatToExpect", requiredFields, t("listings.whatToExpectLabel"))}
+              errorMessage={fieldMessage(errors.whatToExpect)}
+            />
           </Grid.Cell>
         </Grid.Row>
       </SectionWithGrid>

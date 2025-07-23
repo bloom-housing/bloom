@@ -1,4 +1,4 @@
-import React, { useCallback } from "react"
+import React, { useCallback, useState } from "react"
 import Markdown from "markdown-to-jsx"
 import { EditorContent, Editor } from "@tiptap/react"
 import { StarterKit } from "@tiptap/starter-kit"
@@ -186,19 +186,38 @@ type TextEditorProps = {
   characterLimit?: number
   editor: Editor
   editorId?: string
+  error?: boolean
+  errorMessage?: string
+  label: string
 }
 
-export const TextEditor = ({ characterLimit = 1000, editor, editorId }: TextEditorProps) => {
+export const TextEditor = ({
+  characterLimit = 1000,
+  editor,
+  editorId,
+  error,
+  errorMessage,
+  label,
+}: TextEditorProps) => {
+  const [errorState, setErrorState] = useState(error)
+
   if (!editor) {
     return null
   }
+
+  editor.on("update", () => {
+    if (errorState) setErrorState(false)
+  })
 
   const characterCount = editor?.storage?.characterCount?.characters()
   const overLimit = characterCount > characterLimit
 
   return (
     <>
-      <div className={`${styles["editor"]} ${overLimit ? styles["error"] : ""}`}>
+      <label className={`${styles["label"]} ${errorState ? styles["error-text"] : null}`}>
+        {label}
+      </label>
+      <div className={`${styles["editor"]} ${overLimit || errorState ? styles["error"] : ""}`}>
         <MenuBar editor={editor} />
         <EditorContent editor={editor} id={editorId} data-testid={editorId} />
       </div>
@@ -209,6 +228,7 @@ export const TextEditor = ({ characterLimit = 1000, editor, editorId }: TextEdit
       >
         {getCharacterString(characterCount, characterLimit)}
       </div>
+      {errorState && errorMessage ? <div className={"error-message"}>{errorMessage}</div> : null}
     </>
   )
 }
