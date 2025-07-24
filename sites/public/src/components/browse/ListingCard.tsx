@@ -137,7 +137,7 @@ export const ListingCard = ({
                   })}
                 </div>
               )}
-              {!!status?.content && (
+              {!!status?.content && !enableUnitGroups && (
                 <div className={"seeds-m-bs-3"}>
                   {getListingStatusMessage(listing, jurisdiction, null, true)}
                 </div>

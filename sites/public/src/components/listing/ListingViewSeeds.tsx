@@ -63,6 +63,8 @@ export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: Li
   const [showDownloadModal, setShowDownloadModal] = useState(false)
   const [listingFavorited, setListingFavorited] = useState(false)
 
+  const enableUnitGroups = isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableUnitGroups)
+
   useEffect(() => {
     if (profile) {
       void fetchFavoriteListingIds(profile.id, userService).then((listingIds) => {
@@ -262,7 +264,7 @@ export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: Li
           </div>
         </div>
         <div className={`${styles["right-bar"]} ${styles["hide-mobile"]}`}>
-          <Availability listing={listing} jurisdiction={jurisdiction} />
+          {!enableUnitGroups && <Availability listing={listing} jurisdiction={jurisdiction} />}
           {ApplyBar}
         </div>
       </div>
