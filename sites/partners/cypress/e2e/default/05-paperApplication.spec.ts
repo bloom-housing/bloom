@@ -1,5 +1,5 @@
 afterEach(() => {
-  cy.axeWatcherFlush()
+  if (Cypress.env("IN_CI") !== "TRUE") cy.axeWatcherFlush()
 })
 
 describe("Paper Application Tests", () => {
