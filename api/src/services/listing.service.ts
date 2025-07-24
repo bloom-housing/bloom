@@ -2686,8 +2686,8 @@ export class ListingService implements OnModuleInit {
     return listings.map((listing) => {
       return {
         id: listing.id,
-        lat: listing.listingsBuildingAddress.latitude,
-        lng: listing.listingsBuildingAddress.longitude,
+        lat: listing.listingsBuildingAddress?.latitude,
+        lng: listing.listingsBuildingAddress?.longitude,
       } as ListingMapMarker;
     });
   }
