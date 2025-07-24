@@ -25,7 +25,7 @@ const NewApplication = () => {
     <ApplicationContext.Provider value={application}>
       <Layout>
         <Head>
-          <title>{t("nav.siteTitlePartners")}</title>
+          <title>{`Edit Application - ${t("nav.siteTitlePartners")}`}</title>
         </Head>
 
         <NavigationHeader
