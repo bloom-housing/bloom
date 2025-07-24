@@ -294,8 +294,9 @@ const FormPrimaryApplicant = ({
             />
           </Grid.Cell>
         </Grid.Row>
-        <Grid.Row>
-          {mailingAddressValue && (
+
+        {mailingAddressValue && (
+          <Grid.Row>
             <Grid.Cell>
               <FormAddress
                 subtitle={t("application.contact.mailingAddress")}
@@ -304,10 +305,11 @@ const FormPrimaryApplicant = ({
                 stateKeys={stateKeys}
               />
             </Grid.Cell>
-          )}
-        </Grid.Row>
-        <Grid.Row>
-          {workInRegionValue === YesNoEnum.yes && (
+          </Grid.Row>
+        )}
+
+        {workInRegionValue === YesNoEnum.yes && (
+          <Grid.Row>
             <Grid.Cell>
               <FormAddress
                 subtitle={t("application.contact.workAddress")}
@@ -316,8 +318,8 @@ const FormPrimaryApplicant = ({
                 stateKeys={stateKeys}
               />
             </Grid.Cell>
-          )}
-        </Grid.Row>
+          </Grid.Row>
+        )}
       </SectionWithGrid>
     </>
   )

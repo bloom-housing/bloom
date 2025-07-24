@@ -46,10 +46,9 @@ const DetailApplicationAddress = () => {
           t("application.contact.mailingAddress")
         )}
 
-      <hr />
-
-      <Grid.Row columns={3}>
+      <Grid.Row>
         <Grid.Cell>
+          <hr className={"seeds-m-be-section"} />
           <FieldValue
             id="applicationPickupQuestion"
             label={t("listings.applicationPickupQuestion")}
@@ -93,10 +92,9 @@ const DetailApplicationAddress = () => {
         </>
       )}
 
-      <hr />
-
-      <Grid.Row columns={3}>
+      <Grid.Row>
         <Grid.Cell>
+          <hr className={"seeds-m-be-section"} />
           <FieldValue
             id="applicationDropOffQuestion"
             label={t("listings.applicationDropOffQuestion")}
@@ -140,10 +138,9 @@ const DetailApplicationAddress = () => {
         </>
       )}
 
-      <hr />
-
       <Grid.Row>
         <Grid.Cell>
+          <hr className={"seeds-m-be-section"} />
           <FieldValue
             id="postmarksConsideredQuestion"
             label={t("listings.postmarksConsideredQuestion")}

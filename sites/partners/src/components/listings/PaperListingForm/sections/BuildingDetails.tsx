@@ -313,6 +313,7 @@ const BuildingDetails = ({
           </Grid.Cell>
           <Grid.Cell className="seeds-grid-span-2">
             {enableRegions ? (
+<<<<<<< HEAD
               <Select
                 register={register}
                 controlClassName="control"
@@ -325,6 +326,28 @@ const BuildingDetails = ({
                 ]}
                 {...defaultFieldProps("region", t("t.region"), requiredFields, errors, clearErrors)}
               />
+=======
+              <FieldValue label={t("t.region")}>
+                <Select
+                  id="region"
+                  name="region"
+                  label={t("t.region")}
+                  labelClassName="sr-only"
+                  register={register}
+                  inputProps={{
+                    className: "w-full",
+                    onChange: () => setValue("neighborhood", undefined),
+                  }}
+                  options={[
+                    { value: "", label: t("listings.sections.regionPlaceholder") },
+                    ...Object.keys(RegionEnum).map((entry) => ({
+                      value: entry,
+                      label: entry.toString().replace("_", " "),
+                    })),
+                  ]}
+                />
+              </FieldValue>
+>>>>>>> 06d5aa255 (fix: titles)
             ) : (
               <Field
                 type={"number"}

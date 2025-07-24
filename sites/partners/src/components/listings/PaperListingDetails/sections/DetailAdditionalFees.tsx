@@ -28,7 +28,7 @@ const DetailAdditionalFees = () => {
         )
       }
     })
-    return utilitiesExist ? utilities : <>{t("t.none")}</>
+    return utilitiesExist ? <ul className={"flex flex-wrap"}>{utilities}</ul> : <>{t("t.none")}</>
   }
 
   return (
@@ -66,7 +66,7 @@ const DetailAdditionalFees = () => {
         <Grid.Row>
           <Grid.Cell>
             <FieldValue id="utilities" label={t("listings.sections.utilities")}>
-              <ul className={"flex flex-wrap"}>{getUtilitiesIncluded()}</ul>
+              {getUtilitiesIncluded()}
             </FieldValue>
           </Grid.Cell>
         </Grid.Row>

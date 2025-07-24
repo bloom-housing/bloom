@@ -23,7 +23,7 @@ const DetailBuildingFeatures = () => {
         )
       }
     })
-    return featuresExist ? features : <>{t("t.none")}</>
+    return featuresExist ? <ul className={"flex flex-wrap"}>{features}</ul> : <>{t("t.none")}</>
   }
 
   const enableAccessibilityFeatures = doJurisdictionsHaveFeatureFlagOn(
@@ -85,7 +85,7 @@ const DetailBuildingFeatures = () => {
         <Grid.Row>
           <Grid.Cell>
             <FieldValue id="accessibilityFeatures" label={"Accessibility Features"}>
-              <ul className={"flex flex-wrap"}>{getAccessibilityFeatures()}</ul>
+              {getAccessibilityFeatures()}
             </FieldValue>
           </Grid.Cell>
         </Grid.Row>
