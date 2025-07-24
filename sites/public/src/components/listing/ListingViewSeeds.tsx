@@ -63,8 +63,6 @@ export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: Li
   const [showDownloadModal, setShowDownloadModal] = useState(false)
   const [listingFavorited, setListingFavorited] = useState(false)
 
-  const enableUnitGroups = isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableUnitGroups)
-
   useEffect(() => {
     if (profile) {
       void fetchFavoriteListingIds(profile.id, userService).then((listingIds) => {
