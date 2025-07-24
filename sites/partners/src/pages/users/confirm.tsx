@@ -8,7 +8,7 @@ const ConfirmPage = () => {
   return (
     <Layout>
       <Head>
-        <title>{t("nav.siteTitlePartners")}</title>
+        <title>{`User Confirm - ${t("nav.siteTitlePartners")}`}</title>
       </Head>
 
       <div className="md:mb-20 md:mt-12 mx-auto max-w-lg print:my-0 print:max-w-full">

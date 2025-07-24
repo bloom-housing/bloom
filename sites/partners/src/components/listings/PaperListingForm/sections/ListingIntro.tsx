@@ -51,46 +51,49 @@ const ListingIntro = (props: ListingIntroProps) => {
           </Grid.Cell>
         </Grid.Row>
         <Grid.Row columns={2}>
-          <FieldValue
-            label={t("t.jurisdiction")}
-            className={`${
-              fieldHasError(errors?.jurisdiction) || fieldHasError(errors?.["jurisdiction.id"])
-                ? "field-value-error"
-                : ""
-            } ${defaultJurisdiction ? "hidden" : ""}`}
-          >
-            <Select
-              id={"jurisdictions.id"}
-              defaultValue={defaultJurisdiction}
-              name={"jurisdictions.id"}
+          <Grid.Cell>
+            <FieldValue
               label={t("t.jurisdiction")}
-              labelClassName="sr-only"
-              register={register}
-              controlClassName={`control ${defaultJurisdiction ? "hidden" : ""}`}
-              error={
-                fieldHasError(errors?.jurisdictions) || fieldHasError(errors?.["jurisdictions.id"])
-              }
-              subNote={t("listings.requiredToPublish")}
-              errorMessage={
-                fieldMessage(errors?.jurisdictions) ??
-                fieldMessage(errors?.["jurisdictions.id"]) ??
-                undefined
-              }
-              keyPrefix={"jurisdictions"}
-              options={jurisdictionOptions}
-              inputProps={{
-                onChange: () => {
-                  if (
-                    fieldHasError(errors?.jurisdictions) ||
-                    fieldHasError(errors?.["jurisdictions.id"])
-                  ) {
-                    clearErrors("jurisdictions.id")
-                    clearErrors("jurisdictions")
-                  }
-                },
-              }}
-            />
-          </FieldValue>
+              className={`${
+                fieldHasError(errors?.jurisdiction) || fieldHasError(errors?.["jurisdiction.id"])
+                  ? "field-value-error"
+                  : ""
+              } ${defaultJurisdiction ? "hidden" : ""}`}
+            >
+              <Select
+                id={"jurisdictions.id"}
+                defaultValue={defaultJurisdiction}
+                name={"jurisdictions.id"}
+                label={t("t.jurisdiction")}
+                labelClassName="sr-only"
+                register={register}
+                controlClassName={`control ${defaultJurisdiction ? "hidden" : ""}`}
+                error={
+                  fieldHasError(errors?.jurisdictions) ||
+                  fieldHasError(errors?.["jurisdictions.id"])
+                }
+                subNote={t("listings.requiredToPublish")}
+                errorMessage={
+                  fieldMessage(errors?.jurisdictions) ??
+                  fieldMessage(errors?.["jurisdictions.id"]) ??
+                  undefined
+                }
+                keyPrefix={"jurisdictions"}
+                options={jurisdictionOptions}
+                inputProps={{
+                  onChange: () => {
+                    if (
+                      fieldHasError(errors?.jurisdictions) ||
+                      fieldHasError(errors?.["jurisdictions.id"])
+                    ) {
+                      clearErrors("jurisdictions.id")
+                      clearErrors("jurisdictions")
+                    }
+                  },
+                }}
+              />
+            </FieldValue>
+          </Grid.Cell>
           <Grid.Cell>
             <Field
               id="developer"

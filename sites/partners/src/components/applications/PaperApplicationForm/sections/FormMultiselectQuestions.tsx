@@ -212,52 +212,54 @@ const FormMultiselectQuestions = ({
             const question = listingQuestion?.multiselectQuestions
             const inputType = getInputType(question.options as unknown as MultiselectOption[])
             return (
-              <FieldValue label={question.text}>
-                <fieldset className={"mt-4"}>
-                  {inputType === "checkbox" ? (
-                    <>
-                      {question?.options
-                        ?.sort((a, b) => (a.ordinal > b.ordinal ? 1 : -1))
-                        .map((option) => {
-                          return getCheckboxOption(option, question)
-                        })}
-                      {question?.optOutText &&
-                        getCheckboxOption(
-                          {
-                            text: question.optOutText,
-                            description: null,
-                            links: [],
-                            collectAddress: false,
-                            exclusive: true,
-                            ordinal: question.options.length,
-                          },
-                          question
-                        )}
-                    </>
-                  ) : (
-                    <>
-                      {question?.options
-                        ?.sort((a, b) => (a.ordinal > b.ordinal ? 1 : -1))
-                        .map((option) => {
-                          return getRadioOption(option, question, setValue)
-                        })}
-                      {question?.optOutText &&
-                        getRadioOption(
-                          {
-                            text: question.optOutText,
-                            description: null,
-                            links: [],
-                            collectAddress: false,
-                            exclusive: true,
-                            ordinal: question.options.length,
-                          },
-                          question,
-                          setValue
-                        )}
-                    </>
-                  )}
-                </fieldset>
-              </FieldValue>
+              <Grid.Cell>
+                <FieldValue label={question.text}>
+                  <fieldset className={"mt-4"}>
+                    {inputType === "checkbox" ? (
+                      <>
+                        {question?.options
+                          ?.sort((a, b) => (a.ordinal > b.ordinal ? 1 : -1))
+                          .map((option) => {
+                            return getCheckboxOption(option, question)
+                          })}
+                        {question?.optOutText &&
+                          getCheckboxOption(
+                            {
+                              text: question.optOutText,
+                              description: null,
+                              links: [],
+                              collectAddress: false,
+                              exclusive: true,
+                              ordinal: question.options.length,
+                            },
+                            question
+                          )}
+                      </>
+                    ) : (
+                      <>
+                        {question?.options
+                          ?.sort((a, b) => (a.ordinal > b.ordinal ? 1 : -1))
+                          .map((option) => {
+                            return getRadioOption(option, question, setValue)
+                          })}
+                        {question?.optOutText &&
+                          getRadioOption(
+                            {
+                              text: question.optOutText,
+                              description: null,
+                              links: [],
+                              collectAddress: false,
+                              exclusive: true,
+                              ordinal: question.options.length,
+                            },
+                            question,
+                            setValue
+                          )}
+                      </>
+                    )}
+                  </fieldset>
+                </FieldValue>
+              </Grid.Cell>
             )
           })}
         </Grid.Row>

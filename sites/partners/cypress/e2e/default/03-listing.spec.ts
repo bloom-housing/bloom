@@ -1,3 +1,7 @@
+afterEach(() => {
+  if (Cypress.env("IN_CI") !== "TRUE") cy.axeWatcherFlush()
+})
+
 describe("Listing Management Tests", () => {
   beforeEach(() => {
     cy.loginApi()

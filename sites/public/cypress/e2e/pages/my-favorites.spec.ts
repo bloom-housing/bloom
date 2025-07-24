@@ -1,3 +1,7 @@
+afterEach(() => {
+  if (Cypress.env("IN_CI") !== "TRUE") cy.axeWatcherFlush()
+})
+
 describe("My favorites page", function () {
   // TODO: reenable once we have Seeds pages in production & CI builds
   it.skip("renders the my favorites page", function () {

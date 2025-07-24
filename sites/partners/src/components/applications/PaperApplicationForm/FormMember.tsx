@@ -283,21 +283,25 @@ const FormMember = ({
               </SectionWithGrid>
 
               {sameAddressField === YesNoEnum.no && (
-                <FormAddress
-                  subtitle={t("application.details.residenceAddress")}
-                  dataKey="householdMemberAddress"
-                  register={register}
-                  stateKeys={stateKeys}
-                />
+                <div className={"seeds-m-bs-content"}>
+                  <FormAddress
+                    subtitle={t("application.details.residenceAddress")}
+                    dataKey="householdMemberAddress"
+                    register={register}
+                    stateKeys={stateKeys}
+                  />
+                </div>
               )}
 
               {workInRegionField === YesNoEnum.yes && (
-                <FormAddress
-                  subtitle={t("application.contact.workAddress")}
-                  dataKey="householdMemberWorkAddress"
-                  register={register}
-                  stateKeys={stateKeys}
-                />
+                <div className={"seeds-m-bs-content"}>
+                  <FormAddress
+                    subtitle={t("application.contact.workAddress")}
+                    dataKey="householdMemberWorkAddress"
+                    register={register}
+                    stateKeys={stateKeys}
+                  />
+                </div>
               )}
             </Card.Section>
           </Card>

@@ -19,36 +19,48 @@ const DetailLeasingAgent = () => {
   return (
     <SectionWithGrid heading={t("listings.sections.leasingAgentTitle")} inset>
       <Grid.Row>
-        <FieldValue id="leasingAgentName" label={t("leasingAgent.name")}>
-          {getDetailFieldString(listing.leasingAgentName)}
-        </FieldValue>
+        <Grid.Cell>
+          <FieldValue id="leasingAgentName" label={t("leasingAgent.name")}>
+            {getDetailFieldString(listing.leasingAgentName)}
+          </FieldValue>
+        </Grid.Cell>
 
-        <FieldValue id="leasingAgentEmail" label={t("t.email")}>
-          {getDetailFieldString(listing.leasingAgentEmail)}
-        </FieldValue>
+        <Grid.Cell>
+          <FieldValue id="leasingAgentEmail" label={t("t.email")}>
+            {getDetailFieldString(listing.leasingAgentEmail)}
+          </FieldValue>
+        </Grid.Cell>
 
-        <FieldValue id="leasingAgentPhone" label={t("t.phone")}>
-          {getDetailFieldString(listing.leasingAgentPhone)}
-        </FieldValue>
+        <Grid.Cell>
+          <FieldValue id="leasingAgentPhone" label={t("t.phone")}>
+            {getDetailFieldString(listing.leasingAgentPhone)}
+          </FieldValue>
+        </Grid.Cell>
       </Grid.Row>
       <Grid.Row columns={3}>
-        <FieldValue id="leasingAgentTitle" label={t("leasingAgent.title")}>
-          {getDetailFieldString(listing.leasingAgentTitle)}
-        </FieldValue>
+        <Grid.Cell>
+          <FieldValue id="leasingAgentTitle" label={t("leasingAgent.title")}>
+            {getDetailFieldString(listing.leasingAgentTitle)}
+          </FieldValue>
+        </Grid.Cell>
 
         {enableCompanyWebsite && (
-          <FieldValue id="managementWebsite" label={t("leasingAgent.managementWebsite")}>
-            {getDetailFieldString(listing.managementWebsite)}
-          </FieldValue>
+          <Grid.Cell>
+            <FieldValue id="managementWebsite" label={t("leasingAgent.managementWebsite")}>
+              {getDetailFieldString(listing.managementWebsite)}
+            </FieldValue>
+          </Grid.Cell>
         )}
 
-        <FieldValue
-          id="leasingAgentOfficeHours"
-          className="seeds-grid-span-2"
-          label={t("leasingAgent.officeHours")}
-        >
-          {getDetailFieldString(listing.leasingAgentOfficeHours)}
-        </FieldValue>
+        <Grid.Cell>
+          <FieldValue
+            id="leasingAgentOfficeHours"
+            className="seeds-grid-span-2"
+            label={t("leasingAgent.officeHours")}
+          >
+            {getDetailFieldString(listing.leasingAgentOfficeHours)}
+          </FieldValue>
+        </Grid.Cell>
       </Grid.Row>
       {getDetailAddress(
         listing.listingsLeasingAgentAddress,

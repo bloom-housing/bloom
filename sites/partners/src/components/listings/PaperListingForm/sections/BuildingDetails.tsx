@@ -209,6 +209,8 @@ const BuildingDetails = ({
                   inputProps={{
                     className: "w-full",
                   }}
+                  label={t("t.neighborhood")}
+                  labelClassName={"sr-only"}
                   register={register}
                   options={[
                     { value: "", label: t("listings.sections.neighborhoodPlaceholder") },
@@ -325,6 +327,8 @@ const BuildingDetails = ({
                 <Select
                   id="region"
                   name="region"
+                  label={t("t.region")}
+                  labelClassName="sr-only"
                   register={register}
                   inputProps={{
                     className: "w-full",

@@ -15,6 +15,7 @@
 import "@cypress/code-coverage/support"
 // Import commands.js using ES2015 syntax:
 import "./commands"
+import "@axe-core/watcher/dist/cypressCommands"
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')

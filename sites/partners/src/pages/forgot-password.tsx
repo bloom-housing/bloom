@@ -35,7 +35,7 @@ const ForgotPassword = () => {
   }
 
   return (
-    <FormsLayout>
+    <FormsLayout title={`Forgot Password - ${t("nav.siteTitlePartners")}`}>
       <FormForgotPassword
         onSubmit={onSubmit}
         control={{ register, errors, handleSubmit }}

@@ -327,61 +327,67 @@ const FormUnits = ({
       >
         {homeTypeEnabled && (
           <Grid.Row columns={2}>
-            <FieldValue label={t("listings.homeType")}>
-              {homeTypes && (
-                <Select
-                  id={`homeType`}
-                  name={`homeType`}
-                  label={t("listings.homeType")}
-                  labelClassName="sr-only"
-                  register={register}
-                  controlClassName="control"
-                  options={homeTypes}
-                />
-              )}
-            </FieldValue>
+            <Grid.Cell>
+              <FieldValue label={t("listings.homeType")}>
+                {homeTypes && (
+                  <Select
+                    id={`homeType`}
+                    name={`homeType`}
+                    label={t("listings.homeType")}
+                    labelClassName="sr-only"
+                    register={register}
+                    controlClassName="control"
+                    options={homeTypes}
+                  />
+                )}
+              </FieldValue>
+            </Grid.Cell>
           </Grid.Row>
         )}
         {!enableUnitGroups && (
           <Grid.Row columns={2}>
-            <FieldValue label={t("listings.unitTypesOrIndividual")} className="mb-1">
-              <FieldGroup
-                name="disableUnitsAccordion"
-                type="radio"
-                register={register}
-                fields={disableUnitsAccordionOptions}
-                fieldClassName="m-0"
-                fieldGroupClassName="flex h-12 items-center"
-              />
-            </FieldValue>
-            <FieldValue label={t("listings.listingAvailabilityQuestion")} className={"mb-1"}>
-              <FieldGroup
-                name="listingAvailabilityQuestion"
-                type="radio"
-                register={register}
-                groupSubNote={t("listings.requiredToPublish")}
-                error={fieldHasError(errors?.listingAvailability) && listingAvailability === null}
-                errorMessage={fieldMessage(errors?.listingAvailability)}
-                fieldClassName="m-0"
-                fieldGroupClassName="flex h-12 items-center"
-                fields={[
-                  {
-                    label: t("listings.availableUnits"),
-                    value: "availableUnits",
-                    id: "availableUnits",
-                    dataTestId: "listingAvailability.availableUnits",
-                    defaultChecked: listing?.reviewOrderType !== ReviewOrderTypeEnum.waitlist,
-                  },
-                  {
-                    label: t("listings.waitlist.open"),
-                    value: "openWaitlist",
-                    id: "openWaitlist",
-                    dataTestId: "listingAvailability.openWaitlist",
-                    defaultChecked: listing?.reviewOrderType === ReviewOrderTypeEnum.waitlist,
-                  },
-                ]}
-              />
-            </FieldValue>
+            <Grid.Cell>
+              <FieldValue label={t("listings.unitTypesOrIndividual")} className="mb-1">
+                <FieldGroup
+                  name="disableUnitsAccordion"
+                  type="radio"
+                  register={register}
+                  fields={disableUnitsAccordionOptions}
+                  fieldClassName="m-0"
+                  fieldGroupClassName="flex h-12 items-center"
+                />
+              </FieldValue>
+            </Grid.Cell>
+            <Grid.Cell>
+              <FieldValue label={t("listings.listingAvailabilityQuestion")} className={"mb-1"}>
+                <FieldGroup
+                  name="listingAvailabilityQuestion"
+                  type="radio"
+                  register={register}
+                  groupSubNote={t("listings.requiredToPublish")}
+                  error={fieldHasError(errors?.listingAvailability) && listingAvailability === null}
+                  errorMessage={fieldMessage(errors?.listingAvailability)}
+                  fieldClassName="m-0"
+                  fieldGroupClassName="flex h-12 items-center"
+                  fields={[
+                    {
+                      label: t("listings.availableUnits"),
+                      value: "availableUnits",
+                      id: "availableUnits",
+                      dataTestId: "listingAvailability.availableUnits",
+                      defaultChecked: listing?.reviewOrderType !== ReviewOrderTypeEnum.waitlist,
+                    },
+                    {
+                      label: t("listings.waitlist.open"),
+                      value: "openWaitlist",
+                      id: "openWaitlist",
+                      dataTestId: "listingAvailability.openWaitlist",
+                      defaultChecked: listing?.reviewOrderType === ReviewOrderTypeEnum.waitlist,
+                    },
+                  ]}
+                />
+              </FieldValue>
+            </Grid.Cell>
           </Grid.Row>
         )}
         <SectionWithGrid.HeadingRow>{t("listings.units")}</SectionWithGrid.HeadingRow>
@@ -414,29 +420,31 @@ const FormUnits = ({
         </Grid.Row>
         {enableSection8Question && (
           <Grid.Row>
-            <FieldValue label={t("listings.section8Title")}>
-              <FieldGroup
-                name="listingSection8Acceptance"
-                type="radio"
-                register={register}
-                fields={[
-                  {
-                    id: "listingSection8AcceptanceYes",
-                    dataTestId: "listingSection8AcceptanceYes",
-                    label: t("t.yes"),
-                    value: YesNoEnum.yes,
-                    defaultChecked: listing?.section8Acceptance,
-                  },
-                  {
-                    id: "listingSection8AcceptanceNo",
-                    dataTestId: "listingSection8AcceptanceNo",
-                    label: t("t.no"),
-                    value: YesNoEnum.no,
-                    defaultChecked: !listing?.section8Acceptance,
-                  },
-                ]}
-              />
-            </FieldValue>
+            <Grid.Cell>
+              <FieldValue label={t("listings.section8Title")}>
+                <FieldGroup
+                  name="listingSection8Acceptance"
+                  type="radio"
+                  register={register}
+                  fields={[
+                    {
+                      id: "listingSection8AcceptanceYes",
+                      dataTestId: "listingSection8AcceptanceYes",
+                      label: t("t.yes"),
+                      value: YesNoEnum.yes,
+                      defaultChecked: listing?.section8Acceptance,
+                    },
+                    {
+                      id: "listingSection8AcceptanceNo",
+                      dataTestId: "listingSection8AcceptanceNo",
+                      label: t("t.no"),
+                      value: YesNoEnum.no,
+                      defaultChecked: !listing?.section8Acceptance,
+                    },
+                  ]}
+                />
+              </FieldValue>
+            </Grid.Cell>
           </Grid.Row>
         )}
       </SectionWithGrid>
