@@ -22,19 +22,21 @@ import {
   FeatureFlagEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { AuthContext } from "@bloom-housing/shared-helpers"
-import { fieldMessage, fieldHasError } from "../../../../lib/helpers"
+import { fieldMessage, fieldHasError, getLabel } from "../../../../lib/helpers"
 import styles from "../ListingForm.module.scss"
 
 type ApplicationDatesProps = {
   openHouseEvents: TempEvent[]
   setOpenHouseEvents: (events: TempEvent[]) => void
   listing?: FormListing
+  requiredFields: string[]
 }
 
 const ApplicationDates = ({
   listing,
   openHouseEvents,
   setOpenHouseEvents,
+  requiredFields,
 }: ApplicationDatesProps) => {
   const openHouseHeaders = {
     date: "t.date",
@@ -132,7 +134,11 @@ const ApplicationDates = ({
         <Grid.Row columns={2}>
           <Grid.Cell>
             <DateField
-              label={t("listings.applicationDeadline")}
+              label={getLabel(
+                "applicationDueDate",
+                requiredFields,
+                t("listings.applicationDeadline")
+              )}
               name={"applicationDueDateField"}
               id={"applicationDueDateField"}
               register={register}
@@ -161,7 +167,11 @@ const ApplicationDates = ({
           </Grid.Cell>
           <Grid.Cell>
             <TimeField
-              label={t("listings.applicationDueTime")}
+              label={getLabel(
+                "applicationDueDate",
+                requiredFields,
+                t("listings.applicationDueTime")
+              )}
               name={"applicationDueTimeField"}
               id={"applicationDueTimeField"}
               register={register}

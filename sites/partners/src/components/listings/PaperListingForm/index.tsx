@@ -237,7 +237,7 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
     const selectedJurisdictionObj = profile?.jurisdictions?.find(
       (juris) => selectedJurisdiction === juris.id
     )
-    setRequiredFields(selectedJurisdictionObj ? selectedJurisdictionObj.requiredListingFields : [])
+    setRequiredFields(selectedJurisdictionObj?.requiredListingFields || [])
   }, [profile?.jurisdictions, selectedJurisdiction])
 
   const triggerSubmitWithStatus: SubmitFunction = (action, status, newData) => {
@@ -493,6 +493,7 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
                             listing={listing}
                             openHouseEvents={openHouseEvents}
                             setOpenHouseEvents={setOpenHouseEvents}
+                            requiredFields={requiredFields}
                           />
 
                           <div className="-ml-8 -mt-8 relative" style={{ top: "7rem" }}>
