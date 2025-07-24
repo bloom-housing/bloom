@@ -1,7 +1,7 @@
 import { publicUser, updatedPublicUser } from "../../mockData/userData"
 
 afterEach(() => {
-  cy.axeWatcherFlush()
+  if (Cypress.env("IN_CI") !== "TRUE") cy.axeWatcherFlush()
 })
 
 describe("User accounts", () => {

@@ -39,6 +39,8 @@ executors:
       CLOUDINARY_KEY: "key"
       CLOUDINARY_SIGNED_PRESET: "signedpreset"
       CLOUDINARY_CLOUD_NAME: "exygy"
+      AXE_DEVELOPER_HUB_API_KEY: "secret-key"
+      IN_CI: "TRUE"
 
   standard-node:
     docker:
