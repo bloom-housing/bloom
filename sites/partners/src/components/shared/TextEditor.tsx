@@ -17,6 +17,10 @@ import styles from "./TextEditor.module.scss"
 export const EditorExtensions = [
   StarterKit.configure({
     heading: false,
+    code: false,
+    blockquote: false,
+    codeBlock: false,
+    italic: false,
   }),
   CharacterCountExtension,
   LinkExtension.configure({
@@ -190,7 +194,7 @@ export const TextEditor = ({ characterLimit = 1000, editor, editorId }: TextEdit
   }
 
   const characterCount = editor?.storage?.characterCount?.characters()
-  const overLimit = characterCount > characterCount
+  const overLimit = characterCount > characterLimit
 
   return (
     <>
