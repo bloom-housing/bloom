@@ -51,4 +51,6 @@ if (process.env.IN_CI !== "TRUE") {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export default defineConfig(cypressConfig(config as any))
+export default process.env.IN_CI !== "TRUE"
+  ? defineConfig(cypressConfig(config as any))
+  : defineConfig(config)
