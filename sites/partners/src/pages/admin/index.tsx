@@ -128,7 +128,7 @@ const Admin = () => {
     return (
       <Layout>
         <Head>
-          <title>{t("nav.siteTitlePartners")}</title>
+          <title>{`Admin Panel - ${t("nav.siteTitlePartners")}`}</title>
         </Head>
         <Hero title={t("t.administration")}>{t("errors.unauthorized.message")}</Hero>
       </Layout>
@@ -146,7 +146,7 @@ const Admin = () => {
     <>
       <Layout>
         <Head>
-          <title>{t("nav.siteTitlePartners")}</title>
+          <title>{`Admin Panel - ${t("nav.siteTitlePartners")}`}</title>
         </Head>
         <NavigationHeader className="relative" title={t("t.administration")} />
         <section>

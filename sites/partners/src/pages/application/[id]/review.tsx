@@ -100,7 +100,7 @@ const Flag = () => {
   return (
     <Layout>
       <Head>
-        <title>{t("nav.siteTitlePartners")}</title>
+        <title>{`Duplicate Set - ${t("nav.siteTitlePartners")}`}</title>
       </Head>
 
       <NavigationHeader

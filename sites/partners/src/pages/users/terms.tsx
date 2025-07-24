@@ -1,7 +1,8 @@
 import React, { useContext, useCallback, useMemo } from "react"
+import { AuthContext } from "@bloom-housing/shared-helpers"
+import { t } from "@bloom-housing/ui-components"
 import FormsLayout from "../../layouts/forms"
 import { FormTerms } from "../../components/users/FormTerms"
-import { AuthContext } from "@bloom-housing/shared-helpers"
 
 const TermsPage = () => {
   const { profile, userService, loadProfile } = useContext(AuthContext)
@@ -22,7 +23,7 @@ const TermsPage = () => {
   }, [profile])
 
   return (
-    <FormsLayout>
+    <FormsLayout title={`Accept Terms - ${t("nav.siteTitlePartners")}`}>
       <FormTerms onSubmit={onSubmit} terms={jurisdictionTerms} />
     </FormsLayout>
   )

@@ -736,6 +736,8 @@ const PreferenceDrawer = ({
                           id={"mapLayerId"}
                           name={"mapLayerId"}
                           register={register}
+                          label={t("settings.preferenceValidatingAddress.selectMapLayer")}
+                          labelClassName="sr-only"
                           controlClassName={"control"}
                           options={
                             mapLayers
