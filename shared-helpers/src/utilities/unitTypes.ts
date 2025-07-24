@@ -1,4 +1,4 @@
-import { Unit, UnitGroup, UnitType } from "../types/backend-swagger"
+import { Unit, UnitGroup, UnitType, UnitTypeEnum } from "../types/backend-swagger"
 
 type GetUnitTypeNamesReturn = {
   id: string
@@ -6,13 +6,21 @@ type GetUnitTypeNamesReturn = {
 }
 
 export const UnitTypeSort = [
-  "SRO",
-  "studio",
-  "oneBdrm",
-  "twoBdrm",
-  "threeBdrm",
-  "fourBdrm",
-  "fiveBdrm",
+  UnitTypeEnum.SRO,
+  UnitTypeEnum.studio,
+  UnitTypeEnum.oneBdrm,
+  UnitTypeEnum.twoBdrm,
+  UnitTypeEnum.threeBdrm,
+  UnitTypeEnum.fourBdrm,
+  UnitTypeEnum.fiveBdrm,
+]
+
+export const UnitGroupTypeSort = [
+  UnitTypeEnum.studio,
+  UnitTypeEnum.oneBdrm,
+  UnitTypeEnum.twoBdrm,
+  UnitTypeEnum.threeBdrm,
+  UnitTypeEnum.fourBdrm,
 ]
 
 export const sortUnitTypes = (units: UnitType[] | GetUnitTypeNamesReturn[]) => {
