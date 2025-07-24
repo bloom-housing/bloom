@@ -1,10 +1,10 @@
 import { publicUser, updatedPublicUser } from "../../mockData/userData"
 
-afterEach(() => {
-  if (Cypress.env("IN_CI") !== "TRUE") cy.axeWatcherFlush()
-})
-
 describe("User accounts", () => {
+  afterEach(() => {
+    if (Cypress.env("runAccessibilityTests")) cy.axeWatcherFlush()
+  })
+
   it("should allow users to update their account information", () => {
     cy.visit("/sign-in")
     cy.signIn(publicUser.email, publicUser.password)

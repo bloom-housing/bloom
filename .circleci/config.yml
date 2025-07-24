@@ -1,6 +1,7 @@
 version: 2.1
 orbs:
   node: circleci/node@5
+  cypress: cypress-io/cypress@4.2.0
 
 executors:
   cypress-node:
@@ -39,8 +40,7 @@ executors:
       CLOUDINARY_KEY: "key"
       CLOUDINARY_SIGNED_PRESET: "signedpreset"
       CLOUDINARY_CLOUD_NAME: "exygy"
-      AXE_DEVELOPER_HUB_API_KEY: "secret-key"
-      IN_CI: "TRUE"
+      RUN_ACCESSIBILITY_E2E_TESTS: FALSE
 
   standard-node:
     docker:
@@ -54,6 +54,7 @@ executors:
           JURISDICTION_NAME: Bloomington
 
 jobs:
+  run-tests:
   setup:
     executor: standard-node
     steps:
@@ -68,6 +69,16 @@ jobs:
     steps:
       - checkout
       - run: yarn backend:new:install
+      - save_cache:
+          key: build-cache-new-{{ .Environment.CIRCLE_SHA1 }}
+          paths:
+            - ~/
+  setup-cypress:
+    executor: cypress/default
+    steps:
+      - cypress/install:
+          package-manager: yarn
+          install-browsers: true
       - save_cache:
           key: build-cache-new-{{ .Environment.CIRCLE_SHA1 }}
           paths:
@@ -106,7 +117,7 @@ jobs:
           working_directory: sites/public
       - run:
           name: Run Cypress
-          command: npx cypress run
+          command: npx cypress run --browser=chrome --headed
           working_directory: sites/public
       - store_artifacts:
           path: sites/public/cypress/videos
@@ -149,7 +160,7 @@ jobs:
           working_directory: sites/public
       - run:
           name: Run Cypress
-          command: npx cypress run
+          command: npx cypress run --browser=chrome --headed
           working_directory: sites/public
       - store_artifacts:
           path: sites/public/cypress/videos
@@ -189,7 +200,7 @@ jobs:
           working_directory: sites/partners
       - run:
           name: Run Cypress
-          command: npx cypress run
+          command: npx cypress run --browser=chrome --headed
           working_directory: sites/partners
       - store_artifacts:
           path: sites/partners/cypress/videos
@@ -251,38 +262,42 @@ jobs:
             DATABASE_URL: "postgres://bloom-ci@localhost:5432/bloom_prisma"
 
 workflows:
-  build:
-    jobs:
-      - setup
-      - setup-backend
-      - lint:
-          requires:
-            - setup
-      - jest-shared-helpers:
-          requires:
-            - setup
-      - jest-backend
-      - build-public:
-          requires:
-            - setup
-      - unit-test-public:
-          requires:
-            - setup
-      - build-partners:
-          requires:
-            - setup
-      - unit-test-partners:
-          requires:
-            - setup
-      - cypress-public:
-          requires:
-            - setup
-            - setup-backend
-      - cypress-public-seeds:
-          requires:
-            - setup
-            - setup-backend
-      - cypress-partners:
-          requires:
-            - setup
-            - setup-backend
+  build: 
+        jobs:
+          - setup
+          - setup-backend
+          - setup-cypress
+          - lint:
+              requires:
+                - setup
+          - jest-shared-helpers:
+              requires:
+                - setup
+          - jest-backend
+          - build-public:
+              requires:
+                - setup
+          - unit-test-public:
+              requires:
+                - setup
+          - build-partners:
+              requires:
+                - setup
+          - unit-test-partners:
+              requires:
+                - setup
+          - cypress-public:
+              requires:
+                - setup
+                - setup-backend
+                - setup-cypress
+          - cypress-public-seeds:
+              requires:
+                - setup
+                - setup-backend
+                - setup-cypress
+          - cypress-partners:
+              requires:
+                - setup
+                - setup-backend
+                - setup-cypress

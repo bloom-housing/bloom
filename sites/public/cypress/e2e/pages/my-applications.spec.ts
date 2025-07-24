@@ -1,8 +1,8 @@
-afterEach(() => {
-  if (Cypress.env("IN_CI") !== "TRUE") cy.axeWatcherFlush()
-})
-
 describe("My applications page", function () {
+  afterEach(() => {
+    if (Cypress.env("runAccessibilityTests")) cy.axeWatcherFlush()
+  })
+
   it("renders the my applications page", function () {
     cy.visit("/sign-in")
     cy.signIn()

@@ -1,8 +1,7 @@
-afterEach(() => {
-  if (Cypress.env("IN_CI") !== "TRUE") cy.axeWatcherFlush()
-})
-
 describe("Log in and accept terms", () => {
+  afterEach(() => {
+    if (Cypress.env("runAccessibilityTests")) cy.axeWatcherFlush()
+  })
   it("should log in", () => {
     cy.loginAndAcceptTerms("termsUnacceptedUser")
     cy.signOut()

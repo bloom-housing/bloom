@@ -1,7 +1,3 @@
-afterEach(() => {
-  if (Cypress.env("IN_CI") !== "TRUE") cy.axeWatcherFlush()
-})
-
 describe("Application Management Tests", () => {
   before(() => {
     cy.loginApi()
@@ -9,6 +5,10 @@ describe("Application Management Tests", () => {
 
   after(() => {
     cy.signOutApi()
+  })
+
+  afterEach(() => {
+    if (Cypress.env("runAccessibilityTests")) cy.axeWatcherFlush()
   })
 
   it("Application grid should display correct number of results", () => {

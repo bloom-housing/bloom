@@ -1,7 +1,3 @@
-afterEach(() => {
-  if (Cypress.env("IN_CI") !== "TRUE") cy.axeWatcherFlush()
-})
-
 describe("Lottery Tests", () => {
   before(() => {
     cy.loginApi()
@@ -9,6 +5,10 @@ describe("Lottery Tests", () => {
 
   after(() => {
     cy.signOutApi()
+  })
+
+  afterEach(() => {
+    if (Cypress.env("runAccessibilityTests")) cy.axeWatcherFlush()
   })
 
   it("can run through every lottery action", () => {

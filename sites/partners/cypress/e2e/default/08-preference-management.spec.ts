@@ -1,7 +1,3 @@
-afterEach(() => {
-  if (Cypress.env("IN_CI") !== "TRUE") cy.axeWatcherFlush()
-})
-
 describe("Preference Management Tests", () => {
   beforeEach(() => {
     cy.loginApi()
@@ -9,6 +5,7 @@ describe("Preference Management Tests", () => {
 
   afterEach(() => {
     cy.signOutApi()
+    if (Cypress.env("runAccessibilityTests")) cy.axeWatcherFlush()
   })
 
   beforeEach(() => {

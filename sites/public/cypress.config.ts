@@ -3,54 +3,45 @@ import { cypressConfig } from "@axe-core/watcher"
 import dotenv from "dotenv"
 dotenv.config()
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-let config: Cypress.ConfigOptions<any> = {
-  defaultCommandTimeout: 100000,
-  projectId: "bloom-public-reference",
-  pageLoadTimeout: 100000,
-  video: true,
-  videoUploadOnPasses: false,
-  numTestsKeptInMemory: 0,
-  viewportHeight: 1500,
-  env: {
-    codeCoverage: {
-      url: "/api/__coverage__",
+export default defineConfig(
+  cypressConfig({
+    axe: {
+      apiKey: process.env.AXE_DEVELOPER_HUB_API_KEY,
     },
-  },
-  e2e: {
-    // We've imported your old cypress plugins here.
-    // You may want to clean this up later by importing these.
-    setupNodeEvents(on, config) {
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
-      return require("./cypress/plugins/index.js")(on, config)
-    },
-    baseUrl: "http://localhost:3000",
-    specPattern: "cypress/e2e/**/*.{js,jsx,ts,tsx}",
-    experimentalRunAllSpecs: true,
+    defaultCommandTimeout: 100000,
+    projectId: "bloom-public-reference",
+    pageLoadTimeout: 100000,
+    video: true,
+    videoUploadOnPasses: false,
+    numTestsKeptInMemory: 0,
+    viewportHeight: 1500,
     env: {
-      showSeedsDesign: process.env.SHOW_NEW_SEEDS_DESIGNS,
+      codeCoverage: {
+        url: "/api/__coverage__",
+      },
     },
-  },
-
-  component: {
-    devServer: {
-      framework: "next",
-      bundler: "webpack",
+    e2e: {
+      // We've imported your old cypress plugins here.
+      // You may want to clean this up later by importing these.
+      setupNodeEvents(on, config) {
+        // eslint-disable-next-line @typescript-eslint/no-var-requires
+        return require("./cypress/plugins/index.js")(on, config)
+      },
+      baseUrl: "http://localhost:3000",
+      specPattern: "cypress/e2e/**/*.{js,jsx,ts,tsx}",
+      experimentalRunAllSpecs: true,
+      env: {
+        showSeedsDesign: process.env.SHOW_NEW_SEEDS_DESIGNS,
+        runAccessibilityTests: process.env.RUN_ACCESSIBILITY_E2E_TESTS,
+      },
+      supportFile: "cypress/support/e2e.ts",
     },
-  },
-}
 
-const axeDeveloperHubConfig = {
-  axe: {
-    apiKey: process.env.AXE_DEVELOPER_HUB_API_KEY,
-  },
-}
-
-if (process.env.IN_CI !== "TRUE") {
-  config = { ...axeDeveloperHubConfig, ...config }
-}
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export default process.env.IN_CI !== "TRUE"
-  ? defineConfig(cypressConfig(config as any))
-  : defineConfig(config)
+    component: {
+      devServer: {
+        framework: "next",
+        bundler: "webpack",
+      },
+    },
+  })
+)

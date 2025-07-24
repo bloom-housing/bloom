@@ -1,7 +1,3 @@
-afterEach(() => {
-  if (Cypress.env("IN_CI") !== "TRUE") cy.axeWatcherFlush()
-})
-
 describe("Admin User Mangement Tests", () => {
   beforeEach(() => {
     cy.loginApi()
@@ -9,6 +5,7 @@ describe("Admin User Mangement Tests", () => {
 
   afterEach(() => {
     cy.signOutApi()
+    if (Cypress.env("runAccessibilityTests")) cy.axeWatcherFlush()
   })
 
   it("as admin user, should show all users regardless of jurisdiction", () => {

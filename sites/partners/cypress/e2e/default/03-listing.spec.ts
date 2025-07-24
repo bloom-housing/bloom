@@ -1,8 +1,8 @@
-afterEach(() => {
-  if (Cypress.env("IN_CI") !== "TRUE") cy.axeWatcherFlush()
-})
-
 describe("Listing Management Tests", () => {
+  afterEach(() => {
+    if (Cypress.env("runAccessibilityTests")) cy.axeWatcherFlush()
+  })
+
   beforeEach(() => {
     cy.loginApi()
   })

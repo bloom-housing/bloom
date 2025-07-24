@@ -1,7 +1,3 @@
-afterEach(() => {
-  if (Cypress.env("IN_CI") !== "TRUE") cy.axeWatcherFlush()
-})
-
 describe("Paper Application Tests", () => {
   beforeEach(() => {
     cy.loginApi()
@@ -12,6 +8,7 @@ describe("Paper Application Tests", () => {
 
   afterEach(() => {
     cy.signOutApi()
+    if (Cypress.env("runAccessibilityTests")) cy.axeWatcherFlush()
   })
 
   it("fill paper application form completely", () => {

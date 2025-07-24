@@ -1,6 +1,11 @@
 describe("Listings approval feature", () => {
   const uniqueListingName = Date.now().toString()
   const uniqueListingNameEdited = `${uniqueListingName} edited`
+
+  afterEach(() => {
+    if (Cypress.env("runAccessibilityTests")) cy.axeWatcherFlush()
+  })
+
   it("should allow for pending submission, requested changes, and approval", () => {
     cy.intercept("POST", "https://api.cloudinary.com/v1_1/exygy/upload", {
       fixture: "cypressUpload",

@@ -1,8 +1,8 @@
-afterEach(() => {
-  if (Cypress.env("IN_CI") !== "TRUE") cy.axeWatcherFlush()
-})
-
 describe("My favorites page", function () {
+  afterEach(() => {
+    if (Cypress.env("runAccessibilityTests")) cy.axeWatcherFlush()
+  })
+
   // TODO: reenable once we have Seeds pages in production & CI builds
   it.skip("renders the my favorites page", function () {
     cy.visit("/sign-in")
