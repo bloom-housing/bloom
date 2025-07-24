@@ -264,7 +264,7 @@ export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: Li
           </div>
         </div>
         <div className={`${styles["right-bar"]} ${styles["hide-mobile"]}`}>
-          {!enableUnitGroups && <Availability listing={listing} jurisdiction={jurisdiction} />}
+          <Availability listing={listing} jurisdiction={jurisdiction} />
           {ApplyBar}
         </div>
       </div>
