@@ -28,6 +28,7 @@ export const getExportHeaders = (
   includeDemographics = false,
   forLottery = false,
   dateFormat = 'MM-DD-YYYY hh:mm:ssA z',
+  swapCommunityTypeWithPrograms?: boolean,
 ): CsvHeader[] => {
   const enableAdaOtherOption = doAnyJurisdictionHaveFeatureFlagSet(
     user.jurisdictions,
@@ -311,7 +312,7 @@ export const getExportHeaders = (
   // add programs to csv headers
   const programHeaders = constructMultiselectQuestionHeaders(
     'programs',
-    'Program',
+    swapCommunityTypeWithPrograms ? 'Community Type' : 'Program',
     multiSelectQuestions,
   );
   headers.push(...programHeaders);

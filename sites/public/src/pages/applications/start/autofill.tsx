@@ -122,6 +122,10 @@ export default () => {
             conductor.config,
             FeatureFlagEnum.enableAdaOtherOption
           )}
+          swapCommunityTypeWithPrograms={isFeatureFlagOn(
+            conductor.config,
+            FeatureFlagEnum.swapCommunityTypeWithPrograms
+          )}
         />
         <Form onSubmit={handleSubmit(onSubmit)}>
           <CardSection

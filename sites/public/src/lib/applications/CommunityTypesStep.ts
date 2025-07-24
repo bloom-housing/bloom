@@ -5,10 +5,10 @@ import {
 import StepDefinition from "./StepDefinition"
 import { isFeatureFlagOn } from "../helpers"
 
-export default class ProgramsStep extends StepDefinition {
+export default class CommunityTypesStep extends StepDefinition {
   skipStep() {
     return (
-      isFeatureFlagOn(this.conductor.config, FeatureFlagEnum.swapCommunityTypeWithPrograms) ||
+      !isFeatureFlagOn(this.conductor.config, FeatureFlagEnum.swapCommunityTypeWithPrograms) ||
       !this.conductor.listing?.listingMultiselectQuestions.filter(
         (question) => question?.multiselectQuestions?.applicationSection === "programs"
       ).length
