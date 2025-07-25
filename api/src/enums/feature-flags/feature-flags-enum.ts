@@ -5,6 +5,7 @@ export enum FeatureFlagEnum {
   disableCommonApplication = 'disableCommonApplication',
   disableJurisdictionalAdmin = 'disableJurisdictionalAdmin',
   disableListingPreferences = 'disableListingPreferences',
+  disableWorkInRegion = 'disableWorkInRegion',
   enableAccessibilityFeatures = 'enableAccessibilityFeatures',
   enableAdaOtherOption = 'enableAdaOtherOption',
   enableAdditionalResources = 'enableAdditionalResources',
@@ -52,6 +53,11 @@ export const featureFlagMap: { name: string; description: string }[] = [
     name: FeatureFlagEnum.disableListingPreferences,
     description:
       'When true listings will no longer support preferences section',
+  },
+  {
+    name: FeatureFlagEnum.disableWorkInRegion,
+    description:
+      'When true the "Work in Region" question will be removed from the application process',
   },
   {
     name: FeatureFlagEnum.enableAccessibilityFeatures,

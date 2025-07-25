@@ -8,10 +8,12 @@ import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 type DetailsPrimaryApplicantProps = {
   enableFullTimeStudentQuestion?: boolean
+  disableWorkInRegion?: boolean
 }
 
 const DetailsPrimaryApplicant = ({
   enableFullTimeStudentQuestion,
+  disableWorkInRegion,
 }: DetailsPrimaryApplicantProps) => {
   const application = useContext(ApplicationContext)
 
@@ -72,6 +74,16 @@ const DetailsPrimaryApplicant = ({
         >
           {application.additionalPhoneNumber || t("t.n/a")}
         </FieldValue>
+
+        {!disableWorkInRegion && (
+          <FieldValue label={t("application.details.workInRegion")} testId="workInRegion">
+            {(() => {
+              if (!application.applicant.workInRegion) return t("t.n/a")
+
+              return application.applicant.workInRegion === YesNoEnum.yes ? t("t.yes") : t("t.no")
+            })()}
+          </FieldValue>
+        )}
       </Grid.Row>
 
       {enableFullTimeStudentQuestion && (

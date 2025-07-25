@@ -37,6 +37,10 @@ export const getExportHeaders = (
     user.jurisdictions,
     FeatureFlagEnum.enableFullTimeStudentQuestion,
   );
+  const disableWorkInRegion = doAnyJurisdictionHaveFeatureFlagSet(
+    user.jurisdictions,
+    FeatureFlagEnum.disableWorkInRegion,
+  );
 
   const headers: CsvHeader[] = [
     {
@@ -130,6 +134,13 @@ export const getExportHeaders = (
       },
     ],
   );
+
+  if (!disableWorkInRegion) {
+    headers.push({
+      path: 'applicant.workInRegion',
+      label: 'Primary Applicant Work in Region',
+    });
+  }
 
   if (enableFullTimeStudentQuestion) {
     headers.push({
