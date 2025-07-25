@@ -23,6 +23,7 @@ import {
   UnitGroup,
   EnumUnitGroupAmiLevelMonthlyRentDeterminationType,
   UnitType,
+  User,
 } from "../src/types/backend-swagger"
 
 export const multiselectQuestionPreference: MultiselectQuestion = {
@@ -627,6 +628,7 @@ export const jurisdiction: Jurisdiction = {
       jurisdictions: [],
     },
   ],
+  requiredListingFields: [],
   emailFromAddress: "Alameda: Housing Bay Area <bloom-no-reply@exygy.dev>",
   rentalAssistanceDefault:
     "Housing Choice Vouchers, Section 8 and other valid rental assistance programs will be considered for this property. In the case of a valid rental subsidy, the required minimum income will be based on the portion of the rent that the tenant pays after use of the subsidy.",
@@ -1082,4 +1084,40 @@ export const listing: Listing = {
   ],
   unitGroups: [],
   listingImages: [],
+}
+
+export const mockBaseJurisdiction: Jurisdiction = {
+  id: "id",
+  createdAt: new Date(),
+  updatedAt: new Date(),
+  name: "San Jose",
+  multiselectQuestions: [],
+  languages: [LanguagesEnum.en],
+  publicUrl: "http://localhost:3000",
+  emailFromAddress: "Alameda: Housing Bay Area <bloom-no-reply@exygy.dev>",
+  rentalAssistanceDefault:
+    "Housing Choice Vouchers, Section 8 and other valid rental assistance programs will be considered for this property. In the case of a valid rental subsidy, the required minimum income will be based on the portion of the rent that the tenant pays after use of the subsidy.",
+  enablePartnerSettings: true,
+  listingApprovalPermissions: [],
+  duplicateListingPermissions: [],
+  enableGeocodingPreferences: false,
+  allowSingleUseCodeLogin: false,
+  featureFlags: [],
+  requiredListingFields: [],
+}
+
+export const mockUser: User = {
+  id: "123",
+  email: "test@test.com",
+  firstName: "Test",
+  lastName: "User",
+  dob: new Date("2020-01-01"),
+  createdAt: new Date("2020-01-01"),
+  updatedAt: new Date("2020-01-01"),
+  jurisdictions: [],
+  mfaEnabled: false,
+  passwordUpdatedAt: new Date("2020-01-01"),
+  passwordValidForDays: 180,
+  agreedToTermsOfService: true,
+  listings: [],
 }

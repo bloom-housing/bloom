@@ -54,36 +54,38 @@ const ListingIntro = (props: ListingIntroProps) => {
           </Grid.Cell>
         </Grid.Row>
         <Grid.Row columns={2}>
-          <Select
-            id={"jurisdictions.id"}
-            defaultValue={defaultJurisdiction}
-            name={"jurisdictions.id"}
-            label={`${t("t.jurisdiction")} *`}
-            register={register}
-            controlClassName={`control ${defaultJurisdiction ? "hidden" : ""}`}
-            error={
-              fieldHasError(errors?.jurisdictions) || fieldHasError(errors?.["jurisdictions.id"])
-            }
-            errorMessage={
-              fieldMessage(errors?.jurisdictions) ??
-              fieldMessage(errors?.["jurisdictions.id"]) ??
-              undefined
-            }
-            keyPrefix={"jurisdictions"}
-            options={jurisdictionOptions}
-            inputProps={{
-              onChange: () => {
-                if (
-                  fieldHasError(errors?.jurisdictions) ||
-                  fieldHasError(errors?.["jurisdictions.id"])
-                ) {
-                  clearErrors("jurisdictions.id")
-                  clearErrors("jurisdictions")
-                }
-              },
-              "aria-required": fieldIsRequired("jurisdictions", props.requiredFields),
-            }}
-          />
+          <div className={`${defaultJurisdiction ? "hidden" : ""}`}>
+            <Select
+              id={"jurisdictions.id"}
+              defaultValue={defaultJurisdiction}
+              name={"jurisdictions.id"}
+              label={`${t("t.jurisdiction")} *`}
+              register={register}
+              controlClassName={`control ${defaultJurisdiction ? "hidden" : ""}`}
+              error={
+                fieldHasError(errors?.jurisdictions) || fieldHasError(errors?.["jurisdictions.id"])
+              }
+              errorMessage={
+                fieldMessage(errors?.jurisdictions) ??
+                fieldMessage(errors?.["jurisdictions.id"]) ??
+                undefined
+              }
+              keyPrefix={"jurisdictions"}
+              options={jurisdictionOptions}
+              inputProps={{
+                onChange: () => {
+                  if (
+                    fieldHasError(errors?.jurisdictions) ||
+                    fieldHasError(errors?.["jurisdictions.id"])
+                  ) {
+                    clearErrors("jurisdictions.id")
+                    clearErrors("jurisdictions")
+                  }
+                },
+                "aria-required": fieldIsRequired("jurisdictions", props.requiredFields),
+              }}
+            />
+          </div>
           <Grid.Cell>
             <Field
               register={register}

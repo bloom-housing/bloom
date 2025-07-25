@@ -237,7 +237,9 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
     const selectedJurisdictionObj = profile?.jurisdictions?.find(
       (juris) => selectedJurisdiction === juris.id
     )
-    setRequiredFields(selectedJurisdictionObj?.requiredListingFields || [])
+    if (profile.jurisdictions.length === 1)
+      setRequiredFields(profile?.jurisdictions[0].requiredListingFields || [])
+    else setRequiredFields(selectedJurisdictionObj?.requiredListingFields || [])
   }, [profile?.jurisdictions, selectedJurisdiction])
 
   const triggerSubmitWithStatus: SubmitFunction = (action, status, newData) => {

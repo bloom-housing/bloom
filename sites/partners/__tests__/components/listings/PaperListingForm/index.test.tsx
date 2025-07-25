@@ -3,11 +3,86 @@ import { act, fireEvent, screen } from "@testing-library/react"
 import { setupServer } from "msw/lib/node"
 import { mockNextRouter, mockTipTapEditor, render } from "../../../testUtils"
 import { rest } from "msw"
-import ListingForm from "../../../../src/components/listings/PaperListingForm"
 import { AuthContext } from "@bloom-housing/shared-helpers"
-import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  FeatureFlag,
+  FeatureFlagEnum,
+  Jurisdiction,
+  JurisdictionsService,
+  LanguagesEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import ListingForm from "../../../../src/components/listings/PaperListingForm"
+import { mockUser, mockBaseJurisdiction } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 
 const server = setupServer()
+
+const jurisdictions = [
+  {
+    ...mockBaseJurisdiction,
+    id: "Bloomington",
+    name: "Bloomington",
+    featureFlags: [
+      { name: FeatureFlagEnum.enableRegions, active: true } as FeatureFlag,
+      { name: FeatureFlagEnum.enableHomeType, active: true } as FeatureFlag,
+      { name: FeatureFlagEnum.enableCompanyWebsite, active: true } as FeatureFlag,
+    ],
+    requiredListingFields: [
+      "listingsBuildingAddress",
+      "name",
+      "developer",
+      "listingImages",
+      "leasingAgentEmail",
+      "leasingAgentName",
+      "leasingAgentPhone",
+      "jurisdictions",
+      "units",
+      "digitalApplication",
+      "paperApplication",
+      "referralOpportunity",
+      "rentalAssistance",
+      "neighborhood",
+      "yearBuilt",
+      "reservedCommunityTypes",
+      "reservedCommunityDescription",
+      "communityDisclaimerTitle",
+      "disableUnitsAccordion",
+      "homeType",
+      "applicationFee",
+      "depositMin",
+      "depositMax",
+      "depositHelperText",
+      "costsNotIncluded",
+      "amenities",
+      "accessibility",
+      "unitAmenities",
+      "smokingPolicy",
+      "petPolicy",
+      "servicesOffered",
+      "creditHistory",
+      "rentalHistory",
+      "criminalBackground",
+      "requiredDocuments",
+      "programRules",
+      "specialNotes",
+      "whatToExpect",
+      "leasingAgentTitle",
+      "managementWebsite",
+      "leasingAgentOfficeHours",
+      "listingsLeasingAgentAddress",
+      "additionalApplicationSubmissionNotes",
+      "applicationDueDate",
+      "region",
+    ],
+  },
+]
+
+const doJurisdictionsHaveFeatureFlagOn = () => {
+  return false
+}
+
+const getJurisdictionLanguages = () => {
+  return [LanguagesEnum.en]
+}
 
 beforeAll(() => {
   server.listen()
@@ -145,4 +220,171 @@ describe("add listing", () => {
   it.todo("should open the live confirmation dialog when listing is already active")
   it.todo("should open the listing approval dialog when submitting for approval")
   it.todo("should open the request changes dialog when requesting changes")
+
+  it("without selected jurisdiction, show asterisks only on always-required fields", () => {
+    window.URL.createObjectURL = jest.fn()
+    document.cookie = "access-token-available=True"
+    server.use(
+      rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
+        return res(
+          ctx.json({ id: "user1", userRoles: { id: "user1", isAdmin: true, isPartner: false } })
+        )
+      }),
+      rest.get("http://localhost:3100/reservedCommunityTypes", (_req, res, ctx) => {
+        return res(ctx.json([]))
+      }),
+      rest.get("http://localhost:3100/multiselectQuestions", (_req, res, ctx) => {
+        return res(ctx.json([]))
+      }),
+      rest.get("http://localhost/api/adapter/jurisdictions", (_req, res, ctx) => {
+        return res(ctx.json(jurisdictions))
+      })
+    )
+    render(
+      <AuthContext.Provider
+        value={{
+          doJurisdictionsHaveFeatureFlagOn,
+        }}
+      >
+        <ListingForm />
+      </AuthContext.Provider>
+    )
+
+    const asterisks = screen.getAllByText("*", { exact: false })
+    const regex =
+      /(Fields marked with an asterisk \(\*\) are required to publish\.|Listing Name \*|Jurisdiction \*)\w*/
+    asterisks.forEach((asterisk) => {
+      expect(asterisk.textContent).toMatch(regex)
+    })
+  })
+
+  it.only("show asterisks on every possible configurable required field", () => {
+    window.URL.createObjectURL = jest.fn()
+    document.cookie = "access-token-available=True"
+    server.use(
+      rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
+        return res(
+          ctx.json({
+            id: "user1",
+            userRoles: { id: "user1", isAdmin: true, isPartner: false },
+            jurisdictions,
+          })
+        )
+      }),
+      rest.get("http://localhost:3100/reservedCommunityTypes", (_req, res, ctx) => {
+        return res(ctx.json([]))
+      }),
+      rest.get("http://localhost:3100/multiselectQuestions", (_req, res, ctx) => {
+        return res(ctx.json([]))
+      }),
+      rest.get("http://localhost/api/adapter/jurisdictions", (_req, res, ctx) => {
+        return res(ctx.json(jurisdictions))
+      })
+    )
+    const mockRetrieve = jest.fn().mockResolvedValue({})
+
+    render(
+      <AuthContext.Provider
+        value={{
+          doJurisdictionsHaveFeatureFlagOn: (featureFlag: FeatureFlagEnum) => {
+            switch (featureFlag) {
+              case FeatureFlagEnum.enableRegions:
+                return true
+              case FeatureFlagEnum.enableHomeType:
+                return true
+              case FeatureFlagEnum.enableCompanyWebsite:
+                return true
+              default:
+                return false
+            }
+          },
+          getJurisdictionLanguages,
+          profile: {
+            ...mockUser,
+            listings: [],
+            jurisdictions: jurisdictions as Jurisdiction[],
+            userRoles: {
+              isAdmin: true,
+            },
+          },
+          jurisdictionsService: {
+            retrieve: mockRetrieve,
+          } as unknown as JurisdictionsService,
+        }}
+      >
+        <ListingForm />
+      </AuthContext.Provider>
+    )
+
+    const asterisks = screen.getAllByText("*", { exact: false })
+    const possibleRequiredFields = [
+      "Listing Name",
+      "Jurisdiction",
+      "Housing Developer",
+      "Photos",
+      "Street Address",
+      "Neighborhood",
+      "City",
+      "State",
+      "Zip Code",
+      "Region",
+      "Year Built",
+      "Reserved Community Type",
+      "Reserved Community Description",
+      "Home Type",
+      "Units",
+      "Application Fee",
+      "Deposit Min",
+      "Deposit Max",
+      "Deposit Helper Text",
+      "Costs Not Included",
+      "Property Amenities",
+      "Additional Accessibility",
+      "Unit Amenities",
+      "Smoking Policy",
+      "Pets Policy",
+      "Services Offered",
+      "Credit History",
+      "Rental History",
+      "Criminal Background",
+      "Rental Assistance",
+      "Required Documents",
+      "Important Program Rules",
+      "Special Notes",
+      "Tell the applicant what to expect from the process",
+      "Leasing Agent Name",
+      "Email",
+      "Phone",
+      "Leasing Agent Title",
+      "Company Website",
+      "Office Hours",
+      "Street Address or PO Box",
+      "Is there a digital application?",
+      "Is there a paper application?",
+      "Is there a referral opportunity?",
+      "Additional Application Submission Notes",
+      "Application Due Date",
+      "Application Due Time",
+    ]
+
+    // eslint-disable-next-line no-useless-escape
+    let regexString = `Fields marked with an asterisk (*) are required to publish.|`
+    possibleRequiredFields.forEach((field) => {
+      regexString = regexString.concat(`${field} *|`)
+    })
+    regexString = regexString.slice(0, -1)
+
+    // eslint-disable-next-line no-useless-escape
+    const re = new RegExp(`(${regexString.replace(/[()*?.\\]/g, "\\$&")})\w*`)
+
+    // All strings with an asterisk must only be from our list, so we have no extras
+    asterisks.forEach((asterisk) => {
+      expect(asterisk.textContent).toMatch(re)
+    })
+
+    // All labels we expect to have an asterisk also exist
+    possibleRequiredFields.forEach((field) => {
+      expect(screen.getAllByText(`${field} *`).length).toBeGreaterThan(0)
+    })
+  })
 })

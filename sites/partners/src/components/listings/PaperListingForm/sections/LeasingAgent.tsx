@@ -6,7 +6,6 @@ import { stateKeys, AuthContext } from "@bloom-housing/shared-helpers"
 import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import {
   fieldMessage,
-  fieldHasError,
   defaultFieldProps,
   getLabel,
   fieldIsRequired,
@@ -33,12 +32,6 @@ const LeasingAgent = (props: LeasingAgentProps) => {
     jurisdiction
   )
   const [phoneField, setPhoneField] = useState(leasingAgentPhoneField)
-
-  const getErrorMessage = (fieldKey: string) => {
-    if (fieldHasError(errors?.listingsLeasingAgentAddress) && !getValues(fieldKey)) {
-      return t("errors.partialAddress")
-    }
-  }
 
   useEffect(() => {
     // only clear the leasingAgentPhone if the user has changed the field
