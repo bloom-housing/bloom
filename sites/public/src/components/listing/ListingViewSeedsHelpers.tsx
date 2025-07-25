@@ -123,8 +123,7 @@ export const getHasNonReferralMethods = (listing: Listing) => {
     !nonReferralMethods[0].externalReference
   ) {
     return false
-  }
-  else if (
+  } else if (
     nonReferralMethods.length === 1 &&
     nonReferralMethods[0].type === ApplicationMethodsTypeEnum.ExternalLink &&
     getOnlineApplicationURL(nonReferralMethods, listing.id, false).url === ""
