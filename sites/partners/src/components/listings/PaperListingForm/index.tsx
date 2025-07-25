@@ -156,6 +156,7 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
   const whatToExpectEditor = useEditor({
     extensions,
     content: !listing ? t("whatToExpect.default") : listing?.whatToExpect,
+    immediatelyRender: false,
   })
 
   const enableUnitGroups =
