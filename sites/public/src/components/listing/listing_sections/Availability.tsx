@@ -237,6 +237,14 @@ export const Availability = ({ listing, jurisdiction }: AvailabilityProps) => {
 
   const sections = getSections()
 
+  // Only show this section when unit groups is on if the listing is under construction
+  if (
+    enableUnitGroups &&
+    enableMarketingStatus &&
+    listing.marketingType === MarketingTypeEnum.marketing
+  )
+    return null
+
   return (
     <>
       {hideAvailabilityDetails && (

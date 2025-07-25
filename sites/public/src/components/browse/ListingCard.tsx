@@ -37,6 +37,7 @@ export const ListingCard = ({
   showHomeType,
 }: ListingCardProps) => {
   const enableUnitGroups = isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableUnitGroups)
+  const enableMarketingStatus = isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableMarketingStatus)
 
   const imageUrl = imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize))[0]
   const listingTags = getListingTags(
@@ -104,6 +105,13 @@ export const ListingCard = ({
     enableUnitGroups,
   ])
 
+  // Only show the status when unit groups is on if the listing is under construction
+  const showStatusMessage =
+    (!!status?.content && !enableUnitGroups) ||
+    (enableUnitGroups &&
+      enableMarketingStatus &&
+      listing.marketingType === MarketingTypeEnum.comingSoon)
+
   return (
     <li className={styles["list-item"]}>
       <ClickableCard className={styles["listing-card-container"]}>
@@ -137,7 +145,7 @@ export const ListingCard = ({
                   })}
                 </div>
               )}
-              {!!status?.content && (
+              {showStatusMessage && (
                 <div className={"seeds-m-bs-3"}>
                   {getListingStatusMessage(listing, jurisdiction, null, true)}
                 </div>
