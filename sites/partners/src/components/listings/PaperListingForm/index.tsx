@@ -237,7 +237,7 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
     const selectedJurisdictionObj = profile?.jurisdictions?.find(
       (juris) => selectedJurisdiction === juris.id
     )
-    if (profile.jurisdictions.length === 1)
+    if (profile?.jurisdictions.length === 1)
       setRequiredFields(profile?.jurisdictions[0].requiredListingFields || [])
     else setRequiredFields(selectedJurisdictionObj?.requiredListingFields || [])
   }, [profile?.jurisdictions, selectedJurisdiction])

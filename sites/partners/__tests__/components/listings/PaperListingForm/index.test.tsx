@@ -258,7 +258,7 @@ describe("add listing", () => {
     })
   })
 
-  it.only("show asterisks on every possible configurable required field", () => {
+  it("show asterisks on every possible configurable required field", () => {
     window.URL.createObjectURL = jest.fn()
     document.cookie = "access-token-available=True"
     server.use(
