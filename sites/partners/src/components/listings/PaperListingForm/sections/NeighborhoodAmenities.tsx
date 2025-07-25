@@ -34,6 +34,7 @@ const NeighborhoodAmenities = () => {
               id={"listingNeighborhoodAmenities.groceryStores"}
               fullWidth={true}
               register={register}
+              placeholder={""}
             />
           </Grid.Cell>
           <Grid.Cell>
@@ -43,6 +44,7 @@ const NeighborhoodAmenities = () => {
               id={"listingNeighborhoodAmenities.publicTransportation"}
               fullWidth={true}
               register={register}
+              placeholder={""}
             />
           </Grid.Cell>
         </Grid.Row>
@@ -54,6 +56,7 @@ const NeighborhoodAmenities = () => {
               id={"listingNeighborhoodAmenities.schools"}
               fullWidth={true}
               register={register}
+              placeholder={""}
             />
           </Grid.Cell>
           <Grid.Cell>
@@ -63,6 +66,7 @@ const NeighborhoodAmenities = () => {
               id={"listingNeighborhoodAmenities.parksAndCommunityCenters"}
               fullWidth={true}
               register={register}
+              placeholder={""}
             />
           </Grid.Cell>
         </Grid.Row>
@@ -74,6 +78,7 @@ const NeighborhoodAmenities = () => {
               id={"listingNeighborhoodAmenities.pharmacies"}
               fullWidth={true}
               register={register}
+              placeholder={""}
             />
           </Grid.Cell>
           <Grid.Cell>
@@ -83,6 +88,7 @@ const NeighborhoodAmenities = () => {
               id={"listingNeighborhoodAmenities.healthCareResources"}
               fullWidth={true}
               register={register}
+              placeholder={""}
             />
           </Grid.Cell>
         </Grid.Row>

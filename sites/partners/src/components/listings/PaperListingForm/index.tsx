@@ -58,6 +58,7 @@ import SaveBeforeExitDialog from "./dialogs/SaveBeforeExitDialog"
 import ListingVerification from "./sections/ListingVerification"
 import NeighborhoodAmenities from "./sections/NeighborhoodAmenities"
 import PreferencesAndPrograms from "./sections/PreferencesAndPrograms"
+import * as styles from "./ListingForm.module.scss"
 
 const extensions = EditorExtensions
 
@@ -138,6 +139,7 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
     listing?.customMapPin || false
   )
   const [activeFeatureFlags, setActiveFeatureFlags] = useState<FeatureFlag[]>(null)
+  const [requiredFields, setRequiredFields] = useState<string[]>([])
 
   const setLatitudeLongitude = (latlong: LatitudeLongitude) => {
     if (!loading) {
@@ -232,6 +234,12 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
       return featureFlags
     }, [])
     setActiveFeatureFlags(newFeatureFlags)
+    const selectedJurisdictionObj = profile?.jurisdictions?.find(
+      (juris) => selectedJurisdiction === juris.id
+    )
+    if (profile?.jurisdictions.length === 1)
+      setRequiredFields(profile?.jurisdictions[0].requiredListingFields || [])
+    else setRequiredFields(selectedJurisdictionObj?.requiredListingFields || [])
   }, [profile?.jurisdictions, selectedJurisdiction])
 
   const triggerSubmitWithStatus: SubmitFunction = (action, status, newData) => {
@@ -381,7 +389,7 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
           <StatusBar>{getListingStatusTag(listing?.status)}</StatusBar>
 
           <FormProvider {...formMethods}>
-            <section className="bg-primary-lighter py-5">
+            <section className={`bg-primary-lighter py-5 ${styles["form-overrides"]}`}>
               <div className="max-w-screen-xl px-5 mx-auto">
                 {alert && (
                   <AlertBox className="mb-5" onClose={() => setAlert(null)} closeable type="alert">
@@ -402,23 +410,31 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
                           <Tabs.Tab>Application Process</Tabs.Tab>
                         </Tabs.TabList>
                         <Tabs.TabPanel>
-                          <ListingIntro jurisdictions={profile?.jurisdictions || []} />
-                          <ListingPhotos />
-                          <BuildingDetails
-                            listing={listing}
-                            setLatLong={setLatitudeLongitude}
-                            latLong={latLong}
-                            customMapPositionChosen={customMapPositionChosen}
-                            setCustomMapPositionChosen={setCustomMapPositionChosen}
+                          <p className="field-label seeds-m-be-content">
+                            {t("listings.requiredToPublishAsterisk")}
+                          </p>
+                          <ListingIntro
+                            jurisdictions={profile?.jurisdictions || []}
+                            requiredFields={requiredFields}
                           />
-                          <CommunityType listing={listing} />
+                          <ListingPhotos requiredFields={requiredFields} />
+                          <BuildingDetails
+                            customMapPositionChosen={customMapPositionChosen}
+                            latLong={latLong}
+                            listing={listing}
+                            requiredFields={requiredFields}
+                            setCustomMapPositionChosen={setCustomMapPositionChosen}
+                            setLatLong={setLatitudeLongitude}
+                          />
+                          <CommunityType listing={listing} requiredFields={requiredFields} />
                           <Units
-                            units={units}
-                            unitGroups={unitGroups}
-                            setUnits={setUnits}
-                            setUnitGroups={setUnitGroups}
                             disableUnitsAccordion={listing?.disableUnitsAccordion}
                             featureFlags={activeFeatureFlags}
+                            requiredFields={requiredFields}
+                            setUnitGroups={setUnitGroups}
+                            setUnits={setUnits}
+                            unitGroups={unitGroups}
+                            units={units}
                           />
                           <PreferencesAndPrograms
                             listing={listing}
@@ -427,12 +443,21 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
                             programs={programs || []}
                             setPrograms={setPrograms}
                           />
-                          <AdditionalFees existingUtilities={listing?.listingUtilities} />
-                          <BuildingFeatures existingFeatures={listing?.listingFeatures} />
+                          <AdditionalFees
+                            existingUtilities={listing?.listingUtilities}
+                            requiredFields={requiredFields}
+                          />
+                          <BuildingFeatures
+                            existingFeatures={listing?.listingFeatures}
+                            requiredFields={requiredFields}
+                          />
                           <NeighborhoodAmenities />
-                          <AdditionalEligibility defaultText={listing?.rentalAssistance} />
+                          <AdditionalEligibility
+                            defaultText={listing?.rentalAssistance}
+                            requiredFields={requiredFields}
+                          />
                           <BuildingSelectionCriteria />
-                          <AdditionalDetails />
+                          <AdditionalDetails requiredFields={requiredFields} />
                           <ListingVerification />
                           <div className="text-right -mr-8 -mt-8 relative" style={{ top: "7rem" }}>
                             <Button
@@ -454,18 +479,23 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
                           </div>
                         </Tabs.TabPanel>
                         <Tabs.TabPanel>
+                          <p className="field-label seeds-m-be-content">
+                            {t("listings.requiredToPublishAsterisk")}
+                          </p>
                           <RankingsAndResults
                             listing={listing}
                             isAdmin={profile?.userRoles.isAdmin}
                             whatToExpectEditor={whatToExpectEditor}
+                            requiredFields={requiredFields}
                           />
-                          <LeasingAgent />
-                          <ApplicationTypes listing={listing} />
-                          <ApplicationAddress listing={listing} />
+                          <LeasingAgent requiredFields={requiredFields} />
+                          <ApplicationTypes listing={listing} requiredFields={requiredFields} />
+                          <ApplicationAddress listing={listing} requiredFields={requiredFields} />
                           <ApplicationDates
                             listing={listing}
                             openHouseEvents={openHouseEvents}
                             setOpenHouseEvents={setOpenHouseEvents}
+                            requiredFields={requiredFields}
                           />
 
                           <div className="-ml-8 -mt-8 relative" style={{ top: "7rem" }}>
