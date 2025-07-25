@@ -159,6 +159,14 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
     immediatelyRender: false,
   })
 
+  const whatToExpectAdditionalDetailsEditor = useEditor({
+    extensions,
+    content: !listing
+      ? t("whatToExpectAdditionalText.default")
+      : listing?.whatToExpectAdditionalText,
+    immediatelyRender: false,
+  })
+
   const enableUnitGroups =
     activeFeatureFlags?.find((flag) => flag.name === FeatureFlagEnum.enableUnitGroups)?.active ||
     false
@@ -265,6 +273,19 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
           }
 
           formData.whatToExpect = cleanRichText(whatToExpectEditor.getHTML())
+
+          if (
+            whatToExpectAdditionalDetailsEditor?.storage.characterCount.characters() >
+            CHARACTER_LIMIT
+          ) {
+            setLoading(false)
+            setAlert("form")
+            return
+          }
+
+          formData.whatToExpectAdditionalText = cleanRichText(
+            whatToExpectAdditionalDetailsEditor.getHTML()
+          )
 
           if (!enableSection8) {
             formData.listingSection8Acceptance = YesNoEnum.no
@@ -458,6 +479,7 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
                             listing={listing}
                             isAdmin={profile?.userRoles.isAdmin}
                             whatToExpectEditor={whatToExpectEditor}
+                            whatToExpectAdditionalTextEditor={whatToExpectAdditionalDetailsEditor}
                           />
                           <LeasingAgent />
                           <ApplicationTypes listing={listing} />

@@ -21,9 +21,15 @@ type RankingsAndResultsProps = {
   listing?: FormListing
   isAdmin?: boolean
   whatToExpectEditor: Editor
+  whatToExpectAdditionalTextEditor: Editor
 }
 
-const RankingsAndResults = ({ listing, isAdmin, whatToExpectEditor }: RankingsAndResultsProps) => {
+const RankingsAndResults = ({
+  listing,
+  isAdmin,
+  whatToExpectEditor,
+  whatToExpectAdditionalTextEditor,
+}: RankingsAndResultsProps) => {
   const formMethods = useFormContext()
   const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
 
@@ -346,6 +352,15 @@ const RankingsAndResults = ({ listing, isAdmin, whatToExpectEditor }: RankingsAn
           <Grid.Cell className="seeds-grid-span-2">
             <label className={"textarea-label"}>{t("listings.whatToExpectLabel")}</label>
             <TextEditor editor={whatToExpectEditor} editorId={"whatToExpect"} />
+          </Grid.Cell>
+          <Grid.Cell className="seeds-grid-span-2">
+            <label className={"textarea-label"}>
+              {t("listings.whatToExpectAdditionalTextLabel")}
+            </label>
+            <TextEditor
+              editor={whatToExpectAdditionalTextEditor}
+              editorId={"whatToExpectAdditionalText"}
+            />
           </Grid.Cell>
         </Grid.Row>
       </SectionWithGrid>
