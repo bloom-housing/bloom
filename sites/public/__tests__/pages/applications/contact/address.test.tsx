@@ -77,7 +77,7 @@ describe("applications pages", () => {
       expect(await findByTestId("app-primary-phone-number-type")).toBeDisabled()
     })
 
-    it("should hide workk in region question when flag enabled", () => {
+    it("should hide work in region question when flag enabled", () => {
       const conductor = new ApplicationConductor({}, listing)
       const applicationConfig = retrieveApplicationConfig(conductor.listing)
       conductor.config = {
