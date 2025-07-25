@@ -31,7 +31,6 @@ export const blueSkyApartments = {
   unitAmenities: null,
   servicesOffered: null,
   yearBuilt: 1900,
-  applicationDueDate: null,
   applicationOpenDate: dayjs(new Date()).subtract(1, 'days').toDate(),
   applicationFee: '60',
   applicationOrganization: null,
