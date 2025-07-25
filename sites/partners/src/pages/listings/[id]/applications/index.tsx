@@ -45,6 +45,10 @@ const ApplicationsList = () => {
     FeatureFlagEnum.enableFullTimeStudentQuestion,
     listingDto?.jurisdictions.id
   )
+  const disableWorkInRegion = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.disableWorkInRegion,
+    listingDto?.jurisdictions.id
+  )
   const includeDemographicsPartner =
     profile?.userRoles?.isPartner && listingJurisdiction?.enablePartnerDemographics
   const { onExport, exportLoading } = useZipExport(
@@ -109,8 +113,8 @@ const ApplicationsList = () => {
   }, [applications])
 
   const columnDefs = useMemo(() => {
-    return getColDefs(maxHouseholdSize, enableFullTimeStudentQuestion)
-  }, [maxHouseholdSize, enableFullTimeStudentQuestion])
+    return getColDefs(maxHouseholdSize, enableFullTimeStudentQuestion, disableWorkInRegion)
+  }, [maxHouseholdSize, enableFullTimeStudentQuestion, disableWorkInRegion])
 
   const gridComponents = {
     formatLinkCell,
