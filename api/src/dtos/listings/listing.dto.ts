@@ -517,6 +517,14 @@ class Listing extends AbstractDTO {
   whatToExpect?: string;
 
   @Expose()
+  @ValidateListingPublish('whatToExpectAdditionalText', {
+    groups: [ValidationsGroupsEnum.default],
+  })
+  @ApiPropertyOptional()
+  @SanitizeHtml()
+  whatToExpectAdditionalText?: string;
+
+  @Expose()
   @ValidateListingPublish('status', {
     groups: [ValidationsGroupsEnum.default],
   })
