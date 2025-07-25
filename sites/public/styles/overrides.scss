@@ -204,4 +204,24 @@
       text-decoration: underline;
     }
   }
+
+  // These are temporary manual overrides for the UIC multi image modal to enable it to theme with Seeds while the new Seeds multi image modal is still in development
+  .image-card__gallery-modal {
+    --bloom-color-primary: var(--seeds-color-primary);
+    --bloom-color-primary-dark: var(--seeds-color-primary-dark);
+    max-width: var(--seeds-width-2xl);
+    @media (--sm-only) {
+      background-color: var(--seeds-color-white);
+    }
+    p,
+    img {
+      width: 100%;
+    }
+    p {
+      margin-block-end: var(--seeds-s8);
+      @media (--sm-only) {
+        margin-block-end: var(--seeds-s4);
+      }
+    }
+  }
 }
