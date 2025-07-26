@@ -2705,6 +2705,56 @@ describe('Listing Controller Tests', () => {
         .set('Cookie', adminAccessToken)
         .expect(201);
     });
+
+    it('should validate applicationDueDate only if not waitlist', async () => {
+      // Create a jurisdiction applicationDueDate required
+      const applicationDueDateJurisdiction = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(`dynamic required custom ${randomName()}`, {
+          requiredListingFields: ['name', 'applicationDueDate'],
+        }),
+      });
+      const completeData = {
+        name: 'waitlist listing',
+        status: ListingsStatusEnum.active,
+        reviewOrderType: ReviewOrderTypeEnum.waitlist,
+        listingsBuildingAddress: {
+          city: 'Bloomington',
+          state: 'AK',
+          street: 'Main st.',
+          zipCode: '12345',
+        },
+        jurisdictions: {
+          id: applicationDueDateJurisdiction.id,
+        },
+      };
+      // Should pass since is of type waitlist
+      await request(app.getHttpServer())
+        .post('/listings')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send(completeData)
+        .set('Cookie', adminAccessToken)
+        .expect(201);
+
+      // Should fail on validation when fcfs
+      const incompleteData = {
+        name: 'fcfs listing',
+        status: ListingsStatusEnum.active,
+        reviewOrderType: ReviewOrderTypeEnum.firstComeFirstServe,
+        jurisdictions: {
+          id: applicationDueDateJurisdiction.id,
+        },
+      };
+      const res = await request(app.getHttpServer())
+        .post('/listings')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send(incompleteData)
+        .set('Cookie', adminAccessToken)
+        .expect(400);
+
+      expect(res.body.message).toContain(
+        'applicationDueDate is required when publishing the listing',
+      );
+    });
   });
 
   describe('mapMarkers endpoint', () => {
