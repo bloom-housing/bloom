@@ -239,12 +239,10 @@ const ApplicationDates = ({
                     </div>
 
                     <Field
-                      name={"marketingStartDate"}
-                      id={"marketingStartDate"}
+                      name={"marketingYear"}
+                      id={"marketingYear"}
                       placeholder={t("account.settings.placeholders.year")}
-                      defaultValue={
-                        listing?.marketingDate ? dayjs(listing.marketingDate).year() : null
-                      }
+                      defaultValue={listing?.marketingYear}
                       register={register}
                       validation={{
                         validate: {
@@ -259,20 +257,15 @@ const ApplicationDates = ({
                       }}
                       inputProps={{
                         onChange: (e) => {
-                          fieldHasError(errors?.marketingDate) && clearErrors("marketingDate")
-                          fieldHasError(errors?.marketingStartDate) &&
-                            clearErrors("marketingStartDate")
+                          fieldHasError(errors?.marketingYear) && clearErrors("marketingYear")
                           if (!setValue) return
-                          setValue("marketingStartDate", maskNumber(e.target?.value))
+                          setValue("marketingYear", maskNumber(e.target?.value))
                         },
                         maxLength: 4,
                       }}
                       className="w-1/3"
-                      error={
-                        fieldHasError(errors?.marketingDate) ||
-                        fieldHasError(errors?.marketingStartDate)
-                      }
-                      errorMessage={fieldMessage(errors?.marketingDate) || t("errors.dateError")}
+                      error={fieldHasError(errors?.marketingYear)}
+                      errorMessage={fieldMessage(errors?.marketingYear) || t("errors.dateError")}
                     />
                   </div>
                   <p className="field-sub-note">{t("listings.marketingSection.dateSubtitle")}</p>
