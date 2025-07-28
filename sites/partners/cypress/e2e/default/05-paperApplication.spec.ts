@@ -1,13 +1,13 @@
 describe("Paper Application Tests", () => {
   beforeEach(() => {
-    cy.login()
+    cy.loginApi()
     cy.visit("/")
     cy.getByTestId("listing-status-cell-Blue Sky Apartments").click()
     cy.getByID("addApplicationButton").contains("Add Application").click()
   })
 
   afterEach(() => {
-    cy.signOut()
+    cy.signOutApi()
   })
 
   it("fill paper application form completely", () => {
