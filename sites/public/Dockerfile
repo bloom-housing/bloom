@@ -1,7 +1,11 @@
-# This file is largely based on the template-application-flask Dockerfile and
-# Next.js Docker example: https://github.com/vercel/next.js/blob/canary/examples/with-docker-compose
-# =============================================================================
-FROM node:18.14-alpine AS base
+
+# The base image will contain all the source code needed for our site
+FROM node:18.20-alpine AS base
+
+# https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine
+RUN ln -s /usr/lib/libssl.so.3 /lib/libssl.so.3
+
+# We don't need a complicated root path
 WORKDIR /app
 
 # Copy over config files to help with local dependency resolution
@@ -9,9 +13,16 @@ COPY --chown=node:node *.json yarn*.lock *config.js ./
 
 # Bring in just the site we need
 COPY --chown=node:node sites/public ./sites/public
-
 # And shared helpers
 COPY --chown=node:node shared-helpers ./shared-helpers
+
+
+#####################
+##### NEW STAGE #####
+#####################
+
+# The deps stage installs full dependencies
+FROM base AS deps
 
 ARG SITE
 
@@ -21,91 +32,53 @@ WORKDIR /app/sites/public
 # Install deps
 RUN yarn install --frozen-lockfile
 
-# # =============================================================================
-# # Development stage
-# # =============================================================================
-# FROM base AS dev
-# WORKDIR /app
 
-# COPY tsconfig.json .
-# COPY sites/public/tsconfig.json .
-# COPY sites/public/*.config.js .
-# COPY sites/public/*.d.ts .
-# COPY sites/public/src ./src
-# COPY shared-helpers ./shared-helpers
+#######################
+##### BUILD STAGE #####
+#######################
 
-# ENV NEXT_TELEMETRY_DISABLED=1
+# The build stage builds the app
+FROM deps AS build
 
-# CMD ["yarn", "dev"]
-
-# =============================================================================
-# Release stage
-# =============================================================================
-
-# Build the Next.js app
-# =====================================
-FROM base AS builder
+# We need to have this nested 2 layers deep due to hardcoded paths in package.json
 WORKDIR /app/sites/public
+
 # Environment variables must be present at build time
 # https://github.com/vercel/next.js/discussions/14030
-# ARG ENV_VARIABLE
-# ENV ENV_VARIABLE=${ENV_VARIABLE}
-# ARG NEXT_PUBLIC_ENV_VARIABLE
-# ENV NEXT_PUBLIC_ENV_VARIABLE=${NEXT_PUBLIC_ENV_VARIABLE}
-
+ARG BACKEND_API_BASE
+ENV BACKEND_API_BASE=$BACKEND_API_BASE
 ENV NEXT_TELEMETRY_DISABLED=1
 
+# Build/compile
 RUN yarn build
 
-# The optimize stage installs only production dependencies
-FROM base AS optimize
+RUN yarn install --frozen-lockfile --only=production
+
+
+#####################
+##### RUN STAGE #####
+#####################
+
+# The run stage is used to run our optimized app
+FROM node:18.20-alpine AS run
 
 ARG SITE
 
-WORKDIR /app/sites/public
-
-# Reinstall only dependencies required to run the application
-RUN yarn install --frozen-lockfile --only=production
-
-# Run the Next.js server
-# =====================================
-# Use clean image for release, excluding any unnecessary files or dependencies
-FROM node:18.14 AS release
+# Copy (almost) everything over to our fresh image
 WORKDIR /app
 
-RUN apt-get update \
-    # Install security updates
-    # https://pythonspeed.com/articles/security-updates-in-docker/
-    && apt-get upgrade --yes \
-    # Install wget, required for health checks
-    wget \
-    # Reduce the image size by clearing apt cached lists
-    && rm -fr /var/lib/apt/lists/* \
-    # Release stage doesn't have a need for `npm`, so remove it to avoid
-    # any vulnerabilities specific to NPM
-    && npm uninstall -g npm \
-    # Remove yarn as well (https://github.com/nodejs/docker-node/issues/777)
-    && rm -rf /opt/yarn-v*\
-    # Don't run production as root
-    && addgroup --system --gid 1001 nodejs \
-    && adduser --system --uid 1001 nextjs \
-    # Support <Image> cache
-    && mkdir -p .next/cache/images/ \
-    && chown nextjs:nodejs .next/cache/images/
-
-USER nextjs
-
-COPY --from=optimize --chown=node:node /app/node_modules ./node_modules
+# node_modules in the root has some necessary binaries
+# COPY --from=optimize --chown=node:node /app/node_modules ./node_modules
+COPY --from=build --chown=node:node /app/node_modules ./node_modules
 
 # Just the site we need to reduce size
-COPY --from=optimize --chown=node:node /app/sites/public/node_modules ./sites/public/node_modules
+COPY --from=build --chown=node:node /app/sites/public/node_modules ./sites/public/node_modules
 
-COPY --from=builder /app/sites/public/public ./public
+# Bring in our local dependencies
+COPY --from=build /app/shared-helpers ./shared-helpers
 
-# Automatically leverage output traces to reduce image size
-# https://nextjs.org/docs/advanced-features/output-file-tracing
-# COPY --from=builder --chown=nextjs:nodejs /app/sites/public/.next/standalone ./
-# COPY --from=builder --chown=nextjs:nodejs /app/sites/public/.next/static ./.next/static
+# Switch to our site
+WORKDIR /app/sites/public
 
 # Yarn needs a package.json file to work, even for `yarn start`
 COPY --chown=node:node \
@@ -114,20 +87,15 @@ COPY --chown=node:node \
         ./sites/public/next.config.js \
         ./
 
-COPY --from=builder --chown=node:node /app/sites/public/public ./public
-COPY --from=builder --chown=node:node /app/sites/public/.next ./.next
+COPY --from=build --chown=node:node /app/sites/public/public ./public
+COPY --from=build --chown=node:node /app/sites/public/.next ./.next
 
-# Environment variables must be redefined at run time
-# ARG ENV_VARIABLE
-# ENV ENV_VARIABLE=${ENV_VARIABLE}
-# ARG NEXT_PUBLIC_ENV_VARIABLE
-# ENV NEXT_PUBLIC_ENV_VARIABLE=${NEXT_PUBLIC_ENV_VARIABLE}
+# Make sure to get the minimum dependencies
+COPY --from=build --chown=node:node /app/sites/public/node_modules ./node_modules
+
+# Disable Next.js telemetry by default
 ENV NEXT_TELEMETRY_DISABLED=1
-ENV PORT=3000
 
-EXPOSE 3000
-
-# hadolint ignore=DL3025
 # Make sure to use the built-in node user
 USER node
 
