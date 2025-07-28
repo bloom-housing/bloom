@@ -4,7 +4,7 @@
     "lib": ["dom", "dom.iterable", "esnext"],
     "jsx": "preserve",
     "allowJs": true,
-    "types": ["cypress", "cypress-file-upload"],
+    "types": ["cypress", "cypress-file-upload", "node"],
     "target": "es5"
   },
   "exclude": ["../node_modules"],

@@ -17,11 +17,8 @@ import "@cypress/code-coverage/support"
 // Uncomment to run Deque Axe Developer Hub accessibility tests
 // import "@axe-core/watcher/dist/cypressCommands"
 // afterEach(() => {
-//   if (process.env.RUN_ACCESSIBILITY_E2E_TESTS === "TRUE") cy.axeWatcherFlush()
+//   if (Cypress.env("runAccessibilityTests")) cy.axeWatcherFlush()
 // })
 
 // Import commands.js using ES2015 syntax:
 import "./commands"
-
-// Alternatively you can use CommonJS syntax:
-// require('./commands')

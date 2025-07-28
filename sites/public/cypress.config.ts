@@ -29,7 +29,7 @@ let baseConfig: Cypress.ConfigOptions<any> = {
     experimentalRunAllSpecs: true,
     env: {
       showSeedsDesign: process.env.SHOW_NEW_SEEDS_DESIGNS,
-      runAccessibilityTests: process.env.RUN_ACCESSIBILITY_E2E_TESTS,
+      runAccessibilityTests: process.env.RUN_ACCESSIBILITY_E2E_TESTS === "TRUE",
     },
     supportFile: "cypress/support/e2e.ts",
   },
