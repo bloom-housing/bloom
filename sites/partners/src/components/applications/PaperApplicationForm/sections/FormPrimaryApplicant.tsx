@@ -218,37 +218,6 @@ const FormPrimaryApplicant = ({
               </FieldValue>
             </Grid.Cell>
           )}
-          {enableFullTimeStudentQuestion && (
-            <Grid.Cell>
-              <FieldValue label={t("application.add.fullTimeStudent")}>
-                <div className="flex items-center">
-                  <Field
-                    id="application.applicant.workInRegionYes"
-                    name="application.applicant.workInRegion"
-                    className="m-0"
-                    type="radio"
-                    label={t("t.yes")}
-                    register={register}
-                    inputProps={{
-                      value: YesNoEnum.yes,
-                    }}
-                  />
-
-                  <Field
-                    id="application.applicant.workInRegionNo"
-                    name="application.applicant.workInRegion"
-                    className="m-0"
-                    type="radio"
-                    label={t("t.no")}
-                    register={register}
-                    inputProps={{
-                      value: YesNoEnum.no,
-                    }}
-                  />
-                </div>
-              </FieldValue>
-            </Grid.Cell>
-          )}
 
           {enableFullTimeStudentQuestion && (
             <Grid.Cell>
