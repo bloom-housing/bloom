@@ -17,7 +17,7 @@ import "@cypress/code-coverage/support"
 // Uncomment to run Deque Axe Developer Hub accessibility tests
 // import "@axe-core/watcher/dist/cypressCommands"
 // afterEach(() => {
-//   if (Cypress.env("runAccessibilityTests")) cy.axeWatcherFlush()
+//   if (process.env.RUN_ACCESSIBILITY_E2E_TESTS) cy.axeWatcherFlush()
 // })
 
 // Import commands.js using ES2015 syntax:

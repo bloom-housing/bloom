@@ -39,7 +39,7 @@ executors:
       CLOUDINARY_KEY: "key"
       CLOUDINARY_SIGNED_PRESET: "signedpreset"
       CLOUDINARY_CLOUD_NAME: "exygy"
-      RUN_ACCESSIBILITY_E2E_TESTS: FALSE
+      RUN_ACCESSIBILITY_E2E_TESTS: "FALSE"
 
   standard-node:
     docker:

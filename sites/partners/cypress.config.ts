@@ -26,7 +26,7 @@ let baseConfig: Cypress.ConfigOptions<any> = {
     experimentalRunAllSpecs: true,
     supportFile: "cypress/support/e2e.ts",
     env: {
-      runAccessibilityTests: process.env.RUN_ACCESSIBILITY_E2E_TESTS,
+      runAccessibilityTests: process.env.RUN_ACCESSIBILITY_E2E_TESTS === "TRUE",
     },
   },
   component: {
@@ -37,7 +37,7 @@ let baseConfig: Cypress.ConfigOptions<any> = {
   },
 }
 
-if (Cypress.env("runAccessibilityTests")) {
+if (process.env.RUN_ACCESSIBILITY_E2E_TESTS === "TRUE") {
   baseConfig = cypressConfig({
     axe: {
       apiKey: process.env.AXE_DEVELOPER_HUB_API_KEY,
