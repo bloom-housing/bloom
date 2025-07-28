@@ -353,6 +353,8 @@ const RankingsAndResults = ({
             <label className={"textarea-label"}>{t("listings.whatToExpectLabel")}</label>
             <TextEditor editor={whatToExpectEditor} editorId={"whatToExpect"} />
           </Grid.Cell>
+        </Grid.Row>
+        <Grid.Row columns={3}>
           <Grid.Cell className="seeds-grid-span-2">
             <label className={"textarea-label"}>
               {t("listings.whatToExpectAdditionalTextLabel")}
