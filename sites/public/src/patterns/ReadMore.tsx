@@ -12,6 +12,8 @@ interface ReadMoreProps {
   offset?: number
   /** Default state for expanded, otherwise set to false */
   expanded?: boolean
+  /** Additional styling for the wrapper component */
+  className?: string
 }
 
 export const ReadMore = (props: ReadMoreProps) => {
@@ -32,7 +34,7 @@ export const ReadMore = (props: ReadMoreProps) => {
     : props.content
 
   return (
-    <div className={styles["read-more"]} aria-live={"polite"}>
+    <div className={`${styles["read-more"]} ${props.className}`} aria-live={"polite"}>
       <Markdown id={"read-more-content"}>{expanded ? props.content : contentTruncated}</Markdown>
       {shouldTruncate && (
         <button
