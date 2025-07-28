@@ -8,7 +8,6 @@ describe("Paper Application Tests", () => {
 
   afterEach(() => {
     cy.signOutApi()
-    if (Cypress.env("runAccessibilityTests")) cy.axeWatcherFlush()
   })
 
   it("fill paper application form completely", () => {

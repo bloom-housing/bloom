@@ -7,10 +7,6 @@ describe("Lottery Tests", () => {
     cy.signOutApi()
   })
 
-  afterEach(() => {
-    if (Cypress.env("runAccessibilityTests")) cy.axeWatcherFlush()
-  })
-
   it("can run through every lottery action", () => {
     const uniqueListingName = Date.now().toString()
     cy.intercept("POST", "https://api.cloudinary.com/v1_1/exygy/upload", {

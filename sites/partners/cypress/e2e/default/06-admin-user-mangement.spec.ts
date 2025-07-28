@@ -5,7 +5,6 @@ describe("Admin User Mangement Tests", () => {
 
   afterEach(() => {
     cy.signOutApi()
-    if (Cypress.env("runAccessibilityTests")) cy.axeWatcherFlush()
   })
 
   it("as admin user, should show all users regardless of jurisdiction", () => {

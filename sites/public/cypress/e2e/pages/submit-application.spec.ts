@@ -1,10 +1,6 @@
 import { ElmVillageApplication, autofillBlueSkyApplication } from "../../mockData/applicationData"
 
 describe("Submit", function () {
-  afterEach(() => {
-    if (Cypress.env("runAccessibilityTests")) cy.axeWatcherFlush()
-  })
-
   it("should submit an application for the Elm Village listing, then autofill and submit an application for Blue Sky Apartments", function () {
     cy.intercept("GET", "/geocoding/v5/**", { fixture: "address" })
     // Interceptor for the address in the preference

@@ -7,7 +7,6 @@ describe("Jurisdictional Admin User Mangement Tests", () => {
 
   afterEach(() => {
     cy.signOutApi()
-    if (Cypress.env("runAccessibilityTests")) cy.axeWatcherFlush()
   })
 
   it("as jurisdictional admin user, should only see partners/jurisdictional admins on the same jurisdiction", () => {

@@ -1,8 +1,4 @@
 describe("Listing Management Tests", () => {
-  afterEach(() => {
-    if (Cypress.env("runAccessibilityTests")) cy.axeWatcherFlush()
-  })
-
   beforeEach(() => {
     cy.loginApi()
   })

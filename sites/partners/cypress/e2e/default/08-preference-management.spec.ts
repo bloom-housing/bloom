@@ -5,7 +5,6 @@ describe("Preference Management Tests", () => {
 
   afterEach(() => {
     cy.signOutApi()
-    if (Cypress.env("runAccessibilityTests")) cy.axeWatcherFlush()
   })
 
   beforeEach(() => {

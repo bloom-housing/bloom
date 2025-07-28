@@ -1,8 +1,4 @@
 describe.skip("Log in using MFA Tests", () => {
-  afterEach(() => {
-    if (Cypress.env("runAccessibilityTests")) cy.axeWatcherFlush()
-  })
-
   it("should log in using mfa pathway", () => {
     cy.intercept("POST", "api/adapter/auth/request-mfa-code", {
       statusCode: 201,
