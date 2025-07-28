@@ -1,4 +1,4 @@
-describe.skip("Log in using MFA Tests", () => {
+describe("Log in using MFA Tests", () => {
   it("should log in using mfa pathway", () => {
     cy.intercept("POST", "api/adapter/auth/request-mfa-code", {
       statusCode: 201,

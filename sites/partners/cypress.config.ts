@@ -25,6 +25,9 @@ let baseConfig: Cypress.ConfigOptions<any> = {
     specPattern: "cypress/e2e/**/*.{js,jsx,ts,tsx}",
     experimentalRunAllSpecs: true,
     supportFile: "cypress/support/e2e.ts",
+    env: {
+      runAccessibilityTests: process.env.RUN_ACCESSIBILITY_E2E_TESTS,
+    },
   },
   component: {
     devServer: {
