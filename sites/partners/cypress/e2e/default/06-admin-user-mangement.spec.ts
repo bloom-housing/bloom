@@ -1,10 +1,10 @@
 describe("Admin User Mangement Tests", () => {
   beforeEach(() => {
-    cy.login()
+    cy.loginApi()
   })
 
   afterEach(() => {
-    cy.signOut()
+    cy.signOutApi()
   })
 
   it("as admin user, should show all users regardless of jurisdiction", () => {

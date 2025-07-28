@@ -68,6 +68,11 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
     listingDto?.jurisdictions.id
   )
 
+  const disableWorkInRegion = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.disableWorkInRegion,
+    listingDto?.jurisdictions.id
+  )
+
   const units = listingDto?.units
 
   const defaultValues = editMode ? mapApiToForm(application, listingDto) : {}
@@ -235,6 +240,7 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
 
                     <FormPrimaryApplicant
                       enableFullTimeStudentQuestion={enableFullTimeStudentQuestion}
+                      disableWorkInRegion={disableWorkInRegion}
                     />
 
                     <FormAlternateContact />

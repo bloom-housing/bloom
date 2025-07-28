@@ -47,13 +47,17 @@ Cypress.Commands.add("loginAndAcceptTerms", (fix = "user") => {
   })
 })
 
-Cypress.Commands.add("login", (fix = "user") => {
-  cy.visit("/")
+// Authenticate via api for tests not explicitly testing login functionality
+Cypress.Commands.add("loginApi", (fix = "user") => {
   cy.fixture(fix).then((user) => {
-    cy.get("input#email").type(user.email)
-    cy.get("input#password").type(user.password)
-    cy.get("button").contains("Sign In").click()
-    cy.contains("Listings")
+    cy.request("POST", "/api/adapter/auth/login", {
+      email: user.email,
+      password: user.password,
+    }).then((response) => {
+      expect(response.status).eq(201)
+      expect(response).to.have.property("headers")
+      cy.getCookie("access-token").should("exist")
+    })
   })
 })
 
@@ -73,6 +77,14 @@ Cypress.Commands.add("loginWithMfa", () => {
 Cypress.Commands.add("signOut", () => {
   cy.get("button").contains("Sign Out").click()
   cy.get("input#email")
+})
+
+Cypress.Commands.add("signOutApi", (fix = "user") => {
+  cy.fixture(fix).then((user) => {
+    cy.request("GET", "/api/adapter/auth/logout").then((response) => {
+      expect(response.status).eq(200)
+    })
+  })
 })
 
 Cypress.Commands.add("verifyAlertBox", () => {

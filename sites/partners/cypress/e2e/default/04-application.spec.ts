@@ -1,10 +1,10 @@
 describe("Application Management Tests", () => {
   before(() => {
-    cy.login()
+    cy.loginApi()
   })
 
   after(() => {
-    cy.signOut()
+    cy.signOutApi()
   })
 
   it("Application grid should display correct number of results", () => {
