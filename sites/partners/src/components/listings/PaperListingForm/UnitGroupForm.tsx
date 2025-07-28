@@ -1,3 +1,4 @@
+import { UnitGroupTypeSort } from "@bloom-housing/shared-helpers/src/utilities/unitTypes"
 import { Button, Card, Dialog, Drawer, FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import SectionWithGrid from "../../shared/SectionWithGrid"
 import {
@@ -21,7 +22,6 @@ import {
 import { arrayToFormOptions, fieldHasError } from "../../../lib/helpers"
 import { TempAmiLevel, TempUnitGroup } from "../../../lib/listings/formTypes"
 import UnitGroupAmiForm from "./UnitGroupAmiForm"
-import { UnitGroupTypeSort } from "@bloom-housing/shared-helpers/src/utilities/unitTypes"
 
 type UnitGroupFormProps = {
   onSubmit: (unit: TempUnitGroup) => void
