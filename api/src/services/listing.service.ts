@@ -545,9 +545,18 @@ export class ListingService implements OnModuleInit {
                   key: ListingFilterKeys.availabilities,
                   caseSensitive: true,
                 });
-                return builtFilter.map((filt) => ({
-                  unitsAvailable: filt,
-                }));
+
+                return builtFilter
+                  .map((filt) => ({
+                    unitsAvailable: filt,
+                  }))
+                  .concat({
+                    unitGroups: {
+                      some: {
+                        totalAvailable: { gte: 1 },
+                      },
+                    },
+                  });
               }
             },
           );
@@ -656,9 +665,17 @@ export class ListingService implements OnModuleInit {
             caseSensitive: true,
           });
           filters.push({
-            OR: builtFilter.map((filt) => ({
-              unitsAvailable: filt,
-            })),
+            OR: builtFilter
+              .map((filt) => ({
+                unitsAvailable: filt,
+              }))
+              .concat({
+                unitGroups: {
+                  some: {
+                    totalAvailable: { gte: 1 },
+                  },
+                },
+              }),
           });
         }
         if (filter[ListingFilterKeys.bathrooms] !== undefined) {
