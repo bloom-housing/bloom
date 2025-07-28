@@ -137,7 +137,9 @@ export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: Li
     <>
       {listing.whatToExpect && (
         <InfoCard heading={t("whatToExpect.label")}>
-          <Markdown className={"bloom-markdown"}>{listing.whatToExpect}</Markdown>
+          <div className={"bloom-markdown"}>
+            <Markdown>{listing.whatToExpect}</Markdown>
+          </div>
         </InfoCard>
       )}
     </>
@@ -147,7 +149,11 @@ export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: Li
     <>
       {listing.whatToExpectAdditionalText && (
         <InfoCard heading={t("whatToExpectAdditionalText.label")}>
-          <ReadMore maxLength={140} content={listing.whatToExpectAdditionalText} />
+          <ReadMore
+            className={"bloom-markdown"}
+            maxLength={140}
+            content={listing.whatToExpectAdditionalText}
+          />
         </InfoCard>
       )}
     </>
