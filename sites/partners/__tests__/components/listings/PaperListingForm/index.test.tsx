@@ -1,9 +1,9 @@
 import React from "react"
 import { act, fireEvent, screen } from "@testing-library/react"
 import { setupServer } from "msw/lib/node"
-import { mockNextRouter, mockTipTapEditor, render } from "../../../testUtils"
 import { rest } from "msw"
 import { AuthContext } from "@bloom-housing/shared-helpers"
+import { mockBaseJurisdiction, mockUser } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import {
   FeatureFlag,
   FeatureFlagEnum,
@@ -12,7 +12,7 @@ import {
   LanguagesEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import ListingForm from "../../../../src/components/listings/PaperListingForm"
-import { mockUser, mockBaseJurisdiction } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
+import { mockNextRouter, mockTipTapEditor, render } from "../../../testUtils"
 
 const server = setupServer()
 
@@ -227,7 +227,11 @@ describe("add listing", () => {
     server.use(
       rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
         return res(
-          ctx.json({ id: "user1", userRoles: { id: "user1", isAdmin: true, isPartner: false } })
+          ctx.json({
+            id: "user1",
+            userRoles: { id: "user1", isAdmin: true, isPartner: false },
+            jurisdictions,
+          })
         )
       }),
       rest.get("http://localhost:3100/reservedCommunityTypes", (_req, res, ctx) => {
@@ -240,21 +244,90 @@ describe("add listing", () => {
         return res(ctx.json(jurisdictions))
       })
     )
+
+    const mockRetrieve = jest.fn().mockResolvedValue({})
+
     render(
       <AuthContext.Provider
         value={{
-          doJurisdictionsHaveFeatureFlagOn,
+          doJurisdictionsHaveFeatureFlagOn: (featureFlag: FeatureFlagEnum) => {
+            switch (featureFlag) {
+              case FeatureFlagEnum.enableRegions:
+                return true
+              case FeatureFlagEnum.enableHomeType:
+                return true
+              case FeatureFlagEnum.enableCompanyWebsite:
+                return true
+              default:
+                return false
+            }
+          },
+          getJurisdictionLanguages,
+          jurisdictionsService: {
+            retrieve: mockRetrieve,
+          } as unknown as JurisdictionsService,
         }}
       >
         <ListingForm />
       </AuthContext.Provider>
     )
 
-    const asterisks = screen.getAllByText("*", { exact: false })
-    const regex =
-      /(Fields marked with an asterisk \(\*\) are required to publish\.|Listing Name \*|Jurisdiction \*)\w*/
-    asterisks.forEach((asterisk) => {
-      expect(asterisk.textContent).toMatch(regex)
+    const requiredFields = ["Listing Name", "Jurisdiction"]
+
+    const unrequiredFields = [
+      "Housing Developer",
+      "Photos",
+      "Street Address",
+      "Neighborhood",
+      "City",
+      "State",
+      "Zip Code",
+      "Year Built",
+      "Reserved Community Type",
+      "Reserved Community Description",
+      "Units",
+      "Application Fee",
+      "Deposit Min",
+      "Deposit Max",
+      "Deposit Helper Text",
+      "Costs Not Included",
+      "Property Amenities",
+      "Additional Accessibility",
+      "Unit Amenities",
+      "Smoking Policy",
+      "Pets Policy",
+      "Services Offered",
+      "Credit History",
+      "Rental History",
+      "Criminal Background",
+      "Rental Assistance",
+      "Required Documents",
+      "Important Program Rules",
+      "Special Notes",
+      "Tell the applicant what to expect from the process",
+      "Leasing Agent Name",
+      "Email",
+      "Phone",
+      "Leasing Agent Title",
+      "Company Website",
+      "Office Hours",
+      "Street Address or PO Box",
+      "Is there a digital application?",
+      "Is there a paper application?",
+      "Is there a referral opportunity?",
+      "Additional Application Submission Notes",
+      "Application Due Date",
+      "Application Due Time",
+    ]
+
+    requiredFields.forEach((fieldName) => {
+      const query = screen.getAllByText(fieldName)
+      expect(query[0]).toHaveTextContent(`${fieldName} *`)
+    })
+
+    unrequiredFields.forEach((fieldName) => {
+      const query = screen.getAllByText(fieldName)
+      expect(query[0].textContent).not.toContain("*")
     })
   })
 
@@ -316,7 +389,6 @@ describe("add listing", () => {
       </AuthContext.Provider>
     )
 
-    const asterisks = screen.getAllByText("*", { exact: false })
     const possibleRequiredFields = [
       "Listing Name",
       "Jurisdiction",
@@ -367,24 +439,9 @@ describe("add listing", () => {
       "Application Due Time",
     ]
 
-    // eslint-disable-next-line no-useless-escape
-    let regexString = `Fields marked with an asterisk (*) are required to publish.|`
-    possibleRequiredFields.forEach((field) => {
-      regexString = regexString.concat(`${field} *|`)
-    })
-    regexString = regexString.slice(0, -1)
-
-    // eslint-disable-next-line no-useless-escape
-    const re = new RegExp(`(${regexString.replace(/[()*?.\\]/g, "\\$&")})\w*`)
-
-    // All strings with an asterisk must only be from our list, so we have no extras
-    asterisks.forEach((asterisk) => {
-      expect(asterisk.textContent).toMatch(re)
-    })
-
-    // All labels we expect to have an asterisk also exist
-    possibleRequiredFields.forEach((field) => {
-      expect(screen.getAllByText(`${field} *`).length).toBeGreaterThan(0)
+    possibleRequiredFields.forEach((fieldName) => {
+      const query = screen.getAllByText(fieldName)
+      expect(query[0]).toHaveTextContent(`${fieldName} *`)
     })
   })
 })

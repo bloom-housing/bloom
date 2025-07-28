@@ -537,6 +537,7 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
 
                   <FieldValue label={t("listings.unit.amiPercentage")}>
                     <Select
+                      id={"amiPercentage"}
                       name="amiPercentage"
                       label={t("listings.unit.amiPercentage")}
                       placeholder={t("listings.unit.amiPercentage")}

@@ -30,7 +30,7 @@ export const multiselectQuestionPreference: MultiselectQuestion = {
   id: "id1",
   text: "Live/Work in County",
   subText: "Live/Work in County subtitle",
-  jurisdictions: [{ id: "1", name: "Alameda" }],
+  jurisdictions: [{ id: "1", name: "Bloomington" }],
   createdAt: new Date("2022-09-14T22:53:09.982Z"),
   updatedAt: new Date("2022-09-15T22:53:09.982Z"),
   description: "At least one household member lives or works in County",
@@ -612,7 +612,7 @@ export const amiCharts = [
 ]
 
 export const jurisdiction: Jurisdiction = {
-  name: "Alameda",
+  name: "Bloomington",
   notificationsSignUpUrl: "https://public.govdelivery.com/accounts/CAALAME/signup/29652",
   languages: [LanguagesEnum.en],
   partnerTerms: undefined,
@@ -629,7 +629,7 @@ export const jurisdiction: Jurisdiction = {
     },
   ],
   requiredListingFields: [],
-  emailFromAddress: "Alameda: Housing Bay Area <bloom-no-reply@exygy.dev>",
+  emailFromAddress: "Bloomington <bloom-no-reply@exygy.dev>",
   rentalAssistanceDefault:
     "Housing Choice Vouchers, Section 8 and other valid rental assistance programs will be considered for this property. In the case of a valid rental subsidy, the required minimum income will be based on the portion of the rent that the tenant pays after use of the subsidy.",
   enablePartnerSettings: true,

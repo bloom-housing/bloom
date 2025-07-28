@@ -171,6 +171,7 @@ const UnitGroupAmiForm = ({
                 </FieldValue>
                 <FieldValue label={t("listings.unit.amiPercentage")}>
                   <Select
+                    id={"amiPercentage"}
                     label={t("listings.unit.amiPercentage")}
                     name="amiPercentage"
                     placeholder={t("t.selectOne")}

@@ -62,21 +62,21 @@ describe("helpers", () => {
   })
   describe("getLabel", () => {
     it("should return label with asterisk if field is required", () => {
-      expect(getLabel("fieldName", ["fieldName"], "Field Name")).toBe("Field Name *")
+      expect(getLabel("fieldName", ["fieldName"], "Field Name", true)).toBe("Field Name *")
     })
     it("should return label without asterisk if field is not required", () => {
-      expect(getLabel("fieldName", ["notFieldName"], "Field Name")).toBe("Field Name")
+      expect(getLabel("fieldName", ["notFieldName"], "Field Name", true)).toBe("Field Name")
     })
   })
   describe("addAsterisk", () => {
     it("should return string with asterisk", () => {
-      expect(addAsterisk("Field Name")).toBe("Field Name *")
+      expect(addAsterisk("Field Name", true)).toBe("Field Name *")
     })
   })
   describe("defaultFieldProps", () => {
     it("should return correctly in a non-error state for a required field", () => {
       expect(
-        defaultFieldProps("fieldName", "Field Name", ["fieldName"], {}, jest.fn(), false)
+        defaultFieldProps("fieldName", "Field Name", ["fieldName"], {}, jest.fn(), false, true)
       ).toStrictEqual({
         id: "fieldName",
         name: "fieldName",
@@ -97,7 +97,8 @@ describe("helpers", () => {
           ["fieldName"],
           { fieldName: { message: "Custom error" } },
           jest.fn(),
-          false
+          false,
+          true
         )
       ).toStrictEqual({
         id: "fieldName",
@@ -113,7 +114,7 @@ describe("helpers", () => {
     })
     it("should return correctly in a non-error state for a non-required field", () => {
       expect(
-        defaultFieldProps("fieldName", "Field Name", ["notFieldName"], {}, jest.fn(), false)
+        defaultFieldProps("fieldName", "Field Name", ["notFieldName"], {}, jest.fn(), false, true)
       ).toStrictEqual({
         id: "fieldName",
         name: "fieldName",
@@ -134,7 +135,8 @@ describe("helpers", () => {
           ["notFieldName"],
           { fieldName: { message: "Custom error" } },
           jest.fn(),
-          false
+          false,
+          true
         )
       ).toStrictEqual({
         id: "fieldName",
@@ -150,7 +152,7 @@ describe("helpers", () => {
     })
     it("should return correctly for a non-required field but when forceRequired is true", () => {
       expect(
-        defaultFieldProps("fieldName", "Field Name", ["notFieldName"], {}, jest.fn(), true)
+        defaultFieldProps("fieldName", "Field Name", ["notFieldName"], {}, jest.fn(), true, true)
       ).toStrictEqual({
         id: "fieldName",
         name: "fieldName",

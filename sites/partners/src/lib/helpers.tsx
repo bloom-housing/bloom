@@ -19,6 +19,7 @@ import {
   AssetsService,
   IncomePeriodEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import * as styles from "../components/listings/PaperListingForm/ListingForm.module.scss"
 
 export enum YesNoAnswer {
   "Yes" = "yes",
@@ -301,12 +302,23 @@ export const getRequiredSubNote = (fieldName: string, requiredFields: string[]) 
   return fieldIsRequired(fieldName, requiredFields) ? t("listings.requiredToPublish") : null
 }
 
-export const getLabel = (fieldName: string, requiredFields: string[], label: string) => {
-  return fieldIsRequired(fieldName, requiredFields) ? addAsterisk(label) : label
+export const getLabel = (
+  fieldName: string,
+  requiredFields: string[],
+  label: string,
+  noStyling?: boolean
+) => {
+  return fieldIsRequired(fieldName, requiredFields) ? addAsterisk(label, noStyling) : label
 }
 
-export const addAsterisk = (label: string) => {
-  return `${label} *`
+export const addAsterisk = (label: string, noStyling?: boolean) => {
+  if (noStyling) return `${label} *`
+  return (
+    <span>
+      {label}
+      <span className={styles["asterisk"]}>{` *`}</span>
+    </span>
+  )
 }
 
 export const defaultFieldProps = (
@@ -315,13 +327,16 @@ export const defaultFieldProps = (
   requiredFields: string[],
   errors: UseFormMethods["errors"],
   clearErrors: (name?: string | string[]) => void,
-  forceRequired?: boolean
+  forceRequired?: boolean,
+  noStyling?: boolean
 ) => {
   const hasError = fieldHasError(errors ? errors[fieldKey] : null)
   return {
     id: fieldKey,
     name: fieldKey,
-    label: forceRequired ? addAsterisk(label) : getLabel(fieldKey, requiredFields, label),
+    label: forceRequired
+      ? addAsterisk(label, noStyling)
+      : getLabel(fieldKey, requiredFields, label, noStyling),
     error: hasError,
     errorMessage: fieldMessage(errors ? errors[fieldKey] : null),
     inputProps: {

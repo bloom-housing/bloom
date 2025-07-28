@@ -1,5 +1,6 @@
 import React from "react"
 import { useFormContext } from "react-hook-form"
+import { Jurisdiction } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { t, Field, SelectOption, Select } from "@bloom-housing/ui-components"
 import { Grid } from "@bloom-housing/ui-seeds"
 import {
@@ -8,8 +9,8 @@ import {
   fieldIsRequired,
   defaultFieldProps,
 } from "../../../../lib/helpers"
-import { Jurisdiction } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
+import styles from "../ListingForm.module.scss"
 
 interface ListingIntroProps {
   jurisdictions: Jurisdiction[]
@@ -59,7 +60,12 @@ const ListingIntro = (props: ListingIntroProps) => {
               id={"jurisdictions.id"}
               defaultValue={defaultJurisdiction}
               name={"jurisdictions.id"}
-              label={`${t("t.jurisdiction")} *`}
+              label={
+                <span>
+                  {t("t.jurisdiction")}
+                  <span className={styles["asterisk"]}>{` ${"*"}`}</span>
+                </span>
+              }
               register={register}
               controlClassName={`control ${defaultJurisdiction ? "hidden" : ""}`}
               error={

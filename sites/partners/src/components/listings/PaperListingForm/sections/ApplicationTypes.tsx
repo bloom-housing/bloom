@@ -557,6 +557,7 @@ const ApplicationTypes = ({ listing, requiredFields }: ApplicationTypesProps) =>
                     <label className="label">{t("t.language")}</label>
                   </p>
                   <Select
+                    id={"paperApplicationLanguage"}
                     name="paperApplicationLanguage"
                     options={[
                       ...availableJurisdictionLanguages.map((item) => ({
