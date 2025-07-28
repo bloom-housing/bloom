@@ -1,7 +1,7 @@
 #####################
 ##### Run image #####
 #####################
-FROM node:18.20-alpine as run
+FROM node:18.20-alpine AS run
 
 # install the appropriate openSSL package in order to run all commands
 RUN ln -s /usr/lib/libssl.so.3 /lib/libssl.so.3
