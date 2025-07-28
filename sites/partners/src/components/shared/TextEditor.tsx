@@ -188,7 +188,7 @@ type TextEditorProps = {
   editorId?: string
   error?: boolean
   errorMessage?: string
-  label: string
+  label: string | React.ReactNode
 }
 
 export const TextEditor = ({

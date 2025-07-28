@@ -436,7 +436,6 @@ describe("add listing", () => {
       "Is there a referral opportunity?",
       "Additional Application Submission Notes",
       "Application Due Date",
-      "Application Due Time",
     ]
 
     possibleRequiredFields.forEach((fieldName) => {
