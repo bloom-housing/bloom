@@ -116,6 +116,7 @@ export const mapFormToApi = ({
     const noEmail = !applicantData.emailAddress
     const noPhone = !phoneNumber
     const workInRegion: YesNoEnum | null = applicantData?.workInRegion || null
+    const fullTimeStudent: YesNoEnum | null = applicantData?.fullTimeStudent || null
     const emailAddress: string | null = applicantData?.emailAddress || null
 
     applicantData.firstName = mapEmptyStringToNull(applicantData.firstName)
@@ -131,6 +132,7 @@ export const mapFormToApi = ({
       ...data.dateOfBirth,
       emailAddress,
       workInRegion,
+      fullTimeStudent,
       applicantWorkAddress: workAddress,
       phoneNumber,
       phoneNumberType,
@@ -345,7 +347,10 @@ export const mapApiToForm = (applicationData: ApplicationUpdate, listing: Listin
       workInRegion,
     }
 
-    const preferredUnit = applicationData?.preferredUnitTypes?.map((unit) => unit.id)
+    const preferredUnit =
+      applicationData?.preferredUnitTypes?.length > 0
+        ? applicationData?.preferredUnitTypes?.map((unit) => unit.id)
+        : null
 
     const accessibility: string[] = adaFeatureKeys.filter(
       (feature) =>

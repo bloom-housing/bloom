@@ -5,6 +5,7 @@ import {
   stackedUnitSummariesTable,
   mergeGroupSummaryRows,
   stackedUnitGroupsSummariesTable,
+  getAvailabilityText,
 } from "../../src/views/summaryTables"
 
 afterEach(cleanup)
@@ -617,7 +618,7 @@ describe("stackedUnitGroupsSummariesTable", () => {
       {
         rent: { cellSubText: "per month", cellText: "$1,200" },
         unitType: { cellSubText: "", cellText: "1 BR" },
-        availability: { cellText: "Not available" },
+        availability: { cellText: "Waitlist Closed" },
       },
     ])
   })
@@ -626,7 +627,7 @@ describe("stackedUnitGroupsSummariesTable", () => {
       {
         rent: { cellSubText: "per month", cellText: "$1,200 to $1,500" },
         unitType: { cellSubText: "", cellText: "1 BR" },
-        availability: { cellText: "Not available" },
+        availability: { cellText: "Waitlist Closed" },
       },
     ])
   })
@@ -635,7 +636,7 @@ describe("stackedUnitGroupsSummariesTable", () => {
       {
         rent: { cellSubText: "per month", cellText: "30% of income" },
         unitType: { cellSubText: "", cellText: "1 BR" },
-        availability: { cellText: "Not available" },
+        availability: { cellText: "Waitlist Closed" },
       },
     ])
   })
@@ -644,7 +645,7 @@ describe("stackedUnitGroupsSummariesTable", () => {
       {
         rent: { cellSubText: "per month", cellText: "5% to 20% of income" },
         unitType: { cellSubText: "", cellText: "1 BR" },
-        availability: { cellText: "Not available" },
+        availability: { cellText: "Waitlist Closed" },
       },
     ])
   })
@@ -653,7 +654,7 @@ describe("stackedUnitGroupsSummariesTable", () => {
       {
         rent: { cellSubText: "per month", cellText: "% of income, or up to $750" },
         unitType: { cellSubText: "", cellText: "1 BR - 3 BR" },
-        availability: { cellText: "Not available" },
+        availability: { cellText: "Waitlist Closed" },
       },
     ])
   })
@@ -662,7 +663,7 @@ describe("stackedUnitGroupsSummariesTable", () => {
       {
         rent: { cellSubText: "", cellText: "n/a" },
         unitType: { cellSubText: "", cellText: "1 BR" },
-        availability: { cellText: "Not available" },
+        availability: { cellText: "Waitlist Closed" },
       },
     ])
   })
@@ -671,7 +672,7 @@ describe("stackedUnitGroupsSummariesTable", () => {
       {
         rent: { cellSubText: "per month", cellText: "$1,200 to $1,500" },
         unitType: { cellSubText: "", cellText: "1 BR - 2 BR" },
-        availability: { cellText: "Not available" },
+        availability: { cellText: "Waitlist Closed" },
       },
     ])
   })
@@ -716,7 +717,7 @@ describe("stackedUnitGroupsSummariesTable", () => {
         rent: { cellSubText: "", cellText: "n/a" },
         unitType: { cellSubText: "", cellText: "1 BR" },
         availability: {
-          cellText: "3 Vacant Units",
+          cellText: "3 Vacant Units & Waitlist Closed",
         },
       },
     ])
@@ -741,5 +742,34 @@ describe("stackedUnitGroupsSummariesTable", () => {
         availability: { cellText: "Under Construction" },
       },
     ])
+  })
+})
+
+describe("getAvailabilityText", () => {
+  it("should show closed waitlist text", () => {
+    expect(getAvailabilityText(defaultUnitGroupSummary)).toEqual({ text: "Closed waitlist" })
+  })
+  it("should show open waitlist text", () => {
+    expect(getAvailabilityText({ ...defaultUnitGroupSummary, openWaitlist: true })).toEqual({
+      text: "Open waitlist",
+    })
+  })
+  it("should show plural units available text", () => {
+    expect(
+      getAvailabilityText({ ...defaultUnitGroupSummary, openWaitlist: true, unitVacancies: 10 })
+    ).toEqual({ text: "10 Vacant Units & Open waitlist" })
+  })
+  it("should show singular units available text", () => {
+    expect(
+      getAvailabilityText({ ...defaultUnitGroupSummary, openWaitlist: false, unitVacancies: 1 })
+    ).toEqual({ text: "1 Vacant Unit & Closed waitlist" })
+  })
+  it("should show under construction text", () => {
+    expect(
+      getAvailabilityText(
+        { ...defaultUnitGroupSummary, openWaitlist: true, unitVacancies: 10 },
+        true
+      )
+    ).toEqual({ text: "Under Construction" })
   })
 })

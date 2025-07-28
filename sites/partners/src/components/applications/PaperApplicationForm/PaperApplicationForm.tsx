@@ -10,6 +10,7 @@ import {
   ApplicationReviewStatusEnum,
   ApplicationStatusEnum,
   ApplicationUpdate,
+  FeatureFlagEnum,
   HouseholdMember,
   MultiselectQuestionsApplicationSectionEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -40,6 +41,7 @@ type AlertErrorType = "api" | "form"
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormProps) => {
   const { listingDto } = useSingleListingData(listingId)
+  const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
 
   const preferences = listingSectionQuestions(
     listingDto,
@@ -49,6 +51,26 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
   const programs = listingSectionQuestions(
     listingDto,
     MultiselectQuestionsApplicationSectionEnum.programs
+  )
+
+  const enableUnitGroups = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableUnitGroups,
+    listingDto?.jurisdictions.id
+  )
+
+  const enableFullTimeStudentQuestion = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableFullTimeStudentQuestion,
+    listingDto?.jurisdictions.id
+  )
+
+  const enableAdaOtherOption = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableAdaOtherOption,
+    listingDto?.jurisdictions.id
+  )
+
+  const disableWorkInRegion = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.disableWorkInRegion,
+    listingDto?.jurisdictions.id
   )
 
   const units = listingDto?.units
@@ -216,19 +238,27 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
                   <div className="info-card md:w-9/12">
                     <FormApplicationData />
 
-                    <FormPrimaryApplicant />
+                    <FormPrimaryApplicant
+                      enableFullTimeStudentQuestion={enableFullTimeStudentQuestion}
+                      disableWorkInRegion={disableWorkInRegion}
+                    />
 
                     <FormAlternateContact />
 
                     <FormHouseholdMembers
                       householdMembers={householdMembers}
                       setHouseholdMembers={setHouseholdMembers}
+                      enableFullTimeStudentQuestion={enableFullTimeStudentQuestion}
                     />
 
                     <FormHouseholdDetails
                       listingUnits={units}
+                      listingUnitGroups={listingDto?.unitGroups}
                       applicationUnitTypes={application?.preferredUnitTypes}
                       applicationAccessibilityFeatures={application?.accessibility}
+                      enableOtherAdaOption={enableAdaOtherOption}
+                      enableUnitGroups={enableUnitGroups}
+                      enableFullTimeStudentQuestion={enableFullTimeStudentQuestion}
                     />
 
                     <FormMultiselectQuestions

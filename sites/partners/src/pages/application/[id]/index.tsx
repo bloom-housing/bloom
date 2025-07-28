@@ -23,6 +23,7 @@ import { DetailsTerms } from "../../../components/applications/PaperApplicationD
 import { Aside } from "../../../components/applications/Aside"
 import {
   ApplicationStatusEnum,
+  FeatureFlagEnum,
   MultiselectQuestionsApplicationSectionEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
@@ -30,13 +31,20 @@ export default function ApplicationsList() {
   const router = useRouter()
   const applicationId = router.query.id as string
   const { application } = useSingleApplicationData(applicationId)
-
-  {
-    /* TODO: add listing name in a listing response */
-  }
   const { listingDto } = useSingleListingData(application?.listings?.id)
 
-  const { applicationsService } = useContext(AuthContext)
+  const { applicationsService, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
+
+  const enableAdaOtherOption = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableAdaOtherOption,
+    listingDto?.jurisdictions.id
+  )
+
+  const enableFullTimeStudentQuestion = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableFullTimeStudentQuestion,
+    listingDto?.jurisdictions.id
+  )
+
   const [errorAlert, setErrorAlert] = useState(false)
 
   const [membersDrawer, setMembersDrawer] = useState<MembersDrawer>(null)
@@ -132,13 +140,21 @@ export default function ApplicationsList() {
               <div className="info-card md:w-9/12">
                 <DetailsApplicationData />
 
-                <DetailsPrimaryApplicant />
+                <DetailsPrimaryApplicant
+                  enableFullTimeStudentQuestion={enableFullTimeStudentQuestion}
+                />
 
                 <DetailsAlternateContact />
 
-                <DetailsHouseholdMembers setMembersDrawer={setMembersDrawer} />
+                <DetailsHouseholdMembers
+                  setMembersDrawer={setMembersDrawer}
+                  enableFullTimeStudentQuestion={enableFullTimeStudentQuestion}
+                />
 
-                <DetailsHouseholdDetails />
+                <DetailsHouseholdDetails
+                  enableFullTimeStudentQuestion={enableFullTimeStudentQuestion}
+                  enableAdaOtherOption={enableAdaOtherOption}
+                />
 
                 <DetailsMultiselectQuestions
                   listingId={application?.listings?.id}
@@ -173,6 +189,7 @@ export default function ApplicationsList() {
         application={application}
         membersDrawer={membersDrawer}
         setMembersDrawer={setMembersDrawer}
+        enableFullTimeStudentQuestion={enableFullTimeStudentQuestion}
       />
     </ApplicationContext.Provider>
   )

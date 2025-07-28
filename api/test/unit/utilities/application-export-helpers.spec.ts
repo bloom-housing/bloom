@@ -12,6 +12,8 @@ import {
   multiselectQuestionFormat,
   unitTypeToReadable,
 } from '../../../src/utilities/application-export-helpers';
+import { User } from '../../../src/dtos/users/user.dto';
+import { FeatureFlagEnum } from '../../../src/enums/feature-flags/feature-flags-enum';
 
 describe('Testing application export helpers', () => {
   const address = {
@@ -85,6 +87,10 @@ describe('Testing application export helpers', () => {
     {
       path: 'contactPreferences',
       label: 'Primary Applicant Preferred Contact Type',
+    },
+    {
+      path: 'applicant.workInRegion',
+      label: `Primary Applicant Work in Region`,
     },
     {
       path: 'applicant.applicantAddress.street',
@@ -215,6 +221,10 @@ describe('Testing application export helpers', () => {
     {
       path: 'accessibility.hearing',
       label: 'Accessibility Hearing',
+    },
+    {
+      path: 'accessibility.other',
+      label: 'Accessibility Other',
     },
     {
       path: 'householdExpectingChanges',
@@ -351,7 +361,28 @@ describe('Testing application export helpers', () => {
 
   describe('Testing getExportHeaders', () => {
     it('tests getCsvHeaders with no houshold members, multiselect questions or demographics', async () => {
-      const headers = await getExportHeaders(0, [], process.env.TIME_ZONE);
+      const requestingUser = {
+        jurisdictions: [
+          {
+            id: 'juris id',
+            featureFlags: [
+              {
+                name: FeatureFlagEnum.enableAdaOtherOption,
+                description: '',
+                active: true,
+                jurisdictions: [],
+              },
+            ],
+          },
+        ],
+      } as unknown as User;
+
+      const headers = await getExportHeaders(
+        0,
+        [],
+        process.env.TIME_ZONE,
+        requestingUser,
+      );
       const testHeaders = [
         ...csvHeaders,
         {
@@ -374,7 +405,29 @@ describe('Testing application export helpers', () => {
     });
 
     it('tests getCsvHeaders with household members and no multiselect questions or demographics', async () => {
-      const headers = await getExportHeaders(3, [], process.env.TIME_ZONE);
+      const requestingUser = {
+        jurisdictions: [
+          {
+            id: 'juris id',
+            featureFlags: [
+              {
+                name: FeatureFlagEnum.enableAdaOtherOption,
+                description: '',
+                active: true,
+                jurisdictions: [],
+              },
+            ],
+          },
+        ],
+      } as unknown as User;
+
+      const headers = await getExportHeaders(
+        3,
+        [],
+        process.env.TIME_ZONE,
+        requestingUser,
+      );
+
       const testHeaders = [
         ...csvHeaders,
         {

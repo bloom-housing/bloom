@@ -4610,9 +4610,6 @@ export interface ListingCreate {
   waitlistMaxSize?: number
 
   /**  */
-  whatToExpect?: string
-
-  /**  */
   status: ListingsStatusEnum
 
   /**  */
@@ -4752,6 +4749,9 @@ export interface ListingCreate {
 
   /**  */
   requestedChangesUser?: IdDTO
+
+  /**  */
+  whatToExpect?: string
 }
 
 export interface ListingDuplicate {
@@ -4923,9 +4923,6 @@ export interface ListingUpdate {
   waitlistMaxSize?: number
 
   /**  */
-  whatToExpect?: string
-
-  /**  */
   status: ListingsStatusEnum
 
   /**  */
@@ -5065,6 +5062,9 @@ export interface ListingUpdate {
 
   /**  */
   requestedChangesUser?: IdDTO
+
+  /**  */
+  whatToExpect?: string
 }
 
 export interface Accessibility {
@@ -5085,6 +5085,9 @@ export interface Accessibility {
 
   /**  */
   hearing?: boolean
+
+  /**  */
+  other?: boolean
 }
 
 export interface Demographic {
@@ -5158,6 +5161,9 @@ export interface Applicant {
 
   /**  */
   workInRegion?: YesNoEnum
+
+  /**  */
+  fullTimeStudent?: YesNoEnum
 
   /**  */
   applicantWorkAddress: Address
@@ -5240,6 +5246,9 @@ export interface HouseholdMember {
 
   /**  */
   workInRegion?: YesNoEnum
+
+  /**  */
+  fullTimeStudent?: YesNoEnum
 
   /**  */
   householdMemberWorkAddress?: Address
@@ -5661,6 +5670,9 @@ export interface JurisdictionCreate {
 
   /**  */
   duplicateListingPermissions: UserRoleEnum[]
+
+  /**  */
+  requiredListingFields: []
 }
 
 export interface JurisdictionUpdate {
@@ -5708,6 +5720,9 @@ export interface JurisdictionUpdate {
 
   /**  */
   duplicateListingPermissions: UserRoleEnum[]
+
+  /**  */
+  requiredListingFields: []
 }
 
 export interface FeatureFlag {
@@ -5790,6 +5805,9 @@ export interface Jurisdiction {
 
   /**  */
   featureFlags: FeatureFlag[]
+
+  /**  */
+  requiredListingFields: []
 }
 
 export interface MultiselectQuestionCreate {
@@ -6092,6 +6110,9 @@ export interface ApplicantUpdate {
   workInRegion?: YesNoEnum
 
   /**  */
+  fullTimeStudent?: YesNoEnum
+
+  /**  */
   applicantAddress: AddressCreate
 
   /**  */
@@ -6133,6 +6154,9 @@ export interface AccessibilityUpdate {
 
   /**  */
   hearing?: boolean
+
+  /**  */
+  other?: boolean
 }
 
 export interface DemographicUpdate {
@@ -6182,6 +6206,9 @@ export interface HouseholdMemberUpdate {
 
   /**  */
   workInRegion?: YesNoEnum
+
+  /**  */
+  fullTimeStudent?: YesNoEnum
 
   /**  */
   id?: string
@@ -6407,6 +6434,9 @@ export interface UserRole {
 
   /**  */
   isPartner?: boolean
+
+  /**  */
+  isSuperAdmin?: boolean
 }
 
 export interface User {
@@ -6894,11 +6924,12 @@ export enum EnumListingFilterParamsComparison {
   "NA" = "NA",
 }
 export enum ListingViews {
-  "fundamentals" = "fundamentals",
   "base" = "base",
-  "full" = "full",
-  "details" = "details",
   "csv" = "csv",
+  "details" = "details",
+  "full" = "full",
+  "fundamentals" = "fundamentals",
+  "name" = "name",
 }
 
 export enum ListingOrderByKeys {
@@ -7116,7 +7147,9 @@ export enum FeatureFlagEnum {
   "disableCommonApplication" = "disableCommonApplication",
   "disableJurisdictionalAdmin" = "disableJurisdictionalAdmin",
   "disableListingPreferences" = "disableListingPreferences",
+  "disableWorkInRegion" = "disableWorkInRegion",
   "enableAccessibilityFeatures" = "enableAccessibilityFeatures",
+  "enableAdaOtherOption" = "enableAdaOtherOption",
   "enableAdditionalResources" = "enableAdditionalResources",
   "enableCompanyWebsite" = "enableCompanyWebsite",
   "enableGeocodingPreferences" = "enableGeocodingPreferences",
@@ -7127,6 +7160,7 @@ export enum FeatureFlagEnum {
   "enableListingFiltering" = "enableListingFiltering",
   "enableListingOpportunity" = "enableListingOpportunity",
   "enableListingPagination" = "enableListingPagination",
+  "enableListingUpdatedAt" = "enableListingUpdatedAt",
   "enableMarketingStatus" = "enableMarketingStatus",
   "enableNeighborhoodAmenities" = "enableNeighborhoodAmenities",
   "enablePartnerDemographics" = "enablePartnerDemographics",
@@ -7141,6 +7175,7 @@ export enum FeatureFlagEnum {
   "hideCloseListingButton" = "hideCloseListingButton",
   "swapCommunityTypeWithPrograms" = "swapCommunityTypeWithPrograms",
   "enableWaitlistAdditionalFields" = "enableWaitlistAdditionalFields",
+  "enableFullTimeStudentQuestion" = "enableFullTimeStudentQuestion",
 }
 export enum EnumMultiselectQuestionFilterParamsComparison {
   "=" = "=",

@@ -30,7 +30,8 @@ import { ListingOrderByKeys } from '../../src/enums/listings/order-by-enum';
 import { OrderByEnum } from '../../src/enums/shared/order-by-enum';
 import { ListingViews } from '../../src/enums/listings/view-enum';
 import { IdDTO } from '../../src/dtos/shared/id.dto';
-import { ListingPublishedUpdate } from '../../src/dtos/listings/listing-published-update.dto';
+import { ListingCreate } from '../../src/dtos/listings/listing-create.dto';
+import { ListingUpdate } from '../../src/dtos/listings/listing-update.dto';
 import {
   unitTypeFactoryAll,
   unitTypeFactorySingle,
@@ -46,7 +47,6 @@ import {
   reservedCommunityTypeFactoryAll,
   reservedCommunityTypeFactoryGet,
 } from '../../prisma/seed-helpers/reserved-community-type-factory';
-import { ListingPublishedCreate } from '../../src/dtos/listings/listing-published-create.dto';
 import { addressFactory } from '../../prisma/seed-helpers/address-factory';
 import { AddressCreate } from '../../src/dtos/addresses/address-create.dto';
 import { EmailService } from '../../src/services/email.service';
@@ -132,7 +132,7 @@ describe('Listing Controller Tests', () => {
     );
     await createAllFeatureFlags(prisma);
     const jurisdiction = await prisma.jurisdictions.create({
-      data: jurisdictionFactory(),
+      data: jurisdictionFactory(`listing controller ${randomName()}`),
     });
     jurisdictionAId = jurisdiction.id;
     await reservedCommunityTypeFactoryAll(jurisdictionAId, prisma);
@@ -164,14 +164,15 @@ describe('Listing Controller Tests', () => {
   const constructFullListingData = async (
     listingId?: string,
     jurisdictionId?: string,
-  ): Promise<ListingPublishedCreate | ListingPublishedUpdate> => {
+    jurisdictionName?: string,
+  ): Promise<ListingCreate | ListingUpdate> => {
     let jurisdictionA: IdDTO = { id: '' };
 
     if (jurisdictionId) {
       jurisdictionA.id = jurisdictionId;
     } else {
       jurisdictionA = await prisma.jurisdictions.create({
-        data: jurisdictionFactory(),
+        data: jurisdictionFactory(jurisdictionName || randomName()),
       });
     }
 
@@ -255,6 +256,7 @@ describe('Listing Controller Tests', () => {
           },
         },
       ],
+      unitGroups: [],
       listingMultiselectQuestions: [
         {
           id: multiselectQuestion.id,
@@ -473,14 +475,18 @@ describe('Listing Controller Tests', () => {
 
     it('should get listings from list endpoint when params are sent', async () => {
       const listing1 = await listingFactory(jurisdictionAId, prisma, {
-        listing: { name: 'filterListing1' } as Prisma.ListingsCreateInput,
+        listing: {
+          name: `listing endpoint 1 ${randomName()}`,
+        } as Prisma.ListingsCreateInput,
       });
       const listing1Created = await prisma.listings.create({
         data: listing1,
       });
 
       const listing2 = await listingFactory(jurisdictionAId, prisma, {
-        listing: { name: 'filterListing2' } as Prisma.ListingsCreateInput,
+        listing: {
+          name: `listing endpoint 2 ${randomName()}`,
+        } as Prisma.ListingsCreateInput,
       });
       const listing2Created = await prisma.listings.create({
         data: listing2,
@@ -568,7 +574,7 @@ describe('Listing Controller Tests', () => {
 
     beforeAll(async () => {
       jurisdictionB = await prisma.jurisdictions.create({
-        data: jurisdictionFactory(),
+        data: jurisdictionFactory(`filterableList B ${randomName()}`),
       });
       multiselectQuestionPreference = await prisma.multiselectQuestions.create({
         data: multiselectQuestionFactory(jurisdictionB.id, {
@@ -641,14 +647,14 @@ describe('Listing Controller Tests', () => {
       });
 
       jurisdictionC = await prisma.jurisdictions.create({
-        data: jurisdictionFactory(),
+        data: jurisdictionFactory(`filterableList C ${randomName()}`),
       });
       const listing3Input = await listingFactory(jurisdictionC.id, prisma);
       listing3WithUnits = await prisma.listings.create({
         data: listing3Input,
       });
       jurisdictionDWithUnitGroups = await prisma.jurisdictions.create({
-        data: jurisdictionFactory(),
+        data: jurisdictionFactory(`filterableList D ${randomName()}`),
       });
       const listing4Input = await listingFactory(
         jurisdictionDWithUnitGroups.id,
@@ -1930,7 +1936,7 @@ describe('Listing Controller Tests', () => {
 
     it('should delete listing', async () => {
       const jurisdictionA = await prisma.jurisdictions.create({
-        data: jurisdictionFactory(),
+        data: jurisdictionFactory(`delete ${randomName()}`),
       });
       await reservedCommunityTypeFactoryAll(jurisdictionA.id, prisma);
       const listingData = await listingFactory(jurisdictionA.id, prisma, {
@@ -1965,6 +1971,9 @@ describe('Listing Controller Tests', () => {
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send({
           id: id,
+          status: ListingsStatusEnum.pending,
+          name: randomName(),
+          jurisdictions: { id: jurisdictionAId },
         } as IdDTO)
         .set('Cookie', adminAccessToken)
         .expect(404);
@@ -1975,7 +1984,7 @@ describe('Listing Controller Tests', () => {
 
     it('should update listing', async () => {
       const jurisdictionA = await prisma.jurisdictions.create({
-        data: jurisdictionFactory(),
+        data: jurisdictionFactory(`update ${randomName()}`),
       });
       await reservedCommunityTypeFactoryAll(jurisdictionA.id, prisma);
       const listingData = await listingFactory(jurisdictionA.id, prisma);
@@ -1999,7 +2008,11 @@ describe('Listing Controller Tests', () => {
 
   describe('create endpoint', () => {
     it('should create listing', async () => {
-      const val = await constructFullListingData();
+      const val = await constructFullListingData(
+        undefined,
+        undefined,
+        `create listing ${randomName()}`,
+      );
 
       const res = await request(app.getHttpServer())
         .post('/listings')
@@ -2065,7 +2078,7 @@ describe('Listing Controller Tests', () => {
     it('should duplicate listing, include unit groups', async () => {
       const jurisdictionWithUnitGroupsEnabled =
         await prisma.jurisdictions.create({
-          data: jurisdictionFactory(randomName(), {
+          data: jurisdictionFactory(`duplicate unit groups ${randomName()}`, {
             featureFlags: [FeatureFlagEnum.enableUnitGroups],
           }),
         });
@@ -2119,7 +2132,7 @@ describe('Listing Controller Tests', () => {
 
     it('should duplicate listing, exclude units', async () => {
       const jurisdictionA = await prisma.jurisdictions.create({
-        data: jurisdictionFactory(),
+        data: jurisdictionFactory(`duplicate exclude units ${randomName()}`),
       });
       await reservedCommunityTypeFactoryAll(jurisdictionA.id, prisma);
       const listingData = await listingFactory(jurisdictionA.id, prisma, {
@@ -2160,7 +2173,9 @@ describe('Listing Controller Tests', () => {
 
     it('should duplicate listing, exclude units with unit groups', async () => {
       const jurisdictionA = await prisma.jurisdictions.create({
-        data: jurisdictionFactory(),
+        data: jurisdictionFactory(
+          `duplicate exclude units unit groups ${randomName()}`,
+        ),
       });
       await reservedCommunityTypeFactoryAll(jurisdictionA.id, prisma);
       const listingData = await listingFactory(jurisdictionA.id, prisma, {
@@ -2206,7 +2221,7 @@ describe('Listing Controller Tests', () => {
   describe('process endpoint', () => {
     it('should successfully process listings that are past due', async () => {
       const jurisdictionA = await prisma.jurisdictions.create({
-        data: jurisdictionFactory(),
+        data: jurisdictionFactory(`process listings ${randomName()}`),
       });
       await reservedCommunityTypeFactoryAll(jurisdictionA.id, prisma);
       const listingData = await listingFactory(jurisdictionA.id, prisma, {
@@ -2236,7 +2251,7 @@ describe('Listing Controller Tests', () => {
 
     it('should only process listings that are past due', async () => {
       const jurisdictionA = await prisma.jurisdictions.create({
-        data: jurisdictionFactory(),
+        data: jurisdictionFactory(`process some listings ${randomName()}`),
       });
       await reservedCommunityTypeFactoryAll(jurisdictionA.id, prisma);
       const pastDueListingData = await listingFactory(
@@ -2304,7 +2319,7 @@ describe('Listing Controller Tests', () => {
       adminAccessToken;
     beforeAll(async () => {
       jurisdictionA = await prisma.jurisdictions.create({
-        data: jurisdictionFactory('jurisdictionA', {
+        data: jurisdictionFactory(`approval notifications A ${randomName()}`, {
           listingApprovalPermissions: [
             UserRoleEnum.admin,
             UserRoleEnum.jurisdictionAdmin,
@@ -2312,7 +2327,7 @@ describe('Listing Controller Tests', () => {
         }),
       });
       const jurisdictionB = await prisma.jurisdictions.create({
-        data: jurisdictionFactory('jurisdictionB'),
+        data: jurisdictionFactory(`approval notifications B ${randomName()}`),
       });
       adminUser = await prisma.userAccounts.create({
         data: await userFactory({
@@ -2464,6 +2479,280 @@ describe('Listing Controller Tests', () => {
         { id: listing.id, name: val.name, juris: expect.anything() },
         expect.arrayContaining([partnerUser.email]),
         process.env.PARTNERS_PORTAL_URL,
+      );
+    });
+  });
+
+  describe('dynamic required fields validation', () => {
+    let customJurisdiction;
+    let defaultJurisdiction;
+    let unitGroupJurisdiction;
+
+    beforeAll(async () => {
+      // Create a jurisdiction with custom required fields
+      customJurisdiction = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(`dynamic required custom ${randomName()}`, {
+          requiredListingFields: ['name', 'listingsBuildingAddress'],
+        }),
+      });
+
+      // Create a jurisdiction without specified required fields (should use default strict validation)
+      defaultJurisdiction = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(`dynamic required default ${randomName()}`),
+      });
+
+      // Create a unit group jurisdiction
+      unitGroupJurisdiction = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(
+          `dynamic required unit group ${randomName()}`,
+          {
+            featureFlags: [FeatureFlagEnum.enableUnitGroups],
+            requiredListingFields: ['name', 'unitGroups'],
+          },
+        ),
+      });
+    });
+
+    it('should allow saving active listing with requiredListingFields declared in jurisdiction', async () => {
+      const listingData = {
+        name: 'Minimal Listing for custom jurisdiction',
+        status: ListingsStatusEnum.active,
+        listingsBuildingAddress: addressFactory() as AddressCreate,
+        jurisdictions: {
+          id: customJurisdiction.id,
+        },
+      };
+
+      const res = await request(app.getHttpServer())
+        .post('/listings')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send(listingData)
+        .set('Cookie', adminAccessToken)
+        .expect(201);
+
+      expect(res.body.name).toEqual(listingData.name);
+      expect(res.body.status).toEqual(ListingsStatusEnum.active);
+    });
+
+    it('should fail saving active listing without requiredListingFields declared in jurisdictions', async () => {
+      const incompleteData = {
+        name: 'Minimal Listing for custom jurisdiction',
+        status: ListingsStatusEnum.active,
+        jurisdictions: {
+          id: customJurisdiction.id,
+        },
+      };
+
+      // Should fail due to missing required fields from requiredListingFields
+      const res = await request(app.getHttpServer())
+        .post('/listings')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send(incompleteData)
+        .set('Cookie', adminAccessToken)
+        .expect(400);
+
+      expect(res.body.message).toContain(
+        'listingsBuildingAddress is required when publishing the listing',
+      );
+    });
+
+    it('should enforce default strict validation when jurisdiction has no requiredListingFields', async () => {
+      const incompleteData = {
+        name: 'Default Jurisdiction Listing',
+        status: ListingsStatusEnum.active,
+        listingsBuildingAddress: addressFactory() as AddressCreate,
+        jurisdictions: {
+          id: defaultJurisdiction.id,
+        },
+      };
+
+      // Should fail due to missing required fields from default validation
+      const response = await request(app.getHttpServer())
+        .post('/listings')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send(incompleteData)
+        .set('Cookie', adminAccessToken)
+        .expect(400);
+
+      expect(response.body.message).toHaveLength(6);
+      expect(response.body.message.sort()).toEqual(
+        [
+          'listingImages is required when publishing the listing',
+          'developer is required when publishing the listing',
+          'leasingAgentEmail is required when publishing the listing',
+          'leasingAgentName is required when publishing the listing',
+          'leasingAgentPhone is required when publishing the listing',
+          'units must contain at least 1 element',
+        ].sort(),
+      );
+    });
+
+    it('should allow saving non-active listing with only name and jurisdiction field', async () => {
+      const minimalData = {
+        name: 'Minimal Draft Listing',
+        status: ListingsStatusEnum.pending,
+        jurisdictions: {
+          id: defaultJurisdiction.id,
+        },
+      };
+
+      const res = await request(app.getHttpServer())
+        .post('/listings')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send(minimalData)
+        .set('Cookie', adminAccessToken)
+        .expect(201);
+
+      expect(res.body.name).toEqual(minimalData.name);
+      expect(res.body.status).toEqual(ListingsStatusEnum.pending);
+    });
+
+    it('should validate optional fields when provided even if not required', async () => {
+      const invalidOptionalData = {
+        name: 'Invalid Optional Fields',
+        status: ListingsStatusEnum.pending,
+        jurisdictions: {
+          id: customJurisdiction.id,
+        },
+        leasingAgentEmail: 'not-a-valid-email', // Optional but should be validated if provided
+      };
+
+      const res = await request(app.getHttpServer())
+        .post('/listings')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send(invalidOptionalData)
+        .set('Cookie', adminAccessToken)
+        .expect(400);
+
+      expect(res.body.message).toContain('leasingAgentEmail must be an email');
+    });
+
+    it('should error if sending units on a unit group', async () => {
+      const wrongData = {
+        name: 'Minimal Listing for unit group jurisdiction',
+        status: ListingsStatusEnum.active,
+        jurisdictions: {
+          id: unitGroupJurisdiction.id,
+        },
+        units: [{}],
+      };
+      // Should fail due to missing required fields from requiredListingFields
+      const res = await request(app.getHttpServer())
+        .post('/listings')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send(wrongData)
+        .set('Cookie', adminAccessToken)
+        .expect(400);
+      expect(res.body.message).toContain(
+        'units cannot exist on this jurisdiction',
+      );
+    });
+
+    it('should error if sending unit groups on a unit jurisdiction', async () => {
+      const wrongData = {
+        name: 'Minimal Listing for unit group jurisdiction',
+        status: ListingsStatusEnum.active,
+        jurisdictions: {
+          id: customJurisdiction.id,
+        },
+        unitGroups: [{}],
+      };
+      // Should fail due to missing required fields from requiredListingFields
+      const res = await request(app.getHttpServer())
+        .post('/listings')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send(wrongData)
+        .set('Cookie', adminAccessToken)
+        .expect(400);
+      expect(res.body.message).toContain(
+        'unitGroups cannot exist on this jurisdiction',
+      );
+    });
+
+    it('should validate length of unit groups if a required field', async () => {
+      const incompleteData = {
+        name: 'partial unit group',
+        status: ListingsStatusEnum.active,
+        jurisdictions: {
+          id: unitGroupJurisdiction.id,
+        },
+      };
+      // Should fail due to missing required fields from requiredListingFields
+      const res = await request(app.getHttpServer())
+        .post('/listings')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send(incompleteData)
+        .set('Cookie', adminAccessToken)
+        .expect(400);
+      expect(res.body.message).toContain(
+        'unitGroups must contain at least 1 element',
+      );
+    });
+
+    it('should ignore unit group validation if not active', async () => {
+      const incompleteData = {
+        name: 'partial unit group',
+        status: ListingsStatusEnum.pending,
+        jurisdictions: {
+          id: unitGroupJurisdiction.id,
+        },
+      };
+      // Should pass since not publishing
+      await request(app.getHttpServer())
+        .post('/listings')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send(incompleteData)
+        .set('Cookie', adminAccessToken)
+        .expect(201);
+    });
+
+    it('should validate applicationDueDate only if not waitlist', async () => {
+      // Create a jurisdiction applicationDueDate required
+      const applicationDueDateJurisdiction = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(`dynamic required custom ${randomName()}`, {
+          requiredListingFields: ['name', 'applicationDueDate'],
+        }),
+      });
+      const completeData = {
+        name: 'waitlist listing',
+        status: ListingsStatusEnum.active,
+        reviewOrderType: ReviewOrderTypeEnum.waitlist,
+        listingsBuildingAddress: {
+          city: 'Bloomington',
+          state: 'AK',
+          street: 'Main st.',
+          zipCode: '12345',
+        },
+        jurisdictions: {
+          id: applicationDueDateJurisdiction.id,
+        },
+      };
+      // Should pass since is of type waitlist
+      await request(app.getHttpServer())
+        .post('/listings')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send(completeData)
+        .set('Cookie', adminAccessToken)
+        .expect(201);
+
+      // Should fail on validation when fcfs
+      const incompleteData = {
+        name: 'fcfs listing',
+        status: ListingsStatusEnum.active,
+        reviewOrderType: ReviewOrderTypeEnum.firstComeFirstServe,
+        jurisdictions: {
+          id: applicationDueDateJurisdiction.id,
+        },
+      };
+      const res = await request(app.getHttpServer())
+        .post('/listings')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send(incompleteData)
+        .set('Cookie', adminAccessToken)
+        .expect(400);
+
+      expect(res.body.message).toContain(
+        'applicationDueDate is required when publishing the listing',
       );
     });
   });

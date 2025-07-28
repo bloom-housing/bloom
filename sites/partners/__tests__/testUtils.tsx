@@ -24,6 +24,7 @@ export * from "@testing-library/react"
 // eslint-disable-next-line import/export
 export { customRender as render }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const mockNextRouter = (query?: any) => {
   // eslint-disable-next-line @typescript-eslint/no-var-requires
   const useRouter = jest.spyOn(require("next/router"), "useRouter")
@@ -37,4 +38,33 @@ export const mockNextRouter = (query?: any) => {
   }))
 
   return { useRouter, pushMock, backMock }
+}
+
+export const mockTipTapEditor = () => {
+  // Mocking issue: https://github.com/ueberdosis/tiptap/discussions/4008#discussioncomment-7623655
+  function getBoundingClientRect(): DOMRect {
+    const rec = {
+      x: 0,
+      y: 0,
+      bottom: 0,
+      height: 0,
+      left: 0,
+      right: 0,
+      top: 0,
+      width: 0,
+    }
+    return { ...rec, toJSON: () => rec }
+  }
+
+  class FakeDOMRectList extends Array<DOMRect> implements DOMRectList {
+    item(index: number): DOMRect | null {
+      return this[index]
+    }
+  }
+
+  document.elementFromPoint = (): null => null
+  HTMLElement.prototype.getBoundingClientRect = getBoundingClientRect
+  HTMLElement.prototype.getClientRects = (): DOMRectList => new FakeDOMRectList()
+  Range.prototype.getBoundingClientRect = getBoundingClientRect
+  Range.prototype.getClientRects = (): DOMRectList => new FakeDOMRectList()
 }

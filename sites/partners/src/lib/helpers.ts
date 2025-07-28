@@ -239,6 +239,7 @@ export function formatIncome(
   }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const isObject = (obj: any, key: string) => {
   return (
     obj[key] &&
@@ -259,6 +260,7 @@ export const isObject = (obj: any, key: string) => {
  *    No empty strings - set to null but still included
  *    Arrays / non-empty strings / Date objects - no changes
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const removeEmptyObjects = (obj: any, nested?: boolean) => {
   Object.keys(obj).forEach((key) => {
     if (isObject(obj, key)) {

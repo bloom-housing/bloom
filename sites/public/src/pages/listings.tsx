@@ -33,6 +33,7 @@ export interface ListingsProps {
   }
   jurisdiction: Jurisdiction
   multiselectData: MultiselectQuestion[]
+  areFiltersActive: boolean
 }
 
 export default function ListingsPage(props: ListingsProps) {
@@ -48,6 +49,7 @@ export default function ListingsPage(props: ListingsProps) {
           multiselectData={props.multiselectData}
           paginationData={props.paginationData}
           key={router.asPath}
+          areFiltersActive={props.areFiltersActive}
         />
       ) : (
         <ListingBrowseDeprecated
@@ -63,11 +65,13 @@ export default function ListingsPage(props: ListingsProps) {
 export async function getServerSideProps(context: { req: any; query: any }) {
   let openListings
   let closedListings
+  let areFiltersActive = false
 
   if (isFiltered(context.query)) {
     const filterData = decodeQueryToFilterData(context.query)
     const filters = encodeFilterDataToBackendFilters(filterData)
     openListings = await fetchOpenListings(context.req, Number(context.query.page) || 1, filters)
+    areFiltersActive = true
   } else {
     openListings = await fetchOpenListings(context.req, Number(context.query.page) || 1)
     closedListings = await fetchClosedListings(context.req, Number(context.query.page) || 1)
@@ -87,6 +91,7 @@ export async function getServerSideProps(context: { req: any; query: any }) {
       paginationData: openListings?.items?.length ? openListings.meta : null,
       jurisdiction: jurisdiction,
       multiselectData: multiselectData,
+      areFiltersActive,
     },
   }
 }

@@ -29,6 +29,7 @@ const UnitGroupAmiForm = ({
   const { amiChartsService } = useContext(AuthContext)
 
   const [amiChartPercentageOptions, setAmiChartPercentageOptions] = useState([])
+  const [initialAmiPercentage, setInitialAmiPercentage] = useState(null)
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, control, trigger, clearErrors, setValue, getValues, errors, reset } = useForm()
@@ -55,6 +56,10 @@ const UnitGroupAmiForm = ({
         ).sort(function (a: number, b: number) {
           return a - b
         })
+        let currentLevel
+        if (amiChartPercentageOptions.length === 0) {
+          currentLevel = amiLevels.find((entry) => entry.tempId === currentTempId)
+        }
         setAmiChartPercentageOptions(
           uniquePercentages.map((percentage) => {
             return {
@@ -63,11 +68,15 @@ const UnitGroupAmiForm = ({
             }
           })
         )
+        if (currentLevel) {
+          setInitialAmiPercentage(currentLevel.amiPercentage)
+        }
         return amiChartData
       } catch (e) {
         console.error(e)
       }
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [amiChartsService]
   )
 
@@ -121,7 +130,15 @@ const UnitGroupAmiForm = ({
     if (amiLevel) {
       reset({ ...amiLevel })
     }
-  }, [amiLevels, currentTempId, reset, amiChartPercentageOptions])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  useEffect(() => {
+    if (initialAmiPercentage !== null) {
+      setValue("amiPercentage", initialAmiPercentage)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialAmiPercentage])
 
   return (
     <Form onSubmit={() => false}>

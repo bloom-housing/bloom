@@ -452,8 +452,8 @@ export const getAvailabilityText = (
   }
   const hasVacantUnits = group.unitVacancies > 0
   const waitlistStatus = group.openWaitlist
-    ? t("listings.waitlist.open")
-    : t("listings.waitlist.closed")
+    ? t("listings.availability.openWaitlist")
+    : t("listings.availability.closedWaitlist")
 
   // Create an array of status elements to combine
   const statusElements = []
@@ -466,9 +466,7 @@ export const getAvailabilityText = (
     )
   }
 
-  if (group.openWaitlist) {
-    statusElements.push(waitlistStatus)
-  }
+  statusElements.push(waitlistStatus)
 
   // Combine statuses with proper formatting
   let availability = null
@@ -498,18 +496,15 @@ export const getAvailabilityTextForGroup = (
   }
   // Track all statuses across groups
   const statusSet = new Set<string>()
-  let totalVacantUnits = 0
 
   // Collect information from all groups
-  groups.forEach((group) => {
-    if (group.openWaitlist) {
-      statusSet.add(t("listings.waitlist.open"))
-    }
+  statusSet.add(
+    groups.some((entry) => entry.openWaitlist)
+      ? t("listings.waitlist.open")
+      : t("listings.waitlist.closed")
+  )
 
-    if (group.unitVacancies > 0) {
-      totalVacantUnits += group.unitVacancies
-    }
-  })
+  const totalVacantUnits = groups.reduce((acc, group) => (acc += group.unitVacancies), 0)
 
   const statusElements = Array.from(statusSet)
   if (totalVacantUnits > 0) {
