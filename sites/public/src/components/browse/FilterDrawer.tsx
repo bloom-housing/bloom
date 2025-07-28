@@ -47,6 +47,10 @@ const FilterDrawer = (props: FilterDrawerProps) => {
     (entry) => entry === FeatureFlagEnum.enableUnitGroups
   )
 
+  const availabilityLabels = getAvailabilityValues(enableUnitGroups).map((key) =>
+    t(`listings.availability.${key}`)
+  )
+
   return (
     <Drawer
       isOpen={props.isOpen}
@@ -74,8 +78,8 @@ const FilterDrawer = (props: FilterDrawerProps) => {
             groupLabel={t("t.availability")}
             fields={buildDefaultFilterFields(
               ListingFilterKeys.availabilities,
-              "listings.availability",
-              getAvailabilityValues(enableUnitGroups),
+              availabilityLabels,
+              getAvailabilityValues(false),
               props.filterState
             )}
             register={register}
