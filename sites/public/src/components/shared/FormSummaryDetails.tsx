@@ -2,10 +2,9 @@ import React, { Fragment, useEffect, useState } from "react"
 import { MultiLineAddress, t } from "@bloom-housing/ui-components"
 import { Card, FieldValue, Heading, Link } from "@bloom-housing/ui-seeds"
 import {
-  getUniqueUnitTypes,
-  getUniqueUnitGroupUnitTypes,
   AddressHolder,
   cleanMultiselectString,
+  getPreferredUnitTypes,
 } from "@bloom-housing/shared-helpers"
 import {
   Address,
@@ -13,8 +12,6 @@ import {
   Application,
   ApplicationMultiselectQuestion,
   ApplicationMultiselectQuestionOption,
-  FeatureFlag,
-  FeatureFlagEnum,
   InputType,
   Listing,
   MultiselectQuestionsApplicationSectionEnum,
@@ -184,16 +181,7 @@ const FormSummaryDetails = ({
     )
   }
 
-  const allListingUnitTypes = enableUnitGroups
-    ? getUniqueUnitGroupUnitTypes(listing?.unitGroups)
-    : getUniqueUnitTypes(listing?.units)
-
-  const preferredUnits = application.preferredUnitTypes?.map((unit) => {
-    const unitDetails = allListingUnitTypes?.find(
-      (unitType) => unitType.name === unit.name || unit.id === unitType.id
-    )
-    return unitDetails?.name || unit.name
-  })
+  const preferredUnits = getPreferredUnitTypes(application, listing, enableUnitGroups, true)
 
   return (
     <>

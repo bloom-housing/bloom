@@ -8,6 +8,7 @@ import {
   PageView,
   pushGtmEvent,
   AuthContext,
+  getPreferredUnitTypes,
 } from "@bloom-housing/shared-helpers"
 import FormsLayout from "../../../layouts/forms"
 import { useFormConductor } from "../../../lib/hooks"
@@ -37,6 +38,9 @@ export default () => {
 
   const mounted = OnClientSide()
 
+  const enableUnitGroups = isFeatureFlagOn(conductor.config, FeatureFlagEnum.enableUnitGroups)
+  const preferredUnits = getPreferredUnitTypes(application, listing, enableUnitGroups)
+
   const { handleSubmit } = useForm()
   const onSubmit = useCallback(() => {
     if (!submitted) {
@@ -46,6 +50,7 @@ export default () => {
         const withUpdatedLang = {
           ...JSON.parse(JSON.stringify(previousApplication)),
           language: router.locale,
+          preferredUnitTypes: preferredUnits,
         }
 
         conductor.application = withUpdatedLang
@@ -60,7 +65,15 @@ export default () => {
       conductor.sync()
       conductor.routeToNextOrReturnUrl()
     }
-  }, [submitted, previousApplication, useDetails, context, conductor, router])
+  }, [
+    submitted,
+    previousApplication,
+    useDetails,
+    context,
+    conductor,
+    router.locale,
+    preferredUnits,
+  ])
 
   useEffect(() => {
     pushGtmEvent<PageView>({
