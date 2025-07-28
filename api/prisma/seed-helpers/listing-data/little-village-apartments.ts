@@ -25,7 +25,6 @@ export const littleVillageApartments = {
   unitAmenities: null,
   servicesOffered: null,
   yearBuilt: 1996,
-  applicationDueDate: null,
   applicationOpenDate: dayjs(new Date()).subtract(30, 'days').toDate(),
   applicationFee: null,
   applicationOrganization: null,
