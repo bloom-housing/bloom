@@ -193,4 +193,31 @@
       --button-border-radius-md: var(--seeds-rounded-3xl);
     }
   }
+
+  // The multi-image card overrides below exist outside of the jurisdictional class. This allows it to still get the lakeview overrides - if the class does exist, then apply the same overrides to its sibling.
+  .lakeview + div {
+    .image-card__gallery-modal {
+      @extend .lakeview;
+    }
+  }
+
+  // These are temporary manual overrides for the UIC multi image modal to enable it to theme with Seeds while the new Seeds multi image modal is still in development
+  .image-card__gallery-modal {
+    --bloom-color-primary: var(--seeds-color-primary);
+    --bloom-color-primary-dark: var(--seeds-color-primary-dark);
+    max-width: var(--seeds-width-2xl);
+    @media (--sm-only) {
+      background-color: var(--seeds-color-white);
+    }
+    p,
+    img {
+      width: 100%;
+    }
+    p {
+      margin-block-end: var(--seeds-s8);
+      @media (--sm-only) {
+        margin-block-end: var(--seeds-s4);
+      }
+    }
+  }
 }
