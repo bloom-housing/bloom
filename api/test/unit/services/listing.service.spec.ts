@@ -1474,6 +1474,15 @@ describe('Testing listing service', () => {
                   gte: 1,
                 },
               },
+              {
+                unitGroups: {
+                  some: {
+                    totalAvailable: {
+                      gte: 1,
+                    },
+                  },
+                },
+              },
             ],
           },
         ],
@@ -1513,6 +1522,15 @@ describe('Testing listing service', () => {
               {
                 unitsAvailable: {
                   gte: 1,
+                },
+              },
+              {
+                unitGroups: {
+                  some: {
+                    totalAvailable: {
+                      gte: 1,
+                    },
+                  },
                 },
               },
             ],
@@ -1651,6 +1669,15 @@ describe('Testing listing service', () => {
               {
                 unitsAvailable: {
                   gte: 1,
+                },
+              },
+              {
+                unitGroups: {
+                  some: {
+                    totalAvailable: {
+                      gte: 1,
+                    },
+                  },
                 },
               },
             ],

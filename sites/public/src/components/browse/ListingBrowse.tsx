@@ -72,7 +72,9 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
     FeatureFlagEnum.enableListingFiltering
   )
 
-  const enableUnitGroups = isFeatureFlagOn(props.jurisdiction, FeatureFlagEnum.enableUnitGroups)
+  const jurisdictionActiveFeatureFlags = props.jurisdiction.featureFlags
+    .filter((featureFlag) => featureFlag.active)
+    .map((entry) => entry.name)
 
   useEffect(() => {
     pushGtmEvent<ListingList>({
@@ -172,7 +174,7 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
         onSubmit={(data) => onFilterSubmit(data)}
         filterState={filterState}
         multiselectData={props.multiselectData}
-        enableUnitGroups={enableUnitGroups}
+        activeFeatureFlags={jurisdictionActiveFeatureFlags}
       />
       <LoadingState loading={isLoading}>
         <div className={styles["listing-directory"]}>

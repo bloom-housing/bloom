@@ -7,6 +7,7 @@ import {
   HomeTypeEnum,
   ListingFilterKeys,
   MultiselectQuestion,
+  FeatureFlagEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import styles from "./FilterDrawer.module.scss"
 import {
@@ -29,7 +30,7 @@ export interface FilterDrawerProps {
   onClose: () => void
   onSubmit: (data: FilterData) => void
   multiselectData: MultiselectQuestion[]
-  enableUnitGroups?: boolean
+  activeFeatureFlags?: FeatureFlagEnum[]
 }
 
 const FilterDrawer = (props: FilterDrawerProps) => {
@@ -43,6 +44,10 @@ const FilterDrawer = (props: FilterDrawerProps) => {
     clearErrors,
     formState: { errors },
   } = useForm({ mode: "onBlur" })
+
+  const enableUnitGroups = props.activeFeatureFlags?.some(
+    (entry) => entry === FeatureFlagEnum.enableUnitGroups
+  )
 
   return (
     <Drawer
@@ -72,7 +77,7 @@ const FilterDrawer = (props: FilterDrawerProps) => {
             fields={buildDefaultFilterFields(
               ListingFilterKeys.availabilities,
               "listings.availability",
-              getAvailabilityValues(),
+              getAvailabilityValues(enableUnitGroups),
               props.filterState
             )}
             register={register}
@@ -91,12 +96,12 @@ const FilterDrawer = (props: FilterDrawerProps) => {
             groupLabel={t("listings.unitTypes.bedroomSize")}
             fields={buildDefaultFilterFields(
               ListingFilterKeys.bedroomTypes,
-              props.enableUnitGroups
+              enableUnitGroups
                 ? unitTypesSortedByUnitGroups.map((unitType) =>
                     t(unitTypeUnitGroupsMapping[unitType].labelKey)
                   )
                 : unitTypesSorted.map((unitType) => t(unitTypeMapping[unitType].labelKey)),
-              props.enableUnitGroups ? unitTypesSortedByUnitGroups : unitTypesSorted,
+              enableUnitGroups ? unitTypesSortedByUnitGroups : unitTypesSorted,
               props.filterState
             )}
             register={register}
