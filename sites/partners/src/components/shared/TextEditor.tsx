@@ -236,6 +236,7 @@ type TextEditorProps = {
   error?: boolean
   errorMessage?: string
   label: string | React.ReactNode
+  labelId: string
 }
 
 export const TextEditor = ({
@@ -245,6 +246,7 @@ export const TextEditor = ({
   error,
   errorMessage,
   label,
+  labelId,
 }: TextEditorProps) => {
   const [errorState, setErrorState] = useState(error)
 
@@ -256,20 +258,26 @@ export const TextEditor = ({
     if (errorState) setErrorState(false)
   })
 
+  editor.on("create", () => {
+    editor?.view.setProps({
+      attributes: { "aria-labelledby": labelId, role: "textbox" },
+    })
+  })
+
   const characterCount = editor?.storage?.characterCount?.characters()
   const overLimit = characterCount > characterLimit
 
   return (
     <>
-      <label>
+      <label id={labelId}>
         <span className={`${styles["label"]} ${errorState ? styles["error-text"] : null}`}>
           {label}
         </span>
-        <div className={`${styles["editor"]} ${overLimit || errorState ? styles["error"] : ""}`}>
-          <MenuBar editor={editor} />
-          <EditorContent editor={editor} id={editorId} data-testid={editorId} />
-        </div>
       </label>
+      <div className={`${styles["editor"]} ${overLimit || errorState ? styles["error"] : ""}`}>
+        <MenuBar editor={editor} />
+        <EditorContent editor={editor} id={editorId} data-testid={editorId} />
+      </div>
       <div
         className={`${styles["character-count"]} ${
           overLimit ? styles["character-count-warning"] : ""
