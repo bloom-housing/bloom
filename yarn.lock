@@ -2061,6 +2061,62 @@
     tailwindcss-rtl "^0.9.0"
     typesafe-actions "^5.1.0"
 
+"@bloom-housing/ui-components@12.7.4":
+  version "12.7.4"
+  resolved "https://registry.yarnpkg.com/@bloom-housing/ui-components/-/ui-components-12.7.4.tgz#8277386b4751645d4a933044cf011daf55f84c24"
+  integrity sha512-wV5hkfneJOjoqY+or613pQvdjhGIpCVxAsTIOhmrZNo+RIV78HwxxKfaIQg1lJ15YbCoZuaJvfMhWRuvQkmUxA==
+  dependencies:
+    "@fortawesome/fontawesome-svg-core" "^6.1.1"
+    "@fortawesome/free-regular-svg-icons" "^6.1.1"
+    "@fortawesome/free-solid-svg-icons" "^6.1.1"
+    "@fortawesome/react-fontawesome" "^0.1.18"
+    "@mapbox/mapbox-sdk" "^0.13.0"
+    ag-grid-community "^26.0.0"
+    ag-grid-react "^26.0.0"
+    aria-autocomplete "^1.4.0"
+    axios "0.21.2"
+    dayjs "^1.10.7"
+    jwt-decode "^2.2.0"
+    markdown-to-jsx "7.1.8"
+    nanoid "^3.1.12"
+    node-polyglot "^2.4.0"
+    react "18.2.0"
+    react-accessible-accordion "5.0.0"
+    react-beautiful-dnd "^13.1.1"
+    react-dom "18.2.0"
+    react-dropzone "^11.3.2"
+    react-focus-lock "^2.9.4"
+    react-hook-form "^6.15.5"
+    react-map-gl "^6.1.16"
+    react-media "^1.10.0"
+    react-remove-scroll "2.5.4"
+    react-tabs "^3.2.2"
+    react-text-mask "^5.5.0"
+    react-transition-group "^4.4.1"
+    tailwindcss "2.2.10"
+    tailwindcss-rtl "^0.9.0"
+    typesafe-actions "^5.1.0"
+
+"@bloom-housing/ui-seeds@1.22.1":
+  version "1.22.1"
+  resolved "https://registry.yarnpkg.com/@bloom-housing/ui-seeds/-/ui-seeds-1.22.1.tgz#b4ecb2d1e6a5ad30c1ec4dd74159189fa9d46756"
+  integrity sha512-v9J8eaUSmRFLIoMM3eNhmr44s/R6OrKZB0ZOXrA7AC5MBw46C+MJw79BjC0YRvKP6BNacy6ntIba+sZxWuJZNA==
+  dependencies:
+    "@fortawesome/fontawesome-svg-core" "^6.3.0"
+    "@fortawesome/react-fontawesome" "^0.2.0"
+    "@heroicons/react" "^2.0.18"
+    "@types/markdown-to-jsx" "^6.11.2"
+    "@types/mdx" "^2.0.3"
+    "@types/node" "^16.7.13"
+    "@types/react" "^18.0.0"
+    "@types/react-dom" "^18.0.0"
+    focus-trap-react "^11.0.3"
+    markdown-to-jsx "^6.11.4"
+    react "^18.2.0"
+    react-dom "^18.2.0"
+    react-tabs "^6.0.0"
+    typescript "^4.4.2"
+
 "@bloom-housing/ui-seeds@1.22.4":
   version "1.22.4"
   resolved "https://registry.yarnpkg.com/@bloom-housing/ui-seeds/-/ui-seeds-1.22.4.tgz#bc54c14154574c1a7a38a4da1af6d0c1d9e0909f"
@@ -3345,16 +3401,6 @@
   version "2.11.8"
   resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.11.8.tgz#6b79032e760a0899cd4204710beede972a3a185f"
   integrity sha512-P1st0aksCrn9sGZhp8GMYwBnQsbvAWsZAX44oXNNvLHGqAOcoVxmjZiohstwQ7SqKnbR47akdNi+uleWD8+g6A==
-
-"@protobufjs/aspromise@^1.1.1":
-  version "1.1.2"
-  resolved "https://registry.yarnpkg.com/@protobufjs/aspromise/-/aspromise-1.1.2.tgz#9b8b0cc663d669a7d8f6f5d0893a14d348f30fbf"
-  integrity sha512-j+gKExEuLmKwvz3OgROXtrJ2UG2x8Ch2YZUxahh+s1F2HZ+wAceUNLkvy6zKCPVRkU++ZWQrdxsUeQXmcg4uoQ==
-
-"@protobufjs/inquire@^1.1.0":
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@protobufjs/inquire/-/inquire-1.1.0.tgz#ff200e3e7cf2429e2dcafc1140828e8cc638f089"
-  integrity sha512-kdSefcPdruJiFMVSbn801t4vFK7KB/5gd2fYvrxhuJYg8ILrmn9SKSX2tZdV6V+ksulWqS7aXjBcRXl3wHoD9Q==
 
 "@react-google-maps/api@^2.20.3":
   version "2.20.3"
@@ -11131,13 +11177,18 @@ markdown-to-jsx@7.1.8:
   resolved "https://registry.yarnpkg.com/markdown-to-jsx/-/markdown-to-jsx-7.1.8.tgz#49c3bb3c122aa714324034142c8829b93c889338"
   integrity sha512-rRSa1aFmFnpDRFAhv5vIkWM4nPaoB9vnzIjuIKa1wGupfn2hdCNeaQHKpu4/muoc8n8J7yowjTP2oncA4/Rbgg==
 
+markdown-to-jsx@^6.11.4:
+  version "6.11.4"
+  resolved "https://registry.yarnpkg.com/markdown-to-jsx/-/markdown-to-jsx-6.11.4.tgz#b4528b1ab668aef7fe61c1535c27e837819392c5"
+  integrity sha512-3lRCD5Sh+tfA52iGgfs/XZiw33f7fFX9Bn55aNnVNUd2GzLDkOWyKYYD8Yju2B1Vn+feiEdgJs8T6Tg0xNokPw==
+  dependencies:
+    prop-types "^15.6.2"
+    unquote "^1.1.0"
+
 markdown-to-jsx@^7.7.12:
   version "7.7.12"
   resolved "https://registry.yarnpkg.com/markdown-to-jsx/-/markdown-to-jsx-7.7.12.tgz#78fbf5c93f0195a6a2c1177d16cc14ab1e815e42"
   integrity sha512-Y5xNBqoaTooSLkmlg2P0fdbh53gp4MqW7zhvcweGCPUWvWI5BecWRYI8vPlzT8D7OULxsQg2qoRW9EsJlBWasQ==
-  dependencies:
-    prop-types "^15.6.2"
-    unquote "^1.1.0"
 
 mdurl@^2.0.0:
   version "2.0.0"

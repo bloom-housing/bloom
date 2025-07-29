@@ -19,7 +19,7 @@ describe("Listing Management Tests", () => {
     cy.getByID("jurisdictions.id-error").contains("This field is required")
     // Fill out minimum fields and errors get removed
     cy.getByID("jurisdictions.id").select("Bay Area")
-    cy.getByID("jurisdictions.id-error").should("have.length", 0)
+    cy.getByID("jurisdictions.id-error").should("not.include.text", "This field is required")
     cy.getByID("name").type("Test - error messaging")
     cy.getByID("name-error").should("to.be.empty")
     cy.getByID("saveDraftButton").contains("Save as Draft").click()
@@ -44,8 +44,8 @@ describe("Listing Management Tests", () => {
       expect($alertButtons[1]).to.have.id("addUnitsButton")
     })
     cy.getByID("units-error").contains("This field is required")
-    cy.getByID("communityDisclaimerTitle-error").contains("Enter title")
-    cy.get(".textarea-error-message").contains("Enter description")
+    cy.getByID("communityDisclaimerTitle-error").contains("This field is required")
+    cy.get(".textarea-error-message").contains("This field is required")
     cy.getByID("applicationProcessButton").contains("Application Process").click()
     cy.getByID("leasingAgentName-error").contains("This field is required")
     cy.getByID("leasingAgentEmail-error").contains("This field is required")
@@ -72,6 +72,37 @@ describe("Listing Management Tests", () => {
     cy.getByID("listingEditButton").contains("Edit").click()
     cy.getByID("saveAndContinueButton").contains("Save").click()
     cy.getByID("name").should("have.value", "Test - error messaging DISCARD")
+  })
+
+  it("error messaging publish with minimal fields", () => {
+    cy.visit("/")
+    cy.get("a").contains("Add Listing").click()
+    cy.contains("New Listing")
+    cy.getByID("jurisdictions.id").select("Lakeview")
+    // Try to publish a listing and should show errors for appropriate fields
+    cy.getByID("publishButton").contains("Publish").click()
+    cy.getByID("publishButtonConfirm").contains("Publish").click()
+    cy.contains("Please resolve any errors before saving or publishing your listing.")
+    cy.getByID("name-error").contains("This field is required")
+    cy.getByID("developer-error").contains("This field is required").should("not.exist")
+    cy.getByID("listingsBuildingAddress.street-error").contains("Cannot enter a partial address")
+    cy.getByID("listingsBuildingAddress.city-error").contains("Cannot enter a partial address")
+    cy.getByID("listingsBuildingAddress.state-error").contains("Cannot enter a partial address")
+    cy.getByID("listingsBuildingAddress.zipCode-error").contains("Cannot enter a partial address")
+    cy.getByID("units-error").should("not.exist")
+    cy.getByID("applicationProcessButton").contains("Application Process").click()
+    cy.getByID("leasingAgentName-error").contains("This field is required").should("not.exist")
+    cy.getByID("leasingAgentEmail-error").contains("This field is required").should("not.exist")
+    cy.getByID("leasingAgentPhone-error").should("not.exist")
+    cy.getByID("digitalApplicationChoice-error").should(
+      "not.include.text",
+      "This field is required"
+    )
+    cy.getByID("paperApplicationChoice-error").should("not.include.text", "This field is required")
+    cy.getByID("referralOpportunityChoice-error").should(
+      "not.include.text",
+      "This field is required"
+    )
   })
 
   it("full listing publish", () => {

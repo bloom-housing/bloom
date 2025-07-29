@@ -1,4 +1,4 @@
-import { Button, Card, Drawer, FieldValue, Grid } from "@bloom-housing/ui-seeds"
+import { Button, Card, Drawer, Grid } from "@bloom-housing/ui-seeds"
 import SectionWithGrid from "../../shared/SectionWithGrid"
 import { Field, FieldGroup, Form, Select, SelectOption, t } from "@bloom-housing/ui-components"
 import { useForm, useWatch } from "react-hook-form"
@@ -10,6 +10,7 @@ import {
   EnumUnitGroupAmiLevelMonthlyRentDeterminationType,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { TempAmiLevel } from "../../../lib/listings/formTypes"
+import styles from "./ListingForm.module.scss"
 
 type UnitGroupAmiFormProps = {
   onSubmit: (amiLevel: TempAmiLevel) => void
@@ -147,84 +148,73 @@ const UnitGroupAmiForm = ({
           <Card.Section>
             <SectionWithGrid heading={t("listings.unit.amiLevel")}>
               <Grid.Row columns={4}>
-                <FieldValue label={t("listings.unit.amiChart")}>
-                  <Select
-                    label={t("listings.unit.amiChart")}
-                    id="amiChart.id"
-                    name="amiChart.id"
-                    placeholder={t("t.selectOne")}
-                    options={amiChartsOptions}
-                    labelClassName="sr-only"
-                    controlClassName="control"
-                    register={register}
-                    error={fieldHasError(errors?.amiChart)}
-                    errorMessage={t("errors.requiredFieldError")}
-                    validation={{ required: true }}
-                    inputProps={{
-                      onChange: () => {
-                        setValue("amiPercentage", undefined)
-                        clearErrors("amiPercentage")
-                        clearErrors("amiChart.id")
-                      },
-                    }}
-                  />
-                </FieldValue>
-                <FieldValue label={t("listings.unit.amiPercentage")}>
-                  <Select
-                    label={t("listings.unit.amiPercentage")}
-                    name="amiPercentage"
-                    placeholder={t("t.selectOne")}
-                    options={amiChartPercentageOptions}
-                    labelClassName="sr-only"
-                    controlClassName="control"
-                    register={register}
-                    disabled={!amiChartID}
-                    error={fieldHasError(errors?.amiPercentage)}
-                    errorMessage={t("errors.requiredFieldError")}
-                    validation={{ required: true }}
-                  />
-                </FieldValue>
-                <FieldValue label={t("listings.unit.rentType")}>
-                  <FieldGroup
-                    name="monthlyRentDeterminationType"
-                    type="radio"
-                    fields={rentTypeOptions}
-                    register={register}
-                    error={fieldHasError(errors?.monthlyRentDeterminationType)}
-                    errorMessage={t("errors.requiredFieldError")}
-                    validation={{ required: true }}
-                  />
-                </FieldValue>
+                <Select
+                  label={t("listings.unit.amiChart")}
+                  id="amiChart.id"
+                  name="amiChart.id"
+                  placeholder={t("t.selectOne")}
+                  options={amiChartsOptions}
+                  controlClassName="control"
+                  register={register}
+                  error={fieldHasError(errors?.amiChart)}
+                  errorMessage={t("errors.requiredFieldError")}
+                  validation={{ required: true }}
+                  inputProps={{
+                    onChange: () => {
+                      setValue("amiPercentage", undefined)
+                      clearErrors("amiPercentage")
+                      clearErrors("amiChart.id")
+                    },
+                  }}
+                />
+                <Select
+                  id={"amiPercentage"}
+                  label={t("listings.unit.amiPercentage")}
+                  name="amiPercentage"
+                  placeholder={t("t.selectOne")}
+                  options={amiChartPercentageOptions}
+                  controlClassName="control"
+                  register={register}
+                  disabled={!amiChartID}
+                  error={fieldHasError(errors?.amiPercentage)}
+                  errorMessage={t("errors.requiredFieldError")}
+                  validation={{ required: true }}
+                />
+                <FieldGroup
+                  name="monthlyRentDeterminationType"
+                  type="radio"
+                  fields={rentTypeOptions}
+                  register={register}
+                  error={fieldHasError(errors?.monthlyRentDeterminationType)}
+                  errorMessage={t("errors.requiredFieldError")}
+                  validation={{ required: true }}
+                  groupLabel={t("listings.unit.rentType")}
+                  fieldLabelClassName={styles["label-option"]}
+                />
 
                 {rentType &&
                   (rentType === EnumUnitGroupAmiLevelMonthlyRentDeterminationType.flatRent ? (
-                    <FieldValue label={t("listings.unit.monthlyRent")}>
-                      <Field
-                        label={t("listings.unit.monthlyRent")}
-                        name="flatRentValue"
-                        id="flatRentValue"
-                        readerOnly
-                        register={register}
-                        type="number"
-                        error={errors?.flatRentValue}
-                        errorMessage={t("errors.requiredFieldError")}
-                        validation={{ required: true }}
-                      />
-                    </FieldValue>
+                    <Field
+                      label={t("listings.unit.monthlyRent")}
+                      name="flatRentValue"
+                      id="flatRentValue"
+                      register={register}
+                      type="number"
+                      error={errors?.flatRentValue}
+                      errorMessage={t("errors.requiredFieldError")}
+                      validation={{ required: true }}
+                    />
                   ) : (
-                    <FieldValue label={t("listings.unit.percentage")}>
-                      <Field
-                        label={t("listings.unit.percentage")}
-                        name="percentageOfIncomeValue"
-                        id="percentageOfIncomeValue"
-                        readerOnly
-                        register={register}
-                        type="number"
-                        error={errors?.percentageOfIncomeValue}
-                        errorMessage={t("errors.requiredFieldError")}
-                        validation={{ required: true }}
-                      />
-                    </FieldValue>
+                    <Field
+                      label={t("listings.unit.percentage")}
+                      name="percentageOfIncomeValue"
+                      id="percentageOfIncomeValue"
+                      register={register}
+                      type="number"
+                      error={errors?.percentageOfIncomeValue}
+                      errorMessage={t("errors.requiredFieldError")}
+                      validation={{ required: true }}
+                    />
                   ))}
               </Grid.Row>
             </SectionWithGrid>

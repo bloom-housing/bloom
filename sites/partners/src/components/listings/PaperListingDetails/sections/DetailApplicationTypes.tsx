@@ -87,6 +87,24 @@ const DetailApplicationTypes = () => {
           </FieldValue>
         </Grid.Row>
       )}
+
+      {/* 
+      // referral opportunity removed from Doorway
+      <Grid.Row columns={2}>
+        <FieldValue id="referralOpportunity" label={t("listings.applicationType.referral")}>
+          {getDetailBoolean(listing.referralOpportunity)}
+        </FieldValue>
+        {referralMethod && (
+          <>
+            <FieldValue id="referralContactPhone" label={t("listings.referralContactPhone")}>
+              {getDetailFieldString(referralMethod.phoneNumber)}
+            </FieldValue>
+            <FieldValue id="referralSummary" label={t("listings.referralSummary")}>
+              {getDetailFieldString(referralMethod.externalReference)}
+            </FieldValue>
+          </>
+        )}
+      </Grid.Row> */}
     </SectionWithGrid>
   )
 }

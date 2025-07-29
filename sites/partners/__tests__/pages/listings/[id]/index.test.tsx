@@ -498,7 +498,9 @@ describe("listing data", () => {
       expect(queryByText("Rent")).not.toBeInTheDocument()
       expect(queryByText("SQ FT")).not.toBeInTheDocument()
       expect(queryByText("ADA")).not.toBeInTheDocument()
-      expect(queryByText("Do you accept Section 8 Housing Choice Vouchers")).not.toBeInTheDocument()
+      expect(
+        queryByText("Do you accept Section 8 Housing Choice Vouchers?")
+      ).not.toBeInTheDocument()
       expect(queryByText("No")).not.toBeInTheDocument()
     })
 
@@ -552,7 +554,7 @@ describe("listing data", () => {
       expect(getAllByText(/Test ADA_\d{1}/)).toHaveLength(6)
       expect(getAllByText("View")).toHaveLength(6)
 
-      expect(getByText("Do you accept Section 8 Housing Choice Vouchers")).toBeInTheDocument()
+      expect(getByText("Do you accept Section 8 Housing Choice Vouchers?")).toBeInTheDocument()
       expect(getByText("Yes")).toBeInTheDocument()
     })
 

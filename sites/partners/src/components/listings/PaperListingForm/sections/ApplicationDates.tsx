@@ -12,7 +12,7 @@ import {
   Select,
   maskNumber,
 } from "@bloom-housing/ui-components"
-import { Button, Dialog, Drawer, Link, Grid, FieldValue } from "@bloom-housing/ui-seeds"
+import { Button, Dialog, Drawer, Link, Grid } from "@bloom-housing/ui-seeds"
 import { FormListing, TempEvent } from "../../../../lib/listings/formTypes"
 import { OpenHouseForm } from "../OpenHouseForm"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
@@ -22,19 +22,21 @@ import {
   FeatureFlagEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { AuthContext } from "@bloom-housing/shared-helpers"
-import { fieldMessage, fieldHasError } from "../../../../lib/helpers"
+import { fieldMessage, fieldHasError, getLabel } from "../../../../lib/helpers"
+import styles from "../ListingForm.module.scss"
 
 type ApplicationDatesProps = {
   openHouseEvents: TempEvent[]
   setOpenHouseEvents: (events: TempEvent[]) => void
   listing?: FormListing
-  disableDueDate?: boolean
+  requiredFields: string[]
 }
 
 const ApplicationDates = ({
   listing,
   openHouseEvents,
   setOpenHouseEvents,
+  requiredFields,
 }: ApplicationDatesProps) => {
   const openHouseHeaders = {
     date: "t.date",
@@ -132,7 +134,11 @@ const ApplicationDates = ({
         <Grid.Row columns={2}>
           <Grid.Cell>
             <DateField
-              label={t("listings.applicationDeadline")}
+              label={getLabel(
+                "applicationDueDate",
+                requiredFields,
+                t("listings.applicationDeadline")
+              )}
               name={"applicationDueDateField"}
               id={"applicationDueDateField"}
               register={register}
@@ -161,7 +167,14 @@ const ApplicationDates = ({
           </Grid.Cell>
           <Grid.Cell>
             <TimeField
-              label={t("listings.applicationDueTime")}
+              label={
+                getLabel(
+                  "applicationDueDate",
+                  requiredFields,
+                  t("listings.applicationDueTime"),
+                  true
+                ) as string
+              }
               name={"applicationDueTimeField"}
               id={"applicationDueTimeField"}
               register={register}
@@ -190,29 +203,29 @@ const ApplicationDates = ({
         {enableMarketingStatus && (
           <Grid.Row columns={2}>
             <Grid.Cell>
-              <FieldValue label={t("listings.marketingSection.status")}>
-                <FieldGroup
-                  name="marketingType"
-                  type="radio"
-                  register={register}
-                  fields={[
-                    {
-                      label: t("listings.marketing"),
-                      value: MarketingTypeEnum.marketing,
-                      id: "marketingStatusMarketing",
-                      defaultChecked:
-                        !listing?.marketingType ||
-                        listing?.marketingType === MarketingTypeEnum.marketing,
-                    },
-                    {
-                      label: t("listings.underConstruction"),
-                      value: MarketingTypeEnum.comingSoon,
-                      id: "marketingStatusComingSoon",
-                      defaultChecked: listing?.marketingType === MarketingTypeEnum.comingSoon,
-                    },
-                  ]}
-                />
-              </FieldValue>
+              <FieldGroup
+                name="marketingType"
+                type="radio"
+                register={register}
+                groupLabel={t("listings.marketingSection.status")}
+                fieldLabelClassName={`${styles["label-option"]} seeds-m-bs-2`}
+                fields={[
+                  {
+                    label: t("listings.marketing"),
+                    value: MarketingTypeEnum.marketing,
+                    id: "marketingStatusMarketing",
+                    defaultChecked:
+                      !listing?.marketingType ||
+                      listing?.marketingType === MarketingTypeEnum.marketing,
+                  },
+                  {
+                    label: t("listings.underConstruction"),
+                    value: MarketingTypeEnum.comingSoon,
+                    id: "marketingStatusComingSoon",
+                    defaultChecked: listing?.marketingType === MarketingTypeEnum.comingSoon,
+                  },
+                ]}
+              />
             </Grid.Cell>
             {marketingTypeChoice === MarketingTypeEnum.comingSoon && (
               <Grid.Cell>
