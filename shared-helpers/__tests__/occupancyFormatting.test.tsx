@@ -327,8 +327,8 @@ describe("occupancy formatting helper stacked table", () => {
       },
       {
         ...unitGroup,
-        maxOccupancy: 6,
         minOccupancy: undefined,
+        maxOccupancy: 6,
         unitTypes: [
           {
             id: "unit_id_1",
@@ -341,8 +341,8 @@ describe("occupancy formatting helper stacked table", () => {
       },
       {
         ...unitGroup,
-        maxOccupancy: 4,
         minOccupancy: undefined,
+        maxOccupancy: 4,
         unitTypes: [
           {
             id: "unit_id_1",
