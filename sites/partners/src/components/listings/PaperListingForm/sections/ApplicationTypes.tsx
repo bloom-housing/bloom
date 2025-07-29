@@ -504,7 +504,7 @@ const ApplicationTypes = ({ listing, requiredFields }: ApplicationTypesProps) =>
                         ...methods,
                         referral: {
                           ...methods.referral,
-                          phoneNumber: e,
+                          phoneNumber: e.target.value,
                         },
                       })
                     }}
