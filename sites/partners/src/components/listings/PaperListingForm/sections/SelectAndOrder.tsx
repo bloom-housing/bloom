@@ -9,6 +9,7 @@ import { useFormContext } from "react-hook-form"
 import InformationCircleIcon from "@heroicons/react/24/solid/InformationCircleIcon"
 import LinkComponent from "../../../../components/core/LinkComponent"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
+import styles from "../ListingForm.module.scss"
 
 type SelectAndOrderSection = MultiselectQuestion
 
@@ -370,7 +371,7 @@ const SelectAndOrder = ({
                         <Grid.Row>
                           <Grid.Cell>
                             <Field
-                              className={"font-semibold"}
+                              className={`font-semibold ${styles["label-option"]}`}
                               id={`${formKey}.${item.id}`}
                               name={`${formKey}.${item.id}`}
                               type="checkbox"

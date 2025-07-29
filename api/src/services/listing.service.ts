@@ -545,9 +545,18 @@ export class ListingService implements OnModuleInit {
                   key: ListingFilterKeys.availabilities,
                   caseSensitive: true,
                 });
-                return builtFilter.map((filt) => ({
-                  unitsAvailable: filt,
-                }));
+
+                return builtFilter
+                  .map((filt) => ({
+                    unitsAvailable: filt,
+                  }))
+                  .concat({
+                    unitGroups: {
+                      some: {
+                        totalAvailable: { gte: 1 },
+                      },
+                    },
+                  });
               }
             },
           );
@@ -656,9 +665,17 @@ export class ListingService implements OnModuleInit {
             caseSensitive: true,
           });
           filters.push({
-            OR: builtFilter.map((filt) => ({
-              unitsAvailable: filt,
-            })),
+            OR: builtFilter
+              .map((filt) => ({
+                unitsAvailable: filt,
+              }))
+              .concat({
+                unitGroups: {
+                  some: {
+                    totalAvailable: { gte: 1 },
+                  },
+                },
+              }),
           });
         }
         if (filter[ListingFilterKeys.bathrooms] !== undefined) {
@@ -2686,8 +2703,8 @@ export class ListingService implements OnModuleInit {
     return listings.map((listing) => {
       return {
         id: listing.id,
-        lat: listing.listingsBuildingAddress.latitude,
-        lng: listing.listingsBuildingAddress.longitude,
+        lat: listing.listingsBuildingAddress?.latitude,
+        lng: listing.listingsBuildingAddress?.longitude,
       } as ListingMapMarker;
     });
   }
