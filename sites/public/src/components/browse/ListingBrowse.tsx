@@ -1,5 +1,4 @@
 import React, { useEffect, useContext, useState, useCallback } from "react"
-import Head from "next/head"
 import { useRouter } from "next/router"
 import { Button, Card, Heading, LoadingState, Tabs } from "@bloom-housing/ui-seeds"
 import {
@@ -17,7 +16,6 @@ import {
   ResponseException,
 } from "@bloom-housing/shared-helpers"
 import { t } from "@bloom-housing/ui-components"
-import { MetaTags } from "../../components/shared/MetaTags"
 import Layout from "../../layouts/application"
 import MaxWidthLayout from "../../layouts/max-width"
 import { UserStatus } from "../../lib/constants"

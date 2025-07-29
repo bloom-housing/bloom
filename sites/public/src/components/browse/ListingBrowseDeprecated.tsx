@@ -1,10 +1,8 @@
 import React, { useEffect, useContext } from "react"
-import Head from "next/head"
 import { Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { ListingList, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
 import { ListingsGroup, PageHeader, t } from "@bloom-housing/ui-components"
 import { getListings } from "../../lib/helpers"
-import { MetaTags } from "../../components/shared/MetaTags"
 import { UserStatus } from "../../lib/constants"
 import Layout from "../../layouts/application"
 

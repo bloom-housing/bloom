@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from "react"
-import Head from "next/head"
 import {
   AuthContext,
   BloomCard,
@@ -16,7 +15,6 @@ import {
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { t } from "@bloom-housing/ui-components"
 import Layout from "../../layouts/application"
-import { MetaTags } from "../shared/MetaTags"
 import { UserStatus } from "../../lib/constants"
 import { ListingCard } from "../browse/ListingCard"
 import styles from "../browse/ListingBrowse.module.scss"
