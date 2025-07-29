@@ -1,6 +1,7 @@
 describe("Listings approval feature", () => {
   const uniqueListingName = Date.now().toString()
   const uniqueListingNameEdited = `${uniqueListingName} edited`
+
   it("should allow for pending submission, requested changes, and approval", () => {
     cy.intercept("POST", "https://api.cloudinary.com/v1_1/exygy/upload", {
       fixture: "cypressUpload",
@@ -13,15 +14,15 @@ describe("Listings approval feature", () => {
       }
     )
     // Partner: Submit a listing for approval
-    cy.login("jurisdictionalAdminUser")
+    cy.loginApi("jurisdictionalAdminUser")
     cy.visit("/")
 
     cy.addMinimalListing(uniqueListingName, false, true, false)
     cy.getByID("listing-status-pending-review").should("be.visible")
-    cy.signOut()
+    cy.signOutApi()
 
     // Admin: Request changes
-    cy.login("user")
+    cy.loginApi("user")
     cy.findAndOpenListing(uniqueListingName)
     cy.getByID("listing-status-pending-review").should("be.visible")
     cy.getByID("listingEditButton").click()
@@ -29,10 +30,10 @@ describe("Listings approval feature", () => {
     cy.getByTestId("requestedChanges").type("Requested changes test summary")
     cy.getByID("requestChangesButtonConfirm").click()
     cy.getByID("listing-status-changes-requested").should("be.visible")
-    cy.signOut()
+    cy.signOutApi()
 
     // Partner: Can see the requested changes, edit the listing, and resubmit for approval
-    cy.login("jurisdictionalAdminUser")
+    cy.loginApi("jurisdictionalAdminUser")
     cy.findAndOpenListing(uniqueListingName)
     cy.getByID("listing-status-changes-requested").should("be.visible")
     cy.getByID("requestedChanges").contains("Requested changes test summary")
@@ -42,16 +43,16 @@ describe("Listings approval feature", () => {
     cy.getByID("submitButton").contains("Submit").click()
     cy.getByID("submitListingForApprovalButtonConfirm").contains("Submit").click()
     cy.getByTestId("page-header").should("have.text", uniqueListingNameEdited)
-    cy.signOut()
+    cy.signOutApi()
 
     // Admin: Approve and publish
-    cy.login("user")
+    cy.loginApi("user")
     cy.findAndOpenListing(uniqueListingNameEdited)
     cy.getByID("listingEditButton").click()
     cy.getByID("saveAndContinueButton").should("be.visible")
     cy.getByID("listing-status-pending-review").should("be.visible")
     cy.getByID("approveAndPublishButton").click()
     cy.getByID("listing-status-active").should("be.visible")
-    cy.signOut()
+    cy.signOutApi()
   })
 })

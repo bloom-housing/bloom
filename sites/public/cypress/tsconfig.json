@@ -3,8 +3,8 @@
     "lib": ["dom", "dom.iterable", "esnext"],
     "jsx": "preserve",
     "allowJs": true,
-    "types": ["cypress"],
-    "target": "es5"
+    "types": ["cypress", "node"],
+    "target": "es5",
   },
   "exclude": ["../node_modules"],
   "include": ["**/*.ts"]

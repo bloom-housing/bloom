@@ -1,0 +1,53 @@
+.form-overrides {
+  // These are overrides for UIC to make the styling between text inputs and text areas the same
+  [class*="textarea-error-message"] {
+    font-size: var(--seeds-font-size-xs);
+  }
+  [class*="textarea-label-error"] {
+    color: var(--seeds-color-alert);
+  }
+  [class*="field-note"] {
+    font-size: var(--seeds-font-size-xs);
+    color: var(--seeds-color-gray-750);
+    letter-spacing: normal;
+    margin-block-start: var(--seeds-s2);
+  }
+  [class*="field-sub-note"] {
+    letter-spacing: normal;
+  }
+
+  label,
+  legend {
+    color: var(--seeds-input-text-label-color);
+    font-family: var(--seeds-font-sans);
+    font-size: var(--seeds-type-label-size);
+  }
+
+  .label-option {
+    color: var(--seeds-color-black);
+    font-weight: var(--seeds-font-weight-semibold);
+  }
+
+  .label-error {
+    label {
+      color: var(--seeds-color-alert);
+    }
+    color: var(--seeds-color-alert);
+  }
+}
+
+.asterisk {
+  font-weight: var(--seeds-font-weight-bold);
+  color: var(--seeds-color-alert);
+}
+
+.custom-label {
+  color: var(--seeds-input-text-label-color);
+  font-family: var(--seeds-font-sans);
+  font-size: var(--seeds-type-label-size);
+}
+
+.label-option {
+  color: var(--seeds-color-black);
+  font-weight: var(--seeds-font-weight-semibold);
+}
