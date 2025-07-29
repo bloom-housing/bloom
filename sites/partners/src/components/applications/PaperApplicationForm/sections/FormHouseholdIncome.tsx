@@ -24,41 +24,43 @@ const FormHouseholdIncome = () => {
       <hr className="spacer-section-above spacer-section" />
       <SectionWithGrid heading={t("application.details.householdIncome")}>
         <Grid.Row columns={3}>
-          <FieldValue label={t("application.add.incomePeriod")}>
-            <div className="flex h-12 items-center">
-              <Field
-                id="application.incomePeriodYear"
-                name="application.incomePeriod"
-                className="m-0"
-                type="radio"
-                label={t("t.perYear")}
-                register={register}
-                inputProps={{
-                  value: IncomePeriodEnum.perYear,
-                  onChange: () => {
-                    setValue("incomeMonth", "")
-                    setValue("incomeYear", "")
-                  },
-                }}
-              />
+          <Grid.Cell>
+            <FieldValue label={t("application.add.incomePeriod")}>
+              <div className="flex h-12 items-center">
+                <Field
+                  id="application.incomePeriodYear"
+                  name="application.incomePeriod"
+                  className="m-0"
+                  type="radio"
+                  label={t("t.perYear")}
+                  register={register}
+                  inputProps={{
+                    value: IncomePeriodEnum.perYear,
+                    onChange: () => {
+                      setValue("incomeMonth", "")
+                      setValue("incomeYear", "")
+                    },
+                  }}
+                />
 
-              <Field
-                id="application.incomePeriodMonth"
-                name="application.incomePeriod"
-                className="m-0"
-                type="radio"
-                label={t("t.perMonth")}
-                register={register}
-                inputProps={{
-                  value: IncomePeriodEnum.perMonth,
-                  onChange: () => {
-                    setValue("incomeMonth", "")
-                    setValue("incomeYear", "")
-                  },
-                }}
-              />
-            </div>
-          </FieldValue>
+                <Field
+                  id="application.incomePeriodMonth"
+                  name="application.incomePeriod"
+                  className="m-0"
+                  type="radio"
+                  label={t("t.perMonth")}
+                  register={register}
+                  inputProps={{
+                    value: IncomePeriodEnum.perMonth,
+                    onChange: () => {
+                      setValue("incomeMonth", "")
+                      setValue("incomeYear", "")
+                    },
+                  }}
+                />
+              </div>
+            </FieldValue>
+          </Grid.Cell>
         </Grid.Row>
 
         <Grid.Row columns={3}>

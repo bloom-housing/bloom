@@ -577,38 +577,44 @@ const PreferenceDrawer = ({
                   </Grid.Cell>
                 </Grid.Row>
                 <Grid.Row columns={3}>
-                  <FieldValue label={t("t.url")}>
-                    <Field
-                      id="optionUrl"
-                      name="optionUrl"
-                      label={t("t.url")}
-                      placeholder={"https://"}
-                      register={register}
-                      type="url"
-                      error={!!errors?.optionUrl}
-                      errorMessage={
-                        errors?.optionUrl?.type === "https"
-                          ? t("errors.urlHttpsError")
-                          : t("errors.urlError")
-                      }
-                      readerOnly
-                      dataTestId={"preference-option-link"}
-                      defaultValue={optionData?.links?.length > 0 ? optionData?.links[0].url : ""}
-                    />
-                  </FieldValue>
-                  <FieldValue label={t("settings.preferenceLinkTitle")}>
-                    <Field
-                      id="optionLinkTitle"
-                      name="optionLinkTitle"
-                      label={t("settings.preferenceLinkTitle")}
-                      placeholder={t("settings.preferenceLinkTitle")}
-                      register={register}
-                      type="text"
-                      readerOnly
-                      dataTestId={"preference-option-link-title"}
-                      defaultValue={optionData?.links?.length > 0 ? optionData?.links[0].title : ""}
-                    />
-                  </FieldValue>
+                  <Grid.Cell>
+                    <FieldValue label={t("t.url")}>
+                      <Field
+                        id="optionUrl"
+                        name="optionUrl"
+                        label={t("t.url")}
+                        placeholder={"https://"}
+                        register={register}
+                        type="url"
+                        error={!!errors?.optionUrl}
+                        errorMessage={
+                          errors?.optionUrl?.type === "https"
+                            ? t("errors.urlHttpsError")
+                            : t("errors.urlError")
+                        }
+                        readerOnly
+                        dataTestId={"preference-option-link"}
+                        defaultValue={optionData?.links?.length > 0 ? optionData?.links[0].url : ""}
+                      />
+                    </FieldValue>
+                  </Grid.Cell>
+                  <Grid.Cell>
+                    <FieldValue label={t("settings.preferenceLinkTitle")}>
+                      <Field
+                        id="optionLinkTitle"
+                        name="optionLinkTitle"
+                        label={t("settings.preferenceLinkTitle")}
+                        placeholder={t("settings.preferenceLinkTitle")}
+                        register={register}
+                        type="text"
+                        readerOnly
+                        dataTestId={"preference-option-link-title"}
+                        defaultValue={
+                          optionData?.links?.length > 0 ? optionData?.links[0].title : ""
+                        }
+                      />
+                    </FieldValue>
+                  </Grid.Cell>
                 </Grid.Row>
                 <Grid.Row columns={3}>
                   <FieldValue label={t("settings.preferenceExclusiveQuestion")} className="mb-1">
@@ -734,6 +740,8 @@ const PreferenceDrawer = ({
                           id={"mapLayerId"}
                           name={"mapLayerId"}
                           register={register}
+                          label={t("settings.preferenceValidatingAddress.selectMapLayer")}
+                          labelClassName="sr-only"
                           controlClassName={"control"}
                           options={
                             mapLayers

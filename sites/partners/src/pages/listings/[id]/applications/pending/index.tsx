@@ -140,7 +140,7 @@ const ApplicationsList = () => {
   return (
     <Layout>
       <Head>
-        <title>{t("nav.siteTitlePartners")}</title>
+        <title>{`Pending Applications - ${t("nav.siteTitlePartners")}`}</title>
       </Head>
 
       <NavigationHeader

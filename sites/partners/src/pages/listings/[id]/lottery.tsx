@@ -335,7 +335,7 @@ const Lottery = (props: { listing: Listing | undefined }) => {
         <>
           <Layout>
             <Head>
-              <title>{t("nav.siteTitlePartners")}</title>
+              <title>{`Lottery - ${t("nav.siteTitlePartners")}`}</title>
             </Head>
 
             <MetaTags

@@ -141,7 +141,7 @@ const Users = () => {
   return (
     <Layout>
       <Head>
-        <title>{t("nav.siteTitlePartners")}</title>
+        <title>{`Users - ${t("nav.siteTitlePartners")}`}</title>
       </Head>
       <NavigationHeader className="relative" title={t("nav.users")} />
       <section>

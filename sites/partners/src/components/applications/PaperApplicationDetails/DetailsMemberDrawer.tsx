@@ -38,61 +38,90 @@ const DetailsMemberDrawer = ({
           <Card.Section>
             <SectionWithGrid heading={t("application.details.householdMemberDetails")} inset>
               <Grid.Row columns={4}>
-                <FieldValue
-                  label={t("application.name.firstName")}
-                  children={membersDrawer?.firstName || t("t.n/a")}
-                />
-
-                <FieldValue
-                  label={t("application.name.middleName")}
-                  children={membersDrawer?.middleName || t("t.n/a")}
-                />
-
-                <FieldValue
-                  label={t("application.name.lastName")}
-                  children={membersDrawer?.lastName || t("t.n/a")}
-                />
-
-                <FieldValue
-                  label={t("application.household.member.dateOfBirth")}
-                  children={
-                    membersDrawer?.birthMonth && membersDrawer?.birthDay && membersDrawer?.birthYear
-                      ? `${membersDrawer?.birthMonth}/${membersDrawer?.birthDay}/${membersDrawer?.birthYear}`
-                      : t("t.n/a")
-                  }
-                />
-
-                <FieldValue
-                  label={t("t.relationship")}
-                  children={
-                    membersDrawer?.relationship
-                      ? t(`application.form.options.relationship.${membersDrawer?.relationship}`)
-                      : t("t.n/a")
-                  }
-                />
-
-                <FieldValue
-                  label={t("application.add.sameAddressAsPrimary")}
-                  children={
-                    membersDrawer?.sameAddress === YesNoEnum.yes
-                      ? t("t.yes")
-                      : membersDrawer?.sameAddress === YesNoEnum.no
-                      ? t("t.no")
-                      : t("t.n/a")
-                  }
-                />
-
-                {enableFullTimeStudentQuestion && (
+                <Grid.Cell>
                   <FieldValue
-                    label={t("application.details.fullTimeStudent")}
+                    label={t("application.name.firstName")}
+                    children={membersDrawer?.firstName || t("t.n/a")}
+                  />
+                </Grid.Cell>
+
+                <Grid.Cell>
+                  <FieldValue
+                    label={t("application.name.middleName")}
+                    children={membersDrawer?.middleName || t("t.n/a")}
+                  />
+                </Grid.Cell>
+
+                <Grid.Cell>
+                  <FieldValue
+                    label={t("application.name.lastName")}
+                    children={membersDrawer?.lastName || t("t.n/a")}
+                  />
+                </Grid.Cell>
+
+                <Grid.Cell>
+                  <FieldValue
+                    label={t("application.household.member.dateOfBirth")}
                     children={
-                      membersDrawer?.fullTimeStudent === YesNoEnum.yes
+                      membersDrawer?.birthMonth &&
+                      membersDrawer?.birthDay &&
+                      membersDrawer?.birthYear
+                        ? `${membersDrawer?.birthMonth}/${membersDrawer?.birthDay}/${membersDrawer?.birthYear}`
+                        : t("t.n/a")
+                    }
+                  />
+                </Grid.Cell>
+
+                <Grid.Cell>
+                  <FieldValue
+                    label={t("t.relationship")}
+                    children={
+                      membersDrawer?.relationship
+                        ? t(`application.form.options.relationship.${membersDrawer?.relationship}`)
+                        : t("t.n/a")
+                    }
+                  />
+                </Grid.Cell>
+
+                <Grid.Cell>
+                  <FieldValue
+                    label={t("application.add.sameAddressAsPrimary")}
+                    children={
+                      membersDrawer?.sameAddress === YesNoEnum.yes
+                        ? t("t.yes")
+                        : membersDrawer?.sameAddress === YesNoEnum.no
+                        ? t("t.no")
+                        : t("t.n/a")
+                    }
+                  />
+                </Grid.Cell>
+
+                <Grid.Cell>
+                  <FieldValue
+                    label={t("application.add.workInRegion")}
+                    children={
+                      membersDrawer?.workInRegion === YesNoEnum.yes
                         ? t("t.yes")
                         : membersDrawer?.workInRegion === YesNoEnum.no
                         ? t("t.no")
                         : t("t.n/a")
                     }
                   />
+                </Grid.Cell>
+
+                {enableFullTimeStudentQuestion && (
+                  <Grid.Cell>
+                    <FieldValue
+                      label={t("application.details.fullTimeStudent")}
+                      children={
+                        membersDrawer?.fullTimeStudent === YesNoEnum.yes
+                          ? t("t.yes")
+                          : membersDrawer?.workInRegion === YesNoEnum.no
+                          ? t("t.no")
+                          : t("t.n/a")
+                      }
+                    />
+                  </Grid.Cell>
                 )}
               </Grid.Row>
 

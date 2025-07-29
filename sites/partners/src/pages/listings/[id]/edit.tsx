@@ -25,7 +25,7 @@ const EditListing = (props: { listing: Listing }) => {
       <ListingGuard>
         <Layout>
           <Head>
-            <title>{t("nav.siteTitlePartners")}</title>
+            <title>{`Edit ${listingName} - ${t("nav.siteTitlePartners")}`}</title>
           </Head>
 
           <MetaTags

@@ -61,7 +61,7 @@ export default function ListingDetail(props: ListingProps) {
         <>
           <Layout>
             <Head>
-              <title>{t("nav.siteTitlePartners")}</title>
+              <title>{`View ${listing.name} - ${t("nav.siteTitlePartners")}`}</title>
             </Head>
             <NavigationHeader
               title={listing.name}

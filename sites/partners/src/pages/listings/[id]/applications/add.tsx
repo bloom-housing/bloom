@@ -20,7 +20,7 @@ const NewApplication = () => {
   return (
     <Layout>
       <Head>
-        <title>{t("nav.siteTitlePartners")}</title>
+        <title>{`Add Application - ${t("nav.siteTitlePartners")}`}</title>
       </Head>
       <NavigationHeader
         className="relative"

@@ -148,73 +148,83 @@ const UnitGroupAmiForm = ({
           <Card.Section>
             <SectionWithGrid heading={t("listings.unit.amiLevel")}>
               <Grid.Row columns={4}>
-                <Select
-                  label={t("listings.unit.amiChart")}
-                  id="amiChart.id"
-                  name="amiChart.id"
-                  placeholder={t("t.selectOne")}
-                  options={amiChartsOptions}
-                  controlClassName="control"
-                  register={register}
-                  error={fieldHasError(errors?.amiChart)}
-                  errorMessage={t("errors.requiredFieldError")}
-                  validation={{ required: true }}
-                  inputProps={{
-                    onChange: () => {
-                      setValue("amiPercentage", undefined)
-                      clearErrors("amiPercentage")
-                      clearErrors("amiChart.id")
-                    },
-                  }}
-                />
-                <Select
-                  id={"amiPercentage"}
-                  label={t("listings.unit.amiPercentage")}
-                  name="amiPercentage"
-                  placeholder={t("t.selectOne")}
-                  options={amiChartPercentageOptions}
-                  controlClassName="control"
-                  register={register}
-                  disabled={!amiChartID}
-                  error={fieldHasError(errors?.amiPercentage)}
-                  errorMessage={t("errors.requiredFieldError")}
-                  validation={{ required: true }}
-                />
-                <FieldGroup
-                  name="monthlyRentDeterminationType"
-                  type="radio"
-                  fields={rentTypeOptions}
-                  register={register}
-                  error={fieldHasError(errors?.monthlyRentDeterminationType)}
-                  errorMessage={t("errors.requiredFieldError")}
-                  validation={{ required: true }}
-                  groupLabel={t("listings.unit.rentType")}
-                  fieldLabelClassName={styles["label-option"]}
-                />
+                <Grid.Cell>
+                  <Select
+                    label={t("listings.unit.amiChart")}
+                    id="amiChart.id"
+                    name="amiChart.id"
+                    placeholder={t("t.selectOne")}
+                    options={amiChartsOptions}
+                    controlClassName="control"
+                    register={register}
+                    error={fieldHasError(errors?.amiChart)}
+                    errorMessage={t("errors.requiredFieldError")}
+                    validation={{ required: true }}
+                    inputProps={{
+                      onChange: () => {
+                        setValue("amiPercentage", undefined)
+                        clearErrors("amiPercentage")
+                        clearErrors("amiChart.id")
+                      },
+                    }}
+                  />
+                </Grid.Cell>
+                <Grid.Cell>
+                  <Select
+                    id={"amiPercentage"}
+                    label={t("listings.unit.amiPercentage")}
+                    name="amiPercentage"
+                    placeholder={t("t.selectOne")}
+                    options={amiChartPercentageOptions}
+                    controlClassName="control"
+                    register={register}
+                    disabled={!amiChartID}
+                    error={fieldHasError(errors?.amiPercentage)}
+                    errorMessage={t("errors.requiredFieldError")}
+                    validation={{ required: true }}
+                  />
+                </Grid.Cell>
+                <Grid.Cell>
+                  <FieldGroup
+                    name="monthlyRentDeterminationType"
+                    type="radio"
+                    fields={rentTypeOptions}
+                    register={register}
+                    error={fieldHasError(errors?.monthlyRentDeterminationType)}
+                    errorMessage={t("errors.requiredFieldError")}
+                    validation={{ required: true }}
+                    groupLabel={t("listings.unit.rentType")}
+                    fieldLabelClassName={styles["label-option"]}
+                  />
+                </Grid.Cell>
 
                 {rentType &&
                   (rentType === EnumUnitGroupAmiLevelMonthlyRentDeterminationType.flatRent ? (
-                    <Field
-                      label={t("listings.unit.monthlyRent")}
-                      name="flatRentValue"
-                      id="flatRentValue"
-                      register={register}
-                      type="number"
-                      error={errors?.flatRentValue}
-                      errorMessage={t("errors.requiredFieldError")}
-                      validation={{ required: true }}
-                    />
+                    <Grid.Cell>
+                      <Field
+                        label={t("listings.unit.monthlyRent")}
+                        name="flatRentValue"
+                        id="flatRentValue"
+                        register={register}
+                        type="number"
+                        error={errors?.flatRentValue}
+                        errorMessage={t("errors.requiredFieldError")}
+                        validation={{ required: true }}
+                      />
+                    </Grid.Cell>
                   ) : (
-                    <Field
-                      label={t("listings.unit.percentage")}
-                      name="percentageOfIncomeValue"
-                      id="percentageOfIncomeValue"
-                      register={register}
-                      type="number"
-                      error={errors?.percentageOfIncomeValue}
-                      errorMessage={t("errors.requiredFieldError")}
-                      validation={{ required: true }}
-                    />
+                    <Grid.Cell>
+                      <Field
+                        label={t("listings.unit.percentage")}
+                        name="percentageOfIncomeValue"
+                        id="percentageOfIncomeValue"
+                        register={register}
+                        type="number"
+                        error={errors?.percentageOfIncomeValue}
+                        errorMessage={t("errors.requiredFieldError")}
+                        validation={{ required: true }}
+                      />
+                    </Grid.Cell>
                   ))}
               </Grid.Row>
             </SectionWithGrid>

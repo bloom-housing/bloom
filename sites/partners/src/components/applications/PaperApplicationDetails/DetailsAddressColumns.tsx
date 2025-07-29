@@ -1,6 +1,6 @@
 import React from "react"
 import { t } from "@bloom-housing/ui-components"
-import { FieldValue } from "@bloom-housing/ui-seeds"
+import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import {
   AddressCreate,
   Application,
@@ -81,41 +81,38 @@ const DetailsAddressColumns = ({
 
   return (
     <>
-      <FieldValue
-        className={small && "seeds-grid-span-3"}
-        label={t("application.contact.streetAddress")}
-        testId={`${dataTestId}.streetAddress`}
-      >
-        {address.street}
-      </FieldValue>
+      <Grid.Cell className={small && "seeds-grid-span-3"}>
+        <FieldValue
+          label={t("application.contact.streetAddress")}
+          testId={`${dataTestId}.streetAddress`}
+        >
+          {address.street}
+        </FieldValue>
+      </Grid.Cell>
 
-      <FieldValue
-        className={small ? "seeds-grid-span-3" : "seeds-grid-span-2"}
-        label={t("application.contact.apt")}
-        testId={`${dataTestId}.street2`}
-      >
-        {address.street2}
-      </FieldValue>
+      <Grid.Cell className={small ? "seeds-grid-span-3" : "seeds-grid-span-2"}>
+        <FieldValue label={t("application.contact.apt")} testId={`${dataTestId}.street2`}>
+          {address.street2}
+        </FieldValue>
+      </Grid.Cell>
 
-      <FieldValue
-        className={small && "seeds-grid-span-2"}
-        label={t("application.contact.city")}
-        testId={`${dataTestId}.city`}
-      >
-        {address.city}
-      </FieldValue>
+      <Grid.Cell className={small && "seeds-grid-span-2"}>
+        <FieldValue label={t("application.contact.city")} testId={`${dataTestId}.city`}>
+          {address.city}
+        </FieldValue>
+      </Grid.Cell>
 
-      <FieldValue label={t("application.contact.state")} testId={`${dataTestId}.state`}>
-        {address.state}
-      </FieldValue>
+      <Grid.Cell>
+        <FieldValue label={t("application.contact.state")} testId={`${dataTestId}.state`}>
+          {address.state}
+        </FieldValue>
+      </Grid.Cell>
 
-      <FieldValue
-        className={small && "seeds-grid-span-3"}
-        label={t("application.contact.zip")}
-        testId={`${dataTestId}.zipCode`}
-      >
-        {address.zipCode}
-      </FieldValue>
+      <Grid.Cell className={small && "seeds-grid-span-3"}>
+        <FieldValue label={t("application.contact.zip")} testId={`${dataTestId}.zipCode`}>
+          {address.zipCode}
+        </FieldValue>
+      </Grid.Cell>
     </>
   )
 }

@@ -1,8 +1,10 @@
 import { defineConfig } from "cypress"
+import { cypressConfig } from "@axe-core/watcher"
 import dotenv from "dotenv"
 dotenv.config()
 
-export default defineConfig({
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+let baseConfig: Cypress.ConfigOptions<any> = {
   defaultCommandTimeout: 60000,
   projectId: "f32m8f",
   pageLoadTimeout: 100000,
@@ -15,7 +17,6 @@ export default defineConfig({
       url: "/api/__coverage__",
     },
   },
-
   e2e: {
     setupNodeEvents(on, config) {
       // Allow for custom logging. See https://docs.cypress.io/api/commands/task#Usage
@@ -36,7 +37,9 @@ export default defineConfig({
     experimentalRunAllSpecs: true,
     env: {
       showSeedsDesign: process.env.SHOW_NEW_SEEDS_DESIGNS,
+      runAccessibilityTests: process.env.RUN_ACCESSIBILITY_E2E_TESTS === "TRUE",
     },
+    supportFile: "cypress/support/e2e.ts",
   },
 
   component: {
@@ -45,4 +48,15 @@ export default defineConfig({
       bundler: "webpack",
     },
   },
-})
+}
+
+if (process.env.RUN_ACCESSIBILITY_E2E_TESTS === "TRUE") {
+  baseConfig = cypressConfig({
+    axe: {
+      apiKey: process.env.AXE_DEVELOPER_HUB_API_KEY,
+    },
+    ...baseConfig,
+  })
+}
+
+export default defineConfig(baseConfig)
