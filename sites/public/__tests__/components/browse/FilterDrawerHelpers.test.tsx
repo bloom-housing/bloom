@@ -726,9 +726,10 @@ describe("filter drawer helpers", () => {
       )
     }
     it("should show the correct number of columns when no customColumnNumber is added", () => {
-      render(<DefaultCheckBoxGroup />)
+      const { container } = render(<DefaultCheckBoxGroup />)
       expect(screen.getByRole("group", { name: "Home type" })).toBeInTheDocument()
-      expect(screen.getByRole("row")).toHaveAttribute("data-columns", "3")
+      expect(container.querySelector("[data-columns='3']")).toBeInTheDocument()
+      expect(container.querySelector("[data-columns='1']")).not.toBeInTheDocument()
       expect(screen.getByLabelText("Apartment")).toBeInTheDocument()
       expect(screen.getByRole("checkbox", { name: "Apartment" })).not.toBeChecked()
       expect(screen.getByLabelText("Duplex")).toBeInTheDocument()
@@ -739,9 +740,10 @@ describe("filter drawer helpers", () => {
       expect(screen.getByRole("checkbox", { name: "Townhome" })).not.toBeChecked()
     })
     it("should show the correct number of columns when a customColumnNumber is added", () => {
-      render(<CustomColumnCheckBoxGroup />)
+      const { container } = render(<CustomColumnCheckBoxGroup />)
       expect(screen.getByRole("group", { name: "Home type" })).toBeInTheDocument()
-      expect(screen.getByRole("row")).toHaveAttribute("data-columns", "1")
+      expect(container.querySelector("[data-columns='1']")).toBeInTheDocument()
+      expect(container.querySelector("[data-columns='3']")).not.toBeInTheDocument()
       expect(screen.getByLabelText("Apartment")).toBeInTheDocument()
       expect(screen.getByRole("checkbox", { name: "Apartment" })).not.toBeChecked()
       expect(screen.getByLabelText("Duplex")).toBeInTheDocument()
@@ -753,9 +755,10 @@ describe("filter drawer helpers", () => {
     })
 
     it("should show all fields passed into component correctly when a filter state with previous selections is passed", () => {
-      render(<CheckBoxGroupWithSelections />)
+      const { container } = render(<CheckBoxGroupWithSelections />)
       expect(screen.getByRole("group", { name: "Home type" })).toBeInTheDocument()
-      expect(screen.getByRole("row")).toHaveAttribute("data-columns", "3")
+      expect(container.querySelector("[data-columns='3']")).toBeInTheDocument()
+      expect(container.querySelector("[data-columns='1']")).not.toBeInTheDocument()
       expect(screen.getByLabelText("Apartment")).toBeInTheDocument()
       expect(screen.getByRole("checkbox", { name: "Apartment" })).toBeChecked()
       expect(screen.getByLabelText("Duplex")).toBeInTheDocument()

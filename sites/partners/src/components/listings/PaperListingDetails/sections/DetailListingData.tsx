@@ -11,12 +11,16 @@ const DetailListingData = () => {
   return (
     <SectionWithGrid heading={t("listings.details.listingData")} inset>
       <Grid.Row>
-        <FieldValue label={t("listings.details.id")}>{listing.id}</FieldValue>
-        <FieldValue label={t("listings.details.createdDate")}>
-          {getDetailFieldDate(listing.createdAt)}
-          {" at "}
-          {getDetailFieldTime(listing.createdAt)}
-        </FieldValue>
+        <Grid.Cell>
+          <FieldValue label={t("listings.details.id")}>{listing.id}</FieldValue>
+        </Grid.Cell>
+        <Grid.Cell>
+          <FieldValue label={t("listings.details.createdDate")}>
+            {getDetailFieldDate(listing.createdAt)}
+            {" at "}
+            {getDetailFieldTime(listing.createdAt)}
+          </FieldValue>
+        </Grid.Cell>
       </Grid.Row>
     </SectionWithGrid>
   )
