@@ -276,7 +276,7 @@ export const TextEditor = ({
       </label>
       <div className={`${styles["editor"]} ${overLimit || errorState ? styles["error"] : ""}`}>
         <MenuBar editor={editor} />
-        <EditorContent editor={editor} id={editorId} data-testid={editorId} />
+        <EditorContent editor={editor} id={editorId} data-testid={editorId} role={"textbox"} />
       </div>
       <div
         className={`${styles["character-count"]} ${
