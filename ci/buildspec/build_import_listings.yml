@@ -2,7 +2,7 @@ version: 0.2
 env:
   shell: bash
   variables:
-    IMAGE_NAME: "import-listings"
+    IMAGE_NAME: import-listings
 phases:
   build:
     commands:
@@ -21,11 +21,11 @@ phases:
       - cd tasks/import-listings
 
       # Test
-      - docker build --target test -t "${TEST_IMAGE}" .
+      - docker build --build-arg ECR_REGION=${ECR_REGION} --build-arg ECR_ACCOUNT_ID=${ECR_ACCOUNT_ID} --target test -t "${TEST_IMAGE}" .
       - docker run "${TEST_IMAGE}"
 
       # Build runtime image
-      - docker build --target run -t "${RUN_IMAGE}" .
+      - docker build --build-arg ECR_REGION=${ECR_REGION} --build-arg ECR_ACCOUNT_ID=${ECR_ACCOUNT_ID} --target run -t "${RUN_IMAGE}" .
 
       # Tag image
       - docker tag "${RUN_IMAGE}" "${ECR_GIT_TAG}"

@@ -1,6 +1,9 @@
-
+ARG ECR_ACCOUNT_ID
+ARG ECR_REGION
 # The base image will contain all the source code needed for this task
-FROM node:18.14-alpine AS source
+
+FROM ${ECR_ACCOUNT_ID}.dkr.ecr.${ECR_REGION}.amazonaws.com/docker-hub/library/node:18.14-alpine AS source
+
 
 WORKDIR /app
 

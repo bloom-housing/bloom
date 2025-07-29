@@ -7,22 +7,27 @@
 version: 0.2
 env:
   shell: bash
-
 phases:
   pre_build:
     commands:
+      - echo Logging in to Amazon ECR...
       - aws ecr get-login-password --region "${ECR_REGION}" | docker login --username AWS --password-stdin "${ECR_ACCOUNT_ID}.dkr.ecr.${ECR_REGION}.amazonaws.com"
+
+      # Pull from ECR pull-through cache
+      - docker pull ${ECR_ACCOUNT_ID}.dkr.ecr.${ECR_REGION}.amazonaws.com/docker-hub/library/node:18.20-alpine
 
   build:
     commands:
       - export ECR_HOST="${ECR_ACCOUNT_ID}.dkr.ecr.${ECR_REGION}.amazonaws.com"
       - export ECR_REPO="${ECR_HOST}/${ECR_NAMESPACE}"
+      - echo "ECR_REPO: ${ECR_REPO}"
+      - echo "ECR_REGION: ${ECR_REGION}"
 
       # Skip the test step as it is handle before merge. But re-add if you want more verification
       # - docker build . -f build/docker/Dockerfile.backend --target test -t api:test
       # - docker run api:test yarn test
-      - docker build . -f build/docker/Dockerfile.backend --target run -t api:run-candidate
-      - docker build . -f build/docker/Dockerfile.backend --target migrate -t api:migrate-candidate
+      - docker build . -f build/docker/Dockerfile.backend --build-arg ECR_REGION=${ECR_REGION} --build-arg ECR_ACCOUNT_ID=${ECR_ACCOUNT_ID} --target run -t api:run-candidate
+      - docker build . -f build/docker/Dockerfile.backend --build-arg ECR_REGION=${ECR_REGION} --build-arg ECR_ACCOUNT_ID=${ECR_ACCOUNT_ID} --target migrate -t api:migrate-candidate
 
       # Add hash and candidate tags to migration image
       - docker tag api:migrate-candidate "${ECR_REPO}/backend:migrate-${CODEBUILD_RESOLVED_SOURCE_VERSION:0:8}"

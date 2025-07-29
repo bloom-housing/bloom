@@ -25,6 +25,7 @@ phases:
       - >
         docker build . -f build/docker/Dockerfile.sites-generic
         --target test
+        --build-arg ECR_REGION=${ECR_REGION} --build-arg ECR_ACCOUNT_ID=${ECR_ACCOUNT_ID}
         --build-arg SITE=partners
         --build-arg "CLOUDINARY_CLOUD_NAME=${CLOUDINARY_CLOUD_NAME}"
         --build-arg "FILE_SERVICE=${FILE_SERVICE}"
@@ -48,6 +49,7 @@ phases:
       - >
         docker build . -f build/docker/Dockerfile.sites-generic
         --target run
+        --build-arg ECR_REGION=${ECR_REGION} --build-arg ECR_ACCOUNT_ID=${ECR_ACCOUNT_ID}
         --build-arg SITE=partners
         --build-arg "CLOUDINARY_CLOUD_NAME=${CLOUDINARY_CLOUD_NAME}"
         --build-arg "FILE_SERVICE=${FILE_SERVICE}"
