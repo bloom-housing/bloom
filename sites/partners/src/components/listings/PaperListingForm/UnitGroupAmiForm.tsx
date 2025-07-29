@@ -242,7 +242,13 @@ const UnitGroupAmiForm = ({
           {t("t.save")}
         </Button>
 
-        <Button type="button" onClick={onClose} variant="text" size="sm">
+        <Button
+          type="button"
+          onClick={onClose}
+          variant="text"
+          size="sm"
+          className={"font-semibold darker-delete"}
+        >
           {t("t.cancel")}
         </Button>
       </Drawer.Footer>

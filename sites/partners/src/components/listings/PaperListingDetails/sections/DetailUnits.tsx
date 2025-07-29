@@ -12,6 +12,7 @@ import {
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 import { formatRange, formatRentRange, minMaxFinder } from "../../helpers"
+import styles from "../../PaperListingForm/ListingForm.module.scss"
 
 type DetailUnitsProps = {
   setUnitDrawer: (unit: UnitDrawer) => void
@@ -112,7 +113,7 @@ const DetailUnits = ({ setUnitDrawer }: DetailUnitsProps) => {
                   type="button"
                   variant="text"
                   size="sm"
-                  className="font-semibold"
+                  className={"font-semibold darker-link"}
                   onClick={() => setUnitDrawer(unit)}
                 >
                   {t("t.view")}

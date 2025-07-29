@@ -12,6 +12,8 @@ import { ListingContext } from "../../ListingContext"
 import { getDetailFieldDate, getDetailFieldString, getDetailFieldTime } from "./helpers"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 import { AuthContext } from "@bloom-housing/shared-helpers/src/auth/AuthContext"
+import styles from "../../PaperListingForm/ListingForm.module.scss"
+
 const DetailApplicationDates = () => {
   const listing = useContext(ListingContext)
   const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
@@ -57,7 +59,7 @@ const DetailApplicationDates = () => {
                     type="button"
                     variant="text"
                     size="sm"
-                    className="font-semibold"
+                    className={"font-semibold darker-link"}
                     onClick={() => setDrawer(event)}
                   >
                     {t("t.view")}
