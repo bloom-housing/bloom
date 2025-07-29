@@ -82,17 +82,19 @@ const FormHouseholdDetails = ({
       <hr className="spacer-section-above spacer-section" />
       <SectionWithGrid heading={t("application.review.householdDetails")}>
         <Grid.Row>
-          <Grid.Cell>
-            <FieldGroup
-              type="checkbox"
-              name="application.preferredUnit"
-              fields={enableUnitGroups ? preferredUnitGroupOptions : preferredUnitOptions}
-              groupLabel={t("application.details.preferredUnitSizes")}
-              register={register}
-              fieldGroupClassName="grid grid-cols-1 mt-4"
-              fieldClassName="ml-0"
-            />
-          </Grid.Cell>
+          {((enableUnitGroups && preferredUnitGroupOptions.length > 0) || !enableUnitGroups) && (
+            <Grid.Cell>
+              <FieldGroup
+                type="checkbox"
+                name="application.preferredUnit"
+                fields={enableUnitGroups ? preferredUnitGroupOptions : preferredUnitOptions}
+                groupLabel={t("application.details.preferredUnitSizes")}
+                register={register}
+                fieldGroupClassName="grid grid-cols-1 mt-4"
+                fieldClassName="ml-0"
+              />
+            </Grid.Cell>
+          )}
 
           <Grid.Cell>
             <fieldset>

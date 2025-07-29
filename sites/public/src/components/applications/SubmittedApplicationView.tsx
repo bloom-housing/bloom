@@ -1,12 +1,13 @@
 import { t } from "@bloom-housing/ui-components"
 import { Button, Card, Heading, Icon } from "@bloom-housing/ui-seeds"
 import FormSummaryDetails from "../shared/FormSummaryDetails"
-import React, { useMemo } from "react"
+import React, { useMemo, useContext } from "react"
 import { DATE_FORMAT } from "../../lib/constants"
 import dayjs from "dayjs"
-import { CustomIconMap, listingSectionQuestions } from "@bloom-housing/shared-helpers"
+import { CustomIconMap, listingSectionQuestions, AuthContext } from "@bloom-housing/shared-helpers"
 import {
   Application,
+  FeatureFlagEnum,
   Listing,
   MultiselectQuestionsApplicationSectionEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -23,6 +24,7 @@ const SubmittedApplicationView = ({
   listing,
   backHref,
 }: SubmittedApplicationViewProps) => {
+  const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
   const confirmationDate = useMemo(() => {
     return dayjs(application.submissionDate).format(DATE_FORMAT)
   }, [application.submissionDate])
@@ -66,6 +68,7 @@ const SubmittedApplicationView = ({
               ?.length === 0
           }
           editMode={false}
+          enableUnitGroups={doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableUnitGroups)}
         />
         <Card.Section>
           <div className="hide-for-print">

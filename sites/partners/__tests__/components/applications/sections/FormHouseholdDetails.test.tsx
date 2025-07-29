@@ -98,6 +98,7 @@ describe("<FormHouseholdDetails>", () => {
                   name: UnitTypeEnum.oneBdrm,
                 },
               ],
+              openWaitlist: true,
             },
             {
               id: "group2",
@@ -119,6 +120,7 @@ describe("<FormHouseholdDetails>", () => {
                   name: UnitTypeEnum.threeBdrm,
                 },
               ],
+              openWaitlist: true,
             },
           ]}
           enableUnitGroups={true}
@@ -182,6 +184,7 @@ describe("<FormHouseholdDetails>", () => {
                   name: UnitTypeEnum.oneBdrm,
                 },
               ],
+              openWaitlist: true,
             },
             {
               id: "group2",
@@ -203,6 +206,7 @@ describe("<FormHouseholdDetails>", () => {
                   name: UnitTypeEnum.studio,
                 },
               ],
+              openWaitlist: true,
             },
           ]}
           enableUnitGroups={true}
@@ -268,6 +272,7 @@ describe("<FormHouseholdDetails>", () => {
                   name: UnitTypeEnum.threeBdrm,
                 },
               ],
+              openWaitlist: true,
             },
             {
               id: "group2",
@@ -296,6 +301,7 @@ describe("<FormHouseholdDetails>", () => {
                   name: UnitTypeEnum.SRO,
                 },
               ],
+              openWaitlist: true,
             },
           ]}
           enableUnitGroups={true}
@@ -319,5 +325,26 @@ describe("<FormHouseholdDetails>", () => {
       .getAllByRole("checkbox")
       .filter((checkbox) => checkbox.getAttribute("name") === "application.preferredUnit")
     expect(unitTypeCheckboxes).toHaveLength(7)
+  })
+  it("should hide preferred unit sizes if there are no unit groups", () => {
+    render(
+      <FormProviderWrapper>
+        <FormHouseholdDetails
+          listingUnits={[]}
+          applicationUnitTypes={[]}
+          applicationAccessibilityFeatures={{
+            id: "id",
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            mobility: true,
+            vision: true,
+            hearing: true,
+          }}
+          listingUnitGroups={[]}
+          enableUnitGroups={true}
+        />
+      </FormProviderWrapper>
+    )
+    expect(screen.queryByText(/preferred unit sizes/i)).not.toBeInTheDocument()
   })
 })
