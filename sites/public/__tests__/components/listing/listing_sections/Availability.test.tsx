@@ -181,6 +181,7 @@ describe("<Availability>", () => {
       expect(
         view.getByText(
           "Eligible applicants will be contacted on a first come first serve basis until vacancies are filled."
+        )
       )
     })
 
