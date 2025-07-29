@@ -20,8 +20,6 @@ phases:
     commands:
       - export ECR_HOST="${ECR_ACCOUNT_ID}.dkr.ecr.${ECR_REGION}.amazonaws.com"
       - export ECR_REPO="${ECR_HOST}/${ECR_NAMESPACE}"
-      - echo "ECR_REPO: ${ECR_REPO}"
-      - echo "ECR_REGION: ${ECR_REGION}"
 
       # Skip the test step as it is handle before merge. But re-add if you want more verification
       # - docker build . -f build/docker/Dockerfile.backend --target test -t api:test
