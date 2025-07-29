@@ -214,12 +214,15 @@ export const TextEditor = ({
 
   return (
     <>
-      <label className={`${styles["label"]} ${errorState ? styles["error-text"] : null}`}>
+      <label
+        className={`${styles["label"]} ${errorState ? styles["error-text"] : null}`}
+        htmlFor={"editorId"}
+      >
         {label}
       </label>
       <div className={`${styles["editor"]} ${overLimit || errorState ? styles["error"] : ""}`}>
         <MenuBar editor={editor} />
-        <EditorContent editor={editor} id={editorId} data-testid={editorId} />
+        <EditorContent editor={editor} id={editorId} data-testid={editorId} role={"textbox"} />
       </div>
       <div
         className={`${styles["character-count"]} ${
