@@ -154,14 +154,12 @@ describe("CommunityType", () => {
     await act(() => userEvent.click(screen.getByRole("radio", { name: "Yes" })))
 
     expect(
-      screen.getByRole("textbox", { name: "Reserved Community Disclaimer Title" })
+      screen.getByRole("textbox", { name: "Reserved Community Disclaimer Title *" })
     ).toBeInTheDocument()
     expect(
-      screen.getByRole("textbox", { name: "Reserved Community Disclaimer" })
+      screen.getByRole("textbox", { name: "Reserved Community Disclaimer *" })
     ).toBeInTheDocument()
-    expect(
-      screen.getAllByText("Required to publish, appears as first page of application")
-    ).toHaveLength(2)
+    expect(screen.getAllByText("Appears as first page of application")).toHaveLength(2)
   })
 
   it("should not render when swapCommunityTypesWithPrograms is true", () => {

@@ -6,7 +6,7 @@ import {
   FeatureFlagEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { ListingContext } from "../../ListingContext"
-import { getDetailBoolean } from "./helpers"
+import { getDetailBoolean, getDetailFieldString } from "./helpers"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 
@@ -97,10 +97,10 @@ const DetailApplicationTypes = () => {
         {referralMethod && (
           <>
             <FieldValue id="referralContactPhone" label={t("listings.referralContactPhone")}>
-              {referralMethod.phoneNumber}
+              {getDetailFieldString(referralMethod.phoneNumber)}
             </FieldValue>
             <FieldValue id="referralSummary" label={t("listings.referralSummary")}>
-              {referralMethod.externalReference}
+              {getDetailFieldString(referralMethod.externalReference)}
             </FieldValue>
           </>
         )}

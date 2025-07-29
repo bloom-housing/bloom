@@ -1,12 +1,12 @@
 describe("Jurisdictional Admin User Mangement Tests", () => {
   beforeEach(() => {
-    cy.login("jurisdictionalAdmin")
+    cy.loginApi("jurisdictionalAdmin")
     cy.visit("/")
     cy.getByTestId("Users-1").click()
   })
 
   afterEach(() => {
-    cy.signOut()
+    cy.signOutApi()
   })
 
   it("as jurisdictional admin user, should only see partners/jurisdictional admins on the same jurisdiction", () => {
