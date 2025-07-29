@@ -16,7 +16,7 @@
     "prettier": "prettier --write \"**/*.ts\""
   },
   "dependencies": {
-    "@bloom-housing/ui-components": "12.7.3",
+    "@bloom-housing/ui-components": "12.7.4",
     "@bloom-housing/ui-seeds": "1.22.4",
     "@heroicons/react": "^2.1.1",
     "axios-cookiejar-support": "^5.0.5"
