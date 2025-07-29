@@ -4,6 +4,8 @@
   border: 1px solid var(--border-color);
   border-radius: var(--seeds-s1);
   font-family: var(--seeds-font-alt-sans);
+  color: var(--seeds-color-on-surface);
+  font-size: var(--seeds-font-size-base);
 
   :first-child {
     margin-top: 0;
@@ -111,6 +113,16 @@
   padding: var(--seeds-s2) var(--seeds-s3);
 }
 
+.label {
+  display: block;
+  margin-block-end: var(--seeds-s2);
+  font-size: var(--seeds-font-size-sm);
+}
+
 .error {
   outline: 2px solid var(--seeds-color-alert);
+}
+
+.error-text {
+  color: var(--seeds-color-alert);
 }

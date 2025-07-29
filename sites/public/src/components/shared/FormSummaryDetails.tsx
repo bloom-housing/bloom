@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 import { MultiLineAddress, t } from "@bloom-housing/ui-components"
 import { Card, FieldValue, Heading, Link } from "@bloom-housing/ui-seeds"
 import {
@@ -13,8 +13,6 @@ import {
   Application,
   ApplicationMultiselectQuestion,
   ApplicationMultiselectQuestionOption,
-  FeatureFlag,
-  FeatureFlagEnum,
   InputType,
   Listing,
   MultiselectQuestionsApplicationSectionEnum,
@@ -145,7 +143,7 @@ const FormSummaryDetails = ({
     return (
       <>
         <Card.Header className={styles["summary-header"]}>
-          <Heading priority={3} size="xl" className="font-serif font-normal">
+          <Heading priority={3} size="xl">
             {header}
           </Heading>
           {editMode && !validationError && <Link href={appLink}>{t("t.edit")}</Link>}
@@ -198,7 +196,7 @@ const FormSummaryDetails = ({
   return (
     <>
       <Card.Header className={styles["summary-header"]}>
-        <Heading priority={3} size="xl" className="font-serif font-normal">
+        <Heading priority={3} size="xl">
           {t("t.you")}
         </Heading>
         {editMode && <Link href="/applications/contact/name">{t("t.edit")}</Link>}
@@ -317,7 +315,7 @@ const FormSummaryDetails = ({
       {application.alternateContact.type && application.alternateContact.type !== "noContact" && (
         <>
           <Card.Header className={styles["summary-header"]}>
-            <Heading priority={3} size="xl" className="font-serif font-normal">
+            <Heading priority={3} size="xl">
               {t("application.alternateContact.type.label")}
             </Heading>
             {editMode && !validationError && (
@@ -378,7 +376,7 @@ const FormSummaryDetails = ({
       {application.householdSize > 1 && (
         <>
           <Card.Header className={styles["summary-header"]}>
-            <Heading priority={3} size="xl" className="font-serif font-normal">
+            <Heading priority={3} size="xl">
               {t("application.household.householdMembers")}
             </Heading>
             {editMode && !validationError && (
@@ -441,7 +439,7 @@ const FormSummaryDetails = ({
 
       <>
         <Card.Header className={styles["summary-header"]}>
-          <Heading priority={3} size="xl" className="font-serif font-normal">
+          <Heading priority={3} size="xl">
             {t("application.review.householdDetails")}
           </Heading>
           {editMode && !validationError && (
@@ -510,7 +508,7 @@ const FormSummaryDetails = ({
           )}
 
         <Card.Header className={styles["summary-header"]}>
-          <Heading priority={3} size="xl" className="font-serif font-normal">
+          <Heading priority={3} size="xl">
             {t("t.income")}
           </Heading>
           {editMode && !validationError && (

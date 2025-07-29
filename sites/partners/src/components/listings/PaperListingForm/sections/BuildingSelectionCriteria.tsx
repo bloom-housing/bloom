@@ -9,9 +9,10 @@ import {
   FieldGroup,
   StandardTableData,
 } from "@bloom-housing/ui-components"
-import { Button, Card, Drawer, FieldValue, Grid, Heading } from "@bloom-housing/ui-seeds"
+import { Button, Card, Drawer, Grid, Heading } from "@bloom-housing/ui-seeds"
 import { cloudinaryUrlFromId } from "@bloom-housing/shared-helpers"
 import { cloudinaryFileUploader } from "../../../../lib/helpers"
+import styles from "../ListingForm.module.scss"
 
 const BuildingSelectionCriteria = () => {
   const formMethods = useFormContext()
@@ -244,30 +245,27 @@ const BuildingSelectionCriteria = () => {
         <Drawer.Content>
           <Card>
             <Card.Section>
-              <FieldValue
-                label={t("listings.addBuildingSelectionCriteriaSubtitle")}
-                className={!criteriaAttachType ? "" : "hidden"}
-              >
-                <FieldGroup
-                  name="criteriaAttachType"
-                  type="radio"
-                  register={register}
-                  fields={[
-                    {
-                      label: "Upload PDF",
-                      value: "upload",
-                      id: "criteriaAttachTypeUpload",
-                      defaultChecked: false,
-                    },
-                    {
-                      label: "Webpage URL",
-                      value: "url",
-                      id: "criteriaAttachTypeURL",
-                      defaultChecked: false,
-                    },
-                  ]}
-                />
-              </FieldValue>
+              <FieldGroup
+                name="criteriaAttachType"
+                type="radio"
+                register={register}
+                fields={[
+                  {
+                    label: "Upload PDF",
+                    value: "upload",
+                    id: "criteriaAttachTypeUpload",
+                    defaultChecked: false,
+                  },
+                  {
+                    label: "Webpage URL",
+                    value: "url",
+                    id: "criteriaAttachTypeURL",
+                    defaultChecked: false,
+                  },
+                ]}
+                groupLabel={t("listings.addBuildingSelectionCriteriaSubtitle")}
+                fieldLabelClassName={styles["label-option"]}
+              />
 
               {criteriaAttachType === "upload" && (
                 <>

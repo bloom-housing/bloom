@@ -14,7 +14,7 @@ declare namespace Cypress {
     getByID(value: string): Chainable<Element>
     getByTestId(value: string): Chainable<Element>
     loginAndAcceptTerms(fixture?: string): Chainable
-    login(fixture?: string): Chainable
+    loginApi(fixture?: string): Chainable
     loginWithMfa(): Chainable
     attachFile(command: string, optionalProcessingConfig: attachFileSubjectArgs): Chainable
     verifyAlertBox(): Chainable
@@ -34,6 +34,7 @@ declare namespace Cypress {
     verifyTerms(value: Record<string, string>, fieldsToSkip?: string[]): Chainable
     fillMailingAddress(value: Record<string, string>, fieldsToSkip?: string[]): Chainable
     signOut(): Chainable
+    signOutApi(): Chainable
     fillFields(
       obj: Record<string, string>,
       fieldsToType: fieldObj[],

@@ -5,7 +5,7 @@ import {
   MultiselectQuestionsApplicationSectionEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { t, MinimalTable } from "@bloom-housing/ui-components"
-import { FieldValue } from "@bloom-housing/ui-seeds"
+import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { ListingContext } from "../../ListingContext"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 
@@ -51,16 +51,20 @@ const DetailPrograms = () => {
           ? t("listings.activePrograms")
           : t("listings.activeCommunityTypes")}
       </SectionWithGrid.HeadingRow>
-      {programsTableData.length ? (
-        <MinimalTable
-          id="programTable"
-          className="spacer-section-above"
-          headers={programsTableHeaders}
-          data={programsTableData}
-        />
-      ) : (
-        <FieldValue className="spacer-section-above">{t("t.none")}</FieldValue>
-      )}
+      <Grid.Row>
+        <Grid.Cell>
+          {programsTableData.length ? (
+            <MinimalTable
+              id="programTable"
+              className="spacer-section-above"
+              headers={programsTableHeaders}
+              data={programsTableData}
+            />
+          ) : (
+            <FieldValue className="spacer-section-above">{t("t.none")}</FieldValue>
+          )}
+        </Grid.Cell>
+      </Grid.Row>
     </SectionWithGrid>
   )
 }

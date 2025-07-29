@@ -116,68 +116,72 @@ const FormHouseholdDetails = ({
             </fieldset>
           </Grid.Cell>
 
-          <FieldValue label={t("application.household.expectingChanges.title")}>
-            <div className="flex h-12 items-center">
-              <Field
-                id="application.householdExpectingChangesYes"
-                name="application.householdExpectingChanges"
-                className="m-0"
-                type="radio"
-                label={t("t.yes")}
-                register={register}
-                inputProps={{
-                  value: YesNoEnum.yes,
-                }}
-              />
+          <Grid.Cell>
+            <FieldValue label={t("application.household.expectingChanges.title")}>
+              <div className="flex h-12 items-center">
+                <Field
+                  id="application.householdExpectingChangesYes"
+                  name="application.householdExpectingChanges"
+                  className="m-0"
+                  type="radio"
+                  label={t("t.yes")}
+                  register={register}
+                  inputProps={{
+                    value: YesNoEnum.yes,
+                  }}
+                />
 
-              <Field
-                id="application.householdExpectingChangesNo"
-                name="application.householdExpectingChanges"
-                className="m-0"
-                type="radio"
-                label={t("t.no")}
-                register={register}
-                inputProps={{
-                  value: YesNoEnum.no,
-                }}
-              />
-            </div>
-          </FieldValue>
+                <Field
+                  id="application.householdExpectingChangesNo"
+                  name="application.householdExpectingChanges"
+                  className="m-0"
+                  type="radio"
+                  label={t("t.no")}
+                  register={register}
+                  inputProps={{
+                    value: YesNoEnum.no,
+                  }}
+                />
+              </div>
+            </FieldValue>
+          </Grid.Cell>
         </Grid.Row>
         <Grid.Row columns="3">
-          <FieldValue
-            label={
-              enableFullTimeStudentQuestion
-                ? t("application.household.householdStudentAll.title")
-                : t("application.household.householdStudent.title")
-            }
-          >
-            <div className="flex h-12 items-center">
-              <Field
-                id="application.householdStudentYes"
-                name="application.householdStudent"
-                className="m-0"
-                type="radio"
-                label={t("t.yes")}
-                register={register}
-                inputProps={{
-                  value: YesNoEnum.yes,
-                }}
-              />
+          <Grid.Cell>
+            <FieldValue
+              label={
+                enableFullTimeStudentQuestion
+                  ? t("application.household.householdStudentAll.title")
+                  : t("application.household.householdStudent.title")
+              }
+            >
+              <div className="flex h-12 items-center">
+                <Field
+                  id="application.householdStudentYes"
+                  name="application.householdStudent"
+                  className="m-0"
+                  type="radio"
+                  label={t("t.yes")}
+                  register={register}
+                  inputProps={{
+                    value: YesNoEnum.yes,
+                  }}
+                />
 
-              <Field
-                id="application.householdStudentNo"
-                name="application.householdStudent"
-                className="m-0"
-                type="radio"
-                label={t("t.no")}
-                register={register}
-                inputProps={{
-                  value: YesNoEnum.no,
-                }}
-              />
-            </div>
-          </FieldValue>
+                <Field
+                  id="application.householdStudentNo"
+                  name="application.householdStudent"
+                  className="m-0"
+                  type="radio"
+                  label={t("t.no")}
+                  register={register}
+                  inputProps={{
+                    value: YesNoEnum.no,
+                  }}
+                />
+              </div>
+            </FieldValue>
+          </Grid.Cell>
         </Grid.Row>
       </SectionWithGrid>
     </>
