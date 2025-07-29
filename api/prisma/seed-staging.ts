@@ -401,6 +401,11 @@ export const stagingSeed = async (
               applicationSection:
                 MultiselectQuestionsApplicationSectionEnum.programs,
               text,
+              optOutText: 'Prefer not to say',
+              options: [
+                { text: 'Yes', exclusive: true, ordinal: 1 },
+                { text: 'No', exclusive: true, ordinal: 2 },
+              ],
             },
           }),
         }),
