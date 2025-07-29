@@ -233,7 +233,7 @@ const Layout = (props: LayoutProps) => {
           </title>
           {props.pageTitle && (
             <MetaTags
-              title={t("nav.myDashboard")}
+              title={props.pageTitle}
               description={props.metaDescription ?? ""}
               image={props.metaImage ?? ""}
             />

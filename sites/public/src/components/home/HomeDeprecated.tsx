@@ -36,8 +36,7 @@ export const HomeDeprecated = (props: HomeDeprecatedProps) => {
   const metaImage = "" // TODO: replace with hero image
 
   return (
-    <Layout pageTitle={t("nav.siteTitle")}>
-      <MetaTags title={t("nav.siteTitle")} image={metaImage} description={metaDescription} />
+    <Layout pageTitle={t("nav.siteTitle")} metaImage={metaImage} metaDescription={metaDescription}>
       <PageHero>
         <PageHero.Header>
           <Heading>{heroTitle}</Heading>

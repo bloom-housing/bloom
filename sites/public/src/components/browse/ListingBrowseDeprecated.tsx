@@ -54,8 +54,7 @@ export const ListingBrowseDeprecated = (props: ListingBrowseDeprecatedProps) => 
   }, [profile, props.openListings])
 
   return (
-    <Layout pageTitle={t("pageTitle.rent")}>
-      <MetaTags title={t("nav.siteTitle")} image={metaImage} description={metaDescription} />
+    <Layout pageTitle={t("pageTitle.rent")} metaImage={metaImage} metaDescription={metaDescription}>
       <PageHeader title={t("pageTitle.rent")} />
       <div>
         {openListings(props.openListings)}
