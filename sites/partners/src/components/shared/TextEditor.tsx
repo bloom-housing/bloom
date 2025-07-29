@@ -261,16 +261,15 @@ export const TextEditor = ({
 
   return (
     <>
-      <label
-        className={`${styles["label"]} ${errorState ? styles["error-text"] : null}`}
-        htmlFor={editorId}
-      >
-        {label}
+      <label>
+        <span className={`${styles["label"]} ${errorState ? styles["error-text"] : null}`}>
+          {label}
+        </span>
+        <div className={`${styles["editor"]} ${overLimit || errorState ? styles["error"] : ""}`}>
+          <MenuBar editor={editor} />
+          <EditorContent editor={editor} id={editorId} data-testid={editorId} />
+        </div>
       </label>
-      <div className={`${styles["editor"]} ${overLimit || errorState ? styles["error"] : ""}`}>
-        <MenuBar editor={editor} />
-        <EditorContent editor={editor} id={editorId} data-testid={editorId} />
-      </div>
       <div
         className={`${styles["character-count"]} ${
           overLimit ? styles["character-count-warning"] : ""
