@@ -92,7 +92,7 @@ const MenuBar = ({ editor }) => {
   }
 
   return (
-    <div className={styles["editor-menu"]} role={"menu"}>
+    <div className={styles["editor-menu"]}>
       <button
         onClick={() => editor?.chain().focus().toggleBold().run()}
         disabled={!editor?.can().chain().focus().toggleBold().run()}
@@ -100,7 +100,6 @@ const MenuBar = ({ editor }) => {
         type="button"
         aria-label={"Bold"}
         id={"editor-bold"}
-        role={"menuitem"}
       >
         <Icon>
           <BoldIcon />
@@ -112,7 +111,6 @@ const MenuBar = ({ editor }) => {
         type="button"
         aria-label={"Bullet list"}
         id={"editor-bullet-list"}
-        role={"menuitem"}
       >
         <Icon>
           <BulletListIcon />
@@ -124,7 +122,6 @@ const MenuBar = ({ editor }) => {
         type="button"
         aria-label={"Numbered list"}
         id={"editor-numbered-list"}
-        role={"menuitem"}
       >
         <Icon>
           <OrderedListIcon />
@@ -135,7 +132,6 @@ const MenuBar = ({ editor }) => {
         className={editor?.isActive("link") ? styles["is-active"] : ""}
         type="button"
         aria-label={"Set link"}
-        role={"menuitem"}
       >
         <Icon>
           <LinkIcon />
@@ -146,7 +142,6 @@ const MenuBar = ({ editor }) => {
         disabled={!editor?.isActive("link")}
         type="button"
         aria-label={"Unlink"}
-        role={"menuitem"}
       >
         <Icon>
           <UnlinkIcon />
@@ -157,7 +152,6 @@ const MenuBar = ({ editor }) => {
         type="button"
         aria-label={"Line break"}
         id={"editor-line-break"}
-        role={"menuitem"}
       >
         <Icon>
           <DividerIcon />
@@ -220,10 +214,7 @@ export const TextEditor = ({
 
   return (
     <>
-      <label
-        className={`${styles["label"]} ${errorState ? styles["error-text"] : null}`}
-        htmlFor={"editorId"}
-      >
+      <label className={`${styles["label"]} ${errorState ? styles["error-text"] : null}`}>
         {label}
       </label>
       <div className={`${styles["editor"]} ${overLimit || errorState ? styles["error"] : ""}`}>
