@@ -5,7 +5,7 @@ type GetUnitTypeNamesReturn = {
   name: string
 }
 
-export const UnitTypeSort = [
+export const UnitTypeSort: string[] = [
   UnitTypeEnum.SRO,
   UnitTypeEnum.studio,
   UnitTypeEnum.oneBdrm,
@@ -15,7 +15,7 @@ export const UnitTypeSort = [
   UnitTypeEnum.fiveBdrm,
 ]
 
-export const UnitGroupTypeSort = [
+export const UnitGroupTypeSort: string[] = [
   UnitTypeEnum.studio,
   UnitTypeEnum.oneBdrm,
   UnitTypeEnum.twoBdrm,
