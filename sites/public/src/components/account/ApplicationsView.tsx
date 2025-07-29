@@ -133,11 +133,7 @@ const ApplicationsView = (props: ApplicationsViewProps) => {
 
   return (
     <RequireLogin signInPath="/sign-in" signInMessage={t("t.loginIsRequired")}>
-      <Layout>
-        <Head>
-          <title>{t("account.myApplications")}</title>
-        </Head>
-        <MetaTags title={t("account.myApplications")} description="" />
+      <Layout pageTitle={t("account.myApplications")}>
         <section className={styles["applications-section-background"]}>
           <div className={styles["applications-section-container"]}>
             <Tabs

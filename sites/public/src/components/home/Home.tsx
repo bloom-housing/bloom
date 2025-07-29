@@ -48,10 +48,7 @@ export const Home = (props: HomeProps) => {
   )
 
   return (
-    <Layout>
-      <Head>
-        <title>{t("nav.siteTitle")}</title>
-      </Head>
+    <Layout pageTitle={t("nav.siteTitle")}>
       <MetaTags title={t("nav.siteTitle")} description={metaDescription} />
       <div className={styles["home-page"]}>
         <Hero

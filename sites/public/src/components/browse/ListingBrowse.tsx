@@ -162,10 +162,7 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
   )
 
   return (
-    <Layout>
-      <Head>
-        <title>{pageTitle}</title>
-      </Head>
+    <Layout pageTitle={pageTitle}>
       <MetaTags title={t("nav.siteTitle")} description={metaDescription} />
       <PageHeaderSection heading={t("pageTitle.rent")} inverse={true} content={ListingTabs} />
       <FilterDrawer

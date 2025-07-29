@@ -100,7 +100,7 @@ const ApplicationSummary = () => {
   }
 
   return (
-    <FormsLayout>
+    <FormsLayout pageTitle={`Summary - ${t("listings.apply.applyOnline")} - ${listing?.name}`}>
       <Form onSubmit={handleSubmit(onSubmit)}>
         <ApplicationFormLayout
           listingName={listing?.name}

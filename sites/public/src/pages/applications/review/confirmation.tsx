@@ -52,7 +52,7 @@ const ApplicationConfirmation = () => {
   }, [profile])
 
   return (
-    <FormsLayout>
+    <FormsLayout pageTitle={`Confirmation - ${t("listings.apply.applyOnline")} - ${listing?.name}`}>
       <BloomCard>
         <>
           <CardSection divider={"flush"}>

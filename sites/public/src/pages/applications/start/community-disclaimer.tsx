@@ -30,7 +30,9 @@ const ApplicationCommunityDisclaimer = () => {
   }, [profile])
 
   return (
-    <FormsLayout>
+    <FormsLayout
+      pageTitle={`Community Disclaimer - ${t("listings.apply.applyOnline")} - ${listing?.name}`}
+    >
       <ApplicationFormLayout
         listingName={listing?.name}
         heading={listing?.communityDisclaimerTitle ?? ""}

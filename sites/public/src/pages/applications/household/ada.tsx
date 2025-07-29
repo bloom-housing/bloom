@@ -119,7 +119,7 @@ const ApplicationAda = () => {
   })
 
   return (
-    <FormsLayout>
+    <FormsLayout pageTitle={`ADA Features - ${t("listings.apply.applyOnline")} - ${listing?.name}`}>
       <Form onSubmit={handleSubmit(onSubmit, onError)}>
         <ApplicationFormLayout
           listingName={listing?.name}

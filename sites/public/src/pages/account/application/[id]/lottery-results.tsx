@@ -93,7 +93,10 @@ export default () => {
   return (
     <>
       <RequireLogin signInPath="/sign-in" signInMessage={t("t.loginIsRequired")}>
-        <FormsLayout className={styles["lottery-results"]}>
+        <FormsLayout
+          className={styles["lottery-results"]}
+          pageTitle={`Lottery Results - ${listing?.name}`}
+        >
           {noApplication && (
             <ApplicationError error={t("account.application.noApplicationError")} />
           )}

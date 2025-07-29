@@ -22,7 +22,7 @@ const ApplicationView = () => {
   }, [profile])
 
   return (
-    <FormsLayout>
+    <FormsLayout pageTitle={`View Application - ${listing?.name}`}>
       <SubmittedApplicationView
         application={application}
         listing={listing}

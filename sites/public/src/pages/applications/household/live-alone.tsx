@@ -51,7 +51,7 @@ const ApplicationLiveAlone = () => {
   ]
 
   return (
-    <FormsLayout>
+    <FormsLayout pageTitle={`Live Alone - ${t("listings.apply.applyOnline")} - ${listing?.name}`}>
       <Form className="mb-4" onSubmit={handleSubmit(onSubmit)}>
         <ApplicationFormLayout
           listingName={listing?.name}

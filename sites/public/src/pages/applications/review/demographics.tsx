@@ -93,7 +93,7 @@ const ApplicationDemographics = () => {
   }, [profile])
 
   return (
-    <FormsLayout>
+    <FormsLayout pageTitle={`Demographics - ${t("listings.apply.applyOnline")} - ${listing?.name}`}>
       <Form onSubmit={handleSubmit(onSubmit)}>
         <ApplicationFormLayout
           listingName={listing?.name}

@@ -267,7 +267,10 @@ const SignIn = (props: SignInProps) => {
 
   return (
     <>
-      <FormsLayout className={signUpCopy ? "sm:max-w-lg md:max-w-full" : undefined}>
+      <FormsLayout
+        className={signUpCopy ? "sm:max-w-lg md:max-w-full" : undefined}
+        pageTitle={"Sign In"}
+      >
         <div className={signUpCopy ? signUpBenefitsStyles["benefits-container"] : undefined}>
           {signUpCopy && (
             <div className={signUpBenefitsStyles["benefits-display-hide"]}>

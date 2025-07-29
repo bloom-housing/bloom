@@ -51,7 +51,9 @@ const ApplicationAlternateContactType = () => {
   }, [profile])
 
   return (
-    <FormsLayout>
+    <FormsLayout
+      pageTitle={`Alternate Contact Type - ${t("listings.apply.applyOnline")} - ${listing?.name}`}
+    >
       <Form id="applications-contact-alternate-type" onSubmit={handleSubmit(onSubmit, onError)}>
         <ApplicationFormLayout
           listingName={listing?.name}

@@ -67,11 +67,7 @@ export default function ListingPage(props: ListingProps) {
   const metaImage = imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize))[0]
 
   return (
-    <Layout>
-      <Head>
-        <title>{pageTitle}</title>
-      </Head>
-      <MetaTags title={listing.name} image={metaImage} description={metaDescription} />
+    <Layout pageTitle={listing.name} metaImage={metaImage} metaDescription={metaDescription}>
       {process.env.showNewSeedsDesigns ? (
         <ListingViewSeeds listing={listing} profile={profile} jurisdiction={props.jurisdiction} />
       ) : (

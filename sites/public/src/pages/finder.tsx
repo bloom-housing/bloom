@@ -14,7 +14,7 @@ export default function Finder({ jurisdiction }: { jurisdiction: Jurisdiction })
     ) || []
 
   return (
-    <Layout>
+    <Layout pageTitle={"Rental Finder"}>
       <RentalsFinder activeFeatureFlags={activeFeatureFlags} />
     </Layout>
   )

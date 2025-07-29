@@ -40,7 +40,9 @@ const ApplicationPreferencesGeneral = () => {
   }, [profile])
 
   return (
-    <FormsLayout>
+    <FormsLayout
+      pageTitle={`Preferences Notice - ${t("listings.apply.applyOnline")} - ${listing?.name}`}
+    >
       <Form onSubmit={handleSubmit(onSubmit)}>
         <ApplicationFormLayout
           listingName={listing?.name}

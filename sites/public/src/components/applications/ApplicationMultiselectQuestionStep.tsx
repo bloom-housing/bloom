@@ -211,7 +211,13 @@ const ApplicationMultiselectQuestionStep = ({
   }
 
   return (
-    <FormsLayout>
+    <FormsLayout
+      pageTitle={`${
+        applicationSection === MultiselectQuestionsApplicationSectionEnum.preferences
+          ? t("t.preferences")
+          : t("t.programs")
+      } - ${t("listings.apply.applyOnline")} - ${listing?.name}`}
+    >
       <Form onSubmit={handleSubmit(onSubmit)}>
         <ApplicationFormLayout
           listingName={listing?.name}

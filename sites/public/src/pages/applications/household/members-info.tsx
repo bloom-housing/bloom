@@ -36,7 +36,9 @@ const ApplicationMembersInfo = () => {
   }, [profile])
 
   return (
-    <FormsLayout>
+    <FormsLayout
+      pageTitle={`Household Members Notice - ${t("listings.apply.applyOnline")} - ${listing?.name}`}
+    >
       <Form onSubmit={handleSubmit(onSubmit, onError)}>
         <ApplicationFormLayout
           listingName={listing?.name}

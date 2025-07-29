@@ -40,7 +40,6 @@ const closedListings = (listings) => {
 
 export const ListingBrowseDeprecated = (props: ListingBrowseDeprecatedProps) => {
   const { profile } = useContext(AuthContext)
-  const pageTitle = `${t("pageTitle.rent")} - ${t("nav.siteTitle")}`
   const metaDescription = t("pageDescription.welcome", { regionName: t("region.name") })
   const metaImage = "" // TODO: replace with hero image
 
@@ -55,11 +54,7 @@ export const ListingBrowseDeprecated = (props: ListingBrowseDeprecatedProps) => 
   }, [profile, props.openListings])
 
   return (
-    <Layout>
-      <Head>
-        <title>{pageTitle}</title>
-      </Head>
-
+    <Layout pageTitle={t("pageTitle.rent")}>
       <MetaTags title={t("nav.siteTitle")} image={metaImage} description={metaDescription} />
       <PageHeader title={t("pageTitle.rent")} />
       <div>
