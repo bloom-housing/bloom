@@ -49,7 +49,13 @@ const DetailApplicationDates = () => {
             startTime: { content: startTime && getDetailFieldTime(startTime) },
             endTime: { content: endTime && getDetailFieldTime(endTime) },
             url: {
-              content: url ? <Link href={url}>{t("t.url")}</Link> : t("t.n/a"),
+              content: url ? (
+                <Link href={url} className={"darker-link"}>
+                  {t("t.url")}
+                </Link>
+              ) : (
+                t("t.n/a")
+              ),
             },
             view: {
               content: (
@@ -124,7 +130,7 @@ const DetailApplicationDates = () => {
                     </FieldValue>
                     <FieldValue id="drawer.url" label={t("t.url")}>
                       {drawer?.url ? (
-                        <Link className="mx-0 my-0" href={drawer.url}>
+                        <Link className={`mx-0 my-0 darker-link`} href={drawer.url}>
                           {drawer?.label ?? t("t.url")}
                         </Link>
                       ) : (
