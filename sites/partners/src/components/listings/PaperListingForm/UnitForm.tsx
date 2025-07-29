@@ -662,7 +662,7 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
           onClick={() => onClose(false, false, null)}
           variant="text"
           size="sm"
-          className={"font-semibold darker-delete"}
+          className={"font-semibold darker-alert"}
         >
           {t("t.cancel")}
         </Button>
