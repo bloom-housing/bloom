@@ -364,7 +364,6 @@ const RankingsAndResults = ({
             <TextEditor
               editor={whatToExpectEditor}
               editorId={"whatToExpect"}
-              labelId={"whatToExpectLabel"}
               error={fieldHasError(errors?.whatToExpect)}
               label={getLabel("whatToExpect", requiredFields, t("listings.whatToExpectLabel"))}
               errorMessage={fieldMessage(errors.whatToExpect)}

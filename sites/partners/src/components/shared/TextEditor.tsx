@@ -236,7 +236,6 @@ type TextEditorProps = {
   error?: boolean
   errorMessage?: string
   label: string | React.ReactNode
-  labelId: string
 }
 
 export const TextEditor = ({
@@ -246,9 +245,10 @@ export const TextEditor = ({
   error,
   errorMessage,
   label,
-  labelId,
 }: TextEditorProps) => {
   const [errorState, setErrorState] = useState(error)
+
+  const labelId = `${editorId}Label`
 
   if (!editor) {
     return null
