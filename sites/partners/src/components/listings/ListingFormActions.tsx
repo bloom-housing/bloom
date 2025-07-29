@@ -15,7 +15,6 @@ import {
 import { StatusAside } from "../shared/StatusAside"
 import { SubmitFunction } from "./PaperListingForm"
 import { ListingContext } from "./ListingContext"
-import styles from "./PaperListingForm/ListingForm.module.scss"
 
 export enum ListingFormActionsType {
   add = "add",

@@ -9,9 +9,8 @@ import {
   User,
   UserRole,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { JurisdictionAndListingSelection } from "./JurisdictionAndListingSelection"
 import SectionWithGrid from "../shared/SectionWithGrid"
-import styles from "../listings/PaperListingForm/ListingForm.module.scss"
+import { JurisdictionAndListingSelection } from "./JurisdictionAndListingSelection"
 
 type FormUserManageProps = {
   isOpen: boolean
