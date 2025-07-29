@@ -811,7 +811,7 @@ export class ApplicationFlaggedSetService implements OnModuleInit {
                   { status: { not: 'active' } },
                 ],
               }
-            : undefined,
+            : {},
         ],
       },
     });
