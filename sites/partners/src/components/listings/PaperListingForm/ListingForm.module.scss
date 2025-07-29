@@ -19,11 +19,15 @@
   label,
   legend {
     color: var(--seeds-input-text-label-color);
+    font-family: var(--seeds-font-sans);
+    font-size: var(--seeds-type-label-size);
   }
 
   .label-option {
     color: var(--seeds-color-black);
+    font-weight: var(--seeds-font-weight-semibold);
   }
+
   .label-error {
     label {
       color: var(--seeds-color-alert);
@@ -34,4 +38,15 @@
 
 .asterisk {
   font-weight: var(--seeds-font-weight-bold);
+}
+
+.custom-label {
+  color: var(--seeds-input-text-label-color);
+  font-family: var(--seeds-font-sans);
+  font-size: var(--seeds-type-label-size);
+}
+
+.label-option {
+  color: var(--seeds-color-black);
+  font-weight: var(--seeds-font-weight-semibold);
 }

@@ -359,7 +359,7 @@ const BuildingDetails = ({
         )}
         <Grid.Row columns={3}>
           <Grid.Cell className="seeds-grid-span-2">
-            <FieldValue label={t("listings.mapPreview")}>
+            <FieldValue label={t("listings.mapPreview")} className={styles["custom-label"]}>
               {displayMapPreview() ? (
                 <ListingMap
                   listingName={listing?.name}
@@ -386,10 +386,10 @@ const BuildingDetails = ({
             </FieldValue>
           </Grid.Cell>
           <Grid.Cell>
-            <p className="field-label m-4 ml-0">{t("listings.mapPinPosition")}</p>
             <FieldGroup
               name="mapPinPosition"
               type="radio"
+              groupLabel={t("listings.mapPinPosition")}
               fieldLabelClassName={styles["label-option"]}
               fieldGroupClassName={"flex-col"}
               fieldClassName={"ml-0"}

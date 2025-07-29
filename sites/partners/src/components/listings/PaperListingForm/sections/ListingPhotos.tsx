@@ -216,7 +216,7 @@ const ListingPhotos = (props: ListingPhotosProps) => {
         className={"gap-0"}
       >
         <div
-          className={`field-label ${
+          className={`field-label ${styles["custom-label"]} ${
             fieldHasError(errors?.listingImages) ? styles["label-error"] : ""
           }`}
         >

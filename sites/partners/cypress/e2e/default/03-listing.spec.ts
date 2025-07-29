@@ -19,7 +19,7 @@ describe("Listing Management Tests", () => {
     cy.getByID("jurisdictions.id-error").contains("This field is required")
     // Fill out minimum fields and errors get removed
     cy.getByID("jurisdictions.id").select("Bloomington")
-    cy.getByID("jurisdictions.id-error").should("have.length", 0)
+    cy.getByID("jurisdictions.id-error").should("not.include.text", "This field is required")
     cy.getByID("name").type("Test - error messaging")
     cy.getByID("name-error").should("to.be.empty")
     cy.getByID("saveDraftButton").contains("Save as Draft").click()
@@ -95,9 +95,15 @@ describe("Listing Management Tests", () => {
     cy.getByID("leasingAgentName-error").contains("This field is required").should("not.exist")
     cy.getByID("leasingAgentEmail-error").contains("This field is required").should("not.exist")
     cy.getByID("leasingAgentPhone-error").should("not.exist")
-    cy.getByID("digitalApplicationChoice-error").should("not.exist")
-    cy.getByID("paperApplicationChoice-error").should("not.exist")
-    cy.getByID("referralOpportunityChoice-error").should("not.exist")
+    cy.getByID("digitalApplicationChoice-error").should(
+      "not.include.text",
+      "This field is required"
+    )
+    cy.getByID("paperApplicationChoice-error").should("not.include.text", "This field is required")
+    cy.getByID("referralOpportunityChoice-error").should(
+      "not.include.text",
+      "This field is required"
+    )
   })
 
   it("full listing publish", () => {

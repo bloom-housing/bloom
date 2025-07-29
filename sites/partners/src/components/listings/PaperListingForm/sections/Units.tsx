@@ -391,7 +391,7 @@ const FormUnits = ({
 
         <Grid.Row className={"grid-cols-1 gap-0"}>
           <div
-            className={`field-label ${
+            className={`field-label ${styles["custom-label"]} ${
               fieldHasError(errors?.units) || fieldHasError(errors?.unitGroups)
                 ? styles["label-error"]
                 : ""
