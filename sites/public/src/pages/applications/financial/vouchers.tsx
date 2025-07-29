@@ -70,7 +70,9 @@ const ApplicationVouchers = () => {
 
   return (
     <FormsLayout
-      pageTitle={`Vouchers & Subsidies - ${t("listings.apply.applyOnline")} - ${listing?.name}`}
+      pageTitle={`${t("pageTitle.vouchersAndSubsidies")} - ${t("listings.apply.applyOnline")} - ${
+        listing?.name
+      }`}
     >
       <Form onSubmit={handleSubmit(onSubmit, onError)}>
         <ApplicationFormLayout

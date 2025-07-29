@@ -70,7 +70,9 @@ const ApplicationName = () => {
 
   return (
     <FormsLayout
-      pageTitle={`Primary Applicant Name - ${t("listings.apply.applyOnline")} - ${listing?.name}`}
+      pageTitle={`${t("pageTitle.primaryApplicantName")} - ${t("listings.apply.applyOnline")} - ${
+        listing?.name
+      }`}
     >
       <Form onSubmit={handleSubmit(onSubmit, onError)}>
         <ApplicationFormLayout

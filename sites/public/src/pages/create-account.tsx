@@ -98,7 +98,7 @@ const CreateAccount = () => {
   return (
     <FormsLayout
       className={signUpCopy ? "sm:max-w-lg md:max-w-full" : undefined}
-      pageTitle={"Create Account"}
+      pageTitle={t("account.createAccount")}
     >
       <div className={signUpCopy ? signUpBenefitsStyles["benefits-container"] : undefined}>
         {signUpCopy && (

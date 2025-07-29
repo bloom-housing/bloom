@@ -9,7 +9,7 @@ import { MenuLink, t, SiteHeader as UICSiteHeader } from "@bloom-housing/ui-comp
 import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
 import { User } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { ToastProps } from "@bloom-housing/ui-seeds/src/blocks/Toast"
-import MetaTags from "../components/shared/MetaTags"
+import { MetaTags } from "../components/shared/MetaTags"
 import CustomSiteFooter from "../components/shared/CustomSiteFooter"
 import { HeaderLink, SiteHeader } from "../patterns/SiteHeader"
 import styles from "./application.module.scss"
@@ -200,9 +200,9 @@ const getHeaderLinks = (
 
 interface LayoutProps {
   children: React.ReactNode
-  pageTitle?: string
-  metaImage?: string
   metaDescription?: string
+  metaImage?: string
+  pageTitle?: string
 }
 
 const Layout = (props: LayoutProps) => {

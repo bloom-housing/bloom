@@ -58,7 +58,9 @@ const ApplicationHouseholdChanges = () => {
 
   return (
     <FormsLayout
-      pageTitle={`Household Changes - ${t("listings.apply.applyOnline")} - ${listing?.name}`}
+      pageTitle={`${t("application.household.expectingChanges.title")} - ${t(
+        "listings.apply.applyOnline"
+      )} - ${listing?.name}`}
     >
       <Form onSubmit={handleSubmit(onSubmit, onError)}>
         <ApplicationFormLayout

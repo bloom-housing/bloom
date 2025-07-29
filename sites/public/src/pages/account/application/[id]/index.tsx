@@ -57,7 +57,7 @@ export default () => {
   return (
     <>
       <RequireLogin signInPath="/sign-in" signInMessage={t("t.loginIsRequired")}>
-        <FormsLayout pageTitle={`View Application - ${listing?.name}`}>
+        <FormsLayout pageTitle={`${t("application.viewApplication")} - ${listing?.name}`}>
           <LoadingState loading={loading || loading === null}>
             {noApplication && (
               <ApplicationError error={t("account.application.noApplicationError")} />

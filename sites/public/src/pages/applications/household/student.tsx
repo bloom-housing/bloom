@@ -65,7 +65,9 @@ const ApplicationHouseholdStudent = () => {
 
   return (
     <FormsLayout
-      pageTitle={`Household Student - ${t("listings.apply.applyOnline")} - ${listing?.name}`}
+      pageTitle={`${"pageTitle.householdStudent"} - ${t("listings.apply.applyOnline")} - ${
+        listing?.name
+      }`}
     >
       <Form onSubmit={handleSubmit(onSubmit, onError)}>
         <ApplicationFormLayout

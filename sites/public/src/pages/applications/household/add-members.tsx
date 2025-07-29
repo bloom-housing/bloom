@@ -74,7 +74,9 @@ const ApplicationAddMembers = () => {
 
   return (
     <FormsLayout
-      pageTitle={`Add Household Members - ${t("listings.apply.applyOnline")} - ${listing?.name}`}
+      pageTitle={`${t("pageTitle.addHouseholdMembers")} - ${t("listings.apply.applyOnline")} - ${
+        listing?.name
+      }`}
     >
       <Form onSubmit={handleSubmit(onSubmit, onError)}>
         <ApplicationFormLayout

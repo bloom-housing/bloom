@@ -116,7 +116,9 @@ const ApplicationIncome = () => {
   }, [profile])
 
   return (
-    <FormsLayout pageTitle={`Income - ${t("listings.apply.applyOnline")} - ${listing?.name}`}>
+    <FormsLayout
+      pageTitle={`${"t.income"} - ${t("listings.apply.applyOnline")} - ${listing?.name}`}
+    >
       <Form onSubmit={handleSubmit(onSubmit, onError)}>
         <ApplicationFormLayout
           listingName={listing?.name}

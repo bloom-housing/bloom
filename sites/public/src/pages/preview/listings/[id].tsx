@@ -26,7 +26,7 @@ export default function ListingPage(props: ListingProps) {
 
   return (
     <Layout
-      pageTitle={`Preview ${listing.name}`}
+      pageTitle={`${t("pageTitle.preview")} - ${listing.name}`}
       metaImage={metaImage}
       metaDescription={metaDescription}
     >

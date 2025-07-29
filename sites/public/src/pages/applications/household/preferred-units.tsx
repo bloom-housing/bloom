@@ -72,7 +72,9 @@ const ApplicationPreferredUnits = () => {
 
   return (
     <FormsLayout
-      pageTitle={`Preferred Unit Size - ${t("listings.apply.applyOnline")} - ${listing?.name}`}
+      pageTitle={`${t("application.household.preferredUnit.preferredUnitType")} - ${t(
+        "listings.apply.applyOnline"
+      )} - ${listing?.name}`}
     >
       <Form onSubmit={handleSubmit(onSubmit, onError)}>
         <ApplicationFormLayout
