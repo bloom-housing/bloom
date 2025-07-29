@@ -4,6 +4,8 @@
   border: 1px solid var(--border-color);
   border-radius: var(--seeds-s1);
   font-family: var(--seeds-font-alt-sans);
+  color: var(--seeds-color-on-surface);
+  font-size: var(--seeds-font-size-base);
 
   :first-child {
     margin-top: 0;
