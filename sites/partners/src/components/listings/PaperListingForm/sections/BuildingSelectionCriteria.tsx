@@ -136,7 +136,7 @@ const BuildingSelectionCriteria = () => {
             </Button>
             <Button
               type="button"
-              className={"font-semibold darker-delete"}
+              className={"font-semibold darker-alert"}
               onClick={() => {
                 setCloudinaryData({ ...cloudinaryData, id: "" })
                 deletePDF()
@@ -173,7 +173,7 @@ const BuildingSelectionCriteria = () => {
             </Button>
             <Button
               type="button"
-              className={"font-semibold darker-delete"}
+              className={"font-semibold darker-alert"}
               onClick={() => {
                 setValue("buildingSelectionCriteria", "")
               }}

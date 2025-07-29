@@ -258,7 +258,7 @@ const FormUnits = ({
                     </Button>
                     <Button
                       type="button"
-                      className={"font-semibold darker-delete"}
+                      className={"font-semibold darker-alert"}
                       onClick={() => setUnitDeleteModal(unitGroup.tempId)}
                       variant="text"
                       size="sm"
@@ -291,7 +291,7 @@ const FormUnits = ({
                   </Button>
                   <Button
                     type="button"
-                    className={"font-semibold darker-delete"}
+                    className={"font-semibold darker-alert"}
                     onClick={() => setUnitDeleteModal(unit.tempId)}
                     variant="text"
                     size="sm"

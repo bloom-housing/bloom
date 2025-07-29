@@ -127,7 +127,7 @@ const FormHouseholdMembers = ({
               </Button>
               <Button
                 type="button"
-                className={"font-semibold darker-delete"}
+                className={"font-semibold darker-alert"}
                 onClick={() => setMembersDeleteModal(member.orderId)}
                 variant="text"
               >

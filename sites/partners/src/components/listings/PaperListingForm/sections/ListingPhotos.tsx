@@ -103,7 +103,7 @@ const ListingPhotos = (props: ListingPhotosProps) => {
         content: (
           <Button
             type="button"
-            className={"darker-delete"}
+            className={"darker-alert"}
             onClick={() => {
               saveImageFields(fields.filter((item, i2) => i2 != index) as ListingImage[])
             }}

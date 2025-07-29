@@ -218,7 +218,7 @@ const UnitGroupForm = ({
                 </Button>
                 <Button
                   type="button"
-                  className={"font-semibold darker-delete"}
+                  className={"font-semibold darker-alert"}
                   variant="text"
                   size="sm"
                   onClick={() => setAmiDeleteModal(ami.tempId)}
@@ -553,7 +553,7 @@ const UnitGroupForm = ({
           onClick={() => onClose()}
           variant="text"
           size="sm"
-          className={"font-semibold darker-delete"}
+          className={"font-semibold darker-alert"}
         >
           {t("t.cancel")}
         </Button>

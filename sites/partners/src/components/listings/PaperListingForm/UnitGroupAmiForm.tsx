@@ -237,7 +237,7 @@ const UnitGroupAmiForm = ({
           onClick={onClose}
           variant="text"
           size="sm"
-          className={"font-semibold darker-delete"}
+          className={"font-semibold darker-alert"}
         >
           {t("t.cancel")}
         </Button>

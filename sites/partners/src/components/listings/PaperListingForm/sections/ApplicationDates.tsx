@@ -79,7 +79,7 @@ const ApplicationDates = ({
               <Button
                 type="button"
                 size="sm"
-                className={"font-semibold darker-delete"}
+                className={"font-semibold darker-alert"}
                 onClick={() => setModalDeleteOpenHouse(event)}
                 variant="text"
               >

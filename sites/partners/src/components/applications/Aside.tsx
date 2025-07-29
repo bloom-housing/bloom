@@ -57,7 +57,7 @@ const Aside = ({ listingId, type, onDelete, triggerSubmitAndRedirect }: AsidePro
         <Grid.Cell key="btn-cancel">
           <Button
             variant="text"
-            className={"w-full darker-delete"}
+            className={"w-full darker-alert"}
             onClick={() => setDeleteModal(true)}
           >
             {t("t.delete")}
@@ -104,7 +104,7 @@ const Aside = ({ listingId, type, onDelete, triggerSubmitAndRedirect }: AsidePro
             <Button
               type="button"
               variant="text"
-              className={"w-full darker-delete"}
+              className={"w-full darker-alert"}
               onClick={() => setDeleteModal(true)}
             >
               {t("t.delete")}
