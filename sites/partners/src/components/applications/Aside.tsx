@@ -4,6 +4,7 @@ import { t, StatusMessages } from "@bloom-housing/ui-components"
 import { Button, Dialog, Grid, Link } from "@bloom-housing/ui-seeds"
 import { ApplicationContext } from "./ApplicationContext"
 import { StatusAside } from "../shared/StatusAside"
+import styles from "../listings/PaperListingForm/ListingForm.module.scss"
 
 type AsideProps = {
   type: AsideType
@@ -33,7 +34,10 @@ const Aside = ({ listingId, type, onDelete, triggerSubmitAndRedirect }: AsidePro
 
     const cancel = (
       <Grid.Cell key="btn-cancel">
-        <Link className="w-full justify-center" href={`/listings/${listingId}/applications`}>
+        <Link
+          className={"w-full justify-center darker-link"}
+          href={`/listings/${listingId}/applications`}
+        >
           {t("t.cancel")}
         </Link>
       </Grid.Cell>
@@ -51,7 +55,11 @@ const Aside = ({ listingId, type, onDelete, triggerSubmitAndRedirect }: AsidePro
           </Button>
         </Grid.Cell>,
         <Grid.Cell key="btn-cancel">
-          <Button variant="text" className="text-alert w-full" onClick={() => setDeleteModal(true)}>
+          <Button
+            variant="text"
+            className={"w-full darker-delete"}
+            onClick={() => setDeleteModal(true)}
+          >
             {t("t.delete")}
           </Button>
         </Grid.Cell>
@@ -96,7 +104,7 @@ const Aside = ({ listingId, type, onDelete, triggerSubmitAndRedirect }: AsidePro
             <Button
               type="button"
               variant="text"
-              className="text-alert w-full"
+              className={"w-full darker-delete"}
               onClick={() => setDeleteModal(true)}
             >
               {t("t.delete")}

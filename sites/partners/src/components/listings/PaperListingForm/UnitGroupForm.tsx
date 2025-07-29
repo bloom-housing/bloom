@@ -207,7 +207,7 @@ const UnitGroupForm = ({
               <div className="flex gap-3">
                 <Button
                   type="button"
-                  className="front-semibold"
+                  className={"font-semibold darker-link"}
                   variant="text"
                   size="sm"
                   onClick={() => {
@@ -218,7 +218,7 @@ const UnitGroupForm = ({
                 </Button>
                 <Button
                   type="button"
-                  className="front-semibold text-alert"
+                  className={"font-semibold darker-delete"}
                   variant="text"
                   size="sm"
                   onClick={() => setAmiDeleteModal(ami.tempId)}
@@ -548,7 +548,13 @@ const UnitGroupForm = ({
           {t("t.saveExit")}
         </Button>
 
-        <Button type="button" onClick={() => onClose()} variant="text" size="sm">
+        <Button
+          type="button"
+          onClick={() => onClose()}
+          variant="text"
+          size="sm"
+          className={"font-semibold darker-delete"}
+        >
           {t("t.cancel")}
         </Button>
       </Drawer.Footer>

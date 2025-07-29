@@ -5,6 +5,7 @@ import { YesNoEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagg
 import { ApplicationContext } from "../../ApplicationContext"
 import { MembersDrawer } from "../DetailsMemberDrawer"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
+import styles from "../../../listings/PaperListingForm/ListingForm.module.scss"
 
 type DetailsHouseholdMembersProps = {
   setMembersDrawer: (member: MembersDrawer) => void
@@ -64,7 +65,7 @@ const DetailsHouseholdMembers = ({
         content: (
           <Button
             type="button"
-            className="font-semibold"
+            className={"font-semibold darker-link"}
             onClick={() => setMembersDrawer(item)}
             variant="text"
           >
