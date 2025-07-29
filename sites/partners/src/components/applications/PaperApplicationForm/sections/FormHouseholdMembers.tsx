@@ -6,9 +6,8 @@ import {
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { t, MinimalTable } from "@bloom-housing/ui-components"
 import { Button, Dialog, Drawer } from "@bloom-housing/ui-seeds"
-import { FormMember } from "../FormMember"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
-import styles from "../../../listings/PaperListingForm/ListingForm.module.scss"
+import { FormMember } from "../FormMember"
 
 type FormHouseholdMembersProps = {
   householdMembers: HouseholdMember[]

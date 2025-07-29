@@ -4,7 +4,6 @@ import { t, StatusMessages } from "@bloom-housing/ui-components"
 import { Button, Dialog, Grid, Link } from "@bloom-housing/ui-seeds"
 import { ApplicationContext } from "./ApplicationContext"
 import { StatusAside } from "../shared/StatusAside"
-import styles from "../listings/PaperListingForm/ListingForm.module.scss"
 
 type AsideProps = {
   type: AsideType
