@@ -95,28 +95,30 @@ const CommunityType = ({ listing, requiredFields }: CommunityTypeProps) => {
       >
         <Grid.Row columns={2}>
           {options && (
-            <Select
-              id={`reservedCommunityTypes.id`}
-              name={`reservedCommunityTypes.id`}
-              label={getLabel(
-                "reservedCommunityTypes",
-                requiredFields,
-                t("listings.reservedCommunityType")
-              )}
-              register={register}
-              controlClassName="control"
-              options={options}
-              inputProps={{
-                onChange: () => {
-                  setCurrentCommunityType(reservedCommunityType)
-                  fieldHasError(errors?.reservedCommunityTypes) &&
-                    clearErrors("reservedCommunityTypes")
-                },
-                "aria-required": fieldIsRequired("reservedCommunityTypes", requiredFields),
-              }}
-              error={fieldHasError(errors?.reservedCommunityTypes)}
-              errorMessage={fieldMessage(errors?.reservedCommunityTypes)}
-            />
+            <Grid.Cell>
+              <Select
+                id={`reservedCommunityTypes.id`}
+                name={`reservedCommunityTypes.id`}
+                label={getLabel(
+                  "reservedCommunityTypes",
+                  requiredFields,
+                  t("listings.reservedCommunityType")
+                )}
+                register={register}
+                controlClassName="control"
+                options={options}
+                inputProps={{
+                  onChange: () => {
+                    setCurrentCommunityType(reservedCommunityType)
+                    fieldHasError(errors?.reservedCommunityTypes) &&
+                      clearErrors("reservedCommunityTypes")
+                  },
+                  "aria-required": fieldIsRequired("reservedCommunityTypes", requiredFields),
+                }}
+                error={fieldHasError(errors?.reservedCommunityTypes)}
+                errorMessage={fieldMessage(errors?.reservedCommunityTypes)}
+              />
+            </Grid.Cell>
           )}
         </Grid.Row>
         <Grid.Row columns={3}>
@@ -146,27 +148,29 @@ const CommunityType = ({ listing, requiredFields }: CommunityTypeProps) => {
         </Grid.Row>
 
         <Grid.Row columns={1}>
-          <FieldGroup
-            groupLabel={t("listings.includeCommunityDisclaimer")}
-            name="includeCommunityDisclaimerQuestion"
-            fieldLabelClassName={`${styles["label-option"]} seeds-m-bs-2`}
-            type="radio"
-            register={register}
-            fields={[
-              {
-                label: t("t.yes"),
-                value: YesNoEnum.yes,
-                id: "includeCommunityDisclaimerYes",
-                disabled: !currentCommunityType,
-              },
-              {
-                label: t("t.no"),
-                value: YesNoEnum.no,
-                id: "includeCommunityDisclaimerNo",
-                disabled: !currentCommunityType,
-              },
-            ]}
-          />
+          <Grid.Cell>
+            <FieldGroup
+              groupLabel={t("listings.includeCommunityDisclaimer")}
+              name="includeCommunityDisclaimerQuestion"
+              fieldLabelClassName={`${styles["label-option"]} seeds-m-bs-2`}
+              type="radio"
+              register={register}
+              fields={[
+                {
+                  label: t("t.yes"),
+                  value: YesNoEnum.yes,
+                  id: "includeCommunityDisclaimerYes",
+                  disabled: !currentCommunityType,
+                },
+                {
+                  label: t("t.no"),
+                  value: YesNoEnum.no,
+                  id: "includeCommunityDisclaimerNo",
+                  disabled: !currentCommunityType,
+                },
+              ]}
+            />
+          </Grid.Cell>
         </Grid.Row>
 
         {watch("includeCommunityDisclaimerQuestion") === YesNoEnum.yes && currentCommunityType && (

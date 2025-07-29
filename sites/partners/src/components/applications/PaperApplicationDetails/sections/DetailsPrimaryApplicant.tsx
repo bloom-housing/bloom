@@ -20,94 +20,114 @@ const DetailsPrimaryApplicant = ({
   return (
     <SectionWithGrid heading={t("application.household.primaryApplicant")} inset>
       <Grid.Row>
-        <FieldValue label={t("application.name.firstName")} testId="firstName">
-          {application.applicant.firstName || t("t.n/a")}
-        </FieldValue>
+        <Grid.Cell>
+          <FieldValue label={t("application.name.firstName")} testId="firstName">
+            {application.applicant.firstName || t("t.n/a")}
+          </FieldValue>
+        </Grid.Cell>
 
-        <FieldValue label={t("application.name.middleName")} testId="middleName">
-          {application.applicant.middleName || t("t.n/a")}
-        </FieldValue>
+        <Grid.Cell>
+          <FieldValue label={t("application.name.middleName")} testId="middleName">
+            {application.applicant.middleName || t("t.n/a")}
+          </FieldValue>
+        </Grid.Cell>
 
-        <FieldValue label={t("application.name.lastName")} testId="lastName">
-          {application.applicant.lastName || t("t.n/a")}
-        </FieldValue>
+        <Grid.Cell>
+          <FieldValue label={t("application.name.lastName")} testId="lastName">
+            {application.applicant.lastName || t("t.n/a")}
+          </FieldValue>
+        </Grid.Cell>
       </Grid.Row>
       <Grid.Row>
-        <FieldValue label={t("application.household.member.dateOfBirth")} testId="dateOfBirth">
-          {(() => {
-            const { birthMonth, birthDay, birthYear } = application.applicant
-
-            if (birthMonth && birthDay && birthYear) {
-              return `${birthMonth}/${birthDay}/${birthYear}`
-            }
-
-            return t("t.n/a")
-          })()}
-        </FieldValue>
-
-        <FieldValue label={t("t.email")} testId="emailAddress">
-          {application.applicant.emailAddress || t("t.n/a")}
-        </FieldValue>
-
-        <FieldValue
-          label={t("t.phone")}
-          helpText={
-            application.applicant.phoneNumberType &&
-            t(`application.contact.phoneNumberTypes.${application.applicant.phoneNumberType}`)
-          }
-          testId="phoneNumber"
-        >
-          {application.applicant.phoneNumber || t("t.n/a")}
-        </FieldValue>
-      </Grid.Row>
-
-      <Grid.Row>
-        <FieldValue
-          label={t("t.secondPhone")}
-          helpText={
-            application.additionalPhoneNumber &&
-            t(`application.contact.phoneNumberTypes.${application.additionalPhoneNumberType}`)
-          }
-          testId="additionalPhoneNumber"
-        >
-          {application.additionalPhoneNumber || t("t.n/a")}
-        </FieldValue>
-
-        <FieldValue label={t("application.details.preferredContact")} testId="preferredContact">
-          {(() => {
-            if (!application.contactPreferences.length) return t("t.n/a")
-
-            return application.contactPreferences.map((item) => (
-              <span key={item}>
-                {t(`t.${item}`)}
-                <br />
-              </span>
-            ))
-          })()}
-        </FieldValue>
-
-        {!disableWorkInRegion && (
-          <FieldValue label={t("application.details.workInRegion")} testId="workInRegion">
+        <Grid.Cell>
+          <FieldValue label={t("application.household.member.dateOfBirth")} testId="dateOfBirth">
             {(() => {
-              if (!application.applicant.workInRegion) return t("t.n/a")
+              const { birthMonth, birthDay, birthYear } = application.applicant
 
-              return application.applicant.workInRegion === YesNoEnum.yes ? t("t.yes") : t("t.no")
+              if (birthMonth && birthDay && birthYear) {
+                return `${birthMonth}/${birthDay}/${birthYear}`
+              }
+
+              return t("t.n/a")
             })()}
           </FieldValue>
+        </Grid.Cell>
+
+        <Grid.Cell>
+          <FieldValue label={t("t.email")} testId="emailAddress">
+            {application.applicant.emailAddress || t("t.n/a")}
+          </FieldValue>
+        </Grid.Cell>
+
+        <Grid.Cell>
+          <FieldValue
+            label={t("t.phone")}
+            helpText={
+              application.applicant.phoneNumberType &&
+              t(`application.contact.phoneNumberTypes.${application.applicant.phoneNumberType}`)
+            }
+            testId="phoneNumber"
+          >
+            {application.applicant.phoneNumber || t("t.n/a")}
+          </FieldValue>
+        </Grid.Cell>
+      </Grid.Row>
+
+      <Grid.Row>
+        <Grid.Cell>
+          <FieldValue
+            label={t("t.secondPhone")}
+            helpText={
+              application.additionalPhoneNumber &&
+              t(`application.contact.phoneNumberTypes.${application.additionalPhoneNumberType}`)
+            }
+            testId="additionalPhoneNumber"
+          >
+            {application.additionalPhoneNumber || t("t.n/a")}
+          </FieldValue>
+        </Grid.Cell>
+
+        <Grid.Cell>
+          <FieldValue label={t("application.details.preferredContact")} testId="preferredContact">
+            {(() => {
+              if (!application.contactPreferences.length) return t("t.n/a")
+
+              return application.contactPreferences.map((item) => (
+                <span key={item}>
+                  {t(`t.${item}`)}
+                  <br />
+                </span>
+              ))
+            })()}
+          </FieldValue>
+        </Grid.Cell>
+
+        {!disableWorkInRegion && (
+          <Grid.Cell>
+            <FieldValue label={t("application.details.workInRegion")} testId="workInRegion">
+              {(() => {
+                if (!application.applicant.workInRegion) return t("t.n/a")
+
+                return application.applicant.workInRegion === YesNoEnum.yes ? t("t.yes") : t("t.no")
+              })()}
+            </FieldValue>
+          </Grid.Cell>
         )}
       </Grid.Row>
 
       {enableFullTimeStudentQuestion && (
         <Grid.Row>
-          <FieldValue label={t("application.details.fullTimeStudent")} testId="fullTimeStudent">
-            {(() => {
-              if (!application.applicant.fullTimeStudent) return t("t.n/a")
+          <Grid.Cell>
+            <FieldValue label={t("application.details.fullTimeStudent")} testId="fullTimeStudent">
+              {(() => {
+                if (!application.applicant.fullTimeStudent) return t("t.n/a")
 
-              return application.applicant.fullTimeStudent === YesNoEnum.yes
-                ? t("t.yes")
-                : t("t.no")
-            })()}
-          </FieldValue>
+                return application.applicant.fullTimeStudent === YesNoEnum.yes
+                  ? t("t.yes")
+                  : t("t.no")
+              })()}
+            </FieldValue>
+          </Grid.Cell>
         </Grid.Row>
       )}
 
