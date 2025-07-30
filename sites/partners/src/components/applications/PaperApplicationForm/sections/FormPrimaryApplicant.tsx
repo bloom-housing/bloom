@@ -188,89 +188,106 @@ const FormPrimaryApplicant = ({
           </Grid.Cell>
 
           {!disableWorkInRegion && (
-            <FieldValue label={t("application.add.workInRegion")}>
-              <div className="flex items-center">
-                <Field
-                  id="application.applicant.workInRegionYes"
-                  name="application.applicant.workInRegion"
-                  className="m-0"
-                  type="radio"
-                  label={t("t.yes")}
-                  register={register}
-                  inputProps={{
-                    value: YesNoEnum.yes,
-                  }}
-                />
+            <Grid.Cell>
+              <FieldValue label={t("application.add.workInRegion")}>
+                <div className="flex items-center">
+                  <Field
+                    id="application.applicant.workInRegionYes"
+                    name="application.applicant.workInRegion"
+                    className="m-0"
+                    type="radio"
+                    label={t("t.yes")}
+                    register={register}
+                    inputProps={{
+                      value: YesNoEnum.yes,
+                    }}
+                  />
 
-                <Field
-                  id="application.applicant.workInRegionNo"
-                  name="application.applicant.workInRegion"
-                  className="m-0"
-                  type="radio"
-                  label={t("t.no")}
-                  register={register}
-                  inputProps={{
-                    value: YesNoEnum.no,
-                  }}
-                />
-              </div>
-            </FieldValue>
+                  <Field
+                    id="application.applicant.workInRegionNo"
+                    name="application.applicant.workInRegion"
+                    className="m-0"
+                    type="radio"
+                    label={t("t.no")}
+                    register={register}
+                    inputProps={{
+                      value: YesNoEnum.no,
+                    }}
+                  />
+                </div>
+              </FieldValue>
+            </Grid.Cell>
           )}
-          {enableFullTimeStudentQuestion && (
-            <FieldValue label={t("application.add.fullTimeStudent")}>
-              <div className="flex items-center">
-                <Field
-                  id="application.applicant.fullTimeStudentYes"
-                  name="application.applicant.fullTimeStudent"
-                  className="m-0"
-                  type="radio"
-                  label={t("t.yes")}
-                  register={register}
-                  inputProps={{
-                    value: YesNoEnum.yes,
-                  }}
-                />
 
-                <Field
-                  id="application.applicant.fullTimeStudentNo"
-                  name="application.applicant.fullTimeStudent"
-                  className="m-0"
-                  type="radio"
-                  label={t("t.no")}
-                  register={register}
-                  inputProps={{
-                    value: YesNoEnum.no,
-                  }}
-                />
-              </div>
-            </FieldValue>
+          {enableFullTimeStudentQuestion && (
+            <Grid.Cell>
+              <FieldValue label={t("application.add.fullTimeStudent")}>
+                <div className="flex items-center">
+                  <Field
+                    id="application.applicant.fullTimeStudentYes"
+                    name="application.applicant.fullTimeStudent"
+                    className="m-0"
+                    type="radio"
+                    label={t("t.yes")}
+                    register={register}
+                    inputProps={{
+                      value: YesNoEnum.yes,
+                    }}
+                  />
+
+                  <Field
+                    id="application.applicant.fullTimeStudentNo"
+                    name="application.applicant.fullTimeStudent"
+                    className="m-0"
+                    type="radio"
+                    label={t("t.no")}
+                    register={register}
+                    inputProps={{
+                      value: YesNoEnum.no,
+                    }}
+                  />
+                </div>
+              </FieldValue>
+            </Grid.Cell>
           )}
         </Grid.Row>
 
-        <FormAddress
-          subtitle={t("application.details.residenceAddress")}
-          dataKey="application.applicant.applicantAddress"
-          enableMailCheckbox={true}
-          register={register}
-          stateKeys={stateKeys}
-        />
+        <Grid.Row>
+          <Grid.Cell>
+            <FormAddress
+              subtitle={t("application.details.residenceAddress")}
+              dataKey="application.applicant.applicantAddress"
+              enableMailCheckbox={true}
+              register={register}
+              stateKeys={stateKeys}
+            />
+          </Grid.Cell>
+        </Grid.Row>
 
         {mailingAddressValue && (
-          <FormAddress
-            subtitle={t("application.contact.mailingAddress")}
-            dataKey="application.applicationsMailingAddress"
-            register={register}
-            stateKeys={stateKeys}
-          />
+          <Grid.Row>
+            <Grid.Cell>
+              <FormAddress
+                subtitle={t("application.contact.mailingAddress")}
+                dataKey="application.applicationsMailingAddress"
+                register={register}
+                stateKeys={stateKeys}
+              />
+            </Grid.Cell>
+          </Grid.Row>
         )}
 
         {workInRegionValue === YesNoEnum.yes && (
-          <FormAddress
-            subtitle={t("application.contact.workAddress")}
-            dataKey="application.applicant.applicantWorkAddress"
-            register={register}
-            stateKeys={stateKeys}
-          />
+          <Grid.Row>
+            <Grid.Cell>
+              <FormAddress
+                subtitle={t("application.contact.workAddress")}
+                dataKey="application.applicant.applicantWorkAddress"
+                register={register}
+                stateKeys={stateKeys}
+              />
+            </Grid.Cell>
+          </Grid.Row>
         )}
       </SectionWithGrid>
     </>

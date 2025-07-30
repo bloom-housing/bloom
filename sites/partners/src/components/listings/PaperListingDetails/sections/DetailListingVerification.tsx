@@ -21,9 +21,11 @@ const DetailListingVerification = () => {
   return (
     <SectionWithGrid heading={t("listings.sections.verificationTitle")} inset>
       <Grid.Row>
-        <FieldValue label={t("listings.sections.verification")}>
-          {listing.isVerified ? t("t.yes") : t("t.no")}
-        </FieldValue>
+        <Grid.Cell>
+          <FieldValue label={t("listings.sections.verification")}>
+            {listing.isVerified ? t("t.yes") : t("t.no")}
+          </FieldValue>
+        </Grid.Cell>
       </Grid.Row>
     </SectionWithGrid>
   )

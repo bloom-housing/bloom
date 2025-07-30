@@ -13,8 +13,12 @@
 // https://on.cypress.io/configuration
 // ***********************************************************
 import "@cypress/code-coverage/support"
+
+// Uncomment to run Deque Axe Developer Hub accessibility tests
+// import "@axe-core/watcher/dist/cypressCommands"
+// afterEach(() => {
+//   if (Cypress.env("runAccessibilityTests")) cy.axeWatcherFlush()
+// })
+
 // Import commands.js using ES2015 syntax:
 import "./commands"
-
-// Alternatively you can use CommonJS syntax:
-// require('./commands')
