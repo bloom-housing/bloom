@@ -40,6 +40,11 @@ export default function ApplicationsList() {
     listingDto?.jurisdictions.id
   )
 
+  const disableWorkInRegion = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.disableWorkInRegion,
+    listingDto?.jurisdictions.id
+  )
+
   const enableFullTimeStudentQuestion = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableFullTimeStudentQuestion,
     listingDto?.jurisdictions.id
@@ -142,6 +147,7 @@ export default function ApplicationsList() {
 
                 <DetailsPrimaryApplicant
                   enableFullTimeStudentQuestion={enableFullTimeStudentQuestion}
+                  disableWorkInRegion={disableWorkInRegion}
                 />
 
                 <DetailsAlternateContact />
@@ -149,6 +155,7 @@ export default function ApplicationsList() {
                 <DetailsHouseholdMembers
                   setMembersDrawer={setMembersDrawer}
                   enableFullTimeStudentQuestion={enableFullTimeStudentQuestion}
+                  disableWorkInRegion={disableWorkInRegion}
                 />
 
                 <DetailsHouseholdDetails
