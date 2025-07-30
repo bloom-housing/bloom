@@ -24,7 +24,7 @@ import { isFeatureFlagOn } from "../../../lib/helpers"
 import { Button } from "@bloom-housing/ui-seeds"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 
-export default () => {
+const Autofill = () => {
   const router = useRouter()
   const context = useFormConductor("autofill")
   const { conductor, application, listing } = context
@@ -159,3 +159,5 @@ export default () => {
     <FormsLayout></FormsLayout>
   )
 }
+
+export default Autofill

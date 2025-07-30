@@ -1057,6 +1057,7 @@ export const stagingSeed = async (
       },
       index,
     ) => {
+      console.log(`Adding listing - ${value.listing?.name}`);
       const listing = await listingFactory(value.jurisdictionId, prismaClient, {
         amiChart: amiChart,
         numberOfUnits: (!value.unitGroups && index) || 0,

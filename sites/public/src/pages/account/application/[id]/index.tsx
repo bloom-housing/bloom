@@ -12,7 +12,7 @@ import { SubmittedApplicationView } from "../../../../components/applications/Su
 import { ApplicationError } from "../../../../components/account/ApplicationCards"
 import FormsLayout from "../../../../layouts/forms"
 
-export default () => {
+const AccountApplication = () => {
   const router = useRouter()
   const applicationId = router.query.id as string
   const { applicationsService, listingsService, profile } = useContext(AuthContext)
@@ -76,3 +76,5 @@ export default () => {
     </>
   )
 }
+
+export default AccountApplication

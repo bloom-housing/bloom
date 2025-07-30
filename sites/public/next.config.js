@@ -9,7 +9,7 @@ if (process.env.NODE_ENV !== "production") {
   require("dotenv").config()
 }
 // Set up app-wide constants
-let BACKEND_API_BASE = "http://localhost:3100"
+let BACKEND_API_BASE = "http://127.0.0.1:3100"
 if (process.env.INCOMING_HOOK_BODY && process.env.INCOMING_HOOK_BODY.startsWith("http")) {
   // This is a value that can get set via a Netlify webhook for branch deploys
   BACKEND_API_BASE = decodeURIComponent(process.env.INCOMING_HOOK_BODY)
@@ -36,17 +36,17 @@ module.exports = withBundleAnalyzer({
     listingPhotoSize: process.env.LISTING_PHOTO_SIZE || "1302",
     mapBoxToken: MAPBOX_TOKEN,
     housingCounselorServiceUrl: HOUSING_COUNSELOR_SERVICE_URL,
-    gtmKey: process.env.GTM_KEY || null,
+    gtmKey: process.env.GTM_KEY || "",
     idleTimeout: process.env.IDLE_TIMEOUT,
     jurisdictionName: process.env.JURISDICTION_NAME,
-    cacheRevalidate: process.env.CACHE_REVALIDATE ? Number(process.env.CACHE_REVALIDATE) : 30,
+    cacheRevalidate: process.env.CACHE_REVALIDATE ? process.env.CACHE_REVALIDATE : "30",
     cloudinaryCloudName: process.env.CLOUDINARY_CLOUD_NAME,
-    showProfessionalPartners: process.env.SHOW_PROFESSIONAL_PARTNERS === "TRUE",
-    showPublicLottery: process.env.SHOW_PUBLIC_LOTTERY === "TRUE",
-    showNewSeedsDesigns: process.env.SHOW_NEW_SEEDS_DESIGNS === "TRUE",
-    showMandatedAccounts: process.env.SHOW_MANDATED_ACCOUNTS === "TRUE",
-    showPwdless: process.env.SHOW_PWDLESS === "TRUE",
     notificationsSignUpUrl: process.env.NOTIFICATIONS_SIGN_UP_URL || null,
+    showProfessionalPartners: process.env.SHOW_PROFESSIONAL_PARTNERS === "TRUE" ? "TRUE" : "",
+    showPublicLottery: process.env.SHOW_PUBLIC_LOTTERY === "TRUE" ? "TRUE" : "",
+    showNewSeedsDesigns: process.env.SHOW_NEW_SEEDS_DESIGNS === "TRUE" ? "TRUE" : "",
+    showMandatedAccounts: process.env.SHOW_MANDATED_ACCOUNTS === "TRUE" ? "TRUE" : "",
+    showPwdless: process.env.SHOW_PWDLESS === "TRUE" ? "TRUE" : "",
     maintenanceWindow: process.env.MAINTENANCE_WINDOW,
     siteMessageWindow: process.env.SITE_MESSAGE_WINDOW,
     mtcDataUrl: process.env.MTC_DATA_URL,
