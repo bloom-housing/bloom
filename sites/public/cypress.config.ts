@@ -9,7 +9,6 @@ let baseConfig: Cypress.ConfigOptions<any> = {
   projectId: "bloom-public-reference",
   pageLoadTimeout: 100000,
   video: true,
-  videoUploadOnPasses: false,
   numTestsKeptInMemory: 0,
   viewportHeight: 1500,
   env: {
