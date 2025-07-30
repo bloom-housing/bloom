@@ -1,4 +1,4 @@
-import { Button, Card, Dialog, Drawer, FieldValue, Grid } from "@bloom-housing/ui-seeds"
+import { Button, Card, Dialog, Drawer, Grid } from "@bloom-housing/ui-seeds"
 import SectionWithGrid from "../../shared/SectionWithGrid"
 import {
   Field,
@@ -21,6 +21,7 @@ import {
 import { arrayToFormOptions, fieldHasError } from "../../../lib/helpers"
 import { TempAmiLevel, TempUnitGroup } from "../../../lib/listings/formTypes"
 import UnitGroupAmiForm from "./UnitGroupAmiForm"
+import styles from "./ListingForm.module.scss"
 
 type UnitGroupFormProps = {
   onSubmit: (unit: TempUnitGroup) => void
@@ -284,7 +285,9 @@ const UnitGroupForm = ({
             <SectionWithGrid heading={t("listings.unit.details")}>
               <fieldset>
                 <Grid.Row columns={1}>
-                  <legend className="mb-5">{t("listings.unit.type")}</legend>
+                  <legend className={`mb-5 ${styles["custom-label"]}`}>
+                    {t("listings.unit.type")}
+                  </legend>
                 </Grid.Row>
                 <Grid.Row columns={2}>
                   <FieldGroup
@@ -298,249 +301,217 @@ const UnitGroupForm = ({
                     errorMessage={t("errors.requiredFieldError")}
                     validation={{ required: true }}
                     dataTestId="unitTypesCheckBoxes"
+                    fieldLabelClassName={styles["label-option"]}
                   />
                 </Grid.Row>
               </fieldset>
             </SectionWithGrid>
             <SectionWithGrid heading={t("listings.unit.details")}>
               <Grid.Row columns={3}>
-                <FieldValue label={t("listings.unit.affordableGroupQuantity")}>
-                  <Field
-                    label={t("listings.unit.affordableGroupQuantity")}
-                    id="totalCount"
-                    name="totalCount"
-                    placeholder={t("listings.unit.affordableGroupQuantity")}
-                    register={register}
-                    readerOnly
-                    type="number"
-                    error={fieldHasError(errors?.totalCount)}
-                    errorMessage={t("errors.totalCountLessThanTotalAvailableError")}
-                    validation={{ min: totalAvailable }}
-                    inputProps={{
-                      onBlur: () => {
-                        void trigger("totalCount")
-                        void trigger("totalAvailable")
-                      },
-                    }}
-                    dataTestId="totalCount"
-                  />
-                </FieldValue>
+                <Field
+                  label={t("listings.unit.affordableGroupQuantity")}
+                  id="totalCount"
+                  name="totalCount"
+                  register={register}
+                  type="number"
+                  error={fieldHasError(errors?.totalCount)}
+                  errorMessage={t("errors.totalCountLessThanTotalAvailableError")}
+                  validation={{ min: totalAvailable }}
+                  inputProps={{
+                    onBlur: () => {
+                      void trigger("totalCount")
+                      void trigger("totalAvailable")
+                    },
+                  }}
+                  dataTestId="totalCount"
+                />
               </Grid.Row>
               <Grid.Row columns={3}>
-                <FieldValue label={t("listings.unit.minOccupancy")}>
-                  <Select
-                    labelClassName="sr-only"
-                    controlClassName="control"
-                    label={t("listings.unit.minOccupancy")}
-                    id="minOccupancy"
-                    name="minOccupancy"
-                    register={register}
-                    options={numberOptions(numberOccupancyOptions, 1)}
-                    errorMessage={t("errors.minGreaterThanMaxOccupancyError")}
-                    error={fieldHasError(errors?.minOccupancy)}
-                    validation={{ max: maxOccupancy || numberOccupancyOptions }}
-                    inputProps={{
-                      onChange: () => {
-                        void trigger("minOccupancy")
-                        void trigger("maxOccupancy")
-                      },
-                    }}
-                  />
-                </FieldValue>
-                <FieldValue label={t("listings.unit.maxOccupancy")}>
-                  <Select
-                    id="maxOccupancy"
-                    name="maxOccupancy"
-                    label={t("listings.unit.maxOccupancy")}
-                    labelClassName="sr-only"
-                    register={register}
-                    controlClassName="control"
-                    options={numberOptions(numberOccupancyOptions, 1)}
-                    errorMessage={t("errors.maxLessThanMinOccupancyError")}
-                    error={fieldHasError(errors?.maxOccupancy)}
-                    validation={{ min: minOccupancy }}
-                    inputProps={{
-                      onChange: () => {
-                        void trigger("minOccupancy")
-                        void trigger("maxOccupancy")
-                      },
-                    }}
-                  />
-                </FieldValue>
+                <Select
+                  controlClassName="control"
+                  label={t("listings.unit.minOccupancy")}
+                  id="minOccupancy"
+                  name="minOccupancy"
+                  register={register}
+                  options={numberOptions(numberOccupancyOptions, 1)}
+                  errorMessage={t("errors.minGreaterThanMaxOccupancyError")}
+                  error={fieldHasError(errors?.minOccupancy)}
+                  validation={{ max: maxOccupancy || numberOccupancyOptions }}
+                  inputProps={{
+                    onChange: () => {
+                      void trigger("minOccupancy")
+                      void trigger("maxOccupancy")
+                    },
+                  }}
+                />
+                <Select
+                  id="maxOccupancy"
+                  name="maxOccupancy"
+                  label={t("listings.unit.maxOccupancy")}
+                  register={register}
+                  controlClassName="control"
+                  options={numberOptions(numberOccupancyOptions, 1)}
+                  errorMessage={t("errors.maxLessThanMinOccupancyError")}
+                  error={fieldHasError(errors?.maxOccupancy)}
+                  validation={{ min: minOccupancy }}
+                  inputProps={{
+                    onChange: () => {
+                      void trigger("minOccupancy")
+                      void trigger("maxOccupancy")
+                    },
+                  }}
+                />
               </Grid.Row>
               <Grid.Row columns={3}>
-                <FieldValue label={t("listings.unit.minSquareFootage")}>
-                  <Field
-                    label={t("listings.unit.minSquareFootage")}
-                    id="sqFeetMin"
-                    name="sqFeetMin"
-                    placeholder={t("listings.unit.minSquareFootage")}
-                    register={register}
-                    readerOnly
-                    type="number"
-                    errorMessage={t("errors.minGreaterThanMaxFootageError")}
-                    error={fieldHasError(errors?.sqFeetMin)}
-                    validation={{ max: sqFeetMax }}
-                    onChange={() => {
-                      void trigger("sqFeetMin")
-                      void trigger("sqFeetMax")
-                    }}
-                  />
-                </FieldValue>
-                <FieldValue label={t("listings.unit.maxSquareFootage")}>
-                  <Field
-                    label={t("listings.unit.maxSquareFootage")}
-                    id="sqFeetMax"
-                    name="sqFeetMax"
-                    placeholder={t("listings.unit.maxSquareFootage")}
-                    register={register}
-                    readerOnly
-                    type="number"
-                    errorMessage={t("errors.maxLessThanMinFootageError")}
-                    error={fieldHasError(errors?.sqFeetMax)}
-                    validation={{ min: sqFeetMin }}
-                    onChange={() => {
-                      void trigger("sqFeetMin")
-                      void trigger("sqFeetMax")
-                    }}
-                  />
-                </FieldValue>
+                <Field
+                  label={t("listings.unit.minSquareFootage")}
+                  id="sqFeetMin"
+                  name="sqFeetMin"
+                  register={register}
+                  type="number"
+                  errorMessage={t("errors.minGreaterThanMaxFootageError")}
+                  error={fieldHasError(errors?.sqFeetMin)}
+                  validation={{ max: sqFeetMax }}
+                  onChange={() => {
+                    void trigger("sqFeetMin")
+                    void trigger("sqFeetMax")
+                  }}
+                />
+
+                <Field
+                  label={t("listings.unit.maxSquareFootage")}
+                  id="sqFeetMax"
+                  name="sqFeetMax"
+                  register={register}
+                  type="number"
+                  errorMessage={t("errors.maxLessThanMinFootageError")}
+                  error={fieldHasError(errors?.sqFeetMax)}
+                  validation={{ min: sqFeetMin }}
+                  onChange={() => {
+                    void trigger("sqFeetMin")
+                    void trigger("sqFeetMax")
+                  }}
+                />
               </Grid.Row>
               <Grid.Row columns={3}>
-                <FieldValue label={t("listings.unit.minFloor")}>
-                  <Select
-                    labelClassName="sr-only"
-                    controlClassName="control"
-                    label={t("listings.unit.minFloor")}
-                    name="floorMin"
-                    id="floorMin"
-                    options={numberOptions(numberFloorsOptions)}
-                    register={register}
-                    errorMessage={t("errors.minGreaterThanMaxFloorError")}
-                    error={fieldHasError(errors?.floorMin)}
-                    validation={{ max: floorMax || numberFloorsOptions }}
-                    inputProps={{
-                      onChange: () => {
-                        void trigger("floorMin")
-                        void trigger("floorMax")
-                      },
-                    }}
-                  />
-                </FieldValue>
-                <FieldValue label={t("listings.unit.maxFloor")}>
-                  <Select
-                    labelClassName="sr-only"
-                    controlClassName="control"
-                    label={t("listings.unit.maxFloor")}
-                    name="floorMax"
-                    id="floorMax"
-                    options={numberOptions(numberFloorsOptions)}
-                    register={register}
-                    errorMessage={t("errors.maxLessThanMinFloorError")}
-                    error={fieldHasError(errors?.floorMax)}
-                    validation={{ min: floorMin }}
-                    inputProps={{
-                      onChange: () => {
-                        void trigger("floorMin")
-                        void trigger("floorMax")
-                      },
-                    }}
-                  />
-                </FieldValue>
+                <Select
+                  controlClassName="control"
+                  label={t("listings.unit.minFloor")}
+                  name="floorMin"
+                  id="floorMin"
+                  options={numberOptions(numberFloorsOptions)}
+                  register={register}
+                  errorMessage={t("errors.minGreaterThanMaxFloorError")}
+                  error={fieldHasError(errors?.floorMin)}
+                  validation={{ max: floorMax || numberFloorsOptions }}
+                  inputProps={{
+                    onChange: () => {
+                      void trigger("floorMin")
+                      void trigger("floorMax")
+                    },
+                  }}
+                />
+                <Select
+                  controlClassName="control"
+                  label={t("listings.unit.maxFloor")}
+                  name="floorMax"
+                  id="floorMax"
+                  options={numberOptions(numberFloorsOptions)}
+                  register={register}
+                  errorMessage={t("errors.maxLessThanMinFloorError")}
+                  error={fieldHasError(errors?.floorMax)}
+                  validation={{ min: floorMin }}
+                  inputProps={{
+                    onChange: () => {
+                      void trigger("floorMin")
+                      void trigger("floorMax")
+                    },
+                  }}
+                />
               </Grid.Row>
               <Grid.Row columns={3}>
-                <FieldValue label={t("listings.unit.minBathrooms")}>
-                  <Select
-                    labelClassName="sr-only"
-                    controlClassName="control"
-                    label={t("listings.unit.minBathrooms")}
-                    name="bathroomMin"
-                    id="bathroomMin"
-                    options={bathroomOptions}
-                    register={register}
-                    errorMessage={t("errors.minGreaterThanMaxBathroomsError")}
-                    error={fieldHasError(errors.bathroomMin)}
-                    validation={{ max: bathroomMax }}
-                    inputProps={{
-                      onChange: () => {
-                        void trigger("bathroomMin")
-                        void trigger("bathroomMax")
-                      },
-                    }}
-                  />
-                </FieldValue>
-                <FieldValue label={t("listings.unit.maxBathrooms")}>
-                  <Select
-                    labelClassName="sr-only"
-                    controlClassName="control"
-                    label={t("listings.unit.maxBathrooms")}
-                    name="bathroomMax"
-                    id="bathroomMax"
-                    options={bathroomOptions}
-                    register={register}
-                    errorMessage={t("errors.maxLessThanMinBathroomsError")}
-                    error={fieldHasError(errors.bathroomMax)}
-                    validation={{ min: bathroomMin }}
-                    inputProps={{
-                      onChange: () => {
-                        void trigger("bathroomMin")
-                        void trigger("bathroomMax")
-                      },
-                    }}
-                  />
-                </FieldValue>
+                <Select
+                  controlClassName="control"
+                  label={t("listings.unit.minBathrooms")}
+                  name="bathroomMin"
+                  id="bathroomMin"
+                  options={bathroomOptions}
+                  register={register}
+                  errorMessage={t("errors.minGreaterThanMaxBathroomsError")}
+                  error={fieldHasError(errors.bathroomMin)}
+                  validation={{ max: bathroomMax }}
+                  inputProps={{
+                    onChange: () => {
+                      void trigger("bathroomMin")
+                      void trigger("bathroomMax")
+                    },
+                  }}
+                />
+                <Select
+                  controlClassName="control"
+                  label={t("listings.unit.maxBathrooms")}
+                  name="bathroomMax"
+                  id="bathroomMax"
+                  options={bathroomOptions}
+                  register={register}
+                  errorMessage={t("errors.maxLessThanMinBathroomsError")}
+                  error={fieldHasError(errors.bathroomMax)}
+                  validation={{ min: bathroomMin }}
+                  inputProps={{
+                    onChange: () => {
+                      void trigger("bathroomMin")
+                      void trigger("bathroomMax")
+                    },
+                  }}
+                />
               </Grid.Row>
             </SectionWithGrid>
             <hr className="spacer-section-above spacer-section" />
             <SectionWithGrid heading={t("t.availability")}>
               <Grid.Row columns={3}>
-                <FieldValue label={t("listings.unit.groupVacancies")}>
-                  <Field
-                    label={t("listings.unit.groupVacancies")}
-                    placeholder={t("listings.unit.groupVacancies")}
-                    id="totalAvailable"
-                    name="totalAvailable"
-                    register={register}
-                    type="number"
-                    error={errors?.totalAvailable !== undefined}
-                    errorMessage={t("errors.totalAvailableGreaterThanTotalCountError")}
-                    validation={{ max: totalCount || totalAvailable }}
-                    inputProps={{
-                      onBlur: () => {
-                        void trigger("totalCount")
-                        void trigger("totalAvailable")
-                      },
-                    }}
-                    readerOnly
-                  />
-                </FieldValue>
-                <FieldValue label={t("listings.unit.waitlistStatus")}>
-                  <FieldGroup
-                    name="openWaitlist"
-                    type="radio"
-                    fields={[
-                      {
-                        id: "waitlistStatusOpen",
-                        dataTestId: "waitlistStatusOpen",
-                        label: t("listings.listingStatus.active"),
-                        value: YesNoEnum.yes,
-                        defaultChecked: !defaultUnitGroup,
-                      },
-                      {
-                        id: "waitlistStatusClosed",
-                        dataTestId: "waitlistStatusClosed",
-                        label: t("listings.listingStatus.closed"),
-                        value: YesNoEnum.no,
-                      },
-                    ]}
-                    register={register}
-                    fieldClassName="m-0"
-                    fieldGroupClassName="flex h-12 items-center"
-                    error={errors?.openWaitlist !== undefined}
-                    errorMessage={t("errors.requiredFieldError")}
-                    dataTestId="openWaitListQuestion"
-                  />
-                </FieldValue>
+                <Field
+                  label={t("listings.unit.groupVacancies")}
+                  id="totalAvailable"
+                  name="totalAvailable"
+                  register={register}
+                  type="number"
+                  error={errors?.totalAvailable !== undefined}
+                  errorMessage={t("errors.totalAvailableGreaterThanTotalCountError")}
+                  validation={{ max: totalCount || totalAvailable }}
+                  inputProps={{
+                    onBlur: () => {
+                      void trigger("totalCount")
+                      void trigger("totalAvailable")
+                    },
+                  }}
+                />
+                <FieldGroup
+                  name="openWaitlist"
+                  type="radio"
+                  fields={[
+                    {
+                      id: "waitlistStatusOpen",
+                      dataTestId: "waitlistStatusOpen",
+                      label: t("listings.listingStatus.active"),
+                      value: YesNoEnum.yes,
+                      defaultChecked: !defaultUnitGroup,
+                    },
+                    {
+                      id: "waitlistStatusClosed",
+                      dataTestId: "waitlistStatusClosed",
+                      label: t("listings.listingStatus.closed"),
+                      value: YesNoEnum.no,
+                    },
+                  ]}
+                  register={register}
+                  fieldClassName="m-0"
+                  fieldGroupClassName="flex h-12 items-center"
+                  error={errors?.openWaitlist !== undefined}
+                  errorMessage={t("errors.requiredFieldError")}
+                  dataTestId="openWaitListQuestion"
+                  groupLabel={t("listings.unit.waitlistStatus")}
+                  fieldLabelClassName={styles["label-option"]}
+                />
               </Grid.Row>
             </SectionWithGrid>
             <hr className="spacer-section-above spacer-section" />

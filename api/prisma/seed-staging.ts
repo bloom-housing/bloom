@@ -89,7 +89,9 @@ export const stagingSeed = async (
       featureFlags: [
         FeatureFlagEnum.disableJurisdictionalAdmin,
         FeatureFlagEnum.disableListingPreferences,
+        FeatureFlagEnum.disableWorkInRegion,
         FeatureFlagEnum.enableAccessibilityFeatures,
+        FeatureFlagEnum.enableAdaOtherOption,
         FeatureFlagEnum.enableAdditionalResources,
         FeatureFlagEnum.enableCompanyWebsite,
         FeatureFlagEnum.enableGeocodingRadiusMethod,
@@ -182,7 +184,7 @@ export const stagingSeed = async (
     }),
   });
   // create a partner
-  await prismaClient.userAccounts.create({
+  const partnerUser = await prismaClient.userAccounts.create({
     data: await userFactory({
       roles: { isPartner: true },
       email: 'partner@example.com',
@@ -256,7 +258,13 @@ export const stagingSeed = async (
     data: amiChartFactory(10, mainJurisdiction.id),
   });
   await prismaClient.amiChart.create({
+    data: amiChartFactory(10, mainJurisdiction.id, 2),
+  });
+  const lakeviewAmiChart = await prismaClient.amiChart.create({
     data: amiChartFactory(8, lakeviewJurisdiction.id),
+  });
+  await prismaClient.amiChart.create({
+    data: amiChartFactory(8, lakeviewJurisdiction.id, 2),
   });
   // Create map layers
   await prismaClient.mapLayers.create({
@@ -452,6 +460,7 @@ export const stagingSeed = async (
         multiselectQuestionPrograms,
       ],
       applications: [await applicationFactory(), await applicationFactory()],
+      userAccounts: [{ id: partnerUser.id }],
     },
     {
       jurisdictionId: mainJurisdiction.id,
@@ -639,6 +648,7 @@ export const stagingSeed = async (
           ],
         }),
       ],
+      userAccounts: [{ id: partnerUser.id }],
     },
     {
       jurisdictionId: mainJurisdiction.id,
@@ -663,15 +673,18 @@ export const stagingSeed = async (
           },
         },
       ],
+      userAccounts: [{ id: partnerUser.id }],
     },
     {
       jurisdictionId: mainJurisdiction.id,
       listing: valleyHeightsSeniorCommunity,
+      userAccounts: [{ id: partnerUser.id }],
     },
     {
       jurisdictionId: mainJurisdiction.id,
       listing: littleVillageApartments,
       multiselectQuestions: [workInCityQuestion],
+      userAccounts: [{ id: partnerUser.id }],
     },
     {
       jurisdictionId: mainJurisdiction.id,
@@ -813,6 +826,7 @@ export const stagingSeed = async (
           },
         },
       ],
+      userAccounts: [{ id: partnerUser.id }],
     },
     {
       jurisdictionId: lakeviewJurisdiction.id,
@@ -835,7 +849,7 @@ export const stagingSeed = async (
               monthlyRentDeterminationType:
                 MonthlyRentDeterminationTypeEnum.flatRent,
               flatRentValue: 1400.0,
-              amiChart: { connect: { id: amiChart.id } },
+              amiChart: { connect: { id: lakeviewAmiChart.id } },
             },
           },
           unitTypes: {
@@ -867,7 +881,7 @@ export const stagingSeed = async (
               monthlyRentDeterminationType:
                 MonthlyRentDeterminationTypeEnum.percentageOfIncome,
               percentageOfIncomeValue: 30.0,
-              amiChart: { connect: { id: amiChart.id } },
+              amiChart: { connect: { id: lakeviewAmiChart.id } },
             },
           },
           unitTypes: {
@@ -893,7 +907,7 @@ export const stagingSeed = async (
               monthlyRentDeterminationType:
                 MonthlyRentDeterminationTypeEnum.flatRent,
               flatRentValue: 1800.0,
-              amiChart: { connect: { id: amiChart.id } },
+              amiChart: { connect: { id: lakeviewAmiChart.id } },
             },
           },
           unitTypes: {
@@ -913,6 +927,7 @@ export const stagingSeed = async (
         unitGroups?: Prisma.UnitGroupCreateWithoutListingsInput[];
         multiselectQuestions?: MultiselectQuestions[];
         applications?: Prisma.ApplicationsCreateInput[];
+        userAccounts?: Prisma.UserAccountsWhereUniqueInput[];
       },
       index,
     ) => {
@@ -925,6 +940,7 @@ export const stagingSeed = async (
         multiselectQuestions: value.multiselectQuestions,
         applications: value.applications,
         afsLastRunSetInPast: true,
+        userAccounts: value.userAccounts,
       });
       const savedListing = await prismaClient.listings.create({
         data: listing,

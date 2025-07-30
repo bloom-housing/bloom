@@ -43,7 +43,7 @@ const CustomSiteFooter = () => {
           <div className={styles.links}>
             <Link href="/feedback">{t("footer.giveFeedback")}</Link>
             <Link href="/privacy">{t("pageTitle.privacy")}</Link>
-            <Link href="/disclaimer">{t("pageTitle.disclaimer")}</Link>
+            <Link href="/terms">{t("pageTitle.termsAndConditions")}</Link>
             <Link href="/accessibility">{t("pageTitle.accessibilityStatement")}</Link>
           </div>
         </div>
