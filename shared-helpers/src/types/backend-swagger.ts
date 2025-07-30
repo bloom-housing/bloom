@@ -4421,7 +4421,7 @@ export interface Listing {
   marketingType?: MarketingTypeEnum
 
   /**  */
-  marketingDate?: Date
+  marketingYear?: number
 
   /**  */
   marketingSeason?: MarketingSeasonEnum
@@ -4979,7 +4979,7 @@ export interface ListingCreate {
   marketingType?: MarketingTypeEnum
 
   /**  */
-  marketingDate?: Date
+  marketingYear?: number
 
   /**  */
   marketingSeason?: MarketingSeasonEnum
@@ -5295,7 +5295,7 @@ export interface ListingUpdate {
   marketingType?: MarketingTypeEnum
 
   /**  */
-  marketingDate?: Date
+  marketingYear?: number
 
   /**  */
   marketingSeason?: MarketingSeasonEnum
@@ -7311,6 +7311,8 @@ export enum ListingOrderByKeys {
   "status" = "status",
   "unitsAvailable" = "unitsAvailable",
   "marketingType" = "marketingType",
+  "marketingYear" = "marketingYear",
+  "marketingSeason" = "marketingSeason",
 }
 
 export enum OrderByEnum {

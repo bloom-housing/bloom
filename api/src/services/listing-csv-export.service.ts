@@ -909,9 +909,8 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
             },
           },
           {
-            path: 'marketingDate',
-            label: 'Marketing Start Date',
-            format: (val: string): string => formatLocalDate(val, 'YYYY'),
+            path: 'marketingYear',
+            label: 'Marketing Year',
           },
         ],
       );
