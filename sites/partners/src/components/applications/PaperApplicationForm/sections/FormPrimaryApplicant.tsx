@@ -1,11 +1,16 @@
 import React, { useEffect } from "react"
 import { useFormContext } from "react-hook-form"
 import { t, DOBField, Select, Field, PhoneField, FormAddress } from "@bloom-housing/ui-components"
-import { Grid } from "@bloom-housing/ui-seeds"
+import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { phoneNumberKeys, stateKeys, emailRegex } from "@bloom-housing/shared-helpers"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
+import { YesNoEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
-const FormPrimaryApplicant = () => {
+type FormPrimaryApplicantProps = {
+  enableFullTimeStudentQuestion?: boolean
+}
+
+const FormPrimaryApplicant = ({ enableFullTimeStudentQuestion }: FormPrimaryApplicantProps) => {
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -148,6 +153,36 @@ const FormPrimaryApplicant = () => {
               disabled={!additionalPhoneValue?.length}
             />
           </Grid.Cell>
+
+          {enableFullTimeStudentQuestion && (
+            <FieldValue label={t("application.add.fullTimeStudent")}>
+              <div className="flex items-center">
+                <Field
+                  id="application.applicant.fullTimeStudentYes"
+                  name="application.applicant.fullTimeStudent"
+                  className="m-0"
+                  type="radio"
+                  label={t("t.yes")}
+                  register={register}
+                  inputProps={{
+                    value: YesNoEnum.yes,
+                  }}
+                />
+
+                <Field
+                  id="application.applicant.fullTimeStudentNo"
+                  name="application.applicant.fullTimeStudent"
+                  className="m-0"
+                  type="radio"
+                  label={t("t.no")}
+                  register={register}
+                  inputProps={{
+                    value: YesNoEnum.no,
+                  }}
+                />
+              </div>
+            </FieldValue>
+          )}
         </Grid.Row>
 
         <FormAddress

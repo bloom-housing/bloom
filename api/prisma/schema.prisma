@@ -121,6 +121,7 @@ model Applicant {
   phoneNumberType      String?       @map("phone_number_type")
   noPhone              Boolean?      @map("no_phone")
   workInRegion         YesNoEnum?    @map("work_in_region")
+  fullTimeStudent      YesNoEnum?    @map("full_time_student")
   workAddressId        String?       @unique() @map("work_address_id") @db.Uuid
   addressId            String?       @unique() @map("address_id") @db.Uuid
   applicantWorkAddress Address?      @relation("applicant_work_address", fields: [workAddressId], references: [id], onDelete: NoAction, onUpdate: NoAction)
@@ -322,6 +323,7 @@ model HouseholdMember {
   sameAddress                YesNoEnum?    @map("same_address")
   relationship               String?
   workInRegion               YesNoEnum?    @map("work_in_region")
+  fullTimeStudent            YesNoEnum?    @map("full_time_student")
   addressId                  String?       @unique() @map("address_id") @db.Uuid
   workAddressId              String?       @unique() @map("work_address_id") @db.Uuid
   applicationId              String?       @map("application_id") @db.Uuid

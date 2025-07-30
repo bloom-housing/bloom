@@ -50,6 +50,7 @@ export type ApplicationTypes = {
     middleName?: string
     lastName?: string
     emailAddress?: string
+    fullTimeStudent?: YesNoEnum
     applicantAddress: Address
     applicantWorkAddress: Address
     phoneNumberType?: string

@@ -193,6 +193,7 @@ export const stagingSeed = async (
         FeatureFlagEnum.enableWaitlistAdditionalFields,
         FeatureFlagEnum.hideCloseListingButton,
         FeatureFlagEnum.swapCommunityTypeWithPrograms,
+        FeatureFlagEnum.enableFullTimeStudentQuestion,
       ],
     }),
   });

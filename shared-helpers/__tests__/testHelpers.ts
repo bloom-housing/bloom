@@ -184,6 +184,7 @@ export const application: Application = {
     phoneNumber: "(123) 123-1231",
     phoneNumberType: "home",
     noPhone: false,
+    fullTimeStudent: YesNoEnum.no,
     birthDay: "10",
     birthMonth: "10",
     birthYear: "1990",
@@ -259,6 +260,7 @@ export const application: Application = {
       birthYear: "1966",
       relationship: HouseholdMemberRelationship.friend,
       sameAddress: YesNoEnum.no,
+      fullTimeStudent: YesNoEnum.no,
       householdMemberAddress: {
         id: "member_address_id",
         createdAt: new Date(),
@@ -465,7 +467,6 @@ export const listing: Listing = {
   listingsApplicationDropOffAddress: undefined,
   applicationDropOffAddressOfficeHours: undefined,
   listingsApplicationMailingAddress: undefined,
-  applicationLotteryTotals: [],
   jurisdictions: {
     id: "id",
     name: "San Jose",

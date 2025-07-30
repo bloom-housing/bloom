@@ -15,12 +15,14 @@ type DetailsMemberDrawerProps = {
   application: Application
   membersDrawer: MembersDrawer
   setMembersDrawer: (member: MembersDrawer) => void
+  enableFullTimeStudentQuestion?: boolean
 }
 
 const DetailsMemberDrawer = ({
   application,
   membersDrawer,
   setMembersDrawer,
+  enableFullTimeStudentQuestion,
 }: DetailsMemberDrawerProps) => {
   return (
     <Drawer
@@ -61,6 +63,15 @@ const DetailsMemberDrawer = ({
                 />
 
                 <FieldValue
+                  label={t("t.relationship")}
+                  children={
+                    membersDrawer?.relationship
+                      ? t(`application.form.options.relationship.${membersDrawer?.relationship}`)
+                      : t("t.n/a")
+                  }
+                />
+
+                <FieldValue
                   label={t("application.add.sameAddressAsPrimary")}
                   children={
                     membersDrawer?.sameAddress === YesNoEnum.yes
@@ -71,14 +82,18 @@ const DetailsMemberDrawer = ({
                   }
                 />
 
-                <FieldValue
-                  label={t("t.relationship")}
-                  children={
-                    membersDrawer?.relationship
-                      ? t(`application.form.options.relationship.${membersDrawer?.relationship}`)
-                      : t("t.n/a")
-                  }
-                />
+                {enableFullTimeStudentQuestion && (
+                  <FieldValue
+                    label={t("application.details.fullTimeStudent")}
+                    children={
+                      membersDrawer?.fullTimeStudent === YesNoEnum.yes
+                        ? t("t.yes")
+                        : membersDrawer?.workInRegion === YesNoEnum.no
+                        ? t("t.no")
+                        : t("t.n/a")
+                    }
+                  />
+                )}
               </Grid.Row>
 
               {!(membersDrawer?.sameAddress === YesNoEnum.yes) && (

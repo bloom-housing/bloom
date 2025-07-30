@@ -148,4 +148,16 @@ describe("<FormPrimaryApplicant>", () => {
     expect(screen.getAllByLabelText(/state/i)).toHaveLength(2)
     expect(screen.getAllByLabelText(/zip code/i)).toHaveLength(2)
   })
+
+  it("should render the full time student question", () => {
+    render(
+      <FormProviderWrapper>
+        <FormPrimaryApplicant enableFullTimeStudentQuestion={true} />
+      </FormProviderWrapper>
+    )
+
+    expect(screen.getByText(/Full-time Student/i)).toBeInTheDocument()
+    expect(screen.getAllByRole("radio", { name: "Yes" })).toHaveLength(1)
+    expect(screen.getAllByRole("radio", { name: "No" })).toHaveLength(1)
+  })
 })

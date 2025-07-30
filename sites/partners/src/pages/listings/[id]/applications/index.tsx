@@ -10,6 +10,7 @@ import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import {
   ApplicationOrderByKeys,
+  FeatureFlagEnum,
   ListingsStatusEnum,
   LotteryStatusEnum,
   OrderByEnum,
@@ -31,7 +32,7 @@ import styles from "../../../../components/shared/ExportTermsDialog.module.scss"
 import pageStyles from "../../../../../styles/applications.module.scss"
 
 const ApplicationsList = () => {
-  const { profile } = useContext(AuthContext)
+  const { profile, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
   const [isTermsOpen, setIsTermsOpen] = useState(false)
   const router = useRouter()
   const listingId = router.query.id as string
@@ -47,6 +48,10 @@ const ApplicationsList = () => {
 
   const listingJurisdiction = profile?.jurisdictions?.find(
     (jurisdiction) => jurisdiction.id === listingDto?.jurisdictions.id
+  )
+  const enableFullTimeStudentQuestion = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableFullTimeStudentQuestion,
+    listingDto?.jurisdictions.id
   )
   const includeDemographicsPartner =
     profile?.userRoles?.isPartner && listingJurisdiction?.enablePartnerDemographics
@@ -115,8 +120,8 @@ const ApplicationsList = () => {
   }, [applications])
 
   const columnDefs = useMemo(() => {
-    return getColDefs(maxHouseholdSize)
-  }, [maxHouseholdSize])
+    return getColDefs(maxHouseholdSize, enableFullTimeStudentQuestion)
+  }, [maxHouseholdSize, enableFullTimeStudentQuestion])
 
   const gridComponents = {
     formatLinkCell,

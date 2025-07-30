@@ -9,6 +9,7 @@ import fs, { createReadStream, ReadStream } from 'fs';
 import { generatePresignedGetURL, uploadToS3 } from '../utilities/s3-helpers';
 import { getExportHeaders } from '../utilities/application-export-helpers';
 import { IdDTO } from '../dtos/shared/id.dto';
+import { Jurisdiction } from '../dtos/jurisdictions/jurisdiction.dto';
 import { join } from 'path';
 import { ListingService } from './listing.service';
 import { mapTo } from '../utilities/mapTo';
@@ -23,6 +24,8 @@ import { Request as ExpressRequest } from 'express';
 import { User } from '../dtos/users/user.dto';
 import { view } from './application.service';
 import { zipExport, zipExportSecure } from '../utilities/zip-export';
+import { FeatureFlagEnum } from '../enums/feature-flags/feature-flags-enum';
+import { doJurisdictionHaveFeatureFlagSet } from '../utilities/feature-flag-utilities';
 
 view.csv = {
   ...view.details,
@@ -200,6 +203,24 @@ export class ApplicationExporterService {
       },
     });
 
+    const jurisdiction = await this.prisma.jurisdictions.findFirst({
+      select: {
+        featureFlags: true,
+      },
+      where: {
+        listings: {
+          some: {
+            id: queryParams.id,
+          },
+        },
+      },
+    });
+
+    const enableFullTimeStudentQuestion = doJurisdictionHaveFeatureFlagSet(
+      jurisdiction as Jurisdiction,
+      FeatureFlagEnum.enableFullTimeStudentQuestion,
+    );
+
     // get all multiselect questions for a listing to build csv headers
     const multiSelectQuestions =
       await this.multiselectQuestionService.findByListingId(queryParams.id);
@@ -219,6 +240,7 @@ export class ApplicationExporterService {
       queryParams.includeDemographics,
       false,
       this.dateFormat,
+      enableFullTimeStudentQuestion,
     );
 
     return this.csvExportHelper(
@@ -524,6 +546,25 @@ export class ApplicationExporterService {
         markedAsDuplicate: forLottery ? false : undefined,
       },
     });
+
+    const jurisdiction = await this.prisma.jurisdictions.findFirst({
+      select: {
+        featureFlags: true,
+      },
+      where: {
+        listings: {
+          some: {
+            id: queryParams.id,
+          },
+        },
+      },
+    });
+
+    const enableFullTimeStudentQuestion = doJurisdictionHaveFeatureFlagSet(
+      jurisdiction as Jurisdiction,
+      FeatureFlagEnum.enableFullTimeStudentQuestion,
+    );
+
     // get all multiselect questions for a listing to build csv headers
     const multiSelectQuestions =
       await this.multiselectQuestionService.findByListingId(queryParams.id);
@@ -542,6 +583,8 @@ export class ApplicationExporterService {
       queryParams.timeZone,
       queryParams.includeDemographics,
       forLottery,
+      undefined,
+      enableFullTimeStudentQuestion,
     );
 
     if (forLottery) {

@@ -1,11 +1,18 @@
 import React, { useContext } from "react"
 import { t } from "@bloom-housing/ui-components"
+import { YesNoEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { ApplicationContext } from "../../ApplicationContext"
 import { DetailsAddressColumns, AddressColsType } from "../DetailsAddressColumns"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 
-const DetailsPrimaryApplicant = () => {
+type DetailsPrimaryApplicantProps = {
+  enableFullTimeStudentQuestion?: boolean
+}
+
+const DetailsPrimaryApplicant = ({
+  enableFullTimeStudentQuestion,
+}: DetailsPrimaryApplicantProps) => {
   const application = useContext(ApplicationContext)
 
   return (
@@ -66,6 +73,20 @@ const DetailsPrimaryApplicant = () => {
           {application.additionalPhoneNumber || t("t.n/a")}
         </FieldValue>
       </Grid.Row>
+
+      {enableFullTimeStudentQuestion && (
+        <Grid.Row>
+          <FieldValue label={t("application.details.fullTimeStudent")} testId="fullTimeStudent">
+            {(() => {
+              if (!application.applicant.fullTimeStudent) return t("t.n/a")
+
+              return application.applicant.fullTimeStudent === YesNoEnum.yes
+                ? t("t.yes")
+                : t("t.no")
+            })()}
+          </FieldValue>
+        </Grid.Row>
+      )}
 
       <SectionWithGrid.HeadingRow>
         {t("application.details.residenceAddress")}

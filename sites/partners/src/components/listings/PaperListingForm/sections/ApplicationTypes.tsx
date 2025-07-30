@@ -9,12 +9,7 @@ import {
   Select,
   StandardTableData,
 } from "@bloom-housing/ui-components"
-import {
-  fieldMessage,
-  fieldHasError,
-  YesNoAnswer,
-  pdfFileNameFromFileId,
-} from "../../../../lib/helpers"
+import { fieldMessage, fieldHasError, pdfFileNameFromFileId } from "../../../../lib/helpers"
 import { Button, Card, Drawer, Grid } from "@bloom-housing/ui-seeds"
 import {
   ApplicationMethodCreate,
@@ -437,7 +432,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
             </Grid.Cell>
           </Grid.Row>
         )}
-        {/* 
+        {/*
         // referral opportunity removed from Doorway
          <Grid.Row columns={1}>
         <Grid.Cell>

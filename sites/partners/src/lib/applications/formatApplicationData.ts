@@ -119,6 +119,7 @@ export const mapFormToApi = ({
     const phoneNumberType: string | null = applicantData.phoneNumberType || null
     const noEmail = !applicantData.emailAddress
     const noPhone = !phoneNumber
+    const fullTimeStudent: YesNoEnum | null = applicantData?.fullTimeStudent || null
     const emailAddress: string | null = applicantData?.emailAddress || null
 
     applicantData.firstName = mapEmptyStringToNull(applicantData.firstName)
@@ -128,6 +129,7 @@ export const mapFormToApi = ({
       ...applicantData,
       ...data.dateOfBirth,
       emailAddress,
+      fullTimeStudent,
       phoneNumber,
       phoneNumberType,
       noEmail,

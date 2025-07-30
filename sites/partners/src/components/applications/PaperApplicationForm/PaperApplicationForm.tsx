@@ -43,11 +43,6 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
   const { listingDto } = useSingleListingData(listingId)
   const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
 
-  const enableUnitGroups = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableUnitGroups,
-    listingDto?.jurisdictions.id
-  )
-
   const preferences = listingSectionQuestions(
     listingDto,
     MultiselectQuestionsApplicationSectionEnum.preferences
@@ -56,6 +51,16 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
   const programs = listingSectionQuestions(
     listingDto,
     MultiselectQuestionsApplicationSectionEnum.programs
+  )
+
+  const enableUnitGroups = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableUnitGroups,
+    listingDto?.jurisdictions.id
+  )
+
+  const enableFullTimeStudentQuestion = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableFullTimeStudentQuestion,
+    listingDto?.jurisdictions.id
   )
 
   const units = listingDto?.units
@@ -223,13 +228,16 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
                   <div className="info-card md:w-9/12">
                     <FormApplicationData appType={application?.submissionType} />
 
-                    <FormPrimaryApplicant />
+                    <FormPrimaryApplicant
+                      enableFullTimeStudentQuestion={enableFullTimeStudentQuestion}
+                    />
 
                     <FormAlternateContact />
 
                     <FormHouseholdMembers
                       householdMembers={householdMembers}
                       setHouseholdMembers={setHouseholdMembers}
+                      enableFullTimeStudentQuestion={enableFullTimeStudentQuestion}
                     />
 
                     <FormHouseholdDetails
@@ -238,6 +246,7 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
                       applicationUnitTypes={application?.preferredUnitTypes}
                       applicationAccessibilityFeatures={application?.accessibility}
                       enableUnitGroups={enableUnitGroups}
+                      enableFullTimeStudentQuestion={enableFullTimeStudentQuestion}
                     />
 
                     <FormMultiselectQuestions

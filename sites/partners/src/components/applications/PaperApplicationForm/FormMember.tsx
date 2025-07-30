@@ -50,6 +50,7 @@ export class Member implements HouseholdMemberUpdate {
   }
   sameAddress?: YesNoEnum
   relationship?: HouseholdMemberRelationship
+  fullTimeStudent?: YesNoEnum
 }
 
 type ApplicationFormMemberProps = {
@@ -57,9 +58,16 @@ type ApplicationFormMemberProps = {
   onClose: () => void
   members: HouseholdMember[]
   editedMemberId?: number
+  enableFullTimeStudentQuestion?: boolean
 }
 
-const FormMember = ({ onSubmit, onClose, members, editedMemberId }: ApplicationFormMemberProps) => {
+const FormMember = ({
+  onSubmit,
+  onClose,
+  members,
+  editedMemberId,
+  enableFullTimeStudentQuestion,
+}: ApplicationFormMemberProps) => {
   const currentlyEdited = useMemo(() => {
     return members.filter((member) => member.orderId === editedMemberId)[0]
   }, [members, editedMemberId])
@@ -78,6 +86,7 @@ const FormMember = ({ onSubmit, onClose, members, editedMemberId }: ApplicationF
         birthYear: currentlyEdited?.birthYear,
       },
       householdMemberAddress: currentlyEdited?.householdMemberAddress,
+      fullTimeStudent: currentlyEdited?.fullTimeStudent,
     },
   })
 
@@ -90,7 +99,7 @@ const FormMember = ({ onSubmit, onClose, members, editedMemberId }: ApplicationF
 
     const data = getValues()
 
-    const { sameAddress } = data
+    const { sameAddress, fullTimeStudent } = data
     const { birthMonth, birthDay, birthYear } = data.dateOfBirth
     const formData = {
       createdAt: undefined,
@@ -100,6 +109,7 @@ const FormMember = ({ onSubmit, onClose, members, editedMemberId }: ApplicationF
       birthDay,
       birthYear,
       sameAddress: sameAddress ? sameAddress : null,
+      fullTimeStudent: fullTimeStudent ? fullTimeStudent : null,
     }
 
     const editedMember = members.find((member) => member.orderId === editedMemberId)
@@ -122,6 +132,19 @@ const FormMember = ({ onSubmit, onClose, members, editedMemberId }: ApplicationF
     },
     {
       id: "sameAddressNo",
+      label: t("t.no"),
+      value: YesNoEnum.no,
+    },
+  ]
+
+  const fullTimeStudentOptions = [
+    {
+      id: "fullTimeStudentYes",
+      label: t("t.yes"),
+      value: YesNoEnum.yes,
+    },
+    {
+      id: "fullTimeStudentNo",
       label: t("t.no"),
       value: YesNoEnum.no,
     },
@@ -201,6 +224,20 @@ const FormMember = ({ onSubmit, onClose, members, editedMemberId }: ApplicationF
                       fieldGroupClassName="flex h-12 items-center"
                     />
                   </Grid.Cell>
+
+                  {enableFullTimeStudentQuestion && (
+                    <Grid.Cell>
+                      <FieldGroup
+                        name="fullTimeStudent"
+                        type="radio"
+                        register={register}
+                        groupLabel={t("application.add.fullTimeStudent")}
+                        fields={fullTimeStudentOptions}
+                        fieldClassName="m-0"
+                        fieldGroupClassName="flex h-12 items-center"
+                      />
+                    </Grid.Cell>
+                  )}
                 </Grid.Row>
               </SectionWithGrid>
 

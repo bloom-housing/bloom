@@ -25,6 +25,7 @@ export const getExportHeaders = (
   includeDemographics = false,
   forLottery = false,
   dateFormat = 'MM-DD-YYYY hh:mm:ssA z',
+  enableFullTimeStudentQuestion?: boolean,
 ): CsvHeader[] => {
   const headers: CsvHeader[] = [
     {
@@ -116,6 +117,18 @@ export const getExportHeaders = (
         path: 'additionalPhoneNumber',
         label: 'Primary Applicant Additional Phone Number',
       },
+    ],
+  );
+
+  if (enableFullTimeStudentQuestion) {
+    headers.push({
+      path: 'applicant.fullTimeStudent',
+      label: 'Primary Applicant Full-Time Student',
+    });
+  }
+
+  headers.push(
+    ...[
       {
         path: 'applicant.applicantAddress.street',
         label: `Primary Applicant Street`,
@@ -232,7 +245,9 @@ export const getExportHeaders = (
       },
       {
         path: 'householdStudent',
-        label: 'Household Includes Student or Member Nearing 18',
+        label: enableFullTimeStudentQuestion
+          ? 'All Household Members Students'
+          : 'Household Includes Student or Member Nearing 18',
       },
       {
         path: 'incomeVouchers',
@@ -271,7 +286,12 @@ export const getExportHeaders = (
 
   // add household member headers to csv
   if (maxHouseholdMembers) {
-    headers.push(...getHouseholdCsvHeaders(maxHouseholdMembers));
+    headers.push(
+      ...getHouseholdCsvHeaders(
+        maxHouseholdMembers,
+        enableFullTimeStudentQuestion,
+      ),
+    );
   }
 
   headers.push(
@@ -483,6 +503,7 @@ export const addressToString = (address: Address): string => {
  */
 export const getHouseholdCsvHeaders = (
   maxHouseholdMembers: number,
+  enableFullTimeStudentQuestion?: boolean,
 ): CsvHeader[] => {
   const headers = [];
   for (let i = 0; i < maxHouseholdMembers; i++) {
@@ -517,13 +538,21 @@ export const getHouseholdCsvHeaders = (
         label: `Household Member (${j}) Birth Year`,
       },
       {
-        path: `householdMember.${i}.sameAddress`,
-        label: `Household Member (${j}) Same as Primary Applicant`,
-      },
-      {
         path: `householdMember.${i}.relationship`,
         label: `Household Member (${j}) Relationship`,
       },
+      {
+        path: `householdMember.${i}.sameAddress`,
+        label: `Household Member (${j}) Same as Primary Applicant`,
+      },
+    );
+    if (enableFullTimeStudentQuestion) {
+      headers.push({
+        path: `householdMember.${i}.fullTimeStudent`,
+        label: `Household Member (${j}) Full-Time Student`,
+      });
+    }
+    headers.push(
       {
         path: `householdMember.${i}.householdMemberAddress.street`,
         label: `Household Member (${j}) Street`,

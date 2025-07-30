@@ -22,6 +22,7 @@ const mockHouseholdMember = {
   birthDay: "28",
   workInRegion: YesNoEnum.yes,
   sameAddress: YesNoEnum.no,
+  fullTimeStudent: null,
   householdMemberAddress: {
     id: "address_1_id",
     createdAt: new Date(),
@@ -210,7 +211,7 @@ describe("<FormHouseholdMembers>", () => {
 
     const tableHeaders = within(head).getAllByRole("columnheader")
     expect(tableHeaders).toHaveLength(5)
-    const [name, relationship, dob, residence, action] = tableHeaders
+    const [name, dob, relationship, residence, action] = tableHeaders
     expect(name).toHaveTextContent(/name/i)
     expect(relationship).toHaveTextContent(/relationship/i)
     expect(dob).toHaveTextContent(/date of birth/i)
@@ -221,7 +222,7 @@ describe("<FormHouseholdMembers>", () => {
 
     const tableBodyRows = within(body).getAllByRole("row")
     expect(tableBodyRows).toHaveLength(1)
-    const [nameVal, relationshipVal, dobVal, residenceVal, actionVal] = within(
+    const [nameVal, dobVal, relationshipVal, residenceVal, actionVal] = within(
       tableBodyRows[0]
     ).getAllByRole("cell")
     expect(nameVal).toHaveTextContent("John Smith")
@@ -330,5 +331,31 @@ describe("<FormHouseholdMembers>", () => {
         updatedAt: undefined,
       },
     ])
+  })
+
+  it("should render the full time student question in drawer", async () => {
+    const mockSetHouseholdMembers = jest.fn()
+    render(
+      <FormProviderWrapper>
+        <FormHouseholdMembers
+          householdMembers={[]}
+          setHouseholdMembers={mockSetHouseholdMembers}
+          enableFullTimeStudentQuestion={true}
+        />
+      </FormProviderWrapper>
+    )
+
+    const addMemberButton = screen.getByRole("button", { name: /add household member/i })
+    expect(addMemberButton).toBeInTheDocument()
+
+    await act(() => userEvent.click(addMemberButton))
+
+    const drawerTitle = screen.getByRole("heading", { level: 1, name: /^household member$/i })
+    expect(drawerTitle).toBeInTheDocument()
+
+    const drawerContainer = drawerTitle.parentElement.parentElement
+    expect(within(drawerContainer).getByText(/Full-time Student/i)).toBeInTheDocument()
+    expect(within(drawerContainer).getAllByLabelText(/yes/i)).toHaveLength(2)
+    expect(within(drawerContainer).getAllByLabelText(/no/i)).toHaveLength(2)
   })
 })

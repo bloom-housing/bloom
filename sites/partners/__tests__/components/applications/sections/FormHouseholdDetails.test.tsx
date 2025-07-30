@@ -59,8 +59,8 @@ describe("<FormHouseholdDetails>", () => {
 
     expect(screen.getByText(/expecting household changes/i)).toBeInTheDocument()
     expect(screen.getByText(/household includes student or member nearing 18/i)).toBeInTheDocument()
-    expect(screen.getAllByLabelText(/yes/i)).toHaveLength(2)
-    expect(screen.getAllByLabelText(/no/i)).toHaveLength(2)
+    expect(screen.getAllByRole("radio", { name: "Yes" })).toHaveLength(2)
+    expect(screen.getAllByRole("radio", { name: "No" })).toHaveLength(2)
   })
 
   it("renders the form with unit groups when enabled", () => {
@@ -145,8 +145,8 @@ describe("<FormHouseholdDetails>", () => {
 
     expect(screen.getByText(/expecting household changes/i)).toBeInTheDocument()
     expect(screen.getByText(/household includes student or member nearing 18/i)).toBeInTheDocument()
-    expect(screen.getAllByLabelText(/yes/i)).toHaveLength(2)
-    expect(screen.getAllByLabelText(/no/i)).toHaveLength(2)
+    expect(screen.getAllByRole("radio", { name: "Yes" })).toHaveLength(2)
+    expect(screen.getAllByRole("radio", { name: "No" })).toHaveLength(2)
   })
 
   it("handles unit groups with duplicate unit types", () => {
@@ -346,5 +346,38 @@ describe("<FormHouseholdDetails>", () => {
       </FormProviderWrapper>
     )
     expect(screen.queryByText(/preferred unit sizes/i)).not.toBeInTheDocument()
+  })
+
+  it("renders the correct label for full time student question", () => {
+    render(
+      <FormProviderWrapper>
+        <FormHouseholdDetails
+          listingUnits={Object.values(UnitTypeEnum).map((item, index) => ({
+            ...unit,
+            unitTypes: {
+              id: `id_${index}`,
+              createdAt: new Date(),
+              updatedAt: new Date(),
+              numBedrooms: index,
+              name: item,
+            },
+          }))}
+          applicationUnitTypes={[]}
+          applicationAccessibilityFeatures={{
+            id: "id",
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            mobility: true,
+            vision: true,
+            hearing: true,
+          }}
+          enableFullTimeStudentQuestion={true}
+        />
+      </FormProviderWrapper>
+    )
+
+    expect(screen.getByText(/All Household Members Students/i)).toBeInTheDocument()
+    expect(screen.getAllByRole("radio", { name: "Yes" })).toHaveLength(2)
+    expect(screen.getAllByRole("radio", { name: "No" })).toHaveLength(2)
   })
 })

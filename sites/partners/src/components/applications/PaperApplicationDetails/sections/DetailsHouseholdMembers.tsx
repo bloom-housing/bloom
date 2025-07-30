@@ -8,16 +8,23 @@ import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 type DetailsHouseholdMembersProps = {
   setMembersDrawer: (member: MembersDrawer) => void
+  enableFullTimeStudentQuestion?: boolean
 }
 
-const DetailsHouseholdMembers = ({ setMembersDrawer }: DetailsHouseholdMembersProps) => {
+const DetailsHouseholdMembers = ({
+  setMembersDrawer,
+  enableFullTimeStudentQuestion,
+}: DetailsHouseholdMembersProps) => {
   const application = useContext(ApplicationContext)
 
   const householdMembersHeaders = {
     name: "t.name",
-    relationship: "t.relationship",
     birth: "application.household.member.dateOfBirth",
+    relationship: "t.relationship",
     sameResidence: "application.add.sameResidence",
+    ...(enableFullTimeStudentQuestion && {
+      fullTimeStudent: "application.details.fullTimeStudent",
+    }),
     action: "",
   }
 
@@ -36,18 +43,21 @@ const DetailsHouseholdMembers = ({ setMembersDrawer }: DetailsHouseholdMembersPr
     )
     return orderedHouseholdMembers?.map((item) => ({
       name: { content: `${item.firstName} ${item.middleName || ""} ${item.lastName}` },
-      relationship: {
-        content: item.relationship
-          ? t(`application.form.options.relationship.${item.relationship}`)
-          : t("t.n/a"),
-      },
       birth: {
         content:
           item.birthMonth && item.birthDay && item.birthYear
             ? `${item.birthMonth}/${item.birthDay}/${item.birthYear}`
             : t("t.n/a"),
       },
+      relationship: {
+        content: item.relationship
+          ? t(`application.form.options.relationship.${item.relationship}`)
+          : t("t.n/a"),
+      },
       sameResidence: { content: checkAvailablility(item.sameAddress) },
+      ...(enableFullTimeStudentQuestion && {
+        fullTimeStudent: { content: checkAvailablility(item.fullTimeStudent) },
+      }),
       action: {
         content: (
           <Button
@@ -61,7 +71,7 @@ const DetailsHouseholdMembers = ({ setMembersDrawer }: DetailsHouseholdMembersPr
         ),
       },
     }))
-  }, [application, setMembersDrawer])
+  }, [application, setMembersDrawer, enableFullTimeStudentQuestion])
 
   return (
     <SectionWithGrid heading={t("application.household.householdMembers")} bypassGrid inset>

@@ -211,6 +211,7 @@
   "application.household.householdMembers": "Household Members",
   "application.household.householdStudent.question": "Is someone in your household a full time student or going to turn 18 years old within 60 days?",
   "application.household.householdStudent.title": "Household Includes Student or Member Nearing 18",
+  "application.household.householdStudentAll.title": "All Household Members Students",
   "application.household.liveAlone.liveWithOtherPeople": "Other people will live with me",
   "application.household.liveAlone.title": "Next we would like to know about the others who will live with you in the unit.",
   "application.household.liveAlone.willLiveAlone": "I will live alone",
