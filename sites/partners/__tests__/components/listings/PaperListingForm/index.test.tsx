@@ -1,5 +1,5 @@
 import React from "react"
-import { act, fireEvent, screen } from "@testing-library/react"
+import { act, fireEvent, screen, within } from "@testing-library/react"
 import { setupServer } from "msw/lib/node"
 import { mockNextRouter, mockTipTapEditor, render } from "../../../testUtils"
 import { rest } from "msw"
@@ -115,19 +115,29 @@ describe("add listing", () => {
         <ListingForm />
       </AuthContext.Provider>
     )
+
     expect(screen.getByText("Rankings & Results")).toBeInTheDocument()
+
+    const whatToExpectEditorLabel = screen.getByText(
+      /tell the applicant what to expect from the process/i
+    )
+    expect(whatToExpectEditorLabel).toBeInTheDocument()
+    const whatToExpectEditorWrapper = whatToExpectEditorLabel.parentElement
+
     expect(
-      screen.getByText(
+      within(whatToExpectEditorWrapper).getByText(
         "Applicants will be contacted by the property agent in rank order until vacancies are filled. All of the information that you have provided will be verified and your eligibility confirmed. Your application will be removed from the waitlist if you have made any fraudulent statements. If we cannot verify a housing preference that you have claimed, you will not receive the preference but will not be otherwise penalized. Should your application be chosen, be prepared to fill out a more detailed application and provide required supporting documents."
       )
     ).toBeInTheDocument()
-    expect(screen.getByText("You have 451 characters remaining")).toBeInTheDocument()
-    expect(screen.getByLabelText("Bold")).toBeInTheDocument()
-    expect(screen.getByLabelText("Bullet list")).toBeInTheDocument()
-    expect(screen.getByLabelText("Numbered list")).toBeInTheDocument()
-    expect(screen.getByLabelText("Line break")).toBeInTheDocument()
-    expect(screen.getByLabelText("Set link")).toBeInTheDocument()
-    expect(screen.getByLabelText("Unlink")).toBeInTheDocument()
+    expect(
+      within(whatToExpectEditorWrapper).getByText("You have 451 characters remaining")
+    ).toBeInTheDocument()
+    expect(within(whatToExpectEditorWrapper).getByLabelText("Bold")).toBeInTheDocument()
+    expect(within(whatToExpectEditorWrapper).getByLabelText("Bullet list")).toBeInTheDocument()
+    expect(within(whatToExpectEditorWrapper).getByLabelText("Numbered list")).toBeInTheDocument()
+    expect(within(whatToExpectEditorWrapper).getByLabelText("Line break")).toBeInTheDocument()
+    expect(within(whatToExpectEditorWrapper).getByLabelText("Set link")).toBeInTheDocument()
+    expect(within(whatToExpectEditorWrapper).getByLabelText("Unlink")).toBeInTheDocument()
     // Query issue: https://github.com/ueberdosis/tiptap/discussions/4008#discussioncomment-7623655
     const editor = screen.getByTestId("whatToExpect").firstElementChild.querySelector("p")
     act(() => {
@@ -135,7 +145,51 @@ describe("add listing", () => {
         target: { textContent: "Custom what to expect text" },
       })
     })
-    expect(screen.getByText("Custom what to expect text")).toBeInTheDocument()
+    expect(
+      within(whatToExpectEditorWrapper).getByText("Custom what to expect text")
+    ).toBeInTheDocument()
+
+    const whatToExpectAdditonalTextEditorLabel = screen.getByText(
+      /Tell the applicant any additional information/i
+    )
+    expect(whatToExpectAdditonalTextEditorLabel).toBeInTheDocument()
+    const whatToExpectAdditonalTextEditorWrapper =
+      whatToExpectAdditonalTextEditorLabel.parentElement
+    expect(
+      within(whatToExpectAdditonalTextEditorWrapper).getByText("You have 1000 characters remaining")
+    ).toBeInTheDocument()
+    expect(
+      within(whatToExpectAdditonalTextEditorWrapper).getByLabelText("Bold")
+    ).toBeInTheDocument()
+    expect(
+      within(whatToExpectAdditonalTextEditorWrapper).getByLabelText("Bullet list")
+    ).toBeInTheDocument()
+    expect(
+      within(whatToExpectAdditonalTextEditorWrapper).getByLabelText("Numbered list")
+    ).toBeInTheDocument()
+    expect(
+      within(whatToExpectAdditonalTextEditorWrapper).getByLabelText("Line break")
+    ).toBeInTheDocument()
+    expect(
+      within(whatToExpectAdditonalTextEditorWrapper).getByLabelText("Set link")
+    ).toBeInTheDocument()
+    expect(
+      within(whatToExpectAdditonalTextEditorWrapper).getByLabelText("Unlink")
+    ).toBeInTheDocument()
+    // Query issue: https://github.com/ueberdosis/tiptap/discussions/4008#discussioncomment-7623655
+    const whatToExpectAdditonalTextEditor = screen
+      .getByTestId("whatToExpectAdditionalText")
+      .firstElementChild.querySelector("p")
+    act(() => {
+      fireEvent.change(whatToExpectAdditonalTextEditor, {
+        target: { textContent: "Custom what to expect additional text" },
+      })
+    })
+    expect(
+      within(whatToExpectAdditonalTextEditorWrapper).getByText(
+        "Custom what to expect additional text"
+      )
+    ).toBeInTheDocument()
   })
 
   it.todo("should successfully save and show correct toast")
