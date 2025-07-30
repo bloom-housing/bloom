@@ -83,7 +83,7 @@ const ResetPassword = () => {
   }
 
   return (
-    <FormsLayout>
+    <FormsLayout pageTitle={t("pageTitle.resetPassword")}>
       <BloomCard title={t("authentication.forgotPassword.changePassword")} customIcon={"profile"}>
         <>
           {requestError && (

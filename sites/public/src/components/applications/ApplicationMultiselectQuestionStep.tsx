@@ -35,6 +35,21 @@ export interface ApplicationMultiselectQuestionStepProps {
     title?: string
     subTitle?: string
   }
+  swapCommunityTypeWithPrograms: boolean
+}
+
+export const getMultiselectStepTitle = (
+  sectionEnum: MultiselectQuestionsApplicationSectionEnum,
+  swapCommunityTypeWithPrograms: boolean
+) => {
+  if (
+    swapCommunityTypeWithPrograms &&
+    sectionEnum === MultiselectQuestionsApplicationSectionEnum.programs
+  )
+    return t("listings.communityTypes")
+  return sectionEnum === MultiselectQuestionsApplicationSectionEnum.preferences
+    ? t("t.preferences")
+    : t("t.programs")
 }
 
 const ApplicationMultiselectQuestionStep = ({
@@ -42,6 +57,7 @@ const ApplicationMultiselectQuestionStep = ({
   applicationStep,
   applicationSectionNumber,
   strings,
+  swapCommunityTypeWithPrograms,
 }: ApplicationMultiselectQuestionStepProps) => {
   const [verifyAddress, setVerifyAddress] = useState(false)
   const [verifyAddressStep, setVerifyAddressStep] = useState(0)
@@ -211,7 +227,12 @@ const ApplicationMultiselectQuestionStep = ({
   }
 
   return (
-    <FormsLayout>
+    <FormsLayout
+      pageTitle={`${getMultiselectStepTitle(
+        applicationSection,
+        swapCommunityTypeWithPrograms
+      )} - ${t("listings.apply.applyOnline")} - ${listing?.name}`}
+    >
       <Form onSubmit={handleSubmit(onSubmit)}>
         <ApplicationFormLayout
           listingName={listing?.name}
