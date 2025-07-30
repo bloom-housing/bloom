@@ -299,7 +299,35 @@ describe("occupancy formatting helper stacked table", () => {
       },
       {
         ...unitGroup,
+        minOccupancy: 2,
+        maxOccupancy: undefined,
+        unitTypes: [
+          {
+            id: "unit_id_1",
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            name: UnitTypeEnum.twoBdrm,
+            numBedrooms: 2,
+          },
+        ],
+      },
+      {
+        ...unitGroup,
         minOccupancy: 3,
+        maxOccupancy: undefined,
+        unitTypes: [
+          {
+            id: "unit_id_1",
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            name: UnitTypeEnum.twoBdrm,
+            numBedrooms: 2,
+          },
+        ],
+      },
+      {
+        ...unitGroup,
+        minOccupancy: undefined,
         maxOccupancy: 6,
         unitTypes: [
           {
@@ -309,6 +337,27 @@ describe("occupancy formatting helper stacked table", () => {
             name: UnitTypeEnum.threeBdrm,
             numBedrooms: 3,
           },
+        ],
+      },
+      {
+        ...unitGroup,
+        minOccupancy: undefined,
+        maxOccupancy: 4,
+        unitTypes: [
+          {
+            id: "unit_id_1",
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            name: UnitTypeEnum.threeBdrm,
+            numBedrooms: 3,
+          },
+        ],
+      },
+      {
+        ...unitGroup,
+        minOccupancy: 3,
+        maxOccupancy: 6,
+        unitTypes: [
           {
             id: "unit_id_1",
             createdAt: new Date(),
@@ -326,7 +375,15 @@ describe("occupancy formatting helper stacked table", () => {
         occupancy: { cellText: "1-4 people" },
       },
       {
-        unitType: { cellText: "3 BR, 4 BR" },
+        unitType: { cellText: "2 BR" },
+        occupancy: { cellText: "at least 2 people" },
+      },
+      {
+        unitType: { cellText: "3 BR" },
+        occupancy: { cellText: "no more than 6 people" },
+      },
+      {
+        unitType: { cellText: "4 BR" },
         occupancy: { cellText: "3-6 people" },
       },
     ])

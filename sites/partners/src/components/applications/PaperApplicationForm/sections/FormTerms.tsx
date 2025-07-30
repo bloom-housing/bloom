@@ -15,33 +15,35 @@ const FormTerms = () => {
       <hr className="spacer-section-above spacer-section" />
       <SectionWithGrid heading={t("application.review.terms.title")}>
         <Grid.Row>
-          <FieldValue label={t("application.details.signatureOnTerms")}>
-            <div className="flex h-12 items-center">
-              <Field
-                id="application.acceptedTermsYes"
-                name="application.acceptedTerms"
-                className="m-0"
-                type="radio"
-                label={t("t.yes")}
-                register={register}
-                inputProps={{
-                  value: YesNoEnum.yes,
-                }}
-              />
+          <Grid.Cell>
+            <FieldValue label={t("application.details.signatureOnTerms")}>
+              <div className="flex h-12 items-center">
+                <Field
+                  id="application.acceptedTermsYes"
+                  name="application.acceptedTerms"
+                  className="m-0"
+                  type="radio"
+                  label={t("t.yes")}
+                  register={register}
+                  inputProps={{
+                    value: YesNoEnum.yes,
+                  }}
+                />
 
-              <Field
-                id="application.acceptedTermsNo"
-                name="application.acceptedTerms"
-                className="m-0"
-                type="radio"
-                label={t("t.no")}
-                register={register}
-                inputProps={{
-                  value: YesNoEnum.no,
-                }}
-              />
-            </div>
-          </FieldValue>
+                <Field
+                  id="application.acceptedTermsNo"
+                  name="application.acceptedTerms"
+                  className="m-0"
+                  type="radio"
+                  label={t("t.no")}
+                  register={register}
+                  inputProps={{
+                    value: YesNoEnum.no,
+                  }}
+                />
+              </div>
+            </FieldValue>
+          </Grid.Cell>
         </Grid.Row>
       </SectionWithGrid>
     </>

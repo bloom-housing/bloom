@@ -87,7 +87,7 @@ const ApplicationsList = () => {
     <ApplicationContext.Provider value={application}>
       <Layout>
         <Head>
-          <title>{t("nav.siteTitlePartners")}</title>
+          <title>{`Application - ${t("nav.siteTitlePartners")}`}</title>
         </Head>
         <NavigationHeader
           className="relative"

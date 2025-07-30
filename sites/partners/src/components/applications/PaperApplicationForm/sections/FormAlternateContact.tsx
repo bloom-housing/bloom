@@ -115,12 +115,14 @@ const FormAlternateContact = () => {
         )}
 
         <Grid.Row>
-          <FormAddress
-            subtitle={t("application.contact.mailingAddress")}
-            dataKey="application.alternateContact.address"
-            register={register}
-            stateKeys={stateKeys}
-          />
+          <Grid.Cell>
+            <FormAddress
+              subtitle={t("application.contact.mailingAddress")}
+              dataKey="application.alternateContact.address"
+              register={register}
+              stateKeys={stateKeys}
+            />
+          </Grid.Cell>
         </Grid.Row>
       </SectionWithGrid>
     </>
