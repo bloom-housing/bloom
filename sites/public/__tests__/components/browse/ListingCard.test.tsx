@@ -3,7 +3,10 @@ import { render } from "@testing-library/react"
 import { listing, jurisdiction } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import { ListingCard } from "../../../src/components/browse/ListingCard"
 import { getListingTags } from "../../../src/components/listing/listing_sections/MainDetails"
-import { ListingsStatusEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  FeatureFlagEnum,
+  ListingsStatusEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import dayjs from "dayjs"
 
 describe("<ListingCard>", () => {
@@ -15,7 +18,21 @@ describe("<ListingCard>", () => {
           status: ListingsStatusEnum.active,
           applicationDueDate: dayjs(new Date()).add(5, "days").toDate(),
         }}
-        jurisdiction={jurisdiction}
+        jurisdiction={{
+          ...jurisdiction,
+          featureFlags: [
+            ...jurisdiction.featureFlags,
+            {
+              id: "id_2",
+              name: FeatureFlagEnum.enableAccessibilityFeatures,
+              createdAt: new Date(),
+              updatedAt: new Date(),
+              active: true,
+              jurisdictions: [],
+              description: "",
+            },
+          ],
+        }}
       />
     )
     const tags = getListingTags(listing, true)
@@ -36,5 +53,28 @@ describe("<ListingCard>", () => {
     expect(view.getByText("1 bed")).toBeDefined()
     expect(view.getByText("$150")).toBeDefined()
     expect(view.getByText("% of income, or up to $1,200")).toBeDefined()
+  })
+  it("hides reserved tag when swapCommunityTypeWithPrograms is true", () => {
+    const view = render(
+      <ListingCard
+        listing={listing}
+        jurisdiction={{
+          ...jurisdiction,
+          featureFlags: [
+            ...jurisdiction.featureFlags,
+            {
+              name: FeatureFlagEnum.swapCommunityTypeWithPrograms,
+              id: "id",
+              createdAt: new Date(),
+              updatedAt: new Date(),
+              active: true,
+              description: "",
+              jurisdictions: [],
+            },
+          ],
+        }}
+      />
+    )
+    expect(view.queryByText("Veteran")).toBeNull()
   })
 })
