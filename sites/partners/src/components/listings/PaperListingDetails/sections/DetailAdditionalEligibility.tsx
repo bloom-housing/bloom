@@ -12,72 +12,82 @@ const DetailAdditionalEligibility = () => {
   return (
     <SectionWithGrid heading={t("listings.sections.additionalEligibilityTitle")} inset>
       <Grid.Row>
-        <FieldValue id="creditHistory" label={t("listings.creditHistory")}>
-          {getDetailFieldString(listing.creditHistory)}
-        </FieldValue>
+        <Grid.Cell>
+          <FieldValue id="creditHistory" label={t("listings.creditHistory")}>
+            {getDetailFieldString(listing.creditHistory)}
+          </FieldValue>
+        </Grid.Cell>
       </Grid.Row>
 
       <Grid.Row>
-        <FieldValue id="rentalHistory" label={t("listings.rentalHistory")}>
-          {getDetailFieldString(listing.rentalHistory)}
-        </FieldValue>
+        <Grid.Cell>
+          <FieldValue id="rentalHistory" label={t("listings.rentalHistory")}>
+            {getDetailFieldString(listing.rentalHistory)}
+          </FieldValue>
+        </Grid.Cell>
       </Grid.Row>
 
       <Grid.Row>
-        <FieldValue id="criminalBackground" label={t("listings.criminalBackground")}>
-          {getDetailFieldString(listing.criminalBackground)}
-        </FieldValue>
+        <Grid.Cell>
+          <FieldValue id="criminalBackground" label={t("listings.criminalBackground")}>
+            {getDetailFieldString(listing.criminalBackground)}
+          </FieldValue>
+        </Grid.Cell>
       </Grid.Row>
 
       <Grid.Row>
-        <FieldValue id="rentalAssistance" label={t("listings.sections.rentalAssistanceTitle")}>
-          {getDetailFieldString(listing.rentalAssistance)}
-        </FieldValue>
+        <Grid.Cell>
+          <FieldValue id="rentalAssistance" label={t("listings.sections.rentalAssistanceTitle")}>
+            {getDetailFieldString(listing.rentalAssistance)}
+          </FieldValue>
+        </Grid.Cell>
       </Grid.Row>
 
       {(listing.buildingSelectionCriteria ||
         listing.listingsBuildingSelectionCriteriaFile?.fileId) && (
         <Grid.Row columns={1}>
-          <FieldValue label={t("listings.buildingSelectionCriteria")}>
-            {listing.listingsBuildingSelectionCriteriaFile?.fileId ? (
-              <MinimalTable
-                id="buildingSelectionCriteriaTable"
-                headers={{ preview: "t.preview", fileName: "t.fileName" }}
-                data={[
-                  {
-                    preview: {
-                      content: (
-                        <TableThumbnail>
-                          <img
-                            alt="PDF preview"
-                            src={cloudinaryUrlFromId(
-                              listing.listingsBuildingSelectionCriteriaFile.fileId
-                            )}
-                          />
-                        </TableThumbnail>
-                      ),
+          <Grid.Cell>
+            <FieldValue label={t("listings.buildingSelectionCriteria")}>
+              {listing.listingsBuildingSelectionCriteriaFile?.fileId ? (
+                <MinimalTable
+                  id="buildingSelectionCriteriaTable"
+                  headers={{ preview: "t.preview", fileName: "t.fileName" }}
+                  data={[
+                    {
+                      preview: {
+                        content: (
+                          <TableThumbnail>
+                            <img
+                              alt="PDF preview"
+                              src={cloudinaryUrlFromId(
+                                listing.listingsBuildingSelectionCriteriaFile.fileId
+                              )}
+                            />
+                          </TableThumbnail>
+                        ),
+                      },
+                      fileName: {
+                        content: `${listing.listingsBuildingSelectionCriteriaFile.fileId
+                          .split("/")
+                          .slice(-1)
+                          .join()}.pdf`,
+                      },
                     },
-                    fileName: {
-                      content: `${listing.listingsBuildingSelectionCriteriaFile.fileId
-                        .split("/")
-                        .slice(-1)
-                        .join()}.pdf`,
+                  ]}
+                />
+              ) : (
+                <MinimalTable
+                  id="buildingSelectionCriteriaTable"
+                  headers={{ url: "t.url" }}
+                  data={[
+                    {
+                      url: { content: listing.buildingSelectionCriteria },
                     },
-                  },
-                ]}
-              />
-            ) : (
-              <MinimalTable
-                id="buildingSelectionCriteriaTable"
-                headers={{ url: "t.url" }}
-                data={[
-                  {
-                    url: { content: listing.buildingSelectionCriteria },
-                  },
-                ]}
-              />
-            )}
-          </FieldValue>
+                  ]}
+                />
+              )}
+            </FieldValue>
+          </Grid.Cell>
         </Grid.Row>
       )}
     </SectionWithGrid>

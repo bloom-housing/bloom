@@ -1,13 +1,14 @@
 import { defineConfig } from "cypress"
+import { cypressConfig } from "@axe-core/watcher"
 import dotenv from "dotenv"
 dotenv.config()
 
-export default defineConfig({
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+let baseConfig: Cypress.ConfigOptions<any> = {
   defaultCommandTimeout: 100000,
   projectId: "bloom-public-reference",
   pageLoadTimeout: 100000,
   video: true,
-  videoUploadOnPasses: false,
   numTestsKeptInMemory: 0,
   viewportHeight: 1500,
   env: {
@@ -15,7 +16,6 @@ export default defineConfig({
       url: "/api/__coverage__",
     },
   },
-
   e2e: {
     // We've imported your old cypress plugins here.
     // You may want to clean this up later by importing these.
@@ -28,7 +28,9 @@ export default defineConfig({
     experimentalRunAllSpecs: true,
     env: {
       showSeedsDesign: process.env.SHOW_NEW_SEEDS_DESIGNS,
+      runAccessibilityTests: process.env.RUN_ACCESSIBILITY_E2E_TESTS === "TRUE",
     },
+    supportFile: "cypress/support/e2e.ts",
   },
 
   component: {
@@ -37,4 +39,15 @@ export default defineConfig({
       bundler: "webpack",
     },
   },
-})
+}
+
+if (process.env.RUN_ACCESSIBILITY_E2E_TESTS === "TRUE") {
+  baseConfig = cypressConfig({
+    axe: {
+      apiKey: process.env.AXE_DEVELOPER_HUB_API_KEY,
+    },
+    ...baseConfig,
+  })
+}
+
+export default defineConfig(baseConfig)

@@ -383,152 +383,164 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
             <Card.Section>
               <SectionWithGrid heading={t("listings.unit.details")}>
                 <Grid.Row columns={4}>
-                  <Field
-                    id="number"
-                    name="number"
-                    label={t("listings.unit.unitNumber")}
-                    register={register}
-                    type="text"
-                  />
+                  <Grid.Cell>
+                    <Field
+                      id="number"
+                      name="number"
+                      label={t("listings.unit.unitNumber")}
+                      register={register}
+                      type="text"
+                    />
+                  </Grid.Cell>
+                  <Grid.Cell>
+                    <Select
+                      id="unitTypes.id"
+                      name="unitTypes.id"
+                      label={t("listings.unit.type")}
+                      placeholder={t("listings.unit.type")}
+                      register={register}
+                      controlClassName="control"
+                      options={unitTypesOptions}
+                      error={fieldHasError(errors?.unitTypes)}
+                      errorMessage={t("errors.requiredFieldError")}
+                      validation={{ required: true }}
+                      inputProps={{
+                        onChange: () => {
+                          clearErrors("unitTypes.id")
+                        },
+                      }}
+                    />
+                  </Grid.Cell>
+                  <Grid.Cell>
+                    <Select
+                      id="numBathrooms"
+                      name="numBathrooms"
+                      label={t("listings.unit.numBathrooms")}
+                      placeholder={t("listings.unit.numBathrooms")}
+                      register={register}
+                      controlClassName="control"
+                      options={[
+                        { label: t("listings.unit.sharedBathroom"), value: "0" },
+                        ...numberOptions(5),
+                      ]}
+                    />
+                  </Grid.Cell>
+                  <Grid.Cell>
+                    <Select
+                      id="floor"
+                      name="floor"
+                      label={t("listings.unit.floor")}
+                      placeholder={t("listings.unit.floor")}
+                      register={register}
+                      controlClassName="control"
+                      options={numberOptions(10)}
+                    />
+                  </Grid.Cell>
+                  <Grid.Cell>
+                    <Field
+                      id="sqFeet"
+                      name="sqFeet"
+                      label={t("listings.unit.squareFootage")}
+                      register={register}
+                      type="number"
+                    />
+                  </Grid.Cell>
 
-                  <Select
-                    id="unitTypes.id"
-                    name="unitTypes.id"
-                    label={t("listings.unit.type")}
-                    placeholder={t("listings.unit.type")}
-                    register={register}
-                    controlClassName="control"
-                    options={unitTypesOptions}
-                    error={fieldHasError(errors?.unitTypes)}
-                    errorMessage={t("errors.requiredFieldError")}
-                    validation={{ required: true }}
-                    inputProps={{
-                      onChange: () => {
-                        clearErrors("unitTypes.id")
-                      },
-                    }}
-                  />
-
-                  <Select
-                    id="numBathrooms"
-                    name="numBathrooms"
-                    label={t("listings.unit.numBathrooms")}
-                    placeholder={t("listings.unit.numBathrooms")}
-                    register={register}
-                    controlClassName="control"
-                    options={[
-                      { label: t("listings.unit.sharedBathroom"), value: "0" },
-                      ...numberOptions(5),
-                    ]}
-                  />
-
-                  <Select
-                    id="floor"
-                    name="floor"
-                    label={t("listings.unit.floor")}
-                    placeholder={t("listings.unit.floor")}
-                    register={register}
-                    controlClassName="control"
-                    options={numberOptions(10)}
-                  />
-
-                  <Field
-                    id="sqFeet"
-                    name="sqFeet"
-                    label={t("listings.unit.squareFootage")}
-                    register={register}
-                    type="number"
-                  />
-
-                  <Select
-                    id="minOccupancy"
-                    name="minOccupancy"
-                    label={t("listings.unit.minOccupancy")}
-                    placeholder={t("listings.unit.minOccupancy")}
-                    register={register}
-                    controlClassName="control"
-                    options={numberOptions(numberOccupancyOptions)}
-                    error={fieldHasError(errors?.minOccupancy)}
-                    errorMessage={t("errors.minGreaterThanMaxOccupancyError")}
-                    validation={{ max: maxOccupancy || numberOccupancyOptions }}
-                    inputProps={{
-                      onChange: () => {
-                        void trigger("minOccupancy")
-                        void trigger("maxOccupancy")
-                      },
-                    }}
-                  />
-
-                  <Select
-                    id="maxOccupancy"
-                    name="maxOccupancy"
-                    label={t("listings.unit.maxOccupancy")}
-                    placeholder={t("listings.unit.maxOccupancy")}
-                    register={register}
-                    controlClassName="control"
-                    options={numberOptions(numberOccupancyOptions)}
-                    error={fieldHasError(errors?.maxOccupancy)}
-                    errorMessage={t("errors.maxLessThanMinOccupancyError")}
-                    validation={{ min: minOccupancy }}
-                    inputProps={{
-                      onChange: () => {
-                        void trigger("minOccupancy")
-                        void trigger("maxOccupancy")
-                      },
-                    }}
-                  />
+                  <Grid.Cell>
+                    <Select
+                      id="minOccupancy"
+                      name="minOccupancy"
+                      label={t("listings.unit.minOccupancy")}
+                      placeholder={t("listings.unit.minOccupancy")}
+                      register={register}
+                      controlClassName="control"
+                      options={numberOptions(numberOccupancyOptions)}
+                      error={fieldHasError(errors?.minOccupancy)}
+                      errorMessage={t("errors.minGreaterThanMaxOccupancyError")}
+                      validation={{ max: maxOccupancy || numberOccupancyOptions }}
+                      inputProps={{
+                        onChange: () => {
+                          void trigger("minOccupancy")
+                          void trigger("maxOccupancy")
+                        },
+                      }}
+                    />
+                  </Grid.Cell>
+                  <Grid.Cell>
+                    <Select
+                      id="maxOccupancy"
+                      name="maxOccupancy"
+                      label={t("listings.unit.maxOccupancy")}
+                      placeholder={t("listings.unit.maxOccupancy")}
+                      register={register}
+                      controlClassName="control"
+                      options={numberOptions(numberOccupancyOptions)}
+                      error={fieldHasError(errors?.maxOccupancy)}
+                      errorMessage={t("errors.maxLessThanMinOccupancyError")}
+                      validation={{ min: minOccupancy }}
+                      inputProps={{
+                        onChange: () => {
+                          void trigger("minOccupancy")
+                          void trigger("maxOccupancy")
+                        },
+                      }}
+                    />
+                  </Grid.Cell>
                 </Grid.Row>
               </SectionWithGrid>
 
               <hr className="spacer-section-above spacer-section" />
               <SectionWithGrid heading={t("listings.unit.eligibility")}>
                 <Grid.Row columns={4}>
-                  <Select
-                    id="amiChart.id"
-                    name="amiChart.id"
-                    label={t("listings.unit.amiChart")}
-                    placeholder={t("listings.unit.amiChart")}
-                    register={register}
-                    controlClassName="control"
-                    options={amiChartsOptions}
-                    error={fieldHasError(errors?.amiChart?.id)}
-                    errorMessage={t("errors.requiredFieldError")}
-                    validation={{ required: true }}
-                    inputProps={{
-                      onChange: (value) => {
-                        setValue("amiPercentage", undefined)
-                        clearErrors("amiPercentage")
-                        clearErrors("amiChart.id")
-                        ;[...Array(maxAmiHouseholdSize)].forEach((_, index) => {
-                          setValue(`maxIncomeHouseholdSize${index + 1}`, undefined)
-                        })
-                        if (value?.target?.value && !loading && amiChartsOptions) {
-                          void fetchAmiChart(value.target?.value)
+                  <Grid.Cell>
+                    <Select
+                      id="amiChart.id"
+                      name="amiChart.id"
+                      label={t("listings.unit.amiChart")}
+                      placeholder={t("listings.unit.amiChart")}
+                      register={register}
+                      controlClassName="control"
+                      options={amiChartsOptions}
+                      error={fieldHasError(errors?.amiChart?.id)}
+                      errorMessage={t("errors.requiredFieldError")}
+                      validation={{ required: true }}
+                      inputProps={{
+                        onChange: (value) => {
+                          setValue("amiPercentage", undefined)
+                          clearErrors("amiPercentage")
+                          clearErrors("amiChart.id")
+                          ;[...Array(maxAmiHouseholdSize)].forEach((_, index) => {
+                            setValue(`maxIncomeHouseholdSize${index + 1}`, undefined)
+                          })
+                          if (value?.target?.value && !loading && amiChartsOptions) {
+                            void fetchAmiChart(value.target?.value)
+                            setIsAmiPercentageDirty(true)
+                          }
+                        },
+                      }}
+                    />
+                  </Grid.Cell>
+                  <Grid.Cell>
+                    <Select
+                      id={"amiPercentage"}
+                      name="amiPercentage"
+                      label={t("listings.unit.amiPercentage")}
+                      placeholder={t("listings.unit.amiPercentage")}
+                      register={register}
+                      controlClassName="control"
+                      options={amiChartPercentageOptions}
+                      inputProps={{
+                        onChange: () => {
                           setIsAmiPercentageDirty(true)
-                        }
-                      },
-                    }}
-                  />
-
-                  <Select
-                    id={"amiPercentage"}
-                    name="amiPercentage"
-                    label={t("listings.unit.amiPercentage")}
-                    placeholder={t("listings.unit.amiPercentage")}
-                    register={register}
-                    controlClassName="control"
-                    options={amiChartPercentageOptions}
-                    inputProps={{
-                      onChange: () => {
-                        setIsAmiPercentageDirty(true)
-                        clearErrors("amiPercentage")
-                      },
-                    }}
-                    error={fieldHasError(errors?.amiPercentage)}
-                    errorMessage={t("errors.requiredFieldError")}
-                    validation={{ required: !!amiChartID }}
-                    disabled={!amiChartID}
-                  />
+                          clearErrors("amiPercentage")
+                        },
+                      }}
+                      error={fieldHasError(errors?.amiPercentage)}
+                      errorMessage={t("errors.requiredFieldError")}
+                      validation={{ required: !!amiChartID }}
+                      disabled={!amiChartID}
+                    />
+                  </Grid.Cell>
                 </Grid.Row>
               </SectionWithGrid>
 
@@ -546,16 +558,18 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
 
               <Grid>
                 <Grid.Row columns={4}>
-                  <FieldGroup
-                    name="rentType"
-                    type="radio"
-                    register={register}
-                    fields={rentTypeOptions}
-                    fieldClassName="m-0"
-                    fieldGroupClassName="flex h-12 items-center"
-                    groupLabel={t("listings.unit.rentType")}
-                    fieldLabelClassName={styles["label-option"]}
-                  />
+                  <Grid.Cell>
+                    <FieldGroup
+                      name="rentType"
+                      type="radio"
+                      register={register}
+                      fields={rentTypeOptions}
+                      fieldClassName="m-0"
+                      fieldGroupClassName="flex h-12 items-center"
+                      groupLabel={t("listings.unit.rentType")}
+                      fieldLabelClassName={styles["label-option"]}
+                    />
+                  </Grid.Cell>
 
                   {rentType === "fixed" && (
                     <>

@@ -197,12 +197,12 @@ describe("add listing", () => {
       )
     ).toBeInTheDocument()
     expect(screen.getByText("You have 451 characters remaining")).toBeInTheDocument()
-    expect(screen.getByLabelText("Bold")).toBeInTheDocument()
-    expect(screen.getByLabelText("Bullet list")).toBeInTheDocument()
-    expect(screen.getByLabelText("Numbered list")).toBeInTheDocument()
-    expect(screen.getByLabelText("Line break")).toBeInTheDocument()
-    expect(screen.getByLabelText("Set link")).toBeInTheDocument()
-    expect(screen.getByLabelText("Unlink")).toBeInTheDocument()
+    expect(screen.getByRole("menuitem", { name: "Bold" })).toBeInTheDocument()
+    expect(screen.getByRole("menuitem", { name: "Bullet list" })).toBeInTheDocument()
+    expect(screen.getByRole("menuitem", { name: "Numbered list" })).toBeInTheDocument()
+    expect(screen.getByRole("menuitem", { name: "Line break" })).toBeInTheDocument()
+    expect(screen.getByRole("menuitem", { name: "Set link" })).toBeInTheDocument()
+    expect(screen.getByRole("menuitem", { name: "Unlink" })).toBeInTheDocument()
     // Query issue: https://github.com/ueberdosis/tiptap/discussions/4008#discussioncomment-7623655
     const editor = screen.getByTestId("whatToExpect").firstElementChild.querySelector("p")
     act(() => {
