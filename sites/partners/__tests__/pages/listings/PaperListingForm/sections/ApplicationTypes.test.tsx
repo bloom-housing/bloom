@@ -20,22 +20,22 @@ describe("ApplicationTypes", () => {
     )
 
     expect(screen.getByRole("heading", { level: 2, name: "Application Types" })).toBeInTheDocument()
-    const digitalApplication = screen.getByRole("row", {
-      name: "Is there a digital application? Yes No Required to publish",
+    const digitalApplication = screen.getByRole("group", {
+      name: "Is there a digital application?",
     })
     expect(
       within(digitalApplication).getByText("Is there a digital application?")
     ).toBeInTheDocument()
     expect(within(digitalApplication).getByRole("radio", { name: "No" })).toBeInTheDocument()
     expect(within(digitalApplication).getByRole("radio", { name: "Yes" })).toBeInTheDocument()
-    const paperApplication = screen.getByRole("row", {
-      name: "Is there a paper application? Yes No Required to publish",
+    const paperApplication = screen.getByRole("group", {
+      name: "Is there a paper application?",
     })
     expect(within(paperApplication).getByText("Is there a paper application?")).toBeInTheDocument()
     expect(within(paperApplication).getByRole("radio", { name: "No" })).toBeInTheDocument()
     expect(within(paperApplication).getByRole("radio", { name: "Yes" })).toBeInTheDocument()
-    const referralApplication = screen.getByRole("row", {
-      name: "Is there a referral opportunity? Yes No Required to publish",
+    const referralApplication = screen.getByRole("group", {
+      name: "Is there a referral opportunity?",
     })
     expect(
       within(referralApplication).getByText("Is there a referral opportunity?")
@@ -53,8 +53,8 @@ describe("ApplicationTypes", () => {
 
     expect(screen.queryAllByRole("textbox", { name: "Referral Contact Phone" })).toHaveLength(0)
     expect(screen.queryAllByRole("textbox", { name: "Referral Summary" })).toHaveLength(0)
-    const referralApplication = screen.getByRole("row", {
-      name: "Is there a referral opportunity? Yes No Required to publish",
+    const referralApplication = screen.getByRole("group", {
+      name: "Is there a referral opportunity?",
     })
     await act(() =>
       userEvent.click(within(referralApplication).getByRole("radio", { name: "Yes" }))
