@@ -105,6 +105,11 @@ export const stackedUnitGroupsOccupancyTable = (listing: Listing) => {
       }
       return 0
     })
+    .map((unitGroup) => ({
+      ...unitGroup,
+      maxOccupancy: unitGroup.maxOccupancy === -Infinity ? null : unitGroup.maxOccupancy,
+      minOccupancy: unitGroup.minOccupancy === Infinity ? null : unitGroup.minOccupancy,
+    }))
     .filter((unitGroup) => unitGroup.maxOccupancy || unitGroup.minOccupancy)
 
   const tableRows = sortedUnitGroups?.reduce<Record<string, StackedTableRow>[]>((acc, curr) => {
