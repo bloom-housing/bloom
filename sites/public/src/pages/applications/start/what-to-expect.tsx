@@ -55,7 +55,11 @@ const ApplicationWhatToExpect = () => {
   }, [profile])
 
   return (
-    <FormsLayout>
+    <FormsLayout
+      pageTitle={`${t("whatToExpect.label")} - ${t("listings.apply.applyOnline")} - ${
+        listing?.name
+      }`}
+    >
       <ApplicationFormLayout
         listingName={listing?.name}
         heading={t("application.start.whatToExpect.title")}
