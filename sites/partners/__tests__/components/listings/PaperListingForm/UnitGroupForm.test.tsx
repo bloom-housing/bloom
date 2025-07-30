@@ -78,7 +78,7 @@ describe("<UnitGroupForm>", () => {
     expect(screen.getByLabelText(/1 bedroom/i)).toBeInTheDocument()
     expect(screen.getByLabelText(/2 bedroom/i)).toBeInTheDocument()
     expect(screen.getByLabelText(/3 bedroom/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/4\+ bedroom/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/4 bedroom/i)).toBeInTheDocument()
 
     // Details Section
     expect(screen.getByLabelText(/Affordable Unit Group Quantity/i)).toBeInTheDocument()

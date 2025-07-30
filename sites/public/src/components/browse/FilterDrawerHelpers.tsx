@@ -148,7 +148,7 @@ export const unitTypeUnitGroupsMapping = {
   [UnitTypeEnum.fourBdrm]: {
     value: 4,
     ordinal: 4,
-    labelKey: "listings.unitTypes.expanded.fourPlusBdrm",
+    labelKey: "listings.unitTypes.expanded.fourBdrm",
   },
 }
 
