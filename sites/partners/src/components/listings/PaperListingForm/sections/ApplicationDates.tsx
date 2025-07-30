@@ -167,14 +167,11 @@ const ApplicationDates = ({
           </Grid.Cell>
           <Grid.Cell>
             <TimeField
-              label={
-                getLabel(
-                  "applicationDueDate",
-                  requiredFields,
-                  t("listings.applicationDueTime"),
-                  true
-                ) as string
-              }
+              label={getLabel(
+                "applicationDueDate",
+                requiredFields,
+                t("listings.applicationDueTime")
+              )}
               name={"applicationDueTimeField"}
               id={"applicationDueTimeField"}
               register={register}
