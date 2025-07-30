@@ -100,15 +100,17 @@ export const getOnlineApplicationURL = (
   preview: boolean
 ) => {
   let onlineApplicationURL
+  let isCommonApp = false
   if (hasMethod(applicationMethods, ApplicationMethodsTypeEnum.Internal)) {
     onlineApplicationURL = `/applications/start/choose-language?listingId=${listingId}`
     onlineApplicationURL += `${preview ? "&preview=true" : ""}`
+    isCommonApp = true
   } else if (hasMethod(applicationMethods, ApplicationMethodsTypeEnum.ExternalLink)) {
     onlineApplicationURL =
       getMethod(applicationMethods, ApplicationMethodsTypeEnum.ExternalLink)?.externalReference ||
       ""
   }
-  return onlineApplicationURL
+  return { url: onlineApplicationURL, isCommonApp }
 }
 
 export const getHasNonReferralMethods = (listing: Listing) => {

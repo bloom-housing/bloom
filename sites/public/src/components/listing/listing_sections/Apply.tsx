@@ -32,12 +32,23 @@ export const Apply = ({ listing, preview, setShowDownloadModal }: ApplyProps) =>
 
   const applicationsClosed = dayjs() > dayjs(listing.applicationDueDate)
 
-  const redirectIfSignedOut = () =>
-    process.env.showMandatedAccounts && initialStateLoaded && !profile
+  const onlineApplicationURLInfo = getOnlineApplicationURL(
+    listing.applicationMethods,
+    listing.id,
+    preview
+  )
 
-  const onlineApplicationUrl = redirectIfSignedOut()
+  const redirectIfLogInRequired = () =>
+    process.env.showMandatedAccounts &&
+    initialStateLoaded &&
+    !profile &&
+    onlineApplicationURLInfo.isCommonApp &&
+    //previewing applications should not require admin to login
+    !preview
+
+  const onlineApplicationUrl = redirectIfLogInRequired()
     ? `/sign-in?redirectUrl=/applications/start/choose-language&listingId=${listing.id}`
-    : getOnlineApplicationURL(listing.applicationMethods, listing.id, preview)
+    : onlineApplicationURLInfo.url
   const disableApplyButton = !preview && listing.status !== ListingsStatusEnum.active
 
   const paperApplications = getPaperApplications(listing.applicationMethods)

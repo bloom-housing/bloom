@@ -90,7 +90,7 @@ export const imageUrlFromListing = (listing: Listing, size = 400): (string | nul
       return asset ? getImageUrlFromAsset(asset, size) : null
     })
 
-  return imageUrls?.length > 0 ? imageUrls : ["/images/fallback-listing.png"]
+  return imageUrls?.length > 0 ? imageUrls : ["/images/listing-fallback.png"]
   // we can omit this by searching for both "cloudinaryBuilding" and "building" above
   //return imageAssets?.find((asset: Asset) => asset.label == "building")?.fileId
 }
