@@ -61,7 +61,6 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
   const [filterState, setFilterState] = useState<FilterData>({})
   const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const pageTitle = `${t("pageTitle.rent")} - ${t("nav.siteTitle")}`
   const metaDescription = t("pageDescription.welcome", { regionName: t("region.name") })
 
   const filterQuery = getFilterQueryFromURL(router.query)
@@ -160,7 +159,7 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
   )
 
   return (
-    <Layout pageTitle={pageTitle} metaDescription={metaDescription}>
+    <Layout pageTitle={t("pageTitle.rent")} metaDescription={metaDescription}>
       <PageHeaderSection heading={t("pageTitle.rent")} inverse={true} content={ListingTabs} />
       <FilterDrawer
         isOpen={isFilterDrawerOpen}
