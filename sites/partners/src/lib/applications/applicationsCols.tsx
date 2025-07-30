@@ -2,7 +2,7 @@ import Link from "next/link"
 
 import { t } from "@bloom-housing/ui-components"
 import { ApplicationSubmissionTypeEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { convertDataToLocal } from "../../../lib/helpers"
+import { convertDataToLocal } from "../helpers"
 
 export const getCols = () => [
   {
@@ -110,5 +110,3 @@ export const getCols = () => [
     width: 140,
   },
 ]
-
-export default getCols

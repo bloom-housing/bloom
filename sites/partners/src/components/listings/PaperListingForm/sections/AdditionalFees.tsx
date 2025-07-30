@@ -1,17 +1,19 @@
 import React, { useContext, useMemo, useEffect } from "react"
 import { useFormContext } from "react-hook-form"
 import { t, Field, Textarea, FieldGroup } from "@bloom-housing/ui-components"
-import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
-import { fieldHasError, fieldMessage } from "../../../../lib/helpers"
+import { Grid } from "@bloom-housing/ui-seeds"
+import { defaultFieldProps } from "../../../../lib/helpers"
 import { AuthContext, listingUtilities } from "@bloom-housing/shared-helpers"
 import {
   FeatureFlagEnum,
   ListingUtilities,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
+import styles from "../ListingForm.module.scss"
 
 type AdditionalFeesProps = {
   existingUtilities: ListingUtilities
+  requiredFields: string[]
 }
 
 const AdditionalFees = (props: AdditionalFeesProps) => {
@@ -55,81 +57,92 @@ const AdditionalFees = (props: AdditionalFeesProps) => {
         <Grid.Row>
           <Grid.Cell>
             <Field
-              label={t("listings.applicationFee")}
-              name={"applicationFee"}
-              id={"applicationFee"}
               register={register}
               type={"currency"}
               prepend={"$"}
-              placeholder={"0.00"}
+              {...defaultFieldProps(
+                "applicationFee",
+                t("listings.applicationFee"),
+                props.requiredFields,
+                errors,
+                clearErrors
+              )}
             />
           </Grid.Cell>
           <Grid.Cell>
             <Field
-              label={t("listings.depositMin")}
-              name={"depositMin"}
-              id={"depositMin"}
               register={register}
               type={"currency"}
               prepend={"$"}
-              placeholder={"0.00"}
-              error={fieldHasError(errors?.depositMin)}
-              errorMessage={fieldMessage(errors?.depositMin)}
-              inputProps={{
-                onChange: () => clearErrors("depositMin"),
-              }}
+              {...defaultFieldProps(
+                "depositMin",
+                t("listings.depositMin"),
+                props.requiredFields,
+                errors,
+                clearErrors
+              )}
             />
           </Grid.Cell>
           <Grid.Cell>
             <Field
-              label={t("listings.depositMax")}
-              name={"depositMax"}
-              id={"depositMax"}
               register={register}
               type={"currency"}
               prepend={"$"}
-              placeholder={"0.00"}
-              error={fieldHasError(errors?.depositMax)}
-              errorMessage={fieldMessage(errors?.depositMax?.message)}
-              inputProps={{
-                onChange: () => clearErrors("depositMax"),
-              }}
+              {...defaultFieldProps(
+                "depositMax",
+                t("listings.depositMax"),
+                props.requiredFields,
+                errors,
+                clearErrors
+              )}
             />
           </Grid.Cell>
         </Grid.Row>
         <Grid.Row>
           <Grid.Cell>
             <Textarea
-              label={t("listings.sections.depositHelperText")}
-              name={"depositHelperText"}
-              id={"depositHelperText"}
               aria-describedby={"depositHelperText"}
               fullWidth={true}
               register={register}
+              placeholder={""}
+              {...defaultFieldProps(
+                "depositHelperText",
+                t("listings.sections.depositHelperText"),
+                props.requiredFields,
+                errors,
+                clearErrors
+              )}
             />
           </Grid.Cell>
           <Grid.Cell>
             <Textarea
-              label={t("listings.sections.costsNotIncluded")}
-              name={"costsNotIncluded"}
-              id={"costsNotIncluded"}
               aria-describedby={"costsNotIncluded"}
               fullWidth={true}
               register={register}
+              placeholder={""}
+              {...defaultFieldProps(
+                "costsNotIncluded",
+                t("listings.sections.costsNotIncluded"),
+                props.requiredFields,
+                errors,
+                clearErrors
+              )}
             />
           </Grid.Cell>
         </Grid.Row>
         {enableUtilitiesIncluded && (
           <Grid.Row>
-            <FieldValue label={t("listings.sections.utilities")}>
+            <Grid.Cell>
               <FieldGroup
                 type="checkbox"
                 name="utilities"
+                groupLabel={t("listings.sections.utilities")}
                 fields={utilitiesFields}
                 register={register}
-                fieldGroupClassName="grid grid-cols-2 mt-4"
+                fieldGroupClassName="grid grid-cols-2 mt-2"
+                fieldLabelClassName={styles["label-option"]}
               />
-            </FieldValue>
+            </Grid.Cell>
           </Grid.Row>
         )}
       </SectionWithGrid>

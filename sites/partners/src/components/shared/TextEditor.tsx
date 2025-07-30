@@ -1,4 +1,4 @@
-import React, { useCallback } from "react"
+import React, { useCallback, useState } from "react"
 import Markdown from "markdown-to-jsx"
 import { EditorContent, Editor } from "@tiptap/react"
 import { StarterKit } from "@tiptap/starter-kit"
@@ -89,8 +89,21 @@ const MenuBar = ({ editor }) => {
     return null
   }
 
+  const customKeyDown = (
+    e: React.KeyboardEvent<HTMLButtonElement>,
+    beforeId: string,
+    afterId: string
+  ) => {
+    if (e.key === "ArrowRight") {
+      document.getElementById(afterId).focus()
+    }
+    if (e.key === "ArrowLeft") {
+      document.getElementById(beforeId).focus()
+    }
+  }
+
   return (
-    <div className={styles["editor-menu"]}>
+    <div className={styles["editor-menu"]} role={"menubar"}>
       <button
         onClick={() => editor?.chain().focus().toggleBold().run()}
         disabled={!editor?.can().chain().focus().toggleBold().run()}
@@ -98,6 +111,10 @@ const MenuBar = ({ editor }) => {
         type="button"
         aria-label={"Bold"}
         id={"editor-bold"}
+        role={"menuitem"}
+        onKeyDown={(event) => {
+          customKeyDown(event, "editor-line-break", "editor-bullet-list")
+        }}
       >
         <Icon>
           <BoldIcon />
@@ -109,6 +126,10 @@ const MenuBar = ({ editor }) => {
         type="button"
         aria-label={"Bullet list"}
         id={"editor-bullet-list"}
+        role={"menuitem"}
+        onKeyDown={(event) => {
+          customKeyDown(event, "editor-bold", "editor-numbered-list")
+        }}
       >
         <Icon>
           <BulletListIcon />
@@ -120,6 +141,10 @@ const MenuBar = ({ editor }) => {
         type="button"
         aria-label={"Numbered list"}
         id={"editor-numbered-list"}
+        role={"menuitem"}
+        onKeyDown={(event) => {
+          customKeyDown(event, "editor-bullet-list", "editor-set-link")
+        }}
       >
         <Icon>
           <OrderedListIcon />
@@ -130,6 +155,15 @@ const MenuBar = ({ editor }) => {
         className={editor?.isActive("link") ? styles["is-active"] : ""}
         type="button"
         aria-label={"Set link"}
+        role={"menuitem"}
+        id={"editor-set-link"}
+        onKeyDown={(event) => {
+          customKeyDown(
+            event,
+            "editor-numbered-list",
+            editor?.isActive("link") ? "editor-unlink" : "editor-line-break"
+          )
+        }}
       >
         <Icon>
           <LinkIcon />
@@ -140,6 +174,11 @@ const MenuBar = ({ editor }) => {
         disabled={!editor?.isActive("link")}
         type="button"
         aria-label={"Unlink"}
+        role={"menuitem"}
+        id={"editor-unlink"}
+        onKeyDown={(event) => {
+          customKeyDown(event, "editor-set-link", "editor-line-break")
+        }}
       >
         <Icon>
           <UnlinkIcon />
@@ -150,6 +189,14 @@ const MenuBar = ({ editor }) => {
         type="button"
         aria-label={"Line break"}
         id={"editor-line-break"}
+        role={"menuitem"}
+        onKeyDown={(event) => {
+          customKeyDown(
+            event,
+            editor?.isActive("link") ? "editor-unlink" : "editor-numbered-list",
+            "editor-bold"
+          )
+        }}
       >
         <Icon>
           <DividerIcon />
@@ -184,19 +231,48 @@ type TextEditorProps = {
   characterLimit?: number
   editor: Editor
   editorId?: string
+  error?: boolean
+  errorMessage?: string
+  label: string | React.ReactNode
 }
 
-export const TextEditor = ({ characterLimit = 1000, editor, editorId }: TextEditorProps) => {
+export const TextEditor = ({
+  characterLimit = 1000,
+  editor,
+  editorId,
+  error,
+  errorMessage,
+  label,
+}: TextEditorProps) => {
+  const [errorState, setErrorState] = useState(error)
+
+  const labelId = `${editorId}Label`
+
   if (!editor) {
     return null
   }
+
+  editor.on("update", () => {
+    if (errorState) setErrorState(false)
+  })
+
+  editor.on("create", () => {
+    editor?.view.setProps({
+      attributes: { "aria-labelledby": labelId, role: "textbox" },
+    })
+  })
 
   const characterCount = editor?.storage?.characterCount?.characters()
   const overLimit = characterCount > characterLimit
 
   return (
     <>
-      <div className={`${styles["editor"]} ${overLimit ? styles["error"] : ""}`}>
+      <label id={labelId}>
+        <span className={`${styles["label"]} ${errorState ? styles["error-text"] : null}`}>
+          {label}
+        </span>
+      </label>
+      <div className={`${styles["editor"]} ${overLimit || errorState ? styles["error"] : ""}`}>
         <MenuBar editor={editor} />
         <EditorContent editor={editor} id={editorId} data-testid={editorId} />
       </div>
@@ -207,6 +283,7 @@ export const TextEditor = ({ characterLimit = 1000, editor, editorId }: TextEdit
       >
         {getCharacterString(characterCount, characterLimit)}
       </div>
+      {errorState && errorMessage ? <div className={"error-message"}>{errorMessage}</div> : null}
     </>
   )
 }

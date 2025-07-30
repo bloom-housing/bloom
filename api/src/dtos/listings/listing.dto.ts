@@ -966,14 +966,12 @@ class Listing extends AbstractDTO {
   marketingType?: MarketingTypeEnum;
 
   @Expose()
-  @Type(() => Date)
   @ValidateIf((o) => o.marketingType === MarketingTypeEnum.comingSoon, {
     groups: [ValidationsGroupsEnum.default],
   })
-  @IsDate({ groups: [ValidationsGroupsEnum.default] })
-  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
-  marketingDate?: Date | null;
+  marketingYear?: number;
 
   @Expose()
   @ValidateListingPublish('marketingSeason', {

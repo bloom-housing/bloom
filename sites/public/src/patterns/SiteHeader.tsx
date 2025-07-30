@@ -140,7 +140,7 @@ const HeaderLink = (props: HeaderLinkProps) => {
             toggleSubmenu(props.link.label, false, props.openSubmenu, props.setOpenSubmenu)
           }}
           aria-expanded={openSubMenu}
-          aria-controls={`${props.link.label}-submenu`}
+          aria-controls={`${props.link.label.replace(/\s/g, "")}-submenu`}
           ref={parentLink}
           id={props.link.label}
           onKeyDown={(event) => {
@@ -180,7 +180,7 @@ const HeaderLink = (props: HeaderLinkProps) => {
               openSubMenu ? styles["show-submenu"] : styles["hide-submenu"]
             }`}
             ref={props.clickRef}
-            id={`${props.link.label}-submenu`}
+            id={`${props.link.label.replace(/\s/g, "")}-submenu`}
           >
             {props.link.submenuLinks.map((submenuLink, index) => {
               if (submenuLink.href) {
