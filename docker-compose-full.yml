@@ -19,7 +19,7 @@ services:
   api:
     build:
       context: ./api
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
     container_name: bloom-api
     env_file:
       - ./api/.env

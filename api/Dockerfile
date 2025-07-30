@@ -1,8 +1,10 @@
-FROM node:18.19
+#####################
+##### Run image #####
+#####################
+FROM node:18.20-alpine AS run
 
-RUN apt-get update 
-RUN apt-get install -y postgresql-client \
-  && rm -rf /var/lib/apt/lists/*
+# install the appropriate openSSL package in order to run all commands
+RUN ln -s /usr/lib/libssl.so.3 /lib/libssl.so.3
 
 WORKDIR /usr/src/api
 
@@ -13,9 +15,13 @@ COPY . .
 RUN yarn prisma generate
 RUN yarn build
 
-COPY entrypoint.sh .
-RUN chmod +x entrypoint.sh
-
 EXPOSE 3100
-ENTRYPOINT ["./entrypoint.sh"]
+CMD ["yarn", "start:prod"]
 
+###########################
+##### Migration image #####
+###########################
+FROM run AS migrate
+
+# command to run the migrations
+CMD ["yarn", "db:migration:run"]
