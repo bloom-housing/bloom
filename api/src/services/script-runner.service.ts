@@ -570,7 +570,9 @@ export class ScriptRunnerService {
           console.log(
             `migrating ${listingMultiselectQuestions.length} listing multiselect questions`,
           );
-          listingMultiselectQuestions.forEach(async (lmq) => {
+          for (let i = 0; i < listingMultiselectQuestions.length; i++) {
+            const lmq = listingMultiselectQuestions[i];
+
             try {
               await this.prisma.listingMultiselectQuestions.create({
                 data: {
@@ -585,7 +587,7 @@ export class ScriptRunnerService {
                 `unable to migrate listing multiselect question ${lmq.multiselect_question_id} to listing ${createdListing.id}`,
               );
             }
-          });
+          }
         }
 
         // Migrate all events that don't have a file associated to it
