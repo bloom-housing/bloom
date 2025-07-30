@@ -324,33 +324,39 @@ const RankingsAndResults = ({
             <Grid.Row columns={3}>
               {enableWaitlistAdditionalFields && (
                 <>
-                  <Field
-                    name="waitlistMaxSize"
-                    id="waitlistMaxSize"
-                    register={register}
-                    label={t("listings.waitlist.maxSizeQuestion")}
-                    placeholder={""}
-                    type={"number"}
-                    subNote={t("t.recommended")}
-                  />
-                  <Field
-                    name="waitlistCurrentSize"
-                    id="waitlistCurrentSize"
-                    register={register}
-                    label={t("listings.waitlist.currentSizeQuestion")}
-                    placeholder={""}
-                    type={"number"}
-                  />
+                  <Grid.Cell>
+                    <Field
+                      name="waitlistMaxSize"
+                      id="waitlistMaxSize"
+                      register={register}
+                      label={t("listings.waitlist.maxSizeQuestion")}
+                      placeholder={""}
+                      type={"number"}
+                      subNote={t("t.recommended")}
+                    />
+                  </Grid.Cell>
+                  <Grid.Cell>
+                    <Field
+                      name="waitlistCurrentSize"
+                      id="waitlistCurrentSize"
+                      register={register}
+                      label={t("listings.waitlist.currentSizeQuestion")}
+                      placeholder={""}
+                      type={"number"}
+                    />
+                  </Grid.Cell>
                 </>
               )}
-              <Field
-                name="waitlistOpenSpots"
-                id="waitlistOpenSpots"
-                register={register}
-                label={t("listings.waitlist.openSizeQuestion")}
-                placeholder={""}
-                type={"number"}
-              />
+              <Grid.Cell>
+                <Field
+                  name="waitlistOpenSpots"
+                  id="waitlistOpenSpots"
+                  register={register}
+                  label={t("listings.waitlist.openSizeQuestion")}
+                  placeholder={""}
+                  type={"number"}
+                />
+              </Grid.Cell>
             </Grid.Row>
           )}
         <Grid.Row columns={3}>

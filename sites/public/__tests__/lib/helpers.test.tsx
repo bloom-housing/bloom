@@ -288,7 +288,7 @@ describe("helpers", () => {
           true,
           MarketingTypeEnum.comingSoon,
           MarketingSeasonEnum.spring,
-          new Date(2026, 1, 1),
+          2026,
           false
         )
       ).toEqual("Residents should apply in Spring 2026")

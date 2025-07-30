@@ -125,7 +125,7 @@ const ApplicationsList = () => {
   return (
     <Layout>
       <Head>
-        <title>{t("nav.siteTitlePartners")}</title>
+        <title>{`Applications - ${t("nav.siteTitlePartners")}`}</title>
       </Head>
       <NavigationHeader
         title={listingName}

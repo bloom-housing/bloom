@@ -186,130 +186,142 @@ const ApplicationAddress = ({ listing, requiredFields }: ApplicationAddressProps
         subheading={t("listings.sections.applicationAddressSubtitle")}
       >
         <Grid.Row columns={3}>
-          <FieldGroup
-            name="canApplicationsBeMailedIn"
-            type="radio"
-            register={register}
-            fieldLabelClassName={`${styles["label-option"]} seeds-m-bs-2`}
-            groupLabel={"Can applications be mailed in?"}
-            fields={[
-              {
-                ...yesNoRadioOptions[0],
-                id: "applicationsMailedInYes",
-                defaultChecked:
-                  isNullOrUndefined(listing?.listingsApplicationMailingAddress) === false ||
-                  isNullOrUndefined(listing?.applicationMailingAddressType) === false,
-              },
-              {
-                ...yesNoRadioOptions[1],
-                id: "applicationsMailedInNo",
-                defaultChecked:
-                  listing?.listingsApplicationMailingAddress === null &&
-                  listing?.applicationMailingAddressType === null,
-              },
-            ]}
-          />
-          <FieldGroup
-            name="canPaperApplicationsBePickedUp"
-            type="radio"
-            register={register}
-            fieldLabelClassName={`${styles["label-option"]} seeds-m-bs-2`}
-            groupLabel={t("listings.applicationPickupQuestion")}
-            fields={[
-              {
-                ...yesNoRadioOptions[0],
-                id: "applicationsPickedUpYes",
-                defaultChecked:
-                  isNullOrUndefined(listing?.listingsApplicationPickUpAddress) === false ||
-                  isNullOrUndefined(listing?.applicationPickUpAddressType) === false,
-              },
-              {
-                ...yesNoRadioOptions[1],
-                id: "applicationsPickedUpNo",
-                defaultChecked:
-                  listing?.listingsApplicationPickUpAddress === null &&
-                  listing?.applicationPickUpAddressType === null,
-              },
-            ]}
-          />
-          <FieldGroup
-            name="canApplicationsBeDroppedOff"
-            type="radio"
-            register={register}
-            fieldLabelClassName={`${styles["label-option"]} seeds-m-bs-2`}
-            groupLabel={t("listings.applicationDropOffQuestion")}
-            fields={[
-              {
-                ...yesNoRadioOptions[0],
-                id: "applicationsDroppedOffYes",
-                defaultChecked:
-                  isNullOrUndefined(listing?.listingsApplicationDropOffAddress) === false ||
-                  isNullOrUndefined(listing?.applicationDropOffAddressType) === false,
-              },
-              {
-                ...yesNoRadioOptions[1],
-                id: "applicationsDroppedOffNo",
-                defaultChecked:
-                  listing?.listingsApplicationDropOffAddress === null &&
-                  listing?.applicationDropOffAddressType === null,
-              },
-            ]}
-          />
-        </Grid.Row>
-        <Grid.Row columns={3}>
-          {applicationsMailedIn === YesNoEnum.yes ? (
+          <Grid.Cell>
             <FieldGroup
-              fieldGroupClassName="grid grid-cols-1"
-              fieldClassName="ml-0"
-              name="whereApplicationsMailedIn"
+              name="canApplicationsBeMailedIn"
               type="radio"
               register={register}
               fieldLabelClassName={`${styles["label-option"]} seeds-m-bs-2`}
-              groupLabel={"Where are applications mailed in?"}
-              fields={getLocationOptions(
-                "mailIn",
-                listing?.applicationMailingAddressType,
-                isNullOrUndefined(listing?.listingsApplicationMailingAddress) === false
-              )}
+              groupLabel={"Can applications be mailed in?"}
+              fields={[
+                {
+                  ...yesNoRadioOptions[0],
+                  id: "applicationsMailedInYes",
+                  defaultChecked:
+                    isNullOrUndefined(listing?.listingsApplicationMailingAddress) === false ||
+                    isNullOrUndefined(listing?.applicationMailingAddressType) === false,
+                },
+                {
+                  ...yesNoRadioOptions[1],
+                  id: "applicationsMailedInNo",
+                  defaultChecked:
+                    listing?.listingsApplicationMailingAddress === null &&
+                    listing?.applicationMailingAddressType === null,
+                },
+              ]}
             />
+          </Grid.Cell>
+          <Grid.Cell>
+            <FieldGroup
+              name="canPaperApplicationsBePickedUp"
+              type="radio"
+              register={register}
+              fieldLabelClassName={`${styles["label-option"]} seeds-m-bs-2`}
+              groupLabel={t("listings.applicationPickupQuestion")}
+              fields={[
+                {
+                  ...yesNoRadioOptions[0],
+                  id: "applicationsPickedUpYes",
+                  defaultChecked:
+                    isNullOrUndefined(listing?.listingsApplicationPickUpAddress) === false ||
+                    isNullOrUndefined(listing?.applicationPickUpAddressType) === false,
+                },
+                {
+                  ...yesNoRadioOptions[1],
+                  id: "applicationsPickedUpNo",
+                  defaultChecked:
+                    listing?.listingsApplicationPickUpAddress === null &&
+                    listing?.applicationPickUpAddressType === null,
+                },
+              ]}
+            />
+          </Grid.Cell>
+          <Grid.Cell>
+            <FieldGroup
+              name="canApplicationsBeDroppedOff"
+              type="radio"
+              register={register}
+              fieldLabelClassName={`${styles["label-option"]} seeds-m-bs-2`}
+              groupLabel={t("listings.applicationDropOffQuestion")}
+              fields={[
+                {
+                  ...yesNoRadioOptions[0],
+                  id: "applicationsDroppedOffYes",
+                  defaultChecked:
+                    isNullOrUndefined(listing?.listingsApplicationDropOffAddress) === false ||
+                    isNullOrUndefined(listing?.applicationDropOffAddressType) === false,
+                },
+                {
+                  ...yesNoRadioOptions[1],
+                  id: "applicationsDroppedOffNo",
+                  defaultChecked:
+                    listing?.listingsApplicationDropOffAddress === null &&
+                    listing?.applicationDropOffAddressType === null,
+                },
+              ]}
+            />
+          </Grid.Cell>
+        </Grid.Row>
+        <Grid.Row columns={3}>
+          {applicationsMailedIn === YesNoEnum.yes ? (
+            <Grid.Cell>
+              <FieldGroup
+                fieldGroupClassName="grid grid-cols-1"
+                fieldClassName="ml-0"
+                name="whereApplicationsMailedIn"
+                type="radio"
+                register={register}
+                fieldLabelClassName={`${styles["label-option"]} seeds-m-bs-2`}
+                groupLabel={"Where are applications mailed in?"}
+                fields={getLocationOptions(
+                  "mailIn",
+                  listing?.applicationMailingAddressType,
+                  isNullOrUndefined(listing?.listingsApplicationMailingAddress) === false
+                )}
+              />
+            </Grid.Cell>
           ) : (
             <Grid.Cell> </Grid.Cell>
           )}
 
           {applicationsPickedUp === YesNoEnum.yes ? (
-            <FieldGroup
-              fieldGroupClassName="grid grid-cols-1"
-              fieldClassName="ml-0"
-              name="whereApplicationsPickedUp"
-              type="radio"
-              register={register}
-              fieldLabelClassName={`${styles["label-option"]} seeds-m-bs-2`}
-              groupLabel={t("listings.wherePickupQuestion")}
-              fields={getLocationOptions(
-                "pickUp",
-                listing?.applicationPickUpAddressType,
-                isNullOrUndefined(listing?.listingsApplicationPickUpAddress) === false
-              )}
-            />
+            <Grid.Cell>
+              <FieldGroup
+                fieldGroupClassName="grid grid-cols-1"
+                fieldClassName="ml-0"
+                name="whereApplicationsPickedUp"
+                type="radio"
+                register={register}
+                fieldLabelClassName={`${styles["label-option"]} seeds-m-bs-2`}
+                groupLabel={t("listings.wherePickupQuestion")}
+                fields={getLocationOptions(
+                  "pickUp",
+                  listing?.applicationPickUpAddressType,
+                  isNullOrUndefined(listing?.listingsApplicationPickUpAddress) === false
+                )}
+              />
+            </Grid.Cell>
           ) : (
             <Grid.Cell> </Grid.Cell>
           )}
 
           {applicationsDroppedOff === YesNoEnum.yes ? (
-            <FieldGroup
-              fieldGroupClassName="grid grid-cols-1"
-              fieldClassName="ml-0"
-              name="whereApplicationsDroppedOff"
-              type="radio"
-              register={register}
-              fieldLabelClassName={`${styles["label-option"]} seeds-m-bs-2`}
-              groupLabel={t("listings.whereDropOffQuestion")}
-              fields={getLocationOptions(
-                "dropOff",
-                listing?.applicationDropOffAddressType,
-                isNullOrUndefined(listing?.listingsApplicationDropOffAddress) === false
-              )}
-            />
+            <Grid.Cell>
+              <FieldGroup
+                fieldGroupClassName="grid grid-cols-1"
+                fieldClassName="ml-0"
+                name="whereApplicationsDroppedOff"
+                type="radio"
+                register={register}
+                fieldLabelClassName={`${styles["label-option"]} seeds-m-bs-2`}
+                groupLabel={t("listings.whereDropOffQuestion")}
+                fields={getLocationOptions(
+                  "dropOff",
+                  listing?.applicationDropOffAddressType,
+                  isNullOrUndefined(listing?.listingsApplicationDropOffAddress) === false
+                )}
+              />
+            </Grid.Cell>
           ) : (
             <Grid.Cell> </Grid.Cell>
           )}
@@ -662,25 +674,27 @@ const ApplicationAddress = ({ listing, requiredFields }: ApplicationAddressProps
           )}
 
         <Grid.Row columns={3}>
-          <FieldGroup
-            name="arePostmarksConsidered"
-            type="radio"
-            fieldLabelClassName={`${styles["label-option"]} seeds-m-bs-2`}
-            groupLabel={t("listings.postmarksConsideredQuestion")}
-            register={register}
-            fields={[
-              {
-                ...yesNoRadioOptions[0],
-                id: "postmarksConsideredYes",
-                defaultChecked: listing && listing.postmarkedApplicationsReceivedByDate !== null,
-              },
-              {
-                ...yesNoRadioOptions[1],
-                id: "postmarksConsideredNo",
-                defaultChecked: listing && listing.postmarkedApplicationsReceivedByDate === null,
-              },
-            ]}
-          />
+          <Grid.Cell>
+            <FieldGroup
+              name="arePostmarksConsidered"
+              type="radio"
+              fieldLabelClassName={`${styles["label-option"]} seeds-m-bs-2`}
+              groupLabel={t("listings.postmarksConsideredQuestion")}
+              register={register}
+              fields={[
+                {
+                  ...yesNoRadioOptions[0],
+                  id: "postmarksConsideredYes",
+                  defaultChecked: listing && listing.postmarkedApplicationsReceivedByDate !== null,
+                },
+                {
+                  ...yesNoRadioOptions[1],
+                  id: "postmarksConsideredNo",
+                  defaultChecked: listing && listing.postmarkedApplicationsReceivedByDate === null,
+                },
+              ]}
+            />
+          </Grid.Cell>
           <Grid.Cell className={"mt-4"}>
             {postmarksConsidered === YesNoEnum.yes && (
               <DateField
