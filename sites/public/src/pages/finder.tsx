@@ -2,6 +2,7 @@ import {
   FeatureFlagEnum,
   Jurisdiction,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { t } from "@bloom-housing/ui-components"
 import RentalsFinder from "../components/finder/RentalsFinder"
 import Layout from "../layouts/application"
 import { fetchJurisdictionByName } from "../lib/hooks"
@@ -14,7 +15,7 @@ export default function Finder({ jurisdiction }: { jurisdiction: Jurisdiction })
     ) || []
 
   return (
-    <Layout>
+    <Layout pageTitle={t("pageTitle.rentalFinder")}>
       <RentalsFinder activeFeatureFlags={activeFeatureFlags} />
     </Layout>
   )
