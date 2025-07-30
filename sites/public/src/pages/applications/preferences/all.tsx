@@ -1,19 +1,12 @@
 import React from "react"
 import { t } from "@bloom-housing/ui-components"
-import {
-  FeatureFlagEnum,
-  MultiselectQuestionsApplicationSectionEnum,
-} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { MultiselectQuestionsApplicationSectionEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { listingSectionQuestions } from "@bloom-housing/shared-helpers"
 import ApplicationMultiselectQuestionStep from "../../../components/applications/ApplicationMultiselectQuestionStep"
 import { useFormConductor } from "../../../lib/hooks"
 
 const ApplicationPreferencesAll = () => {
-  const { conductor, listing } = useFormConductor("preferences")
-
-  const swapCommunityTypeWithPrograms = conductor.config.featureFlags?.some(
-    (flag) => flag.name === FeatureFlagEnum.swapCommunityTypeWithPrograms && flag.active
-  )
+  const { listing } = useFormConductor("preferences")
 
   return (
     <ApplicationMultiselectQuestionStep
@@ -29,7 +22,7 @@ const ApplicationPreferencesAll = () => {
         title: t("application.preferences.title"),
         subTitle: t("application.preferences.preamble"),
       }}
-      swapCommunityTypeWithPrograms={swapCommunityTypeWithPrograms}
+      swapCommunityTypeWithPrograms={false}
     />
   )
 }
