@@ -2,6 +2,7 @@ import React, { useState, useCallback, useContext, useEffect } from "react"
 import { useRouter } from "next/router"
 import dayjs from "dayjs"
 import { useEditor } from "@tiptap/react"
+import { CharacterCount as CharacterCountExtension } from "@tiptap/extension-character-count"
 import { t, Form, AlertBox, LoadingOverlay, LatitudeLongitude } from "@bloom-housing/ui-components"
 import { Button, Icon, Tabs } from "@bloom-housing/ui-seeds"
 import ChevronLeftIcon from "@heroicons/react/20/solid/ChevronLeftIcon"
@@ -58,8 +59,6 @@ import SaveBeforeExitDialog from "./dialogs/SaveBeforeExitDialog"
 import ListingVerification from "./sections/ListingVerification"
 import NeighborhoodAmenities from "./sections/NeighborhoodAmenities"
 import PreferencesAndPrograms from "./sections/PreferencesAndPrograms"
-
-const extensions = EditorExtensions
 
 const CHARACTER_LIMIT = 1000
 
@@ -154,13 +153,13 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
   const [requestChangesDialog, setRequestChangesDialog] = useState(false)
 
   const whatToExpectEditor = useEditor({
-    extensions,
+    extensions: [...EditorExtensions, CharacterCountExtension.configure()],
     content: !listing ? t("whatToExpect.default") : listing?.whatToExpect,
     immediatelyRender: false,
   })
 
   const whatToExpectAdditionalDetailsEditor = useEditor({
-    extensions,
+    extensions: [...EditorExtensions, CharacterCountExtension.configure()],
     content: !listing
       ? t("whatToExpectAdditionalText.default")
       : listing?.whatToExpectAdditionalText,
