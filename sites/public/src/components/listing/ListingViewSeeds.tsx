@@ -45,6 +45,7 @@ import { Neighborhood } from "./listing_sections/Neighborhood"
 import { RentSummary } from "./listing_sections/RentSummary"
 import { UnitSummaries } from "./listing_sections/UnitSummaries"
 import styles from "./ListingViewSeeds.module.scss"
+import { ReadMore } from "../../patterns/ReadMore"
 
 interface ListingProps {
   listing: Listing
@@ -136,7 +137,23 @@ export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: Li
     <>
       {listing.whatToExpect && (
         <InfoCard heading={t("whatToExpect.label")}>
-          <Markdown className={"bloom-markdown"}>{listing.whatToExpect}</Markdown>
+          <div className={"bloom-markdown"}>
+            <Markdown>{listing.whatToExpect}</Markdown>
+          </div>
+        </InfoCard>
+      )}
+    </>
+  )
+
+  const WhatToExpectAdditionalText = (
+    <>
+      {listing.whatToExpectAdditionalText && (
+        <InfoCard heading={t("whatToExpectAdditionalText.label")}>
+          <ReadMore
+            className={"bloom-markdown"}
+            maxLength={140}
+            content={listing.whatToExpectAdditionalText}
+          />
         </InfoCard>
       )}
     </>
@@ -201,6 +218,7 @@ export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: Li
       {LotteryEvent}
       {ReferralApplication}
       {WhatToExpect}
+      {WhatToExpectAdditionalText}
       <LeasingAgent
         address={listing.listingsLeasingAgentAddress}
         email={listing.leasingAgentEmail}

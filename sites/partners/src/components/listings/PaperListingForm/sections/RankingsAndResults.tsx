@@ -24,6 +24,7 @@ type RankingsAndResultsProps = {
   listing?: FormListing
   requiredFields: string[]
   whatToExpectEditor: Editor
+  whatToExpectAdditionalTextEditor: Editor
 }
 
 const RankingsAndResults = ({
@@ -31,6 +32,7 @@ const RankingsAndResults = ({
   listing,
   requiredFields,
   whatToExpectEditor,
+  whatToExpectAdditionalTextEditor,
 }: RankingsAndResultsProps) => {
   const formMethods = useFormContext()
   const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
@@ -367,6 +369,21 @@ const RankingsAndResults = ({
               error={fieldHasError(errors?.whatToExpect)}
               label={getLabel("whatToExpect", requiredFields, t("listings.whatToExpectLabel"))}
               errorMessage={fieldMessage(errors.whatToExpect)}
+            />
+          </Grid.Cell>
+        </Grid.Row>
+        <Grid.Row columns={3}>
+          <Grid.Cell className="seeds-grid-span-2">
+            <TextEditor
+              editor={whatToExpectAdditionalTextEditor}
+              editorId={"whatToExpectAdditionalText"}
+              error={fieldHasError(errors?.whatToExpectAdditionalText)}
+              label={getLabel(
+                "whatToExpectAdditionalText",
+                requiredFields,
+                t("listings.whatToExpectAdditionalTextLabel")
+              )}
+              errorMessage={fieldMessage(errors.whatToExpectAdditionalText)}
             />
           </Grid.Cell>
         </Grid.Row>
