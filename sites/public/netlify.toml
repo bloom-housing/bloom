@@ -1,20 +1,10 @@
 [build]
 
-command = "yarn run build"
-ignore = "/bin/false"
-
-[[plugins]]
-package = "@netlify/plugin-nextjs"
 
 [build.environment]
-
-NODE_VERSION = "18.14.2"
-YARN_VERSION = "1.22.4"
-NEXT_TELEMETRY_DISABLED = "1"
-NODE_OPTIONS = "--max_old_space_size=4096"
 
 # reminder: URLs and fragments should *not* have a trailing /
 LISTINGS_QUERY = "/listings"
 
 [context.branch-deploy.environment]
-GTM_KEY = "GTM-KF22FJP"
+

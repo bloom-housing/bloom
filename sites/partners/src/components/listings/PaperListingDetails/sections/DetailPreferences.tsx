@@ -1,6 +1,6 @@
 import React, { useContext, useMemo } from "react"
 import { t, MinimalTable } from "@bloom-housing/ui-components"
-import { FieldValue } from "@bloom-housing/ui-seeds"
+import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { ListingContext } from "../../ListingContext"
 import { AuthContext, listingSectionQuestions } from "@bloom-housing/shared-helpers"
 import {
@@ -40,17 +40,21 @@ const DetailPreferences = () => {
 
   return (
     <SectionWithGrid heading={t("listings.sections.housingPreferencesTitle")} inset bypassGrid>
-      <SectionWithGrid.HeadingRow>{t("listings.activePreferences")}</SectionWithGrid.HeadingRow>
-      {preferenceTableData.length ? (
-        <MinimalTable
-          id="preferenceTable"
-          className="spacer-section-above"
-          headers={preferencesTableHeaders}
-          data={preferenceTableData}
-        />
-      ) : (
-        <FieldValue className="spacer-section-above">{t("t.none")}</FieldValue>
-      )}
+      <Grid.Row>
+        <Grid.Cell>
+          <SectionWithGrid.HeadingRow>{t("listings.activePreferences")}</SectionWithGrid.HeadingRow>
+          {preferenceTableData.length ? (
+            <MinimalTable
+              id="preferenceTable"
+              className="spacer-section-above"
+              headers={preferencesTableHeaders}
+              data={preferenceTableData}
+            />
+          ) : (
+            <FieldValue className="spacer-section-above">{t("t.none")}</FieldValue>
+          )}
+        </Grid.Cell>
+      </Grid.Row>
     </SectionWithGrid>
   )
 }

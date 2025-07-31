@@ -10,17 +10,19 @@ const DetailsTerms = () => {
   return (
     <SectionWithGrid heading={t("application.review.terms.title")} inset>
       <Grid.Row>
-        <FieldValue label={t("application.details.signatureOnTerms")} testId="signatureOnTerms">
-          {(() => {
-            if (application.acceptedTerms === null) {
-              return t("t.n/a")
-            } else if (application.acceptedTerms) {
-              return t("t.yes")
-            } else {
-              return t("t.no")
-            }
-          })()}
-        </FieldValue>
+        <Grid.Cell>
+          <FieldValue label={t("application.details.signatureOnTerms")} testId="signatureOnTerms">
+            {(() => {
+              if (application.acceptedTerms === null) {
+                return t("t.n/a")
+              } else if (application.acceptedTerms) {
+                return t("t.yes")
+              } else {
+                return t("t.no")
+              }
+            })()}
+          </FieldValue>
+        </Grid.Cell>
       </Grid.Row>
     </SectionWithGrid>
   )
