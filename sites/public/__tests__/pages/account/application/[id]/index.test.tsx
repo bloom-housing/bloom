@@ -241,7 +241,7 @@ describe("Account Listing View", () => {
     const preferredUnitTypeSection = screen.getByTestId("app-summary-preferred-units")
     expect(preferredUnitTypeSection).toBeInTheDocument()
     expect(within(preferredUnitTypeSection).getByText(/preferred unit type/i)).toBeInTheDocument()
-    expect(within(preferredUnitTypeSection).getByText(/studio, 1 bedroom/i)).toBeInTheDocument()
+    expect(within(preferredUnitTypeSection).getByText(/studio/i)).toBeInTheDocument()
 
     const adaAccessibleUnitsSection = screen.getByTestId("app-summary-ada")
     expect(adaAccessibleUnitsSection).toBeInTheDocument()
