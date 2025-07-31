@@ -2,6 +2,7 @@
 5.5 View
 Optional application summary
 */
+import { t } from "@bloom-housing/ui-components"
 import FormsLayout from "../../layouts/forms"
 import { AppSubmissionContext } from "../../lib/applications/AppSubmissionContext"
 import React, { useContext, useEffect } from "react"
@@ -22,7 +23,7 @@ const ApplicationView = () => {
   }, [profile])
 
   return (
-    <FormsLayout>
+    <FormsLayout pageTitle={`${t("application.viewApplication")} - ${listing?.name}`}>
       <SubmittedApplicationView
         application={application}
         listing={listing}
