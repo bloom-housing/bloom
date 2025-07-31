@@ -197,6 +197,7 @@ const ApplicationsList = () => {
         membersDrawer={membersDrawer}
         setMembersDrawer={setMembersDrawer}
         enableFullTimeStudentQuestion={enableFullTimeStudentQuestion}
+        disableWorkInRegion={disableWorkInRegion}
       />
     </ApplicationContext.Provider>
   )
