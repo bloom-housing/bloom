@@ -8,6 +8,7 @@ const ApplicationCommunityTypes = () => {
       applicationSection={MultiselectQuestionsApplicationSectionEnum.programs}
       applicationStep={"communityTypes"}
       applicationSectionNumber={3}
+      swapCommunityTypeWithPrograms={true}
     />
   )
 }
