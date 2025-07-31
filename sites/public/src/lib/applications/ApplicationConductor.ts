@@ -221,8 +221,6 @@ export default class ApplicationConductor {
     const stepIndex = this.steps.findIndex((step) => step.name === stepName)
     if (stepIndex >= 0) {
       this.currentStepIndex = stepIndex
-    } else {
-      console.error(`There is no step defined which matches ${stepName}`)
     }
   }
 

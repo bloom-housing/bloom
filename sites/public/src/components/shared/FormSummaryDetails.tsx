@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 import { MultiLineAddress, t } from "@bloom-housing/ui-components"
 import { Card, FieldValue, Heading, Link } from "@bloom-housing/ui-seeds"
 import {

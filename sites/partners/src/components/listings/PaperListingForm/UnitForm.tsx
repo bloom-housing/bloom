@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from "react"
 import { t, Field, Select, FieldGroup, Form, numberOptions } from "@bloom-housing/ui-components"
-import { Button, Card, Drawer, FieldValue, Grid } from "@bloom-housing/ui-seeds"
+import { Button, Card, Drawer, Grid } from "@bloom-housing/ui-seeds"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import { useForm, useWatch, useFormContext } from "react-hook-form"
 import { TempUnit } from "../../../lib/listings/formTypes"
@@ -13,6 +13,7 @@ import {
 import { useAmiChartList, useUnitPriorityList, useUnitTypeList } from "../../../lib/hooks"
 import { arrayToFormOptions, getRentType, fieldHasError } from "../../../lib/helpers"
 import SectionWithGrid from "../../shared/SectionWithGrid"
+import styles from "./ListingForm.module.scss"
 
 type UnitFormProps = {
   onSubmit: (unit: TempUnit) => void
@@ -382,25 +383,21 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
             <Card.Section>
               <SectionWithGrid heading={t("listings.unit.details")}>
                 <Grid.Row columns={4}>
-                  <FieldValue label={t("listings.unit.unitNumber")}>
+                  <Grid.Cell>
                     <Field
                       id="number"
                       name="number"
                       label={t("listings.unit.unitNumber")}
-                      placeholder={t("listings.unit.unitNumber")}
                       register={register}
                       type="text"
-                      readerOnly
                     />
-                  </FieldValue>
-
-                  <FieldValue label={t("listings.unit.type")}>
+                  </Grid.Cell>
+                  <Grid.Cell>
                     <Select
                       id="unitTypes.id"
                       name="unitTypes.id"
                       label={t("listings.unit.type")}
                       placeholder={t("listings.unit.type")}
-                      labelClassName="sr-only"
                       register={register}
                       controlClassName="control"
                       options={unitTypesOptions}
@@ -413,15 +410,13 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
                         },
                       }}
                     />
-                  </FieldValue>
-
-                  <FieldValue label={t("listings.unit.numBathrooms")}>
+                  </Grid.Cell>
+                  <Grid.Cell>
                     <Select
                       id="numBathrooms"
                       name="numBathrooms"
                       label={t("listings.unit.numBathrooms")}
                       placeholder={t("listings.unit.numBathrooms")}
-                      labelClassName="sr-only"
                       register={register}
                       controlClassName="control"
                       options={[
@@ -429,40 +424,34 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
                         ...numberOptions(5),
                       ]}
                     />
-                  </FieldValue>
-
-                  <FieldValue label={t("listings.unit.floor")}>
+                  </Grid.Cell>
+                  <Grid.Cell>
                     <Select
                       id="floor"
                       name="floor"
                       label={t("listings.unit.floor")}
                       placeholder={t("listings.unit.floor")}
-                      labelClassName="sr-only"
                       register={register}
                       controlClassName="control"
                       options={numberOptions(10)}
                     />
-                  </FieldValue>
-
-                  <FieldValue label={t("listings.unit.squareFootage")}>
+                  </Grid.Cell>
+                  <Grid.Cell>
                     <Field
                       id="sqFeet"
                       name="sqFeet"
                       label={t("listings.unit.squareFootage")}
-                      placeholder={t("listings.unit.squareFootage")}
                       register={register}
-                      readerOnly
                       type="number"
                     />
-                  </FieldValue>
+                  </Grid.Cell>
 
-                  <FieldValue label={t("listings.unit.minOccupancy")}>
+                  <Grid.Cell>
                     <Select
                       id="minOccupancy"
                       name="minOccupancy"
                       label={t("listings.unit.minOccupancy")}
                       placeholder={t("listings.unit.minOccupancy")}
-                      labelClassName="sr-only"
                       register={register}
                       controlClassName="control"
                       options={numberOptions(numberOccupancyOptions)}
@@ -476,15 +465,13 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
                         },
                       }}
                     />
-                  </FieldValue>
-
-                  <FieldValue label={t("listings.unit.maxOccupancy")}>
+                  </Grid.Cell>
+                  <Grid.Cell>
                     <Select
                       id="maxOccupancy"
                       name="maxOccupancy"
                       label={t("listings.unit.maxOccupancy")}
                       placeholder={t("listings.unit.maxOccupancy")}
-                      labelClassName="sr-only"
                       register={register}
                       controlClassName="control"
                       options={numberOptions(numberOccupancyOptions)}
@@ -498,20 +485,19 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
                         },
                       }}
                     />
-                  </FieldValue>
+                  </Grid.Cell>
                 </Grid.Row>
               </SectionWithGrid>
 
               <hr className="spacer-section-above spacer-section" />
               <SectionWithGrid heading={t("listings.unit.eligibility")}>
                 <Grid.Row columns={4}>
-                  <FieldValue label={t("listings.unit.amiChart")}>
+                  <Grid.Cell>
                     <Select
                       id="amiChart.id"
                       name="amiChart.id"
                       label={t("listings.unit.amiChart")}
                       placeholder={t("listings.unit.amiChart")}
-                      labelClassName="sr-only"
                       register={register}
                       controlClassName="control"
                       options={amiChartsOptions}
@@ -533,14 +519,13 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
                         },
                       }}
                     />
-                  </FieldValue>
-
-                  <FieldValue label={t("listings.unit.amiPercentage")}>
+                  </Grid.Cell>
+                  <Grid.Cell>
                     <Select
+                      id={"amiPercentage"}
                       name="amiPercentage"
                       label={t("listings.unit.amiPercentage")}
                       placeholder={t("listings.unit.amiPercentage")}
-                      labelClassName="sr-only"
                       register={register}
                       controlClassName="control"
                       options={amiChartPercentageOptions}
@@ -555,7 +540,7 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
                       validation={{ required: !!amiChartID }}
                       disabled={!amiChartID}
                     />
-                  </FieldValue>
+                  </Grid.Cell>
                 </Grid.Row>
               </SectionWithGrid>
 
@@ -573,7 +558,7 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
 
               <Grid>
                 <Grid.Row columns={4}>
-                  <FieldValue label={t("listings.unit.rentType")}>
+                  <Grid.Cell>
                     <FieldGroup
                       name="rentType"
                       type="radio"
@@ -581,8 +566,10 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
                       fields={rentTypeOptions}
                       fieldClassName="m-0"
                       fieldGroupClassName="flex h-12 items-center"
+                      groupLabel={t("listings.unit.rentType")}
+                      fieldLabelClassName={styles["label-option"]}
                     />
-                  </FieldValue>
+                  </Grid.Cell>
 
                   {rentType === "fixed" && (
                     <>
