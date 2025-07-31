@@ -27,7 +27,7 @@ import {
   MultiselectQuestionsApplicationSectionEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
-export default function ApplicationsList() {
+const ApplicationsList = () => {
   const router = useRouter()
   const applicationId = router.query.id as string
   const { application } = useSingleApplicationData(applicationId)
@@ -201,3 +201,5 @@ export default function ApplicationsList() {
     </ApplicationContext.Provider>
   )
 }
+
+export default ApplicationsList

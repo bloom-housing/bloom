@@ -5,7 +5,7 @@ orbs:
 executors:
   cypress-node:
     docker:
-      - image: "cypress/base:18.14.1"
+      - image: "cypress/base:18.20.3"
       - image: "cimg/postgres:12.10"
         environment:
           POSTGRES_USER: bloom-ci
@@ -17,13 +17,12 @@ executors:
       PORT: "3100"
       EMAIL_API_KEY: "SG.SOME-LONG-SECRET-KEY"
       APP_SECRET: "CI-LONG-SECRET-KEY"
-      NODE_ENV: "development"
       # DB URL for migration and seeds:
-      DATABASE_URL: "postgres://bloom-ci@localhost:5432/bloom"
+      DATABASE_URL: "postgres://bloom-ci@127.0.0.1:5432/bloom"
       # DB URL for the jest tests per ormconfig.test.ts
-      TEST_DATABASE_URL: "postgres://bloom-ci@localhost:5432/bloom"
-      PARTNERS_PORTAL_URL: "http://localhost:3001"
-      BACKEND_API_BASE: "http://localhost:3100"
+      TEST_DATABASE_URL: "postgres://bloom-ci@127.0.0.1:5432/bloom"
+      PARTNERS_PORTAL_URL: "http://127.0.0.1:3001"
+      BACKEND_API_BASE: "http://127.0.0.1:3100"
       JURISDICTION_NAME: Bloomington
       GOOGLE_API_EMAIL: "secret-key"
       GOOGLE_API_ID: "secret-key"
@@ -43,7 +42,7 @@ executors:
 
   standard-node:
     docker:
-      - image: "cimg/node:18.14.2"
+      - image: "cimg/node:18.20.3"
       - image: "cimg/postgres:12.10"
         environment:
           POSTGRES_USER: bloom-ci

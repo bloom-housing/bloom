@@ -194,7 +194,11 @@ const ApplicationMember = () => {
   }, [profile])
 
   return (
-    <FormsLayout>
+    <FormsLayout
+      pageTitle={`${t("application.household.householdMember")} - ${t(
+        "listings.apply.applyOnline"
+      )} - ${listing?.name}`}
+    >
       <Form onSubmit={handleSubmit(onSubmit, onError)}>
         <ApplicationFormLayout
           listingName={listing?.name}
