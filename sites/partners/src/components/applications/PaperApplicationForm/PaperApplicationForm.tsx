@@ -73,6 +73,11 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
     listingDto?.jurisdictions.id
   )
 
+  const enableLimitedHowDidYouHear = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableLimitedHowDidYouHear,
+    listingDto?.jurisdictions.id
+  )
+
   const units = listingDto?.units
 
   const defaultValues = editMode ? mapApiToForm(application, listingDto) : {}
@@ -275,7 +280,10 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
                       sectionTitle={t("application.details.preferences")}
                     />
 
-                    <FormDemographics formValues={application?.demographics} />
+                    <FormDemographics
+                      formValues={application?.demographics}
+                      enableLimitedHowDidYouHear={enableLimitedHowDidYouHear}
+                    />
 
                     <FormTerms />
                   </div>

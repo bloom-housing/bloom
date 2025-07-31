@@ -1,8 +1,9 @@
 import React from "react"
 import { setupServer } from "msw/lib/node"
-import { fireEvent } from "@testing-library/react"
+import { fireEvent, screen } from "@testing-library/react"
 import { mockNextRouter, render } from "../../../testUtils"
 import ApplicationDemographics from "../../../../src/pages/applications/review/demographics"
+import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 window.scrollTo = jest.fn()
 
@@ -95,5 +96,66 @@ describe("applications pages", () => {
       fireEvent.click(getByText("Other / Multiracial"))
       expect(await findAllByTestId("otherMultiracial")).toHaveLength(2)
     })
+  })
+
+  it("should show full list of how did you hear fields", () => {
+    render(<ApplicationDemographics />)
+    expect(screen.getByText("How did you hear about this listing?")).toBeInTheDocument()
+    expect(screen.getByLabelText("Alameda County HCD Website")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Alameda County HCD Website" })).toBeInTheDocument()
+    expect(screen.getByLabelText("Developer Website")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Developer Website" })).toBeInTheDocument()
+    expect(screen.getByLabelText("Flyer")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Flyer" })).toBeInTheDocument()
+    expect(screen.getByLabelText("Email Alert")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Email Alert" })).toBeInTheDocument()
+    expect(screen.getByLabelText("Friend")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Friend" })).toBeInTheDocument()
+    expect(screen.getByLabelText("Friend")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Friend" })).toBeInTheDocument()
+    expect(screen.getByLabelText("Housing Counselor")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Housing Counselor" })).toBeInTheDocument()
+    expect(screen.getByLabelText("Radio Ad")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Radio Ad" })).toBeInTheDocument()
+    expect(screen.getByLabelText("Bus Ad")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Bus Ad" })).toBeInTheDocument()
+    expect(screen.getByLabelText("Other")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Other" })).toBeInTheDocument()
+  })
+
+  it("should show limited list of how did you hear fields when enableLimitedHowDidYouHear is on", () => {
+    jest.mock("../../../../src/lib/hooks", () => ({
+      useFormConductor: (stepName: string) => {
+        return {
+          conductor: {
+            config: {
+              featureFlags: [{ name: FeatureFlagEnum.enableLimitedHowDidYouHear, active: true }],
+            },
+          },
+        }
+      },
+    }))
+    render(<ApplicationDemographics />)
+    expect(screen.getByText("How did you hear about this listing?")).toBeInTheDocument()
+    expect(screen.getByLabelText("Alameda County HCD Website")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Alameda County HCD Website" })).toBeInTheDocument()
+    expect(screen.getByLabelText("Developer Website")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Developer Website" })).toBeInTheDocument()
+    expect(screen.getByLabelText("Flyer")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Flyer" })).toBeInTheDocument()
+    expect(screen.getByLabelText("Email Alert")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Email Alert" })).toBeInTheDocument()
+    expect(screen.getByLabelText("Friend")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Friend" })).toBeInTheDocument()
+    expect(screen.getByLabelText("Friend")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Friend" })).toBeInTheDocument()
+    expect(screen.getByLabelText("Housing Counselor")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Housing Counselor" })).toBeInTheDocument()
+    expect(screen.getByLabelText("Radio Ad")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Radio Ad" })).toBeInTheDocument()
+    expect(screen.getByLabelText("Bus Ad")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Bus Ad" })).toBeInTheDocument()
+    expect(screen.getByLabelText("Other")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Other" })).toBeInTheDocument()
   })
 })
