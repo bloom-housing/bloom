@@ -9,11 +9,13 @@ import SectionWithGrid from "../../../shared/SectionWithGrid"
 type DetailsHouseholdMembersProps = {
   setMembersDrawer: (member: MembersDrawer) => void
   enableFullTimeStudentQuestion?: boolean
+  disableWorkInRegion?: boolean
 }
 
 const DetailsHouseholdMembers = ({
   setMembersDrawer,
   enableFullTimeStudentQuestion,
+  disableWorkInRegion,
 }: DetailsHouseholdMembersProps) => {
   const application = useContext(ApplicationContext)
 
@@ -22,7 +24,9 @@ const DetailsHouseholdMembers = ({
     birth: "application.household.member.dateOfBirth",
     relationship: "t.relationship",
     sameResidence: "application.add.sameResidence",
-    workInRegion: "application.details.workInRegion",
+    ...(!disableWorkInRegion && {
+      workInRegion: "application.details.workInRegion",
+    }),
     ...(enableFullTimeStudentQuestion && {
       fullTimeStudent: "application.details.fullTimeStudent",
     }),

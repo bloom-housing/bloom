@@ -27,7 +27,7 @@ describe('Testing application export helpers', () => {
     zipCode: '67890',
   };
 
-  const csvHeaders: CsvHeader[] = [
+  const getCsvHeader = (disableWorkInRegion?: boolean): CsvHeader[] => [
     {
       path: 'id',
       label: 'Application Id',
@@ -88,10 +88,14 @@ describe('Testing application export helpers', () => {
       path: 'contactPreferences',
       label: 'Primary Applicant Preferred Contact Type',
     },
-    {
-      path: 'applicant.workInRegion',
-      label: `Primary Applicant Work in Region`,
-    },
+    ...(!disableWorkInRegion
+      ? [
+          {
+            path: 'applicant.workInRegion',
+            label: `Primary Applicant Work in Region`,
+          },
+        ]
+      : []),
     {
       path: 'applicant.applicantAddress.street',
       label: `Primary Applicant Street`,
@@ -384,7 +388,7 @@ describe('Testing application export helpers', () => {
         requestingUser,
       );
       const testHeaders = [
-        ...csvHeaders,
+        ...getCsvHeader(),
         {
           path: 'householdSize',
           label: 'Household Size',
@@ -429,12 +433,64 @@ describe('Testing application export helpers', () => {
       );
 
       const testHeaders = [
-        ...csvHeaders,
+        ...getCsvHeader(),
         {
           path: 'householdSize',
           label: 'Household Size',
         },
         ...getHouseholdCsvHeaders(3),
+        {
+          path: 'markedAsDuplicate',
+          label: 'Marked As Duplicate',
+        },
+        {
+          path: 'applicationFlaggedSet',
+          label: 'Flagged As Duplicate',
+          format: (val: ApplicationFlaggedSet[]): boolean => {
+            return val.length > 0;
+          },
+        },
+      ];
+      expect(JSON.stringify(headers)).toEqual(JSON.stringify(testHeaders));
+    });
+
+    it('tests getCsvHeaders with household members with no work in region', async () => {
+      const requestingUser = {
+        jurisdictions: [
+          {
+            id: 'juris id',
+            featureFlags: [
+              {
+                name: FeatureFlagEnum.enableAdaOtherOption,
+                description: '',
+                active: true,
+                jurisdictions: [],
+              },
+              {
+                name: FeatureFlagEnum.disableWorkInRegion,
+                description: '',
+                active: true,
+                jurisdictions: [],
+              },
+            ],
+          },
+        ],
+      } as User;
+
+      const headers = await getExportHeaders(
+        3,
+        [],
+        process.env.TIME_ZONE,
+        requestingUser,
+      );
+
+      const testHeaders = [
+        ...getCsvHeader(true),
+        {
+          path: 'householdSize',
+          label: 'Household Size',
+        },
+        ...getHouseholdCsvHeaders(3, false, true),
         {
           path: 'markedAsDuplicate',
           label: 'Marked As Duplicate',

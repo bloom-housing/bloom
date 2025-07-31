@@ -602,8 +602,10 @@ export function getColDefs(
           if (value.length < householdIndex) return ""
           return formatYesNoLabel(value[i]?.sameAddress)
         },
-      },
-      {
+      }
+    )
+    if (!disableWorkInRegion) {
+      householdCols.push({
         headerName: `${t("application.details.workInRegion")} HH:${householdIndex}`,
         field: "householdMember",
         sortable: false,
@@ -614,8 +616,8 @@ export function getColDefs(
           if (value?.length < householdIndex) return ""
           return t(`t.${value[i]?.workInRegion}`)
         },
-      }
-    )
+      })
+    }
     if (enableFullTimeStudentQuestion) {
       householdCols.push({
         headerName: `${t("application.details.fullTimeStudent")} HH:${householdIndex}`,
