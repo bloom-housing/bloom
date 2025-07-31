@@ -1,4 +1,3 @@
-import Head from "next/head"
 import Link from "next/link"
 import { Card, t } from "@bloom-housing/ui-components"
 import { Heading } from "@bloom-housing/ui-seeds"
@@ -8,14 +7,10 @@ import styles from "./Assistance.module.scss"
 import { BloomCard } from "@bloom-housing/shared-helpers"
 
 const Assistance = () => {
-  const pageTitle = t("pageTitle.getAssistance")
   return (
-    <Layout>
-      <Head>
-        <title>{pageTitle}</title>
-      </Head>
+    <Layout pageTitle={t("pageTitle.getAssistance")}>
       <PageHeaderLayout
-        heading={pageTitle}
+        heading={t("pageTitle.getAssistance")}
         inverse
         subheading={t("pageDescription.getAssistance")}
         className={styles["site-layout"]}

@@ -154,7 +154,7 @@ const ApplicationChooseLanguage = () => {
   const statusContent = getListingApplicationStatus(listing)
 
   return (
-    <FormsLayout>
+    <FormsLayout pageTitle={`${t("listings.apply.applyOnline")} - ${listing?.name}`}>
       <ApplicationFormLayout
         listingName={listing?.name}
         heading={t("application.chooseLanguage.letsGetStarted")}
