@@ -30,7 +30,6 @@ import ApplicationFormLayout from "../../../layouts/application-form"
 const ApplicationDemographics = () => {
   const { profile } = useContext(AuthContext)
   const { conductor, application, listing } = useFormConductor("demographics")
-  console.log(conductor.config.featureFlags)
   let currentPageSection = 4
   if (listingSectionQuestions(listing, MultiselectQuestionsApplicationSectionEnum.programs)?.length)
     currentPageSection += 1
