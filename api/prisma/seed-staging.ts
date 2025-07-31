@@ -383,7 +383,6 @@ export const stagingSeed = async (
         description:
           'Are you or anyone in your household 62 years of age or older?',
         applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
-        optOutText: 'Prefer not to say',
         options: [
           { text: 'Yes', exclusive: true, ordinal: 1 },
           { text: 'No', exclusive: true, ordinal: 2 },
@@ -402,7 +401,6 @@ export const stagingSeed = async (
               applicationSection:
                 MultiselectQuestionsApplicationSectionEnum.programs,
               text,
-              optOutText: 'Prefer not to say',
               options: [
                 { text: 'Yes', exclusive: true, ordinal: 1 },
                 { text: 'No', exclusive: true, ordinal: 2 },

@@ -500,7 +500,9 @@ const FormSummaryDetails = ({
         {!hidePrograms &&
           multiselectQuestionSection(
             MultiselectQuestionsApplicationSectionEnum.programs,
-            "/applications/programs/programs",
+            swapCommunityTypeWithPrograms
+              ? "/applications/community-types/community-types"
+              : "/applications/programs/programs",
             swapCommunityTypeWithPrograms ? t("t.communityTypes") : t("t.programs"),
             application.programs.filter((item) => item.claimed == true).length == 0
               ? `${t("application.preferences.general.title", {
