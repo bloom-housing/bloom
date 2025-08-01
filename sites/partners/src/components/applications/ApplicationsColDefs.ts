@@ -581,7 +581,7 @@ export function getColDefs(
         width: 90,
         minWidth: 50,
         valueFormatter: ({ value }) => {
-          if (value?.length < householdIndex) return ""
+          if (!value[i]?.fullTimeStudent || value?.length < householdIndex) return ""
           return t(`t.${value[i]?.fullTimeStudent}`)
         },
       })
