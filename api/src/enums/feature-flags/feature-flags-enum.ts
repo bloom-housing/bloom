@@ -14,6 +14,7 @@ export enum FeatureFlagEnum {
   enableGeocodingRadiusMethod = 'enableGeocodingRadiusMethod',
   enableHomeType = 'enableHomeType',
   enableIsVerified = 'enableIsVerified',
+  enableLimitedHowDidYouHear = 'enableLimitedHowDidYouHear',
   enableListingFavoriting = 'enableListingFavoriting',
   enableListingFiltering = 'enableListingFiltering',
   enableListingOpportunity = 'enableListingOpportunity',
@@ -102,6 +103,11 @@ export const featureFlagMap: { name: string; description: string }[] = [
     name: FeatureFlagEnum.enableIsVerified,
     description:
       'When true, the listing can ba have its contents manually verified by a user',
+  },
+  {
+    name: FeatureFlagEnum.enableLimitedHowDidYouHear,
+    description:
+      'When true, the Radio Ad and Bus Ad options are removed from the how did you hear section.',
   },
   {
     name: FeatureFlagEnum.enableListingFavoriting,
