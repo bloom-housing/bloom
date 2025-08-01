@@ -198,7 +198,7 @@ const LeasingAgent = (props: LeasingAgentProps) => {
             />
           </Grid.Cell>
 
-          <div className="seeds-grid-span-2">
+          <Grid.Cell className="seeds-grid-span-2">
             <Select
               id={`listingsLeasingAgentAddress.state`}
               name={`listingsLeasingAgentAddress.state`}
@@ -221,7 +221,7 @@ const LeasingAgent = (props: LeasingAgentProps) => {
                 ),
               }}
             />
-          </div>
+          </Grid.Cell>
 
           <Grid.Cell className="seeds-grid-span-2">
             <Field

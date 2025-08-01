@@ -23,7 +23,7 @@ const DetailBuildingFeatures = () => {
         )
       }
     })
-    return featuresExist ? features : <>{t("t.none")}</>
+    return featuresExist ? <ul className={"flex flex-wrap"}>{features}</ul> : <>{t("t.none")}</>
   }
 
   const enableAccessibilityFeatures = doJurisdictionsHaveFeatureFlagOn(
@@ -34,46 +34,60 @@ const DetailBuildingFeatures = () => {
   return (
     <SectionWithGrid heading={t("listings.sections.buildingFeaturesTitle")} inset>
       <Grid.Row>
-        <FieldValue id="amenities" label={t("t.propertyAmenities")}>
-          {getDetailFieldString(listing.amenities)}
-        </FieldValue>
+        <Grid.Cell>
+          <FieldValue id="amenities" label={t("t.propertyAmenities")}>
+            {getDetailFieldString(listing.amenities)}
+          </FieldValue>
+        </Grid.Cell>
       </Grid.Row>
 
       <Grid.Row>
-        <FieldValue id="unitAmenities" label={t("t.unitAmenities")}>
-          {getDetailFieldString(listing.unitAmenities)}
-        </FieldValue>
+        <Grid.Cell>
+          <FieldValue id="unitAmenities" label={t("t.unitAmenities")}>
+            {getDetailFieldString(listing.unitAmenities)}
+          </FieldValue>
+        </Grid.Cell>
       </Grid.Row>
 
       <Grid.Row>
-        <FieldValue id="accessibility" label={t("t.additionalAccessibility")}>
-          {getDetailFieldString(listing.accessibility)}
-        </FieldValue>
+        <Grid.Cell>
+          <FieldValue id="accessibility" label={t("t.additionalAccessibility")}>
+            {getDetailFieldString(listing.accessibility)}
+          </FieldValue>
+        </Grid.Cell>
       </Grid.Row>
 
       <Grid.Row>
-        <FieldValue id="smokingPolicy" label={t("t.smokingPolicy")}>
-          {getDetailFieldString(listing.smokingPolicy)}
-        </FieldValue>
+        <Grid.Cell>
+          <FieldValue id="smokingPolicy" label={t("t.smokingPolicy")}>
+            {getDetailFieldString(listing.smokingPolicy)}
+          </FieldValue>
+        </Grid.Cell>
       </Grid.Row>
 
       <Grid.Row>
-        <FieldValue id="petPolicy" label={t("t.petsPolicy")}>
-          {getDetailFieldString(listing.petPolicy)}
-        </FieldValue>
+        <Grid.Cell>
+          <FieldValue id="petPolicy" label={t("t.petsPolicy")}>
+            {getDetailFieldString(listing.petPolicy)}
+          </FieldValue>
+        </Grid.Cell>
       </Grid.Row>
 
       <Grid.Row>
-        <FieldValue id="servicesOffered" label={t("t.servicesOffered")}>
-          {getDetailFieldString(listing.servicesOffered)}
-        </FieldValue>
+        <Grid.Cell>
+          <FieldValue id="servicesOffered" label={t("t.servicesOffered")}>
+            {getDetailFieldString(listing.servicesOffered)}
+          </FieldValue>
+        </Grid.Cell>
       </Grid.Row>
 
       {!enableAccessibilityFeatures ? null : (
         <Grid.Row>
-          <FieldValue id="accessibilityFeatures" label={"Accessibility Features"}>
-            <ul className={"flex flex-wrap"}>{getAccessibilityFeatures()}</ul>
-          </FieldValue>
+          <Grid.Cell>
+            <FieldValue id="accessibilityFeatures" label={"Accessibility Features"}>
+              {getAccessibilityFeatures()}
+            </FieldValue>
+          </Grid.Cell>
         </Grid.Row>
       )}
     </SectionWithGrid>

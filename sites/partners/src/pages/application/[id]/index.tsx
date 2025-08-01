@@ -27,7 +27,7 @@ import {
   MultiselectQuestionsApplicationSectionEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
-export default function ApplicationsList() {
+const ApplicationsList = () => {
   const router = useRouter()
   const applicationId = router.query.id as string
   const { application } = useSingleApplicationData(applicationId)
@@ -42,6 +42,11 @@ export default function ApplicationsList() {
 
   const enableFullTimeStudentQuestion = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableFullTimeStudentQuestion,
+    listingDto?.jurisdictions.id
+  )
+
+  const swapCommunityTypeWithPrograms = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.swapCommunityTypeWithPrograms,
     listingDto?.jurisdictions.id
   )
 
@@ -87,7 +92,7 @@ export default function ApplicationsList() {
     <ApplicationContext.Provider value={application}>
       <Layout>
         <Head>
-          <title>{t("nav.siteTitlePartners")}</title>
+          <title>{`Application - ${t("nav.siteTitlePartners")}`}</title>
         </Head>
         <NavigationHeader
           className="relative"
@@ -159,7 +164,11 @@ export default function ApplicationsList() {
                 <DetailsMultiselectQuestions
                   listingId={application?.listings?.id}
                   applicationSection={MultiselectQuestionsApplicationSectionEnum.programs}
-                  title={t("application.details.programs")}
+                  title={
+                    swapCommunityTypeWithPrograms
+                      ? t("application.details.communityTypes")
+                      : t("application.details.programs")
+                  }
                 />
 
                 <DetailsHouseholdIncome />
@@ -194,3 +203,5 @@ export default function ApplicationsList() {
     </ApplicationContext.Provider>
   )
 }
+
+export default ApplicationsList
