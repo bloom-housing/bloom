@@ -155,6 +155,7 @@ export const stagingSeed = async (
       ],
       acceptedTerms: true,
       password: 'abcdef',
+      mfaEnabled: true,
     }),
   });
   // create admin user
@@ -171,6 +172,7 @@ export const stagingSeed = async (
       ],
       acceptedTerms: true,
       password: 'abcdef',
+      mfaEnabled: true,
     }),
   });
   // create a jurisdictional admin
@@ -181,6 +183,7 @@ export const stagingSeed = async (
       confirmedAt: new Date(),
       jurisdictionIds: [mainJurisdiction.id],
       acceptedTerms: true,
+      mfaEnabled: true,
     }),
   });
   // create a partner
@@ -191,6 +194,7 @@ export const stagingSeed = async (
       confirmedAt: new Date(),
       jurisdictionIds: [mainJurisdiction.id],
       acceptedTerms: true,
+      mfaEnabled: true,
     }),
   });
   await prismaClient.userAccounts.create({
@@ -200,6 +204,7 @@ export const stagingSeed = async (
       confirmedAt: new Date(),
       jurisdictionIds: [mainJurisdiction.id],
       acceptedTerms: false,
+      mfaEnabled: true,
     }),
   });
   await prismaClient.userAccounts.create({
@@ -209,8 +214,8 @@ export const stagingSeed = async (
       confirmedAt: new Date(),
       jurisdictionIds: [mainJurisdiction.id],
       acceptedTerms: true,
-      mfaEnabled: true,
       singleUseCode: '12345',
+      mfaEnabled: true,
     }),
   });
   await prismaClient.userAccounts.create({
@@ -237,6 +242,7 @@ export const stagingSeed = async (
         nadaHill.id,
       ],
       acceptedTerms: true,
+      mfaEnabled: true,
     }),
   });
   // add jurisdiction specific translations and default ones
@@ -960,6 +966,7 @@ export const stagingSeed = async (
           jurisdictionIds: [savedListing.jurisdictionId],
           acceptedTerms: true,
           listings: [savedListing.id],
+          mfaEnabled: true,
         }),
       });
     },

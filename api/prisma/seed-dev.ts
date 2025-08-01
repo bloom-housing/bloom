@@ -60,6 +60,7 @@ export const devSeeding = async (
       jurisdictionIds: [jurisdiction.id],
       acceptedTerms: true,
       password: 'abcdef',
+      mfaEnabled: true,
     }),
   });
   await prismaClient.userAccounts.create({
@@ -76,6 +77,7 @@ export const devSeeding = async (
       email: 'jurisdiction-admin@example.com',
       confirmedAt: new Date(),
       jurisdictionIds: [jurisdiction.id],
+      mfaEnabled: true,
     }),
   });
   // add jurisdiction specific translations and default ones
