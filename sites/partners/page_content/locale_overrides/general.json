@@ -39,6 +39,7 @@
   "application.details.applicationStatus.draft": "Draft",
   "application.details.applicationStatus.removed": "Removed",
   "application.details.applicationStatus.submitted": "Submitted",
+  "application.details.communityTypes": "Community Types",
   "application.details.householdIncome": "Declared Household Income",
   "application.details.householdMemberDetails": "Household Member Details",
   "application.details.householdSize": "Household Size",

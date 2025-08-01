@@ -157,6 +157,10 @@ const ApplicationSummary = () => {
               conductor.config,
               FeatureFlagEnum.enableAdaOtherOption
             )}
+            swapCommunityTypeWithPrograms={isFeatureFlagOn(
+              conductor.config,
+              FeatureFlagEnum.swapCommunityTypeWithPrograms
+            )}
           />
 
           <CardSection divider={"flush"} className={"border-none"}>

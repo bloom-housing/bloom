@@ -50,7 +50,11 @@ const loadListing = async (
     jurisdictionId: listingResponse.jurisdictions.id,
   })
   conductor.listing = listingResponse
-  const applicationConfig = retrieveApplicationConfig(conductor.listing, isPreview) // TODO: load from backend
+  const applicationConfig = retrieveApplicationConfig(
+    conductor.listing,
+    jurisdictionResponse.featureFlags,
+    isPreview
+  ) // TODO: load from backend
   conductor.config = {
     ...applicationConfig,
     languages: jurisdictionResponse.languages,
