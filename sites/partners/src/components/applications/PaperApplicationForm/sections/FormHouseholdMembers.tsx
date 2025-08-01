@@ -6,8 +6,8 @@ import {
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { t, MinimalTable } from "@bloom-housing/ui-components"
 import { Button, Dialog, Drawer } from "@bloom-housing/ui-seeds"
-import { FormMember } from "../FormMember"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
+import { FormMember } from "../FormMember"
 
 type FormHouseholdMembersProps = {
   householdMembers: HouseholdMember[]
@@ -118,7 +118,7 @@ const FormHouseholdMembers = ({
             <div className="flex gap-3">
               <Button
                 type="button"
-                className="font-semibold"
+                className={"font-semibold darker-link"}
                 onClick={() => editMember(member)}
                 variant="text"
               >
@@ -126,7 +126,7 @@ const FormHouseholdMembers = ({
               </Button>
               <Button
                 type="button"
-                className="font-semibold text-alert"
+                className={"font-semibold darker-alert"}
                 onClick={() => setMembersDeleteModal(member.orderId)}
                 variant="text"
               >

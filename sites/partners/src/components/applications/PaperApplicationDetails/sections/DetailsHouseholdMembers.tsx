@@ -64,7 +64,7 @@ const DetailsHouseholdMembers = ({
         content: (
           <Button
             type="button"
-            className="font-semibold"
+            className={"font-semibold darker-link"}
             onClick={() => setMembersDrawer(item)}
             variant="text"
           >

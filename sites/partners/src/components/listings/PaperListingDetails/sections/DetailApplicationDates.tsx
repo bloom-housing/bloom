@@ -2,16 +2,17 @@ import React, { useContext, useMemo, useState } from "react"
 import dayjs from "dayjs"
 import { t, MinimalTable } from "@bloom-housing/ui-components"
 import { Button, Card, Drawer, FieldValue, Grid, Link } from "@bloom-housing/ui-seeds"
+import { AuthContext } from "@bloom-housing/shared-helpers/src/auth/AuthContext"
 import {
   ListingEvent,
   ListingEventsTypeEnum,
   MarketingTypeEnum,
   FeatureFlagEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import SectionWithGrid from "../../../shared/SectionWithGrid"
 import { ListingContext } from "../../ListingContext"
 import { getDetailFieldDate, getDetailFieldString, getDetailFieldTime } from "./helpers"
-import SectionWithGrid from "../../../shared/SectionWithGrid"
-import { AuthContext } from "@bloom-housing/shared-helpers/src/auth/AuthContext"
+
 const DetailApplicationDates = () => {
   const listing = useContext(ListingContext)
   const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
@@ -48,7 +49,13 @@ const DetailApplicationDates = () => {
             startTime: { content: startTime && getDetailFieldTime(startTime) },
             endTime: { content: endTime && getDetailFieldTime(endTime) },
             url: {
-              content: url ? <Link href={url}>{t("t.url")}</Link> : t("t.n/a"),
+              content: url ? (
+                <Link href={url} className={"darker-link"}>
+                  {t("t.url")}
+                </Link>
+              ) : (
+                t("t.n/a")
+              ),
             },
             view: {
               content: (
@@ -57,7 +64,7 @@ const DetailApplicationDates = () => {
                     type="button"
                     variant="text"
                     size="sm"
-                    className="font-semibold"
+                    className={"font-semibold darker-link"}
                     onClick={() => setDrawer(event)}
                   >
                     {t("t.view")}
@@ -136,7 +143,7 @@ const DetailApplicationDates = () => {
                     <Grid.Cell>
                       <FieldValue id="drawer.url" label={t("t.url")}>
                         {drawer?.url ? (
-                          <Link className="mx-0 my-0" href={drawer.url}>
+                          <Link className="mx-0 my-0 darker-link" href={drawer.url}>
                             {drawer?.label ?? t("t.url")}
                           </Link>
                         ) : (

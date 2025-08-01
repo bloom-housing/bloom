@@ -9,8 +9,8 @@ import {
   User,
   UserRole,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { JurisdictionAndListingSelection } from "./JurisdictionAndListingSelection"
 import SectionWithGrid from "../shared/SectionWithGrid"
+import { JurisdictionAndListingSelection } from "./JurisdictionAndListingSelection"
 
 type FormUserManageProps = {
   isOpen: boolean
@@ -449,7 +449,7 @@ const FormUserManage = ({
           {mode === "edit" && (
             <Button
               type="button"
-              className="bg-opacity-0 text-alert"
+              className={"bg-opacity-0 darker-alert"}
               onClick={() => setDeleteModalActive(true)}
               variant="text"
             >
