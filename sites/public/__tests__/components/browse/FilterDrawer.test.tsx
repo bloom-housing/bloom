@@ -100,8 +100,8 @@ describe("FilterDrawer", () => {
     expect(screen.getByRole("checkbox", { name: "2 bedroom" })).not.toBeChecked()
     expect(screen.getByLabelText("3 bedroom")).toBeInTheDocument()
     expect(screen.getByRole("checkbox", { name: "3 bedroom" })).not.toBeChecked()
-    expect(screen.getByLabelText("4 bedroom")).toBeInTheDocument()
-    expect(screen.getByRole("checkbox", { name: "4 bedroom" })).not.toBeChecked()
+    expect(screen.getByLabelText("4+ bedroom")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "4+ bedroom" })).not.toBeChecked()
     expect(screen.getByLabelText("5 bedroom")).toBeInTheDocument()
     expect(screen.getByRole("checkbox", { name: "5 bedroom" })).not.toBeChecked()
 
@@ -259,8 +259,8 @@ describe("FilterDrawer", () => {
     expect(screen.getByRole("checkbox", { name: "2 bedroom" })).not.toBeChecked()
     expect(screen.getByLabelText("3 bedroom")).toBeInTheDocument()
     expect(screen.getByRole("checkbox", { name: "3 bedroom" })).not.toBeChecked()
-    expect(screen.getByLabelText("4 bedroom")).toBeInTheDocument()
-    expect(screen.getByRole("checkbox", { name: "4 bedroom" })).not.toBeChecked()
+    expect(screen.getByLabelText("4+ bedroom")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "4+ bedroom" })).not.toBeChecked()
     expect(screen.getByLabelText("5 bedroom")).toBeInTheDocument()
     expect(screen.getByRole("checkbox", { name: "5 bedroom" })).not.toBeChecked()
 

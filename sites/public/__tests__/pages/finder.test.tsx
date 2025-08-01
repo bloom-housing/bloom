@@ -55,7 +55,7 @@ describe("<RentalsFinder>", () => {
     expect(screen.getByRole("checkbox", { name: /1 bedroom/i })).toBeInTheDocument()
     expect(screen.getByRole("checkbox", { name: /2 bedroom/i })).toBeInTheDocument()
     expect(screen.getByRole("checkbox", { name: /3 bedroom/i })).toBeInTheDocument()
-    expect(screen.getByRole("checkbox", { name: /4 bedroom/i })).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: /4\+ bedroom/i })).toBeInTheDocument()
     expect(screen.getByRole("checkbox", { name: /5 bedroom/i })).toBeInTheDocument()
 
     expect(screen.getByRole("button", { name: /next/i })).toBeInTheDocument()

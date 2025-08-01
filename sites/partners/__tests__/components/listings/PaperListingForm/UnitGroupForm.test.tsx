@@ -79,7 +79,7 @@ describe("<UnitGroupForm>", () => {
     expect(screen.getByLabelText(/one bedroom/i)).toBeInTheDocument()
     expect(screen.getByLabelText(/two bedroom/i)).toBeInTheDocument()
     expect(screen.getByLabelText(/three bedroom/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/four bedroom/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/four\+ bedroom/i)).toBeInTheDocument()
     expect(screen.getByLabelText(/five bedroom/i)).toBeInTheDocument()
 
     // Details Section

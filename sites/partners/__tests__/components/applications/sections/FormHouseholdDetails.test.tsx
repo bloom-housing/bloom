@@ -45,7 +45,7 @@ describe("<FormHouseholdDetails>", () => {
 
     expect(screen.getByText(/preferred unit sizes/i)).toBeInTheDocument()
     expect(screen.getByLabelText("5 Bedroom")).toBeInTheDocument()
-    expect(screen.getByLabelText("4 Bedroom")).toBeInTheDocument()
+    expect(screen.getByLabelText("4+ Bedroom")).toBeInTheDocument()
     expect(screen.getByLabelText("3 Bedroom")).toBeInTheDocument()
     expect(screen.getByLabelText("2 Bedroom")).toBeInTheDocument()
     expect(screen.getByLabelText("1 Bedroom")).toBeInTheDocument()
@@ -316,7 +316,7 @@ describe("<FormHouseholdDetails>", () => {
     expect(screen.getByRole("checkbox", { name: "1 Bedroom" })).toBeInTheDocument()
     expect(screen.getByRole("checkbox", { name: "2 Bedroom" })).toBeInTheDocument()
     expect(screen.getByRole("checkbox", { name: "3 Bedroom" })).toBeInTheDocument()
-    expect(screen.getByRole("checkbox", { name: "4 Bedroom" })).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "4+ Bedroom" })).toBeInTheDocument()
     expect(screen.getByRole("checkbox", { name: "5 Bedroom" })).toBeInTheDocument()
     expect(screen.getByRole("checkbox", { name: "SRO" })).toBeInTheDocument()
 

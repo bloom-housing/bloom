@@ -1,12 +1,13 @@
-import React, { useEffect, useContext } from "react"
-import { t } from "@bloom-housing/ui-components"
 import Markdown from "markdown-to-jsx"
+import React, { useEffect, useContext } from "react"
 import { PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
-import { UserStatus } from "../../lib/constants"
+import { t } from "@bloom-housing/ui-components"
 import Layout from "../../layouts/application"
 import pageContent from "../../md_content/disclaimer_seeds.md"
 import { PageHeaderLayout } from "../../patterns/PageHeaderLayout"
 import styles from "../../patterns/PageHeaderLayout.module.scss"
+import { RenderIf } from "../../lib/helpers"
+import { UserStatus } from "../../lib/constants"
 
 const DisclaimerSeeds = () => {
   const { profile } = useContext(AuthContext)
@@ -21,12 +22,17 @@ const DisclaimerSeeds = () => {
 
   return (
     <Layout>
-      <PageHeaderLayout
-        heading={t("pageTitle.disclaimer")}
-        subheading="A design approach is a general philosophy that may or may not include a guide for specific methods."
-        inverse
-      >
-        <Markdown className={styles["markdown"]}>{pageContent.toString()}</Markdown>
+      <PageHeaderLayout heading={t("pageTitle.terms")} inverse>
+        <Markdown
+          options={{
+            overrides: {
+              RenderIf,
+            },
+          }}
+          className={styles["markdown"]}
+        >
+          {pageContent.toString()}
+        </Markdown>
       </PageHeaderLayout>
     </Layout>
   )
