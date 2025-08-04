@@ -74,7 +74,11 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
   )
 
   const enableLimitedHowDidYouHear = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableLimitedHowDidYouHear,
+    FeatureFlagEnum.enableLimitedHowDidYouHear
+  )
+
+  const swapCommunityTypeWithPrograms = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.swapCommunityTypeWithPrograms,
     listingDto?.jurisdictions.id
   )
 
@@ -269,7 +273,11 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
                     <FormMultiselectQuestions
                       questions={programs}
                       applicationSection={MultiselectQuestionsApplicationSectionEnum.programs}
-                      sectionTitle={t("application.details.programs")}
+                      sectionTitle={
+                        swapCommunityTypeWithPrograms
+                          ? t("application.details.communityTypes")
+                          : t("application.details.programs")
+                      }
                     />
 
                     <FormHouseholdIncome />
