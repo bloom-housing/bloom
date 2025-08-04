@@ -25,7 +25,6 @@ export const valleyHeightsSeniorCommunity = {
   unitAmenities: null,
   servicesOffered: null,
   yearBuilt: 2019,
-  applicationDueDate: null,
   applicationOpenDate: dayjs(new Date()).subtract(100, 'days').toDate(),
   applicationFee: '50',
   applicationOrganization: null,

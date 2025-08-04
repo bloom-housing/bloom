@@ -91,6 +91,7 @@ export const listingFactory = async (
     status?: ListingsStatusEnum;
     unitGroups?: Prisma.UnitGroupCreateWithoutListingsInput[];
     units?: Prisma.UnitsCreateWithoutListingsInput[];
+    userAccounts?: Prisma.UserAccountsWhereUniqueInput[];
   },
 ): Promise<Prisma.ListingsCreateInput> => {
   const previousListing = optionalParams?.listing || {};
@@ -258,6 +259,9 @@ export const listingFactory = async (
       ? {
           create: units,
         }
+      : undefined,
+    userAccounts: optionalParams?.userAccounts
+      ? { connect: optionalParams?.userAccounts }
       : undefined,
 
     ...additionalEligibilityRules(optionalParams?.includeEligibilityRules),
