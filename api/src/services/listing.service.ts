@@ -2326,9 +2326,11 @@ export class ListingService implements OnModuleInit {
                             level.monthlyRentDeterminationType,
                           percentageOfIncomeValue:
                             level.percentageOfIncomeValue,
-                          amiChart: {
-                            connect: { id: level.amiChart.id },
-                          },
+                          amiChart: level.amiChart
+                            ? {
+                                connect: { id: level.amiChart.id },
+                              }
+                            : undefined,
                         })),
                       }
                     : undefined,

@@ -75,6 +75,9 @@ const SubmittedApplicationView = ({
           enableAdaOtherOption={doJurisdictionsHaveFeatureFlagOn(
             FeatureFlagEnum.enableAdaOtherOption
           )}
+          swapCommunityTypeWithPrograms={doJurisdictionsHaveFeatureFlagOn(
+            FeatureFlagEnum.swapCommunityTypeWithPrograms
+          )}
         />
         <Card.Section>
           <div className="hide-for-print">
