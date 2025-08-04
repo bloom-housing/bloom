@@ -259,6 +259,7 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
                       householdMembers={householdMembers}
                       setHouseholdMembers={setHouseholdMembers}
                       enableFullTimeStudentQuestion={enableFullTimeStudentQuestion}
+                      disableWorkInRegion={disableWorkInRegion}
                     />
 
                     <FormHouseholdDetails

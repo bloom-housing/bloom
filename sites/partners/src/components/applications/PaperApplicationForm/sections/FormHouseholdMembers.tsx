@@ -13,12 +13,14 @@ type FormHouseholdMembersProps = {
   householdMembers: HouseholdMember[]
   setHouseholdMembers: (members: HouseholdMember[]) => void
   enableFullTimeStudentQuestion?: boolean
+  disableWorkInRegion?: boolean
 }
 
 const FormHouseholdMembers = ({
   householdMembers,
   setHouseholdMembers,
   enableFullTimeStudentQuestion,
+  disableWorkInRegion,
 }: FormHouseholdMembersProps) => {
   type MembersDrawer = HouseholdMember | null
 
@@ -173,6 +175,7 @@ const FormHouseholdMembers = ({
           members={householdMembers}
           editedMemberId={membersDrawer?.orderId}
           enableFullTimeStudentQuestion={enableFullTimeStudentQuestion}
+          disableWorkInRegion={disableWorkInRegion}
         />
       </Drawer>
 

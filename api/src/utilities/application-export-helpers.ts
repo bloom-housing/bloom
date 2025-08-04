@@ -321,6 +321,7 @@ export const getExportHeaders = (
       ...getHouseholdCsvHeaders(
         maxHouseholdMembers,
         enableFullTimeStudentQuestion,
+        disableWorkInRegion,
       ),
     );
   }
@@ -530,11 +531,14 @@ export const addressToString = (address: Address): string => {
 /**
  *
  * @param maxHouseholdMembers the maximum number of household members across all applications
+ * @param enableFullTimeStudentQuestion should the 'Full-time Student' column be included from the headers
+ * @param disableWorkInRegion should the `Work In Region` columns be excluded from the headers
  * @returns the headers and formatters for the household member columns
  */
 export const getHouseholdCsvHeaders = (
   maxHouseholdMembers: number,
   enableFullTimeStudentQuestion?: boolean,
+  disableWorkInRegion?: boolean,
 ): CsvHeader[] => {
   const headers = [];
   for (let i = 0; i < maxHouseholdMembers; i++) {
@@ -577,6 +581,12 @@ export const getHouseholdCsvHeaders = (
         label: `Household Member (${j}) Same as Primary Applicant`,
       },
     );
+    if (!disableWorkInRegion) {
+      headers.push({
+        path: `householdMember.${i}.workInRegion`,
+        label: `Household Member (${j}) Work in Region`,
+      });
+    }
     if (enableFullTimeStudentQuestion) {
       headers.push({
         path: `householdMember.${i}.fullTimeStudent`,
