@@ -57,7 +57,7 @@ describe("<FormDemographics>", () => {
     expect(screen.getByLabelText(/housing counselor/i)).toBeInTheDocument()
     expect(screen.getByLabelText(/^other$/i)).toBeInTheDocument()
     expect(screen.getByLabelText(/radio ad/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/alameda county hcd website/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/detroit home connect/i)).toBeInTheDocument()
     expect(screen.queryByLabelText(/government website/i)).not.toBeInTheDocument()
     expect(screen.queryByLabelText(/property website/i)).not.toBeInTheDocument()
   })
