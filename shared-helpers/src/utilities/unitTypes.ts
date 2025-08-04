@@ -1,4 +1,11 @@
-import { Unit, UnitGroup, UnitType, UnitTypeEnum } from "../types/backend-swagger"
+import {
+  Application,
+  Listing,
+  Unit,
+  UnitGroup,
+  UnitType,
+  UnitTypeEnum,
+} from "../types/backend-swagger"
 
 type GetUnitTypeNamesReturn = {
   id: string
@@ -54,7 +61,7 @@ export const getUniqueUnitTypes = (units: Unit[]): GetUnitTypeNamesReturn[] => {
   return sorted
 }
 
-export const getUniqueUnitGroupUnitTypes = (unitGroups: UnitGroup[]): GetUnitTypeNamesReturn[] => {
+export const getUniqueUnitGroupUnitTypes = (unitGroups?: UnitGroup[]): GetUnitTypeNamesReturn[] => {
   if (!unitGroups) return []
 
   const unitTypes = unitGroups.reduce((acc, group) => {
@@ -86,3 +93,27 @@ export const getUniqueUnitGroupUnitTypes = (unitGroups: UnitGroup[]): GetUnitTyp
 
 // It creates array of objects with the id property
 export const createUnitTypeId = (unitIds: string[]) => unitIds?.map((id) => ({ id })) || []
+
+export const getPreferredUnitTypes = (
+  application: Application,
+  listing: Listing,
+  enableUnitGroups: boolean,
+  returnName?: boolean
+) => {
+  const allListingUnitTypes = enableUnitGroups
+    ? getUniqueUnitGroupUnitTypes(listing?.unitGroups || [])
+    : getUniqueUnitTypes(listing?.units)
+
+  const preferredUnits = application.preferredUnitTypes
+    ?.filter((unitType) =>
+      allListingUnitTypes.some((unit) => unitType.name === unit.name || unitType.id === unit.id)
+    )
+    .map((unit) => {
+      const unitDetails = allListingUnitTypes?.find(
+        (unitType) => unitType.name === unit.name || unit.id === unitType.id
+      )
+      return returnName ? unitDetails?.name || unit.name : unitDetails || unit
+    })
+
+  return returnName ? (preferredUnits as string[]) : (preferredUnits as UnitType[])
+}
