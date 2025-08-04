@@ -372,7 +372,7 @@ describe("<ListingBrowse>", () => {
 
       expect(unitType).toHaveTextContent("Studio - 1 BR")
       expect(rent).toHaveTextContent("$1,500per month")
-      expect(availability).toHaveTextContent("Open Waitlist")
+      expect(availability).toHaveTextContent("Open waitlist")
     })
 
     it("render no unit groups preview table", () => {

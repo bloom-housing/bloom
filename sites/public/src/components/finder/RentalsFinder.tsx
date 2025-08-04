@@ -21,6 +21,8 @@ import {
   ReservedCommunityTypes,
   unitTypeMapping,
   unitTypesSorted,
+  unitTypesSortedByUnitGroups,
+  unitTypeUnitGroupsMapping,
 } from "../browse/FilterDrawerHelpers"
 
 type FinderStep = {
@@ -62,8 +64,14 @@ export default function RentalsFinder({ activeFeatureFlags }: RentalsFinderProps
                 fieldGroupName="bedrooms"
                 options={buildDefaultFilterFields(
                   ListingFilterKeys.bedroomTypes,
-                  unitTypesSorted.map((unitType) => t(unitTypeMapping[unitType].labelKey)),
-                  unitTypesSorted,
+                  activeFeatureFlags.some((flag) => flag == FeatureFlagEnum.enableUnitGroups)
+                    ? unitTypesSortedByUnitGroups.map((unitType) =>
+                        t(unitTypeUnitGroupsMapping[unitType].labelKey)
+                      )
+                    : unitTypesSorted.map((unitType) => t(unitTypeMapping[unitType].labelKey)),
+                  activeFeatureFlags.some((flag) => flag == FeatureFlagEnum.enableUnitGroups)
+                    ? unitTypesSortedByUnitGroups
+                    : unitTypesSorted,
                   {}
                 )}
               />
