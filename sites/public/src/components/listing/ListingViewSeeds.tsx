@@ -9,7 +9,7 @@ import {
   ListingsStatusEnum,
   User,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { t } from "@bloom-housing/ui-components"
+import { ExpandableSection, t } from "@bloom-housing/ui-components"
 import {
   AuthContext,
   MessageContext,
@@ -140,20 +140,15 @@ export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: Li
           <div className={"bloom-markdown"}>
             <Markdown>{listing.whatToExpect}</Markdown>
           </div>
-        </InfoCard>
-      )}
-    </>
-  )
-
-  const WhatToExpectAdditionalText = (
-    <>
-      {listing.whatToExpectAdditionalText && (
-        <InfoCard heading={t("whatToExpectAdditionalText.label")}>
-          <ReadMore
-            className={"bloom-markdown"}
-            maxLength={140}
-            content={listing.whatToExpectAdditionalText}
-          />
+          {listing.whatToExpectAdditionalText && (
+            <div>
+              <ReadMore
+                className={"bloom-markdown"}
+                maxLength={140}
+                content={listing.whatToExpectAdditionalText}
+              />
+            </div>
+          )}
         </InfoCard>
       )}
     </>
@@ -218,7 +213,6 @@ export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: Li
       {LotteryEvent}
       {ReferralApplication}
       {WhatToExpect}
-      {WhatToExpectAdditionalText}
       <LeasingAgent
         address={listing.listingsLeasingAgentAddress}
         email={listing.leasingAgentEmail}
