@@ -500,8 +500,8 @@ export const getAvailabilityTextForGroup = (
   // Collect information from all groups
   statusSet.add(
     groups.some((entry) => entry.openWaitlist)
-      ? t("listings.waitlist.open")
-      : t("listings.waitlist.closed")
+      ? t("listings.availability.openWaitlist")
+      : t("listings.availability.closedWaitlist")
   )
 
   const totalVacantUnits = groups.reduce((acc, group) => (acc += group.unitVacancies), 0)

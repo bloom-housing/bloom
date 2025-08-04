@@ -75,12 +75,10 @@ describe("<UnitGroupForm>", () => {
     // Unit Types Section
     expect(screen.getByText(/unit type/i)).toBeInTheDocument()
     expect(await screen.findByLabelText(/studio/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/sro/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/one bedroom/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/two bedroom/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/three bedroom/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/four bedroom/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/five bedroom/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/1 bedroom/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/2 bedroom/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/3 bedroom/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/4 bedroom/i)).toBeInTheDocument()
 
     // Details Section
     expect(screen.getByLabelText(/Affordable Unit Group Quantity/i)).toBeInTheDocument()

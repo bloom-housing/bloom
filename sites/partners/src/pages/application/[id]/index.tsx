@@ -50,6 +50,11 @@ const ApplicationsList = () => {
     listingDto?.jurisdictions.id
   )
 
+  const swapCommunityTypeWithPrograms = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.swapCommunityTypeWithPrograms,
+    listingDto?.jurisdictions.id
+  )
+
   const [errorAlert, setErrorAlert] = useState(false)
 
   const [membersDrawer, setMembersDrawer] = useState<MembersDrawer>(null)
@@ -166,7 +171,11 @@ const ApplicationsList = () => {
                 <DetailsMultiselectQuestions
                   listingId={application?.listings?.id}
                   applicationSection={MultiselectQuestionsApplicationSectionEnum.programs}
-                  title={t("application.details.programs")}
+                  title={
+                    swapCommunityTypeWithPrograms
+                      ? t("application.details.communityTypes")
+                      : t("application.details.programs")
+                  }
                 />
 
                 <DetailsHouseholdIncome />

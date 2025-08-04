@@ -2,6 +2,7 @@
 import React from "react"
 import { screen } from "@testing-library/dom"
 import {
+  FeatureFlagEnum,
   HomeTypeEnum,
   ListingFilterKeys,
   MultiselectQuestion,
@@ -355,5 +356,32 @@ describe("FilterDrawer", () => {
 
     expect(screen.getByRole("button", { name: "Show matching listings" })).toBeInTheDocument()
     expect(screen.getByRole("button", { name: "Cancel" })).toBeInTheDocument()
+  })
+
+  it("should return correct unit types fields with unit groups", () => {
+    render(
+      <FilterDrawer
+        isOpen={true}
+        onClose={() => {}}
+        onSubmit={() => {}}
+        filterState={{}}
+        multiselectData={mockMultiselect}
+        activeFeatureFlags={[FeatureFlagEnum.enableUnitGroups]}
+      />
+    )
+
+    expect(screen.getByRole("group", { name: "Bedroom size" })).toBeInTheDocument()
+    expect(screen.getByLabelText("Studio")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Studio" })).not.toBeChecked()
+    expect(screen.getByLabelText("1 bedroom")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "1 bedroom" })).not.toBeChecked()
+    expect(screen.getByLabelText("2 bedroom")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "2 bedroom" })).not.toBeChecked()
+    expect(screen.getByLabelText("3 bedroom")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "3 bedroom" })).not.toBeChecked()
+    expect(screen.getByLabelText("4 bedroom")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "4 bedroom" })).not.toBeChecked()
+    expect(screen.queryByLabelText("SRO")).not.toBeInTheDocument()
+    expect(screen.queryByLabelText("5 bedroom")).not.toBeInTheDocument()
   })
 })
