@@ -74,7 +74,8 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
   )
 
   const enableLimitedHowDidYouHear = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableLimitedHowDidYouHear
+    FeatureFlagEnum.enableLimitedHowDidYouHear,
+    listingDto?.jurisdictions.id
   )
 
   const swapCommunityTypeWithPrograms = doJurisdictionsHaveFeatureFlagOn(
