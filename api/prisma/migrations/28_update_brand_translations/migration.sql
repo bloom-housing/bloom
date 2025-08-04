@@ -17,7 +17,7 @@ SET translations = jsonb_set(translations, '{footer,line2}', '""')
 WHERE language = 'en';
 
 UPDATE translations
-SET translations = jsonb_set(translations, '{invite,inviteMessage}', '"Welcome to the Partners Portal on %{appUrl}."')
+SET translations = jsonb_set(translations, '{invite,inviteWelcomeMessage}', '"Welcome to the Partners Portal on %{appUrl}."')
 WHERE language = 'en';
 
 UPDATE translations
