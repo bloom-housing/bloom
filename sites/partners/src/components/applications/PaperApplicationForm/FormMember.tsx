@@ -71,6 +71,7 @@ type ApplicationFormMemberProps = {
   members: HouseholdMember[]
   editedMemberId?: number
   enableFullTimeStudentQuestion?: boolean
+  disableWorkInRegion?: boolean
 }
 
 const FormMember = ({
@@ -79,6 +80,7 @@ const FormMember = ({
   members,
   editedMemberId,
   enableFullTimeStudentQuestion,
+  disableWorkInRegion,
 }: ApplicationFormMemberProps) => {
   const currentlyEdited = useMemo(() => {
     return members.filter((member) => member.orderId === editedMemberId)[0]
@@ -254,17 +256,19 @@ const FormMember = ({
                     />
                   </Grid.Cell>
 
-                  <Grid.Cell>
-                    <FieldGroup
-                      name="workInRegion"
-                      type="radio"
-                      register={register}
-                      groupLabel={t("application.details.workInRegion")}
-                      fields={workInRegionOptions}
-                      fieldClassName="m-0"
-                      fieldGroupClassName="flex h-12 items-center"
-                    />
-                  </Grid.Cell>
+                  {!disableWorkInRegion && (
+                    <Grid.Cell>
+                      <FieldGroup
+                        name="workInRegion"
+                        type="radio"
+                        register={register}
+                        groupLabel={t("application.details.workInRegion")}
+                        fields={workInRegionOptions}
+                        fieldClassName="m-0"
+                        fieldGroupClassName="flex h-12 items-center"
+                      />
+                    </Grid.Cell>
+                  )}
 
                   {enableFullTimeStudentQuestion && (
                     <Grid.Cell>
