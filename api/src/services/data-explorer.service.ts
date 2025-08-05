@@ -11,8 +11,8 @@ import { mapTo } from '../utilities/mapTo';
 import { PermissionService } from './permission.service';
 import { User } from '../dtos/users/user.dto';
 import { permissionActions } from '../enums/permissions/permission-actions-enum';
-import { DataExplorerParams } from 'src/dtos/applications/data-explorer-params.dto';
-import { DataExplorerReport } from 'src/dtos/applications/data-explorer-report.dto';
+import { DataExplorerParams } from '../dtos/applications/data-explorer-params.dto';
+import { DataExplorerReport } from '../dtos/applications/data-explorer-report.dto';
 import axios from 'axios';
 /*
   this is the service for calling the FastAPI housing-reports endpoint
@@ -51,13 +51,18 @@ export class DataExplorerService {
       console.error('No report data returned from API');
       throw new NotFoundException('No report data found');
     }
-    return reportData;
+    return mapTo(DataExplorerReport, reportData);
   }
 
+  //Unit tests for bloom api
   async getReportDataFastAPI(): Promise<DataExplorerReport> {
     try {
       const API_BASE_URL = 'http://127.0.0.1:8000';
+      //"x-forwarded-for": req.headers["x-forwarded-for"] || "",
 
+      // DO an API Key Header check, allow list, custom header
+      // passkey: process.env.API_PASS_KEY,
+      // Check for header with ip
       const response = await axios.get(`${API_BASE_URL}/generate-report`);
       return response.data as DataExplorerReport;
     } catch (error) {

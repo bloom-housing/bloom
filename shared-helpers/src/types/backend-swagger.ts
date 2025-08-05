@@ -1378,28 +1378,6 @@ export class MultiselectQuestionsService {
   }
 }
 
-export class DataExplorerService {
-  generateReport(
-    params: {
-      jurisdictionId: string
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<DataExplorerReport> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/generate-report"
-
-      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-
-      configs.params = { jurisdictionId: params["jurisdictionId"], userId: "222" }
-
-      let data = null
-
-      configs.data = data
-
-      axios(configs, resolve, reject)
-    })
-  }
-}
 export class ApplicationsService {
   /**
    * Get a paginated set of applications
@@ -2834,6 +2812,32 @@ export class LotteryService {
       url = url.replace("{id}", params["id"] + "")
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject)
+    })
+  }
+}
+
+export class DataExplorerService {
+  /**
+   * Generate a report
+   */
+  generateReport(
+    params: {
+      /**  */
+      jurisdictionId?: string
+      /**  */
+      userId?: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<DataExplorerReport> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/generate-report"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+      configs.params = { jurisdictionId: params["jurisdictionId"], userId: params["userId"] }
 
       /** 适配ios13，get请求不允许带body */
 
@@ -6877,6 +6881,147 @@ export interface PublicLotteryTotal {
   multiselectQuestionId?: string
 }
 
+export interface RaceFrequency {
+  /** Count of occurrences */
+  count: number
+
+  /** Percentage of total */
+  percentage?: number
+
+  /** Race category */
+  race: string
+}
+
+export interface EthnicityFrequency {
+  /** Count of occurrences */
+  count: number
+
+  /** Percentage of total */
+  percentage?: number
+
+  /** Ethnicity category */
+  ethnicity: string
+}
+
+export interface SubsidyFrequency {
+  /** Count of occurrences */
+  count: number
+
+  /** Percentage of total */
+  percentage?: number
+
+  /** Subsidy or voucher type */
+  subsidyType: string
+}
+
+export interface AccessibilityFrequency {
+  /** Count of occurrences */
+  count: number
+
+  /** Percentage of total */
+  percentage?: number
+
+  /** Accessibility type */
+  accessibilityType: string
+}
+
+export interface AgeFrequency {
+  /** Count of occurrences */
+  count: number
+
+  /** Percentage of total */
+  percentage?: number
+
+  /** Age range */
+  age: string
+}
+
+export interface LocationFrequency {
+  /** Count of occurrences */
+  count: number
+
+  /** Percentage of total */
+  percentage?: number
+
+  /** Residential location */
+  location: string
+}
+
+export interface LanguageFrequency {
+  /** Count of occurrences */
+  count: number
+
+  /** Percentage of total */
+  percentage?: number
+
+  /** Language preference */
+  language: string
+}
+
+export interface incomeHouseholdSizeCrossTab {
+  [householdSize: string]: {
+    [AMI: string]: number
+  }
+}
+
+export interface ReportProducts {
+  /** Cross-tabulation of income bands by household size */
+  incomeHouseholdSizeCrossTab: incomeHouseholdSizeCrossTab
+
+  /** Frequency distribution by race */
+  raceFrequencies: RaceFrequency[]
+
+  /** Frequency distribution by ethnicity */
+  ethnicityFrequencies: EthnicityFrequency[]
+
+  /** Frequency distribution by subsidy or voucher type */
+  subsidyOrVoucherTypeFrequencies: SubsidyFrequency[]
+
+  /** Frequency distribution by accessibility type */
+  accessibilityTypeFrequencies: AccessibilityFrequency[]
+
+  /** Frequency distribution by age range */
+  ageFrequencies: AgeFrequency[]
+
+  /** Frequency distribution by residential location */
+  residentialLocationFrequencies: LocationFrequency[]
+
+  /** Frequency distribution by language preference */
+  languageFrequencies: LanguageFrequency[]
+}
+
+export interface DataExplorerReport {
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /** Total number of processed applications */
+  totalProcessedApplications: number
+
+  /** Total number of applicants */
+  totalApplicants?: number
+
+  /** Total number of listings */
+  totalListings?: number
+
+  /** Whether the data passes k-anonymity requirements and has no errors */
+  validResponse: boolean
+
+  /** K-anonymity score for the dataset */
+  kAnonScore: number
+
+  /** Report data products containing various frequency distributions */
+  products: CombinedProductsTypes
+
+  /** Any errors encountered during report generation */
+  reportErrors?: string[]
+}
+
 export enum FilterAvailabilityEnum {
   "closedWaitlist" = "closedWaitlist",
   "comingSoon" = "comingSoon",
@@ -7204,3 +7349,4 @@ export enum MfaType {
   "sms" = "sms",
   "email" = "email",
 }
+export type CombinedProductsTypes = ReportProducts

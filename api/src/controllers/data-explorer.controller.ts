@@ -17,19 +17,18 @@ import { PermissionTypeDecorator } from '../decorators/permission-type.decorator
 import { ApiKeyGuard } from '../guards/api-key.guard';
 import { JwtAuthGuard } from 'src/guards/jwt.guard';
 import { DataExplorerService } from 'src/services/data-explorer.service';
-import { PermissionGuard } from 'src/guards/permission.guard';
 import { DataExplorerParams } from 'src/dtos/applications/data-explorer-params.dto';
 import { DataExplorerReport } from 'src/dtos/applications/data-explorer-report.dto';
 
 @Controller('generate-report')
-@ApiTags('applications')
+@ApiTags('data-explorer')
 @UsePipes(
   new ValidationPipe({
     ...defaultValidationPipeOptions,
     groups: [ValidationsGroupsEnum.default, ValidationsGroupsEnum.partners],
   }),
 )
-@UseGuards(ApiKeyGuard, JwtAuthGuard, PermissionGuard)
+@UseGuards(ApiKeyGuard, JwtAuthGuard)
 @PermissionTypeDecorator('application')
 @UseInterceptors(ActivityLogInterceptor)
 export class DataExplorerController {
