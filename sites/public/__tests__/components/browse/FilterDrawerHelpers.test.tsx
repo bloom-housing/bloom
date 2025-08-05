@@ -672,7 +672,7 @@ describe("filter drawer helpers", () => {
 
       return (
         <CheckboxGroup
-          groupLabel={t("listings.homeType.lower")}
+          groupLabel={t("listings.homeType")}
           fields={buildDefaultFilterFields(
             ListingFilterKeys.homeTypes,
             "listings.homeType",
@@ -690,7 +690,7 @@ describe("filter drawer helpers", () => {
 
       return (
         <CheckboxGroup
-          groupLabel={t("listings.homeType.lower")}
+          groupLabel={t("listings.homeType")}
           fields={buildDefaultFilterFields(
             ListingFilterKeys.homeTypes,
             "listings.homeType",
@@ -709,7 +709,7 @@ describe("filter drawer helpers", () => {
 
       return (
         <CheckboxGroup
-          groupLabel={t("listings.homeType.lower")}
+          groupLabel={t("listings.homeType")}
           fields={buildDefaultFilterFields(
             ListingFilterKeys.homeTypes,
             "listings.homeType",
