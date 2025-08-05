@@ -97,6 +97,7 @@ export const stagingSeed = async (
         FeatureFlagEnum.enableGeocodingRadiusMethod,
         FeatureFlagEnum.enableHomeType,
         FeatureFlagEnum.enableIsVerified,
+        FeatureFlagEnum.enableLimitedHowDidYouHear,
         FeatureFlagEnum.enableListingFavoriting,
         FeatureFlagEnum.enableListingFiltering,
         FeatureFlagEnum.enableListingOpportunity,
