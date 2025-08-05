@@ -38,7 +38,7 @@ describe("<Dashboard>", () => {
       </AuthContext.Provider>
     )
 
-    const dashboardCards = screen.getAllByRole("gridcell")
+    const dashboardCards = screen.getAllByRole("article")
     expect(dashboardCards).toHaveLength(2)
 
     const [myApplicationsCard, accountSettingsCard] = dashboardCards
@@ -113,7 +113,7 @@ describe("<Dashboard>", () => {
       </AuthContext.Provider>
     )
 
-    const dashboardCards = screen.getAllByRole("gridcell")
+    const dashboardCards = screen.getAllByRole("article")
     expect(dashboardCards).toHaveLength(3)
 
     const myFavoritesCard = dashboardCards.pop()
@@ -165,7 +165,7 @@ describe("<Dashboard>", () => {
       </AuthContext.Provider>
     )
 
-    const dashboardCards = screen.getAllByRole("gridcell")
+    const dashboardCards = screen.getAllByRole("article")
     expect(dashboardCards).toHaveLength(1)
 
     const [accountSettingsCard] = dashboardCards

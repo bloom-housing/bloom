@@ -100,7 +100,11 @@ const ApplicationSummary = () => {
   }
 
   return (
-    <FormsLayout>
+    <FormsLayout
+      pageTitle={`${t("pageTitle.summary")} - ${t("listings.apply.applyOnline")} - ${
+        listing?.name
+      }`}
+    >
       <Form onSubmit={handleSubmit(onSubmit)}>
         <ApplicationFormLayout
           listingName={listing?.name}
@@ -150,6 +154,10 @@ const ApplicationSummary = () => {
             enableAdaOtherOption={isFeatureFlagOn(
               conductor.config,
               FeatureFlagEnum.enableAdaOtherOption
+            )}
+            swapCommunityTypeWithPrograms={isFeatureFlagOn(
+              conductor.config,
+              FeatureFlagEnum.swapCommunityTypeWithPrograms
             )}
           />
 

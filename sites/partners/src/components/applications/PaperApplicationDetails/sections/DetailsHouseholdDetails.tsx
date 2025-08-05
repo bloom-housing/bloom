@@ -32,50 +32,61 @@ const DetailsHouseholdDetails = ({
   return (
     <SectionWithGrid heading={t("application.review.householdDetails")} inset>
       <Grid.Row>
-        <FieldValue label={t("application.details.preferredUnitSizes")} testId="preferredUnitSizes">
-          {(() => {
-            if (!preferredUnits.length) return t("t.n/a")
+        <Grid.Cell>
+          <FieldValue
+            label={t("application.details.preferredUnitSizes")}
+            testId="preferredUnitSizes"
+          >
+            {(() => {
+              if (!preferredUnits.length) return t("t.n/a")
 
-            return preferredUnits?.map((item) => (
-              <Fragment key={item.id}>
-                {t(`application.household.preferredUnit.options.${item.name}`)}
-                <br />
-              </Fragment>
-            ))
-          })()}
-        </FieldValue>
+              return preferredUnits?.map((item) => (
+                <Fragment key={item.id}>
+                  {t(`application.household.preferredUnit.options.${item.name}`)}
+                  <br />
+                </Fragment>
+              ))
+            })()}
+          </FieldValue>
+        </Grid.Cell>
 
-        <FieldValue label={t("application.details.adaPriorities")} testId="adaPriorities">
-          {application.accessibility &&
-            accessibilityLabels(application.accessibility).map((item) => (
-              <Fragment key={item}>
-                {item}
-                <br />
-              </Fragment>
-            ))}
-        </FieldValue>
+        <Grid.Cell>
+          <FieldValue label={t("application.details.adaPriorities")} testId="adaPriorities">
+            {application.accessibility &&
+              accessibilityLabels(application.accessibility).map((item) => (
+                <Fragment key={item}>
+                  {item}
+                  <br />
+                </Fragment>
+              ))}
+          </FieldValue>
+        </Grid.Cell>
 
-        <FieldValue
-          id="householdChanges"
-          label={t("application.household.expectingChanges.title")}
-          testId="expectingChanges"
-        >
-          {application.householdExpectingChanges ? t("t.yes") : t("t.no")}
-        </FieldValue>
+        <Grid.Cell>
+          <FieldValue
+            id="householdChanges"
+            label={t("application.household.expectingChanges.title")}
+            testId="expectingChanges"
+          >
+            {application.householdExpectingChanges ? t("t.yes") : t("t.no")}
+          </FieldValue>
+        </Grid.Cell>
       </Grid.Row>
 
       <Grid.Row>
-        <FieldValue
-          id="householdStudent"
-          label={
-            enableFullTimeStudentQuestion
-              ? t("application.household.householdStudentAll.title")
-              : t("application.household.householdStudent.title")
-          }
-          testId="householdStudent"
-        >
-          {application.householdStudent ? t("t.yes") : t("t.no")}
-        </FieldValue>
+        <Grid.Cell>
+          <FieldValue
+            id="householdStudent"
+            label={
+              enableFullTimeStudentQuestion
+                ? t("application.household.householdStudentAll.title")
+                : t("application.household.householdStudent.title")
+            }
+            testId="householdStudent"
+          >
+            {application.householdStudent ? t("t.yes") : t("t.no")}
+          </FieldValue>
+        </Grid.Cell>
       </Grid.Row>
     </SectionWithGrid>
   )

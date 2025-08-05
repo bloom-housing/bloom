@@ -97,6 +97,7 @@ export const stagingSeed = async (
         FeatureFlagEnum.enableGeocodingRadiusMethod,
         FeatureFlagEnum.enableHomeType,
         FeatureFlagEnum.enableIsVerified,
+        FeatureFlagEnum.enableLimitedHowDidYouHear,
         FeatureFlagEnum.enableListingFavoriting,
         FeatureFlagEnum.enableListingFiltering,
         FeatureFlagEnum.enableListingOpportunity,
@@ -383,7 +384,6 @@ export const stagingSeed = async (
         description:
           'Are you or anyone in your household 62 years of age or older?',
         applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
-        optOutText: 'Prefer not to say',
         options: [
           { text: 'Yes', exclusive: true, ordinal: 1 },
           { text: 'No', exclusive: true, ordinal: 2 },
@@ -402,6 +402,10 @@ export const stagingSeed = async (
               applicationSection:
                 MultiselectQuestionsApplicationSectionEnum.programs,
               text,
+              options: [
+                { text: 'Yes', exclusive: true, ordinal: 1 },
+                { text: 'No', exclusive: true, ordinal: 2 },
+              ],
             },
           }),
         }),
@@ -931,6 +935,7 @@ export const stagingSeed = async (
       },
       index,
     ) => {
+      console.log(`Adding listing - ${value.listing?.name}`);
       const listing = await listingFactory(value.jurisdictionId, prismaClient, {
         amiChart: amiChart,
         numberOfUnits: (!value.unitGroups && index) || 0,

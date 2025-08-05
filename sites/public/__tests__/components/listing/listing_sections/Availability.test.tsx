@@ -150,6 +150,41 @@ describe("<Availability>", () => {
       expect(view.getByText("100 units")).toBeDefined()
     })
 
+    it("shows correct data for under construction with enableMarketingStatus on", () => {
+      const dueDate = dayjs(new Date()).add(5, "days").hour(10).minute(30).toDate()
+      const view = render(
+        <Availability
+          listing={{
+            ...listing,
+            reviewOrderType: ReviewOrderTypeEnum.firstComeFirstServe,
+            status: ListingsStatusEnum.active,
+            waitlistOpenSpots: null,
+            applicationDueDate: dueDate,
+            marketingType: MarketingTypeEnum.comingSoon,
+            marketingSeason: MarketingSeasonEnum.spring,
+            marketingYear: 2026,
+          }}
+          jurisdiction={{
+            ...jurisdiction,
+            featureFlags: [
+              { name: FeatureFlagEnum.enableMarketingStatus, active: true } as FeatureFlag,
+            ],
+          }}
+        />
+      )
+      expect(view.getByText("Availability")).toBeDefined()
+      expect(view.getAllByText("Under Construction").length).toBe(2)
+      expect(view.queryByText("First Come First Serve")).toBeNull()
+      expect(view.queryByText("Vacant Units Available")).toBeNull()
+      expect(view.getByText("Residents should apply in Spring 2026")).toBeDefined()
+      expect(view.queryByText("Application Due:", { exact: false })).toBeNull()
+      expect(
+        view.getByText(
+          "Eligible applicants will be contacted on a first come first serve basis until vacancies are filled."
+        )
+      )
+    })
+
     it("shows correct data for closed waitlist listing, due date, no spots", () => {
       const dueDate = dayjs(new Date()).subtract(5, "days").hour(10).minute(30).toDate()
       const view = render(
@@ -306,7 +341,7 @@ describe("<Availability>", () => {
             applicationDueDate: dueDate,
             marketingType: MarketingTypeEnum.comingSoon,
             marketingSeason: MarketingSeasonEnum.spring,
-            marketingDate: new Date(2026, 1, 1, 10, 30, 0),
+            marketingYear: 2026,
           }}
           jurisdiction={{
             ...jurisdiction,
@@ -340,7 +375,7 @@ describe("<Availability>", () => {
             applicationDueDate: dueDate,
             marketingType: MarketingTypeEnum.comingSoon,
             marketingSeason: MarketingSeasonEnum.spring,
-            marketingDate: new Date(2026, 1, 1, 10, 30, 0),
+            marketingYear: 2026,
           }}
           jurisdiction={{
             ...jurisdiction,
@@ -376,7 +411,7 @@ describe("<Availability>", () => {
             applicationDueDate: dueDate,
             marketingType: MarketingTypeEnum.comingSoon,
             marketingSeason: MarketingSeasonEnum.spring,
-            marketingDate: new Date(2026, 1, 1, 10, 30, 0),
+            marketingYear: 2026,
           }}
           jurisdiction={{
             ...jurisdiction,

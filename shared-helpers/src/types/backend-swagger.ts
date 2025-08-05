@@ -4124,7 +4124,7 @@ export interface Listing {
   marketingType?: MarketingTypeEnum
 
   /**  */
-  marketingDate?: Date
+  marketingYear?: number
 
   /**  */
   marketingSeason?: MarketingSeasonEnum
@@ -4679,7 +4679,7 @@ export interface ListingCreate {
   marketingType?: MarketingTypeEnum
 
   /**  */
-  marketingDate?: Date
+  marketingYear?: number
 
   /**  */
   marketingSeason?: MarketingSeasonEnum
@@ -4992,7 +4992,7 @@ export interface ListingUpdate {
   marketingType?: MarketingTypeEnum
 
   /**  */
-  marketingDate?: Date
+  marketingYear?: number
 
   /**  */
   marketingSeason?: MarketingSeasonEnum
@@ -6942,6 +6942,8 @@ export enum ListingOrderByKeys {
   "status" = "status",
   "unitsAvailable" = "unitsAvailable",
   "marketingType" = "marketingType",
+  "marketingYear" = "marketingYear",
+  "marketingSeason" = "marketingSeason",
 }
 
 export enum OrderByEnum {
@@ -7156,6 +7158,7 @@ export enum FeatureFlagEnum {
   "enableGeocodingRadiusMethod" = "enableGeocodingRadiusMethod",
   "enableHomeType" = "enableHomeType",
   "enableIsVerified" = "enableIsVerified",
+  "enableLimitedHowDidYouHear" = "enableLimitedHowDidYouHear",
   "enableListingFavoriting" = "enableListingFavoriting",
   "enableListingFiltering" = "enableListingFiltering",
   "enableListingOpportunity" = "enableListingOpportunity",
