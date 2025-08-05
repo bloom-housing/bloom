@@ -40,6 +40,11 @@ const ApplicationsList = () => {
     listingDto?.jurisdictions.id
   )
 
+  const disableWorkInRegion = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.disableWorkInRegion,
+    listingDto?.jurisdictions.id
+  )
+
   const enableFullTimeStudentQuestion = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableFullTimeStudentQuestion,
     listingDto?.jurisdictions.id
@@ -147,6 +152,7 @@ const ApplicationsList = () => {
 
                 <DetailsPrimaryApplicant
                   enableFullTimeStudentQuestion={enableFullTimeStudentQuestion}
+                  disableWorkInRegion={disableWorkInRegion}
                 />
 
                 <DetailsAlternateContact />
@@ -154,6 +160,7 @@ const ApplicationsList = () => {
                 <DetailsHouseholdMembers
                   setMembersDrawer={setMembersDrawer}
                   enableFullTimeStudentQuestion={enableFullTimeStudentQuestion}
+                  disableWorkInRegion={disableWorkInRegion}
                 />
 
                 <DetailsHouseholdDetails
@@ -199,6 +206,7 @@ const ApplicationsList = () => {
         membersDrawer={membersDrawer}
         setMembersDrawer={setMembersDrawer}
         enableFullTimeStudentQuestion={enableFullTimeStudentQuestion}
+        disableWorkInRegion={disableWorkInRegion}
       />
     </ApplicationContext.Provider>
   )
