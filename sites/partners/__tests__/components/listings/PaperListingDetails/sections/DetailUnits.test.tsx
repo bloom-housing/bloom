@@ -56,7 +56,7 @@ describe("DetailUnits", () => {
     ).toBeInTheDocument()
     expect(screen.getByText("Individual Units")).toBeInTheDocument()
     expect(screen.getByText("What is the listing availability?")).toBeInTheDocument()
-    expect(screen.getByText("Open Waitlist")).toBeInTheDocument()
+    expect(screen.getByText("Open waitlist")).toBeInTheDocument()
     expect(screen.queryAllByText("Home Type")).toHaveLength(0)
 
     // Table
@@ -142,7 +142,7 @@ describe("DetailUnits", () => {
     ).toBeInTheDocument()
     expect(screen.getByText("Individual Units")).toBeInTheDocument()
     expect(screen.getByText("What is the listing availability?")).toBeInTheDocument()
-    expect(screen.getByText("Open Waitlist")).toBeInTheDocument()
+    expect(screen.getByText("Open waitlist")).toBeInTheDocument()
     expect(screen.queryAllByText("Home Type")).toHaveLength(0)
 
     // Table
@@ -244,7 +244,7 @@ describe("DetailUnits", () => {
     ).not.toBeInTheDocument()
     expect(screen.queryByText("Individual Units")).not.toBeInTheDocument()
     expect(screen.queryByText("What is the listing availability?")).not.toBeInTheDocument()
-    expect(screen.queryByText("Open Waitlist")).not.toBeInTheDocument()
+    expect(screen.queryByText("Open waitlist")).not.toBeInTheDocument()
     expect(screen.queryAllByText("Home Type")).toHaveLength(0)
 
     // Table
@@ -256,7 +256,7 @@ describe("DetailUnits", () => {
     const columnHeaders = within(head).getAllByRole("columnheader")
     expect(columnHeaders).toHaveLength(7)
 
-    expect(columnHeaders[0]).toHaveTextContent("Unit Type")
+    expect(columnHeaders[0]).toHaveTextContent("Unit type")
     expect(columnHeaders[1]).toHaveTextContent("# of Units")
     expect(columnHeaders[2]).toHaveTextContent("AMI")
     expect(columnHeaders[3]).toHaveTextContent("Rent")

@@ -127,7 +127,7 @@ describe("partners_application_index", () => {
     expect(getByText("First Name")).toBeInTheDocument()
     expect(getByText("Middle Name")).toBeInTheDocument()
     expect(getByText("Last Name")).toBeInTheDocument()
-    expect(getByText("Date of Birth")).toBeInTheDocument()
+    expect(getByText("Date of birth")).toBeInTheDocument()
     expect(getByText("Email")).toBeInTheDocument()
     expect(getByText("Phone")).toBeInTheDocument()
     expect(getByText("Second Phone")).toBeInTheDocument()
@@ -136,7 +136,7 @@ describe("partners_application_index", () => {
     expect(getByText("Residence Address")).toBeInTheDocument()
     expect(getByText("Mailing Address")).toBeInTheDocument()
     expect(getByText("Work Address")).toBeInTheDocument()
-    expect(getAllByText("Street Address")).toHaveLength(3)
+    expect(getAllByText("Street address")).toHaveLength(3)
     expect(getAllByText("Apt or Unit #")).toHaveLength(3)
     expect(getAllByText("City")).toHaveLength(3)
     expect(getAllByText("State")).toHaveLength(3)
@@ -154,7 +154,7 @@ describe("partners_application_index", () => {
     expect(getByText("First Name")).toBeInTheDocument()
     expect(getByText("Middle Name")).toBeInTheDocument()
     expect(getByText("Last Name")).toBeInTheDocument()
-    expect(getByText("Date of Birth")).toBeInTheDocument()
+    expect(getByText("Date of birth")).toBeInTheDocument()
     expect(getByText("Email")).toBeInTheDocument()
     expect(getByText("Phone")).toBeInTheDocument()
     expect(getByText("Second Phone")).toBeInTheDocument()
@@ -163,7 +163,7 @@ describe("partners_application_index", () => {
     expect(getByText("Residence Address")).toBeInTheDocument()
     expect(getByText("Mailing Address")).toBeInTheDocument()
     expect(getByText("Work Address")).toBeInTheDocument()
-    expect(getAllByText("Street Address")).toHaveLength(3)
+    expect(getAllByText("Street address")).toHaveLength(3)
     expect(getAllByText("Apt or Unit #")).toHaveLength(3)
     expect(getAllByText("City")).toHaveLength(3)
     expect(getAllByText("State")).toHaveLength(3)
@@ -200,7 +200,7 @@ describe("partners_application_index", () => {
     expect(getByText("Phone")).toBeInTheDocument()
     expect(getAllByText("n/a")).toHaveLength(5)
     expect(queryByText("Address")).not.toBeInTheDocument()
-    expect(queryByText("Street Address")).not.toBeInTheDocument()
+    expect(queryByText("Street address")).not.toBeInTheDocument()
     expect(queryByText("Apt or Unit #")).not.toBeInTheDocument()
     expect(queryByText("City")).not.toBeInTheDocument()
     expect(queryByText("State")).not.toBeInTheDocument()
@@ -240,7 +240,7 @@ describe("partners_application_index", () => {
     expect(getByText("Phone")).toBeInTheDocument()
     expect(getByText("(789) 012-3456")).toBeInTheDocument()
     expect(getByText("Address")).toBeInTheDocument()
-    expect(getByText("Street Address")).toBeInTheDocument()
+    expect(getByText("Street address")).toBeInTheDocument()
     expect(getByText("25 Visitor Center Rd")).toBeInTheDocument()
     expect(getByText("Apt or Unit #")).toBeInTheDocument()
     expect(getByText("25")).toBeInTheDocument()
@@ -505,7 +505,7 @@ describe("partners_application_index", () => {
     const { getByText, findByText, queryByText } = render(<ApplicationsList />)
     const housholdMembersSection = await findByText("Household Members")
     expect(housholdMembersSection).toBeInTheDocument()
-    expect(queryByText("Household Member")).not.toBeInTheDocument()
+    expect(queryByText("Household member")).not.toBeInTheDocument()
     expect(queryByText("Household Member Details")).not.toBeInTheDocument()
     expect(queryByText("Done")).not.toBeInTheDocument()
 
@@ -516,7 +516,7 @@ describe("partners_application_index", () => {
 
     fireEvent.click(viewButton)
 
-    expect(getByText("Household Member")).toBeInTheDocument()
+    expect(getByText("Household member")).toBeInTheDocument()
     expect(getByText("Done")).toBeInTheDocument()
 
     expect(getByText("Household Member Details")).toBeInTheDocument()
@@ -527,7 +527,7 @@ describe("partners_application_index", () => {
     expect(within(householdMemberDetailsSection).getByText("n/a")).toBeInTheDocument()
     expect(within(householdMemberDetailsSection).getByText("Last Name")).toBeInTheDocument()
     expect(within(householdMemberDetailsSection).getByText("Household Last")).toBeInTheDocument()
-    expect(within(householdMemberDetailsSection).getByText("Date of Birth")).toBeInTheDocument()
+    expect(within(householdMemberDetailsSection).getByText("Date of birth")).toBeInTheDocument()
     expect(within(householdMemberDetailsSection).getByText("11/25/1966")).toBeInTheDocument()
     expect(
       within(householdMemberDetailsSection).getByText("Same Address as Primary")
@@ -571,7 +571,7 @@ describe("partners_application_index", () => {
     const { getByText, findByText, queryByText } = render(<ApplicationsList />)
     const housholdMembersSection = await findByText("Household Members")
     expect(housholdMembersSection).toBeInTheDocument()
-    expect(queryByText("Household Member")).not.toBeInTheDocument()
+    expect(queryByText("Household member")).not.toBeInTheDocument()
     expect(queryByText("Household Member Details")).not.toBeInTheDocument()
     expect(queryByText("Done")).not.toBeInTheDocument()
 
@@ -582,14 +582,14 @@ describe("partners_application_index", () => {
 
     fireEvent.click(viewButton)
 
-    expect(getByText("Household Member")).toBeInTheDocument()
+    expect(getByText("Household member")).toBeInTheDocument()
     expect(getByText("Done")).toBeInTheDocument()
 
     expect(getByText("Household Member Details")).toBeInTheDocument()
     const householdMemberDetailsSection = getByText("Household Member Details").parentElement
 
     expect(within(householdMemberDetailsSection).getByText("Residence Address")).toBeInTheDocument()
-    expect(within(householdMemberDetailsSection).getByText("Street Address")).toBeInTheDocument()
+    expect(within(householdMemberDetailsSection).getByText("Street address")).toBeInTheDocument()
     expect(within(householdMemberDetailsSection).getByText("25 E Center St")).toBeInTheDocument()
     expect(within(householdMemberDetailsSection).getByText("Apt or Unit #")).toBeInTheDocument()
     expect(within(householdMemberDetailsSection).getAllByText("n/a")).toHaveLength(2)
@@ -640,7 +640,7 @@ describe("partners_application_index", () => {
     const { getByText, findByText, queryByText } = render(<ApplicationsList />)
     const housholdMembersSection = await findByText("Household Members")
     expect(housholdMembersSection).toBeInTheDocument()
-    expect(queryByText("Household Member")).not.toBeInTheDocument()
+    expect(queryByText("Household member")).not.toBeInTheDocument()
     expect(queryByText("Household Member Details")).not.toBeInTheDocument()
     expect(queryByText("Done")).not.toBeInTheDocument()
 
@@ -651,14 +651,14 @@ describe("partners_application_index", () => {
 
     fireEvent.click(viewButton)
 
-    expect(getByText("Household Member")).toBeInTheDocument()
+    expect(getByText("Household member")).toBeInTheDocument()
     expect(getByText("Done")).toBeInTheDocument()
 
     expect(getByText("Household Member Details")).toBeInTheDocument()
     const householdMemberDetailsSection = getByText("Household Member Details").parentElement
 
     expect(within(householdMemberDetailsSection).getByText("Work Address")).toBeInTheDocument()
-    expect(within(householdMemberDetailsSection).getByText("Street Address")).toBeInTheDocument()
+    expect(within(householdMemberDetailsSection).getByText("Street address")).toBeInTheDocument()
     expect(
       within(householdMemberDetailsSection).getByText("2745 Cherry Ridge Drive")
     ).toBeInTheDocument()
@@ -711,7 +711,7 @@ describe("partners_application_index", () => {
     const { getByText, findByText, queryByText } = render(<ApplicationsList />)
     const housholdMembersSection = await findByText("Household Members")
     expect(housholdMembersSection).toBeInTheDocument()
-    expect(queryByText("Household Member")).not.toBeInTheDocument()
+    expect(queryByText("Household member")).not.toBeInTheDocument()
     expect(queryByText("Household Member Details")).not.toBeInTheDocument()
     expect(queryByText("Done")).not.toBeInTheDocument()
 
@@ -722,7 +722,7 @@ describe("partners_application_index", () => {
 
     fireEvent.click(viewButton)
 
-    expect(getByText("Household Member")).toBeInTheDocument()
+    expect(getByText("Household member")).toBeInTheDocument()
     expect(getByText("Done")).toBeInTheDocument()
 
     expect(getByText("Household Member Details")).toBeInTheDocument()

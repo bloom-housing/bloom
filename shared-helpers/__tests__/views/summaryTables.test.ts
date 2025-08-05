@@ -739,7 +739,7 @@ describe("stackedUnitGroupsSummariesTable", () => {
       {
         rent: { cellSubText: "", cellText: "n/a" },
         unitType: { cellSubText: "", cellText: "1 BR" },
-        availability: { cellText: "Under Construction" },
+        availability: { cellText: "Under construction" },
       },
     ])
   })
@@ -770,6 +770,6 @@ describe("getAvailabilityText", () => {
         { ...defaultUnitGroupSummary, openWaitlist: true, unitVacancies: 10 },
         true
       )
-    ).toEqual({ text: "Under Construction" })
+    ).toEqual({ text: "Under construction" })
   })
 })

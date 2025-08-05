@@ -40,7 +40,7 @@ Cypress.Commands.add("loginAndAcceptTerms", (fix = "user") => {
   cy.fixture(fix).then((user) => {
     cy.get("input#email").type(user.email)
     cy.get("input#password").type(user.password)
-    cy.get("button").contains("Sign In").click()
+    cy.get("button").contains("Sign in").click()
     cy.getByTestId("agree").check()
     cy.getByID("form-submit").click()
     cy.contains("Listings")
@@ -66,7 +66,7 @@ Cypress.Commands.add("loginWithMfa", () => {
   cy.fixture("mfaUser").then((user) => {
     cy.get("input#email").type(user.email)
     cy.get("input#password").type(user.password)
-    cy.get("button").contains("Sign In").click()
+    cy.get("button").contains("Sign in").click()
     cy.getByID("verify-by-email").click()
     cy.getByTestId("sign-in-mfa-code-field").type(user.mfaCode)
     cy.getByID("verify-and-sign-in").click()
@@ -370,7 +370,7 @@ Cypress.Commands.add("verifyAlternateContact", (application, fieldsToSkip = []) 
 Cypress.Commands.add("verifyHouseholdMembers", (application, fieldsToSkip = []) => {
   ;[
     { id: `[data-label="Name"]`, fieldKey: "householdMemberName" },
-    { id: `[data-label="Date of Birth"]`, fieldKey: "householdMemberDoB" },
+    { id: `[data-label="Date of birth"]`, fieldKey: "householdMemberDoB" },
     { id: `[data-label="Relationship"]`, fieldKey: "relationship" },
     { id: `[data-label="Same Residence"]`, fieldKey: "sameAddress" },
     { id: `[data-label="Work in Region"]`, fieldKey: "workInRegion" },

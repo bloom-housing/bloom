@@ -33,7 +33,7 @@ describe("<HouseholdMemberForm>", () => {
         memberFirstName={"Sonja"}
         memberLastName={"Aldenkamp"}
         key={"abcd"}
-        subtitle={"Household Member"}
+        subtitle={"Household member"}
         editMember={editMemberSpy}
       />
     )

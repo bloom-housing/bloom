@@ -538,7 +538,7 @@
   "errors.lastNameError": "Please enter a last name",
   "errors.maxLength": "Must not be more than %{length} characters.",
   "errors.maxLessThanMinRentError": "Max rent must be greater than or equal to min rent",
-  "errors.minGreaterThanMaxRentError": "Min rent must be less than or equal to max Rent",
+  "errors.minGreaterThanMaxRentError": "Min rent must be less than or equal to max rent",
   "errors.notFound.message": "Uh oh, we can't seem to find the page you're looking for. Try going back to the previous page or click below to browse listings.",
   "errors.notFound.subtitle": "Sorry, we couldn't find the page you're looking for.",
   "errors.notFound.title": "Page not found",

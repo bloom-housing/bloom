@@ -1,5 +1,7 @@
 import { Logger } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
+import { mockDeep } from 'jest-mock-extended';
+
 import {
   LanguagesEnum,
   MultiselectQuestionsApplicationSectionEnum,
