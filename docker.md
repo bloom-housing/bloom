@@ -69,3 +69,27 @@ The following command should be run in the `api` directory to build the image
 
 After the image is built, the following command should be run from the `api` directory. It will run all of the pending migrations on the postgres defined at `DATABASE_URL` in the `.env` file
 `docker run  --env-file .env --name backend-migrate backend-migrate`
+
+### Public image
+
+#### Build
+
+The following command should be run in the _root_ directory to build the image
+`docker build . -f sites/public/Dockerfile -t public`
+
+#### Run
+
+After the image is built, the following command should be run from the _root_ directory.
+`docker run  --env-file  sites/public/.env -p 3000:3000  public`
+
+### Partner image
+
+#### Build
+
+The following command should be run in the _root_ directory to build the image
+`docker build . -f sites/partner/Dockerfile -t partner`
+
+#### Run
+
+After the image is built, the following command should be run from the _root_ directory.
+`docker run  --env-file  sites/partner/.env -p 3001:3001  partner`
