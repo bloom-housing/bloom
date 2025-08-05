@@ -75,7 +75,7 @@ Cypress.Commands.add("loginWithMfa", () => {
 })
 
 Cypress.Commands.add("signOut", () => {
-  cy.get("button").contains("Sign Out").click()
+  cy.get("button").contains("Sign out").click()
   cy.get("input#email")
 })
 
@@ -372,8 +372,8 @@ Cypress.Commands.add("verifyHouseholdMembers", (application, fieldsToSkip = []) 
     { id: `[data-label="Name"]`, fieldKey: "householdMemberName" },
     { id: `[data-label="Date of birth"]`, fieldKey: "householdMemberDoB" },
     { id: `[data-label="Relationship"]`, fieldKey: "relationship" },
-    { id: `[data-label="Same Residence"]`, fieldKey: "sameAddress" },
-    { id: `[data-label="Work in Region"]`, fieldKey: "workInRegion" },
+    { id: `[data-label="Same residence"]`, fieldKey: "sameAddress" },
+    { id: `[data-label="Work in region"]`, fieldKey: "workInRegion" },
   ]
     .filter(({ id }) => !fieldsToSkip.includes(id))
     .forEach(({ id, fieldKey }) => {
@@ -407,8 +407,8 @@ Cypress.Commands.add("verifyTerms", (application) => {
 Cypress.Commands.add("addMinimalListing", (listingName, isLottery, isApproval, jurisdiction) => {
   // Create and publish minimal FCFS or Lottery listing
   // TODO: test Open Waitlist, though maybe with integration test instead
-  cy.getByID("addListingButton").contains("Add Listing").click()
-  cy.contains("New Listing")
+  cy.getByID("addListingButton").contains("Add listing").click()
+  cy.contains("New listing")
   cy.fixture("minimalListing").then((listing) => {
     if (jurisdiction) {
       cy.getByID("jurisdictions.id").select("Bloomington")
@@ -416,7 +416,7 @@ Cypress.Commands.add("addMinimalListing", (listingName, isLottery, isApproval, j
     }
     cy.getByID("name").type(listingName)
     cy.getByID("developer").type(listing["developer"])
-    cy.getByID("add-photos-button").contains("Add Photo").click()
+    cy.getByID("add-photos-button").contains("Add photo").click()
     cy.getByTestId("dropzone-input").attachFile(
       "cypress-automated-image-upload-071e2ab9-5a52-4f34-85f0-e41f696f4b96.jpeg",
       {
@@ -433,7 +433,7 @@ Cypress.Commands.add("addMinimalListing", (listingName, isLottery, isApproval, j
     cy.getByID("listingsBuildingAddress.city").type(listing["buildingAddress.city"])
     cy.getByID("listingsBuildingAddress.state").select(listing["buildingAddress.state"])
     cy.getByID("listingsBuildingAddress.zipCode").type(listing["buildingAddress.zipCode"])
-    cy.getByID("addUnitsButton").contains("Add Unit").click()
+    cy.getByID("addUnitsButton").contains("Add unit").click()
     cy.getByID("number").type(listing["number"])
     cy.getByID("unitTypes.id").select(listing["unitType.id"])
     cy.getByID("unitFormSaveAndExitButton").contains("Save & exit").click()
