@@ -76,10 +76,6 @@ const jurisdictions = [
   },
 ]
 
-const doJurisdictionsHaveFeatureFlagOn = () => {
-  return false
-}
-
 const getJurisdictionLanguages = () => {
   return [LanguagesEnum.en]
 }
@@ -284,7 +280,7 @@ describe("add listing", () => {
       "Zip code",
       "Year built",
       "Reserved community type",
-      "Reserved community Description",
+      "Reserved community description",
       "Units",
       "Application fee",
       "Deposit min",
@@ -326,6 +322,7 @@ describe("add listing", () => {
     })
 
     unrequiredFields.forEach((fieldName) => {
+      console.log(fieldName)
       const query = screen.getAllByText(fieldName)
       expect(query[0].textContent).not.toContain("*")
     })

@@ -213,7 +213,7 @@ describe("PreferencesAndPrograms", () => {
             id: "programId",
             createdAt: new Date(),
             updatedAt: new Date(),
-            text: "Program 1",
+            text: "Families",
             applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
             jurisdictions: undefined,
           },

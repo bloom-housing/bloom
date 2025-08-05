@@ -109,10 +109,10 @@ describe("listing data", () => {
         </ListingContext.Provider>
       )
 
-      expect(getByText("Listing Data")).toBeInTheDocument()
+      expect(getByText("Listing data")).toBeInTheDocument()
       expect(getByText("Listing ID")).toBeInTheDocument()
       expect(getByText("Uvbk5qurpB2WI9V6WnNdH")).toBeInTheDocument()
-      expect(getByText("Date Created")).toBeInTheDocument()
+      expect(getByText("Date created")).toBeInTheDocument()
       expect(getByText("02/03/2025 at 10:13 AM")).toBeInTheDocument()
     })
 
@@ -133,12 +133,12 @@ describe("listing data", () => {
           </ListingContext.Provider>
         )
 
-        expect(queryByText("Listing Notes")).not.toBeInTheDocument()
-        expect(queryByText("Change Request Summary")).not.toBeInTheDocument()
+        expect(queryByText("Listing notes")).not.toBeInTheDocument()
+        expect(queryByText("Change request summary")).not.toBeInTheDocument()
         expect(queryByText("Test changes")).not.toBeInTheDocument()
-        expect(queryByText("Request Date")).not.toBeInTheDocument()
+        expect(queryByText("Request date")).not.toBeInTheDocument()
         expect(queryByText("01/10/2025")).not.toBeInTheDocument()
-        expect(queryByText("Requested By")).not.toBeInTheDocument()
+        expect(queryByText("Requested by")).not.toBeInTheDocument()
         expect(queryByText("John Test")).not.toBeInTheDocument()
       })
 
@@ -157,12 +157,12 @@ describe("listing data", () => {
           </ListingContext.Provider>
         )
 
-        expect(getByText("Listing Notes")).toBeInTheDocument()
-        expect(getByText("Change Request Summary")).toBeInTheDocument()
+        expect(getByText("Listing notes")).toBeInTheDocument()
+        expect(getByText("Change request summary")).toBeInTheDocument()
         expect(getByText("Test changes")).toBeInTheDocument()
-        expect(getByText("Request Date")).toBeInTheDocument()
+        expect(getByText("Request date")).toBeInTheDocument()
         expect(getByText("01/10/2025")).toBeInTheDocument()
-        expect(queryByText("Requested By")).not.toBeInTheDocument()
+        expect(queryByText("Requested by")).not.toBeInTheDocument()
         expect(queryByText("John Test")).not.toBeInTheDocument()
       })
 
@@ -184,12 +184,12 @@ describe("listing data", () => {
           </ListingContext.Provider>
         )
 
-        expect(getByText("Listing Notes")).toBeInTheDocument()
-        expect(getByText("Change Request Summary")).toBeInTheDocument()
+        expect(getByText("Listing notes")).toBeInTheDocument()
+        expect(getByText("Change request summary")).toBeInTheDocument()
         expect(getByText("Test changes")).toBeInTheDocument()
-        expect(getByText("Request Date")).toBeInTheDocument()
+        expect(getByText("Request date")).toBeInTheDocument()
         expect(getByText("01/10/2025")).toBeInTheDocument()
-        expect(getByText("Requested By")).toBeInTheDocument()
+        expect(getByText("Requested by")).toBeInTheDocument()
         expect(getByText("John Test")).toBeInTheDocument()
       })
     })
@@ -201,12 +201,12 @@ describe("listing data", () => {
         </ListingContext.Provider>
       )
 
-      expect(getByText("Listing Intro")).toBeInTheDocument()
-      expect(getByText("Listing Name")).toBeInTheDocument()
+      expect(getByText("Listing intro")).toBeInTheDocument()
+      expect(getByText("Listing name")).toBeInTheDocument()
       expect(getByText("Archer Studios")).toBeInTheDocument()
       expect(getByText("Jurisdiction")).toBeInTheDocument()
       expect(getByText("San Jose")).toBeInTheDocument()
-      expect(getByText("Housing Developer")).toBeInTheDocument()
+      expect(getByText("Housing developer")).toBeInTheDocument()
       expect(getByText("Charities Housing")).toBeInTheDocument()
     })
 
@@ -223,7 +223,7 @@ describe("listing data", () => {
           </ListingContext.Provider>
         )
 
-        expect(getByText("Listing Photo")).toBeInTheDocument()
+        expect(getByText("Listing photo")).toBeInTheDocument()
         expect(getByText("None")).toBeInTheDocument()
         expect(queryByText("Preview")).not.toBeInTheDocument()
         expect(queryByText("Primary")).not.toBeInTheDocument()
@@ -262,7 +262,7 @@ describe("listing data", () => {
           </ListingContext.Provider>
         )
 
-        expect(getByText("Listing Photo", { selector: "h2" })).toBeInTheDocument()
+        expect(getByText("Listing photo", { selector: "h2" })).toBeInTheDocument()
         expect(getByText("Preview")).toBeInTheDocument()
         expect(getByText("Primary")).toBeInTheDocument()
         expect(getByText("Primary photo")).toBeInTheDocument()
@@ -270,7 +270,7 @@ describe("listing data", () => {
         expect(listingImages).toHaveLength(2)
         listingImages.forEach((imageElement) => {
           expect(imageElement).toHaveAttribute("src", "asset_file_id")
-          expect(imageElement).toHaveAttribute("alt", "Listing Photo")
+          expect(imageElement).toHaveAttribute("alt", "Listing photo")
         })
       })
     })
@@ -282,8 +282,8 @@ describe("listing data", () => {
         </ListingContext.Provider>
       )
 
-      expect(getByText("Building Details")).toBeInTheDocument()
-      expect(getByText("Building Address")).toBeInTheDocument()
+      expect(getByText("Building details")).toBeInTheDocument()
+      expect(getByText("Building address")).toBeInTheDocument()
       expect(getByText("Street address")).toBeInTheDocument()
       expect(getByText("98 Archer Street")).toBeInTheDocument()
       expect(getByText("City")).toBeInTheDocument()
@@ -294,11 +294,11 @@ describe("listing data", () => {
       expect(getByText("CA")).toBeInTheDocument()
       expect(getByText("Latitude")).toBeInTheDocument()
       expect(getByText("37.36537")).toBeInTheDocument()
-      expect(getByText("Zip Code")).toBeInTheDocument()
+      expect(getByText("Zip code")).toBeInTheDocument()
       expect(getByText("95112")).toBeInTheDocument()
       expect(getByText("Neighborhood")).toBeInTheDocument()
       expect(getByText("Rosemary Gardens Park")).toBeInTheDocument()
-      expect(getByText("Year Built")).toBeInTheDocument()
+      expect(getByText("Year built")).toBeInTheDocument()
       expect(getByText("2012")).toBeInTheDocument()
       expect(queryByText("Region")).not.toBeInTheDocument()
       expect(queryByText("Southwest")).not.toBeInTheDocument()
@@ -319,8 +319,8 @@ describe("listing data", () => {
         </AuthContext.Provider>
       )
 
-      expect(getByText("Building Details")).toBeInTheDocument()
-      expect(getByText("Building Address")).toBeInTheDocument()
+      expect(getByText("Building details")).toBeInTheDocument()
+      expect(getByText("Building address")).toBeInTheDocument()
       expect(getByText("Street address")).toBeInTheDocument()
       expect(getByText("98 Archer Street")).toBeInTheDocument()
       expect(getByText("City")).toBeInTheDocument()
@@ -331,11 +331,11 @@ describe("listing data", () => {
       expect(getByText("CA")).toBeInTheDocument()
       expect(getByText("Latitude")).toBeInTheDocument()
       expect(getByText("37.36537")).toBeInTheDocument()
-      expect(getByText("Zip Code")).toBeInTheDocument()
+      expect(getByText("Zip code")).toBeInTheDocument()
       expect(getByText("95112")).toBeInTheDocument()
       expect(getByText("Neighborhood")).toBeInTheDocument()
       expect(getByText("Rosemary Gardens Park")).toBeInTheDocument()
-      expect(getByText("Year Built")).toBeInTheDocument()
+      expect(getByText("Year built")).toBeInTheDocument()
       expect(getByText("2012")).toBeInTheDocument()
       expect(getByText("Region")).toBeInTheDocument()
       expect(getByText("Southwest")).toBeInTheDocument()
@@ -358,10 +358,10 @@ describe("listing data", () => {
           </ListingContext.Provider>
         )
 
-        expect(getByText("Community Type")).toBeInTheDocument()
-        expect(getByText("Reserved Community Type")).toBeInTheDocument()
-        expect(getByText("Farmworker Housing")).toBeInTheDocument()
-        expect(getByText("Reserved Community Description")).toBeInTheDocument()
+        expect(getByText("Community type")).toBeInTheDocument()
+        expect(getByText("Reserved community type")).toBeInTheDocument()
+        expect(getByText("Farmworker housing")).toBeInTheDocument()
+        expect(getByText("Reserved community description")).toBeInTheDocument()
         expect(getByText("Test community description")).toBeInTheDocument()
         expect(
           getByText(
@@ -390,10 +390,10 @@ describe("listing data", () => {
           </ListingContext.Provider>
         )
 
-        expect(getByText("Community Type")).toBeInTheDocument()
-        expect(getByText("Reserved Community Type")).toBeInTheDocument()
-        expect(getByText("Farmworker Housing")).toBeInTheDocument()
-        expect(getByText("Reserved Community Description")).toBeInTheDocument()
+        expect(getByText("Community type")).toBeInTheDocument()
+        expect(getByText("Reserved community type")).toBeInTheDocument()
+        expect(getByText("Farmworker housing")).toBeInTheDocument()
+        expect(getByText("Reserved community description")).toBeInTheDocument()
         expect(getByText("Test community description")).toBeInTheDocument()
         expect(
           getByText(
@@ -408,11 +408,11 @@ describe("listing data", () => {
       const COMMUNITY_TYPES = [
         {
           dtoField: "developmentalDisability",
-          typeString: "Developmental Disability",
+          typeString: "Developmental disability",
         },
         {
           dtoField: "farmworkerHousing",
-          typeString: "Farmworker Housing",
+          typeString: "Farmworker housing",
         },
         {
           dtoField: "housingVoucher",
@@ -432,7 +432,7 @@ describe("listing data", () => {
         },
         {
           dtoField: "specialNeeds",
-          typeString: "Special Needs",
+          typeString: "Special needs",
         },
         {
           dtoField: "veteran",
@@ -440,7 +440,7 @@ describe("listing data", () => {
         },
         {
           dtoField: "schoolEmployee",
-          typeString: "School Employee",
+          typeString: "School employee",
         },
       ].map((data) =>
         Object.assign(data, {
@@ -484,9 +484,9 @@ describe("listing data", () => {
       )
 
       expect(getByText("Do you want to show unit types or individual units?")).toBeInTheDocument()
-      expect(getByText("Individual Units")).toBeInTheDocument()
+      expect(getByText("Individual units")).toBeInTheDocument()
       expect(getByText("What is the listing availability?")).toBeInTheDocument()
-      expect(getByText("Available Units")).toBeInTheDocument()
+      expect(getByText("Available units")).toBeInTheDocument()
       expect(getByText("None")).toBeInTheDocument()
 
       expect(queryByText("Unit #")).not.toBeInTheDocument()
@@ -532,9 +532,9 @@ describe("listing data", () => {
       )
 
       expect(getByText("Do you want to show unit types or individual units?")).toBeInTheDocument()
-      expect(getByText("Individual Units")).toBeInTheDocument()
+      expect(getByText("Individual units")).toBeInTheDocument()
       expect(getByText("What is the listing availability?")).toBeInTheDocument()
-      expect(getByText("Available Units")).toBeInTheDocument()
+      expect(getByText("Available units")).toBeInTheDocument()
 
       expect(getByText("Unit #")).toBeInTheDocument()
       expect(getByText("Unit type")).toBeInTheDocument()
@@ -563,7 +563,7 @@ describe("listing data", () => {
       )
 
       expect(getByText("Housing preferences")).toBeInTheDocument()
-      expect(getByText("Active Preferences")).toBeInTheDocument()
+      expect(getByText("Active preferences")).toBeInTheDocument()
       expect(getByText("None")).toBeInTheDocument()
       expect(queryByText("Order")).not.toBeInTheDocument()
       expect(queryByText("Name")).not.toBeInTheDocument()
@@ -606,7 +606,7 @@ describe("listing data", () => {
       )
 
       expect(getByText("Housing preferences")).toBeInTheDocument()
-      expect(getByText("Active Preferences")).toBeInTheDocument()
+      expect(getByText("Active preferences")).toBeInTheDocument()
       expect(getByText("Order")).toBeInTheDocument()
       expect(getByText("1")).toBeInTheDocument()
       expect(getByText("2")).toBeInTheDocument()
@@ -652,7 +652,7 @@ describe("listing data", () => {
       )
 
       expect(getByText("Housing programs")).toBeInTheDocument()
-      expect(getByText("Active Programs")).toBeInTheDocument()
+      expect(getByText("Active programs")).toBeInTheDocument()
       expect(getByText("Order")).toBeInTheDocument()
       expect(getByText("1")).toBeInTheDocument()
       expect(getByText("2")).toBeInTheDocument()
@@ -841,7 +841,7 @@ describe("listing data", () => {
         ).toBeInTheDocument()
         expect(getByText("Rental assistance")).toBeInTheDocument()
         expect(getByText("Custom rental assistance")).toBeInTheDocument()
-        expect(getByText("Building criteria selection")).toBeInTheDocument()
+        expect(getByText("Building selection criteria")).toBeInTheDocument()
         expect(getByText("URL")).toBeInTheDocument()
         expect(
           getByText("Tenant Selection Criteria will be available to all applicants upon request.")
@@ -1603,7 +1603,7 @@ describe("listing data", () => {
       },
       {
         statusEnum: ListingsStatusEnum.changesRequested,
-        tagString: "Changes Requested",
+        tagString: "Changes requested",
       },
       {
         statusEnum: ListingsStatusEnum.closed,
@@ -1615,7 +1615,7 @@ describe("listing data", () => {
       },
       {
         statusEnum: ListingsStatusEnum.pendingReview,
-        tagString: "Pending Review",
+        tagString: "Pending review",
       },
     ].map((item) =>
       Object.assign(item, {
@@ -1746,7 +1746,7 @@ describe("listing data", () => {
         const copyDialogForm = copyDialogHeader.parentElement.parentElement
         expect(
           within(copyDialogForm).getByText(
-            "You are duplicating a listing to draft status. Please enter a unique name below and indicate whether or not you’d like to include existing unit data."
+            "You are duplicating a listing to draft status. Please enter a unique name below and indicate whether or not you'd like to include existing unit data."
           )
         ).toBeInTheDocument()
         expect(within(copyDialogForm).getByLabelText("Listing name")).toBeInTheDocument()

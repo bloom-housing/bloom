@@ -70,7 +70,7 @@ describe("users", () => {
     expect(header).toBeInTheDocument()
     expect(getByText("Users")).toBeInTheDocument()
     expect(getByText("Filter")).toBeInTheDocument()
-    expect(getByText("Add User")).toBeInTheDocument()
+    expect(getByText("Add user")).toBeInTheDocument()
     expect(queryAllByText("Export to CSV")).toHaveLength(0)
 
     const name = await findByText("First Last")
@@ -116,7 +116,7 @@ describe("users", () => {
 
     const header = await findByText("Partners Portal")
     expect(header).toBeInTheDocument()
-    expect(getByText("Add User")).toBeInTheDocument()
+    expect(getByText("Add user")).toBeInTheDocument()
     const exportButton = await findByText("Export to CSV")
     expect(exportButton).toBeInTheDocument()
     fireEvent.click(exportButton)

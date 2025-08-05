@@ -436,11 +436,11 @@ Cypress.Commands.add("addMinimalListing", (listingName, isLottery, isApproval, j
     cy.getByID("addUnitsButton").contains("Add Unit").click()
     cy.getByID("number").type(listing["number"])
     cy.getByID("unitTypes.id").select(listing["unitType.id"])
-    cy.getByID("unitFormSaveAndExitButton").contains("Save & Exit").click()
+    cy.getByID("unitFormSaveAndExitButton").contains("Save & exit").click()
     cy.getByID("amiChart.id").select(1).trigger("change")
     cy.getByID("amiPercentage").select(1)
-    cy.getByID("unitFormSaveAndExitButton").contains("Save & Exit").click()
-    cy.get("button").contains("Application Process").click()
+    cy.getByID("unitFormSaveAndExitButton").contains("Save & exit").click()
+    cy.get("button").contains("Application process").click()
     if (isLottery) {
       cy.getByID("reviewOrderLottery").check()
       cy.getByTestId("lottery-start-date-month").type("1")
@@ -484,7 +484,7 @@ Cypress.Commands.add("addMinimalListing", (listingName, isLottery, isApproval, j
 Cypress.Commands.add("addMinimalApplication", (listingName) => {
   cy.visit("/")
   cy.getByTestId(`listing-status-cell-${listingName}`).click()
-  cy.getByID("addApplicationButton").contains("Add Application").click()
+  cy.getByID("addApplicationButton").contains("Add application").click()
   cy.fixture("applicantOnlyData").then((application) => {
     cy.fillPrimaryApplicant(application, [
       "application.additionalPhoneNumber",

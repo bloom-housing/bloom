@@ -23,7 +23,7 @@ afterEach(() => {
 afterAll(() => server.close())
 
 describe("Create Account Page", () => {
-  it("should render the page with all fileds, buttons and links", () => {
+  it("should render the page with all fields, buttons and links", () => {
     render(<CreateAccount />)
 
     const verifyInitialInput = (input: HTMLElement) => {
@@ -34,7 +34,7 @@ describe("Create Account Page", () => {
 
     expect(screen.getByRole("heading", { name: /create account/i, level: 1 })).toBeInTheDocument()
 
-    expect(screen.getByText("Your Name", { selector: "legend" })).toBeInTheDocument()
+    expect(screen.getByText("Your name", { selector: "legend" })).toBeInTheDocument()
     verifyInitialInput(screen.getByRole("textbox", { name: /first or given name/i }))
     verifyInitialInput(screen.getByRole("textbox", { name: /middle name \(optional\)/i }))
     verifyInitialInput(screen.getByRole("textbox", { name: /last or family name/i }))
