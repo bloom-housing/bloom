@@ -170,11 +170,13 @@ export const MainDetails = ({
             <div className={`seeds-m-ie-4 ${styles["flex-margin"]}`}>
               {oneLineAddress(listing.listingsBuildingAddress)}
             </div>
-            <div className={styles["flex-margin"]}>
-              <Link href={googleMapsHref} newWindowTarget={true}>
-                {t("t.viewOnMap")}
-              </Link>
-            </div>
+            {listing.listingsBuildingAddress && (
+              <div className={styles["flex-margin"]}>
+                <Link href={googleMapsHref} newWindowTarget={true}>
+                  {t("t.viewOnMap")}
+                </Link>
+              </div>
+            )}
           </div>
         </div>
 
