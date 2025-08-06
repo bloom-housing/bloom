@@ -73,6 +73,16 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
     listingDto?.jurisdictions.id
   )
 
+  const enableLimitedHowDidYouHear = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableLimitedHowDidYouHear,
+    listingDto?.jurisdictions.id
+  )
+
+  const swapCommunityTypeWithPrograms = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.swapCommunityTypeWithPrograms,
+    listingDto?.jurisdictions.id
+  )
+
   const units = listingDto?.units
 
   const defaultValues = editMode ? mapApiToForm(application, listingDto) : {}
@@ -249,6 +259,7 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
                       householdMembers={householdMembers}
                       setHouseholdMembers={setHouseholdMembers}
                       enableFullTimeStudentQuestion={enableFullTimeStudentQuestion}
+                      disableWorkInRegion={disableWorkInRegion}
                     />
 
                     <FormHouseholdDetails
@@ -264,7 +275,11 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
                     <FormMultiselectQuestions
                       questions={programs}
                       applicationSection={MultiselectQuestionsApplicationSectionEnum.programs}
-                      sectionTitle={t("application.details.programs")}
+                      sectionTitle={
+                        swapCommunityTypeWithPrograms
+                          ? t("application.details.communityTypes")
+                          : t("application.details.programs")
+                      }
                     />
 
                     <FormHouseholdIncome />
@@ -275,7 +290,10 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
                       sectionTitle={t("application.details.preferences")}
                     />
 
-                    <FormDemographics formValues={application?.demographics} />
+                    <FormDemographics
+                      formValues={application?.demographics}
+                      enableLimitedHowDidYouHear={enableLimitedHowDidYouHear}
+                    />
 
                     <FormTerms />
                   </div>

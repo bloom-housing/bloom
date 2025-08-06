@@ -49,7 +49,10 @@ const loadListing = async (
     jurisdictionId: listingResponse.jurisdictions.id,
   })
   conductor.listing = listingResponse
-  const applicationConfig = retrieveApplicationConfig(conductor.listing) // TODO: load from backend
+  const applicationConfig = retrieveApplicationConfig(
+    conductor.listing,
+    jurisdictionResponse.featureFlags
+  ) // TODO: load from backend
   conductor.config = {
     ...applicationConfig,
     languages: jurisdictionResponse.languages,
@@ -154,7 +157,7 @@ const ApplicationChooseLanguage = () => {
   const statusContent = getListingApplicationStatus(listing)
 
   return (
-    <FormsLayout>
+    <FormsLayout pageTitle={`${t("listings.apply.applyOnline")} - ${listing?.name}`}>
       <ApplicationFormLayout
         listingName={listing?.name}
         heading={t("application.chooseLanguage.letsGetStarted")}

@@ -121,8 +121,15 @@ export const getHasNonReferralMethods = (listing: Listing) => {
     nonReferralMethods[0].type === ApplicationMethodsTypeEnum.FileDownload &&
     !nonReferralMethods[0].paperApplications.length &&
     !nonReferralMethods[0].externalReference
-  )
+  ) {
     return false
+  } else if (
+    nonReferralMethods.length === 1 &&
+    nonReferralMethods[0].type === ApplicationMethodsTypeEnum.ExternalLink &&
+    getOnlineApplicationURL(nonReferralMethods, listing.id, false).url === ""
+  ) {
+    return false
+  }
   return nonReferralMethods.length
 }
 
@@ -511,7 +518,7 @@ export const getEligibilitySections = (
             ),
           }
         : {
-            header: t("listings.communityTypes"),
+            header: t("t.communityTypes"),
             subheader: t("listings.communityTypesDescription"),
             note: t("listings.communityTypesNote"),
             content: (

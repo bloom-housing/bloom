@@ -2,11 +2,14 @@ import { createContext } from "react"
 import ApplicationConductor from "./ApplicationConductor"
 import { blankApplication, listingSectionQuestions } from "@bloom-housing/shared-helpers"
 import {
+  FeatureFlagEnum,
   Listing,
   MultiselectQuestionsApplicationSectionEnum,
+  FeatureFlag,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { isFeatureFlagOn } from "../helpers"
 
-export const retrieveApplicationConfig = (listing: Listing) => {
+export const retrieveApplicationConfig = (listing: Listing, featureFlags: FeatureFlag[]) => {
   // Note: this whole function will eventually be replaced with one that reads this from the backend.
   const config = {
     sections: ["you", "household"],
@@ -69,14 +72,18 @@ export const retrieveApplicationConfig = (listing: Listing) => {
       name: "householdStudent",
     }
   )
-
   // conditionally add programs
   if (
     listingSectionQuestions(listing, MultiselectQuestionsApplicationSectionEnum.programs)?.length
   ) {
-    config.sections.push("programs")
+    const swapCommunityTypeWithPrograms = isFeatureFlagOn(
+      { featureFlags: featureFlags },
+      FeatureFlagEnum.swapCommunityTypeWithPrograms
+    )
+    const stepName = swapCommunityTypeWithPrograms ? "communityTypes" : "programs"
+    config.sections.push(stepName)
     config.steps.push({
-      name: "programs",
+      name: stepName,
     })
   }
 

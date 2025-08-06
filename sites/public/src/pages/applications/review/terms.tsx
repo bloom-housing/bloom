@@ -144,7 +144,11 @@ const ApplicationTerms = () => {
   }, [profile])
 
   return (
-    <FormsLayout>
+    <FormsLayout
+      pageTitle={`${t("application.review.terms.title")} - ${t("listings.apply.applyOnline")} - ${
+        listing?.name
+      }`}
+    >
       <Form id="review-terms" onSubmit={handleSubmit(onSubmit)}>
         <ApplicationFormLayout
           listingName={listing?.name}

@@ -11,17 +11,23 @@ const DetailListingIntro = () => {
   return (
     <SectionWithGrid heading={t("listings.sections.introTitle")} inset>
       <Grid.Row>
-        <FieldValue id="name" label={t("listings.listingName")}>
-          {getDetailFieldString(listing.name)}
-        </FieldValue>
+        <Grid.Cell>
+          <FieldValue id="name" label={t("listings.listingName")}>
+            {getDetailFieldString(listing.name)}
+          </FieldValue>
+        </Grid.Cell>
       </Grid.Row>
       <Grid.Row>
-        <FieldValue id="jurisdictions.name" label={t("t.jurisdiction")}>
-          {getDetailFieldString(listing.jurisdictions.name)}
-        </FieldValue>
-        <FieldValue id="developer" label={t("listings.developer")}>
-          {getDetailFieldString(listing.developer)}
-        </FieldValue>
+        <Grid.Cell>
+          <FieldValue id="jurisdictions.name" label={t("t.jurisdiction")}>
+            {getDetailFieldString(listing.jurisdictions.name)}
+          </FieldValue>
+        </Grid.Cell>
+        <Grid.Cell>
+          <FieldValue id="developer" label={t("listings.developer")}>
+            {getDetailFieldString(listing.developer)}
+          </FieldValue>
+        </Grid.Cell>
       </Grid.Row>
     </SectionWithGrid>
   )
