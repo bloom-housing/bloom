@@ -657,7 +657,13 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
           {t("t.saveExit")}
         </Button>
 
-        <Button type="button" onClick={() => onClose(false, false, null)} variant="text" size="sm">
+        <Button
+          type="button"
+          onClick={() => onClose(false, false, null)}
+          variant="text"
+          size="sm"
+          className={"font-semibold darker-alert"}
+        >
           {t("t.cancel")}
         </Button>
       </Drawer.Footer>
