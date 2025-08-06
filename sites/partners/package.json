@@ -95,6 +95,9 @@
     "typescript": "4.6.4",
     "webpack": "^5.98.0"
   },
+  "resolutions": {
+    "@types/react": "18.0.34"
+  },
   "prettier": {
     "singleQuote": false,
     "printWidth": 100,

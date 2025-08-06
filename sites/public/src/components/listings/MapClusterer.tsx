@@ -100,7 +100,7 @@ export const MapClusterer = ({
   const [markers, setMarkers] = useState<{
     [key: string]: google.maps.marker.AdvancedMarkerElement
   }>({})
-  const [infoWindowContent, setInfoWindowContent] = useState<React.JSX.Element>(null)
+  const [infoWindowContent, setInfoWindowContent] = useState(null)
   const [currentMapMarkers, setCurrentMapMarkers] = useState(mapMarkers)
 
   const map = useMap()

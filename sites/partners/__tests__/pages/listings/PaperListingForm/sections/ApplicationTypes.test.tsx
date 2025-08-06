@@ -20,31 +20,33 @@ describe("ApplicationTypes", () => {
     )
 
     expect(screen.getByRole("heading", { level: 2, name: "Application Types" })).toBeInTheDocument()
-    const digitalApplication = screen.getByRole("group", {
-      name: "Is there a digital application?",
+    const digitalApplication = screen.getByRole("row", {
+      name: "Is there a digital application? Yes No Required to publish",
     })
     expect(
       within(digitalApplication).getByText("Is there a digital application?")
     ).toBeInTheDocument()
     expect(within(digitalApplication).getByRole("radio", { name: "No" })).toBeInTheDocument()
     expect(within(digitalApplication).getByRole("radio", { name: "Yes" })).toBeInTheDocument()
-    const paperApplication = screen.getByRole("group", {
-      name: "Is there a paper application?",
+    const paperApplication = screen.getByRole("row", {
+      name: "Is there a paper application? Yes No Required to publish",
     })
     expect(within(paperApplication).getByText("Is there a paper application?")).toBeInTheDocument()
     expect(within(paperApplication).getByRole("radio", { name: "No" })).toBeInTheDocument()
     expect(within(paperApplication).getByRole("radio", { name: "Yes" })).toBeInTheDocument()
-    const referralApplication = screen.getByRole("group", {
-      name: "Is there a referral opportunity?",
-    })
-    expect(
-      within(referralApplication).getByText("Is there a referral opportunity?")
-    ).toBeInTheDocument()
-    expect(within(referralApplication).getByRole("radio", { name: "No" })).toBeInTheDocument()
-    expect(within(referralApplication).getByRole("radio", { name: "Yes" })).toBeInTheDocument()
+    // Referral opportunity not available in Doorway
+    // const referralApplication = screen.getByRole("group", {
+    //   name: "Is there a referral opportunity?",
+    // })
+    // expect(
+    //   within(referralApplication).getByText("Is there a referral opportunity?")
+    // ).toBeInTheDocument()
+    // expect(within(referralApplication).getByRole("radio", { name: "No" })).toBeInTheDocument()
+    // expect(within(referralApplication).getByRole("radio", { name: "Yes" })).toBeInTheDocument()
   })
 
-  it("should render referral opportunity section", async () => {
+  // Referral opportunity not configured for Doorway
+  it.skip("should render referral opportunity section", async () => {
     render(
       <FormProviderWrapper>
         <ApplicationTypes listing={listing} />
