@@ -2,8 +2,6 @@ import React, { useContext, useMemo } from "react"
 import { t, MinimalTable } from "@bloom-housing/ui-components"
 import { Button, FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { AuthContext } from "@bloom-housing/shared-helpers"
-import { ListingContext } from "../../ListingContext"
-import { UnitDrawer } from "../DetailsUnitDrawer"
 import {
   EnumUnitGroupAmiLevelMonthlyRentDeterminationType,
   FeatureFlagEnum,
@@ -11,7 +9,9 @@ import {
   ReviewOrderTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
+import { ListingContext } from "../../ListingContext"
 import { formatRange, formatRentRange, minMaxFinder } from "../../helpers"
+import { UnitDrawer } from "../DetailsUnitDrawer"
 
 type DetailUnitsProps = {
   setUnitDrawer: (unit: UnitDrawer) => void
@@ -112,7 +112,7 @@ const DetailUnits = ({ setUnitDrawer }: DetailUnitsProps) => {
                   type="button"
                   variant="text"
                   size="sm"
-                  className="font-semibold"
+                  className={"font-semibold darker-link"}
                   onClick={() => setUnitDrawer(unit)}
                 >
                   {t("t.view")}
