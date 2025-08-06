@@ -18,7 +18,9 @@ const DetailBuildingDetails = () => {
 
   return (
     <SectionWithGrid heading={t("listings.sections.buildingDetailsTitle")} inset>
-      <SectionWithGrid.HeadingRow>Building Address</SectionWithGrid.HeadingRow>
+      <SectionWithGrid.HeadingRow>
+        {t("listings.sections.buildingAddress")}
+      </SectionWithGrid.HeadingRow>
       {listing.listingsBuildingAddress ? (
         <>
           <Grid.Row columns={3}>

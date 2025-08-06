@@ -32,7 +32,7 @@ describe("applications pages", () => {
   describe("preferences all step", () => {
     it("should render page content", () => {
       const conductor = new ApplicationConductor({}, {})
-      const { getByText, getAllByText, debug, getByRole } = render(
+      const { getByText, getAllByText, getByRole } = render(
         <AppSubmissionContext.Provider
           value={{
             conductor: conductor,
@@ -64,8 +64,6 @@ describe("applications pages", () => {
           <ApplicationPreferencesAll />
         </AppSubmissionContext.Provider>
       )
-
-      debug()
 
       expect(
         getByText("Your household may qualify for the following housing preferences.")

@@ -43,10 +43,10 @@ describe("applications pages", () => {
       expect(
         await findByText("There are errors you'll need to resolve before moving on.")
       ).toBeInTheDocument()
-      expect(getByText("Please enter a Given Name")).toBeInTheDocument()
-      expect(getByText("Please enter a Family Name")).toBeInTheDocument()
+      expect(getByText("Please enter a given name")).toBeInTheDocument()
+      expect(getByText("Please enter a family name")).toBeInTheDocument()
       expect(
-        getByText("Please enter a valid Date of Birth, must be 18 or older")
+        getByText("Please enter a valid date of birth, must be 18 or older")
       ).toBeInTheDocument()
       expect(getByText("Please enter an email address")).toBeInTheDocument()
     })

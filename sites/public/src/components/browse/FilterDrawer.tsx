@@ -87,7 +87,7 @@ const FilterDrawer = (props: FilterDrawerProps) => {
             register={register}
           />
           <CheckboxGroup
-            groupLabel={t("listings.homeType.lower")}
+            groupLabel={t("listings.homeType")}
             fields={buildDefaultFilterFields(
               ListingFilterKeys.homeTypes,
               "listings.homeType",

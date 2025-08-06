@@ -195,7 +195,7 @@ describe("admin", () => {
 
     const columnHeaders = within(head).getAllByRole("columnheader")
     expect(columnHeaders).toHaveLength(3)
-    expect(columnHeaders[0]).toHaveTextContent("Feature Flag")
+    expect(columnHeaders[0]).toHaveTextContent("Feature flag")
     expect(columnHeaders[1]).toHaveTextContent("Description")
     expect(columnHeaders[2]).toHaveTextContent("Actions")
 

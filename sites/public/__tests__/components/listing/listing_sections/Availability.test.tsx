@@ -30,9 +30,9 @@ describe("<Availability>", () => {
           jurisdiction={jurisdiction}
         />
       )
-      expect(view.getByText("Applications Closed")).toBeDefined()
+      expect(view.getByText("Applications closed")).toBeDefined()
       expect(view.getByText("Availability")).toBeDefined()
-      expect(view.getByText("Reserved Building")).toBeDefined()
+      expect(view.getByText("Reserved building")).toBeDefined()
       expect(view.getByText("Veteran")).toBeDefined()
       expect(view.getByText("Community type description")).toBeDefined()
     })
@@ -53,10 +53,10 @@ describe("<Availability>", () => {
           jurisdiction={jurisdiction}
         />
       )
-      expect(view.getByText("Applications Closed")).toBeDefined()
+      expect(view.getByText("Applications closed")).toBeDefined()
       expect(view.getByText("Availability")).toBeDefined()
-      expect(view.getByText("First Come First Serve")).toBeDefined()
-      expect(view.queryByText("Vacant Units Available")).toBeNull()
+      expect(view.getByText("First come first serve")).toBeDefined()
+      expect(view.queryByText("Vacant units available")).toBeNull()
       expect(
         view.getByText(
           "Eligible applicants will be contacted on a first come first serve basis until vacancies are filled."
@@ -79,11 +79,11 @@ describe("<Availability>", () => {
           jurisdiction={jurisdiction}
         />
       )
-      expect(view.queryByText("Applications Closed")).toBeNull()
+      expect(view.queryByText("Applications closed")).toBeNull()
       expect(view.getByText("Availability")).toBeDefined()
-      expect(view.getByText("First Come First Serve")).toBeDefined()
-      expect(view.getByText("Vacant Units Available")).toBeDefined()
-      expect(view.getByText("Application Due:", { exact: false })).toBeDefined()
+      expect(view.getByText("First come first serve")).toBeDefined()
+      expect(view.getByText("Vacant units available")).toBeDefined()
+      expect(view.getByText("Application due:", { exact: false })).toBeDefined()
       expect(view.getByText(dayjs(dueDate).format("MMM DD, YYYY"), { exact: false })).toBeDefined()
       expect(
         view.getByText(
@@ -107,11 +107,11 @@ describe("<Availability>", () => {
           jurisdiction={jurisdiction}
         />
       )
-      expect(view.getByText("Applications Closed")).toBeDefined()
+      expect(view.getByText("Applications closed")).toBeDefined()
       expect(view.getByText("Availability")).toBeDefined()
       expect(view.getByText("Lottery")).toBeDefined()
-      expect(view.queryByText("Vacant Units Available")).toBeNull()
-      expect(view.queryByText("Application Due:", { exact: false })).toBeNull()
+      expect(view.queryByText("Vacant units available")).toBeNull()
+      expect(view.queryByText("Application due:", { exact: false })).toBeNull()
       expect(view.queryByText(dayjs(dueDate).format("MMM DD, YYYY"), { exact: false })).toBeNull()
       expect(
         view.getByText(
@@ -136,11 +136,11 @@ describe("<Availability>", () => {
           jurisdiction={jurisdiction}
         />
       )
-      expect(view.queryByText("Applications Closed")).toBeNull()
+      expect(view.queryByText("Applications closed")).toBeNull()
       expect(view.getByText("Availability")).toBeDefined()
       expect(view.getByText("Lottery")).toBeDefined()
-      expect(view.getByText("Vacant Units Available")).toBeDefined()
-      expect(view.getByText("Application Due:", { exact: false })).toBeDefined()
+      expect(view.getByText("Vacant units available")).toBeDefined()
+      expect(view.getByText("Application due:", { exact: false })).toBeDefined()
       expect(view.getByText(dayjs(dueDate).format("MMM DD, YYYY"), { exact: false })).toBeDefined()
       expect(
         view.getByText(
@@ -173,11 +173,11 @@ describe("<Availability>", () => {
         />
       )
       expect(view.getByText("Availability")).toBeDefined()
-      expect(view.getAllByText("Under Construction").length).toBe(2)
-      expect(view.queryByText("First Come First Serve")).toBeNull()
-      expect(view.queryByText("Vacant Units Available")).toBeNull()
+      expect(view.getAllByText("Under construction").length).toBe(2)
+      expect(view.queryByText("First come first serve")).toBeNull()
+      expect(view.queryByText("Vacant units available")).toBeNull()
       expect(view.getByText("Residents should apply in Spring 2026")).toBeDefined()
-      expect(view.queryByText("Application Due:", { exact: false })).toBeNull()
+      expect(view.queryByText("Application due:", { exact: false })).toBeNull()
       expect(
         view.getByText(
           "Eligible applicants will be contacted on a first come first serve basis until vacancies are filled."
@@ -199,12 +199,12 @@ describe("<Availability>", () => {
           jurisdiction={jurisdiction}
         />
       )
-      expect(view.getByText("Applications Closed")).toBeDefined()
+      expect(view.getByText("Applications closed")).toBeDefined()
       expect(view.getByText("Availability")).toBeDefined()
       expect(view.getByText("Waitlist")).toBeDefined()
       expect(view.queryByText("Waitlist is open")).toBeNull()
-      expect(view.queryByText("Open Waitlist Slots")).toBeNull()
-      expect(view.queryByText("Application Due:", { exact: false })).toBeNull()
+      expect(view.queryByText("Open waitlist slots")).toBeNull()
+      expect(view.queryByText("Application due:", { exact: false })).toBeNull()
       expect(view.queryByText(dayjs(dueDate).format("MMM DD, YYYY"), { exact: false })).toBeNull()
       expect(view.queryByText("Submit an application for an open slot on the waitlist.")).toBeNull()
     })
@@ -223,12 +223,12 @@ describe("<Availability>", () => {
           jurisdiction={jurisdiction}
         />
       )
-      expect(view.queryByText("Applications Closed")).toBeNull()
+      expect(view.queryByText("Applications closed")).toBeNull()
       expect(view.getByText("Availability")).toBeDefined()
       expect(view.getByText("Waitlist")).toBeDefined()
       expect(view.getByText("Waitlist is open")).toBeDefined()
-      expect(view.queryByText("Open Waitlist Slots")).toBeNull()
-      expect(view.getByText("Application Due:", { exact: false })).toBeDefined()
+      expect(view.queryByText("Open waitlist slots")).toBeNull()
+      expect(view.getByText("Application due:", { exact: false })).toBeDefined()
       expect(view.getByText(dayjs(dueDate).format("MMM DD, YYYY"), { exact: false })).toBeDefined()
       expect(
         view.getByText("Submit an application for an open slot on the waitlist.")
@@ -248,12 +248,12 @@ describe("<Availability>", () => {
           jurisdiction={jurisdiction}
         />
       )
-      expect(view.getByText("Applications Closed")).toBeDefined()
+      expect(view.getByText("Applications closed")).toBeDefined()
       expect(view.getByText("Availability")).toBeDefined()
       expect(view.getByText("Waitlist")).toBeDefined()
       expect(view.queryByText("Waitlist is open")).toBeNull()
-      expect(view.queryByText("Open Waitlist Slots")).toBeNull()
-      expect(view.queryByText("Application Due:", { exact: false })).toBeNull()
+      expect(view.queryByText("Open waitlist slots")).toBeNull()
+      expect(view.queryByText("Application due:", { exact: false })).toBeNull()
       expect(view.queryByText("Submit an application for an open slot on the waitlist.")).toBeNull()
     })
 
@@ -270,13 +270,13 @@ describe("<Availability>", () => {
           jurisdiction={jurisdiction}
         />
       )
-      expect(view.queryByText("Applications Closed")).toBeNull()
+      expect(view.queryByText("Applications closed")).toBeNull()
       expect(view.getByText("Availability")).toBeDefined()
       expect(view.getByText("Waitlist")).toBeDefined()
       expect(view.getByText("Waitlist is open")).toBeDefined()
-      expect(view.queryByText("Open Waitlist Slots")).toBeNull()
-      expect(view.queryByText("Application Due:", { exact: false })).toBeNull()
-      expect(view.getByText("Applications Open")).toBeDefined()
+      expect(view.queryByText("Open waitlist slots")).toBeNull()
+      expect(view.queryByText("Application due:", { exact: false })).toBeNull()
+      expect(view.getByText("Applications open")).toBeDefined()
       expect(
         view.getByText("Submit an application for an open slot on the waitlist.")
       ).toBeDefined()
@@ -295,12 +295,12 @@ describe("<Availability>", () => {
           jurisdiction={jurisdiction}
         />
       )
-      expect(view.getByText("Applications Closed")).toBeDefined()
+      expect(view.getByText("Applications closed")).toBeDefined()
       expect(view.getByText("Availability")).toBeDefined()
       expect(view.getByText("Waitlist")).toBeDefined()
       expect(view.queryByText("Waitlist is open")).toBeNull()
       expect(view.getByText("50 open waitlist slots")).toBeDefined()
-      expect(view.queryByText("Application Due:", { exact: false })).toBeNull()
+      expect(view.queryByText("Application due:", { exact: false })).toBeNull()
       expect(view.queryByText("Submit an application for an open slot on the waitlist.")).toBeNull()
     })
 
@@ -317,13 +317,13 @@ describe("<Availability>", () => {
           jurisdiction={jurisdiction}
         />
       )
-      expect(view.queryByText("Applications Closed")).toBeNull()
+      expect(view.queryByText("Applications closed")).toBeNull()
       expect(view.getByText("Availability")).toBeDefined()
       expect(view.getByText("Waitlist")).toBeDefined()
       expect(view.getByText("Waitlist is open")).toBeDefined()
       expect(view.getByText("50 open waitlist slots")).toBeDefined()
-      expect(view.queryByText("Application Due:", { exact: false })).toBeNull()
-      expect(view.getByText("Applications Open")).toBeDefined()
+      expect(view.queryByText("Application due:", { exact: false })).toBeNull()
+      expect(view.getByText("Applications open")).toBeDefined()
       expect(
         view.getByText("Submit an application for an open slot on the waitlist.")
       ).toBeDefined()
@@ -352,10 +352,10 @@ describe("<Availability>", () => {
         />
       )
       expect(view.getByText("Availability")).toBeDefined()
-      expect(view.queryByText("Under Construction")).toBeNull()
-      expect(view.getByText("First Come First Serve")).toBeDefined()
-      expect(view.getByText("Vacant Units Available")).toBeDefined()
-      expect(view.getByText("Application Due:", { exact: false })).toBeDefined()
+      expect(view.queryByText("Under construction")).toBeNull()
+      expect(view.getByText("First come first serve")).toBeDefined()
+      expect(view.getByText("Vacant units available")).toBeDefined()
+      expect(view.getByText("Application due:", { exact: false })).toBeDefined()
       expect(
         view.getByText(
           "Eligible applicants will be contacted on a first come first serve basis until vacancies are filled."
@@ -386,11 +386,11 @@ describe("<Availability>", () => {
         />
       )
       expect(view.getByText("Availability")).toBeDefined()
-      expect(view.getAllByText("Under Construction").length).toBe(2)
-      expect(view.queryByText("First Come First Serve")).toBeNull()
-      expect(view.queryByText("Vacant Units Available")).toBeNull()
+      expect(view.getAllByText("Under construction").length).toBe(2)
+      expect(view.queryByText("First come first serve")).toBeNull()
+      expect(view.queryByText("Vacant units available")).toBeNull()
       expect(view.getByText("Residents should apply in Spring 2026")).toBeDefined()
-      expect(view.queryByText("Application Due:", { exact: false })).toBeNull()
+      expect(view.queryByText("Application due:", { exact: false })).toBeNull()
       expect(
         view.getByText(
           "Eligible applicants will be contacted on a first come first serve basis until vacancies are filled."
@@ -423,11 +423,11 @@ describe("<Availability>", () => {
         />
       )
       expect(view.getByText("Availability")).toBeDefined()
-      expect(view.getAllByText("Under Construction").length).toBe(2)
-      expect(view.queryByText("First Come First Serve")).toBeNull()
-      expect(view.queryByText("Vacant Units Available")).toBeNull()
+      expect(view.getAllByText("Under construction").length).toBe(2)
+      expect(view.queryByText("First come first serve")).toBeNull()
+      expect(view.queryByText("Vacant units available")).toBeNull()
       expect(view.getByText("Residents should apply in Spring 2026")).toBeDefined()
-      expect(view.queryByText("Application Due:", { exact: false })).toBeNull()
+      expect(view.queryByText("Application due:", { exact: false })).toBeNull()
       expect(
         view.queryByText(
           "Eligible applicants will be contacted on a first come first serve basis until vacancies are filled."
@@ -455,15 +455,15 @@ describe("<Availability>", () => {
         />
       )
       expect(view.queryByText("Availability")).toBeNull()
-      expect(view.queryByText("Applications Closed")).toBeNull()
+      expect(view.queryByText("Applications closed")).toBeNull()
       expect(view.queryByText("Availability")).toBeNull()
       expect(view.queryByText("Waitlist")).toBeNull()
       expect(view.queryByText("Waitlist is open")).toBeNull()
-      expect(view.queryByText("Open Waitlist Slots")).toBeNull()
-      expect(view.queryByText("Application Due:", { exact: false })).toBeNull()
-      expect(view.queryByText("Applications Open")).toBeNull()
+      expect(view.queryByText("Open waitlist slots")).toBeNull()
+      expect(view.queryByText("Application due:", { exact: false })).toBeNull()
+      expect(view.queryByText("Applications open")).toBeNull()
       expect(view.queryByText("Submit an application for an open slot on the waitlist.")).toBeNull()
-      expect(view.queryAllByText("Under Construction").length).toBe(0)
+      expect(view.queryAllByText("Under construction").length).toBe(0)
     })
   })
 })

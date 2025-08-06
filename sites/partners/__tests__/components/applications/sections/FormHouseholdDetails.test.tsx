@@ -44,11 +44,11 @@ describe("<FormHouseholdDetails>", () => {
     ).toBeInTheDocument()
 
     expect(screen.getByText(/preferred unit sizes/i)).toBeInTheDocument()
-    expect(screen.getByLabelText("5 Bedroom")).toBeInTheDocument()
-    expect(screen.getByLabelText("4 Bedroom")).toBeInTheDocument()
-    expect(screen.getByLabelText("3 Bedroom")).toBeInTheDocument()
-    expect(screen.getByLabelText("2 Bedroom")).toBeInTheDocument()
-    expect(screen.getByLabelText("1 Bedroom")).toBeInTheDocument()
+    expect(screen.getByLabelText("5 bedroom")).toBeInTheDocument()
+    expect(screen.getByLabelText("4 bedroom")).toBeInTheDocument()
+    expect(screen.getByLabelText("3 bedroom")).toBeInTheDocument()
+    expect(screen.getByLabelText("2 bedroom")).toBeInTheDocument()
+    expect(screen.getByLabelText("1 bedroom")).toBeInTheDocument()
     expect(screen.getByLabelText("SRO")).toBeInTheDocument()
     expect(screen.getByLabelText("Studio")).toBeInTheDocument()
 
@@ -134,9 +134,9 @@ describe("<FormHouseholdDetails>", () => {
 
     expect(screen.getByText(/preferred unit sizes/i)).toBeInTheDocument()
     expect(screen.getByLabelText("Studio")).toBeInTheDocument()
-    expect(screen.getByLabelText("1 Bedroom")).toBeInTheDocument()
-    expect(screen.getByLabelText("2 Bedroom")).toBeInTheDocument()
-    expect(screen.getByLabelText("3 Bedroom")).toBeInTheDocument()
+    expect(screen.getByLabelText("1 bedroom")).toBeInTheDocument()
+    expect(screen.getByLabelText("2 bedroom")).toBeInTheDocument()
+    expect(screen.getByLabelText("3 bedroom")).toBeInTheDocument()
 
     expect(screen.getByText(/ada priorities selected/i)).toBeInTheDocument()
     expect(screen.getByLabelText(/mobility impairments/i)).toBeInTheDocument()
@@ -217,7 +217,7 @@ describe("<FormHouseholdDetails>", () => {
     expect(screen.getByText(/preferred unit sizes/i)).toBeInTheDocument()
 
     const studioLabels = screen.getAllByRole("checkbox", { name: "Studio" })
-    const oneBedroomLabels = screen.getAllByRole("checkbox", { name: "1 Bedroom" })
+    const oneBedroomLabels = screen.getAllByRole("checkbox", { name: "1 bedroom" })
 
     expect(studioLabels).toHaveLength(1)
     expect(oneBedroomLabels).toHaveLength(1)
@@ -313,11 +313,11 @@ describe("<FormHouseholdDetails>", () => {
 
     // Test all unit types are displayed
     expect(screen.getByRole("checkbox", { name: "Studio" })).toBeInTheDocument()
-    expect(screen.getByRole("checkbox", { name: "1 Bedroom" })).toBeInTheDocument()
-    expect(screen.getByRole("checkbox", { name: "2 Bedroom" })).toBeInTheDocument()
-    expect(screen.getByRole("checkbox", { name: "3 Bedroom" })).toBeInTheDocument()
-    expect(screen.getByRole("checkbox", { name: "4 Bedroom" })).toBeInTheDocument()
-    expect(screen.getByRole("checkbox", { name: "5 Bedroom" })).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "1 bedroom" })).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "2 bedroom" })).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "3 bedroom" })).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "4 bedroom" })).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "5 bedroom" })).toBeInTheDocument()
     expect(screen.getByRole("checkbox", { name: "SRO" })).toBeInTheDocument()
 
     // Verify we have all 7 unit type checkboxes
@@ -376,7 +376,7 @@ describe("<FormHouseholdDetails>", () => {
       </FormProviderWrapper>
     )
 
-    expect(screen.getByText(/All Household Members Students/i)).toBeInTheDocument()
+    expect(screen.getByText("All household members students")).toBeInTheDocument()
     expect(screen.getAllByRole("radio", { name: "Yes" })).toHaveLength(2)
     expect(screen.getAllByRole("radio", { name: "No" })).toHaveLength(2)
   })

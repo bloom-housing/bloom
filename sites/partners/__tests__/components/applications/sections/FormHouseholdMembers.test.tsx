@@ -44,7 +44,7 @@ describe("<FormHouseholdMembers>", () => {
     )
 
     expect(
-      screen.getByRole("heading", { level: 2, name: /household members/i })
+      screen.getByRole("heading", { level: 2, name: /Household members/i })
     ).toBeInTheDocument()
 
     const addMemberButton = screen.getByRole("button", { name: /add household member/i })
@@ -354,7 +354,7 @@ describe("<FormHouseholdMembers>", () => {
     expect(drawerTitle).toBeInTheDocument()
 
     const drawerContainer = drawerTitle.parentElement.parentElement
-    expect(within(drawerContainer).getByText(/Full-time Student/i)).toBeInTheDocument()
+    expect(within(drawerContainer).getByText(/Full-time student/i)).toBeInTheDocument()
     expect(within(drawerContainer).getAllByLabelText(/yes/i)).toHaveLength(3)
     expect(within(drawerContainer).getAllByLabelText(/no/i)).toHaveLength(3)
   })

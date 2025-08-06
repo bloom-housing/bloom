@@ -89,14 +89,14 @@ describe("ListingViewSeedsHelpers", () => {
         minimalEligibilitySectionsListing
       )
       expect(eligibilitySections).not.toContainEqual({
-        header: "Housing Programs",
+        header: "Housing programs",
         note: "One or more questions in the application will help to determine whether or not you are eligible for the housing programs listed above. After you have submitted your application, the property manager will ask you to verify your housing program eligibility by providing documentation or another form of verification.",
         subheader:
           "Some or all of the units for this property are reserved for persons who qualify for the particular housing program(s) listed below. You may need to qualify for one of these programs in order to be eligible for a unit at this property.",
         content: expect.anything(),
       })
       expect(eligibilitySections).not.toContainEqual({
-        header: "Community Types",
+        header: "Community types",
         note: "Affordable housing properties often receive funding to house specific populations, like seniors, residents with disabilities, etc. Properties can serve more than one population. Contact this property if you are unsure if you qualify.",
         subheader: "This program includes opportunities for members of specific communities",
         content: expect.anything(),
@@ -128,7 +128,7 @@ describe("ListingViewSeedsHelpers", () => {
                 id: "id",
                 createdAt: new Date(),
                 updatedAt: new Date(),
-                text: "Program 1",
+                text: "Families",
                 jurisdictions: [],
                 applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
               },
@@ -138,7 +138,7 @@ describe("ListingViewSeedsHelpers", () => {
       )
 
       expect(eligibilitySections).toContainEqual({
-        header: "Housing Programs",
+        header: "Housing programs",
         note: "One or more questions in the application will help to determine whether or not you are eligible for the housing programs listed above. After you have submitted your application, the property manager will ask you to verify your housing program eligibility by providing documentation or another form of verification.",
         subheader:
           "Some or all of the units for this property are reserved for persons who qualify for the particular housing program(s) listed below. You may need to qualify for one of these programs in order to be eligible for a unit at this property.",
@@ -171,7 +171,7 @@ describe("ListingViewSeedsHelpers", () => {
                 id: "id",
                 createdAt: new Date(),
                 updatedAt: new Date(),
-                text: "Community 1",
+                text: "Families",
                 jurisdictions: [],
                 applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
               },
@@ -181,7 +181,7 @@ describe("ListingViewSeedsHelpers", () => {
       )
 
       expect(eligibilitySections).toContainEqual({
-        header: "Community Types",
+        header: "Community types",
         note: "Affordable housing properties often receive funding to house specific populations, like seniors, residents with disabilities, etc. Properties can serve more than one population. Contact this property if you are unsure if you qualify.",
         subheader: "This program includes opportunities for members of specific communities",
         content: expect.anything(),

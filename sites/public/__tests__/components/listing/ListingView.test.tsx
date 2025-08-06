@@ -25,8 +25,8 @@ describe("<ListingView>", () => {
           />
         </AuthContext.Provider>
       )
-      expect(view.getByText(/Applications Closed/)).toBeInTheDocument()
-      expect(view.queryByText("Apply Online")).toBeNull()
+      expect(view.getByText(/Applications closed/)).toBeInTheDocument()
+      expect(view.queryByText("Apply online")).toBeNull()
     })
 
     it("shows if the due date is in the future", () => {
@@ -46,7 +46,7 @@ describe("<ListingView>", () => {
           />
         </AuthContext.Provider>
       )
-      expect(view.getByText("Apply Online")).toBeInTheDocument()
+      expect(view.getByText("Apply online")).toBeInTheDocument()
     })
 
     it("does not show for paper applications even with a future due date", () => {
@@ -72,7 +72,7 @@ describe("<ListingView>", () => {
           />
         </AuthContext.Provider>
       )
-      expect(view.queryByText("Apply Online")).toBeNull()
+      expect(view.queryByText("Apply online")).toBeNull()
     })
   })
 })

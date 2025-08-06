@@ -352,10 +352,10 @@ describe("<RentalsFinder>", () => {
     ).toBeInTheDocument()
     const minRentInput = screen.getByRole("textbox", { name: /minimum rent/i })
     expect(minRentInput).toBeInTheDocument()
-    expect(minRentInput).toHaveAttribute("placeholder", "No Minimum Rent")
+    expect(minRentInput).toHaveAttribute("placeholder", "No minimum rent")
     const maxRentInput = screen.getByRole("textbox", { name: /maximum rent/i })
     expect(maxRentInput).toBeInTheDocument()
-    expect(maxRentInput).toHaveAttribute("placeholder", "No Maximum Rent")
+    expect(maxRentInput).toHaveAttribute("placeholder", "No maximum rent")
     expect(
       screen.getByRole("checkbox", {
         name: /include rentals that accept section 8 housing choice vouchers/i,

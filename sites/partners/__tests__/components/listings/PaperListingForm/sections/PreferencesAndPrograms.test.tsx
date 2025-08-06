@@ -213,7 +213,7 @@ describe("PreferencesAndPrograms", () => {
             id: "programId",
             createdAt: new Date(),
             updatedAt: new Date(),
-            text: "Program 1",
+            text: "Families",
             applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
             jurisdictions: undefined,
           },
@@ -238,11 +238,11 @@ describe("PreferencesAndPrograms", () => {
           </AuthContext.Provider>
         )
 
-        expect(screen.getByText("Housing Programs")).toBeInTheDocument()
+        expect(screen.getByText("Housing programs")).toBeInTheDocument()
         expect(
           screen.getByText("Tell us about any additional housing programs related to this listing.")
         ).toBeInTheDocument()
-        expect(screen.getByText("Edit Programs")).toBeInTheDocument()
+        expect(screen.getByText("Edit programs")).toBeInTheDocument()
         expect(screen.queryByText("Community", { exact: false })).toBeFalsy()
       })
 
@@ -281,7 +281,7 @@ describe("PreferencesAndPrograms", () => {
           </AuthContext.Provider>
         )
 
-        expect(screen.getByText("Community Types")).toBeInTheDocument()
+        expect(screen.getByText("Community types")).toBeInTheDocument()
         expect(
           screen.getByText("Tell us about any additional community types related to this listing.")
         ).toBeInTheDocument()
@@ -290,7 +290,7 @@ describe("PreferencesAndPrograms", () => {
             "Please choose the populations your building serves, based on your building's financing and regulatory agreements."
           )
         ).toBeInTheDocument()
-        expect(screen.getByText("Edit Communities")).toBeInTheDocument()
+        expect(screen.getByText("Edit communities")).toBeInTheDocument()
         expect(screen.queryByText("Program", { exact: false })).toBeFalsy()
       })
 

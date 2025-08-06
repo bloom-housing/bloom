@@ -15,7 +15,7 @@ const NewListing = () => {
     <ListingGuard>
       <Layout>
         <Head>
-          <title>{`Add Listing - ${t("nav.siteTitlePartners")}`}</title>
+          <title>{`Add listing - ${t("nav.siteTitlePartners")}`}</title>
         </Head>
         <MetaTags
           title={t("nav.siteTitlePartners")}

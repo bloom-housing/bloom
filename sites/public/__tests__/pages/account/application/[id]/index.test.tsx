@@ -247,13 +247,13 @@ describe("Account Listing View", () => {
     expect(adaAccessibleUnitsSection).toBeInTheDocument()
     expect(within(adaAccessibleUnitsSection).getByText(/ada accessible units/i)).toBeInTheDocument()
     expect(
-      within(adaAccessibleUnitsSection).getByTestId("For Vision Impairments")
+      within(adaAccessibleUnitsSection).getByTestId("For vision impairments")
     ).toBeInTheDocument()
     expect(
-      within(adaAccessibleUnitsSection).getByTestId("For Hearing Impairments")
+      within(adaAccessibleUnitsSection).getByTestId("For hearing impairments")
     ).toBeInTheDocument()
     expect(
-      within(adaAccessibleUnitsSection).getByTestId("For Mobility Impairments")
+      within(adaAccessibleUnitsSection).getByTestId("For mobility impairments")
     ).toBeInTheDocument()
 
     const householdChangesSection = screen.getByTestId("app-summary-household-changes")
