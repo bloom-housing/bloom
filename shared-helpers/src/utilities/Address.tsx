@@ -16,7 +16,7 @@ export const oneLineAddress = (address: AddressType) => {
 }
 
 export const multiLineAddress = (address: AddressType) => {
-  if (!address) return ""
+  if (!address) return <></>
   return (
     <>
       {address.placeName && <span>{address.placeName}</span>}
@@ -27,7 +27,7 @@ export const multiLineAddress = (address: AddressType) => {
 }
 
 export const Address = ({ address, getDirections }: AddressProps) => {
-  if (!address) return ""
+  if (!address) return <></>
   const googleMapsHref = "https://www.google.com/maps/place/" + oneLineAddress(address)
 
   return (
