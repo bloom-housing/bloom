@@ -461,9 +461,9 @@ export const stagingSeed = async (
   await prismaClient.multiselectQuestions.create({
     data: multiselectQuestionFactory(lakeviewJurisdiction.id, {
       multiselectQuestion: {
-        text: 'Seniors',
+        text: 'Seniors 62+',
         description:
-          'Are you or anyone in your household 65 years of age or older?',
+          'Are you or anyone in your household 62 years of age or older?',
         applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
         optOutText: 'Prefer not to say',
         options: [

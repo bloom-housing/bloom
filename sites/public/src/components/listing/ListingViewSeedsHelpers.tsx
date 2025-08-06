@@ -488,7 +488,13 @@ export const getEligibilitySections = (
               <CardList
                 cardContent={programs.map((question) => {
                   return {
-                    heading: question.multiselectQuestions.text,
+                    heading: t(
+                      question.multiselectQuestions.untranslatedText
+                        ? t(
+                            `listingFilters.program.${question.multiselectQuestions.untranslatedText}`
+                          )
+                        : t(`listingFilters.program.${question.multiselectQuestions.text}`)
+                    ),
                     description: question.multiselectQuestions.description,
                   }
                 })}
