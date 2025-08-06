@@ -45,6 +45,7 @@ import { Neighborhood } from "./listing_sections/Neighborhood"
 import { RentSummary } from "./listing_sections/RentSummary"
 import { UnitSummaries } from "./listing_sections/UnitSummaries"
 import styles from "./ListingViewSeeds.module.scss"
+import { ReadMore } from "../../patterns/ReadMore"
 
 interface ListingProps {
   listing: Listing
@@ -136,7 +137,11 @@ export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: Li
     <>
       {listing.whatToExpect && (
         <InfoCard heading={t("whatToExpect.label")}>
-          <Markdown className={"bloom-markdown"}>{listing.whatToExpect}</Markdown>
+          {listing.whatToExpect ? ( //this would be whatToExpectAdditionalText
+            <ReadMore content={listing.whatToExpect} truncatedContent={listing.whatToExpect} /> //the truncated content would be whatToExpectAdditionalText
+          ) : (
+            <Markdown className={"bloom-markdown"}>{listing.whatToExpect}</Markdown>
+          )}
         </InfoCard>
       )}
     </>
