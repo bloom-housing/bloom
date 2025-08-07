@@ -28,7 +28,7 @@ ARG ECR_ACCOUNT_ID
 ARG ECR_REGION
 
 # The base image will contain all the source code needed for our site
-FROM ${ECR_ACCOUNT_ID}.dkr.ecr.${ECR_REGION}.amazonaws.com/docker-hub/library/node:18.14-alpine AS base
+FROM ${ECR_ACCOUNT_ID}.dkr.ecr.${ECR_REGION}.amazonaws.com/docker-hub/library/node:18.20-alpine AS base
 
 # https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine
 RUN apk add --no-cache libc6-compat
@@ -196,7 +196,7 @@ RUN yarn install --frozen-lockfile --only=production
 ARG ECR_ACCOUNT_ID
 ARG ECR_REGION
 # The run stage is used to run our optimized app
-FROM ${ECR_ACCOUNT_ID}.dkr.ecr.${ECR_REGION}.amazonaws.com/docker-hub/library/node:18.14-alpine AS run
+FROM ${ECR_ACCOUNT_ID}.dkr.ecr.${ECR_REGION}.amazonaws.com/docker-hub/library/node:18.20-alpine AS run
 
 ARG SITE
 
