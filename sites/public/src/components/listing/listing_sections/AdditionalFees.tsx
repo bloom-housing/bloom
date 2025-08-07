@@ -45,14 +45,16 @@ export const AdditionalFees = ({
                   <div>{t("listings.applicationFeeDueAt")}</div>
                 </div>
               )}
-              {(depositMin || depositMax) && (
+              {(depositMin || depositMax || depositHelperText) && (
                 <div className={styles["split-card-cell"]}>
                   <Heading size={"md"} className={listingStyles["thin-heading"]} priority={4}>
                     {t("t.deposit")}
                   </Heading>
-                  <div className={styles.emphasized}>
-                    {getCurrencyRange(parseInt(depositMin), parseInt(depositMax))}
-                  </div>
+                  {(depositMin || depositMax) && (
+                    <div className={styles.emphasized}>
+                      {getCurrencyRange(parseInt(depositMin), parseInt(depositMax))}
+                    </div>
+                  )}
                   <div>{depositHelperText}</div>
                 </div>
               )}
