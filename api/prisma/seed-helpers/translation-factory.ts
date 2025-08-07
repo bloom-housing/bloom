@@ -12,15 +12,14 @@ const translations = (jurisdictionName?: string, language?: LanguagesEnum) => {
         reviewListing: 'Review Listing',
       },
       footer: {
-        line1: `${jurisdictionName || 'Bloom'}`,
+        line1: `${jurisdictionName || 'Detroit'}`,
         line2: '',
         thankYou: 'Thank you',
-        footer: `${jurisdictionName || 'Bloom Housing'}`,
+        footer: `${jurisdictionName || 'Detroit Home Connect'}`,
       },
       header: {
-        logoUrl:
-          'https://res.cloudinary.com/exygy/image/upload/w_400,c_limit,q_65/dev/bloom_logo_generic_zgb4sg.jpg',
-        logoTitle: 'Bloom Housing Portal',
+        logoUrl: 'https://detroitmi.gov/themes/custom/detroitminew/logo.svg',
+        logoTitle: 'Detroit Home Connect',
       },
       invite: {
         hello: 'Welcome to the Partners Portal',
@@ -115,7 +114,7 @@ const translations = (jurisdictionName?: string, language?: LanguagesEnum) => {
         passwordInfo:
           "Your password won't change until you access the link above and create a new one.",
         resetRequest:
-          'A request to reset your Bloom Housing Portal website password for %{appUrl} has recently been made.',
+          'A request to reset your Detroit Home Connect website password for %{appUrl} has recently been made.',
         ignoreRequest: "If you didn't request this, please ignore this email.",
         changePassword: 'Change my password',
       },
