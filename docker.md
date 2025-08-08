@@ -38,6 +38,8 @@ It is recommended to use this command to bring down the running instances so tha
 
 Bloom is setup to be deployable in cloud environments via docker images. Those images can be built and run locally.
 
+You can run each of the following images individually or run several together.
+
 ### Backend
 
 For a full view into the docker steps you can find the details in this [DockerFile](api/Dockerfile)
@@ -87,9 +89,9 @@ After the image is built, the following command should be run from the _root_ di
 #### Build
 
 The following command should be run in the _root_ directory to build the image
-`docker build . -f sites/partner/Dockerfile -t partner`
+`docker build . -f sites/partners/Dockerfile -t partners`
 
 #### Run
 
 After the image is built, the following command should be run from the _root_ directory.
-`docker run  --env-file  sites/partner/.env -p 3001:3001  partner`
+`docker run  --env-file  sites/partners/.env -p 3001:3001 --name partners partners`
