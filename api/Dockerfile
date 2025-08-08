@@ -1,31 +1,27 @@
+#####################
+##### Run image #####
+#####################
+FROM node:18.20-alpine AS run
 
-# Base image
-FROM node:18
+# install the appropriate openSSL package in order to run all commands
+RUN ln -s /usr/lib/libssl.so.3 /lib/libssl.so.3
 
-# Create working directory
 WORKDIR /usr/src/api
 
-# Copy package.json
-COPY package.json ./
+COPY package.json yarn.lock ./
+RUN yarn install --frozen-lockfile
 
-# Copy yarn.lcok
-COPY yarn.lock ./
-
-# run yarn install
-RUN yarn install
-
-# Copy source code into docker image
 COPY . .
-
-# Copy .env
-COPY .env ./
-
-# run build commands
 RUN yarn prisma generate
 RUN yarn build
 
-# Expose port 3100 for api
 EXPOSE 3100
+CMD ["yarn", "start:prod"]
 
-# Start api
-CMD ["yarn", "dev"]
+###########################
+##### Migration image #####
+###########################
+FROM run AS migrate
+
+# command to run the migrations
+CMD ["yarn", "db:migration:run"]

@@ -2532,6 +2532,7 @@ describe('Testing application flagged set service', () => {
           afsLastRunAt: true,
         },
         where: {
+          id: undefined,
           lastApplicationUpdateAt: {
             not: null,
           },
@@ -2550,6 +2551,7 @@ describe('Testing application flagged set service', () => {
                 },
               ],
             },
+            {},
           ],
         },
       });

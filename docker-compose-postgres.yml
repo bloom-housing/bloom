@@ -1,0 +1,21 @@
+# docker-compose.yml
+
+services:
+  db:
+    image: postgres:15
+    container_name: bloom-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: bloom_prisma
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: prisma
+      PGPORT: 5433
+    ports:
+      - "5433:5433"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    command: -p 5433
+
+volumes:
+  db_data:
+
