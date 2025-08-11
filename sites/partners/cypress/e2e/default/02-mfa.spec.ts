@@ -9,7 +9,7 @@ describe("Log in using MFA Tests", () => {
     cy.visit("/")
     cy.get("input#email").type("mfauser@bloom.com")
     cy.get("input#password").type("Abcdef12345!")
-    cy.get("button").contains("Sign In").click()
+    cy.get("button").contains("Sign in").click()
     cy.getByID("verify-by-email").click()
     cy.getByTestId("sign-in-mfa-code-field").type("12345")
     cy.getByID("verify-and-sign-in").click()

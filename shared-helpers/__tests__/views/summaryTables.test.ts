@@ -717,7 +717,7 @@ describe("stackedUnitGroupsSummariesTable", () => {
         rent: { cellSubText: "", cellText: "n/a" },
         unitType: { cellSubText: "", cellText: "1 BR" },
         availability: {
-          cellText: "3 Vacant Units & Closed waitlist",
+          cellText: "3 Vacant units & Closed waitlist",
         },
       },
     ])
@@ -739,7 +739,7 @@ describe("stackedUnitGroupsSummariesTable", () => {
       {
         rent: { cellSubText: "", cellText: "n/a" },
         unitType: { cellSubText: "", cellText: "1 BR" },
-        availability: { cellText: "Under Construction" },
+        availability: { cellText: "Under construction" },
       },
     ])
   })
@@ -757,12 +757,12 @@ describe("getAvailabilityText", () => {
   it("should show plural units available text", () => {
     expect(
       getAvailabilityText({ ...defaultUnitGroupSummary, openWaitlist: true, unitVacancies: 10 })
-    ).toEqual({ text: "10 Vacant Units & Open waitlist" })
+    ).toEqual({ text: "10 Vacant units & Open waitlist" })
   })
   it("should show singular units available text", () => {
     expect(
       getAvailabilityText({ ...defaultUnitGroupSummary, openWaitlist: false, unitVacancies: 1 })
-    ).toEqual({ text: "1 Vacant Unit & Closed waitlist" })
+    ).toEqual({ text: "1 Vacant unit & Closed waitlist" })
   })
   it("should show under construction text", () => {
     expect(
@@ -770,6 +770,6 @@ describe("getAvailabilityText", () => {
         { ...defaultUnitGroupSummary, openWaitlist: true, unitVacancies: 10 },
         true
       )
-    ).toEqual({ text: "Under Construction" })
+    ).toEqual({ text: "Under construction" })
   })
 })

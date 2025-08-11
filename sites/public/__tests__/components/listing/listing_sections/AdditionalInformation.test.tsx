@@ -20,7 +20,7 @@ describe("<AdditionalInformation>", () => {
         ]}
       />
     )
-    expect(getAllByText("Additional Information").length).toBeGreaterThan(0)
+    expect(getAllByText("Additional information").length).toBeGreaterThan(0)
     expect(getAllByText("Required documents and selection criteria").length).toBeGreaterThan(0)
     expect(getByText("Additional information 1 heading")).toBeDefined()
     expect(getByText("Description for additional information 1")).toBeDefined()
