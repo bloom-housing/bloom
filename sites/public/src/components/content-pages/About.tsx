@@ -5,9 +5,10 @@ import { PageHeaderLayout } from "../../patterns/PageHeaderLayout"
 import styles from "../../patterns/PageHeaderLayout.module.scss"
 
 const About = () => {
+  const pageTitle = t("pageTitle.about")
   return (
-    <Layout>
-      <PageHeaderLayout heading={t("pageTitle.about")} inverse>
+    <Layout pageTitle={pageTitle}>
+      <PageHeaderLayout heading={pageTitle} inverse>
         <section className={styles["markdown"]}>
           <p>{t("about.body1")}</p>
           <br />

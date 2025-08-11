@@ -19,11 +19,11 @@ const Terms = () => {
     })
   }, [profile])
 
-  const pagetTitle = <>{t("pageTitle.termsAndConditions")}</>
+  const pageTitle = t("pageTitle.termsAndConditions")
 
   return (
-    <Layout>
-      <PageHeaderLayout heading={pagetTitle} inverse>
+    <Layout pageTitle={pageTitle}>
+      <PageHeaderLayout heading={pageTitle} inverse>
         <Markdown
           options={{
             overrides: {

@@ -1,5 +1,4 @@
 import { useState } from "react"
-import Head from "next/head"
 import { Card, Dialog, Grid, Heading } from "@bloom-housing/ui-seeds"
 import { t } from "@bloom-housing/ui-components"
 import { GridRow } from "@bloom-housing/ui-seeds/src/layout/Grid"
@@ -25,12 +24,7 @@ const HousingBasics = () => {
 
   return (
     <>
-      <Layout>
-        <Head>
-          <title>
-            {pageTitle} - {t("nav.siteTitle")}
-          </title>
-        </Head>
+      <Layout pageTitle={pageTitle}>
         <PageHeaderLayout
           inverse
           heading={pageTitle}

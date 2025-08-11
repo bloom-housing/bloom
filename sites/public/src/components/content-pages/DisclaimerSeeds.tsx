@@ -20,9 +20,11 @@ const DisclaimerSeeds = () => {
     })
   }, [profile])
 
+  const pageTitle = t("pageTitle.terms")
+
   return (
-    <Layout>
-      <PageHeaderLayout heading={t("pageTitle.terms")} inverse>
+    <Layout pageTitle={pageTitle}>
+      <PageHeaderLayout heading={pageTitle} inverse>
         <Markdown
           options={{
             overrides: {

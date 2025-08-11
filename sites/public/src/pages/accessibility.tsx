@@ -20,10 +20,10 @@ const Accessibility = () => {
     })
   }, [profile])
 
-  const pageTitle = <>{t("pageTitle.accessibilityStatement")}</>
+  const pageTitle = t("pageTitle.accessibilityStatement")
 
   return (
-    <Layout>
+    <Layout pageTitle={t("pageTitle.accessibilityStatement")}>
       <PageHeaderLayout heading={pageTitle} inverse>
         <Markdown
           options={{
