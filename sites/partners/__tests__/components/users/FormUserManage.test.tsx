@@ -48,7 +48,7 @@ describe("<FormUserManage>", () => {
   beforeAll(() => {
     mockNextRouter()
   })
-  describe("Add User", () => {
+  describe("Add user", () => {
     describe("with jurisdictional admins enabled", () => {
       describe("as admin", () => {
         const adminUserWithJurisdictions = {
@@ -90,23 +90,23 @@ describe("<FormUserManage>", () => {
           )
 
           await waitFor(() => screen.getByText("Administrator"))
-          expect(screen.getByText("Add User")).toBeInTheDocument()
-          expect(screen.getByText("User Details")).toBeInTheDocument()
+          expect(screen.getByText("Add user")).toBeInTheDocument()
+          expect(screen.getByText("User details")).toBeInTheDocument()
           expect(screen.getByRole("button", { name: "Close" })).toBeInTheDocument()
-          expect(screen.getByRole("textbox", { name: "First Name" })).toBeInTheDocument()
-          expect(screen.getByRole("textbox", { name: "Last Name" })).toBeInTheDocument()
+          expect(screen.getByRole("textbox", { name: "First name" })).toBeInTheDocument()
+          expect(screen.getByRole("textbox", { name: "Last name" })).toBeInTheDocument()
           expect(screen.getByRole("textbox", { name: "Email" })).toBeInTheDocument()
           // "Role" select should have all four role option
           expect(screen.getByRole("combobox", { name: "Role" })).toBeInTheDocument()
           expect(screen.getByRole("option", { name: "Administrator" })).toBeInTheDocument()
-          expect(screen.getByRole("option", { name: "Jurisdictional Admin" })).toBeInTheDocument()
+          expect(screen.getByRole("option", { name: "Jurisdictional admin" })).toBeInTheDocument()
           expect(
-            screen.getByRole("option", { name: "Jurisdictional Admin - No PII" })
+            screen.getByRole("option", { name: "Jurisdictional admin - No PII" })
           ).toBeInTheDocument()
           expect(screen.getByRole("option", { name: "Partner" })).toBeInTheDocument()
           expect(screen.getByRole("button", { name: "Invite" })).toBeInTheDocument()
-          await userEvent.type(screen.getByRole("textbox", { name: "First Name" }), "firstName")
-          await userEvent.type(screen.getByRole("textbox", { name: "Last Name" }), "lastName")
+          await userEvent.type(screen.getByRole("textbox", { name: "First name" }), "firstName")
+          await userEvent.type(screen.getByRole("textbox", { name: "Last name" }), "lastName")
           await userEvent.type(screen.getByRole("textbox", { name: "Email" }), "email@example.com")
           await act(async () => {
             await userEvent.selectOptions(
@@ -165,22 +165,22 @@ describe("<FormUserManage>", () => {
             />
           )
 
-          await waitFor(() => screen.getByText("Jurisdictional Admin"))
+          await waitFor(() => screen.getByText("Jurisdictional admin"))
           // "Role" select should have all three role option
           expect(screen.getByRole("combobox", { name: "Role" })).toBeInTheDocument()
           expect(screen.getByRole("option", { name: "Administrator" })).toBeInTheDocument()
-          expect(screen.getByRole("option", { name: "Jurisdictional Admin" })).toBeInTheDocument()
+          expect(screen.getByRole("option", { name: "Jurisdictional admin" })).toBeInTheDocument()
           expect(
-            screen.getByRole("option", { name: "Jurisdictional Admin - No PII" })
+            screen.getByRole("option", { name: "Jurisdictional admin - No PII" })
           ).toBeInTheDocument()
           expect(screen.getByRole("option", { name: "Partner" })).toBeInTheDocument()
-          await userEvent.type(screen.getByRole("textbox", { name: "First Name" }), "firstName")
-          await userEvent.type(screen.getByRole("textbox", { name: "Last Name" }), "lastName")
+          await userEvent.type(screen.getByRole("textbox", { name: "First name" }), "firstName")
+          await userEvent.type(screen.getByRole("textbox", { name: "Last name" }), "lastName")
           await userEvent.type(screen.getByRole("textbox", { name: "Email" }), "eamil@example.com")
           await act(async () => {
             await userEvent.selectOptions(
               screen.getByRole("combobox", { name: "Role" }),
-              screen.getByRole("option", { name: "Jurisdictional Admin" })
+              screen.getByRole("option", { name: "Jurisdictional admin" })
             )
             await userEvent.click(screen.getByRole("button", { name: "Invite" }))
           })
@@ -253,17 +253,17 @@ describe("<FormUserManage>", () => {
             />
           )
 
-          await waitFor(() => screen.getByText("Jurisdictional Admin"))
+          await waitFor(() => screen.getByText("Jurisdictional admin"))
           // "Role" select should have all four role option
           expect(screen.getByRole("combobox", { name: "Role" })).toBeInTheDocument()
           expect(screen.getByRole("option", { name: "Administrator" })).toBeInTheDocument()
-          expect(screen.getByRole("option", { name: "Jurisdictional Admin" })).toBeInTheDocument()
+          expect(screen.getByRole("option", { name: "Jurisdictional admin" })).toBeInTheDocument()
           expect(
-            screen.getByRole("option", { name: "Jurisdictional Admin - No PII" })
+            screen.getByRole("option", { name: "Jurisdictional admin - No PII" })
           ).toBeInTheDocument()
           expect(screen.getByRole("option", { name: "Partner" })).toBeInTheDocument()
-          await userEvent.type(screen.getByRole("textbox", { name: "First Name" }), "firstName")
-          await userEvent.type(screen.getByRole("textbox", { name: "Last Name" }), "lastName")
+          await userEvent.type(screen.getByRole("textbox", { name: "First name" }), "firstName")
+          await userEvent.type(screen.getByRole("textbox", { name: "Last name" }), "lastName")
           await userEvent.type(screen.getByRole("textbox", { name: "Email" }), "email@example.com")
           await act(async () => {
             await userEvent.selectOptions(
@@ -285,7 +285,7 @@ describe("<FormUserManage>", () => {
               screen.getByRole("checkbox", { name: "jurisdictionWithJurisdictionAdmin" })
             )
           })
-          await waitFor(() => screen.getByText("jurisdictionWithJurisdictionAdmin Listings"))
+          await waitFor(() => screen.getByText("jurisdictionWithJurisdictionAdmin listings"))
           await act(async () => {
             await userEvent.click(screen.getByRole("checkbox", { name: "listing1" }))
             await userEvent.click(screen.getByRole("checkbox", { name: "listing3" }))
@@ -341,11 +341,11 @@ describe("<FormUserManage>", () => {
               onDrawerClose={onDrawerClose}
             />
           )
-          await waitFor(() => screen.getByText("Jurisdictional Admin"))
+          await waitFor(() => screen.getByText("Jurisdictional admin"))
           expect(screen.queryByRole("option", { name: "Administrator" })).not.toBeInTheDocument()
-          expect(screen.getByRole("option", { name: "Jurisdictional Admin" })).toBeInTheDocument()
+          expect(screen.getByRole("option", { name: "Jurisdictional admin" })).toBeInTheDocument()
           expect(
-            screen.getByRole("option", { name: "Jurisdictional Admin - No PII" })
+            screen.getByRole("option", { name: "Jurisdictional admin - No PII" })
           ).toBeInTheDocument()
           expect(screen.getByRole("option", { name: "Partner" })).toBeInTheDocument()
         })
@@ -389,14 +389,14 @@ describe("<FormUserManage>", () => {
         )
 
         await waitFor(() => screen.getByText("Administrator"))
-        expect(screen.getByText("Add User")).toBeInTheDocument()
-        expect(screen.getByText("User Details")).toBeInTheDocument()
+        expect(screen.getByText("Add user")).toBeInTheDocument()
+        expect(screen.getByText("User details")).toBeInTheDocument()
         // "Role" select should have all three role option
         expect(screen.getByRole("combobox", { name: "Role" })).toBeInTheDocument()
         expect(screen.getByRole("option", { name: "Administrator" })).toBeInTheDocument()
-        expect(screen.getByRole("option", { name: "Jurisdictional Admin" })).toBeInTheDocument()
+        expect(screen.getByRole("option", { name: "Jurisdictional admin" })).toBeInTheDocument()
         expect(
-          screen.getByRole("option", { name: "Jurisdictional Admin - No PII" })
+          screen.getByRole("option", { name: "Jurisdictional admin - No PII" })
         ).toBeInTheDocument()
         expect(screen.getByRole("option", { name: "Partner" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Invite" })).toBeInTheDocument()
@@ -404,7 +404,7 @@ describe("<FormUserManage>", () => {
         await act(async () => {
           await userEvent.selectOptions(
             screen.getByRole("combobox", { name: "Role" }),
-            screen.getByRole("option", { name: "Jurisdictional Admin" })
+            screen.getByRole("option", { name: "Jurisdictional admin" })
           )
         })
         expect(
@@ -455,14 +455,14 @@ describe("<FormUserManage>", () => {
         )
 
         await waitFor(() => screen.getByText("Administrator"))
-        expect(screen.getByText("Add User")).toBeInTheDocument()
-        expect(screen.getByText("User Details")).toBeInTheDocument()
-        // "Role" select should not have Jurisdictional Admin
+        expect(screen.getByText("Add user")).toBeInTheDocument()
+        expect(screen.getByText("User details")).toBeInTheDocument()
+        // "Role" select should not have Jurisdictional admin
         expect(screen.getByRole("combobox", { name: "Role" })).toBeInTheDocument()
         expect(screen.getByRole("option", { name: "Administrator" })).toBeInTheDocument()
         expect(screen.getByRole("option", { name: "Partner" })).toBeInTheDocument()
         expect(
-          screen.queryByRole("option", { name: "Jurisdictional Admin" })
+          screen.queryByRole("option", { name: "Jurisdictional admin" })
         ).not.toBeInTheDocument()
         expect(
           screen.queryByRole("option", { name: "Jurisdictional Admin - No PII" })
@@ -529,19 +529,19 @@ describe("<FormUserManage>", () => {
       )
 
       await waitFor(() => screen.getByText("Administrator"))
-      expect(screen.getByText("Edit User")).toBeInTheDocument()
-      expect(screen.getByText("User Details")).toBeInTheDocument()
+      expect(screen.getByText("Edit user")).toBeInTheDocument()
+      expect(screen.getByText("User details")).toBeInTheDocument()
       expect(screen.getByRole("button", { name: "Close" })).toBeInTheDocument()
-      expect(screen.getByRole("textbox", { name: "First Name" })).toBeInTheDocument()
-      expect(screen.getByRole("textbox", { name: "Last Name" })).toBeInTheDocument()
+      expect(screen.getByRole("textbox", { name: "First name" })).toBeInTheDocument()
+      expect(screen.getByRole("textbox", { name: "Last name" })).toBeInTheDocument()
       expect(screen.getByRole("textbox", { name: "Email" })).toBeInTheDocument()
       expect(screen.getByRole("button", { name: "Save" })).toBeInTheDocument()
-      expect(screen.getByRole("button", { name: "Resend Invite" })).toBeInTheDocument()
+      expect(screen.getByRole("button", { name: "Resend invite" })).toBeInTheDocument()
       expect(screen.getByRole("button", { name: "Delete" })).toBeInTheDocument()
       // "Role" select should have all three role option
       expect(screen.getByRole("combobox", { name: "Role" })).toBeInTheDocument()
       expect(screen.getByRole("option", { name: "Administrator" })).toBeInTheDocument()
-      expect(screen.getByRole("option", { name: "Jurisdictional Admin" })).toBeInTheDocument()
+      expect(screen.getByRole("option", { name: "Jurisdictional admin" })).toBeInTheDocument()
       expect(screen.getByRole("option", { name: "Partner" })).toBeInTheDocument()
       // Jurisdiction options
       expect(
@@ -635,7 +635,7 @@ describe("<FormUserManage>", () => {
       await waitFor(() => screen.getByText("Administrator"))
       await act(async () => {
         // Select and unselect listings
-        await userEvent.click(screen.getByRole("button", { name: "Resend Invite" }))
+        await userEvent.click(screen.getByRole("button", { name: "Resend invite" }))
       })
       await waitFor(() => {
         expect(requestSpy).toHaveBeenCalledWith({

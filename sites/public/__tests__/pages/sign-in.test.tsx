@@ -40,7 +40,7 @@ describe("Sign In Page", () => {
   it("renders all page elements including fields, buttons and links", () => {
     const { getByText, getByTestId, getByLabelText, getByRole } = renderSignInPage()
 
-    expect(getByText("Sign In", { selector: "h1" })).toBeInTheDocument()
+    expect(getByText("Sign in", { selector: "h1" })).toBeInTheDocument()
     expect(getByLabelText("Email")).toBeInTheDocument()
     expect(getByTestId("sign-in-email-field")).toBeInTheDocument()
     expect(getByLabelText("Password")).toBeInTheDocument()
@@ -151,7 +151,7 @@ describe("Sign In Page", () => {
           </MessageContext.Provider>
         </AuthContext.Provider>
       )
-      expect(getByText("Sign In", { selector: "h1" })).toBeInTheDocument()
+      expect(getByText("Sign in", { selector: "h1" })).toBeInTheDocument()
       expect(getByLabelText("Email")).toBeInTheDocument()
       expect(getByLabelText("Password")).toBeInTheDocument()
     })
@@ -183,7 +183,7 @@ describe("Passwordless Sign In page", () => {
   it("renders all page elements including fields, buttons and links", () => {
     const { getByText, getByLabelText, getByTestId, getByRole } = renderSignInPage()
 
-    expect(getByText("Sign In", { selector: "h1" })).toBeInTheDocument()
+    expect(getByText("Sign in", { selector: "h1" })).toBeInTheDocument()
     expect(
       getByText("Enter your email and we'll send you a code to sign in.", { selector: "p" })
     ).toBeInTheDocument()
@@ -361,7 +361,7 @@ describe("Mandated accounts", () => {
     it("shows sign-in form", () => {
       const { getByText, getByLabelText, getByRole } = renderSignInWithMandatedAccounts()
 
-      expect(getByText("Sign In", { selector: "h1" })).toBeInTheDocument()
+      expect(getByText("Sign in", { selector: "h1" })).toBeInTheDocument()
       expect(getByLabelText("Email")).toBeInTheDocument()
       expect(getByLabelText("Password")).toBeInTheDocument()
       expect(getByRole("button", { name: /sign in/i })).toBeInTheDocument()
@@ -443,7 +443,7 @@ describe("Mandated accounts", () => {
       it("shows sign-in form with listing redirect parameters on mobile", () => {
         const { getByText, getByLabelText, getByRole } = renderSignInWithMandatedAccounts()
 
-        expect(getByText("Sign In", { selector: "h1" })).toBeInTheDocument()
+        expect(getByText("Sign in", { selector: "h1" })).toBeInTheDocument()
         expect(getByLabelText("Email")).toBeInTheDocument()
         expect(getByLabelText("Password")).toBeInTheDocument()
         expect(getByRole("button", { name: /sign in/i })).toBeInTheDocument()
@@ -589,8 +589,8 @@ describe("Resend confirmation flow", () => {
     expect(resendButton).toBeInTheDocument()
     fireEvent.click(resendButton)
 
-    expect(await findByText("Resend Code")).toBeInTheDocument()
-    const resendCodeButton = await findByText("Resend Code")
+    expect(await findByText("Resend code")).toBeInTheDocument()
+    const resendCodeButton = await findByText("Resend code")
     fireEvent.click(resendCodeButton)
 
     const resendCodeConfirmationButton = await findByText("Resend the code")

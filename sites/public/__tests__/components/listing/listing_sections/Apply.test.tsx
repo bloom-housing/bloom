@@ -56,7 +56,7 @@ describe("<Apply>", () => {
         setShowDownloadModal={() => null}
       />
     )
-    expect(screen.queryByText("How to Apply")).not.toBeInTheDocument()
+    expect(screen.queryByText("How to apply")).not.toBeInTheDocument()
   })
 
   it("does not render if due date is in the past", () => {
@@ -82,7 +82,7 @@ describe("<Apply>", () => {
         setShowDownloadModal={() => null}
       />
     )
-    expect(screen.queryByText("How to Apply")).not.toBeInTheDocument()
+    expect(screen.queryByText("How to apply")).not.toBeInTheDocument()
   })
 
   it("does not render if listing is closed", () => {
@@ -109,7 +109,7 @@ describe("<Apply>", () => {
         setShowDownloadModal={() => null}
       />
     )
-    expect(screen.queryByText("How to Apply")).not.toBeInTheDocument()
+    expect(screen.queryByText("How to apply")).not.toBeInTheDocument()
   })
 
   it("shows apply online button for internal online application", () => {
@@ -135,14 +135,14 @@ describe("<Apply>", () => {
         setShowDownloadModal={() => null}
       />
     )
-    expect(screen.getByRole("heading", { level: 2, name: "How to Apply" })).toBeInTheDocument()
-    expect(screen.getByText("Apply Online")).toBeInTheDocument()
-    expect(screen.getByRole("link", { name: "Apply Online" })).toHaveAttribute(
+    expect(screen.getByRole("heading", { level: 2, name: "How to apply" })).toBeInTheDocument()
+    expect(screen.getByText("Apply online")).toBeInTheDocument()
+    expect(screen.getByRole("link", { name: "Apply online" })).toHaveAttribute(
       "href",
       `/applications/start/choose-language?listingId=${listing.id}`
     )
 
-    expect(screen.queryByText("Download Application")).not.toBeInTheDocument()
+    expect(screen.queryByText("Download application")).not.toBeInTheDocument()
   })
 
   it("shows redirected apply online button for internal online application with mandated accounts on while signed out", () => {
@@ -171,14 +171,14 @@ describe("<Apply>", () => {
         />
       </AuthContext.Provider>
     )
-    expect(screen.getByRole("heading", { level: 2, name: "How to Apply" })).toBeInTheDocument()
-    expect(screen.getByText("Apply Online")).toBeInTheDocument()
-    expect(screen.getByRole("link", { name: "Apply Online" })).toHaveAttribute(
+    expect(screen.getByRole("heading", { level: 2, name: "How to apply" })).toBeInTheDocument()
+    expect(screen.getByText("Apply online")).toBeInTheDocument()
+    expect(screen.getByRole("link", { name: "Apply online" })).toHaveAttribute(
       "href",
       `/sign-in?redirectUrl=/applications/start/choose-language&listingId=${listing.id}`
     )
 
-    expect(screen.queryByText("Download Application")).not.toBeInTheDocument()
+    expect(screen.queryByText("Download application")).not.toBeInTheDocument()
   })
 
   it("shows not-redirected apply online button for internal online application with mandated accounts on while signed in", () => {
@@ -207,14 +207,14 @@ describe("<Apply>", () => {
         />
       </AuthContext.Provider>
     )
-    expect(screen.getByRole("heading", { level: 2, name: "How to Apply" })).toBeInTheDocument()
-    expect(screen.getByText("Apply Online")).toBeInTheDocument()
-    expect(screen.getByRole("link", { name: "Apply Online" })).toHaveAttribute(
+    expect(screen.getByRole("heading", { level: 2, name: "How to apply" })).toBeInTheDocument()
+    expect(screen.getByText("Apply online")).toBeInTheDocument()
+    expect(screen.getByRole("link", { name: "Apply online" })).toHaveAttribute(
       "href",
       `/applications/start/choose-language?listingId=${listing.id}`
     )
 
-    expect(screen.queryByText("Download Application")).not.toBeInTheDocument()
+    expect(screen.queryByText("Download application")).not.toBeInTheDocument()
   })
 
   it("shows apply online button for external online application", () => {
@@ -240,14 +240,14 @@ describe("<Apply>", () => {
         setShowDownloadModal={() => null}
       />
     )
-    expect(screen.getByRole("heading", { level: 2, name: "How to Apply" })).toBeInTheDocument()
-    expect(screen.getByText("Apply Online")).toBeInTheDocument()
-    expect(screen.getByRole("link", { name: "Apply Online" })).toHaveAttribute(
+    expect(screen.getByRole("heading", { level: 2, name: "How to apply" })).toBeInTheDocument()
+    expect(screen.getByText("Apply online")).toBeInTheDocument()
+    expect(screen.getByRole("link", { name: "Apply online" })).toHaveAttribute(
       "href",
       "https://www.exygy.com"
     )
 
-    expect(screen.queryByText("Download Application")).not.toBeInTheDocument()
+    expect(screen.queryByText("Download application")).not.toBeInTheDocument()
   })
 
   it("shows apply online button for external online application with mandated accounts on and signed out", () => {
@@ -276,14 +276,14 @@ describe("<Apply>", () => {
         />
       </AuthContext.Provider>
     )
-    expect(screen.getByRole("heading", { level: 2, name: "How to Apply" })).toBeInTheDocument()
-    expect(screen.getByText("Apply Online")).toBeInTheDocument()
-    expect(screen.getByRole("link", { name: "Apply Online" })).toHaveAttribute(
+    expect(screen.getByRole("heading", { level: 2, name: "How to apply" })).toBeInTheDocument()
+    expect(screen.getByText("Apply online")).toBeInTheDocument()
+    expect(screen.getByRole("link", { name: "Apply online" })).toHaveAttribute(
       "href",
       "https://www.exygy.com"
     )
 
-    expect(screen.queryByText("Download Application")).not.toBeInTheDocument()
+    expect(screen.queryByText("Download application")).not.toBeInTheDocument()
   })
 
   it("shows apply online button for external online application with mandated accounts on and signed in", () => {
@@ -312,14 +312,14 @@ describe("<Apply>", () => {
         />
       </AuthContext.Provider>
     )
-    expect(screen.getByRole("heading", { level: 2, name: "How to Apply" })).toBeInTheDocument()
-    expect(screen.getByText("Apply Online")).toBeInTheDocument()
-    expect(screen.getByRole("link", { name: "Apply Online" })).toHaveAttribute(
+    expect(screen.getByRole("heading", { level: 2, name: "How to apply" })).toBeInTheDocument()
+    expect(screen.getByText("Apply online")).toBeInTheDocument()
+    expect(screen.getByRole("link", { name: "Apply online" })).toHaveAttribute(
       "href",
       "https://www.exygy.com"
     )
 
-    expect(screen.queryByText("Download Application")).not.toBeInTheDocument()
+    expect(screen.queryByText("Download application")).not.toBeInTheDocument()
   })
 
   it("shows download application button and opens modal for multiple paper applications", () => {
@@ -376,13 +376,13 @@ describe("<Apply>", () => {
         setShowDownloadModal={showDownloadModalSpy}
       />
     )
-    expect(screen.getByRole("heading", { level: 2, name: "How to Apply" })).toBeInTheDocument()
-    expect(screen.getByRole("button", { name: "Download Application" })).toBeInTheDocument()
-    fireEvent.click(screen.getByText("Download Application"))
+    expect(screen.getByRole("heading", { level: 2, name: "How to apply" })).toBeInTheDocument()
+    expect(screen.getByRole("button", { name: "Download application" })).toBeInTheDocument()
+    fireEvent.click(screen.getByText("Download application"))
     expect(showDownloadModalSpy).toHaveBeenCalled()
 
     expect(fetchMock).not.toHaveBeenCalled()
-    expect(screen.queryByText("Apply Online")).not.toBeInTheDocument()
+    expect(screen.queryByText("Apply online")).not.toBeInTheDocument()
   })
 
   it("shows download application button and does not open modal for one paper application", () => {
@@ -429,15 +429,15 @@ describe("<Apply>", () => {
         setShowDownloadModal={showDownloadModalSpy}
       />
     )
-    expect(screen.getByRole("heading", { level: 2, name: "How to Apply" })).toBeInTheDocument()
-    expect(screen.getByRole("button", { name: "Download Application" })).toBeInTheDocument()
-    fireEvent.click(screen.getByText("Download Application"))
+    expect(screen.getByRole("heading", { level: 2, name: "How to apply" })).toBeInTheDocument()
+    expect(screen.getByRole("button", { name: "Download application" })).toBeInTheDocument()
+    fireEvent.click(screen.getByText("Download application"))
     expect(fetchMock).toHaveBeenCalledWith(
       "https://res.cloudinary.com/exygy/image/upload/paper-application-id.pdf",
       { headers: { "Content-Type": "application/pdf" }, method: "GET" }
     )
 
-    expect(screen.queryByText("Apply Online")).not.toBeInTheDocument()
+    expect(screen.queryByText("Apply online")).not.toBeInTheDocument()
     expect(showDownloadModalSpy).not.toHaveBeenCalled()
   })
 
@@ -488,9 +488,9 @@ describe("<Apply>", () => {
         setShowDownloadModal={() => null}
       />
     )
-    expect(screen.getByRole("heading", { level: 2, name: "How to Apply" })).toBeInTheDocument()
-    expect(screen.getByText("Apply Online")).toBeInTheDocument()
-    expect(screen.getByRole("button", { name: "Download Application" })).toBeInTheDocument()
+    expect(screen.getByRole("heading", { level: 2, name: "How to apply" })).toBeInTheDocument()
+    expect(screen.getByText("Apply online")).toBeInTheDocument()
+    expect(screen.getByRole("button", { name: "Download application" })).toBeInTheDocument()
   })
 
   it("shows paper application and mailing / drop off / pick up addresses", () => {
@@ -568,23 +568,23 @@ describe("<Apply>", () => {
         setShowDownloadModal={() => null}
       />
     )
-    expect(screen.getByRole("heading", { level: 2, name: "How to Apply" })).toBeInTheDocument()
-    expect(screen.getByRole("button", { name: "Download Application" })).toBeInTheDocument()
+    expect(screen.getByRole("heading", { level: 2, name: "How to apply" })).toBeInTheDocument()
+    expect(screen.getByRole("button", { name: "Download application" })).toBeInTheDocument()
     expect(screen.getByText("Pick up an application")).toBeInTheDocument()
     expect(screen.getByText("Pick up address street, Pick up address unit")).toBeInTheDocument()
     expect(screen.getByText("Pick up address city, CA 67890")).toBeInTheDocument()
     expect(screen.getByText("Pick up address office hours")).toBeInTheDocument()
-    expect(screen.getByText("Submit a Paper Application")).toBeInTheDocument()
-    expect(screen.getByText("Send Application by US Mail")).toBeInTheDocument()
+    expect(screen.getByText("Submit a paper application")).toBeInTheDocument()
+    expect(screen.getByText("Send application by US Mail")).toBeInTheDocument()
     expect(screen.getByText("Mailing address street, Mailing address unit")).toBeInTheDocument()
     expect(screen.getByText("Mailing address city, CO 12345")).toBeInTheDocument()
-    expect(screen.getByText("Drop Off Application")).toBeInTheDocument()
+    expect(screen.getByText("Drop off application")).toBeInTheDocument()
     expect(screen.getByText("Drop off address street, Drop off address unit")).toBeInTheDocument()
     expect(screen.getByText("Drop off address city, CT 45678")).toBeInTheDocument()
     expect(screen.getByText("Drop off address office hours")).toBeInTheDocument()
-    expect(screen.getAllByText("Get Directions").length).toBe(2)
+    expect(screen.getAllByText("Get directions").length).toBe(2)
 
-    expect(screen.queryByText("Apply Online")).not.toBeInTheDocument()
+    expect(screen.queryByText("Apply online")).not.toBeInTheDocument()
   })
 
   it("shows mailing address with postmark", () => {
@@ -639,7 +639,7 @@ describe("<Apply>", () => {
         setShowDownloadModal={() => null}
       />
     )
-    expect(screen.getByRole("heading", { level: 2, name: "How to Apply" })).toBeInTheDocument()
+    expect(screen.getByRole("heading", { level: 2, name: "How to apply" })).toBeInTheDocument()
     const postmarkString = getDateString(postmarkDate, `MMM DD, YYYY [${t("t.at")}] hh:mm A`)
     expect(
       screen.getByText(
@@ -647,7 +647,7 @@ describe("<Apply>", () => {
       )
     )
 
-    expect(screen.queryByText("Apply Online")).not.toBeInTheDocument()
+    expect(screen.queryByText("Apply online")).not.toBeInTheDocument()
   })
 
   it("shows mailing address with no postmark", () => {
@@ -701,7 +701,7 @@ describe("<Apply>", () => {
         setShowDownloadModal={() => null}
       />
     )
-    expect(screen.getByRole("heading", { level: 2, name: "How to Apply" })).toBeInTheDocument()
+    expect(screen.getByRole("heading", { level: 2, name: "How to apply" })).toBeInTheDocument()
     const dueDateString = getDateString(dueDate, `MMM DD, YYYY [${t("t.at")}] hh:mm A`)
 
     expect(
@@ -710,7 +710,7 @@ describe("<Apply>", () => {
       )
     )
 
-    expect(screen.queryByText("Apply Online")).not.toBeInTheDocument()
+    expect(screen.queryByText("Apply online")).not.toBeInTheDocument()
   })
 
   it("shows mailing address with no online or paper app", () => {
@@ -748,11 +748,11 @@ describe("<Apply>", () => {
         setShowDownloadModal={() => null}
       />
     )
-    expect(getByText("How to Apply")).toBeDefined()
-    expect(getByText("Send Application by US Mail")).toBeDefined()
-    expect(getByText(addressCity, { exact: false })).toBeDefined()
-    expect(getByText(addressState, { exact: false })).toBeDefined()
-    expect(getByText(addressStreet, { exact: false })).toBeDefined()
-    expect(getByText(addressZipCode, { exact: false })).toBeDefined()
+    expect(screen.getByRole("heading", { level: 2, name: "How to apply" })).toBeInTheDocument()
+    expect(screen.getByText("Send application by US Mail")).toBeInTheDocument()
+    expect(screen.getByText(addressCity, { exact: false })).toBeInTheDocument()
+    expect(screen.getByText(addressState, { exact: false })).toBeInTheDocument()
+    expect(screen.getByText(addressStreet, { exact: false })).toBeInTheDocument()
+    expect(screen.getByText(addressZipCode, { exact: false })).toBeInTheDocument()
   })
 })

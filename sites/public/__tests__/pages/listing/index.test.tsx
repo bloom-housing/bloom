@@ -76,12 +76,12 @@ describe("<ListingViewSeeds>", () => {
       it.todo("hide section if not rental assistance data avialble")
       it.todo("render the rental assistance section with given information")
     })
-    describe("Housing Preferences", () => {
+    describe("Housing preferences", () => {
       it.todo("hide section if no preferences have been found")
       it.todo("hide section if the disableListingPreferences feature flag is turned on")
       it.todo("render the prefrences section with all given data")
     })
-    describe("Housing Programs", () => {
+    describe("Housing programs", () => {
       it.todo("hide section if no programs are available")
       it.todo("render the programs section with all given data")
     })

@@ -49,9 +49,9 @@ describe("applications pages", () => {
 
     it("should uncheck all other boxes when 'No' is selected", () => {
       const { getByText, getByTestId } = render(<ApplicationAda />)
-      fireEvent.click(getByText("For Mobility Impairments"))
-      fireEvent.click(getByText("For Vision Impairments"))
-      fireEvent.click(getByText("For Hearing Impairments"))
+      fireEvent.click(getByText("For mobility impairments"))
+      fireEvent.click(getByText("For vision impairments"))
+      fireEvent.click(getByText("For hearing impairments"))
 
       expect(getByTestId("app-ada-mobility")).toBeChecked()
       expect(getByTestId("app-ada-vision")).toBeChecked()

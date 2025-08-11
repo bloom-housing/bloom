@@ -166,7 +166,7 @@ describe("settings", () => {
       fireEvent.click(within(modal).getByText("Delete"))
 
       // Modal should be closed and the alert popped up
-      const removedToaster = await findByText("Preference Removed")
+      const removedToaster = await findByText("Preference removed")
       expect(removedToaster).toBeInTheDocument()
       expect(queryAllByText("Are you sure?")).toHaveLength(0)
     })
@@ -256,10 +256,10 @@ describe("settings", () => {
 
       // Add a preference
       fireEvent.click(getByText("Add item"))
-      expect(getByText("Add Preference")).toBeInTheDocument()
+      expect(getByText("Add preference")).toBeInTheDocument()
 
       // Add a preference option
-      fireEvent.click(getByText("Add Option"))
+      fireEvent.click(getByText("Add option"))
       expect(getByText("Do you want to collect address information?")).toBeInTheDocument()
 
       // Click collect address
@@ -301,10 +301,10 @@ describe("settings", () => {
 
       // Add a preference
       fireEvent.click(getByText("Add item"))
-      expect(getByText("Add Preference")).toBeInTheDocument()
+      expect(getByText("Add preference")).toBeInTheDocument()
 
       // Add a preference option
-      fireEvent.click(getByText("Add Option"))
+      fireEvent.click(getByText("Add option"))
       expect(getByText("Do you want to collect address information?")).toBeInTheDocument()
 
       // Click collect address

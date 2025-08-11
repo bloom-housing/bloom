@@ -54,8 +54,8 @@ describe("LotteryResults", () => {
       </FormComponent>
     )
 
-    expect(results.getByText("Add Results")).toBeTruthy()
-    expect(results.getByText("Upload Results")).toBeTruthy()
+    expect(results.getByText("Add results")).toBeTruthy()
+    expect(results.getByText("Upload results")).toBeTruthy()
     expect(results.getByText("Select PDF file")).toBeTruthy()
     expect(results.getByText("Drag files here", { exact: false })).toBeTruthy()
     expect(results.getByText("choose from folder")).toBeTruthy()
@@ -72,7 +72,7 @@ describe("LotteryResults", () => {
       </FormComponent>
     )
 
-    expect(results.getByText("Add Results")).toBeTruthy()
+    expect(results.getByText("Add results")).toBeTruthy()
 
     fireEvent.click(results.getByText("Cancel"))
 
@@ -101,7 +101,7 @@ describe("LotteryResults", () => {
       </FormComponent>
     )
 
-    expect(results.getByText("Edit Results")).toBeTruthy()
+    expect(results.getByText("Edit results")).toBeTruthy()
     expect(results.getByText("Preview")).toBeTruthy()
     expect(results.getByText("lotteryId")).toBeTruthy()
     expect(results.getByText("Post")).toBeTruthy()
@@ -130,7 +130,7 @@ describe("LotteryResults", () => {
       </FormComponent>
     )
 
-    expect(results.getByText("Add Results")).toBeTruthy()
+    expect(results.getByText("Add results")).toBeTruthy()
     expect(results.getByText("Drag files here", { exact: false })).toBeTruthy()
     const file = new File(["hello"], "sample.pdf", { type: "application/pdf" })
     await userEvent.upload(results.getByTestId("dropzone-input"), file)

@@ -156,8 +156,8 @@ describe("<FormPrimaryApplicant>", () => {
       </FormProviderWrapper>
     )
 
-    expect(screen.getByText(/Full-time Student/i)).toBeInTheDocument()
-    expect(screen.getAllByRole("radio", { name: "Yes" })).toHaveLength(1)
-    expect(screen.getAllByRole("radio", { name: "No" })).toHaveLength(1)
+    expect(screen.getByText(/Full-time student/i)).toBeInTheDocument()
+    expect(screen.getAllByRole("radio", { name: "Yes" })).toHaveLength(2)
+    expect(screen.getAllByRole("radio", { name: "No" })).toHaveLength(2)
   })
 })

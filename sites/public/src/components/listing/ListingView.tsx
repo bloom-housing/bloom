@@ -251,9 +251,9 @@ export const ListingView = (props: ListingProps) => {
       >
         <>
           {getMultiselectQuestionData(MultiselectQuestionsApplicationSectionEnum.programs).map(
-            (msq) => {
+            (msq, index) => {
               return (
-                <Card spacing="md" className="listing-multiselect-card">
+                <Card spacing="md" className="listing-multiselect-card" key={index}>
                   <Card.Header>
                     <SeedsHeading size="sm" priority={4}>
                       {msq.title}
