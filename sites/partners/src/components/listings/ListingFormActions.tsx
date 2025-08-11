@@ -1,21 +1,20 @@
 import React, { useContext, useMemo } from "react"
 import { useRouter } from "next/router"
 import dayjs from "dayjs"
+import LinkIcon from "@heroicons/react/20/solid/LinkIcon"
+import PencilSquareIcon from "@heroicons/react/24/solid/PencilSquareIcon"
 import { t, StatusMessages } from "@bloom-housing/ui-components"
 import { Button, Link, Grid, Icon } from "@bloom-housing/ui-seeds"
 import { pdfUrlFromListingEvents, AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
-import PencilSquareIcon from "@heroicons/react/24/solid/PencilSquareIcon"
-import LinkIcon from "@heroicons/react/20/solid/LinkIcon"
-import { ListingContext } from "./ListingContext"
-import { StatusAside } from "../shared/StatusAside"
 import {
   ListingEventsTypeEnum,
   ListingUpdate,
   ListingsStatusEnum,
   UserRoleEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-
+import { StatusAside } from "../shared/StatusAside"
 import { SubmitFunction } from "./PaperListingForm"
+import { ListingContext } from "./ListingContext"
 
 export enum ListingFormActionsType {
   add = "add",
@@ -97,7 +96,7 @@ const ListingFormActions = ({
         <Button
           id="listingsExitButton"
           variant="text"
-          className="w-full justify-center p-3"
+          className={"w-full justify-center p-3 darker-link"}
           onClick={() => {
             showSaveBeforeExitDialog()
           }}

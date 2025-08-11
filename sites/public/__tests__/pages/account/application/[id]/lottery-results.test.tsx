@@ -115,29 +115,23 @@ describe("Listing Lottery Results View", () => {
     expect(
       await screen.findByRole("heading", { level: 1, name: /archer studios/i })
     ).toBeInTheDocument()
-    expect(
-      await screen.getByRole("link", { name: /view the original listing/i })
-    ).toBeInTheDocument()
+    expect(screen.getByRole("link", { name: /view the original listing/i })).toBeInTheDocument()
 
     expect(
       await screen.findByRole("heading", { level: 2, name: /here are your lottery results/i })
     ).toBeInTheDocument()
-    expect(
-      await screen.getByText(/99999 applications were submitted for 1 unit/i)
-    ).toBeInTheDocument()
+    expect(screen.getByText(/99999 applications were submitted for 1 unit/i)).toBeInTheDocument()
     expect(
       await screen.findByRole("heading", { level: 3, name: /your raw rank/i })
     ).toBeInTheDocument()
-    expect(await screen.getByText(/^5$/)).toBeInTheDocument()
-    expect(
-      await screen.getByText(/99999 applications were submitted for 1 unit/i)
-    ).toBeInTheDocument()
+    expect(screen.getByText(/^5$/)).toBeInTheDocument()
+    expect(screen.getByText(/99999 applications were submitted for 1 unit/i)).toBeInTheDocument()
 
-    expect(await screen.getByText(/Your lottery preference\(s\)/))
-    expect(await screen.getByText(/^Preference 1/i)).toBeInTheDocument()
+    expect(screen.getByText(/Your lottery preference\(s\)/))
+    expect(screen.getByText(/^Preference 1/i)).toBeInTheDocument()
     expect(screen.getAllByText(/^Out of 12345 applicants on this list$/i).length).toStrictEqual(1)
 
-    expect(await screen.getByText(/^Preference 2/i)).toBeInTheDocument()
+    expect(screen.getByText(/^Preference 2/i)).toBeInTheDocument()
     expect(screen.getAllByText(/^Out of 98765 applicants on this list$/i).length).toStrictEqual(1)
 
     // Normally we don't want to query DOM elements directly, but this is to verify the sort order:
@@ -174,6 +168,6 @@ describe("Listing Lottery Results View", () => {
 
     // Listing heading is an error
     expect(await screen.findByRole("heading", { level: 1, name: /error/i })).toBeInTheDocument()
-    expect(await screen.getByText(/No application with that ID exists/i)).toBeInTheDocument()
+    expect(screen.getByText(/No application with that ID exists/i)).toBeInTheDocument()
   })
 })

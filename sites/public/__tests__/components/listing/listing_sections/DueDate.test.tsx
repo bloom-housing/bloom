@@ -8,7 +8,7 @@ describe("<DueDate>", () => {
   it("shows nothing if no content", () => {
     const { queryByText } = render(<DueDate content={[]} />)
     expect(queryByText("Application Due Date")).toBeNull()
-    expect(queryByText("First Come First Serve")).toBeNull()
+    expect(queryByText("First come first serve")).toBeNull()
   })
   it("shows multiple content rows", () => {
     const { getByText } = render(<DueDate content={["Row 1", "Row 2"]} />)
