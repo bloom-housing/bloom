@@ -6958,15 +6958,9 @@ export interface LanguageFrequency {
   language: string
 }
 
-export interface incomeHouseholdSizeCrossTab {
-  [householdSize: string]: {
-    [AMI: string]: number
-  }
-}
-
 export interface ReportProducts {
-  /** Cross-tabulation of income bands by household size */
-  incomeHouseholdSizeCrossTab: incomeHouseholdSizeCrossTab
+  /** Cross-tabulation of income bands by household size. Keys are household sizes, values are income band distributions. */
+  incomeHouseholdSizeCrossTab: object
 
   /** Frequency distribution by race */
   raceFrequencies: RaceFrequency[]

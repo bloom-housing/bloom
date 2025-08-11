@@ -15,7 +15,7 @@ import { ValidationsGroupsEnum } from '../enums/shared/validation-groups-enum';
 import { ActivityLogInterceptor } from '../interceptors/activity-log.interceptor';
 import { PermissionTypeDecorator } from '../decorators/permission-type.decorator';
 import { ApiKeyGuard } from '../guards/api-key.guard';
-import { JwtAuthGuard } from 'src/guards/jwt.guard';
+import { JwtAuthGuard } from '../guards/jwt.guard';
 import { DataExplorerService } from 'src/services/data-explorer.service';
 import { DataExplorerParams } from 'src/dtos/applications/data-explorer-params.dto';
 import { DataExplorerReport } from 'src/dtos/applications/data-explorer-report.dto';

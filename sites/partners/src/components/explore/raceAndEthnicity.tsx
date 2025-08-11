@@ -1,7 +1,9 @@
+import {
+  RaceFrequency,
+  EthnicityFrequency,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import React from "react"
 import { BarChart, Bar, XAxis, YAxis, Tooltip as ReTooltip, ResponsiveContainer } from "recharts"
-import { EthnicityFrequency, RaceFrequency } from "../../lib/explore/data-explorer"
-
 interface DemographicsSectionProps {
   chartData: {
     raceFrequencies: RaceFrequency[]

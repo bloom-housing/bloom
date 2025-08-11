@@ -114,11 +114,40 @@ export class ReportProducts {
   @Expose()
   @ApiProperty({
     type: 'object',
-    example: {
-      '1': { '0-30% AMI': 10, '31-50% AMI': 20 },
-      '2': { '0-30% AMI': 15, '31-50% AMI': 25 },
+    additionalProperties: {
+      type: 'object',
+      additionalProperties: {
+        type: 'number',
+      },
     },
-    description: 'Cross-tabulation of income bands by household size',
+    example: {
+      '1': {
+        '0-30 AMI': 45,
+        '31-50 AMI': 78,
+        '51-80 AMI': 92,
+        '81-120 AMI': 34,
+      },
+      '2': {
+        '0-30 AMI': 67,
+        '31-50 AMI': 89,
+        '51-80 AMI': 112,
+        '81-120 AMI': 56,
+      },
+      '3': {
+        '0-30 AMI': 82,
+        '31-50 AMI': 95,
+        '51-80 AMI': 78,
+        '81-120 AMI': 45,
+      },
+      '4+': {
+        '0-30 AMI': 93,
+        '31-50 AMI': 88,
+        '51-80 AMI': 65,
+        '81-120 AMI': 40,
+      },
+    },
+    description:
+      'Cross-tabulation of income bands by household size. Keys are household sizes, values are income band distributions.',
   })
   @IsObject({ groups: [ValidationsGroupsEnum.default] })
   incomeHouseholdSizeCrossTab: Record<string, Record<string, number>>;
