@@ -252,7 +252,7 @@ export class EmailService {
     await this.send(
       newEmail,
       jurisdiction.emailFromAddress,
-      'Bloom email change request',
+      'Home connect email change request',
       this.template('change-email')({
         user: user,
         confirmationUrl: confirmationUrl,
