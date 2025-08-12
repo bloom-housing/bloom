@@ -348,6 +348,12 @@ describe('Testing application export helpers', () => {
                 active: true,
                 jurisdictions: [],
               },
+              {
+                name: FeatureFlagEnum.disableWorkInRegion,
+                description: '',
+                active: true,
+                jurisdictions: [],
+              },
             ],
           },
         ],
@@ -388,6 +394,12 @@ describe('Testing application export helpers', () => {
             featureFlags: [
               {
                 name: FeatureFlagEnum.enableAdaOtherOption,
+                description: '',
+                active: true,
+                jurisdictions: [],
+              },
+              {
+                name: FeatureFlagEnum.disableWorkInRegion,
                 description: '',
                 active: true,
                 jurisdictions: [],

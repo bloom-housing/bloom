@@ -37,16 +37,15 @@ const DetailsHouseholdIncome = () => {
         </Grid.Cell>
 
         <Grid.Cell>
-          <FieldValue label={t("application.details.vouchers")} testId="vouchers">
-            {(() => {
-              if (application.incomeVouchers === null) return t("t.n/a")
+          <FieldValue label={t("application.details.incomeVouchers")} testId="vouchers">
+            {(!application.incomeVouchers || application.incomeVouchers.length === 0) && t("t.n/a")}
 
-              if (application.incomeVouchers) {
-                return t("t.yes")
-              }
-
-              return t("t.no")
-            })()}
+            {application.incomeVouchers?.map((item) => (
+              <Fragment key={item}>
+                {t(`application.financial.vouchers.options.${item}`)}
+                <br />
+              </Fragment>
+            ))}
           </FieldValue>
         </Grid.Cell>
       </Grid.Row>

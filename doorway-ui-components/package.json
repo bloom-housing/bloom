@@ -51,8 +51,8 @@
     "typescript": "^4.9.4"
   },
   "dependencies": {
-    "@bloom-housing/ui-components": "12.7.3",
-    "@bloom-housing/ui-seeds": "1.22.1",
+    "@bloom-housing/ui-components": "12.7.4",
+    "@bloom-housing/ui-seeds": "2.0.0",
     "ag-grid-community": "^26.0.0",
     "markdown-to-jsx": "7.1.8",
     "nanoid": "^3.3.6",

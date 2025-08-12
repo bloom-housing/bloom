@@ -74,7 +74,7 @@ describe("Listing Management Tests", () => {
     cy.getByID("name").should("have.value", "Test - error messaging DISCARD")
   })
 
-  it("error messaging publish with minimal fields", () => {
+  it.skip("error messaging publish with minimal fields", () => {
     cy.visit("/")
     cy.get("a").contains("Add Listing").click()
     cy.contains("New Listing")

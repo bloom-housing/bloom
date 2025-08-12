@@ -1,7 +1,11 @@
 import React from "react"
 import Head from "next/head"
 import { APIProvider } from "@vis.gl/react-google-maps"
-import { Jurisdiction, Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  Jurisdiction,
+  Listing,
+  MultiselectQuestion,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { Heading } from "@bloom-housing/ui-seeds"
 import { t } from "@bloom-housing/ui-components"
 import { MetaTags } from "../components/shared/MetaTags"
@@ -23,6 +27,8 @@ export interface ListingsProps {
     totalPages: number
   }
   jurisdiction: Jurisdiction
+  multiselectData: MultiselectQuestion[]
+  areFiltersActive: boolean
 }
 export interface DoorwayListingsProps {
   listingsEndpoint: string

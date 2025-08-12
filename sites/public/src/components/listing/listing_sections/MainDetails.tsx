@@ -115,16 +115,6 @@ export const getListingTags = (
     }
   }
 
-  if (!hideAccessibilityTag && listing.listingFeatures) {
-    if (Object.values(listing.listingFeatures).some((feature) => feature)) {
-      listingTags.push({
-        title: t("listing.tags.accessible"),
-        variant: "warn",
-        icon: <HandRaisedIcon />,
-      })
-    }
-  }
-
   return listingTags
 }
 

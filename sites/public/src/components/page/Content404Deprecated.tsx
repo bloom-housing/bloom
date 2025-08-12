@@ -4,8 +4,6 @@ import { Button } from "@bloom-housing/ui-seeds"
 import MaxWidthLayout from "../../layouts/max-width"
 
 export const Content404Deprecated = () => {
-  const pageTitle = t("errors.notFound.title")
-
   return (
     <>
       <Hero

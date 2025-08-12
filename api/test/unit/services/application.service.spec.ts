@@ -89,18 +89,18 @@ export const mockApplication = (options: {
       phoneNumber: `application ${options.position} phoneNumber`,
       phoneNumberType: `application ${options.position} phoneNumberType`,
       noPhone: false,
-      workInRegion: YesNoEnum.yes,
-      applicantWorkAddress: {
-        placeName: `application ${options.position} applicantWorkAddress placeName`,
-        city: `application ${options.position} applicantWorkAddress city`,
-        county: `application ${options.position} applicantWorkAddress county`,
-        state: `application ${options.position} applicantWorkAddress state`,
-        street: `application ${options.position} applicantWorkAddress street`,
-        street2: `application ${options.position} applicantWorkAddress street2`,
-        zipCode: `application ${options.position} applicantWorkAddress zipCode`,
-        latitude: options.position,
-        longitude: options.position,
-      },
+      // workInRegion: YesNoEnum.yes,
+      // applicantWorkAddress: {
+      //   placeName: `application ${options.position} applicantWorkAddress placeName`,
+      //   city: `application ${options.position} applicantWorkAddress city`,
+      //   county: `application ${options.position} applicantWorkAddress county`,
+      //   state: `application ${options.position} applicantWorkAddress state`,
+      //   street: `application ${options.position} applicantWorkAddress street`,
+      //   street2: `application ${options.position} applicantWorkAddress street2`,
+      //   zipCode: `application ${options.position} applicantWorkAddress zipCode`,
+      //   latitude: options.position,
+      //   longitude: options.position,
+      // },
       applicantAddress: {
         placeName: `application ${options.position} applicantAddress placeName`,
         city: `application ${options.position} applicantAddress city`,
@@ -1807,7 +1807,7 @@ describe('Testing application service', () => {
             phoneNumberType: 'Cell',
             noPhone: false,
             workInRegion: null,
-            fullTimeStudent: YesNoEnum.no,
+            fullTimeStudent: undefined,
             applicantAddress: {
               create: {
                 ...exampleAddress,
@@ -1821,6 +1821,7 @@ describe('Testing application service', () => {
             mobility: false,
             vision: false,
             hearing: false,
+            other: false,
           },
         },
         alternateContact: {
@@ -1883,7 +1884,7 @@ describe('Testing application service', () => {
               sameAddress: YesNoEnum.yes,
               relationship: HouseholdMemberRelationship.other,
               workInRegion: null,
-              fullTimeStudent: YesNoEnum.no,
+              fullTimeStudent: undefined,
               householdMemberAddress: {
                 create: {
                   ...exampleAddress,

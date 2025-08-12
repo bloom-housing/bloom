@@ -76,10 +76,6 @@ const jurisdictions = [
   },
 ]
 
-const doJurisdictionsHaveFeatureFlagOn = () => {
-  return false
-}
-
 const getJurisdictionLanguages = () => {
   return [LanguagesEnum.en]
 }
@@ -314,7 +310,6 @@ describe("add listing", () => {
       "Street Address or PO Box",
       "Is there a digital application?",
       "Is there a paper application?",
-      "Is there a referral opportunity?",
       "Additional Application Submission Notes",
       "Application Due Date",
       "Application Due Time",
@@ -433,7 +428,6 @@ describe("add listing", () => {
       "Street Address or PO Box",
       "Is there a digital application?",
       "Is there a paper application?",
-      "Is there a referral opportunity?",
       "Additional Application Submission Notes",
       "Application Due Date",
     ]

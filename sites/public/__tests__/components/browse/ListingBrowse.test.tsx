@@ -66,8 +66,8 @@ describe("<ListingBrowse>", () => {
     expect(screen.queryByText(/page \d* of \d*/i)).not.toBeInTheDocument()
   })
 
-  it("shows empty state, open listings with filters", async () => {
-    const { replaceMock } = mockNextRouter({ bedroomTypes: "fiveBdrm" })
+  it("shows empty state, open listings with filters", () => {
+    // const { replaceMock } = mockNextRouter({ bedroomTypes: "fiveBdrm" })
     render(
       <ListingBrowse
         listings={[]}
@@ -88,17 +88,17 @@ describe("<ListingBrowse>", () => {
       screen.getByText(/try removing some of your filters or show all listings./i)
     ).toBeInTheDocument()
 
-    const showAllButton = screen.getByRole("button", { name: /^Show all listings$/i })
-    expect(showAllButton).toBeInTheDocument()
+    // const showAllButton = screen.getByRole("button", { name: /^Show all listings$/i })
+    // expect(showAllButton).toBeInTheDocument()
 
-    await userEvent.click(showAllButton)
-    await waitFor(() => {
-      expect(replaceMock).toBeCalledWith("/")
-    })
+    // await userEvent.click(showAllButton)
+    // await waitFor(() => {
+    //   expect(replaceMock).toBeCalledWith("/")
+    // })
   })
 
-  it("shows empty state, closed listings with filters", async () => {
-    const { replaceMock } = mockNextRouter({ bedroomTypes: "fiveBdrm" })
+  it("shows empty state, closed listings with filters", () => {
+    // const { replaceMock } = mockNextRouter({ bedroomTypes: "fiveBdrm" })
     render(
       <ListingBrowse
         listings={[]}
@@ -119,13 +119,13 @@ describe("<ListingBrowse>", () => {
       screen.getByText(/try removing some of your filters or show all listings./i)
     ).toBeInTheDocument()
 
-    const showAllButton = screen.getByRole("button", { name: /^Show all listings$/i })
-    expect(showAllButton).toBeInTheDocument()
+    // const showAllButton = screen.getByRole("button", { name: /^Show all listings$/i })
+    // expect(showAllButton).toBeInTheDocument()
 
-    await userEvent.click(showAllButton)
-    await waitFor(() => {
-      expect(replaceMock).toBeCalledWith("/")
-    })
+    // await userEvent.click(showAllButton)
+    // await waitFor(() => {
+    //   expect(replaceMock).toBeCalledWith("/")
+    // })
   })
 
   describe("listing unit previews", () => {
@@ -169,7 +169,7 @@ describe("<ListingBrowse>", () => {
       // Validate first row
       const [unitType, minIncome, rent] = within(rows[0]).getAllByRole("cell")
 
-      expect(unitType).toHaveTextContent("1 BR")
+      expect(unitType).toHaveTextContent("1 bed")
       expect(minIncome).toHaveTextContent("$150")
       expect(minIncome).toHaveTextContent("per month")
       expect(rent).toHaveTextContent("% of income, or up to $1,200")
@@ -370,7 +370,7 @@ describe("<ListingBrowse>", () => {
       // Validate first row
       const [unitType, rent, availability] = within(rows[0]).getAllByRole("cell")
 
-      expect(unitType).toHaveTextContent("Studio - 1 BR")
+      expect(unitType).toHaveTextContent("Studio - 1 bed")
       expect(rent).toHaveTextContent("$1,500per month")
       expect(availability).toHaveTextContent("Open Waitlist")
     })

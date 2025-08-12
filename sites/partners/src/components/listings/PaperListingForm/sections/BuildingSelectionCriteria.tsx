@@ -11,7 +11,7 @@ import {
   Icon,
 } from "@bloom-housing/ui-components"
 import { uploadAssetAndSetData } from "../../../../lib/assets"
-import { Button, Card, Drawer, FieldValue, Grid, Heading } from "@bloom-housing/ui-seeds"
+import { Button, Card, Drawer, Grid, Heading } from "@bloom-housing/ui-seeds"
 import styles from "../ListingForm.module.scss"
 
 const BuildingSelectionCriteria = () => {

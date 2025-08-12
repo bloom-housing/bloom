@@ -348,30 +348,27 @@ const BuildingDetails = ({
         </Grid.Row>
         <Grid.Row>
           <Grid.Cell>
-            <FieldValue
-              label={t("application.contact.county")}
-              className={"mb-0"}
-              // error={fieldHasError(errors?.buildingAddress?.county)}
-            >
-              <Select
-                id={`listingsBuildingAddress.county`}
-                name={`listingsBuildingAddress.county`}
-                error={!!getError("county")}
-                errorMessage={getError("county")}
-                label={t("application.contact.county")}
-                labelClassName="sr-only"
-                register={register}
-                controlClassName="control"
-                options={countyKeys}
-                keyPrefix="counties"
-                inputProps={{
-                  onChange: () =>
-                    fieldHasError(errors?.listingsBuildingAddress?.county) &&
-                    clearErrors("listingsBuildingAddress"),
-                }}
-              />
-            </FieldValue>
-            <p className="field-sub-note">{t("listings.requiredToPublish")}</p>
+            <Select
+              id={`listingsBuildingAddress.county`}
+              name={`listingsBuildingAddress.county`}
+              error={!!getError("county")}
+              errorMessage={getError("county")}
+              label={getLabel(
+                "listingsBuildingAddress",
+                requiredFields,
+                t("application.contact.county")
+              )}
+              register={register}
+              controlClassName="control"
+              options={countyKeys}
+              keyPrefix="counties"
+              inputProps={{
+                onChange: () =>
+                  fieldHasError(errors?.listingsBuildingAddress?.county) &&
+                  clearErrors("listingsBuildingAddress"),
+                "aria-required": fieldIsRequired("listingsBuildingAddress", requiredFields),
+              }}
+            />
           </Grid.Cell>
           <Grid.Cell>
             <AlertNotice inverted>

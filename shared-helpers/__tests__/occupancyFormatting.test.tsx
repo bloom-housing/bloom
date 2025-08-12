@@ -243,11 +243,11 @@ describe("occupancy formatting helper stacked table", () => {
         occupancy: { cellText: "1-2 people" },
       },
       {
-        unitType: { cellText: "1 BR" },
+        unitType: { cellText: "1 bed" },
         occupancy: { cellText: "1-2 people" },
       },
       {
-        unitType: { cellText: "2 BR, 3 BR" },
+        unitType: { cellText: "2 beds, 3 beds" },
         occupancy: { cellText: "2-4 people" },
       },
     ])
@@ -371,19 +371,19 @@ describe("occupancy formatting helper stacked table", () => {
 
     expect(stackedUnitGroupsOccupancyTable(testListing)).toStrictEqual([
       {
-        unitType: { cellText: "Studio, 1 BR" },
+        unitType: { cellText: "Studio, 1 bed" },
         occupancy: { cellText: "1-4 people" },
       },
       {
-        unitType: { cellText: "2 BR" },
+        unitType: { cellText: "2 beds" },
         occupancy: { cellText: "at least 2 people" },
       },
       {
-        unitType: { cellText: "3 BR" },
+        unitType: { cellText: "3 beds" },
         occupancy: { cellText: "no more than 6 people" },
       },
       {
-        unitType: { cellText: "4 BR" },
+        unitType: { cellText: "4 beds" },
         occupancy: { cellText: "3-6 people" },
       },
     ])

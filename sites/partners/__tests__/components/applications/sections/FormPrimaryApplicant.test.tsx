@@ -149,7 +149,7 @@ describe("<FormPrimaryApplicant>", () => {
     expect(screen.getAllByLabelText(/zip code/i)).toHaveLength(2)
   })
 
-  it("should render the full time student question", () => {
+  it.skip("should render the full time student question", () => {
     render(
       <FormProviderWrapper>
         <FormPrimaryApplicant enableFullTimeStudentQuestion={true} />

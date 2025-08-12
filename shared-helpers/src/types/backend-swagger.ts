@@ -4907,6 +4907,9 @@ export interface ListingCreate {
   waitlistMaxSize?: number
 
   /**  */
+  whatToExpect?: string
+
+  /**  */
   status: ListingsStatusEnum
 
   /**  */
@@ -5049,9 +5052,6 @@ export interface ListingCreate {
 
   /**  */
   requestedChangesUser?: IdDTO
-
-  /**  */
-  whatToExpect?: string
 }
 
 export interface ListingDuplicate {
@@ -5223,6 +5223,9 @@ export interface ListingUpdate {
   waitlistMaxSize?: number
 
   /**  */
+  whatToExpect?: string
+
+  /**  */
   status: ListingsStatusEnum
 
   /**  */
@@ -5365,9 +5368,6 @@ export interface ListingUpdate {
 
   /**  */
   requestedChangesUser?: IdDTO
-
-  /**  */
-  whatToExpect?: string
 }
 
 export interface Accessibility {

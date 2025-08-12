@@ -1,4 +1,4 @@
 {
   "presets": ["next/babel"],
-  "plugins": ["istanbul", ["@babel/plugin-proposal-decorators", { "legacy": true }]]
+  "plugins": ["istanbul"]
 }

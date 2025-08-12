@@ -171,8 +171,7 @@ const ApplicationDates = ({
                 getLabel(
                   "applicationDueDate",
                   requiredFields,
-                  t("listings.applicationDueTime"),
-                  true
+                  t("listings.applicationDueTime")
                 ) as string
               }
               name={"applicationDueTimeField"}

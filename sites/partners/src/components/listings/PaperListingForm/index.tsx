@@ -273,7 +273,7 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
             return
           }
 
-          formData.whatToExpect = cleanRichText(whatToExpectEditor.getHTML())
+          formData.whatToExpect = cleanRichText(whatToExpectEditor?.getHTML())
 
           if (!enableSection8) {
             formData.listingSection8Acceptance = YesNoEnum.no
@@ -381,6 +381,7 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
       profile,
       addToast,
       enableUnitGroups,
+      whatToExpectEditor,
     ]
   )
 
@@ -408,8 +409,8 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
                         onSelect={(index) => setTabIndex(index)}
                       >
                         <Tabs.TabList>
-                          <Tabs.Tab>Listing Details</Tabs.Tab>
-                          <Tabs.Tab>Application Process</Tabs.Tab>
+                          <Tabs.Tab>{t("listings.details")}</Tabs.Tab>
+                          <Tabs.Tab>{t("listings.applicationProcess")}</Tabs.Tab>
                         </Tabs.TabList>
                         <Tabs.TabPanel>
                           <p className="field-label seeds-m-be-content">
@@ -479,7 +480,7 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
                                 setTimeout(() => window.scroll({ top: 0, behavior: "smooth" }))
                               }}
                             >
-                              Application Process
+                              {t("listings.applicationProcess")}
                             </Button>
                           </div>
                         </Tabs.TabPanel>
@@ -518,7 +519,7 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
                                 setTimeout(() => window.scroll({ top: 0, behavior: "smooth" }))
                               }}
                             >
-                              Listing Details
+                              {t("listings.details")}
                             </Button>
                           </div>
                         </Tabs.TabPanel>
