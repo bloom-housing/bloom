@@ -244,14 +244,16 @@ export const getListingStatusMessage = (
   const enableUnitGroups = isFeatureFlagOn(jurisdiction, "enableUnitGroups")
   const prefix = getStatusPrefix(listing, enableMarketingStatus, enableUnitGroups)
 
+  const overwriteHide =
+    listing.reviewOrderType !== ReviewOrderTypeEnum.lottery &&
+    listing.marketingType !== MarketingTypeEnum.comingSoon
+
   const hideNoUnitGroups =
-    enableUnitGroups &&
-    (!listing.unitGroups || listing.unitGroups.length === 0) &&
-    listing.reviewOrderType !== ReviewOrderTypeEnum.lottery
+    enableUnitGroups && (!listing.unitGroups || listing.unitGroups.length === 0) && overwriteHide
   const hideWaitlistClosedNoAvailableUnits =
     enableUnitGroups &&
     !listing.unitGroups.some((group) => group.openWaitlist || group.totalAvailable > 0) &&
-    listing.reviewOrderType !== ReviewOrderTypeEnum.lottery
+    overwriteHide
   const hideIsClosed =
     listing.status === ListingsStatusEnum.closed ||
     (listing.applicationDueDate && dayjs() > dayjs(listing.applicationDueDate))
