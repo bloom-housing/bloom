@@ -21,6 +21,7 @@ import {
   Address,
   ApplicationMultiselectQuestion,
   FeatureFlag,
+  FeatureFlagEnum,
   Jurisdiction,
   Listing,
   ListingsStatusEnum,
@@ -35,6 +36,7 @@ import {
 import { CommonMessageVariant } from "@bloom-housing/ui-seeds/src/blocks/shared/CommonMessage"
 import { Icon, Message } from "@bloom-housing/ui-seeds"
 import styles from "./helpers.module.scss"
+import { ApplicationFormConfig } from "./applications/configInterfaces"
 
 export const getGenericAddress = (bloomAddress: Address) => {
   return bloomAddress
@@ -464,4 +466,12 @@ export const fetchFavoriteListingIds = async (userId: string, userService: UserS
 
 export const isTrue = (value) => {
   return value === true || value === "true"
+}
+
+export const isUnitGroupAppWaitlist = (listing: Listing, config: ApplicationFormConfig) => {
+  return (
+    isFeatureFlagOn(config, FeatureFlagEnum.enableUnitGroups) &&
+    listing.unitGroups.some((group) => group.openWaitlist) &&
+    !listing.unitGroups.some((group) => group.totalAvailable > 0)
+  )
 }

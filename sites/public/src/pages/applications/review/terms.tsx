@@ -15,7 +15,11 @@ import {
 import FormsLayout from "../../../layouts/forms"
 import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
-import { isFeatureFlagOn, untranslateMultiselectQuestion } from "../../../lib/helpers"
+import {
+  isFeatureFlagOn,
+  isUnitGroupAppWaitlist,
+  untranslateMultiselectQuestion,
+} from "../../../lib/helpers"
 import {
   ApplicationReviewStatusEnum,
   FeatureFlagEnum,
@@ -109,6 +113,11 @@ const ApplicationTerms = () => {
   const content = useMemo(() => {
     switch (listing?.reviewOrderType) {
       case ReviewOrderTypeEnum.firstComeFirstServe:
+        if (isUnitGroupAppWaitlist(listing, conductor.config)) {
+          return {
+            text: t("application.review.terms.waitlist.text"),
+          }
+        }
         return {
           text: t("application.review.terms.fcfs.text"),
         }
@@ -123,7 +132,7 @@ const ApplicationTerms = () => {
       default:
         return { text: "" }
     }
-  }, [listing])
+  }, [conductor.config, listing])
 
   useEffect(() => {
     if (application.confirmationCode && router.isReady) {
