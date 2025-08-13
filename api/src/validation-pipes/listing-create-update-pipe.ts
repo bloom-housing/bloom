@@ -14,17 +14,7 @@ import { defaultValidationPipeOptions } from '../utilities/default-validation-pi
 @Injectable()
 export class ListingCreateUpdateValidationPipe extends ValidationPipe {
   // Default required fields if jurisdiction doesn't specify any
-  private defaultRequiredFields = [
-    'listingsBuildingAddress',
-    'name',
-    'developer',
-    'listingImages',
-    'leasingAgentEmail',
-    'leasingAgentName',
-    'leasingAgentPhone',
-    'jurisdictions',
-    'units',
-  ];
+  private defaultRequiredFields = ['name', 'jurisdictions'];
 
   constructor(private prisma: PrismaService) {
     super({

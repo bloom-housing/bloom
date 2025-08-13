@@ -9,12 +9,14 @@ interface AddressProps {
 }
 
 export const oneLineAddress = (address: AddressType) => {
+  if (!address) return ""
   return `${address.street}${address.street2 ? `, ${address.street2}` : ""}, ${address.city}, ${
     address.state
   } ${address.zipCode}`
 }
 
 export const multiLineAddress = (address: AddressType) => {
+  if (!address) return <></>
   return (
     <>
       {address.placeName && <span>{address.placeName}</span>}
@@ -25,6 +27,7 @@ export const multiLineAddress = (address: AddressType) => {
 }
 
 export const Address = ({ address, getDirections }: AddressProps) => {
+  if (!address) return <></>
   const googleMapsHref = "https://www.google.com/maps/place/" + oneLineAddress(address)
 
   return (
