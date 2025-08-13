@@ -5,6 +5,7 @@ import { BloomCard, CustomIconMap, listingFeatures } from "@bloom-housing/shared
 import {
   FeatureFlagEnum,
   ListingFilterKeys,
+  MultiselectQuestion,
   RegionEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { Form, ProgressNav, StepHeader, t } from "@bloom-housing/ui-components"
@@ -38,6 +39,7 @@ type FinderSection = {
 
 export type RentalsFinderProps = {
   activeFeatureFlags: FeatureFlagEnum[]
+  multiselectData: MultiselectQuestion[]
 }
 
 export default function RentalsFinder({ activeFeatureFlags }: RentalsFinderProps) {
