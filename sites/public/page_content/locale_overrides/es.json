@@ -23,8 +23,6 @@
   "contact.cityOfDetroitTitle": "Departamento de Vivienda y Revitalización de la ciudad de Detroit",
   "contact.cityOfDetroitDescription": "Si tiene alguna duda sobre las ofertas y las solicitudes, comuníquese con el agente de bienes raíces indicado en cada oferta.",
   "contact.generalInquiries": "Para consultas generales sobre el programa, comuníquese con el Departamento de Vivienda y Revitalización al <a className='underline' href='tel:+13132246380'>313-224-6380</a>",
-  "errors.maxLessThanMinRentError": "Max Rent must be greater than or equal to Min Rent",
-  "errors.minGreaterThanMaxRentError": "Min Rent must be less than or equal to Max Rent",
   "errors.negativeMinRent": "Min Rent must be a positive value",
   "finder.accessibility.question": "¿Usted o alguien de su grupo familiar necesita alguna de las siguientes características de accesibilidad?",
   "finder.accessibility.subtitle": "Las características de accesibilidad incluyen muchas diseñadas específicamente para los residentes con discapacidades, así como una serie de otros servicios del edificio y de la unidad.",

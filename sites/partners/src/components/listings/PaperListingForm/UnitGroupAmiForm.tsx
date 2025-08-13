@@ -8,6 +8,7 @@ import { fieldHasError } from "../../../lib/helpers"
 import {
   AmiChartItem,
   EnumUnitGroupAmiLevelMonthlyRentDeterminationType,
+  UnitGroupAmiLevel,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { TempAmiLevel } from "../../../lib/listings/formTypes"
 import styles from "./ListingForm.module.scss"
@@ -33,7 +34,8 @@ const UnitGroupAmiForm = ({
   const [initialAmiPercentage, setInitialAmiPercentage] = useState(null)
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, control, trigger, clearErrors, setValue, getValues, errors, reset } = useForm()
+  const { register, control, trigger, clearErrors, setValue, getValues, errors, reset } =
+    useForm<UnitGroupAmiLevel>()
 
   const amiChartID: string = useWatch({
     control,
@@ -98,6 +100,16 @@ const UnitGroupAmiForm = ({
       createdAt: undefined,
       updatedAt: undefined,
       ...data,
+      ...(data.monthlyRentDeterminationType ===
+      EnumUnitGroupAmiLevelMonthlyRentDeterminationType.flatRent
+        ? {
+            flatRentValue: data.flatRentValue,
+            percentageOfIncomeValue: null,
+          }
+        : {
+            percentageOfIncomeValue: data.percentageOfIncomeValue,
+            flatRentValue: null,
+          }),
     }
 
     const current = amiLevels.find((summary) => summary.tempId === currentTempId)
@@ -157,7 +169,7 @@ const UnitGroupAmiForm = ({
                     options={amiChartsOptions}
                     controlClassName="control"
                     register={register}
-                    error={fieldHasError(errors?.amiChart)}
+                    error={fieldHasError(errors?.amiChart?.id)}
                     errorMessage={t("errors.requiredFieldError")}
                     validation={{ required: true }}
                     inputProps={{
@@ -207,7 +219,7 @@ const UnitGroupAmiForm = ({
                         id="flatRentValue"
                         register={register}
                         type="number"
-                        error={errors?.flatRentValue}
+                        error={fieldHasError(errors?.flatRentValue)}
                         errorMessage={t("errors.requiredFieldError")}
                         validation={{ required: true }}
                       />
@@ -220,7 +232,7 @@ const UnitGroupAmiForm = ({
                         id="percentageOfIncomeValue"
                         register={register}
                         type="number"
-                        error={errors?.percentageOfIncomeValue}
+                        error={fieldHasError(errors?.percentageOfIncomeValue)}
                         errorMessage={t("errors.requiredFieldError")}
                         validation={{ required: true }}
                       />
@@ -242,7 +254,13 @@ const UnitGroupAmiForm = ({
           {t("t.save")}
         </Button>
 
-        <Button type="button" onClick={onClose} variant="text" size="sm">
+        <Button
+          type="button"
+          onClick={onClose}
+          variant="text"
+          size="sm"
+          className={"font-semibold darker-alert"}
+        >
           {t("t.cancel")}
         </Button>
       </Drawer.Footer>

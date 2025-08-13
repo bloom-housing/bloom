@@ -51,11 +51,11 @@ describe("<LeasingAgent>", () => {
     // expect(getByText("Due to high call volume you may hear a message.")).toBeDefined()
     expect(getByText("Address street, Address unit")).toBeDefined()
     expect(getByText("Address city, CA 67890")).toBeDefined()
-    expect(getByRole("link", { name: "Get Directions" })).toHaveAttribute(
+    expect(getByRole("link", { name: "Get directions" })).toHaveAttribute(
       "href",
       "https://www.google.com/maps/place/Address street, Address unit, Address city, CA 67890"
     )
-    expect(getByText("Office Hours")).toBeDefined()
+    expect(getByText("Office hours")).toBeDefined()
     expect(getByText("Leasing office hours")).toBeDefined()
   })
 })

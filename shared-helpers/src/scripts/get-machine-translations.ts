@@ -18,6 +18,8 @@ async function main(argv: string[]) {
     "vi" = "vi",
     "zh" = "zh",
     "tl" = "tl",
+    "ar" = "ar",
+    "bn" = "bn",
   }
 
   const GOOGLE_API_EMAIL = "SECRET_VALUE"
