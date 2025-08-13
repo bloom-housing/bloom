@@ -1291,6 +1291,7 @@
   "session.voided.header": "Session expired",
   "session.voided.ok": "OK",
   "siteMessage.achpTranstion": "Welcome Alameda County Housing Portal users!  To learn more about the differences with Doorway, please visit:<a className='lined' href='https://mtc.ca.gov/achp-to-doorway' target='_blank'>https://mtc.ca.gov/achp-to-doorway</a>.",
+  "siteMessage.generic": "This is a generic site message to inform users of important information to consider as they search for affordable housing and supportive resources. For more information, check out this <a className='lined' href='https://www.example.com/' target='_blank'>example site</a>.",
   "states.AK": "Alaska",
   "states.AL": "Alabama",
   "states.AR": "Arkansas",
