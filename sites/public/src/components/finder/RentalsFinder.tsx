@@ -42,7 +42,7 @@ export type RentalsFinderProps = {
   multiselectData: MultiselectQuestion[]
 }
 
-export default function RentalsFinder({ activeFeatureFlags }: RentalsFinderProps) {
+export default function RentalsFinder({ activeFeatureFlags, multiselectData }: RentalsFinderProps) {
   const router = useRouter()
   const [stepIndex, setStepIndex] = useState<number>(0)
   const [sectionIndex, setSectionIndex] = useState<number>(0)
@@ -136,7 +136,19 @@ export default function RentalsFinder({ activeFeatureFlags }: RentalsFinderProps
           {
             question: t("finder.building.question"),
             subtitle: t("finder.building.subtitle"),
-            content: (
+            content: activeFeatureFlags.some(
+              (flag) => flag === FeatureFlagEnum.swapCommunityTypeWithPrograms
+            ) ? (
+              <FinderMultiselectQuestion
+                legend={t("finder.multiselectLegend")}
+                fieldGroupName={ListingFilterKeys.multiselectQuestions}
+                options={multiselectData.map((entry) => ({
+                  key: `${ListingFilterKeys.multiselectQuestions}.${entry.id}`,
+                  label: entry.text,
+                  defaultChecked: false,
+                }))}
+              />
+            ) : (
               <FinderMultiselectQuestion
                 legend={t("finder.multiselectLegend")}
                 fieldGroupName="reservedCommunityTypes"
@@ -160,7 +172,7 @@ export default function RentalsFinder({ activeFeatureFlags }: RentalsFinderProps
         ],
       },
     ],
-    [activeFeatureFlags]
+    [activeFeatureFlags, multiselectData]
   )
 
   const sectionLabels = useMemo(
