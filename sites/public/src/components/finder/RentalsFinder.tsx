@@ -63,7 +63,7 @@ export default function RentalsFinder({ activeFeatureFlags, multiselectData }: R
             content: (
               <FinderMultiselectQuestion
                 legend={t("finder.multiselectLegend")}
-                fieldGroupName="bedrooms"
+                fieldGroupName={ListingFilterKeys.bedrooms}
                 options={buildDefaultFilterFields(
                   ListingFilterKeys.bedroomTypes,
                   activeFeatureFlags.some((flag) => flag == FeatureFlagEnum.enableUnitGroups)
@@ -87,7 +87,7 @@ export default function RentalsFinder({ activeFeatureFlags, multiselectData }: R
                   content: (
                     <FinderMultiselectQuestion
                       legend={t("finder.multiselectLegend")}
-                      fieldGroupName="regions"
+                      fieldGroupName={ListingFilterKeys.regions}
                       options={Object.keys(RegionEnum).map((region) => ({
                         key: `${ListingFilterKeys.regions}.${region}`,
                         label: region.replace("_", " "),
@@ -116,7 +116,7 @@ export default function RentalsFinder({ activeFeatureFlags, multiselectData }: R
                   content: (
                     <FinderMultiselectQuestion
                       legend={t("finder.multiselectLegend")}
-                      fieldGroupName="listingFeatures"
+                      fieldGroupName={ListingFilterKeys.listingFeatures}
                       options={buildDefaultFilterFields(
                         ListingFilterKeys.listingFeatures,
                         "eligibility.accessibility",
@@ -151,7 +151,7 @@ export default function RentalsFinder({ activeFeatureFlags, multiselectData }: R
             ) : (
               <FinderMultiselectQuestion
                 legend={t("finder.multiselectLegend")}
-                fieldGroupName="reservedCommunityTypes"
+                fieldGroupName={ListingFilterKeys.reservedCommunityTypes}
                 options={Object.values(ReservedCommunityTypes).map((type) => ({
                   key: `${ListingFilterKeys.reservedCommunityTypes}.${type}`,
                   label: t(`finder.building.${type}`),
