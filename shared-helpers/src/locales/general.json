@@ -668,6 +668,7 @@
   "listings.availability.openWaitlist": "Open waitlist",
   "listings.availability.unitsAvailable": "Units available",
   "listings.availability.vacantUnits": "Vacant units",
+  "listings.availabilityUnknown": "Availability unknown",
   "listings.availableAndWaitlist": "Available units & open waitlist",
   "listings.availableUnit": "Available unit",
   "listings.availableUnits": "Available units",

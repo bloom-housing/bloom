@@ -1,6 +1,7 @@
 import React from "react"
 import dayjs from "dayjs"
 import InfoIcon from "@heroicons/react/20/solid/InformationCircleIcon"
+import LockClosedIcon from "@heroicons/react/20/solid/LockClosedIcon"
 import {
   t,
   ListingCard,
@@ -173,8 +174,14 @@ export const getStatusPrefix = (
     if (listing.reviewOrderType === ReviewOrderTypeEnum.lottery)
       return { label: t("listings.lottery"), variant: "primary" }
     if (unitsAvailable) return { label: t("listings.applicationFCFS"), variant: "primary" }
-    if (hasUnitGroupsWaitlistOpen)
+    if (!listing.unitGroups || listing.unitGroups.length === 0) {
+      return { label: t("listings.availabilityUnknown"), variant: "warn" }
+    }
+    if (hasUnitGroupsWaitlistOpen) {
       return { label: t("listings.waitlist.open"), variant: "secondary" }
+    } else {
+      return { label: t("listings.availability.closedWaitlist"), variant: "secondary-inverse" }
+    }
   } else {
     switch (listing.reviewOrderType) {
       case ReviewOrderTypeEnum.lottery:
@@ -238,12 +245,29 @@ export const getListingStatusMessage = (
   const enableUnitGroups = isFeatureFlagOn(jurisdiction, "enableUnitGroups")
   const prefix = getStatusPrefix(listing, enableMarketingStatus, enableUnitGroups)
 
+  const overwriteHide =
+    listing.reviewOrderType !== ReviewOrderTypeEnum.lottery &&
+    listing.marketingType !== MarketingTypeEnum.comingSoon
+
+  const hideNoUnitGroups =
+    enableUnitGroups && (!listing.unitGroups || listing.unitGroups.length === 0) && overwriteHide
+  const hideWaitlistClosedNoAvailableUnits =
+    enableUnitGroups &&
+    !listing.unitGroups.some((group) => group.openWaitlist || group.totalAvailable > 0) &&
+    overwriteHide
+  const hideIsClosed =
+    listing.status === ListingsStatusEnum.closed ||
+    (listing.applicationDueDate && dayjs() > dayjs(listing.applicationDueDate))
+
+  const hideStatusMessageContent =
+    hideDate || hideNoUnitGroups || hideWaitlistClosedNoAvailableUnits || hideIsClosed
+
   return (
     <Message
       className={styles["status-bar"]}
       customIcon={
         <Icon size="md" className={styles["primary-color-icon"]}>
-          <InfoIcon />
+          {prefix?.variant === "secondary-inverse" ? <LockClosedIcon /> : <InfoIcon />}
         </Icon>
       }
       variant={prefix?.variant}
@@ -253,7 +277,7 @@ export const getListingStatusMessage = (
       ) : (
         <div className={styles["due-date-content"]}>
           <div className={styles["date-review-order"]}>{prefix?.label}</div>
-          {!hideDate && (
+          {!hideStatusMessageContent && (
             <div>
               {getListingStatusMessageContent(
                 listing.status,
