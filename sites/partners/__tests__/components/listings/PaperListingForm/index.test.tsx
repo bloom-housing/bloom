@@ -76,10 +76,6 @@ const jurisdictions = [
   },
 ]
 
-const doJurisdictionsHaveFeatureFlagOn = () => {
-  return false
-}
-
 const getJurisdictionLanguages = () => {
   return [LanguagesEnum.en]
 }
@@ -132,29 +128,29 @@ describe("add listing", () => {
     )
 
     // Listing Details Tab
-    expect(screen.getByRole("button", { name: "Listing Details" }))
-    expect(screen.getByRole("heading", { level: 2, name: "Listing Intro" }))
-    expect(screen.getByRole("heading", { level: 2, name: "Listing Photo" }))
-    expect(screen.getByRole("heading", { level: 2, name: "Building Details" }))
-    expect(screen.getByRole("heading", { level: 2, name: "Listing Units" }))
-    expect(screen.getByRole("heading", { level: 2, name: "Housing Preferences" }))
-    expect(screen.getByRole("heading", { level: 2, name: "Housing Programs" }))
-    expect(screen.getByRole("heading", { level: 2, name: "Additional Fees" }))
-    expect(screen.getByRole("heading", { level: 2, name: "Building Features" }))
-    expect(screen.getByRole("heading", { level: 2, name: "Additional Eligibility Rules" }))
-    expect(screen.getByRole("heading", { level: 2, name: "Additional Details" }))
+    expect(screen.getByRole("button", { name: "Listing details" }))
+    expect(screen.getByRole("heading", { level: 2, name: "Listing intro" }))
+    expect(screen.getByRole("heading", { level: 2, name: "Listing photo" }))
+    expect(screen.getByRole("heading", { level: 2, name: "Building details" }))
+    expect(screen.getByRole("heading", { level: 2, name: "Listing units" }))
+    expect(screen.getByRole("heading", { level: 2, name: "Housing preferences" }))
+    expect(screen.getByRole("heading", { level: 2, name: "Housing programs" }))
+    expect(screen.getByRole("heading", { level: 2, name: "Additional fees" }))
+    expect(screen.getByRole("heading", { level: 2, name: "Building features" }))
+    expect(screen.getByRole("heading", { level: 2, name: "Additional eligibility rules" }))
+    expect(screen.getByRole("heading", { level: 2, name: "Additional details" }))
 
     // Application Process tab
-    expect(screen.getByRole("button", { name: "Application Process" }))
-    expect(screen.getByRole("heading", { level: 2, name: "Rankings & Results" }))
-    expect(screen.getByRole("heading", { level: 2, name: "Leasing Agent" }))
-    expect(screen.getByRole("heading", { level: 2, name: "Application Types" }))
-    expect(screen.getByRole("heading", { level: 2, name: "Application Address" }))
-    expect(screen.getByRole("heading", { level: 2, name: "Application Dates" }))
+    expect(screen.getByRole("button", { name: "Application process" }))
+    expect(screen.getByRole("heading", { level: 2, name: "Rankings & results" }))
+    expect(screen.getByRole("heading", { level: 2, name: "Leasing agent" }))
+    expect(screen.getByRole("heading", { level: 2, name: "Application types" }))
+    expect(screen.getByRole("heading", { level: 2, name: "Application address" }))
+    expect(screen.getByRole("heading", { level: 2, name: "Application dates" }))
 
     // Action buttons
     expect(screen.getByRole("button", { name: "Publish" }))
-    expect(screen.getByRole("button", { name: "Save as Draft" }))
+    expect(screen.getByRole("button", { name: "Save as draft" }))
     expect(screen.getByRole("button", { name: "Exit" }))
   })
 
@@ -191,7 +187,7 @@ describe("add listing", () => {
       </AuthContext.Provider>
     )
 
-    expect(screen.getByText("Rankings & Results")).toBeInTheDocument()
+    expect(screen.getByText("Rankings & results")).toBeInTheDocument()
 
     const whatToExpectEditorLabel = screen.getByText(
       /tell the applicant what to expect from the process/i
@@ -340,52 +336,52 @@ describe("add listing", () => {
       </AuthContext.Provider>
     )
 
-    const requiredFields = ["Listing Name", "Jurisdiction"]
+    const requiredFields = ["Listing name", "Jurisdiction"]
 
     const unrequiredFields = [
-      "Housing Developer",
+      "Housing developer",
       "Photos",
-      "Street Address",
+      "Street address",
       "Neighborhood",
       "City",
       "State",
-      "Zip Code",
-      "Year Built",
-      "Reserved Community Type",
-      "Reserved Community Description",
+      "Zip code",
+      "Year built",
+      "Reserved community type",
+      "Reserved community description",
       "Units",
-      "Application Fee",
-      "Deposit Min",
-      "Deposit Max",
-      "Deposit Helper Text",
-      "Costs Not Included",
-      "Property Amenities",
-      "Additional Accessibility",
-      "Unit Amenities",
-      "Smoking Policy",
-      "Pets Policy",
-      "Services Offered",
-      "Credit History",
-      "Rental History",
-      "Criminal Background",
-      "Rental Assistance",
-      "Required Documents",
-      "Important Program Rules",
-      "Special Notes",
+      "Application fee",
+      "Deposit min",
+      "Deposit max",
+      "Deposit helper text",
+      "Costs not included",
+      "Property amenities",
+      "Additional accessibility",
+      "Unit amenities",
+      "Smoking policy",
+      "Pets policy",
+      "Services offered",
+      "Credit history",
+      "Rental history",
+      "Criminal background",
+      "Rental assistance",
+      "Required documents",
+      "Important program rules",
+      "Special notes",
       "Tell the applicant what to expect from the process",
-      "Leasing Agent Name",
+      "Leasing agent name",
       "Email",
       "Phone",
-      "Leasing Agent Title",
-      "Company Website",
-      "Office Hours",
-      "Street Address or PO Box",
+      "Leasing agent title",
+      "Company website",
+      "Office hours",
+      "Street address or PO box",
       "Is there a digital application?",
       "Is there a paper application?",
       "Is there a referral opportunity?",
-      "Additional Application Submission Notes",
-      "Application Due Date",
-      "Application Due Time",
+      "Additional application submission notes",
+      "Application due date",
+      "Application due time",
     ]
 
     requiredFields.forEach((fieldName) => {
@@ -394,6 +390,7 @@ describe("add listing", () => {
     })
 
     unrequiredFields.forEach((fieldName) => {
+      console.log(fieldName)
       const query = screen.getAllByText(fieldName)
       expect(query[0].textContent).not.toContain("*")
     })
@@ -458,52 +455,52 @@ describe("add listing", () => {
     )
 
     const possibleRequiredFields = [
-      "Listing Name",
+      "Listing name",
       "Jurisdiction",
-      "Housing Developer",
+      "Housing developer",
       "Photos",
-      "Street Address",
+      "Street address",
       "Neighborhood",
       "City",
       "State",
-      "Zip Code",
+      "Zip code",
       "Region",
-      "Year Built",
-      "Reserved Community Type",
-      "Reserved Community Description",
-      "Home Type",
+      "Year built",
+      "Reserved community type",
+      "Reserved community description",
+      "Home type",
       "Units",
-      "Application Fee",
-      "Deposit Min",
-      "Deposit Max",
-      "Deposit Helper Text",
-      "Costs Not Included",
-      "Property Amenities",
-      "Additional Accessibility",
-      "Unit Amenities",
-      "Smoking Policy",
-      "Pets Policy",
-      "Services Offered",
-      "Credit History",
-      "Rental History",
-      "Criminal Background",
-      "Rental Assistance",
-      "Required Documents",
-      "Important Program Rules",
-      "Special Notes",
+      "Application fee",
+      "Deposit min",
+      "Deposit max",
+      "Deposit helper text",
+      "Costs not included",
+      "Property amenities",
+      "Additional accessibility",
+      "Unit amenities",
+      "Smoking policy",
+      "Pets policy",
+      "Services offered",
+      "Credit history",
+      "Rental history",
+      "Criminal background",
+      "Rental assistance",
+      "Required documents",
+      "Important program rules",
+      "Special notes",
       "Tell the applicant what to expect from the process",
-      "Leasing Agent Name",
+      "Leasing agent name",
       "Email",
       "Phone",
-      "Leasing Agent Title",
-      "Company Website",
-      "Office Hours",
-      "Street Address or PO Box",
+      "Leasing agent title",
+      "Company website",
+      "Office hours",
+      "Street address or PO box",
       "Is there a digital application?",
       "Is there a paper application?",
       "Is there a referral opportunity?",
-      "Additional Application Submission Notes",
-      "Application Due Date",
+      "Additional application submission notes",
+      "Application due date",
     ]
 
     possibleRequiredFields.forEach((fieldName) => {
