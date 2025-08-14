@@ -183,6 +183,12 @@
     }
   }
 
+  .seeds-cards-section, .seeds-heading-group {
+    &, > * {
+      overflow-wrap: anywhere;
+    }
+  }
+
   // Used in core for theming testing purposes only
   .lakeview {
     --seeds-color-primary-darker: #4e2169;
