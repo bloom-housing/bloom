@@ -1,5 +1,4 @@
 <RenderIf language="en">
-
 This is an accessibility statement from the City of Detroit Housing and Revitalization Department.
 
 ### Conformance Status
@@ -55,7 +54,6 @@ This statement was updated on 21 March 2023.
 </RenderIf>
 
 <RenderIf language="es">
-
 Esta es una declaración de accesibilidad del Departamento de Vivienda y Revitalización de la Ciudad de Detroit.
 
 ### Estado de Conformidad
