@@ -141,6 +141,10 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
     }
   }
 
+  const onFilterClear = () => {
+    setFilterState({})
+  }
+
   const onShowAll = useCallback(async () => {
     await router.replace(router.pathname)
   }, [router])
@@ -168,6 +172,7 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
         filterState={filterState}
         multiselectData={props.multiselectData}
         activeFeatureFlags={jurisdictionActiveFeatureFlags}
+        onClear={onFilterClear}
       />
       <LoadingState loading={isLoading}>
         <div className={styles["listing-directory"]}>
