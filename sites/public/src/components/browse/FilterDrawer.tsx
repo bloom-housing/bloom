@@ -29,6 +29,7 @@ export interface FilterDrawerProps {
   isOpen: boolean
   onClose: () => void
   onSubmit: (data: FilterData) => void
+  onClear: () => void
   multiselectData: MultiselectQuestion[]
   activeFeatureFlags?: FeatureFlagEnum[]
 }
@@ -42,6 +43,7 @@ const FilterDrawer = (props: FilterDrawerProps) => {
     setValue,
     setError,
     clearErrors,
+    reset,
     formState: { errors },
   } = useForm({ mode: "onBlur" })
 
@@ -159,8 +161,15 @@ const FilterDrawer = (props: FilterDrawerProps) => {
         <Button type="submit" variant="primary" size="sm" nativeButtonProps={{ form: "filter" }}>
           {t("listings.showMatchingListings")}
         </Button>
-        <Button variant="primary-outlined" size="sm" onClick={props.onClose}>
-          {t("t.cancel")}
+        <Button
+          variant="primary-outlined"
+          size="sm"
+          onClick={() => {
+            reset({})
+            props.onClear()
+          }}
+        >
+          {t("listingFilters.clear")}
         </Button>
       </Drawer.Footer>
     </Drawer>
