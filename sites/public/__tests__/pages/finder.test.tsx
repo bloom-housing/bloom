@@ -762,7 +762,7 @@ describe("<RentalsFinder>", () => {
 
       await waitFor(() => {
         expect(pushMock).toBeCalledWith(
-          "/listings?bedroomTypes=studio,oneBdrm&regions=Greater_Downtown,Westside&monthlyRent=1,500.00-3,000.00&section8Acceptance=true&listingFeatures=wheelchairRamp,elevator,serviceAnimalsAllowed&reservedCommunityTypes=veterans"
+          "/listings?bedroomTypes=studio,oneBdrm&regions=Greater_Downtown,Westside&monthlyRent=1,500.00-3,000.00&section8Acceptance=true&listingFeatures=wheelchairRamp,elevator,serviceAnimalsAllowed&reservedCommunityTypes=veteran"
         )
       })
     })

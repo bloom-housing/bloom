@@ -23,7 +23,7 @@ export enum ReservedCommunityTypes {
   "senior55" = "senior55",
   "senior62" = "senior62",
   "homeless" = "homeless",
-  "veterans" = "veterans",
+  "veteran" = "veteran",
 }
 
 export interface FilterData {
