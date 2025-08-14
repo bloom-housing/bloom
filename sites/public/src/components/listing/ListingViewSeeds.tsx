@@ -144,7 +144,7 @@ export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: Li
             <div>
               <ReadMore
                 className={"bloom-markdown"}
-                maxLength={140}
+                maxLength={0}
                 content={listing.whatToExpectAdditionalText}
               />
             </div>

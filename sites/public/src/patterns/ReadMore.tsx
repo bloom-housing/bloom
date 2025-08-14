@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useMemo, useState } from "react"
 import Markdown from "markdown-to-jsx"
 import { t } from "@bloom-housing/ui-components"
 import styles from "./ReadMore.module.scss"
@@ -14,8 +14,6 @@ interface ReadMoreProps {
   expanded?: boolean
   /** Additional styling for the wrapper component */
   className?: string
-  /** If passed, all of the main content is displayed and truncation happens at the start of this content */
-  truncatedContent?: string
 }
 
 export const ReadMore = (props: ReadMoreProps) => {
@@ -26,21 +24,27 @@ export const ReadMore = (props: ReadMoreProps) => {
 
   const [expanded, setExpanded] = useState(props.expanded || false)
   // Should only truncate if there would be > computedDefaultOffset characters after the ellipsis, so that you don't expand to see only an oddly few number of additional characters
-  const shouldTruncate =
-    props.truncatedContent || props.content.length > computedMaxLength + computedDefaultOffset
+  const shouldTruncate = props.content.length > computedMaxLength + computedDefaultOffset
 
-  // Clips at the end of the nearest word after the max length, instead of in the middle of a word
-  const truncatedIndex = props.content.indexOf(" ", computedMaxLength)
+  const truncatedContent = useMemo((): string | null => {
+    if (!shouldTruncate) {
+      setExpanded(true)
+      return null
+    }
 
-  const contentTruncated =
-    shouldTruncate && !props.truncatedContent
-      ? props.content.slice(0, truncatedIndex).concat(" ...")
-      : props.content
+    if (computedMaxLength > 0) {
+      // Clips at the end of the nearest word after the max length, instead of in the middle of a word
+      const truncatedIndex = props.content.indexOf(" ", computedMaxLength)
+      return props.content.slice(0, truncatedIndex).concat(" ...")
+    } else {
+      return ""
+    }
+  }, [shouldTruncate, computedMaxLength, props.content])
 
   return (
     <div className={`${styles["read-more"]} ${props.className}`} aria-live={"polite"}>
       <Markdown id={"read-more-content"} className={"bloom-markdown"}>
-        {expanded ? props.content.concat(props.truncatedContent ?? "") : contentTruncated}
+        {expanded ? props.content : truncatedContent}
       </Markdown>
       {shouldTruncate && (
         <button
