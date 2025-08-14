@@ -127,7 +127,7 @@ const FilterDrawer = (props: FilterDrawerProps) => {
               return {
                 key: `${ListingFilterKeys.regions}.${region}`,
                 label: region.replace("_", " "),
-                defaultChecked: props.filterState?.[ListingFilterKeys.regions]?.[region],
+                defaultChecked: isTrue(props.filterState?.[ListingFilterKeys.regions]?.[region]),
               }
             })}
             register={register}
@@ -165,8 +165,8 @@ const FilterDrawer = (props: FilterDrawerProps) => {
           variant="primary-outlined"
           size="sm"
           onClick={() => {
-            reset({})
             props.onClear()
+            reset({})
           }}
         >
           {t("listingFilters.clear")}
