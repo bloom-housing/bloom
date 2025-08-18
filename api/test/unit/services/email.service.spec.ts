@@ -121,7 +121,7 @@ describe('Testing email service', () => {
     expect(sendMock).toHaveBeenCalled();
     expect(sendMock.mock.calls[0][0].to).toEqual('newemail@example.com');
     expect(sendMock.mock.calls[0][0].subject).toEqual(
-      'Bloom email change request',
+      'Home connect email change request',
     );
     expect(sendMock.mock.calls[0][0].html).toContain(
       'An email address change has been requested for your account.',
