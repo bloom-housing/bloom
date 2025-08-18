@@ -17,6 +17,7 @@ import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
 import {
   isFeatureFlagOn,
+  isUnitGroupAppBase,
   isUnitGroupAppWaitlist,
   untranslateMultiselectQuestion,
 } from "../../../lib/helpers"
@@ -116,6 +117,11 @@ const ApplicationTerms = () => {
         if (isUnitGroupAppWaitlist(listing, conductor.config)) {
           return {
             text: t("application.review.terms.waitlist.text"),
+          }
+        }
+        if (isUnitGroupAppBase(listing, conductor.config)) {
+          return {
+            text: t("application.review.terms.base.text"),
           }
         }
         return {

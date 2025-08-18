@@ -12,7 +12,7 @@ import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
 import ApplicationFormLayout from "../../../layouts/application-form"
 import styles from "../../../layouts/application-form.module.scss"
-import { isUnitGroupAppWaitlist } from "../../../lib/helpers"
+import { isUnitGroupAppBase, isUnitGroupAppWaitlist } from "../../../lib/helpers"
 
 const ApplicationWhatToExpect = () => {
   const { profile } = useContext(AuthContext)
@@ -31,6 +31,12 @@ const ApplicationWhatToExpect = () => {
           return {
             steps: t("application.start.whatToExpect.waitlist.steps"),
             finePrint: t("application.start.whatToExpect.waitlist.finePrint"),
+          }
+        }
+        if (isUnitGroupAppBase(listing, conductor.config)) {
+          return {
+            steps: "",
+            finePrint: t("application.start.whatToExpect.base.finePrint"),
           }
         }
         return {

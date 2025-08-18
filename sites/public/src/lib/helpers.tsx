@@ -475,3 +475,11 @@ export const isUnitGroupAppWaitlist = (listing: Listing, config: ApplicationForm
     !listing.unitGroups.some((group) => group.totalAvailable > 0)
   )
 }
+
+export const isUnitGroupAppBase = (listing: Listing, config: ApplicationFormConfig) => {
+  return (
+    isFeatureFlagOn(config, FeatureFlagEnum.enableUnitGroups) &&
+    !listing.unitGroups.some((group) => group.openWaitlist) &&
+    !listing.unitGroups.some((group) => group.totalAvailable > 0)
+  )
+}

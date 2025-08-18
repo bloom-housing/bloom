@@ -16,7 +16,7 @@ import FormsLayout from "../../../layouts/forms"
 import styles from "../../../layouts/application-form.module.scss"
 import { AppSubmissionContext } from "../../../lib/applications/AppSubmissionContext"
 import { UserStatus } from "../../../lib/constants"
-import { isUnitGroupAppWaitlist } from "../../../lib/helpers"
+import { isUnitGroupAppBase, isUnitGroupAppWaitlist } from "../../../lib/helpers"
 
 const ApplicationConfirmation = () => {
   const { application, listing, conductor } = useContext(AppSubmissionContext)
@@ -31,6 +31,11 @@ const ApplicationConfirmation = () => {
         if (isUnitGroupAppWaitlist(listing, conductor.config)) {
           return {
             text: t("application.review.confirmation.whatHappensNext.waitlist"),
+          }
+        }
+        if (isUnitGroupAppBase(listing, conductor.config)) {
+          return {
+            text: t("application.review.confirmation.whatHappensNext.base"),
           }
         }
         return {
