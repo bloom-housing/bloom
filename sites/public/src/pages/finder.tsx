@@ -6,7 +6,7 @@ import {
 import { t } from "@bloom-housing/ui-components"
 import RentalsFinder from "../components/finder/RentalsFinder"
 import Layout from "../layouts/application"
-import { fetchJurisdictionByName, fetchMultiselectData } from "../lib/hooks"
+import { fetchJurisdictionByName, fetchMultiselectProgramData } from "../lib/hooks"
 import { isFeatureFlagOn } from "../lib/helpers"
 
 export interface FinderProps {
@@ -39,7 +39,7 @@ export async function getStaticProps(context: { req: any; query: any }) {
     jurisdiction,
     FeatureFlagEnum.swapCommunityTypeWithPrograms
   )
-    ? await fetchMultiselectData(context.req, jurisdiction?.id)
+    ? await fetchMultiselectProgramData(context.req, jurisdiction?.id)
     : null
 
   return {
