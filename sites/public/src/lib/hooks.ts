@@ -35,7 +35,7 @@ import { fetchFavoriteListingIds } from "./helpers"
  */
 export const useAuthenticApplicationCheckpoint = (
   listing: Listing,
-  application: Record<string, any>
+  application: Record<string, unknown>
 ) => {
   const router = useRouter()
   const toastyRef = useToastyRef()
@@ -82,6 +82,7 @@ export const useFormConductor = (stepName: string, bypassCheckpoint?: boolean) =
   useRequireLoggedInUser("/", !process.env.showMandatedAccounts)
   const context = useContext(AppSubmissionContext)
   if (!bypassCheckpoint) {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     useAuthenticApplicationCheckpoint(context.listing, context.application)
   }
   const conductor = context.conductor
