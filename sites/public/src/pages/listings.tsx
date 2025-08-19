@@ -17,7 +17,7 @@ import { isFeatureFlagOn } from "../lib/helpers"
 import {
   fetchClosedListings,
   fetchJurisdictionByName,
-  fetchMultiselectData,
+  fetchMultiselectProgramData,
   fetchOpenListings,
 } from "../lib/hooks"
 
@@ -81,7 +81,7 @@ export async function getServerSideProps(context: { req: any; query: any }) {
     jurisdiction,
     FeatureFlagEnum.swapCommunityTypeWithPrograms
   )
-    ? await fetchMultiselectData(context.req, jurisdiction?.id)
+    ? await fetchMultiselectProgramData(context.req, jurisdiction?.id)
     : null
 
   return {
