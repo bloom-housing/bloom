@@ -43,7 +43,6 @@ const FilterDrawer = (props: FilterDrawerProps) => {
     setValue,
     setError,
     clearErrors,
-    reset,
     formState: { errors },
   } = useForm({ mode: "onBlur" })
 
@@ -161,14 +160,7 @@ const FilterDrawer = (props: FilterDrawerProps) => {
         <Button type="submit" variant="primary" size="sm" nativeButtonProps={{ form: "filter" }}>
           {t("listings.showMatchingListings")}
         </Button>
-        <Button
-          variant="primary-outlined"
-          size="sm"
-          onClick={() => {
-            props.onClear()
-            reset({})
-          }}
-        >
+        <Button variant="primary-outlined" size="sm" onClick={props.onClear}>
           {t("listingFilters.clear")}
         </Button>
       </Drawer.Footer>

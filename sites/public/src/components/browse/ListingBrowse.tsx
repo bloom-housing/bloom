@@ -142,7 +142,13 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
   }
 
   const onFilterClear = () => {
-    setFilterState({})
+    if (Object.keys(filterState).length > 0) {
+      setIsLoading(true)
+      router.pathname.includes("listings-closed")
+        ? void router.push(`/listings-closed`)
+        : void router.push(`/listings`)
+    }
+    setIsFilterDrawerOpen(false)
   }
 
   const onShowAll = useCallback(async () => {
