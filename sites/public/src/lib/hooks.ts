@@ -19,8 +19,43 @@ import {
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { ParsedUrlQuery } from "querystring"
 import { AppSubmissionContext } from "./applications/AppSubmissionContext"
-import { useRequireLoggedInUser, isInternalLink, AuthContext } from "@bloom-housing/shared-helpers"
+import {
+  useRequireLoggedInUser,
+  isInternalLink,
+  AuthContext,
+  useToastyRef,
+} from "@bloom-housing/shared-helpers"
+import { t } from "@bloom-housing/ui-components"
 import { fetchFavoriteListingIds } from "./helpers"
+
+/**
+ *
+ * @param listing
+ * @param application
+ */
+export const useAuthenticApplicationCheckpoint = (
+  listing: Listing,
+  application: Record<string, any>
+) => {
+  const router = useRouter()
+  const toastyRef = useToastyRef()
+  const { profile } = useContext(AuthContext)
+
+  useEffect(() => {
+    if (!listing) {
+      void router.push("/listings")
+      return
+    }
+
+    if (application.confirmationCode && router.isReady) {
+      const { addToast } = toastyRef.current
+      addToast(t("listings.applicationAlreadySubmitted"), { variant: "alert" })
+      profile
+        ? void router.push(`/${router.locale}/account/applications`)
+        : void router.push(`/${router.locale}/listing/${listing.id}/${listing.urlSlug}`)
+    }
+  }, [application, listing, profile, router, toastyRef])
+}
 
 export const useRedirectToPrevPage = (defaultPath = "/") => {
   const router = useRouter()
@@ -37,9 +72,18 @@ export const useRedirectToPrevPage = (defaultPath = "/") => {
   }
 }
 
-export const useFormConductor = (stepName: string) => {
+/**
+ * Hook for use in the Common Application form steps
+ * @param stepName
+ * @param bypassCheckpoint true if it should bypass checking that listing & application is in progress
+ * @returns
+ */
+export const useFormConductor = (stepName: string, bypassCheckpoint?: boolean) => {
   useRequireLoggedInUser("/", !process.env.showMandatedAccounts)
   const context = useContext(AppSubmissionContext)
+  if (!bypassCheckpoint) {
+    useAuthenticApplicationCheckpoint(context.listing, context.application)
+  }
   const conductor = context.conductor
 
   conductor.stepTo(stepName)
