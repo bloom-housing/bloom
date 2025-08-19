@@ -3,6 +3,8 @@ import { Card, Button, Heading } from "@bloom-housing/ui-seeds"
 import { t } from "@bloom-housing/ui-components"
 import styles from "./ApplicationCards.module.scss"
 
+// TODO: test
+
 const ApplicationCard = (props: { children: React.ReactElement; heading: string }) => {
   return (
     <Card spacing={"sm"} className={`${styles["application-card"]} my-6`}>
