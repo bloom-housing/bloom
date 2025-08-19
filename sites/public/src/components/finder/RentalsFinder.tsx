@@ -5,6 +5,7 @@ import { BloomCard, CustomIconMap, listingFeatures } from "@bloom-housing/shared
 import {
   FeatureFlagEnum,
   ListingFilterKeys,
+  MultiselectQuestion,
   RegionEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { Form, ProgressNav, StepHeader, t } from "@bloom-housing/ui-components"
@@ -38,9 +39,10 @@ type FinderSection = {
 
 export type RentalsFinderProps = {
   activeFeatureFlags: FeatureFlagEnum[]
+  multiselectData: MultiselectQuestion[]
 }
 
-export default function RentalsFinder({ activeFeatureFlags }: RentalsFinderProps) {
+export default function RentalsFinder({ activeFeatureFlags, multiselectData }: RentalsFinderProps) {
   const router = useRouter()
   const [stepIndex, setStepIndex] = useState<number>(0)
   const [sectionIndex, setSectionIndex] = useState<number>(0)
@@ -61,7 +63,7 @@ export default function RentalsFinder({ activeFeatureFlags }: RentalsFinderProps
             content: (
               <FinderMultiselectQuestion
                 legend={t("finder.multiselectLegend")}
-                fieldGroupName="bedrooms"
+                fieldGroupName={ListingFilterKeys.bedrooms}
                 options={buildDefaultFilterFields(
                   ListingFilterKeys.bedroomTypes,
                   activeFeatureFlags.some((flag) => flag == FeatureFlagEnum.enableUnitGroups)
@@ -85,7 +87,7 @@ export default function RentalsFinder({ activeFeatureFlags }: RentalsFinderProps
                   content: (
                     <FinderMultiselectQuestion
                       legend={t("finder.multiselectLegend")}
-                      fieldGroupName="regions"
+                      fieldGroupName={ListingFilterKeys.regions}
                       options={Object.keys(RegionEnum).map((region) => ({
                         key: `${ListingFilterKeys.regions}.${region}`,
                         label: region.replace("_", " "),
@@ -114,7 +116,7 @@ export default function RentalsFinder({ activeFeatureFlags }: RentalsFinderProps
                   content: (
                     <FinderMultiselectQuestion
                       legend={t("finder.multiselectLegend")}
-                      fieldGroupName="listingFeatures"
+                      fieldGroupName={ListingFilterKeys.listingFeatures}
                       options={buildDefaultFilterFields(
                         ListingFilterKeys.listingFeatures,
                         "eligibility.accessibility",
@@ -134,10 +136,22 @@ export default function RentalsFinder({ activeFeatureFlags }: RentalsFinderProps
           {
             question: t("finder.building.question"),
             subtitle: t("finder.building.subtitle"),
-            content: (
+            content: activeFeatureFlags.some(
+              (flag) => flag === FeatureFlagEnum.swapCommunityTypeWithPrograms
+            ) ? (
               <FinderMultiselectQuestion
                 legend={t("finder.multiselectLegend")}
-                fieldGroupName="reservedCommunityTypes"
+                fieldGroupName={ListingFilterKeys.multiselectQuestions}
+                options={multiselectData.map((entry) => ({
+                  key: `${ListingFilterKeys.multiselectQuestions}.${entry.id}`,
+                  label: entry.text,
+                  defaultChecked: false,
+                }))}
+              />
+            ) : (
+              <FinderMultiselectQuestion
+                legend={t("finder.multiselectLegend")}
+                fieldGroupName={ListingFilterKeys.reservedCommunityTypes}
                 options={Object.values(ReservedCommunityTypes).map((type) => ({
                   key: `${ListingFilterKeys.reservedCommunityTypes}.${type}`,
                   label: t(`finder.building.${type}`),
@@ -158,7 +172,7 @@ export default function RentalsFinder({ activeFeatureFlags }: RentalsFinderProps
         ],
       },
     ],
-    [activeFeatureFlags]
+    [activeFeatureFlags, multiselectData]
   )
 
   const sectionLabels = useMemo(
