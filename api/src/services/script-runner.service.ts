@@ -603,15 +603,37 @@ export class ScriptRunnerService {
           WHERE jp.programs_id = '${prog.id}'
         `);
 
+      //obj with program title as key and updated program description as value
+      const updatedProgInfo = {
+        Families:
+          "This property offers housing for all family types, with no age restrictions (other than the lead applicant must be over 18 years old). Contact the property manager for more information. Please select ''I am a part of this community'' to continue the application.",
+        'Supportive Housing for the Homeless':
+          'This property offers housing for those experiencing homelessness, and may require additional processes that applicants must complete to qualify.',
+        Veterans:
+          'This property offers housing for those who have served active duty in branches of the U.S. Armed Forces, and were discharged under conditions other than dishonorable.',
+      };
+      const description = updatedProgInfo[prog.title] || prog.description;
+
       const res: MultiselectQuestion =
         await this.multiselectQuestionService.create({
           text: prog.title,
           subText: prog.subtitle,
-          description: prog.description,
+          description: description,
           links: null,
           hideFromListing: this.resolveHideFromListings(prog),
           optOutText: null,
-          options: null,
+          options: [
+            {
+              text: 'I am a part of this community',
+              ordinal: 1,
+              exclusive: true,
+            },
+            {
+              text: 'I am not a part of this community',
+              ordinal: 2,
+              exclusive: true,
+            },
+          ],
           applicationSection:
             MultiselectQuestionsApplicationSectionEnum.programs,
           jurisdictions: jurisInfo.map((juris) => {
