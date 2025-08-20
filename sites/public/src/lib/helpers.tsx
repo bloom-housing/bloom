@@ -314,7 +314,7 @@ export const getApplicationSeason = (
   if (marketingYear) {
     label = label.concat(` ${marketingYear}`)
   }
-  return label
+  return marketingSeason || marketingYear ? label : null
 }
 
 export const getListings = (listings) => {
