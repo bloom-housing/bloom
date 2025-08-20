@@ -1058,6 +1058,7 @@ enum YesNoEnum {
 }
 
 enum RuleEnum {
+  phoneNumber
   nameAndDOB
   email
   combination
