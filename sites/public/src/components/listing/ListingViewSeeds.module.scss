@@ -10,6 +10,10 @@
   --heading-color: var(--seeds-text-color-darker);
   --subheading-margin: var(--seeds-s1);
   --subheading-margin-sm: var(--seeds-spacer-header);
+
+  &, p {
+    overflow-wrap: anywhere;
+  }
 }
 
 .nested-heading-group {
