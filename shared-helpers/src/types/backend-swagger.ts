@@ -4265,6 +4265,9 @@ export interface Listing {
   whatToExpect?: string
 
   /**  */
+  whatToExpectAdditionalText?: string
+
+  /**  */
   status: ListingsStatusEnum
 
   /**  */
@@ -4910,6 +4913,9 @@ export interface ListingCreate {
   whatToExpect?: string
 
   /**  */
+  whatToExpectAdditionalText?: string
+
+  /**  */
   status: ListingsStatusEnum
 
   /**  */
@@ -5224,6 +5230,9 @@ export interface ListingUpdate {
 
   /**  */
   whatToExpect?: string
+
+  /**  */
+  whatToExpectAdditionalText?: string
 
   /**  */
   status: ListingsStatusEnum
