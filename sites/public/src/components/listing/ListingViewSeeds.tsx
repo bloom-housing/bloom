@@ -9,7 +9,7 @@ import {
   ListingsStatusEnum,
   User,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { t } from "@bloom-housing/ui-components"
+import { ExpandableSection, t } from "@bloom-housing/ui-components"
 import {
   AuthContext,
   MessageContext,
@@ -45,6 +45,7 @@ import { Neighborhood } from "./listing_sections/Neighborhood"
 import { RentSummary } from "./listing_sections/RentSummary"
 import { UnitSummaries } from "./listing_sections/UnitSummaries"
 import styles from "./ListingViewSeeds.module.scss"
+import { ReadMore } from "../../patterns/ReadMore"
 
 interface ListingProps {
   listing: Listing
@@ -136,7 +137,18 @@ export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: Li
     <>
       {listing.whatToExpect && (
         <InfoCard heading={t("whatToExpect.label")}>
-          <Markdown className={"bloom-markdown"}>{listing.whatToExpect}</Markdown>
+          <div className={"bloom-markdown"}>
+            <Markdown>{listing.whatToExpect}</Markdown>
+          </div>
+          {listing.whatToExpectAdditionalText && (
+            <div>
+              <ReadMore
+                className={"bloom-markdown"}
+                maxLength={0}
+                content={listing.whatToExpectAdditionalText}
+              />
+            </div>
+          )}
         </InfoCard>
       )}
     </>

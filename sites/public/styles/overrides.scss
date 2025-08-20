@@ -177,6 +177,11 @@
   }
 
   .bloom-markdown {
+    &,
+    > * {
+      overflow-wrap: anywhere;
+    }
+
     p:not(li > *) {
       padding-block: 0.25em;
     }
