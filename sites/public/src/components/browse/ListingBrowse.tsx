@@ -92,6 +92,7 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
   useEffect(() => {
     const filterData = decodeQueryToFilterData(router.query)
     setFilterState(filterData)
+    setIsLoading(false)
   }, [router.asPath, router.query])
 
   const saveFavoriteFn = (listingId: string) => {
@@ -141,14 +142,15 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
     }
   }
 
-  const onFilterClear = () => {
+  const onFilterClear = (resetFilters: (data: FilterData) => void) => {
     if (Object.keys(filterState).length > 0) {
       setIsLoading(true)
       router.pathname.includes("listings-closed")
         ? void router.push(`/listings-closed`)
         : void router.push(`/listings`)
     }
-    setIsFilterDrawerOpen(false)
+    resetFilters({ name: "", monthlyRent: { minRent: "", maxRent: "" } })
+    setFilterState({})
   }
 
   const onShowAll = useCallback(async () => {
