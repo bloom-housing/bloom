@@ -568,7 +568,7 @@
   "finder.building.senior55": "Rentals for seniors 55+",
   "finder.building.senior62": "Rentals for seniors 62+",
   "finder.building.subtitle": "Some affordable housing rental properties are dedicated to specific populations, like seniors. We will use your selections to find you rentals that may match your housing needs.",
-  "finder.building.veterans": "Rentals for veterans",
+  "finder.building.veteran": "Rentals for veterans",
   "finder.building.withDisabilities": "Rentals for residents with disabilities",
   "finder.buildingSectionTitle": "Building types",
   "finder.disclaimer.alert": "Disclaimer: The information in this personalized rental finder should be used for informational purposes only. Due to the changing nature of property information, the best way to see if you qualify for a property or if it has any availability is by contacting the property itself.",
@@ -1144,5 +1144,7 @@
   "welcome.viewAdditionalHousing": "View additional housing opportunities and resources",
   "welcome.viewAdditionalHousingTruncated": "View resources",
   "whatToExpect.default": "Applicants will be contacted by the property agent in rank order until vacancies are filled. All of the information that you have provided will be verified and your eligibility confirmed. Your application will be removed from the waitlist if you have made any fraudulent statements. If we cannot verify a housing preference that you have claimed, you will not receive the preference but will not be otherwise penalized. Should your application be chosen, be prepared to fill out a more detailed application and provide required supporting documents.",
-  "whatToExpect.label": "What to expect"
+  "whatToExpectAdditionalText.default": "",
+  "whatToExpect.label": "What to expect",
+  "whatToExpectAdditionalText.label": "Additional Info"
 }

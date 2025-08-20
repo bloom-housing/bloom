@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useContext, useEffect } from "react"
 import { useRouter } from "next/router"
 import dayjs from "dayjs"
+import { CharacterCount as CharacterCountExtension } from "@tiptap/extension-character-count"
 import { useEditor } from "@tiptap/react"
 import { t, Form, AlertBox, LoadingOverlay, LatitudeLongitude } from "@bloom-housing/ui-components"
 import { Button, Icon, Tabs } from "@bloom-housing/ui-seeds"
@@ -59,8 +60,6 @@ import ListingVerification from "./sections/ListingVerification"
 import NeighborhoodAmenities from "./sections/NeighborhoodAmenities"
 import PreferencesAndPrograms from "./sections/PreferencesAndPrograms"
 import * as styles from "./ListingForm.module.scss"
-
-const extensions = EditorExtensions
 
 const CHARACTER_LIMIT = 1000
 
@@ -156,8 +155,16 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
   const [requestChangesDialog, setRequestChangesDialog] = useState(false)
 
   const whatToExpectEditor = useEditor({
-    extensions,
+    extensions: [...EditorExtensions, CharacterCountExtension.configure()],
     content: !listing ? t("whatToExpect.default") : listing?.whatToExpect,
+    immediatelyRender: false,
+  })
+
+  const whatToExpectAdditionalDetailsEditor = useEditor({
+    extensions: [...EditorExtensions, CharacterCountExtension.configure()],
+    content: !listing
+      ? t("whatToExpectAdditionalText.default")
+      : listing?.whatToExpectAdditionalText,
     immediatelyRender: false,
   })
 
@@ -273,6 +280,19 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
           }
 
           formData.whatToExpect = cleanRichText(whatToExpectEditor.getHTML())
+
+          if (
+            whatToExpectAdditionalDetailsEditor?.storage.characterCount.characters() >
+            CHARACTER_LIMIT
+          ) {
+            setLoading(false)
+            setAlert("form")
+            return
+          }
+
+          formData.whatToExpectAdditionalText = cleanRichText(
+            whatToExpectAdditionalDetailsEditor.getHTML()
+          )
 
           if (!enableSection8) {
             formData.listingSection8Acceptance = YesNoEnum.no
@@ -486,6 +506,7 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
                             listing={listing}
                             isAdmin={profile?.userRoles.isAdmin}
                             whatToExpectEditor={whatToExpectEditor}
+                            whatToExpectAdditionalTextEditor={whatToExpectAdditionalDetailsEditor}
                             requiredFields={requiredFields}
                           />
                           <LeasingAgent requiredFields={requiredFields} />
