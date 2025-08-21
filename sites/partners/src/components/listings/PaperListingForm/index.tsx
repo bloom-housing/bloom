@@ -11,10 +11,12 @@ import { AuthContext, MessageContext, listingSectionQuestions } from "@bloom-hou
 import {
   FeatureFlag,
   FeatureFlagEnum,
+  Jurisdiction,
   ListingCreate,
   ListingEventsTypeEnum,
   ListingUpdate,
   ListingsStatusEnum,
+  MarketingTypeEnum,
   MultiselectQuestion,
   MultiselectQuestionsApplicationSectionEnum,
   YesNoEnum,
@@ -107,6 +109,7 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { getValues, setError, clearErrors, reset, watch } = formMethods
   const selectedJurisdiction: string = watch("jurisdictions.id")
+  const marketingTypeChoice = watch("marketingType")
 
   const router = useRouter()
 
@@ -157,6 +160,7 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
   const [listingIsAlreadyLiveDialog, setListingIsAlreadyLiveDialog] = useState(false)
   const [submitForApprovalDialog, setSubmitForApprovalDialog] = useState(false)
   const [requestChangesDialog, setRequestChangesDialog] = useState(false)
+  const [selectedJurisdictionData, setSelectedJurisdictionData] = useState<Jurisdiction>()
 
   const whatToExpectEditor = useEditor({
     extensions: [...EditorExtensions, CharacterCountExtension.configure()],
@@ -178,24 +182,35 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
           jurisdictionId: selectedJurisdiction,
         })
 
-        if (!jurisdictionData) {
-          return
-        }
-
-        if (!whatToExpectEditor?.storage.characterCount.characters()) {
-          whatToExpectEditor.commands.setContent(jurisdictionData.whatToExpect)
-        }
-        if (!whatToExpectAdditionalDetailsEditor?.storage.characterCount.characters()) {
-          whatToExpectAdditionalDetailsEditor.commands.setContent(
-            jurisdictionData.whatToExpectAdditionalText
-          )
+        if (jurisdictionData) {
+          setSelectedJurisdictionData(jurisdictionData)
         }
       }
     }
     void fetchData()
-
-    //eslint-disable-next-line
   }, [jurisdictionsService, selectedJurisdiction])
+
+  useEffect(() => {
+    if (selectedJurisdictionData) {
+      if (marketingTypeChoice === MarketingTypeEnum.comingSoon) {
+        whatToExpectEditor.commands.setContent(
+          selectedJurisdictionData.whatToExpectUnderConstruction
+        )
+        whatToExpectAdditionalDetailsEditor.commands.clearContent()
+        return
+      }
+
+      if (!whatToExpectEditor?.storage.characterCount.characters()) {
+        whatToExpectEditor.commands.setContent(selectedJurisdictionData.whatToExpect)
+      }
+      if (!whatToExpectAdditionalDetailsEditor?.storage.characterCount.characters()) {
+        whatToExpectAdditionalDetailsEditor.commands.setContent(
+          selectedJurisdictionData.whatToExpectAdditionalText
+        )
+      }
+    }
+    //eslint-disable-next-line
+  }, [selectedJurisdictionData, marketingTypeChoice])
 
   const enableUnitGroups =
     activeFeatureFlags?.find((flag) => flag.name === FeatureFlagEnum.enableUnitGroups)?.active ||
