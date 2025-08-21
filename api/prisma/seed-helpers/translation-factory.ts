@@ -47,19 +47,13 @@ const translations = (jurisdictionName?: string, language?: LanguagesEnum) => {
       confirmation: {
         subject: 'Your Application Confirmation',
         eligible: {
-          fcfs: 'Eligible applicants will be contacted on a first come first serve basis until vacancies are filled.',
+          fcfs: 'Applicants will be contacted on a first come first serve basis until vacancies are filled.',
           lottery:
-            'Once the application period closes, eligible applicants will be placed in order based on lottery rank order.',
+            'Once the application period closes, applicants will be placed in order based on lottery rank order.',
           waitlist:
-            'Eligible applicants will be placed on the waitlist on a first come first serve basis until waitlist spots are filled.',
-          fcfsPreference:
-            'Housing preferences, if applicable, will affect first come first serve order.',
+            'Applicants will be placed on the waitlist on a first come first serve basis until waitlist spots are filled.',
           waitlistContact:
             'You may be contacted while on the waitlist to confirm that you wish to remain on the waitlist.',
-          lotteryPreference:
-            'Housing preferences, if applicable, will affect lottery rank order.',
-          waitlistPreference:
-            'Housing preferences, if applicable, will affect waitlist order.',
         },
         interview:
           'If you are contacted for an interview, you will be asked to fill out a more detailed application and provide supporting documents.',
@@ -101,7 +95,7 @@ const translations = (jurisdictionName?: string, language?: LanguagesEnum) => {
         officeHours: 'Office Hours:',
         propertyManager: 'Property Manager',
         contactAgentToUpdateInfo:
-          'If you need to update information on your application, do not apply again. Instead, contact the agent for this listing.',
+          'If you need to update information on your application, do not apply again. Instead, contact the Property Agent for this listing.',
       },
       mfaCodeEmail: {
         message: 'Access code for your account has been requested.',
@@ -201,11 +195,9 @@ const translations = (jurisdictionName?: string, language?: LanguagesEnum) => {
       confirmation: {
         eligible: {
           waitlist:
-            'Los solicitantes que reúnan los requisitos quedarán en la lista de espera por orden de recepción de solicitud hasta que se cubran todos los lugares.',
+            'Los solicitantes se incluirán en la lista de espera por orden de llegada hasta que se cubran las plazas.',
           waitlistContact:
-            'Es posible que se comuniquen con usted mientras esté en la lista de espera para confirmar que desea permanecer en la lista.',
-          waitlistPreference:
-            'Las preferencias de vivienda, si corresponde, afectarán al orden de la lista de espera.',
+            'Es posible que nos pongamos en contacto con usted mientras esté en la lista de espera para confirmar su deseo de permanecer en ella.',
         },
         interview:
           'Si se comunican con usted para una entrevista, se le pedirá que complete una solicitud más detallada y presente documentos de respaldo.',

@@ -269,10 +269,7 @@ describe('Testing email service', () => {
       );
       expect(sendMock.mock.calls[0][0].html).toContain('What happens next?');
       expect(sendMock.mock.calls[0][0].html).toContain(
-        'Eligible applicants will be contacted on a first come first serve basis until vacancies are filled.',
-      );
-      expect(sendMock.mock.calls[0][0].html).toContain(
-        'Housing preferences, if applicable, will affect first come first serve order.',
+        'Applicants will be contacted on a first come first serve basis until vacancies are filled.',
       );
       expect(sendMock.mock.calls[0][0].html).toContain(
         'If you are contacted for an interview, you will be asked to fill out a more detailed application and provide supporting documents',
@@ -299,16 +296,13 @@ describe('Testing email service', () => {
       );
       expect(sendMock.mock.calls[0][0].html).toContain('What happens next?');
       expect(sendMock.mock.calls[0][0].html).toContain(
-        'Once the application period closes, eligible applicants will be placed in order based on lottery rank order.',
-      );
-      expect(sendMock.mock.calls[0][0].html).toContain(
-        'Housing preferences, if applicable, will affect lottery rank order.',
+        'Once the application period closes, applicants will be placed in order based on lottery rank order.',
       );
       expect(sendMock.mock.calls[0][0].html).toContain(
         'If you are contacted for an interview, you will be asked to fill out a more detailed application and provide supporting documents',
       );
       expect(sendMock.mock.calls[0][0].html).toContain(
-        'If you need to update information on your application, do not apply again. Instead, contact the agent for this listing',
+        'If you need to update information on your application, do not apply again. Instead, contact the Property Agent for this listing',
       );
     });
     it('Test waitlist', async () => {
@@ -332,10 +326,7 @@ describe('Testing email service', () => {
       );
       expect(sendMock.mock.calls[0][0].html).toContain('What happens next?');
       expect(sendMock.mock.calls[0][0].html).toContain(
-        'Eligible applicants will be placed on the waitlist on a first come first serve basis until waitlist spots are filled.',
-      );
-      expect(sendMock.mock.calls[0][0].html).toContain(
-        'Housing preferences, if applicable, will affect waitlist order.',
+        'Applicants will be placed on the waitlist on a first come first serve basis until waitlist spots are filled.',
       );
       expect(sendMock.mock.calls[0][0].html).toContain(
         'If you are contacted for an interview, you will be asked to fill out a more detailed application and provide supporting documents',
