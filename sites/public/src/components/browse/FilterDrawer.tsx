@@ -148,7 +148,13 @@ const FilterDrawer = (props: FilterDrawerProps) => {
               groupLabel={t("t.community")}
               fields={buildDefaultFilterFields(
                 ListingFilterKeys.multiselectQuestions,
-                props.multiselectData?.map((multi) => multi.text),
+                props.multiselectData?.map((multi) =>
+                  t(
+                    multi.untranslatedText
+                      ? t(`listingFilters.program.${multi.untranslatedText}`)
+                      : t(`listingFilters.program.${multi.text}`)
+                  )
+                ),
                 props.multiselectData?.map((multi) => multi.id),
                 props.filterState
               )}
