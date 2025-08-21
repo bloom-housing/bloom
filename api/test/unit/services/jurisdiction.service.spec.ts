@@ -198,7 +198,7 @@ describe('Testing jurisdiction service', () => {
       emailFromAddress: `emailFromAddress: 3`,
       rentalAssistanceDefault: `rentalAssistanceDefault: 3`,
       whatToExpect: `whatToExpect: 3`,
-      whatToExpectAdditionalText: `whatToExpectAdditionalText: 3}`,
+      whatToExpectAdditionalText: `whatToExpectAdditionalText: 3`,
       whatToExpectUnderConstruction: `whatToExpectUnderConstruction: 3`,
       enablePartnerSettings: true,
       allowSingleUseCodeLogin: false,
