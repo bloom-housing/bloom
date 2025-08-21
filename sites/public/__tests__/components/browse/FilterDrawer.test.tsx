@@ -196,7 +196,7 @@ describe("FilterDrawer", () => {
     expect(screen.getByRole("checkbox", { name: "Community Type Four" })).not.toBeChecked()
 
     expect(screen.getByRole("button", { name: "Show matching listings" })).toBeInTheDocument()
-    expect(screen.getByRole("button", { name: "Cancel" })).toBeInTheDocument()
+    expect(screen.getByRole("button", { name: "Clear" })).toBeInTheDocument()
   })
 
   it("should return all filter fields correctly with previous selections", () => {
@@ -355,7 +355,7 @@ describe("FilterDrawer", () => {
     expect(screen.getByRole("checkbox", { name: "Community Type Four" })).not.toBeChecked()
 
     expect(screen.getByRole("button", { name: "Show matching listings" })).toBeInTheDocument()
-    expect(screen.getByRole("button", { name: "Cancel" })).toBeInTheDocument()
+    expect(screen.getByRole("button", { name: "Clear" })).toBeInTheDocument()
   })
 
   it("should return correct unit types fields with unit groups", () => {
