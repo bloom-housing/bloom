@@ -5666,6 +5666,9 @@ export interface JurisdictionCreate {
   whatToExpectAdditionalText: string
 
   /**  */
+  whatToExpectUnderConstruction: string
+
+  /**  */
   enablePartnerSettings?: boolean
 
   /**  */
@@ -5720,6 +5723,9 @@ export interface JurisdictionUpdate {
 
   /**  */
   whatToExpectAdditionalText: string
+
+  /**  */
+  whatToExpectUnderConstruction: string
 
   /**  */
   enablePartnerSettings?: boolean
@@ -5808,6 +5814,9 @@ export interface Jurisdiction {
 
   /**  */
   whatToExpectAdditionalText: string
+
+  /**  */
+  whatToExpectUnderConstruction: string
 
   /**  */
   enablePartnerSettings?: boolean

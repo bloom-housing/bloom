@@ -87,6 +87,12 @@ export class Jurisdiction extends AbstractDTO {
   whatToExpectAdditionalText: string;
 
   @Expose()
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ApiProperty()
+  whatToExpectUnderConstruction: string;
+
+  @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   enablePartnerSettings?: boolean;
