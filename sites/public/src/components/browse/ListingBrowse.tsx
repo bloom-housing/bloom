@@ -69,7 +69,7 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
     FeatureFlagEnum.enableListingFiltering
   )
 
-  const jurisdictionActiveFeatureFlags = props.jurisdiction.featureFlags
+  const jurisdictionActiveFeatureFlags = props.jurisdiction?.featureFlags
     .filter((featureFlag) => featureFlag.active)
     .map((entry) => entry.name)
 
