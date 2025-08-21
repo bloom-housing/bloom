@@ -42,19 +42,22 @@ export const useAuthenticApplicationCheckpoint = (
   const { profile } = useContext(AuthContext)
 
   useEffect(() => {
+    const { addToast } = toastyRef.current
+
     if (!listing) {
+      addToast(t("application.timeout.afterMessage"), { variant: "alert" })
       void router.push("/listings")
       return
     }
 
-    if (application.confirmationCode && router.isReady) {
-      const { addToast } = toastyRef.current
+    if (application.confirmationCode) {
       addToast(t("listings.applicationAlreadySubmitted"), { variant: "alert" })
-      profile
-        ? void router.push(`/${router.locale}/account/applications`)
-        : void router.push(`/${router.locale}/listing/${listing.id}/${listing.urlSlug}`)
+      void router.push(
+        profile ? `/account/applications` : `/listing/${listing.id}/${listing.urlSlug}`
+      )
     }
-  }, [application, listing, profile, router, toastyRef])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [router]) // ensure this only runs once on the page
 }
 
 export const useRedirectToPrevPage = (defaultPath = "/") => {
