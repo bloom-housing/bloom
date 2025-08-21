@@ -23,9 +23,8 @@
         display: flex;
         flex-direction: column;
         gap: var(--seeds-s4);
-
-        p {
-          padding-block-start: var(--seeds-s4);
+        &:last-of-type {
+          display: block;
         }
       }
 
@@ -35,6 +34,9 @@
 
       .contact-card-description {
         color: var(--seeds-text-color-light);
+        p:last-of-type {
+          margin-block-start: var(--seeds-spacer-text);
+        }
       }
 
       .contact-card-info {

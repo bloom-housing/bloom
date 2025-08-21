@@ -38,7 +38,7 @@ describe("<LeasingAgent>", () => {
       />
     )
     // Note: this is different for Detroit
-    expect(getByText("Leasing Contact Information")).toBeDefined()
+    expect(getByText("Leasing contact information")).toBeDefined()
     expect(getByText("Agent Name")).toBeDefined()
     expect(getByText("Agent title")).toBeDefined()
     expect(getByRole("link", { name: `Call ${phoneNumber}` })).toHaveAttribute(

@@ -90,11 +90,13 @@ const HousingBasics = () => {
                     {t("t.contact")}
                   </Heading>
                   <p className={styles["contact-card-info"]}>{t("contact.cityOfDetroitTitle")}</p>
-                  <p className={styles["contact-card-descriptieon"]}>
+                  <p className={styles["contact-card-description"]}>
                     {t("contact.cityOfDetroitDescription")}
                   </p>
                 </div>
-                <div className={styles["contact-card-subsection"]}>
+                <div
+                  className={`${styles["contact-card-subsection"]} ${styles["contact-card-description"]}`}
+                >
                   <Markdown>{t("contact.generalInquiries")}</Markdown>
                 </div>
               </Card>

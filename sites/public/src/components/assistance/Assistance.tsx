@@ -64,7 +64,7 @@ const Assistance = () => {
                     RenderIf,
                   },
                 }}
-                className={styles["contact-card-subsection"]}
+                className={`${styles["contact-card-subsection"]} ${styles["contact-card-description"]}`}
               >
                 {contactInfo.toString()}
               </Markdown>
