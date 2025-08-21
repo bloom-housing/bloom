@@ -1144,5 +1144,7 @@
   "welcome.viewAdditionalHousing": "Tingnan ang karagdagang oportunidad at mapagkukunan ng pabahay",
   "welcome.viewAdditionalHousingTruncated": "Tingnan ang mga oportunidad at mapagkukunan",
   "whatToExpect.default": "Ang mga aplikante ay tatawagan ng ahente ng property sa ayon sa pagkakasunod-sunod ng rank hanggang sa mapunan ang mga bakante. Ang lahat ng impormasyon na iyong ibinigay ay i-ve-verify ang kukumpirmahin ang iyong pagiging kwalipikado. Aalisin ang iyong application sa waitlist kung gumawa ka ng anumang mapanlinlang na pahayag. Kung hindi namin ma-verify ang isang kagustuhan sa pabahay na iyong na-claim, hindi mo matatanggap ang kagustuhan ngunit hindi mapaparusahan. Kung mapili ang iyong application, maging handa upang punan ang isang mas detalyadong application at magbigay ng mga kinakailangang pansuportang dokumento.",
-  "whatToExpect.label": "Ano ang aasahan"
+  "whatToExpect.label": "Ano ang aasahan",
+  "whatToExpectAdditionalText.default": "",
+  "whatToExpectAdditionalText.label": "Karagdagang impormasyon"
 }
