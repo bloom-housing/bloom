@@ -259,9 +259,17 @@ export const getListingStatusMessage = (
   const hideIsClosed =
     listing.status === ListingsStatusEnum.closed ||
     (listing.applicationDueDate && dayjs() > dayjs(listing.applicationDueDate))
+  const hideNoDateMarketingStatus =
+    listing.marketingType === MarketingTypeEnum.comingSoon &&
+    !listing.marketingSeason &&
+    !listing.marketingYear
 
   const hideStatusMessageContent =
-    hideDate || hideNoUnitGroups || hideWaitlistClosedNoAvailableUnits || hideIsClosed
+    hideDate ||
+    hideNoUnitGroups ||
+    hideWaitlistClosedNoAvailableUnits ||
+    hideIsClosed ||
+    hideNoDateMarketingStatus
 
   return (
     <Message
@@ -308,7 +316,7 @@ export const getApplicationSeason = (
   if (marketingYear) {
     label = label.concat(` ${marketingYear}`)
   }
-  return label
+  return marketingSeason || marketingYear ? label : null
 }
 
 export const getListings = (listings) => {

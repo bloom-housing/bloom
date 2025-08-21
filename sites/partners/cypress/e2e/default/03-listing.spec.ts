@@ -266,7 +266,11 @@ describe("Listing Management Tests", () => {
     cy.getByID("whatToExpect").clear()
     cy.getByID("whatToExpect").type("Custom unformatted text")
     cy.getByID("whatToExpect").type("{enter}Item A")
-    cy.getByID("editor-bullet-list").click()
+    cy.getByID("whatToExpect")
+      .parent()
+      .within(() => {
+        cy.getByID("editor-bullet-list").click()
+      })
     cy.getByID("whatToExpect").click()
     cy.getByID("whatToExpect").type("{enter}Item B{enter}Item C")
     cy.getByID("leasingAgentName").type(listing["leasingAgentName"])
