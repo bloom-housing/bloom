@@ -101,43 +101,40 @@ const UnitGroupForm = ({
     { label: "5", value: "5" },
   ]
 
+  const unitGroupFormValuesToCheck = useMemo(
+    () => [
+      minOccupancy,
+      maxOccupancy,
+      sqFeetMin,
+      sqFeetMax,
+      floorMin,
+      floorMax,
+      bathroomMin,
+      bathroomMax,
+    ],
+    [minOccupancy, maxOccupancy, sqFeetMin, sqFeetMax, floorMin, floorMax, bathroomMin, bathroomMax]
+  )
+
   useEffect(() => {
-    if (
-      !!minOccupancy ||
-      !!maxOccupancy ||
-      !!sqFeetMin ||
-      !!sqFeetMax ||
-      !!floorMin ||
-      !!floorMax ||
-      !!bathroomMin ||
-      !!bathroomMax
-    ) {
+    const FILTER_FIELDS = [
+      "minOccupancy",
+      "maxOccupancy",
+      "sqFeetMin",
+      "sqFeetMax",
+      "floorMin",
+      "floorMax",
+      "bathroomMin",
+      "bathroomMax",
+    ]
+
+    if (unitGroupFormValuesToCheck.some((value) => value)) {
       const timeoutId = setTimeout(() => {
-        void trigger([
-          "minOccupancy",
-          "maxOccupancy",
-          "sqFeetMin",
-          "sqFeetMax",
-          "floorMin",
-          "floorMax",
-          "bathroomMin",
-          "bathroomMax",
-        ])
+        void trigger(FILTER_FIELDS)
       }, 0)
 
       return () => clearTimeout(timeoutId)
     }
-  }, [
-    minOccupancy,
-    maxOccupancy,
-    sqFeetMin,
-    sqFeetMax,
-    floorMin,
-    floorMax,
-    bathroomMin,
-    bathroomMax,
-    trigger,
-  ])
+  }, [unitGroupFormValuesToCheck, trigger])
 
   // sets the options for the ami charts
   useEffect(() => {
