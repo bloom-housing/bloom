@@ -12,7 +12,12 @@ import {
 import { useCallback, useEffect, useMemo, useState } from "react"
 import { useForm, useFormContext, useWatch } from "react-hook-form"
 import { DrawerHeader } from "@bloom-housing/ui-seeds/src/overlays/Drawer"
-import { useAmiChartList, useUnitPriorityList, useUnitTypeList } from "../../../lib/hooks"
+import {
+  useAmiChartList,
+  useUnitPriorityList,
+  useUnitTypeList,
+  useWatchOnFormFieldsChange,
+} from "../../../lib/hooks"
 import {
   AmiChart,
   EnumUnitGroupAmiLevelMonthlyRentDeterminationType,
@@ -101,40 +106,29 @@ const UnitGroupForm = ({
     { label: "5", value: "5" },
   ]
 
-  const unitGroupFormValuesToCheck = useMemo(
-    () => [
-      minOccupancy,
-      maxOccupancy,
-      sqFeetMin,
-      sqFeetMax,
-      floorMin,
-      floorMax,
-      bathroomMin,
-      bathroomMax,
-    ],
-    [minOccupancy, maxOccupancy, sqFeetMin, sqFeetMax, floorMin, floorMax, bathroomMin, bathroomMax]
-  )
+  const fieldsValuesToWatch = [
+    minOccupancy,
+    maxOccupancy,
+    sqFeetMin,
+    sqFeetMax,
+    floorMin,
+    floorMax,
+    bathroomMin,
+    bathroomMax,
+  ]
 
-  useEffect(() => {
-    const FILTER_FIELDS = [
-      "minOccupancy",
-      "maxOccupancy",
-      "sqFeetMin",
-      "sqFeetMax",
-      "floorMin",
-      "floorMax",
-      "bathroomMin",
-      "bathroomMax",
-    ]
+  const fieldsToTriggerWatch = [
+    "minOccupancy",
+    "maxOccupancy",
+    "sqFeetMin",
+    "sqFeetMax",
+    "floorMin",
+    "floorMax",
+    "bathroomMin",
+    "bathroomMax",
+  ]
 
-    if (unitGroupFormValuesToCheck.some((value) => value)) {
-      const timeoutId = setTimeout(() => {
-        void trigger(FILTER_FIELDS)
-      }, 0)
-
-      return () => clearTimeout(timeoutId)
-    }
-  }, [unitGroupFormValuesToCheck, trigger])
+  useWatchOnFormFieldsChange(fieldsValuesToWatch, fieldsToTriggerWatch, trigger)
 
   // sets the options for the ami charts
   useEffect(() => {
