@@ -101,6 +101,44 @@ const UnitGroupForm = ({
     { label: "5", value: "5" },
   ]
 
+  useEffect(() => {
+    if (
+      !!minOccupancy ||
+      !!maxOccupancy ||
+      !!sqFeetMin ||
+      !!sqFeetMax ||
+      !!floorMin ||
+      !!floorMax ||
+      !!bathroomMin ||
+      !!bathroomMax
+    ) {
+      const timeoutId = setTimeout(() => {
+        void trigger([
+          "minOccupancy",
+          "maxOccupancy",
+          "sqFeetMin",
+          "sqFeetMax",
+          "floorMin",
+          "floorMax",
+          "bathroomMin",
+          "bathroomMax",
+        ])
+      }, 0)
+
+      return () => clearTimeout(timeoutId)
+    }
+  }, [
+    minOccupancy,
+    maxOccupancy,
+    sqFeetMin,
+    sqFeetMax,
+    floorMin,
+    floorMax,
+    bathroomMin,
+    bathroomMax,
+    trigger,
+  ])
+
   // sets the options for the ami charts
   useEffect(() => {
     if (amiCharts.length === 0 || amiChartsOptions.length) return
