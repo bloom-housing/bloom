@@ -233,10 +233,11 @@ export const getListingStatusMessageContent = (
 
 export const getListingStatusMessage = (
   listing: Listing,
-  jurisdiction: Jurisdiction,
+  jurisdiction: Jurisdiction | { featureFlags: FeatureFlag[] },
   content?: React.ReactNode,
   hideTime?: boolean,
-  hideDate?: boolean
+  hideDate?: boolean,
+  className?: string
 ) => {
   if (!listing) return
 
@@ -269,9 +270,12 @@ export const getListingStatusMessage = (
     hideIsClosed ||
     hideNoDateMarketingStatus
 
+  const classNames = [styles["status-bar"]]
+  if (className) classNames.push(className)
+
   return (
     <Message
-      className={styles["status-bar"]}
+      className={classNames.join(" ")}
       customIcon={
         <Icon size="md" className={styles["primary-color-icon"]}>
           {prefix?.variant === "secondary-inverse" ? <LockClosedIcon /> : <InfoIcon />}
