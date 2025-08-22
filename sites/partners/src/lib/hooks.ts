@@ -669,7 +669,7 @@ export function useLotteryActivityLog(listingId: string) {
   }
 }
 
-export function useWatchOnFormFieldsChange(
+export function useWatchOnFormNumberFieldsChange(
   fieldsValuesToWatch: number[],
   fieldsToTriggerWatch: string[],
   trigger: (name?: string | string[]) => Promise<boolean>

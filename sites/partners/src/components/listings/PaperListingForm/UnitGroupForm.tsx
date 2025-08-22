@@ -16,7 +16,7 @@ import {
   useAmiChartList,
   useUnitPriorityList,
   useUnitTypeList,
-  useWatchOnFormFieldsChange,
+  useWatchOnFormNumberFieldsChange,
 } from "../../../lib/hooks"
 import {
   AmiChart,
@@ -128,7 +128,7 @@ const UnitGroupForm = ({
     "bathroomMax",
   ]
 
-  useWatchOnFormFieldsChange(fieldsValuesToWatch, fieldsToTriggerWatch, trigger)
+  useWatchOnFormNumberFieldsChange(fieldsValuesToWatch, fieldsToTriggerWatch, trigger)
 
   // sets the options for the ami charts
   useEffect(() => {
