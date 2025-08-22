@@ -351,9 +351,7 @@ export class EmailService {
     let preferenceText: string = null;
     let contactText: string = null;
     if (enableUnitGroups) {
-      const hasUnitGroupsWaitlistOpen = listing.unitGroups?.some(
-        (group) => group.openWaitlist,
-      );
+      const hasUnitGroups = listing.unitGroups?.length > 0;
       const unitsAvailable =
         listing.unitGroups?.length > 0
           ? listing.unitGroups.reduce(
@@ -361,6 +359,7 @@ export class EmailService {
               0,
             )
           : listing.unitsAvailable;
+
       if (listing.reviewOrderType === ReviewOrderTypeEnum.lottery) {
         eligibleText = this.polyglot.t('confirmation.eligible.lottery');
         preferenceText = this.polyglot.t(
@@ -371,7 +370,7 @@ export class EmailService {
         preferenceText = this.polyglot.t(
           'confirmation.eligible.fcfsPreference',
         );
-      } else if (hasUnitGroupsWaitlistOpen) {
+      } else if (hasUnitGroups) {
         eligibleText = this.polyglot.t('confirmation.eligible.waitlist');
         contactText = this.polyglot.t('confirmation.eligible.waitlistContact');
         preferenceText = this.polyglot.t(
