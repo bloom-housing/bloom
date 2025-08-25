@@ -17,7 +17,7 @@ import { isFeatureFlagOn } from "../lib/helpers"
 import {
   fetchClosedListings,
   fetchJurisdictionByName,
-  fetchMultiselectData,
+  fetchMultiselectProgramData,
   fetchOpenListings,
 } from "../lib/hooks"
 
@@ -37,8 +37,6 @@ export interface ListingsProps {
 }
 
 export default function ListingsPage(props: ListingsProps) {
-  const router = useRouter()
-
   return (
     <>
       {process.env.showNewSeedsDesigns ? (
@@ -48,7 +46,6 @@ export default function ListingsPage(props: ListingsProps) {
           jurisdiction={props.jurisdiction}
           multiselectData={props.multiselectData}
           paginationData={props.paginationData}
-          key={router.asPath}
           areFiltersActive={props.areFiltersActive}
         />
       ) : (
@@ -81,7 +78,7 @@ export async function getServerSideProps(context: { req: any; query: any }) {
     jurisdiction,
     FeatureFlagEnum.swapCommunityTypeWithPrograms
   )
-    ? await fetchMultiselectData(context.req, jurisdiction?.id)
+    ? await fetchMultiselectProgramData(context.req, jurisdiction?.id)
     : null
 
   return {
