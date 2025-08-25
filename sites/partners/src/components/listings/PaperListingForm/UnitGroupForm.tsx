@@ -103,14 +103,14 @@ const UnitGroupForm = ({
 
   useEffect(() => {
     if (
-      !!minOccupancy ||
-      !!maxOccupancy ||
-      !!sqFeetMin ||
-      !!sqFeetMax ||
-      !!floorMin ||
-      !!floorMax ||
-      !!bathroomMin ||
-      !!bathroomMax
+      minOccupancy ||
+      maxOccupancy ||
+      sqFeetMin ||
+      sqFeetMax ||
+      floorMin ||
+      floorMax ||
+      bathroomMin ||
+      bathroomMax
     ) {
       const timeoutId = setTimeout(() => {
         void trigger([

@@ -75,6 +75,16 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
 
   const maxAmiHouseholdSize = 8
 
+  useEffect(() => {
+    if (minOccupancy || maxOccupancy) {
+      const timeoutId = setTimeout(() => {
+        void trigger(["minOccupancy", "maxOccupancy"])
+      }, 0)
+
+      return () => clearTimeout(timeoutId)
+    }
+  }, [minOccupancy, maxOccupancy, trigger])
+
   const getAmiChartTableData = () => {
     return [...Array(maxAmiHouseholdSize)].map((_, index) => {
       const fieldName = `maxIncomeHouseholdSize${index + 1}`
