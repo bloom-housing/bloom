@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from "react"
 import { t, Field, Select, FieldGroup, Form, numberOptions } from "@bloom-housing/ui-components"
 import { Button, Card, Drawer, Grid } from "@bloom-housing/ui-seeds"
 import { AuthContext } from "@bloom-housing/shared-helpers"
-import { useForm, useWatch, useFormContext } from "react-hook-form"
+import { useWatch, useFormContext } from "react-hook-form"
 import { TempUnit } from "../../../lib/listings/formTypes"
 import {
   AmiChart,
