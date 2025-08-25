@@ -10,7 +10,12 @@ import {
   UnitAccessibilityPriorityType,
   UnitType,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { useAmiChartList, useUnitPriorityList, useUnitTypeList } from "../../../lib/hooks"
+import {
+  useAmiChartList,
+  useUnitPriorityList,
+  useUnitTypeList,
+  useWatchOnFormNumberFieldsChange,
+} from "../../../lib/hooks"
 import { arrayToFormOptions, getRentType, fieldHasError } from "../../../lib/helpers"
 import SectionWithGrid from "../../shared/SectionWithGrid"
 import styles from "./ListingForm.module.scss"
@@ -74,6 +79,12 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
   })
 
   const maxAmiHouseholdSize = 8
+
+  const fieldsValuesToWatch = [minOccupancy, maxOccupancy]
+
+  const fieldsToTriggerWatch = ["minOccupancy", "maxOccupancy"]
+
+  useWatchOnFormNumberFieldsChange(fieldsValuesToWatch, fieldsToTriggerWatch, trigger)
 
   const getAmiChartTableData = () => {
     return [...Array(maxAmiHouseholdSize)].map((_, index) => {

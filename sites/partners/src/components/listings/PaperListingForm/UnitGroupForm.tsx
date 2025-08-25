@@ -12,7 +12,12 @@ import {
 import { useCallback, useEffect, useMemo, useState } from "react"
 import { useForm, useFormContext, useWatch } from "react-hook-form"
 import { DrawerHeader } from "@bloom-housing/ui-seeds/src/overlays/Drawer"
-import { useAmiChartList, useUnitPriorityList, useUnitTypeList } from "../../../lib/hooks"
+import {
+  useAmiChartList,
+  useUnitPriorityList,
+  useUnitTypeList,
+  useWatchOnFormNumberFieldsChange,
+} from "../../../lib/hooks"
 import {
   AmiChart,
   EnumUnitGroupAmiLevelMonthlyRentDeterminationType,
@@ -100,6 +105,30 @@ const UnitGroupForm = ({
     { label: "4", value: "4" },
     { label: "5", value: "5" },
   ]
+
+  const fieldsValuesToWatch = [
+    minOccupancy,
+    maxOccupancy,
+    sqFeetMin,
+    sqFeetMax,
+    floorMin,
+    floorMax,
+    bathroomMin,
+    bathroomMax,
+  ]
+
+  const fieldsToTriggerWatch = [
+    "minOccupancy",
+    "maxOccupancy",
+    "sqFeetMin",
+    "sqFeetMax",
+    "floorMin",
+    "floorMax",
+    "bathroomMin",
+    "bathroomMax",
+  ]
+
+  useWatchOnFormNumberFieldsChange(fieldsValuesToWatch, fieldsToTriggerWatch, trigger)
 
   // sets the options for the ami charts
   useEffect(() => {
@@ -345,12 +374,6 @@ const UnitGroupForm = ({
                     errorMessage={t("errors.minGreaterThanMaxOccupancyError")}
                     error={fieldHasError(errors?.minOccupancy)}
                     validation={{ max: maxOccupancy || numberOccupancyOptions }}
-                    inputProps={{
-                      onChange: () => {
-                        void trigger("minOccupancy")
-                        void trigger("maxOccupancy")
-                      },
-                    }}
                   />
                 </Grid.Cell>
                 <Grid.Cell>
@@ -364,12 +387,6 @@ const UnitGroupForm = ({
                     errorMessage={t("errors.maxLessThanMinOccupancyError")}
                     error={fieldHasError(errors?.maxOccupancy)}
                     validation={{ min: minOccupancy }}
-                    inputProps={{
-                      onChange: () => {
-                        void trigger("minOccupancy")
-                        void trigger("maxOccupancy")
-                      },
-                    }}
                   />
                 </Grid.Cell>
               </Grid.Row>
@@ -384,10 +401,6 @@ const UnitGroupForm = ({
                     errorMessage={t("errors.minGreaterThanMaxFootageError")}
                     error={fieldHasError(errors?.sqFeetMin)}
                     validation={{ max: sqFeetMax }}
-                    onChange={() => {
-                      void trigger("sqFeetMin")
-                      void trigger("sqFeetMax")
-                    }}
                   />
                 </Grid.Cell>
                 <Grid.Cell>
@@ -400,10 +413,6 @@ const UnitGroupForm = ({
                     errorMessage={t("errors.maxLessThanMinFootageError")}
                     error={fieldHasError(errors?.sqFeetMax)}
                     validation={{ min: sqFeetMin }}
-                    onChange={() => {
-                      void trigger("sqFeetMin")
-                      void trigger("sqFeetMax")
-                    }}
                   />
                 </Grid.Cell>
               </Grid.Row>
@@ -419,12 +428,6 @@ const UnitGroupForm = ({
                     errorMessage={t("errors.minGreaterThanMaxFloorError")}
                     error={fieldHasError(errors?.floorMin)}
                     validation={{ max: floorMax || numberFloorsOptions }}
-                    inputProps={{
-                      onChange: () => {
-                        void trigger("floorMin")
-                        void trigger("floorMax")
-                      },
-                    }}
                   />
                 </Grid.Cell>
                 <Grid.Cell>
@@ -438,12 +441,6 @@ const UnitGroupForm = ({
                     errorMessage={t("errors.maxLessThanMinFloorError")}
                     error={fieldHasError(errors?.floorMax)}
                     validation={{ min: floorMin }}
-                    inputProps={{
-                      onChange: () => {
-                        void trigger("floorMin")
-                        void trigger("floorMax")
-                      },
-                    }}
                   />
                 </Grid.Cell>
               </Grid.Row>
@@ -459,12 +456,6 @@ const UnitGroupForm = ({
                     errorMessage={t("errors.minGreaterThanMaxBathroomsError")}
                     error={fieldHasError(errors.bathroomMin)}
                     validation={{ max: bathroomMax }}
-                    inputProps={{
-                      onChange: () => {
-                        void trigger("bathroomMin")
-                        void trigger("bathroomMax")
-                      },
-                    }}
                   />
                 </Grid.Cell>
                 <Grid.Cell>
@@ -478,12 +469,6 @@ const UnitGroupForm = ({
                     errorMessage={t("errors.maxLessThanMinBathroomsError")}
                     error={fieldHasError(errors.bathroomMax)}
                     validation={{ min: bathroomMin }}
-                    inputProps={{
-                      onChange: () => {
-                        void trigger("bathroomMin")
-                        void trigger("bathroomMax")
-                      },
-                    }}
                   />
                 </Grid.Cell>
               </Grid.Row>
