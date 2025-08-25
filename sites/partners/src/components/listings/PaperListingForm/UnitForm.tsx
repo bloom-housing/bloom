@@ -40,8 +40,17 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
   const [amiChartPercentageOptions, setAmiChartPercentageOptions] = useState([])
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, errors, trigger, getValues, setValue, control, reset, clearErrors, watch } =
-    useForm()
+  const {
+    register,
+    formState: { errors },
+    trigger,
+    getValues,
+    setValue,
+    control,
+    reset,
+    clearErrors,
+    watch,
+  } = useForm()
   const jurisdiction: string = watch("jurisdictions.id")
   /**
    * fetch form options

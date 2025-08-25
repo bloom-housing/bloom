@@ -60,7 +60,16 @@ const UnitGroupForm = ({
   }
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, errors, trigger, setValue, control, getValues, reset, watch } = useForm()
+  const {
+    register,
+    formState: { errors },
+    trigger,
+    setValue,
+    control,
+    getValues,
+    reset,
+    watch,
+  } = useForm()
   const jurisdiction: string = watch("jurisdictions.id")
   /**
    * fetch form options
