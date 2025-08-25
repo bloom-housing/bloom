@@ -353,7 +353,6 @@
   "application.review.confirmation.whatHappensNext.fcfs": "### Điều gì xảy ra tiếp theo?\n\n* Những ứng viên đủ điều kiện sẽ được liên hệ trên cơ sở ai đến trước được phục vụ trước cho đến khi các vị trí tuyển dụng được lấp đầy.\n\n* Ưu tiên về nhà ở, nếu có, sẽ ảnh hưởng đến thứ tự đến trước được phục vụ trước.\n\n* Nếu được liên hệ để phỏng vấn, bạn sẽ được yêu cầu điền đơn đăng ký chi tiết hơn và cung cấp các tài liệu hỗ trợ.",
   "application.review.confirmation.whatHappensNext.lottery": "### Điều gì xảy ra tiếp theo?\n\n* Sau khi thời gian đăng ký kết thúc, những người nộp đơn đủ điều kiện sẽ được sắp xếp theo thứ tự dựa trên thứ tự xếp hạng xổ số.\n\n* Ưu tiên về nhà ở, nếu có, sẽ ảnh hưởng đến thứ tự xếp hạng xổ số.\n\n* Nếu được liên hệ để phỏng vấn, bạn sẽ được yêu cầu điền đơn đăng ký chi tiết hơn và cung cấp các tài liệu hỗ trợ.",
   "application.review.confirmation.whatHappensNext.waitlist": "### Điều gì xảy ra tiếp theo?\n\n* Những người đăng ký đủ điều kiện sẽ được đưa vào danh sách chờ trên cơ sở ai đến trước được phục vụ trước cho đến khi các chỗ trong danh sách chờ được lấp đầy.\n\n* Ưu tiên về nhà ở, nếu có, sẽ ảnh hưởng đến thứ tự danh sách chờ.\n\n* Nếu bạn được liên hệ để phỏng vấn, bạn sẽ được yêu cầu điền đơn đăng ký chi tiết hơn và cung cấp các tài liệu hỗ trợ.\n\n* Bạn có thể được liên hệ khi đang trong danh sách chờ để xác nhận rằng bạn muốn tiếp tục tham gia danh sách chờ.",
-  "application.review.confirmation.whatHappensNext": "### Điều gì sẽ xảy ra tiếp theo?\n\n* Sau khi tất cả các đơn đăng ký được nộp, người quản lý khu nhà sẽ bắt đầu xử lý các đơn đăng ký.\n\n* %{reviewOrder}\n\n* Nếu quý vị được liên hệ để phỏng vấn, quý vị sẽ cần phải điền vào đơn đăng ký chi tiết hơn và cung cấp các tài liệu hỗ trợ.",
   "application.review.demographics.ethnicityLabel": "Điều nào dưới đây mô tả đúng nhất về dân tộc của quý vị?",
   "application.review.demographics.ethnicityOptions.hispanicLatino": "Gốc Tây Ban Nha / La-tinh",
   "application.review.demographics.ethnicityOptions.notHispanicLatino": "Không phải người gốc Tây Ban Nha / La tinh",
@@ -1321,7 +1320,6 @@
   "pageTitle.welcomeVietnamese": "Tiếng Việt",
   "professionalPartners.dev.howDoWeListPropertyResp4a1": "Email",
   "progressNav.completed": "hoàn thành",
-  "progressNav.current": "Bước hiện tại:",
   "progressNav.notCompleted": "chưa hoàn thành",
   "progressNav.srHeading": "Tiến trình",
   "region.name": "Địa phương",
@@ -1597,5 +1595,7 @@
   "welcome.whatDoesAffordableMean": "“Bình dân” nghĩa là gì?",
   "welcome.whatHappens": "Điều gì xảy ra sau khi tôi nộp đơn?",
   "whatToExpect.default": "Các ứng viên sẽ được nhân viên đại diện bất động sản liên lạc theo thứ tự xếp hạng cho đến khi hết chỗ trống. Tất cả thông tin quý vị đã cung cấp sẽ được xác nhận và xác nhận tình trạng điều kiện hội đủ của quý vị. Đơn ghi danh của quý vị sẽ bị xóa khỏi danh sách chờ nếu quý vị có bất kỳ tuyên bố sai sự thật nào. Nếu chúng tôi không thể xác nhận lựa chọn ưu tiên nhà ở mà quý vị đã yêu cầu, quý vị sẽ không nhận được lựa chọn ưu tiên đó nhưng sẽ không bị phạt. Nếu đơn ghi danh của quý vị được chọn, hãy chuẩn bị để điền vào mẫu đơn chi tiết hơn và cung cấp các tài liệu hỗ trợ cần thiết.",
-  "whatToExpect.label": "Những gì mong đợi"
+  "whatToExpect.label": "Những gì mong đợi",
+  "whatToExpectAdditionalText.default": "",
+  "whatToExpectAdditionalText.label": "Thông tin bổ sung"
 }

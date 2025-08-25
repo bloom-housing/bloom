@@ -353,7 +353,6 @@
   "application.review.confirmation.whatHappensNext.fcfs": "### 接下来会发生什么？\n\n* 我们将按照先到先得的原则联系符合条件的申请人，直到空缺被填满。\n\n* 如果适用，住房偏好将影响先到先得的顺序。\n\n* 如果有人联系您进行面试，您将被要求填写更详细的申请表并提供支持文件。",
   "application.review.confirmation.whatHappensNext.lottery": "### 接下来会发生什么？\n\n* 申请期结束后，符合条件的申请人将根据抽签排名顺序进行排序。\n\n* 如果适用，住房偏好将影响抽签排名顺序。\n\n* 如果有人联系您进行面试，您将被要求填写更详细的申请表并提供支持文件。",
   "application.review.confirmation.whatHappensNext.waitlist": "### 接下来会发生什么？\n\n* 符合条件的申请人将按照先到先得的原则被列入候补名单，直到候补名单上的名额被填满。\n\n* 住房偏好（如适用）将影响候补名单的顺序。\n\n* 如果有人联系您进行面试，您将被要求填写更详细的申请表并提供支持文件。\n\n* 您可能会在候补名单上被联系以确认您是否希望继续留在候补名单上。",
-  "application.review.confirmation.whatHappensNext": "### 接下來呢?\n\n* 提交所有申請後，房地產經理即會開始受理申請。\n\n* %{reviewOrder}\n\n* 如果您收到面談聯絡，那就必須填寫更詳細的申請並提供佐證文件。",
   "application.review.demographics.ethnicityLabel": "哪項最能形容您的族裔？",
   "application.review.demographics.ethnicityOptions.hispanicLatino": "西班牙語裔／拉美裔",
   "application.review.demographics.ethnicityOptions.notHispanicLatino": "非西班牙語裔／拉美裔",
@@ -1320,7 +1319,6 @@
   "pageTitle.welcomeSpanish": "欢迎",
   "pageTitle.welcomeVietnamese": "越南语",
   "progressNav.completed": "完全的",
-  "progressNav.current": "当前步骤：",
   "progressNav.notCompleted": "没完成",
   "progressNav.srHeading": "进度",
   "region.name": "當地地區",
@@ -1596,5 +1594,7 @@
   "welcome.whatDoesAffordableMean": "「可負擔」是什麽意思？",
   "welcome.whatHappens": "在我提交申請後會發生什麼？",
   "whatToExpect.default": "物業經紀人將按排名次序聯絡申請人，直到沒有空缺為止。您提供的所有資料都會受到查證，以確定您的資格。如果您作出任何不實陳述，則您的申請會從候補名單被刪除。如果我們無法證實您要求的住房優先權，您將不會獲得該優先權，但不會受到其他處罰。若您的申請被選中，請準備填寫一份更加詳盡的申請表，並提供所需的證明文件。",
-  "whatToExpect.label": "预期结果"
+  "whatToExpect.label": "预期结果",
+  "whatToExpectAdditionalText.default": "",
+  "whatToExpectAdditionalText.label": "附加資訊"
 }
