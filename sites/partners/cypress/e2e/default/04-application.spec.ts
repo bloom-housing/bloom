@@ -40,13 +40,13 @@ describe("Application Management Tests", () => {
         now.getMonth() + 1
       )}-${convertToString(now.getDate())}`
 
-      // file name formate: applications-{listingId}-YYYY-MM-DD_HH-mm.zip
+      // file name format: applications-{listingId}-YYYY-MM-DD_HH-mm.zip
       const csvName = `applications-${listingId}-${dateString}_${convertToString(
         now.getHours()
       )}-${convertToString(now.getMinutes())}.zip`
       const downloadFolder = Cypress.config("downloadsFolder")
       const completeZipPath = `${downloadFolder}/${csvName}`
-      cy.readFile(completeZipPath)
+      cy.readFile(completeZipPath).should("exist")
     })
   })
 })
