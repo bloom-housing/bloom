@@ -10,7 +10,7 @@ import {
   t,
 } from "@bloom-housing/ui-components"
 import { useCallback, useEffect, useMemo, useState } from "react"
-import { useFormContext, useWatch } from "react-hook-form"
+import { useForm, useWatch } from "react-hook-form"
 import { DrawerHeader } from "@bloom-housing/ui-seeds/src/overlays/Drawer"
 import {
   useAmiChartList,
@@ -59,9 +59,8 @@ const UnitGroupForm = ({
     action: "",
   }
 
-  const formMethods = useFormContext()
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, errors, trigger, setValue, control, getValues, reset, watch } = formMethods
+  const { register, errors, trigger, setValue, control, getValues, reset, watch } = useForm()
   const jurisdiction: string = watch("jurisdictions.id")
   /**
    * fetch form options
