@@ -29,9 +29,15 @@
 
             <h2 class="mt3">{{t "confirmation.whatHappensNext"}}</h2>
             <ul>
-            <li>{{eligibleText}}</li>
-            <li>{{preferenceText}}</li>
-            <li>{{interviewText}}</li>
+            {{#if eligibleText}}
+              <li>{{eligibleText}}</li>
+            {{/if}}
+            {{#if preferenceText}}
+              <li>{{preferenceText}}</li>
+            {{/if}}
+            {{#if interviewText}}
+              <li>{{interviewText}}</li>
+            {{/if}}
             {{#if contactText}}
               <li>{{contactText}}</li>
             {{/if}}
