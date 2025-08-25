@@ -61,7 +61,7 @@ const UnitGroupForm = ({
 
   const formMethods = useFormContext()
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { watch } = formMethods
+  const { register, errors, trigger, setValue, control, getValues, reset, watch } = formMethods
   const jurisdiction: string = watch("jurisdictions.id")
   /**
    * fetch form options
@@ -69,9 +69,6 @@ const UnitGroupForm = ({
   const { data: amiCharts = [] } = useAmiChartList(jurisdiction)
   const { data: unitPriorities = [] } = useUnitPriorityList()
   const { data: unitTypes = [] } = useUnitTypeList()
-
-  // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, errors, trigger, setValue, control, getValues, reset } = formMethods
 
   // Controls for validating occupancy
   const minOccupancy: number = useWatch({ control, name: "minOccupancy" })

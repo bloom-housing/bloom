@@ -41,7 +41,8 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
 
   const formMethods = useFormContext()
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { watch } = formMethods
+  const { register, errors, trigger, getValues, setValue, control, reset, clearErrors, watch } =
+    formMethods
   const jurisdiction: string = watch("jurisdictions.id")
   /**
    * fetch form options
@@ -49,10 +50,6 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
   const { data: amiCharts = [] } = useAmiChartList(jurisdiction)
   const { data: unitPriorities = [] } = useUnitPriorityList()
   const { data: unitTypes = [] } = useUnitTypeList()
-
-  // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, errors, trigger, getValues, setValue, control, reset, clearErrors } =
-    formMethods
 
   const numberOccupancyOptions = 11
 
