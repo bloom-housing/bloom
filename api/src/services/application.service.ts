@@ -612,6 +612,8 @@ export class ApplicationService {
       },
       include: {
         jurisdictions: true,
+        // support unit group availability logic in email
+        unitGroups: true,
         // multiselect questions and address is needed for geocoding
         listingMultiselectQuestions: {
           include: {
