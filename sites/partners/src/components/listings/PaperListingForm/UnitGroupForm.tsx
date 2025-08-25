@@ -71,7 +71,7 @@ const UnitGroupForm = ({
   const { data: unitTypes = [] } = useUnitTypeList()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, errors, trigger, setValue, control, getValues, reset } = useForm()
+  const { register, errors, trigger, setValue, control, getValues, reset } = formMethods
 
   // Controls for validating occupancy
   const minOccupancy: number = useWatch({ control, name: "minOccupancy" })

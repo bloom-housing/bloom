@@ -51,7 +51,8 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
   const { data: unitTypes = [] } = useUnitTypeList()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, errors, trigger, getValues, setValue, control, reset, clearErrors } = useForm()
+  const { register, errors, trigger, getValues, setValue, control, reset, clearErrors } =
+    formMethods
 
   const numberOccupancyOptions = 11
 
