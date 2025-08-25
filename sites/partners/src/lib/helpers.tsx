@@ -10,11 +10,12 @@ dayjs.extend(advanced)
 dayjs.extend(customParseFormat)
 
 import { TempUnit } from "./listings/formTypes"
-import { FieldError } from "react-hook-form"
+import { FieldError, UseFormMethods } from "react-hook-form"
 import {
   Application,
   IncomePeriodEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import * as styles from "../components/listings/PaperListingForm/ListingForm.module.scss"
 
 export enum YesNoAnswer {
   "Yes" = "yes",
@@ -176,6 +177,7 @@ export function formatIncome(
   }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const isObject = (obj: any, key: string) => {
   return (
     obj[key] &&
@@ -196,6 +198,7 @@ export const isObject = (obj: any, key: string) => {
  *    No empty strings - set to null but still included
  *    Arrays / non-empty strings / Date objects - no changes
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const removeEmptyObjects = (obj: any, nested?: boolean) => {
   Object.keys(obj).forEach((key) => {
     if (isObject(obj, key)) {
@@ -226,6 +229,70 @@ export const removeEmptyObjects = (obj: any, nested?: boolean) => {
 
 export const fieldHasError = (errorObj: FieldError) => {
   return errorObj !== undefined
+}
+
+export const fieldIsRequired = (fieldName: string, requiredFields: string[]) => {
+  return requiredFields?.indexOf(fieldName) >= 0
+}
+
+export const getRequiredSubNote = (fieldName: string, requiredFields: string[]) => {
+  return fieldIsRequired(fieldName, requiredFields) ? t("listings.requiredToPublish") : null
+}
+
+export const getLabel = (
+  fieldName: string,
+  requiredFields: string[],
+  label: string,
+  noStyling?: boolean
+) => {
+  return fieldIsRequired(fieldName, requiredFields) ? addAsterisk(label, noStyling) : label
+}
+
+export const addAsterisk = (label: string, noStyling?: boolean) => {
+  if (noStyling) return `${label} *`
+  return (
+    <span>
+      {label}
+      <span className={styles["asterisk"]}>{` *`}</span>
+    </span>
+  )
+}
+
+export const defaultFieldProps = (
+  fieldKey: string,
+  label: string,
+  requiredFields: string[],
+  errors: UseFormMethods["errors"],
+  clearErrors: (name?: string | string[]) => void,
+  forceRequired?: boolean,
+  noStyling?: boolean
+) => {
+  const hasError = fieldHasError(errors ? errors[fieldKey] : null)
+  return {
+    id: fieldKey,
+    name: fieldKey,
+    label: forceRequired
+      ? addAsterisk(label, noStyling)
+      : getLabel(fieldKey, requiredFields, label, noStyling),
+    error: hasError,
+    errorMessage: fieldMessage(errors ? errors[fieldKey] : null),
+    inputProps: {
+      onChange: () => hasError && clearErrors(fieldKey),
+      "aria-required": forceRequired || fieldIsRequired(fieldKey, requiredFields),
+    },
+  }
+}
+
+export const getAddressErrorMessage = (
+  fieldKey: string,
+  rootKey: string,
+  defaultMessage: string,
+  errors: UseFormMethods["errors"],
+  getValues: UseFormMethods["getValues"]
+) => {
+  const hasError = errors ? errors[rootKey] : null
+  const message = hasError && !getValues(fieldKey) ? t("errors.partialAddress") : defaultMessage
+  return message
 }
 
 export const fieldMessage = (errorObj: FieldError) => {

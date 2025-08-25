@@ -1,4 +1,4 @@
-import { Button, Card, Dialog, Drawer, FieldValue, Grid } from "@bloom-housing/ui-seeds"
+import { Button, Card, Dialog, Drawer, Grid } from "@bloom-housing/ui-seeds"
 import SectionWithGrid from "../../shared/SectionWithGrid"
 import {
   Field,
@@ -21,6 +21,7 @@ import {
 import { arrayToFormOptions, fieldHasError } from "../../../lib/helpers"
 import { TempAmiLevel, TempUnitGroup } from "../../../lib/listings/formTypes"
 import UnitGroupAmiForm from "./UnitGroupAmiForm"
+import styles from "./ListingForm.module.scss"
 
 type UnitGroupFormProps = {
   onSubmit: (unit: TempUnitGroup) => void
@@ -284,34 +285,37 @@ const UnitGroupForm = ({
             <SectionWithGrid heading={t("listings.unit.details")}>
               <fieldset>
                 <Grid.Row columns={1}>
-                  <legend className="mb-5">{t("listings.unit.type")}</legend>
+                  <legend className={`mb-5 ${styles["custom-label"]}`}>
+                    {t("listings.unit.type")}
+                  </legend>
                 </Grid.Row>
                 <Grid.Row columns={2}>
-                  <FieldGroup
-                    type="checkbox"
-                    name="unitTypes"
-                    fields={unitTypesOptions}
-                    register={register}
-                    fieldGroupClassName="grid grid-cols-2"
-                    fieldClassName="m-0"
-                    error={fieldHasError(errors?.unitTypes)}
-                    errorMessage={t("errors.requiredFieldError")}
-                    validation={{ required: true }}
-                    dataTestId="unitTypesCheckBoxes"
-                  />
+                  <Grid.Cell>
+                    <FieldGroup
+                      type="checkbox"
+                      name="unitTypes"
+                      fields={unitTypesOptions}
+                      register={register}
+                      fieldGroupClassName="grid grid-cols-2"
+                      fieldClassName="m-0"
+                      error={fieldHasError(errors?.unitTypes)}
+                      errorMessage={t("errors.requiredFieldError")}
+                      validation={{ required: true }}
+                      dataTestId="unitTypesCheckBoxes"
+                      fieldLabelClassName={styles["label-option"]}
+                    />
+                  </Grid.Cell>
                 </Grid.Row>
               </fieldset>
             </SectionWithGrid>
             <SectionWithGrid heading={t("listings.unit.details")}>
               <Grid.Row columns={3}>
-                <FieldValue label={t("listings.unit.affordableGroupQuantity")}>
+                <Grid.Cell>
                   <Field
                     label={t("listings.unit.affordableGroupQuantity")}
                     id="totalCount"
                     name="totalCount"
-                    placeholder={t("listings.unit.affordableGroupQuantity")}
                     register={register}
-                    readerOnly
                     type="number"
                     error={fieldHasError(errors?.totalCount)}
                     errorMessage={t("errors.totalCountLessThanTotalAvailableError")}
@@ -324,18 +328,16 @@ const UnitGroupForm = ({
                     }}
                     dataTestId="totalCount"
                   />
-                </FieldValue>
+                </Grid.Cell>
               </Grid.Row>
               <Grid.Row columns={3}>
-                <FieldValue label={t("listings.unit.minOccupancy")}>
+                <Grid.Cell>
                   <Select
+                    controlClassName="control"
+                    label={t("listings.unit.minOccupancy")}
                     id="minOccupancy"
                     name="minOccupancy"
-                    label={t("listings.unit.minOccupancy")}
-                    placeholder={t("listings.unit.minOccupancy")}
-                    labelClassName="sr-only"
                     register={register}
-                    controlClassName="control"
                     options={numberOptions(numberOccupancyOptions, 1)}
                     errorMessage={t("errors.minGreaterThanMaxOccupancyError")}
                     error={fieldHasError(errors?.minOccupancy)}
@@ -347,14 +349,12 @@ const UnitGroupForm = ({
                       },
                     }}
                   />
-                </FieldValue>
-                <FieldValue label={t("listings.unit.maxOccupancy")}>
+                </Grid.Cell>
+                <Grid.Cell>
                   <Select
                     id="maxOccupancy"
                     name="maxOccupancy"
                     label={t("listings.unit.maxOccupancy")}
-                    placeholder={t("listings.unit.maxOccupancy")}
-                    labelClassName="sr-only"
                     register={register}
                     controlClassName="control"
                     options={numberOptions(numberOccupancyOptions, 1)}
@@ -368,17 +368,15 @@ const UnitGroupForm = ({
                       },
                     }}
                   />
-                </FieldValue>
+                </Grid.Cell>
               </Grid.Row>
               <Grid.Row columns={3}>
-                <FieldValue label={t("listings.unit.minSquareFootage")}>
+                <Grid.Cell>
                   <Field
                     label={t("listings.unit.minSquareFootage")}
                     id="sqFeetMin"
                     name="sqFeetMin"
-                    placeholder={t("listings.unit.minSquareFootage")}
                     register={register}
-                    readerOnly
                     type="number"
                     errorMessage={t("errors.minGreaterThanMaxFootageError")}
                     error={fieldHasError(errors?.sqFeetMin)}
@@ -388,15 +386,13 @@ const UnitGroupForm = ({
                       void trigger("sqFeetMax")
                     }}
                   />
-                </FieldValue>
-                <FieldValue label={t("listings.unit.maxSquareFootage")}>
+                </Grid.Cell>
+                <Grid.Cell>
                   <Field
                     label={t("listings.unit.maxSquareFootage")}
                     id="sqFeetMax"
                     name="sqFeetMax"
-                    placeholder={t("listings.unit.maxSquareFootage")}
                     register={register}
-                    readerOnly
                     type="number"
                     errorMessage={t("errors.maxLessThanMinFootageError")}
                     error={fieldHasError(errors?.sqFeetMax)}
@@ -406,12 +402,11 @@ const UnitGroupForm = ({
                       void trigger("sqFeetMax")
                     }}
                   />
-                </FieldValue>
+                </Grid.Cell>
               </Grid.Row>
               <Grid.Row columns={3}>
-                <FieldValue label={t("listings.unit.minFloor")}>
+                <Grid.Cell>
                   <Select
-                    labelClassName="sr-only"
                     controlClassName="control"
                     label={t("listings.unit.minFloor")}
                     name="floorMin"
@@ -428,10 +423,9 @@ const UnitGroupForm = ({
                       },
                     }}
                   />
-                </FieldValue>
-                <FieldValue label={t("listings.unit.maxFloor")}>
+                </Grid.Cell>
+                <Grid.Cell>
                   <Select
-                    labelClassName="sr-only"
                     controlClassName="control"
                     label={t("listings.unit.maxFloor")}
                     name="floorMax"
@@ -448,12 +442,11 @@ const UnitGroupForm = ({
                       },
                     }}
                   />
-                </FieldValue>
+                </Grid.Cell>
               </Grid.Row>
               <Grid.Row columns={3}>
-                <FieldValue label={t("listings.unit.minBathrooms")}>
+                <Grid.Cell>
                   <Select
-                    labelClassName="sr-only"
                     controlClassName="control"
                     label={t("listings.unit.minBathrooms")}
                     name="bathroomMin"
@@ -470,10 +463,9 @@ const UnitGroupForm = ({
                       },
                     }}
                   />
-                </FieldValue>
-                <FieldValue label={t("listings.unit.maxBathrooms")}>
+                </Grid.Cell>
+                <Grid.Cell>
                   <Select
-                    labelClassName="sr-only"
                     controlClassName="control"
                     label={t("listings.unit.maxBathrooms")}
                     name="bathroomMax"
@@ -490,16 +482,15 @@ const UnitGroupForm = ({
                       },
                     }}
                   />
-                </FieldValue>
+                </Grid.Cell>
               </Grid.Row>
             </SectionWithGrid>
             <hr className="spacer-section-above spacer-section" />
             <SectionWithGrid heading={t("t.availability")}>
               <Grid.Row columns={3}>
-                <FieldValue label={t("listings.unit.groupVacancies")}>
+                <Grid.Cell>
                   <Field
                     label={t("listings.unit.groupVacancies")}
-                    placeholder={t("listings.unit.groupVacancies")}
                     id="totalAvailable"
                     name="totalAvailable"
                     register={register}
@@ -513,10 +504,9 @@ const UnitGroupForm = ({
                         void trigger("totalAvailable")
                       },
                     }}
-                    readerOnly
                   />
-                </FieldValue>
-                <FieldValue label={t("listings.unit.waitlistStatus")}>
+                </Grid.Cell>
+                <Grid.Cell>
                   <FieldGroup
                     name="openWaitlist"
                     type="radio"
@@ -541,29 +531,33 @@ const UnitGroupForm = ({
                     error={errors?.openWaitlist !== undefined}
                     errorMessage={t("errors.requiredFieldError")}
                     dataTestId="openWaitListQuestion"
+                    groupLabel={t("listings.unit.waitlistStatus")}
+                    fieldLabelClassName={styles["label-option"]}
                   />
-                </FieldValue>
+                </Grid.Cell>
               </Grid.Row>
             </SectionWithGrid>
             <hr className="spacer-section-above spacer-section" />
             <SectionWithGrid heading={t("listings.sections.eligibilityTitle")}>
-              <Grid.Cell className="grid-inset-section">
-                {!!amiLevels.length && (
-                  <div className="mb-5">
-                    <MinimalTable headers={amiTableHeaders} data={amiLevelsTableData} />
-                  </div>
-                )}
-                <Button
-                  onClick={() => {
-                    setAmiSummary((amiLevels.length || 0) + 1)
-                  }}
-                  id="addAmiLevelButton"
-                  type="button"
-                  variant="primary-outlined"
-                >
-                  {t("listings.unit.amiAdd")}
-                </Button>
-              </Grid.Cell>
+              <Grid.Row>
+                <Grid.Cell className="grid-inset-section">
+                  {!!amiLevels.length && (
+                    <div className="mb-5">
+                      <MinimalTable headers={amiTableHeaders} data={amiLevelsTableData} />
+                    </div>
+                  )}
+                  <Button
+                    onClick={() => {
+                      setAmiSummary((amiLevels.length || 0) + 1)
+                    }}
+                    id="addAmiLevelButton"
+                    type="button"
+                    variant="primary-outlined"
+                  >
+                    {t("listings.unit.amiAdd")}
+                  </Button>
+                </Grid.Cell>
+              </Grid.Row>
             </SectionWithGrid>
           </Card.Section>
         </Card>

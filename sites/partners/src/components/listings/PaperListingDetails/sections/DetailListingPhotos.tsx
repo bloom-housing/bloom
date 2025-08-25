@@ -2,7 +2,7 @@ import React, { useContext } from "react"
 import { t, MinimalTable, TableThumbnail } from "@bloom-housing/ui-components"
 import { getImageUrlFromAsset } from "@bloom-housing/shared-helpers"
 import { ListingContext } from "../../ListingContext"
-import { FieldValue } from "@bloom-housing/ui-seeds"
+import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 const photoTableHeaders = {
@@ -35,11 +35,19 @@ const DetailListingPhotos = () => {
 
   return (
     <SectionWithGrid heading={t("listings.sections.photoTitle")} inset bypassGrid>
-      {listing.listingImages.length > 0 ? (
-        <MinimalTable id="listingPhotoTable" headers={photoTableHeaders} data={photoTableData} />
-      ) : (
-        <FieldValue>{t("t.none")}</FieldValue>
-      )}
+      <Grid.Row>
+        <Grid.Cell>
+          {listing.listingImages.length > 0 ? (
+            <MinimalTable
+              id="listingPhotoTable"
+              headers={photoTableHeaders}
+              data={photoTableData}
+            />
+          ) : (
+            <FieldValue>{t("t.none")}</FieldValue>
+          )}
+        </Grid.Cell>
+      </Grid.Row>
     </SectionWithGrid>
   )
 }

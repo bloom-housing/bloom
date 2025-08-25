@@ -155,7 +155,8 @@ export const ListingView = (props: ListingProps) => {
 
   const hmiData: StandardTableData = listing?.unitsSummarized?.hmi?.rows.map((row) => {
     const amiRows = Object.keys(row).reduce((acc, rowContent) => {
-      acc[rowContent] = { content: row[rowContent] }
+      acc[rowContent] = { content: row[rowContent].toString().replace(/-/g, " - ") }
+
       return acc
     }, {})
     return {
@@ -979,7 +980,7 @@ export const ListingView = (props: ListingProps) => {
             )}
             {lotterySection}
             <ExpandableSection
-              content={listing.whatToExpect}
+              content={<Markdown className={"bloom-markdown"}>{listing.whatToExpect}</Markdown>}
               strings={{
                 title: t("whatToExpect.label"),
                 readMore: t("t.readMore"),

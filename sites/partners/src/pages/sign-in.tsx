@@ -257,7 +257,7 @@ const SignIn = () => {
         onSubmit={(email) => onResendConfirmationSubmit(email)}
         loadingMessage={isResendConfirmationLoading && t("t.formSubmitted")}
       />
-      <FormsLayout>{formToRender}</FormsLayout>
+      <FormsLayout title={`Sign In - ${t("nav.siteTitlePartners")}`}>{formToRender}</FormsLayout>
     </>
   )
 }

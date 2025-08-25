@@ -74,6 +74,13 @@ export const formatCommunityType = {
   senior55: 'Seniors 55+',
   senior62: 'Seniors 62+',
   specialNeeds: 'Special Needs',
+  developmentalDisability: 'Developmental Disability',
+  farmworkerHousing: 'Farmworker Housing',
+  housingVoucher: 'HCV/Section 8 Voucher',
+  senior: 'Seniors',
+  seniorVeterans: 'Senior Veteran',
+  veteran: 'Veteran',
+  schoolEmployee: 'School Employee',
 };
 
 @Injectable()
@@ -472,11 +479,33 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
         path: 'yearBuilt',
         label: 'Building Year Built',
       },
-      {
-        path: 'reservedCommunityTypes.name',
-        label: 'Reserved Community Types',
-        format: (val: string): string => formatCommunityType[val] || '',
-      },
+      ...(doAnyJurisdictionHaveFalsyFeatureFlagValue(
+        user.jurisdictions,
+        FeatureFlagEnum.swapCommunityTypeWithPrograms,
+      )
+        ? [
+            {
+              path: 'reservedCommunityTypes.name',
+              label: 'Reserved Community Types',
+              format: (val: string): string => formatCommunityType[val] || val,
+            },
+          ]
+        : [
+            {
+              path: 'listingMultiselectQuestions',
+              label: 'Community Types',
+              format: (val: ListingMultiselectQuestion[]): string => {
+                return val
+                  .filter(
+                    (question) =>
+                      question.multiselectQuestions.applicationSection ===
+                      'programs',
+                  )
+                  .map((question) => question.multiselectQuestions.text)
+                  .join(',');
+              },
+            },
+          ]),
       {
         path: 'listingsBuildingAddress.latitude',
         label: 'Latitude',
@@ -684,20 +713,27 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
               .join(',');
           },
         },
-        {
-          path: 'listingMultiselectQuestions',
-          label: 'Housing Programs',
-          format: (val: ListingMultiselectQuestion[]): string => {
-            return val
-              .filter(
-                (question) =>
-                  question.multiselectQuestions.applicationSection ===
-                  'programs',
-              )
-              .map((question) => question.multiselectQuestions.text)
-              .join(',');
-          },
-        },
+        ...(doAnyJurisdictionHaveFalsyFeatureFlagValue(
+          user.jurisdictions,
+          FeatureFlagEnum.swapCommunityTypeWithPrograms,
+        )
+          ? [
+              {
+                path: 'listingMultiselectQuestions',
+                label: 'Housing Programs',
+                format: (val: ListingMultiselectQuestion[]): string => {
+                  return val
+                    .filter(
+                      (question) =>
+                        question.multiselectQuestions.applicationSection ===
+                        'programs',
+                    )
+                    .map((question) => question.multiselectQuestions.text)
+                    .join(',');
+                },
+              },
+            ]
+          : []),
         {
           path: 'applicationFee',
           label: 'Application Fee',
@@ -873,9 +909,8 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
             },
           },
           {
-            path: 'marketingDate',
-            label: 'Marketing Start Date',
-            format: (val: string): string => formatLocalDate(val, 'YYYY'),
+            path: 'marketingYear',
+            label: 'Marketing Year',
           },
         ],
       );

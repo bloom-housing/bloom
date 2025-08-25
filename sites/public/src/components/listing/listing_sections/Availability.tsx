@@ -132,7 +132,7 @@ export const Availability = ({ listing, jurisdiction }: AvailabilityProps) => {
     enableMarketingStatus,
     listing.marketingType,
     listing.marketingSeason,
-    listing.marketingDate,
+    listing.marketingYear,
     false
   )
   const unitsAvailable =
@@ -160,7 +160,7 @@ export const Availability = ({ listing, jurisdiction }: AvailabilityProps) => {
     additionalContent?: React.ReactNode
   ) => {
     return (
-      <Card.Section divider={"flush"}>
+      <Card.Section divider={"flush"} key={title}>
         <Heading priority={3} size={"md"}>
           {title}
         </Heading>
@@ -236,6 +236,14 @@ export const Availability = ({ listing, jurisdiction }: AvailabilityProps) => {
   }
 
   const sections = getSections()
+
+  // Only show this section when unit groups is on if the listing is under construction
+  if (
+    enableUnitGroups &&
+    enableMarketingStatus &&
+    listing.marketingType === MarketingTypeEnum.marketing
+  )
+    return null
 
   return (
     <>

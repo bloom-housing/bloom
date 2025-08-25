@@ -3,11 +3,13 @@ import { Address } from '../dtos/addresses/address.dto';
 import { ApplicationFlaggedSet } from '../dtos/application-flagged-sets/application-flagged-set.dto';
 import { ApplicationLotteryPosition } from '../dtos/applications/application-lottery-position.dto';
 import { ApplicationMultiselectQuestion } from '../dtos/applications/application-multiselect-question.dto';
+import { FeatureFlagEnum } from '../enums/feature-flags/feature-flags-enum';
 import { MultiselectQuestion } from '../dtos/multiselect-questions/multiselect-question.dto';
 import { UnitType } from '../dtos/unit-types/unit-type.dto';
 import { CsvHeader } from '../types/CsvExportInterface';
 import { formatLocalDate } from '../utilities/format-local-date';
-
+import { User } from 'src/dtos/users/user.dto';
+import { doAnyJurisdictionHaveFeatureFlagSet } from './feature-flag-utilities';
 /**
  *
  * @param maxHouseholdMembers the max number of household members on an application
@@ -22,11 +24,24 @@ export const getExportHeaders = (
   maxHouseholdMembers: number,
   multiSelectQuestions: MultiselectQuestion[],
   timeZone: string,
+  user: User,
   includeDemographics = false,
   forLottery = false,
   dateFormat = 'MM-DD-YYYY hh:mm:ssA z',
-  enableFullTimeStudentQuestion?: boolean,
 ): CsvHeader[] => {
+  const enableAdaOtherOption = doAnyJurisdictionHaveFeatureFlagSet(
+    user.jurisdictions,
+    FeatureFlagEnum.enableAdaOtherOption,
+  );
+  const enableFullTimeStudentQuestion = doAnyJurisdictionHaveFeatureFlagSet(
+    user.jurisdictions,
+    FeatureFlagEnum.enableFullTimeStudentQuestion,
+  );
+  const disableWorkInRegion = doAnyJurisdictionHaveFeatureFlagSet(
+    user.jurisdictions,
+    FeatureFlagEnum.disableWorkInRegion,
+  );
+
   const headers: CsvHeader[] = [
     {
       path: 'id',
@@ -119,6 +134,13 @@ export const getExportHeaders = (
       },
     ],
   );
+
+  if (!disableWorkInRegion) {
+    headers.push({
+      path: 'applicant.workInRegion',
+      label: 'Primary Applicant Work in Region',
+    });
+  }
 
   if (enableFullTimeStudentQuestion) {
     headers.push({
@@ -239,6 +261,14 @@ export const getExportHeaders = (
         path: 'accessibility.hearing',
         label: 'Accessibility Hearing',
       },
+      ...(enableAdaOtherOption
+        ? [
+            {
+              path: 'accessibility.other',
+              label: 'Accessibility Other',
+            },
+          ]
+        : []),
       {
         path: 'householdExpectingChanges',
         label: 'Expecting Household Changes',

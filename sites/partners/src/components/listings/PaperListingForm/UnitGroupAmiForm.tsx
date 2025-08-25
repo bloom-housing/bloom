@@ -1,4 +1,4 @@
-import { Button, Card, Drawer, FieldValue, Grid } from "@bloom-housing/ui-seeds"
+import { Button, Card, Drawer, Grid } from "@bloom-housing/ui-seeds"
 import SectionWithGrid from "../../shared/SectionWithGrid"
 import { Field, FieldGroup, Form, Select, SelectOption, t } from "@bloom-housing/ui-components"
 import { useForm, useWatch } from "react-hook-form"
@@ -10,6 +10,7 @@ import {
   EnumUnitGroupAmiLevelMonthlyRentDeterminationType,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { TempAmiLevel } from "../../../lib/listings/formTypes"
+import styles from "./ListingForm.module.scss"
 
 type UnitGroupAmiFormProps = {
   onSubmit: (amiLevel: TempAmiLevel) => void
@@ -29,6 +30,7 @@ const UnitGroupAmiForm = ({
   const { amiChartsService } = useContext(AuthContext)
 
   const [amiChartPercentageOptions, setAmiChartPercentageOptions] = useState([])
+  const [initialAmiPercentage, setInitialAmiPercentage] = useState(null)
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, control, trigger, clearErrors, setValue, getValues, errors, reset } = useForm()
@@ -55,6 +57,10 @@ const UnitGroupAmiForm = ({
         ).sort(function (a: number, b: number) {
           return a - b
         })
+        let currentLevel
+        if (amiChartPercentageOptions.length === 0) {
+          currentLevel = amiLevels.find((entry) => entry.tempId === currentTempId)
+        }
         setAmiChartPercentageOptions(
           uniquePercentages.map((percentage) => {
             return {
@@ -63,11 +69,15 @@ const UnitGroupAmiForm = ({
             }
           })
         )
+        if (currentLevel) {
+          setInitialAmiPercentage(currentLevel.amiPercentage)
+        }
         return amiChartData
       } catch (e) {
         console.error(e)
       }
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [amiChartsService]
   )
 
@@ -121,7 +131,15 @@ const UnitGroupAmiForm = ({
     if (amiLevel) {
       reset({ ...amiLevel })
     }
-  }, [amiLevels, currentTempId, reset, amiChartPercentageOptions])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  useEffect(() => {
+    if (initialAmiPercentage !== null) {
+      setValue("amiPercentage", initialAmiPercentage)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialAmiPercentage])
 
   return (
     <Form onSubmit={() => false}>
@@ -130,14 +148,13 @@ const UnitGroupAmiForm = ({
           <Card.Section>
             <SectionWithGrid heading={t("listings.unit.amiLevel")}>
               <Grid.Row columns={4}>
-                <FieldValue label={t("listings.unit.amiChart")}>
+                <Grid.Cell>
                   <Select
                     label={t("listings.unit.amiChart")}
                     id="amiChart.id"
                     name="amiChart.id"
                     placeholder={t("t.selectOne")}
                     options={amiChartsOptions}
-                    labelClassName="sr-only"
                     controlClassName="control"
                     register={register}
                     error={fieldHasError(errors?.amiChart)}
@@ -151,14 +168,14 @@ const UnitGroupAmiForm = ({
                       },
                     }}
                   />
-                </FieldValue>
-                <FieldValue label={t("listings.unit.amiPercentage")}>
+                </Grid.Cell>
+                <Grid.Cell>
                   <Select
+                    id={"amiPercentage"}
                     label={t("listings.unit.amiPercentage")}
                     name="amiPercentage"
                     placeholder={t("t.selectOne")}
                     options={amiChartPercentageOptions}
-                    labelClassName="sr-only"
                     controlClassName="control"
                     register={register}
                     disabled={!amiChartID}
@@ -166,8 +183,8 @@ const UnitGroupAmiForm = ({
                     errorMessage={t("errors.requiredFieldError")}
                     validation={{ required: true }}
                   />
-                </FieldValue>
-                <FieldValue label={t("listings.unit.rentType")}>
+                </Grid.Cell>
+                <Grid.Cell>
                   <FieldGroup
                     name="monthlyRentDeterminationType"
                     type="radio"
@@ -176,38 +193,38 @@ const UnitGroupAmiForm = ({
                     error={fieldHasError(errors?.monthlyRentDeterminationType)}
                     errorMessage={t("errors.requiredFieldError")}
                     validation={{ required: true }}
+                    groupLabel={t("listings.unit.rentType")}
+                    fieldLabelClassName={styles["label-option"]}
                   />
-                </FieldValue>
+                </Grid.Cell>
 
                 {rentType &&
                   (rentType === EnumUnitGroupAmiLevelMonthlyRentDeterminationType.flatRent ? (
-                    <FieldValue label={t("listings.unit.monthlyRent")}>
+                    <Grid.Cell>
                       <Field
                         label={t("listings.unit.monthlyRent")}
                         name="flatRentValue"
                         id="flatRentValue"
-                        readerOnly
                         register={register}
                         type="number"
                         error={errors?.flatRentValue}
                         errorMessage={t("errors.requiredFieldError")}
                         validation={{ required: true }}
                       />
-                    </FieldValue>
+                    </Grid.Cell>
                   ) : (
-                    <FieldValue label={t("listings.unit.percentage")}>
+                    <Grid.Cell>
                       <Field
                         label={t("listings.unit.percentage")}
                         name="percentageOfIncomeValue"
                         id="percentageOfIncomeValue"
-                        readerOnly
                         register={register}
                         type="number"
                         error={errors?.percentageOfIncomeValue}
                         errorMessage={t("errors.requiredFieldError")}
                         validation={{ required: true }}
                       />
-                    </FieldValue>
+                    </Grid.Cell>
                   ))}
               </Grid.Row>
             </SectionWithGrid>

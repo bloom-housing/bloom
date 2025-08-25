@@ -12,6 +12,7 @@ import {
 } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import {
+  FeatureFlagEnum,
   HouseholdMember,
   HouseholdMemberRelationship,
   HouseholdMemberUpdate,
@@ -31,6 +32,7 @@ import { AppSubmissionContext } from "../../../lib/applications/AppSubmissionCon
 import { UserStatus } from "../../../lib/constants"
 import ApplicationFormLayout from "../../../layouts/application-form"
 import styles from "../../../layouts/application-form.module.scss"
+import { isFeatureFlagOn } from "../../../lib/helpers"
 
 export class Member implements HouseholdMemberUpdate {
   constructor(orderId: number) {
@@ -63,6 +65,7 @@ export class Member implements HouseholdMemberUpdate {
   }
   sameAddress?: YesNoEnum
   relationship?: HouseholdMemberRelationship
+  fullTimeStudent?: YesNoEnum
 }
 
 const ApplicationMember = () => {
@@ -71,6 +74,11 @@ const ApplicationMember = () => {
   const { conductor, application, listing } = useContext(AppSubmissionContext)
   const router = useRouter()
   const currentPageSection = 2
+
+  const enableFullTimeStudentQuestion = isFeatureFlagOn(
+    conductor.config,
+    FeatureFlagEnum.enableFullTimeStudentQuestion
+  )
 
   if (router.query?.memberId) {
     memberId = parseInt(router.query?.memberId.toString())
@@ -129,6 +137,21 @@ const ApplicationMember = () => {
       label: t("t.no"),
       value: "no",
       defaultChecked: member?.sameAddress === "no",
+    },
+  ]
+
+  const fullTimeStudentOptions = [
+    {
+      id: "fullTimeStudentYes",
+      label: t("t.yes"),
+      value: "yes",
+      defaultChecked: member?.fullTimeStudent === "yes",
+    },
+    {
+      id: "fullTimeStudentNo",
+      label: t("t.no"),
+      value: "no",
+      defaultChecked: member?.fullTimeStudent === "no",
     },
   ]
 
@@ -340,7 +363,10 @@ const ApplicationMember = () => {
             )}
           </CardSection>
 
-          <CardSection divider={"inset"} className={"border-none"}>
+          <CardSection
+            divider={"inset"}
+            className={enableFullTimeStudentQuestion ? "" : "border-none"}
+          >
             <div className={"field " + (errors.relationship ? "error" : "")}>
               <label className="text__caps-spaced" htmlFor="relationship">
                 {t("application.household.member.whatIsTheirRelationship")}
@@ -367,6 +393,28 @@ const ApplicationMember = () => {
               )}
             </div>
           </CardSection>
+
+          {enableFullTimeStudentQuestion && (
+            <CardSection divider={"inset"} className={"border-none"}>
+              <fieldset>
+                <legend className="text__caps-spaced">
+                  {t("application.household.member.fullTimeStudent")}
+                </legend>
+                <FieldGroup
+                  name="fullTimeStudent"
+                  fieldGroupClassName="grid grid-cols-1"
+                  fieldClassName="ml-0"
+                  type="radio"
+                  register={register}
+                  validation={{ required: true }}
+                  error={errors.fullTimeStudent}
+                  errorMessage={t("errors.selectOption")}
+                  fields={fullTimeStudentOptions}
+                  dataTestId={"app-household-member-full-time-student"}
+                />
+              </fieldset>
+            </CardSection>
+          )}
 
           <CardSection
             divider={"flush"}

@@ -712,4 +712,47 @@ describe("<Apply>", () => {
 
     expect(screen.queryByText("Apply Online")).not.toBeInTheDocument()
   })
+
+  it("shows mailing address with no online or paper app", () => {
+    const addressCity = "Warrensville Heights"
+    const addressState = "Ohio"
+    const addressStreet = "1598 Peaceful Lane"
+    const addressZipCode = "44128"
+    const { getByText } = render(
+      <Apply
+        listing={{
+          ...listing,
+          applicationDueDate: dayjs(new Date()).add(5, "days").toDate(),
+          applicationMethods: [
+            {
+              id: "id",
+              createdAt: new Date(),
+              updatedAt: new Date(),
+              type: ApplicationMethodsTypeEnum.FileDownload,
+              acceptsPostmarkedApplications: null,
+              externalReference: null,
+              paperApplications: [],
+            },
+          ],
+          listingsApplicationMailingAddress: {
+            id: "mailing_adress_id",
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            city: addressCity,
+            state: addressState,
+            street: addressStreet,
+            zipCode: addressZipCode,
+          },
+        }}
+        preview={false}
+        setShowDownloadModal={() => null}
+      />
+    )
+    expect(getByText("How to Apply")).toBeDefined()
+    expect(getByText("Send Application by US Mail")).toBeDefined()
+    expect(getByText(addressCity, { exact: false })).toBeDefined()
+    expect(getByText(addressState, { exact: false })).toBeDefined()
+    expect(getByText(addressStreet, { exact: false })).toBeDefined()
+    expect(getByText(addressZipCode, { exact: false })).toBeDefined()
+  })
 })

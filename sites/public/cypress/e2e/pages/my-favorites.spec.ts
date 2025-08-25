@@ -1,5 +1,5 @@
 describe("My favorites page", function () {
-  // TODO: reenable once we have Seeds pages in production & CI builds
+  // Doorway does not have the favorites feature enabled
   it.skip("renders the my favorites page", function () {
     cy.visit("/sign-in")
     cy.signIn()

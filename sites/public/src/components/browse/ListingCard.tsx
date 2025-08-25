@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useMemo } from "react"
 import {
   FeatureFlagEnum,
   Jurisdiction,
@@ -36,6 +36,9 @@ export const ListingCard = ({
   setFavorited,
   showHomeType,
 }: ListingCardProps) => {
+  const enableUnitGroups = isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableUnitGroups)
+  const enableMarketingStatus = isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableMarketingStatus)
+
   const imageUrl = imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize))[0]
   const listingTags = getListingTags(
     listing,
@@ -59,6 +62,55 @@ export const ListingCard = ({
       </FavoriteButton>
     )
   }
+
+  const unitsPreviewTable = useMemo(() => {
+    const hasData = listing.unitGroups.length || listing.units.length
+
+    if (!hasData) {
+      return
+    }
+
+    if (enableUnitGroups && listing.unitGroups?.length > 0) {
+      return (
+        <StackedTable
+          headers={{
+            unitType: "t.unitType",
+            rent: "t.rent",
+            availability: "t.availability",
+          }}
+          stackedData={getListingStackedGroupTableData(
+            listing.unitGroupsSummarized,
+            listing.marketingType === MarketingTypeEnum.comingSoon
+          )}
+        />
+      )
+    } else {
+      return (
+        <StackedTable
+          headers={{
+            unitType: "t.unitType",
+            minimumIncome: "t.minimumIncome",
+            rent: "t.rent",
+          }}
+          stackedData={getListingStackedTableData(listing.unitsSummarized)}
+        />
+      )
+    }
+  }, [
+    listing.units,
+    listing.unitGroups,
+    listing.marketingType,
+    listing.unitGroupsSummarized,
+    listing.unitsSummarized,
+    enableUnitGroups,
+  ])
+
+  // Only show the status when unit groups is on if the listing is under construction
+  const showStatusMessage =
+    (!!status?.content && !enableUnitGroups) ||
+    (enableUnitGroups &&
+      enableMarketingStatus &&
+      listing.marketingType === MarketingTypeEnum.comingSoon)
 
   return (
     <li className={styles["list-item"]}>
@@ -93,36 +145,14 @@ export const ListingCard = ({
                   })}
                 </div>
               )}
-              {!!status?.content && (
+              {showStatusMessage && (
                 <div className={"seeds-m-bs-3"}>
                   {getListingStatusMessage(listing, jurisdiction, null, true)}
                 </div>
               )}
               <div className={`${styles["unit-table"]} styled-stacked-table`}>
-                {listing.unitGroups?.length > 0 ? (
-                  <StackedTable
-                    headers={{
-                      unitType: "t.unitType",
-                      rent: "t.rent",
-                      availability: "t.availability",
-                    }}
-                    stackedData={getListingStackedGroupTableData(
-                      listing.unitGroupsSummarized,
-                      listing.marketingType === MarketingTypeEnum.comingSoon
-                    )}
-                  />
-                ) : (
-                  <StackedTable
-                    headers={{
-                      unitType: "t.unitType",
-                      minimumIncome: "t.minimumIncome",
-                      rent: "t.rent",
-                    }}
-                    stackedData={getListingStackedTableData(listing.unitsSummarized)}
-                  />
-                )}
+                {unitsPreviewTable}
               </div>
-
               {actions.length > 0 && (
                 <div className={styles["action-container"]}>{actions.map((action) => action)}</div>
               )}

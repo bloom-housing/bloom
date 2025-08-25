@@ -40,7 +40,8 @@ function compareStrings(a, b, node, nextNode, isInverted) {
 
 export function getColDefs(
   maxHouseholdSize: number,
-  enableFullTimeStudentQuestion?: boolean
+  enableFullTimeStudentQuestion?: boolean,
+  disableWorkInRegion?: boolean
 ): ColDef[] {
   const defs: ColDef[] = [
     {
@@ -287,6 +288,21 @@ export function getColDefs(
     },
   ]
 
+  if (!disableWorkInRegion) {
+    defs.push({
+      headerName: t("application.details.workInRegion"),
+      field: "applicant.workInRegion",
+      sortable: false,
+      filter: false,
+      width: 110,
+      minWidth: 50,
+      valueFormatter: ({ value }) => {
+        if (!value) return ""
+        return t(`t.${value}`)
+      },
+    })
+  }
+
   if (enableFullTimeStudentQuestion) {
     defs.push({
       headerName: t("application.details.fullTimeStudent"),
@@ -297,7 +313,7 @@ export function getColDefs(
       minWidth: 50,
       valueFormatter: ({ value }) => {
         if (!value) return ""
-        return formatYesNoLabel(value)
+        return t(`t.${value}`)
       },
     })
   }
@@ -566,7 +582,7 @@ export function getColDefs(
         minWidth: 50,
         valueFormatter: ({ value }) => {
           if (value?.length < householdIndex) return ""
-          return formatYesNoLabel(value[i]?.fullTimeStudent)
+          return t(`t.${value[i]?.fullTimeStudent}`)
         },
       })
     }

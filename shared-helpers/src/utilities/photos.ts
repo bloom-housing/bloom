@@ -37,7 +37,8 @@ export const getImageUrlFromAsset = (
   asset: AssetCreate,
   size = 400,
   cloudinaryCloudName = process.env.CLOUDINARY_CLOUD_NAME || "exygy"
-): string | null => {
+): string => {
+  // ): string | null => {
   const fileId = asset.fileId
 
   // if fileId is a url, just return it
@@ -74,23 +75,26 @@ export const getImageUrlFromAsset = (
 //   }
 // }
 
-export const imageUrlFromListing = (listing: Listing, size = 400): (string | null)[] => {
-  const imageAssets =
-    listing?.listingImages?.length && listing.listingImages[0].assets
-      ? listing.listingImages
-          .sort((imageA, imageB) => (imageA.ordinal ?? 10) - (imageB?.ordinal ?? 10))
-          .map((imageObj) => imageObj.assets)
-      : listing?.assets
+export const imageUrlFromListing = (listing: Listing, size = 400): string[] => {
+  let imageAssets: Asset[] = []
+
+  if (listing?.listingImages?.length && listing.listingImages[0].assets) {
+    imageAssets = listing.listingImages
+      .sort((imageA, imageB) => (imageA.ordinal ?? 10) - (imageB?.ordinal ?? 10))
+      .map((imageObj) => imageObj.assets)
+  } else if (Array.isArray(listing?.assets)) {
+    imageAssets = listing.assets
+  }
 
   const imageUrls = imageAssets
     ?.filter(
       (asset: Asset) => asset.label === CLOUDINARY_BUILDING_LABEL || asset.label === "building"
     )
     ?.map((asset: Asset) => {
-      return asset ? getImageUrlFromAsset(asset, size) : null
+      return asset ? getImageUrlFromAsset(asset, size) : ""
     })
 
-  return imageUrls?.length > 0 ? imageUrls : ["/images/listing-fallback.png"]
+  return imageUrls?.length > 0 ? imageUrls : [IMAGE_FALLBACK_URL]
   // we can omit this by searching for both "cloudinaryBuilding" and "building" above
   //return imageAssets?.find((asset: Asset) => asset.label == "building")?.fileId
 }

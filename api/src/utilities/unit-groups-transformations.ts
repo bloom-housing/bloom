@@ -7,6 +7,7 @@ import { MinMax } from '../dtos/shared/min-max.dto';
 import { MonthlyRentDeterminationTypeEnum } from '@prisma/client';
 import { AmiChartItem } from '../dtos/units/ami-chart-item.dto';
 import Listing from '../dtos/listings/listing.dto';
+import { usd } from './unit-utilities';
 
 // Helper function to set min and max values
 export const setMinMax = (range: MinMax, value: number): MinMax => {
@@ -29,12 +30,26 @@ export const getUnitGroupSummary = (
 ): UnitGroupSummary[] => {
   const summary: UnitGroupSummary[] = [];
 
-  //Sort unit groups by the lowest possible number of bedrooms in unit types (lowest to highest)
-  const sortedUnitGroups = unitGroups?.sort(
-    (a, b) =>
+  const sortedUnitGroups = unitGroups?.sort((a, b) => {
+    const unitTypeComparison =
       a.unitTypes.sort((c, d) => c.numBedrooms - d.numBedrooms)[0].numBedrooms -
-      b.unitTypes.sort((e, f) => e.numBedrooms - f.numBedrooms)[0].numBedrooms,
-  );
+      b.unitTypes.sort((e, f) => e.numBedrooms - f.numBedrooms)[0].numBedrooms;
+
+    if (unitTypeComparison === 0) {
+      return (
+        a.unitGroupAmiLevels.reduce(
+          (acc, curr) => (acc > curr.amiPercentage ? acc : curr.amiPercentage),
+          -Infinity,
+        ) -
+        b.unitGroupAmiLevels.reduce(
+          (acc, curr) => (acc > curr.amiPercentage ? acc : curr.amiPercentage),
+          -Infinity,
+        )
+      );
+    }
+
+    return unitTypeComparison;
+  });
 
   sortedUnitGroups?.forEach((group) => {
     let rentAsPercentIncomeRange: MinMax,
@@ -86,9 +101,11 @@ export const getUnitGroupSummary = (
   return summary;
 };
 
-export const getMaxIncomeAmiChartItems = (
+export type MinMaxIncomeAmiChartItem = AmiChartItem & { incomeString?: string };
+
+export const getMinMaxIncomeAmiChartItems = (
   amiCharts: AmiChart[] = [],
-): AmiChartItem[] => {
+): MinMaxIncomeAmiChartItem[] => {
   if (!amiCharts || amiCharts.length === 0) {
     return [];
   }
@@ -97,18 +114,35 @@ export const getMaxIncomeAmiChartItems = (
     return amiCharts[0]?.items || [];
   }
 
-  const allItems = amiCharts.flatMap((chart) => chart?.items || []);
+  const allItems: MinMaxIncomeAmiChartItem[] = amiCharts.flatMap(
+    (chart) => chart?.items || [],
+  );
 
-  return allItems.reduce((result: AmiChartItem[], currentItem) => {
+  return allItems.reduce((result: MinMaxIncomeAmiChartItem[], currentItem) => {
     const existingItemIndex = result.findIndex(
       (item) =>
         item.percentOfAmi === currentItem.percentOfAmi &&
         item.householdSize === currentItem.householdSize,
     );
 
+    const income = currentItem.income;
+
     if (existingItemIndex === -1) {
+      currentItem.incomeString = usd.format(income);
       result.push(currentItem);
-    } else if (currentItem.income > result[existingItemIndex].income) {
+    } else {
+      const newIncome = result[existingItemIndex].income;
+
+      if (income > newIncome) {
+        currentItem.incomeString = `${usd.format(newIncome)} - ${usd.format(
+          income,
+        )}`;
+      }
+      if (income < newIncome) {
+        currentItem.incomeString = `${usd.format(income)} - ${usd.format(
+          newIncome,
+        )}`;
+      }
       result[existingItemIndex] = currentItem;
     }
 
@@ -127,41 +161,39 @@ export const getHouseholdMaxIncomeSummary = (
   };
   const rows = [];
 
-  if (!amiCharts || (amiCharts && amiCharts.length === 0)) {
-    return {
-      columns,
-      rows,
-    };
-  }
-
-  const amiChartItems = getMaxIncomeAmiChartItems(amiCharts);
-
   let occupancyRange: MinMax;
   const amiPercentages = new Set<number>();
-  // aggregate household sizes across all groups based off of the occupancy range
+
   unitGroups.forEach((group) => {
     if (occupancyRange === undefined) {
       occupancyRange = {
-        min: group.minOccupancy || 1,
-        max: group.maxOccupancy || 1,
+        min: group.minOccupancy,
+        max: group.maxOccupancy,
       };
     } else {
-      occupancyRange.min = Math.min(
-        occupancyRange.min,
-        group.minOccupancy || 1,
-      );
-      occupancyRange.max = Math.max(
-        occupancyRange.max,
-        group.maxOccupancy || 1,
-      );
+      occupancyRange.min = Math.min(occupancyRange.min, group.minOccupancy);
+      occupancyRange.max = Math.max(occupancyRange.max, group.maxOccupancy);
     }
-
     group.unitGroupAmiLevels.forEach((level) => {
       if (level.amiPercentage) {
         amiPercentages.add(level.amiPercentage);
       }
     });
   });
+
+  if (
+    !amiCharts ||
+    (amiCharts && amiCharts.length === 0) ||
+    !occupancyRange ||
+    (occupancyRange.min === null && occupancyRange.max === null)
+  ) {
+    return {
+      columns,
+      rows,
+    };
+  }
+
+  const amiChartItems = getMinMaxIncomeAmiChartItems(amiCharts);
 
   Array.from(amiPercentages)
     .filter((percentage) => percentage !== null)
@@ -176,15 +208,16 @@ export const getHouseholdMaxIncomeSummary = (
   // for the occupancy range, get the max income per percentage of AMI across the AMI charts
   amiChartItems.forEach((item) => {
     if (
-      item.householdSize >= (occupancyRange?.min || 1) &&
-      item.householdSize <= (occupancyRange?.max || 1) &&
+      item.householdSize >= (occupancyRange?.min || item.householdSize) &&
+      item.householdSize <= (occupancyRange?.max || item.householdSize) &&
       amiPercentages.has(item.percentOfAmi)
     ) {
       if (hmiMap[item.householdSize] === undefined) {
         hmiMap[item.householdSize] = {};
       }
 
-      hmiMap[item.householdSize][item.percentOfAmi] = item.income;
+      hmiMap[item.householdSize][item.percentOfAmi] =
+        item.incomeString ?? usd.format(item.income);
     }
   });
 

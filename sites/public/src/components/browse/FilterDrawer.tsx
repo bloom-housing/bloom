@@ -6,6 +6,8 @@ import {
   RegionEnum,
   HomeTypeEnum,
   ListingFilterKeys,
+  MultiselectQuestion,
+  FeatureFlagEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import styles from "./FilterDrawer.module.scss"
 import {
@@ -14,6 +16,7 @@ import {
   FilterData,
   getAvailabilityValues,
   RentSection,
+  SearchSection,
   unitTypeMapping,
   unitTypesSorted,
 } from "./FilterDrawerHelpers"
@@ -24,11 +27,29 @@ export interface FilterDrawerProps {
   isOpen: boolean
   onClose: () => void
   onSubmit: (data: FilterData) => void
+  multiselectData: MultiselectQuestion[]
+  activeFeatureFlags?: FeatureFlagEnum[]
 }
 
 const FilterDrawer = (props: FilterDrawerProps) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, handleSubmit, getValues, setValue } = useForm()
+  const {
+    register,
+    handleSubmit,
+    getValues,
+    setValue,
+    setError,
+    clearErrors,
+    formState: { errors },
+  } = useForm({ mode: "onBlur" })
+
+  const enableUnitGroups = props.activeFeatureFlags?.some(
+    (entry) => entry === FeatureFlagEnum.enableUnitGroups
+  )
+
+  const availabilityLabels = getAvailabilityValues(enableUnitGroups).map((key) =>
+    t(`listings.availability.${key}`)
+  )
 
   return (
     <Drawer
@@ -57,8 +78,8 @@ const FilterDrawer = (props: FilterDrawerProps) => {
             groupLabel={t("t.availability")}
             fields={buildDefaultFilterFields(
               ListingFilterKeys.availabilities,
-              "listings.availability",
-              getAvailabilityValues(),
+              availabilityLabels,
+              getAvailabilityValues(false),
               props.filterState
             )}
             register={register}
@@ -88,6 +109,9 @@ const FilterDrawer = (props: FilterDrawerProps) => {
             getValues={getValues}
             setValue={setValue}
             filterState={props.filterState}
+            setError={setError}
+            clearErrors={clearErrors}
+            errors={errors}
           />
           <CheckboxGroup
             groupLabel={t("t.region")}
@@ -110,6 +134,19 @@ const FilterDrawer = (props: FilterDrawerProps) => {
             )}
             register={register}
           />
+          <SearchSection register={register} nameState={props.filterState?.name} />
+          {props.multiselectData?.length > 0 && (
+            <CheckboxGroup
+              groupLabel={t("t.community")}
+              fields={buildDefaultFilterFields(
+                ListingFilterKeys.multiselectQuestions,
+                props.multiselectData?.map((multi) => multi.text),
+                props.multiselectData?.map((multi) => multi.id),
+                props.filterState
+              )}
+              register={register}
+            />
+          )}
         </Form>
       </Drawer.Content>
       <Drawer.Footer>

@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useContext, useEffect } from "react"
 import { useRouter } from "next/router"
 import dayjs from "dayjs"
+import { useEditor } from "@tiptap/react"
 import { t, Form, AlertBox, LoadingOverlay, LatitudeLongitude } from "@bloom-housing/ui-components"
 import { Button, Icon, Tabs } from "@bloom-housing/ui-seeds"
 import ChevronLeftIcon from "@heroicons/react/20/solid/ChevronLeftIcon"
@@ -27,6 +28,7 @@ import {
   formDefaults,
 } from "../../../lib/listings/formTypes"
 import ListingDataPipeline from "../../../lib/listings/ListingDataPipeline"
+import { EditorExtensions } from "../../shared/TextEditor"
 import ListingFormActions, { ListingFormActionsType } from "../ListingFormActions"
 import AdditionalDetails from "./sections/AdditionalDetails"
 import AdditionalEligibility from "./sections/AdditionalEligibility"
@@ -44,7 +46,7 @@ import LotteryResults from "./sections/LotteryResults"
 import ApplicationTypes from "./sections/ApplicationTypes"
 import CommunityType from "./sections/CommunityType"
 import BuildingSelectionCriteria from "./sections/BuildingSelectionCriteria"
-import { getReadableErrorMessage } from "../PaperListingDetails/sections/helpers"
+import { cleanRichText, getReadableErrorMessage } from "../PaperListingDetails/sections/helpers"
 import { StatusBar } from "../../../components/shared/StatusBar"
 import { getListingStatusTag } from "../helpers"
 import RequestChangesDialog from "./dialogs/RequestChangesDialog"
@@ -56,6 +58,11 @@ import SaveBeforeExitDialog from "./dialogs/SaveBeforeExitDialog"
 import ListingVerification from "./sections/ListingVerification"
 import NeighborhoodAmenities from "./sections/NeighborhoodAmenities"
 import PreferencesAndPrograms from "./sections/PreferencesAndPrograms"
+import * as styles from "./ListingForm.module.scss"
+
+const extensions = EditorExtensions
+
+const CHARACTER_LIMIT = 1000
 
 type ListingFormProps = {
   listing?: FormListing
@@ -133,6 +140,7 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
     listing?.customMapPin || false
   )
   const [activeFeatureFlags, setActiveFeatureFlags] = useState<FeatureFlag[]>(null)
+  const [requiredFields, setRequiredFields] = useState<string[]>([])
 
   const setLatitudeLongitude = (latlong: LatitudeLongitude) => {
     if (!loading) {
@@ -147,6 +155,12 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
   const [listingIsAlreadyLiveDialog, setListingIsAlreadyLiveDialog] = useState(false)
   const [submitForApprovalDialog, setSubmitForApprovalDialog] = useState(false)
   const [requestChangesDialog, setRequestChangesDialog] = useState(false)
+
+  const whatToExpectEditor = useEditor({
+    extensions,
+    content: !listing ? t("whatToExpect.default") : listing?.whatToExpect,
+    immediatelyRender: false,
+  })
 
   const enableUnitGroups =
     activeFeatureFlags?.find((flag) => flag.name === FeatureFlagEnum.enableUnitGroups)?.active ||
@@ -221,6 +235,12 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
       return featureFlags
     }, [])
     setActiveFeatureFlags(newFeatureFlags)
+    const selectedJurisdictionObj = profile?.jurisdictions?.find(
+      (juris) => selectedJurisdiction === juris.id
+    )
+    if (profile?.jurisdictions.length === 1)
+      setRequiredFields(profile?.jurisdictions[0].requiredListingFields || [])
+    else setRequiredFields(selectedJurisdictionObj?.requiredListingFields || [])
   }, [profile?.jurisdictions, selectedJurisdiction])
 
   const triggerSubmitWithStatus: SubmitFunction = (action, status, newData) => {
@@ -246,6 +266,14 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
           setLoading(true)
           clearErrors()
           const successful = await formMethods.trigger()
+
+          if (whatToExpectEditor?.storage.characterCount.characters() > CHARACTER_LIMIT) {
+            setLoading(false)
+            setAlert("form")
+            return
+          }
+
+          formData.whatToExpect = cleanRichText(whatToExpectEditor?.getHTML())
 
           if (!enableSection8) {
             formData.listingSection8Acceptance = YesNoEnum.no
@@ -353,6 +381,7 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
       profile,
       addToast,
       enableUnitGroups,
+      whatToExpectEditor,
     ]
   )
 
@@ -363,7 +392,7 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
           <StatusBar>{getListingStatusTag(listing?.status)}</StatusBar>
 
           <FormProvider {...formMethods}>
-            <section className="bg-primary-lighter py-5">
+            <section className={`bg-primary-lighter py-5 ${styles["form-overrides"]}`}>
               <div className="max-w-screen-xl px-5 mx-auto">
                 {alert && (
                   <AlertBox className="mb-5" onClose={() => setAlert(null)} closeable type="alert">
@@ -380,30 +409,38 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
                         onSelect={(index) => setTabIndex(index)}
                       >
                         <Tabs.TabList>
-                          <Tabs.Tab>Listing Details</Tabs.Tab>
-                          <Tabs.Tab>Application Process</Tabs.Tab>
+                          <Tabs.Tab>{t("listings.details")}</Tabs.Tab>
+                          <Tabs.Tab>{t("listings.applicationProcess")}</Tabs.Tab>
                         </Tabs.TabList>
                         <Tabs.TabPanel>
-                          <ListingIntro jurisdictions={profile?.jurisdictions || []} />
-                          <ListingPhotos />
-                          <BuildingDetails
-                            listing={listing}
-                            setLatLong={setLatitudeLongitude}
-                            latLong={latLong}
-                            customMapPositionChosen={customMapPositionChosen}
-                            setCustomMapPositionChosen={setCustomMapPositionChosen}
+                          <p className="field-label seeds-m-be-content">
+                            {t("listings.requiredToPublishAsterisk")}
+                          </p>
+                          <ListingIntro
+                            jurisdictions={profile?.jurisdictions || []}
+                            requiredFields={requiredFields}
                           />
-                          <CommunityType listing={listing} />
+                          <ListingPhotos requiredFields={requiredFields} />
+                          <BuildingDetails
+                            customMapPositionChosen={customMapPositionChosen}
+                            latLong={latLong}
+                            listing={listing}
+                            requiredFields={requiredFields}
+                            setCustomMapPositionChosen={setCustomMapPositionChosen}
+                            setLatLong={setLatitudeLongitude}
+                          />
+                          <CommunityType listing={listing} requiredFields={requiredFields} />
                           <Units
-                            units={units}
-                            unitGroups={unitGroups}
-                            setUnits={setUnits}
-                            setUnitGroups={setUnitGroups}
                             disableUnitsAccordion={listing?.disableUnitsAccordion}
                             disableListingAvailability={
                               isListingActive && !profile.userRoles.isAdmin
                             }
                             featureFlags={activeFeatureFlags}
+                            requiredFields={requiredFields}
+                            setUnitGroups={setUnitGroups}
+                            setUnits={setUnits}
+                            unitGroups={unitGroups}
+                            units={units}
                           />
                           <PreferencesAndPrograms
                             listing={listing}
@@ -412,12 +449,21 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
                             programs={programs || []}
                             setPrograms={setPrograms}
                           />
-                          <AdditionalFees existingUtilities={listing?.listingUtilities} />
-                          <BuildingFeatures existingFeatures={listing?.listingFeatures} />
+                          <AdditionalFees
+                            existingUtilities={listing?.listingUtilities}
+                            requiredFields={requiredFields}
+                          />
+                          <BuildingFeatures
+                            existingFeatures={listing?.listingFeatures}
+                            requiredFields={requiredFields}
+                          />
                           <NeighborhoodAmenities />
-                          <AdditionalEligibility defaultText={listing?.rentalAssistance} />
+                          <AdditionalEligibility
+                            defaultText={listing?.rentalAssistance}
+                            requiredFields={requiredFields}
+                          />
                           <BuildingSelectionCriteria />
-                          <AdditionalDetails />
+                          <AdditionalDetails requiredFields={requiredFields} />
                           <ListingVerification />
                           <div className="text-right -mr-8 -mt-8 relative" style={{ top: "7rem" }}>
                             <Button
@@ -434,24 +480,29 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
                                 setTimeout(() => window.scroll({ top: 0, behavior: "smooth" }))
                               }}
                             >
-                              Application Process
+                              {t("listings.applicationProcess")}
                             </Button>
                           </div>
                         </Tabs.TabPanel>
                         <Tabs.TabPanel>
+                          <p className="field-label seeds-m-be-content">
+                            {t("listings.requiredToPublishAsterisk")}
+                          </p>
                           <RankingsAndResults
                             listing={listing}
                             disableDueDates={isListingActive && !profile.userRoles.isAdmin}
                             isAdmin={profile?.userRoles.isAdmin}
+                            whatToExpectEditor={whatToExpectEditor}
+                            requiredFields={requiredFields}
                           />
-                          <LeasingAgent />
-                          <ApplicationTypes listing={listing} />
-                          <ApplicationAddress listing={listing} />
+                          <LeasingAgent requiredFields={requiredFields} />
+                          <ApplicationTypes listing={listing} requiredFields={requiredFields} />
+                          <ApplicationAddress listing={listing} requiredFields={requiredFields} />
                           <ApplicationDates
                             listing={listing}
                             openHouseEvents={openHouseEvents}
                             setOpenHouseEvents={setOpenHouseEvents}
-                            disableDueDate={isListingActive && !profile.userRoles.isAdmin}
+                            requiredFields={requiredFields}
                           />
 
                           <div className="-ml-8 -mt-8 relative" style={{ top: "7rem" }}>
@@ -468,7 +519,7 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
                                 setTimeout(() => window.scroll({ top: 0, behavior: "smooth" }))
                               }}
                             >
-                              Listing Details
+                              {t("listings.details")}
                             </Button>
                           </div>
                         </Tabs.TabPanel>

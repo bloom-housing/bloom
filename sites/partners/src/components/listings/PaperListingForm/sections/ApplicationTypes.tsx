@@ -9,7 +9,12 @@ import {
   Select,
   StandardTableData,
 } from "@bloom-housing/ui-components"
-import { fieldMessage, fieldHasError, pdfFileNameFromFileId } from "../../../../lib/helpers"
+import {
+  fieldMessage,
+  fieldHasError,
+  getLabel,
+  pdfFileNameFromFileId,
+} from "../../../../lib/helpers"
 import { Button, Card, Drawer, Grid } from "@bloom-housing/ui-seeds"
 import {
   ApplicationMethodCreate,
@@ -18,10 +23,11 @@ import {
   LanguagesEnum,
   YesNoEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { AuthContext } from "@bloom-housing/shared-helpers"
 import { FormListing } from "../../../../lib/listings/formTypes"
 import { uploadAssetAndSetData } from "../../../../lib/assets"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
-import { AuthContext } from "@bloom-housing/shared-helpers"
+import styles from "../ListingForm.module.scss"
 
 interface Methods {
   digital: ApplicationMethodCreate
@@ -29,7 +35,12 @@ interface Methods {
   referral: ApplicationMethodCreate
 }
 
-const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
+type ApplicationTypesProps = {
+  listing: FormListing
+  requiredFields: string[]
+}
+
+const ApplicationTypes = ({ listing, requiredFields }: ApplicationTypesProps) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, setValue, watch, errors, getValues } = useFormContext()
   const { doJurisdictionsHaveFeatureFlagOn, getJurisdictionLanguages } = useContext(AuthContext)
@@ -192,24 +203,21 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
         subheading={t("listings.sections.applicationTypesSubtitle")}
       >
         <Grid.Row columns={2}>
-          <Grid.Cell>
-            <p
-              className={`field-label m-4 ml-0 ${
-                fieldHasError(errors?.digitalApplication) &&
-                digitalApplicationChoice === null &&
-                "text-alert"
-              }`}
-            >
-              {t("listings.isDigitalApplication")}
-            </p>
-
+          <Grid.Cell
+            className={fieldHasError(errors?.digitalApplication) ? styles["label-error"] : ""}
+          >
             <FieldGroup
               name="digitalApplicationChoice"
               type="radio"
               register={register}
+              groupLabel={getLabel(
+                "digitalApplication",
+                requiredFields,
+                t("listings.isDigitalApplication")
+              )}
               error={fieldHasError(errors?.digitalApplication) && digitalApplicationChoice === null}
               errorMessage={fieldMessage(errors?.digitalApplication)}
-              groupSubNote={t("listings.requiredToPublish")}
+              fieldLabelClassName={`${styles["label-option"]} seeds-m-bs-2`}
               fields={[
                 {
                   ...yesNoRadioOptions[0],
@@ -247,17 +255,17 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
           </Grid.Cell>
           {!disableCommonApplication && digitalApplicationChoice === YesNoEnum.yes && (
             <Grid.Cell>
-              <p className="field-label m-4 ml-0">{t("listings.usingCommonDigitalApplication")}</p>
-
               <FieldGroup
                 name="commonDigitalApplicationChoice"
                 type="radio"
+                groupLabel={t("listings.usingCommonDigitalApplication")}
                 register={register}
+                fieldLabelClassName={`${styles["label-option"]} seeds-m-bs-2`}
                 fields={[
                   {
                     ...yesNoRadioOptions[0],
                     id: "commonDigitalApplicationChoiceYes",
-                    defaultChecked: methods.digital.type === ApplicationMethodsTypeEnum.Internal,
+                    defaultChecked: methods.digital?.type === ApplicationMethodsTypeEnum.Internal,
                     inputProps: {
                       onChange: () => {
                         setMethods({
@@ -274,7 +282,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                     ...yesNoRadioOptions[1],
                     id: "commonDigitalApplicationChoiceNo",
                     defaultChecked:
-                      methods.digital.type === ApplicationMethodsTypeEnum.ExternalLink,
+                      methods.digital?.type === ApplicationMethodsTypeEnum.ExternalLink,
                     inputProps: {
                       onChange: () => {
                         setMethods({
@@ -326,24 +334,21 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
             </Grid.Row>
           )}
         <Grid.Row columns={2}>
-          <Grid.Cell>
-            <p
-              className={`field-label m-4 ml-0 ${
-                fieldHasError(errors?.paperApplication) &&
-                paperApplicationChoice === null &&
-                "text-alert"
-              }`}
-            >
-              {t("listings.isPaperApplication")}
-            </p>
-
+          <Grid.Cell
+            className={fieldHasError(errors?.paperApplication) ? styles["label-error"] : ""}
+          >
             <FieldGroup
               name="paperApplicationChoice"
               type="radio"
-              groupSubNote={t("listings.requiredToPublish")}
+              groupLabel={getLabel(
+                "paperApplication",
+                requiredFields,
+                t("listings.isPaperApplication")
+              )}
               error={fieldHasError(errors?.paperApplication) && paperApplicationChoice === null}
               errorMessage={fieldMessage(errors?.paperApplication)}
               register={register}
+              fieldLabelClassName={`${styles["label-option"]} seeds-m-bs-2`}
               fields={[
                 {
                   ...yesNoRadioOptions[0],
@@ -417,7 +422,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                       ),
                     },
                   }))}
-                ></MinimalTable>
+                />
               )}
               <Button
                 type="button"
@@ -434,23 +439,20 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
         )}
         {/*
         // referral opportunity removed from Doorway
-         <Grid.Row columns={1}>
-        <Grid.Cell>
-          <p
-            className={`field-label m-4 ml-0 ${
-              fieldHasError(errors?.referralOpportunity) &&
-              referralOpportunityChoice === null &&
-              "text-alert"
-            }`}
+        <Grid.Row columns={1}>
+          <Grid.Cell
+            className={fieldHasError(errors?.referralOpportunity) ? styles["label-error"] : ""}
           >
-            {t("listings.isReferralOpportunity")}
-          </p>
-
             <FieldGroup
               name="referralOpportunityChoice"
               type="radio"
               register={register}
-              groupSubNote={t("listings.requiredToPublish")}
+              fieldLabelClassName={`${styles["label-option"]} seeds-m-bs-2`}
+              groupLabel={getLabel(
+                "referralOpportunity",
+                requiredFields,
+                t("listings.isReferralOpportunity")
+              )}
               error={
                 fieldHasError(errors?.referralOpportunity) && referralOpportunityChoice === null
               }
@@ -496,18 +498,16 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                 label={t("listings.referralContactPhone")}
                 name="referralContactPhone"
                 id="referralContactPhone"
-                placeholder={t("t.phoneNumberPlaceholder")}
                 mask={() => (
                   <PhoneMask
                     name="referralContactPhone"
                     value={methods.referral ? methods.referral.phoneNumber : ""}
-                    placeholder={t("t.phoneNumberPlaceholder")}
                     onChange={(e) => {
                       setMethods({
                         ...methods,
                         referral: {
                           ...methods.referral,
-                          phoneNumber: e,
+                          phoneNumber: e.target.value,
                         },
                       })
                     }}
@@ -521,7 +521,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                 label={t("listings.referralSummary")}
                 rows={3}
                 fullWidth={true}
-                placeholder={t("t.descriptionTitle")}
+                placeholder={""}
                 name="referralSummary"
                 id="referralSummary"
                 maxLength={500}
@@ -627,6 +627,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                     <label className="label">{t("t.language")}</label>
                   </p>
                   <Select
+                    id={"paperApplicationLanguage"}
                     name="paperApplicationLanguage"
                     options={[
                       ...availableJurisdictionLanguages.map((item) => ({

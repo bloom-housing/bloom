@@ -12,36 +12,42 @@ const DetailsHouseholdIncome = () => {
   return (
     <SectionWithGrid heading={t("application.details.householdIncome")} inset>
       <Grid.Row>
-        <FieldValue label={t("application.details.annualIncome")} testId="annualIncome">
-          {application.incomePeriod === IncomePeriodEnum.perYear
-            ? formatIncome(
-                parseFloat(application.income),
-                application.incomePeriod,
-                IncomePeriodEnum.perYear
-              )
-            : t("t.n/a")}
-        </FieldValue>
+        <Grid.Cell>
+          <FieldValue label={t("application.details.annualIncome")} testId="annualIncome">
+            {application.incomePeriod === IncomePeriodEnum.perYear
+              ? formatIncome(
+                  parseFloat(application.income),
+                  application.incomePeriod,
+                  IncomePeriodEnum.perYear
+                )
+              : t("t.n/a")}
+          </FieldValue>
+        </Grid.Cell>
 
-        <FieldValue label={t("application.details.monthlyIncome")} testId="monthlyIncome">
-          {application.incomePeriod === IncomePeriodEnum.perMonth
-            ? formatIncome(
-                parseFloat(application.income),
-                application.incomePeriod,
-                IncomePeriodEnum.perMonth
-              )
-            : t("t.n/a")}
-        </FieldValue>
+        <Grid.Cell>
+          <FieldValue label={t("application.details.monthlyIncome")} testId="monthlyIncome">
+            {application.incomePeriod === IncomePeriodEnum.perMonth
+              ? formatIncome(
+                  parseFloat(application.income),
+                  application.incomePeriod,
+                  IncomePeriodEnum.perMonth
+                )
+              : t("t.n/a")}
+          </FieldValue>
+        </Grid.Cell>
 
-        <FieldValue label={t("application.details.incomeVouchers")} testId="vouchers">
-          {(!application.incomeVouchers || application.incomeVouchers.length === 0) && t("t.n/a")}
+        <Grid.Cell>
+          <FieldValue label={t("application.details.incomeVouchers")} testId="vouchers">
+            {(!application.incomeVouchers || application.incomeVouchers.length === 0) && t("t.n/a")}
 
-          {application.incomeVouchers?.map((item) => (
-            <Fragment key={item}>
-              {t(`application.financial.vouchers.options.${item}`)}
-              <br />
-            </Fragment>
-          ))}
-        </FieldValue>
+            {application.incomeVouchers?.map((item) => (
+              <Fragment key={item}>
+                {t(`application.financial.vouchers.options.${item}`)}
+                <br />
+              </Fragment>
+            ))}
+          </FieldValue>
+        </Grid.Cell>
       </Grid.Row>
     </SectionWithGrid>
   )

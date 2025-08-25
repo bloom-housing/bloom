@@ -22,65 +22,75 @@ const DetailBuildingDetails = () => {
       {listing.listingsBuildingAddress ? (
         <>
           <Grid.Row columns={3}>
-            <FieldValue
-              id="buildingAddress.street"
-              className="seeds-grid-span-2"
-              label={t("application.contact.streetAddress")}
-            >
-              {listing.listingsBuildingAddress?.street}
-            </FieldValue>
-            <FieldValue id="neighborhood" label={t("t.neighborhood")}>
-              {listing?.neighborhood || t("t.n/a")}
-            </FieldValue>
+            <Grid.Cell className={"seeds-grid-span-2"}>
+              <FieldValue
+                id="buildingAddress.street"
+                className="seeds-grid-span-2"
+                label={t("application.contact.streetAddress")}
+              >
+                {listing.listingsBuildingAddress?.street}
+              </FieldValue>
+            </Grid.Cell>
+            <Grid.Cell>
+              <FieldValue id="neighborhood" label={t("t.neighborhood")}>
+                {listing?.neighborhood || t("t.n/a")}
+              </FieldValue>
+            </Grid.Cell>
           </Grid.Row>
           <Grid.Row columns={6}>
-            <FieldValue
-              id="buildingAddress.city"
-              className="seeds-grid-span-2"
-              label={t("application.contact.city")}
-            >
-              {listing.listingsBuildingAddress?.city}
-            </FieldValue>
-            <FieldValue id="buildingAddress.state" label={t("application.contact.state")}>
-              {listing.listingsBuildingAddress?.state}
-            </FieldValue>
-            <FieldValue id="buildingAddress.zipCode" label={t("application.contact.zip")}>
-              {listing.listingsBuildingAddress?.zipCode}
-            </FieldValue>
+            <Grid.Cell className="seeds-grid-span-2">
+              <FieldValue id="buildingAddress.city" label={t("application.contact.city")}>
+                {listing.listingsBuildingAddress?.city}
+              </FieldValue>
+            </Grid.Cell>
+            <Grid.Cell className="seeds-grid-span-1">
+              <FieldValue id="buildingAddress.state" label={t("application.contact.state")}>
+                {listing.listingsBuildingAddress?.state}
+              </FieldValue>
+            </Grid.Cell>
+            <Grid.Cell className="seeds-grid-span-1">
+              <FieldValue id="buildingAddress.zipCode" label={t("application.contact.zip")}>
+                {listing.listingsBuildingAddress?.zipCode}
+              </FieldValue>
+            </Grid.Cell>
             {enableRegions ? (
-              <FieldValue
-                className="seeds-grid-span-2"
-                id="buildingAdress.region"
-                label={t("t.region")}
-              >
-                {listing.region ? listing.region.toString().replace("_", " ") : t("t.n/a")}
-              </FieldValue>
+              <Grid.Cell className="seeds-grid-span-12">
+                <FieldValue id="buildingAdress.region" label={t("t.region")}>
+                  {listing.region ? listing.region.toString().replace("_", " ") : t("t.n/a")}
+                </FieldValue>
+              </Grid.Cell>
             ) : (
-              <FieldValue
-                className="seeds-grid-span-2"
-                id="yearBuilt"
-                label={t("listings.yearBuilt")}
-              >
-                {listing.yearBuilt}
-              </FieldValue>
+              <Grid.Cell className="seeds-grid-span-2">
+                <FieldValue id="yearBuilt" label={t("listings.yearBuilt")}>
+                  {listing.yearBuilt}
+                </FieldValue>
+              </Grid.Cell>
             )}
           </Grid.Row>
           <Grid.Row columns={3}>
-            <FieldValue id="buildingAddress.county" label={t("application.contact.county")}>
-              {t(`counties.${listing.listingsBuildingAddress.county}`)}
-            </FieldValue>
-            <FieldValue id="longitude" label={t("listings.longitude")}>
-              {listing.listingsBuildingAddress?.longitude &&
-                listing.listingsBuildingAddress.longitude.toString()}
-            </FieldValue>
-            <FieldValue id="latitude" label={t("listings.latitude")}>
-              {listing.listingsBuildingAddress?.latitude &&
-                listing.listingsBuildingAddress.latitude.toString()}
-            </FieldValue>
-            {enableRegions && (
-              <FieldValue id="yearBuilt" label={t("listings.yearBuilt")}>
-                {listing.yearBuilt}
+            <Grid.Cell>
+              <FieldValue id="buildingAddress.county" label={t("application.contact.county")}>
+                {t(`counties.${listing.listingsBuildingAddress.county}`)}
               </FieldValue>
+            </Grid.Cell>
+            <Grid.Cell>
+              <FieldValue id="longitude" label={t("listings.longitude")}>
+                {listing.listingsBuildingAddress?.longitude &&
+                  listing.listingsBuildingAddress.longitude.toString()}
+              </FieldValue>
+            </Grid.Cell>
+            <Grid.Cell>
+              <FieldValue id="latitude" label={t("listings.latitude")}>
+                {listing.listingsBuildingAddress?.latitude &&
+                  listing.listingsBuildingAddress.latitude.toString()}
+              </FieldValue>
+            </Grid.Cell>
+            {enableRegions && (
+              <Grid.Cell>
+                <FieldValue id="yearBuilt" label={t("listings.yearBuilt")}>
+                  {listing.yearBuilt}
+                </FieldValue>
+              </Grid.Cell>
             )}
           </Grid.Row>
         </>

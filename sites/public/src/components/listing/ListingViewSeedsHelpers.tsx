@@ -16,7 +16,6 @@ import {
 import {
   FieldGroup,
   Form,
-  getTranslationWithArguments,
   StackedTable,
   StandardTableData,
   t,
@@ -114,11 +113,24 @@ export const getOnlineApplicationURL = (
 }
 
 export const getHasNonReferralMethods = (listing: Listing) => {
-  return listing?.applicationMethods
-    ? listing.applicationMethods.some(
-        (method) => method.type !== ApplicationMethodsTypeEnum.Referral
-      )
-    : false
+  const nonReferralMethods = listing.applicationMethods.filter(
+    (method) => method.type !== ApplicationMethodsTypeEnum.Referral
+  )
+  if (
+    nonReferralMethods.length === 1 &&
+    nonReferralMethods[0].type === ApplicationMethodsTypeEnum.FileDownload &&
+    !nonReferralMethods[0].paperApplications.length &&
+    !nonReferralMethods[0].externalReference
+  ) {
+    return false
+  } else if (
+    nonReferralMethods.length === 1 &&
+    nonReferralMethods[0].type === ApplicationMethodsTypeEnum.ExternalLink &&
+    getOnlineApplicationURL(nonReferralMethods, listing.id, false).url === ""
+  ) {
+    return false
+  }
+  return nonReferralMethods.length
 }
 
 export const getAccessibilityFeatures = (listing: Listing) => {
@@ -221,11 +233,32 @@ export const getHmiData = (listing: Listing): StandardTableData => {
   })
 }
 
+// This unusual string modification has to do with the odd way the backend is sending this data (as a string with certain characters we need to split and parse). When the backend rewrites this generation we can update this!
+export const getCurrencyFromArgumentString = (content: string) => {
+  if (typeof content === "string") {
+    const paramIndex = content.indexOf(":")
+    if (paramIndex >= 0) {
+      return content.substring(paramIndex).replace(/-/g, " - ").replace(/:/g, "")
+    }
+  }
+  return content
+}
+
 export const getStackedHmiData = (listing: Listing) => {
   return (
     listing?.unitsSummarized?.hmi?.rows.map((row) => {
       const amiRows = Object.keys(row).reduce((acc, rowContent) => {
-        acc[rowContent] = { cellText: getTranslationWithArguments(row[rowContent].toString()) }
+        const content = getCurrencyFromArgumentString(row[rowContent])
+        acc[rowContent] = {
+          cellText: Number.isInteger(row[rowContent]) ? row[rowContent] : content,
+          // This unusual type checking has to do with the odd way the backend is sending this data (as a string with certain characters we need to split and parse). When the backend rewrites this generation we can update this!
+          cellSubText: rowContent.includes("Month")
+            ? t("t.perMonth")
+            : rowContent.includes("Year") ||
+              (typeof row[rowContent] === "string" && row[rowContent].includes("annual"))
+            ? t("t.perYear")
+            : null,
+        }
         return acc
       }, {})
 
@@ -253,7 +286,8 @@ export const getStackedUnitGroupsHmiData = (listing: Listing) => {
           }
         } else {
           obj[key] = {
-            cellText: `$${row[key].toLocaleString("en")} ${t("t.perYear")}`,
+            cellText: `${row[key].toLocaleString("en")}`,
+            cellSubText: t("t.perYear"),
           }
         }
       }
@@ -385,47 +419,50 @@ export const getEligibilitySections = (
   // HMI
   const stackedUnitGroupsHmiData = getStackedUnitGroupsHmiData(listing)
   const stackedHmiData = getStackedHmiData(listing)
-  eligibilityFeatures.push({
-    header: t("listings.householdMaximumIncome"),
-    subheader: listing?.units[0]?.bmrProgramChart
-      ? t("listings.forIncomeCalculationsBMR")
-      : t("listings.forIncomeCalculations"),
-    content: (
-      <StackedTable
-        headers={
-          enableUnitGroups
-            ? getUnitGroupsHmiHeaders(listing)
-            : ((listing?.unitsSummarized?.hmi?.columns || []) as TableHeaders)
-        }
-        stackedData={enableUnitGroups ? stackedUnitGroupsHmiData : stackedHmiData}
-      />
-    ),
-    hide:
-      (enableUnitGroups && stackedUnitGroupsHmiData.length === 0) ||
-      (!enableUnitGroups && stackedHmiData.length === 0),
-  })
+  const hideHMI =
+    (enableUnitGroups && stackedUnitGroupsHmiData.length === 0) ||
+    (!enableUnitGroups && stackedHmiData.length === 0)
+  if (!hideHMI) {
+    eligibilityFeatures.push({
+      header: t("listings.householdMaximumIncome"),
+      subheader: listing?.units[0]?.bmrProgramChart
+        ? t("listings.forIncomeCalculationsBMR")
+        : t("listings.forIncomeCalculations"),
+      content: (
+        <StackedTable
+          headers={
+            enableUnitGroups
+              ? getUnitGroupsHmiHeaders(listing)
+              : ((listing?.unitsSummarized?.hmi?.columns || []) as TableHeaders)
+          }
+          stackedData={enableUnitGroups ? stackedUnitGroupsHmiData : stackedHmiData}
+        />
+      ),
+    })
+  }
 
   // Occupancy
   const stackedUnitGroupsOccupancyData = stackedUnitGroupsOccupancyTable(listing)
   const stackedOccupancyData = stackedOccupancyTable(listing)
 
-  eligibilityFeatures.push({
-    header: t("t.occupancy"),
-    subheader: getOccupancyDescription(listing, enableUnitGroups),
-    content: (
-      <StackedTable
-        headers={{
-          unitType: "t.unitType",
-          occupancy: "t.occupancy",
-        }}
-        stackedData={enableUnitGroups ? stackedUnitGroupsOccupancyData : stackedOccupancyData}
-      />
-    ),
-    hide:
-      (enableUnitGroups && stackedUnitGroupsOccupancyData.length === 0) ||
-      (!enableUnitGroups && stackedOccupancyData.length === 0),
-  })
-
+  const hideOccupancy =
+    (enableUnitGroups && stackedUnitGroupsOccupancyData.length === 0) ||
+    (!enableUnitGroups && stackedOccupancyData.length === 0)
+  if (!hideOccupancy) {
+    eligibilityFeatures.push({
+      header: t("t.occupancy"),
+      subheader: getOccupancyDescription(listing, enableUnitGroups),
+      content: (
+        <StackedTable
+          headers={{
+            unitType: "t.unitType",
+            occupancy: "t.occupancy",
+          }}
+          stackedData={enableUnitGroups ? stackedUnitGroupsOccupancyData : stackedOccupancyData}
+        />
+      ),
+    })
+  }
   // Rental Assistance
   if (listing.rentalAssistance) {
     eligibilityFeatures.push({

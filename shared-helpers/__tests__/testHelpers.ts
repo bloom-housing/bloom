@@ -20,13 +20,17 @@ import {
   ListingEventsTypeEnum,
   ApplicationReviewStatusEnum,
   InputType,
+  UnitGroup,
+  EnumUnitGroupAmiLevelMonthlyRentDeterminationType,
+  UnitType,
+  User,
 } from "../src/types/backend-swagger"
 
 export const multiselectQuestionPreference: MultiselectQuestion = {
   id: "id1",
   text: "Live/Work in County",
   subText: "Live/Work in County subtitle",
-  jurisdictions: [{ id: "1", name: "Alameda" }],
+  jurisdictions: [{ id: "1", name: "Bloomington" }],
   createdAt: new Date("2022-09-14T22:53:09.982Z"),
   updatedAt: new Date("2022-09-15T22:53:09.982Z"),
   description: "At least one household member lives or works in County",
@@ -185,9 +189,6 @@ export const application: Application = {
     phoneNumberType: "home",
     noPhone: false,
     fullTimeStudent: YesNoEnum.no,
-    birthDay: "10",
-    birthMonth: "10",
-    birthYear: "1990",
     applicantAddress: {
       id: "applicant_address_id",
       createdAt: new Date(),
@@ -211,17 +212,6 @@ export const application: Application = {
       zipCode: "95389",
       latitude: 37.7487501,
       longitude: -119.5920354,
-    },
-    applicantAddress: {
-      id: "applicant_address_id",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      city: "Yellowstone National Park",
-      county: "",
-      state: "WY",
-      street: "3200 Old Faithful Inn Rd",
-      street2: "12",
-      zipCode: "82190",
     },
   },
   applicationLotteryPositions: [],
@@ -397,9 +387,232 @@ export const unit: Unit = {
   monthlyRentAsPercentOfIncome: undefined,
 }
 
+export const unitTypes: UnitType[] = [
+  {
+    id: "782a29a6-ca80-4b1a-bcad-d816ce4c42e6",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    name: UnitTypeEnum.studio,
+    numBedrooms: 0,
+  },
+  {
+    id: "88872ac6-d8e4-460a-97fd-a57c4354f7c7",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    name: UnitTypeEnum.oneBdrm,
+    numBedrooms: 1,
+  },
+  {
+    id: "8e8fb9a3-63c3-4a27-b432-aeecafacc76d",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    name: UnitTypeEnum.twoBdrm,
+    numBedrooms: 2,
+  },
+  {
+    id: "41b0f6f9-af33-4bc1-b5c3-b6761e35075d",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    name: UnitTypeEnum.threeBdrm,
+    numBedrooms: 3,
+  },
+  {
+    id: "e1853e6c-4f36-4b0e-9589-1735deb6a34c",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    name: UnitTypeEnum.fourBdrm,
+    numBedrooms: 4,
+  },
+  {
+    id: "e98b54fe-1562-4ff2-9192-499faffb827b",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    name: UnitTypeEnum.SRO,
+    numBedrooms: 0,
+  },
+  {
+    id: "797e5f3e-0d30-4a9f-8985-d5864776ebb1",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    name: UnitTypeEnum.fiveBdrm,
+    numBedrooms: 5,
+  },
+]
+
+export const unitGroup: UnitGroup = {
+  id: "unit_group_id",
+  createdAt: new Date(),
+  updatedAt: new Date(),
+  maxOccupancy: 3,
+  minOccupancy: 1,
+  floorMin: 1,
+  floorMax: 4,
+  totalCount: 5,
+  totalAvailable: 5,
+  bathroomMin: 1,
+  bathroomMax: 2,
+  openWaitlist: true,
+  sqFeetMin: 370,
+  sqFeetMax: 840,
+  unitGroupAmiLevels: [
+    {
+      id: "4e64914b-3169-4d6f-a8ef-d4b11b34ebcd",
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      amiPercentage: 30,
+      monthlyRentDeterminationType: EnumUnitGroupAmiLevelMonthlyRentDeterminationType.flatRent,
+      flatRentValue: 1500,
+      amiChart: {
+        id: "4e64914b-3169-4d6f-a8ef-d4b11b34ebcd",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        items: [],
+        name: "Mock AMI ",
+        jurisdictions: {
+          id: "Uvbk5qurpB2WI9V6WnNdH",
+          name: "Test City",
+        },
+      },
+    },
+    {
+      id: "mock_ami_id_2",
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      amiPercentage: 10,
+      monthlyRentDeterminationType:
+        EnumUnitGroupAmiLevelMonthlyRentDeterminationType.percentageOfIncome,
+      percentageOfIncomeValue: 20,
+      amiChart: {
+        id: "4e64914b-3169-4d6f-a8ef-d4b11b34ebcd",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        items: [],
+        name: "Mock AMI",
+        jurisdictions: {
+          id: "Uvbk5qurpB2WI9V6WnNdH",
+          name: "Bloomington",
+        },
+      },
+    },
+  ],
+  unitTypes: [
+    {
+      id: "unit_id_1",
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      name: UnitTypeEnum.studio,
+      numBedrooms: 0,
+    },
+    {
+      id: "unit_id_2",
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      name: UnitTypeEnum.oneBdrm,
+      numBedrooms: 1,
+    },
+    {
+      id: "unit_id_3",
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      name: UnitTypeEnum.twoBdrm,
+      numBedrooms: 2,
+    },
+  ],
+}
+
+export const amiCharts = [
+  {
+    id: "4e64914b-3169-4d6f-a8ef-d4b11b34ebcd",
+    createdAt: "2025-06-09T17:15:41.062Z",
+    updatedAt: "2025-06-09T17:15:41.062Z",
+    items: [
+      {
+        percentOfAmi: 10,
+        householdSize: 1,
+        income: 12000,
+      },
+      {
+        percentOfAmi: 10,
+        householdSize: 2,
+        income: 24000,
+      },
+      {
+        percentOfAmi: 10,
+        householdSize: 3,
+        income: 36000,
+      },
+      {
+        percentOfAmi: 10,
+        householdSize: 4,
+        income: 48000,
+      },
+      {
+        percentOfAmi: 10,
+        householdSize: 5,
+        income: 60000,
+      },
+      {
+        percentOfAmi: 20,
+        householdSize: 1,
+        income: 24000,
+      },
+      {
+        percentOfAmi: 20,
+        householdSize: 2,
+        income: 36000,
+      },
+      {
+        percentOfAmi: 20,
+        householdSize: 3,
+        income: 48000,
+      },
+      {
+        percentOfAmi: 20,
+        householdSize: 4,
+        income: 60000,
+      },
+      {
+        percentOfAmi: 20,
+        householdSize: 5,
+        income: 72000,
+      },
+      {
+        percentOfAmi: 30,
+        householdSize: 1,
+        income: 36000,
+      },
+      {
+        percentOfAmi: 30,
+        householdSize: 2,
+        income: 48000,
+      },
+      {
+        percentOfAmi: 30,
+        householdSize: 3,
+        income: 60000,
+      },
+      {
+        percentOfAmi: 30,
+        householdSize: 4,
+        income: 72000,
+      },
+      {
+        percentOfAmi: 30,
+        householdSize: 5,
+        income: 84000,
+      },
+    ],
+    name: "Mock AMI",
+    jurisdictions: {
+      id: "Uvbk5qurpB2WI9V6WnNdH",
+      name: "Test City",
+    },
+  },
+]
+
 export const jurisdiction: Jurisdiction = {
-  name: "Alameda",
-  notificationsSignUpUrl: "https://public.govdelivery.com/accounts/CAMTC/signup/36832",
+  name: "Bloomington",
+  notificationsSignUpUrl: "https://public.govdelivery.com/accounts/CAALAME/signup/29652",
   languages: [LanguagesEnum.en],
   partnerTerms: undefined,
   publicUrl: "",
@@ -414,7 +627,8 @@ export const jurisdiction: Jurisdiction = {
       jurisdictions: [],
     },
   ],
-  emailFromAddress: "Alameda: Housing Bay Area <bloom-no-reply@exygy.dev>",
+  requiredListingFields: [],
+  emailFromAddress: "Bloomington <bloom-no-reply@exygy.dev>",
   rentalAssistanceDefault:
     "Housing Choice Vouchers, Section 8 and other valid rental assistance programs will be considered for this property. In the case of a valid rental subsidy, the required minimum income will be based on the portion of the rent that the tenant pays after use of the subsidy.",
   enablePartnerSettings: true,
@@ -460,6 +674,7 @@ export const jurisdiction: Jurisdiction = {
 export const listing: Listing = {
   id: "Uvbk5qurpB2WI9V6WnNdH",
   applicationLotteryTotals: [],
+  contentUpdatedAt: new Date("2019-12-31T15:22:57.000-07:00"),
   applicationConfig: undefined,
   applicationOpenDate: new Date("2019-12-31T15:22:57.000-07:00"),
   listingsApplicationPickUpAddress: undefined,
@@ -631,7 +846,7 @@ export const listing: Listing = {
     {
       ordinal: 1,
       multiselectQuestions: {
-        id: "id",
+        id: "pref_id_1",
         createdAt: new Date(),
         updatedAt: new Date(),
         text: "Preference 1",
@@ -642,7 +857,7 @@ export const listing: Listing = {
     {
       ordinal: 2,
       multiselectQuestions: {
-        id: "id",
+        id: "pref_id_2",
         createdAt: new Date(),
         updatedAt: new Date(),
         text: "Preference 2",
@@ -653,7 +868,7 @@ export const listing: Listing = {
     {
       ordinal: 1,
       multiselectQuestions: {
-        id: "id",
+        id: "prog_id_1",
         createdAt: new Date(),
         updatedAt: new Date(),
         text: "Program 1",
@@ -664,7 +879,7 @@ export const listing: Listing = {
     {
       ordinal: 2,
       multiselectQuestions: {
-        id: "id",
+        id: "prog_id_2",
         createdAt: new Date(),
         updatedAt: new Date(),
         text: "Program 2",
@@ -871,4 +1086,40 @@ export const listing: Listing = {
   isExternal: false,
   unitGroups: [],
   listingImages: [],
+}
+
+export const mockBaseJurisdiction: Jurisdiction = {
+  id: "id",
+  createdAt: new Date(),
+  updatedAt: new Date(),
+  name: "San Jose",
+  multiselectQuestions: [],
+  languages: [LanguagesEnum.en],
+  publicUrl: "http://localhost:3000",
+  emailFromAddress: "Alameda: Housing Bay Area <bloom-no-reply@exygy.dev>",
+  rentalAssistanceDefault:
+    "Housing Choice Vouchers, Section 8 and other valid rental assistance programs will be considered for this property. In the case of a valid rental subsidy, the required minimum income will be based on the portion of the rent that the tenant pays after use of the subsidy.",
+  enablePartnerSettings: true,
+  listingApprovalPermissions: [],
+  duplicateListingPermissions: [],
+  enableGeocodingPreferences: false,
+  allowSingleUseCodeLogin: false,
+  featureFlags: [],
+  requiredListingFields: [],
+}
+
+export const mockUser: User = {
+  id: "123",
+  email: "test@test.com",
+  firstName: "Test",
+  lastName: "User",
+  dob: new Date("2020-01-01"),
+  createdAt: new Date("2020-01-01"),
+  updatedAt: new Date("2020-01-01"),
+  jurisdictions: [],
+  mfaEnabled: false,
+  passwordUpdatedAt: new Date("2020-01-01"),
+  passwordValidForDays: 180,
+  agreedToTermsOfService: true,
+  listings: [],
 }

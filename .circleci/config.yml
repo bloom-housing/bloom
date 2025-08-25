@@ -39,6 +39,7 @@ executors:
       CLOUDINARY_KEY: "key"
       CLOUDINARY_SIGNED_PRESET: "signedpreset"
       CLOUDINARY_CLOUD_NAME: "exygy"
+      RUN_ACCESSIBILITY_E2E_TESTS: "FALSE"
 
   standard-node:
     docker:
@@ -249,38 +250,38 @@ jobs:
             DATABASE_URL: "postgres://bloom-ci@localhost:5432/bloom_prisma"
 
 workflows:
-  build:
-    jobs:
-      - setup
-      - setup-backend
-      - lint:
-          requires:
-            - setup
-      - jest-shared-helpers:
-          requires:
-            - setup
-      - jest-backend
-      - build-public:
-          requires:
-            - setup
-      - unit-test-public:
-          requires:
-            - setup
-      - build-partners:
-          requires:
-            - setup
-      - unit-test-partners:
-          requires:
-            - setup
-      - cypress-public:
-          requires:
-            - setup
-            - setup-backend
-      - cypress-public-seeds:
-          requires:
-            - setup
-            - setup-backend
-      - cypress-partners:
-          requires:
-            - setup
-            - setup-backend
+  build: 
+        jobs:
+          - setup
+          - setup-backend
+          - lint:
+              requires:
+                - setup
+          - jest-shared-helpers:
+              requires:
+                - setup
+          - jest-backend
+          - build-public:
+              requires:
+                - setup
+          - unit-test-public:
+              requires:
+                - setup
+          - build-partners:
+              requires:
+                - setup
+          - unit-test-partners:
+              requires:
+                - setup
+          - cypress-public:
+              requires:
+                - setup
+                - setup-backend
+          - cypress-public-seeds:
+              requires:
+                - setup
+                - setup-backend
+          - cypress-partners:
+              requires:
+                - setup
+                - setup-backend

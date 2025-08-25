@@ -74,7 +74,218 @@ describe('Testing application export service', () => {
         firstName: 'requesting fName',
         lastName: 'requesting lName',
         email: 'requestingUser@email.com',
-        jurisdictions: [{ id: 'juris id' }],
+        jurisdictions: [
+          {
+            id: 'juris id',
+            featureFlags: [
+              {
+                name: FeatureFlagEnum.enableAdaOtherOption,
+                description: '',
+                active: false,
+                jurisdictions: [],
+              },
+              {
+                name: FeatureFlagEnum.enableFullTimeStudentQuestion,
+                description: '',
+                active: false,
+                jurisdictions: [],
+              },
+              {
+                name: FeatureFlagEnum.disableWorkInRegion,
+                description: '',
+                active: true,
+                jurisdictions: [],
+              },
+            ],
+          },
+        ],
+      } as unknown as User;
+
+      const applications = mockApplicationSet(5, new Date(), 1);
+      prisma.applications.findMany = jest.fn().mockReturnValue(applications);
+      prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue({
+        featureFlags: [
+          {
+            id: 'flag id',
+            name: FeatureFlagEnum.enableAdaOtherOption,
+            active: false,
+          },
+          {
+            id: 'flag id',
+            name: FeatureFlagEnum.enableFullTimeStudentQuestion,
+            active: false,
+          },
+          {
+            id: 'flag id',
+            name: FeatureFlagEnum.disableWorkInRegion,
+            active: true,
+          },
+        ],
+      });
+      prisma.listings.findUnique = jest.fn().mockResolvedValue({});
+      permissionService.canOrThrow = jest.fn().mockResolvedValue(true);
+
+      prisma.multiselectQuestions.findMany = jest.fn().mockReturnValue([
+        {
+          ...mockMultiselectQuestion(
+            0,
+            new Date(),
+            MultiselectQuestionsApplicationSectionEnum.preferences,
+          ),
+          options: [
+            { id: 1, text: 'text' },
+            { id: 2, text: 'text', collectAddress: true },
+          ],
+        },
+        {
+          ...mockMultiselectQuestion(
+            1,
+            new Date(),
+            MultiselectQuestionsApplicationSectionEnum.programs,
+          ),
+          options: [{ id: 1, text: 'text' }],
+        },
+      ]);
+
+      const exportResponse = await service.csvExport(
+        {
+          listingId: randomUUID(),
+          includeDemographics: false,
+        } as unknown as ApplicationCsvQueryParams,
+        requestingUser,
+      );
+
+      const headerRow =
+        '"Application Id","Application Confirmation Code","Application Type","Application Submission Date","Application Received At","Application Received By","Primary Applicant First Name","Primary Applicant Middle Name","Primary Applicant Last Name","Primary Applicant Birth Day","Primary Applicant Birth Month","Primary Applicant Birth Year","Primary Applicant Email Address","Primary Applicant Phone Number","Primary Applicant Phone Type","Primary Applicant Additional Phone Number","Primary Applicant Street","Primary Applicant Street 2","Primary Applicant City","Primary Applicant State","Primary Applicant Zip Code","Primary Applicant Mailing Street","Primary Applicant Mailing Street 2","Primary Applicant Mailing City","Primary Applicant Mailing State","Primary Applicant Mailing Zip Code","Alternate Contact First Name","Alternate Contact Last Name","Alternate Contact Type","Alternate Contact Agency","Alternate Contact Other Type","Alternate Contact Email Address","Alternate Contact Phone Number","Alternate Contact Street","Alternate Contact Street 2","Alternate Contact City","Alternate Contact State","Alternate Contact Zip Code","Income","Income Period","Accessibility Mobility","Accessibility Vision","Accessibility Hearing","Expecting Household Changes","Household Includes Student or Member Nearing 18","Vouchers or Subsidies","Requested Unit Types","Preference text 0","Preference text 0 - text - Address","Program text 1","Household Size","Household Member (1) First Name","Household Member (1) Middle Name","Household Member (1) Last Name","Household Member (1) First Name","Household Member (1) Birth Day","Household Member (1) Birth Month","Household Member (1) Birth Year","Household Member (1) Relationship","Household Member (1) Same as Primary Applicant","Household Member (1) Street","Household Member (1) Street 2","Household Member (1) City","Household Member (1) State","Household Member (1) Zip Code","Marked As Duplicate","Flagged As Duplicate"';
+      const firstApp =
+        '"application 0 firstName","application 0 middleName","application 0 lastName","application 0 birthDay","application 0 birthMonth","application 0 birthYear","application 0 emailaddress","application 0 phoneNumber","application 0 phoneNumberType","additionalPhoneNumber 0","application 0 applicantAddress street","application 0 applicantAddress street2","application 0 applicantAddress city","application 0 applicantAddress state","application 0 applicantAddress zipCode","application 0 mailingAddress street","application 0 mailingAddress street2","application 0 mailingAddress city","application 0 mailingAddress state","application 0 mailingAddress zipCode","application 0 alternateContact firstName","application 0 alternateContact lastName","application 0 alternateContact type","application 0 alternateContact agency","application 0 alternateContact otherType","application 0 alternatecontact emailaddress","application 0 alternateContact phoneNumber","application 0 alternateContact address street","application 0 alternateContact address street2","application 0 alternateContact address city","application 0 alternateContact address state","application 0 alternateContact address zipCode","income 0","per month",,,,"true","true","true","Studio,One Bedroom",,,,,,,,,,,,,,,,,,,,';
+      const mockedStream = new PassThrough();
+      exportResponse.pipe(mockedStream);
+
+      // In order to make sure the last expect statements are properly hit we need to wrap in a promise and resolve it
+      const readable = await new Promise((resolve) => {
+        mockedStream.on('data', async (d) => {
+          const value = Buffer.from(d).toString();
+          mockedStream.end();
+          mockedStream.destroy();
+          resolve(value);
+        });
+      });
+
+      expect(readable).toContain(headerRow);
+      expect(readable).toContain(firstApp);
+    });
+
+    it('should build csv with demographics', async () => {
+      const requestingUser = {
+        firstName: 'requesting fName',
+        lastName: 'requesting lName',
+        email: 'requestingUser@email.com',
+        jurisdictions: [
+          {
+            id: 'juris id',
+            featureFlags: [
+              {
+                name: FeatureFlagEnum.enableAdaOtherOption,
+                description: '',
+                active: false,
+                jurisdictions: [],
+              },
+              {
+                name: FeatureFlagEnum.enableFullTimeStudentQuestion,
+                description: '',
+                active: false,
+                jurisdictions: [],
+              },
+              {
+                name: FeatureFlagEnum.disableWorkInRegion,
+                description: '',
+                active: true,
+                jurisdictions: [],
+              },
+            ],
+          },
+        ],
+      } as unknown as User;
+
+      const applications = mockApplicationSet(3, new Date());
+      prisma.applications.findMany = jest.fn().mockReturnValue(applications);
+      prisma.listings.findUnique = jest.fn().mockResolvedValue({});
+      permissionService.canOrThrow = jest.fn().mockResolvedValue(true);
+
+      prisma.multiselectQuestions.findMany = jest
+        .fn()
+        .mockReturnValue([
+          mockMultiselectQuestion(
+            0,
+            new Date(),
+            MultiselectQuestionsApplicationSectionEnum.preferences,
+          ),
+          mockMultiselectQuestion(
+            1,
+            new Date(),
+            MultiselectQuestionsApplicationSectionEnum.programs,
+          ),
+        ]);
+
+      const exportResponse = await service.csvExport(
+        {
+          listingId: 'test',
+          includeDemographics: true,
+        } as unknown as ApplicationCsvQueryParams,
+        requestingUser,
+      );
+
+      const headerRow =
+        '"Application Id","Application Confirmation Code","Application Type","Application Submission Date","Application Received At","Application Received By","Primary Applicant First Name","Primary Applicant Middle Name","Primary Applicant Last Name","Primary Applicant Birth Day","Primary Applicant Birth Month","Primary Applicant Birth Year","Primary Applicant Email Address","Primary Applicant Phone Number","Primary Applicant Phone Type","Primary Applicant Additional Phone Number","Primary Applicant Street","Primary Applicant Street 2","Primary Applicant City","Primary Applicant State","Primary Applicant Zip Code","Primary Applicant Mailing Street","Primary Applicant Mailing Street 2","Primary Applicant Mailing City","Primary Applicant Mailing State","Primary Applicant Mailing Zip Code","Alternate Contact First Name","Alternate Contact Last Name","Alternate Contact Type","Alternate Contact Agency","Alternate Contact Other Type","Alternate Contact Email Address","Alternate Contact Phone Number","Alternate Contact Street","Alternate Contact Street 2","Alternate Contact City","Alternate Contact State","Alternate Contact Zip Code","Income","Income Period","Accessibility Mobility","Accessibility Vision","Accessibility Hearing","Expecting Household Changes","Household Includes Student or Member Nearing 18","Vouchers or Subsidies","Requested Unit Types","Preference text 0","Program text 1","Household Size","Marked As Duplicate","Flagged As Duplicate","Race","Gender","Sexual Orientation","Spoken Language","How did you Hear?"';
+      const firstApp =
+        '"application 0 firstName","application 0 middleName","application 0 lastName","application 0 birthDay","application 0 birthMonth","application 0 birthYear","application 0 emailaddress","application 0 phoneNumber","application 0 phoneNumberType","additionalPhoneNumber 0","application 0 applicantAddress street","application 0 applicantAddress street2","application 0 applicantAddress city","application 0 applicantAddress state","application 0 applicantAddress zipCode","application 0 mailingAddress street","application 0 mailingAddress street2","application 0 mailingAddress city","application 0 mailingAddress state","application 0 mailingAddress zipCode","application 0 alternateContact firstName","application 0 alternateContact lastName","application 0 alternateContact type","application 0 alternateContact agency","application 0 alternateContact otherType","application 0 alternatecontact emailaddress","application 0 alternateContact phoneNumber","application 0 alternateContact address street","application 0 alternateContact address street2","application 0 alternateContact address city","application 0 alternateContact address state","application 0 alternateContact address zipCode","income 0","per month",,,,"true","true","true","Studio,One Bedroom",,,,,,"Indigenous",,,,"Other"';
+
+      const mockedStream = new PassThrough();
+      exportResponse.pipe(mockedStream);
+      const readable = await new Promise((resolve) => {
+        mockedStream.on('data', async (d) => {
+          const value = Buffer.from(d).toString();
+          mockedStream.end();
+          mockedStream.destroy();
+          resolve(value);
+        });
+      });
+
+      expect(readable).toContain(headerRow);
+      expect(readable).toContain(firstApp);
+    });
+
+    it('should build csv without other ADA accesbility option', async () => {
+      const requestingUser = {
+        firstName: 'requesting fName',
+        lastName: 'requesting lName',
+        email: 'requestingUser@email.com',
+        jurisdictions: [
+          {
+            id: 'juris id',
+            featureFlags: [
+              {
+                name: FeatureFlagEnum.enableAdaOtherOption,
+                description: '',
+                active: false,
+                jurisdictions: [],
+              },
+              {
+                name: FeatureFlagEnum.enableFullTimeStudentQuestion,
+                description: '',
+                active: false,
+                jurisdictions: [],
+              },
+              {
+                name: FeatureFlagEnum.disableWorkInRegion,
+                description: '',
+                active: true,
+                jurisdictions: [],
+              },
+            ],
+          },
+        ],
       } as unknown as User;
 
       const applications = mockApplicationSet(5, new Date(), 1);
@@ -118,73 +329,18 @@ describe('Testing application export service', () => {
           listingId: randomUUID(),
           includeDemographics: false,
         } as unknown as ApplicationCsvQueryParams,
-        requestingUser.id,
+        requestingUser,
       );
 
       const headerRow =
         '"Application Id","Application Confirmation Code","Application Type","Application Submission Date","Application Received At","Application Received By","Primary Applicant First Name","Primary Applicant Middle Name","Primary Applicant Last Name","Primary Applicant Birth Day","Primary Applicant Birth Month","Primary Applicant Birth Year","Primary Applicant Email Address","Primary Applicant Phone Number","Primary Applicant Phone Type","Primary Applicant Additional Phone Number","Primary Applicant Street","Primary Applicant Street 2","Primary Applicant City","Primary Applicant State","Primary Applicant Zip Code","Primary Applicant Mailing Street","Primary Applicant Mailing Street 2","Primary Applicant Mailing City","Primary Applicant Mailing State","Primary Applicant Mailing Zip Code","Alternate Contact First Name","Alternate Contact Last Name","Alternate Contact Type","Alternate Contact Agency","Alternate Contact Other Type","Alternate Contact Email Address","Alternate Contact Phone Number","Alternate Contact Street","Alternate Contact Street 2","Alternate Contact City","Alternate Contact State","Alternate Contact Zip Code","Income","Income Period","Accessibility Mobility","Accessibility Vision","Accessibility Hearing","Expecting Household Changes","Household Includes Student or Member Nearing 18","Vouchers or Subsidies","Requested Unit Types","Preference text 0","Preference text 0 - text - Address","Program text 1","Household Size","Household Member (1) First Name","Household Member (1) Middle Name","Household Member (1) Last Name","Household Member (1) First Name","Household Member (1) Birth Day","Household Member (1) Birth Month","Household Member (1) Birth Year","Household Member (1) Relationship","Household Member (1) Same as Primary Applicant","Household Member (1) Street","Household Member (1) Street 2","Household Member (1) City","Household Member (1) State","Household Member (1) Zip Code","Marked As Duplicate","Flagged As Duplicate"';
       const firstApp =
         '"application 0 firstName","application 0 middleName","application 0 lastName","application 0 birthDay","application 0 birthMonth","application 0 birthYear","application 0 emailaddress","application 0 phoneNumber","application 0 phoneNumberType","additionalPhoneNumber 0","application 0 applicantAddress street","application 0 applicantAddress street2","application 0 applicantAddress city","application 0 applicantAddress state","application 0 applicantAddress zipCode","application 0 mailingAddress street","application 0 mailingAddress street2","application 0 mailingAddress city","application 0 mailingAddress state","application 0 mailingAddress zipCode","application 0 alternateContact firstName","application 0 alternateContact lastName","application 0 alternateContact type","application 0 alternateContact agency","application 0 alternateContact otherType","application 0 alternatecontact emailaddress","application 0 alternateContact phoneNumber","application 0 alternateContact address street","application 0 alternateContact address street2","application 0 alternateContact address city","application 0 alternateContact address state","application 0 alternateContact address zipCode","income 0","per month",,,,"true","true","true","Studio,One Bedroom",,,,,,,,,,,,,,,,,,,,';
+
       const mockedStream = new PassThrough();
       exportResponse.pipe(mockedStream);
 
       // In order to make sure the last expect statements are properly hit we need to wrap in a promise and resolve it
-      const readable = await new Promise((resolve) => {
-        mockedStream.on('data', async (d) => {
-          const value = Buffer.from(d).toString();
-          mockedStream.end();
-          mockedStream.destroy();
-          resolve(value);
-        });
-      });
-
-      expect(readable).toContain(headerRow);
-      expect(readable).toContain(firstApp);
-    });
-
-    it('should build csv with demographics', async () => {
-      const requestingUser = {
-        firstName: 'requesting fName',
-        lastName: 'requesting lName',
-        email: 'requestingUser@email.com',
-        jurisdictions: [{ id: 'juris id' }],
-      } as unknown as User;
-
-      const applications = mockApplicationSet(3, new Date());
-      prisma.applications.findMany = jest.fn().mockReturnValue(applications);
-      prisma.listings.findUnique = jest.fn().mockResolvedValue({});
-      permissionService.canOrThrow = jest.fn().mockResolvedValue(true);
-
-      prisma.multiselectQuestions.findMany = jest
-        .fn()
-        .mockReturnValue([
-          mockMultiselectQuestion(
-            0,
-            new Date(),
-            MultiselectQuestionsApplicationSectionEnum.preferences,
-          ),
-          mockMultiselectQuestion(
-            1,
-            new Date(),
-            MultiselectQuestionsApplicationSectionEnum.programs,
-          ),
-        ]);
-
-      const exportResponse = await service.csvExport(
-        {
-          listingId: 'test',
-          includeDemographics: true,
-        } as unknown as ApplicationCsvQueryParams,
-        requestingUser.id,
-      );
-
-      const headerRow =
-        '"Application Id","Application Confirmation Code","Application Type","Application Submission Date","Application Received At","Application Received By","Primary Applicant First Name","Primary Applicant Middle Name","Primary Applicant Last Name","Primary Applicant Birth Day","Primary Applicant Birth Month","Primary Applicant Birth Year","Primary Applicant Email Address","Primary Applicant Phone Number","Primary Applicant Phone Type","Primary Applicant Additional Phone Number","Primary Applicant Street","Primary Applicant Street 2","Primary Applicant City","Primary Applicant State","Primary Applicant Zip Code","Primary Applicant Mailing Street","Primary Applicant Mailing Street 2","Primary Applicant Mailing City","Primary Applicant Mailing State","Primary Applicant Mailing Zip Code","Alternate Contact First Name","Alternate Contact Last Name","Alternate Contact Type","Alternate Contact Agency","Alternate Contact Other Type","Alternate Contact Email Address","Alternate Contact Phone Number","Alternate Contact Street","Alternate Contact Street 2","Alternate Contact City","Alternate Contact State","Alternate Contact Zip Code","Income","Income Period","Accessibility Mobility","Accessibility Vision","Accessibility Hearing","Expecting Household Changes","Household Includes Student or Member Nearing 18","Vouchers or Subsidies","Requested Unit Types","Preference text 0","Program text 1","Household Size","Marked As Duplicate","Flagged As Duplicate","Race","Gender","Sexual Orientation","Spoken Language","How did you Hear?"';
-      const firstApp =
-        '"application 0 firstName","application 0 middleName","application 0 lastName","application 0 birthDay","application 0 birthMonth","application 0 birthYear","application 0 emailaddress","application 0 phoneNumber","application 0 phoneNumberType","additionalPhoneNumber 0","application 0 applicantAddress street","application 0 applicantAddress street2","application 0 applicantAddress city","application 0 applicantAddress state","application 0 applicantAddress zipCode","application 0 mailingAddress street","application 0 mailingAddress street2","application 0 mailingAddress city","application 0 mailingAddress state","application 0 mailingAddress zipCode","application 0 alternateContact firstName","application 0 alternateContact lastName","application 0 alternateContact type","application 0 alternateContact agency","application 0 alternateContact otherType","application 0 alternatecontact emailaddress","application 0 alternateContact phoneNumber","application 0 alternateContact address street","application 0 alternateContact address street2","application 0 alternateContact address city","application 0 alternateContact address state","application 0 alternateContact address zipCode","income 0","per month",,,,"true","true","true","Studio,One Bedroom",,,,,,"Indigenous",,,,"Other"';
-
-      const mockedStream = new PassThrough();
-      exportResponse.pipe(mockedStream);
       const readable = await new Promise((resolve) => {
         mockedStream.on('data', async (d) => {
           const value = Buffer.from(d).toString();
@@ -207,7 +363,31 @@ describe('Testing application export service', () => {
         firstName: 'requesting fName',
         lastName: 'requesting lName',
         email: 'requestingUser@email.com',
-        jurisdictions: [{ id: 'juris id' }],
+        jurisdictions: [
+          {
+            id: 'juris id',
+            featureFlags: [
+              {
+                name: FeatureFlagEnum.enableAdaOtherOption,
+                description: '',
+                active: false,
+                jurisdictions: [],
+              },
+              {
+                name: FeatureFlagEnum.enableFullTimeStudentQuestion,
+                description: '',
+                active: false,
+                jurisdictions: [],
+              },
+              {
+                name: FeatureFlagEnum.disableWorkInRegion,
+                description: '',
+                active: true,
+                jurisdictions: [],
+              },
+            ],
+          },
+        ],
       } as unknown as User;
 
       const applications = mockApplicationSet(5, new Date());
@@ -242,7 +422,7 @@ describe('Testing application export service', () => {
         .mockReturnValue('Studio');
       const exportResponse = await service.csvExport(
         { listingId: randomUUID() } as unknown as ApplicationCsvQueryParams,
-        requestingUser.id,
+        requestingUser,
       );
 
       const mockedStream = new PassThrough();
@@ -269,7 +449,31 @@ describe('Testing application export service', () => {
         firstName: 'requesting fName',
         lastName: 'requesting lName',
         email: 'requestingUser@email.com',
-        jurisdictions: [{ id: 'juris id' }],
+        jurisdictions: [
+          {
+            id: 'juris id',
+            featureFlags: [
+              {
+                name: FeatureFlagEnum.enableAdaOtherOption,
+                description: '',
+                active: false,
+                jurisdictions: [],
+              },
+              {
+                name: FeatureFlagEnum.enableFullTimeStudentQuestion,
+                description: '',
+                active: false,
+                jurisdictions: [],
+              },
+              {
+                name: FeatureFlagEnum.disableWorkInRegion,
+                description: '',
+                active: true,
+                jurisdictions: [],
+              },
+            ],
+          },
+        ],
       } as unknown as User;
 
       const applications = mockApplicationSet(5, new Date());
@@ -307,7 +511,7 @@ describe('Testing application export service', () => {
           listingId: randomUUID(),
           timeZone: 'America/New_York',
         } as unknown as ApplicationCsvQueryParams,
-        requestingUser.id,
+        requestingUser,
       );
 
       const mockedStream = new PassThrough();
@@ -334,7 +538,31 @@ describe('Testing application export service', () => {
         firstName: 'requesting fName',
         lastName: 'requesting lName',
         email: 'requestingUser@email.com',
-        jurisdictions: [{ id: 'juris id' }],
+        jurisdictions: [
+          {
+            id: 'juris id',
+            featureFlags: [
+              {
+                name: FeatureFlagEnum.enableAdaOtherOption,
+                description: '',
+                active: false,
+                jurisdictions: [],
+              },
+              {
+                name: FeatureFlagEnum.enableFullTimeStudentQuestion,
+                description: '',
+                active: false,
+                jurisdictions: [],
+              },
+              {
+                name: FeatureFlagEnum.disableWorkInRegion,
+                description: '',
+                active: true,
+                jurisdictions: [],
+              },
+            ],
+          },
+        ],
       } as unknown as User;
 
       const applications = mockApplicationSet(5, new Date());
@@ -375,7 +603,7 @@ describe('Testing application export service', () => {
           listingId: randomUUID(),
           timeZone: 'America/New_York',
         } as unknown as ApplicationCsvQueryParams,
-        requestingUser.id,
+        requestingUser,
       );
 
       const mockedStream = new PassThrough();
@@ -451,7 +679,43 @@ describe('Testing application export service', () => {
 
   describe('populateDataForEachHeader', () => {
     it('should populate the data for each header and output a string', async () => {
-      const headers = await getExportHeaders(0, [], 'America/Los_Angeles');
+      const requestingUser = {
+        firstName: 'requesting fName',
+        lastName: 'requesting lName',
+        email: 'requestingUser@email.com',
+        jurisdictions: [
+          {
+            id: 'juris id',
+            featureFlags: [
+              {
+                name: FeatureFlagEnum.enableAdaOtherOption,
+                description: '',
+                active: false,
+                jurisdictions: [],
+              },
+              {
+                name: FeatureFlagEnum.enableFullTimeStudentQuestion,
+                description: '',
+                active: false,
+                jurisdictions: [],
+              },
+              {
+                name: FeatureFlagEnum.disableWorkInRegion,
+                description: '',
+                active: true,
+                jurisdictions: [],
+              },
+            ],
+          },
+        ],
+      } as unknown as User;
+
+      const headers = await getExportHeaders(
+        0,
+        [],
+        'America/Los_Angeles',
+        requestingUser,
+      );
       const id = randomUUID();
       const application = mockApplication({
         date: new Date('December 5, 2024 03:24:00 PST'),
@@ -468,7 +732,43 @@ describe('Testing application export service', () => {
       );
     });
     it('should populate the data for each header and output a string', async () => {
-      const headers = await getExportHeaders(0, [], 'America/Los_Angeles');
+      const requestingUser = {
+        firstName: 'requesting fName',
+        lastName: 'requesting lName',
+        email: 'requestingUser@email.com',
+        jurisdictions: [
+          {
+            id: 'juris id',
+            featureFlags: [
+              {
+                name: FeatureFlagEnum.enableAdaOtherOption,
+                description: '',
+                active: false,
+                jurisdictions: [],
+              },
+              {
+                name: FeatureFlagEnum.enableFullTimeStudentQuestion,
+                description: '',
+                active: false,
+                jurisdictions: [],
+              },
+              {
+                name: FeatureFlagEnum.disableWorkInRegion,
+                description: '',
+                active: true,
+                jurisdictions: [],
+              },
+            ],
+          },
+        ],
+      } as unknown as User;
+
+      const headers = await getExportHeaders(
+        0,
+        [],
+        'America/Los_Angeles',
+        requestingUser,
+      );
       const id = randomUUID();
       const application = mockApplication({
         date: new Date('December 5, 2024 03:24:00 PST'),
@@ -488,6 +788,7 @@ describe('Testing application export service', () => {
         'accessibility.hearing': '',
         'accessibility.mobility': '',
         'accessibility.vision': '',
+        // 'accessibility.other': '',
         additionalPhoneNumber: 'additionalPhoneNumber 1',
         'alternateContact.address.city':
           'application 1 alternateContact address city',

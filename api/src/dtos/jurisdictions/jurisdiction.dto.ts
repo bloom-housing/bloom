@@ -141,4 +141,10 @@ export class Jurisdiction extends AbstractDTO {
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty({ type: FeatureFlag, isArray: true })
   featureFlags: FeatureFlag[];
+
+  @Expose()
+  @IsString({ groups: [ValidationsGroupsEnum.default], each: true })
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ApiProperty({ isArray: true })
+  requiredListingFields: string[];
 }

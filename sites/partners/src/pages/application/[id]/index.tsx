@@ -32,15 +32,22 @@ export default function ApplicationsList() {
   const applicationId = router.query.id as string
   const { application } = useSingleApplicationData(applicationId)
   const { listingDto } = useSingleListingData(application?.listings?.id)
-  const { applicationsService, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
-  const [errorAlert, setErrorAlert] = useState(false)
 
-  const [membersDrawer, setMembersDrawer] = useState<MembersDrawer>(null)
+  const { applicationsService, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
+
+  const enableAdaOtherOption = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableAdaOtherOption,
+    listingDto?.jurisdictions.id
+  )
 
   const enableFullTimeStudentQuestion = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableFullTimeStudentQuestion,
     listingDto?.jurisdictions.id
   )
+
+  const [errorAlert, setErrorAlert] = useState(false)
+
+  const [membersDrawer, setMembersDrawer] = useState<MembersDrawer>(null)
 
   async function deleteApplication() {
     try {
@@ -80,7 +87,7 @@ export default function ApplicationsList() {
     <ApplicationContext.Provider value={application}>
       <Layout>
         <Head>
-          <title>{t("nav.siteTitlePartners")}</title>
+          <title>{`Application - ${t("nav.siteTitlePartners")}`}</title>
         </Head>
         <NavigationHeader
           className="relative"
@@ -146,6 +153,7 @@ export default function ApplicationsList() {
 
                 <DetailsHouseholdDetails
                   enableFullTimeStudentQuestion={enableFullTimeStudentQuestion}
+                  enableAdaOtherOption={enableAdaOtherOption}
                 />
 
                 <DetailsMultiselectQuestions

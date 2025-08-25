@@ -1,13 +1,16 @@
-import React from "react"
+import React, { useContext } from "react"
 import Head from "next/head"
 import axios from "axios"
-import { AlertBox, t } from "@bloom-housing/ui-components"
-import { imageUrlFromListing } from "@bloom-housing/shared-helpers"
+import { t } from "@bloom-housing/ui-components"
+import { AuthContext, imageUrlFromListing } from "@bloom-housing/shared-helpers"
+
 import Layout from "../../../layouts/application"
+import { ListingViewSeeds } from "../../../components/listing/ListingViewSeeds"
 import { ListingView, ListingViewListing } from "../../../components/listing/ListingView"
 import { MetaTags } from "../../../components/shared/MetaTags"
 import { runtimeConfig } from "../../../lib/runtime-config"
 import { Jurisdiction, Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { Alert } from "@bloom-housing/ui-seeds"
 
 interface ListingProps {
   listing: Listing
@@ -18,6 +21,7 @@ interface ListingProps {
 
 export default function ListingPage(props: ListingProps) {
   const { listing } = props
+  const { profile } = useContext(AuthContext)
   const pageTitle = `${listing.name} - ${t("nav.siteTitle")}`
   const metaDescription = t("pageDescription.listing", {
     listingName: listing.name,
@@ -30,31 +34,34 @@ export default function ListingPage(props: ListingProps) {
         <title>{pageTitle}</title>
       </Head>
       <MetaTags title={listing.name} image={metaImage} description={metaDescription} />
-      <AlertBox
-        className="pt-6 pb-4 bg-red-500 font-bold text-xs"
-        type="alert"
-        boundToLayoutWidth
-        inverted
-        closeable
-      >
+      <Alert variant="alert-inverse" fullwidth className="fullscreen-alert">
         {t("listings.listingPreviewOnly")}
-      </AlertBox>
-      <ListingView
-        listing={listing as ListingViewListing}
-        preview={true}
-        jurisdiction={props.jurisdiction}
-        googleMapsApiKey={props.googleMapsApiKey}
-        googleMapsMapId={props.googleMapsMapId}
-        isExternal={false}
-      />
+      </Alert>
+      {process.env.showNewSeedsDesigns ? (
+        <ListingViewSeeds
+          listing={listing}
+          preview={true}
+          profile={profile}
+          jurisdiction={props.jurisdiction}
+        />
+      ) : (
+        <ListingView
+          listing={listing as ListingViewListing}
+          preview={true}
+          jurisdiction={props.jurisdiction}
+          googleMapsApiKey={props.googleMapsApiKey}
+          googleMapsMapId={props.googleMapsMapId}
+          isExternal={false}
+        />
+      )}
     </Layout>
   )
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function getServerSideProps(context: {
   params: Record<string, string>
   locale: string
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   req: any
 }) {
   let response

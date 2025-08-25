@@ -27,15 +27,17 @@ export enum ReservedCommunityTypes {
 }
 
 export interface FilterData {
-  availability?: Record<FilterAvailabilityEnum, BooleanOrBooleanString>
-  bedroomTypes?: Record<UnitTypeEnum, BooleanOrBooleanString>
-  homeType?: Record<HomeTypeEnum, BooleanOrBooleanString>
+  availabilities?: { [K in FilterAvailabilityEnum]?: BooleanOrBooleanString }
+  bedroomTypes?: { [K in UnitTypeEnum]?: BooleanOrBooleanString }
+  homeTypes?: { [K in HomeTypeEnum]?: BooleanOrBooleanString }
   isVerified?: BooleanOrBooleanString
-  listingFeatures?: Record<keyof ListingFeatures, BooleanOrBooleanString>
-  monthlyRent?: Record<"maxRent" | "minRent", string>
-  regions?: Record<RegionEnum, BooleanOrBooleanString>
+  listingFeatures?: { [K in keyof ListingFeatures]?: BooleanOrBooleanString }
+  monthlyRent?: { [K in "maxRent" | "minRent"]?: string }
+  regions?: { [K in RegionEnum]: BooleanOrBooleanString }
   section8Acceptance?: BooleanOrBooleanString
-  reservedCommunityTypes?: Record<ReservedCommunityTypes, BooleanOrBooleanString>
+  reservedCommunityTypes?: { [K in ReservedCommunityTypes]?: BooleanOrBooleanString }
+  multiselectQuestions?: Record<string, BooleanOrBooleanString>
+  name?: string
 }
 
 export interface FilterField {
@@ -56,6 +58,14 @@ export interface RentSectionProps {
   getValues: UseFormMethods["getValues"]
   setValue: UseFormMethods["setValue"]
   filterState: FilterData
+  setError: UseFormMethods["setError"]
+  clearErrors: UseFormMethods["clearErrors"]
+  errors: UseFormMethods["formState"]["errors"]
+}
+
+export interface SearchSectionProps {
+  register: UseFormMethods["register"]
+  nameState: string
 }
 
 const arrayFilters: ListingFilterKeys[] = [
@@ -66,17 +76,12 @@ const arrayFilters: ListingFilterKeys[] = [
   ListingFilterKeys.regions,
   ListingFilterKeys.reservedCommunityTypes,
   ListingFilterKeys.availabilities,
+  ListingFilterKeys.multiselectQuestions,
 ]
 
 const booleanFilters: ListingFilterKeys[] = [
   ListingFilterKeys.isVerified,
   ListingFilterKeys.section8Acceptance,
-]
-
-// https://github.com/bloom-housing/bloom/issues/4795
-const individualFilters: ListingFilterKeys[] = [
-  ListingFilterKeys.bathrooms,
-  ListingFilterKeys.jurisdiction,
 ]
 
 // customizations to base enums
@@ -91,7 +96,7 @@ const availabilityOrdering = {
  *
  * @returns an array of availability keys in the displayed order
  */
-export const getAvailabilityValues = () => {
+export const getAvailabilityValues = (enableUnitGroups: boolean) => {
   // TODO: https://github.com/metrotranscom/doorway/issues/1278
   const availabilityFiltered = Object.keys(FilterAvailabilityEnum).filter(
     (elem) => elem != FilterAvailabilityEnum.waitlistOpen
@@ -99,6 +104,13 @@ export const getAvailabilityValues = () => {
   const availabilityOrdered = availabilityFiltered.sort((a, b) => {
     return availabilityOrdering[a].ordinal - availabilityOrdering[b].ordinal
   })
+
+  if (enableUnitGroups) {
+    const index = availabilityOrdered.indexOf(FilterAvailabilityEnum.unitsAvailable)
+    if (index !== -1) {
+      availabilityOrdered[index] = "vacantUnits"
+    }
+  }
   return availabilityOrdered
 }
 
@@ -179,55 +191,107 @@ export const CheckboxGroup = (props: CheckboxGroupProps) => {
   )
 }
 
-export const RentSection = (props: RentSectionProps) => (
-  <fieldset className={styles["filter-section"]}>
-    <legend className={styles["filter-section-label"]}>{t("t.rent")}</legend>
-    <Grid spacing="sm">
-      <Grid.Row>
-        <Grid.Cell>
-          <Field
-            id={`${ListingFilterKeys.monthlyRent}.minRent`}
-            name={`${ListingFilterKeys.monthlyRent}.minRent`}
-            label={t("listings.minRent")}
-            type="currency"
-            prepend="$"
-            register={props.register}
-            getValues={props.getValues}
-            setValue={props.setValue}
-            defaultValue={props.filterState?.[ListingFilterKeys.monthlyRent]?.minRent}
-          />
-        </Grid.Cell>
-        <Grid.Cell>
-          <Field
-            id={`${ListingFilterKeys.monthlyRent}.maxRent`}
-            name={`${ListingFilterKeys.monthlyRent}.maxRent`}
-            label={t("listings.maxRent")}
-            type="currency"
-            prepend="$"
-            register={props.register}
-            getValues={props.getValues}
-            setValue={props.setValue}
-            defaultValue={props.filterState?.[ListingFilterKeys.monthlyRent]?.maxRent}
-          />
-        </Grid.Cell>
-      </Grid.Row>
-      <Grid.Row>
-        <Grid.Cell>
-          <Field
-            id={ListingFilterKeys.section8Acceptance}
-            name={ListingFilterKeys.section8Acceptance}
-            label={t("listings.section8Acceptance")}
-            labelClassName={styles["filter-checkbox-label"]}
-            type="checkbox"
-            register={props.register}
-            inputProps={{
-              defaultChecked: isTrue(props.filterState?.[ListingFilterKeys.section8Acceptance]),
-            }}
-          />
-        </Grid.Cell>
-      </Grid.Row>
-    </Grid>
-  </fieldset>
+export const validateRentValues = (
+  getValues: UseFormMethods["getValues"],
+  clearErrors: UseFormMethods["clearErrors"],
+  setError: UseFormMethods["setError"]
+) => {
+  const minField = `${ListingFilterKeys.monthlyRent}.minRent`
+  const maxField = `${ListingFilterKeys.monthlyRent}.maxRent`
+
+  const minValue = getValues(minField)
+  const maxValue = getValues(maxField)
+
+  clearErrors([minField, maxField])
+
+  if (minValue && maxValue) {
+    const numericMin = parseFloat(minValue.replaceAll(",", ""))
+    const numericMax = parseFloat(maxValue.replaceAll(",", ""))
+
+    if (numericMin > numericMax) {
+      setError(minField, { message: t("errors.minGreaterThanMaxRentError") })
+      setError(maxField, { message: t("errors.maxLessThanMinRentError") })
+    }
+  }
+}
+
+export const RentSection = (props: RentSectionProps) => {
+  return (
+    <fieldset className={styles["filter-section"]}>
+      <legend className={styles["filter-section-label"]}>{t("t.rent")}</legend>
+      <Grid spacing="sm">
+        <Grid.Row>
+          <Grid.Cell>
+            <Field
+              id={`${ListingFilterKeys.monthlyRent}.minRent`}
+              name={`${ListingFilterKeys.monthlyRent}.minRent`}
+              label={t("listings.minRent")}
+              type="currency"
+              prepend="$"
+              register={props.register}
+              getValues={props.getValues}
+              setValue={props.setValue}
+              defaultValue={props.filterState?.[ListingFilterKeys.monthlyRent]?.minRent}
+              error={!!props.errors[ListingFilterKeys.monthlyRent]?.minRent}
+              errorMessage={props.errors[ListingFilterKeys.monthlyRent]?.minRent?.message}
+              inputProps={{
+                onBlur: () =>
+                  validateRentValues(props.getValues, props.clearErrors, props.setError),
+              }}
+            />
+          </Grid.Cell>
+          <Grid.Cell>
+            <Field
+              id={`${ListingFilterKeys.monthlyRent}.maxRent`}
+              name={`${ListingFilterKeys.monthlyRent}.maxRent`}
+              label={t("listings.maxRent")}
+              type="currency"
+              prepend="$"
+              register={props.register}
+              getValues={props.getValues}
+              setValue={props.setValue}
+              defaultValue={props.filterState?.[ListingFilterKeys.monthlyRent]?.maxRent}
+              error={!!props.errors[ListingFilterKeys.monthlyRent]?.maxRent}
+              errorMessage={props.errors[ListingFilterKeys.monthlyRent]?.maxRent?.message}
+              inputProps={{
+                onBlur: () =>
+                  validateRentValues(props.getValues, props.clearErrors, props.setError),
+              }}
+            />
+          </Grid.Cell>
+        </Grid.Row>
+        <Grid.Row>
+          <Grid.Cell>
+            <Field
+              id={ListingFilterKeys.section8Acceptance}
+              name={ListingFilterKeys.section8Acceptance}
+              label={t("listings.section8Acceptance")}
+              labelClassName={styles["filter-checkbox-label"]}
+              type="checkbox"
+              register={props.register}
+              inputProps={{
+                defaultChecked: isTrue(props.filterState?.[ListingFilterKeys.section8Acceptance]),
+              }}
+            />
+          </Grid.Cell>
+        </Grid.Row>
+      </Grid>
+    </fieldset>
+  )
+}
+
+export const SearchSection = (props: SearchSectionProps) => (
+  <div className={styles["filter-section"]}>
+    <Field
+      id={ListingFilterKeys.name}
+      name={ListingFilterKeys.name}
+      label={t("t.listingName")}
+      subNote={t("listings.search.subNote")}
+      type="text"
+      register={props.register}
+      defaultValue={props.nameState}
+    />
+  </div>
 )
 
 /**
@@ -237,21 +301,10 @@ export const RentSection = (props: RentSectionProps) => (
  * @param data object containing form selections or url params decoded
  * @returns array of formatted backend filters
  */
-export const encodeFilterDataToBackendFilters = (data: FilterData = {}): ListingFilterParams[] => {
+export const encodeFilterDataToBackendFilters = (data: FilterData): ListingFilterParams[] => {
   const filters: ListingFilterParams[] = []
   Object.entries(data).forEach(([filterType, userSelections]) => {
-    // individual filters not yet implemented
-    if (individualFilters.includes(ListingFilterKeys[filterType])) {
-      Object.entries(userSelections).forEach((field) => {
-        if (field[1]) {
-          const filter = {
-            $comparison: EnumListingFilterParamsComparison["="],
-          }
-          filter[filterType] = field[0]
-          filters.push(filter)
-        }
-      })
-    } else if (arrayFilters.includes(ListingFilterKeys[filterType])) {
+    if (arrayFilters.includes(ListingFilterKeys[filterType])) {
       const selectedFields = []
       Object.entries(userSelections).forEach((field) => {
         if (field[1]) {
@@ -295,8 +348,16 @@ export const encodeFilterDataToBackendFilters = (data: FilterData = {}): Listing
         filter[ListingFilterKeys.monthlyRent] = userSelections["maxRent"]?.replace(",", "")
         filters.push(filter)
       }
+    } else if (filterType === ListingFilterKeys.name) {
+      const filter = {
+        $comparison: EnumListingFilterParamsComparison["LIKE"],
+      }
+
+      filter[ListingFilterKeys.name] = userSelections
+      filters.push(filter)
     }
   })
+
   return filters
 }
 
@@ -345,6 +406,9 @@ export const encodeFilterDataToQuery = (data: FilterData): string => {
         "-"
       )}`
       queryArr.push(rentParam)
+    } else if (filterType === ListingFilterKeys.name) {
+      const nameParam = `${ListingFilterKeys[filterType]}=${userSelections}`
+      queryArr.push(nameParam)
     }
   })
   return queryArr.join("&")
@@ -373,7 +437,9 @@ export const decodeQueryToFilterData = (parsedQuery: ParsedUrlQuery): FilterData
     } else if (filterType === ListingFilterKeys.monthlyRent && typeof userSelections === "string") {
       //custom separator to avoid conflicts with higher values with commas
       const rentArr = userSelections.split("-")
-      filterData[filterType] = { minRent: rentArr[0], maxRent: rentArr[1] }
+      filterData[filterType] = { minRent: rentArr[0] ?? "", maxRent: rentArr[1] ?? "" }
+    } else if (filterType === ListingFilterKeys.name) {
+      filterData[filterType] = userSelections
     }
   })
   return filterData
@@ -404,6 +470,8 @@ export const removeUnselectedFilterData = (data: FilterData): FilterData => {
       (filterType === ListingFilterKeys.monthlyRent && userSelections["minRent"]) ||
       userSelections["maxRent"]
     ) {
+      cleanedFilterData[filterType] = userSelections
+    } else if (filterType === ListingFilterKeys.name && userSelections) {
       cleanedFilterData[filterType] = userSelections
     }
   })

@@ -9,6 +9,7 @@ import { useFormContext } from "react-hook-form"
 import InformationCircleIcon from "@heroicons/react/24/solid/InformationCircleIcon"
 import LinkComponent from "../../../../components/core/LinkComponent"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
+import styles from "../ListingForm.module.scss"
 
 type SelectAndOrderSection = MultiselectQuestion
 
@@ -195,7 +196,7 @@ const SelectAndOrder = ({
     item: MultiselectQuestion
   ) => {
     const getInfoSection = (option, index) => {
-      const isNotLastItem = index < item.options.length - 1
+      const isNotLastItem = index < item.options?.length - 1
       return (
         <div key={index} className={isNotLastItem ? "mb-5" : "mb-1"}>
           <div className={"font-semibold mb-1 text-gray-800"}>
@@ -238,7 +239,7 @@ const SelectAndOrder = ({
     }
     return (
       <div className="ml-8 -mt-6 mb-4 text-sm">
-        {item.options.some((option) => option.collectAddress) && (
+        {item.options?.some((option) => option.collectAddress) && (
           <div className="mt-6 mb-2">{additionalFieldsTag()}</div>
         )}
         <div>
@@ -257,7 +258,7 @@ const SelectAndOrder = ({
           {previewShown && (
             <div className={"bg-blue-100 mt-2 p-4"}>
               {getInfoSection(item, -1)}
-              {item.options.map((option, index) => {
+              {item.options?.map((option, index) => {
                 return getInfoSection(option, index)
               })}
             </div>
@@ -366,7 +367,7 @@ const SelectAndOrder = ({
                         <Grid.Row>
                           <Grid.Cell>
                             <Field
-                              className={"font-semibold"}
+                              className={`font-semibold ${styles["label-option"]}`}
                               id={`${formKey}.${item.id}`}
                               name={`${formKey}.${item.id}`}
                               type="checkbox"

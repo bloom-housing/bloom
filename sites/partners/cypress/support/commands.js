@@ -400,7 +400,7 @@ Cypress.Commands.add("addMinimalListing", (listingName, isLottery, isApproval, j
   cy.fixture("minimalListing").then((listing) => {
     if (jurisdiction) {
       cy.getByID("jurisdictions.id").select("Bay Area")
-      cy.getByID("jurisdictions.id-error").should("have.length", 0)
+      cy.getByID("jurisdictions.id-error").should("not.include.text", "This field is required")
     }
     cy.getByID("name").type(listingName)
     cy.getByID("developer").type(listing["developer"])

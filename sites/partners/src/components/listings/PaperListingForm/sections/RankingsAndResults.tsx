@@ -2,6 +2,7 @@ import React, { useContext } from "react"
 import dayjs from "dayjs"
 import utc from "dayjs/plugin/utc"
 dayjs.extend(utc)
+import { Editor } from "@tiptap/react"
 import { useFormContext, useWatch } from "react-hook-form"
 import { t, Field, FieldGroup, Textarea, DateField, TimeField } from "@bloom-housing/ui-components"
 import { Grid } from "@bloom-housing/ui-seeds"
@@ -13,15 +14,26 @@ import {
   ReviewOrderTypeEnum,
   YesNoEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { fieldHasError, fieldMessage, getLabel } from "../../../../lib/helpers"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
+import { TextEditor } from "../../../shared/TextEditor"
+import styles from "../ListingForm.module.scss"
 
 type RankingsAndResultsProps = {
-  listing?: FormListing
   disableDueDates?: boolean
   isAdmin?: boolean
+  listing?: FormListing
+  requiredFields: string[]
+  whatToExpectEditor: Editor
 }
 
-const RankingsAndResults = ({ listing, disableDueDates, isAdmin }: RankingsAndResultsProps) => {
+const RankingsAndResults = ({
+  disableDueDates,
+  isAdmin,
+  listing,
+  requiredFields,
+  whatToExpectEditor,
+}: RankingsAndResultsProps) => {
   const formMethods = useFormContext()
   const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
 
@@ -94,11 +106,12 @@ const RankingsAndResults = ({ listing, disableDueDates, isAdmin }: RankingsAndRe
         {(availabilityQuestion !== "openWaitlist" || enableUnitGroups) && (
           <Grid.Row columns={2} className={"flex items-center"}>
             <Grid.Cell>
-              <p className="field-label m-4 ml-0">{t("listings.reviewOrderQuestion")}</p>
               <FieldGroup
                 name="reviewOrderQuestion"
                 type="radio"
                 register={register}
+                groupLabel={t("listings.reviewOrderQuestion")}
+                fieldLabelClassName={`${styles["label-option"]} seeds-m-bs-2`}
                 fields={[
                   {
                     label: t("listings.firstComeFirstServe"),
@@ -130,11 +143,12 @@ const RankingsAndResults = ({ listing, disableDueDates, isAdmin }: RankingsAndRe
                 {isAdmin ? (
                   <Grid.Row columns={2} className={"flex items-center"}>
                     <Grid.Cell>
-                      <p className={`field-label m-4 ml-0`}>{t("listings.lotteryOptInQuestion")}</p>
                       <FieldGroup
                         name="lotteryOptInQuestion"
                         type="radio"
                         register={register}
+                        groupLabel={t("listings.lotteryOptInQuestion")}
+                        fieldLabelClassName={`${styles["label-option"]} seeds-m-bs-2`}
                         fields={[
                           {
                             ...yesNoRadioOptions[0],
@@ -278,7 +292,7 @@ const RankingsAndResults = ({ listing, disableDueDates, isAdmin }: RankingsAndRe
                   label={t("listings.lotteryDateNotes")}
                   name={"lotteryDateNotes"}
                   id={"lotteryDateNotes"}
-                  placeholder={t("t.notes")}
+                  placeholder={""}
                   note={t("t.optional")}
                   fullWidth={true}
                   register={register}
@@ -290,11 +304,12 @@ const RankingsAndResults = ({ listing, disableDueDates, isAdmin }: RankingsAndRe
         )}
         <Grid.Row columns={2} className={"flex items-center"}>
           <Grid.Cell>
-            <p className={`field-label m-4 ml-0`}>{t("listings.waitlist.openQuestion")}</p>
             <FieldGroup
               name="waitlistOpenQuestion"
               type="radio"
+              groupLabel={t("listings.waitlist.openQuestion")}
               register={register}
+              fieldLabelClassName={`${styles["label-option"]} seeds-m-bs-2`}
               fields={[
                 {
                   ...yesNoRadioOptions[0],
@@ -317,43 +332,49 @@ const RankingsAndResults = ({ listing, disableDueDates, isAdmin }: RankingsAndRe
             <Grid.Row columns={3}>
               {enableWaitlistAdditionalFields && (
                 <>
-                  <Field
-                    name="waitlistMaxSize"
-                    id="waitlistMaxSize"
-                    register={register}
-                    label={t("listings.waitlist.maxSizeQuestion")}
-                    placeholder={t("listings.waitlist.maxSize")}
-                    type={"number"}
-                    subNote={t("t.recommended")}
-                  />
-                  <Field
-                    name="waitlistCurrentSize"
-                    id="waitlistCurrentSize"
-                    register={register}
-                    label={t("listings.waitlist.currentSizeQuestion")}
-                    placeholder={t("listings.waitlist.currentSize")}
-                    type={"number"}
-                  />
+                  <Grid.Cell>
+                    <Field
+                      name="waitlistMaxSize"
+                      id="waitlistMaxSize"
+                      register={register}
+                      label={t("listings.waitlist.maxSizeQuestion")}
+                      placeholder={""}
+                      type={"number"}
+                      subNote={t("t.recommended")}
+                    />
+                  </Grid.Cell>
+                  <Grid.Cell>
+                    <Field
+                      name="waitlistCurrentSize"
+                      id="waitlistCurrentSize"
+                      register={register}
+                      label={t("listings.waitlist.currentSizeQuestion")}
+                      placeholder={""}
+                      type={"number"}
+                    />
+                  </Grid.Cell>
                 </>
               )}
-              <Field
-                name="waitlistOpenSpots"
-                id="waitlistOpenSpots"
-                register={register}
-                label={t("listings.waitlist.openSizeQuestion")}
-                placeholder={t("listings.waitlist.openSize")}
-                type={"number"}
-              />
+              <Grid.Cell>
+                <Field
+                  name="waitlistOpenSpots"
+                  id="waitlistOpenSpots"
+                  register={register}
+                  label={t("listings.waitlist.openSizeQuestion")}
+                  placeholder={""}
+                  type={"number"}
+                />
+              </Grid.Cell>
             </Grid.Row>
           )}
         <Grid.Row columns={3}>
           <Grid.Cell className="seeds-grid-span-2">
-            <Textarea
-              label={t("listings.whatToExpectLabel")}
-              name={"whatToExpect"}
-              id={"whatToExpect"}
-              fullWidth={true}
-              register={register}
+            <TextEditor
+              editor={whatToExpectEditor}
+              editorId={"whatToExpect"}
+              error={fieldHasError(errors?.whatToExpect)}
+              label={getLabel("whatToExpect", requiredFields, t("listings.whatToExpectLabel"))}
+              errorMessage={fieldMessage(errors.whatToExpect)}
             />
           </Grid.Cell>
         </Grid.Row>

@@ -92,3 +92,7 @@ dump.rdb
 
 # pg dumps
 *.dump
+
+# Development planning files
+memory-bank/
+.github/copilot-instructions.md

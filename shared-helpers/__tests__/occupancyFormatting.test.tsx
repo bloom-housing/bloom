@@ -5,9 +5,11 @@ import {
   getOccupancyDescription,
   getOccupancy,
   stackedOccupancyTable,
+  stackedUnitGroupsOccupancyTable,
 } from "../src/views/occupancyFormatting"
 import { t } from "@bloom-housing/ui-components"
-import { Listing, UnitType, UnitsSummarized } from "../src/types/backend-swagger"
+import { Listing, UnitType, UnitTypeEnum, UnitsSummarized } from "../src/types/backend-swagger"
+import { unitGroup } from "./testHelpers"
 
 const testListing: Listing = {} as Listing
 const unitsSummarized = {
@@ -166,7 +168,7 @@ describe("occupancy formatting helper", () => {
 })
 
 describe("occupancy formatting helper stacked table", () => {
-  it("properly creates occupancy table", () => {
+  it("properly creates occupancy table for units", () => {
     expect(stackedOccupancyTable(testListing)).toStrictEqual([
       {
         occupancy: { cellText: "2-6 people" },
@@ -179,6 +181,210 @@ describe("occupancy formatting helper stacked table", () => {
       {
         occupancy: { cellText: "1 person" },
         unitType: { cellText: "SRO" },
+      },
+    ])
+  })
+
+  it("properly creates occupancy table for unit groups without duplicate unit types configurations", () => {
+    testListing.unitGroups = [
+      {
+        ...unitGroup,
+        minOccupancy: 1,
+        maxOccupancy: 2,
+        unitTypes: [
+          {
+            id: "unit_id_1",
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            name: UnitTypeEnum.studio,
+            numBedrooms: 0,
+          },
+        ],
+      },
+      {
+        ...unitGroup,
+        minOccupancy: 1,
+        maxOccupancy: 2,
+        unitTypes: [
+          {
+            id: "unit_id_1",
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            name: UnitTypeEnum.oneBdrm,
+            numBedrooms: 1,
+          },
+        ],
+      },
+      {
+        ...unitGroup,
+        minOccupancy: 2,
+        maxOccupancy: 4,
+        unitTypes: [
+          {
+            id: "unit_id_1",
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            name: UnitTypeEnum.twoBdrm,
+            numBedrooms: 2,
+          },
+          {
+            id: "unit_id_1",
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            name: UnitTypeEnum.threeBdrm,
+            numBedrooms: 3,
+          },
+        ],
+      },
+    ]
+    expect(stackedUnitGroupsOccupancyTable(testListing)).toStrictEqual([
+      {
+        unitType: { cellText: "Studio" },
+        occupancy: { cellText: "1-2 people" },
+      },
+      {
+        unitType: { cellText: "1 bed" },
+        occupancy: { cellText: "1-2 people" },
+      },
+      {
+        unitType: { cellText: "2 beds, 3 beds" },
+        occupancy: { cellText: "2-4 people" },
+      },
+    ])
+  })
+
+  it("properly creates occupancy table for unit groups with duplicate unit types configurations", () => {
+    testListing.unitGroups = [
+      {
+        ...unitGroup,
+        minOccupancy: 1,
+        maxOccupancy: 3,
+        unitTypes: [
+          {
+            id: "unit_id_1",
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            name: UnitTypeEnum.studio,
+            numBedrooms: 0,
+          },
+          {
+            id: "unit_id_1",
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            name: UnitTypeEnum.oneBdrm,
+            numBedrooms: 1,
+          },
+        ],
+      },
+      {
+        ...unitGroup,
+        minOccupancy: 2,
+        maxOccupancy: 4,
+        unitTypes: [
+          {
+            id: "unit_id_1",
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            name: UnitTypeEnum.studio,
+            numBedrooms: 0,
+          },
+          {
+            id: "unit_id_1",
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            name: UnitTypeEnum.oneBdrm,
+            numBedrooms: 1,
+          },
+        ],
+      },
+      {
+        ...unitGroup,
+        minOccupancy: 2,
+        maxOccupancy: undefined,
+        unitTypes: [
+          {
+            id: "unit_id_1",
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            name: UnitTypeEnum.twoBdrm,
+            numBedrooms: 2,
+          },
+        ],
+      },
+      {
+        ...unitGroup,
+        minOccupancy: 3,
+        maxOccupancy: undefined,
+        unitTypes: [
+          {
+            id: "unit_id_1",
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            name: UnitTypeEnum.twoBdrm,
+            numBedrooms: 2,
+          },
+        ],
+      },
+      {
+        ...unitGroup,
+        minOccupancy: undefined,
+        maxOccupancy: 6,
+        unitTypes: [
+          {
+            id: "unit_id_1",
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            name: UnitTypeEnum.threeBdrm,
+            numBedrooms: 3,
+          },
+        ],
+      },
+      {
+        ...unitGroup,
+        minOccupancy: undefined,
+        maxOccupancy: 4,
+        unitTypes: [
+          {
+            id: "unit_id_1",
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            name: UnitTypeEnum.threeBdrm,
+            numBedrooms: 3,
+          },
+        ],
+      },
+      {
+        ...unitGroup,
+        minOccupancy: 3,
+        maxOccupancy: 6,
+        unitTypes: [
+          {
+            id: "unit_id_1",
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            name: UnitTypeEnum.fourBdrm,
+            numBedrooms: 4,
+          },
+        ],
+      },
+    ]
+
+    expect(stackedUnitGroupsOccupancyTable(testListing)).toStrictEqual([
+      {
+        unitType: { cellText: "Studio, 1 bed" },
+        occupancy: { cellText: "1-4 people" },
+      },
+      {
+        unitType: { cellText: "2 beds" },
+        occupancy: { cellText: "at least 2 people" },
+      },
+      {
+        unitType: { cellText: "3 beds" },
+        occupancy: { cellText: "no more than 6 people" },
+      },
+      {
+        unitType: { cellText: "4 beds" },
+        occupancy: { cellText: "3-6 people" },
       },
     ])
   })

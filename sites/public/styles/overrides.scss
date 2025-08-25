@@ -131,6 +131,10 @@
     flex-direction: column;
   }
 
+  .fullscreen-alert {
+    --alert-max-width: calc(var(--seeds-screen-lg) - var(--seeds-s20));
+  }
+
   .styled-stacked-table {
     // Temporary until we have Seeds tables to manipulate UIC StackedTable component
     [class*="stacked-table"] {
@@ -379,6 +383,35 @@
     }
   }
 
+  .bloom-markdown {
+    p:not(li > *) {
+      padding-block: 0.25em;
+    }
+
+    ul {
+      list-style: disc;
+    }
+
+    ol {
+      list-style: decimal;
+    }
+    ul,
+    ol {
+      margin-left: var(--seeds-s5);
+      margin-block-end: 0.5em;
+    }
+
+    hr {
+      margin-block: var(--seeds-spacer-label);
+      width: 100%;
+    }
+
+    a {
+      color: var(--seeds-color-blue-500);
+      text-decoration: underline;
+    }
+  }
+
   // Used in core for theming testing purposes only
   .lakeview {
     --seeds-color-primary-darker: #4e2169;
@@ -391,6 +424,33 @@
     .seeds-button {
       --button-border-radius-sm: var(--seeds-rounded-3xl);
       --button-border-radius-md: var(--seeds-rounded-3xl);
+    }
+  }
+
+  // The multi-image card overrides below exist outside of the jurisdictional class. This allows it to still get the lakeview overrides - if the class does exist, then apply the same overrides to its sibling.
+  .lakeview + div {
+    .image-card__gallery-modal {
+      @extend .lakeview;
+    }
+  }
+
+  // These are temporary manual overrides for the UIC multi image modal to enable it to theme with Seeds while the new Seeds multi image modal is still in development
+  .image-card__gallery-modal {
+    --bloom-color-primary: var(--seeds-color-primary);
+    --bloom-color-primary-dark: var(--seeds-color-primary-dark);
+    max-width: var(--seeds-width-2xl);
+    @media (--sm-only) {
+      background-color: var(--seeds-color-white);
+    }
+    p,
+    img {
+      width: 100%;
+    }
+    p {
+      margin-block-end: var(--seeds-s8);
+      @media (--sm-only) {
+        margin-block-end: var(--seeds-s4);
+      }
     }
   }
 }

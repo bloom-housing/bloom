@@ -48,7 +48,7 @@ export const stagingSeed = async (
 ) => {
   // Seed feature flags
   await createAllFeatureFlags(prismaClient);
-  //doorway-specific permissions
+  //doorway-specific settings
   const listingApprovalPermissions = [UserRoleEnum.admin];
   const duplicateListingPermissions = [
     UserRoleEnum.admin,
@@ -56,33 +56,58 @@ export const stagingSeed = async (
     UserRoleEnum.limitedJurisdictionAdmin,
     UserRoleEnum.partner,
   ];
+  const featureFlags = [
+    FeatureFlagEnum.disableWorkInRegion,
+    FeatureFlagEnum.enableGeocodingPreferences,
+    FeatureFlagEnum.enableListingOpportunity,
+    FeatureFlagEnum.enablePartnerDemographics,
+    FeatureFlagEnum.enablePartnerSettings,
+  ];
+  const languages = Object.values(LanguagesEnum);
+  const requiredListingFields = [
+    'listingsBuildingAddress',
+    'name',
+    'developer',
+    'listingImages',
+    'leasingAgentEmail',
+    'leasingAgentName',
+    'leasingAgentPhone',
+    'jurisdictions',
+    'units',
+    'digitalApplication',
+    'paperApplication',
+    'applicationDueDate',
+  ];
+  const doorwaySpecificSettings = {
+    listingApprovalPermissions,
+    duplicateListingPermissions,
+    featureFlags,
+    languages,
+    requiredListingFields,
+  };
   // create main jurisdiction
   const jurisdiction = await prismaClient.jurisdictions.create({
     data: {
       ...jurisdictionFactory(jurisdictionName || 'Bay Area', {
-        listingApprovalPermissions,
-        duplicateListingPermissions,
+        ...doorwaySpecificSettings,
       }),
       allowSingleUseCodeLogin: true,
     },
   });
-  // add another jurisdiction
-  const additionalJurisdiction = await prismaClient.jurisdictions.create({
-    data: jurisdictionFactory('Contra Costa', {
-      listingApprovalPermissions,
-      duplicateListingPermissions,
-    }),
-  });
+  // add other jurisdictions
   const alamedaCounty = await prismaClient.jurisdictions.create({
     data: jurisdictionFactory('Alameda', {
-      listingApprovalPermissions,
-      duplicateListingPermissions,
+      ...doorwaySpecificSettings,
+    }),
+  });
+  const contraCostaCounty = await prismaClient.jurisdictions.create({
+    data: jurisdictionFactory('Contra Costa', {
+      ...doorwaySpecificSettings,
     }),
   });
   const marinCounty = await prismaClient.jurisdictions.create({
     data: jurisdictionFactory('Marin', {
-      listingApprovalPermissions,
-      duplicateListingPermissions,
+      ...doorwaySpecificSettings,
     }),
   });
   const napaCounty = await prismaClient.jurisdictions.create({
@@ -91,16 +116,19 @@ export const stagingSeed = async (
       duplicateListingPermissions,
     }),
   });
+  const sanFranciscoCounty = await prismaClient.jurisdictions.create({
+    data: jurisdictionFactory('San Francisco', {
+      ...doorwaySpecificSettings,
+    }),
+  });
   const sanMateoCounty = await prismaClient.jurisdictions.create({
     data: jurisdictionFactory('San Mateo', {
-      listingApprovalPermissions,
-      duplicateListingPermissions,
+      ...doorwaySpecificSettings,
     }),
   });
   const santaClaraCounty = await prismaClient.jurisdictions.create({
     data: jurisdictionFactory('Santa Clara', {
-      listingApprovalPermissions,
-      duplicateListingPermissions,
+      ...doorwaySpecificSettings,
     }),
   });
   const solanaCounty = await prismaClient.jurisdictions.create({
@@ -111,26 +139,19 @@ export const stagingSeed = async (
   });
   const sonomaCounty = await prismaClient.jurisdictions.create({
     data: jurisdictionFactory('Sonoma', {
-      listingApprovalPermissions,
-      duplicateListingPermissions,
-    }),
-  });
-  const sanFranciscoCounty = await prismaClient.jurisdictions.create({
-    data: jurisdictionFactory('San Francisco', {
-      listingApprovalPermissions,
-      duplicateListingPermissions,
+      ...doorwaySpecificSettings,
     }),
   });
   const jurisdictionNameMap = {
     Alameda: alamedaCounty.id,
-    'Contra Costa': additionalJurisdiction.id,
+    'Contra Costa': contraCostaCounty.id,
     Marin: marinCounty.id,
-    'San Mateo': sanMateoCounty.id,
     Napa: napaCounty.id,
+    'San Francisco': sanFranciscoCounty.id,
+    'San Mateo': sanMateoCounty.id,
     'Santa Clara': santaClaraCounty.id,
     Solano: solanaCounty.id,
     Sonoma: sonomaCounty.id,
-    'San Francisco': sanFranciscoCounty.id,
   };
   // create main jurisdiction with as many feature flags turned on as possible
   const mainJurisdiction = await prismaClient.jurisdictions.create({
@@ -155,12 +176,21 @@ export const stagingSeed = async (
         FeatureFlagEnum.enableSingleUseCode,
         FeatureFlagEnum.enableUtilitiesIncluded,
       ],
-      languages: [
-        LanguagesEnum.en,
-        LanguagesEnum.es,
-        LanguagesEnum.zh,
-        LanguagesEnum.vi,
-        LanguagesEnum.tl,
+      languages: Object.values(LanguagesEnum),
+      requiredListingFields: [
+        'listingsBuildingAddress',
+        'name',
+        'developer',
+        'listingImages',
+        'leasingAgentEmail',
+        'leasingAgentName',
+        'leasingAgentPhone',
+        'jurisdictions',
+        'units',
+        'digitalApplication',
+        'paperApplication',
+        'referralOpportunity',
+        'rentalAssistance',
       ],
     }),
   });
@@ -170,7 +200,9 @@ export const stagingSeed = async (
       featureFlags: [
         FeatureFlagEnum.disableJurisdictionalAdmin,
         FeatureFlagEnum.disableListingPreferences,
+        FeatureFlagEnum.disableWorkInRegion,
         FeatureFlagEnum.enableAccessibilityFeatures,
+        FeatureFlagEnum.enableAdaOtherOption,
         FeatureFlagEnum.enableAdditionalResources,
         FeatureFlagEnum.enableCompanyWebsite,
         FeatureFlagEnum.enableGeocodingRadiusMethod,
@@ -180,6 +212,7 @@ export const stagingSeed = async (
         FeatureFlagEnum.enableListingFiltering,
         FeatureFlagEnum.enableListingOpportunity,
         FeatureFlagEnum.enableListingPagination,
+        FeatureFlagEnum.enableListingUpdatedAt,
         FeatureFlagEnum.enableMarketingStatus,
         FeatureFlagEnum.enableNeighborhoodAmenities,
         FeatureFlagEnum.enablePartnerDemographics,
@@ -195,6 +228,7 @@ export const stagingSeed = async (
         FeatureFlagEnum.swapCommunityTypeWithPrograms,
         FeatureFlagEnum.enableFullTimeStudentQuestion,
       ],
+      requiredListingFields: ['name', 'listingsBuildingAddress'],
     }),
   });
   // Basic configuration jurisdiction
@@ -242,14 +276,15 @@ export const stagingSeed = async (
       confirmedAt: new Date(),
       jurisdictionIds: [
         jurisdiction.id,
-        additionalJurisdiction.id,
+        alamedaCounty.id,
+        contraCostaCounty.id,
         marinCounty.id,
         napaCounty.id,
+        sanFranciscoCounty.id,
         sanMateoCounty.id,
         santaClaraCounty.id,
         solanaCounty.id,
         sonomaCounty.id,
-        sanFranciscoCounty.id,
       ],
       acceptedTerms: true,
       password: 'abcdef',
@@ -353,9 +388,18 @@ export const stagingSeed = async (
   const NUM_AMI_CHARTS = 5;
   for (let index = 0; index < NUM_AMI_CHARTS; index++) {
     await prismaClient.amiChart.create({
-      data: amiChartFactory(8, additionalJurisdiction.id),
+      data: amiChartFactory(8, contraCostaCounty.id),
     });
   }
+  await prismaClient.amiChart.create({
+    data: amiChartFactory(10, mainJurisdiction.id, 2),
+  });
+  await prismaClient.amiChart.create({
+    data: amiChartFactory(8, lakeviewJurisdiction.id),
+  });
+  await prismaClient.amiChart.create({
+    data: amiChartFactory(8, lakeviewJurisdiction.id, 2),
+  });
   // Create map layers
   await prismaClient.mapLayers.create({
     data: mapLayerFactory(jurisdiction.id, 'Redlined Districts', redlinedMap),
@@ -473,6 +517,22 @@ export const stagingSeed = async (
       },
     }),
   });
+
+  // add extra programs to support filtering by "community type"
+  await Promise.all(
+    [...new Array(3)].map(
+      async () =>
+        await prismaClient.multiselectQuestions.create({
+          data: multiselectQuestionFactory(lakeviewJurisdiction.id, {
+            multiselectQuestion: {
+              applicationSection:
+                MultiselectQuestionsApplicationSectionEnum.programs,
+            },
+          }),
+        }),
+    ),
+  );
+
   // create pre-determined values
   const unitTypes = await unitTypeFactoryAll(prismaClient);
   await unitAccessibilityPriorityTypeFactoryAll(prismaClient);

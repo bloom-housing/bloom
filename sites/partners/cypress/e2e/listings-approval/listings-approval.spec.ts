@@ -1,6 +1,7 @@
 describe("Listings approval feature", () => {
   const uniqueListingName = Date.now().toString()
   const uniqueListingNameEdited = `${uniqueListingName} edited`
+
   it("should allow for pending submission, requested changes, and approval", () => {
     cy.intercept("/api/adapter/upload", {
       body: {

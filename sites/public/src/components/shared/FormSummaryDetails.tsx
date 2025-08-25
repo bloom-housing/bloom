@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 import { MultiLineAddress, t } from "@bloom-housing/ui-components"
 import { Card, FieldValue, Heading, Link } from "@bloom-housing/ui-seeds"
 import {
@@ -27,34 +27,8 @@ type FormSummaryDetailsProps = {
   hidePrograms?: boolean
   validationError?: boolean
   enableUnitGroups?: boolean
-}
-
-const accessibilityLabels = (accessibility) => {
-  const labels = []
-  if (accessibility.mobility) labels.push(t("application.ada.mobility"))
-  if (accessibility.vision) labels.push(t("application.ada.vision"))
-  if (accessibility.hearing) labels.push(t("application.ada.hearing"))
-  if (labels.length === 0) labels.push(t("t.no"))
-
-  return labels
-}
-
-const reformatAddress = (address: Address) => {
-  const { street, street2, city, state, zipCode } = address
-  const newAddress = {
-    placeName: street,
-    street: street2,
-    city,
-    state,
-    zipCode,
-  } as Address
-  if (newAddress.street === null || newAddress.street === "") {
-    if (newAddress.placeName) {
-      newAddress.street = newAddress.placeName
-      delete newAddress.placeName
-    }
-  }
-  return newAddress
+  enableFullTimeStudentQuestion?: boolean
+  enableAdaOtherOption?: boolean
 }
 
 const FormSummaryDetails = ({
@@ -65,6 +39,8 @@ const FormSummaryDetails = ({
   hidePrograms = false,
   validationError = false,
   enableUnitGroups = false,
+  enableAdaOtherOption = false,
+  enableFullTimeStudentQuestion = false,
 }: FormSummaryDetailsProps) => {
   // fix for rehydration
   const [hasMounted, setHasMounted] = useState(false)
@@ -73,6 +49,36 @@ const FormSummaryDetails = ({
   }, [])
   if (!hasMounted) {
     return null
+  }
+
+  const accessibilityLabels = () => {
+    const labels = []
+    if (application.accessibility.mobility) labels.push(t("application.ada.mobility"))
+    if (application.accessibility.vision) labels.push(t("application.ada.vision"))
+    if (application.accessibility.hearing) labels.push(t("application.ada.hearing"))
+    if (application.accessibility.other && enableAdaOtherOption)
+      labels.push(t("application.ada.other"))
+    if (labels.length === 0) labels.push(t("t.no"))
+
+    return labels
+  }
+
+  const reformatAddress = (address: Address) => {
+    const { street, street2, city, state, zipCode } = address
+    const newAddress = {
+      placeName: street,
+      street: street2,
+      city,
+      state,
+      zipCode,
+    } as Address
+    if (newAddress.street === null || newAddress.street === "") {
+      if (newAddress.placeName) {
+        newAddress.street = newAddress.placeName
+        delete newAddress.placeName
+      }
+    }
+    return newAddress
   }
 
   const alternateContactName = () => {
@@ -270,6 +276,18 @@ const FormSummaryDetails = ({
             <MultiLineAddress address={reformatAddress(application.applicationsMailingAddress)} />
           </FieldValue>
         )}
+        {enableFullTimeStudentQuestion && (
+          <FieldValue
+            testId={"app-summary-full-time-student"}
+            id="fullTimeStudent"
+            label={t("application.review.confirmation.fullTimeStudent")}
+            className={styles["summary-value"]}
+          >
+            {application.applicant.fullTimeStudent
+              ? t(`t.${application.applicant.fullTimeStudent}`)
+              : t("t.n/a")}
+          </FieldValue>
+        )}
       </Card.Section>
       {application.alternateContact.type && application.alternateContact.type !== "noContact" && (
         <>
@@ -384,6 +402,15 @@ const FormSummaryDetails = ({
                     {t("application.review.sameAddressAsApplicant")}
                   </p>
                 )}
+                {enableFullTimeStudentQuestion && (
+                  <FieldValue
+                    testId={"app-summary-household-member-full-time-student"}
+                    label={t("application.review.confirmation.fullTimeStudent")}
+                    className={styles["summary-value"]}
+                  >
+                    {member.fullTimeStudent ? t(`t.${member.fullTimeStudent}`) : t("t.n/a")}
+                  </FieldValue>
+                )}
               </div>
             ))}
           </Card.Section>
@@ -419,7 +446,7 @@ const FormSummaryDetails = ({
             label={t("application.ada.label")}
             className={styles["summary-value"]}
           >
-            {accessibilityLabels(application.accessibility).map((item) => (
+            {accessibilityLabels().map((item) => (
               <div key={item} data-testid={item}>
                 {item}
                 <br />
@@ -437,7 +464,11 @@ const FormSummaryDetails = ({
           <FieldValue
             testId={"app-summary-household-student"}
             id="householdStudent"
-            label={t("application.household.householdStudent.title")}
+            label={
+              enableFullTimeStudentQuestion
+                ? t("application.household.householdStudentAll.title")
+                : t("application.household.householdStudent.title")
+            }
             className={styles["summary-value"]}
           >
             {application.householdStudent ? t("t.yes") : t("t.no")}

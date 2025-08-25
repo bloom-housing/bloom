@@ -18,8 +18,8 @@
   },
   "dependencies": {
     "@bloom-housing/doorway-ui-components": "^1.0.0",
-    "@bloom-housing/ui-components": "12.7.3",
-    "@bloom-housing/ui-seeds": "1.22.1",
+    "@bloom-housing/ui-components": "12.7.4",
+    "@bloom-housing/ui-seeds": "2.0.0",
     "@heroicons/react": "^2.1.1",
     "axios-cookiejar-support": "^5.0.5",
     "tough-cookie": "^5.1.2"

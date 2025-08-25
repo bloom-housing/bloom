@@ -21,6 +21,7 @@ type FormHouseholdDetailsProps = {
   applicationUnitTypes: UnitType[]
   applicationAccessibilityFeatures: Accessibility
   listingUnitGroups?: UnitGroup[]
+  enableOtherAdaOption?: boolean
   enableUnitGroups?: boolean
   enableFullTimeStudentQuestion?: boolean
 }
@@ -30,6 +31,7 @@ const FormHouseholdDetails = ({
   applicationUnitTypes,
   applicationAccessibilityFeatures,
   listingUnitGroups,
+  enableOtherAdaOption,
   enableUnitGroups,
   enableFullTimeStudentQuestion,
 }: FormHouseholdDetailsProps) => {
@@ -64,20 +66,22 @@ const FormHouseholdDetails = ({
     }
   })
 
-  const adaFeaturesOptions = adaFeatureKeys.map((item) => {
-    const isChecked =
-      applicationAccessibilityFeatures &&
-      Object.keys(applicationAccessibilityFeatures).includes(item) &&
-      applicationAccessibilityFeatures[item] === true
+  const adaFeaturesOptions = adaFeatureKeys
+    .filter((item) => (item === "other" ? enableOtherAdaOption : true))
+    .map((item) => {
+      const isChecked =
+        applicationAccessibilityFeatures &&
+        Object.keys(applicationAccessibilityFeatures).includes(item) &&
+        applicationAccessibilityFeatures[item] === true
 
-    return {
-      id: item,
-      label: t(`application.add.${item}`),
-      value: item,
-      defaultChecked: isChecked,
-      dataTestId: `adaFeature.${item}`,
-    }
-  })
+      return {
+        id: item,
+        label: t(`application.ada.${item}`),
+        value: item,
+        defaultChecked: isChecked,
+        dataTestId: `adaFeature.${item}`,
+      }
+    })
 
   return (
     <>
@@ -112,68 +116,72 @@ const FormHouseholdDetails = ({
             </fieldset>
           </Grid.Cell>
 
-          <FieldValue label={t("application.household.expectingChanges.title")}>
-            <div className="flex h-12 items-center">
-              <Field
-                id="application.householdExpectingChangesYes"
-                name="application.householdExpectingChanges"
-                className="m-0"
-                type="radio"
-                label={t("t.yes")}
-                register={register}
-                inputProps={{
-                  value: YesNoEnum.yes,
-                }}
-              />
+          <Grid.Cell>
+            <FieldValue label={t("application.household.expectingChanges.title")}>
+              <div className="flex h-12 items-center">
+                <Field
+                  id="application.householdExpectingChangesYes"
+                  name="application.householdExpectingChanges"
+                  className="m-0"
+                  type="radio"
+                  label={t("t.yes")}
+                  register={register}
+                  inputProps={{
+                    value: YesNoEnum.yes,
+                  }}
+                />
 
-              <Field
-                id="application.householdExpectingChangesNo"
-                name="application.householdExpectingChanges"
-                className="m-0"
-                type="radio"
-                label={t("t.no")}
-                register={register}
-                inputProps={{
-                  value: YesNoEnum.no,
-                }}
-              />
-            </div>
-          </FieldValue>
+                <Field
+                  id="application.householdExpectingChangesNo"
+                  name="application.householdExpectingChanges"
+                  className="m-0"
+                  type="radio"
+                  label={t("t.no")}
+                  register={register}
+                  inputProps={{
+                    value: YesNoEnum.no,
+                  }}
+                />
+              </div>
+            </FieldValue>
+          </Grid.Cell>
         </Grid.Row>
         <Grid.Row columns="3">
-          <FieldValue
-            label={
-              enableFullTimeStudentQuestion
-                ? t("application.household.householdStudentAll.title")
-                : t("application.household.householdStudent.title")
-            }
-          >
-            <div className="flex h-12 items-center">
-              <Field
-                id="application.householdStudentYes"
-                name="application.householdStudent"
-                className="m-0"
-                type="radio"
-                label={t("t.yes")}
-                register={register}
-                inputProps={{
-                  value: YesNoEnum.yes,
-                }}
-              />
+          <Grid.Cell>
+            <FieldValue
+              label={
+                enableFullTimeStudentQuestion
+                  ? t("application.household.householdStudentAll.title")
+                  : t("application.household.householdStudent.title")
+              }
+            >
+              <div className="flex h-12 items-center">
+                <Field
+                  id="application.householdStudentYes"
+                  name="application.householdStudent"
+                  className="m-0"
+                  type="radio"
+                  label={t("t.yes")}
+                  register={register}
+                  inputProps={{
+                    value: YesNoEnum.yes,
+                  }}
+                />
 
-              <Field
-                id="application.householdStudentNo"
-                name="application.householdStudent"
-                className="m-0"
-                type="radio"
-                label={t("t.no")}
-                register={register}
-                inputProps={{
-                  value: YesNoEnum.no,
-                }}
-              />
-            </div>
-          </FieldValue>
+                <Field
+                  id="application.householdStudentNo"
+                  name="application.householdStudent"
+                  className="m-0"
+                  type="radio"
+                  label={t("t.no")}
+                  register={register}
+                  inputProps={{
+                    value: YesNoEnum.no,
+                  }}
+                />
+              </div>
+            </FieldValue>
+          </Grid.Cell>
         </Grid.Row>
       </SectionWithGrid>
     </>

@@ -42,12 +42,12 @@ import { ReservedCommunityTypeUpdate } from '../../../src/dtos/reserved-communit
 import { unitRentTypeFactory } from '../../../prisma/seed-helpers/unit-rent-type-factory';
 import { unitAccessibilityPriorityTypeFactorySingle } from '../../../prisma/seed-helpers/unit-accessibility-priority-type-factory';
 import { multiselectQuestionFactory } from '../../../prisma/seed-helpers/multiselect-question-factory';
+import { ListingCreate } from '../../../src/dtos/listings/listing-create.dto';
+import { ListingUpdate } from '../../../src/dtos/listings/listing-update.dto';
 import { MultiselectQuestionCreate } from '../../../src/dtos/multiselect-questions/multiselect-question-create.dto';
 import { MultiselectQuestionUpdate } from '../../../src/dtos/multiselect-questions/multiselect-question-update.dto';
 import { UserCreate } from '../../../src/dtos/users/user-create.dto';
 import { UserInvite } from '../../../src/dtos/users/user-invite.dto';
-import { ListingPublishedCreate } from '../../../src/dtos/listings/listing-published-create.dto';
-import { ListingPublishedUpdate } from '../../../src/dtos/listings/listing-published-update.dto';
 import { AlternateContactRelationship } from '../../../src/enums/applications/alternate-contact-relationship-enum';
 import { HouseholdMemberRelationship } from '../../../src/enums/applications/household-member-relationship-enum';
 
@@ -110,6 +110,7 @@ export const buildJurisdictionCreateMock = (
     allowSingleUseCodeLogin: true,
     listingApprovalPermissions: [],
     duplicateListingPermissions: [],
+    requiredListingFields: [],
   };
 };
 
@@ -130,6 +131,7 @@ export const buildJurisdictionUpdateMock = (
     allowSingleUseCodeLogin: true,
     listingApprovalPermissions: [],
     duplicateListingPermissions: [],
+    requiredListingFields: [],
   };
 };
 
@@ -489,7 +491,7 @@ export const constructFullListingData = async (
   prisma: PrismaService,
   listingId?: string,
   jurisdictionId?: string,
-): Promise<ListingPublishedCreate | ListingPublishedUpdate> => {
+): Promise<ListingCreate | ListingUpdate> => {
   let jurisdictionA: IdDTO = { id: '' };
 
   if (jurisdictionId) {
@@ -578,6 +580,7 @@ export const constructFullListingData = async (
         },
       },
     ],
+    unitGroups: [],
     listingMultiselectQuestions: [
       {
         id: multiselectQuestion.id,

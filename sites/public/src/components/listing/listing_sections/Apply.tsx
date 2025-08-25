@@ -110,89 +110,103 @@ export const Apply = ({ listing, preview, setShowDownloadModal }: ApplyProps) =>
     </Button>
   )
 
+  const hasPrimaryApplicationMethod = onlineApplicationUrl || hasPaperApplication
+
+  const shouldShowApplyButton = getHasNonReferralMethods(listing)
+
+  const showSection =
+    (shouldShowApplyButton ||
+      applicationMailingAddress ||
+      applicationPickUpAddress ||
+      applicationDropOffAddress) &&
+    !applicationsClosed &&
+    listing.status !== ListingsStatusEnum.closed
+
+  const showSecondarySection =
+    (hasPaperApplication && onlineApplicationUrl) ||
+    applicationMailingAddress ||
+    applicationPickUpAddress ||
+    applicationDropOffAddress
+
+  if (!showSection) return <></>
+
   return (
-    <>
-      {getHasNonReferralMethods(listing) &&
-        !applicationsClosed &&
-        listing.status !== ListingsStatusEnum.closed && (
-          <Card
-            className={`${listingStyles["mobile-full-width-card"]} ${listingStyles["mobile-no-bottom-border"]}`}
-          >
-            <Card.Section divider="flush" className={styles["card-section-background"]}>
-              <Heading priority={2} size={"lg"} className={"seeds-m-be-header"}>
-                {t("listings.apply.howToApply")}
-              </Heading>
-              {onlineApplicationUrl ? ApplyOnlineButton : DownloadApplicationButton}
-            </Card.Section>
-            {((hasPaperApplication &&
-              (onlineApplicationUrl ||
-                applicationMailingAddress ||
-                applicationPickUpAddress ||
-                applicationDropOffAddress)) ||
-              !!applicationPickUpAddress) && (
-              <Card.Section divider="flush">
-                {hasPaperApplication && onlineApplicationUrl && (
-                  <>
-                    <Heading priority={2} size={"lg"} className={"seeds-m-be-header"}>
-                      {t("listings.apply.getAPaperApplication")}
-                    </Heading>
-                    {DownloadApplicationButton}
-                  </>
-                )}
-                {applicationPickUpAddress && (
-                  <div>
-                    <Heading
-                      size={"md"}
-                      priority={3}
-                      className={`${
-                        hasPaperApplication && onlineApplicationUrl ? "seeds-m-bs-content" : ""
-                      } seeds-m-be-header`}
-                    >
-                      {t("listings.apply.pickUpAnApplication")}
-                    </Heading>
-                    <Address address={applicationPickUpAddress} getDirections={true} />
-                    {listing.applicationPickUpAddressOfficeHours && (
-                      <div className={"seeds-m-bs-content"}>
-                        <Heading size={"md"} priority={4} className={"seeds-m-be-header"}>
-                          {t("leasingAgent.officeHours")}
-                        </Heading>
-                        <Markdown children={listing.applicationPickUpAddressOfficeHours} />
-                      </div>
-                    )}
-                  </div>
-                )}
-                {applicationMailingAddress && (
-                  <div className={"seeds-m-bs-content"}>
-                    <Heading size={"lg"} priority={2} className={"seeds-m-be-header"}>
-                      {t("listings.apply.submitAPaperApplication")}
-                    </Heading>
-                    <Heading size={"md"} priority={3} className={`seeds-m-be-header`}>
-                      {t("listings.apply.sendByUsMail")}
-                    </Heading>
-                    <Address address={applicationMailingAddress} />
-                    {postmarkString && <p className={"seeds-m-bs-label"}>{postmarkString}</p>}
-                  </div>
-                )}
-                {applicationDropOffAddress && (
-                  <div className={"seeds-m-bs-content"}>
-                    <Heading size={"md"} priority={3} className={`seeds-m-be-header`}>
-                      {t("listings.apply.dropOffApplication")}
-                    </Heading>
-                    <Address address={applicationDropOffAddress} getDirections={true} />
-                    {listing.applicationDropOffAddressOfficeHours && (
-                      <div className={"seeds-m-bs-content"}>
-                        <Heading size={"md"} priority={4} className={"seeds-m-be-header"}>
-                          {t("leasingAgent.officeHours")}
-                        </Heading>
-                        <Markdown children={listing.applicationDropOffAddressOfficeHours} />
-                      </div>
-                    )}
-                  </div>
-                )}
-              </Card.Section>
-            )}
-          </Card>
+    <Card
+      className={`${listingStyles["mobile-full-width-card"]} ${listingStyles["mobile-no-bottom-border"]}`}
+    >
+      <Card.Section
+        divider="flush"
+        className={`${hasPrimaryApplicationMethod ? styles["card-section-background"] : null}`}
+      >
+        <Heading priority={2} size={"lg"} className={"seeds-m-be-header"}>
+          {t("listings.apply.howToApply")}
+        </Heading>
+        {hasPrimaryApplicationMethod && (
+          <>{onlineApplicationUrl ? ApplyOnlineButton : DownloadApplicationButton}</>
         )}
-    </>
+      </Card.Section>
+      {showSecondarySection && (
+        <Card.Section divider="flush">
+          {hasPaperApplication && onlineApplicationUrl && (
+            <>
+              <Heading priority={2} size={"lg"} className={"seeds-m-be-header"}>
+                {t("listings.apply.getAPaperApplication")}
+              </Heading>
+              {DownloadApplicationButton}
+            </>
+          )}
+          {applicationPickUpAddress && (
+            <div>
+              <Heading
+                size={"md"}
+                priority={3}
+                className={`${
+                  hasPaperApplication && onlineApplicationUrl ? "seeds-m-bs-content" : ""
+                } seeds-m-be-header`}
+              >
+                {t("listings.apply.pickUpAnApplication")}
+              </Heading>
+              <Address address={applicationPickUpAddress} getDirections={true} />
+              {listing.applicationPickUpAddressOfficeHours && (
+                <div className={"seeds-m-bs-content"}>
+                  <Heading size={"md"} priority={4} className={"seeds-m-be-header"}>
+                    {t("leasingAgent.officeHours")}
+                  </Heading>
+                  <Markdown children={listing.applicationPickUpAddressOfficeHours} />
+                </div>
+              )}
+            </div>
+          )}
+          {applicationMailingAddress && (
+            <div className={"seeds-m-bs-content"}>
+              <Heading size={"lg"} priority={2} className={"seeds-m-be-header"}>
+                {t("listings.apply.submitAPaperApplication")}
+              </Heading>
+              <Heading size={"md"} priority={3} className={`seeds-m-be-header`}>
+                {t("listings.apply.sendByUsMail")}
+              </Heading>
+              <Address address={applicationMailingAddress} />
+              {postmarkString && <p className={"seeds-m-bs-label"}>{postmarkString}</p>}
+            </div>
+          )}
+          {applicationDropOffAddress && (
+            <div className={"seeds-m-bs-content"}>
+              <Heading size={"md"} priority={3} className={`seeds-m-be-header`}>
+                {t("listings.apply.dropOffApplication")}
+              </Heading>
+              <Address address={applicationDropOffAddress} getDirections={true} />
+              {listing.applicationDropOffAddressOfficeHours && (
+                <div className={"seeds-m-bs-content"}>
+                  <Heading size={"md"} priority={4} className={"seeds-m-be-header"}>
+                    {t("leasingAgent.officeHours")}
+                  </Heading>
+                  <Markdown children={listing.applicationDropOffAddressOfficeHours} />
+                </div>
+              )}
+            </div>
+          )}
+        </Card.Section>
+      )}
+    </Card>
   )
 }

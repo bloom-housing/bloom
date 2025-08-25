@@ -1,7 +1,11 @@
 import React from "react"
 import { cleanup, screen } from "@testing-library/react"
 import { AuthContext } from "@bloom-housing/shared-helpers"
-import { listing } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
+import {
+  listing,
+  mockBaseJurisdiction,
+  mockUser,
+} from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import { ListingContext } from "../../../src/components/listings/ListingContext"
 import ListingFormActions, {
   ListingFormActionsType,
@@ -10,32 +14,12 @@ import { mockNextRouter, render } from "../../testUtils"
 import {
   UserRoleEnum,
   Jurisdiction,
-  LanguagesEnum,
   ListingsStatusEnum,
   User,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import userEvent from "@testing-library/user-event"
 
 afterEach(cleanup)
-
-const mockBaseJurisdiction: Jurisdiction = {
-  id: "id",
-  createdAt: new Date(),
-  updatedAt: new Date(),
-  name: "San Jose",
-  multiselectQuestions: [],
-  languages: [LanguagesEnum.en],
-  publicUrl: "http://localhost:3000",
-  emailFromAddress: "Alameda: Housing Bay Area <bloom-no-reply@exygy.dev>",
-  rentalAssistanceDefault:
-    "Housing Choice Vouchers, Section 8 and other valid rental assistance programs will be considered for this property. In the case of a valid rental subsidy, the required minimum income will be based on the portion of the rent that the tenant pays after use of the subsidy.",
-  enablePartnerSettings: true,
-  listingApprovalPermissions: [],
-  duplicateListingPermissions: [],
-  enableGeocodingPreferences: false,
-  enableListingOpportunity: false,
-  allowSingleUseCodeLogin: false,
-}
 
 const mockAdminOnlyApprovalJurisdiction: Jurisdiction = {
   ...mockBaseJurisdiction,
@@ -60,22 +44,6 @@ const mockAllUserCopyJurisdiction: Jurisdiction = {
 const mockOnlyAdminAndJurisAdminCopyJurisdiction: Jurisdiction = {
   ...mockBaseJurisdiction,
   duplicateListingPermissions: [UserRoleEnum.admin, UserRoleEnum.jurisdictionAdmin],
-}
-
-const mockUser: User = {
-  id: "123",
-  email: "test@test.com",
-  firstName: "Test",
-  lastName: "User",
-  dob: new Date("2020-01-01"),
-  createdAt: new Date("2020-01-01"),
-  updatedAt: new Date("2020-01-01"),
-  jurisdictions: [],
-  mfaEnabled: false,
-  passwordUpdatedAt: new Date("2020-01-01"),
-  passwordValidForDays: 180,
-  agreedToTermsOfService: true,
-  listings: [],
 }
 
 let adminUser: User = {

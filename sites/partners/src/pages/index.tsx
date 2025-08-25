@@ -164,7 +164,7 @@ export default function ListingsList() {
   return (
     <Layout>
       <Head>
-        <title>{t("nav.siteTitlePartners")}</title>
+        <title>{`Home - ${t("nav.siteTitlePartners")}`}</title>
       </Head>
       <MetaTags title={t("nav.siteTitlePartners")} description={metaDescription} />
       <NavigationHeader title={t("nav.listings")}></NavigationHeader>

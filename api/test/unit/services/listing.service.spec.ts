@@ -33,11 +33,9 @@ import { UnitTypeSort } from '../../../src/utilities/unit-utilities';
 import { Listing } from '../../../src/dtos/listings/listing.dto';
 import { ListingViews } from '../../../src/enums/listings/view-enum';
 import { TranslationService } from '../../../src/services/translation.service';
-import { GoogleTranslateService } from '../../../src/services/google-translate.service';
 import { ListingCreate } from '../../../src/dtos/listings/listing-create.dto';
 import { ListingUpdate } from '../../../src/dtos/listings/listing-update.dto';
-import { ListingPublishedCreate } from '../../../src/dtos/listings/listing-published-create.dto';
-import { ListingPublishedUpdate } from '../../../src/dtos/listings/listing-published-update.dto';
+import { GoogleTranslateService } from '../../../src/services/google-translate.service';
 import { ApplicationFlaggedSetService } from '../../../src/services/application-flagged-set.service';
 import { User } from '../../../src/dtos/users/user.dto';
 import { EmailService } from '../../../src/services/email.service';
@@ -315,7 +313,7 @@ describe('Testing listing service', () => {
   const constructFullListingData = (
     listingId?: string,
     useUnitGroups = false,
-  ): ListingPublishedCreate | ListingPublishedUpdate => {
+  ): ListingCreate | ListingUpdate => {
     return {
       id: listingId ?? undefined,
       assets: [exampleAsset],
@@ -1498,6 +1496,15 @@ describe('Testing listing service', () => {
                   gte: 1,
                 },
               },
+              {
+                unitGroups: {
+                  some: {
+                    totalAvailable: {
+                      gte: 1,
+                    },
+                  },
+                },
+              },
             ],
           },
         ],
@@ -1537,6 +1544,15 @@ describe('Testing listing service', () => {
               {
                 unitsAvailable: {
                   gte: 1,
+                },
+              },
+              {
+                unitGroups: {
+                  some: {
+                    totalAvailable: {
+                      gte: 1,
+                    },
+                  },
                 },
               },
             ],
@@ -1675,6 +1691,15 @@ describe('Testing listing service', () => {
               {
                 unitsAvailable: {
                   gte: 1,
+                },
+              },
+              {
+                unitGroups: {
+                  some: {
+                    totalAvailable: {
+                      gte: 1,
+                    },
+                  },
                 },
               },
             ],
@@ -4834,411 +4859,6 @@ describe('Testing listing service', () => {
           section8Acceptance: false,
           updatedAt: undefined,
           isVerified: false,
-        },
-        where: {
-          id: expect.anything(),
-        },
-      });
-
-      expect(canOrThrowMock).toHaveBeenCalledWith(
-        user,
-        'listing',
-        permissionActions.update,
-        {
-          id: 'example id',
-        },
-      );
-    });
-
-    it('should do a complete listing update', async () => {
-      prisma.listings.findUnique = jest.fn().mockResolvedValue({
-        id: 'example id',
-        name: 'example name',
-        reservedCommunityTypes: {
-          id: randomUUID(),
-        },
-      });
-      prisma.listings.update = jest.fn().mockResolvedValue({
-        id: 'example id',
-        name: 'example name',
-      });
-      prisma.assets.create = jest
-        .fn()
-        .mockResolvedValue({ oridinal: 1, id: randomUUID() });
-      prisma.address.create = jest.fn().mockResolvedValue({
-        id: randomUUID(),
-        city: 'Washington',
-        state: 'DC',
-        street: '1600 Pennsylvania Avenue',
-        zipCode: '20500',
-      });
-      prisma.listingEvents.findMany = jest.fn().mockResolvedValue([]);
-      prisma.listingEvents.update = jest.fn().mockResolvedValue({
-        id: 'example id',
-        name: 'example name',
-      });
-      prisma.assets.delete = jest.fn().mockResolvedValue({
-        id: 'example id',
-        name: 'example name',
-      });
-      const updateMock = jest
-        .fn()
-        .mockResolvedValue({ id: 'example id', name: 'example name' });
-
-      prisma.$transaction = jest
-        .fn()
-        .mockResolvedValue([
-          jest.fn(),
-          jest.fn(),
-          jest.fn(),
-          jest.fn(),
-          jest.fn(),
-          updateMock,
-        ]);
-
-      const val = constructFullListingData(randomUUID());
-      prisma.assets.create = jest.fn().mockResolvedValue({ id: randomUUID() });
-      prisma.address.create = jest.fn().mockResolvedValue({ id: randomUUID() });
-      val.reservedCommunityTypes = null;
-      val.applicationDueDate = undefined;
-      val.reviewOrderType = undefined;
-
-      await service.update(val as ListingUpdate, user);
-
-      const nestedUtilitiesUpdate = {
-        water: false,
-        gas: true,
-        trash: false,
-        sewer: true,
-        electricity: false,
-        cable: true,
-        phone: false,
-        internet: true,
-      };
-      const nestedFeaturesUpdate = {
-        elevator: true,
-        wheelchairRamp: false,
-        serviceAnimalsAllowed: true,
-        accessibleParking: false,
-        parkingOnSite: true,
-        inUnitWasherDryer: false,
-        laundryInBuilding: true,
-        barrierFreeEntrance: false,
-        rollInShower: true,
-        grabBars: false,
-        heatingInUnit: true,
-        acInUnit: false,
-        hearing: true,
-        visual: false,
-        mobility: true,
-        barrierFreeUnitEntrance: false,
-        loweredLightSwitch: true,
-        barrierFreeBathroom: false,
-        wideDoorways: true,
-        loweredCabinets: false,
-      };
-      const nestedNeighborhoodAmenities = {
-        groceryStores: 'stores',
-        pharmacies: 'pharmacies',
-        healthCareResources: 'health care',
-        parksAndCommunityCenters: 'parks',
-        schools: 'schools',
-        publicTransportation: 'public transportation',
-      };
-
-      expect(prisma.listings.update).toHaveBeenCalledWith({
-        include: {
-          applicationMethods: {
-            include: {
-              paperApplications: {
-                include: {
-                  assets: true,
-                },
-              },
-            },
-          },
-          jurisdictions: true,
-          listingEvents: {
-            include: {
-              assets: true,
-            },
-          },
-          listingFeatures: true,
-          listingImages: {
-            include: {
-              assets: true,
-            },
-          },
-          listingMultiselectQuestions: {
-            include: {
-              multiselectQuestions: true,
-            },
-          },
-          listingUtilities: true,
-          listingNeighborhoodAmenities: true,
-          listingsApplicationDropOffAddress: true,
-          listingsApplicationPickUpAddress: true,
-          listingsApplicationMailingAddress: true,
-          listingsBuildingAddress: true,
-          listingsBuildingSelectionCriteriaFile: true,
-          listingsLeasingAgentAddress: true,
-          listingsResult: true,
-          reservedCommunityTypes: true,
-          requestedChangesUser: true,
-          units: {
-            include: {
-              amiChart: {
-                include: {
-                  jurisdictions: true,
-                  unitGroupAmiLevels: true,
-                },
-              },
-              unitAccessibilityPriorityTypes: true,
-              unitAmiChartOverrides: true,
-              unitRentTypes: true,
-              unitTypes: true,
-            },
-          },
-          unitGroups: {
-            include: {
-              unitTypes: true,
-              unitGroupAmiLevels: {
-                include: {
-                  amiChart: {
-                    include: {
-                      jurisdictions: true,
-                    },
-                  },
-                },
-              },
-            },
-          },
-        },
-        data: {
-          ...val,
-          id: undefined,
-          publishedAt: expect.anything(),
-          contentUpdatedAt: expect.anything(),
-          assets: [exampleAsset],
-          applicationMethods: {
-            create: [
-              {
-                type: ApplicationMethodsTypeEnum.Internal,
-                label: 'example label',
-                externalReference: 'example reference',
-                acceptsPostmarkedApplications: false,
-                phoneNumber: '520-750-8811',
-                paperApplications: {
-                  create: [
-                    {
-                      language: LanguagesEnum.en,
-                      assets: {
-                        create: {
-                          ...exampleAsset,
-                        },
-                      },
-                    },
-                  ],
-                },
-              },
-            ],
-          },
-          listingEvents: {
-            create: [
-              {
-                type: ListingEventsTypeEnum.openHouse,
-                startDate: expect.anything(),
-                startTime: expect.anything(),
-                endTime: expect.anything(),
-                url: 'https://www.google.com',
-                note: 'example note',
-                label: 'example label',
-                assets: {
-                  create: {
-                    ...exampleAsset,
-                  },
-                },
-              },
-            ],
-          },
-          listingImages: {
-            create: [
-              {
-                assets: {
-                  connect: {
-                    id: expect.anything(),
-                  },
-                },
-                ordinal: 0,
-              },
-            ],
-          },
-          listingMultiselectQuestions: {
-            create: [
-              {
-                multiselectQuestionId: expect.anything(),
-                ordinal: 0,
-              },
-            ],
-          },
-          listingsApplicationDropOffAddress: {
-            connect: {
-              id: expect.anything(),
-            },
-          },
-          reservedCommunityTypes: {
-            disconnect: {
-              id: expect.anything(),
-            },
-          },
-          listingsBuildingSelectionCriteriaFile: {
-            create: {
-              ...exampleAsset,
-            },
-          },
-          listingUtilities: {
-            upsert: {
-              where: {
-                id: undefined,
-              },
-              create: nestedUtilitiesUpdate,
-              update: nestedUtilitiesUpdate,
-            },
-          },
-          listingsApplicationMailingAddress: {
-            connect: {
-              id: expect.anything(),
-            },
-          },
-          listingsLeasingAgentAddress: {
-            connect: {
-              id: expect.anything(),
-            },
-          },
-          listingFeatures: {
-            upsert: {
-              where: {
-                id: undefined,
-              },
-              create: nestedFeaturesUpdate,
-              update: nestedFeaturesUpdate,
-            },
-          },
-          listingNeighborhoodAmenities: {
-            upsert: {
-              where: {
-                id: undefined,
-              },
-              create: nestedNeighborhoodAmenities,
-              update: nestedNeighborhoodAmenities,
-            },
-          },
-          jurisdictions: {
-            connect: {
-              id: expect.anything(),
-            },
-          },
-          listingsApplicationPickUpAddress: {
-            connect: {
-              id: expect.anything(),
-            },
-          },
-          listingsBuildingAddress: {
-            connect: {
-              id: expect.anything(),
-            },
-          },
-          units: {
-            create: [
-              {
-                amiPercentage: '1',
-                annualIncomeMin: '2',
-                monthlyIncomeMin: '3',
-                floor: 4,
-                annualIncomeMax: '5',
-                maxOccupancy: 6,
-                minOccupancy: 7,
-                monthlyRent: '8',
-                numBathrooms: 9,
-                numBedrooms: 10,
-                number: '11',
-                sqFeet: '12',
-                monthlyRentAsPercentOfIncome: '13',
-                bmrProgramChart: true,
-                unitTypes: {
-                  connect: {
-                    id: expect.anything(),
-                  },
-                },
-                amiChart: {
-                  connect: {
-                    id: expect.anything(),
-                  },
-                },
-                unitAmiChartOverrides: {
-                  create: {
-                    items: [
-                      {
-                        percentOfAmi: 10,
-                        householdSize: 20,
-                        income: 30,
-                      },
-                    ],
-                  },
-                },
-                unitAccessibilityPriorityTypes: {
-                  connect: {
-                    id: expect.anything(),
-                  },
-                },
-                unitRentTypes: {
-                  connect: {
-                    id: expect.anything(),
-                  },
-                },
-              },
-            ],
-          },
-          unitGroups: {
-            create: [],
-          },
-          section8Acceptance: true,
-          unitsSummary: {
-            create: [
-              {
-                monthlyRentMin: 1,
-                monthlyRentMax: 2,
-                monthlyRentAsPercentOfIncome: '3',
-                amiPercentage: 4,
-                minimumIncomeMin: '5',
-                minimumIncomeMax: '6',
-                maxOccupancy: 7,
-                minOccupancy: 8,
-                floorMin: 9,
-                floorMax: 10,
-                sqFeetMin: '11',
-                sqFeetMax: '12',
-                totalCount: 13,
-                totalAvailable: 14,
-                unitTypes: {
-                  connect: {
-                    id: expect.anything(),
-                  },
-                },
-                unitAccessibilityPriorityTypes: {
-                  connect: {
-                    id: expect.anything(),
-                  },
-                },
-              },
-            ],
-          },
-          listingsResult: {
-            create: {
-              ...exampleAsset,
-            },
-          },
-          isVerified: true,
         },
         where: {
           id: expect.anything(),

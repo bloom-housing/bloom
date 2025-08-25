@@ -19,7 +19,7 @@ describe("Listing Management Tests", () => {
     cy.getByID("jurisdictions.id-error").contains("This field is required")
     // Fill out minimum fields and errors get removed
     cy.getByID("jurisdictions.id").select("Bay Area")
-    cy.getByID("jurisdictions.id-error").should("have.length", 0)
+    cy.getByID("jurisdictions.id-error").should("not.include.text", "This field is required")
     cy.getByID("name").type("Test - error messaging")
     cy.getByID("name-error").should("to.be.empty")
     cy.getByID("saveDraftButton").contains("Save as Draft").click()
@@ -44,8 +44,8 @@ describe("Listing Management Tests", () => {
       expect($alertButtons[1]).to.have.id("addUnitsButton")
     })
     cy.getByID("units-error").contains("This field is required")
-    cy.getByID("communityDisclaimerTitle-error").contains("Enter title")
-    cy.get(".textarea-error-message").contains("Enter description")
+    cy.getByID("communityDisclaimerTitle-error").contains("This field is required")
+    cy.get(".textarea-error-message").contains("This field is required")
     cy.getByID("applicationProcessButton").contains("Application Process").click()
     cy.getByID("leasingAgentName-error").contains("This field is required")
     cy.getByID("leasingAgentEmail-error").contains("This field is required")
@@ -72,6 +72,37 @@ describe("Listing Management Tests", () => {
     cy.getByID("listingEditButton").contains("Edit").click()
     cy.getByID("saveAndContinueButton").contains("Save").click()
     cy.getByID("name").should("have.value", "Test - error messaging DISCARD")
+  })
+
+  it.skip("error messaging publish with minimal fields", () => {
+    cy.visit("/")
+    cy.get("a").contains("Add Listing").click()
+    cy.contains("New Listing")
+    cy.getByID("jurisdictions.id").select("Lakeview")
+    // Try to publish a listing and should show errors for appropriate fields
+    cy.getByID("publishButton").contains("Publish").click()
+    cy.getByID("publishButtonConfirm").contains("Publish").click()
+    cy.contains("Please resolve any errors before saving or publishing your listing.")
+    cy.getByID("name-error").contains("This field is required")
+    cy.getByID("developer-error").contains("This field is required").should("not.exist")
+    cy.getByID("listingsBuildingAddress.street-error").contains("Cannot enter a partial address")
+    cy.getByID("listingsBuildingAddress.city-error").contains("Cannot enter a partial address")
+    cy.getByID("listingsBuildingAddress.state-error").contains("Cannot enter a partial address")
+    cy.getByID("listingsBuildingAddress.zipCode-error").contains("Cannot enter a partial address")
+    cy.getByID("units-error").should("not.exist")
+    cy.getByID("applicationProcessButton").contains("Application Process").click()
+    cy.getByID("leasingAgentName-error").contains("This field is required").should("not.exist")
+    cy.getByID("leasingAgentEmail-error").contains("This field is required").should("not.exist")
+    cy.getByID("leasingAgentPhone-error").should("not.exist")
+    cy.getByID("digitalApplicationChoice-error").should(
+      "not.include.text",
+      "This field is required"
+    )
+    cy.getByID("paperApplicationChoice-error").should("not.include.text", "This field is required")
+    cy.getByID("referralOpportunityChoice-error").should(
+      "not.include.text",
+      "This field is required"
+    )
   })
 
   it("full listing publish", () => {
@@ -255,6 +286,12 @@ describe("Listing Management Tests", () => {
     cy.get("button").contains("Application Process").click()
     cy.getByID("reviewOrderFCFS").check()
     cy.getByID("waitlistOpenNo").check()
+    cy.getByID("whatToExpect").clear()
+    cy.getByID("whatToExpect").type("Custom unformatted text")
+    cy.getByID("whatToExpect").type("{enter}Item A")
+    cy.getByID("editor-bullet-list").click()
+    cy.getByID("whatToExpect").click()
+    cy.getByID("whatToExpect").type("{enter}Item B{enter}Item C")
     cy.getByID("leasingAgentName").type(listing["leasingAgentName"])
     cy.getByID("leasingAgentEmail").type(listing["leasingAgentEmail"])
     cy.getByID("leasingAgentPhone").type(listing["leasingAgentPhone"])
@@ -392,9 +429,10 @@ describe("Listing Management Tests", () => {
     cy.getByID("programRules").contains(listing["programRules"])
     cy.getByID("specialNotes").contains(listing["specialNotes"])
     cy.getByID("reviewOrderQuestion").contains("First come first serve")
-    cy.getByID("whatToExpect").contains(
-      "Applicants will be contacted by the property agent in rank order until vacancies are filled. All of the information that you have provided will be verified and your eligibility confirmed. Your application will be removed from the waitlist if you have made any fraudulent statements. If we cannot verify a housing preference that you have claimed, you will not receive the preference but will not be otherwise penalized. Should your application be chosen, be prepared to fill out a more detailed application and provide required supporting documents."
-    )
+    cy.getByID("whatToExpect").contains("Custom unformatted text")
+    cy.getByID("whatToExpect").contains("li", "Item A")
+    cy.getByID("whatToExpect").contains("li", "Item B")
+    cy.getByID("whatToExpect").contains("li", "Item C")
     cy.getByID("leasingAgentName").contains(listing["leasingAgentName"])
     cy.getByID("leasingAgentEmail").contains(listing["leasingAgentEmail"].toLowerCase())
     cy.getByID("leasingAgentPhone").contains("(520) 245-8811")
@@ -438,6 +476,7 @@ describe("Listing Management Tests", () => {
     cy.getByID("openhouseHeader").contains("11:05 PM")
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   function verifyAutofill(cy: Cypress.cy, listing: any): void {
     cy.findAndOpenListing(listing["name"])
     cy.getByID("listingEditButton").contains("Edit").click()
