@@ -11,10 +11,12 @@ import { AuthContext, MessageContext, listingSectionQuestions } from "@bloom-hou
 import {
   FeatureFlag,
   FeatureFlagEnum,
+  Jurisdiction,
   ListingCreate,
   ListingEventsTypeEnum,
   ListingUpdate,
   ListingsStatusEnum,
+  MarketingTypeEnum,
   MultiselectQuestion,
   MultiselectQuestionsApplicationSectionEnum,
   YesNoEnum,
@@ -104,9 +106,14 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
     shouldUnregister: false,
   })
 
+  // eslint-disable-next-line @typescript-eslint/unbound-method
+  const { getValues, setError, clearErrors, reset, watch } = formMethods
+  const selectedJurisdiction: string = watch("jurisdictions.id")
+  const marketingTypeChoice = watch("marketingType")
+
   const router = useRouter()
 
-  const { listingsService, profile } = useContext(AuthContext)
+  const { listingsService, profile, jurisdictionsService } = useContext(AuthContext)
   const { addToast } = useContext(MessageContext)
 
   const [tabIndex, setTabIndex] = useState(0)
@@ -153,20 +160,57 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
   const [listingIsAlreadyLiveDialog, setListingIsAlreadyLiveDialog] = useState(false)
   const [submitForApprovalDialog, setSubmitForApprovalDialog] = useState(false)
   const [requestChangesDialog, setRequestChangesDialog] = useState(false)
+  const [selectedJurisdictionData, setSelectedJurisdictionData] = useState<Jurisdiction>()
 
   const whatToExpectEditor = useEditor({
     extensions: [...EditorExtensions, CharacterCountExtension.configure()],
-    content: !listing ? t("whatToExpect.default") : listing?.whatToExpect,
+    content: listing?.whatToExpect,
     immediatelyRender: false,
   })
 
   const whatToExpectAdditionalDetailsEditor = useEditor({
     extensions: [...EditorExtensions, CharacterCountExtension.configure()],
-    content: !listing
-      ? t("whatToExpectAdditionalText.default")
-      : listing?.whatToExpectAdditionalText,
+    content: listing?.whatToExpectAdditionalText,
     immediatelyRender: false,
   })
+
+  useEffect(() => {
+    // Retrieve the jurisdiction data from the backend whenever the jurisdiction changes
+    async function fetchData() {
+      if (selectedJurisdiction) {
+        const jurisdictionData = await jurisdictionsService.retrieve({
+          jurisdictionId: selectedJurisdiction,
+        })
+
+        if (jurisdictionData) {
+          setSelectedJurisdictionData(jurisdictionData)
+        }
+      }
+    }
+    void fetchData()
+  }, [jurisdictionsService, selectedJurisdiction])
+
+  useEffect(() => {
+    if (selectedJurisdictionData) {
+      if (marketingTypeChoice === MarketingTypeEnum.comingSoon) {
+        whatToExpectEditor.commands.setContent(
+          selectedJurisdictionData.whatToExpectUnderConstruction
+        )
+        whatToExpectAdditionalDetailsEditor.commands.clearContent()
+        return
+      }
+
+      if (!whatToExpectEditor?.storage.characterCount.characters()) {
+        whatToExpectEditor.commands.setContent(selectedJurisdictionData.whatToExpect)
+      }
+      if (!whatToExpectAdditionalDetailsEditor?.storage.characterCount.characters()) {
+        whatToExpectAdditionalDetailsEditor.commands.setContent(
+          selectedJurisdictionData.whatToExpectAdditionalText
+        )
+      }
+    }
+    //eslint-disable-next-line
+  }, [selectedJurisdictionData, marketingTypeChoice])
 
   const enableUnitGroups =
     activeFeatureFlags?.find((flag) => flag.name === FeatureFlagEnum.enableUnitGroups)?.active ||
@@ -223,11 +267,6 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
     setUnitGroups,
     setOpenHouseEvents,
   ])
-
-  // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { getValues, setError, clearErrors, reset, watch } = formMethods
-
-  const selectedJurisdiction = watch("jurisdictions.id")
 
   // Set the active feature flags depending on if/what jurisdiction is selected
   useEffect(() => {
