@@ -16,9 +16,9 @@ import { ActivityLogInterceptor } from '../interceptors/activity-log.interceptor
 import { PermissionTypeDecorator } from '../decorators/permission-type.decorator';
 import { ApiKeyGuard } from '../guards/api-key.guard';
 import { JwtAuthGuard } from '../guards/jwt.guard';
-import { DataExplorerService } from 'src/services/data-explorer.service';
-import { DataExplorerParams } from 'src/dtos/applications/data-explorer-params.dto';
-import { DataExplorerReport } from 'src/dtos/applications/data-explorer-report.dto';
+import { DataExplorerService } from '../services/data-explorer.service';
+import { DataExplorerParams } from '../dtos/applications/data-explorer-params.dto';
+import { DataExplorerReport } from '../dtos/applications/data-explorer-report.dto';
 
 @Controller('generate-report')
 @ApiTags('data-explorer')
