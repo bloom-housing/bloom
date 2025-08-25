@@ -374,12 +374,6 @@ const UnitGroupForm = ({
                     errorMessage={t("errors.minGreaterThanMaxOccupancyError")}
                     error={fieldHasError(errors?.minOccupancy)}
                     validation={{ max: maxOccupancy || numberOccupancyOptions }}
-                    inputProps={{
-                      onChange: () => {
-                        void trigger("minOccupancy")
-                        void trigger("maxOccupancy")
-                      },
-                    }}
                   />
                 </Grid.Cell>
                 <Grid.Cell>
@@ -393,12 +387,6 @@ const UnitGroupForm = ({
                     errorMessage={t("errors.maxLessThanMinOccupancyError")}
                     error={fieldHasError(errors?.maxOccupancy)}
                     validation={{ min: minOccupancy }}
-                    inputProps={{
-                      onChange: () => {
-                        void trigger("minOccupancy")
-                        void trigger("maxOccupancy")
-                      },
-                    }}
                   />
                 </Grid.Cell>
               </Grid.Row>
@@ -413,10 +401,6 @@ const UnitGroupForm = ({
                     errorMessage={t("errors.minGreaterThanMaxFootageError")}
                     error={fieldHasError(errors?.sqFeetMin)}
                     validation={{ max: sqFeetMax }}
-                    onChange={() => {
-                      void trigger("sqFeetMin")
-                      void trigger("sqFeetMax")
-                    }}
                   />
                 </Grid.Cell>
                 <Grid.Cell>
@@ -429,10 +413,6 @@ const UnitGroupForm = ({
                     errorMessage={t("errors.maxLessThanMinFootageError")}
                     error={fieldHasError(errors?.sqFeetMax)}
                     validation={{ min: sqFeetMin }}
-                    onChange={() => {
-                      void trigger("sqFeetMin")
-                      void trigger("sqFeetMax")
-                    }}
                   />
                 </Grid.Cell>
               </Grid.Row>
@@ -448,12 +428,6 @@ const UnitGroupForm = ({
                     errorMessage={t("errors.minGreaterThanMaxFloorError")}
                     error={fieldHasError(errors?.floorMin)}
                     validation={{ max: floorMax || numberFloorsOptions }}
-                    inputProps={{
-                      onChange: () => {
-                        void trigger("floorMin")
-                        void trigger("floorMax")
-                      },
-                    }}
                   />
                 </Grid.Cell>
                 <Grid.Cell>
@@ -467,12 +441,6 @@ const UnitGroupForm = ({
                     errorMessage={t("errors.maxLessThanMinFloorError")}
                     error={fieldHasError(errors?.floorMax)}
                     validation={{ min: floorMin }}
-                    inputProps={{
-                      onChange: () => {
-                        void trigger("floorMin")
-                        void trigger("floorMax")
-                      },
-                    }}
                   />
                 </Grid.Cell>
               </Grid.Row>
@@ -488,12 +456,6 @@ const UnitGroupForm = ({
                     errorMessage={t("errors.minGreaterThanMaxBathroomsError")}
                     error={fieldHasError(errors.bathroomMin)}
                     validation={{ max: bathroomMax }}
-                    inputProps={{
-                      onChange: () => {
-                        void trigger("bathroomMin")
-                        void trigger("bathroomMax")
-                      },
-                    }}
                   />
                 </Grid.Cell>
                 <Grid.Cell>
@@ -507,12 +469,6 @@ const UnitGroupForm = ({
                     errorMessage={t("errors.maxLessThanMinBathroomsError")}
                     error={fieldHasError(errors.bathroomMax)}
                     validation={{ min: bathroomMin }}
-                    inputProps={{
-                      onChange: () => {
-                        void trigger("bathroomMin")
-                        void trigger("bathroomMax")
-                      },
-                    }}
                   />
                 </Grid.Cell>
               </Grid.Row>
