@@ -22,6 +22,7 @@ import {
   Address,
   ApplicationMultiselectQuestion,
   FeatureFlag,
+  FeatureFlagEnum,
   Jurisdiction,
   Listing,
   ListingsStatusEnum,
@@ -37,6 +38,7 @@ import { CommonMessageVariant } from "@bloom-housing/ui-seeds/src/blocks/shared/
 import { Icon, Message } from "@bloom-housing/ui-seeds"
 import { useRouter } from "next/router"
 import styles from "./helpers.module.scss"
+import { ApplicationFormConfig } from "./applications/configInterfaces"
 
 export const getGenericAddress = (bloomAddress: Address) => {
   return bloomAddress
@@ -515,4 +517,20 @@ export const RenderIf = (props: { language: string; children: JSX.Element }) => 
 
 export const isTrue = (value) => {
   return value === true || value === "true"
+}
+
+export const isUnitGroupAppWaitlist = (listing: Listing, config: ApplicationFormConfig) => {
+  return (
+    isFeatureFlagOn(config, FeatureFlagEnum.enableUnitGroups) &&
+    listing.unitGroups.some((group) => group.openWaitlist) &&
+    !listing.unitGroups.some((group) => group.totalAvailable > 0)
+  )
+}
+
+export const isUnitGroupAppBase = (listing: Listing, config: ApplicationFormConfig) => {
+  return (
+    isFeatureFlagOn(config, FeatureFlagEnum.enableUnitGroups) &&
+    !listing.unitGroups.some((group) => group.openWaitlist) &&
+    !listing.unitGroups.some((group) => group.totalAvailable > 0)
+  )
 }
