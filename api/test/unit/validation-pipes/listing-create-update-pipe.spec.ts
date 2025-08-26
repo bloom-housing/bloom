@@ -166,17 +166,7 @@ describe('ListingCreateUpdateValidationPipe', () => {
         requiredListingFields: [],
       });
 
-      const expectedDefaultFields = [
-        'listingsBuildingAddress',
-        'name',
-        'developer',
-        'listingImages',
-        'leasingAgentEmail',
-        'leasingAgentName',
-        'leasingAgentPhone',
-        'jurisdictions',
-        'units',
-      ];
+      const expectedDefaultFields = ['name', 'jurisdictions'];
 
       const expectedTransformedValue = {
         ...value,
@@ -209,17 +199,7 @@ describe('ListingCreateUpdateValidationPipe', () => {
         requiredListingFields: null,
       });
 
-      const expectedDefaultFields = [
-        'listingsBuildingAddress',
-        'name',
-        'developer',
-        'listingImages',
-        'leasingAgentEmail',
-        'leasingAgentName',
-        'leasingAgentPhone',
-        'jurisdictions',
-        'units',
-      ];
+      const expectedDefaultFields = ['name', 'jurisdictions'];
 
       const expectedTransformedValue = {
         ...value,
@@ -250,17 +230,7 @@ describe('ListingCreateUpdateValidationPipe', () => {
       // Mock jurisdiction not found
       mockPrisma.jurisdictions.findFirst.mockResolvedValue(null);
 
-      const expectedDefaultFields = [
-        'listingsBuildingAddress',
-        'name',
-        'developer',
-        'listingImages',
-        'leasingAgentEmail',
-        'leasingAgentName',
-        'leasingAgentPhone',
-        'jurisdictions',
-        'units',
-      ];
+      const expectedDefaultFields = ['name', 'jurisdictions'];
 
       const expectedTransformedValue = {
         ...value,
