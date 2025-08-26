@@ -175,24 +175,11 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
   })
 
   useEffect(() => {
-    // Retrieve the jurisdiction data from the backend whenever the jurisdiction changes
-    async function fetchData() {
-      if (selectedJurisdiction) {
-        const jurisdictionData = await jurisdictionsService.retrieve({
-          jurisdictionId: selectedJurisdiction,
-        })
-
-        if (jurisdictionData) {
-          setSelectedJurisdictionData(jurisdictionData)
-        }
-      }
-    }
-    void fetchData()
-  }, [jurisdictionsService, selectedJurisdiction])
-
-  useEffect(() => {
     if (selectedJurisdictionData) {
-      if (marketingTypeChoice === MarketingTypeEnum.comingSoon) {
+      if (
+        marketingTypeChoice === MarketingTypeEnum.comingSoon &&
+        !!selectedJurisdictionData.whatToExpectUnderConstruction
+      ) {
         whatToExpectEditor.commands.setContent(
           selectedJurisdictionData.whatToExpectUnderConstruction
         )
@@ -268,8 +255,22 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
     setOpenHouseEvents,
   ])
 
-  // Set the active feature flags depending on if/what jurisdiction is selected
   useEffect(() => {
+    // Retrieve the jurisdiction data from the backend whenever the jurisdiction changes
+    async function fetchData() {
+      if (selectedJurisdiction) {
+        const jurisdictionData = await jurisdictionsService.retrieve({
+          jurisdictionId: selectedJurisdiction,
+        })
+
+        if (jurisdictionData) {
+          setSelectedJurisdictionData(jurisdictionData)
+        }
+      }
+    }
+    void fetchData()
+
+    // Set the active feature flags depending on if/what jurisdiction is selected
     const newFeatureFlags = profile?.jurisdictions?.reduce((featureFlags, juris) => {
       if (!selectedJurisdiction || selectedJurisdiction === juris.id) {
         // filter only the active feature flags
@@ -279,6 +280,7 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
       }
       return featureFlags
     }, [])
+
     setActiveFeatureFlags(newFeatureFlags)
     const selectedJurisdictionObj = profile?.jurisdictions?.find(
       (juris) => selectedJurisdiction === juris.id
@@ -286,7 +288,7 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
     if (profile?.jurisdictions.length === 1)
       setRequiredFields(profile?.jurisdictions[0].requiredListingFields || [])
     else setRequiredFields(selectedJurisdictionObj?.requiredListingFields || [])
-  }, [profile?.jurisdictions, selectedJurisdiction])
+  }, [profile?.jurisdictions, selectedJurisdiction, jurisdictionsService])
 
   const triggerSubmitWithStatus: SubmitFunction = (action, status, newData) => {
     if (action !== "redirect" && status === ListingsStatusEnum.active) {
