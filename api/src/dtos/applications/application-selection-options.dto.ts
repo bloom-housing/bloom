@@ -16,7 +16,7 @@ class ApplicationSelectionOptions extends AbstractDTO {
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => IdDTO)
   @ApiProperty({ type: IdDTO })
-  addressAddress?: IdDTO;
+  addressHolderAddress?: IdDTO;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
