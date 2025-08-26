@@ -5,13 +5,13 @@ CREATE TYPE "multiselect_questions_status_enum" AS ENUM ('draft', 'inUse', 'toRe
 CREATE TYPE "validation_method_enum" AS ENUM ('radius', 'map', 'none');
 
 -- AlterTable
-ALTER TABLE "multiselect_questions" ADD COLUMN     "is_exclusive" BOOLEAN;
-ALTER TABLE "multiselect_questions" ADD COLUMN     "jurisdiction_id" UUID;
-ALTER TABLE "multiselect_questions" ADD COLUMN     "name" TEXT;
-ALTER TABLE "multiselect_questions" ADD COLUMN     "status" "multiselect_questions_status_enum" NOT NULL DEFAULT 'draft';
+ALTER TABLE "multiselect_questions" ADD COLUMN "is_exclusive" BOOLEAN;
+ALTER TABLE "multiselect_questions" ADD COLUMN "jurisdiction_id" UUID;
+ALTER TABLE "multiselect_questions" ADD COLUMN "name" TEXT;
+ALTER TABLE "multiselect_questions" ADD COLUMN "status" "multiselect_questions_status_enum" NOT NULL DEFAULT 'draft';
 
 UPDATE "multiselect_questions"
-SET "name" = 'text';
+SET "name" = "text";
 
 ALTER TABLE "multiselect_questions" ALTER COLUMN "name" SET NOT NULL;
 
