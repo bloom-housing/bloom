@@ -14,6 +14,7 @@ import { BaseFilter } from '../shared/base-filter.dto';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 import { FilterAvailabilityEnum } from '../../enums/listings/filter-availability-enum';
 import { ListingFilterKeys } from '../../enums/listings/filter-key-enum';
+import { FixLargeObjectArray } from '../../decorators/fix-large-object-array';
 
 export class ListingFilterParams extends BaseFilter {
   @Expose()
@@ -103,6 +104,7 @@ export class ListingFilterParams extends BaseFilter {
   })
   @IsUUID(4, { groups: [ValidationsGroupsEnum.default], each: true })
   @IsArray({ groups: [ValidationsGroupsEnum.default] })
+  @FixLargeObjectArray()
   [ListingFilterKeys.ids]?: string[];
 
   @Expose()
