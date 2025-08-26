@@ -3,7 +3,12 @@ import { act, fireEvent, screen, within } from "@testing-library/react"
 import { setupServer } from "msw/lib/node"
 import { rest } from "msw"
 import { AuthContext } from "@bloom-housing/shared-helpers"
-import { mockBaseJurisdiction, mockUser } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
+import {
+  jurisdiction,
+  mockBaseJurisdiction,
+  mockUser,
+  user,
+} from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import {
   FeatureFlag,
   FeatureFlagEnum,
@@ -154,7 +159,7 @@ describe("add listing", () => {
     expect(screen.getByRole("button", { name: "Exit" }))
   })
 
-  it("should render rich text field", () => {
+  it("should render rich text field", async () => {
     window.URL.createObjectURL = jest.fn()
     document.cookie = "access-token-available=True"
     server.use(
@@ -163,6 +168,12 @@ describe("add listing", () => {
           ctx.json({ id: "user1", userRoles: { id: "user1", isAdmin: true, isPartner: false } })
         )
       }),
+      rest.get(
+        "http://localhost/api/adapter/jurisdictions/67c22813-6080-441d-a496-03f2d06f2635",
+        (_req, res, ctx) => {
+          return res(ctx.json(jurisdiction))
+        }
+      ),
       rest.get("http://localhost:3100/reservedCommunityTypes", (_req, res, ctx) => {
         return res(ctx.json([]))
       }),
@@ -173,6 +184,13 @@ describe("add listing", () => {
     render(
       <AuthContext.Provider
         value={{
+          profile: {
+            ...user,
+            listings: [],
+            jurisdictions: [jurisdiction],
+          },
+          getJurisdictionLanguages: () => [],
+          jurisdictionsService: new JurisdictionsService(),
           doJurisdictionsHaveFeatureFlagOn: (featureFlag: FeatureFlagEnum) => {
             switch (featureFlag) {
               case FeatureFlagEnum.swapCommunityTypeWithPrograms:
@@ -196,7 +214,7 @@ describe("add listing", () => {
     const whatToExpectEditorWrapper = whatToExpectEditorLabel.parentElement.parentElement
 
     expect(
-      within(whatToExpectEditorWrapper).getByText(
+      await within(whatToExpectEditorWrapper).findByText(
         "Applicants will be contacted by the property agent in rank order until vacancies are filled. All of the information that you have provided will be verified and your eligibility confirmed. Your application will be removed from the waitlist if you have made any fraudulent statements. If we cannot verify a housing preference that you have claimed, you will not receive the preference but will not be otherwise penalized. Should your application be chosen, be prepared to fill out a more detailed application and provide required supporting documents."
       )
     ).toBeInTheDocument()
@@ -238,8 +256,14 @@ describe("add listing", () => {
     expect(whatToExpectAdditonalTextEditorLabel).toBeInTheDocument()
     const whatToExpectAdditonalTextEditorWrapper =
       whatToExpectAdditonalTextEditorLabel.parentElement.parentElement
+
     expect(
-      within(whatToExpectAdditonalTextEditorWrapper).getByText("You have 1000 characters remaining")
+      await within(whatToExpectAdditonalTextEditorWrapper).findByText(
+        "Property staff should walk you through the process to get on their waitlist."
+      )
+    ).toBeInTheDocument()
+    expect(
+      within(whatToExpectAdditonalTextEditorWrapper).getByText("You have 924 characters remaining")
     ).toBeInTheDocument()
     expect(
       within(whatToExpectAdditonalTextEditorWrapper).getByRole("menuitem", { name: "Bold" })
