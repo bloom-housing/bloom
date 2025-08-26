@@ -15,7 +15,12 @@ import {
 import FormsLayout from "../../../layouts/forms"
 import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
-import { isFeatureFlagOn, untranslateMultiselectQuestion } from "../../../lib/helpers"
+import {
+  isFeatureFlagOn,
+  isUnitGroupAppBase,
+  isUnitGroupAppWaitlist,
+  untranslateMultiselectQuestion,
+} from "../../../lib/helpers"
 import {
   ApplicationReviewStatusEnum,
   FeatureFlagEnum,
