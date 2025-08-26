@@ -144,7 +144,9 @@ export default function RentalsFinder({ activeFeatureFlags, multiselectData }: R
                 fieldGroupName={ListingFilterKeys.multiselectQuestions}
                 options={multiselectData.map((entry) => ({
                   key: `${ListingFilterKeys.multiselectQuestions}.${entry.id}`,
-                  label: entry.text,
+                  label: entry.untranslatedText
+                    ? t(`listingFilters.program.${entry.untranslatedText}`)
+                    : t(`listingFilters.program.${entry.text}`),
                   defaultChecked: false,
                 }))}
               />

@@ -140,6 +140,7 @@ export const stagingSeed = async (
   const nadaHill = await prismaClient.jurisdictions.create({
     data: jurisdictionFactory('Nada Hill', {
       featureFlags: [],
+      requiredListingFields: ['name'],
     }),
   });
   // create super admin user
