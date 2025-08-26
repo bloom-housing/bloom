@@ -40,6 +40,32 @@
       --card-content-padding-inline: var(--seeds-s4);
     }
 
+    :dir(rtl) {
+      ol {
+        width: 100%;
+      }
+
+      li {
+        text-align: right;
+
+        &::after {
+          left: unset;
+          right: var(--seeds-s2);
+        }
+
+        &::before {
+          left: unset;
+          right: var(--seeds-s2);
+          transform: translateX(50%);
+        }
+
+        span {
+          padding-right: var(--dot-label-padding-left);
+          padding-left: var(--dot-label-padding-right);
+        }
+      }
+    }
+
     .desktop-nav {
       --bloom-color-primary: var(--seeds-color-primary);
       display: block;
