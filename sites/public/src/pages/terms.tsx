@@ -8,6 +8,7 @@ import { UserStatus } from "../lib/constants"
 import pageContent from "../md_content/terms.md"
 import { PageHeaderLayout } from "../patterns/PageHeaderLayout"
 import styles from "./../patterns/PageHeaderLayout.module.scss"
+
 const Terms = () => {
   const { profile } = useContext(AuthContext)
 
@@ -24,16 +25,17 @@ const Terms = () => {
   return (
     <Layout pageTitle={pageTitle}>
       <PageHeaderLayout heading={pageTitle} inverse>
-        <Markdown
-          options={{
-            overrides: {
-              RenderIf,
-            },
-          }}
-          className={styles["markdown"]}
-        >
-          {pageContent.toString()}
-        </Markdown>
+        <div className={styles["markdown"]}>
+          <Markdown
+            options={{
+              overrides: {
+                RenderIf,
+              },
+            }}
+          >
+            {pageContent.toString()}
+          </Markdown>
+        </div>
       </PageHeaderLayout>
     </Layout>
   )

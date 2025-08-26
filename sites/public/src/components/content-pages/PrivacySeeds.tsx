@@ -6,6 +6,7 @@ import { UserStatus } from "../../lib/constants"
 import Layout from "../../layouts/application"
 import pageContent from "../../md_content/privacy_policy.md"
 import { PageHeaderLayout } from "../../patterns/PageHeaderLayout"
+import { RenderIf } from "../../lib/helpers"
 import styles from "../../patterns/PageHeaderLayout.module.scss"
 
 const Privacy = () => {
@@ -22,7 +23,17 @@ const Privacy = () => {
   return (
     <Layout pageTitle={t("pageTitle.privacy")}>
       <PageHeaderLayout heading={t("pageTitle.privacy")} inverse>
-        <Markdown className={styles["markdown"]}>{pageContent.toString()}</Markdown>
+        <div className={styles["markdown"]}>
+          <Markdown
+            options={{
+              overrides: {
+                RenderIf,
+              },
+            }}
+          >
+            {pageContent.toString()}
+          </Markdown>
+        </div>
       </PageHeaderLayout>
     </Layout>
   )
