@@ -80,6 +80,18 @@
       @media (max-width: theme("screens.sm")) {
         display: block;
       }
+
+      :dir(rtl) {
+        span:first-of-type {
+          margin-right: unset;
+          margin-left: var(--title-spacing);
+        }
+
+        span:last-of-type {
+          margin-left: unset;
+          margin-right: var(--title-spacing);
+        }
+      }
     }
   }
 }
