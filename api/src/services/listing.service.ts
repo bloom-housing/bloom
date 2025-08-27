@@ -1216,14 +1216,16 @@ export class ListingService implements OnModuleInit {
     requestingUser: User,
     copyOfId?: string,
   ): Promise<Listing> {
-    // await this.permissionService.canOrThrow(
-    //   requestingUser,
-    //   'listing',
-    //   permissionActions.create,
-    //   {
-    //     jurisdictionId: dto.jurisdictions.id,
-    //   },
-    // );
+    // eslint-disable-next-line prettier/prettier
+    console.log("requesting user ", requestingUser)
+    await this.permissionService.canOrThrow(
+      requestingUser,
+      'listing',
+      permissionActions.create,
+      {
+        jurisdictionId: dto.jurisdictions.id,
+      },
+    );
 
     const rawJurisdiction = await this.prisma.jurisdictions.findFirst({
       where: {
@@ -2375,6 +2377,13 @@ export class ListingService implements OnModuleInit {
               }
             : undefined,
           contentUpdatedAt: new Date(),
+          lastUpdatedByUser: requestingUser.id
+            ? {
+                connect: {
+                  id: requestingUser.id,
+                },
+              }
+            : undefined,
           publishedAt:
             storedListing.status !== ListingsStatusEnum.active &&
             incomingDto.status === ListingsStatusEnum.active

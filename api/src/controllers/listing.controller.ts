@@ -85,7 +85,7 @@ import { ListingFilterKeyDTO } from '../dtos/listings/listing-filter-key.dto';
 @UseGuards(OptionalAuthGuard)
 @PermissionTypeDecorator('listing')
 @ActivityLogMetadata([{ targetPropertyName: 'status', propertyPath: 'status' }])
-// @UseInterceptors(ActivityLogInterceptor)
+@UseInterceptors(ActivityLogInterceptor)
 export class ListingController {
   constructor(
     private readonly listingService: ListingService,
@@ -213,7 +213,7 @@ export class ListingController {
   })
   @ApiOkResponse({ type: SuccessDTO })
   @PermissionAction(permissionActions.submit)
-  // @UseInterceptors(ActivityLogInterceptor)
+  @UseInterceptors(ActivityLogInterceptor)
   @UseGuards(ApiKeyGuard, OptionalAuthGuard, AdminOrJurisdictionalAdminGuard)
   async closeListings(): Promise<SuccessDTO> {
     return await this.listingService.closeListings();
