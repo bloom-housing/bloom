@@ -110,18 +110,31 @@
   }
 
   ul.application-timeline {
-    .ui-icon > svg {
-      margin-block-start: 0 !important;
+    .ui-icon > svg:dir(rtl) {
+      margin-inline-start: auto;
+      @media (--sm-only) {
+        margin-inline-start: 0.8rem;
+      }
     }
-
-    .progress-nav__dot-item > p {
-      padding-block-start: 2.65rem;
-      text-align: start;
-      font-weight: normal !important;
+    .ui-icon > svg {
+      margin-block-start: -5.25rem;
+      margin-inline-start: -8.25rem;
+      @media (--sm-only) {
+        margin-inline-start: -6.25rem;
+      }
     }
 
     .progress-nav__dot-item {
-      text-align: start;
+      padding-block-start: 2.65rem;
+      font-weight: normal !important;
+      > .font-bold,
+      p {
+        text-align: start;
+      }
+    }
+
+    .progress-nav__dot-item > p {
+      padding-top: 0;
     }
 
     .progress-nav__dot-item::before {
@@ -137,8 +150,8 @@
       background-color: var(--seeds-color-success-dark);
     }
 
-    .progress-nav__dot-item:first-of-type::after {
-      inset-inline-start: 0;
+    .progress-nav__dot-item::after {
+      inset-inline-start: 2rem;
     }
 
     .progress-nav__dot-item:last-of-type::after {
