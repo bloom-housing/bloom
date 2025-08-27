@@ -13,7 +13,6 @@ import listingStyles from "../ListingViewSeeds.module.scss"
 import {
   getListingStatusMessage,
   getListingStatusMessageContent,
-  getStatusPrefix,
   isFeatureFlagOn,
 } from "../../../lib/helpers"
 import styles from "./Availability.module.scss"
@@ -222,11 +221,13 @@ export const Availability = ({ listing, jurisdiction }: AvailabilityProps) => {
       // const hasUnitGroupsWaitlistOpen = listing.unitGroups.some((group) => group.openWaitlist)
       // if (hasUnitGroupsWaitlistOpen) sections.push(waitlistContent)
 
-      // When unit groups is on, show the availability section only if the status is waitlist
-      if (
-        getStatusPrefix(listing, enableMarketingStatus, enableUnitGroups).label ===
-        t("listings.waitlist.open")
-      ) {
+      // When unit groups is on, show the availability section only if the listing has waitlist values filled out
+      const hasWaitlistValues = !(
+        listing.waitlistOpenSpots == undefined &&
+        listing.waitlistCurrentSize == undefined &&
+        listing.waitlistMaxSize == undefined
+      )
+      if (hasWaitlistValues) {
         sections.push(waitlistContent)
       }
 
