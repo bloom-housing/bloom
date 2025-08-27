@@ -148,6 +148,7 @@ views.full = {
     },
   },
   listingsResult: true,
+  lastUpdatedByUser: true,
   listingsLeasingAgentAddress: true,
   listingsApplicationPickUpAddress: true,
   listingsApplicationDropOffAddress: true,
@@ -1216,8 +1217,6 @@ export class ListingService implements OnModuleInit {
     requestingUser: User,
     copyOfId?: string,
   ): Promise<Listing> {
-    // eslint-disable-next-line prettier/prettier
-    console.log("requesting user ", requestingUser)
     await this.permissionService.canOrThrow(
       requestingUser,
       'listing',
@@ -1226,7 +1225,6 @@ export class ListingService implements OnModuleInit {
         jurisdictionId: dto.jurisdictions.id,
       },
     );
-
     const rawJurisdiction = await this.prisma.jurisdictions.findFirst({
       where: {
         id: dto.jurisdictions.id,
@@ -1572,7 +1570,6 @@ export class ListingService implements OnModuleInit {
         isVerified: !!dto.isVerified,
       },
     });
-
     if (rawListing.status === ListingsStatusEnum.pendingReview) {
       const jurisdiction = await this.prisma.jurisdictions.findFirst({
         where: {
