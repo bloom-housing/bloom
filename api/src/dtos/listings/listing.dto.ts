@@ -911,6 +911,21 @@ class Listing extends AbstractDTO {
   requestedChangesUser?: IdDTO;
 
   @Expose()
+  @ApiPropertyOptional()
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @Transform(
+    (obj: any) => {
+      return obj.obj.lastUpdatedByUser
+        ? requestedChangesUserMapper(obj.obj.lastUpdatedByUser as User)
+        : undefined;
+    },
+    {
+      toClassOnly: true,
+    },
+  )
+  lastUpdatedByUser?: IdDTO;
+
+  @Expose()
   @ValidateListingPublish('lotteryOptIn', {
     groups: [ValidationsGroupsEnum.default],
   })
