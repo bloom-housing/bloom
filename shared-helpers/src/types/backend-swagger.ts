@@ -3020,6 +3020,15 @@ export interface MultiselectOption {
   radiusSize?: number
 
   /**  */
+  shouldCollectAddress?: boolean
+
+  /**  */
+  shouldCollectName?: boolean
+
+  /**  */
+  shouldCollectRelationship?: boolean
+
+  /**  */
   text: string
 
   /**  */

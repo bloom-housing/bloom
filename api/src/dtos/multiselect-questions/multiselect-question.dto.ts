@@ -77,6 +77,7 @@ class MultiselectQuestion extends AbstractDTO {
 
   // TODO: Temporarily optional until after MSQ refactor
   // @Expose()
+  // @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   name?: string;

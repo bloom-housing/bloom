@@ -72,9 +72,6 @@ CREATE TABLE "multiselect_options" (
     "id" UUID NOT NULL DEFAULT uuid_generate_v4(),
     "created_at" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(6) NOT NULL,
-    "collect_address" BOOLEAN,
-    "collect_name" BOOLEAN,
-    "collect_relationship" BOOLEAN,
     "description" TEXT,
     "is_opt_out" BOOLEAN NOT NULL DEFAULT FALSE,
     "links" JSONB,
@@ -84,6 +81,9 @@ CREATE TABLE "multiselect_options" (
     "name" TEXT NOT NULL,
     "ordinal" INTEGER NOT NULL,
     "radius_size" INTEGER,
+    "should_collect_address" BOOLEAN,
+    "should_collect_name" BOOLEAN,
+    "should_collect_relationship" BOOLEAN,
     "validation_method" "validation_method_enum",
 
     CONSTRAINT "multiselect_options_pkey" PRIMARY KEY ("id")

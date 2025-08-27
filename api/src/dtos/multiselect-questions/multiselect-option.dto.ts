@@ -60,6 +60,7 @@ export class MultiselectOption {
   mapPinPosition?: string;
 
   @Expose()
+  // TODO: Temporarily optional until after MSQ refactor
   // @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => IdDTO)
@@ -67,6 +68,7 @@ export class MultiselectOption {
   multiselectQuestion?: IdDTO;
 
   @Expose()
+  // TODO: Temporarily optional until after MSQ refactor
   // @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
@@ -82,6 +84,21 @@ export class MultiselectOption {
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   radiusSize?: number;
+
+  @Expose()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  shouldCollectAddress?: boolean;
+
+  @Expose()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  shouldCollectName?: boolean;
+
+  @Expose()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  shouldCollectRelationship?: boolean;
 
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
