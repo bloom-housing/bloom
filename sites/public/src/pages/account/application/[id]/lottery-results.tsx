@@ -118,17 +118,6 @@ const LotteryResults = () => {
                     <Heading priority={2} size={"2xl"} className="mt-6">
                       {t("account.application.lottery.resultsHeader")}
                     </Heading>
-                    <p className="mt-4">
-                      {t(
-                        `account.application.lottery.resultsSubheader${
-                          listing?.unitsAvailable !== 1 ? "Plural" : ""
-                        }`,
-                        {
-                          applications: totals?.find((total) => !total.multiselectQuestionId).total,
-                          units: listing?.unitsAvailable,
-                        }
-                      )}
-                    </p>
                   </Card.Section>
                   <Card.Section
                     divider={"flush"}
@@ -155,32 +144,6 @@ const LotteryResults = () => {
                         {t("account.application.lottery.rawRankButton")}
                       </Button>
                     </div>
-                  </Card.Section>
-                  <Card.Section divider={"flush"} className={"border-none"}>
-                    <div>
-                      <Heading priority={3} size={"xl"} className={`${styles["section-heading"]}`}>
-                        {t("account.application.lottery.preferencesHeader")}
-                      </Heading>
-                      <p>{t("account.application.lottery.preferences")}</p>
-                    </div>
-                    <div>
-                      <Button
-                        className={styles["section-button"]}
-                        href={"https://www.exygy.com"} // NOTE: Update per jurisdiction
-                        hideExternalLinkIcon={true}
-                        size={"sm"}
-                      >
-                        {t("account.application.lottery.preferencesButton")}
-                      </Button>
-                    </div>
-                  </Card.Section>
-                  <Card.Section
-                    divider={"flush"}
-                    className={`${styles["background-card-alert-section"]}`}
-                  >
-                    <Message fullwidth={true} className={styles["preference-alert"]}>
-                      {t("account.application.lottery.preferencesMessage")}
-                    </Message>
                   </Card.Section>
                   {listing?.listingMultiselectQuestions
                     .filter(

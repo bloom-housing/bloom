@@ -298,7 +298,7 @@
   "listings.lottery.noDataEmail": "partners@housingbayarea.org",
   "listings.lottery.partnerPublishTimestamp": "A lottery was run and released by %{adminName} on %{date} at %{time}, but a lottery has not yet been published for this listing. By publishing the lottery, you will be posting lottery results for this listing to the %{portal}.",
   "listings.lottery.partnerPublishTimestampAdmin": "admins",
-  "listings.lottery.partnerPublishTimestampPortal": "Bloom Housing Portal",
+  "listings.lottery.partnerPublishTimestampPortal": "Detroit Home Connect",
   "listings.lottery.publishContent": "Publishing the lottery for this listing will email a notification to applicants that results are available in their account.",
   "listings.lottery.publishLottery": "Publish lottery",
   "listings.lottery.publishLotteryData": "Publish lottery data",
