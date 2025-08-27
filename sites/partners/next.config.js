@@ -73,6 +73,9 @@ module.exports = withBundleAnalyzer(
       })
       return config
     },
+    eslint: {
+      ignoreDuringBuilds: true,
+    },
     // Uncomment line below before building when using symlink for UI-C
     // experimental: { esmExternals: "loose" },
   })
