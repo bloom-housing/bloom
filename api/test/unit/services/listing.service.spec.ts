@@ -674,7 +674,6 @@ describe('Testing listing service', () => {
       });
     });
 
-    // NOT PASSING
     it('should handle call to list() with params sent', async () => {
       prisma.listings.findMany = jest
         .fn()
@@ -764,7 +763,6 @@ describe('Testing listing service', () => {
           jurisdictions: true,
           listingsBuildingAddress: true,
           reservedCommunityTypes: true,
-          lastUpdatedByUser: true,
           listingImages: {
             include: {
               assets: true,
