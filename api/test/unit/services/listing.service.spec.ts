@@ -197,8 +197,9 @@ const mockListingSet = (
   useUnitGroups = false,
 ) => {
   const toReturn = [];
+  const lastUpdatedByUser = user;
   for (let i = 0; i < pos; i++) {
-    toReturn.push(mockListing(i, genUnits, useUnitGroups));
+    toReturn.push(mockListing(i, genUnits, useUnitGroups), lastUpdatedByUser);
   }
   return toReturn;
 };
@@ -673,6 +674,7 @@ describe('Testing listing service', () => {
       });
     });
 
+    // NOT PASSING
     it('should handle call to list() with params sent', async () => {
       prisma.listings.findMany = jest
         .fn()
@@ -762,6 +764,7 @@ describe('Testing listing service', () => {
           jurisdictions: true,
           listingsBuildingAddress: true,
           reservedCommunityTypes: true,
+          lastUpdatedByUser: true,
           listingImages: {
             include: {
               assets: true,
@@ -782,7 +785,6 @@ describe('Testing listing service', () => {
               unitAmiChartOverrides: true,
             },
           },
-          lastUpdatedByUser: true,
           unitGroups: {
             include: {
               unitTypes: true,
@@ -2364,6 +2366,7 @@ describe('Testing listing service', () => {
           listingsBuildingAddress: true,
           requestedChangesUser: true,
           reservedCommunityTypes: true,
+          lastUpdatedByUser: true,
           listingImages: {
             include: {
               assets: true,
