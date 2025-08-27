@@ -223,9 +223,9 @@ export const Availability = ({ listing, jurisdiction }: AvailabilityProps) => {
 
       // When unit groups is on, show the availability section only if the listing has waitlist values filled out
       const hasWaitlistValues = !(
-        listing.waitlistOpenSpots == undefined &&
-        listing.waitlistCurrentSize == undefined &&
-        listing.waitlistMaxSize == undefined
+        listing.waitlistOpenSpots == null &&
+        listing.waitlistCurrentSize == null &&
+        listing.waitlistMaxSize == null
       )
       if (hasWaitlistValues) {
         sections.push(waitlistContent)
