@@ -1552,7 +1552,7 @@ export class ListingService implements OnModuleInit {
         publishedAt:
           dto.status === ListingsStatusEnum.active ? new Date() : undefined,
         contentUpdatedAt: new Date(),
-        lastUpdatedByUser: requestingUser.id
+        lastUpdatedByUser: requestingUser
           ? {
               connect: {
                 id: requestingUser.id,
@@ -2374,7 +2374,7 @@ export class ListingService implements OnModuleInit {
               }
             : undefined,
           contentUpdatedAt: new Date(),
-          lastUpdatedByUser: requestingUser.id
+          lastUpdatedByUser: requestingUser
             ? {
                 connect: {
                   id: requestingUser.id,

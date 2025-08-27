@@ -3270,7 +3270,6 @@ describe('Testing listing service', () => {
               },
             },
           },
-          lastUpdatedByUser: true,
           jurisdictions: true,
           listingEvents: {
             include: {
@@ -3473,6 +3472,11 @@ describe('Testing listing service', () => {
             },
           },
           jurisdictions: {
+            connect: {
+              id: expect.anything(),
+            },
+          },
+          lastUpdatedByUser: {
             connect: {
               id: expect.anything(),
             },
@@ -3754,6 +3758,7 @@ describe('Testing listing service', () => {
 
       expect(prisma.listings.create).toHaveBeenCalledWith({
         include: {
+          lastUpdatedByUser: true,
           applicationMethods: {
             include: {
               paperApplications: {
@@ -3763,7 +3768,6 @@ describe('Testing listing service', () => {
               },
             },
           },
-          lastUpdatedByUser: true,
           jurisdictions: true,
           listingEvents: {
             include: {
@@ -3781,6 +3785,7 @@ describe('Testing listing service', () => {
               multiselectQuestions: true,
             },
           },
+
           listingUtilities: true,
           listingNeighborhoodAmenities: true,
           listingsApplicationDropOffAddress: true,
