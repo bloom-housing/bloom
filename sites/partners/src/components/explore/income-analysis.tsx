@@ -9,11 +9,10 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts"
-import { IncomeHouseholdSizeCrossTab } from "../../lib/explore/data-explorer"
 
 interface HouseholdIncomeReportProps {
   chartData: {
-    incomeHouseholdSizeCrossTab: IncomeHouseholdSizeCrossTab
+    incomeHouseholdSizeCrossTab: object
   }
 }
 

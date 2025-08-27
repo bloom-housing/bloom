@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useContext } from "react"
 import Head from "next/head"
 import { t } from "@bloom-housing/ui-components"
 import { Button } from "@bloom-housing/ui-seeds"
@@ -9,7 +9,8 @@ import DemographicsSection from "../../components/explore/raceAndEthnicity"
 import PrimaryApplicantSection from "../../components/explore/applicantAndHouseholdData"
 import { AiPermissionModal } from "../../components/explore/aiPermissionModal"
 import { AiInsightsPanel } from "../../components/explore/AIInsightsPanel"
-import { getReportDataFastAPI, ReportProducts } from "../../lib/explore/data-explorer"
+import { AuthContext } from "@bloom-housing/shared-helpers"
+import { ReportProducts } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { useRouter } from "next/router"
 
 const ApplicationAnalysis = () => {
@@ -31,26 +32,23 @@ const ApplicationAnalysis = () => {
     accessibilityTypeFrequencies: [],
   })
 
+  const { dataExplorerService, profile } = useContext(AuthContext)
+
   useEffect(() => {
+    // look into loading spinner
     const fetchData = async () => {
       try {
-        const reportData = await getReportDataFastAPI()
-        setChartData({
-          incomeHouseholdSizeCrossTab: reportData.products.incomeHouseholdSizeCrossTab,
-          raceFrequencies: reportData.products.raceFrequencies,
-          ethnicityFrequencies: reportData.products.ethnicityFrequencies,
-          residentialLocationFrequencies: reportData.products.residentialLocationFrequencies,
-          ageFrequencies: reportData.products.ageFrequencies,
-          languageFrequencies: reportData.products.languageFrequencies,
-          subsidyOrVoucherTypeFrequencies: reportData.products.subsidyOrVoucherTypeFrequencies,
-          accessibilityTypeFrequencies: reportData.products.accessibilityTypeFrequencies,
+        console.log("Fetching report data...")
+        const reportData = await dataExplorerService.generateReport({
+          jurisdictionId: profile.userRoles.isAdmin ? "all" : profile.jurisdictions[0]?.id,
         })
+        setChartData(reportData.products)
       } catch (error) {
         console.error("Error fetching report data:", error)
       }
     }
     void fetchData()
-  }, [])
+  }, [dataExplorerService, profile.jurisdictions, profile.userRoles.isAdmin])
 
   const handleEnableGenAI = () => {
     setShowOnboardingModal(true)
