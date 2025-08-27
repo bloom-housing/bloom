@@ -4,7 +4,7 @@
     "jsx": "preserve",
     "allowJs": true,
     "types": ["cypress", "node"],
-    "target": "es5",
+    "target": "es5"
   },
   "exclude": ["../node_modules"],
   "include": ["**/*.ts"]
