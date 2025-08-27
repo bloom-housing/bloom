@@ -333,6 +333,7 @@ describe('Testing listing service', () => {
       leasingAgentPhone: '520-750-8811',
       name: 'example listing',
       paperApplication: false,
+      lastUpdatedByUser: user,
       referralOpportunity: false,
       rentalAssistance: 'rental assistance',
       reviewOrderType: ReviewOrderTypeEnum.firstComeFirstServe,
@@ -599,11 +600,13 @@ describe('Testing listing service', () => {
           listingsBuildingAddress: true,
           requestedChangesUser: true,
           reservedCommunityTypes: true,
+
           listingImages: {
             include: {
               assets: true,
             },
           },
+          lastUpdatedByUser: true,
           listingMultiselectQuestions: {
             include: {
               multiselectQuestions: true,
@@ -764,6 +767,7 @@ describe('Testing listing service', () => {
               assets: true,
             },
           },
+
           listingMultiselectQuestions: {
             include: {
               multiselectQuestions: true,
@@ -778,6 +782,7 @@ describe('Testing listing service', () => {
               unitAmiChartOverrides: true,
             },
           },
+          lastUpdatedByUser: true,
           unitGroups: {
             include: {
               unitTypes: true,
