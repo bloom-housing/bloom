@@ -15,26 +15,26 @@ describe("ApplicationTypes", () => {
   it("should render application types section", () => {
     render(
       <FormProviderWrapper>
-        <ApplicationTypes listing={listing} />
+        <ApplicationTypes listing={listing} requiredFields={[]} />
       </FormProviderWrapper>
     )
 
-    expect(screen.getByRole("heading", { level: 2, name: "Application Types" })).toBeInTheDocument()
-    const digitalApplication = screen.getByRole("row", {
-      name: "Is there a digital application? Yes No Required to publish",
+    expect(screen.getByRole("heading", { name: "Application Types" })).toBeInTheDocument()
+    const digitalApplication = screen.getByRole("group", {
+      name: "Is there a digital application?",
     })
     expect(
       within(digitalApplication).getByText("Is there a digital application?")
     ).toBeInTheDocument()
     expect(within(digitalApplication).getByRole("radio", { name: "No" })).toBeInTheDocument()
     expect(within(digitalApplication).getByRole("radio", { name: "Yes" })).toBeInTheDocument()
-    const paperApplication = screen.getByRole("row", {
-      name: "Is there a paper application? Yes No Required to publish",
+    const paperApplication = screen.getByRole("group", {
+      name: "Is there a paper application?",
     })
     expect(within(paperApplication).getByText("Is there a paper application?")).toBeInTheDocument()
     expect(within(paperApplication).getByRole("radio", { name: "No" })).toBeInTheDocument()
     expect(within(paperApplication).getByRole("radio", { name: "Yes" })).toBeInTheDocument()
-    // Referral opportunity not available in Doorway
+    // Referral opportunity not setup in Doorway
     // const referralApplication = screen.getByRole("group", {
     //   name: "Is there a referral opportunity?",
     // })
@@ -45,16 +45,16 @@ describe("ApplicationTypes", () => {
     // expect(within(referralApplication).getByRole("radio", { name: "Yes" })).toBeInTheDocument()
   })
 
-  // Referral opportunity not configured for Doorway
+  // Referral opportunity not configured in doorway
   it.skip("should render referral opportunity section", async () => {
     render(
       <FormProviderWrapper>
-        <ApplicationTypes listing={listing} />
+        <ApplicationTypes listing={listing} requiredFields={[]} />
       </FormProviderWrapper>
     )
 
-    expect(screen.queryAllByRole("textbox", { name: "Referral Contact Phone" })).toHaveLength(0)
-    expect(screen.queryAllByRole("textbox", { name: "Referral Summary" })).toHaveLength(0)
+    expect(screen.queryAllByRole("textbox", { name: "Referral contact phone" })).toHaveLength(0)
+    expect(screen.queryAllByRole("textbox", { name: "Referral summary" })).toHaveLength(0)
     const referralApplication = screen.getByRole("group", {
       name: "Is there a referral opportunity?",
     })
@@ -62,9 +62,9 @@ describe("ApplicationTypes", () => {
       userEvent.click(within(referralApplication).getByRole("radio", { name: "Yes" }))
     )
 
-    const referralContactPhone = screen.getByRole("textbox", { name: "Referral Contact Phone" })
+    const referralContactPhone = screen.getByRole("textbox", { name: "Referral contact phone" })
     expect(referralContactPhone).toBeInTheDocument()
-    expect(screen.getByRole("textbox", { name: "Referral Summary" })).toBeInTheDocument()
+    expect(screen.getByRole("textbox", { name: "Referral summary" })).toBeInTheDocument()
 
     // validate that the phone mask works
     await act(() => userEvent.type(referralContactPhone, "1234567890"))
