@@ -59,18 +59,6 @@ import { mapTo } from '../utilities/mapTo';
 import { ListingCreateUpdateValidationPipe } from '../validation-pipes/listing-create-update-pipe';
 import { ListingFilterKeyDTO } from '../dtos/listings/listing-filter-key.dto';
 
-// TODO: changes will be in this controller
-// chores:
-
-// - Update schema.prisma with new field `lastUpdatedByUserId` along with relation `lastUpdatedByUser` for listings and generate migration
-//     - Reference `requestedChangesUserId` and `requestedChangedUser` for how we have done it in the past
-// - Update DTOs that reference it
-// - For all places in `listing.service.ts` that set the `contentUpdatedAt` field the `lastUpdatedByUser` should be set
-//     - The ID can be retrieved by the request. Refer to `requestedChangesUser` for examples
-// - If required update all listing endpoints that need this data to be returned
-// behavior:
-// is updated whenever a change is made to the listing and then returned to the frontend with that user.
-
 @Controller('listings')
 @ApiTags('listings')
 @ApiExtraModels(
