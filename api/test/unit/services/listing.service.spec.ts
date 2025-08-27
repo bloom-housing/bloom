@@ -2881,6 +2881,7 @@ describe('Testing listing service', () => {
           jurisdictions: true,
           listingsBuildingAddress: true,
           requestedChangesUser: true,
+          lastUpdatedByUser: true,
           reservedCommunityTypes: true,
           listingImages: {
             include: {
@@ -3153,6 +3154,7 @@ describe('Testing listing service', () => {
               },
             },
           },
+          lastUpdatedByUser: true,
           jurisdictions: true,
           listingEvents: {
             include: {
@@ -3270,6 +3272,7 @@ describe('Testing listing service', () => {
               },
             },
           },
+          lastUpdatedByUser: true,
           jurisdictions: true,
           listingEvents: {
             include: {
@@ -3629,6 +3632,7 @@ describe('Testing listing service', () => {
               },
             },
           },
+          lastUpdatedByUser: true,
           jurisdictions: true,
           listingEvents: {
             include: {
@@ -4089,6 +4093,7 @@ describe('Testing listing service', () => {
               },
             },
           },
+          lastUpdatedByUser: true,
           jurisdictions: true,
           listingEvents: {
             include: {
@@ -4202,6 +4207,7 @@ describe('Testing listing service', () => {
               assets: true,
             },
           },
+          lastUpdatedByUser: true,
           listingFeatures: true,
           listingImages: {
             include: {
@@ -4294,6 +4300,7 @@ describe('Testing listing service', () => {
               },
             },
           },
+          lastUpdatedByUser: true,
           jurisdictions: true,
           listingEvents: {
             include: {
