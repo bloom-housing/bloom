@@ -5748,6 +5748,15 @@ export interface JurisdictionCreate {
   rentalAssistanceDefault: string
 
   /**  */
+  whatToExpect: string
+
+  /**  */
+  whatToExpectAdditionalText: string
+
+  /**  */
+  whatToExpectUnderConstruction: string
+
+  /**  */
   enablePartnerSettings?: boolean
 
   /**  */
@@ -5796,6 +5805,15 @@ export interface JurisdictionUpdate {
 
   /**  */
   rentalAssistanceDefault: string
+
+  /**  */
+  whatToExpect: string
+
+  /**  */
+  whatToExpectAdditionalText: string
+
+  /**  */
+  whatToExpectUnderConstruction: string
 
   /**  */
   enablePartnerSettings?: boolean
@@ -5878,6 +5896,15 @@ export interface Jurisdiction {
 
   /**  */
   rentalAssistanceDefault: string
+
+  /**  */
+  whatToExpect: string
+
+  /**  */
+  whatToExpectAdditionalText: string
+
+  /**  */
+  whatToExpectUnderConstruction: string
 
   /**  */
   enablePartnerSettings?: boolean
