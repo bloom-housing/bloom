@@ -13,6 +13,7 @@ import listingStyles from "../ListingViewSeeds.module.scss"
 import {
   getListingStatusMessage,
   getListingStatusMessageContent,
+  getStatusPrefix,
   isFeatureFlagOn,
 } from "../../../lib/helpers"
 import styles from "./Availability.module.scss"
@@ -36,15 +37,15 @@ const getWaitlistSizeFields = (
     return null
   return (
     <div className={styles["waitlist-size-container"]}>
-      {waitlistCurrentSize !== undefined && showAdditionalWaitlistFields && (
+      {waitlistCurrentSize !== null && showAdditionalWaitlistFields && (
         <p>{`${waitlistCurrentSize} ${t("listings.waitlist.currentSize").toLowerCase()}`}</p>
       )}
-      {waitlistOpenSpots !== undefined && (
+      {waitlistOpenSpots !== null && (
         <p className={`${showAdditionalWaitlistFields ? styles["bold-text"] : ""}`}>
           {`${waitlistOpenSpots} ${t("listings.waitlist.openSlots").toLowerCase()}`}
         </p>
       )}
-      {waitlistMaxSize !== undefined && showAdditionalWaitlistFields && (
+      {waitlistMaxSize !== null && showAdditionalWaitlistFields && (
         <p>{`${waitlistMaxSize} ${t("listings.waitlist.finalSize").toLowerCase()}`}</p>
       )}
     </div>
@@ -120,7 +121,7 @@ export const Availability = ({ listing, jurisdiction }: AvailabilityProps) => {
     FeatureFlagEnum.enableWaitlistAdditionalFields
   )
 
-  const hideAvailabilityDetails =
+  const alwaysShowStatusBar =
     listing.status === ListingsStatusEnum.closed ||
     (enableMarketingStatus && listing.marketingType === MarketingTypeEnum.comingSoon)
 
@@ -150,8 +151,6 @@ export const Availability = ({ listing, jurisdiction }: AvailabilityProps) => {
     enableUnitGroups
   )
 
-  const hasUnitGroupsWaitlistOpen = listing.unitGroups.some((group) => group.openWaitlist)
-
   const getCardSection = (
     title: string,
     subtitle?: string,
@@ -164,9 +163,7 @@ export const Availability = ({ listing, jurisdiction }: AvailabilityProps) => {
         <Heading priority={3} size={"md"}>
           {title}
         </Heading>
-        {!hideAvailabilityDetails && subtitle && (
-          <p className={styles["bold-subheader"]}>{subtitle}</p>
-        )}
+        {!alwaysShowStatusBar && subtitle && <p className={styles["bold-subheader"]}>{subtitle}</p>}
         {statusMessage && (
           <p className={`${listingStyles["thin-heading-sm"]} seeds-m-bs-label`}>{statusMessage}</p>
         )}
@@ -216,6 +213,26 @@ export const Availability = ({ listing, jurisdiction }: AvailabilityProps) => {
   const getSections = () => {
     if (enableMarketingStatus && listing.marketingType === MarketingTypeEnum.comingSoon)
       return [constructionContent]
+    if (enableUnitGroups) {
+      const sections = []
+      // Temporarily commenting out until design can take a pass at what the full section should look like with unit groups on
+      // if (unitsAvailable && listing.reviewOrderType === ReviewOrderTypeEnum.firstComeFirstServe)
+      //   sections.push(fcfsContent)
+      // if (listing.reviewOrderType === ReviewOrderTypeEnum.lottery) sections.push(lotteryContent)
+      // const hasUnitGroupsWaitlistOpen = listing.unitGroups.some((group) => group.openWaitlist)
+      // if (hasUnitGroupsWaitlistOpen) sections.push(waitlistContent)
+
+      // When unit groups is on, show the availability section only if the status is waitlist
+      if (
+        getStatusPrefix(listing, enableMarketingStatus, enableUnitGroups).label ===
+        t("listings.waitlist.open")
+      ) {
+        sections.push(waitlistContent)
+      }
+
+      return sections
+    }
+
     if (!enableUnitGroups) {
       switch (listing.reviewOrderType) {
         case ReviewOrderTypeEnum.lottery:
@@ -225,32 +242,23 @@ export const Availability = ({ listing, jurisdiction }: AvailabilityProps) => {
         default:
           return [fcfsContent]
       }
-    } else {
-      const sections = []
-      if (unitsAvailable && listing.reviewOrderType === ReviewOrderTypeEnum.firstComeFirstServe)
-        sections.push(fcfsContent)
-      if (listing.reviewOrderType === ReviewOrderTypeEnum.lottery) sections.push(lotteryContent)
-      if (hasUnitGroupsWaitlistOpen) sections.push(waitlistContent)
-      return sections
     }
   }
 
   const sections = getSections()
 
-  // Only show this section when unit groups is on if the listing is under construction
-  if (
-    enableUnitGroups &&
-    enableMarketingStatus &&
-    listing.marketingType === MarketingTypeEnum.marketing
-  )
-    return null
-
   return (
     <>
-      {hideAvailabilityDetails && (
+      {(enableUnitGroups || alwaysShowStatusBar) && (
         <div className={styles["status-messages"]}>
           <div className={"seeds-m-be-content"}>
-            {getListingStatusMessage(listing, jurisdiction, null, false, true)}
+            {getListingStatusMessage(
+              listing,
+              jurisdiction,
+              null,
+              false,
+              listing.marketingType === MarketingTypeEnum.comingSoon
+            )}
           </div>
         </div>
       )}
