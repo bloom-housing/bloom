@@ -5301,7 +5301,7 @@ export interface ApplicationSelectionOptions {
   updatedAt: Date
 
   /**  */
-  addressAddress: IdDTO
+  addressHolderAddress: IdDTO
 
   /**  */
   addressHolderName?: string
@@ -7282,6 +7282,7 @@ export enum FeatureFlagEnum {
   "enableAdaOtherOption" = "enableAdaOtherOption",
   "enableAdditionalResources" = "enableAdditionalResources",
   "enableCompanyWebsite" = "enableCompanyWebsite",
+  "enableFullTimeStudentQuestion" = "enableFullTimeStudentQuestion",
   "enableGeocodingPreferences" = "enableGeocodingPreferences",
   "enableGeocodingRadiusMethod" = "enableGeocodingRadiusMethod",
   "enableHomeType" = "enableHomeType",
@@ -7302,11 +7303,11 @@ export enum FeatureFlagEnum {
   "enableUnderConstructionHome" = "enableUnderConstructionHome",
   "enableUnitGroups" = "enableUnitGroups",
   "enableUtilitiesIncluded" = "enableUtilitiesIncluded",
+  "enableWaitlistAdditionalFields" = "enableWaitlistAdditionalFields",
+  "enableV2MSQ" = "enableV2MSQ",
   "example" = "example",
   "hideCloseListingButton" = "hideCloseListingButton",
   "swapCommunityTypeWithPrograms" = "swapCommunityTypeWithPrograms",
-  "enableWaitlistAdditionalFields" = "enableWaitlistAdditionalFields",
-  "enableFullTimeStudentQuestion" = "enableFullTimeStudentQuestion",
 }
 export enum EnumMultiselectQuestionFilterParamsComparison {
   "=" = "=",
