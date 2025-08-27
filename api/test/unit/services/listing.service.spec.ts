@@ -3765,6 +3765,7 @@ describe('Testing listing service', () => {
               },
             },
           },
+          lastUpdatedByUser: true,
           jurisdictions: true,
           listingEvents: {
             include: {
@@ -3826,6 +3827,9 @@ describe('Testing listing service', () => {
           ...val,
           isVerified: true,
           contentUpdatedAt: expect.anything(),
+          lastUpdatedByUser: {
+            connect: { id: expect.anything() },
+          },
           publishedAt: expect.anything(),
           assets: {
             create: [exampleAsset],
@@ -4673,6 +4677,7 @@ describe('Testing listing service', () => {
           displayWaitlistSize: false,
           unitsSummary: null,
           listingEvents: [],
+          lastUpdatedByUser: user,
         } as ListingUpdate,
         user,
       );
@@ -4694,6 +4699,7 @@ describe('Testing listing service', () => {
               assets: true,
             },
           },
+          lastUpdatedByUser: true,
           listingFeatures: true,
           listingImages: {
             include: {
