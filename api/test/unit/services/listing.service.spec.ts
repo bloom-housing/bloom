@@ -197,9 +197,8 @@ const mockListingSet = (
   useUnitGroups = false,
 ) => {
   const toReturn = [];
-  const lastUpdatedByUser = user;
   for (let i = 0; i < pos; i++) {
-    toReturn.push(mockListing(i, genUnits, useUnitGroups), lastUpdatedByUser);
+    toReturn.push(mockListing(i, genUnits, useUnitGroups));
   }
   return toReturn;
 };
