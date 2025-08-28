@@ -141,6 +141,106 @@ describe("listings", () => {
     expect(screen.queryByText("Verified")).toBeNull()
   })
 
+  it("should show is waitlist and available units columns if unit groups feature flag is off", () => {
+    window.URL.createObjectURL = jest.fn()
+    document.cookie = "access-token-available=True"
+    server.use(
+      rest.get("http://localhost:3100/listings", (_req, res, ctx) => {
+        return res(ctx.json({ items: [listing], meta: { totalItems: 1, totalPages: 1 } }))
+      }),
+      rest.get("http://localhost/api/adapter/listings", (_req, res, ctx) => {
+        return res(ctx.json({ items: [listing], meta: { totalItems: 1, totalPages: 1 } }))
+      }),
+      rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
+        return res(
+          ctx.json({
+            id: "user1",
+            roles: { id: "user1", isAdmin: false, isPartner: true },
+          })
+        )
+      }),
+      rest.post("http://localhost:3100/auth/token", (_req, res, ctx) => {
+        return res(ctx.json(""))
+      })
+    )
+
+    render(
+      <AuthContext.Provider
+        value={{
+          initialStateLoaded: true,
+          profile: {
+            ...mockUser,
+            jurisdictions: [
+              {
+                id: "id1",
+                featureFlags: [
+                  {
+                    name: FeatureFlagEnum.enableUnitGroups,
+                    active: false,
+                  } as FeatureFlag,
+                ],
+              } as Jurisdiction,
+            ],
+          },
+        }}
+      >
+        <ListingsList />
+      </AuthContext.Provider>
+    )
+    expect(screen.getByText("Available units")).toBeDefined()
+    expect(screen.getByText("Open waitlist")).toBeDefined()
+  })
+
+  it("should not show is last updated column if feature flag is off", () => {
+    window.URL.createObjectURL = jest.fn()
+    document.cookie = "access-token-available=True"
+    server.use(
+      rest.get("http://localhost:3100/listings", (_req, res, ctx) => {
+        return res(ctx.json({ items: [listing], meta: { totalItems: 1, totalPages: 1 } }))
+      }),
+      rest.get("http://localhost/api/adapter/listings", (_req, res, ctx) => {
+        return res(ctx.json({ items: [listing], meta: { totalItems: 1, totalPages: 1 } }))
+      }),
+      rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
+        return res(
+          ctx.json({
+            id: "user1",
+            roles: { id: "user1", isAdmin: false, isPartner: true },
+          })
+        )
+      }),
+      rest.post("http://localhost:3100/auth/token", (_req, res, ctx) => {
+        return res(ctx.json(""))
+      })
+    )
+
+    render(
+      <AuthContext.Provider
+        value={{
+          initialStateLoaded: true,
+          profile: {
+            ...mockUser,
+            jurisdictions: [
+              {
+                id: "id1",
+                featureFlags: [
+                  {
+                    name: FeatureFlagEnum.enableUnitGroups,
+                    active: true,
+                  } as FeatureFlag,
+                ],
+              } as Jurisdiction,
+            ],
+          },
+        }}
+      >
+        <ListingsList />
+      </AuthContext.Provider>
+    )
+    expect(screen.queryByText("Available units")).toBeNull()
+    expect(screen.queryByText("Open waitlist")).toBeNull()
+  })
+
   it("should show is verified column if feature flag is on", () => {
     window.URL.createObjectURL = jest.fn()
     document.cookie = "access-token-available=True"
