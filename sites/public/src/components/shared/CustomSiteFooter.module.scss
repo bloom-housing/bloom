@@ -2,7 +2,7 @@
   color: var(--seeds-color-on-inverse-muted);
   width: 100%;
   background-color: var(--seeds-bg-color-inverse);
-  text-align: inline-start;
+  text-align: start;
   display: flex;
   flex-direction: column;
 
@@ -21,7 +21,7 @@
 
 .footer {
   padding-inline: 0;
-  text-align: inline-start;
+  text-align: start;
   display: flex;
   justify-content: space-between;
   flex-direction: column;
