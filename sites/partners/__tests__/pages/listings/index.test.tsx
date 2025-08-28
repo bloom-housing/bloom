@@ -632,6 +632,36 @@ describe("listings", () => {
           true
         )
       ).toBe(false)
+      expect(
+        getFlagInAllJurisdictions(
+          [
+            {
+              id: "id1",
+              featureFlags: [
+                {
+                  name: FeatureFlagEnum.enableUnitGroups,
+                  active: true,
+                } as FeatureFlag,
+              ],
+            } as Jurisdiction,
+            {
+              id: "id2",
+              featureFlags: [
+                {
+                  name: FeatureFlagEnum.enableUnitGroups,
+                  active: false,
+                } as FeatureFlag,
+              ],
+            } as Jurisdiction,
+            {
+              id: "id2",
+              featureFlags: [],
+            } as Jurisdiction,
+          ],
+          FeatureFlagEnum.enableUnitGroups,
+          true
+        )
+      ).toBe(false)
     })
   })
 })
