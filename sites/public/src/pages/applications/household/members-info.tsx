@@ -37,7 +37,7 @@ const ApplicationMembersInfo = () => {
 
   return (
     <FormsLayout
-      pageTitle={`${"pageTitle.householdMembersNotice"} - ${t("listings.apply.applyOnline")} - ${
+      pageTitle={`${t("pageTitle.householdMembersNotice")} - ${t("listings.apply.applyOnline")} - ${
         listing?.name
       }`}
     >
