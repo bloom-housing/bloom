@@ -42,6 +42,7 @@ export const getLinkCellFormatter = (router: NextRouter) =>
       this.linkWithId = document.createElement("button")
       this.linkWithId.classList.add("text-blue-700")
       this.linkWithId.innerText = params.value
+      this.linkWithId.style.textDecoration = "underline"
 
       this.linkWithId.addEventListener("click", function () {
         void router.push(`/application/${applicationId}/review`)
