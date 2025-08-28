@@ -334,7 +334,6 @@ describe('Testing listing service', () => {
       leasingAgentPhone: '520-750-8811',
       name: 'example listing',
       paperApplication: false,
-      lastUpdatedByUser: user,
       referralOpportunity: false,
       rentalAssistance: 'rental assistance',
       reviewOrderType: ReviewOrderTypeEnum.firstComeFirstServe,
@@ -3215,7 +3214,7 @@ describe('Testing listing service', () => {
           contentUpdatedAt: expect.anything(),
           lastUpdatedByUser: {
             connect: {
-              id: expect.anything(),
+              id: user.id,
             },
           },
           depositMin: '5',
@@ -3251,9 +3250,6 @@ describe('Testing listing service', () => {
         {
           jurisdictionId: expect.anything(),
         },
-        {
-          lastUpdatedByUser: expect.anything(),
-        },
       );
     });
 
@@ -3278,6 +3274,7 @@ describe('Testing listing service', () => {
               },
             },
           },
+          lastUpdatedByUser: true,
           jurisdictions: true,
           listingEvents: {
             include: {
@@ -3339,6 +3336,11 @@ describe('Testing listing service', () => {
           ...val,
           isVerified: true,
           contentUpdatedAt: expect.anything(),
+          lastUpdatedByUser: {
+            connect: {
+              id: user.id,
+            },
+          },
           publishedAt: expect.anything(),
           assets: {
             create: [exampleAsset],
@@ -3480,11 +3482,6 @@ describe('Testing listing service', () => {
             },
           },
           jurisdictions: {
-            connect: {
-              id: expect.anything(),
-            },
-          },
-          lastUpdatedByUser: {
             connect: {
               id: expect.anything(),
             },
@@ -3704,6 +3701,11 @@ describe('Testing listing service', () => {
           name: 'example listing name',
           contentUpdatedAt: expect.anything(),
           depositMin: '5',
+          lastUpdatedByUser: {
+            connect: {
+              id: user.id,
+            },
+          },
           assets: {
             create: [
               {
@@ -3766,7 +3768,6 @@ describe('Testing listing service', () => {
 
       expect(prisma.listings.create).toHaveBeenCalledWith({
         include: {
-          lastUpdatedByUser: true,
           applicationMethods: {
             include: {
               paperApplications: {
@@ -3776,6 +3777,7 @@ describe('Testing listing service', () => {
               },
             },
           },
+          lastUpdatedByUser: true,
           jurisdictions: true,
           listingEvents: {
             include: {
@@ -3839,7 +3841,7 @@ describe('Testing listing service', () => {
           isVerified: true,
           contentUpdatedAt: expect.anything(),
           lastUpdatedByUser: {
-            connect: { id: expect.anything() },
+            connect: { id: user.id },
           },
           publishedAt: expect.anything(),
           assets: {
@@ -4765,6 +4767,11 @@ describe('Testing listing service', () => {
         data: {
           name: 'example listing name',
           contentUpdatedAt: expect.anything(),
+          lastUpdatedByUser: {
+            connect: {
+              id: user.id,
+            },
+          },
           depositMin: '5',
           assets: [
             {
@@ -4931,6 +4938,11 @@ describe('Testing listing service', () => {
           jurisdictions: {
             connect: {
               id: expect.anything(),
+            },
+          },
+          lastUpdatedByUser: {
+            connect: {
+              id: user.id,
             },
           },
           listingNeighborhoodAmenities: {
