@@ -10,7 +10,6 @@ import { ApiProperty } from '@nestjs/swagger';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 import { IdDTO } from '../shared/id.dto';
 import { Listing } from './listing.dto';
-import { User } from '../users/user.dto';
 import { UnitCreate } from '../units/unit-create.dto';
 import { ApplicationMethodCreate } from '../application-methods/application-method-create.dto';
 import { AssetCreate } from '../assets/asset-create.dto';
@@ -235,13 +234,4 @@ export class ListingUpdate extends OmitType(Listing, [
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => IdDTO)
   requestedChangesUser?: IdDTO;
-
-  @Expose()
-  @ApiPropertyOptional()
-  @ValidateListingPublish('lastUpdatedByUser', {
-    groups: [ValidationsGroupsEnum.default],
-  })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => User)
-  lastUpdatedByUser?: User;
 }

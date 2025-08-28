@@ -3152,13 +3152,13 @@ describe('Testing listing service', () => {
               },
             },
           },
-          lastUpdatedByUser: true,
           jurisdictions: true,
           listingEvents: {
             include: {
               assets: true,
             },
           },
+          lastUpdatedByUser: true,
           listingFeatures: true,
           listingImages: {
             include: {
@@ -3213,6 +3213,11 @@ describe('Testing listing service', () => {
         data: {
           name: 'example listing name',
           contentUpdatedAt: expect.anything(),
+          lastUpdatedByUser: {
+            connect: {
+              id: expect.anything(),
+            },
+          },
           depositMin: '5',
           assets: {
             create: [
@@ -3245,6 +3250,9 @@ describe('Testing listing service', () => {
         permissionActions.create,
         {
           jurisdictionId: expect.anything(),
+        },
+        {
+          lastUpdatedByUser: expect.anything(),
         },
       );
     });

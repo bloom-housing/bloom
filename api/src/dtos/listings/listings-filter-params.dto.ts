@@ -14,7 +14,7 @@ import { BaseFilter } from '../shared/base-filter.dto';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 import { FilterAvailabilityEnum } from '../../enums/listings/filter-availability-enum';
 import { ListingFilterKeys } from '../../enums/listings/filter-key-enum';
-import { userMapper } from 'src/utilities/user';
+import { userMapper } from 'src/utilities/users';
 import { IdDTO } from '../shared/id.dto';
 import { User } from '../users/user.dto';
 
