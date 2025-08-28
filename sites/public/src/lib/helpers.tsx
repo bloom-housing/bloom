@@ -22,6 +22,7 @@ import {
   Address,
   ApplicationMultiselectQuestion,
   FeatureFlag,
+  FeatureFlagEnum,
   Jurisdiction,
   Listing,
   ListingsStatusEnum,
@@ -37,6 +38,7 @@ import { CommonMessageVariant } from "@bloom-housing/ui-seeds/src/blocks/shared/
 import { Icon, Message } from "@bloom-housing/ui-seeds"
 import { useRouter } from "next/router"
 import styles from "./helpers.module.scss"
+import { ApplicationFormConfig } from "./applications/configInterfaces"
 
 export const getGenericAddress = (bloomAddress: Address) => {
   return bloomAddress
@@ -234,10 +236,11 @@ export const getListingStatusMessageContent = (
 
 export const getListingStatusMessage = (
   listing: Listing,
-  jurisdiction: Jurisdiction,
+  jurisdiction: Jurisdiction | { featureFlags: FeatureFlag[] },
   content?: React.ReactNode,
   hideTime?: boolean,
-  hideDate?: boolean
+  hideDate?: boolean,
+  className?: string
 ) => {
   if (!listing) return
 
@@ -270,9 +273,12 @@ export const getListingStatusMessage = (
     hideIsClosed ||
     hideNoDateMarketingStatus
 
+  const classNames = [styles["status-bar"]]
+  if (className) classNames.push(className)
+
   return (
     <Message
-      className={styles["status-bar"]}
+      className={classNames.join(" ")}
       customIcon={
         <Icon size="md" className={styles["primary-color-icon"]}>
           {prefix?.variant === "secondary-inverse" ? <LockClosedIcon /> : <InfoIcon />}
@@ -511,4 +517,20 @@ export const RenderIf = (props: { language: string; children: JSX.Element }) => 
 
 export const isTrue = (value) => {
   return value === true || value === "true"
+}
+
+export const isUnitGroupAppWaitlist = (listing: Listing, config: ApplicationFormConfig) => {
+  return (
+    isFeatureFlagOn(config, FeatureFlagEnum.enableUnitGroups) &&
+    listing.unitGroups.some((group) => group.openWaitlist) &&
+    !listing.unitGroups.some((group) => group.totalAvailable > 0)
+  )
+}
+
+export const isUnitGroupAppBase = (listing: Listing, config: ApplicationFormConfig) => {
+  return (
+    isFeatureFlagOn(config, FeatureFlagEnum.enableUnitGroups) &&
+    !listing.unitGroups.some((group) => group.openWaitlist) &&
+    !listing.unitGroups.some((group) => group.totalAvailable > 0)
+  )
 }
