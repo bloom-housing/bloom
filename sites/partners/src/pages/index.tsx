@@ -3,7 +3,10 @@ import Head from "next/head"
 import { Button, Icon } from "@bloom-housing/ui-seeds"
 import { t, AgTable, useAgTable } from "@bloom-housing/ui-components"
 import { AuthContext } from "@bloom-housing/shared-helpers"
-import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  FeatureFlagEnum,
+  Jurisdiction,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import dayjs from "dayjs"
 import { ColDef, ColGroupDef } from "ag-grid-community"
 import { useListingExport, useListingsData } from "../lib/hooks"
@@ -70,6 +73,19 @@ class ListingsLink extends formatLinkCell {
     this.link.setAttribute("href", `/listings/${params.data.id}`)
     this.link.setAttribute("data-testid", params.data.name)
   }
+}
+
+export const getFlagInAllJurisdictions = (
+  jurisdictions: Jurisdiction[],
+  flagName: FeatureFlagEnum,
+  activeState: boolean
+) => {
+  return jurisdictions.every(
+    (jurisdiction) =>
+      !!jurisdiction.featureFlags.find(
+        (flag) => flag.name === flagName && flag.active === activeState
+      )
+  )
 }
 
 export default function ListingsList() {
@@ -149,8 +165,9 @@ export default function ListingsList() {
     ]
 
     if (profile?.jurisdictions.length === 1) {
-      const featureFlags = profile?.jurisdictions[0].featureFlags
-      if (featureFlags?.find((flag) => flag.name === FeatureFlagEnum.enableIsVerified)?.active) {
+      if (
+        getFlagInAllJurisdictions(profile?.jurisdictions, FeatureFlagEnum.enableIsVerified, true)
+      ) {
         columns.push({
           headerName: t("t.verified"),
           field: "isVerified",
@@ -161,7 +178,9 @@ export default function ListingsList() {
           maxWidth: 100,
         })
       }
-      if (!featureFlags?.find((flag) => flag.name === FeatureFlagEnum.enableUnitGroups)?.active) {
+      if (
+        getFlagInAllJurisdictions(profile?.jurisdictions, FeatureFlagEnum.enableUnitGroups, false)
+      ) {
         columns.push(
           {
             headerName: t("listings.availableUnits"),
@@ -183,7 +202,11 @@ export default function ListingsList() {
         )
       }
       if (
-        featureFlags?.find((flag) => flag.name === FeatureFlagEnum.enableListingUpdatedAt)?.active
+        getFlagInAllJurisdictions(
+          profile?.jurisdictions,
+          FeatureFlagEnum.enableListingUpdatedAt,
+          true
+        )
       ) {
         columns.push({
           headerName: t("t.lastUpdated"),

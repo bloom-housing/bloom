@@ -4,7 +4,7 @@ import { fireEvent, screen } from "@testing-library/react"
 import { rest } from "msw"
 import { setupServer } from "msw/node"
 import { listing } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
-import ListingsList from "../../../src/pages/index"
+import ListingsList, { getFlagInAllJurisdictions } from "../../../src/pages/index"
 import { mockNextRouter, render } from "../../testUtils"
 import {
   FeatureFlag,
@@ -460,5 +460,178 @@ describe("listings", () => {
     fireEvent.click(exportButton)
     const success = await findByText("The file has been exported")
     expect(success).toBeInTheDocument()
+  })
+  describe("getFlagInAllJurisdictions", () => {
+    it("should return true if feature flag exists for one jurisdiction", () => {
+      expect(
+        getFlagInAllJurisdictions(
+          [
+            {
+              id: "id1",
+              featureFlags: [
+                {
+                  name: FeatureFlagEnum.enableUnitGroups,
+                  active: true,
+                } as FeatureFlag,
+              ],
+            } as Jurisdiction,
+          ],
+          FeatureFlagEnum.enableUnitGroups,
+          true
+        )
+      ).toBe(true)
+    })
+    it("should return false if feature flag does not exist for one jurisdiction", () => {
+      expect(
+        getFlagInAllJurisdictions(
+          [
+            {
+              id: "id1",
+              featureFlags: [],
+            } as Jurisdiction,
+          ],
+          FeatureFlagEnum.enableUnitGroups,
+          true
+        )
+      ).toBe(false)
+      expect(
+        getFlagInAllJurisdictions(
+          [
+            {
+              id: "id1",
+              featureFlags: [
+                {
+                  name: FeatureFlagEnum.enableAdaOtherOption,
+                  active: true,
+                } as FeatureFlag,
+              ],
+            } as Jurisdiction,
+          ],
+          FeatureFlagEnum.enableUnitGroups,
+          true
+        )
+      ).toBe(false)
+    })
+    it("should return true if feature flag exists for all jurisdictions", () => {
+      expect(
+        getFlagInAllJurisdictions(
+          [
+            {
+              id: "id1",
+              featureFlags: [
+                {
+                  name: FeatureFlagEnum.enableUnitGroups,
+                  active: true,
+                } as FeatureFlag,
+              ],
+            } as Jurisdiction,
+            {
+              id: "id2",
+              featureFlags: [
+                {
+                  name: FeatureFlagEnum.enableUnitGroups,
+                  active: true,
+                } as FeatureFlag,
+                {
+                  name: FeatureFlagEnum.enableAccessibilityFeatures,
+                  active: false,
+                } as FeatureFlag,
+              ],
+            } as Jurisdiction,
+          ],
+          FeatureFlagEnum.enableUnitGroups,
+          true
+        )
+      ).toBe(true)
+    })
+    it("should return false if feature flag is not true for all jurisdictions", () => {
+      expect(
+        getFlagInAllJurisdictions(
+          [
+            {
+              id: "id1",
+              featureFlags: [
+                {
+                  name: FeatureFlagEnum.enableUnitGroups,
+                  active: true,
+                } as FeatureFlag,
+              ],
+            } as Jurisdiction,
+            {
+              id: "id2",
+              featureFlags: [
+                {
+                  name: FeatureFlagEnum.enableUnitGroups,
+                  active: false,
+                } as FeatureFlag,
+              ],
+            } as Jurisdiction,
+          ],
+          FeatureFlagEnum.enableUnitGroups,
+          true
+        )
+      ).toBe(false)
+      expect(
+        getFlagInAllJurisdictions(
+          [
+            {
+              id: "id1",
+              featureFlags: [
+                {
+                  name: FeatureFlagEnum.enableUnitGroups,
+                  active: false,
+                } as FeatureFlag,
+              ],
+            } as Jurisdiction,
+            {
+              id: "id2",
+              featureFlags: [
+                {
+                  name: FeatureFlagEnum.enableUnitGroups,
+                  active: false,
+                } as FeatureFlag,
+              ],
+            } as Jurisdiction,
+            {
+              id: "id2",
+              featureFlags: [
+                {
+                  name: FeatureFlagEnum.enableAdditionalResources,
+                  active: true,
+                } as FeatureFlag,
+              ],
+            } as Jurisdiction,
+          ],
+          FeatureFlagEnum.enableUnitGroups,
+          true
+        )
+      ).toBe(false)
+      expect(
+        getFlagInAllJurisdictions(
+          [
+            {
+              id: "id1",
+              featureFlags: [
+                {
+                  name: FeatureFlagEnum.enableAccessibilityFeatures,
+                  active: false,
+                } as FeatureFlag,
+              ],
+            } as Jurisdiction,
+            {
+              id: "id2",
+              featureFlags: [
+                {
+                  name: FeatureFlagEnum.enableAdaOtherOption,
+                  active: false,
+                } as FeatureFlag,
+              ],
+            } as Jurisdiction,
+          ],
+          FeatureFlagEnum.enableUnitGroups,
+          true
+        )
+      ).toBe(false)
+    })
   })
 })
