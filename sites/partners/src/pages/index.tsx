@@ -164,61 +164,58 @@ export default function ListingsList() {
       },
     ]
 
-    if (profile?.jurisdictions.length === 1) {
-      if (
-        getFlagInAllJurisdictions(profile?.jurisdictions, FeatureFlagEnum.enableIsVerified, true)
-      ) {
-        columns.push({
-          headerName: t("t.verified"),
-          field: "isVerified",
-          sortable: false,
-          filter: false,
-          resizable: true,
-          cellRenderer: "formatIsVerified",
-          maxWidth: 100,
-        })
-      }
-      if (
-        getFlagInAllJurisdictions(profile?.jurisdictions, FeatureFlagEnum.enableUnitGroups, false)
-      ) {
-        columns.push(
-          {
-            headerName: t("listings.availableUnits"),
-            field: "unitsAvailable",
-            sortable: false,
-            filter: false,
-            resizable: true,
-            maxWidth: 120,
-          },
-          {
-            headerName: t("listings.waitlist.open"),
-            field: "waitlistCurrentSize",
-            sortable: false,
-            filter: false,
-            resizable: true,
-            cellRenderer: "formatWaitlistStatus",
-            maxWidth: 160,
-          }
-        )
-      }
-      if (
-        getFlagInAllJurisdictions(
-          profile?.jurisdictions,
-          FeatureFlagEnum.enableListingUpdatedAt,
-          true
-        )
-      ) {
-        columns.push({
-          headerName: t("t.lastUpdated"),
-          field: "contentUpdatedAt",
-          sortable: false,
-          filter: false,
-          resizable: true,
-          valueFormatter: ({ value }) => (value ? dayjs(value).format("MM/DD/YYYY") : t("t.none")),
-          maxWidth: 140,
-        })
-      }
+    if (getFlagInAllJurisdictions(profile?.jurisdictions, FeatureFlagEnum.enableIsVerified, true)) {
+      columns.push({
+        headerName: t("t.verified"),
+        field: "isVerified",
+        sortable: false,
+        filter: false,
+        resizable: true,
+        cellRenderer: "formatIsVerified",
+        maxWidth: 100,
+      })
     }
+    if (
+      getFlagInAllJurisdictions(profile?.jurisdictions, FeatureFlagEnum.enableUnitGroups, false)
+    ) {
+      columns.push(
+        {
+          headerName: t("listings.availableUnits"),
+          field: "unitsAvailable",
+          sortable: false,
+          filter: false,
+          resizable: true,
+          maxWidth: 120,
+        },
+        {
+          headerName: t("listings.waitlist.open"),
+          field: "waitlistCurrentSize",
+          sortable: false,
+          filter: false,
+          resizable: true,
+          cellRenderer: "formatWaitlistStatus",
+          maxWidth: 160,
+        }
+      )
+    }
+    if (
+      getFlagInAllJurisdictions(
+        profile?.jurisdictions,
+        FeatureFlagEnum.enableListingUpdatedAt,
+        true
+      )
+    ) {
+      columns.push({
+        headerName: t("t.lastUpdated"),
+        field: "contentUpdatedAt",
+        sortable: false,
+        filter: false,
+        resizable: true,
+        valueFormatter: ({ value }) => (value ? dayjs(value).format("MM/DD/YYYY") : t("t.none")),
+        maxWidth: 140,
+      })
+    }
+
     return columns
   }, [])
 
