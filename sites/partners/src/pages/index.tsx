@@ -10,6 +10,7 @@ import Layout from "../layouts"
 import { MetaTags } from "../components/shared/MetaTags"
 import { NavigationHeader } from "../components/shared/NavigationHeader"
 import DocumentArrowDownIcon from "@heroicons/react/24/solid/DocumentArrowDownIcon"
+import DataTable from "../components/shared/DataTable"
 
 class formatLinkCell {
   link: HTMLAnchorElement
@@ -157,6 +158,8 @@ export default function ListingsList() {
     userJurisidctionIds: profile?.jurisdictions?.map((jurisdiction) => jurisdiction.id),
   })
 
+  console.log({ listingDtos })
+
   return (
     <Layout>
       <Head>
@@ -166,7 +169,7 @@ export default function ListingsList() {
       <NavigationHeader title={t("nav.listings")}></NavigationHeader>
       <section>
         <article className="flex-row flex-wrap relative max-w-screen-xl mx-auto py-8 px-4">
-          <AgTable
+          {/* <AgTable
             id="listings-table"
             pagination={{
               perPage: tableOptions.pagination.itemsPerPage,
@@ -218,6 +221,11 @@ export default function ListingsList() {
                 )}
               </div>
             }
+          /> */}
+          <DataTable
+            rowData={listingDtos?.items.map((item) => {
+              return { name: item.name, status: item.status }
+            })}
           />
         </article>
       </section>

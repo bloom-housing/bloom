@@ -1,0 +1,11 @@
+.container {
+  height: 500px;
+}
+
+.pagination {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: space-between;
+  margin-block-start: var(--seeds-s4);
+}
