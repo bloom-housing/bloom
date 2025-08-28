@@ -1289,10 +1289,10 @@
   resolved "https://registry.npmjs.org/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@bloom-housing/ui-components@12.7.5":
-  version "12.7.5"
-  resolved "https://registry.yarnpkg.com/@bloom-housing/ui-components/-/ui-components-12.7.5.tgz#dcf80df26103a2ba1c07712a16f627210c8cff6d"
-  integrity sha512-bOt2aEAB6owSzyhV+m95tCMwg0dbHZyVsBu6wCAogrm2J23doCEUretguSS4veRyP9EL6dpvcXdrAp9kDIEo/w==
+"@bloom-housing/ui-components@12.7.7":
+  version "12.7.7"
+  resolved "https://registry.yarnpkg.com/@bloom-housing/ui-components/-/ui-components-12.7.7.tgz#6516177f1cc2d6aae58c1f409df09ebd0a134a13"
+  integrity sha512-0uwfeuuSpHNfOp3cZUTy8tc2qoyOWuwMal6k8b6a6hj0OpAE2r5hLNrsFC1rSeAYFmm4ffpNX/WHEFiLl1Gh2Q==
   dependencies:
     "@fortawesome/fontawesome-svg-core" "^6.1.1"
     "@fortawesome/free-regular-svg-icons" "^6.1.1"
@@ -1302,7 +1302,6 @@
     ag-grid-community "^26.0.0"
     ag-grid-react "^26.0.0"
     aria-autocomplete "^1.4.0"
-    axios "0.21.2"
     dayjs "^1.10.7"
     jwt-decode "^2.2.0"
     markdown-to-jsx "7.1.8"
@@ -4286,13 +4285,6 @@ axios-cookiejar-support@^5.0.5:
   dependencies:
     http-cookie-agent "^6.0.8"
 
-axios@0.21.2:
-  version "0.21.2"
-  resolved "https://registry.yarnpkg.com/axios/-/axios-0.21.2.tgz#21297d5084b2aeeb422f5d38e7be4fbb82239017"
-  integrity sha512-87otirqUw3e8CzHTMO+/9kh/FSgXt/eVDvipijwDtEuwbkySWZ9SBm6VEubmJ/kLKEoLQV/POhxXFb66bfekfg==
-  dependencies:
-    follow-redirects "^1.14.0"
-
 axios@^0.19.2:
   version "0.19.2"
   resolved "https://registry.npmjs.org/axios/-/axios-0.19.2.tgz"
@@ -7022,7 +7014,7 @@ follow-redirects@1.5.10:
   dependencies:
     debug "=3.1.0"
 
-follow-redirects@^1.14.0, follow-redirects@^1.15.6:
+follow-redirects@^1.15.6:
   version "1.15.9"
   resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.15.9.tgz#a604fa10e443bf98ca94228d9eebcc2e8a2c8ee1"
   integrity sha512-gew4GsXizNgdoRyqmyfMHyAmXsZDk6mHkSxZFCzW9gwlbtOW44CDtYavM+y+72qD/Vq2l550kMF52DT8fOLJqQ==

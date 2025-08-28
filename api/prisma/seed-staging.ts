@@ -230,6 +230,12 @@ export const stagingSeed = async (
         FeatureFlagEnum.enableFullTimeStudentQuestion,
       ],
       requiredListingFields: ['name', 'listingsBuildingAddress'],
+      languages: [
+        LanguagesEnum.en,
+        LanguagesEnum.es,
+        // LanguagesEnum.ar,
+        // LanguagesEnum.bn,
+      ],
     }),
   });
   // Basic configuration jurisdiction
