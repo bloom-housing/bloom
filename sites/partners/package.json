@@ -42,7 +42,7 @@
     "@tiptap/starter-kit": "^2.24.0",
     "ag-grid-community": "^26.0.0",
     "axios": "^1.8.3",
-    "axios-cookiejar-support": "^5.0.5",
+    "axios-cookiejar-support": "^6.0.4",
     "clone-deep": "^4.0.1",
     "dayjs": "^1.10.7",
     "dotenv": "^8.2.0",
