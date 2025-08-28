@@ -1,4 +1,4 @@
-import { useCallback, useContext, useState } from "react"
+import { useCallback, useContext, useState, useEffect } from "react"
 import useSWR from "swr"
 import qs from "qs"
 import dayjs from "dayjs"
@@ -667,4 +667,20 @@ export function useLotteryActivityLog(listingId: string) {
     lotteryActivityLogLoading: !error && !data,
     lotteryError: error,
   }
+}
+
+export function useWatchOnFormNumberFieldsChange(
+  fieldsValuesToWatch: number[],
+  fieldsToTriggerWatch: string[],
+  trigger: (name?: string | string[]) => Promise<boolean>
+) {
+  useEffect(() => {
+    if (fieldsValuesToWatch.some((value) => value)) {
+      const timeoutId = setTimeout(() => {
+        void trigger(fieldsToTriggerWatch)
+      }, 0)
+
+      return () => clearTimeout(timeoutId)
+    }
+  }, [fieldsToTriggerWatch, fieldsValuesToWatch, trigger])
 }
