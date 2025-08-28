@@ -80,11 +80,12 @@ export const getFlagInAllJurisdictions = (
   flagName: FeatureFlagEnum,
   activeState: boolean
 ) => {
-  return jurisdictions.every(
+  return jurisdictions?.every(
     (jurisdiction) =>
       !!jurisdiction.featureFlags.find(
         (flag) => flag.name === flagName && flag.active === activeState
-      )
+      ) ||
+      (!activeState && !jurisdiction.featureFlags.find((flag) => flag.name === flagName))
   )
 }
 
@@ -175,6 +176,7 @@ export default function ListingsList() {
         maxWidth: 100,
       })
     }
+
     if (
       getFlagInAllJurisdictions(profile?.jurisdictions, FeatureFlagEnum.enableUnitGroups, false)
     ) {
