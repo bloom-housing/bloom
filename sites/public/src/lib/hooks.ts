@@ -57,7 +57,7 @@ export const useAuthenticApplicationCheckpoint = (
       )
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [router]) // ensure this only runs once on the page
+  }, [toastyRef]) // ensure this only runs once on the page
 }
 
 export const useRedirectToPrevPage = (defaultPath = "/") => {
