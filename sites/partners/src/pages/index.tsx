@@ -150,7 +150,6 @@ export default function ListingsList() {
 
     if (profile?.jurisdictions.length === 1) {
       const featureFlags = profile?.jurisdictions[0].featureFlags
-      console.log({ featureFlags })
       if (featureFlags?.find((flag) => flag.name === FeatureFlagEnum.enableIsVerified)?.active) {
         columns.push({
           headerName: t("t.verified"),
