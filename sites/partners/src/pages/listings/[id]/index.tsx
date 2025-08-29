@@ -131,7 +131,9 @@ export default function ListingDetail(props: ListingProps) {
                       setErrorAlert={setErrorAlert}
                     />
                     <div className="flex flex-col items-center mt-16 gap-2">
-                      <p>Last edited by {listing.name}</p>
+                      <p>
+                        {t("listings.details.editedAt")} {listing.name}
+                      </p>
                       <p>{dayjs(listing.contentUpdatedAt).format("MMMM DD, YYYY, HH:mm A")}</p>
                     </div>
                   </div>
