@@ -133,6 +133,7 @@ export default function ListingDetail(props: ListingProps) {
                     <div className="flex flex-col items-center mt-16 gap-2">
                       <p>
                         {t("listings.details.editedAt")} {listing.name}
+                        {/* {t("listings.details.editedAt")} {listing.lastUpdatedByUser} */}
                       </p>
                       <p>{dayjs(listing.contentUpdatedAt).format("MMMM DD, YYYY, HH:mm A")}</p>
                     </div>
