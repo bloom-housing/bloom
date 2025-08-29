@@ -14,7 +14,7 @@ import { BaseFilter } from '../shared/base-filter.dto';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 import { FilterAvailabilityEnum } from '../../enums/listings/filter-availability-enum';
 import { ListingFilterKeys } from '../../enums/listings/filter-key-enum';
-import { requestedChangesUserMapper } from '../../utilities/requested-changes-user';
+import { mapUser } from '../../utilities/mapUser';
 import { IdDTO } from '../shared/id.dto';
 import { User } from '../users/user.dto';
 
@@ -218,7 +218,7 @@ export class ListingFilterParams extends BaseFilter {
   @Transform(
     (obj: any) => {
       return obj.obj.lastUpdatedByUser
-        ? requestedChangesUserMapper(obj.obj.lastUpdatedByUser as User)
+        ? mapUser(obj.obj.lastUpdatedByUser as User)
         : undefined;
     },
     {
