@@ -15,7 +15,7 @@ import styles from "../../../layouts/application-form.module.scss"
 
 const ApplicationWhatToExpect = () => {
   const { profile } = useContext(AuthContext)
-  const { conductor, listing } = useFormConductor("whatToExpect")
+  const { conductor, listing } = useFormConductor("whatToExpect", true)
   const router = useRouter()
 
   const { handleSubmit } = useForm()
