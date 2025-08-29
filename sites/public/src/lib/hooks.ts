@@ -19,8 +19,46 @@ import {
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { ParsedUrlQuery } from "querystring"
 import { AppSubmissionContext } from "./applications/AppSubmissionContext"
-import { useRequireLoggedInUser, isInternalLink, AuthContext } from "@bloom-housing/shared-helpers"
+import {
+  useRequireLoggedInUser,
+  isInternalLink,
+  AuthContext,
+  useToastyRef,
+} from "@bloom-housing/shared-helpers"
+import { t } from "@bloom-housing/ui-components"
 import { fetchFavoriteListingIds } from "./helpers"
+
+/**
+ *
+ * @param listing
+ * @param application
+ */
+export const useAuthenticApplicationCheckpoint = (
+  listing: Listing,
+  application: Record<string, unknown>
+) => {
+  const router = useRouter()
+  const toastyRef = useToastyRef()
+  const { profile } = useContext(AuthContext)
+
+  useEffect(() => {
+    const { addToast } = toastyRef.current
+
+    if (!listing) {
+      addToast(t("application.timeout.afterMessage"), { variant: "alert" })
+      void router.push("/listings")
+      return
+    }
+
+    if (application.confirmationCode) {
+      addToast(t("listings.applicationAlreadySubmitted"), { variant: "alert" })
+      void router.push(
+        profile ? `/account/applications` : `/listing/${listing.id}/${listing.urlSlug}`
+      )
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [toastyRef]) // ensure this only runs once on the page
+}
 
 export const useRedirectToPrevPage = (defaultPath = "/") => {
   const router = useRouter()
@@ -37,9 +75,19 @@ export const useRedirectToPrevPage = (defaultPath = "/") => {
   }
 }
 
-export const useFormConductor = (stepName: string) => {
+/**
+ * Hook for use in the Common Application form steps
+ * @param stepName
+ * @param bypassCheckpoint true if it should bypass checking that listing & application is in progress
+ * @returns
+ */
+export const useFormConductor = (stepName: string, bypassCheckpoint?: boolean) => {
   useRequireLoggedInUser("/", !process.env.showMandatedAccounts)
   const context = useContext(AppSubmissionContext)
+  if (!bypassCheckpoint) {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    useAuthenticApplicationCheckpoint(context.listing, context.application)
+  }
   const conductor = context.conductor
 
   conductor.stepTo(stepName)
