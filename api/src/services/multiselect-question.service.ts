@@ -5,13 +5,13 @@ import { MultiselectQuestionUpdate } from '../dtos/multiselect-questions/multise
 import { MultiselectQuestionCreate } from '../dtos/multiselect-questions/multiselect-question-create.dto';
 import { mapTo } from '../utilities/mapTo';
 import { SuccessDTO } from '../dtos/shared/success.dto';
-import { Prisma } from '@prisma/client';
+import { MultiselectQuestionsStatusEnum, Prisma } from '@prisma/client';
 import { buildFilter } from '../utilities/build-filter';
 import { MultiselectQuestionFilterKeys } from '../enums/multiselect-questions/filter-key-enum';
 import { MultiselectQuestionQueryParams } from '../dtos/multiselect-questions/multiselect-question-query-params.dto';
 
 const view: Prisma.MultiselectQuestionsInclude = {
-  jurisdictions: true,
+  jurisdiction: true,
 };
 
 /*
@@ -28,11 +28,17 @@ export class MultiselectQuestionService {
   async list(
     params: MultiselectQuestionQueryParams,
   ): Promise<MultiselectQuestion[]> {
-    const rawMultiselectQuestions =
+    let rawMultiselectQuestions =
       await this.prisma.multiselectQuestions.findMany({
         include: view,
         where: this.buildWhere(params),
       });
+
+    // TODO: Temporary until front end accepts MSQ refactor
+    rawMultiselectQuestions = rawMultiselectQuestions.map((msq) => ({
+      ...msq,
+      jurisdictions: [msq.jurisdiction],
+    }));
     return mapTo(MultiselectQuestion, rawMultiselectQuestions);
   }
 
@@ -59,10 +65,8 @@ export class MultiselectQuestionService {
         });
         filters.push({
           OR: builtFilter.map((filt) => ({
-            jurisdictions: {
-              some: {
-                id: filt,
-              },
+            jurisdiction: {
+              id: filt,
             },
           })),
         });
@@ -106,6 +110,10 @@ export class MultiselectQuestionService {
       );
     }
 
+    // TODO: Temporary until front end accepts MSQ refactor
+    rawMultiselectQuestion['jurisdictions'] = [
+      rawMultiselectQuestion.jurisdiction,
+    ];
     return mapTo(MultiselectQuestion, rawMultiselectQuestion);
   }
 
@@ -115,25 +123,38 @@ export class MultiselectQuestionService {
   async create(
     incomingData: MultiselectQuestionCreate,
   ): Promise<MultiselectQuestion> {
-    const rawResult = await this.prisma.multiselectQuestions.create({
-      data: {
-        ...incomingData,
-        jurisdictions: {
-          connect: incomingData.jurisdictions.map((juris) => ({
-            id: juris.id,
-          })),
-        },
-        links: incomingData.links
-          ? (incomingData.links as unknown as Prisma.InputJsonArray)
-          : undefined,
-        options: incomingData.options
-          ? (incomingData.options as unknown as Prisma.InputJsonArray)
-          : undefined,
-      },
-      include: view,
-    });
+    const { jurisdictions, links, options, ...createData } = incomingData;
 
-    return mapTo(MultiselectQuestion, rawResult);
+    const rawMultiselectQuestion =
+      await this.prisma.multiselectQuestions.create({
+        data: {
+          ...createData,
+          jurisdiction: {
+            connect: jurisdictions?.at(0)?.id
+              ? { id: jurisdictions?.at(0)?.id }
+              : undefined,
+          },
+          links: links
+            ? (links as unknown as Prisma.InputJsonArray)
+            : undefined,
+          options: options
+            ? (options as unknown as Prisma.InputJsonArray)
+            : undefined,
+          status: MultiselectQuestionsStatusEnum.draft,
+
+          // TODO: Temporary until after MSQ refactor
+          isExclusive: false,
+          multiselectOptions: undefined,
+          name: createData.text,
+        },
+        include: view,
+      });
+
+    // TODO: Temporary until front end accepts MSQ refactor
+    rawMultiselectQuestion['jurisdictions'] = [
+      rawMultiselectQuestion.jurisdiction,
+    ];
+    return mapTo(MultiselectQuestion, rawMultiselectQuestion);
   }
 
   /*
@@ -143,45 +164,43 @@ export class MultiselectQuestionService {
   async update(
     incomingData: MultiselectQuestionUpdate,
   ): Promise<MultiselectQuestion> {
-    const existingMultiSelectQ = await this.findOrThrow(incomingData.id);
+    const { id, jurisdictions, links, options, ...updateData } = incomingData;
 
-    if (existingMultiSelectQ.jurisdictions?.length) {
+    await this.findOrThrow(id);
+
+    const rawMultiselectQuestion =
       await this.prisma.multiselectQuestions.update({
         data: {
-          jurisdictions: {
-            disconnect: existingMultiSelectQ.jurisdictions.map((juris) => ({
-              id: juris.id,
-            })),
+          ...updateData,
+          id: undefined,
+          jurisdiction: {
+            connect: jurisdictions?.at(0)?.id
+              ? { id: jurisdictions?.at(0)?.id }
+              : undefined,
           },
+          links: links
+            ? (links as unknown as Prisma.InputJsonArray)
+            : undefined,
+          options: options
+            ? (options as unknown as Prisma.InputJsonArray)
+            : undefined,
+
+          // TODO: Temporary until after MSQ refactor
+          isExclusive: false,
+          multiselectOptions: undefined,
+          name: updateData.text,
         },
         where: {
-          id: existingMultiSelectQ.id,
+          id: id,
         },
+        include: view,
       });
-    }
 
-    const rawResults = await this.prisma.multiselectQuestions.update({
-      data: {
-        ...incomingData,
-        jurisdictions: {
-          connect: incomingData.jurisdictions.map((juris) => ({
-            id: juris.id,
-          })),
-        },
-        links: incomingData.links
-          ? JSON.parse(JSON.stringify(incomingData.links))
-          : undefined,
-        options: incomingData.options
-          ? JSON.parse(JSON.stringify(incomingData.options))
-          : undefined,
-        id: undefined,
-      },
-      where: {
-        id: incomingData.id,
-      },
-      include: view,
-    });
-    return mapTo(MultiselectQuestion, rawResults);
+    // TODO: Temporary until front end accepts MSQ refactor
+    rawMultiselectQuestion['jurisdictions'] = [
+      rawMultiselectQuestion?.jurisdiction,
+    ];
+    return mapTo(MultiselectQuestion, rawMultiselectQuestion);
   }
 
   /*
@@ -205,39 +224,49 @@ export class MultiselectQuestionService {
   async findOrThrow(
     multiselectQuestionId: string,
   ): Promise<MultiselectQuestion> {
-    const multiselectQuestion =
+    const rawMultiselectQuestion =
       await this.prisma.multiselectQuestions.findFirst({
         include: {
-          jurisdictions: true,
+          jurisdiction: true,
         },
         where: {
           id: multiselectQuestionId,
         },
       });
 
-    if (!multiselectQuestion) {
+    if (!rawMultiselectQuestion) {
       throw new NotFoundException(
         `multiselectQuestionId ${multiselectQuestionId} was requested but not found`,
       );
     }
 
-    return mapTo(MultiselectQuestion, multiselectQuestion);
+    // TODO: Temporary until front end accepts MSQ refactor
+    rawMultiselectQuestion['jurisdictions'] = [
+      rawMultiselectQuestion.jurisdiction,
+    ];
+    return mapTo(MultiselectQuestion, rawMultiselectQuestion);
   }
 
   async findByListingId(listingId: string): Promise<MultiselectQuestion[]> {
-    const questions = await this.prisma.multiselectQuestions.findMany({
-      include: {
-        listings: true,
-      },
-      where: {
-        listings: {
-          some: {
-            listingId,
+    let rawMultiselectQuestions =
+      await this.prisma.multiselectQuestions.findMany({
+        include: {
+          listings: true,
+        },
+        where: {
+          listings: {
+            some: {
+              listingId,
+            },
           },
         },
-      },
-    });
+      });
 
-    return mapTo(MultiselectQuestion, questions);
+    // TODO: Temporary until front end accepts MSQ refactor
+    rawMultiselectQuestions = rawMultiselectQuestions.map((msq) => ({
+      ...msq,
+      jurisdictions: [{ id: msq.jurisdictionId }],
+    }));
+    return mapTo(MultiselectQuestion, rawMultiselectQuestions);
   }
 }
