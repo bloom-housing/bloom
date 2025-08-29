@@ -10,6 +10,7 @@ import Layout from "../layouts"
 import { MetaTags } from "../components/shared/MetaTags"
 import { NavigationHeader } from "../components/shared/NavigationHeader"
 import DocumentArrowDownIcon from "@heroicons/react/24/solid/DocumentArrowDownIcon"
+import { FeatureFlagEnum, Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 class formatLinkCell {
   link: HTMLAnchorElement
@@ -59,7 +60,7 @@ class ListingsLink extends formatLinkCell {
 
 export default function ListingsList() {
   const metaDescription = t("pageDescription.welcome", { regionName: t("region.name") })
-  const { profile } = useContext(AuthContext)
+  const { profile, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
   const isAdmin = profile?.userRoles?.isAdmin || profile?.userRoles?.isJurisdictionalAdmin || false
   const { onExport, csvExportLoading } = useListingExport()
 
@@ -133,6 +134,19 @@ export default function ListingsList() {
         filter: false,
         resizable: true,
         minWidth: 110,
+        valueFormatter: ({ value, data }: { value: string; data: Listing }) => {
+          if (
+            doJurisdictionsHaveFeatureFlagOn(
+              FeatureFlagEnum.enableUnitGroups,
+              data.jurisdictions.id
+            )
+          ) {
+            return data.unitGroups
+              .reduce((acc, curr) => acc + (curr.totalAvailable ?? 0), 0)
+              .toString()
+          }
+          return value
+        },
       },
       {
         headerName: t("listings.waitlist.open"),
