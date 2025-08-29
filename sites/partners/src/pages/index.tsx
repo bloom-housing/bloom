@@ -3,6 +3,10 @@ import Head from "next/head"
 import { Button, Icon } from "@bloom-housing/ui-seeds"
 import { t, AgTable, useAgTable } from "@bloom-housing/ui-components"
 import { AuthContext } from "@bloom-housing/shared-helpers"
+import {
+  FeatureFlagEnum,
+  Jurisdiction,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import dayjs from "dayjs"
 import { ColDef, ColGroupDef } from "ag-grid-community"
 import { useListingExport, useListingsData } from "../lib/hooks"
@@ -19,6 +23,7 @@ class formatLinkCell {
     this.link.classList.add("text-blue-700")
     this.link.setAttribute("href", `/listings/${params.data.id}/applications`)
     this.link.innerText = params.valueFormatted || params.value
+    this.link.style.textDecoration = "underline"
   }
 
   getGui() {
@@ -30,10 +35,23 @@ class formatWaitlistStatus {
   text: HTMLSpanElement
 
   init({ data }) {
-    const isWaitlistOpen = data.waitlistCurrentSize < data.waitlistMaxSize
+    const isWaitlistOpen = data.waitlistOpenSpots > 0
 
     this.text = document.createElement("span")
     this.text.innerHTML = isWaitlistOpen ? t("t.yes") : t("t.no")
+  }
+
+  getGui() {
+    return this.text
+  }
+}
+
+class formatIsVerified {
+  text: HTMLSpanElement
+
+  init({ data }) {
+    this.text = document.createElement("span")
+    this.text.innerHTML = data.isVerified ? t("t.yes") : t("t.no")
   }
 
   getGui() {
@@ -57,6 +75,20 @@ class ListingsLink extends formatLinkCell {
   }
 }
 
+export const getFlagInAllJurisdictions = (
+  jurisdictions: Jurisdiction[],
+  flagName: FeatureFlagEnum,
+  activeState: boolean
+) => {
+  return jurisdictions?.every(
+    (jurisdiction) =>
+      !!jurisdiction.featureFlags.find(
+        (flag) => flag.name === flagName && flag.active === activeState
+      ) ||
+      (!activeState && !jurisdiction.featureFlags.find((flag) => flag.name === flagName))
+  )
+}
+
 export default function ListingsList() {
   const metaDescription = t("pageDescription.welcome", { regionName: t("region.name") })
   const { profile } = useContext(AuthContext)
@@ -69,6 +101,7 @@ export default function ListingsList() {
     ApplicationsLink,
     formatLinkCell,
     formatWaitlistStatus,
+    formatIsVerified,
     ListingsLink,
   }
 
@@ -97,7 +130,7 @@ export default function ListingsList() {
         resizable: true,
         valueFormatter: ({ value }) => t(`listings.listingStatus.${value}`),
         cellRenderer: "ApplicationsLink",
-        minWidth: 180,
+        maxWidth: 190,
       },
       {
         headerName: t("listings.createdDate"),
@@ -106,7 +139,7 @@ export default function ListingsList() {
         filter: false,
         resizable: true,
         valueFormatter: ({ value }) => (value ? dayjs(value).format("MM/DD/YYYY") : t("t.none")),
-        minWidth: 130,
+        maxWidth: 140,
       },
       {
         headerName: t("listings.publishedDate"),
@@ -115,35 +148,72 @@ export default function ListingsList() {
         filter: false,
         resizable: true,
         valueFormatter: ({ value }) => (value ? dayjs(value).format("MM/DD/YYYY") : t("t.none")),
-        minWidth: 130,
+        maxWidth: 150,
       },
       {
-        headerName: t("listings.applicationDeadline"),
+        headerName: t("listings.applicationDueDate"),
         field: "applicationDueDate",
         sortable: false,
         filter: false,
         resizable: true,
         valueFormatter: ({ value }) => (value ? dayjs(value).format("MM/DD/YYYY") : t("t.none")),
-        minWidth: 130,
-      },
-      {
-        headerName: t("listings.availableUnits"),
-        field: "unitsAvailable",
-        sortable: false,
-        filter: false,
-        resizable: true,
-        minWidth: 110,
-      },
-      {
-        headerName: t("listings.waitlist.open"),
-        field: "waitlistCurrentSize",
-        sortable: false,
-        filter: false,
-        resizable: true,
-        cellRenderer: "formatWaitlistStatus",
-        minWidth: 100,
+        maxWidth: 120,
       },
     ]
+
+    if (getFlagInAllJurisdictions(profile?.jurisdictions, FeatureFlagEnum.enableIsVerified, true)) {
+      columns.push({
+        headerName: t("t.verified"),
+        field: "isVerified",
+        sortable: false,
+        filter: false,
+        resizable: true,
+        cellRenderer: "formatIsVerified",
+        maxWidth: 100,
+      })
+    }
+
+    if (
+      getFlagInAllJurisdictions(profile?.jurisdictions, FeatureFlagEnum.enableUnitGroups, false)
+    ) {
+      columns.push(
+        {
+          headerName: t("listings.availableUnits"),
+          field: "unitsAvailable",
+          sortable: false,
+          filter: false,
+          resizable: true,
+          maxWidth: 120,
+        },
+        {
+          headerName: t("listings.waitlist.open"),
+          field: "waitlistCurrentSize",
+          sortable: false,
+          filter: false,
+          resizable: true,
+          cellRenderer: "formatWaitlistStatus",
+          maxWidth: 160,
+        }
+      )
+    }
+    if (
+      getFlagInAllJurisdictions(
+        profile?.jurisdictions,
+        FeatureFlagEnum.enableListingUpdatedAt,
+        true
+      )
+    ) {
+      columns.push({
+        headerName: t("t.lastUpdated"),
+        field: "contentUpdatedAt",
+        sortable: false,
+        filter: false,
+        resizable: true,
+        valueFormatter: ({ value }) => (value ? dayjs(value).format("MM/DD/YYYY") : t("t.none")),
+        maxWidth: 140,
+      })
+    }
+
     return columns
   }, [])
 
