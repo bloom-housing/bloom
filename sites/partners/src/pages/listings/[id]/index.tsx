@@ -39,6 +39,7 @@ import DetailPrograms from "../../../components/listings/PaperListingDetails/sec
 import DetailListingNotes from "../../../components/listings/PaperListingDetails/sections/DetailNotes"
 import CopyListingDialog from "../../../components/listings/PaperListingForm/dialogs/CopyListingDialog"
 import DetailListingVerification from "../../../components/listings/PaperListingDetails/sections/DetailListingVerification"
+import dayjs from "dayjs"
 
 interface ListingProps {
   listing: Listing
@@ -130,8 +131,8 @@ export default function ListingDetail(props: ListingProps) {
                       setErrorAlert={setErrorAlert}
                     />
                     <div className="flex flex-col items-center mt-16 gap-2">
-                      <p>Last edited by Craig Yappert</p>
-                      <p>July 29, 2025, 11:34 AM</p>
+                      <p>Last edited by {listing.name}</p>
+                      <p>{dayjs(listing.contentUpdatedAt).format("MMMM DD, YYYY, HH:mm A")}</p>
                     </div>
                   </div>
                 </div>
