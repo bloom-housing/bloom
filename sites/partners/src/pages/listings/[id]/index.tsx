@@ -129,7 +129,7 @@ export default function ListingDetail(props: ListingProps) {
                       showCopyListingDialog={() => setCopyListingDialog(true)}
                       setErrorAlert={setErrorAlert}
                     />
-                    <div>
+                    <div className="flex flex-col items-center mt-16 gap-2">
                       <p>Last edited by Craig Yappert</p>
                       <p>July 29, 2025, 11:34 AM</p>
                     </div>
