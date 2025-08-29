@@ -129,6 +129,10 @@ export default function ListingDetail(props: ListingProps) {
                       showCopyListingDialog={() => setCopyListingDialog(true)}
                       setErrorAlert={setErrorAlert}
                     />
+                    <div>
+                      <p>Last edited by Craig Yappert</p>
+                      <p>July 29, 2025, 11:34 AM</p>
+                    </div>
                   </div>
                 </div>
               </div>
