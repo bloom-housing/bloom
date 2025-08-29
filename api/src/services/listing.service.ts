@@ -1073,7 +1073,7 @@ export class ListingService implements OnModuleInit {
         }
         if (filter[ListingFilterKeys.listingFeatures]) {
           filters.push({
-            OR: filter[ListingFilterKeys.listingFeatures].map((feature) => ({
+            AND: filter[ListingFilterKeys.listingFeatures].map((feature) => ({
               listingFeatures: {
                 [feature]: true,
               },
