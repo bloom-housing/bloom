@@ -1982,7 +1982,7 @@ describe('Testing listing service', () => {
       expect(whereClause).toStrictEqual({
         AND: [
           {
-            OR: [
+            AND: [
               {
                 listingFeatures: {
                   hearing: true,
