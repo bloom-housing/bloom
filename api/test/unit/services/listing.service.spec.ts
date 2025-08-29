@@ -599,11 +599,13 @@ describe('Testing listing service', () => {
           listingsBuildingAddress: true,
           requestedChangesUser: true,
           reservedCommunityTypes: true,
+
           listingImages: {
             include: {
               assets: true,
             },
           },
+          lastUpdatedByUser: true,
           listingMultiselectQuestions: {
             include: {
               multiselectQuestions: true,
@@ -764,6 +766,7 @@ describe('Testing listing service', () => {
               assets: true,
             },
           },
+
           listingMultiselectQuestions: {
             include: {
               multiselectQuestions: true,
@@ -2359,6 +2362,7 @@ describe('Testing listing service', () => {
           listingsBuildingAddress: true,
           requestedChangesUser: true,
           reservedCommunityTypes: true,
+          lastUpdatedByUser: true,
           listingImages: {
             include: {
               assets: true,
@@ -2873,6 +2877,7 @@ describe('Testing listing service', () => {
           jurisdictions: true,
           listingsBuildingAddress: true,
           requestedChangesUser: true,
+          lastUpdatedByUser: true,
           reservedCommunityTypes: true,
           listingImages: {
             include: {
@@ -3151,6 +3156,7 @@ describe('Testing listing service', () => {
               assets: true,
             },
           },
+          lastUpdatedByUser: true,
           listingFeatures: true,
           listingImages: {
             include: {
@@ -3205,6 +3211,11 @@ describe('Testing listing service', () => {
         data: {
           name: 'example listing name',
           contentUpdatedAt: expect.anything(),
+          lastUpdatedByUser: {
+            connect: {
+              id: user.id,
+            },
+          },
           depositMin: '5',
           assets: {
             create: [
@@ -3262,6 +3273,7 @@ describe('Testing listing service', () => {
               },
             },
           },
+          lastUpdatedByUser: true,
           jurisdictions: true,
           listingEvents: {
             include: {
@@ -3323,6 +3335,11 @@ describe('Testing listing service', () => {
           ...val,
           isVerified: true,
           contentUpdatedAt: expect.anything(),
+          lastUpdatedByUser: {
+            connect: {
+              id: user.id,
+            },
+          },
           publishedAt: expect.anything(),
           assets: {
             create: [exampleAsset],
@@ -3621,6 +3638,7 @@ describe('Testing listing service', () => {
               },
             },
           },
+          lastUpdatedByUser: true,
           jurisdictions: true,
           listingEvents: {
             include: {
@@ -3682,6 +3700,11 @@ describe('Testing listing service', () => {
           name: 'example listing name',
           contentUpdatedAt: expect.anything(),
           depositMin: '5',
+          lastUpdatedByUser: {
+            connect: {
+              id: user.id,
+            },
+          },
           assets: {
             create: [
               {
@@ -3753,6 +3776,7 @@ describe('Testing listing service', () => {
               },
             },
           },
+          lastUpdatedByUser: true,
           jurisdictions: true,
           listingEvents: {
             include: {
@@ -3770,6 +3794,7 @@ describe('Testing listing service', () => {
               multiselectQuestions: true,
             },
           },
+
           listingUtilities: true,
           listingNeighborhoodAmenities: true,
           listingsApplicationDropOffAddress: true,
@@ -3814,6 +3839,9 @@ describe('Testing listing service', () => {
           ...val,
           isVerified: true,
           contentUpdatedAt: expect.anything(),
+          lastUpdatedByUser: {
+            connect: { id: user.id },
+          },
           publishedAt: expect.anything(),
           assets: {
             create: [exampleAsset],
@@ -4081,6 +4109,7 @@ describe('Testing listing service', () => {
               },
             },
           },
+          lastUpdatedByUser: true,
           jurisdictions: true,
           listingEvents: {
             include: {
@@ -4194,6 +4223,7 @@ describe('Testing listing service', () => {
               assets: true,
             },
           },
+          lastUpdatedByUser: true,
           listingFeatures: true,
           listingImages: {
             include: {
@@ -4286,6 +4316,7 @@ describe('Testing listing service', () => {
               },
             },
           },
+          lastUpdatedByUser: true,
           jurisdictions: true,
           listingEvents: {
             include: {
@@ -4658,6 +4689,7 @@ describe('Testing listing service', () => {
           displayWaitlistSize: false,
           unitsSummary: null,
           listingEvents: [],
+          lastUpdatedByUser: user,
         } as ListingUpdate,
         user,
       );
@@ -4679,6 +4711,7 @@ describe('Testing listing service', () => {
               assets: true,
             },
           },
+          lastUpdatedByUser: true,
           listingFeatures: true,
           listingImages: {
             include: {
@@ -4733,6 +4766,11 @@ describe('Testing listing service', () => {
         data: {
           name: 'example listing name',
           contentUpdatedAt: expect.anything(),
+          lastUpdatedByUser: {
+            connect: {
+              id: user.id,
+            },
+          },
           depositMin: '5',
           assets: [
             {
@@ -4899,6 +4937,11 @@ describe('Testing listing service', () => {
           jurisdictions: {
             connect: {
               id: expect.anything(),
+            },
+          },
+          lastUpdatedByUser: {
+            connect: {
+              id: user.id,
             },
           },
           listingNeighborhoodAmenities: {

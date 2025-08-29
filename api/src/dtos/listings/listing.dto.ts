@@ -48,7 +48,7 @@ import { UnitsSummary } from '../units/units-summary.dto';
 import { IdDTO } from '../shared/id.dto';
 import { listingUrlSlug } from '../../utilities/listing-url-slug';
 import { User } from '../users/user.dto';
-import { requestedChangesUserMapper } from '../../utilities/requested-changes-user';
+import { mapUser } from '../../utilities/mapUser';
 import { LotteryDateParamValidator } from '../../utilities/lottery-date-validator';
 import { ApplicationLotteryTotal } from '../applications/application-lottery-total.dto';
 import { ListingNeighborhoodAmenities } from './listing-neighborhood-amenities.dto';
@@ -901,7 +901,7 @@ class Listing extends AbstractDTO {
   @Transform(
     (obj: any) => {
       return obj.obj.requestedChangesUser
-        ? requestedChangesUserMapper(obj.obj.requestedChangesUser as User)
+        ? mapUser(obj.obj.requestedChangesUser as User)
         : undefined;
     },
     {
@@ -1021,6 +1021,21 @@ class Listing extends AbstractDTO {
 
   @Expose()
   requiredFields?: string[];
+
+  @Expose()
+  @ApiPropertyOptional()
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @Transform(
+    (obj: any) => {
+      return obj.obj.lastUpdatedByUser
+        ? mapUser(obj.obj.lastUpdatedByUser as User)
+        : undefined;
+    },
+    {
+      toClassOnly: true,
+    },
+  )
+  lastUpdatedByUser?: IdDTO;
 }
 
 export { Listing as default, Listing };
