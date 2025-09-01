@@ -168,7 +168,7 @@
   "application.financial.income.legend": "تردد الدخل",
   "application.financial.income.placeholder": "اجمع كل مصادر دخلك",
   "application.financial.income.prompt": "ما هو إجمالي دخل أسرتك قبل الضريبة؟",
-  "application.financial.income.title": "دعنا ننتقل إلى الدخل.",
+  "application.financial.income.title": "دعنا ننتقل إلى الدخل",
   "application.financial.income.validationError.instruction1": "يرجى إجراء تغييرات إذا كنت تعتقد أنك قد ارتكبت خطأ. اعلم أنه إذا قمت بتزوير أي معلومات في طلبك ، فسيتم استبعادك.",
   "application.financial.income.validationError.instruction2": "إذا كانت المعلومات التي أدخلتها دقيقة ، فنحن نشجعك على إعادة التحقق في المستقبل مع توفر المزيد من الخصائص.",
   "application.financial.income.validationError.reason.high": "دخل أسرتك مرتفع للغاية.",

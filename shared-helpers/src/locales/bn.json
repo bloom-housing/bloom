@@ -168,7 +168,7 @@
   "application.financial.income.legend": "আয়ের ফ্রিকোয়েন্সি",
   "application.financial.income.placeholder": "আপনার আয়ের উৎসের মোট",
   "application.financial.income.prompt": "আপনার পরিবারের মোট কর-পূর্ব আয় কত?",
-  "application.financial.income.title": "আসুন আয়ের দিকে এগিয়ে যাই।",
+  "application.financial.income.title": "আসুন আয়ের দিকে এগিয়ে যাই",
   "application.financial.income.validationError.instruction1": "দয়া করে পরিবর্তন করুন যদি আপনি বিশ্বাস করেন যে আপনি ভুল করেছেন। সচেতন থাকুন যে আপনি যদি আপনার আবেদনের কোন তথ্য মিথ্যা প্রমাণ করেন তাহলে আপনি অযোগ্য হবেন।",
   "application.financial.income.validationError.instruction2": "আপনার দেওয়া তথ্য যদি সঠিক হয়, ভবিষ্যতে আরও বৈশিষ্ট্য উপলব্ধ হওয়ায় আমরা আপনাকে আবার পরীক্ষা করতে উৎসাহিত করি।",
   "application.financial.income.validationError.reason.high": "আপনার পরিবারের আয় খুব বেশি।",

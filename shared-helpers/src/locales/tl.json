@@ -168,7 +168,7 @@
   "application.financial.income.legend": " Dalas ng kita",
   "application.financial.income.placeholder": "Kabuuan ng lahat ng iyong pinagkukunan ng kita",
   "application.financial.income.prompt": "Ano ang kabuuang kita ng iyong sambahayan bago kaltasan ng buwis?",
-  "application.financial.income.title": "Magtungo tayo sa kita.",
+  "application.financial.income.title": "Magtungo tayo sa kita",
   "application.financial.income.validationError.instruction1": "Pakipalitan kung sa tingin mo ay nagkamali ka. Pakitandaan na kapag hindi tama ang alinmang impormasyon sa iyong application, ikaw ay madidiskwalipika.",
   "application.financial.income.validationError.instruction2": "Kung ang impormasyon na iyong inilagay ay tama, hinihimok namin kayo na tingnan muli sa susunod dahil mas maraming property ang magiging available.",
   "application.financial.income.validationError.reason.high": "Napakataas ng kita ng iyong sambahayan.",

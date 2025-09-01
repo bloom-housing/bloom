@@ -168,7 +168,7 @@
   "application.financial.income.legend": "Income frequency",
   "application.financial.income.placeholder": "Total all of your income sources",
   "application.financial.income.prompt": "What is your household total pre-tax income?",
-  "application.financial.income.title": "Let's move to income.",
+  "application.financial.income.title": "Let's move to income",
   "application.financial.income.validationError.instruction1": "Please make changes if you believe you might have made a mistake. Be aware that if you falsify any information on your application you will be disqualified.",
   "application.financial.income.validationError.instruction2": "If the information you entered is accurate, we encourage you to check back in the future as more properties become available.",
   "application.financial.income.validationError.reason.high": "Your household income is too high.",

@@ -168,7 +168,7 @@
   "application.financial.income.legend": "Frecuencia de Ingresos",
   "application.financial.income.placeholder": "Saque el total de todas sus fuentes de ingresos",
   "application.financial.income.prompt": "¿Cuáles son los ingresos totales de su hogar antes de impuestos?",
-  "application.financial.income.title": "Pasemos a los ingresos.",
+  "application.financial.income.title": "Pasemos a los ingresos",
   "application.financial.income.validationError.instruction1": "Por favor haga cambios si usted cree haber cometido algún error. Tenga presente que si usted falsifica cualquier tipo de información en su solicitud será descalificado(a).",
   "application.financial.income.validationError.instruction2": "Si la información que usted ingresó es correcta, lo invitamos a visitarnos en el futuro a medida que otras propiedades están disponibles.",
   "application.financial.income.validationError.reason.high": "Los ingresos de su hogar son demasiado altos.",

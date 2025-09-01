@@ -168,7 +168,7 @@
   "application.financial.income.legend": "收入頻率",
   "application.financial.income.placeholder": "請將所有收入來源相加",
   "application.financial.income.prompt": "您家庭的稅前總收入是多少？",
-  "application.financial.income.title": "讓我們轉到收入部分。",
+  "application.financial.income.title": "讓我們轉到收入部分",
   "application.financial.income.validationError.instruction1": "如果您認為自己可能填寫錯誤，請更改資料。請注意，如果您偽造任何申請資料，您將會被取消資格。",
   "application.financial.income.validationError.instruction2": "如果您填寫的資料正確無誤，我們建議您日後再回來查看，因為會有更多可供申請的物業。",
   "application.financial.income.validationError.reason.high": "您的家庭收入過高。",

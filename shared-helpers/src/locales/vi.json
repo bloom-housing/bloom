@@ -168,7 +168,7 @@
   "application.financial.income.legend": "Tần suất thu nhập",
   "application.financial.income.placeholder": "Tổng tất cả các nguồn thu nhập của quý vị",
   "application.financial.income.prompt": "Tổng thu nhập trước thuế của hộ gia đình của quý vị là bao nhiêu?",
-  "application.financial.income.title": "Hãy chuyển sang phần thu nhập.",
+  "application.financial.income.title": "Hãy chuyển sang phần thu nhập",
   "application.financial.income.validationError.instruction1": "Vui lòng thực hiện các thay đổi nếu quý vị cho rằng mình có thể đã nhầm lẫn. Lưu ý rằng nếu quý vị giả mạo bất kỳ thông tin nào trong đơn ghi danh của mình, quý vị sẽ bị loại.",
   "application.financial.income.validationError.instruction2": "Nếu thông tin quý vị đã nhập là chính xác, chúng tôi đề nghị quý vị nên kiểm tra lại trong tương lai khi có thêm các bất động sản.",
   "application.financial.income.validationError.reason.high": "Thu nhập hộ gia đình của quý vị quá cao.",
