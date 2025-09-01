@@ -152,7 +152,7 @@
   "application.contact.streetAddress": "街道地址",
   "application.contact.suggestedAddress": "建议地址：",
   "application.contact.title": "謝謝，%{firstName}。現在我們需要知道如何就您的申請與您聯繫",
-  "application.contact.verifyAddressTitle": "我們已找到下列地址。請確認這是正確地址。",
+  "application.contact.verifyAddressTitle": "我們已找到下列地址，請確認這是正確地址",
   "application.contact.verifyMultipleAddresses": "由於此首選項有多個選項，因此您需要驗證多個位址。",
   "application.contact.workAddress": "工作地址",
   "application.contact.youEntered": "您已輸入：",
