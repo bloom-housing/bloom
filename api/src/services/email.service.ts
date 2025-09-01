@@ -62,6 +62,11 @@ export class EmailService {
         return polyglot.t(phrase, options);
       },
     );
+    Handlebars.registerHelper('or', function (...args) {
+      // Remove the last argument (Handlebars options object)
+      args.pop();
+      return args.some((arg) => arg && arg !== '');
+    });
     const parts = this.partials();
     Handlebars.registerPartial(parts);
   }
@@ -142,6 +147,7 @@ export class EmailService {
         }
       }
     };
+    console.log('emailParams', emailParams);
     await this.sendGrid.send(emailParams, isMultipleRecipients, handleError);
   }
 
