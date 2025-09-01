@@ -62,7 +62,7 @@ export const startCronJob = (
     undefined,
     process.env.TIME_ZONE,
   );
-  schedulerRegistry.addCronJob(cronName, job);
+  schedulerRegistry.addCronJob(cronName, job as any);
   if (process.env.NODE_ENV !== 'test') {
     job.start();
   }
