@@ -147,7 +147,6 @@ export class EmailService {
         }
       }
     };
-    console.log('emailParams', emailParams);
     await this.sendGrid.send(emailParams, isMultipleRecipients, handleError);
   }
 
