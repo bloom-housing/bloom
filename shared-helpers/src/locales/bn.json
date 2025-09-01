@@ -231,7 +231,7 @@
   "application.household.member.whatReletionship": "আপনার সাথে তাদের সম্পর্ক কি",
   "application.household.member.workInRegion": "তারা কি %{county} কাউন্টিতে কাজ করে?",
   "application.household.member.workInRegionNote": "টিবিডি",
-  "application.household.membersInfo.title": "অন্য লোকেদের যোগ করার আগে, নিশ্চিত করুন যে এই তালিকার জন্য অন্য কোনো অ্যাপ্লিকেশনে তাদের নাম নেই।",
+  "application.household.membersInfo.title": "অন্য লোকেদের যোগ করার আগে, নিশ্চিত করুন যে এই তালিকার জন্য অন্য কোনো অ্যাপ্লিকেশনে তাদের নাম নেই",
   "application.household.preferredUnit.legend": "পছন্দের ইউনিটের ধরণ",
   "application.household.preferredUnit.options.fiveBdrm": "৫টি শোবার ঘর",
   "application.household.preferredUnit.options.fourBdrm": "৪টি শোবার ঘর",

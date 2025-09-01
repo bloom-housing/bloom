@@ -231,7 +231,7 @@
   "application.household.member.whatReletionship": "¿Cuál es su parentesco o relación con usted?",
   "application.household.member.workInRegion": "¿Trabaja él o ella en <REGION>?",
   "application.household.member.workInRegionNote": "Esto significa que actualmente él o ella trabaja en <REGION> al menos el 75% de sus horas de trabajo.",
-  "application.household.membersInfo.title": "Antes de añadir a otras personas, asegúrese de que no hayan sido nombradas en ninguna otra solicitud de este listado.",
+  "application.household.membersInfo.title": "Antes de añadir a otras personas, asegúrese de que no hayan sido nombradas en ninguna otra solicitud de este listado",
   "application.household.preferredUnit.legend": "Tipo de unidad preferida",
   "application.household.preferredUnit.options.fiveBdrm": "5 dormitorios",
   "application.household.preferredUnit.options.fourBdrm": "4 dormitorios",

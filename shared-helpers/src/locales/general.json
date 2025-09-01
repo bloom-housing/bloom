@@ -231,7 +231,7 @@
   "application.household.member.whatReletionship": "What is their relationship to you",
   "application.household.member.workInRegion": "Do they work in %{county} County?",
   "application.household.member.workInRegionNote": "TBD",
-  "application.household.membersInfo.title": "Before adding other people, make sure that they aren't named on any other application for this listing.",
+  "application.household.membersInfo.title": "Before adding other people, make sure that they aren't named on any other application for this listing",
   "application.household.preferredUnit.legend": "Preferred unit type",
   "application.household.preferredUnit.options.fiveBdrm": "5 bedroom",
   "application.household.preferredUnit.options.fourBdrm": "4 bedroom",

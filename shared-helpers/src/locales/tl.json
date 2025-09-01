@@ -231,7 +231,7 @@
   "application.household.member.whatReletionship": "Ano ang kanilang relasyon sa iyo",
   "application.household.member.workInRegion": "Nagtatrabaho ba sila sa %{county} County?",
   "application.household.member.workInRegionNote": "TBD",
-  "application.household.membersInfo.title": "Bago magdagdag ng ibang tao, siguraduhing hindi sila pinangalanan sa anumang iba pang application para sa listahang ito.",
+  "application.household.membersInfo.title": "Bago magdagdag ng ibang tao, siguraduhing hindi sila pinangalanan sa anumang iba pang application para sa listahang ito",
   "application.household.preferredUnit.legend": "Napiling uri ng unit",
   "application.household.preferredUnit.options.fiveBdrm": "5 silid-tulugan",
   "application.household.preferredUnit.options.fourBdrm": "4 na kwarto",

@@ -231,7 +231,7 @@
   "application.household.member.whatReletionship": "Quan hệ của người đó với quý vị là gì",
   "application.household.member.workInRegion": "Họ có làm việc tại <REGION> không?",
   "application.household.member.workInRegionNote": "Điều này có nghĩa là họ hiện đang làm việc tại <REGION> ít nhất 75% số giờ làm việc của họ.",
-  "application.household.membersInfo.title": "Trước khi thêm người khác, hãy đảm bảo rằng họ không có tên trên bất kỳ đơn ghi danh nào khác cho danh sách nhà này.",
+  "application.household.membersInfo.title": "Trước khi thêm người khác, hãy đảm bảo rằng họ không có tên trên bất kỳ đơn ghi danh nào khác cho danh sách nhà này",
   "application.household.preferredUnit.legend": "Loại nhà ở ưu tiên",
   "application.household.preferredUnit.options.fiveBdrm": "5 phòng ngủ",
   "application.household.preferredUnit.options.fourBdrm": "4 phòng ngủ",

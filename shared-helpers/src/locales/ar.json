@@ -231,7 +231,7 @@
   "application.household.member.whatReletionship": "ماذا تعني علاقتهم لك",
   "application.household.member.workInRegion": "هل يعملون في مقاطعة %{county}؟",
   "application.household.member.workInRegionNote": "يحدد لاحقًا",
-  "application.household.membersInfo.title": "قبل إضافة أشخاص آخرين ، تأكد من عدم ذكر أسمائهم في أي تطبيق آخر لهذه القائمة.",
+  "application.household.membersInfo.title": "قبل إضافة أشخاص آخرين ، تأكد من عدم ذكر أسمائهم في أي تطبيق آخر لهذه القائمة",
   "application.household.preferredUnit.legend": "نوع الوحدة المفضل",
   "application.household.preferredUnit.options.fiveBdrm": "5 غرف نوم",
   "application.household.preferredUnit.options.fourBdrm": "4 غرف نوم",
