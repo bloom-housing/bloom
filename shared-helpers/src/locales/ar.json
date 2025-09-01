@@ -151,7 +151,7 @@
   "application.contact.state": "حالة",
   "application.contact.streetAddress": ".عنوان الشارع",
   "application.contact.suggestedAddress": "العنوان المقترح:",
-  "application.contact.title": "شكرًا %{firstName}. الآن نحن بحاجة لمعرفة كيفية الاتصال بك.",
+  "application.contact.title": "شكرًا %{firstName}. الآن نحن بحاجة لمعرفة كيفية الاتصال بك",
   "application.contact.verifyAddressTitle": "لقد حددنا العنوان التالي. يُرجى تأكيد صحته.",
   "application.contact.verifyMultipleAddresses": "نظرًا لوجود خيارات متعددة لهذا التفضيل، فسوف تحتاج إلى التحقق من عناوين متعددة.",
   "application.contact.workAddress": "عنوان العمل",

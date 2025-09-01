@@ -151,7 +151,7 @@
   "application.contact.state": "Tiểu bang",
   "application.contact.streetAddress": "Địa chỉ đường phố",
   "application.contact.suggestedAddress": "Địa chỉ đề xuất:",
-  "application.contact.title": "Cảm ơn, %{firstName}. Bây giờ chúng tôi cần biết cách liên hệ với bạn về đơn đăng ký của bạn.",
+  "application.contact.title": "Cảm ơn, %{firstName}. Bây giờ chúng tôi cần biết cách liên hệ với bạn về đơn đăng ký của bạn",
   "application.contact.verifyAddressTitle": "Chúng tôi đã xác định được địa chỉ sau. Vui lòng xác nhận địa chỉ chính xác.",
   "application.contact.verifyMultipleAddresses": "Vì có nhiều tùy chọn cho tùy chọn này nên bạn sẽ cần xác minh nhiều địa chỉ.",
   "application.contact.workAddress": "Địa chỉ làm việc",
