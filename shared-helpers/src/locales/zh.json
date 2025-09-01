@@ -240,7 +240,7 @@
   "application.household.preferredUnit.options.studio": "工作室",
   "application.household.preferredUnit.options.threeBdrm": "3卧室",
   "application.household.preferredUnit.options.twoBdrm": "2卧室",
-  "application.household.preferredUnit.optionsLabel": "請勾選所有適用的單位",
+  "application.household.preferredUnit.optionsLabel": "選擇所有適用項目：",
   "application.household.preferredUnit.preferredUnitType": "首选单位类型",
   "application.household.preferredUnit.subTitle": "雖然單位尺寸通常根據入住率分配，但請提供您的首選單位尺寸，以確定您在此機會的偏好或建立候補名單（僅針對此機會）。",
   "application.household.preferredUnit.title": "您對哪類單位面積感興趣？",

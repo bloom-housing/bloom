@@ -240,7 +240,7 @@
   "application.household.preferredUnit.options.studio": "Một phòng kiểu studio",
   "application.household.preferredUnit.options.threeBdrm": "3 phòng ngủ",
   "application.household.preferredUnit.options.twoBdrm": "2 phòng ngủ",
-  "application.household.preferredUnit.optionsLabel": "Đánh dấu tất cả các lựa chọn phù hợp",
+  "application.household.preferredUnit.optionsLabel": "Chọn tất cả những gì áp dụng:",
   "application.household.preferredUnit.preferredUnitType": "Loại đơn vị ưa thích",
   "application.household.preferredUnit.subTitle": "Mặc dù các kích thước nhà ở thường dựa vào mức độ sử dụng nhưng vui lòng cho biết kích thước nhà ở mà quý vị yêu thích để xác định ưu tiên của quý vị trong cơ hội này hoặc lập danh sách chờ (chỉ dành cho cơ hội này).",
   "application.household.preferredUnit.title": "Kích thước căn nhà mà quý vị quan tâm là gì?",

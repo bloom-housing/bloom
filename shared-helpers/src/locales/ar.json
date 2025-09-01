@@ -240,7 +240,7 @@
   "application.household.preferredUnit.options.studio": "ستوديو",
   "application.household.preferredUnit.options.threeBdrm": "3 غرف نوم",
   "application.household.preferredUnit.options.twoBdrm": "غرفتي نوم",
-  "application.household.preferredUnit.optionsLabel": "تحقق من كل ما ينطبق:",
+  "application.household.preferredUnit.optionsLabel": "حدد كل ما ينطبق:",
   "application.household.preferredUnit.preferredUnitType": "نوع الوحدة المفضل",
   "application.household.preferredUnit.subTitle": "سيكون نوع الوحدة التي اخترتها خاضعًا للتوافر.",
   "application.household.preferredUnit.title": "ما هي أحجام الوحدات التي تهتم بها؟",
