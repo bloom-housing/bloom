@@ -7165,7 +7165,7 @@ export enum ValidationMethodEnum {
 
 export enum MultiselectQuestionsStatusEnum {
   "draft" = "draft",
-  "inUse" = "inUse",
+  "active" = "active",
   "toRetire" = "toRetire",
   "retired" = "retired",
 }

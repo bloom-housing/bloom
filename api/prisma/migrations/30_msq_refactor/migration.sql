@@ -1,5 +1,5 @@
 -- CreateEnum
-CREATE TYPE "multiselect_questions_status_enum" AS ENUM ('draft', 'inUse', 'toRetire', 'retired');
+CREATE TYPE "multiselect_questions_status_enum" AS ENUM ('draft', 'active', 'toRetire', 'retired');
 
 -- CreateEnum
 CREATE TYPE "validation_method_enum" AS ENUM ('radius', 'map', 'none');

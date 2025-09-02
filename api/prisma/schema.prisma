@@ -1113,7 +1113,7 @@ enum MultiselectQuestionsApplicationSectionEnum {
 
 enum MultiselectQuestionsStatusEnum {
   draft
-  inUse
+  active
   toRetire
   retired
 
