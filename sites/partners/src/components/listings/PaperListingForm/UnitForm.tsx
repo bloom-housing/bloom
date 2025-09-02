@@ -52,6 +52,7 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
     watch,
   } = useForm({
     mode: "onBlur",
+    shouldFocusError: false,
   })
   const jurisdiction: string = watch("jurisdictions.id")
   /**
