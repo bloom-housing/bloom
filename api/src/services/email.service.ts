@@ -65,7 +65,7 @@ export class EmailService {
     Handlebars.registerHelper('or', function (...args) {
       // Remove the last argument (Handlebars options object)
       args.pop();
-      return args.some((arg) => arg && arg !== '');
+      return args.some((arg) => arg);
     });
     const parts = this.partials();
     Handlebars.registerPartial(parts);
