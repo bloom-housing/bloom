@@ -131,7 +131,7 @@ export default function ListingDetail(props: ListingProps) {
                       setErrorAlert={setErrorAlert}
                     />
                   </div>
-                  {listing.lastUpdatedByUser && (
+                  {listing.lastUpdatedByUser.name && (
                     <div className="flex flex-col items-center mt-16 gap-2">
                       <p>
                         {t("listings.details.editedAt")} {listing.lastUpdatedByUser.name}
