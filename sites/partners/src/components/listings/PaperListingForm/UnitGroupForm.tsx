@@ -71,6 +71,7 @@ const UnitGroupForm = ({
     watch,
   } = useForm({
     mode: "onBlur",
+    shouldFocusError: false,
   })
   const jurisdiction: string = watch("jurisdictions.id")
   /**
