@@ -3971,6 +3971,9 @@ export interface Listing {
   whatToExpect?: string
 
   /**  */
+  whatToExpectAdditionalText?: string
+
+  /**  */
   status: ListingsStatusEnum
 
   /**  */
@@ -4610,6 +4613,12 @@ export interface ListingCreate {
   waitlistMaxSize?: number
 
   /**  */
+  whatToExpect?: string
+
+  /**  */
+  whatToExpectAdditionalText?: string
+
+  /**  */
   status: ListingsStatusEnum
 
   /**  */
@@ -4749,9 +4758,6 @@ export interface ListingCreate {
 
   /**  */
   requestedChangesUser?: IdDTO
-
-  /**  */
-  whatToExpect?: string
 }
 
 export interface ListingDuplicate {
@@ -4923,6 +4929,12 @@ export interface ListingUpdate {
   waitlistMaxSize?: number
 
   /**  */
+  whatToExpect?: string
+
+  /**  */
+  whatToExpectAdditionalText?: string
+
+  /**  */
   status: ListingsStatusEnum
 
   /**  */
@@ -5062,9 +5074,6 @@ export interface ListingUpdate {
 
   /**  */
   requestedChangesUser?: IdDTO
-
-  /**  */
-  whatToExpect?: string
 }
 
 export interface Accessibility {
@@ -5651,6 +5660,15 @@ export interface JurisdictionCreate {
   rentalAssistanceDefault: string
 
   /**  */
+  whatToExpect: string
+
+  /**  */
+  whatToExpectAdditionalText: string
+
+  /**  */
+  whatToExpectUnderConstruction: string
+
+  /**  */
   enablePartnerSettings?: boolean
 
   /**  */
@@ -5699,6 +5717,15 @@ export interface JurisdictionUpdate {
 
   /**  */
   rentalAssistanceDefault: string
+
+  /**  */
+  whatToExpect: string
+
+  /**  */
+  whatToExpectAdditionalText: string
+
+  /**  */
+  whatToExpectUnderConstruction: string
 
   /**  */
   enablePartnerSettings?: boolean
@@ -5781,6 +5808,15 @@ export interface Jurisdiction {
 
   /**  */
   rentalAssistanceDefault: string
+
+  /**  */
+  whatToExpect: string
+
+  /**  */
+  whatToExpectAdditionalText: string
+
+  /**  */
+  whatToExpectUnderConstruction: string
 
   /**  */
   enablePartnerSettings?: boolean
@@ -7158,6 +7194,7 @@ export enum FeatureFlagEnum {
   "enableGeocodingRadiusMethod" = "enableGeocodingRadiusMethod",
   "enableHomeType" = "enableHomeType",
   "enableIsVerified" = "enableIsVerified",
+  "enableLimitedHowDidYouHear" = "enableLimitedHowDidYouHear",
   "enableListingFavoriting" = "enableListingFavoriting",
   "enableListingFiltering" = "enableListingFiltering",
   "enableListingOpportunity" = "enableListingOpportunity",

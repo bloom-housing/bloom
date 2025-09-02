@@ -69,7 +69,7 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
     FeatureFlagEnum.enableListingFiltering
   )
 
-  const jurisdictionActiveFeatureFlags = props.jurisdiction.featureFlags
+  const jurisdictionActiveFeatureFlags = props.jurisdiction?.featureFlags
     .filter((featureFlag) => featureFlag.active)
     .map((entry) => entry.name)
 
@@ -92,6 +92,7 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
   useEffect(() => {
     const filterData = decodeQueryToFilterData(router.query)
     setFilterState(filterData)
+    setIsLoading(false)
   }, [router.asPath, router.query])
 
   const saveFavoriteFn = (listingId: string) => {
@@ -141,6 +142,17 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
     }
   }
 
+  const onFilterClear = (resetFilters: (data: FilterData) => void) => {
+    if (Object.keys(filterState).length > 0) {
+      setIsLoading(true)
+      router.pathname.includes("listings-closed")
+        ? void router.push(`/listings-closed`)
+        : void router.push(`/listings`)
+    }
+    resetFilters({ name: "", monthlyRent: { minRent: "", maxRent: "" } })
+    setFilterState({})
+  }
+
   const onShowAll = useCallback(async () => {
     await router.replace(router.pathname)
   }, [router])
@@ -168,6 +180,7 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
         filterState={filterState}
         multiselectData={props.multiselectData}
         activeFeatureFlags={jurisdictionActiveFeatureFlags}
+        onClear={onFilterClear}
       />
       <LoadingState loading={isLoading}>
         <div className={styles["listing-directory"]}>

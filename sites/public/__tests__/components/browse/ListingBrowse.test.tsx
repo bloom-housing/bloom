@@ -160,8 +160,8 @@ describe("<ListingBrowse>", () => {
       const columnHeaders = within(head).getAllByRole("columnheader")
       expect(columnHeaders).toHaveLength(3)
 
-      expect(columnHeaders[0]).toHaveTextContent("Unit Type")
-      expect(columnHeaders[1]).toHaveTextContent("Minimum Income")
+      expect(columnHeaders[0]).toHaveTextContent("Unit type")
+      expect(columnHeaders[1]).toHaveTextContent("Minimum income")
       expect(columnHeaders[2]).toHaveTextContent("Rent")
 
       const rows = within(body).getAllByRole("row")
@@ -361,7 +361,7 @@ describe("<ListingBrowse>", () => {
       const columnHeaders = within(head).getAllByRole("columnheader")
       expect(columnHeaders).toHaveLength(3)
 
-      expect(columnHeaders[0]).toHaveTextContent("Unit Type")
+      expect(columnHeaders[0]).toHaveTextContent("Unit type")
       expect(columnHeaders[1]).toHaveTextContent("Rent")
       expect(columnHeaders[2]).toHaveTextContent("Availability")
 
@@ -649,7 +649,7 @@ describe("<ListingBrowse>", () => {
     })
     expect(listingNameField).toHaveValue("Test Search")
 
-    expect(screen.getByRole("button", { name: "Cancel" })).toBeInTheDocument()
+    expect(screen.getByRole("button", { name: "Clear" })).toBeInTheDocument()
     const showMatchingButton = screen.getByRole("button", { name: "Show matching listings" })
     expect(showMatchingButton).toBeInTheDocument()
     fireEvent.click(showMatchingButton)

@@ -1,6 +1,7 @@
 import React from "react"
 import dayjs from "dayjs"
 import InfoIcon from "@heroicons/react/20/solid/InformationCircleIcon"
+import LockClosedIcon from "@heroicons/react/20/solid/LockClosedIcon"
 import {
   t,
   ListingCard,
@@ -21,6 +22,7 @@ import {
   Address,
   ApplicationMultiselectQuestion,
   FeatureFlag,
+  FeatureFlagEnum,
   Jurisdiction,
   Listing,
   ListingsStatusEnum,
@@ -35,6 +37,7 @@ import {
 import { CommonMessageVariant } from "@bloom-housing/ui-seeds/src/blocks/shared/CommonMessage"
 import { Icon, Message } from "@bloom-housing/ui-seeds"
 import styles from "./helpers.module.scss"
+import { ApplicationFormConfig } from "./applications/configInterfaces"
 
 export const getGenericAddress = (bloomAddress: Address) => {
   return bloomAddress
@@ -172,8 +175,14 @@ export const getStatusPrefix = (
     if (listing.reviewOrderType === ReviewOrderTypeEnum.lottery)
       return { label: t("listings.lottery"), variant: "primary" }
     if (unitsAvailable) return { label: t("listings.applicationFCFS"), variant: "primary" }
-    if (hasUnitGroupsWaitlistOpen)
+    if (!listing.unitGroups || listing.unitGroups.length === 0) {
+      return { label: t("listings.availabilityUnknown"), variant: "warn" }
+    }
+    if (hasUnitGroupsWaitlistOpen) {
       return { label: t("listings.waitlist.open"), variant: "secondary" }
+    } else {
+      return { label: t("listings.availability.closedWaitlist"), variant: "secondary-inverse" }
+    }
   } else {
     switch (listing.reviewOrderType) {
       case ReviewOrderTypeEnum.lottery:
@@ -226,10 +235,11 @@ export const getListingStatusMessageContent = (
 
 export const getListingStatusMessage = (
   listing: Listing,
-  jurisdiction: Jurisdiction,
+  jurisdiction: Jurisdiction | { featureFlags: FeatureFlag[] },
   content?: React.ReactNode,
   hideTime?: boolean,
-  hideDate?: boolean
+  hideDate?: boolean,
+  className?: string
 ) => {
   if (!listing) return
 
@@ -237,12 +247,40 @@ export const getListingStatusMessage = (
   const enableUnitGroups = isFeatureFlagOn(jurisdiction, "enableUnitGroups")
   const prefix = getStatusPrefix(listing, enableMarketingStatus, enableUnitGroups)
 
+  const overwriteHide =
+    listing.reviewOrderType !== ReviewOrderTypeEnum.lottery &&
+    listing.marketingType !== MarketingTypeEnum.comingSoon
+
+  const hideNoUnitGroups =
+    enableUnitGroups && (!listing.unitGroups || listing.unitGroups.length === 0) && overwriteHide
+  const hideWaitlistClosedNoAvailableUnits =
+    enableUnitGroups &&
+    !listing.unitGroups.some((group) => group.openWaitlist || group.totalAvailable > 0) &&
+    overwriteHide
+  const hideIsClosed =
+    listing.status === ListingsStatusEnum.closed ||
+    (listing.applicationDueDate && dayjs() > dayjs(listing.applicationDueDate))
+  const hideNoDateMarketingStatus =
+    listing.marketingType === MarketingTypeEnum.comingSoon &&
+    !listing.marketingSeason &&
+    !listing.marketingYear
+
+  const hideStatusMessageContent =
+    hideDate ||
+    hideNoUnitGroups ||
+    hideWaitlistClosedNoAvailableUnits ||
+    hideIsClosed ||
+    hideNoDateMarketingStatus
+
+  const classNames = [styles["status-bar"]]
+  if (className) classNames.push(className)
+
   return (
     <Message
-      className={styles["status-bar"]}
+      className={classNames.join(" ")}
       customIcon={
         <Icon size="md" className={styles["primary-color-icon"]}>
-          <InfoIcon />
+          {prefix?.variant === "secondary-inverse" ? <LockClosedIcon /> : <InfoIcon />}
         </Icon>
       }
       variant={prefix?.variant}
@@ -252,7 +290,7 @@ export const getListingStatusMessage = (
       ) : (
         <div className={styles["due-date-content"]}>
           <div className={styles["date-review-order"]}>{prefix?.label}</div>
-          {!hideDate && (
+          {!hideStatusMessageContent && (
             <div>
               {getListingStatusMessageContent(
                 listing.status,
@@ -282,7 +320,7 @@ export const getApplicationSeason = (
   if (marketingYear) {
     label = label.concat(` ${marketingYear}`)
   }
-  return label
+  return marketingSeason || marketingYear ? label : null
 }
 
 export const getListings = (listings) => {
@@ -464,4 +502,20 @@ export const fetchFavoriteListingIds = async (userId: string, userService: UserS
 
 export const isTrue = (value) => {
   return value === true || value === "true"
+}
+
+export const isUnitGroupAppWaitlist = (listing: Listing, config: ApplicationFormConfig) => {
+  return (
+    isFeatureFlagOn(config, FeatureFlagEnum.enableUnitGroups) &&
+    listing.unitGroups.some((group) => group.openWaitlist) &&
+    !listing.unitGroups.some((group) => group.totalAvailable > 0)
+  )
+}
+
+export const isUnitGroupAppBase = (listing: Listing, config: ApplicationFormConfig) => {
+  return (
+    isFeatureFlagOn(config, FeatureFlagEnum.enableUnitGroups) &&
+    !listing.unitGroups.some((group) => group.openWaitlist) &&
+    !listing.unitGroups.some((group) => group.totalAvailable > 0)
+  )
 }

@@ -136,7 +136,7 @@ const SelectAndOrder = ({
             <div className="flex">
               <Button
                 type="button"
-                className="font-semibold text-alert"
+                className={"font-semibold darker-alert"}
                 onClick={() => {
                   deleteItem(item, true)
                 }}
