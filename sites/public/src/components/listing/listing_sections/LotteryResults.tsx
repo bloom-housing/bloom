@@ -24,8 +24,6 @@ export const LotteryResults = ({
     <Card className={`${styles["mobile-full-width-card"]} ${styles["mobile-no-bottom-border"]}`}>
       <Card.Section>
         <HeadingGroup
-          headingPriority={3}
-          size={"lg"}
           className={`${styles["heading-group"]} seeds-m-be-header`}
           heading={t("listings.lotteryResults.header")}
           subheading={
@@ -33,6 +31,7 @@ export const LotteryResults = ({
               ? dayjs(lotteryResultsEvent.startTime).format("MMMM D, YYYY")
               : null
           }
+          headingProps={{ size: "lg", priority: 3 }}
         />
         <Button
           href={lotteryResultsPdfUrl}
