@@ -130,15 +130,15 @@ export default function ListingDetail(props: ListingProps) {
                       showCopyListingDialog={() => setCopyListingDialog(true)}
                       setErrorAlert={setErrorAlert}
                     />
+                    {listing.lastUpdatedByUser.name && (
+                      <div className="flex flex-col items-center mt-16 gap-2">
+                        <p>
+                          {t("listings.details.editedAt")} {listing.lastUpdatedByUser.name}
+                        </p>
+                        <p>{dayjs(listing.contentUpdatedAt).format("MMMM DD, YYYY, HH:mm A")}</p>
+                      </div>
+                    )}
                   </div>
-                  {listing.lastUpdatedByUser.name && (
-                    <div className="flex flex-col items-center mt-16 gap-2">
-                      <p>
-                        {t("listings.details.editedAt")} {listing.lastUpdatedByUser.name}
-                      </p>
-                      <p>{dayjs(listing.contentUpdatedAt).format("MMMM DD, YYYY, HH:mm A")}</p>
-                    </div>
-                  )}
                 </div>
               </div>
             </section>
