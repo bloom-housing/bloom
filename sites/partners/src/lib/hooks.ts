@@ -675,7 +675,7 @@ export function useWatchOnFormNumberFieldsChange(
   trigger: (name?: string | string[]) => Promise<boolean>
 ) {
   useEffect(() => {
-    if (fieldValuesToWatch.some((value) => value)) {
+    if (fieldValuesToWatch.some((value) => value) && trigger) {
       const timeoutId = setTimeout(() => {
         try {
           void trigger(fieldToTriggerWatch)
