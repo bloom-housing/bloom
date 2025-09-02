@@ -69,7 +69,9 @@ const UnitGroupForm = ({
     getValues,
     reset,
     watch,
-  } = useForm()
+  } = useForm({
+    mode: "onChange",
+  })
   const jurisdiction: string = watch("jurisdictions.id")
   /**
    * fetch form options
@@ -111,7 +113,7 @@ const UnitGroupForm = ({
     { label: "5", value: "5" },
   ]
 
-  const fieldsValuesToWatch = [
+  const fieldValuesToWatch = [
     minOccupancy,
     maxOccupancy,
     sqFeetMin,
@@ -122,7 +124,7 @@ const UnitGroupForm = ({
     bathroomMax,
   ]
 
-  const fieldsToTriggerWatch = [
+  const fieldToTriggerWatch = [
     "minOccupancy",
     "maxOccupancy",
     "sqFeetMin",
@@ -133,7 +135,7 @@ const UnitGroupForm = ({
     "bathroomMax",
   ]
 
-  useWatchOnFormNumberFieldsChange(fieldsValuesToWatch, fieldsToTriggerWatch, trigger)
+  useWatchOnFormNumberFieldsChange(fieldValuesToWatch, fieldToTriggerWatch, trigger)
 
   // sets the options for the ami charts
   useEffect(() => {
