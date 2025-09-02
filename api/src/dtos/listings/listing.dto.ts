@@ -1024,7 +1024,6 @@ class Listing extends AbstractDTO {
 
   @Expose()
   @ApiPropertyOptional()
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
   @Transform(
     (obj: any) => {
       return obj.obj.lastUpdatedByUser

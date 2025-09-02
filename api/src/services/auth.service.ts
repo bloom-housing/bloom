@@ -389,7 +389,10 @@ export class AuthService {
     });
 
     // Refetch user with full relations
-    user = await this.userService.findUserOrError({ userId: user.id }, UserViews.full);
+    user = await this.userService.findUserOrError(
+      { userId: user.id },
+      UserViews.full,
+    );
 
     return await this.setCredentials(res, mapTo(User, user));
   }

@@ -234,13 +234,4 @@ export class ListingUpdate extends OmitType(Listing, [
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => IdDTO)
   requestedChangesUser?: IdDTO;
-
-  @Expose()
-  @ApiPropertyOptional()
-  @ValidateListingPublish('lastUpdatedByUser', {
-    groups: [ValidationsGroupsEnum.default],
-  })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => IdDTO)
-  lastUpdatedByUser?: IdDTO;
 }

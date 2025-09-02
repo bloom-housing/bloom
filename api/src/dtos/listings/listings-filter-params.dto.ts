@@ -1,6 +1,6 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { HomeTypeEnum, ListingsStatusEnum, RegionEnum } from '@prisma/client';
-import { Expose, Transform, Type } from 'class-transformer';
+import { Expose, Type } from 'class-transformer';
 import {
   IsArray,
   IsBoolean,
@@ -14,9 +14,6 @@ import { BaseFilter } from '../shared/base-filter.dto';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 import { FilterAvailabilityEnum } from '../../enums/listings/filter-availability-enum';
 import { ListingFilterKeys } from '../../enums/listings/filter-key-enum';
-import { mapUser } from '../../utilities/mapUser';
-import { IdDTO } from '../shared/id.dto';
-import { User } from '../users/user.dto';
 
 export class ListingFilterParams extends BaseFilter {
   @Expose()
@@ -211,19 +208,4 @@ export class ListingFilterParams extends BaseFilter {
     example: '48211',
   })
   [ListingFilterKeys.zipCode]?: string;
-
-  @Expose()
-  @ApiPropertyOptional()
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @Transform(
-    (obj: any) => {
-      return obj.obj.lastUpdatedByUser
-        ? mapUser(obj.obj.lastUpdatedByUser as User)
-        : undefined;
-    },
-    {
-      toClassOnly: true,
-    },
-  )
-  lastUpdatedByUser?: IdDTO;
 }
