@@ -35,7 +35,7 @@ describe("applications pages", () => {
       const { getByText, getByTestId, getAllByTestId } = render(<ApplicationDemographics />)
 
       expect(
-        getByText("Help us ensure we are meeting our goal to serve all people.")
+        getByText("Help us ensure we are meeting our goal to serve all people")
       ).toBeInTheDocument()
       expect(getByTestId("americanIndianAlaskanNative")).toBeInTheDocument()
       expect(getByTestId("asian")).toBeInTheDocument()
