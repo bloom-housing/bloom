@@ -231,6 +231,7 @@
   "listings.depositMin": "Deposit min",
   "listings.details": "Listing details",
   "listings.details.createdDate": "Date created",
+  "listings.details.editedAt": "Last edited by",
   "listings.details.id": "Listing ID",
   "listings.details.listingData": "Listing data",
   "listings.details.updatedDate": "Date updated",
