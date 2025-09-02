@@ -674,14 +674,17 @@ export function useWatchOnFormNumberFieldsChange(
   fieldToTriggerWatch: string[],
   trigger: (name?: string | string[]) => Promise<boolean>
 ) {
-  if (fieldValuesToWatch.some((value) => value)) {
-    const timeoutId = setTimeout(() => {
-      try {
-        void trigger(fieldToTriggerWatch)
-      } catch (error) {
-        console.debug("Form trigger error (likely component unmounted):", error)
-      }
-    }, 0)
-    return () => clearTimeout(timeoutId)
-  }
+  useEffect(() => {
+    if (fieldValuesToWatch.some((value) => value)) {
+      const timeoutId = setTimeout(() => {
+        try {
+          void trigger(fieldToTriggerWatch)
+        } catch (error) {
+          console.debug("Form trigger error (likely component unmounted):", error)
+        }
+      }, 0)
+
+      return () => clearTimeout(timeoutId)
+    }
+  }, [fieldToTriggerWatch, fieldValuesToWatch, trigger])
 }
