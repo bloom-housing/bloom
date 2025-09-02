@@ -1,4 +1,4 @@
-import { useCallback, useContext, useState, useEffect } from "react"
+import { useCallback, useContext, useState } from "react"
 import useSWR from "swr"
 import qs from "qs"
 import dayjs from "dayjs"
@@ -674,17 +674,19 @@ export function useWatchOnFormNumberFieldsChange(
   fieldsToTriggerWatch: string[],
   trigger: (name?: string | string[]) => Promise<boolean>
 ) {
-  useEffect(() => {
-    if (fieldsValuesToWatch.some((value) => value)) {
-      const timeoutId = setTimeout(() => {
-        try {
-          void trigger(fieldsToTriggerWatch)
-        } catch (error) {
-          console.debug("Form trigger error (likely component unmounted):", error)
-        }
-      }, 0)
+  console.log(trigger)
+  console.log(fieldsValuesToWatch, fieldsToTriggerWatch )
+  // useEffect(() => {
+  //   if (fieldsValuesToWatch.some((value) => value)) {
+  //     const timeoutId = setTimeout(() => {
+  //       try {
+  //         void trigger(fieldsToTriggerWatch)
+  //       } catch (error) {
+  //         console.debug("Form trigger error (likely component unmounted):", error)
+  //       }
+  //     }, 0)
 
-      return () => clearTimeout(timeoutId)
-    }
-  }, [fieldsToTriggerWatch, fieldsValuesToWatch, trigger])
+  //     return () => clearTimeout(timeoutId)
+  //   }
+  // }, [fieldsToTriggerWatch, fieldsValuesToWatch, trigger])
 }
