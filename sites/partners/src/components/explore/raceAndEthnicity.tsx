@@ -1,12 +1,82 @@
 import React from "react"
-import { BarChart, Bar, XAxis, YAxis, Tooltip as ReTooltip, ResponsiveContainer } from "recharts"
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip as ReTooltip,
+  ResponsiveContainer,
+  LabelList,
+  CartesianGrid,
+} from "recharts"
 import { EthnicityFrequency, RaceFrequency } from "../../lib/explore/data-explorer"
+import DataTable from "./DataTable"
 
 interface DemographicsSectionProps {
   chartData: {
     raceFrequencies: RaceFrequency[]
     ethnicityFrequencies: EthnicityFrequency[]
   }
+}
+
+interface DemographicChartProps {
+  title: string
+  data: Array<{ count: number; percentage: number; [key: string]: string | number }>
+  dataKey: string
+}
+
+const BLUE_500 = "#3B82F6"
+
+function DemographicChart({ title, data, dataKey }: DemographicChartProps) {
+  return (
+    <div className="mb-12 w-1/2">
+      <h3 className="text-lg font-semibold mb-2">{title}</h3>
+      <div className="w-full h-64">
+        <ResponsiveContainer>
+          <BarChart
+            layout="vertical"
+            data={data}
+            margin={{ top: 20, right: 30, left: 20, bottom: 20 }}
+          >
+            <CartesianGrid stroke="#EFEFEF" horizontal={false} vertical={true} />
+            <XAxis
+              type="number"
+              tick={{ fontSize: 12, fill: "#4B5563" }}
+              tickLine={false}
+              axisLine={false}
+              label={{
+                value: "Count",
+                position: "insideBottom",
+                offset: -10,
+                style: { textAnchor: "middle", fontSize: "12px", fill: "#4B5563" },
+              }}
+            />
+            <YAxis
+              type="category"
+              dataKey={dataKey}
+              tick={{ fontSize: 12, fill: "##767676" }}
+              tickLine={false}
+              axisLine={false}
+            />
+            <ReTooltip
+              formatter={(val: number) => [`${val}`, "Count"]}
+              cursor={{ fill: "#CBD5E1", opacity: 0.3 }}
+            />
+
+            <Bar dataKey="count" fill={BLUE_500} barSize={24} radius={[0, 4, 4, 0]}>
+              <LabelList
+                dataKey="count"
+                position="right"
+                style={{ fontSize: "12px", fill: "#4B5563" }}
+              />
+            </Bar>
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
+
+      <DataTable title={title} data={data} dataKey={dataKey} />
+    </div>
+  )
 }
 
 export default function DemographicsSection({ chartData }: DemographicsSectionProps) {
@@ -29,7 +99,7 @@ export default function DemographicsSection({ chartData }: DemographicsSectionPr
 
   return (
     <div className="w-full flex justify-center bg-gray-100">
-      <div className="p-6 bg-white rounded-lg shadow w-2/3">
+      <div className="p-6 bg-white rounded-lg shadow  w-full">
         <h2 className="text-2xl font-semibold mb-2">Demographics</h2>
         <p className="text-sm text-gray-600 mb-6">
           Below is a summary of applicant demographics including race and ethnicity.
@@ -37,126 +107,10 @@ export default function DemographicsSection({ chartData }: DemographicsSectionPr
 
         <div className="w-full h-full flex flex-row gap-6">
           {/* ─── Race Section ─────────────────────────────────────────────────── */}
-          <div className="mb-12 w-1/2">
-            <h3 className="text-lg font-semibold mb-2">Race</h3>
-            <div className="w-full h-64">
-              <ResponsiveContainer>
-                <BarChart
-                  layout="vertical"
-                  data={raceChartData}
-                  margin={{ top: 20, right: 30, left: 120, bottom: 20 }}
-                  // onMouseMove={(e) => setActiveBar(e?.activePayload?.[0]?.payload?.race ?? null)}
-                  // onMouseLeave={() => setActiveBar(null)}
-                >
-                  <XAxis type="number" hide />
-                  <YAxis
-                    type="category"
-                    dataKey="race"
-                    tick={{ fontSize: 12, fill: "#4B5563" }}
-                    tickLine={false}
-                  />
-                  <ReTooltip
-                    formatter={(val: number) => [`${val}`, "Count"]}
-                    cursor={{ fill: "#CBD5E1", opacity: 0.3 }}
-                  />
-
-                  <Bar dataKey="count" fill="#1E293B" barSize={16} />
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
-
-            <div className="mt-6">
-              <table className="min-w-full divide-y divide-gray-200 border">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">Race</th>
-                    <th className="px-4 py-2 text-right text-sm font-medium text-gray-700">
-                      Count
-                    </th>
-                    <th className="px-4 py-2 text-right text-sm font-medium text-gray-700">%</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-200">
-                  {raceFrequencies.map((d) => (
-                    <tr key={d.race}>
-                      <td className="px-4 py-2 text-sm text-gray-700">{d.race}</td>
-                      <td className="px-4 py-2 text-sm text-right text-gray-700">{d.count}</td>
-                      <td className="px-4 py-2 text-sm text-right text-gray-700">
-                        {(d.percentage * 100).toFixed(1)}%
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
+          <DemographicChart title="Race" data={raceChartData} dataKey="race" />
 
           {/* ─── Ethnicity Section ────────────────────────────────────────────── */}
-          <div className="flex flex-col w-1/2">
-            <h3 className="text-lg font-semibold mb-2">Ethnicity</h3>
-            <div className="w-full h-48">
-              <ResponsiveContainer>
-                <BarChart
-                  layout="vertical"
-                  data={ethnicityChartData}
-                  margin={{ top: 20, right: 30, left: 120, bottom: 20 }}
-                  // onMouseMove={(e) =>
-                  //   setActiveBar(e?.activePayload?.[0]?.payload?.ethnicity ?? null)
-                  // }
-                  // onMouseLeave={() => setActiveBar(null)}
-                >
-                  <XAxis type="number" hide />
-                  <YAxis
-                    type="category"
-                    dataKey="ethnicity"
-                    tick={{ fontSize: 12, fill: "#4B5563" }}
-                    tickLine={false}
-                  />
-                  <ReTooltip
-                    formatter={(val: number) => [`${val}`, "Count"]}
-                    cursor={{ fill: "#CBD5E1", opacity: 0.3 }}
-                  />
-
-                  <Bar
-                    dataKey="count"
-                    fill="#1E293B"
-                    barSize={16}
-                    opacity={1}
-                    name="Ethnicity"
-                    // onMouseOver={(data: any) => setActiveBar(data.ethnicity)}
-                    // onMouseOut={() => setActiveBar(null)}
-                  />
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
-
-            <div className="mt-6">
-              <table className="min-w-full divide-y divide-gray-200 border">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">
-                      Ethnicity
-                    </th>
-                    <th className="px-4 py-2 text-right text-sm font-medium text-gray-700">
-                      Count
-                    </th>
-                    <th className="px-4 py-2 text-right text-sm font-medium text-gray-700">%</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-200">
-                  {ethnicityFrequencies.map((d) => (
-                    <tr key={d.ethnicity}>
-                      <td className="px-4 py-2 text-sm text-gray-700">{d.ethnicity}</td>
-                      <td className="px-4 py-2 text-sm text-right text-gray-700">{d.count}</td>
-                      <td className="px-4 py-2 text-sm text-right text-gray-700">
-                        {(d.percentage * 100).toFixed(1)}%
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
+          <DemographicChart title="Ethnicity" data={ethnicityChartData} dataKey="ethnicity" />
         </div>
       </div>
     </div>

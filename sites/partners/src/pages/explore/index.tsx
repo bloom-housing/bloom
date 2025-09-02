@@ -1,13 +1,13 @@
 import { useEffect } from "react"
 import { useRouter } from "next/router"
 
-// This index file redirects to the filtering page
-// Eventually, this will be replaced with a dashboard or overview page
+// This index file redirects to the application-analysis page
+// The filtering functionality is now embedded as a slide-out menu
 const ExploreDashboard = () => {
   const router = useRouter()
 
   useEffect(() => {
-    void router.replace("/explore/filtering")
+    void router.replace("/explore/application-analysis")
   }, [router])
 
   return null
