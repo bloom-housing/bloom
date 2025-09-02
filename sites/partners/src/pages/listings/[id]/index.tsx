@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useContext } from "react"
 import Head from "next/head"
 import axios from "axios"
 import { t, AlertBox, Breadcrumbs, BreadcrumbLink } from "@bloom-housing/ui-components"
@@ -40,6 +40,7 @@ import DetailListingNotes from "../../../components/listings/PaperListingDetails
 import CopyListingDialog from "../../../components/listings/PaperListingForm/dialogs/CopyListingDialog"
 import DetailListingVerification from "../../../components/listings/PaperListingDetails/sections/DetailListingVerification"
 import dayjs from "dayjs"
+import { AuthContext } from "@bloom-housing/shared-helpers"
 
 interface ListingProps {
   listing: Listing
@@ -50,6 +51,8 @@ export default function ListingDetail(props: ListingProps) {
   const [errorAlert, setErrorAlert] = useState<string>(null)
   const [unitDrawer, setUnitDrawer] = useState<UnitDrawer>(null)
   const [copyListingDialog, setCopyListingDialog] = useState(false)
+  const { profile } = useContext(AuthContext)
+  const isSameEditingUser = profile?.id === listing.lastUpdatedByUser?.id
 
   if (!listing) return null
 
@@ -130,10 +133,11 @@ export default function ListingDetail(props: ListingProps) {
                       showCopyListingDialog={() => setCopyListingDialog(true)}
                       setErrorAlert={setErrorAlert}
                     />
-                    {listing.lastUpdatedByUser.name && (
+                    {listing.lastUpdatedByUser?.name && (
                       <div className="flex flex-col items-center mt-16 gap-2">
                         <p>
-                          {t("listings.details.editedAt")} {listing.lastUpdatedByUser.name}
+                          {t("listings.details.editedAt")}{" "}
+                          {isSameEditingUser ? "You" : listing.lastUpdatedByUser.name}
                         </p>
                         <p>{dayjs(listing.contentUpdatedAt).format("MMMM DD, YYYY, HH:mm A")}</p>
                       </div>
