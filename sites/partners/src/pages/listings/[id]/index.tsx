@@ -137,7 +137,9 @@ export default function ListingDetail(props: ListingProps) {
                       <div className="flex flex-col items-center mt-16 gap-2">
                         <p>
                           {t("listings.details.editedAt")}{" "}
-                          {isSameEditingUser ? "You" : listing.lastUpdatedByUser.name}
+                          {isSameEditingUser
+                            ? t("listings.details.you")
+                            : listing.lastUpdatedByUser.name}
                         </p>
                         <p>{dayjs(listing.contentUpdatedAt).format("MMMM DD, YYYY, HH:mm A")}</p>
                       </div>
