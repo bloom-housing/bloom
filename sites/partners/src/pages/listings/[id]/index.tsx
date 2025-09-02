@@ -53,6 +53,7 @@ export default function ListingDetail(props: ListingProps) {
   const [copyListingDialog, setCopyListingDialog] = useState(false)
   const { profile } = useContext(AuthContext)
   const isSameEditingUser = profile?.id === listing.lastUpdatedByUser?.id
+  const showLastUpdatedByUser = !!listing.lastUpdatedByUser?.name
 
   if (!listing) return null
 
@@ -133,7 +134,7 @@ export default function ListingDetail(props: ListingProps) {
                       showCopyListingDialog={() => setCopyListingDialog(true)}
                       setErrorAlert={setErrorAlert}
                     />
-                    {listing.lastUpdatedByUser?.name && (
+                    {showLastUpdatedByUser && (
                       <div className="flex flex-col items-center mt-16 gap-2">
                         <p>
                           {t("listings.details.editedAt")}{" "}
