@@ -1,5 +1,14 @@
 import React from "react"
-import { BarChart, Bar, XAxis, YAxis, Tooltip as ReTooltip, ResponsiveContainer } from "recharts"
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip as ReTooltip,
+  ResponsiveContainer,
+  LabelList,
+  CartesianGrid,
+} from "recharts"
 import {
   AccessibilityFrequency,
   AgeFrequency,
@@ -7,6 +16,7 @@ import {
   LocationFrequency,
   SubsidyFrequency,
 } from "../../lib/explore/data-explorer"
+import DataTable from "./DataTable"
 
 interface ChartData {
   residentialLocationFrequencies: LocationFrequency[]
@@ -20,9 +30,10 @@ interface PrimaryApplicantSectionProps {
   chartData: ChartData
 }
 
+const BLUE_500 = "#3B82F6"
+
 export default function PrimaryApplicantSection({ chartData }: PrimaryApplicantSectionProps) {
   const {
-    residentialLocationFrequencies,
     ageFrequencies,
     languageFrequencies,
     subsidyOrVoucherTypeFrequencies,
@@ -32,12 +43,6 @@ export default function PrimaryApplicantSection({ chartData }: PrimaryApplicantS
   // const [activeBar, setActiveBar] = useState<string | null>(null)
 
   const charts = [
-    {
-      title: "Residential address location",
-      data: residentialLocationFrequencies,
-      key: "location",
-      tableLabel: "Origin City",
-    },
     {
       title: "Age",
       data: ageFrequencies,
@@ -54,129 +59,66 @@ export default function PrimaryApplicantSection({ chartData }: PrimaryApplicantS
 
   return (
     <div className="w-full flex justify-center bg-gray-100 py-8">
-      <div className="p-6 bg-white rounded-lg shadow w-2/3">
+      <div className="p-6 bg-white rounded-lg shadow w-full">
         <h2 className="text-2xl font-semibold mb-2">Primary applicant and household data</h2>
         <p className="text-sm text-gray-600 mb-6">
           The following is a summary of applicant and household data.
         </p>
 
-        {/* ── Grid for 3 bar charts ───────────────────────────────────── */}
+        {/* ── Grid for 2 bar charts ───────────────────────────────────── */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
           {charts.map(({ title, data, key, tableLabel }) => (
             <div key={key}>
               <h3 className="text-lg font-semibold mb-2">{title}</h3>
-              <div className="w-full h-64">
-                <ResponsiveContainer>
-                  <BarChart
-                    data={data}
-                    margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
-                    // onMouseMove={(e) => setActiveBar(e?.activePayload?.[0]?.payload?.[key] ?? null)}
-                    // onMouseLeave={() => setActiveBar(null)}
-                  >
+              <div className="w-full h-80">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={data} margin={{ top: 30, right: 0, left: 0, bottom: 5 }}>
+                    <CartesianGrid stroke="#EFEFEF" horizontal={true} vertical={false} />
                     <XAxis
                       dataKey={key}
                       tick={{ fontSize: 12, fill: "#4B5563" }}
                       tickLine={false}
-                      angle={-45}
-                      textAnchor="end"
-                      height={60}
+                      axisLine={false}
+                      textAnchor="middle"
                     />
                     <YAxis
                       type="number"
                       tick={{ fontSize: 12, fill: "#4B5563" }}
                       tickLine={false}
+                      axisLine={false}
                     />
                     <ReTooltip
                       formatter={(val: number) => [`${val}`, "Count"]}
                       cursor={{ fill: "#CBD5E1", opacity: 0.3 }}
                     />
-                    <Bar dataKey="count" fill="#1E293B" barSize={16} />
+                    <Bar dataKey="count" fill={BLUE_500} barSize={24} radius={[6, 6, 0, 0]}>
+                      <LabelList
+                        dataKey="count"
+                        position="top"
+                        style={{ fontSize: "12px", fill: "#4B5563" }}
+                      />
+                    </Bar>
                   </BarChart>
                 </ResponsiveContainer>
               </div>
 
-              {/* Table */}
-              <div className="mt-6">
-                <table className="min-w-full divide-y divide-gray-200 border">
-                  <thead className="bg-gray-50">
-                    <tr>
-                      <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">
-                        {tableLabel}
-                      </th>
-                      <th className="px-4 py-2 text-right text-sm font-medium text-gray-700">
-                        Count
-                      </th>
-                      <th className="px-4 py-2 text-right text-sm font-medium text-gray-700">%</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-200">
-                    {data.map((d) => (
-                      <tr key={d[key]}>
-                        <td className="px-4 py-2 text-sm text-gray-700">{d[key]}</td>
-                        <td className="px-4 py-2 text-sm text-right text-gray-700">{d.count}</td>
-                        <td className="px-4 py-2 text-sm text-right text-gray-700">
-                          {(d.percentage * 100).toFixed(1)}%
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+              <DataTable title={tableLabel} data={data} dataKey={key} />
             </div>
           ))}
         </div>
 
-        {/* ── Subsidy & Accessibility tables ─────────────────────────────── */}
         <div className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-8">
-          {/* Subsidy or voucher */}
-          <div>
-            <h3 className="text-lg font-semibold mb-2">Subsidy or voucher</h3>
-            <table className="min-w-full divide-y divide-gray-200 border">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">Subsidy</th>
-                  <th className="px-4 py-2 text-right text-sm font-medium text-gray-700">Count</th>
-                  <th className="px-4 py-2 text-right text-sm font-medium text-gray-700">%</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-200">
-                {subsidyOrVoucherTypeFrequencies.map((d) => (
-                  <tr key={d.subsidyType}>
-                    <td className="px-4 py-2 text-sm text-gray-700">{d.subsidyType}</td>
-                    <td className="px-4 py-2 text-sm text-right text-gray-700">{d.count}</td>
-                    <td className="px-4 py-2 text-sm text-right text-gray-700">
-                      {(d.percentage * 100).toFixed(1)}%
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <DataTable
+            title="Accessibility"
+            data={accessibilityTypeFrequencies}
+            dataKey="accessibilityType"
+          />
 
-          {/* Accessibility */}
-          <div>
-            <h3 className="text-lg font-semibold mb-2">Accessibility</h3>
-            <table className="min-w-full divide-y divide-gray-200 border">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">Type</th>
-                  <th className="px-4 py-2 text-right text-sm font-medium text-gray-700">Count</th>
-                  <th className="px-4 py-2 text-right text-sm font-medium text-gray-700">%</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-200">
-                {accessibilityTypeFrequencies.map((d) => (
-                  <tr key={d.accessibilityType}>
-                    <td className="px-4 py-2 text-sm text-gray-700">{d.accessibilityType}</td>
-                    <td className="px-4 py-2 text-sm text-right text-gray-700">{d.count}</td>
-                    <td className="px-4 py-2 text-sm text-right text-gray-700">
-                      {(d.percentage * 100).toFixed(1)}%
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <DataTable
+            title="Subsidy or voucher"
+            data={subsidyOrVoucherTypeFrequencies}
+            dataKey="subsidyType"
+          />
         </div>
       </div>
     </div>

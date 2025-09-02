@@ -57,6 +57,7 @@ export interface ReportProducts {
 export interface ReportData {
   reportFilters: ReportFilters
   totalProcessedApplications: number
+  totalListings: number
   isSufficient: boolean
   kAnonScore: number
   products: ReportProducts
@@ -118,7 +119,8 @@ export const getReportDataFastAPI = async () => {
 // ── Option 1: Balanced distribution (more random) ─────────────────────────────
 export const reportDataOption1: ReportData = {
   reportFilters: { dateRange: "01/01/2025 - 06/30/2025" },
-  totalProcessedApplications: 1000,
+  totalProcessedApplications: 13293,
+  totalListings: 24,
   isSufficient: true,
   kAnonScore: 5,
   products: {
@@ -133,7 +135,7 @@ export const reportDataOption1: ReportData = {
       { race: "Black or African American", count: 183, percentage: 0.183 },
       { race: "Hispanic or Latino", count: 210, percentage: 0.21 },
       { race: "White", count: 312, percentage: 0.312 },
-      { race: "Other/Multiracial", count: 78, percentage: 0.078 },
+      { race: "Multiracial", count: 78, percentage: 0.078 },
     ],
     ethnicityFrequencies: [
       { ethnicity: "Hispanic or Latino", count: 250, percentage: 0.25 },
@@ -167,7 +169,7 @@ export const reportDataOption1: ReportData = {
     languageFrequencies: [
       { language: "English", count: 846, percentage: 0.846 },
       { language: "Spanish", count: 84, percentage: 0.084 },
-      { language: "Traditional Chinese", count: 42, percentage: 0.042 },
+      { language: "Chinese", count: 42, percentage: 0.042 },
       { language: "Other", count: 28, percentage: 0.028 },
     ],
   },
@@ -178,6 +180,7 @@ export const reportDataOption1: ReportData = {
 export const reportDataOption2: ReportData = {
   reportFilters: { dateRange: "01/01/2025 - 06/30/2025" },
   totalProcessedApplications: 800,
+  totalListings: 18,
   isSufficient: true,
   kAnonScore: 3,
   products: {
@@ -237,6 +240,7 @@ export const reportDataOption2: ReportData = {
 export const reportDataOption3: ReportData = {
   reportFilters: { dateRange: "01/01/2025 - 06/30/2025" },
   totalProcessedApplications: 1200,
+  totalListings: 32,
   isSufficient: true,
   kAnonScore: 10,
   products: {
@@ -295,6 +299,7 @@ export const reportDataOption3: ReportData = {
 export const reportDataOption4: ReportData = {
   reportFilters: { dateRange: "01/01/2025 - 06/30/2025" },
   totalProcessedApplications: 50,
+  totalListings: 5,
   isSufficient: false,
   kAnonScore: 2,
   products: {

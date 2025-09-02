@@ -10,6 +10,7 @@ import {
   ResponsiveContainer,
 } from "recharts"
 import { IncomeHouseholdSizeCrossTab } from "../../lib/explore/data-explorer"
+import { HeadingGroup } from "@bloom-housing/ui-seeds"
 
 interface HouseholdIncomeReportProps {
   chartData: {
@@ -46,11 +47,9 @@ export default function HouseholdIncomeReport({ chartData }: HouseholdIncomeRepo
 
   return (
     <div className="w-full flex justify-center bg-gray-100 py-8">
-      <div className="p-6 bg-white rounded-lg shadow w-2/3">
+      <div className="p-6 bg-white rounded-lg shadow w-full">
         <h2 className="text-2xl font-semibold mb-2">Household self-reported income and size</h2>
-        <p className="text-sm text-gray-600 mb-6">
-          Below is a summary of applicants’ household size and income.
-        </p>
+        <p className="text-sm text-gray-600 mb-6"></p>
 
         {/* ─── Chart Section ─────────────────────────────────────────────────── */}
         <div className="w-full h-96 p-4">
