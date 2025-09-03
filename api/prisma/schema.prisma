@@ -874,7 +874,7 @@ model UserAccounts {
   userRoles                UserRoles?
   requestedChangesListings Listings[]              @relation("requested_changes_user")
   favoriteListings         Listings[]              @relation("favorite_listings")
-  lasUpdatedListingsByUser Listings[]              @relation("last_updated_by_user")
+  lastUpdatedListingsByUser Listings[]              @relation("last_updated_by_user")
 
   @@map("user_accounts")
   
