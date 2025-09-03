@@ -1,8 +1,7 @@
-import React, { useState, useContext } from "react"
+import React, { useState } from "react"
 import Head from "next/head"
 import axios from "axios"
 import { t, AlertBox, Breadcrumbs, BreadcrumbLink } from "@bloom-housing/ui-components"
-import { AuthContext } from "@bloom-housing/shared-helpers"
 import {
   Listing,
   ListingsStatusEnum,
@@ -11,7 +10,6 @@ import {
 import { ListingStatusBar } from "../../../components/listings/ListingStatusBar"
 import ListingGuard from "../../../components/shared/ListingGuard"
 import { NavigationHeader } from "../../../components/shared/NavigationHeader"
-import dayjs from "dayjs"
 import Layout from "../../../layouts/index"
 import ListingFormActions, {
   ListingFormActionsType,
@@ -51,9 +49,6 @@ export default function ListingDetail(props: ListingProps) {
   const [errorAlert, setErrorAlert] = useState<string>(null)
   const [unitDrawer, setUnitDrawer] = useState<UnitDrawer>(null)
   const [copyListingDialog, setCopyListingDialog] = useState(false)
-  const { profile } = useContext(AuthContext)
-  const isSameEditingUser = profile?.id === listing.lastUpdatedByUser?.id
-  const showLastUpdatedByUser = !!listing.lastUpdatedByUser?.name
 
   if (!listing) return null
 
@@ -134,17 +129,6 @@ export default function ListingDetail(props: ListingProps) {
                       showCopyListingDialog={() => setCopyListingDialog(true)}
                       setErrorAlert={setErrorAlert}
                     />
-                    {showLastUpdatedByUser && (
-                      <div className="flex flex-col items-center mt-16 gap-2">
-                        <p>
-                          {t("listings.details.editedAt")}{" "}
-                          {isSameEditingUser
-                            ? t("listings.details.you")
-                            : listing.lastUpdatedByUser.name}
-                        </p>
-                        <p>{dayjs(listing.contentUpdatedAt).format("MMMM DD, YYYY, HH:mm A")}</p>
-                      </div>
-                    )}
                   </div>
                 </div>
               </div>

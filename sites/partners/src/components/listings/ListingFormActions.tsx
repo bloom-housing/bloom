@@ -3,7 +3,7 @@ import { useRouter } from "next/router"
 import dayjs from "dayjs"
 import LinkIcon from "@heroicons/react/20/solid/LinkIcon"
 import PencilSquareIcon from "@heroicons/react/24/solid/PencilSquareIcon"
-import { t, StatusMessages } from "@bloom-housing/ui-components"
+import { t } from "@bloom-housing/ui-components"
 import { Button, Link, Grid, Icon } from "@bloom-housing/ui-seeds"
 import { pdfUrlFromListingEvents, AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
 import {
@@ -49,6 +49,8 @@ const ListingFormActions = ({
   const { profile, listingsService, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
   const { addToast } = useContext(MessageContext)
   const router = useRouter()
+  const isSameEditingUser = profile?.id === listing?.lastUpdatedByUser?.id
+  const showLastUpdatedByUser = !!listing?.lastUpdatedByUser?.name
 
   // single jurisdiction check covers jurisAdmin adding a listing (listing is undefined then)
   const jurisdiction =
@@ -87,7 +89,7 @@ const ListingFormActions = ({
 
     const dayjsDate = dayjs(listing.updatedAt)
 
-    return dayjsDate.format("MMMM DD, YYYY")
+    return dayjsDate.format("MMMM DD, YYYY, HH:mm A")
   }, [listing])
 
   const actions = useMemo(() => {
@@ -531,7 +533,15 @@ const ListingFormActions = ({
   return (
     <>
       <StatusAside columns={1} actions={actions}>
-        {type === "edit" && <StatusMessages lastTimestamp={recordUpdated} />}
+        {showLastUpdatedByUser && (
+          <div className="flex flex-col items-center mt-16 gap-2">
+            <p>
+              {t("listings.details.editedAt")}{" "}
+              {isSameEditingUser ? t("listings.details.you") : listing.lastUpdatedByUser.name}
+            </p>
+            <p>{recordUpdated}</p>
+          </div>
+        )}
       </StatusAside>
     </>
   )
