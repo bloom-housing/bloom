@@ -52,8 +52,7 @@ export const Neighborhood = ({
           <HeadingGroup
             heading={t("t.neighborhood")}
             subheading={neighborhood}
-            size={"lg"}
-            headingPriority={3}
+            headingProps={{ size: "lg", priority: 3 }}
             className={`${styles["heading-group"]} seeds-m-bs-section`}
           />
         )}
@@ -61,8 +60,7 @@ export const Neighborhood = ({
           <HeadingGroup
             heading={t("t.region")}
             subheading={region}
-            size={"lg"}
-            headingPriority={3}
+            headingProps={{ size: "lg", priority: 3 }}
             className={`${styles["heading-group"]} seeds-m-bs-section`}
           />
         )}
@@ -71,8 +69,7 @@ export const Neighborhood = ({
             <HeadingGroup
               heading={t("listings.sections.neighborhoodAmenitiesTitle")}
               subheading={t("listings.sections.neighborhoodAmenitiesSubtitle")}
-              size={"lg"}
-              headingPriority={3}
+              headingProps={{ size: "lg", priority: 3 }}
               className={`${styles["heading-group"]} seeds-m-bs-section`}
             />
             {Object.keys(neighborhoodAmenities).map((amenity, index) => {
@@ -81,8 +78,7 @@ export const Neighborhood = ({
                 <HeadingGroup
                   heading={t(`listings.amenities.${amenity}`)}
                   subheading={neighborhoodAmenities[amenity]}
-                  size={"lg"}
-                  headingPriority={4}
+                  headingProps={{ size: "lg", priority: 4 }}
                   className={`${styles["heading-group"]} ${styles["nested-heading-group"]} seeds-m-bs-content`}
                   key={index}
                 />
