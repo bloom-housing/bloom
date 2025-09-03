@@ -759,53 +759,53 @@ Cypress.Commands.add(
     } else {
       cy.beginApplicationRejectAutofill(listingName)
     }
-    // cy.step1PrimaryApplicantName(application, autofill)
-    // cy.step2PrimaryApplicantAddresses(application, autofill)
-    // cy.step3AlternateContactType(application, autofill)
-    // if (application.alternateContact.type !== "noContact") {
-    //   cy.step4AlternateContactName(application, autofill)
-    //   cy.step5AlternateContactInfo(application, autofill)
-    // }
-    // cy.step6HouseholdSize(application, autofill)
-    // if (application.householdMember.length > 0) {
-    //   cy.step7AddHouseholdMembers(application, autofill)
-    // }
-    // cy.step8PreferredUnits(application, autofill)
-    // cy.step9Accessibility(application, autofill)
-    // cy.step10Changes(application, autofill)
+    cy.step1PrimaryApplicantName(application, autofill)
+    cy.step2PrimaryApplicantAddresses(application, autofill)
+    cy.step3AlternateContactType(application, autofill)
+    if (application.alternateContact.type !== "noContact") {
+      cy.step4AlternateContactName(application, autofill)
+      cy.step5AlternateContactInfo(application, autofill)
+    }
+    cy.step6HouseholdSize(application, autofill)
+    if (application.householdMember.length > 0) {
+      cy.step7AddHouseholdMembers(application, autofill)
+    }
+    cy.step8PreferredUnits(application, autofill)
+    cy.step9Accessibility(application, autofill)
+    cy.step10Changes(application, autofill)
 
-    // cy.window().then((win) => {
-    //   const listing = JSON.parse(win.sessionStorage.getItem("bloom-app-listing"))
-    //   const listingQuestionSectionExists = (sectionTitle) => {
-    //     return (
-    //       listing.listingMultiselectQuestions?.filter(
-    //         (question) => question.multiselectQuestions.applicationSection === sectionTitle
-    //       )?.length > 0
-    //     )
-    //   }
-    //   const programsExist = listingQuestionSectionExists("programs")
-    //   const preferencesExist = listingQuestionSectionExists("preferences")
+    cy.window().then((win) => {
+      const listing = JSON.parse(win.sessionStorage.getItem("bloom-app-listing"))
+      const listingQuestionSectionExists = (sectionTitle) => {
+        return (
+          listing.listingMultiselectQuestions?.filter(
+            (question) => question.multiselectQuestions.applicationSection === sectionTitle
+          )?.length > 0
+        )
+      }
+      const programsExist = listingQuestionSectionExists("programs")
+      const preferencesExist = listingQuestionSectionExists("preferences")
 
-    //   cy.step11Student(application, programsExist, autofill)
+      cy.step11Student(application, programsExist, autofill)
 
-    //   if (programsExist) {
-    //     cy.step12Programs(application)
-    //   }
+      if (programsExist) {
+        cy.step12Programs(application)
+      }
 
-    //   cy.step13IncomeVouchers(application, autofill)
-    //   cy.step14Income(application, autofill)
-    //   if (preferencesExist) {
-    //     if (application.preferences.length > 0) {
-    //       cy.step15SelectPreferences(application)
-    //     } else {
-    //       cy.step16GeneralPool()
-    //     }
-    //   }
+      cy.step13IncomeVouchers(application, autofill)
+      cy.step14Income(application, autofill)
+      if (preferencesExist) {
+        if (application.preferences.length > 0) {
+          cy.step15SelectPreferences(application)
+        } else {
+          cy.step16GeneralPool()
+        }
+      }
 
-    //   cy.step17Demographics(application, autofill)
-    //   cy.step18Summary(application, verify)
-    //   cy.step19TermsAndSubmit(application)
-    // })
+      cy.step17Demographics(application, autofill)
+      cy.step18Summary(application, verify)
+      cy.step19TermsAndSubmit(application)
+    })
   }
 )
 
