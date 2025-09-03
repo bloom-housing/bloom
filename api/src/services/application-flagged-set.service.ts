@@ -804,16 +804,14 @@ export class ApplicationFlaggedSetService implements OnModuleInit {
               },
             ],
           },
-          ...(duplicatesCloseDate && duplicatesCloseDate < dayjs(new Date())
-            ? [
-                {
-                  AND: [
-                    { closedAt: { lte: duplicatesCloseDate.toDate() } },
-                    { status: { not: ListingsStatusEnum.active } },
-                  ],
-                },
-              ]
-            : []),
+          duplicatesCloseDate && duplicatesCloseDate < dayjs(new Date())
+            ? {
+                AND: [
+                  { closedAt: { lte: duplicatesCloseDate.toDate() } },
+                  { status: { not: 'active' } },
+                ],
+              }
+            : undefined,
         ],
       },
     });
