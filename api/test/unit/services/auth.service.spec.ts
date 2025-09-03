@@ -1072,19 +1072,7 @@ describe('Testing auth service', () => {
     );
 
     expect(prisma.userAccounts.findUnique).toHaveBeenCalledWith({
-      include: {
-        favoriteListings: {
-          select: {
-            id: true,
-            name: true,
-          },
-        },
-        jurisdictions: true,
-        listings: true,
-        userRoles: true,
-      },
       where: {
-        email: undefined,
         id,
       },
     });
@@ -1146,19 +1134,7 @@ describe('Testing auth service', () => {
     );
 
     expect(prisma.userAccounts.findUnique).toHaveBeenCalledWith({
-      include: {
-        favoriteListings: {
-          select: {
-            id: true,
-            name: true,
-          },
-        },
-        jurisdictions: true,
-        listings: true,
-        userRoles: true,
-      },
       where: {
-        email: undefined,
         id,
       },
     });
