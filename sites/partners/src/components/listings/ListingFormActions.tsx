@@ -50,7 +50,7 @@ const ListingFormActions = ({
   const { addToast } = useContext(MessageContext)
   const router = useRouter()
   const isSameEditingUser = profile?.id === listing?.lastUpdatedByUser?.id
-  const showLastUpdatedByUser = !!listing?.lastUpdatedByUser?.name
+  const showLastUpdatedByUser = !!listing?.lastUpdatedByUser?.name && type !== "add"
 
   // single jurisdiction check covers jurisAdmin adding a listing (listing is undefined then)
   const jurisdiction =
