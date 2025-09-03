@@ -16,7 +16,7 @@ import {
   RuleEnum,
 } from '@prisma/client';
 import { PrismaService } from './prisma.service';
-import { mapTo } from '../utilities/map-to';
+import { mapTo } from '../utilities/mapTo';
 import { SuccessDTO } from '../dtos/shared/success.dto';
 import { ApplicationFlaggedSet } from '../dtos/application-flagged-sets/application-flagged-set.dto';
 import { PaginatedAfsDto } from '../dtos/application-flagged-sets/paginated-afs.dto';

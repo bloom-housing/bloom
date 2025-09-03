@@ -3,7 +3,7 @@ import { PrismaService } from './prisma.service';
 import { UnitRentType } from '../dtos/unit-rent-types/unit-rent-type.dto';
 import { UnitRentTypeCreate } from '../dtos/unit-rent-types/unit-rent-type-create.dto';
 import { UnitRentTypeUpdate } from '../dtos/unit-rent-types/unit-rent-type-update.dto';
-import { mapTo } from '../utilities/map-to';
+import { mapTo } from '../utilities/mapTo';
 import { SuccessDTO } from '../dtos/shared/success.dto';
 import { UnitRentTypes } from '@prisma/client';
 

@@ -49,7 +49,7 @@ import { permissionActions } from '../enums/permissions/permission-actions-enum'
 import { buildFilter } from '../utilities/build-filter';
 import { buildOrderByForListings } from '../utilities/build-order-by';
 import { startCronJob } from '../utilities/cron-job-starter';
-import { mapTo } from '../utilities/map-to';
+import { mapTo } from '../utilities/mapTo';
 import {
   buildPaginationMetaInfo,
   calculateSkip,

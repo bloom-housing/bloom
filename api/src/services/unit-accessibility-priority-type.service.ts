@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from './prisma.service';
 import { UnitAccessibilityPriorityType } from '../dtos/unit-accessibility-priority-types/unit-accessibility-priority-type.dto';
 import { UnitAccessibilityPriorityTypeCreate } from '../dtos/unit-accessibility-priority-types/unit-accessibility-priority-type-create.dto';
-import { mapTo } from '../utilities/map-to';
+import { mapTo } from '../utilities/mapTo';
 import { SuccessDTO } from '../dtos/shared/success.dto';
 import { UnitAccessibilityPriorityTypeUpdate } from '../dtos/unit-accessibility-priority-types/unit-accessibility-priority-type-update.dto';
 

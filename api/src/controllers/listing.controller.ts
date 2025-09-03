@@ -55,7 +55,7 @@ import { ExportLogInterceptor } from '../interceptors/export-log.interceptor';
 import { ListingService } from '../services/listing.service';
 import { ListingCsvExporterService } from '../services/listing-csv-export.service';
 import { defaultValidationPipeOptions } from '../utilities/default-validation-pipe-options';
-import { mapTo } from '../utilities/map-to';
+import { mapTo } from '../utilities/mapTo';
 import { ListingCreateUpdateValidationPipe } from '../validation-pipes/listing-create-update-pipe';
 import { ListingFilterKeyDTO } from '../dtos/listings/listing-filter-key.dto';
 

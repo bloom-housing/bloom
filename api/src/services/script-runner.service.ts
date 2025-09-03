@@ -14,7 +14,7 @@ import { MultiselectQuestionService } from './multiselect-question.service';
 import { PrismaService } from './prisma.service';
 import { SuccessDTO } from '../dtos/shared/success.dto';
 import { User } from '../dtos/users/user.dto';
-import { mapTo } from '../utilities/map-to';
+import { mapTo } from '../utilities/mapTo';
 import { BulkApplicationResendDTO } from '../dtos/script-runner/bulk-application-resend.dto';
 import { Application } from '../dtos/applications/application.dto';
 import { AmiChartImportDTO } from '../dtos/script-runner/ami-chart-import.dto';

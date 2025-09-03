@@ -15,7 +15,7 @@ import {
 } from '@prisma/client';
 import { PrismaService } from './prisma.service';
 import { Application } from '../dtos/applications/application.dto';
-import { mapTo } from '../utilities/map-to';
+import { mapTo } from '../utilities/mapTo';
 import { ApplicationQueryParams } from '../dtos/applications/application-query-params.dto';
 import { calculateSkip, calculateTake } from '../utilities/pagination-helpers';
 import { buildOrderByForApplications } from '../utilities/build-order-by';
