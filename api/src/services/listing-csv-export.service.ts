@@ -33,7 +33,7 @@ import { ListingEvent } from '../dtos/listings/listing-event.dto';
 import { ApplicationMethod } from '../dtos/application-methods/application-method.dto';
 import Unit from '../dtos/units/unit.dto';
 import Listing from '../dtos/listings/listing.dto';
-import { mapTo } from '../utilities/mapTo';
+import { mapTo } from '../utilities/map-to';
 import { ListingMultiselectQuestion } from '../dtos/listings/listing-multiselect-question.dto';
 import { ListingUtilities } from '../dtos/listings/listing-utility.dto';
 import { ListingFeatures } from '../dtos/listings/listing-feature.dto';

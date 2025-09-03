@@ -16,7 +16,7 @@ import { Request } from 'express';
 
 import { PrismaService } from './prisma.service';
 import { User } from '../dtos/users/user.dto';
-import { mapTo } from '../utilities/mapTo';
+import { mapTo } from '../utilities/map-to';
 import {
   buildPaginationMetaInfo,
   calculateSkip,

@@ -12,7 +12,7 @@ import { FeatureFlagAssociate } from '../dtos/feature-flags/feature-flag-associa
 import { FeatureFlagCreate } from '../dtos/feature-flags/feature-flag-create.dto';
 import { FeatureFlagUpdate } from '../dtos/feature-flags/feature-flag-update.dto';
 import { SuccessDTO } from '../dtos/shared/success.dto';
-import { mapTo } from '../utilities/mapTo';
+import { mapTo } from '../utilities/map-to';
 import { featureFlagMap } from '../enums/feature-flags/feature-flags-enum';
 
 /**

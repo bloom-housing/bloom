@@ -20,7 +20,7 @@ import { User } from '../dtos/users/user.dto';
 import { PrismaService } from './prisma.service';
 import { UserService } from './user.service';
 import { IdDTO } from '../dtos/shared/id.dto';
-import { mapTo } from '../utilities/mapTo';
+import { mapTo } from '../utilities/map-to';
 import { Confirm } from '../dtos/auth/confirm.dto';
 import { SmsService } from './sms.service';
 import { EmailService } from './email.service';

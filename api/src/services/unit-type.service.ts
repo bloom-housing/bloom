@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from './prisma.service';
 import { UnitType } from '../dtos/unit-types/unit-type.dto';
 import { UnitTypeCreate } from '../dtos/unit-types/unit-type-create.dto';
-import { mapTo } from '../utilities/mapTo';
+import { mapTo } from '../utilities/map-to';
 import { SuccessDTO } from '../dtos/shared/success.dto';
 import { UnitTypeUpdate } from '../dtos/unit-types/unit-type-update.dto';
 

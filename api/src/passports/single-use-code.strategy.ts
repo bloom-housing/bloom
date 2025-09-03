@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { User } from '../dtos/users/user.dto';
 import { PrismaService } from '../services/prisma.service';
-import { mapTo } from '../utilities/mapTo';
+import { mapTo } from '../utilities/map-to';
 import { defaultValidationPipeOptions } from '../utilities/default-validation-pipe-options';
 import { LoginViaSingleUseCode } from '../dtos/auth/login-single-use-code.dto';
 import { OrderByEnum } from '../enums/shared/order-by-enum';

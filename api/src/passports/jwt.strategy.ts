@@ -5,7 +5,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { User } from '../dtos/users/user.dto';
 import { TOKEN_COOKIE_NAME } from '../services/auth.service';
 import { PrismaService } from '../services/prisma.service';
-import { mapTo } from '../utilities/mapTo';
+import { mapTo } from '../utilities/map-to';
 import { isPasswordOutdated } from '../utilities/password-helpers';
 
 type PayloadType = {

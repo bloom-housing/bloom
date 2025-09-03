@@ -32,7 +32,7 @@ import { ListingService } from './listing.service';
 import { MultiselectQuestionService } from './multiselect-question.service';
 import { PermissionService } from './permission.service';
 import { PrismaService } from './prisma.service';
-import { mapTo } from '../utilities/mapTo';
+import { mapTo } from '../utilities/map-to';
 import { LotteryActivityLogItem } from '../dtos/lottery/lottery-activity-log-item.dto';
 import { ListingLotteryStatus } from '../../src/dtos/listings/listing-lottery-status.dto';
 import { ListingViews } from '../../src/enums/listings/view-enum';

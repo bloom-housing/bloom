@@ -10,7 +10,7 @@ import {
 import { PrismaService } from './prisma.service';
 import { User } from '../dtos/users/user.dto';
 import { UserRole } from '../dtos/users/user-role.dto';
-import { mapTo } from '../utilities/mapTo';
+import { mapTo } from '../utilities/map-to';
 import { IdDTO } from '../dtos/shared/id.dto';
 import { buildWhereClause } from '../utilities/build-user-where';
 

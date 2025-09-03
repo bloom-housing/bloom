@@ -4,7 +4,7 @@ import { Prisma } from '@prisma/client';
 import { ReservedCommunityType } from '../dtos/reserved-community-types/reserved-community-type.dto';
 import { ReservedCommunityTypeCreate } from '../dtos/reserved-community-types/reserved-community-type-create.dto';
 import { ReservedCommunityTypeUpdate } from '../dtos/reserved-community-types/reserved-community-type-update.dto';
-import { mapTo } from '../utilities/mapTo';
+import { mapTo } from '../utilities/map-to';
 import { SuccessDTO } from '../dtos/shared/success.dto';
 import { ReservedCommunityTypeQueryParams } from '../dtos/reserved-community-types/reserved-community-type-query-params.dto';
 

@@ -5,7 +5,7 @@ import { AmiChart } from '../dtos/ami-charts/ami-chart.dto';
 import { AmiChartCreate } from '../dtos/ami-charts/ami-chart-create.dto';
 import { AmiChartUpdate } from '../dtos/ami-charts/ami-chart-update.dto';
 import { AmiChartQueryParams } from '../dtos/ami-charts/ami-chart-query-params.dto';
-import { mapTo } from '../utilities/mapTo';
+import { mapTo } from '../utilities/map-to';
 import { SuccessDTO } from '../dtos/shared/success.dto';
 import { AmiChartItem } from '../dtos/units/ami-chart-item.dto';
 

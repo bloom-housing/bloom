@@ -12,7 +12,7 @@ import { Jurisdiction } from '../dtos/jurisdictions/jurisdiction.dto';
 import { Injectable, StreamableFile } from '@nestjs/common';
 import { join } from 'path';
 import { ListingService } from './listing.service';
-import { mapTo } from '../utilities/mapTo';
+import { mapTo } from '../utilities/map-to';
 import { MultiselectQuestion } from '../dtos/multiselect-questions/multiselect-question.dto';
 import { MultiselectQuestionsApplicationSectionEnum } from '@prisma/client';
 import { MultiselectQuestionService } from './multiselect-question.service';

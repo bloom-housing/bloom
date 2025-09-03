@@ -27,7 +27,7 @@ import { MfaAuthGuard } from '../guards/mfa.guard';
 import { JwtAuthGuard } from '../guards/jwt.guard';
 import { OptionalAuthGuard } from '../guards/optional.guard';
 import { Login } from '../dtos/auth/login.dto';
-import { mapTo } from '../utilities/mapTo';
+import { mapTo } from '../utilities/map-to';
 import { User } from '../dtos/users/user.dto';
 import { LoginViaSingleUseCode } from '../dtos/auth/login-single-use-code.dto';
 import { ApiKeyGuard } from '../guards/api-key.guard';

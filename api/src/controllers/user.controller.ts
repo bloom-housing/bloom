@@ -28,7 +28,7 @@ import { UserService } from '../services/user.service';
 import { User } from '../dtos/users/user.dto';
 import { defaultValidationPipeOptions } from '../utilities/default-validation-pipe-options';
 import { IdDTO } from '../dtos/shared/id.dto';
-import { mapTo } from '../utilities/mapTo';
+import { mapTo } from '../utilities/map-to';
 import { PaginatedUserDto } from '../dtos/users/paginated-user.dto';
 import { UserQueryParams } from '../dtos/users/user-query-param.dto';
 import { Request as ExpressRequest, Response } from 'express';

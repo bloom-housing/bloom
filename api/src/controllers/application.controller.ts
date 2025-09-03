@@ -39,7 +39,7 @@ import {
 } from '../dtos/applications/application-multiselect-question-option.dto';
 import { ValidationsGroupsEnum } from '../enums/shared/validation-groups-enum';
 import { OptionalAuthGuard } from '../guards/optional.guard';
-import { mapTo } from '../utilities/mapTo';
+import { mapTo } from '../utilities/map-to';
 import { User } from '../dtos/users/user.dto';
 import { ActivityLogInterceptor } from '../interceptors/activity-log.interceptor';
 import { PermissionTypeDecorator } from '../decorators/permission-type.decorator';

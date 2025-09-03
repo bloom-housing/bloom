@@ -3,7 +3,7 @@ import { PrismaService } from './prisma.service';
 import { MultiselectQuestion } from '../dtos/multiselect-questions/multiselect-question.dto';
 import { MultiselectQuestionUpdate } from '../dtos/multiselect-questions/multiselect-question-update.dto';
 import { MultiselectQuestionCreate } from '../dtos/multiselect-questions/multiselect-question-create.dto';
-import { mapTo } from '../utilities/mapTo';
+import { mapTo } from '../utilities/map-to';
 import { SuccessDTO } from '../dtos/shared/success.dto';
 import { Prisma } from '@prisma/client';
 import { buildFilter } from '../utilities/build-filter';

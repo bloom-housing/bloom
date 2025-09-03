@@ -29,7 +29,7 @@ import { AfsMeta } from '../dtos/application-flagged-sets/afs-meta.dto';
 import { AfsProcessQueryParams } from '../dtos/application-flagged-sets/afs-process-query-params.dto';
 import { AfsQueryParams } from '../dtos/application-flagged-sets/afs-query-params.dto';
 import { User } from '../dtos/users/user.dto';
-import { mapTo } from '../utilities/mapTo';
+import { mapTo } from '../utilities/map-to';
 import { OptionalAuthGuard } from '../guards/optional.guard';
 import { PermissionGuard } from '../guards/permission.guard';
 import { PermissionTypeDecorator } from '../decorators/permission-type.decorator';
