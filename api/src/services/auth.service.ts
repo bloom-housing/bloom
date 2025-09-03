@@ -356,10 +356,7 @@ export class AuthService {
   async confirmUser(dto: Confirm, res?: Response): Promise<SuccessDTO> {
     const token = verify(dto.token, process.env.APP_SECRET) as IdAndEmail;
 
-    let user = await this.userService.findUserOrError(
-      { userId: token.id },
-      UserViews.full,
-    );
+    let user = await this.userService.findUserOrError({ userId: token.id });
 
     if (user.confirmationToken !== dto.token) {
       throw new BadRequestException(
@@ -381,18 +378,12 @@ export class AuthService {
       data.email = token.email;
     }
 
-    await this.prisma.userAccounts.update({
+    user = await this.prisma.userAccounts.update({
       data,
       where: {
         id: user.id,
       },
     });
-
-    // Refetch user with full relations
-    user = await this.userService.findUserOrError(
-      { userId: user.id },
-      UserViews.full,
-    );
 
     return await this.setCredentials(res, mapTo(User, user));
   }

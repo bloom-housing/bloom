@@ -35,7 +35,7 @@ export const startCronJob = (
   const repeatCron = cronString;
   const randomSecond = Math.floor(Math.random() * 30);
   const newCron = `${randomSecond * 2} ${repeatCron}`;
-  const job = new CronJob(
+  const job: CronJob = new CronJob(
     newCron,
     () => {
       void (async () => {
@@ -62,7 +62,7 @@ export const startCronJob = (
     undefined,
     process.env.TIME_ZONE,
   );
-  schedulerRegistry.addCronJob(cronName, job as any);
+  schedulerRegistry.addCronJob(cronName, job);
   if (process.env.NODE_ENV !== 'test') {
     job.start();
   }

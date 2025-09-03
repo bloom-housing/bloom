@@ -89,11 +89,11 @@ export const applicationFactory = async (optionalParams?: {
         }
       : undefined,
     ...optionalParams?.overrides,
-    ...(optionalParams?.householdMember && {
-      householdMember: {
-        create: optionalParams.householdMember,
-      },
-    }),
+    householdMember: optionalParams?.householdMember
+      ? {
+          create: optionalParams.householdMember,
+        }
+      : undefined,
     demographics: {
       create: demographics,
     },
