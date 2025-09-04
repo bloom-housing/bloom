@@ -130,3 +130,7 @@
     display: none;
   }
 }
+
+.link-no-gap {
+  --link-interior-gap: 0;
+}

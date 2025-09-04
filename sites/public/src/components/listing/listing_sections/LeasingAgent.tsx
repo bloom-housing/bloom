@@ -40,7 +40,15 @@ export const LeasingAgent = ({
         {phone && (
           <>
             <p className={"seeds-m-bs-header seeds-m-be-text"}>
-              <Link href={`tel:${formatPhone(phone)}`}>{`${t("t.call")} ${phone}`}</Link>
+              <Link
+                className={styles["link-no-gap"]}
+                href={`tel:${formatPhone(phone)}`}
+                aria-label={`${t("t.call")} ${phone}`}
+              >
+                {t("t.call")}
+                &nbsp;
+                <span dir="ltr">{phone}</span>
+              </Link>
             </p>
             <p>{t("leasingAgent.dueToHighCallVolume")}</p>
           </>
