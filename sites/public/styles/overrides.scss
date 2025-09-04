@@ -3,6 +3,12 @@
     -webkit-font-smoothing: antialiased; // restore macOS styling that had been unset
   }
 
+  .seeds-tag {
+    --tag-padding-inline: var(--seeds-s3);
+    --tag-padding-block: var(--seeds-s1_5);
+    line-height: var(--seeds-line-height-4);
+  }
+
   .main-container {
     display: flex;
     flex: 1;
