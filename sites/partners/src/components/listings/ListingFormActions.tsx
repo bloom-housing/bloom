@@ -535,23 +535,18 @@ const ListingFormActions = ({
   return (
     <>
       <StatusAside columns={1} actions={actions}>
-        {showLastUpdatedByUser && (
-          <div className="flex flex-col items-center mt-16 gap-2">
-            <p>
-              {t("listings.details.editedBy")}{" "}
-              {isSameEditingUser ? t("listings.details.you") : listing.lastUpdatedByUser.name}
-            </p>
-            <p>{recordUpdated}</p>
-          </div>
-        )}
-        {showLastEdited && (
-          <div className="flex flex-col items-center mt-16 gap-2">
-            <p>
-              {" "}
-              {t("listings.details.editedAt")} {recordUpdated}
-            </p>
-          </div>
-        )}
+        <div className="flex flex-col items-center mt-16 gap-2">
+          {showLastUpdatedByUser && (
+            <div className="flex flex-col items-center mt-16 gap-2">
+              <p>
+                {t("listings.details.editedBy")}{" "}
+                {isSameEditingUser ? t("listings.details.you") : listing.lastUpdatedByUser.name}
+              </p>
+            </div>
+          )}
+          {showLastEdited && <p>{t("listings.details.editedAt")}</p>}
+          <p>{recordUpdated}</p>
+        </div>
       </StatusAside>
     </>
   )
