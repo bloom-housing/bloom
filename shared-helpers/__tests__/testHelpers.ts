@@ -686,6 +686,10 @@ export const listing: Listing = {
   listingsApplicationDropOffAddress: undefined,
   applicationDropOffAddressOfficeHours: undefined,
   listingsApplicationMailingAddress: undefined,
+  lastUpdatedByUser: {
+    id: "d4522484-f473-4c0e-8f78-e1f8ab69cd70",
+    name: "First Last",
+  },
   jurisdictions: {
     id: "id",
     name: "San Jose",
