@@ -52,7 +52,7 @@ const ListingFormActions = ({
   const isSameEditingUser = profile?.id === listing?.lastUpdatedByUser?.id
   const showLastUpdatedByUser =
     !!listing?.lastUpdatedByUser?.name && type !== ListingFormActionsType.add
-  const showLastEdited = showLastUpdatedByUser && type === ListingFormActionsType.edit
+  const showLastEdited = !showLastUpdatedByUser && type !== ListingFormActionsType.add
 
   // single jurisdiction check covers jurisAdmin adding a listing (listing is undefined then)
   const jurisdiction =
