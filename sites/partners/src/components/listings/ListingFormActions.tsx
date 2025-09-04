@@ -50,7 +50,9 @@ const ListingFormActions = ({
   const { addToast } = useContext(MessageContext)
   const router = useRouter()
   const isSameEditingUser = profile?.id === listing?.lastUpdatedByUser?.id
-  const showLastUpdatedByUser = !!listing?.lastUpdatedByUser?.name && type !== "add"
+  const showLastUpdatedByUser =
+    !!listing?.lastUpdatedByUser?.name && type !== ListingFormActionsType.add
+  const showLastEdited = showLastUpdatedByUser && type === ListingFormActionsType.edit
 
   // single jurisdiction check covers jurisAdmin adding a listing (listing is undefined then)
   const jurisdiction =
@@ -536,10 +538,18 @@ const ListingFormActions = ({
         {showLastUpdatedByUser && (
           <div className="flex flex-col items-center mt-16 gap-2">
             <p>
-              {t("listings.details.editedAt")}{" "}
+              {t("listings.details.editedBy")}{" "}
               {isSameEditingUser ? t("listings.details.you") : listing.lastUpdatedByUser.name}
             </p>
             <p>{recordUpdated}</p>
+          </div>
+        )}
+        {showLastEdited && (
+          <div className="flex flex-col items-center mt-16 gap-2">
+            <p>
+              {" "}
+              {t("listings.details.editedAt")} {recordUpdated}
+            </p>
           </div>
         )}
       </StatusAside>
