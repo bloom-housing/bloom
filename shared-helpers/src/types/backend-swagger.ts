@@ -3116,6 +3116,17 @@ export interface SuccessDTO {
   success: boolean
 }
 
+export interface IdDTO {
+  /**  */
+  id: string
+
+  /**  */
+  name?: string
+
+  /**  */
+  ordinal?: number
+}
+
 export interface ListingFilterParams {
   /**  */
   $comparison: EnumListingFilterParamsComparison
@@ -3185,6 +3196,9 @@ export interface ListingFilterParams {
 
   /**  */
   zipCode?: string
+
+  /**  */
+  lastUpdatedByUser?: IdDTO
 }
 
 export interface ListingsQueryBody {
@@ -3252,17 +3266,6 @@ export interface PaginationAllowsAllQueryParams {
 
   /**  */
   limit?: number | "all"
-}
-
-export interface IdDTO {
-  /**  */
-  id: string
-
-  /**  */
-  name?: string
-
-  /**  */
-  ordinal?: number
 }
 
 export interface MultiselectLink {
@@ -4440,6 +4443,9 @@ export interface Listing {
 
   /**  */
   listingNeighborhoodAmenities?: ListingNeighborhoodAmenities
+
+  /**  */
+  lastUpdatedByUser?: IdDTO
 }
 
 export interface PaginationMeta {
@@ -5006,6 +5012,9 @@ export interface ListingCreate {
   listingNeighborhoodAmenities?: ListingNeighborhoodAmenities
 
   /**  */
+  lastUpdatedByUser?: IdDTO
+
+  /**  */
   listingMultiselectQuestions?: IdDTO[]
 
   /**  */
@@ -5323,6 +5332,9 @@ export interface ListingUpdate {
 
   /**  */
   listingNeighborhoodAmenities?: ListingNeighborhoodAmenities
+
+  /**  */
+  lastUpdatedByUser?: IdDTO
 
   /**  */
   listingMultiselectQuestions?: IdDTO[]
@@ -7555,6 +7567,7 @@ export enum FeatureFlagEnum {
   "enableAdaOtherOption" = "enableAdaOtherOption",
   "enableAdditionalResources" = "enableAdditionalResources",
   "enableCompanyWebsite" = "enableCompanyWebsite",
+  "enableFullTimeStudentQuestion" = "enableFullTimeStudentQuestion",
   "enableGeocodingPreferences" = "enableGeocodingPreferences",
   "enableGeocodingRadiusMethod" = "enableGeocodingRadiusMethod",
   "enableHomeType" = "enableHomeType",
@@ -7575,11 +7588,11 @@ export enum FeatureFlagEnum {
   "enableUnderConstructionHome" = "enableUnderConstructionHome",
   "enableUnitGroups" = "enableUnitGroups",
   "enableUtilitiesIncluded" = "enableUtilitiesIncluded",
+  "enableWaitlistAdditionalFields" = "enableWaitlistAdditionalFields",
+  "enableV2MSQ" = "enableV2MSQ",
   "example" = "example",
   "hideCloseListingButton" = "hideCloseListingButton",
   "swapCommunityTypeWithPrograms" = "swapCommunityTypeWithPrograms",
-  "enableWaitlistAdditionalFields" = "enableWaitlistAdditionalFields",
-  "enableFullTimeStudentQuestion" = "enableFullTimeStudentQuestion",
 }
 export enum EnumMultiselectQuestionFilterParamsComparison {
   "=" = "=",
