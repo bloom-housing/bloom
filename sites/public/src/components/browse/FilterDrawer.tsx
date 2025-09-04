@@ -16,6 +16,7 @@ import {
   FilterData,
   getAvailabilityValues,
   RentSection,
+  ReservedCommunityTypes,
   SearchSection,
   unitTypeMapping,
   unitTypesSorted,
@@ -49,6 +50,10 @@ const FilterDrawer = (props: FilterDrawerProps) => {
 
   const enableUnitGroups = props.activeFeatureFlags?.some(
     (entry) => entry === FeatureFlagEnum.enableUnitGroups
+  )
+
+  const swapCommunityTypeWithPrograms = props.activeFeatureFlags?.some(
+    (entry) => entry === FeatureFlagEnum.swapCommunityTypeWithPrograms
   )
 
   const availabilityLabels = getAvailabilityValues(enableUnitGroups).map((key) =>
@@ -143,22 +148,31 @@ const FilterDrawer = (props: FilterDrawerProps) => {
             register={register}
           />
           <SearchSection register={register} nameState={props.filterState?.name} />
-          {props.multiselectData?.length > 0 && (
-            <CheckboxGroup
-              groupLabel={t("t.community")}
-              fields={buildDefaultFilterFields(
-                ListingFilterKeys.multiselectQuestions,
-                props.multiselectData?.map((multi) =>
-                  multi.untranslatedText
-                    ? t(`listingFilters.program.${multi.untranslatedText}`)
-                    : t(`listingFilters.program.${multi.text}`)
-                ),
-                props.multiselectData?.map((multi) => multi.id),
-                props.filterState
-              )}
-              register={register}
-            />
-          )}
+          <CheckboxGroup
+            groupLabel={t("t.community")}
+            fields={
+              swapCommunityTypeWithPrograms
+                ? buildDefaultFilterFields(
+                    ListingFilterKeys.multiselectQuestions,
+                    props.multiselectData?.map((multi) =>
+                      multi.untranslatedText
+                        ? t(`listingFilters.program.${multi.untranslatedText}`)
+                        : t(`listingFilters.program.${multi.text}`)
+                    ),
+                    props.multiselectData?.map((multi) => multi.id),
+                    props.filterState
+                  )
+                : buildDefaultFilterFields(
+                    ListingFilterKeys.reservedCommunityTypes,
+                    Object.values(ReservedCommunityTypes).map((type) =>
+                      t(`finder.building.${type}`)
+                    ),
+                    Object.values(ReservedCommunityTypes).map((type) => type),
+                    props.filterState
+                  )
+            }
+            register={register}
+          />
         </Form>
       </Drawer.Content>
       <Drawer.Footer>
