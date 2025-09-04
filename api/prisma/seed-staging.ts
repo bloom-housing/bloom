@@ -345,6 +345,7 @@ export const stagingSeed = async (
             'Have you or anyone in your household served in the US military?',
           applicationSection:
             MultiselectQuestionsApplicationSectionEnum.programs,
+          isExclusive: true,
           optOutText: 'Prefer not to say',
           options: [
             { text: 'Yes', exclusive: true, ordinal: 1 },
@@ -391,6 +392,7 @@ export const stagingSeed = async (
         description:
           'Are you or anyone in your household 62 years of age or older?',
         applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
+        isExclusive: true,
         options: [
           { text: 'Yes', exclusive: true, ordinal: 1 },
           { text: 'No', exclusive: true, ordinal: 2 },
@@ -409,6 +411,7 @@ export const stagingSeed = async (
               applicationSection:
                 MultiselectQuestionsApplicationSectionEnum.programs,
               text,
+              isExclusive: true,
               options: [
                 { text: 'Yes', exclusive: true, ordinal: 1 },
                 { text: 'No', exclusive: true, ordinal: 2 },
