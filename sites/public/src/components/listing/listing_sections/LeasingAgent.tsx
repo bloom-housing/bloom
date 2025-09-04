@@ -40,7 +40,11 @@ export const LeasingAgent = ({
         {phone && (
           <>
             <p className={"seeds-m-bs-header seeds-m-be-text"}>
-              <Link className={styles["link-no-gap"]} href={`tel:${formatPhone(phone)}`}>
+              <Link
+                className={styles["link-no-gap"]}
+                href={`tel:${formatPhone(phone)}`}
+                aria-label={`${t("t.call")} ${phone}`}
+              >
                 {t("t.call")}
                 &nbsp;
                 <span dir="ltr">{phone}</span>

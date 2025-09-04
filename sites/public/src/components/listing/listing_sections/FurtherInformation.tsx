@@ -18,6 +18,7 @@ export const FurtherInformation = ({ instructions, phoneNumber }: FurtherInforma
             <Link
               className={styles["link-no-gap"]}
               href={`tel:${phoneNumber.replace(/[-()]/g, "")}`}
+              aria-label={`${t("t.call")} ${phoneNumber}`}
             >
               {t("t.call")}
               &nbsp;
