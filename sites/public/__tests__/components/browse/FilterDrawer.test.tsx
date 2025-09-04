@@ -60,6 +60,7 @@ describe("FilterDrawer", () => {
         onClear={() => {}}
         filterState={{}}
         multiselectData={mockMultiselect}
+        activeFeatureFlags={[FeatureFlagEnum.swapCommunityTypeWithPrograms]}
       />
     )
     expect(screen.getByLabelText("Close")).toBeInTheDocument()
@@ -220,6 +221,7 @@ describe("FilterDrawer", () => {
         onClear={() => {}}
         filterState={filterState}
         multiselectData={mockMultiselect}
+        activeFeatureFlags={[FeatureFlagEnum.swapCommunityTypeWithPrograms]}
       />
     )
     expect(screen.getByLabelText("Close")).toBeInTheDocument()
@@ -369,7 +371,10 @@ describe("FilterDrawer", () => {
         onClear={() => {}}
         filterState={{}}
         multiselectData={mockMultiselect}
-        activeFeatureFlags={[FeatureFlagEnum.enableUnitGroups]}
+        activeFeatureFlags={[
+          FeatureFlagEnum.enableUnitGroups,
+          FeatureFlagEnum.swapCommunityTypeWithPrograms,
+        ]}
       />
     )
 
