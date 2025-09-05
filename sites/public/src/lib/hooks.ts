@@ -29,7 +29,7 @@ import { t } from "@bloom-housing/ui-components"
 import { fetchFavoriteListingIds } from "./helpers"
 
 /**
- *
+ * This ensures a listing is present in memory and no application has yet been submitted
  * @param listing
  * @param application
  */
@@ -44,12 +44,15 @@ export const useAuthenticApplicationCheckpoint = (
   useEffect(() => {
     const { addToast } = toastyRef.current
 
+    // redirect to the listings page if a listing hasn't been loaded
     if (!listing) {
       addToast(t("application.timeout.afterMessage"), { variant: "alert" })
       void router.push("/listings")
       return
     }
 
+    // redirect to the applications (logged-in state) or the listing page (non-logged-in state)
+    // if the application has been submitted already
     if (application.confirmationCode) {
       addToast(t("listings.applicationAlreadySubmitted"), { variant: "alert" })
       void router.push(
