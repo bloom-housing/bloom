@@ -54,10 +54,9 @@ Cypress.Commands.add("checkErrorMessages", (command) => {
 Cypress.Commands.add("beginApplicationRejectAutofill", (listingName) => {
   cy.visit("/listings")
   if (Cypress.env("showSeedsDesign")) {
-    cy.getByID("listing-seeds-link").contains(listingName)
-    cy.getByID("listing-seeds-link").eq(1).click()
+    cy.getByID("listing-seeds-link").contains(listingName).parent().click()
   } else {
-    cy.get(".is-card-link").contains(listingName).click()
+    cy.get(".is-card-link").contains(listingName).parent().click()
   }
   cy.getByID("listing-view-apply-button").eq(1).click()
   cy.getByID("app-choose-language-sign-in-button").click()
@@ -82,10 +81,9 @@ Cypress.Commands.add("beginApplicationRejectAutofill", (listingName) => {
 Cypress.Commands.add("beginApplicationSignedIn", (listingName, autofill) => {
   cy.visit("/listings")
   if (Cypress.env("showSeedsDesign")) {
-    cy.getByID("listing-seeds-link").contains(listingName)
-    cy.getByID("listing-seeds-link").eq(1).click()
+    cy.getByID("listing-seeds-link").contains(listingName).parent().click()
   } else {
-    cy.get(".is-card-link").contains(listingName).click()
+    cy.get(".is-card-link").contains(listingName).parent().click()
   }
   cy.getByID("listing-view-apply-button").eq(1).click()
   cy.getByID("app-choose-language-button").eq(0).click()
