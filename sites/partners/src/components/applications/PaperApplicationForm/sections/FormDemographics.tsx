@@ -74,11 +74,10 @@ const FormDemographics = ({ formValues }: FormDemographicsProps) => {
             <Select
               id="application.demographics.spokenLanguage"
               name="application.demographics.spokenLanguage"
-              placeholder={t("t.selectOne")}
               label={t("application.add.spokenLanguage")}
               register={register}
               controlClassName="control"
-              options={spokenLanguageKeys}
+              options={["", ...spokenLanguageKeys]}
               keyPrefix="application.review.demographics.spokenLanguageOptions"
             />
             {spokenLanguageValue === "notListed" && (
@@ -86,7 +85,6 @@ const FormDemographics = ({ formValues }: FormDemographicsProps) => {
                 id="application.demographics.spokenLanguageNotListed"
                 name="application.demographics.spokenLanguageNotListed"
                 label={t("application.review.demographics.spokenLanguageSpecify")}
-                validation={{ required: true }}
                 register={register}
               />
             )}
@@ -94,22 +92,20 @@ const FormDemographics = ({ formValues }: FormDemographicsProps) => {
             <Select
               id="application.demographics.gender"
               name="application.demographics.gender"
-              placeholder={t("t.selectOne")}
               label={t("application.add.gender")}
               register={register}
               controlClassName="control"
-              options={genderKeys}
+              options={["", ...genderKeys]}
               keyPrefix="application.review.demographics.genderOptions"
             />
 
             <Select
               id="application.demographics.sexualOrientation"
               name="application.demographics.sexualOrientation"
-              placeholder={t("t.selectOne")}
               label={t("application.add.sexualOrientation")}
               register={register}
               controlClassName="control"
-              options={sexualOrientationKeys}
+              options={["", ...sexualOrientationKeys]}
               keyPrefix="application.review.demographics.sexualOrientationOptions"
             />
           </Grid.Cell>

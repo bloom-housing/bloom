@@ -712,7 +712,10 @@ export const convertDemographicSexualOrientationToReadable = (
  * @returns outputs the readable version of the string
  */
 export const convertDemographicLanguageToReadable = (type: string): string => {
+  // Not Listed is saved as "notListed:<custom text here>"
   const [rootKey, customValue = ''] = type.split(':');
+  let notListedString = 'Not Listed';
+  if (customValue) notListedString = notListedString + `:${customValue}`;
   const typeMap = {
     chineseCantonese: 'Chinese - Cantonese',
     chineseMandarin: 'Chinese - Mandarin',
@@ -722,7 +725,7 @@ export const convertDemographicLanguageToReadable = (type: string): string => {
     russian: 'Russian',
     spanish: 'Spanish',
     vietnamese: 'Vietnamese',
-    notListed: `Not Listed:${customValue}`,
+    notListed: notListedString,
   };
   return typeMap[rootKey] ?? rootKey;
 };

@@ -6,6 +6,7 @@ import { UnitType } from '../../../src/dtos/unit-types/unit-type.dto';
 import { InputType } from '../../../src/enums/shared/input-type-enum';
 import {
   addressToString,
+  convertDemographicLanguageToReadable,
   convertDemographicRaceToReadable,
   getExportHeaders,
   getHouseholdCsvHeaders,
@@ -292,6 +293,29 @@ describe('Testing application export helpers', () => {
     it('tests convertDemographicRaceToReadable with type not in typeMap', () => {
       const custom = 'This is a custom value';
       expect(convertDemographicRaceToReadable(custom)).toBe(custom);
+    });
+  });
+
+  describe('Testing convertDemographicLanguageToReadable', () => {
+    it('tests convertDemographicLanguageToReadable with standard key', () => {
+      expect(convertDemographicLanguageToReadable('chineseMandarin')).toEqual(
+        'Chinese - Mandarin',
+      );
+    });
+    it('tests convertDemographicLanguageToReadable with invalid key', () => {
+      expect(convertDemographicLanguageToReadable('wrongKey')).toEqual(
+        'wrongKey',
+      );
+    });
+    it('tests convertDemographicLanguageToReadable with not listed key and custom value', () => {
+      expect(convertDemographicLanguageToReadable('notListed:Greek')).toEqual(
+        'Not Listed:Greek',
+      );
+    });
+    it('tests convertDemographicLanguageToReadable with not listed key and no custom value', () => {
+      expect(convertDemographicLanguageToReadable('notListed:')).toEqual(
+        'Not Listed',
+      );
     });
   });
 

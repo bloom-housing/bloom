@@ -96,4 +96,41 @@ describe("<FormDemographics>", () => {
     expect(screen.getByLabelText(/South American/i)).toBeInTheDocument()
     expect(screen.getByLabelText(/Other Latino/i)).toBeInTheDocument()
   })
+
+  it("should show spoken language", async () => {
+    render(
+      <FormProviderWrapper>
+        <FormDemographics
+          formValues={{
+            id: "id",
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            race: [],
+            howDidYouHear: [],
+          }}
+        />
+      </FormProviderWrapper>
+    )
+
+    expect(screen.getByRole("combobox", { name: "Spoken Language" })).toBeInTheDocument()
+    expect(screen.getByRole("option", { name: "Chinese - Cantonese" })).toBeInTheDocument()
+    expect(screen.getByRole("option", { name: "Chinese - Mandarin" })).toBeInTheDocument()
+    expect(screen.getByRole("option", { name: "English" })).toBeInTheDocument()
+    expect(screen.getByRole("option", { name: "Filipino" })).toBeInTheDocument()
+    expect(screen.getByRole("option", { name: "Korean" })).toBeInTheDocument()
+    expect(screen.getByRole("option", { name: "Russian" })).toBeInTheDocument()
+    expect(screen.getByRole("option", { name: "Spanish" })).toBeInTheDocument()
+    expect(screen.getByRole("option", { name: "Vietnamese" })).toBeInTheDocument()
+    expect(screen.getByRole("option", { name: "Not Listed" })).toBeInTheDocument()
+    expect(screen.queryAllByRole("textbox", { name: "Please specify:" })).toHaveLength(0)
+
+    await act(async () => {
+      await userEvent.selectOptions(
+        screen.getByRole("combobox", { name: "Spoken Language" }),
+        screen.getByRole("option", { name: "Not Listed" })
+      )
+    })
+
+    expect(screen.getByRole("textbox", { name: "Please specify:" })).toBeInTheDocument()
+  })
 })
