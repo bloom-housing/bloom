@@ -305,6 +305,12 @@ export class ListingService implements OnModuleInit {
         jurisdictions: { some: { id: jurisId } },
       });
     }
+    if (userRoles.includes(UserRoleEnum.limitedJurisdictionAdmin)) {
+      userRolesWhere.push({
+        userRoles: { isLimitedJurisdictionalAdmin: true },
+        jurisdictions: { some: { id: jurisId } },
+      });
+    }
 
     const userResults = await this.prisma.userAccounts.findMany({
       include: {
