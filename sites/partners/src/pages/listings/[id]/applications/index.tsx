@@ -122,6 +122,8 @@ const ApplicationsList = () => {
 
   if (!applications || appsError) return <div>{t("t.errorOccurred")}</div>
 
+  if (profile?.userRoles?.isLimitedJurisdictionalAdmin) return null
+
   return (
     <Layout>
       <Head>
