@@ -105,6 +105,12 @@ describe('Testing user csv export service', () => {
             { isJurisdictionalAdmin: true },
             jurisdiction1,
           ),
+          mockUser(
+            4,
+            new Date(1707846198724),
+            { isLimitedJurisdictionalAdmin: true },
+            jurisdiction2,
+          ),
         ]);
       const exportResponse = await service.exportFile(
         {
@@ -138,6 +144,11 @@ describe('Testing user csv export service', () => {
                 {
                   userRoles: {
                     isJurisdictionalAdmin: true,
+                  },
+                },
+                {
+                  userRoles: {
+                    isLimitedJurisdictionalAdmin: true,
                   },
                 },
               ],
@@ -187,6 +198,12 @@ describe('Testing user csv export service', () => {
             { isJurisdictionalAdmin: true },
             jurisdiction1,
           ),
+          mockUser(
+            4,
+            new Date(1707846198724),
+            { isLimitedJurisdictionalAdmin: true },
+            jurisdiction1,
+          ),
         ]);
       const exportResponse = await service.exportFile(
         {
@@ -216,6 +233,11 @@ describe('Testing user csv export service', () => {
                 {
                   userRoles: {
                     isJurisdictionalAdmin: true,
+                  },
+                },
+                {
+                  userRoles: {
+                    isLimitedJurisdictionalAdmin: true,
                   },
                 },
               ],
