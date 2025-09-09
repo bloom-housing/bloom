@@ -199,6 +199,7 @@ export const stagingSeed = async (
       confirmedAt: new Date(),
       jurisdictionIds: [mainJurisdiction.id],
       acceptedTerms: true,
+      password: 'abcdef',
     }),
   });
   // create a partner
