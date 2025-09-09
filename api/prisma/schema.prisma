@@ -636,6 +636,8 @@ model Listings {
   applicationLotteryTotals              ApplicationLotteryTotal[]
   copyOf                                Listings?                     @relation("copy_of", fields: [copyOfId], references: [id], onUpdate: NoAction)
   Listings                              Listings[]                    @relation("copy_of")
+  lastUpdatedByUserId                   String?                       @map("last_updated_by_user_id") @db.Uuid
+  lastUpdatedByUser                     UserAccounts?                 @relation("last_updated_by_user", fields: [lastUpdatedByUserId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@index([jurisdictionId])
   @@map("listings")
@@ -872,8 +874,10 @@ model UserAccounts {
   userRoles                UserRoles?
   requestedChangesListings Listings[]              @relation("requested_changes_user")
   favoriteListings         Listings[]              @relation("favorite_listings")
+  lastUpdatedListingsByUser Listings[]              @relation("last_updated_by_user")
 
   @@map("user_accounts")
+  
 }
 
 model UserRoles {
