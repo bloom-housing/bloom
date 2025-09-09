@@ -188,13 +188,15 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
         return
       }
 
-      if (!whatToExpectEditor?.storage.characterCount.characters()) {
-        whatToExpectEditor.commands.setContent(selectedJurisdictionData.whatToExpect)
-      }
-      if (!whatToExpectAdditionalDetailsEditor?.storage.characterCount.characters()) {
-        whatToExpectAdditionalDetailsEditor.commands.setContent(
-          selectedJurisdictionData.whatToExpectAdditionalText
-        )
+      if (!editMode) {
+        if (!whatToExpectEditor?.storage.characterCount.characters()) {
+          whatToExpectEditor.commands.setContent(selectedJurisdictionData.whatToExpect)
+        }
+        if (!whatToExpectAdditionalDetailsEditor?.storage.characterCount.characters()) {
+          whatToExpectAdditionalDetailsEditor.commands.setContent(
+            selectedJurisdictionData.whatToExpectAdditionalText
+          )
+        }
       }
     }
     //eslint-disable-next-line

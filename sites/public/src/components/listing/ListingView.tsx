@@ -979,14 +979,16 @@ export const ListingView = (props: ListingProps) => {
               </div>
             )}
             {lotterySection}
-            <ExpandableSection
-              content={<Markdown className={"bloom-markdown"}>{listing.whatToExpect}</Markdown>}
-              strings={{
-                title: t("whatToExpect.label"),
-                readMore: t("t.readMore"),
-                readLess: t("t.readLess"),
-              }}
-            />
+            {listing.whatToExpect && (
+              <ExpandableSection
+                content={<Markdown className={"bloom-markdown"}>{listing.whatToExpect}</Markdown>}
+                strings={{
+                  title: t("whatToExpect.label"),
+                  readMore: t("t.readMore"),
+                  readLess: t("t.readLess"),
+                }}
+              />
+            )}
             {!appOpenInFuture && (
               <Contact
                 sectionTitle={t("leasingAgent.contact")}
