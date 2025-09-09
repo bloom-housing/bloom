@@ -2,6 +2,7 @@ import * as React from "react"
 import { t } from "@bloom-housing/ui-components"
 import { Link } from "@bloom-housing/ui-seeds"
 import { InfoCard } from "./InfoCard"
+import styles from "../ListingViewSeeds.module.scss"
 
 type FurtherInformationProps = {
   instructions?: string
@@ -14,9 +15,15 @@ export const FurtherInformation = ({ instructions, phoneNumber }: FurtherInforma
       <>
         {phoneNumber && (
           <p className={"seeds-m-be-text"}>
-            <Link href={`tel:${phoneNumber.replace(/[-()]/g, "")}`}>{`${t(
-              "t.call"
-            )} ${phoneNumber}`}</Link>
+            <Link
+              className={styles["link-no-gap"]}
+              href={`tel:${phoneNumber.replace(/[-()]/g, "")}`}
+              aria-label={`${t("t.call")} ${phoneNumber}`}
+            >
+              {t("t.call")}
+              &nbsp;
+              <span dir="ltr">{phoneNumber}</span>
+            </Link>
           </p>
         )}
         <p>{instructions || t("application.referralApplication.instructions")}</p>
