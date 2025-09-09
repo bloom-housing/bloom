@@ -2825,6 +2825,17 @@ export interface SuccessDTO {
   success: boolean
 }
 
+export interface IdDTO {
+  /**  */
+  id: string
+
+  /**  */
+  name?: string
+
+  /**  */
+  ordinal?: number
+}
+
 export interface ListingFilterParams {
   /**  */
   $comparison: EnumListingFilterParamsComparison
@@ -2894,6 +2905,9 @@ export interface ListingFilterParams {
 
   /**  */
   zipCode?: string
+
+  /**  */
+  lastUpdatedByUser?: IdDTO
 }
 
 export interface ListingsQueryBody {
@@ -2958,17 +2972,6 @@ export interface PaginationAllowsAllQueryParams {
 
   /**  */
   limit?: number | "all"
-}
-
-export interface IdDTO {
-  /**  */
-  id: string
-
-  /**  */
-  name?: string
-
-  /**  */
-  ordinal?: number
 }
 
 export interface MultiselectLink {
@@ -4176,6 +4179,9 @@ export interface Listing {
 
   /**  */
   listingNeighborhoodAmenities?: ListingNeighborhoodAmenities
+
+  /**  */
+  lastUpdatedByUser?: IdDTO
 }
 
 export interface PaginationMeta {
@@ -4739,6 +4745,9 @@ export interface ListingCreate {
   listingNeighborhoodAmenities?: ListingNeighborhoodAmenities
 
   /**  */
+  lastUpdatedByUser?: IdDTO
+
+  /**  */
   listingMultiselectQuestions?: IdDTO[]
 
   /**  */
@@ -5053,6 +5062,9 @@ export interface ListingUpdate {
 
   /**  */
   listingNeighborhoodAmenities?: ListingNeighborhoodAmenities
+
+  /**  */
+  lastUpdatedByUser?: IdDTO
 
   /**  */
   listingMultiselectQuestions?: IdDTO[]
