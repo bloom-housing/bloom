@@ -78,6 +78,15 @@ export const devSeeding = async (
       jurisdictionIds: [jurisdiction.id],
     }),
   });
+  await prismaClient.userAccounts.create({
+    data: await userFactory({
+      roles: { isLimitedJurisdictionalAdmin: true },
+      email: 'limited-jurisdiction-admin@example.com',
+      confirmedAt: new Date(),
+      jurisdictionIds: [jurisdiction.id],
+      password: 'abcdef',
+    }),
+  });
   // add jurisdiction specific translations and default ones
   await prismaClient.translations.create({
     data: translationFactory(jurisdiction.id, jurisdiction.name),
