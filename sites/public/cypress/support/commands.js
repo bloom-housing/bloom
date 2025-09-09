@@ -55,12 +55,11 @@ Cypress.Commands.add("beginApplicationRejectAutofill", (listingName) => {
   cy.visit("/")
   cy.getByTestId("View Listings-1").click()
   if (Cypress.env("showSeedsDesign")) {
-    cy.getByID("listing-seeds-link").contains(listingName)
-    cy.getByID("listing-seeds-link").eq(1).click()
+    cy.getByID("listing-seeds-link").contains(listingName).parent().click()
   } else {
     cy.getByTestId("map-pagination").should("include.text", "(Page 1 of 10)")
     cy.getByTestId("loading-overlay").should("not.exist")
-    cy.get(".is-card-link").contains(listingName).click({ force: true })
+    cy.get(".is-card-link").contains(listingName).parent().click()
   }
   cy.getByID("listing-view-apply-button").eq(1).click()
   cy.get("[data-testid=sign-in-email-field]").type("admin@example.com")
@@ -85,12 +84,11 @@ Cypress.Commands.add("beginApplicationRejectAutofill", (listingName) => {
 Cypress.Commands.add("beginApplicationSignedIn", (listingName, autofill) => {
   cy.visit("/listings")
   if (Cypress.env("showSeedsDesign")) {
-    cy.getByID("listing-seeds-link").contains(listingName)
-    cy.getByID("listing-seeds-link").eq(1).click()
+    cy.getByID("listing-seeds-link").contains(listingName).parent().click()
   } else {
     cy.getByTestId("map-pagination").should("include.text", "(Page 1 of 10)")
     cy.getByTestId("loading-overlay").should("not.exist")
-    cy.get(".is-card-link").contains(listingName).click({ force: true })
+    cy.get(".is-card-link").contains(listingName).parent().click()
   }
   cy.getByID("listing-view-apply-button").eq(1).click()
   cy.getByID("app-choose-language-button").eq(0).click()
