@@ -59,11 +59,17 @@
       .language {
         &:not(:last-child) {
           margin-inline-end: var(--seeds-s6);
+          @media (--sm-only) {
+            margin-inline-end: var(--seeds-s3);
+          }
         }
       }
       .active-language {
         color: var(--seeds-color-white);
       }
+    }
+    @media (--sm-only) {
+      font-size: var(--seeds-font-size-xs);
     }
   }
 
