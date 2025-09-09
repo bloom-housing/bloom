@@ -3278,28 +3278,7 @@ export interface MultiselectLink {
 
 export interface MultiselectOption {
   /**  */
-  text: string
-
-  /**  */
-  untranslatedText?: string
-
-  /**  */
-  ordinal: number
-
-  /**  */
-  description?: string
-
-  /**  */
-  links?: MultiselectLink[]
-
-  /**  */
   collectAddress?: boolean
-
-  /**  */
-  validationMethod?: ValidationMethodEnum
-
-  /**  */
-  radiusSize?: number
 
   /**  */
   collectName?: boolean
@@ -3308,13 +3287,52 @@ export interface MultiselectOption {
   collectRelationship?: boolean
 
   /**  */
+  description?: string
+
+  /**  */
   exclusive?: boolean
+
+  /**  */
+  isOptOut?: boolean
+
+  /**  */
+  links?: MultiselectLink[]
 
   /**  */
   mapLayerId?: string
 
   /**  */
   mapPinPosition?: string
+
+  /**  */
+  multiselectQuestion?: IdDTO
+
+  /**  */
+  name?: string
+
+  /**  */
+  ordinal: number
+
+  /**  */
+  radiusSize?: number
+
+  /**  */
+  shouldCollectAddress?: boolean
+
+  /**  */
+  shouldCollectName?: boolean
+
+  /**  */
+  shouldCollectRelationship?: boolean
+
+  /**  */
+  text: string
+
+  /**  */
+  untranslatedText?: string
+
+  /**  */
+  validationMethod?: ValidationMethodEnum
 }
 
 export interface MultiselectQuestion {
@@ -3328,25 +3346,31 @@ export interface MultiselectQuestion {
   updatedAt: Date
 
   /**  */
-  text: string
-
-  /**  */
-  untranslatedText?: string
-
-  /**  */
-  untranslatedOptOutText?: string
-
-  /**  */
-  subText?: string
+  applicationSection: MultiselectQuestionsApplicationSectionEnum
 
   /**  */
   description?: string
 
   /**  */
-  links?: MultiselectLink[]
+  isExclusive?: boolean
+
+  /**  */
+  hideFromListing?: boolean
+
+  /**  */
+  jurisdiction?: IdDTO
 
   /**  */
   jurisdictions: IdDTO[]
+
+  /**  */
+  links?: MultiselectLink[]
+
+  /**  */
+  multiselectOptions?: MultiselectOption[]
+
+  /**  */
+  name?: string
 
   /**  */
   options?: MultiselectOption[]
@@ -3355,10 +3379,19 @@ export interface MultiselectQuestion {
   optOutText?: string
 
   /**  */
-  hideFromListing?: boolean
+  status: MultiselectQuestionsStatusEnum
 
   /**  */
-  applicationSection: MultiselectQuestionsApplicationSectionEnum
+  subText?: string
+
+  /**  */
+  text: string
+
+  /**  */
+  untranslatedText?: string
+
+  /**  */
+  untranslatedOptOutText?: string
 }
 
 export interface ListingMultiselectQuestion {
@@ -5584,6 +5617,58 @@ export interface HouseholdMember {
   householdMemberAddress: Address
 }
 
+export interface ApplicationSelectionOptions {
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  addressHolderAddress: IdDTO
+
+  /**  */
+  addressHolderName?: string
+
+  /**  */
+  addressHolderRelationship?: string
+
+  /**  */
+  applicationSelection: IdDTO
+
+  /**  */
+  isGeocodingVerified?: boolean
+
+  /**  */
+  multiselectOption: IdDTO
+}
+
+export interface ApplicationSelections {
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  application: IdDTO
+
+  /**  */
+  hasOptedOut?: boolean
+
+  /**  */
+  multiselectQuestion: IdDTO
+
+  /**  */
+  selections: ApplicationSelectionOptions
+}
+
 export interface ApplicationMultiselectQuestionOption {
   /**  */
   key: string
@@ -5734,6 +5819,9 @@ export interface Application {
 
   /**  */
   householdMember: HouseholdMember[]
+
+  /**  */
+  applicationSelections?: ApplicationSelections[]
 
   /**  */
   preferences?: ApplicationMultiselectQuestion[]
@@ -6181,22 +6269,31 @@ export interface Jurisdiction {
 
 export interface MultiselectQuestionCreate {
   /**  */
-  text: string
-
-  /**  */
-  untranslatedOptOutText?: string
-
-  /**  */
-  subText?: string
+  applicationSection: MultiselectQuestionsApplicationSectionEnum
 
   /**  */
   description?: string
 
   /**  */
-  links?: MultiselectLink[]
+  isExclusive?: boolean
+
+  /**  */
+  hideFromListing?: boolean
+
+  /**  */
+  jurisdiction?: IdDTO
 
   /**  */
   jurisdictions: IdDTO[]
+
+  /**  */
+  links?: MultiselectLink[]
+
+  /**  */
+  multiselectOptions?: MultiselectOption[]
+
+  /**  */
+  name?: string
 
   /**  */
   options?: MultiselectOption[]
@@ -6205,10 +6302,13 @@ export interface MultiselectQuestionCreate {
   optOutText?: string
 
   /**  */
-  hideFromListing?: boolean
+  subText?: string
 
   /**  */
-  applicationSection: MultiselectQuestionsApplicationSectionEnum
+  text: string
+
+  /**  */
+  untranslatedOptOutText?: string
 }
 
 export interface MultiselectQuestionUpdate {
@@ -6216,22 +6316,31 @@ export interface MultiselectQuestionUpdate {
   id: string
 
   /**  */
-  text: string
-
-  /**  */
-  untranslatedOptOutText?: string
-
-  /**  */
-  subText?: string
+  applicationSection: MultiselectQuestionsApplicationSectionEnum
 
   /**  */
   description?: string
 
   /**  */
-  links?: MultiselectLink[]
+  isExclusive?: boolean
+
+  /**  */
+  hideFromListing?: boolean
+
+  /**  */
+  jurisdiction?: IdDTO
 
   /**  */
   jurisdictions: IdDTO[]
+
+  /**  */
+  links?: MultiselectLink[]
+
+  /**  */
+  multiselectOptions?: MultiselectOption[]
+
+  /**  */
+  name?: string
 
   /**  */
   options?: MultiselectOption[]
@@ -6240,10 +6349,13 @@ export interface MultiselectQuestionUpdate {
   optOutText?: string
 
   /**  */
-  hideFromListing?: boolean
+  subText?: string
 
   /**  */
-  applicationSection: MultiselectQuestionsApplicationSectionEnum
+  text: string
+
+  /**  */
+  untranslatedOptOutText?: string
 }
 
 export interface MultiselectQuestionQueryParams {
@@ -6411,6 +6523,9 @@ export interface PublicAppsFiltered {
 
   /**  */
   householdMember: HouseholdMember[]
+
+  /**  */
+  applicationSelections?: ApplicationSelections[]
 
   /**  */
   preferences?: ApplicationMultiselectQuestion[]
@@ -6663,6 +6778,9 @@ export interface ApplicationCreate {
   reviewStatus?: ApplicationReviewStatusEnum
 
   /**  */
+  applicationSelections?: ApplicationSelections[]
+
+  /**  */
   preferences?: ApplicationMultiselectQuestion[]
 
   /**  */
@@ -6762,6 +6880,9 @@ export interface ApplicationUpdate {
 
   /**  */
   reviewStatus?: ApplicationReviewStatusEnum
+
+  /**  */
+  applicationSelections?: ApplicationSelections[]
 
   /**  */
   preferences?: ApplicationMultiselectQuestion[]
@@ -7412,15 +7533,22 @@ export enum LotteryStatusEnum {
   "expired" = "expired",
 }
 
+export enum MultiselectQuestionsApplicationSectionEnum {
+  "programs" = "programs",
+  "preferences" = "preferences",
+}
+
 export enum ValidationMethodEnum {
   "radius" = "radius",
   "map" = "map",
   "none" = "none",
 }
 
-export enum MultiselectQuestionsApplicationSectionEnum {
-  "programs" = "programs",
-  "preferences" = "preferences",
+export enum MultiselectQuestionsStatusEnum {
+  "draft" = "draft",
+  "active" = "active",
+  "toRetire" = "toRetire",
+  "retired" = "retired",
 }
 
 export enum ApplicationMethodsTypeEnum {
