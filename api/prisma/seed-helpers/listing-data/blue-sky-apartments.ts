@@ -16,7 +16,7 @@ export const blueSkyApartments = {
   additionalApplicationSubmissionNotes: null,
   digitalApplication: true,
   commonDigitalApplication: true,
-  paperApplication: true,
+  paperApplication: false,
   referralOpportunity: false,
   assets: [],
   accessibility: null,
