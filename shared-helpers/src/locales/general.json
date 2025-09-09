@@ -152,7 +152,7 @@
   "application.contact.streetAddress": "Street address",
   "application.contact.suggestedAddress": "Suggested address:",
   "application.contact.verifyMultipleAddresses": "Since there are multiple options for this preference, you’ll need to verify multiple addresses.",
-  "application.contact.title": "Thanks, %{firstName}. Now we need to know how to contact you about your application",
+  "application.contact.title": "Thanks %{firstName}, now we need to know how to contact you about your application",
   "application.contact.verifyAddressTitle": "We have located the following address, please confirm it's correct",
   "application.contact.workAddress": "Work address",
   "application.contact.youEntered": "You entered:",

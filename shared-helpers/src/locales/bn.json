@@ -151,7 +151,7 @@
   "application.contact.state": "রাষ্ট্র",
   "application.contact.streetAddress": "রাস্তার ঠিকানা",
   "application.contact.suggestedAddress": "প্রস্তাবিত ঠিকানা:",
-  "application.contact.title": "ধন্যবাদ %{firstName}। এখন আমাদের জানতে হবে কিভাবে আপনার সাথে যোগাযোগ করতে হয়",
+  "application.contact.title": "ধন্যবাদ %{firstName}, এখন আমাদের জানতে হবে কিভাবে আপনার সাথে যোগাযোগ করতে হয়",
   "application.contact.verifyAddressTitle": "আমরা নিম্নলিখিত ঠিকানাটি খুঁজে পেয়েছি, দয়া করে নিশ্চিত করুন যে এটি সঠিক",
   "application.contact.verifyMultipleAddresses": "যেহেতু এই পছন্দের জন্য একাধিক বিকল্প রয়েছে, তাই আপনাকে একাধিক ঠিকানা যাচাই করতে হবে।",
   "application.contact.workAddress": "কর্মস্থলের ঠিকানা",

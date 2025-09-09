@@ -151,7 +151,7 @@
   "application.contact.state": "Estado",
   "application.contact.streetAddress": "Domicilio",
   "application.contact.suggestedAddress": "Dirección sugerida:",
-  "application.contact.title": "Gracias, %{firstName}. Ahora necesitamos saber cómo comunicarnos con usted acerca de su solicitud",
+  "application.contact.title": "Gracias %{firstName}, ahora necesitamos saber cómo comunicarnos con usted acerca de su solicitud",
   "application.contact.verifyAddressTitle": "Hemos localizado la siguiente dirección. Por favor, confirme que sea la dirección correcta.",
   "application.contact.verifyMultipleAddresses": "Dado que existen varias opciones para esta preferencia, deberá verificar varias direcciones.",
   "application.contact.workAddress": "Dirección del trabajo",

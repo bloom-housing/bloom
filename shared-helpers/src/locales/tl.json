@@ -151,7 +151,7 @@
   "application.contact.state": "State",
   "application.contact.streetAddress": "Address ng kalye",
   "application.contact.suggestedAddress": "Iminungkahing address:",
-  "application.contact.title": "Salamat, %{firstName}. Ngayon ay kailangan naming malaman kung paano makipag-ugnayan sa iyo tungkol sa iyong aplikasyon",
+  "application.contact.title": "Salamat %{firstName}, ngayon ay kailangan naming malaman kung paano makipag-ugnayan sa iyo tungkol sa iyong aplikasyon",
   "application.contact.verifyAddressTitle": "Nahanap namin ang sumusunod na address, pakikumpirma kung tama ito",
   "application.contact.verifyMultipleAddresses": "Dahil maraming opsyon para sa kagustuhang ito, kakailanganin mong i-verify ang maraming address.",
   "application.contact.workAddress": "Address ng trabaho",
