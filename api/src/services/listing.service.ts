@@ -148,6 +148,7 @@ views.full = {
     },
   },
   listingsResult: true,
+  lastUpdatedByUser: true,
   listingsLeasingAgentAddress: true,
   listingsApplicationPickUpAddress: true,
   listingsApplicationDropOffAddress: true,
@@ -1224,7 +1225,6 @@ export class ListingService implements OnModuleInit {
         jurisdictionId: dto.jurisdictions.id,
       },
     );
-
     const rawJurisdiction = await this.prisma.jurisdictions.findFirst({
       where: {
         id: dto.jurisdictions.id,
@@ -1552,6 +1552,13 @@ export class ListingService implements OnModuleInit {
         publishedAt:
           dto.status === ListingsStatusEnum.active ? new Date() : undefined,
         contentUpdatedAt: new Date(),
+        lastUpdatedByUser: requestingUser
+          ? {
+              connect: {
+                id: requestingUser.id,
+              },
+            }
+          : undefined,
         section8Acceptance: !!dto.section8Acceptance,
         copyOf: copyOfId
           ? {
@@ -1563,7 +1570,6 @@ export class ListingService implements OnModuleInit {
         isVerified: !!dto.isVerified,
       },
     });
-
     if (rawListing.status === ListingsStatusEnum.pendingReview) {
       const jurisdiction = await this.prisma.jurisdictions.findFirst({
         where: {
@@ -2368,6 +2374,13 @@ export class ListingService implements OnModuleInit {
               }
             : undefined,
           contentUpdatedAt: new Date(),
+          lastUpdatedByUser: requestingUser
+            ? {
+                connect: {
+                  id: requestingUser.id,
+                },
+              }
+            : undefined,
           publishedAt:
             storedListing.status !== ListingsStatusEnum.active &&
             incomingDto.status === ListingsStatusEnum.active
