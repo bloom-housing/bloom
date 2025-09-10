@@ -2825,17 +2825,6 @@ export interface SuccessDTO {
   success: boolean
 }
 
-export interface IdDTO {
-  /**  */
-  id: string
-
-  /**  */
-  name?: string
-
-  /**  */
-  ordinal?: number
-}
-
 export interface ListingFilterParams {
   /**  */
   $comparison: EnumListingFilterParamsComparison
@@ -2905,9 +2894,6 @@ export interface ListingFilterParams {
 
   /**  */
   zipCode?: string
-
-  /**  */
-  lastUpdatedByUser?: IdDTO
 }
 
 export interface ListingsQueryBody {
@@ -2972,6 +2958,17 @@ export interface PaginationAllowsAllQueryParams {
 
   /**  */
   limit?: number | "all"
+}
+
+export interface IdDTO {
+  /**  */
+  id: string
+
+  /**  */
+  name?: string
+
+  /**  */
+  ordinal?: number
 }
 
 export interface MultiselectLink {
@@ -5434,6 +5431,9 @@ export interface Application {
 
   /**  */
   applicationLotteryPositions: ApplicationLotteryPosition[]
+
+  /**  */
+  isNewest?: boolean
 }
 
 export interface ApplicationFlaggedSet {
@@ -6095,6 +6095,9 @@ export interface PublicAppsFiltered {
   applicationLotteryPositions: ApplicationLotteryPosition[]
 
   /**  */
+  isNewest?: boolean
+
+  /**  */
   listings: Listing
 }
 
@@ -6336,6 +6339,9 @@ export interface ApplicationCreate {
   listings: IdDTO
 
   /**  */
+  isNewest?: boolean
+
+  /**  */
   applicant: ApplicantUpdate
 
   /**  */
@@ -6429,6 +6435,9 @@ export interface ApplicationUpdate {
 
   /**  */
   listings: IdDTO
+
+  /**  */
+  isNewest?: boolean
 
   /**  */
   applicant: ApplicantUpdate
