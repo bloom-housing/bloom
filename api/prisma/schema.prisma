@@ -238,6 +238,10 @@ model Applications {
   wasCreatedExternally         Boolean                       @default(false) @map("was_created_externally")
   userId                       String?                       @map("user_id") @db.Uuid
   listingId                    String?                       @map("listing_id") @db.Uuid
+  // The newest application for the user
+  isNewest                     Boolean?                      @default(false) @map("is_newest")
+  wasPIICleared                Boolean?                      @default(false) @map("was_pii_cleared")
+  expireAfter                  DateTime?                     @map("expire_after")
   applicantId                  String?                       @unique() @map("applicant_id") @db.Uuid
   mailingAddressId             String?                       @unique() @map("mailing_address_id") @db.Uuid
   alternateAddressId           String?                       @unique() @map("alternate_address_id") @db.Uuid
@@ -261,6 +265,9 @@ model Applications {
   @@unique([listingId, confirmationCode])
   @@index([listingId])
   @@index([userId])
+  @@index([isNewest])
+  @@index([wasPIICleared])
+  @@index([expireAfter])
   @@map("applications")
 }
 
@@ -374,7 +381,7 @@ model Jurisdictions {
   publicUrl                     String                   @default("") @map("public_url")
   emailFromAddress              String?                  @map("email_from_address")
   rentalAssistanceDefault       String                   @map("rental_assistance_default")
-  whatToExpect                  String                   @default("") @map("what_to_expect")
+  whatToExpect                  String                   @default("Applicants will be contacted by the property agent in rank order until vacancies are filled. All of the information that you have provided will be verified and your eligibility confirmed. Your application will be removed from the waitlist if you have made any fraudulent statements. If we cannot verify a housing preference that you have claimed, you will not receive the preference but will not be otherwise penalized. Should your application be chosen, be prepared to fill out a more detailed application and provide required supporting documents.") @map("what_to_expect")
   whatToExpectAdditionalText    String                   @default("") @map("what_to_expect_additional_text")
   whatToExpectUnderConstruction String                   @default("") @map("what_to_expect_under_construction")
   enablePartnerSettings         Boolean                  @default(false) @map("enable_partner_settings")
@@ -897,45 +904,47 @@ model UnitsSummary {
 // Note: [email] formerly lower case enforced formerly had an isEmail validator
 // Note: [phone_number] formerly had a phone number validator
 model UserAccounts {
-  id                       String                  @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  passwordHash             String                  @map("password_hash") @db.VarChar
-  passwordUpdatedAt        DateTime                @default(now()) @map("password_updated_at") @db.Timestamp(6)
-  passwordValidForDays     Int                     @default(365) @map("password_valid_for_days")
-  resetToken               String?                 @map("reset_token") @db.VarChar
-  confirmationToken        String?                 @map("confirmation_token") @db.VarChar
-  confirmedAt              DateTime?               @map("confirmed_at") @db.Timestamptz(6)
-  email                    String                  @unique() @db.VarChar
-  firstName                String                  @map("first_name") @db.VarChar
-  middleName               String?                 @map("middle_name") @db.VarChar
-  lastName                 String                  @map("last_name") @db.VarChar
-  dob                      DateTime?               @db.Timestamp(6)
-  phoneNumber              String?                 @map("phone_number") @db.VarChar
-  createdAt                DateTime                @default(now()) @map("created_at") @db.Timestamp(6)
-  updatedAt                DateTime                @updatedAt @map("updated_at") @db.Timestamp(6)
-  language                 LanguagesEnum?
-  mfaEnabled               Boolean                 @default(false) @map("mfa_enabled")
-  singleUseCode            String?                 @map("single_use_code") @db.VarChar
-  singleUseCodeUpdatedAt   DateTime?               @map("single_use_code_updated_at") @db.Timestamptz(6)
-  lastLoginAt              DateTime                @default(now()) @map("last_login_at") @db.Timestamp(6)
-  failedLoginAttemptsCount Int                     @default(0) @map("failed_login_attempts_count")
-  phoneNumberVerified      Boolean?                @default(false) @map("phone_number_verified")
-  agreedToTermsOfService   Boolean                 @default(false) @map("agreed_to_terms_of_service")
-  hitConfirmationUrl       DateTime?               @map("hit_confirmation_url") @db.Timestamptz(6)
-  activeAccessToken        String?                 @map("active_access_token") @db.VarChar
-  activeRefreshToken       String?                 @map("active_refresh_token") @db.VarChar
-  activityLogs             ActivityLog[]
-  applicationFlaggedSet    ApplicationFlaggedSet[]
-  applications             Applications[]
-  listings                 Listings[]
-  jurisdictions            Jurisdictions[]
-  userPreferences          UserPreferences?
-  userRoles                UserRoles?
-  requestedChangesListings Listings[]              @relation("requested_changes_user")
-  favoriteListings         Listings[]              @relation("favorite_listings")
+  id                        String                  @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  passwordHash              String                  @map("password_hash") @db.VarChar
+  passwordUpdatedAt         DateTime                @default(now()) @map("password_updated_at") @db.Timestamp(6)
+  passwordValidForDays      Int                     @default(365) @map("password_valid_for_days")
+  resetToken                String?                 @map("reset_token") @db.VarChar
+  confirmationToken         String?                 @map("confirmation_token") @db.VarChar
+  confirmedAt               DateTime?               @map("confirmed_at") @db.Timestamptz(6)
+  email                     String                  @unique() @db.VarChar
+  firstName                 String                  @map("first_name") @db.VarChar
+  middleName                String?                 @map("middle_name") @db.VarChar
+  lastName                  String                  @map("last_name") @db.VarChar
+  dob                       DateTime?               @db.Timestamp(6)
+  phoneNumber               String?                 @map("phone_number") @db.VarChar
+  createdAt                 DateTime                @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt                 DateTime                @updatedAt @map("updated_at") @db.Timestamp(6)
+  language                  LanguagesEnum?
+  mfaEnabled                Boolean                 @default(false) @map("mfa_enabled")
+  singleUseCode             String?                 @map("single_use_code") @db.VarChar
+  singleUseCodeUpdatedAt    DateTime?               @map("single_use_code_updated_at") @db.Timestamptz(6)
+  lastLoginAt               DateTime                @default(now()) @map("last_login_at") @db.Timestamp(6)
+  failedLoginAttemptsCount  Int                     @default(0) @map("failed_login_attempts_count")
+  phoneNumberVerified       Boolean?                @default(false) @map("phone_number_verified")
+  agreedToTermsOfService    Boolean                 @default(false) @map("agreed_to_terms_of_service")
+  hitConfirmationUrl        DateTime?               @map("hit_confirmation_url") @db.Timestamptz(6)
+  activeAccessToken         String?                 @map("active_access_token") @db.VarChar
+  activeRefreshToken        String?                 @map("active_refresh_token") @db.VarChar
+  activityLogs              ActivityLog[]
+  applicationFlaggedSet     ApplicationFlaggedSet[]
+  applications              Applications[]
+  listings                  Listings[]
+  jurisdictions             Jurisdictions[]
+  userPreferences           UserPreferences?
+  userRoles                 UserRoles?
+  requestedChangesListings  Listings[]              @relation("requested_changes_user")
+  favoriteListings          Listings[]              @relation("favorite_listings")
   lastUpdatedListingsByUser Listings[]              @relation("last_updated_by_user")
+  wasWarnedOfDeletion       Boolean?                @default(false) @map("was_warned_of_deletion")
 
   @@map("user_accounts")
-  
+  @@index([lastLoginAt])
+  @@index([wasWarnedOfDeletion])
 }
 
 model UserRoles {
