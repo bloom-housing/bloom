@@ -206,6 +206,16 @@
     }
   }
 
+  @media (--sm-only) {
+    .language-nav__list {
+      font-size: var(--seeds-font-size-xs);
+
+      .language-nav__list-button {
+        padding-inline: var(--seeds-s1_5);
+      }
+    }
+  }
+
   // Used in core for theming testing purposes only
   .lakeview {
     --seeds-color-primary-darker: #4e2169;
