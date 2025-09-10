@@ -900,7 +900,7 @@ model UserAccounts {
   id                       String                  @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   passwordHash             String                  @map("password_hash") @db.VarChar
   passwordUpdatedAt        DateTime                @default(now()) @map("password_updated_at") @db.Timestamp(6)
-  passwordValidForDays     Int                     @default(180) @map("password_valid_for_days")
+  passwordValidForDays     Int                     @default(365) @map("password_valid_for_days")
   resetToken               String?                 @map("reset_token") @db.VarChar
   confirmationToken        String?                 @map("confirmation_token") @db.VarChar
   confirmedAt              DateTime?               @map("confirmed_at") @db.Timestamptz(6)
