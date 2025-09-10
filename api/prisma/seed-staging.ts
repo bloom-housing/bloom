@@ -88,6 +88,7 @@ export const stagingSeed = async (
     data: jurisdictionFactory('Lakeview', {
       featureFlags: [
         FeatureFlagEnum.disableJurisdictionalAdmin,
+        FeatureFlagEnum.disableLimitedJurisdictionalAdmin,
         FeatureFlagEnum.disableListingPreferences,
         FeatureFlagEnum.disableWorkInRegion,
         FeatureFlagEnum.enableAccessibilityFeatures,
