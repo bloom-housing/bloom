@@ -1620,6 +1620,10 @@ export class ListingService implements OnModuleInit {
         duplicateListingPermissions?.includes(
           UserRoleEnum.jurisdictionAdmin,
         )) ||
+      (requestingUser?.userRoles?.isLimitedJurisdictionalAdmin &&
+        duplicateListingPermissions?.includes(
+          UserRoleEnum.limitedJurisdictionAdmin,
+        )) ||
       (requestingUser?.userRoles?.isPartner &&
         duplicateListingPermissions?.includes(UserRoleEnum.partner))
         ? {
