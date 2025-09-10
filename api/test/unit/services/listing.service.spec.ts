@@ -4610,21 +4610,6 @@ describe('Testing listing service', () => {
       expect(prisma.listings.findUnique).toHaveBeenCalledWith({
         include: {
           jurisdictions: true,
-          listingFeatures: true,
-          listingImages: {
-            include: {
-              assets: true,
-            },
-          },
-          listingMultiselectQuestions: {
-            include: {
-              multiselectQuestions: true,
-            },
-          },
-          listingUtilities: true,
-          listingNeighborhoodAmenities: true,
-          listingsBuildingAddress: true,
-          reservedCommunityTypes: true,
         },
         where: {
           id: id,
