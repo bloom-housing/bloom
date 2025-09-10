@@ -3,7 +3,10 @@ import { PrismaService } from '../../../src/services/prisma.service';
 import { MultiselectQuestionService } from '../../../src/services/multiselect-question.service';
 import { MultiselectQuestionCreate } from '../../../src/dtos/multiselect-questions/multiselect-question-create.dto';
 import { MultiselectQuestionUpdate } from '../../../src/dtos/multiselect-questions/multiselect-question-update.dto';
-import { MultiselectQuestionsApplicationSectionEnum } from '@prisma/client';
+import {
+  MultiselectQuestionsApplicationSectionEnum,
+  MultiselectQuestionsStatusEnum,
+} from '@prisma/client';
 import { MultiselectQuestionQueryParams } from '../../../src/dtos/multiselect-questions/multiselect-question-query-params.dto';
 import { Compare } from '../../../src/dtos/shared/base-filter.dto';
 import { randomUUID } from 'crypto';
@@ -26,7 +29,7 @@ export const mockMultiselectQuestion = (
     hideFromListing: false,
     applicationSection:
       section ?? MultiselectQuestionsApplicationSectionEnum.programs,
-    jurisdictions: [{ name: `jurisdiction${position}`, id: randomUUID() }],
+    jurisdiction: { name: `jurisdiction${position}`, id: randomUUID() },
   };
 };
 
@@ -66,18 +69,18 @@ describe('Testing multiselect question service', () => {
           id: mockedValue[0].id,
           createdAt: date,
           updatedAt: date,
-          text: `text 0`,
-          subText: `subText 0`,
-          description: `description 0`,
+          text: 'text 0',
+          subText: 'subText 0',
+          description: 'description 0',
           links: [],
           options: [],
-          optOutText: `optOutText 0`,
+          optOutText: 'optOutText 0',
           hideFromListing: false,
           applicationSection:
             MultiselectQuestionsApplicationSectionEnum.programs,
           jurisdictions: [
             {
-              id: mockedValue[0].jurisdictions[0].id,
+              id: mockedValue[0].jurisdiction.id,
               name: 'jurisdiction0',
               ordinal: undefined,
             },
@@ -87,18 +90,18 @@ describe('Testing multiselect question service', () => {
           id: mockedValue[1].id,
           createdAt: date,
           updatedAt: date,
-          text: `text 1`,
-          subText: `subText 1`,
-          description: `description 1`,
+          text: 'text 1',
+          subText: 'subText 1',
+          description: 'description 1',
           links: [],
           options: [],
-          optOutText: `optOutText 1`,
+          optOutText: 'optOutText 1',
           hideFromListing: false,
           applicationSection:
             MultiselectQuestionsApplicationSectionEnum.programs,
           jurisdictions: [
             {
-              id: mockedValue[1].jurisdictions[0].id,
+              id: mockedValue[1].jurisdiction.id,
               name: 'jurisdiction1',
               ordinal: undefined,
             },
@@ -108,18 +111,18 @@ describe('Testing multiselect question service', () => {
           id: mockedValue[2].id,
           createdAt: date,
           updatedAt: date,
-          text: `text 2`,
-          subText: `subText 2`,
-          description: `description 2`,
+          text: 'text 2',
+          subText: 'subText 2',
+          description: 'description 2',
           links: [],
           options: [],
-          optOutText: `optOutText 2`,
+          optOutText: 'optOutText 2',
           hideFromListing: false,
           applicationSection:
             MultiselectQuestionsApplicationSectionEnum.programs,
           jurisdictions: [
             {
-              id: mockedValue[2].jurisdictions[0].id,
+              id: mockedValue[2].jurisdiction.id,
               name: 'jurisdiction2',
               ordinal: undefined,
             },
@@ -129,7 +132,7 @@ describe('Testing multiselect question service', () => {
 
       expect(prisma.multiselectQuestions.findMany).toHaveBeenCalledWith({
         include: {
-          jurisdictions: true,
+          jurisdiction: true,
         },
         where: {
           AND: [],
@@ -159,18 +162,18 @@ describe('Testing multiselect question service', () => {
           id: mockedValue[0].id,
           createdAt: date,
           updatedAt: date,
-          text: `text 0`,
-          subText: `subText 0`,
-          description: `description 0`,
+          text: 'text 0',
+          subText: 'subText 0',
+          description: 'description 0',
           links: [],
           options: [],
-          optOutText: `optOutText 0`,
+          optOutText: 'optOutText 0',
           hideFromListing: false,
           applicationSection:
             MultiselectQuestionsApplicationSectionEnum.programs,
           jurisdictions: [
             {
-              id: mockedValue[0].jurisdictions[0].id,
+              id: mockedValue[0].jurisdiction.id,
               name: 'jurisdiction0',
               ordinal: undefined,
             },
@@ -180,18 +183,18 @@ describe('Testing multiselect question service', () => {
           id: mockedValue[1].id,
           createdAt: date,
           updatedAt: date,
-          text: `text 1`,
-          subText: `subText 1`,
-          description: `description 1`,
+          text: 'text 1',
+          subText: 'subText 1',
+          description: 'description 1',
           links: [],
           options: [],
-          optOutText: `optOutText 1`,
+          optOutText: 'optOutText 1',
           hideFromListing: false,
           applicationSection:
             MultiselectQuestionsApplicationSectionEnum.programs,
           jurisdictions: [
             {
-              id: mockedValue[1].jurisdictions[0].id,
+              id: mockedValue[1].jurisdiction.id,
               name: 'jurisdiction1',
               ordinal: undefined,
             },
@@ -201,18 +204,18 @@ describe('Testing multiselect question service', () => {
           id: mockedValue[2].id,
           createdAt: date,
           updatedAt: date,
-          text: `text 2`,
-          subText: `subText 2`,
-          description: `description 2`,
+          text: 'text 2',
+          subText: 'subText 2',
+          description: 'description 2',
           links: [],
           options: [],
-          optOutText: `optOutText 2`,
+          optOutText: 'optOutText 2',
           hideFromListing: false,
           applicationSection:
             MultiselectQuestionsApplicationSectionEnum.programs,
           jurisdictions: [
             {
-              id: mockedValue[2].jurisdictions[0].id,
+              id: mockedValue[2].jurisdiction.id,
               name: 'jurisdiction2',
               ordinal: undefined,
             },
@@ -222,7 +225,7 @@ describe('Testing multiselect question service', () => {
 
       expect(prisma.multiselectQuestions.findMany).toHaveBeenCalledWith({
         include: {
-          jurisdictions: true,
+          jurisdiction: true,
         },
         where: {
           AND: [
@@ -253,17 +256,17 @@ describe('Testing multiselect question service', () => {
         id: mockedValue.id,
         createdAt: date,
         updatedAt: date,
-        text: `text 3`,
-        subText: `subText 3`,
-        description: `description 3`,
+        text: 'text 3',
+        subText: 'subText 3',
+        description: 'description 3',
         links: [],
         options: [],
-        optOutText: `optOutText 3`,
+        optOutText: 'optOutText 3',
         hideFromListing: false,
         applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
         jurisdictions: [
           {
-            id: mockedValue.jurisdictions[0].id,
+            id: mockedValue.jurisdiction.id,
             name: 'jurisdiction3',
             ordinal: undefined,
           },
@@ -277,7 +280,7 @@ describe('Testing multiselect question service', () => {
           },
         },
         include: {
-          jurisdictions: true,
+          jurisdiction: true,
         },
       });
     });
@@ -296,7 +299,7 @@ describe('Testing multiselect question service', () => {
           },
         },
         include: {
-          jurisdictions: true,
+          jurisdiction: true,
         },
       });
     });
@@ -311,12 +314,12 @@ describe('Testing multiselect question service', () => {
         .mockResolvedValue(mockedValue);
 
       const params: MultiselectQuestionCreate = {
-        text: `text 4`,
-        subText: `subText 4`,
-        description: `description 4`,
+        text: 'text 4',
+        subText: 'subText 4',
+        description: 'description 4',
         links: [],
         options: [],
-        optOutText: `optOutText 4`,
+        optOutText: 'optOutText 4',
         hideFromListing: false,
         applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
         jurisdictions: [{ id: 'jurisdiction id' }],
@@ -326,17 +329,17 @@ describe('Testing multiselect question service', () => {
         id: mockedValue.id,
         createdAt: date,
         updatedAt: date,
-        text: `text 3`,
-        subText: `subText 3`,
-        description: `description 3`,
+        text: 'text 3',
+        subText: 'subText 3',
+        description: 'description 3',
         links: [],
         options: [],
-        optOutText: `optOutText 3`,
+        optOutText: 'optOutText 3',
         hideFromListing: false,
         applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
         jurisdictions: [
           {
-            id: mockedValue.jurisdictions[0].id,
+            id: mockedValue.jurisdiction.id,
             name: 'jurisdiction3',
             ordinal: undefined,
           },
@@ -345,19 +348,23 @@ describe('Testing multiselect question service', () => {
 
       expect(prisma.multiselectQuestions.create).toHaveBeenCalledWith({
         data: {
-          text: `text 4`,
-          subText: `subText 4`,
-          description: `description 4`,
-          links: [],
-          options: [],
-          optOutText: `optOutText 4`,
-          hideFromListing: false,
           applicationSection:
             MultiselectQuestionsApplicationSectionEnum.programs,
-          jurisdictions: { connect: [{ id: 'jurisdiction id' }] },
+          description: 'description 4',
+          isExclusive: false,
+          hideFromListing: false,
+          jurisdiction: { connect: { id: 'jurisdiction id' } },
+          links: [],
+          multiselectOptions: undefined,
+          name: 'text 4',
+          options: [],
+          optOutText: 'optOutText 4',
+          status: MultiselectQuestionsStatusEnum.draft,
+          subText: 'subText 4',
+          text: 'text 4',
         },
         include: {
-          jurisdictions: true,
+          jurisdiction: true,
         },
       });
     });
@@ -377,11 +384,12 @@ describe('Testing multiselect question service', () => {
         text: '',
         applicationSection:
           MultiselectQuestionsApplicationSectionEnum.preferences,
+        jurisdiction: { name: 'jurisdiction1', id: 'jurisdictionId' },
       });
 
       const params: MultiselectQuestionUpdate = {
         id: mockedMultiselectQuestions.id,
-        jurisdictions: [],
+        jurisdictions: [{ name: 'jurisdiction1', id: 'jurisdictionId' }],
         text: '',
         applicationSection:
           MultiselectQuestionsApplicationSectionEnum.preferences,
@@ -392,18 +400,18 @@ describe('Testing multiselect question service', () => {
         createdAt: date,
         updatedAt: date,
         text: '',
-        subText: `subText 3`,
-        description: `description 3`,
+        subText: 'subText 3',
+        description: 'description 3',
         links: [],
         options: [],
-        optOutText: `optOutText 3`,
+        optOutText: 'optOutText 3',
         hideFromListing: false,
         applicationSection:
           MultiselectQuestionsApplicationSectionEnum.preferences,
         jurisdictions: [
           {
-            id: mockedMultiselectQuestions.jurisdictions[0].id,
-            name: 'jurisdiction3',
+            id: 'jurisdictionId',
+            name: 'jurisdiction1',
             ordinal: undefined,
           },
         ],
@@ -411,7 +419,7 @@ describe('Testing multiselect question service', () => {
 
       expect(prisma.multiselectQuestions.findFirst).toHaveBeenCalledWith({
         include: {
-          jurisdictions: true,
+          jurisdiction: true,
         },
         where: {
           id: mockedMultiselectQuestions.id,
@@ -420,76 +428,21 @@ describe('Testing multiselect question service', () => {
 
       expect(prisma.multiselectQuestions.update).toHaveBeenCalledWith({
         data: {
-          jurisdictions: {
-            connect: [],
-          },
-          text: '',
           applicationSection:
             MultiselectQuestionsApplicationSectionEnum.preferences,
-        },
-        where: {
-          id: mockedMultiselectQuestions.id,
-        },
-        include: {
-          jurisdictions: true,
-        },
-      });
-    });
-
-    it('should update jurisdiction and disconnect old jurisdiction()', async () => {
-      const date = new Date();
-
-      const mockedMultiselectQuestions = mockMultiselectQuestion(3, date);
-
-      prisma.multiselectQuestions.findFirst = jest
-        .fn()
-        .mockResolvedValue(mockedMultiselectQuestions);
-      prisma.multiselectQuestions.update = jest.fn();
-
-      const params: MultiselectQuestionUpdate = {
-        id: mockedMultiselectQuestions.id,
-        jurisdictions: [{ name: 'jurisdiction1', id: 'jurisdictionId' }],
-        text: '',
-        applicationSection:
-          MultiselectQuestionsApplicationSectionEnum.preferences,
-      };
-
-      await service.update(params);
-      expect(prisma.multiselectQuestions.findFirst).toHaveBeenCalledWith({
-        include: {
-          jurisdictions: true,
-        },
-        where: {
-          id: mockedMultiselectQuestions.id,
-        },
-      });
-      expect(prisma.multiselectQuestions.update).toHaveBeenCalledWith({
-        data: {
-          jurisdictions: {
-            disconnect: [
-              { id: mockedMultiselectQuestions.jurisdictions[0].id },
-            ],
-          },
-        },
-        where: {
-          id: mockedMultiselectQuestions.id,
-        },
-      });
-
-      expect(prisma.multiselectQuestions.update).toHaveBeenCalledWith({
-        data: {
-          jurisdictions: {
-            connect: [{ id: 'jurisdictionId' }],
-          },
+          isExclusive: false,
+          links: undefined,
+          jurisdiction: { connect: { id: 'jurisdictionId' } },
+          multiselectOptions: undefined,
+          name: '',
+          options: undefined,
           text: '',
-          applicationSection:
-            MultiselectQuestionsApplicationSectionEnum.preferences,
         },
         where: {
           id: mockedMultiselectQuestions.id,
         },
         include: {
-          jurisdictions: true,
+          jurisdiction: true,
         },
       });
     });
@@ -511,7 +464,7 @@ describe('Testing multiselect question service', () => {
 
       expect(prisma.multiselectQuestions.findFirst).toHaveBeenCalledWith({
         include: {
-          jurisdictions: true,
+          jurisdiction: true,
         },
         where: {
           id: 'example id',
@@ -543,7 +496,7 @@ describe('Testing multiselect question service', () => {
 
       expect(prisma.multiselectQuestions.findFirst).toHaveBeenCalledWith({
         include: {
-          jurisdictions: true,
+          jurisdiction: true,
         },
         where: {
           id: 'example Id',
