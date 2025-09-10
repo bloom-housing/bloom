@@ -28,8 +28,7 @@ export const OrderedSection = (props: OrderedSectionProps) => {
           <HeadingGroup
             heading={props.title}
             subheading={props.subtitle}
-            headingPriority={3}
-            size={"lg"}
+            headingProps={{ size: "lg", priority: 3 }}
             className={`${styles["heading"]}`}
           />
           {props.children && <div className={"seeds-m-bs-content"}>{props.children}</div>}
