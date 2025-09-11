@@ -344,6 +344,72 @@ describe('Testing email service', () => {
         'You may be contacted while on the waitlist to confirm that you wish to remain on the waitlist',
       );
     });
+
+    it('Test leasing agent section with all fields present', async () => {
+      const listingWithLeasingAgent = {
+        ...listing,
+        leasingAgentName: 'John Doe',
+        leasingAgentTitle: 'Property Manager',
+        leasingAgentPhone: '(555) 123-4567',
+        leasingAgentEmail: 'john.doe@example.com',
+        leasingAgentOfficeHours: 'Monday-Friday 9AM-5PM',
+      };
+
+      await service.applicationConfirmation(
+        listingWithLeasingAgent,
+        application as ApplicationCreate,
+        'http://localhost:3001',
+      );
+
+      expect(sendMock).toHaveBeenCalled();
+      const emailHtml = sendMock.mock.calls[0][0].html;
+
+      expect(emailHtml).toContain('<h3>Property Manager</h3>');
+      expect(emailHtml).toContain('John Doe<br />');
+      expect(emailHtml).toContain('Property Manager<br />');
+      expect(emailHtml).toContain('(555) 123-4567<br />');
+      expect(emailHtml).toContain('john.doe@example.com<br />');
+
+      expect(emailHtml).toContain('<h3>Office Hours:</h3>');
+      expect(emailHtml).toContain('Monday-Friday 9AM-5PM');
+    });
+
+    it('Test leasing agent section with partial fields present', async () => {
+      const listingWithPartialLeasingAgent = {
+        ...listing,
+        leasingAgentName: 'John Doe',
+        leasingAgentPhone: '(555) 123-4567',
+      };
+
+      await service.applicationConfirmation(
+        listingWithPartialLeasingAgent,
+        application as ApplicationCreate,
+        'http://localhost:3001',
+      );
+
+      expect(sendMock).toHaveBeenCalled();
+      const emailHtml = sendMock.mock.calls[0][0].html;
+
+      expect(emailHtml).toContain('<h3>Property Manager</h3>');
+      expect(emailHtml).toContain('John Doe<br />');
+      expect(emailHtml).toContain('(555) 123-4567<br />');
+
+      expect(emailHtml).not.toContain('<h3>Office Hours:</h3>');
+    });
+
+    it('Test no property manager and office hours', async () => {
+      await service.applicationConfirmation(
+        listing,
+        application as ApplicationCreate,
+        'http://localhost:3001',
+      );
+
+      expect(sendMock).toHaveBeenCalled();
+      const emailHtml = sendMock.mock.calls[0][0].html;
+
+      expect(emailHtml).not.toContain('<h3>Property Manager</h3>');
+      expect(emailHtml).not.toContain('<h3>Office Hours:</h3>');
+    });
   });
 
   describe('request approval', () => {
