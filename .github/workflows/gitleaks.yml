@@ -13,7 +13,7 @@ jobs:
       - name: Check out git repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 2
 
       - name: run gitleaks scan
         uses: gitleaks/gitleaks-action@v2
