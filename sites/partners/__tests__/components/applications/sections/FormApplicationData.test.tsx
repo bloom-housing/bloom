@@ -73,7 +73,7 @@ describe("<FormApplicationData>", () => {
     expect((languageSelect as HTMLSelectElement).value).toBe(LanguagesEnum.en)
   })
 
-  it("clearing date fields resets time fields", async () => {
+  it("clearing date fields does not resets time fields", async () => {
     render(
       <FormProviderWrapper>
         <FormApplicationData />
@@ -112,8 +112,8 @@ describe("<FormApplicationData>", () => {
     expect(timeHours).toBeDisabled()
     expect(timeMinutes).toBeDisabled()
     expect(timePeriod).toBeDisabled()
-    expect((timeHours as HTMLInputElement).value).toBe("")
-    expect((timeMinutes as HTMLInputElement).value).toBe("")
+    expect((timeHours as HTMLInputElement).value).toBe("12")
+    expect((timeMinutes as HTMLInputElement).value).toBe("30")
     expect((timePeriod as HTMLSelectElement).value).toBe("pm")
   })
 })
