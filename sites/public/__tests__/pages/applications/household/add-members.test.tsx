@@ -25,7 +25,7 @@ describe("applications pages", () => {
     it("should render form fields", () => {
       const { getByText } = render(<ApplicationAddMembers />)
 
-      expect(getByText("Tell us about your household.")).toBeInTheDocument()
+      expect(getByText("Tell us about your household")).toBeInTheDocument()
       expect(getByText("Edit")).toBeInTheDocument()
       expect(getByText("Add Household Member", { exact: false })).toBeInTheDocument()
     })
