@@ -24,6 +24,7 @@ import {
   unitTypeUnitGroupsMapping,
 } from "./FilterDrawerHelpers"
 import { isTrue } from "../../lib/helpers"
+import { useMemo } from "react"
 
 export interface FilterDrawerProps {
   filterState: FilterData
@@ -59,6 +60,44 @@ const FilterDrawer = (props: FilterDrawerProps) => {
   const availabilityLabels = getAvailabilityValues(enableUnitGroups).map((key) =>
     t(`listings.availability.${key}`)
   )
+
+  const communityFilters = useMemo(() => {
+    if (swapCommunityTypeWithPrograms) {
+      return (
+        props.multiselectData.length > 0 && (
+          <CheckboxGroup
+            groupLabel={t("t.community")}
+            fields={buildDefaultFilterFields(
+              ListingFilterKeys.multiselectQuestions,
+              props.multiselectData?.map((multi) =>
+                multi.untranslatedText
+                  ? t(`listingFilters.program.${multi.untranslatedText}`)
+                  : t(`listingFilters.program.${multi.text}`)
+              ),
+              props.multiselectData?.map((multi) => multi.id),
+              props.filterState
+            )}
+            register={register}
+          />
+        )
+      )
+    } else {
+      return (
+        Object.values(ReservedCommunityTypes).length > 0 && (
+          <CheckboxGroup
+            groupLabel={t("t.community")}
+            fields={buildDefaultFilterFields(
+              ListingFilterKeys.reservedCommunityTypes,
+              Object.values(ReservedCommunityTypes).map((type) => t(`finder.building.${type}`)),
+              Object.values(ReservedCommunityTypes).map((type) => type),
+              props.filterState
+            )}
+            register={register}
+          />
+        )
+      )
+    }
+  }, [props.filterState, props.multiselectData, register, swapCommunityTypeWithPrograms])
 
   return (
     <Drawer
@@ -148,31 +187,7 @@ const FilterDrawer = (props: FilterDrawerProps) => {
             register={register}
           />
           <SearchSection register={register} nameState={props.filterState?.name} />
-          <CheckboxGroup
-            groupLabel={t("t.community")}
-            fields={
-              swapCommunityTypeWithPrograms
-                ? buildDefaultFilterFields(
-                    ListingFilterKeys.multiselectQuestions,
-                    props.multiselectData?.map((multi) =>
-                      multi.untranslatedText
-                        ? t(`listingFilters.program.${multi.untranslatedText}`)
-                        : t(`listingFilters.program.${multi.text}`)
-                    ),
-                    props.multiselectData?.map((multi) => multi.id),
-                    props.filterState
-                  )
-                : buildDefaultFilterFields(
-                    ListingFilterKeys.reservedCommunityTypes,
-                    Object.values(ReservedCommunityTypes).map((type) =>
-                      t(`finder.building.${type}`)
-                    ),
-                    Object.values(ReservedCommunityTypes).map((type) => type),
-                    props.filterState
-                  )
-            }
-            register={register}
-          />
+          {communityFilters}
         </Form>
       </Drawer.Content>
       <Drawer.Footer>
