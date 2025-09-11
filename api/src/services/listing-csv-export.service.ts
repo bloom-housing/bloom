@@ -53,7 +53,16 @@ import { UnitGroupSummary } from '../dtos/unit-groups/unit-group-summary.dto';
 import { addUnitGroupsSummarized } from '../utilities/unit-groups-transformations';
 
 views.csv = {
-  ...views.details,
+  listingMultiselectQuestions: {
+    include: {
+      multiselectQuestions: {
+        select: {
+          text: true,
+        },
+      },
+    },
+  },
+  ...views.full,
   copyOf: {
     select: {
       id: true,
