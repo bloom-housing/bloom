@@ -27,7 +27,7 @@ describe("applications pages", () => {
 
       expect(
         getByText(
-          "Before adding other people, make sure that they aren't named on any other application for this listing."
+          "Before adding other people, make sure that they aren't named on any other application for this listing"
         )
       ).toBeInTheDocument()
     })
