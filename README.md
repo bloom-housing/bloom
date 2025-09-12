@@ -120,9 +120,9 @@ We are also using [conventional commits](https://www.conventionalcommits.org/en/
 
 On commit, two steps automatically run: (1) linting and (2) a verification of the conventional commit standard. You can either, instead of running `git commit`, globally install commitizen (`npm install -g commitizen`) and then commit with `git cz` which will run a commit message CLI (the CLI asks a series of questions about your changeset and builds the commit message for you in the conventional commit format), or alternatively run `git commit` with your own message if you are confident it follows the conventional standard, and the linter will fail if it does not.
 
-#### Pre-commit (optional)
+#### Pre-commit
 
-We are using [gitleaks-action](https://github.com/gitleaks/gitleaks-action) to alert on secrets and api keys. Optionally you can also enable the pre-commit hook to check for these patterns on commit. The `.githooks` directory contains a pre-commit script to check for secrets before allowing a `git commit`. To enable this for your local clone please perform the following steps:
+To prevent committing secrets please enable the pre-commit hook to check for these patterns on commit. The `.githooks` directory contains a pre-commit script to check for secrets before allowing a `git commit`. To enable this for your local clone please perform the following steps:
 
 1. Install gitleaks. On mac you can run `brew install gitleaks`. For other install options see the [gitleaks docs](https://github.com/gitleaks/gitleaks?tab=readme-ov-file#installing)
 2. `cd` into your locally cloned repo and run `git config core.hooksPath .githooks/`
