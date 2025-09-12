@@ -1650,6 +1650,10 @@ export class ListingService implements OnModuleInit {
         !requestingUser?.jurisdictions?.some(
           (juris) => juris.id === storedListing.jurisdictionId,
         )) ||
+      (requestingUser?.userRoles?.isLimitedJurisdictionalAdmin &&
+        !requestingUser?.jurisdictions?.some(
+          (juris) => juris.id === storedListing.jurisdictionId,
+        )) ||
       (requestingUser?.userRoles?.isPartner &&
         !requestingUser?.listings?.some(
           (listing) => listing.id === storedListing.id,
