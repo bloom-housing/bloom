@@ -4,6 +4,7 @@
 export enum FeatureFlagEnum {
   disableCommonApplication = 'disableCommonApplication',
   disableJurisdictionalAdmin = 'disableJurisdictionalAdmin',
+  disableLimitedJurisdictionalAdmin = 'disableLimitedJurisdictionalAdmin',
   disableListingPreferences = 'disableListingPreferences',
   disableWorkInRegion = 'disableWorkInRegion',
   enableAccessibilityFeatures = 'enableAccessibilityFeatures',
@@ -50,6 +51,10 @@ export const featureFlagMap: { name: string; description: string }[] = [
   {
     name: FeatureFlagEnum.disableJurisdictionalAdmin,
     description: 'When true, jurisdictional admins cannot be created',
+  },
+  {
+    name: FeatureFlagEnum.disableLimitedJurisdictionalAdmin,
+    description: 'When true, limited jurisdictional admins cannot be created',
   },
   {
     name: FeatureFlagEnum.disableListingPreferences,
