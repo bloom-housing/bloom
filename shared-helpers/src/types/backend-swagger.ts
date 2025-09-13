@@ -2825,17 +2825,6 @@ export interface SuccessDTO {
   success: boolean
 }
 
-export interface IdDTO {
-  /**  */
-  id: string
-
-  /**  */
-  name?: string
-
-  /**  */
-  ordinal?: number
-}
-
 export interface ListingFilterParams {
   /**  */
   $comparison: EnumListingFilterParamsComparison
@@ -2905,9 +2894,6 @@ export interface ListingFilterParams {
 
   /**  */
   zipCode?: string
-
-  /**  */
-  lastUpdatedByUser?: IdDTO
 }
 
 export interface ListingsQueryBody {
@@ -2972,6 +2958,17 @@ export interface PaginationAllowsAllQueryParams {
 
   /**  */
   limit?: number | "all"
+}
+
+export interface IdDTO {
+  /**  */
+  id: string
+
+  /**  */
+  name?: string
+
+  /**  */
+  ordinal?: number
 }
 
 export interface MultiselectLink {
@@ -6602,6 +6599,9 @@ export interface UserRole {
   isJurisdictionalAdmin?: boolean
 
   /**  */
+  isLimitedJurisdictionalAdmin?: boolean
+
+  /**  */
   isPartner?: boolean
 
   /**  */
@@ -7319,11 +7319,13 @@ export enum UserRoleEnum {
   "partner" = "partner",
   "admin" = "admin",
   "jurisdictionAdmin" = "jurisdictionAdmin",
+  "limitedJurisdictionAdmin" = "limitedJurisdictionAdmin",
 }
 
 export enum FeatureFlagEnum {
   "disableCommonApplication" = "disableCommonApplication",
   "disableJurisdictionalAdmin" = "disableJurisdictionalAdmin",
+  "disableLimitedJurisdictionalAdmin" = "disableLimitedJurisdictionalAdmin",
   "disableListingPreferences" = "disableListingPreferences",
   "disableWorkInRegion" = "disableWorkInRegion",
   "enableAccessibilityFeatures" = "enableAccessibilityFeatures",
