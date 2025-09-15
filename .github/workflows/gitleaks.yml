@@ -1,8 +1,6 @@
 name: gitleaks
 on:
   push:
-  issues:
-  issue_comment:
 
 jobs:
   scan:
