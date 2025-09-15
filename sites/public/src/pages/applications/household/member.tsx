@@ -132,13 +132,13 @@ const ApplicationMember = () => {
     {
       id: "sameAddressYes",
       label: t("t.yes"),
-      value: "yes",
+      value: YesNoEnum.yes,
       defaultChecked: member?.sameAddress === "yes",
     },
     {
       id: "sameAddressNo",
       label: t("t.no"),
-      value: "no",
+      value: YesNoEnum.no,
       defaultChecked: member?.sameAddress === "no",
     },
   ]
@@ -147,13 +147,13 @@ const ApplicationMember = () => {
     {
       id: "workInRegionYes",
       label: t("t.yes"),
-      value: "yes",
+      value: YesNoEnum.yes,
       defaultChecked: member?.workInRegion === "yes",
     },
     {
       id: "workInRegionNo",
       label: t("t.no"),
-      value: "no",
+      value: YesNoEnum.no,
       defaultChecked: member?.workInRegion === "no",
     },
   ]
@@ -162,13 +162,13 @@ const ApplicationMember = () => {
     {
       id: "fullTimeStudentYes",
       label: t("t.yes"),
-      value: "yes",
+      value: YesNoEnum.yes,
       defaultChecked: member?.fullTimeStudent === "yes",
     },
     {
       id: "fullTimeStudentNo",
       label: t("t.no"),
-      value: "no",
+      value: YesNoEnum.no,
       defaultChecked: member?.fullTimeStudent === "no",
     },
   ]

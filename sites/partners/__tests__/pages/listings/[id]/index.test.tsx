@@ -1118,7 +1118,7 @@ describe("listing data", () => {
                   createdAt: new Date(),
                   updatedAt: new Date(),
                   type: ApplicationMethodsTypeEnum.Internal,
-                  externalReference: "Test Refference",
+                  externalReference: "Test Reference",
                 },
               ],
               digitalApplication: true,
@@ -1291,7 +1291,7 @@ describe("listing data", () => {
         // expect(queryByText("Referral summary")).not.toBeInTheDocument()
         expect(queryByText("Common digital application")).not.toBeInTheDocument()
         expect(queryByText("Custom online application URL")).not.toBeInTheDocument()
-        expect(queryByText("Test Refference")).not.toBeInTheDocument()
+        expect(queryByText("Test Reference")).not.toBeInTheDocument()
       })
 
       it("should hide digital application choice when disable flag is on", () => {

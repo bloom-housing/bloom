@@ -447,7 +447,7 @@ export class LotteryService {
   ): Promise<SuccessDTO> {
     const storedListing = await this.listingService.findOrThrow(
       dto.id,
-      ListingViews.details,
+      ListingViews.full,
     );
 
     await this.permissionService.canOrThrow(

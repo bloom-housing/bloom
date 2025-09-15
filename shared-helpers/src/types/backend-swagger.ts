@@ -3116,17 +3116,6 @@ export interface SuccessDTO {
   success: boolean
 }
 
-export interface IdDTO {
-  /**  */
-  id: string
-
-  /**  */
-  name?: string
-
-  /**  */
-  ordinal?: number
-}
-
 export interface ListingFilterParams {
   /**  */
   $comparison: EnumListingFilterParamsComparison
@@ -3196,9 +3185,6 @@ export interface ListingFilterParams {
 
   /**  */
   zipCode?: string
-
-  /**  */
-  lastUpdatedByUser?: IdDTO
 }
 
 export interface ListingsQueryBody {
@@ -3266,6 +3252,17 @@ export interface PaginationAllowsAllQueryParams {
 
   /**  */
   limit?: number | "all"
+}
+
+export interface IdDTO {
+  /**  */
+  id: string
+
+  /**  */
+  name?: string
+
+  /**  */
+  ordinal?: number
 }
 
 export interface MultiselectLink {
@@ -7464,7 +7461,6 @@ export enum EnumListingFilterParamsComparison {
 export enum ListingViews {
   "base" = "base",
   "csv" = "csv",
-  "details" = "details",
   "full" = "full",
   "fundamentals" = "fundamentals",
   "name" = "name",
@@ -7546,6 +7542,7 @@ export enum ValidationMethodEnum {
 
 export enum MultiselectQuestionsStatusEnum {
   "draft" = "draft",
+  "visible" = "visible",
   "active" = "active",
   "toRetire" = "toRetire",
   "retired" = "retired",

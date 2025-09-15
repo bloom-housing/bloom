@@ -76,21 +76,6 @@ export type getListingsArgs = {
 export const views: Partial<Record<ListingViews, Prisma.ListingsInclude>> = {
   fundamentals: {
     jurisdictions: true,
-    listingsBuildingAddress: true,
-    reservedCommunityTypes: true,
-    listingImages: {
-      include: {
-        assets: true,
-      },
-    },
-    listingMultiselectQuestions: {
-      include: {
-        multiselectQuestions: true,
-      },
-    },
-    listingFeatures: true,
-    listingUtilities: true,
-    listingNeighborhoodAmenities: true,
   },
 };
 
@@ -111,6 +96,21 @@ views.name = {
 
 views.base = {
   ...views.fundamentals,
+  listingsBuildingAddress: true,
+  reservedCommunityTypes: true,
+  listingImages: {
+    include: {
+      assets: true,
+    },
+  },
+  listingMultiselectQuestions: {
+    include: {
+      multiselectQuestions: true,
+    },
+  },
+  listingFeatures: true,
+  listingUtilities: true,
+  listingNeighborhoodAmenities: true,
   units: {
     include: {
       unitTypes: true,
@@ -134,7 +134,7 @@ views.base = {
 };
 
 views.full = {
-  ...views.fundamentals,
+  ...views.base,
   applicationMethods: {
     include: {
       paperApplications: {
@@ -171,25 +171,6 @@ views.full = {
       },
     },
   },
-  unitGroups: {
-    include: {
-      unitTypes: true,
-      unitGroupAmiLevels: {
-        include: {
-          amiChart: {
-            include: {
-              jurisdictions: true,
-            },
-          },
-        },
-      },
-    },
-  },
-};
-
-views.details = {
-  ...views.base,
-  ...views.full,
 };
 
 const LISTING_CRON_JOB_NAME = 'LISTING_CRON_JOB';
@@ -1476,7 +1457,7 @@ export class ListingService implements OnModuleInit {
     const { requiredFields, ...listingData } = dto;
 
     const rawListing = await this.prisma.listings.create({
-      include: views.details,
+      include: views.full,
       data: {
         ...listingData,
         displayWaitlistSize: dto.displayWaitlistSize ?? false,
@@ -1825,7 +1806,7 @@ export class ListingService implements OnModuleInit {
   ): Promise<Listing> {
     const storedListing = await this.findOrThrow(
       dto.storedListing.id,
-      ListingViews.details,
+      ListingViews.full,
     );
     if (dto.name.trim() === storedListing.name) {
       throw new BadRequestException('New listing name must be unique');
@@ -2149,7 +2130,7 @@ export class ListingService implements OnModuleInit {
     const { requiredFields, ...incomingDto } = dto;
     const storedListing = await this.findOrThrow(
       incomingDto.id,
-      ListingViews.details,
+      ListingViews.full,
     );
     const isNonAdmin = !requestingUser?.userRoles?.isAdmin;
     const isActiveListing = dto.status === ListingsStatusEnum.active;
@@ -2702,7 +2683,7 @@ export class ListingService implements OnModuleInit {
             },
           },
         },
-        include: views.details,
+        include: views.full,
         where: {
           id: incomingDto.id,
         },
