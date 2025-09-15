@@ -205,12 +205,12 @@ export const buildWhereClause = (
             OR: [
               {
                 userRoles: {
-                  isAdmin: null,
+                  isSuperAdmin: null,
                 },
               },
               {
                 userRoles: {
-                  isAdmin: false,
+                  isSuperAdmin: false,
                 },
               },
             ],
@@ -219,12 +219,12 @@ export const buildWhereClause = (
             OR: [
               {
                 userRoles: {
-                  isSuperAdmin: null,
+                  isAdmin: null,
                 },
               },
               {
                 userRoles: {
-                  isSuperAdmin: false,
+                  isAdmin: false,
                 },
               },
             ],
