@@ -198,12 +198,6 @@ model ApplicationSelections {
   selections			      ApplicationSelectionOptions[]
 }
 
-// Note: [additional_phone_number, additional_phone_number_type, household_size] formerly max length 16;
-//       [contact_preferences, income] formerly max length 64;
-//       [app_url] formerly max length 256;
-// Note: [contact_preferences] formerly max array length of 8
-// Note: [household_member] formerly had max array lenght of 32
-// Note: missing virtual [flagged] field
 model Applications {
   id                           String                        @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   createdAt                    DateTime                      @default(now()) @map("created_at") @db.Timestamp(6)
@@ -238,10 +232,11 @@ model Applications {
   wasCreatedExternally         Boolean                       @default(false) @map("was_created_externally")
   userId                       String?                       @map("user_id") @db.Uuid
   listingId                    String?                       @map("listing_id") @db.Uuid
-  // The newest application for the user
+  // This application is the most recent for the user
   isNewest                     Boolean?                      @default(false) @map("is_newest")
   wasPIICleared                Boolean?                      @default(false) @map("was_pii_cleared")
-  expireAfter                  DateTime?                     @map("expire_after")
+  // Signifies when PII data should be cleared
+  expireAfter                  DateTime?                     @map("expire_after") @db.Timestamptz(6)
   applicantId                  String?                       @unique() @map("applicant_id") @db.Uuid
   mailingAddressId             String?                       @unique() @map("mailing_address_id") @db.Uuid
   alternateAddressId           String?                       @unique() @map("alternate_address_id") @db.Uuid

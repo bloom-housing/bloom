@@ -2,7 +2,7 @@
 ALTER TABLE
     "applications"
 ADD
-    COLUMN "expire_after" TIMESTAMP(3),
+    COLUMN "expire_after" TIMESTAMP(6),
 ADD
     COLUMN "is_newest" BOOLEAN DEFAULT false,
 ADD
