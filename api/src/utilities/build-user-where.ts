@@ -94,6 +94,36 @@ export const buildWhereClause = (
                 isLimitedJurisdictionalAdmin: true,
               },
             },
+            {
+              userRoles: {
+                isSuperAdmin: true,
+              },
+            },
+          ],
+        });
+      } else if (user?.userRoles?.isSuperAdmin) {
+        filters.push({
+          OR: [
+            {
+              userRoles: {
+                isPartner: true,
+              },
+            },
+            {
+              userRoles: {
+                isSuperAdmin: true,
+              },
+            },
+            {
+              userRoles: {
+                isJurisdictionalAdmin: true,
+              },
+            },
+            {
+              userRoles: {
+                isLimitedJurisdictionalAdmin: true,
+              },
+            },
           ],
         });
       } else if (user?.userRoles?.isJurisdictionalAdmin) {
@@ -181,6 +211,20 @@ export const buildWhereClause = (
               {
                 userRoles: {
                   isAdmin: false,
+                },
+              },
+            ],
+          },
+          {
+            OR: [
+              {
+                userRoles: {
+                  isSuperAdmin: null,
+                },
+              },
+              {
+                userRoles: {
+                  isSuperAdmin: false,
                 },
               },
             ],

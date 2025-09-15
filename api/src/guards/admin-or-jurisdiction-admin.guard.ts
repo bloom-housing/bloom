@@ -9,7 +9,8 @@ export class AdminOrJurisdictionalAdminGuard implements CanActivate {
     return (
       authUser?.userRoles?.isAdmin ||
       authUser?.userRoles?.isJurisdictionalAdmin ||
-      authUser?.userRoles?.isLimitedJurisdictionalAdmin
+      authUser?.userRoles?.isLimitedJurisdictionalAdmin ||
+      authUser?.userRoles?.isSuperAdmin
     );
   }
 }
