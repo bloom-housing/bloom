@@ -26,7 +26,7 @@ describe("applications pages", () => {
       const { getByText } = render(<ApplicationConfirmation />)
 
       expect(
-        getByText("Thanks. We have received your application", { exact: false })
+        getByText("Thanks, we have received your application", { exact: false })
       ).toBeInTheDocument()
       expect(
         getByText(

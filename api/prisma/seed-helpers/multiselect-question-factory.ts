@@ -1,5 +1,6 @@
 import {
   MultiselectQuestionsApplicationSectionEnum,
+  MultiselectQuestionsStatusEnum,
   Prisma,
 } from '@prisma/client';
 import { randomName, randomNoun } from './word-generator';
@@ -31,8 +32,15 @@ export const multiselectQuestionFactory = (
       multiselectAppSectionAsArray[
         randomInt(multiselectAppSectionAsArray.length)
       ],
+
+    // TODO: Temporary until after MSQ refactor
+    isExclusive: optionalParams?.multiselectQuestion?.isExclusive ?? false,
+    multiselectOptions: undefined,
+    name: text,
+    status: MultiselectQuestionsStatusEnum.draft,
+
     ...previousMultiselectQuestion,
-    jurisdictions: {
+    jurisdiction: {
       connect: {
         id: jurisdictionId,
       },
