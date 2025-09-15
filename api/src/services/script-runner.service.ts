@@ -1103,6 +1103,358 @@ export class ScriptRunnerService {
 
   /**
    *
+   * @param req incoming request object
+   * @param dataTransferDTO data transfer endpoint args. Should contain foreign db connection string
+   * @returns successDTO
+   * @description transfers missing application data after transferJurisdictionPublicUserAndApplicationData
+   * from foreign data into the database this api normally connects to
+   */
+  async transferJurisdictionAdditionalApplicationData(
+    req: ExpressRequest,
+    dataTransferDTO: DataTransferDTO,
+    prisma?: PrismaClient,
+  ): Promise<SuccessDTO> {
+    const requestingUser = mapTo(User, req['user']);
+    await this.markScriptAsRunStart(
+      `data transfer additional application data ${
+        dataTransferDTO.jurisdiction
+      } page ${dataTransferDTO.page || 1} of size ${
+        dataTransferDTO.pageSize || 5_000
+      }`,
+      requestingUser,
+    );
+
+    // connect to foreign db based on incoming connection string
+    const client =
+      prisma ||
+      new PrismaClient({
+        datasources: {
+          db: {
+            url: dataTransferDTO.connectionString,
+          },
+        },
+      });
+    await client.$connect();
+
+    const doorwayJurisdiction = await this.prisma.jurisdictions.findFirst({
+      where: { name: dataTransferDTO.jurisdiction },
+    });
+
+    if (!doorwayJurisdiction) {
+      throw new Error(
+        `${dataTransferDTO.jurisdiction} county doesn't exist in Doorway database`,
+      );
+    }
+
+    // get jurisdiction
+    const jurisdiction: { id: string }[] =
+      await client.$queryRaw`SELECT id, name FROM jurisdictions WHERE name = ${dataTransferDTO.jurisdiction}`;
+
+    if (!jurisdiction) {
+      throw new Error(
+        `${dataTransferDTO.jurisdiction} county doesn't exist in foreign database`,
+      );
+    }
+
+    const listings = await client.listings.findMany({
+      select: {
+        id: true,
+      },
+      where: {
+        jurisdictionId: jurisdiction[0].id,
+      },
+    });
+
+    console.log('listings', listings.length);
+
+    const skip = calculateSkip(
+      dataTransferDTO.pageSize || 5_000,
+      dataTransferDTO.page || 1,
+    );
+    const take = calculateTake(dataTransferDTO.pageSize || 5_000);
+
+    // Retrieve all applications from the incoming DB that have a user attached and
+    // connected to one of the jurisdiction's listings
+    const applications = await client.applications.findMany({
+      select: {
+        id: true,
+        language: true,
+        contactPreferences: true,
+        sendMailToMailingAddress: true,
+        acceptedTerms: true,
+        additionalPhone: true,
+        additionalPhoneNumberType: true,
+        income: true,
+        incomePeriod: true,
+        // we can't retrieve income vouchers because its a boolean vs an array of strings
+        // incomeVouchers: true,
+        housingStatus: true,
+        householdStudent: true,
+        status: true,
+        householdExpectingChanges: true,
+        programs: true,
+        preferences: true,
+        // sub tables
+        applicationsAlternateAddress: true,
+        accessibility: true,
+        alternateContact: {
+          select: {
+            id: true,
+            createdAt: true,
+            updatedAt: true,
+            type: true,
+            agency: true,
+            otherType: true,
+          },
+        },
+        applicant: {
+          select: {
+            id: true,
+            noEmail: true,
+            noPhone: true,
+            phoneNumberType: true,
+            workInRegion: true,
+            createdAt: true,
+            updatedAt: true,
+            applicantWorkAddress: true,
+            applicantAddress: true,
+          },
+        },
+        demographics: {
+          select: {
+            ethnicity: true,
+            gender: true,
+            sexualOrientation: true,
+            howDidYouHear: true,
+            race: true,
+          },
+        },
+        applicationsMailingAddress: true,
+      },
+      where: {
+        listingId: {
+          in: listings.map((listing) => listing.id),
+        },
+        userId: { not: null },
+      },
+      skip,
+      take,
+      orderBy: [
+        // Sort by listings and then application id so that we can go listing by listing
+        { listingId: OrderByEnum.ASC },
+        { id: OrderByEnum.ASC },
+      ],
+    });
+
+    console.log(
+      `adding additional fields to ${applications.length} applications....`,
+    );
+
+    // income voucher is a boolean in HBA so we have to manually get it separately
+    const incomeVouchersQuery = `select id, income_vouchers from applications where id in (${applications.map(
+      (app) => `'${app.id}'`,
+    )})`;
+    const incomeVouchers: { id: string; income_vouchers: boolean }[] =
+      await client.$queryRawUnsafe(incomeVouchersQuery);
+
+    let currentApplicationCount = 0;
+    let currentFailureCount = 0;
+    for (const application of applications) {
+      const incomeVoucher = !!incomeVouchers?.find(
+        (voucher) => voucher.id === application.id,
+      )?.income_vouchers;
+      try {
+        await this.prisma.applications.update({
+          data: {
+            id: application.id,
+            language: application.language,
+            contactPreferences: application.contactPreferences,
+            sendMailToMailingAddress: application.sendMailToMailingAddress,
+            acceptedTerms: application.acceptedTerms,
+            additionalPhone: application.additionalPhone,
+            additionalPhoneNumberType: application.additionalPhoneNumberType,
+            income: application.income,
+            incomePeriod: application.incomePeriod,
+            // HBA only collected it as a boolean so we don't know if it's rental assistance or issued vouchers
+            // We need to add a new value to represent these
+            incomeVouchers: incomeVoucher ? ['incomeVoucher'] : [],
+            housingStatus: application.housingStatus,
+            householdStudent: application.householdStudent,
+            status: application.status, // This will always be "submitted"
+            householdExpectingChanges: application.householdExpectingChanges,
+            programs: application.programs,
+            preferences: application.preferences,
+            applicationsAlternateAddress: {
+              create: {
+                // Only non-PII address data (no lat/long or street)
+                city: application.applicationsAlternateAddress?.city,
+                county: application.applicationsAlternateAddress?.county,
+                state: application.applicationsAlternateAddress?.state,
+                zipCode: application.applicationsAlternateAddress?.zipCode,
+              },
+            },
+            accessibility: {
+              create: {
+                mobility: application.accessibility?.mobility,
+                vision: application.accessibility?.vision,
+                hearing: application.accessibility?.hearing,
+              },
+            },
+            alternateContact: {
+              create: {
+                type: application.alternateContact.type,
+                agency: application.alternateContact.agency,
+                otherType: application.alternateContact.otherType,
+              },
+            },
+            applicant: {
+              create: {
+                ...application.applicant,
+                applicantAddress: {
+                  create: {
+                    // Only non-PII address data (no lat/long or street)
+                    city: application.applicant.applicantAddress?.city,
+                    county: application.applicant.applicantAddress?.county,
+                    state: application.applicant.applicantAddress?.state,
+                    zipCode: application.applicant.applicantAddress?.zipCode,
+                  },
+                },
+                applicantWorkAddress: {
+                  create: {
+                    // Only non-PII address data (no lat/long or street)
+                    city: application.applicant.applicantWorkAddress?.city,
+                    county: application.applicant.applicantWorkAddress?.county,
+                    state: application.applicant.applicantWorkAddress?.state,
+                    zipCode:
+                      application.applicant.applicantWorkAddress?.zipCode,
+                  },
+                },
+              },
+            },
+            demographics: {
+              create: {
+                gender: application.demographics?.gender,
+                sexualOrientation: application.demographics?.sexualOrientation,
+                race: application.demographics?.race,
+                ethnicity: application.demographics?.ethnicity,
+                howDidYouHear: application.demographics?.howDidYouHear,
+              },
+            },
+            applicationsMailingAddress: {
+              create: {
+                // Only non-PII address data (no lat/long or street)
+                city: application.applicationsMailingAddress?.city,
+                county: application.applicationsMailingAddress?.county,
+                state: application.applicationsMailingAddress?.state,
+                zipCode: application.applicationsMailingAddress?.zipCode,
+              },
+            },
+          },
+          where: {
+            id: application.id,
+          },
+        });
+        const applicationHouseholdMembers =
+          await client.householdMember.findMany({
+            select: {
+              id: true,
+              createdAt: true,
+              updatedAt: true,
+              orderId: true,
+              sameAddress: true,
+              relationship: true,
+              workInRegion: true,
+              fullTimeStudent: true,
+              applicationId: true,
+              householdMemberAddress: true,
+            },
+            where: {
+              applicationId: application.id,
+            },
+          });
+        if (applicationHouseholdMembers?.length) {
+          for (const applicationHouseholdMember of applicationHouseholdMembers) {
+            await this.prisma.householdMember.create({
+              data: {
+                id: applicationHouseholdMember.id,
+                createdAt: applicationHouseholdMember.createdAt,
+                updatedAt: applicationHouseholdMember.updatedAt,
+                orderId: applicationHouseholdMember.orderId,
+                sameAddress: applicationHouseholdMember.sameAddress,
+                relationship: applicationHouseholdMember.relationship,
+                workInRegion: applicationHouseholdMember.workInRegion,
+                fullTimeStudent: applicationHouseholdMember.fullTimeStudent,
+                householdMemberWorkAddress: undefined,
+                applications: {
+                  connect: {
+                    id: applicationHouseholdMember.applicationId,
+                  },
+                },
+                householdMemberAddress: {
+                  // Only non-PII address data (no lat/long or street)
+
+                  create: {
+                    city: applicationHouseholdMember.householdMemberAddress
+                      ?.city,
+                    county:
+                      applicationHouseholdMember.householdMemberAddress?.county,
+                    state:
+                      applicationHouseholdMember.householdMemberAddress?.state,
+                    zipCode:
+                      applicationHouseholdMember.householdMemberAddress
+                        ?.zipCode,
+                  },
+                },
+              },
+            });
+          }
+        }
+      } catch (e) {
+        currentFailureCount++;
+        // If the update fails because the application doesn't exist we want a different log to easier separate the issues out
+        if (e['code'] === 'P2025') {
+          console.log(
+            `application ${application.id} does not exist in the system`,
+          );
+        } else {
+          console.log('e', e);
+          console.log(`unable to migrate application ${application.id}`);
+        }
+      }
+      currentApplicationCount++;
+      // console logs for progress of migration
+      if (currentApplicationCount % 500 === 0) {
+        console.log(
+          `Progress: ${currentApplicationCount} applications migrated`,
+        );
+      }
+    }
+
+    console.log(
+      `migrated ${
+        currentApplicationCount - currentFailureCount
+      } applications with ${currentFailureCount} failures`,
+    );
+    console.log(`migrated page ${dataTransferDTO.page || 1} of applications`);
+
+    // disconnect from foreign db
+    await client.$disconnect();
+
+    // script runner standard spin down
+    await this.markScriptAsComplete(
+      `data transfer additional application data ${
+        dataTransferDTO.jurisdiction
+      } page ${dataTransferDTO.page || 1} of size ${
+        dataTransferDTO.pageSize || 5_000
+      }`,
+      requestingUser,
+    );
+
+    return { success: true };
+  }
+
+  /**
+   *
    * @param amiChartImportDTO this is a string in a very specific format like:
    * percentOfAmiValue_1 householdSize_1_income_value householdSize_2_income_value \n percentOfAmiValue_2 householdSize_1_income_value householdSize_2_income_value
    *
