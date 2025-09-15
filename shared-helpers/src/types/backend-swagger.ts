@@ -7095,7 +7095,6 @@ export enum EnumListingFilterParamsComparison {
 export enum ListingViews {
   "base" = "base",
   "csv" = "csv",
-  "details" = "details",
   "full" = "full",
   "fundamentals" = "fundamentals",
   "name" = "name",
@@ -7177,6 +7176,7 @@ export enum ValidationMethodEnum {
 
 export enum MultiselectQuestionsStatusEnum {
   "draft" = "draft",
+  "visible" = "visible",
   "active" = "active",
   "toRetire" = "toRetire",
   "retired" = "retired",
