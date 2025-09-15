@@ -92,7 +92,7 @@ export function useListingsData({
       orderDir: sort?.filter((item) => item.orderDir).map((item) => item.orderDir),
     })
   }
-
+  // TODO: We need to filter support admin too??
   // filter if logged user is an agent
   if (roles?.isPartner) {
     params.filter.push({

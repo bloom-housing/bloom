@@ -35,6 +35,8 @@ type FormUserManageValues = {
 const determineUserRole = (roles: UserRole) => {
   if (roles?.isAdmin) {
     return RoleOption.Administrator
+  } else if (roles?.isSupportAdmin) {
+    return RoleOption.SupportAdmin
   } else if (roles?.isJurisdictionalAdmin) {
     return RoleOption.JurisdictionalAdmin
   } else if (roles?.isLimitedJurisdictionalAdmin) {
@@ -202,6 +204,7 @@ const FormUserManage = ({
     const roles = (() => {
       return {
         isAdmin: userRoles.includes(RoleOption.Administrator),
+        isSupportAdmin: userRoles.includes(RoleOption.SupportAdmin),
         isPartner: userRoles.includes(RoleOption.Partner),
         isJurisdictionalAdmin: userRoles.includes(RoleOption.JurisdictionalAdmin),
         isLimitedJurisdictionalAdmin: userRoles.includes(RoleOption.LimitedJurisdictionalAdmin),

@@ -282,6 +282,7 @@ export enum RoleOption {
   Partner = "partner",
   JurisdictionalAdmin = "jurisdictionalAdmin",
   LimitedJurisdictionalAdmin = "limitedJurisdictionalAdmin",
+  SupportAdmin = "supportAdmin",
 }
 export const roleKeys = Object.values(RoleOption)
 

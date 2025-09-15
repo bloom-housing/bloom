@@ -62,6 +62,7 @@ export default function ListingsList() {
   const { profile } = useContext(AuthContext)
   const isAdmin =
     profile?.userRoles?.isAdmin ||
+    profile?.userRoles?.isSupportAdmin ||
     profile?.userRoles?.isJurisdictionalAdmin ||
     profile?.userRoles?.isLimitedJurisdictionalAdmin ||
     false
@@ -75,7 +76,7 @@ export default function ListingsList() {
     formatWaitlistStatus,
     ListingsLink,
   }
-
+  // Todo: do we want to render something different here below for support admin?
   const columnDefs = useMemo(() => {
     const columns: (ColDef | ColGroupDef)[] = [
       {

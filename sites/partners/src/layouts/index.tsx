@@ -33,6 +33,7 @@ const Layout = (props) => {
   if (
     profile?.jurisdictions?.some((jurisdiction) => !!jurisdiction.enablePartnerSettings) &&
     (profile?.userRoles?.isAdmin ||
+      profile?.userRoles?.isSupportAdmin ||
       profile?.userRoles?.isJurisdictionalAdmin ||
       profile?.userRoles?.isLimitedJurisdictionalAdmin)
   ) {
