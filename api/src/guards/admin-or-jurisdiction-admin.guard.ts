@@ -8,9 +8,9 @@ export class AdminOrJurisdictionalAdminGuard implements CanActivate {
     const authUser: User = req['user'];
     return (
       authUser?.userRoles?.isAdmin ||
+      authUser?.userRoles?.isSupportAdmin ||
       authUser?.userRoles?.isJurisdictionalAdmin ||
-      authUser?.userRoles?.isLimitedJurisdictionalAdmin ||
-      authUser?.userRoles?.isSupportAdmin
+      authUser?.userRoles?.isLimitedJurisdictionalAdmin
     );
   }
 }
