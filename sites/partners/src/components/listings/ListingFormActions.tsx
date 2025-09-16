@@ -84,7 +84,6 @@ const ListingFormActions = ({
   const listingJurisdiction = profile?.jurisdictions?.find(
     (jurisdiction) => jurisdiction.id === listing?.jurisdictions?.id
   )
-
   const hideCloseButton = doJurisdictionsHaveFeatureFlagOn(
     "hideCloseListingButton",
     listingJurisdiction?.id
@@ -426,6 +425,9 @@ const ListingFormActions = ({
       listing.status === ListingsStatusEnum.pendingReview &&
       type === ListingFormActionsType.details
     ) {
+      if (profile?.userRoles.isSupportAdmin) {
+        elements.push(editFromDetailButton)
+      }
       if (isListingApprover && !profile?.userRoles.isPartner) {
         elements.push(approveAndPublishButton)
         elements.push(editFromDetailButton)
@@ -478,10 +480,13 @@ const ListingFormActions = ({
     }
     //open listing, edit view
     else if (listing.status === ListingsStatusEnum.active && type === ListingFormActionsType.edit) {
-      if (!hideCloseButton) {
+      if (!hideCloseButton && !profile.userRoles.isSupportAdmin) {
         elements.push(closeButton)
       }
-      elements.push(unpublishButton)
+      if (!profile.userRoles.isSupportAdmin) {
+        elements.push(unpublishButton)
+      }
+
       elements.push(saveContinueButton)
       elements.push(cancelButton)
     }
