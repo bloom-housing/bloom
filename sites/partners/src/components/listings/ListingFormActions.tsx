@@ -444,6 +444,9 @@ const ListingFormActions = ({
         elements.push(approveAndPublishButton)
         elements.push(requestChangesButton)
       }
+      if (profile?.userRoles.isSupportAdmin) {
+        elements.push(requestChangesButton)
+      }
       if (profile?.userRoles.isPartner) {
         elements.push(isListingApprover || !isListingApprovalEnabled ? publishButton : submitButton)
       }
