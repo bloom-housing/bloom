@@ -101,7 +101,7 @@ export const buildWhereClause = (
             },
           ],
         });
-      } else if (user?.userRoles?.isSuperAdmin) {
+      } else if (user?.userRoles?.isSupportAdmin) {
         filters.push({
           OR: [
             {
