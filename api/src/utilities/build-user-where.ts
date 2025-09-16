@@ -96,7 +96,7 @@ export const buildWhereClause = (
             },
             {
               userRoles: {
-                isSuperAdmin: true,
+                isSupportAdmin: true,
               },
             },
           ],
@@ -111,7 +111,7 @@ export const buildWhereClause = (
             },
             {
               userRoles: {
-                isSuperAdmin: true,
+                isSupportAdmin: true,
               },
             },
             {
@@ -125,6 +125,15 @@ export const buildWhereClause = (
               },
             },
           ],
+        });
+        filters.push({
+          jurisdictions: {
+            some: {
+              id: {
+                in: user?.jurisdictions?.map((juris) => juris.id),
+              },
+            },
+          },
         });
       } else if (user?.userRoles?.isJurisdictionalAdmin) {
         filters.push({
@@ -205,12 +214,12 @@ export const buildWhereClause = (
             OR: [
               {
                 userRoles: {
-                  isSuperAdmin: null,
+                  isSupportAdmin: null,
                 },
               },
               {
                 userRoles: {
-                  isSuperAdmin: false,
+                  isSupportAdmin: false,
                 },
               },
             ],

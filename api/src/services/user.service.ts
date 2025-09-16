@@ -417,7 +417,7 @@ export class UserService {
     const isPartnerPortalUser =
       storedUser.userRoles?.isAdmin ||
       storedUser.userRoles?.isJurisdictionalAdmin ||
-      storedUser.userRoles?.isSuperAdmin ||
+      storedUser.userRoles?.isSupportAdmin ||
       storedUser.userRoles?.isLimitedJurisdictionalAdmin ||
       storedUser.userRoles?.isPartner;
     const isUserSiteMatch = async () => {
