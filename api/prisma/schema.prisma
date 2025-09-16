@@ -236,7 +236,7 @@ model Applications {
   isNewest                     Boolean?                      @default(false) @map("is_newest")
   wasPIICleared                Boolean?                      @default(false) @map("was_pii_cleared")
   // Signifies when PII data should be cleared
-  expireAfter                  DateTime?                     @map("expire_after") @db.Timestamptz(6)
+  expireAfter                  DateTime?                     @map("expire_after") @db.Timestamp(6)
   applicantId                  String?                       @unique() @map("applicant_id") @db.Uuid
   mailingAddressId             String?                       @unique() @map("mailing_address_id") @db.Uuid
   alternateAddressId           String?                       @unique() @map("alternate_address_id") @db.Uuid
@@ -261,8 +261,6 @@ model Applications {
   @@index([listingId])
   @@index([userId])
   @@index([isNewest])
-  @@index([wasPIICleared])
-  @@index([expireAfter])
   @@map("applications")
 }
 
@@ -938,8 +936,6 @@ model UserAccounts {
   wasWarnedOfDeletion       Boolean?                @default(false) @map("was_warned_of_deletion")
 
   @@map("user_accounts")
-  @@index([lastLoginAt])
-  @@index([wasWarnedOfDeletion])
 }
 
 model UserRoles {
