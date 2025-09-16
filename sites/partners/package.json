@@ -50,7 +50,7 @@
     "dotenv": "^8.2.0",
     "markdown-to-jsx": "^7.7.12",
     "nanoid": "^3.1.12",
-    "next": "^13.2.4",
+    "next": "^14.2.28",
     "qs": "^6.10.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
@@ -58,7 +58,6 @@
     "react-hook-form": "^6.15.5",
     "swr": "^2.1.2",
     "tailwindcss": "2.2.10",
-    "tough-cookie": "^5.1.2",
     "winston": "^3.13.0"
   },
   "devDependencies": {
@@ -67,9 +66,8 @@
     "@babel/plugin-proposal-decorators": "^7.21.0",
     "@babel/preset-env": "^7.20.2",
     "@csstools/postcss-global-data": "^3.0.0",
-    "@cypress/code-coverage": "^3.10.1",
-    "@cypress/webpack-preprocessor": "^6.0.2",
-    "@netlify/plugin-nextjs": "4.41.3",
+    "@cypress/code-coverage": "^3.14.4",
+    "@cypress/webpack-preprocessor": "^6.0.4",
     "@next/bundle-analyzer": "^10.1.0",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "5.17.0",
@@ -81,7 +79,7 @@
     "@types/react": "^18.0.34",
     "babel-loader": "^9.1.2",
     "concurrently": "^5.3.0",
-    "cypress": "^13.16.0",
+    "cypress": "^14.5.0",
     "cypress-file-upload": "^5.0.8",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^26.5.3",
@@ -96,6 +94,9 @@
     "ts-loader": "^9.5.2",
     "typescript": "4.6.4",
     "webpack": "^5.98.0"
+  },
+  "resolutions": {
+    "@types/react": "18.0.34"
   },
   "prettier": {
     "singleQuote": false,

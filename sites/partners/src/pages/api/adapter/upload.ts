@@ -3,7 +3,6 @@ import type { NextApiRequest, NextApiResponse } from "next"
 import qs from "qs"
 import { getConfigs } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { wrapper } from "axios-cookiejar-support"
-import { CookieJar } from "tough-cookie"
 
 /*
   This file exists as per https://nextjs.org/docs/api-routes/dynamic-api-routes  
@@ -24,8 +23,6 @@ export const config = {
 }
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-  const jar = new CookieJar()
-
   const headers: Record<string, string | string[]> = {
     jurisdictionName: req.headers.jurisdictionname,
     language: req.headers.language,
@@ -44,7 +41,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       paramsSerializer: (params) => {
         return qs.stringify(params)
       },
-      jar,
     })
   )
   try {
@@ -83,8 +79,9 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     // send request to backend
     const response = await axios.request(configs)
     // set up response from next api based on response from backend
-    const cookies = await jar.getSetCookieStrings(process.env.BACKEND_API_BASE || "")
-    res.setHeader("Set-Cookie", cookies)
+    const responseHeaders = response["headers"]
+    const cookiesFromHeaders = responseHeaders?.["set-cookie"] || []
+    res.setHeader("Set-Cookie", cookiesFromHeaders)
     res.statusMessage = response.statusText
     res.status(response.status).json(response.data)
   } catch (e) {

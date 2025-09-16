@@ -27,14 +27,14 @@
   "scripts": {
     "link:uic": "cd node_modules/react && yarn link && cd ../../../ui-components && yarn link 'react' && yarn link && cd ../doorway && yarn link '@bloom-housing/ui-components'",
     "unlink:uic": "yarn unlink @bloom-housing/ui-components && cd ../ui-components && yarn unlink react && yarn unlink && yarn install --force && cd ../doorway/node_modules/react && yarn unlink && cd ../.. && yarn install --force",
-    "dev:app:public": "wait-on \"http-get://localhost:${PORT:-3100}/\" && cd sites/public && yarn dev",
-    "test:app:public": "wait-on \"http-get://localhost:${PORT:-3100}/\" && cd sites/public && yarn test",
-    "test:app:public:headless": "wait-on \"http-get://localhost:${PORT:-3100}/\" && cd sites/public && yarn test:headless",
+    "dev:app:public": "wait-on \"http-get://127.0.0.1:${PORT:-3100}/\" && cd sites/public && yarn dev",
+    "test:app:public": "wait-on \"http-get://127.0.0.1:${PORT:-3100}/\" && cd sites/public && yarn test",
+    "test:app:public:headless": "wait-on \"http-get://127.0.0.1:${PORT:-3100}/\" && cd sites/public && yarn test:headless",
     "test:app:public:unit": "cd sites/public && yarn test:unit:coverage",
     "build:app:public": "cd sites/public && yarn build",
-    "dev:app:partners": "wait-on \"http-get://localhost:${PORT:-3100}/\" && cd sites/partners && yarn dev",
-    "test:app:partners": "wait-on \"http-get://localhost:${PORT:-3100}/\" && cd sites/partners && yarn test",
-    "test:app:partners:headless": "wait-on \"http-get://localhost:${PORT:-3100}/\" && cd sites/partners && yarn test:headless",
+    "dev:app:partners": "wait-on \"http-get://127.0.0.1:${PORT:-3100}/\" && cd sites/partners && yarn dev",
+    "test:app:partners": "wait-on \"http-get://127.0.0.1:${PORT:-3100}/\" && cd sites/partners && yarn test",
+    "test:app:partners:headless": "wait-on \"http-get://127.0.0.1:${PORT:-3100}/\" && cd sites/partners && yarn test:headless",
     "test:app:partners:unit": "cd sites/partners && yarn test:unit:coverage",
     "build:app:partners": "cd sites/partners && yarn build",
     "dev:backend": "cd api && yarn dev",
@@ -85,6 +85,9 @@
     "ts-node": "^10.0.0",
     "typescript": "4.6.4",
     "wait-on": "^5.2.0"
+  },
+  "resolutions": {
+    "@types/react": "18.0.34"
   },
   "prettier": {
     "singleQuote": false,

@@ -18,8 +18,8 @@ import {
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import { useSingleFlaggedApplication } from "../../../lib/hooks"
 import Layout from "../../../layouts"
-import { getCols } from "./applicationsCols"
 import { NavigationHeader } from "../../../components/shared/NavigationHeader"
+import { getCols } from "../../../lib/applications/applicationsCols"
 import { StatusBar } from "../../../components/shared/StatusBar"
 
 const Flag = () => {

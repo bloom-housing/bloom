@@ -51,7 +51,7 @@ const ApplicationAddMembers = () => {
 
   const membersSection = application.householdMember.map((member, index) => {
     return (
-      <CardSection divider="inset">
+      <CardSection divider="inset" key={index}>
         <HouseholdMemberForm
           editMember={editMember}
           key={index}

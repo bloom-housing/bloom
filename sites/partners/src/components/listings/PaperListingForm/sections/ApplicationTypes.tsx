@@ -40,6 +40,47 @@ type ApplicationTypesProps = {
   requiredFields: string[]
 }
 
+/**
+ * Input for the phone fields need to be masked to make sure the format of
+ * "(123) 456-7890" is the only accepted form.
+ * Limit characters to only values allowed and auto-add phone formatting
+ */
+export const phoneMask = (incomingNewValue: string): string => {
+  // Remove all non number characters
+  let newValue = incomingNewValue.replace(/[^0-9]/g, "")
+
+  const NUMBER = "number"
+
+  // Add the additional characters to the proper spots
+  ;[
+    "(",
+    NUMBER,
+    NUMBER,
+    NUMBER,
+    ")",
+    " ",
+    NUMBER,
+    NUMBER,
+    NUMBER,
+    "-",
+    NUMBER,
+    NUMBER,
+    NUMBER,
+    NUMBER,
+  ].forEach((value, index) => {
+    if (newValue[index] || incomingNewValue.length > index) {
+      if (value !== NUMBER && value !== newValue[index]) {
+        newValue = `${newValue.slice(0, index)}${value}${newValue.slice(index)}`
+      }
+    }
+  })
+  // Only allow a total of 14 character (10 numbers and 4 additional characters)
+  if (newValue.length > 14) {
+    newValue = newValue.slice(0, 14)
+  }
+  return newValue
+}
+
 const ApplicationTypes = ({ listing, requiredFields }: ApplicationTypesProps) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, setValue, watch, errors, getValues } = useFormContext()
@@ -91,6 +132,7 @@ const ApplicationTypes = ({ listing, requiredFields }: ApplicationTypesProps) =>
     id: "",
     url: "",
   })
+  // const referralPhoneRef = React.useRef("")
   const resetDrawerState = () => {
     setProgressValue(0)
     setCloudinaryData({
@@ -494,26 +536,25 @@ const ApplicationTypes = ({ listing, requiredFields }: ApplicationTypesProps) =>
         {referralOpportunityChoice === YesNoEnum.yes && (
           <Grid.Row columns={3}>
             <Grid.Cell>
-              <PhoneField
+              <Field
                 label={t("listings.referralContactPhone")}
                 name="referralContactPhone"
                 id="referralContactPhone"
-                mask={() => (
-                  <PhoneMask
-                    name="referralContactPhone"
-                    value={methods.referral ? methods.referral.phoneNumber : ""}
-                    onChange={(e) => {
-                      setMethods({
-                        ...methods,
-                        referral: {
-                          ...methods.referral,
-                          phoneNumber: e.target.value,
-                        },
-                      })
-                    }}
-                  />
-                )}
-                controlClassName={"control"}
+                defaultValue={methods.referral ? methods.referral.phoneNumber : ""}
+                register={register}
+                placeholder={t("t.phoneNumberPlaceholder")}
+                onChange={(e) => {
+                  const newValue = phoneMask(e.target.value)
+                  referralPhoneRef.current = newValue
+                  e.target.value = newValue
+                  setMethods({
+                    ...methods,
+                    referral: {
+                      ...methods.referral,
+                      phoneNumber: e.target.value,
+                    },
+                  })
+                }}
               />
             </Grid.Cell>
             <Grid.Cell className="seeds-grid-span-2">
