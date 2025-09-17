@@ -7,28 +7,25 @@ describe("Admin User Mangement Tests", () => {
     cy.signOutApi()
   })
 
-  const escapeRegExp = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
-  const rolesArray = [
-    "Partner",
-    "Administrator",
-    "Jurisdictional admin",
-    "Limited Jurisdictional admin",
-    "Admin (support)",
-  ]
-
-  const rolesRegex = new RegExp(`\\b(?:${rolesArray.map(escapeRegExp).join("|")})\\b`)
   it("as admin user, should show all users regardless of jurisdiction", () => {
     cy.visit("/")
     cy.getByTestId("Users-1").click()
-
+    const rolesArray = [
+      "Partner",
+      "Administrator",
+      "Jurisdictional admin",
+      "Limited Jurisdictional admin",
+      "Admin \\(support\\)",
+    ]
     cy.getByTestId("ag-page-size").select("100", { force: true })
-    cy.get(".ag-center-cols-container .ag-row").should("have.length.greaterThan", 0)
 
-    cy.get('.ag-center-cols-container [col-id="userRoles"]').each(($cell) => {
-      const text = $cell.text().replace(/\s+/g, " ").trim()
-      expect(text, `cell text: "${text}"`).to.match(rolesRegex)
+    const regex = new RegExp(`${rolesArray.join("|")}`, "g")
+
+    cy.get(`.ag-center-cols-container [col-id="userRoles"]`).each((role) => {
+      cy.wrap(role).contains(regex)
     })
   })
+
   it("as admin user, should be able to download export", () => {
     const convertToString = (value: number) => {
       return value < 10 ? `0${value}` : `${value}`
