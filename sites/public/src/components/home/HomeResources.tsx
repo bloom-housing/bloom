@@ -27,7 +27,7 @@ export const HomeResources = (props: HomeResourcesProps) => {
               iconSymbol={"envelope"}
               title={t("welcome.signUp")}
               variant={"block"}
-              headingPriority={2}
+              headingPriority={3}
               className={styles["resource"]}
               iconClass={styles["resource-icon"]}
             >
@@ -49,7 +49,7 @@ export const HomeResources = (props: HomeResourcesProps) => {
             iconSymbol="house"
             title={t("welcome.seeMoreOpportunitiesTruncated")}
             variant={"block"}
-            headingPriority={2}
+            headingPriority={3}
             className={styles["resource"]}
             iconClass={styles["resource-icon"]}
           >
@@ -71,7 +71,7 @@ export const HomeResources = (props: HomeResourcesProps) => {
               iconSymbol="questionMarkCircle"
               title={t("welcome.learnHousingBasics")}
               variant={"block"}
-              headingPriority={2}
+              headingPriority={3}
               className={styles["resource"]}
               iconClass={styles["resource-icon"]}
             >
