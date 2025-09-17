@@ -14,8 +14,8 @@ const EditListing = (props: { listing: Listing }) => {
   const metaDescription = ""
   const metaImage = "" // TODO: replace with hero image
 
-  const { listing: initialListing } = props
-  const [listing, setListing] = useState<Listing>(initialListing)
+  const { listing: defaultlListing } = props
+  const [listing, setListing] = useState<Listing>(defaultlListing)
   const [listingName, setListingName] = useState(listing?.name)
 
   const updateListing = useCallback((updatedListing: Listing) => {
