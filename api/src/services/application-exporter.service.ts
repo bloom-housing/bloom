@@ -697,6 +697,7 @@ export class ApplicationExporterService {
                   sexualOrientation: true,
                   howDidYouHear: true,
                   race: true,
+                  spokenLanguage: true,
                 },
               }
             : false,

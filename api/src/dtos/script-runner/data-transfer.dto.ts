@@ -21,4 +21,10 @@ export class DataTransferDTO {
   @ApiPropertyOptional()
   @Type(() => Number)
   page?: number;
+
+  @Expose()
+  @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  @Type(() => Number)
+  pageSize?: number;
 }

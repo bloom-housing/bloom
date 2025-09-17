@@ -123,6 +123,23 @@ export class ScriptRunnerController {
     );
   }
 
+  @Put('transferJurisdictionAdditionalApplicationData')
+  @ApiOperation({
+    summary:
+      'A script that pulls missing application data from one source into the current db',
+    operationId: 'transferJurisdictionAdditionalApplicationData',
+  })
+  @ApiOkResponse({ type: SuccessDTO })
+  async transferJurisdictionAdditionalApplicationData(
+    @Body() dataTransferDTO: DataTransferDTO,
+    @Request() req: ExpressRequest,
+  ): Promise<SuccessDTO> {
+    return await this.scriptRunnerService.transferJurisdictionAdditionalApplicationData(
+      req,
+      dataTransferDTO,
+    );
+  }
+
   @Put('amiChartImport')
   @ApiOperation({
     summary:
