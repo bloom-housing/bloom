@@ -1129,6 +1129,7 @@
   "users.inviteSent": "Invite sent",
   "users.jurisdictionalAdmin": "Jurisdictional admin",
   "users.limitedJurisdictionalAdmin": "Limited Jurisdictional admin",
+  "users.supportAdmin": "Admin (support)",
   "users.userDeleted": "User deleted",
   "users.userUpdated": "User updated",
   "welcome.allApplicationClosed": "All applications are currently closed, but you can view closed listings.",
