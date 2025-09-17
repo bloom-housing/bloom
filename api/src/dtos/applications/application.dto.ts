@@ -288,4 +288,9 @@ export class Application extends AbstractDTO {
   @Type(() => ApplicationLotteryPosition)
   @ApiProperty({ type: ApplicationLotteryPosition, isArray: true })
   applicationLotteryPositions: ApplicationLotteryPosition[];
+
+  @Expose()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  isNewest?: boolean;
 }
