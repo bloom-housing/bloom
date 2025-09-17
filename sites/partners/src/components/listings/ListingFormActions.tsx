@@ -91,9 +91,9 @@ const ListingFormActions = ({
   const recordUpdated = useMemo(() => {
     if (!listing) return null
 
-    const dayjsDate = dayjs(listing.updatedAt)
+    const dayjsDate = dayjs(listing.contentUpdatedAt)
 
-    return dayjsDate.format("MMMM DD, YYYY, HH:mm A")
+    return dayjsDate.format("MMMM DD, YYYY, hh:mm A")
   }, [listing])
 
   const actions = useMemo(() => {
