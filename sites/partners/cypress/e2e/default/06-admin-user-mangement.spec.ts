@@ -15,6 +15,7 @@ describe("Admin User Mangement Tests", () => {
       "Administrator",
       "Jurisdictional admin",
       "Limited Jurisdictional admin",
+      "Admin (support)",
     ]
     cy.getByTestId("ag-page-size").select("100", { force: true })
 
