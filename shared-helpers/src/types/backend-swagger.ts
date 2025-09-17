@@ -5519,6 +5519,9 @@ export interface Application {
 
   /**  */
   applicationLotteryPositions: ApplicationLotteryPosition[]
+
+  /**  */
+  isNewest?: boolean
 }
 
 export interface ApplicationFlaggedSet {
@@ -6207,6 +6210,9 @@ export interface PublicAppsFiltered {
   applicationLotteryPositions: ApplicationLotteryPosition[]
 
   /**  */
+  isNewest?: boolean
+
+  /**  */
   listings: Listing
 }
 
@@ -6451,6 +6457,9 @@ export interface ApplicationCreate {
   listings: IdDTO
 
   /**  */
+  isNewest?: boolean
+
+  /**  */
   applicant: ApplicantUpdate
 
   /**  */
@@ -6547,6 +6556,9 @@ export interface ApplicationUpdate {
 
   /**  */
   listings: IdDTO
+
+  /**  */
+  isNewest?: boolean
 
   /**  */
   applicant: ApplicantUpdate
@@ -7095,7 +7107,6 @@ export enum EnumListingFilterParamsComparison {
 export enum ListingViews {
   "base" = "base",
   "csv" = "csv",
-  "details" = "details",
   "full" = "full",
   "fundamentals" = "fundamentals",
   "name" = "name",
@@ -7177,6 +7188,7 @@ export enum ValidationMethodEnum {
 
 export enum MultiselectQuestionsStatusEnum {
   "draft" = "draft",
+  "visible" = "visible",
   "active" = "active",
   "toRetire" = "toRetire",
   "retired" = "retired",
