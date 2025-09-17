@@ -28,6 +28,7 @@ describe("applications pages", () => {
 
       expect(getByText("What unit sizes are you interested in?")).toBeInTheDocument()
       expect(getByText("Select all that apply")).toBeInTheDocument()
+      expect(getByText("Select all that apply:")).toBeInTheDocument()
     })
   })
 })
