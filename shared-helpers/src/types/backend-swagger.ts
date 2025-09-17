@@ -5831,6 +5831,9 @@ export interface Application {
 
   /**  */
   applicationLotteryPositions: ApplicationLotteryPosition[]
+
+  /**  */
+  isNewest?: boolean
 }
 
 export interface ApplicationFlaggedSet {
@@ -6534,6 +6537,9 @@ export interface PublicAppsFiltered {
   applicationLotteryPositions: ApplicationLotteryPosition[]
 
   /**  */
+  isNewest?: boolean
+
+  /**  */
   listings: Listing
 }
 
@@ -6787,6 +6793,9 @@ export interface ApplicationCreate {
   listings: IdDTO
 
   /**  */
+  isNewest?: boolean
+
+  /**  */
   applicant: ApplicantUpdate
 
   /**  */
@@ -6889,6 +6898,9 @@ export interface ApplicationUpdate {
 
   /**  */
   listings: IdDTO
+
+  /**  */
+  isNewest?: boolean
 
   /**  */
   applicant: ApplicantUpdate
