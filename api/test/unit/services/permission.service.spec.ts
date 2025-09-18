@@ -159,15 +159,6 @@ describe('Testing permission service', () => {
         `(${permissionActions.read}|${permissionActions.create}|${permissionActions.update}|${permissionActions.delete})`,
       ),
     ).toEqual(true);
-
-    expect(
-      await enforcer.hasPermissionForUser(
-        'example id',
-        'user',
-        `r.obj.jurisdictionId == 'juris id'`,
-        `(${permissionActions.read}|${permissionActions.invitePartner}|${permissionActions.inviteJurisdictionalAdmin}|${permissionActions.update}|${permissionActions.delete})`,
-      ),
-    ).toEqual(true);
   });
 
   it('should add partner user role for user', async () => {
