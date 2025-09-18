@@ -853,16 +853,28 @@ describe('Testing application export service', () => {
     });
   });
 
-  describe('csvExport permissions', () => {
+  describe('csv export permissions for limitedJurisdictionAdmin', () => {
     it('should throw ForbiddenException for limitedJurisdictionAdmin users', async () => {
       const requestingUser = {
-        firstName: 'requesting fName',
-        lastName: 'requesting lName',
-        email: 'requestingUser@email.com',
+        firstName: 'FirstName',
+        lastName: 'LastName',
+        email: 'limited-jurisdiction-admin@example.com',
         userRoles: {
           isLimitedJurisdictionalAdmin: true,
         },
-        jurisdictions: [{ id: 'juris id' }],
+        jurisdictions: [
+          {
+            id: 'juris id',
+            featureFlags: [
+              {
+                name: FeatureFlagEnum.disableLimitedJurisdictionalAdmin,
+                description: '',
+                active: false,
+                jurisdictions: [],
+              },
+            ],
+          },
+        ],
       } as unknown as User;
 
       await expect(
@@ -870,7 +882,7 @@ describe('Testing application export service', () => {
           {
             listingId: 'test-listing-id',
             includeDemographics: false,
-          } as ApplicationCsvQueryParams,
+          } as unknown as ApplicationCsvQueryParams,
           requestingUser,
         ),
       ).rejects.toThrow('Forbidden');
