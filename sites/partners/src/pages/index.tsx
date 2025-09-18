@@ -60,7 +60,12 @@ class ListingsLink extends formatLinkCell {
 export default function ListingsList() {
   const metaDescription = t("pageDescription.welcome", { regionName: t("region.name") })
   const { profile } = useContext(AuthContext)
-  const isAdmin = profile?.userRoles?.isAdmin || profile?.userRoles?.isJurisdictionalAdmin || false
+  const isAdmin =
+    profile?.userRoles?.isAdmin ||
+    profile?.userRoles?.isSupportAdmin ||
+    profile?.userRoles?.isJurisdictionalAdmin ||
+    profile?.userRoles?.isLimitedJurisdictionalAdmin ||
+    false
   const { onExport, csvExportLoading } = useListingExport()
 
   const tableOptions = useAgTable()
@@ -71,7 +76,7 @@ export default function ListingsList() {
     formatWaitlistStatus,
     ListingsLink,
   }
-
+  // Todo: do we want to render something different here below for support admin?
   const columnDefs = useMemo(() => {
     const columns: (ColDef | ColGroupDef)[] = [
       {
@@ -96,7 +101,7 @@ export default function ListingsList() {
         filter: false,
         resizable: true,
         valueFormatter: ({ value }) => t(`listings.listingStatus.${value}`),
-        cellRenderer: "ApplicationsLink",
+        cellRenderer: !profile?.userRoles?.isLimitedJurisdictionalAdmin ? "ApplicationsLink" : "",
         minWidth: 180,
       },
       {

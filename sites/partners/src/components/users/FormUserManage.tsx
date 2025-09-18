@@ -35,8 +35,12 @@ type FormUserManageValues = {
 const determineUserRole = (roles: UserRole) => {
   if (roles?.isAdmin) {
     return RoleOption.Administrator
+  } else if (roles?.isSupportAdmin) {
+    return RoleOption.SupportAdmin
   } else if (roles?.isJurisdictionalAdmin) {
     return RoleOption.JurisdictionalAdmin
+  } else if (roles?.isLimitedJurisdictionalAdmin) {
+    return RoleOption.LimitedJurisdictionalAdmin
   }
   return RoleOption.Partner
 }
@@ -62,6 +66,22 @@ const FormUserManage = ({
     !doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.disableJurisdictionalAdmin, undefined, true)
   ) {
     possibleUserRoles.push(RoleOption.JurisdictionalAdmin)
+  }
+  if (
+    !profile?.userRoles?.isPartner &&
+    !doJurisdictionsHaveFeatureFlagOn(
+      FeatureFlagEnum.disableLimitedJurisdictionalAdmin,
+      undefined,
+      true
+    )
+  ) {
+    possibleUserRoles.push(RoleOption.LimitedJurisdictionalAdmin)
+  }
+  if (
+    !profile?.userRoles?.isPartner &&
+    !doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.disableSupportAdmin, undefined, true)
+  ) {
+    possibleUserRoles.push(RoleOption.SupportAdmin)
   }
   if (profile?.userRoles?.isAdmin) {
     possibleUserRoles.push(RoleOption.Administrator)
@@ -190,8 +210,10 @@ const FormUserManage = ({
     const roles = (() => {
       return {
         isAdmin: userRoles.includes(RoleOption.Administrator),
+        isSupportAdmin: userRoles.includes(RoleOption.SupportAdmin),
         isPartner: userRoles.includes(RoleOption.Partner),
         isJurisdictionalAdmin: userRoles.includes(RoleOption.JurisdictionalAdmin),
+        isLimitedJurisdictionalAdmin: userRoles.includes(RoleOption.LimitedJurisdictionalAdmin),
         userId: undefined,
       }
     })()

@@ -37,6 +37,7 @@ const mockAllUserCopyJurisdiction: Jurisdiction = {
     UserRoleEnum.admin,
     UserRoleEnum.jurisdictionAdmin,
     UserRoleEnum.partner,
+    UserRoleEnum.limitedJurisdictionAdmin,
   ],
 }
 

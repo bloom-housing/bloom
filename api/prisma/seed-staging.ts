@@ -88,6 +88,7 @@ export const stagingSeed = async (
     data: jurisdictionFactory('Lakeview', {
       featureFlags: [
         FeatureFlagEnum.disableJurisdictionalAdmin,
+        FeatureFlagEnum.disableLimitedJurisdictionalAdmin,
         FeatureFlagEnum.disableListingPreferences,
         FeatureFlagEnum.disableWorkInRegion,
         FeatureFlagEnum.enableAccessibilityFeatures,
@@ -181,6 +182,16 @@ export const stagingSeed = async (
       password: 'abcdef',
     }),
   });
+  // create a support admin
+  await prismaClient.userAccounts.create({
+    data: await userFactory({
+      roles: { isSupportAdmin: true },
+      email: 'support-admin@example.com',
+      confirmedAt: new Date(),
+      jurisdictionIds: [mainJurisdiction.id],
+      password: 'abcdef',
+    }),
+  });
   // create a jurisdictional admin
   await prismaClient.userAccounts.create({
     data: await userFactory({
@@ -189,6 +200,17 @@ export const stagingSeed = async (
       confirmedAt: new Date(),
       jurisdictionIds: [mainJurisdiction.id],
       acceptedTerms: true,
+    }),
+  });
+  // create a limited jurisdictional admin
+  await prismaClient.userAccounts.create({
+    data: await userFactory({
+      roles: { isLimitedJurisdictionalAdmin: true },
+      email: 'limited-jurisdiction-admin@example.com',
+      confirmedAt: new Date(),
+      jurisdictionIds: [mainJurisdiction.id],
+      acceptedTerms: true,
+      password: 'abcdef',
     }),
   });
   // create a partner
