@@ -13,8 +13,8 @@ describe("Admin User Mangement Tests", () => {
     const rolesArray = [
       "Partner",
       "Administrator",
+      "Jurisdictional admin",
       "Jurisdictional Admin - No PII",
-      "Limited Jurisdictional admin",
     ]
     cy.getByTestId("ag-page-size").select("100", { force: true })
 
