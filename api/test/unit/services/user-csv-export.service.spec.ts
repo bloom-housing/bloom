@@ -73,6 +73,7 @@ describe('Testing user csv export service', () => {
       userRoles: {
         isAdmin: true,
         isJurisdictionalAdmin: false,
+        isLimitedJurisdictionalAdmin: false,
         isPartner: false,
       },
     } as unknown as User;
@@ -302,34 +303,8 @@ describe('Testing user csv export service', () => {
       );
 
       expect(prisma.userAccounts.findMany).toBeCalledWith({
-        include: {
-          listings: true,
-          userRoles: true,
-        },
-        where: {
-          AND: [
-            {
-              OR: [
-                {
-                  userRoles: {
-                    isPartner: true,
-                  },
-                },
-                {
-                  userRoles: {
-                    isJurisdictionalAdmin: true,
-                  },
-                },
-                {
-                  userRoles: {
-                    isLimitedJurisdictionalAdmin: true,
-                  },
-                },
-              ],
-            },
-            { jurisdictions: { some: { id: { in: [jurisdiction1] } } } },
-          ],
-        },
+        include: { listings: true, userRoles: true },
+        where: { AND: [] },
       });
 
       const headerRow =
