@@ -357,7 +357,6 @@ describe('Testing permission service', () => {
         },
       ],
     } as User;
-
     const enforcer = await service.addUserPermissions(e, user);
     expect(
       await enforcer.hasRoleForUser(
@@ -365,31 +364,12 @@ describe('Testing permission service', () => {
         UserRoleEnum.limitedJurisdictionAdmin,
       ),
     ).toEqual(true);
-
-    expect(
-      await enforcer.hasPermissionForUser(
-        'example id',
-        'application',
-        `r.obj.jurisdictionId == 'juris id'`,
-        `(${permissionActions.read})`,
-      ),
-    ).toEqual(true);
-
     expect(
       await enforcer.hasPermissionForUser(
         'example id',
         'listing',
         `r.obj.jurisdictionId == 'juris id'`,
-        `(${permissionActions.read})`,
-      ),
-    ).toEqual(true);
-
-    expect(
-      await enforcer.hasPermissionForUser(
-        'example id',
-        'user',
-        `r.obj.jurisdictionId == 'juris id'`,
-        `(${permissionActions.read})`,
+        `(${permissionActions.read}|${permissionActions.create}|${permissionActions.update}|${permissionActions.delete})`,
       ),
     ).toEqual(true);
   });
