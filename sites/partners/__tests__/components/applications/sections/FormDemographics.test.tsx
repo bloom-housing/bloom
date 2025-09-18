@@ -75,15 +75,14 @@ describe("<FormDemographics>", () => {
     )
 
     expect(screen.getByText(/race/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/american indian \/ alaskan native/i)).toBeInTheDocument()
     expect(screen.getByLabelText(/asian/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/black \/ african american/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/native hawaiian \/ other pacific islander/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/black/i)).toBeInTheDocument()
+    expect(
+      screen.getByLabelText(/Middle Eastern, West African or North African/i)
+    ).toBeInTheDocument()
+    expect(screen.getByLabelText(/pacific islander/i)).toBeInTheDocument()
     expect(screen.getByLabelText(/white/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/other \/ multiracial/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/decline to respond/i)).toBeInTheDocument()
 
-    expect(screen.queryByLabelText(/Asian Indian/i)).not.toBeInTheDocument()
     expect(screen.queryByLabelText(/Chinese/i)).not.toBeInTheDocument()
     expect(screen.queryByLabelText(/Filipino/i)).not.toBeInTheDocument()
     expect(screen.queryByLabelText(/Japanese/i)).not.toBeInTheDocument()
@@ -95,20 +94,14 @@ describe("<FormDemographics>", () => {
     expect(screen.queryByLabelText(/Samoan/i)).not.toBeInTheDocument()
     expect(screen.queryByLabelText(/^Other Pacific Islander$/i)).not.toBeInTheDocument()
 
-    expect(screen.getByLabelText(/ethnicity/i)).toBeInTheDocument()
-
     expect(screen.getByText(/how did you hear about us/i))
-    expect(screen.queryByLabelText(/bus ad/i)).not.toBeInTheDocument()
-    expect(screen.getByLabelText(/developer website/i)).toBeInTheDocument()
     expect(screen.getByLabelText(/email alert/i)).toBeInTheDocument()
     expect(screen.getByLabelText(/flyer/i)).toBeInTheDocument()
     expect(screen.getByLabelText(/friend/i)).toBeInTheDocument()
     expect(screen.getByLabelText(/housing counselor/i)).toBeInTheDocument()
     expect(screen.getByLabelText(/^other$/i)).toBeInTheDocument()
-    expect(screen.queryByLabelText(/radio ad/i)).not.toBeInTheDocument()
-    expect(screen.getByLabelText(/alameda county hcd website/i)).toBeInTheDocument()
-    expect(screen.queryByLabelText(/government website/i)).not.toBeInTheDocument()
-    expect(screen.queryByLabelText(/property website/i)).not.toBeInTheDocument()
+    expect(screen.queryByLabelText(/government website/i)).toBeInTheDocument()
+    expect(screen.queryByLabelText(/property website/i)).toBeInTheDocument()
   })
 
   it("should expand suboptions when main key is checked", async () => {
@@ -122,6 +115,7 @@ describe("<FormDemographics>", () => {
             race: [],
             howDidYouHear: [],
           }}
+          enableLimitedHowDidYouHear={false}
         />
       </FormProviderWrapper>
     )
@@ -162,11 +156,12 @@ describe("<FormDemographics>", () => {
             race: [],
             howDidYouHear: [],
           }}
+          enableLimitedHowDidYouHear={false}
         />
       </FormProviderWrapper>
     )
 
-    expect(screen.getByRole("combobox", { name: "Spoken Language" })).toBeInTheDocument()
+    expect(screen.getByRole("combobox", { name: "Spoken language" })).toBeInTheDocument()
     expect(screen.getByRole("option", { name: "Chinese - Cantonese" })).toBeInTheDocument()
     expect(screen.getByRole("option", { name: "Chinese - Mandarin" })).toBeInTheDocument()
     expect(screen.getByRole("option", { name: "English" })).toBeInTheDocument()
@@ -180,7 +175,7 @@ describe("<FormDemographics>", () => {
 
     await act(async () => {
       await userEvent.selectOptions(
-        screen.getByRole("combobox", { name: "Spoken Language" }),
+        screen.getByRole("combobox", { name: "Spoken language" }),
         screen.getByRole("option", { name: "Not Listed" })
       )
     })

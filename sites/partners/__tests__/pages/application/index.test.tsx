@@ -137,11 +137,11 @@ describe("partners_application_index", () => {
     expect(getByText("Residence address")).toBeInTheDocument()
     expect(getByText("Mailing address")).toBeInTheDocument()
     // expect(getByText("Work address")).toBeInTheDocument()
-    expect(getAllByText("Street address")).toHaveLength(3)
-    expect(getAllByText("Apt or unit #")).toHaveLength(3)
-    expect(getAllByText("City")).toHaveLength(3)
-    expect(getAllByText("State")).toHaveLength(3)
-    expect(getAllByText("Zip code")).toHaveLength(3)
+    expect(getAllByText("Street address")).toHaveLength(2)
+    expect(getAllByText("Apt or unit #")).toHaveLength(2)
+    expect(getAllByText("City")).toHaveLength(2)
+    expect(getAllByText("State")).toHaveLength(2)
+    expect(getAllByText("Zip code")).toHaveLength(2)
   })
 
   it("should display Primary Applicant section info with full time student question", () => {
@@ -166,11 +166,11 @@ describe("partners_application_index", () => {
     expect(getByText("Mailing address")).toBeInTheDocument()
     // Disabled for Doorway
     // expect(getByText("Work address")).toBeInTheDocument()
-    expect(getAllByText("Street address")).toHaveLength(3)
-    expect(getAllByText("Apt or unit #")).toHaveLength(3)
-    expect(getAllByText("City")).toHaveLength(3)
-    expect(getAllByText("State")).toHaveLength(3)
-    expect(getAllByText("Zip code")).toHaveLength(3)
+    expect(getAllByText("Street address")).toHaveLength(2)
+    expect(getAllByText("Apt or unit #")).toHaveLength(2)
+    expect(getAllByText("City")).toHaveLength(2)
+    expect(getAllByText("State")).toHaveLength(2)
+    expect(getAllByText("Zip code")).toHaveLength(2)
     expect(getByText("Full-time student")).toBeInTheDocument()
     expect(getByText("No")).toBeInTheDocument()
   })
@@ -258,7 +258,7 @@ describe("partners_application_index", () => {
     const { getByRole, queryByText } = render(
       <ApplicationContext.Provider value={application}>
         {/* eslint-disable-next-line @typescript-eslint/no-empty-function */}
-        <DetailsHouseholdMembers setMembersDrawer={() => {}} />
+        <DetailsHouseholdMembers setMembersDrawer={() => {}} disableWorkInRegion={true} />
       </ApplicationContext.Provider>
     )
 
@@ -268,9 +268,9 @@ describe("partners_application_index", () => {
     // Get the table and check headers
     const table = getByRole("table")
     const tableHeaders = within(table).getAllByRole("columnheader")
-    expect(tableHeaders).toHaveLength(6)
+    expect(tableHeaders).toHaveLength(5)
 
-    const [name, dob, relationship, residence, work, actions] = tableHeaders
+    const [name, dob, relationship, residence, actions] = tableHeaders
     expect(name).toHaveTextContent(/name/i)
     expect(dob).toHaveTextContent(/date of birth/i)
     expect(relationship).toHaveTextContent(/relationship/i)
@@ -301,8 +301,12 @@ describe("partners_application_index", () => {
   it("should display Houshold Members section table with full time student question", () => {
     const { getByRole } = render(
       <ApplicationContext.Provider value={application}>
-        {/* eslint-disable-next-line @typescript-eslint/no-empty-function */}
-        <DetailsHouseholdMembers setMembersDrawer={() => {}} enableFullTimeStudentQuestion={true} />
+        <DetailsHouseholdMembers
+          /* eslint-disable-next-line @typescript-eslint/no-empty-function */
+          setMembersDrawer={() => {}}
+          enableFullTimeStudentQuestion={true}
+          disableWorkInRegion={true}
+        />
       </ApplicationContext.Provider>
     )
 

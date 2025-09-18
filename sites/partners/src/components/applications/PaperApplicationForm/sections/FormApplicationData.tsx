@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React from "react"
 import {
   t,
   Field,
@@ -26,7 +26,6 @@ const FormApplicationData = (props: FormApplicationDataProps) => {
   const { register, watch, errors, setValue } = formMethods
 
   const dateSubmittedValue: DateFieldValues = watch("dateSubmitted")
-  const dateSubmittedError = !!errors?.dateSubmitted
   const isDateFilled =
     dateSubmittedValue?.day && dateSubmittedValue?.month && dateSubmittedValue?.year
 
@@ -34,28 +33,11 @@ const FormApplicationData = (props: FormApplicationDataProps) => {
     dateSubmittedValue?.day || dateSubmittedValue?.month || dateSubmittedValue?.year
 
   const dateReceivedValue: DateFieldValues = watch("dateReceived")
-  const dateReceivedError = !!errors?.dateReceived
   const isDateReceivedFilled =
     dateReceivedValue?.day && dateReceivedValue?.month && dateReceivedValue?.year
 
   const isDateReceivedRequired =
     dateReceivedValue?.day && dateReceivedValue?.month && dateReceivedValue?.year
-
-  useEffect(() => {
-    if (dateSubmittedError || !isDateRequired) {
-      setValue("timeSubmitted.hours", null)
-      setValue("timeSubmitted.minutes", null)
-      setValue("timeSubmitted.seconds", null)
-    }
-  }, [dateSubmittedError, isDateRequired, setValue])
-
-  useEffect(() => {
-    if (dateReceivedError || !isDateReceivedRequired) {
-      setValue("timeReceived.hours", null)
-      setValue("timeReceived.minutes", null)
-      setValue("timeReceived.seconds", null)
-    }
-  }, [dateReceivedError, isDateReceivedRequired, setValue])
 
   return (
     <SectionWithGrid heading={t("application.details.applicationData")}>

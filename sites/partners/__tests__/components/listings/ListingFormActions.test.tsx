@@ -1840,7 +1840,7 @@ describe("<ListingFormActions>", () => {
         expect(screen.queryAllByRole("button", { name: "Reopen" })).toHaveLength(0)
         expect(screen.getByRole("button", { name: "Save" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Unpublish" })).toBeInTheDocument()
-        expect(screen.getByRole("button", { name: "Post Results" })).toBeInTheDocument()
+        expect(screen.getByRole("button", { name: "Post results" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Exit" })).toBeInTheDocument()
       })
     })

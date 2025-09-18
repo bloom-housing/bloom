@@ -18,6 +18,7 @@ import {
   ListingEventsTypeEnum,
   ListingsStatusEnum,
   MultiselectQuestionsApplicationSectionEnum,
+  MultiselectQuestionsStatusEnum,
   RegionEnum,
   ReviewOrderTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -292,7 +293,7 @@ describe("listing data", () => {
       expect(getByText("City")).toBeInTheDocument()
       expect(getByText("Solano")).toBeInTheDocument()
       expect(getByText("Longitude")).toBeInTheDocument()
-      expect(getByText("-121.81524")).toBeInTheDocument()
+      expect(getByText("-121.91071")).toBeInTheDocument()
       expect(getByText("State")).toBeInTheDocument()
       expect(getByText("CA")).toBeInTheDocument()
       expect(getByText("Latitude")).toBeInTheDocument()
@@ -327,9 +328,9 @@ describe("listing data", () => {
       expect(getByText("Street address")).toBeInTheDocument()
       expect(getByText("98 Archer Street")).toBeInTheDocument()
       expect(getByText("City")).toBeInTheDocument()
-      expect(getByText("Dixon")).toBeInTheDocument()
+      expect(getByText("San Jose")).toBeInTheDocument()
       expect(getByText("Longitude")).toBeInTheDocument()
-      expect(getByText("-121.81524")).toBeInTheDocument()
+      expect(getByText("-121.91071")).toBeInTheDocument()
       expect(getByText("State")).toBeInTheDocument()
       expect(getByText("CA")).toBeInTheDocument()
       expect(getByText("Latitude")).toBeInTheDocument()
@@ -588,6 +589,7 @@ describe("listing data", () => {
                   text: "Test Name_1",
                   description: "Test Description_1",
                   applicationSection: MultiselectQuestionsApplicationSectionEnum.preferences,
+                  status: MultiselectQuestionsStatusEnum.draft,
                 },
               },
               {
@@ -599,6 +601,7 @@ describe("listing data", () => {
                   text: "Test Name_2",
                   description: "Test Description_2",
                   applicationSection: MultiselectQuestionsApplicationSectionEnum.preferences,
+                  status: MultiselectQuestionsStatusEnum.draft,
                 },
               },
             ],
@@ -634,6 +637,7 @@ describe("listing data", () => {
                   text: "Test Program Name_1",
                   description: "Test Program Description_1",
                   applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
+                  status: MultiselectQuestionsStatusEnum.draft,
                 },
               },
               {
@@ -645,6 +649,7 @@ describe("listing data", () => {
                   text: "Test Program Name_2",
                   description: "Test Program Description_2",
                   applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
+                  status: MultiselectQuestionsStatusEnum.draft,
                 },
               },
             ],
@@ -1072,7 +1077,7 @@ describe("listing data", () => {
       expect(getByText("Apt or unit #")).toBeInTheDocument()
       expect(getByText("#12")).toBeInTheDocument()
       expect(getByText("City")).toBeInTheDocument()
-      expect(getByText("Dixon")).toBeInTheDocument()
+      expect(getByText("San Jose")).toBeInTheDocument()
       expect(getByText("State")).toBeInTheDocument()
       expect(getByText("CA")).toBeInTheDocument()
       expect(getByText("Zip code")).toBeInTheDocument()
@@ -1212,8 +1217,8 @@ describe("listing data", () => {
         // Disabled for Doorway
         // expect(getByText("Referral")).toBeInTheDocument()
         expect(getAllByText("No")).toHaveLength(2)
-        expect(getByText("Referral contact phone")).toBeInTheDocument()
-        expect(getByText("(509) 786-4500")).toBeInTheDocument()
+        // expect(getByText("Referral contact phone")).toBeInTheDocument()
+        // expect(getByText("(509) 786-4500")).toBeInTheDocument()
         // expect(getByText("Referral summary")).toBeInTheDocument()
         // expect(getByText("Test Referral Summary")).toBeInTheDocument()
         expect(queryByText("Common digital application")).not.toBeInTheDocument()
