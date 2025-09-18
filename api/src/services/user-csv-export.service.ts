@@ -200,7 +200,9 @@ export class UserCsvExporterService implements CsvExporterServiceInterface {
   async authorizeCSVExport(user?: User): Promise<void> {
     if (
       user &&
-      (user.userRoles?.isAdmin || user.userRoles?.isJurisdictionalAdmin)
+      (user.userRoles?.isAdmin ||
+        user.userRoles?.isJurisdictionalAdmin ||
+        user.userRoles?.isLimitedJurisdictionalAdmin)
     ) {
       return;
     } else {
