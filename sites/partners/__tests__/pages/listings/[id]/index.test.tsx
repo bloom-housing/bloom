@@ -95,7 +95,7 @@ function mockJurisdictionsHaveFeatureFlagOn(
   }
 }
 
-describe.only("listing data", () => {
+describe("listing data", () => {
   describe("should display all listing data", () => {
     it("should display Listing Data section", () => {
       const { getByText } = render(
