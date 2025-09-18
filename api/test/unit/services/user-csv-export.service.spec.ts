@@ -266,5 +266,90 @@ describe('Testing user csv export service', () => {
       expect(readable).toContain(headerRow);
       expect(readable).toContain(firstUser);
     });
+
+    it('should export file for limitedJurisdictionAdmin', async () => {
+      prisma.userAccounts.findMany = jest
+        .fn()
+        .mockResolvedValue([
+          mockUser(
+            1,
+            new Date(1707842826559),
+            { isPartner: true },
+            jurisdiction1,
+          ),
+          mockUser(
+            2,
+            new Date(1707842826559),
+            { isPartner: true },
+            jurisdiction2,
+          ),
+          mockUser(
+            3,
+            new Date(1707846198724),
+            { isLimitedJurisdictionalAdmin: true },
+            jurisdiction1,
+          ),
+        ]);
+      const exportResponse = await service.exportFile(
+        {
+          user: {
+            ...requestingUser,
+            jurisdictions: [{ id: jurisdiction1 }],
+            userRoles: { isLimitedJurisdictionalAdmin: true },
+          },
+        } as unknown as ExpressRequest,
+        {} as unknown as Response,
+      );
+
+      expect(prisma.userAccounts.findMany).toBeCalledWith({
+        include: {
+          listings: true,
+          userRoles: true,
+        },
+        where: {
+          AND: [
+            {
+              OR: [
+                {
+                  userRoles: {
+                    isPartner: true,
+                  },
+                },
+                {
+                  userRoles: {
+                    isJurisdictionalAdmin: true,
+                  },
+                },
+                {
+                  userRoles: {
+                    isLimitedJurisdictionalAdmin: true,
+                  },
+                },
+              ],
+            },
+            { jurisdictions: { some: { id: { in: [jurisdiction1] } } } },
+          ],
+        },
+      });
+
+      const headerRow =
+        '"First Name","Last Name","Email","Role","Date Created","Status","Listing Names","Listing Ids","Last Logged In"';
+      const firstUser =
+        '"first name 1","last name 1","exampleemail_1@test.com","Partner","02-13-2024","Confirmed",,,"02-13-2024"';
+
+      const mockedStream = new PassThrough();
+      exportResponse.getStream().pipe(mockedStream);
+      const readable = await new Promise((resolve) => {
+        mockedStream.on('data', async (d) => {
+          const value = Buffer.from(d).toString();
+          mockedStream.end();
+          mockedStream.destroy();
+          resolve(value);
+        });
+      });
+
+      expect(readable).toContain(headerRow);
+      expect(readable).toContain(firstUser);
+    });
   });
 });

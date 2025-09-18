@@ -852,4 +852,28 @@ describe('Testing application export service', () => {
       );
     });
   });
+
+  describe('csvExport permissions', () => {
+    it('should throw ForbiddenException for limitedJurisdictionAdmin users', async () => {
+      const requestingUser = {
+        firstName: 'requesting fName',
+        lastName: 'requesting lName',
+        email: 'requestingUser@email.com',
+        userRoles: {
+          isLimitedJurisdictionalAdmin: true,
+        },
+        jurisdictions: [{ id: 'juris id' }],
+      } as unknown as User;
+
+      await expect(
+        service.csvExport(
+          {
+            listingId: 'test-listing-id',
+            includeDemographics: false,
+          } as ApplicationCsvQueryParams,
+          requestingUser,
+        ),
+      ).rejects.toThrow('Forbidden');
+    });
+  });
 });
