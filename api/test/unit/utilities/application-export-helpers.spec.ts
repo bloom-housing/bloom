@@ -398,7 +398,7 @@ describe('Testing application export helpers', () => {
         requestingUser,
       );
       const testHeaders = [
-        ...getCsvHeader(),
+        ...getCsvHeader(true),
         {
           path: 'householdSize',
           label: 'Household Size',
@@ -449,12 +449,12 @@ describe('Testing application export helpers', () => {
       );
 
       const testHeaders = [
-        ...getCsvHeader(),
+        ...getCsvHeader(true),
         {
           path: 'householdSize',
           label: 'Household Size',
         },
-        ...getHouseholdCsvHeaders(3),
+        ...getHouseholdCsvHeaders(3, false, true),
         {
           path: 'markedAsDuplicate',
           label: 'Marked As Duplicate',

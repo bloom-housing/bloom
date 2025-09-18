@@ -2446,6 +2446,28 @@ export class ScriptRunnerService {
     })
   }
   /**
+   * A script that pulls missing application data from one source into the current db
+   */
+  transferJurisdictionAdditionalApplicationData(
+    params: {
+      /** requestBody */
+      body?: DataTransferDTO
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/scriptRunner/transferJurisdictionAdditionalApplicationData"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
    * A script that takes in a standardized string and outputs the input for the ami chart create endpoint
    */
   amiChartImport(
@@ -7307,6 +7329,9 @@ export interface DataTransferDTO {
 
   /**  */
   page?: number
+
+  /**  */
+  pageSize?: number
 }
 
 export interface AssetTransferDTO {
@@ -7318,6 +7343,9 @@ export interface AssetTransferDTO {
 
   /**  */
   page?: number
+
+  /**  */
+  pageSize?: number
 
   /**  */
   cloudinaryName: string

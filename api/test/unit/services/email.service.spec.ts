@@ -298,6 +298,7 @@ describe('Testing email service', () => {
       jurisdictions: { name: 'test jurisdiction', id: 'jurisdictionId' },
       displayWaitlistSize: false,
       showWaitlist: false,
+      applicationLotteryTotals: [],
       applicationMethods: [],
       assets: [],
       listingEvents: [],
@@ -473,17 +474,35 @@ describe('Testing email service', () => {
         'http://localhost:3001',
       );
 
-      expect(sendMock).toHaveBeenCalled();
-      const emailHtml = sendMock.mock.calls[0][0].html;
+      expect(mockSeSClient).toHaveReceivedCommandWith(SendEmailCommand, {
+        FromEmailAddress: 'Doorway <no-reply@housingbayarea.org>',
+        Destination: { ToAddresses: ['applicant.email@example.com'] },
+        Content: {
+          Simple: {
+            Subject: {
+              Data: 'Your Application Confirmation',
+            },
+            Body: {
+              Html: {
+                Data: expect.anything(),
+              },
+            },
+          },
+        },
+      });
+      const html =
+        mockSeSClient.call(0).args[0].input['Content']['Simple']['Body'][
+          'Html'
+        ]['Data'];
 
-      expect(emailHtml).toContain('<h3>Property Manager</h3>');
-      expect(emailHtml).toContain('John Doe<br />');
-      expect(emailHtml).toContain('Property Manager<br />');
-      expect(emailHtml).toContain('(555) 123-4567<br />');
-      expect(emailHtml).toContain('john.doe@example.com<br />');
+      expect(html).toContain('<h3>Property Manager</h3>');
+      expect(html).toContain('John Doe<br />');
+      expect(html).toContain('Property Manager<br />');
+      expect(html).toContain('(555) 123-4567<br />');
+      expect(html).toContain('john.doe@example.com<br />');
 
-      expect(emailHtml).toContain('<h3>Office Hours:</h3>');
-      expect(emailHtml).toContain('Monday-Friday 9AM-5PM');
+      expect(html).toContain('<h3>Office Hours:</h3>');
+      expect(html).toContain('Monday-Friday 9AM-5PM');
     });
 
     it('Test leasing agent section with partial fields present', async () => {
@@ -499,14 +518,32 @@ describe('Testing email service', () => {
         'http://localhost:3001',
       );
 
-      expect(sendMock).toHaveBeenCalled();
-      const emailHtml = sendMock.mock.calls[0][0].html;
+      expect(mockSeSClient).toHaveReceivedCommandWith(SendEmailCommand, {
+        FromEmailAddress: 'Doorway <no-reply@housingbayarea.org>',
+        Destination: { ToAddresses: ['applicant.email@example.com'] },
+        Content: {
+          Simple: {
+            Subject: {
+              Data: 'Your Application Confirmation',
+            },
+            Body: {
+              Html: {
+                Data: expect.anything(),
+              },
+            },
+          },
+        },
+      });
+      const html =
+        mockSeSClient.call(0).args[0].input['Content']['Simple']['Body'][
+          'Html'
+        ]['Data'];
 
-      expect(emailHtml).toContain('<h3>Property Manager</h3>');
-      expect(emailHtml).toContain('John Doe<br />');
-      expect(emailHtml).toContain('(555) 123-4567<br />');
+      expect(html).toContain('<h3>Property Manager</h3>');
+      expect(html).toContain('John Doe<br />');
+      expect(html).toContain('(555) 123-4567<br />');
 
-      expect(emailHtml).not.toContain('<h3>Office Hours:</h3>');
+      expect(html).not.toContain('<h3>Office Hours:</h3>');
     });
 
     it('Test no property manager and office hours', async () => {
@@ -516,11 +553,29 @@ describe('Testing email service', () => {
         'http://localhost:3001',
       );
 
-      expect(sendMock).toHaveBeenCalled();
-      const emailHtml = sendMock.mock.calls[0][0].html;
+      expect(mockSeSClient).toHaveReceivedCommandWith(SendEmailCommand, {
+        FromEmailAddress: 'Doorway <no-reply@housingbayarea.org>',
+        Destination: { ToAddresses: ['applicant.email@example.com'] },
+        Content: {
+          Simple: {
+            Subject: {
+              Data: 'Your Application Confirmation',
+            },
+            Body: {
+              Html: {
+                Data: expect.anything(),
+              },
+            },
+          },
+        },
+      });
+      const html =
+        mockSeSClient.call(0).args[0].input['Content']['Simple']['Body'][
+          'Html'
+        ]['Data'];
 
-      expect(emailHtml).not.toContain('<h3>Property Manager</h3>');
-      expect(emailHtml).not.toContain('<h3>Office Hours:</h3>');
+      expect(html).not.toContain('<h3>Property Manager</h3>');
+      expect(html).not.toContain('<h3>Office Hours:</h3>');
     });
   });
 
@@ -700,12 +755,19 @@ describe('Testing email service', () => {
         jurisdictions: { name: 'test jurisdiction', id: 'jurisdictionId' },
         displayWaitlistSize: false,
         showWaitlist: false,
+        applicationLotteryTotals: [],
         applicationMethods: [],
         assets: [],
         listingEvents: [
           {
+            id: 'id',
+            createdAt: new Date(),
+            updatedAt: new Date(),
             type: ListingEventsTypeEnum.publicLottery,
             startDate: new Date(),
+            startTime: new Date(),
+            endTime: new Date(),
+            note: 'Lottery event notes',
           },
         ],
         units: [],

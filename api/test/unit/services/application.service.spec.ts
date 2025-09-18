@@ -1767,6 +1767,7 @@ describe('Testing application service', () => {
             multiselectQuestions: true,
           },
         },
+        unitGroups: true,
       },
     });
 
@@ -2081,6 +2082,7 @@ describe('Testing application service', () => {
             multiselectQuestions: true,
           },
         },
+        unitGroups: true,
       },
     });
 
