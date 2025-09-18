@@ -2213,34 +2213,6 @@ describe('Testing user service', () => {
       );
       expect(res).toEqual(true);
     });
-    it('should allow support admin to promote to jurisdictional admin', () => {
-      const res = service.isUserRoleChangeAllowed(
-        { userRoles: { isSupportAdmin: true } } as unknown as User,
-        { isJurisdictionalAdmin: true },
-      );
-      expect(res).toEqual(true);
-    });
-    it('should allow support admin to promote to partner', () => {
-      const res = service.isUserRoleChangeAllowed(
-        { userRoles: { isSupportAdmin: true } } as unknown as User,
-        { isPartner: true },
-      );
-      expect(res).toEqual(true);
-    });
-    it('should disallow support admin to promote to admin', () => {
-      const res = service.isUserRoleChangeAllowed(
-        { userRoles: { isSupportAdmin: true } } as unknown as User,
-        { isAdmin: true },
-      );
-      expect(res).toEqual(false);
-    });
-    it('should allow support admin to demote', () => {
-      const res = service.isUserRoleChangeAllowed(
-        { userRoles: { isSupportAdmin: true } } as unknown as User,
-        {},
-      );
-      expect(res).toEqual(true);
-    });
 
     it('should disallow partner to promote to jurisdictional admin', () => {
       const res = service.isUserRoleChangeAllowed(

@@ -4641,6 +4641,7 @@ describe('Testing listing service', () => {
         jurisdictions: {
           id: jurisdictionId,
         },
+        jurisdictionId,
       });
 
       prisma.listings.create = jest.fn().mockResolvedValue({
