@@ -13,7 +13,7 @@
 
   @media (min-width: theme("screens.md")) {
     flex-direction: row;
-    margin-left: var(--seeds-s20);
+    margin-inline-start: var(--seeds-s20);
   }
 }
 

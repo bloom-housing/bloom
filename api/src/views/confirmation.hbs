@@ -59,15 +59,19 @@
 
             <h2>{{t "confirmation.needToMakeUpdates"}}</h2>
             <p>{{t "leasingAgent.contactAgentToUpdateInfo"}}</p>
+            {{#if (or listing.leasingAgentName listing.leasingAgentTitle listing.leasingAgentPhone listing.leasingAgentEmail)}}
             <h3>{{t "leasingAgent.propertyManager"}}</h3>
             <p>
-              {{listing.leasingAgentName}}<br />
-              {{listing.leasingAgentTitle}}<br />
-              {{listing.leasingAgentPhone}}<br />
-              {{listing.leasingAgentEmail}}<br />
+              {{#if listing.leasingAgentName}}{{listing.leasingAgentName}}<br />{{/if}}
+              {{#if listing.leasingAgentTitle}}{{listing.leasingAgentTitle}}<br />{{/if}}
+              {{#if listing.leasingAgentPhone}}{{listing.leasingAgentPhone}}<br />{{/if}}
+              {{#if listing.leasingAgentEmail}}{{listing.leasingAgentEmail}}<br />{{/if}}
             </p>
+            {{/if}}
+            {{#if listing.leasingAgentOfficeHours}}
             <h3>{{t "leasingAgent.officeHours"}}</h3>
             <p>{{listing.leasingAgentOfficeHours}}</p>
+            {{/if}}
           </div>
         </td>
       </tr>
