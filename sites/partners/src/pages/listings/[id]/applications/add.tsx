@@ -14,8 +14,6 @@ const NewApplication = () => {
   const { profile } = useContext(AuthContext)
 
   const { listingDto: listing } = useSingleListingData(listingId)
-
-  // TODO: I guess this role can create a new paper application?
   if (profile?.userRoles?.isLimitedJurisdictionalAdmin) return null
 
   return (

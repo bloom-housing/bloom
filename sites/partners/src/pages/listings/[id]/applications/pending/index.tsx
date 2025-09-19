@@ -134,7 +134,6 @@ const ApplicationsList = () => {
       time: dayjsDate?.format("hh:mma"),
     }
   }
-  // TODO: the support admin role can see applications
   if (profile?.userRoles?.isLimitedJurisdictionalAdmin) return null
   return (
     <Layout>
