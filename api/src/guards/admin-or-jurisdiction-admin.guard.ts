@@ -7,7 +7,10 @@ export class AdminOrJurisdictionalAdminGuard implements CanActivate {
     const req = context.switchToHttp().getRequest();
     const authUser: User = req['user'];
     return (
-      authUser?.userRoles?.isAdmin || authUser?.userRoles?.isJurisdictionalAdmin
+      authUser?.userRoles?.isAdmin ||
+      authUser?.userRoles?.isSupportAdmin ||
+      authUser?.userRoles?.isJurisdictionalAdmin ||
+      authUser?.userRoles?.isLimitedJurisdictionalAdmin
     );
   }
 }

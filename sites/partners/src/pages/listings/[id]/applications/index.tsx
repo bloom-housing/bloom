@@ -122,6 +122,8 @@ const ApplicationsList = () => {
 
   if (!applications || appsError) return <div>{t("t.errorOccurred")}</div>
 
+  if (profile?.userRoles?.isLimitedJurisdictionalAdmin) return null
+
   return (
     <Layout>
       <Head>
@@ -156,7 +158,7 @@ const ApplicationsList = () => {
       <ListingStatusBar status={listingDto?.status} />
 
       <section className={"bg-gray-200 pt-4"}>
-        <article className="flex flex-col md:flex-row items-start gap-x-8 relative max-w-screen-xl mx-auto pb-8 px-4 flex-col">
+        <article className="flex flex-col md:flex-row items-start gap-x-8 relative max-w-screen-xl mx-auto pb-8 px-4">
           {listingDto && (
             <>
               <ApplicationsSideNav
