@@ -520,6 +520,27 @@ model ListingUtilities {
   @@map("listing_utilities")
 }
 
+enum ListingTypeEnum {
+  regulated
+  nonRegulated
+
+  @@map("listing_type_enum")
+}
+
+enum DepositTypeEnum {
+  fixedDeposit
+  depositRange
+
+  @@map("deposit_type_enum")
+}
+
+enum RentTypeEnum {
+  fixedRent
+  rentRange
+
+  @@map("rent_type_enum")
+}
+
 // Note: missing [referralApplication, applicationConfig, showWaitlist, unitsSummarized] virtual property
 // Note: [reserved_community_description, result_link] formerly max length 4096;
 // Note: [leasing_agent_email] formerly had an isEmail validator
