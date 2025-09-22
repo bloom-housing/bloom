@@ -585,7 +585,7 @@ model Listings {
   depositMin                            String?                       @map("deposit_min")
   depositMax                            String?                       @map("deposit_max")
   depositType                           DepositTypeEnum?              @map("deposit_type")
-  depositValue                          Decimal?                      @map("deposit_value")
+  depositValue                          Decimal?                      @map("deposit_value") @db.Decimal(8, 2)
   depositRangeMin                       Int?                          @map("deposit_range_min")
   depositRangeMax                       Int?                          @map("deposit_range_max")
   depositHelperText                     String?                       @map("deposit_helper_text")
