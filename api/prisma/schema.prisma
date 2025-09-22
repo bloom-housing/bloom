@@ -39,31 +39,31 @@ model ActivityLog {
 
 // Note: [place_name, city, county, state, street, street2, zip_code] formerly had max length of 64 characters
 model Address {
-  id                            String                        @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  createdAt                     DateTime                      @default(now()) @map("created_at") @db.Timestamp(6)
-  updatedAt                     DateTime                      @updatedAt @map("updated_at") @db.Timestamp(6)
-  placeName                     String?                       @map("place_name")
-  city                          String?
-  county                        String?
-  state                         String?
-  street                        String?
-  street2                       String?
-  zipCode                       String?                       @map("zip_code")
-  latitude                      Decimal?                      @db.Decimal
-  longitude                     Decimal?                      @db.Decimal
-  alternateContact              AlternateContact?
-  applicantWorkAddress          Applicant?                    @relation("applicant_work_address")
-  applicantAddress              Applicant?                    @relation("applicant_address")
-  applicationSelectionAddress   ApplicationSelectionOptions?  @relation("application_selection_address")
-  applicationsAlternateAddress  Applications?                 @relation("applications_alternate_address")
-  applicationsMailingAddress    Applications?                 @relation("applications_mailing_address")
-  householdMemberAddress        HouseholdMember?              @relation("household_member_address")
-  householdMemberWorkAddress    HouseholdMember?              @relation("household_member_work_address")
-  applicationDropOffAddress     Listings[]                    @relation("application_drop_off_address")
-  applicationMailingAddress     Listings[]                    @relation("application_mailing_address")
-  leasingAgentAddress           Listings[]                    @relation("leasing_agent_address")
-  applicationPickUpAddress      Listings[]                    @relation("application_pick_up_address")
-  buildingAddress               Listings[]                    @relation("building_address")
+  id                           String                       @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  createdAt                    DateTime                     @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt                    DateTime                     @updatedAt @map("updated_at") @db.Timestamp(6)
+  placeName                    String?                      @map("place_name")
+  city                         String?
+  county                       String?
+  state                        String?
+  street                       String?
+  street2                      String?
+  zipCode                      String?                      @map("zip_code")
+  latitude                     Decimal?                     @db.Decimal
+  longitude                    Decimal?                     @db.Decimal
+  alternateContact             AlternateContact?
+  applicantWorkAddress         Applicant?                   @relation("applicant_work_address")
+  applicantAddress             Applicant?                   @relation("applicant_address")
+  applicationSelectionAddress  ApplicationSelectionOptions? @relation("application_selection_address")
+  applicationsAlternateAddress Applications?                @relation("applications_alternate_address")
+  applicationsMailingAddress   Applications?                @relation("applications_mailing_address")
+  householdMemberAddress       HouseholdMember?             @relation("household_member_address")
+  householdMemberWorkAddress   HouseholdMember?             @relation("household_member_work_address")
+  applicationDropOffAddress    Listings[]                   @relation("application_drop_off_address")
+  applicationMailingAddress    Listings[]                   @relation("application_mailing_address")
+  leasingAgentAddress          Listings[]                   @relation("leasing_agent_address")
+  applicationPickUpAddress     Listings[]                   @relation("application_pick_up_address")
+  buildingAddress              Listings[]                   @relation("building_address")
 
   @@map("address")
 }
@@ -176,26 +176,26 @@ model ApplicationSelectionOptions {
   createdAt                 DateTime              @default(now()) @map("created_at") @db.Timestamp(6)
   updatedAt                 DateTime              @updatedAt @map("updated_at") @db.Timestamp(6)
   addressHolderAddressId    String?               @unique() @map("address_holder_address_id") @db.Uuid
-  addressHolderName 	      String?               @map("address_holder_name")
+  addressHolderName         String?               @map("address_holder_name")
   addressHolderRelationship String?               @map("address_holder_relationship")
-  applicationSelectionId	  String                @map("application_selection_id") @db.Uuid
-  isGeocodingVerified	      Boolean?              @map("is_geocoding_verified")
-  multiselectOptionId 	    String                @map("multiselect_option_id") @db.Uuid
-  addressHolderAddress	    Address?              @relation("application_selection_address", fields: [addressHolderAddressId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  applicationSelections	    ApplicationSelections @relation(fields: [applicationSelectionId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  multiselectOption  	      MultiselectOptions    @relation(fields: [multiselectOptionId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  applicationSelectionId    String                @map("application_selection_id") @db.Uuid
+  isGeocodingVerified       Boolean?              @map("is_geocoding_verified")
+  multiselectOptionId       String                @map("multiselect_option_id") @db.Uuid
+  addressHolderAddress      Address?              @relation("application_selection_address", fields: [addressHolderAddressId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  applicationSelections     ApplicationSelections @relation(fields: [applicationSelectionId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  multiselectOption         MultiselectOptions    @relation(fields: [multiselectOptionId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model ApplicationSelections {
   id                    String                        @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   createdAt             DateTime                      @default(now()) @map("created_at") @db.Timestamp(6)
   updatedAt             DateTime                      @updatedAt @map("updated_at") @db.Timestamp(6)
-  applicationId		      String                        @map("application_id") @db.Uuid
-  hasOptedOut		        Boolean?                      @map("has_opted_out")
+  applicationId         String                        @map("application_id") @db.Uuid
+  hasOptedOut           Boolean?                      @map("has_opted_out")
   multiselectQuestionId String                        @map("multiselect_question_id") @db.Uuid
-  application 			    Applications                  @relation(fields: [applicationId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  multiselectQuestion	  MultiselectQuestions          @relation(fields: [multiselectQuestionId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  selections			      ApplicationSelectionOptions[]
+  application           Applications                  @relation(fields: [applicationId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  multiselectQuestion   MultiselectQuestions          @relation(fields: [multiselectQuestionId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  selections            ApplicationSelectionOptions[]
 }
 
 // Note: [additional_phone_number, additional_phone_number_type, household_size] formerly max length 16;
@@ -694,21 +694,21 @@ model MultiselectOptions {
   id                          String                        @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   createdAt                   DateTime                      @default(now()) @map("created_at") @db.Timestamp(6)
   updatedAt                   DateTime                      @updatedAt @map("updated_at") @db.Timestamp(6)
-  description	 		            String?
-  isOptOut			              Boolean                       @default(false) @map("is_opt_out")
-  links				                Json?
-  mapLayerId 		              String?                       @map("map_layer_id")
-  mapPinPosition 		          String?                       @map("map_pin_position")
-  multiselectQuestionId	      String                        @map("multiselect_question_id") @db.Uuid
-  name			                  String
-  ordinal 			              Int
-  radiusSize			            Int?                          @map("radius_size")
+  description                 String?
+  isOptOut                    Boolean                       @default(false) @map("is_opt_out")
+  links                       Json?
+  mapLayerId                  String?                       @map("map_layer_id")
+  mapPinPosition              String?                       @map("map_pin_position")
+  multiselectQuestionId       String                        @map("multiselect_question_id") @db.Uuid
+  name                        String
+  ordinal                     Int
+  radiusSize                  Int?                          @map("radius_size")
   shouldCollectAddress        Boolean?                      @map("should_collect_address")
   shouldCollectName           Boolean?                      @map("should_collect_name")
-  shouldCollectRelationship	  Boolean?                      @map("should_collect_relationship")
-  validationMethod	 	        ValidationMethodEnum?         @map("validation_method")
+  shouldCollectRelationship   Boolean?                      @map("should_collect_relationship")
+  validationMethod            ValidationMethodEnum?         @map("validation_method")
   applicationSelectionOptions ApplicationSelectionOptions[]
-  multiselectQuestion	        MultiselectQuestions          @relation(fields: [multiselectQuestionId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  multiselectQuestion         MultiselectQuestions          @relation(fields: [multiselectQuestionId], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
   @@map("multiselect_options")
 }
@@ -716,27 +716,27 @@ model MultiselectOptions {
 // Note: missing [untranslatedText, untranslatedOptOutText] virtual fields
 // Note: [options] formerly had array max length 64
 model MultiselectQuestions {
-  id                          String                                      @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  createdAt                   DateTime                                    @default(now()) @map("created_at") @db.Timestamp(6)
-  updatedAt                   DateTime                                    @updatedAt @map("updated_at") @db.Timestamp(6)
-  applicationSection          MultiselectQuestionsApplicationSectionEnum  @map("application_section")
+  id                          String                                     @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  createdAt                   DateTime                                   @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt                   DateTime                                   @updatedAt @map("updated_at") @db.Timestamp(6)
+  applicationSection          MultiselectQuestionsApplicationSectionEnum @map("application_section")
   description                 String?
-  hideFromListing             Boolean?                                    @map("hide_from_listing")
-  isExclusive            			Boolean                                     @map("is_exclusive")
-  jurisdictionId              String                                      @map("jurisdiction_id") @db.Uuid
+  hideFromListing             Boolean?                                   @map("hide_from_listing")
+  isExclusive                 Boolean                                    @map("is_exclusive")
+  jurisdictionId              String                                     @map("jurisdiction_id") @db.Uuid
   links                       Json?
-  name                  			String
+  name                        String
   options                     Json?
-  optOutText                  String?                                     @map("opt_out_text")
-  status         			        MultiselectQuestionsStatusEnum
-  subText                     String?                                     @map("sub_text")
+  optOutText                  String?                                    @map("opt_out_text")
+  status                      MultiselectQuestionsStatusEnum
+  subText                     String?                                    @map("sub_text")
   text                        String
   // Used to denote when a multiselect question was transferred from another jurisdiction
-  wasCreatedExternally        Boolean                                     @default(false) @map("was_created_externally")
+  wasCreatedExternally        Boolean                                    @default(false) @map("was_created_externally")
   applicationLotteryPositions ApplicationLotteryPositions[]
   applicationLotteryTotals    ApplicationLotteryTotal[]
   applicationSelections       ApplicationSelections[]
-  jurisdiction                Jurisdictions                               @relation(fields: [jurisdictionId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  jurisdiction                Jurisdictions                              @relation(fields: [jurisdictionId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   listings                    ListingMultiselectQuestions[]
   multiselectOptions          MultiselectOptions[]
 
@@ -897,45 +897,44 @@ model UnitsSummary {
 // Note: [email] formerly lower case enforced formerly had an isEmail validator
 // Note: [phone_number] formerly had a phone number validator
 model UserAccounts {
-  id                       String                  @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  passwordHash             String                  @map("password_hash") @db.VarChar
-  passwordUpdatedAt        DateTime                @default(now()) @map("password_updated_at") @db.Timestamp(6)
-  passwordValidForDays     Int                     @default(365) @map("password_valid_for_days")
-  resetToken               String?                 @map("reset_token") @db.VarChar
-  confirmationToken        String?                 @map("confirmation_token") @db.VarChar
-  confirmedAt              DateTime?               @map("confirmed_at") @db.Timestamptz(6)
-  email                    String                  @unique() @db.VarChar
-  firstName                String                  @map("first_name") @db.VarChar
-  middleName               String?                 @map("middle_name") @db.VarChar
-  lastName                 String                  @map("last_name") @db.VarChar
-  dob                      DateTime?               @db.Timestamp(6)
-  phoneNumber              String?                 @map("phone_number") @db.VarChar
-  createdAt                DateTime                @default(now()) @map("created_at") @db.Timestamp(6)
-  updatedAt                DateTime                @updatedAt @map("updated_at") @db.Timestamp(6)
-  language                 LanguagesEnum?
-  mfaEnabled               Boolean                 @default(false) @map("mfa_enabled")
-  singleUseCode            String?                 @map("single_use_code") @db.VarChar
-  singleUseCodeUpdatedAt   DateTime?               @map("single_use_code_updated_at") @db.Timestamptz(6)
-  lastLoginAt              DateTime                @default(now()) @map("last_login_at") @db.Timestamp(6)
-  failedLoginAttemptsCount Int                     @default(0) @map("failed_login_attempts_count")
-  phoneNumberVerified      Boolean?                @default(false) @map("phone_number_verified")
-  agreedToTermsOfService   Boolean                 @default(false) @map("agreed_to_terms_of_service")
-  hitConfirmationUrl       DateTime?               @map("hit_confirmation_url") @db.Timestamptz(6)
-  activeAccessToken        String?                 @map("active_access_token") @db.VarChar
-  activeRefreshToken       String?                 @map("active_refresh_token") @db.VarChar
-  activityLogs             ActivityLog[]
-  applicationFlaggedSet    ApplicationFlaggedSet[]
-  applications             Applications[]
-  listings                 Listings[]
-  jurisdictions            Jurisdictions[]
-  userPreferences          UserPreferences?
-  userRoles                UserRoles?
-  requestedChangesListings Listings[]              @relation("requested_changes_user")
-  favoriteListings         Listings[]              @relation("favorite_listings")
+  id                        String                  @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  passwordHash              String                  @map("password_hash") @db.VarChar
+  passwordUpdatedAt         DateTime                @default(now()) @map("password_updated_at") @db.Timestamp(6)
+  passwordValidForDays      Int                     @default(365) @map("password_valid_for_days")
+  resetToken                String?                 @map("reset_token") @db.VarChar
+  confirmationToken         String?                 @map("confirmation_token") @db.VarChar
+  confirmedAt               DateTime?               @map("confirmed_at") @db.Timestamptz(6)
+  email                     String                  @unique() @db.VarChar
+  firstName                 String                  @map("first_name") @db.VarChar
+  middleName                String?                 @map("middle_name") @db.VarChar
+  lastName                  String                  @map("last_name") @db.VarChar
+  dob                       DateTime?               @db.Timestamp(6)
+  phoneNumber               String?                 @map("phone_number") @db.VarChar
+  createdAt                 DateTime                @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt                 DateTime                @updatedAt @map("updated_at") @db.Timestamp(6)
+  language                  LanguagesEnum?
+  mfaEnabled                Boolean                 @default(false) @map("mfa_enabled")
+  singleUseCode             String?                 @map("single_use_code") @db.VarChar
+  singleUseCodeUpdatedAt    DateTime?               @map("single_use_code_updated_at") @db.Timestamptz(6)
+  lastLoginAt               DateTime                @default(now()) @map("last_login_at") @db.Timestamp(6)
+  failedLoginAttemptsCount  Int                     @default(0) @map("failed_login_attempts_count")
+  phoneNumberVerified       Boolean?                @default(false) @map("phone_number_verified")
+  agreedToTermsOfService    Boolean                 @default(false) @map("agreed_to_terms_of_service")
+  hitConfirmationUrl        DateTime?               @map("hit_confirmation_url") @db.Timestamptz(6)
+  activeAccessToken         String?                 @map("active_access_token") @db.VarChar
+  activeRefreshToken        String?                 @map("active_refresh_token") @db.VarChar
+  activityLogs              ActivityLog[]
+  applicationFlaggedSet     ApplicationFlaggedSet[]
+  applications              Applications[]
+  listings                  Listings[]
+  jurisdictions             Jurisdictions[]
+  userPreferences           UserPreferences?
+  userRoles                 UserRoles?
+  requestedChangesListings  Listings[]              @relation("requested_changes_user")
+  favoriteListings          Listings[]              @relation("favorite_listings")
   lastUpdatedListingsByUser Listings[]              @relation("last_updated_by_user")
 
   @@map("user_accounts")
-  
 }
 
 model UserRoles {
