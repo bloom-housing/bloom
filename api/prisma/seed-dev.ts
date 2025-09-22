@@ -93,7 +93,7 @@ export const devSeeding = async (
       email: 'support-admin@example.com',
       confirmedAt: new Date(),
       jurisdictionIds: [jurisdiction.id],
-      password: 'abcdef',
+      acceptedTerms: true,
     }),
   });
   // add jurisdiction specific translations and default ones

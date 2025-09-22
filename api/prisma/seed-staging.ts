@@ -189,7 +189,7 @@ export const stagingSeed = async (
       email: 'support-admin@example.com',
       confirmedAt: new Date(),
       jurisdictionIds: [mainJurisdiction.id],
-      password: 'abcdef',
+      acceptedTerms: true,
     }),
   });
   // create a jurisdictional admin
