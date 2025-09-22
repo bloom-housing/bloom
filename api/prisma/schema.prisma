@@ -998,6 +998,8 @@ model UnitGroup {
   updatedAt                      DateTime                        @default(now()) @updatedAt @map("updated_at") @db.Timestamp(6)
   maxOccupancy                   Int?                            @map("max_occupancy")
   minOccupancy                   Int?                            @map("min_occupancy")
+  flatRentValueFrom              Decimal?                        @map("flat_rent_value_from")
+  flatRentValueTo                Decimal?                        @map("flat_rent_value_to")
   floorMin                       Int?                            @map("floor_min")
   floorMax                       Int?                            @map("floor_max")
   totalCount                     Int?                            @map("total_count")
@@ -1010,6 +1012,7 @@ model UnitGroup {
   openWaitlist                   Boolean                         @default(true) @map("open_waitlist")
   sqFeetMin                      Decimal?                        @map("sq_feet_min") @db.Decimal
   sqFeetMax                      Decimal?                        @map("sq_feet_max") @db.Decimal
+  rentType                       RentTypeEnum?                   @map("rent_type")
   listings                       Listings?                       @relation(fields: [listingId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   unitAccessibilityPriorityTypes UnitAccessibilityPriorityTypes? @relation(fields: [priorityTypeId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   unitGroupAmiLevels             UnitGroupAmiLevels[]
