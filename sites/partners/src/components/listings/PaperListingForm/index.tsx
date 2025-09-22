@@ -12,6 +12,7 @@ import {
   FeatureFlag,
   FeatureFlagEnum,
   Jurisdiction,
+  Listing,
   ListingCreate,
   ListingEventsTypeEnum,
   ListingUpdate,
@@ -69,6 +70,7 @@ type ListingFormProps = {
   listing?: FormListing
   editMode?: boolean
   setListingName?: React.Dispatch<React.SetStateAction<string>>
+  updateListing?: (updatedListing: Listing) => void
 }
 
 export type SubmitFunction = (
@@ -99,7 +101,7 @@ const getToast = (
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) => {
+const ListingForm = ({ listing, editMode, setListingName, updateListing }: ListingFormProps) => {
   const defaultValues = editMode ? listing : formDefaults
   const formMethods = useForm<FormListing>({
     defaultValues,
@@ -376,6 +378,9 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
               if (continueEditing) {
                 setAlert(null)
                 setListingName(result.name)
+                if (updateListing) {
+                  updateListing(result as Listing)
+                }
               } else {
                 await router.push(`/listings/${result.id}`)
               }
