@@ -76,7 +76,6 @@ export default function ListingsList() {
     formatWaitlistStatus,
     ListingsLink,
   }
-  // Todo: do we want to render something different here below for support admin?
   const columnDefs = useMemo(() => {
     const columns: (ColDef | ColGroupDef)[] = [
       {
