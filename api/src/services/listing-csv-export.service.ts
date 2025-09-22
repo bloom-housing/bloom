@@ -1302,7 +1302,10 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
   async authorizeCSVExport(user?: User): Promise<void> {
     if (
       user &&
-      (user.userRoles?.isAdmin || user.userRoles?.isJurisdictionalAdmin)
+      (user.userRoles?.isAdmin ||
+        user.userRoles?.isJurisdictionalAdmin ||
+        user.userRoles?.isPartner ||
+        user.userRoles.isSuperAdmin)
     ) {
       return;
     } else {
