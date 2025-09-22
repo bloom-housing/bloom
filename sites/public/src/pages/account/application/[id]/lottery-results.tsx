@@ -118,7 +118,8 @@ const LotteryResults = () => {
                     <Heading priority={2} size={"2xl"} className="mt-6">
                       {t("account.application.lottery.resultsHeader")}
                     </Heading>
-                    <p className="mt-4">
+                    {/* For unit groups we don't have proper unitsAvailable value */}
+                    {/* <p className="mt-4">
                       {t(
                         `account.application.lottery.resultsSubheader${
                           listing?.unitsAvailable !== 1 ? "Plural" : ""
@@ -128,7 +129,7 @@ const LotteryResults = () => {
                           units: listing?.unitsAvailable,
                         }
                       )}
-                    </p>
+                    </p> */}
                   </Card.Section>
                   <Card.Section
                     divider={"flush"}
@@ -156,7 +157,8 @@ const LotteryResults = () => {
                       </Button>
                     </div>
                   </Card.Section>
-                  <Card.Section divider={"flush"} className={"border-none"}>
+                  {/* Hide all preference related stuff, as we're not using preferences here */}
+                  {/* <Card.Section divider={"flush"} className={"border-none"}>
                     <div>
                       <Heading priority={3} size={"xl"} className={`${styles["section-heading"]}`}>
                         {t("account.application.lottery.preferencesHeader")}
@@ -181,7 +183,7 @@ const LotteryResults = () => {
                     <Message fullwidth={true} className={styles["preference-alert"]}>
                       {t("account.application.lottery.preferencesMessage")}
                     </Message>
-                  </Card.Section>
+                  </Card.Section> */}
                   {listing?.listingMultiselectQuestions
                     .filter(
                       (question) =>
