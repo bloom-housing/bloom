@@ -81,7 +81,7 @@ export function useListingsData({
     limit,
     filter: [],
     search,
-    view: view ?? ListingViews.base,
+    view: view ?? ListingViews.fundamentals,
   }
 
   if (sort) {
