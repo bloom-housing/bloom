@@ -14,7 +14,7 @@ describe("Admin User Mangement Tests", () => {
       "Partner",
       "Administrator",
       "Jurisdictional admin",
-      "Jurisdictional Admin - No PII",
+      "Jurisdictional admin - No PII",
     ]
     cy.getByTestId("ag-page-size").select("100", { force: true })
 
