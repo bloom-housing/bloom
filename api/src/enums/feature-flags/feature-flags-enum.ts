@@ -54,10 +54,6 @@ export const featureFlagMap: { name: string; description: string }[] = [
     description: 'When true, jurisdictional admins cannot be created',
   },
   {
-    name: FeatureFlagEnum.disableLimitedJurisdictionalAdmin,
-    description: 'When true, limited jurisdictional admins cannot be created',
-  },
-  {
     name: FeatureFlagEnum.disableSupportAdmin,
     description: 'When true, support admins cannot be created',
   },
