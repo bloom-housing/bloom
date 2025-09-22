@@ -276,7 +276,11 @@ export class ListingService implements OnModuleInit {
     if (userRoles.includes(UserRoleEnum.admin))
       userRolesWhere.push({ userRoles: { isAdmin: true } });
     if (userRoles.includes(UserRoleEnum.supportAdmin))
-      userRolesWhere.push({ userRoles: { isSupportAdmin: true } });
+      userRolesWhere.push({
+        userRoles: { isSuperAdmin: true },
+        listings: { some: { id: listingId } },
+      });
+    userRolesWhere.push({ userRoles: { isSupportAdmin: true } });
     if (userRoles.includes(UserRoleEnum.partner))
       userRolesWhere.push({
         userRoles: { isPartner: true },
@@ -286,6 +290,7 @@ export class ListingService implements OnModuleInit {
       userRolesWhere.push({
         userRoles: { isJurisdictionalAdmin: true },
         jurisdictions: { some: { id: jurisId } },
+        listings: { some: { id: listingId } },
       });
     }
     if (userRoles.includes(UserRoleEnum.limitedJurisdictionAdmin)) {
