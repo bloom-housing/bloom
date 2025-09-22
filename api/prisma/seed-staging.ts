@@ -191,6 +191,16 @@ export const stagingSeed = async (
       acceptedTerms: true,
     }),
   });
+  // create a limited jurisdictional admin
+  await prismaClient.userAccounts.create({
+    data: await userFactory({
+      roles: { isLimitedJurisdictionalAdmin: true },
+      email: 'limited-jurisdiction-admin@example.com',
+      confirmedAt: new Date(),
+      jurisdictionIds: [mainJurisdiction.id],
+      acceptedTerms: true,
+    }),
+  });
   // create a partner
   const partnerUser = await prismaClient.userAccounts.create({
     data: await userFactory({
