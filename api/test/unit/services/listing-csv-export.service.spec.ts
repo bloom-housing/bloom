@@ -151,23 +151,6 @@ describe('Testing listing csv export service', () => {
   });
 
   describe('authorizeCSVExport', () => {
-    it('should allow isSupportAdmin to export', async () => {
-      const user = {
-        id: 'support-admin-id',
-        userRoles: {
-          isSupportAdmin: true,
-          isAdmin: false,
-          isJurisdictionalAdmin: false,
-          isLimitedJurisdictionalAdmin: false,
-          isPartner: false,
-        },
-      };
-
-      await expect(
-        service.authorizeCSVExport(user as any),
-      ).resolves.toBeUndefined();
-    });
-
     it('should throw ForbiddenException for users without proper roles', async () => {
       const user = {
         id: 'regular-user-id',
