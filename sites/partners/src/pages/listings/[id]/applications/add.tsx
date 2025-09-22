@@ -16,6 +16,8 @@ const NewApplication = () => {
   const { listingDto: listing } = useSingleListingData(listingId)
   if (profile?.userRoles?.isLimitedJurisdictionalAdmin) return null
 
+  if (profile?.userRoles?.isLimitedJurisdictionalAdmin) return null
+
   return (
     <Layout>
       <Head>

@@ -88,7 +88,6 @@ export const stagingSeed = async (
     data: jurisdictionFactory('Lakeview', {
       featureFlags: [
         FeatureFlagEnum.disableJurisdictionalAdmin,
-        FeatureFlagEnum.disableLimitedJurisdictionalAdmin,
         FeatureFlagEnum.disableListingPreferences,
         FeatureFlagEnum.disableWorkInRegion,
         FeatureFlagEnum.enableAccessibilityFeatures,
@@ -189,7 +188,7 @@ export const stagingSeed = async (
       email: 'support-admin@example.com',
       confirmedAt: new Date(),
       jurisdictionIds: [mainJurisdiction.id],
-      password: 'abcdef',
+      acceptedTerms: true,
     }),
   });
   // create a jurisdictional admin
@@ -210,7 +209,6 @@ export const stagingSeed = async (
       confirmedAt: new Date(),
       jurisdictionIds: [mainJurisdiction.id],
       acceptedTerms: true,
-      password: 'abcdef',
     }),
   });
   // create a partner

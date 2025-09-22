@@ -66,15 +66,6 @@ const FormUserManage = ({
     !doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.disableJurisdictionalAdmin, undefined, true)
   ) {
     possibleUserRoles.push(RoleOption.JurisdictionalAdmin)
-  }
-  if (
-    !profile?.userRoles?.isPartner &&
-    !doJurisdictionsHaveFeatureFlagOn(
-      FeatureFlagEnum.disableLimitedJurisdictionalAdmin,
-      undefined,
-      true
-    )
-  ) {
     possibleUserRoles.push(RoleOption.LimitedJurisdictionalAdmin)
   }
   if (

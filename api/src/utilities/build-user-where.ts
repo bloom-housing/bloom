@@ -126,15 +126,6 @@ export const buildWhereClause = (
             },
           ],
         });
-        filters.push({
-          jurisdictions: {
-            some: {
-              id: {
-                in: user?.jurisdictions?.map((juris) => juris.id),
-              },
-            },
-          },
-        });
       } else if (user?.userRoles?.isJurisdictionalAdmin) {
         filters.push({
           OR: [

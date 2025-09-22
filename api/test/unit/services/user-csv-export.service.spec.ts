@@ -73,6 +73,7 @@ describe('Testing user csv export service', () => {
       userRoles: {
         isAdmin: true,
         isJurisdictionalAdmin: false,
+        isLimitedJurisdictionalAdmin: false,
         isPartner: false,
       },
     } as unknown as User;
