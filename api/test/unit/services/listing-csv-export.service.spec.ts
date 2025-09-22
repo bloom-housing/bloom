@@ -151,19 +151,44 @@ describe('Testing listing csv export service', () => {
   });
 
   describe('authorizeCSVExport', () => {
-    it('should throw ForbiddenException for users without proper roles', async () => {
+    it('should allow admin users to export', async () => {
       const user = {
-        id: 'regular-user-id',
         userRoles: {
-          isSupportAdmin: false,
+          isAdmin: true,
+        },
+      };
+
+      await expect(service.authorizeCSVExport(user as any)).resolves.toBeUndefined();
+    });
+
+    it('should allow jurisdictional admin users to export', async () => {
+      const user = {
+        userRoles: {
+          isJurisdictionalAdmin: true,
+        },
+      };
+
+      await expect(service.authorizeCSVExport(user as any)).resolves.toBeUndefined();
+    });
+
+    it('should throw ForbiddenException for unauthorized users', async () => {
+      const user = {
+        userRoles: {
           isAdmin: false,
           isJurisdictionalAdmin: false,
           isLimitedJurisdictionalAdmin: false,
           isPartner: false,
+          isSupportAdmin: false,
         },
       };
 
-      await expect(service.authorizeCSVExport(user as any)).rejects.toThrow();
+      await expect(service.authorizeCSVExport(user as any)).rejects.toThrow(
+        'Forbidden',
+      );
+    });
+
+    it('should throw ForbiddenException for undefined user', async () => {
+      await expect(service.authorizeCSVExport()).rejects.toThrow('Forbidden');
     });
   });
 });
