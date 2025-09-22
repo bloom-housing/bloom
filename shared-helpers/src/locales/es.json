@@ -6,7 +6,7 @@
   "account.application.confirmation": "Confirmación",
   "account.application.error": "Error",
   "account.application.lottery.applicantList": "De %{applicants} solicitantes en esta lista",
-  "account.application.lottery.next": "El administrador de la propiedad se pondrá en contacto con los solicitantes por orden de preferencia. Si se pone en contacto con usted, le pedirá que proporcione documentación que respalde lo que respondió en la solicitud. Dicha documentación podría incluir, por ejemplo, recibos de sueldo. También podría solicitarle que complete una solicitud complementaria para obtener más información.",
+  "account.application.lottery.next": "El administrador de la propiedad se comunicará con los solicitantes en orden de preferencia. Comenzarán con la prioridad más alta. Si el administrador de la propiedad se comunica con usted, le pedirá que proporcione documentación para respaldar lo que respondió en la solicitud. Esa documentación podría incluir recibos de sueldo, por ejemplo. También es posible que necesiten recopilar más información pidiéndole que complete una solicitud complementaria.",
   "account.application.lottery.nextHeader": "¿Qué pasa después?",
   "account.application.lottery.preferences": "Las preferencias de lotería para su solicitud se muestran aquí en orden de prioridad. Si no califica para ninguna preferencia de lotería, formará parte de la categoría de lotería general. La categoría de lotería general es el último grupo procesado.",
   "account.application.lottery.preferencesButton": "¿Qué son las preferencias de lotería?",
