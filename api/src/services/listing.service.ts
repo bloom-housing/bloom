@@ -290,7 +290,6 @@ export class ListingService implements OnModuleInit {
       userRolesWhere.push({
         userRoles: { isJurisdictionalAdmin: true },
         jurisdictions: { some: { id: jurisId } },
-        listings: { some: { id: listingId } },
       });
     }
     if (userRoles.includes(UserRoleEnum.limitedJurisdictionAdmin)) {
