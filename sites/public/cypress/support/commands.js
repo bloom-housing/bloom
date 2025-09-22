@@ -53,7 +53,7 @@ Cypress.Commands.add("checkErrorMessages", (command) => {
 
 Cypress.Commands.add("beginApplicationRejectAutofill", (listingName) => {
   cy.visit("/")
-  cy.getByTestId("View Listings-1").click()
+  cy.getByTestId("View listings-1").click()
   if (Cypress.env("showSeedsDesign")) {
     cy.getByID("listing-seeds-link").contains(listingName).parent().click()
   } else {

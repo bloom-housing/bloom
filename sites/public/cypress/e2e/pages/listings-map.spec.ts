@@ -44,7 +44,7 @@ describe("Listings map", function () {
     cy.get("@listingsSearch.all").should("have.length", 0)
 
     cy.visit("/")
-    cy.getByTestId("View Listings-1").click()
+    cy.getByTestId("View listings-1").click()
     cy.getByTestId("loading-overlay").should("not.exist")
 
     // Initial map load
