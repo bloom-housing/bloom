@@ -2430,7 +2430,7 @@ describe('Listing Controller Tests', () => {
         expect.arrayContaining([
           adminUser.email,
           jurisAdmin.email,
-          supportAdmin,
+          supportAdmin.email,
         ]),
         process.env.PARTNERS_PORTAL_URL,
       );
