@@ -125,16 +125,7 @@ const UnitGroupForm = ({
     bathroomMax,
   ]
 
-  const fieldToTriggerWatch = [
-    "minOccupancy",
-    "maxOccupancy",
-    "sqFeetMin",
-    "sqFeetMax",
-    "floorMin",
-    "floorMax",
-    "bathroomMin",
-    "bathroomMax",
-  ]
+  const fieldToTriggerWatch = "minOccupancy"
 
   useWatchOnFormNumberFieldsChange(fieldValuesToWatch, fieldToTriggerWatch, trigger)
 

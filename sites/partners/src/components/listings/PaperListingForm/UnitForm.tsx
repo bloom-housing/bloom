@@ -89,7 +89,7 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
 
   const fieldsValuesToWatch = [minOccupancy, maxOccupancy]
 
-  const fieldsToTriggerWatch = ["minOccupancy", "maxOccupancy"]
+  const fieldsToTriggerWatch = "minOccupancy"
 
   useWatchOnFormNumberFieldsChange(fieldsValuesToWatch, fieldsToTriggerWatch, trigger)
 

@@ -671,7 +671,7 @@ export function useLotteryActivityLog(listingId: string) {
 
 export function useWatchOnFormNumberFieldsChange(
   fieldValuesToWatch: number[],
-  fieldToTriggerWatch: string[],
+  fieldToTriggerWatch: string | string[],
   trigger: (name?: string | string[]) => Promise<boolean>
 ) {
   useEffect(() => {
