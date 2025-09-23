@@ -38,7 +38,7 @@ describe("<ListingCard>", () => {
     )
     const tags = getListingTags(listing, true)
     expect(view.getByText(listing.name)).toBeDefined()
-    expect(view.getByText("98 Archer Place, Dixon, CA 95620")).toBeDefined()
+    expect(view.getByText("98 Archer Street, San Jose, CA 95112")).toBeDefined()
     tags.forEach((tag) => {
       expect(view.getByText(tag.title)).toBeDefined()
     })

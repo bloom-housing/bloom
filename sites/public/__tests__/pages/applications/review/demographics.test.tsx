@@ -201,8 +201,8 @@ describe("applications pages", () => {
   it("should show full list of how did you hear fields", () => {
     render(<ApplicationDemographics />)
     expect(screen.getByText("How did you hear about this listing?")).toBeInTheDocument()
-    expect(screen.getByRole("checkbox", { name: "Alameda County HCD Website" })).toBeInTheDocument()
-    expect(screen.getByRole("checkbox", { name: "Developer website" })).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Government website" })).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Property website" })).toBeInTheDocument()
     expect(screen.getByRole("checkbox", { name: "Flyer" })).toBeInTheDocument()
     expect(screen.getByRole("checkbox", { name: "Email alert" })).toBeInTheDocument()
     expect(screen.getByRole("checkbox", { name: "Friend" })).toBeInTheDocument()
@@ -236,8 +236,8 @@ describe("applications pages", () => {
       </AppSubmissionContext.Provider>
     )
     expect(screen.getByText("How did you hear about this listing?")).toBeInTheDocument()
-    expect(screen.getByRole("checkbox", { name: "Alameda County HCD Website" })).toBeInTheDocument()
-    expect(screen.getByRole("checkbox", { name: "Developer website" })).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Government website" })).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Property website" })).toBeInTheDocument()
     expect(screen.getByRole("checkbox", { name: "Flyer" })).toBeInTheDocument()
     expect(screen.getByRole("checkbox", { name: "Email alert" })).toBeInTheDocument()
     expect(screen.getByRole("checkbox", { name: "Friend" })).toBeInTheDocument()
