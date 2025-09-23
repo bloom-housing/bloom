@@ -334,6 +334,8 @@ export class ListingService implements OnModuleInit {
     const nonApprovingRoles: UserRoleEnum[] = [UserRoleEnum.partner];
     if (!params.approvingRoles.includes(UserRoleEnum.jurisdictionAdmin))
       nonApprovingRoles.push(UserRoleEnum.jurisdictionAdmin);
+    if (!params.approvingRoles.includes(UserRoleEnum.supportAdmin))
+      nonApprovingRoles.push(UserRoleEnum.supportAdmin);
     if (
       params.status === ListingsStatusEnum.pendingReview &&
       params.previousStatus !== ListingsStatusEnum.pendingReview
