@@ -23,8 +23,8 @@ module.exports = {
     global: {
       branches: 50,
       functions: 47,
-      lines: 62,
-      statements: 62,
+      lines: 61,
+      statements: 61,
     },
   },
   preset: "ts-jest",

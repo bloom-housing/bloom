@@ -107,7 +107,7 @@ describe("Listings map", function () {
     cy.get('[id^="marker-id"]').first().click({ force: true })
     cy.getByTestId("listings-map-info-window").should("be.visible")
     cy.getByTestId("listings-map-info-window").within(() => {
-      cy.get("a").contains("See Details")
+      cy.get("a").contains("See details")
     })
 
     cy.getByTestId("loading-overlay").should("not.exist")
