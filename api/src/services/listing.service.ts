@@ -277,8 +277,8 @@ export class ListingService implements OnModuleInit {
       userRolesWhere.push({ userRoles: { isAdmin: true } });
     if (userRoles.includes(UserRoleEnum.supportAdmin)) {
       userRolesWhere.push({
-        userRoles: { isSuperAdmin: true },
-        listings: { some: { id: listingId } },
+        userRoles: { isSupportAdmin: true },
+        jurisdictions: { some: { id: listingId } },
       });
     }
     if (userRoles.includes(UserRoleEnum.partner))
