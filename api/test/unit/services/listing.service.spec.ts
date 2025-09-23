@@ -5094,7 +5094,11 @@ describe('Testing listing service', () => {
 
     it('listingApprovalNotify changes requested email', async () => {
       jest.spyOn(service, 'getUserEmailInfo').mockResolvedValueOnce({
-        emails: ['jurisAdmin@email.com', 'partner@email.com'],
+        emails: [
+          'jurisAdmin@email.com',
+          'partner@email.com',
+          'supportAdmin@email.com',
+        ],
       });
       await service.listingApprovalNotify({
         user,
@@ -5112,7 +5116,7 @@ describe('Testing listing service', () => {
       expect(changesRequestedMock).toBeCalledWith(
         user,
         { id: 'id', name: 'name', juris: 'jurisId' },
-        ['jurisAdmin@email.com', 'partner@email.com'],
+        ['jurisAdmin@email.com', 'partner@email.com', 'supportAdmin@email.com'],
         config.get('PARTNERS_PORTAL_URL'),
       );
     });
