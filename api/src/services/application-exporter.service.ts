@@ -9,7 +9,7 @@ import { generatePresignedGetURL, uploadToS3 } from '../utilities/s3-helpers';
 import { getExportHeaders } from '../utilities/application-export-helpers';
 import { IdDTO } from '../dtos/shared/id.dto';
 import { Jurisdiction } from '../dtos/jurisdictions/jurisdiction.dto';
-import { Injectable, StreamableFile } from '@nestjs/common';
+import { ForbiddenException, Injectable, StreamableFile } from '@nestjs/common';
 import { join } from 'path';
 import { ListingService } from './listing.service';
 import { mapTo } from '../utilities/mapTo';
@@ -856,6 +856,9 @@ export class ApplicationExporterService {
      * By making listingId required, we can check if the user has update permissions for the listing, since right now if a user has that
      * they also can run the export for that listing
      */
+    if (user?.userRoles?.isLimitedJurisdictionalAdmin)
+      throw new ForbiddenException();
+
     const jurisdictionId =
       await this.listingService.getJurisdictionIdByListingId(listingId);
 

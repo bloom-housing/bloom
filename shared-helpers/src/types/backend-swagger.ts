@@ -6683,6 +6683,9 @@ export interface UserRole {
   isJurisdictionalAdmin?: boolean
 
   /**  */
+  isLimitedJurisdictionalAdmin?: boolean
+
+  /**  */
   isPartner?: boolean
 
   /**  */
@@ -7424,6 +7427,7 @@ export enum UserRoleEnum {
   "partner" = "partner",
   "admin" = "admin",
   "jurisdictionAdmin" = "jurisdictionAdmin",
+  "limitedJurisdictionAdmin" = "limitedJurisdictionAdmin",
 }
 
 export enum FeatureFlagEnum {
