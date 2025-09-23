@@ -2427,16 +2427,16 @@ describe('Listing Controller Tests', () => {
           id: jurisdictionA.id,
         }),
         { id: listing.id, name: val.name },
-        expect.arrayContaining([
-          adminUser.email,
-          jurisAdmin.email,
-          supportAdmin.email,
-        ]),
+        expect.arrayContaining([adminUser.email, jurisAdmin.email]),
         process.env.PARTNERS_PORTAL_URL,
       );
       //ensure juris admin is not included since don't have approver permissions in alameda seed
       expect(mockRequestApproval.mock.calls[0]['emails']).toEqual(
-        expect.not.arrayContaining([wrongJurisAdmin.email, partnerUser.email]),
+        expect.not.arrayContaining([
+          wrongJurisAdmin.email,
+          partnerUser.email,
+          supportAdmin.email,
+        ]),
       );
     });
 
