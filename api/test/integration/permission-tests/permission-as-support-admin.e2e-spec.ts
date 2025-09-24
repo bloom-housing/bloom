@@ -1438,7 +1438,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         .expect(200);
     });
 
-    it('should succeed for create endpoint', async () => {
+    it('should error as forbiddens for create endpoint', async () => {
       const body = {
         name: 'new name',
         description: 'new description',
@@ -1450,7 +1450,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send(body)
         .set('Cookie', cookies)
-        .expect(201);
+        .expect(403);
     });
 
     it('should error as forbiddens for update endpoint', async () => {
@@ -1472,7 +1472,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         .expect(403);
     });
 
-    it('should succeed for delete endpoint', async () => {
+    it('should error as forbiddens for delete endpoint', async () => {
       const featureFlag = await prisma.featureFlags.create({
         data: featureFlagFactory(),
       });
@@ -1482,10 +1482,10 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send({ id: featureFlag.id })
         .set('Cookie', cookies)
-        .expect(200);
+        .expect(403);
     });
 
-    it('should succeed for associate jurisdictions endpoint', async () => {
+    it('should error as forbiddens for associate jurisdictions endpoint', async () => {
       const featureFlag = await prisma.featureFlags.create({
         data: featureFlagFactory(),
       });
@@ -1501,10 +1501,10 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send(body)
         .set('Cookie', cookies)
-        .expect(200);
+        .expect(403);
     });
 
-    it('should succeed for retrieve endpoint', async () => {
+    it('should error as forbiddens for retrieve endpoint', async () => {
       const featureFlag = await prisma.featureFlags.create({
         data: featureFlagFactory(),
       });
@@ -1513,7 +1513,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         .get(`/featureFlags/${featureFlag.id}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
-        .expect(200);
+        .expect(403);
     });
   });
 });
