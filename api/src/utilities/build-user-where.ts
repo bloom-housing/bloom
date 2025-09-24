@@ -101,31 +101,6 @@ export const buildWhereClause = (
             },
           ],
         });
-      } else if (user?.userRoles?.isSupportAdmin) {
-        filters.push({
-          OR: [
-            {
-              userRoles: {
-                isPartner: true,
-              },
-            },
-            {
-              userRoles: {
-                isSupportAdmin: true,
-              },
-            },
-            {
-              userRoles: {
-                isJurisdictionalAdmin: true,
-              },
-            },
-            {
-              userRoles: {
-                isLimitedJurisdictionalAdmin: true,
-              },
-            },
-          ],
-        });
       } else if (user?.userRoles?.isJurisdictionalAdmin) {
         filters.push({
           OR: [
