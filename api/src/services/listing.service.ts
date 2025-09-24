@@ -1630,10 +1630,6 @@ export class ListingService implements OnModuleInit {
 
     //manually check for juris/listing mismatch since logic above is forcing admin permissioning
     if (
-      (requestingUser?.userRoles?.isSupportAdmin &&
-        !requestingUser?.jurisdictions?.some(
-          (juris) => juris.id === storedListing.jurisdictionId,
-        )) ||
       (requestingUser?.userRoles?.isJurisdictionalAdmin &&
         (requestingUser?.userRoles?.isJurisdictionalAdmin ||
           requestingUser?.userRoles?.isLimitedJurisdictionalAdmin) &&
