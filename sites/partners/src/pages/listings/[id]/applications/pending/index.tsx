@@ -134,6 +134,7 @@ const ApplicationsList = () => {
       time: dayjsDate?.format("hh:mma"),
     }
   }
+
   if (profile?.userRoles?.isLimitedJurisdictionalAdmin) return null
   return (
     <Layout>

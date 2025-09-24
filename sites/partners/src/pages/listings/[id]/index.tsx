@@ -53,6 +53,7 @@ export default function ListingDetail(props: ListingProps) {
   const [copyListingDialog, setCopyListingDialog] = useState(false)
 
   if (!listing) return null
+
   return (
     <ListingContext.Provider value={listing}>
       <ListingGuard>
