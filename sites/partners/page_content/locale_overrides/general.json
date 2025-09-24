@@ -644,6 +644,5 @@
   "users.unconfirmed": "Unconfirmed",
   "users.userDetails": "User details",
   "users.jurisdictionalAdmin": "Jurisdictional admin",
-  "users.limitedJurisdictionalAdmin": "Limited Jurisdictional admin",
   "users.supportAdmin": "Admin (support)"
 }

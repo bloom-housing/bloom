@@ -417,9 +417,9 @@ export class UserService {
     const isPartnerPortalUser =
       storedUser.userRoles?.isAdmin ||
       storedUser.userRoles?.isJurisdictionalAdmin ||
-      storedUser.userRoles?.isSupportAdmin ||
       storedUser.userRoles?.isLimitedJurisdictionalAdmin ||
-      storedUser.userRoles?.isPartner;
+      storedUser.userRoles?.isPartner ||
+      storedUser.userRoles?.isSupportAdmin;
     const isUserSiteMatch = async () => {
       if (isPartnerPortalUser) {
         return dto.appUrl === process.env.PARTNERS_PORTAL_URL;
