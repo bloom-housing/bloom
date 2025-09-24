@@ -279,10 +279,10 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         },
       });
 
-      expect(activityLogResult).not.toBeNull();
+      expect(activityLogResult).toBeNull();
     });
 
-    it('should error as forbiddens for public create endpoint', async () => {
+    it('should succeed for public create endpoint', async () => {
       const unitTypeA = await unitTypeFactorySingle(
         prisma,
         UnitTypeEnum.oneBdrm,
@@ -307,10 +307,10 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
           ),
         )
         .set('Cookie', cookies)
-        .expect(403);
+        .expect(200);
     });
 
-    it('should error as forbiddens for partner create endpoint & create an activity log entry', async () => {
+    it('should succeed for partner create endpoint & create an activity log entry', async () => {
       const unitTypeA = await unitTypeFactorySingle(
         prisma,
         UnitTypeEnum.oneBdrm,
@@ -335,7 +335,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
           ),
         )
         .set('Cookie', cookies)
-        .expect(403);
+        .expect(200);
 
       const activityLogResult = await prisma.activityLog.findFirst({
         where: {
@@ -345,7 +345,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         },
       });
 
-      expect(activityLogResult).toBeNull();
+      expect(activityLogResult).not.toBeNull();
     });
 
     it('should error as forbiddens for update endpoint & create an activity log entry', async () => {
@@ -394,7 +394,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
       expect(activityLogResult).toBeNull();
     });
 
-    it('should error as forbiddens for verify endpoint', async () => {
+    it('should succeed for verify endpoint', async () => {
       const unitTypeA = await unitTypeFactorySingle(
         prisma,
         UnitTypeEnum.oneBdrm,
@@ -417,7 +417,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
           ),
         )
         .set('Cookie', cookies)
-        .expect(403);
+        .expect(200);
     });
 
     it('should error as forbiddens for csv endpoint & create an activity log entry', async () => {
@@ -465,15 +465,15 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         .expect(200);
     });
 
-    it('should error as forbiddens for retrieve endpoint', async () => {
+    it('should succeed for retrieve endpoint', async () => {
       await request(app.getHttpServer())
         .get(`/jurisdictions/${jurisdictionId}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
-        .expect(403);
+        .expect(200);
     });
 
-    it('should error as forbiddens for retrieve by name endpoint', async () => {
+    it('should succeed for retrieve by name endpoint', async () => {
       const jurisdictionNameId = await prisma.jurisdictions.create({
         data: jurisdictionFactory(`admin permission juris name`),
       });
@@ -482,7 +482,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         .get(`/jurisdictions/byName/${jurisdictionNameId.name}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
-        .expect(403);
+        .expect(200);
     });
 
     it('should error as forbiddens for create endpoint', async () => {
