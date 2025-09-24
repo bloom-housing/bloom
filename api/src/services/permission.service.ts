@@ -104,6 +104,22 @@ export class PermissionService {
           );
         }),
       );
+    } else if (user.userRoles?.isLimitedJurisdictionalAdmin) {
+      await enforcer.addRoleForUser(
+        user.id,
+        UserRoleEnum.limitedJurisdictionAdmin,
+      );
+
+      await Promise.all(
+        user.jurisdictions.map(async (adminInJurisdiction: Jurisdiction) => {
+          await enforcer.addPermissionForUser(
+            user.id,
+            'listing',
+            `r.obj.jurisdictionId == '${adminInJurisdiction.id}'`,
+            `(${permissionActions.read}|${permissionActions.create}|${permissionActions.update}|${permissionActions.delete})`,
+          );
+        }),
+      );
     } else if (user.userRoles?.isPartner) {
       await enforcer.addRoleForUser(user.id, UserRoleEnum.partner);
 
