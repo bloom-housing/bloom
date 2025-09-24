@@ -1453,7 +1453,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         .expect(201);
     });
 
-    it('should succeed for update endpoint', async () => {
+    it('should error as forbiddens for update endpoint', async () => {
       const featureFlag = await prisma.featureFlags.create({
         data: featureFlagFactory(),
       });
@@ -1469,7 +1469,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send(body)
         .set('Cookie', cookies)
-        .expect(200);
+        .expect(403);
     });
 
     it('should succeed for delete endpoint', async () => {
