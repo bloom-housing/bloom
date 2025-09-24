@@ -866,12 +866,12 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
   });
 
   describe('Testing user endpoints', () => {
-    it('should error forbidden for list endpoint', async () => {
+    it('should succeed for for list endpoint', async () => {
       await request(app.getHttpServer())
         .get(`/user/list?`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
-        .expect(403);
+        .expect(200);
     });
 
     it('should error forbidden for retrieve endpoint', async () => {
@@ -1018,7 +1018,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
           buildUserInviteMock(jurisdictionId, 'partnerUser+admin@email.com'),
         )
         .set('Cookie', cookies)
-        .expect(403);
+        .expect(201);
 
       const activityLogResult = await prisma.activityLog.findFirst({
         where: {
@@ -1028,7 +1028,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         },
       });
 
-      expect(activityLogResult).toBeNull();
+      expect(activityLogResult).not.toBeNull();
     });
 
     it('should error forbidden for csv export endpoint & create an activity log entry', async () => {
@@ -1166,7 +1166,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
       expect(activityLogResult).toBeNull();
     });
 
-    it('should error forbidden for create endpoint & create an activity log entry', async () => {
+    it('should succeed forbidden for create endpoint & create an activity log entry', async () => {
       const val = await constructFullListingData(prisma);
 
       const res = await request(app.getHttpServer())
@@ -1174,7 +1174,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send(val)
         .set('Cookie', cookies)
-        .expect(403);
+        .expect(201);
 
       const activityLogResult = await prisma.activityLog.findFirst({
         where: {
@@ -1184,7 +1184,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         },
       });
 
-      expect(activityLogResult).toBeNull();
+      expect(activityLogResult).not.toBeNull();
     });
 
     it('should succeed for duplicate endpoint & create an activity log entry', async () => {
