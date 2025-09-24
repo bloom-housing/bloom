@@ -54,7 +54,7 @@ export const featureFlagMap: { name: string; description: string }[] = [
   },
   {
     name: FeatureFlagEnum.enableSupportAdmin,
-    description: 'When false, support admins cannot be created',
+    description: 'When true, support admins can be created',
   },
   {
     name: FeatureFlagEnum.disableListingPreferences,
