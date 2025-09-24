@@ -70,7 +70,7 @@ const FormUserManage = ({
   }
   if (
     !profile?.userRoles?.isPartner &&
-    !doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.disableSupportAdmin, undefined, true)
+    doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableSupportAdmin, undefined, true)
   ) {
     possibleUserRoles.push(RoleOption.SupportAdmin)
   }
