@@ -69,7 +69,7 @@ const FormUserManage = ({
     possibleUserRoles.push(RoleOption.LimitedJurisdictionalAdmin)
   }
   if (
-    !profile?.userRoles?.isPartner &&
+    profile?.userRoles?.isAdmin &&
     doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableSupportAdmin, undefined, true)
   ) {
     possibleUserRoles.push(RoleOption.SupportAdmin)
