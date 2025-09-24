@@ -682,8 +682,8 @@ export class EmailService {
             },
             signInUrl: `${jurisdiction.publicUrl}/${language}/sign-in`,
             // These two URLs are placeholders and must be updated per jurisdiction
-            notificationsUrl: 'https://www.exygy.com',
-            helpCenterUrl: 'https://www.exygy.com',
+            // notificationsUrl: 'https://www.exygy.com',
+            // helpCenterUrl: 'https://www.exygy.com',
           }),
         );
       }

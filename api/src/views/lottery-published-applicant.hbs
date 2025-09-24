@@ -39,10 +39,14 @@
                 <br/><br/>
                 {{t "lotteryAvailable.whatHappensContent" }}
                 <br/><br/>
-                {{t "lotteryAvailable.otherOpportunities1" appOptions}} <a href="{{ notificationsUrl }}" target="_blank">{{t "lotteryAvailable.otherOpportunities2"}}</a>.
-                <br/><br/>
-                 {{t "lotteryAvailable.otherOpportunities3"}} <a href="{{ helpCenterUrl }}"  target="_blank">{{t "lotteryAvailable.otherOpportunities4"}}</a>.
-                <br/><br/>
+                {{#if notificationsUrl}}
+                    {{t "lotteryAvailable.otherOpportunities1" appOptions}} <a href="{{ notificationsUrl }}" target="_blank">{{t "lotteryAvailable.otherOpportunities2"}}</a>.
+                    <br/><br/>
+                {{/if}}
+                {{#if helpCenterUrl}}
+                     {{t "lotteryAvailable.otherOpportunities3"}} <a href="{{ helpCenterUrl }}"  target="_blank">{{t "lotteryAvailable.otherOpportunities4"}}</a>.
+                    <br/><br/>
+                {{/if}}
             </p>
             </td>
         </tr>
