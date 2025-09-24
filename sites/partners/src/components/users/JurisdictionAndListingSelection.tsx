@@ -113,8 +113,7 @@ const JurisdictionAndListingSelection = ({ jurisdictionOptions, listingsOptions 
   if (profile?.userRoles?.isAdmin) {
     if (
       selectedRoles === RoleOption.JurisdictionalAdmin ||
-      selectedRoles === RoleOption.LimitedJurisdictionalAdmin ||
-      selectedRoles === RoleOption.SupportAdmin
+      selectedRoles === RoleOption.LimitedJurisdictionalAdmin
     ) {
       // if disableJurisdictionalAdmin is flagged on for a jurisdiction remove it from selectable options
       const filteredJurisdictionOptions = jurisdictionOptions.filter(

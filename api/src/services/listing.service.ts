@@ -1599,8 +1599,7 @@ export class ListingService implements OnModuleInit {
 
     const userRoles =
       requestingUser?.userRoles?.isAdmin ||
-      (requestingUser?.userRoles?.isSupportAdmin &&
-        duplicateListingPermissions?.includes(UserRoleEnum.supportAdmin)) ||
+      requestingUser?.userRoles?.isSupportAdmin ||
       (requestingUser?.userRoles?.isJurisdictionalAdmin &&
         duplicateListingPermissions?.includes(
           UserRoleEnum.jurisdictionAdmin,
