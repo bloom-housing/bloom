@@ -309,7 +309,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         .expect(201);
     });
 
-    it('should succeed for partner create endpoint & create an activity log entry', async () => {
+    it('should error forbidden for partner create endpoint & create an activity log entry', async () => {
       const unitTypeA = await unitTypeFactorySingle(
         prisma,
         UnitTypeEnum.oneBdrm,
@@ -334,7 +334,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
           ),
         )
         .set('Cookie', cookies)
-        .expect(201);
+        .expect(403);
 
       const activityLogResult = await prisma.activityLog.findFirst({
         where: {
