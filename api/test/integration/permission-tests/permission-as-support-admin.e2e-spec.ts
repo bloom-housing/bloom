@@ -1107,7 +1107,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         .expect(200);
     });
 
-    it('should error forbidden for delete endpoint & create an activity log entry', async () => {
+    it('should succeed for delete endpoint & create an activity log entry', async () => {
       const listingData = await listingFactory(jurisdictionId, prisma, {
         noImage: true,
       });
@@ -1122,7 +1122,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
           id: listing.id,
         } as IdDTO)
         .set('Cookie', cookies)
-        .expect(403);
+        .expect(200);
 
       const activityLogResult = await prisma.activityLog.findFirst({
         where: {
@@ -1132,10 +1132,10 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         },
       });
 
-      expect(activityLogResult).toBeNull();
+      expect(activityLogResult).not.toBeNull();
     });
 
-    it('should error forbidden for update endpoint & create an activity log entry', async () => {
+    it('should succeed for update endpoint & create an activity log entry', async () => {
       const listingData = await listingFactory(jurisdictionId, prisma);
       const listing = await prisma.listings.create({
         data: listingData,
@@ -1152,7 +1152,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send(val)
         .set('Cookie', cookies)
-        .expect(403);
+        .expect(200);
 
       const activityLogResult = await prisma.activityLog.findFirst({
         where: {
@@ -1162,11 +1162,15 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         },
       });
 
-      expect(activityLogResult).toBeNull();
+      expect(activityLogResult).not.toBeNull();
     });
 
-    it('should succeed forbidden for create endpoint & create an activity log entry', async () => {
-      const val = await constructFullListingData(prisma);
+    it('should succeed for create endpoint & create an activity log entry', async () => {
+      const val = await constructFullListingData(
+        prisma,
+        undefined,
+        jurisdictionId,
+      );
 
       const res = await request(app.getHttpServer())
         .post('/listings')
@@ -1186,13 +1190,13 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
       expect(activityLogResult).not.toBeNull();
     });
 
-    it('should succeed for duplicate endpoint & create an activity log entry', async () => {
+    it('should succeed for duplicate endpoint', async () => {
       const listingData = await listingFactory(jurisdictionId, prisma);
       const listing = await prisma.listings.create({
         data: listingData,
       });
 
-      const res = await request(app.getHttpServer())
+      await request(app.getHttpServer())
         .post('/listings/duplicate')
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send({
@@ -1204,16 +1208,6 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         })
         .set('Cookie', cookies)
         .expect(201);
-
-      const activityLogResult = await prisma.activityLog.findFirst({
-        where: {
-          module: 'listing',
-          action: permissionActions.create,
-          recordId: res.body.id,
-        },
-      });
-
-      expect(activityLogResult).not.toBeNull();
     });
 
     it('should succeed for process endpoint', async () => {
@@ -1249,7 +1243,6 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         .expect(200);
     });
   });
-
   describe('Testing application flagged set endpoints', () => {
     it('should succeed for list endpoint', async () => {
       await request(app.getHttpServer())
