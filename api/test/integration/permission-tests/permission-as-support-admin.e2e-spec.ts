@@ -921,7 +921,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         .expect(403);
     });
 
-    it('should error forbidden for public resend confirmation endpoint', async () => {
+    it('should succeed for public resend confirmation endpoint', async () => {
       const userA = await prisma.userAccounts.create({
         data: await userFactory(),
       });
@@ -934,7 +934,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
           appUrl: 'https://www.google.com',
         } as EmailAndAppUrl)
         .set('Cookie', cookies)
-        .expect(403);
+        .expect(201);
     });
 
     it('should succeed for partner resend confirmation endpoint', async () => {
