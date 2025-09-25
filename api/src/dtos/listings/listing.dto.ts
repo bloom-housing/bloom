@@ -61,6 +61,7 @@ import {
   ValidateAtLeastOneUnit,
   ValidateOnlyUnitsOrUnitGroups,
 } from '../../decorators/validate-units-required.decorator';
+import { ValidateListingDeposit } from 'src/decorators/validate-listing-deposit.decorator';
 
 class Listing extends AbstractDTO {
   @Expose()
@@ -370,6 +371,7 @@ class Listing extends AbstractDTO {
   @IsEnum(DepositTypeEnum, {
     groups: [ValidationsGroupsEnum.default],
   })
+  @ValidateListingDeposit({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional({ enum: DepositTypeEnum })
   depositType: DepositTypeEnum;
 
