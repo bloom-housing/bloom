@@ -34,8 +34,8 @@ import {
 } from '../../../prisma/seed-helpers/unit-accessibility-priority-type-factory';
 import { UnitAccessibilityPriorityTypeCreate } from '../../../src/dtos/unit-accessibility-priority-types/unit-accessibility-priority-type-create.dto';
 import { UnitAccessibilityPriorityTypeUpdate } from '../../../src/dtos/unit-accessibility-priority-types/unit-accessibility-priority-type-update.dto';
-// import { UnitTypeCreate } from '../../../src/dtos/unit-types/unit-type-create.dto';
-// import { UnitTypeUpdate } from '../../../src/dtos/unit-types/unit-type-update.dto';
+import { UnitTypeCreate } from '../../../src/dtos/unit-types/unit-type-create.dto';
+import { UnitTypeUpdate } from '../../../src/dtos/unit-types/unit-type-update.dto';
 import { multiselectQuestionFactory } from '../../../prisma/seed-helpers/multiselect-question-factory';
 import { UserUpdate } from '../../../src/dtos/users/user-update.dto';
 import { EmailAndAppUrl } from '../../../src/dtos/users/email-and-app-url.dto';
@@ -322,7 +322,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         .set('Cookie', cookies)
         .expect(201);
     });
-
+    // TODO: FAILING TEST BELOW
     // it('should error as forbidden for partner create endpoint & create an activity log entry', async () => {
     //   const unitTypeA = await unitTypeFactorySingle(
     //     prisma,
@@ -739,75 +739,74 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         .expect(403);
     });
   });
+  describe('Testing unit types endpoints', () => {
+    it('should succeed forbiddens for list endpoint', async () => {
+      await request(app.getHttpServer())
+        .get(`/unitTypes?`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .expect(200);
+    });
 
-  // describe('Testing unit types endpoints', () => {
-  //   it('should succeed forbiddens for list endpoint', async () => {
-  //     await request(app.getHttpServer())
-  //       .get(`/unitTypes?`)
-  //       .set({ passkey: process.env.API_PASS_KEY || '' })
-  //       .set('Cookie', cookies)
-  //       .expect(200);
-  //   });
+    it('should succeed for retrieve endpoint', async () => {
+      const unitTypeA = await unitTypeFactorySingle(
+        prisma,
+        UnitTypeEnum.oneBdrm,
+      );
 
-  //   it('should succeed for retrieve endpoint', async () => {
-  //     const unitTypeA = await unitTypeFactorySingle(
-  //       prisma,
-  //       UnitTypeEnum.oneBdrm,
-  //     );
+      await request(app.getHttpServer())
+        .get(`/unitTypes/${unitTypeA.id}`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .expect(200);
+    });
 
-  //     await request(app.getHttpServer())
-  //       .get(`/unitTypes/${unitTypeA.id}`)
-  //       .set({ passkey: process.env.API_PASS_KEY || '' })
-  //       .set('Cookie', cookies)
-  //       .expect(200);
-  //   });
+    it('should error as forbiddens for create endpoint', async () => {
+      const name = UnitTypeEnum.twoBdrm;
+      await request(app.getHttpServer())
+        .post('/unitTypes')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({
+          name: name,
+          numBedrooms: 10,
+        } as UnitTypeCreate)
+        .set('Cookie', cookies)
+        .expect(403);
+    });
 
-  //   it('should error as forbiddens for create endpoint', async () => {
-  //     const name = UnitTypeEnum.twoBdrm;
-  //     await request(app.getHttpServer())
-  //       .post('/unitTypes')
-  //       .set({ passkey: process.env.API_PASS_KEY || '' })
-  //       .send({
-  //         name: name,
-  //         numBedrooms: 10,
-  //       } as UnitTypeCreate)
-  //       .set('Cookie', cookies)
-  //       .expect(403);
-  //   });
+    it('should error as forbiddens for update endpoint', async () => {
+      const unitTypeA = await unitTypeFactorySingle(prisma, UnitTypeEnum.SRO);
+      const name = UnitTypeEnum.SRO;
+      await request(app.getHttpServer())
+        .put(`/unitTypes/${unitTypeA.id}`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({
+          id: unitTypeA.id,
+          name: name,
+          numBedrooms: 11,
+        } as UnitTypeUpdate)
+        .set('Cookie', cookies)
+        .expect(403);
+    });
 
-  //   it('should error as forbiddens for update endpoint', async () => {
-  //     const unitTypeA = await unitTypeFactorySingle(prisma, UnitTypeEnum.SRO);
-  //     const name = UnitTypeEnum.SRO;
-  //     await request(app.getHttpServer())
-  //       .put(`/unitTypes/${unitTypeA.id}`)
-  //       .set({ passkey: process.env.API_PASS_KEY || '' })
-  //       .send({
-  //         id: unitTypeA.id,
-  //         name: name,
-  //         numBedrooms: 11,
-  //       } as UnitTypeUpdate)
-  //       .set('Cookie', cookies)
-  //       .expect(403);
-  //   });
+    it('should error as forbiddens for delete endpoint', async () => {
+      const unitTypeA = await prisma.unitTypes.create({
+        data: {
+          name: UnitTypeEnum.studio,
+          numBedrooms: 23,
+        },
+      });
 
-  //   it('should error as forbiddens for delete endpoint', async () => {
-  //     const unitTypeA = await prisma.unitTypes.create({
-  //       data: {
-  //         name: UnitTypeEnum.studio,
-  //         numBedrooms: 23,
-  //       },
-  //     });
-
-  //     await request(app.getHttpServer())
-  //       .delete(`/unitTypes`)
-  //       .set({ passkey: process.env.API_PASS_KEY || '' })
-  //       .send({
-  //         id: unitTypeA.id,
-  //       } as IdDTO)
-  //       .set('Cookie', cookies)
-  //       .expect(403);
-  //   });
-  // });
+      await request(app.getHttpServer())
+        .delete(`/unitTypes`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({
+          id: unitTypeA.id,
+        } as IdDTO)
+        .set('Cookie', cookies)
+        .expect(403);
+    });
+  });
 
   describe('Testing multiselect questions endpoints', () => {
     it('should succeed for list endpoint', async () => {
