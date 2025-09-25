@@ -4,7 +4,6 @@
 export enum FeatureFlagEnum {
   disableCommonApplication = 'disableCommonApplication',
   disableJurisdictionalAdmin = 'disableJurisdictionalAdmin',
-  disableSupportAdmin = 'disableSupportAdmin',
   disableListingPreferences = 'disableListingPreferences',
   disableWorkInRegion = 'disableWorkInRegion',
   enableAccessibilityFeatures = 'enableAccessibilityFeatures',
@@ -29,6 +28,7 @@ export enum FeatureFlagEnum {
   enableRegions = 'enableRegions',
   enableSection8Question = 'enableSection8Question',
   enableSingleUseCode = 'enableSingleUseCode',
+  enableSupportAdmin = 'enableSupportAdmin',
   enableUnderConstructionHome = 'enableUnderConstructionHome',
   enableUnitGroups = 'enableUnitGroups',
   enableUtilitiesIncluded = 'enableUtilitiesIncluded',
@@ -51,10 +51,6 @@ export const featureFlagMap: { name: string; description: string }[] = [
   {
     name: FeatureFlagEnum.disableJurisdictionalAdmin,
     description: 'When true, jurisdictional admins cannot be created',
-  },
-  {
-    name: FeatureFlagEnum.disableSupportAdmin,
-    description: 'When true, support admins cannot be created',
   },
   {
     name: FeatureFlagEnum.disableListingPreferences,
@@ -171,6 +167,10 @@ export const featureFlagMap: { name: string; description: string }[] = [
     name: FeatureFlagEnum.enableSingleUseCode,
     description:
       'When true, the backend allows for logging into this jurisdiction using the single use code flow',
+  },
+  {
+    name: FeatureFlagEnum.enableSupportAdmin,
+    description: 'When true, support admins can be created',
   },
   {
     name: FeatureFlagEnum.enableUnderConstructionHome,

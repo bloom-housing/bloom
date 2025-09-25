@@ -624,7 +624,9 @@
   "users.addPassword": "Add a password",
   "users.addUser": "Add user",
   "users.administrator": "Administrator",
+  "users.jurisdictionalAdmin": "Jurisdictional admin",
   "users.limitedJurisdictionalAdmin": "Jurisdictional admin - No PII",
+  "users.supportAdmin": "Admin (support)",
   "users.allJurisdictions": "All jurisdictions",
   "users.allListings": "All listings",
   "users.alljurisdictionalizedListings": "All %{jurisdiction} listings",
@@ -642,8 +644,5 @@
   "users.resendInvite": "Resend invite",
   "users.totalUsers": "total users",
   "users.unconfirmed": "Unconfirmed",
-  "users.userDetails": "User details",
-  "users.jurisdictionalAdmin": "Jurisdictional admin",
-  "users.limitedJurisdictionalAdmin": "Limited Jurisdictional admin",
-  "users.supportAdmin": "Admin (support)"
+  "users.userDetails": "User details"
 }

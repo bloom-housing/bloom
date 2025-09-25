@@ -80,24 +80,7 @@ export class PermissionService {
     if (user.userRoles?.isAdmin) {
       await enforcer.addRoleForUser(user.id, UserRoleEnum.admin);
     } else if (user.userRoles?.isSupportAdmin) {
-      await enforcer.addRoleForUser(user.id, UserRoleEnum.jurisdictionAdmin);
-
-      await Promise.all(
-        user.jurisdictions.map(async (adminInJurisdiction: Jurisdiction) => {
-          await enforcer.addPermissionForUser(
-            user.id,
-            'application',
-            `r.obj.jurisdictionId == '${adminInJurisdiction.id}'`,
-            `(${permissionActions.read}|${permissionActions.create}|${permissionActions.update}|${permissionActions.delete})`,
-          );
-          await enforcer.addPermissionForUser(
-            user.id,
-            'listing',
-            `r.obj.jurisdictionId == '${adminInJurisdiction.id}'`,
-            `(${permissionActions.read}|${permissionActions.create}|${permissionActions.update}|${permissionActions.delete})`,
-          );
-        }),
-      );
+      await enforcer.addRoleForUser(user.id, UserRoleEnum.supportAdmin);
     } else if (user.userRoles?.isJurisdictionalAdmin) {
       await enforcer.addRoleForUser(user.id, UserRoleEnum.jurisdictionAdmin);
 

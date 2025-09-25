@@ -1605,8 +1605,7 @@ export class ListingService implements OnModuleInit {
 
     const userRoles =
       requestingUser?.userRoles?.isAdmin ||
-      (requestingUser?.userRoles?.isSupportAdmin &&
-        duplicateListingPermissions?.includes(UserRoleEnum.supportAdmin)) ||
+      requestingUser?.userRoles?.isSupportAdmin ||
       (requestingUser?.userRoles?.isJurisdictionalAdmin &&
         duplicateListingPermissions?.includes(
           UserRoleEnum.jurisdictionAdmin,
@@ -1637,17 +1636,8 @@ export class ListingService implements OnModuleInit {
 
     //manually check for juris/listing mismatch since logic above is forcing admin permissioning
     if (
-      (requestingUser?.userRoles?.isSupportAdmin &&
-        !requestingUser?.jurisdictions?.some(
-          (juris) => juris.id === storedListing.jurisdictionId,
-        )) ||
-      (requestingUser?.userRoles?.isJurisdictionalAdmin &&
-        (requestingUser?.userRoles?.isJurisdictionalAdmin ||
-          requestingUser?.userRoles?.isLimitedJurisdictionalAdmin) &&
-        !requestingUser?.jurisdictions?.some(
-          (juris) => juris.id === storedListing.jurisdictionId,
-        )) ||
-      (requestingUser?.userRoles?.isLimitedJurisdictionalAdmin &&
+      ((requestingUser?.userRoles?.isJurisdictionalAdmin ||
+        requestingUser?.userRoles?.isLimitedJurisdictionalAdmin) &&
         !requestingUser?.jurisdictions?.some(
           (juris) => juris.id === storedListing.jurisdictionId,
         )) ||

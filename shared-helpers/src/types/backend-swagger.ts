@@ -6608,9 +6608,6 @@ export interface UserRole {
   isAdmin?: boolean
 
   /**  */
-  isSupportAdmin?: boolean
-
-  /**  */
   isJurisdictionalAdmin?: boolean
 
   /**  */
@@ -6621,6 +6618,9 @@ export interface UserRole {
 
   /**  */
   isSuperAdmin?: boolean
+
+  /**  */
+  isSupportAdmin?: boolean
 }
 
 export interface User {
@@ -7341,7 +7341,7 @@ export enum UserRoleEnum {
 export enum FeatureFlagEnum {
   "disableCommonApplication" = "disableCommonApplication",
   "disableJurisdictionalAdmin" = "disableJurisdictionalAdmin",
-  "disableSupportAdmin" = "disableSupportAdmin",
+  "enableSupportAdmin" = "enableSupportAdmin",
   "disableListingPreferences" = "disableListingPreferences",
   "disableWorkInRegion" = "disableWorkInRegion",
   "enableAccessibilityFeatures" = "enableAccessibilityFeatures",

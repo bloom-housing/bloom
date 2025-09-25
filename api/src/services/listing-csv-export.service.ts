@@ -1306,7 +1306,7 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
         user.userRoles?.isJurisdictionalAdmin ||
         user.userRoles?.isLimitedJurisdictionalAdmin ||
         user.userRoles?.isPartner ||
-        user.userRoles.isSuperAdmin)
+        user.userRoles.isSupportAdmin)
     ) {
       return;
     } else {

@@ -136,28 +136,7 @@ describe('Testing permission service', () => {
 
     const enforcer = await service.addUserPermissions(e, user);
     expect(
-      await enforcer.hasRoleForUser(
-        'example id',
-        UserRoleEnum.jurisdictionAdmin,
-      ),
-    ).toEqual(true);
-
-    expect(
-      await enforcer.hasPermissionForUser(
-        'example id',
-        'application',
-        `r.obj.jurisdictionId == 'juris id'`,
-        `(${permissionActions.read}|${permissionActions.create}|${permissionActions.update}|${permissionActions.delete})`,
-      ),
-    ).toEqual(true);
-
-    expect(
-      await enforcer.hasPermissionForUser(
-        'example id',
-        'listing',
-        `r.obj.jurisdictionId == 'juris id'`,
-        `(${permissionActions.read}|${permissionActions.create}|${permissionActions.update}|${permissionActions.delete})`,
-      ),
+      await enforcer.hasRoleForUser('example id', UserRoleEnum.supportAdmin),
     ).toEqual(true);
   });
 
@@ -245,27 +224,6 @@ describe('Testing permission service', () => {
     expect(await service.can(user, 'user', permissionActions.update)).toEqual(
       true,
     );
-  });
-
-  it('should allow support admin to write listing in the correct jurisdiction', async () => {
-    const user = {
-      id: 'example id',
-      userRoles: {
-        isSupportAdmin: true,
-      },
-      jurisdictions: [
-        {
-          id: 'juris id',
-        },
-      ],
-      listings: [],
-    } as User;
-
-    expect(
-      await service.can(user, 'listing', permissionActions.update, {
-        jurisdictionId: 'juris id',
-      }),
-    ).toEqual(true);
   });
 
   it('should allow jurisdictional admin to write listing in the correct jurisdiction', async () => {

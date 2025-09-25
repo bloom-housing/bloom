@@ -14,7 +14,6 @@ const NewApplication = () => {
   const { profile } = useContext(AuthContext)
 
   const { listingDto: listing } = useSingleListingData(listingId)
-  if (profile?.userRoles?.isLimitedJurisdictionalAdmin) return null
 
   if (profile?.userRoles?.isLimitedJurisdictionalAdmin) return null
 
