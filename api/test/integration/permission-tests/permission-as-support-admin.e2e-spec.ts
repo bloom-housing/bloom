@@ -173,7 +173,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
 
     it('should succeed for update endpoint', async () => {
       const amiChartA = await prisma.amiChart.create({
-        data: amiChartFactory(10, jurisdictionId),
+        data: amiChartFactory(11, jurisdictionId),
       });
 
       await request(app.getHttpServer())
