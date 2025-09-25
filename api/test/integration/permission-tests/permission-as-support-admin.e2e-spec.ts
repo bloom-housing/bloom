@@ -509,7 +509,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
     it('should error as forbidden for delete endpoint', async () => {
       const jurisdictionA = await generateJurisdiction(
         prisma,
-        'correct jadmin permission juris delete',
+        'correct support admin permission juris delete',
       );
 
       await request(app.getHttpServer())
