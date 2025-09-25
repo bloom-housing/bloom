@@ -2,25 +2,25 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import cookieParser from 'cookie-parser';
-// import { stringify } from 'qs';
-import { FlaggedSetStatusEnum, RuleEnum } from '@prisma/client';
+import { stringify } from 'qs';
+import { FlaggedSetStatusEnum, RuleEnum, UnitTypeEnum } from '@prisma/client';
 import { AppModule } from '../../../src/modules/app.module';
 import { PrismaService } from '../../../src/services/prisma.service';
 import { userFactory } from '../../../prisma/seed-helpers/user-factory';
 import { Login } from '../../../src/dtos/auth/login.dto';
 import { jurisdictionFactory } from '../../../prisma/seed-helpers/jurisdiction-factory';
 import { listingFactory } from '../../../prisma/seed-helpers/listing-factory';
-// import { amiChartFactory } from '../../../prisma/seed-helpers/ami-chart-factory';
-// import { AmiChartQueryParams } from '../../../src/dtos/ami-charts/ami-chart-query-params.dto';
+import { amiChartFactory } from '../../../prisma/seed-helpers/ami-chart-factory';
+import { AmiChartQueryParams } from '../../../src/dtos/ami-charts/ami-chart-query-params.dto';
 import { IdDTO } from '../../../src/dtos/shared/id.dto';
-// import {
-//   // unitTypeFactoryAll,
-//   unitTypeFactorySingle,
-// } from '../../../prisma/seed-helpers/unit-type-factory';
-// import { translationFactory } from '../../../prisma/seed-helpers/translation-factory';
-// import { applicationFactory } from '../../../prisma/seed-helpers/application-factory';
-// import { addressFactory } from '../../../prisma/seed-helpers/address-factory';
-// import { AddressCreate } from '../../../src/dtos/addresses/address-create.dto';
+import {
+  unitTypeFactoryAll,
+  unitTypeFactorySingle,
+} from '../../../prisma/seed-helpers/unit-type-factory';
+import { translationFactory } from '../../../prisma/seed-helpers/translation-factory';
+import { applicationFactory } from '../../../prisma/seed-helpers/application-factory';
+import { addressFactory } from '../../../prisma/seed-helpers/address-factory';
+import { AddressCreate } from '../../../src/dtos/addresses/address-create.dto';
 import {
   reservedCommunityTypeFactoryAll,
   reservedCommunityTypeFactoryGet,
@@ -46,8 +46,8 @@ import { permissionActions } from '../../../src/enums/permissions/permission-act
 import { AfsResolve } from '../../../src/dtos/application-flagged-sets/afs-resolve.dto';
 import {
   generateJurisdiction,
-  // buildAmiChartCreateMock,
-  // buildAmiChartUpdateMock,
+  buildAmiChartCreateMock,
+  buildAmiChartUpdateMock,
   // buildPresignedEndpointMock,
   // buildJurisdictionCreateMock,
   // buildJurisdictionUpdateMock,
@@ -56,8 +56,8 @@ import {
   buildMultiselectQuestionCreateMock,
   buildMultiselectQuestionUpdateMock,
   buildUserInviteMock,
-  // buildApplicationCreateMock,
-  // buildApplicationUpdateMock,
+  buildApplicationCreateMock,
+  buildApplicationUpdateMock,
   constructFullListingData,
   createSimpleApplication,
   createSimpleListing,
@@ -133,332 +133,332 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
     await app.close();
   });
 
-  // describe('Testing ami-chart endpoints', () => {
-  //   it('should succeed for list endpoint', async () => {
-  //     await prisma.amiChart.create({
-  //       data: amiChartFactory(10, jurisdictionId),
-  //     });
-  //     const queryParams: AmiChartQueryParams = {
-  //       jurisdictionId: jurisdictionId,
-  //     };
-  //     const query = stringify(queryParams as any);
+  describe('Testing ami-chart endpoints', () => {
+    it('should succeed for list endpoint', async () => {
+      await prisma.amiChart.create({
+        data: amiChartFactory(10, jurisdictionId),
+      });
+      const queryParams: AmiChartQueryParams = {
+        jurisdictionId: jurisdictionId,
+      };
+      const query = stringify(queryParams as any);
 
-  //     await request(app.getHttpServer())
-  //       .get(`/amiCharts?${query}`)
-  //       .set({ passkey: process.env.API_PASS_KEY || '' })
-  //       .set('Cookie', cookies)
-  //       .expect(200);
-  //   });
+      await request(app.getHttpServer())
+        .get(`/amiCharts?${query}`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .expect(200);
+    });
 
-  //   it('should succeed for retrieve endpoint', async () => {
-  //     const amiChartA = await prisma.amiChart.create({
-  //       data: amiChartFactory(10, jurisdictionId),
-  //     });
+    it('should succeed for retrieve endpoint', async () => {
+      const amiChartA = await prisma.amiChart.create({
+        data: amiChartFactory(10, jurisdictionId),
+      });
 
-  //     await request(app.getHttpServer())
-  //       .get(`/amiCharts/${amiChartA.id}`)
-  //       .set({ passkey: process.env.API_PASS_KEY || '' })
-  //       .set('Cookie', cookies)
-  //       .expect(200);
-  //   });
+      await request(app.getHttpServer())
+        .get(`/amiCharts/${amiChartA.id}`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .expect(200);
+    });
 
-  //   it('should succeed for create endpoint', async () => {
-  //     await request(app.getHttpServer())
-  //       .post('/amiCharts')
-  //       .set({ passkey: process.env.API_PASS_KEY || '' })
-  //       .send(buildAmiChartCreateMock(jurisdictionId))
-  //       .set('Cookie', cookies)
-  //       .expect(201);
-  //   });
+    it('should succeed for create endpoint', async () => {
+      await request(app.getHttpServer())
+        .post('/amiCharts')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send(buildAmiChartCreateMock(jurisdictionId))
+        .set('Cookie', cookies)
+        .expect(201);
+    });
 
-  //   it('should succeed for update endpoint', async () => {
-  //     const amiChartA = await prisma.amiChart.create({
-  //       data: amiChartFactory(11, jurisdictionId),
-  //     });
+    it('should succeed for update endpoint', async () => {
+      const amiChartA = await prisma.amiChart.create({
+        data: amiChartFactory(11, jurisdictionId),
+      });
 
-  //     await request(app.getHttpServer())
-  //       .put(`/amiCharts/${amiChartA.id}`)
-  //       .set({ passkey: process.env.API_PASS_KEY || '' })
-  //       .send(buildAmiChartUpdateMock(amiChartA.id))
-  //       .set('Cookie', cookies)
-  //       .expect(200);
-  //   });
+      await request(app.getHttpServer())
+        .put(`/amiCharts/${amiChartA.id}`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send(buildAmiChartUpdateMock(amiChartA.id))
+        .set('Cookie', cookies)
+        .expect(200);
+    });
 
-  //   it('should succeed for delete endpoint', async () => {
-  //     const amiChartA = await prisma.amiChart.create({
-  //       data: amiChartFactory(10, jurisdictionId),
-  //     });
+    it('should succeed for delete endpoint', async () => {
+      const amiChartA = await prisma.amiChart.create({
+        data: amiChartFactory(10, jurisdictionId),
+      });
 
-  //     await request(app.getHttpServer())
-  //       .delete(`/amiCharts`)
-  //       .set({ passkey: process.env.API_PASS_KEY || '' })
-  //       .send({
-  //         id: amiChartA.id,
-  //       } as IdDTO)
-  //       .set('Cookie', cookies)
-  //       .expect(200);
-  //   });
-  // });
+      await request(app.getHttpServer())
+        .delete(`/amiCharts`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({
+          id: amiChartA.id,
+        } as IdDTO)
+        .set('Cookie', cookies)
+        .expect(200);
+    });
+  });
 
-  // describe('Testing app endpoints', () => {
-  //   it('should succeed for heartbeat endpoint', async () => {
-  //     request(app.getHttpServer()).get('/').expect(200);
-  //   });
-  // });
+  describe('Testing app endpoints', () => {
+    it('should succeed for heartbeat endpoint', async () => {
+      request(app.getHttpServer()).get('/').expect(200);
+    });
+  });
 
-  // describe('Testing application endpoints', () => {
-  //   beforeAll(async () => {
-  //     await unitTypeFactoryAll(prisma);
-  //     await prisma.translations.create({
-  //       data: translationFactory(),
-  //     });
-  //   });
+  describe('Testing application endpoints', () => {
+    beforeAll(async () => {
+      await unitTypeFactoryAll(prisma);
+      await prisma.translations.create({
+        data: translationFactory(),
+      });
+    });
 
-  //   it('should succeed for list endpoint', async () => {
-  //     const listing1 = await listingFactory(jurisdictionId, prisma);
-  //     const listing1Created = await prisma.listings.create({
-  //       data: listing1,
-  //     });
+    it('should succeed for list endpoint', async () => {
+      const listing1 = await listingFactory(jurisdictionId, prisma);
+      const listing1Created = await prisma.listings.create({
+        data: listing1,
+      });
 
-  //     await request(app.getHttpServer())
-  //       .get(`/applications?listingId=${listing1Created.id}`)
-  //       .set({ passkey: process.env.API_PASS_KEY || '' })
-  //       .set('Cookie', cookies)
-  //       .expect(200);
-  //   });
+      await request(app.getHttpServer())
+        .get(`/applications?listingId=${listing1Created.id}`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .expect(200);
+    });
 
-  //   it('should error as forbidden for retrieve endpoint', async () => {
-  //     const unitTypeA = await unitTypeFactorySingle(
-  //       prisma,
-  //       UnitTypeEnum.oneBdrm,
-  //     );
+    it('should error as forbidden for retrieve endpoint', async () => {
+      const unitTypeA = await unitTypeFactorySingle(
+        prisma,
+        UnitTypeEnum.oneBdrm,
+      );
 
-  //     const listing1 = await listingFactory(jurisdictionId, prisma);
-  //     const listing1Created = await prisma.listings.create({
-  //       data: listing1,
-  //     });
+      const listing1 = await listingFactory(jurisdictionId, prisma);
+      const listing1Created = await prisma.listings.create({
+        data: listing1,
+      });
 
-  //     const applicationA = await prisma.applications.create({
-  //       data: await applicationFactory({
-  //         unitTypeId: unitTypeA.id,
-  //         listingId: listing1Created.id,
-  //       }),
-  //       include: {
-  //         applicant: true,
-  //       },
-  //     });
+      const applicationA = await prisma.applications.create({
+        data: await applicationFactory({
+          unitTypeId: unitTypeA.id,
+          listingId: listing1Created.id,
+        }),
+        include: {
+          applicant: true,
+        },
+      });
 
-  //     await request(app.getHttpServer())
-  //       .get(`/applications/${applicationA.id}`)
-  //       .set({ passkey: process.env.API_PASS_KEY || '' })
-  //       .set('Cookie', cookies)
-  //       .expect(403);
-  //   });
+      await request(app.getHttpServer())
+        .get(`/applications/${applicationA.id}`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .expect(403);
+    });
 
-  //   it('should error as forbidden for delete endpoint & create an activity log entry', async () => {
-  //     const unitTypeA = await unitTypeFactorySingle(
-  //       prisma,
-  //       UnitTypeEnum.oneBdrm,
-  //     );
-  //     const listing1 = await listingFactory(jurisdictionId, prisma);
-  //     const listing1Created = await prisma.listings.create({
-  //       data: listing1,
-  //     });
-  //     const applicationA = await prisma.applications.create({
-  //       data: await applicationFactory({
-  //         unitTypeId: unitTypeA.id,
-  //         listingId: listing1Created.id,
-  //       }),
-  //       include: {
-  //         applicant: true,
-  //       },
-  //     });
+    it('should error as forbidden for delete endpoint & create an activity log entry', async () => {
+      const unitTypeA = await unitTypeFactorySingle(
+        prisma,
+        UnitTypeEnum.oneBdrm,
+      );
+      const listing1 = await listingFactory(jurisdictionId, prisma);
+      const listing1Created = await prisma.listings.create({
+        data: listing1,
+      });
+      const applicationA = await prisma.applications.create({
+        data: await applicationFactory({
+          unitTypeId: unitTypeA.id,
+          listingId: listing1Created.id,
+        }),
+        include: {
+          applicant: true,
+        },
+      });
 
-  //     await request(app.getHttpServer())
-  //       .delete(`/applications/`)
-  //       .set({ passkey: process.env.API_PASS_KEY || '' })
-  //       .send({
-  //         id: applicationA.id,
-  //       })
-  //       .set('Cookie', cookies)
-  //       .expect(403);
+      await request(app.getHttpServer())
+        .delete(`/applications/`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({
+          id: applicationA.id,
+        })
+        .set('Cookie', cookies)
+        .expect(403);
 
-  //     const activityLogResult = await prisma.activityLog.findFirst({
-  //       where: {
-  //         module: 'application',
-  //         action: permissionActions.delete,
-  //         recordId: applicationA.id,
-  //       },
-  //     });
+      const activityLogResult = await prisma.activityLog.findFirst({
+        where: {
+          module: 'application',
+          action: permissionActions.delete,
+          recordId: applicationA.id,
+        },
+      });
 
-  //     expect(activityLogResult).toBeNull();
-  //   });
+      expect(activityLogResult).toBeNull();
+    });
 
-  //   it('should succeed for public create endpoint', async () => {
-  //     const unitTypeA = await unitTypeFactorySingle(
-  //       prisma,
-  //       UnitTypeEnum.oneBdrm,
-  //     );
+    it('should succeed for public create endpoint', async () => {
+      const unitTypeA = await unitTypeFactorySingle(
+        prisma,
+        UnitTypeEnum.oneBdrm,
+      );
 
-  //     const listing1 = await listingFactory(jurisdictionId, prisma, {
-  //       digitalApp: true,
-  //     });
-  //     const listing1Created = await prisma.listings.create({
-  //       data: listing1,
-  //     });
+      const listing1 = await listingFactory(jurisdictionId, prisma, {
+        digitalApp: true,
+      });
+      const listing1Created = await prisma.listings.create({
+        data: listing1,
+      });
 
-  //     const exampleAddress = addressFactory() as AddressCreate;
-  //     await request(app.getHttpServer())
-  //       .post(`/applications/submit`)
-  //       .set({ passkey: process.env.API_PASS_KEY || '' })
-  //       .send(
-  //         buildApplicationCreateMock(
-  //           exampleAddress,
-  //           listing1Created.id,
-  //           unitTypeA.id,
-  //           new Date(),
-  //         ),
-  //       )
-  //       .set('Cookie', cookies)
-  //       .expect(201);
-  //   });
+      const exampleAddress = addressFactory() as AddressCreate;
+      await request(app.getHttpServer())
+        .post(`/applications/submit`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send(
+          buildApplicationCreateMock(
+            exampleAddress,
+            listing1Created.id,
+            unitTypeA.id,
+            new Date(),
+          ),
+        )
+        .set('Cookie', cookies)
+        .expect(201);
+    });
 
-  //   it('should error as forbidden for partner create endpoint & create an activity log entry', async () => {
-  //     const unitTypeA = await unitTypeFactorySingle(
-  //       prisma,
-  //       UnitTypeEnum.oneBdrm,
-  //     );
+    it('should error as forbidden for partner create endpoint & create an activity log entry', async () => {
+      const unitTypeA = await unitTypeFactorySingle(
+        prisma,
+        UnitTypeEnum.oneBdrm,
+      );
 
-  //     const listing1 = await listingFactory(jurisdictionId, prisma, {
-  //       digitalApp: true,
-  //     });
-  //     const listing1Created = await prisma.listings.create({
-  //       data: listing1,
-  //     });
+      const listing1 = await listingFactory(jurisdictionId, prisma, {
+        digitalApp: true,
+      });
+      const listing1Created = await prisma.listings.create({
+        data: listing1,
+      });
 
-  //     const exampleAddress = addressFactory() as AddressCreate;
-  //     const res = await request(app.getHttpServer())
-  //       .post(`/applications/`)
-  //       .set({ passkey: process.env.API_PASS_KEY || '' })
-  //       .send(
-  //         buildApplicationCreateMock(
-  //           exampleAddress,
-  //           listing1Created.id,
-  //           unitTypeA.id,
-  //           new Date(),
-  //         ),
-  //       )
-  //       .set('Cookie', cookies)
-  //       .expect(403);
+      const exampleAddress = addressFactory() as AddressCreate;
+      const res = await request(app.getHttpServer())
+        .post(`/applications/`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send(
+          buildApplicationCreateMock(
+            exampleAddress,
+            listing1Created.id,
+            unitTypeA.id,
+            new Date(),
+          ),
+        )
+        .set('Cookie', cookies)
+        .expect(403);
 
-  //     const activityLogResult = await prisma.activityLog.findFirst({
-  //       where: {
-  //         module: 'application',
-  //         action: permissionActions.create,
-  //         recordId: res.body.id,
-  //       },
-  //     });
+      const activityLogResult = await prisma.activityLog.findFirst({
+        where: {
+          module: 'application',
+          action: permissionActions.create,
+          recordId: res.body.id,
+        },
+      });
 
-  //     expect(activityLogResult).toBeNull();
-  //   });
+      expect(activityLogResult).toBeNull();
+    });
 
-  //   it('should error as forbidden for update endpoint & create an activity log entry', async () => {
-  //     const unitTypeA = await unitTypeFactorySingle(
-  //       prisma,
-  //       UnitTypeEnum.oneBdrm,
-  //     );
-  //     const listing1 = await listingFactory(jurisdictionId, prisma);
-  //     const listing1Created = await prisma.listings.create({
-  //       data: listing1,
-  //     });
+    it('should error as forbidden for update endpoint & create an activity log entry', async () => {
+      const unitTypeA = await unitTypeFactorySingle(
+        prisma,
+        UnitTypeEnum.oneBdrm,
+      );
+      const listing1 = await listingFactory(jurisdictionId, prisma);
+      const listing1Created = await prisma.listings.create({
+        data: listing1,
+      });
 
-  //     const applicationA = await prisma.applications.create({
-  //       data: await applicationFactory({
-  //         unitTypeId: unitTypeA.id,
-  //         listingId: listing1Created.id,
-  //       }),
-  //       include: {
-  //         applicant: true,
-  //       },
-  //     });
-  //     const exampleAddress = addressFactory() as AddressCreate;
-  //     await request(app.getHttpServer())
-  //       .put(`/applications/${applicationA.id}`)
-  //       .set({ passkey: process.env.API_PASS_KEY || '' })
-  //       .send(
-  //         buildApplicationUpdateMock(
-  //           applicationA.id,
-  //           exampleAddress,
-  //           listing1Created.id,
-  //           unitTypeA.id,
-  //           new Date(),
-  //         ),
-  //       )
-  //       .set('Cookie', cookies)
-  //       .expect(403);
+      const applicationA = await prisma.applications.create({
+        data: await applicationFactory({
+          unitTypeId: unitTypeA.id,
+          listingId: listing1Created.id,
+        }),
+        include: {
+          applicant: true,
+        },
+      });
+      const exampleAddress = addressFactory() as AddressCreate;
+      await request(app.getHttpServer())
+        .put(`/applications/${applicationA.id}`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send(
+          buildApplicationUpdateMock(
+            applicationA.id,
+            exampleAddress,
+            listing1Created.id,
+            unitTypeA.id,
+            new Date(),
+          ),
+        )
+        .set('Cookie', cookies)
+        .expect(403);
 
-  //     const activityLogResult = await prisma.activityLog.findFirst({
-  //       where: {
-  //         module: 'application',
-  //         action: permissionActions.update,
-  //         recordId: applicationA.id,
-  //       },
-  //     });
+      const activityLogResult = await prisma.activityLog.findFirst({
+        where: {
+          module: 'application',
+          action: permissionActions.update,
+          recordId: applicationA.id,
+        },
+      });
 
-  //     expect(activityLogResult).toBeNull();
-  //   });
+      expect(activityLogResult).toBeNull();
+    });
 
-  //   it('should succeed for verify endpoint', async () => {
-  //     const unitTypeA = await unitTypeFactorySingle(
-  //       prisma,
-  //       UnitTypeEnum.oneBdrm,
-  //     );
-  //     const listing1 = await listingFactory(jurisdictionId, prisma);
-  //     const listing1Created = await prisma.listings.create({
-  //       data: listing1,
-  //     });
+    it('should succeed for verify endpoint', async () => {
+      const unitTypeA = await unitTypeFactorySingle(
+        prisma,
+        UnitTypeEnum.oneBdrm,
+      );
+      const listing1 = await listingFactory(jurisdictionId, prisma);
+      const listing1Created = await prisma.listings.create({
+        data: listing1,
+      });
 
-  //     const exampleAddress = addressFactory() as AddressCreate;
+      const exampleAddress = addressFactory() as AddressCreate;
 
-  //     await request(app.getHttpServer())
-  //       .post(`/applications/verify`)
-  //       .set({ passkey: process.env.API_PASS_KEY || '' })
-  //       .send(
-  //         buildApplicationCreateMock(
-  //           exampleAddress,
-  //           listing1Created.id,
-  //           unitTypeA.id,
-  //           new Date(),
-  //         ),
-  //       )
-  //       .set('Cookie', cookies)
-  //       .expect(201);
-  //   });
+      await request(app.getHttpServer())
+        .post(`/applications/verify`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send(
+          buildApplicationCreateMock(
+            exampleAddress,
+            listing1Created.id,
+            unitTypeA.id,
+            new Date(),
+          ),
+        )
+        .set('Cookie', cookies)
+        .expect(201);
+    });
 
-  //   it('should error as forbidden for csv endpoint & create an activity log entry', async () => {
-  //     const application = await applicationFactory();
-  //     const listing1 = await listingFactory(jurisdictionId, prisma, {
-  //       applications: [application],
-  //     });
-  //     const listing1Created = await prisma.listings.create({
-  //       data: listing1,
-  //     });
-  //     await request(app.getHttpServer())
-  //       .get(`/applications/csv?id=${listing1Created.id}`)
-  //       .set({ passkey: process.env.API_PASS_KEY || '' })
-  //       .set('Cookie', cookies)
-  //       .expect(403);
-  //     const activityLogResult = await prisma.activityLog.findFirst({
-  //       where: {
-  //         module: 'application',
-  //         action: 'export',
-  //         recordId: listing1Created.id,
-  //       },
-  //     });
+    it('should error as forbidden for csv endpoint & create an activity log entry', async () => {
+      const application = await applicationFactory();
+      const listing1 = await listingFactory(jurisdictionId, prisma, {
+        applications: [application],
+      });
+      const listing1Created = await prisma.listings.create({
+        data: listing1,
+      });
+      await request(app.getHttpServer())
+        .get(`/applications/csv?id=${listing1Created.id}`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .expect(403);
+      const activityLogResult = await prisma.activityLog.findFirst({
+        where: {
+          module: 'application',
+          action: 'export',
+          recordId: listing1Created.id,
+        },
+      });
 
-  //     expect(activityLogResult).toBeNull();
-  //   });
-  // });
+      expect(activityLogResult).toBeNull();
+    });
+  });
 
   // describe('Testing asset endpoints', () => {
   //   it('should succeed for presigned endpoint', async () => {
