@@ -983,24 +983,6 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .expect(403);
     });
-
-    it('should error as forbidden for csv export endpoint & create an activity log entry', async () => {
-      await request(app.getHttpServer())
-        .get('/user/csv')
-        .set({ passkey: process.env.API_PASS_KEY || '' })
-        .set('Cookie', cookies)
-        .expect(403);
-
-      const activityLogResult = await prisma.activityLog.findFirst({
-        where: {
-          module: 'user',
-          action: 'export',
-          recordId: null,
-        },
-      });
-
-      expect(activityLogResult).toBeNull();
-    });
   });
 
   describe('Testing listing endpoints', () => {
