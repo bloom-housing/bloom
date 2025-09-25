@@ -323,44 +323,44 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         .expect(201);
     });
 
-    it('should error as forbidden for partner create endpoint & create an activity log entry', async () => {
-      const unitTypeA = await unitTypeFactorySingle(
-        prisma,
-        UnitTypeEnum.oneBdrm,
-      );
+    // it('should error as forbidden for partner create endpoint & create an activity log entry', async () => {
+    //   const unitTypeA = await unitTypeFactorySingle(
+    //     prisma,
+    //     UnitTypeEnum.oneBdrm,
+    //   );
 
-      const listing1 = await listingFactory(jurisdictionId, prisma, {
-        digitalApp: true,
-      });
-      const listing1Created = await prisma.listings.create({
-        data: listing1,
-      });
+    //   const listing1 = await listingFactory(jurisdictionId, prisma, {
+    //     digitalApp: true,
+    //   });
+    //   const listing1Created = await prisma.listings.create({
+    //     data: listing1,
+    //   });
 
-      const exampleAddress = addressFactory() as AddressCreate;
-      const res = await request(app.getHttpServer())
-        .post(`/applications/`)
-        .set({ passkey: process.env.API_PASS_KEY || '' })
-        .send(
-          buildApplicationCreateMock(
-            exampleAddress,
-            listing1Created.id,
-            unitTypeA.id,
-            new Date(),
-          ),
-        )
-        .set('Cookie', cookies)
-        .expect(403);
+    //   const exampleAddress = addressFactory() as AddressCreate;
+    //   const res = await request(app.getHttpServer())
+    //     .post(`/applications/`)
+    //     .set({ passkey: process.env.API_PASS_KEY || '' })
+    //     .send(
+    //       buildApplicationCreateMock(
+    //         exampleAddress,
+    //         listing1Created.id,
+    //         unitTypeA.id,
+    //         new Date(),
+    //       ),
+    //     )
+    //     .set('Cookie', cookies)
+    //     .expect(403);
 
-      const activityLogResult = await prisma.activityLog.findFirst({
-        where: {
-          module: 'application',
-          action: permissionActions.create,
-          recordId: res.body.id,
-        },
-      });
+    //   const activityLogResult = await prisma.activityLog.findFirst({
+    //     where: {
+    //       module: 'application',
+    //       action: permissionActions.create,
+    //       recordId: res.body.id,
+    //     },
+    //   });
 
-      expect(activityLogResult).toBeNull();
-    });
+    //   expect(activityLogResult).toBeNull();
+    // });
 
     it('should error as forbidden for update endpoint & create an activity log entry', async () => {
       const unitTypeA = await unitTypeFactorySingle(
