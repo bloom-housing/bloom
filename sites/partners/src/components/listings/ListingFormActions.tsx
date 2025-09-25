@@ -93,7 +93,7 @@ const ListingFormActions = ({
 
     const dayjsDate = dayjs(listing.contentUpdatedAt)
 
-    return dayjsDate.format("MMMM DD, YYYY, HH:mm A")
+    return dayjsDate.format("MMMM DD, YYYY, hh:mm A")
   }, [listing])
 
   const actions = useMemo(() => {
