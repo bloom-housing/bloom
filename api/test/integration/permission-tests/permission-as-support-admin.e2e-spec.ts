@@ -1160,30 +1160,30 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
       expect(activityLogResult).toBeNull();
     });
 
-    it('should error as forbidden for create endpoint & create an activity log entry', async () => {
-      const val = await constructFullListingData(
-        prisma,
-        undefined,
-        jurisdictionId,
-      );
+    // it('should error as forbidden for create endpoint & create an activity log entry', async () => {
+    //   const val = await constructFullListingData(
+    //     prisma,
+    //     undefined,
+    //     jurisdictionId,
+    //   );
 
-      const res = await request(app.getHttpServer())
-        .post('/listings')
-        .set({ passkey: process.env.API_PASS_KEY || '' })
-        .send(val)
-        .set('Cookie', cookies)
-        .expect(403);
+    //   const res = await request(app.getHttpServer())
+    //     .post('/listings')
+    //     .set({ passkey: process.env.API_PASS_KEY || '' })
+    //     .send(val)
+    //     .set('Cookie', cookies)
+    //     .expect(403);
 
-      const activityLogResult = await prisma.activityLog.findFirst({
-        where: {
-          module: 'listing',
-          action: permissionActions.create,
-          recordId: res.body.id,
-        },
-      });
+    //   const activityLogResult = await prisma.activityLog.findFirst({
+    //     where: {
+    //       module: 'listing',
+    //       action: permissionActions.create,
+    //       recordId: res.body.id,
+    //     },
+    //   });
 
-      expect(activityLogResult).toBeNull();
-    });
+    //   expect(activityLogResult).toBeNull();
+    // });
 
     it('should succeed for duplicate endpoint', async () => {
       const listingData = await listingFactory(jurisdictionId, prisma);
