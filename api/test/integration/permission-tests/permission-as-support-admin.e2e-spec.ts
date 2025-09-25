@@ -877,7 +877,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         .expect(200);
     });
 
-    it('should succeed for retrieve endpoint', async () => {
+    it('should error forbidden for for retrieve endpoint', async () => {
       const userA = await prisma.userAccounts.create({
         data: await userFactory({ jurisdictionIds: [jurisdictionId] }),
       });
@@ -886,10 +886,10 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         .get(`/user/${userA.id}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
-        .expect(200);
+        .expect(403);
     });
 
-    it('should succeed for update endpoint', async () => {
+    it('should error forbidden for update endpoint', async () => {
       const userA = await prisma.userAccounts.create({
         data: await userFactory({ jurisdictionIds: [jurisdictionId] }),
       });
@@ -904,10 +904,10 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
           jurisdictions: [{ id: jurisdictionId } as IdDTO],
         } as UserUpdate)
         .set('Cookie', cookies)
-        .expect(200);
+        .expect(403);
     });
 
-    it('should succeed for delete endpoint', async () => {
+    it('should error forbidden for delete endpoint', async () => {
       const userA = await prisma.userAccounts.create({
         data: await userFactory({ jurisdictionIds: [jurisdictionId] }),
       });
@@ -919,10 +919,10 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
           id: userA.id,
         } as IdDTO)
         .set('Cookie', cookies)
-        .expect(200);
+        .expect(403);
     });
 
-    it('should succeed for public resend confirmation endpoint', async () => {
+    it('should error forbidden for public resend confirmation endpoint', async () => {
       const userA = await prisma.userAccounts.create({
         data: await userFactory(),
       });
@@ -935,7 +935,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
           appUrl: 'https://www.google.com',
         } as EmailAndAppUrl)
         .set('Cookie', cookies)
-        .expect(201);
+        .expect(403);
     });
 
     it('should succeed for partner resend confirmation endpoint', async () => {
@@ -1030,12 +1030,12 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         .expect(403);
     });
 
-    it('should succeed for csv export endpoint & create an activity log entry', async () => {
+    it('should error forbidden for csv export endpoint & create an activity log entry', async () => {
       await request(app.getHttpServer())
         .get('/user/csv')
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
-        .expect(200);
+        .expect(403);
 
       const activityLogResult = await prisma.activityLog.findFirst({
         where: {
@@ -1045,7 +1045,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         },
       });
 
-      expect(activityLogResult).not.toBeNull();
+      expect(activityLogResult).toBeNull();
     });
   });
 
@@ -1135,7 +1135,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
       expect(activityLogResult).not.toBeNull();
     });
 
-    it('should succeed for update endpoint & create an activity log entry', async () => {
+    it('should error forbidden for update endpoint & create an activity log entry', async () => {
       const listingData = await listingFactory(jurisdictionId, prisma);
       const listing = await prisma.listings.create({
         data: listingData,
@@ -1152,7 +1152,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send(val)
         .set('Cookie', cookies)
-        .expect(200);
+        .expect(403);
 
       const activityLogResult = await prisma.activityLog.findFirst({
         where: {
@@ -1165,7 +1165,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
       expect(activityLogResult).not.toBeNull();
     });
 
-    it('should succeed for create endpoint & create an activity log entry', async () => {
+    it('should error forbidden for create endpoint & create an activity log entry', async () => {
       const val = await constructFullListingData(
         prisma,
         undefined,
@@ -1177,7 +1177,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send(val)
         .set('Cookie', cookies)
-        .expect(201);
+        .expect(403);
 
       const activityLogResult = await prisma.activityLog.findFirst({
         where: {
@@ -1187,7 +1187,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         },
       });
 
-      expect(activityLogResult).not.toBeNull();
+      expect(activityLogResult).toBeNull();
     });
 
     it('should succeed for duplicate endpoint', async () => {
