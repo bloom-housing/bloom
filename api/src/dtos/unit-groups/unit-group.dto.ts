@@ -1,10 +1,4 @@
-import {
-  IsBoolean,
-  IsDecimal,
-  IsEnum,
-  IsNumber,
-  ValidateNested,
-} from 'class-validator';
+import { IsBoolean, IsEnum, IsNumber, ValidateNested } from 'class-validator';
 import { Expose, Type } from 'class-transformer';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 import { AbstractDTO } from '../shared/abstract.dto';
