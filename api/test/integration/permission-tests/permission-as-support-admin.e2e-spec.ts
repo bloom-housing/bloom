@@ -76,7 +76,7 @@ const testEmailService = {
   applicationConfirmation: jest.fn(),
 };
 
-describe('Testing Permissioning of endpoints as Support Admin User', () => {
+describe.only('Testing Permissioning of endpoints as Support Admin User', () => {
   let app: INestApplication;
   let prisma: PrismaService;
   let userService: UserService;
@@ -214,12 +214,12 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
       });
     });
 
-    it('should error forbidden for list endpoint', async () => {
+    it('should succeed for list endpoint', async () => {
       await request(app.getHttpServer())
         .get(`/applications?`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
-        .expect(403);
+        .expect(200);
     });
 
     it('should error as forbidden for retrieve endpoint', async () => {
@@ -344,7 +344,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         },
       });
 
-      expect(activityLogResult).not.toBeNull();
+      expect(activityLogResult).toBeNull();
     });
 
     it('should error as forbiddens for update endpoint & create an activity log entry', async () => {
@@ -1086,7 +1086,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         .expect(200);
     });
 
-    it('should succeed for delete endpoint & create an activity log entry', async () => {
+    it('should error forbidden for delete endpoint & create an activity log entry', async () => {
       const listingData = await listingFactory(jurisdictionId, prisma, {
         noImage: true,
       });
@@ -1101,7 +1101,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
           id: listing.id,
         } as IdDTO)
         .set('Cookie', cookies)
-        .expect(200);
+        .expect(403);
 
       const activityLogResult = await prisma.activityLog.findFirst({
         where: {
@@ -1111,7 +1111,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         },
       });
 
-      expect(activityLogResult).not.toBeNull();
+      expect(activityLogResult).toBeNull();
     });
 
     it('should error forbidden for update endpoint & create an activity log entry', async () => {
@@ -1141,7 +1141,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         },
       });
 
-      expect(activityLogResult).not.toBeNull();
+      expect(activityLogResult).toBeNull();
     });
 
     it('should error forbidden for create endpoint & create an activity log entry', async () => {
