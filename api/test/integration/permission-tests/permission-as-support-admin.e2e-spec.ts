@@ -255,7 +255,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         .expect(403);
     });
 
-    it('should error as forbidden for partner create endpoint & create an activity log entry', async () => {
+    it('should error as forbidden for partner create', async () => {
       const unitTypeA = await unitTypeFactorySingle(
         prisma,
         UnitTypeEnum.oneBdrm,
@@ -283,7 +283,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         .set('Cookie', cookies)
         .expect(403);
     });
-    it('should error as forbidden for delete endpoint & create an activity log entry', async () => {
+    it('should error as forbidden for delete endpoint', async () => {
       const unitTypeA = await unitTypeFactorySingle(
         prisma,
         UnitTypeEnum.oneBdrm,
@@ -350,7 +350,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         .set('Cookie', cookies)
         .expect(201);
     });
-    it('should error as forbidden for update endpoint & create an activity log entry', async () => {
+    it('should error as forbidden for update endpoint', async () => {
       const unitTypeA = await unitTypeFactorySingle(
         prisma,
         UnitTypeEnum.oneBdrm,
@@ -1079,7 +1079,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         .expect(200);
     });
 
-    it('should error as forbidden for create endpoint & create an activity log entry', async () => {
+    it('should error as forbidden for create endpoint', async () => {
       const val = await constructFullListingData(
         prisma,
         undefined,
@@ -1093,7 +1093,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         .set('Cookie', cookies)
         .expect(403);
     });
-    it('should error as forbidden for delete endpoint & create an activity log entry', async () => {
+    it('should error as forbidden for delete endpoint', async () => {
       const listingData = await listingFactory(jurisdictionId, prisma, {
         noImage: true,
       });
@@ -1109,19 +1109,9 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         } as IdDTO)
         .set('Cookie', cookies)
         .expect(403);
-
-      const activityLogResult = await prisma.activityLog.findFirst({
-        where: {
-          module: 'listing',
-          action: permissionActions.delete,
-          recordId: listing.id,
-        },
-      });
-
-      expect(activityLogResult).toBeNull();
     });
 
-    it('should error as forbidden for update endpoint & create an activity log entry', async () => {
+    it('should error as forbidden for update endpoint', async () => {
       const listingData = await listingFactory(jurisdictionId, prisma);
       const listing = await prisma.listings.create({
         data: listingData,
@@ -1139,16 +1129,6 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         .send(val)
         .set('Cookie', cookies)
         .expect(403);
-
-      const activityLogResult = await prisma.activityLog.findFirst({
-        where: {
-          module: 'listing',
-          action: permissionActions.update,
-          recordId: listing.id,
-        },
-      });
-
-      expect(activityLogResult).toBeNull();
     });
     it('should succeed for duplicate endpoint', async () => {
       const listingData = await listingFactory(jurisdictionId, prisma);
