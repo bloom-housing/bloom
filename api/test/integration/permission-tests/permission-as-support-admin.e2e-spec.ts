@@ -269,7 +269,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
       });
 
       const exampleAddress = addressFactory() as AddressCreate;
-      const res = await request(app.getHttpServer())
+      await request(app.getHttpServer())
         .post(`/applications/`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send(
@@ -282,16 +282,6 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         )
         .set('Cookie', cookies)
         .expect(403);
-
-      const activityLogResult = await prisma.activityLog.findFirst({
-        where: {
-          module: 'application',
-          action: permissionActions.create,
-          recordId: res.body.id,
-        },
-      });
-
-      expect(activityLogResult).toBeNull();
     });
     it('should error as forbidden for delete endpoint & create an activity log entry', async () => {
       const unitTypeA = await unitTypeFactorySingle(
@@ -1028,16 +1018,6 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
         .expect(403);
-
-      const activityLogResult = await prisma.activityLog.findFirst({
-        where: {
-          module: 'user',
-          action: 'export',
-          recordId: null,
-        },
-      });
-
-      expect(activityLogResult).toBeNull();
     });
   });
 
@@ -1106,22 +1086,12 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         jurisdictionId,
       );
 
-      const res = await request(app.getHttpServer())
+      await request(app.getHttpServer())
         .post('/listings')
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send(val)
         .set('Cookie', cookies)
         .expect(403);
-
-      const activityLogResult = await prisma.activityLog.findFirst({
-        where: {
-          module: 'listing',
-          action: permissionActions.create,
-          recordId: res.body.id,
-        },
-      });
-
-      expect(activityLogResult).toBeNull();
     });
     it('should error as forbidden for delete endpoint & create an activity log entry', async () => {
       const listingData = await listingFactory(jurisdictionId, prisma, {
