@@ -3,39 +3,39 @@ import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import cookieParser from 'cookie-parser';
 // import { stringify } from 'qs';
-import { FlaggedSetStatusEnum, RuleEnum } from '@prisma/client';
+import { FlaggedSetStatusEnum, RuleEnum, UnitTypeEnum } from '@prisma/client';
 import { AppModule } from '../../../src/modules/app.module';
 import { PrismaService } from '../../../src/services/prisma.service';
 import { userFactory } from '../../../prisma/seed-helpers/user-factory';
 import { Login } from '../../../src/dtos/auth/login.dto';
-// import { jurisdictionFactory } from '../../../prisma/seed-helpers/jurisdiction-factory';
+import { jurisdictionFactory } from '../../../prisma/seed-helpers/jurisdiction-factory';
 import { listingFactory } from '../../../prisma/seed-helpers/listing-factory';
 // import { amiChartFactory } from '../../../prisma/seed-helpers/ami-chart-factory';
 // import { AmiChartQueryParams } from '../../../src/dtos/ami-charts/ami-chart-query-params.dto';
 import { IdDTO } from '../../../src/dtos/shared/id.dto';
-// import {
-//   unitTypeFactoryAll,
-//   unitTypeFactorySingle,
-// } from '../../../prisma/seed-helpers/unit-type-factory';
+import {
+  // unitTypeFactoryAll,
+  unitTypeFactorySingle,
+} from '../../../prisma/seed-helpers/unit-type-factory';
 // import { translationFactory } from '../../../prisma/seed-helpers/translation-factory';
 // import { applicationFactory } from '../../../prisma/seed-helpers/application-factory';
 // import { addressFactory } from '../../../prisma/seed-helpers/address-factory';
 // import { AddressCreate } from '../../../src/dtos/addresses/address-create.dto';
 import {
   reservedCommunityTypeFactoryAll,
-  // reservedCommunityTypeFactoryGet,
+  reservedCommunityTypeFactoryGet,
 } from '../../../prisma/seed-helpers/reserved-community-type-factory';
-// import { unitRentTypeFactory } from '../../../prisma/seed-helpers/unit-rent-type-factory';
-// import { UnitRentTypeCreate } from '../../../src/dtos/unit-rent-types/unit-rent-type-create.dto';
-// import { UnitRentTypeUpdate } from '../../../src/dtos/unit-rent-types/unit-rent-type-update.dto';
+import { unitRentTypeFactory } from '../../../prisma/seed-helpers/unit-rent-type-factory';
+import { UnitRentTypeCreate } from '../../../src/dtos/unit-rent-types/unit-rent-type-create.dto';
+import { UnitRentTypeUpdate } from '../../../src/dtos/unit-rent-types/unit-rent-type-update.dto';
 import {
   unitAccessibilityPriorityTypeFactoryAll,
-  // unitAccessibilityPriorityTypeFactorySingle,
+  unitAccessibilityPriorityTypeFactorySingle,
 } from '../../../prisma/seed-helpers/unit-accessibility-priority-type-factory';
-// import { UnitAccessibilityPriorityTypeCreate } from '../../../src/dtos/unit-accessibility-priority-types/unit-accessibility-priority-type-create.dto';
-// import { UnitAccessibilityPriorityTypeUpdate } from '../../../src/dtos/unit-accessibility-priority-types/unit-accessibility-priority-type-update.dto';
-// import { UnitTypeCreate } from '../../../src/dtos/unit-types/unit-type-create.dto';
-// import { UnitTypeUpdate } from '../../../src/dtos/unit-types/unit-type-update.dto';
+import { UnitAccessibilityPriorityTypeCreate } from '../../../src/dtos/unit-accessibility-priority-types/unit-accessibility-priority-type-create.dto';
+import { UnitAccessibilityPriorityTypeUpdate } from '../../../src/dtos/unit-accessibility-priority-types/unit-accessibility-priority-type-update.dto';
+import { UnitTypeCreate } from '../../../src/dtos/unit-types/unit-type-create.dto';
+import { UnitTypeUpdate } from '../../../src/dtos/unit-types/unit-type-update.dto';
 import { multiselectQuestionFactory } from '../../../prisma/seed-helpers/multiselect-question-factory';
 import { UserUpdate } from '../../../src/dtos/users/user-update.dto';
 import { EmailAndAppUrl } from '../../../src/dtos/users/email-and-app-url.dto';
@@ -51,10 +51,10 @@ import {
   // buildPresignedEndpointMock,
   // buildJurisdictionCreateMock,
   // buildJurisdictionUpdateMock,
-  // buildReservedCommunityTypeCreateMock,
-  // buildReservedCommunityTypeUpdateMock,
-  // buildMultiselectQuestionCreateMock,
-  // buildMultiselectQuestionUpdateMock,
+  buildReservedCommunityTypeCreateMock,
+  buildReservedCommunityTypeUpdateMock,
+  buildMultiselectQuestionCreateMock,
+  buildMultiselectQuestionUpdateMock,
   buildUserInviteMock,
   // buildApplicationCreateMock,
   // buildApplicationUpdateMock,
@@ -539,349 +539,349 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
   //   });
   // });
 
-  // describe('Testing reserved community types endpoints', () => {
-  //   it('should succeed for list endpoint', async () => {
-  //     await request(app.getHttpServer())
-  //       .get(`/reservedCommunityTypes`)
-  //       .set({ passkey: process.env.API_PASS_KEY || '' })
-  //       .set('Cookie', cookies)
-  //       .expect(200);
-  //   });
+  describe('Testing reserved community types endpoints', () => {
+    it('should succeed for list endpoint', async () => {
+      await request(app.getHttpServer())
+        .get(`/reservedCommunityTypes`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .expect(200);
+    });
 
-  //   it('should succeed for retrieve endpoint', async () => {
-  //     const reservedCommunityTypeA = await reservedCommunityTypeFactoryGet(
-  //       prisma,
-  //       jurisdictionId,
-  //     );
+    it('should succeed for retrieve endpoint', async () => {
+      const reservedCommunityTypeA = await reservedCommunityTypeFactoryGet(
+        prisma,
+        jurisdictionId,
+      );
 
-  //     await request(app.getHttpServer())
-  //       .get(`/reservedCommunityTypes/${reservedCommunityTypeA.id}`)
-  //       .set({ passkey: process.env.API_PASS_KEY || '' })
-  //       .set('Cookie', cookies)
-  //       .expect(200);
-  //   });
+      await request(app.getHttpServer())
+        .get(`/reservedCommunityTypes/${reservedCommunityTypeA.id}`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .expect(200);
+    });
 
-  //   it('should error as forbiddens for create endpoint', async () => {
-  //     await request(app.getHttpServer())
-  //       .post('/reservedCommunityTypes')
-  //       .set({ passkey: process.env.API_PASS_KEY || '' })
-  //       .send(buildReservedCommunityTypeCreateMock(jurisdictionId))
-  //       .set('Cookie', cookies)
-  //       .expect(403);
-  //   });
+    it('should error as forbiddens for create endpoint', async () => {
+      await request(app.getHttpServer())
+        .post('/reservedCommunityTypes')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send(buildReservedCommunityTypeCreateMock(jurisdictionId))
+        .set('Cookie', cookies)
+        .expect(403);
+    });
 
-  //   it('should error as forbiddens for update endpoint', async () => {
-  //     const newJurisdiction = await prisma.jurisdictions.create({
-  //       data: jurisdictionFactory(),
-  //     });
-  //     await reservedCommunityTypeFactoryAll(newJurisdiction.id, prisma);
-  //     const reservedCommunityTypeA = await reservedCommunityTypeFactoryGet(
-  //       prisma,
-  //       newJurisdiction.id,
-  //     );
+    it('should error as forbiddens for update endpoint', async () => {
+      const newJurisdiction = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(),
+      });
+      await reservedCommunityTypeFactoryAll(newJurisdiction.id, prisma);
+      const reservedCommunityTypeA = await reservedCommunityTypeFactoryGet(
+        prisma,
+        newJurisdiction.id,
+      );
 
-  //     await request(app.getHttpServer())
-  //       .put(`/reservedCommunityTypes/${reservedCommunityTypeA.id}`)
-  //       .set({ passkey: process.env.API_PASS_KEY || '' })
-  //       .send(buildReservedCommunityTypeUpdateMock(reservedCommunityTypeA.id))
-  //       .set('Cookie', cookies)
-  //       .expect(403);
-  //   });
+      await request(app.getHttpServer())
+        .put(`/reservedCommunityTypes/${reservedCommunityTypeA.id}`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send(buildReservedCommunityTypeUpdateMock(reservedCommunityTypeA.id))
+        .set('Cookie', cookies)
+        .expect(403);
+    });
 
-  //   it('should error as forbiddens for delete endpoint', async () => {
-  //     const newJurisdiction = await prisma.jurisdictions.create({
-  //       data: jurisdictionFactory(),
-  //     });
-  //     await reservedCommunityTypeFactoryAll(newJurisdiction.id, prisma);
-  //     const reservedCommunityTypeA = await reservedCommunityTypeFactoryGet(
-  //       prisma,
-  //       newJurisdiction.id,
-  //     );
+    it('should error as forbiddens for delete endpoint', async () => {
+      const newJurisdiction = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(),
+      });
+      await reservedCommunityTypeFactoryAll(newJurisdiction.id, prisma);
+      const reservedCommunityTypeA = await reservedCommunityTypeFactoryGet(
+        prisma,
+        newJurisdiction.id,
+      );
 
-  //     await request(app.getHttpServer())
-  //       .delete(`/reservedCommunityTypes`)
-  //       .set({ passkey: process.env.API_PASS_KEY || '' })
-  //       .send({
-  //         id: reservedCommunityTypeA.id,
-  //       } as IdDTO)
-  //       .set('Cookie', cookies)
-  //       .expect(403);
-  //   });
-  // });
+      await request(app.getHttpServer())
+        .delete(`/reservedCommunityTypes`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({
+          id: reservedCommunityTypeA.id,
+        } as IdDTO)
+        .set('Cookie', cookies)
+        .expect(403);
+    });
+  });
 
-  // describe('Testing unit rent types endpoints', () => {
-  //   it('should succeed for list endpoint', async () => {
-  //     await request(app.getHttpServer())
-  //       .get(`/unitRentTypes?`)
-  //       .set({ passkey: process.env.API_PASS_KEY || '' })
-  //       .set('Cookie', cookies)
-  //       .expect(200);
-  //   });
+  describe('Testing unit rent types endpoints', () => {
+    it('should succeed for list endpoint', async () => {
+      await request(app.getHttpServer())
+        .get(`/unitRentTypes?`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .expect(200);
+    });
 
-  //   it('should succeed for retrieve endpoint', async () => {
-  //     const unitRentTypeA = await prisma.unitRentTypes.create({
-  //       data: unitRentTypeFactory(),
-  //     });
+    it('should succeed for retrieve endpoint', async () => {
+      const unitRentTypeA = await prisma.unitRentTypes.create({
+        data: unitRentTypeFactory(),
+      });
 
-  //     await request(app.getHttpServer())
-  //       .get(`/unitRentTypes/${unitRentTypeA.id}`)
-  //       .set({ passkey: process.env.API_PASS_KEY || '' })
-  //       .set('Cookie', cookies)
-  //       .expect(200);
-  //   });
+      await request(app.getHttpServer())
+        .get(`/unitRentTypes/${unitRentTypeA.id}`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .expect(200);
+    });
 
-  //   it('should error as forbiddens for create endpoint', async () => {
-  //     const name = unitRentTypeFactory().name;
-  //     await request(app.getHttpServer())
-  //       .post('/unitRentTypes')
-  //       .set({ passkey: process.env.API_PASS_KEY || '' })
-  //       .send({
-  //         name: name,
-  //       } as UnitRentTypeCreate)
-  //       .set('Cookie', cookies)
-  //       .expect(403);
-  //   });
+    it('should error as forbiddens for create endpoint', async () => {
+      const name = unitRentTypeFactory().name;
+      await request(app.getHttpServer())
+        .post('/unitRentTypes')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({
+          name: name,
+        } as UnitRentTypeCreate)
+        .set('Cookie', cookies)
+        .expect(403);
+    });
 
-  //   it('should error as forbiddens for update endpoint', async () => {
-  //     const unitRentTypeA = await prisma.unitRentTypes.create({
-  //       data: unitRentTypeFactory(),
-  //     });
-  //     const name = unitRentTypeFactory().name;
-  //     await request(app.getHttpServer())
-  //       .put(`/unitRentTypes/${unitRentTypeA.id}`)
-  //       .set({ passkey: process.env.API_PASS_KEY || '' })
-  //       .send({
-  //         id: unitRentTypeA.id,
-  //         name: name,
-  //       } as UnitRentTypeUpdate)
-  //       .set('Cookie', cookies)
-  //       .expect(403);
-  //   });
+    it('should error as forbiddens for update endpoint', async () => {
+      const unitRentTypeA = await prisma.unitRentTypes.create({
+        data: unitRentTypeFactory(),
+      });
+      const name = unitRentTypeFactory().name;
+      await request(app.getHttpServer())
+        .put(`/unitRentTypes/${unitRentTypeA.id}`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({
+          id: unitRentTypeA.id,
+          name: name,
+        } as UnitRentTypeUpdate)
+        .set('Cookie', cookies)
+        .expect(403);
+    });
 
-  //   it('should error as forbiddens for delete endpoint', async () => {
-  //     const unitRentTypeA = await prisma.unitRentTypes.create({
-  //       data: unitRentTypeFactory(),
-  //     });
+    it('should error as forbiddens for delete endpoint', async () => {
+      const unitRentTypeA = await prisma.unitRentTypes.create({
+        data: unitRentTypeFactory(),
+      });
 
-  //     await request(app.getHttpServer())
-  //       .delete(`/unitRentTypes`)
-  //       .set({ passkey: process.env.API_PASS_KEY || '' })
-  //       .send({
-  //         id: unitRentTypeA.id,
-  //       } as IdDTO)
-  //       .set('Cookie', cookies)
-  //       .expect(403);
-  //   });
-  // });
+      await request(app.getHttpServer())
+        .delete(`/unitRentTypes`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({
+          id: unitRentTypeA.id,
+        } as IdDTO)
+        .set('Cookie', cookies)
+        .expect(403);
+    });
+  });
 
-  // describe('Testing unit accessibility priority types endpoints', () => {
-  //   it('should succeed for list endpoint', async () => {
-  //     await request(app.getHttpServer())
-  //       .get(`/unitAccessibilityPriorityTypes?`)
-  //       .set({ passkey: process.env.API_PASS_KEY || '' })
-  //       .set('Cookie', cookies)
-  //       .expect(200);
-  //   });
+  describe('Testing unit accessibility priority types endpoints', () => {
+    it('should succeed for list endpoint', async () => {
+      await request(app.getHttpServer())
+        .get(`/unitAccessibilityPriorityTypes?`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .expect(200);
+    });
 
-  //   it('should succeed for retrieve endpoint', async () => {
-  //     const unitTypeA = await unitAccessibilityPriorityTypeFactorySingle(
-  //       prisma,
-  //     );
+    it('should succeed for retrieve endpoint', async () => {
+      const unitTypeA = await unitAccessibilityPriorityTypeFactorySingle(
+        prisma,
+      );
 
-  //     await request(app.getHttpServer())
-  //       .get(`/unitAccessibilityPriorityTypes/${unitTypeA.id}`)
-  //       .set({ passkey: process.env.API_PASS_KEY || '' })
-  //       .set('Cookie', cookies)
-  //       .expect(200);
-  //   });
+      await request(app.getHttpServer())
+        .get(`/unitAccessibilityPriorityTypes/${unitTypeA.id}`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .expect(200);
+    });
 
-  //   it('should error as forbiddens for create endpoint', async () => {
-  //     await request(app.getHttpServer())
-  //       .post('/unitAccessibilityPriorityTypes')
-  //       .set({ passkey: process.env.API_PASS_KEY || '' })
-  //       .send({
-  //         name: 'hearing And Visual',
-  //       } as UnitAccessibilityPriorityTypeCreate)
-  //       .set('Cookie', cookies)
-  //       .expect(403);
-  //   });
+    it('should error as forbiddens for create endpoint', async () => {
+      await request(app.getHttpServer())
+        .post('/unitAccessibilityPriorityTypes')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({
+          name: 'hearing And Visual',
+        } as UnitAccessibilityPriorityTypeCreate)
+        .set('Cookie', cookies)
+        .expect(403);
+    });
 
-  //   it('should error as forbiddens for update endpoint', async () => {
-  //     const unitTypeA = await unitAccessibilityPriorityTypeFactorySingle(
-  //       prisma,
-  //     );
-  //     await request(app.getHttpServer())
-  //       .put(`/unitAccessibilityPriorityTypes/${unitTypeA.id}`)
-  //       .set({ passkey: process.env.API_PASS_KEY || '' })
-  //       .send({
-  //         id: unitTypeA.id,
-  //         name: 'hearing And Visual',
-  //       } as UnitAccessibilityPriorityTypeUpdate)
-  //       .set('Cookie', cookies)
-  //       .expect(403);
-  //   });
+    it('should error as forbiddens for update endpoint', async () => {
+      const unitTypeA = await unitAccessibilityPriorityTypeFactorySingle(
+        prisma,
+      );
+      await request(app.getHttpServer())
+        .put(`/unitAccessibilityPriorityTypes/${unitTypeA.id}`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({
+          id: unitTypeA.id,
+          name: 'hearing And Visual',
+        } as UnitAccessibilityPriorityTypeUpdate)
+        .set('Cookie', cookies)
+        .expect(403);
+    });
 
-  //   it('should error as forbiddens for delete endpoint', async () => {
-  //     await unitAccessibilityPriorityTypeFactoryAll(prisma);
-  //     const unitTypeA = await prisma.unitAccessibilityPriorityTypes.create({
-  //       data: {
-  //         name: 'unit type A',
-  //       },
-  //     });
+    it('should error as forbiddens for delete endpoint', async () => {
+      await unitAccessibilityPriorityTypeFactoryAll(prisma);
+      const unitTypeA = await prisma.unitAccessibilityPriorityTypes.create({
+        data: {
+          name: 'unit type A',
+        },
+      });
 
-  //     await request(app.getHttpServer())
-  //       .delete(`/unitAccessibilityPriorityTypes`)
-  //       .set({ passkey: process.env.API_PASS_KEY || '' })
-  //       .send({
-  //         id: unitTypeA.id,
-  //       } as IdDTO)
-  //       .set('Cookie', cookies)
-  //       .expect(403);
-  //   });
-  // });
+      await request(app.getHttpServer())
+        .delete(`/unitAccessibilityPriorityTypes`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({
+          id: unitTypeA.id,
+        } as IdDTO)
+        .set('Cookie', cookies)
+        .expect(403);
+    });
+  });
 
-  // describe('Testing unit types endpoints', () => {
-  //   it('should succeed forbiddens for list endpoint', async () => {
-  //     await request(app.getHttpServer())
-  //       .get(`/unitTypes?`)
-  //       .set({ passkey: process.env.API_PASS_KEY || '' })
-  //       .set('Cookie', cookies)
-  //       .expect(200);
-  //   });
+  describe('Testing unit types endpoints', () => {
+    it('should succeed forbiddens for list endpoint', async () => {
+      await request(app.getHttpServer())
+        .get(`/unitTypes?`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .expect(200);
+    });
 
-  //   it('should succeed for retrieve endpoint', async () => {
-  //     const unitTypeA = await unitTypeFactorySingle(
-  //       prisma,
-  //       UnitTypeEnum.oneBdrm,
-  //     );
+    it('should succeed for retrieve endpoint', async () => {
+      const unitTypeA = await unitTypeFactorySingle(
+        prisma,
+        UnitTypeEnum.oneBdrm,
+      );
 
-  //     await request(app.getHttpServer())
-  //       .get(`/unitTypes/${unitTypeA.id}`)
-  //       .set({ passkey: process.env.API_PASS_KEY || '' })
-  //       .set('Cookie', cookies)
-  //       .expect(200);
-  //   });
+      await request(app.getHttpServer())
+        .get(`/unitTypes/${unitTypeA.id}`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .expect(200);
+    });
 
-  //   it('should error as forbiddens for create endpoint', async () => {
-  //     const name = UnitTypeEnum.twoBdrm;
-  //     await request(app.getHttpServer())
-  //       .post('/unitTypes')
-  //       .set({ passkey: process.env.API_PASS_KEY || '' })
-  //       .send({
-  //         name: name,
-  //         numBedrooms: 10,
-  //       } as UnitTypeCreate)
-  //       .set('Cookie', cookies)
-  //       .expect(403);
-  //   });
+    it('should error as forbiddens for create endpoint', async () => {
+      const name = UnitTypeEnum.twoBdrm;
+      await request(app.getHttpServer())
+        .post('/unitTypes')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({
+          name: name,
+          numBedrooms: 10,
+        } as UnitTypeCreate)
+        .set('Cookie', cookies)
+        .expect(403);
+    });
 
-  //   it('should error as forbiddens for update endpoint', async () => {
-  //     const unitTypeA = await unitTypeFactorySingle(prisma, UnitTypeEnum.SRO);
-  //     const name = UnitTypeEnum.SRO;
-  //     await request(app.getHttpServer())
-  //       .put(`/unitTypes/${unitTypeA.id}`)
-  //       .set({ passkey: process.env.API_PASS_KEY || '' })
-  //       .send({
-  //         id: unitTypeA.id,
-  //         name: name,
-  //         numBedrooms: 11,
-  //       } as UnitTypeUpdate)
-  //       .set('Cookie', cookies)
-  //       .expect(403);
-  //   });
+    it('should error as forbiddens for update endpoint', async () => {
+      const unitTypeA = await unitTypeFactorySingle(prisma, UnitTypeEnum.SRO);
+      const name = UnitTypeEnum.SRO;
+      await request(app.getHttpServer())
+        .put(`/unitTypes/${unitTypeA.id}`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({
+          id: unitTypeA.id,
+          name: name,
+          numBedrooms: 11,
+        } as UnitTypeUpdate)
+        .set('Cookie', cookies)
+        .expect(403);
+    });
 
-  //   it('should error as forbiddens for delete endpoint', async () => {
-  //     const unitTypeA = await prisma.unitTypes.create({
-  //       data: {
-  //         name: UnitTypeEnum.studio,
-  //         numBedrooms: 23,
-  //       },
-  //     });
+    it('should error as forbiddens for delete endpoint', async () => {
+      const unitTypeA = await prisma.unitTypes.create({
+        data: {
+          name: UnitTypeEnum.studio,
+          numBedrooms: 23,
+        },
+      });
 
-  //     await request(app.getHttpServer())
-  //       .delete(`/unitTypes`)
-  //       .set({ passkey: process.env.API_PASS_KEY || '' })
-  //       .send({
-  //         id: unitTypeA.id,
-  //       } as IdDTO)
-  //       .set('Cookie', cookies)
-  //       .expect(403);
-  //   });
-  // });
+      await request(app.getHttpServer())
+        .delete(`/unitTypes`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({
+          id: unitTypeA.id,
+        } as IdDTO)
+        .set('Cookie', cookies)
+        .expect(403);
+    });
+  });
 
-  // describe('Testing multiselect questions endpoints', () => {
-  //   it('should succeed for list endpoint', async () => {
-  //     await request(app.getHttpServer())
-  //       .get(`/multiselectQuestions?`)
-  //       .set({ passkey: process.env.API_PASS_KEY || '' })
-  //       .set('Cookie', cookies)
-  //       .expect(200);
-  //   });
+  describe('Testing multiselect questions endpoints', () => {
+    it('should succeed for list endpoint', async () => {
+      await request(app.getHttpServer())
+        .get(`/multiselectQuestions?`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .expect(200);
+    });
 
-  //   it('should succeed for retrieve endpoint', async () => {
-  //     const multiselectQuestionA = await prisma.multiselectQuestions.create({
-  //       data: multiselectQuestionFactory(jurisdictionId),
-  //     });
+    it('should succeed for retrieve endpoint', async () => {
+      const multiselectQuestionA = await prisma.multiselectQuestions.create({
+        data: multiselectQuestionFactory(jurisdictionId),
+      });
 
-  //     await request(app.getHttpServer())
-  //       .get(`/multiselectQuestions/${multiselectQuestionA.id}`)
-  //       .set({ passkey: process.env.API_PASS_KEY || '' })
-  //       .set('Cookie', cookies)
-  //       .expect(200);
-  //   });
+      await request(app.getHttpServer())
+        .get(`/multiselectQuestions/${multiselectQuestionA.id}`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .expect(200);
+    });
 
-  //   it('should succeed for create endpoint', async () => {
-  //     await request(app.getHttpServer())
-  //       .post('/multiselectQuestions')
-  //       .set({ passkey: process.env.API_PASS_KEY || '' })
-  //       .send(buildMultiselectQuestionCreateMock(jurisdictionId))
-  //       .set('Cookie', cookies)
-  //       .expect(201);
-  //   });
+    it('should succeed for create endpoint', async () => {
+      await request(app.getHttpServer())
+        .post('/multiselectQuestions')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send(buildMultiselectQuestionCreateMock(jurisdictionId))
+        .set('Cookie', cookies)
+        .expect(201);
+    });
 
-  //   it('should succeed for update endpoint', async () => {
-  //     const multiselectQuestionA = await prisma.multiselectQuestions.create({
-  //       data: multiselectQuestionFactory(jurisdictionId),
-  //     });
+    it('should succeed for update endpoint', async () => {
+      const multiselectQuestionA = await prisma.multiselectQuestions.create({
+        data: multiselectQuestionFactory(jurisdictionId),
+      });
 
-  //     await request(app.getHttpServer())
-  //       .put(`/multiselectQuestions/${multiselectQuestionA.id}`)
-  //       .set({ passkey: process.env.API_PASS_KEY || '' })
-  //       .send(
-  //         buildMultiselectQuestionUpdateMock(
-  //           jurisdictionId,
-  //           multiselectQuestionA.id,
-  //         ),
-  //       )
-  //       .set('Cookie', cookies)
-  //       .expect(200);
-  //   });
+      await request(app.getHttpServer())
+        .put(`/multiselectQuestions/${multiselectQuestionA.id}`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send(
+          buildMultiselectQuestionUpdateMock(
+            jurisdictionId,
+            multiselectQuestionA.id,
+          ),
+        )
+        .set('Cookie', cookies)
+        .expect(200);
+    });
 
-  //   it('should succeed for delete endpoint & create an activity log entry', async () => {
-  //     const multiselectQuestionA = await prisma.multiselectQuestions.create({
-  //       data: multiselectQuestionFactory(jurisdictionId),
-  //     });
+    it('should succeed for delete endpoint & create an activity log entry', async () => {
+      const multiselectQuestionA = await prisma.multiselectQuestions.create({
+        data: multiselectQuestionFactory(jurisdictionId),
+      });
 
-  //     await request(app.getHttpServer())
-  //       .delete(`/multiselectQuestions`)
-  //       .set({ passkey: process.env.API_PASS_KEY || '' })
-  //       .send({
-  //         id: multiselectQuestionA.id,
-  //       } as IdDTO)
-  //       .set('Cookie', cookies)
-  //       .expect(200);
+      await request(app.getHttpServer())
+        .delete(`/multiselectQuestions`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({
+          id: multiselectQuestionA.id,
+        } as IdDTO)
+        .set('Cookie', cookies)
+        .expect(200);
 
-  //     const activityLogResult = await prisma.activityLog.findFirst({
-  //       where: {
-  //         module: 'multiselectQuestion',
-  //         action: permissionActions.delete,
-  //         recordId: multiselectQuestionA.id,
-  //       },
-  //     });
+      const activityLogResult = await prisma.activityLog.findFirst({
+        where: {
+          module: 'multiselectQuestion',
+          action: permissionActions.delete,
+          recordId: multiselectQuestionA.id,
+        },
+      });
 
-  //     expect(activityLogResult).not.toBeNull();
-  //   });
-  // });
+      expect(activityLogResult).not.toBeNull();
+    });
+  });
 
   describe('Testing user endpoints', () => {
     it('should succeed for list endpoint', async () => {
@@ -1159,7 +1159,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
 
       expect(activityLogResult).toBeNull();
     });
-
+    // TODO: FAILING TEST BELOW
     // it('should error as forbidden for create endpoint & create an activity log entry', async () => {
     //   const val = await constructFullListingData(
     //     prisma,
