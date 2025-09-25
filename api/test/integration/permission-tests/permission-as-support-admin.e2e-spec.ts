@@ -215,8 +215,13 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
     });
 
     it('should succeed for list endpoint', async () => {
+      const listing1 = await listingFactory(jurisdictionId, prisma);
+      const listing1Created = await prisma.listings.create({
+        data: listing1,
+      });
+
       await request(app.getHttpServer())
-        .get(`/applications?`)
+        .get(`/applications?listingId=${listing1Created.id}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
         .expect(200);
@@ -228,8 +233,16 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         UnitTypeEnum.oneBdrm,
       );
 
+      const listing1 = await listingFactory(jurisdictionId, prisma);
+      const listing1Created = await prisma.listings.create({
+        data: listing1,
+      });
+
       const applicationA = await prisma.applications.create({
-        data: await applicationFactory({ unitTypeId: unitTypeA.id }),
+        data: await applicationFactory({
+          unitTypeId: unitTypeA.id,
+          listingId: listing1Created.id,
+        }),
         include: {
           applicant: true,
         },
@@ -281,11 +294,12 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
       expect(activityLogResult).toBeNull();
     });
 
-    it('should succced for public create endpoint', async () => {
+    it('should succeed for public create endpoint', async () => {
       const unitTypeA = await unitTypeFactorySingle(
         prisma,
         UnitTypeEnum.oneBdrm,
       );
+
       const listing1 = await listingFactory(jurisdictionId, prisma, {
         digitalApp: true,
       });
@@ -309,11 +323,12 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         .expect(201);
     });
 
-    it('should error forbidden for partner create endpoint & create an activity log entry', async () => {
+    it('should error as forbidden for partner create endpoint & create an activity log entry', async () => {
       const unitTypeA = await unitTypeFactorySingle(
         prisma,
         UnitTypeEnum.oneBdrm,
       );
+
       const listing1 = await listingFactory(jurisdictionId, prisma, {
         digitalApp: true,
       });
@@ -347,7 +362,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
       expect(activityLogResult).toBeNull();
     });
 
-    it('should error as forbiddens for update endpoint & create an activity log entry', async () => {
+    it('should error as forbidden for update endpoint & create an activity log entry', async () => {
       const unitTypeA = await unitTypeFactorySingle(
         prisma,
         UnitTypeEnum.oneBdrm,
@@ -366,7 +381,6 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
           applicant: true,
         },
       });
-
       const exampleAddress = addressFactory() as AddressCreate;
       await request(app.getHttpServer())
         .put(`/applications/${applicationA.id}`)
@@ -382,6 +396,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         )
         .set('Cookie', cookies)
         .expect(403);
+
       const activityLogResult = await prisma.activityLog.findFirst({
         where: {
           module: 'application',
@@ -404,6 +419,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
       });
 
       const exampleAddress = addressFactory() as AddressCreate;
+
       await request(app.getHttpServer())
         .post(`/applications/verify`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
@@ -419,7 +435,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         .expect(201);
     });
 
-    it('should error as forbiddens for csv endpoint & create an activity log entry', async () => {
+    it('should error as forbidden for csv endpoint & create an activity log entry', async () => {
       const application = await applicationFactory();
       const listing1 = await listingFactory(jurisdictionId, prisma, {
         applications: [application],
@@ -876,7 +892,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         .expect(200);
     });
 
-    it('should error forbidden for for retrieve endpoint', async () => {
+    it('should error as forbidden for for retrieve endpoint', async () => {
       const userA = await prisma.userAccounts.create({
         data: await userFactory({ jurisdictionIds: [jurisdictionId] }),
       });
@@ -888,7 +904,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         .expect(403);
     });
 
-    it('should error forbidden for update endpoint', async () => {
+    it('should error as forbidden for update endpoint', async () => {
       const userA = await prisma.userAccounts.create({
         data: await userFactory({ jurisdictionIds: [jurisdictionId] }),
       });
@@ -906,7 +922,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         .expect(403);
     });
 
-    it('should error forbidden for delete endpoint', async () => {
+    it('should error as forbidden for delete endpoint', async () => {
       const userA = await prisma.userAccounts.create({
         data: await userFactory({ jurisdictionIds: [jurisdictionId] }),
       });
@@ -1009,7 +1025,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         .expect(403);
     });
 
-    it('should error forbidden for csv export endpoint & create an activity log entry', async () => {
+    it('should error as forbidden for csv export endpoint & create an activity log entry', async () => {
       await request(app.getHttpServer())
         .get('/user/csv')
         .set({ passkey: process.env.API_PASS_KEY || '' })
@@ -1086,7 +1102,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         .expect(200);
     });
 
-    it('should error forbidden for delete endpoint & create an activity log entry', async () => {
+    it('should error as forbidden for delete endpoint & create an activity log entry', async () => {
       const listingData = await listingFactory(jurisdictionId, prisma, {
         noImage: true,
       });
@@ -1114,7 +1130,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
       expect(activityLogResult).toBeNull();
     });
 
-    it('should error forbidden for update endpoint & create an activity log entry', async () => {
+    it('should error as forbidden for update endpoint & create an activity log entry', async () => {
       const listingData = await listingFactory(jurisdictionId, prisma);
       const listing = await prisma.listings.create({
         data: listingData,
@@ -1144,7 +1160,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
       expect(activityLogResult).toBeNull();
     });
 
-    it('should error forbidden for create endpoint & create an activity log entry', async () => {
+    it('should error as forbidden for create endpoint & create an activity log entry', async () => {
       const val = await constructFullListingData(
         prisma,
         undefined,
@@ -1363,7 +1379,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         .expect(200);
     });
 
-    it('should error forbidden for lottery status endpoint', async () => {
+    it('should error as forbidden for lottery status endpoint', async () => {
       const listingData = await listingFactory(jurisdictionId, prisma, {
         status: 'closed',
       });
@@ -1384,7 +1400,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
   });
 
   describe('Testing feature flag endpoints', () => {
-    it('should error forbidden for list endpoint', async () => {
+    it('should error as forbidden for list endpoint', async () => {
       await request(app.getHttpServer())
         .get(`/featureFlags`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
