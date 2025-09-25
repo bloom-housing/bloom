@@ -76,7 +76,7 @@ const testEmailService = {
   applicationConfirmation: jest.fn(),
 };
 
-describe.only('Testing Permissioning of endpoints as Support Admin User', () => {
+describe('Testing Permissioning of endpoints as Support Admin User', () => {
   let app: INestApplication;
   let prisma: PrismaService;
   let userService: UserService;
