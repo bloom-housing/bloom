@@ -364,7 +364,7 @@ class Listing extends AbstractDTO {
   depositMax?: string;
 
   @Expose()
-  @ValidateListingPublish('', {
+  @ValidateListingPublish('depositType', {
     groups: [ValidationsGroupsEnum.default],
   })
   @IsEnum(DepositTypeEnum, {
@@ -374,7 +374,7 @@ class Listing extends AbstractDTO {
   depositType: DepositTypeEnum;
 
   @Expose()
-  @ValidateListingPublish('', {
+  @ValidateListingPublish('depositValue', {
     groups: [ValidationsGroupsEnum.default],
   })
   @IsDecimal()
@@ -382,7 +382,7 @@ class Listing extends AbstractDTO {
   depositValue?: number;
 
   @Expose()
-  @ValidateListingPublish('', {
+  @ValidateListingPublish('depositRangeMin', {
     groups: [ValidationsGroupsEnum.default],
   })
   @IsNumber()
@@ -390,7 +390,7 @@ class Listing extends AbstractDTO {
   depositRangeMin?: number;
 
   @Expose()
-  @ValidateListingPublish('', {
+  @ValidateListingPublish('depositRangeMax', {
     groups: [ValidationsGroupsEnum.default],
   })
   @IsNumber()
