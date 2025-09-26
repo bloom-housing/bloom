@@ -624,6 +624,7 @@
   "users.addPassword": "Add a password",
   "users.addUser": "Add user",
   "users.administrator": "Administrator",
+  "users.limitedJurisdictionalAdmin": "Jurisdictional admin - No PII",
   "users.allJurisdictions": "All jurisdictions",
   "users.allListings": "All listings",
   "users.alljurisdictionalizedListings": "All %{jurisdiction} listings",
