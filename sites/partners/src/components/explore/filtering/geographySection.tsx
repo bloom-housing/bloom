@@ -35,6 +35,14 @@ export function GeographySection({ form }: Props) {
           getValues={getValues}
           setValue={setValue}
           placeholder="Select county"
+          validation={{
+            validate: (value: string[]) => {
+              if (!value || value.length === 0) {
+                return "Please select at least one residential county option"
+              }
+              return true
+            },
+          }}
         />
         {Array.isArray(errors.applicantResidentialCounties) &&
           errors.applicantResidentialCounties.map((error, idx) =>
@@ -56,6 +64,14 @@ export function GeographySection({ form }: Props) {
           getValues={getValues}
           setValue={setValue}
           placeholder="Select county"
+          validation={{
+            validate: (value: string[]) => {
+              if (!value || value.length === 0) {
+                return "Please select at least one work county option"
+              }
+              return true
+            },
+          }}
         />
         {Array.isArray(errors.applicantWorkCounties) &&
           errors.applicantWorkCounties.map((error, idx) =>
