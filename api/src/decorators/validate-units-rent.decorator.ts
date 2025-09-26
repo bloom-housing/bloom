@@ -39,6 +39,11 @@ export class RentValueConstraint implements ValidatorConstraintInterface {
         !this.isFieldEmpty(flatRentValueFrom) &&
         !this.isFieldEmpty(flatRentValueTo)
       );
+    } else {
+      return (
+        this.isFieldEmpty(flatRentValueFrom) &&
+        this.isFieldEmpty(flatRentValueTo)
+      );
     }
 
     return true;
