@@ -959,7 +959,7 @@ describe('Testing Permissioning of endpoints as Limited Jurisdictional Admin in 
       );
 
       const data = await applicationFactory();
-      data.applicant.create.emailAddress = 'publicuser@email.com';
+      data.applicant.create.emailAddress = 'publilimitedcorrectcuser@email.com';
       await prisma.applications.create({
         data,
       });
