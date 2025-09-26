@@ -103,10 +103,13 @@ describe('Testing Permissioning of endpoints as Limited Jurisdictional Admin in 
 
     const userJuris = await generateJurisdiction(
       prisma,
-      'limited jadmin permission juris',
+      'wrong limited jadmin permission juris',
     );
 
-    jurisId = await generateJurisdiction(prisma, 'wrong permission juris');
+    jurisId = await generateJurisdiction(
+      prisma,
+      'wrong permission limited juris',
+    );
     await reservedCommunityTypeFactoryAll(jurisId, prisma);
 
     const storedUser = await prisma.userAccounts.create({
@@ -411,7 +414,7 @@ describe('Testing Permissioning of endpoints as Limited Jurisdictional Admin in 
     it('should error as forbidden for csv endpoint', async () => {
       const jurisdiction = await generateJurisdiction(
         prisma,
-        'permission limited juris csv endpoint',
+        'wrong permission limited juris csv endpoint',
       );
       await reservedCommunityTypeFactoryAll(jurisdiction, prisma);
       const application = await applicationFactory();
@@ -962,7 +965,7 @@ describe('Testing Permissioning of endpoints as Limited Jurisdictional Admin in 
     it('should succeed for public create endpoint', async () => {
       const juris = await generateJurisdiction(
         prisma,
-        'limited jadmin permission juris create success',
+        'wrong limited jadmin permission juris create success',
       );
 
       const data = await applicationFactory();
@@ -982,7 +985,7 @@ describe('Testing Permissioning of endpoints as Limited Jurisdictional Admin in 
     it('should error as forbidden for partner create endpoint', async () => {
       const juris = await generateJurisdiction(
         prisma,
-        'limited jadmin permission juris create failure',
+        'wrong limited jadmin permission juris create failure',
       );
 
       await request(app.getHttpServer())
