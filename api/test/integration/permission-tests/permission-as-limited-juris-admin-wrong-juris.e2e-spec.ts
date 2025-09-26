@@ -961,15 +961,11 @@ describe('Testing Permissioning of endpoints as Limited Jurisdictional Admin in 
         .set('Cookie', cookies)
         .expect(200);
     });
-
     it('should succeed for public create endpoint', async () => {
-      const juris = await generateJurisdiction(
-        prisma,
-        'wrong limited jadmin permission juris create success',
-      );
+      const juris = await generateJurisdiction(prisma, 'permission juris 86');
 
       const data = await applicationFactory();
-      data.applicant.create.emailAddress = 'publiclimitedwronguser@email.com';
+      data.applicant.create.emailAddress = 'publicuser@email.com';
       await prisma.applications.create({
         data,
       });
@@ -977,7 +973,7 @@ describe('Testing Permissioning of endpoints as Limited Jurisdictional Admin in 
       await request(app.getHttpServer())
         .post(`/user/`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
-        .send(buildUserCreateMock(juris, 'publicUser+jurisWrong@email.com'))
+        .send(buildUserCreateMock(juris, 'publicUser+jurisIncorrect@email.com'))
         .set('Cookie', cookies)
         .expect(201);
     });
