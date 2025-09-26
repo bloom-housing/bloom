@@ -326,7 +326,7 @@ describe('Testing Permissioning of endpoints as Limited Jurisdictional Admin in 
       });
 
       const exampleAddress = addressFactory() as AddressCreate;
-      const res = await request(app.getHttpServer())
+      await request(app.getHttpServer())
         .post(`/applications/`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send(
@@ -953,7 +953,7 @@ describe('Testing Permissioning of endpoints as Limited Jurisdictional Admin in 
     });
 
     it('should succeed for public create endpoint', async () => {
-      const juris = await generateJurisdiction(
+      const jurisdiction = await generateJurisdiction(
         prisma,
         'correct limited jadmin permission juris create',
       );
@@ -967,7 +967,12 @@ describe('Testing Permissioning of endpoints as Limited Jurisdictional Admin in 
       await request(app.getHttpServer())
         .post(`/user/`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
-        .send(buildUserCreateMock(juris, 'publicUser+jurisCorrect@email.com'))
+        .send(
+          buildUserCreateMock(
+            jurisdiction,
+            'publicUser+jurisCorrect@email.com',
+          ),
+        )
         .set('Cookie', cookies)
         .expect(201);
     });

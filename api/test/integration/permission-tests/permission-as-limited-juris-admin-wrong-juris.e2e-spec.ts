@@ -983,7 +983,7 @@ describe('Testing Permissioning of endpoints as Limited Jurisdictional Admin in 
     });
 
     it('should error as forbidden for partner create endpoint', async () => {
-      const juris = await generateJurisdiction(
+      const jurisdiction = await generateJurisdiction(
         prisma,
         'wrong limited jadmin permission juris create failure',
       );
@@ -991,7 +991,9 @@ describe('Testing Permissioning of endpoints as Limited Jurisdictional Admin in 
       await request(app.getHttpServer())
         .post(`/user/invite`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
-        .send(buildUserInviteMock(juris, 'partnerUser+jurisWrong@email.com'))
+        .send(
+          buildUserInviteMock(jurisdiction, 'partnerUser+jurisWrong@email.com'),
+        )
         .set('Cookie', cookies)
         .expect(403);
     });
