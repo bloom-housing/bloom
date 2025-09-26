@@ -61,6 +61,9 @@ import {
   constructFullListingData,
   createSimpleApplication,
   createSimpleListing,
+  buildPresignedEndpointMock,
+  buildJurisdictionCreateMock,
+  buildJurisdictionUpdateMock,
 } from './helpers';
 import { ApplicationFlaggedSetService } from '../../../src/services/application-flagged-set.service';
 import { featureFlagFactory } from '../../../prisma/seed-helpers/feature-flag-factory';
@@ -423,7 +426,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         .expect(201);
     });
 
-    it('should error as forbidden for csv endpoint & create an activity log entry', async () => {
+    it('should succeed for csv endpoint & create an activity log entry', async () => {
       const application = await applicationFactory();
       const listing1 = await listingFactory(jurisdictionId, prisma, {
         applications: [application],
@@ -435,7 +438,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         .get(`/applications/csv?id=${listing1Created.id}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
-        .expect(403);
+        .expect(200);
       const activityLogResult = await prisma.activityLog.findFirst({
         where: {
           module: 'application',
@@ -444,88 +447,88 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         },
       });
 
-      expect(activityLogResult).toBeNull();
+      expect(activityLogResult).not.toBeNull();
     });
   });
 
-  // describe('Testing asset endpoints', () => {
-  //   it('should succeed for presigned endpoint', async () => {
-  //     await request(app.getHttpServer())
-  //       .post('/assets/presigned-upload-metadata/')
-  //       .set({ passkey: process.env.API_PASS_KEY || '' })
-  //       .send(buildPresignedEndpointMock())
-  //       .set('Cookie', cookies)
-  //       .expect(201);
-  //   });
-  // });
+  describe('Testing asset endpoints', () => {
+    it('should succeed for presigned endpoint', async () => {
+      await request(app.getHttpServer())
+        .post('/assets/presigned-upload-metadata/')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send(buildPresignedEndpointMock())
+        .set('Cookie', cookies)
+        .expect(201);
+    });
+  });
 
-  // describe('Testing jurisdiction endpoints', () => {
-  //   it('should succeed for list endpoint', async () => {
-  //     await request(app.getHttpServer())
-  //       .get(`/jurisdictions?`)
-  //       .set({ passkey: process.env.API_PASS_KEY || '' })
-  //       .set('Cookie', cookies)
-  //       .expect(200);
-  //   });
+  describe('Testing jurisdiction endpoints', () => {
+    it('should succeed for list endpoint', async () => {
+      await request(app.getHttpServer())
+        .get(`/jurisdictions?`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .expect(200);
+    });
 
-  //   it('should succeed for retrieve endpoint', async () => {
-  //     await request(app.getHttpServer())
-  //       .get(`/jurisdictions/${jurisdictionId}`)
-  //       .set({ passkey: process.env.API_PASS_KEY || '' })
-  //       .set('Cookie', cookies)
-  //       .expect(200);
-  //   });
+    it('should succeed for retrieve endpoint', async () => {
+      await request(app.getHttpServer())
+        .get(`/jurisdictions/${jurisdictionId}`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .expect(200);
+    });
 
-  //   it('should succeed for retrieve by name endpoint', async () => {
-  //     const jurisdictionA = await prisma.jurisdictions.findFirst({
-  //       where: {
-  //         id: jurisdictionId,
-  //       },
-  //     });
+    it('should succeed for retrieve by name endpoint', async () => {
+      const jurisdictionA = await prisma.jurisdictions.findFirst({
+        where: {
+          id: jurisdictionId,
+        },
+      });
 
-  //     await request(app.getHttpServer())
-  //       .get(`/jurisdictions/byName/${jurisdictionA.name}`)
-  //       .set({ passkey: process.env.API_PASS_KEY || '' })
-  //       .set('Cookie', cookies)
-  //       .expect(200);
-  //   });
+      await request(app.getHttpServer())
+        .get(`/jurisdictions/byName/${jurisdictionA.name}`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .expect(200);
+    });
 
-  //   it('should error as forbidden for create endpoint', async () => {
-  //     await request(app.getHttpServer())
-  //       .post('/jurisdictions')
-  //       .set({ passkey: process.env.API_PASS_KEY || '' })
-  //       .send(buildJurisdictionCreateMock('new permission jurisdiction 2'))
-  //       .set('Cookie', cookies)
-  //       .expect(403);
-  //   });
+    it('should error as forbidden for create endpoint', async () => {
+      await request(app.getHttpServer())
+        .post('/jurisdictions')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send(buildJurisdictionCreateMock('new permission jurisdiction 2'))
+        .set('Cookie', cookies)
+        .expect(403);
+    });
 
-  //   it('should error as forbidden for update endpoint', async () => {
-  //     await request(app.getHttpServer())
-  //       .put(`/jurisdictions/${jurisdictionId}`)
-  //       .set({ passkey: process.env.API_PASS_KEY || '' })
-  //       .send(
-  //         buildJurisdictionUpdateMock(jurisdictionId, 'permission juris 9:3'),
-  //       )
-  //       .set('Cookie', cookies)
-  //       .expect(403);
-  //   });
+    it('should error as forbidden for update endpoint', async () => {
+      await request(app.getHttpServer())
+        .put(`/jurisdictions/${jurisdictionId}`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send(
+          buildJurisdictionUpdateMock(jurisdictionId, 'permission juris 9:3'),
+        )
+        .set('Cookie', cookies)
+        .expect(403);
+    });
 
-  //   it('should error as forbidden for delete endpoint', async () => {
-  //     const jurisdictionA = await generateJurisdiction(
-  //       prisma,
-  //       'correct support admin permission juris delete',
-  //     );
+    it('should error as forbidden for delete endpoint', async () => {
+      const jurisdictionA = await generateJurisdiction(
+        prisma,
+        'correct support admin permission juris delete',
+      );
 
-  //     await request(app.getHttpServer())
-  //       .delete(`/jurisdictions`)
-  //       .set({ passkey: process.env.API_PASS_KEY || '' })
-  //       .send({
-  //         id: jurisdictionA,
-  //       } as IdDTO)
-  //       .set('Cookie', cookies)
-  //       .expect(403);
-  //   });
-  // });
+      await request(app.getHttpServer())
+        .delete(`/jurisdictions`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({
+          id: jurisdictionA,
+        } as IdDTO)
+        .set('Cookie', cookies)
+        .expect(403);
+    });
+  });
 
   describe('Testing reserved community types endpoints', () => {
     it('should succeed for list endpoint', async () => {
@@ -1079,7 +1082,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         .expect(200);
     });
 
-    it('should error as forbidden for create endpoint', async () => {
+    it('should succeed for create endpoint', async () => {
       const val = await constructFullListingData(
         prisma,
         undefined,
@@ -1091,9 +1094,9 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send(val)
         .set('Cookie', cookies)
-        .expect(403);
+        .expect(201);
     });
-    it('should error as forbidden for delete endpoint', async () => {
+    it('should succeed for delete endpoint', async () => {
       const listingData = await listingFactory(jurisdictionId, prisma, {
         noImage: true,
       });
@@ -1108,10 +1111,10 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
           id: listing.id,
         } as IdDTO)
         .set('Cookie', cookies)
-        .expect(403);
+        .expect(200);
     });
 
-    it('should error as forbidden for update endpoint', async () => {
+    it('should succeed for update endpoint', async () => {
       const listingData = await listingFactory(jurisdictionId, prisma);
       const listing = await prisma.listings.create({
         data: listingData,
@@ -1128,7 +1131,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send(val)
         .set('Cookie', cookies)
-        .expect(403);
+        .expect(200);
     });
     it('should succeed for duplicate endpoint', async () => {
       const listingData = await listingFactory(jurisdictionId, prisma);
