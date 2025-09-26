@@ -18,9 +18,6 @@ ADD COLUMN     "has_hud_ebll_clearance" BOOLEAN,
 ADD COLUMN     "listing_type" "listing_type_enum" DEFAULT 'regulated';
 
 -- AlterTable
-ALTER TABLE "multiselect_questions" ALTER COLUMN "status" DROP DEFAULT;
-
--- AlterTable
 ALTER TABLE "unit_group" ADD COLUMN     "flat_rent_value_from" DECIMAL(65,30),
 ADD COLUMN     "flat_rent_value_to" DECIMAL(65,30),
 ADD COLUMN     "rent_type" "rent_type_enum";

@@ -373,7 +373,7 @@ class Listing extends AbstractDTO {
   })
   @ValidateListingDeposit({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional({ enum: DepositTypeEnum })
-  depositType: DepositTypeEnum;
+  depositType?: DepositTypeEnum;
 
   @Expose()
   @ValidateListingPublish('depositValue', {
