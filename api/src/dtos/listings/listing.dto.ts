@@ -323,6 +323,13 @@ class Listing extends AbstractDTO {
   buildingSelectionCriteria?: string;
 
   @Expose()
+  @ValidateListingPublish('cocInfo7', {
+    groups: [ValidationsGroupsEnum.default],
+  })
+  @ApiPropertyOptional()
+  cocInfo?: string;
+
+  @Expose()
   @ValidateListingPublish('costsNotIncluded', {
     groups: [ValidationsGroupsEnum.default],
   })
