@@ -33,7 +33,14 @@ export function HouseholdDetailsSection({ form }: Props) {
           getValues={getValues}
           setValue={setValue}
           placeholder="Select one or more household size"
-          validation={{ required: "Please select at least one size" }}
+          validation={{
+            validate: (value: string[]) => {
+              if (!value || value.length === 0) {
+                return "Please select at least one household size option"
+              }
+              return true
+            },
+          }}
         />
         {Array.isArray(errors.householdSize) &&
           errors.householdSize.map((err, idx) =>
@@ -54,7 +61,30 @@ export function HouseholdDetailsSection({ form }: Props) {
             setValue={setValue}
             type="currency"
             prepend="$"
-            validation={{ valueAsNumber: true }}
+            validation={{
+              valueAsNumber: true,
+              validate: {
+                isPositive: (value: number) => {
+                  if (value !== undefined && value !== null && value <= 0) {
+                    return "Min income should be greater than 0"
+                  }
+                  return true
+                },
+                lessThanMax: (value: number) => {
+                  const maxIncomeValue = getValues("maxIncome")
+                  if (
+                    value !== undefined &&
+                    value !== null &&
+                    maxIncomeValue !== undefined &&
+                    maxIncomeValue !== null &&
+                    value > maxIncomeValue
+                  ) {
+                    return "Min income must be less than or equal to max income"
+                  }
+                  return true
+                },
+              },
+            }}
           />
           <TextInputField
             label="Max income"
@@ -64,7 +94,24 @@ export function HouseholdDetailsSection({ form }: Props) {
             setValue={setValue}
             type="currency"
             prepend="$"
-            validation={{ valueAsNumber: true }}
+            validation={{
+              valueAsNumber: true,
+              validate: {
+                greaterThanMin: (value: number) => {
+                  const minIncomeValue = getValues("minIncome")
+                  if (
+                    value !== undefined &&
+                    value !== null &&
+                    minIncomeValue !== undefined &&
+                    minIncomeValue !== null &&
+                    value < minIncomeValue
+                  ) {
+                    return "Max income must be greater than or equal to min income"
+                  }
+                  return true
+                },
+              },
+            }}
           />
         </div>
         {(errors.minIncome || errors.maxIncome) && (
@@ -80,6 +127,14 @@ export function HouseholdDetailsSection({ form }: Props) {
           getValues={getValues}
           setValue={setValue}
           placeholder="Select one or more AMI level"
+          validation={{
+            validate: (value: string[]) => {
+              if (!value || value.length === 0) {
+                return "Please select at least one AMI level option"
+              }
+              return true
+            },
+          }}
         />
         {Array.isArray(errors.amiLevels) &&
           errors.amiLevels.map((err, idx) =>
@@ -100,6 +155,14 @@ export function HouseholdDetailsSection({ form }: Props) {
           getValues={getValues}
           setValue={setValue}
           placeholder="Select voucher status"
+          validation={{
+            validate: (value: string[]) => {
+              if (!value || value.length === 0) {
+                return "Please select at least one voucher status option"
+              }
+              return true
+            },
+          }}
         />
         {Array.isArray(errors.voucherStatuses) &&
           errors.voucherStatuses.map((err, idx) =>
@@ -119,6 +182,14 @@ export function HouseholdDetailsSection({ form }: Props) {
           getValues={getValues}
           setValue={setValue}
           placeholder="Select accessibility type"
+          validation={{
+            validate: (value: string[]) => {
+              if (!value || value.length === 0) {
+                return "Please select at least one accessibility type option"
+              }
+              return true
+            },
+          }}
         />
         {Array.isArray(errors.accessibilityTypes) &&
           errors.accessibilityTypes.map((err, idx) =>

@@ -82,8 +82,6 @@ function DemographicChart({ title, data, dataKey }: DemographicChartProps) {
 export default function DemographicsSection({ chartData }: DemographicsSectionProps) {
   const { raceFrequencies, ethnicityFrequencies } = chartData
 
-  // const [activeBar, setActiveBar] = useState<string | null>(null)
-
   // Normalize chart data
   const maxRace = Math.max(...raceFrequencies.map((d) => d.count))
   const raceChartData = raceFrequencies.map((d) => ({
@@ -106,10 +104,8 @@ export default function DemographicsSection({ chartData }: DemographicsSectionPr
         </p>
 
         <div className="w-full h-full flex flex-row gap-6">
-          {/* ─── Race Section ─────────────────────────────────────────────────── */}
           <DemographicChart title="Race" data={raceChartData} dataKey="race" />
 
-          {/* ─── Ethnicity Section ────────────────────────────────────────────── */}
           <DemographicChart title="Ethnicity" data={ethnicityChartData} dataKey="ethnicity" />
         </div>
       </div>
