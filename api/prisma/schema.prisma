@@ -597,7 +597,7 @@ model Listings {
   leasingAgentOfficeHours               String?                       @map("leasing_agent_office_hours")
   leasingAgentPhone                     String?                       @map("leasing_agent_phone")
   leasingAgentTitle                     String?                       @map("leasing_agent_title")
-  listingType                           ListingTypeEnum?              @default(regulated) @map("listing_type")
+  listingType                           ListingTypeEnum               @default(regulated) @map("listing_type")
   name                                  String
   postmarkedApplicationsReceivedByDate  DateTime?                     @map("postmarked_applications_received_by_date") @db.Timestamptz(6)
   programRules                          String?                       @map("program_rules")
@@ -968,14 +968,14 @@ model UserAccounts {
 }
 
 model UserRoles {
-  isAdmin                       Boolean         @default(false) @map("is_admin")
-  isJurisdictionalAdmin         Boolean         @default(false) @map("is_jurisdictional_admin")
-  isLimitedJurisdictionalAdmin  Boolean         @default(false) @map("is_limited_jurisdictional_admin")
-  isPartner                     Boolean         @default(false) @map("is_partner")
+  isAdmin                      Boolean      @default(false) @map("is_admin")
+  isJurisdictionalAdmin        Boolean      @default(false) @map("is_jurisdictional_admin")
+  isLimitedJurisdictionalAdmin Boolean      @default(false) @map("is_limited_jurisdictional_admin")
+  isPartner                    Boolean      @default(false) @map("is_partner")
   // Role for maintainers of the code base. Should have access to everything as well as developer specific pages
-  isSuperAdmin                  Boolean         @default(false) @map("is_super_admin")
-  userId                        String          @id() @map("user_id") @db.Uuid
-  userAccounts                  UserAccounts    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  isSuperAdmin                 Boolean      @default(false) @map("is_super_admin")
+  userId                       String       @id() @map("user_id") @db.Uuid
+  userAccounts                 UserAccounts @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("user_roles")
 }
