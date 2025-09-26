@@ -230,7 +230,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         .expect(200);
     });
 
-    it('should error as forbidden for retrieve endpoint', async () => {
+    it('should succeed for retrieve endpoint', async () => {
       const unitTypeA = await unitTypeFactorySingle(
         prisma,
         UnitTypeEnum.oneBdrm,
@@ -255,10 +255,10 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         .get(`/applications/${applicationA.id}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
-        .expect(403);
+        .expect(200);
     });
 
-    it('should error as forbidden for partner create', async () => {
+    it('should succeed for partner create', async () => {
       const unitTypeA = await unitTypeFactorySingle(
         prisma,
         UnitTypeEnum.oneBdrm,
@@ -284,9 +284,9 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
           ),
         )
         .set('Cookie', cookies)
-        .expect(403);
+        .expect(201);
     });
-    it('should error as forbidden for delete endpoint', async () => {
+    it('should succeed for delete endpoint', async () => {
       const unitTypeA = await unitTypeFactorySingle(
         prisma,
         UnitTypeEnum.oneBdrm,
@@ -312,7 +312,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
           id: applicationA.id,
         })
         .set('Cookie', cookies)
-        .expect(403);
+        .expect(200);
 
       const activityLogResult = await prisma.activityLog.findFirst({
         where: {
@@ -322,7 +322,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         },
       });
 
-      expect(activityLogResult).toBeNull();
+      expect(activityLogResult).not.toBeNull();
     });
 
     it('should succeed for public create endpoint', async () => {
@@ -353,7 +353,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         .set('Cookie', cookies)
         .expect(201);
     });
-    it('should error as forbidden for update endpoint', async () => {
+    it('should succed for update endpoint', async () => {
       const unitTypeA = await unitTypeFactorySingle(
         prisma,
         UnitTypeEnum.oneBdrm,
@@ -386,7 +386,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
           ),
         )
         .set('Cookie', cookies)
-        .expect(403);
+        .expect(200);
 
       const activityLogResult = await prisma.activityLog.findFirst({
         where: {
@@ -396,7 +396,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         },
       });
 
-      expect(activityLogResult).toBeNull();
+      expect(activityLogResult).not.toBeNull();
     });
 
     it('should succeed for verify endpoint', async () => {
