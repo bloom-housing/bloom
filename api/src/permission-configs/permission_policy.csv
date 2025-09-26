@@ -71,6 +71,7 @@ p, limitedJurisdictionAdmin, jurisdiction, true, read
 p, anonymous, jurisdiction, true, read
 
 p, admin, listing, true, .*
+p, supportAdmin, listing, true, .*
 p, anonymous, listing, true, read
 
 p, admin, reservedCommunityType, true, .*
