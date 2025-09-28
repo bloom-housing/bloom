@@ -220,7 +220,7 @@ const Lottery = (props: { listing: Listing | undefined }) => {
               </p>
             </div>
             <div>
-              {profile.userRoles.isAdmin && (
+              {!profile.userRoles.isSupportAdmin && (
                 <Button
                   onClick={() => {
                     setPublishModal(true)
