@@ -1,4 +1,5 @@
 p, admin, application, true, .*
+p, supportAdmin, application, true, .*
 p, user, application, true, submit
 p, user, application, r.sub == r.obj.userId, read
 p, anonymous, application, true, submit
@@ -71,6 +72,7 @@ p, limitedJurisdictionAdmin, jurisdiction, true, read
 p, anonymous, jurisdiction, true, read
 
 p, admin, listing, true, .*
+p, supportAdmin, listing, true, .*
 p, anonymous, listing, true, read
 
 p, admin, reservedCommunityType, true, .*

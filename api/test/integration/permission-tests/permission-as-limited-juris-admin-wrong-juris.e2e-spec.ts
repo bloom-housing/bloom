@@ -8,7 +8,6 @@ import { AppModule } from '../../../src/modules/app.module';
 import { PrismaService } from '../../../src/services/prisma.service';
 import { userFactory } from '../../../prisma/seed-helpers/user-factory';
 import { Login } from '../../../src/dtos/auth/login.dto';
-import { jurisdictionFactory } from '../../../prisma/seed-helpers/jurisdiction-factory';
 import { listingFactory } from '../../../prisma/seed-helpers/listing-factory';
 import { amiChartFactory } from '../../../prisma/seed-helpers/ami-chart-factory';
 import { AmiChartQueryParams } from '../../../src/dtos/ami-charts/ami-chart-query-params.dto';
@@ -48,25 +47,22 @@ import {
   generateJurisdiction,
   buildAmiChartCreateMock,
   buildAmiChartUpdateMock,
-  // buildPresignedEndpointMock,
-  // buildJurisdictionCreateMock,
-  // buildJurisdictionUpdateMock,
+  buildPresignedEndpointMock,
+  buildJurisdictionCreateMock,
+  buildJurisdictionUpdateMock,
   buildReservedCommunityTypeCreateMock,
   buildReservedCommunityTypeUpdateMock,
   buildMultiselectQuestionCreateMock,
   buildMultiselectQuestionUpdateMock,
+  buildUserCreateMock,
   buildUserInviteMock,
   buildApplicationCreateMock,
   buildApplicationUpdateMock,
   constructFullListingData,
   createSimpleApplication,
   createSimpleListing,
-  buildPresignedEndpointMock,
-  buildJurisdictionCreateMock,
-  buildJurisdictionUpdateMock,
 } from './helpers';
 import { ApplicationFlaggedSetService } from '../../../src/services/application-flagged-set.service';
-import { featureFlagFactory } from '../../../prisma/seed-helpers/feature-flag-factory';
 
 const testEmailService = {
   confirmation: jest.fn(),
@@ -79,13 +75,13 @@ const testEmailService = {
   applicationConfirmation: jest.fn(),
 };
 
-describe('Testing Permissioning of endpoints as Support Admin User', () => {
+describe('Testing Permissioning of endpoints as Limited Jurisdictional Admin in the wrong jurisdiction', () => {
   let app: INestApplication;
   let prisma: PrismaService;
   let userService: UserService;
   let applicationFlaggedSetService: ApplicationFlaggedSetService;
   let cookies = '';
-  let jurisdictionId = '';
+  let jurisId = '';
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -95,25 +91,31 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
       .useValue(testEmailService)
       .compile();
 
+    app = moduleFixture.createNestApplication();
+    prisma = moduleFixture.get<PrismaService>(PrismaService);
+    userService = moduleFixture.get<UserService>(UserService);
     applicationFlaggedSetService =
       moduleFixture.get<ApplicationFlaggedSetService>(
         ApplicationFlaggedSetService,
       );
-    app = moduleFixture.createNestApplication();
-    prisma = moduleFixture.get<PrismaService>(PrismaService);
-    userService = moduleFixture.get<UserService>(UserService);
     app.use(cookieParser());
     await app.init();
 
-    jurisdictionId = await generateJurisdiction(
+    const userJuris = await generateJurisdiction(
       prisma,
-      'support admin permission juris',
+      'wrong limited jadmin permission juris',
     );
-    await reservedCommunityTypeFactoryAll(jurisdictionId, prisma);
+
+    jurisId = await generateJurisdiction(
+      prisma,
+      'wrong permission limited juris',
+    );
+    await reservedCommunityTypeFactoryAll(jurisId, prisma);
 
     const storedUser = await prisma.userAccounts.create({
       data: await userFactory({
-        roles: { isSupportAdmin: true },
+        roles: { isLimitedJurisdictionalAdmin: true },
+        jurisdictionIds: [userJuris],
         mfaEnabled: false,
         confirmedAt: new Date(),
       }),
@@ -127,8 +129,9 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
       } as Login)
       .expect(201);
 
-    cookies = resLogIn.headers['set-cookie'];
+    await reservedCommunityTypeFactoryAll(jurisId, prisma);
     await unitAccessibilityPriorityTypeFactoryAll(prisma);
+    cookies = resLogIn.headers['set-cookie'];
   });
 
   afterAll(async () => {
@@ -139,10 +142,10 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
   describe('Testing ami-chart endpoints', () => {
     it('should succeed for list endpoint', async () => {
       await prisma.amiChart.create({
-        data: amiChartFactory(10, jurisdictionId),
+        data: amiChartFactory(10, jurisId),
       });
       const queryParams: AmiChartQueryParams = {
-        jurisdictionId: jurisdictionId,
+        jurisdictionId: jurisId,
       };
       const query = stringify(queryParams as any);
 
@@ -155,7 +158,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
 
     it('should succeed for retrieve endpoint', async () => {
       const amiChartA = await prisma.amiChart.create({
-        data: amiChartFactory(10, jurisdictionId),
+        data: amiChartFactory(10, jurisId),
       });
 
       await request(app.getHttpServer())
@@ -169,14 +172,14 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
       await request(app.getHttpServer())
         .post('/amiCharts')
         .set({ passkey: process.env.API_PASS_KEY || '' })
-        .send(buildAmiChartCreateMock(jurisdictionId))
+        .send(buildAmiChartCreateMock(jurisId))
         .set('Cookie', cookies)
         .expect(201);
     });
 
     it('should succeed for update endpoint', async () => {
       const amiChartA = await prisma.amiChart.create({
-        data: amiChartFactory(11, jurisdictionId),
+        data: amiChartFactory(10, jurisId),
       });
 
       await request(app.getHttpServer())
@@ -189,7 +192,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
 
     it('should succeed for delete endpoint', async () => {
       const amiChartA = await prisma.amiChart.create({
-        data: amiChartFactory(10, jurisdictionId),
+        data: amiChartFactory(10, jurisId),
       });
 
       await request(app.getHttpServer())
@@ -218,7 +221,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
     });
 
     it('should succeed for list endpoint', async () => {
-      const listing1 = await listingFactory(jurisdictionId, prisma);
+      const listing1 = await listingFactory(jurisId, prisma);
       const listing1Created = await prisma.listings.create({
         data: listing1,
       });
@@ -230,13 +233,13 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         .expect(200);
     });
 
-    it('should succeed for retrieve endpoint', async () => {
+    it('should error as forbidden for retrieve endpoint', async () => {
       const unitTypeA = await unitTypeFactorySingle(
         prisma,
         UnitTypeEnum.oneBdrm,
       );
 
-      const listing1 = await listingFactory(jurisdictionId, prisma);
+      const listing1 = await listingFactory(jurisId, prisma);
       const listing1Created = await prisma.listings.create({
         data: listing1,
       });
@@ -255,43 +258,15 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         .get(`/applications/${applicationA.id}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
-        .expect(200);
+        .expect(403);
     });
 
-    it('should succeed for partner create', async () => {
+    it('should error as forbidden for delete endpoint', async () => {
       const unitTypeA = await unitTypeFactorySingle(
         prisma,
         UnitTypeEnum.oneBdrm,
       );
-
-      const listing1 = await listingFactory(jurisdictionId, prisma, {
-        digitalApp: true,
-      });
-      const listing1Created = await prisma.listings.create({
-        data: listing1,
-      });
-
-      const exampleAddress = addressFactory() as AddressCreate;
-      await request(app.getHttpServer())
-        .post(`/applications/`)
-        .set({ passkey: process.env.API_PASS_KEY || '' })
-        .send(
-          buildApplicationCreateMock(
-            exampleAddress,
-            listing1Created.id,
-            unitTypeA.id,
-            new Date(),
-          ),
-        )
-        .set('Cookie', cookies)
-        .expect(201);
-    });
-    it('should succeed for delete endpoint', async () => {
-      const unitTypeA = await unitTypeFactorySingle(
-        prisma,
-        UnitTypeEnum.oneBdrm,
-      );
-      const listing1 = await listingFactory(jurisdictionId, prisma);
+      const listing1 = await listingFactory(jurisId, prisma);
       const listing1Created = await prisma.listings.create({
         data: listing1,
       });
@@ -312,17 +287,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
           id: applicationA.id,
         })
         .set('Cookie', cookies)
-        .expect(200);
-
-      const activityLogResult = await prisma.activityLog.findFirst({
-        where: {
-          module: 'application',
-          action: permissionActions.delete,
-          recordId: applicationA.id,
-        },
-      });
-
-      expect(activityLogResult).not.toBeNull();
+        .expect(403);
     });
 
     it('should succeed for public create endpoint', async () => {
@@ -331,7 +296,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         UnitTypeEnum.oneBdrm,
       );
 
-      const listing1 = await listingFactory(jurisdictionId, prisma, {
+      const listing1 = await listingFactory(jurisId, prisma, {
         digitalApp: true,
       });
       const listing1Created = await prisma.listings.create({
@@ -353,12 +318,42 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         .set('Cookie', cookies)
         .expect(201);
     });
-    it('should succed for update endpoint', async () => {
+
+    it('should error as forbidden for partner create endpoint', async () => {
       const unitTypeA = await unitTypeFactorySingle(
         prisma,
         UnitTypeEnum.oneBdrm,
       );
-      const listing1 = await listingFactory(jurisdictionId, prisma);
+
+      const listing1 = await listingFactory(jurisId, prisma, {
+        digitalApp: true,
+      });
+      const listing1Created = await prisma.listings.create({
+        data: listing1,
+      });
+
+      const exampleAddress = addressFactory() as AddressCreate;
+      await request(app.getHttpServer())
+        .post(`/applications/`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send(
+          buildApplicationCreateMock(
+            exampleAddress,
+            listing1Created.id,
+            unitTypeA.id,
+            new Date(),
+          ),
+        )
+        .set('Cookie', cookies)
+        .expect(403);
+    });
+
+    it('should error as forbidden for update endpoint', async () => {
+      const unitTypeA = await unitTypeFactorySingle(
+        prisma,
+        UnitTypeEnum.oneBdrm,
+      );
+      const listing1 = await listingFactory(jurisId, prisma);
       const listing1Created = await prisma.listings.create({
         data: listing1,
       });
@@ -372,6 +367,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
           applicant: true,
         },
       });
+
       const exampleAddress = addressFactory() as AddressCreate;
       await request(app.getHttpServer())
         .put(`/applications/${applicationA.id}`)
@@ -386,17 +382,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
           ),
         )
         .set('Cookie', cookies)
-        .expect(200);
-
-      const activityLogResult = await prisma.activityLog.findFirst({
-        where: {
-          module: 'application',
-          action: permissionActions.update,
-          recordId: applicationA.id,
-        },
-      });
-
-      expect(activityLogResult).not.toBeNull();
+        .expect(403);
     });
 
     it('should succeed for verify endpoint', async () => {
@@ -404,13 +390,12 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         prisma,
         UnitTypeEnum.oneBdrm,
       );
-      const listing1 = await listingFactory(jurisdictionId, prisma);
+      const listing1 = await listingFactory(jurisId, prisma);
       const listing1Created = await prisma.listings.create({
         data: listing1,
       });
 
       const exampleAddress = addressFactory() as AddressCreate;
-
       await request(app.getHttpServer())
         .post(`/applications/verify`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
@@ -426,9 +411,14 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         .expect(201);
     });
 
-    it('should succeed for csv endpoint & create an activity log entry', async () => {
+    it('should error as forbidden for csv endpoint', async () => {
+      const jurisdiction = await generateJurisdiction(
+        prisma,
+        'wrong permission limited juris csv endpoint',
+      );
+      await reservedCommunityTypeFactoryAll(jurisdiction, prisma);
       const application = await applicationFactory();
-      const listing1 = await listingFactory(jurisdictionId, prisma, {
+      const listing1 = await listingFactory(jurisdiction, prisma, {
         applications: [application],
       });
       const listing1Created = await prisma.listings.create({
@@ -438,16 +428,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         .get(`/applications/csv?id=${listing1Created.id}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
-        .expect(200);
-      const activityLogResult = await prisma.activityLog.findFirst({
-        where: {
-          module: 'application',
-          action: 'export',
-          recordId: listing1Created.id,
-        },
-      });
-
-      expect(activityLogResult).not.toBeNull();
+        .expect(403);
     });
   });
 
@@ -473,7 +454,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
 
     it('should succeed for retrieve endpoint', async () => {
       await request(app.getHttpServer())
-        .get(`/jurisdictions/${jurisdictionId}`)
+        .get(`/jurisdictions/${jurisId}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
         .expect(200);
@@ -482,7 +463,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
     it('should succeed for retrieve by name endpoint', async () => {
       const jurisdictionA = await prisma.jurisdictions.findFirst({
         where: {
-          id: jurisdictionId,
+          id: jurisId,
         },
       });
 
@@ -497,18 +478,16 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
       await request(app.getHttpServer())
         .post('/jurisdictions')
         .set({ passkey: process.env.API_PASS_KEY || '' })
-        .send(buildJurisdictionCreateMock('new permission jurisdiction 2'))
+        .send(buildJurisdictionCreateMock('new permission jurisdiction 3'))
         .set('Cookie', cookies)
         .expect(403);
     });
 
     it('should error as forbidden for update endpoint', async () => {
       await request(app.getHttpServer())
-        .put(`/jurisdictions/${jurisdictionId}`)
+        .put(`/jurisdictions/${jurisId}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
-        .send(
-          buildJurisdictionUpdateMock(jurisdictionId, 'permission juris 9:3'),
-        )
+        .send(buildJurisdictionUpdateMock(jurisId, 'permission juris 9:4'))
         .set('Cookie', cookies)
         .expect(403);
     });
@@ -516,7 +495,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
     it('should error as forbidden for delete endpoint', async () => {
       const jurisdictionA = await generateJurisdiction(
         prisma,
-        'correct support admin permission juris delete',
+        'wrong limited jadmin permission juris delete',
       );
 
       await request(app.getHttpServer())
@@ -542,7 +521,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
     it('should succeed for retrieve endpoint', async () => {
       const reservedCommunityTypeA = await reservedCommunityTypeFactoryGet(
         prisma,
-        jurisdictionId,
+        jurisId,
       );
 
       await request(app.getHttpServer())
@@ -552,25 +531,20 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         .expect(200);
     });
 
-    it('should error as forbiddens for create endpoint', async () => {
+    it('should error as forbidden for create endpoint', async () => {
       await request(app.getHttpServer())
         .post('/reservedCommunityTypes')
         .set({ passkey: process.env.API_PASS_KEY || '' })
-        .send(buildReservedCommunityTypeCreateMock(jurisdictionId))
+        .send(buildReservedCommunityTypeCreateMock(jurisId))
         .set('Cookie', cookies)
         .expect(403);
     });
 
-    it('should error as forbiddens for update endpoint', async () => {
-      const newJurisdiction = await prisma.jurisdictions.create({
-        data: jurisdictionFactory(),
-      });
-      await reservedCommunityTypeFactoryAll(newJurisdiction.id, prisma);
+    it('should error as forbidden for update endpoint', async () => {
       const reservedCommunityTypeA = await reservedCommunityTypeFactoryGet(
         prisma,
-        newJurisdiction.id,
+        jurisId,
       );
-
       await request(app.getHttpServer())
         .put(`/reservedCommunityTypes/${reservedCommunityTypeA.id}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
@@ -579,14 +553,10 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         .expect(403);
     });
 
-    it('should error as forbiddens for delete endpoint', async () => {
-      const newJurisdiction = await prisma.jurisdictions.create({
-        data: jurisdictionFactory(),
-      });
-      await reservedCommunityTypeFactoryAll(newJurisdiction.id, prisma);
+    it('should error as forbidden for delete endpoint', async () => {
       const reservedCommunityTypeA = await reservedCommunityTypeFactoryGet(
         prisma,
-        newJurisdiction.id,
+        jurisId,
       );
 
       await request(app.getHttpServer())
@@ -621,7 +591,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         .expect(200);
     });
 
-    it('should error as forbiddens for create endpoint', async () => {
+    it('should error as forbidden for create endpoint', async () => {
       const name = unitRentTypeFactory().name;
       await request(app.getHttpServer())
         .post('/unitRentTypes')
@@ -633,7 +603,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         .expect(403);
     });
 
-    it('should error as forbiddens for update endpoint', async () => {
+    it('should error as forbidden for update endpoint', async () => {
       const unitRentTypeA = await prisma.unitRentTypes.create({
         data: unitRentTypeFactory(),
       });
@@ -649,7 +619,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         .expect(403);
     });
 
-    it('should error as forbiddens for delete endpoint', async () => {
+    it('should error as forbidden for delete endpoint', async () => {
       const unitRentTypeA = await prisma.unitRentTypes.create({
         data: unitRentTypeFactory(),
       });
@@ -686,18 +656,18 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         .expect(200);
     });
 
-    it('should error as forbiddens for create endpoint', async () => {
+    it('should error as forbidden for create endpoint', async () => {
       await request(app.getHttpServer())
         .post('/unitAccessibilityPriorityTypes')
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send({
-          name: 'hearing And Visual',
+          name: 'hearing',
         } as UnitAccessibilityPriorityTypeCreate)
         .set('Cookie', cookies)
         .expect(403);
     });
 
-    it('should error as forbiddens for update endpoint', async () => {
+    it('should error as forbidden for update endpoint', async () => {
       const unitTypeA = await unitAccessibilityPriorityTypeFactorySingle(
         prisma,
       );
@@ -706,19 +676,16 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send({
           id: unitTypeA.id,
-          name: 'hearing And Visual',
+          name: 'hearing',
         } as UnitAccessibilityPriorityTypeUpdate)
         .set('Cookie', cookies)
         .expect(403);
     });
 
-    it('should error as forbiddens for delete endpoint', async () => {
-      await unitAccessibilityPriorityTypeFactoryAll(prisma);
-      const unitTypeA = await prisma.unitAccessibilityPriorityTypes.create({
-        data: {
-          name: 'unit type A',
-        },
-      });
+    it('should error as forbidden for delete endpoint', async () => {
+      const unitTypeA = await unitAccessibilityPriorityTypeFactorySingle(
+        prisma,
+      );
 
       await request(app.getHttpServer())
         .delete(`/unitAccessibilityPriorityTypes`)
@@ -730,8 +697,9 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         .expect(403);
     });
   });
+
   describe('Testing unit types endpoints', () => {
-    it('should succeed forbiddens for list endpoint', async () => {
+    it('should succeed for list endpoint', async () => {
       await request(app.getHttpServer())
         .get(`/unitTypes?`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
@@ -752,7 +720,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         .expect(200);
     });
 
-    it('should error as forbiddens for create endpoint', async () => {
+    it('should error as forbidden for create endpoint', async () => {
       const name = UnitTypeEnum.twoBdrm;
       await request(app.getHttpServer())
         .post('/unitTypes')
@@ -765,7 +733,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         .expect(403);
     });
 
-    it('should error as forbiddens for update endpoint', async () => {
+    it('should error as forbidden for update endpoint', async () => {
       const unitTypeA = await unitTypeFactorySingle(prisma, UnitTypeEnum.SRO);
       const name = UnitTypeEnum.SRO;
       await request(app.getHttpServer())
@@ -780,13 +748,11 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         .expect(403);
     });
 
-    it('should error as forbiddens for delete endpoint', async () => {
-      const unitTypeA = await prisma.unitTypes.create({
-        data: {
-          name: UnitTypeEnum.studio,
-          numBedrooms: 23,
-        },
-      });
+    it('should error as forbidden for delete endpoint', async () => {
+      const unitTypeA = await unitTypeFactorySingle(
+        prisma,
+        UnitTypeEnum.oneBdrm,
+      );
 
       await request(app.getHttpServer())
         .delete(`/unitTypes`)
@@ -810,7 +776,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
 
     it('should succeed for retrieve endpoint', async () => {
       const multiselectQuestionA = await prisma.multiselectQuestions.create({
-        data: multiselectQuestionFactory(jurisdictionId),
+        data: multiselectQuestionFactory(jurisId),
       });
 
       await request(app.getHttpServer())
@@ -820,28 +786,25 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         .expect(200);
     });
 
-    it('should succeed for create endpoint', async () => {
+    it('should succed for create endpoint', async () => {
       await request(app.getHttpServer())
         .post('/multiselectQuestions')
         .set({ passkey: process.env.API_PASS_KEY || '' })
-        .send(buildMultiselectQuestionCreateMock(jurisdictionId))
+        .send(buildMultiselectQuestionCreateMock(jurisId))
         .set('Cookie', cookies)
         .expect(201);
     });
 
     it('should succeed for update endpoint', async () => {
       const multiselectQuestionA = await prisma.multiselectQuestions.create({
-        data: multiselectQuestionFactory(jurisdictionId),
+        data: multiselectQuestionFactory(jurisId),
       });
 
       await request(app.getHttpServer())
         .put(`/multiselectQuestions/${multiselectQuestionA.id}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send(
-          buildMultiselectQuestionUpdateMock(
-            jurisdictionId,
-            multiselectQuestionA.id,
-          ),
+          buildMultiselectQuestionUpdateMock(jurisId, multiselectQuestionA.id),
         )
         .set('Cookie', cookies)
         .expect(200);
@@ -849,7 +812,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
 
     it('should succeed for delete endpoint & create an activity log entry', async () => {
       const multiselectQuestionA = await prisma.multiselectQuestions.create({
-        data: multiselectQuestionFactory(jurisdictionId),
+        data: multiselectQuestionFactory(jurisId),
       });
 
       await request(app.getHttpServer())
@@ -882,9 +845,9 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         .expect(200);
     });
 
-    it('should error as forbidden for for retrieve endpoint', async () => {
+    it('should error as forbidden for retrieve endpoint', async () => {
       const userA = await prisma.userAccounts.create({
-        data: await userFactory({ jurisdictionIds: [jurisdictionId] }),
+        data: await userFactory(),
       });
 
       await request(app.getHttpServer())
@@ -896,7 +859,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
 
     it('should error as forbidden for update endpoint', async () => {
       const userA = await prisma.userAccounts.create({
-        data: await userFactory({ jurisdictionIds: [jurisdictionId] }),
+        data: await userFactory(),
       });
 
       await request(app.getHttpServer())
@@ -906,7 +869,6 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
           id: userA.id,
           firstName: 'New User First Name',
           lastName: 'New User Last Name',
-          jurisdictions: [{ id: jurisdictionId } as IdDTO],
         } as UserUpdate)
         .set('Cookie', cookies)
         .expect(403);
@@ -914,7 +876,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
 
     it('should error as forbidden for delete endpoint', async () => {
       const userA = await prisma.userAccounts.create({
-        data: await userFactory({ jurisdictionIds: [jurisdictionId] }),
+        data: await userFactory(),
       });
 
       await request(app.getHttpServer())
@@ -999,23 +961,40 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         .set('Cookie', cookies)
         .expect(200);
     });
+    it('should succeed for public create endpoint', async () => {
+      const juris = await generateJurisdiction(prisma, 'permission juris 86');
+
+      const data = await applicationFactory();
+      data.applicant.create.emailAddress = 'publicuser@email.com';
+      await prisma.applications.create({
+        data,
+      });
+
+      await request(app.getHttpServer())
+        .post(`/user/`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send(buildUserCreateMock(juris, 'publicUser+jurisIncorrect@email.com'))
+        .set('Cookie', cookies)
+        .expect(201);
+    });
 
     it('should error as forbidden for partner create endpoint', async () => {
+      const jurisdiction = await generateJurisdiction(
+        prisma,
+        'wrong limited jadmin permission juris create failure',
+      );
+
       await request(app.getHttpServer())
         .post(`/user/invite`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .send(
-          // builds an invite for an admin
-          buildUserInviteMock(
-            jurisdictionId,
-            'partnerUser+jurisCorrect@email.com',
-          ),
+          buildUserInviteMock(jurisdiction, 'partnerUser+jurisWrong@email.com'),
         )
         .set('Cookie', cookies)
-        .set({ passkey: process.env.API_PASS_KEY || '' })
         .expect(403);
     });
 
-    it('should error as forbidden for csv export endpoint & create an activity log entry', async () => {
+    it('should error as forbidden for csv export endpoint', async () => {
       await request(app.getHttpServer())
         .get('/user/csv')
         .set({ passkey: process.env.API_PASS_KEY || '' })
@@ -1043,13 +1022,13 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
 
     it('should succeed for retrieveListings endpoint', async () => {
       const multiselectQuestion1 = await prisma.multiselectQuestions.create({
-        data: multiselectQuestionFactory(jurisdictionId, {
+        data: multiselectQuestionFactory(jurisId, {
           multiselectQuestion: {
             text: 'example a',
           },
         }),
       });
-      const listingA = await listingFactory(jurisdictionId, prisma, {
+      const listingA = await listingFactory(jurisId, prisma, {
         multiselectQuestions: [multiselectQuestion1],
       });
       const listingACreated = await prisma.listings.create({
@@ -1068,7 +1047,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
     });
 
     it('should succeed for external listing endpoint', async () => {
-      const listingA = await listingFactory(jurisdictionId, prisma);
+      const listingA = await listingFactory(jurisId, prisma);
       const listingACreated = await prisma.listings.create({
         data: listingA,
         include: {
@@ -1082,24 +1061,8 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         .expect(200);
     });
 
-    it('should succeed for create endpoint', async () => {
-      const val = await constructFullListingData(
-        prisma,
-        undefined,
-        jurisdictionId,
-      );
-
-      await request(app.getHttpServer())
-        .post('/listings')
-        .set({ passkey: process.env.API_PASS_KEY || '' })
-        .send(val)
-        .set('Cookie', cookies)
-        .expect(201);
-    });
-    it('should succeed for delete endpoint', async () => {
-      const listingData = await listingFactory(jurisdictionId, prisma, {
-        noImage: true,
-      });
+    it('should error as forbidden for delete endpoint', async () => {
+      const listingData = await listingFactory(jurisId, prisma);
       const listing = await prisma.listings.create({
         data: listingData,
       });
@@ -1111,30 +1074,38 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
           id: listing.id,
         } as IdDTO)
         .set('Cookie', cookies)
-        .expect(200);
+        .expect(403);
     });
 
-    it('should succeed for update endpoint', async () => {
-      const listingData = await listingFactory(jurisdictionId, prisma);
+    it('should error as forbidden for update endpoint', async () => {
+      const listingData = await listingFactory(jurisId, prisma);
       const listing = await prisma.listings.create({
         data: listingData,
       });
 
-      const val = await constructFullListingData(
-        prisma,
-        listing.id,
-        jurisdictionId,
-      );
+      const val = await constructFullListingData(prisma, listing.id, jurisId);
 
       await request(app.getHttpServer())
         .put(`/listings/${listing.id}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send(val)
         .set('Cookie', cookies)
-        .expect(200);
+        .expect(403);
     });
-    it('should succeed for duplicate endpoint', async () => {
-      const listingData = await listingFactory(jurisdictionId, prisma);
+
+    it('should error as forbidden for create endpoint', async () => {
+      const val = await constructFullListingData(prisma, undefined, jurisId);
+
+      await request(app.getHttpServer())
+        .post('/listings')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send(val)
+        .set('Cookie', cookies)
+        .expect(403);
+    });
+
+    it('should error as forbidden for duplicate endpoint', async () => {
+      const listingData = await listingFactory(jurisId, prisma);
       const listing = await prisma.listings.create({
         data: listingData,
       });
@@ -1150,7 +1121,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
           },
         })
         .set('Cookie', cookies)
-        .expect(201);
+        .expect(403);
     });
 
     it('should succeed for process endpoint', async () => {
@@ -1186,25 +1157,26 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         .expect(200);
     });
   });
+
   describe('Testing application flagged set endpoints', () => {
-    it('should succeed for list endpoint', async () => {
+    it('should error as forbidden for list endpoint', async () => {
       await request(app.getHttpServer())
         .get(`/applicationFlaggedSets?`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
-        .expect(200);
+        .expect(403);
     });
 
-    it('should succeed for meta endpoint', async () => {
+    it('should error as forbidden for meta endpoint', async () => {
       await request(app.getHttpServer())
         .get(`/applicationFlaggedSets/meta?`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
-        .expect(200);
+        .expect(403);
     });
 
-    it('should succeed for retrieve endpoint', async () => {
-      const listing = await createSimpleListing(prisma);
+    it('should error as forbidden for retrieve endpoint', async () => {
+      const listing = await createSimpleListing(prisma, jurisId);
       const applicationA = await createSimpleApplication(prisma);
       const applicationB = await createSimpleApplication(prisma);
 
@@ -1229,11 +1201,11 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         .get(`/applicationFlaggedSets/${resolvedAFS.id}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
-        .expect(200);
+        .expect(403);
     });
 
-    it('should succeed for resolve endpoint', async () => {
-      const listing = await createSimpleListing(prisma);
+    it('should error as forbidden for resolve endpoint', async () => {
+      const listing = await createSimpleListing(prisma, jurisId);
       const applicationA = await createSimpleApplication(prisma);
       const applicationB = await createSimpleApplication(prisma);
 
@@ -1267,11 +1239,11 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
           ],
         } as AfsResolve)
         .set('Cookie', cookies)
-        .expect(201);
+        .expect(403);
     });
 
-    it('should succeed for reset confirmation endpoint', async () => {
-      const listing = await createSimpleListing(prisma);
+    it('should error as forbidden for reset confirmation endpoint', async () => {
+      const listing = await createSimpleListing(prisma, jurisId);
       const applicationA = await createSimpleApplication(prisma);
       const applicationB = await createSimpleApplication(prisma);
 
@@ -1299,22 +1271,21 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
           id: afs.id,
         } as IdDTO)
         .set('Cookie', cookies)
-        .expect(200);
+        .expect(403);
     });
 
-    it('should succeed for process endpoint', async () => {
+    it('should error as forbidden for process endpoint', async () => {
       /*
         Because so many different iterations of the process endpoint were firing we were running into collisions. 
         Since this is just testing the permissioning aspect I'm switching to mocking the process function
       */
-      const mockProcess = jest.fn();
-      applicationFlaggedSetService.process = mockProcess;
+      applicationFlaggedSetService.process = jest.fn();
 
       await request(app.getHttpServer())
         .put(`/applicationFlaggedSets/process`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
-        .expect(200);
+        .expect(403);
     });
   });
 
@@ -1328,7 +1299,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
     });
 
     it('should error as forbidden for lottery status endpoint', async () => {
-      const listingData = await listingFactory(jurisdictionId, prisma, {
+      const listingData = await listingFactory(jurisId, prisma, {
         status: 'closed',
       });
       const listing = await prisma.listings.create({
@@ -1356,79 +1327,45 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         .expect(403);
     });
 
-    it('should error as forbiddens for create endpoint', async () => {
-      const body = {
-        name: 'new name',
-        description: 'new description',
-        active: true,
-      };
-
+    it('should error as forbidden for create endpoint', async () => {
       await request(app.getHttpServer())
         .post(`/featureFlags`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
-        .send(body)
+        .send({})
         .set('Cookie', cookies)
         .expect(403);
     });
 
-    it('should error as forbiddens for update endpoint', async () => {
-      const featureFlag = await prisma.featureFlags.create({
-        data: featureFlagFactory(),
-      });
-
-      const body = {
-        id: featureFlag.id,
-        description: 'updated description',
-        active: !featureFlag.active,
-      };
-
+    it('should error as forbidden for update endpoint', async () => {
       await request(app.getHttpServer())
         .put(`/featureFlags`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
-        .send(body)
+        .send({})
         .set('Cookie', cookies)
         .expect(403);
     });
 
-    it('should error as forbiddens for delete endpoint', async () => {
-      const featureFlag = await prisma.featureFlags.create({
-        data: featureFlagFactory(),
-      });
-
+    it('should error as forbidden for delete endpoint', async () => {
       await request(app.getHttpServer())
         .delete(`/featureFlags`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
-        .send({ id: featureFlag.id })
+        .send({})
         .set('Cookie', cookies)
         .expect(403);
     });
 
-    it('should error as forbiddens for associate jurisdictions endpoint', async () => {
-      const featureFlag = await prisma.featureFlags.create({
-        data: featureFlagFactory(),
-      });
-
-      const body = {
-        id: featureFlag.id,
-        associate: [],
-        remove: [],
-      };
-
+    it('should error as forbidden for associate jurisdictions endpoint', async () => {
       await request(app.getHttpServer())
         .put(`/featureFlags/associateJurisdictions`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
-        .send(body)
+        .send({})
         .set('Cookie', cookies)
         .expect(403);
     });
 
-    it('should error as forbiddens for retrieve endpoint', async () => {
-      const featureFlag = await prisma.featureFlags.create({
-        data: featureFlagFactory(),
-      });
-
+    it('should error as forbidden for retrieve endpoint', async () => {
       await request(app.getHttpServer())
-        .get(`/featureFlags/${featureFlag.id}`)
+        .get(`/featureFlags/example`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
         .expect(403);

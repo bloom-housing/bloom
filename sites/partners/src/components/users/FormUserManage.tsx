@@ -68,14 +68,9 @@ const FormUserManage = ({
     possibleUserRoles.push(RoleOption.JurisdictionalAdmin)
     possibleUserRoles.push(RoleOption.LimitedJurisdictionalAdmin)
   }
-  if (
-    profile?.userRoles?.isAdmin &&
-    doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableSupportAdmin, undefined, true)
-  ) {
-    possibleUserRoles.push(RoleOption.SupportAdmin)
-  }
   if (profile?.userRoles?.isAdmin) {
     possibleUserRoles.push(RoleOption.Administrator)
+    possibleUserRoles.push(RoleOption.SupportAdmin)
   }
 
   let defaultValues: FormUserManageValues = {}
