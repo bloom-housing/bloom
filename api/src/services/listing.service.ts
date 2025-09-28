@@ -275,11 +275,8 @@ export class ListingService implements OnModuleInit {
     const userRolesWhere: Prisma.UserAccountsWhereInput[] = [];
     if (userRoles.includes(UserRoleEnum.admin))
       userRolesWhere.push({ userRoles: { isAdmin: true } });
-    if (userRoles.includes(UserRoleEnum.supportAdmin)) {
-      userRolesWhere.push({
-        userRoles: { isSupportAdmin: true },
-      });
-    }
+    if (userRoles.includes(UserRoleEnum.supportAdmin))
+      userRolesWhere.push({ userRoles: { isSupportAdmin: true } });
     if (userRoles.includes(UserRoleEnum.partner))
       userRolesWhere.push({
         userRoles: { isPartner: true },
