@@ -28,7 +28,7 @@ describe("applications pages", () => {
 
       expect(
         getByText(
-          "Do you anticipate any changes in the number of people in your household in the next 12 months? If so, that may impact your eligibility for certain units."
+          "Do you anticipate any changes in your household in the next 12 months, such as the number of people?"
         )
       ).toBeInTheDocument()
       expect(getAllByTestId("app-expecting-changes")).toHaveLength(2)

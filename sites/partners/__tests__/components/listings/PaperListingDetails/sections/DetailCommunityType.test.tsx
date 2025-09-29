@@ -48,9 +48,9 @@ describe("DetailCommunityType", () => {
       </AuthContext.Provider>
     )
 
-    expect(results.getByText("Community Type")).toBeInTheDocument()
-    expect(results.getByText("Reserved Community Type")).toBeInTheDocument()
-    expect(results.getByText("Reserved Community Description")).toBeInTheDocument()
+    expect(results.getByText("Community type")).toBeInTheDocument()
+    expect(results.getByText("Reserved community type")).toBeInTheDocument()
+    expect(results.getByText("Reserved community description")).toBeInTheDocument()
     expect(
       results.getByText(
         "Do you want to include a community type disclaimer as the first page of the application?"
@@ -82,10 +82,10 @@ describe("DetailCommunityType", () => {
       </AuthContext.Provider>
     )
 
-    expect(results.getByText("Community Type")).toBeInTheDocument()
-    expect(results.getByText("Reserved Community Type")).toBeInTheDocument()
+    expect(results.getByText("Community type")).toBeInTheDocument()
+    expect(results.getByText("Reserved community type")).toBeInTheDocument()
     expect(results.getByText("Veteran")).toBeInTheDocument()
-    expect(results.getByText("Reserved Community Description")).toBeInTheDocument()
+    expect(results.getByText("Reserved community description")).toBeInTheDocument()
     expect(results.getByText("For folks who serve in the armed forces")).toBeInTheDocument()
     expect(
       results.getByText(

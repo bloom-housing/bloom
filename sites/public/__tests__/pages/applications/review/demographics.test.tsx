@@ -1,7 +1,15 @@
 import React from "react"
 import { setupServer } from "msw/lib/node"
-import { fireEvent } from "@testing-library/react"
+import { fireEvent, screen } from "@testing-library/react"
+import { blankApplication } from "@bloom-housing/shared-helpers"
+import {
+  FeatureFlag,
+  FeatureFlagEnum,
+  Listing,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { mockNextRouter, render } from "../../../testUtils"
+import ApplicationConductor from "../../../../src/lib/applications/ApplicationConductor"
+import { AppSubmissionContext } from "../../../../src/lib/applications/AppSubmissionContext"
 import ApplicationDemographics from "../../../../src/pages/applications/review/demographics"
 
 window.scrollTo = jest.fn()
@@ -188,5 +196,55 @@ describe("applications pages", () => {
       fireEvent.click(getByLabelText("Other White"))
       expect(await findAllByTestId("white-otherWhite")).toHaveLength(2)
     })
+  })
+
+  it("should show full list of how did you hear fields", () => {
+    render(<ApplicationDemographics />)
+    expect(screen.getByText("How did you hear about this listing?")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Government website" })).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Property website" })).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Flyer" })).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Email alert" })).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Friend" })).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Friend" })).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Housing counselor" })).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Radio ad" })).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Bus ad" })).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Other" })).toBeInTheDocument()
+  })
+
+  it("should show limited list of how did you hear fields when enableLimitedHowDidYouHear is on", () => {
+    const conductor = new ApplicationConductor({}, {})
+    conductor.config.featureFlags = [
+      { name: FeatureFlagEnum.enableLimitedHowDidYouHear, active: true } as FeatureFlag,
+    ]
+    render(
+      <AppSubmissionContext.Provider
+        value={{
+          conductor: conductor,
+          application: JSON.parse(JSON.stringify(blankApplication)),
+          listing: {} as unknown as Listing,
+          syncApplication: () => {
+            return
+          },
+          syncListing: () => {
+            return
+          },
+        }}
+      >
+        <ApplicationDemographics />
+      </AppSubmissionContext.Provider>
+    )
+    expect(screen.getByText("How did you hear about this listing?")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Government website" })).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Property website" })).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Flyer" })).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Email alert" })).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Friend" })).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Friend" })).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Housing counselor" })).toBeInTheDocument()
+    expect(screen.queryByRole("checkbox", { name: "Radio ad" })).not.toBeInTheDocument()
+    expect(screen.queryByRole("checkbox", { name: "Bus ad" })).not.toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Other" })).toBeInTheDocument()
   })
 })

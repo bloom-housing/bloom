@@ -57,7 +57,7 @@ const AccountApplication = () => {
   return (
     <>
       <RequireLogin signInPath="/sign-in" signInMessage={t("t.loginIsRequired")}>
-        <FormsLayout>
+        <FormsLayout pageTitle={`${t("application.viewApplication")} - ${listing?.name}`}>
           <LoadingState loading={loading || loading === null}>
             {noApplication && (
               <ApplicationError error={t("account.application.noApplicationError")} />

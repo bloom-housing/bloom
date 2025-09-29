@@ -36,7 +36,8 @@ module.exports = withBundleAnalyzer({
     listingPhotoSize: process.env.LISTING_PHOTO_SIZE || "1302",
     mapBoxToken: MAPBOX_TOKEN,
     housingCounselorServiceUrl: HOUSING_COUNSELOR_SERVICE_URL,
-    gtmKey: process.env.GTM_KEY || "",
+    gaKey: process.env.GA_KEY || null,
+    gtmKey: process.env.GTM_KEY || null,
     idleTimeout: process.env.IDLE_TIMEOUT,
     jurisdictionName: process.env.JURISDICTION_NAME,
     cacheRevalidate: process.env.CACHE_REVALIDATE ? process.env.CACHE_REVALIDATE : "30",
@@ -91,6 +92,9 @@ module.exports = withBundleAnalyzer({
       }
     )
     return config
+  },
+  eslint: {
+    ignoreDuringBuilds: true,
   },
   // eslint-disable-next-line @typescript-eslint/require-await
   async headers() {

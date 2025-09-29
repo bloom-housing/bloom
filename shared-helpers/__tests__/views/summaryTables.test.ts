@@ -618,7 +618,7 @@ describe("stackedUnitGroupsSummariesTable", () => {
       {
         rent: { cellSubText: "per month", cellText: "$1,200" },
         unitType: { cellSubText: "", cellText: "1 bed" },
-        availability: { cellText: "Not available" },
+        availability: { cellText: "Closed waitlist" },
       },
     ])
   })
@@ -627,7 +627,7 @@ describe("stackedUnitGroupsSummariesTable", () => {
       {
         rent: { cellSubText: "per month", cellText: "$1,200 to $1,500" },
         unitType: { cellSubText: "", cellText: "1 bed" },
-        availability: { cellText: "Not available" },
+        availability: { cellText: "Closed waitlist" },
       },
     ])
   })
@@ -636,7 +636,7 @@ describe("stackedUnitGroupsSummariesTable", () => {
       {
         rent: { cellSubText: "per month", cellText: "30% of income" },
         unitType: { cellSubText: "", cellText: "1 bed" },
-        availability: { cellText: "Not available" },
+        availability: { cellText: "Closed waitlist" },
       },
     ])
   })
@@ -645,7 +645,7 @@ describe("stackedUnitGroupsSummariesTable", () => {
       {
         rent: { cellSubText: "per month", cellText: "5% to 20% of income" },
         unitType: { cellSubText: "", cellText: "1 bed" },
-        availability: { cellText: "Not available" },
+        availability: { cellText: "Closed waitlist" },
       },
     ])
   })
@@ -654,7 +654,7 @@ describe("stackedUnitGroupsSummariesTable", () => {
       {
         rent: { cellSubText: "per month", cellText: "% of income, or up to $750" },
         unitType: { cellSubText: "", cellText: "1 bed - 3 beds" },
-        availability: { cellText: "Not available" },
+        availability: { cellText: "Closed waitlist" },
       },
     ])
   })
@@ -663,7 +663,7 @@ describe("stackedUnitGroupsSummariesTable", () => {
       {
         rent: { cellSubText: "", cellText: "n/a" },
         unitType: { cellSubText: "", cellText: "1 bed" },
-        availability: { cellText: "Not available" },
+        availability: { cellText: "Closed waitlist" },
       },
     ])
   })
@@ -672,7 +672,7 @@ describe("stackedUnitGroupsSummariesTable", () => {
       {
         rent: { cellSubText: "per month", cellText: "$1,200 to $1,500" },
         unitType: { cellSubText: "", cellText: "1 bed - 2 beds" },
-        availability: { cellText: "Not available" },
+        availability: { cellText: "Closed waitlist" },
       },
     ])
   })
@@ -694,7 +694,7 @@ describe("stackedUnitGroupsSummariesTable", () => {
       {
         rent: { cellSubText: "", cellText: "n/a" },
         unitType: { cellSubText: "", cellText: "1 bed" },
-        availability: { cellText: "Open Waitlist" },
+        availability: { cellText: "Open waitlist" },
       },
     ])
   })
@@ -717,7 +717,7 @@ describe("stackedUnitGroupsSummariesTable", () => {
         rent: { cellSubText: "", cellText: "n/a" },
         unitType: { cellSubText: "", cellText: "1 bed" },
         availability: {
-          cellText: "3 Vacant Units",
+          cellText: "3 Vacant units & Closed waitlist",
         },
       },
     ])
@@ -739,7 +739,7 @@ describe("stackedUnitGroupsSummariesTable", () => {
       {
         rent: { cellSubText: "", cellText: "n/a" },
         unitType: { cellSubText: "", cellText: "1 bed" },
-        availability: { cellText: "Under Construction" },
+        availability: { cellText: "Under construction" },
       },
     ])
   })
@@ -757,12 +757,12 @@ describe("getAvailabilityText", () => {
   it("should show plural units available text", () => {
     expect(
       getAvailabilityText({ ...defaultUnitGroupSummary, openWaitlist: true, unitVacancies: 10 })
-    ).toEqual({ text: "10 Vacant Units & Open waitlist" })
+    ).toEqual({ text: "10 Vacant units & Open waitlist" })
   })
   it("should show singular units available text", () => {
     expect(
       getAvailabilityText({ ...defaultUnitGroupSummary, openWaitlist: false, unitVacancies: 1 })
-    ).toEqual({ text: "1 Vacant Unit & Closed waitlist" })
+    ).toEqual({ text: "1 Vacant unit & Closed waitlist" })
   })
   it("should show under construction text", () => {
     expect(
@@ -770,6 +770,6 @@ describe("getAvailabilityText", () => {
         { ...defaultUnitGroupSummary, openWaitlist: true, unitVacancies: 10 },
         true
       )
-    ).toEqual({ text: "Under Construction" })
+    ).toEqual({ text: "Under construction" })
   })
 })

@@ -8,7 +8,11 @@ import {
 } from "../components/browse/FilterDrawerHelpers"
 import { ListingBrowse, TabsIndexEnum } from "../components/browse/ListingBrowse"
 import { isFeatureFlagOn } from "../lib/helpers"
-import { fetchClosedListings, fetchJurisdictionByName, fetchMultiselectData } from "../lib/hooks"
+import {
+  fetchClosedListings,
+  fetchJurisdictionByName,
+  fetchMultiselectProgramData,
+} from "../lib/hooks"
 import { ListingsProps } from "./listings"
 
 export default function ListingsPageClosed(props: ListingsProps) {
@@ -49,7 +53,7 @@ export async function getServerSideProps(context: { req: any; query: any }) {
     jurisdiction,
     FeatureFlagEnum.swapCommunityTypeWithPrograms
   )
-    ? await fetchMultiselectData(context.req, jurisdiction?.id)
+    ? await fetchMultiselectProgramData(context.req, jurisdiction?.id)
     : null
 
   return {

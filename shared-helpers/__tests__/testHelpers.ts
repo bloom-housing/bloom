@@ -631,6 +631,10 @@ export const jurisdiction: Jurisdiction = {
   emailFromAddress: "Bloomington <bloom-no-reply@exygy.dev>",
   rentalAssistanceDefault:
     "Housing Choice Vouchers, Section 8 and other valid rental assistance programs will be considered for this property. In the case of a valid rental subsidy, the required minimum income will be based on the portion of the rent that the tenant pays after use of the subsidy.",
+  whatToExpect:
+    "Applicants will be contacted by the property agent in rank order until vacancies are filled. All of the information that you have provided will be verified and your eligibility confirmed. Your application will be removed from the waitlist if you have made any fraudulent statements. If we cannot verify a housing preference that you have claimed, you will not receive the preference but will not be otherwise penalized. Should your application be chosen, be prepared to fill out a more detailed application and provide required supporting documents.",
+  whatToExpectAdditionalText:
+    "Property staff should walk you through the process to get on their waitlist.",
   enablePartnerSettings: true,
   enableListingOpportunity: false,
   enableGeocodingPreferences: false,
@@ -682,6 +686,10 @@ export const listing: Listing = {
   listingsApplicationDropOffAddress: undefined,
   applicationDropOffAddressOfficeHours: undefined,
   listingsApplicationMailingAddress: undefined,
+  lastUpdatedByUser: {
+    id: "d4522484-f473-4c0e-8f78-e1f8ab69cd70",
+    name: "First Last",
+  },
   jurisdictions: {
     id: "id",
     name: "San Jose",
@@ -777,7 +785,7 @@ export const listing: Listing = {
       ],
     },
   ],
-  applicationOrganization: "98 Archer Place",
+  applicationOrganization: "98 Archer Street",
   assets: [
     {
       id: "1234",
@@ -814,12 +822,12 @@ export const listing: Listing = {
     id: "id",
     createdAt: new Date(),
     updatedAt: new Date(),
-    city: "Dixon",
-    street: "98 Archer Place",
-    zipCode: "95620",
+    city: "San Jose",
+    street: "98 Archer Street",
+    zipCode: "95112",
     state: "CA",
-    latitude: 37.44522,
-    longitude: -121.81524,
+    latitude: 37.36537,
+    longitude: -121.91071,
   },
   leasingAgentEmail: "mbaca@charitieshousing.org",
   leasingAgentName: "Marisela Baca",
@@ -871,7 +879,7 @@ export const listing: Listing = {
         id: "prog_id_1",
         createdAt: new Date(),
         updatedAt: new Date(),
-        text: "Program 1",
+        text: "Families",
         jurisdictions: [],
         applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
       },
@@ -882,7 +890,7 @@ export const listing: Listing = {
         id: "prog_id_2",
         createdAt: new Date(),
         updatedAt: new Date(),
-        text: "Program 2",
+        text: "Veterans",
         jurisdictions: [],
         applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
       },
@@ -934,12 +942,12 @@ export const listing: Listing = {
     createdAt: new Date(),
     updatedAt: new Date(),
     county: "Solano",
-    city: "Dixon",
-    street: "98 Archer Place",
-    zipCode: "95620",
+    city: "San Jose",
+    street: "98 Archer Street",
+    zipCode: "95112",
     state: "CA",
-    latitude: 37.44522,
-    longitude: -121.81524,
+    latitude: 37.36537,
+    longitude: -121.91071,
   },
   neighborhood: "Rosemary Gardens Park",
   petPolicy:
@@ -1099,6 +1107,10 @@ export const mockBaseJurisdiction: Jurisdiction = {
   emailFromAddress: "Alameda: Housing Bay Area <bloom-no-reply@exygy.dev>",
   rentalAssistanceDefault:
     "Housing Choice Vouchers, Section 8 and other valid rental assistance programs will be considered for this property. In the case of a valid rental subsidy, the required minimum income will be based on the portion of the rent that the tenant pays after use of the subsidy.",
+  whatToExpect:
+    "<p>If you are interested in applying for this property, please get in touch in one of these ways:</p><ul><li><p>Phone</p></li><li><p>Email</p></li><li><p>In-person</p></li><li><p>In some instances, the property has a link directly to an application</p></li></ul><p>Once you contact a property, ask if they have any available units if you are looking to move in immediately.</p><p><strong>Waitlists</strong>:</p><p>If none are available, but you are still interested in eventually living at the property, ask how you can be placed on their waitlist.</p>",
+  whatToExpectAdditionalText:
+    "<ul><li><p>Property staff should walk you through the process to get on their waitlist.</p></li><li><p>You can be on waitlists for multiple properties, but you will need to contact each one of them to begin that process.</p></li><li><p>Even if you are on a waitlist, it can take months or over a year to get an available unit for that building.</p></li><li><p>Many properties that are affordable because of government funding or agreements have long waitlists. If you're on a waitlist for a property, you should contact the property on a regular basis to see if any units are available.</p></li></ul>",
   enablePartnerSettings: true,
   listingApprovalPermissions: [],
   duplicateListingPermissions: [],

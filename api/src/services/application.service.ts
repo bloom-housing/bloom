@@ -612,6 +612,8 @@ export class ApplicationService {
       },
       include: {
         jurisdictions: true,
+        // support unit group availability logic in email
+        unitGroups: true,
         // multiselect questions and address is needed for geocoding
         listingMultiselectQuestions: {
           include: {
@@ -775,6 +777,9 @@ export class ApplicationService {
               },
             }
           : undefined,
+
+        // TODO: Temporary until after MSQ refactor
+        applicationSelections: undefined,
       },
       include: view.details,
     });
@@ -957,6 +962,9 @@ export class ApplicationService {
           : undefined,
         programs: dto.programs as unknown as Prisma.JsonArray,
         preferences: dto.preferences as unknown as Prisma.JsonArray,
+
+        // TODO: Temporary until after MSQ refactor
+        applicationSelections: undefined,
       },
     });
 

@@ -10,10 +10,10 @@ describe("Listing Management Tests", () => {
   it("error messaging & save dialogs", () => {
     // Test to check that the appropriate error messages happen on submit
     cy.visit("/")
-    cy.get("a").contains("Add Listing").click()
-    cy.contains("New Listing")
+    cy.get("a").contains("Add listing").click()
+    cy.contains("New listing")
     // Save an empty listing as a draft and should show errors for appropriate fields
-    cy.getByID("saveDraftButton").contains("Save as Draft").click()
+    cy.getByID("saveDraftButton").contains("Save as draft").click()
     cy.contains("Please resolve any errors before saving or publishing your listing.")
     cy.getByID("name-error").contains("This field is required")
     cy.getByID("jurisdictions.id-error").contains("This field is required")
@@ -22,9 +22,9 @@ describe("Listing Management Tests", () => {
     cy.getByID("jurisdictions.id-error").should("not.include.text", "This field is required")
     cy.getByID("name").type("Test - error messaging")
     cy.getByID("name-error").should("to.be.empty")
-    cy.getByID("saveDraftButton").contains("Save as Draft").click()
+    cy.getByID("saveDraftButton").contains("Save as draft").click()
     cy.contains("Test - error messaging")
-    cy.contains("Listing Data")
+    cy.contains("Listing data")
     // Try to publish a listing and should show errors for appropriate fields
     cy.getByID("listingEditButton").contains("Edit").click()
     cy.getByID("reservedCommunityTypes.id").select(1)
@@ -46,14 +46,14 @@ describe("Listing Management Tests", () => {
     cy.getByID("units-error").contains("This field is required")
     cy.getByID("communityDisclaimerTitle-error").contains("This field is required")
     cy.get(".textarea-error-message").contains("This field is required")
-    cy.getByID("applicationProcessButton").contains("Application Process").click()
+    cy.getByID("applicationProcessButton").contains("Application process").click()
     cy.getByID("leasingAgentName-error").contains("This field is required")
     cy.getByID("leasingAgentEmail-error").contains("This field is required")
     cy.getByID("leasingAgentPhone-error").contains("This field is required")
     cy.getByID("digitalApplicationChoice-error").contains("This field is required")
     cy.getByID("paperApplicationChoice-error").contains("This field is required")
     // Verify the behavior of Exit discard & confirm
-    cy.contains("Listing Details").click()
+    cy.contains("Listing details").click()
     cy.getByID("name").clear()
     cy.getByID("name").type("Test - error messaging DISCARD")
     cy.getByID("listingsExitButton").click()
@@ -76,8 +76,8 @@ describe("Listing Management Tests", () => {
 
   it.skip("error messaging publish with minimal fields", () => {
     cy.visit("/")
-    cy.get("a").contains("Add Listing").click()
-    cy.contains("New Listing")
+    cy.get("a").contains("Add listing").click()
+    cy.contains("New listing")
     cy.getByID("jurisdictions.id").select("Lakeview")
     // Try to publish a listing and should show errors for appropriate fields
     cy.getByID("publishButton").contains("Publish").click()
@@ -90,7 +90,7 @@ describe("Listing Management Tests", () => {
     cy.getByID("listingsBuildingAddress.state-error").contains("Cannot enter a partial address")
     cy.getByID("listingsBuildingAddress.zipCode-error").contains("Cannot enter a partial address")
     cy.getByID("units-error").should("not.exist")
-    cy.getByID("applicationProcessButton").contains("Application Process").click()
+    cy.getByID("applicationProcessButton").contains("Application process").click()
     cy.getByID("leasingAgentName-error").contains("This field is required").should("not.exist")
     cy.getByID("leasingAgentEmail-error").contains("This field is required").should("not.exist")
     cy.getByID("leasingAgentPhone-error").should("not.exist")
@@ -113,8 +113,8 @@ describe("Listing Management Tests", () => {
       },
     })
     cy.visit("/")
-    cy.get("a").contains("Add Listing").click()
-    cy.contains("New Listing")
+    cy.get("a").contains("Add listing").click()
+    cy.contains("New listing")
     cy.fixture("listing").then((listing) => {
       fillOutListing(cy, listing)
       verifyDetails(cy, listing)
@@ -140,7 +140,7 @@ describe("Listing Management Tests", () => {
     cy.getByID("name").type(listing["name"])
     cy.getByID("developer").type(listing["developer"])
     // Test photo upload
-    cy.getByID("add-photos-button").contains("Add Photo").click()
+    cy.getByID("add-photos-button").contains("Add photo").click()
     cy.getByTestId("dropzone-input").attachFile(
       "cypress-automated-image-upload-071e2ab9-5a52-4f34-85f0-e41f696f4b96.jpeg",
       {
@@ -174,7 +174,7 @@ describe("Listing Management Tests", () => {
         fixture: "cypress-automated-image-upload-46806882-b98d-49d7-ac83-8016ab4b2f08.jpg",
       }
     )
-    cy.getByID("add-photos-button").contains("Edit Photos").click()
+    cy.getByID("add-photos-button").contains("Edit photos").click()
     cy.getByTestId("dropzone-input").attachFile(
       "cypress-automated-image-upload-46806882-b98d-49d7-ac83-8016ab4b2f08.jpg",
       {
@@ -226,7 +226,7 @@ describe("Listing Management Tests", () => {
     if (listing["homeType"]) {
       cy.getByID("homeType").select(listing["homeType"])
     }
-    cy.getByID("addUnitsButton").contains("Add Unit").click()
+    cy.getByID("addUnitsButton").contains("Add unit").click()
     cy.getByID("number").type(listing["number"])
     cy.getByID("unitTypes.id").select(listing["unitType.id"])
     cy.getByID("numBathrooms").select(listing["numBathrooms"])
@@ -238,12 +238,12 @@ describe("Listing Management Tests", () => {
     cy.getByID("monthlyIncomeMin").type(listing["monthlyIncomeMin"])
     cy.getByID("monthlyRent").type(listing["monthlyRent"])
     cy.getByID("unitAccessibilityPriorityTypes.id").select(listing["priorityType.id"])
-    cy.get("button").contains("Save & Exit").click()
+    cy.get("button").contains("Save & exit").click()
     cy.getByID("amiChart.id").select(1).trigger("change")
     cy.getByID("amiPercentage").select(1)
-    cy.get("button").contains("Save & Exit").click()
-    cy.get("#add-preferences-button").contains("Add Preference").click()
-    cy.get(".seeds-card-section > .seeds-button").contains("Select Preferences").click()
+    cy.get("button").contains("Save & exit").click()
+    cy.get("#add-preferences-button").contains("Add preference").click()
+    cy.get(".seeds-card-section > .seeds-button").contains("Select preferences").click()
     cy.get(
       ":nth-child(1) > .seeds-grid > .seeds-grid-row > .seeds-grid-cell > .field > div > .label"
     )
@@ -275,7 +275,7 @@ describe("Listing Management Tests", () => {
     cy.getByID("rentalHistory").type(listing["rentalHistory"])
     cy.getByID("criminalBackground").type(listing["criminalBackground"])
     cy.getByID("addBuildingSelectionCriteriaButton")
-      .contains("Add Building Selection Criteria")
+      .contains("Add building selection criteria")
       .click()
     cy.getByID("criteriaAttachTypeURL").check()
     cy.getByID("buildingSelectionCriteriaURL").type(listing["buildingSelectionCriteriaURL"])
@@ -283,13 +283,17 @@ describe("Listing Management Tests", () => {
     cy.getByID("requiredDocuments").type(listing["requiredDocuments"])
     cy.getByID("programRules").type(listing["programRules"])
     cy.getByID("specialNotes").type(listing["specialNotes"])
-    cy.get("button").contains("Application Process").click()
+    cy.get("button").contains("Application process").click()
     cy.getByID("reviewOrderFCFS").check()
     cy.getByID("waitlistOpenNo").check()
     cy.getByID("whatToExpect").clear()
     cy.getByID("whatToExpect").type("Custom unformatted text")
     cy.getByID("whatToExpect").type("{enter}Item A")
-    cy.getByID("editor-bullet-list").click()
+    cy.getByID("whatToExpect")
+      .parent()
+      .within(() => {
+        cy.getByID("editor-bullet-list").click()
+      })
     cy.getByID("whatToExpect").click()
     cy.getByID("whatToExpect").type("{enter}Item B{enter}Item C")
     cy.getByID("leasingAgentName").type(listing["leasingAgentName"])
@@ -329,7 +333,7 @@ describe("Listing Management Tests", () => {
       listing["additionalApplicationSubmissionNotes"]
     )
 
-    cy.getByID("addOpenHouseButton").contains("Add Open House").click()
+    cy.getByID("addOpenHouseButton").contains("Add open house").click()
 
     cy.getByID("date.month").type(listing["date.month"])
     cy.getByID("date.day").type(listing["date.day"])
@@ -389,8 +393,8 @@ describe("Listing Management Tests", () => {
     if (listing["homeType"]) {
       cy.getByID("homeType").contains(listing["homeType"])
     }
-    cy.getByTestId("unit-types-or-individual").contains("Unit Types")
-    cy.getByTestId("listing-availability-question").contains("Available Units")
+    cy.getByTestId("unit-types-or-individual").contains("Unit types")
+    cy.getByTestId("listing-availability-question").contains("Available units")
     cy.getByID("unitTable").contains(listing["number"])
     cy.getByID("unitTable").contains(listing["monthlyRent"])
     cy.getByID("unitTable").contains(listing["sqFeet"])
@@ -548,7 +552,7 @@ describe("Listing Management Tests", () => {
     cy.getByID("requiredDocuments").should("have.value", listing["requiredDocuments"])
     cy.getByID("programRules").should("have.value", listing["programRules"])
     cy.getByID("specialNotes").should("have.value", listing["specialNotes"])
-    cy.get("button").contains("Application Process").click()
+    cy.get("button").contains("Application process").click()
     cy.getByID("reviewOrderFCFS").should("be.checked")
     cy.getByID("waitlistOpenNo").should("be.checked")
     cy.getByID("leasingAgentName").should("have.value", listing["leasingAgentName"])

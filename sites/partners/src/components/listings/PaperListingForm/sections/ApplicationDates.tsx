@@ -70,7 +70,7 @@ const ApplicationDates = ({
               <Button
                 type="button"
                 size="sm"
-                className="font-semibold"
+                className={"font-semibold darker-link"}
                 onClick={() => setDrawerOpenHouse(event)}
                 variant="text"
               >
@@ -79,7 +79,7 @@ const ApplicationDates = ({
               <Button
                 type="button"
                 size="sm"
-                className="font-semibold text-alert"
+                className={"font-semibold darker-alert"}
                 onClick={() => setModalDeleteOpenHouse(event)}
                 variant="text"
               >
@@ -167,13 +167,11 @@ const ApplicationDates = ({
           </Grid.Cell>
           <Grid.Cell>
             <TimeField
-              label={
-                getLabel(
-                  "applicationDueDate",
-                  requiredFields,
-                  t("listings.applicationDueTime")
-                ) as string
-              }
+              label={getLabel(
+                "applicationDueDate",
+                requiredFields,
+                t("listings.applicationDueTime")
+              )}
               name={"applicationDueTimeField"}
               id={"applicationDueTimeField"}
               register={register}

@@ -1,5 +1,4 @@
 import React, { useContext, useEffect } from "react"
-import Head from "next/head"
 import { t, ActionBlock, InfoCard } from "@bloom-housing/ui-components"
 import { ActionBlockBackground, DoorwayHero } from "@bloom-housing/doorway-ui-components"
 import { Button, Heading } from "@bloom-housing/ui-seeds"
@@ -7,7 +6,6 @@ import { PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpe
 import { UserStatus } from "../../lib/constants"
 import Layout from "../../layouts/application"
 import { ConfirmationModal } from "../../components/account/ConfirmationModal"
-import { MetaTags } from "../../components/shared/MetaTags"
 import { Jurisdiction } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { LandingSearch } from "../listings/search/LandingSearch"
 import { FormOption } from "../listings/search/ListingsSearchModal"
@@ -35,11 +33,7 @@ export const HomeDeprecated = (props: HomeDeprecatedProps) => {
   const metaDescription = t("pageDescription.welcome")
   const metaImage = t("welcome.personWithChildAlt")
   return (
-    <Layout>
-      <Head>
-        <title>{t("nav.siteTitle")}</title>
-      </Head>
-      <MetaTags title={t("nav.siteTitle")} image={metaImage} description={metaDescription} />
+    <Layout metaImage={metaImage} metaDescription={metaDescription}>
       <DoorwayHero
         title={t("welcome.findAffordableHousing")}
         offsetImage={"images/person-with-child.jpg"}

@@ -32,6 +32,7 @@ import { Demographic } from './demographic.dto';
 import { HouseholdMember } from './household-member.dto';
 import { UnitType } from '../unit-types/unit-type.dto';
 import { ApplicationLotteryPosition } from './application-lottery-position.dto';
+import ApplicationSelections from './application-selections.dto';
 
 export class Application extends AbstractDTO {
   @Expose()
@@ -255,6 +256,18 @@ export class Application extends AbstractDTO {
   @ApiProperty({ type: HouseholdMember, isArray: true })
   householdMember: HouseholdMember[];
 
+  // TODO: Temporarily optional until after MSQ refactor
+  // @Expose()
+  // @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ArrayMaxSize(64, { groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @Type(() => ApplicationSelections)
+  @ApiPropertyOptional({
+    type: ApplicationSelections,
+    isArray: true,
+  })
+  applicationSelections?: ApplicationSelections[];
+
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ArrayMaxSize(64, { groups: [ValidationsGroupsEnum.default] })
@@ -289,4 +302,9 @@ export class Application extends AbstractDTO {
   @Type(() => ApplicationLotteryPosition)
   @ApiProperty({ type: ApplicationLotteryPosition, isArray: true })
   applicationLotteryPositions: ApplicationLotteryPosition[];
+
+  @Expose()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  isNewest?: boolean;
 }

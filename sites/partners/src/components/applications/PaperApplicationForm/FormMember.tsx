@@ -59,6 +59,7 @@ type ApplicationFormMemberProps = {
   members: HouseholdMember[]
   editedMemberId?: number
   enableFullTimeStudentQuestion?: boolean
+  disableWorkInRegion?: boolean
 }
 
 const FormMember = ({
@@ -67,6 +68,7 @@ const FormMember = ({
   members,
   editedMemberId,
   enableFullTimeStudentQuestion,
+  disableWorkInRegion,
 }: ApplicationFormMemberProps) => {
   const currentlyEdited = useMemo(() => {
     return members.filter((member) => member.orderId === editedMemberId)[0]
@@ -91,6 +93,7 @@ const FormMember = ({
   })
 
   const sameAddressField = watch("sameAddress")
+  const workInRegionField = watch("workInRegion")
 
   async function onFormSubmit() {
     const validation = await trigger()
@@ -132,6 +135,19 @@ const FormMember = ({
     },
     {
       id: "sameAddressNo",
+      label: t("t.no"),
+      value: YesNoEnum.no,
+    },
+  ]
+
+  const workInRegionOptions = [
+    {
+      id: "workInRegionYes",
+      label: t("t.yes"),
+      value: YesNoEnum.yes,
+    },
+    {
+      id: "workInRegionNo",
       label: t("t.no"),
       value: YesNoEnum.no,
     },
@@ -225,6 +241,20 @@ const FormMember = ({
                     />
                   </Grid.Cell>
 
+                  {!disableWorkInRegion && (
+                    <Grid.Cell>
+                      <FieldGroup
+                        name="workInRegion"
+                        type="radio"
+                        register={register}
+                        groupLabel={t("application.details.workInRegion")}
+                        fields={workInRegionOptions}
+                        fieldClassName="m-0"
+                        fieldGroupClassName="flex h-12 items-center"
+                      />
+                    </Grid.Cell>
+                  )}
+
                   {enableFullTimeStudentQuestion && (
                     <Grid.Cell>
                       <FieldGroup
@@ -252,7 +282,7 @@ const FormMember = ({
                 </div>
               )}
 
-              {/* {workInRegionField === YesNoEnum.yes && (
+              {workInRegionField === YesNoEnum.yes && (
                 <div className={"seeds-m-bs-content"}>
                   <FormAddress
                     subtitle={t("application.contact.workAddress")}
@@ -261,7 +291,7 @@ const FormMember = ({
                     stateKeys={stateKeys}
                   />
                 </div>
-              )} */}
+              )}
             </Card.Section>
           </Card>
         </Form>

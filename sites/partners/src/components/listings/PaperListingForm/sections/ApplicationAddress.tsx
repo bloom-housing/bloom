@@ -182,7 +182,7 @@ const ApplicationAddress = ({ listing, requiredFields }: ApplicationAddressProps
     <>
       <hr className="spacer-section-above spacer-section" />
       <SectionWithGrid
-        heading={"Application Address"}
+        heading={t("application.address")}
         subheading={t("listings.sections.applicationAddressSubtitle")}
       >
         <Grid.Row columns={3}>

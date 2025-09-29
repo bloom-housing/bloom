@@ -7,7 +7,7 @@ import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend
 describe("<ListingViewSeeds>", () => {
   it("shows error state if listing is null", () => {
     const view = render(<ListingViewSeeds listing={null} jurisdiction={jurisdiction} />)
-    expect(view.getByText("Page Not Found")).toBeDefined()
+    expect(view.getByText("Page not found")).toBeDefined()
     expect(view.queryByText(listing.name)).toBeNull()
   })
 
@@ -31,7 +31,7 @@ describe("<ListingViewSeeds>", () => {
 
   it("doesn't show listing updated at for a default jurisdiction", () => {
     const view = render(<ListingViewSeeds listing={listing} jurisdiction={jurisdiction} />)
-    expect(view.queryByText("Listing Updated: Dec 31, 2019")).toBeNull()
+    expect(view.queryByText("Listing updated: Dec 31, 2019")).toBeNull()
   })
 
   it("shows listing updated at when the jurisdiction allows it", () => {
@@ -55,6 +55,6 @@ describe("<ListingViewSeeds>", () => {
         }}
       />
     )
-    expect(view.getAllByText("Listing Updated: Dec 31, 2019")).toHaveLength(2)
+    expect(view.getAllByText("Listing updated: Dec 31, 2019")).toHaveLength(2)
   })
 })

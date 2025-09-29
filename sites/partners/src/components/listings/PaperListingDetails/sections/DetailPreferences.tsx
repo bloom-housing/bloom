@@ -2,12 +2,21 @@ import React, { useContext, useMemo } from "react"
 import { t, MinimalTable } from "@bloom-housing/ui-components"
 import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { ListingContext } from "../../ListingContext"
-import { listingSectionQuestions } from "@bloom-housing/shared-helpers"
-import { MultiselectQuestionsApplicationSectionEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { AuthContext, listingSectionQuestions } from "@bloom-housing/shared-helpers"
+import {
+  FeatureFlagEnum,
+  MultiselectQuestionsApplicationSectionEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 const DetailPreferences = () => {
   const listing = useContext(ListingContext)
+  const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
+
+  const disableListingPreferences = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.disableListingPreferences,
+    listing.jurisdictions.id
+  )
 
   const preferencesTableHeaders = {
     order: "t.order",
@@ -26,6 +35,8 @@ const DetailPreferences = () => {
       ),
     [listing]
   )
+
+  if (disableListingPreferences) return null
 
   return (
     <SectionWithGrid heading={t("listings.sections.housingPreferencesTitle")} inset bypassGrid>

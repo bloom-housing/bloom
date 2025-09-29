@@ -1,5 +1,4 @@
 import Link from "next/link"
-import Head from "next/head"
 import { Card, Grid, Heading } from "@bloom-housing/ui-seeds"
 import { t } from "@bloom-housing/ui-components"
 import { GridRow } from "@bloom-housing/ui-seeds/src/layout/Grid"
@@ -13,12 +12,7 @@ const Resources = () => {
   const pageTitle = t("pageTitle.additionalResources")
 
   return (
-    <Layout>
-      <Head>
-        <title>
-          {pageTitle} - {t("nav.siteTitle")}
-        </title>
-      </Head>
+    <Layout pageTitle={pageTitle}>
       <PageHeaderLayout
         inverse
         heading={pageTitle}

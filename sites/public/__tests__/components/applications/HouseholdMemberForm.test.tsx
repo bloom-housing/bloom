@@ -15,11 +15,11 @@ describe("<HouseholdMemberForm>", () => {
         memberFirstName={"Breana"}
         memberLastName={"Oquendo"}
         key={"abcd"}
-        subtitle={"Primary Applicant"}
+        subtitle={"Primary applicant"}
         editMember={editMemberSpy}
       />
     )
-    expect(getByText("Primary Applicant")).toBeTruthy()
+    expect(getByText("Primary applicant")).toBeTruthy()
     expect(getByText("Breana Oquendo")).toBeTruthy()
     fireEvent.click(getByText(t("t.edit")))
     expect(editMemberSpy).toHaveBeenCalledTimes(1)
@@ -33,7 +33,7 @@ describe("<HouseholdMemberForm>", () => {
         memberFirstName={"Sonja"}
         memberLastName={"Aldenkamp"}
         key={"abcd"}
-        subtitle={"Household Member"}
+        subtitle={"Household member"}
         editMember={editMemberSpy}
       />
     )

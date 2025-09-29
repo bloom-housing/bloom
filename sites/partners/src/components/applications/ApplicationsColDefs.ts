@@ -572,6 +572,20 @@ export function getColDefs(
         },
       }
     )
+    if (!disableWorkInRegion) {
+      householdCols.push({
+        headerName: `${t("application.details.workInRegion")} HH:${householdIndex}`,
+        field: "householdMember",
+        sortable: false,
+        filter: false,
+        width: 90,
+        minWidth: 50,
+        valueFormatter: ({ value }) => {
+          if (value?.length < householdIndex) return ""
+          return t(`t.${value[i]?.workInRegion}`)
+        },
+      })
+    }
     if (enableFullTimeStudentQuestion) {
       householdCols.push({
         headerName: `${t("application.details.fullTimeStudent")} HH:${householdIndex}`,
@@ -581,7 +595,7 @@ export function getColDefs(
         width: 90,
         minWidth: 50,
         valueFormatter: ({ value }) => {
-          if (value?.length < householdIndex) return ""
+          if (!value[i]?.fullTimeStudent || value?.length < householdIndex) return ""
           return t(`t.${value[i]?.fullTimeStudent}`)
         },
       })

@@ -29,9 +29,15 @@
 
             <h2 class="mt3">{{t "confirmation.whatHappensNext"}}</h2>
             <ul>
-            <li>{{eligibleText}}</li>
-            <li>{{preferenceText}}</li>
-            <li>{{interviewText}}</li>
+            {{#if eligibleText}}
+              <li>{{eligibleText}}</li>
+            {{/if}}
+            {{#if preferenceText}}
+              <li>{{preferenceText}}</li>
+            {{/if}}
+            {{#if interviewText}}
+              <li>{{interviewText}}</li>
+            {{/if}}
             {{#if duplicateText}}
               <li>{{duplicateText}} <a href="{{ termsUrl }}" target="_blank">{{t "lotteryAvailable.termsOfUse"}}</a>.</li>
             {{/if}}
@@ -62,13 +68,15 @@
             </ul>
             {{else}}
             <p>{{t "leasingAgent.contactAgentToUpdateInfo"}}</p>
-            <h3>{{t "leasingAgent.propertyManager"}}</h3>
-            <p>
-              {{listing.leasingAgentName}}<br />
-              {{listing.leasingAgentTitle}}<br />
-              {{listing.leasingAgentPhone}}<br />
-              {{listing.leasingAgentEmail}}<br />
-            </p>
+              {{#if (or listing.leasingAgentName listing.leasingAgentTitle listing.leasingAgentPhone listing.leasingAgentEmail)}}
+              <h3>{{t "leasingAgent.propertyManager"}}</h3>
+              <p>
+                {{#if listing.leasingAgentName}}{{listing.leasingAgentName}}<br />{{/if}}
+                {{#if listing.leasingAgentTitle}}{{listing.leasingAgentTitle}}<br />{{/if}}
+                {{#if listing.leasingAgentPhone}}{{listing.leasingAgentPhone}}<br />{{/if}}
+                {{#if listing.leasingAgentEmail}}{{listing.leasingAgentEmail}}<br />{{/if}}
+              </p>
+              {{/if}}
             {{/if}}
             {{#if listing.leasingAgentOfficeHours}}
               <h3>{{t "leasingAgent.officeHours"}}</h3>

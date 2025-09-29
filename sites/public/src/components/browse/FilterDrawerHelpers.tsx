@@ -23,7 +23,7 @@ export enum ReservedCommunityTypes {
   "senior55" = "senior55",
   "senior62" = "senior62",
   "homeless" = "homeless",
-  "veterans" = "veterans",
+  "veteran" = "veteran",
 }
 
 export interface FilterData {
@@ -136,8 +136,28 @@ export const unitTypeMapping = {
   },
 }
 
+export const unitTypeUnitGroupsMapping = {
+  [UnitTypeEnum.studio]: { value: 0, ordinal: 0, labelKey: "listings.unitTypes.studio" },
+  [UnitTypeEnum.oneBdrm]: { value: 1, ordinal: 1, labelKey: "listings.unitTypes.expanded.oneBdrm" },
+  [UnitTypeEnum.twoBdrm]: { value: 2, ordinal: 2, labelKey: "listings.unitTypes.expanded.twoBdrm" },
+  [UnitTypeEnum.threeBdrm]: {
+    value: 3,
+    ordinal: 3,
+    labelKey: "listings.unitTypes.expanded.threeBdrm",
+  },
+  [UnitTypeEnum.fourBdrm]: {
+    value: 4,
+    ordinal: 4,
+    labelKey: "listings.unitTypes.expanded.fourBdrm",
+  },
+}
+
 export const unitTypesSorted = Object.keys(UnitTypeEnum).sort(
   (a, b) => unitTypeMapping[a].ordinal - unitTypeMapping[b].ordinal
+)
+
+export const unitTypesSortedByUnitGroups = Object.keys(unitTypeUnitGroupsMapping).sort(
+  (a, b) => unitTypeUnitGroupsMapping[a].ordinal - unitTypeUnitGroupsMapping[b].ordinal
 )
 
 /**
@@ -169,7 +189,7 @@ export const CheckboxGroup = (props: CheckboxGroupProps) => {
     <fieldset className={styles["filter-section"]}>
       <legend className={styles["filter-section-label"]}>{props.groupLabel}</legend>
       <Grid spacing="sm">
-        <Grid.Row columns={props.customColumnNumber ?? 3}>
+        <Grid.Row columns={props.customColumnNumber ?? 2}>
           {props.fields.map((field) => {
             return (
               <Grid.Cell key={`${field.key}-cell`}>

@@ -13,6 +13,7 @@ import {
   AuthContext,
 } from "@bloom-housing/shared-helpers"
 import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { isFeatureFlagOn } from "../../../lib/helpers"
 import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
 import ApplicationFormLayout from "../../../layouts/application-form"
@@ -27,9 +28,7 @@ const ApplicationPreferredUnits = () => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, handleSubmit, errors, trigger } = useForm()
 
-  const enableUnitGroups = conductor.config.featureFlags?.some(
-    (flag) => flag.name === FeatureFlagEnum.enableUnitGroups && flag.active
-  )
+  const enableUnitGroups = isFeatureFlagOn(conductor.config, FeatureFlagEnum.enableUnitGroups)
 
   const onSubmit = async (data) => {
     const validation = await trigger()
@@ -71,7 +70,11 @@ const ApplicationPreferredUnits = () => {
   }, [profile])
 
   return (
-    <FormsLayout>
+    <FormsLayout
+      pageTitle={`${t("application.household.preferredUnit.preferredUnitType")} - ${t(
+        "listings.apply.applyOnline"
+      )} - ${listing?.name}`}
+    >
       <Form onSubmit={handleSubmit(onSubmit, onError)}>
         <ApplicationFormLayout
           listingName={listing?.name}

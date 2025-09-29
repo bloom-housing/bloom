@@ -10,15 +10,17 @@ import {
   isKeyIncluded,
   getCustomValue,
   howDidYouHear,
+  limitedHowDidYouHear,
 } from "@bloom-housing/shared-helpers"
 import { Demographic } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 type FormDemographicsProps = {
   formValues: Demographic
+  enableLimitedHowDidYouHear: boolean
 }
 
-const FormDemographics = ({ formValues }: FormDemographicsProps) => {
+const FormDemographics = ({ formValues, enableLimitedHowDidYouHear }: FormDemographicsProps) => {
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -27,7 +29,7 @@ const FormDemographics = ({ formValues }: FormDemographicsProps) => {
   const spokenLanguageValue: string = watch("application.demographics.spokenLanguage")
 
   const howDidYouHearOptions = useMemo(() => {
-    return howDidYouHear?.map((item) => ({
+    return (enableLimitedHowDidYouHear ? limitedHowDidYouHear : howDidYouHear)?.map((item) => ({
       id: item.id,
       label: t(`application.review.demographics.howDidYouHearOptions.${item.id}`),
       register,

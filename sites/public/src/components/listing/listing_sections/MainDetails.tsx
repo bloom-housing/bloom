@@ -165,18 +165,20 @@ export const MainDetails = ({
         >
           {listing.name}
         </Heading>
-        <div className={styles["listing-address-container"]}>
-          <div className={styles["listing-address"]}>
-            <div className={`seeds-m-ie-4 ${styles["flex-margin"]}`}>
-              {oneLineAddress(listing.listingsBuildingAddress)}
-            </div>
-            <div className={styles["flex-margin"]}>
-              <Link href={googleMapsHref} newWindowTarget={true}>
-                {t("t.viewOnMap")}
-              </Link>
+        {listing.listingsBuildingAddress && (
+          <div className={styles["listing-address-container"]}>
+            <div className={styles["listing-address"]}>
+              <div className={`seeds-m-ie-4 ${styles["flex-margin"]}`}>
+                {oneLineAddress(listing.listingsBuildingAddress)}
+              </div>
+              <div className={styles["flex-margin"]}>
+                <Link href={googleMapsHref} newWindowTarget={true}>
+                  {t("t.viewOnMap")}
+                </Link>
+              </div>
             </div>
           </div>
-        </div>
+        )}
 
         {listingTags.length > 0 && (
           <div className={`${styles["listing-tags"]} seeds-m-bs-3`} data-testid={"listing-tags"}>

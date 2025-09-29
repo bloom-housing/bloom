@@ -110,7 +110,7 @@ describe("<Edit>", () => {
     })
   })
 
-  describe("Date of Birth form", () => {
+  describe("Date of birth form", () => {
     it("should update date of birth successfully", async () => {
       const updatedUser = {
         ...user,
@@ -218,7 +218,7 @@ describe("<Edit>", () => {
 
       await waitFor(() => {
         expect(
-          screen.getByText(/Please enter a valid Date of Birth, must be 18 or older/i)
+          screen.getByText(/Please enter a valid date of birth, must be 18 or older/i)
         ).toBeInTheDocument()
       })
     })

@@ -15,15 +15,15 @@ Cypress.Commands.add("signIn", (email, password) => {
 })
 
 Cypress.Commands.add("signOut", () => {
-  // TODO: once the favorites feature is being tested, this is Sign Out-4:
+  // TODO: once the favorites feature is being tested, this is Sign out-4:
   if (Cypress.env("showSeedsDesign")) {
-    cy.get(`[data-testid="My Account"]`).trigger("click")
-    cy.get(`[data-testid="Sign Out"]`).trigger("click")
+    cy.get(`[data-testid="My account"]`).trigger("click")
+    cy.get(`[data-testid="Sign out"]`).trigger("click")
   } else {
     // data-testid for SiteHeader in this path is set in ui-components
     // See https://github.com/bloom-housing/ui-components/blob/c35c094554e8199f202d67a405272035189060ec/src/headers/SiteHeader.tsx#L175
-    cy.get(`[data-testid="My Account-4"]`).trigger("mouseover")
-    cy.get(`[data-testid="Sign Out-3"]`).trigger("click")
+    cy.get(`[data-testid="My account-4"]`).trigger("mouseover")
+    cy.get(`[data-testid="Sign out-3"]`).trigger("click")
   }
 })
 
@@ -53,14 +53,13 @@ Cypress.Commands.add("checkErrorMessages", (command) => {
 
 Cypress.Commands.add("beginApplicationRejectAutofill", (listingName) => {
   cy.visit("/")
-  cy.getByTestId("View Listings-1").click()
+  cy.getByTestId("View listings-1").click()
   if (Cypress.env("showSeedsDesign")) {
-    cy.getByID("listing-seeds-link").contains(listingName)
-    cy.getByID("listing-seeds-link").eq(1).click()
+    cy.getByID("listing-seeds-link").contains(listingName).parent().click()
   } else {
     cy.getByTestId("map-pagination").should("include.text", "(Page 1 of 10)")
     cy.getByTestId("loading-overlay").should("not.exist")
-    cy.get(".is-card-link").contains(listingName).click({ force: true })
+    cy.get(".is-card-link").contains(listingName).parent().click()
   }
   cy.getByID("listing-view-apply-button").eq(1).click()
   cy.get("[data-testid=sign-in-email-field]").type("admin@example.com")
@@ -85,12 +84,11 @@ Cypress.Commands.add("beginApplicationRejectAutofill", (listingName) => {
 Cypress.Commands.add("beginApplicationSignedIn", (listingName, autofill) => {
   cy.visit("/listings")
   if (Cypress.env("showSeedsDesign")) {
-    cy.getByID("listing-seeds-link").contains(listingName)
-    cy.getByID("listing-seeds-link").eq(1).click()
+    cy.getByID("listing-seeds-link").contains(listingName).parent().click()
   } else {
     cy.getByTestId("map-pagination").should("include.text", "(Page 1 of 10)")
     cy.getByTestId("loading-overlay").should("not.exist")
-    cy.get(".is-card-link").contains(listingName).click({ force: true })
+    cy.get(".is-card-link").contains(listingName).parent().click()
   }
   cy.getByID("listing-view-apply-button").eq(1).click()
   cy.getByID("app-choose-language-button").eq(0).click()
@@ -638,15 +636,15 @@ Cypress.Commands.add("step18Summary", (application, verify) => {
   ]
 
   if (application.accessibility.mobility) {
-    const val = "For Mobility Impairments"
+    const val = "For mobility impairments"
     fields.push({ id: val, fieldValue: val })
   }
   if (application.accessibility.vision) {
-    const val = "For Vision Impairments"
+    const val = "For vision impairments"
     fields.push({ id: val, fieldValue: val })
   }
   if (application.accessibility.hearing) {
-    const val = "For Hearing Impairments"
+    const val = "For hearing impairments"
     fields.push({ id: val, fieldValue: val })
   }
 

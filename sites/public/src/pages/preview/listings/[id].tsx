@@ -1,5 +1,4 @@
 import React, { useContext } from "react"
-import Head from "next/head"
 import axios from "axios"
 import { t } from "@bloom-housing/ui-components"
 import { AuthContext, imageUrlFromListing } from "@bloom-housing/shared-helpers"
@@ -7,7 +6,6 @@ import { AuthContext, imageUrlFromListing } from "@bloom-housing/shared-helpers"
 import Layout from "../../../layouts/application"
 import { ListingViewSeeds } from "../../../components/listing/ListingViewSeeds"
 import { ListingView, ListingViewListing } from "../../../components/listing/ListingView"
-import { MetaTags } from "../../../components/shared/MetaTags"
 import { runtimeConfig } from "../../../lib/runtime-config"
 import { Jurisdiction, Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { Alert } from "@bloom-housing/ui-seeds"
@@ -22,18 +20,17 @@ interface ListingProps {
 export default function ListingPage(props: ListingProps) {
   const { listing } = props
   const { profile } = useContext(AuthContext)
-  const pageTitle = `${listing.name} - ${t("nav.siteTitle")}`
   const metaDescription = t("pageDescription.listing", {
     listingName: listing.name,
   })
   const metaImage = imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize))[0]
 
   return (
-    <Layout>
-      <Head>
-        <title>{pageTitle}</title>
-      </Head>
-      <MetaTags title={listing.name} image={metaImage} description={metaDescription} />
+    <Layout
+      pageTitle={`${t("pageTitle.preview")} - ${listing.name}`}
+      metaImage={metaImage}
+      metaDescription={metaDescription}
+    >
       <Alert variant="alert-inverse" fullwidth className="fullscreen-alert">
         {t("listings.listingPreviewOnly")}
       </Alert>

@@ -2446,6 +2446,28 @@ export class ScriptRunnerService {
     })
   }
   /**
+   * A script that pulls missing application data from one source into the current db
+   */
+  transferJurisdictionAdditionalApplicationData(
+    params: {
+      /** requestBody */
+      body?: DataTransferDTO
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/scriptRunner/transferJurisdictionAdditionalApplicationData"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
    * A script that takes in a standardized string and outputs the input for the ami chart create endpoint
    */
   amiChartImport(
@@ -3275,28 +3297,7 @@ export interface MultiselectLink {
 
 export interface MultiselectOption {
   /**  */
-  text: string
-
-  /**  */
-  untranslatedText?: string
-
-  /**  */
-  ordinal: number
-
-  /**  */
-  description?: string
-
-  /**  */
-  links?: MultiselectLink[]
-
-  /**  */
   collectAddress?: boolean
-
-  /**  */
-  validationMethod?: ValidationMethodEnum
-
-  /**  */
-  radiusSize?: number
 
   /**  */
   collectName?: boolean
@@ -3305,13 +3306,52 @@ export interface MultiselectOption {
   collectRelationship?: boolean
 
   /**  */
+  description?: string
+
+  /**  */
   exclusive?: boolean
+
+  /**  */
+  isOptOut?: boolean
+
+  /**  */
+  links?: MultiselectLink[]
 
   /**  */
   mapLayerId?: string
 
   /**  */
   mapPinPosition?: string
+
+  /**  */
+  multiselectQuestion?: IdDTO
+
+  /**  */
+  name?: string
+
+  /**  */
+  ordinal: number
+
+  /**  */
+  radiusSize?: number
+
+  /**  */
+  shouldCollectAddress?: boolean
+
+  /**  */
+  shouldCollectName?: boolean
+
+  /**  */
+  shouldCollectRelationship?: boolean
+
+  /**  */
+  text: string
+
+  /**  */
+  untranslatedText?: string
+
+  /**  */
+  validationMethod?: ValidationMethodEnum
 }
 
 export interface MultiselectQuestion {
@@ -3325,25 +3365,31 @@ export interface MultiselectQuestion {
   updatedAt: Date
 
   /**  */
-  text: string
-
-  /**  */
-  untranslatedText?: string
-
-  /**  */
-  untranslatedOptOutText?: string
-
-  /**  */
-  subText?: string
+  applicationSection: MultiselectQuestionsApplicationSectionEnum
 
   /**  */
   description?: string
 
   /**  */
-  links?: MultiselectLink[]
+  isExclusive?: boolean
+
+  /**  */
+  hideFromListing?: boolean
+
+  /**  */
+  jurisdiction?: IdDTO
 
   /**  */
   jurisdictions: IdDTO[]
+
+  /**  */
+  links?: MultiselectLink[]
+
+  /**  */
+  multiselectOptions?: MultiselectOption[]
+
+  /**  */
+  name?: string
 
   /**  */
   options?: MultiselectOption[]
@@ -3352,10 +3398,19 @@ export interface MultiselectQuestion {
   optOutText?: string
 
   /**  */
-  hideFromListing?: boolean
+  status: MultiselectQuestionsStatusEnum
 
   /**  */
-  applicationSection: MultiselectQuestionsApplicationSectionEnum
+  subText?: string
+
+  /**  */
+  text: string
+
+  /**  */
+  untranslatedText?: string
+
+  /**  */
+  untranslatedOptOutText?: string
 }
 
 export interface ListingMultiselectQuestion {
@@ -4265,6 +4320,9 @@ export interface Listing {
   whatToExpect?: string
 
   /**  */
+  whatToExpectAdditionalText?: string
+
+  /**  */
   status: ListingsStatusEnum
 
   /**  */
@@ -4437,6 +4495,9 @@ export interface Listing {
 
   /**  */
   listingNeighborhoodAmenities?: ListingNeighborhoodAmenities
+
+  /**  */
+  lastUpdatedByUser?: IdDTO
 }
 
 export interface PaginationMeta {
@@ -4910,6 +4971,9 @@ export interface ListingCreate {
   whatToExpect?: string
 
   /**  */
+  whatToExpectAdditionalText?: string
+
+  /**  */
   status: ListingsStatusEnum
 
   /**  */
@@ -4998,6 +5062,9 @@ export interface ListingCreate {
 
   /**  */
   listingNeighborhoodAmenities?: ListingNeighborhoodAmenities
+
+  /**  */
+  lastUpdatedByUser?: IdDTO
 
   /**  */
   listingMultiselectQuestions?: IdDTO[]
@@ -5226,6 +5293,9 @@ export interface ListingUpdate {
   whatToExpect?: string
 
   /**  */
+  whatToExpectAdditionalText?: string
+
+  /**  */
   status: ListingsStatusEnum
 
   /**  */
@@ -5314,6 +5384,9 @@ export interface ListingUpdate {
 
   /**  */
   listingNeighborhoodAmenities?: ListingNeighborhoodAmenities
+
+  /**  */
+  lastUpdatedByUser?: IdDTO
 
   /**  */
   listingMultiselectQuestions?: IdDTO[]
@@ -5563,6 +5636,58 @@ export interface HouseholdMember {
   householdMemberAddress: Address
 }
 
+export interface ApplicationSelectionOptions {
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  addressHolderAddress: IdDTO
+
+  /**  */
+  addressHolderName?: string
+
+  /**  */
+  addressHolderRelationship?: string
+
+  /**  */
+  applicationSelection: IdDTO
+
+  /**  */
+  isGeocodingVerified?: boolean
+
+  /**  */
+  multiselectOption: IdDTO
+}
+
+export interface ApplicationSelections {
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  application: IdDTO
+
+  /**  */
+  hasOptedOut?: boolean
+
+  /**  */
+  multiselectQuestion: IdDTO
+
+  /**  */
+  selections: ApplicationSelectionOptions
+}
+
 export interface ApplicationMultiselectQuestionOption {
   /**  */
   key: string
@@ -5715,6 +5840,9 @@ export interface Application {
   householdMember: HouseholdMember[]
 
   /**  */
+  applicationSelections?: ApplicationSelections[]
+
+  /**  */
   preferences?: ApplicationMultiselectQuestion[]
 
   /**  */
@@ -5725,6 +5853,9 @@ export interface Application {
 
   /**  */
   applicationLotteryPositions: ApplicationLotteryPosition[]
+
+  /**  */
+  isNewest?: boolean
 }
 
 export interface ApplicationFlaggedSet {
@@ -5963,6 +6094,15 @@ export interface JurisdictionCreate {
   rentalAssistanceDefault: string
 
   /**  */
+  whatToExpect: string
+
+  /**  */
+  whatToExpectAdditionalText: string
+
+  /**  */
+  whatToExpectUnderConstruction: string
+
+  /**  */
   enablePartnerSettings?: boolean
 
   /**  */
@@ -6014,6 +6154,15 @@ export interface JurisdictionUpdate {
 
   /**  */
   rentalAssistanceDefault: string
+
+  /**  */
+  whatToExpect: string
+
+  /**  */
+  whatToExpectAdditionalText: string
+
+  /**  */
+  whatToExpectUnderConstruction: string
 
   /**  */
   enablePartnerSettings?: boolean
@@ -6101,6 +6250,15 @@ export interface Jurisdiction {
   rentalAssistanceDefault: string
 
   /**  */
+  whatToExpect: string
+
+  /**  */
+  whatToExpectAdditionalText: string
+
+  /**  */
+  whatToExpectUnderConstruction: string
+
+  /**  */
   enablePartnerSettings?: boolean
 
   /**  */
@@ -6133,22 +6291,31 @@ export interface Jurisdiction {
 
 export interface MultiselectQuestionCreate {
   /**  */
-  text: string
-
-  /**  */
-  untranslatedOptOutText?: string
-
-  /**  */
-  subText?: string
+  applicationSection: MultiselectQuestionsApplicationSectionEnum
 
   /**  */
   description?: string
 
   /**  */
-  links?: MultiselectLink[]
+  isExclusive?: boolean
+
+  /**  */
+  hideFromListing?: boolean
+
+  /**  */
+  jurisdiction?: IdDTO
 
   /**  */
   jurisdictions: IdDTO[]
+
+  /**  */
+  links?: MultiselectLink[]
+
+  /**  */
+  multiselectOptions?: MultiselectOption[]
+
+  /**  */
+  name?: string
 
   /**  */
   options?: MultiselectOption[]
@@ -6157,10 +6324,13 @@ export interface MultiselectQuestionCreate {
   optOutText?: string
 
   /**  */
-  hideFromListing?: boolean
+  subText?: string
 
   /**  */
-  applicationSection: MultiselectQuestionsApplicationSectionEnum
+  text: string
+
+  /**  */
+  untranslatedOptOutText?: string
 }
 
 export interface MultiselectQuestionUpdate {
@@ -6168,22 +6338,31 @@ export interface MultiselectQuestionUpdate {
   id: string
 
   /**  */
-  text: string
-
-  /**  */
-  untranslatedOptOutText?: string
-
-  /**  */
-  subText?: string
+  applicationSection: MultiselectQuestionsApplicationSectionEnum
 
   /**  */
   description?: string
 
   /**  */
-  links?: MultiselectLink[]
+  isExclusive?: boolean
+
+  /**  */
+  hideFromListing?: boolean
+
+  /**  */
+  jurisdiction?: IdDTO
 
   /**  */
   jurisdictions: IdDTO[]
+
+  /**  */
+  links?: MultiselectLink[]
+
+  /**  */
+  multiselectOptions?: MultiselectOption[]
+
+  /**  */
+  name?: string
 
   /**  */
   options?: MultiselectOption[]
@@ -6192,10 +6371,13 @@ export interface MultiselectQuestionUpdate {
   optOutText?: string
 
   /**  */
-  hideFromListing?: boolean
+  subText?: string
 
   /**  */
-  applicationSection: MultiselectQuestionsApplicationSectionEnum
+  text: string
+
+  /**  */
+  untranslatedOptOutText?: string
 }
 
 export interface MultiselectQuestionQueryParams {
@@ -6365,6 +6547,9 @@ export interface PublicAppsFiltered {
   householdMember: HouseholdMember[]
 
   /**  */
+  applicationSelections?: ApplicationSelections[]
+
+  /**  */
   preferences?: ApplicationMultiselectQuestion[]
 
   /**  */
@@ -6372,6 +6557,9 @@ export interface PublicAppsFiltered {
 
   /**  */
   applicationLotteryPositions: ApplicationLotteryPosition[]
+
+  /**  */
+  isNewest?: boolean
 
   /**  */
   listings: Listing
@@ -6615,6 +6803,9 @@ export interface ApplicationCreate {
   reviewStatus?: ApplicationReviewStatusEnum
 
   /**  */
+  applicationSelections?: ApplicationSelections[]
+
+  /**  */
   preferences?: ApplicationMultiselectQuestion[]
 
   /**  */
@@ -6622,6 +6813,9 @@ export interface ApplicationCreate {
 
   /**  */
   listings: IdDTO
+
+  /**  */
+  isNewest?: boolean
 
   /**  */
   applicant: ApplicantUpdate
@@ -6716,6 +6910,9 @@ export interface ApplicationUpdate {
   reviewStatus?: ApplicationReviewStatusEnum
 
   /**  */
+  applicationSelections?: ApplicationSelections[]
+
+  /**  */
   preferences?: ApplicationMultiselectQuestion[]
 
   /**  */
@@ -6723,6 +6920,9 @@ export interface ApplicationUpdate {
 
   /**  */
   listings: IdDTO
+
+  /**  */
+  isNewest?: boolean
 
   /**  */
   applicant: ApplicantUpdate
@@ -7129,6 +7329,9 @@ export interface DataTransferDTO {
 
   /**  */
   page?: number
+
+  /**  */
+  pageSize?: number
 }
 
 export interface AssetTransferDTO {
@@ -7140,6 +7343,9 @@ export interface AssetTransferDTO {
 
   /**  */
   page?: number
+
+  /**  */
+  pageSize?: number
 
   /**  */
   cloudinaryName: string
@@ -7295,7 +7501,6 @@ export enum EnumListingFilterParamsComparison {
 export enum ListingViews {
   "base" = "base",
   "csv" = "csv",
-  "details" = "details",
   "full" = "full",
   "fundamentals" = "fundamentals",
   "name" = "name",
@@ -7364,15 +7569,23 @@ export enum LotteryStatusEnum {
   "expired" = "expired",
 }
 
+export enum MultiselectQuestionsApplicationSectionEnum {
+  "programs" = "programs",
+  "preferences" = "preferences",
+}
+
 export enum ValidationMethodEnum {
   "radius" = "radius",
   "map" = "map",
   "none" = "none",
 }
 
-export enum MultiselectQuestionsApplicationSectionEnum {
-  "programs" = "programs",
-  "preferences" = "preferences",
+export enum MultiselectQuestionsStatusEnum {
+  "draft" = "draft",
+  "visible" = "visible",
+  "active" = "active",
+  "toRetire" = "toRetire",
+  "retired" = "retired",
 }
 
 export enum ApplicationMethodsTypeEnum {
@@ -7519,10 +7732,12 @@ export enum FeatureFlagEnum {
   "enableAdaOtherOption" = "enableAdaOtherOption",
   "enableAdditionalResources" = "enableAdditionalResources",
   "enableCompanyWebsite" = "enableCompanyWebsite",
+  "enableFullTimeStudentQuestion" = "enableFullTimeStudentQuestion",
   "enableGeocodingPreferences" = "enableGeocodingPreferences",
   "enableGeocodingRadiusMethod" = "enableGeocodingRadiusMethod",
   "enableHomeType" = "enableHomeType",
   "enableIsVerified" = "enableIsVerified",
+  "enableLimitedHowDidYouHear" = "enableLimitedHowDidYouHear",
   "enableListingFavoriting" = "enableListingFavoriting",
   "enableListingFiltering" = "enableListingFiltering",
   "enableListingOpportunity" = "enableListingOpportunity",
@@ -7538,11 +7753,11 @@ export enum FeatureFlagEnum {
   "enableUnderConstructionHome" = "enableUnderConstructionHome",
   "enableUnitGroups" = "enableUnitGroups",
   "enableUtilitiesIncluded" = "enableUtilitiesIncluded",
+  "enableWaitlistAdditionalFields" = "enableWaitlistAdditionalFields",
+  "enableV2MSQ" = "enableV2MSQ",
   "example" = "example",
   "hideCloseListingButton" = "hideCloseListingButton",
   "swapCommunityTypeWithPrograms" = "swapCommunityTypeWithPrograms",
-  "enableWaitlistAdditionalFields" = "enableWaitlistAdditionalFields",
-  "enableFullTimeStudentQuestion" = "enableFullTimeStudentQuestion",
 }
 export enum EnumMultiselectQuestionFilterParamsComparison {
   "=" = "=",

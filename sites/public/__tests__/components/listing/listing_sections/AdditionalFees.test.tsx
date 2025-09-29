@@ -16,7 +16,7 @@ describe("<AdditionalFees>", () => {
         utilitiesIncluded={[]}
       />
     )
-    expect(queryByText("Additional Fees")).toBeNull()
+    expect(queryByText("Additional fees")).toBeNull()
   })
   it("renders all content", () => {
     const { getByText } = render(
@@ -29,14 +29,14 @@ describe("<AdditionalFees>", () => {
         utilitiesIncluded={["Water, Electricity"]}
       />
     )
-    expect(getByText("Additional Fees")).toBeDefined()
-    expect(getByText("Application Fee")).toBeDefined()
+    expect(getByText("Additional fees")).toBeDefined()
+    expect(getByText("Application fee")).toBeDefined()
     expect(getByText("per applicant age 18 and over")).toBeDefined()
     expect(getByText("Due at interview")).toBeDefined()
     expect(getByText("$50")).toBeDefined()
     expect(getByText("Deposit")).toBeDefined()
     expect(getByText("$100 – $200", { exact: false })).toBeDefined()
-    expect(getByText("Utilities Included")).toBeDefined()
+    expect(getByText("Utilities included")).toBeDefined()
     expect(getByText("Water, Electricity")).toBeDefined()
     expect(getByText("Costs not included")).toBeDefined()
     expect(getByText("Gas, internet")).toBeDefined()
@@ -52,14 +52,14 @@ describe("<AdditionalFees>", () => {
         utilitiesIncluded={[]}
       />
     )
-    expect(getByText("Additional Fees")).toBeDefined()
-    expect(getByText("Application Fee")).toBeDefined()
+    expect(getByText("Additional fees")).toBeDefined()
+    expect(getByText("Application fee")).toBeDefined()
     expect(getByText("per applicant age 18 and over")).toBeDefined()
     expect(getByText("Due at interview")).toBeDefined()
     expect(getByText("$50")).toBeDefined()
     expect(getByText("Deposit")).toBeDefined()
     expect(getByText("$100 – $200", { exact: false })).toBeDefined()
-    expect(queryByText("Utilities Included")).toBeNull()
+    expect(queryByText("Utilities included")).toBeNull()
   })
   it("renders just deposit min", () => {
     const { getByText } = render(
@@ -72,7 +72,7 @@ describe("<AdditionalFees>", () => {
         utilitiesIncluded={[]}
       />
     )
-    expect(getByText("Additional Fees")).toBeDefined()
+    expect(getByText("Additional fees")).toBeDefined()
     expect(getByText("Deposit")).toBeDefined()
     expect(getByText("$100", { exact: false })).toBeDefined()
   })
@@ -87,7 +87,7 @@ describe("<AdditionalFees>", () => {
         utilitiesIncluded={[]}
       />
     )
-    expect(getByText("Additional Fees")).toBeDefined()
+    expect(getByText("Additional fees")).toBeDefined()
     expect(getByText("Deposit")).toBeDefined()
     expect(getByText("$200", { exact: false })).toBeDefined()
   })

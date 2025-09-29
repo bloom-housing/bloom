@@ -38,14 +38,14 @@ describe("<ListingCard>", () => {
     )
     const tags = getListingTags(listing, true)
     expect(view.getByText(listing.name)).toBeDefined()
-    expect(view.getByText("98 Archer Place, Dixon, CA 95620")).toBeDefined()
+    expect(view.getByText("98 Archer Street, San Jose, CA 95112")).toBeDefined()
     tags.forEach((tag) => {
       expect(view.getByText(tag.title)).toBeDefined()
     })
-    expect(view.getByText("Unit Type")).toBeDefined()
-    expect(view.getByText("Minimum Income")).toBeDefined()
+    expect(view.getByText("Unit type")).toBeDefined()
+    expect(view.getByText("Minimum income")).toBeDefined()
     expect(view.getByText("Rent")).toBeDefined()
-    expect(view.getByText("First Come First Serve", { exact: false })).toBeDefined()
+    expect(view.getByText("First come first serve", { exact: false })).toBeDefined()
     expect(view.getByLabelText("A picture of the building")).toBeDefined()
     expect(view.getByRole("link", { name: listing.name })).toHaveAttribute(
       "href",
@@ -126,6 +126,20 @@ describe("<ListingCard>", () => {
       />
     )
     expect(view.getByText("Seniors 62+")).toBeDefined()
-    expect(view.getByText("Supportive Housing for the Homeless")).toBeDefined()
+    expect(view.getByText("Supportive housing for the homeless")).toBeDefined()
+  })
+  it("renders with no address", () => {
+    const view = render(
+      <ListingCard
+        listing={{
+          ...listing,
+          status: ListingsStatusEnum.active,
+          applicationDueDate: dayjs(new Date()).add(5, "days").toDate(),
+          listingsBuildingAddress: null,
+        }}
+        jurisdiction={jurisdiction}
+      />
+    )
+    expect(view.getByText(listing.name)).toBeDefined()
   })
 })

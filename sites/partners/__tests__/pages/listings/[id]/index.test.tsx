@@ -18,6 +18,7 @@ import {
   ListingEventsTypeEnum,
   ListingsStatusEnum,
   MultiselectQuestionsApplicationSectionEnum,
+  MultiselectQuestionsStatusEnum,
   RegionEnum,
   ReviewOrderTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -109,10 +110,10 @@ describe("listing data", () => {
         </ListingContext.Provider>
       )
 
-      expect(getByText("Listing Data")).toBeInTheDocument()
+      expect(getByText("Listing data")).toBeInTheDocument()
       expect(getByText("Listing ID")).toBeInTheDocument()
       expect(getByText("Uvbk5qurpB2WI9V6WnNdH")).toBeInTheDocument()
-      expect(getByText("Date Created")).toBeInTheDocument()
+      expect(getByText("Date created")).toBeInTheDocument()
       expect(getByText("02/03/2025 at 10:13 AM")).toBeInTheDocument()
     })
 
@@ -133,12 +134,12 @@ describe("listing data", () => {
           </ListingContext.Provider>
         )
 
-        expect(queryByText("Listing Notes")).not.toBeInTheDocument()
-        expect(queryByText("Change Request Summary")).not.toBeInTheDocument()
+        expect(queryByText("Listing notes")).not.toBeInTheDocument()
+        expect(queryByText("Change request summary")).not.toBeInTheDocument()
         expect(queryByText("Test changes")).not.toBeInTheDocument()
-        expect(queryByText("Request Date")).not.toBeInTheDocument()
+        expect(queryByText("Request date")).not.toBeInTheDocument()
         expect(queryByText("01/10/2025")).not.toBeInTheDocument()
-        expect(queryByText("Requested By")).not.toBeInTheDocument()
+        expect(queryByText("Requested by")).not.toBeInTheDocument()
         expect(queryByText("John Test")).not.toBeInTheDocument()
       })
 
@@ -157,12 +158,12 @@ describe("listing data", () => {
           </ListingContext.Provider>
         )
 
-        expect(getByText("Listing Notes")).toBeInTheDocument()
-        expect(getByText("Change Request Summary")).toBeInTheDocument()
+        expect(getByText("Listing notes")).toBeInTheDocument()
+        expect(getByText("Change request summary")).toBeInTheDocument()
         expect(getByText("Test changes")).toBeInTheDocument()
-        expect(getByText("Request Date")).toBeInTheDocument()
+        expect(getByText("Request date")).toBeInTheDocument()
         expect(getByText("01/10/2025")).toBeInTheDocument()
-        expect(queryByText("Requested By")).not.toBeInTheDocument()
+        expect(queryByText("Requested by")).not.toBeInTheDocument()
         expect(queryByText("John Test")).not.toBeInTheDocument()
       })
 
@@ -184,12 +185,12 @@ describe("listing data", () => {
           </ListingContext.Provider>
         )
 
-        expect(getByText("Listing Notes")).toBeInTheDocument()
-        expect(getByText("Change Request Summary")).toBeInTheDocument()
+        expect(getByText("Listing notes")).toBeInTheDocument()
+        expect(getByText("Change request summary")).toBeInTheDocument()
         expect(getByText("Test changes")).toBeInTheDocument()
-        expect(getByText("Request Date")).toBeInTheDocument()
+        expect(getByText("Request date")).toBeInTheDocument()
         expect(getByText("01/10/2025")).toBeInTheDocument()
-        expect(getByText("Requested By")).toBeInTheDocument()
+        expect(getByText("Requested by")).toBeInTheDocument()
         expect(getByText("John Test")).toBeInTheDocument()
       })
     })
@@ -201,12 +202,12 @@ describe("listing data", () => {
         </ListingContext.Provider>
       )
 
-      expect(getByText("Listing Intro")).toBeInTheDocument()
-      expect(getByText("Listing Name")).toBeInTheDocument()
+      expect(getByText("Listing intro")).toBeInTheDocument()
+      expect(getByText("Listing name")).toBeInTheDocument()
       expect(getByText("Archer Studios")).toBeInTheDocument()
       expect(getByText("Jurisdiction")).toBeInTheDocument()
       expect(getByText("San Jose")).toBeInTheDocument()
-      expect(getByText("Housing Developer")).toBeInTheDocument()
+      expect(getByText("Housing developer")).toBeInTheDocument()
       expect(getByText("Charities Housing")).toBeInTheDocument()
     })
 
@@ -223,7 +224,7 @@ describe("listing data", () => {
           </ListingContext.Provider>
         )
 
-        expect(getByText("Listing Photo")).toBeInTheDocument()
+        expect(getByText("Listing photo")).toBeInTheDocument()
         expect(getByText("None")).toBeInTheDocument()
         expect(queryByText("Preview")).not.toBeInTheDocument()
         expect(queryByText("Primary")).not.toBeInTheDocument()
@@ -262,7 +263,7 @@ describe("listing data", () => {
           </ListingContext.Provider>
         )
 
-        expect(getByText("Listing Photo", { selector: "h2" })).toBeInTheDocument()
+        expect(getByText("Listing photo", { selector: "h2" })).toBeInTheDocument()
         expect(getByText("Preview")).toBeInTheDocument()
         expect(getByText("Primary")).toBeInTheDocument()
         expect(getByText("Primary photo")).toBeInTheDocument()
@@ -273,7 +274,7 @@ describe("listing data", () => {
             "src",
             "https://res.cloudinary.com/exygy/image/upload/w_400,c_limit,q_65/asset_file_id.jpg"
           )
-          expect(imageElement).toHaveAttribute("alt", "Listing Photo")
+          expect(imageElement).toHaveAttribute("alt", "Listing photo")
         })
       })
     })
@@ -285,23 +286,23 @@ describe("listing data", () => {
         </ListingContext.Provider>
       )
 
-      expect(getByText("Building Details")).toBeInTheDocument()
-      expect(getByText("Building Address")).toBeInTheDocument()
-      expect(getByText("Street Address")).toBeInTheDocument()
-      expect(getByText("98 Archer Place")).toBeInTheDocument()
+      expect(getByText("Building details")).toBeInTheDocument()
+      expect(getByText("Building address")).toBeInTheDocument()
+      expect(getByText("Street address")).toBeInTheDocument()
+      expect(getByText("98 Archer Street")).toBeInTheDocument()
       expect(getByText("City")).toBeInTheDocument()
       expect(getByText("Solano")).toBeInTheDocument()
       expect(getByText("Longitude")).toBeInTheDocument()
-      expect(getByText("-121.81524")).toBeInTheDocument()
+      expect(getByText("-121.91071")).toBeInTheDocument()
       expect(getByText("State")).toBeInTheDocument()
       expect(getByText("CA")).toBeInTheDocument()
       expect(getByText("Latitude")).toBeInTheDocument()
-      expect(getByText("37.44522")).toBeInTheDocument()
-      expect(getByText("Zip Code")).toBeInTheDocument()
-      expect(getByText("95620")).toBeInTheDocument()
+      expect(getByText("37.36537")).toBeInTheDocument()
+      expect(getByText("Zip code")).toBeInTheDocument()
+      expect(getByText("95112")).toBeInTheDocument()
       expect(getByText("Neighborhood")).toBeInTheDocument()
       expect(getByText("Rosemary Gardens Park")).toBeInTheDocument()
-      expect(getByText("Year Built")).toBeInTheDocument()
+      expect(getByText("Year built")).toBeInTheDocument()
       expect(getByText("2012")).toBeInTheDocument()
       expect(queryByText("Region")).not.toBeInTheDocument()
       expect(queryByText("Southwest")).not.toBeInTheDocument()
@@ -322,23 +323,23 @@ describe("listing data", () => {
         </AuthContext.Provider>
       )
 
-      expect(getByText("Building Details")).toBeInTheDocument()
-      expect(getByText("Building Address")).toBeInTheDocument()
-      expect(getByText("Street Address")).toBeInTheDocument()
-      expect(getByText("98 Archer Place")).toBeInTheDocument()
+      expect(getByText("Building details")).toBeInTheDocument()
+      expect(getByText("Building address")).toBeInTheDocument()
+      expect(getByText("Street address")).toBeInTheDocument()
+      expect(getByText("98 Archer Street")).toBeInTheDocument()
       expect(getByText("City")).toBeInTheDocument()
-      expect(getByText("Dixon")).toBeInTheDocument()
+      expect(getByText("San Jose")).toBeInTheDocument()
       expect(getByText("Longitude")).toBeInTheDocument()
-      expect(getByText("-121.81524")).toBeInTheDocument()
+      expect(getByText("-121.91071")).toBeInTheDocument()
       expect(getByText("State")).toBeInTheDocument()
       expect(getByText("CA")).toBeInTheDocument()
       expect(getByText("Latitude")).toBeInTheDocument()
-      expect(getByText("37.44522")).toBeInTheDocument()
-      expect(getByText("Zip Code")).toBeInTheDocument()
-      expect(getByText("95620")).toBeInTheDocument()
+      expect(getByText("37.36537")).toBeInTheDocument()
+      expect(getByText("Zip code")).toBeInTheDocument()
+      expect(getByText("95112")).toBeInTheDocument()
       expect(getByText("Neighborhood")).toBeInTheDocument()
       expect(getByText("Rosemary Gardens Park")).toBeInTheDocument()
-      expect(getByText("Year Built")).toBeInTheDocument()
+      expect(getByText("Year built")).toBeInTheDocument()
       expect(getByText("2012")).toBeInTheDocument()
       expect(getByText("Region")).toBeInTheDocument()
       expect(getByText("Southwest")).toBeInTheDocument()
@@ -361,10 +362,10 @@ describe("listing data", () => {
           </ListingContext.Provider>
         )
 
-        expect(getByText("Community Type")).toBeInTheDocument()
-        expect(getByText("Reserved Community Type")).toBeInTheDocument()
-        expect(getByText("Farmworker Housing")).toBeInTheDocument()
-        expect(getByText("Reserved Community Description")).toBeInTheDocument()
+        expect(getByText("Community type")).toBeInTheDocument()
+        expect(getByText("Reserved community type")).toBeInTheDocument()
+        expect(getByText("Farmworker housing")).toBeInTheDocument()
+        expect(getByText("Reserved community description")).toBeInTheDocument()
         expect(getByText("Test community description")).toBeInTheDocument()
         expect(
           getByText(
@@ -393,10 +394,10 @@ describe("listing data", () => {
           </ListingContext.Provider>
         )
 
-        expect(getByText("Community Type")).toBeInTheDocument()
-        expect(getByText("Reserved Community Type")).toBeInTheDocument()
-        expect(getByText("Farmworker Housing")).toBeInTheDocument()
-        expect(getByText("Reserved Community Description")).toBeInTheDocument()
+        expect(getByText("Community type")).toBeInTheDocument()
+        expect(getByText("Reserved community type")).toBeInTheDocument()
+        expect(getByText("Farmworker housing")).toBeInTheDocument()
+        expect(getByText("Reserved community description")).toBeInTheDocument()
         expect(getByText("Test community description")).toBeInTheDocument()
         expect(
           getByText(
@@ -411,11 +412,11 @@ describe("listing data", () => {
       const COMMUNITY_TYPES = [
         {
           dtoField: "developmentalDisability",
-          typeString: "Developmental Disability",
+          typeString: "Developmental disability",
         },
         {
           dtoField: "farmworkerHousing",
-          typeString: "Farmworker Housing",
+          typeString: "Farmworker housing",
         },
         {
           dtoField: "housingVoucher",
@@ -435,7 +436,7 @@ describe("listing data", () => {
         },
         {
           dtoField: "specialNeeds",
-          typeString: "Special Needs",
+          typeString: "Special needs",
         },
         {
           dtoField: "veteran",
@@ -443,7 +444,7 @@ describe("listing data", () => {
         },
         {
           dtoField: "schoolEmployee",
-          typeString: "School Employee",
+          typeString: "School employee",
         },
       ].map((data) =>
         Object.assign(data, {
@@ -487,13 +488,13 @@ describe("listing data", () => {
       )
 
       expect(getByText("Do you want to show unit types or individual units?")).toBeInTheDocument()
-      expect(getByText("Individual Units")).toBeInTheDocument()
+      expect(getByText("Individual units")).toBeInTheDocument()
       expect(getByText("What is the listing availability?")).toBeInTheDocument()
-      expect(getByText("Available Units")).toBeInTheDocument()
+      expect(getByText("Available units")).toBeInTheDocument()
       expect(getByText("None")).toBeInTheDocument()
 
       expect(queryByText("Unit #")).not.toBeInTheDocument()
-      expect(queryByText("Unit Type")).not.toBeInTheDocument()
+      expect(queryByText("Unit type")).not.toBeInTheDocument()
       expect(queryByText("AMI")).not.toBeInTheDocument()
       expect(queryByText("Rent")).not.toBeInTheDocument()
       expect(queryByText("SQ FT")).not.toBeInTheDocument()
@@ -535,12 +536,12 @@ describe("listing data", () => {
       )
 
       expect(getByText("Do you want to show unit types or individual units?")).toBeInTheDocument()
-      expect(getByText("Individual Units")).toBeInTheDocument()
+      expect(getByText("Individual units")).toBeInTheDocument()
       expect(getByText("What is the listing availability?")).toBeInTheDocument()
-      expect(getByText("Available Units")).toBeInTheDocument()
+      expect(getByText("Available units")).toBeInTheDocument()
 
       expect(getByText("Unit #")).toBeInTheDocument()
-      expect(getByText("Unit Type")).toBeInTheDocument()
+      expect(getByText("Unit type")).toBeInTheDocument()
       expect(getByText("AMI")).toBeInTheDocument()
       expect(getByText("Rent")).toBeInTheDocument()
       expect(getByText("SQ FT")).toBeInTheDocument()
@@ -565,8 +566,8 @@ describe("listing data", () => {
         </ListingContext.Provider>
       )
 
-      expect(getByText("Housing Preferences")).toBeInTheDocument()
-      expect(getByText("Active Preferences")).toBeInTheDocument()
+      expect(getByText("Housing preferences")).toBeInTheDocument()
+      expect(getByText("Active preferences")).toBeInTheDocument()
       expect(getByText("None")).toBeInTheDocument()
       expect(queryByText("Order")).not.toBeInTheDocument()
       expect(queryByText("Name")).not.toBeInTheDocument()
@@ -588,6 +589,7 @@ describe("listing data", () => {
                   text: "Test Name_1",
                   description: "Test Description_1",
                   applicationSection: MultiselectQuestionsApplicationSectionEnum.preferences,
+                  status: MultiselectQuestionsStatusEnum.draft,
                 },
               },
               {
@@ -599,6 +601,7 @@ describe("listing data", () => {
                   text: "Test Name_2",
                   description: "Test Description_2",
                   applicationSection: MultiselectQuestionsApplicationSectionEnum.preferences,
+                  status: MultiselectQuestionsStatusEnum.draft,
                 },
               },
             ],
@@ -608,8 +611,8 @@ describe("listing data", () => {
         </ListingContext.Provider>
       )
 
-      expect(getByText("Housing Preferences")).toBeInTheDocument()
-      expect(getByText("Active Preferences")).toBeInTheDocument()
+      expect(getByText("Housing preferences")).toBeInTheDocument()
+      expect(getByText("Active preferences")).toBeInTheDocument()
       expect(getByText("Order")).toBeInTheDocument()
       expect(getByText("1")).toBeInTheDocument()
       expect(getByText("2")).toBeInTheDocument()
@@ -634,6 +637,7 @@ describe("listing data", () => {
                   text: "Test Program Name_1",
                   description: "Test Program Description_1",
                   applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
+                  status: MultiselectQuestionsStatusEnum.draft,
                 },
               },
               {
@@ -645,6 +649,7 @@ describe("listing data", () => {
                   text: "Test Program Name_2",
                   description: "Test Program Description_2",
                   applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
+                  status: MultiselectQuestionsStatusEnum.draft,
                 },
               },
             ],
@@ -654,8 +659,8 @@ describe("listing data", () => {
         </ListingContext.Provider>
       )
 
-      expect(getByText("Housing Programs")).toBeInTheDocument()
-      expect(getByText("Active Programs")).toBeInTheDocument()
+      expect(getByText("Housing programs")).toBeInTheDocument()
+      expect(getByText("Active programs")).toBeInTheDocument()
       expect(getByText("Order")).toBeInTheDocument()
       expect(getByText("1")).toBeInTheDocument()
       expect(getByText("2")).toBeInTheDocument()
@@ -680,16 +685,16 @@ describe("listing data", () => {
         </ListingContext.Provider>
       )
 
-      expect(getByText("Additional Fees")).toBeInTheDocument()
-      expect(getByText("Application Fee")).toBeInTheDocument()
+      expect(getByText("Additional fees")).toBeInTheDocument()
+      expect(getByText("Application fee")).toBeInTheDocument()
       expect(getByText("30.0")).toBeInTheDocument()
-      expect(getByText("Deposit Max")).toBeInTheDocument()
+      expect(getByText("Deposit max")).toBeInTheDocument()
       expect(getByText("1000")).toBeInTheDocument()
-      expect(getByText("Deposit Helper Text")).toBeInTheDocument()
+      expect(getByText("Deposit helper text")).toBeInTheDocument()
       expect(getByText("Test Deposit Helper Text")).toBeInTheDocument()
-      expect(getByText("Deposit Min")).toBeInTheDocument()
+      expect(getByText("Deposit min")).toBeInTheDocument()
       expect(getByText("1140.0")).toBeInTheDocument()
-      expect(getByText("Costs Not Included")).toBeInTheDocument()
+      expect(getByText("Costs not included")).toBeInTheDocument()
       expect(
         getByText(
           "Resident responsible for PG&E, internet and phone. Owner pays for water, trash, and sewage."
@@ -710,30 +715,30 @@ describe("listing data", () => {
           </ListingContext.Provider>
         )
 
-        expect(getByText("Building Features")).toBeInTheDocument()
-        expect(getByText("Property Amenities")).toBeInTheDocument()
+        expect(getByText("Building features")).toBeInTheDocument()
+        expect(getByText("Property amenities")).toBeInTheDocument()
         expect(
           getByText(
             "Community Room, Laundry Room, Assigned Parking, Bike Storage, Roof Top Garden, Part-time Resident Service Coordinator"
           )
         ).toBeInTheDocument()
-        expect(getByText("Unit Amenities")).toBeInTheDocument()
+        expect(getByText("Unit amenities")).toBeInTheDocument()
         expect(getByText("Dishwasher")).toBeInTheDocument()
-        expect(getByText("Additional Accessibility")).toBeInTheDocument()
+        expect(getByText("Additional accessibility")).toBeInTheDocument()
         expect(
           getByText(
             "There is a total of 5 ADA units in the complex, all others are adaptable. Exterior Wheelchair ramp (front entry)"
           )
         ).toBeInTheDocument()
-        expect(getByText("Smoking Policy")).toBeInTheDocument()
+        expect(getByText("Smoking policy")).toBeInTheDocument()
         expect(getByText("Non-smoking building")).toBeInTheDocument()
-        expect(getByText("Pets Policy")).toBeInTheDocument()
+        expect(getByText("Pets policy")).toBeInTheDocument()
         expect(
           getByText(
             "No pets allowed. Accommodation animals may be granted to persons with disabilities via a reasonable accommodation request."
           )
         ).toBeInTheDocument()
-        expect(getByText("Services Offered")).toBeInTheDocument()
+        expect(getByText("Services offered")).toBeInTheDocument()
         expect(getByText("Professional Help")).toBeInTheDocument()
       })
 
@@ -790,17 +795,17 @@ describe("listing data", () => {
         )
 
         expect(getByText("Elevator")).toBeInTheDocument()
-        expect(getByText("Wheelchair Ramp")).toBeInTheDocument()
-        expect(getByText("Service Animals Allowed")).toBeInTheDocument()
-        expect(getByText("Accessible Parking Spots")).toBeInTheDocument()
-        expect(getByText("Parking On Site")).toBeInTheDocument()
+        expect(getByText("Wheelchair ramp")).toBeInTheDocument()
+        expect(getByText("Service animals allowed")).toBeInTheDocument()
+        expect(getByText("Accessible parking spots")).toBeInTheDocument()
+        expect(getByText("Parking on site")).toBeInTheDocument()
         expect(getByText("In-unit washer/dryer")).toBeInTheDocument()
-        expect(getByText("Laundry in Building")).toBeInTheDocument()
+        expect(getByText("Laundry in building")).toBeInTheDocument()
         expect(getByText("Barrier-free (no-step) property entrance")).toBeInTheDocument()
         expect(getByText("Roll-in showers")).toBeInTheDocument()
         expect(getByText("Grab bars in bathrooms")).toBeInTheDocument()
-        expect(getByText("Heating in Unit")).toBeInTheDocument()
-        expect(getByText("AC in Unit")).toBeInTheDocument()
+        expect(getByText("Heating in unit")).toBeInTheDocument()
+        expect(getByText("AC in unit")).toBeInTheDocument()
         expect(getByText("Units for those with hearing disabilities")).toBeInTheDocument()
         expect(getByText("Units for those with visual disabilities")).toBeInTheDocument()
         expect(getByText("Units for those with mobility disabilities")).toBeInTheDocument()
@@ -824,33 +829,33 @@ describe("listing data", () => {
           </ListingContext.Provider>
         )
 
-        expect(getByText("Additional Eligibility Rules")).toBeInTheDocument()
-        expect(getByText("Credit History")).toBeInTheDocument()
+        expect(getByText("Additional eligibility rules")).toBeInTheDocument()
+        expect(getByText("Credit history")).toBeInTheDocument()
         expect(
           // Look only for part of the text to verify that content rendered properly
           getByText(
             /Applications will be rated on a score system for housing. An applicant's score may be impacted by negative tenant peformance information provided to the credit reporting agency./
           )
         ).toBeInTheDocument()
-        expect(getByText("Rental History")).toBeInTheDocument()
+        expect(getByText("Rental history")).toBeInTheDocument()
         expect(
           // Look only for part of the text to verify that content rendered properly
           getByText(/Two years of rental history will be verified with all applicable landlords./)
         ).toBeInTheDocument()
-        expect(getByText("Criminal Background")).toBeInTheDocument()
+        expect(getByText("Criminal background")).toBeInTheDocument()
         expect(
           // Look only for part of the text to verify that content rendered properly
           getByText(/A criminal background investigation will be obtained on each applicant./)
         ).toBeInTheDocument()
-        expect(getByText("Rental Assistance")).toBeInTheDocument()
+        expect(getByText("Rental assistance")).toBeInTheDocument()
         expect(getByText("Custom rental assistance")).toBeInTheDocument()
-        expect(getByText("Building Criteria Selection")).toBeInTheDocument()
+        expect(getByText("Building selection criteria")).toBeInTheDocument()
         expect(getByText("URL")).toBeInTheDocument()
         expect(
           getByText("Tenant Selection Criteria will be available to all applicants upon request.")
         ).toBeInTheDocument()
         expect(queryByText("Preview")).not.toBeInTheDocument()
-        expect(queryByText("File Name")).not.toBeInTheDocument()
+        expect(queryByText("File name")).not.toBeInTheDocument()
       })
 
       it("should display selection criteria file", async () => {
@@ -872,7 +877,7 @@ describe("listing data", () => {
         )
 
         expect(getByText("Preview")).toBeInTheDocument()
-        expect(getByText("File Name")).toBeInTheDocument()
+        expect(getByText("File name")).toBeInTheDocument()
         expect(getByText("example_file.pdf")).toBeInTheDocument()
         expect(getByText("Preview")).toBeInTheDocument()
 
@@ -894,15 +899,15 @@ describe("listing data", () => {
         </ListingContext.Provider>
       )
 
-      expect(getByText("Required Documents")).toBeInTheDocument()
+      expect(getByText("Required documents")).toBeInTheDocument()
       expect(getByText("Completed application and government issued IDs")).toBeInTheDocument()
-      expect(getByText("Important Program Rules")).toBeInTheDocument()
+      expect(getByText("Important program rules")).toBeInTheDocument()
       expect(
         getByText(
           "Applicants must adhere to minimum & maximum income limits. Tenant Selection Criteria applies."
         )
       ).toBeInTheDocument()
-      expect(getByText("Special Notes")).toBeInTheDocument()
+      expect(getByText("Special notes")).toBeInTheDocument()
       expect(getByText("Special notes description")).toBeInTheDocument()
     })
 
@@ -922,10 +927,10 @@ describe("listing data", () => {
           </ListingContext.Provider>
         )
 
-        expect(getByText("Rankings & Results")).toBeInTheDocument()
+        expect(getByText("Rankings & results")).toBeInTheDocument()
         expect(getByText("Do you want to show a waitlist size?")).toBeInTheDocument()
         expect(getByText("Yes")).toBeInTheDocument()
-        expect(getByText("Number of Openings")).toBeInTheDocument()
+        expect(getByText("Number of openings")).toBeInTheDocument()
         expect(getByText("Tell the applicant what to expect from the process")).toBeInTheDocument()
         expect(
           getByText(
@@ -942,9 +947,9 @@ describe("listing data", () => {
           queryByText("Will the lottery be run in the partner portal?")
         ).not.toBeInTheDocument()
         expect(queryByText("When will the lottery be run?")).not.toBeInTheDocument()
-        expect(queryByText("Lottery Start Time")).not.toBeInTheDocument()
-        expect(queryByText("Lottery End Time")).not.toBeInTheDocument()
-        expect(queryByText("Lottery Date Notes")).not.toBeInTheDocument()
+        expect(queryByText("Lottery start time")).not.toBeInTheDocument()
+        expect(queryByText("Lottery end time")).not.toBeInTheDocument()
+        expect(queryByText("Lottery date notes")).not.toBeInTheDocument()
       })
 
       it("should display data for first come first serve review order typy without lottery event", () => {
@@ -962,7 +967,7 @@ describe("listing data", () => {
           </ListingContext.Provider>
         )
 
-        expect(getByText("Rankings & Results")).toBeInTheDocument()
+        expect(getByText("Rankings & results")).toBeInTheDocument()
         expect(getByText("How is the application review order determined?")).toBeInTheDocument()
         expect(getByText("First come first serve")).toBeInTheDocument()
         expect(getByText("Tell the applicant what to expect from the process")).toBeInTheDocument()
@@ -980,9 +985,9 @@ describe("listing data", () => {
           queryByText("Will the lottery be run in the partner portal?")
         ).not.toBeInTheDocument()
         expect(queryByText("When will the lottery be run?")).not.toBeInTheDocument()
-        expect(queryByText("Lottery Start Time")).not.toBeInTheDocument()
-        expect(queryByText("Lottery End Time")).not.toBeInTheDocument()
-        expect(queryByText("Lottery Date Notes")).not.toBeInTheDocument()
+        expect(queryByText("Lottery start time")).not.toBeInTheDocument()
+        expect(queryByText("Lottery end time")).not.toBeInTheDocument()
+        expect(queryByText("Lottery date notes")).not.toBeInTheDocument()
       })
 
       it("should display data for lottery serve review order typy with lottery event", () => {
@@ -1012,18 +1017,18 @@ describe("listing data", () => {
           </ListingContext.Provider>
         )
 
-        expect(getByText("Rankings & Results")).toBeInTheDocument()
+        expect(getByText("Rankings & results")).toBeInTheDocument()
         expect(getByText("How is the application review order determined?")).toBeInTheDocument()
         expect(getByText("Lottery")).toBeInTheDocument()
         expect(getByText("Will the lottery be run in the partner portal?")).toBeInTheDocument()
         expect(getByText("No")).toBeInTheDocument()
         expect(getByText("When will the lottery be run?")).toBeInTheDocument()
         expect(getByText("02/18/2024")).toBeInTheDocument()
-        expect(getByText("Lottery Start Time")).toBeInTheDocument()
+        expect(getByText("Lottery start time")).toBeInTheDocument()
         expect(getByText("10:30 AM")).toBeInTheDocument()
-        expect(getByText("Lottery End Time")).toBeInTheDocument()
+        expect(getByText("Lottery end time")).toBeInTheDocument()
         expect(getByText("12:15 PM")).toBeInTheDocument()
-        expect(getByText("Lottery Date Notes")).toBeInTheDocument()
+        expect(getByText("Lottery date notes")).toBeInTheDocument()
         expect(getByText("Test lottery note")).toBeInTheDocument()
         expect(getByText("Tell the applicant what to expect from the process")).toBeInTheDocument()
         expect(
@@ -1034,7 +1039,7 @@ describe("listing data", () => {
 
         expect(queryByText("Do you want to show a waitlist size?")).not.toBeInTheDocument()
         expect(queryByText("Yes")).not.toBeInTheDocument()
-        expect(queryByText("Number of Openings")).not.toBeInTheDocument()
+        expect(queryByText("Number of openings")).not.toBeInTheDocument()
         expect(queryByText("First come first serve")).not.toBeInTheDocument()
       })
     })
@@ -1055,28 +1060,28 @@ describe("listing data", () => {
         </ListingContext.Provider>
       )
 
-      expect(getByText("Leasing Agent")).toBeInTheDocument()
-      expect(getByText("Leasing Agent Name")).toBeInTheDocument()
+      expect(getByText("Leasing agent")).toBeInTheDocument()
+      expect(getByText("Leasing agent name")).toBeInTheDocument()
       expect(getByText("Marisela Baca")).toBeInTheDocument()
       expect(getByText("Email")).toBeInTheDocument()
       expect(getByText("mbaca@charitieshousing.org")).toBeInTheDocument()
       expect(getByText("Phone")).toBeInTheDocument()
       expect(getByText("(408) 217-8562")).toBeInTheDocument()
-      expect(getByText("Leasing Agent Title")).toBeInTheDocument()
+      expect(getByText("Leasing agent title")).toBeInTheDocument()
       expect(getByText("Pro Agent")).toBeInTheDocument()
-      expect(getByText("Office Hours")).toBeInTheDocument()
+      expect(getByText("Office hours")).toBeInTheDocument()
       expect(getByText("Monday, Tuesday & Friday, 9:00AM - 5:00PM")).toBeInTheDocument()
-      expect(getByText("Leasing Agent Address")).toBeInTheDocument()
-      expect(getByText("Street Address or PO Box")).toBeInTheDocument()
-      expect(getByText("98 Archer Place")).toBeInTheDocument()
-      expect(getByText("Apt or Unit #")).toBeInTheDocument()
+      expect(getByText("Leasing agent address")).toBeInTheDocument()
+      expect(getByText("Street address or PO box")).toBeInTheDocument()
+      expect(getByText("98 Archer Street")).toBeInTheDocument()
+      expect(getByText("Apt or unit #")).toBeInTheDocument()
       expect(getByText("#12")).toBeInTheDocument()
       expect(getByText("City")).toBeInTheDocument()
-      expect(getByText("Dixon")).toBeInTheDocument()
+      expect(getByText("San Jose")).toBeInTheDocument()
       expect(getByText("State")).toBeInTheDocument()
       expect(getByText("CA")).toBeInTheDocument()
-      expect(getByText("Zip Code")).toBeInTheDocument()
-      expect(getByText("95620")).toBeInTheDocument()
+      expect(getByText("Zip code")).toBeInTheDocument()
+      expect(getByText("95112")).toBeInTheDocument()
     })
 
     describe("should display Application Types section", () => {
@@ -1093,13 +1098,17 @@ describe("listing data", () => {
           </ListingContext.Provider>
         )
 
-        expect(getByText("Application Types")).toBeInTheDocument()
-        expect(getByText("Online Applications")).toBeInTheDocument()
-        expect(getByText("Paper Applications")).toBeInTheDocument()
+        expect(getByText("Application types")).toBeInTheDocument()
+        expect(getByText("Online applications")).toBeInTheDocument()
+        expect(getByText("Paper applications")).toBeInTheDocument()
+        // Disabled for Doorway
+        // expect(getByText("Referral")).toBeInTheDocument()
         expect(getAllByText("n/a")).toHaveLength(2)
-        expect(queryByText("Common Digital Application")).not.toBeInTheDocument()
-        expect(queryByText("Custom Online Application URL")).not.toBeInTheDocument()
-        expect(queryByText("File Name")).not.toBeInTheDocument()
+        expect(queryByText("Common digital application")).not.toBeInTheDocument()
+        // expect(queryByText("Referral contact phone")).not.toBeInTheDocument()
+        // expect(queryByText("Referral summary")).not.toBeInTheDocument()
+        expect(queryByText("Custom online application URL")).not.toBeInTheDocument()
+        expect(queryByText("File name")).not.toBeInTheDocument()
         expect(queryByText("Language")).not.toBeInTheDocument()
       })
 
@@ -1114,7 +1123,7 @@ describe("listing data", () => {
                   createdAt: new Date(),
                   updatedAt: new Date(),
                   type: ApplicationMethodsTypeEnum.Internal,
-                  externalReference: "Test Refference",
+                  externalReference: "Test Reference",
                 },
               ],
               digitalApplication: true,
@@ -1126,13 +1135,17 @@ describe("listing data", () => {
           </ListingContext.Provider>
         )
 
-        expect(getByText("Application Types")).toBeInTheDocument()
-        expect(getByText("Online Applications")).toBeInTheDocument()
-        expect(getByText("Common Digital Application")).toBeInTheDocument()
-        expect(getByText("Paper Applications")).toBeInTheDocument()
+        expect(getByText("Application types")).toBeInTheDocument()
+        expect(getByText("Online applications")).toBeInTheDocument()
+        expect(getByText("Common digital application")).toBeInTheDocument()
+        expect(getByText("Paper applications")).toBeInTheDocument()
+        // Disabled for Doorway
+        // expect(getByText("Referral")).toBeInTheDocument()
         expect(getAllByText("Yes")).toHaveLength(3)
-        expect(queryByText("Custom Online Application URL")).not.toBeInTheDocument()
-        expect(queryByText("File Name")).not.toBeInTheDocument()
+        // expect(queryByText("Referral contact phone")).not.toBeInTheDocument()
+        // expect(queryByText("Referral summary")).not.toBeInTheDocument()
+        expect(queryByText("Custom online application URL")).not.toBeInTheDocument()
+        expect(queryByText("File name")).not.toBeInTheDocument()
         expect(queryByText("Language")).not.toBeInTheDocument()
       })
 
@@ -1147,7 +1160,7 @@ describe("listing data", () => {
                   createdAt: new Date(),
                   updatedAt: new Date(),
                   type: ApplicationMethodsTypeEnum.ExternalLink,
-                  externalReference: "Test Refference",
+                  externalReference: "Test reference",
                 },
               ],
               digitalApplication: false,
@@ -1159,14 +1172,18 @@ describe("listing data", () => {
           </ListingContext.Provider>
         )
 
-        expect(getByText("Application Types")).toBeInTheDocument()
-        expect(getByText("Online Applications")).toBeInTheDocument()
-        expect(getByText("Common Digital Application")).toBeInTheDocument()
-        expect(getByText("Paper Applications")).toBeInTheDocument()
-        expect(getByText("Custom Online Application URL")).toBeInTheDocument()
-        expect(getByText("Test Refference")).toBeInTheDocument()
+        expect(getByText("Application types")).toBeInTheDocument()
+        expect(getByText("Online applications")).toBeInTheDocument()
+        expect(getByText("Common digital application")).toBeInTheDocument()
+        expect(getByText("Paper applications")).toBeInTheDocument()
+        expect(getByText("Custom online application URL")).toBeInTheDocument()
+        expect(getByText("Test reference")).toBeInTheDocument()
+        // Disabled for Doorway
+        // expect(getByText("Referral")).toBeInTheDocument()
         expect(getAllByText("No")).toHaveLength(3)
-        expect(queryByText("File Name")).not.toBeInTheDocument()
+        // expect(queryByText("Referral contact phone")).not.toBeInTheDocument()
+        // expect(queryByText("Referral summary")).not.toBeInTheDocument()
+        expect(queryByText("File name")).not.toBeInTheDocument()
         expect(queryByText("Language")).not.toBeInTheDocument()
       })
 
@@ -1181,7 +1198,7 @@ describe("listing data", () => {
                   createdAt: new Date(),
                   updatedAt: new Date(),
                   type: ApplicationMethodsTypeEnum.Referral,
-                  externalReference: "Test Refferal Summary",
+                  externalReference: "Test Referral Summary",
                   phoneNumber: "(509) 786-4500",
                 },
               ],
@@ -1194,14 +1211,20 @@ describe("listing data", () => {
           </ListingContext.Provider>
         )
 
-        expect(getByText("Application Types")).toBeInTheDocument()
-        expect(getByText("Online Applications")).toBeInTheDocument()
-        expect(getByText("Paper Applications")).toBeInTheDocument()
+        expect(getByText("Application types")).toBeInTheDocument()
+        expect(getByText("Online applications")).toBeInTheDocument()
+        expect(getByText("Paper applications")).toBeInTheDocument()
+        // Disabled for Doorway
+        // expect(getByText("Referral")).toBeInTheDocument()
         expect(getAllByText("No")).toHaveLength(2)
-        expect(queryByText("Common Digital Application")).not.toBeInTheDocument()
-        expect(queryByText("Custom Online Application URL")).not.toBeInTheDocument()
-        expect(queryByText("Test Refference")).not.toBeInTheDocument()
-        expect(queryByText("File Name")).not.toBeInTheDocument()
+        // expect(getByText("Referral contact phone")).toBeInTheDocument()
+        // expect(getByText("(509) 786-4500")).toBeInTheDocument()
+        // expect(getByText("Referral summary")).toBeInTheDocument()
+        // expect(getByText("Test Referral Summary")).toBeInTheDocument()
+        expect(queryByText("Common digital application")).not.toBeInTheDocument()
+        expect(queryByText("Custom online application URL")).not.toBeInTheDocument()
+        expect(queryByText("Test Reference")).not.toBeInTheDocument()
+        expect(queryByText("File name")).not.toBeInTheDocument()
         expect(queryByText("Language")).not.toBeInTheDocument()
       })
 
@@ -1257,18 +1280,23 @@ describe("listing data", () => {
           </ListingContext.Provider>
         )
 
-        expect(getByText("Application Types")).toBeInTheDocument()
-        expect(getByText("Online Applications")).toBeInTheDocument()
-        expect(getAllByText("Paper Applications")).toHaveLength(2)
+        expect(getByText("Application types")).toBeInTheDocument()
+        expect(getByText("Online applications")).toBeInTheDocument()
+        expect(getAllByText("Paper applications")).toHaveLength(2)
+        // Disabled for Doorway
+        // expect(getByText("Referral")).toBeInTheDocument()
         expect(getAllByText("No")).toHaveLength(2)
-        expect(getByText("File Name")).toBeInTheDocument()
+        expect(getByText("File name")).toBeInTheDocument()
         expect(getByText("Language")).toBeInTheDocument()
         expect(getByText("English")).toBeInTheDocument()
         expect(getByText("Español")).toBeInTheDocument()
         expect(getAllByText(/asset_\d_file_id.pdf/)).toHaveLength(2)
-        expect(queryByText("Common Digital Application")).not.toBeInTheDocument()
-        expect(queryByText("Custom Online Application URL")).not.toBeInTheDocument()
-        expect(queryByText("Test Refference")).not.toBeInTheDocument()
+
+        // expect(queryByText("Referral contact phone")).not.toBeInTheDocument()
+        // expect(queryByText("Referral summary")).not.toBeInTheDocument()
+        expect(queryByText("Common digital application")).not.toBeInTheDocument()
+        expect(queryByText("Custom online application URL")).not.toBeInTheDocument()
+        expect(queryByText("Test Reference")).not.toBeInTheDocument()
       })
 
       it("should hide digital application choice when disable flag is on", () => {
@@ -1301,18 +1329,18 @@ describe("listing data", () => {
           </AuthContext.Provider>
         )
 
-        expect(getByText("Application Types")).toBeInTheDocument()
-        expect(getByText("Online Applications")).toBeInTheDocument()
-        expect(getByText("Paper Applications")).toBeInTheDocument()
-        expect(getByText("Custom Online Application URL")).toBeInTheDocument()
+        expect(getByText("Application types")).toBeInTheDocument()
+        expect(getByText("Online applications")).toBeInTheDocument()
+        expect(getByText("Paper applications")).toBeInTheDocument()
+        expect(getByText("Custom online application URL")).toBeInTheDocument()
         expect(getByText("https://example.com/application")).toBeInTheDocument()
-        // Referral question is not asked in Doorway
+        // Disabled for Doorway
         // expect(getByText("Referral")).toBeInTheDocument()
         expect(getAllByText("No")).toHaveLength(2)
-        expect(queryByText("Common Digital Application")).not.toBeInTheDocument()
-        expect(queryByText("Referral Contact Phone")).not.toBeInTheDocument()
-        expect(queryByText("Referral Summary")).not.toBeInTheDocument()
-        expect(queryByText("File Name")).not.toBeInTheDocument()
+        expect(queryByText("Common digital application")).not.toBeInTheDocument()
+        // expect(queryByText("Referral contact phone")).not.toBeInTheDocument()
+        // expect(queryByText("Referral summary")).not.toBeInTheDocument()
+        expect(queryByText("File name")).not.toBeInTheDocument()
         expect(queryByText("Language")).not.toBeInTheDocument()
       })
     })
@@ -1339,25 +1367,25 @@ describe("listing data", () => {
           </ListingContext.Provider>
         )
 
-        expect(getByText("Application Address")).toBeInTheDocument()
+        expect(getByText("Application address")).toBeInTheDocument()
         expect(getByText("Can applications be mailed in?")).toBeInTheDocument()
         expect(getByText("Can applications be picked up?")).toBeInTheDocument()
         expect(getByText("Can applications be dropped off?")).toBeInTheDocument()
         expect(getByText("Are postmarks considered?")).toBeInTheDocument()
-        expect(getByText("Additional Application Submission Notes")).toBeInTheDocument()
+        expect(getByText("Additional application submission notes")).toBeInTheDocument()
         expect(getAllByText("No")).toHaveLength(4)
         expect(getAllByText("None")).toHaveLength(1)
 
         expect(queryByText("Where can applications be mailed in?")).not.toBeInTheDocument()
-        expect(queryByText("Leasing Agent Address")).not.toBeInTheDocument()
-        expect(queryByText("Mailing Address")).not.toBeInTheDocument()
+        expect(queryByText("Leasing agent address")).not.toBeInTheDocument()
+        expect(queryByText("Mailing address")).not.toBeInTheDocument()
         expect(queryByText("Where are applications picked up?")).not.toBeInTheDocument()
-        expect(queryByText("Pickup Address")).not.toBeInTheDocument()
-        expect(queryByText("Office Hours")).not.toBeInTheDocument()
+        expect(queryByText("Pickup address")).not.toBeInTheDocument()
+        expect(queryByText("Office hours")).not.toBeInTheDocument()
         expect(queryByText("Where are applications dropped off?")).not.toBeInTheDocument()
-        expect(queryByText("Drop Off Address")).not.toBeInTheDocument()
-        expect(queryByText("Received by Date")).not.toBeInTheDocument()
-        expect(queryByText("Received by Time")).not.toBeInTheDocument()
+        expect(queryByText("Drop off address")).not.toBeInTheDocument()
+        expect(queryByText("Received by date")).not.toBeInTheDocument()
+        expect(queryByText("Received by time")).not.toBeInTheDocument()
       })
 
       it("should display all the Application Address data", () => {
@@ -1407,31 +1435,31 @@ describe("listing data", () => {
           </ListingContext.Provider>
         )
 
-        expect(getByText("Application Address")).toBeInTheDocument()
+        expect(getByText("Application address")).toBeInTheDocument()
         expect(getByText("Can applications be mailed in?")).toBeInTheDocument()
         expect(getByText("Where can applications be mailed in?")).toBeInTheDocument()
-        expect(getByText("Mailing Address")).toBeInTheDocument()
+        expect(getByText("Mailing address")).toBeInTheDocument()
         expect(getByText("Can applications be picked up?")).toBeInTheDocument()
         expect(getByText("Where are applications picked up?")).toBeInTheDocument()
-        expect(getByText("Pickup Address")).toBeInTheDocument()
+        expect(getByText("Pickup address")).toBeInTheDocument()
         expect(getByText("Can applications be dropped off?")).toBeInTheDocument()
         expect(getByText("Where are applications dropped off?")).toBeInTheDocument()
-        expect(getByText("Drop Off Address")).toBeInTheDocument()
+        expect(getByText("Drop off address")).toBeInTheDocument()
         expect(getByText("Are postmarks considered?")).toBeInTheDocument()
-        expect(getByText("Received by Date")).toBeInTheDocument()
+        expect(getByText("Received by date")).toBeInTheDocument()
         expect(getByText("03/14/2025")).toBeInTheDocument()
-        expect(getByText("Received by Time")).toBeInTheDocument()
+        expect(getByText("Received by time")).toBeInTheDocument()
         expect(getByText("08:15 AM")).toBeInTheDocument()
-        expect(getByText("Additional Application Submission Notes")).toBeInTheDocument()
+        expect(getByText("Additional application submission notes")).toBeInTheDocument()
         expect(getByText("Test Submission note")).toBeInTheDocument()
-        expect(getAllByText("Street Address or PO Box")).toHaveLength(3)
-        expect(getAllByText("Apt or Unit #")).toHaveLength(3)
+        expect(getAllByText("Street address or PO box")).toHaveLength(3)
+        expect(getAllByText("Apt or unit #")).toHaveLength(3)
         expect(getAllByText("City")).toHaveLength(3)
         expect(getAllByText("State")).toHaveLength(3)
-        expect(getAllByText("Zip Code")).toHaveLength(3)
-        expect(getAllByText("Office Hours")).toHaveLength(2)
+        expect(getAllByText("Zip code")).toHaveLength(3)
+        expect(getAllByText("Office hours")).toHaveLength(2)
         expect(getAllByText("Yes")).toHaveLength(4)
-        expect(getAllByText("Leasing Agent Address")).toHaveLength(3)
+        expect(getAllByText("Leasing agent address")).toHaveLength(3)
         expect(getByText("1598 Peaceful Lane")).toBeInTheDocument()
         expect(getByText("None")).toBeInTheDocument()
         expect(getByText("Warrensville Heights")).toBeInTheDocument()
@@ -1464,17 +1492,17 @@ describe("listing data", () => {
           </ListingContext.Provider>
         )
 
-        expect(getByText("Application Dates")).toBeInTheDocument()
-        expect(getByText("Application Due Date")).toBeInTheDocument()
-        expect(getByText("Application Due Time")).toBeInTheDocument()
+        expect(getByText("Application dates")).toBeInTheDocument()
+        expect(getByText("Application due date")).toBeInTheDocument()
+        expect(getByText("Application due time")).toBeInTheDocument()
         expect(getAllByText("None")).toHaveLength(2)
-        expect(queryByText("Open Houses")).not.toBeInTheDocument()
-        expect(queryByText("Open House")).not.toBeInTheDocument()
+        expect(queryByText("Open houses")).not.toBeInTheDocument()
+        expect(queryByText("Open house")).not.toBeInTheDocument()
         expect(queryByText("Date")).not.toBeInTheDocument()
-        expect(queryByText("Start Time")).not.toBeInTheDocument()
-        expect(queryByText("End Time")).not.toBeInTheDocument()
+        expect(queryByText("Start time")).not.toBeInTheDocument()
+        expect(queryByText("End time")).not.toBeInTheDocument()
         expect(queryByText("URL")).not.toBeInTheDocument()
-        expect(queryByText("Open House Notes")).not.toBeInTheDocument()
+        expect(queryByText("Open house notes")).not.toBeInTheDocument()
         expect(queryByText("Done")).not.toBeInTheDocument()
       })
 
@@ -1503,17 +1531,17 @@ describe("listing data", () => {
           </ListingContext.Provider>
         )
 
-        expect(getByText("Application Dates")).toBeInTheDocument()
-        expect(getByText("Application Due Date")).toBeInTheDocument()
+        expect(getByText("Application dates")).toBeInTheDocument()
+        expect(getByText("Application due date")).toBeInTheDocument()
         expect(getByText("12/20/2024")).toBeInTheDocument()
-        expect(getByText("Application Due Time")).toBeInTheDocument()
+        expect(getByText("Application due time")).toBeInTheDocument()
         expect(getByText("03:30 PM")).toBeInTheDocument()
-        expect(getByText("Open Houses")).toBeInTheDocument()
+        expect(getByText("Open houses")).toBeInTheDocument()
         expect(getByText("Date")).toBeInTheDocument()
         expect(getByText("02/18/2024")).toBeInTheDocument()
-        expect(getByText("Start Time")).toBeInTheDocument()
+        expect(getByText("Start time")).toBeInTheDocument()
         expect(getByText("10:30 AM")).toBeInTheDocument()
-        expect(getByText("End Time")).toBeInTheDocument()
+        expect(getByText("End time")).toBeInTheDocument()
         expect(getByText("12:15 PM")).toBeInTheDocument()
         expect(getByText("Link")).toBeInTheDocument()
 
@@ -1586,7 +1614,7 @@ describe("listing data", () => {
       },
       {
         statusEnum: ListingsStatusEnum.changesRequested,
-        tagString: "Changes Requested",
+        tagString: "Changes requested",
       },
       {
         statusEnum: ListingsStatusEnum.closed,
@@ -1598,7 +1626,7 @@ describe("listing data", () => {
       },
       {
         statusEnum: ListingsStatusEnum.pendingReview,
-        tagString: "Pending Review",
+        tagString: "Pending review",
       },
     ].map((item) =>
       Object.assign(item, {
@@ -1723,17 +1751,17 @@ describe("listing data", () => {
 
         fireEvent.click(copyButton)
 
-        const copyDialogHeader = getByText("Copy Listing", { selector: "h1" })
+        const copyDialogHeader = getByText("Copy listing", { selector: "h1" })
         expect(copyDialogHeader).toBeInTheDocument()
 
         const copyDialogForm = copyDialogHeader.parentElement.parentElement
         expect(
           within(copyDialogForm).getByText(
-            "You are duplicating a listing to draft status. Please enter a unique name below and indicate whether or not you’d like to include existing unit data."
+            "You are duplicating a listing to draft status. Please enter a unique name below and indicate whether or not you'd like to include existing unit data."
           )
         ).toBeInTheDocument()
-        expect(within(copyDialogForm).getByLabelText("Listing Name")).toBeInTheDocument()
-        expect(within(copyDialogForm).getByLabelText("Listing Name")).toHaveAttribute(
+        expect(within(copyDialogForm).getByLabelText("Listing name")).toBeInTheDocument()
+        expect(within(copyDialogForm).getByLabelText("Listing name")).toHaveAttribute(
           "value",
           "Archer Studios Copy"
         )
@@ -1782,7 +1810,7 @@ describe("listing data", () => {
 
         fireEvent.click(copyButton)
 
-        let copyDialogHeader = getByText("Copy Listing", { selector: "h1" })
+        let copyDialogHeader = getByText("Copy listing", { selector: "h1" })
         expect(copyDialogHeader).toBeInTheDocument()
 
         const copyDialogForm = copyDialogHeader.parentElement.parentElement
@@ -1793,7 +1821,7 @@ describe("listing data", () => {
         expect(cancelDialogButton).toBeInTheDocument()
         fireEvent.click(cancelDialogButton)
 
-        copyDialogHeader = queryByText("Copy Listing", { selector: "h1" })
+        copyDialogHeader = queryByText("Copy listing", { selector: "h1" })
         expect(copyDialogHeader).not.toBeInTheDocument()
       })
     })
@@ -1881,7 +1909,7 @@ describe("listing data", () => {
       </AuthContext.Provider>
     )
 
-    const unitSectionHeader = getByText("Listing Units", { selector: "h2" })
+    const unitSectionHeader = getByText("Listing units", { selector: "h2" })
     expect(unitSectionHeader).toBeInTheDocument()
     const unitSection = unitSectionHeader.parentElement
     expect(unitSection).toBeInTheDocument()
@@ -1899,13 +1927,13 @@ describe("listing data", () => {
     const detailsSectionHeader = within(unitDrawer).getByText("Details", { selector: "h2" })
     expect(detailsSectionHeader).toBeInTheDocument()
     const detailsSection = detailsSectionHeader.parentElement
-    expect(within(detailsSection).getByText("Unit Number")).toBeInTheDocument()
-    expect(within(detailsSection).getByText("Unit Type")).toBeInTheDocument()
-    expect(within(detailsSection).getByText("Number of Bathrooms")).toBeInTheDocument()
-    expect(within(detailsSection).getByText("Unit Floor")).toBeInTheDocument()
-    expect(within(detailsSection).getByText("Square Footage")).toBeInTheDocument()
-    expect(within(detailsSection).getByText("Minimum Occupancy")).toBeInTheDocument()
-    expect(within(detailsSection).getByText("Max Occupancy")).toBeInTheDocument()
+    expect(within(detailsSection).getByText("Unit number")).toBeInTheDocument()
+    expect(within(detailsSection).getByText("Unit type")).toBeInTheDocument()
+    expect(within(detailsSection).getByText("Number of bathrooms")).toBeInTheDocument()
+    expect(within(detailsSection).getByText("Unit floor")).toBeInTheDocument()
+    expect(within(detailsSection).getByText("Square footage")).toBeInTheDocument()
+    expect(within(detailsSection).getByText("Minimum occupancy")).toBeInTheDocument()
+    expect(within(detailsSection).getByText("Max occupancy")).toBeInTheDocument()
     expect(within(detailsSection).getByText("#1")).toBeInTheDocument()
     expect(within(detailsSection).getByText("Studio")).toBeInTheDocument()
     expect(within(detailsSection).getByText("285")).toBeInTheDocument()
@@ -1916,13 +1944,13 @@ describe("listing data", () => {
     const eligibilitySectionHeader = within(unitDrawer).getByText("Eligibility", { selector: "h2" })
     expect(eligibilitySectionHeader).toBeInTheDocument()
     const eligibilitySection = eligibilitySectionHeader.parentElement
-    expect(within(eligibilitySection).getByText("AMI Chart")).toBeInTheDocument()
+    expect(within(eligibilitySection).getByText("AMI chart")).toBeInTheDocument()
     expect(within(eligibilitySection).getByText("n/a")).toBeInTheDocument()
     expect(within(eligibilitySection).getByText("Percentage of AMI")).toBeInTheDocument()
     expect(within(eligibilitySection).getByText("45.0")).toBeInTheDocument()
-    expect(within(eligibilitySection).getByText("Minimum Monthly Income")).toBeInTheDocument()
+    expect(within(eligibilitySection).getByText("Minimum monthly income")).toBeInTheDocument()
     expect(within(eligibilitySection).getByText("2208.0")).toBeInTheDocument()
-    expect(within(eligibilitySection).getByText("Monthly Rent")).toBeInTheDocument()
+    expect(within(eligibilitySection).getByText("Monthly rent")).toBeInTheDocument()
     expect(within(eligibilitySection).getByText("1104.0")).toBeInTheDocument()
 
     // Accessibility section
@@ -1932,7 +1960,7 @@ describe("listing data", () => {
     expect(accessibilitySectionHeader).toBeInTheDocument()
     const accessibilitySection = accessibilitySectionHeader.parentElement
     expect(
-      within(accessibilitySection).getByText("Accessibility Priority Type")
+      within(accessibilitySection).getByText("Accessibility priority type")
     ).toBeInTheDocument()
     expect(within(accessibilitySection).getByText("Test ADA_1")).toBeInTheDocument()
 

@@ -30,13 +30,13 @@ describe("<SubmitApplication>", () => {
           dropOffHeader: "Drop Off Header",
           sectionHeader: "Paper App Header",
           officeHoursHeader: "Office Hours Header",
-          mapString: "Get Directions",
+          mapString: "Get directions",
         }}
       />
     )
     expect(getByText("Paper App Header")).toBeTruthy()
     expect(getByText("Mail Header")).toBeTruthy()
-    expect(getByText("Mailing Address Street", { exact: false })).toBeTruthy()
+    expect(getByText("Mailing address Street", { exact: false })).toBeTruthy()
     expect(getByText("Postmark details string")).toBeTruthy()
     expect(getByText("or")).toBeTruthy()
     expect(getByText("Drop Off Header")).toBeTruthy()

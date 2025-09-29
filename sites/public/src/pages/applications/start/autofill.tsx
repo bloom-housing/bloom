@@ -8,6 +8,7 @@ import {
   PageView,
   pushGtmEvent,
   AuthContext,
+  getPreferredUnitTypes,
 } from "@bloom-housing/shared-helpers"
 import FormsLayout from "../../../layouts/forms"
 import { useFormConductor } from "../../../lib/hooks"
@@ -37,6 +38,9 @@ const Autofill = () => {
 
   const mounted = OnClientSide()
 
+  const enableUnitGroups = isFeatureFlagOn(conductor.config, FeatureFlagEnum.enableUnitGroups)
+  const preferredUnits = getPreferredUnitTypes(application, listing, enableUnitGroups)
+
   const { handleSubmit } = useForm()
   const onSubmit = useCallback(() => {
     if (!submitted) {
@@ -46,6 +50,7 @@ const Autofill = () => {
         const withUpdatedLang = {
           ...JSON.parse(JSON.stringify(previousApplication)),
           language: router.locale,
+          preferredUnitTypes: preferredUnits,
         }
 
         conductor.application = withUpdatedLang
@@ -60,7 +65,15 @@ const Autofill = () => {
       conductor.sync()
       conductor.routeToNextOrReturnUrl()
     }
-  }, [submitted, previousApplication, useDetails, context, conductor, router])
+  }, [
+    submitted,
+    previousApplication,
+    useDetails,
+    context,
+    conductor,
+    router.locale,
+    preferredUnits,
+  ])
 
   useEffect(() => {
     pushGtmEvent<PageView>({
@@ -91,7 +104,11 @@ const Autofill = () => {
   }, [profile, applicationsService, onSubmit, previousApplication, initialStateLoaded])
 
   return previousApplication ? (
-    <FormsLayout>
+    <FormsLayout
+      pageTitle={`${t("pageTitle.autofill")} - ${t("listings.apply.applyOnline")} - ${
+        listing?.name
+      }`}
+    >
       <ApplicationFormLayout
         listingName={listing?.name}
         heading={t("application.autofill.saveTime")}
@@ -121,6 +138,10 @@ const Autofill = () => {
           enableAdaOtherOption={isFeatureFlagOn(
             conductor.config,
             FeatureFlagEnum.enableAdaOtherOption
+          )}
+          swapCommunityTypeWithPrograms={isFeatureFlagOn(
+            conductor.config,
+            FeatureFlagEnum.swapCommunityTypeWithPrograms
           )}
         />
         <Form onSubmit={handleSubmit(onSubmit)}>

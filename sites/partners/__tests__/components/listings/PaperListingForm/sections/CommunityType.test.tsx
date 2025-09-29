@@ -88,23 +88,23 @@ describe("CommunityType", () => {
 
     render(
       <FormComponent>
-        <CommunityType />
+        <CommunityType requiredFields={[]} />
       </FormComponent>
     )
 
     // verify that the page has loaded as well as the community types
-    await screen.findByRole("heading", { level: 2, name: "Community Type" })
+    await screen.findByRole("heading", { level: 2, name: "Community type" })
     await screen.findByRole("option", { name: "Seniors" })
 
     expect(
       screen.getByText("Are there any requirements that applicants need to meet?")
     ).toBeInTheDocument()
-    expect(screen.getByRole("combobox", { name: "Reserved Community Type" })).toBeInTheDocument()
-    expect(screen.getByRole("option", { name: "Select One" })).toBeInTheDocument()
+    expect(screen.getByRole("combobox", { name: "Reserved community type" })).toBeInTheDocument()
+    expect(screen.getByRole("option", { name: "Select one" })).toBeInTheDocument()
     expect(screen.getByRole("option", { name: "Seniors" })).toBeInTheDocument()
     expect(screen.getByRole("option", { name: "Veteran" })).toBeInTheDocument()
     expect(
-      screen.getByRole("textbox", { name: "Reserved Community Description" })
+      screen.getByRole("textbox", { name: "Reserved community description" })
     ).toBeInTheDocument()
     expect(screen.getByText("Appears in listing")).toBeInTheDocument()
     expect(
@@ -115,7 +115,7 @@ describe("CommunityType", () => {
     expect(screen.getByRole("radio", { name: "Yes" })).toBeDisabled()
     expect(screen.getByRole("radio", { name: "No" })).toBeDisabled()
     expect(
-      screen.queryAllByRole("textbox", { name: "Reserved Community Disclaimer Title" })
+      screen.queryAllByRole("textbox", { name: "Reserved community disclaimer title" })
     ).toHaveLength(0)
   })
 
@@ -135,17 +135,17 @@ describe("CommunityType", () => {
 
     render(
       <FormComponent>
-        <CommunityType />
+        <CommunityType requiredFields={[]} />
       </FormComponent>
     )
 
     // verify that the page has loaded as well as the community types
-    await screen.findByRole("heading", { level: 2, name: "Community Type" })
+    await screen.findByRole("heading", { level: 2, name: "Community type" })
     await screen.findByRole("option", { name: "Seniors" })
 
     await act(() =>
       userEvent.selectOptions(
-        screen.getByRole("combobox", { name: "Reserved Community Type" }),
+        screen.getByRole("combobox", { name: "Reserved community type" }),
         "Seniors"
       )
     )
@@ -154,10 +154,10 @@ describe("CommunityType", () => {
     await act(() => userEvent.click(screen.getByRole("radio", { name: "Yes" })))
 
     expect(
-      screen.getByRole("textbox", { name: "Reserved Community Disclaimer Title *" })
+      screen.getByRole("textbox", { name: "Reserved community disclaimer title *" })
     ).toBeInTheDocument()
     expect(
-      screen.getByRole("textbox", { name: "Reserved Community Disclaimer *" })
+      screen.getByRole("textbox", { name: "Reserved community disclaimer *" })
     ).toBeInTheDocument()
     expect(screen.getAllByText("Appears as first page of application")).toHaveLength(2)
   })
@@ -176,10 +176,10 @@ describe("CommunityType", () => {
 
     const results = render(
       <FormComponent>
-        <CommunityType />
+        <CommunityType requiredFields={[]} />
       </FormComponent>
     )
 
-    expect(results.queryAllByRole("heading", { level: 2, name: "Community Type" })).toHaveLength(0)
+    expect(results.queryAllByRole("heading", { level: 2, name: "Community type" })).toHaveLength(0)
   })
 })

@@ -2,7 +2,10 @@ import { render, screen, waitFor } from "@testing-library/react"
 import React from "react"
 import userEvent from "@testing-library/user-event"
 import { act } from "react-dom/test-utils"
-import { LanguagesEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  ApplicationSubmissionTypeEnum,
+  LanguagesEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { FormProviderWrapper } from "./helpers"
 import { FormApplicationData } from "../../../../src/components/applications/PaperApplicationForm/sections/FormApplicationData"
 
@@ -10,7 +13,7 @@ describe("<FormApplicationData>", () => {
   it("renders the form with application data fields", () => {
     render(
       <FormProviderWrapper>
-        <FormApplicationData />
+        <FormApplicationData appType={ApplicationSubmissionTypeEnum.paper} />
       </FormProviderWrapper>
     )
     expect(screen.getByRole("heading", { level: 2, name: /application data/i })).toBeInTheDocument()
@@ -31,7 +34,7 @@ describe("<FormApplicationData>", () => {
   it("time fields are disabled when date is not fully entered", async () => {
     render(
       <FormProviderWrapper>
-        <FormApplicationData />
+        <FormApplicationData appType={ApplicationSubmissionTypeEnum.paper} />
       </FormProviderWrapper>
     )
 
@@ -63,7 +66,7 @@ describe("<FormApplicationData>", () => {
   it("language selection works correctly", async () => {
     render(
       <FormProviderWrapper>
-        <FormApplicationData />
+        <FormApplicationData appType={ApplicationSubmissionTypeEnum.paper} />
       </FormProviderWrapper>
     )
 
@@ -73,10 +76,10 @@ describe("<FormApplicationData>", () => {
     expect((languageSelect as HTMLSelectElement).value).toBe(LanguagesEnum.en)
   })
 
-  it("clearing date fields resets time fields", async () => {
+  it("clearing date fields does not resets time fields", async () => {
     render(
       <FormProviderWrapper>
-        <FormApplicationData />
+        <FormApplicationData appType={ApplicationSubmissionTypeEnum.paper} />
       </FormProviderWrapper>
     )
 
@@ -112,8 +115,8 @@ describe("<FormApplicationData>", () => {
     expect(timeHours).toBeDisabled()
     expect(timeMinutes).toBeDisabled()
     expect(timePeriod).toBeDisabled()
-    expect((timeHours as HTMLInputElement).value).toBe("")
-    expect((timeMinutes as HTMLInputElement).value).toBe("")
+    expect((timeHours as HTMLInputElement).value).toBe("12")
+    expect((timeMinutes as HTMLInputElement).value).toBe("30")
     expect((timePeriod as HTMLSelectElement).value).toBe("pm")
   })
 })

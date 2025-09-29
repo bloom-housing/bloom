@@ -142,7 +142,11 @@ const ApplicationTerms = () => {
   }, [profile])
 
   return (
-    <FormsLayout>
+    <FormsLayout
+      pageTitle={`${t("application.review.terms.title")} - ${t("listings.apply.applyOnline")} - ${
+        listing?.name
+      }`}
+    >
       <Dialog
         isOpen={sessionVoided}
         onClose={closeCallback}

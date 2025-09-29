@@ -1,8 +1,8 @@
 .sign-up-benefits-container {
   display: flex;
   flex-direction: column;
-  padding-top: var(--seeds-s6);
-  padding-bottom: var(--seeds-s4);
+  padding-block-start: var(--seeds-s6);
+  padding-block-end: var(--seeds-s4);
   padding-inline: var(--seeds-s4);
   @media (min-width: theme("screens.md")) {
     padding: 0;
@@ -12,7 +12,7 @@
 .sign-up-benefits-item {
   display: flex;
   flex-direction: row;
-  margin-bottom: var(--seeds-s3);
+  margin-block-end: var(--seeds-s3);
   align-items: center;
 
   .icon {
@@ -27,6 +27,6 @@
   }
 
   .text {
-    margin-left: var(--seeds-s3);
+    margin-inline-start: var(--seeds-s3);
   }
 }

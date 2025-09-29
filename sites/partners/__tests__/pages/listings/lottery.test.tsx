@@ -463,7 +463,7 @@ describe("lottery", () => {
     expect(await findByText("Are you sure?")).toBeInTheDocument()
     expect(
       getByText(
-        "Retracting the lottery will revoke Partner users’ access to the lottery data, including their ability to publish results to applicants."
+        "Retracting the lottery will revoke Partner users' access to the lottery data, including their ability to publish results to applicants."
       )
     ).toBeInTheDocument()
   })
@@ -946,7 +946,7 @@ describe("lottery", () => {
     expect(header).toBeInTheDocument()
 
     expect(getByText("Listing closed")).toBeInTheDocument()
-    expect(getByText("by Property")).toBeInTheDocument()
+    expect(getByText("by property")).toBeInTheDocument()
     expect(getByText("September 6th, 2025 at 8:15 am")).toBeInTheDocument()
     expect(getByText("Lottery was run")).toBeInTheDocument()
     expect(getByText("by Admin One")).toBeInTheDocument()

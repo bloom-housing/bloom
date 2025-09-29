@@ -186,13 +186,16 @@ describe('Testing script runner service', () => {
         data: {
           id: expect.anything(),
           applicationSection: 'preferences',
-          jurisdictions: {
+          isExclusive: false,
+          jurisdiction: {
             connect: { id: jurisdictionId },
           },
           links: undefined,
           optOutText: "I don't want to be considered",
           description: 'multiselect question description',
           hideFromListing: false,
+          name: 'multiselect question',
+          status: 'draft',
           subText: 'sub text',
           text: 'multiselect question',
           options: [{ ordinal: 1, text: 'multiselect question option' }],
@@ -1276,6 +1279,7 @@ describe('Testing script runner service', () => {
         singleUseCodeUpdatedAt: pastDate,
         activeAccessToken: null,
         activeRefreshToken: null,
+        wasWarnedOfDeletion: false,
       };
       externalPrismaClient.userAccounts.findMany.mockResolvedValueOnce([
         partnerOne,
@@ -1341,6 +1345,7 @@ describe('Testing script runner service', () => {
               isPartner: true,
             },
           },
+          wasWarnedOfDeletion: false,
         },
       });
     });

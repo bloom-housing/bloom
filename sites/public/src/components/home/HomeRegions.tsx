@@ -18,7 +18,10 @@ export const HomeRegions = () => {
               <div className={styles["region-card-image"]}>
                 <img src={"/images/listing-fallback.png"} alt={region.title} />
               </div>
-              <Link href={"/listings"} className={styles["region-card-name"]}>
+              <Link
+                href={`/listings?regions=${region.enum}`}
+                className={styles["region-card-name"]}
+              >
                 {region.title}
               </Link>
             </ClickableCard>

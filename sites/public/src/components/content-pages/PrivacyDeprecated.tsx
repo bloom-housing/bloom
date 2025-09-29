@@ -20,7 +20,7 @@ const PrivacyDeprecated = () => {
   const pageTitle = <>{t("pageTitle.privacy")}</>
 
   return (
-    <Layout>
+    <Layout pageTitle={t("pageTitle.privacy")}>
       <PageHeader inverse={true} title={pageTitle} />
       <MarkdownSection>
         <Markdown>{pageContent.toString()}</Markdown>

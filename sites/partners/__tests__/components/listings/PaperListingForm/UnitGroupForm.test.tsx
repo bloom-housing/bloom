@@ -75,37 +75,35 @@ describe("<UnitGroupForm>", () => {
     // Unit Types Section
     expect(screen.getByText(/unit type/i)).toBeInTheDocument()
     expect(await screen.findByLabelText(/studio/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/sro/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/one bedroom/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/two bedroom/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/three bedroom/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/four bedroom/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/five bedroom/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/1 bedroom/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/2 bedroom/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/3 bedroom/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/4 bedroom/i)).toBeInTheDocument()
 
     // Details Section
     expect(screen.getByLabelText(/Affordable Unit Group Quantity/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/Minimum Occupancy/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/Max Occupancy/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/Min Square Footage/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/Max Square Footage/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/Minimum Floor/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/Maximum Floor/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/Min Number of Bathrooms/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/Max Number of Bathrooms/)).toBeInTheDocument()
+    expect(screen.getByLabelText(/Minimum occupancy/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/Max occupancy/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/Min square footage/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/Max square footage/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/Minimum floor/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/Maximum floor/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/Min number of bathrooms/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/Max number of bathrooms/)).toBeInTheDocument()
 
     // Availability Section
     expect(screen.getByRole("heading", { level: 2, name: /availability/i })).toBeInTheDocument()
 
-    expect(screen.getByLabelText(/Unit Group Vacancies/i)).toBeInTheDocument()
-    expect(screen.getByText(/waitlist status/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/^open$/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/closed/i)).toBeInTheDocument()
-    expect(screen.getByRole("heading", { level: 2, name: /eligibility/i })).toBeInTheDocument()
+    expect(screen.getByLabelText(/Unit group vacancies/i)).toBeInTheDocument()
+    expect(screen.getByText(/Waitlist status/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/^Open$/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/Closed/i)).toBeInTheDocument()
+    expect(screen.getByRole("heading", { level: 2, name: "Eligibility" })).toBeInTheDocument()
 
     // Eligibility Section
-    expect(screen.getByRole("heading", { level: 2, name: /eligibility/i })).toBeInTheDocument()
+    expect(screen.getByRole("heading", { level: 2, name: "Eligibility" })).toBeInTheDocument()
     expect(screen.queryByRole("table")).not.toBeInTheDocument()
-    expect(screen.getByRole("button", { name: /add ami level/i }))
+    expect(screen.getByRole("button", { name: "Add AMI level" }))
   })
 
   it("should open ami form drawer", async () => {
@@ -447,8 +445,8 @@ describe("<UnitGroupForm>", () => {
     )
 
     // ----------------------------- Occupancy Section -----------------------------
-    const minOccupancyInput = screen.getByLabelText("Minimum Occupancy")
-    const maxOccupancyInput = screen.getByLabelText("Max Occupancy")
+    const minOccupancyInput = screen.getByLabelText("Minimum occupancy")
+    const maxOccupancyInput = screen.getByLabelText("Max occupancy")
 
     expect(minOccupancyInput).toBeInTheDocument()
     expect(maxOccupancyInput).toBeInTheDocument()

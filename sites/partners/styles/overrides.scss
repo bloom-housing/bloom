@@ -215,3 +215,17 @@
   vertical-align: 15%;
   margin-inline-start: var(--seeds-s3);
 }
+
+// Temporary short-term overrides for contrast compliance
+.darker-link {
+  --seeds-color-primary: var(--seeds-color-blue-700);
+  --bloom-color-primary: var(--seeds-color-blue-700);
+}
+
+.darker-alert {
+  --seeds-color-primary: var(--seeds-color-red-700);
+}
+
+.darker-help-text {
+  --field-value-help-text-color: var(--seeds-input-text-label-color);
+}

@@ -1,10 +1,8 @@
 import React, { useEffect, useContext } from "react"
-import Head from "next/head"
 import { Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { ListingList, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
 import { ListingsGroup, PageHeader, t } from "@bloom-housing/ui-components"
 import { getListings } from "../../lib/helpers"
-import { MetaTags } from "../../components/shared/MetaTags"
 import { UserStatus } from "../../lib/constants"
 import Layout from "../../layouts/application"
 
@@ -40,7 +38,6 @@ const closedListings = (listings) => {
 
 export const ListingBrowseDeprecated = (props: ListingBrowseDeprecatedProps) => {
   const { profile } = useContext(AuthContext)
-  const pageTitle = `${t("pageTitle.rent")} - ${t("nav.siteTitle")}`
   const metaDescription = t("pageDescription.welcome", { regionName: t("region.name") })
   const metaImage = "" // TODO: replace with hero image
 
@@ -55,12 +52,7 @@ export const ListingBrowseDeprecated = (props: ListingBrowseDeprecatedProps) => 
   }, [profile, props.openListings])
 
   return (
-    <Layout>
-      <Head>
-        <title>{pageTitle}</title>
-      </Head>
-
-      <MetaTags title={t("nav.siteTitle")} image={metaImage} description={metaDescription} />
+    <Layout pageTitle={t("pageTitle.rent")} metaImage={metaImage} metaDescription={metaDescription}>
       <PageHeader title={t("pageTitle.rent")} />
       <div>
         {openListings(props.openListings)}

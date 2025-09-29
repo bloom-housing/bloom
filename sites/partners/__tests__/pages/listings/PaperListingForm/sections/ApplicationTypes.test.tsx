@@ -19,7 +19,7 @@ describe("ApplicationTypes", () => {
       </FormProviderWrapper>
     )
 
-    expect(screen.getByRole("heading", { name: "Application Types" })).toBeInTheDocument()
+    expect(screen.getByRole("heading", { level: 2, name: "Application types" })).toBeInTheDocument()
     const digitalApplication = screen.getByRole("group", {
       name: "Is there a digital application?",
     })

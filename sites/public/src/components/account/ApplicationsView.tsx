@@ -1,5 +1,4 @@
 import React, { useEffect, useState, Fragment, useContext } from "react"
-import Head from "next/head"
 import { useRouter } from "next/router"
 import { t } from "@bloom-housing/ui-components"
 import { Button, Card, LoadingState, Heading, Tabs } from "@bloom-housing/ui-seeds"
@@ -13,7 +12,6 @@ import {
 import Layout from "../../layouts/application"
 import { ApplicationsFilterEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { StatusItemWrapper, AppWithListing } from "./StatusItemWrapper"
-import { MetaTags } from "../shared/MetaTags"
 import { UserStatus } from "../../lib/constants"
 
 import styles from "./ApplicationsView.module.scss"
@@ -133,11 +131,7 @@ const ApplicationsView = (props: ApplicationsViewProps) => {
 
   return (
     <RequireLogin signInPath="/sign-in" signInMessage={t("t.loginIsRequired")}>
-      <Layout>
-        <Head>
-          <title>{t("account.myApplications")}</title>
-        </Head>
-        <MetaTags title={t("account.myApplications")} description="" />
+      <Layout pageTitle={t("account.myApplications")}>
         <section className={styles["applications-section-background"]}>
           <div className={styles["applications-section-container"]}>
             <Tabs

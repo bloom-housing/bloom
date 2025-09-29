@@ -48,7 +48,7 @@ const ForgotPassword = () => {
   }
 
   return (
-    <FormsLayout>
+    <FormsLayout pageTitle={t("pageTitle.forgotPassword")}>
       <FormForgotPassword
         onSubmit={(data) => void onSubmit(data)}
         control={{ register, errors, handleSubmit }}

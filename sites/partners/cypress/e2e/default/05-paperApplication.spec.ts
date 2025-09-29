@@ -3,7 +3,7 @@ describe("Paper Application Tests", () => {
     cy.loginApi()
     cy.visit("/")
     cy.getByTestId("listing-status-cell-Blue Sky Apartments").click()
-    cy.getByID("addApplicationButton").contains("Add Application").click()
+    cy.getByID("addApplicationButton").contains("Add application").click()
   })
 
   afterEach(() => {

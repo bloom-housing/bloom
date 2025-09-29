@@ -19,7 +19,7 @@ describe("<MainDetails>", () => {
     render(<MainDetails listing={listing} jurisdiction={jurisdiction} />)
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(listing.name)
     expect(screen.getByText(oneLineAddress(listing.listingsBuildingAddress))).toBeDefined()
-    expect(screen.getByText("View on Map")).toBeDefined()
+    expect(screen.getByText("View on map")).toBeDefined()
     expect(screen.getByText(listing.developer)).toBeDefined()
     expect(screen.getByAltText("A picture of the building")).toBeDefined()
   })

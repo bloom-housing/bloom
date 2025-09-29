@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useContext } from "react"
-import Head from "next/head"
 import { useRouter } from "next/router"
 import {
   FeatureFlagEnum,
@@ -15,7 +14,6 @@ import {
 } from "@bloom-housing/shared-helpers"
 import { Button, Card, Grid } from "@bloom-housing/ui-seeds"
 import Layout from "../../layouts/application"
-import { MetaTags } from "../../components/shared/MetaTags"
 import { UserStatus } from "../../lib/constants"
 import MaxWidthLayout from "../../layouts/max-width"
 import { isFeatureFlagOn, setFeatureFlagLocalStorage } from "../../lib/helpers"
@@ -64,11 +62,7 @@ function Dashboard(props: DashboardProps) {
 
   return (
     <RequireLogin signInPath="/sign-in" signInMessage={t("t.loginIsRequired")}>
-      <Layout>
-        <Head>
-          <title>{t("nav.myDashboard")}</title>
-        </Head>
-        <MetaTags title={t("nav.myDashboard")} description="" />
+      <Layout pageTitle={t("nav.myDashboard")}>
         {alertMessage && (
           <AlertBox className="" onClose={() => closeAlert()} type="success">
             {t(alertMessage)}

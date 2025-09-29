@@ -1,8 +1,8 @@
 .footer-container {
   color: var(--seeds-color-white);
   width: 100%;
-  background-color: var(--seeds-color-gray-800);
-  text-align: inline-start;
+  background-color: var(--seeds-bg-color-inverse);
+  text-align: start;
   display: flex;
   flex-direction: column;
 
@@ -21,7 +21,7 @@
 
 .footer {
   padding-inline: 0;
-  text-align: inline-start;
+  text-align: start;
   display: flex;
   justify-content: space-between;
   flex-direction: row;

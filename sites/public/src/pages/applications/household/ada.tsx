@@ -11,6 +11,7 @@ import {
 } from "@bloom-housing/shared-helpers"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import FormsLayout from "../../../layouts/forms"
+import { isFeatureFlagOn } from "../../../lib/helpers"
 import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
 import ApplicationFormLayout from "../../../layouts/application-form"
@@ -20,10 +21,9 @@ import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend
 const ApplicationAda = () => {
   const { profile } = useContext(AuthContext)
   const { conductor, application, listing } = useFormConductor("adaHouseholdMembers")
-  //todo figure out logic to only check for false/save as false if enabled
-  // does that matter?
-  const enableAdaOtherOption = conductor.config.featureFlags?.some(
-    (flag) => flag.name === FeatureFlagEnum.enableAdaOtherOption && flag.active
+  const enableAdaOtherOption = isFeatureFlagOn(
+    conductor.config,
+    FeatureFlagEnum.enableAdaOtherOption
   )
   const currentPageSection = 2
 
@@ -119,7 +119,11 @@ const ApplicationAda = () => {
   })
 
   return (
-    <FormsLayout>
+    <FormsLayout
+      pageTitle={`${t("pageTitle.adaFeatures")} - ${t("listings.apply.applyOnline")} - ${
+        listing?.name
+      }`}
+    >
       <Form onSubmit={handleSubmit(onSubmit, onError)}>
         <ApplicationFormLayout
           listingName={listing?.name}

@@ -2,6 +2,7 @@
 import React from "react"
 import { screen } from "@testing-library/dom"
 import {
+  FeatureFlagEnum,
   HomeTypeEnum,
   ListingFilterKeys,
   MultiselectQuestion,
@@ -20,7 +21,7 @@ describe("FilterDrawer", () => {
       id: "idOne",
       createdAt: new Date(),
       updatedAt: new Date(),
-      text: "Community Type One",
+      text: "Families",
       jurisdictions: [{ id: "jurisId" }],
       applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
     },
@@ -28,7 +29,7 @@ describe("FilterDrawer", () => {
       id: "idTwo",
       createdAt: new Date(),
       updatedAt: new Date(),
-      text: "Community Type Two",
+      text: "Residents with Disabilities",
       jurisdictions: [{ id: "jurisId" }],
       applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
     },
@@ -36,7 +37,7 @@ describe("FilterDrawer", () => {
       id: "idThree",
       createdAt: new Date(),
       updatedAt: new Date(),
-      text: "Community Type Three",
+      text: "Seniors 55+",
       jurisdictions: [{ id: "jurisId" }],
       applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
     },
@@ -44,7 +45,7 @@ describe("FilterDrawer", () => {
       id: "idFour",
       createdAt: new Date(),
       updatedAt: new Date(),
-      text: "Community Type Four",
+      text: "Veterans",
       jurisdictions: [{ id: "jurisId" }],
       applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
     },
@@ -110,9 +111,9 @@ describe("FilterDrawer", () => {
     expect(screen.getByRole("textbox", { name: "Min rent" })).toHaveValue("")
     expect(screen.getByLabelText("Max rent")).toBeInTheDocument()
     expect(screen.getByRole("textbox", { name: "Max rent" })).toHaveValue("")
-    expect(screen.getByLabelText("Accepts Section 8 Housing Choice vouchers")).toBeInTheDocument()
+    expect(screen.getByLabelText("Accepts Section 8 Housing Choice Vouchers")).toBeInTheDocument()
     expect(
-      screen.getByRole("checkbox", { name: "Accepts Section 8 Housing Choice vouchers" })
+      screen.getByRole("checkbox", { name: "Accepts Section 8 Housing Choice Vouchers" })
     ).not.toBeChecked()
 
     expect(screen.getByRole("group", { name: "Region" })).toBeInTheDocument()
@@ -125,20 +126,20 @@ describe("FilterDrawer", () => {
     expect(screen.getByLabelText("Westside")).toBeInTheDocument()
     expect(screen.getByRole("checkbox", { name: "Westside" })).not.toBeChecked()
 
-    expect(screen.getByRole("checkbox", { name: "Wheelchair Ramp" })).not.toBeChecked()
-    expect(screen.getByLabelText("Wheelchair Ramp")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Wheelchair ramp" })).not.toBeChecked()
+    expect(screen.getByLabelText("Wheelchair ramp")).toBeInTheDocument()
     expect(screen.getByRole("checkbox", { name: "Elevator" })).not.toBeChecked()
     expect(screen.getByLabelText("Elevator")).toBeInTheDocument()
-    expect(screen.getByRole("checkbox", { name: "Service Animals Allowed" })).not.toBeChecked()
-    expect(screen.getByLabelText("Service Animals Allowed")).toBeInTheDocument()
-    expect(screen.getByRole("checkbox", { name: "Accessible Parking Spots" })).not.toBeChecked()
-    expect(screen.getByLabelText("Accessible Parking Spots")).toBeInTheDocument()
-    expect(screen.getByRole("checkbox", { name: "Parking On Site" })).not.toBeChecked()
-    expect(screen.getByLabelText("Parking On Site")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Service animals allowed" })).not.toBeChecked()
+    expect(screen.getByLabelText("Service animals allowed")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Accessible parking spots" })).not.toBeChecked()
+    expect(screen.getByLabelText("Accessible parking spots")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Parking on site" })).not.toBeChecked()
+    expect(screen.getByLabelText("Parking on site")).toBeInTheDocument()
     expect(screen.getByRole("checkbox", { name: "In-unit washer/dryer" })).not.toBeChecked()
     expect(screen.getByLabelText("In-unit washer/dryer")).toBeInTheDocument()
-    expect(screen.getByRole("checkbox", { name: "Laundry in Building" })).not.toBeChecked()
-    expect(screen.getByLabelText("Laundry in Building")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Laundry in building" })).not.toBeChecked()
+    expect(screen.getByLabelText("Laundry in building")).toBeInTheDocument()
     expect(
       screen.getByRole("checkbox", { name: "Barrier-free (no-step) property entrance" })
     ).not.toBeChecked()
@@ -147,10 +148,10 @@ describe("FilterDrawer", () => {
     expect(screen.getByLabelText("Roll-in showers")).toBeInTheDocument()
     expect(screen.getByRole("checkbox", { name: "Grab bars in bathrooms" })).not.toBeChecked()
     expect(screen.getByLabelText("Grab bars in bathrooms")).toBeInTheDocument()
-    expect(screen.getByRole("checkbox", { name: "Heating in Unit" })).not.toBeChecked()
-    expect(screen.getByLabelText("Heating in Unit")).toBeInTheDocument()
-    expect(screen.getByRole("checkbox", { name: "AC in Unit" })).not.toBeChecked()
-    expect(screen.getByLabelText("AC in Unit")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Heating in unit" })).not.toBeChecked()
+    expect(screen.getByLabelText("Heating in unit")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "AC in unit" })).not.toBeChecked()
+    expect(screen.getByLabelText("AC in unit")).toBeInTheDocument()
     expect(
       screen.getByRole("checkbox", { name: "Units for those with hearing disabilities" })
     ).not.toBeChecked()
@@ -185,17 +186,17 @@ describe("FilterDrawer", () => {
     expect(screen.getByText("Enter full or partial listing name")).toBeInTheDocument()
 
     expect(screen.getByRole("group", { name: "Community" })).toBeInTheDocument()
-    expect(screen.getByLabelText("Community Type One")).toBeInTheDocument()
-    expect(screen.getByRole("checkbox", { name: "Community Type One" })).not.toBeChecked()
-    expect(screen.getByLabelText("Community Type Two")).toBeInTheDocument()
-    expect(screen.getByRole("checkbox", { name: "Community Type Two" })).not.toBeChecked()
-    expect(screen.getByLabelText("Community Type Three")).toBeInTheDocument()
-    expect(screen.getByRole("checkbox", { name: "Community Type Three" })).not.toBeChecked()
-    expect(screen.getByLabelText("Community Type Four")).toBeInTheDocument()
-    expect(screen.getByRole("checkbox", { name: "Community Type Four" })).not.toBeChecked()
+    expect(screen.getByLabelText("Families")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Families" })).not.toBeChecked()
+    expect(screen.getByLabelText("Residents with disabilities")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Residents with disabilities" })).not.toBeChecked()
+    expect(screen.getByLabelText("Seniors 55+")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Seniors 55+" })).not.toBeChecked()
+    expect(screen.getByLabelText("Veterans")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Veterans" })).not.toBeChecked()
 
     expect(screen.getByRole("button", { name: "Show matching listings" })).toBeInTheDocument()
-    expect(screen.getByRole("button", { name: "Cancel" })).toBeInTheDocument()
+    expect(screen.getByRole("button", { name: "Clear" })).toBeInTheDocument()
   })
 
   it("should return all filter fields correctly with previous selections", () => {
@@ -269,9 +270,9 @@ describe("FilterDrawer", () => {
     expect(screen.getByRole("textbox", { name: "Min rent" })).toHaveValue("500.00")
     expect(screen.getByLabelText("Max rent")).toBeInTheDocument()
     expect(screen.getByRole("textbox", { name: "Max rent" })).toHaveValue("900.00")
-    expect(screen.getByLabelText("Accepts Section 8 Housing Choice vouchers")).toBeInTheDocument()
+    expect(screen.getByLabelText("Accepts Section 8 Housing Choice Vouchers")).toBeInTheDocument()
     expect(
-      screen.getByRole("checkbox", { name: "Accepts Section 8 Housing Choice vouchers" })
+      screen.getByRole("checkbox", { name: "Accepts Section 8 Housing Choice Vouchers" })
     ).toBeChecked()
 
     expect(screen.getByRole("group", { name: "Region" })).toBeInTheDocument()
@@ -284,20 +285,20 @@ describe("FilterDrawer", () => {
     expect(screen.getByLabelText("Westside")).toBeInTheDocument()
     expect(screen.getByRole("checkbox", { name: "Westside" })).not.toBeChecked()
 
-    expect(screen.getByRole("checkbox", { name: "Wheelchair Ramp" })).not.toBeChecked()
-    expect(screen.getByLabelText("Wheelchair Ramp")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Wheelchair ramp" })).not.toBeChecked()
+    expect(screen.getByLabelText("Wheelchair ramp")).toBeInTheDocument()
     expect(screen.getByRole("checkbox", { name: "Elevator" })).not.toBeChecked()
     expect(screen.getByLabelText("Elevator")).toBeInTheDocument()
-    expect(screen.getByRole("checkbox", { name: "Service Animals Allowed" })).not.toBeChecked()
-    expect(screen.getByLabelText("Service Animals Allowed")).toBeInTheDocument()
-    expect(screen.getByRole("checkbox", { name: "Accessible Parking Spots" })).not.toBeChecked()
-    expect(screen.getByLabelText("Accessible Parking Spots")).toBeInTheDocument()
-    expect(screen.getByRole("checkbox", { name: "Parking On Site" })).not.toBeChecked()
-    expect(screen.getByLabelText("Parking On Site")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Service animals allowed" })).not.toBeChecked()
+    expect(screen.getByLabelText("Service animals allowed")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Accessible parking spots" })).not.toBeChecked()
+    expect(screen.getByLabelText("Accessible parking spots")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Parking on site" })).not.toBeChecked()
+    expect(screen.getByLabelText("Parking on site")).toBeInTheDocument()
     expect(screen.getByRole("checkbox", { name: "In-unit washer/dryer" })).not.toBeChecked()
     expect(screen.getByLabelText("In-unit washer/dryer")).toBeInTheDocument()
-    expect(screen.getByRole("checkbox", { name: "Laundry in Building" })).not.toBeChecked()
-    expect(screen.getByLabelText("Laundry in Building")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Laundry in building" })).not.toBeChecked()
+    expect(screen.getByLabelText("Laundry in building")).toBeInTheDocument()
     expect(
       screen.getByRole("checkbox", { name: "Barrier-free (no-step) property entrance" })
     ).not.toBeChecked()
@@ -306,10 +307,10 @@ describe("FilterDrawer", () => {
     expect(screen.getByLabelText("Roll-in showers")).toBeInTheDocument()
     expect(screen.getByRole("checkbox", { name: "Grab bars in bathrooms" })).not.toBeChecked()
     expect(screen.getByLabelText("Grab bars in bathrooms")).toBeInTheDocument()
-    expect(screen.getByRole("checkbox", { name: "Heating in Unit" })).not.toBeChecked()
-    expect(screen.getByLabelText("Heating in Unit")).toBeInTheDocument()
-    expect(screen.getByRole("checkbox", { name: "AC in Unit" })).not.toBeChecked()
-    expect(screen.getByLabelText("AC in Unit")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Heating in unit" })).not.toBeChecked()
+    expect(screen.getByLabelText("Heating in unit")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "AC in unit" })).not.toBeChecked()
+    expect(screen.getByLabelText("AC in unit")).toBeInTheDocument()
     expect(
       screen.getByRole("checkbox", { name: "Units for those with hearing disabilities" })
     ).not.toBeChecked()
@@ -344,16 +345,43 @@ describe("FilterDrawer", () => {
     expect(screen.getByText("Enter full or partial listing name")).toBeInTheDocument()
 
     expect(screen.getByRole("group", { name: "Community" })).toBeInTheDocument()
-    expect(screen.getByLabelText("Community Type One")).toBeInTheDocument()
-    expect(screen.getByRole("checkbox", { name: "Community Type One" })).not.toBeChecked()
-    expect(screen.getByLabelText("Community Type Two")).toBeInTheDocument()
-    expect(screen.getByRole("checkbox", { name: "Community Type Two" })).not.toBeChecked()
-    expect(screen.getByLabelText("Community Type Three")).toBeInTheDocument()
-    expect(screen.getByRole("checkbox", { name: "Community Type Three" })).not.toBeChecked()
-    expect(screen.getByLabelText("Community Type Four")).toBeInTheDocument()
-    expect(screen.getByRole("checkbox", { name: "Community Type Four" })).not.toBeChecked()
+    expect(screen.getByLabelText("Families")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Families" })).not.toBeChecked()
+    expect(screen.getByLabelText("Residents with disabilities")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Residents with disabilities" })).not.toBeChecked()
+    expect(screen.getByLabelText("Seniors 55+")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Seniors 55+" })).not.toBeChecked()
+    expect(screen.getByLabelText("Veterans")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Veterans" })).not.toBeChecked()
 
     expect(screen.getByRole("button", { name: "Show matching listings" })).toBeInTheDocument()
-    expect(screen.getByRole("button", { name: "Cancel" })).toBeInTheDocument()
+    expect(screen.getByRole("button", { name: "Clear" })).toBeInTheDocument()
+  })
+
+  it("should return correct unit types fields with unit groups", () => {
+    render(
+      <FilterDrawer
+        isOpen={true}
+        onClose={() => {}}
+        onSubmit={() => {}}
+        filterState={{}}
+        multiselectData={mockMultiselect}
+        activeFeatureFlags={[FeatureFlagEnum.enableUnitGroups]}
+      />
+    )
+
+    expect(screen.getByRole("group", { name: "Bedroom size" })).toBeInTheDocument()
+    expect(screen.getByLabelText("Studio")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Studio" })).not.toBeChecked()
+    expect(screen.getByLabelText("1 bedroom")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "1 bedroom" })).not.toBeChecked()
+    expect(screen.getByLabelText("2 bedroom")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "2 bedroom" })).not.toBeChecked()
+    expect(screen.getByLabelText("3 bedroom")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "3 bedroom" })).not.toBeChecked()
+    expect(screen.getByLabelText("4 bedroom")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "4 bedroom" })).not.toBeChecked()
+    expect(screen.queryByLabelText("SRO")).not.toBeInTheDocument()
+    expect(screen.queryByLabelText("5 bedroom")).not.toBeInTheDocument()
   })
 })

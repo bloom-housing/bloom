@@ -9,7 +9,6 @@ import {
   pushGtmEvent,
   AuthContext,
   useToastyRef,
-  CustomIconMap,
 } from "@bloom-housing/shared-helpers"
 import {
   LanguagesEnum,
@@ -17,16 +16,16 @@ import {
   ListingsService,
   JurisdictionsService,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { Heading, Icon, Button, Message } from "@bloom-housing/ui-seeds"
+import { Heading, Button } from "@bloom-housing/ui-seeds"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
+import ApplicationFormLayout from "../../../layouts/application-form"
 import FormsLayout from "../../../layouts/forms"
 import {
   AppSubmissionContext,
   retrieveApplicationConfig,
 } from "../../../lib/applications/AppSubmissionContext"
 import { UserStatus } from "../../../lib/constants"
-import ApplicationFormLayout from "../../../layouts/application-form"
-import { getListingApplicationStatus } from "../../../lib/helpers"
+import { getListingStatusMessage } from "../../../lib/helpers"
 import styles from "../../../layouts/application-form.module.scss"
 
 const loadListing = async (
@@ -50,7 +49,11 @@ const loadListing = async (
     jurisdictionId: listingResponse.jurisdictions.id,
   })
   conductor.listing = listingResponse
-  const applicationConfig = retrieveApplicationConfig(conductor.listing, isPreview) // TODO: load from backend
+  const applicationConfig = retrieveApplicationConfig(
+    conductor.listing,
+    jurisdictionResponse.featureFlags,
+    isPreview
+  ) // TODO: load from backend
   conductor.config = {
     ...applicationConfig,
     languages: jurisdictionResponse.languages,
@@ -159,10 +162,8 @@ const ApplicationChooseLanguage = () => {
     [conductor, context, listingId, router, listingsService, jurisdictionsService, isPreview]
   )
 
-  const statusContent = getListingApplicationStatus(listing)
-
   return (
-    <FormsLayout>
+    <FormsLayout pageTitle={`${t("listings.apply.applyOnline")} - ${listing?.name}`}>
       <ApplicationFormLayout
         listingName={listing?.name}
         heading={t("application.chooseLanguage.letsGetStarted")}
@@ -177,17 +178,14 @@ const ApplicationChooseLanguage = () => {
         {listing && (
           <CardSection className={"p-0"}>
             <ImageCard imageUrl={imageUrl} description={listing.name} />
-            <Message
-              className={styles["message-inside-card"]}
-              customIcon={
-                <Icon size="md" outlined>
-                  {CustomIconMap.clock}
-                </Icon>
-              }
-              fullwidth
-            >
-              {statusContent?.content}
-            </Message>
+            {getListingStatusMessage(
+              listing,
+              conductor.config,
+              null,
+              false,
+              false,
+              styles["message-inside-card"]
+            )}
           </CardSection>
         )}
 

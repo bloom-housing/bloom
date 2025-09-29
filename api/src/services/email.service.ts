@@ -12,21 +12,22 @@ import utc from 'dayjs/plugin/utc';
 import tz from 'dayjs/plugin/timezone';
 import advanced from 'dayjs/plugin/advancedFormat';
 import * as aws from '@aws-sdk/client-sesv2';
-import { TranslationService } from './translation.service';
-import { JurisdictionService } from './jurisdiction.service';
-import { Jurisdiction } from '../dtos/jurisdictions/jurisdiction.dto';
 import {
   LanguagesEnum,
   ListingEventsTypeEnum,
   ReviewOrderTypeEnum,
 } from '@prisma/client';
-import { IdDTO } from '../dtos/shared/id.dto';
-import { Listing } from '../dtos/listings/listing.dto';
+import { JurisdictionService } from './jurisdiction.service';
+import { TranslationService } from './translation.service';
 import { ApplicationCreate } from '../dtos/applications/application-create.dto';
+import { Jurisdiction } from '../dtos/jurisdictions/jurisdiction.dto';
+import { Listing } from '../dtos/listings/listing.dto';
+import { IdDTO } from '../dtos/shared/id.dto';
 import { User } from '../dtos/users/user.dto';
 import Unit from '../dtos/units/unit.dto';
+import { FeatureFlagEnum } from '../enums/feature-flags/feature-flags-enum';
+import { doJurisdictionHaveFeatureFlagSet } from '../utilities/feature-flag-utilities';
 import { getPublicEmailURL } from '../utilities/get-public-email-url';
-
 dayjs.extend(utc);
 dayjs.extend(tz);
 dayjs.extend(advanced);
@@ -71,6 +72,11 @@ export class EmailService {
         return polyglot.t(phrase, options);
       },
     );
+    Handlebars.registerHelper('or', function (...args) {
+      // Remove the last argument (Handlebars options object)
+      args.pop();
+      return args.some((arg) => arg);
+    });
     const parts = this.partials();
     Handlebars.registerPartial(parts);
   }
@@ -443,30 +449,65 @@ export class EmailService {
   ) {
     const jurisdiction = await this.getJurisdiction([listing.jurisdictions]);
     void (await this.loadTranslations(jurisdiction, application.language));
+    const enableUnitGroups = doJurisdictionHaveFeatureFlagSet(
+      jurisdiction,
+      FeatureFlagEnum.enableUnitGroups,
+    );
     const listingUrl = `${appUrl}/listing/${listing.id}`;
     const compiledTemplate = this.template('confirmation');
 
-    let eligibleText: string;
-    let preferenceText: string;
-    let contactText = null;
+    let eligibleText: string = null;
+    let preferenceText: string = null;
+    let contactText: string = null;
     let duplicateText = null;
-    if (listing.reviewOrderType === ReviewOrderTypeEnum.firstComeFirstServe) {
-      eligibleText = this.polyglot.t('confirmation.eligible.fcfs');
-      preferenceText = this.polyglot.t('confirmation.eligible.fcfsPreference');
-    }
-    if (listing.reviewOrderType === ReviewOrderTypeEnum.lottery) {
-      eligibleText = this.polyglot.t('confirmation.eligible.lottery');
-      preferenceText = this.polyglot.t(
-        'confirmation.eligible.lotteryPreference',
-      );
-      duplicateText = this.polyglot.t('lotteryAvailable.duplicatesDetails');
-    }
-    if (listing.reviewOrderType === ReviewOrderTypeEnum.waitlist) {
-      eligibleText = this.polyglot.t('confirmation.eligible.waitlist');
-      contactText = this.polyglot.t('confirmation.eligible.waitlistContact');
-      preferenceText = this.polyglot.t(
-        'confirmation.eligible.waitlistPreference',
-      );
+    if (enableUnitGroups) {
+      const hasUnitGroups = listing.unitGroups?.length > 0;
+      const unitsAvailable =
+        listing.unitGroups?.length > 0
+          ? listing.unitGroups.reduce(
+              (acc, curr) => acc + curr.totalAvailable,
+              0,
+            )
+          : listing.unitsAvailable;
+
+      if (listing.reviewOrderType === ReviewOrderTypeEnum.lottery) {
+        eligibleText = this.polyglot.t('confirmation.eligible.lottery');
+        preferenceText = this.polyglot.t(
+          'confirmation.eligible.lotteryPreference',
+        );
+      } else if (unitsAvailable) {
+        eligibleText = this.polyglot.t('confirmation.eligible.fcfs');
+        preferenceText = this.polyglot.t(
+          'confirmation.eligible.fcfsPreference',
+        );
+      } else if (hasUnitGroups) {
+        eligibleText = this.polyglot.t('confirmation.eligible.waitlist');
+        contactText = this.polyglot.t('confirmation.eligible.waitlistContact');
+        preferenceText = this.polyglot.t(
+          'confirmation.eligible.waitlistPreference',
+        );
+      }
+    } else {
+      if (listing.reviewOrderType === ReviewOrderTypeEnum.firstComeFirstServe) {
+        eligibleText = this.polyglot.t('confirmation.eligible.fcfs');
+        preferenceText = this.polyglot.t(
+          'confirmation.eligible.fcfsPreference',
+        );
+      }
+      if (listing.reviewOrderType === ReviewOrderTypeEnum.lottery) {
+        eligibleText = this.polyglot.t('confirmation.eligible.lottery');
+        preferenceText = this.polyglot.t(
+          'confirmation.eligible.lotteryPreference',
+        );
+        duplicateText = this.polyglot.t('lotteryAvailable.duplicatesDetails');
+      }
+      if (listing.reviewOrderType === ReviewOrderTypeEnum.waitlist) {
+        eligibleText = this.polyglot.t('confirmation.eligible.waitlist');
+        contactText = this.polyglot.t('confirmation.eligible.waitlistContact');
+        preferenceText = this.polyglot.t(
+          'confirmation.eligible.waitlistPreference',
+        );
+      }
     }
 
     const user = {

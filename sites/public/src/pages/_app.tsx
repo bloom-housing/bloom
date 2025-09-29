@@ -14,7 +14,7 @@ import {
   AuthProvider,
   MessageProvider,
 } from "@bloom-housing/shared-helpers"
-import { pageChangeHandler, gaLoadScript, gaCaptureScript } from "../lib/customScripts"
+import { pageChangeHandler, gaLoadScript, gaCaptureScript, uaScript } from "../lib/customScripts"
 import { AppSubmissionContext } from "../lib/applications/AppSubmissionContext"
 import ApplicationConductor, {
   loadApplicationFromAutosave,
@@ -68,6 +68,12 @@ function BloomApp({ Component, router, pageProps }: AppProps) {
       if (gaLoadNode && gaCaptureNode) {
         document.head.append(gaLoadNode)
         document.head.append(gaCaptureNode)
+      }
+      // UA Tracking
+      const uaScriptTag = document.createElement("script")
+      uaScriptTag.textContent = uaScript()
+      if (uaScriptTag.textContent !== "") {
+        document.head.append(uaScriptTag)
       }
 
       document.body.dataset.customScriptsLoaded = "true"

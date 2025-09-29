@@ -10,10 +10,12 @@ export enum FeatureFlagEnum {
   enableAdaOtherOption = 'enableAdaOtherOption',
   enableAdditionalResources = 'enableAdditionalResources',
   enableCompanyWebsite = 'enableCompanyWebsite',
+  enableFullTimeStudentQuestion = 'enableFullTimeStudentQuestion',
   enableGeocodingPreferences = 'enableGeocodingPreferences',
   enableGeocodingRadiusMethod = 'enableGeocodingRadiusMethod',
   enableHomeType = 'enableHomeType',
   enableIsVerified = 'enableIsVerified',
+  enableLimitedHowDidYouHear = 'enableLimitedHowDidYouHear',
   enableListingFavoriting = 'enableListingFavoriting',
   enableListingFiltering = 'enableListingFiltering',
   enableListingOpportunity = 'enableListingOpportunity',
@@ -29,11 +31,11 @@ export enum FeatureFlagEnum {
   enableUnderConstructionHome = 'enableUnderConstructionHome',
   enableUnitGroups = 'enableUnitGroups',
   enableUtilitiesIncluded = 'enableUtilitiesIncluded',
+  enableWaitlistAdditionalFields = 'enableWaitlistAdditionalFields',
+  enableV2MSQ = 'enableV2MSQ',
   example = 'example', // sample feature flag for testing purposes
   hideCloseListingButton = 'hideCloseListingButton',
   swapCommunityTypeWithPrograms = 'swapCommunityTypeWithPrograms',
-  enableWaitlistAdditionalFields = 'enableWaitlistAdditionalFields',
-  enableFullTimeStudentQuestion = 'enableFullTimeStudentQuestion',
 }
 
 // List of all of existing flags and their descriptions.
@@ -102,6 +104,11 @@ export const featureFlagMap: { name: string; description: string }[] = [
     name: FeatureFlagEnum.enableIsVerified,
     description:
       'When true, the listing can ba have its contents manually verified by a user',
+  },
+  {
+    name: FeatureFlagEnum.enableLimitedHowDidYouHear,
+    description:
+      'When true, the Radio Ad and Bus Ad options are removed from the how did you hear section.',
   },
   {
     name: FeatureFlagEnum.enableListingFavoriting,
@@ -190,6 +197,15 @@ export const featureFlagMap: { name: string; description: string }[] = [
       "When true, the 'utilities included' section is displayed in listing creation/edit and the public listing view",
   },
   {
+    name: FeatureFlagEnum.enableWaitlistAdditionalFields,
+    description:
+      'When true, the waitlist additional fields are displayed in the waitlist section of the listing form',
+  },
+  {
+    name: FeatureFlagEnum.enableV2MSQ,
+    description: 'When true, the new mutliselect question logic will be used.',
+  },
+  {
     name: FeatureFlagEnum.hideCloseListingButton,
     description: 'When true, close button is hidden on the listing edit form',
   },
@@ -197,10 +213,5 @@ export const featureFlagMap: { name: string; description: string }[] = [
     name: FeatureFlagEnum.swapCommunityTypeWithPrograms,
     description:
       'When true, the programs section on the frontend is displayed as community types.',
-  },
-  {
-    name: FeatureFlagEnum.enableWaitlistAdditionalFields,
-    description:
-      'When true, the waitlist additional fields are displayed in the waitlist section of the listing form',
   },
 ];

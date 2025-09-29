@@ -26,7 +26,7 @@ describe("applications pages", () => {
     it("should render form fields", () => {
       const { getByText, getByTestId, getAllByTestId } = render(<ApplicationMember />)
 
-      expect(getByText("Tell us about this person.")).toBeInTheDocument()
+      expect(getByText("Tell us about this person")).toBeInTheDocument()
       expect(getByTestId("app-household-member-first-name")).toBeInTheDocument()
       expect(getByTestId("app-household-member-first-name")).toBeInTheDocument()
       expect(getByTestId("app-household-member-first-name")).toBeInTheDocument()
@@ -44,10 +44,10 @@ describe("applications pages", () => {
       expect(
         await findByText("There are errors you'll need to resolve before moving on.")
       ).toBeInTheDocument()
-      expect(getByText("Please enter a Given Name")).toBeInTheDocument()
-      expect(getByText("Please enter a Family Name")).toBeInTheDocument()
-      expect(getByText("Please enter a valid Date of Birth")).toBeInTheDocument()
-      expect(getAllByText("Please select one of the options above.")).toHaveLength(2)
+      expect(getByText("Please enter a given name")).toBeInTheDocument()
+      expect(getByText("Please enter a family name")).toBeInTheDocument()
+      expect(getByText("Please enter a valid date of birth")).toBeInTheDocument()
+      expect(getAllByText("Please select one of the options above.")).toHaveLength(3)
     })
 
     it("should show more address fields if same address is not selected", () => {

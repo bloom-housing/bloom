@@ -1,5 +1,4 @@
 import React, { useContext, useEffect } from "react"
-import Head from "next/head"
 import {
   FeatureFlagEnum,
   Jurisdiction,
@@ -11,7 +10,6 @@ import { PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpe
 import { UserStatus } from "../../lib/constants"
 import Layout from "../../layouts/application"
 import { ConfirmationModal } from "../../components/account/ConfirmationModal"
-import { MetaTags } from "../../components/shared/MetaTags"
 import { isFeatureFlagOn } from "../../lib/helpers"
 import { Hero } from "../../patterns/Hero"
 import { HomeSection } from "./HomeSection"
@@ -48,11 +46,7 @@ export const Home = (props: HomeProps) => {
   )
 
   return (
-    <Layout>
-      <Head>
-        <title>{t("nav.siteTitle")}</title>
-      </Head>
-      <MetaTags title={t("nav.siteTitle")} description={metaDescription} />
+    <Layout metaDescription={metaDescription}>
       <div className={styles["home-page"]}>
         <Hero
           title={heroTitle}

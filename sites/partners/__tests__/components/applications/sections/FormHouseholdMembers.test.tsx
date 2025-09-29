@@ -20,7 +20,6 @@ const mockHouseholdMember = {
   birthYear: "1998",
   birthMonth: "3",
   birthDay: "28",
-  workInRegion: YesNoEnum.yes,
   sameAddress: YesNoEnum.no,
   fullTimeStudent: null,
   householdMemberAddress: {
@@ -38,13 +37,17 @@ describe("<FormHouseholdMembers>", () => {
   it("should render the add household member button and drawer", async () => {
     render(
       <FormProviderWrapper>
-        {/* eslint-disable-next-line @typescript-eslint/no-empty-function */}
-        <FormHouseholdMembers householdMembers={[]} setHouseholdMembers={() => {}} />
+        <FormHouseholdMembers
+          householdMembers={[]}
+          /* eslint-disable-next-line @typescript-eslint/no-empty-function */
+          setHouseholdMembers={() => {}}
+          disableWorkInRegion={true}
+        />
       </FormProviderWrapper>
     )
 
     expect(
-      screen.getByRole("heading", { level: 2, name: /household members/i })
+      screen.getByRole("heading", { level: 2, name: /Household members/i })
     ).toBeInTheDocument()
 
     const addMemberButton = screen.getByRole("button", { name: /add household member/i })
@@ -85,8 +88,12 @@ describe("<FormHouseholdMembers>", () => {
   it("show residance address fields when same address as primary is set to no", async () => {
     render(
       <FormProviderWrapper>
-        {/* eslint-disable-next-line @typescript-eslint/no-empty-function */}
-        <FormHouseholdMembers householdMembers={[]} setHouseholdMembers={() => {}} />
+        <FormHouseholdMembers
+          householdMembers={[]}
+          /* eslint-disable-next-line @typescript-eslint/no-empty-function */
+          setHouseholdMembers={() => {}}
+          disableWorkInRegion={true}
+        />
       </FormProviderWrapper>
     )
 
@@ -150,8 +157,12 @@ describe("<FormHouseholdMembers>", () => {
   it("should show both address section if required", async () => {
     render(
       <FormProviderWrapper>
-        {/* eslint-disable-next-line @typescript-eslint/no-empty-function */}
-        <FormHouseholdMembers householdMembers={[]} setHouseholdMembers={() => {}} />
+        <FormHouseholdMembers
+          householdMembers={[]}
+          /* eslint-disable-next-line @typescript-eslint/no-empty-function */
+          setHouseholdMembers={() => {}}
+          disableWorkInRegion={true}
+        />
       </FormProviderWrapper>
     )
 
@@ -197,6 +208,7 @@ describe("<FormHouseholdMembers>", () => {
           householdMembers={[mockHouseholdMember]}
           // eslint-disable-next-line @typescript-eslint/no-empty-function
           setHouseholdMembers={() => {}}
+          disableWorkInRegion={true}
         />
       </FormProviderWrapper>
     )
@@ -240,6 +252,7 @@ describe("<FormHouseholdMembers>", () => {
         <FormHouseholdMembers
           householdMembers={[mockHouseholdMember]}
           setHouseholdMembers={mockSetHouseholdMember}
+          disableWorkInRegion={true}
         />
       </FormProviderWrapper>
     )
@@ -285,6 +298,7 @@ describe("<FormHouseholdMembers>", () => {
             },
           ]}
           setHouseholdMembers={mockSetHouseholdMembers}
+          disableWorkInRegion={true}
         />
       </FormProviderWrapper>
     )
@@ -341,6 +355,7 @@ describe("<FormHouseholdMembers>", () => {
           householdMembers={[]}
           setHouseholdMembers={mockSetHouseholdMembers}
           enableFullTimeStudentQuestion={true}
+          disableWorkInRegion={true}
         />
       </FormProviderWrapper>
     )
@@ -354,7 +369,7 @@ describe("<FormHouseholdMembers>", () => {
     expect(drawerTitle).toBeInTheDocument()
 
     const drawerContainer = drawerTitle.parentElement.parentElement
-    expect(within(drawerContainer).getByText(/Full-time Student/i)).toBeInTheDocument()
+    expect(within(drawerContainer).getByText(/Full-time student/i)).toBeInTheDocument()
     expect(within(drawerContainer).getAllByLabelText(/yes/i)).toHaveLength(2)
     expect(within(drawerContainer).getAllByLabelText(/no/i)).toHaveLength(2)
   })

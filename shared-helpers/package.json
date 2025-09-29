@@ -18,7 +18,7 @@
   },
   "dependencies": {
     "@bloom-housing/doorway-ui-components": "^1.0.0",
-    "@bloom-housing/ui-components": "12.7.4",
+    "@bloom-housing/ui-components": "12.7.7",
     "@bloom-housing/ui-seeds": "2.0.0",
     "@heroicons/react": "^2.1.1",
     "axios-cookiejar-support": "^5.0.5"
@@ -36,6 +36,7 @@
     "@types/react-test-renderer": "18.0.0",
     "@types/react-text-mask": "^5.4.14",
     "@types/react-transition-group": "^4.4.12",
+    "@google-cloud/translate": "^9.2.0",
     "csv-parse": "^5.5.5",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^26.5.3",

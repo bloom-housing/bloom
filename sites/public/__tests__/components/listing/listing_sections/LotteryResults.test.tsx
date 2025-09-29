@@ -25,7 +25,7 @@ describe("<LotteryResults>", () => {
         lotteryResultsPdfUrl={null}
       />
     )
-    expect(queryByText("Lottery Results")).toBeNull()
+    expect(queryByText("Lottery results")).toBeNull()
   })
   it("shows nothing status is not closed", () => {
     const { queryByText } = render(
@@ -42,7 +42,7 @@ describe("<LotteryResults>", () => {
         lotteryResultsPdfUrl={"pdfUrl"}
       />
     )
-    expect(queryByText("Lottery Results")).toBeNull()
+    expect(queryByText("Lottery results")).toBeNull()
   })
   it("shows button if status is closed and link is present", () => {
     const lotteryDate = dayjs(new Date()).add(5, "days").add(30, "minutes").toDate()
@@ -60,10 +60,10 @@ describe("<LotteryResults>", () => {
         lotteryResultsPdfUrl={"pdfUrl"}
       />
     )
-    expect(getByText("Lottery Results")).toBeDefined()
-    expect(getByText("Download Results")).toBeDefined()
+    expect(getByText("Lottery results")).toBeDefined()
+    expect(getByText("Download results")).toBeDefined()
     expect(getByText(dayjs(lotteryDate).format("MMMM D, YYYY"))).toBeDefined()
-    expect(getByRole("link", { name: "Download Results" })).toHaveAttribute("href", "pdfUrl")
+    expect(getByRole("link", { name: "Download results" })).toHaveAttribute("href", "pdfUrl")
   })
   it("shows button if status is closed and link is present with no date", () => {
     const { getByText, getByRole } = render(
@@ -78,9 +78,9 @@ describe("<LotteryResults>", () => {
         lotteryResultsPdfUrl={"pdfUrl"}
       />
     )
-    expect(getByText("Lottery Results")).toBeDefined()
-    expect(getByText("Download Results")).toBeDefined()
-    expect(getByRole("link", { name: "Download Results" })).toHaveAttribute("href", "pdfUrl")
+    expect(getByText("Lottery results")).toBeDefined()
+    expect(getByText("Download results")).toBeDefined()
+    expect(getByRole("link", { name: "Download results" })).toHaveAttribute("href", "pdfUrl")
   })
   it("shows button if status is closed and link is present with no event", () => {
     const { getByText, getByRole } = render(
@@ -90,8 +90,8 @@ describe("<LotteryResults>", () => {
         lotteryResultsPdfUrl={"pdfUrl"}
       />
     )
-    expect(getByText("Lottery Results")).toBeDefined()
-    expect(getByText("Download Results")).toBeDefined()
-    expect(getByRole("link", { name: "Download Results" })).toHaveAttribute("href", "pdfUrl")
+    expect(getByText("Lottery results")).toBeDefined()
+    expect(getByText("Download results")).toBeDefined()
+    expect(getByRole("link", { name: "Download results" })).toHaveAttribute("href", "pdfUrl")
   })
 })

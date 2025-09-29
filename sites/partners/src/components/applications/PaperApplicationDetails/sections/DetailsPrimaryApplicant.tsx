@@ -2,9 +2,9 @@ import React, { useContext } from "react"
 import { t } from "@bloom-housing/ui-components"
 import { YesNoEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
+import SectionWithGrid from "../../../shared/SectionWithGrid"
 import { ApplicationContext } from "../../ApplicationContext"
 import { DetailsAddressColumns, AddressColsType } from "../DetailsAddressColumns"
-import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 type DetailsPrimaryApplicantProps = {
   enableFullTimeStudentQuestion?: boolean
@@ -67,6 +67,7 @@ const DetailsPrimaryApplicant = ({
               t(`application.contact.phoneNumberTypes.${application.applicant.phoneNumberType}`)
             }
             testId="phoneNumber"
+            className={"darker-help-text"}
           >
             {application.applicant.phoneNumber || t("t.n/a")}
           </FieldValue>
@@ -82,6 +83,7 @@ const DetailsPrimaryApplicant = ({
               t(`application.contact.phoneNumberTypes.${application.additionalPhoneNumberType}`)
             }
             testId="additionalPhoneNumber"
+            className={"darker-help-text"}
           >
             {application.additionalPhoneNumber || t("t.n/a")}
           </FieldValue>

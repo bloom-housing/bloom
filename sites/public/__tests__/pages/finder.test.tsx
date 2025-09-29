@@ -351,10 +351,10 @@ describe("<RentalsFinder>", () => {
     ).toBeInTheDocument()
     const minRentInput = screen.getByRole("textbox", { name: /minimum rent/i })
     expect(minRentInput).toBeInTheDocument()
-    expect(minRentInput).toHaveAttribute("placeholder", "No Minimum Rent")
+    expect(minRentInput).toHaveAttribute("placeholder", "No minimum rent")
     const maxRentInput = screen.getByRole("textbox", { name: /maximum rent/i })
     expect(maxRentInput).toBeInTheDocument()
-    expect(maxRentInput).toHaveAttribute("placeholder", "No Maximum Rent")
+    expect(maxRentInput).toHaveAttribute("placeholder", "No maximum rent")
     expect(
       screen.getByRole("checkbox", {
         name: /include rentals that accept section 8 housing choice vouchers/i,
@@ -761,7 +761,7 @@ describe("<RentalsFinder>", () => {
 
       await waitFor(() => {
         expect(pushMock).toBeCalledWith(
-          "/listings?bedroomTypes=studio,oneBdrm&regions=Greater_Downtown,Westside&monthlyRent=1,500.00-3,000.00&section8Acceptance=true&listingFeatures=wheelchairRamp,elevator,serviceAnimalsAllowed&reservedCommunityTypes=veterans"
+          "/listings?bedroomTypes=studio,oneBdrm&regions=Greater_Downtown,Westside&monthlyRent=1,500.00-3,000.00&section8Acceptance=true&listingFeatures=wheelchairRamp,elevator,serviceAnimalsAllowed&reservedCommunityTypes=veteran"
         )
       })
     })

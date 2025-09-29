@@ -54,10 +54,10 @@ describe("DetailUnits", () => {
     expect(
       screen.getByText("Do you want to show unit types or individual units?")
     ).toBeInTheDocument()
-    expect(screen.getByText("Individual Units")).toBeInTheDocument()
+    expect(screen.getByText("Individual units")).toBeInTheDocument()
     expect(screen.getByText("What is the listing availability?")).toBeInTheDocument()
-    expect(screen.getByText("Open Waitlist")).toBeInTheDocument()
-    expect(screen.queryAllByText("Home Type")).toHaveLength(0)
+    expect(screen.getByText("Open waitlist")).toBeInTheDocument()
+    expect(screen.queryAllByText("Home type")).toHaveLength(0)
 
     // Table
     expect(screen.getByText("None")).toBeInTheDocument()
@@ -89,9 +89,9 @@ describe("DetailUnits", () => {
     expect(
       screen.getByText("Do you want to show unit types or individual units?")
     ).toBeInTheDocument()
-    expect(screen.getByText("Unit Types")).toBeInTheDocument()
+    expect(screen.getByText("Unit types")).toBeInTheDocument()
     expect(screen.getByText("What is the listing availability?")).toBeInTheDocument()
-    expect(screen.getByText("Available Units")).toBeInTheDocument()
+    expect(screen.getByText("Available units")).toBeInTheDocument()
 
     // Table
     const table = screen.getByRole("table")
@@ -140,10 +140,10 @@ describe("DetailUnits", () => {
     expect(
       screen.getByText("Do you want to show unit types or individual units?")
     ).toBeInTheDocument()
-    expect(screen.getByText("Individual Units")).toBeInTheDocument()
+    expect(screen.getByText("Individual units")).toBeInTheDocument()
     expect(screen.getByText("What is the listing availability?")).toBeInTheDocument()
-    expect(screen.getByText("Open Waitlist")).toBeInTheDocument()
-    expect(screen.queryAllByText("Home Type")).toHaveLength(0)
+    expect(screen.getByText("Open waitlist")).toBeInTheDocument()
+    expect(screen.queryAllByText("Home type")).toHaveLength(0)
 
     // Table
     expect(screen.getByText("None")).toBeInTheDocument()
@@ -242,10 +242,10 @@ describe("DetailUnits", () => {
     expect(
       screen.queryByText("Do you want to show unit types or individual units?")
     ).not.toBeInTheDocument()
-    expect(screen.queryByText("Individual Units")).not.toBeInTheDocument()
+    expect(screen.queryByText("Individual units")).not.toBeInTheDocument()
     expect(screen.queryByText("What is the listing availability?")).not.toBeInTheDocument()
-    expect(screen.queryByText("Open Waitlist")).not.toBeInTheDocument()
-    expect(screen.queryAllByText("Home Type")).toHaveLength(0)
+    expect(screen.queryByText("Open waitlist")).not.toBeInTheDocument()
+    expect(screen.queryAllByText("Home type")).toHaveLength(0)
 
     // Table
     const table = screen.getByRole("table")
@@ -256,8 +256,8 @@ describe("DetailUnits", () => {
     const columnHeaders = within(head).getAllByRole("columnheader")
     expect(columnHeaders).toHaveLength(7)
 
-    expect(columnHeaders[0]).toHaveTextContent("Unit Type")
-    expect(columnHeaders[1]).toHaveTextContent("# of Units")
+    expect(columnHeaders[0]).toHaveTextContent("Unit type")
+    expect(columnHeaders[1]).toHaveTextContent("# of units")
     expect(columnHeaders[2]).toHaveTextContent("AMI")
     expect(columnHeaders[3]).toHaveTextContent("Rent")
     expect(columnHeaders[4]).toHaveTextContent("Occupancy")
@@ -280,7 +280,7 @@ describe("DetailUnits", () => {
     expect(bath).toHaveTextContent("1 - 2")
   })
 
-  describe("Home Type", () => {
+  describe("Home type", () => {
     it("should render the home type if enabled", () => {
       const callUnitDrawer = jest.fn()
       render(
@@ -304,7 +304,7 @@ describe("DetailUnits", () => {
       )
 
       expect(screen.getByRole("heading", { level: 2, name: /listing units/i })).toBeInTheDocument()
-      expect(screen.getByText("Home Type")).toBeInTheDocument()
+      expect(screen.getByText("Home type")).toBeInTheDocument()
       expect(screen.getByText("Apartment")).toBeInTheDocument()
     })
     it("should render 'none' home type if enabled and no home type set", () => {
@@ -329,7 +329,7 @@ describe("DetailUnits", () => {
       )
 
       expect(screen.getByRole("heading", { level: 2, name: /listing units/i })).toBeInTheDocument()
-      expect(screen.getByText("Home Type")).toBeInTheDocument()
+      expect(screen.getByText("Home type")).toBeInTheDocument()
       expect(screen.getByText("None")).toBeInTheDocument()
     })
   })

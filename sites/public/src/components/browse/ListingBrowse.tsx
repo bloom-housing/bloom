@@ -1,5 +1,4 @@
 import React, { useEffect, useContext, useState, useCallback } from "react"
-import Head from "next/head"
 import { useRouter } from "next/router"
 import { Button, Card, Heading, LoadingState, Tabs } from "@bloom-housing/ui-seeds"
 import {
@@ -17,7 +16,6 @@ import {
   ResponseException,
 } from "@bloom-housing/shared-helpers"
 import { t } from "@bloom-housing/ui-components"
-import { MetaTags } from "../../components/shared/MetaTags"
 import Layout from "../../layouts/application"
 import MaxWidthLayout from "../../layouts/max-width"
 import { UserStatus } from "../../lib/constants"
@@ -63,7 +61,6 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
   const [filterState, setFilterState] = useState<FilterData>({})
   const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const pageTitle = `${t("pageTitle.rent")} - ${t("nav.siteTitle")}`
   const metaDescription = t("pageDescription.welcome", { regionName: t("region.name") })
 
   const filterQuery = getFilterQueryFromURL(router.query)
@@ -72,7 +69,7 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
     FeatureFlagEnum.enableListingFiltering
   )
 
-  const jurisdictionActiveFeatureFlags = props.jurisdiction.featureFlags
+  const jurisdictionActiveFeatureFlags = props.jurisdiction?.featureFlags
     .filter((featureFlag) => featureFlag.active)
     .map((entry) => entry.name)
 
@@ -95,6 +92,7 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
   useEffect(() => {
     const filterData = decodeQueryToFilterData(router.query)
     setFilterState(filterData)
+    setIsLoading(false)
   }, [router.asPath, router.query])
 
   const saveFavoriteFn = (listingId: string) => {
@@ -144,6 +142,17 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
     }
   }
 
+  const onFilterClear = (resetFilters: (data: FilterData) => void) => {
+    if (Object.keys(filterState).length > 0) {
+      setIsLoading(true)
+      router.pathname.includes("listings-closed")
+        ? void router.push(`/listings-closed`)
+        : void router.push(`/listings`)
+    }
+    resetFilters({ name: "", monthlyRent: { minRent: "", maxRent: "" } })
+    setFilterState({})
+  }
+
   const onShowAll = useCallback(async () => {
     await router.replace(router.pathname)
   }, [router])
@@ -162,11 +171,7 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
   )
 
   return (
-    <Layout>
-      <Head>
-        <title>{pageTitle}</title>
-      </Head>
-      <MetaTags title={t("nav.siteTitle")} description={metaDescription} />
+    <Layout pageTitle={t("pageTitle.rent")} metaDescription={metaDescription}>
       <PageHeaderSection heading={t("pageTitle.rent")} inverse={true} content={ListingTabs} />
       <FilterDrawer
         isOpen={isFilterDrawerOpen}
@@ -175,6 +180,7 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
         filterState={filterState}
         multiselectData={props.multiselectData}
         activeFeatureFlags={jurisdictionActiveFeatureFlags}
+        onClear={onFilterClear}
       />
       <LoadingState loading={isLoading}>
         <div className={styles["listing-directory"]}>

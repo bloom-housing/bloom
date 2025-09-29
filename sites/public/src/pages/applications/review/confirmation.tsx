@@ -10,15 +10,16 @@ import {
   AuthContext,
   BloomCard,
 } from "@bloom-housing/shared-helpers"
+import { ReviewOrderTypeEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { Button, Heading, Link } from "@bloom-housing/ui-seeds"
 import FormsLayout from "../../../layouts/forms"
 import styles from "../../../layouts/application-form.module.scss"
 import { AppSubmissionContext } from "../../../lib/applications/AppSubmissionContext"
 import { UserStatus } from "../../../lib/constants"
-import { ReviewOrderTypeEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { isUnitGroupAppBase, isUnitGroupAppWaitlist } from "../../../lib/helpers"
 
 const ApplicationConfirmation = () => {
-  const { application, listing } = useContext(AppSubmissionContext)
+  const { application, listing, conductor } = useContext(AppSubmissionContext)
   const { initialStateLoaded, profile } = useContext(AuthContext)
   const router = useRouter()
 
@@ -27,6 +28,16 @@ const ApplicationConfirmation = () => {
   const content = useMemo(() => {
     switch (listing?.reviewOrderType) {
       case ReviewOrderTypeEnum.firstComeFirstServe:
+        if (isUnitGroupAppWaitlist(listing, conductor.config)) {
+          return {
+            text: t("application.review.confirmation.whatHappensNext.waitlist"),
+          }
+        }
+        if (isUnitGroupAppBase(listing, conductor.config)) {
+          return {
+            text: t("application.review.confirmation.whatHappensNext.base"),
+          }
+        }
         return {
           text: t("application.review.confirmation.whatHappensNext.fcfs"),
         }
@@ -41,7 +52,7 @@ const ApplicationConfirmation = () => {
       default:
         return { text: "" }
     }
-  }, [listing])
+  }, [listing, conductor.config])
 
   const contentUpdates = useMemo(() => {
     switch (listing?.reviewOrderType) {
@@ -70,7 +81,11 @@ const ApplicationConfirmation = () => {
   }, [profile])
 
   return (
-    <FormsLayout>
+    <FormsLayout
+      pageTitle={`${t("account.application.confirmation")} - ${t("listings.apply.applyOnline")} - ${
+        listing?.name
+      }`}
+    >
       <BloomCard>
         <>
           <CardSection divider={"flush"}>

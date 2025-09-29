@@ -19,7 +19,7 @@ describe("DetailPrograms", () => {
             id: "programId",
             createdAt: new Date(),
             updatedAt: new Date(),
-            text: "Program 1",
+            text: "Families",
             applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
             jurisdictions: undefined,
           },
@@ -45,9 +45,9 @@ describe("DetailPrograms", () => {
         </AuthContext.Provider>
       )
 
-      expect(results.getByText("Housing Programs")).toBeInTheDocument()
-      expect(results.getByText("Active Programs")).toBeInTheDocument()
-      expect(results.getByText("Program 1")).toBeInTheDocument()
+      expect(results.getByText("Housing programs")).toBeInTheDocument()
+      expect(results.getByText("Active programs")).toBeInTheDocument()
+      expect(results.getByText("Families")).toBeInTheDocument()
       expect(results.queryByText("Community", { exact: false })).toBeFalsy()
     })
   })
@@ -86,8 +86,8 @@ describe("DetailPrograms", () => {
         </AuthContext.Provider>
       )
 
-      expect(results.getByText("Community Types")).toBeInTheDocument()
-      expect(results.getByText("Active Community Types")).toBeInTheDocument()
+      expect(results.getByText("Community types")).toBeInTheDocument()
+      expect(results.getByText("Active community types")).toBeInTheDocument()
       expect(results.getByText("Community 1")).toBeInTheDocument()
       expect(results.queryByText("Program", { exact: false })).toBeFalsy()
     })

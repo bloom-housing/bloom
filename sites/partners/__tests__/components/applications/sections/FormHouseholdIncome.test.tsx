@@ -23,7 +23,7 @@ describe("<FormHouseholdIncome>", () => {
     expect(screen.getByLabelText(/annual income/i)).toBeInTheDocument()
     expect(screen.getByLabelText(/monthly income/i)).toBeInTheDocument()
     // Note: this is the "Housing Voucher or Subsidy" question in core
-    expect(screen.getByText("Issued Vouchers or Rental Assistance")).toBeInTheDocument()
+    expect(screen.getByText("Issued vouchers or rental assistance")).toBeInTheDocument()
     expect(
       screen.getByRole("checkbox", { name: /Section 8 or Housing Authority Issued Vouchers/i })
     ).toBeInTheDocument()

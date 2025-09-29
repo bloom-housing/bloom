@@ -897,6 +897,7 @@ describe('Testing application export service', () => {
           { text: 'option 3 text', ordinal: 2 },
         ],
         optOutText: 'I am opting out',
+        status: 'draft',
       };
       const multiselectQuestion2: MultiselectQuestion = {
         id: multiselectQuestionId2,
@@ -913,6 +914,7 @@ describe('Testing application export service', () => {
           },
         ],
         optOutText: 'I am opting out!',
+        status: 'draft',
       };
       const headers = await constructMultiselectQuestionHeaders(
         'preferences',

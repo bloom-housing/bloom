@@ -1,11 +1,11 @@
 import { AuthProvider, ConfigProvider, MessageProvider } from "@bloom-housing/shared-helpers"
-import { fireEvent, render } from "@testing-library/react"
+import { fireEvent } from "@testing-library/react"
 import { rest } from "msw"
 import { setupServer } from "msw/node"
 import React from "react"
 import Users from "../../../src/pages/users"
 import { user } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
-import { mockNextRouter } from "../../testUtils"
+import { mockNextRouter, render } from "../../testUtils"
 
 const server = setupServer()
 
@@ -44,6 +44,9 @@ describe("users", () => {
   })
 
   it("should render user table when data is returned", async () => {
+    window.URL.createObjectURL = jest.fn()
+    // set a logged in token
+    document.cookie = "access-token-available=True"
     server.use(
       rest.post("http://localhost:3100/listings/list", (_req, res, ctx) => {
         return res(ctx.json([]))
@@ -56,21 +59,18 @@ describe("users", () => {
       }),
       rest.get("http://localhost/api/adapter/user/list", (_req, res, ctx) => {
         return res(ctx.json({ items: [user], meta: { totalItems: 1, totalPages: 1 } }))
+      }),
+      rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
+        return res(ctx.json(user))
       })
     )
-    const { findByText, getByText, queryAllByText } = render(
-      <ConfigProvider apiUrl={"http://localhost:3100"}>
-        <AuthProvider>
-          <Users />
-        </AuthProvider>
-      </ConfigProvider>
-    )
+    const { findByText, getByText, queryAllByText } = render(<Users />)
 
     const header = await findByText("Users")
     expect(header).toBeInTheDocument()
     expect(getByText("Filter")).toBeInTheDocument()
-    expect(queryAllByText("Add User")).toHaveLength(0)
-    expect(queryAllByText("Export to CSV")).toHaveLength(0)
+    expect(getByText("Add user")).toBeInTheDocument()
+    expect(queryAllByText("Export to CSV")).toHaveLength(1)
 
     const name = await findByText("First Last")
     expect(name).toBeInTheDocument()
@@ -115,7 +115,7 @@ describe("users", () => {
 
     const header = await findByText("Users")
     expect(header).toBeInTheDocument()
-    expect(getByText("Add User")).toBeInTheDocument()
+    expect(getByText("Add user")).toBeInTheDocument()
     const exportButton = await findByText("Export to CSV")
     expect(exportButton).toBeInTheDocument()
     fireEvent.click(exportButton)

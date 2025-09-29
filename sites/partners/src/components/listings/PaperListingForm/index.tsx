@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useContext, useEffect } from "react"
 import { useRouter } from "next/router"
 import dayjs from "dayjs"
+import { CharacterCount as CharacterCountExtension } from "@tiptap/extension-character-count"
 import { useEditor } from "@tiptap/react"
 import { t, Form, AlertBox, LoadingOverlay, LatitudeLongitude } from "@bloom-housing/ui-components"
 import { Button, Icon, Tabs } from "@bloom-housing/ui-seeds"
@@ -10,10 +11,13 @@ import { AuthContext, MessageContext, listingSectionQuestions } from "@bloom-hou
 import {
   FeatureFlag,
   FeatureFlagEnum,
+  Jurisdiction,
+  Listing,
   ListingCreate,
   ListingEventsTypeEnum,
   ListingUpdate,
   ListingsStatusEnum,
+  MarketingTypeEnum,
   MultiselectQuestion,
   MultiselectQuestionsApplicationSectionEnum,
   YesNoEnum,
@@ -60,14 +64,13 @@ import NeighborhoodAmenities from "./sections/NeighborhoodAmenities"
 import PreferencesAndPrograms from "./sections/PreferencesAndPrograms"
 import * as styles from "./ListingForm.module.scss"
 
-const extensions = EditorExtensions
-
 const CHARACTER_LIMIT = 1000
 
 type ListingFormProps = {
   listing?: FormListing
   editMode?: boolean
   setListingName?: React.Dispatch<React.SetStateAction<string>>
+  updateListing?: (updatedListing: Listing) => void
 }
 
 export type SubmitFunction = (
@@ -98,7 +101,7 @@ const getToast = (
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) => {
+const ListingForm = ({ listing, editMode, setListingName, updateListing }: ListingFormProps) => {
   const defaultValues = editMode ? listing : formDefaults
   const isListingActive = listing?.status === ListingsStatusEnum.active
   const formMethods = useForm<FormListing>({
@@ -106,9 +109,14 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
     shouldUnregister: false,
   })
 
+  // eslint-disable-next-line @typescript-eslint/unbound-method
+  const { getValues, setError, clearErrors, reset, watch } = formMethods
+  const selectedJurisdiction: string = watch("jurisdictions.id")
+  const marketingTypeChoice = watch("marketingType")
+
   const router = useRouter()
 
-  const { listingsService, profile } = useContext(AuthContext)
+  const { listingsService, profile, jurisdictionsService } = useContext(AuthContext)
   const { addToast } = useContext(MessageContext)
 
   const [tabIndex, setTabIndex] = useState(0)
@@ -155,12 +163,46 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
   const [listingIsAlreadyLiveDialog, setListingIsAlreadyLiveDialog] = useState(false)
   const [submitForApprovalDialog, setSubmitForApprovalDialog] = useState(false)
   const [requestChangesDialog, setRequestChangesDialog] = useState(false)
+  const [selectedJurisdictionData, setSelectedJurisdictionData] = useState<Jurisdiction>()
 
   const whatToExpectEditor = useEditor({
-    extensions,
-    content: !listing ? t("whatToExpect.default") : listing?.whatToExpect,
+    extensions: [...EditorExtensions, CharacterCountExtension.configure()],
+    content: listing?.whatToExpect,
     immediatelyRender: false,
   })
+
+  const whatToExpectAdditionalDetailsEditor = useEditor({
+    extensions: [...EditorExtensions, CharacterCountExtension.configure()],
+    content: listing?.whatToExpectAdditionalText,
+    immediatelyRender: false,
+  })
+
+  useEffect(() => {
+    if (selectedJurisdictionData) {
+      if (
+        marketingTypeChoice === MarketingTypeEnum.comingSoon &&
+        !!selectedJurisdictionData.whatToExpectUnderConstruction
+      ) {
+        whatToExpectEditor.commands.setContent(
+          selectedJurisdictionData.whatToExpectUnderConstruction
+        )
+        whatToExpectAdditionalDetailsEditor.commands.clearContent()
+        return
+      }
+
+      if (!editMode) {
+        if (!whatToExpectEditor?.storage.characterCount.characters()) {
+          whatToExpectEditor.commands.setContent(selectedJurisdictionData.whatToExpect)
+        }
+        if (!whatToExpectAdditionalDetailsEditor?.storage.characterCount.characters()) {
+          whatToExpectAdditionalDetailsEditor.commands.setContent(
+            selectedJurisdictionData.whatToExpectAdditionalText
+          )
+        }
+      }
+    }
+    //eslint-disable-next-line
+  }, [selectedJurisdictionData, marketingTypeChoice])
 
   const enableUnitGroups =
     activeFeatureFlags?.find((flag) => flag.name === FeatureFlagEnum.enableUnitGroups)?.active ||
@@ -218,13 +260,22 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
     setOpenHouseEvents,
   ])
 
-  // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { getValues, setError, clearErrors, reset, watch } = formMethods
-
-  const selectedJurisdiction = watch("jurisdictions.id")
-
-  // Set the active feature flags depending on if/what jurisdiction is selected
   useEffect(() => {
+    // Retrieve the jurisdiction data from the backend whenever the jurisdiction changes
+    async function fetchData() {
+      if (selectedJurisdiction) {
+        const jurisdictionData = await jurisdictionsService.retrieve({
+          jurisdictionId: selectedJurisdiction,
+        })
+
+        if (jurisdictionData) {
+          setSelectedJurisdictionData(jurisdictionData)
+        }
+      }
+    }
+    void fetchData()
+
+    // Set the active feature flags depending on if/what jurisdiction is selected
     const newFeatureFlags = profile?.jurisdictions?.reduce((featureFlags, juris) => {
       if (!selectedJurisdiction || selectedJurisdiction === juris.id) {
         // filter only the active feature flags
@@ -234,6 +285,7 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
       }
       return featureFlags
     }, [])
+
     setActiveFeatureFlags(newFeatureFlags)
     const selectedJurisdictionObj = profile?.jurisdictions?.find(
       (juris) => selectedJurisdiction === juris.id
@@ -241,7 +293,7 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
     if (profile?.jurisdictions.length === 1)
       setRequiredFields(profile?.jurisdictions[0].requiredListingFields || [])
     else setRequiredFields(selectedJurisdictionObj?.requiredListingFields || [])
-  }, [profile?.jurisdictions, selectedJurisdiction])
+  }, [profile?.jurisdictions, selectedJurisdiction, jurisdictionsService])
 
   const triggerSubmitWithStatus: SubmitFunction = (action, status, newData) => {
     if (action !== "redirect" && status === ListingsStatusEnum.active) {
@@ -274,6 +326,19 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
           }
 
           formData.whatToExpect = cleanRichText(whatToExpectEditor?.getHTML())
+
+          if (
+            whatToExpectAdditionalDetailsEditor?.storage.characterCount.characters() >
+            CHARACTER_LIMIT
+          ) {
+            setLoading(false)
+            setAlert("form")
+            return
+          }
+
+          formData.whatToExpectAdditionalText = cleanRichText(
+            whatToExpectAdditionalDetailsEditor.getHTML()
+          )
 
           if (!enableSection8) {
             formData.listingSection8Acceptance = YesNoEnum.no
@@ -314,6 +379,9 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
               if (continueEditing) {
                 setAlert(null)
                 setListingName(result.name)
+                if (updateListing) {
+                  updateListing(result as Listing)
+                }
               } else {
                 await router.push(`/listings/${result.id}`)
               }
@@ -493,6 +561,7 @@ const ListingForm = ({ listing, editMode, setListingName }: ListingFormProps) =>
                             disableDueDates={isListingActive && !profile.userRoles.isAdmin}
                             isAdmin={profile?.userRoles.isAdmin}
                             whatToExpectEditor={whatToExpectEditor}
+                            whatToExpectAdditionalTextEditor={whatToExpectAdditionalDetailsEditor}
                             requiredFields={requiredFields}
                           />
                           <LeasingAgent requiredFields={requiredFields} />

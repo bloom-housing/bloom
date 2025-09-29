@@ -44,7 +44,7 @@ describe("Listings map", function () {
     cy.get("@listingsSearch.all").should("have.length", 0)
 
     cy.visit("/")
-    cy.getByTestId("View Listings-1").click()
+    cy.getByTestId("View listings-1").click()
     cy.getByTestId("loading-overlay").should("not.exist")
 
     // Initial map load
@@ -107,7 +107,7 @@ describe("Listings map", function () {
     cy.get('[id^="marker-id"]').first().click({ force: true })
     cy.getByTestId("listings-map-info-window").should("be.visible")
     cy.getByTestId("listings-map-info-window").within(() => {
-      cy.get("a").contains("See Details")
+      cy.get("a").contains("See details")
     })
 
     cy.getByTestId("loading-overlay").should("not.exist")

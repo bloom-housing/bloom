@@ -48,7 +48,7 @@ describe("listing applications add page", () => {
       screen.getByRole("heading", { level: 2, name: /alternate contact/i })
     ).toBeInTheDocument()
     expect(
-      screen.getByRole("heading", { level: 2, name: /household members/i })
+      screen.getByRole("heading", { level: 2, name: /Household members/i })
     ).toBeInTheDocument()
     expect(
       screen.getByRole("heading", { level: 2, name: /household details/i })

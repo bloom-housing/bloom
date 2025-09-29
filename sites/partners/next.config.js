@@ -93,6 +93,9 @@ module.exports = withBundleAnalyzer(
       )
       return config
     },
+    eslint: {
+      ignoreDuringBuilds: true,
+    },
     // eslint-disable-next-line @typescript-eslint/require-await
     async headers() {
       return [

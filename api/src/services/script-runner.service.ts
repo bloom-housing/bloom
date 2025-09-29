@@ -3,6 +3,7 @@ import {
   ApplicationMethodsTypeEnum,
   LanguagesEnum,
   MultiselectQuestionsApplicationSectionEnum,
+  MultiselectQuestionsStatusEnum,
   Prisma,
   PrismaClient,
   ReviewOrderTypeEnum,
@@ -137,15 +138,18 @@ export class ScriptRunnerService {
         await this.prisma.multiselectQuestions.create({
           data: {
             id: question.id,
+            name: question.text,
             text: question.text,
             subText: question.sub_text,
             description: question.description,
             hideFromListing: question.hide_from_listing,
+            isExclusive: false,
             applicationSection: question.application_section,
             links: question.links,
             options: question.options,
             optOutText: question.opt_out_text,
-            jurisdictions: {
+            status: MultiselectQuestionsStatusEnum.draft,
+            jurisdiction: {
               connect: {
                 id: doorwayJurisdiction.id,
               },

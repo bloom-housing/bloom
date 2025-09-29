@@ -23,7 +23,7 @@ afterEach(() => {
 afterAll(() => server.close())
 
 describe("Create Account Page", () => {
-  it("should render the page with all fileds, buttons and links", () => {
+  it("should render the page with all fields, buttons and links", () => {
     render(<CreateAccount />)
 
     const verifyInitialInput = (input: HTMLElement) => {
@@ -34,7 +34,7 @@ describe("Create Account Page", () => {
 
     expect(screen.getByRole("heading", { name: /create account/i, level: 1 })).toBeInTheDocument()
 
-    expect(screen.getByText("Your Name", { selector: "legend" })).toBeInTheDocument()
+    expect(screen.getByText("Your name", { selector: "legend" })).toBeInTheDocument()
     verifyInitialInput(screen.getByRole("textbox", { name: /first or given name/i }))
     verifyInitialInput(screen.getByRole("textbox", { name: /middle name \(optional\)/i }))
     verifyInitialInput(screen.getByRole("textbox", { name: /last or family name/i }))
@@ -83,11 +83,11 @@ describe("Create Account Page", () => {
     it("should show no alerts on initial load", () => {
       render(<CreateAccount />)
 
-      expect(screen.queryByText("Please enter a First Name")).not.toBeInTheDocument()
+      expect(screen.queryByText("Please enter a first name")).not.toBeInTheDocument()
       expect(screen.queryByText("Must not be more than 64 characters.")).not.toBeInTheDocument()
-      expect(screen.queryByText("Please enter a Last Name")).not.toBeInTheDocument()
+      expect(screen.queryByText("Please enter a last name")).not.toBeInTheDocument()
       expect(
-        screen.queryByText("Please enter a valid Date of Birth, must be 18 or older")
+        screen.queryByText("Please enter a valid date of birth, must be 18 or older")
       ).not.toBeInTheDocument()
       expect(screen.queryByText("Please enter a valid email address")).not.toBeInTheDocument()
       expect(screen.queryByText("Please enter a valid password")).not.toBeInTheDocument()
@@ -102,16 +102,16 @@ describe("Create Account Page", () => {
       await act(() => userEvent.click(createAccountButton))
 
       expect(screen.getByRole("textbox", { name: /first or given name/i })).toBeInvalid()
-      expect(screen.getByText("Please enter a First Name")).toBeInTheDocument()
+      expect(screen.getByText("Please enter a first name")).toBeInTheDocument()
 
       expect(screen.getByRole("textbox", { name: /last or family name/i })).toBeInvalid()
-      expect(screen.getByText("Please enter a Last Name")).toBeInTheDocument()
+      expect(screen.getByText("Please enter a last name")).toBeInTheDocument()
 
       expect(screen.getByRole("textbox", { name: /month/i })).toBeInvalid()
       expect(screen.getByRole("textbox", { name: /day/i })).toBeInvalid()
       expect(screen.getByRole("textbox", { name: /year/i })).toBeInvalid()
       expect(
-        screen.getByText("Please enter a valid Date of Birth, must be 18 or older")
+        screen.getByText("Please enter a valid date of birth, must be 18 or older")
       ).toBeInTheDocument()
 
       expect(screen.getByRole("textbox", { name: /your email address/i })).toBeInvalid()
@@ -143,8 +143,8 @@ describe("Create Account Page", () => {
       expect(firstNameField).toBeInvalid()
       expect(middleNameField).toBeInvalid()
       expect(lastNameField).toBeInvalid()
-      expect(screen.queryByText("Please enter a First Name")).not.toBeInTheDocument()
-      expect(screen.queryByText("Please enter a Last Name")).not.toBeInTheDocument()
+      expect(screen.queryByText("Please enter a first name")).not.toBeInTheDocument()
+      expect(screen.queryByText("Please enter a last name")).not.toBeInTheDocument()
     })
 
     describe("show password error on invalid passwords", () => {
@@ -463,11 +463,11 @@ describe("Create Account Page", () => {
     expect(createAccountButton).toBeInTheDocument()
     await act(() => userEvent.click(createAccountButton))
 
-    expect(screen.queryByText("Please enter a First Name")).not.toBeInTheDocument()
+    expect(screen.queryByText("Please enter a first name")).not.toBeInTheDocument()
     expect(screen.queryByText("Must not be more than 64 characters.")).not.toBeInTheDocument()
-    expect(screen.queryByText("Please enter a Last Name")).not.toBeInTheDocument()
+    expect(screen.queryByText("Please enter a last name")).not.toBeInTheDocument()
     expect(
-      screen.queryByText("Please enter a valid Date of Birth, must be 18 or older")
+      screen.queryByText("Please enter a valid date of birth, must be 18 or older")
     ).not.toBeInTheDocument()
     expect(screen.queryByText("Please enter a valid email address")).not.toBeInTheDocument()
     expect(screen.queryByText("Please enter a valid password")).not.toBeInTheDocument()

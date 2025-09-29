@@ -208,6 +208,7 @@ export const stagingSeed = async (
         FeatureFlagEnum.enableGeocodingRadiusMethod,
         FeatureFlagEnum.enableHomeType,
         FeatureFlagEnum.enableIsVerified,
+        FeatureFlagEnum.enableLimitedHowDidYouHear,
         FeatureFlagEnum.enableListingFavoriting,
         FeatureFlagEnum.enableListingFiltering,
         FeatureFlagEnum.enableListingOpportunity,
@@ -229,6 +230,12 @@ export const stagingSeed = async (
         FeatureFlagEnum.enableFullTimeStudentQuestion,
       ],
       requiredListingFields: ['name', 'listingsBuildingAddress'],
+      languages: [
+        LanguagesEnum.en,
+        LanguagesEnum.es,
+        // LanguagesEnum.ar,
+        // LanguagesEnum.bn,
+      ],
     }),
   });
   // Basic configuration jurisdiction
@@ -250,6 +257,7 @@ export const stagingSeed = async (
   const nadaHill = await prismaClient.jurisdictions.create({
     data: jurisdictionFactory('Nada Hill', {
       featureFlags: [],
+      requiredListingFields: ['name'],
     }),
   });
   // create super admin user
@@ -463,6 +471,7 @@ export const stagingSeed = async (
             'Have you or anyone in your household served in the US military?',
           applicationSection:
             MultiselectQuestionsApplicationSectionEnum.programs,
+          isExclusive: true,
           optOutText: 'Prefer not to say',
           options: [
             { text: 'Yes', exclusive: true, ordinal: 1 },
@@ -509,7 +518,7 @@ export const stagingSeed = async (
         description:
           'Are you or anyone in your household 62 years of age or older?',
         applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
-        optOutText: 'Prefer not to say',
+        isExclusive: true,
         options: [
           { text: 'Yes', exclusive: true, ordinal: 1 },
           { text: 'No', exclusive: true, ordinal: 2 },
@@ -520,13 +529,19 @@ export const stagingSeed = async (
 
   // add extra programs to support filtering by "community type"
   await Promise.all(
-    [...new Array(3)].map(
-      async () =>
+    ['Seniors 55+', 'Families', 'Veterans'].map(
+      async (text) =>
         await prismaClient.multiselectQuestions.create({
           data: multiselectQuestionFactory(lakeviewJurisdiction.id, {
             multiselectQuestion: {
               applicationSection:
                 MultiselectQuestionsApplicationSectionEnum.programs,
+              text,
+              isExclusive: true,
+              options: [
+                { text: 'Yes', exclusive: true, ordinal: 1 },
+                { text: 'No', exclusive: true, ordinal: 2 },
+              ],
             },
           }),
         }),

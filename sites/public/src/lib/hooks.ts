@@ -296,7 +296,7 @@ export async function fetchJurisdictionByName(
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function fetchMultiselectData(req: any, jurisdictionId: string) {
+export async function fetchMultiselectProgramData(req: any, jurisdictionId: string) {
   try {
     const headers = {
       passkey: process.env.API_PASS_KEY,
