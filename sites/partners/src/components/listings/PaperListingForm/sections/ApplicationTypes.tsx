@@ -83,7 +83,7 @@ type ApplicationTypesProps = {
 
 const ApplicationTypes = ({ listing, requiredFields }: ApplicationTypesProps) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, setValue, watch, errors, getValues, setError } = useFormContext()
+  const { register, setValue, watch, errors, getValues, setError, clearErrors } = useFormContext()
   const { doJurisdictionsHaveFeatureFlagOn, getJurisdictionLanguages } = useContext(AuthContext)
 
   const getDefaultMethods = () => {
@@ -619,6 +619,7 @@ const ApplicationTypes = ({ listing, requiredFields }: ApplicationTypesProps) =>
                   name="paperApplicationLanguage"
                   error={fieldHasError(errors?.selectedLanguageError)}
                   errorMessage={fieldMessage(errors?.selectedLanguageError)}
+                  register={register}
                   options={[
                     ...availableJurisdictionLanguages.map((item) => ({
                       label: t(`languages.${item}`),
@@ -631,6 +632,7 @@ const ApplicationTypes = ({ listing, requiredFields }: ApplicationTypesProps) =>
                   inputProps={{
                     onChange: (e) => {
                       setSelectedLanguage(e.target?.value)
+                      clearErrors("selectedLanguageError")
                     },
                   }}
                 />
