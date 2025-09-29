@@ -1,7 +1,10 @@
 import React from "react"
 import { useFormContext } from "react-hook-form"
-import { Jurisdiction } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { t, Field, SelectOption, Select } from "@bloom-housing/ui-components"
+import {
+  EnumListingListingType,
+  Jurisdiction,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { t, Field, SelectOption, Select, FieldGroup } from "@bloom-housing/ui-components"
 import { Grid } from "@bloom-housing/ui-seeds"
 import {
   fieldMessage,
@@ -21,7 +24,8 @@ const ListingIntro = (props: ListingIntroProps) => {
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, clearErrors, errors } = formMethods
+  const { register, clearErrors, errors, getValues } = formMethods
+  const listing = getValues()
 
   const jurisdictionOptions: SelectOption[] = [
     { label: "", value: "" },
@@ -38,6 +42,31 @@ const ListingIntro = (props: ListingIntroProps) => {
         heading={t("listings.sections.introTitle")}
         subheading={t("listings.sections.introSubtitle")}
       >
+        <Grid.Row columns={1}>
+          <Grid.Cell>
+            <FieldGroup
+              name="listingType"
+              type="radio"
+              register={register}
+              groupLabel={t("listings.listingTypeTile")}
+              fields={[
+                {
+                  id: "regulatedListing",
+                  label: t("listings.regulatedListing"),
+                  value: EnumListingListingType.regulated,
+                  defaultChecked: !listing?.listingType,
+                },
+                {
+                  id: "nonRegulatedListing",
+                  label: t("listings.nonRegulatedListing"),
+                  value: EnumListingListingType.nonRegulated,
+                },
+              ]}
+              error={fieldHasError(errors.listingType)}
+              errorMessage={fieldMessage(errors.listingType)}
+            />
+          </Grid.Cell>
+        </Grid.Row>
         <Grid.Row columns={1}>
           <Grid.Cell>
             <Field
