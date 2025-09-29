@@ -183,7 +183,7 @@ const ApplicationTypes = ({ listing, requiredFields }: ApplicationTypesProps) =>
     if (!selectedLanguage) {
       setError("selectedLanguageError", { message: "Language not selected" })
     }
-    if (errors?.selectedLanguageError) {
+    if (errors) {
       return undefined
     }
 
