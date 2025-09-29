@@ -1,5 +1,5 @@
 import { AuthProvider, ConfigProvider, MessageProvider } from "@bloom-housing/shared-helpers"
-import { fireEvent } from "@testing-library/react"
+import { fireEvent, screen } from "@testing-library/react"
 import { rest } from "msw"
 import { setupServer } from "msw/node"
 import React from "react"
@@ -69,7 +69,8 @@ describe("users", () => {
     const header = await findByText("Users")
     expect(header).toBeInTheDocument()
     expect(getByText("Filter")).toBeInTheDocument()
-    expect(getByText("Add user")).toBeInTheDocument()
+    const addUserButton = await screen.findByRole("button", { name: "Add user" })
+    expect(addUserButton).toBeInTheDocument()
     expect(queryAllByText("Export to CSV")).toHaveLength(1)
 
     const name = await findByText("First Last")
@@ -103,7 +104,7 @@ describe("users", () => {
         return res(ctx.json(""))
       })
     )
-    const { findByText, getByText } = render(
+    const { findByText } = render(
       <ConfigProvider apiUrl={"http://localhost:3100"}>
         <AuthProvider>
           <MessageProvider>
@@ -115,7 +116,8 @@ describe("users", () => {
 
     const header = await findByText("Users")
     expect(header).toBeInTheDocument()
-    expect(getByText("Add user")).toBeInTheDocument()
+    const addUserButton = await screen.findByRole("button", { name: "Add user" })
+    expect(addUserButton).toBeInTheDocument()
     const exportButton = await findByText("Export to CSV")
     expect(exportButton).toBeInTheDocument()
     fireEvent.click(exportButton)
