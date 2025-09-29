@@ -83,7 +83,7 @@ type ApplicationTypesProps = {
 
 const ApplicationTypes = ({ listing, requiredFields }: ApplicationTypesProps) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, setValue, watch, errors, getValues } = useFormContext()
+  const { register, setValue, watch, errors, getValues, setError } = useFormContext()
   const { doJurisdictionsHaveFeatureFlagOn, getJurisdictionLanguages } = useContext(AuthContext)
 
   const getDefaultMethods = () => {
@@ -135,6 +135,18 @@ const ApplicationTypes = ({ listing, requiredFields }: ApplicationTypesProps) =>
     url: "",
   })
   const referralPhoneRef = React.useRef("")
+
+  const resetDrawerStateOnSave = () => {
+    if (errors) {
+      return
+    }
+    setProgressValue(0)
+    setCloudinaryData({
+      id: "",
+      url: "",
+    })
+    setDrawerState(false)
+  }
   const resetDrawerState = () => {
     setProgressValue(0)
     setCloudinaryData({
@@ -168,6 +180,14 @@ const ApplicationTypes = ({ listing, requiredFields }: ApplicationTypesProps) =>
   }
 
   const savePaperApplication = () => {
+    if (!selectedLanguage) {
+      setError("selectedLanguageError", { message: "language not selected" })
+    }
+
+    if (errors?.selectedLanguageError) {
+      return undefined
+    }
+
     const paperApplications = methods.paper?.paperApplications ?? []
     paperApplications.push({
       assets: {
@@ -599,6 +619,9 @@ const ApplicationTypes = ({ listing, requiredFields }: ApplicationTypesProps) =>
                   <Select
                     id={"paperApplicationLanguage"}
                     name="paperApplicationLanguage"
+                    error={fieldHasError(errors?.selectedLanguageError)}
+                    errorMessage={fieldMessage(errors?.selectedLanguageError)}
+                    register={register}
                     options={[
                       ...availableJurisdictionLanguages.map((item) => ({
                         label: t(`languages.${item}`),
@@ -638,7 +661,7 @@ const ApplicationTypes = ({ listing, requiredFields }: ApplicationTypesProps) =>
             key={0}
             onClick={() => {
               savePaperApplication()
-              resetDrawerState()
+              resetDrawerStateOnSave()
             }}
             variant="primary"
             size="sm"
