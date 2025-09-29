@@ -16,7 +16,7 @@ export const Content404Deprecated = () => {
       <div className="homepage-extra">
         <MaxWidthLayout className={"seeds-p-b-container"}>
           <p className={"seeds-m-be-header text-center"}>{t("welcome.seeMoreOpportunities")}</p>
-          <Button variant="primary-outlined" href="/additional-resources">
+          <Button variant="primary-outlined" href="/help/housing-help">
             {t("welcome.viewAdditionalHousing")}
           </Button>
         </MaxWidthLayout>
