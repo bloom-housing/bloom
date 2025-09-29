@@ -181,9 +181,8 @@ const ApplicationTypes = ({ listing, requiredFields }: ApplicationTypesProps) =>
 
   const savePaperApplication = () => {
     if (!selectedLanguage) {
-      setError("selectedLanguageError", { message: "language not selected" })
+      setError("selectedLanguageError", { message: "Language not selected" })
     }
-
     if (errors?.selectedLanguageError) {
       return undefined
     }
@@ -611,34 +610,31 @@ const ApplicationTypes = ({ listing, requiredFields }: ApplicationTypesProps) =>
         <Drawer.Content>
           <Card>
             <Card.Section>
-              {cloudinaryData.url === "" && (
-                <div className="field">
-                  <p className="mb-2">
-                    <label className="label">{t("t.language")}</label>
-                  </p>
-                  <Select
-                    id={"paperApplicationLanguage"}
-                    name="paperApplicationLanguage"
-                    error={fieldHasError(errors?.selectedLanguageError)}
-                    errorMessage={fieldMessage(errors?.selectedLanguageError)}
-                    register={register}
-                    options={[
-                      ...availableJurisdictionLanguages.map((item) => ({
-                        label: t(`languages.${item}`),
-                        value: item,
-                      })),
-                    ]}
-                    placeholder={t("t.selectLanguage")}
-                    defaultValue={selectedLanguage}
-                    validation={{ required: true }}
-                    inputProps={{
-                      onChange: (e) => {
-                        setSelectedLanguage(e.target?.value)
-                      },
-                    }}
-                  />
-                </div>
-              )}
+              <div className="field">
+                <p className="mb-2">
+                  <label className="label">{t("t.language")}</label>
+                </p>
+                <Select
+                  id={"paperApplicationLanguage"}
+                  name="paperApplicationLanguage"
+                  error={fieldHasError(errors?.selectedLanguageError)}
+                  errorMessage={fieldMessage(errors?.selectedLanguageError)}
+                  options={[
+                    ...availableJurisdictionLanguages.map((item) => ({
+                      label: t(`languages.${item}`),
+                      value: item,
+                    })),
+                  ]}
+                  placeholder={t("t.selectLanguage")}
+                  defaultValue={selectedLanguage}
+                  validation={{ required: true }}
+                  inputProps={{
+                    onChange: (e) => {
+                      setSelectedLanguage(e.target?.value)
+                    },
+                  }}
+                />
+              </div>
               <Dropzone
                 id="listing-paper-application-upload"
                 label={t("t.uploadFile")}
