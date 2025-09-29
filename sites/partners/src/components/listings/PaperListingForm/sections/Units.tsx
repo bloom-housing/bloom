@@ -8,6 +8,7 @@ import {
 } from "@bloom-housing/ui-components"
 import { Button, Dialog, Drawer, Grid, Tag } from "@bloom-housing/ui-seeds"
 import {
+  EnumListingListingType,
   EnumUnitGroupAmiLevelMonthlyRentDeterminationType,
   FeatureFlag,
   FeatureFlagEnum,
@@ -67,6 +68,11 @@ const FormUnits = ({
   const listingAvailability = useWatch({
     control,
     name: "listingAvailabilityQuestion",
+  })
+
+  const listingType = useWatch({
+    control,
+    name: "listingType",
   })
 
   const homeTypes = [
@@ -523,6 +529,7 @@ const FormUnits = ({
             draft={!units.some((unit) => unit.tempId === defaultUnit?.tempId)}
             defaultUnit={defaultUnit}
             nextId={nextId}
+            isNonRegulated={listingType !== EnumListingListingType.nonRegulated}
           />
         )}
       </Drawer>
