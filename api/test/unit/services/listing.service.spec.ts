@@ -2341,7 +2341,7 @@ describe('Testing listing service', () => {
       });
     });
 
-    it('should handle no records returned when findOne() is called with details view', async () => {
+    it('should handle no records returned when findOne() is called with full view', async () => {
       prisma.listings.findUnique = jest.fn().mockResolvedValue(null);
 
       await expect(
@@ -2349,7 +2349,7 @@ describe('Testing listing service', () => {
           await service.findOne(
             'a different listingId',
             LanguagesEnum.en,
-            ListingViews.details,
+            ListingViews.full,
           ),
       ).rejects.toThrowError();
 
@@ -2806,7 +2806,7 @@ describe('Testing listing service', () => {
       });
     });
 
-    it('should get records from findOne() with details view found and units', async () => {
+    it('should get records from findOne() with full view found and units', async () => {
       const date = new Date();
 
       const mockedListing = mockListing(0, { numberToMake: 1, date });
@@ -2829,7 +2829,7 @@ describe('Testing listing service', () => {
       const listing: Listing = await service.findOne(
         'listingId',
         LanguagesEnum.en,
-        ListingViews.details,
+        ListingViews.full,
       );
 
       expect(listing.id).toEqual('0');
@@ -4610,21 +4610,6 @@ describe('Testing listing service', () => {
       expect(prisma.listings.findUnique).toHaveBeenCalledWith({
         include: {
           jurisdictions: true,
-          listingFeatures: true,
-          listingImages: {
-            include: {
-              assets: true,
-            },
-          },
-          listingMultiselectQuestions: {
-            include: {
-              multiselectQuestions: true,
-            },
-          },
-          listingUtilities: true,
-          listingNeighborhoodAmenities: true,
-          listingsBuildingAddress: true,
-          reservedCommunityTypes: true,
         },
         where: {
           id: id,
@@ -4923,7 +4908,7 @@ describe('Testing listing service', () => {
       );
 
       expect(prisma.listings.update).toHaveBeenCalledWith({
-        include: views.details,
+        include: views.full,
         data: {
           name: 'example listing name',
           contentUpdatedAt: expect.anything(),

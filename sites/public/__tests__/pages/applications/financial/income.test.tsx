@@ -26,7 +26,7 @@ describe("applications pages", () => {
     it("should render form fields", () => {
       const { getByText, getByTestId, getAllByTestId } = render(<ApplicationIncome />)
 
-      expect(getByText("Let's move to income.")).toBeInTheDocument()
+      expect(getByText("Let's move to income")).toBeInTheDocument()
       expect(getByTestId("app-income")).toBeInTheDocument()
       expect(getAllByTestId("app-income-period")).toHaveLength(2)
     })

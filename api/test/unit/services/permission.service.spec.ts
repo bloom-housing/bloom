@@ -332,6 +332,48 @@ describe('Testing permission service', () => {
     });
   });
 
+  it('should add limited jurisdiction admin user role for user', async () => {
+    const e = await newEnforcer(
+      path.join(
+        __dirname,
+        '../../../src/permission-configs',
+        'permission_model.conf',
+      ),
+      path.join(
+        __dirname,
+        '../../../src/permission-configs',
+        'permission_policy.csv',
+      ),
+    );
+
+    const user = {
+      id: 'example id',
+      userRoles: {
+        isLimitedJurisdictionalAdmin: true,
+      },
+      jurisdictions: [
+        {
+          id: 'juris id',
+        },
+      ],
+    } as User;
+    const enforcer = await service.addUserPermissions(e, user);
+    expect(
+      await enforcer.hasRoleForUser(
+        'example id',
+        UserRoleEnum.limitedJurisdictionAdmin,
+      ),
+    ).toEqual(true);
+    expect(
+      await enforcer.hasPermissionForUser(
+        'example id',
+        'listing',
+        `r.obj.jurisdictionId == 'juris id'`,
+        `(${permissionActions.read}|${permissionActions.create}|${permissionActions.update}|${permissionActions.delete})`,
+      ),
+    ).toEqual(true);
+  });
+
   it('should allow anonymous to read listings', async () => {
     expect(
       await service.canOrThrow(undefined, 'listing', permissionActions.read),
