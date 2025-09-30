@@ -14,7 +14,11 @@ import { ListingView } from "../../../components/listing/ListingView"
 import { ErrorPage } from "../../_error"
 import dayjs from "dayjs"
 import { fetchJurisdictionByName } from "../../../lib/hooks"
-import { Jurisdiction, Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  Jurisdiction,
+  Listing,
+  ListingsStatusEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { ListingViewSeeds } from "../../../components/listing/ListingViewSeeds"
 
 interface ListingProps {
@@ -64,7 +68,13 @@ export default function ListingPage(props: ListingProps) {
   const metaImage = imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize))[0]
 
   return (
-    <Layout pageTitle={listing.name} metaImage={metaImage} metaDescription={metaDescription}>
+    <Layout
+      pageTitle={listing.name}
+      metaImage={metaImage}
+      metaDescription={metaDescription}
+      // search engines should not crawl for closed or draft listings
+      noIndex={listing.status !== ListingsStatusEnum.active}
+    >
       {process.env.showNewSeedsDesigns ? (
         <ListingViewSeeds listing={listing} profile={profile} jurisdiction={props.jurisdiction} />
       ) : (
