@@ -103,10 +103,29 @@ export const conversationalSystemContext = {
 }
 
 const API_BASE_URL = "http://127.0.0.1:8000"
-export const getReportDataFastAPI = async () => {
+
+export interface ApiFilters {
+  householdSize?: string[] | null
+  minIncome?: number | null
+  maxIncome?: number | null
+  amiLevels?: string[] | null
+  voucherStatuses?: string[] | null
+  accessibilityTypes?: string[] | null
+  races?: string[] | null
+  ethnicities?: string[] | null
+  applicantResidentialCounties?: string[] | null
+  applicantWorkCounties?: string[] | null
+  minAge?: number | null
+  maxAge?: number | null
+  startDate?: string | null
+  endDate?: string | null
+}
+
+export const getReportDataFastAPI = async (filters?: ApiFilters) => {
   console.log("Fetching data from API...")
   try {
-    const response = await axios.get(`${API_BASE_URL}/generate-report`)
+    const url = `${API_BASE_URL}/generate-report`
+    const response = filters ? await axios.post(url, filters) : await axios.get(url)
     console.log("Data returned from API:", response.data)
     return response.data as ReportData
   } catch (error) {

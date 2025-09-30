@@ -35,22 +35,15 @@ export function ApplicationDemographicsSection({ form }: Props) {
           setValue={setValue}
           placeholder="Select one or more race"
           validation={{
-            validate: (value: string[]) => {
-              if (!value || value.length === 0) {
-                return "Please select at least one race option"
-              }
+            validate: (_value: string[]) => {
+              // Allow empty selection for filtering - means no filter applied
               return true
             },
           }}
         />
-        {Array.isArray(errors.races) &&
-          errors.races.map((error, idx) =>
-            error?.message ? (
-              <p className="error" key={idx}>
-                {error.message}
-              </p>
-            ) : null
-          )}
+        {errors.races && (
+          <p className="error">{(errors.races as unknown as { message: string }).message}</p>
+        )}
 
         <MultiSelectField
           label="Ethnicity"
@@ -61,22 +54,15 @@ export function ApplicationDemographicsSection({ form }: Props) {
           setValue={setValue}
           placeholder="Select ethnicity"
           validation={{
-            validate: (value: string[]) => {
-              if (!value || value.length === 0) {
-                return "Please select at least one ethnicity option"
-              }
+            validate: (_value: string[]) => {
+              // Allow empty selection for filtering - means no filter applied
               return true
             },
           }}
         />
-        {Array.isArray(errors.ethnicities) &&
-          errors.ethnicities.map((error, idx) =>
-            error?.message ? (
-              <p className="error" key={idx}>
-                {error.message}
-              </p>
-            ) : null
-          )}
+        {errors.ethnicities && (
+          <p className="error">{(errors.ethnicities as unknown as { message: string }).message}</p>
+        )}
       </div>
       <div className="flex flex-row gap-4">
         <div className="flex flex-col">
@@ -90,32 +76,38 @@ export function ApplicationDemographicsSection({ form }: Props) {
             validation={{
               valueAsNumber: true,
               validate: {
-                isAdult: (value: number) => {
-                  if (value !== undefined && value !== null && value < 18) {
+                isAdult: (value: string) => {
+                  if (value !== undefined && value !== null && value !== "" && Number(value) < 18) {
                     return "Min age should be greater than or equal to 18"
                   }
                   return true
                 },
-                lessThanMax: (value: number) => {
+                lessThanMax: (value: string) => {
+                  // If minAge is not provided, validation passes
+                  if (value === undefined || value === null || value === "") {
+                    return true
+                  }
+
                   const formValues = getValues()
                   const maxAgeValue = Number(formValues.maxAge)
-                  if (
-                    value !== undefined &&
-                    value !== null &&
-                    !isNaN(maxAgeValue) &&
-                    value > maxAgeValue
-                  ) {
+
+                  // If maxAge is not provided or is invalid, validation passes
+                  if (maxAgeValue === undefined || isNaN(maxAgeValue)) {
+                    return true
+                  }
+
+                  // If both ages are provided, minAge must be <= maxAge
+                  if (Number(value) > maxAgeValue) {
                     return "Min age must be less than or equal to max age"
                   }
+
                   return true
                 },
               },
             }}
           />
           {errors.minAge && (
-            <p className="error">
-              {Array.isArray(errors.minAge) ? errors.minAge[0]?.message : "Invalid age"}
-            </p>
+            <p className="error">{(errors.minAge as unknown as { message: string }).message}</p>
           )}
         </div>
 
@@ -130,26 +122,32 @@ export function ApplicationDemographicsSection({ form }: Props) {
             validation={{
               valueAsNumber: true,
               validate: {
-                greaterThanMin: (value: number) => {
+                greaterThanMin: (value: string) => {
+                  // If maxAge is not provided, validation passes
+                  if (value === undefined || value === null || value === "") {
+                    return true
+                  }
+
                   const formValues = getValues()
                   const minAgeValue = Number(formValues.minAge)
-                  if (
-                    value !== undefined &&
-                    value !== null &&
-                    !isNaN(minAgeValue) &&
-                    value < minAgeValue
-                  ) {
+
+                  // If minAge is not provided or is invalid, validation passes
+                  if (minAgeValue === undefined || isNaN(minAgeValue)) {
+                    return true
+                  }
+
+                  // If maxAge is provided, it must be >= minAge
+                  if (Number(value) < minAgeValue) {
                     return "Max age must be greater than or equal to min age"
                   }
+
                   return true
                 },
               },
             }}
           />
           {errors.maxAge && (
-            <p className="error">
-              {Array.isArray(errors.maxAge) ? errors.maxAge[0]?.message : "Invalid age"}
-            </p>
+            <p className="error">{(errors.maxAge as unknown as { message: string }).message}</p>
           )}
         </div>
       </div>

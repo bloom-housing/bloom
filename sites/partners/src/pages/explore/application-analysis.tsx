@@ -9,7 +9,8 @@ import DemographicsSection from "../../components/explore/raceAndEthnicity"
 import PrimaryApplicantSection from "../../components/explore/applicantAndHouseholdData"
 import ReportSummary from "../../components/explore/ReportSummary"
 import { FilteringSlideOut } from "../../components/explore/FilteringSlideOut"
-import { getReportDataFastAPI, ReportProducts } from "../../lib/explore/data-explorer"
+import { getReportDataFastAPI, ReportProducts, ApiFilters } from "../../lib/explore/data-explorer"
+import { FormValues } from "../../components/explore/filtering/mainForm"
 import { useRouter } from "next/router"
 
 const ApplicationAnalysis = () => {
@@ -34,30 +35,39 @@ const ApplicationAnalysis = () => {
     totalProcessedApplications: 0,
     totalListings: 0,
   })
+  const [appliedFilters, setAppliedFilters] = useState<ApiFilters | undefined>(undefined)
+
+  // Log applied filters for debugging
+  useEffect(() => {
+    if (appliedFilters) {
+      console.log("Current applied filters:", appliedFilters)
+    }
+  }, [appliedFilters])
+
+  const fetchData = async (filters?: ApiFilters) => {
+    try {
+      const reportData = await getReportDataFastAPI(filters)
+      setChartData({
+        incomeHouseholdSizeCrossTab: reportData.products.incomeHouseholdSizeCrossTab,
+        raceFrequencies: reportData.products.raceFrequencies,
+        ethnicityFrequencies: reportData.products.ethnicityFrequencies,
+        residentialLocationFrequencies: reportData.products.residentialLocationFrequencies,
+        ageFrequencies: reportData.products.ageFrequencies,
+        languageFrequencies: reportData.products.languageFrequencies,
+        subsidyOrVoucherTypeFrequencies: reportData.products.subsidyOrVoucherTypeFrequencies,
+        accessibilityTypeFrequencies: reportData.products.accessibilityTypeFrequencies,
+      })
+      setFilterInformation({
+        dataRange: reportData.reportFilters.dateRange,
+        totalProcessedApplications: reportData.totalProcessedApplications,
+        totalListings: reportData.totalListings,
+      })
+    } catch (error) {
+      console.error("Error fetching report data:", error)
+    }
+  }
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const reportData = await getReportDataFastAPI()
-        setChartData({
-          incomeHouseholdSizeCrossTab: reportData.products.incomeHouseholdSizeCrossTab,
-          raceFrequencies: reportData.products.raceFrequencies,
-          ethnicityFrequencies: reportData.products.ethnicityFrequencies,
-          residentialLocationFrequencies: reportData.products.residentialLocationFrequencies,
-          ageFrequencies: reportData.products.ageFrequencies,
-          languageFrequencies: reportData.products.languageFrequencies,
-          subsidyOrVoucherTypeFrequencies: reportData.products.subsidyOrVoucherTypeFrequencies,
-          accessibilityTypeFrequencies: reportData.products.accessibilityTypeFrequencies,
-        })
-        setFilterInformation({
-          dataRange: reportData.reportFilters.dateRange,
-          totalProcessedApplications: reportData.totalProcessedApplications,
-          totalListings: reportData.totalListings,
-        })
-      } catch (error) {
-        console.error("Error fetching report data:", error)
-      }
-    }
     void fetchData()
   }, [])
 
@@ -75,8 +85,43 @@ const ApplicationAnalysis = () => {
     }
   }, [isFilterPanelOpen])
 
-  const handleApplyFilters = () => {
-    // TODO: Apply filters and refresh data
+  const handleApplyFilters = (filters: FormValues) => {
+    console.log("Raw filter values:", filters)
+
+    // Helper function to handle numeric fields - convert NaN to null, keep all other values
+    const getNumericValue = (num: number | null | undefined): number | null =>
+      num !== undefined && !isNaN(num) ? num : null
+
+    // Helper function to handle string fields - convert empty strings to null
+    const getStringValue = (str: string | null | undefined): string | null =>
+      str && str.trim() !== "" ? str : null
+
+    // Convert FormValues to ApiFilters format - preserve all values, transform NaN and empty strings to null
+    const apiFilters: ApiFilters = {
+      householdSize: filters.householdSize,
+      minIncome: getNumericValue(filters.minIncome),
+      maxIncome: getNumericValue(filters.maxIncome),
+      amiLevels: filters.amiLevels,
+      voucherStatuses: filters.voucherStatuses,
+      accessibilityTypes: filters.accessibilityTypes,
+      races: filters.races,
+      ethnicities: filters.ethnicities,
+      applicantResidentialCounties: filters.applicantResidentialCounties,
+      applicantWorkCounties: filters.applicantWorkCounties,
+      minAge: getNumericValue(filters.minAge),
+      maxAge: getNumericValue(filters.maxAge),
+      startDate: getStringValue(filters.startDate),
+      endDate: getStringValue(filters.endDate),
+    }
+
+    // Remove undefined values
+    const cleanedFilters = Object.fromEntries(
+      Object.entries(apiFilters).filter(([, value]) => value !== undefined)
+    ) as ApiFilters
+
+    setAppliedFilters(cleanedFilters)
+    console.log("Applied filters:", cleanedFilters)
+    void fetchData(cleanedFilters)
     setIsFilterPanelOpen(false)
   }
 
@@ -90,7 +135,7 @@ const ApplicationAnalysis = () => {
         title="Application Report"
       ></NavigationHeader>
       <div className="w-full bg-gray-100">
-        <div className="flex flex-col bg-gray-100 w-4/5 p-12">
+        <div className="flex flex-col bg-gray-100 max-w-7xl mx-auto my-4 px-5">
           <ReportSummary
             dateRange={filterInformation.dataRange}
             totalApplications={filterInformation.totalProcessedApplications}
@@ -129,8 +174,11 @@ const ApplicationAnalysis = () => {
         </div>
       </div>
 
-      {/* Filtering Slide-out Panel */}
-      <FilteringSlideOut isOpen={isFilterPanelOpen} onClose={() => setIsFilterPanelOpen(false)} />
+      <FilteringSlideOut
+        isOpen={isFilterPanelOpen}
+        onClose={() => setIsFilterPanelOpen(false)}
+        onApplyFilters={handleApplyFilters}
+      />
     </Layout>
   )
 }
