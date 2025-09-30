@@ -1,13 +1,18 @@
 import React from "react"
 import { XMarkIcon } from "@heroicons/react/24/outline"
-import { MainForm } from "./filtering/mainForm"
+import { MainForm, FormValues } from "./filtering/mainForm"
 
 interface FilteringSlideOutProps {
   isOpen: boolean
   onClose: () => void
+  onApplyFilters?: (filters: FormValues) => void
 }
 
-export const FilteringSlideOut: React.FC<FilteringSlideOutProps> = ({ isOpen, onClose }) => {
+export const FilteringSlideOut: React.FC<FilteringSlideOutProps> = ({
+  isOpen,
+  onClose,
+  onApplyFilters,
+}) => {
   return (
     <>
       {/* Overlay */}
@@ -45,7 +50,7 @@ export const FilteringSlideOut: React.FC<FilteringSlideOutProps> = ({ isOpen, on
 
           {/* Scrollable content area */}
           <div className="flex-1 overflow-y-auto">
-            <MainForm onClose={onClose} />
+            <MainForm onClose={onClose} onApplyFilters={onApplyFilters} />
           </div>
         </div>
       </div>

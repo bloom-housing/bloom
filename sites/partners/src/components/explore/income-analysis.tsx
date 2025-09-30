@@ -1,4 +1,3 @@
-// HouseholdIncomeReport.tsx
 import React from "react"
 import {
   BarChart,

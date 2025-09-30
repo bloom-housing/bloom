@@ -77,10 +77,4 @@ export const dropdownOptions = {
     { value: "solano", label: "Solano" },
     { value: "sonoma", label: "Sonoma" },
   ] as MultiSelectFieldItem[],
-
-  cities: [
-    { value: "oakland", label: "Oakland" },
-    { value: "berkeley", label: "Berkeley" },
-    { value: "san_leandro", label: "San Leandro" },
-  ] as MultiSelectFieldItem[],
 }

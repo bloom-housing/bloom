@@ -17,9 +17,8 @@ export function HouseholdDetailsSection({ form }: Props) {
     setValue,
     formState: { errors },
   } = form
-
   return (
-    <section className="flex flex-col border-b pb-8">
+    <section className="flex flex-col border-b py-8">
       <HeadingGroup
         heading="Self reported household details"
         subheading="Select the settings for self reported income, size and household details"
@@ -35,21 +34,19 @@ export function HouseholdDetailsSection({ form }: Props) {
           placeholder="Select one or more household size"
           validation={{
             validate: (value: string[]) => {
-              if (!value || value.length === 0) {
-                return "Please select at least one household size option"
+              console.log(value)
+              if (value.length > 0) {
+                return true
               }
-              return true
+              return "Please select at least one household size"
             },
           }}
         />
-        {Array.isArray(errors.householdSize) &&
-          errors.householdSize.map((err, idx) =>
-            err?.message ? (
-              <p className="error" key={idx}>
-                {err.message}
-              </p>
-            ) : null
-          )}
+        {errors.householdSize && (
+          <p className="error">
+            {(errors.householdSize as unknown as { message: string }).message}
+          </p>
+        )}
       </div>
       <div className="flex flex-col pb-6">
         <div className="flex">
@@ -64,12 +61,6 @@ export function HouseholdDetailsSection({ form }: Props) {
             validation={{
               valueAsNumber: true,
               validate: {
-                isPositive: (value: number) => {
-                  if (value !== undefined && value !== null && value <= 0) {
-                    return "Min income should be greater than 0"
-                  }
-                  return true
-                },
                 lessThanMax: (value: number) => {
                   const maxIncomeValue = getValues("maxIncome")
                   if (
@@ -129,21 +120,16 @@ export function HouseholdDetailsSection({ form }: Props) {
           placeholder="Select one or more AMI level"
           validation={{
             validate: (value: string[]) => {
-              if (!value || value.length === 0) {
-                return "Please select at least one AMI level option"
+              if (value.length > 0) {
+                return true
               }
-              return true
+              return "Please select at least one AMI level"
             },
           }}
         />
-        {Array.isArray(errors.amiLevels) &&
-          errors.amiLevels.map((err, idx) =>
-            err?.message ? (
-              <p className="error" key={idx}>
-                {err.message}
-              </p>
-            ) : null
-          )}
+        {errors.amiLevels && (
+          <p className="error">{(errors.amiLevels as unknown as { message: string }).message}</p>
+        )}
       </div>
 
       <div className="pb-6">
@@ -157,21 +143,18 @@ export function HouseholdDetailsSection({ form }: Props) {
           placeholder="Select voucher status"
           validation={{
             validate: (value: string[]) => {
-              if (!value || value.length === 0) {
-                return "Please select at least one voucher status option"
+              if (value.length > 0) {
+                return true
               }
-              return true
+              return "Please select at least one voucher status"
             },
           }}
         />
-        {Array.isArray(errors.voucherStatuses) &&
-          errors.voucherStatuses.map((err, idx) =>
-            err?.message ? (
-              <p className="error" key={idx}>
-                {err.message}
-              </p>
-            ) : null
-          )}
+        {errors.voucherStatuses && (
+          <p className="error">
+            {(errors.voucherStatuses as unknown as { message: string }).message}
+          </p>
+        )}
       </div>
       <div className="">
         <MultiSelectField
@@ -184,21 +167,18 @@ export function HouseholdDetailsSection({ form }: Props) {
           placeholder="Select accessibility type"
           validation={{
             validate: (value: string[]) => {
-              if (!value || value.length === 0) {
-                return "Please select at least one accessibility type option"
+              if (value.length > 0) {
+                return true
               }
-              return true
+              return "Please select at least one accessibility type"
             },
           }}
         />
-        {Array.isArray(errors.accessibilityTypes) &&
-          errors.accessibilityTypes.map((err, idx) =>
-            err?.message ? (
-              <p className="error" key={idx}>
-                {err.message}
-              </p>
-            ) : null
-          )}
+        {errors.accessibilityTypes && (
+          <p className="error">
+            {(errors.accessibilityTypes as unknown as { message: string }).message}
+          </p>
+        )}
       </div>
     </section>
   )

@@ -22,7 +22,7 @@ export function GeographySection({ form }: Props) {
     <section className="flex flex-col py-8">
       <HeadingGroup
         heading="Geography"
-        subheading="Set the geographic boundaries based on primary applicant and listing addresses"
+        subheading="Set the geographic boundaries based on primary applicant addresses"
       />
 
       <div className="sub-section w-1/2">
@@ -37,21 +37,18 @@ export function GeographySection({ form }: Props) {
           placeholder="Select county"
           validation={{
             validate: (value: string[]) => {
-              if (!value || value.length === 0) {
-                return "Please select at least one residential county option"
+              if (value.length > 0) {
+                return true
               }
-              return true
+              return "Must select at least one county if filtering"
             },
           }}
         />
-        {Array.isArray(errors.applicantResidentialCounties) &&
-          errors.applicantResidentialCounties.map((error, idx) =>
-            error?.message ? (
-              <p className="error" key={idx}>
-                {error.message}
-              </p>
-            ) : null
-          )}
+        {errors.applicantResidentialCounties && (
+          <p className="error">
+            {(errors.applicantResidentialCounties as unknown as { message: string }).message}
+          </p>
+        )}
       </div>
 
       <div className="sub-section w-1/2 py-6">
@@ -66,21 +63,18 @@ export function GeographySection({ form }: Props) {
           placeholder="Select county"
           validation={{
             validate: (value: string[]) => {
-              if (!value || value.length === 0) {
-                return "Please select at least one work county option"
+              if (value.length > 0) {
+                return true
               }
-              return true
+              return "Must select at least one county if filtering"
             },
           }}
         />
-        {Array.isArray(errors.applicantWorkCounties) &&
-          errors.applicantWorkCounties.map((error, idx) =>
-            error?.message ? (
-              <p className="error" key={idx}>
-                {error.message}
-              </p>
-            ) : null
-          )}
+        {errors.applicantWorkCounties && (
+          <p className="error">
+            {(errors.applicantWorkCounties as unknown as { message: string }).message}
+          </p>
+        )}
       </div>
     </section>
   )
