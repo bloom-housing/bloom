@@ -180,22 +180,22 @@ const UnitGroupForm = ({
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const saveAmiSummary = (newAmiLevel: TempAmiLevel) => {
-    const exisits = amiLevels?.some((amiLevel) => amiLevel.tempId === newAmiLevel.tempId)
-    if (exisits) {
-      setAmiLevels(
-        amiLevels.map((amiLevel) =>
-          amiLevel.tempId === newAmiLevel.tempId ? newAmiLevel : amiLevel
-        )
-      )
-    } else {
-      if (amiLevels) {
-        setAmiLevels((current) => [...current, newAmiLevel])
-      } else {
-        setAmiLevels([newAmiLevel])
-      }
-    }
-  }
+  // const saveAmiSummary = (newAmiLevel: TempAmiLevel) => {
+  //   const exisits = amiLevels?.some((amiLevel) => amiLevel.tempId === newAmiLevel.tempId)
+  //   if (exisits) {
+  //     setAmiLevels(
+  //       amiLevels.map((amiLevel) =>
+  //         amiLevel.tempId === newAmiLevel.tempId ? newAmiLevel : amiLevel
+  //       )
+  //     )
+  //   } else {
+  //     if (amiLevels) {
+  //       setAmiLevels((current) => [...current, newAmiLevel])
+  //     } else {
+  //       setAmiLevels([newAmiLevel])
+  //     }
+  //   }
+  // }
 
   const deleteAmiLevel = useCallback(
     (tempId: number) => {
@@ -584,13 +584,13 @@ const UnitGroupForm = ({
           nested
         >
           <DrawerHeader id="add-ami-level-drawer-header">{t("listings.unit.amiAdd")}</DrawerHeader>
-          <UnitGroupAmiForm
+          {/* <UnitGroupAmiForm
             onClose={() => setAmiSummary(null)}
             onSubmit={(amiLevel) => saveAmiSummary(amiLevel)}
             amiChartsOptions={amiChartsOptions}
             amiLevels={amiLevels}
             currentTempId={amiSummary}
-          />
+          /> */}
         </Drawer>
 
         <Dialog isOpen={!!amiDeleteModal} onClose={() => setAmiDeleteModal(null)}>
