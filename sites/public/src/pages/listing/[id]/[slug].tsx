@@ -72,8 +72,8 @@ export default function ListingPage(props: ListingProps) {
       pageTitle={listing.name}
       metaImage={metaImage}
       metaDescription={metaDescription}
-      // search engines should not crawl for closed or draft listings
-      noIndex={listing.status !== ListingsStatusEnum.active}
+      // search engines should not crawl for closed listings
+      noIndex={listing.status === ListingsStatusEnum.closed}
     >
       {process.env.showNewSeedsDesigns ? (
         <ListingViewSeeds listing={listing} profile={profile} jurisdiction={props.jurisdiction} />
