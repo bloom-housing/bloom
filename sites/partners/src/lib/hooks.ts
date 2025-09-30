@@ -1,4 +1,4 @@
-import { useCallback, useContext, useState } from "react"
+import { useCallback, useContext, useState, useEffect } from "react"
 import useSWR from "swr"
 import qs from "qs"
 import dayjs from "dayjs"
@@ -667,4 +667,24 @@ export function useLotteryActivityLog(listingId: string) {
     lotteryActivityLogLoading: !error && !data,
     lotteryError: error,
   }
+}
+
+export function useWatchOnFormNumberFieldsChange(
+  fieldValuesToWatch: number[],
+  fieldToTriggerWatch: string | string[],
+  trigger: (name?: string | string[]) => Promise<boolean>
+) {
+  useEffect(() => {
+    if (fieldValuesToWatch.some((value) => value) && trigger) {
+      const timeoutId = setTimeout(() => {
+        try {
+          void trigger(fieldToTriggerWatch)
+        } catch (error) {
+          console.debug("Form trigger error (likely component unmounted):", error)
+        }
+      }, 0)
+
+      return () => clearTimeout(timeoutId)
+    }
+  }, [fieldToTriggerWatch, fieldValuesToWatch, trigger])
 }
