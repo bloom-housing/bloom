@@ -73,6 +73,8 @@ const ListingFormActions = ({
     profile?.userRoles?.isAdmin ||
     (profile?.userRoles?.isJurisdictionalAdmin &&
       duplicateListingPermissions?.includes(UserRoleEnum.jurisdictionAdmin)) ||
+    (profile?.userRoles?.isLimitedJurisdictionalAdmin &&
+      duplicateListingPermissions?.includes(UserRoleEnum.limitedJurisdictionAdmin)) ||
     (profile?.userRoles?.isPartner && duplicateListingPermissions?.includes(UserRoleEnum.partner))
 
   const listingId = listing?.id
