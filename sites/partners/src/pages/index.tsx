@@ -76,22 +76,24 @@ class ListingsLink extends formatLinkCell {
 }
 
 export const getFlagInAllJurisdictions = (
-  jurisdictions: Jurisdiction[],
   flagName: FeatureFlagEnum,
-  activeState: boolean
+  activeState: boolean,
+  doJurisdictionsHaveFeatureFlagOn: (
+    featureFlag: string,
+    jurisdiction?: string,
+    onlyIfAllJurisdictionsHaveItEnabled?: boolean
+  ) => boolean
 ) => {
-  return jurisdictions?.every(
-    (jurisdiction) =>
-      !!jurisdiction.featureFlags.find(
-        (flag) => flag.name === flagName && flag.active === activeState
-      ) ||
-      (!activeState && !jurisdiction.featureFlags.find((flag) => flag.name === flagName))
-  )
+  if (activeState) {
+    return doJurisdictionsHaveFeatureFlagOn(flagName, null, true)
+  } else {
+    return !doJurisdictionsHaveFeatureFlagOn(flagName)
+  }
 }
 
 export default function ListingsList() {
   const metaDescription = t("pageDescription.welcome", { regionName: t("region.name") })
-  const { profile } = useContext(AuthContext)
+  const { profile, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
   const isAdmin =
     profile?.userRoles?.isAdmin ||
     profile?.userRoles?.isJurisdictionalAdmin ||
@@ -165,7 +167,13 @@ export default function ListingsList() {
       },
     ]
 
-    if (getFlagInAllJurisdictions(profile?.jurisdictions, FeatureFlagEnum.enableIsVerified, true)) {
+    if (
+      getFlagInAllJurisdictions(
+        FeatureFlagEnum.enableIsVerified,
+        true,
+        doJurisdictionsHaveFeatureFlagOn
+      )
+    ) {
       columns.push({
         headerName: t("t.verified"),
         field: "isVerified",
@@ -178,7 +186,11 @@ export default function ListingsList() {
     }
 
     if (
-      getFlagInAllJurisdictions(profile?.jurisdictions, FeatureFlagEnum.enableUnitGroups, false)
+      getFlagInAllJurisdictions(
+        FeatureFlagEnum.enableUnitGroups,
+        false,
+        doJurisdictionsHaveFeatureFlagOn
+      )
     ) {
       columns.push(
         {
@@ -202,9 +214,9 @@ export default function ListingsList() {
     }
     if (
       getFlagInAllJurisdictions(
-        profile?.jurisdictions,
         FeatureFlagEnum.enableListingUpdatedAt,
-        true
+        true,
+        doJurisdictionsHaveFeatureFlagOn
       )
     ) {
       columns.push({
