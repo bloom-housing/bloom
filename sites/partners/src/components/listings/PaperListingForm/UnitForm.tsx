@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from "react"
 import { t, Field, Select, FieldGroup, Form, numberOptions } from "@bloom-housing/ui-components"
 import { Button, Card, Drawer, Grid } from "@bloom-housing/ui-seeds"
 import { AuthContext } from "@bloom-housing/shared-helpers"
-import { useWatch, useForm } from "react-hook-form"
+import { useWatch, useForm, FormProvider } from "react-hook-form"
 import { TempUnit } from "../../../lib/listings/formTypes"
 import {
   AmiChart,
@@ -92,6 +92,10 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
   const fieldsToTriggerWatch = "minOccupancy"
 
   useWatchOnFormNumberFieldsChange(fieldsValuesToWatch, fieldsToTriggerWatch, trigger)
+  const methods = useForm({
+    mode: "onChange",
+    shouldFocusError: false,
+  })
 
   const maxAmiHouseholdSize = 8
 
@@ -396,286 +400,298 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
   }, [unitTypesOptions, unitTypes])
 
   return (
-    <>
-      <Drawer.Content>
-        <Form onSubmit={() => false}>
-          <Card>
-            <Card.Section>
-              <SectionWithGrid heading={t("listings.unit.details")}>
-                <Grid.Row columns={4}>
-                  <Grid.Cell>
-                    <Field
-                      id="number"
-                      name="number"
-                      label={t("listings.unit.unitNumber")}
-                      register={register}
-                      type="text"
-                    />
-                  </Grid.Cell>
-                  <Grid.Cell>
-                    <Select
-                      id="unitTypes.id"
-                      name="unitTypes.id"
-                      label={t("listings.unit.type")}
-                      placeholder={t("listings.unit.type")}
-                      register={register}
-                      controlClassName="control"
-                      options={unitTypesOptions}
-                      error={fieldHasError(errors?.unitTypes)}
-                      errorMessage={t("errors.requiredFieldError")}
-                      validation={{ required: true }}
-                      inputProps={{
-                        onChange: () => {
-                          clearErrors("unitTypes.id")
-                        },
-                      }}
-                    />
-                  </Grid.Cell>
-                  <Grid.Cell>
-                    <Select
-                      id="numBathrooms"
-                      name="numBathrooms"
-                      label={t("listings.unit.numBathrooms")}
-                      placeholder={t("listings.unit.numBathrooms")}
-                      register={register}
-                      controlClassName="control"
-                      options={[
-                        { label: t("listings.unit.sharedBathroom"), value: "0" },
-                        ...numberOptions(5),
-                      ]}
-                    />
-                  </Grid.Cell>
-                  <Grid.Cell>
-                    <Select
-                      id="floor"
-                      name="floor"
-                      label={t("listings.unit.floor")}
-                      placeholder={t("listings.unit.floor")}
-                      register={register}
-                      controlClassName="control"
-                      options={numberOptions(10)}
-                    />
-                  </Grid.Cell>
-                  <Grid.Cell>
-                    <Field
-                      id="sqFeet"
-                      name="sqFeet"
-                      label={t("listings.unit.squareFootage")}
-                      register={register}
-                      type="number"
-                    />
-                  </Grid.Cell>
-
-                  <Grid.Cell>
-                    <Select
-                      id="minOccupancy"
-                      name="minOccupancy"
-                      label={t("listings.unit.minOccupancy")}
-                      placeholder={t("listings.unit.minOccupancy")}
-                      register={register}
-                      controlClassName="control"
-                      options={numberOptions(numberOccupancyOptions)}
-                      error={fieldHasError(errors?.minOccupancy)}
-                      errorMessage={t("errors.minGreaterThanMaxOccupancyError")}
-                      validation={{ max: maxOccupancy || numberOccupancyOptions }}
-                    />
-                  </Grid.Cell>
-                  <Grid.Cell>
-                    <Select
-                      id="maxOccupancy"
-                      name="maxOccupancy"
-                      label={t("listings.unit.maxOccupancy")}
-                      placeholder={t("listings.unit.maxOccupancy")}
-                      register={register}
-                      controlClassName="control"
-                      options={numberOptions(numberOccupancyOptions)}
-                      error={fieldHasError(errors?.maxOccupancy)}
-                      errorMessage={t("errors.maxLessThanMinOccupancyError")}
-                      validation={{ min: minOccupancy }}
-                    />
-                  </Grid.Cell>
-                </Grid.Row>
-              </SectionWithGrid>
-
-              <hr className="spacer-section-above spacer-section" />
-              <SectionWithGrid heading={t("listings.unit.eligibility")}>
-                <Grid.Row columns={4}>
-                  <Grid.Cell>
-                    <Select
-                      id="amiChart.id"
-                      name="amiChart.id"
-                      label={t("listings.unit.amiChart")}
-                      placeholder={t("listings.unit.amiChart")}
-                      register={register}
-                      controlClassName="control"
-                      options={amiChartsOptions}
-                      error={fieldHasError(errors?.amiChart?.id)}
-                      errorMessage={t("errors.requiredFieldError")}
-                      validation={{ required: true }}
-                      inputProps={{
-                        onChange: (value) => {
-                          setValue("amiPercentage", undefined)
-                          clearErrors("amiPercentage")
-                          clearErrors("amiChart.id")
-                          ;[...Array(maxAmiHouseholdSize)].forEach((_, index) => {
-                            setValue(`maxIncomeHouseholdSize${index + 1}`, undefined)
-                          })
-                          if (value?.target?.value && !loading && amiChartsOptions) {
-                            void fetchAmiChart(value.target?.value)
-                            setIsAmiPercentageDirty(true)
-                          }
-                        },
-                      }}
-                    />
-                  </Grid.Cell>
-                  <Grid.Cell>
-                    <Select
-                      id={"amiPercentage"}
-                      name="amiPercentage"
-                      label={t("listings.unit.amiPercentage")}
-                      placeholder={t("listings.unit.amiPercentage")}
-                      register={register}
-                      controlClassName="control"
-                      options={amiChartPercentageOptions}
-                      inputProps={{
-                        onChange: () => {
-                          setIsAmiPercentageDirty(true)
-                          clearErrors("amiPercentage")
-                        },
-                      }}
-                      error={fieldHasError(errors?.amiPercentage)}
-                      errorMessage={t("errors.requiredFieldError")}
-                      validation={{ required: !!amiChartID }}
-                      disabled={!amiChartID}
-                    />
-                  </Grid.Cell>
-                </Grid.Row>
-              </SectionWithGrid>
-
-              <section className="mb-6 sm:w-1/2 sm:pr-3">
-                <table className={"w-full text-xs td-plain th-plain"}>
-                  <thead>
-                    <tr>
-                      <th>{t("listings.householdSize")}</th>
-                      <th>{t("listings.maxAnnualIncome")}</th>
-                    </tr>
-                  </thead>
-                  <tbody>{getAmiChartTableData()}</tbody>
-                </table>
-              </section>
-
-              <Grid>
-                <Grid.Row columns={4}>
-                  <Grid.Cell>
-                    <FieldGroup
-                      name="rentType"
-                      type="radio"
-                      register={register}
-                      fields={rentTypeOptions}
-                      fieldClassName="m-0"
-                      fieldGroupClassName="flex h-12 items-center"
-                      groupLabel={t("listings.unit.rentType")}
-                      fieldLabelClassName={styles["label-option"]}
-                    />
-                  </Grid.Cell>
-
-                  {rentType === "fixed" && (
-                    <>
-                      <Grid.Cell>
-                        <Field
-                          id="monthlyIncomeMin"
-                          name="monthlyIncomeMin"
-                          label={t("t.monthlyMinimumIncome")}
-                          placeholder="0.00"
-                          register={register}
-                          type="number"
-                          prepend="$"
-                        />
-                      </Grid.Cell>
-
-                      <Grid.Cell>
-                        <Field
-                          id="monthlyRent"
-                          name="monthlyRent"
-                          label={t("listings.unit.monthlyRent")}
-                          placeholder="0.00"
-                          register={register}
-                          type="number"
-                          prepend="$"
-                        />
-                      </Grid.Cell>
-                    </>
-                  )}
-                  {rentType === "percentage" && (
+    <FormProvider {...methods}>
+      <>
+        <Drawer.Content>
+          <Form onSubmit={() => false}>
+            <Card>
+              <Card.Section>
+                <SectionWithGrid heading={t("listings.unit.details")}>
+                  <Grid.Row columns={4}>
                     <Grid.Cell>
                       <Field
-                        id="monthlyRentAsPercentOfIncome"
-                        name="monthlyRentAsPercentOfIncome"
-                        label={t("listings.unit.%incomeRent")}
-                        placeholder={t("listings.unit.percentage")}
+                        id="number"
+                        name="number"
+                        label={t("listings.unit.unitNumber")}
+                        register={register}
+                        type="text"
+                      />
+                    </Grid.Cell>
+                    <Grid.Cell>
+                      <Select
+                        id="unitTypes.id"
+                        name="unitTypes.id"
+                        label={t("listings.unit.type")}
+                        placeholder={t("listings.unit.type")}
+                        register={register}
+                        controlClassName="control"
+                        options={unitTypesOptions}
+                        error={fieldHasError(errors?.unitTypes)}
+                        errorMessage={t("errors.requiredFieldError")}
+                        validation={{ required: true }}
+                        inputProps={{
+                          onChange: () => {
+                            clearErrors("unitTypes.id")
+                          },
+                        }}
+                      />
+                    </Grid.Cell>
+                    <Grid.Cell>
+                      <Select
+                        id="numBathrooms"
+                        name="numBathrooms"
+                        label={t("listings.unit.numBathrooms")}
+                        placeholder={t("listings.unit.numBathrooms")}
+                        register={register}
+                        controlClassName="control"
+                        options={[
+                          { label: t("listings.unit.sharedBathroom"), value: "0" },
+                          ...numberOptions(5),
+                        ]}
+                      />
+                    </Grid.Cell>
+                    <Grid.Cell>
+                      <Select
+                        id="floor"
+                        name="floor"
+                        label={t("listings.unit.floor")}
+                        placeholder={t("listings.unit.floor")}
+                        register={register}
+                        controlClassName="control"
+                        options={numberOptions(10)}
+                      />
+                    </Grid.Cell>
+                    <Grid.Cell>
+                      <Field
+                        id="sqFeet"
+                        name="sqFeet"
+                        label={t("listings.unit.squareFootage")}
                         register={register}
                         type="number"
                       />
                     </Grid.Cell>
-                  )}
-                </Grid.Row>
-              </Grid>
 
-              <hr className="spacer-section-above spacer-section" />
-              <SectionWithGrid heading={t("t.accessibility")}>
-                <Grid.Row columns={4}>
-                  <Grid.Cell>
-                    <Select
-                      id="unitAccessibilityPriorityTypes.id"
-                      name="unitAccessibilityPriorityTypes.id"
-                      label={t("listings.unit.accessibilityPriorityType")}
-                      placeholder={t("listings.unit.accessibilityPriorityType")}
-                      register={register}
-                      controlClassName="control"
-                      options={unitPrioritiesOptions}
-                    />
-                  </Grid.Cell>
-                </Grid.Row>
-              </SectionWithGrid>
-            </Card.Section>
-          </Card>
-        </Form>
-      </Drawer.Content>
-      <Drawer.Footer>
-        {!draft ? (
-          <Button type="button" onClick={() => copyAndNew()} variant="secondary" size="sm">
-            {t("t.copy")}
+                    <Grid.Cell>
+                      <Select
+                        id="minOccupancy"
+                        name="minOccupancy"
+                        label={t("listings.unit.minOccupancy")}
+                        placeholder={t("listings.unit.minOccupancy")}
+                        register={register}
+                        controlClassName="control"
+                        options={numberOptions(numberOccupancyOptions)}
+                        error={fieldHasError(errors?.minOccupancy)}
+                        errorMessage={t("errors.minGreaterThanMaxOccupancyError")}
+                        validation={{ max: maxOccupancy || numberOccupancyOptions }}
+                      />
+                    </Grid.Cell>
+                    <Grid.Cell>
+                      <Select
+                        id="maxOccupancy"
+                        name="maxOccupancy"
+                        label={t("listings.unit.maxOccupancy")}
+                        placeholder={t("listings.unit.maxOccupancy")}
+                        register={register}
+                        controlClassName="control"
+                        options={numberOptions(numberOccupancyOptions)}
+                        error={fieldHasError(errors?.maxOccupancy)}
+                        errorMessage={t("errors.maxLessThanMinOccupancyError")}
+                        validation={{ min: minOccupancy }}
+                      />
+                    </Grid.Cell>
+                  </Grid.Row>
+                </SectionWithGrid>
+
+                <hr className="spacer-section-above spacer-section" />
+                <SectionWithGrid heading={t("listings.unit.eligibility")}>
+                  <Grid.Row columns={4}>
+                    <Grid.Cell>
+                      <Select
+                        id="amiChart.id"
+                        name="amiChart.id"
+                        label={t("listings.unit.amiChart")}
+                        placeholder={t("listings.unit.amiChart")}
+                        register={register}
+                        controlClassName="control"
+                        options={amiChartsOptions}
+                        error={fieldHasError(errors?.amiChart?.id)}
+                        errorMessage={t("errors.requiredFieldError")}
+                        validation={{ required: true }}
+                        inputProps={{
+                          onChange: (value) => {
+                            setValue("amiPercentage", undefined)
+                            clearErrors("amiPercentage")
+                            clearErrors("amiChart.id")
+                            ;[...Array(maxAmiHouseholdSize)].forEach((_, index) => {
+                              setValue(`maxIncomeHouseholdSize${index + 1}`, undefined)
+                            })
+                            if (value?.target?.value && !loading && amiChartsOptions) {
+                              void fetchAmiChart(value.target?.value)
+                              setIsAmiPercentageDirty(true)
+                            }
+                          },
+                        }}
+                      />
+                    </Grid.Cell>
+                    <Grid.Cell>
+                      <Select
+                        id={"amiPercentage"}
+                        name="amiPercentage"
+                        label={t("listings.unit.amiPercentage")}
+                        placeholder={t("listings.unit.amiPercentage")}
+                        register={register}
+                        controlClassName="control"
+                        options={amiChartPercentageOptions}
+                        inputProps={{
+                          onChange: () => {
+                            setIsAmiPercentageDirty(true)
+                            clearErrors("amiPercentage")
+                          },
+                        }}
+                        error={fieldHasError(errors?.amiPercentage)}
+                        errorMessage={t("errors.requiredFieldError")}
+                        validation={{ required: !!amiChartID }}
+                        disabled={!amiChartID}
+                      />
+                    </Grid.Cell>
+                  </Grid.Row>
+                </SectionWithGrid>
+
+                <section className="mb-6 sm:w-1/2 sm:pr-3">
+                  <table className={"w-full text-xs td-plain th-plain"}>
+                    <thead>
+                      <tr>
+                        <th>{t("listings.householdSize")}</th>
+                        <th>{t("listings.maxAnnualIncome")}</th>
+                      </tr>
+                    </thead>
+                    <tbody>{getAmiChartTableData()}</tbody>
+                  </table>
+                </section>
+
+                <Grid>
+                  <Grid.Row columns={4}>
+                    <Grid.Cell>
+                      <FieldGroup
+                        name="rentType"
+                        type="radio"
+                        register={register}
+                        fields={rentTypeOptions}
+                        fieldClassName="m-0"
+                        fieldGroupClassName="flex h-12 items-center"
+                        groupLabel={t("listings.unit.rentType")}
+                        fieldLabelClassName={styles["label-option"]}
+                      />
+                    </Grid.Cell>
+
+                    {rentType === "fixed" && (
+                      <>
+                        <Grid.Cell>
+                          <Field
+                            id="monthlyIncomeMin"
+                            name="monthlyIncomeMin"
+                            label={t("t.monthlyMinimumIncome")}
+                            placeholder="0.00"
+                            register={register}
+                            type="number"
+                            prepend="$"
+                          />
+                        </Grid.Cell>
+
+                        <Grid.Cell>
+                          <Field
+                            id="monthlyRent"
+                            name="monthlyRent"
+                            label={t("listings.unit.monthlyRent")}
+                            placeholder="0.00"
+                            register={register}
+                            type="number"
+                            prepend="$"
+                          />
+                        </Grid.Cell>
+                      </>
+                    )}
+                    {rentType === "percentage" && (
+                      <Grid.Cell>
+                        <Field
+                          id="monthlyRentAsPercentOfIncome"
+                          name="monthlyRentAsPercentOfIncome"
+                          label={t("listings.unit.%incomeRent")}
+                          placeholder={t("listings.unit.percentage")}
+                          register={register}
+                          type="number"
+                        />
+                      </Grid.Cell>
+                    )}
+                  </Grid.Row>
+                </Grid>
+
+                <hr className="spacer-section-above spacer-section" />
+                <SectionWithGrid heading={t("t.accessibility")}>
+                  <Grid.Row columns={4}>
+                    <Grid.Cell>
+                      <Select
+                        id="unitAccessibilityPriorityTypes.id"
+                        name="unitAccessibilityPriorityTypes.id"
+                        label={t("listings.unit.accessibilityPriorityType")}
+                        placeholder={t("listings.unit.accessibilityPriorityType")}
+                        register={register}
+                        controlClassName="control"
+                        options={unitPrioritiesOptions}
+                      />
+                    </Grid.Cell>
+                  </Grid.Row>
+                </SectionWithGrid>
+              </Card.Section>
+            </Card>
+          </Form>
+        </Drawer.Content>
+        <Drawer.Footer>
+          {!draft ? (
+            <Button type="button" onClick={() => copyAndNew()} variant="secondary" size="sm">
+              {t("t.copy")}
+            </Button>
+          ) : (
+            <Button
+              type="button"
+              onClick={() => onFormSubmit("save")}
+              variant="secondary"
+              size="sm"
+            >
+              {t("t.save")}
+            </Button>
+          )}
+          <Button
+            type="button"
+            onClick={() => onFormSubmit("saveNew")}
+            variant="secondary"
+            size="sm"
+          >
+            {t("t.saveNew")}
           </Button>
-        ) : (
-          <Button type="button" onClick={() => onFormSubmit("save")} variant="secondary" size="sm">
-            {t("t.save")}
+
+          <Button
+            type="button"
+            onClick={() => onFormSubmit("saveExit")}
+            variant="primary"
+            size="sm"
+            id={"unitFormSaveAndExitButton"}
+          >
+            {t("t.saveExit")}
           </Button>
-        )}
-        <Button type="button" onClick={() => onFormSubmit("saveNew")} variant="secondary" size="sm">
-          {t("t.saveNew")}
-        </Button>
 
-        <Button
-          type="button"
-          onClick={() => onFormSubmit("saveExit")}
-          variant="primary"
-          size="sm"
-          id={"unitFormSaveAndExitButton"}
-        >
-          {t("t.saveExit")}
-        </Button>
-
-        <Button
-          type="button"
-          onClick={() => onClose(false, false, null)}
-          variant="text"
-          size="sm"
-          className={"font-semibold darker-alert"}
-        >
-          {t("t.cancel")}
-        </Button>
-      </Drawer.Footer>
-    </>
+          <Button
+            type="button"
+            onClick={() => onClose(false, false, null)}
+            variant="text"
+            size="sm"
+            className={"font-semibold darker-alert"}
+          >
+            {t("t.cancel")}
+          </Button>
+        </Drawer.Footer>
+      </>
+    </FormProvider>
   )
 }
 
