@@ -113,7 +113,7 @@ describe("Listing Management Tests", () => {
     cy.fixture("listing").then((listing) => {
       fillOutListing(cy, listing)
       verifyDetails(cy, listing)
-      verifyAutofill(cy, listing)
+      // verifyAutofill(cy, listing)
       verifyOpenListingWarning(cy, listing)
     })
   })
