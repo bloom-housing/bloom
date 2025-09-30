@@ -154,7 +154,7 @@ const ApplicationMultiselectQuestionStep = ({
       conductor.currentStep.save([body.current])
     }
     // Update to the next page if we have more pages
-    if (page !== questions.length) {
+    if (page !== questions.length && !conductor.returnToReview) {
       setVerifyAddressStep(0)
       setVerifyAddress(false)
       setPage(page + 1)
