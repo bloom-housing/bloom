@@ -26,7 +26,7 @@ import {
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { arrayToFormOptions, fieldHasError } from "../../../lib/helpers"
 import { TempAmiLevel, TempUnitGroup } from "../../../lib/listings/formTypes"
-// import UnitGroupAmiForm from "./UnitGroupAmiForm"
+import UnitGroupAmiForm from "./UnitGroupAmiForm"
 import styles from "./ListingForm.module.scss"
 
 type UnitGroupFormProps = {
@@ -59,6 +59,11 @@ const UnitGroupForm = ({
     action: "",
   }
 
+  const methods = useForm({
+    mode: "onChange",
+    shouldFocusError: false,
+  })
+
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const {
     register,
@@ -69,10 +74,8 @@ const UnitGroupForm = ({
     getValues,
     reset,
     watch,
-  } = useForm({
-    mode: "onChange",
-    shouldFocusError: false,
-  })
+  } = methods
+
   const jurisdiction: string = watch("jurisdictions.id")
   /**
    * fetch form options
@@ -129,11 +132,6 @@ const UnitGroupForm = ({
 
   useWatchOnFormNumberFieldsChange(fieldValuesToWatch, fieldToTriggerWatch, trigger)
 
-  const methods = useForm({
-    mode: "onChange",
-    shouldFocusError: false,
-  })
-
   // sets the options for the ami charts
   useEffect(() => {
     if (amiCharts.length === 0 || amiChartsOptions.length) return
@@ -180,22 +178,22 @@ const UnitGroupForm = ({
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  // const saveAmiSummary = (newAmiLevel: TempAmiLevel) => {
-  //   const exisits = amiLevels?.some((amiLevel) => amiLevel.tempId === newAmiLevel.tempId)
-  //   if (exisits) {
-  //     setAmiLevels(
-  //       amiLevels.map((amiLevel) =>
-  //         amiLevel.tempId === newAmiLevel.tempId ? newAmiLevel : amiLevel
-  //       )
-  //     )
-  //   } else {
-  //     if (amiLevels) {
-  //       setAmiLevels((current) => [...current, newAmiLevel])
-  //     } else {
-  //       setAmiLevels([newAmiLevel])
-  //     }
-  //   }
-  // }
+  const saveAmiSummary = (newAmiLevel: TempAmiLevel) => {
+    const exisits = amiLevels?.some((amiLevel) => amiLevel.tempId === newAmiLevel.tempId)
+    if (exisits) {
+      setAmiLevels(
+        amiLevels.map((amiLevel) =>
+          amiLevel.tempId === newAmiLevel.tempId ? newAmiLevel : amiLevel
+        )
+      )
+    } else {
+      if (amiLevels) {
+        setAmiLevels((current) => [...current, newAmiLevel])
+      } else {
+        setAmiLevels([newAmiLevel])
+      }
+    }
+  }
 
   const deleteAmiLevel = useCallback(
     (tempId: number) => {
@@ -584,13 +582,13 @@ const UnitGroupForm = ({
           nested
         >
           <DrawerHeader id="add-ami-level-drawer-header">{t("listings.unit.amiAdd")}</DrawerHeader>
-          {/* <UnitGroupAmiForm
+          <UnitGroupAmiForm
             onClose={() => setAmiSummary(null)}
             onSubmit={(amiLevel) => saveAmiSummary(amiLevel)}
             amiChartsOptions={amiChartsOptions}
             amiLevels={amiLevels}
             currentTempId={amiSummary}
-          /> */}
+          />
         </Drawer>
 
         <Dialog isOpen={!!amiDeleteModal} onClose={() => setAmiDeleteModal(null)}>

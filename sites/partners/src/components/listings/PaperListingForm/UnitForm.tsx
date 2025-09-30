@@ -39,6 +39,11 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
   const [currentAmiChart, setCurrentAmiChart] = useState(null)
   const [amiChartPercentageOptions, setAmiChartPercentageOptions] = useState([])
 
+  const methods = useForm({
+    mode: "onChange",
+    shouldFocusError: false,
+  })
+
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const {
     register,
@@ -50,10 +55,7 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
     reset,
     clearErrors,
     watch,
-  } = useForm({
-    mode: "onChange",
-    shouldFocusError: false,
-  })
+  } = methods
   const jurisdiction: string = watch("jurisdictions.id")
   /**
    * fetch form options
@@ -92,10 +94,6 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
   const fieldsToTriggerWatch = "minOccupancy"
 
   useWatchOnFormNumberFieldsChange(fieldsValuesToWatch, fieldsToTriggerWatch, trigger)
-  const methods = useForm({
-    mode: "onChange",
-    shouldFocusError: false,
-  })
 
   const maxAmiHouseholdSize = 8
 
