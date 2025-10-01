@@ -24,6 +24,7 @@ const ListingGuard = ({ children }: AuthGuardProps) => {
     return children
   }
 
+  window.location.href = "/unauthorized"
   return null
 }
 
