@@ -62,7 +62,6 @@ const ListingFormActions = ({
 
   const listingApprovalPermissions = jurisdiction?.listingApprovalPermissions
   const isListingApprovalEnabled = listingApprovalPermissions?.length > 0
-  console.log("isListingApprovalEnabled", isListingApprovalEnabled)
   const isListingApprover =
     profile?.userRoles.isAdmin ||
     (profile?.userRoles.isJurisdictionalAdmin &&
