@@ -29,7 +29,7 @@ import { ExportLogInterceptor } from '../interceptors/export-log.interceptor';
 import { ListingLotteryStatus } from '../../src/dtos/listings/listing-lottery-status.dto';
 import { LotteryActivityLogItem } from '../dtos/lottery/lottery-activity-log-item.dto';
 import { LotteryService } from '../services/lottery.service';
-import { mapTo } from '../../src/utilities/mapTo';
+import { mapTo } from '../utilities/mapTo';
 import { OptionalAuthGuard } from '../guards/optional.guard';
 import { PermissionAction } from '../../src/decorators/permission-action.decorator';
 import { permissionActions } from '../../src/enums/permissions/permission-actions-enum';

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React from "react"
 import { t, Select, TimeField, DateField, DateFieldValues } from "@bloom-housing/ui-components"
 import { Grid } from "@bloom-housing/ui-seeds"
 import { LanguagesEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -12,20 +12,11 @@ const FormApplicationData = () => {
   const { register, watch, errors, setValue } = formMethods
 
   const dateSubmittedValue: DateFieldValues = watch("dateSubmitted")
-  const dateSubmittedError = !!errors?.dateSubmitted
   const isDateFilled =
     dateSubmittedValue?.day && dateSubmittedValue?.month && dateSubmittedValue?.year
 
   const isDateRequired =
     dateSubmittedValue?.day || dateSubmittedValue?.month || dateSubmittedValue?.year
-
-  useEffect(() => {
-    if (dateSubmittedError || !isDateRequired) {
-      setValue("timeSubmitted.hours", null)
-      setValue("timeSubmitted.minutes", null)
-      setValue("timeSubmitted.seconds", null)
-    }
-  }, [dateSubmittedError, isDateRequired, setValue])
 
   return (
     <SectionWithGrid heading={t("application.details.applicationData")}>

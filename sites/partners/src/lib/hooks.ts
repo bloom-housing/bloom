@@ -81,7 +81,7 @@ export function useListingsData({
     limit,
     filter: [],
     search,
-    view: view ?? ListingViews.base,
+    view: view ?? ListingViews.fundamentals,
   }
 
   if (sort) {
@@ -99,7 +99,7 @@ export function useListingsData({
       $comparison: EnumListingFilterParamsComparison["="],
       leasingAgent: userId,
     })
-  } else if (roles?.isJurisdictionalAdmin) {
+  } else if (roles?.isJurisdictionalAdmin || roles?.isLimitedJurisdictionalAdmin) {
     params.filter.push({
       $comparison: EnumListingFilterParamsComparison.IN,
       jurisdiction: userJurisidctionIds[0],

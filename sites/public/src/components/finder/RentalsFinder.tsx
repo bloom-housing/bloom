@@ -198,6 +198,7 @@ export default function RentalsFinder({ activeFeatureFlags, multiselectData }: R
     } else {
       setStepIndex((prev) => prev + 1)
     }
+    window.scrollTo({ top: 0 })
   }, [errors, isLastStep, getValues])
 
   const onPreviousClick = useCallback(() => {

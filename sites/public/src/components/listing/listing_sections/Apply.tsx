@@ -110,6 +110,10 @@ export const Apply = ({ listing, preview, setShowDownloadModal }: ApplyProps) =>
     </Button>
   )
 
+  const validPaperApplication = !listing.paperApplication || hasPaperApplication
+  const validOnlineApplication =
+    !listing.digitalApplication || listing.commonDigitalApplication || onlineApplicationUrl
+
   const hasPrimaryApplicationMethod = onlineApplicationUrl || hasPaperApplication
 
   const shouldShowApplyButton = getHasNonReferralMethods(listing)
@@ -120,6 +124,8 @@ export const Apply = ({ listing, preview, setShowDownloadModal }: ApplyProps) =>
       applicationPickUpAddress ||
       applicationDropOffAddress) &&
     !applicationsClosed &&
+    validOnlineApplication &&
+    validPaperApplication &&
     listing.status !== ListingsStatusEnum.closed
 
   const showSecondarySection =
