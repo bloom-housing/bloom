@@ -62,6 +62,7 @@ const ListingFormActions = ({
 
   const listingApprovalPermissions = jurisdiction?.listingApprovalPermissions
   const isListingApprovalEnabled = listingApprovalPermissions?.length > 0
+  console.log("isListingApprovalEnabled", isListingApprovalEnabled)
   const isListingApprover =
     profile?.userRoles.isAdmin ||
     (profile?.userRoles.isJurisdictionalAdmin &&
@@ -397,7 +398,11 @@ const ListingFormActions = ({
 
     // new unsaved listing
     if (type === ListingFormActionsType.add) {
-      elements.push(isListingApprover || !isListingApprovalEnabled ? publishButton : submitButton)
+      elements.push(
+        isListingApprover || (!profile.userRoles.isSupportAdmin && !isListingApprovalEnabled)
+          ? publishButton
+          : submitButton
+      )
       elements.push(saveDraftButton)
       elements.push(cancelButton)
     }
