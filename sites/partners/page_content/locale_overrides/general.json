@@ -628,7 +628,7 @@
   "users.administrator": "Administrator",
   "users.jurisdictionalAdmin": "Jurisdictional admin",
   "users.limitedJurisdictionalAdmin": "Jurisdictional admin - No PII",
-  "users.supportAdmin": "Admin (support)",
+  "users.adminSupport": "Admin (support)",
   "users.allJurisdictions": "All jurisdictions",
   "users.allListings": "All listings",
   "users.alljurisdictionalizedListings": "All %{jurisdiction} listings",
