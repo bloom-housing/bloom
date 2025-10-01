@@ -223,12 +223,18 @@ jobs:
       - restore_cache:
           key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
       - run: yarn lint
+  missing-translations:
+    executor: standard-node
+    steps:
+      - restore_cache:
+          key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
+      - run: yarn test:shared-helpers:missing-translations
   jest-shared-helpers:
     executor: standard-node
     steps:
       - restore_cache:
           key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
-      - run: yarn test:shared:helpers
+      - run: yarn test:shared-helpers
   jest-backend:
     executor: standard-node
     steps:
@@ -254,6 +260,9 @@ workflows:
           - setup
           - setup-backend
           - lint:
+              requires:
+                - setup
+          - missing-translations:
               requires:
                 - setup
           - jest-shared-helpers:
