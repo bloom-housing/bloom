@@ -98,6 +98,7 @@ const ApplicationsList = () => {
 
       this.linkWithId = document.createElement("button")
       this.linkWithId.classList.add("text-blue-700")
+      this.linkWithId.style.textDecoration = "underline"
       this.linkWithId.innerText = params.value
 
       this.linkWithId.addEventListener("click", function () {
