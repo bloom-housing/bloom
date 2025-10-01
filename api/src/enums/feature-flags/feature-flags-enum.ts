@@ -148,7 +148,7 @@ export const featureFlagMap: { name: string; description: string }[] = [
   {
     name: FeatureFlagEnum.enableNonRegulatedListings,
     description:
-      'When true, the non-regulated listings is displayed in listing creation/edit and the public listing view',
+      'When true, non-regulated listings are displayed in listing creation/edit and public listing view',
   },
   {
     name: FeatureFlagEnum.enablePartnerDemographics,
