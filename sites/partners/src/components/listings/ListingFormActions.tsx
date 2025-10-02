@@ -398,7 +398,7 @@ const ListingFormActions = ({
     // new unsaved listing
     if (type === ListingFormActionsType.add) {
       elements.push(
-        isListingApprover || (!profile.userRoles.isSupportAdmin && !isListingApprovalEnabled)
+        isListingApprover || (!profile?.userRoles?.isSupportAdmin && !isListingApprovalEnabled)
           ? publishButton
           : submitButton
       )
