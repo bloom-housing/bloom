@@ -22,7 +22,7 @@ type UnitFormProps = {
   defaultUnit: TempUnit | undefined
   nextId: number
   draft: boolean
-  isNonRegulated: boolean
+  isNonRegulated?: boolean
 }
 
 const UnitForm = ({
