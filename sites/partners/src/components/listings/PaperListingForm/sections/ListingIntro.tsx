@@ -1,8 +1,9 @@
 import React from "react"
-import { useFormContext } from "react-hook-form"
+import { useFormContext, useWatch } from "react-hook-form"
 import {
   EnumListingListingType,
   Jurisdiction,
+  YesNoEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { t, Field, SelectOption, Select, FieldGroup } from "@bloom-housing/ui-components"
 import { Grid } from "@bloom-housing/ui-seeds"
@@ -134,6 +135,32 @@ const ListingIntro = (props: ListingIntroProps) => {
                 errors,
                 clearErrors
               )}
+            />
+          </Grid.Cell>
+        </Grid.Row>
+        <Grid.Row columns={1}>
+          <Grid.Cell>
+            <FieldGroup
+              name="hasEbllClearance"
+              type="radio"
+              register={register}
+              groupLabel={t("listings.hasEbllClearanceTitle")}
+              fields={[
+                {
+                  id: "ebllYes",
+                  label: t("t.yes"),
+                  value: YesNoEnum.yes,
+                  defaultChecked: listing?.hasEbllClearance === true,
+                },
+                {
+                  id: "ebllNo",
+                  label: t("t.no"),
+                  value: YesNoEnum.no,
+                  defaultChecked: listing?.hasEbllClearance === false,
+                },
+              ]}
+              error={fieldHasError(errors.hasEbllClearance)}
+              errorMessage={fieldMessage(errors.hasEbllClearance)}
             />
           </Grid.Cell>
         </Grid.Row>
