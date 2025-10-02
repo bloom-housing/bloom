@@ -529,7 +529,7 @@ const FormUnits = ({
             draft={!units.some((unit) => unit.tempId === defaultUnit?.tempId)}
             defaultUnit={defaultUnit}
             nextId={nextId}
-            isNonRegulated={listingType !== EnumListingListingType.nonRegulated}
+            isNonRegulated={listingType === EnumListingListingType.nonRegulated}
           />
         )}
       </Drawer>
