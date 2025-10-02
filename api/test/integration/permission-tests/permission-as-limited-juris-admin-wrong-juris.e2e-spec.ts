@@ -1124,12 +1124,12 @@ describe('Testing Permissioning of endpoints as Limited Jurisdictional Admin in 
         .expect(403);
     });
 
-    it('should succeed for process endpoint', async () => {
+    it('should error as forbidden for process endpoint', async () => {
       await request(app.getHttpServer())
         .put(`/listings/closeListings`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
-        .expect(200);
+        .expect(403);
     });
 
     it('should succeed for csv endpoint & create an activity log entry', async () => {
@@ -1290,12 +1290,12 @@ describe('Testing Permissioning of endpoints as Limited Jurisdictional Admin in 
   });
 
   describe('Testing lottery endpoints', () => {
-    it('should succeed for expireLotteries endpoint', async () => {
+    it('should error as forbidden for expireLotteries endpoint', async () => {
       await request(app.getHttpServer())
         .put(`/lottery/expireLotteries`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
-        .expect(200);
+        .expect(403);
     });
 
     it('should error as forbidden for lottery status endpoint', async () => {

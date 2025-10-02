@@ -769,13 +769,13 @@ describe('Testing Permissioning of endpoints as Limited Jurisdictional Admin in 
         .expect(200);
     });
 
-    it('should succeed for create endpoint', async () => {
+    it('should error as forbidden for create endpoint', async () => {
       await request(app.getHttpServer())
         .post('/multiselectQuestions')
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send(buildMultiselectQuestionCreateMock(jurisId))
         .set('Cookie', cookies)
-        .expect(201);
+        .expect(403);
     });
 
     it('should succeed for update endpoint', async () => {
