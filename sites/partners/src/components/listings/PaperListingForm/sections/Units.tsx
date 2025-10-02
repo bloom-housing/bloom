@@ -507,6 +507,7 @@ const FormUnits = ({
             defaultUnitGroup={defaultUnitGroup}
             draft={!unitGroups.some((unitGroup) => unitGroup.tempId === defaultUnitGroup?.tempId)}
             nextId={nextId}
+            isNonRegulated={listingType === EnumListingListingType.nonRegulated}
           />
         ) : (
           <UnitForm

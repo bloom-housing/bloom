@@ -7431,6 +7431,11 @@ export enum AlternateContactRelationship {
   "noContact" = "noContact",
 }
 
+export enum RentTypeEnum {
+  "fixedRent" = "fixedRent",
+  "rentRange" = "rentRange",
+}
+
 export enum HouseholdMemberRelationship {
   "spouse" = "spouse",
   "registeredDomesticPartner" = "registeredDomesticPartner",

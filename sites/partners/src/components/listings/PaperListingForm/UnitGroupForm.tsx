@@ -16,6 +16,7 @@ import { useAmiChartList, useUnitPriorityList, useUnitTypeList } from "../../../
 import {
   AmiChart,
   EnumUnitGroupAmiLevelMonthlyRentDeterminationType,
+  RentTypeEnum,
   UnitAccessibilityPriorityType,
   YesNoEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -30,6 +31,7 @@ type UnitGroupFormProps = {
   defaultUnitGroup: TempUnitGroup | undefined
   draft: boolean
   nextId: number
+  isNonRegulated?: boolean
 }
 
 const UnitGroupForm = ({
@@ -38,6 +40,7 @@ const UnitGroupForm = ({
   defaultUnitGroup,
   draft,
   nextId,
+  isNonRegulated,
 }: UnitGroupFormProps) => {
   const [amiChartsOptions, setAmiChartsOptions] = useState([])
   const [unitPrioritiesOptions, setUnitPrioritiesOptions] = useState([])
@@ -85,6 +88,7 @@ const UnitGroupForm = ({
   const bathroomMax: number = useWatch({ control, name: "bathroomMax" })
 
   const totalAvailable: number = useWatch({ control, name: "totalAvailable" })
+  const rentType = useWatch({ control, name: "rentType" })
   const totalCount: number = useWatch({ control, name: "totalCount" })
 
   const numberOccupancyOptions = 8
@@ -333,6 +337,73 @@ const UnitGroupForm = ({
                   />
                 </Grid.Cell>
               </Grid.Row>
+              {isNonRegulated && (
+                <>
+                  <Grid.Row columns={3}>
+                    <Grid.Cell>
+                      <FieldGroup
+                        name="rentType"
+                        type="radio"
+                        register={register}
+                        groupLabel={t("listings.unitGroup.rentType")}
+                        fields={[
+                          {
+                            label: t("listings.unitGroup.fixedRent"),
+                            value: RentTypeEnum.fixedRent,
+                            id: "rentTypeFixed",
+                          },
+                          {
+                            label: t("listings.unitGroup.rentRange"),
+                            value: RentTypeEnum.rentRange,
+                            id: "rentTypeRange",
+                          },
+                        ]}
+                      />
+                    </Grid.Cell>
+                  </Grid.Row>
+                  {rentType === RentTypeEnum.fixedRent && (
+                    <Grid.Row columns={3}>
+                      <Grid.Cell>
+                        <Field
+                          id="monthlyRent"
+                          name="monthlyRent"
+                          label={t("listings.unit.monthlyRent")}
+                          register={register}
+                          placeholder="0.00"
+                          type="number"
+                          prepend="$"
+                        />
+                      </Grid.Cell>
+                    </Grid.Row>
+                  )}
+                  {rentType === RentTypeEnum.rentRange && (
+                    <Grid.Row columns={3}>
+                      <Grid.Cell>
+                        <Field
+                          id="monthlyRentFrom"
+                          name="monthlyRentFrom"
+                          label={t("listings.unitGroup.monthlyRentFrom")}
+                          register={register}
+                          placeholder="0.00"
+                          type="number"
+                          prepend="$"
+                        />
+                      </Grid.Cell>
+                      <Grid.Cell>
+                        <Field
+                          id="monthlyRentTo"
+                          name="monthlyRentTo"
+                          label={t("listings.unitGroup.monthlyRentTo")}
+                          register={register}
+                          placeholder="0.00"
+                          type="number"
+                          prepend="$"
+                        />
+                      </Grid.Cell>
+                    </Grid.Row>
+                  )}
+                </>
+              )}
               <Grid.Row columns={3}>
                 <Grid.Cell>
                   <Select
@@ -509,35 +580,37 @@ const UnitGroupForm = ({
                     }}
                   />
                 </Grid.Cell>
-                <Grid.Cell>
-                  <FieldGroup
-                    name="openWaitlist"
-                    type="radio"
-                    fields={[
-                      {
-                        id: "waitlistStatusOpen",
-                        dataTestId: "waitlistStatusOpen",
-                        label: t("listings.listingStatus.active"),
-                        value: YesNoEnum.yes,
-                        defaultChecked: !defaultUnitGroup,
-                      },
-                      {
-                        id: "waitlistStatusClosed",
-                        dataTestId: "waitlistStatusClosed",
-                        label: t("listings.listingStatus.closed"),
-                        value: YesNoEnum.no,
-                      },
-                    ]}
-                    register={register}
-                    fieldClassName="m-0"
-                    fieldGroupClassName="flex h-12 items-center"
-                    error={errors?.openWaitlist !== undefined}
-                    errorMessage={t("errors.requiredFieldError")}
-                    dataTestId="openWaitListQuestion"
-                    groupLabel={t("listings.unit.waitlistStatus")}
-                    fieldLabelClassName={styles["label-option"]}
-                  />
-                </Grid.Cell>
+                {!isNonRegulated && (
+                  <Grid.Cell>
+                    <FieldGroup
+                      name="openWaitlist"
+                      type="radio"
+                      fields={[
+                        {
+                          id: "waitlistStatusOpen",
+                          dataTestId: "waitlistStatusOpen",
+                          label: t("listings.listingStatus.active"),
+                          value: YesNoEnum.yes,
+                          defaultChecked: !defaultUnitGroup,
+                        },
+                        {
+                          id: "waitlistStatusClosed",
+                          dataTestId: "waitlistStatusClosed",
+                          label: t("listings.listingStatus.closed"),
+                          value: YesNoEnum.no,
+                        },
+                      ]}
+                      register={register}
+                      fieldClassName="m-0"
+                      fieldGroupClassName="flex h-12 items-center"
+                      error={errors?.openWaitlist !== undefined}
+                      errorMessage={t("errors.requiredFieldError")}
+                      dataTestId="openWaitListQuestion"
+                      groupLabel={t("listings.unit.waitlistStatus")}
+                      fieldLabelClassName={styles["label-option"]}
+                    />
+                  </Grid.Cell>
+                )}
               </Grid.Row>
             </SectionWithGrid>
             <hr className="spacer-section-above spacer-section" />
