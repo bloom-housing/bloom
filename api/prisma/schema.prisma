@@ -977,7 +977,7 @@ model UserRoles {
   // Role for maintainers of the code base. Should have access to everything as well as developer specific pages
   isSuperAdmin                  Boolean         @default(false) @map("is_super_admin")
   userId                        String          @id() @map("user_id") @db.Uuid
-  userAccounts                 UserAccounts     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userAccounts                  UserAccounts    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("user_roles")
 }
