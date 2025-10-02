@@ -423,7 +423,7 @@ class Listing extends AbstractDTO {
   disableUnitsAccordion?: boolean;
 
   @Expose()
-  @ValidateListingPublish('disableUnitsAccordion', {
+  @ValidateListingPublish('hasHudEbllClearance', {
     groups: [ValidationsGroupsEnum.default],
   })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
