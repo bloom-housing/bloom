@@ -83,7 +83,7 @@ type ApplicationTypesProps = {
 
 const ApplicationTypes = ({ listing, requiredFields }: ApplicationTypesProps) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, setValue, watch, errors, getValues } = useFormContext()
+  const { register, setValue, watch, errors, getValues, setError, clearErrors } = useFormContext()
   const { doJurisdictionsHaveFeatureFlagOn, getJurisdictionLanguages } = useContext(AuthContext)
 
   const getDefaultMethods = () => {
@@ -135,6 +135,18 @@ const ApplicationTypes = ({ listing, requiredFields }: ApplicationTypesProps) =>
     url: "",
   })
   const referralPhoneRef = React.useRef("")
+
+  const resetDrawerStateOnSave = () => {
+    if (errors) {
+      return
+    }
+    setProgressValue(0)
+    setCloudinaryData({
+      id: "",
+      url: "",
+    })
+    setDrawerState(false)
+  }
   const resetDrawerState = () => {
     setProgressValue(0)
     setCloudinaryData({
@@ -168,6 +180,13 @@ const ApplicationTypes = ({ listing, requiredFields }: ApplicationTypesProps) =>
   }
 
   const savePaperApplication = () => {
+    if (!selectedLanguage) {
+      setError("selectedLanguageError", { message: "Language not selected" })
+    }
+    if (errors) {
+      return undefined
+    }
+
     const paperApplications = methods.paper?.paperApplications ?? []
     paperApplications.push({
       assets: {
@@ -591,31 +610,33 @@ const ApplicationTypes = ({ listing, requiredFields }: ApplicationTypesProps) =>
         <Drawer.Content>
           <Card>
             <Card.Section>
-              {cloudinaryData.url === "" && (
-                <div className="field">
-                  <p className="mb-2">
-                    <label className="label">{t("t.language")}</label>
-                  </p>
-                  <Select
-                    id={"paperApplicationLanguage"}
-                    name="paperApplicationLanguage"
-                    options={[
-                      ...availableJurisdictionLanguages.map((item) => ({
-                        label: t(`languages.${item}`),
-                        value: item,
-                      })),
-                    ]}
-                    placeholder={t("t.selectLanguage")}
-                    defaultValue={selectedLanguage}
-                    validation={{ required: true }}
-                    inputProps={{
-                      onChange: (e) => {
-                        setSelectedLanguage(e.target?.value)
-                      },
-                    }}
-                  />
-                </div>
-              )}
+              <div className="field">
+                <p className="mb-2">
+                  <label className="label">{t("t.language")}</label>
+                </p>
+                <Select
+                  id={"paperApplicationLanguage"}
+                  name="paperApplicationLanguage"
+                  error={fieldHasError(errors?.selectedLanguageError)}
+                  errorMessage={fieldMessage(errors?.selectedLanguageError)}
+                  register={register}
+                  options={[
+                    ...availableJurisdictionLanguages.map((item) => ({
+                      label: t(`languages.${item}`),
+                      value: item,
+                    })),
+                  ]}
+                  placeholder={t("t.selectLanguage")}
+                  defaultValue={selectedLanguage}
+                  validation={{ required: true }}
+                  inputProps={{
+                    onChange: (e) => {
+                      setSelectedLanguage(e.target?.value)
+                      clearErrors("selectedLanguageError")
+                    },
+                  }}
+                />
+              </div>
               <Dropzone
                 id="listing-paper-application-upload"
                 label={t("t.uploadFile")}
@@ -638,7 +659,7 @@ const ApplicationTypes = ({ listing, requiredFields }: ApplicationTypesProps) =>
             key={0}
             onClick={() => {
               savePaperApplication()
-              resetDrawerState()
+              resetDrawerStateOnSave()
             }}
             variant="primary"
             size="sm"
