@@ -444,80 +444,84 @@ const UnitGroupForm = ({
                   />
                 </Grid.Cell>
               </Grid.Row>
-              <Grid.Row columns={3}>
-                <Grid.Cell>
-                  <Field
-                    label={t("listings.unit.minSquareFootage")}
-                    id="sqFeetMin"
-                    name="sqFeetMin"
-                    register={register}
-                    type="number"
-                    errorMessage={t("errors.minGreaterThanMaxFootageError")}
-                    error={fieldHasError(errors?.sqFeetMin)}
-                    validation={{ max: sqFeetMax }}
-                    onChange={() => {
-                      void trigger("sqFeetMin")
-                      void trigger("sqFeetMax")
-                    }}
-                  />
-                </Grid.Cell>
-                <Grid.Cell>
-                  <Field
-                    label={t("listings.unit.maxSquareFootage")}
-                    id="sqFeetMax"
-                    name="sqFeetMax"
-                    register={register}
-                    type="number"
-                    errorMessage={t("errors.maxLessThanMinFootageError")}
-                    error={fieldHasError(errors?.sqFeetMax)}
-                    validation={{ min: sqFeetMin }}
-                    onChange={() => {
-                      void trigger("sqFeetMin")
-                      void trigger("sqFeetMax")
-                    }}
-                  />
-                </Grid.Cell>
-              </Grid.Row>
-              <Grid.Row columns={3}>
-                <Grid.Cell>
-                  <Select
-                    controlClassName="control"
-                    label={t("listings.unit.minFloor")}
-                    name="floorMin"
-                    id="floorMin"
-                    options={numberOptions(numberFloorsOptions)}
-                    register={register}
-                    errorMessage={t("errors.minGreaterThanMaxFloorError")}
-                    error={fieldHasError(errors?.floorMin)}
-                    validation={{ max: floorMax || numberFloorsOptions }}
-                    inputProps={{
-                      onChange: () => {
-                        void trigger("floorMin")
-                        void trigger("floorMax")
-                      },
-                    }}
-                  />
-                </Grid.Cell>
-                <Grid.Cell>
-                  <Select
-                    controlClassName="control"
-                    label={t("listings.unit.maxFloor")}
-                    name="floorMax"
-                    id="floorMax"
-                    options={numberOptions(numberFloorsOptions)}
-                    register={register}
-                    errorMessage={t("errors.maxLessThanMinFloorError")}
-                    error={fieldHasError(errors?.floorMax)}
-                    validation={{ min: floorMin }}
-                    inputProps={{
-                      onChange: () => {
-                        void trigger("floorMin")
-                        void trigger("floorMax")
-                      },
-                    }}
-                  />
-                </Grid.Cell>
-              </Grid.Row>
+              {!isNonRegulated && (
+                <>
+                  <Grid.Row columns={3}>
+                    <Grid.Cell>
+                      <Field
+                        label={t("listings.unit.minSquareFootage")}
+                        id="sqFeetMin"
+                        name="sqFeetMin"
+                        register={register}
+                        type="number"
+                        errorMessage={t("errors.minGreaterThanMaxFootageError")}
+                        error={fieldHasError(errors?.sqFeetMin)}
+                        validation={{ max: sqFeetMax }}
+                        onChange={() => {
+                          void trigger("sqFeetMin")
+                          void trigger("sqFeetMax")
+                        }}
+                      />
+                    </Grid.Cell>
+                    <Grid.Cell>
+                      <Field
+                        label={t("listings.unit.maxSquareFootage")}
+                        id="sqFeetMax"
+                        name="sqFeetMax"
+                        register={register}
+                        type="number"
+                        errorMessage={t("errors.maxLessThanMinFootageError")}
+                        error={fieldHasError(errors?.sqFeetMax)}
+                        validation={{ min: sqFeetMin }}
+                        onChange={() => {
+                          void trigger("sqFeetMin")
+                          void trigger("sqFeetMax")
+                        }}
+                      />
+                    </Grid.Cell>
+                  </Grid.Row>
+                  <Grid.Row columns={3}>
+                    <Grid.Cell>
+                      <Select
+                        controlClassName="control"
+                        label={t("listings.unit.minFloor")}
+                        name="floorMin"
+                        id="floorMin"
+                        options={numberOptions(numberFloorsOptions)}
+                        register={register}
+                        errorMessage={t("errors.minGreaterThanMaxFloorError")}
+                        error={fieldHasError(errors?.floorMin)}
+                        validation={{ max: floorMax || numberFloorsOptions }}
+                        inputProps={{
+                          onChange: () => {
+                            void trigger("floorMin")
+                            void trigger("floorMax")
+                          },
+                        }}
+                      />
+                    </Grid.Cell>
+                    <Grid.Cell>
+                      <Select
+                        controlClassName="control"
+                        label={t("listings.unit.maxFloor")}
+                        name="floorMax"
+                        id="floorMax"
+                        options={numberOptions(numberFloorsOptions)}
+                        register={register}
+                        errorMessage={t("errors.maxLessThanMinFloorError")}
+                        error={fieldHasError(errors?.floorMax)}
+                        validation={{ min: floorMin }}
+                        inputProps={{
+                          onChange: () => {
+                            void trigger("floorMin")
+                            void trigger("floorMax")
+                          },
+                        }}
+                      />
+                    </Grid.Cell>
+                  </Grid.Row>
+                </>
+              )}
               <Grid.Row columns={3}>
                 <Grid.Cell>
                   <Select
@@ -613,28 +617,32 @@ const UnitGroupForm = ({
                 )}
               </Grid.Row>
             </SectionWithGrid>
-            <hr className="spacer-section-above spacer-section" />
-            <SectionWithGrid heading={t("listings.sections.eligibilityTitle")}>
-              <Grid.Row>
-                <Grid.Cell className="grid-inset-section">
-                  {!!amiLevels.length && (
-                    <div className="mb-5">
-                      <MinimalTable headers={amiTableHeaders} data={amiLevelsTableData} />
-                    </div>
-                  )}
-                  <Button
-                    onClick={() => {
-                      setAmiSummary((amiLevels.length || 0) + 1)
-                    }}
-                    id="addAmiLevelButton"
-                    type="button"
-                    variant="primary-outlined"
-                  >
-                    {t("listings.unit.amiAdd")}
-                  </Button>
-                </Grid.Cell>
-              </Grid.Row>
-            </SectionWithGrid>
+            {!isNonRegulated && (
+              <>
+                <hr className="spacer-section-above spacer-section" />
+                <SectionWithGrid heading={t("listings.sections.eligibilityTitle")}>
+                  <Grid.Row>
+                    <Grid.Cell className="grid-inset-section">
+                      {!!amiLevels.length && (
+                        <div className="mb-5">
+                          <MinimalTable headers={amiTableHeaders} data={amiLevelsTableData} />
+                        </div>
+                      )}
+                      <Button
+                        onClick={() => {
+                          setAmiSummary((amiLevels.length || 0) + 1)
+                        }}
+                        id="addAmiLevelButton"
+                        type="button"
+                        variant="primary-outlined"
+                      >
+                        {t("listings.unit.amiAdd")}
+                      </Button>
+                    </Grid.Cell>
+                  </Grid.Row>
+                </SectionWithGrid>
+              </>
+            )}
           </Card.Section>
         </Card>
       </Drawer.Content>
