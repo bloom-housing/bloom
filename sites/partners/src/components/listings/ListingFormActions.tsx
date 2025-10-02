@@ -486,10 +486,17 @@ const ListingFormActions = ({
     }
     //open listing, edit view
     else if (listing.status === ListingsStatusEnum.active && type === ListingFormActionsType.edit) {
-      if (!hideCloseButton && !profile.userRoles.isSupportAdmin) {
+      if (
+        !hideCloseButton &&
+        (!profile.userRoles.isSupportAdmin || !profile.userRoles.isLimitedJurisdictionalAdmin)
+      ) {
         elements.push(closeButton)
       }
       if (!profile.userRoles.isSupportAdmin) {
+        elements.push(unpublishButton)
+      }
+
+      if (!profile.userRoles.isLimitedJurisdictionalAdmin) {
         elements.push(unpublishButton)
       }
 
