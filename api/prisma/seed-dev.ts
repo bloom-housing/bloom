@@ -93,7 +93,6 @@ export const devSeeding = async (
       roles: { isSupportAdmin: true },
       email: 'support-admin@example.com',
       confirmedAt: new Date(),
-      jurisdictionIds: [jurisdiction.id],
       acceptedTerms: true,
     }),
   });

@@ -1,4 +1,5 @@
-import React from "react"
+import React, { useContext } from "react"
+import { AuthContext } from "@bloom-housing/shared-helpers"
 import { useFormContext } from "react-hook-form"
 import { Jurisdiction } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { t, Field, SelectOption, Select } from "@bloom-housing/ui-components"
@@ -19,6 +20,7 @@ interface ListingIntroProps {
 
 const ListingIntro = (props: ListingIntroProps) => {
   const formMethods = useFormContext()
+  const { profile } = useContext(AuthContext)
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, clearErrors, errors } = formMethods
@@ -30,7 +32,12 @@ const ListingIntro = (props: ListingIntroProps) => {
       value: jurisdiction.id,
     })),
   ]
-  const defaultJurisdiction = props.jurisdictions.length === 1 ? props.jurisdictions[0].id : ""
+
+  const defaultJurisdiction =
+    props.jurisdictions.length === 1 || profile.userRoles.isSupportAdmin
+      ? props.jurisdictions[0].id
+      : ""
+  console.log("jurisdiction", defaultJurisdiction)
 
   return (
     <>
