@@ -5,6 +5,7 @@ import {
   IsArray,
   IsBoolean,
   IsDate,
+  IsDecimal,
   IsDefined,
   IsEmail,
   IsEnum,
@@ -30,6 +31,8 @@ import {
   MarketingSeasonEnum,
   MarketingTypeEnum,
   ReviewOrderTypeEnum,
+  DepositTypeEnum,
+  ListingTypeEnum,
 } from '@prisma/client';
 import { EnforceLowerCase } from '../../decorators/enforce-lower-case.decorator';
 import { SanitizeHtml } from '../../decorators/sanitize-html.decorator';
@@ -361,6 +364,40 @@ class Listing extends AbstractDTO {
   depositMax?: string;
 
   @Expose()
+  @ValidateListingPublish('depositType', {
+    groups: [ValidationsGroupsEnum.default],
+  })
+  @IsEnum(DepositTypeEnum, {
+    groups: [ValidationsGroupsEnum.default],
+  })
+  @ApiPropertyOptional({ enum: DepositTypeEnum })
+  depositType?: DepositTypeEnum;
+
+  @Expose()
+  @ValidateListingPublish('depositValue', {
+    groups: [ValidationsGroupsEnum.default],
+  })
+  @IsDecimal()
+  @ApiPropertyOptional()
+  depositValue?: number;
+
+  @Expose()
+  @ValidateListingPublish('depositRangeMin', {
+    groups: [ValidationsGroupsEnum.default],
+  })
+  @IsNumber()
+  @ApiPropertyOptional()
+  depositRangeMin?: number;
+
+  @Expose()
+  @ValidateListingPublish('depositRangeMax', {
+    groups: [ValidationsGroupsEnum.default],
+  })
+  @IsNumber()
+  @ApiPropertyOptional()
+  depositRangeMax?: number;
+
+  @Expose()
   @ValidateListingPublish('depositHelperText', {
     groups: [ValidationsGroupsEnum.default],
   })
@@ -375,6 +412,14 @@ class Listing extends AbstractDTO {
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   disableUnitsAccordion?: boolean;
+
+  @Expose()
+  @ValidateListingPublish('disableUnitsAccordion', {
+    groups: [ValidationsGroupsEnum.default],
+  })
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  hasHudEbllClearance?: boolean;
 
   @Expose()
   @ValidateListingPublish('leasingAgentEmail', {
@@ -420,6 +465,16 @@ class Listing extends AbstractDTO {
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   leasingAgentTitle?: string;
+
+  @Expose()
+  @ValidateListingPublish('leasingAgentTitle', {
+    groups: [ValidationsGroupsEnum.default],
+  })
+  @IsEnum(ListingTypeEnum, {
+    groups: [ValidationsGroupsEnum.default],
+  })
+  @ApiPropertyOptional({ enum: ListingTypeEnum })
+  listingType?: ListingTypeEnum;
 
   @Expose()
   @ValidateListingPublish('managementWebsite', {
