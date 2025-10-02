@@ -1,4 +1,10 @@
-import { IsBoolean, IsEnum, IsNumber, ValidateNested } from 'class-validator';
+import {
+  IsBoolean,
+  IsDecimal,
+  IsEnum,
+  IsNumber,
+  ValidateNested,
+} from 'class-validator';
 import { Expose, Type } from 'class-transformer';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 import { AbstractDTO } from '../shared/abstract.dto';
@@ -21,12 +27,12 @@ class UnitGroup extends AbstractDTO {
   minOccupancy?: number;
 
   @Expose()
-  @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
+  @IsDecimal({}, { groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   flatRentValueFrom?: number;
 
   @Expose()
-  @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
+  @IsDecimal({}, { groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   flatRentValueTo?: number;
 
