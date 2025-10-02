@@ -37,7 +37,6 @@ const ListingIntro = (props: ListingIntroProps) => {
     props.jurisdictions.length === 1 || profile.userRoles.isSupportAdmin
       ? props.jurisdictions[0].id
       : ""
-  console.log("jurisdiction", defaultJurisdiction)
 
   return (
     <>
