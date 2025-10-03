@@ -58,7 +58,7 @@ const Lottery = (props: { listing: Listing | undefined }) => {
   const includeDemographicsPartner =
     profile?.userRoles?.isPartner && listingJurisdiction?.enablePartnerDemographics
 
-  const showPublishLotteryButton = profile?.userRoles?.isAdmin || profile?.userRoles?.isPartner
+  const showPublishLotteryButton = profile?.userRoles?.isPartner
 
   const { onExport, exportLoading } = useZipExport(
     listing?.id,
