@@ -752,7 +752,7 @@ describe("lottery", () => {
         return res(
           ctx.json({
             id: "user1",
-            userRoles: { isAdmin: false },
+            userRoles: { isAdmin: true, isJurisdictionalAdmin: false },
           })
         )
       }),
