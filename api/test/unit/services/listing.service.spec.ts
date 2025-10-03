@@ -5094,7 +5094,11 @@ describe('Testing listing service', () => {
 
     it('listingApprovalNotify changes requested email', async () => {
       jest.spyOn(service, 'getUserEmailInfo').mockResolvedValueOnce({
-        emails: ['jurisAdmin@email.com', 'partner@email.com'],
+        emails: [
+          'jurisAdmin@email.com',
+          'partner@email.com',
+          'supportAdmin@email.com',
+        ],
       });
       await service.listingApprovalNotify({
         user,
@@ -5105,21 +5109,25 @@ describe('Testing listing service', () => {
       });
 
       expect(service.getUserEmailInfo).toBeCalledWith(
-        ['partner', 'jurisdictionAdmin'],
+        ['partner', 'jurisdictionAdmin', 'supportAdmin'],
         'id',
         'jurisId',
       );
       expect(changesRequestedMock).toBeCalledWith(
         user,
         { id: 'id', name: 'name', juris: 'jurisId' },
-        ['jurisAdmin@email.com', 'partner@email.com'],
+        ['jurisAdmin@email.com', 'partner@email.com', 'supportAdmin@email.com'],
         config.get('PARTNERS_PORTAL_URL'),
       );
     });
 
     it('listingApprovalNotify listing approved email', async () => {
       jest.spyOn(service, 'getUserEmailInfo').mockResolvedValueOnce({
-        emails: ['jurisAdmin@email.com', 'partner@email.com'],
+        emails: [
+          'jurisAdmin@email.com',
+          'partner@email.com',
+          'supportAdmin@email.com',
+        ],
         publicUrl: 'public.housing.gov',
       });
       await service.listingApprovalNotify({
@@ -5132,7 +5140,7 @@ describe('Testing listing service', () => {
       });
 
       expect(service.getUserEmailInfo).toBeCalledWith(
-        ['partner', 'jurisdictionAdmin'],
+        ['partner', 'jurisdictionAdmin', 'supportAdmin'],
         'id',
         'jurisId',
         true,
@@ -5140,7 +5148,7 @@ describe('Testing listing service', () => {
       expect(listingApprovedMock).toBeCalledWith(
         expect.objectContaining({ id: 'jurisId' }),
         { id: 'id', name: 'name' },
-        ['jurisAdmin@email.com', 'partner@email.com'],
+        ['jurisAdmin@email.com', 'partner@email.com', 'supportAdmin@email.com'],
         'public.housing.gov',
       );
     });
