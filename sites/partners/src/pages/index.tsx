@@ -93,6 +93,7 @@ export default function ListingsList() {
   const { profile, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
   const isAdmin =
     profile?.userRoles?.isAdmin ||
+    profile?.userRoles?.isSupportAdmin ||
     profile?.userRoles?.isJurisdictionalAdmin ||
     profile?.userRoles?.isLimitedJurisdictionalAdmin ||
     false
@@ -107,7 +108,6 @@ export default function ListingsList() {
     formatIsVerified,
     ListingsLink,
   }
-
   const columnDefs = useMemo(() => {
     const columns: (ColDef | ColGroupDef)[] = [
       {

@@ -94,6 +94,11 @@ export const buildWhereClause = (
                 isLimitedJurisdictionalAdmin: true,
               },
             },
+            {
+              userRoles: {
+                isSupportAdmin: true,
+              },
+            },
           ],
         });
       } else if (user?.userRoles?.isJurisdictionalAdmin) {
@@ -167,6 +172,20 @@ export const buildWhereClause = (
               {
                 userRoles: {
                   isJurisdictionalAdmin: false,
+                },
+              },
+            ],
+          },
+          {
+            OR: [
+              {
+                userRoles: {
+                  isSupportAdmin: null,
+                },
+              },
+              {
+                userRoles: {
+                  isSupportAdmin: false,
                 },
               },
             ],

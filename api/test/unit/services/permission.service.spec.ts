@@ -108,6 +108,38 @@ describe('Testing permission service', () => {
     ).toEqual(true);
   });
 
+  it('should add support admin user role for user', async () => {
+    const e = await newEnforcer(
+      path.join(
+        __dirname,
+        '../../../src/permission-configs',
+        'permission_model.conf',
+      ),
+      path.join(
+        __dirname,
+        '../../../src/permission-configs',
+        'permission_policy.csv',
+      ),
+    );
+
+    const user = {
+      id: 'example id',
+      userRoles: {
+        isSupportAdmin: true,
+      },
+      jurisdictions: [
+        {
+          id: 'juris id',
+        },
+      ],
+    } as User;
+
+    const enforcer = await service.addUserPermissions(e, user);
+    expect(
+      await enforcer.hasRoleForUser('example id', UserRoleEnum.supportAdmin),
+    ).toEqual(true);
+  });
+
   it('should add partner user role for user', async () => {
     const e = await newEnforcer(
       path.join(
