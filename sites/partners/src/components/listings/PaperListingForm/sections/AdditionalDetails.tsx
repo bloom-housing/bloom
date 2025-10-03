@@ -1,13 +1,24 @@
 import React from "react"
 import { useFormContext } from "react-hook-form"
 import { Grid } from "@bloom-housing/ui-seeds"
-import { t, Textarea } from "@bloom-housing/ui-components"
+import { FieldGroup, t, Textarea } from "@bloom-housing/ui-components"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 import { defaultFieldProps } from "../../../../lib/helpers"
 
 type AdditionalDetailsProps = {
   defaultText?: string
   requiredFields: string[]
+}
+enum RequiredDocumentEnum {
+  "socialSecurityCard" = "socialSecurityCard",
+  "currentLandlordReference" = "currentLandlordReference",
+  "birthCertificate" = "birthCertificate",
+  "previousLandlordReference" = "previousLandlordReference",
+  "governmentIssuedId" = "governmentIssuedId",
+  "proofOfAssets" = "proofOfAssets",
+  "proofOfIncome" = "proofOfIncome",
+  "residencyDocuments" = "residencyDocuments",
+  "proofOfCustody" = "proofOfCustody",
 }
 
 const AdditionalDetails = (props: AdditionalDetailsProps) => {
@@ -23,9 +34,21 @@ const AdditionalDetails = (props: AdditionalDetailsProps) => {
         heading={t("listings.sections.additionalDetails")}
         subheading={t("listings.sections.additionalDetailsSubtitle")}
       >
-        <Grid.Row columns={2}>
+        <Grid.Row columns={1}>
           <Grid.Cell>
-            <Textarea
+            <FieldGroup
+              name={"requiredDocuments"}
+              groupLabel={t("listings.requiredDocuments")}
+              register={register}
+              type="checkbox"
+              fields={Object.keys(RequiredDocumentEnum).map((key) => ({
+                id: `requiredDocuments.${key}`,
+                label: t(`listings.requiredDocuments.${key}`),
+                value: key,
+              }))}
+              fieldGroupClassName="grid grid-cols-2 mt-2"
+            />
+            {/* <Textarea
               label={t("listings.requiredDocuments")}
               name={"requiredDocuments"}
               id={"requiredDocuments"}
@@ -40,8 +63,10 @@ const AdditionalDetails = (props: AdditionalDetailsProps) => {
                 errors,
                 clearErrors
               )}
-            />
+            /> */}
           </Grid.Cell>
+        </Grid.Row>
+        <Grid.Row columns={2}>
           <Grid.Cell>
             <Textarea
               fullWidth={true}
@@ -57,8 +82,6 @@ const AdditionalDetails = (props: AdditionalDetailsProps) => {
               )}
             />
           </Grid.Cell>
-        </Grid.Row>
-        <Grid.Row columns={2}>
           <Grid.Cell>
             <Textarea
               fullWidth={true}
