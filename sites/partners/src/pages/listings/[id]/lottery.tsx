@@ -58,8 +58,6 @@ const Lottery = (props: { listing: Listing | undefined }) => {
   const includeDemographicsPartner =
     profile?.userRoles?.isPartner && listingJurisdiction?.enablePartnerDemographics
 
-  const showPublishLotteryButton = profile?.userRoles?.isPartner
-
   const { onExport, exportLoading } = useZipExport(
     listing?.id,
     (profile?.userRoles?.isAdmin ||
@@ -222,7 +220,7 @@ const Lottery = (props: { listing: Listing | undefined }) => {
               </p>
             </div>
             <div>
-              {showPublishLotteryButton && (
+              {profile?.userRoles?.isPartner && (
                 <Button
                   onClick={() => {
                     setPublishModal(true)
