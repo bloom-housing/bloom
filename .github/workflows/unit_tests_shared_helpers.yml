@@ -36,4 +36,4 @@ jobs:
 
       # Tests
       - name: yarn unit test shared/helpers
-        run: yarn test-shared:helpers
+        run: yarn test:shared-helpers
