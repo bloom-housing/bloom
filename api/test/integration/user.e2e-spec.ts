@@ -17,12 +17,12 @@ import { UserCreate } from '../../src/dtos/users/user-create.dto';
 import { jurisdictionFactory } from '../../prisma/seed-helpers/jurisdiction-factory';
 import { listingFactory } from '../../prisma/seed-helpers/listing-factory';
 import { applicationFactory } from '../../prisma/seed-helpers/application-factory';
+import { randomName } from '../../prisma/seed-helpers/word-generator';
 import { UserInvite } from '../../src/dtos/users/user-invite.dto';
 import { EmailService } from '../../src/services/email.service';
 import { Login } from '../../src/dtos/auth/login.dto';
 import { RequestMfaCode } from '../../src/dtos/mfa/request-mfa-code.dto';
 import { ModificationEnum } from '../../src/enums/shared/modification-enum';
-import { randomName } from 'prisma/seed-helpers/word-generator';
 
 describe('User Controller Tests', () => {
   let app: INestApplication;
