@@ -77,7 +77,7 @@ jobs:
           PGPASSWORD: bloom
 
       - name: Setup backend
-        run: yarn test:backend:new:dbsetup:withseed:large
+        run: yarn test:backend:new:dbsetup:withseed
         env:
           PGHOST: 127.0.0.1
           PGPASSWORD: bloom

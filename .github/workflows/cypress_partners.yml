@@ -19,7 +19,6 @@ env:
   JURISDICTION_ENDPOINT_PATH: /jurisdictions
   LISTINGS_ENDPOINT_PATH: /listings
   MAPBOX_TOKEN: ${{ secrets.MAPBOX_TOKEN }}
-  DISABLE_CORS: "TRUE"
   TWILIO_ACCOUNT_SID: 'AC.TEST'
   TWILIO_AUTH_TOKEN: 'TEST'
   MFA_CODE_VALID: '600000'
@@ -81,18 +80,6 @@ jobs:
           PGHOST: 127.0.0.1
           PGPASSWORD: bloom
           PGUSER: bloom-dev
-
-      - name: yarn in tasks/import-listings dir
-        working-directory: ./tasks/import-listings
-        run: yarn
-
-      - name: Build import
-        working-directory: ./tasks/import-listings
-        run: yarn build
-
-      - name: Import listings
-        working-directory: ./tasks/import-listings
-        run: yarn import:run:local:dev
 
       - name: Cypress run
         uses: cypress-io/github-action@v5
