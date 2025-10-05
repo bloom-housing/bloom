@@ -80,8 +80,8 @@ const NavigationHeader = ({
   const tabNavItems = useMemo(() => {
     return (
       <>
-        {tabNavElements.map((tab) => (
-          <TabNav className="relative -bottom-8 md:-bottom-10">
+        <TabNav className="relative -bottom-8 md:-bottom-10">
+          {tabNavElements.map((tab) => (
             <TabNavItem
               key={tab.path}
               tagContent={tab?.content}
@@ -91,8 +91,8 @@ const NavigationHeader = ({
             >
               {tab.label}
             </TabNavItem>
-          </TabNav>
-        ))}
+          ))}
+        </TabNav>
       </>
     )
   }, [currentPath, tabNavElements])
