@@ -79,21 +79,19 @@ const NavigationHeader = ({
 
   const tabNavItems = useMemo(() => {
     return (
-      <>
-        <TabNav className="relative -bottom-8 md:-bottom-10">
-          {tabNavElements.map((tab) => (
-            <TabNavItem
-              key={tab.path}
-              tagContent={tab?.content}
-              current={tab.activePaths.includes(currentPath)}
-              href={tab.path}
-              tagSize={AppearanceSizeType.small}
-            >
-              {tab.label}
-            </TabNavItem>
-          ))}
-        </TabNav>
-      </>
+      <TabNav className="relative -bottom-8 md:-bottom-10">
+        {tabNavElements.map((tab) => (
+          <TabNavItem
+            key={tab.path}
+            tagContent={tab?.content}
+            current={tab.activePaths.includes(currentPath)}
+            href={tab.path}
+            tagSize={AppearanceSizeType.small}
+          >
+            {tab.label}
+          </TabNavItem>
+        ))}
+      </TabNav>
     )
   }, [currentPath, tabNavElements])
 
