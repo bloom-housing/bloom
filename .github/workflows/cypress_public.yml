@@ -31,6 +31,7 @@ env:
   SHOW_PUBLIC_LOTTERY: "TRUE"
   GOOGLE_MAPS_API_KEY: ${{ secrets.GOOGLE_MAPS_API_KEY }}
   GOOGLE_MAPS_MAP_ID: ${{ secrets.GOOGLE_MAPS_MAP_ID }}
+  HOUSING_COUNSELOR_SERVICE_URL: "/get-assistance"
 
 jobs:
   public-cypress:

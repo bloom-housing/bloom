@@ -22,6 +22,7 @@ import { EmailService } from '../../src/services/email.service';
 import { Login } from '../../src/dtos/auth/login.dto';
 import { RequestMfaCode } from '../../src/dtos/mfa/request-mfa-code.dto';
 import { ModificationEnum } from '../../src/enums/shared/modification-enum';
+import { randomName } from 'prisma/seed-helpers/word-generator';
 
 describe('User Controller Tests', () => {
   let app: INestApplication;
@@ -586,7 +587,9 @@ describe('User Controller Tests', () => {
 
     it('should not set resetToken when forgot-password is called by public user on the partners site', async () => {
       const juris = await prisma.jurisdictions.create({
-        data: jurisdictionFactory(),
+        data: jurisdictionFactory(
+          `forgotPassword-jurisdiction-${randomName()}`,
+        ),
       });
 
       const userA = await prisma.userAccounts.create({
