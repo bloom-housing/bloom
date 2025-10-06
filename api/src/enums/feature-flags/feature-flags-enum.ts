@@ -23,6 +23,7 @@ export enum FeatureFlagEnum {
   enableListingUpdatedAt = 'enableListingUpdatedAt',
   enableMarketingStatus = 'enableMarketingStatus',
   enableNeighborhoodAmenities = 'enableNeighborhoodAmenities',
+  enableNonRegulatedListings = 'enableNonRegulatedListings',
   enablePartnerDemographics = 'enablePartnerDemographics',
   enablePartnerSettings = 'enablePartnerSettings',
   enableRegions = 'enableRegions',
@@ -144,6 +145,11 @@ export const featureFlagMap: { name: string; description: string }[] = [
     name: FeatureFlagEnum.enableNeighborhoodAmenities,
     description:
       "When true, the 'neighborhood amenities' section is displayed in listing creation/edit and the public listing view",
+  },
+  {
+    name: FeatureFlagEnum.enableNonRegulatedListings,
+    description:
+      'When true, non-regulated listings are displayed in listing creation/edit and public listing view',
   },
   {
     name: FeatureFlagEnum.enablePartnerDemographics,

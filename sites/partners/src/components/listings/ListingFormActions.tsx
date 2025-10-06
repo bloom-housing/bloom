@@ -397,7 +397,11 @@ const ListingFormActions = ({
 
     // new unsaved listing
     if (type === ListingFormActionsType.add) {
-      elements.push(isListingApprover || !isListingApprovalEnabled ? publishButton : submitButton)
+      elements.push(
+        isListingApprover || (!profile?.userRoles?.isSupportAdmin && !isListingApprovalEnabled)
+          ? publishButton
+          : submitButton
+      )
       elements.push(saveDraftButton)
       elements.push(cancelButton)
     }
@@ -424,11 +428,10 @@ const ListingFormActions = ({
       listing.status === ListingsStatusEnum.pendingReview &&
       type === ListingFormActionsType.details
     ) {
-      if (profile?.userRoles.isSupportAdmin) {
-        elements.push(editFromDetailButton)
-      }
       if (isListingApprover && !profile?.userRoles.isPartner) {
         elements.push(approveAndPublishButton)
+        elements.push(editFromDetailButton)
+      } else if (profile?.userRoles.isSupportAdmin) {
         elements.push(editFromDetailButton)
       }
       if (isListingCopier) elements.push(copyButton)
@@ -442,8 +445,7 @@ const ListingFormActions = ({
       if (isListingApprover && !profile?.userRoles.isPartner) {
         elements.push(approveAndPublishButton)
         elements.push(requestChangesButton)
-      }
-      if (profile?.userRoles.isSupportAdmin) {
+      } else if (profile?.userRoles.isSupportAdmin) {
         elements.push(requestChangesButton)
       }
       if (profile?.userRoles.isPartner) {

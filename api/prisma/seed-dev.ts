@@ -92,8 +92,8 @@ export const devSeeding = async (
     data: await userFactory({
       roles: { isSupportAdmin: true },
       email: 'support-admin@example.com',
-      confirmedAt: new Date(),
       jurisdictionIds: [jurisdiction.id],
+      confirmedAt: new Date(),
       acceptedTerms: true,
     }),
   });

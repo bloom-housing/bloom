@@ -105,6 +105,7 @@ export const stagingSeed = async (
         FeatureFlagEnum.enableListingUpdatedAt,
         FeatureFlagEnum.enableMarketingStatus,
         FeatureFlagEnum.enableNeighborhoodAmenities,
+        FeatureFlagEnum.enableNonRegulatedListings,
         FeatureFlagEnum.enablePartnerDemographics,
         FeatureFlagEnum.enablePartnerSettings,
         FeatureFlagEnum.enableRegions,
@@ -187,8 +188,13 @@ export const stagingSeed = async (
       roles: { isSupportAdmin: true },
       email: 'support-admin@example.com',
       confirmedAt: new Date(),
-      jurisdictionIds: [mainJurisdiction.id],
       acceptedTerms: true,
+      jurisdictionIds: [
+        mainJurisdiction.id,
+        lakeviewJurisdiction.id,
+        bridgeBayJurisdiction.id,
+        nadaHill.id,
+      ],
     }),
   });
   // create a jurisdictional admin
