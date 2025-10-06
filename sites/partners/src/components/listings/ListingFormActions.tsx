@@ -445,8 +445,7 @@ const ListingFormActions = ({
       if (isListingApprover && !profile?.userRoles.isPartner) {
         elements.push(approveAndPublishButton)
         elements.push(requestChangesButton)
-      }
-      if (profile?.userRoles.isSupportAdmin) {
+      } else if (profile?.userRoles.isSupportAdmin) {
         elements.push(requestChangesButton)
       }
       if (profile?.userRoles.isPartner) {
