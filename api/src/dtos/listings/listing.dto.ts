@@ -61,7 +61,7 @@ import {
   ValidateAtLeastOneUnit,
   ValidateOnlyUnitsOrUnitGroups,
 } from '../../decorators/validate-units-required.decorator';
-import { ValidateListingDeposit } from 'src/decorators/validate-listing-deposit.decorator';
+import { ValidateListingDeposit } from '../../decorators/validate-listing-deposit.decorator';
 
 class Listing extends AbstractDTO {
   @Expose()
