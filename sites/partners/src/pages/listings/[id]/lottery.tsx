@@ -220,14 +220,17 @@ const Lottery = (props: { listing: Listing | undefined }) => {
               </p>
             </div>
             <div>
-              <Button
-                onClick={() => {
-                  setPublishModal(true)
-                }}
-                id={"lottery-publish-button"}
-              >
-                {t("listings.actions.publish")}
-              </Button>
+              {profile?.userRoles?.isPartner ||
+                (profile?.userRoles?.isAdmin && (
+                  <Button
+                    onClick={() => {
+                      setPublishModal(true)
+                    }}
+                    id={"lottery-publish-button"}
+                  >
+                    {t("listings.actions.publish")}
+                  </Button>
+                ))}
             </div>
           </CardSection>
         )
