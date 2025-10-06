@@ -16,6 +16,7 @@ yarn-error.log*
 # Tests
 /coverage
 /.nyc_output
+sampleFile.csv
 
 # IDEs and editors
 /.idea
