@@ -53,15 +53,6 @@ const NavigationHeader = ({
       },
     ]
 
-    if (process.env.showLottery && tabs?.lotteryLabel) {
-      elements.push({
-        label: tabs.lotteryLabel,
-        path: `/listings/${listingId}/lottery`,
-        activePaths: [`/listings/${listingId}/lottery`],
-        content: undefined,
-      })
-    }
-
     if (tabs?.applicationsLabel) {
       elements.push({
         label: tabs?.applicationsLabel || "",
@@ -73,6 +64,15 @@ const NavigationHeader = ({
           `/listings/${listingId}/applications/pending?type=email`,
           `/listings/${listingId}/applications/resolved`,
         ],
+        content: undefined,
+      })
+    }
+
+    if (process.env.showLottery && tabs?.lotteryLabel) {
+      elements.push({
+        label: tabs.lotteryLabel,
+        path: `/listings/${listingId}/lottery`,
+        activePaths: [`/listings/${listingId}/lottery`],
         content: undefined,
       })
     }
