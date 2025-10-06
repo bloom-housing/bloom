@@ -428,11 +428,10 @@ const ListingFormActions = ({
       listing.status === ListingsStatusEnum.pendingReview &&
       type === ListingFormActionsType.details
     ) {
-      if (profile?.userRoles.isSupportAdmin) {
-        elements.push(editFromDetailButton)
-      }
       if (isListingApprover && !profile?.userRoles.isPartner) {
         elements.push(approveAndPublishButton)
+        elements.push(editFromDetailButton)
+      } else if (profile?.userRoles.isSupportAdmin) {
         elements.push(editFromDetailButton)
       }
       if (isListingCopier) elements.push(copyButton)
