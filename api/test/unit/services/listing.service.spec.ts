@@ -5094,11 +5094,7 @@ describe('Testing listing service', () => {
 
     it('listingApprovalNotify changes requested email', async () => {
       jest.spyOn(service, 'getUserEmailInfo').mockResolvedValueOnce({
-        emails: [
-          'jurisAdmin@email.com',
-          'partner@email.com',
-          'supportAdmin@email.com',
-        ],
+        emails: ['jurisAdmin@email.com', 'partner@email.com'],
       });
       await service.listingApprovalNotify({
         user,
@@ -5109,25 +5105,21 @@ describe('Testing listing service', () => {
       });
 
       expect(service.getUserEmailInfo).toBeCalledWith(
-        ['partner', 'jurisdictionAdmin', 'supportAdmin'],
+        ['partner', 'jurisdictionAdmin'],
         'id',
         'jurisId',
       );
       expect(changesRequestedMock).toBeCalledWith(
         user,
         { id: 'id', name: 'name', juris: 'jurisId' },
-        ['jurisAdmin@email.com', 'partner@email.com', 'supportAdmin@email.com'],
+        ['jurisAdmin@email.com', 'partner@email.com'],
         config.get('PARTNERS_PORTAL_URL'),
       );
     });
 
     it('listingApprovalNotify listing approved email', async () => {
       jest.spyOn(service, 'getUserEmailInfo').mockResolvedValueOnce({
-        emails: [
-          'jurisAdmin@email.com',
-          'partner@email.com',
-          'supportAdmin@email.com',
-        ],
+        emails: ['jurisAdmin@email.com', 'partner@email.com'],
         publicUrl: 'public.housing.gov',
       });
       await service.listingApprovalNotify({
