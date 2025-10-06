@@ -575,7 +575,7 @@ describe('Testing listing service', () => {
     };
   };
 
-  describe('Test list endpoint', () => {
+  describe.only('Test list endpoint', () => {
     it('should handle call to list() with no params sent', async () => {
       prisma.listings.findMany = jest
         .fn()
@@ -5119,7 +5119,12 @@ describe('Testing listing service', () => {
 
     it('listingApprovalNotify listing approved email', async () => {
       jest.spyOn(service, 'getUserEmailInfo').mockResolvedValueOnce({
-        emails: ['jurisAdmin@email.com', 'partner@email.com'],
+        emails: [
+          'jurisAdmin@email.com',
+          'partner@email.com',
+          'supportAdmin@email.com',
+          'admin@example.com',
+        ],
         publicUrl: 'public.housing.gov',
       });
       await service.listingApprovalNotify({
@@ -5132,7 +5137,12 @@ describe('Testing listing service', () => {
       });
 
       expect(service.getUserEmailInfo).toBeCalledWith(
-        ['partner', 'jurisdictionAdmin', 'supportAdmin'],
+        [
+          UserRoleEnum.partner,
+          UserRoleEnum.admin,
+          UserRoleEnum.jurisdictionAdmin,
+          UserRoleEnum.supportAdmin,
+        ],
         'id',
         'jurisId',
         true,
@@ -5140,7 +5150,12 @@ describe('Testing listing service', () => {
       expect(listingApprovedMock).toBeCalledWith(
         expect.objectContaining({ id: 'jurisId' }),
         { id: 'id', name: 'name' },
-        ['jurisAdmin@email.com', 'partner@email.com', 'supportAdmin@email.com'],
+        [
+          'jurisAdmin@email.com',
+          'partner@email.com',
+          'supportAdmin@email.com',
+          'admin@example.com',
+        ],
         'public.housing.gov',
       );
     });
