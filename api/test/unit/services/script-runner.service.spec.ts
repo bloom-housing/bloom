@@ -65,7 +65,7 @@ describe('Testing script runner service', () => {
     mockConsoleLog.mockRestore();
   });
 
-  it.skip('should add lottery translations', async () => {
+  it('should add lottery translations', async () => {
     prisma.scriptRuns.findUnique = jest.fn().mockResolvedValue(null);
     prisma.scriptRuns.create = jest.fn().mockResolvedValue(null);
     prisma.scriptRuns.update = jest.fn().mockResolvedValue(null);
