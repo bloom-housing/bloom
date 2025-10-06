@@ -51,18 +51,6 @@ const NavigationHeader = ({
         activePaths: [`/listings/${listingId}`],
         content: undefined,
       },
-      {
-        label: tabs?.applicationsLabel || "",
-        path: `/listings/${listingId}/applications`,
-        activePaths: [
-          `/listings/${listingId}/applications`,
-          `/listings/${listingId}/applications/pending`,
-          `/listings/${listingId}/applications/pending?type=name_dob`,
-          `/listings/${listingId}/applications/pending?type=email`,
-          `/listings/${listingId}/applications/resolved`,
-        ],
-        content: undefined,
-      },
     ]
 
     if (process.env.showLottery && tabs?.lotteryLabel) {
@@ -74,11 +62,29 @@ const NavigationHeader = ({
       })
     }
 
+    if (tabs?.applicationsLabel) {
+      elements.push({
+        label: tabs?.applicationsLabel || "",
+        path: `/listings/${listingId}/applications`,
+        activePaths: [
+          `/listings/${listingId}/applications`,
+          `/listings/${listingId}/applications/pending`,
+          `/listings/${listingId}/applications/pending?type=name_dob`,
+          `/listings/${listingId}/applications/pending?type=email`,
+          `/listings/${listingId}/applications/resolved`,
+        ],
+        content: undefined,
+      
+      })
+    }
+
+
     return elements
   }, [tabs, listingId])
 
   const tabNavItems = useMemo(() => {
     return (
+      <>
       <TabNav className="relative -bottom-8 md:-bottom-10">
         {tabNavElements.map((tab) => (
           <TabNavItem
@@ -92,6 +98,7 @@ const NavigationHeader = ({
           </TabNavItem>
         ))}
       </TabNav>
+      </>
     )
   }, [currentPath, tabNavElements])
 
