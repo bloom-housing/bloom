@@ -399,11 +399,7 @@ const ListingFormActions = ({
 
     // new unsaved listing
     if (type === ListingFormActionsType.add) {
-      elements.push(
-        isListingApprover || (!profile?.userRoles?.isSupportAdmin && !isListingApprovalEnabled)
-          ? publishButton
-          : submitButton
-      )
+      elements.push(isListingApprover || !isListingApprovalEnabled ? publishButton : submitButton)
       elements.push(saveDraftButton)
       elements.push(cancelButton)
     }
