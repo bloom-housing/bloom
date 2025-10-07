@@ -5121,6 +5121,7 @@ describe('Testing listing service', () => {
       jest.spyOn(service, 'getUserEmailInfo').mockResolvedValueOnce({
         emails: [
           'jurisAdmin@email.com',
+          'jurisLimitedAdmin@email.com',
           'partner@email.com',
           'supportAdmin@email.com',
           'admin@example.com',
@@ -5141,6 +5142,7 @@ describe('Testing listing service', () => {
           UserRoleEnum.partner,
           UserRoleEnum.admin,
           UserRoleEnum.jurisdictionAdmin,
+          UserRoleEnum.limitedJurisdictionAdmin,
           UserRoleEnum.supportAdmin,
         ],
         'id',
@@ -5152,6 +5154,7 @@ describe('Testing listing service', () => {
         { id: 'id', name: 'name' },
         [
           'jurisAdmin@email.com',
+          'jurisLimitedAdmin@email.com',
           'partner@email.com',
           'supportAdmin@email.com',
           'admin@example.com',
