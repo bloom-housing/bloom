@@ -2430,10 +2430,10 @@ describe('Listing Controller Tests', () => {
         expect.arrayContaining([adminUser.email, jurisAdmin.email]),
         process.env.PARTNERS_PORTAL_URL,
       );
-      //ensure juris admin is not included since don't have approver permissions in alameda seed
+
       expect(mockRequestApproval.mock.calls[0]['emails']).toEqual(
         expect.not.arrayContaining([
-          wrongJurisAdmin.email,
+          jurisdictionA.email,
           partnerUser.email,
           supportAdmin.email,
         ]),
