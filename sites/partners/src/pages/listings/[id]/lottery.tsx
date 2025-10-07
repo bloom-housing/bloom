@@ -212,7 +212,10 @@ const Lottery = (props: { listing: Listing | undefined }) => {
               {/* TODO: Update dates */}
               <p>
                 {t("listings.lottery.partnerPublishTimestamp", {
-                  adminName: t("listings.lottery.partnerPublishTimestampAdmin"),
+                  adminName:
+                    profile.userRoles.isAdmin || profile.userRoles.isPartner
+                      ? t("listings.lottery.shouldNotPublishRolesTimestamp")
+                      : "",
                   date: dayjs(lotteryReleaseDate).format("MM/DD/YYYY"),
                   time: dayjs(lotteryReleaseDate).format("h:mm a"),
                   portal: t("listings.lottery.partnerPublishTimestampPortal"),
