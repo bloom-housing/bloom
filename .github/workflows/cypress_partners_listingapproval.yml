@@ -15,13 +15,9 @@ env:
   PARTNERS_PORTAL_URL: http://localhost:3001
   DATABASE_URL: postgres://bloom-dev:bloom@127.0.0.1:5432/bloom
   TEST_DATABASE_URL: postgres://bloom-dev:bloom@127.0.0.1:5432/bloom_test
-  JURISDICTION_NAME: 'Bay Area'
   BACKEND_API_BASE: http://localhost:3100
   LISTINGS_QUERY: /listings
   NEXTJS_PORT: 3001
-  JURISDICTION_INCLUDE_LIST: San Jose,San Mateo,Alameda
-  LISTING_VIEW: base
-  JURISDICTION_ENDPOINT_PATH: /jurisdictions
   LISTINGS_ENDPOINT_PATH: /listings
   MAPBOX_TOKEN: ${{ secrets.MAPBOX_TOKEN }}
   FEATURE_LISTINGS_APPROVAL: "TRUE"
