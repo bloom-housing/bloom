@@ -215,10 +215,13 @@ const Lottery = (props: { listing: Listing | undefined }) => {
                   adminName:
                     profile.userRoles.isAdmin || profile.userRoles.isPartner
                       ? t("listings.lottery.shouldNotPublishRolesTimestamp")
-                      : "",
+                      : t("listings.lottery.shouldNotPublishRolesTimestamp"),
                   date: dayjs(lotteryReleaseDate).format("MM/DD/YYYY"),
                   time: dayjs(lotteryReleaseDate).format("h:mm a"),
-                  portal: t("listings.lottery.partnerPublishTimestampPortal"),
+                  portal:
+                    profile?.userRoles?.isAdmin || profile?.userRoles?.isPartner
+                      ? t("listings.lottery.partnerPublishTimestampPortal")
+                      : t("listings.lottery.shouldNotPublishRolesTimestamp"),
                 })}
               </p>
             </div>
