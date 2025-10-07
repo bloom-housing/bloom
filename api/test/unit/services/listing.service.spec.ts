@@ -5119,7 +5119,13 @@ describe('Testing listing service', () => {
 
     it('listingApprovalNotify listing approved email', async () => {
       jest.spyOn(service, 'getUserEmailInfo').mockResolvedValueOnce({
-        emails: ['jurisAdmin@email.com', 'partner@email.com'],
+        emails: [
+          'jurisAdmin@email.com',
+          'jurisLimitedAdmin@email.com',
+          'partner@email.com',
+          'supportAdmin@email.com',
+          'admin@example.com',
+        ],
         publicUrl: 'public.housing.gov',
       });
       await service.listingApprovalNotify({
@@ -5132,7 +5138,13 @@ describe('Testing listing service', () => {
       });
 
       expect(service.getUserEmailInfo).toBeCalledWith(
-        ['partner', 'jurisdictionAdmin'],
+        [
+          UserRoleEnum.partner,
+          UserRoleEnum.admin,
+          UserRoleEnum.jurisdictionAdmin,
+          UserRoleEnum.limitedJurisdictionAdmin,
+          UserRoleEnum.supportAdmin,
+        ],
         'id',
         'jurisId',
         true,
@@ -5140,7 +5152,13 @@ describe('Testing listing service', () => {
       expect(listingApprovedMock).toBeCalledWith(
         expect.objectContaining({ id: 'jurisId' }),
         { id: 'id', name: 'name' },
-        ['jurisAdmin@email.com', 'partner@email.com'],
+        [
+          'jurisAdmin@email.com',
+          'jurisLimitedAdmin@email.com',
+          'partner@email.com',
+          'supportAdmin@email.com',
+          'admin@example.com',
+        ],
         'public.housing.gov',
       );
     });
