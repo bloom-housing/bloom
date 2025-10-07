@@ -928,6 +928,13 @@ export const ListingView = (props: ListingProps) => {
             {listing.whatToExpect && (
               <ExpandableSection
                 content={<Markdown className={"bloom-markdown"}>{listing.whatToExpect}</Markdown>}
+                expandableContent={
+                  listing.whatToExpectAdditionalText ? (
+                    <Markdown className={"bloom-markdown"}>
+                      {listing.whatToExpectAdditionalText}
+                    </Markdown>
+                  ) : undefined
+                }
                 strings={{
                   title: t("whatToExpect.label"),
                   readMore: t("t.readMore"),
