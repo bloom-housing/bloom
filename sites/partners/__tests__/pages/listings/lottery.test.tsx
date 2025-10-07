@@ -779,8 +779,8 @@ describe("lottery", () => {
 
     const header = await findByText("Lottery")
     expect(header).toBeInTheDocument()
-
     expect(getByText("Publish lottery data")).toBeInTheDocument()
+    expect(getByText("Publish")).toBeInTheDocument()
   })
 
   it("should show export if in published to public state as a parter", async () => {
