@@ -219,16 +219,20 @@ const Lottery = (props: { listing: Listing | undefined }) => {
                 })}
               </p>
             </div>
-            <div>
-              <Button
-                onClick={() => {
-                  setPublishModal(true)
-                }}
-                id={"lottery-publish-button"}
-              >
-                {t("listings.actions.publish")}
-              </Button>
-            </div>
+
+            {profile?.userRoles?.isPartner ||
+              (profile?.userRoles?.isAdmin && (
+                <div>
+                  <Button
+                    onClick={() => {
+                      setPublishModal(true)
+                    }}
+                    id={"lottery-publish-button"}
+                  >
+                    {t("listings.actions.publish")}
+                  </Button>
+                </div>
+              ))}
           </CardSection>
         )
       } else if (listing.lotteryStatus === LotteryStatusEnum.publishedToPublic) {
