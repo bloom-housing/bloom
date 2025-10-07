@@ -220,7 +220,7 @@ const Lottery = (props: { listing: Listing | undefined }) => {
               </p>
             </div>
 
-            {(profile?.userRoles?.isPartner || profile?.userRoles?.isAdmin) && (
+            {profile?.userRoles?.isPartner && (
               <div>
                 <Button
                   onClick={() => {
