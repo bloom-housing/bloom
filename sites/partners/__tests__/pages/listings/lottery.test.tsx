@@ -744,7 +744,7 @@ describe("lottery", () => {
     expect(queryByText("Release lottery")).not.toBeInTheDocument()
   })
 
-  it("should not show publish button if in released to partners state as a parter", async () => {
+  it("should not show publish button if in released to partners state as a jurisdictional admin", async () => {
     mockNextRouter({ id: "Uvbk5qurpB2WI9V6WnNdH" })
     document.cookie = "access-token-available=True"
     server.use(
