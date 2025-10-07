@@ -2342,10 +2342,11 @@ describe('Listing Controller Tests', () => {
     let listing,
       adminUser,
       jurisAdmin,
-      wrongJurisAdmin,
+      limitedJurisdictionA,
       jurisdictionA,
       partnerUser,
-      adminAccessToken;
+      adminAccessToken,
+      supportAdmin;
     beforeAll(async () => {
       jurisdictionA = await prisma.jurisdictions.create({
         data: jurisdictionFactory(`approval notifications A ${randomName()}`, {
@@ -2367,10 +2368,10 @@ describe('Listing Controller Tests', () => {
           confirmedAt: new Date(),
         }),
       });
-      wrongJurisAdmin = await prisma.userAccounts.create({
+      limitedJurisdictionA = await prisma.userAccounts.create({
         data: await userFactory({
           roles: {
-            isJurisdictionalAdmin: true,
+            isLimitedJurisdictionalAdmin: true,
           },
           jurisdictionIds: [jurisdictionB.id],
         }),
@@ -2379,6 +2380,15 @@ describe('Listing Controller Tests', () => {
         data: await userFactory({
           roles: {
             isJurisdictionalAdmin: true,
+          },
+          jurisdictionIds: [jurisdictionA.id],
+        }),
+      });
+
+      supportAdmin = await prisma.userAccounts.create({
+        data: await userFactory({
+          roles: {
+            isSupportAdmin: true,
           },
           jurisdictionIds: [jurisdictionA.id],
         }),
@@ -2462,7 +2472,14 @@ describe('Listing Controller Tests', () => {
       const emailEntries =
         mockSeSClient.call(0).args[0].input['BulkEmailEntries'];
       expect(emailEntries).not.toContain({
-        Destination: { ToAddresses: [wrongJurisAdmin.email] },
+        Destination: {
+          ToAddresses: [
+            jurisdictionA.email,
+            partnerUser.email,
+            supportAdmin.email,
+            limitedJurisdictionA.email,
+          ],
+        },
       });
     });
 
