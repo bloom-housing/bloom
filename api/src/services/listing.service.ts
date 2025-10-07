@@ -93,6 +93,7 @@ views.name = {
 
 views.base = {
   ...views.fundamentals,
+  requiredDocumentsList: true,
   listingsBuildingAddress: true,
   reservedCommunityTypes: true,
   listingImages: {
@@ -1110,6 +1111,9 @@ export class ListingService implements OnModuleInit {
     if (listing.listingsLeasingAgentAddress) {
       listing.leasingAgentAddress = listing.listingsLeasingAgentAddress;
     }
+    if (listing.requiredDocumentsList) {
+      listing.requiredDocuments = listing.requiredDocumentsList;
+    }
     if (listing.listingUtilities) {
       listing.utilities = listing.listingUtilities;
     }
@@ -1282,6 +1286,11 @@ export class ListingService implements OnModuleInit {
                     }
                   : undefined,
               })),
+            }
+          : undefined,
+        requiredDocumentsList: dto.requiredDocumentsList
+          ? {
+              create: { ...dto.requiredDocumentsList },
             }
           : undefined,
         listingEvents: dto.listingEvents
@@ -2151,6 +2160,17 @@ export class ListingService implements OnModuleInit {
             ? {
                 disconnect: {
                   id: storedListing.reservedCommunityTypes.id,
+                },
+              }
+            : undefined,
+          requiredDocumentsList: dto.requiredDocumentsList
+            ? {
+                upsert: {
+                  where: {
+                    id: storedListing.requiredDocumentsList?.id,
+                  },
+                  create: { ...incomingDto.requiredDocumentsList },
+                  update: { ...incomingDto.requiredDocumentsList },
                 },
               }
             : undefined,

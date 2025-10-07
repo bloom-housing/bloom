@@ -522,6 +522,24 @@ model ListingUtilities {
   @@map("listing_utilities")
 }
 
+model ListingDocuments {
+  id                        String    @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  createdAt                 DateTime  @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt                 DateTime  @updatedAt @map("updated_at") @db.Timestamp(6)
+  socialSecurityCard        Boolean?
+  currentLandlordReference  Boolean?
+  birthCertificate          Boolean?
+  previousLandlordReference Boolean?
+  governmentIssuedId        Boolean?
+  proofOfAssets             Boolean?
+  proofOfIncome             Boolean?
+  residencyDocuments        Boolean?
+  proofOfCustody            Boolean?
+  listings                  Listings?
+
+  @@map("listing_documents")
+}
+
 enum ListingTypeEnum {
   regulated
   nonRegulated
@@ -605,6 +623,7 @@ model Listings {
   rentalAssistance                      String?                       @map("rental_assistance")
   rentalHistory                         String?                       @map("rental_history")
   requiredDocuments                     String?                       @map("required_documents")
+  requiredDocumentsList                 ListingDocuments?             @relation(fields: [documentsId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   specialNotes                          String?                       @map("special_notes")
   waitlistCurrentSize                   Int?                          @map("waitlist_current_size")
   waitlistMaxSize                       Int?                          @map("waitlist_max_size")
@@ -638,6 +657,7 @@ model Listings {
   resultId                              String?                       @map("result_id") @db.Uuid
   featuresId                            String?                       @unique() @map("features_id") @db.Uuid
   utilitiesId                           String?                       @unique() @map("utilities_id") @db.Uuid
+  documentsId                           String?                       @unique() @map("documents_id") @db.Uuid
   includeCommunityDisclaimer            Boolean?                      @map("include_community_disclaimer")
   communityDisclaimerTitle              String?                       @map("community_disclaimer_title")
   communityDisclaimerDescription        String?                       @map("community_disclaimer_description")

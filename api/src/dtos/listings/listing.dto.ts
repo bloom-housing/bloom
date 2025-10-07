@@ -62,6 +62,7 @@ import {
   ValidateOnlyUnitsOrUnitGroups,
 } from '../../decorators/validate-units-required.decorator';
 import { ValidateListingDeposit } from '../../decorators/validate-listing-deposit.decorator';
+import { ListingDocuments } from './listing-documents.dto';
 
 class Listing extends AbstractDTO {
   @Expose()
@@ -545,6 +546,15 @@ class Listing extends AbstractDTO {
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   requiredDocuments?: string;
+
+  @Expose()
+  @ValidateListingPublish('requiredDocumentsList', {
+    groups: [ValidationsGroupsEnum.default],
+  })
+  @Type(() => ListingDocuments)
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @ApiPropertyOptional({ type: ListingDocuments })
+  requiredDocumentsList?: ListingDocuments;
 
   @Expose()
   @ValidateListingPublish('specialNotes', {
