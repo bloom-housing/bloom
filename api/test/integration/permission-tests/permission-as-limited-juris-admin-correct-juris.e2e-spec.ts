@@ -769,16 +769,16 @@ describe('Testing Permissioning of endpoints as Limited Jurisdictional Admin in 
         .expect(200);
     });
 
-    it('should succeed for create endpoint', async () => {
+    it('should error as forbidden for create endpoint', async () => {
       await request(app.getHttpServer())
         .post('/multiselectQuestions')
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send(buildMultiselectQuestionCreateMock(jurisId))
         .set('Cookie', cookies)
-        .expect(201);
+        .expect(403);
     });
 
-    it('should succeed for update endpoint', async () => {
+    it('should error as forbidden for update endpoint', async () => {
       const multiselectQuestionA = await prisma.multiselectQuestions.create({
         data: multiselectQuestionFactory(jurisId),
       });
@@ -790,10 +790,10 @@ describe('Testing Permissioning of endpoints as Limited Jurisdictional Admin in 
           buildMultiselectQuestionUpdateMock(jurisId, multiselectQuestionA.id),
         )
         .set('Cookie', cookies)
-        .expect(200);
+        .expect(403);
     });
 
-    it('should succeed for delete endpoint', async () => {
+    it('should error as forbidden for delete endpoint', async () => {
       const multiselectQuestionA = await prisma.multiselectQuestions.create({
         data: multiselectQuestionFactory(jurisId),
       });
@@ -805,27 +805,17 @@ describe('Testing Permissioning of endpoints as Limited Jurisdictional Admin in 
           id: multiselectQuestionA.id,
         } as IdDTO)
         .set('Cookie', cookies)
-        .expect(200);
-
-      const activityLogResult = await prisma.activityLog.findFirst({
-        where: {
-          module: 'multiselectQuestion',
-          action: permissionActions.delete,
-          recordId: multiselectQuestionA.id,
-        },
-      });
-
-      expect(activityLogResult).not.toBeNull();
+        .expect(403);
     });
   });
 
   describe('Testing user endpoints', () => {
-    it('should succeed for list endpoint', async () => {
+    it('should error as forbidden for list endpoint', async () => {
       await request(app.getHttpServer())
         .get(`/user/list?`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
-        .expect(200);
+        .expect(403);
     });
 
     it('should error as forbidden for retrieve endpoint', async () => {
@@ -1139,12 +1129,12 @@ describe('Testing Permissioning of endpoints as Limited Jurisdictional Admin in 
         .expect(403);
     });
 
-    it('should succeed for expireLotteries endpoint', async () => {
+    it('should error as forbidden for expireLotteries endpoint', async () => {
       await request(app.getHttpServer())
         .put(`/lottery/expireLotteries`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
-        .expect(200);
+        .expect(403);
     });
 
     it('should error as forbidden for lottery status endpoint', async () => {

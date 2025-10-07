@@ -36,7 +36,7 @@ const determineUserRole = (roles: UserRole) => {
   if (roles?.isAdmin) {
     return RoleOption.Administrator
   } else if (roles?.isSupportAdmin) {
-    return RoleOption.SupportAdmin
+    return RoleOption.AdminSupport
   } else if (roles?.isJurisdictionalAdmin) {
     return RoleOption.JurisdictionalAdmin
   } else if (roles?.isLimitedJurisdictionalAdmin) {
@@ -70,7 +70,7 @@ const FormUserManage = ({
   }
   if (profile?.userRoles?.isAdmin) {
     possibleUserRoles.push(RoleOption.Administrator)
-    possibleUserRoles.push(RoleOption.SupportAdmin)
+    possibleUserRoles.push(RoleOption.AdminSupport)
   }
 
   let defaultValues: FormUserManageValues = {}
@@ -196,7 +196,7 @@ const FormUserManage = ({
     const roles = (() => {
       return {
         isAdmin: userRoles.includes(RoleOption.Administrator),
-        isSupportAdmin: userRoles.includes(RoleOption.SupportAdmin),
+        isSupportAdmin: userRoles.includes(RoleOption.AdminSupport),
         isPartner: userRoles.includes(RoleOption.Partner),
         isJurisdictionalAdmin: userRoles.includes(RoleOption.JurisdictionalAdmin),
         isLimitedJurisdictionalAdmin: userRoles.includes(RoleOption.LimitedJurisdictionalAdmin),

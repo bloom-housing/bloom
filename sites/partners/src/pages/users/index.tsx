@@ -95,7 +95,7 @@ const Users = () => {
           }
 
           if (isSupportAdmin) {
-            roles.push(t("users.supportAdmin"))
+            roles.push(t("users.adminSupport"))
           }
 
           return roles.join(", ")
