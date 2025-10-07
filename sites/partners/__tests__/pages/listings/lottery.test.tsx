@@ -744,6 +744,45 @@ describe("lottery", () => {
     expect(queryByText("Release lottery")).not.toBeInTheDocument()
   })
 
+  it("should now show publish button if in released to partners state as a parter", async () => {
+    mockNextRouter({ id: "Uvbk5qurpB2WI9V6WnNdH" })
+    document.cookie = "access-token-available=True"
+    server.use(
+      rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
+        return res(
+          ctx.json({
+            id: "user1",
+            userRoles: { isParner: false, isJurisdictionalAdmin: true },
+          })
+        )
+      }),
+      rest.post("http://localhost:3100/auth/token", (_req, res, ctx) => {
+        return res(ctx.json(""))
+      }),
+      rest.get("http://localhost:3100/applicationFlaggedSets/meta", (_req, res, ctx) => {
+        return res(ctx.json({ totalCount: 5, totalPendingCount: 5 }))
+      }),
+      rest.get(
+        "http://localhost:3100/lottery/lotteryActivityLog/Uvbk5qurpB2WI9V6WnNdH",
+        (_req, res, ctx) => {
+          return res(ctx.json([]))
+        }
+      )
+    )
+
+    const updatedListing = {
+      ...closedListing,
+      lotteryStatus: LotteryStatusEnum.releasedToPartners,
+    }
+
+    const { getByText, findByText } = render(<Lottery listing={updatedListing} />)
+
+    const header = await findByText("Lottery")
+    expect(header).toBeInTheDocument()
+
+    expect(getByText("Publish lottery data")).toBeInTheDocument()
+  })
+
   it("should show export if in published to public state as a parter", async () => {
     mockNextRouter({ id: "Uvbk5qurpB2WI9V6WnNdH" })
     document.cookie = "access-token-available=True"
