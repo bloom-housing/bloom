@@ -321,6 +321,7 @@
   "listings.lottery.runLottery": "Run lottery",
   "listings.lottery.runLotteryContent": "Make sure to add all paper applications before running the lottery.",
   "listings.lottery.runLotteryDuplicates": "Run lottery without resolving duplicates",
+  "listings.lottery.shouldNotPublishRolesTimestamp": "A lottery was run and released by %{adminName} on %{date} at %{time}, but a lottery has not yet been published for this listing. Once a partner publishes the lottery results, you and applicants will have access.",
   "listings.lottery.toast.run": "Lottery run successfully",
   "listings.lottery.toast.rerun": "Lottery re-run successfully",
   "listings.lottery.toast.released": "Lottery released successfully",
