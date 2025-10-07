@@ -7463,6 +7463,7 @@ export enum FeatureFlagEnum {
   "enableRegions" = "enableRegions",
   "enableSection8Question" = "enableSection8Question",
   "enableSingleUseCode" = "enableSingleUseCode",
+  "enableSupportAdmin" = "enableSupportAdmin",
   "enableUnderConstructionHome" = "enableUnderConstructionHome",
   "enableUnitGroups" = "enableUnitGroups",
   "enableUtilitiesIncluded" = "enableUtilitiesIncluded",
