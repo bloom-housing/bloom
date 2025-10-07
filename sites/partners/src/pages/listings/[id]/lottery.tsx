@@ -211,12 +211,18 @@ const Lottery = (props: { listing: Listing | undefined }) => {
             <div className={styles["card-description"]}>
               {/* TODO: Update dates */}
               <p>
-                {t("listings.lottery.partnerPublishTimestamp", {
-                  adminName: t("listings.lottery.partnerPublishTimestampAdmin"),
-                  date: dayjs(lotteryReleaseDate).format("MM/DD/YYYY"),
-                  time: dayjs(lotteryReleaseDate).format("h:mm a"),
-                  portal: t("listings.lottery.partnerPublishTimestampPortal"),
-                })}
+                {profile?.userRoles?.isPartner
+                  ? t("listings.lottery.partnerPublishTimestamp", {
+                      adminName: t("listings.lottery.partnerPublishTimestampAdmin"),
+                      date: dayjs(lotteryReleaseDate).format("MM/DD/YYYY"),
+                      time: dayjs(lotteryReleaseDate).format("h:mm a"),
+                      portal: t("listings.lottery.partnerPublishTimestampPortal"),
+                    })
+                  : t("listings.lottery.shouldNotPublishRolesTimestamp", {
+                      adminName: t("listings.lottery.partnerPublishTimestampAdmin"),
+                      date: dayjs(lotteryReleaseDate).format("MM/DD/YYYY"),
+                      time: dayjs(lotteryReleaseDate).format("h:mm a"),
+                    })}
               </p>
             </div>
             <div>
