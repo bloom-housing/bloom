@@ -575,7 +575,7 @@ describe('Testing listing service', () => {
     };
   };
 
-  describe.only('Test list endpoint', () => {
+  describe('Test list endpoint', () => {
     it('should handle call to list() with no params sent', async () => {
       prisma.listings.findMany = jest
         .fn()
