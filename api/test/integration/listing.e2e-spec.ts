@@ -2313,7 +2313,7 @@ describe('Listing Controller Tests', () => {
     let listing,
       adminUser,
       jurisAdmin,
-      wrongJurisAdmin,
+      limitedJurisdictionA,
       jurisdictionA,
       partnerUser,
       adminAccessToken,
@@ -2339,10 +2339,10 @@ describe('Listing Controller Tests', () => {
           confirmedAt: new Date(),
         }),
       });
-      wrongJurisAdmin = await prisma.userAccounts.create({
+      limitedJurisdictionA = await prisma.userAccounts.create({
         data: await userFactory({
           roles: {
-            isJurisdictionalAdmin: true,
+            isLimitedJurisdictionalAdmin: true,
           },
           jurisdictionIds: [jurisdictionB.id],
         }),
@@ -2436,6 +2436,7 @@ describe('Listing Controller Tests', () => {
           jurisdictionA.email,
           partnerUser.email,
           supportAdmin.email,
+          limitedJurisdictionA.email,
         ]),
       );
     });
