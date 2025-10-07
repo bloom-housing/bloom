@@ -211,7 +211,7 @@ const Lottery = (props: { listing: Listing | undefined }) => {
             <div className={styles["card-description"]}>
               {/* TODO: Update dates */}
               <p>
-                {profile?.userRoles?.isAdmin || profile?.userRoles?.isPartner
+                {profile?.userRoles?.isPartner
                   ? t("listings.lottery.partnerPublishTimestamp", {
                       adminName: t("listings.lottery.partnerPublishTimestampAdmin"),
                       date: dayjs(lotteryReleaseDate).format("MM/DD/YYYY"),
