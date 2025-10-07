@@ -182,6 +182,21 @@ export const stagingSeed = async (
       password: 'abcdef',
     }),
   });
+  // create a support admin
+  await prismaClient.userAccounts.create({
+    data: await userFactory({
+      roles: { isSupportAdmin: true },
+      email: 'support-admin@example.com',
+      confirmedAt: new Date(),
+      acceptedTerms: true,
+      jurisdictionIds: [
+        mainJurisdiction.id,
+        lakeviewJurisdiction.id,
+        bridgeBayJurisdiction.id,
+        nadaHill.id,
+      ],
+    }),
+  });
   // create a jurisdictional admin
   await prismaClient.userAccounts.create({
     data: await userFactory({
