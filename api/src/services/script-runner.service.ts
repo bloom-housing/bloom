@@ -1,6 +1,11 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  BadRequestException,
+  NotImplementedException,
+} from '@nestjs/common';
 import {
   LanguagesEnum,
+  ListingsStatusEnum,
   MultiselectQuestionsApplicationSectionEnum,
   Prisma,
   ReviewOrderTypeEnum,
@@ -22,6 +27,7 @@ import { AmiChartCreate } from '../dtos/ami-charts/ami-chart-create.dto';
 import { AmiChartUpdate } from '../dtos/ami-charts/ami-chart-update.dto';
 import MultiselectQuestion from '../dtos/multiselect-questions/multiselect-question.dto';
 import { AmiChartUpdateImportDTO } from '../dtos/script-runner/ami-chart-update-import.dto';
+import dayjs from 'dayjs';
 
 /**
   this is the service for running scripts
@@ -648,6 +654,65 @@ export class ScriptRunnerService {
       'migrate Detroit to multiselect questions',
       requestingUser,
     );
+    return { success: true };
+  }
+
+  /**
+   *
+   * @param req incoming request object
+   * @returns successDTO
+   * @description for all closed listings populate the expire_after on applications and
+   * designate newest application for each applicant
+   */
+  async setPIIDeletionInitialFields(req: ExpressRequest): Promise<SuccessDTO> {
+    const requestingUser = mapTo(User, req['user']);
+    await this.markScriptAsRunStart('set pii deletion fields', requestingUser);
+    if (!process.env.APPLICATION_DAYS_TILL_EXPIRY) {
+      throw new NotImplementedException(
+        'APPLICATION_DAYS_TILL_EXPIRY env variable is not set',
+      );
+    }
+
+    // Set the expire_after field on applications tied to closed listings
+    const closedListings = await this.prisma.listings.findMany({
+      select: { id: true, closedAt: true },
+      where: { status: ListingsStatusEnum.closed, closedAt: { not: null } },
+    });
+    for (const listing of closedListings) {
+      const expireAfter = dayjs(listing.closedAt)
+        .add(Number(process.env.APPLICATION_DAYS_TILL_EXPIRY))
+        .toDate();
+      await this.prisma.applications.updateMany({
+        data: { expireAfter: expireAfter },
+        where: { listingId: listing.id },
+      });
+    }
+
+    // Set the is_newest field on application if newest application for applicant
+    const userCount = await this.prisma.userAccounts.count({
+      where: { userRoles: { is: null } },
+    });
+    console.log('total public user count', userCount);
+    // Batch in groups of 1000
+    for (let currentCount = 0; currentCount < userCount; currentCount + 1000) {
+      const applicationsToUpdate: {
+        user_id: string;
+        application_id: string;
+      }[] = await this.prisma
+        .$queryRaw`select a.user_id, (a.application_ids::jsonb)[0]::text as application_id from (
+                    select a.user_id, json_agg(a.id ORDER BY a.created_at DESC) as application_ids from applications a
+                    GROUP BY a.user_id) a
+                    OFFSET ${currentCount}
+                    limit 1000;`;
+      await this.prisma.applications.updateMany({
+        data: { isNewest: true },
+        where: {
+          id: { in: applicationsToUpdate.map((app) => app.application_id) },
+        },
+      });
+    }
+
+    await this.markScriptAsComplete('set pii deletion fields', requestingUser);
     return { success: true };
   }
 

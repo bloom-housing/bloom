@@ -209,4 +209,17 @@ export class ScriptRunnerController {
       req,
     );
   }
+
+  @Put('setPIIDeletionInitialFields')
+  @ApiOperation({
+    summary:
+      'A script that sets the initial values for all PII deletion fields',
+    operationId: 'setPIIDeletionInitialFields',
+  })
+  @ApiOkResponse({ type: SuccessDTO })
+  async setPIIDeletionInitialFields(
+    @Request() req: ExpressRequest,
+  ): Promise<SuccessDTO> {
+    return await this.scriptRunnerService.setPIIDeletionInitialFields(req);
+  }
 }
