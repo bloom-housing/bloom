@@ -101,6 +101,7 @@ const ApplicationsList = () => {
       this.linkWithId = document.createElement("button")
       this.linkWithId.innerText = params.value
       this.linkWithId.classList.add("text-blue-700")
+      this.linkWithId.style.textDecoration = "underline"
       this.linkWithId.addEventListener("click", function () {
         void router.push(`/application/${applicationId}/review`)
       })

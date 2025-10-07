@@ -11,7 +11,7 @@ import { Expose, Type } from 'class-transformer';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 import { IdDTO } from '../shared/id.dto';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { ValidateUnitGroupRent } from 'src/decorators/validate-units-rent.decorator';
+import { ValidateUnitGroupRent } from '../../decorators/validate-units-rent.decorator';
 import { RentTypeEnum } from '@prisma/client';
 
 class UnitsSummary {
