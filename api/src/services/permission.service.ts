@@ -79,6 +79,8 @@ export class PermissionService {
 
     if (user.userRoles?.isAdmin) {
       await enforcer.addRoleForUser(user.id, UserRoleEnum.admin);
+    } else if (user.userRoles?.isSupportAdmin) {
+      await enforcer.addRoleForUser(user.id, UserRoleEnum.supportAdmin);
     } else if (user.userRoles?.isJurisdictionalAdmin) {
       await enforcer.addRoleForUser(user.id, UserRoleEnum.jurisdictionAdmin);
 

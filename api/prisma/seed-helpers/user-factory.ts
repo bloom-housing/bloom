@@ -68,6 +68,7 @@ export const userFactory = async (optionalParams?: {
         optionalParams?.roles?.isLimitedJurisdictionalAdmin || false,
       isPartner: optionalParams?.roles?.isPartner || false,
       isSuperAdmin: optionalParams?.roles?.isSuperAdmin || false,
+      isSupportAdmin: optionalParams?.roles?.isSupportAdmin || false,
     },
   },
 });

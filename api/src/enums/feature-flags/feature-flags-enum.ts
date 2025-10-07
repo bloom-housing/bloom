@@ -23,11 +23,13 @@ export enum FeatureFlagEnum {
   enableListingUpdatedAt = 'enableListingUpdatedAt',
   enableMarketingStatus = 'enableMarketingStatus',
   enableNeighborhoodAmenities = 'enableNeighborhoodAmenities',
+  enableNonRegulatedListings = 'enableNonRegulatedListings',
   enablePartnerDemographics = 'enablePartnerDemographics',
   enablePartnerSettings = 'enablePartnerSettings',
   enableRegions = 'enableRegions',
   enableSection8Question = 'enableSection8Question',
   enableSingleUseCode = 'enableSingleUseCode',
+  enableSupportAdmin = 'enableSupportAdmin',
   enableUnderConstructionHome = 'enableUnderConstructionHome',
   enableUnitGroups = 'enableUnitGroups',
   enableUtilitiesIncluded = 'enableUtilitiesIncluded',
@@ -145,6 +147,11 @@ export const featureFlagMap: { name: string; description: string }[] = [
       "When true, the 'neighborhood amenities' section is displayed in listing creation/edit and the public listing view",
   },
   {
+    name: FeatureFlagEnum.enableNonRegulatedListings,
+    description:
+      'When true, non-regulated listings are displayed in listing creation/edit and public listing view',
+  },
+  {
     name: FeatureFlagEnum.enablePartnerDemographics,
     description:
       'When true, demographics data is included in application or lottery exports for partners',
@@ -166,6 +173,10 @@ export const featureFlagMap: { name: string; description: string }[] = [
     name: FeatureFlagEnum.enableSingleUseCode,
     description:
       'When true, the backend allows for logging into this jurisdiction using the single use code flow',
+  },
+  {
+    name: FeatureFlagEnum.enableSupportAdmin,
+    description: 'When true, support admins can be created',
   },
   {
     name: FeatureFlagEnum.enableUnderConstructionHome,
