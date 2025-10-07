@@ -381,6 +381,7 @@ export class ListingService implements OnModuleInit {
             UserRoleEnum.partner,
             UserRoleEnum.admin,
             UserRoleEnum.jurisdictionAdmin,
+            UserRoleEnum.limitedJurisdictionAdmin,
             UserRoleEnum.supportAdmin,
           ],
           params.listingInfo.id,
