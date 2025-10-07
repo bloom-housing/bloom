@@ -779,7 +779,7 @@ describe("lottery", () => {
 
     const header = await findByText("Lottery")
     expect(header).toBeInTheDocument()
-    expect(getByText("Publish lottery data"))toBeInTheDocument()
+    expect(getByText("Publish lottery data")).toBeInTheDocument()
     expect(getByText("Publish")).not.toBeInTheDocument()
   })
 
