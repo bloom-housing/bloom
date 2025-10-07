@@ -775,12 +775,12 @@ describe("lottery", () => {
       lotteryStatus: LotteryStatusEnum.releasedToPartners,
     }
 
-    const { getByText, findByText } = render(<Lottery listing={updatedListing} />)
+    const { getByText, findByText, queryByText } = render(<Lottery listing={updatedListing} />)
 
     const header = await findByText("Lottery")
     expect(header).toBeInTheDocument()
     expect(getByText("Publish lottery data")).toBeInTheDocument()
-    expect(getByText("Publish")).not.toBeInTheDocument()
+    expect(queryByText("Publish")).not.toBeInTheDocument()
   })
 
   it("should show export if in published to public state as a parter", async () => {
