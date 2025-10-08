@@ -64,6 +64,7 @@ export const stagingSeed = async (
         FeatureFlagEnum.enableSection8Question,
         FeatureFlagEnum.enableSingleUseCode,
         FeatureFlagEnum.enableUtilitiesIncluded,
+        FeatureFlagEnum.enableWhatToExpectAdditionalField,
       ],
       languages: Object.values(LanguagesEnum),
       requiredListingFields: [
@@ -118,6 +119,7 @@ export const stagingSeed = async (
         FeatureFlagEnum.hideCloseListingButton,
         FeatureFlagEnum.swapCommunityTypeWithPrograms,
         FeatureFlagEnum.enableFullTimeStudentQuestion,
+        FeatureFlagEnum.enableWhatToExpectAdditionalField,
       ],
       requiredListingFields: ['name', 'listingsBuildingAddress'],
       languages: [

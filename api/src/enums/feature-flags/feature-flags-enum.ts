@@ -34,6 +34,7 @@ export enum FeatureFlagEnum {
   enableUnitGroups = 'enableUnitGroups',
   enableUtilitiesIncluded = 'enableUtilitiesIncluded',
   enableWaitlistAdditionalFields = 'enableWaitlistAdditionalFields',
+  enableWhatToExpectAdditionalField = 'enableWhatToExpectAdditionalField',
   enableV2MSQ = 'enableV2MSQ',
   example = 'example', // sample feature flag for testing purposes
   hideCloseListingButton = 'hideCloseListingButton',
@@ -196,6 +197,11 @@ export const featureFlagMap: { name: string; description: string }[] = [
     name: FeatureFlagEnum.enableWaitlistAdditionalFields,
     description:
       'When true, the waitlist additional fields are displayed in the waitlist section of the listing form',
+  },
+  {
+    name: FeatureFlagEnum.enableWhatToExpectAdditionalField,
+    description:
+      'When true, the what to expect additional field is displayed in listing creation/edit form on the partner site',
   },
   {
     name: FeatureFlagEnum.enableV2MSQ,

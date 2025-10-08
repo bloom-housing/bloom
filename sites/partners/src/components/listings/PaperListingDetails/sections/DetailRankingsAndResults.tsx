@@ -27,6 +27,11 @@ const DetailRankingsAndResults = () => {
     listing.jurisdictions.id
   )
 
+  const enableWhatToExpectAdditionalField = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableWhatToExpectAdditionalField,
+    listing.jurisdictions.id
+  )
+
   const lotteryEvent = getLotteryEvent(listing)
   const getReviewOrderType = () => {
     if (!listing.reviewOrderType) {
@@ -134,14 +139,19 @@ const DetailRankingsAndResults = () => {
           </FieldValue>
         </Grid.Cell>
       </Grid.Row>
-      <Grid.Row>
-        <FieldValue
-          id="whatToExpectAdditionalText"
-          label={t("listings.whatToExpectAdditionalText")}
-        >
-          {getDetailFieldRichText(listing.whatToExpectAdditionalText, "whatToExpectAdditionalText")}
-        </FieldValue>
-      </Grid.Row>
+      {enableWhatToExpectAdditionalField && (
+        <Grid.Row>
+          <FieldValue
+            id="whatToExpectAdditionalText"
+            label={t("listings.whatToExpectAdditionalText")}
+          >
+            {getDetailFieldRichText(
+              listing.whatToExpectAdditionalText,
+              "whatToExpectAdditionalText"
+            )}
+          </FieldValue>
+        </Grid.Row>
+      )}
     </SectionWithGrid>
   )
 }
