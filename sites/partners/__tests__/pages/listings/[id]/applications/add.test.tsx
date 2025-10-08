@@ -20,11 +20,9 @@ beforeEach(() => {
   jest.clearAllMocks()
   jest.useFakeTimers()
 
-  // server.use(
-  //   rest.get("http://localhost:3100/listings/Uvbk5qurpB2WI9V6WnNdH", (_req, res, ctx) => {
-  //     return res(ctx.json(listing))
-  //   })
-  // )
+  jest
+    .spyOn(require("../../../../../src/lib/hooks"), "useSingleListingData")
+    .mockReturnValue({ listingDto: listing })
 })
 
 afterEach(() => {
@@ -42,9 +40,6 @@ function mockJurisdictionsHaveFeatureFlagOn(_featureFlag: string) {
 describe("listing applications add page", () => {
   it("should render all application form sections and control buttons", async () => {
     const { pushMock } = mockNextRouter({ id: "Uvbk5qurpB2WI9V6WnNdH" })
-    jest
-      .spyOn(require("../../../../../src/lib/hooks"), "useSingleListingData")
-      .mockReturnValue({ listingDto: listing })
 
     render(
       <AuthContext.Provider
@@ -98,16 +93,17 @@ describe("listing applications add page", () => {
     ).toBeInTheDocument()
     expect(screen.getByRole("heading", { level: 2, name: /terms/i })).toBeInTheDocument()
 
-    await waitFor(() => {
+    waitFor(async () => {
       const submitButton = screen.getByRole("button", { name: /^submit$/i })
       expect(submitButton).toBeInTheDocument()
-      userEvent.click(submitButton)
+      await userEvent.click(submitButton)
       expect(pushMock).toHaveBeenCalledWith("/application/application_id")
     })
   })
 
-  it.skip("should navigate to preview on submit click", (done) => {
+  it("should navigate to preview on submit click", async () => {
     const { pushMock } = mockNextRouter({ id: "Uvbk5qurpB2WI9V6WnNdH" })
+
     render(
       <AuthContext.Provider
         value={{
@@ -123,34 +119,18 @@ describe("listing applications add page", () => {
     )
 
     expect(screen.getByText(/draft/i)).toBeInTheDocument()
-    const submitButton = screen.getByRole("button", { name: /^submit$/i })
-    expect(submitButton).toBeInTheDocument()
-
-    new Promise(async () => {
-      await act(async () => {
-        await userEvent.click(submitButton)
-      })
-
-      await waitFor(() => {
-        //expect(pushMock).toHaveBeenCalledWith("/application/application_id")
-      })
-    }).then(() => {
-      done()
+    
+    waitFor(async () => {
+      const submitButton = screen.getByRole("button", { name: /^submit$/i })
+      expect(submitButton).toBeInTheDocument()
+      await userEvent.click(submitButton)
+      expect(pushMock).toHaveBeenCalledWith("/application/application_id")
     })
   })
 
   it("should navigate to new form on submit & new click", async () => {
     const { pushMock } = mockNextRouter({ id: "test_id" })
-    server.use(
-      rest.get("http://localhost:3100/listings/test_id", (_req, res, ctx) => {
-        return res(ctx.json({ ...listing, listingMultiselectQuestions: [] }))
-      }),
-      rest.post("http://localhost/api/adapter/applications", (_req, res, ctx) => {
-        return res(
-          ctx.json({ ...application, programs: [], preferences: [], id: "application_id" })
-        )
-      })
-    )
+
     render(
       <AuthContext.Provider
         value={{
@@ -165,11 +145,11 @@ describe("listing applications add page", () => {
       </AuthContext.Provider>
     )
 
-    const submitButton = screen.getByRole("button", { name: /submit & new/i })
-    expect(submitButton).toBeInTheDocument()
-    await userEvent.click(submitButton)
-
-    await waitFor(() => {
+    
+    waitFor(async () => {
+      const submitButton = screen.getByRole("button", { name: /submit & new/i })
+      expect(submitButton).toBeInTheDocument()
+      await userEvent.click(submitButton)
       expect(pushMock).toHaveBeenCalledWith("/listings/test_id/applications/add")
     })
   })
