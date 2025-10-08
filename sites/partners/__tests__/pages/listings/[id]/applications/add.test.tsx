@@ -119,7 +119,7 @@ describe("listing applications add page", () => {
     )
 
     expect(screen.getByText(/draft/i)).toBeInTheDocument()
-    
+
     waitFor(async () => {
       const submitButton = screen.getByRole("button", { name: /^submit$/i })
       expect(submitButton).toBeInTheDocument()
@@ -145,7 +145,6 @@ describe("listing applications add page", () => {
       </AuthContext.Provider>
     )
 
-    
     waitFor(async () => {
       const submitButton = screen.getByRole("button", { name: /submit & new/i })
       expect(submitButton).toBeInTheDocument()
