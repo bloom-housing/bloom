@@ -3,6 +3,7 @@ import { INestApplication } from '@nestjs/common';
 import {
   ApplicationAddressTypeEnum,
   ApplicationMethodsTypeEnum,
+  DepositTypeEnum,
   HomeTypeEnum,
   LanguagesEnum,
   ListingEventsTypeEnum,
@@ -2032,6 +2033,169 @@ describe('Listing Controller Tests', () => {
       expect(newDBValues.length).toBeGreaterThanOrEqual(1);
       expect(newDBValues[0].listingFeatures).toMatchObject(listingFeatures);
       expect(newDBValues[0].listingUtilities).toMatchObject(listingUtilities);
+    });
+
+    describe('listing deposit type validation', () => {
+      it("should create listing when deposit is 'fixedDeposit', 'depositValue' is set and 'depositRangeMin' and 'depositRangeMax' are missing", async () => {
+        const val = await constructFullListingData(
+          undefined,
+          undefined,
+          `create listing ${randomName()}`,
+        );
+
+        const res = await request(app.getHttpServer())
+          .post('/listings')
+          .set({ passkey: process.env.API_PASS_KEY || '' })
+          .send({
+            ...val,
+            depositType: DepositTypeEnum.fixedDeposit,
+            depositValue: 1000,
+          })
+          .set('Cookie', adminAccessToken)
+          .expect(201);
+
+        expect(res.body.name).toEqual(val.name);
+
+        const newDBValues = await prisma.listings.findFirst({
+          where: { id: res.body.id },
+        });
+
+        expect(newDBValues).toBeDefined();
+        expect(newDBValues.depositType).toEqual(DepositTypeEnum.fixedDeposit);
+        expect(newDBValues.depositRangeMax).toBeNull();
+        expect(newDBValues.depositRangeMin).toBeNull();
+        expect(Number(newDBValues.depositValue)).toEqual(1000);
+      });
+
+      it("should fail when deposit is 'fixedDeposit' but 'depositRangeMin' and 'depositRangeMax' are set", async () => {
+        const val = await constructFullListingData(
+          undefined,
+          undefined,
+          `create listing ${randomName()}`,
+        );
+
+        const res = await request(app.getHttpServer())
+          .post('/listings')
+          .set({ passkey: process.env.API_PASS_KEY || '' })
+          .send({
+            ...val,
+            depositType: DepositTypeEnum.fixedDeposit,
+            depositValue: 1000,
+            depositRangeMin: 100,
+            depositRangeMax: 500,
+          })
+          .set('Cookie', adminAccessToken)
+          .expect(400);
+
+        expect(res.body.message[0]).toEqual(
+          'When deposit is of type "fixedDeposit" the "depositValue" must be filled and the "depositRangeMin"|"depositRangeMax" fields must be null',
+        );
+      });
+
+      it("should fail when deposit is 'fixedDeposit' but 'depositValue' is missing", async () => {
+        const val = await constructFullListingData(
+          undefined,
+          undefined,
+          `create listing ${randomName()}`,
+        );
+
+        const res = await request(app.getHttpServer())
+          .post('/listings')
+          .set({ passkey: process.env.API_PASS_KEY || '' })
+          .send({
+            ...val,
+            depositType: DepositTypeEnum.fixedDeposit,
+          })
+          .set('Cookie', adminAccessToken)
+          .expect(400);
+
+        expect(res.body.message[0]).toEqual(
+          'When deposit is of type "fixedDeposit" the "depositValue" must be filled and the "depositRangeMin"|"depositRangeMax" fields must be null',
+        );
+      });
+
+      it("should create listing when deposit is 'rangeDeposit', 'depositRangeMin' and 'depositRangeMax' are set and 'depositValue' is missing", async () => {
+        const val = await constructFullListingData(
+          undefined,
+          undefined,
+          `create listing ${randomName()}`,
+        );
+
+        const res = await request(app.getHttpServer())
+          .post('/listings')
+          .set({ passkey: process.env.API_PASS_KEY || '' })
+          .send({
+            ...val,
+            depositType: DepositTypeEnum.depositRange,
+            depositRangeMin: 100,
+            depositRangeMax: 500,
+            depositValue: null,
+          })
+          .set('Cookie', adminAccessToken)
+          .expect(201);
+
+        expect(res.body.name).toEqual(val.name);
+
+        const newDBValues = await prisma.listings.findFirst({
+          where: { id: res.body.id },
+        });
+
+        expect(newDBValues).toBeDefined();
+        expect(newDBValues.depositType).toEqual(DepositTypeEnum.depositRange);
+        expect(Number(newDBValues.depositRangeMax)).toEqual(500);
+        expect(Number(newDBValues.depositRangeMin)).toEqual(100);
+        expect(newDBValues.depositValue).toBeNull();
+      });
+
+      it("should fail when deposit is 'rangeDeposit' but 'depositValue' is set", async () => {
+        const val = await constructFullListingData(
+          undefined,
+          undefined,
+          `create listing ${randomName()}`,
+        );
+
+        const res = await request(app.getHttpServer())
+          .post('/listings')
+          .set({ passkey: process.env.API_PASS_KEY || '' })
+          .send({
+            ...val,
+            depositType: DepositTypeEnum.depositRange,
+            depositValue: 1000,
+            depositRangeMin: 100,
+            depositRangeMax: 500,
+          })
+          .set('Cookie', adminAccessToken)
+          .expect(400);
+
+        expect(res.body.message[0]).toEqual(
+          'When deposit is of type "depositRange" the "depositRangeMin" and "depositRangeMax" fields must be filled and "depositValue" must be null',
+        );
+      });
+
+      it("should fail when deposit is 'rangeDeposit' but 'depositRangeMin' and 'depositRangeMax' are missing", async () => {
+        const val = await constructFullListingData(
+          undefined,
+          undefined,
+          `create listing ${randomName()}`,
+        );
+
+        const res = await request(app.getHttpServer())
+          .post('/listings')
+          .set({ passkey: process.env.API_PASS_KEY || '' })
+          .send({
+            ...val,
+            depositType: DepositTypeEnum.depositRange,
+            depositValue: null,
+            depositRangeMin: null,
+            depositRangeMax: null,
+          })
+          .set('Cookie', adminAccessToken)
+          .expect(400);
+
+        expect(res.body.message[0]).toEqual(
+          'When deposit is of type "depositRange" the "depositRangeMin" and "depositRangeMax" fields must be filled and "depositValue" must be null',
+        );
+      });
     });
   });
 
