@@ -1,20 +1,13 @@
 import React from "react"
 import NewApplication from "../../../../../src/pages/listings/[id]/applications/add"
 import { mockNextRouter, render, screen, waitFor } from "../../../../testUtils"
-import { setupServer } from "msw/lib/node"
-import { rest } from "msw"
-import { application, listing, user } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
+import { listing, user } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import userEvent from "@testing-library/user-event"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import {
   ApplicationsService,
   ListingsService,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-const server = setupServer()
-
-beforeAll(() => {
-  server.listen()
-})
 
 beforeEach(() => {
   jest.clearAllMocks()
@@ -25,27 +18,17 @@ beforeEach(() => {
     .mockReturnValue({ listingDto: listing })
 })
 
-afterEach(() => {
-  server.resetHandlers()
-})
-
-afterAll(() => {
-  server.close()
-})
-
 function mockJurisdictionsHaveFeatureFlagOn(_featureFlag: string) {
   return false
 }
 
 describe("listing applications add page", () => {
-  it("should render all application form sections and control buttons", async () => {
+  it("should render all application form sections and control buttons", () => {
     const { pushMock } = mockNextRouter({ id: "Uvbk5qurpB2WI9V6WnNdH" })
 
     render(
       <AuthContext.Provider
         value={{
-          applicationsService: new ApplicationsService(),
-          listingsService: new ListingsService(),
           profile: { ...user, listings: [{ id: listing.id }], jurisdictions: [] },
           doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
             mockJurisdictionsHaveFeatureFlagOn(featureFlag),
@@ -93,7 +76,7 @@ describe("listing applications add page", () => {
     ).toBeInTheDocument()
     expect(screen.getByRole("heading", { level: 2, name: /terms/i })).toBeInTheDocument()
 
-    waitFor(async () => {
+    void waitFor(async () => {
       const submitButton = screen.getByRole("button", { name: /^submit$/i })
       expect(submitButton).toBeInTheDocument()
       await userEvent.click(submitButton)
@@ -101,14 +84,12 @@ describe("listing applications add page", () => {
     })
   })
 
-  it("should navigate to preview on submit click", async () => {
+  it("should navigate to preview on submit click", () => {
     const { pushMock } = mockNextRouter({ id: "Uvbk5qurpB2WI9V6WnNdH" })
 
     render(
       <AuthContext.Provider
         value={{
-          applicationsService: new ApplicationsService(),
-          listingsService: new ListingsService(),
           profile: { ...user, listings: [{ id: listing.id }], jurisdictions: [] },
           doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
             mockJurisdictionsHaveFeatureFlagOn(featureFlag),
@@ -120,7 +101,7 @@ describe("listing applications add page", () => {
 
     expect(screen.getByText(/draft/i)).toBeInTheDocument()
 
-    waitFor(async () => {
+    void waitFor(async () => {
       const submitButton = screen.getByRole("button", { name: /^submit$/i })
       expect(submitButton).toBeInTheDocument()
       await userEvent.click(submitButton)
@@ -128,14 +109,12 @@ describe("listing applications add page", () => {
     })
   })
 
-  it("should navigate to new form on submit & new click", async () => {
+  it("should navigate to new form on submit & new click", () => {
     const { pushMock } = mockNextRouter({ id: "test_id" })
 
     render(
       <AuthContext.Provider
         value={{
-          applicationsService: new ApplicationsService(),
-          listingsService: new ListingsService(),
           profile: { ...user, listings: [{ id: listing.id }], jurisdictions: [] },
           doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
             mockJurisdictionsHaveFeatureFlagOn(featureFlag),
@@ -145,7 +124,7 @@ describe("listing applications add page", () => {
       </AuthContext.Provider>
     )
 
-    waitFor(async () => {
+    void waitFor(async () => {
       const submitButton = screen.getByRole("button", { name: /submit & new/i })
       expect(submitButton).toBeInTheDocument()
       await userEvent.click(submitButton)
