@@ -24,6 +24,7 @@ import Layout from "../../../../../layouts"
 import { ApplicationsSideNav } from "../../../../../components/applications/ApplicationsSideNav"
 import { NavigationHeader } from "../../../../../components/shared/NavigationHeader"
 import { mergeApplicationNames } from "../../../../../lib/helpers"
+import ListingGuard from "../../../../../components/shared/ListingGuard"
 
 const ApplicationsList = () => {
   const router = useRouter()
@@ -138,102 +139,104 @@ const ApplicationsList = () => {
 
   if (profile?.userRoles?.isLimitedJurisdictionalAdmin) return null
   return (
-    <Layout>
-      <Head>
-        <title>{`Pending Applications - ${t("nav.siteTitlePartners")}`}</title>
-      </Head>
+    <ListingGuard>
+      <Layout>
+        <Head>
+          <title>{`Pending Applications - ${t("nav.siteTitlePartners")}`}</title>
+        </Head>
 
-      <NavigationHeader
-        title={listingName}
-        listingId={listingId}
-        tabs={{
-          show: true,
-          flagsQty: flaggedAppsData?.meta?.totalFlagged,
-          listingLabel: t("t.listingSingle"),
-          applicationsLabel: t("nav.applications"),
-          lotteryLabel:
-            listingDto?.status === ListingsStatusEnum.closed &&
-            listingDto?.lotteryOptIn &&
-            listingDto?.reviewOrderType === ReviewOrderTypeEnum.lottery
-              ? t("listings.lotteryTitle")
-              : undefined,
-        }}
-        breadcrumbs={
-          <Breadcrumbs>
-            <BreadcrumbLink href="/">{t("t.listing")}</BreadcrumbLink>
-            <BreadcrumbLink href={`/listings/${listingId}`}>{listingName}</BreadcrumbLink>
-            <BreadcrumbLink href={`/listings/${listingId}/applications`}>
-              {t("nav.applications")}
-            </BreadcrumbLink>
-            <BreadcrumbLink href={`/listings/${listingId}/applications/pending`} current>
-              {t("t.pending")}
-            </BreadcrumbLink>
-          </Breadcrumbs>
-        }
-      />
+        <NavigationHeader
+          title={listingName}
+          listingId={listingId}
+          tabs={{
+            show: true,
+            flagsQty: flaggedAppsData?.meta?.totalFlagged,
+            listingLabel: t("t.listingSingle"),
+            applicationsLabel: t("nav.applications"),
+            lotteryLabel:
+              listingDto?.status === ListingsStatusEnum.closed &&
+              listingDto?.lotteryOptIn &&
+              listingDto?.reviewOrderType === ReviewOrderTypeEnum.lottery
+                ? t("listings.lotteryTitle")
+                : undefined,
+          }}
+          breadcrumbs={
+            <Breadcrumbs>
+              <BreadcrumbLink href="/">{t("t.listing")}</BreadcrumbLink>
+              <BreadcrumbLink href={`/listings/${listingId}`}>{listingName}</BreadcrumbLink>
+              <BreadcrumbLink href={`/listings/${listingId}/applications`}>
+                {t("nav.applications")}
+              </BreadcrumbLink>
+              <BreadcrumbLink href={`/listings/${listingId}/applications/pending`} current>
+                {t("t.pending")}
+              </BreadcrumbLink>
+            </Breadcrumbs>
+          }
+        />
 
-      <ListingStatusBar status={listingDto?.status} />
+        <ListingStatusBar status={listingDto?.status} />
 
-      <section className={"bg-gray-200 pt-4"}>
-        <article className="flex flex-col md:flex-row items-start gap-x-8 relative max-w-screen-xl mx-auto pb-6 px-4">
-          {listingDto && (
-            <>
-              <ApplicationsSideNav
-                className="w-full md:w-72"
-                listingId={listingId}
-                listingOpen={isListingOpen}
-              />
-
-              <div className="w-full">
-                {isListingOpen && (
-                  <AlertBox type="notice" className="mb-3" customIcon={"lock"} closeable>
-                    {listingDto?.applicationDueDate
-                      ? t("applications.duplicatesAlertDate", {
-                          date: formatDateTime(listingDto.applicationDueDate, true),
-                        })
-                      : t("applications.duplicatesAlert")}
-                  </AlertBox>
-                )}
-                <AgTable
-                  id="applications-table"
-                  pagination={{
-                    perPage: tableOptions.pagination.itemsPerPage,
-                    setPerPage: tableOptions.pagination.setItemsPerPage,
-                    currentPage: tableOptions.pagination.currentPage,
-                    setCurrentPage: tableOptions.pagination.setCurrentPage,
-                  }}
-                  config={{
-                    gridComponents,
-                    columns,
-                    totalItemsLabel:
-                      flaggedAppsData?.meta?.totalItems === 1
-                        ? t("applications.duplicates.set")
-                        : t("applications.duplicates.sets"),
-                  }}
-                  data={{
-                    items: flaggedAppsData?.items ?? [],
-                    loading: flaggedAppsLoading,
-                    totalItems: flaggedAppsData?.meta?.totalItems ?? 0,
-                    totalPages: flaggedAppsData?.meta?.totalPages ?? 0,
-                  }}
-                  search={{
-                    setSearch: tableOptions.filter.setFilterValue,
-                  }}
-                  sort={{
-                    setSort: tableOptions.sort.setSortOptions,
-                  }}
+        <section className={"bg-gray-200 pt-4"}>
+          <article className="flex flex-col md:flex-row items-start gap-x-8 relative max-w-screen-xl mx-auto pb-6 px-4">
+            {listingDto && (
+              <>
+                <ApplicationsSideNav
+                  className="w-full md:w-72"
+                  listingId={listingId}
+                  listingOpen={isListingOpen}
                 />
-                {afsLastRun && (
-                  <span className="text-gray-750 text-sm flex max-w-screen-xl mx-auto pt-6 pb-4 px-4 justify-end">
-                    {`${t("t.lastUpdated")} ${afsLastRun.date} ${t("t.at")} ${afsLastRun.time}`}
-                  </span>
-                )}
-              </div>
-            </>
-          )}
-        </article>
-      </section>
-    </Layout>
+
+                <div className="w-full">
+                  {isListingOpen && (
+                    <AlertBox type="notice" className="mb-3" customIcon={"lock"} closeable>
+                      {listingDto?.applicationDueDate
+                        ? t("applications.duplicatesAlertDate", {
+                            date: formatDateTime(listingDto.applicationDueDate, true),
+                          })
+                        : t("applications.duplicatesAlert")}
+                    </AlertBox>
+                  )}
+                  <AgTable
+                    id="applications-table"
+                    pagination={{
+                      perPage: tableOptions.pagination.itemsPerPage,
+                      setPerPage: tableOptions.pagination.setItemsPerPage,
+                      currentPage: tableOptions.pagination.currentPage,
+                      setCurrentPage: tableOptions.pagination.setCurrentPage,
+                    }}
+                    config={{
+                      gridComponents,
+                      columns,
+                      totalItemsLabel:
+                        flaggedAppsData?.meta?.totalItems === 1
+                          ? t("applications.duplicates.set")
+                          : t("applications.duplicates.sets"),
+                    }}
+                    data={{
+                      items: flaggedAppsData?.items ?? [],
+                      loading: flaggedAppsLoading,
+                      totalItems: flaggedAppsData?.meta?.totalItems ?? 0,
+                      totalPages: flaggedAppsData?.meta?.totalPages ?? 0,
+                    }}
+                    search={{
+                      setSearch: tableOptions.filter.setFilterValue,
+                    }}
+                    sort={{
+                      setSort: tableOptions.sort.setSortOptions,
+                    }}
+                  />
+                  {afsLastRun && (
+                    <span className="text-gray-750 text-sm flex max-w-screen-xl mx-auto pt-6 pb-4 px-4 justify-end">
+                      {`${t("t.lastUpdated")} ${afsLastRun.date} ${t("t.at")} ${afsLastRun.time}`}
+                    </span>
+                  )}
+                </div>
+              </>
+            )}
+          </article>
+        </section>
+      </Layout>
+    </ListingGuard>
   )
 }
 
