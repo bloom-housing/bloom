@@ -275,6 +275,8 @@ export class ListingService implements OnModuleInit {
     const userRolesWhere: Prisma.UserAccountsWhereInput[] = [];
     if (userRoles.includes(UserRoleEnum.admin))
       userRolesWhere.push({ userRoles: { isAdmin: true } });
+    if (userRoles.includes(UserRoleEnum.supportAdmin))
+      userRolesWhere.push({ userRoles: { isSupportAdmin: true } });
     if (userRoles.includes(UserRoleEnum.partner))
       userRolesWhere.push({
         userRoles: { isPartner: true },
@@ -328,6 +330,7 @@ export class ListingService implements OnModuleInit {
     const nonApprovingRoles: UserRoleEnum[] = [UserRoleEnum.partner];
     if (!params.approvingRoles.includes(UserRoleEnum.jurisdictionAdmin))
       nonApprovingRoles.push(UserRoleEnum.jurisdictionAdmin);
+
     if (
       params.status === ListingsStatusEnum.pendingReview &&
       params.previousStatus !== ListingsStatusEnum.pendingReview
@@ -374,7 +377,13 @@ export class ListingService implements OnModuleInit {
         params.previousStatus === ListingsStatusEnum.pending
       ) {
         const userInfo = await this.getUserEmailInfo(
-          nonApprovingRoles,
+          [
+            UserRoleEnum.partner,
+            UserRoleEnum.admin,
+            UserRoleEnum.jurisdictionAdmin,
+            UserRoleEnum.limitedJurisdictionAdmin,
+            UserRoleEnum.supportAdmin,
+          ],
           params.listingInfo.id,
           params.jurisId,
           true,
@@ -1597,6 +1606,7 @@ export class ListingService implements OnModuleInit {
 
     const userRoles =
       requestingUser?.userRoles?.isAdmin ||
+      requestingUser?.userRoles?.isSupportAdmin ||
       (requestingUser?.userRoles?.isJurisdictionalAdmin &&
         duplicateListingPermissions?.includes(
           UserRoleEnum.jurisdictionAdmin,
