@@ -145,9 +145,9 @@ const ApplicationTypes = ({ listing, requiredFields }: ApplicationTypesProps) =>
   }
 
   const resetDrawerStateOnSave = () => {
-    if (errors) {
-      return
-    }
+    // if (errors) {
+    //   return
+    // }
     setProgressValue(0)
     setCloudinaryData({
       id: "",
@@ -180,14 +180,23 @@ const ApplicationTypes = ({ listing, requiredFields }: ApplicationTypesProps) =>
   }
 
   const savePaperApplication = () => {
+    const paperApplications = methods.paper?.paperApplications ?? []
+
+    // console.log("applicatoins", paperApplications)
+
+    // if (paperApplications?.length === 0) {
+    //   setError("paperApplicationsError", { message: "File not uploaded" })
+    // }
     if (!selectedLanguage) {
       setError("selectedLanguageError", { message: "Language not selected" })
     }
 
-    if (errors) {
-      return undefined
-    }
-    const paperApplications = methods.paper?.paperApplications ?? []
+    console.log("errors", errors)
+
+    // if (errors) {
+    //   return undefined
+    // }
+
     paperApplications.push({
       assets: {
         fileId: cloudinaryData.id,
@@ -623,6 +632,9 @@ const ApplicationTypes = ({ listing, requiredFields }: ApplicationTypesProps) =>
                       value: item,
                     })),
                   ]}
+                  error={fieldHasError(errors?.selectedLanguageError)}
+                  errorMessage={fieldMessage(errors?.selectedLanguageError)}
+                  register={register}
                   placeholder={t("t.selectLanguage")}
                   defaultValue={selectedLanguage}
                   validation={{ required: true }}
@@ -666,6 +678,7 @@ const ApplicationTypes = ({ listing, requiredFields }: ApplicationTypesProps) =>
           <Button
             key={1}
             onClick={() => {
+              clearErrors("selectedLanguageError")
               resetDrawerState()
             }}
             variant="primary-outlined"
