@@ -75,11 +75,10 @@ describe("admin", () => {
   it("should show unauthorized if user is not a superAdmin", () => {
     const { location } = window
     delete window.location
-    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-    // @ts-ignore
+
     window.location = {
       href: "",
-    }
+    } as Location
     window.URL.createObjectURL = jest.fn()
     document.cookie = "access-token-available=True"
 
