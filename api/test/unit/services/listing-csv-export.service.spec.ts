@@ -280,7 +280,9 @@ describe('Testing listing csv export service', () => {
         },
       };
 
-      await expect(service.authorizeCSVExport(user as any)).resolves.toBeUndefined();
+      await expect(
+        service.authorizeCSVExport(user as any),
+      ).resolves.toBeUndefined();
     });
 
     it('should allow support admin users to export', async () => {
