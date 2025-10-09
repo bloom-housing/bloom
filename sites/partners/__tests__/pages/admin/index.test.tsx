@@ -73,8 +73,15 @@ const jurisdictions = [
 
 describe("admin", () => {
   it("should show unauthorized if user is not a superAdmin", () => {
+    const { location } = window
+    delete window.location
+
+    window.location = {
+      href: "",
+    } as Location
     window.URL.createObjectURL = jest.fn()
     document.cookie = "access-token-available=True"
+
     server.use(
       rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
         return res(
@@ -89,12 +96,8 @@ describe("admin", () => {
       })
     )
     render(<Admin />)
-    expect(
-      screen.getByRole("heading", {
-        level: 2,
-        name: /uh oh, you are not allowed to access this page./i,
-      })
-    ).toBeInTheDocument()
+    expect(window.location.href).toBe("/unauthorized")
+    window.location = location
   })
 
   it("should display the feature flag page when superadmin for by jurisdiction", async () => {

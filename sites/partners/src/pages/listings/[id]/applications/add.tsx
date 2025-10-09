@@ -7,6 +7,7 @@ import PaperApplicationForm from "../../../../components/applications/PaperAppli
 import { NavigationHeader } from "../../../../components/shared/NavigationHeader"
 import { useRouter } from "next/router"
 import { useSingleListingData } from "../../../../lib/hooks"
+import ListingGuard from "../../../../components/shared/ListingGuard"
 
 const NewApplication = () => {
   const router = useRouter()
@@ -18,29 +19,31 @@ const NewApplication = () => {
   if (profile?.userRoles?.isLimitedJurisdictionalAdmin) return null
 
   return (
-    <Layout>
-      <Head>
-        <title>{`Add Application - ${t("nav.siteTitlePartners")}`}</title>
-      </Head>
-      <NavigationHeader
-        className="relative"
-        title={t("applications.newApplication")}
-        breadcrumbs={
-          <Breadcrumbs>
-            <BreadcrumbLink href="/">{t("t.listing")}</BreadcrumbLink>
-            <BreadcrumbLink href={`/listings/${listingId}`}>{listing?.name}</BreadcrumbLink>
-            <BreadcrumbLink href={`/listings/${listingId}/applications`}>
-              {t("nav.applications")}
-            </BreadcrumbLink>
-            <BreadcrumbLink href={`/listings/${listingId}/applications/add`} current>
-              {t("t.add")}
-            </BreadcrumbLink>
-          </Breadcrumbs>
-        }
-      />
+    <ListingGuard>
+      <Layout>
+        <Head>
+          <title>{`Add Application - ${t("nav.siteTitlePartners")}`}</title>
+        </Head>
+        <NavigationHeader
+          className="relative"
+          title={t("applications.newApplication")}
+          breadcrumbs={
+            <Breadcrumbs>
+              <BreadcrumbLink href="/">{t("t.listing")}</BreadcrumbLink>
+              <BreadcrumbLink href={`/listings/${listingId}`}>{listing?.name}</BreadcrumbLink>
+              <BreadcrumbLink href={`/listings/${listingId}/applications`}>
+                {t("nav.applications")}
+              </BreadcrumbLink>
+              <BreadcrumbLink href={`/listings/${listingId}/applications/add`} current>
+                {t("t.add")}
+              </BreadcrumbLink>
+            </Breadcrumbs>
+          }
+        />
 
-      <PaperApplicationForm listingId={listingId} />
-    </Layout>
+        <PaperApplicationForm listingId={listingId} />
+      </Layout>
+    </ListingGuard>
   )
 }
 

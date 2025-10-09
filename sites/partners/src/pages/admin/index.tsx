@@ -2,7 +2,7 @@ import { useContext, useEffect, useMemo, useState } from "react"
 import Head from "next/head"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import PencilSquareIcon from "@heroicons/react/24/solid/PencilSquareIcon"
-import { Field, Hero, MinimalTable, t } from "@bloom-housing/ui-components"
+import { Field, MinimalTable, t } from "@bloom-housing/ui-components"
 import { Button, Card, Drawer, Heading, Icon, Tabs } from "@bloom-housing/ui-seeds"
 import Layout from "../../layouts"
 import { NavigationHeader } from "../../components/shared/NavigationHeader"
@@ -125,14 +125,8 @@ const Admin = () => {
   }
 
   if (!profile || !profile?.userRoles?.isSuperAdmin) {
-    return (
-      <Layout>
-        <Head>
-          <title>{`Admin Panel - ${t("nav.siteTitlePartners")}`}</title>
-        </Head>
-        <Hero title={t("t.administration")}>{t("errors.unauthorized.message")}</Hero>
-      </Layout>
-    )
+    window.location.href = "/unauthorized"
+    return null
   }
 
   const selectedJurisdictionName = selectedJurisdiction
