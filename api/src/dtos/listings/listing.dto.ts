@@ -5,7 +5,6 @@ import {
   IsArray,
   IsBoolean,
   IsDate,
-  IsDecimal,
   IsDefined,
   IsEmail,
   IsEnum,
