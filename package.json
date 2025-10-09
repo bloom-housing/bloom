@@ -43,7 +43,7 @@
     "dev:partners": "concurrently \"yarn dev:backend\" \"yarn dev:app:partners\"",
     "dev:public": "concurrently \"yarn dev:backend\" \"yarn dev:app:public\"",
     "start:uic": "cd doorway-ui-components && yarn start",
-    "test:shared:helpers": "cd shared-helpers && yarn && yarn test",
+    "test:shared-helpers": "cd shared-helpers && yarn && yarn test",
     "test:shared-helpers:missing-translations": "cd shared-helpers && yarn && yarn test:missing-translations",
     "test:doorway-ui-components": "cd doorway-ui-components && yarn && yarn test",
     "test:apps": "concurrently \"yarn dev:backend\" \"yarn test:app:public\"",

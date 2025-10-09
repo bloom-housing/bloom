@@ -246,6 +246,8 @@ describe('Testing script runner service', () => {
       .fn()
       .mockResolvedValue([{ id: randomUUID(), translations: {} }]);
     prisma.translations.update = jest.fn().mockResolvedValue(null);
+    prisma.jurisdictions.findMany = jest.fn().mockResolvedValue([]);
+    prisma.translations.create = jest.fn().mockResolvedValue(null);
 
     const id = randomUUID();
     const scriptName = 'add lottery translations';

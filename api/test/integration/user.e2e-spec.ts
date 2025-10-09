@@ -18,6 +18,7 @@ import { UserCreate } from '../../src/dtos/users/user-create.dto';
 import { jurisdictionFactory } from '../../prisma/seed-helpers/jurisdiction-factory';
 import { listingFactory } from '../../prisma/seed-helpers/listing-factory';
 import { applicationFactory } from '../../prisma/seed-helpers/application-factory';
+import { randomName } from '../../prisma/seed-helpers/word-generator';
 import { UserInvite } from '../../src/dtos/users/user-invite.dto';
 import { Login } from '../../src/dtos/auth/login.dto';
 import { RequestMfaCode } from '../../src/dtos/mfa/request-mfa-code.dto';
@@ -631,7 +632,9 @@ describe('User Controller Tests', () => {
 
     it('should not set resetToken when forgot-password is called by public user on the partners site', async () => {
       const juris = await prisma.jurisdictions.create({
-        data: jurisdictionFactory(),
+        data: jurisdictionFactory(
+          `forgotPassword-jurisdiction-${randomName()}`,
+        ),
       });
 
       const userA = await prisma.userAccounts.create({

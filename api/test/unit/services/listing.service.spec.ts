@@ -3138,7 +3138,10 @@ describe('Testing listing service', () => {
         id: 'example id',
         name: 'example name',
       });
-      prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue(null);
+      prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue({
+        id: 'jurisdiction-id',
+      });
+
       await service.create(
         {
           name: 'example listing name',
@@ -3279,7 +3282,9 @@ describe('Testing listing service', () => {
         id: 'example id',
         name: 'example name',
       });
-      prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue(null);
+      prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue({
+        id: 'jurisdiction-id',
+      });
       const val = constructFullListingData();
 
       await service.create(val as ListingCreate, user);
@@ -5012,6 +5017,10 @@ describe('Testing listing service', () => {
     });
 
     it('listingApprovalNotify listing approved email', async () => {
+      prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue({
+        id: randomUUID(),
+        publicUrl: 'public.housing.gov',
+      });
       jest.spyOn(service, 'getUserEmailInfo').mockResolvedValueOnce({
         emails: [
           'jurisAdmin@email.com',
@@ -5020,7 +5029,6 @@ describe('Testing listing service', () => {
           'supportAdmin@email.com',
           'admin@example.com',
         ],
-        publicUrl: 'public.housing.gov',
       });
       await service.listingApprovalNotify({
         user,

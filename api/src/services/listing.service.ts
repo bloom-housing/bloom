@@ -591,11 +591,17 @@ export class ListingService implements OnModuleInit {
           true,
           true,
         );
+        const jurisdiction = await this.prisma.jurisdictions.findFirst({
+          select: {
+            publicUrl: true,
+          },
+          where: { id: params.jurisId },
+        });
         await this.emailService.listingApproved(
           { id: params.jurisId },
           { id: params.listingInfo.id, name: params.listingInfo.name },
           userInfo.emails,
-          userInfo.publicUrl,
+          jurisdiction?.publicUrl || '',
         );
       }
     }
