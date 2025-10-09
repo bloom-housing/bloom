@@ -2313,10 +2313,11 @@ describe('Listing Controller Tests', () => {
     let listing,
       adminUser,
       jurisAdmin,
-      wrongJurisAdmin,
+      limitedJurisdictionA,
       jurisdictionA,
       partnerUser,
-      adminAccessToken;
+      adminAccessToken,
+      supportAdmin;
     beforeAll(async () => {
       jurisdictionA = await prisma.jurisdictions.create({
         data: jurisdictionFactory(`approval notifications A ${randomName()}`, {
@@ -2338,10 +2339,10 @@ describe('Listing Controller Tests', () => {
           confirmedAt: new Date(),
         }),
       });
-      wrongJurisAdmin = await prisma.userAccounts.create({
+      limitedJurisdictionA = await prisma.userAccounts.create({
         data: await userFactory({
           roles: {
-            isJurisdictionalAdmin: true,
+            isLimitedJurisdictionalAdmin: true,
           },
           jurisdictionIds: [jurisdictionB.id],
         }),
@@ -2350,6 +2351,15 @@ describe('Listing Controller Tests', () => {
         data: await userFactory({
           roles: {
             isJurisdictionalAdmin: true,
+          },
+          jurisdictionIds: [jurisdictionA.id],
+        }),
+      });
+
+      supportAdmin = await prisma.userAccounts.create({
+        data: await userFactory({
+          roles: {
+            isSupportAdmin: true,
           },
           jurisdictionIds: [jurisdictionA.id],
         }),
@@ -2420,9 +2430,14 @@ describe('Listing Controller Tests', () => {
         expect.arrayContaining([adminUser.email, jurisAdmin.email]),
         process.env.PARTNERS_PORTAL_URL,
       );
-      //ensure juris admin is not included since don't have approver permissions in alameda seed
+
       expect(mockRequestApproval.mock.calls[0]['emails']).toEqual(
-        expect.not.arrayContaining([wrongJurisAdmin.email, partnerUser.email]),
+        expect.not.arrayContaining([
+          jurisdictionA.email,
+          partnerUser.email,
+          supportAdmin.email,
+          limitedJurisdictionA.email,
+        ]),
       );
     });
 

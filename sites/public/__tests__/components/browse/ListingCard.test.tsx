@@ -128,4 +128,18 @@ describe("<ListingCard>", () => {
     expect(view.getByText("Seniors 62+")).toBeDefined()
     expect(view.getByText("Supportive housing for the homeless")).toBeDefined()
   })
+  it("renders with no address", () => {
+    const view = render(
+      <ListingCard
+        listing={{
+          ...listing,
+          status: ListingsStatusEnum.active,
+          applicationDueDate: dayjs(new Date()).add(5, "days").toDate(),
+          listingsBuildingAddress: null,
+        }}
+        jurisdiction={jurisdiction}
+      />
+    )
+    expect(view.getByText(listing.name)).toBeDefined()
+  })
 })

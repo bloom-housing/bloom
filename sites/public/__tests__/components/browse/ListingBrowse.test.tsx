@@ -649,7 +649,7 @@ describe("<ListingBrowse>", () => {
     })
     expect(listingNameField).toHaveValue("Test Search")
 
-    expect(screen.getByRole("button", { name: "Cancel" })).toBeInTheDocument()
+    expect(screen.getByRole("button", { name: "Clear" })).toBeInTheDocument()
     const showMatchingButton = screen.getByRole("button", { name: "Show matching listings" })
     expect(showMatchingButton).toBeInTheDocument()
     fireEvent.click(showMatchingButton)

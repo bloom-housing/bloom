@@ -21,7 +21,7 @@ describe("FilterDrawer", () => {
       id: "idOne",
       createdAt: new Date(),
       updatedAt: new Date(),
-      text: "Community Type One",
+      text: "Families",
       jurisdictions: [{ id: "jurisId" }],
       applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
     },
@@ -29,7 +29,7 @@ describe("FilterDrawer", () => {
       id: "idTwo",
       createdAt: new Date(),
       updatedAt: new Date(),
-      text: "Community Type Two",
+      text: "Residents with Disabilities",
       jurisdictions: [{ id: "jurisId" }],
       applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
     },
@@ -37,7 +37,7 @@ describe("FilterDrawer", () => {
       id: "idThree",
       createdAt: new Date(),
       updatedAt: new Date(),
-      text: "Community Type Three",
+      text: "Seniors 55+",
       jurisdictions: [{ id: "jurisId" }],
       applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
     },
@@ -45,7 +45,7 @@ describe("FilterDrawer", () => {
       id: "idFour",
       createdAt: new Date(),
       updatedAt: new Date(),
-      text: "Community Type Four",
+      text: "Veterans",
       jurisdictions: [{ id: "jurisId" }],
       applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
     },
@@ -186,17 +186,17 @@ describe("FilterDrawer", () => {
     expect(screen.getByText("Enter full or partial listing name")).toBeInTheDocument()
 
     expect(screen.getByRole("group", { name: "Community" })).toBeInTheDocument()
-    expect(screen.getByLabelText("Community Type One")).toBeInTheDocument()
-    expect(screen.getByRole("checkbox", { name: "Community Type One" })).not.toBeChecked()
-    expect(screen.getByLabelText("Community Type Two")).toBeInTheDocument()
-    expect(screen.getByRole("checkbox", { name: "Community Type Two" })).not.toBeChecked()
-    expect(screen.getByLabelText("Community Type Three")).toBeInTheDocument()
-    expect(screen.getByRole("checkbox", { name: "Community Type Three" })).not.toBeChecked()
-    expect(screen.getByLabelText("Community Type Four")).toBeInTheDocument()
-    expect(screen.getByRole("checkbox", { name: "Community Type Four" })).not.toBeChecked()
+    expect(screen.getByLabelText("Families")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Families" })).not.toBeChecked()
+    expect(screen.getByLabelText("Residents with disabilities")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Residents with disabilities" })).not.toBeChecked()
+    expect(screen.getByLabelText("Seniors 55+")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Seniors 55+" })).not.toBeChecked()
+    expect(screen.getByLabelText("Veterans")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Veterans" })).not.toBeChecked()
 
     expect(screen.getByRole("button", { name: "Show matching listings" })).toBeInTheDocument()
-    expect(screen.getByRole("button", { name: "Cancel" })).toBeInTheDocument()
+    expect(screen.getByRole("button", { name: "Clear" })).toBeInTheDocument()
   })
 
   it("should return all filter fields correctly with previous selections", () => {
@@ -345,17 +345,17 @@ describe("FilterDrawer", () => {
     expect(screen.getByText("Enter full or partial listing name")).toBeInTheDocument()
 
     expect(screen.getByRole("group", { name: "Community" })).toBeInTheDocument()
-    expect(screen.getByLabelText("Community Type One")).toBeInTheDocument()
-    expect(screen.getByRole("checkbox", { name: "Community Type One" })).not.toBeChecked()
-    expect(screen.getByLabelText("Community Type Two")).toBeInTheDocument()
-    expect(screen.getByRole("checkbox", { name: "Community Type Two" })).not.toBeChecked()
-    expect(screen.getByLabelText("Community Type Three")).toBeInTheDocument()
-    expect(screen.getByRole("checkbox", { name: "Community Type Three" })).not.toBeChecked()
-    expect(screen.getByLabelText("Community Type Four")).toBeInTheDocument()
-    expect(screen.getByRole("checkbox", { name: "Community Type Four" })).not.toBeChecked()
+    expect(screen.getByLabelText("Families")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Families" })).not.toBeChecked()
+    expect(screen.getByLabelText("Residents with disabilities")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Residents with disabilities" })).not.toBeChecked()
+    expect(screen.getByLabelText("Seniors 55+")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Seniors 55+" })).not.toBeChecked()
+    expect(screen.getByLabelText("Veterans")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Veterans" })).not.toBeChecked()
 
     expect(screen.getByRole("button", { name: "Show matching listings" })).toBeInTheDocument()
-    expect(screen.getByRole("button", { name: "Cancel" })).toBeInTheDocument()
+    expect(screen.getByRole("button", { name: "Clear" })).toBeInTheDocument()
   })
 
   it("should return correct unit types fields with unit groups", () => {

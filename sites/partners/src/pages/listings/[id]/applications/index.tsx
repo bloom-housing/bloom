@@ -87,6 +87,7 @@ const ApplicationsList = () => {
 
       this.linkWithId = document.createElement("button")
       this.linkWithId.classList.add("text-blue-700")
+      this.linkWithId.style.textDecoration = "underline"
       this.linkWithId.innerText = params.value
 
       this.linkWithId.addEventListener("click", function () {
@@ -122,6 +123,8 @@ const ApplicationsList = () => {
 
   if (!applications || appsError) return <div>{t("t.errorOccurred")}</div>
 
+  if (profile?.userRoles?.isLimitedJurisdictionalAdmin) return null
+
   return (
     <Layout>
       <Head>
@@ -156,7 +159,7 @@ const ApplicationsList = () => {
       <ListingStatusBar status={listingDto?.status} />
 
       <section className={"bg-gray-200 pt-4"}>
-        <article className="flex flex-col md:flex-row items-start gap-x-8 relative max-w-screen-xl mx-auto pb-8 px-4 flex-col">
+        <article className="flex flex-col md:flex-row items-start gap-x-8 relative max-w-screen-xl mx-auto pb-8 px-4">
           {listingDto && (
             <>
               <ApplicationsSideNav

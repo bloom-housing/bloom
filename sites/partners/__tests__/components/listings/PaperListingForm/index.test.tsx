@@ -1,9 +1,14 @@
 import React from "react"
-import { act, fireEvent, screen } from "@testing-library/react"
+import { act, fireEvent, screen, within } from "@testing-library/react"
 import { setupServer } from "msw/lib/node"
 import { rest } from "msw"
 import { AuthContext } from "@bloom-housing/shared-helpers"
-import { mockBaseJurisdiction, mockUser } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
+import {
+  jurisdiction,
+  mockBaseJurisdiction,
+  mockUser,
+  user,
+} from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import {
   FeatureFlag,
   FeatureFlagEnum,
@@ -154,7 +159,7 @@ describe("add listing", () => {
     expect(screen.getByRole("button", { name: "Exit" }))
   })
 
-  it("should render rich text field", () => {
+  it("should render rich text field", async () => {
     window.URL.createObjectURL = jest.fn()
     document.cookie = "access-token-available=True"
     server.use(
@@ -163,6 +168,12 @@ describe("add listing", () => {
           ctx.json({ id: "user1", userRoles: { id: "user1", isAdmin: true, isPartner: false } })
         )
       }),
+      rest.get(
+        "http://localhost/api/adapter/jurisdictions/67c22813-6080-441d-a496-03f2d06f2635",
+        (_req, res, ctx) => {
+          return res(ctx.json(jurisdiction))
+        }
+      ),
       rest.get("http://localhost:3100/reservedCommunityTypes", (_req, res, ctx) => {
         return res(ctx.json([]))
       }),
@@ -173,6 +184,13 @@ describe("add listing", () => {
     render(
       <AuthContext.Provider
         value={{
+          profile: {
+            ...user,
+            listings: [],
+            jurisdictions: [jurisdiction],
+          },
+          getJurisdictionLanguages: () => [],
+          jurisdictionsService: new JurisdictionsService(),
           doJurisdictionsHaveFeatureFlagOn: (featureFlag: FeatureFlagEnum) => {
             switch (featureFlag) {
               case FeatureFlagEnum.swapCommunityTypeWithPrograms:
@@ -186,19 +204,41 @@ describe("add listing", () => {
         <ListingForm />
       </AuthContext.Provider>
     )
+
     expect(screen.getByText("Rankings & results")).toBeInTheDocument()
+
+    const whatToExpectEditorLabel = screen.getByText(
+      /tell the applicant what to expect from the process/i
+    )
+    expect(whatToExpectEditorLabel).toBeInTheDocument()
+    const whatToExpectEditorWrapper = whatToExpectEditorLabel.parentElement.parentElement
+
     expect(
-      screen.getByText(
+      await within(whatToExpectEditorWrapper).findByText(
         "Applicants will be contacted by the property agent in rank order until vacancies are filled. All of the information that you have provided will be verified and your eligibility confirmed. Your application will be removed from the waitlist if you have made any fraudulent statements. If we cannot verify a housing preference that you have claimed, you will not receive the preference but will not be otherwise penalized. Should your application be chosen, be prepared to fill out a more detailed application and provide required supporting documents."
       )
     ).toBeInTheDocument()
-    expect(screen.getByText("You have 451 characters remaining")).toBeInTheDocument()
-    expect(screen.getByRole("menuitem", { name: "Bold" })).toBeInTheDocument()
-    expect(screen.getByRole("menuitem", { name: "Bullet list" })).toBeInTheDocument()
-    expect(screen.getByRole("menuitem", { name: "Numbered list" })).toBeInTheDocument()
-    expect(screen.getByRole("menuitem", { name: "Line break" })).toBeInTheDocument()
-    expect(screen.getByRole("menuitem", { name: "Set link" })).toBeInTheDocument()
-    expect(screen.getByRole("menuitem", { name: "Unlink" })).toBeInTheDocument()
+    expect(
+      within(whatToExpectEditorWrapper).getByText("You have 451 characters remaining")
+    ).toBeInTheDocument()
+    expect(
+      within(whatToExpectEditorWrapper).getByRole("menuitem", { name: "Bold" })
+    ).toBeInTheDocument()
+    expect(
+      within(whatToExpectEditorWrapper).getByRole("menuitem", { name: "Bullet list" })
+    ).toBeInTheDocument()
+    expect(
+      within(whatToExpectEditorWrapper).getByRole("menuitem", { name: "Numbered list" })
+    ).toBeInTheDocument()
+    expect(
+      within(whatToExpectEditorWrapper).getByRole("menuitem", { name: "Line break" })
+    ).toBeInTheDocument()
+    expect(
+      within(whatToExpectEditorWrapper).getByRole("menuitem", { name: "Set link" })
+    ).toBeInTheDocument()
+    expect(
+      within(whatToExpectEditorWrapper).getByRole("menuitem", { name: "Unlink" })
+    ).toBeInTheDocument()
     // Query issue: https://github.com/ueberdosis/tiptap/discussions/4008#discussioncomment-7623655
     const editor = screen.getByTestId("whatToExpect").firstElementChild.querySelector("p")
     act(() => {
@@ -206,7 +246,59 @@ describe("add listing", () => {
         target: { textContent: "Custom what to expect text" },
       })
     })
-    expect(screen.getByText("Custom what to expect text")).toBeInTheDocument()
+    expect(
+      within(whatToExpectEditorWrapper).getByText("Custom what to expect text")
+    ).toBeInTheDocument()
+
+    const whatToExpectAdditonalTextEditorLabel = screen.getByText(
+      /Tell the applicant any additional information/i
+    )
+    expect(whatToExpectAdditonalTextEditorLabel).toBeInTheDocument()
+    const whatToExpectAdditonalTextEditorWrapper =
+      whatToExpectAdditonalTextEditorLabel.parentElement.parentElement
+
+    expect(
+      await within(whatToExpectAdditonalTextEditorWrapper).findByText(
+        "Property staff should walk you through the process to get on their waitlist."
+      )
+    ).toBeInTheDocument()
+    expect(
+      within(whatToExpectAdditonalTextEditorWrapper).getByText("You have 924 characters remaining")
+    ).toBeInTheDocument()
+    expect(
+      within(whatToExpectAdditonalTextEditorWrapper).getByRole("menuitem", { name: "Bold" })
+    ).toBeInTheDocument()
+    expect(
+      within(whatToExpectAdditonalTextEditorWrapper).getByRole("menuitem", { name: "Bullet list" })
+    ).toBeInTheDocument()
+    expect(
+      within(whatToExpectAdditonalTextEditorWrapper).getByRole("menuitem", {
+        name: "Numbered list",
+      })
+    ).toBeInTheDocument()
+    expect(
+      within(whatToExpectAdditonalTextEditorWrapper).getByRole("menuitem", { name: "Line break" })
+    ).toBeInTheDocument()
+    expect(
+      within(whatToExpectAdditonalTextEditorWrapper).getByRole("menuitem", { name: "Set link" })
+    ).toBeInTheDocument()
+    expect(
+      within(whatToExpectAdditonalTextEditorWrapper).getByRole("menuitem", { name: "Unlink" })
+    ).toBeInTheDocument()
+    // Query issue: https://github.com/ueberdosis/tiptap/discussions/4008#discussioncomment-7623655
+    const whatToExpectAdditonalTextEditor = screen
+      .getByTestId("whatToExpectAdditionalText")
+      .firstElementChild.querySelector("p")
+    act(() => {
+      fireEvent.change(whatToExpectAdditonalTextEditor, {
+        target: { textContent: "Custom what to expect additional text" },
+      })
+    })
+    expect(
+      within(whatToExpectAdditonalTextEditorWrapper).getByText(
+        "Custom what to expect additional text"
+      )
+    ).toBeInTheDocument()
   })
 
   it.todo("should successfully save and show correct toast")

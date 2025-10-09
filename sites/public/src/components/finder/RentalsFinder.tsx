@@ -144,7 +144,9 @@ export default function RentalsFinder({ activeFeatureFlags, multiselectData }: R
                 fieldGroupName={ListingFilterKeys.multiselectQuestions}
                 options={multiselectData.map((entry) => ({
                   key: `${ListingFilterKeys.multiselectQuestions}.${entry.id}`,
-                  label: entry.text,
+                  label: entry.untranslatedText
+                    ? t(`listingFilters.program.${entry.untranslatedText}`)
+                    : t(`listingFilters.program.${entry.text}`),
                   defaultChecked: false,
                 }))}
               />
@@ -196,6 +198,7 @@ export default function RentalsFinder({ activeFeatureFlags, multiselectData }: R
     } else {
       setStepIndex((prev) => prev + 1)
     }
+    window.scrollTo({ top: 0 })
   }, [errors, isLastStep, getValues])
 
   const onPreviousClick = useCallback(() => {

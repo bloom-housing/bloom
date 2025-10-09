@@ -37,8 +37,6 @@ export interface ListingsProps {
 }
 
 export default function ListingsPage(props: ListingsProps) {
-  const router = useRouter()
-
   return (
     <>
       {process.env.showNewSeedsDesigns ? (
@@ -48,7 +46,6 @@ export default function ListingsPage(props: ListingsProps) {
           jurisdiction={props.jurisdiction}
           multiselectData={props.multiselectData}
           paginationData={props.paginationData}
-          key={router.asPath}
           areFiltersActive={props.areFiltersActive}
         />
       ) : (

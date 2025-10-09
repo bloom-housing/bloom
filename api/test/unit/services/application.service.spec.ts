@@ -1520,6 +1520,7 @@ describe('Testing application service', () => {
       },
       include: {
         jurisdictions: true,
+        unitGroups: true,
         listingsBuildingAddress: true,
         listingMultiselectQuestions: {
           include: {
@@ -1742,6 +1743,7 @@ describe('Testing application service', () => {
       },
       include: {
         jurisdictions: true,
+        unitGroups: true,
         listingsBuildingAddress: true,
         listingMultiselectQuestions: {
           include: {
@@ -1789,6 +1791,7 @@ describe('Testing application service', () => {
       },
       include: {
         jurisdictions: true,
+        unitGroups: true,
         listingsBuildingAddress: true,
         listingMultiselectQuestions: {
           include: {
@@ -1830,6 +1833,7 @@ describe('Testing application service', () => {
       },
       include: {
         jurisdictions: true,
+        unitGroups: true,
         listingsBuildingAddress: true,
         listingMultiselectQuestions: {
           include: {

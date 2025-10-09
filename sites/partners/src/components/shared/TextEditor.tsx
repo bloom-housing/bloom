@@ -3,7 +3,6 @@ import Markdown from "markdown-to-jsx"
 import { EditorContent, Editor } from "@tiptap/react"
 import { StarterKit } from "@tiptap/starter-kit"
 import { Link as LinkExtension } from "@tiptap/extension-link"
-import { CharacterCount as CharacterCountExtension } from "@tiptap/extension-character-count"
 import BoldIcon from "@heroicons/react/16/solid/BoldIcon"
 import BulletListIcon from "@heroicons/react/16/solid/ListBulletIcon"
 import OrderedListIcon from "@heroicons/react/16/solid/NumberedListIcon"
@@ -22,7 +21,6 @@ export const EditorExtensions = [
     codeBlock: false,
     italic: false,
   }),
-  CharacterCountExtension,
   LinkExtension.configure({
     openOnClick: true,
     autolink: true,

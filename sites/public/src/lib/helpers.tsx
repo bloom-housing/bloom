@@ -22,6 +22,7 @@ import {
   Address,
   ApplicationMultiselectQuestion,
   FeatureFlag,
+  FeatureFlagEnum,
   Jurisdiction,
   Listing,
   ListingsStatusEnum,
@@ -36,6 +37,7 @@ import {
 import { CommonMessageVariant } from "@bloom-housing/ui-seeds/src/blocks/shared/CommonMessage"
 import { Icon, Message } from "@bloom-housing/ui-seeds"
 import styles from "./helpers.module.scss"
+import { ApplicationFormConfig } from "./applications/configInterfaces"
 
 export const getGenericAddress = (bloomAddress: Address) => {
   return bloomAddress
@@ -233,10 +235,11 @@ export const getListingStatusMessageContent = (
 
 export const getListingStatusMessage = (
   listing: Listing,
-  jurisdiction: Jurisdiction,
+  jurisdiction: Jurisdiction | { featureFlags: FeatureFlag[] },
   content?: React.ReactNode,
   hideTime?: boolean,
-  hideDate?: boolean
+  hideDate?: boolean,
+  className?: string
 ) => {
   if (!listing) return
 
@@ -257,13 +260,24 @@ export const getListingStatusMessage = (
   const hideIsClosed =
     listing.status === ListingsStatusEnum.closed ||
     (listing.applicationDueDate && dayjs() > dayjs(listing.applicationDueDate))
+  const hideNoDateMarketingStatus =
+    listing.marketingType === MarketingTypeEnum.comingSoon &&
+    !listing.marketingSeason &&
+    !listing.marketingYear
 
   const hideStatusMessageContent =
-    hideDate || hideNoUnitGroups || hideWaitlistClosedNoAvailableUnits || hideIsClosed
+    hideDate ||
+    hideNoUnitGroups ||
+    hideWaitlistClosedNoAvailableUnits ||
+    hideIsClosed ||
+    hideNoDateMarketingStatus
+
+  const classNames = [styles["status-bar"]]
+  if (className) classNames.push(className)
 
   return (
     <Message
-      className={styles["status-bar"]}
+      className={classNames.join(" ")}
       customIcon={
         <Icon size="md" className={styles["primary-color-icon"]}>
           {prefix?.variant === "secondary-inverse" ? <LockClosedIcon /> : <InfoIcon />}
@@ -306,7 +320,7 @@ export const getApplicationSeason = (
   if (marketingYear) {
     label = label.concat(` ${marketingYear}`)
   }
-  return label
+  return marketingSeason || marketingYear ? label : null
 }
 
 export const getListings = (listings) => {
@@ -488,4 +502,20 @@ export const fetchFavoriteListingIds = async (userId: string, userService: UserS
 
 export const isTrue = (value) => {
   return value === true || value === "true"
+}
+
+export const isUnitGroupAppWaitlist = (listing: Listing, config: ApplicationFormConfig) => {
+  return (
+    isFeatureFlagOn(config, FeatureFlagEnum.enableUnitGroups) &&
+    listing.unitGroups.some((group) => group.openWaitlist) &&
+    !listing.unitGroups.some((group) => group.totalAvailable > 0)
+  )
+}
+
+export const isUnitGroupAppBase = (listing: Listing, config: ApplicationFormConfig) => {
+  return (
+    isFeatureFlagOn(config, FeatureFlagEnum.enableUnitGroups) &&
+    !listing.unitGroups.some((group) => group.openWaitlist) &&
+    !listing.unitGroups.some((group) => group.totalAvailable > 0)
+  )
 }
