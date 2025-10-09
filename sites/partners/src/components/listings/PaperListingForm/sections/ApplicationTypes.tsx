@@ -653,7 +653,7 @@ const ApplicationTypes = ({ listing, requiredFields }: ApplicationTypesProps) =>
             variant="primary-outlined"
             size="sm"
           >
-            Cancel
+            Cancelar
           </Button>
         </Drawer.Footer>
       </Drawer>
