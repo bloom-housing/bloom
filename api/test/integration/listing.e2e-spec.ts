@@ -2314,8 +2314,8 @@ describe('Listing Controller Tests', () => {
             unitGroups: val.unitGroups.map((entry) => ({
               ...entry,
               rentType: RentTypeEnum.rentRange,
-              flatRentValueFrom: '100',
-              flatRentValueTo: '500',
+              flatRentValueFrom: 100,
+              flatRentValueTo: 500,
             })),
           })
           .set('Cookie', adminAccessToken)
@@ -2337,6 +2337,34 @@ describe('Listing Controller Tests', () => {
           100,
         );
         expect(Number(newDBValues.unitGroups[0].flatRentValueTo)).toEqual(500);
+      });
+
+      it("should fail to create listing when unit group rent type is 'fixedRent' but the 'flatRentValueFrom' and 'flatRentValueFrom' are set", async () => {
+        const val = await constructFullListingData(
+          undefined,
+          undefined,
+          `create listing ${randomName()}`,
+          true,
+        );
+
+        const res = await request(app.getHttpServer())
+          .post('/listings')
+          .set({ passkey: process.env.API_PASS_KEY || '' })
+          .send({
+            ...val,
+            unitGroups: val.unitGroups.map((entry) => ({
+              ...entry,
+              rentType: RentTypeEnum.fixedRent,
+              flatRentValueFrom: 100,
+              flatRentValueTo: 400,
+            })),
+          })
+          .set('Cookie', adminAccessToken)
+          .expect(400);
+
+        expect(res.body.message[0]).toEqual(
+          'unitGroups.0.When rent is of type "fixedRent" the "flatRentValueFrom" and "flatRentValueTo" fields must be empty',
+        );
       });
 
       it("should fail to create listing when unit group rent type is 'rentRange' but the 'flatRentValueFrom' and 'flatRentValueFrom' are missing", async () => {
