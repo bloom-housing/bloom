@@ -213,7 +213,7 @@ export class ScriptRunnerController {
 
   @Put('migrateMultiselectDataToRefactor')
   @ApiOperation({
-    summary: 'An example of how the script runner can work',
+    summary: 'A script to migrate MSQ data and options to refactored schema',
     operationId: 'migrateMultiselectDataToRefactor',
   })
   @ApiOkResponse({ type: SuccessDTO })
@@ -225,7 +225,8 @@ export class ScriptRunnerController {
 
   @Put('migrateMultiselectApplicationDataToRefactor')
   @ApiOperation({
-    summary: 'An example of how the script runner can work',
+    summary:
+      'A script to migrate application MSQ selections to refactored schema',
     operationId: 'migrateMultiselectApplicationDataToRefactor',
   })
   @ApiOkResponse({ type: SuccessDTO })

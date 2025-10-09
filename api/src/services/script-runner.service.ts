@@ -657,8 +657,12 @@ export class ScriptRunnerService {
   }
 
   /**
-    this is simply an example
-  */
+   *
+   * @param req incoming request object
+   * @returns successDTO
+   * @description pulls in all multiselect questions, updates new fields
+   * and moves option data out of JSON format and into MultiselectOptions table
+   */
   async migrateMultiselectDataToRefactor(
     req: ExpressRequest,
   ): Promise<SuccessDTO> {
@@ -749,8 +753,15 @@ export class ScriptRunnerService {
   }
 
   /**
-    this is simply an example
-  */
+   *
+   * @param req incoming request object
+   * @param page which page of the application table to query from
+   * @param pageSize size of the page of the application table being quieried
+   * @returns successDTO
+   * @description pulls all applications within a given range, loops over the
+   * preferences and programs jsons to find the correct MSQ and option, and maps
+   * the data to the ApplicationSelections and ApplicationSelectionOptions tables.
+   */
   async migrateMultiselectApplicationDataToRefactor(
     req: ExpressRequest,
     page?: number,
