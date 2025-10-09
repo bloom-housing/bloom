@@ -83,7 +83,7 @@ type ApplicationTypesProps = {
 
 const ApplicationTypes = ({ listing, requiredFields }: ApplicationTypesProps) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, setValue, watch, errors, getValues } = useFormContext()
+  const { register, setValue, watch, errors, getValues, setError, clearErrors } = useFormContext()
   const { doJurisdictionsHaveFeatureFlagOn, getJurisdictionLanguages } = useContext(AuthContext)
 
   const getDefaultMethods = () => {
@@ -169,6 +169,7 @@ const ApplicationTypes = ({ listing, requiredFields }: ApplicationTypesProps) =>
 
   const savePaperApplication = () => {
     const paperApplications = methods.paper?.paperApplications ?? []
+
     paperApplications.push({
       assets: {
         fileId: cloudinaryData.id,
@@ -237,6 +238,8 @@ const ApplicationTypes = ({ listing, requiredFields }: ApplicationTypesProps) =>
   }, [methods, setValue])
   // register applicationMethods so we can set a value for it
   register("applicationMethods")
+
+  console.log("paperApplications", methods?.paper?.paperApplications)
 
   return (
     <>
@@ -591,39 +594,41 @@ const ApplicationTypes = ({ listing, requiredFields }: ApplicationTypesProps) =>
         <Drawer.Content>
           <Card>
             <Card.Section>
-              {cloudinaryData.url === "" && (
-                <div className="field">
-                  <p className="mb-2">
-                    <label className="label">{t("t.language")}</label>
-                  </p>
-                  <Select
-                    id={"paperApplicationLanguage"}
-                    name="paperApplicationLanguage"
-                    options={[
-                      ...availableJurisdictionLanguages.map((item) => ({
-                        label: t(`languages.${item}`),
-                        value: item,
-                      })),
-                    ]}
-                    placeholder={t("t.selectLanguage")}
-                    defaultValue={selectedLanguage}
-                    validation={{ required: true }}
-                    inputProps={{
-                      onChange: (e) => {
-                        setSelectedLanguage(e.target?.value)
-                      },
-                    }}
-                  />
-                </div>
+              <div className="field">
+                <p className="mb-2">
+                  <label className="label">{t("t.language")}</label>
+                </p>
+                <Select
+                  disabled={!!methods?.paper?.paperApplications}
+                  id={"paperApplicationLanguage"}
+                  name="paperApplicationLanguage"
+                  options={[
+                    ...availableJurisdictionLanguages.map((item) => ({
+                      label: t(`languages.${item}`),
+                      value: item,
+                    })),
+                  ]}
+                  placeholder={t("t.selectLanguage")}
+                  defaultValue={selectedLanguage}
+                  validation={{ required: true }}
+                  inputProps={{
+                    onChange: (e) => {
+                      setSelectedLanguage(e.target?.value)
+                    },
+                  }}
+                />
+              </div>
+              {selectedLanguage && (
+                <Dropzone
+                  id="listing-paper-application-upload"
+                  label={t("t.uploadFile")}
+                  helptext={t("listings.pdfHelperText")}
+                  uploader={pdfUploader}
+                  accept="application/pdf"
+                  progress={progressValue}
+                />
               )}
-              <Dropzone
-                id="listing-paper-application-upload"
-                label={t("t.uploadFile")}
-                helptext={t("listings.pdfHelperText")}
-                uploader={pdfUploader}
-                accept="application/pdf"
-                progress={progressValue}
-              />
+
               {cloudinaryData.url !== "" && (
                 <MinimalTable
                   headers={paperApplicationsTableHeaders}
@@ -635,6 +640,7 @@ const ApplicationTypes = ({ listing, requiredFields }: ApplicationTypesProps) =>
         </Drawer.Content>
         <Drawer.Footer>
           <Button
+            disabled={progressValue === 0}
             key={0}
             onClick={() => {
               savePaperApplication()
@@ -648,6 +654,7 @@ const ApplicationTypes = ({ listing, requiredFields }: ApplicationTypesProps) =>
           <Button
             key={1}
             onClick={() => {
+              clearErrors("selectedLanguageError")
               resetDrawerState()
             }}
             variant="primary-outlined"
