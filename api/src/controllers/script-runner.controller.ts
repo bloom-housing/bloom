@@ -18,6 +18,7 @@ import { BulkApplicationResendDTO } from '../dtos/script-runner/bulk-application
 import { AmiChartImportDTO } from '../dtos/script-runner/ami-chart-import.dto';
 import { AmiChartUpdateImportDTO } from '../dtos/script-runner/ami-chart-update-import.dto';
 import { CommunityTypeDTO } from '../dtos/script-runner/community-type.dto';
+import { PaginationDTO } from '../dtos/script-runner/pagination.dto';
 import { ApiKeyGuard } from '../guards/api-key.guard';
 
 @Controller('scriptRunner')
@@ -207,6 +208,35 @@ export class ScriptRunnerController {
   ): Promise<SuccessDTO> {
     return await this.scriptRunnerService.migrateDetroitToMultiselectQuestions(
       req,
+    );
+  }
+
+  @Put('migrateMultiselectDataToRefactor')
+  @ApiOperation({
+    summary: 'An example of how the script runner can work',
+    operationId: 'migrateMultiselectDataToRefactor',
+  })
+  @ApiOkResponse({ type: SuccessDTO })
+  async migrateMultiselectDataToRefactor(
+    @Request() req: ExpressRequest,
+  ): Promise<SuccessDTO> {
+    return await this.scriptRunnerService.migrateMultiselectDataToRefactor(req);
+  }
+
+  @Put('migrateMultiselectApplicationDataToRefactor')
+  @ApiOperation({
+    summary: 'An example of how the script runner can work',
+    operationId: 'migrateMultiselectApplicationDataToRefactor',
+  })
+  @ApiOkResponse({ type: SuccessDTO })
+  async migrateMultiselectApplicationDataToRefactor(
+    @Body() body: PaginationDTO,
+    @Request() req: ExpressRequest,
+  ): Promise<SuccessDTO> {
+    return await this.scriptRunnerService.migrateMultiselectApplicationDataToRefactor(
+      req,
+      body.page,
+      body.pageSize,
     );
   }
 }
