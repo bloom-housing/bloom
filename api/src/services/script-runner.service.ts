@@ -674,19 +674,22 @@ export class ScriptRunnerService {
     }
 
     // Set the expire_after field on applications tied to closed listings
-    const closedListings = await this.prisma.listings.findMany({
-      select: { id: true, closedAt: true },
-      where: { status: ListingsStatusEnum.closed, closedAt: { not: null } },
-    });
-    for (const listing of closedListings) {
-      const expireAfter = dayjs(listing.closedAt)
-        .add(Number(process.env.APPLICATION_DAYS_TILL_EXPIRY))
-        .toDate();
-      await this.prisma.applications.updateMany({
-        data: { expireAfter: expireAfter },
-        where: { listingId: listing.id },
-      });
-    }
+    // const closedListings = await this.prisma.listings.findMany({
+    //   select: { id: true, closedAt: true },
+    //   where: { status: ListingsStatusEnum.closed, closedAt: { not: null } },
+    // });
+    // console.log(
+    //   `updating expireAfter for ${closedListings.length} closed listings`,
+    // );
+    // for (const listing of closedListings) {
+    //   const expireAfter = dayjs(listing.closedAt)
+    //     .add(Number(process.env.APPLICATION_DAYS_TILL_EXPIRY), 'days')
+    //     .toDate();
+    //   await this.prisma.applications.updateMany({
+    //     data: { expireAfter: expireAfter },
+    //     where: { listingId: listing.id },
+    //   });
+    // }
 
     // Set the is_newest field on application if newest application for applicant
     const userCount = await this.prisma.userAccounts.count({
@@ -704,10 +707,15 @@ export class ScriptRunnerService {
                     GROUP BY a.user_id) a
                     OFFSET ${currentCount}
                     limit 1000;`;
+      console.log(`updating ${applicationsToUpdate.length} applications`);
       await this.prisma.applications.updateMany({
         data: { isNewest: true },
         where: {
-          id: { in: applicationsToUpdate.map((app) => app.application_id) },
+          id: {
+            in: applicationsToUpdate.map((app) =>
+              app.application_id.replace('"', '').replace('"', ''),
+            ),
+          },
         },
       });
     }
