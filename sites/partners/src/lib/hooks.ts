@@ -92,14 +92,13 @@ export function useListingsData({
       orderDir: sort?.filter((item) => item.orderDir).map((item) => item.orderDir),
     })
   }
-
   // filter if logged user is an agent
   if (roles?.isPartner) {
     params.filter.push({
       $comparison: EnumListingFilterParamsComparison["="],
       leasingAgent: userId,
     })
-  } else if (roles?.isJurisdictionalAdmin) {
+  } else if (roles?.isJurisdictionalAdmin || roles?.isLimitedJurisdictionalAdmin) {
     params.filter.push({
       $comparison: EnumListingFilterParamsComparison.IN,
       jurisdiction: userJurisidctionIds[0],

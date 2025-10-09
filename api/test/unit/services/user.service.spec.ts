@@ -2166,6 +2166,13 @@ describe('Testing user service', () => {
       );
       expect(res).toEqual(true);
     });
+    it('should allow admin to promote to support admin', () => {
+      const res = service.isUserRoleChangeAllowed(
+        { userRoles: { isAdmin: true } } as unknown as User,
+        { isSupportAdmin: true },
+      );
+      expect(res).toEqual(true);
+    });
 
     it('should allow admin to demote', () => {
       const res = service.isUserRoleChangeAllowed(
