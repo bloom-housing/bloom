@@ -386,7 +386,7 @@ class Listing extends AbstractDTO {
   @ValidateListingPublish('depositValue', {
     groups: [ValidationsGroupsEnum.default],
   })
-  @IsDecimal()
+  @IsNumber()
   @ApiPropertyOptional()
   depositValue?: number;
 
