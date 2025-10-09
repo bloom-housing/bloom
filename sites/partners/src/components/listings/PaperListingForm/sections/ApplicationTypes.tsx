@@ -83,7 +83,7 @@ type ApplicationTypesProps = {
 
 const ApplicationTypes = ({ listing, requiredFields }: ApplicationTypesProps) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, setValue, watch, errors, getValues, setError, clearErrors } = useFormContext()
+  const { register, setValue, watch, errors, getValues } = useFormContext()
   const { doJurisdictionsHaveFeatureFlagOn, getJurisdictionLanguages } = useContext(AuthContext)
 
   const getDefaultMethods = () => {
@@ -169,7 +169,6 @@ const ApplicationTypes = ({ listing, requiredFields }: ApplicationTypesProps) =>
 
   const savePaperApplication = () => {
     const paperApplications = methods.paper?.paperApplications ?? []
-
     paperApplications.push({
       assets: {
         fileId: cloudinaryData.id,
@@ -238,8 +237,6 @@ const ApplicationTypes = ({ listing, requiredFields }: ApplicationTypesProps) =>
   }, [methods, setValue])
   // register applicationMethods so we can set a value for it
   register("applicationMethods")
-
-  console.log("paperApplications", methods?.paper?.paperApplications)
 
   return (
     <>
@@ -654,7 +651,6 @@ const ApplicationTypes = ({ listing, requiredFields }: ApplicationTypesProps) =>
           <Button
             key={1}
             onClick={() => {
-              clearErrors("selectedLanguageError")
               resetDrawerState()
             }}
             variant="primary-outlined"
