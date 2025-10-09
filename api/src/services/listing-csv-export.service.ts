@@ -53,7 +53,16 @@ import { UnitGroupSummary } from '../dtos/unit-groups/unit-group-summary.dto';
 import { addUnitGroupsSummarized } from '../utilities/unit-groups-transformations';
 
 views.csv = {
-  ...views.details,
+  listingMultiselectQuestions: {
+    include: {
+      multiselectQuestions: {
+        select: {
+          text: true,
+        },
+      },
+    },
+  },
+  ...views.full,
   copyOf: {
     select: {
       id: true,
@@ -214,7 +223,7 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
   /**
    *
    * @param filename
-   * @param queryParams
+   * @param optionParams
    * @returns a promise with SuccessDTO
    */
   async createCsv<QueryParams extends ListingCsvQueryParams>(
@@ -425,7 +434,7 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
           formatLocalDate(val, this.dateFormat, this.timeZone),
       },
       {
-        path: 'updatedAt',
+        path: 'contentUpdatedAt',
         label: 'Last Updated',
         format: (val: string): string =>
           formatLocalDate(val, this.dateFormat, this.timeZone),
@@ -946,23 +955,23 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
           label: 'Leasing Agent Zip',
         },
         {
-          path: 'listingsLeasingAgentAddress.street',
+          path: 'listingsApplicationMailingAddress.street',
           label: 'Leasing Agency Mailing Address',
         },
         {
-          path: 'listingsLeasingAgentAddress.street2',
+          path: 'listingsApplicationMailingAddress.street2',
           label: 'Leasing Agency Mailing Address Street 2',
         },
         {
-          path: 'listingsLeasingAgentAddress.city',
+          path: 'listingsApplicationMailingAddress.city',
           label: 'Leasing Agency Mailing Address City',
         },
         {
-          path: 'listingsLeasingAgentAddress.state',
+          path: 'listingsApplicationMailingAddress.state',
           label: 'Leasing Agency Mailing Address State',
         },
         {
-          path: 'listingsLeasingAgentAddress.zipCode',
+          path: 'listingsApplicationMailingAddress.zipCode',
           label: 'Leasing Agency Mailing Address Zip',
         },
         {
@@ -1108,7 +1117,9 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
           path: 'userAccounts',
           label: 'Partners Who Have Access',
           format: (val: User[]): string =>
-            val.map((user) => `${user.firstName} ${user.lastName}`).join(', '),
+            val
+              ?.map((user) => `${user.firstName} ${user.lastName}`)
+              .join(', ') || '',
         },
       ],
     );
@@ -1295,7 +1306,9 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
       user &&
       (user.userRoles?.isAdmin ||
         user.userRoles?.isJurisdictionalAdmin ||
-        user.userRoles?.isPartner)
+        user.userRoles?.isLimitedJurisdictionalAdmin ||
+        user.userRoles?.isPartner ||
+        user.userRoles.isSupportAdmin)
     ) {
       return;
     } else {

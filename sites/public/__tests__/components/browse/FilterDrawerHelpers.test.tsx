@@ -728,7 +728,7 @@ describe("filter drawer helpers", () => {
     it("should show the correct number of columns when no customColumnNumber is added", () => {
       const { container } = render(<DefaultCheckBoxGroup />)
       expect(screen.getByRole("group", { name: "Home type" })).toBeInTheDocument()
-      expect(container.querySelector("[data-columns='3']")).toBeInTheDocument()
+      expect(container.querySelector("[data-columns='2']")).toBeInTheDocument()
       expect(container.querySelector("[data-columns='1']")).not.toBeInTheDocument()
       expect(screen.getByLabelText("Apartment")).toBeInTheDocument()
       expect(screen.getByRole("checkbox", { name: "Apartment" })).not.toBeChecked()
@@ -743,7 +743,7 @@ describe("filter drawer helpers", () => {
       const { container } = render(<CustomColumnCheckBoxGroup />)
       expect(screen.getByRole("group", { name: "Home type" })).toBeInTheDocument()
       expect(container.querySelector("[data-columns='1']")).toBeInTheDocument()
-      expect(container.querySelector("[data-columns='3']")).not.toBeInTheDocument()
+      expect(container.querySelector("[data-columns='2']")).not.toBeInTheDocument()
       expect(screen.getByLabelText("Apartment")).toBeInTheDocument()
       expect(screen.getByRole("checkbox", { name: "Apartment" })).not.toBeChecked()
       expect(screen.getByLabelText("Duplex")).toBeInTheDocument()
@@ -757,7 +757,7 @@ describe("filter drawer helpers", () => {
     it("should show all fields passed into component correctly when a filter state with previous selections is passed", () => {
       const { container } = render(<CheckBoxGroupWithSelections />)
       expect(screen.getByRole("group", { name: "Home type" })).toBeInTheDocument()
-      expect(container.querySelector("[data-columns='3']")).toBeInTheDocument()
+      expect(container.querySelector("[data-columns='2']")).toBeInTheDocument()
       expect(container.querySelector("[data-columns='1']")).not.toBeInTheDocument()
       expect(screen.getByLabelText("Apartment")).toBeInTheDocument()
       expect(screen.getByRole("checkbox", { name: "Apartment" })).toBeChecked()

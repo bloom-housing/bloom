@@ -89,6 +89,16 @@ export const buildWhereClause = (
                 isJurisdictionalAdmin: true,
               },
             },
+            {
+              userRoles: {
+                isLimitedJurisdictionalAdmin: true,
+              },
+            },
+            {
+              userRoles: {
+                isSupportAdmin: true,
+              },
+            },
           ],
         });
       } else if (user?.userRoles?.isJurisdictionalAdmin) {
@@ -102,6 +112,11 @@ export const buildWhereClause = (
             {
               userRoles: {
                 isJurisdictionalAdmin: true,
+              },
+            },
+            {
+              userRoles: {
+                isLimitedJurisdictionalAdmin: true,
               },
             },
           ],
@@ -137,12 +152,40 @@ export const buildWhereClause = (
             OR: [
               {
                 userRoles: {
+                  isLimitedJurisdictionalAdmin: null,
+                },
+              },
+              {
+                userRoles: {
+                  isLimitedJurisdictionalAdmin: false,
+                },
+              },
+            ],
+          },
+          {
+            OR: [
+              {
+                userRoles: {
                   isJurisdictionalAdmin: null,
                 },
               },
               {
                 userRoles: {
                   isJurisdictionalAdmin: false,
+                },
+              },
+            ],
+          },
+          {
+            OR: [
+              {
+                userRoles: {
+                  isSupportAdmin: null,
+                },
+              },
+              {
+                userRoles: {
+                  isSupportAdmin: false,
                 },
               },
             ],

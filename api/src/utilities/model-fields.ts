@@ -1,6 +1,6 @@
 import { Prisma } from '@prisma/client';
 
-export const getModelFields = (modelName: string) => {
+export const getModelFields = (modelName: string): Prisma.DMMF.Field[] => {
   return Prisma.dmmf.datamodel.models.filter(
     (model) => model.name === modelName,
   )[0].fields;

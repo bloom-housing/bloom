@@ -6,7 +6,7 @@ dotenv.config()
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 let baseConfig: Cypress.ConfigOptions<any> = {
   defaultCommandTimeout: 100000,
-  projectId: "bloom-public-reference",
+  projectId: "vo3uk2",
   pageLoadTimeout: 100000,
   video: true,
   numTestsKeptInMemory: 0,

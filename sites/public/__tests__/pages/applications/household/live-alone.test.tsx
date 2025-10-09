@@ -27,7 +27,9 @@ describe("applications pages", () => {
       const { getByText, getByTestId } = render(<ApplicationLiveAlone />)
 
       expect(
-        getByText("Next we would like to know about the others who will live with you in the unit.")
+        getByText(
+          "Next, we would like to know about the others who will live with you in the unit."
+        )
       ).toBeInTheDocument()
       expect(getByTestId("app-household-live-alone")).toBeInTheDocument()
       expect(getByTestId("app-household-with-others")).toBeInTheDocument()
