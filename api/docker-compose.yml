@@ -1,12 +1,29 @@
 services:
   api:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: api
-    environment:
-      - PORT=${PORT}
+    image: bloomapi:dev
+    restart: never
+    expose:
+      - '3100'
     ports:
       - '3100:3100'
-    extra_hosts:
-      - 'host.docker.internal:host-gateway'
+    environment:
+      PORT: 3100
+      APP_SECRET: "totally a secret"
+      DATABASE_URL: "postgres://postgres:example@db:5432/bloom_prisma"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: postgres
+    restart: always
+    expose:
+      - '5432'
+    environment:
+      POSTGRES_PASSWORD: example
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready", "--username=postgres"]
+      interval: 2s
+      timeout: 1s
+      retries: 20
+      start_period: 1s
