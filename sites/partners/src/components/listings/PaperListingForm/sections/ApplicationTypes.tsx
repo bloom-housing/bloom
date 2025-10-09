@@ -144,18 +144,6 @@ const ApplicationTypes = ({ listing, requiredFields }: ApplicationTypesProps) =>
     setDrawerState(false)
   }
 
-  const resetDrawerStateOnSave = () => {
-    // if (errors) {
-    //   return
-    // }
-    setProgressValue(0)
-    setCloudinaryData({
-      id: "",
-      url: "",
-    })
-    setDrawerState(false)
-  }
-
   const disableCommonApplication = jurisdiction
     ? doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.disableCommonApplication, jurisdiction)
     : false
@@ -181,21 +169,6 @@ const ApplicationTypes = ({ listing, requiredFields }: ApplicationTypesProps) =>
 
   const savePaperApplication = () => {
     const paperApplications = methods.paper?.paperApplications ?? []
-
-    // console.log("applicatoins", paperApplications)
-
-    // if (paperApplications?.length === 0) {
-    //   setError("paperApplicationsError", { message: "File not uploaded" })
-    // }
-    if (!selectedLanguage) {
-      setError("selectedLanguageError", { message: "Language not selected" })
-    }
-
-    console.log("errors", errors)
-
-    // if (errors) {
-    //   return undefined
-    // }
 
     paperApplications.push({
       assets: {
@@ -265,6 +238,8 @@ const ApplicationTypes = ({ listing, requiredFields }: ApplicationTypesProps) =>
   }, [methods, setValue])
   // register applicationMethods so we can set a value for it
   register("applicationMethods")
+
+  console.log("paperApplications", methods?.paper?.paperApplications)
 
   return (
     <>
@@ -624,6 +599,7 @@ const ApplicationTypes = ({ listing, requiredFields }: ApplicationTypesProps) =>
                   <label className="label">{t("t.language")}</label>
                 </p>
                 <Select
+                  disabled={!!methods?.paper?.paperApplications}
                   id={"paperApplicationLanguage"}
                   name="paperApplicationLanguage"
                   options={[
@@ -632,28 +608,27 @@ const ApplicationTypes = ({ listing, requiredFields }: ApplicationTypesProps) =>
                       value: item,
                     })),
                   ]}
-                  error={fieldHasError(errors?.selectedLanguageError)}
-                  errorMessage={fieldMessage(errors?.selectedLanguageError)}
-                  register={register}
                   placeholder={t("t.selectLanguage")}
                   defaultValue={selectedLanguage}
                   validation={{ required: true }}
                   inputProps={{
                     onChange: (e) => {
                       setSelectedLanguage(e.target?.value)
-                      clearErrors("selectedLanguageError")
                     },
                   }}
                 />
               </div>
-              <Dropzone
-                id="listing-paper-application-upload"
-                label={t("t.uploadFile")}
-                helptext={t("listings.pdfHelperText")}
-                uploader={pdfUploader}
-                accept="application/pdf"
-                progress={progressValue}
-              />
+              {selectedLanguage && (
+                <Dropzone
+                  id="listing-paper-application-upload"
+                  label={t("t.uploadFile")}
+                  helptext={t("listings.pdfHelperText")}
+                  uploader={pdfUploader}
+                  accept="application/pdf"
+                  progress={progressValue}
+                />
+              )}
+
               {cloudinaryData.url !== "" && (
                 <MinimalTable
                   headers={paperApplicationsTableHeaders}
@@ -665,10 +640,11 @@ const ApplicationTypes = ({ listing, requiredFields }: ApplicationTypesProps) =>
         </Drawer.Content>
         <Drawer.Footer>
           <Button
+            disabled={progressValue === 0}
             key={0}
             onClick={() => {
               savePaperApplication()
-              resetDrawerStateOnSave()
+              resetDrawerState()
             }}
             variant="primary"
             size="sm"
