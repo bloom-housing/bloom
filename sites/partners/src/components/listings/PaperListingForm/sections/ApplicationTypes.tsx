@@ -596,7 +596,7 @@ const ApplicationTypes = ({ listing, requiredFields }: ApplicationTypesProps) =>
                   <label className="label">{t("t.language")}</label>
                 </p>
                 <Select
-                  disabled={methods?.paper?.paperApplications?.length > 0}
+                  disabled={progressValue === 100}
                   id={"paperApplicationLanguage"}
                   name="paperApplicationLanguage"
                   options={[
