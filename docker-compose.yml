@@ -8,6 +8,7 @@ services:
       - '3100:3100'
     environment:
       PORT: 3100
+      NODE_ENV: "production"
       APP_SECRET: "totally a secret"
       DATABASE_URL: "postgres://postgres:example@db:5432/bloom_prisma"
     depends_on:
@@ -16,7 +17,7 @@ services:
 
   db:
     image: postgres
-    restart: always
+    restart: never
     expose:
       - '5432'
     environment:
@@ -27,3 +28,19 @@ services:
       timeout: 1s
       retries: 20
       start_period: 1s
+
+  partner:
+    image: bloom_sites_partner:dev
+    restart: never
+    expose:
+      - '3200'
+    ports:
+      - '3200:3200'
+    environment:
+      PORT: 3200
+      NODE_ENV: "production"
+
+    depends_on:
+      db:
+        condition: service_healthy
+
