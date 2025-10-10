@@ -637,7 +637,7 @@ const ApplicationTypes = ({ listing, requiredFields }: ApplicationTypesProps) =>
         </Drawer.Content>
         <Drawer.Footer>
           <Button
-            disabled={progressValue === 0}
+            disabled={progressValue < 100}
             key={0}
             onClick={() => {
               savePaperApplication()
