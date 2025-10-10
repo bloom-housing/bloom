@@ -1,0 +1,44 @@
+# Keep up to date with Active LTS: https://nodejs.org/en/about/previous-releases
+FROM node:22 AS build
+
+# Create a non-root user to build (priciple of least priviledge).
+WORKDIR /build
+RUN groupadd --gid 2002 build && useradd --gid 2002 --uid 2002 --home /build build
+RUN chown 2002:2002 /build
+USER 2002:2002
+
+# Copy package.json and yarn.lock in a separate layer from the source code and install the
+# dependencies. This allows docker to cache this step if dependencies haven't changed from the last
+# docker build, making build times a lot faster.
+WORKDIR /build
+COPY --chown=2002:2002 package.json yarn.lock .
+COPY --chown=2002:2002 shared-helpers ./shared-helpers
+COPY --chown=2002:2002 sites/partners/package.json ./sites/partners/
+WORKDIR /build/sites/partners
+RUN yarn install --frozen-lockfile
+
+# Copy in the source code and build. `next build` needs the tsconfig.json at repo root for type
+# checking.
+COPY --chown=2002:2002 tsconfig.json /build/tsconfig.json
+COPY --chown=2002:2002 sites/partners .
+
+ENV NEXT_TELEMETRY_DISABLED=1
+RUN yarn build
+
+# Start a new container filesystem and copy in just the runtime dependencies and the built
+# application.
+FROM node:22 AS run
+WORKDIR /run
+
+# Copy over build artifacts.
+COPY --from=build /build/sites/partners/.next/standalone .
+COPY --from=build /build/sites/partners/.next/static ./sites/partners/.next/static
+
+# Create a non-root user to run (priciple of least priviledge).
+WORKDIR /run
+RUN groupadd --gid 2002 run && useradd --gid 2002 --uid 2002 --home /run run
+RUN chown --recursive 2002:2002 /run
+USER 2002:2002
+
+ENV NEXT_TELEMETRY_DISABLED=1
+CMD [ "node", "./sites/partners/server.js" ]
