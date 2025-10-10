@@ -269,8 +269,7 @@ export class ListingService implements OnModuleInit {
     userRoles: UserRoleEnum | UserRoleEnum[],
     listingId?: string,
     jurisId?: string,
-    getPublicUrl = false,
-  ): Promise<{ emails: string[]; publicUrl?: string | null }> {
+  ): Promise<{ emails: string[] }> {
     // determine where clause(s)
     const userRolesWhere: Prisma.UserAccountsWhereInput[] = [];
     if (userRoles.includes(UserRoleEnum.admin))
@@ -296,13 +295,8 @@ export class ListingService implements OnModuleInit {
     }
 
     const userResults = await this.prisma.userAccounts.findMany({
-      include: {
-        jurisdictions: {
-          select: {
-            id: true,
-            publicUrl: getPublicUrl,
-          },
-        },
+      select: {
+        email: true,
       },
       where: {
         OR: userRolesWhere,
@@ -310,13 +304,9 @@ export class ListingService implements OnModuleInit {
     });
 
     // account for users having access to multiple jurisdictions
-    const publicUrl = getPublicUrl
-      ? userResults[0]?.jurisdictions?.find((juris) => juris.id === jurisId)
-          ?.publicUrl
-      : null;
     const userEmails: string[] = [];
     userResults?.forEach((user) => user?.email && userEmails.push(user.email));
-    return { emails: userEmails, publicUrl };
+    return { emails: userEmails };
   }
 
   public async listingApprovalNotify(params: {
@@ -386,13 +376,18 @@ export class ListingService implements OnModuleInit {
           ],
           params.listingInfo.id,
           params.jurisId,
-          true,
         );
+        const jurisdiction = await this.prisma.jurisdictions.findFirst({
+          select: {
+            publicUrl: true,
+          },
+          where: { id: params.jurisId },
+        });
         await this.emailService.listingApproved(
           { id: params.jurisId },
           { id: params.listingInfo.id, name: params.listingInfo.name },
           userInfo.emails,
-          userInfo.publicUrl,
+          jurisdiction?.publicUrl || '',
         );
       }
     }
