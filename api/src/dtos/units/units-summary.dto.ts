@@ -5,11 +5,14 @@ import {
   IsString,
   IsUUID,
   ValidateNested,
+  IsEnum,
 } from 'class-validator';
 import { Expose, Type } from 'class-transformer';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 import { IdDTO } from '../shared/id.dto';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { ValidateUnitGroupRent } from '../../decorators/validate-unit-groups-rent.decorator';
+import { RentTypeEnum } from '@prisma/client';
 
 class UnitsSummary {
   @Expose()
@@ -101,6 +104,26 @@ class UnitsSummary {
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   totalAvailable?: number;
+
+  @Expose()
+  @IsEnum(RentTypeEnum, {
+    groups: [ValidationsGroupsEnum.default],
+  })
+  @ValidateUnitGroupRent({
+    groups: [ValidationsGroupsEnum.default],
+  })
+  @ApiPropertyOptional()
+  rentType?: RentTypeEnum;
+
+  @Expose()
+  @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  flatRentValueFrom?: number;
+
+  @Expose()
+  @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  flatRentValueTo?: number;
 }
 
 export { UnitsSummary as default, UnitsSummary };
