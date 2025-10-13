@@ -210,16 +210,29 @@ export class ScriptRunnerController {
     );
   }
 
-  @Put('setPIIDeletionInitialFields')
+  @Put('setInitialExpireAfterValues')
   @ApiOperation({
     summary:
-      'A script that sets the initial values for all PII deletion fields',
-    operationId: 'setPIIDeletionInitialFields',
+      'A script that sets the initial values for expire_after on applications',
+    operationId: 'setInitialExpireAfterValues',
   })
   @ApiOkResponse({ type: SuccessDTO })
-  async setPIIDeletionInitialFields(
+  async setInitialExpireAfterValues(
     @Request() req: ExpressRequest,
   ): Promise<SuccessDTO> {
-    return await this.scriptRunnerService.setPIIDeletionInitialFields(req);
+    return await this.scriptRunnerService.setInitialExpireAfterValues(req);
+  }
+
+  @Put('setIsNewestApplicationValues')
+  @ApiOperation({
+    summary:
+      'A script that sets is_newest field on application if newest application for applicant',
+    operationId: 'setIsNewestApplicationValues',
+  })
+  @ApiOkResponse({ type: SuccessDTO })
+  async setIsNewestApplicationValues(
+    @Request() req: ExpressRequest,
+  ): Promise<SuccessDTO> {
+    return await this.scriptRunnerService.setIsNewestApplicationValues(req);
   }
 }
