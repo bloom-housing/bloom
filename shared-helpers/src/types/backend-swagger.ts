@@ -3538,6 +3538,12 @@ export interface UnitGroup {
   minOccupancy?: number
 
   /**  */
+  flatRentValueFrom?: number
+
+  /**  */
+  flatRentValueTo?: number
+
+  /**  */
   floorMin?: number
 
   /**  */
@@ -3563,6 +3569,9 @@ export interface UnitGroup {
 
   /**  */
   sqFeetMax?: number
+
+  /**  */
+  rentType?: string
 
   /**  */
   unitAccessibilityPriorityTypes?: UnitAccessibilityPriorityType
@@ -3950,10 +3959,25 @@ export interface Listing {
   depositMax?: string
 
   /**  */
+  depositType?: EnumListingDepositType
+
+  /**  */
+  depositValue?: number
+
+  /**  */
+  depositRangeMin?: number
+
+  /**  */
+  depositRangeMax?: number
+
+  /**  */
   depositHelperText?: string
 
   /**  */
   disableUnitsAccordion?: boolean
+
+  /**  */
+  hasHudEbllClearance?: boolean
 
   /**  */
   leasingAgentEmail?: string
@@ -3969,6 +3993,9 @@ export interface Listing {
 
   /**  */
   leasingAgentTitle?: string
+
+  /**  */
+  listingType?: EnumListingListingType
 
   /**  */
   managementWebsite?: string
@@ -4306,6 +4333,12 @@ export interface UnitGroupCreate {
   minOccupancy?: number
 
   /**  */
+  flatRentValueFrom?: number
+
+  /**  */
+  flatRentValueTo?: number
+
+  /**  */
   floorMin?: number
 
   /**  */
@@ -4331,6 +4364,9 @@ export interface UnitGroupCreate {
 
   /**  */
   sqFeetMax?: number
+
+  /**  */
+  rentType?: string
 
   /**  */
   unitAccessibilityPriorityTypes?: IdDTO
@@ -4598,10 +4634,25 @@ export interface ListingCreate {
   depositMax?: string
 
   /**  */
+  depositType?: EnumListingCreateDepositType
+
+  /**  */
+  depositValue?: number
+
+  /**  */
+  depositRangeMin?: number
+
+  /**  */
+  depositRangeMax?: number
+
+  /**  */
   depositHelperText?: string
 
   /**  */
   disableUnitsAccordion?: boolean
+
+  /**  */
+  hasHudEbllClearance?: boolean
 
   /**  */
   leasingAgentEmail?: string
@@ -4617,6 +4668,9 @@ export interface ListingCreate {
 
   /**  */
   leasingAgentTitle?: string
+
+  /**  */
+  listingType?: EnumListingCreateListingType
 
   /**  */
   managementWebsite?: string
@@ -4917,10 +4971,25 @@ export interface ListingUpdate {
   depositMax?: string
 
   /**  */
+  depositType?: EnumListingUpdateDepositType
+
+  /**  */
+  depositValue?: number
+
+  /**  */
+  depositRangeMin?: number
+
+  /**  */
+  depositRangeMax?: number
+
+  /**  */
   depositHelperText?: string
 
   /**  */
   disableUnitsAccordion?: boolean
+
+  /**  */
+  hasHudEbllClearance?: boolean
 
   /**  */
   leasingAgentEmail?: string
@@ -4936,6 +5005,9 @@ export interface ListingUpdate {
 
   /**  */
   leasingAgentTitle?: string
+
+  /**  */
+  listingType?: EnumListingUpdateListingType
 
   /**  */
   managementWebsite?: string
@@ -6618,6 +6690,9 @@ export interface UserRole {
 
   /**  */
   isSuperAdmin?: boolean
+
+  /**  */
+  isSupportAdmin?: boolean
 }
 
 export interface User {
@@ -7249,9 +7324,33 @@ export enum MarketingSeasonEnum {
   "fall" = "fall",
   "winter" = "winter",
 }
+export enum EnumListingDepositType {
+  "fixedDeposit" = "fixedDeposit",
+  "depositRange" = "depositRange",
+}
+export enum EnumListingListingType {
+  "regulated" = "regulated",
+  "nonRegulated" = "nonRegulated",
+}
 export enum EnumUnitGroupAmiLevelCreateMonthlyRentDeterminationType {
   "flatRent" = "flatRent",
   "percentageOfIncome" = "percentageOfIncome",
+}
+export enum EnumListingCreateDepositType {
+  "fixedDeposit" = "fixedDeposit",
+  "depositRange" = "depositRange",
+}
+export enum EnumListingCreateListingType {
+  "regulated" = "regulated",
+  "nonRegulated" = "nonRegulated",
+}
+export enum EnumListingUpdateDepositType {
+  "fixedDeposit" = "fixedDeposit",
+  "depositRange" = "depositRange",
+}
+export enum EnumListingUpdateListingType {
+  "regulated" = "regulated",
+  "nonRegulated" = "nonRegulated",
 }
 export enum AfsView {
   "pending" = "pending",
@@ -7332,6 +7431,7 @@ export enum UserRoleEnum {
   "admin" = "admin",
   "jurisdictionAdmin" = "jurisdictionAdmin",
   "limitedJurisdictionAdmin" = "limitedJurisdictionAdmin",
+  "supportAdmin" = "supportAdmin",
 }
 
 export enum FeatureFlagEnum {
@@ -7356,11 +7456,13 @@ export enum FeatureFlagEnum {
   "enableListingUpdatedAt" = "enableListingUpdatedAt",
   "enableMarketingStatus" = "enableMarketingStatus",
   "enableNeighborhoodAmenities" = "enableNeighborhoodAmenities",
+  "enableNonRegulatedListings" = "enableNonRegulatedListings",
   "enablePartnerDemographics" = "enablePartnerDemographics",
   "enablePartnerSettings" = "enablePartnerSettings",
   "enableRegions" = "enableRegions",
   "enableSection8Question" = "enableSection8Question",
   "enableSingleUseCode" = "enableSingleUseCode",
+  "enableSupportAdmin" = "enableSupportAdmin",
   "enableUnderConstructionHome" = "enableUnderConstructionHome",
   "enableUnitGroups" = "enableUnitGroups",
   "enableUtilitiesIncluded" = "enableUtilitiesIncluded",

@@ -752,25 +752,28 @@ export class ScriptRunnerService {
     }
 
     for (const translation of translations) {
-      const translationsJSON = translation.translations as Prisma.JsonObject;
+      if (translation?.translation) {
+        const translationsJSON =
+          (translation?.translations as Prisma.JsonObject) || {};
 
-      Object.keys(newTranslations).forEach((key) => {
-        translationsJSON[key] = {
-          ...((translationsJSON[key] || {}) as Prisma.JsonObject),
-          ...newTranslations[key],
-        };
-      });
+        Object.keys(newTranslations).forEach((key) => {
+          translationsJSON[key] = {
+            ...((translationsJSON[key] || {}) as Prisma.JsonObject),
+            ...newTranslations[key],
+          };
+        });
 
-      // technique taken from
-      // https://www.prisma.io/docs/orm/prisma-client/special-fields-and-types/working-with-json-fields#advanced-example-update-a-nested-json-key-value
-      const dataClause = Prisma.validator<Prisma.TranslationsUpdateInput>()({
-        translations: translationsJSON,
-      });
+        // technique taken from
+        // https://www.prisma.io/docs/orm/prisma-client/special-fields-and-types/working-with-json-fields#advanced-example-update-a-nested-json-key-value
+        const dataClause = Prisma.validator<Prisma.TranslationsUpdateInput>()({
+          translations: translationsJSON,
+        });
 
-      await this.prisma.translations.update({
-        where: { id: translation.id },
-        data: dataClause,
-      });
+        await this.prisma.translations.update({
+          where: { id: translation.id },
+          data: dataClause,
+        });
+      }
     }
   }
 

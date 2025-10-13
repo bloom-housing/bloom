@@ -4,4 +4,5 @@ export enum UserRoleEnum {
   admin = 'admin',
   jurisdictionAdmin = 'jurisdictionAdmin',
   limitedJurisdictionAdmin = 'limitedJurisdictionAdmin',
+  supportAdmin = 'supportAdmin',
 }

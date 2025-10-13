@@ -1,4 +1,5 @@
 p, admin, application, true, .*
+p, supportAdmin, application, true, .*
 p, user, application, true, submit
 p, user, application, r.sub == r.obj.userId, read
 p, anonymous, application, true, submit
@@ -10,94 +11,113 @@ p, user, userProfile, r.sub == r.obj.id, (read|update)
 p, anonymous, user, true, create
 
 p, admin, asset, true, .*
+p, supportAdmin, asset, true, .*
 p, jurisdictionAdmin, asset, true, .*
 p, limitedJurisdictionAdmin, asset, true, .*
 p, partner, asset, true, .*
 
 p, admin, multiselectQuestion, true, .*
+p, supportAdmin, multiselectQuestion, true, .*
 p, jurisdictionAdmin, multiselectQuestion, true, .*
 p, limitedJurisdictionAdmin, multiselectQuestion, true, .*
 p, partner, multiselectQuestion, true, .*
 p, anonymous, multiselectQuestion, true, read
 
 p, admin, applicationMethod, true, .*
+p, supportAdmin, applicationMethod, true, .*
 p, jurisdictionAdmin, applicationMethod, true, .*
 p, partner, applicationMethod, true, read
 
 p, admin, unit, true, .*
+p, supportAdmin, unit, true, .*
 p, jurisdictionAdmin, unit, true, .*
 p, limitedJurisdictionAdmin, unit, true, .*
 p, partner, unit, true, read
 
 p, admin, listingEvent, true, .*
+p, supportAdmin, listingEvent, true, .*
 p, jurisdictionAdmin, listingEvent, true, .*
 p, limitedJurisdictionAdmin, listingEvent, true, .*
 p, partner, listingEvent, true, read
 
 p, admin, property, true, .*
+p, supportAdmin, property, true, .*
 p, jurisdictionAdmin, property, true, .*
 p, limitedJurisdictionAdmin, property, true, .*
 p, partner, property, true, read
 
 p, admin, propertyGroup, true, .*
+p, supportAdmin, propertyGroup, true, .*
 p, jurisdictionAdmin, propertyGroup, true, .*
 p, limitedJurisdictionAdmin, propertyGroup, true, .*
 p, partner, propertyGroup, true, read
 
 p, admin, amiChart, true, .*
+p, supportAdmin, amiChart, true, .*
 p, jurisdictionAdmin, amiChart, true, .*
 p, limitedJurisdictionAdmin, amiChart, true, .*
 p, partner, amiChart, true, read
 
 p, admin, applicationFlaggedSet, true, .*
+p, supportAdmin, applicationFlaggedSet, true, .*
 p, jurisdictionAdmin, applicationFlaggedSet, true, .*
 p, partner, applicationFlaggedSet, true, .*
 
 p, admin, translation, true, .*
 
 p, admin, jurisdiction, true, .*
+p, supportAdmin, jurisdiction, true, read
 p, jurisdictionAdmin, jurisdiction, true, read
 p, limitedJurisdictionAdmin, jurisdiction, true, read
 p, anonymous, jurisdiction, true, read
 
 p, admin, listing, true, .*
+p, supportAdmin, listing, true, .*
 p, anonymous, listing, true, read
 
 p, admin, reservedCommunityType, true, .*
+p, supportAdmin, reservedCommunityType, true, read
 p, jurisdictionAdmin, reservedCommunityType, true, read
 p, limitedJurisdictionAdmin, reservedCommunityType, true, read
 p, partner, reservedCommunityType, true, read
 
 p, admin, unitType, true, .*
+p, supportAdmin, unitType, true, read
 p, jurisdictionAdmin, unitType, true, read
 p, limitedJurisdictionAdmin, unitType, true, read
 p, partner, unitType, true, read
 
 p, admin, unitRentType, true, .*
+p, supportAdmin, unitRentType, true, read
 p, jurisdictionAdmin, unitRentType, true, read
 p, limitedJurisdictionAdmin, unitRentType, true, read
 p, partner, unitRentType, true, read
 
 p, admin, unitAccessibilityPriorityType, true, .*
+p, supportAdmin, unitAccessibilityPriorityType, true, read
 p, jurisdictionAdmin, unitAccessibilityPriorityType, true, read
 p, limitedJurisdictionAdmin, unitAccessibilityPriorityType, true, read
 p, partner, unitAccessibilityPriorityType, true, read
 
 p, admin, applicationMethod, true, .*
+p, supportAdmin, applicationMethod, true, .*
 p, jurisdictionAdmin, applicationMethod, true, .*
 p, partner, applicationMethod, true, read
 
 p, admin, paperApplication, true, .*
+p, supportAdmin, paperApplication, true, .*
 p, jurisdictionAdmin, paperApplication, true, .*
 p, partner, paperApplication, true, read
 
 p, admin, mapLayers, true, .*
+p, supportAdmin, mapLayers, true, .*
 p, jurisdictionAdmin, mapLayers, true, .*
 p, limitedJurisdictionAdmin, mapLayers, true, .*
 
 p, admin, featureFlags, true, .*
 
-g, admin, jurisdictionAdmin
+g, admin, supportAdmin
+g, supportAdmin, jurisdictionAdmin
 g, jurisdictionAdmin, partner
 g, partner, user
 g, user, anonymous
