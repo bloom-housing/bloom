@@ -224,7 +224,6 @@ describe("ApplicationTypes", () => {
       })
       const dropzone = screen.getByLabelText("Upload file")
 
-
       await act(async () => {
         await userEvent.upload(dropzone, file)
       })
