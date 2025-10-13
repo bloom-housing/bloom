@@ -147,15 +147,15 @@ describe('Script Runner Controller Tests', () => {
         }),
       });
 
-      const res = await request(app.getHttpServer())
+      await request(app.getHttpServer())
         .put(`/scriptRunner/setInitialExpireAfterValues`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
         .expect(200);
+
       expect(logger.log).toBeCalledWith(
         'updating expireAfter for 2 closed listings',
       );
-
       expect(logger.log).toBeCalledWith(
         `updated 3 applications for ${createdClosedListing1.id}`,
       );
@@ -179,5 +179,9 @@ describe('Script Runner Controller Tests', () => {
       });
       expect(afterUpdate3.expireAfter).toBeNull();
     });
+  });
+
+  describe('setIsNewestApplicationValues endpoint', () => {
+    it.todo('should update only the newest applications');
   });
 });
