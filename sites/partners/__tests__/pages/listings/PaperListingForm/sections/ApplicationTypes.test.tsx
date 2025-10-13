@@ -185,6 +185,7 @@ describe("ApplicationTypes", () => {
       const mockCloudinaryUploader = helpers.cloudinaryFileUploader as jest.MockedFunction<
         typeof helpers.cloudinaryFileUploader
       >
+      // eslint-disable-next-line @typescript-eslint/require-await
       mockCloudinaryUploader.mockImplementation(async ({ setCloudinaryData, setProgressValue }) => {
         setProgressValue(100)
         setCloudinaryData({
