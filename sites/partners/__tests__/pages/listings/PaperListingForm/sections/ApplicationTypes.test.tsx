@@ -1,15 +1,43 @@
 import React from "react"
 import { listing } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import userEvent from "@testing-library/user-event"
+import { FormProvider, useForm } from "react-hook-form"
+import { AuthContext } from "@bloom-housing/shared-helpers"
+import { LanguagesEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import ApplicationTypes, {
   phoneMask,
 } from "../../../../../src/components/listings/PaperListingForm/sections/ApplicationTypes"
-import { act, mockNextRouter, render, screen, within } from "../../../../testUtils"
+import { act, mockNextRouter, render, screen, within, waitFor } from "../../../../testUtils"
 import { FormProviderWrapper } from "../../../../components/applications/sections/helpers"
+import * as helpers from "../../../../../src/lib/helpers"
+
+jest.mock("../../../../../src/lib/helpers", () => ({
+  ...jest.requireActual("../../../../../src/lib/helpers"),
+  cloudinaryFileUploader: jest.fn(),
+}))
 
 beforeAll(() => {
   mockNextRouter()
 })
+
+const mockAuthContext = {
+  doJurisdictionsHaveFeatureFlagOn: () => false,
+  getJurisdictionLanguages: () => [LanguagesEnum.en, LanguagesEnum.es],
+}
+
+const listingWithJurisdiction = {
+  ...listing,
+  jurisdictions: { id: "test-jurisdiction-id" },
+}
+
+const FormProviderWithJurisdiction = ({ children }: React.PropsWithChildren) => {
+  const formMethods = useForm({
+    defaultValues: {
+      jurisdictions: { id: "test-jurisdiction-id" },
+    },
+  })
+  return <FormProvider {...formMethods}>{children}</FormProvider>
+}
 
 describe("ApplicationTypes", () => {
   it("should render application types section", () => {
@@ -81,7 +109,6 @@ describe("ApplicationTypes", () => {
       expect(phoneMask("(123) g-45-67")).toEqual("(123) 456-7")
     })
   })
-
   describe("Add Application drawer", () => {
     it("should open and close the paper application drawer", async () => {
       render(
@@ -155,7 +182,6 @@ describe("ApplicationTypes", () => {
     })
 
     it("should disable language selector and save button during file upload, then enable save after upload", async () => {
-      // Mock the cloudinary uploader to simulate successful upload
       const mockCloudinaryUploader = helpers.cloudinaryFileUploader as jest.MockedFunction<
         typeof helpers.cloudinaryFileUploader
       >
@@ -183,39 +209,34 @@ describe("ApplicationTypes", () => {
       const addPaperAppButton = screen.getByRole("button", { name: "Add paper application" })
       await act(() => userEvent.click(addPaperAppButton))
 
-      // Select a language
       const languageSelect = screen.getByRole("combobox")
       await act(() => userEvent.selectOptions(languageSelect, "en"))
 
-      // Wait for dropzone to appear
       await waitFor(() => {
         expect(screen.getByText("Upload file")).toBeInTheDocument()
       })
 
-      // Verify save button is disabled before upload
       const saveButton = screen.getByRole("button", { name: "Save" })
       expect(saveButton).toBeDisabled()
 
-      // Mock file upload
-      const file = new File(["test pdf content"], "test.pdf", { type: "application/pdf" })
+      const file = new File(["mocked application pdf content"], "application.pdf", {
+        type: "application/pdf",
+      })
       const dropzone = screen.getByLabelText("Upload file")
 
-      // Upload the PDF
+
       await act(async () => {
         await userEvent.upload(dropzone, file)
       })
 
-      // Wait for upload to complete
       await waitFor(() => {
         expect(languageSelect).toBeDisabled()
       })
 
-      // Verify save button is enabled after upload completes
       await waitFor(() => {
         expect(saveButton).not.toBeDisabled()
       })
 
-      // Click save and verify drawer closes
       await act(() => userEvent.click(saveButton))
       expect(
         screen.queryByRole("heading", { name: "Add paper application" })
