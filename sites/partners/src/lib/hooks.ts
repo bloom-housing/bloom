@@ -671,19 +671,21 @@ export function useLotteryActivityLog(listingId: string) {
 export function useWatchOnFormNumberFieldsChange(
   fieldValuesToWatch: number[],
   fieldToTriggerWatch: string[],
-  trigger: (name?: string | string[]) => Promise<boolean>
+  trigger?: (name?: string | string[]) => Promise<boolean>
 ) {
   useEffect(() => {
-    if (fieldValuesToWatch.some((value) => value) && trigger) {
-      const timeoutId = setTimeout(() => {
-        try {
-          void trigger(fieldToTriggerWatch)
-        } catch (error) {
-          console.debug("Form trigger error (likely component unmounted):", error)
-        }
-      }, 0)
-
-      return () => clearTimeout(timeoutId)
+    if (!trigger || !fieldValuesToWatch.some((value) => value)) {
+      return
     }
+
+    const timeoutId = setTimeout(() => {
+      try {
+        void trigger(fieldToTriggerWatch)
+      } catch (error) {
+        console.debug("Form trigger error (likely component unmounted):", error)
+      }
+    }, 0)
+
+    return () => clearTimeout(timeoutId)
   }, [fieldToTriggerWatch, fieldValuesToWatch, trigger])
 }
