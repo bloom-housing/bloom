@@ -662,39 +662,41 @@ const ApplicationTypes = ({ listing, requiredFields }: ApplicationTypesProps) =>
         <Drawer.Content>
           <Card>
             <Card.Section>
-              {cloudinaryData.url === "" && (
-                <div className="field">
-                  <p className="mb-2">
-                    <label className="label">{t("t.language")}</label>
-                  </p>
-                  <Select
-                    id={"paperApplicationLanguage"}
-                    name="paperApplicationLanguage"
-                    options={[
-                      ...availableJurisdictionLanguages.map((item) => ({
-                        label: t(`languages.${item}`),
-                        value: item,
-                      })),
-                    ]}
-                    placeholder={t("t.selectLanguage")}
-                    defaultValue={selectedLanguage}
-                    validation={{ required: true }}
-                    inputProps={{
-                      onChange: (e) => {
-                        setSelectedLanguage(e.target?.value)
-                      },
-                    }}
-                  />
-                </div>
+              <div className="field">
+                <p className="mb-2">
+                  <label className="label">{t("t.language")}</label>
+                </p>
+                <Select
+                  disabled={progressValue === 100}
+                  id={"paperApplicationLanguage"}
+                  name="paperApplicationLanguage"
+                  options={[
+                    ...availableJurisdictionLanguages.map((item) => ({
+                      label: t(`languages.${item}`),
+                      value: item,
+                    })),
+                  ]}
+                  placeholder={t("t.selectLanguage")}
+                  defaultValue={selectedLanguage}
+                  validation={{ required: true }}
+                  inputProps={{
+                    onChange: (e) => {
+                      setSelectedLanguage(e.target?.value)
+                    },
+                  }}
+                />
+              </div>
+              {selectedLanguage && (
+                <Dropzone
+                  id="listing-paper-application-upload"
+                  label={t("t.uploadFile")}
+                  helptext={t("listings.pdfHelperText")}
+                  uploader={pdfUploader}
+                  accept="application/pdf"
+                  progress={progressValue}
+                />
               )}
-              <Dropzone
-                id="listing-paper-application-upload"
-                label={t("t.uploadFile")}
-                helptext={t("listings.pdfHelperText")}
-                uploader={pdfUploader}
-                accept="application/pdf"
-                progress={progressValue}
-              />
+
               {cloudinaryData.url !== "" && (
                 <MinimalTable
                   headers={paperApplicationsTableHeaders}
@@ -706,6 +708,7 @@ const ApplicationTypes = ({ listing, requiredFields }: ApplicationTypesProps) =>
         </Drawer.Content>
         <Drawer.Footer>
           <Button
+            disabled={progressValue < 100}
             key={0}
             onClick={() => {
               savePaperApplication()
