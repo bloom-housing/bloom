@@ -8,6 +8,11 @@ ALTER TYPE "multiselect_questions_status_enum_new" RENAME TO "multiselect_questi
 DROP TYPE "multiselect_questions_status_enum_old";
 COMMIT;
 
+-- AlterTable
+ALTER TABLE "multiselect_questions" ALTER COLUMN "status" SET DEFAULT 'draft';
+
+-- The following Drops have to do with mapping ApplicationSelections and ApplicationSelectionsOptions to snake_case naming
+
 -- DropForeignKey
 ALTER TABLE "ApplicationSelectionOptions" DROP CONSTRAINT "ApplicationSelectionOptions_address_holder_address_id_fkey";
 
@@ -22,9 +27,6 @@ ALTER TABLE "ApplicationSelections" DROP CONSTRAINT "ApplicationSelections_appli
 
 -- DropForeignKey
 ALTER TABLE "ApplicationSelections" DROP CONSTRAINT "ApplicationSelections_multiselect_question_id_fkey";
-
--- AlterTable
-ALTER TABLE "multiselect_questions" ALTER COLUMN "status" SET DEFAULT 'draft';
 
 -- DropTable
 DROP TABLE "ApplicationSelectionOptions";

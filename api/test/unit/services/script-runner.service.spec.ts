@@ -917,7 +917,7 @@ describe('Testing script runner service', () => {
     });
   });
 
-  it.only('should migrate application msq selection data to refactored schema', async () => {
+  it('should migrate application msq selection data to refactored schema', async () => {
     const id = randomUUID();
     const scriptName =
       'migrate multiselect application data to refactor with page 1 of size 5000';

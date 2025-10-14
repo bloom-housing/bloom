@@ -802,7 +802,7 @@ export class ScriptRunnerService {
           ? (programs as unknown[] as ApplicationMultiselectQuestion[])
           : [],
       );
-      console.log(`Application ID: ${id}`);
+
       for (const {
         key,
         claimed,
@@ -832,11 +832,11 @@ export class ScriptRunnerService {
         const selectedOptions = [];
         if (!multiselectQuestion) {
           console.log(
-            `Could not find MSQ with id: ${multiselectQuestionId} or key: ${key}`,
+            `Could not find MSQ with id: ${multiselectQuestionId} or key: ${key} for application with id: ${id}`,
           );
           continue;
         }
-        console.log(`Found MSQ ${multiselectQuestion.id}`);
+
         for (const selected of options.filter(({ checked }) => checked)) {
           const selectedName = selected.key
             ?.trim()
@@ -855,7 +855,9 @@ export class ScriptRunnerService {
                 ?.toLowerCase() === selectedName,
           );
           if (!multiselectOption) {
-            console.log(`Could not match MSQ option with key: ${selected.key}`);
+            console.log(
+              `Could not match MSQ option with key: ${selected.key} for MSQ with id: ${multiselectQuestion.id}`,
+            );
             continue;
           }
 
