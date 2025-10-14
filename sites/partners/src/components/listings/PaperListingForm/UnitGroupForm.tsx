@@ -10,9 +10,14 @@ import {
   t,
 } from "@bloom-housing/ui-components"
 import { useCallback, useEffect, useMemo, useState } from "react"
-import { useForm, useFormContext, useWatch } from "react-hook-form"
+import { useForm, useWatch } from "react-hook-form"
 import { DrawerHeader } from "@bloom-housing/ui-seeds/src/overlays/Drawer"
-import { useAmiChartList, useUnitPriorityList, useUnitTypeList } from "../../../lib/hooks"
+import {
+  useAmiChartList,
+  useUnitPriorityList,
+  useUnitTypeList,
+  useWatchOnFormNumberFieldsChange,
+} from "../../../lib/hooks"
 import {
   AmiChart,
   EnumUnitGroupAmiLevelMonthlyRentDeterminationType,
@@ -54,9 +59,20 @@ const UnitGroupForm = ({
     action: "",
   }
 
-  const formMethods = useFormContext()
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { watch } = formMethods
+  const {
+    register,
+    formState: { errors },
+    trigger,
+    setValue,
+    control,
+    getValues,
+    reset,
+    watch,
+  } = useForm({
+    mode: "onChange",
+    shouldFocusError: false,
+  })
   const jurisdiction: string = watch("jurisdictions.id")
   /**
    * fetch form options
@@ -64,9 +80,6 @@ const UnitGroupForm = ({
   const { data: amiCharts = [] } = useAmiChartList(jurisdiction)
   const { data: unitPriorities = [] } = useUnitPriorityList()
   const { data: unitTypes = [] } = useUnitTypeList()
-
-  // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, errors, trigger, setValue, control, getValues, reset } = useForm()
 
   // Controls for validating occupancy
   const minOccupancy: number = useWatch({ control, name: "minOccupancy" })
@@ -100,6 +113,30 @@ const UnitGroupForm = ({
     { label: "4", value: "4" },
     { label: "5", value: "5" },
   ]
+
+  const fieldValuesToWatch = [
+    minOccupancy,
+    maxOccupancy,
+    sqFeetMin,
+    sqFeetMax,
+    floorMin,
+    floorMax,
+    bathroomMin,
+    bathroomMax,
+  ]
+
+  const fieldToTriggerWatch = [
+    "minOccupancy",
+    "maxOccupancy",
+    "sqFeetMin",
+    "sqFeetMax",
+    "floorMin",
+    "floorMax",
+    "bathroomMin",
+    "bathroomMax",
+  ]
+
+  useWatchOnFormNumberFieldsChange(fieldValuesToWatch, fieldToTriggerWatch, trigger)
 
   // sets the options for the ami charts
   useEffect(() => {
@@ -340,17 +377,10 @@ const UnitGroupForm = ({
                     label={t("listings.unit.minOccupancy")}
                     id="minOccupancy"
                     name="minOccupancy"
-                    register={register}
                     options={numberOptions(numberOccupancyOptions, 1)}
                     errorMessage={t("errors.minGreaterThanMaxOccupancyError")}
                     error={fieldHasError(errors?.minOccupancy)}
                     validation={{ max: maxOccupancy || numberOccupancyOptions }}
-                    inputProps={{
-                      onChange: () => {
-                        void trigger("minOccupancy")
-                        void trigger("maxOccupancy")
-                      },
-                    }}
                   />
                 </Grid.Cell>
                 <Grid.Cell>
@@ -358,18 +388,11 @@ const UnitGroupForm = ({
                     id="maxOccupancy"
                     name="maxOccupancy"
                     label={t("listings.unit.maxOccupancy")}
-                    register={register}
                     controlClassName="control"
                     options={numberOptions(numberOccupancyOptions, 1)}
                     errorMessage={t("errors.maxLessThanMinOccupancyError")}
                     error={fieldHasError(errors?.maxOccupancy)}
                     validation={{ min: minOccupancy }}
-                    inputProps={{
-                      onChange: () => {
-                        void trigger("minOccupancy")
-                        void trigger("maxOccupancy")
-                      },
-                    }}
                   />
                 </Grid.Cell>
               </Grid.Row>
@@ -379,15 +402,10 @@ const UnitGroupForm = ({
                     label={t("listings.unit.minSquareFootage")}
                     id="sqFeetMin"
                     name="sqFeetMin"
-                    register={register}
                     type="number"
                     errorMessage={t("errors.minGreaterThanMaxFootageError")}
                     error={fieldHasError(errors?.sqFeetMin)}
                     validation={{ max: sqFeetMax }}
-                    onChange={() => {
-                      void trigger("sqFeetMin")
-                      void trigger("sqFeetMax")
-                    }}
                   />
                 </Grid.Cell>
                 <Grid.Cell>
@@ -395,15 +413,10 @@ const UnitGroupForm = ({
                     label={t("listings.unit.maxSquareFootage")}
                     id="sqFeetMax"
                     name="sqFeetMax"
-                    register={register}
                     type="number"
                     errorMessage={t("errors.maxLessThanMinFootageError")}
                     error={fieldHasError(errors?.sqFeetMax)}
                     validation={{ min: sqFeetMin }}
-                    onChange={() => {
-                      void trigger("sqFeetMin")
-                      void trigger("sqFeetMax")
-                    }}
                   />
                 </Grid.Cell>
               </Grid.Row>
@@ -415,16 +428,9 @@ const UnitGroupForm = ({
                     name="floorMin"
                     id="floorMin"
                     options={numberOptions(numberFloorsOptions)}
-                    register={register}
                     errorMessage={t("errors.minGreaterThanMaxFloorError")}
                     error={fieldHasError(errors?.floorMin)}
                     validation={{ max: floorMax || numberFloorsOptions }}
-                    inputProps={{
-                      onChange: () => {
-                        void trigger("floorMin")
-                        void trigger("floorMax")
-                      },
-                    }}
                   />
                 </Grid.Cell>
                 <Grid.Cell>
@@ -434,16 +440,9 @@ const UnitGroupForm = ({
                     name="floorMax"
                     id="floorMax"
                     options={numberOptions(numberFloorsOptions)}
-                    register={register}
                     errorMessage={t("errors.maxLessThanMinFloorError")}
                     error={fieldHasError(errors?.floorMax)}
                     validation={{ min: floorMin }}
-                    inputProps={{
-                      onChange: () => {
-                        void trigger("floorMin")
-                        void trigger("floorMax")
-                      },
-                    }}
                   />
                 </Grid.Cell>
               </Grid.Row>
@@ -455,16 +454,9 @@ const UnitGroupForm = ({
                     name="bathroomMin"
                     id="bathroomMin"
                     options={bathroomOptions}
-                    register={register}
                     errorMessage={t("errors.minGreaterThanMaxBathroomsError")}
                     error={fieldHasError(errors.bathroomMin)}
                     validation={{ max: bathroomMax }}
-                    inputProps={{
-                      onChange: () => {
-                        void trigger("bathroomMin")
-                        void trigger("bathroomMax")
-                      },
-                    }}
                   />
                 </Grid.Cell>
                 <Grid.Cell>
@@ -474,16 +466,9 @@ const UnitGroupForm = ({
                     name="bathroomMax"
                     id="bathroomMax"
                     options={bathroomOptions}
-                    register={register}
                     errorMessage={t("errors.maxLessThanMinBathroomsError")}
                     error={fieldHasError(errors.bathroomMax)}
                     validation={{ min: bathroomMin }}
-                    inputProps={{
-                      onChange: () => {
-                        void trigger("bathroomMin")
-                        void trigger("bathroomMax")
-                      },
-                    }}
                   />
                 </Grid.Cell>
               </Grid.Row>
