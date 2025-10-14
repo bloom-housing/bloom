@@ -674,18 +674,24 @@ export function useWatchOnFormNumberFieldsChange(
   trigger?: (name?: string | string[]) => Promise<boolean>
 ) {
   useEffect(() => {
-    if (!trigger || !fieldValuesToWatch.some((value) => value)) {
+    // Guard against undefined trigger or missing field values
+    if (!trigger || typeof trigger !== "function" || !fieldValuesToWatch.some((value) => value)) {
       return
     }
 
     const timeoutId = setTimeout(() => {
       try {
-        void trigger(fieldToTriggerWatch)
+        // Double-check trigger is still defined before calling
+        if (trigger && typeof trigger === "function") {
+          void trigger(fieldToTriggerWatch)
+        }
       } catch (error) {
+        // Silently catch errors during unmount or form state issues
         console.debug("Form trigger error (likely component unmounted):", error)
       }
     }, 0)
 
     return () => clearTimeout(timeoutId)
-  }, [fieldToTriggerWatch, fieldValuesToWatch, trigger])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fieldToTriggerWatch.join(","), fieldValuesToWatch.join(","), trigger])
 }
