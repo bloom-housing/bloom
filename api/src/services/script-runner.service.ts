@@ -777,6 +777,7 @@ export class ScriptRunnerService {
 
     const skip = calculateSkip(pageSize || 5_000, page || 1);
     const take = calculateTake(pageSize || 5_000);
+    console.log(`START OF RUN ${page ? skip : 1}:${skip + take}\n\n\n\n`);
     const applications = await this.prisma.applications.findMany({
       include: {
         listings: {
@@ -832,7 +833,7 @@ export class ScriptRunnerService {
         const selectedOptions = [];
         if (!multiselectQuestion) {
           console.log(
-            `Could not find MSQ with id: ${multiselectQuestionId} or key: ${key} for application with id: ${id}`,
+            `Could not find MSQ with id: "${multiselectQuestionId}" or key: "${key}" for application with id: "${id}"`,
           );
           continue;
         }
@@ -856,7 +857,7 @@ export class ScriptRunnerService {
           );
           if (!multiselectOption) {
             console.log(
-              `Could not match MSQ option with key: ${selected.key} for MSQ with id: ${multiselectQuestion.id}`,
+              `Could not match MSQ option with key: "${selected.key}" for MSQ with id: "${multiselectQuestion.id}"`,
             );
             continue;
           }
@@ -873,7 +874,7 @@ export class ScriptRunnerService {
             multiselectOptionId: multiselectOption.id,
           };
 
-          selected.extraData.forEach(async ({ key, value }) => {
+          for (const { key, value } of selected.extraData) {
             if (key === 'addressHolderAddress' || key === 'address') {
               const address = await this.prisma.address.create({ data: value });
               selectedOptionBody.addressHolderAddressId = address.id;
@@ -887,8 +888,7 @@ export class ScriptRunnerService {
             } else if (key === 'geocodingVerified') {
               selectedOptionBody.isGeocodingVerified = Boolean(value);
             }
-          });
-
+          }
           selectedOptions.push(selectedOptionBody);
         }
         const selectedBody = {
@@ -902,12 +902,7 @@ export class ScriptRunnerService {
         });
       }
     }
-
-    console.log(
-      `END OF RUN ${skip * take - (skip - 1) * take}:${
-        skip * take
-      }\n\n\n\n\n\n\n\n`,
-    );
+    console.log(`END OF RUN ${page ? skip : 1}:${skip + take}\n\n\n\n`);
 
     await this.markScriptAsComplete(
       `migrate multiselect application data to refactor with page ${
