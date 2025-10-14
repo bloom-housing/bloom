@@ -154,11 +154,12 @@ const ApplicationMultiselectQuestionStep = ({
       conductor.currentStep.save([body.current])
     }
     // Update to the next page if we have more pages
-    if (page !== questions.length) {
+    if (page !== questions.length && !conductor.returnToReview) {
       setVerifyAddressStep(0)
       setVerifyAddress(false)
       setPage(page + 1)
       body.current = null
+      window.scrollTo({ top: 0 })
       return
     }
     // Otherwise complete the section and move to the next URL

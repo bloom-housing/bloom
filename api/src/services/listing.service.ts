@@ -269,12 +269,13 @@ export class ListingService implements OnModuleInit {
     userRoles: UserRoleEnum | UserRoleEnum[],
     listingId?: string,
     jurisId?: string,
-    getPublicUrl = false,
-  ): Promise<{ emails: string[]; publicUrl?: string | null }> {
+  ): Promise<{ emails: string[] }> {
     // determine where clause(s)
     const userRolesWhere: Prisma.UserAccountsWhereInput[] = [];
     if (userRoles.includes(UserRoleEnum.admin))
       userRolesWhere.push({ userRoles: { isAdmin: true } });
+    if (userRoles.includes(UserRoleEnum.supportAdmin))
+      userRolesWhere.push({ userRoles: { isSupportAdmin: true } });
     if (userRoles.includes(UserRoleEnum.partner))
       userRolesWhere.push({
         userRoles: { isPartner: true },
@@ -286,15 +287,16 @@ export class ListingService implements OnModuleInit {
         jurisdictions: { some: { id: jurisId } },
       });
     }
+    if (userRoles.includes(UserRoleEnum.limitedJurisdictionAdmin)) {
+      userRolesWhere.push({
+        userRoles: { isLimitedJurisdictionalAdmin: true },
+        jurisdictions: { some: { id: jurisId } },
+      });
+    }
 
     const userResults = await this.prisma.userAccounts.findMany({
-      include: {
-        jurisdictions: {
-          select: {
-            id: true,
-            publicUrl: getPublicUrl,
-          },
-        },
+      select: {
+        email: true,
       },
       where: {
         OR: userRolesWhere,
@@ -302,13 +304,9 @@ export class ListingService implements OnModuleInit {
     });
 
     // account for users having access to multiple jurisdictions
-    const publicUrl = getPublicUrl
-      ? userResults[0]?.jurisdictions?.find((juris) => juris.id === jurisId)
-          ?.publicUrl
-      : null;
     const userEmails: string[] = [];
     userResults?.forEach((user) => user?.email && userEmails.push(user.email));
-    return { emails: userEmails, publicUrl };
+    return { emails: userEmails };
   }
 
   public async listingApprovalNotify(params: {
@@ -322,6 +320,7 @@ export class ListingService implements OnModuleInit {
     const nonApprovingRoles: UserRoleEnum[] = [UserRoleEnum.partner];
     if (!params.approvingRoles.includes(UserRoleEnum.jurisdictionAdmin))
       nonApprovingRoles.push(UserRoleEnum.jurisdictionAdmin);
+
     if (
       params.status === ListingsStatusEnum.pendingReview &&
       params.previousStatus !== ListingsStatusEnum.pendingReview
@@ -368,16 +367,27 @@ export class ListingService implements OnModuleInit {
         params.previousStatus === ListingsStatusEnum.pending
       ) {
         const userInfo = await this.getUserEmailInfo(
-          nonApprovingRoles,
+          [
+            UserRoleEnum.partner,
+            UserRoleEnum.admin,
+            UserRoleEnum.jurisdictionAdmin,
+            UserRoleEnum.limitedJurisdictionAdmin,
+            UserRoleEnum.supportAdmin,
+          ],
           params.listingInfo.id,
           params.jurisId,
-          true,
         );
+        const jurisdiction = await this.prisma.jurisdictions.findFirst({
+          select: {
+            publicUrl: true,
+          },
+          where: { id: params.jurisId },
+        });
         await this.emailService.listingApproved(
           { id: params.jurisId },
           { id: params.listingInfo.id, name: params.listingInfo.name },
           userInfo.emails,
-          userInfo.publicUrl,
+          jurisdiction?.publicUrl || '',
         );
       }
     }
@@ -1591,9 +1601,14 @@ export class ListingService implements OnModuleInit {
 
     const userRoles =
       requestingUser?.userRoles?.isAdmin ||
+      requestingUser?.userRoles?.isSupportAdmin ||
       (requestingUser?.userRoles?.isJurisdictionalAdmin &&
         duplicateListingPermissions?.includes(
           UserRoleEnum.jurisdictionAdmin,
+        )) ||
+      (requestingUser?.userRoles?.isLimitedJurisdictionalAdmin &&
+        duplicateListingPermissions?.includes(
+          UserRoleEnum.limitedJurisdictionAdmin,
         )) ||
       (requestingUser?.userRoles?.isPartner &&
         duplicateListingPermissions?.includes(UserRoleEnum.partner))
@@ -1617,7 +1632,8 @@ export class ListingService implements OnModuleInit {
 
     //manually check for juris/listing mismatch since logic above is forcing admin permissioning
     if (
-      (requestingUser?.userRoles?.isJurisdictionalAdmin &&
+      ((requestingUser?.userRoles?.isJurisdictionalAdmin ||
+        requestingUser?.userRoles?.isLimitedJurisdictionalAdmin) &&
         !requestingUser?.jurisdictions?.some(
           (juris) => juris.id === storedListing.jurisdictionId,
         )) ||
