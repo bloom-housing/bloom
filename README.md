@@ -137,6 +137,25 @@ As a reviewer on a PR, try not to leave only comments, but a clear next step act
 
 ## CI/CD
 
+### Github actions
+
+On all pull requests the following github action jobs are triggered
+
+1. API unit tests
+2. API integration tests
+3. Public unit/integration tests
+4. public Cypress tests
+5. Partner unit/integration tests
+6. partner Cypress tests
+
+Configuration for all of these can be found in the `.github/workflows` directory. For additional investigation of cypress test failures you can change the `record` flag in the respective yml file to true and find the recordings in [cypress cloud](https://cloud.cypress.io/).
+
+### GitLeaks
+
+[Gitleaks](https://gitleaks.io/) is enabled for this repo. This scans for any potentially leaked secrets on all pull requests to the main branch via a github action.
+
+If this job fails on your pull request please notify the team of the flagged secret and we can then triage if a secret needs to be rotated
+
 ### Dependabot
 
 Dependabot is enabled for this repo. Dependabot is responsible for raising security and version upgrade PRs for the application's dependencies.
