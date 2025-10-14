@@ -7513,6 +7513,7 @@ export enum FeatureFlagEnum {
   "enableUnitGroups" = "enableUnitGroups",
   "enableUtilitiesIncluded" = "enableUtilitiesIncluded",
   "enableWaitlistAdditionalFields" = "enableWaitlistAdditionalFields",
+  "enableWhatToExpectAdditionalField" = "enableWhatToExpectAdditionalField",
   "enableV2MSQ" = "enableV2MSQ",
   "example" = "example",
   "hideCloseListingButton" = "hideCloseListingButton",
