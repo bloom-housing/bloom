@@ -1,0 +1,103 @@
+services:
+  db:
+    image: docker.io/postgres:18
+    restart: never
+    expose:
+      - "5432"
+    environment:
+      POSTGRES_PASSWORD: example
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready", "--username=postgres"]
+      interval: "2s"
+      timeout: "1s"
+      retries: 20
+      start_period: "1s"
+
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    restart: never
+    expose:
+      - "3100"
+    ports:
+      - "3100:3100"
+    environment:
+      PORT: 3100
+      NODE_ENV: "production"
+      APP_SECRET: "totally a secret"
+      DATABASE_URL: "postgres://postgres:example@db:5432/bloom_prisma"
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://127.0.0.1:3100/"]
+      interval: "2s"
+      timeout: "1s"
+      retries: 20
+      start_period: "1s"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  dbseed:
+    build:
+      context: ./api
+      dockerfile: Dockerfile.dbseed.dev
+    restart: never
+    environment:
+      DATABASE_URL: "postgres://postgres:example@db:5432/bloom_prisma"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  partners:
+    build:
+      context: .
+      dockerfile: Dockerfile.sites.partners
+    restart: never
+    expose:
+      - "3001"
+    ports:
+      - "3001:3001"
+    environment:
+      NODE_ENV: "production"
+      NEXTJS_PORT: 3001
+      BACKEND_API_BASE: "http://api:3100"
+      LISTINGS_QUERY: "/listings"
+    depends_on:
+      dbseed:
+        condition: service_completed_successfully
+
+  public:
+    build:
+      context: .
+      dockerfile: Dockerfile.sites.public
+    restart: never
+    expose:
+      - "3002"
+    ports:
+      - "3002:3002"
+    environment:
+      NODE_ENV: "production"
+      NEXTJS_PORT: 3002
+      BACKEND_API_BASE: "http://api:3100"
+      BACKEND_API_BASE_NEW: "http://api:3100"
+      LISTINGS_QUERY: "/listings"
+      MAX_BROWSE_LISTINGS: 10
+      HOUSING_COUNSELOR_SERVICE_URL: "/get-assistance"
+
+      JURISDICTION_NAME: "Bloomington"
+      CLOUDINARY_CLOUD_NAME: "exygy"
+
+      LANGUAGES: "en,es,zh,vi,tl"
+      RTL_LANGUAGES: "ar"
+
+      IDLE_TIEMOUT: 5      # seconds
+      CACHE_REVALIDATE: 30 # seconds
+
+      SHOW_PUBLIC_LOTTERY: "TRUE"
+      SHOW_MANDATED_ACCOUNTS: "FALSE"
+      SHOW_PDWLESS: "FALSE"
+      SHOW_NEW_SEEDS_DESIGNS: "FALSE"
+    depends_on:
+      dbseed:
+        condition: service_completed_successfully
+
