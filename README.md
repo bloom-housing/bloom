@@ -93,6 +93,11 @@ The database is seeded with the `yarn:dbseed:development` script.
 - Start the deployment: `docker-compose up`
 - Stop the deployment: `docker-compose down`
 
+Open the sites:
+
+- partners: http://localhost:3001
+- public: http://localhost:3002
+
 ### Bloom UIC development
 
 Because Bloom's ui-components package is a separate open source repository, developing in Bloom while concurrently iterating in ui-components requires linking the folders with the following steps:
