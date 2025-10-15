@@ -1,4 +1,4 @@
-import { useCallback, useContext, useState } from "react"
+import { useCallback, useContext, useState, useEffect } from "react"
 import useSWR from "swr"
 import qs from "qs"
 import dayjs from "dayjs"
@@ -667,4 +667,32 @@ export function useLotteryActivityLog(listingId: string) {
     lotteryActivityLogLoading: !error && !data,
     lotteryError: error,
   }
+}
+
+export function useWatchOnFormNumberFieldsChange(
+  fieldValuesToWatch: number[],
+  fieldToTriggerWatch: string[],
+  trigger?: (name?: string | string[]) => Promise<boolean>
+) {
+  useEffect(() => {
+    // Guard against undefined trigger or missing field values
+    // this was causing the cyrpress error Cannot destructure property 'ref' of 'undefined' as it is undefined.
+    // this is related to react hook form
+    if (!trigger || typeof trigger !== "function" || !fieldValuesToWatch.some((value) => value)) {
+      return
+    }
+
+    const timeoutId = setTimeout(() => {
+      try {
+        if (trigger && typeof trigger === "function") {
+          void trigger(fieldToTriggerWatch)
+        }
+      } catch (error) {
+        console.debug("Form trigger error (likely component unmounted):", error)
+      }
+    }, 0)
+
+    return () => clearTimeout(timeoutId)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fieldToTriggerWatch.join(","), fieldValuesToWatch.join(","), trigger])
 }
