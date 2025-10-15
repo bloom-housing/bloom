@@ -195,6 +195,8 @@ describe("add listing", () => {
             switch (featureFlag) {
               case FeatureFlagEnum.swapCommunityTypeWithPrograms:
                 return false
+              case FeatureFlagEnum.enableWhatToExpectAdditionalField:
+                return true
               default:
                 return false
             }
@@ -415,7 +417,6 @@ describe("add listing", () => {
     })
 
     unrequiredFields.forEach((fieldName) => {
-      console.log(fieldName)
       const query = screen.getAllByText(fieldName)
       expect(query[0].textContent).not.toContain("*")
     })

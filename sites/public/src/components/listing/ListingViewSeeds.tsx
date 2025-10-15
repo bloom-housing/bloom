@@ -9,7 +9,7 @@ import {
   ListingsStatusEnum,
   User,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { ExpandableSection, t } from "@bloom-housing/ui-components"
+import { t } from "@bloom-housing/ui-components"
 import {
   AuthContext,
   MessageContext,
@@ -140,15 +140,16 @@ export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: Li
           <div className={"bloom-markdown"}>
             <Markdown>{listing.whatToExpect}</Markdown>
           </div>
-          {listing.whatToExpectAdditionalText && (
-            <div>
-              <ReadMore
-                className={"bloom-markdown"}
-                maxLength={0}
-                content={listing.whatToExpectAdditionalText}
-              />
-            </div>
-          )}
+          {listing.whatToExpectAdditionalText &&
+            isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableWhatToExpectAdditionalField) && (
+              <div>
+                <ReadMore
+                  className={"bloom-markdown"}
+                  maxLength={0}
+                  content={listing.whatToExpectAdditionalText}
+                />
+              </div>
+            )}
         </InfoCard>
       )}
     </>
