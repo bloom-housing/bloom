@@ -2,8 +2,11 @@ import React from "react"
 import { fireEvent } from "@testing-library/react"
 import { rest } from "msw"
 import { setupServer } from "msw/node"
-import { application, listing } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
+import { application, listing, user } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
+import { AuthContext } from "@bloom-housing/shared-helpers"
 import {
+  ApplicationsService,
+  ListingsService,
   Listing,
   ListingsStatusEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -25,6 +28,10 @@ afterAll(() => {
   server.close()
 })
 
+function mockJurisdictionsHaveFeatureFlagOn(_featureFlag: string) {
+  return false
+}
+
 describe("applications", () => {
   it("should render error text when the api call fails", async () => {
     mockNextRouter({ id: "Uvbk5qurpB2WI9V6WnNdH" })
@@ -43,7 +50,19 @@ describe("applications", () => {
         return res(ctx.json({ totalCount: 1 }))
       })
     )
-    const { findByText } = render(<ApplicationsList />)
+    const { findByText } = render(
+      <AuthContext.Provider
+        value={{
+          applicationsService: new ApplicationsService(),
+          listingsService: new ListingsService(),
+          profile: { ...user, listings: [{ id: listing.id }], jurisdictions: [] },
+          doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
+            mockJurisdictionsHaveFeatureFlagOn(featureFlag),
+        }}
+      >
+        <ApplicationsList />
+      </AuthContext.Provider>
+    )
 
     const error = await findByText("An error has occurred.")
     expect(error).toBeInTheDocument()
@@ -69,7 +88,19 @@ describe("applications", () => {
         return res(ctx.json({ totalCount: 1 }))
       })
     )
-    const { getByText, getAllByText, findAllByText } = render(<ApplicationsList />)
+    const { findAllByText, getByText, getAllByText } = render(
+      <AuthContext.Provider
+        value={{
+          applicationsService: new ApplicationsService(),
+          listingsService: new ListingsService(),
+          profile: { ...user, listings: [{ id: listing.id }], jurisdictions: [] },
+          doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
+            mockJurisdictionsHaveFeatureFlagOn(featureFlag),
+        }}
+      >
+        <ApplicationsList />
+      </AuthContext.Provider>
+    )
 
     const header = await findAllByText("Applications")
     expect(header.length).toBeGreaterThan(0)
@@ -182,7 +213,19 @@ describe("applications", () => {
         return res(ctx.json({ totalCount: 1 }))
       })
     )
-    const { findAllByText, getByText } = render(<ApplicationsList />)
+    const { findAllByText, getByText } = render(
+      <AuthContext.Provider
+        value={{
+          applicationsService: new ApplicationsService(),
+          listingsService: new ListingsService(),
+          profile: { ...user, listings: [{ id: listing.id }], jurisdictions: [] },
+          doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
+            mockJurisdictionsHaveFeatureFlagOn(featureFlag),
+        }}
+      >
+        <ApplicationsList />
+      </AuthContext.Provider>
+    )
 
     const header = await findAllByText("Applications")
     expect(header.length).toBeGreaterThan(0)
@@ -218,7 +261,19 @@ describe("applications", () => {
         return res(ctx.json(""))
       })
     )
-    const { findAllByText, queryByText } = render(<ApplicationsList />)
+    const { findAllByText, queryByText } = render(
+      <AuthContext.Provider
+        value={{
+          applicationsService: new ApplicationsService(),
+          listingsService: new ListingsService(),
+          profile: { ...user, listings: [{ id: listing.id }], jurisdictions: [] },
+          doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
+            mockJurisdictionsHaveFeatureFlagOn(featureFlag),
+        }}
+      >
+        <ApplicationsList />
+      </AuthContext.Provider>
+    )
 
     const header = await findAllByText("Applications")
     expect(header.length).toBeGreaterThan(0)
