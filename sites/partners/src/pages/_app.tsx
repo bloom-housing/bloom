@@ -24,10 +24,16 @@ import { translations, overrideTranslations } from "../lib/translations"
 import "../../styles/overrides.scss"
 
 const signInMessage = "Login is required to view this page."
+const skipLoginRoutes = [
+  "/forgot-password",
+  "/reset-password",
+  "/users/confirm",
+  "/users/terms",
+  "/unauthorized",
+]
 
 function BloomApp({ Component, router, pageProps }: AppProps) {
   const { locale } = router
-  const skipLoginRoutes = ["/forgot-password", "/reset-password", "/users/confirm", "/users/terms"]
 
   // fix for rehydration
   const [hasMounted, setHasMounted] = useState(false)
