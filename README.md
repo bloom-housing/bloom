@@ -90,8 +90,8 @@ Desktop](https://docs.docker.com/desktop/).
 
 The database is seeded with the `yarn:dbseed:development` script.
 
-- Start the deployment: `docker-compose up`
-- Stop the deployment: `docker-compose down`
+- Start the deployment: `docker compose up`
+- Stop the deployment: `docker compose down`
 
 Open the sites:
 
