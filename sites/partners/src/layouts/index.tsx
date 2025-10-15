@@ -52,6 +52,8 @@ const Layout = (props) => {
     })
   }
 
+  // Change this file in line <FooterNav copyright={`© ${currentYear} • All Rights Reserved`} />
+
   return (
     <div className="site-wrapper">
       <div className="site-content site-content--wide-content">
