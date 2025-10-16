@@ -5,6 +5,7 @@ import {
   ApplicationStatusEnum,
   ApplicationSubmissionTypeEnum,
   LanguagesEnum,
+  ListingsStatusEnum,
   MultiselectQuestionsApplicationSectionEnum,
   PrismaClient,
   ReviewOrderTypeEnum,
@@ -2350,6 +2351,223 @@ describe('Testing script runner service', () => {
       },
       where: {
         id: { in: ['new id'] },
+      },
+    });
+  });
+
+  it('should migrate multiselect data to refactored schema', async () => {
+    const id = randomUUID();
+    const scriptName = 'migrate multiselect data to refactor';
+
+    prisma.scriptRuns.findUnique = jest.fn().mockResolvedValue(null);
+    prisma.scriptRuns.create = jest.fn().mockResolvedValue(null);
+    prisma.scriptRuns.update = jest.fn().mockResolvedValue(null);
+    prisma.multiselectQuestions.findMany = jest.fn().mockResolvedValue([
+      {
+        id: 'question1',
+        listings: [{ listings: { status: ListingsStatusEnum.active } }],
+        optOutText: 'No',
+        options: [{ exclusive: true, ordinal: 1, text: 'option name' }],
+      },
+    ]);
+    prisma.multiselectQuestions.update = jest.fn().mockResolvedValue(null);
+    prisma.multiselectOptions.createMany = jest.fn().mockResolvedValue(null);
+    prisma.multiselectOptions.create = jest.fn().mockResolvedValue(null);
+
+    const res = await service.migrateMultiselectDataToRefactor({
+      user: {
+        id,
+      } as unknown as User,
+    } as unknown as ExpressRequest);
+
+    expect(res.success).toBe(true);
+
+    expect(prisma.scriptRuns.findUnique).toHaveBeenCalledWith({
+      where: {
+        scriptName,
+      },
+    });
+    expect(prisma.scriptRuns.create).toHaveBeenCalledWith({
+      data: {
+        scriptName,
+        triggeringUser: id,
+      },
+    });
+    expect(prisma.scriptRuns.update).toHaveBeenCalledWith({
+      data: {
+        didScriptRun: true,
+        triggeringUser: id,
+      },
+      where: {
+        scriptName,
+      },
+    });
+
+    expect(prisma.multiselectQuestions.findMany).toBeCalledWith({
+      include: {
+        listings: {
+          include: {
+            listings: {
+              select: {
+                status: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    expect(prisma.multiselectQuestions.update).toHaveBeenCalledWith({
+      data: { isExclusive: true, status: 'active' },
+      where: { id: 'question1' },
+    });
+    expect(prisma.multiselectOptions.createMany).toHaveBeenCalledWith({
+      data: [
+        {
+          isOptOut: false,
+          multiselectQuestionId: 'question1',
+          name: 'option name',
+          ordinal: 1,
+        },
+      ],
+    });
+    expect(prisma.multiselectOptions.create).toHaveBeenCalledWith({
+      data: {
+        isOptOut: true,
+        multiselectQuestionId: 'question1',
+        name: 'No',
+        ordinal: 2,
+      },
+    });
+  });
+
+  it('should migrate application msq selection data to refactored schema', async () => {
+    const id = randomUUID();
+    const scriptName =
+      'migrate multiselect application data to refactor with page 1 of size 5000';
+
+    prisma.scriptRuns.findUnique = jest.fn().mockResolvedValue(null);
+    prisma.scriptRuns.create = jest.fn().mockResolvedValue(null);
+    prisma.scriptRuns.update = jest.fn().mockResolvedValue(null);
+    prisma.applications.findMany = jest.fn().mockResolvedValue([
+      {
+        id: 'application1',
+        listings: { jurisdictions: { name: 'jurisdiction name' } },
+        preferences: [
+          {
+            claimed: true,
+            key: 'questiom name',
+            multiselectQuestionId: 'question1',
+            options: [
+              {
+                checked: true,
+                extraData: [
+                  {
+                    key: 'addressHolderAddress',
+                    value: {
+                      city: 'city',
+                      state: 'state',
+                      street: 'street',
+                      zipCode: 'zipCode',
+                    },
+                  },
+                  {
+                    key: 'addressHolderName',
+                    value: 'name',
+                  },
+                  {
+                    key: 'addressHolderRelationship',
+                    value: 'spouse',
+                  },
+                  {
+                    key: 'geocodingVerified',
+                    value: true,
+                  },
+                ],
+                key: 'option name',
+              },
+            ],
+          },
+        ],
+        programs: [],
+      },
+    ]);
+    prisma.multiselectQuestions.findFirst = jest.fn().mockResolvedValue({
+      id: 'question1',
+      multiselectOptions: [{ id: 'option1', ordinal: 1, name: 'option name' }],
+    });
+    prisma.address.create = jest.fn().mockResolvedValue({ id: 'address1' });
+    prisma.applicationSelections.create = jest.fn().mockResolvedValue(null);
+
+    const res = await service.migrateMultiselectApplicationDataToRefactor({
+      user: {
+        id,
+      } as unknown as User,
+    } as unknown as ExpressRequest);
+
+    expect(res.success).toBe(true);
+
+    expect(prisma.scriptRuns.findUnique).toHaveBeenCalledWith({
+      where: {
+        scriptName,
+      },
+    });
+    expect(prisma.scriptRuns.create).toHaveBeenCalledWith({
+      data: {
+        scriptName,
+        triggeringUser: id,
+      },
+    });
+    expect(prisma.scriptRuns.update).toHaveBeenCalledWith({
+      data: {
+        didScriptRun: true,
+        triggeringUser: id,
+      },
+      where: {
+        scriptName,
+      },
+    });
+
+    expect(prisma.applications.findMany).toBeCalledWith({
+      include: {
+        listings: {
+          include: {
+            jurisdictions: {
+              select: {
+                name: true,
+              },
+            },
+          },
+        },
+      },
+      skip: 0,
+      take: 5_000,
+      orderBy: { createdAt: 'asc' },
+    });
+
+    expect(prisma.multiselectQuestions.findFirst).toHaveBeenCalledWith({
+      include: { multiselectOptions: true },
+      where: { id: 'question1' },
+    });
+
+    expect(prisma.applicationSelections.create).toHaveBeenCalledWith({
+      data: {
+        applicationId: 'application1',
+        hasOptedOut: false,
+        multiselectQuestionId: 'question1',
+        selections: {
+          createMany: {
+            data: [
+              {
+                addressHolderAddressId: 'address1',
+                addressHolderName: 'name',
+                addressHolderRelationship: 'spouse',
+                isGeocodingVerified: true,
+                multiselectOptionId: 'option1',
+              },
+            ],
+          },
+        },
       },
     });
   });

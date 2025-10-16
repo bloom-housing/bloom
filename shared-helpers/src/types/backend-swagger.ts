@@ -2789,6 +2789,44 @@ export class ScriptRunnerService {
       axios(configs, resolve, reject)
     })
   }
+  /**
+   * A script to migrate MSQ data and options to refactored schema
+   */
+  migrateMultiselectDataToRefactor(options: IRequestOptions = {}): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/scriptRunner/migrateMultiselectDataToRefactor"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = null
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * A script to migrate application MSQ selections to refactored schema
+   */
+  migrateMultiselectApplicationDataToRefactor(
+    params: {
+      /** requestBody */
+      body?: PaginationDTO
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/scriptRunner/migrateMultiselectApplicationDataToRefactor"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
 }
 
 export class FeatureFlagsService {
@@ -7481,6 +7519,14 @@ export interface CommunityTypeDTO {
 
   /**  */
   description?: string
+}
+
+export interface PaginationDTO {
+  /**  */
+  page?: number
+
+  /**  */
+  pageSize?: number
 }
 
 export interface FeatureFlagAssociate {
