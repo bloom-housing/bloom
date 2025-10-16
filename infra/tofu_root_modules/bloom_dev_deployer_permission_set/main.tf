@@ -38,11 +38,37 @@ resource "aws_ssoadmin_permission_set_inline_policy" "bloom_dev_deployer" {
 }
 data "aws_iam_policy_document" "bloom_dev_deployer" {
   statement {
-    sid = "Statement1"
+    sid = "StateBucket"
     actions = [
-      "sts:GetCallerIdentity",
-      "ec2:DescribeVpcs"
+      "s3:CreateBucket",
+      "s3:GetAccelerateConfiguration",
+      "s3:GetBucketAcl",
+      "s3:GetBucketCors",
+      "s3:GetBucketLogging",
+      "s3:GetBucketObjectLockConfiguration",
+      "s3:GetBucketPolicy",
+      "s3:GetBucketRequestPayment",
+      "s3:GetBucketVersioning",
+      "s3:GetBucketWebsite",
+      "s3:GetEncryptionConfiguration",
+      "s3:GetLifecycleConfiguration",
+      "s3:GetReplicationConfiguration",
+      "s3:ListBucket",
+      "s3:GetBucketTagging",
+      "s3:PutBucketVersioning",
     ]
-    resources = ["*"]
+    resources = ["arn:aws:s3:::bloom-dev-tofu-state"]
+  }
+  statement {
+    sid = "StateFiles"
+    actions = [
+      "s3:GetObject",
+      "s3:PutObject",
+      "s3:DeleteObject"
+    ]
+    resources = [
+      "arn:aws:s3:::bloom-dev-tofu-state/state",
+      "arn:aws:s3:::bloom-dev-tofu-state/state.tflock"
+    ]
   }
 }
