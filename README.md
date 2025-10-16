@@ -92,6 +92,7 @@ The database is seeded with the `yarn:dbseed:development` script.
 
 - Start the deployment: `docker compose up`
 - Stop the deployment: `docker compose down`
+- Rebuild all containers: `docker compose build`
 
 Open the sites:
 
