@@ -1,4 +1,6 @@
 # Keep up to date with Active LTS: https://nodejs.org/en/about/previous-releases
+#
+# IMPORTANT: keep the below run image in sync.
 FROM node:22 AS build
 
 # Create a non-root user to build (priciple of least priviledge).
@@ -27,7 +29,7 @@ RUN yarn build
 
 # Start a new container filesystem and copy in just the runtime dependencies and the built
 # application.
-FROM node:20 AS run
+FROM node:22 AS run
 WORKDIR /run
 
 # Copy over build artifacts.
