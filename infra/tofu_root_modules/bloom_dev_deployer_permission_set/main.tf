@@ -6,7 +6,7 @@ terraform {
     }
   }
   backend "s3" {
-    region       = "us-east-1"
+    region       = local.region
     profile      = local.sso_profile_id
     bucket       = "bloom-dev-deployer-tofu-state"
     key          = "state"
