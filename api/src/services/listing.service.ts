@@ -1826,6 +1826,10 @@ export class ListingService implements OnModuleInit {
         duplicateListingPermissions?.includes(
           UserRoleEnum.jurisdictionAdmin,
         )) ||
+      (requestingUser?.userRoles?.isLimitedJurisdictionalAdmin &&
+        duplicateListingPermissions?.includes(
+          UserRoleEnum.limitedJurisdictionAdmin,
+        )) ||
       (requestingUser?.userRoles?.isPartner &&
         duplicateListingPermissions?.includes(UserRoleEnum.partner))
         ? {
@@ -1848,7 +1852,8 @@ export class ListingService implements OnModuleInit {
 
     //manually check for juris/listing mismatch since logic above is forcing admin permissioning
     if (
-      (requestingUser?.userRoles?.isJurisdictionalAdmin &&
+      ((requestingUser?.userRoles?.isJurisdictionalAdmin ||
+        requestingUser?.userRoles?.isLimitedJurisdictionalAdmin) &&
         !requestingUser?.jurisdictions?.some(
           (juris) => juris.id === storedListing.jurisdictionId,
         )) ||

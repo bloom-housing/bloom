@@ -1,5 +1,6 @@
 import React, { useContext } from "react"
 import { useRouter } from "next/router"
+import { AuthContext, formatDateTime } from "@bloom-housing/shared-helpers"
 import Head from "next/head"
 import dayjs from "dayjs"
 import utc from "dayjs/plugin/utc"
@@ -17,7 +18,6 @@ import {
   ReviewOrderTypeEnum,
   RuleEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { AuthContext, formatDateTime } from "@bloom-housing/shared-helpers"
 import { useSingleListingData, useFlaggedApplicationsList } from "../../../../../lib/hooks"
 import { ListingStatusBar } from "../../../../../components/listings/ListingStatusBar"
 import Layout from "../../../../../layouts"
@@ -136,7 +136,6 @@ const ApplicationsList = () => {
   }
 
   if (profile?.userRoles?.isLimitedJurisdictionalAdmin) return null
-
   return (
     <Layout>
       <Head>

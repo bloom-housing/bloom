@@ -190,7 +190,6 @@ export const devSeeding = async (
       email: 'limited-jurisdiction-admin@example.com',
       confirmedAt: new Date(),
       jurisdictionIds: [jurisdiction.id],
-      acceptedTerms: true,
     }),
   });
   // add jurisdiction specific translations and default ones

@@ -1515,6 +1515,7 @@
   "users.confirmationSent": "Confirmation sent",
   "users.inviteSent": "Invite sent",
   "users.jurisdictionalAdmin": "Jurisdictional admin",
+  "users.limitedJurisdictionalAdmin": "Jurisdictional admin - No PII",
   "users.userDeleted": "User deleted",
   "users.userUpdated": "User updated",
   "welcome.allApplicationClosed": "All applications are currently closed, but you can view closed listings.",
