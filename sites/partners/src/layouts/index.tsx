@@ -17,6 +17,9 @@ const Layout = (props) => {
   const { toastMessagesRef, addToast } = useContext(MessageContext)
   const router = useRouter()
   const currentYear = new Date().getFullYear()
+  const copyRight = profile.userRoles.isPartner
+    ? `Copyright @ ${currentYear} Bay Area Housing Finance Authority. All rights reserved `
+    : `© ${currentYear} • All Rights Reserved`
   const menuLinks: MenuLink[] = []
   if (profile) {
     menuLinks.push({
@@ -52,8 +55,6 @@ const Layout = (props) => {
     })
   }
 
-  // Change this file in line <FooterNav copyright={`© ${currentYear} • All Rights Reserved`} />
-
   return (
     <div className="site-wrapper">
       <div className="site-content site-content--wide-content">
@@ -77,7 +78,7 @@ const Layout = (props) => {
           {props.children}
         </main>
         <SiteFooter>
-          <FooterNav copyright={`© ${currentYear} • All Rights Reserved`} />
+          <FooterNav copyright={copyRight} />
           <FooterSection className="bg-black" small>
             <ExygyFooter />
           </FooterSection>
