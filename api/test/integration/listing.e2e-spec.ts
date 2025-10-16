@@ -3,6 +3,7 @@ import { INestApplication } from '@nestjs/common';
 import {
   ApplicationAddressTypeEnum,
   ApplicationMethodsTypeEnum,
+  DepositTypeEnum,
   HomeTypeEnum,
   LanguagesEnum,
   ListingEventsTypeEnum,
@@ -11,6 +12,7 @@ import {
   MultiselectQuestionsApplicationSectionEnum,
   Prisma,
   RegionEnum,
+  RentTypeEnum,
   ReviewOrderTypeEnum,
   UnitTypeEnum,
   UserRoleEnum,
@@ -161,10 +163,22 @@ describe('Listing Controller Tests', () => {
     await app.close();
   });
 
+  const defaultRequiredFields = [
+    'listingsBuildingAddress',
+    'name',
+    'developer',
+    'listingImages',
+    'leasingAgentEmail',
+    'leasingAgentName',
+    'leasingAgentPhone',
+    'jurisdictions',
+  ];
+
   const constructFullListingData = async (
     listingId?: string,
     jurisdictionId?: string,
     jurisdictionName?: string,
+    useUnitGroups?: boolean,
   ): Promise<ListingCreate | ListingUpdate> => {
     let jurisdictionA: IdDTO = { id: '' };
 
@@ -172,7 +186,15 @@ describe('Listing Controller Tests', () => {
       jurisdictionA.id = jurisdictionId;
     } else {
       jurisdictionA = await prisma.jurisdictions.create({
-        data: jurisdictionFactory(jurisdictionName || randomName()),
+        data: jurisdictionFactory(jurisdictionName || randomName(), {
+          featureFlags: [
+            ...(useUnitGroups ? [FeatureFlagEnum.enableUnitGroups] : []),
+          ],
+          requiredListingFields: [
+            ...defaultRequiredFields,
+            ...(useUnitGroups ? ['unitGroups'] : ['units']),
+          ],
+        }),
       });
     }
 
@@ -226,37 +248,99 @@ describe('Listing Controller Tests', () => {
       referralOpportunity: false,
       rentalAssistance: 'rental assistance',
       reviewOrderType: ReviewOrderTypeEnum.firstComeFirstServe,
-      units: [
-        {
-          amiPercentage: '1',
-          annualIncomeMin: '2',
-          monthlyIncomeMin: '3',
-          floor: 4,
-          annualIncomeMax: '5',
-          maxOccupancy: 6,
-          minOccupancy: 7,
-          monthlyRent: '8',
-          numBathrooms: 9,
-          numBedrooms: 10,
-          number: '11',
-          sqFeet: '12',
-          monthlyRentAsPercentOfIncome: '13',
-          bmrProgramChart: true,
-          unitTypes: {
-            id: unitType.id,
-          },
-          amiChart: {
-            id: amiChart.id,
-          },
-          unitAccessibilityPriorityTypes: {
-            id: unitAccessibilityPriorityType.id,
-          },
-          unitRentTypes: {
-            id: rentType.id,
-          },
-        },
-      ],
-      unitGroups: [],
+      ...(useUnitGroups
+        ? {
+            units: [],
+            unitsSummary: [],
+            unitGroups: [
+              {
+                totalCount: 4,
+                minOccupancy: 1,
+                maxOccupancy: 4,
+                sqFeetMin: 240,
+                sqFeetMax: 567,
+                floorMin: 1,
+                floorMax: 2,
+                bathroomMin: 1,
+                bathroomMax: 2,
+                totalAvailable: 2,
+                openWaitlist: true,
+                unitTypes: [
+                  {
+                    id: unitType.id,
+                  },
+                ],
+                unitGroupAmiLevels: [
+                  {
+                    amiChart: {
+                      id: amiChart.id,
+                    },
+                    amiPercentage: 10,
+                    monthlyRentDeterminationType: 'flatRent',
+                    flatRentValue: 1000,
+                    percentageOfIncomeValue: null,
+                  },
+                ],
+              },
+            ],
+          }
+        : {
+            units: [
+              {
+                amiPercentage: '1',
+                annualIncomeMin: '2',
+                monthlyIncomeMin: '3',
+                floor: 4,
+                annualIncomeMax: '5',
+                maxOccupancy: 6,
+                minOccupancy: 7,
+                monthlyRent: '8',
+                numBathrooms: 9,
+                numBedrooms: 10,
+                number: '11',
+                sqFeet: '12',
+                monthlyRentAsPercentOfIncome: '13',
+                bmrProgramChart: true,
+                unitTypes: {
+                  id: unitType.id,
+                },
+                amiChart: {
+                  id: amiChart.id,
+                },
+                unitAccessibilityPriorityTypes: {
+                  id: unitAccessibilityPriorityType.id,
+                },
+                unitRentTypes: {
+                  id: rentType.id,
+                },
+              },
+            ],
+            unitsSummary: [
+              {
+                unitTypes: {
+                  id: unitType.id,
+                },
+                monthlyRentMin: 1,
+                monthlyRentMax: 2,
+                monthlyRentAsPercentOfIncome: '3',
+                amiPercentage: 4,
+                minimumIncomeMin: '5',
+                minimumIncomeMax: '6',
+                maxOccupancy: 7,
+                minOccupancy: 8,
+                floorMin: 9,
+                floorMax: 10,
+                sqFeetMin: '11',
+                sqFeetMax: '12',
+                unitAccessibilityPriorityTypes: {
+                  id: unitAccessibilityPriorityType.id,
+                },
+                totalCount: 13,
+                totalAvailable: 14,
+              },
+            ],
+            unitGroups: [],
+          }),
       listingMultiselectQuestions: [
         {
           id: multiselectQuestion.id,
@@ -276,30 +360,6 @@ describe('Listing Controller Tests', () => {
               assets: exampleAsset,
             },
           ],
-        },
-      ],
-      unitsSummary: [
-        {
-          unitTypes: {
-            id: unitType.id,
-          },
-          monthlyRentMin: 1,
-          monthlyRentMax: 2,
-          monthlyRentAsPercentOfIncome: '3',
-          amiPercentage: 4,
-          minimumIncomeMin: '5',
-          minimumIncomeMax: '6',
-          maxOccupancy: 7,
-          minOccupancy: 8,
-          floorMin: 9,
-          floorMax: 10,
-          sqFeetMin: '11',
-          sqFeetMax: '12',
-          unitAccessibilityPriorityTypes: {
-            id: unitAccessibilityPriorityType.id,
-          },
-          totalCount: 13,
-          totalAvailable: 14,
         },
       ],
       listingsApplicationPickUpAddress: exampleAddress,
@@ -384,6 +444,7 @@ describe('Listing Controller Tests', () => {
         : undefined,
       homeType: 'apartment',
       marketingType: undefined,
+      requiredFields: [],
     };
   };
 
@@ -2032,6 +2093,307 @@ describe('Listing Controller Tests', () => {
       expect(newDBValues.length).toBeGreaterThanOrEqual(1);
       expect(newDBValues[0].listingFeatures).toMatchObject(listingFeatures);
       expect(newDBValues[0].listingUtilities).toMatchObject(listingUtilities);
+    });
+
+    describe('listing deposit type validation', () => {
+      it("should create listing when deposit is 'fixedDeposit', 'depositValue' is set and 'depositRangeMin' and 'depositRangeMax' are missing", async () => {
+        const val = await constructFullListingData(
+          undefined,
+          undefined,
+          `create listing ${randomName()}`,
+        );
+
+        const res = await request(app.getHttpServer())
+          .post('/listings')
+          .set({ passkey: process.env.API_PASS_KEY || '' })
+          .send({
+            ...val,
+            depositType: DepositTypeEnum.fixedDeposit,
+            depositValue: 1000,
+          })
+          .set('Cookie', adminAccessToken)
+          .expect(201);
+
+        expect(res.body.name).toEqual(val.name);
+
+        const newDBValues = await prisma.listings.findFirst({
+          where: { id: res.body.id },
+        });
+
+        expect(newDBValues).toBeDefined();
+        expect(newDBValues.depositType).toEqual(DepositTypeEnum.fixedDeposit);
+        expect(newDBValues.depositRangeMax).toBeNull();
+        expect(newDBValues.depositRangeMin).toBeNull();
+        expect(Number(newDBValues.depositValue)).toEqual(1000);
+      });
+
+      it("should fail when deposit is 'fixedDeposit' but 'depositRangeMin' and 'depositRangeMax' are set", async () => {
+        const val = await constructFullListingData(
+          undefined,
+          undefined,
+          `create listing ${randomName()}`,
+        );
+
+        const res = await request(app.getHttpServer())
+          .post('/listings')
+          .set({ passkey: process.env.API_PASS_KEY || '' })
+          .send({
+            ...val,
+            depositType: DepositTypeEnum.fixedDeposit,
+            depositValue: 1000,
+            depositRangeMin: 100,
+            depositRangeMax: 500,
+          })
+          .set('Cookie', adminAccessToken)
+          .expect(400);
+
+        expect(res.body.message[0]).toEqual(
+          'When deposit is of type "fixedDeposit" the "depositValue" must be filled and the "depositRangeMin"|"depositRangeMax" fields must be null',
+        );
+      });
+
+      it("should fail when deposit is 'fixedDeposit' but 'depositValue' is missing", async () => {
+        const val = await constructFullListingData(
+          undefined,
+          undefined,
+          `create listing ${randomName()}`,
+        );
+
+        const res = await request(app.getHttpServer())
+          .post('/listings')
+          .set({ passkey: process.env.API_PASS_KEY || '' })
+          .send({
+            ...val,
+            depositType: DepositTypeEnum.fixedDeposit,
+          })
+          .set('Cookie', adminAccessToken)
+          .expect(400);
+
+        expect(res.body.message[0]).toEqual(
+          'When deposit is of type "fixedDeposit" the "depositValue" must be filled and the "depositRangeMin"|"depositRangeMax" fields must be null',
+        );
+      });
+
+      it("should create listing when deposit is 'rangeDeposit', 'depositRangeMin' and 'depositRangeMax' are set and 'depositValue' is missing", async () => {
+        const val = await constructFullListingData(
+          undefined,
+          undefined,
+          `create listing ${randomName()}`,
+        );
+
+        const res = await request(app.getHttpServer())
+          .post('/listings')
+          .set({ passkey: process.env.API_PASS_KEY || '' })
+          .send({
+            ...val,
+            depositType: DepositTypeEnum.depositRange,
+            depositRangeMin: 100,
+            depositRangeMax: 500,
+            depositValue: null,
+          })
+          .set('Cookie', adminAccessToken)
+          .expect(201);
+
+        expect(res.body.name).toEqual(val.name);
+
+        const newDBValues = await prisma.listings.findFirst({
+          where: { id: res.body.id },
+        });
+
+        expect(newDBValues).toBeDefined();
+        expect(newDBValues.depositType).toEqual(DepositTypeEnum.depositRange);
+        expect(Number(newDBValues.depositRangeMax)).toEqual(500);
+        expect(Number(newDBValues.depositRangeMin)).toEqual(100);
+        expect(newDBValues.depositValue).toBeNull();
+      });
+
+      it("should fail when deposit is 'rangeDeposit' but 'depositValue' is set", async () => {
+        const val = await constructFullListingData(
+          undefined,
+          undefined,
+          `create listing ${randomName()}`,
+        );
+
+        const res = await request(app.getHttpServer())
+          .post('/listings')
+          .set({ passkey: process.env.API_PASS_KEY || '' })
+          .send({
+            ...val,
+            depositType: DepositTypeEnum.depositRange,
+            depositValue: 1000,
+            depositRangeMin: 100,
+            depositRangeMax: 500,
+          })
+          .set('Cookie', adminAccessToken)
+          .expect(400);
+
+        expect(res.body.message[0]).toEqual(
+          'When deposit is of type "depositRange" the "depositRangeMin" and "depositRangeMax" fields must be filled and "depositValue" must be null',
+        );
+      });
+
+      it("should fail when deposit is 'rangeDeposit' but 'depositRangeMin' and 'depositRangeMax' are missing", async () => {
+        const val = await constructFullListingData(
+          undefined,
+          undefined,
+          `create listing ${randomName()}`,
+        );
+
+        const res = await request(app.getHttpServer())
+          .post('/listings')
+          .set({ passkey: process.env.API_PASS_KEY || '' })
+          .send({
+            ...val,
+            depositType: DepositTypeEnum.depositRange,
+            depositValue: null,
+            depositRangeMin: null,
+            depositRangeMax: null,
+          })
+          .set('Cookie', adminAccessToken)
+          .expect(400);
+
+        expect(res.body.message[0]).toEqual(
+          'When deposit is of type "depositRange" the "depositRangeMin" and "depositRangeMax" fields must be filled and "depositValue" must be null',
+        );
+      });
+    });
+
+    describe('listing unit group rent type validation', () => {
+      it("should create listing when unit group rent type is 'fixedRent' and the 'flatRentValueFrom' and 'flatRentValueFrom' are missing", async () => {
+        const val = await constructFullListingData(
+          undefined,
+          undefined,
+          `create listing ${randomName()}`,
+          true,
+        );
+
+        const res = await request(app.getHttpServer())
+          .post('/listings')
+          .set({ passkey: process.env.API_PASS_KEY || '' })
+          .send({
+            ...val,
+            unitGroups: val.unitGroups.map((entry) => ({
+              ...entry,
+              rentType: RentTypeEnum.fixedRent,
+              flatRentValueFrom: null,
+              flatRentValueTo: null,
+            })),
+          })
+          .set('Cookie', adminAccessToken)
+          .expect(201);
+
+        expect(res.body.name).toEqual(val.name);
+
+        const newDBValues = await prisma.listings.findFirst({
+          where: { id: res.body.id },
+          include: { unitGroups: true },
+        });
+
+        expect(newDBValues).toBeDefined();
+        expect(newDBValues.unitGroups).toHaveLength(1);
+        expect(newDBValues.unitGroups[0].rentType).toEqual(
+          RentTypeEnum.fixedRent,
+        );
+        expect(newDBValues.unitGroups[0].flatRentValueFrom).toBeNull();
+        expect(newDBValues.unitGroups[0].flatRentValueTo).toBeNull();
+      });
+
+      it("should create listing when unit group rent type is 'rentRange' and the 'flatRentValueFrom' and 'flatRentValueFrom' are set", async () => {
+        const val = await constructFullListingData(
+          undefined,
+          undefined,
+          `create listing ${randomName()}`,
+          true,
+        );
+
+        const res = await request(app.getHttpServer())
+          .post('/listings')
+          .set({ passkey: process.env.API_PASS_KEY || '' })
+          .send({
+            ...val,
+            unitGroups: val.unitGroups.map((entry) => ({
+              ...entry,
+              rentType: RentTypeEnum.rentRange,
+              flatRentValueFrom: 100,
+              flatRentValueTo: 500,
+            })),
+          })
+          .set('Cookie', adminAccessToken)
+          .expect(201);
+
+        expect(res.body.name).toEqual(val.name);
+
+        const newDBValues = await prisma.listings.findFirst({
+          where: { id: res.body.id },
+          include: { unitGroups: true },
+        });
+
+        expect(newDBValues).toBeDefined();
+        expect(newDBValues.unitGroups).toHaveLength(1);
+        expect(newDBValues.unitGroups[0].rentType).toEqual(
+          RentTypeEnum.rentRange,
+        );
+        expect(Number(newDBValues.unitGroups[0].flatRentValueFrom)).toEqual(
+          100,
+        );
+        expect(Number(newDBValues.unitGroups[0].flatRentValueTo)).toEqual(500);
+      });
+
+      it("should fail to create listing when unit group rent type is 'fixedRent' but the 'flatRentValueFrom' and 'flatRentValueFrom' are set", async () => {
+        const val = await constructFullListingData(
+          undefined,
+          undefined,
+          `create listing ${randomName()}`,
+          true,
+        );
+
+        const res = await request(app.getHttpServer())
+          .post('/listings')
+          .set({ passkey: process.env.API_PASS_KEY || '' })
+          .send({
+            ...val,
+            unitGroups: val.unitGroups.map((entry) => ({
+              ...entry,
+              rentType: RentTypeEnum.fixedRent,
+              flatRentValueFrom: 100,
+              flatRentValueTo: 400,
+            })),
+          })
+          .set('Cookie', adminAccessToken)
+          .expect(400);
+
+        expect(res.body.message[0]).toEqual(
+          'unitGroups.0.When rent is of type "fixedRent" the "flatRentValueFrom" and "flatRentValueTo" fields must be empty',
+        );
+      });
+
+      it("should fail to create listing when unit group rent type is 'rentRange' but the 'flatRentValueFrom' and 'flatRentValueFrom' are missing", async () => {
+        const val = await constructFullListingData(
+          undefined,
+          undefined,
+          `create listing ${randomName()}`,
+          true,
+        );
+
+        const res = await request(app.getHttpServer())
+          .post('/listings')
+          .set({ passkey: process.env.API_PASS_KEY || '' })
+          .send({
+            ...val,
+            unitGroups: val.unitGroups.map((entry) => ({
+              ...entry,
+              rentType: RentTypeEnum.rentRange,
+              flatRentValueFrom: null,
+              flatRentValueTo: null,
+            })),
+          })
+          .set('Cookie', adminAccessToken)
+          .expect(400);
+
+        expect(res.body.message[0]).toEqual(
+          'unitGroups.0.When rent is of type "rentRange" the "flatRentValueFrom" and "flatRentValueTo" fields must be filled',
+        );
+      });
     });
   });
 

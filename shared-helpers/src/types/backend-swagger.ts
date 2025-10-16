@@ -3851,6 +3851,15 @@ export interface UnitsSummary {
 
   /**  */
   totalAvailable?: number
+
+  /**  */
+  rentType?: string
+
+  /**  */
+  flatRentValueFrom?: number
+
+  /**  */
+  flatRentValueTo?: number
 }
 
 export interface ApplicationLotteryTotal {
@@ -3980,6 +3989,9 @@ export interface Listing {
 
   /**  */
   buildingSelectionCriteria?: string
+
+  /**  */
+  cocInfo?: string
 
   /**  */
   costsNotIncluded?: string
@@ -4503,6 +4515,15 @@ export interface UnitsSummaryCreate {
 
   /**  */
   totalAvailable?: number
+
+  /**  */
+  rentType?: string
+
+  /**  */
+  flatRentValueFrom?: number
+
+  /**  */
+  flatRentValueTo?: number
 }
 
 export interface ListingImageCreate {
@@ -4655,6 +4676,9 @@ export interface ListingCreate {
 
   /**  */
   buildingSelectionCriteria?: string
+
+  /**  */
+  cocInfo?: string
 
   /**  */
   costsNotIncluded?: string
@@ -4992,6 +5016,9 @@ export interface ListingUpdate {
 
   /**  */
   buildingSelectionCriteria?: string
+
+  /**  */
+  cocInfo?: string
 
   /**  */
   costsNotIncluded?: string
