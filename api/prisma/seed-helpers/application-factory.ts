@@ -21,6 +21,7 @@ import { alternateContactFactory } from './alternate-contact-factory';
 import { randomBoolean } from './boolean-generator';
 
 export const applicationFactory = async (optionalParams?: {
+  createdAt?: Date;
   householdSize?: number;
   unitTypeId?: string;
   applicant?: Prisma.ApplicantCreateWithoutApplicationsInput;
@@ -45,6 +46,7 @@ export const applicationFactory = async (optionalParams?: {
   const demographics = await demographicsFactory();
   const additionalPhone = randomBoolean();
   return {
+    createdAt: optionalParams?.createdAt || new Date(),
     confirmationCode: generateConfirmationCode(),
     applicant: { create: applicantFactory(optionalParams?.applicant) },
     appUrl: '',
