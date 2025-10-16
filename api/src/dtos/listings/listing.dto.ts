@@ -5,7 +5,6 @@ import {
   IsArray,
   IsBoolean,
   IsDate,
-  IsDecimal,
   IsDefined,
   IsEmail,
   IsEnum,
@@ -61,6 +60,7 @@ import {
   ValidateAtLeastOneUnit,
   ValidateOnlyUnitsOrUnitGroups,
 } from '../../decorators/validate-units-required.decorator';
+import { ValidateListingDeposit } from '../../decorators/validate-listing-deposit.decorator';
 
 class Listing extends AbstractDTO {
   @Expose()
@@ -322,6 +322,13 @@ class Listing extends AbstractDTO {
   buildingSelectionCriteria?: string;
 
   @Expose()
+  @ValidateListingPublish('cocInfo7', {
+    groups: [ValidationsGroupsEnum.default],
+  })
+  @ApiPropertyOptional()
+  cocInfo?: string;
+
+  @Expose()
   @ValidateListingPublish('costsNotIncluded', {
     groups: [ValidationsGroupsEnum.default],
   })
@@ -370,6 +377,7 @@ class Listing extends AbstractDTO {
   @IsEnum(DepositTypeEnum, {
     groups: [ValidationsGroupsEnum.default],
   })
+  @ValidateListingDeposit({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional({ enum: DepositTypeEnum })
   depositType?: DepositTypeEnum;
 
@@ -377,7 +385,7 @@ class Listing extends AbstractDTO {
   @ValidateListingPublish('depositValue', {
     groups: [ValidationsGroupsEnum.default],
   })
-  @IsDecimal()
+  @IsNumber()
   @ApiPropertyOptional()
   depositValue?: number;
 
@@ -414,7 +422,7 @@ class Listing extends AbstractDTO {
   disableUnitsAccordion?: boolean;
 
   @Expose()
-  @ValidateListingPublish('disableUnitsAccordion', {
+  @ValidateListingPublish('hasHudEbllClearance', {
     groups: [ValidationsGroupsEnum.default],
   })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
