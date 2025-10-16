@@ -1,4 +1,4 @@
-# `bloom-dev-deployer`IAM Identity Center Permission Set
+# `bloom-dev-deployer` IAM Identity Center Permission Set
 
 This root module configures the `bloom-dev-deployer` IAM Identity Center Permission Set in the Exygy
 AWS management account. The permission set is assigned on the `bloom-dev` AWS account to the
