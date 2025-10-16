@@ -93,7 +93,6 @@ export function useListingsData({
       orderDir: sort?.filter((item) => item.orderDir).map((item) => item.orderDir),
     })
   }
-
   // filter if logged user is an agent
   if (roles?.isPartner) {
     params.filter.push({

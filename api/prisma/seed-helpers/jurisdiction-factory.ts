@@ -35,6 +35,7 @@ export const jurisdictionFactory = (
     UserRoleEnum.admin,
     UserRoleEnum.jurisdictionAdmin,
     UserRoleEnum.limitedJurisdictionAdmin,
+    UserRoleEnum.supportAdmin,
   ],
   featureFlags: optionalFields?.featureFlags
     ? {

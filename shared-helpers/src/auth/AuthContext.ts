@@ -263,6 +263,7 @@ export const AuthProvider: FunctionComponent<React.PropsWithChildren> = ({ child
             profile &&
             (!forPartners ||
               profile.userRoles?.isAdmin ||
+              profile.userRoles?.isSupportAdmin ||
               profile.userRoles?.isJurisdictionalAdmin ||
               profile.userRoles?.isLimitedJurisdictionalAdmin ||
               profile.userRoles?.isPartner)

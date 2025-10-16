@@ -163,6 +163,18 @@ describe('Testing listing csv export service', () => {
       ).resolves.toBeUndefined();
     });
 
+    it('should allow support admin users to export', async () => {
+      const user = {
+        userRoles: {
+          isSupportAdmin: true,
+        },
+      };
+
+      await expect(
+        service.authorizeCSVExport(user as any),
+      ).resolves.toBeUndefined();
+    });
+
     it('should allow jurisdictional admin users to export', async () => {
       const user = {
         userRoles: {
@@ -182,6 +194,7 @@ describe('Testing listing csv export service', () => {
           isJurisdictionalAdmin: false,
           isLimitedJurisdictionalAdmin: false,
           isPartner: false,
+          isSupportAdmin: false,
         },
       };
 

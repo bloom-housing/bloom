@@ -28,4 +28,9 @@ export class UserRole {
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   isSuperAdmin?: boolean;
+
+  @Expose()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  isSupportAdmin?: boolean;
 }

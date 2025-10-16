@@ -29,6 +29,7 @@ export enum FeatureFlagEnum {
   enableRegions = 'enableRegions',
   enableSection8Question = 'enableSection8Question',
   enableSingleUseCode = 'enableSingleUseCode',
+  enableSupportAdmin = 'enableSupportAdmin',
   enableUnderConstructionHome = 'enableUnderConstructionHome',
   enableUnitGroups = 'enableUnitGroups',
   enableUtilitiesIncluded = 'enableUtilitiesIncluded',
@@ -173,6 +174,10 @@ export const featureFlagMap: { name: string; description: string }[] = [
     name: FeatureFlagEnum.enableSingleUseCode,
     description:
       'When true, the backend allows for logging into this jurisdiction using the single use code flow',
+  },
+  {
+    name: FeatureFlagEnum.enableSupportAdmin,
+    description: 'When true, support admins can be created',
   },
   {
     name: FeatureFlagEnum.enableUnderConstructionHome,

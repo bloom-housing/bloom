@@ -4499,6 +4499,57 @@ describe('Testing listing service', () => {
         },
       });
     });
+
+    it('should allow isSupportAdmin to duplicate listing with jurisdiction permissions', async () => {
+      const listing = mockListing(1, { numberToMake: 2, date: new Date() });
+      const newName = 'duplicate name';
+      const jurisdictionId = randomUUID();
+
+      prisma.listings.findUnique = jest.fn().mockResolvedValue({
+        ...listing,
+        jurisdictions: {
+          id: jurisdictionId,
+        },
+        jurisdictionId,
+      });
+
+      prisma.listings.create = jest.fn().mockResolvedValue({
+        ...listing,
+        id: 'duplicate id',
+        name: newName,
+      });
+
+      const supportAdminUser = {
+        id: 'support-admin-id',
+        userRoles: {
+          isSupportAdmin: true,
+          isAdmin: false,
+          isJurisdictionalAdmin: false,
+          isLimitedJurisdictionalAdmin: false,
+          isPartner: false,
+        },
+        jurisdictions: [
+          {
+            id: jurisdictionId,
+            duplicateListingPermissions: [UserRoleEnum.supportAdmin],
+          },
+        ],
+      };
+
+      const newListing = await service.duplicate(
+        {
+          includeUnits: true,
+          name: newName,
+          storedListing: {
+            id: listing.id.toString(),
+          },
+        },
+        supportAdminUser as any,
+      );
+
+      expect(newListing.name).toBe(newName);
+      expect(newListing.units).toEqual(listing.units);
+    });
   });
 
   describe('Test update endpoint', () => {

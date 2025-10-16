@@ -657,6 +657,7 @@
   "users.addUser": "Add user",
   "users.administrator": "Administrator",
   "users.alljurisdictionalizedListings": "All %{jurisdiction} listings",
+  "users.adminSupport": "Admin (support)",
   "users.allJurisdictions": "All jurisdictions",
   "users.allListings": "All listings",
   "users.confirmAccount": "Confirm account",
