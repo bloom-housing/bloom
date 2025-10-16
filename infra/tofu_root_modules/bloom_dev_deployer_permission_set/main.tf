@@ -25,14 +25,12 @@ provider "aws" {
   region  = local.region
 }
 
-
 resource "aws_ssoadmin_permission_set" "bloom_dev_deployer" {
   instance_arn     = local.iam_identity_center_instance_arn
   name             = "bloom-dev-deployer"
   description      = "Permission to configure a Bloom deployment in the bloom-dev-deployer account."
   session_duration = "PT1H"
 }
-
 resource "aws_ssoadmin_permission_set_inline_policy" "bloom_dev_deployer" {
   instance_arn       = local.iam_identity_center_instance_arn
   permission_set_arn = aws_ssoadmin_permission_set.bloom_dev_deployer.arn
