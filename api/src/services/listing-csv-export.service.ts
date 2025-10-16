@@ -763,6 +763,25 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
           format: this.formatCurrency,
         },
         {
+          path: 'depositType',
+          label: 'Deposit Type',
+        },
+        {
+          path: 'depositValue',
+          label: 'Deposit Value',
+          format: this.formatCurrency,
+        },
+        {
+          path: 'depositRangeMin',
+          label: 'Deposit Range Min',
+          format: this.formatCurrency,
+        },
+        {
+          path: 'depositRangeMax',
+          label: 'Deposit Range Max',
+          format: this.formatCurrency,
+        },
+        {
           path: 'costsNotIncluded',
           label: 'Costs Not Included',
         },
