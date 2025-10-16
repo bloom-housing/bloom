@@ -692,8 +692,8 @@ export class ScriptRunnerService {
 
       const hasPublishedListing = msq.listings.some(({ listings }) => {
         return (
-          listings.status == ListingsStatusEnum.active ||
-          listings.status == ListingsStatusEnum.closed
+          listings.status === ListingsStatusEnum.active ||
+          listings.status === ListingsStatusEnum.closed
         );
       });
       const status: MultiselectQuestionsStatusEnum = hasPublishedListing
@@ -714,7 +714,7 @@ export class ScriptRunnerService {
         data: options.map((option) => {
           return {
             description:
-              option.description?.trim() == '' ? null : option.description,
+              option.description?.trim() === '' ? null : option.description,
             isOptOut: false,
             links: option.links
               ? (option.links as unknown as Prisma.InputJsonArray)
