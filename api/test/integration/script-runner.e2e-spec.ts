@@ -11,6 +11,7 @@ import { listingFactory } from '../../prisma/seed-helpers/listing-factory';
 import { jurisdictionFactory } from '../../prisma/seed-helpers/jurisdiction-factory';
 import { reservedCommunityTypeFactoryAll } from '../../prisma/seed-helpers/reserved-community-type-factory';
 import { applicationFactory } from '../../prisma/seed-helpers/application-factory';
+import dayjs from 'dayjs';
 
 describe('Script Runner Controller Tests', () => {
   let app: INestApplication;
@@ -80,6 +81,8 @@ describe('Script Runner Controller Tests', () => {
 
     it('should set the expire_after value for applications on closed listings', async () => {
       process.env.APPLICATION_DAYS_TILL_EXPIRY = '90';
+      // Reset all closedAt values so other tests don't impact this test
+      await prisma.listings.updateMany({ data: { closedAt: null } });
       const jurisData = jurisdictionFactory();
       const jurisdiction = await prisma.jurisdictions.create({
         data: {
@@ -182,6 +185,76 @@ describe('Script Runner Controller Tests', () => {
   });
 
   describe('setIsNewestApplicationValues endpoint', () => {
-    it.todo('should update only the newest applications');
+    it('should update only the newest applications', async () => {
+      // create partner user that shouldn't be counte
+      await prisma.userAccounts.create({
+        data: await userFactory({
+          roles: { isAdmin: true },
+        }),
+      });
+      // Create public users
+      const user1 = await prisma.userAccounts.create({
+        data: await userFactory(),
+      });
+      const user2 = await prisma.userAccounts.create({
+        data: await userFactory(),
+      });
+      // create applications
+      const notNewestApplication1 = await prisma.applications.create({
+        data: await applicationFactory({
+          userId: user1.id,
+          createdAt: dayjs(new Date()).subtract(10, 'day').toDate(),
+        }),
+      });
+      const newestApplication = await prisma.applications.create({
+        data: await applicationFactory({
+          userId: user1.id,
+          createdAt: dayjs(new Date()).subtract(4, 'day').toDate(),
+        }),
+      });
+      const notNewestApplication2 = await prisma.applications.create({
+        data: await applicationFactory({
+          userId: user1.id,
+          createdAt: dayjs(new Date()).subtract(6, 'day').toDate(),
+        }),
+      });
+      const user2Application = await prisma.applications.create({
+        data: await applicationFactory({
+          userId: user2.id,
+        }),
+      });
+      await request(app.getHttpServer())
+        .put(`/scriptRunner/setIsNewestApplicationValues`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .expect(200);
+
+      expect(logger.log).toBeCalledWith('total public user count 2');
+      const updatedApplicationsUser1 = await prisma.applications.findMany({
+        where: { userId: user1.id },
+      });
+      expect(
+        updatedApplicationsUser1.find(
+          (app) => app.id === notNewestApplication1.id,
+        ).isNewest,
+      ).toEqual(false);
+      expect(
+        updatedApplicationsUser1.find((app) => app.id === newestApplication.id)
+          .isNewest,
+      ).toEqual(true);
+      expect(
+        updatedApplicationsUser1.find(
+          (app) => app.id === notNewestApplication2.id,
+        ).isNewest,
+      ).toEqual(false);
+
+      expect(
+        (
+          await prisma.applications.findFirst({
+            where: { userId: user2.id },
+          })
+        ).isNewest,
+      ).toEqual(true);
+    });
   });
 });

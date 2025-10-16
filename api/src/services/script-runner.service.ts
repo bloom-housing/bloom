@@ -723,7 +723,7 @@ export class ScriptRunnerService {
     const userCount = await this.prisma.userAccounts.count({
       where: { userRoles: { is: null } },
     });
-    console.log('total public user count', userCount);
+    this.logger.log(`total public user count ${userCount}`);
     // Batch in groups of 1000
     for (let currentCount = 0; currentCount < userCount; currentCount += 1000) {
       const applicationsToUpdate: {
@@ -735,7 +735,7 @@ export class ScriptRunnerService {
                     GROUP BY a.user_id) a
                     OFFSET ${currentCount}
                     LIMIT 1000;`;
-      console.log(`updating ${applicationsToUpdate.length} applications`);
+      this.logger.log(`updating ${applicationsToUpdate.length} applications`);
       await this.prisma.applications.updateMany({
         data: { isNewest: true },
         where: {
