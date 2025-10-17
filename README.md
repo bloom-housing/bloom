@@ -82,6 +82,70 @@ You can also run each process individually from separate terminals with the foll
 
 We have a number of default users seeded for local development, the most basic of which being (email: `admin@example.com`, password: `abcdef`) which will login to both the public and partners sites, but you can view other default seeded users and their permissions by checking out the user section of the [seed file](https://github.com/bloom-housing/bloom/blob/aed77bf06525be359ef9205044fabbea2ab2576d/api/prisma/seed-staging.ts#L67).
 
+### Running locally in docker
+
+Run the docker images to emulate a cloud deployment locally on your machine. Docker and Docker
+Compose are required. The easiest way is to install [Docker
+Desktop](https://docs.docker.com/desktop/).
+
+The following containers are defined in the [docker-compose.yml](./docker-compose.yml) file:
+
+- `db`: the postgres database.
+- `api`: the [api](./api).
+- `dbseed`: a run-to-completion container that [runs a db seed
+  script](./api/Dockerfile.dbseed.dev).
+- `partners`: the [partners site](./sites/partners).
+- `public`: the [public site](./sites/partners).
+
+Build, start, and tear down containers with the following commands. Each command takes an optional
+list of containers to operate on. By default the command operates on all containers.
+
+- `docker compose build [container...]`
+- `docker compose up [container...]`
+- `docker compose down [container...]`
+
+For example, to rebuild just the api and partners site docker images, run:
+
+```bash
+docker compose build api partners
+```
+
+By default the containers are just stopped and not deleted when you exit the `docker compose up`
+command. If you run `docker compose up` again the containers will be restarted. This means the `db`
+container will have the prior state from the last run. This causes the `dbseed` container to fail
+because it already seeded the database on the previous run. Either:
+
+- Run `docker compose down` between running `docker compose up`. This wipes the database state
+  clean.
+- Run `docker compose up db api partners public` to restart just the `db`, `api`, `partners`, and
+  `public` containers.
+
+The database is seeded with the `yarn:dbseed:staging` script by default. To use the dev seed script,
+edit the `command:` field for the `dbseed` service in the [docker-compose.yml](./docker-compose.yml)
+file:
+
+```yaml
+  dbseed:
+    build:
+      context: ./api
+      dockerfile: Dockerfile.dbseed.dev
+    restart: no
+    environment:
+      DATABASE_URL: "postgres://postgres:example@db:5432/bloom_prisma"
+    command:
+    - "yarn"
+    - "db:seed:development" # <- change this line to your desired DB seed
+                            # script in ./api/package.json
+    depends_on:
+      api:
+        condition: service_healthy
+```
+
+The sites are available at:
+
+- partners: http://localhost:3001
+- public: http://localhost:3000
+
 ### Bloom UIC development
 
 Because Bloom's ui-components package is a separate open source repository, developing in Bloom while concurrently iterating in ui-components requires linking the folders with the following steps:
