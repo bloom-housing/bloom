@@ -5,8 +5,9 @@ services:
     expose:
       - "5432"
     environment:
-      PGUSER: "postgres"
+      POSTGRES_USER: "postgres"
       POSTGRES_PASSWORD: "example"
+      POSTGRES_DB: "bloom_prisma"
     healthcheck:
       test: ["CMD-SHELL", "pg_isready", "--username=postgres"]
       interval: "2s"
@@ -45,6 +46,9 @@ services:
     restart: no
     environment:
       DATABASE_URL: "postgres://postgres:example@db:5432/bloom_prisma"
+    command:
+    - "yarn"
+    - "db:seed:staging"
     depends_on:
       api:
         condition: service_healthy
