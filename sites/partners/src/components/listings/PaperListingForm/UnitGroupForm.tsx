@@ -88,6 +88,9 @@ const UnitGroupForm = ({
   const minOccupancy: number = useWatch({ control, name: "minOccupancy" })
   const maxOccupancy: number = useWatch({ control, name: "maxOccupancy" })
 
+  const flatRentValueFrom: number = useWatch({ control, name: "flatRentValueFrom" })
+  const flatRentValueTo: number = useWatch({ control, name: "flatRentValueTo" })
+
   // Controls for validating square footage
   const sqFeetMin: number = useWatch({ control, name: "sqFeetMin" })
   const sqFeetMax: number = useWatch({ control, name: "sqFeetMax" })
@@ -417,22 +420,28 @@ const UnitGroupForm = ({
                     <Grid.Row columns={3}>
                       <Grid.Cell>
                         <Field
-                          id="monthlyRentFrom"
-                          name="monthlyRentFrom"
-                          label={t("listings.unitGroup.monthlyRentFrom")}
+                          id="flatRentValueFrom"
+                          name="flatRentValueFrom"
+                          label={t("listings.unitGroup.flatRentValueFrom")}
                           register={register}
                           placeholder="0.00"
+                          validation={{ max: flatRentValueTo }}
+                          errorMessage={t("errors.minGreaterThanFlatRentValueTo")}
+                          error={fieldHasError(errors?.flatRentValueFrom)}
                           type="number"
                           prepend="$"
                         />
                       </Grid.Cell>
                       <Grid.Cell>
                         <Field
-                          id="monthlyRentTo"
-                          name="monthlyRentTo"
-                          label={t("listings.unitGroup.monthlyRentTo")}
+                          id="flatRentValueTo"
+                          name="flatRentValueTo"
+                          label={t("listings.unitGroup.flatRentValueTo")}
                           register={register}
                           placeholder="0.00"
+                          validation={{ min: flatRentValueFrom }}
+                          errorMessage={t("errors.maxLessThanFlatRentValueFrom")}
+                          error={fieldHasError(errors?.flatRentValueTo)}
                           type="number"
                           prepend="$"
                         />
