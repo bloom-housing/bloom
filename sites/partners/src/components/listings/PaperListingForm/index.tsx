@@ -215,10 +215,6 @@ const ListingForm = ({ listing, editMode, setListingName, updateListing }: Listi
     activeFeatureFlags?.find((flag) => flag.name === FeatureFlagEnum.disableListingPreferences)
       ?.active || false
 
-  const enableNonRegulatedListings =
-    activeFeatureFlags?.find((flag) => flag.name === FeatureFlagEnum.enableNonRegulatedListings)
-      ?.active || false
-
   useEffect(() => {
     if (listing?.units) {
       const tempUnits = listing.units.map((unit, i) => ({
@@ -488,7 +484,6 @@ const ListingForm = ({ listing, editMode, setListingName, updateListing }: Listi
                           <ListingIntro
                             jurisdictions={profile?.jurisdictions || []}
                             requiredFields={requiredFields}
-                            enableNonRegulatedListings={enableNonRegulatedListings}
                           />
                           <ListingPhotos requiredFields={requiredFields} />
                           <BuildingDetails
