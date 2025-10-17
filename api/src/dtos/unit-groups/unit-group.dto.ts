@@ -1,10 +1,4 @@
-import {
-  IsBoolean,
-  IsDecimal,
-  IsEnum,
-  IsNumber,
-  ValidateNested,
-} from 'class-validator';
+import { IsBoolean, IsEnum, IsNumber, ValidateNested } from 'class-validator';
 import { Expose, Type } from 'class-transformer';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 import { AbstractDTO } from '../shared/abstract.dto';
@@ -13,7 +7,7 @@ import { UnitAccessibilityPriorityType } from '../unit-accessibility-priority-ty
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { UnitGroupAmiLevel } from './unit-group-ami-level.dto';
 import { RentTypeEnum } from '@prisma/client';
-import { ValidateUnitGroupRent } from '../../decorators/validate-units-rent.decorator';
+import { ValidateUnitGroupRent } from '../../decorators/validate-unit-groups-rent.decorator';
 
 class UnitGroup extends AbstractDTO {
   @Expose()
@@ -27,12 +21,12 @@ class UnitGroup extends AbstractDTO {
   minOccupancy?: number;
 
   @Expose()
-  @IsDecimal({}, { groups: [ValidationsGroupsEnum.default] })
+  @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   flatRentValueFrom?: number;
 
   @Expose()
-  @IsDecimal({}, { groups: [ValidationsGroupsEnum.default] })
+  @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   flatRentValueTo?: number;
 

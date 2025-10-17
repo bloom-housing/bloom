@@ -10,9 +10,14 @@ import {
   t,
 } from "@bloom-housing/ui-components"
 import { useCallback, useEffect, useMemo, useState } from "react"
-import { useForm, useFormContext, useWatch } from "react-hook-form"
+import { useForm, useWatch } from "react-hook-form"
 import { DrawerHeader } from "@bloom-housing/ui-seeds/src/overlays/Drawer"
-import { useAmiChartList, useUnitPriorityList, useUnitTypeList } from "../../../lib/hooks"
+import {
+  useAmiChartList,
+  useUnitPriorityList,
+  useUnitTypeList,
+  useWatchOnFormNumberFieldsChange,
+} from "../../../lib/hooks"
 import {
   AmiChart,
   EnumUnitGroupAmiLevelMonthlyRentDeterminationType,
@@ -57,9 +62,20 @@ const UnitGroupForm = ({
     action: "",
   }
 
-  const formMethods = useFormContext()
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { watch } = formMethods
+  const {
+    register,
+    formState: { errors },
+    trigger,
+    setValue,
+    control,
+    getValues,
+    reset,
+    watch,
+  } = useForm({
+    mode: "onChange",
+    shouldFocusError: false,
+  })
   const jurisdiction: string = watch("jurisdictions.id")
   /**
    * fetch form options
@@ -67,9 +83,6 @@ const UnitGroupForm = ({
   const { data: amiCharts = [] } = useAmiChartList(jurisdiction)
   const { data: unitPriorities = [] } = useUnitPriorityList()
   const { data: unitTypes = [] } = useUnitTypeList()
-
-  // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, errors, trigger, setValue, control, getValues, reset } = useForm()
 
   // Controls for validating occupancy
   const minOccupancy: number = useWatch({ control, name: "minOccupancy" })
@@ -104,6 +117,30 @@ const UnitGroupForm = ({
     { label: "4", value: "4" },
     { label: "5", value: "5" },
   ]
+
+  const fieldValuesToWatch = [
+    minOccupancy,
+    maxOccupancy,
+    sqFeetMin,
+    sqFeetMax,
+    floorMin,
+    floorMax,
+    bathroomMin,
+    bathroomMax,
+  ]
+
+  const fieldToTriggerWatch = [
+    "minOccupancy",
+    "maxOccupancy",
+    "sqFeetMin",
+    "sqFeetMax",
+    "floorMin",
+    "floorMax",
+    "bathroomMin",
+    "bathroomMax",
+  ]
+
+  useWatchOnFormNumberFieldsChange(fieldValuesToWatch, fieldToTriggerWatch, trigger)
 
   // sets the options for the ami charts
   useEffect(() => {
@@ -416,12 +453,6 @@ const UnitGroupForm = ({
                     errorMessage={t("errors.minGreaterThanMaxOccupancyError")}
                     error={fieldHasError(errors?.minOccupancy)}
                     validation={{ max: maxOccupancy || numberOccupancyOptions }}
-                    inputProps={{
-                      onChange: () => {
-                        void trigger("minOccupancy")
-                        void trigger("maxOccupancy")
-                      },
-                    }}
                   />
                 </Grid.Cell>
                 <Grid.Cell>
@@ -435,12 +466,6 @@ const UnitGroupForm = ({
                     errorMessage={t("errors.maxLessThanMinOccupancyError")}
                     error={fieldHasError(errors?.maxOccupancy)}
                     validation={{ min: minOccupancy }}
-                    inputProps={{
-                      onChange: () => {
-                        void trigger("minOccupancy")
-                        void trigger("maxOccupancy")
-                      },
-                    }}
                   />
                 </Grid.Cell>
               </Grid.Row>
@@ -534,12 +559,6 @@ const UnitGroupForm = ({
                     errorMessage={t("errors.minGreaterThanMaxBathroomsError")}
                     error={fieldHasError(errors.bathroomMin)}
                     validation={{ max: bathroomMax }}
-                    inputProps={{
-                      onChange: () => {
-                        void trigger("bathroomMin")
-                        void trigger("bathroomMax")
-                      },
-                    }}
                   />
                 </Grid.Cell>
                 <Grid.Cell>
@@ -553,12 +572,6 @@ const UnitGroupForm = ({
                     errorMessage={t("errors.maxLessThanMinBathroomsError")}
                     error={fieldHasError(errors.bathroomMax)}
                     validation={{ min: bathroomMin }}
-                    inputProps={{
-                      onChange: () => {
-                        void trigger("bathroomMin")
-                        void trigger("bathroomMax")
-                      },
-                    }}
                   />
                 </Grid.Cell>
               </Grid.Row>

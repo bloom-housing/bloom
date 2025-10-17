@@ -2476,6 +2476,44 @@ export class ScriptRunnerService {
       axios(configs, resolve, reject)
     })
   }
+  /**
+   * An example of how the script runner can work
+   */
+  migrateMultiselectDataToRefactor(options: IRequestOptions = {}): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/scriptRunner/migrateMultiselectDataToRefactor"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = null
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * An example of how the script runner can work
+   */
+  migrateMultiselectApplicationDataToRefactor(
+    params: {
+      /** requestBody */
+      body?: PaginationDTO
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/scriptRunner/migrateMultiselectApplicationDataToRefactor"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
 }
 
 export class FeatureFlagsService {
@@ -7127,6 +7165,14 @@ export interface CommunityTypeDTO {
   description?: string
 }
 
+export interface PaginationDTO {
+  /**  */
+  page?: number
+
+  /**  */
+  pageSize?: number
+}
+
 export interface FeatureFlagAssociate {
   /**  */
   id: string
@@ -7507,7 +7553,6 @@ export enum UserRoleEnum {
 export enum FeatureFlagEnum {
   "disableCommonApplication" = "disableCommonApplication",
   "disableJurisdictionalAdmin" = "disableJurisdictionalAdmin",
-  "enableSupportAdmin" = "enableSupportAdmin",
   "disableListingPreferences" = "disableListingPreferences",
   "disableWorkInRegion" = "disableWorkInRegion",
   "enableAccessibilityFeatures" = "enableAccessibilityFeatures",
@@ -7533,10 +7578,12 @@ export enum FeatureFlagEnum {
   "enableRegions" = "enableRegions",
   "enableSection8Question" = "enableSection8Question",
   "enableSingleUseCode" = "enableSingleUseCode",
+  "enableSupportAdmin" = "enableSupportAdmin",
   "enableUnderConstructionHome" = "enableUnderConstructionHome",
   "enableUnitGroups" = "enableUnitGroups",
   "enableUtilitiesIncluded" = "enableUtilitiesIncluded",
   "enableWaitlistAdditionalFields" = "enableWaitlistAdditionalFields",
+  "enableWhatToExpectAdditionalField" = "enableWhatToExpectAdditionalField",
   "enableV2MSQ" = "enableV2MSQ",
   "example" = "example",
   "hideCloseListingButton" = "hideCloseListingButton",
