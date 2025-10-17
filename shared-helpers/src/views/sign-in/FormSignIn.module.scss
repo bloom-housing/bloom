@@ -1,8 +1,17 @@
 .forgot-password {
-  float: inline-end;
   font-size: var(--seeds-font-size-sm);
-  text-decoration-line: underline;
-  color: var(--seeds-color-blue-900);
+}
+
+.forgot-password-wrapper {
+  grid-area: field;
+  width: fit-content;
+  justify-self: end;
+  text-align: right;
+}
+
+.password-grid {
+  display: grid;
+  grid-template-areas: "field";
 }
 
 .sign-in-error-container {
@@ -24,6 +33,7 @@
 
 .sign-in-password-input {
   margin-bottom: var(--seeds-s3);
+  grid-area: field;
 }
 
 .sign-in-action {
