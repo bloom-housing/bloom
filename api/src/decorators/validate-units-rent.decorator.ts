@@ -7,7 +7,7 @@ import {
   ValidatorConstraintInterface,
   ValidatorOptions,
 } from 'class-validator';
-import UnitGroup from 'src/dtos/unit-groups/unit-group.dto';
+import UnitGroup from '../dtos/unit-groups/unit-group.dto';
 
 export function ValidateUnitGroupRent(validationOptions?: ValidatorOptions) {
   return function (object: object, propertyName: string) {

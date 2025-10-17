@@ -1,7 +1,7 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 import { IsBoolean } from 'class-validator';
-import { ValidationsGroupsEnum } from 'src/enums/shared/validation-groups-enum';
+import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 
 export class ListingDocuments {
   @Expose()

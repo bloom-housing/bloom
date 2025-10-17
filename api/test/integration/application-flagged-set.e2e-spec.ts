@@ -17,7 +17,7 @@ import { PrismaService } from '../../src/services/prisma.service';
 import { jurisdictionFactory } from '../../prisma/seed-helpers/jurisdiction-factory';
 import { listingFactory } from '../../prisma/seed-helpers/listing-factory';
 import { applicationFactory } from '../../prisma/seed-helpers/application-factory';
-import { AfsQueryParams } from 'src/dtos/application-flagged-sets/afs-query-params.dto';
+import { AfsQueryParams } from '../../src/dtos/application-flagged-sets/afs-query-params.dto';
 import { View } from '../../src/enums/application-flagged-sets/view';
 import { AfsResolve } from '../../src/dtos/application-flagged-sets/afs-resolve.dto';
 import { IdDTO } from '../../src/dtos/shared/id.dto';
