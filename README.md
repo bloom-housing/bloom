@@ -97,7 +97,7 @@ The database is seeded with the `yarn:dbseed:development` script.
 Open the sites:
 
 - partners: http://localhost:3001
-- public: http://localhost:3002
+- public: http://localhost:3000
 
 ### Bloom UIC development
 
