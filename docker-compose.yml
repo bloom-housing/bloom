@@ -95,7 +95,7 @@ services:
 
       SHOW_PUBLIC_LOTTERY: "TRUE"
       SHOW_MANDATED_ACCOUNTS: "FALSE"
-      SHOW_PDWLESS: "FALSE"
+      SHOW_PWDLESS: "FALSE"
       SHOW_NEW_SEEDS_DESIGNS: "FALSE"
     depends_on:
       dbseed:
