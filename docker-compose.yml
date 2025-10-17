@@ -5,6 +5,7 @@ services:
     expose:
       - "5432"
     environment:
+      PGUSER: "postgres"
       POSTGRES_USER: "postgres"
       POSTGRES_PASSWORD: "example"
       POSTGRES_DB: "bloom_prisma"
