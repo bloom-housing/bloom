@@ -1,7 +1,7 @@
 services:
   db:
     image: docker.io/postgres:18
-    restart: never
+    restart: no
     expose:
       - "5432"
     environment:
@@ -17,7 +17,7 @@ services:
     build:
       context: ./api
       dockerfile: Dockerfile
-    restart: never
+    restart: no
     expose:
       - "3100"
     ports:
@@ -41,7 +41,7 @@ services:
     build:
       context: ./api
       dockerfile: Dockerfile.dbseed.dev
-    restart: never
+    restart: no
     environment:
       DATABASE_URL: "postgres://postgres:example@db:5432/bloom_prisma"
     depends_on:
@@ -52,7 +52,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.sites.partners
-    restart: never
+    restart: no
     expose:
       - "3001"
     ports:
@@ -70,7 +70,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.sites.public
-    restart: never
+    restart: no
     expose:
       - "3000"
     ports:
