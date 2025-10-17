@@ -1,9 +1,10 @@
 import React, { useContext } from "react"
 import { useRouter } from "next/router"
 import type { UseFormMethods } from "react-hook-form"
-import { Field, Form, NavigationContext, t } from "@bloom-housing/ui-components"
-import { Button } from "@bloom-housing/ui-seeds"
+import { Field, t } from "@bloom-housing/ui-components"
+import { Button, Link } from "@bloom-housing/ui-seeds"
 import { getListingRedirectUrl } from "../../utilities/getListingRedirectUrl"
+import { Form } from "../components/Form"
 import styles from "./FormSignIn.module.scss"
 
 export type FormSignInPwdlessProps = {
@@ -35,7 +36,6 @@ const FormSignInPwdless = ({
   const onError = () => {
     window.scrollTo(0, 0)
   }
-  const { LinkComponent } = useContext(NavigationContext)
   const router = useRouter()
   const listingIdRedirect = router.query?.listingId as string
   const forgetPasswordURL = getListingRedirectUrl(listingIdRedirect, "/forgot-password")
@@ -56,12 +56,7 @@ const FormSignInPwdless = ({
       />
 
       {!useCode && (
-        <>
-          <aside>
-            <LinkComponent href={forgetPasswordURL} className={styles["forgot-password"]}>
-              {t("authentication.signIn.forgotPassword")}
-            </LinkComponent>
-          </aside>
+        <div className={styles["password-grid"]}>
           <Field
             className={styles["sign-in-password-input"]}
             name="password"
@@ -74,7 +69,12 @@ const FormSignInPwdless = ({
             type={"password"}
             dataTestId="sign-in-password-field"
           />
-        </>
+          <aside className={styles["forgot-password-wrapper"]}>
+            <Link href={forgetPasswordURL} className={styles["forgot-password"]}>
+              {t("authentication.signIn.forgotPassword")}
+            </Link>
+          </aside>
+        </div>
       )}
       <div className={styles["sign-in-action"]}>
         <Button

@@ -1,4 +1,5 @@
 .form-card {
+  --card-footer-background-color: var(--seeds-bg-color-surface-primary);
   --card-content-padding-inline: var(--seeds-s12);
   --card-header-padding-inline: var(--seeds-s12);
   @media (max-width: theme("screens.sm")) {

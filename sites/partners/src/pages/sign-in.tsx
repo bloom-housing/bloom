@@ -191,9 +191,9 @@ const SignIn = () => {
         )}
         emailOnClick={() => setValue("mfaType", MfaType.email)}
         smsOnClick={() => setValue("mfaType", MfaType.sms)}
-        control={{ register, errors, handleSubmit, setValue }}
+        control={{ register, errors, handleSubmit }}
         networkError={{
-          content: { ...networkError, error: !!networkError?.error },
+          content: { ...networkError },
           reset: resetNetworkError,
         }}
       />
@@ -207,13 +207,14 @@ const SignIn = () => {
           mfaType,
           setRenderStep,
           requestMfaCode,
+          determineNetworkError,
           setAllowPhoneNumberEdit,
           setPhoneNumber,
           resetNetworkError
         )}
         control={{ errors, handleSubmit, control }}
         networkError={{
-          content: { ...networkError, error: !!networkError?.error },
+          content: { ...networkError },
           reset: resetNetworkError,
         }}
         phoneNumber={phoneNumber}
@@ -233,7 +234,7 @@ const SignIn = () => {
         )}
         control={{ register, errors, handleSubmit, watch }}
         networkError={{
-          content: { ...networkError, error: !!networkError?.error },
+          content: { ...networkError },
           reset: resetNetworkError,
         }}
         mfaType={mfaType}

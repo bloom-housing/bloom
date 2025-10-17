@@ -1,15 +1,14 @@
 import React from "react"
+import { Field, t } from "@bloom-housing/ui-components"
+import { Button, Card } from "@bloom-housing/ui-seeds"
 import {
-  Field,
+  BloomCard,
   Form,
-  FormCard,
-  t,
+  FormSignInControl,
   FormSignInErrorBox,
   NetworkStatus,
-  FormSignInControl,
-} from "@bloom-housing/ui-components"
-import { Button, Icon } from "@bloom-housing/ui-seeds"
-import { CustomIconMap } from "@bloom-housing/shared-helpers"
+} from "@bloom-housing/shared-helpers"
+import styles from "./FormSignIn.module.scss"
 
 export enum RequestType {
   email = "email",
@@ -57,24 +56,23 @@ const FormSignInMFACode = ({
   }
 
   return (
-    <FormCard>
-      <div className="form-card__lead text-center">
-        <Icon size="2xl">{CustomIconMap.profile}</Icon>
-        <h2 className="form-card__title is-borderless">{t("nav.signInMFA.verifyTitle")}</h2>
-        <p className="form-card__sub-title">
-          {mfaType === RequestType.sms
-            ? t("nav.signInMFA.haveSentCodeToPhone")
-            : t("nav.signInMFA.haveSentCodeToEmail")}
-        </p>
-      </div>
-      <FormSignInErrorBox
-        errors={errors}
-        networkStatus={networkError}
-        errorMessageId={"mfa-code"}
-      />
-
-      <div className="form-card__group pt-0">
-        <Form id="sign-in-mfa" className="mt-10" onSubmit={handleSubmit(onSubmit, onError)}>
+    <BloomCard
+      title={t("nav.signInMFA.verifyTitle")}
+      subtitle={
+        mfaType === RequestType.sms
+          ? t("nav.signInMFA.haveSentCodeToPhone")
+          : t("nav.signInMFA.haveSentCodeToEmail")
+      }
+      iconSymbol="profile"
+    >
+      <Form id="sign-in-mfa" onSubmit={handleSubmit(onSubmit, onError)}>
+        <FormSignInErrorBox
+          errors={errors}
+          networkStatus={networkError}
+          errorMessageId={"mfa-code"}
+          className={styles["sign-in-error-container"]}
+        />
+        <Card.Section>
           <Field
             caps={true}
             name="mfaCode"
@@ -86,14 +84,16 @@ const FormSignInMFACode = ({
             dataTestId="sign-in-mfa-code-field"
             note={note}
           />
-          <div className="text-center mt-10">
+        </Card.Section>
+        <Card.Footer>
+          <Card.Section>
             <Button type="submit" variant="primary" id="verify-and-sign-in">
               {t("nav.signInMFA.signIn")}
             </Button>
-          </div>
-        </Form>
-      </div>
-    </FormCard>
+          </Card.Section>
+        </Card.Footer>
+      </Form>
+    </BloomCard>
   )
 }
 

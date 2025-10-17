@@ -19,6 +19,9 @@ export type FormSignInProps = {
 
 export type FormSignInControl = {
   errors: UseFormMethods["errors"]
+  handleSubmit?: UseFormMethods["handleSubmit"]
+  register?: UseFormMethods["register"]
+  watch?: UseFormMethods["watch"]
 }
 
 export type FormSignInValues = {

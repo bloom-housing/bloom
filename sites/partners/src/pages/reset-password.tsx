@@ -1,9 +1,9 @@
 import React, { useState, useContext, useRef } from "react"
 import { useRouter } from "next/router"
 import { useForm } from "react-hook-form"
-import { Button, Icon } from "@bloom-housing/ui-seeds"
-import { Field, Form, FormCard, t, AlertBox } from "@bloom-housing/ui-components"
-import { AuthContext, CustomIconMap, MessageContext } from "@bloom-housing/shared-helpers"
+import { Alert, Button, Card } from "@bloom-housing/ui-seeds"
+import { Field, t } from "@bloom-housing/ui-components"
+import { AuthContext, BloomCard, Form, MessageContext } from "@bloom-housing/shared-helpers"
 import FormsLayout from "../layouts/forms"
 
 const ResetPassword = () => {
@@ -42,18 +42,13 @@ const ResetPassword = () => {
 
   return (
     <FormsLayout title={`Reset Password - ${t("nav.siteTitlePartners")}`}>
-      <FormCard>
-        <div className="form-card__lead text-center border-b mx-0">
-          <Icon size="2xl">{CustomIconMap.profile}</Icon>
-          <h2 className="form-card__title">{t("authentication.forgotPassword.changePassword")}</h2>
-        </div>
-        {requestError && (
-          <AlertBox className="" onClose={() => setRequestError(undefined)} type="alert">
-            {requestError}
-          </AlertBox>
-        )}
-        <div className="form-card__group pt-0 border-b">
-          <Form id="sign-in" className="mt-10" onSubmit={handleSubmit(onSubmit)}>
+      <BloomCard iconSymbol="profile" title={t("authentication.forgotPassword.changePassword")}>
+        <Form id="sign-in" onSubmit={handleSubmit(onSubmit)}>
+          <Card.Section>
+            {requestError && (
+              <Alert variant="alert" fullwidth className="spacer-content" onClose={() => setRequestError(undefined)}>{requestError}</Alert>
+            )}
+
             <Field
               name="password"
               label={t("authentication.createAccount.password")}
@@ -78,15 +73,16 @@ const ResetPassword = () => {
               type="password"
               labelClassName={"text__caps-spaced"}
             />
-
-            <div className="text-center mt-6">
+          </Card.Section>
+          <Card.Footer>
+            <Card.Section>
               <Button type="submit" variant="primary">
                 {t("authentication.forgotPassword.changePassword")}
               </Button>
-            </div>
-          </Form>
-        </div>
-      </FormCard>
+            </Card.Section>
+          </Card.Footer>
+        </Form>
+      </BloomCard>
     </FormsLayout>
   )
 }

@@ -25,6 +25,40 @@
   .seeds-button[data-variant="primary"] {
     color: white; // AG grid styling from UIC was messing up our primary button
   }
+
+  .bloom-markdown { // copied over from public
+    &,
+    > * {
+      overflow-wrap: anywhere;
+    }
+
+    p:not(li > *) {
+      padding-block: 0.25em;
+    }
+
+    ul {
+      list-style: disc;
+    }
+
+    ol {
+      list-style: decimal;
+    }
+    ul,
+    ol {
+      margin-inline-start: var(--seeds-s5);
+      margin-block-end: 0.5em;
+    }
+
+    hr {
+      margin-block: var(--seeds-spacer-label);
+      width: 100%;
+    }
+
+    a {
+      color: var(--seeds-color-blue-500);
+      text-decoration: underline;
+    }
+  }
 }
 
 .section-with-grid hgroup p {
