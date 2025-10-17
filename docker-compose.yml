@@ -72,12 +72,12 @@ services:
       dockerfile: Dockerfile.sites.public
     restart: never
     expose:
-      - "3002"
+      - "3000"
     ports:
-      - "3002:3002"
+      - "3000:3000"
     environment:
       NODE_ENV: "production"
-      NEXTJS_PORT: 3002
+      NEXTJS_PORT: 3000
       BACKEND_API_BASE: "http://api:3100"
       BACKEND_API_BASE_NEW: "http://api:3100"
       LISTINGS_QUERY: "/listings"
