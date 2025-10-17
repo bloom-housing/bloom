@@ -8,10 +8,43 @@ Cloud Native Computing Foundation.
 
 - [tofu_root_modules](./tofu_root_modules): Contains all the Open Tofu root modules. A root module
   is a set of resources that are all managed together. Each root module has a state file that
-  records the results of the last-run apply operation.
+  records the results of the latest apply operation.
 
    - [bloom_dev_deployer_permission_set](./tofu_root_modules/bloom_dev_deployer_permission_set/README.md):
      Configures the bloom-dev-deployer permission set that is assigned on the bloom-dev account.
+
+## Infrastructure-as-code mental model
+
+Let's say that you need to deploy Bloom to an AWS account. A straight-forward way of achieving this
+would be to log into the AWS web console and create all the required resources. The downside of this
+approach is that unless you take really good notes, it is a difficult process to replicate. Even if
+you take really good notes, the process might have a lot of steps which are all opportunities for
+making mistakes. Additionally, it is not possible to automate such a process (well, maybe if you
+have one of those neat AIs that can control your browser. But the AI could also make mistakes just
+like a human).
+
+Another approach could be to write a bash script that calls a bunch of AWS CLI commands that create
+the resources. This improves on the web-based approach because all the steps are explicitly written
+down. However, the script only works on a fresh AWS account - if you run it again there will be
+a bunch of errors because the resources will have already been created. If you need to change how
+the account is configured, you need to write more scripts. That reminds me too much of database
+evolutions to seem like an good idea...
+
+Enter infrastructure-as-code tools like Open Tofu. I like to think of them as CLI scripting with
+a bunch of functionality already built in. We have `.tf` files that contain [resource
+descriptions](https://opentofu.org/docs/language/resources/) for everything we want to configure. We
+can run the 'script' by running [`tofu apply`](https://opentofu.org/docs/cli/commands/apply/). If
+the AWS account already matches our desired configuration, Tofu gives us a nice message that the
+infrastructure matches the configuration. Otherwise, Tofu presents us with a list of planned changes
+it thinks it needs to make and asks if it should go forward with the plan.
+
+These tools are not magic, however. It is still possible to misconfigure resources and get errors
+from the AWS API. These cases are not always handled gracefully and sometimes require deleting or
+configuring things manually to unbork the tool. Using a infrastructure-as-code still requires manual
+testing and knowledge of the underlying systems you are configuring. It is a heck of a lot better
+than shell scripting, however, at least in my experience :)
+
+_Monologue by Avritt Rohwer_
 
 ## Developer setup
 
