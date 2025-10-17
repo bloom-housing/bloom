@@ -40,7 +40,7 @@ const AdditionalDetails = (props: AdditionalDetailsProps) => {
         <Grid.Row columns={1}>
           <Grid.Cell>
             <FieldGroup
-              name={"requiredDocuments"}
+              name={"requiredDocumentsOptions"}
               groupLabel={
                 <span>
                   {t("listings.requiredDocuments")}
@@ -55,6 +55,24 @@ const AdditionalDetails = (props: AdditionalDetailsProps) => {
                 value: key,
               }))}
               fieldGroupClassName="grid grid-cols-2 mt-2"
+            />
+          </Grid.Cell>
+        </Grid.Row>
+        <Grid.Row columns={2}>
+          <Grid.Cell>
+            <Textarea
+              id={"requiredDocuments"}
+              fullWidth={true}
+              register={register}
+              maxLength={2000}
+              placeholder={""}
+              {...defaultFieldProps(
+                "requiredDocuments",
+                t("listings.requiredDocumentsAdditionalInfo"),
+                props.requiredFields,
+                errors,
+                clearErrors
+              )}
             />
           </Grid.Cell>
         </Grid.Row>

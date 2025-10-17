@@ -762,6 +762,7 @@
   "listings.rentalHistory": "Rental history",
   "listings.rePricing": "Re-pricing",
   "listings.requiredDocuments": "Required documents",
+  "listings.requiredDocumentsAdditionalInfo": "Required documents (Additional Info)",
   "listings.requiredDocuments.socialSecurityCard": "Social Security card",
   "listings.requiredDocuments.birthCertificate": "Birth Certificate (all household members 18+)",
   "listings.requiredDocuments.governmentIssuedId": "Government-issued ID (all household members 18+)",
