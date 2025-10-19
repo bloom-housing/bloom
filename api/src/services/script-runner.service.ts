@@ -13,6 +13,7 @@ import {
   Prisma,
   ReviewOrderTypeEnum,
 } from '@prisma/client';
+import dayjs from 'dayjs';
 import { Request as ExpressRequest } from 'express';
 import https from 'https';
 import { AmiChartService } from './ami-chart.service';
@@ -32,11 +33,7 @@ import { AmiChartUpdate } from '../dtos/ami-charts/ami-chart-update.dto';
 import MultiselectQuestion from '../dtos/multiselect-questions/multiselect-question.dto';
 import { MultiselectOption } from '../dtos/multiselect-questions/multiselect-option.dto';
 import { AmiChartUpdateImportDTO } from '../dtos/script-runner/ami-chart-update-import.dto';
-<<<<<<< HEAD
 import { calculateSkip, calculateTake } from '../utilities/pagination-helpers';
-=======
-import dayjs from 'dayjs';
->>>>>>> 9b7d6bd06 (fix: add pii deletion population script)
 
 /**
   this is the service for running scripts
@@ -52,7 +49,7 @@ export class ScriptRunnerService {
     private prisma: PrismaService,
     @Inject(Logger)
     private logger = new Logger(ScriptRunnerService.name),
-  ) { }
+  ) {}
 
   /**
    *
@@ -203,8 +200,9 @@ export class ScriptRunnerService {
     amiChartUpdateImportDTO: AmiChartUpdateImportDTO,
   ): Promise<SuccessDTO> {
     // script runner standard start up
-    const scriptName = `AMI Chart ${amiChartUpdateImportDTO.amiId
-      } update ${new Date()}`;
+    const scriptName = `AMI Chart ${
+      amiChartUpdateImportDTO.amiId
+    } update ${new Date()}`;
     const requestingUser = mapTo(User, req['user']);
     await this.markScriptAsRunStart(scriptName, requestingUser);
 
@@ -780,7 +778,8 @@ export class ScriptRunnerService {
   ): Promise<SuccessDTO> {
     const requestingUser = mapTo(User, req['user']);
     await this.markScriptAsRunStart(
-      `migrate multiselect application data to refactor with page ${page || 1
+      `migrate multiselect application data to refactor with page ${
+        page || 1
       } of size ${pageSize || 5_000}`,
       requestingUser,
     );
@@ -914,7 +913,7 @@ export class ScriptRunnerService {
     }
     console.log(`END OF RUN ${page ? skip : 1}:${skip + take}\n\n\n\n`);
 
-   await this.markScriptAsComplete(
+    await this.markScriptAsComplete(
       `migrate multiselect application data to refactor with page ${
         page || 1
       } of size ${pageSize || 5_000}`,
@@ -923,8 +922,8 @@ export class ScriptRunnerService {
     return { success: true };
   }
 
-  /** 
-  * @param req incoming request object
+  /**
+   * @param req incoming request object
    * @returns successDTO
    * @description for all closed listings populate the expire_after on applications
    */
