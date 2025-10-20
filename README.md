@@ -88,6 +88,14 @@ Run the docker images to emulate a cloud deployment locally on your machine. Doc
 Compose are required. The easiest way is to install [Docker
 Desktop](https://docs.docker.com/desktop/).
 
+To get started, run `docker compose up` which will build images then run them. The sites are
+available at:
+
+- partners: http://localhost:3001
+- public: http://localhost:3000
+
+#### Containers
+
 The following containers are defined in the [docker-compose.yml](./docker-compose.yml) file:
 
 - `db`: the postgres database.
@@ -120,6 +128,75 @@ because it already seeded the database on the previous run. Either:
 - Run `docker compose up db api partners public` to restart just the `db`, `api`, `partners`, and
   `public` containers.
 
+By default `docker compose up` will not rebuild images. Rebuild with `docker compose build`.
+
+#### Debugging
+
+##### Run a command in an existing container
+
+To run a command inside one of the containers defined in the docker-compose.yml file, first get its
+container ID:
+
+```bash
+docker container ls
+```
+
+For example, the ID of of the bloom-api container in the following example output is `5b4b92589171`:
+
+```
+$ docker container ls
+CONTAINER ID  IMAGE                                    COMMAND               CREATED         STATUS                   PORTS                   NAMES
+5b4b92589171  docker.io/library/postgres:18            postgres              13 minutes ago  Up 13 minutes (healthy)  5432/tcp                bloom-db-1
+3fb2c2f39540  docker.io/library/bloom-api:latest       /bin/bash -c yarn...  13 minutes ago  Up 13 minutes (healthy)  0.0.0.0:3100->3100/tcp  bloom-api-1
+d111808885be  docker.io/library/bloom-partners:latest  /bin/bash -c yarn...  13 minutes ago  Up 13 minutes            0.0.0.0:3001->3001/tcp  bloom-partners-1
+62de5c066288  docker.io/library/bloom-public:latest    /bin/bash -c yarn...  13 minutes ago  Up 13 minutes            0.0.0.0:3000->3000/tcp  bloom-public-1
+```
+
+Then, use `docker exec` to run a command. For example, the following command runs `ls
+/app/sites/public/.next/server/chunks` in the public site container:
+
+```bash
+docker exec 62de5c066288 ls /app/sites/public/.next/server/chunks
+```
+
+To run a command that expects stdin like bash, use `docker exec -it`. For example, the following
+command runs a bash process inside the public site container:
+
+```bash
+docker exec -it 62de5c066288 /bin/bash
+```
+
+##### Start an additional container in the network
+
+The docker-compose.yml file creates a docker network called `bloom_default`. To run a new container
+inside the network, use the `--network=bloom_default` flag in `docker container run`. For example, the
+following command starts a python docker image and runs a bash shell in it. Then in the shell it
+curls the api and pretty-prints the result using python:
+
+```
+docker container run --network=bloom_default --rm -it python:latest /bin/bash
+root@c89395fd8af3:/# curl api:3100/jurisdictions | python -m json
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100 26650  100 26650    0     0  1824k      0 --:--:-- --:--:-- --:--:-- 1858k
+[
+    {
+        "id": "1f5639e2-5de0-40b3-8e32-ed5dca4d22f2",
+        "createdAt": "2025-10-20T23:01:27.920Z",
+        "updatedAt": "2025-10-20T23:01:27.920Z",
+        "name": "Revitalizing Rosewood",
+        "notificationsSignUpUrl": "https://www.exygy.com",
+        "languages": [
+            "en",
+             ...
+```
+
+The `--rm` flag removes the container when the command exits. Otherwise the container still exits
+but with an Exited status. Run `docker container ls -a` to list all containers including ones that
+are not running.
+
+#### Database seeding
+
 The database is seeded with the `yarn:dbseed:staging` script by default. To use the dev seed script,
 edit the `command:` field for the `dbseed` service in the [docker-compose.yml](./docker-compose.yml)
 file:
@@ -140,11 +217,6 @@ file:
       api:
         condition: service_healthy
 ```
-
-The sites are available at:
-
-- partners: http://localhost:3001
-- public: http://localhost:3000
 
 ### Bloom UIC development
 
