@@ -33,7 +33,7 @@ const ApplicationSummary = () => {
   const { profile, applicationsService } = useContext(AuthContext)
   const toastyRef = useToastyRef()
   const [validationError, setValidationError] = useState(false)
-  const { conductor, application, listing } = useFormConductor("summary", true)
+  const { conductor, application, listing } = useFormConductor("summary")
   let currentPageSection = 4
   if (listingSectionQuestions(listing, MultiselectQuestionsApplicationSectionEnum.programs)?.length)
     currentPageSection += 1
