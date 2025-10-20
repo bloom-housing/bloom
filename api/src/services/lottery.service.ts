@@ -505,6 +505,7 @@ export class LotteryService {
             UserRoleEnum.admin,
             UserRoleEnum.jurisdictionAdmin,
             UserRoleEnum.partner,
+            UserRoleEnum.supportAdmin,
           ],
           storedListing.id,
           storedListing.jurisdictionId,
@@ -532,6 +533,26 @@ export class LotteryService {
         }
         const storedListingMapped = mapTo(Listing, storedListing);
         await this.publishLottery(storedListingMapped);
+        const partnerUserEmailInfo = await this.listingService.getUserEmailInfo(
+          [
+            UserRoleEnum.admin,
+            UserRoleEnum.jurisdictionAdmin,
+            UserRoleEnum.partner,
+            UserRoleEnum.supportAdmin,
+          ],
+          storedListing.id,
+          storedListing.jurisdictionId,
+        );
+        await this.emailService.lotteryReleased(
+          {
+            id: storedListing.id,
+            name: storedListing.name,
+            juris: storedListing.jurisdictionId,
+          },
+          partnerUserEmailInfo.emails,
+          this.configService.get('PARTNERS_PORTAL_URL'),
+        );
+
         break;
       }
       default: {
