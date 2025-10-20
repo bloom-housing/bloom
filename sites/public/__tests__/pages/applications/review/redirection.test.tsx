@@ -32,7 +32,7 @@ describe("applications pages", () => {
     it("no listing available should redirect to listings page", async () => {
       const { pushMock } = mockNextRouter()
       const conductor = new ApplicationConductor({}, {})
-      const { getByText, getByTestId } = render(
+      render(
         <AppSubmissionContext.Provider
           value={{
             conductor: conductor,
@@ -58,7 +58,7 @@ describe("applications pages", () => {
     it("listing available should not redirect to listings page", async () => {
       const { pushMock } = mockNextRouter()
       const conductor = new ApplicationConductor({}, {})
-      const { getByText, getByTestId } = render(
+      render(
         <AppSubmissionContext.Provider
           value={{
             conductor: conductor,
@@ -86,7 +86,7 @@ describe("applications pages", () => {
     it("no listing available should redirect to listings page", async () => {
       const { pushMock } = mockNextRouter()
       const conductor = new ApplicationConductor({}, {})
-      const { getByText, getByTestId } = render(
+      render(
         <AppSubmissionContext.Provider
           value={{
             conductor: conductor,
@@ -112,7 +112,7 @@ describe("applications pages", () => {
     it("listing available should not redirect to listings page", async () => {
       const { pushMock } = mockNextRouter()
       const conductor = new ApplicationConductor({}, {})
-      const { getByText, getByTestId } = render(
+      render(
         <AppSubmissionContext.Provider
           value={{
             conductor: conductor,
