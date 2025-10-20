@@ -81,7 +81,7 @@ describe('Application flagged set Controller Tests', () => {
           birthYear: nameIndicator,
         },
         listingId: listing,
-        householdMember: [householdMember],
+        householdMember: householdMember ? [householdMember] : null,
       }),
       include: {
         applicant: true,
