@@ -20,7 +20,10 @@ import { randomUUID } from 'crypto';
 import { HttpModule, HttpService } from '@nestjs/axios';
 import { of } from 'rxjs';
 import { PrismaService } from '../../../src/services/prisma.service';
-import { ListingService, views } from '../../../src/services/listing.service';
+import {
+  ListingService,
+  includeViews,
+} from '../../../src/services/listing.service';
 import { ListingsQueryParams } from '../../../src/dtos/listings/listings-query-params.dto';
 import { ListingOrderByKeys } from '../../../src/enums/listings/order-by-enum';
 import { OrderByEnum } from '../../../src/enums/shared/order-by-enum';
@@ -4964,7 +4967,7 @@ describe('Testing listing service', () => {
       );
 
       expect(prisma.listings.update).toHaveBeenCalledWith({
-        include: views.full,
+        include: includeViews.full,
         data: {
           name: 'example listing name',
           contentUpdatedAt: expect.anything(),
