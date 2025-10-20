@@ -1805,14 +1805,22 @@ export class ListingService implements OnModuleInit {
     a listing view can be provided which will add the joins to produce that view correctly
   */
   async findOrThrow(id: string, view?: ListingViews) {
+    const hasSelectView = view && selectViews[view];
     const viewInclude = view ? includeViews[view] : undefined;
 
-    const listing = await this.prisma.listings.findUnique({
-      include: viewInclude,
-      where: {
-        id,
-      },
-    });
+    const listing = hasSelectView
+      ? await this.prisma.listings.findUnique({
+          select: selectViews[view],
+          where: {
+            id,
+          },
+        })
+      : await this.prisma.listings.findUnique({
+          include: viewInclude,
+          where: {
+            id,
+          },
+        });
 
     if (!listing) {
       throw new NotFoundException(

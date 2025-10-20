@@ -2327,13 +2327,9 @@ describe('Testing listing service', () => {
         where: {
           id: 'listingId',
         },
-        include: {
-          Listings: {
-            select: {
-              id: true,
-              name: true,
-            },
-          },
+        select: {
+          id: true,
+          name: true,
           jurisdictions: {
             select: {
               id: true,
