@@ -535,6 +535,7 @@ const ListingFormActions = ({
     listingsService,
     profile?.userRoles.isAdmin,
     profile?.userRoles.isPartner,
+    profile?.userRoles.isSupportAdmin,
     router,
     setErrorAlert,
     showCloseListingModal,

@@ -228,7 +228,7 @@ export default function ListingsList() {
     }
 
     return columns
-  }, [])
+  }, [doJurisdictionsHaveFeatureFlagOn, profile?.userRoles?.isLimitedJurisdictionalAdmin])
 
   const { listingDtos, listingsLoading } = useListingsData({
     page: tableOptions.pagination.currentPage,
