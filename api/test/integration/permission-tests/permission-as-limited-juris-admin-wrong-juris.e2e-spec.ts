@@ -434,7 +434,7 @@ describe('Testing Permissioning of endpoints as Limited Jurisdictional Admin in 
   describe('Testing asset endpoints', () => {
     it('should succeed for presigned endpoint', async () => {
       await request(app.getHttpServer())
-        .post('/assets/presigned-upload-metadata/')
+        .post('/asset/presigned-upload-metadata/')
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send(buildPresignedEndpointMock())
         .set('Cookie', cookies)
@@ -785,16 +785,16 @@ describe('Testing Permissioning of endpoints as Limited Jurisdictional Admin in 
         .expect(200);
     });
 
-    it('should error as forbidden for create endpoint', async () => {
+    it('should succeed for create endpoint', async () => {
       await request(app.getHttpServer())
         .post('/multiselectQuestions')
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send(buildMultiselectQuestionCreateMock(jurisId))
         .set('Cookie', cookies)
-        .expect(403);
+        .expect(201);
     });
 
-    it('should error as forbidden for update endpoint', async () => {
+    it('should succeed for update endpoint', async () => {
       const multiselectQuestionA = await prisma.multiselectQuestions.create({
         data: multiselectQuestionFactory(jurisId),
       });
@@ -806,10 +806,10 @@ describe('Testing Permissioning of endpoints as Limited Jurisdictional Admin in 
           buildMultiselectQuestionUpdateMock(jurisId, multiselectQuestionA.id),
         )
         .set('Cookie', cookies)
-        .expect(403);
+        .expect(200);
     });
 
-    it('should error as forbidden for delete endpoint', async () => {
+    it('should succeed for delete endpoint', async () => {
       const multiselectQuestionA = await prisma.multiselectQuestions.create({
         data: multiselectQuestionFactory(jurisId),
       });
@@ -821,7 +821,17 @@ describe('Testing Permissioning of endpoints as Limited Jurisdictional Admin in 
           id: multiselectQuestionA.id,
         } as IdDTO)
         .set('Cookie', cookies)
-        .expect(403);
+        .expect(200);
+
+      const activityLogResult = await prisma.activityLog.findFirst({
+        where: {
+          module: 'multiselectQuestion',
+          action: permissionActions.delete,
+          recordId: multiselectQuestionA.id,
+        },
+      });
+
+      expect(activityLogResult).not.toBeNull();
     });
   });
 
@@ -995,10 +1005,10 @@ describe('Testing Permissioning of endpoints as Limited Jurisdictional Admin in 
   describe('Testing listing endpoints', () => {
     it('should succeed for list endpoint', async () => {
       await request(app.getHttpServer())
-        .get(`/listings?`)
+        .post(`/listings/list`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
-        .expect(200);
+        .expect(201);
     });
 
     it('should succeed for filterableList endpoint', async () => {
@@ -1167,10 +1177,10 @@ describe('Testing Permissioning of endpoints as Limited Jurisdictional Admin in 
 
     it('should succeed for mapMarkers endpoint', async () => {
       await request(app.getHttpServer())
-        .get(`/listings/mapMarkers`)
+        .post(`/listings/mapMarkers`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
-        .expect(200);
+        .expect(201);
     });
   });
 

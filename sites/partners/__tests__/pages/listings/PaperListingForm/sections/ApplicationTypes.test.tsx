@@ -9,11 +9,11 @@ import ApplicationTypes, {
 } from "../../../../../src/components/listings/PaperListingForm/sections/ApplicationTypes"
 import { act, mockNextRouter, render, screen, within, waitFor } from "../../../../testUtils"
 import { FormProviderWrapper } from "../../../../components/applications/sections/helpers"
-import * as helpers from "../../../../../src/lib/helpers"
+import * as assets from "../../../../../src/lib/assets"
 
-jest.mock("../../../../../src/lib/helpers", () => ({
-  ...jest.requireActual("../../../../../src/lib/helpers"),
-  cloudinaryFileUploader: jest.fn(),
+jest.mock("../../../../../src/lib/assets", () => ({
+  ...jest.requireActual("../../../../../src/lib/assets"),
+  uploadAssetAndSetData: jest.fn(),
 }))
 
 beforeAll(() => {
@@ -184,17 +184,19 @@ describe("ApplicationTypes", () => {
     })
 
     it("should disable language selector and save button during file upload, then enable save after upload", async () => {
-      const mockCloudinaryUploader = helpers.cloudinaryFileUploader as jest.MockedFunction<
-        typeof helpers.cloudinaryFileUploader
+      const mockCloudinaryUploader = assets.uploadAssetAndSetData as jest.MockedFunction<
+        typeof assets.uploadAssetAndSetData
       >
-      // eslint-disable-next-line @typescript-eslint/require-await
-      mockCloudinaryUploader.mockImplementation(async ({ setCloudinaryData, setProgressValue }) => {
-        setProgressValue(100)
-        setCloudinaryData({
-          id: "test-cloudinary-id/test-file",
-          url: "https://test.cloudinary.com/test-file.pdf",
-        })
-      })
+      mockCloudinaryUploader.mockImplementation(
+        // eslint-disable-next-line @typescript-eslint/require-await
+        async (_file, _label, setProgressValue, setAssetData) => {
+          setProgressValue(100)
+          setAssetData({
+            id: "test-cloudinary-id/test-file",
+            url: "https://test.cloudinary.com/test-file.pdf",
+          })
+        }
+      )
 
       render(
         <AuthContext.Provider value={mockAuthContext}>

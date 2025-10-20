@@ -454,7 +454,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
   describe('Testing asset endpoints', () => {
     it('should succeed for presigned endpoint', async () => {
       await request(app.getHttpServer())
-        .post('/assets/presigned-upload-metadata/')
+        .post('/asset/presigned-upload-metadata/')
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send(buildPresignedEndpointMock())
         .set('Cookie', cookies)
@@ -1017,10 +1017,10 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
   describe('Testing listing endpoints', () => {
     it('should succeed for list endpoint', async () => {
       await request(app.getHttpServer())
-        .get(`/listings?`)
+        .post(`/listings/list`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
-        .expect(200);
+        .expect(201);
     });
 
     it('should succeed for filterableList endpoint', async () => {
@@ -1115,6 +1115,8 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         listing.id,
         jurisdictionId,
       );
+      val.applicationDueDate = listing.applicationDueDate;
+      val.reviewOrderType = listing.reviewOrderType;
 
       await request(app.getHttpServer())
         .put(`/listings/${listing.id}`)
@@ -1170,10 +1172,10 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
 
     it('should succeed for mapMarkers endpoint', async () => {
       await request(app.getHttpServer())
-        .get(`/listings/mapMarkers`)
+        .post(`/listings/mapMarkers`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
-        .expect(200);
+        .expect(201);
     });
   });
   describe('Testing application flagged set endpoints', () => {
