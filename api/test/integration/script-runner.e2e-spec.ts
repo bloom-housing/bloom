@@ -81,7 +81,6 @@ describe('Script Runner Controller Tests', () => {
 
     it('should set the expire_after value for applications on closed listings', async () => {
       process.env.APPLICATION_DAYS_TILL_EXPIRY = '90';
-      // Reset all closedAt values so other tests don't impact this test
       const jurisData = jurisdictionFactory();
       const jurisdiction = await prisma.jurisdictions.create({
         data: {
