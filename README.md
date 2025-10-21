@@ -141,7 +141,7 @@ container ID:
 docker container ls
 ```
 
-For example, the ID of of the bloom-api container in the following example output is `5b4b92589171`:
+For example, the ID of of the bloom-api container in the following example output is `62de5c066288`:
 
 ```
 $ docker container ls
