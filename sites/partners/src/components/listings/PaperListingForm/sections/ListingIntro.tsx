@@ -25,8 +25,10 @@ const ListingIntro = (props: ListingIntroProps) => {
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, clearErrors, errors, getValues } = formMethods
+  const { register, clearErrors, errors, getValues, watch } = formMethods
   const listing = getValues()
+
+  const listingType = watch("listingType")
 
   const jurisdictionOptions: SelectOption[] = [
     { label: "", value: "" },
@@ -139,32 +141,32 @@ const ListingIntro = (props: ListingIntroProps) => {
             />
           </Grid.Cell>
         </Grid.Row>
-        <Grid.Row columns={1}>
-          <Grid.Cell>
-            <FieldGroup
-              name="hasEbllClearance"
-              type="radio"
-              register={register}
-              groupLabel={t("listings.hasEbllClearanceTitle")}
-              fields={[
-                {
-                  id: "ebllYes",
-                  label: t("t.yes"),
-                  value: YesNoEnum.yes,
-                  defaultChecked: listing?.hasEbllClearance === true,
-                },
-                {
-                  id: "ebllNo",
-                  label: t("t.no"),
-                  value: YesNoEnum.no,
-                  defaultChecked: listing?.hasEbllClearance === false,
-                },
-              ]}
-              error={fieldHasError(errors.hasEbllClearance)}
-              errorMessage={fieldMessage(errors.hasEbllClearance)}
-            />
-          </Grid.Cell>
-        </Grid.Row>
+        {listingType === EnumListingListingType.nonRegulated && (
+          <Grid.Row columns={1}>
+            <Grid.Cell>
+              <FieldGroup
+                name="hasHudEbllClearance"
+                type="radio"
+                register={register}
+                groupLabel={t("listings.hasEbllClearanceTitle")}
+                fields={[
+                  {
+                    id: "ebllYes",
+                    label: t("t.yes"),
+                    value: YesNoEnum.yes,
+                  },
+                  {
+                    id: "ebllNo",
+                    label: t("t.no"),
+                    value: YesNoEnum.no,
+                  },
+                ]}
+                error={fieldHasError(errors.hasEbllClearance)}
+                errorMessage={fieldMessage(errors.hasEbllClearance)}
+              />
+            </Grid.Cell>
+          </Grid.Row>
+        )}
       </SectionWithGrid>
     </>
   )
