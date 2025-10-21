@@ -1,5 +1,5 @@
 import React from "react"
-import { useFormContext, useWatch } from "react-hook-form"
+import { useFormContext } from "react-hook-form"
 import {
   EnumListingListingType,
   Jurisdiction,
