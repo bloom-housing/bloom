@@ -543,14 +543,13 @@ export class LotteryService {
           storedListing.id,
           storedListing.jurisdictionId,
         );
-        await this.emailService.lotteryReleased(
+        await this.emailService.lotteryPublishedApplicant(
           {
             id: storedListing.id,
             name: storedListing.name,
             juris: storedListing.jurisdictionId,
           },
-          partnerUserEmailInfo.emails,
-          this.configService.get('PARTNERS_PORTAL_URL'),
+          partnerUserEmailInfo,
         );
 
         break;

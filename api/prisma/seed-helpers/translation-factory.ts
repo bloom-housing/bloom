@@ -177,7 +177,7 @@ const translations = (jurisdictionName?: string, language?: LanguagesEnum) => {
           'Lottery results for %{listingName} have been published to applicant accounts.',
       },
       lotteryAvailable: {
-        header: 'New Housing Lottery Results Available',
+        header: 'Lottery results have been published for %{listingName}',
         resultsAvailable:
           'Results are available for a housing lottery for %{listingName}. See your housing portal account for more information.',
         signIn: 'Sign In to View Your Results',
