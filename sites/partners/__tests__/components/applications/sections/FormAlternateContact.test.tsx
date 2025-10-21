@@ -1,4 +1,4 @@
-import { act, render, screen } from "@testing-library/react"
+import { render, screen } from "@testing-library/react"
 import React from "react"
 import { FormProviderWrapper } from "./helpers"
 import { FormAlternateContact } from "../../../../src/components/applications/PaperApplicationForm/sections/FormAlternateContact"
@@ -41,10 +41,10 @@ describe("<FormAlternateContact>", () => {
     expect(relationshipSelect).toBeInTheDocument()
 
     expect(screen.queryByLabelText(/other relationship/i)).not.toBeInTheDocument()
-    await act(() => userEvent.selectOptions(relationshipSelect, "friend"))
+    await userEvent.selectOptions(relationshipSelect, "friend")
     expect(relationshipSelect).toHaveValue("friend")
     expect(screen.queryByLabelText(/other relationship/i)).not.toBeInTheDocument()
-    await act(() => userEvent.selectOptions(relationshipSelect, "other"))
+    await userEvent.selectOptions(relationshipSelect, "other")
     expect(relationshipSelect).toHaveValue("other")
     expect(await screen.findByLabelText(/other relationship/i)).toBeInTheDocument()
   })
