@@ -51,7 +51,7 @@ describe("Public Reset Password Page", () => {
         selector: "input",
       })
 
-      await act(() => userEvent.click(screen.getByRole("button", { name: /change password/i })))
+      await userEvent.click(screen.getByRole("button", { name: /change password/i }))
 
       expect(passwordInput).toBeInvalid()
       expect(confirmPasswordInput).toBeValid()
@@ -67,9 +67,9 @@ describe("Public Reset Password Page", () => {
         selector: "input",
       })
 
-      await act(() => userEvent.type(passwordInput, "Password_1"))
-      await act(() => userEvent.type(confirmPasswordInput, "Password_2"))
-      await act(() => userEvent.click(screen.getByRole("button", { name: /change password/i })))
+      await userEvent.type(passwordInput, "Password_1")
+      await userEvent.type(confirmPasswordInput, "Password_2")
+      await userEvent.click(screen.getByRole("button", { name: /change password/i }))
 
       expect(passwordInput).toBeValid()
       expect(confirmPasswordInput).toBeInvalid()
@@ -130,14 +130,16 @@ describe("Public Reset Password Page", () => {
         selector: "input",
       })
 
-      await act(() => userEvent.type(passwordInput, "Password"))
-      await act(() => userEvent.type(confirmPasswordInput, "Password"))
-      await act(() => userEvent.click(screen.getByRole("button", { name: /change password/i })))
+      await userEvent.type(passwordInput, "Password")
+      await userEvent.type(confirmPasswordInput, "Password")
+      await userEvent.click(screen.getByRole("button", { name: /change password/i }))
 
       expect(await screen.findByText(value)).toBeInTheDocument()
     })
 
     it("should show generic error message", async () => {
+      // Hide the console.error statment in the component submit handler
+      jest.spyOn(console, "error").mockImplementation()
       server.use(
         rest.put("http://localhost/api/adapter/auth/update-password", (_req, res, ctx) => {
           return res(ctx.status(401))
@@ -150,9 +152,9 @@ describe("Public Reset Password Page", () => {
         selector: "input",
       })
 
-      await act(() => userEvent.type(passwordInput, "Password"))
-      await act(() => userEvent.type(confirmPasswordInput, "Password"))
-      await act(() => userEvent.click(screen.getByRole("button", { name: /change password/i })))
+      await userEvent.type(passwordInput, "Password")
+      await userEvent.type(confirmPasswordInput, "Password")
+      await userEvent.click(screen.getByRole("button", { name: /change password/i }))
 
       expect(
         await screen.findByText(
@@ -185,9 +187,9 @@ describe("Public Reset Password Page", () => {
       selector: "input",
     })
 
-    await act(() => userEvent.type(passwordInput, "Password"))
-    await act(() => userEvent.type(confirmPasswordInput, "Password"))
-    await act(() => userEvent.click(screen.getByRole("button", { name: /change password/i })))
+    await userEvent.type(passwordInput, "Password")
+    await userEvent.type(confirmPasswordInput, "Password")
+    await userEvent.click(screen.getByRole("button", { name: /change password/i }))
 
     expect(screen.queryByText("Please enter new login password")).not.toBeInTheDocument()
     expect(screen.queryByText("The passwords do not match")).not.toBeInTheDocument()
