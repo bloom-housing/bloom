@@ -32,6 +32,7 @@ export default function FinderRentQuestion() {
               validateRentValues(getValues, clearErrors, setError)
             },
           }}
+          ariaLabel={t(`finder.rent.minRentReader`)}
         />
         <Field
           id={`${ListingFilterKeys.monthlyRent}.maxRent`}
@@ -48,6 +49,7 @@ export default function FinderRentQuestion() {
           inputProps={{
             onBlur: () => validateRentValues(getValues, clearErrors, setError),
           }}
+          ariaLabel={t(`finder.rent.maxRentReader`)}
         />
       </div>
       <Field
