@@ -25,6 +25,7 @@ import {
 } from "../../../../lib/helpers"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 import {
+  EnumListingListingType,
   FeatureFlagEnum,
   RegionEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -83,6 +84,11 @@ const BuildingDetails = ({
   const mapPinPosition = useWatch({
     control,
     name: "mapPinPosition",
+  })
+
+  const listingType = useWatch({
+    control,
+    name: "listingType",
   })
 
   const displayMapPreview = () => {
@@ -326,21 +332,23 @@ const BuildingDetails = ({
                 {...defaultFieldProps("region", t("t.region"), requiredFields, errors, clearErrors)}
               />
             ) : (
-              <Field
-                type={"number"}
-                register={register}
-                {...defaultFieldProps(
-                  "yearBuilt",
-                  t("listings.yearBuilt"),
-                  requiredFields,
-                  errors,
-                  clearErrors
-                )}
-              />
+              listingType === EnumListingListingType.regulated && (
+                <Field
+                  type={"number"}
+                  register={register}
+                  {...defaultFieldProps(
+                    "yearBuilt",
+                    t("listings.yearBuilt"),
+                    requiredFields,
+                    errors,
+                    clearErrors
+                  )}
+                />
+              )
             )}
           </Grid.Cell>
         </Grid.Row>
-        {enableRegions && (
+        {enableRegions && listingType === EnumListingListingType.regulated && (
           <Grid.Row columns={3}>
             <Grid.Cell>
               <Field
