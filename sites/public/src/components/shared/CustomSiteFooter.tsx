@@ -29,6 +29,7 @@ const CustomSiteFooter = () => {
                 <a href="mailto: doorway@bayareametro.gov" className="underline">
                   doorway@bayareametro.gov
                 </a>
+                <p className="w-64">{t("footer.phoneNumber")}</p>
               </div>
             </div>
             <div className={styles["right-column-container"]}>
