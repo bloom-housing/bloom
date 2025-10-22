@@ -547,7 +547,7 @@ describe('Testing email service', () => {
       const emailMock = sendMock.mock.calls[0][0];
       expect(emailMock.to).toEqual(emailArr);
       expect(emailMock.subject).toEqual(
-        'Lottery results have been published for listing name',
+        'New Housing Lottery Results Available',
       );
       expect(emailMock.html).toMatch(
         /href="https:\/\/example\.com\/en\/sign-in"/,
