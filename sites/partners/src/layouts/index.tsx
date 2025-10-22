@@ -8,6 +8,7 @@ import {
   FooterSection,
   t,
   MenuLink,
+  LocalizedLink,
 } from "@bloom-housing/ui-components"
 import { AuthContext, ExygyFooter, MessageContext } from "@bloom-housing/shared-helpers"
 import { Toast } from "@bloom-housing/ui-seeds"
@@ -17,9 +18,13 @@ const Layout = (props) => {
   const { toastMessagesRef, addToast } = useContext(MessageContext)
   const router = useRouter()
   const currentYear = new Date().getFullYear()
-  const copyRight = profile.userRoles.isPartner
+  const copyRight = profile?.userRoles?.isPartner
     ? `Copyright @ ${currentYear} Bay Area Housing Finance Authority. All rights reserved `
     : `© ${currentYear} • All Rights Reserved`
+  const doorwayPartnersManualLink =
+    "https://docs.google.com/document/d/1W4tIMtUMwz4KqdcO5f4yZi0R5AU74P3B/edit"
+  const privacyPolicyLink = "https://mtc.ca.gov/doorway-housing-portal-privacy-policy"
+  const termsOfUseLink = "https://mtc.ca.gov/doorway-housing-portal-terms-use"
   const menuLinks: MenuLink[] = []
   if (profile) {
     menuLinks.push({
@@ -78,7 +83,17 @@ const Layout = (props) => {
           {props.children}
         </main>
         <SiteFooter>
-          <FooterNav copyright={copyRight} />
+          <FooterNav copyright={copyRight}>
+            {profile?.userRoles?.isPartner && (
+              <>
+                <LocalizedLink href={doorwayPartnersManualLink}>
+                  Doorway Partners Manual
+                </LocalizedLink>
+                <LocalizedLink href={privacyPolicyLink}>Privacy Policy</LocalizedLink>
+                <LocalizedLink href={termsOfUseLink}>Terms of Use</LocalizedLink>
+              </>
+            )}
+          </FooterNav>
           <FooterSection className="bg-black" small>
             <ExygyFooter />
           </FooterSection>
