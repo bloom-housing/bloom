@@ -16,13 +16,16 @@ const ListingGuard = ({ children }: AuthGuardProps) => {
 
   const hasPrivileges =
     profile?.userRoles?.isAdmin ||
+    profile?.userRoles?.isSupportAdmin ||
     profile?.userRoles?.isJurisdictionalAdmin ||
+    profile?.userRoles?.isLimitedJurisdictionalAdmin ||
     leasingAgentInListingsIds?.includes(listingId)
 
   if (hasPrivileges) {
     return children
   }
 
+  window.location.href = "/unauthorized"
   return null
 }
 

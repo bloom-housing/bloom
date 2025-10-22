@@ -32,6 +32,8 @@ export const jurisdictionFactory = (
   duplicateListingPermissions: optionalFields?.duplicateListingPermissions || [
     UserRoleEnum.admin,
     UserRoleEnum.jurisdictionAdmin,
+    UserRoleEnum.limitedJurisdictionAdmin,
+    UserRoleEnum.supportAdmin,
   ],
   featureFlags: optionalFields?.featureFlags
     ? {

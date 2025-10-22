@@ -599,11 +599,13 @@ describe('Testing listing service', () => {
           listingsBuildingAddress: true,
           requestedChangesUser: true,
           reservedCommunityTypes: true,
+
           listingImages: {
             include: {
               assets: true,
             },
           },
+          lastUpdatedByUser: true,
           listingMultiselectQuestions: {
             include: {
               multiselectQuestions: true,
@@ -764,6 +766,7 @@ describe('Testing listing service', () => {
               assets: true,
             },
           },
+
           listingMultiselectQuestions: {
             include: {
               multiselectQuestions: true,
@@ -2338,7 +2341,7 @@ describe('Testing listing service', () => {
       });
     });
 
-    it('should handle no records returned when findOne() is called with details view', async () => {
+    it('should handle no records returned when findOne() is called with full view', async () => {
       prisma.listings.findUnique = jest.fn().mockResolvedValue(null);
 
       await expect(
@@ -2346,7 +2349,7 @@ describe('Testing listing service', () => {
           await service.findOne(
             'a different listingId',
             LanguagesEnum.en,
-            ListingViews.details,
+            ListingViews.full,
           ),
       ).rejects.toThrowError();
 
@@ -2359,6 +2362,7 @@ describe('Testing listing service', () => {
           listingsBuildingAddress: true,
           requestedChangesUser: true,
           reservedCommunityTypes: true,
+          lastUpdatedByUser: true,
           listingImages: {
             include: {
               assets: true,
@@ -2802,7 +2806,7 @@ describe('Testing listing service', () => {
       });
     });
 
-    it('should get records from findOne() with details view found and units', async () => {
+    it('should get records from findOne() with full view found and units', async () => {
       const date = new Date();
 
       const mockedListing = mockListing(0, { numberToMake: 1, date });
@@ -2825,7 +2829,7 @@ describe('Testing listing service', () => {
       const listing: Listing = await service.findOne(
         'listingId',
         LanguagesEnum.en,
-        ListingViews.details,
+        ListingViews.full,
       );
 
       expect(listing.id).toEqual('0');
@@ -2873,6 +2877,7 @@ describe('Testing listing service', () => {
           jurisdictions: true,
           listingsBuildingAddress: true,
           requestedChangesUser: true,
+          lastUpdatedByUser: true,
           reservedCommunityTypes: true,
           listingImages: {
             include: {
@@ -3111,6 +3116,9 @@ describe('Testing listing service', () => {
         id: 'example id',
         name: 'example name',
       });
+      prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue({
+        id: 'jurisdiction-id',
+      });
 
       await service.create(
         {
@@ -3151,6 +3159,7 @@ describe('Testing listing service', () => {
               assets: true,
             },
           },
+          lastUpdatedByUser: true,
           listingFeatures: true,
           listingImages: {
             include: {
@@ -3205,6 +3214,11 @@ describe('Testing listing service', () => {
         data: {
           name: 'example listing name',
           contentUpdatedAt: expect.anything(),
+          lastUpdatedByUser: {
+            connect: {
+              id: user.id,
+            },
+          },
           depositMin: '5',
           assets: {
             create: [
@@ -3246,7 +3260,9 @@ describe('Testing listing service', () => {
         id: 'example id',
         name: 'example name',
       });
-
+      prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue({
+        id: 'jurisdiction-id',
+      });
       const val = constructFullListingData();
 
       await service.create(val as ListingCreate, user);
@@ -3262,6 +3278,7 @@ describe('Testing listing service', () => {
               },
             },
           },
+          lastUpdatedByUser: true,
           jurisdictions: true,
           listingEvents: {
             include: {
@@ -3323,6 +3340,11 @@ describe('Testing listing service', () => {
           ...val,
           isVerified: true,
           contentUpdatedAt: expect.anything(),
+          lastUpdatedByUser: {
+            connect: {
+              id: user.id,
+            },
+          },
           publishedAt: expect.anything(),
           assets: {
             create: [exampleAsset],
@@ -3621,6 +3643,7 @@ describe('Testing listing service', () => {
               },
             },
           },
+          lastUpdatedByUser: true,
           jurisdictions: true,
           listingEvents: {
             include: {
@@ -3682,6 +3705,11 @@ describe('Testing listing service', () => {
           name: 'example listing name',
           contentUpdatedAt: expect.anything(),
           depositMin: '5',
+          lastUpdatedByUser: {
+            connect: {
+              id: user.id,
+            },
+          },
           assets: {
             create: [
               {
@@ -3753,6 +3781,7 @@ describe('Testing listing service', () => {
               },
             },
           },
+          lastUpdatedByUser: true,
           jurisdictions: true,
           listingEvents: {
             include: {
@@ -3770,6 +3799,7 @@ describe('Testing listing service', () => {
               multiselectQuestions: true,
             },
           },
+
           listingUtilities: true,
           listingNeighborhoodAmenities: true,
           listingsApplicationDropOffAddress: true,
@@ -3814,6 +3844,9 @@ describe('Testing listing service', () => {
           ...val,
           isVerified: true,
           contentUpdatedAt: expect.anything(),
+          lastUpdatedByUser: {
+            connect: { id: user.id },
+          },
           publishedAt: expect.anything(),
           assets: {
             create: [exampleAsset],
@@ -4081,6 +4114,7 @@ describe('Testing listing service', () => {
               },
             },
           },
+          lastUpdatedByUser: true,
           jurisdictions: true,
           listingEvents: {
             include: {
@@ -4194,6 +4228,7 @@ describe('Testing listing service', () => {
               assets: true,
             },
           },
+          lastUpdatedByUser: true,
           listingFeatures: true,
           listingImages: {
             include: {
@@ -4286,6 +4321,7 @@ describe('Testing listing service', () => {
               },
             },
           },
+          lastUpdatedByUser: true,
           jurisdictions: true,
           listingEvents: {
             include: {
@@ -4579,21 +4615,6 @@ describe('Testing listing service', () => {
       expect(prisma.listings.findUnique).toHaveBeenCalledWith({
         include: {
           jurisdictions: true,
-          listingFeatures: true,
-          listingImages: {
-            include: {
-              assets: true,
-            },
-          },
-          listingMultiselectQuestions: {
-            include: {
-              multiselectQuestions: true,
-            },
-          },
-          listingUtilities: true,
-          listingNeighborhoodAmenities: true,
-          listingsBuildingAddress: true,
-          reservedCommunityTypes: true,
         },
         where: {
           id: id,
@@ -4613,6 +4634,57 @@ describe('Testing listing service', () => {
           id: expect.anything(),
         },
       });
+    });
+
+    it('should allow isSupportAdmin to duplicate listing with jurisdiction permissions', async () => {
+      const listing = mockListing(1, { numberToMake: 2, date: new Date() });
+      const newName = 'duplicate name';
+      const jurisdictionId = randomUUID();
+
+      prisma.listings.findUnique = jest.fn().mockResolvedValue({
+        ...listing,
+        jurisdictions: {
+          id: jurisdictionId,
+        },
+        jurisdictionId,
+      });
+
+      prisma.listings.create = jest.fn().mockResolvedValue({
+        ...listing,
+        id: 'duplicate id',
+        name: newName,
+      });
+
+      const supportAdminUser = {
+        id: 'support-admin-id',
+        userRoles: {
+          isSupportAdmin: true,
+          isAdmin: false,
+          isJurisdictionalAdmin: false,
+          isLimitedJurisdictionalAdmin: false,
+          isPartner: false,
+        },
+        jurisdictions: [
+          {
+            id: jurisdictionId,
+            duplicateListingPermissions: [UserRoleEnum.supportAdmin],
+          },
+        ],
+      };
+
+      const newListing = await service.duplicate(
+        {
+          includeUnits: true,
+          name: newName,
+          storedListing: {
+            id: listing.id.toString(),
+          },
+        },
+        supportAdminUser as any,
+      );
+
+      expect(newListing.name).toBe(newName);
+      expect(newListing.units).toEqual(listing.units);
     });
   });
 
@@ -4658,6 +4730,7 @@ describe('Testing listing service', () => {
           displayWaitlistSize: false,
           unitsSummary: null,
           listingEvents: [],
+          lastUpdatedByUser: user,
         } as ListingUpdate,
         user,
       );
@@ -4679,6 +4752,7 @@ describe('Testing listing service', () => {
               assets: true,
             },
           },
+          lastUpdatedByUser: true,
           listingFeatures: true,
           listingImages: {
             include: {
@@ -4733,6 +4807,11 @@ describe('Testing listing service', () => {
         data: {
           name: 'example listing name',
           contentUpdatedAt: expect.anything(),
+          lastUpdatedByUser: {
+            connect: {
+              id: user.id,
+            },
+          },
           depositMin: '5',
           assets: [
             {
@@ -4885,7 +4964,7 @@ describe('Testing listing service', () => {
       );
 
       expect(prisma.listings.update).toHaveBeenCalledWith({
-        include: views.details,
+        include: views.full,
         data: {
           name: 'example listing name',
           contentUpdatedAt: expect.anything(),
@@ -4899,6 +4978,11 @@ describe('Testing listing service', () => {
           jurisdictions: {
             connect: {
               id: expect.anything(),
+            },
+          },
+          lastUpdatedByUser: {
+            connect: {
+              id: user.id,
             },
           },
           listingNeighborhoodAmenities: {
@@ -5039,9 +5123,18 @@ describe('Testing listing service', () => {
     });
 
     it('listingApprovalNotify listing approved email', async () => {
-      jest.spyOn(service, 'getUserEmailInfo').mockResolvedValueOnce({
-        emails: ['jurisAdmin@email.com', 'partner@email.com'],
+      prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue({
+        id: randomUUID(),
         publicUrl: 'public.housing.gov',
+      });
+      jest.spyOn(service, 'getUserEmailInfo').mockResolvedValueOnce({
+        emails: [
+          'jurisAdmin@email.com',
+          'jurisLimitedAdmin@email.com',
+          'partner@email.com',
+          'supportAdmin@email.com',
+          'admin@example.com',
+        ],
       });
       await service.listingApprovalNotify({
         user,
@@ -5053,15 +5146,26 @@ describe('Testing listing service', () => {
       });
 
       expect(service.getUserEmailInfo).toBeCalledWith(
-        ['partner', 'jurisdictionAdmin'],
+        [
+          UserRoleEnum.partner,
+          UserRoleEnum.admin,
+          UserRoleEnum.jurisdictionAdmin,
+          UserRoleEnum.limitedJurisdictionAdmin,
+          UserRoleEnum.supportAdmin,
+        ],
         'id',
         'jurisId',
-        true,
       );
       expect(listingApprovedMock).toBeCalledWith(
         expect.objectContaining({ id: 'jurisId' }),
         { id: 'id', name: 'name' },
-        ['jurisAdmin@email.com', 'partner@email.com'],
+        [
+          'jurisAdmin@email.com',
+          'jurisLimitedAdmin@email.com',
+          'partner@email.com',
+          'supportAdmin@email.com',
+          'admin@example.com',
+        ],
         'public.housing.gov',
       );
     });

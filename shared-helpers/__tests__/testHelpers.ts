@@ -685,6 +685,10 @@ export const listing: Listing = {
   listingsApplicationDropOffAddress: undefined,
   applicationDropOffAddressOfficeHours: undefined,
   listingsApplicationMailingAddress: undefined,
+  lastUpdatedByUser: {
+    id: "d4522484-f473-4c0e-8f78-e1f8ab69cd70",
+    name: "First Last",
+  },
   applicationLotteryTotals: [],
   jurisdictions: {
     id: "id",
@@ -856,6 +860,13 @@ export const listing: Listing = {
         text: "Preference 1",
         jurisdictions: [],
         applicationSection: MultiselectQuestionsApplicationSectionEnum.preferences,
+        options: [
+          {
+            name: "option_1",
+            text: "Option 1",
+            ordinal: 1,
+          },
+        ],
       },
     },
     {
@@ -867,6 +878,13 @@ export const listing: Listing = {
         text: "Preference 2",
         jurisdictions: [],
         applicationSection: MultiselectQuestionsApplicationSectionEnum.preferences,
+        options: [
+          {
+            name: "option_1",
+            text: "Option 1",
+            ordinal: 1,
+          },
+        ],
       },
     },
     {
@@ -878,6 +896,13 @@ export const listing: Listing = {
         text: "Families",
         jurisdictions: [],
         applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
+        options: [
+          {
+            name: "option_1",
+            text: "Option 1",
+            ordinal: 1,
+          },
+        ],
       },
     },
     {
@@ -889,6 +914,13 @@ export const listing: Listing = {
         text: "Veterans",
         jurisdictions: [],
         applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
+        options: [
+          {
+            name: "option_1",
+            text: "Option 1",
+            ordinal: 1,
+          },
+        ],
       },
     },
   ],

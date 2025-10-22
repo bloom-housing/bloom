@@ -120,6 +120,13 @@ We are also using [conventional commits](https://www.conventionalcommits.org/en/
 
 On commit, two steps automatically run: (1) linting and (2) a verification of the conventional commit standard. You can either, instead of running `git commit`, globally install commitizen (`npm install -g commitizen`) and then commit with `git cz` which will run a commit message CLI (the CLI asks a series of questions about your changeset and builds the commit message for you in the conventional commit format), or alternatively run `git commit` with your own message if you are confident it follows the conventional standard, and the linter will fail if it does not.
 
+#### Pre-commit
+
+To prevent committing secrets please enable the pre-commit hook to check for these patterns on commit. The `.githooks` directory contains a pre-commit script to check for secrets before allowing a `git commit`. To enable this for your local clone please perform the following steps:
+
+1. Install gitleaks. On mac you can run `brew install gitleaks`. For other install options see the [gitleaks docs](https://github.com/gitleaks/gitleaks?tab=readme-ov-file#installing)
+2. `cd` into your locally cloned repo and run `git config core.hooksPath .githooks/`
+
 ### Pull Requests
 
 Pull requests are opened to the main branch. When opening a pull request please fill out the entire pull request template which includes tagging the issue your PR is related to, a description of your PR, including details for the reviewer about how to test your PR, and a testing checklist.
@@ -129,6 +136,25 @@ When your PR is ready for review, add the `needs review(s)` label to surface it 
 As a reviewer on a PR, try not to leave only comments, but a clear next step action. If the PR requires further discussion or changes, mark it with Requested Changes. If a PR looks good to you (or even if there are small changes requested that won't require an additional review), please mark it with Approved and comment on the last few changes needed. This helps other reviewers better understand the state of PRs at the list view and prevents an additional unnecessary review cycle.
 
 ## CI/CD
+
+### Github actions
+
+On all pull requests the following github action jobs are triggered
+
+1. API unit tests
+2. API integration tests
+3. Public unit/integration tests
+4. public Cypress tests
+5. Partner unit/integration tests
+6. partner Cypress tests
+
+Configuration for all of these can be found in the `.github/workflows` directory. For additional investigation of cypress test failures you can change the `record` flag in the respective yml file to true and find the recordings in [cypress cloud](https://cloud.cypress.io/).
+
+### GitLeaks
+
+[Gitleaks](https://gitleaks.io/) is enabled for this repo. This scans for any potentially leaked secrets on all pull requests to the main branch via a github action.
+
+If this job fails on your pull request please notify the team of the flagged secret and we can then triage if a secret needs to be rotated
 
 ### Dependabot
 

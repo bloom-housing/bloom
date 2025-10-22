@@ -206,6 +206,7 @@ export default function RentalsFinder({ activeFeatureFlags, multiselectData }: R
       setStepIndex((prev) => prev + 1)
       document.getElementById("finder-card-title")?.focus()
     }
+    window.scrollTo({ top: 0 })
   }, [errors, isLastStep, getValues])
 
   const onPreviousClick = useCallback(() => {

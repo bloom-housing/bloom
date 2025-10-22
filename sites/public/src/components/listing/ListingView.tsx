@@ -90,7 +90,7 @@ const getUnhiddenMultiselectQuestions = (
 export const ListingView = (props: ListingProps) => {
   const { initialStateLoaded, profile, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
   let buildingSelectionCriteria, preferencesSection, programsSection
-  const { listing } = props
+  const { listing, jurisdiction } = props
 
   const statusContent = getListingApplicationStatus(listing)
 
@@ -925,14 +925,27 @@ export const ListingView = (props: ListingProps) => {
               </div>
             )}
             {lotterySection}
-            <ExpandableSection
-              content={<Markdown className={"bloom-markdown"}>{listing.whatToExpect}</Markdown>}
-              strings={{
-                title: t("whatToExpect.label"),
-                readMore: t("t.readMore"),
-                readLess: t("t.readLess"),
-              }}
-            />
+            {listing.whatToExpect && (
+              <ExpandableSection
+                content={<Markdown className={"bloom-markdown"}>{listing.whatToExpect}</Markdown>}
+                expandableContent={
+                  listing.whatToExpectAdditionalText &&
+                  isFeatureFlagOn(
+                    jurisdiction,
+                    FeatureFlagEnum.enableWhatToExpectAdditionalField
+                  ) ? (
+                    <Markdown className={"bloom-markdown"}>
+                      {listing.whatToExpectAdditionalText}
+                    </Markdown>
+                  ) : undefined
+                }
+                strings={{
+                  title: t("whatToExpect.label"),
+                  readMore: t("t.readMore"),
+                  readLess: t("t.readLess"),
+                }}
+              />
+            )}
             {!appOpenInFuture && (
               <Contact
                 sectionTitle={t("leasingAgent.contact")}

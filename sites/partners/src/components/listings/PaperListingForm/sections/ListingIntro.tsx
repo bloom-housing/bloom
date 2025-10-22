@@ -30,6 +30,7 @@ const ListingIntro = (props: ListingIntroProps) => {
       value: jurisdiction.id,
     })),
   ]
+
   const defaultJurisdiction = props.jurisdictions.length === 1 ? props.jurisdictions[0].id : ""
 
   return (
