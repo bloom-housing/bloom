@@ -235,7 +235,7 @@ describe('User Controller Tests', () => {
   describe('delete endpoint', () => {
     it('should delete user when user exists', async () => {
       const userA = await prisma.userAccounts.create({
-        data: await userFactory({ roles: { isPartner: true } }),
+        data: await userFactory({ roles: { isAdmin: true } }),
       });
 
       const res = await request(app.getHttpServer())

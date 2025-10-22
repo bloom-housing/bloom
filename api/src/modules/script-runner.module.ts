@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Logger, Module } from '@nestjs/common';
 import { ScriptRunnerController } from '../controllers/script-runner.controller';
 import { ScriptRunnerService } from '../services/script-runner.service';
 import { AmiChartModule } from './ami-chart.module';
@@ -18,7 +18,7 @@ import { AssetModule } from './asset.module';
     AssetModule,
   ],
   controllers: [ScriptRunnerController],
-  providers: [ScriptRunnerService],
+  providers: [ScriptRunnerService, Logger],
   exports: [ScriptRunnerService],
 })
 export class ScriptRunnerModule {}

@@ -1339,7 +1339,7 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
         user.userRoles?.isJurisdictionalAdmin ||
         user.userRoles?.isLimitedJurisdictionalAdmin ||
         user.userRoles?.isPartner ||
-        user.userRoles.isSupportAdmin)
+        user.userRoles?.isSupportAdmin)
     ) {
       return;
     } else {

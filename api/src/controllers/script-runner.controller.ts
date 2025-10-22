@@ -432,4 +432,30 @@ export class ScriptRunnerController {
       body.pageSize,
     );
   }
+
+  @Put('setInitialExpireAfterValues')
+  @ApiOperation({
+    summary:
+      'A script that sets the initial values for expire_after on applications',
+    operationId: 'setInitialExpireAfterValues',
+  })
+  @ApiOkResponse({ type: SuccessDTO })
+  async setInitialExpireAfterValues(
+    @Request() req: ExpressRequest,
+  ): Promise<SuccessDTO> {
+    return await this.scriptRunnerService.setInitialExpireAfterValues(req);
+  }
+
+  @Put('setIsNewestApplicationValues')
+  @ApiOperation({
+    summary:
+      'A script that sets is_newest field on application if newest application for applicant',
+    operationId: 'setIsNewestApplicationValues',
+  })
+  @ApiOkResponse({ type: SuccessDTO })
+  async setIsNewestApplicationValues(
+    @Request() req: ExpressRequest,
+  ): Promise<SuccessDTO> {
+    return await this.scriptRunnerService.setIsNewestApplicationValues(req);
+  }
 }
