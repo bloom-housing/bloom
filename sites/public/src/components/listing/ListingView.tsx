@@ -310,7 +310,12 @@ export const ListingView = (props: ListingProps) => {
   }
 
   let lotterySection
-  if (publicLottery && (!lotteryResults || (lotteryResults && !lotteryResults.url))) {
+
+  if (
+    publicLottery &&
+    (!lotteryResults || (lotteryResults && !lotteryResults.url)) &&
+    (listing.status === ListingsStatusEnum.active || !lotteryResults)
+  ) {
     lotterySection = publicLottery.startDate && (
       <EventSection
         headerText={t("listings.publicLottery.header")}
