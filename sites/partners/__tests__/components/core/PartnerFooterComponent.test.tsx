@@ -31,9 +31,9 @@ describe("Partner Footer Component", () => {
   })
   it("should not render links properly in the partners footer", () => {
     render(<PartnersFooter {...footerData} />)
-    expect(screen.getByText(/2025/)).toBeInTheDocument()
-    expect(screen.queryByText("Doorway Partners Manual")).toBeInTheDocument()
-    expect(screen.queryByText("Privacy Polic")).toBeInTheDocument()
-    expect(screen.queryByText("Terms of Use")).toBeInTheDocument()
+    expect(screen.getByText(/2025/, { selector: "a" })).toBeInTheDocument()
+    expect(screen.queryByText("Doorway Partners Manual", { selector: "a" })).toBeInTheDocument()
+    expect(screen.queryByText("Privacy Polic", { selector: "a" })).toBeInTheDocument()
+    expect(screen.queryByText("Terms of Use", { selector: "a" })).toBeInTheDocument()
   })
 })
