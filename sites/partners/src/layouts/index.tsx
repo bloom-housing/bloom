@@ -4,7 +4,7 @@ import { useRouter } from "next/router"
 import { SiteHeader, t, MenuLink } from "@bloom-housing/ui-components"
 import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
 import { Toast } from "@bloom-housing/ui-seeds"
-import PartnersFooter, { PartnerFooterProps } from "../components/core/FooterComponent"
+import PartnersFooter, { PartnerFooterProps } from "../components/core/PartnerFooterComponent"
 
 const Layout = (props) => {
   const { profile, signOut } = useContext(AuthContext)
