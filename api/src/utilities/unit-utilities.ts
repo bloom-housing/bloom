@@ -442,7 +442,7 @@ export const summarizeUnitsByTypeAndRent = (
     const finalSummary = unitMap[key].reduce((summary, unit, index) => {
       return getUnitsSummary(unit, index === 0 ? null : summary);
     }, {} as UnitSummary);
-    if (listing.reviewOrderType !== ReviewOrderTypeEnum.waitlist) {
+    if (listing.reviewOrderType !== ReviewOrderTypeEnum.waitlistFCFS) {
       finalSummary.totalAvailable = unitMap[key].length;
     }
     summaries.push(finalSummary);

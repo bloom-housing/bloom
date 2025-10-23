@@ -695,7 +695,7 @@ describe('Listing Controller Tests', () => {
         optionalFeatures: {
           acInUnit: false,
         },
-        reviewOrderType: ReviewOrderTypeEnum.waitlist,
+        reviewOrderType: ReviewOrderTypeEnum.waitlistFCFS,
         status: ListingsStatusEnum.active,
         units: [
           unitFactorySingle(unitTypeThreeBed, {
@@ -3228,7 +3228,7 @@ describe('Listing Controller Tests', () => {
       const completeData = {
         name: 'waitlist listing',
         status: ListingsStatusEnum.active,
-        reviewOrderType: ReviewOrderTypeEnum.waitlist,
+        reviewOrderType: ReviewOrderTypeEnum.waitlistFCFS,
         listingsBuildingAddress: {
           city: 'Bloomington',
           state: 'AK',

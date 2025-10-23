@@ -1121,7 +1121,7 @@ enum ApplicationAddressTypeEnum {
 enum ReviewOrderTypeEnum {
   lottery
   firstComeFirstServe
-  waitlist
+  waitlistFCFS
 
   @@map("listings_review_order_type_enum")
 }

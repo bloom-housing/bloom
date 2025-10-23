@@ -549,7 +549,7 @@ export class ListingService implements OnModuleInit {
                 const builtFilter = buildFilter({
                   $comparison: Compare['='],
                   $include_nulls: false,
-                  value: ReviewOrderTypeEnum.waitlist,
+                  value: ReviewOrderTypeEnum.waitlistFCFS,
                   key: ListingFilterKeys.availabilities,
                   caseSensitive: true,
                 });
@@ -665,7 +665,7 @@ export class ListingService implements OnModuleInit {
           const builtFilter = buildFilter({
             $comparison: filter.$comparison,
             $include_nulls: false,
-            value: ReviewOrderTypeEnum.waitlist,
+            value: ReviewOrderTypeEnum.waitlistFCFS,
             key: ListingFilterKeys.availability,
             caseSensitive: true,
           });
@@ -2586,7 +2586,7 @@ export class ListingService implements OnModuleInit {
     units?: any[],
     unitGroups?: any[],
   ): number {
-    return reviewOrderType !== ReviewOrderTypeEnum.waitlist && units
+    return reviewOrderType !== ReviewOrderTypeEnum.waitlistFCFS && units
       ? units.length
       : unitGroups
       ? unitGroups.reduce(

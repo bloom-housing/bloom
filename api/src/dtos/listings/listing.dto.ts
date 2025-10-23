@@ -218,7 +218,7 @@ class Listing extends AbstractDTO {
     (o) =>
       !(
         o.applicationDueDate == undefined &&
-        o.reviewOrderType == ReviewOrderTypeEnum.waitlist
+        o.reviewOrderType == ReviewOrderTypeEnum.waitlistFCFS
       ),
     {
       groups: [ValidationsGroupsEnum.default],

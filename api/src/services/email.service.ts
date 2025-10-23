@@ -395,7 +395,7 @@ export class EmailService {
           'confirmation.eligible.lotteryPreference',
         );
       }
-      if (listing.reviewOrderType === ReviewOrderTypeEnum.waitlist) {
+      if (listing.reviewOrderType === ReviewOrderTypeEnum.waitlistFCFS) {
         eligibleText = this.polyglot.t('confirmation.eligible.waitlist');
         contactText = this.polyglot.t('confirmation.eligible.waitlistContact');
         preferenceText = this.polyglot.t(

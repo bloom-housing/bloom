@@ -313,7 +313,7 @@ describe('Testing email service', () => {
     });
     it('Test waitlist', async () => {
       await service.applicationConfirmation(
-        { ...listing, reviewOrderType: ReviewOrderTypeEnum.waitlist },
+        { ...listing, reviewOrderType: ReviewOrderTypeEnum.waitlistFCFS },
         application as ApplicationCreate,
         'http://localhost:3001',
       );

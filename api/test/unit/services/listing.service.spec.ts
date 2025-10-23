@@ -1453,7 +1453,7 @@ describe('Testing listing service', () => {
             OR: [
               {
                 reviewOrderType: {
-                  equals: ReviewOrderTypeEnum.waitlist,
+                  equals: ReviewOrderTypeEnum.waitlistFCFS,
                 },
               },
             ],
@@ -1650,7 +1650,7 @@ describe('Testing listing service', () => {
             OR: [
               {
                 reviewOrderType: {
-                  equals: ReviewOrderTypeEnum.waitlist,
+                  equals: ReviewOrderTypeEnum.waitlistFCFS,
                 },
               },
             ],
