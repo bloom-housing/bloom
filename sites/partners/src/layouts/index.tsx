@@ -18,9 +18,7 @@ const Layout = (props) => {
   const { toastMessagesRef, addToast } = useContext(MessageContext)
   const router = useRouter()
   const currentYear = new Date().getFullYear()
-  const copyRight = profile?.userRoles?.isPartner
-    ? `Copyright @ ${currentYear} Bay Area Housing Finance Authority. All rights reserved `
-    : `© ${currentYear} • All Rights Reserved`
+  const copyRight = `Copyright @ ${currentYear} Bay Area Housing Finance Authority. All rights reserved `
   const doorwayPartnersManualLink =
     "https://docs.google.com/document/d/1W4tIMtUMwz4KqdcO5f4yZi0R5AU74P3B/edit"
   const privacyPolicyLink = "https://mtc.ca.gov/doorway-housing-portal-privacy-policy"
@@ -84,15 +82,9 @@ const Layout = (props) => {
         </main>
         <SiteFooter>
           <FooterNav copyright={copyRight}>
-            {profile?.userRoles?.isPartner && (
-              <>
-                <LocalizedLink href={doorwayPartnersManualLink}>
-                  Doorway Partners Manual
-                </LocalizedLink>
-                <LocalizedLink href={privacyPolicyLink}>Privacy Policy</LocalizedLink>
-                <LocalizedLink href={termsOfUseLink}>Terms of Use</LocalizedLink>
-              </>
-            )}
+            <LocalizedLink href={doorwayPartnersManualLink}>Doorway Partners Manual</LocalizedLink>
+            <LocalizedLink href={privacyPolicyLink}>Privacy Policy</LocalizedLink>
+            <LocalizedLink href={termsOfUseLink}>Terms of Use</LocalizedLink>
           </FooterNav>
           <FooterSection className="bg-black" small>
             <ExygyFooter />
