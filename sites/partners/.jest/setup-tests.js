@@ -1,10 +1,10 @@
 // Future home of additional Jest config
 import { addTranslation } from "@bloom-housing/ui-components"
 import generalTranslations from "@bloom-housing/shared-helpers/src/locales/general.json"
-import axios from "axios"
-import "@testing-library/jest-dom/extend-expect"
-import general from "../page_content/locale_overrides/general.json"
 import { serviceOptions } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import "@testing-library/jest-dom"
+import axios from "axios"
+import general from "../page_content/locale_overrides/general.json"
 addTranslation({ ...generalTranslations, ...general })
 
 process.env.cloudinaryCloudName = "exygy"

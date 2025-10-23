@@ -3,7 +3,6 @@ import { FormProviderWrapper } from "./helpers"
 import { FormHouseholdMembers } from "../../../../src/components/applications/PaperApplicationForm/sections/FormHouseholdMembers"
 import { render, screen, within } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
-import { act } from "react-dom/test-utils"
 import {
   HouseholdMemberRelationship,
   YesNoEnum,
@@ -51,7 +50,7 @@ describe("<FormHouseholdMembers>", () => {
     expect(addMemberButton).toBeInTheDocument()
     expect(screen.queryByRole("table")).not.toBeInTheDocument()
 
-    await act(() => userEvent.click(addMemberButton))
+    await userEvent.click(addMemberButton)
 
     const drawerTitle = screen.getByRole("heading", { level: 1, name: /^household member$/i })
     expect(drawerTitle).toBeInTheDocument()
@@ -94,7 +93,7 @@ describe("<FormHouseholdMembers>", () => {
     const addMemberButton = screen.getByRole("button", { name: /add household member/i })
     expect(addMemberButton).toBeInTheDocument()
 
-    await act(() => userEvent.click(addMemberButton))
+    await userEvent.click(addMemberButton)
 
     const drawerTitle = screen.getByRole("heading", { level: 1, name: /^household member$/i })
     expect(drawerTitle).toBeInTheDocument()
@@ -105,7 +104,7 @@ describe("<FormHouseholdMembers>", () => {
     ).getByLabelText(/no/i)
 
     expect(noRadioButton).toBeInTheDocument()
-    await act(() => userEvent.click(noRadioButton))
+    await userEvent.click(noRadioButton)
 
     expect(screen.getByText(/residence address/i)).toBeInTheDocument()
     expect(screen.getAllByLabelText(/street address/i)).toHaveLength(1)
@@ -126,7 +125,7 @@ describe("<FormHouseholdMembers>", () => {
     const addMemberButton = screen.getByRole("button", { name: /add household member/i })
     expect(addMemberButton).toBeInTheDocument()
 
-    await act(() => userEvent.click(addMemberButton))
+    await userEvent.click(addMemberButton)
 
     const drawerTitle = screen.getByRole("heading", { level: 1, name: /^household member$/i })
     expect(drawerTitle).toBeInTheDocument()
@@ -137,7 +136,7 @@ describe("<FormHouseholdMembers>", () => {
     ).getByLabelText(/yes/i)
 
     expect(yesRadioButton).toBeInTheDocument()
-    await act(() => userEvent.click(yesRadioButton))
+    await userEvent.click(yesRadioButton)
 
     expect(screen.getByText(/work address/i)).toBeInTheDocument()
     expect(screen.getAllByLabelText(/street address/i)).toHaveLength(1)
@@ -158,7 +157,7 @@ describe("<FormHouseholdMembers>", () => {
     const addMemberButton = screen.getByRole("button", { name: /add household member/i })
     expect(addMemberButton).toBeInTheDocument()
 
-    await act(() => userEvent.click(addMemberButton))
+    await userEvent.click(addMemberButton)
 
     const drawerTitle = screen.getByRole("heading", { level: 1, name: /^household member$/i })
     expect(drawerTitle).toBeInTheDocument()
@@ -175,10 +174,8 @@ describe("<FormHouseholdMembers>", () => {
     expect(yesRadioButton).toBeInTheDocument()
     expect(noRadioButton).toBeInTheDocument()
 
-    await act(async () => {
-      await userEvent.click(yesRadioButton)
-      await userEvent.click(noRadioButton)
-    })
+    await userEvent.click(yesRadioButton)
+    await userEvent.click(noRadioButton)
 
     expect(screen.getByText(/residence address/i)).toBeInTheDocument()
     expect(screen.getByText(/work address/i)).toBeInTheDocument()
@@ -246,7 +243,7 @@ describe("<FormHouseholdMembers>", () => {
     const deleteButton = screen.getByRole("button", { name: /delete/i })
     expect(deleteButton).toBeInTheDocument()
 
-    await act(() => userEvent.click(deleteButton))
+    await userEvent.click(deleteButton)
 
     const popupTitle = await screen.findByRole("heading", {
       level: 1,
@@ -258,9 +255,7 @@ describe("<FormHouseholdMembers>", () => {
     expect(within(popupContainer).getByRole("button", { name: /cancel/i }))
     expect(within(popupContainer).getByRole("button", { name: /delete/i }))
 
-    await act(() =>
-      userEvent.click(within(popupContainer).getByRole("button", { name: /delete/i }))
-    )
+    await userEvent.click(within(popupContainer).getByRole("button", { name: /delete/i }))
 
     expect(
       screen.queryAllByRole("heading", {
@@ -291,7 +286,7 @@ describe("<FormHouseholdMembers>", () => {
     const editButton = screen.getByRole("button", { name: /edit/i })
     expect(editButton).toBeInTheDocument()
 
-    await act(() => userEvent.click(editButton))
+    await userEvent.click(editButton)
 
     const drawerTitle = screen.getByRole("heading", { level: 1, name: /^household member$/i })
     expect(drawerTitle).toBeInTheDocument()
@@ -314,7 +309,7 @@ describe("<FormHouseholdMembers>", () => {
     expect(within(primaryAdress.parentElement).getByLabelText(/no/i)).toBeChecked()
 
     await userEvent.type(within(drawerContainer).getByLabelText(/first name/i), "athon")
-    await act(() => userEvent.click(screen.getByRole("button", { name: "Submit" })))
+    await userEvent.click(screen.getByRole("button", { name: "Submit" }))
 
     expect(mockSetHouseholdMembers).toHaveBeenCalledWith([
       {
@@ -348,7 +343,7 @@ describe("<FormHouseholdMembers>", () => {
     const addMemberButton = screen.getByRole("button", { name: /add household member/i })
     expect(addMemberButton).toBeInTheDocument()
 
-    await act(() => userEvent.click(addMemberButton))
+    await userEvent.click(addMemberButton)
 
     const drawerTitle = screen.getByRole("heading", { level: 1, name: /^household member$/i })
     expect(drawerTitle).toBeInTheDocument()

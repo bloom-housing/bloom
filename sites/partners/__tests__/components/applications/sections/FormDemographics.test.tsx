@@ -1,4 +1,3 @@
-import { act } from "react-dom/test-utils"
 import { FormDemographics } from "../../../../src/components/applications/PaperApplicationForm/sections/FormDemographics"
 import { mockNextRouter, render, screen } from "../../../testUtils"
 import { FormProviderWrapper } from "./helpers"
@@ -136,10 +135,8 @@ describe("<FormDemographics>", () => {
       /native hawaiian \/ other pacific islander/i
     )
 
-    await act(async () => {
-      await userEvent.click(asianCheckbox)
-      await userEvent.click(hawaiianPacificCheckbox)
-    })
+    await userEvent.click(asianCheckbox)
+    await userEvent.click(hawaiianPacificCheckbox)
 
     expect(screen.getByLabelText(/Asian Indian/i)).toBeInTheDocument()
     expect(screen.getByLabelText(/Chinese/i)).toBeInTheDocument()
