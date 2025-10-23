@@ -418,9 +418,9 @@ describe('Testing Permissioning of endpoints as Limited Jurisdictional Admin in 
     it('should succeed for presigned endpoint', async () => {
       await request(app.getHttpServer())
         .post('/asset/presigned-upload-metadata/')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .send(buildPresignedEndpointMock())
         .set('Cookie', cookies)
-        .set({ passkey: process.env.API_PASS_KEY || '' })
         .expect(201);
     });
   });

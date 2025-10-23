@@ -30,6 +30,8 @@ import {
   MarketingSeasonEnum,
   MarketingTypeEnum,
   ReviewOrderTypeEnum,
+  DepositTypeEnum,
+  ListingTypeEnum,
 } from '@prisma/client';
 import { EnforceLowerCase } from '../../decorators/enforce-lower-case.decorator';
 import { SanitizeHtml } from '../../decorators/sanitize-html.decorator';
@@ -58,6 +60,7 @@ import {
   ValidateAtLeastOneUnit,
   ValidateOnlyUnitsOrUnitGroups,
 } from '../../decorators/validate-units-required.decorator';
+import { ValidateListingDeposit } from '../../decorators/validate-listing-deposit.decorator';
 
 class Listing extends AbstractDTO {
   @Expose()
@@ -319,6 +322,13 @@ class Listing extends AbstractDTO {
   buildingSelectionCriteria?: string;
 
   @Expose()
+  @ValidateListingPublish('cocInfo7', {
+    groups: [ValidationsGroupsEnum.default],
+  })
+  @ApiPropertyOptional()
+  cocInfo?: string;
+
+  @Expose()
   @ValidateListingPublish('costsNotIncluded', {
     groups: [ValidationsGroupsEnum.default],
   })
@@ -361,6 +371,41 @@ class Listing extends AbstractDTO {
   depositMax?: string;
 
   @Expose()
+  @ValidateListingPublish('depositType', {
+    groups: [ValidationsGroupsEnum.default],
+  })
+  @IsEnum(DepositTypeEnum, {
+    groups: [ValidationsGroupsEnum.default],
+  })
+  @ValidateListingDeposit({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional({ enum: DepositTypeEnum })
+  depositType?: DepositTypeEnum;
+
+  @Expose()
+  @ValidateListingPublish('depositValue', {
+    groups: [ValidationsGroupsEnum.default],
+  })
+  @IsNumber()
+  @ApiPropertyOptional()
+  depositValue?: number;
+
+  @Expose()
+  @ValidateListingPublish('depositRangeMin', {
+    groups: [ValidationsGroupsEnum.default],
+  })
+  @IsNumber()
+  @ApiPropertyOptional()
+  depositRangeMin?: number;
+
+  @Expose()
+  @ValidateListingPublish('depositRangeMax', {
+    groups: [ValidationsGroupsEnum.default],
+  })
+  @IsNumber()
+  @ApiPropertyOptional()
+  depositRangeMax?: number;
+
+  @Expose()
   @ValidateListingPublish('depositHelperText', {
     groups: [ValidationsGroupsEnum.default],
   })
@@ -375,6 +420,14 @@ class Listing extends AbstractDTO {
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   disableUnitsAccordion?: boolean;
+
+  @Expose()
+  @ValidateListingPublish('hasHudEbllClearance', {
+    groups: [ValidationsGroupsEnum.default],
+  })
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  hasHudEbllClearance?: boolean;
 
   @Expose()
   @ValidateListingPublish('leasingAgentEmail', {
@@ -420,6 +473,16 @@ class Listing extends AbstractDTO {
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   leasingAgentTitle?: string;
+
+  @Expose()
+  @ValidateListingPublish('leasingAgentTitle', {
+    groups: [ValidationsGroupsEnum.default],
+  })
+  @IsEnum(ListingTypeEnum, {
+    groups: [ValidationsGroupsEnum.default],
+  })
+  @ApiPropertyOptional({ enum: ListingTypeEnum })
+  listingType?: ListingTypeEnum;
 
   @Expose()
   @ValidateListingPublish('managementWebsite', {

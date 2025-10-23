@@ -461,6 +461,8 @@ export class ListingService implements OnModuleInit {
     const userRolesWhere: Prisma.UserAccountsWhereInput[] = [];
     if (userRoles.includes(UserRoleEnum.admin))
       userRolesWhere.push({ userRoles: { isAdmin: true } });
+    if (userRoles.includes(UserRoleEnum.supportAdmin))
+      userRolesWhere.push({ userRoles: { isSupportAdmin: true } });
     if (userRoles.includes(UserRoleEnum.partner))
       userRolesWhere.push({
         userRoles: { isPartner: true },
@@ -526,6 +528,7 @@ export class ListingService implements OnModuleInit {
     ];
     if (!params.approvingRoles.includes(UserRoleEnum.jurisdictionAdmin))
       nonApprovingRoles.push(UserRoleEnum.jurisdictionAdmin);
+
     if (
       params.status === ListingsStatusEnum.pendingReview &&
       params.previousStatus !== ListingsStatusEnum.pendingReview
@@ -576,17 +579,29 @@ export class ListingService implements OnModuleInit {
         params.previousStatus === ListingsStatusEnum.pending
       ) {
         const userInfo = await this.getUserEmailInfo(
-          nonApprovingRoles,
+          [
+            UserRoleEnum.partner,
+            UserRoleEnum.admin,
+            UserRoleEnum.jurisdictionAdmin,
+            UserRoleEnum.limitedJurisdictionAdmin,
+            UserRoleEnum.supportAdmin,
+          ],
           params.listingInfo.id,
           params.jurisId,
           true,
           true,
         );
+        const jurisdiction = await this.prisma.jurisdictions.findFirst({
+          select: {
+            publicUrl: true,
+          },
+          where: { id: params.jurisId },
+        });
         await this.emailService.listingApproved(
           { id: params.jurisId },
           { id: params.listingInfo.id, name: params.listingInfo.name },
           userInfo.emails,
-          userInfo.publicUrl,
+          jurisdiction?.publicUrl || '',
         );
       }
     }
@@ -1675,6 +1690,9 @@ export class ListingService implements OnModuleInit {
                 openWaitlist: group.openWaitlist,
                 sqFeetMax: group.sqFeetMax,
                 sqFeetMin: group.sqFeetMin,
+                rentType: group.rentType,
+                flatRentValueFrom: group.flatRentValueFrom,
+                flatRentValueTo: group.flatRentValueTo,
                 totalAvailable: group.totalAvailable,
                 totalCount: group.totalCount,
                 unitGroupAmiLevels: {
@@ -1822,9 +1840,14 @@ export class ListingService implements OnModuleInit {
 
     const userRoles =
       requestingUser?.userRoles?.isAdmin ||
+      requestingUser?.userRoles?.isSupportAdmin ||
       (requestingUser?.userRoles?.isJurisdictionalAdmin &&
         duplicateListingPermissions?.includes(
           UserRoleEnum.jurisdictionAdmin,
+        )) ||
+      (requestingUser?.userRoles?.isLimitedJurisdictionalAdmin &&
+        duplicateListingPermissions?.includes(
+          UserRoleEnum.limitedJurisdictionAdmin,
         )) ||
       (requestingUser?.userRoles?.isPartner &&
         duplicateListingPermissions?.includes(UserRoleEnum.partner))
@@ -1848,7 +1871,8 @@ export class ListingService implements OnModuleInit {
 
     //manually check for juris/listing mismatch since logic above is forcing admin permissioning
     if (
-      (requestingUser?.userRoles?.isJurisdictionalAdmin &&
+      ((requestingUser?.userRoles?.isJurisdictionalAdmin ||
+        requestingUser?.userRoles?.isLimitedJurisdictionalAdmin) &&
         !requestingUser?.jurisdictions?.some(
           (juris) => juris.id === storedListing.jurisdictionId,
         )) ||
@@ -2572,6 +2596,9 @@ export class ListingService implements OnModuleInit {
                   maxOccupancy: group.maxOccupancy,
                   minOccupancy: group.minOccupancy,
                   openWaitlist: group.openWaitlist,
+                  rentType: group.rentType,
+                  flatRentValueFrom: group.flatRentValueFrom,
+                  flatRentValueTo: group.flatRentValueTo,
                   sqFeetMin: group.sqFeetMin,
                   sqFeetMax: group.sqFeetMax,
                   totalCount: group.totalCount,

@@ -172,6 +172,10 @@ const Settings = () => {
     )
   }
 
+  if (profile?.userRoles?.isPartner || profile?.userRoles?.isSupportAdmin) {
+    window.location.href = "/unauthorized"
+  }
+
   return (
     <>
       <Layout>

@@ -582,8 +582,6 @@ export const getHouseholdCsvHeaders = (
       },
     );
     if (!disableWorkInRegion) {
-      console.log('HELLO ERIC M');
-
       headers.push({
         path: `householdMember.${i}.workInRegion`,
         label: `Household Member (${j}) Work in Region`,

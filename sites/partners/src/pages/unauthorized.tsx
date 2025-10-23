@@ -1,16 +1,18 @@
-import Layout from "../layouts"
-import Head from "next/head"
-import { Hero, t } from "@bloom-housing/ui-components"
+import FormsLayout from "../layouts/forms"
+import { t } from "@bloom-housing/ui-components"
+import { BloomCard } from "@bloom-housing/shared-helpers"
+import { Card } from "@bloom-housing/ui-seeds"
 
 export default () => {
   const pageTitle = t("errors.unauthorized.title")
 
   return (
-    <Layout>
-      <Head>
-        <title>{pageTitle}</title>
-      </Head>
-      <Hero title={pageTitle}>{t("errors.unauthorized.message")}</Hero>
-    </Layout>
+    <FormsLayout title={`${pageTitle} - ${t("nav.siteTitlePartners")}`}>
+      <BloomCard title={pageTitle} iconSymbol={"lockClosed"} iconClass="text-alert">
+        <Card.Section>
+          <p>{t("errors.unauthorized.message")}</p>
+        </Card.Section>
+      </BloomCard>
+    </FormsLayout>
   )
 }

@@ -71,6 +71,7 @@ const testEmailService = {
   changeEmail: jest.fn(),
   forgotPassword: jest.fn(),
   sendMfaCode: jest.fn(),
+  sendCSV: jest.fn(),
   applicationConfirmation: jest.fn(),
 };
 
@@ -100,9 +101,16 @@ describe('Testing Permissioning of endpoints as Limited Jurisdictional Admin in 
     app.use(cookieParser());
     await app.init();
 
-    const userJuris = await generateJurisdiction(prisma, 'permission juris 83');
+    const userJuris = await generateJurisdiction(
+      prisma,
+      'wrong limited jadmin permission juris',
+    );
 
-    jurisId = await generateJurisdiction(prisma, 'permission juris 84');
+    jurisId = await generateJurisdiction(
+      prisma,
+      'wrong permission limited juris',
+    );
+    await reservedCommunityTypeFactoryAll(jurisId, prisma);
 
     const storedUser = await prisma.userAccounts.create({
       data: await userFactory({
@@ -207,12 +215,12 @@ describe('Testing Permissioning of endpoints as Limited Jurisdictional Admin in 
   describe('Testing application endpoints', () => {
     beforeAll(async () => {
       await unitTypeFactoryAll(prisma);
-      await await prisma.translations.create({
+      await prisma.translations.create({
         data: translationFactory(),
       });
     });
 
-    it('should succeed for list endpoint for listing with no applications', async () => {
+    it('should succeed for list endpoint', async () => {
       const listing1 = await listingFactory(jurisId, prisma);
       const listing1Created = await prisma.listings.create({
         data: listing1,
@@ -317,7 +325,9 @@ describe('Testing Permissioning of endpoints as Limited Jurisdictional Admin in 
         UnitTypeEnum.oneBdrm,
       );
 
-      const listing1 = await listingFactory(jurisId, prisma);
+      const listing1 = await listingFactory(jurisId, prisma, {
+        digitalApp: true,
+      });
       const listing1Created = await prisma.listings.create({
         data: listing1,
       });
@@ -385,7 +395,6 @@ describe('Testing Permissioning of endpoints as Limited Jurisdictional Admin in 
       });
 
       const exampleAddress = addressFactory() as AddressCreate;
-
       await request(app.getHttpServer())
         .post(`/applications/verify`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
@@ -402,8 +411,13 @@ describe('Testing Permissioning of endpoints as Limited Jurisdictional Admin in 
     });
 
     it('should error as forbidden for csv endpoint', async () => {
+      const jurisdiction = await generateJurisdiction(
+        prisma,
+        'wrong permission limited juris csv endpoint',
+      );
+      await reservedCommunityTypeFactoryAll(jurisdiction, prisma);
       const application = await applicationFactory();
-      const listing1 = await listingFactory(jurisId, prisma, {
+      const listing1 = await listingFactory(jurisdiction, prisma, {
         applications: [application],
       });
       const listing1Created = await prisma.listings.create({
@@ -421,9 +435,9 @@ describe('Testing Permissioning of endpoints as Limited Jurisdictional Admin in 
     it('should succeed for presigned endpoint', async () => {
       await request(app.getHttpServer())
         .post('/asset/presigned-upload-metadata/')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .send(buildPresignedEndpointMock())
         .set('Cookie', cookies)
-        .set({ passkey: process.env.API_PASS_KEY || '' })
         .expect(201);
     });
   });
@@ -480,7 +494,7 @@ describe('Testing Permissioning of endpoints as Limited Jurisdictional Admin in 
     it('should error as forbidden for delete endpoint', async () => {
       const jurisdictionA = await generateJurisdiction(
         prisma,
-        'permission juris 85',
+        'wrong limited jadmin permission juris delete',
       );
 
       await request(app.getHttpServer())
@@ -771,7 +785,7 @@ describe('Testing Permissioning of endpoints as Limited Jurisdictional Admin in 
         .expect(200);
     });
 
-    it('should succed for create endpoint', async () => {
+    it('should succeed for create endpoint', async () => {
       await request(app.getHttpServer())
         .post('/multiselectQuestions')
         .set({ passkey: process.env.API_PASS_KEY || '' })
@@ -832,7 +846,7 @@ describe('Testing Permissioning of endpoints as Limited Jurisdictional Admin in 
 
     it('should error as forbidden for retrieve endpoint', async () => {
       const userA = await prisma.userAccounts.create({
-        data: await userFactory({ jurisdictionIds: [jurisId] }),
+        data: await userFactory(),
       });
 
       await request(app.getHttpServer())
@@ -844,7 +858,7 @@ describe('Testing Permissioning of endpoints as Limited Jurisdictional Admin in 
 
     it('should error as forbidden for update endpoint', async () => {
       const userA = await prisma.userAccounts.create({
-        data: await userFactory({ jurisdictionIds: [jurisId] }),
+        data: await userFactory(),
       });
 
       await request(app.getHttpServer())
@@ -854,7 +868,6 @@ describe('Testing Permissioning of endpoints as Limited Jurisdictional Admin in 
           id: userA.id,
           firstName: 'New User First Name',
           lastName: 'New User Last Name',
-          jurisdictions: [{ id: jurisId } as IdDTO],
         } as UserUpdate)
         .set('Cookie', cookies)
         .expect(403);
@@ -862,7 +875,7 @@ describe('Testing Permissioning of endpoints as Limited Jurisdictional Admin in 
 
     it('should error as forbidden for delete endpoint', async () => {
       const userA = await prisma.userAccounts.create({
-        data: await userFactory({ jurisdictionIds: [jurisId] }),
+        data: await userFactory(),
       });
 
       await request(app.getHttpServer())
@@ -947,7 +960,6 @@ describe('Testing Permissioning of endpoints as Limited Jurisdictional Admin in 
         .set('Cookie', cookies)
         .expect(200);
     });
-
     it('should succeed for public create endpoint', async () => {
       const juris = await generateJurisdiction(prisma, 'permission juris 86');
 
@@ -966,14 +978,18 @@ describe('Testing Permissioning of endpoints as Limited Jurisdictional Admin in 
     });
 
     it('should error as forbidden for partner create endpoint', async () => {
+      const jurisdiction = await generateJurisdiction(
+        prisma,
+        'wrong limited jadmin permission juris create failure',
+      );
+
       await request(app.getHttpServer())
         .post(`/user/invite`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .send(
-          // builds an invite for an admin
-          buildUserInviteMock(jurisId, 'partnerUser+jurisIncorrect@email.com'),
+          buildUserInviteMock(jurisdiction, 'partnerUser+jurisWrong@email.com'),
         )
         .set('Cookie', cookies)
-        .set({ passkey: process.env.API_PASS_KEY || '' })
         .expect(403);
     });
 
@@ -988,6 +1004,14 @@ describe('Testing Permissioning of endpoints as Limited Jurisdictional Admin in 
 
   describe('Testing listing endpoints', () => {
     it('should succeed for list endpoint', async () => {
+      await request(app.getHttpServer())
+        .post(`/listings/list`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .expect(201);
+    });
+
+    it('should succeed for filterableList endpoint', async () => {
       await request(app.getHttpServer())
         .post(`/listings/list`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
@@ -1080,13 +1104,7 @@ describe('Testing Permissioning of endpoints as Limited Jurisdictional Admin in 
     });
 
     it('should error as forbidden for duplicate endpoint', async () => {
-      const jurisdictionA = await generateJurisdiction(
-        prisma,
-        'permission juris 188',
-      );
-      await reservedCommunityTypeFactoryAll(jurisdictionA, prisma);
-
-      const listingData = await listingFactory(jurisdictionA, prisma);
+      const listingData = await listingFactory(jurisId, prisma);
       const listing = await prisma.listings.create({
         data: listingData,
       });
@@ -1160,6 +1178,8 @@ describe('Testing Permissioning of endpoints as Limited Jurisdictional Admin in 
     it('should succeed for mapMarkers endpoint', async () => {
       await request(app.getHttpServer())
         .post(`/listings/mapMarkers`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
         .expect(201);
     });
   });
@@ -1289,6 +1309,35 @@ describe('Testing Permissioning of endpoints as Limited Jurisdictional Admin in 
       await request(app.getHttpServer())
         .put(`/applicationFlaggedSets/process`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .expect(403);
+    });
+  });
+
+  describe('Testing lottery endpoints', () => {
+    it('should error as forbidden for expireLotteries endpoint', async () => {
+      await request(app.getHttpServer())
+        .put(`/lottery/expireLotteries`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .expect(403);
+    });
+
+    it('should error as forbidden for lottery status endpoint', async () => {
+      const listingData = await listingFactory(jurisId, prisma, {
+        status: 'closed',
+      });
+      const listing = await prisma.listings.create({
+        data: listingData,
+      });
+
+      await request(app.getHttpServer())
+        .put('/lottery/lotteryStatus')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({
+          id: listing.id,
+          lotteryStatus: 'ran',
+        })
         .set('Cookie', cookies)
         .expect(403);
     });

@@ -71,6 +71,7 @@ const ListingFormActions = ({
   const duplicateListingPermissions = jurisdiction?.duplicateListingPermissions
   const isListingCopier =
     profile?.userRoles?.isAdmin ||
+    profile?.userRoles?.isSupportAdmin ||
     (profile?.userRoles?.isJurisdictionalAdmin &&
       duplicateListingPermissions?.includes(UserRoleEnum.jurisdictionAdmin)) ||
     (profile?.userRoles?.isLimitedJurisdictionalAdmin &&
@@ -82,7 +83,6 @@ const ListingFormActions = ({
   const listingJurisdiction = profile?.jurisdictions?.find(
     (jurisdiction) => jurisdiction.id === listing?.jurisdictions?.id
   )
-
   const hideCloseButton = doJurisdictionsHaveFeatureFlagOn(
     "hideCloseListingButton",
     listingJurisdiction?.id
@@ -399,7 +399,11 @@ const ListingFormActions = ({
 
     // new unsaved listing
     if (type === ListingFormActionsType.add) {
-      elements.push(isListingApprover || !isListingApprovalEnabled ? publishButton : submitButton)
+      elements.push(
+        isListingApprover || (!profile?.userRoles?.isSupportAdmin && !isListingApprovalEnabled)
+          ? publishButton
+          : submitButton
+      )
       elements.push(saveDraftButton)
       elements.push(cancelButton)
     }
@@ -429,6 +433,8 @@ const ListingFormActions = ({
       if (isListingApprover && !profile?.userRoles.isPartner) {
         elements.push(approveAndPublishButton)
         elements.push(editFromDetailButton)
+      } else if (profile?.userRoles.isSupportAdmin) {
+        elements.push(editFromDetailButton)
       }
       if (isListingCopier) elements.push(copyButton)
       elements.push(previewButton)
@@ -440,6 +446,8 @@ const ListingFormActions = ({
     ) {
       if (isListingApprover && !profile?.userRoles.isPartner) {
         elements.push(approveAndPublishButton)
+        elements.push(requestChangesButton)
+      } else if (profile?.userRoles.isSupportAdmin) {
         elements.push(requestChangesButton)
       }
       if (profile?.userRoles.isPartner) {
@@ -478,10 +486,13 @@ const ListingFormActions = ({
     }
     //open listing, edit view
     else if (listing.status === ListingsStatusEnum.active && type === ListingFormActionsType.edit) {
-      if (!hideCloseButton) {
+      if (!hideCloseButton && !profile.userRoles.isSupportAdmin) {
         elements.push(closeButton)
       }
-      elements.push(unpublishButton)
+      if (!profile.userRoles.isSupportAdmin) {
+        elements.push(unpublishButton)
+      }
+
       elements.push(saveContinueButton)
       elements.push(cancelButton)
     }
@@ -524,6 +535,7 @@ const ListingFormActions = ({
     listingsService,
     profile?.userRoles.isAdmin,
     profile?.userRoles.isPartner,
+    profile?.userRoles.isSupportAdmin,
     router,
     setErrorAlert,
     showCloseListingModal,

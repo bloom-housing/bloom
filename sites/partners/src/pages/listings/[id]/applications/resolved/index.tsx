@@ -16,6 +16,7 @@ import { getLinkCellFormatter } from "../../../../../components/applications/hel
 import { NavigationHeader } from "../../../../../components/shared/NavigationHeader"
 
 import { mergeApplicationNames } from "../../../../../lib/helpers"
+import ListingGuard from "../../../../../components/shared/ListingGuard"
 
 const ApplicationsList = () => {
   const router = useRouter()
@@ -93,75 +94,77 @@ const ApplicationsList = () => {
   if (profile?.userRoles?.isLimitedJurisdictionalAdmin) return null
 
   return (
-    <Layout>
-      <Head>
-        <title>{`Resolved Applications - ${t("nav.siteTitlePartners")}`}</title>
-      </Head>
+    <ListingGuard>
+      <Layout>
+        <Head>
+          <title>{`Resolved Applications - ${t("nav.siteTitlePartners")}`}</title>
+        </Head>
 
-      <NavigationHeader
-        title={listingName}
-        listingId={listingId}
-        tabs={{
-          show: true,
-          flagsQty: flaggedAppsData?.meta?.totalFlagged,
-          listingLabel: t("t.listingSingle"),
-          applicationsLabel: t("nav.applications"),
-        }}
-        breadcrumbs={
-          <Breadcrumbs>
-            <BreadcrumbLink href="/">{t("t.listing")}</BreadcrumbLink>
-            <BreadcrumbLink href={`/listings/${listingId}`}>{listingName}</BreadcrumbLink>
-            <BreadcrumbLink href={`/listings/${listingId}/applications`}>
-              {t("nav.applications")}
-            </BreadcrumbLink>
-            <BreadcrumbLink href={`/listings/${listingId}/applications/resolved`} current>
-              {t("t.resolved")}
-            </BreadcrumbLink>
-          </Breadcrumbs>
-        }
-      />
+        <NavigationHeader
+          title={listingName}
+          listingId={listingId}
+          tabs={{
+            show: true,
+            flagsQty: flaggedAppsData?.meta?.totalFlagged,
+            listingLabel: t("t.listingSingle"),
+            applicationsLabel: t("nav.applications"),
+          }}
+          breadcrumbs={
+            <Breadcrumbs>
+              <BreadcrumbLink href="/">{t("t.listing")}</BreadcrumbLink>
+              <BreadcrumbLink href={`/listings/${listingId}`}>{listingName}</BreadcrumbLink>
+              <BreadcrumbLink href={`/listings/${listingId}/applications`}>
+                {t("nav.applications")}
+              </BreadcrumbLink>
+              <BreadcrumbLink href={`/listings/${listingId}/applications/resolved`} current>
+                {t("t.resolved")}
+              </BreadcrumbLink>
+            </Breadcrumbs>
+          }
+        />
 
-      <ListingStatusBar status={listingDto?.status} />
+        <ListingStatusBar status={listingDto?.status} />
 
-      <section className={"bg-gray-200 pt-4"}>
-        <article className="flex flex-col md:flex-row items-start gap-x-8 relative max-w-screen-xl mx-auto pb-8 px-4">
-          <ApplicationsSideNav className="w-full md:w-72" listingId={listingId} />
+        <section className={"bg-gray-200 pt-4"}>
+          <article className="flex flex-col md:flex-row items-start gap-x-8 relative max-w-screen-xl mx-auto pb-8 px-4">
+            <ApplicationsSideNav className="w-full md:w-72" listingId={listingId} />
 
-          <div className="w-full">
-            <AgTable
-              id="applications-table"
-              className="w-full"
-              pagination={{
-                perPage: tableOptions.pagination.itemsPerPage,
-                setPerPage: tableOptions.pagination.setItemsPerPage,
-                currentPage: tableOptions.pagination.currentPage,
-                setCurrentPage: tableOptions.pagination.setCurrentPage,
-              }}
-              config={{
-                gridComponents: { formatLinkCell: getLinkCellFormatter(router) },
-                columns: columns,
-                totalItemsLabel:
-                  flaggedAppsData?.meta?.totalItems === 1
-                    ? t("applications.duplicates.set")
-                    : t("applications.duplicates.sets"),
-              }}
-              data={{
-                items: flaggedAppsData?.items ?? [],
-                loading: flaggedAppsLoading,
-                totalItems: flaggedAppsData?.meta?.totalItems ?? 0,
-                totalPages: flaggedAppsData?.meta?.totalPages ?? 0,
-              }}
-              search={{
-                setSearch: tableOptions.filter.setFilterValue,
-              }}
-              sort={{
-                setSort: tableOptions.sort.setSortOptions,
-              }}
-            />
-          </div>
-        </article>
-      </section>
-    </Layout>
+            <div className="w-full">
+              <AgTable
+                id="applications-table"
+                className="w-full"
+                pagination={{
+                  perPage: tableOptions.pagination.itemsPerPage,
+                  setPerPage: tableOptions.pagination.setItemsPerPage,
+                  currentPage: tableOptions.pagination.currentPage,
+                  setCurrentPage: tableOptions.pagination.setCurrentPage,
+                }}
+                config={{
+                  gridComponents: { formatLinkCell: getLinkCellFormatter(router) },
+                  columns: columns,
+                  totalItemsLabel:
+                    flaggedAppsData?.meta?.totalItems === 1
+                      ? t("applications.duplicates.set")
+                      : t("applications.duplicates.sets"),
+                }}
+                data={{
+                  items: flaggedAppsData?.items ?? [],
+                  loading: flaggedAppsLoading,
+                  totalItems: flaggedAppsData?.meta?.totalItems ?? 0,
+                  totalPages: flaggedAppsData?.meta?.totalPages ?? 0,
+                }}
+                search={{
+                  setSearch: tableOptions.filter.setFilterValue,
+                }}
+                sort={{
+                  setSort: tableOptions.sort.setSortOptions,
+                }}
+              />
+            </div>
+          </article>
+        </section>
+      </Layout>
+    </ListingGuard>
   )
 }
 
