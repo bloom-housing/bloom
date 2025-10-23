@@ -1,6 +1,6 @@
 import React from "react"
 import NewApplication from "../../../../../src/pages/listings/[id]/applications/add"
-import { act, mockNextRouter, render, screen } from "../../../../testUtils"
+import { mockNextRouter, render, screen } from "../../../../testUtils"
 import { setupServer } from "msw/lib/node"
 import { rest } from "msw"
 import { application, listing, user } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
@@ -114,7 +114,7 @@ describe("listing applications add page", () => {
     expect(screen.getByText(/draft/i)).toBeInTheDocument()
     const submitButton = screen.getByRole("button", { name: /^submit$/i })
     expect(submitButton).toBeInTheDocument()
-    await act(() => userEvent.click(submitButton))
+    await userEvent.click(submitButton)
     expect(pushMock).toHaveBeenCalledWith("/application/application_id")
   })
 
@@ -143,7 +143,7 @@ describe("listing applications add page", () => {
 
     const submitButton = screen.getByRole("button", { name: /submit & new/i })
     expect(submitButton).toBeInTheDocument()
-    await act(() => userEvent.click(submitButton))
+    await userEvent.click(submitButton)
     expect(pushMock).toHaveBeenCalledWith("/listings/test_id/applications/add")
   })
 })

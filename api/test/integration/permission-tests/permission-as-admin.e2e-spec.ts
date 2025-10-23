@@ -916,7 +916,7 @@ describe('Testing Permissioning of endpoints as Admin User', () => {
 
     it('should succeed for delete endpoint & create an activity log entry', async () => {
       const userA = await prisma.userAccounts.create({
-        data: await userFactory(),
+        data: await userFactory({ roles: { isAdmin: true } }),
       });
 
       await request(app.getHttpServer())
