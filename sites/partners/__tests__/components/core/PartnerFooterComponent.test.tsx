@@ -11,15 +11,15 @@ const footerData: PartnerFooterProps = {
   links: [
     {
       text: "Doorway Partners Manual",
-      hrerf: "https://docs.google.com/document/d/1W4tIMtUMwz4KqdcO5f4yZi0R5AU74P3B/edit",
+      hrerf: "",
     },
     {
       text: "Privacy Policy",
-      hrerf: "https://mtc.ca.gov/doorway-housing-portal-privacy-policy",
+      hrerf: "",
     },
     {
       text: "Terms of Use",
-      hrerf: "https://mtc.ca.gov/doorway-housing-portal-terms-use",
+      hrerf: "",
     },
   ],
 }
