@@ -7,9 +7,27 @@ describe("Partner Footer Component", () => {
     jest.useFakeTimers("modern")
     jest.setSystemTime(new Date("2025-01-01"))
     render(<PartnersFooter />)
-    expect(screen.getByText(/2025/)).toBeInTheDocument()
-    expect(screen.getByRole("link", { name: "Doorway Partners Manual" })).toBeInTheDocument()
-    expect(screen.getByRole("link", { name: "Privacy Policy" })).toBeInTheDocument()
-    expect(screen.getByRole("link", { name: "Terms of Use" })).toBeInTheDocument()
+    expect(
+      screen.getByText("Copyright @ 2025 Bay Area Housing Finance Authority. All rights reserved")
+    ).toBeInTheDocument()
+    const partnerManualLink = screen.getByRole("link", { name: "Doorway Partners Manual" })
+    const privacyPolicyLink = screen.getByRole("link", { name: "Privacy Policy" })
+    const doorwayPartnersManualLink = screen.getByRole("link", { name: "Terms of Use" })
+
+    expect(partnerManualLink).toBeInTheDocument()
+    expect(partnerManualLink).toHaveAttribute(
+      "href",
+      "https://docs.google.com/document/d/1W4tIMtUMwz4KqdcO5f4yZi0R5AU74P3B/edit"
+    )
+    expect(privacyPolicyLink).toBeInTheDocument()
+    expect(privacyPolicyLink).toHaveAttribute(
+      "href",
+      "https://mtc.ca.gov/doorway-housing-portal-privacy-policy"
+    )
+    expect(doorwayPartnersManualLink).toBeInTheDocument()
+    expect(doorwayPartnersManualLink).toHaveAttribute(
+      "href",
+      "https://mtc.ca.gov/doorway-housing-portal-terms-use"
+    )
   })
 })

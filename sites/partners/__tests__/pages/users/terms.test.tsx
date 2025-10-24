@@ -51,8 +51,12 @@ describe("User Terms", () => {
         /I have reviewed the(.*) for this Website, as that term is defined in the Terms of Use, and agree to comply with all requirements described therein that relate to my use as a Professional Partner or Local Government. If I am agreeing to comply with the Terms of Use on behalf of a Professional Partner or Local Government, I warrant that I am authorized to enter into agreements such as the Terms of Use on behalf of such Professional Partner or Local Government./
       )
     ).toBeInTheDocument()
-
-    expect(getAllByRole("link", { name: "Terms of Use" })).toHaveLength(2)
+    const termsOfUseLinks = getAllByRole("link", { name: "Terms of Use" })
+    expect(termsOfUseLinks).toHaveLength(2)
+    expect(termsOfUseLinks).toHaveAttribute(
+      "href",
+      "https://mtc.ca.gov/doorway-housing-portal-terms-use"
+    )
     expect(
       getByLabelText("I have reviewed, understand and agree to the Terms of Use.")
     ).toBeInTheDocument()

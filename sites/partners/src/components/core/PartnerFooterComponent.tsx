@@ -7,14 +7,12 @@ type PartnerFooterLink = {
 }
 
 export type PartnerFooterProps = {
-  copyRight: string
   links: PartnerFooterLink[]
 }
 
 const currentYear = new Date().getFullYear()
-const copyRight = `Copyright @ ${currentYear} Bay Area Housing Finance Authority. All rights reserved `
+const copyRight = `Copyright @ ${currentYear} Bay Area Housing Finance Authority. All rights reserved`
 const footerData: PartnerFooterProps = {
-  copyRight: copyRight,
   links: [
     {
       text: "Doorway Partners Manual",
@@ -34,7 +32,7 @@ const footerData: PartnerFooterProps = {
 const PartnersFooter = () => {
   return (
     <SiteFooter>
-      <FooterNav copyright={footerData.copyRight}>
+      <FooterNav copyright={copyRight}>
         {footerData.links.map((footerLik) => (
           <LocalizedLink key={footerLik.text} href={footerLik.hrerf}>
             {footerLik.text}
