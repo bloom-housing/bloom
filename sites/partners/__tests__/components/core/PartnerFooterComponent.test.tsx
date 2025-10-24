@@ -25,15 +25,13 @@ const footerData: PartnerFooterProps = {
 }
 
 describe("Partner Footer Component", () => {
-  beforeAll(() => {
+  it("should not render links properly in the partners footer", () => {
     jest.useFakeTimers()
     jest.setSystemTime(new Date("2025-01-01"))
-  })
-  it("should not render links properly in the partners footer", () => {
     render(<PartnersFooter {...footerData} />)
     expect(screen.getByText(/2025/)).toBeInTheDocument()
     expect(screen.queryByText("Doorway Partners Manual", { selector: "a" })).toBeInTheDocument()
-    expect(screen.queryByText("Privacy Polic", { selector: "a" })).toBeInTheDocument()
+    expect(screen.queryByText("Privacy Policy", { selector: "a" })).toBeInTheDocument()
     expect(screen.queryByText("Terms of Use", { selector: "a" })).toBeInTheDocument()
   })
 })
