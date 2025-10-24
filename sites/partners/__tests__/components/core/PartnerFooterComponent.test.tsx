@@ -26,7 +26,7 @@ const footerData: PartnerFooterProps = {
 
 describe("Partner Footer Component", () => {
   it("should not render links properly in the partners footer", () => {
-    jest.useFakeTimers()
+    jest.useFakeTimers("modern")
     jest.setSystemTime(new Date("2025-01-01"))
     render(<PartnersFooter {...footerData} />)
     expect(screen.getByText(/2025/)).toBeInTheDocument()
