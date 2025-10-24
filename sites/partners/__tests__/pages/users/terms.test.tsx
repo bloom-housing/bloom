@@ -53,7 +53,7 @@ describe("User Terms", () => {
     ).toBeInTheDocument()
     const termsOfUseLinks = getAllByRole("link", { name: "Terms of Use" })
     expect(termsOfUseLinks).toHaveLength(2)
-    expect(termsOfUseLinks.every((link) => link)).toHaveAttribute(
+    expect(termsOfUseLinks[0]).toHaveAttribute(
       "href",
       "https://mtc.ca.gov/doorway-housing-portal-terms-use"
     )
