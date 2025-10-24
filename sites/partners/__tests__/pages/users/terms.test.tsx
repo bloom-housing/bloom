@@ -42,7 +42,7 @@ afterAll(() => server.close())
 describe("User Terms", () => {
   it("should render terms modal", () => {
     mockNextRouter()
-    const { getByText, getByLabelText } = render(<TermsPage />)
+    const { getByText, getByLabelText, getAllByRole } = render(<TermsPage />)
     expect(getByText("Review Terms of Service"))
     expect(getByText("You must accept the Terms of Use before continuing.")).toBeInTheDocument()
     expect(getByText("Terms of Use", { selector: "h2" })).toBeInTheDocument()
@@ -51,9 +51,9 @@ describe("User Terms", () => {
         /I have reviewed the(.*) for this Website, as that term is defined in the Terms of Use, and agree to comply with all requirements described therein that relate to my use as a Professional Partner or Local Government. If I am agreeing to comply with the Terms of Use on behalf of a Professional Partner or Local Government, I warrant that I am authorized to enter into agreements such as the Terms of Use on behalf of such Professional Partner or Local Government./
       )
     ).toBeInTheDocument()
-    const termsOfUseLink = getByText("Terms of Use", { selector: "a" })
-    expect(termsOfUseLink).toBeInTheDocument()
-    expect(termsOfUseLink).toHaveAttribute(
+    const termsOfUseLinks = getAllByRole("link", { name: "Terms of Use" })
+    expect(termsOfUseLinks).toHaveLength(2)
+    expect(termsOfUseLinks[0]).toHaveAttribute(
       "href",
       "https://mtc.ca.gov/doorway-housing-portal-terms-use"
     )
