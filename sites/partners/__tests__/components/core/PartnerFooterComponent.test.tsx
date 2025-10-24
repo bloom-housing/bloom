@@ -12,7 +12,7 @@ describe("Partner Footer Component", () => {
     ).toBeInTheDocument()
     const partnerManualLink = screen.getByRole("link", { name: "Doorway Partners Manual" })
     const privacyPolicyLink = screen.getByRole("link", { name: "Privacy Policy" })
-    const doorwayPartnersManualLink = screen.getByRole("link", { name: "Terms of Use" })
+    const termsOfUselLink = screen.getByRole("link", { name: "Terms of Use" })
 
     expect(partnerManualLink).toBeInTheDocument()
     expect(partnerManualLink).toHaveAttribute(
@@ -24,8 +24,8 @@ describe("Partner Footer Component", () => {
       "href",
       "https://mtc.ca.gov/doorway-housing-portal-privacy-policy"
     )
-    expect(doorwayPartnersManualLink).toBeInTheDocument()
-    expect(doorwayPartnersManualLink).toHaveAttribute(
+    expect(termsOfUselLink).toBeInTheDocument()
+    expect(termsOfUselLink).toHaveAttribute(
       "href",
       "https://mtc.ca.gov/doorway-housing-portal-terms-use"
     )
