@@ -4,31 +4,13 @@ import { useRouter } from "next/router"
 import { SiteHeader, t, MenuLink } from "@bloom-housing/ui-components"
 import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
 import { Toast } from "@bloom-housing/ui-seeds"
-import PartnersFooter, { PartnerFooterProps } from "../components/core/PartnerFooterComponent"
+import PartnersFooter from "../components/core/PartnerFooterComponent"
 
 const Layout = (props) => {
   const { profile, signOut } = useContext(AuthContext)
   const { toastMessagesRef, addToast } = useContext(MessageContext)
   const router = useRouter()
-  const currentYear = new Date().getFullYear()
-  const copyRight = `Copyright @ ${currentYear} Bay Area Housing Finance Authority. All rights reserved `
-  const footerData: PartnerFooterProps = {
-    copyRight: copyRight,
-    links: [
-      {
-        text: "Doorway Partners Manual",
-        hrerf: "https://docs.google.com/document/d/1W4tIMtUMwz4KqdcO5f4yZi0R5AU74P3B/edit",
-      },
-      {
-        text: "Privacy Policy",
-        hrerf: "https://mtc.ca.gov/doorway-housing-portal-privacy-policy",
-      },
-      {
-        text: "Terms of Use",
-        hrerf: "https://mtc.ca.gov/doorway-housing-portal-terms-use",
-      },
-    ],
-  }
+
   const menuLinks: MenuLink[] = []
   if (profile) {
     menuLinks.push({
@@ -86,7 +68,7 @@ const Layout = (props) => {
           ))}
           {props.children}
         </main>
-        <PartnersFooter {...footerData} />
+        <PartnersFooter />
       </div>
     </div>
   )
