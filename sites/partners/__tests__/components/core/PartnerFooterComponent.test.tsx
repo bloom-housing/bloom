@@ -8,7 +8,7 @@ describe("Partner Footer Component", () => {
     jest.setSystemTime(new Date("2025-01-01"))
     render(<PartnersFooter />)
     expect(
-      screen.getByText("Copyright @ 2025 Bay Area Housing Finance Authority. All rights reserved")
+      screen.getByText(/Copyright @ 2025 Bay Area Housing Finance Authority. All rights reserved/)
     ).toBeInTheDocument()
     const partnerManualLink = screen.getByRole("link", { name: "Doorway Partners Manual" })
     const privacyPolicyLink = screen.getByRole("link", { name: "Privacy Policy" })
