@@ -34,6 +34,7 @@ export enum FeatureFlagEnum {
   enableUnitGroups = 'enableUnitGroups',
   enableUtilitiesIncluded = 'enableUtilitiesIncluded',
   enableWaitlistAdditionalFields = 'enableWaitlistAdditionalFields',
+  enableWaitlistLottery = 'enableWaitlistLottery',
   enableWhatToExpectAdditionalField = 'enableWhatToExpectAdditionalField',
   enableV2MSQ = 'enableV2MSQ',
   example = 'example', // sample feature flag for testing purposes
@@ -197,6 +198,11 @@ export const featureFlagMap: { name: string; description: string }[] = [
     name: FeatureFlagEnum.enableWaitlistAdditionalFields,
     description:
       'When true, the waitlist additional fields are displayed in the waitlist section of the listing form',
+  },
+  {
+    name: FeatureFlagEnum.enableWaitlistLottery,
+    description:
+      'When true, jurisdiction supports lotteries for waitlist opportunities',
   },
   {
     name: FeatureFlagEnum.enableWhatToExpectAdditionalField,
