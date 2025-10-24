@@ -12,9 +12,11 @@ import {
   MultiselectQuestionsStatusEnum,
   Prisma,
   ReviewOrderTypeEnum,
+  UnitTypeEnum,
 } from '@prisma/client';
 import dayjs from 'dayjs';
 import { Request as ExpressRequest } from 'express';
+import fs from 'fs';
 import https from 'https';
 import { AmiChartService } from './ami-chart.service';
 import { EmailService } from './email.service';
@@ -34,6 +36,8 @@ import MultiselectQuestion from '../dtos/multiselect-questions/multiselect-quest
 import { MultiselectOption } from '../dtos/multiselect-questions/multiselect-option.dto';
 import { AmiChartUpdateImportDTO } from '../dtos/script-runner/ami-chart-update-import.dto';
 import { calculateSkip, calculateTake } from '../utilities/pagination-helpers';
+import path from 'path';
+// import * as myData from './nevada.json';
 
 /**
   this is the service for running scripts
@@ -1010,6 +1014,193 @@ export class ScriptRunnerService {
 
     await this.markScriptAsComplete(
       'set is_newest field on applications',
+      requestingUser,
+    );
+    return { success: true };
+  }
+
+  /**
+    Data import script
+  */
+  async importData(
+    req: ExpressRequest,
+    jurisdiction: string,
+  ): Promise<SuccessDTO> {
+    const requestingUser = mapTo(User, req['user']);
+    await this.markScriptAsRunStart(
+      `data import ${jurisdiction}`,
+      requestingUser,
+    );
+    const rawJurisdiction = await this.prisma.jurisdictions.findFirst({
+      where: { name: jurisdiction },
+    });
+    if (!rawJurisdiction) {
+      throw new NotImplementedException(
+        `jurisdiction ${jurisdiction} doesn't exist`,
+      );
+    }
+    try {
+      const filePath = path.join(
+        process.cwd(),
+        'src/data',
+        `${jurisdiction.toLowerCase()}.json`,
+      );
+
+      const fileContent = fs.readFileSync(filePath, 'utf8');
+
+      const jsonData = JSON.parse(fileContent);
+
+      for (const listing of jsonData) {
+        const units = [];
+        if (listing['0BR'] > 0) {
+          const studioType = await this.prisma.unitTypes.findFirst({
+            select: { id: true },
+            where: { name: UnitTypeEnum.studio },
+          });
+          const studio = await this.prisma.unitGroup.create({
+            select: {
+              id: true,
+            },
+            data: {
+              unitTypes: {
+                connect: {
+                  id: studioType.id,
+                },
+              },
+              totalCount: listing['OBR'],
+              totalAvailable: listing['OBR'],
+            },
+          });
+          console.log('added studio', studio);
+          units.push(studio.id);
+        }
+        if (listing['1BR'] > 0) {
+          const oneBdrmType = await this.prisma.unitTypes.findFirst({
+            select: { id: true },
+            where: { name: UnitTypeEnum.oneBdrm },
+          });
+          const oneBdrm = await this.prisma.unitGroup.create({
+            select: {
+              id: true,
+            },
+            data: {
+              unitTypes: {
+                connect: {
+                  id: oneBdrmType.id,
+                },
+              },
+              totalCount: listing['1BR'],
+              totalAvailable: listing['1BR'],
+            },
+          });
+          console.log('added oneBdrm', oneBdrm);
+          units.push(oneBdrm.id);
+        }
+        if (listing['2BR'] > 0) {
+          const twoBdrmType = await this.prisma.unitTypes.findFirst({
+            select: { id: true },
+            where: { name: UnitTypeEnum.twoBdrm },
+          });
+          const twoBdrm = await this.prisma.unitGroup.create({
+            select: {
+              id: true,
+            },
+            data: {
+              unitTypes: {
+                connect: {
+                  id: twoBdrmType.id,
+                },
+              },
+              totalCount: listing['2BR'],
+              totalAvailable: listing['2BR'],
+            },
+          });
+          console.log('added twoBdrm', twoBdrm);
+          units.push(twoBdrm.id);
+        }
+        if (listing['3BR'] > 0) {
+          const threeBdrmType = await this.prisma.unitTypes.findFirst({
+            select: { id: true },
+            where: { name: UnitTypeEnum.threeBdrm },
+          });
+          const threeBdrm = await this.prisma.unitGroup.create({
+            select: {
+              id: true,
+            },
+            data: {
+              unitTypes: {
+                connect: {
+                  id: threeBdrmType.id,
+                },
+              },
+              totalCount: listing['3BR'],
+              totalAvailable: listing['3BR'],
+            },
+          });
+          console.log('added threeBdrm', threeBdrm);
+          units.push(threeBdrm.id);
+        }
+        if (listing['4BR'] > 0) {
+          const fourBdrmType = await this.prisma.unitTypes.findFirst({
+            select: { id: true },
+            where: { name: UnitTypeEnum.fourBdrm },
+          });
+          const fourBdrm = await this.prisma.unitGroup.create({
+            select: {
+              id: true,
+            },
+            data: {
+              unitTypes: {
+                connect: {
+                  id: fourBdrmType.id,
+                },
+              },
+              totalCount: listing['4BR'],
+              totalAvailable: listing['4BR'],
+            },
+          });
+          console.log('added fourBdrm', fourBdrm);
+          units.push(fourBdrm.id);
+        }
+        const createdListing = await this.prisma.listings.create({
+          data: {
+            jurisdictions: {
+              connect: {
+                id: rawJurisdiction.id,
+              },
+            },
+            name: listing['PropertyName'],
+            displayWaitlistSize: false,
+            listingsBuildingAddress: {
+              create: {
+                state: listing['PropertyState'],
+                street: listing['PropertyAddress'],
+                city: listing['PropertyCity'],
+                county: listing['County'],
+                zipCode: listing['PropertyZip'],
+                latitude: listing['LAT'],
+                longitude: listing['LON'],
+              },
+            },
+            yearBuilt: listing['YearBuilt'],
+            assets: [],
+            unitGroups: {
+              connect: units.map((unit) => {
+                return { id: unit };
+              }),
+            },
+          },
+        });
+        console.log('created listing ', createdListing.name);
+      }
+    } catch (error) {
+      console.error('Error reading or parsing JSON:', error);
+      throw new NotImplementedException(
+        `jurisdiction ${jurisdiction} file doesn't exist`,
+      );
+    }
+    await this.markScriptAsComplete(
+      `data import ${jurisdiction}`,
       requestingUser,
     );
     return { success: true };

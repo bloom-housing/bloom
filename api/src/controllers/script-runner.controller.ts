@@ -266,4 +266,20 @@ export class ScriptRunnerController {
   ): Promise<SuccessDTO> {
     return await this.scriptRunnerService.setIsNewestApplicationValues(req);
   }
+
+  @Put('importData')
+  @ApiOperation({
+    summary: 'A script to import data from a pre-determined json file',
+    operationId: 'importData',
+  })
+  @ApiOkResponse({ type: SuccessDTO })
+  async importData(
+    @Request() req: ExpressRequest,
+    @Body() body: PaginationDTO,
+  ): Promise<SuccessDTO> {
+    return await this.scriptRunnerService.importData(
+      req,
+      body?.jurisdiction || '',
+    );
+  }
 }

@@ -15,4 +15,8 @@ export class PaginationDTO {
   @ApiPropertyOptional()
   @Type(() => Number)
   pageSize?: number;
+
+  @Expose()
+  @ApiPropertyOptional()
+  jurisdiction?: string;
 }
