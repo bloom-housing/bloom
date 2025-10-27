@@ -105,6 +105,7 @@ const ListingForm = ({ listing, editMode, setListingName, updateListing }: Listi
   const defaultValues = editMode ? listing : formDefaults
   const formMethods = useForm<FormListing>({
     defaultValues,
+    mode: "onBlur",
     shouldUnregister: false,
   })
 
