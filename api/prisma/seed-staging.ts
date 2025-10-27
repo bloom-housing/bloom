@@ -117,7 +117,6 @@ export const stagingSeed = async (
         FeatureFlagEnum.enableUnitGroups,
         FeatureFlagEnum.enableUtilitiesIncluded,
         FeatureFlagEnum.enableWaitlistAdditionalFields,
-        FeatureFlagEnum.enableWaitlistLottery,
         FeatureFlagEnum.hideCloseListingButton,
         FeatureFlagEnum.swapCommunityTypeWithPrograms,
         FeatureFlagEnum.enableFullTimeStudentQuestion,
