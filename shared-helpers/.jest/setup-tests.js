@@ -1,8 +1,6 @@
-// Future home of additional Jest config
-import "@testing-library/jest-dom/extend-expect"
-
 import { addTranslation } from "@bloom-housing/ui-components"
 import generalTranslations from "@bloom-housing/shared-helpers/src/locales/general.json"
+import "@testing-library/jest-dom"
 
 // see: https://jestjs.io/docs/en/manual-mocks#mocking-methods-which-are-not-implemented-in-jsdom
 window.matchMedia = jest.fn().mockImplementation((query) => {

@@ -226,7 +226,7 @@ describe('ReservedCommunityType Controller Tests', () => {
 
   it('testing delete endpoint', async () => {
     const jurisdictionA = await prisma.jurisdictions.create({
-      data: jurisdictionFactory(),
+      data: jurisdictionFactory('jurisdictionForDeleteRCT'),
     });
     await reservedCommunityTypeFactoryAll(jurisdictionA.id, prisma);
     const reservedCommunityTypeA = await reservedCommunityTypeFactoryGet(
