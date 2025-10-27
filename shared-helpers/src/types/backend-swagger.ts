@@ -7739,6 +7739,7 @@ export enum ReviewOrderTypeEnum {
   "lottery" = "lottery",
   "firstComeFirstServe" = "firstComeFirstServe",
   "waitlist" = "waitlist",
+  "waitlistLottery" = "waitlistLottery",
 }
 
 export enum LotteryStatusEnum {
@@ -7962,6 +7963,7 @@ export enum FeatureFlagEnum {
   "enableUnitGroups" = "enableUnitGroups",
   "enableUtilitiesIncluded" = "enableUtilitiesIncluded",
   "enableWaitlistAdditionalFields" = "enableWaitlistAdditionalFields",
+  "enableWaitlistLottery" = "enableWaitlistLottery",
   "enableWhatToExpectAdditionalField" = "enableWhatToExpectAdditionalField",
   "enableV2MSQ" = "enableV2MSQ",
   "example" = "example",
