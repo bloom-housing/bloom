@@ -1045,9 +1045,7 @@ export class ScriptRunnerService {
         'src/data',
         `${jurisdiction.toLowerCase()}.json`,
       );
-
       const fileContent = fs.readFileSync(filePath, 'utf8');
-
       const jsonData = JSON.parse(fileContent);
 
       for (const listing of jsonData) {

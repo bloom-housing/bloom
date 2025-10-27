@@ -86,11 +86,11 @@ export const stagingSeed = async (
   });
   // jurisdiction with unit groups enabled
   const lakeviewJurisdiction = await prismaClient.jurisdictions.create({
-    data: jurisdictionFactory('Lakeview', {
+    data: jurisdictionFactory('Nevada', {
       featureFlags: [
-        FeatureFlagEnum.disableJurisdictionalAdmin,
+        // FeatureFlagEnum.disableJurisdictionalAdmin,
         FeatureFlagEnum.disableListingPreferences,
-        FeatureFlagEnum.disableWorkInRegion,
+        // FeatureFlagEnum.disableWorkInRegion,
         FeatureFlagEnum.enableAccessibilityFeatures,
         FeatureFlagEnum.enableAdaOtherOption,
         FeatureFlagEnum.enableAdditionalResources,
@@ -109,14 +109,14 @@ export const stagingSeed = async (
         FeatureFlagEnum.enableNonRegulatedListings,
         FeatureFlagEnum.enablePartnerDemographics,
         FeatureFlagEnum.enablePartnerSettings,
-        FeatureFlagEnum.enableRegions,
+        // FeatureFlagEnum.enableRegions,
         FeatureFlagEnum.enableSection8Question,
         FeatureFlagEnum.enableSingleUseCode,
         FeatureFlagEnum.enableUnderConstructionHome,
         FeatureFlagEnum.enableUnitGroups,
         FeatureFlagEnum.enableUtilitiesIncluded,
         FeatureFlagEnum.enableWaitlistAdditionalFields,
-        FeatureFlagEnum.hideCloseListingButton,
+        // FeatureFlagEnum.hideCloseListingButton,
         FeatureFlagEnum.swapCommunityTypeWithPrograms,
         FeatureFlagEnum.enableFullTimeStudentQuestion,
         FeatureFlagEnum.enableWhatToExpectAdditionalField,
