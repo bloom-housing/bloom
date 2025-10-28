@@ -75,7 +75,7 @@ const RankingsAndResults = ({
     FeatureFlagEnum.enableWaitlistAdditionalFields,
     selectedJurisdictionId
   )
-
+  // TODO: Change may be done in this file
   const enableUnitGroups = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableUnitGroups,
     selectedJurisdictionId
