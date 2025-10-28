@@ -2,6 +2,7 @@ import {
   ListingsStatusEnum,
   ReviewOrderTypeEnum,
   Prisma,
+  ApplicationMethodsTypeEnum,
 } from '@prisma/client';
 import dayjs from 'dayjs';
 import { glacierAddress } from '../address-factory';
@@ -26,7 +27,6 @@ export const sunshineFlats: Prisma.ListingsCreateInput = {
   unitAmenities: null,
   servicesOffered: null,
   yearBuilt: null,
-  applicationDueDate: null,
   applicationOpenDate: dayjs(new Date()).subtract(2, 'days').toDate(),
   applicationFee: null,
   applicationOrganization: null,
@@ -35,6 +35,11 @@ export const sunshineFlats: Prisma.ListingsCreateInput = {
   applicationDropOffAddressOfficeHours: null,
   applicationDropOffAddressType: null,
   applicationMailingAddressType: null,
+  applicationMethods: {
+    create: {
+      type: ApplicationMethodsTypeEnum.Internal,
+    },
+  },
   buildingSelectionCriteria: null,
   costsNotIncluded: null,
   creditHistory: null,

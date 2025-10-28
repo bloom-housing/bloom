@@ -56,6 +56,7 @@ export const view: Partial<
         phoneNumberType: true,
         noPhone: true,
         workInRegion: true,
+        fullTimeStudent: true,
         applicantAddress: {
           select: {
             id: true,
@@ -99,6 +100,7 @@ export const view: Partial<
         sameAddress: true,
         relationship: true,
         workInRegion: true,
+        fullTimeStudent: true,
       },
     },
     accessibility: {
@@ -107,6 +109,7 @@ export const view: Partial<
         mobility: true,
         vision: true,
         hearing: true,
+        other: true,
       },
     },
     applicationsMailingAddress: {
@@ -217,6 +220,7 @@ view.base = {
       sameAddress: true,
       relationship: true,
       workInRegion: true,
+      fullTimeStudent: true,
       householdMemberAddress: {
         select: {
           id: true,
@@ -605,6 +609,8 @@ export class ApplicationService {
       },
       include: {
         jurisdictions: true,
+        // support unit group availability logic in email
+        unitGroups: true,
         // multiselect questions and address is needed for geocoding
         listingMultiselectQuestions: {
           include: {
@@ -659,6 +665,7 @@ export class ApplicationService {
                 birthYear: dto.applicant.birthYear
                   ? Number(dto.applicant.birthYear)
                   : undefined,
+                fullTimeStudent: dto.applicant.fullTimeStudent,
               },
             }
           : undefined,
@@ -741,6 +748,7 @@ export class ApplicationService {
                 birthYear: member.birthYear
                   ? Number(member.birthYear)
                   : undefined,
+                fullTimeStudent: member.fullTimeStudent,
               })),
             }
           : undefined,
@@ -753,6 +761,9 @@ export class ApplicationService {
               },
             }
           : undefined,
+
+        // TODO: Temporary until after MSQ refactor
+        applicationSelections: undefined,
       },
       include: view.details,
     });
@@ -842,6 +853,7 @@ export class ApplicationService {
                 birthYear: dto.applicant.birthYear
                   ? Number(dto.applicant.birthYear)
                   : undefined,
+                fullTimeStudent: dto.applicant.fullTimeStudent,
               },
             }
           : undefined,
@@ -894,7 +906,7 @@ export class ApplicationService {
           : undefined,
         preferredUnitTypes: dto.preferredUnitTypes
           ? {
-              connect: dto.preferredUnitTypes.map((unitType) => ({
+              set: dto.preferredUnitTypes.map((unitType) => ({
                 id: unitType.id,
               })),
             }
@@ -924,11 +936,15 @@ export class ApplicationService {
                 birthYear: member.birthYear
                   ? Number(member.birthYear)
                   : undefined,
+                fullTimeStudent: member.fullTimeStudent,
               })),
             }
           : undefined,
         programs: dto.programs as unknown as Prisma.JsonArray,
         preferences: dto.preferences as unknown as Prisma.JsonArray,
+
+        // TODO: Temporary until after MSQ refactor
+        applicationSelections: undefined,
       },
     });
 

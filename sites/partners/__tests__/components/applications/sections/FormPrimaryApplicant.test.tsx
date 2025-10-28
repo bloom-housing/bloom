@@ -3,7 +3,6 @@ import React from "react"
 import { FormPrimaryApplicant } from "../../../../src/components/applications/PaperApplicationForm/sections/FormPrimaryApplicant"
 import { FormProviderWrapper } from "./helpers"
 import userEvent from "@testing-library/user-event"
-import { act } from "react-dom/test-utils"
 
 describe("<FormPrimaryApplicant>", () => {
   it("renders the form with primary applicant fields", () => {
@@ -69,9 +68,7 @@ describe("<FormPrimaryApplicant>", () => {
 
     expect(phoneInput).toBeInTheDocument()
 
-    await act(async () => {
-      await userEvent.type(phoneInput, "(424) 242-4242")
-    })
+    await userEvent.type(phoneInput, "(424) 242-4242")
 
     expect(phoneTypeSelect).toBeEnabled()
   })
@@ -93,9 +90,7 @@ describe("<FormPrimaryApplicant>", () => {
 
     expect(additonalPhoneInput).toBeInTheDocument()
 
-    await act(async () => {
-      await userEvent.type(additonalPhoneInput, "(424) 242-4242")
-    })
+    await userEvent.type(additonalPhoneInput, "(424) 242-4242")
 
     expect(additionalPhoneTypeSelect).toBeEnabled()
   })
@@ -109,7 +104,7 @@ describe("<FormPrimaryApplicant>", () => {
 
     const workInTheRegionButton = screen.getByLabelText("Yes")
 
-    await act(() => userEvent.click(workInTheRegionButton))
+    await userEvent.click(workInTheRegionButton)
 
     await waitFor(() => {
       expect(workInTheRegionButton).toBeChecked()
@@ -132,7 +127,7 @@ describe("<FormPrimaryApplicant>", () => {
 
     const sendMailToAddress = screen.getByLabelText(/send my mail to a different address/i)
 
-    await act(() => userEvent.click(sendMailToAddress))
+    await userEvent.click(sendMailToAddress)
 
     await waitFor(() => {
       expect(sendMailToAddress).toBeChecked()
@@ -144,5 +139,17 @@ describe("<FormPrimaryApplicant>", () => {
     expect(screen.getAllByLabelText(/city/i)).toHaveLength(2)
     expect(screen.getAllByLabelText(/state/i)).toHaveLength(2)
     expect(screen.getAllByLabelText(/zip code/i)).toHaveLength(2)
+  })
+
+  it("should render the full time student question", () => {
+    render(
+      <FormProviderWrapper>
+        <FormPrimaryApplicant enableFullTimeStudentQuestion={true} />
+      </FormProviderWrapper>
+    )
+
+    expect(screen.getByText(/Full-time student/i)).toBeInTheDocument()
+    expect(screen.getAllByRole("radio", { name: "Yes" })).toHaveLength(2)
+    expect(screen.getAllByRole("radio", { name: "No" })).toHaveLength(2)
   })
 })

@@ -1,7 +1,7 @@
 export enum ListingViews {
+  address = 'address',
   base = 'base',
   csv = 'csv',
-  details = 'details',
   full = 'full',
   fundamentals = 'fundamentals',
   name = 'name',

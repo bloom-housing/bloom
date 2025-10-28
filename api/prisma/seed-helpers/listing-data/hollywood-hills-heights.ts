@@ -1,4 +1,8 @@
-import { ListingsStatusEnum, ReviewOrderTypeEnum } from '@prisma/client';
+import {
+  ApplicationMethodsTypeEnum,
+  ListingsStatusEnum,
+  ReviewOrderTypeEnum,
+} from '@prisma/client';
 import dayjs from 'dayjs';
 import { yellowstoneAddress } from '../address-factory';
 
@@ -21,7 +25,6 @@ export const hollywoodHillsHeights = {
   unitAmenities: null,
   servicesOffered: null,
   yearBuilt: null,
-  applicationDueDate: null,
   applicationOpenDate: dayjs(new Date()).subtract(70, 'days').toDate(),
   applicationFee: null,
   applicationOrganization: null,
@@ -30,6 +33,11 @@ export const hollywoodHillsHeights = {
   applicationDropOffAddressOfficeHours: null,
   applicationDropOffAddressType: null,
   applicationMailingAddressType: null,
+  applicationMethods: {
+    create: {
+      type: ApplicationMethodsTypeEnum.Internal,
+    },
+  },
   buildingSelectionCriteria: null,
   costsNotIncluded: null,
   creditHistory: null,

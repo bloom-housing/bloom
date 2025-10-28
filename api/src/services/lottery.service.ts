@@ -403,6 +403,7 @@ export class LotteryService {
         UserRoleEnum.admin,
         UserRoleEnum.jurisdictionAdmin,
         UserRoleEnum.partner,
+        UserRoleEnum.supportAdmin,
       ],
       listing.id,
       listing.jurisdictions?.id,
@@ -445,7 +446,7 @@ export class LotteryService {
   ): Promise<SuccessDTO> {
     const storedListing = await this.listingService.findOrThrow(
       dto.id,
-      ListingViews.details,
+      ListingViews.full,
     );
 
     await this.permissionService.canOrThrow(
@@ -505,6 +506,7 @@ export class LotteryService {
             UserRoleEnum.admin,
             UserRoleEnum.jurisdictionAdmin,
             UserRoleEnum.partner,
+            UserRoleEnum.supportAdmin,
           ],
           storedListing.id,
           storedListing.jurisdictionId,

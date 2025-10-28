@@ -44,11 +44,11 @@ describe("<FormHouseholdDetails>", () => {
     ).toBeInTheDocument()
 
     expect(screen.getByText(/preferred unit sizes/i)).toBeInTheDocument()
-    expect(screen.getByLabelText("5 Bedroom")).toBeInTheDocument()
-    expect(screen.getByLabelText("4 Bedroom")).toBeInTheDocument()
-    expect(screen.getByLabelText("3 Bedroom")).toBeInTheDocument()
-    expect(screen.getByLabelText("2 Bedroom")).toBeInTheDocument()
-    expect(screen.getByLabelText("1 Bedroom")).toBeInTheDocument()
+    expect(screen.getByLabelText("5 bedroom")).toBeInTheDocument()
+    expect(screen.getByLabelText("4 bedroom")).toBeInTheDocument()
+    expect(screen.getByLabelText("3 bedroom")).toBeInTheDocument()
+    expect(screen.getByLabelText("2 bedroom")).toBeInTheDocument()
+    expect(screen.getByLabelText("1 bedroom")).toBeInTheDocument()
     expect(screen.getByLabelText("SRO")).toBeInTheDocument()
     expect(screen.getByLabelText("Studio")).toBeInTheDocument()
 
@@ -59,8 +59,8 @@ describe("<FormHouseholdDetails>", () => {
 
     expect(screen.getByText(/expecting household changes/i)).toBeInTheDocument()
     expect(screen.getByText(/household includes student or member nearing 18/i)).toBeInTheDocument()
-    expect(screen.getAllByLabelText(/yes/i)).toHaveLength(2)
-    expect(screen.getAllByLabelText(/no/i)).toHaveLength(2)
+    expect(screen.getAllByRole("radio", { name: "Yes" })).toHaveLength(2)
+    expect(screen.getAllByRole("radio", { name: "No" })).toHaveLength(2)
   })
 
   it("renders the form with unit groups when enabled", () => {
@@ -98,6 +98,7 @@ describe("<FormHouseholdDetails>", () => {
                   name: UnitTypeEnum.oneBdrm,
                 },
               ],
+              openWaitlist: true,
             },
             {
               id: "group2",
@@ -119,6 +120,7 @@ describe("<FormHouseholdDetails>", () => {
                   name: UnitTypeEnum.threeBdrm,
                 },
               ],
+              openWaitlist: true,
             },
           ]}
           enableUnitGroups={true}
@@ -132,9 +134,9 @@ describe("<FormHouseholdDetails>", () => {
 
     expect(screen.getByText(/preferred unit sizes/i)).toBeInTheDocument()
     expect(screen.getByLabelText("Studio")).toBeInTheDocument()
-    expect(screen.getByLabelText("1 Bedroom")).toBeInTheDocument()
-    expect(screen.getByLabelText("2 Bedroom")).toBeInTheDocument()
-    expect(screen.getByLabelText("3 Bedroom")).toBeInTheDocument()
+    expect(screen.getByLabelText("1 bedroom")).toBeInTheDocument()
+    expect(screen.getByLabelText("2 bedroom")).toBeInTheDocument()
+    expect(screen.getByLabelText("3 bedroom")).toBeInTheDocument()
 
     expect(screen.getByText(/ada priorities selected/i)).toBeInTheDocument()
     expect(screen.getByLabelText(/mobility impairments/i)).toBeInTheDocument()
@@ -143,8 +145,8 @@ describe("<FormHouseholdDetails>", () => {
 
     expect(screen.getByText(/expecting household changes/i)).toBeInTheDocument()
     expect(screen.getByText(/household includes student or member nearing 18/i)).toBeInTheDocument()
-    expect(screen.getAllByLabelText(/yes/i)).toHaveLength(2)
-    expect(screen.getAllByLabelText(/no/i)).toHaveLength(2)
+    expect(screen.getAllByRole("radio", { name: "Yes" })).toHaveLength(2)
+    expect(screen.getAllByRole("radio", { name: "No" })).toHaveLength(2)
   })
 
   it("handles unit groups with duplicate unit types", () => {
@@ -182,6 +184,7 @@ describe("<FormHouseholdDetails>", () => {
                   name: UnitTypeEnum.oneBdrm,
                 },
               ],
+              openWaitlist: true,
             },
             {
               id: "group2",
@@ -203,6 +206,7 @@ describe("<FormHouseholdDetails>", () => {
                   name: UnitTypeEnum.studio,
                 },
               ],
+              openWaitlist: true,
             },
           ]}
           enableUnitGroups={true}
@@ -213,7 +217,7 @@ describe("<FormHouseholdDetails>", () => {
     expect(screen.getByText(/preferred unit sizes/i)).toBeInTheDocument()
 
     const studioLabels = screen.getAllByRole("checkbox", { name: "Studio" })
-    const oneBedroomLabels = screen.getAllByRole("checkbox", { name: "1 Bedroom" })
+    const oneBedroomLabels = screen.getAllByRole("checkbox", { name: "1 bedroom" })
 
     expect(studioLabels).toHaveLength(1)
     expect(oneBedroomLabels).toHaveLength(1)
@@ -268,6 +272,7 @@ describe("<FormHouseholdDetails>", () => {
                   name: UnitTypeEnum.threeBdrm,
                 },
               ],
+              openWaitlist: true,
             },
             {
               id: "group2",
@@ -296,6 +301,7 @@ describe("<FormHouseholdDetails>", () => {
                   name: UnitTypeEnum.SRO,
                 },
               ],
+              openWaitlist: true,
             },
           ]}
           enableUnitGroups={true}
@@ -307,11 +313,11 @@ describe("<FormHouseholdDetails>", () => {
 
     // Test all unit types are displayed
     expect(screen.getByRole("checkbox", { name: "Studio" })).toBeInTheDocument()
-    expect(screen.getByRole("checkbox", { name: "1 Bedroom" })).toBeInTheDocument()
-    expect(screen.getByRole("checkbox", { name: "2 Bedroom" })).toBeInTheDocument()
-    expect(screen.getByRole("checkbox", { name: "3 Bedroom" })).toBeInTheDocument()
-    expect(screen.getByRole("checkbox", { name: "4 Bedroom" })).toBeInTheDocument()
-    expect(screen.getByRole("checkbox", { name: "5 Bedroom" })).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "1 bedroom" })).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "2 bedroom" })).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "3 bedroom" })).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "4 bedroom" })).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "5 bedroom" })).toBeInTheDocument()
     expect(screen.getByRole("checkbox", { name: "SRO" })).toBeInTheDocument()
 
     // Verify we have all 7 unit type checkboxes
@@ -319,5 +325,59 @@ describe("<FormHouseholdDetails>", () => {
       .getAllByRole("checkbox")
       .filter((checkbox) => checkbox.getAttribute("name") === "application.preferredUnit")
     expect(unitTypeCheckboxes).toHaveLength(7)
+  })
+  it("should hide preferred unit sizes if there are no unit groups", () => {
+    render(
+      <FormProviderWrapper>
+        <FormHouseholdDetails
+          listingUnits={[]}
+          applicationUnitTypes={[]}
+          applicationAccessibilityFeatures={{
+            id: "id",
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            mobility: true,
+            vision: true,
+            hearing: true,
+          }}
+          listingUnitGroups={[]}
+          enableUnitGroups={true}
+        />
+      </FormProviderWrapper>
+    )
+    expect(screen.queryByText(/preferred unit sizes/i)).not.toBeInTheDocument()
+  })
+
+  it("renders the correct label for full time student question", () => {
+    render(
+      <FormProviderWrapper>
+        <FormHouseholdDetails
+          listingUnits={Object.values(UnitTypeEnum).map((item, index) => ({
+            ...unit,
+            unitTypes: {
+              id: `id_${index}`,
+              createdAt: new Date(),
+              updatedAt: new Date(),
+              numBedrooms: index,
+              name: item,
+            },
+          }))}
+          applicationUnitTypes={[]}
+          applicationAccessibilityFeatures={{
+            id: "id",
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            mobility: true,
+            vision: true,
+            hearing: true,
+          }}
+          enableFullTimeStudentQuestion={true}
+        />
+      </FormProviderWrapper>
+    )
+
+    expect(screen.getByText("All household members students")).toBeInTheDocument()
+    expect(screen.getAllByRole("radio", { name: "Yes" })).toHaveLength(2)
+    expect(screen.getAllByRole("radio", { name: "No" })).toHaveLength(2)
   })
 })

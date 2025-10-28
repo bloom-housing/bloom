@@ -36,9 +36,7 @@ export const ListingCard = ({
   setFavorited,
   showHomeType,
 }: ListingCardProps) => {
-  const enableUnitGroups = jurisdiction.featureFlags.find(
-    (flag) => flag.name === FeatureFlagEnum.enableUnitGroups
-  )?.active
+  const enableUnitGroups = isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableUnitGroups)
 
   const imageUrl = imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize))[0]
   const listingTags = getListingTags(

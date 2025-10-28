@@ -9,8 +9,8 @@ import {
   User,
   UserRole,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { JurisdictionAndListingSelection } from "./JurisdictionAndListingSelection"
 import SectionWithGrid from "../shared/SectionWithGrid"
+import { JurisdictionAndListingSelection } from "./JurisdictionAndListingSelection"
 
 type FormUserManageProps = {
   isOpen: boolean
@@ -35,8 +35,12 @@ type FormUserManageValues = {
 const determineUserRole = (roles: UserRole) => {
   if (roles?.isAdmin) {
     return RoleOption.Administrator
+  } else if (roles?.isSupportAdmin) {
+    return RoleOption.AdminSupport
   } else if (roles?.isJurisdictionalAdmin) {
     return RoleOption.JurisdictionalAdmin
+  } else if (roles?.isLimitedJurisdictionalAdmin) {
+    return RoleOption.LimitedJurisdictionalAdmin
   }
   return RoleOption.Partner
 }
@@ -62,9 +66,11 @@ const FormUserManage = ({
     !doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.disableJurisdictionalAdmin, undefined, true)
   ) {
     possibleUserRoles.push(RoleOption.JurisdictionalAdmin)
+    possibleUserRoles.push(RoleOption.LimitedJurisdictionalAdmin)
   }
   if (profile?.userRoles?.isAdmin) {
     possibleUserRoles.push(RoleOption.Administrator)
+    possibleUserRoles.push(RoleOption.AdminSupport)
   }
 
   let defaultValues: FormUserManageValues = {}
@@ -190,8 +196,10 @@ const FormUserManage = ({
     const roles = (() => {
       return {
         isAdmin: userRoles.includes(RoleOption.Administrator),
+        isSupportAdmin: userRoles.includes(RoleOption.AdminSupport),
         isPartner: userRoles.includes(RoleOption.Partner),
         isJurisdictionalAdmin: userRoles.includes(RoleOption.JurisdictionalAdmin),
+        isLimitedJurisdictionalAdmin: userRoles.includes(RoleOption.LimitedJurisdictionalAdmin),
         userId: undefined,
       }
     })()
@@ -449,7 +457,7 @@ const FormUserManage = ({
           {mode === "edit" && (
             <Button
               type="button"
-              className="bg-opacity-0 text-alert"
+              className={"bg-opacity-0 darker-alert"}
               onClick={() => setDeleteModalActive(true)}
               variant="text"
             >

@@ -1,11 +1,13 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 // Prints keys that are in a foreign language translations file that do not exist in the english file for cleanup
-// example: `ts-node unused-foreign-keys > unused-foreign-keys.json`
+// example: `ts-node unused-foreign-keys > unused-foreign-keys-output.json`
 const englishTranslations = require("../locales/general.json")
 const spanishTranslations = require("../locales/es.json")
 const chineseTranslations = require("../locales/zh.json")
 const vietnameseTranslations = require("../locales/vi.json")
 const tagalogTranslations = require("../locales/tl.json")
+const arabicTranslations = require("../locales/ar.json")
+const bengaliTranslations = require("../locales/bn.json")
 
 function main() {
   type TranslationsType = {
@@ -17,6 +19,8 @@ function main() {
     { translationKeys: chineseTranslations, language: "Chinese" },
     { translationKeys: vietnameseTranslations, language: "Vietnamese" },
     { translationKeys: tagalogTranslations, language: "Tagalog" },
+    { translationKeys: arabicTranslations, language: "Arabic" },
+    { translationKeys: bengaliTranslations, language: "Bengali" },
   ]
 
   const getUnusedForeignKeys = (

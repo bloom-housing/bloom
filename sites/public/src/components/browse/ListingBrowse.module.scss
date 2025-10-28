@@ -21,8 +21,10 @@
         font-size: var(--seeds-type-heading-size-lg);
         font-weight: var(--seeds-font-weight-bold);
       }
+
       button {
         margin-inline-start: var(--seeds-s4);
+        gap: var(--seeds-s1);
       }
     }
   }
@@ -38,8 +40,20 @@
   }
 
   .empty-state {
-    @media (--sm-only) {
-      padding: var(--seeds-spacer-content);
+    h2 {
+      font-family: var(--seeds-font-alt-sans);
+      font-weight: var(--seeds-font-weight-bold);
+    }
+
+    &-icon {
+      svg {
+        fill: none;
+        stroke-width: 1px;
+      }
+    }
+
+    .button-wrapper {
+      padding-block-start: var(--seeds-s6);
     }
   }
 

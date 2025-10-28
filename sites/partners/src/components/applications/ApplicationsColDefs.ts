@@ -1,8 +1,12 @@
+import { ColDef } from "ag-grid-community"
 import { t, formatYesNoLabel } from "@bloom-housing/ui-components"
 import { convertDataToLocal, formatIncome } from "../../lib/helpers"
 import dayjs from "dayjs"
 import customParseFormat from "dayjs/plugin/customParseFormat"
-import { IncomePeriodEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  Application,
+  IncomePeriodEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 dayjs.extend(customParseFormat)
 
 function compareDates(a, b, node, nextNode, isInverted) {
@@ -34,8 +38,12 @@ function compareStrings(a, b, node, nextNode, isInverted) {
   }
 }
 
-export function getColDefs(maxHouseholdSize: number) {
-  const defs = [
+export function getColDefs(
+  maxHouseholdSize: number,
+  enableFullTimeStudentQuestion?: boolean,
+  disableWorkInRegion?: boolean
+): ColDef[] {
+  const defs: ColDef[] = [
     {
       headerName: t("application.details.submittedDate"),
       field: "submissionDate",
@@ -278,6 +286,39 @@ export function getColDefs(maxHouseholdSize: number) {
         return value ? t(`application.contact.phoneNumberTypes.${value}`) : t("t.none")
       },
     },
+  ]
+
+  if (!disableWorkInRegion) {
+    defs.push({
+      headerName: t("application.details.workInRegion"),
+      field: "applicant.workInRegion",
+      sortable: false,
+      filter: false,
+      width: 110,
+      minWidth: 50,
+      valueFormatter: ({ value }) => {
+        if (!value) return ""
+        return t(`t.${value}`)
+      },
+    })
+  }
+
+  if (enableFullTimeStudentQuestion) {
+    defs.push({
+      headerName: t("application.details.fullTimeStudent"),
+      field: "applicant.fullTimeStudent",
+      sortable: false,
+      filter: false,
+      width: 110,
+      minWidth: 50,
+      valueFormatter: ({ value }) => {
+        if (!value) return ""
+        return t(`t.${value}`)
+      },
+    })
+  }
+
+  defs.push(
     {
       headerName: t("applications.table.residenceStreet"),
       field: "applicant.applicantAddress.street",
@@ -416,7 +457,7 @@ export function getColDefs(maxHouseholdSize: number) {
       filter: false,
       width: 135,
       minWidth: 50,
-      valueFormatter: ({ data, value }) => {
+      valueFormatter: ({ data, value }: { data: Application; value: string }) => {
         if (!value) return ""
 
         return value == "other"
@@ -484,8 +525,8 @@ export function getColDefs(maxHouseholdSize: number) {
       filter: false,
       width: 110,
       minWidth: 50,
-    },
-  ]
+    }
+  )
 
   const householdCols = []
 
@@ -561,8 +602,10 @@ export function getColDefs(maxHouseholdSize: number) {
           if (value.length < householdIndex) return ""
           return formatYesNoLabel(value[i]?.sameAddress)
         },
-      },
-      {
+      }
+    )
+    if (!disableWorkInRegion) {
+      householdCols.push({
         headerName: `${t("application.details.workInRegion")} HH:${householdIndex}`,
         field: "householdMember",
         sortable: false,
@@ -571,10 +614,24 @@ export function getColDefs(maxHouseholdSize: number) {
         minWidth: 50,
         valueFormatter: ({ value }) => {
           if (value?.length < householdIndex) return ""
-          return formatYesNoLabel(value[i]?.workInRegion)
+          return t(`t.${value[i]?.workInRegion}`)
         },
-      }
-    )
+      })
+    }
+    if (enableFullTimeStudentQuestion) {
+      householdCols.push({
+        headerName: `${t("application.details.fullTimeStudent")} HH:${householdIndex}`,
+        field: "householdMember",
+        sortable: false,
+        filter: false,
+        width: 90,
+        minWidth: 50,
+        valueFormatter: ({ value }) => {
+          if (!value[i]?.fullTimeStudent || value?.length < householdIndex) return ""
+          return t(`t.${value[i]?.fullTimeStudent}`)
+        },
+      })
+    }
   }
 
   const duplicateCols = [

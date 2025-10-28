@@ -62,6 +62,7 @@ export class Member implements HouseholdMemberUpdate {
   sameAddress?: YesNoEnum
   relationship?: HouseholdMemberRelationship
   workInRegion?: YesNoEnum
+  fullTimeStudent?: YesNoEnum
 }
 
 type ApplicationFormMemberProps = {
@@ -69,9 +70,18 @@ type ApplicationFormMemberProps = {
   onClose: () => void
   members: HouseholdMember[]
   editedMemberId?: number
+  enableFullTimeStudentQuestion?: boolean
+  disableWorkInRegion?: boolean
 }
 
-const FormMember = ({ onSubmit, onClose, members, editedMemberId }: ApplicationFormMemberProps) => {
+const FormMember = ({
+  onSubmit,
+  onClose,
+  members,
+  editedMemberId,
+  enableFullTimeStudentQuestion,
+  disableWorkInRegion,
+}: ApplicationFormMemberProps) => {
   const currentlyEdited = useMemo(() => {
     return members.filter((member) => member.orderId === editedMemberId)[0]
   }, [members, editedMemberId])
@@ -92,6 +102,7 @@ const FormMember = ({ onSubmit, onClose, members, editedMemberId }: ApplicationF
       },
       householdMemberAddress: currentlyEdited?.householdMemberAddress,
       householdMemberWorkAddress: currentlyEdited?.householdMemberWorkAddress,
+      fullTimeStudent: currentlyEdited?.fullTimeStudent,
     },
   })
 
@@ -105,7 +116,7 @@ const FormMember = ({ onSubmit, onClose, members, editedMemberId }: ApplicationF
 
     const data = getValues()
 
-    const { sameAddress, workInRegion } = data
+    const { sameAddress, workInRegion, fullTimeStudent } = data
     const { birthMonth, birthDay, birthYear } = data.dateOfBirth
     const formData = {
       createdAt: undefined,
@@ -116,6 +127,7 @@ const FormMember = ({ onSubmit, onClose, members, editedMemberId }: ApplicationF
       birthYear,
       sameAddress: sameAddress ? sameAddress : null,
       workInRegion: workInRegion ? workInRegion : null,
+      fullTimeStudent: fullTimeStudent ? fullTimeStudent : null,
     }
 
     const editedMember = members.find((member) => member.orderId === editedMemberId)
@@ -151,6 +163,19 @@ const FormMember = ({ onSubmit, onClose, members, editedMemberId }: ApplicationF
     },
     {
       id: "workInRegionNo",
+      label: t("t.no"),
+      value: YesNoEnum.no,
+    },
+  ]
+
+  const fullTimeStudentOptions = [
+    {
+      id: "fullTimeStudentYes",
+      label: t("t.yes"),
+      value: YesNoEnum.yes,
+    },
+    {
+      id: "fullTimeStudentNo",
       label: t("t.no"),
       value: YesNoEnum.no,
     },
@@ -231,36 +256,56 @@ const FormMember = ({ onSubmit, onClose, members, editedMemberId }: ApplicationF
                     />
                   </Grid.Cell>
 
-                  <Grid.Cell>
-                    <FieldGroup
-                      name="workInRegion"
-                      type="radio"
-                      register={register}
-                      groupLabel={t("application.details.workInRegion")}
-                      fields={workInRegionOptions}
-                      fieldClassName="m-0"
-                      fieldGroupClassName="flex h-12 items-center"
-                    />
-                  </Grid.Cell>
+                  {!disableWorkInRegion && (
+                    <Grid.Cell>
+                      <FieldGroup
+                        name="workInRegion"
+                        type="radio"
+                        register={register}
+                        groupLabel={t("application.details.workInRegion")}
+                        fields={workInRegionOptions}
+                        fieldClassName="m-0"
+                        fieldGroupClassName="flex h-12 items-center"
+                      />
+                    </Grid.Cell>
+                  )}
+
+                  {enableFullTimeStudentQuestion && (
+                    <Grid.Cell>
+                      <FieldGroup
+                        name="fullTimeStudent"
+                        type="radio"
+                        register={register}
+                        groupLabel={t("application.add.fullTimeStudent")}
+                        fields={fullTimeStudentOptions}
+                        fieldClassName="m-0"
+                        fieldGroupClassName="flex h-12 items-center"
+                      />
+                    </Grid.Cell>
+                  )}
                 </Grid.Row>
               </SectionWithGrid>
 
               {sameAddressField === YesNoEnum.no && (
-                <FormAddress
-                  subtitle={t("application.details.residenceAddress")}
-                  dataKey="householdMemberAddress"
-                  register={register}
-                  stateKeys={stateKeys}
-                />
+                <div className={"seeds-m-bs-content"}>
+                  <FormAddress
+                    subtitle={t("application.details.residenceAddress")}
+                    dataKey="householdMemberAddress"
+                    register={register}
+                    stateKeys={stateKeys}
+                  />
+                </div>
               )}
 
               {workInRegionField === YesNoEnum.yes && (
-                <FormAddress
-                  subtitle={t("application.contact.workAddress")}
-                  dataKey="householdMemberWorkAddress"
-                  register={register}
-                  stateKeys={stateKeys}
-                />
+                <div className={"seeds-m-bs-content"}>
+                  <FormAddress
+                    subtitle={t("application.contact.workAddress")}
+                    dataKey="householdMemberWorkAddress"
+                    register={register}
+                    stateKeys={stateKeys}
+                  />
+                </div>
               )}
             </Card.Section>
           </Card>

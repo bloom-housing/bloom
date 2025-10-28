@@ -51,7 +51,7 @@ const ApplicationAddMembers = () => {
 
   const membersSection = application.householdMember.map((member, index) => {
     return (
-      <CardSection divider="inset">
+      <CardSection divider="inset" key={index}>
         <HouseholdMemberForm
           editMember={editMember}
           key={index}
@@ -73,7 +73,11 @@ const ApplicationAddMembers = () => {
   }, [profile])
 
   return (
-    <FormsLayout>
+    <FormsLayout
+      pageTitle={`${t("pageTitle.addHouseholdMembers")} - ${t("listings.apply.applyOnline")} - ${
+        listing?.name
+      }`}
+    >
       <Form onSubmit={handleSubmit(onSubmit, onError)}>
         <ApplicationFormLayout
           listingName={listing?.name}

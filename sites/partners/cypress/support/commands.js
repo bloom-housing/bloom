@@ -40,20 +40,24 @@ Cypress.Commands.add("loginAndAcceptTerms", (fix = "user") => {
   cy.fixture(fix).then((user) => {
     cy.get("input#email").type(user.email)
     cy.get("input#password").type(user.password)
-    cy.get("button").contains("Sign In").click()
+    cy.get("button").contains("Sign in").click()
     cy.getByTestId("agree").check()
     cy.getByID("form-submit").click()
     cy.contains("Listings")
   })
 })
 
-Cypress.Commands.add("login", (fix = "user") => {
-  cy.visit("/")
+// Authenticate via api for tests not explicitly testing login functionality
+Cypress.Commands.add("loginApi", (fix = "user") => {
   cy.fixture(fix).then((user) => {
-    cy.get("input#email").type(user.email)
-    cy.get("input#password").type(user.password)
-    cy.get("button").contains("Sign In").click()
-    cy.contains("Listings")
+    cy.request("POST", "/api/adapter/auth/login", {
+      email: user.email,
+      password: user.password,
+    }).then((response) => {
+      expect(response.status).eq(201)
+      expect(response).to.have.property("headers")
+      cy.getCookie("access-token").should("exist")
+    })
   })
 })
 
@@ -62,7 +66,7 @@ Cypress.Commands.add("loginWithMfa", () => {
   cy.fixture("mfaUser").then((user) => {
     cy.get("input#email").type(user.email)
     cy.get("input#password").type(user.password)
-    cy.get("button").contains("Sign In").click()
+    cy.get("button").contains("Sign in").click()
     cy.getByID("verify-by-email").click()
     cy.getByTestId("sign-in-mfa-code-field").type(user.mfaCode)
     cy.getByID("verify-and-sign-in").click()
@@ -71,8 +75,16 @@ Cypress.Commands.add("loginWithMfa", () => {
 })
 
 Cypress.Commands.add("signOut", () => {
-  cy.get("button").contains("Sign Out").click()
+  cy.get("button").contains("Sign out").click()
   cy.get("input#email")
+})
+
+Cypress.Commands.add("signOutApi", (fix = "user") => {
+  cy.fixture(fix).then((user) => {
+    cy.request("GET", "/api/adapter/auth/logout").then((response) => {
+      expect(response.status).eq(200)
+    })
+  })
 })
 
 Cypress.Commands.add("verifyAlertBox", () => {
@@ -358,10 +370,10 @@ Cypress.Commands.add("verifyAlternateContact", (application, fieldsToSkip = []) 
 Cypress.Commands.add("verifyHouseholdMembers", (application, fieldsToSkip = []) => {
   ;[
     { id: `[data-label="Name"]`, fieldKey: "householdMemberName" },
-    { id: `[data-label="Date of Birth"]`, fieldKey: "householdMemberDoB" },
+    { id: `[data-label="Date of birth"]`, fieldKey: "householdMemberDoB" },
     { id: `[data-label="Relationship"]`, fieldKey: "relationship" },
-    { id: `[data-label="Same Residence"]`, fieldKey: "sameAddress" },
-    { id: `[data-label="Work in Region"]`, fieldKey: "workInRegion" },
+    { id: `[data-label="Same residence"]`, fieldKey: "sameAddress" },
+    { id: `[data-label="Work in region"]`, fieldKey: "workInRegion" },
   ]
     .filter(({ id }) => !fieldsToSkip.includes(id))
     .forEach(({ id, fieldKey }) => {
@@ -395,16 +407,16 @@ Cypress.Commands.add("verifyTerms", (application) => {
 Cypress.Commands.add("addMinimalListing", (listingName, isLottery, isApproval, jurisdiction) => {
   // Create and publish minimal FCFS or Lottery listing
   // TODO: test Open Waitlist, though maybe with integration test instead
-  cy.getByID("addListingButton").contains("Add Listing").click()
-  cy.contains("New Listing")
+  cy.getByID("addListingButton").contains("Add listing").click()
+  cy.contains("New listing")
   cy.fixture("minimalListing").then((listing) => {
     if (jurisdiction) {
       cy.getByID("jurisdictions.id").select("Bloomington")
-      cy.getByID("jurisdictions.id-error").should("have.length", 0)
+      cy.getByID("jurisdictions.id-error").should("not.include.text", "This field is required")
     }
     cy.getByID("name").type(listingName)
     cy.getByID("developer").type(listing["developer"])
-    cy.getByID("add-photos-button").contains("Add Photo").click()
+    cy.getByID("add-photos-button").contains("Add photo").click()
     cy.getByTestId("dropzone-input").attachFile(
       "cypress-automated-image-upload-071e2ab9-5a52-4f34-85f0-e41f696f4b96.jpeg",
       {
@@ -421,14 +433,14 @@ Cypress.Commands.add("addMinimalListing", (listingName, isLottery, isApproval, j
     cy.getByID("listingsBuildingAddress.city").type(listing["buildingAddress.city"])
     cy.getByID("listingsBuildingAddress.state").select(listing["buildingAddress.state"])
     cy.getByID("listingsBuildingAddress.zipCode").type(listing["buildingAddress.zipCode"])
-    cy.getByID("addUnitsButton").contains("Add Unit").click()
+    cy.getByID("addUnitsButton").contains("Add unit").click()
     cy.getByID("number").type(listing["number"])
     cy.getByID("unitTypes.id").select(listing["unitType.id"])
-    cy.getByID("unitFormSaveAndExitButton").contains("Save & Exit").click()
+    cy.getByID("unitFormSaveAndExitButton").contains("Save & exit").click()
     cy.getByID("amiChart.id").select(1).trigger("change")
     cy.getByID("amiPercentage").select(1)
-    cy.getByID("unitFormSaveAndExitButton").contains("Save & Exit").click()
-    cy.get("button").contains("Application Process").click()
+    cy.getByID("unitFormSaveAndExitButton").contains("Save & exit").click()
+    cy.get("button").contains("Application process").click()
     if (isLottery) {
       cy.getByID("reviewOrderLottery").check()
       cy.getByTestId("lottery-start-date-month").type("1")
@@ -472,7 +484,7 @@ Cypress.Commands.add("addMinimalListing", (listingName, isLottery, isApproval, j
 Cypress.Commands.add("addMinimalApplication", (listingName) => {
   cy.visit("/")
   cy.getByTestId(`listing-status-cell-${listingName}`).click()
-  cy.getByID("addApplicationButton").contains("Add Application").click()
+  cy.getByID("addApplicationButton").contains("Add application").click()
   cy.fixture("applicantOnlyData").then((application) => {
     cy.fillPrimaryApplicant(application, [
       "application.additionalPhoneNumber",

@@ -10,38 +10,77 @@ import {
   AuthContext,
   BloomCard,
 } from "@bloom-housing/shared-helpers"
+import {
+  FeatureFlagEnum,
+  ReviewOrderTypeEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { Button, Heading, Link } from "@bloom-housing/ui-seeds"
 import FormsLayout from "../../../layouts/forms"
 import styles from "../../../layouts/application-form.module.scss"
 import { AppSubmissionContext } from "../../../lib/applications/AppSubmissionContext"
 import { UserStatus } from "../../../lib/constants"
-import { ReviewOrderTypeEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { isFeatureFlagOn, isUnitGroupAppBase, isUnitGroupAppWaitlist } from "../../../lib/helpers"
 
 const ApplicationConfirmation = () => {
-  const { application, listing } = useContext(AppSubmissionContext)
+  const { application, listing, conductor } = useContext(AppSubmissionContext)
   const { initialStateLoaded, profile } = useContext(AuthContext)
   const router = useRouter()
+
+  const disableListingPreferences = isFeatureFlagOn(
+    conductor.config,
+    FeatureFlagEnum.disableListingPreferences
+  )
 
   const imageUrl = imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize))[0]
 
   const content = useMemo(() => {
     switch (listing?.reviewOrderType) {
       case ReviewOrderTypeEnum.firstComeFirstServe:
+        if (isUnitGroupAppWaitlist(listing, conductor.config)) {
+          return {
+            text: t(
+              `application.review.confirmation.whatHappensNext${
+                disableListingPreferences ? ".noPref" : ""
+              }.waitlist`
+            ),
+          }
+        }
+        if (isUnitGroupAppBase(listing, conductor.config)) {
+          return {
+            text: t(
+              `application.review.confirmation.whatHappensNext${
+                disableListingPreferences ? ".noPref" : ""
+              }.base`
+            ),
+          }
+        }
         return {
-          text: t("application.review.confirmation.whatHappensNext.fcfs"),
+          text: t(
+            `application.review.confirmation.whatHappensNext${
+              disableListingPreferences ? ".noPref" : ""
+            }.fcfs`
+          ),
         }
       case ReviewOrderTypeEnum.lottery:
         return {
-          text: t("application.review.confirmation.whatHappensNext.lottery"),
+          text: t(
+            `application.review.confirmation.whatHappensNext${
+              disableListingPreferences ? ".noPref" : ""
+            }.lottery`
+          ),
         }
       case ReviewOrderTypeEnum.waitlist:
         return {
-          text: t("application.review.confirmation.whatHappensNext.waitlist"),
+          text: t(
+            `application.review.confirmation.whatHappensNext${
+              disableListingPreferences ? ".noPref" : ""
+            }.waitlist`
+          ),
         }
       default:
         return { text: "" }
     }
-  }, [listing, router.locale])
+  }, [listing, conductor.config])
 
   useEffect(() => {
     pushGtmEvent<PageView>({
@@ -52,7 +91,11 @@ const ApplicationConfirmation = () => {
   }, [profile])
 
   return (
-    <FormsLayout>
+    <FormsLayout
+      pageTitle={`${t("account.application.confirmation")} - ${t("listings.apply.applyOnline")} - ${
+        listing?.name
+      }`}
+    >
       <BloomCard>
         <>
           <CardSection divider={"flush"}>

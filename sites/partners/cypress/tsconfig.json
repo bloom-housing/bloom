@@ -1,9 +1,12 @@
 {
   "compilerOptions": {
     "strict": true,
-    "target": "es5",
-    "lib": ["es5", "dom"],
-    "types": ["cypress", "cypress-file-upload"]
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "jsx": "preserve",
+    "allowJs": true,
+    "types": ["cypress", "cypress-file-upload", "node"],
+    "target": "es5"
   },
+  "exclude": ["../node_modules"],
   "include": ["**/*.ts"]
 }

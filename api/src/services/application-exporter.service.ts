@@ -8,7 +8,8 @@ import fs, { createReadStream, ReadStream } from 'fs';
 import { generatePresignedGetURL, uploadToS3 } from '../utilities/s3-helpers';
 import { getExportHeaders } from '../utilities/application-export-helpers';
 import { IdDTO } from '../dtos/shared/id.dto';
-import { Injectable, StreamableFile } from '@nestjs/common';
+import { Jurisdiction } from '../dtos/jurisdictions/jurisdiction.dto';
+import { ForbiddenException, Injectable, StreamableFile } from '@nestjs/common';
 import { join } from 'path';
 import { ListingService } from './listing.service';
 import { mapTo } from '../utilities/mapTo';
@@ -23,6 +24,8 @@ import { Request as ExpressRequest } from 'express';
 import { User } from '../dtos/users/user.dto';
 import { view } from './application.service';
 import { zipExport, zipExportSecure } from '../utilities/zip-export';
+import { FeatureFlagEnum } from '../enums/feature-flags/feature-flags-enum';
+import { doJurisdictionHaveFeatureFlagSet } from '../utilities/feature-flag-utilities';
 
 view.csv = {
   ...view.details,
@@ -68,16 +71,16 @@ export class ApplicationExporterService {
     const now = new Date();
     const dateString = dayjs(now).format('YYYY-MM-DD_HH-mm');
     if (isLottery) {
-      readStream = await this.spreadsheetExport(queryParams, user.id, true);
+      readStream = await this.spreadsheetExport(queryParams, user, true);
       zipFilename = `listing-${queryParams.id}-lottery-${
         user.id
       }-${now.getTime()}`;
       filename = `lottery-${queryParams.id}-${dateString}`;
     } else {
       if (isSpreadsheet) {
-        readStream = await this.spreadsheetExport(queryParams, user.id, false);
+        readStream = await this.spreadsheetExport(queryParams, user, false);
       } else {
-        readStream = await this.csvExport(queryParams, user.id);
+        readStream = await this.csvExport(queryParams, user);
       }
       zipFilename = `listing-${queryParams.id}-applications-${
         user.id
@@ -111,16 +114,16 @@ export class ApplicationExporterService {
     const now = new Date();
     const dateString = dayjs(now).format('YYYY-MM-DD_HH-mm');
     if (isLottery) {
-      readStream = await this.spreadsheetExport(queryParams, user.id, true);
+      readStream = await this.spreadsheetExport(queryParams, user, true);
       zipFilename = `listing-${queryParams.id}-lottery-${
         user.id
       }-${now.getTime()}`;
       filename = `lottery-${queryParams.id}-${dateString}`;
     } else {
       if (isSpreadsheet) {
-        readStream = await this.spreadsheetExport(queryParams, user.id, false);
+        readStream = await this.spreadsheetExport(queryParams, user, false);
       } else {
-        readStream = await this.csvExport(queryParams, user.id);
+        readStream = await this.csvExport(queryParams, user);
       }
       zipFilename = `listing-${queryParams.id}-applications-${
         user.id
@@ -162,16 +165,16 @@ export class ApplicationExporterService {
    */
   async csvExport<QueryParams extends ApplicationCsvQueryParams>(
     queryParams: QueryParams,
-    user_id: string,
+    user: User,
   ): Promise<ReadStream> {
     const filename = join(
       process.cwd(),
-      `src/temp/listing-${
-        queryParams.id
-      }-applications-${user_id}-${new Date().getTime()}.csv`,
+      `src/temp/listing-${queryParams.id}-applications-${
+        user.id
+      }-${new Date().getTime()}.csv`,
     );
 
-    await this.createCsv(filename, queryParams);
+    await this.createCsv(filename, queryParams, user);
     return createReadStream(filename);
   }
 
@@ -184,6 +187,7 @@ export class ApplicationExporterService {
   async createCsv<QueryParams extends ApplicationCsvQueryParams>(
     filename: string,
     queryParams: QueryParams,
+    user: User,
   ): Promise<void> {
     const applications = await this.prisma.applications.findMany({
       select: {
@@ -199,6 +203,24 @@ export class ApplicationExporterService {
         deletedAt: null,
       },
     });
+
+    const jurisdiction = await this.prisma.jurisdictions.findFirst({
+      select: {
+        featureFlags: true,
+      },
+      where: {
+        listings: {
+          some: {
+            id: queryParams.id,
+          },
+        },
+      },
+    });
+
+    const swapCommunityTypeWithPrograms = doJurisdictionHaveFeatureFlagSet(
+      jurisdiction as Jurisdiction,
+      FeatureFlagEnum.swapCommunityTypeWithPrograms,
+    );
 
     // get all multiselect questions for a listing to build csv headers
     const multiSelectQuestions =
@@ -216,9 +238,11 @@ export class ApplicationExporterService {
       maxHouseholdMembers,
       multiSelectQuestions,
       queryParams.timeZone,
+      user,
       queryParams.includeDemographics,
       false,
       this.dateFormat,
+      swapCommunityTypeWithPrograms,
     );
 
     return this.csvExportHelper(
@@ -455,14 +479,14 @@ export class ApplicationExporterService {
    */
   async spreadsheetExport<QueryParams extends ApplicationCsvQueryParams>(
     queryParams: QueryParams,
-    user_id: string,
+    user: User,
     forLottery = true,
   ): Promise<ReadStream> {
     const filename = join(
       process.cwd(),
       `src/temp/${forLottery ? 'lottery-' : ''}listing-${
         queryParams.id
-      }-applications-${user_id}-${new Date().getTime()}.xlsx`,
+      }-applications-${user.id}-${new Date().getTime()}.xlsx`,
     );
 
     const workbook = new Excel.stream.xlsx.WorkbookWriter({
@@ -475,6 +499,7 @@ export class ApplicationExporterService {
       {
         ...queryParams,
       },
+      user,
       forLottery,
     );
 
@@ -492,6 +517,7 @@ export class ApplicationExporterService {
   async createSpreadsheets<QueryParams extends ApplicationCsvQueryParams>(
     workbook: Excel.stream.xlsx.WorkbookWriter,
     queryParams: QueryParams,
+    user: User,
     forLottery = false,
   ): Promise<void> {
     let applications = await this.prisma.applications.findMany({
@@ -524,6 +550,25 @@ export class ApplicationExporterService {
         markedAsDuplicate: forLottery ? false : undefined,
       },
     });
+
+    const jurisdiction = await this.prisma.jurisdictions.findFirst({
+      select: {
+        featureFlags: true,
+      },
+      where: {
+        listings: {
+          some: {
+            id: queryParams.id,
+          },
+        },
+      },
+    });
+
+    const swapCommunityTypeWithPrograms = doJurisdictionHaveFeatureFlagSet(
+      jurisdiction as Jurisdiction,
+      FeatureFlagEnum.swapCommunityTypeWithPrograms,
+    );
+
     // get all multiselect questions for a listing to build csv headers
     const multiSelectQuestions =
       await this.multiselectQuestionService.findByListingId(queryParams.id);
@@ -540,8 +585,11 @@ export class ApplicationExporterService {
       maxHouseholdMembers,
       multiSelectQuestions,
       queryParams.timeZone,
+      user,
       queryParams.includeDemographics,
       forLottery,
+      undefined,
+      swapCommunityTypeWithPrograms,
     );
 
     if (forLottery) {
@@ -808,6 +856,9 @@ export class ApplicationExporterService {
      * By making listingId required, we can check if the user has update permissions for the listing, since right now if a user has that
      * they also can run the export for that listing
      */
+    if (user?.userRoles?.isLimitedJurisdictionalAdmin)
+      throw new ForbiddenException();
+
     const jurisdictionId =
       await this.listingService.getJurisdictionIdByListingId(listingId);
 

@@ -21,9 +21,10 @@ import {
   RentSection,
   SearchSection,
 } from "../../../src/components/browse/FilterDrawerHelpers"
-import { mockNextRouter, render } from "../../testUtils"
+import { act, mockNextRouter, render } from "../../testUtils"
 import { useForm } from "react-hook-form"
 import { t } from "@bloom-housing/ui-components"
+import userEvent from "@testing-library/user-event"
 
 describe("filter drawer helpers", () => {
   const emptyFormData: FilterData = {
@@ -671,7 +672,7 @@ describe("filter drawer helpers", () => {
 
       return (
         <CheckboxGroup
-          groupLabel={t("listings.homeType.lower")}
+          groupLabel={t("listings.homeType")}
           fields={buildDefaultFilterFields(
             ListingFilterKeys.homeTypes,
             "listings.homeType",
@@ -689,7 +690,7 @@ describe("filter drawer helpers", () => {
 
       return (
         <CheckboxGroup
-          groupLabel={t("listings.homeType.lower")}
+          groupLabel={t("listings.homeType")}
           fields={buildDefaultFilterFields(
             ListingFilterKeys.homeTypes,
             "listings.homeType",
@@ -708,7 +709,7 @@ describe("filter drawer helpers", () => {
 
       return (
         <CheckboxGroup
-          groupLabel={t("listings.homeType.lower")}
+          groupLabel={t("listings.homeType")}
           fields={buildDefaultFilterFields(
             ListingFilterKeys.homeTypes,
             "listings.homeType",
@@ -725,9 +726,10 @@ describe("filter drawer helpers", () => {
       )
     }
     it("should show the correct number of columns when no customColumnNumber is added", () => {
-      render(<DefaultCheckBoxGroup />)
+      const { container } = render(<DefaultCheckBoxGroup />)
       expect(screen.getByRole("group", { name: "Home type" })).toBeInTheDocument()
-      expect(screen.getByRole("row")).toHaveAttribute("data-columns", "3")
+      expect(container.querySelector("[data-columns='2']")).toBeInTheDocument()
+      expect(container.querySelector("[data-columns='1']")).not.toBeInTheDocument()
       expect(screen.getByLabelText("Apartment")).toBeInTheDocument()
       expect(screen.getByRole("checkbox", { name: "Apartment" })).not.toBeChecked()
       expect(screen.getByLabelText("Duplex")).toBeInTheDocument()
@@ -738,9 +740,10 @@ describe("filter drawer helpers", () => {
       expect(screen.getByRole("checkbox", { name: "Townhome" })).not.toBeChecked()
     })
     it("should show the correct number of columns when a customColumnNumber is added", () => {
-      render(<CustomColumnCheckBoxGroup />)
+      const { container } = render(<CustomColumnCheckBoxGroup />)
       expect(screen.getByRole("group", { name: "Home type" })).toBeInTheDocument()
-      expect(screen.getByRole("row")).toHaveAttribute("data-columns", "1")
+      expect(container.querySelector("[data-columns='1']")).toBeInTheDocument()
+      expect(container.querySelector("[data-columns='2']")).not.toBeInTheDocument()
       expect(screen.getByLabelText("Apartment")).toBeInTheDocument()
       expect(screen.getByRole("checkbox", { name: "Apartment" })).not.toBeChecked()
       expect(screen.getByLabelText("Duplex")).toBeInTheDocument()
@@ -752,9 +755,10 @@ describe("filter drawer helpers", () => {
     })
 
     it("should show all fields passed into component correctly when a filter state with previous selections is passed", () => {
-      render(<CheckBoxGroupWithSelections />)
+      const { container } = render(<CheckBoxGroupWithSelections />)
       expect(screen.getByRole("group", { name: "Home type" })).toBeInTheDocument()
-      expect(screen.getByRole("row")).toHaveAttribute("data-columns", "3")
+      expect(container.querySelector("[data-columns='2']")).toBeInTheDocument()
+      expect(container.querySelector("[data-columns='1']")).not.toBeInTheDocument()
       expect(screen.getByLabelText("Apartment")).toBeInTheDocument()
       expect(screen.getByRole("checkbox", { name: "Apartment" })).toBeChecked()
       expect(screen.getByLabelText("Duplex")).toBeInTheDocument()
@@ -769,7 +773,14 @@ describe("filter drawer helpers", () => {
   describe("RentSection", () => {
     const DefaultRentSection = () => {
       // eslint-disable-next-line @typescript-eslint/unbound-method
-      const { register, getValues, setValue } = useForm()
+      const {
+        register,
+        getValues,
+        setValue,
+        setError,
+        clearErrors,
+        formState: { errors },
+      } = useForm()
 
       return (
         <RentSection
@@ -777,12 +788,22 @@ describe("filter drawer helpers", () => {
           getValues={getValues}
           setValue={setValue}
           filterState={{}}
+          setError={setError}
+          clearErrors={clearErrors}
+          errors={errors}
         />
       )
     }
     const RentSectionWithSelections = () => {
       // eslint-disable-next-line @typescript-eslint/unbound-method
-      const { register, getValues, setValue } = useForm()
+      const {
+        register,
+        getValues,
+        setValue,
+        setError,
+        clearErrors,
+        formState: { errors },
+      } = useForm()
 
       return (
         <RentSection
@@ -793,6 +814,9 @@ describe("filter drawer helpers", () => {
             [ListingFilterKeys.monthlyRent]: { minRent: "500.00", maxRent: "900.00" },
             [ListingFilterKeys.section8Acceptance]: true,
           }}
+          setError={setError}
+          clearErrors={clearErrors}
+          errors={errors}
         />
       )
     }
@@ -803,9 +827,9 @@ describe("filter drawer helpers", () => {
       expect(screen.getByRole("textbox", { name: "Min rent" })).toHaveValue("")
       expect(screen.getByLabelText("Max rent")).toBeInTheDocument()
       expect(screen.getByRole("textbox", { name: "Max rent" })).toHaveValue("")
-      expect(screen.getByLabelText("Accepts Section 8 Housing Choice vouchers")).toBeInTheDocument()
+      expect(screen.getByLabelText("Accepts Section 8 Housing Choice Vouchers")).toBeInTheDocument()
       expect(
-        screen.getByRole("checkbox", { name: "Accepts Section 8 Housing Choice vouchers" })
+        screen.getByRole("checkbox", { name: "Accepts Section 8 Housing Choice Vouchers" })
       ).not.toBeChecked()
     })
 
@@ -816,10 +840,43 @@ describe("filter drawer helpers", () => {
       expect(screen.getByRole("textbox", { name: "Min rent" })).toHaveValue("500.00")
       expect(screen.getByLabelText("Max rent")).toBeInTheDocument()
       expect(screen.getByRole("textbox", { name: "Max rent" })).toHaveValue("900.00")
-      expect(screen.getByLabelText("Accepts Section 8 Housing Choice vouchers")).toBeInTheDocument()
+      expect(screen.getByLabelText("Accepts Section 8 Housing Choice Vouchers")).toBeInTheDocument()
       expect(
-        screen.getByRole("checkbox", { name: "Accepts Section 8 Housing Choice vouchers" })
+        screen.getByRole("checkbox", { name: "Accepts Section 8 Housing Choice Vouchers" })
       ).toBeChecked()
+    })
+    it("should display error message when min rent is greater than max rent", async () => {
+      render(<DefaultRentSection />)
+      await userEvent.type(screen.getByRole("textbox", { name: "Min rent" }), "1000.00")
+      await userEvent.type(screen.getByRole("textbox", { name: "Max rent" }), "500.00")
+      await userEvent.tab()
+
+      expect(
+        screen.getByText("Min rent must be less than or equal to max rent")
+      ).toBeInTheDocument()
+      expect(
+        screen.getByText("Max rent must be greater than or equal to min rent")
+      ).toBeInTheDocument()
+    })
+    it("should clear error message when min rent is less than max rent", async () => {
+      render(<DefaultRentSection />)
+      await userEvent.type(screen.getByRole("textbox", { name: "Min rent" }), "1000.00")
+      await userEvent.type(screen.getByRole("textbox", { name: "Max rent" }), "500.00")
+      await userEvent.tab()
+
+      expect(
+        screen.getByText("Min rent must be less than or equal to max rent")
+      ).toBeInTheDocument()
+
+      await userEvent.type(screen.getByRole("textbox", { name: "Max rent" }), "1500.00")
+      await userEvent.tab()
+
+      expect(
+        screen.queryByText("Min rent must be less than or equal to max rent")
+      ).not.toBeInTheDocument()
+      expect(
+        screen.queryByText("Max rent must be greater than or equal to min rent")
+      ).not.toBeInTheDocument()
     })
   })
 

@@ -183,6 +183,12 @@ These tests will mock Prisma and therefore will not interface directly with the 
 
 #### How to run unit tests
 
+The tests require the TIME_ZONE environment variable to be set. Create a `.env` file:
+
+```bash
+echo 'TIME_ZONE=America/Los_Angeles' > .env
+```
+
 Running the following will run all unit tests: `yarn test`
 
 ### Testing with code coverage

@@ -4,9 +4,10 @@ import { randomName } from './word-generator';
 export const amiChartFactory = (
   numberToCreate: number,
   jurisdictionId: string,
+  offset?: number,
 ): Prisma.AmiChartCreateInput => ({
   name: randomName(),
-  items: amiChartItemsFactory(numberToCreate),
+  items: amiChartItemsFactory(numberToCreate, offset),
   jurisdictions: {
     connect: {
       id: jurisdictionId,
@@ -14,14 +15,17 @@ export const amiChartFactory = (
   },
 });
 
-const amiChartItemsFactory = (numberToCreate: number): Prisma.JsonArray =>
+const amiChartItemsFactory = (
+  numberToCreate: number,
+  offset = 0,
+): Prisma.JsonArray =>
   [...Array(numberToCreate)].flatMap((_, index) => {
     const baseValue = index + 1;
     return [...Array(8)].map((_, index2) => {
       return {
         percentOfAmi: baseValue * 10,
         householdSize: index2 + 1,
-        income: (baseValue + index2) * 12_000,
+        income: (baseValue + index2 + offset) * 12_000,
       };
     });
   });

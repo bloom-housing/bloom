@@ -6,7 +6,7 @@ import {
   StandardTableData,
   Select,
 } from "@bloom-housing/ui-components"
-import { Button, Dialog, Drawer, FieldValue, Grid, Tag } from "@bloom-housing/ui-seeds"
+import { Button, Dialog, Drawer, Grid, Tag } from "@bloom-housing/ui-seeds"
 import {
   EnumUnitGroupAmiLevelMonthlyRentDeterminationType,
   FeatureFlag,
@@ -20,27 +20,30 @@ import { MessageContext } from "@bloom-housing/shared-helpers"
 import UnitForm from "../UnitForm"
 import { useFormContext, useWatch } from "react-hook-form"
 import { TempUnit, TempUnitGroup } from "../../../../lib/listings/formTypes"
-import { fieldHasError, fieldMessage } from "../../../../lib/helpers"
+import { defaultFieldProps, fieldHasError, fieldMessage, getLabel } from "../../../../lib/helpers"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 import { formatRange, formatRentRange, minMaxFinder } from "../../helpers"
 import UnitGroupForm from "../UnitGroupForm"
+import styles from "../ListingForm.module.scss"
 
 type UnitProps = {
-  units: TempUnit[]
-  unitGroups: TempUnitGroup[]
-  setUnits: (units: TempUnit[]) => void
-  setUnitGroups: (unitGroups: TempUnitGroup[]) => void
   disableUnitsAccordion: boolean
   featureFlags?: FeatureFlag[]
+  requiredFields: string[]
+  setUnitGroups: (unitGroups: TempUnitGroup[]) => void
+  setUnits: (units: TempUnit[]) => void
+  unitGroups: TempUnitGroup[]
+  units: TempUnit[]
 }
 
 const FormUnits = ({
-  units,
-  unitGroups,
-  setUnits,
-  setUnitGroups,
   disableUnitsAccordion,
   featureFlags,
+  requiredFields,
+  setUnitGroups,
+  setUnits,
+  unitGroups,
+  units,
 }: UnitProps) => {
   const { addToast } = useContext(MessageContext)
   const [unitDrawerOpen, setUnitDrawerOpen] = useState(false)
@@ -246,7 +249,7 @@ const FormUnits = ({
                   <div className="flex gap-3">
                     <Button
                       type="button"
-                      className="font-semibold"
+                      className={"font-semibold darker-link"}
                       onClick={() => editUnitGroup(unitGroup.tempId)}
                       variant="text"
                       size="sm"
@@ -255,7 +258,7 @@ const FormUnits = ({
                     </Button>
                     <Button
                       type="button"
-                      className="font-semibold text-alert"
+                      className={"font-semibold darker-alert"}
                       onClick={() => setUnitDeleteModal(unitGroup.tempId)}
                       variant="text"
                       size="sm"
@@ -279,7 +282,7 @@ const FormUnits = ({
                 <div className="flex gap-3">
                   <Button
                     type="button"
-                    className="font-semibold"
+                    className={"font-semibold darker-link"}
                     onClick={() => editUnit(unit.tempId)}
                     variant="text"
                     size="sm"
@@ -288,7 +291,7 @@ const FormUnits = ({
                   </Button>
                   <Button
                     type="button"
-                    className="font-semibold text-alert"
+                    className={"font-semibold darker-alert"}
                     onClick={() => setUnitDeleteModal(unit.tempId)}
                     variant="text"
                     size="sm"
@@ -327,39 +330,45 @@ const FormUnits = ({
       >
         {homeTypeEnabled && (
           <Grid.Row columns={2}>
-            <FieldValue label={t("listings.homeType")}>
-              {homeTypes && (
+            {homeTypes && (
+              <Grid.Cell>
                 <Select
-                  id={`homeType`}
-                  name={`homeType`}
-                  label={t("listings.homeType")}
-                  labelClassName="sr-only"
                   register={register}
                   controlClassName="control"
                   options={homeTypes}
+                  {...defaultFieldProps(
+                    "homeType",
+                    t("listings.homeType"),
+                    requiredFields,
+                    errors,
+                    clearErrors
+                  )}
                 />
-              )}
-            </FieldValue>
+              </Grid.Cell>
+            )}
           </Grid.Row>
         )}
         {!enableUnitGroups && (
           <Grid.Row columns={2}>
-            <FieldValue label={t("listings.unitTypesOrIndividual")} className="mb-1">
+            <Grid.Cell>
               <FieldGroup
                 name="disableUnitsAccordion"
                 type="radio"
+                groupLabel={t("listings.unitTypesOrIndividual")}
                 register={register}
                 fields={disableUnitsAccordionOptions}
                 fieldClassName="m-0"
-                fieldGroupClassName="flex h-12 items-center"
+                fieldGroupClassName={"flex h-12 items-center"}
+                fieldLabelClassName={styles["label-option"]}
               />
-            </FieldValue>
-            <FieldValue label={t("listings.listingAvailabilityQuestion")} className={"mb-1"}>
+            </Grid.Cell>
+            <Grid.Cell>
               <FieldGroup
                 name="listingAvailabilityQuestion"
                 type="radio"
+                fieldLabelClassName={styles["label-option"]}
+                groupLabel={t("listings.listingAvailabilityQuestion")}
                 register={register}
-                groupSubNote={t("listings.requiredToPublish")}
                 error={fieldHasError(errors?.listingAvailability) && listingAvailability === null}
                 errorMessage={fieldMessage(errors?.listingAvailability)}
                 fieldClassName="m-0"
@@ -381,11 +390,23 @@ const FormUnits = ({
                   },
                 ]}
               />
-            </FieldValue>
+            </Grid.Cell>
           </Grid.Row>
         )}
         <SectionWithGrid.HeadingRow>{t("listings.units")}</SectionWithGrid.HeadingRow>
-        <Grid.Row>
+
+        <Grid.Row className={"grid-cols-1 gap-0"}>
+          <div
+            className={`field-label ${styles["custom-label"]} ${
+              fieldHasError(errors?.units) || fieldHasError(errors?.unitGroups)
+                ? styles["label-error"]
+                : ""
+            }`}
+          >
+            {enableUnitGroups
+              ? getLabel("unitGroups", requiredFields, "Unit groups")
+              : getLabel("units", requiredFields, "Units")}
+          </div>
           <Grid.Cell className="grid-inset-section">
             {(enableUnitGroups ? !!unitGroups.length : !!units.length) && (
               <div className="mb-5">
@@ -411,14 +432,22 @@ const FormUnits = ({
               {t(enableUnitGroups ? "listings.unitGroup.add" : "listings.unit.add")}
             </Button>
           </Grid.Cell>
+          {(fieldHasError(errors?.units) || fieldHasError(errors?.unitGroups)) && (
+            <span className={"text-xs text-alert seeds-m-bs-2"} id="units-error">
+              {t("errors.requiredFieldError")}
+            </span>
+          )}
         </Grid.Row>
+
         {enableSection8Question && (
           <Grid.Row>
-            <FieldValue label={t("listings.section8Title")}>
+            <Grid.Cell>
               <FieldGroup
                 name="listingSection8Acceptance"
                 type="radio"
                 register={register}
+                groupLabel={t("listings.section8Title")}
+                fieldLabelClassName={`${styles["label-option"]} seeds-m-bs-2`}
                 fields={[
                   {
                     id: "listingSection8AcceptanceYes",
@@ -436,17 +465,10 @@ const FormUnits = ({
                   },
                 ]}
               />
-            </FieldValue>
+            </Grid.Cell>
           </Grid.Row>
         )}
       </SectionWithGrid>
-
-      {!enableUnitGroups && <p className="field-sub-note">{t("listings.requiredToPublish")}</p>}
-      {fieldHasError(errors?.units) && (
-        <span className={"text-xs text-alert"} id="units-error">
-          {t("errors.requiredFieldError")}
-        </span>
-      )}
 
       <Drawer
         isOpen={unitDrawerOpen}

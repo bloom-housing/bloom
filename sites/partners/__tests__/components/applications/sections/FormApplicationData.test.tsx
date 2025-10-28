@@ -1,7 +1,6 @@
 import { render, screen, waitFor } from "@testing-library/react"
 import React from "react"
 import userEvent from "@testing-library/user-event"
-import { act } from "react-dom/test-utils"
 import { LanguagesEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { FormProviderWrapper } from "./helpers"
 import { FormApplicationData } from "../../../../src/components/applications/PaperApplicationForm/sections/FormApplicationData"
@@ -47,11 +46,9 @@ describe("<FormApplicationData>", () => {
     const dayInput = screen.getByTestId("dateSubmitted-day")
     const yearInput = screen.getByTestId("dateSubmitted-year")
 
-    await act(async () => {
-      await userEvent.type(monthInput, "2")
-      await userEvent.type(dayInput, "10")
-      await userEvent.type(yearInput, "2025")
-    })
+    await userEvent.type(monthInput, "2")
+    await userEvent.type(dayInput, "10")
+    await userEvent.type(yearInput, "2025")
 
     await waitFor(() => {
       expect(timeHours).not.toBeDisabled()
@@ -73,7 +70,7 @@ describe("<FormApplicationData>", () => {
     expect((languageSelect as HTMLSelectElement).value).toBe(LanguagesEnum.en)
   })
 
-  it("clearing date fields resets time fields", async () => {
+  it("clearing date fields does not resets time fields", async () => {
     render(
       <FormProviderWrapper>
         <FormApplicationData />
@@ -87,33 +84,27 @@ describe("<FormApplicationData>", () => {
     const dayInput = screen.getByTestId("dateSubmitted-day")
     const yearInput = screen.getByTestId("dateSubmitted-year")
 
-    await act(async () => {
-      await userEvent.type(monthInput, "2")
-      await userEvent.type(dayInput, "10")
-      await userEvent.type(yearInput, "2025")
-    })
+    await userEvent.type(monthInput, "2")
+    await userEvent.type(dayInput, "10")
+    await userEvent.type(yearInput, "2025")
 
-    await act(async () => {
-      await userEvent.type(timeHours, "12")
-      await userEvent.type(timeMinutes, "30")
-      await userEvent.selectOptions(timePeriod, "pm")
-    })
+    await userEvent.type(timeHours, "12")
+    await userEvent.type(timeMinutes, "30")
+    await userEvent.selectOptions(timePeriod, "pm")
 
     expect((timeHours as HTMLInputElement).value).toBe("12")
     expect((timeMinutes as HTMLInputElement).value).toBe("30")
     expect((timePeriod as HTMLSelectElement).value).toBe("pm")
 
-    await act(async () => {
-      await userEvent.clear(monthInput)
-      await userEvent.clear(dayInput)
-      await userEvent.clear(yearInput)
-    })
+    await userEvent.clear(monthInput)
+    await userEvent.clear(dayInput)
+    await userEvent.clear(yearInput)
 
     expect(timeHours).toBeDisabled()
     expect(timeMinutes).toBeDisabled()
     expect(timePeriod).toBeDisabled()
-    expect((timeHours as HTMLInputElement).value).toBe("")
-    expect((timeMinutes as HTMLInputElement).value).toBe("")
+    expect((timeHours as HTMLInputElement).value).toBe("12")
+    expect((timeMinutes as HTMLInputElement).value).toBe("30")
     expect((timePeriod as HTMLSelectElement).value).toBe("pm")
   })
 })

@@ -1,10 +1,10 @@
 describe("Preference Management Tests", () => {
   beforeEach(() => {
-    cy.login()
+    cy.loginApi()
   })
 
   afterEach(() => {
-    cy.signOut()
+    cy.signOutApi()
   })
 
   beforeEach(() => {
@@ -47,8 +47,8 @@ describe("Preference Management Tests", () => {
 
     cy.getByID("preference-save-button").click()
     cy.getByTestId("toast-alert")
-      .contains("Preference Created")
-      .should("have.text", "Preference Created")
+      .contains("Preference created")
+      .should("have.text", "Preference created")
 
     // Verify
     cy.getByTestId("preference-edit-icon: Preference Title").should("be.enabled")

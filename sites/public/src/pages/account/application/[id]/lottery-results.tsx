@@ -17,7 +17,7 @@ import {
 } from "../../../../components/account/ApplicationCards"
 import styles from "../../../../../styles/lottery-results.module.scss"
 
-export default () => {
+const LotteryResults = () => {
   const router = useRouter()
   const applicationId = router.query.id as string
   const { applicationsService, listingsService, profile, lotteryService } = useContext(AuthContext)
@@ -93,7 +93,10 @@ export default () => {
   return (
     <>
       <RequireLogin signInPath="/sign-in" signInMessage={t("t.loginIsRequired")}>
-        <FormsLayout className={styles["lottery-results"]}>
+        <FormsLayout
+          className={styles["lottery-results"]}
+          pageTitle={`${t("listings.lotteryResults.header")} - ${listing?.name}`}
+        >
           {noApplication && (
             <ApplicationError error={t("account.application.noApplicationError")} />
           )}
@@ -221,3 +224,5 @@ export default () => {
     </>
   )
 }
+
+export default LotteryResults

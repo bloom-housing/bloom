@@ -3,7 +3,10 @@ import { useForm } from "react-hook-form"
 
 import { FieldGroup, Form, Select, t } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
-import { MultiselectQuestionsApplicationSectionEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  FeatureFlagEnum,
+  MultiselectQuestionsApplicationSectionEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import {
   ethnicityKeys,
   raceKeys,
@@ -16,8 +19,10 @@ import {
   pushGtmEvent,
   AuthContext,
   listingSectionQuestions,
+  limitedHowDidYouHear,
 } from "@bloom-housing/shared-helpers"
 import FormsLayout from "../../../layouts/forms"
+import { isFeatureFlagOn } from "../../../lib/helpers"
 import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
 import ApplicationFormLayout from "../../../layouts/application-form"
@@ -54,8 +59,13 @@ const ApplicationDemographics = () => {
     conductor.routeToNextOrReturnUrl()
   }
 
+  const enableLimitedHowDidYouHear = isFeatureFlagOn(
+    conductor.config,
+    FeatureFlagEnum.enableLimitedHowDidYouHear
+  )
+
   const howDidYouHearOptions = () => {
-    return howDidYouHear?.map((item) => ({
+    return (enableLimitedHowDidYouHear ? limitedHowDidYouHear : howDidYouHear)?.map((item) => ({
       id: item.id,
       label: t(`application.review.demographics.howDidYouHearOptions.${item.id}`),
       defaultChecked: application.demographics.howDidYouHear?.includes(item.id),
@@ -93,7 +103,11 @@ const ApplicationDemographics = () => {
   }, [profile])
 
   return (
-    <FormsLayout>
+    <FormsLayout
+      pageTitle={`${t("pageTitle.demographics")} - ${t("listings.apply.applyOnline")} - ${
+        listing?.name
+      }`}
+    >
       <Form onSubmit={handleSubmit(onSubmit)}>
         <ApplicationFormLayout
           listingName={listing?.name}

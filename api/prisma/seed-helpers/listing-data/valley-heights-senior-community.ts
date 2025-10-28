@@ -1,4 +1,8 @@
-import { ListingsStatusEnum, ReviewOrderTypeEnum } from '@prisma/client';
+import {
+  ApplicationMethodsTypeEnum,
+  ListingsStatusEnum,
+  ReviewOrderTypeEnum,
+} from '@prisma/client';
 import dayjs from 'dayjs';
 
 export const valleyHeightsSeniorCommunity = {
@@ -20,7 +24,6 @@ export const valleyHeightsSeniorCommunity = {
   unitAmenities: null,
   servicesOffered: null,
   yearBuilt: 2019,
-  applicationDueDate: null,
   applicationOpenDate: dayjs(new Date()).subtract(100, 'days').toDate(),
   applicationFee: '50',
   applicationOrganization: null,
@@ -29,6 +32,11 @@ export const valleyHeightsSeniorCommunity = {
   applicationDropOffAddressOfficeHours: null,
   applicationDropOffAddressType: null,
   applicationMailingAddressType: null,
+  applicationMethods: {
+    create: {
+      type: ApplicationMethodsTypeEnum.Internal,
+    },
+  },
   buildingSelectionCriteria: null,
   costsNotIncluded: 'Residents are responsible for gas and electric. ',
   creditHistory: null,

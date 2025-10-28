@@ -24,6 +24,7 @@
       color: var(--seeds-text-color);
       font-family: var(--seeds-font-alt-sans);
       width: 100%;
+      min-height: var(--seeds-s56);
       @media (--md-down) {
         flex-direction: column;
       }

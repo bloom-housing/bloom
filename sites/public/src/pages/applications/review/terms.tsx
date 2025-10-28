@@ -15,9 +15,15 @@ import {
 import FormsLayout from "../../../layouts/forms"
 import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
-import { untranslateMultiselectQuestion } from "../../../lib/helpers"
+import {
+  isFeatureFlagOn,
+  isUnitGroupAppBase,
+  isUnitGroupAppWaitlist,
+  untranslateMultiselectQuestion,
+} from "../../../lib/helpers"
 import {
   ApplicationReviewStatusEnum,
+  FeatureFlagEnum,
   MultiselectQuestionsApplicationSectionEnum,
   ReviewOrderTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -52,6 +58,13 @@ const ApplicationTerms = () => {
       conductor.currentStep.save({ acceptedTerms })
       application.acceptedTerms = acceptedTerms
       application.completedSections = 6
+
+      if (!isFeatureFlagOn(conductor.config, FeatureFlagEnum.enableFullTimeStudentQuestion)) {
+        application.applicant.fullTimeStudent = null
+        application.householdMember.forEach((member) => {
+          member.fullTimeStudent = null
+        })
+      }
 
       if (application?.programs?.length) {
         untranslateMultiselectQuestion(application.programs, listing)
@@ -101,6 +114,16 @@ const ApplicationTerms = () => {
   const content = useMemo(() => {
     switch (listing?.reviewOrderType) {
       case ReviewOrderTypeEnum.firstComeFirstServe:
+        if (isUnitGroupAppWaitlist(listing, conductor.config)) {
+          return {
+            text: t("application.review.terms.waitlist.text"),
+          }
+        }
+        if (isUnitGroupAppBase(listing, conductor.config)) {
+          return {
+            text: t("application.review.terms.base.text"),
+          }
+        }
         return {
           text: t("application.review.terms.fcfs.text"),
         }
@@ -115,7 +138,7 @@ const ApplicationTerms = () => {
       default:
         return { text: "" }
     }
-  }, [listing])
+  }, [conductor.config, listing])
 
   useEffect(() => {
     if (application.confirmationCode && router.isReady) {
@@ -136,7 +159,11 @@ const ApplicationTerms = () => {
   }, [profile])
 
   return (
-    <FormsLayout>
+    <FormsLayout
+      pageTitle={`${t("application.review.terms.title")} - ${t("listings.apply.applyOnline")} - ${
+        listing?.name
+      }`}
+    >
       <Form id="review-terms" onSubmit={handleSubmit(onSubmit)}>
         <ApplicationFormLayout
           listingName={listing?.name}

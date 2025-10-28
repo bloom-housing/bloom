@@ -171,11 +171,15 @@ const Settings = () => {
     )
   }
 
+  if (profile?.userRoles?.isPartner || profile?.userRoles?.isSupportAdmin) {
+    window.location.href = "/unauthorized"
+  }
+
   return (
     <>
       <Layout>
         <Head>
-          <title>{t("nav.siteTitlePartners")}</title>
+          <title>{`Settings - ${t("nav.siteTitlePartners")}`}</title>
         </Head>
         <NavigationHeader className="relative" title={t("t.settings")} />
         <section>

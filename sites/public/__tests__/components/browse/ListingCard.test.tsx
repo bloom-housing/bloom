@@ -6,6 +6,7 @@ import { getListingTags } from "../../../src/components/listing/listing_sections
 import {
   FeatureFlagEnum,
   ListingsStatusEnum,
+  MultiselectQuestionsApplicationSectionEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import dayjs from "dayjs"
 
@@ -41,10 +42,10 @@ describe("<ListingCard>", () => {
     tags.forEach((tag) => {
       expect(view.getByText(tag.title)).toBeDefined()
     })
-    expect(view.getByText("Unit Type")).toBeDefined()
-    expect(view.getByText("Minimum Income")).toBeDefined()
+    expect(view.getByText("Unit type")).toBeDefined()
+    expect(view.getByText("Minimum income")).toBeDefined()
     expect(view.getByText("Rent")).toBeDefined()
-    expect(view.getByText("First Come First Serve", { exact: false })).toBeDefined()
+    expect(view.getByText("First come first serve", { exact: false })).toBeDefined()
     expect(view.getByLabelText("A picture of the building")).toBeDefined()
     expect(view.getByRole("link", { name: listing.name })).toHaveAttribute(
       "href",
@@ -76,5 +77,69 @@ describe("<ListingCard>", () => {
       />
     )
     expect(view.queryByText("Veteran")).toBeNull()
+  })
+  it("shows programs tags when swapCommunityTypeWithPrograms is true", () => {
+    const view = render(
+      <ListingCard
+        listing={{
+          ...listing,
+          listingMultiselectQuestions: [
+            {
+              ordinal: 1,
+              multiselectQuestions: {
+                id: "prog_id_1",
+                createdAt: new Date(),
+                updatedAt: new Date(),
+                text: "Seniors 62+",
+                jurisdictions: [],
+                applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
+              },
+            },
+            {
+              ordinal: 2,
+              multiselectQuestions: {
+                id: "prog_id_2",
+                createdAt: new Date(),
+                updatedAt: new Date(),
+                text: "Supportive Housing for the Homeless",
+                jurisdictions: [],
+                applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
+              },
+            },
+          ],
+        }}
+        jurisdiction={{
+          ...jurisdiction,
+          featureFlags: [
+            ...jurisdiction.featureFlags,
+            {
+              name: FeatureFlagEnum.swapCommunityTypeWithPrograms,
+              id: "id",
+              createdAt: new Date(),
+              updatedAt: new Date(),
+              active: true,
+              description: "",
+              jurisdictions: [],
+            },
+          ],
+        }}
+      />
+    )
+    expect(view.getByText("Seniors 62+")).toBeDefined()
+    expect(view.getByText("Supportive housing for the homeless")).toBeDefined()
+  })
+  it("renders with no address", () => {
+    const view = render(
+      <ListingCard
+        listing={{
+          ...listing,
+          status: ListingsStatusEnum.active,
+          applicationDueDate: dayjs(new Date()).add(5, "days").toDate(),
+          listingsBuildingAddress: null,
+        }}
+        jurisdiction={jurisdiction}
+      />
+    )
+    expect(view.getByText(listing.name)).toBeDefined()
   })
 })

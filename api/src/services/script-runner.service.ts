@@ -1,10 +1,19 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  BadRequestException,
+  NotImplementedException,
+  Inject,
+  Logger,
+} from '@nestjs/common';
 import {
   LanguagesEnum,
+  ListingsStatusEnum,
   MultiselectQuestionsApplicationSectionEnum,
+  MultiselectQuestionsStatusEnum,
   Prisma,
   ReviewOrderTypeEnum,
 } from '@prisma/client';
+import dayjs from 'dayjs';
 import { Request as ExpressRequest } from 'express';
 import https from 'https';
 import { AmiChartService } from './ami-chart.service';
@@ -17,11 +26,14 @@ import { User } from '../dtos/users/user.dto';
 import { mapTo } from '../utilities/mapTo';
 import { BulkApplicationResendDTO } from '../dtos/script-runner/bulk-application-resend.dto';
 import { Application } from '../dtos/applications/application.dto';
+import { ApplicationMultiselectQuestion } from '../dtos/applications/application-multiselect-question.dto';
 import { AmiChartImportDTO } from '../dtos/script-runner/ami-chart-import.dto';
 import { AmiChartCreate } from '../dtos/ami-charts/ami-chart-create.dto';
 import { AmiChartUpdate } from '../dtos/ami-charts/ami-chart-update.dto';
 import MultiselectQuestion from '../dtos/multiselect-questions/multiselect-question.dto';
+import { MultiselectOption } from '../dtos/multiselect-questions/multiselect-option.dto';
 import { AmiChartUpdateImportDTO } from '../dtos/script-runner/ami-chart-update-import.dto';
+import { calculateSkip, calculateTake } from '../utilities/pagination-helpers';
 
 /**
   this is the service for running scripts
@@ -35,6 +47,8 @@ export class ScriptRunnerService {
     private featureFlagService: FeatureFlagService,
     private multiselectQuestionService: MultiselectQuestionService,
     private prisma: PrismaService,
+    @Inject(Logger)
+    private logger = new Logger(ScriptRunnerService.name),
   ) {}
 
   /**
@@ -652,6 +666,356 @@ export class ScriptRunnerService {
   }
 
   /**
+   *
+   * @param req incoming request object
+   * @returns successDTO
+   * @description pulls in all multiselect questions, updates new fields
+   * and moves option data out of JSON format and into MultiselectOptions table
+   */
+  async migrateMultiselectDataToRefactor(
+    req: ExpressRequest,
+  ): Promise<SuccessDTO> {
+    const requestingUser = mapTo(User, req['user']);
+    await this.markScriptAsRunStart(
+      'migrate multiselect data to refactor',
+      requestingUser,
+    );
+
+    const multiselectQuestions =
+      await this.prisma.multiselectQuestions.findMany({
+        include: {
+          listings: {
+            include: {
+              listings: {
+                select: {
+                  status: true,
+                },
+              },
+            },
+          },
+        },
+      });
+
+    for (const msq of multiselectQuestions) {
+      const id = msq.id;
+
+      const hasPublishedListing = msq.listings.some(({ listings }) => {
+        return (
+          listings.status === ListingsStatusEnum.active ||
+          listings.status === ListingsStatusEnum.closed
+        );
+      });
+      const status: MultiselectQuestionsStatusEnum = hasPublishedListing
+        ? MultiselectQuestionsStatusEnum.active
+        : MultiselectQuestionsStatusEnum.visible;
+
+      const options = msq.options as unknown[] as MultiselectOption[];
+
+      const isExclusive = options.some((options) => {
+        return options.exclusive;
+      });
+      await this.prisma.multiselectQuestions.update({
+        data: { isExclusive: isExclusive, status: status },
+        where: { id: id },
+      });
+
+      await this.prisma.multiselectOptions.createMany({
+        data: options.map((option) => {
+          return {
+            description:
+              option.description?.trim() === '' ? null : option.description,
+            isOptOut: false,
+            links: option.links
+              ? (option.links as unknown as Prisma.InputJsonArray)
+              : undefined,
+            mapLayerId: option.mapLayerId,
+            mapPinPosition: option.mapPinPosition,
+            multiselectQuestionId: id,
+            name: option.text,
+            ordinal: option.ordinal,
+            radiusSize: option.radiusSize,
+            shouldCollectAddress: option.collectAddress,
+            shouldCollectName: option.collectName,
+            shouldCollectRelationship: option.collectRelationship,
+            validationMethod: option.validationMethod,
+          };
+        }),
+      });
+
+      if (msq.optOutText) {
+        await this.prisma.multiselectOptions.create({
+          data: {
+            isOptOut: true,
+            multiselectQuestionId: id,
+            name: msq.optOutText,
+            ordinal: options.length + 1,
+          },
+        });
+      }
+    }
+
+    await this.markScriptAsComplete(
+      'migrate multiselect data to refactor',
+      requestingUser,
+    );
+    return { success: true };
+  }
+
+  /**
+   *
+   * @param req incoming request object
+   * @param page which page of the application table to query from
+   * @param pageSize size of the page of the application table being quieried
+   * @returns successDTO
+   * @description pulls all applications within a given range, loops over the
+   * preferences and programs jsons to find the correct MSQ and option, and maps
+   * the data to the ApplicationSelections and ApplicationSelectionOptions tables.
+   */
+  async migrateMultiselectApplicationDataToRefactor(
+    req: ExpressRequest,
+    page?: number,
+    pageSize?: number,
+  ): Promise<SuccessDTO> {
+    const requestingUser = mapTo(User, req['user']);
+    await this.markScriptAsRunStart(
+      `migrate multiselect application data to refactor with page ${
+        page || 1
+      } of size ${pageSize || 5_000}`,
+      requestingUser,
+    );
+
+    const skip = calculateSkip(pageSize || 5_000, page || 1);
+    const take = calculateTake(pageSize || 5_000);
+    console.log(`START OF RUN ${page ? skip : 1}:${skip + take}\n\n\n\n`);
+    const applications = await this.prisma.applications.findMany({
+      include: {
+        listings: {
+          include: {
+            jurisdictions: {
+              select: {
+                name: true,
+              },
+            },
+          },
+        },
+      },
+      skip: skip,
+      take: take,
+      orderBy: { createdAt: 'asc' },
+    });
+
+    for (const { id, listings, preferences, programs } of applications) {
+      const preferencesAndPrograms = (
+        preferences as unknown[] as ApplicationMultiselectQuestion[]
+      ).concat(
+        programs
+          ? (programs as unknown[] as ApplicationMultiselectQuestion[])
+          : [],
+      );
+
+      for (const {
+        key,
+        claimed,
+        options,
+        multiselectQuestionId = null,
+      } of preferencesAndPrograms as unknown[] as ApplicationMultiselectQuestion[]) {
+        if (!claimed) {
+          continue;
+        }
+        let multiselectQuestion;
+        if (multiselectQuestionId) {
+          multiselectQuestion =
+            await this.prisma.multiselectQuestions.findFirst({
+              include: { multiselectOptions: true },
+              where: { id: multiselectQuestionId },
+            });
+        } else {
+          multiselectQuestion =
+            await this.prisma.multiselectQuestions.findFirst({
+              include: { multiselectOptions: true },
+              where: {
+                text: { equals: key, mode: Prisma.QueryMode.insensitive },
+              },
+            });
+        }
+        let hasOptedOut = false;
+        const selectedOptions = [];
+        if (!multiselectQuestion) {
+          console.log(
+            `Could not find MSQ with id: "${multiselectQuestionId}" or key: "${key}" for application with id: "${id}"`,
+          );
+          continue;
+        }
+
+        for (const selected of options.filter(({ checked }) => checked)) {
+          const selectedName = selected.key
+            ?.trim()
+            ?.replaceAll('%{county}', listings.jurisdictions.name)
+            ?.replaceAll('  ', ' ')
+            ?.replaceAll("'", '')
+            ?.replaceAll('.', '')
+            ?.toLowerCase();
+          const multiselectOption = multiselectQuestion.multiselectOptions.find(
+            (option: MultiselectOption) =>
+              option.name
+                ?.trim()
+                ?.replaceAll('  ', ' ')
+                ?.replaceAll("'", '')
+                ?.replaceAll('.', '')
+                ?.toLowerCase() === selectedName,
+          );
+          if (!multiselectOption) {
+            console.log(
+              `Could not match MSQ option with key: "${selected.key}" for MSQ with id: "${multiselectQuestion.id}"`,
+            );
+            continue;
+          }
+
+          if (multiselectOption.isOptOut) {
+            hasOptedOut = true;
+          }
+
+          const selectedOptionBody = {
+            addressHolderAddressId: null,
+            addressHolderName: null,
+            addressHolderRelationship: null,
+            isGeocodingVerified: null,
+            multiselectOptionId: multiselectOption.id,
+          };
+
+          for (const { key, value } of selected.extraData) {
+            if (key === 'addressHolderAddress' || key === 'address') {
+              const address = await this.prisma.address.create({ data: value });
+              selectedOptionBody.addressHolderAddressId = address.id;
+            } else if (key === 'addressHolderName' || key === 'name') {
+              selectedOptionBody.addressHolderName = value;
+            } else if (
+              key === 'addressHolderRelationship' ||
+              key === 'relationship'
+            ) {
+              selectedOptionBody.addressHolderRelationship = value;
+            } else if (key === 'geocodingVerified') {
+              selectedOptionBody.isGeocodingVerified = Boolean(value);
+            }
+          }
+          selectedOptions.push(selectedOptionBody);
+        }
+        const selectedBody = {
+          applicationId: id,
+          hasOptedOut: hasOptedOut,
+          multiselectQuestionId: multiselectQuestion.id,
+          selections: { createMany: { data: selectedOptions } },
+        };
+        await this.prisma.applicationSelections.create({
+          data: selectedBody,
+        });
+      }
+    }
+    console.log(`END OF RUN ${page ? skip : 1}:${skip + take}\n\n\n\n`);
+
+    await this.markScriptAsComplete(
+      `migrate multiselect application data to refactor with page ${
+        page || 1
+      } of size ${pageSize || 5_000}`,
+      requestingUser,
+    );
+    return { success: true };
+  }
+
+  /**
+   * @param req incoming request object
+   * @returns successDTO
+   * @description for all closed listings populate the expire_after on applications
+   */
+  async setInitialExpireAfterValues(req: ExpressRequest): Promise<SuccessDTO> {
+    const requestingUser = mapTo(User, req['user']);
+    if (!process.env.APPLICATION_DAYS_TILL_EXPIRY) {
+      throw new NotImplementedException(
+        'APPLICATION_DAYS_TILL_EXPIRY env variable is not set',
+      );
+    }
+    await this.markScriptAsRunStart(
+      'set initial expire_after value',
+      requestingUser,
+    );
+
+    // Set the expire_after field on applications tied to closed listings
+    const closedListings = await this.prisma.listings.findMany({
+      select: { id: true, closedAt: true },
+      where: { status: ListingsStatusEnum.closed, closedAt: { not: null } },
+    });
+    this.logger.log(
+      `updating expireAfter for ${closedListings.length} closed listings`,
+    );
+    for (const listing of closedListings) {
+      const expireAfter = dayjs(listing.closedAt)
+        .add(Number(process.env.APPLICATION_DAYS_TILL_EXPIRY), 'days')
+        .toDate();
+      const updatedApplications = await this.prisma.applications.updateMany({
+        data: { expireAfter: expireAfter },
+        where: { listingId: listing.id },
+      });
+      this.logger.log(
+        `updated ${updatedApplications.count} applications for ${listing.id}`,
+      );
+    }
+
+    await this.markScriptAsComplete(
+      'set initial expire_after value',
+      requestingUser,
+    );
+    return { success: true };
+  }
+
+  /**
+   *
+   * @param req incoming request object
+   * @returns successDTO
+   * @description Set the is_newest field on application if newest application for applicant
+   */
+  async setIsNewestApplicationValues(req: ExpressRequest): Promise<SuccessDTO> {
+    const requestingUser = mapTo(User, req['user']);
+    await this.markScriptAsRunStart(
+      'set is_newest field on applications',
+      requestingUser,
+    );
+
+    const userCount = await this.prisma.userAccounts.count({
+      where: { userRoles: { is: null } },
+    });
+    this.logger.log(`total public user count ${userCount}`);
+    // Batch in groups of 1000
+    for (let currentCount = 0; currentCount < userCount; currentCount += 1000) {
+      const applicationsToUpdate: {
+        user_id: string;
+        application_id: string;
+      }[] = await this.prisma
+        .$queryRaw`select a.user_id, (a.application_ids::jsonb)[0]::text as application_id from (
+                    select a.user_id, json_agg(a.id ORDER BY a.created_at DESC) as application_ids from applications a
+                    GROUP BY a.user_id) a
+                    OFFSET ${currentCount}
+                    LIMIT 1000;`;
+      this.logger.log(`updating ${applicationsToUpdate.length} applications`);
+      await this.prisma.applications.updateMany({
+        data: { isNewest: true },
+        where: {
+          id: {
+            in: applicationsToUpdate.map((app) =>
+              app.application_id.replace('"', '').replace('"', ''),
+            ),
+          },
+        },
+      });
+    }
+
+    await this.markScriptAsComplete(
+      'set is_newest field on applications',
+      requestingUser,
+    );
+    return { success: true };
+  }
+
+  /**
     this is simply an example
   */
   async example(req: ExpressRequest): Promise<SuccessDTO> {
@@ -752,25 +1116,28 @@ export class ScriptRunnerService {
     }
 
     for (const translation of translations) {
-      const translationsJSON = translation.translations as Prisma.JsonObject;
+      if (translation?.translation) {
+        const translationsJSON =
+          (translation?.translations as Prisma.JsonObject) || {};
 
-      Object.keys(newTranslations).forEach((key) => {
-        translationsJSON[key] = {
-          ...((translationsJSON[key] || {}) as Prisma.JsonObject),
-          ...newTranslations[key],
-        };
-      });
+        Object.keys(newTranslations).forEach((key) => {
+          translationsJSON[key] = {
+            ...((translationsJSON[key] || {}) as Prisma.JsonObject),
+            ...newTranslations[key],
+          };
+        });
 
-      // technique taken from
-      // https://www.prisma.io/docs/orm/prisma-client/special-fields-and-types/working-with-json-fields#advanced-example-update-a-nested-json-key-value
-      const dataClause = Prisma.validator<Prisma.TranslationsUpdateInput>()({
-        translations: translationsJSON,
-      });
+        // technique taken from
+        // https://www.prisma.io/docs/orm/prisma-client/special-fields-and-types/working-with-json-fields#advanced-example-update-a-nested-json-key-value
+        const dataClause = Prisma.validator<Prisma.TranslationsUpdateInput>()({
+          translations: translationsJSON,
+        });
 
-      await this.prisma.translations.update({
-        where: { id: translation.id },
-        data: dataClause,
-      });
+        await this.prisma.translations.update({
+          where: { id: translation.id },
+          data: dataClause,
+        });
+      }
     }
   }
 

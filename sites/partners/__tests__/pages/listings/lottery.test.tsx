@@ -463,7 +463,7 @@ describe("lottery", () => {
     expect(await findByText("Are you sure?")).toBeInTheDocument()
     expect(
       getByText(
-        "Retracting the lottery will revoke Partner users’ access to the lottery data, including their ability to publish results to applicants."
+        "Retracting the lottery will revoke Partner users' access to the lottery data, including their ability to publish results to applicants."
       )
     ).toBeInTheDocument()
   })
@@ -744,7 +744,7 @@ describe("lottery", () => {
     expect(queryByText("Release lottery")).not.toBeInTheDocument()
   })
 
-  it("should show publish modal if in released to partners state as a parter", async () => {
+  it("should not show publish button if in released to partners state as a jurisdictional admin", async () => {
     mockNextRouter({ id: "Uvbk5qurpB2WI9V6WnNdH" })
     document.cookie = "access-token-available=True"
     server.use(
@@ -775,20 +775,12 @@ describe("lottery", () => {
       lotteryStatus: LotteryStatusEnum.releasedToPartners,
     }
 
-    const { getByText, findByText } = render(<Lottery listing={updatedListing} />)
+    const { getByText, findByText, queryByText } = render(<Lottery listing={updatedListing} />)
 
     const header = await findByText("Lottery")
     expect(header).toBeInTheDocument()
-
     expect(getByText("Publish lottery data")).toBeInTheDocument()
-    fireEvent.click(getByText("Publish"))
-    expect(await findByText("Confirmation needed")).toBeInTheDocument()
-    expect(
-      getByText(
-        "Publishing the lottery for this listing will email a notification to applicants that results are available in their account."
-      )
-    ).toBeInTheDocument()
-    expect(getByText("Publish lottery")).toBeInTheDocument()
+    expect(queryByText("Publish")).not.toBeInTheDocument()
   })
 
   it("should show export if in published to public state as a parter", async () => {
@@ -943,7 +935,7 @@ describe("lottery", () => {
     expect(header).toBeInTheDocument()
 
     expect(getByText("Listing closed")).toBeInTheDocument()
-    expect(getByText("by Property")).toBeInTheDocument()
+    expect(getByText("by property")).toBeInTheDocument()
     expect(getByText("September 6th, 2025 at 8:15 am")).toBeInTheDocument()
     expect(getByText("Lottery was run")).toBeInTheDocument()
     expect(getByText("by Admin One")).toBeInTheDocument()

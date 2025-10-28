@@ -1,4 +1,4 @@
-import { IsBoolean, IsNumber, ValidateNested } from 'class-validator';
+import { IsBoolean, IsEnum, IsNumber, ValidateNested } from 'class-validator';
 import { Expose, Type } from 'class-transformer';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 import { AbstractDTO } from '../shared/abstract.dto';
@@ -6,6 +6,8 @@ import { UnitType } from '../unit-types/unit-type.dto';
 import { UnitAccessibilityPriorityType } from '../unit-accessibility-priority-types/unit-accessibility-priority-type.dto';
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { UnitGroupAmiLevel } from './unit-group-ami-level.dto';
+import { RentTypeEnum } from '@prisma/client';
+import { ValidateUnitGroupRent } from '../../decorators/validate-unit-groups-rent.decorator';
 
 class UnitGroup extends AbstractDTO {
   @Expose()
@@ -17,6 +19,16 @@ class UnitGroup extends AbstractDTO {
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   minOccupancy?: number;
+
+  @Expose()
+  @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  flatRentValueFrom?: number;
+
+  @Expose()
+  @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  flatRentValueTo?: number;
 
   @Expose()
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
@@ -62,6 +74,16 @@ class UnitGroup extends AbstractDTO {
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   sqFeetMax?: number;
+
+  @Expose()
+  @IsEnum(RentTypeEnum, {
+    groups: [ValidationsGroupsEnum.default],
+  })
+  @ValidateUnitGroupRent({
+    groups: [ValidationsGroupsEnum.default],
+  })
+  @ApiPropertyOptional()
+  rentType?: RentTypeEnum;
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })

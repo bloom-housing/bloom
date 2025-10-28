@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
+import Markdown from "markdown-to-jsx"
 import {
   FeatureFlagEnum,
   Jurisdiction,
@@ -15,12 +16,13 @@ import {
   pdfUrlFromListingEvents,
   ResponseException,
 } from "@bloom-housing/shared-helpers"
-import { Heading } from "@bloom-housing/ui-seeds"
+import { Card, Heading } from "@bloom-housing/ui-seeds"
 import { ErrorPage } from "../../pages/_error"
 import { fetchFavoriteListingIds, isFeatureFlagOn, saveListingFavorite } from "../../lib/helpers"
 import {
   getAdditionalInformation,
   getAmiValues,
+  getDateString,
   getEligibilitySections,
   getFeatures,
   getPaperApplications,
@@ -43,6 +45,7 @@ import { Neighborhood } from "./listing_sections/Neighborhood"
 import { RentSummary } from "./listing_sections/RentSummary"
 import { UnitSummaries } from "./listing_sections/UnitSummaries"
 import styles from "./ListingViewSeeds.module.scss"
+import { ReadMore } from "../../patterns/ReadMore"
 
 interface ListingProps {
   listing: Listing
@@ -134,7 +137,19 @@ export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: Li
     <>
       {listing.whatToExpect && (
         <InfoCard heading={t("whatToExpect.label")}>
-          <div>{listing.whatToExpect}</div>
+          <div className={"bloom-markdown"}>
+            <Markdown>{listing.whatToExpect}</Markdown>
+          </div>
+          {listing.whatToExpectAdditionalText &&
+            isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableWhatToExpectAdditionalField) && (
+              <div>
+                <ReadMore
+                  className={"bloom-markdown"}
+                  maxLength={0}
+                  content={listing.whatToExpectAdditionalText}
+                />
+              </div>
+            )}
         </InfoCard>
       )}
     </>
@@ -162,6 +177,24 @@ export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: Li
             : []
         }
       />
+    </>
+  )
+
+  const ListingUpdatedAt = (
+    <>
+      {isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableListingUpdatedAt) &&
+        listing.contentUpdatedAt && (
+          <Card
+            className={`${styles["mobile-full-width-card"]} ${styles["mobile-no-bottom-border"]}`}
+          >
+            <Card.Section>
+              <p>
+                {t("listings.listingUpdated")}:{" "}
+                {getDateString(listing.contentUpdatedAt, "MMM DD, YYYY")}
+              </p>
+            </Card.Section>
+          </Card>
+        )}
     </>
   )
 
@@ -194,6 +227,7 @@ export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: Li
             : undefined
         }
       />
+      {ListingUpdatedAt}
     </>
   )
 
@@ -220,10 +254,7 @@ export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: Li
           />
           <div className={styles["main-content"]}>
             <div className={styles["hide-desktop"]}>{ApplyBar}</div>
-            <Eligibility
-              eligibilitySections={getEligibilitySections(jurisdiction, listing)}
-              section8Acceptance={listing.section8Acceptance}
-            />
+            <Eligibility eligibilitySections={getEligibilitySections(jurisdiction, listing)} />
             <Features features={getFeatures(listing, jurisdiction)}>{UnitFeatures}</Features>
             <Neighborhood
               address={listing.listingsBuildingAddress}

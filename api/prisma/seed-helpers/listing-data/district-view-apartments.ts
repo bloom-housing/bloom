@@ -1,4 +1,5 @@
 import {
+  ApplicationMethodsTypeEnum,
   ListingEventsTypeEnum,
   ListingsStatusEnum,
   ReviewOrderTypeEnum,
@@ -33,6 +34,12 @@ export const districtViewApartments = {
   applicationDropOffAddressOfficeHours: null,
   applicationDropOffAddressType: null,
   applicationMailingAddressType: null,
+  applicationMethods: {
+    create: {
+      type: ApplicationMethodsTypeEnum.ExternalLink,
+      externalReference: 'https://example.com/application',
+    },
+  },
   buildingSelectionCriteria: null,
   costsNotIncluded: null,
   creditHistory: null,

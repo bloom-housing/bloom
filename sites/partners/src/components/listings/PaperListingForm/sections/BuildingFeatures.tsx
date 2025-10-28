@@ -1,16 +1,19 @@
 import React, { useMemo, useContext, useEffect } from "react"
 import { useFormContext } from "react-hook-form"
 import { t, Textarea, FieldGroup } from "@bloom-housing/ui-components"
-import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
+import { Grid } from "@bloom-housing/ui-seeds"
 import { listingFeatures, AuthContext } from "@bloom-housing/shared-helpers"
 import {
   FeatureFlagEnum,
   ListingFeatures,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
+import { defaultFieldProps } from "../../../../lib/helpers"
+import styles from "../ListingForm.module.scss"
 
 type BuildingFeaturesProps = {
   existingFeatures: ListingFeatures
+  requiredFields: string[]
 }
 
 const BuildingFeatures = (props: BuildingFeaturesProps) => {
@@ -18,7 +21,7 @@ const BuildingFeatures = (props: BuildingFeaturesProps) => {
   const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, watch, setValue } = formMethods
+  const { register, watch, setValue, errors, clearErrors } = formMethods
   const jurisdiction = watch("jurisdictions.id")
 
   const featureOptions = useMemo(() => {
@@ -52,80 +55,110 @@ const BuildingFeatures = (props: BuildingFeaturesProps) => {
         <Grid.Row>
           <Grid.Cell>
             <Textarea
-              label={t("t.propertyAmenities")}
-              name={"amenities"}
-              id={"amenities"}
               fullWidth={true}
+              placeholder={""}
               register={register}
               maxLength={600}
+              {...defaultFieldProps(
+                "amenities",
+                t("t.propertyAmenities"),
+                props.requiredFields,
+                errors,
+                clearErrors
+              )}
             />
           </Grid.Cell>
           <Grid.Cell>
             <Textarea
-              label={t("t.additionalAccessibility")}
-              name={"accessibility"}
-              id={"accessibility"}
               fullWidth={true}
+              placeholder={""}
               register={register}
               maxLength={600}
-            />
-          </Grid.Cell>
-        </Grid.Row>
-        <Grid.Row>
-          <Grid.Cell>
-            <Textarea
-              label={t("t.unitAmenities")}
-              name={"unitAmenities"}
-              id={"unitAmenities"}
-              fullWidth={true}
-              register={register}
-              maxLength={600}
-            />
-          </Grid.Cell>
-          <Grid.Cell>
-            <Textarea
-              label={t("t.smokingPolicy")}
-              name={"smokingPolicy"}
-              id={"smokingPolicy"}
-              fullWidth={true}
-              register={register}
-              maxLength={600}
+              {...defaultFieldProps(
+                "accessibility",
+                t("t.additionalAccessibility"),
+                props.requiredFields,
+                errors,
+                clearErrors
+              )}
             />
           </Grid.Cell>
         </Grid.Row>
         <Grid.Row>
           <Grid.Cell>
             <Textarea
-              label={t("t.petsPolicy")}
-              name={"petPolicy"}
-              id={"petPolicy"}
               fullWidth={true}
+              placeholder={""}
               register={register}
               maxLength={600}
+              {...defaultFieldProps(
+                "unitAmenities",
+                t("t.unitAmenities"),
+                props.requiredFields,
+                errors,
+                clearErrors
+              )}
             />
           </Grid.Cell>
           <Grid.Cell>
             <Textarea
-              label={t("t.servicesOffered")}
-              name={"servicesOffered"}
-              id={"servicesOffered"}
               fullWidth={true}
+              placeholder={""}
               register={register}
               maxLength={600}
+              {...defaultFieldProps(
+                "smokingPolicy",
+                t("t.smokingPolicy"),
+                props.requiredFields,
+                errors,
+                clearErrors
+              )}
+            />
+          </Grid.Cell>
+        </Grid.Row>
+        <Grid.Row>
+          <Grid.Cell>
+            <Textarea
+              fullWidth={true}
+              placeholder={""}
+              register={register}
+              maxLength={600}
+              {...defaultFieldProps(
+                "petPolicy",
+                t("t.petsPolicy"),
+                props.requiredFields,
+                errors,
+                clearErrors
+              )}
+            />
+          </Grid.Cell>
+          <Grid.Cell>
+            <Textarea
+              fullWidth={true}
+              placeholder={""}
+              register={register}
+              maxLength={600}
+              {...defaultFieldProps(
+                "servicesOffered",
+                t("t.servicesOffered"),
+                props.requiredFields,
+                errors,
+                clearErrors
+              )}
             />
           </Grid.Cell>
         </Grid.Row>
         {!enableAccessibilityFeatures ? null : (
           <Grid.Row>
-            <FieldValue label={t("listings.sections.accessibilityFeatures")}>
-              <FieldGroup
-                type="checkbox"
-                name="accessibilityFeatures"
-                fields={featureOptions}
-                register={register}
-                fieldGroupClassName="grid grid-cols-3 mt-4 gap-x-4"
-              />
-            </FieldValue>
+            <FieldGroup
+              type="checkbox"
+              name="accessibilityFeatures"
+              groupLabel={t("listings.sections.accessibilityFeatures")}
+              fields={featureOptions}
+              register={register}
+              fieldGroupClassName="grid grid-cols-3 mt-2 gap-x-4"
+              fieldLabelClassName={styles["label-option"]}
+            />
           </Grid.Row>
         )}
       </SectionWithGrid>

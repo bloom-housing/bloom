@@ -1,7 +1,11 @@
 import React from "react"
 import { cleanup, screen } from "@testing-library/react"
 import { AuthContext } from "@bloom-housing/shared-helpers"
-import { listing } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
+import {
+  listing,
+  mockBaseJurisdiction,
+  mockUser,
+} from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import { ListingContext } from "../../../src/components/listings/ListingContext"
 import ListingFormActions, {
   ListingFormActionsType,
@@ -10,31 +14,12 @@ import { mockNextRouter, render } from "../../testUtils"
 import {
   UserRoleEnum,
   Jurisdiction,
-  LanguagesEnum,
   ListingsStatusEnum,
   User,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import userEvent from "@testing-library/user-event"
 
 afterEach(cleanup)
-
-const mockBaseJurisdiction: Jurisdiction = {
-  id: "id",
-  createdAt: new Date(),
-  updatedAt: new Date(),
-  name: "San Jose",
-  multiselectQuestions: [],
-  languages: [LanguagesEnum.en],
-  publicUrl: "http://localhost:3000",
-  emailFromAddress: "Alameda: Housing Bay Area <bloom-no-reply@exygy.dev>",
-  rentalAssistanceDefault:
-    "Housing Choice Vouchers, Section 8 and other valid rental assistance programs will be considered for this property. In the case of a valid rental subsidy, the required minimum income will be based on the portion of the rent that the tenant pays after use of the subsidy.",
-  enablePartnerSettings: true,
-  listingApprovalPermissions: [],
-  duplicateListingPermissions: [],
-  enableGeocodingPreferences: false,
-  allowSingleUseCodeLogin: false,
-}
 
 const mockAdminOnlyApprovalJurisdiction: Jurisdiction = {
   ...mockBaseJurisdiction,
@@ -52,28 +37,13 @@ const mockAllUserCopyJurisdiction: Jurisdiction = {
     UserRoleEnum.admin,
     UserRoleEnum.jurisdictionAdmin,
     UserRoleEnum.partner,
+    UserRoleEnum.limitedJurisdictionAdmin,
   ],
 }
 
 const mockOnlyAdminAndJurisAdminCopyJurisdiction: Jurisdiction = {
   ...mockBaseJurisdiction,
   duplicateListingPermissions: [UserRoleEnum.admin, UserRoleEnum.jurisdictionAdmin],
-}
-
-const mockUser: User = {
-  id: "123",
-  email: "test@test.com",
-  firstName: "Test",
-  lastName: "User",
-  dob: new Date("2020-01-01"),
-  createdAt: new Date("2020-01-01"),
-  updatedAt: new Date("2020-01-01"),
-  jurisdictions: [],
-  mfaEnabled: false,
-  passwordUpdatedAt: new Date("2020-01-01"),
-  passwordValidForDays: 180,
-  agreedToTermsOfService: true,
-  listings: [],
 }
 
 let adminUser: User = {
@@ -140,7 +110,7 @@ describe("<ListingFormActions>", () => {
             formActionType={ListingFormActionsType.add}
           />
         )
-        expect(screen.getByRole("button", { name: "Save as Draft" })).toBeInTheDocument()
+        expect(screen.getByRole("button", { name: "Save as draft" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Publish" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Exit" })).toBeInTheDocument()
       })
@@ -242,7 +212,7 @@ describe("<ListingFormActions>", () => {
             formActionType={ListingFormActionsType.add}
           />
         )
-        expect(screen.getByRole("button", { name: "Save as Draft" })).toBeInTheDocument()
+        expect(screen.getByRole("button", { name: "Save as draft" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Publish" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Exit" })).toBeInTheDocument()
       })
@@ -341,7 +311,7 @@ describe("<ListingFormActions>", () => {
             formActionType={ListingFormActionsType.add}
           />
         )
-        expect(screen.getByRole("button", { name: "Save as Draft" })).toBeInTheDocument()
+        expect(screen.getByRole("button", { name: "Save as draft" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Publish" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Exit" })).toBeInTheDocument()
       })
@@ -421,7 +391,7 @@ describe("<ListingFormActions>", () => {
           />
         )
         expect(screen.getByRole("button", { name: "Unpublish" })).toBeInTheDocument()
-        expect(screen.getByRole("button", { name: "Post Results" })).toBeInTheDocument()
+        expect(screen.getByRole("button", { name: "Post results" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Save" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Exit" })).toBeInTheDocument()
       })
@@ -446,7 +416,7 @@ describe("<ListingFormActions>", () => {
           />
         )
         expect(screen.getByRole("button", { name: "Publish" })).toBeInTheDocument()
-        expect(screen.getByRole("button", { name: "Save as Draft" })).toBeInTheDocument()
+        expect(screen.getByRole("button", { name: "Save as draft" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Exit" })).toBeInTheDocument()
       })
 
@@ -484,7 +454,7 @@ describe("<ListingFormActions>", () => {
             formActionType={ListingFormActionsType.details}
           />
         )
-        expect(screen.getByRole("button", { name: "Approve & Publish" })).toBeInTheDocument()
+        expect(screen.getByRole("button", { name: "Approve & publish" })).toBeInTheDocument()
         expect(screen.getByRole("link", { name: "Edit" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Copy" })).toBeInTheDocument()
         expect(screen.getByRole("link", { name: "Preview" })).toBeInTheDocument()
@@ -498,9 +468,9 @@ describe("<ListingFormActions>", () => {
             formActionType={ListingFormActionsType.edit}
           />
         )
-        expect(screen.getByRole("button", { name: "Approve & Publish" })).toBeInTheDocument()
+        expect(screen.getByRole("button", { name: "Approve & publish" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Save" })).toBeInTheDocument()
-        expect(screen.getByRole("button", { name: "Request Changes" })).toBeInTheDocument()
+        expect(screen.getByRole("button", { name: "Request changes" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Exit" })).toBeInTheDocument()
       })
 
@@ -512,7 +482,7 @@ describe("<ListingFormActions>", () => {
             formActionType={ListingFormActionsType.details}
           />
         )
-        expect(screen.getByRole("button", { name: "Approve & Publish" })).toBeInTheDocument()
+        expect(screen.getByRole("button", { name: "Approve & publish" })).toBeInTheDocument()
         expect(screen.getByRole("link", { name: "Edit" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Copy" })).toBeInTheDocument()
         expect(screen.getByRole("link", { name: "Preview" })).toBeInTheDocument()
@@ -526,7 +496,7 @@ describe("<ListingFormActions>", () => {
             formActionType={ListingFormActionsType.edit}
           />
         )
-        expect(screen.getByRole("button", { name: "Approve & Publish" })).toBeInTheDocument()
+        expect(screen.getByRole("button", { name: "Approve & publish" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Save" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Exit" })).toBeInTheDocument()
       })
@@ -581,7 +551,7 @@ describe("<ListingFormActions>", () => {
         expect(screen.getByRole("button", { name: "Reopen" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Save" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Unpublish" })).toBeInTheDocument()
-        expect(screen.getByRole("button", { name: "Post Results" })).toBeInTheDocument()
+        expect(screen.getByRole("button", { name: "Post results" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Exit" })).toBeInTheDocument()
       })
 
@@ -596,9 +566,8 @@ describe("<ListingFormActions>", () => {
           />
         )
 
-        await userEvent.click(screen.getByRole("button", { name: "Approve & Publish" }))
+        await userEvent.click(screen.getByRole("button", { name: "Approve & publish" }))
         expect(submitMock).toBeCalledWith("redirect", ListingsStatusEnum.active)
-        screen.debug()
       })
     })
     describe("as a jurisdictional admin", () => {
@@ -618,7 +587,7 @@ describe("<ListingFormActions>", () => {
           />
         )
         expect(screen.getByRole("button", { name: "Submit" })).toBeInTheDocument()
-        expect(screen.getByRole("button", { name: "Save as Draft" })).toBeInTheDocument()
+        expect(screen.getByRole("button", { name: "Save as draft" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Exit" })).toBeInTheDocument()
       })
 
@@ -733,7 +702,7 @@ describe("<ListingFormActions>", () => {
         expect(screen.queryByText("Reopen")).toBeFalsy()
         expect(screen.getByRole("button", { name: "Save" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Unpublish" })).toBeInTheDocument()
-        expect(screen.getByRole("button", { name: "Post Results" })).toBeInTheDocument()
+        expect(screen.getByRole("button", { name: "Post results" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Exit" })).toBeInTheDocument()
       })
     })
@@ -751,7 +720,7 @@ describe("<ListingFormActions>", () => {
           />
         )
         expect(screen.getByRole("button", { name: "Submit" })).toBeInTheDocument()
-        expect(screen.getByRole("button", { name: "Save as Draft" })).toBeInTheDocument()
+        expect(screen.getByRole("button", { name: "Save as draft" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Exit" })).toBeInTheDocument()
       })
 
@@ -871,7 +840,7 @@ describe("<ListingFormActions>", () => {
         expect(screen.queryByText("Reopen")).toBeFalsy()
         expect(screen.getByRole("button", { name: "Save" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Unpublish" })).toBeInTheDocument()
-        expect(screen.getByRole("button", { name: "Post Results" })).toBeInTheDocument()
+        expect(screen.getByRole("button", { name: "Post results" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Exit" })).toBeInTheDocument()
       })
     })
@@ -901,7 +870,7 @@ describe("<ListingFormActions>", () => {
           </AuthContext.Provider>
         )
         expect(screen.getByRole("button", { name: "Publish" })).toBeInTheDocument()
-        expect(screen.getByRole("button", { name: "Save as Draft" })).toBeInTheDocument()
+        expect(screen.getByRole("button", { name: "Save as draft" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Exit" })).toBeInTheDocument()
       })
 
@@ -956,7 +925,7 @@ describe("<ListingFormActions>", () => {
             </ListingContext.Provider>
           </AuthContext.Provider>
         )
-        expect(screen.getByRole("button", { name: "Approve & Publish" })).toBeInTheDocument()
+        expect(screen.getByRole("button", { name: "Approve & publish" })).toBeInTheDocument()
         expect(screen.getByRole("link", { name: "Edit" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Copy" })).toBeInTheDocument()
         expect(screen.getByRole("link", { name: "Preview" })).toBeInTheDocument()
@@ -977,9 +946,9 @@ describe("<ListingFormActions>", () => {
             </ListingContext.Provider>
           </AuthContext.Provider>
         )
-        expect(screen.getByRole("button", { name: "Approve & Publish" })).toBeInTheDocument()
+        expect(screen.getByRole("button", { name: "Approve & publish" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Save" })).toBeInTheDocument()
-        expect(screen.getByRole("button", { name: "Request Changes" })).toBeInTheDocument()
+        expect(screen.getByRole("button", { name: "Request changes" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Exit" })).toBeInTheDocument()
       })
 
@@ -998,7 +967,7 @@ describe("<ListingFormActions>", () => {
             </ListingContext.Provider>
           </AuthContext.Provider>
         )
-        expect(screen.getByRole("button", { name: "Approve & Publish" })).toBeInTheDocument()
+        expect(screen.getByRole("button", { name: "Approve & publish" })).toBeInTheDocument()
         expect(screen.getByRole("link", { name: "Edit" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Copy" })).toBeInTheDocument()
         expect(screen.getByRole("link", { name: "Preview" })).toBeInTheDocument()
@@ -1019,7 +988,7 @@ describe("<ListingFormActions>", () => {
             </ListingContext.Provider>
           </AuthContext.Provider>
         )
-        expect(screen.getByRole("button", { name: "Approve & Publish" })).toBeInTheDocument()
+        expect(screen.getByRole("button", { name: "Approve & publish" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Save" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Exit" })).toBeInTheDocument()
       })
@@ -1089,7 +1058,7 @@ describe("<ListingFormActions>", () => {
         expect(screen.getByRole("button", { name: "Reopen" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Save" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Unpublish" })).toBeInTheDocument()
-        expect(screen.getByRole("button", { name: "Post Results" })).toBeInTheDocument()
+        expect(screen.getByRole("button", { name: "Post results" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Exit" })).toBeInTheDocument()
       })
     })
@@ -1115,7 +1084,7 @@ describe("<ListingFormActions>", () => {
           </AuthContext.Provider>
         )
         expect(screen.getByRole("button", { name: "Publish" })).toBeInTheDocument()
-        expect(screen.getByRole("button", { name: "Save as Draft" })).toBeInTheDocument()
+        expect(screen.getByRole("button", { name: "Save as draft" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Exit" })).toBeInTheDocument()
       })
 
@@ -1169,7 +1138,7 @@ describe("<ListingFormActions>", () => {
             </ListingContext.Provider>
           </AuthContext.Provider>
         )
-        expect(screen.getByRole("button", { name: "Approve & Publish" })).toBeInTheDocument()
+        expect(screen.getByRole("button", { name: "Approve & publish" })).toBeInTheDocument()
         expect(screen.getByRole("link", { name: "Edit" })).toBeInTheDocument()
         expect(screen.getByRole("link", { name: "Preview" })).toBeInTheDocument()
       })
@@ -1189,9 +1158,9 @@ describe("<ListingFormActions>", () => {
             </ListingContext.Provider>
           </AuthContext.Provider>
         )
-        expect(screen.getByRole("button", { name: "Approve & Publish" })).toBeInTheDocument()
+        expect(screen.getByRole("button", { name: "Approve & publish" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Save" })).toBeInTheDocument()
-        expect(screen.getByRole("button", { name: "Request Changes" })).toBeInTheDocument()
+        expect(screen.getByRole("button", { name: "Request changes" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Exit" })).toBeInTheDocument()
       })
 
@@ -1210,7 +1179,7 @@ describe("<ListingFormActions>", () => {
             </ListingContext.Provider>
           </AuthContext.Provider>
         )
-        expect(screen.getByRole("button", { name: "Approve & Publish" })).toBeInTheDocument()
+        expect(screen.getByRole("button", { name: "Approve & publish" })).toBeInTheDocument()
         expect(screen.getByRole("link", { name: "Edit" })).toBeInTheDocument()
         expect(screen.getByRole("link", { name: "Preview" })).toBeInTheDocument()
       })
@@ -1230,7 +1199,7 @@ describe("<ListingFormActions>", () => {
             </ListingContext.Provider>
           </AuthContext.Provider>
         )
-        expect(screen.getByRole("button", { name: "Approve & Publish" })).toBeInTheDocument()
+        expect(screen.getByRole("button", { name: "Approve & publish" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Save" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Exit" })).toBeInTheDocument()
       })
@@ -1303,7 +1272,7 @@ describe("<ListingFormActions>", () => {
         expect(screen.getByRole("button", { name: "Reopen" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Save" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Unpublish" })).toBeInTheDocument()
-        expect(screen.getByRole("button", { name: "Post Results" })).toBeInTheDocument()
+        expect(screen.getByRole("button", { name: "Post results" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Exit" })).toBeInTheDocument()
       })
     })
@@ -1326,7 +1295,7 @@ describe("<ListingFormActions>", () => {
           </AuthContext.Provider>
         )
         expect(screen.getByRole("button", { name: "Submit" })).toBeInTheDocument()
-        expect(screen.getByRole("button", { name: "Save as Draft" })).toBeInTheDocument()
+        expect(screen.getByRole("button", { name: "Save as draft" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Exit" })).toBeInTheDocument()
       })
 
@@ -1459,7 +1428,7 @@ describe("<ListingFormActions>", () => {
         expect(screen.queryByText("Reopen")).toBeFalsy()
         expect(screen.getByRole("button", { name: "Save" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Unpublish" })).toBeInTheDocument()
-        expect(screen.getByRole("button", { name: "Post Results" })).toBeInTheDocument()
+        expect(screen.getByRole("button", { name: "Post results" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Exit" })).toBeInTheDocument()
       })
     })
@@ -1480,7 +1449,7 @@ describe("<ListingFormActions>", () => {
           lotteryOptIn={true}
         />
       )
-      expect(screen.queryByText("Post Results")).not.toBeInTheDocument()
+      expect(screen.queryByText("Post results")).not.toBeInTheDocument()
     })
 
     it("renders correct buttons in a closed edit state with lottery opted out", () => {
@@ -1492,7 +1461,7 @@ describe("<ListingFormActions>", () => {
           lotteryOptIn={false}
         />
       )
-      expect(screen.queryByText("Post Results")).toBeInTheDocument()
+      expect(screen.queryByText("Post results")).toBeInTheDocument()
     })
   })
 
@@ -1739,7 +1708,7 @@ describe("<ListingFormActions>", () => {
         expect(screen.queryByText("Reopen")).toBeFalsy()
         expect(screen.getByRole("button", { name: "Save" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Unpublish" })).toBeInTheDocument()
-        expect(screen.getByRole("button", { name: "Post Results" })).toBeInTheDocument()
+        expect(screen.getByRole("button", { name: "Post results" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Exit" })).toBeInTheDocument()
       })
     })
@@ -1774,7 +1743,7 @@ describe("<ListingFormActions>", () => {
         expect(screen.queryByText("Reopen")).toBeFalsy()
         expect(screen.getByRole("button", { name: "Save" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Unpublish" })).toBeInTheDocument()
-        expect(screen.getByRole("button", { name: "Post Results" })).toBeInTheDocument()
+        expect(screen.getByRole("button", { name: "Post results" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Exit" })).toBeInTheDocument()
       })
     })
@@ -1808,7 +1777,7 @@ describe("<ListingFormActions>", () => {
         expect(screen.queryByText("Reopen")).toBeFalsy()
         expect(screen.getByRole("button", { name: "Save" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Unpublish" })).toBeInTheDocument()
-        expect(screen.getByRole("button", { name: "Post Results" })).toBeInTheDocument()
+        expect(screen.getByRole("button", { name: "Post results" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Exit" })).toBeInTheDocument()
       })
     })

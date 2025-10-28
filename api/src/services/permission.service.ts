@@ -79,6 +79,8 @@ export class PermissionService {
 
     if (user.userRoles?.isAdmin) {
       await enforcer.addRoleForUser(user.id, UserRoleEnum.admin);
+    } else if (user.userRoles?.isSupportAdmin) {
+      await enforcer.addRoleForUser(user.id, UserRoleEnum.supportAdmin);
     } else if (user.userRoles?.isJurisdictionalAdmin) {
       await enforcer.addRoleForUser(user.id, UserRoleEnum.jurisdictionAdmin);
 
@@ -101,6 +103,22 @@ export class PermissionService {
             'user',
             `r.obj.jurisdictionId == '${adminInJurisdiction.id}'`,
             `(${permissionActions.read}|${permissionActions.invitePartner}|${permissionActions.inviteJurisdictionalAdmin}|${permissionActions.update}|${permissionActions.delete})`,
+          );
+        }),
+      );
+    } else if (user.userRoles?.isLimitedJurisdictionalAdmin) {
+      await enforcer.addRoleForUser(
+        user.id,
+        UserRoleEnum.limitedJurisdictionAdmin,
+      );
+
+      await Promise.all(
+        user.jurisdictions.map(async (adminInJurisdiction: Jurisdiction) => {
+          await enforcer.addPermissionForUser(
+            user.id,
+            'listing',
+            `r.obj.jurisdictionId == '${adminInJurisdiction.id}'`,
+            `(${permissionActions.read}|${permissionActions.create}|${permissionActions.update}|${permissionActions.delete})`,
           );
         }),
       );

@@ -119,6 +119,13 @@ export class TranslationService {
       whatToExpect: listing.whatToExpect,
     };
 
+    if (listing.listingNeighborhoodAmenities) {
+      Object.keys(listing.listingNeighborhoodAmenities).forEach((field) => {
+        pathsToFilter[`listingNeighborhoodAmenities.${field}`] =
+          listing.listingNeighborhoodAmenities[field];
+      });
+    }
+
     if (listing.referralApplication?.externalReference) {
       pathsToFilter[`referralApplication.externalReference`] =
         listing.referralApplication?.externalReference;

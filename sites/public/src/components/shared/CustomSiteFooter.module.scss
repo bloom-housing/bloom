@@ -2,7 +2,7 @@
   color: var(--seeds-color-on-inverse-muted);
   width: 100%;
   background-color: var(--seeds-bg-color-inverse);
-  text-align: left;
+  text-align: start;
   display: flex;
   flex-direction: column;
 
@@ -21,7 +21,7 @@
 
 .footer {
   padding-inline: 0;
-  text-align: left;
+  text-align: start;
   display: flex;
   justify-content: space-between;
   flex-direction: column;
@@ -39,8 +39,8 @@
     width: var(--seeds-s24);
     height: var(--seeds-s24);
     display: inline-block;
-    margin-right: var(--seeds-s3);
-    margin-bottom: var(--seeds-s8);
+    margin-inline-end: var(--seeds-s3);
+    margin-block-end: var(--seeds-s8);
     img {
       width: 100%;
       height: 100%;
@@ -59,7 +59,7 @@
   align-items: flex-start;
   color: var(--seeds-color-on-inverse-muted);
   img {
-    margin-left: var(--seeds-s4);
+    margin-inline-start: var(--seeds-s4);
   }
 
   @media (--md-down) {
@@ -67,8 +67,8 @@
     align-items: flex-start;
     justify-content: start;
     img {
-      margin-top: var(--seeds-s4);
-      margin-left: 0;
+      margin-block-start: var(--seeds-s4);
+      margin-inline-start: 0;
     }
   }
 }
@@ -76,11 +76,11 @@
 .text-container {
   display: flex;
   flex-direction: column;
-  margin-bottom: var(--seeds-s4);
+  margin-block-end: var(--seeds-s4);
 }
 
 .text-container:last-of-type {
-  margin-bottom: 0;
+  margin-block-end: 0;
 }
 
 .copyright-text {
@@ -92,22 +92,22 @@
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: flex-end;
-  margin-bottom: calc(-1 * var(--seeds-s2));
+  margin-block-end: calc(-1 * var(--seeds-s2));
   a {
     color: var(--seeds-color-on-inverse-muted);
-    margin-left: var(--seeds-s6);
-    margin-bottom: var(--seeds-s2);
+    margin-inline-start: var(--seeds-s6);
+    margin-block-end: var(--seeds-s2);
   }
   @media (--md-down) {
-    margin-bottom: 0;
+    margin-block-end: 0;
     flex-direction: column;
-    margin-top: var(--seeds-s8);
+    margin-block-start: var(--seeds-s8);
     a {
-      margin-left: 0;
-      margin-bottom: var(--seeds-s5);
+      margin-inline-start: 0;
+      margin-block-end: var(--seeds-s5);
     }
     a:last-of-type {
-      margin-bottom: 0;
+      margin-block-end: 0;
     }
   }
 }

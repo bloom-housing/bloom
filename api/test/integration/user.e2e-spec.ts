@@ -17,6 +17,7 @@ import { UserCreate } from '../../src/dtos/users/user-create.dto';
 import { jurisdictionFactory } from '../../prisma/seed-helpers/jurisdiction-factory';
 import { listingFactory } from '../../prisma/seed-helpers/listing-factory';
 import { applicationFactory } from '../../prisma/seed-helpers/application-factory';
+import { randomName } from '../../prisma/seed-helpers/word-generator';
 import { UserInvite } from '../../src/dtos/users/user-invite.dto';
 import { EmailService } from '../../src/services/email.service';
 import { Login } from '../../src/dtos/auth/login.dto';
@@ -225,7 +226,7 @@ describe('User Controller Tests', () => {
   describe('delete endpoint', () => {
     it('should delete user when user exists', async () => {
       const userA = await prisma.userAccounts.create({
-        data: await userFactory(),
+        data: await userFactory({ roles: { isAdmin: true } }),
       });
 
       const res = await request(app.getHttpServer())
@@ -586,7 +587,9 @@ describe('User Controller Tests', () => {
 
     it('should not set resetToken when forgot-password is called by public user on the partners site', async () => {
       const juris = await prisma.jurisdictions.create({
-        data: jurisdictionFactory(),
+        data: jurisdictionFactory(
+          `forgotPassword-jurisdiction-${randomName()}`,
+        ),
       });
 
       const userA = await prisma.userAccounts.create({

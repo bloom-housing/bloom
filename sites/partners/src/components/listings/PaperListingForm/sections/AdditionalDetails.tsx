@@ -3,12 +3,18 @@ import { useFormContext } from "react-hook-form"
 import { Grid } from "@bloom-housing/ui-seeds"
 import { t, Textarea } from "@bloom-housing/ui-components"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
+import { defaultFieldProps } from "../../../../lib/helpers"
 
-const AdditionalDetails = () => {
+type AdditionalDetailsProps = {
+  defaultText?: string
+  requiredFields: string[]
+}
+
+const AdditionalDetails = (props: AdditionalDetailsProps) => {
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register } = formMethods
+  const { register, errors, clearErrors } = formMethods
 
   return (
     <>
@@ -26,28 +32,46 @@ const AdditionalDetails = () => {
               fullWidth={true}
               register={register}
               maxLength={2000}
+              placeholder={""}
+              {...defaultFieldProps(
+                "requiredDocuments",
+                t("listings.requiredDocuments"),
+                props.requiredFields,
+                errors,
+                clearErrors
+              )}
             />
           </Grid.Cell>
           <Grid.Cell>
             <Textarea
-              label={t("listings.importantProgramRules")}
-              name={"programRules"}
-              id={"programRules"}
               fullWidth={true}
               register={register}
               maxLength={600}
+              placeholder={""}
+              {...defaultFieldProps(
+                "programRules",
+                t("listings.importantProgramRules"),
+                props.requiredFields,
+                errors,
+                clearErrors
+              )}
             />
           </Grid.Cell>
         </Grid.Row>
         <Grid.Row columns={2}>
           <Grid.Cell>
             <Textarea
-              label={t("listings.specialNotes")}
-              name={"specialNotes"}
-              id={"specialNotes"}
               fullWidth={true}
               register={register}
               maxLength={600}
+              placeholder={""}
+              {...defaultFieldProps(
+                "specialNotes",
+                t("listings.specialNotes"),
+                props.requiredFields,
+                errors,
+                clearErrors
+              )}
             />
           </Grid.Cell>
         </Grid.Row>

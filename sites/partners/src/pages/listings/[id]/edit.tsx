@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useCallback } from "react"
 import Head from "next/head"
 import axios from "axios"
 import { t, Breadcrumbs, BreadcrumbLink } from "@bloom-housing/ui-components"
@@ -14,8 +14,14 @@ const EditListing = (props: { listing: Listing }) => {
   const metaDescription = ""
   const metaImage = "" // TODO: replace with hero image
 
-  const { listing } = props
+  const { listing: defaultlListing } = props
+  const [listing, setListing] = useState<Listing>(defaultlListing)
   const [listingName, setListingName] = useState(listing?.name)
+
+  const updateListing = useCallback((updatedListing: Listing) => {
+    setListing(updatedListing)
+    setListingName(updatedListing.name)
+  }, [])
 
   if (!listing) return false
 
@@ -24,7 +30,7 @@ const EditListing = (props: { listing: Listing }) => {
       <ListingGuard>
         <Layout>
           <Head>
-            <title>{t("nav.siteTitlePartners")}</title>
+            <title>{`Edit ${listingName} - ${t("nav.siteTitlePartners")}`}</title>
           </Head>
 
           <MetaTags
@@ -54,7 +60,12 @@ const EditListing = (props: { listing: Listing }) => {
             }
           />
 
-          <PaperListingForm listing={listing} editMode setListingName={setListingName} />
+          <PaperListingForm
+            listing={listing}
+            editMode
+            setListingName={setListingName}
+            updateListing={updateListing}
+          />
         </Layout>
       </ListingGuard>
     </ListingContext.Provider>

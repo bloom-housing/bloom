@@ -2,8 +2,11 @@ import React from "react"
 import { fireEvent } from "@testing-library/react"
 import { rest } from "msw"
 import { setupServer } from "msw/node"
-import { application, listing } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
+import { application, listing, user } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
+import { AuthContext } from "@bloom-housing/shared-helpers"
 import {
+  ApplicationsService,
+  ListingsService,
   Listing,
   ListingsStatusEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -25,6 +28,10 @@ afterAll(() => {
   server.close()
 })
 
+function mockJurisdictionsHaveFeatureFlagOn(_featureFlag: string) {
+  return false
+}
+
 describe("applications", () => {
   it("should render error text when the api call fails", async () => {
     mockNextRouter({ id: "Uvbk5qurpB2WI9V6WnNdH" })
@@ -43,7 +50,19 @@ describe("applications", () => {
         return res(ctx.json({ totalCount: 1 }))
       })
     )
-    const { findByText } = render(<ApplicationsList />)
+    const { findByText } = render(
+      <AuthContext.Provider
+        value={{
+          applicationsService: new ApplicationsService(),
+          listingsService: new ListingsService(),
+          profile: { ...user, listings: [{ id: listing.id }], jurisdictions: [] },
+          doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
+            mockJurisdictionsHaveFeatureFlagOn(featureFlag),
+        }}
+      >
+        <ApplicationsList />
+      </AuthContext.Provider>
+    )
 
     const error = await findByText("An error has occurred.")
     expect(error).toBeInTheDocument()
@@ -69,92 +88,105 @@ describe("applications", () => {
         return res(ctx.json({ totalCount: 1 }))
       })
     )
-    const { findByText, getByText, getAllByText } = render(<ApplicationsList />)
+    const { findByText, getByText, getAllByText } = render(
+      <AuthContext.Provider
+        value={{
+          applicationsService: new ApplicationsService(),
+          listingsService: new ListingsService(),
+          profile: { ...user, listings: [{ id: listing.id }], jurisdictions: [] },
+          doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
+            mockJurisdictionsHaveFeatureFlagOn(featureFlag),
+        }}
+      >
+        <ApplicationsList />
+      </AuthContext.Provider>
+    )
 
     const header = await findByText("Partners Portal")
     expect(header).toBeInTheDocument()
 
     expect(getAllByText("Archer Studios").length).toBeGreaterThan(0)
-    expect(getByText("Add Application")).toBeInTheDocument()
+    expect(getByText("Add application")).toBeInTheDocument()
     expect(getByText("Export")).toBeInTheDocument()
-    expect(getAllByText("All Applications").length).toBeGreaterThan(0)
+    expect(getAllByText("All applications").length).toBeGreaterThan(0)
 
-    expect(getByText("Application Type")).toBeInTheDocument()
+    expect(getByText("Application type")).toBeInTheDocument()
     expect(getByText("Electronic")).toBeInTheDocument()
-    expect(getByText("First Name")).toBeInTheDocument()
+    expect(getByText("First name")).toBeInTheDocument()
     expect(getByText("Applicant First")).toBeInTheDocument()
-    expect(getByText("Last Name")).toBeInTheDocument()
+    expect(getByText("Last name")).toBeInTheDocument()
     expect(getByText("Applicant Last")).toBeInTheDocument()
-    expect(getByText("Household Size")).toBeInTheDocument()
+    expect(getByText("Household size")).toBeInTheDocument()
     expect(getByText("2")).toBeInTheDocument()
-    expect(getByText("Declared Annual Income")).toBeInTheDocument()
+    expect(getByText("Declared annual income")).toBeInTheDocument()
     expect(getByText("$40,000")).toBeInTheDocument()
-    expect(getByText("Subsidy or Voucher")).toBeInTheDocument()
+    expect(getByText("Subsidy or voucher")).toBeInTheDocument()
     expect(getByText("Primary DOB")).toBeInTheDocument()
     expect(getByText("10/10/1990")).toBeInTheDocument()
     expect(getByText("Phone")).toBeInTheDocument()
     expect(getByText("(123) 123-1231")).toBeInTheDocument()
-    expect(getByText("Phone Type")).toBeInTheDocument()
+    expect(getByText("Phone type")).toBeInTheDocument()
     expect(getByText("Home")).toBeInTheDocument()
-    expect(getByText("Additional Phone")).toBeInTheDocument()
+    expect(getByText("Additional phone")).toBeInTheDocument()
     expect(getByText("(456) 456-4564")).toBeInTheDocument()
-    expect(getByText("Addtl. Phone Type")).toBeInTheDocument()
+    expect(getByText("Addtl. phone type")).toBeInTheDocument()
     expect(getByText("Cell")).toBeInTheDocument()
-    expect(getByText("Residence Street Address")).toBeInTheDocument()
+    expect(getByText("Work in region")).toBeInTheDocument()
+    expect(getByText("Residence street address")).toBeInTheDocument()
     expect(getByText("3200 Old Faithful Inn Rd")).toBeInTheDocument()
-    expect(getByText("Residence City")).toBeInTheDocument()
+    expect(getByText("Residence city")).toBeInTheDocument()
     expect(getByText("Yellowstone National Park")).toBeInTheDocument()
-    expect(getByText("Residence State")).toBeInTheDocument()
+    expect(getByText("Residence state")).toBeInTheDocument()
     expect(getByText("WY")).toBeInTheDocument()
-    expect(getByText("Residence Zip")).toBeInTheDocument()
+    expect(getByText("Residence zip")).toBeInTheDocument()
     expect(getByText("82190")).toBeInTheDocument()
-    expect(getByText("Mailing Street Address")).toBeInTheDocument()
+    expect(getByText("Mailing street address")).toBeInTheDocument()
     expect(getByText("1000 US-36")).toBeInTheDocument()
-    expect(getByText("Mailing City")).toBeInTheDocument()
+    expect(getByText("Mailing city")).toBeInTheDocument()
     expect(getByText("Estes Park")).toBeInTheDocument()
-    expect(getByText("Mailing State")).toBeInTheDocument()
+    expect(getByText("Mailing state")).toBeInTheDocument()
     expect(getByText("CO")).toBeInTheDocument()
-    expect(getByText("Mailing Zip")).toBeInTheDocument()
+    expect(getByText("Mailing zip")).toBeInTheDocument()
     expect(getByText("80517")).toBeInTheDocument()
-    expect(getByText("Work Street Address")).toBeInTheDocument()
+    expect(getByText("Work street address")).toBeInTheDocument()
     expect(getByText("9035 Village Dr")).toBeInTheDocument()
-    expect(getByText("Work City")).toBeInTheDocument()
+    expect(getByText("Work city")).toBeInTheDocument()
     expect(getByText("Yosemite Valley")).toBeInTheDocument()
-    expect(getByText("Work State")).toBeInTheDocument()
+    expect(getByText("Work state")).toBeInTheDocument()
     expect(getByText("CA")).toBeInTheDocument()
-    expect(getByText("Work Zip")).toBeInTheDocument()
+    expect(getByText("Work zip")).toBeInTheDocument()
     expect(getByText("95389")).toBeInTheDocument()
-    expect(getByText("Alt Contact First Name")).toBeInTheDocument()
+    expect(getByText("Alt contact first name")).toBeInTheDocument()
     expect(getByText("Alternate First")).toBeInTheDocument()
-    expect(getByText("Alt Contact Last Name")).toBeInTheDocument()
+    expect(getByText("Alt contact last name")).toBeInTheDocument()
     expect(getByText("Alternate Last")).toBeInTheDocument()
-    expect(getByText("Alt Contact Agency")).toBeInTheDocument()
+    expect(getByText("Alt contact agency")).toBeInTheDocument()
     expect(getByText("Alternate Agency")).toBeInTheDocument()
-    expect(getByText("Alt Contact Email")).toBeInTheDocument()
+    expect(getByText("Alt contact email")).toBeInTheDocument()
     expect(getByText("alternate@email.com")).toBeInTheDocument()
-    expect(getByText("Alt Contact Phone")).toBeInTheDocument()
+    expect(getByText("Alt contact phone")).toBeInTheDocument()
     expect(getByText("(789) 012-3456")).toBeInTheDocument()
-    expect(getByText("Alt Contact Street Address")).toBeInTheDocument()
+    expect(getByText("Alt contact street address")).toBeInTheDocument()
     expect(getByText("25 Visitor Center Rd")).toBeInTheDocument()
-    expect(getByText("Alt Contact City")).toBeInTheDocument()
+    expect(getByText("Alt contact city")).toBeInTheDocument()
     expect(getByText("Bay Harbor")).toBeInTheDocument()
-    expect(getByText("Alt Contact State")).toBeInTheDocument()
+    expect(getByText("Alt contact state")).toBeInTheDocument()
     expect(getByText("ME")).toBeInTheDocument()
-    expect(getByText("Alt Contact Zip")).toBeInTheDocument()
+    expect(getByText("Alt contact zip")).toBeInTheDocument()
     expect(getByText("04609")).toBeInTheDocument()
-    expect(getByText("First Name HH:1")).toBeInTheDocument()
+    expect(getByText("First name HH:1")).toBeInTheDocument()
     expect(getByText("Household First")).toBeInTheDocument()
-    expect(getByText("Last Name HH:1")).toBeInTheDocument()
+    expect(getByText("Last name HH:1")).toBeInTheDocument()
     expect(getByText("Household Last")).toBeInTheDocument()
     expect(getByText("Household DOB HH:1")).toBeInTheDocument()
     expect(getByText("11/25/1966")).toBeInTheDocument()
     expect(getByText("Relationship HH:1")).toBeInTheDocument()
     expect(getByText("Friend")).toBeInTheDocument()
-    expect(getByText("Same Address as Primary HH:1")).toBeInTheDocument()
-    expect(getByText("Work in Region HH:1")).toBeInTheDocument()
-    expect(getAllByText("Yes")).toHaveLength(3)
-    expect(getByText("Flagged as Duplicate")).toBeInTheDocument()
-    expect(getByText("Marked as Duplicate")).toBeInTheDocument()
+    expect(getByText("Same address as primary HH:1")).toBeInTheDocument()
+    expect(getByText("Work in region HH:1")).toBeInTheDocument()
+    expect(getAllByText("Yes")).toHaveLength(4)
+    expect(getByText("Flagged as duplicate")).toBeInTheDocument()
+    expect(getByText("Marked as duplicate")).toBeInTheDocument()
     expect(getByText("No")).toBeInTheDocument()
   })
 
@@ -178,12 +210,24 @@ describe("applications", () => {
         return res(ctx.json({ totalCount: 1 }))
       })
     )
-    const { findByText, getByText } = render(<ApplicationsList />)
+    const { findByText, getByText } = render(
+      <AuthContext.Provider
+        value={{
+          applicationsService: new ApplicationsService(),
+          listingsService: new ListingsService(),
+          profile: { ...user, listings: [{ id: listing.id }], jurisdictions: [] },
+          doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
+            mockJurisdictionsHaveFeatureFlagOn(featureFlag),
+        }}
+      >
+        <ApplicationsList />
+      </AuthContext.Provider>
+    )
 
     const header = await findByText("Partners Portal")
     expect(header).toBeInTheDocument()
 
-    fireEvent.click(getByText("Add Application"))
+    fireEvent.click(getByText("Add application"))
     expect(pushMock).toHaveBeenCalledWith("/listings/Uvbk5qurpB2WI9V6WnNdH/applications/add")
   })
 
@@ -208,12 +252,24 @@ describe("applications", () => {
         return res(ctx.json({ totalCount: 1 }))
       })
     )
-    const { findByText, getByText } = render(<ApplicationsList />)
+    const { findByText, getByText } = render(
+      <AuthContext.Provider
+        value={{
+          applicationsService: new ApplicationsService(),
+          listingsService: new ListingsService(),
+          profile: { ...user, listings: [{ id: listing.id }], jurisdictions: [] },
+          doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
+            mockJurisdictionsHaveFeatureFlagOn(featureFlag),
+        }}
+      >
+        <ApplicationsList />
+      </AuthContext.Provider>
+    )
 
     const header = await findByText("Partners Portal")
     expect(header).toBeInTheDocument()
 
-    fireEvent.click(getByText("Add Application"))
+    fireEvent.click(getByText("Add application"))
     const modalHeader = await findByText("Confirmation needed")
     expect(modalHeader).toBeInTheDocument()
     expect(pushMock).not.toHaveBeenCalledWith("/listings/Uvbk5qurpB2WI9V6WnNdH/applications/add")

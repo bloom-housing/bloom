@@ -5,6 +5,7 @@ import {
   Jurisdiction,
   Listing,
   MarketingTypeEnum,
+  MultiselectQuestionsApplicationSectionEnum,
   ReviewOrderTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { Heading, Link, Tag, Icon } from "@bloom-housing/ui-seeds"
@@ -61,7 +62,22 @@ export const getListingTags = (
     })
   }
 
-  if (!swapCommunityTypeWithPrograms && listing.reservedCommunityTypes) {
+  if (swapCommunityTypeWithPrograms) {
+    listing.listingMultiselectQuestions
+      .filter(
+        (question) =>
+          question.multiselectQuestions.applicationSection ===
+          MultiselectQuestionsApplicationSectionEnum.programs
+      )
+      .forEach((question) => {
+        listingTags.push({
+          title: question.multiselectQuestions.untranslatedText
+            ? t(`listingFilters.program.${question.multiselectQuestions.untranslatedText}`)
+            : t(`listingFilters.program.${question.multiselectQuestions.text}`),
+          variant: "highlight-warm",
+        })
+      })
+  } else if (listing.reservedCommunityTypes) {
     listingTags.push({
       title: t(`listings.reservedCommunityTypes.${listing.reservedCommunityTypes.name}`),
       variant: "highlight-warm",
@@ -149,18 +165,20 @@ export const MainDetails = ({
         >
           {listing.name}
         </Heading>
-        <div className={styles["listing-address-container"]}>
-          <div className={styles["listing-address"]}>
-            <div className={`seeds-m-ie-4 ${styles["flex-margin"]}`}>
-              {oneLineAddress(listing.listingsBuildingAddress)}
-            </div>
-            <div className={styles["flex-margin"]}>
-              <Link href={googleMapsHref} newWindowTarget={true}>
-                {t("t.viewOnMap")}
-              </Link>
+        {listing.listingsBuildingAddress && (
+          <div className={styles["listing-address-container"]}>
+            <div className={styles["listing-address"]}>
+              <div className={`seeds-m-ie-4 ${styles["flex-margin"]}`}>
+                {oneLineAddress(listing.listingsBuildingAddress)}
+              </div>
+              <div className={styles["flex-margin"]}>
+                <Link href={googleMapsHref} newWindowTarget={true}>
+                  {t("t.viewOnMap")}
+                </Link>
+              </div>
             </div>
           </div>
-        </div>
+        )}
 
         {listingTags.length > 0 && (
           <div className={`${styles["listing-tags"]} seeds-m-bs-3`} data-testid={"listing-tags"}>

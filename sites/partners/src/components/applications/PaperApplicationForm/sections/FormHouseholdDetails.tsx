@@ -20,8 +20,10 @@ type FormHouseholdDetailsProps = {
   listingUnits: Unit[]
   applicationUnitTypes: UnitType[]
   applicationAccessibilityFeatures: Accessibility
-  listingUnitGroups: UnitGroup[]
-  enableUnitGroups: boolean
+  listingUnitGroups?: UnitGroup[]
+  enableOtherAdaOption?: boolean
+  enableUnitGroups?: boolean
+  enableFullTimeStudentQuestion?: boolean
 }
 
 const FormHouseholdDetails = ({
@@ -29,7 +31,9 @@ const FormHouseholdDetails = ({
   applicationUnitTypes,
   applicationAccessibilityFeatures,
   listingUnitGroups,
+  enableOtherAdaOption,
   enableUnitGroups,
+  enableFullTimeStudentQuestion,
 }: FormHouseholdDetailsProps) => {
   const formMethods = useFormContext()
   // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -62,37 +66,41 @@ const FormHouseholdDetails = ({
     }
   })
 
-  const adaFeaturesOptions = adaFeatureKeys.map((item) => {
-    const isChecked =
-      applicationAccessibilityFeatures &&
-      Object.keys(applicationAccessibilityFeatures).includes(item) &&
-      applicationAccessibilityFeatures[item] === true
+  const adaFeaturesOptions = adaFeatureKeys
+    .filter((item) => (item === "other" ? enableOtherAdaOption : true))
+    .map((item) => {
+      const isChecked =
+        applicationAccessibilityFeatures &&
+        Object.keys(applicationAccessibilityFeatures).includes(item) &&
+        applicationAccessibilityFeatures[item] === true
 
-    return {
-      id: item,
-      label: t(`application.add.${item}`),
-      value: item,
-      defaultChecked: isChecked,
-      dataTestId: `adaFeature.${item}`,
-    }
-  })
+      return {
+        id: item,
+        label: t(`application.ada.${item}`),
+        value: item,
+        defaultChecked: isChecked,
+        dataTestId: `adaFeature.${item}`,
+      }
+    })
 
   return (
     <>
       <hr className="spacer-section-above spacer-section" />
       <SectionWithGrid heading={t("application.review.householdDetails")}>
         <Grid.Row>
-          <Grid.Cell>
-            <FieldGroup
-              type="checkbox"
-              name="application.preferredUnit"
-              fields={enableUnitGroups ? preferredUnitGroupOptions : preferredUnitOptions}
-              groupLabel={t("application.details.preferredUnitSizes")}
-              register={register}
-              fieldGroupClassName="grid grid-cols-1 mt-4"
-              fieldClassName="ml-0"
-            />
-          </Grid.Cell>
+          {((enableUnitGroups && preferredUnitGroupOptions.length > 0) || !enableUnitGroups) && (
+            <Grid.Cell>
+              <FieldGroup
+                type="checkbox"
+                name="application.preferredUnit"
+                fields={enableUnitGroups ? preferredUnitGroupOptions : preferredUnitOptions}
+                groupLabel={t("application.details.preferredUnitSizes")}
+                register={register}
+                fieldGroupClassName="grid grid-cols-1 mt-4"
+                fieldClassName="ml-0"
+              />
+            </Grid.Cell>
+          )}
 
           <Grid.Cell>
             <fieldset>
@@ -108,62 +116,72 @@ const FormHouseholdDetails = ({
             </fieldset>
           </Grid.Cell>
 
-          <FieldValue label={t("application.household.expectingChanges.title")}>
-            <div className="flex h-12 items-center">
-              <Field
-                id="application.householdExpectingChangesYes"
-                name="application.householdExpectingChanges"
-                className="m-0"
-                type="radio"
-                label={t("t.yes")}
-                register={register}
-                inputProps={{
-                  value: YesNoEnum.yes,
-                }}
-              />
+          <Grid.Cell>
+            <FieldValue label={t("application.household.expectingChanges.title")}>
+              <div className="flex h-12 items-center">
+                <Field
+                  id="application.householdExpectingChangesYes"
+                  name="application.householdExpectingChanges"
+                  className="m-0"
+                  type="radio"
+                  label={t("t.yes")}
+                  register={register}
+                  inputProps={{
+                    value: YesNoEnum.yes,
+                  }}
+                />
 
-              <Field
-                id="application.householdExpectingChangesNo"
-                name="application.householdExpectingChanges"
-                className="m-0"
-                type="radio"
-                label={t("t.no")}
-                register={register}
-                inputProps={{
-                  value: YesNoEnum.no,
-                }}
-              />
-            </div>
-          </FieldValue>
+                <Field
+                  id="application.householdExpectingChangesNo"
+                  name="application.householdExpectingChanges"
+                  className="m-0"
+                  type="radio"
+                  label={t("t.no")}
+                  register={register}
+                  inputProps={{
+                    value: YesNoEnum.no,
+                  }}
+                />
+              </div>
+            </FieldValue>
+          </Grid.Cell>
         </Grid.Row>
         <Grid.Row columns="3">
-          <FieldValue label={t("application.household.householdStudent.title")}>
-            <div className="flex h-12 items-center">
-              <Field
-                id="application.householdStudentYes"
-                name="application.householdStudent"
-                className="m-0"
-                type="radio"
-                label={t("t.yes")}
-                register={register}
-                inputProps={{
-                  value: YesNoEnum.yes,
-                }}
-              />
+          <Grid.Cell>
+            <FieldValue
+              label={
+                enableFullTimeStudentQuestion
+                  ? t("application.household.householdStudentAll.title")
+                  : t("application.household.householdStudent.title")
+              }
+            >
+              <div className="flex h-12 items-center">
+                <Field
+                  id="application.householdStudentYes"
+                  name="application.householdStudent"
+                  className="m-0"
+                  type="radio"
+                  label={t("t.yes")}
+                  register={register}
+                  inputProps={{
+                    value: YesNoEnum.yes,
+                  }}
+                />
 
-              <Field
-                id="application.householdStudentNo"
-                name="application.householdStudent"
-                className="m-0"
-                type="radio"
-                label={t("t.no")}
-                register={register}
-                inputProps={{
-                  value: YesNoEnum.no,
-                }}
-              />
-            </div>
-          </FieldValue>
+                <Field
+                  id="application.householdStudentNo"
+                  name="application.householdStudent"
+                  className="m-0"
+                  type="radio"
+                  label={t("t.no")}
+                  register={register}
+                  inputProps={{
+                    value: YesNoEnum.no,
+                  }}
+                />
+              </div>
+            </FieldValue>
+          </Grid.Cell>
         </Grid.Row>
       </SectionWithGrid>
     </>

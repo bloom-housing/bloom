@@ -17,7 +17,7 @@ import {
   ListingEventsTypeEnum,
   MarketingTypeEnum,
 } from '@prisma/client';
-import { views } from './listing.service';
+import { includeViews } from './listing.service';
 import { PrismaService } from './prisma.service';
 import {
   CsvExporterServiceInterface,
@@ -52,8 +52,17 @@ import {
 import { UnitGroupSummary } from '../dtos/unit-groups/unit-group-summary.dto';
 import { addUnitGroupsSummarized } from '../utilities/unit-groups-transformations';
 
-views.csv = {
-  ...views.details,
+includeViews.csv = {
+  listingMultiselectQuestions: {
+    include: {
+      multiselectQuestions: {
+        select: {
+          text: true,
+        },
+      },
+    },
+  },
+  ...includeViews.full,
   copyOf: {
     select: {
       id: true,
@@ -74,6 +83,13 @@ export const formatCommunityType = {
   senior55: 'Seniors 55+',
   senior62: 'Seniors 62+',
   specialNeeds: 'Special Needs',
+  developmentalDisability: 'Developmental Disability',
+  farmworkerHousing: 'Farmworker Housing',
+  housingVoucher: 'HCV/Section 8 Voucher',
+  senior: 'Seniors',
+  seniorVeterans: 'Senior Veteran',
+  veteran: 'Veteran',
+  schoolEmployee: 'School Employee',
 };
 
 @Injectable()
@@ -150,7 +166,7 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
       );
 
     const listings = await this.prisma.listings.findMany({
-      include: views.csv,
+      include: includeViews.csv,
       where: whereClause,
     });
 
@@ -207,7 +223,7 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
   /**
    *
    * @param filename
-   * @param queryParams
+   * @param optionParams
    * @returns a promise with SuccessDTO
    */
   async createCsv<QueryParams extends ListingCsvQueryParams>(
@@ -418,7 +434,7 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
           formatLocalDate(val, this.dateFormat, this.timeZone),
       },
       {
-        path: 'updatedAt',
+        path: 'contentUpdatedAt',
         label: 'Last Updated',
         format: (val: string): string =>
           formatLocalDate(val, this.dateFormat, this.timeZone),
@@ -472,11 +488,33 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
         path: 'yearBuilt',
         label: 'Building Year Built',
       },
-      {
-        path: 'reservedCommunityTypes.name',
-        label: 'Reserved Community Types',
-        format: (val: string): string => formatCommunityType[val] || '',
-      },
+      ...(doAnyJurisdictionHaveFalsyFeatureFlagValue(
+        user.jurisdictions,
+        FeatureFlagEnum.swapCommunityTypeWithPrograms,
+      )
+        ? [
+            {
+              path: 'reservedCommunityTypes.name',
+              label: 'Reserved Community Types',
+              format: (val: string): string => formatCommunityType[val] || val,
+            },
+          ]
+        : [
+            {
+              path: 'listingMultiselectQuestions',
+              label: 'Community Types',
+              format: (val: ListingMultiselectQuestion[]): string => {
+                return val
+                  .filter(
+                    (question) =>
+                      question.multiselectQuestions.applicationSection ===
+                      'programs',
+                  )
+                  .map((question) => question.multiselectQuestions.text)
+                  .join(',');
+              },
+            },
+          ]),
       {
         path: 'listingsBuildingAddress.latitude',
         label: 'Latitude',
@@ -672,20 +710,27 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
               .join(',');
           },
         },
-        {
-          path: 'listingMultiselectQuestions',
-          label: 'Housing Programs',
-          format: (val: ListingMultiselectQuestion[]): string => {
-            return val
-              .filter(
-                (question) =>
-                  question.multiselectQuestions.applicationSection ===
-                  'programs',
-              )
-              .map((question) => question.multiselectQuestions.text)
-              .join(',');
-          },
-        },
+        ...(doAnyJurisdictionHaveFalsyFeatureFlagValue(
+          user.jurisdictions,
+          FeatureFlagEnum.swapCommunityTypeWithPrograms,
+        )
+          ? [
+              {
+                path: 'listingMultiselectQuestions',
+                label: 'Housing Programs',
+                format: (val: ListingMultiselectQuestion[]): string => {
+                  return val
+                    .filter(
+                      (question) =>
+                        question.multiselectQuestions.applicationSection ===
+                        'programs',
+                    )
+                    .map((question) => question.multiselectQuestions.text)
+                    .join(',');
+                },
+              },
+            ]
+          : []),
         {
           path: 'applicationFee',
           label: 'Application Fee',
@@ -703,6 +748,25 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
         {
           path: 'depositMax',
           label: 'Deposit Max',
+          format: this.formatCurrency,
+        },
+        {
+          path: 'depositType',
+          label: 'Deposit Type',
+        },
+        {
+          path: 'depositValue',
+          label: 'Deposit Value',
+          format: this.formatCurrency,
+        },
+        {
+          path: 'depositRangeMin',
+          label: 'Deposit Range Min',
+          format: this.formatCurrency,
+        },
+        {
+          path: 'depositRangeMax',
+          label: 'Deposit Range Max',
           format: this.formatCurrency,
         },
         {
@@ -861,9 +925,8 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
             },
           },
           {
-            path: 'marketingDate',
-            label: 'Marketing Start Date',
-            format: (val: string): string => formatLocalDate(val, 'YYYY'),
+            path: 'marketingYear',
+            label: 'Marketing Year',
           },
         ],
       );
@@ -911,23 +974,23 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
           label: 'Leasing Agent Zip',
         },
         {
-          path: 'listingsLeasingAgentAddress.street',
+          path: 'listingsApplicationMailingAddress.street',
           label: 'Leasing Agency Mailing Address',
         },
         {
-          path: 'listingsLeasingAgentAddress.street2',
+          path: 'listingsApplicationMailingAddress.street2',
           label: 'Leasing Agency Mailing Address Street 2',
         },
         {
-          path: 'listingsLeasingAgentAddress.city',
+          path: 'listingsApplicationMailingAddress.city',
           label: 'Leasing Agency Mailing Address City',
         },
         {
-          path: 'listingsLeasingAgentAddress.state',
+          path: 'listingsApplicationMailingAddress.state',
           label: 'Leasing Agency Mailing Address State',
         },
         {
-          path: 'listingsLeasingAgentAddress.zipCode',
+          path: 'listingsApplicationMailingAddress.zipCode',
           label: 'Leasing Agency Mailing Address Zip',
         },
         {
@@ -1073,7 +1136,9 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
           path: 'userAccounts',
           label: 'Partners Who Have Access',
           format: (val: User[]): string =>
-            val.map((user) => `${user.firstName} ${user.lastName}`).join(', '),
+            val
+              ?.map((user) => `${user.firstName} ${user.lastName}`)
+              .join(', ') || '',
         },
       ],
     );
@@ -1260,7 +1325,9 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
       user &&
       (user.userRoles?.isAdmin ||
         user.userRoles?.isJurisdictionalAdmin ||
-        user.userRoles?.isPartner)
+        user.userRoles?.isLimitedJurisdictionalAdmin ||
+        user.userRoles?.isPartner ||
+        user.userRoles?.isSupportAdmin)
     ) {
       return;
     } else {

@@ -64,8 +64,25 @@ export const stagingSeed = async (
         FeatureFlagEnum.enableSection8Question,
         FeatureFlagEnum.enableSingleUseCode,
         FeatureFlagEnum.enableUtilitiesIncluded,
+        FeatureFlagEnum.enableWaitlistLottery,
+        FeatureFlagEnum.enableWhatToExpectAdditionalField,
       ],
       languages: Object.values(LanguagesEnum),
+      requiredListingFields: [
+        'listingsBuildingAddress',
+        'name',
+        'developer',
+        'listingImages',
+        'leasingAgentEmail',
+        'leasingAgentName',
+        'leasingAgentPhone',
+        'jurisdictions',
+        'units',
+        'digitalApplication',
+        'paperApplication',
+        'referralOpportunity',
+        'rentalAssistance',
+      ],
     }),
   });
   // jurisdiction with unit groups enabled
@@ -74,18 +91,23 @@ export const stagingSeed = async (
       featureFlags: [
         FeatureFlagEnum.disableJurisdictionalAdmin,
         FeatureFlagEnum.disableListingPreferences,
+        FeatureFlagEnum.disableWorkInRegion,
         FeatureFlagEnum.enableAccessibilityFeatures,
+        FeatureFlagEnum.enableAdaOtherOption,
         FeatureFlagEnum.enableAdditionalResources,
         FeatureFlagEnum.enableCompanyWebsite,
         FeatureFlagEnum.enableGeocodingRadiusMethod,
         FeatureFlagEnum.enableHomeType,
         FeatureFlagEnum.enableIsVerified,
+        FeatureFlagEnum.enableLimitedHowDidYouHear,
         FeatureFlagEnum.enableListingFavoriting,
         FeatureFlagEnum.enableListingFiltering,
         FeatureFlagEnum.enableListingOpportunity,
         FeatureFlagEnum.enableListingPagination,
+        FeatureFlagEnum.enableListingUpdatedAt,
         FeatureFlagEnum.enableMarketingStatus,
         FeatureFlagEnum.enableNeighborhoodAmenities,
+        FeatureFlagEnum.enableNonRegulatedListings,
         FeatureFlagEnum.enablePartnerDemographics,
         FeatureFlagEnum.enablePartnerSettings,
         FeatureFlagEnum.enableRegions,
@@ -97,6 +119,15 @@ export const stagingSeed = async (
         FeatureFlagEnum.enableWaitlistAdditionalFields,
         FeatureFlagEnum.hideCloseListingButton,
         FeatureFlagEnum.swapCommunityTypeWithPrograms,
+        FeatureFlagEnum.enableFullTimeStudentQuestion,
+        FeatureFlagEnum.enableWhatToExpectAdditionalField,
+      ],
+      requiredListingFields: ['name', 'listingsBuildingAddress'],
+      languages: [
+        LanguagesEnum.en,
+        LanguagesEnum.es,
+        LanguagesEnum.ar,
+        LanguagesEnum.bn,
       ],
     }),
   });
@@ -119,6 +150,23 @@ export const stagingSeed = async (
   const nadaHill = await prismaClient.jurisdictions.create({
     data: jurisdictionFactory('Nada Hill', {
       featureFlags: [],
+      requiredListingFields: ['name'],
+    }),
+  });
+  // create super admin user
+  await prismaClient.userAccounts.create({
+    data: await userFactory({
+      roles: { isSuperAdmin: true, isAdmin: true },
+      email: 'superadmin@example.com',
+      confirmedAt: new Date(),
+      jurisdictionIds: [
+        mainJurisdiction.id,
+        lakeviewJurisdiction.id,
+        bridgeBayJurisdiction.id,
+        nadaHill.id,
+      ],
+      acceptedTerms: true,
+      password: 'abcdef',
     }),
   });
   // create admin user
@@ -137,6 +185,21 @@ export const stagingSeed = async (
       password: 'abcdef',
     }),
   });
+  // create a support admin
+  await prismaClient.userAccounts.create({
+    data: await userFactory({
+      roles: { isSupportAdmin: true },
+      email: 'support-admin@example.com',
+      confirmedAt: new Date(),
+      acceptedTerms: true,
+      jurisdictionIds: [
+        mainJurisdiction.id,
+        lakeviewJurisdiction.id,
+        bridgeBayJurisdiction.id,
+        nadaHill.id,
+      ],
+    }),
+  });
   // create a jurisdictional admin
   await prismaClient.userAccounts.create({
     data: await userFactory({
@@ -147,8 +210,18 @@ export const stagingSeed = async (
       acceptedTerms: true,
     }),
   });
-  // create a partner
+  // create a limited jurisdictional admin
   await prismaClient.userAccounts.create({
+    data: await userFactory({
+      roles: { isLimitedJurisdictionalAdmin: true },
+      email: 'limited-jurisdiction-admin@example.com',
+      confirmedAt: new Date(),
+      jurisdictionIds: [mainJurisdiction.id],
+      acceptedTerms: true,
+    }),
+  });
+  // create a partner
+  const partnerUser = await prismaClient.userAccounts.create({
     data: await userFactory({
       roles: { isPartner: true },
       email: 'partner@example.com',
@@ -222,7 +295,13 @@ export const stagingSeed = async (
     data: amiChartFactory(10, mainJurisdiction.id),
   });
   await prismaClient.amiChart.create({
+    data: amiChartFactory(10, mainJurisdiction.id, 2),
+  });
+  const lakeviewAmiChart = await prismaClient.amiChart.create({
     data: amiChartFactory(8, lakeviewJurisdiction.id),
+  });
+  await prismaClient.amiChart.create({
+    data: amiChartFactory(8, lakeviewJurisdiction.id, 2),
   });
   // Create map layers
   await prismaClient.mapLayers.create({
@@ -295,6 +374,7 @@ export const stagingSeed = async (
             'Have you or anyone in your household served in the US military?',
           applicationSection:
             MultiselectQuestionsApplicationSectionEnum.programs,
+          isExclusive: true,
           optOutText: 'Prefer not to say',
           options: [
             { text: 'Yes', exclusive: true, ordinal: 1 },
@@ -337,11 +417,11 @@ export const stagingSeed = async (
   await prismaClient.multiselectQuestions.create({
     data: multiselectQuestionFactory(lakeviewJurisdiction.id, {
       multiselectQuestion: {
-        text: 'Seniors',
+        text: 'Seniors 62+',
         description:
-          'Are you or anyone in your household 65 years of age or older?',
+          'Are you or anyone in your household 62 years of age or older?',
         applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
-        optOutText: 'Prefer not to say',
+        isExclusive: true,
         options: [
           { text: 'Yes', exclusive: true, ordinal: 1 },
           { text: 'No', exclusive: true, ordinal: 2 },
@@ -352,13 +432,19 @@ export const stagingSeed = async (
 
   // add extra programs to support filtering by "community type"
   await Promise.all(
-    [...new Array(3)].map(
-      async () =>
+    ['Seniors 55+', 'Families', 'Veterans'].map(
+      async (text) =>
         await prismaClient.multiselectQuestions.create({
           data: multiselectQuestionFactory(lakeviewJurisdiction.id, {
             multiselectQuestion: {
               applicationSection:
                 MultiselectQuestionsApplicationSectionEnum.programs,
+              text,
+              isExclusive: true,
+              options: [
+                { text: 'Yes', exclusive: true, ordinal: 1 },
+                { text: 'No', exclusive: true, ordinal: 2 },
+              ],
             },
           }),
         }),
@@ -417,6 +503,7 @@ export const stagingSeed = async (
         multiselectQuestionPrograms,
       ],
       applications: [await applicationFactory(), await applicationFactory()],
+      userAccounts: [{ id: partnerUser.id }],
     },
     {
       jurisdictionId: mainJurisdiction.id,
@@ -604,6 +691,7 @@ export const stagingSeed = async (
           ],
         }),
       ],
+      userAccounts: [{ id: partnerUser.id }],
     },
     {
       jurisdictionId: mainJurisdiction.id,
@@ -628,15 +716,18 @@ export const stagingSeed = async (
           },
         },
       ],
+      userAccounts: [{ id: partnerUser.id }],
     },
     {
       jurisdictionId: mainJurisdiction.id,
       listing: valleyHeightsSeniorCommunity,
+      userAccounts: [{ id: partnerUser.id }],
     },
     {
       jurisdictionId: mainJurisdiction.id,
       listing: littleVillageApartments,
       multiselectQuestions: [workInCityQuestion],
+      userAccounts: [{ id: partnerUser.id }],
     },
     {
       jurisdictionId: mainJurisdiction.id,
@@ -778,6 +869,7 @@ export const stagingSeed = async (
           },
         },
       ],
+      userAccounts: [{ id: partnerUser.id }],
     },
     {
       jurisdictionId: lakeviewJurisdiction.id,
@@ -800,7 +892,7 @@ export const stagingSeed = async (
               monthlyRentDeterminationType:
                 MonthlyRentDeterminationTypeEnum.flatRent,
               flatRentValue: 1400.0,
-              amiChart: { connect: { id: amiChart.id } },
+              amiChart: { connect: { id: lakeviewAmiChart.id } },
             },
           },
           unitTypes: {
@@ -832,7 +924,7 @@ export const stagingSeed = async (
               monthlyRentDeterminationType:
                 MonthlyRentDeterminationTypeEnum.percentageOfIncome,
               percentageOfIncomeValue: 30.0,
-              amiChart: { connect: { id: amiChart.id } },
+              amiChart: { connect: { id: lakeviewAmiChart.id } },
             },
           },
           unitTypes: {
@@ -858,7 +950,7 @@ export const stagingSeed = async (
               monthlyRentDeterminationType:
                 MonthlyRentDeterminationTypeEnum.flatRent,
               flatRentValue: 1800.0,
-              amiChart: { connect: { id: amiChart.id } },
+              amiChart: { connect: { id: lakeviewAmiChart.id } },
             },
           },
           unitTypes: {
@@ -878,9 +970,11 @@ export const stagingSeed = async (
         unitGroups?: Prisma.UnitGroupCreateWithoutListingsInput[];
         multiselectQuestions?: MultiselectQuestions[];
         applications?: Prisma.ApplicationsCreateInput[];
+        userAccounts?: Prisma.UserAccountsWhereUniqueInput[];
       },
       index,
     ) => {
+      console.log(`Adding listing - ${value.listing?.name}`);
       const listing = await listingFactory(value.jurisdictionId, prismaClient, {
         amiChart: amiChart,
         numberOfUnits: (!value.unitGroups && index) || 0,
@@ -890,6 +984,7 @@ export const stagingSeed = async (
         multiselectQuestions: value.multiselectQuestions,
         applications: value.applications,
         afsLastRunSetInPast: true,
+        userAccounts: value.userAccounts,
       });
       const savedListing = await prismaClient.listings.create({
         data: listing,

@@ -2,8 +2,6 @@ import React, { useContext, useMemo } from "react"
 import { t, MinimalTable } from "@bloom-housing/ui-components"
 import { Button, FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { AuthContext } from "@bloom-housing/shared-helpers"
-import { ListingContext } from "../../ListingContext"
-import { UnitDrawer } from "../DetailsUnitDrawer"
 import {
   EnumUnitGroupAmiLevelMonthlyRentDeterminationType,
   FeatureFlagEnum,
@@ -11,7 +9,9 @@ import {
   ReviewOrderTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
+import { ListingContext } from "../../ListingContext"
 import { formatRange, formatRentRange, minMaxFinder } from "../../helpers"
+import { UnitDrawer } from "../DetailsUnitDrawer"
 
 type DetailUnitsProps = {
   setUnitDrawer: (unit: UnitDrawer) => void
@@ -112,7 +112,7 @@ const DetailUnits = ({ setUnitDrawer }: DetailUnitsProps) => {
                   type="button"
                   variant="text"
                   size="sm"
-                  className="font-semibold"
+                  className={"font-semibold darker-link"}
                   onClick={() => setUnitDrawer(unit)}
                 >
                   {t("t.view")}
@@ -136,29 +136,35 @@ const DetailUnits = ({ setUnitDrawer }: DetailUnitsProps) => {
     <SectionWithGrid heading={t("listings.units")} inset>
       {enableHomeType && (
         <Grid.Row>
-          <FieldValue id="homeType" label={t("listings.homeType")}>
-            {listing.homeType ? t(`listings.homeType.${listing.homeType}`) : t("t.none")}
-          </FieldValue>
+          <Grid.Cell>
+            <FieldValue id="homeType" label={t("listings.homeType")}>
+              {listing.homeType ? t(`listings.homeType.${listing.homeType}`) : t("t.none")}
+            </FieldValue>
+          </Grid.Cell>
         </Grid.Row>
       )}
       {!enableUnitGroups && (
         <Grid.Row>
-          <FieldValue
-            id="unitTypesOrIndividual"
-            testId={"unit-types-or-individual"}
-            label={t("listings.unitTypesOrIndividual")}
-            children={
-              listing.disableUnitsAccordion
-                ? t("listings.unit.unitTypes")
-                : t("listings.unit.individualUnits")
-            }
-          />
-          <FieldValue
-            id="listings.listingAvailabilityQuestion"
-            testId={"listing-availability-question"}
-            label={t("listings.listingAvailabilityQuestion")}
-            children={listingAvailabilityText}
-          />
+          <Grid.Cell>
+            <FieldValue
+              id="unitTypesOrIndividual"
+              testId={"unit-types-or-individual"}
+              label={t("listings.unitTypesOrIndividual")}
+              children={
+                listing.disableUnitsAccordion
+                  ? t("listings.unit.unitTypes")
+                  : t("listings.unit.individualUnits")
+              }
+            />
+          </Grid.Cell>
+          <Grid.Cell>
+            <FieldValue
+              id="listings.listingAvailabilityQuestion"
+              testId={"listing-availability-question"}
+              label={t("listings.listingAvailabilityQuestion")}
+              children={listingAvailabilityText}
+            />
+          </Grid.Cell>
         </Grid.Row>
       )}
       <Grid.Row>
@@ -175,13 +181,15 @@ const DetailUnits = ({ setUnitDrawer }: DetailUnitsProps) => {
       </Grid.Row>
       {enableSection8Question && (
         <Grid.Row>
-          <FieldValue
-            id="listings.section8Title"
-            testId="listing-section-8-acceptance"
-            label={t("listings.section8Title")}
-          >
-            {listing.section8Acceptance ? t("t.yes") : t("t.no")}
-          </FieldValue>
+          <Grid.Cell>
+            <FieldValue
+              id="listings.section8Title"
+              testId="listing-section-8-acceptance"
+              label={t("listings.section8Title")}
+            >
+              {listing.section8Acceptance ? t("t.yes") : t("t.no")}
+            </FieldValue>
+          </Grid.Cell>
         </Grid.Row>
       )}
     </SectionWithGrid>

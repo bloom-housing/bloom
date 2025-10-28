@@ -38,7 +38,7 @@ describe("<Dashboard>", () => {
       </AuthContext.Provider>
     )
 
-    const dashboardCards = screen.getAllByRole("gridcell")
+    const dashboardCards = screen.getAllByRole("article")
     expect(dashboardCards).toHaveLength(2)
 
     const [myApplicationsCard, accountSettingsCard] = dashboardCards
@@ -64,7 +64,7 @@ describe("<Dashboard>", () => {
       within(accountSettingsCard).getByRole("heading", { level: 2, name: /account settings/i })
     ).toBeInTheDocument()
     expect(
-      within(accountSettingsCard).getByText("Account Settings, email and password")
+      within(accountSettingsCard).getByText("Account settings, email and password")
     ).toBeInTheDocument()
 
     const updateAccountSettingsButton = within(accountSettingsCard).getByRole("link", {
@@ -113,7 +113,7 @@ describe("<Dashboard>", () => {
       </AuthContext.Provider>
     )
 
-    const dashboardCards = screen.getAllByRole("gridcell")
+    const dashboardCards = screen.getAllByRole("article")
     expect(dashboardCards).toHaveLength(3)
 
     const myFavoritesCard = dashboardCards.pop()
@@ -165,7 +165,7 @@ describe("<Dashboard>", () => {
       </AuthContext.Provider>
     )
 
-    const dashboardCards = screen.getAllByRole("gridcell")
+    const dashboardCards = screen.getAllByRole("article")
     expect(dashboardCards).toHaveLength(1)
 
     const [accountSettingsCard] = dashboardCards
@@ -175,7 +175,7 @@ describe("<Dashboard>", () => {
       within(accountSettingsCard).getByRole("heading", { level: 2, name: /account settings/i })
     ).toBeInTheDocument()
     expect(
-      within(accountSettingsCard).getByText("Account Settings, email and password")
+      within(accountSettingsCard).getByText("Account settings, email and password")
     ).toBeInTheDocument()
 
     // My applications card not present

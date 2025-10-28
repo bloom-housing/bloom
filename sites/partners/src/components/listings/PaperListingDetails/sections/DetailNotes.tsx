@@ -14,25 +14,31 @@ const DetailListingNotes = () => {
   return (
     <SectionWithGrid heading={t("listings.approval.listingNotes")} inset>
       <Grid.Row columns={3}>
-        <FieldValue id="requestedChanges" label={t("listings.approval.changeRequestSummary")}>
-          <ExpandableText
-            buttonClassName="ml-4"
-            strings={{
-              readMore: t("t.more"),
-              readLess: t("t.less"),
-            }}
-          >
-            {getDetailFieldString(listing.requestedChanges)}
-          </ExpandableText>
-        </FieldValue>
-        <FieldValue id="requestedChangesDate" label={t("listings.approval.requestDate")}>
-          {getDetailFieldDate(listing.requestedChangesDate)}
-        </FieldValue>
+        <Grid.Cell>
+          <FieldValue id="requestedChanges" label={t("listings.approval.changeRequestSummary")}>
+            <ExpandableText
+              buttonClassName="ml-4"
+              strings={{
+                readMore: t("t.more"),
+                readLess: t("t.less"),
+              }}
+            >
+              {getDetailFieldString(listing.requestedChanges)}
+            </ExpandableText>
+          </FieldValue>
+        </Grid.Cell>
+        <Grid.Cell>
+          <FieldValue id="requestedChangesDate" label={t("listings.approval.requestDate")}>
+            {getDetailFieldDate(listing.requestedChangesDate)}
+          </FieldValue>
+        </Grid.Cell>
 
         {listing?.requestedChangesUser?.name && (
-          <FieldValue id="requestedChangesUser" label={t("listings.approval.requestedBy")}>
-            {`${listing.requestedChangesUser.name}`}
-          </FieldValue>
+          <Grid.Cell>
+            <FieldValue id="requestedChangesUser" label={t("listings.approval.requestedBy")}>
+              {`${listing.requestedChangesUser.name}`}
+            </FieldValue>
+          </Grid.Cell>
         )}
       </Grid.Row>
     </SectionWithGrid>

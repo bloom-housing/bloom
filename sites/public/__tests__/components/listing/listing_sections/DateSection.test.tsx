@@ -104,6 +104,6 @@ describe("<DateSection>", () => {
       />
     )
     expect(getByText("Date heading")).toBeDefined()
-    expect(getByText("See Video")).toBeDefined()
+    expect(getByText("See video")).toBeDefined()
   })
 })

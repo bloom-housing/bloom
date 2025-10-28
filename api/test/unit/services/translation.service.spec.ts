@@ -42,6 +42,8 @@ const mockListing = (): Listing => {
       publicUrl: '',
       emailFromAddress: '',
       rentalAssistanceDefault: '',
+      whatToExpect: '',
+      whatToExpectAdditionalText: '',
     },
     units: [],
     unitsSummarized: undefined,
@@ -82,6 +84,14 @@ const mockListing = (): Listing => {
       id: 'referral application',
       createdAt: new Date(),
       updatedAt: new Date(),
+    },
+    listingNeighborhoodAmenities: {
+      groceryStores: 'untranslated grocery stores',
+      publicTransportation: 'untranslated public transportation',
+      schools: 'untranslated schools',
+      parksAndCommunityCenters: 'untranslated parks and community centers',
+      pharmacies: 'untranslated pharmacies',
+      healthCareResources: 'untranslated health care resources',
     },
     listingMultiselectQuestions: [
       {
@@ -130,6 +140,12 @@ const translatedStrings = [
   'translated special notes',
   'translated unit amenities',
   'translated what to expect',
+  'translated grocery stores',
+  'translated public transportation',
+  'translated schools',
+  'translated parks and community centers',
+  'translated pharmacies',
+  'translated health care resources',
   'translated external reference',
   'translated multiselect text',
   'translated multiselect description',
@@ -394,6 +410,24 @@ const validateTranslatedFields = (listing: Listing) => {
 
   expect(listing.referralApplication.externalReference).toEqual(
     'translated external reference',
+  );
+  expect(listing.listingNeighborhoodAmenities.groceryStores).toEqual(
+    'translated grocery stores',
+  );
+  expect(listing.listingNeighborhoodAmenities.publicTransportation).toEqual(
+    'translated public transportation',
+  );
+  expect(listing.listingNeighborhoodAmenities.schools).toEqual(
+    'translated schools',
+  );
+  expect(listing.listingNeighborhoodAmenities.parksAndCommunityCenters).toEqual(
+    'translated parks and community centers',
+  );
+  expect(listing.listingNeighborhoodAmenities.pharmacies).toEqual(
+    'translated pharmacies',
+  );
+  expect(listing.listingNeighborhoodAmenities.healthCareResources).toEqual(
+    'translated health care resources',
   );
 
   expect(

@@ -35,6 +35,7 @@ import {
   LotteryService,
   LanguagesEnum,
   DataExplorerService,
+  FeatureFlagsService,
 } from "../types/backend-swagger"
 import { getListingRedirectUrl } from "../utilities/getListingRedirectUrl"
 import { useRouter } from "next/router"
@@ -50,6 +51,7 @@ type ContextProps = {
   authService: AuthService
   multiselectQuestionsService: MultiselectQuestionsService
   unitTypesService: UnitTypesService
+  featureFlagService: FeatureFlagsService
   reservedCommunityTypeService: ReservedCommunityTypesService
   unitPriorityService: UnitAccessibilityPriorityTypesService
   mapLayersService: MapLayersService
@@ -233,6 +235,7 @@ export const AuthProvider: FunctionComponent<React.PropsWithChildren> = ({ child
     reservedCommunityTypeService: new ReservedCommunityTypesService(),
     unitPriorityService: new UnitAccessibilityPriorityTypesService(),
     unitTypesService: new UnitTypesService(),
+    featureFlagService: new FeatureFlagsService(),
     loading: state.loading,
     initialStateLoaded: state.initialStateLoaded,
     profile: state.profile,
@@ -256,7 +259,9 @@ export const AuthProvider: FunctionComponent<React.PropsWithChildren> = ({ child
             profile &&
             (!forPartners ||
               profile.userRoles?.isAdmin ||
+              profile.userRoles?.isSupportAdmin ||
               profile.userRoles?.isJurisdictionalAdmin ||
+              profile.userRoles?.isLimitedJurisdictionalAdmin ||
               profile.userRoles?.isPartner)
           ) {
             dispatch(saveProfile(profile))

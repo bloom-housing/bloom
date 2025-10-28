@@ -23,13 +23,14 @@ import {
   UnitGroup,
   EnumUnitGroupAmiLevelMonthlyRentDeterminationType,
   UnitType,
+  User,
 } from "../src/types/backend-swagger"
 
 export const multiselectQuestionPreference: MultiselectQuestion = {
   id: "id1",
   text: "Live/Work in County",
   subText: "Live/Work in County subtitle",
-  jurisdictions: [{ id: "1", name: "Alameda" }],
+  jurisdictions: [{ id: "1", name: "Bloomington" }],
   createdAt: new Date("2022-09-14T22:53:09.982Z"),
   updatedAt: new Date("2022-09-15T22:53:09.982Z"),
   description: "At least one household member lives or works in County",
@@ -188,6 +189,7 @@ export const application: Application = {
     phoneNumberType: "home",
     noPhone: false,
     workInRegion: YesNoEnum.yes,
+    fullTimeStudent: YesNoEnum.no,
     applicantWorkAddress: {
       id: "applicant_work_address_id",
       createdAt: new Date(),
@@ -249,6 +251,7 @@ export const application: Application = {
       relationship: HouseholdMemberRelationship.friend,
       sameAddress: YesNoEnum.no,
       workInRegion: YesNoEnum.yes,
+      fullTimeStudent: YesNoEnum.no,
       householdMemberAddress: {
         id: "member_address_id",
         createdAt: new Date(),
@@ -609,7 +612,7 @@ export const amiCharts = [
 ]
 
 export const jurisdiction: Jurisdiction = {
-  name: "Alameda",
+  name: "Bloomington",
   notificationsSignUpUrl: "https://public.govdelivery.com/accounts/CAALAME/signup/29652",
   languages: [LanguagesEnum.en],
   partnerTerms: undefined,
@@ -625,9 +628,14 @@ export const jurisdiction: Jurisdiction = {
       jurisdictions: [],
     },
   ],
-  emailFromAddress: "Alameda: Housing Bay Area <bloom-no-reply@exygy.dev>",
+  requiredListingFields: [],
+  emailFromAddress: "Bloomington <bloom-no-reply@exygy.dev>",
   rentalAssistanceDefault:
     "Housing Choice Vouchers, Section 8 and other valid rental assistance programs will be considered for this property. In the case of a valid rental subsidy, the required minimum income will be based on the portion of the rent that the tenant pays after use of the subsidy.",
+  whatToExpect:
+    "Applicants will be contacted by the property agent in rank order until vacancies are filled. All of the information that you have provided will be verified and your eligibility confirmed. Your application will be removed from the waitlist if you have made any fraudulent statements. If we cannot verify a housing preference that you have claimed, you will not receive the preference but will not be otherwise penalized. Should your application be chosen, be prepared to fill out a more detailed application and provide required supporting documents.",
+  whatToExpectAdditionalText:
+    "Property staff should walk you through the process to get on their waitlist.",
   enablePartnerSettings: true,
   enableGeocodingPreferences: false,
   id: "67c22813-6080-441d-a496-03f2d06f2635",
@@ -669,6 +677,7 @@ export const jurisdiction: Jurisdiction = {
 
 export const listing: Listing = {
   id: "Uvbk5qurpB2WI9V6WnNdH",
+  contentUpdatedAt: new Date("2019-12-31T15:22:57.000-07:00"),
   applicationConfig: undefined,
   applicationOpenDate: new Date("2019-12-31T15:22:57.000-07:00"),
   listingsApplicationPickUpAddress: undefined,
@@ -676,6 +685,10 @@ export const listing: Listing = {
   listingsApplicationDropOffAddress: undefined,
   applicationDropOffAddressOfficeHours: undefined,
   listingsApplicationMailingAddress: undefined,
+  lastUpdatedByUser: {
+    id: "d4522484-f473-4c0e-8f78-e1f8ab69cd70",
+    name: "First Last",
+  },
   applicationLotteryTotals: [],
   jurisdictions: {
     id: "id",
@@ -847,6 +860,13 @@ export const listing: Listing = {
         text: "Preference 1",
         jurisdictions: [],
         applicationSection: MultiselectQuestionsApplicationSectionEnum.preferences,
+        options: [
+          {
+            name: "option_1",
+            text: "Option 1",
+            ordinal: 1,
+          },
+        ],
       },
     },
     {
@@ -858,6 +878,13 @@ export const listing: Listing = {
         text: "Preference 2",
         jurisdictions: [],
         applicationSection: MultiselectQuestionsApplicationSectionEnum.preferences,
+        options: [
+          {
+            name: "option_1",
+            text: "Option 1",
+            ordinal: 1,
+          },
+        ],
       },
     },
     {
@@ -866,9 +893,16 @@ export const listing: Listing = {
         id: "prog_id_1",
         createdAt: new Date(),
         updatedAt: new Date(),
-        text: "Program 1",
+        text: "Families",
         jurisdictions: [],
         applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
+        options: [
+          {
+            name: "option_1",
+            text: "Option 1",
+            ordinal: 1,
+          },
+        ],
       },
     },
     {
@@ -877,9 +911,16 @@ export const listing: Listing = {
         id: "prog_id_2",
         createdAt: new Date(),
         updatedAt: new Date(),
-        text: "Program 2",
+        text: "Veterans",
         jurisdictions: [],
         applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
+        options: [
+          {
+            name: "option_1",
+            text: "Option 1",
+            ordinal: 1,
+          },
+        ],
       },
     },
   ],
@@ -1079,4 +1120,44 @@ export const listing: Listing = {
   ],
   unitGroups: [],
   listingImages: [],
+}
+
+export const mockBaseJurisdiction: Jurisdiction = {
+  id: "id",
+  createdAt: new Date(),
+  updatedAt: new Date(),
+  name: "San Jose",
+  multiselectQuestions: [],
+  languages: [LanguagesEnum.en],
+  publicUrl: "http://localhost:3000",
+  emailFromAddress: "Alameda: Housing Bay Area <bloom-no-reply@exygy.dev>",
+  rentalAssistanceDefault:
+    "Housing Choice Vouchers, Section 8 and other valid rental assistance programs will be considered for this property. In the case of a valid rental subsidy, the required minimum income will be based on the portion of the rent that the tenant pays after use of the subsidy.",
+  whatToExpect:
+    "<p>If you are interested in applying for this property, please get in touch in one of these ways:</p><ul><li><p>Phone</p></li><li><p>Email</p></li><li><p>In-person</p></li><li><p>In some instances, the property has a link directly to an application</p></li></ul><p>Once you contact a property, ask if they have any available units if you are looking to move in immediately.</p><p><strong>Waitlists</strong>:</p><p>If none are available, but you are still interested in eventually living at the property, ask how you can be placed on their waitlist.</p>",
+  whatToExpectAdditionalText:
+    "<ul><li><p>Property staff should walk you through the process to get on their waitlist.</p></li><li><p>You can be on waitlists for multiple properties, but you will need to contact each one of them to begin that process.</p></li><li><p>Even if you are on a waitlist, it can take months or over a year to get an available unit for that building.</p></li><li><p>Many properties that are affordable because of government funding or agreements have long waitlists. If you're on a waitlist for a property, you should contact the property on a regular basis to see if any units are available.</p></li></ul>",
+  enablePartnerSettings: true,
+  listingApprovalPermissions: [],
+  duplicateListingPermissions: [],
+  enableGeocodingPreferences: false,
+  allowSingleUseCodeLogin: false,
+  featureFlags: [],
+  requiredListingFields: [],
+}
+
+export const mockUser: User = {
+  id: "123",
+  email: "test@test.com",
+  firstName: "Test",
+  lastName: "User",
+  dob: new Date("2020-01-01"),
+  createdAt: new Date("2020-01-01"),
+  updatedAt: new Date("2020-01-01"),
+  jurisdictions: [],
+  mfaEnabled: false,
+  passwordUpdatedAt: new Date("2020-01-01"),
+  passwordValidForDays: 180,
+  agreedToTermsOfService: true,
+  listings: [],
 }

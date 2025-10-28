@@ -6,6 +6,7 @@ import styles from "./forms.module.scss"
 interface FormLayoutProps {
   children?: React.ReactNode
   className?: string
+  pageTitle?: string
 }
 const FormLayout = (props: FormLayoutProps) => {
   const classNames = [styles["form-layout"]]
@@ -13,7 +14,7 @@ const FormLayout = (props: FormLayoutProps) => {
   return (
     <>
       <ApplicationTimeout />
-      <Layout>
+      <Layout pageTitle={props.pageTitle}>
         <section className={styles["form-layout-container"]}>
           <div className={classNames.join(" ")}>{props.children}</div>
         </section>

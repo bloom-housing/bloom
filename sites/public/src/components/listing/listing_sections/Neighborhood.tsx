@@ -30,6 +30,9 @@ export const Neighborhood = ({
     ? Object.values(neighborhoodAmenities).some((value) => value !== null && value !== undefined)
     : null
 
+  const showSection = address || neighborhood || region || hasNeighborhoodAmenities
+  if (!showSection) return null
+
   return (
     <CollapsibleSection
       title={t("t.neighborhood")}
@@ -37,10 +40,14 @@ export const Neighborhood = ({
       priority={2}
     >
       <div className={`${styles["mobile-inline-collapse-padding"]} seeds-m-bs-section`}>
-        <ListingMap address={getGenericAddress(address)} listingName={name} />
-        <Link href={googleMapsHref} newWindowTarget={true} className={"seeds-m-bs-4"}>
-          {t("t.getDirections")}
-        </Link>
+        {address && (
+          <>
+            <ListingMap address={getGenericAddress(address)} listingName={name} />
+            <Link href={googleMapsHref} newWindowTarget={true} className={"seeds-m-bs-4"}>
+              {t("t.getDirections")}
+            </Link>
+          </>
+        )}
         {neighborhood && (
           <HeadingGroup
             heading={t("t.neighborhood")}

@@ -90,7 +90,7 @@ describe("settings", () => {
       expect(rows).toHaveLength(1)
       const [name, jurisdiction, updated, actions] = within(rows[0]).getAllByRole("cell")
       expect(name).toHaveTextContent(multiselectQuestionPreference.text)
-      expect(jurisdiction).toHaveTextContent("Alameda")
+      expect(jurisdiction).toHaveTextContent("Bloomington")
       expect(updated).toHaveTextContent("09/15/2022")
       const actionButtons = within(actions).getAllByRole("button")
       expect(actionButtons).toHaveLength(3)
@@ -166,7 +166,7 @@ describe("settings", () => {
       fireEvent.click(within(modal).getByText("Delete"))
 
       // Modal should be closed and the alert popped up
-      const removedToaster = await findByText("Preference Removed")
+      const removedToaster = await findByText("Preference removed")
       expect(removedToaster).toBeInTheDocument()
       expect(queryAllByText("Are you sure?")).toHaveLength(0)
     })
@@ -256,10 +256,10 @@ describe("settings", () => {
 
       // Add a preference
       fireEvent.click(getByText("Add item"))
-      expect(getByText("Add Preference")).toBeInTheDocument()
+      expect(getByText("Add preference")).toBeInTheDocument()
 
       // Add a preference option
-      fireEvent.click(getByText("Add Option"))
+      fireEvent.click(getByText("Add option"))
       expect(getByText("Do you want to collect address information?")).toBeInTheDocument()
 
       // Click collect address
@@ -301,10 +301,10 @@ describe("settings", () => {
 
       // Add a preference
       fireEvent.click(getByText("Add item"))
-      expect(getByText("Add Preference")).toBeInTheDocument()
+      expect(getByText("Add preference")).toBeInTheDocument()
 
       // Add a preference option
-      fireEvent.click(getByText("Add Option"))
+      fireEvent.click(getByText("Add option"))
       expect(getByText("Do you want to collect address information?")).toBeInTheDocument()
 
       // Click collect address

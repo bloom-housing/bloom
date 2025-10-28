@@ -7,6 +7,7 @@ import {
   HomeTypeEnum,
   ListingFilterKeys,
   MultiselectQuestion,
+  FeatureFlagEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import styles from "./FilterDrawer.module.scss"
 import {
@@ -18,6 +19,8 @@ import {
   SearchSection,
   unitTypeMapping,
   unitTypesSorted,
+  unitTypesSortedByUnitGroups,
+  unitTypeUnitGroupsMapping,
 } from "./FilterDrawerHelpers"
 import { isTrue } from "../../lib/helpers"
 
@@ -26,12 +29,31 @@ export interface FilterDrawerProps {
   isOpen: boolean
   onClose: () => void
   onSubmit: (data: FilterData) => void
+  onClear: (resetFilters: (data: FilterData) => void) => void
   multiselectData: MultiselectQuestion[]
+  activeFeatureFlags?: FeatureFlagEnum[]
 }
 
 const FilterDrawer = (props: FilterDrawerProps) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, handleSubmit, getValues, setValue } = useForm()
+  const {
+    register,
+    handleSubmit,
+    getValues,
+    setValue,
+    setError,
+    clearErrors,
+    reset,
+    formState: { errors },
+  } = useForm({ mode: "onBlur" })
+
+  const enableUnitGroups = props.activeFeatureFlags?.some(
+    (entry) => entry === FeatureFlagEnum.enableUnitGroups
+  )
+
+  const availabilityLabels = getAvailabilityValues(enableUnitGroups).map((key) =>
+    t(`listings.availability.${key}`)
+  )
 
   return (
     <Drawer
@@ -60,14 +82,14 @@ const FilterDrawer = (props: FilterDrawerProps) => {
             groupLabel={t("t.availability")}
             fields={buildDefaultFilterFields(
               ListingFilterKeys.availabilities,
-              "listings.availability",
-              getAvailabilityValues(),
+              availabilityLabels,
+              getAvailabilityValues(false),
               props.filterState
             )}
             register={register}
           />
           <CheckboxGroup
-            groupLabel={t("listings.homeType.lower")}
+            groupLabel={t("listings.homeType")}
             fields={buildDefaultFilterFields(
               ListingFilterKeys.homeTypes,
               "listings.homeType",
@@ -80,8 +102,12 @@ const FilterDrawer = (props: FilterDrawerProps) => {
             groupLabel={t("listings.unitTypes.bedroomSize")}
             fields={buildDefaultFilterFields(
               ListingFilterKeys.bedroomTypes,
-              unitTypesSorted.map((unitType) => t(unitTypeMapping[unitType].labelKey)),
-              unitTypesSorted,
+              enableUnitGroups
+                ? unitTypesSortedByUnitGroups.map((unitType) =>
+                    t(unitTypeUnitGroupsMapping[unitType].labelKey)
+                  )
+                : unitTypesSorted.map((unitType) => t(unitTypeMapping[unitType].labelKey)),
+              enableUnitGroups ? unitTypesSortedByUnitGroups : unitTypesSorted,
               props.filterState
             )}
             register={register}
@@ -91,6 +117,9 @@ const FilterDrawer = (props: FilterDrawerProps) => {
             getValues={getValues}
             setValue={setValue}
             filterState={props.filterState}
+            setError={setError}
+            clearErrors={clearErrors}
+            errors={errors}
           />
           <CheckboxGroup
             groupLabel={t("t.region")}
@@ -98,7 +127,7 @@ const FilterDrawer = (props: FilterDrawerProps) => {
               return {
                 key: `${ListingFilterKeys.regions}.${region}`,
                 label: region.replace("_", " "),
-                defaultChecked: props.filterState?.[ListingFilterKeys.regions]?.[region],
+                defaultChecked: isTrue(props.filterState?.[ListingFilterKeys.regions]?.[region]),
               }
             })}
             register={register}
@@ -119,7 +148,11 @@ const FilterDrawer = (props: FilterDrawerProps) => {
               groupLabel={t("t.community")}
               fields={buildDefaultFilterFields(
                 ListingFilterKeys.multiselectQuestions,
-                props.multiselectData?.map((multi) => multi.text),
+                props.multiselectData?.map((multi) =>
+                  multi.untranslatedText
+                    ? t(`listingFilters.program.${multi.untranslatedText}`)
+                    : t(`listingFilters.program.${multi.text}`)
+                ),
                 props.multiselectData?.map((multi) => multi.id),
                 props.filterState
               )}
@@ -132,8 +165,8 @@ const FilterDrawer = (props: FilterDrawerProps) => {
         <Button type="submit" variant="primary" size="sm" nativeButtonProps={{ form: "filter" }}>
           {t("listings.showMatchingListings")}
         </Button>
-        <Button variant="primary-outlined" size="sm" onClick={props.onClose}>
-          {t("t.cancel")}
+        <Button variant="primary-outlined" size="sm" onClick={() => props.onClear(reset)}>
+          {t("listingFilters.clear")}
         </Button>
       </Drawer.Footer>
     </Drawer>

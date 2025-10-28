@@ -2,7 +2,7 @@ import React from "react"
 import { FormMultiselectQuestions } from "../../../../src/components/applications/PaperApplicationForm/sections/FormMultiselectQuestions"
 import { FormProviderWrapper } from "./helpers"
 import { MultiselectQuestionsApplicationSectionEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { act, mockNextRouter, render, screen } from "../../../testUtils"
+import { mockNextRouter, render, screen } from "../../../testUtils"
 import { multiselectQuestionPreference } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import userEvent from "@testing-library/user-event"
 
@@ -170,7 +170,7 @@ describe("<FormMultiselectQuestions>", () => {
     expect(checkbox).toBeInTheDocument()
 
     expect(screen.queryByLabelText(/full name of address holder/i)).not.toBeInTheDocument()
-    await act(() => userEvent.click(checkbox))
+    await userEvent.click(checkbox)
     expect(await screen.findByText(/full name of address holder/i)).toBeInTheDocument()
   })
 
@@ -206,7 +206,7 @@ describe("<FormMultiselectQuestions>", () => {
     expect(checkbox).toBeInTheDocument()
 
     expect(screen.queryByLabelText(/relationship to address holder/i)).not.toBeInTheDocument()
-    await act(() => userEvent.click(checkbox))
+    await userEvent.click(checkbox)
     expect(await screen.findByText(/relationship to address holder/i)).toBeInTheDocument()
   })
 
@@ -258,7 +258,7 @@ describe("<FormMultiselectQuestions>", () => {
       screen.queryByText(/Drag the pin to update the marker location/i)
     ).not.toBeInTheDocument()
 
-    await act(() => userEvent.click(checkbox))
+    await userEvent.click(checkbox)
 
     expect(screen.getByText(/qualifying address/i)).toBeInTheDocument()
     expect(screen.getByLabelText(/street address/i)).toBeInTheDocument()

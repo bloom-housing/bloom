@@ -6,6 +6,7 @@ import { Button, Dialog } from "@bloom-housing/ui-seeds"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import {
   ApplicationOrderByKeys,
+  FeatureFlagEnum,
   ListingsStatusEnum,
   LotteryStatusEnum,
   OrderByEnum,
@@ -22,9 +23,10 @@ import Layout from "../../../../layouts"
 import { getColDefs } from "../../../../components/applications/ApplicationsColDefs"
 import { ApplicationsSideNav } from "../../../../components/applications/ApplicationsSideNav"
 import { NavigationHeader } from "../../../../components/shared/NavigationHeader"
+import ListingGuard from "../../../../components/shared/ListingGuard"
 
 const ApplicationsList = () => {
-  const { profile } = useContext(AuthContext)
+  const { profile, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
   const router = useRouter()
   const listingId = router.query.id as string
 
@@ -39,6 +41,14 @@ const ApplicationsList = () => {
 
   const listingJurisdiction = profile?.jurisdictions.find(
     (jurisdiction) => jurisdiction.id === listingDto?.jurisdictions.id
+  )
+  const enableFullTimeStudentQuestion = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableFullTimeStudentQuestion,
+    listingDto?.jurisdictions.id
+  )
+  const disableWorkInRegion = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.disableWorkInRegion,
+    listingDto?.jurisdictions.id
   )
   const includeDemographicsPartner =
     profile?.userRoles?.isPartner && listingJurisdiction?.enablePartnerDemographics
@@ -78,6 +88,7 @@ const ApplicationsList = () => {
 
       this.linkWithId = document.createElement("button")
       this.linkWithId.classList.add("text-blue-700")
+      this.linkWithId.style.textDecoration = "underline"
       this.linkWithId.innerText = params.value
 
       this.linkWithId.addEventListener("click", function () {
@@ -104,8 +115,8 @@ const ApplicationsList = () => {
   }, [applications])
 
   const columnDefs = useMemo(() => {
-    return getColDefs(maxHouseholdSize)
-  }, [maxHouseholdSize])
+    return getColDefs(maxHouseholdSize, enableFullTimeStudentQuestion, disableWorkInRegion)
+  }, [maxHouseholdSize, enableFullTimeStudentQuestion, disableWorkInRegion])
 
   const gridComponents = {
     formatLinkCell,
@@ -113,181 +124,185 @@ const ApplicationsList = () => {
 
   if (!applications || appsError) return <div>{t("t.errorOccurred")}</div>
 
+  if (profile?.userRoles?.isLimitedJurisdictionalAdmin) return null
+
   return (
-    <Layout>
-      <Head>
-        <title>{t("nav.siteTitlePartners")}</title>
-      </Head>
-      <NavigationHeader
-        title={listingName}
-        listingId={listingId}
-        tabs={{
-          show: true,
-          flagsQty: flaggedApps?.meta?.totalFlagged,
-          listingLabel: t("t.listingSingle"),
-          applicationsLabel: t("nav.applications"),
-          lotteryLabel:
-            listingDto?.status === ListingsStatusEnum.closed &&
-            listingDto?.lotteryOptIn &&
-            listingDto?.reviewOrderType === ReviewOrderTypeEnum.lottery
-              ? t("listings.lotteryTitle")
-              : undefined,
-        }}
-        breadcrumbs={
-          <Breadcrumbs>
-            <BreadcrumbLink href="/">{t("t.listing")}</BreadcrumbLink>
-            <BreadcrumbLink href={`/listings/${listingId}`}>{listingName}</BreadcrumbLink>
-            <BreadcrumbLink href={`/listings/${listingId}/applications`} current>
-              {t("nav.applications")}
-            </BreadcrumbLink>
-          </Breadcrumbs>
-        }
-      />
+    <ListingGuard>
+      <Layout>
+        <Head>
+          <title>{`Applications - ${t("nav.siteTitlePartners")}`}</title>
+        </Head>
+        <NavigationHeader
+          title={listingName}
+          listingId={listingId}
+          tabs={{
+            show: true,
+            flagsQty: flaggedApps?.meta?.totalFlagged,
+            listingLabel: t("t.listingSingle"),
+            applicationsLabel: t("nav.applications"),
+            lotteryLabel:
+              listingDto?.status === ListingsStatusEnum.closed &&
+              listingDto?.lotteryOptIn &&
+              listingDto?.reviewOrderType === ReviewOrderTypeEnum.lottery
+                ? t("listings.lotteryTitle")
+                : undefined,
+          }}
+          breadcrumbs={
+            <Breadcrumbs>
+              <BreadcrumbLink href="/">{t("t.listing")}</BreadcrumbLink>
+              <BreadcrumbLink href={`/listings/${listingId}`}>{listingName}</BreadcrumbLink>
+              <BreadcrumbLink href={`/listings/${listingId}/applications`} current>
+                {t("nav.applications")}
+              </BreadcrumbLink>
+            </Breadcrumbs>
+          }
+        />
 
-      <ListingStatusBar status={listingDto?.status} />
+        <ListingStatusBar status={listingDto?.status} />
 
-      <section className={"bg-gray-200 pt-4"}>
-        <article className="flex flex-col md:flex-row items-start gap-x-8 relative max-w-screen-xl mx-auto pb-8 px-4 flex-col">
-          {listingDto && (
-            <>
-              <ApplicationsSideNav
-                className="w-full md:w-72"
-                listingId={listingId}
-                listingOpen={isListingOpen}
-              />
+        <section className={"bg-gray-200 pt-4"}>
+          <article className="flex flex-col md:flex-row items-start gap-x-8 relative max-w-screen-xl mx-auto pb-8 px-4">
+            {listingDto && (
+              <>
+                <ApplicationsSideNav
+                  className="w-full md:w-72"
+                  listingId={listingId}
+                  listingOpen={isListingOpen}
+                />
 
-              <AgTable
-                className="w-full"
-                id="applications-table"
-                pagination={{
-                  perPage: tableOptions.pagination.itemsPerPage,
-                  setPerPage: tableOptions.pagination.setItemsPerPage,
-                  currentPage: tableOptions.pagination.currentPage,
-                  setCurrentPage: tableOptions.pagination.setCurrentPage,
-                }}
-                config={{
-                  gridComponents,
-                  columns: columnDefs,
-                  totalItemsLabel: t("applications.totalApplications"),
-                }}
-                data={{
-                  items: applications,
-                  loading: appsLoading,
-                  totalItems: appsMeta?.totalItems,
-                  totalPages: appsMeta?.totalPages,
-                }}
-                search={{
-                  setSearch: tableOptions.filter.setFilterValue,
-                }}
-                sort={{
-                  setSort: tableOptions.sort.setSortOptions,
-                }}
-                headerContent={
-                  <div className="flex gap-2 items-center">
-                    <Button
-                      onClick={() => {
-                        if (
-                          process.env.showLottery &&
-                          (listingDto.lotteryStatus === LotteryStatusEnum.ran ||
-                            listingDto.lotteryStatus === LotteryStatusEnum.releasedToPartners ||
-                            listingDto.lotteryStatus === LotteryStatusEnum.publishedToPublic)
-                        ) {
-                          setApplicationConfirmAddPostLotteryModal(true)
-                        } else if (listingDto.status === ListingsStatusEnum.closed) {
-                          setApplicationConfirmAddModal(true)
-                        } else {
-                          void router.push(`/listings/${listingId}/applications/add`)
-                        }
-                      }}
-                      variant="primary-outlined"
-                      size="sm"
-                      id={"addApplicationButton"}
-                    >
-                      {t("applications.addApplication")}
-                    </Button>
+                <AgTable
+                  className="w-full"
+                  id="applications-table"
+                  pagination={{
+                    perPage: tableOptions.pagination.itemsPerPage,
+                    setPerPage: tableOptions.pagination.setItemsPerPage,
+                    currentPage: tableOptions.pagination.currentPage,
+                    setCurrentPage: tableOptions.pagination.setCurrentPage,
+                  }}
+                  config={{
+                    gridComponents,
+                    columns: columnDefs,
+                    totalItemsLabel: t("applications.totalApplications"),
+                  }}
+                  data={{
+                    items: applications,
+                    loading: appsLoading,
+                    totalItems: appsMeta?.totalItems,
+                    totalPages: appsMeta?.totalPages,
+                  }}
+                  search={{
+                    setSearch: tableOptions.filter.setFilterValue,
+                  }}
+                  sort={{
+                    setSort: tableOptions.sort.setSortOptions,
+                  }}
+                  headerContent={
+                    <div className="flex gap-2 items-center">
+                      <Button
+                        onClick={() => {
+                          if (
+                            process.env.showLottery &&
+                            (listingDto.lotteryStatus === LotteryStatusEnum.ran ||
+                              listingDto.lotteryStatus === LotteryStatusEnum.releasedToPartners ||
+                              listingDto.lotteryStatus === LotteryStatusEnum.publishedToPublic)
+                          ) {
+                            setApplicationConfirmAddPostLotteryModal(true)
+                          } else if (listingDto.status === ListingsStatusEnum.closed) {
+                            setApplicationConfirmAddModal(true)
+                          } else {
+                            void router.push(`/listings/${listingId}/applications/add`)
+                          }
+                        }}
+                        variant="primary-outlined"
+                        size="sm"
+                        id={"addApplicationButton"}
+                      >
+                        {t("applications.addApplication")}
+                      </Button>
 
-                    <Button
-                      variant="primary-outlined"
-                      size="sm"
-                      onClick={() => onExport()}
-                      loadingMessage={exportLoading && t("t.formSubmitted")}
-                    >
-                      {t("t.export")}
-                    </Button>
-                  </div>
-                }
-              />
-            </>
-          )}
-        </article>
-      </section>
+                      <Button
+                        variant="primary-outlined"
+                        size="sm"
+                        onClick={() => onExport()}
+                        loadingMessage={exportLoading && t("t.formSubmitted")}
+                      >
+                        {t("t.export")}
+                      </Button>
+                    </div>
+                  }
+                />
+              </>
+            )}
+          </article>
+        </section>
 
-      <Dialog
-        isOpen={applicationConfirmAddModal}
-        onClose={() => setApplicationConfirmAddModal(false)}
-        ariaLabelledBy="confirm-add-application-dialog-header"
-      >
-        <Dialog.Header id="confirm-add-application-dialog-header">
-          {t("applications.addConfirmModalHeader")}
-        </Dialog.Header>
-        <Dialog.Content>{t("applications.addConfirmModalContent")}</Dialog.Content>
-        <Dialog.Footer>
-          <Button
-            type="button"
-            variant="primary"
-            onClick={() => router.push(`/listings/${listingId}/applications/add`)}
-            size="sm"
-          >
-            {t("applications.addConfirmModalAddApplication")}
-          </Button>
-          <Button
-            type="button"
-            variant="primary-outlined"
-            onClick={() => setApplicationConfirmAddModal(false)}
-            size="sm"
-          >
-            {t("t.cancel")}
-          </Button>
-        </Dialog.Footer>
-      </Dialog>
+        <Dialog
+          isOpen={applicationConfirmAddModal}
+          onClose={() => setApplicationConfirmAddModal(false)}
+          ariaLabelledBy="confirm-add-application-dialog-header"
+        >
+          <Dialog.Header id="confirm-add-application-dialog-header">
+            {t("applications.addConfirmModalHeader")}
+          </Dialog.Header>
+          <Dialog.Content>{t("applications.addConfirmModalContent")}</Dialog.Content>
+          <Dialog.Footer>
+            <Button
+              type="button"
+              variant="primary"
+              onClick={() => router.push(`/listings/${listingId}/applications/add`)}
+              size="sm"
+            >
+              {t("applications.addConfirmModalAddApplication")}
+            </Button>
+            <Button
+              type="button"
+              variant="primary-outlined"
+              onClick={() => setApplicationConfirmAddModal(false)}
+              size="sm"
+            >
+              {t("t.cancel")}
+            </Button>
+          </Dialog.Footer>
+        </Dialog>
 
-      <Dialog
-        isOpen={applicationConfirmAddPostLotteryModal}
-        onClose={() => setApplicationConfirmAddPostLotteryModal(false)}
-        ariaLabelledBy="confirm-add-application-post-lottery-dialog-header"
-      >
-        <Dialog.Header id="confirm-add-application-post-lottery-dialog-header">
-          {t("applications.addConfirmModalAddApplicationPostLotteryTitle")}
-        </Dialog.Header>
-        <Dialog.Content>
-          <p>
-            <span>{t("applications.addConfirmModalAddApplicationPostLottery")}</span>{" "}
-            <span className={"font-semibold"}>
-              {t("applications.addConfirmModalAddApplicationPostLotteryWeighted")}
-            </span>
-          </p>
-          <p>{t("applications.addConfirmModalAddApplicationPostLotteryAreYouSure")}</p>
-        </Dialog.Content>
-        <Dialog.Footer>
-          <Button
-            type="button"
-            variant="alert"
-            onClick={() => router.push(`/listings/${listingId}/applications/add`)}
-            size="sm"
-          >
-            {t("applications.addConfirmModalAddApplicationPostLotteryConfirm")}
-          </Button>
-          <Button
-            type="button"
-            variant="primary-outlined"
-            onClick={() => setApplicationConfirmAddPostLotteryModal(false)}
-            size="sm"
-          >
-            {t("t.cancel")}
-          </Button>
-        </Dialog.Footer>
-      </Dialog>
-    </Layout>
+        <Dialog
+          isOpen={applicationConfirmAddPostLotteryModal}
+          onClose={() => setApplicationConfirmAddPostLotteryModal(false)}
+          ariaLabelledBy="confirm-add-application-post-lottery-dialog-header"
+        >
+          <Dialog.Header id="confirm-add-application-post-lottery-dialog-header">
+            {t("applications.addConfirmModalAddApplicationPostLotteryTitle")}
+          </Dialog.Header>
+          <Dialog.Content>
+            <p>
+              <span>{t("applications.addConfirmModalAddApplicationPostLottery")}</span>{" "}
+              <span className={"font-semibold"}>
+                {t("applications.addConfirmModalAddApplicationPostLotteryWeighted")}
+              </span>
+            </p>
+            <p>{t("applications.addConfirmModalAddApplicationPostLotteryAreYouSure")}</p>
+          </Dialog.Content>
+          <Dialog.Footer>
+            <Button
+              type="button"
+              variant="alert"
+              onClick={() => router.push(`/listings/${listingId}/applications/add`)}
+              size="sm"
+            >
+              {t("applications.addConfirmModalAddApplicationPostLotteryConfirm")}
+            </Button>
+            <Button
+              type="button"
+              variant="primary-outlined"
+              onClick={() => setApplicationConfirmAddPostLotteryModal(false)}
+              size="sm"
+            >
+              {t("t.cancel")}
+            </Button>
+          </Dialog.Footer>
+        </Dialog>
+      </Layout>
+    </ListingGuard>
   )
 }
 

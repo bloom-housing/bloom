@@ -1,4 +1,4 @@
-import * as React from "react"
+import React, { useMemo } from "react"
 import { Heading } from "@bloom-housing/ui-seeds"
 import { StackedTable, t } from "@bloom-housing/ui-components"
 import {
@@ -28,46 +28,20 @@ export const RentSummary = ({
   section8Acceptance,
   listing,
 }: RentSummaryProps) => {
-  const unitSummariesHeaders = {
-    unitType: "t.unitType",
-    minimumIncome: "t.minimumIncome",
-    rent: "t.rent",
-    availability: "t.availability",
-  }
-
   const { headers, data: unitGroupSummariesData } = getUnitGroupSummariesTable(listing)
 
-  return (
-    <div className={styles["rent-summary"]}>
-      <Heading size={"lg"} className={"seeds-m-be-header"} priority={2}>
-        {t("t.rent")}
-      </Heading>
-      {amiValues.length > 1 &&
-        amiValues.map((percent) => {
-          const byAMI = unitsSummarized.byAMI.find((item) => {
-            return parseInt(item.percent, 10) === percent
-          })
+  const hasData = !!listing?.unitGroups?.length || !!listing?.units?.length
 
-          const groupedUnits = byAMI
-            ? getStackedUnitSummaryDetailsTable(byAMI.byUnitType, reviewOrderType)
-            : []
+  const rentTable = useMemo(() => {
+    const unitSummariesHeaders = {
+      unitType: "t.unitType",
+      minimumIncome: "t.minimumIncome",
+      rent: "t.rent",
+      availability: "t.availability",
+    }
 
-          return (
-            <React.Fragment key={percent}>
-              <Heading size={"md"} priority={3} className={"seeds-m-bs-content"}>
-                {t("listings.percentAMIUnit", { percent: percent })}
-              </Heading>
-              <div className={"seeds-m-bs-header"}>
-                <StackedTable headers={unitSummariesHeaders} stackedData={groupedUnits} />
-              </div>
-            </React.Fragment>
-          )
-        })}
-      {unitGroupSummariesData && (
-        <StackedTable headers={headers} stackedData={unitGroupSummariesData} />
-      )}
-
-      {amiValues.length === 1 && (
+    if (amiValues.length === 1) {
+      return (
         <StackedTable
           headers={unitSummariesHeaders}
           stackedData={getStackedUnitSummaryDetailsTable(
@@ -75,8 +49,57 @@ export const RentSummary = ({
             reviewOrderType
           )}
         />
+      )
+    }
+
+    if (amiValues.length > 1) {
+      return amiValues.map((percent) => {
+        const byAMI = unitsSummarized.byAMI.find((item) => {
+          return parseInt(item.percent, 10) === percent
+        })
+
+        const groupedUnits = byAMI
+          ? getStackedUnitSummaryDetailsTable(byAMI.byUnitType, reviewOrderType)
+          : []
+
+        return (
+          <React.Fragment key={percent}>
+            <Heading size={"md"} priority={3} className={"seeds-m-bs-content"}>
+              {t("listings.percentAMIUnit", { percent: percent })}
+            </Heading>
+            <div className={"seeds-m-bs-header"}>
+              <StackedTable headers={unitSummariesHeaders} stackedData={groupedUnits} />
+            </div>
+          </React.Fragment>
+        )
+      })
+    }
+
+    if (unitGroupSummariesData) {
+      return <StackedTable headers={headers} stackedData={unitGroupSummariesData} />
+    }
+  }, [
+    amiValues,
+    headers,
+    reviewOrderType,
+    unitGroupSummariesData,
+    unitsSummarized?.byAMI,
+    unitsSummarized?.byUnitTypeAndRent,
+  ])
+
+  if (!hasData) return null
+
+  return (
+    <div className={styles["rent-summary"]}>
+      <Heading size={"lg"} className={"seeds-m-be-header"} priority={2}>
+        {t("t.rent")}
+      </Heading>
+      {rentTable}
+      {section8Acceptance && (
+        <div className={"seeds-p-bs-4"}>
+          <Markdown>{t("listings.section8VoucherInfo")}</Markdown>
+        </div>
       )}
-      {section8Acceptance && <Markdown>{t("listings.section8VoucherInfo")}</Markdown>}
     </div>
   )
 }

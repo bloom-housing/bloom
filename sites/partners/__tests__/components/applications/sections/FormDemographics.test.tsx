@@ -1,4 +1,3 @@
-import { act } from "react-dom/test-utils"
 import { FormDemographics } from "../../../../src/components/applications/PaperApplicationForm/sections/FormDemographics"
 import { mockNextRouter, render, screen } from "../../../testUtils"
 import { FormProviderWrapper } from "./helpers"
@@ -10,7 +9,7 @@ beforeAll(() => {
 })
 
 describe("<FormDemographics>", () => {
-  it("renders the form with demographic information fields", () => {
+  it("renders the form with full demographic information fields", () => {
     render(
       <FormProviderWrapper>
         <FormDemographics
@@ -21,6 +20,7 @@ describe("<FormDemographics>", () => {
             race: [],
             howDidYouHear: [],
           }}
+          enableLimitedHowDidYouHear={false}
         />
       </FormProviderWrapper>
     )
@@ -62,6 +62,59 @@ describe("<FormDemographics>", () => {
     expect(screen.queryByLabelText(/property website/i)).not.toBeInTheDocument()
   })
 
+  it("renders the form with limited how did you hear options when flag is enabled", () => {
+    render(
+      <FormProviderWrapper>
+        <FormDemographics
+          formValues={{
+            id: "id",
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            race: [],
+            howDidYouHear: [],
+          }}
+          enableLimitedHowDidYouHear={true}
+        />
+      </FormProviderWrapper>
+    )
+
+    expect(screen.getByText(/race/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/american indian \/ alaskan native/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/asian/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/black \/ african american/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/native hawaiian \/ other pacific islander/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/white/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/other \/ multiracial/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/decline to respond/i)).toBeInTheDocument()
+
+    expect(screen.queryByLabelText(/Asian Indian/i)).not.toBeInTheDocument()
+    expect(screen.queryByLabelText(/Chinese/i)).not.toBeInTheDocument()
+    expect(screen.queryByLabelText(/Filipino/i)).not.toBeInTheDocument()
+    expect(screen.queryByLabelText(/Japanese/i)).not.toBeInTheDocument()
+    expect(screen.queryByLabelText(/Korean/i)).not.toBeInTheDocument()
+    expect(screen.queryByLabelText(/Vietnamese/i)).not.toBeInTheDocument()
+    expect(screen.queryByLabelText(/Other Asian/i)).not.toBeInTheDocument()
+    expect(screen.queryByLabelText(/^Native Hawaiian$/i)).not.toBeInTheDocument()
+    expect(screen.queryByLabelText(/Guamanian or Chamorro/i)).not.toBeInTheDocument()
+    expect(screen.queryByLabelText(/Samoan/i)).not.toBeInTheDocument()
+    expect(screen.queryByLabelText(/^Other Pacific Islander$/i)).not.toBeInTheDocument()
+
+    expect(screen.getByLabelText(/ethnicity/i)).toBeInTheDocument()
+
+    expect(screen.getByText(/how did you hear about us/i))
+    expect(screen.queryByLabelText(/bus ad/i)).not.toBeInTheDocument()
+    expect(screen.getByLabelText(/developer website/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/email alert/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/flyer/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/friend/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/housing counselor/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/^other$/i)).toBeInTheDocument()
+    expect(screen.queryByLabelText(/radio ad/i)).not.toBeInTheDocument()
+    expect(screen.getByLabelText(/alameda county hcd website/i)).toBeInTheDocument()
+    expect(screen.queryByLabelText(/government website/i)).not.toBeInTheDocument()
+    expect(screen.queryByLabelText(/property website/i)).not.toBeInTheDocument()
+  })
+
   it("should expand suboptions when main key is checked", async () => {
     render(
       <FormProviderWrapper>
@@ -82,10 +135,8 @@ describe("<FormDemographics>", () => {
       /native hawaiian \/ other pacific islander/i
     )
 
-    await act(async () => {
-      await userEvent.click(asianCheckbox)
-      await userEvent.click(hawaiianPacificCheckbox)
-    })
+    await userEvent.click(asianCheckbox)
+    await userEvent.click(hawaiianPacificCheckbox)
 
     expect(screen.getByLabelText(/Asian Indian/i)).toBeInTheDocument()
     expect(screen.getByLabelText(/Chinese/i)).toBeInTheDocument()

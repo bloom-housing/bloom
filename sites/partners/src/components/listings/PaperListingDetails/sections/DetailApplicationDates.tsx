@@ -2,16 +2,17 @@ import React, { useContext, useMemo, useState } from "react"
 import dayjs from "dayjs"
 import { t, MinimalTable } from "@bloom-housing/ui-components"
 import { Button, Card, Drawer, FieldValue, Grid, Link } from "@bloom-housing/ui-seeds"
+import { AuthContext } from "@bloom-housing/shared-helpers/src/auth/AuthContext"
 import {
   ListingEvent,
   ListingEventsTypeEnum,
   MarketingTypeEnum,
   FeatureFlagEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import SectionWithGrid from "../../../shared/SectionWithGrid"
 import { ListingContext } from "../../ListingContext"
 import { getDetailFieldDate, getDetailFieldString, getDetailFieldTime } from "./helpers"
-import SectionWithGrid from "../../../shared/SectionWithGrid"
-import { AuthContext } from "@bloom-housing/shared-helpers/src/auth/AuthContext"
+
 const DetailApplicationDates = () => {
   const listing = useContext(ListingContext)
   const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
@@ -48,7 +49,13 @@ const DetailApplicationDates = () => {
             startTime: { content: startTime && getDetailFieldTime(startTime) },
             endTime: { content: endTime && getDetailFieldTime(endTime) },
             url: {
-              content: url ? <Link href={url}>{t("t.url")}</Link> : t("t.n/a"),
+              content: url ? (
+                <Link href={url} className={"darker-link"}>
+                  {t("t.url")}
+                </Link>
+              ) : (
+                t("t.n/a")
+              ),
             },
             view: {
               content: (
@@ -57,7 +64,7 @@ const DetailApplicationDates = () => {
                     type="button"
                     variant="text"
                     size="sm"
-                    className="font-semibold"
+                    className={"font-semibold darker-link"}
                     onClick={() => setDrawer(event)}
                   >
                     {t("t.view")}
@@ -74,28 +81,34 @@ const DetailApplicationDates = () => {
     <>
       <SectionWithGrid heading={t("listings.sections.applicationDatesTitle")} inset>
         <Grid.Row columns={3}>
-          <FieldValue id="applicationDeadline" label={t("listings.applicationDeadline")}>
-            {getDetailFieldDate(listing.applicationDueDate) ?? t("t.n/a")}
-          </FieldValue>
-          <FieldValue
-            id="applicationDueTime"
-            className="seeds-grid-span-2"
-            label={t("listings.applicationDueTime")}
-          >
-            {getDetailFieldTime(listing.applicationDueDate) ?? t("t.n/a")}
-          </FieldValue>
+          <Grid.Cell>
+            <FieldValue id="applicationDeadline" label={t("listings.applicationDeadline")}>
+              {getDetailFieldDate(listing.applicationDueDate) ?? t("t.n/a")}
+            </FieldValue>
+          </Grid.Cell>
+          <Grid.Cell>
+            <FieldValue
+              id="applicationDueTime"
+              className="seeds-grid-span-2"
+              label={t("listings.applicationDueTime")}
+            >
+              {getDetailFieldTime(listing.applicationDueDate) ?? t("t.n/a")}
+            </FieldValue>
+          </Grid.Cell>
         </Grid.Row>
 
         {!!openHouseEvents.length && (
           <Grid.Row columns={1}>
-            <FieldValue id="openHouseEvent.header" label={t("listings.openHouseEvent.header")}>
-              <MinimalTable
-                id="openhouseHeader"
-                className="spacer-heading-above"
-                headers={openHouseHeaders}
-                data={openHouseEvents}
-              />
-            </FieldValue>
+            <Grid.Cell>
+              <FieldValue id="openHouseEvent.header" label={t("listings.openHouseEvent.header")}>
+                <MinimalTable
+                  id="openhouseHeader"
+                  className="spacer-heading-above"
+                  headers={openHouseHeaders}
+                  data={openHouseEvents}
+                />
+              </FieldValue>
+            </Grid.Cell>
           </Grid.Row>
         )}
 
@@ -112,30 +125,40 @@ const DetailApplicationDates = () => {
               <Card.Section>
                 <Grid className="grid-inset-section">
                   <Grid.Row columns={3}>
-                    <FieldValue id="drawer.startTime.date" label={t("t.date")}>
-                      {drawer?.startTime && getDetailFieldDate(drawer.startTime)}
-                    </FieldValue>
-                    <FieldValue id="drawer.startTime.time" label={t("t.startTime")}>
-                      {getDetailFieldTime(drawer?.startTime)}
-                    </FieldValue>
-                    <FieldValue id="drawer.endTime.time" label={t("t.endTime")}>
-                      {drawer?.endTime && getDetailFieldTime(drawer?.endTime)}
-                    </FieldValue>
-                    <FieldValue id="drawer.url" label={t("t.url")}>
-                      {drawer?.url ? (
-                        <Link className="mx-0 my-0" href={drawer.url}>
-                          {drawer?.label ?? t("t.url")}
-                        </Link>
-                      ) : (
-                        t("t.n/a")
-                      )}
-                    </FieldValue>
-                    <FieldValue
-                      id="events.openHouseNotes"
-                      label={t("listings.events.openHouseNotes")}
-                    >
-                      {drawer?.note || t("t.n/a")}
-                    </FieldValue>
+                    <Grid.Cell>
+                      <FieldValue id="drawer.startTime.date" label={t("t.date")}>
+                        {drawer?.startTime && getDetailFieldDate(drawer.startTime)}
+                      </FieldValue>
+                    </Grid.Cell>
+                    <Grid.Cell>
+                      <FieldValue id="drawer.startTime.time" label={t("t.startTime")}>
+                        {getDetailFieldTime(drawer?.startTime)}
+                      </FieldValue>
+                    </Grid.Cell>
+                    <Grid.Cell>
+                      <FieldValue id="drawer.endTime.time" label={t("t.endTime")}>
+                        {drawer?.endTime && getDetailFieldTime(drawer?.endTime)}
+                      </FieldValue>
+                    </Grid.Cell>
+                    <Grid.Cell>
+                      <FieldValue id="drawer.url" label={t("t.url")}>
+                        {drawer?.url ? (
+                          <Link className="mx-0 my-0 darker-link" href={drawer.url}>
+                            {drawer?.label ?? t("t.url")}
+                          </Link>
+                        ) : (
+                          t("t.n/a")
+                        )}
+                      </FieldValue>
+                    </Grid.Cell>
+                    <Grid.Cell>
+                      <FieldValue
+                        id="events.openHouseNotes"
+                        label={t("listings.events.openHouseNotes")}
+                      >
+                        {drawer?.note || t("t.n/a")}
+                      </FieldValue>
+                    </Grid.Cell>
                   </Grid.Row>
                 </Grid>
               </Card.Section>
@@ -150,14 +173,18 @@ const DetailApplicationDates = () => {
 
         {enableMarketingStatus && (
           <Grid.Row columns={3}>
-            <FieldValue id="marketingStatus" label={t("listings.marketingSection.status")}>
-              {getDetailFieldString(t(marketingTypeHeaders[listing.marketingType]))}
-            </FieldValue>
-            <FieldValue id="marketingSeasonDate" label={t("listings.marketingSection.date")}>
-              {listing.marketingSeason && t(`seasons.${listing.marketingSeason}`)}{" "}
-              {listing.marketingDate && dayjs(listing.marketingDate).year()}
-              {!listing.marketingSeason && !listing.marketingDate && t("t.none")}
-            </FieldValue>
+            <Grid.Cell>
+              <FieldValue id="marketingStatus" label={t("listings.marketingSection.status")}>
+                {getDetailFieldString(t(marketingTypeHeaders[listing.marketingType]))}
+              </FieldValue>
+            </Grid.Cell>
+            <Grid.Cell>
+              <FieldValue id="marketingSeasonDate" label={t("listings.marketingSection.date")}>
+                {listing.marketingSeason && t(`seasons.${listing.marketingSeason}`)}{" "}
+                {listing.marketingYear && listing.marketingYear}
+                {!listing.marketingSeason && !listing.marketingYear && t("t.none")}
+              </FieldValue>
+            </Grid.Cell>
           </Grid.Row>
         )}
       </SectionWithGrid>

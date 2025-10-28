@@ -1,6 +1,7 @@
 import React from "react"
 import dayjs from "dayjs"
 import InfoIcon from "@heroicons/react/20/solid/InformationCircleIcon"
+import LockClosedIcon from "@heroicons/react/20/solid/LockClosedIcon"
 import {
   t,
   ListingCard,
@@ -20,6 +21,8 @@ import {
 import {
   Address,
   ApplicationMultiselectQuestion,
+  FeatureFlag,
+  FeatureFlagEnum,
   Jurisdiction,
   Listing,
   ListingsStatusEnum,
@@ -34,6 +37,7 @@ import {
 import { CommonMessageVariant } from "@bloom-housing/ui-seeds/src/blocks/shared/CommonMessage"
 import { Icon, Message } from "@bloom-housing/ui-seeds"
 import styles from "./helpers.module.scss"
+import { ApplicationFormConfig } from "./applications/configInterfaces"
 
 export const getGenericAddress = (bloomAddress: Address) => {
   return bloomAddress
@@ -150,7 +154,8 @@ export const getListingApplicationStatus = (
 
 export const getStatusPrefix = (
   listing: Listing,
-  enableMarketingStatus: boolean
+  enableMarketingStatus: boolean,
+  enableUnitGroups: boolean
 ): { label: string; variant: CommonMessageVariant } => {
   if (
     listing.status === ListingsStatusEnum.closed ||
@@ -161,13 +166,32 @@ export const getStatusPrefix = (
   if (enableMarketingStatus && listing.marketingType === MarketingTypeEnum.comingSoon)
     return { label: t("listings.underConstruction"), variant: "warn" }
 
-  switch (listing.reviewOrderType) {
-    case ReviewOrderTypeEnum.lottery:
+  if (enableUnitGroups) {
+    const hasUnitGroupsWaitlistOpen = listing.unitGroups.some((group) => group.openWaitlist)
+    const unitsAvailable =
+      listing.unitGroups.length > 0
+        ? listing.unitGroups.reduce((acc, curr) => acc + curr.totalAvailable, 0)
+        : listing.unitsAvailable
+    if (listing.reviewOrderType === ReviewOrderTypeEnum.lottery)
       return { label: t("listings.lottery"), variant: "primary" }
-    case ReviewOrderTypeEnum.waitlist:
+    if (unitsAvailable) return { label: t("listings.applicationFCFS"), variant: "primary" }
+    if (!listing.unitGroups || listing.unitGroups.length === 0) {
+      return { label: t("listings.availabilityUnknown"), variant: "warn" }
+    }
+    if (hasUnitGroupsWaitlistOpen) {
       return { label: t("listings.waitlist.open"), variant: "secondary" }
-    default:
-      return { label: t("listings.applicationFCFS"), variant: "primary" }
+    } else {
+      return { label: t("listings.availability.closedWaitlist"), variant: "secondary-inverse" }
+    }
+  } else {
+    switch (listing.reviewOrderType) {
+      case ReviewOrderTypeEnum.lottery:
+        return { label: t("listings.lottery"), variant: "primary" }
+      case ReviewOrderTypeEnum.waitlist:
+        return { label: t("listings.waitlist.open"), variant: "secondary" }
+      default:
+        return { label: t("listings.applicationFCFS"), variant: "primary" }
+    }
   }
 }
 
@@ -177,7 +201,7 @@ export const getListingStatusMessageContent = (
   enableMarketingStatus: boolean,
   marketingType: MarketingTypeEnum,
   marketingSeason: MarketingSeasonEnum,
-  marketingDate: Date,
+  marketingYear: number,
   hideTime?: boolean
 ) => {
   let content = ""
@@ -203,7 +227,7 @@ export const getListingStatusMessageContent = (
     }
 
     if (marketingType === MarketingTypeEnum.comingSoon && enableMarketingStatus) {
-      content = getApplicationSeason(marketingSeason, marketingDate)
+      content = getApplicationSeason(marketingSeason, marketingYear)
     }
   }
   return content
@@ -211,32 +235,62 @@ export const getListingStatusMessageContent = (
 
 export const getListingStatusMessage = (
   listing: Listing,
-  jurisdiction: Jurisdiction,
+  jurisdiction: Jurisdiction | { featureFlags: FeatureFlag[] },
   content?: React.ReactNode,
   hideTime?: boolean,
-  hideDate?: boolean
+  hideDate?: boolean,
+  className?: string
 ) => {
   if (!listing) return
 
   const enableMarketingStatus = isFeatureFlagOn(jurisdiction, "enableMarketingStatus")
-  const prefix = getStatusPrefix(listing, enableMarketingStatus)
+  const enableUnitGroups = isFeatureFlagOn(jurisdiction, "enableUnitGroups")
+  const prefix = getStatusPrefix(listing, enableMarketingStatus, enableUnitGroups)
+
+  const overwriteHide =
+    listing.reviewOrderType !== ReviewOrderTypeEnum.lottery &&
+    listing.marketingType !== MarketingTypeEnum.comingSoon
+
+  const hideNoUnitGroups =
+    enableUnitGroups && (!listing.unitGroups || listing.unitGroups.length === 0) && overwriteHide
+  const hideWaitlistClosedNoAvailableUnits =
+    enableUnitGroups &&
+    !listing.unitGroups.some((group) => group.openWaitlist || group.totalAvailable > 0) &&
+    overwriteHide
+  const hideIsClosed =
+    listing.status === ListingsStatusEnum.closed ||
+    (listing.applicationDueDate && dayjs() > dayjs(listing.applicationDueDate))
+  const hideNoDateMarketingStatus =
+    listing.marketingType === MarketingTypeEnum.comingSoon &&
+    !listing.marketingSeason &&
+    !listing.marketingYear
+
+  const hideStatusMessageContent =
+    hideDate ||
+    hideNoUnitGroups ||
+    hideWaitlistClosedNoAvailableUnits ||
+    hideIsClosed ||
+    hideNoDateMarketingStatus
+
+  const classNames = [styles["status-bar"]]
+  if (className) classNames.push(className)
 
   return (
     <Message
-      className={styles["status-bar"]}
+      className={classNames.join(" ")}
       customIcon={
         <Icon size="md" className={styles["primary-color-icon"]}>
-          <InfoIcon />
+          {prefix?.variant === "secondary-inverse" ? <LockClosedIcon /> : <InfoIcon />}
         </Icon>
       }
-      variant={prefix.variant}
+      variant={prefix?.variant}
     >
       {content ? (
         content
       ) : (
         <div className={styles["due-date-content"]}>
-          <div className={styles["date-review-order"]}>{prefix.label}</div>
-          {!hideDate && (
+          <div className={styles["date-review-order"]}>{prefix?.label}</div>
+          {!hideStatusMessageContent && (
             <div>
               {getListingStatusMessageContent(
                 listing.status,
@@ -244,7 +298,7 @@ export const getListingStatusMessage = (
                 enableMarketingStatus,
                 listing.marketingType,
                 listing.marketingSeason,
-                listing.marketingDate,
+                listing.marketingYear,
                 hideTime
               )}
             </div>
@@ -255,15 +309,18 @@ export const getListingStatusMessage = (
   )
 }
 
-export const getApplicationSeason = (marketingSeason: MarketingSeasonEnum, marketingDate: Date) => {
+export const getApplicationSeason = (
+  marketingSeason: MarketingSeasonEnum,
+  marketingYear: number
+) => {
   let label = t("listings.apply.applicationSeason")
   if (marketingSeason) {
     label = label.concat(` ${t(`seasons.${marketingSeason}`)}`)
   }
-  if (marketingDate) {
-    label = label.concat(` ${dayjs(marketingDate).year()}`)
+  if (marketingYear) {
+    label = label.concat(` ${marketingYear}`)
   }
-  return label
+  return marketingSeason || marketingYear ? label : null
 }
 
 export const getListings = (listings) => {
@@ -399,7 +456,11 @@ export const downloadExternalPDF = async (fileURL: string, fileName: string) => 
   }
 }
 
-export const isFeatureFlagOn = (jurisdiction: Jurisdiction, featureFlag: string) => {
+export const isFeatureFlagOn = (
+  // optional type when no full jurisdiction data is available
+  jurisdiction: Jurisdiction | { featureFlags: FeatureFlag[] },
+  featureFlag: string
+) => {
   return jurisdiction?.featureFlags?.some((flag) => flag.name === featureFlag && flag.active)
 }
 
@@ -441,4 +502,20 @@ export const fetchFavoriteListingIds = async (userId: string, userService: UserS
 
 export const isTrue = (value) => {
   return value === true || value === "true"
+}
+
+export const isUnitGroupAppWaitlist = (listing: Listing, config: ApplicationFormConfig) => {
+  return (
+    isFeatureFlagOn(config, FeatureFlagEnum.enableUnitGroups) &&
+    listing.unitGroups.some((group) => group.openWaitlist) &&
+    !listing.unitGroups.some((group) => group.totalAvailable > 0)
+  )
+}
+
+export const isUnitGroupAppBase = (listing: Listing, config: ApplicationFormConfig) => {
+  return (
+    isFeatureFlagOn(config, FeatureFlagEnum.enableUnitGroups) &&
+    !listing.unitGroups.some((group) => group.openWaitlist) &&
+    !listing.unitGroups.some((group) => group.totalAvailable > 0)
+  )
 }

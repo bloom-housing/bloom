@@ -3,11 +3,13 @@ import { Address } from '../dtos/addresses/address.dto';
 import { ApplicationFlaggedSet } from '../dtos/application-flagged-sets/application-flagged-set.dto';
 import { ApplicationLotteryPosition } from '../dtos/applications/application-lottery-position.dto';
 import { ApplicationMultiselectQuestion } from '../dtos/applications/application-multiselect-question.dto';
+import { FeatureFlagEnum } from '../enums/feature-flags/feature-flags-enum';
 import { MultiselectQuestion } from '../dtos/multiselect-questions/multiselect-question.dto';
 import { UnitType } from '../dtos/unit-types/unit-type.dto';
 import { CsvHeader } from '../types/CsvExportInterface';
 import { formatLocalDate } from '../utilities/format-local-date';
-
+import { User } from 'src/dtos/users/user.dto';
+import { doAnyJurisdictionHaveFeatureFlagSet } from './feature-flag-utilities';
 /**
  *
  * @param maxHouseholdMembers the max number of household members on an application
@@ -22,10 +24,25 @@ export const getExportHeaders = (
   maxHouseholdMembers: number,
   multiSelectQuestions: MultiselectQuestion[],
   timeZone: string,
+  user: User,
   includeDemographics = false,
   forLottery = false,
   dateFormat = 'MM-DD-YYYY hh:mm:ssA z',
+  swapCommunityTypeWithPrograms?: boolean,
 ): CsvHeader[] => {
+  const enableAdaOtherOption = doAnyJurisdictionHaveFeatureFlagSet(
+    user.jurisdictions,
+    FeatureFlagEnum.enableAdaOtherOption,
+  );
+  const enableFullTimeStudentQuestion = doAnyJurisdictionHaveFeatureFlagSet(
+    user.jurisdictions,
+    FeatureFlagEnum.enableFullTimeStudentQuestion,
+  );
+  const disableWorkInRegion = doAnyJurisdictionHaveFeatureFlagSet(
+    user.jurisdictions,
+    FeatureFlagEnum.disableWorkInRegion,
+  );
+
   const headers: CsvHeader[] = [
     {
       path: 'id',
@@ -110,6 +127,25 @@ export const getExportHeaders = (
         path: 'contactPreferences',
         label: 'Primary Applicant Preferred Contact Type',
       },
+    ],
+  );
+
+  if (!disableWorkInRegion) {
+    headers.push({
+      path: 'applicant.workInRegion',
+      label: 'Primary Applicant Work in Region',
+    });
+  }
+
+  if (enableFullTimeStudentQuestion) {
+    headers.push({
+      path: 'applicant.fullTimeStudent',
+      label: 'Primary Applicant Full-Time Student',
+    });
+  }
+
+  headers.push(
+    ...[
       {
         path: 'applicant.applicantAddress.street',
         label: `Primary Applicant Street`,
@@ -240,13 +276,23 @@ export const getExportHeaders = (
         path: 'accessibility.hearing',
         label: 'Accessibility Hearing',
       },
+      ...(enableAdaOtherOption
+        ? [
+            {
+              path: 'accessibility.other',
+              label: 'Accessibility Other',
+            },
+          ]
+        : []),
       {
         path: 'householdExpectingChanges',
         label: 'Expecting Household Changes',
       },
       {
         path: 'householdStudent',
-        label: 'Household Includes Student or Member Nearing 18',
+        label: enableFullTimeStudentQuestion
+          ? 'All Household Members Students'
+          : 'Household Includes Student or Member Nearing 18',
       },
       {
         path: 'incomeVouchers',
@@ -273,7 +319,7 @@ export const getExportHeaders = (
   // add programs to csv headers
   const programHeaders = constructMultiselectQuestionHeaders(
     'programs',
-    'Program',
+    swapCommunityTypeWithPrograms ? 'Community Type' : 'Program',
     multiSelectQuestions,
   );
   headers.push(...programHeaders);
@@ -285,7 +331,13 @@ export const getExportHeaders = (
 
   // add household member headers to csv
   if (maxHouseholdMembers) {
-    headers.push(...getHouseholdCsvHeaders(maxHouseholdMembers));
+    headers.push(
+      ...getHouseholdCsvHeaders(
+        maxHouseholdMembers,
+        enableFullTimeStudentQuestion,
+        disableWorkInRegion,
+      ),
+    );
   }
 
   headers.push(
@@ -471,10 +523,14 @@ export const addressToString = (address: Address): string => {
 /**
  *
  * @param maxHouseholdMembers the maximum number of household members across all applications
+ * @param enableFullTimeStudentQuestion should the 'Full-time Student' column be included from the headers
+ * @param disableWorkInRegion should the `Work In Region` columns be excluded from the headers
  * @returns the headers and formatters for the household member columns
  */
 export const getHouseholdCsvHeaders = (
   maxHouseholdMembers: number,
+  enableFullTimeStudentQuestion?: boolean,
+  disableWorkInRegion?: boolean,
 ): CsvHeader[] => {
   const headers = [];
   for (let i = 0; i < maxHouseholdMembers; i++) {
@@ -493,10 +549,6 @@ export const getHouseholdCsvHeaders = (
         label: `Household Member (${j}) Last Name`,
       },
       {
-        path: `householdMember.${i}.firstName`,
-        label: `Household Member (${j}) First Name`,
-      },
-      {
         path: `householdMember.${i}.birthDay`,
         label: `Household Member (${j}) Birth Day`,
       },
@@ -509,17 +561,27 @@ export const getHouseholdCsvHeaders = (
         label: `Household Member (${j}) Birth Year`,
       },
       {
-        path: `householdMember.${i}.sameAddress`,
-        label: `Household Member (${j}) Same as Primary Applicant`,
-      },
-      {
         path: `householdMember.${i}.relationship`,
         label: `Household Member (${j}) Relationship`,
       },
       {
+        path: `householdMember.${i}.sameAddress`,
+        label: `Household Member (${j}) Same as Primary Applicant`,
+      },
+    );
+    if (!disableWorkInRegion) {
+      headers.push({
         path: `householdMember.${i}.workInRegion`,
         label: `Household Member (${j}) Work in Region`,
-      },
+      });
+    }
+    if (enableFullTimeStudentQuestion) {
+      headers.push({
+        path: `householdMember.${i}.fullTimeStudent`,
+        label: `Household Member (${j}) Full-Time Student`,
+      });
+    }
+    headers.push(
       {
         path: `householdMember.${i}.householdMemberAddress.street`,
         label: `Household Member (${j}) Street`,

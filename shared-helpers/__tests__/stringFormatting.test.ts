@@ -29,6 +29,9 @@ describe("stringFormatting helpers", () => {
     it("with a range", () => {
       expect(getCurrencyRange(100, 200)).toBe("$100 – $200")
     })
+    it("with NaN", () => {
+      expect(getCurrencyRange(NaN, 100)).toBe("$100")
+    })
     it("with neither", () => {
       expect(getCurrencyRange(null, null)).toBe("")
     })

@@ -1,14 +1,14 @@
-import React from "react"
-import Head from "next/head"
+import React, { useContext } from "react"
 import axios from "axios"
-import { AlertBox, t } from "@bloom-housing/ui-components"
-import { imageUrlFromListing } from "@bloom-housing/shared-helpers"
+import { t } from "@bloom-housing/ui-components"
+import { AuthContext, imageUrlFromListing } from "@bloom-housing/shared-helpers"
 
 import Layout from "../../../layouts/application"
+import { ListingViewSeeds } from "../../../components/listing/ListingViewSeeds"
 import { ListingView } from "../../../components/listing/ListingView"
-import { MetaTags } from "../../../components/shared/MetaTags"
 import { fetchJurisdictionByName } from "../../../lib/hooks"
 import { Jurisdiction, Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { Alert } from "@bloom-housing/ui-seeds"
 
 interface ListingProps {
   listing: Listing
@@ -17,7 +17,7 @@ interface ListingProps {
 
 export default function ListingPage(props: ListingProps) {
   const { listing } = props
-  const pageTitle = `${listing.name} - ${t("nav.siteTitle")}`
+  const { profile } = useContext(AuthContext)
   const metaDescription = t("pageDescription.listing", {
     regionName: t("region.name"),
     listingName: listing.name,
@@ -25,29 +25,32 @@ export default function ListingPage(props: ListingProps) {
   const metaImage = imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize))[0]
 
   return (
-    <Layout>
-      <Head>
-        <title>{pageTitle}</title>
-      </Head>
-      <MetaTags title={listing.name} image={metaImage} description={metaDescription} />
-      <AlertBox
-        className="pt-6 pb-4 bg-red-500 font-bold text-xs"
-        type="alert"
-        boundToLayoutWidth
-        inverted
-        closeable
-      >
+    <Layout
+      pageTitle={`${t("pageTitle.preview")} - ${listing.name}`}
+      metaImage={metaImage}
+      metaDescription={metaDescription}
+    >
+      <Alert variant="alert-inverse" fullwidth className="fullscreen-alert">
         {t("listings.listingPreviewOnly")}
-      </AlertBox>
-      <ListingView listing={listing} preview={true} jurisdiction={props.jurisdiction} />
+      </Alert>
+      {process.env.showNewSeedsDesigns ? (
+        <ListingViewSeeds
+          listing={listing}
+          preview={true}
+          profile={profile}
+          jurisdiction={props.jurisdiction}
+        />
+      ) : (
+        <ListingView listing={listing} preview={true} jurisdiction={props.jurisdiction} />
+      )}
     </Layout>
   )
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function getServerSideProps(context: {
   params: Record<string, string>
   locale: string
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   req: any
 }) {
   let response

@@ -23,20 +23,38 @@ import { DetailsTerms } from "../../../components/applications/PaperApplicationD
 import { Aside } from "../../../components/applications/Aside"
 import {
   ApplicationStatusEnum,
+  FeatureFlagEnum,
   MultiselectQuestionsApplicationSectionEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
-export default function ApplicationsList() {
+const ApplicationsList = () => {
   const router = useRouter()
   const applicationId = router.query.id as string
   const { application } = useSingleApplicationData(applicationId)
-
-  {
-    /* TODO: add listing name in a listing response */
-  }
   const { listingDto } = useSingleListingData(application?.listings?.id)
 
-  const { applicationsService } = useContext(AuthContext)
+  const { applicationsService, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
+
+  const enableAdaOtherOption = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableAdaOtherOption,
+    listingDto?.jurisdictions.id
+  )
+
+  const disableWorkInRegion = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.disableWorkInRegion,
+    listingDto?.jurisdictions.id
+  )
+
+  const enableFullTimeStudentQuestion = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableFullTimeStudentQuestion,
+    listingDto?.jurisdictions.id
+  )
+
+  const swapCommunityTypeWithPrograms = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.swapCommunityTypeWithPrograms,
+    listingDto?.jurisdictions.id
+  )
+
   const [errorAlert, setErrorAlert] = useState(false)
 
   const [membersDrawer, setMembersDrawer] = useState<MembersDrawer>(null)
@@ -79,7 +97,7 @@ export default function ApplicationsList() {
     <ApplicationContext.Provider value={application}>
       <Layout>
         <Head>
-          <title>{t("nav.siteTitlePartners")}</title>
+          <title>{`Application - ${t("nav.siteTitlePartners")}`}</title>
         </Head>
         <NavigationHeader
           className="relative"
@@ -132,18 +150,32 @@ export default function ApplicationsList() {
               <div className="info-card md:w-9/12">
                 <DetailsApplicationData />
 
-                <DetailsPrimaryApplicant />
+                <DetailsPrimaryApplicant
+                  enableFullTimeStudentQuestion={enableFullTimeStudentQuestion}
+                  disableWorkInRegion={disableWorkInRegion}
+                />
 
                 <DetailsAlternateContact />
 
-                <DetailsHouseholdMembers setMembersDrawer={setMembersDrawer} />
+                <DetailsHouseholdMembers
+                  setMembersDrawer={setMembersDrawer}
+                  enableFullTimeStudentQuestion={enableFullTimeStudentQuestion}
+                  disableWorkInRegion={disableWorkInRegion}
+                />
 
-                <DetailsHouseholdDetails />
+                <DetailsHouseholdDetails
+                  enableFullTimeStudentQuestion={enableFullTimeStudentQuestion}
+                  enableAdaOtherOption={enableAdaOtherOption}
+                />
 
                 <DetailsMultiselectQuestions
                   listingId={application?.listings?.id}
                   applicationSection={MultiselectQuestionsApplicationSectionEnum.programs}
-                  title={t("application.details.programs")}
+                  title={
+                    swapCommunityTypeWithPrograms
+                      ? t("application.details.communityTypes")
+                      : t("application.details.programs")
+                  }
                 />
 
                 <DetailsHouseholdIncome />
@@ -173,7 +205,11 @@ export default function ApplicationsList() {
         application={application}
         membersDrawer={membersDrawer}
         setMembersDrawer={setMembersDrawer}
+        enableFullTimeStudentQuestion={enableFullTimeStudentQuestion}
+        disableWorkInRegion={disableWorkInRegion}
       />
     </ApplicationContext.Provider>
   )
 }
+
+export default ApplicationsList

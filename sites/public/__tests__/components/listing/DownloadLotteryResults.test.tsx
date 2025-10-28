@@ -14,7 +14,7 @@ describe("<DownloadLotteryResults>", () => {
       />
     )
     expect(getByText("February 21, 2023")).toBeTruthy()
-    expect(getByText("Lottery Results")).toBeTruthy()
+    expect(getByText("Lottery results")).toBeTruthy()
     expect(getByText("View lottery results")).toBeTruthy()
   })
 })

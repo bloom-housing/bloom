@@ -75,10 +75,11 @@ const ApplicationIncome = () => {
 
     const { income, incomePeriod } = data
     const incomeValue = income.replaceAll(",", "")
-    // Skip validation of total income if the applicant has income vouchers.
-    const validationError = application.incomeVouchers
-      ? null
-      : verifyIncome(listing, incomeValue, incomePeriod)
+    // Skip validation of total income if no units or the applicant has income vouchers.
+    const validationError =
+      !listing.units?.length || application.incomeVouchers
+        ? null
+        : verifyIncome(listing, incomeValue, incomePeriod)
     setIncomeError(validationError)
 
     if (!validationError) {
@@ -115,7 +116,9 @@ const ApplicationIncome = () => {
   }, [profile])
 
   return (
-    <FormsLayout>
+    <FormsLayout
+      pageTitle={`${t("t.income")} - ${t("listings.apply.applyOnline")} - ${listing?.name}`}
+    >
       <Form onSubmit={handleSubmit(onSubmit, onError)}>
         <ApplicationFormLayout
           listingName={listing?.name}

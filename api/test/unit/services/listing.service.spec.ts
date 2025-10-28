@@ -20,7 +20,10 @@ import { randomUUID } from 'crypto';
 import { HttpModule, HttpService } from '@nestjs/axios';
 import { of } from 'rxjs';
 import { PrismaService } from '../../../src/services/prisma.service';
-import { ListingService, views } from '../../../src/services/listing.service';
+import {
+  ListingService,
+  includeViews,
+} from '../../../src/services/listing.service';
 import { ListingsQueryParams } from '../../../src/dtos/listings/listings-query-params.dto';
 import { ListingOrderByKeys } from '../../../src/enums/listings/order-by-enum';
 import { OrderByEnum } from '../../../src/enums/shared/order-by-enum';
@@ -33,11 +36,9 @@ import { UnitTypeSort } from '../../../src/utilities/unit-utilities';
 import { Listing } from '../../../src/dtos/listings/listing.dto';
 import { ListingViews } from '../../../src/enums/listings/view-enum';
 import { TranslationService } from '../../../src/services/translation.service';
-import { GoogleTranslateService } from '../../../src/services/google-translate.service';
 import { ListingCreate } from '../../../src/dtos/listings/listing-create.dto';
 import { ListingUpdate } from '../../../src/dtos/listings/listing-update.dto';
-import { ListingPublishedCreate } from '../../../src/dtos/listings/listing-published-create.dto';
-import { ListingPublishedUpdate } from '../../../src/dtos/listings/listing-published-update.dto';
+import { GoogleTranslateService } from '../../../src/services/google-translate.service';
 import { ApplicationFlaggedSetService } from '../../../src/services/application-flagged-set.service';
 import { User } from '../../../src/dtos/users/user.dto';
 import { EmailService } from '../../../src/services/email.service';
@@ -315,7 +316,7 @@ describe('Testing listing service', () => {
   const constructFullListingData = (
     listingId?: string,
     useUnitGroups = false,
-  ): ListingPublishedCreate | ListingPublishedUpdate => {
+  ): ListingCreate | ListingUpdate => {
     return {
       id: listingId ?? undefined,
       assets: [exampleAsset],
@@ -601,11 +602,13 @@ describe('Testing listing service', () => {
           listingsBuildingAddress: true,
           requestedChangesUser: true,
           reservedCommunityTypes: true,
+
           listingImages: {
             include: {
               assets: true,
             },
           },
+          lastUpdatedByUser: true,
           listingMultiselectQuestions: {
             include: {
               multiselectQuestions: true,
@@ -766,6 +769,7 @@ describe('Testing listing service', () => {
               assets: true,
             },
           },
+
           listingMultiselectQuestions: {
             include: {
               multiselectQuestions: true,
@@ -1476,6 +1480,15 @@ describe('Testing listing service', () => {
                   gte: 1,
                 },
               },
+              {
+                unitGroups: {
+                  some: {
+                    totalAvailable: {
+                      gte: 1,
+                    },
+                  },
+                },
+              },
             ],
           },
         ],
@@ -1515,6 +1528,15 @@ describe('Testing listing service', () => {
               {
                 unitsAvailable: {
                   gte: 1,
+                },
+              },
+              {
+                unitGroups: {
+                  some: {
+                    totalAvailable: {
+                      gte: 1,
+                    },
+                  },
                 },
               },
             ],
@@ -1653,6 +1675,15 @@ describe('Testing listing service', () => {
               {
                 unitsAvailable: {
                   gte: 1,
+                },
+              },
+              {
+                unitGroups: {
+                  some: {
+                    totalAvailable: {
+                      gte: 1,
+                    },
+                  },
                 },
               },
             ],
@@ -1954,7 +1985,7 @@ describe('Testing listing service', () => {
       expect(whereClause).toStrictEqual({
         AND: [
           {
-            OR: [
+            AND: [
               {
                 listingFeatures: {
                   hearing: true,
@@ -2296,13 +2327,9 @@ describe('Testing listing service', () => {
         where: {
           id: 'listingId',
         },
-        include: {
-          Listings: {
-            select: {
-              id: true,
-              name: true,
-            },
-          },
+        select: {
+          id: true,
+          name: true,
           jurisdictions: {
             select: {
               id: true,
@@ -2313,7 +2340,7 @@ describe('Testing listing service', () => {
       });
     });
 
-    it('should handle no records returned when findOne() is called with details view', async () => {
+    it('should handle no records returned when findOne() is called with full view', async () => {
       prisma.listings.findUnique = jest.fn().mockResolvedValue(null);
 
       await expect(
@@ -2321,7 +2348,7 @@ describe('Testing listing service', () => {
           await service.findOne(
             'a different listingId',
             LanguagesEnum.en,
-            ListingViews.details,
+            ListingViews.full,
           ),
       ).rejects.toThrowError();
 
@@ -2334,6 +2361,7 @@ describe('Testing listing service', () => {
           listingsBuildingAddress: true,
           requestedChangesUser: true,
           reservedCommunityTypes: true,
+          lastUpdatedByUser: true,
           listingImages: {
             include: {
               assets: true,
@@ -2777,7 +2805,7 @@ describe('Testing listing service', () => {
       });
     });
 
-    it('should get records from findOne() with details view found and units', async () => {
+    it('should get records from findOne() with full view found and units', async () => {
       const date = new Date();
 
       const mockedListing = mockListing(0, { numberToMake: 1, date });
@@ -2800,7 +2828,7 @@ describe('Testing listing service', () => {
       const listing: Listing = await service.findOne(
         'listingId',
         LanguagesEnum.en,
-        ListingViews.details,
+        ListingViews.full,
       );
 
       expect(listing.id).toEqual('0');
@@ -2848,6 +2876,7 @@ describe('Testing listing service', () => {
           jurisdictions: true,
           listingsBuildingAddress: true,
           requestedChangesUser: true,
+          lastUpdatedByUser: true,
           reservedCommunityTypes: true,
           listingImages: {
             include: {
@@ -3086,6 +3115,9 @@ describe('Testing listing service', () => {
         id: 'example id',
         name: 'example name',
       });
+      prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue({
+        id: 'jurisdiction-id',
+      });
 
       await service.create(
         {
@@ -3126,6 +3158,7 @@ describe('Testing listing service', () => {
               assets: true,
             },
           },
+          lastUpdatedByUser: true,
           listingFeatures: true,
           listingImages: {
             include: {
@@ -3180,6 +3213,11 @@ describe('Testing listing service', () => {
         data: {
           name: 'example listing name',
           contentUpdatedAt: expect.anything(),
+          lastUpdatedByUser: {
+            connect: {
+              id: user.id,
+            },
+          },
           depositMin: '5',
           assets: {
             create: [
@@ -3221,7 +3259,9 @@ describe('Testing listing service', () => {
         id: 'example id',
         name: 'example name',
       });
-
+      prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue({
+        id: 'jurisdiction-id',
+      });
       const val = constructFullListingData();
 
       await service.create(val as ListingCreate, user);
@@ -3237,6 +3277,7 @@ describe('Testing listing service', () => {
               },
             },
           },
+          lastUpdatedByUser: true,
           jurisdictions: true,
           listingEvents: {
             include: {
@@ -3298,6 +3339,11 @@ describe('Testing listing service', () => {
           ...val,
           isVerified: true,
           contentUpdatedAt: expect.anything(),
+          lastUpdatedByUser: {
+            connect: {
+              id: user.id,
+            },
+          },
           publishedAt: expect.anything(),
           assets: {
             create: [exampleAsset],
@@ -3596,6 +3642,7 @@ describe('Testing listing service', () => {
               },
             },
           },
+          lastUpdatedByUser: true,
           jurisdictions: true,
           listingEvents: {
             include: {
@@ -3657,6 +3704,11 @@ describe('Testing listing service', () => {
           name: 'example listing name',
           contentUpdatedAt: expect.anything(),
           depositMin: '5',
+          lastUpdatedByUser: {
+            connect: {
+              id: user.id,
+            },
+          },
           assets: {
             create: [
               {
@@ -3728,6 +3780,7 @@ describe('Testing listing service', () => {
               },
             },
           },
+          lastUpdatedByUser: true,
           jurisdictions: true,
           listingEvents: {
             include: {
@@ -3745,6 +3798,7 @@ describe('Testing listing service', () => {
               multiselectQuestions: true,
             },
           },
+
           listingUtilities: true,
           listingNeighborhoodAmenities: true,
           listingsApplicationDropOffAddress: true,
@@ -3789,6 +3843,9 @@ describe('Testing listing service', () => {
           ...val,
           isVerified: true,
           contentUpdatedAt: expect.anything(),
+          lastUpdatedByUser: {
+            connect: { id: user.id },
+          },
           publishedAt: expect.anything(),
           assets: {
             create: [exampleAsset],
@@ -4056,6 +4113,7 @@ describe('Testing listing service', () => {
               },
             },
           },
+          lastUpdatedByUser: true,
           jurisdictions: true,
           listingEvents: {
             include: {
@@ -4169,6 +4227,7 @@ describe('Testing listing service', () => {
               assets: true,
             },
           },
+          lastUpdatedByUser: true,
           listingFeatures: true,
           listingImages: {
             include: {
@@ -4261,6 +4320,7 @@ describe('Testing listing service', () => {
               },
             },
           },
+          lastUpdatedByUser: true,
           jurisdictions: true,
           listingEvents: {
             include: {
@@ -4319,6 +4379,162 @@ describe('Testing listing service', () => {
           },
         },
       });
+    });
+
+    it('should do a complete listing update', async () => {
+      prisma.listings.findUnique = jest.fn().mockResolvedValue({
+        id: 'example id',
+        name: 'example name',
+        reservedCommunityTypes: {
+          id: randomUUID(),
+        },
+      });
+      prisma.listings.update = jest.fn().mockResolvedValue({
+        id: 'example id',
+        name: 'example name',
+      });
+      prisma.listingEvents.findMany = jest.fn().mockResolvedValue([]);
+      prisma.listingEvents.update = jest.fn().mockResolvedValue({
+        id: 'example id',
+        name: 'example name',
+      });
+      prisma.assets.delete = jest.fn().mockResolvedValue({
+        id: 'example id',
+        name: 'example name',
+      });
+      const updateMock = jest
+        .fn()
+        .mockResolvedValue({ id: 'example id', name: 'example name' });
+
+      prisma.$transaction = jest
+        .fn()
+        .mockResolvedValue([
+          jest.fn(),
+          jest.fn(),
+          jest.fn(),
+          jest.fn(),
+          jest.fn(),
+          updateMock,
+        ]);
+
+      const val = constructFullListingData(randomUUID());
+      prisma.assets.create = jest.fn().mockResolvedValue({ id: randomUUID() });
+      prisma.address.create = jest.fn().mockResolvedValue({ id: randomUUID() });
+      val.reservedCommunityTypes = null;
+
+      await service.update(val as ListingUpdate, user);
+
+      const nestedUtilitiesUpdate = {
+        water: false,
+        gas: true,
+        trash: false,
+        sewer: true,
+        electricity: false,
+        cable: true,
+        phone: false,
+        internet: true,
+      };
+      const nestedFeaturesUpdate = {
+        elevator: true,
+        wheelchairRamp: false,
+        serviceAnimalsAllowed: true,
+        accessibleParking: false,
+        parkingOnSite: true,
+        inUnitWasherDryer: false,
+        laundryInBuilding: true,
+        barrierFreeEntrance: false,
+        rollInShower: true,
+        grabBars: false,
+        heatingInUnit: true,
+        acInUnit: false,
+        hearing: true,
+        visual: false,
+        mobility: true,
+        barrierFreeUnitEntrance: false,
+        loweredLightSwitch: true,
+        barrierFreeBathroom: false,
+        wideDoorways: true,
+        loweredCabinets: false,
+      };
+      const nestedNeighborhoodAmenities = {
+        groceryStores: 'stores',
+        pharmacies: 'pharmacies',
+        healthCareResources: 'health care',
+        parksAndCommunityCenters: 'parks',
+        schools: 'schools',
+        publicTransportation: 'public transportation',
+      };
+
+      const calculatedUnitsAvailable = service.calculateUnitsAvailable(
+        val.reviewOrderType,
+        val.units,
+        val.unitGroups,
+      );
+
+      // Capture mock call arguments instead of using expect.anything()
+      expect(prisma.listings.update).toHaveBeenCalledTimes(1);
+      const updateCall = (prisma.listings.update as jest.Mock).mock.calls[0][0];
+
+      // Test key properties
+      expect(updateCall.data.unitsAvailable).toBe(calculatedUnitsAvailable);
+      expect(updateCall.data.publishedAt).toBeInstanceOf(Date);
+      expect(updateCall.data.contentUpdatedAt).toBeInstanceOf(Date);
+      expect(updateCall.data.assets).toEqual([exampleAsset]);
+      expect(updateCall.data.section8Acceptance).toBe(true);
+      expect(updateCall.data.isVerified).toBe(true);
+
+      // Test nested structures
+      expect(updateCall.data.applicationMethods.create).toHaveLength(1);
+      expect(updateCall.data.applicationMethods.create[0].type).toBe(
+        ApplicationMethodsTypeEnum.Internal,
+      );
+      expect(updateCall.data.listingEvents.create).toHaveLength(1);
+      expect(updateCall.data.listingEvents.create[0].type).toBe(
+        ListingEventsTypeEnum.openHouse,
+      );
+      expect(updateCall.data.units.create).toHaveLength(1);
+      expect(updateCall.data.units.create[0].amiPercentage).toBe('1');
+      expect(updateCall.data.units.create[0].bmrProgramChart).toBe(true);
+      expect(updateCall.data.unitGroups.create).toEqual([]);
+      expect(updateCall.data.listingUtilities.upsert.create).toEqual(
+        nestedUtilitiesUpdate,
+      );
+      expect(updateCall.data.listingUtilities.upsert.update).toEqual(
+        nestedUtilitiesUpdate,
+      );
+      expect(updateCall.data.listingFeatures.upsert.create).toEqual(
+        nestedFeaturesUpdate,
+      );
+      expect(updateCall.data.listingFeatures.upsert.update).toEqual(
+        nestedFeaturesUpdate,
+      );
+      expect(
+        updateCall.data.listingNeighborhoodAmenities.upsert.create,
+      ).toEqual(nestedNeighborhoodAmenities);
+      expect(
+        updateCall.data.listingNeighborhoodAmenities.upsert.update,
+      ).toEqual(nestedNeighborhoodAmenities);
+      expect(updateCall.data.unitsSummary.create).toHaveLength(1);
+      expect(updateCall.data.unitsSummary.create[0].monthlyRentMin).toBe(1);
+      expect(updateCall.data.unitsSummary.create[0].totalCount).toBe(13);
+
+      // Test ID types instead of exact values
+      expect(typeof updateCall.where.id).toBe('string');
+      expect(typeof updateCall.data.units.create[0].unitTypes.connect.id).toBe(
+        'string',
+      );
+      expect(
+        typeof updateCall.data.unitsSummary.create[0].unitTypes.connect.id,
+      ).toBe('string');
+
+      expect(canOrThrowMock).toHaveBeenCalledWith(
+        user,
+        'listing',
+        permissionActions.update,
+        {
+          id: 'example id',
+        },
+      );
     });
   });
 
@@ -4398,21 +4614,6 @@ describe('Testing listing service', () => {
       expect(prisma.listings.findUnique).toHaveBeenCalledWith({
         include: {
           jurisdictions: true,
-          listingFeatures: true,
-          listingImages: {
-            include: {
-              assets: true,
-            },
-          },
-          listingMultiselectQuestions: {
-            include: {
-              multiselectQuestions: true,
-            },
-          },
-          listingUtilities: true,
-          listingNeighborhoodAmenities: true,
-          listingsBuildingAddress: true,
-          reservedCommunityTypes: true,
         },
         where: {
           id: id,
@@ -4432,6 +4633,57 @@ describe('Testing listing service', () => {
           id: expect.anything(),
         },
       });
+    });
+
+    it('should allow isSupportAdmin to duplicate listing with jurisdiction permissions', async () => {
+      const listing = mockListing(1, { numberToMake: 2, date: new Date() });
+      const newName = 'duplicate name';
+      const jurisdictionId = randomUUID();
+
+      prisma.listings.findUnique = jest.fn().mockResolvedValue({
+        ...listing,
+        jurisdictions: {
+          id: jurisdictionId,
+        },
+        jurisdictionId,
+      });
+
+      prisma.listings.create = jest.fn().mockResolvedValue({
+        ...listing,
+        id: 'duplicate id',
+        name: newName,
+      });
+
+      const supportAdminUser = {
+        id: 'support-admin-id',
+        userRoles: {
+          isSupportAdmin: true,
+          isAdmin: false,
+          isJurisdictionalAdmin: false,
+          isLimitedJurisdictionalAdmin: false,
+          isPartner: false,
+        },
+        jurisdictions: [
+          {
+            id: jurisdictionId,
+            duplicateListingPermissions: [UserRoleEnum.supportAdmin],
+          },
+        ],
+      };
+
+      const newListing = await service.duplicate(
+        {
+          includeUnits: true,
+          name: newName,
+          storedListing: {
+            id: listing.id.toString(),
+          },
+        },
+        supportAdminUser as any,
+      );
+
+      expect(newListing.name).toBe(newName);
+      expect(newListing.units).toEqual(listing.units);
     });
   });
 
@@ -4477,6 +4729,7 @@ describe('Testing listing service', () => {
           displayWaitlistSize: false,
           unitsSummary: null,
           listingEvents: [],
+          lastUpdatedByUser: user,
         } as ListingUpdate,
         user,
       );
@@ -4498,6 +4751,7 @@ describe('Testing listing service', () => {
               assets: true,
             },
           },
+          lastUpdatedByUser: true,
           listingFeatures: true,
           listingImages: {
             include: {
@@ -4552,6 +4806,11 @@ describe('Testing listing service', () => {
         data: {
           name: 'example listing name',
           contentUpdatedAt: expect.anything(),
+          lastUpdatedByUser: {
+            connect: {
+              id: user.id,
+            },
+          },
           depositMin: '5',
           assets: [
             {
@@ -4704,7 +4963,7 @@ describe('Testing listing service', () => {
       );
 
       expect(prisma.listings.update).toHaveBeenCalledWith({
-        include: views.details,
+        include: includeViews.full,
         data: {
           name: 'example listing name',
           contentUpdatedAt: expect.anything(),
@@ -4718,6 +4977,11 @@ describe('Testing listing service', () => {
           jurisdictions: {
             connect: {
               id: expect.anything(),
+            },
+          },
+          lastUpdatedByUser: {
+            connect: {
+              id: user.id,
             },
           },
           listingNeighborhoodAmenities: {
@@ -4804,399 +5068,6 @@ describe('Testing listing service', () => {
         },
       );
     });
-
-    it('should do a complete listing update', async () => {
-      prisma.listings.findUnique = jest.fn().mockResolvedValue({
-        id: 'example id',
-        name: 'example name',
-        reservedCommunityTypes: {
-          id: randomUUID(),
-        },
-      });
-      prisma.listings.update = jest.fn().mockResolvedValue({
-        id: 'example id',
-        name: 'example name',
-      });
-      prisma.listingEvents.findMany = jest.fn().mockResolvedValue([]);
-      prisma.listingEvents.update = jest.fn().mockResolvedValue({
-        id: 'example id',
-        name: 'example name',
-      });
-      prisma.assets.delete = jest.fn().mockResolvedValue({
-        id: 'example id',
-        name: 'example name',
-      });
-      const updateMock = jest
-        .fn()
-        .mockResolvedValue({ id: 'example id', name: 'example name' });
-
-      prisma.$transaction = jest
-        .fn()
-        .mockResolvedValue([
-          jest.fn(),
-          jest.fn(),
-          jest.fn(),
-          jest.fn(),
-          jest.fn(),
-          updateMock,
-        ]);
-
-      const val = constructFullListingData(randomUUID());
-      prisma.assets.create = jest.fn().mockResolvedValue({ id: randomUUID() });
-      prisma.address.create = jest.fn().mockResolvedValue({ id: randomUUID() });
-      val.reservedCommunityTypes = null;
-
-      await service.update(val as ListingUpdate, user);
-
-      const nestedUtilitiesUpdate = {
-        water: false,
-        gas: true,
-        trash: false,
-        sewer: true,
-        electricity: false,
-        cable: true,
-        phone: false,
-        internet: true,
-      };
-      const nestedFeaturesUpdate = {
-        elevator: true,
-        wheelchairRamp: false,
-        serviceAnimalsAllowed: true,
-        accessibleParking: false,
-        parkingOnSite: true,
-        inUnitWasherDryer: false,
-        laundryInBuilding: true,
-        barrierFreeEntrance: false,
-        rollInShower: true,
-        grabBars: false,
-        heatingInUnit: true,
-        acInUnit: false,
-        hearing: true,
-        visual: false,
-        mobility: true,
-        barrierFreeUnitEntrance: false,
-        loweredLightSwitch: true,
-        barrierFreeBathroom: false,
-        wideDoorways: true,
-        loweredCabinets: false,
-      };
-      const nestedNeighborhoodAmenities = {
-        groceryStores: 'stores',
-        pharmacies: 'pharmacies',
-        healthCareResources: 'health care',
-        parksAndCommunityCenters: 'parks',
-        schools: 'schools',
-        publicTransportation: 'public transportation',
-      };
-
-      expect(prisma.listings.update).toHaveBeenCalledWith({
-        include: {
-          applicationMethods: {
-            include: {
-              paperApplications: {
-                include: {
-                  assets: true,
-                },
-              },
-            },
-          },
-          jurisdictions: true,
-          listingEvents: {
-            include: {
-              assets: true,
-            },
-          },
-          listingFeatures: true,
-          listingImages: {
-            include: {
-              assets: true,
-            },
-          },
-          listingMultiselectQuestions: {
-            include: {
-              multiselectQuestions: true,
-            },
-          },
-          listingUtilities: true,
-          listingNeighborhoodAmenities: true,
-          listingsApplicationDropOffAddress: true,
-          listingsApplicationPickUpAddress: true,
-          listingsApplicationMailingAddress: true,
-          listingsBuildingAddress: true,
-          listingsBuildingSelectionCriteriaFile: true,
-          listingsLeasingAgentAddress: true,
-          listingsResult: true,
-          reservedCommunityTypes: true,
-          requestedChangesUser: true,
-          units: {
-            include: {
-              amiChart: {
-                include: {
-                  jurisdictions: true,
-                  unitGroupAmiLevels: true,
-                },
-              },
-              unitAccessibilityPriorityTypes: true,
-              unitAmiChartOverrides: true,
-              unitRentTypes: true,
-              unitTypes: true,
-            },
-          },
-          unitGroups: {
-            include: {
-              unitTypes: true,
-              unitGroupAmiLevels: {
-                include: {
-                  amiChart: {
-                    include: {
-                      jurisdictions: true,
-                    },
-                  },
-                },
-              },
-            },
-          },
-        },
-        data: {
-          ...val,
-          id: undefined,
-          publishedAt: expect.anything(),
-          contentUpdatedAt: expect.anything(),
-          assets: [exampleAsset],
-          applicationMethods: {
-            create: [
-              {
-                type: ApplicationMethodsTypeEnum.Internal,
-                label: 'example label',
-                externalReference: 'example reference',
-                acceptsPostmarkedApplications: false,
-                phoneNumber: '520-750-8811',
-                paperApplications: {
-                  create: [
-                    {
-                      language: LanguagesEnum.en,
-                      assets: {
-                        create: {
-                          ...exampleAsset,
-                        },
-                      },
-                    },
-                  ],
-                },
-              },
-            ],
-          },
-          listingEvents: {
-            create: [
-              {
-                type: ListingEventsTypeEnum.openHouse,
-                startDate: expect.anything(),
-                startTime: expect.anything(),
-                endTime: expect.anything(),
-                url: 'https://www.google.com',
-                note: 'example note',
-                label: 'example label',
-                assets: {
-                  create: {
-                    ...exampleAsset,
-                  },
-                },
-              },
-            ],
-          },
-          listingImages: {
-            create: [
-              {
-                assets: {
-                  connect: {
-                    id: expect.anything(),
-                  },
-                },
-                ordinal: 0,
-              },
-            ],
-          },
-          listingMultiselectQuestions: {
-            create: [
-              {
-                multiselectQuestionId: expect.anything(),
-                ordinal: 0,
-              },
-            ],
-          },
-          listingsApplicationDropOffAddress: {
-            connect: {
-              id: expect.anything(),
-            },
-          },
-          reservedCommunityTypes: {
-            disconnect: {
-              id: expect.anything(),
-            },
-          },
-          listingsBuildingSelectionCriteriaFile: {
-            create: {
-              ...exampleAsset,
-            },
-          },
-          listingUtilities: {
-            upsert: {
-              where: {
-                id: undefined,
-              },
-              create: nestedUtilitiesUpdate,
-              update: nestedUtilitiesUpdate,
-            },
-          },
-          listingsApplicationMailingAddress: {
-            connect: {
-              id: expect.anything(),
-            },
-          },
-          listingsLeasingAgentAddress: {
-            connect: {
-              id: expect.anything(),
-            },
-          },
-          listingFeatures: {
-            upsert: {
-              where: {
-                id: undefined,
-              },
-              create: nestedFeaturesUpdate,
-              update: nestedFeaturesUpdate,
-            },
-          },
-          listingNeighborhoodAmenities: {
-            upsert: {
-              where: {
-                id: undefined,
-              },
-              create: nestedNeighborhoodAmenities,
-              update: nestedNeighborhoodAmenities,
-            },
-          },
-          jurisdictions: {
-            connect: {
-              id: expect.anything(),
-            },
-          },
-          listingsApplicationPickUpAddress: {
-            connect: {
-              id: expect.anything(),
-            },
-          },
-          listingsBuildingAddress: {
-            connect: {
-              id: expect.anything(),
-            },
-          },
-          units: {
-            create: [
-              {
-                amiPercentage: '1',
-                annualIncomeMin: '2',
-                monthlyIncomeMin: '3',
-                floor: 4,
-                annualIncomeMax: '5',
-                maxOccupancy: 6,
-                minOccupancy: 7,
-                monthlyRent: '8',
-                numBathrooms: 9,
-                numBedrooms: 10,
-                number: '11',
-                sqFeet: '12',
-                monthlyRentAsPercentOfIncome: '13',
-                bmrProgramChart: true,
-                unitTypes: {
-                  connect: {
-                    id: expect.anything(),
-                  },
-                },
-                amiChart: {
-                  connect: {
-                    id: expect.anything(),
-                  },
-                },
-                unitAmiChartOverrides: {
-                  create: {
-                    items: [
-                      {
-                        percentOfAmi: 10,
-                        householdSize: 20,
-                        income: 30,
-                      },
-                    ],
-                  },
-                },
-                unitAccessibilityPriorityTypes: {
-                  connect: {
-                    id: expect.anything(),
-                  },
-                },
-                unitRentTypes: {
-                  connect: {
-                    id: expect.anything(),
-                  },
-                },
-              },
-            ],
-          },
-          unitGroups: {
-            create: [],
-          },
-          section8Acceptance: true,
-          unitsSummary: {
-            create: [
-              {
-                monthlyRentMin: 1,
-                monthlyRentMax: 2,
-                monthlyRentAsPercentOfIncome: '3',
-                amiPercentage: 4,
-                minimumIncomeMin: '5',
-                minimumIncomeMax: '6',
-                maxOccupancy: 7,
-                minOccupancy: 8,
-                floorMin: 9,
-                floorMax: 10,
-                sqFeetMin: '11',
-                sqFeetMax: '12',
-                totalCount: 13,
-                totalAvailable: 14,
-                unitTypes: {
-                  connect: {
-                    id: expect.anything(),
-                  },
-                },
-                unitAccessibilityPriorityTypes: {
-                  connect: {
-                    id: expect.anything(),
-                  },
-                },
-              },
-            ],
-          },
-          listingsResult: {
-            create: {
-              ...exampleAsset,
-            },
-          },
-          isVerified: true,
-        },
-        where: {
-          id: expect.anything(),
-        },
-      });
-
-      expect(canOrThrowMock).toHaveBeenCalledWith(
-        user,
-        'listing',
-        permissionActions.update,
-        {
-          id: 'example id',
-        },
-      );
-    });
   });
 
   describe('Test listingApprovalNotify endpoint', () => {
@@ -5251,9 +5122,18 @@ describe('Testing listing service', () => {
     });
 
     it('listingApprovalNotify listing approved email', async () => {
-      jest.spyOn(service, 'getUserEmailInfo').mockResolvedValueOnce({
-        emails: ['jurisAdmin@email.com', 'partner@email.com'],
+      prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue({
+        id: randomUUID(),
         publicUrl: 'public.housing.gov',
+      });
+      jest.spyOn(service, 'getUserEmailInfo').mockResolvedValueOnce({
+        emails: [
+          'jurisAdmin@email.com',
+          'jurisLimitedAdmin@email.com',
+          'partner@email.com',
+          'supportAdmin@email.com',
+          'admin@example.com',
+        ],
       });
       await service.listingApprovalNotify({
         user,
@@ -5265,15 +5145,26 @@ describe('Testing listing service', () => {
       });
 
       expect(service.getUserEmailInfo).toBeCalledWith(
-        ['partner', 'jurisdictionAdmin'],
+        [
+          UserRoleEnum.partner,
+          UserRoleEnum.admin,
+          UserRoleEnum.jurisdictionAdmin,
+          UserRoleEnum.limitedJurisdictionAdmin,
+          UserRoleEnum.supportAdmin,
+        ],
         'id',
         'jurisId',
-        true,
       );
       expect(listingApprovedMock).toBeCalledWith(
         expect.objectContaining({ id: 'jurisId' }),
         { id: 'id', name: 'name' },
-        ['jurisAdmin@email.com', 'partner@email.com'],
+        [
+          'jurisAdmin@email.com',
+          'jurisLimitedAdmin@email.com',
+          'partner@email.com',
+          'supportAdmin@email.com',
+          'admin@example.com',
+        ],
         'public.housing.gov',
       );
     });

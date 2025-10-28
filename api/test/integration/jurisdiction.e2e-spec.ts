@@ -127,10 +127,14 @@ describe('Jurisdiction Controller Tests', () => {
       publicUrl: `publicUrl: 10`,
       emailFromAddress: `emailFromAddress: 10`,
       rentalAssistanceDefault: `rentalAssistanceDefault: 10`,
+      whatToExpect: `whatToExpect: 10`,
+      whatToExpectAdditionalText: `whatToExpectAdditionalText: 10`,
+      whatToExpectUnderConstruction: `whatToExpectUnderConstruction: 10`,
       enablePartnerSettings: true,
       allowSingleUseCodeLogin: true,
       listingApprovalPermissions: [],
       duplicateListingPermissions: [],
+      requiredListingFields: [],
     };
     const res = await request(app.getHttpServer())
       .post('/jurisdictions')
@@ -153,10 +157,14 @@ describe('Jurisdiction Controller Tests', () => {
       publicUrl: `updated publicUrl: 11`,
       emailFromAddress: `emailFromAddress: 10`,
       rentalAssistanceDefault: `rentalAssistanceDefault: 10`,
+      whatToExpect: `whatToExpect: 10`,
+      whatToExpectAdditionalText: `whatToExpectAdditionalText: 10`,
+      whatToExpectUnderConstruction: `whatToExpectUnderConstruction: 10`,
       enablePartnerSettings: true,
       allowSingleUseCodeLogin: true,
       listingApprovalPermissions: [],
       duplicateListingPermissions: [],
+      requiredListingFields: [],
     };
     const res = await request(app.getHttpServer())
       .put(`/jurisdictions/${id}`)
@@ -183,10 +191,14 @@ describe('Jurisdiction Controller Tests', () => {
       publicUrl: `updated publicUrl: 10`,
       emailFromAddress: `emailFromAddress: 10`,
       rentalAssistanceDefault: `rentalAssistanceDefault: 10`,
+      whatToExpect: `whatToExpect: 10`,
+      whatToExpectAdditionalText: `whatToExpectAdditionalText: 10`,
+      whatToExpectUnderConstruction: `whatToExpectUnderConstruction: 10`,
       enablePartnerSettings: true,
       allowSingleUseCodeLogin: true,
       listingApprovalPermissions: [],
       duplicateListingPermissions: [],
+      requiredListingFields: [],
     };
 
     const res = await request(app.getHttpServer())

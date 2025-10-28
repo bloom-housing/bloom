@@ -1,5 +1,4 @@
 import React, { useEffect, useContext } from "react"
-import Head from "next/head"
 import { GetStaticPaths, GetStaticProps } from "next"
 import axios from "axios"
 import { t } from "@bloom-housing/ui-components"
@@ -12,7 +11,6 @@ import {
 import { UserStatus } from "../../../lib/constants"
 import Layout from "../../../layouts/application"
 import { ListingView } from "../../../components/listing/ListingView"
-import { MetaTags } from "../../../components/shared/MetaTags"
 import { ErrorPage } from "../../_error"
 import dayjs from "dayjs"
 import { fetchJurisdictionByName } from "../../../lib/hooks"
@@ -27,7 +25,6 @@ interface ListingProps {
 export default function ListingPage(props: ListingProps) {
   const { listing } = props
 
-  const pageTitle = `${listing.name} - ${t("nav.siteTitle")}`
   const { profile } = useContext(AuthContext)
 
   useEffect(() => {
@@ -67,11 +64,7 @@ export default function ListingPage(props: ListingProps) {
   const metaImage = imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize))[0]
 
   return (
-    <Layout>
-      <Head>
-        <title>{pageTitle}</title>
-      </Head>
-      <MetaTags title={listing.name} image={metaImage} description={metaDescription} />
+    <Layout pageTitle={listing.name} metaImage={metaImage} metaDescription={metaDescription}>
       {process.env.showNewSeedsDesigns ? (
         <ListingViewSeeds listing={listing} profile={profile} jurisdiction={props.jurisdiction} />
       ) : (

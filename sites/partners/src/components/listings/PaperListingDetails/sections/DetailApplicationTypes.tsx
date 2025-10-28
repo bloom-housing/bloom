@@ -6,7 +6,7 @@ import {
   FeatureFlagEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { ListingContext } from "../../ListingContext"
-import { getDetailBoolean } from "./helpers"
+import { getDetailBoolean, getDetailFieldString } from "./helpers"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 
@@ -50,58 +50,77 @@ const DetailApplicationTypes = () => {
   return (
     <SectionWithGrid heading={t("listings.sections.applicationTypesTitle")} inset>
       <Grid.Row columns={2}>
-        <FieldValue id="digitalApplication" label={t("listings.applicationType.onlineApplication")}>
-          {getDetailBoolean(listing.digitalApplication)}
-        </FieldValue>
-        {!disableCommonApplication && digitalMethod && (
+        <Grid.Cell>
           <FieldValue
-            id="digitalMethod.type"
-            label={t("listings.applicationType.digitalApplication")}
+            id="digitalApplication"
+            label={t("listings.applicationType.onlineApplication")}
           >
-            {digitalMethod?.type === ApplicationMethodsTypeEnum.ExternalLink
-              ? t("t.no")
-              : t("t.yes")}
+            {getDetailBoolean(listing.digitalApplication)}
           </FieldValue>
+        </Grid.Cell>
+        {!disableCommonApplication && digitalMethod && (
+          <Grid.Cell>
+            <FieldValue
+              id="digitalMethod.type"
+              label={t("listings.applicationType.digitalApplication")}
+            >
+              {digitalMethod?.type === ApplicationMethodsTypeEnum.ExternalLink
+                ? t("t.no")
+                : t("t.yes")}
+            </FieldValue>
+          </Grid.Cell>
         )}
         {digitalMethod?.type === ApplicationMethodsTypeEnum.ExternalLink && (
-          <FieldValue
-            id="customOnlineApplicationUrl"
-            label={t("listings.customOnlineApplicationUrl")}
-          >
-            {digitalMethod.externalReference}
-          </FieldValue>
+          <Grid.Cell>
+            <FieldValue
+              id="customOnlineApplicationUrl"
+              label={t("listings.customOnlineApplicationUrl")}
+            >
+              {digitalMethod.externalReference}
+            </FieldValue>
+          </Grid.Cell>
         )}
       </Grid.Row>
       <Grid.Row>
-        <FieldValue id="paperApplication" label={t("listings.applicationType.paperApplication")}>
-          {getDetailBoolean(listing.paperApplication)}
-        </FieldValue>
+        <Grid.Cell>
+          <FieldValue id="paperApplication" label={t("listings.applicationType.paperApplication")}>
+            {getDetailBoolean(listing.paperApplication)}
+          </FieldValue>
+        </Grid.Cell>
       </Grid.Row>
       {paperApplicationsTableRows.length > 0 && (
         <Grid.Row>
-          <FieldValue label={t("listings.applicationType.paperApplication")}>
-            <MinimalTable
-              id="paperApplicationTable"
-              headers={paperApplicationsTableHeaders}
-              data={paperApplicationsTableRows}
-              flushLeft={true}
-            ></MinimalTable>
-          </FieldValue>
+          <Grid.Cell>
+            <FieldValue label={t("listings.applicationType.paperApplication")}>
+              <MinimalTable
+                id="paperApplicationTable"
+                headers={paperApplicationsTableHeaders}
+                data={paperApplicationsTableRows}
+                flushLeft={true}
+              ></MinimalTable>
+            </FieldValue>
+          </Grid.Cell>
         </Grid.Row>
       )}
 
       <Grid.Row columns={2}>
-        <FieldValue id="referralOpportunity" label={t("listings.applicationType.referral")}>
-          {getDetailBoolean(listing.referralOpportunity)}
-        </FieldValue>
+        <Grid.Cell>
+          <FieldValue id="referralOpportunity" label={t("listings.applicationType.referral")}>
+            {getDetailBoolean(listing.referralOpportunity)}
+          </FieldValue>
+        </Grid.Cell>
         {referralMethod && (
           <>
-            <FieldValue id="referralContactPhone" label={t("listings.referralContactPhone")}>
-              {referralMethod.phoneNumber}
-            </FieldValue>
-            <FieldValue id="referralSummary" label={t("listings.referralSummary")}>
-              {referralMethod.externalReference}
-            </FieldValue>
+            <Grid.Cell>
+              <FieldValue id="referralContactPhone" label={t("listings.referralContactPhone")}>
+                {getDetailFieldString(referralMethod.phoneNumber)}
+              </FieldValue>
+            </Grid.Cell>
+            <Grid.Cell>
+              <FieldValue id="referralSummary" label={t("listings.referralSummary")}>
+                {getDetailFieldString(referralMethod.externalReference)}
+              </FieldValue>
+            </Grid.Cell>
           </>
         )}
       </Grid.Row>

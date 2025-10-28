@@ -15,8 +15,12 @@
   @media (--md-and-up) {
     flex-basis: 50%;
   }
+  @media (--sm-only) {
+    &:not(:last-child) {
+      margin-block-end: var(--seeds-spacer-content);
+    }
+  }
   &:not(:last-child) {
     padding-inline-end: var(--seeds-s4);
   }
-  margin-block-end: var(--seeds-spacer-content);
 }

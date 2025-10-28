@@ -11,14 +11,20 @@ import {
 } from "@bloom-housing/shared-helpers"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import FormsLayout from "../../../layouts/forms"
+import { isFeatureFlagOn } from "../../../lib/helpers"
 import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
 import ApplicationFormLayout from "../../../layouts/application-form"
 import styles from "../../../layouts/application-form.module.scss"
+import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 const ApplicationAda = () => {
   const { profile } = useContext(AuthContext)
   const { conductor, application, listing } = useFormConductor("adaHouseholdMembers")
+  const enableAdaOtherOption = isFeatureFlagOn(
+    conductor.config,
+    FeatureFlagEnum.enableAdaOtherOption
+  )
   const currentPageSection = 2
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -27,9 +33,11 @@ const ApplicationAda = () => {
   >({
     defaultValues: {
       none:
-        application.accessibility.mobility === false &&
-        application.accessibility.vision === false &&
-        application.accessibility.hearing === false,
+        (application.accessibility.mobility === false &&
+          application.accessibility.vision === false &&
+          application.accessibility.hearing === false &&
+          !enableAdaOtherOption) ||
+        (enableAdaOtherOption && application.accessibility.other),
     },
     shouldFocusError: false,
   })
@@ -42,6 +50,7 @@ const ApplicationAda = () => {
         mobility: !!data["app-accessibility-mobility"],
         vision: !!data["app-accessibility-vision"],
         hearing: !!data["app-accessibility-hearing"],
+        other: enableAdaOtherOption ? !!data["app-accessibility-other"] : null,
       },
     })
     conductor.sync()
@@ -59,26 +68,30 @@ const ApplicationAda = () => {
     })
   }, [profile])
 
-  const adaFeaturesOptions: FieldSingle[] = adaFeatureKeys.map((item) => {
-    const isChecked = application.accessibility[item]
+  const adaFeaturesOptions: FieldSingle[] = adaFeatureKeys
+    .filter((item) => {
+      return item === "other" ? enableAdaOtherOption : true
+    })
+    .map((item) => {
+      const isChecked = application.accessibility[item]
 
-    return {
-      id: item,
-      label: t(`application.ada.${item}`),
-      value: item,
-      defaultChecked: isChecked,
-      dataTestId: `app-ada-${item}`,
-      uniqueName: true,
-      inputProps: {
-        onChange: () => {
-          setTimeout(() => {
-            setValue("app-accessibility-no-features", false)
-            clearErrors()
-          }, 1)
+      return {
+        id: item,
+        label: t(`application.ada.${item}`),
+        value: item,
+        defaultChecked: isChecked,
+        dataTestId: `app-ada-${item}`,
+        uniqueName: true,
+        inputProps: {
+          onChange: () => {
+            setTimeout(() => {
+              setValue("app-accessibility-no-features", false)
+              clearErrors()
+            }, 1)
+          },
         },
-      },
-    }
-  })
+      }
+    })
 
   adaFeaturesOptions.push({
     id: "no-features",
@@ -87,7 +100,8 @@ const ApplicationAda = () => {
     defaultChecked:
       application.accessibility["mobility"] === false &&
       application.accessibility["hearing"] === false &&
-      application.accessibility["vision"] === false,
+      application.accessibility["vision"] === false &&
+      !application.accessibility["other"],
     dataTestId: `app-ada-none`,
     uniqueName: true,
     inputProps: {
@@ -97,6 +111,7 @@ const ApplicationAda = () => {
           setValue("app-accessibility-mobility", false)
           setValue("app-accessibility-vision", false)
           setValue("app-accessibility-hearing", false)
+          setValue("app-accessibility-other", false)
           clearErrors()
         }
       },
@@ -104,7 +119,11 @@ const ApplicationAda = () => {
   })
 
   return (
-    <FormsLayout>
+    <FormsLayout
+      pageTitle={`${t("pageTitle.adaFeatures")} - ${t("listings.apply.applyOnline")} - ${
+        listing?.name
+      }`}
+    >
       <Form onSubmit={handleSubmit(onSubmit, onError)}>
         <ApplicationFormLayout
           listingName={listing?.name}

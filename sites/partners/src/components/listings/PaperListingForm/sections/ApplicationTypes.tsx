@@ -8,12 +8,9 @@ import {
   MinimalTable,
   Select,
   Textarea,
-  PhoneField,
-  PhoneMask,
   StandardTableData,
 } from "@bloom-housing/ui-components"
 import { Button, Card, Drawer, Grid } from "@bloom-housing/ui-seeds"
-import { cloudinaryFileUploader, fieldMessage, fieldHasError } from "../../../../lib/helpers"
 import {
   ApplicationMethodCreate,
   ApplicationMethodsTypeEnum,
@@ -21,9 +18,16 @@ import {
   LanguagesEnum,
   YesNoEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { AuthContext } from "@bloom-housing/shared-helpers"
+import {
+  cloudinaryFileUploader,
+  fieldMessage,
+  fieldHasError,
+  getLabel,
+} from "../../../../lib/helpers"
 import { FormListing } from "../../../../lib/listings/formTypes"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
-import { AuthContext } from "@bloom-housing/shared-helpers"
+import styles from "../ListingForm.module.scss"
 
 interface Methods {
   digital: ApplicationMethodCreate
@@ -31,7 +35,53 @@ interface Methods {
   referral: ApplicationMethodCreate
 }
 
-const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
+/**
+ * Input for the phone fields need to be masked to make sure the format of
+ * "(123) 456-7890" is the only accepted form.
+ * Limit characters to only values allowed and auto-add phone formatting
+ */
+export const phoneMask = (incomingNewValue: string): string => {
+  // Remove all non number characters
+  let newValue = incomingNewValue.replace(/[^0-9]/g, "")
+
+  const NUMBER = "number"
+
+  // Add the additional characters to the proper spots
+  ;[
+    "(",
+    NUMBER,
+    NUMBER,
+    NUMBER,
+    ")",
+    " ",
+    NUMBER,
+    NUMBER,
+    NUMBER,
+    "-",
+    NUMBER,
+    NUMBER,
+    NUMBER,
+    NUMBER,
+  ].forEach((value, index) => {
+    if (newValue[index] || incomingNewValue.length > index) {
+      if (value !== NUMBER && value !== newValue[index]) {
+        newValue = `${newValue.slice(0, index)}${value}${newValue.slice(index)}`
+      }
+    }
+  })
+  // Only allow a total of 14 character (10 numbers and 4 additional characters)
+  if (newValue.length > 14) {
+    newValue = newValue.slice(0, 14)
+  }
+  return newValue
+}
+
+type ApplicationTypesProps = {
+  listing: FormListing
+  requiredFields: string[]
+}
+
+const ApplicationTypes = ({ listing, requiredFields }: ApplicationTypesProps) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, setValue, watch, errors, getValues } = useFormContext()
   const { doJurisdictionsHaveFeatureFlagOn, getJurisdictionLanguages } = useContext(AuthContext)
@@ -84,6 +134,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
     id: "",
     url: "",
   })
+  const referralPhoneRef = React.useRef("")
   const resetDrawerState = () => {
     setProgressValue(0)
     setCloudinaryData({
@@ -186,6 +237,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
   }, [methods, setValue])
   // register applicationMethods so we can set a value for it
   register("applicationMethods")
+
   return (
     <>
       <hr className="spacer-section-above spacer-section" />
@@ -194,24 +246,21 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
         subheading={t("listings.sections.applicationTypesSubtitle")}
       >
         <Grid.Row columns={2}>
-          <Grid.Cell>
-            <p
-              className={`field-label m-4 ml-0 ${
-                fieldHasError(errors?.digitalApplication) &&
-                digitalApplicationChoice === null &&
-                "text-alert"
-              }`}
-            >
-              {t("listings.isDigitalApplication")}
-            </p>
-
+          <Grid.Cell
+            className={fieldHasError(errors?.digitalApplication) ? styles["label-error"] : ""}
+          >
             <FieldGroup
               name="digitalApplicationChoice"
               type="radio"
               register={register}
+              groupLabel={getLabel(
+                "digitalApplication",
+                requiredFields,
+                t("listings.isDigitalApplication")
+              )}
               error={fieldHasError(errors?.digitalApplication) && digitalApplicationChoice === null}
               errorMessage={fieldMessage(errors?.digitalApplication)}
-              groupSubNote={t("listings.requiredToPublish")}
+              fieldLabelClassName={`${styles["label-option"]} seeds-m-bs-2`}
               fields={[
                 {
                   ...yesNoRadioOptions[0],
@@ -249,17 +298,17 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
           </Grid.Cell>
           {!disableCommonApplication && digitalApplicationChoice === YesNoEnum.yes && (
             <Grid.Cell>
-              <p className="field-label m-4 ml-0">{t("listings.usingCommonDigitalApplication")}</p>
-
               <FieldGroup
                 name="commonDigitalApplicationChoice"
                 type="radio"
+                groupLabel={t("listings.usingCommonDigitalApplication")}
                 register={register}
+                fieldLabelClassName={`${styles["label-option"]} seeds-m-bs-2`}
                 fields={[
                   {
                     ...yesNoRadioOptions[0],
                     id: "commonDigitalApplicationChoiceYes",
-                    defaultChecked: methods.digital.type === ApplicationMethodsTypeEnum.Internal,
+                    defaultChecked: methods.digital?.type === ApplicationMethodsTypeEnum.Internal,
                     inputProps: {
                       onChange: () => {
                         setMethods({
@@ -276,7 +325,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                     ...yesNoRadioOptions[1],
                     id: "commonDigitalApplicationChoiceNo",
                     defaultChecked:
-                      methods.digital.type === ApplicationMethodsTypeEnum.ExternalLink,
+                      methods.digital?.type === ApplicationMethodsTypeEnum.ExternalLink,
                     inputProps: {
                       onChange: () => {
                         setMethods({
@@ -326,24 +375,21 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
             </Grid.Row>
           )}
         <Grid.Row columns={2}>
-          <Grid.Cell>
-            <p
-              className={`field-label m-4 ml-0 ${
-                fieldHasError(errors?.paperApplication) &&
-                paperApplicationChoice === null &&
-                "text-alert"
-              }`}
-            >
-              {t("listings.isPaperApplication")}
-            </p>
-
+          <Grid.Cell
+            className={fieldHasError(errors?.paperApplication) ? styles["label-error"] : ""}
+          >
             <FieldGroup
               name="paperApplicationChoice"
               type="radio"
-              groupSubNote={t("listings.requiredToPublish")}
+              groupLabel={getLabel(
+                "paperApplication",
+                requiredFields,
+                t("listings.isPaperApplication")
+              )}
               error={fieldHasError(errors?.paperApplication) && paperApplicationChoice === null}
               errorMessage={fieldMessage(errors?.paperApplication)}
               register={register}
+              fieldLabelClassName={`${styles["label-option"]} seeds-m-bs-2`}
               fields={[
                 {
                   ...yesNoRadioOptions[0],
@@ -416,7 +462,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                       ),
                     },
                   }))}
-                ></MinimalTable>
+                />
               )}
               <Button
                 type="button"
@@ -432,22 +478,19 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
           </Grid.Row>
         )}
         <Grid.Row columns={1}>
-          <Grid.Cell>
-            <p
-              className={`field-label m-4 ml-0 ${
-                fieldHasError(errors?.referralOpportunity) &&
-                referralOpportunityChoice === null &&
-                "text-alert"
-              }`}
-            >
-              {t("listings.isReferralOpportunity")}
-            </p>
-
+          <Grid.Cell
+            className={fieldHasError(errors?.referralOpportunity) ? styles["label-error"] : ""}
+          >
             <FieldGroup
               name="referralOpportunityChoice"
               type="radio"
               register={register}
-              groupSubNote={t("listings.requiredToPublish")}
+              fieldLabelClassName={`${styles["label-option"]} seeds-m-bs-2`}
+              groupLabel={getLabel(
+                "referralOpportunity",
+                requiredFields,
+                t("listings.isReferralOpportunity")
+              )}
               error={
                 fieldHasError(errors?.referralOpportunity) && referralOpportunityChoice === null
               }
@@ -489,28 +532,25 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
         {referralOpportunityChoice === YesNoEnum.yes && (
           <Grid.Row columns={3}>
             <Grid.Cell>
-              <PhoneField
+              <Field
                 label={t("listings.referralContactPhone")}
                 name="referralContactPhone"
                 id="referralContactPhone"
+                defaultValue={methods.referral ? methods.referral.phoneNumber : ""}
+                register={register}
                 placeholder={t("t.phoneNumberPlaceholder")}
-                mask={() => (
-                  <PhoneMask
-                    name="referralContactPhone"
-                    value={methods.referral ? methods.referral.phoneNumber : ""}
-                    placeholder={t("t.phoneNumberPlaceholder")}
-                    onChange={(e) => {
-                      setMethods({
-                        ...methods,
-                        referral: {
-                          ...methods.referral,
-                          phoneNumber: e,
-                        },
-                      })
-                    }}
-                  />
-                )}
-                controlClassName={"control"}
+                onChange={(e) => {
+                  const newValue = phoneMask(e.target.value)
+                  referralPhoneRef.current = newValue
+                  e.target.value = newValue
+                  setMethods({
+                    ...methods,
+                    referral: {
+                      ...methods.referral,
+                      phoneNumber: e.target.value,
+                    },
+                  })
+                }}
               />
             </Grid.Cell>
             <Grid.Cell className="seeds-grid-span-2">
@@ -518,7 +558,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                 label={t("listings.referralSummary")}
                 rows={3}
                 fullWidth={true}
-                placeholder={t("t.descriptionTitle")}
+                placeholder={""}
                 name="referralSummary"
                 id="referralSummary"
                 maxLength={500}
@@ -551,38 +591,41 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
         <Drawer.Content>
           <Card>
             <Card.Section>
-              {cloudinaryData.url === "" && (
-                <div className="field">
-                  <p className="mb-2">
-                    <label className="label">{t("t.language")}</label>
-                  </p>
-                  <Select
-                    name="paperApplicationLanguage"
-                    options={[
-                      ...availableJurisdictionLanguages.map((item) => ({
-                        label: t(`languages.${item}`),
-                        value: item,
-                      })),
-                    ]}
-                    placeholder={t("t.selectLanguage")}
-                    defaultValue={selectedLanguage}
-                    validation={{ required: true }}
-                    inputProps={{
-                      onChange: (e) => {
-                        setSelectedLanguage(e.target?.value)
-                      },
-                    }}
-                  />
-                </div>
+              <div className="field">
+                <p className="mb-2">
+                  <label className="label">{t("t.language")}</label>
+                </p>
+                <Select
+                  disabled={progressValue === 100}
+                  id={"paperApplicationLanguage"}
+                  name="paperApplicationLanguage"
+                  options={[
+                    ...availableJurisdictionLanguages.map((item) => ({
+                      label: t(`languages.${item}`),
+                      value: item,
+                    })),
+                  ]}
+                  placeholder={t("t.selectLanguage")}
+                  defaultValue={selectedLanguage}
+                  validation={{ required: true }}
+                  inputProps={{
+                    onChange: (e) => {
+                      setSelectedLanguage(e.target?.value)
+                    },
+                  }}
+                />
+              </div>
+              {selectedLanguage && (
+                <Dropzone
+                  id="listing-paper-application-upload"
+                  label={t("t.uploadFile")}
+                  helptext={t("listings.pdfHelperText")}
+                  uploader={pdfUploader}
+                  accept="application/pdf"
+                  progress={progressValue}
+                />
               )}
-              <Dropzone
-                id="listing-paper-application-upload"
-                label={t("t.uploadFile")}
-                helptext={t("listings.pdfHelperText")}
-                uploader={pdfUploader}
-                accept="application/pdf"
-                progress={progressValue}
-              />
+
               {cloudinaryData.url !== "" && (
                 <MinimalTable
                   headers={paperApplicationsTableHeaders}
@@ -594,6 +637,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
         </Drawer.Content>
         <Drawer.Footer>
           <Button
+            disabled={progressValue < 100}
             key={0}
             onClick={() => {
               savePaperApplication()

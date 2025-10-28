@@ -1,21 +1,20 @@
 import React, { useContext, useMemo } from "react"
 import { useRouter } from "next/router"
 import dayjs from "dayjs"
-import { t, StatusMessages } from "@bloom-housing/ui-components"
+import LinkIcon from "@heroicons/react/20/solid/LinkIcon"
+import PencilSquareIcon from "@heroicons/react/24/solid/PencilSquareIcon"
+import { t } from "@bloom-housing/ui-components"
 import { Button, Link, Grid, Icon } from "@bloom-housing/ui-seeds"
 import { pdfUrlFromListingEvents, AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
-import PencilSquareIcon from "@heroicons/react/24/solid/PencilSquareIcon"
-import LinkIcon from "@heroicons/react/20/solid/LinkIcon"
-import { ListingContext } from "./ListingContext"
-import { StatusAside } from "../shared/StatusAside"
 import {
   ListingEventsTypeEnum,
   ListingUpdate,
   ListingsStatusEnum,
   UserRoleEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-
+import { StatusAside } from "../shared/StatusAside"
 import { SubmitFunction } from "./PaperListingForm"
+import { ListingContext } from "./ListingContext"
 
 export enum ListingFormActionsType {
   add = "add",
@@ -50,6 +49,10 @@ const ListingFormActions = ({
   const { profile, listingsService, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
   const { addToast } = useContext(MessageContext)
   const router = useRouter()
+  const isSameEditingUser = profile?.id === listing?.lastUpdatedByUser?.id
+  const showLastUpdatedByUser =
+    !!listing?.lastUpdatedByUser?.name && type !== ListingFormActionsType.add
+  const showLastEdited = !showLastUpdatedByUser && type !== ListingFormActionsType.add
 
   // single jurisdiction check covers jurisAdmin adding a listing (listing is undefined then)
   const jurisdiction =
@@ -68,8 +71,11 @@ const ListingFormActions = ({
   const duplicateListingPermissions = jurisdiction?.duplicateListingPermissions
   const isListingCopier =
     profile?.userRoles?.isAdmin ||
+    profile?.userRoles?.isSupportAdmin ||
     (profile?.userRoles?.isJurisdictionalAdmin &&
       duplicateListingPermissions?.includes(UserRoleEnum.jurisdictionAdmin)) ||
+    (profile?.userRoles?.isLimitedJurisdictionalAdmin &&
+      duplicateListingPermissions?.includes(UserRoleEnum.limitedJurisdictionAdmin)) ||
     (profile?.userRoles?.isPartner && duplicateListingPermissions?.includes(UserRoleEnum.partner))
 
   const listingId = listing?.id
@@ -77,7 +83,6 @@ const ListingFormActions = ({
   const listingJurisdiction = profile?.jurisdictions?.find(
     (jurisdiction) => jurisdiction.id === listing?.jurisdictions?.id
   )
-
   const hideCloseButton = doJurisdictionsHaveFeatureFlagOn(
     "hideCloseListingButton",
     listingJurisdiction?.id
@@ -86,9 +91,9 @@ const ListingFormActions = ({
   const recordUpdated = useMemo(() => {
     if (!listing) return null
 
-    const dayjsDate = dayjs(listing.updatedAt)
+    const dayjsDate = dayjs(listing.contentUpdatedAt)
 
-    return dayjsDate.format("MMMM DD, YYYY")
+    return dayjsDate.format("MMMM DD, YYYY, hh:mm A")
   }, [listing])
 
   const actions = useMemo(() => {
@@ -97,7 +102,7 @@ const ListingFormActions = ({
         <Button
           id="listingsExitButton"
           variant="text"
-          className="w-full justify-center p-3"
+          className={"w-full justify-center p-3 darker-link"}
           onClick={() => {
             showSaveBeforeExitDialog()
           }}
@@ -392,7 +397,11 @@ const ListingFormActions = ({
 
     // new unsaved listing
     if (type === ListingFormActionsType.add) {
-      elements.push(isListingApprover || !isListingApprovalEnabled ? publishButton : submitButton)
+      elements.push(
+        isListingApprover || (!profile?.userRoles?.isSupportAdmin && !isListingApprovalEnabled)
+          ? publishButton
+          : submitButton
+      )
       elements.push(saveDraftButton)
       elements.push(cancelButton)
     }
@@ -422,6 +431,8 @@ const ListingFormActions = ({
       if (isListingApprover && !profile?.userRoles.isPartner) {
         elements.push(approveAndPublishButton)
         elements.push(editFromDetailButton)
+      } else if (profile?.userRoles.isSupportAdmin) {
+        elements.push(editFromDetailButton)
       }
       if (isListingCopier) elements.push(copyButton)
       elements.push(previewButton)
@@ -433,6 +444,8 @@ const ListingFormActions = ({
     ) {
       if (isListingApprover && !profile?.userRoles.isPartner) {
         elements.push(approveAndPublishButton)
+        elements.push(requestChangesButton)
+      } else if (profile?.userRoles.isSupportAdmin) {
         elements.push(requestChangesButton)
       }
       if (profile?.userRoles.isPartner) {
@@ -471,10 +484,13 @@ const ListingFormActions = ({
     }
     //open listing, edit view
     else if (listing.status === ListingsStatusEnum.active && type === ListingFormActionsType.edit) {
-      if (!hideCloseButton) {
+      if (!hideCloseButton && !profile.userRoles.isSupportAdmin) {
         elements.push(closeButton)
       }
-      elements.push(unpublishButton)
+      if (!profile.userRoles.isSupportAdmin) {
+        elements.push(unpublishButton)
+      }
+
       elements.push(saveContinueButton)
       elements.push(cancelButton)
     }
@@ -532,7 +548,18 @@ const ListingFormActions = ({
   return (
     <>
       <StatusAside columns={1} actions={actions}>
-        {type === "edit" && <StatusMessages lastTimestamp={recordUpdated} />}
+        <div className="flex flex-col items-center mt-16 gap-2">
+          {showLastUpdatedByUser && (
+            <div className="flex flex-col items-center mt-16 gap-2">
+              <p>
+                {t("listings.details.editedBy")}{" "}
+                {isSameEditingUser ? t("listings.details.you") : listing.lastUpdatedByUser.name}
+              </p>
+            </div>
+          )}
+          {showLastEdited && <p>{t("listings.details.editedAt")}</p>}
+          <p>{recordUpdated}</p>
+        </div>
       </StatusAside>
     </>
   )

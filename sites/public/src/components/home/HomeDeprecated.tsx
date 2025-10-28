@@ -1,5 +1,4 @@
 import React, { useContext, useEffect } from "react"
-import Head from "next/head"
 import { t, ActionBlock } from "@bloom-housing/ui-components"
 import { Button, Heading, Icon } from "@bloom-housing/ui-seeds"
 import { PageView, pushGtmEvent, AuthContext, CustomIconMap } from "@bloom-housing/shared-helpers"
@@ -7,7 +6,6 @@ import { Jurisdiction } from "@bloom-housing/shared-helpers/src/types/backend-sw
 import { UserStatus } from "../../lib/constants"
 import Layout from "../../layouts/application"
 import { ConfirmationModal } from "../../components/account/ConfirmationModal"
-import { MetaTags } from "../../components/shared/MetaTags"
 
 import PageHero from "../page/HeroDeprecated"
 
@@ -36,11 +34,7 @@ export const HomeDeprecated = (props: HomeDeprecatedProps) => {
   const metaImage = "" // TODO: replace with hero image
 
   return (
-    <Layout>
-      <Head>
-        <title>{t("nav.siteTitle")}</title>
-      </Head>
-      <MetaTags title={t("nav.siteTitle")} image={metaImage} description={metaDescription} />
+    <Layout metaImage={metaImage} metaDescription={metaDescription}>
       <PageHero>
         <PageHero.Header>
           <Heading>{heroTitle}</Heading>

@@ -28,10 +28,10 @@ export const alternateContactTypeRadioOrder = [
 
 export const preferredUnitCheckboxesOrder = [
   "Studio",
-  "1 Bedroom",
-  "2 Bedroom",
-  "3 Bedroom",
-  "3+ Bedroom",
+  "1 bedroom",
+  "2 bedroom",
+  "3 bedroom",
+  "3+ bedroom",
 ]
 
 export const howDidYouHearCheckboxesOrder = [
@@ -194,7 +194,7 @@ export const ElmVillageApplication: Application = {
     {
       ...idDefaults,
       id: "dff3ff70-7085-4dab-afd9-de4b33e0ec1e",
-      name: "1 Bedroom" as UnitTypeEnum,
+      name: "1 bedroom" as UnitTypeEnum,
       numBedrooms: 1,
     },
   ],

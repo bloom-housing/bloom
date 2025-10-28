@@ -9,6 +9,10 @@
     flex-direction: column;
   }
 
+  .fullscreen-alert {
+    --alert-max-width: calc(var(--seeds-screen-lg) - var(--seeds-s20));
+  }
+
   .styled-stacked-table {
     // Temporary until we have Seeds tables to manipulate UIC StackedTable component
     [class*="stacked-table"] {
@@ -106,26 +110,39 @@
   }
 
   ul.application-timeline {
-    .ui-icon > svg {
-      margin-top: 0 !important;
+    .ui-icon > svg:dir(rtl) {
+      margin-inline-start: auto;
+      @media (--sm-only) {
+        margin-inline-start: 0.8rem;
+      }
     }
-
-    .progress-nav__dot-item > p {
-      padding-top: 2.65rem;
-      text-align: left;
-      font-weight: normal !important;
+    .ui-icon > svg {
+      margin-block-start: -5.25rem;
+      margin-inline-start: -8.25rem;
+      @media (--sm-only) {
+        margin-inline-start: -6.25rem;
+      }
     }
 
     .progress-nav__dot-item {
-      text-align: left;
+      padding-block-start: 2.65rem;
+      font-weight: normal !important;
+      > .font-bold,
+      p {
+        text-align: start;
+      }
+    }
+
+    .progress-nav__dot-item > p {
+      padding-top: 0;
     }
 
     .progress-nav__dot-item::before {
-      left: 1rem;
+      inset-inline-start: 1rem;
     }
 
     .progress-nav__dot-item::after {
-      top: 0.9rem;
+      inset-block-start: 0.9rem;
       height: 3px;
     }
 
@@ -133,8 +150,8 @@
       background-color: var(--seeds-color-success-dark);
     }
 
-    .progress-nav__dot-item:first-of-type::after {
-      left: 0;
+    .progress-nav__dot-item::after {
+      inset-inline-start: 2rem;
     }
 
     .progress-nav__dot-item:last-of-type::after {
@@ -142,7 +159,60 @@
     }
 
     .progress-nav__dot-item .absolute {
-      margin-left: 0.6rem;
+      margin-inline-start: 0.6rem;
+    }
+  }
+
+  .bloom-markdown {
+    &,
+    > * {
+      overflow-wrap: anywhere;
+    }
+
+    p:not(li > *) {
+      padding-block: 0.25em;
+    }
+
+    ul {
+      list-style: disc;
+    }
+
+    ol {
+      list-style: decimal;
+    }
+    ul,
+    ol {
+      margin-inline-start: var(--seeds-s5);
+      margin-block-end: 0.5em;
+    }
+
+    hr {
+      margin-block: var(--seeds-spacer-label);
+      width: 100%;
+    }
+
+    a {
+      color: var(--seeds-color-blue-500);
+      text-decoration: underline;
+    }
+  }
+
+  .seeds-card-section,
+  .seeds-heading-group {
+    &,
+    > *,
+    p {
+      overflow-wrap: anywhere;
+    }
+  }
+
+  @media (--sm-only) {
+    .language-nav__list {
+      font-size: var(--seeds-font-size-xs);
+
+      .language-nav__list-button {
+        padding-inline: var(--seeds-s1_5);
+      }
     }
   }
 
@@ -158,6 +228,33 @@
     .seeds-button {
       --button-border-radius-sm: var(--seeds-rounded-3xl);
       --button-border-radius-md: var(--seeds-rounded-3xl);
+    }
+  }
+
+  // The multi-image card overrides below exist outside of the jurisdictional class. This allows it to still get the lakeview overrides - if the class does exist, then apply the same overrides to its sibling.
+  .lakeview + div {
+    .image-card__gallery-modal {
+      @extend .lakeview;
+    }
+  }
+
+  // These are temporary manual overrides for the UIC multi image modal to enable it to theme with Seeds while the new Seeds multi image modal is still in development
+  .image-card__gallery-modal {
+    --bloom-color-primary: var(--seeds-color-primary);
+    --bloom-color-primary-dark: var(--seeds-color-primary-dark);
+    max-width: var(--seeds-width-2xl);
+    @media (--sm-only) {
+      background-color: var(--seeds-color-white);
+    }
+    p,
+    img {
+      width: 100%;
+    }
+    p {
+      margin-block-end: var(--seeds-s8);
+      @media (--sm-only) {
+        margin-block-end: var(--seeds-s4);
+      }
     }
   }
 }

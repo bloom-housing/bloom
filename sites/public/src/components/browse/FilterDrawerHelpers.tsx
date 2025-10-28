@@ -23,7 +23,7 @@ export enum ReservedCommunityTypes {
   "senior55" = "senior55",
   "senior62" = "senior62",
   "homeless" = "homeless",
-  "veterans" = "veterans",
+  "veteran" = "veteran",
 }
 
 export interface FilterData {
@@ -58,6 +58,9 @@ export interface RentSectionProps {
   getValues: UseFormMethods["getValues"]
   setValue: UseFormMethods["setValue"]
   filterState: FilterData
+  setError: UseFormMethods["setError"]
+  clearErrors: UseFormMethods["clearErrors"]
+  errors: UseFormMethods["formState"]["errors"]
 }
 
 export interface SearchSectionProps {
@@ -93,7 +96,7 @@ const availabilityOrdering = {
  *
  * @returns an array of availability keys in the displayed order
  */
-export const getAvailabilityValues = () => {
+export const getAvailabilityValues = (enableUnitGroups: boolean) => {
   // TODO: https://github.com/metrotranscom/doorway/issues/1278
   const availabilityFiltered = Object.keys(FilterAvailabilityEnum).filter(
     (elem) => elem != FilterAvailabilityEnum.waitlistOpen
@@ -101,6 +104,13 @@ export const getAvailabilityValues = () => {
   const availabilityOrdered = availabilityFiltered.sort((a, b) => {
     return availabilityOrdering[a].ordinal - availabilityOrdering[b].ordinal
   })
+
+  if (enableUnitGroups) {
+    const index = availabilityOrdered.indexOf(FilterAvailabilityEnum.unitsAvailable)
+    if (index !== -1) {
+      availabilityOrdered[index] = "vacantUnits"
+    }
+  }
   return availabilityOrdered
 }
 
@@ -126,8 +136,28 @@ export const unitTypeMapping = {
   },
 }
 
+export const unitTypeUnitGroupsMapping = {
+  [UnitTypeEnum.studio]: { value: 0, ordinal: 0, labelKey: "listings.unitTypes.studio" },
+  [UnitTypeEnum.oneBdrm]: { value: 1, ordinal: 1, labelKey: "listings.unitTypes.expanded.oneBdrm" },
+  [UnitTypeEnum.twoBdrm]: { value: 2, ordinal: 2, labelKey: "listings.unitTypes.expanded.twoBdrm" },
+  [UnitTypeEnum.threeBdrm]: {
+    value: 3,
+    ordinal: 3,
+    labelKey: "listings.unitTypes.expanded.threeBdrm",
+  },
+  [UnitTypeEnum.fourBdrm]: {
+    value: 4,
+    ordinal: 4,
+    labelKey: "listings.unitTypes.expanded.fourBdrm",
+  },
+}
+
 export const unitTypesSorted = Object.keys(UnitTypeEnum).sort(
   (a, b) => unitTypeMapping[a].ordinal - unitTypeMapping[b].ordinal
+)
+
+export const unitTypesSortedByUnitGroups = Object.keys(unitTypeUnitGroupsMapping).sort(
+  (a, b) => unitTypeUnitGroupsMapping[a].ordinal - unitTypeUnitGroupsMapping[b].ordinal
 )
 
 /**
@@ -159,7 +189,7 @@ export const CheckboxGroup = (props: CheckboxGroupProps) => {
     <fieldset className={styles["filter-section"]}>
       <legend className={styles["filter-section-label"]}>{props.groupLabel}</legend>
       <Grid spacing="sm">
-        <Grid.Row columns={props.customColumnNumber ?? 3}>
+        <Grid.Row columns={props.customColumnNumber ?? 2}>
           {props.fields.map((field) => {
             return (
               <Grid.Cell key={`${field.key}-cell`}>
@@ -181,56 +211,94 @@ export const CheckboxGroup = (props: CheckboxGroupProps) => {
   )
 }
 
-export const RentSection = (props: RentSectionProps) => (
-  <fieldset className={styles["filter-section"]}>
-    <legend className={styles["filter-section-label"]}>{t("t.rent")}</legend>
-    <Grid spacing="sm">
-      <Grid.Row>
-        <Grid.Cell>
-          <Field
-            id={`${ListingFilterKeys.monthlyRent}.minRent`}
-            name={`${ListingFilterKeys.monthlyRent}.minRent`}
-            label={t("listings.minRent")}
-            type="currency"
-            prepend="$"
-            register={props.register}
-            getValues={props.getValues}
-            setValue={props.setValue}
-            defaultValue={props.filterState?.[ListingFilterKeys.monthlyRent]?.minRent}
-          />
-        </Grid.Cell>
-        <Grid.Cell>
-          <Field
-            id={`${ListingFilterKeys.monthlyRent}.maxRent`}
-            name={`${ListingFilterKeys.monthlyRent}.maxRent`}
-            label={t("listings.maxRent")}
-            type="currency"
-            prepend="$"
-            register={props.register}
-            getValues={props.getValues}
-            setValue={props.setValue}
-            defaultValue={props.filterState?.[ListingFilterKeys.monthlyRent]?.maxRent}
-          />
-        </Grid.Cell>
-      </Grid.Row>
-      <Grid.Row>
-        <Grid.Cell>
-          <Field
-            id={ListingFilterKeys.section8Acceptance}
-            name={ListingFilterKeys.section8Acceptance}
-            label={t("listings.section8Acceptance")}
-            labelClassName={styles["filter-checkbox-label"]}
-            type="checkbox"
-            register={props.register}
-            inputProps={{
-              defaultChecked: isTrue(props.filterState?.[ListingFilterKeys.section8Acceptance]),
-            }}
-          />
-        </Grid.Cell>
-      </Grid.Row>
-    </Grid>
-  </fieldset>
-)
+export const validateRentValues = (
+  getValues: UseFormMethods["getValues"],
+  clearErrors: UseFormMethods["clearErrors"],
+  setError: UseFormMethods["setError"]
+) => {
+  const minField = `${ListingFilterKeys.monthlyRent}.minRent`
+  const maxField = `${ListingFilterKeys.monthlyRent}.maxRent`
+
+  const minValue = getValues(minField)
+  const maxValue = getValues(maxField)
+
+  clearErrors([minField, maxField])
+
+  if (minValue && maxValue) {
+    const numericMin = parseFloat(minValue.replaceAll(",", ""))
+    const numericMax = parseFloat(maxValue.replaceAll(",", ""))
+
+    if (numericMin > numericMax) {
+      setError(minField, { message: t("errors.minGreaterThanMaxRentError") })
+      setError(maxField, { message: t("errors.maxLessThanMinRentError") })
+    }
+  }
+}
+
+export const RentSection = (props: RentSectionProps) => {
+  return (
+    <fieldset className={styles["filter-section"]}>
+      <legend className={styles["filter-section-label"]}>{t("t.rent")}</legend>
+      <Grid spacing="sm">
+        <Grid.Row>
+          <Grid.Cell>
+            <Field
+              id={`${ListingFilterKeys.monthlyRent}.minRent`}
+              name={`${ListingFilterKeys.monthlyRent}.minRent`}
+              label={t("listings.minRent")}
+              type="currency"
+              prepend="$"
+              register={props.register}
+              getValues={props.getValues}
+              setValue={props.setValue}
+              defaultValue={props.filterState?.[ListingFilterKeys.monthlyRent]?.minRent}
+              error={!!props.errors[ListingFilterKeys.monthlyRent]?.minRent}
+              errorMessage={props.errors[ListingFilterKeys.monthlyRent]?.minRent?.message}
+              inputProps={{
+                onBlur: () =>
+                  validateRentValues(props.getValues, props.clearErrors, props.setError),
+              }}
+            />
+          </Grid.Cell>
+          <Grid.Cell>
+            <Field
+              id={`${ListingFilterKeys.monthlyRent}.maxRent`}
+              name={`${ListingFilterKeys.monthlyRent}.maxRent`}
+              label={t("listings.maxRent")}
+              type="currency"
+              prepend="$"
+              register={props.register}
+              getValues={props.getValues}
+              setValue={props.setValue}
+              defaultValue={props.filterState?.[ListingFilterKeys.monthlyRent]?.maxRent}
+              error={!!props.errors[ListingFilterKeys.monthlyRent]?.maxRent}
+              errorMessage={props.errors[ListingFilterKeys.monthlyRent]?.maxRent?.message}
+              inputProps={{
+                onBlur: () =>
+                  validateRentValues(props.getValues, props.clearErrors, props.setError),
+              }}
+            />
+          </Grid.Cell>
+        </Grid.Row>
+        <Grid.Row>
+          <Grid.Cell>
+            <Field
+              id={ListingFilterKeys.section8Acceptance}
+              name={ListingFilterKeys.section8Acceptance}
+              label={t("listings.section8Acceptance")}
+              labelClassName={styles["filter-checkbox-label"]}
+              type="checkbox"
+              register={props.register}
+              inputProps={{
+                defaultChecked: isTrue(props.filterState?.[ListingFilterKeys.section8Acceptance]),
+              }}
+            />
+          </Grid.Cell>
+        </Grid.Row>
+      </Grid>
+    </fieldset>
+  )
+}
 
 export const SearchSection = (props: SearchSectionProps) => (
   <div className={styles["filter-section"]}>

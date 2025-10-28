@@ -15,6 +15,7 @@ import {
 import {
   ApplicationCreate,
   ApplicationReviewStatusEnum,
+  FeatureFlagEnum,
   ListingsStatusEnum,
   MultiselectQuestionsApplicationSectionEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -25,6 +26,7 @@ import { UserStatus } from "../../../lib/constants"
 import ApplicationFormLayout from "../../../layouts/application-form"
 import styles from "../../../layouts/application-form.module.scss"
 import dayjs from "dayjs"
+import { isFeatureFlagOn } from "../../../lib/helpers"
 
 const ApplicationSummary = () => {
   const router = useRouter()
@@ -98,7 +100,11 @@ const ApplicationSummary = () => {
   }
 
   return (
-    <FormsLayout>
+    <FormsLayout
+      pageTitle={`${t("pageTitle.summary")} - ${t("listings.apply.applyOnline")} - ${
+        listing?.name
+      }`}
+    >
       <Form onSubmit={handleSubmit(onSubmit)}>
         <ApplicationFormLayout
           listingName={listing?.name}
@@ -140,6 +146,19 @@ const ApplicationSummary = () => {
             }
             editMode
             validationError={validationError}
+            enableUnitGroups={isFeatureFlagOn(conductor.config, FeatureFlagEnum.enableUnitGroups)}
+            enableFullTimeStudentQuestion={isFeatureFlagOn(
+              conductor.config,
+              FeatureFlagEnum.enableFullTimeStudentQuestion
+            )}
+            enableAdaOtherOption={isFeatureFlagOn(
+              conductor.config,
+              FeatureFlagEnum.enableAdaOtherOption
+            )}
+            swapCommunityTypeWithPrograms={isFeatureFlagOn(
+              conductor.config,
+              FeatureFlagEnum.swapCommunityTypeWithPrograms
+            )}
           />
 
           <CardSection divider={"flush"} className={"border-none"}>

@@ -1,10 +1,10 @@
 describe("Lottery Tests", () => {
   before(() => {
-    cy.login()
+    cy.loginApi()
   })
 
   after(() => {
-    cy.signOut()
+    cy.signOutApi()
   })
 
   it("can run through every lottery action", () => {
@@ -59,8 +59,8 @@ describe("Lottery Tests", () => {
     cy.getByID("save-user").click()
 
     // Login as partner and view lottery tab
-    cy.signOut()
-    cy.login("partnerUser")
+    cy.signOutApi()
+    cy.loginApi("partnerUser")
     cy.findAndOpenListing(uniqueListingName)
     cy.get(`[role="tab"]`).eq(2).click()
     cy.get("h2").contains("Publish lottery data")
@@ -71,8 +71,8 @@ describe("Lottery Tests", () => {
     cy.get("h2").contains("Export lottery data")
 
     // Login as admin and view lottery tab
-    cy.signOut()
-    cy.login()
+    cy.signOutApi()
+    cy.loginApi()
     cy.findAndOpenListing(uniqueListingName)
     cy.get(`[role="tab"]`).eq(2).click()
     cy.get("h2").contains("Export lottery data")
@@ -83,8 +83,8 @@ describe("Lottery Tests", () => {
     cy.get("h2").contains("Export lottery data")
 
     // Login as partner and view lottery tab, ensure no data
-    cy.signOut()
-    cy.login("partnerUser")
+    cy.signOutApi()
+    cy.loginApi("partnerUser")
     cy.findAndOpenListing(uniqueListingName)
     cy.get(`[role="tab"]`).eq(2).click()
     cy.get("h2").contains("No lottery data")

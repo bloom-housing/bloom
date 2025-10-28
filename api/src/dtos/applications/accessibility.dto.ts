@@ -19,4 +19,9 @@ export class Accessibility extends AbstractDTO {
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   hearing?: boolean;
+
+  @Expose()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  other?: boolean;
 }

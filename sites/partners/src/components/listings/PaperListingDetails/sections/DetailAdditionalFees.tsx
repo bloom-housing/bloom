@@ -28,35 +28,47 @@ const DetailAdditionalFees = () => {
         )
       }
     })
-    return utilitiesExist ? utilities : <>{t("t.none")}</>
+    return utilitiesExist ? <ul className={"flex flex-wrap"}>{utilities}</ul> : <>{t("t.none")}</>
   }
 
   return (
     <SectionWithGrid heading={t("listings.sections.additionalFees")} inset>
       <Grid.Row>
-        <FieldValue id="applicationFee" label={t("listings.applicationFee")}>
-          {getDetailFieldString(listing.applicationFee)}
-        </FieldValue>
-        <FieldValue id="depositMin" label={t("listings.depositMin")}>
-          {getDetailFieldString(listing.depositMin)}
-        </FieldValue>
-        <FieldValue id="depositMax" label={t("listings.depositMax")}>
-          {getDetailFieldString(listing.depositMax)}
-        </FieldValue>
+        <Grid.Cell>
+          <FieldValue id="applicationFee" label={t("listings.applicationFee")}>
+            {getDetailFieldString(listing.applicationFee)}
+          </FieldValue>
+        </Grid.Cell>
+        <Grid.Cell>
+          <FieldValue id="depositMin" label={t("listings.depositMin")}>
+            {getDetailFieldString(listing.depositMin)}
+          </FieldValue>
+        </Grid.Cell>
+        <Grid.Cell>
+          <FieldValue id="depositMax" label={t("listings.depositMax")}>
+            {getDetailFieldString(listing.depositMax)}
+          </FieldValue>
+        </Grid.Cell>
       </Grid.Row>
       <Grid.Row>
-        <FieldValue label={t("listings.sections.depositHelperText")}>
-          {getDetailFieldString(listing.depositHelperText)}
-        </FieldValue>
-        <FieldValue id="costsNotIncluded" label={t("listings.sections.costsNotIncluded")}>
-          {getDetailFieldString(listing.costsNotIncluded)}
-        </FieldValue>
+        <Grid.Cell>
+          <FieldValue label={t("listings.sections.depositHelperText")}>
+            {getDetailFieldString(listing.depositHelperText)}
+          </FieldValue>
+        </Grid.Cell>
+        <Grid.Cell>
+          <FieldValue id="costsNotIncluded" label={t("listings.sections.costsNotIncluded")}>
+            {getDetailFieldString(listing.costsNotIncluded)}
+          </FieldValue>
+        </Grid.Cell>
       </Grid.Row>
       {enableUtilitiesIncluded && (
         <Grid.Row>
-          <FieldValue id="utilities" label={t("listings.sections.utilities")}>
-            <ul className={"flex flex-wrap"}>{getUtilitiesIncluded()}</ul>
-          </FieldValue>
+          <Grid.Cell>
+            <FieldValue id="utilities" label={t("listings.sections.utilities")}>
+              {getUtilitiesIncluded()}
+            </FieldValue>
+          </Grid.Cell>
         </Grid.Row>
       )}
     </SectionWithGrid>

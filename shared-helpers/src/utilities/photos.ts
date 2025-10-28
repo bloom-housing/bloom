@@ -19,22 +19,21 @@ export const getUrlForListingImage = (image: Asset, size = 400) => {
 }
 
 export const imageUrlFromListing = (listing: Listing, size = 400): string[] => {
-  const imageAssets =
-    listing?.listingImages?.length && listing.listingImages[0].assets
-      ? listing.listingImages
-          .sort((imageA, imageB) => (imageA.ordinal ?? 10) - (imageB?.ordinal ?? 10))
-          .map((imageObj) => imageObj.assets)
-      : listing?.assets
+  let imageAssets: Asset[] = []
+
+  if (listing?.listingImages?.length && listing.listingImages[0].assets) {
+    imageAssets = listing.listingImages
+      .sort((imageA, imageB) => (imageA.ordinal ?? 10) - (imageB?.ordinal ?? 10))
+      .map((imageObj) => imageObj.assets)
+  } else if (Array.isArray(listing?.assets)) {
+    imageAssets = listing.assets
+  }
 
   const imageUrls = imageAssets
     ?.filter(
       (asset: Asset) => asset.label === CLOUDINARY_BUILDING_LABEL || asset.label === "building"
     )
-    ?.map((asset: Asset) => {
-      return asset.label === CLOUDINARY_BUILDING_LABEL
-        ? cloudinaryUrlFromId(asset.fileId, size)
-        : asset.fileId
-    })
+    ?.map((asset: Asset) => getUrlForListingImage(asset, size) || "")
 
-  return imageUrls?.length > 0 ? imageUrls : ["/images/fallback-listing.png"]
+  return imageUrls?.length > 0 ? imageUrls : [IMAGE_FALLBACK_URL]
 }

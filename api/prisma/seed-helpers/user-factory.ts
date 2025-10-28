@@ -59,12 +59,18 @@ export const userFactory = async (optionalParams?: {
         }),
       }
     : undefined,
-  userRoles: {
-    create: {
-      isAdmin: optionalParams?.roles?.isAdmin || false,
-      isJurisdictionalAdmin:
-        optionalParams?.roles?.isJurisdictionalAdmin || false,
-      isPartner: optionalParams?.roles?.isPartner || false,
-    },
-  },
+  userRoles: optionalParams?.roles
+    ? {
+        create: {
+          isAdmin: optionalParams?.roles?.isAdmin || false,
+          isJurisdictionalAdmin:
+            optionalParams?.roles?.isJurisdictionalAdmin || false,
+          isLimitedJurisdictionalAdmin:
+            optionalParams?.roles?.isLimitedJurisdictionalAdmin || false,
+          isPartner: optionalParams?.roles?.isPartner || false,
+          isSuperAdmin: optionalParams?.roles?.isSuperAdmin || false,
+          isSupportAdmin: optionalParams?.roles?.isSupportAdmin || false,
+        },
+      }
+    : undefined,
 });

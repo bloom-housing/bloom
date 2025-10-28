@@ -11,7 +11,9 @@ import LiveAloneStep from "./LiveAloneStep"
 import HouseholdMemberStep from "./HouseholdMemberStep"
 import SelectedPreferencesStep from "./SelectedPreferencesStep"
 import PreferencesAllStep from "./PreferencesAllStep"
+import PreferredUnitSizeStep from "./PreferredUnitSizeStep"
 import ProgramsStep from "./ProgramsStep"
+import CommunityTypesStep from "./CommunityTypesStep"
 import { Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 export const loadApplicationFromAutosave = () => {
@@ -83,6 +85,7 @@ export default class ApplicationConductor {
     },
     preferredUnitSize: {
       url: "/applications/household/preferred-units",
+      definition: PreferredUnitSizeStep,
     },
     adaHouseholdMembers: {
       url: "/applications/household/ada",
@@ -96,6 +99,10 @@ export default class ApplicationConductor {
     programs: {
       url: "/applications/programs/programs",
       definition: ProgramsStep,
+    },
+    communityTypes: {
+      url: "/applications/community-types/community-types",
+      definition: CommunityTypesStep,
     },
     vouchersSubsidies: {
       url: "/applications/financial/vouchers",
@@ -219,8 +226,6 @@ export default class ApplicationConductor {
     const stepIndex = this.steps.findIndex((step) => step.name === stepName)
     if (stepIndex >= 0) {
       this.currentStepIndex = stepIndex
-    } else {
-      console.error(`There is no step defined which matches ${stepName}`)
     }
   }
 

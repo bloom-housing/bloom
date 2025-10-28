@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useContext } from "react"
 import Head from "next/head"
 import axios from "axios"
 import { t, AlertBox, Breadcrumbs, BreadcrumbLink } from "@bloom-housing/ui-components"
@@ -14,6 +14,7 @@ import Layout from "../../../layouts/index"
 import ListingFormActions, {
   ListingFormActionsType,
 } from "../../../components/listings/ListingFormActions"
+import { AuthContext } from "@bloom-housing/shared-helpers"
 import { ListingContext } from "../../../components/listings/ListingContext"
 import DetailListingData from "../../../components/listings/PaperListingDetails/sections/DetailListingData"
 import DetailListingIntro from "../../../components/listings/PaperListingDetails/sections/DetailListingIntro"
@@ -46,6 +47,7 @@ interface ListingProps {
 
 export default function ListingDetail(props: ListingProps) {
   const { listing } = props
+  const { profile } = useContext(AuthContext)
   const [errorAlert, setErrorAlert] = useState<string>(null)
   const [unitDrawer, setUnitDrawer] = useState<UnitDrawer>(null)
   const [copyListingDialog, setCopyListingDialog] = useState(false)
@@ -58,7 +60,7 @@ export default function ListingDetail(props: ListingProps) {
         <>
           <Layout>
             <Head>
-              <title>{t("nav.siteTitlePartners")}</title>
+              <title>{`View ${listing.name} - ${t("nav.siteTitlePartners")}`}</title>
             </Head>
             <NavigationHeader
               title={listing.name}
@@ -66,11 +68,14 @@ export default function ListingDetail(props: ListingProps) {
               tabs={{
                 show: listing.status !== ListingsStatusEnum.pending,
                 listingLabel: t("t.listingSingle"),
-                applicationsLabel: t("nav.applications"),
+                applicationsLabel: !profile?.userRoles?.isLimitedJurisdictionalAdmin
+                  ? t("nav.applications")
+                  : undefined,
                 lotteryLabel:
                   listing.status === ListingsStatusEnum.closed &&
                   listing?.lotteryOptIn &&
-                  listing?.reviewOrderType === ReviewOrderTypeEnum.lottery
+                  listing?.reviewOrderType === ReviewOrderTypeEnum.lottery &&
+                  !profile?.userRoles?.isLimitedJurisdictionalAdmin
                     ? t("listings.lotteryTitle")
                     : undefined,
               }}

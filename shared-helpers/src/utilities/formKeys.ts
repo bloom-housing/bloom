@@ -70,7 +70,7 @@ export const contactPreferencesKeys = [
   },
 ]
 
-export const adaFeatureKeys = ["mobility", "vision", "hearing"]
+export const adaFeatureKeys = ["mobility", "vision", "hearing", "other"]
 
 export const relationshipKeys = ["", ...Object.values(HouseholdMemberRelationship)]
 
@@ -281,6 +281,8 @@ export enum RoleOption {
   Administrator = "administrator",
   Partner = "partner",
   JurisdictionalAdmin = "jurisdictionalAdmin",
+  LimitedJurisdictionalAdmin = "limitedJurisdictionalAdmin",
+  AdminSupport = "adminSupport",
 }
 export const roleKeys = Object.values(RoleOption)
 

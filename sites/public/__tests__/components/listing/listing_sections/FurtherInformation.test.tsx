@@ -11,7 +11,8 @@ describe("<FurtherInformation>", () => {
       <FurtherInformation instructions={"Further instructions"} phoneNumber={"(123) 456-7890"} />
     )
     expect(getByText("For further information")).toBeDefined()
-    expect(getByText(`Call ${phoneNumber}`)).toBeDefined()
+    expect(getByText("Call")).toBeDefined()
+    expect(getByText(phoneNumber)).toBeDefined()
     expect(getByText("Further instructions")).toBeDefined()
   })
   it("shows default instructions", () => {

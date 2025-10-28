@@ -43,11 +43,6 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
   const { listingDto } = useSingleListingData(listingId)
   const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
 
-  const enableUnitGroups = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableUnitGroups,
-    listingDto?.jurisdictions.id
-  )
-
   const preferences = listingSectionQuestions(
     listingDto,
     MultiselectQuestionsApplicationSectionEnum.preferences
@@ -56,6 +51,36 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
   const programs = listingSectionQuestions(
     listingDto,
     MultiselectQuestionsApplicationSectionEnum.programs
+  )
+
+  const enableUnitGroups = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableUnitGroups,
+    listingDto?.jurisdictions.id
+  )
+
+  const enableFullTimeStudentQuestion = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableFullTimeStudentQuestion,
+    listingDto?.jurisdictions.id
+  )
+
+  const enableAdaOtherOption = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableAdaOtherOption,
+    listingDto?.jurisdictions.id
+  )
+
+  const disableWorkInRegion = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.disableWorkInRegion,
+    listingDto?.jurisdictions.id
+  )
+
+  const enableLimitedHowDidYouHear = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableLimitedHowDidYouHear,
+    listingDto?.jurisdictions.id
+  )
+
+  const swapCommunityTypeWithPrograms = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.swapCommunityTypeWithPrograms,
+    listingDto?.jurisdictions.id
   )
 
   const units = listingDto?.units
@@ -223,13 +248,18 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
                   <div className="info-card md:w-9/12">
                     <FormApplicationData />
 
-                    <FormPrimaryApplicant />
+                    <FormPrimaryApplicant
+                      enableFullTimeStudentQuestion={enableFullTimeStudentQuestion}
+                      disableWorkInRegion={disableWorkInRegion}
+                    />
 
                     <FormAlternateContact />
 
                     <FormHouseholdMembers
                       householdMembers={householdMembers}
                       setHouseholdMembers={setHouseholdMembers}
+                      enableFullTimeStudentQuestion={enableFullTimeStudentQuestion}
+                      disableWorkInRegion={disableWorkInRegion}
                     />
 
                     <FormHouseholdDetails
@@ -237,13 +267,19 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
                       listingUnitGroups={listingDto?.unitGroups}
                       applicationUnitTypes={application?.preferredUnitTypes}
                       applicationAccessibilityFeatures={application?.accessibility}
+                      enableOtherAdaOption={enableAdaOtherOption}
                       enableUnitGroups={enableUnitGroups}
+                      enableFullTimeStudentQuestion={enableFullTimeStudentQuestion}
                     />
 
                     <FormMultiselectQuestions
                       questions={programs}
                       applicationSection={MultiselectQuestionsApplicationSectionEnum.programs}
-                      sectionTitle={t("application.details.programs")}
+                      sectionTitle={
+                        swapCommunityTypeWithPrograms
+                          ? t("application.details.communityTypes")
+                          : t("application.details.programs")
+                      }
                     />
 
                     <FormHouseholdIncome />
@@ -254,7 +290,10 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
                       sectionTitle={t("application.details.preferences")}
                     />
 
-                    <FormDemographics formValues={application?.demographics} />
+                    <FormDemographics
+                      formValues={application?.demographics}
+                      enableLimitedHowDidYouHear={enableLimitedHowDidYouHear}
+                    />
 
                     <FormTerms />
                   </div>

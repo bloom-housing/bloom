@@ -129,58 +129,64 @@ const MultiselectQuestionsMap = ({ geocodingClient, dataKey }: MultiselectQuesti
   return (
     <>
       <Grid.Row>
-        <FieldValue label={t("listings.mapPreview")}>
-          {displayMapPreview() ? (
-            <ListingMap
-              address={{
-                city: buildingAddress.city,
-                state: buildingAddress.state,
-                street: buildingAddress.street,
-                zipCode: buildingAddress.zipCode,
-                latitude: buildingAddress.latitude,
-                longitude: buildingAddress.longitude,
-              }}
-              enableCustomPinPositioning={mapPinPosition === "custom"}
-              setCustomMapPositionChosen={setCustomMapPositionChosen}
-              setLatLong={setLatLong}
-            />
-          ) : (
-            <div
-              className={"w-full bg-gray-400 p-3 flex items-center justify-center"}
-              style={{ height: "400px" }}
-            >
-              {t("listings.mapPreviewNoAddress")}
-            </div>
-          )}
-        </FieldValue>
+        <Grid.Cell>
+          <FieldValue label={t("listings.mapPreview")}>
+            {displayMapPreview() ? (
+              <ListingMap
+                address={{
+                  city: buildingAddress.city,
+                  state: buildingAddress.state,
+                  street: buildingAddress.street,
+                  zipCode: buildingAddress.zipCode,
+                  latitude: buildingAddress.latitude,
+                  longitude: buildingAddress.longitude,
+                }}
+                enableCustomPinPositioning={mapPinPosition === "custom"}
+                setCustomMapPositionChosen={setCustomMapPositionChosen}
+                setLatLong={setLatLong}
+              />
+            ) : (
+              <div
+                className={"w-full bg-gray-400 p-3 flex items-center justify-center"}
+                style={{ height: "400px" }}
+              >
+                {t("listings.mapPreviewNoAddress")}
+              </div>
+            )}
+          </FieldValue>
+        </Grid.Cell>
       </Grid.Row>
       <Grid.Row>
-        <p className="field-label m-4 ml-0">{t("listings.mapPinPosition")}</p>
+        <Grid.Cell>
+          <p className="field-label m-4 ml-0">{t("listings.mapPinPosition")}</p>
+        </Grid.Cell>
       </Grid.Row>
       <Grid.Row>
-        <FieldGroup
-          name={`${dataKey}-mapPinPosition`}
-          type="radio"
-          fieldGroupClassName={"flex-col"}
-          fieldClassName={"ml-0"}
-          register={register}
-          fields={[
-            {
-              label: t("t.automatic"),
-              value: "automatic",
-              id: `${dataKey}-mapPinPosition-automatic`,
-              note: t("listings.mapPinAutomaticDescription"),
-              defaultChecked: mapPinPosition === "automatic" || mapPinPosition === undefined,
-            },
-            {
-              label: t("t.custom"),
-              value: "custom",
-              id: `${dataKey}-mapPinPosition-custom`,
-              note: t("listings.mapPinCustomDescription"),
-              defaultChecked: mapPinPosition === "custom",
-            },
-          ]}
-        />
+        <Grid.Cell>
+          <FieldGroup
+            name={`${dataKey}-mapPinPosition`}
+            type="radio"
+            fieldGroupClassName={"flex-col"}
+            fieldClassName={"ml-0"}
+            register={register}
+            fields={[
+              {
+                label: t("t.automatic"),
+                value: "automatic",
+                id: `${dataKey}-mapPinPosition-automatic`,
+                note: t("listings.mapPinAutomaticDescription"),
+                defaultChecked: mapPinPosition === "automatic" || mapPinPosition === undefined,
+              },
+              {
+                label: t("t.custom"),
+                value: "custom",
+                id: `${dataKey}-mapPinPosition-custom`,
+                note: t("listings.mapPinCustomDescription"),
+                defaultChecked: mapPinPosition === "custom",
+              },
+            ]}
+          />
+        </Grid.Cell>
       </Grid.Row>
     </>
   )

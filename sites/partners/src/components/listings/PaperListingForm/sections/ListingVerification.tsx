@@ -3,6 +3,7 @@ import SectionWithGrid from "../../../shared/SectionWithGrid"
 import { useFormContext } from "react-hook-form"
 import { useContext } from "react"
 import { AuthContext } from "@bloom-housing/shared-helpers"
+import styles from "../ListingForm.module.scss"
 
 const ListingVerification = () => {
   const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
@@ -29,6 +30,7 @@ const ListingVerification = () => {
             label={t("listings.sections.verificationLabel")}
             dataTestId="verifyListing"
             register={register}
+            labelClassName={styles["label-option"]}
           />
         </SectionWithGrid>
       )}

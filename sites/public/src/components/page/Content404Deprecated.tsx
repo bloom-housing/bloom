@@ -5,7 +5,7 @@ import MaxWidthLayout from "../../layouts/max-width"
 
 export const Content404Deprecated = () => {
   return (
-    <MaxWidthLayout className={"seeds-p-b-container"}>
+    <>
       <Hero
         title={t("errors.notFound.title")}
         buttonTitle={t("welcome.seeRentalListings")}
@@ -13,10 +13,14 @@ export const Content404Deprecated = () => {
       >
         {t("errors.notFound.message")}
       </Hero>
-      <p className={"seeds-m-be-header"}>{t("welcome.seeMoreOpportunities")}</p>
-      <Button variant="primary-outlined" href="/additional-resources">
-        {t("welcome.viewAdditionalHousing")}
-      </Button>
-    </MaxWidthLayout>
+      <div className="homepage-extra">
+        <MaxWidthLayout className={"seeds-p-b-container"}>
+          <p className={"seeds-m-be-header text-center"}>{t("welcome.seeMoreOpportunities")}</p>
+          <Button variant="primary-outlined" href="/additional-resources">
+            {t("welcome.viewAdditionalHousing")}
+          </Button>
+        </MaxWidthLayout>
+      </div>
+    </>
   )
 }

@@ -90,7 +90,7 @@ const getUnhiddenMultiselectQuestions = (
 export const ListingView = (props: ListingProps) => {
   const { initialStateLoaded, profile, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
   let buildingSelectionCriteria, preferencesSection, programsSection
-  const { listing } = props
+  const { listing, jurisdiction } = props
 
   const statusContent = getListingApplicationStatus(listing)
 
@@ -139,7 +139,8 @@ export const ListingView = (props: ListingProps) => {
 
   const hmiData: StandardTableData = listing?.unitsSummarized?.hmi?.rows.map((row) => {
     const amiRows = Object.keys(row).reduce((acc, rowContent) => {
-      acc[rowContent] = { content: row[rowContent] }
+      acc[rowContent] = { content: row[rowContent].toString().replace(/-/g, " - ") }
+
       return acc
     }, {})
     return {
@@ -234,9 +235,9 @@ export const ListingView = (props: ListingProps) => {
       >
         <>
           {getMultiselectQuestionData(MultiselectQuestionsApplicationSectionEnum.programs).map(
-            (msq) => {
+            (msq, index) => {
               return (
-                <Card spacing="md" className="listing-multiselect-card">
+                <Card spacing="md" className="listing-multiselect-card" key={index}>
                   <Card.Header>
                     <SeedsHeading size="sm" priority={4}>
                       {msq.title}
@@ -372,15 +373,17 @@ export const ListingView = (props: ListingProps) => {
 
   const getOnlineApplicationURL = () => {
     let onlineApplicationURL
+    let isCommonApp = false
     if (hasMethod(listing.applicationMethods, ApplicationMethodsTypeEnum.Internal)) {
       onlineApplicationURL = `/applications/start/choose-language?listingId=${listing.id}`
       onlineApplicationURL += `${props.preview ? "&preview=true" : ""}`
+      isCommonApp = true
     } else if (hasMethod(listing.applicationMethods, ApplicationMethodsTypeEnum.ExternalLink)) {
       onlineApplicationURL =
         getMethod(listing.applicationMethods, ApplicationMethodsTypeEnum.ExternalLink)
           ?.externalReference || ""
     }
-    return onlineApplicationURL
+    return { url: onlineApplicationURL, isCommonApp }
   }
 
   const getPaperApplications = () => {
@@ -418,22 +421,29 @@ export const ListingView = (props: ListingProps) => {
     return date ? dayjs(date).format(format) : null
   }
 
-  const redirectIfSignedOut = () =>
-    process.env.showMandatedAccounts && initialStateLoaded && !profile
-
   const submissionAddressExists =
     listing.listingsApplicationMailingAddress ||
     listing.applicationMailingAddressType === ApplicationAddressTypeEnum.leasingAgent ||
     listing.listingsApplicationDropOffAddress ||
     listing.applicationDropOffAddressType === ApplicationAddressTypeEnum.leasingAgent
 
+  const onlineApplicationURLInfo = getOnlineApplicationURL()
+
+  const redirectIfLogInRequired = () =>
+    process.env.showMandatedAccounts &&
+    initialStateLoaded &&
+    !profile &&
+    onlineApplicationURLInfo.isCommonApp &&
+    //previewing applications should not require admin to login
+    !props.preview
+
   const applySidebar = () => (
     <>
       <GetApplication
         onlineApplicationURL={
-          redirectIfSignedOut()
+          redirectIfLogInRequired()
             ? `/sign-in?redirectUrl=/applications/start/choose-language&listingId=${listing.id}`
-            : getOnlineApplicationURL()
+            : onlineApplicationURLInfo.url
         }
         applicationsOpen={!appOpenInFuture}
         applicationsOpenDate={getDateString(listing.applicationOpenDate, "MMMM D, YYYY")}
@@ -915,14 +925,27 @@ export const ListingView = (props: ListingProps) => {
               </div>
             )}
             {lotterySection}
-            <ExpandableSection
-              content={listing.whatToExpect}
-              strings={{
-                title: t("whatToExpect.label"),
-                readMore: t("t.readMore"),
-                readLess: t("t.readLess"),
-              }}
-            />
+            {listing.whatToExpect && (
+              <ExpandableSection
+                content={<Markdown className={"bloom-markdown"}>{listing.whatToExpect}</Markdown>}
+                expandableContent={
+                  listing.whatToExpectAdditionalText &&
+                  isFeatureFlagOn(
+                    jurisdiction,
+                    FeatureFlagEnum.enableWhatToExpectAdditionalField
+                  ) ? (
+                    <Markdown className={"bloom-markdown"}>
+                      {listing.whatToExpectAdditionalText}
+                    </Markdown>
+                  ) : undefined
+                }
+                strings={{
+                  title: t("whatToExpect.label"),
+                  readMore: t("t.readMore"),
+                  readLess: t("t.readLess"),
+                }}
+              />
+            )}
             {!appOpenInFuture && (
               <Contact
                 sectionTitle={t("leasingAgent.contact")}

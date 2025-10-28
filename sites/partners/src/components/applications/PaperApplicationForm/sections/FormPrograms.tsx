@@ -23,24 +23,26 @@ const FormPrograms = ({ programs }: FormProgramsProps) => {
         <Grid.Row columns={2}>
           {programs?.map((listingProgram) => {
             return (
-              <FieldValue label={listingProgram?.multiselectQuestions?.text}>
-                <fieldset>
-                  <FieldGroup
-                    fieldGroupClassName="grid grid-cols-1"
-                    fieldClassName="ml-0"
-                    type={getInputType(listingProgram?.multiselectQuestions?.options)}
-                    name={`application.programs.${listingProgram?.multiselectQuestions?.text}`}
-                    register={register}
-                    fields={listingProgram?.multiselectQuestions?.options?.map((option) => {
-                      return {
-                        id: `${listingProgram?.multiselectQuestions?.text}-${option.text}`,
-                        label: option.text,
-                        value: option.text,
-                      }
-                    })}
-                  />
-                </fieldset>
-              </FieldValue>
+              <Grid.Cell>
+                <FieldValue label={listingProgram?.multiselectQuestions?.text}>
+                  <fieldset>
+                    <FieldGroup
+                      fieldGroupClassName="grid grid-cols-1"
+                      fieldClassName="ml-0"
+                      type={getInputType(listingProgram?.multiselectQuestions?.options)}
+                      name={`application.programs.${listingProgram?.multiselectQuestions?.text}`}
+                      register={register}
+                      fields={listingProgram?.multiselectQuestions?.options?.map((option) => {
+                        return {
+                          id: `${listingProgram?.multiselectQuestions?.text}-${option.text}`,
+                          label: option.text,
+                          value: option.text,
+                        }
+                      })}
+                    />
+                  </fieldset>
+                </FieldValue>
+              </Grid.Cell>
             )
           })}
         </Grid.Row>

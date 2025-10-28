@@ -1,16 +1,16 @@
 describe("Jurisdictional Admin User Mangement Tests", () => {
   beforeEach(() => {
-    cy.login("jurisdictionalAdmin")
+    cy.loginApi("jurisdictionalAdmin")
     cy.visit("/")
     cy.getByTestId("Users-1").click()
   })
 
   afterEach(() => {
-    cy.signOut()
+    cy.signOutApi()
   })
 
   it("as jurisdictional admin user, should only see partners/jurisdictional admins on the same jurisdiction", () => {
-    const rolesArray = ["Partner", "Jurisdictional Admin"]
+    const rolesArray = ["Partner", "Jurisdictional admin", "Jurisdictional admin - No PII"]
     cy.getByTestId("ag-page-size").select("100", { force: true })
 
     const regex = new RegExp(`${rolesArray.join("|")}`, "g")

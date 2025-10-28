@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react"
+import React, { useState, useEffect } from "react"
 import Head from "next/head"
 import { t } from "@bloom-housing/ui-components"
 import { Button } from "@bloom-housing/ui-seeds"
@@ -7,11 +7,12 @@ import { NavigationHeader } from "../../components/shared/NavigationHeader"
 import HouseholdIncomeReport from "../../components/explore/income-analysis"
 import DemographicsSection from "../../components/explore/raceAndEthnicity"
 import PrimaryApplicantSection from "../../components/explore/applicantAndHouseholdData"
-import { AiPermissionModal } from "../../components/explore/aiPermissionModal"
-import { AiInsightsPanel } from "../../components/explore/AIInsightsPanel"
-import { AuthContext } from "@bloom-housing/shared-helpers"
-import { ReportProducts } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import ReportSummary from "../../components/explore/ReportSummary"
+import { FilteringSlideOut } from "../../components/explore/FilteringSlideOut"
+import { getReportDataFastAPI, ApiFilters } from "../../lib/explore/data-explorer"
+import { FormValues } from "../../components/explore/filtering/mainForm"
 import { useRouter } from "next/router"
+import { ReportProducts } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 const ApplicationAnalysis = () => {
   const router = useRouter()
@@ -19,8 +20,7 @@ const ApplicationAnalysis = () => {
     void router.replace("/")
   }
 
-  const [genAIEnabled, setGenAIEnabled] = useState(false)
-  const [showOnboardingModal, setShowOnboardingModal] = useState(false)
+  const [isFilterPanelOpen, setIsFilterPanelOpen] = useState(false)
   const [chartData, setChartData] = useState<ReportProducts>({
     incomeHouseholdSizeCrossTab: {},
     raceFrequencies: [],
@@ -31,32 +31,99 @@ const ApplicationAnalysis = () => {
     subsidyOrVoucherTypeFrequencies: [],
     accessibilityTypeFrequencies: [],
   })
+  const [filterInformation, setFilterInformation] = useState({
+    dataRange: "",
+    totalProcessedApplications: 0,
+    totalListings: 0,
+  })
+  const [appliedFilters, setAppliedFilters] = useState<ApiFilters | undefined>(undefined)
 
-  const { dataExplorerService, profile } = useContext(AuthContext)
-
+  // Log applied filters for debugging
   useEffect(() => {
-    // look into loading spinner
-    const fetchData = async () => {
-      try {
-        console.log("Fetching report data...")
-        const reportData = await dataExplorerService.generateReport({
-          jurisdictionId: profile.userRoles.isAdmin ? "all" : profile.jurisdictions[0]?.id,
-        })
-        setChartData(reportData.products)
-      } catch (error) {
-        console.error("Error fetching report data:", error)
-      }
+    if (appliedFilters) {
+      console.log("Current applied filters:", appliedFilters)
     }
-    void fetchData()
-  }, [dataExplorerService, profile.jurisdictions, profile.userRoles.isAdmin])
+  }, [appliedFilters])
 
-  const handleEnableGenAI = () => {
-    setShowOnboardingModal(true)
+  const fetchData = async (filters?: ApiFilters) => {
+    try {
+      const reportData = await getReportDataFastAPI(filters)
+      setChartData({
+        incomeHouseholdSizeCrossTab: reportData.products.incomeHouseholdSizeCrossTab,
+        raceFrequencies: reportData.products.raceFrequencies,
+        ethnicityFrequencies: reportData.products.ethnicityFrequencies,
+        residentialLocationFrequencies: reportData.products.residentialLocationFrequencies,
+        ageFrequencies: reportData.products.ageFrequencies,
+        languageFrequencies: reportData.products.languageFrequencies,
+        subsidyOrVoucherTypeFrequencies: reportData.products.subsidyOrVoucherTypeFrequencies,
+        accessibilityTypeFrequencies: reportData.products.accessibilityTypeFrequencies,
+      })
+      setFilterInformation({
+        dataRange: reportData.reportFilters.dateRange,
+        totalProcessedApplications: reportData.totalProcessedApplications,
+        totalListings: reportData.totalListings,
+      })
+    } catch (error) {
+      console.error("Error fetching report data:", error)
+    }
   }
 
-  const handleConfirmGenAI = () => {
-    setGenAIEnabled(true)
-    setShowOnboardingModal(false)
+  useEffect(() => {
+    void fetchData()
+  }, [])
+
+  // Effect to disable body scroll when filter panel is open
+  useEffect(() => {
+    if (isFilterPanelOpen) {
+      document.body.style.overflow = "hidden"
+    } else {
+      document.body.style.overflow = "unset"
+    }
+
+    // Cleanup on unmount
+    return () => {
+      document.body.style.overflow = "unset"
+    }
+  }, [isFilterPanelOpen])
+
+  const handleApplyFilters = (filters: FormValues) => {
+    console.log("Raw filter values:", filters)
+
+    // Helper function to handle numeric fields - convert NaN to null, keep all other values
+    const getNumericValue = (num: number | null | undefined): number | null =>
+      num !== undefined && !isNaN(num) ? num : null
+
+    // Helper function to handle string fields - convert empty strings to null
+    const getStringValue = (str: string | null | undefined): string | null =>
+      str && str.trim() !== "" ? str : null
+
+    // Convert FormValues to ApiFilters format - preserve all values, transform NaN and empty strings to null
+    const apiFilters: ApiFilters = {
+      householdSize: filters.householdSize,
+      minIncome: getNumericValue(filters.minIncome),
+      maxIncome: getNumericValue(filters.maxIncome),
+      amiLevels: filters.amiLevels,
+      voucherStatuses: filters.voucherStatuses,
+      accessibilityTypes: filters.accessibilityTypes,
+      races: filters.races,
+      ethnicities: filters.ethnicities,
+      applicantResidentialCounties: filters.applicantResidentialCounties,
+      applicantWorkCounties: filters.applicantWorkCounties,
+      minAge: getNumericValue(filters.minAge),
+      maxAge: getNumericValue(filters.maxAge),
+      startDate: getStringValue(filters.startDate),
+      endDate: getStringValue(filters.endDate),
+    }
+
+    // Remove undefined values
+    const cleanedFilters = Object.fromEntries(
+      Object.entries(apiFilters).filter(([, value]) => value !== undefined)
+    ) as ApiFilters
+
+    setAppliedFilters(cleanedFilters)
+    console.log("Applied filters:", cleanedFilters)
+    void fetchData(cleanedFilters)
+    setIsFilterPanelOpen(false)
   }
 
   return (
@@ -64,10 +131,28 @@ const ApplicationAnalysis = () => {
       <Head>
         <title>{t("nav.siteTitlePartners")} - Application Analysis</title>
       </Head>
-      <NavigationHeader className="relative" title="Application Analysis" />
-      <div className="flex flex-wrap-reverse bg-gray-100">
-        <div className="w-2/3">
-          <>
+      <NavigationHeader
+        className="relative bg-white border-b border-gray-450"
+        title="Application Report"
+      ></NavigationHeader>
+      <div className="w-full bg-gray-100">
+        <div className="flex flex-col bg-gray-100 max-w-7xl mx-auto my-4 px-5">
+          <ReportSummary
+            dateRange={filterInformation.dataRange}
+            totalApplications={filterInformation.totalProcessedApplications}
+            totalListings={filterInformation.totalListings}
+          />
+          <div className="pb-8 ml-auto">
+            <Button
+              variant="primary"
+              size="sm"
+              onClick={() => setIsFilterPanelOpen(true)}
+              className="ml-auto"
+            >
+              Customize Report
+            </Button>
+          </div>
+          <div className="">
             <HouseholdIncomeReport
               chartData={{ incomeHouseholdSizeCrossTab: chartData.incomeHouseholdSizeCrossTab }}
             />
@@ -86,48 +171,14 @@ const ApplicationAnalysis = () => {
                 accessibilityTypeFrequencies: chartData.accessibilityTypeFrequencies,
               }}
             />
-          </>
-        </div>
-        <div className="w-1/3 bg-white p-6 flex flex-col">
-          {!genAIEnabled ? (
-            <div className="text-center">
-              <div className="mb-6">
-                <div className="w-16 h-16 mx-auto mb-4 bg-blue-100 rounded-full flex items-center justify-center">
-                  <svg
-                    className="w-8 h-8 text-blue-600"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
-                    />
-                  </svg>
-                </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">AI-Powered Insights</h3>
-                <p className="text-gray-600 mb-6">
-                  Get intelligent analysis and recommendations based on your application data using
-                  advanced AI technology.
-                </p>
-              </div>
-              <Button size="md" onClick={handleEnableGenAI}>
-                Enable GenAI Insights
-              </Button>
-            </div>
-          ) : (
-            <AiInsightsPanel />
-          )}
+          </div>
         </div>
       </div>
 
-      {/* GenAI Onboarding Modal */}
-      <AiPermissionModal
-        showOnboardingModal={showOnboardingModal}
-        setShowOnboardingModal={() => setShowOnboardingModal(false)}
-        handleConfirmGenAI={handleConfirmGenAI}
+      <FilteringSlideOut
+        isOpen={isFilterPanelOpen}
+        onClose={() => setIsFilterPanelOpen(false)}
+        onApplyFilters={handleApplyFilters}
       />
     </Layout>
   )

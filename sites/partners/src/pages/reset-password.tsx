@@ -41,7 +41,7 @@ const ResetPassword = () => {
   }
 
   return (
-    <FormsLayout>
+    <FormsLayout title={`Reset Password - ${t("nav.siteTitlePartners")}`}>
       <FormCard>
         <div className="form-card__lead text-center border-b mx-0">
           <Icon size="2xl">{CustomIconMap.profile}</Icon>

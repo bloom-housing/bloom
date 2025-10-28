@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react"
 import { useFormContext } from "react-hook-form"
 import { t, Select, Textarea, FieldGroup, Field } from "@bloom-housing/ui-components"
-import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
+import { Grid } from "@bloom-housing/ui-seeds"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import {
   FeatureFlagEnum,
@@ -9,20 +9,29 @@ import {
   YesNoEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { useReservedCommunityTypeList } from "../../../../lib/hooks"
-import { arrayToFormOptions } from "../../../../lib/helpers"
+import {
+  arrayToFormOptions,
+  defaultFieldProps,
+  fieldHasError,
+  fieldIsRequired,
+  fieldMessage,
+  getLabel,
+} from "../../../../lib/helpers"
 import { FormListing } from "../../../../lib/listings/formTypes"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
+import styles from "../ListingForm.module.scss"
 
 type CommunityTypeProps = {
   listing?: FormListing
+  requiredFields: string[]
 }
 
-const CommunityType = ({ listing }: CommunityTypeProps) => {
+const CommunityType = ({ listing, requiredFields }: CommunityTypeProps) => {
   const formMethods = useFormContext()
   const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, setValue, watch, errors } = formMethods
+  const { register, setValue, watch, errors, clearErrors } = formMethods
   const jurisdiction = watch("jurisdictions.id")
   const reservedCommunityType = watch("reservedCommunityTypes.id")
 
@@ -85,42 +94,65 @@ const CommunityType = ({ listing }: CommunityTypeProps) => {
         subheading={t("listings.sections.communityTypeSubtitle")}
       >
         <Grid.Row columns={2}>
-          <FieldValue label={t("listings.reservedCommunityType")}>
-            {options && (
+          {options && (
+            <Grid.Cell>
               <Select
                 id={`reservedCommunityTypes.id`}
                 name={`reservedCommunityTypes.id`}
-                label={t("listings.reservedCommunityType")}
-                labelClassName="sr-only"
+                label={getLabel(
+                  "reservedCommunityTypes",
+                  requiredFields,
+                  t("listings.reservedCommunityType")
+                )}
                 register={register}
                 controlClassName="control"
                 options={options}
                 inputProps={{
                   onChange: () => {
                     setCurrentCommunityType(reservedCommunityType)
+                    fieldHasError(errors?.reservedCommunityTypes) &&
+                      clearErrors("reservedCommunityTypes")
                   },
+                  "aria-required": fieldIsRequired("reservedCommunityTypes", requiredFields),
                 }}
+                error={fieldHasError(errors?.reservedCommunityTypes)}
+                errorMessage={fieldMessage(errors?.reservedCommunityTypes)}
               />
-            )}
-          </FieldValue>
+            </Grid.Cell>
+          )}
         </Grid.Row>
         <Grid.Row columns={3}>
           <Grid.Cell className="seeds-grid-span-2">
             <Textarea
-              label={t("listings.reservedCommunityDescription")}
+              label={getLabel(
+                "reservedCommunityDescription",
+                requiredFields,
+                t("listings.reservedCommunityDescription")
+              )}
+              placeholder={""}
               name={"reservedCommunityDescription"}
               id={"reservedCommunityDescription"}
               fullWidth={true}
               register={register}
               note={t("listings.appearsInListing")}
+              errorMessage={fieldMessage(errors?.reservedCommunityDescription)}
+              inputProps={{
+                onChange: () => {
+                  fieldHasError(errors?.reservedCommunityDescription) &&
+                    clearErrors("reservedCommunityDescription")
+                },
+                "aria-required": fieldIsRequired("reservedCommunityDescription", requiredFields),
+              }}
             />
           </Grid.Cell>
         </Grid.Row>
 
         <Grid.Row columns={1}>
-          <FieldValue label={t("listings.includeCommunityDisclaimer")}>
+          <Grid.Cell>
             <FieldGroup
+              groupLabel={t("listings.includeCommunityDisclaimer")}
               name="includeCommunityDisclaimerQuestion"
+              fieldLabelClassName={`${styles["label-option"]} seeds-m-bs-2`}
               type="radio"
               register={register}
               fields={[
@@ -138,7 +170,7 @@ const CommunityType = ({ listing }: CommunityTypeProps) => {
                 },
               ]}
             />
-          </FieldValue>
+          </Grid.Cell>
         </Grid.Row>
 
         {watch("includeCommunityDisclaimerQuestion") === YesNoEnum.yes && currentCommunityType && (
@@ -146,14 +178,16 @@ const CommunityType = ({ listing }: CommunityTypeProps) => {
             <Grid.Row columns={3}>
               <Grid.Cell className="seeds-grid-span-2">
                 <Field
-                  label={t("listings.reservedCommunityDisclaimerTitle")}
-                  name="communityDisclaimerTitle"
-                  id="communityDisclaimerTitle"
                   register={register}
-                  subNote={t("listings.requiredToPublishAppearsAsFirstPage")}
-                  error={errors.communityDisclaimerTitle}
-                  placeholder={t("t.enterTitle")}
-                  errorMessage={t("t.enterTitle")}
+                  subNote={t("listings.appearsAsFirstPage")}
+                  {...defaultFieldProps(
+                    "communityDisclaimerTitle",
+                    t("listings.reservedCommunityDisclaimerTitle"),
+                    requiredFields,
+                    errors,
+                    clearErrors,
+                    true
+                  )}
                 />
               </Grid.Cell>
             </Grid.Row>
@@ -161,14 +195,17 @@ const CommunityType = ({ listing }: CommunityTypeProps) => {
             <Grid.Row columns={3}>
               <Grid.Cell className="seeds-grid-span-2">
                 <Textarea
-                  label={t("listings.reservedCommunityDisclaimer")}
-                  name="communityDisclaimerDescription"
-                  id="communityDisclaimerDescription"
                   fullWidth={true}
                   register={register}
-                  note={t("listings.requiredToPublishAppearsAsFirstPage")}
-                  placeholder={t("t.enterDescription")}
-                  errorMessage={errors.communityDisclaimerDescription && t("t.enterDescription")}
+                  note={t("listings.appearsAsFirstPage")}
+                  {...defaultFieldProps(
+                    "communityDisclaimerDescription",
+                    t("listings.reservedCommunityDisclaimer"),
+                    requiredFields,
+                    errors,
+                    clearErrors,
+                    true
+                  )}
                 />
               </Grid.Cell>
             </Grid.Row>

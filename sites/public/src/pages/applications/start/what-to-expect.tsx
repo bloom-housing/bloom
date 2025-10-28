@@ -12,10 +12,11 @@ import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
 import ApplicationFormLayout from "../../../layouts/application-form"
 import styles from "../../../layouts/application-form.module.scss"
+import { isUnitGroupAppBase, isUnitGroupAppWaitlist } from "../../../lib/helpers"
 
 const ApplicationWhatToExpect = () => {
   const { profile } = useContext(AuthContext)
-  const { conductor, listing } = useFormConductor("whatToExpect")
+  const { conductor, listing } = useFormConductor("whatToExpect", true)
   const router = useRouter()
 
   const { handleSubmit } = useForm()
@@ -26,6 +27,18 @@ const ApplicationWhatToExpect = () => {
   const content = useMemo(() => {
     switch (listing?.reviewOrderType) {
       case ReviewOrderTypeEnum.firstComeFirstServe:
+        if (isUnitGroupAppWaitlist(listing, conductor.config)) {
+          return {
+            steps: t("application.start.whatToExpect.waitlist.steps"),
+            finePrint: t("application.start.whatToExpect.waitlist.finePrint"),
+          }
+        }
+        if (isUnitGroupAppBase(listing, conductor.config)) {
+          return {
+            steps: "",
+            finePrint: t("application.start.whatToExpect.base.finePrint"),
+          }
+        }
         return {
           steps: t("application.start.whatToExpect.fcfs.steps"),
           finePrint: t("application.start.whatToExpect.fcfs.finePrint"),
@@ -44,7 +57,7 @@ const ApplicationWhatToExpect = () => {
         return { steps: "", finePrint: "" }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [listing, router.locale])
+  }, [listing, router.locale, conductor.config])
 
   useEffect(() => {
     pushGtmEvent<PageView>({
@@ -55,7 +68,11 @@ const ApplicationWhatToExpect = () => {
   }, [profile])
 
   return (
-    <FormsLayout>
+    <FormsLayout
+      pageTitle={`${t("whatToExpect.label")} - ${t("listings.apply.applyOnline")} - ${
+        listing?.name
+      }`}
+    >
       <ApplicationFormLayout
         listingName={listing?.name}
         heading={t("application.start.whatToExpect.title")}

@@ -70,44 +70,62 @@ export type getListingsArgs = {
   where: Prisma.ListingsWhereInput;
 };
 
-export const views: Partial<Record<ListingViews, Prisma.ListingsInclude>> = {
+export const selectViews: Partial<Record<ListingViews, Prisma.ListingsSelect>> =
+  {
+    name: {
+      name: true,
+      id: true,
+      jurisdictions: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
+    },
+  };
+
+selectViews.address = {
+  name: true,
+  id: true,
+  listingsBuildingAddress: {
+    select: {
+      city: true,
+      county: true,
+      street: true,
+      street2: true,
+      zipCode: true,
+      state: true,
+      latitude: true,
+      longitude: true,
+    },
+  },
+};
+
+export const includeViews: Partial<
+  Record<ListingViews, Prisma.ListingsInclude>
+> = {
   fundamentals: {
     jurisdictions: true,
-    listingsBuildingAddress: true,
-    reservedCommunityTypes: true,
-    listingImages: {
-      include: {
-        assets: true,
-      },
-    },
-    listingMultiselectQuestions: {
-      include: {
-        multiselectQuestions: true,
-      },
-    },
-    listingFeatures: true,
-    listingUtilities: true,
-    listingNeighborhoodAmenities: true,
   },
 };
 
-views.name = {
-  Listings: {
-    select: {
-      name: true,
-      id: true,
+includeViews.base = {
+  ...includeViews.fundamentals,
+  listingsBuildingAddress: true,
+  reservedCommunityTypes: true,
+  listingImages: {
+    include: {
+      assets: true,
     },
   },
-  jurisdictions: {
-    select: {
-      id: true,
-      name: true,
+  listingMultiselectQuestions: {
+    include: {
+      multiselectQuestions: true,
     },
   },
-};
-
-views.base = {
-  ...views.fundamentals,
+  listingFeatures: true,
+  listingUtilities: true,
+  listingNeighborhoodAmenities: true,
   units: {
     include: {
       unitTypes: true,
@@ -130,8 +148,8 @@ views.base = {
   },
 };
 
-views.full = {
-  ...views.fundamentals,
+includeViews.full = {
+  ...includeViews.base,
   applicationMethods: {
     include: {
       paperApplications: {
@@ -148,6 +166,7 @@ views.full = {
     },
   },
   listingsResult: true,
+  lastUpdatedByUser: true,
   listingsLeasingAgentAddress: true,
   listingsApplicationPickUpAddress: true,
   listingsApplicationDropOffAddress: true,
@@ -167,25 +186,6 @@ views.full = {
       },
     },
   },
-  unitGroups: {
-    include: {
-      unitTypes: true,
-      unitGroupAmiLevels: {
-        include: {
-          amiChart: {
-            include: {
-              jurisdictions: true,
-            },
-          },
-        },
-      },
-    },
-  },
-};
-
-views.details = {
-  ...views.base,
-  ...views.full,
 };
 
 const LISTING_CRON_JOB_NAME = 'LISTING_CRON_JOB';
@@ -248,13 +248,24 @@ export class ListingService implements OnModuleInit {
       }
     }
 
-    const listingsRaw = await this.prisma.listings.findMany({
+    const query = {
       skip: calculateSkip(params.limit, page),
       take: calculateTake(params.limit),
       orderBy: buildOrderByForListings(params.orderBy, params.orderDir),
-      include: views[params.view ?? 'full'],
       where: whereClause,
-    });
+    };
+    const hasSelectView = selectViews[params.view];
+
+    // Prisma only allows either select or include so two separate
+    const listingsRaw = hasSelectView
+      ? await this.prisma.listings.findMany({
+          ...query,
+          select: selectViews[params.view],
+        })
+      : await this.prisma.listings.findMany({
+          ...query,
+          include: includeViews[params.view ?? 'full'],
+        });
 
     const listings = mapTo(Listing, listingsRaw);
 
@@ -287,12 +298,13 @@ export class ListingService implements OnModuleInit {
     userRoles: UserRoleEnum | UserRoleEnum[],
     listingId?: string,
     jurisId?: string,
-    getPublicUrl = false,
-  ): Promise<{ emails: string[]; publicUrl?: string | null }> {
+  ): Promise<{ emails: string[] }> {
     // determine where clause(s)
     const userRolesWhere: Prisma.UserAccountsWhereInput[] = [];
     if (userRoles.includes(UserRoleEnum.admin))
       userRolesWhere.push({ userRoles: { isAdmin: true } });
+    if (userRoles.includes(UserRoleEnum.supportAdmin))
+      userRolesWhere.push({ userRoles: { isSupportAdmin: true } });
     if (userRoles.includes(UserRoleEnum.partner))
       userRolesWhere.push({
         userRoles: { isPartner: true },
@@ -304,15 +316,16 @@ export class ListingService implements OnModuleInit {
         jurisdictions: { some: { id: jurisId } },
       });
     }
+    if (userRoles.includes(UserRoleEnum.limitedJurisdictionAdmin)) {
+      userRolesWhere.push({
+        userRoles: { isLimitedJurisdictionalAdmin: true },
+        jurisdictions: { some: { id: jurisId } },
+      });
+    }
 
     const userResults = await this.prisma.userAccounts.findMany({
-      include: {
-        jurisdictions: {
-          select: {
-            id: true,
-            publicUrl: getPublicUrl,
-          },
-        },
+      select: {
+        email: true,
       },
       where: {
         OR: userRolesWhere,
@@ -320,13 +333,9 @@ export class ListingService implements OnModuleInit {
     });
 
     // account for users having access to multiple jurisdictions
-    const publicUrl = getPublicUrl
-      ? userResults[0]?.jurisdictions?.find((juris) => juris.id === jurisId)
-          ?.publicUrl
-      : null;
     const userEmails: string[] = [];
     userResults?.forEach((user) => user?.email && userEmails.push(user.email));
-    return { emails: userEmails, publicUrl };
+    return { emails: userEmails };
   }
 
   public async listingApprovalNotify(params: {
@@ -340,6 +349,7 @@ export class ListingService implements OnModuleInit {
     const nonApprovingRoles: UserRoleEnum[] = [UserRoleEnum.partner];
     if (!params.approvingRoles.includes(UserRoleEnum.jurisdictionAdmin))
       nonApprovingRoles.push(UserRoleEnum.jurisdictionAdmin);
+
     if (
       params.status === ListingsStatusEnum.pendingReview &&
       params.previousStatus !== ListingsStatusEnum.pendingReview
@@ -386,16 +396,27 @@ export class ListingService implements OnModuleInit {
         params.previousStatus === ListingsStatusEnum.pending
       ) {
         const userInfo = await this.getUserEmailInfo(
-          nonApprovingRoles,
+          [
+            UserRoleEnum.partner,
+            UserRoleEnum.admin,
+            UserRoleEnum.jurisdictionAdmin,
+            UserRoleEnum.limitedJurisdictionAdmin,
+            UserRoleEnum.supportAdmin,
+          ],
           params.listingInfo.id,
           params.jurisId,
-          true,
         );
+        const jurisdiction = await this.prisma.jurisdictions.findFirst({
+          select: {
+            publicUrl: true,
+          },
+          where: { id: params.jurisId },
+        });
         await this.emailService.listingApproved(
           { id: params.jurisId },
           { id: params.listingInfo.id, name: params.listingInfo.name },
           userInfo.emails,
-          userInfo.publicUrl,
+          jurisdiction?.publicUrl || '',
         );
       }
     }
@@ -545,9 +566,18 @@ export class ListingService implements OnModuleInit {
                   key: ListingFilterKeys.availabilities,
                   caseSensitive: true,
                 });
-                return builtFilter.map((filt) => ({
-                  unitsAvailable: filt,
-                }));
+
+                return builtFilter
+                  .map((filt) => ({
+                    unitsAvailable: filt,
+                  }))
+                  .concat({
+                    unitGroups: {
+                      some: {
+                        totalAvailable: { gte: 1 },
+                      },
+                    },
+                  });
               }
             },
           );
@@ -656,9 +686,17 @@ export class ListingService implements OnModuleInit {
             caseSensitive: true,
           });
           filters.push({
-            OR: builtFilter.map((filt) => ({
-              unitsAvailable: filt,
-            })),
+            OR: builtFilter
+              .map((filt) => ({
+                unitsAvailable: filt,
+              }))
+              .concat({
+                unitGroups: {
+                  some: {
+                    totalAvailable: { gte: 1 },
+                  },
+                },
+              }),
           });
         }
         if (filter[ListingFilterKeys.bathrooms] !== undefined) {
@@ -847,7 +885,7 @@ export class ListingService implements OnModuleInit {
         }
         if (filter[ListingFilterKeys.listingFeatures]) {
           filters.push({
-            OR: filter[ListingFilterKeys.listingFeatures].map((feature) => ({
+            AND: filter[ListingFilterKeys.listingFeatures].map((feature) => ({
               listingFeatures: {
                 [feature]: true,
               },
@@ -1207,7 +1245,6 @@ export class ListingService implements OnModuleInit {
         jurisdictionId: dto.jurisdictions.id,
       },
     );
-
     const rawJurisdiction = await this.prisma.jurisdictions.findFirst({
       where: {
         id: dto.jurisdictions.id,
@@ -1234,21 +1271,21 @@ export class ListingService implements OnModuleInit {
       });
     }
 
-    dto.unitsAvailable =
-      dto.reviewOrderType !== ReviewOrderTypeEnum.waitlist && dto.units
-        ? dto.units.length
-        : dto.unitGroups
-        ? dto.unitGroups.reduce(
-            (unitsAvailable, { totalAvailable }) =>
-              unitsAvailable + totalAvailable,
-            0,
-          )
-        : 0;
+    dto.unitsAvailable = this.calculateUnitsAvailable(
+      dto.reviewOrderType,
+      dto.units,
+      dto.unitGroups,
+    );
+
+    // Remove requiredFields property before saving to database
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { requiredFields, ...listingData } = dto;
 
     const rawListing = await this.prisma.listings.create({
-      include: views.details,
+      include: includeViews.full,
       data: {
-        ...dto,
+        ...listingData,
+        displayWaitlistSize: dto.displayWaitlistSize ?? false,
         assets: dto.assets
           ? {
               create: dto.assets.map((asset) => ({
@@ -1256,7 +1293,7 @@ export class ListingService implements OnModuleInit {
                 label: asset.label,
               })),
             }
-          : undefined,
+          : Prisma.JsonNullValueInput.JsonNull,
         applicationMethods: dto.applicationMethods
           ? {
               create: dto.applicationMethods.map((applicationMethod) => ({
@@ -1463,10 +1500,13 @@ export class ListingService implements OnModuleInit {
                 openWaitlist: group.openWaitlist,
                 sqFeetMax: group.sqFeetMax,
                 sqFeetMin: group.sqFeetMin,
+                rentType: group.rentType,
+                flatRentValueFrom: group.flatRentValueFrom,
+                flatRentValueTo: group.flatRentValueTo,
                 totalAvailable: group.totalAvailable,
                 totalCount: group.totalCount,
                 unitGroupAmiLevels: {
-                  create: group.unitGroupAmiLevels.map((level) => ({
+                  create: group.unitGroupAmiLevels?.map((level) => ({
                     amiPercentage: level.amiPercentage,
                     monthlyRentDeterminationType:
                       level.monthlyRentDeterminationType,
@@ -1535,6 +1575,13 @@ export class ListingService implements OnModuleInit {
         publishedAt:
           dto.status === ListingsStatusEnum.active ? new Date() : undefined,
         contentUpdatedAt: new Date(),
+        lastUpdatedByUser: requestingUser
+          ? {
+              connect: {
+                id: requestingUser.id,
+              },
+            }
+          : undefined,
         section8Acceptance: !!dto.section8Acceptance,
         copyOf: copyOfId
           ? {
@@ -1546,7 +1593,6 @@ export class ListingService implements OnModuleInit {
         isVerified: !!dto.isVerified,
       },
     });
-
     if (rawListing.status === ListingsStatusEnum.pendingReview) {
       const jurisdiction = await this.prisma.jurisdictions.findFirst({
         where: {
@@ -1571,7 +1617,7 @@ export class ListingService implements OnModuleInit {
   ): Promise<Listing> {
     const storedListing = await this.findOrThrow(
       dto.storedListing.id,
-      ListingViews.details,
+      ListingViews.full,
     );
     if (dto.name.trim() === storedListing.name) {
       throw new BadRequestException('New listing name must be unique');
@@ -1587,9 +1633,14 @@ export class ListingService implements OnModuleInit {
 
     const userRoles =
       requestingUser?.userRoles?.isAdmin ||
+      requestingUser?.userRoles?.isSupportAdmin ||
       (requestingUser?.userRoles?.isJurisdictionalAdmin &&
         duplicateListingPermissions?.includes(
           UserRoleEnum.jurisdictionAdmin,
+        )) ||
+      (requestingUser?.userRoles?.isLimitedJurisdictionalAdmin &&
+        duplicateListingPermissions?.includes(
+          UserRoleEnum.limitedJurisdictionAdmin,
         )) ||
       (requestingUser?.userRoles?.isPartner &&
         duplicateListingPermissions?.includes(UserRoleEnum.partner))
@@ -1613,7 +1664,8 @@ export class ListingService implements OnModuleInit {
 
     //manually check for juris/listing mismatch since logic above is forcing admin permissioning
     if (
-      (requestingUser?.userRoles?.isJurisdictionalAdmin &&
+      ((requestingUser?.userRoles?.isJurisdictionalAdmin ||
+        requestingUser?.userRoles?.isLimitedJurisdictionalAdmin) &&
         !requestingUser?.jurisdictions?.some(
           (juris) => juris.id === storedListing.jurisdictionId,
         )) ||
@@ -1753,14 +1805,22 @@ export class ListingService implements OnModuleInit {
     a listing view can be provided which will add the joins to produce that view correctly
   */
   async findOrThrow(id: string, view?: ListingViews) {
-    const viewInclude = view ? views[view] : undefined;
+    const hasSelectView = view && selectViews[view];
+    const viewInclude = view ? includeViews[view] : undefined;
 
-    const listing = await this.prisma.listings.findUnique({
-      include: viewInclude,
-      where: {
-        id,
-      },
-    });
+    const listing = hasSelectView
+      ? await this.prisma.listings.findUnique({
+          select: selectViews[view],
+          where: {
+            id,
+          },
+        })
+      : await this.prisma.listings.findUnique({
+          include: viewInclude,
+          where: {
+            id,
+          },
+        });
 
     if (!listing) {
       throw new NotFoundException(
@@ -1869,7 +1929,13 @@ export class ListingService implements OnModuleInit {
     update a listing
   */
   async update(dto: ListingUpdate, requestingUser: User): Promise<Listing> {
-    const storedListing = await this.findOrThrow(dto.id, ListingViews.details);
+    // Remove requiredFields property before saving to database
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { requiredFields, ...incomingDto } = dto;
+    const storedListing = await this.findOrThrow(
+      incomingDto.id,
+      ListingViews.full,
+    );
 
     await this.permissionService.canOrThrow(
       requestingUser,
@@ -1883,7 +1949,7 @@ export class ListingService implements OnModuleInit {
 
     const rawJurisdiction = await this.prisma.jurisdictions.findFirst({
       where: {
-        id: dto.jurisdictions.id,
+        id: incomingDto.jurisdictions.id,
       },
       include: {
         featureFlags: true,
@@ -1896,8 +1962,8 @@ export class ListingService implements OnModuleInit {
     );
 
     if (
-      (enableUnitGroups && dto.units?.length > 0) ||
-      (!enableUnitGroups && dto.unitGroups?.length > 0)
+      (enableUnitGroups && incomingDto.units?.length > 0) ||
+      (!enableUnitGroups && incomingDto.unitGroups?.length > 0)
     ) {
       throw new BadRequestException({
         message: `Cannot provide ${
@@ -1907,20 +1973,15 @@ export class ListingService implements OnModuleInit {
       });
     }
 
-    dto.unitsAvailable =
-      dto.reviewOrderType !== ReviewOrderTypeEnum.waitlist && dto.units
-        ? dto.units.length
-        : dto.unitGroups
-        ? dto.unitGroups.reduce(
-            (unitsAvailable, { totalAvailable }) =>
-              unitsAvailable + totalAvailable,
-            0,
-          )
-        : 0;
+    incomingDto.unitsAvailable = this.calculateUnitsAvailable(
+      incomingDto.reviewOrderType,
+      incomingDto.units,
+      incomingDto.unitGroups,
+    );
 
     // We need to save the assets before saving it to the listing_images table
     let allAssets = [];
-    const unsavedImages = dto.listingImages?.reduce((values, value) => {
+    const unsavedImages = incomingDto.listingImages?.reduce((values, value) => {
       if (!value.assets.id) {
         values.push(value);
       } else {
@@ -1946,31 +2007,31 @@ export class ListingService implements OnModuleInit {
 
     const pickUpAddress = await this.addressUpdate(
       storedListing,
-      dto,
+      incomingDto,
       'listingsApplicationPickUpAddress',
     );
     const mailAddress = await this.addressUpdate(
       storedListing,
-      dto,
+      incomingDto,
       'listingsApplicationMailingAddress',
     );
     const dropOffAddress = await this.addressUpdate(
       storedListing,
-      dto,
+      incomingDto,
       'listingsApplicationDropOffAddress',
     );
     const leasingAgentAddress = await this.addressUpdate(
       storedListing,
-      dto,
+      incomingDto,
       'listingsLeasingAgentAddress',
     );
     const buildingAddress = await this.addressUpdate(
       storedListing,
-      dto,
+      incomingDto,
       'listingsBuildingAddress',
     );
     // Delete all assets tied to listing events before creating new ones
-    await this.updateListingEvents(dto.id);
+    await this.updateListingEvents(incomingDto.id);
 
     const previousFeaturesId = storedListing.listingFeatures?.id;
     const previousUtilitiesId = storedListing.listingUtilities?.id;
@@ -2007,13 +2068,13 @@ export class ListingService implements OnModuleInit {
       // Delete all listing images before creating new ones
       this.prisma.listingImages.deleteMany({
         where: {
-          listingId: dto.id,
+          listingId: incomingDto.id,
         },
       }),
       // Delete all listing events before creating new ones
       this.prisma.listingEvents.deleteMany({
         where: {
-          listingId: dto.id,
+          listingId: incomingDto.id,
         },
       }),
       // Delete all paper applications and methods before creating new ones
@@ -2021,53 +2082,55 @@ export class ListingService implements OnModuleInit {
         where: {
           applicationMethods: {
             is: {
-              listingId: dto.id,
+              listingId: incomingDto.id,
             },
           },
         },
       }),
       this.prisma.applicationMethods.deleteMany({
         where: {
-          listingId: dto.id,
+          listingId: incomingDto.id,
         },
       }),
       this.prisma.listingMultiselectQuestions.deleteMany({
         where: {
-          listingId: dto.id,
+          listingId: incomingDto.id,
         },
       }),
       this.prisma.listings.update({
         data: {
-          ...dto,
+          ...incomingDto,
           id: undefined,
           createdAt: undefined,
           updatedAt: undefined,
-          assets: dto.assets as unknown as Prisma.InputJsonArray,
-          applicationMethods: dto.applicationMethods
+          assets: incomingDto.assets as unknown as Prisma.InputJsonArray,
+          applicationMethods: incomingDto.applicationMethods
             ? {
-                create: dto.applicationMethods.map((applicationMethod) => ({
-                  ...applicationMethod,
-                  paperApplications: applicationMethod.paperApplications
-                    ? {
-                        create: applicationMethod.paperApplications.map(
-                          (paperApplication) => ({
-                            ...paperApplication,
-                            assets: {
-                              create: {
-                                ...paperApplication.assets,
-                                id: undefined,
+                create: incomingDto.applicationMethods.map(
+                  (applicationMethod) => ({
+                    ...applicationMethod,
+                    paperApplications: applicationMethod.paperApplications
+                      ? {
+                          create: applicationMethod.paperApplications.map(
+                            (paperApplication) => ({
+                              ...paperApplication,
+                              assets: {
+                                create: {
+                                  ...paperApplication.assets,
+                                  id: undefined,
+                                },
                               },
-                            },
-                          }),
-                        ),
-                      }
-                    : undefined,
-                })),
+                            }),
+                          ),
+                        }
+                      : undefined,
+                  }),
+                ),
               }
             : undefined,
-          listingEvents: dto.listingEvents
+          listingEvents: incomingDto.listingEvents
             ? {
-                create: dto.listingEvents.map((event) => ({
+                create: incomingDto.listingEvents.map((event) => ({
                   type: event.type,
                   startDate: event.startDate,
                   startTime: event.startTime,
@@ -2100,9 +2163,9 @@ export class ListingService implements OnModuleInit {
                 }),
               }
             : undefined,
-          listingMultiselectQuestions: dto.listingMultiselectQuestions
+          listingMultiselectQuestions: incomingDto.listingMultiselectQuestions
             ? {
-                create: dto.listingMultiselectQuestions.map(
+                create: incomingDto.listingMultiselectQuestions.map(
                   (multiselectQuestion) => ({
                     ordinal: multiselectQuestion.ordinal,
                     multiselectQuestionId: multiselectQuestion.id,
@@ -2117,10 +2180,10 @@ export class ListingService implements OnModuleInit {
                 },
               }
             : undefined,
-          reservedCommunityTypes: dto.reservedCommunityTypes
+          reservedCommunityTypes: incomingDto.reservedCommunityTypes
             ? {
                 connect: {
-                  id: dto.reservedCommunityTypes.id,
+                  id: incomingDto.reservedCommunityTypes.id,
                 },
               }
             : storedListing.reservedCommunityTypes
@@ -2133,37 +2196,38 @@ export class ListingService implements OnModuleInit {
           // Three options for the building selection criteria file
           // create new one, connect existing one, or deleted (disconnect)
           listingsBuildingSelectionCriteriaFile:
-            dto.listingsBuildingSelectionCriteriaFile
-              ? dto.listingsBuildingSelectionCriteriaFile.id
+            incomingDto.listingsBuildingSelectionCriteriaFile
+              ? incomingDto.listingsBuildingSelectionCriteriaFile.id
                 ? {
                     connectOrCreate: {
                       where: {
-                        id: dto.listingsBuildingSelectionCriteriaFile.id,
+                        id: incomingDto.listingsBuildingSelectionCriteriaFile
+                          .id,
                       },
                       create: {
-                        ...dto.listingsBuildingSelectionCriteriaFile,
+                        ...incomingDto.listingsBuildingSelectionCriteriaFile,
                       },
                     },
                   }
                 : {
                     create: {
-                      ...dto.listingsBuildingSelectionCriteriaFile,
+                      ...incomingDto.listingsBuildingSelectionCriteriaFile,
                     },
                   }
               : {
                   disconnect: true,
                 },
-          listingUtilities: dto.listingUtilities
+          listingUtilities: incomingDto.listingUtilities
             ? {
                 upsert: {
                   where: {
                     id: previousUtilitiesId,
                   },
                   create: {
-                    ...dto.listingUtilities,
+                    ...incomingDto.listingUtilities,
                   },
                   update: {
-                    ...dto.listingUtilities,
+                    ...incomingDto.listingUtilities,
                   },
                 },
               }
@@ -2182,25 +2246,25 @@ export class ListingService implements OnModuleInit {
                 },
               }
             : undefined,
-          listingFeatures: dto.listingFeatures
+          listingFeatures: incomingDto.listingFeatures
             ? {
                 upsert: {
                   where: {
                     id: previousFeaturesId,
                   },
                   create: {
-                    ...dto.listingFeatures,
+                    ...incomingDto.listingFeatures,
                   },
                   update: {
-                    ...dto.listingFeatures,
+                    ...incomingDto.listingFeatures,
                   },
                 },
               }
             : undefined,
-          jurisdictions: dto.jurisdictions
+          jurisdictions: incomingDto.jurisdictions
             ? {
                 connect: {
-                  id: dto.jurisdictions.id,
+                  id: incomingDto.jurisdictions.id,
                 },
               }
             : undefined,
@@ -2218,9 +2282,9 @@ export class ListingService implements OnModuleInit {
                 },
               }
             : undefined,
-          units: dto.units
+          units: incomingDto.units
             ? {
-                create: dto.units.map((unit) => ({
+                create: incomingDto.units.map((unit) => ({
                   amiPercentage: unit.amiPercentage,
                   annualIncomeMin: unit.annualIncomeMin,
                   monthlyIncomeMin: unit.monthlyIncomeMin,
@@ -2275,9 +2339,9 @@ export class ListingService implements OnModuleInit {
                 })),
               }
             : undefined,
-          unitGroups: dto.unitGroups
+          unitGroups: incomingDto.unitGroups
             ? {
-                create: dto.unitGroups.map((group) => ({
+                create: incomingDto.unitGroups.map((group) => ({
                   bathroomMax: group.bathroomMax,
                   bathroomMin: group.bathroomMin,
                   floorMax: group.floorMax,
@@ -2285,6 +2349,9 @@ export class ListingService implements OnModuleInit {
                   maxOccupancy: group.maxOccupancy,
                   minOccupancy: group.minOccupancy,
                   openWaitlist: group.openWaitlist,
+                  rentType: group.rentType,
+                  flatRentValueFrom: group.flatRentValueFrom,
+                  flatRentValueTo: group.flatRentValueTo,
                   sqFeetMin: group.sqFeetMin,
                   sqFeetMax: group.sqFeetMax,
                   totalCount: group.totalCount,
@@ -2305,9 +2372,11 @@ export class ListingService implements OnModuleInit {
                             level.monthlyRentDeterminationType,
                           percentageOfIncomeValue:
                             level.percentageOfIncomeValue,
-                          amiChart: {
-                            connect: { id: level.amiChart.id },
-                          },
+                          amiChart: level.amiChart
+                            ? {
+                                connect: { id: level.amiChart.id },
+                              }
+                            : undefined,
                         })),
                       }
                     : undefined,
@@ -2322,9 +2391,9 @@ export class ListingService implements OnModuleInit {
                 })),
               }
             : undefined,
-          unitsSummary: dto.unitsSummary
+          unitsSummary: incomingDto.unitsSummary
             ? {
-                create: dto.unitsSummary.map((unitSummary) => ({
+                create: incomingDto.unitsSummary.map((unitSummary) => ({
                   ...unitSummary,
                   unitTypes: unitSummary.unitTypes
                     ? {
@@ -2345,18 +2414,25 @@ export class ListingService implements OnModuleInit {
               }
             : undefined,
           contentUpdatedAt: new Date(),
+          lastUpdatedByUser: requestingUser
+            ? {
+                connect: {
+                  id: requestingUser.id,
+                },
+              }
+            : undefined,
           publishedAt:
             storedListing.status !== ListingsStatusEnum.active &&
-            dto.status === ListingsStatusEnum.active
+            incomingDto.status === ListingsStatusEnum.active
               ? new Date()
               : storedListing.publishedAt,
           closedAt:
             storedListing.status !== ListingsStatusEnum.closed &&
-            dto.status === ListingsStatusEnum.closed
+            incomingDto.status === ListingsStatusEnum.closed
               ? new Date()
               : storedListing.closedAt,
           requestedChangesUser:
-            dto.status === ListingsStatusEnum.changesRequested &&
+            incomingDto.status === ListingsStatusEnum.changesRequested &&
             storedListing.status !== ListingsStatusEnum.changesRequested
               ? {
                   connect: {
@@ -2364,15 +2440,15 @@ export class ListingService implements OnModuleInit {
                   },
                 }
               : undefined,
-          listingsResult: dto.listingsResult
+          listingsResult: incomingDto.listingsResult
             ? {
                 create: {
-                  ...dto.listingsResult,
+                  ...incomingDto.listingsResult,
                 },
               }
             : undefined,
-          section8Acceptance: !!dto.section8Acceptance,
-          isVerified: !!dto.isVerified,
+          section8Acceptance: !!incomingDto.section8Acceptance,
+          isVerified: !!incomingDto.isVerified,
           listingNeighborhoodAmenities: {
             upsert: {
               where: {
@@ -2387,9 +2463,9 @@ export class ListingService implements OnModuleInit {
             },
           },
         },
-        include: views.details,
+        include: includeViews.full,
         where: {
-          id: dto.id,
+          id: incomingDto.id,
         },
       }),
     ]);
@@ -2404,37 +2480,41 @@ export class ListingService implements OnModuleInit {
 
     const listingApprovalPermissions = (
       await this.prisma.jurisdictions.findFirst({
-        where: { id: dto.jurisdictions.id },
+        where: { id: incomingDto.jurisdictions.id },
       })
     )?.listingApprovalPermissions;
 
     if (listingApprovalPermissions?.length > 0)
       await this.listingApprovalNotify({
         user: requestingUser,
-        listingInfo: { id: dto.id, name: dto.name },
+        listingInfo: { id: incomingDto.id, name: incomingDto.name },
         approvingRoles: listingApprovalPermissions,
-        status: dto.status,
+        status: incomingDto.status,
         previousStatus: storedListing.status,
-        jurisId: dto.jurisdictions.id,
+        jurisId: incomingDto.jurisdictions.id,
       });
 
     // if listing is closed for the first time the application flag set job needs to run
     if (
       storedListing.status === ListingsStatusEnum.active &&
-      dto.status === ListingsStatusEnum.closed
+      incomingDto.status === ListingsStatusEnum.closed
     ) {
       if (
         process.env.DUPLICATES_CLOSE_DATE &&
         dayjs(process.env.DUPLICATES_CLOSE_DATE, 'YYYY-MM-DD HH:mm Z') <
           dayjs(new Date())
       ) {
-        await this.afsService.processDuplicates(dto.id);
+        await this.afsService.processDuplicates(incomingDto.id);
       } else {
-        await this.afsService.process(dto.id);
+        await this.afsService.process(incomingDto.id);
       }
     }
 
-    await this.cachePurge(storedListing.status, dto.status, rawListing.id);
+    await this.cachePurge(
+      storedListing.status,
+      incomingDto.status,
+      rawListing.id,
+    );
 
     return mapTo(Listing, rawListing);
   }
@@ -2443,7 +2523,7 @@ export class ListingService implements OnModuleInit {
     clears the listing cache of either 1 listing or all listings
      @param storedListingStatus the status that was stored for the listing
      @param incomingListingStatus the incoming "new" status for a listing
-     @param savedResponseId the id of the listing   
+     @param savedResponseId the id of the listing
   */
   async cachePurge(
     storedListingStatus: ListingsStatusEnum | undefined,
@@ -2496,6 +2576,26 @@ export class ListingService implements OnModuleInit {
     }
     return listing;
   };
+
+  /*
+    calculates the number of units available for a listing
+    For unit groups it will return 0 (as we don't use it for it)
+  */
+  calculateUnitsAvailable(
+    reviewOrderType: ReviewOrderTypeEnum,
+    units?: any[],
+    unitGroups?: any[],
+  ): number {
+    return reviewOrderType !== ReviewOrderTypeEnum.waitlist && units
+      ? units.length
+      : unitGroups
+      ? unitGroups.reduce(
+          (unitsAvailable, { totalAvailable }) =>
+            unitsAvailable + totalAvailable,
+          0,
+        )
+      : 0;
+  }
 
   /*
     returns id, name of listing given a multiselect question id
@@ -2587,7 +2687,7 @@ export class ListingService implements OnModuleInit {
 
   /**
     marks the db record for this cronjob as begun or creates a cronjob that
-    is marked as begun if one does not already exist 
+    is marked as begun if one does not already exist
   */
   async markCronJobAsStarted(cronJobName: string): Promise<void> {
     const job = await this.prisma.cronJob.findFirst({
@@ -2658,8 +2758,8 @@ export class ListingService implements OnModuleInit {
     return listings.map((listing) => {
       return {
         id: listing.id,
-        lat: listing.listingsBuildingAddress.latitude,
-        lng: listing.listingsBuildingAddress.longitude,
+        lat: listing.listingsBuildingAddress?.latitude,
+        lng: listing.listingsBuildingAddress?.longitude,
       } as ListingMapMarker;
     });
   }

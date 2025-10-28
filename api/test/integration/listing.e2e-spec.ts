@@ -3,6 +3,7 @@ import { INestApplication } from '@nestjs/common';
 import {
   ApplicationAddressTypeEnum,
   ApplicationMethodsTypeEnum,
+  DepositTypeEnum,
   HomeTypeEnum,
   LanguagesEnum,
   ListingEventsTypeEnum,
@@ -11,6 +12,7 @@ import {
   MultiselectQuestionsApplicationSectionEnum,
   Prisma,
   RegionEnum,
+  RentTypeEnum,
   ReviewOrderTypeEnum,
   UnitTypeEnum,
   UserRoleEnum,
@@ -30,7 +32,8 @@ import { ListingOrderByKeys } from '../../src/enums/listings/order-by-enum';
 import { OrderByEnum } from '../../src/enums/shared/order-by-enum';
 import { ListingViews } from '../../src/enums/listings/view-enum';
 import { IdDTO } from '../../src/dtos/shared/id.dto';
-import { ListingPublishedUpdate } from '../../src/dtos/listings/listing-published-update.dto';
+import { ListingCreate } from '../../src/dtos/listings/listing-create.dto';
+import { ListingUpdate } from '../../src/dtos/listings/listing-update.dto';
 import {
   unitTypeFactoryAll,
   unitTypeFactorySingle,
@@ -46,7 +49,6 @@ import {
   reservedCommunityTypeFactoryAll,
   reservedCommunityTypeFactoryGet,
 } from '../../prisma/seed-helpers/reserved-community-type-factory';
-import { ListingPublishedCreate } from '../../src/dtos/listings/listing-published-create.dto';
 import { addressFactory } from '../../prisma/seed-helpers/address-factory';
 import { AddressCreate } from '../../src/dtos/addresses/address-create.dto';
 import { EmailService } from '../../src/services/email.service';
@@ -132,7 +134,7 @@ describe('Listing Controller Tests', () => {
     );
     await createAllFeatureFlags(prisma);
     const jurisdiction = await prisma.jurisdictions.create({
-      data: jurisdictionFactory(),
+      data: jurisdictionFactory(`listing controller ${randomName()}`),
     });
     jurisdictionAId = jurisdiction.id;
     await reservedCommunityTypeFactoryAll(jurisdictionAId, prisma);
@@ -161,17 +163,38 @@ describe('Listing Controller Tests', () => {
     await app.close();
   });
 
+  const defaultRequiredFields = [
+    'listingsBuildingAddress',
+    'name',
+    'developer',
+    'listingImages',
+    'leasingAgentEmail',
+    'leasingAgentName',
+    'leasingAgentPhone',
+    'jurisdictions',
+  ];
+
   const constructFullListingData = async (
     listingId?: string,
     jurisdictionId?: string,
-  ): Promise<ListingPublishedCreate | ListingPublishedUpdate> => {
+    jurisdictionName?: string,
+    useUnitGroups?: boolean,
+  ): Promise<ListingCreate | ListingUpdate> => {
     let jurisdictionA: IdDTO = { id: '' };
 
     if (jurisdictionId) {
       jurisdictionA.id = jurisdictionId;
     } else {
       jurisdictionA = await prisma.jurisdictions.create({
-        data: jurisdictionFactory(),
+        data: jurisdictionFactory(jurisdictionName || randomName(), {
+          featureFlags: [
+            ...(useUnitGroups ? [FeatureFlagEnum.enableUnitGroups] : []),
+          ],
+          requiredListingFields: [
+            ...defaultRequiredFields,
+            ...(useUnitGroups ? ['unitGroups'] : ['units']),
+          ],
+        }),
       });
     }
 
@@ -225,36 +248,99 @@ describe('Listing Controller Tests', () => {
       referralOpportunity: false,
       rentalAssistance: 'rental assistance',
       reviewOrderType: ReviewOrderTypeEnum.firstComeFirstServe,
-      units: [
-        {
-          amiPercentage: '1',
-          annualIncomeMin: '2',
-          monthlyIncomeMin: '3',
-          floor: 4,
-          annualIncomeMax: '5',
-          maxOccupancy: 6,
-          minOccupancy: 7,
-          monthlyRent: '8',
-          numBathrooms: 9,
-          numBedrooms: 10,
-          number: '11',
-          sqFeet: '12',
-          monthlyRentAsPercentOfIncome: '13',
-          bmrProgramChart: true,
-          unitTypes: {
-            id: unitType.id,
-          },
-          amiChart: {
-            id: amiChart.id,
-          },
-          unitAccessibilityPriorityTypes: {
-            id: unitAccessibilityPriorityType.id,
-          },
-          unitRentTypes: {
-            id: rentType.id,
-          },
-        },
-      ],
+      ...(useUnitGroups
+        ? {
+            units: [],
+            unitsSummary: [],
+            unitGroups: [
+              {
+                totalCount: 4,
+                minOccupancy: 1,
+                maxOccupancy: 4,
+                sqFeetMin: 240,
+                sqFeetMax: 567,
+                floorMin: 1,
+                floorMax: 2,
+                bathroomMin: 1,
+                bathroomMax: 2,
+                totalAvailable: 2,
+                openWaitlist: true,
+                unitTypes: [
+                  {
+                    id: unitType.id,
+                  },
+                ],
+                unitGroupAmiLevels: [
+                  {
+                    amiChart: {
+                      id: amiChart.id,
+                    },
+                    amiPercentage: 10,
+                    monthlyRentDeterminationType: 'flatRent',
+                    flatRentValue: 1000,
+                    percentageOfIncomeValue: null,
+                  },
+                ],
+              },
+            ],
+          }
+        : {
+            units: [
+              {
+                amiPercentage: '1',
+                annualIncomeMin: '2',
+                monthlyIncomeMin: '3',
+                floor: 4,
+                annualIncomeMax: '5',
+                maxOccupancy: 6,
+                minOccupancy: 7,
+                monthlyRent: '8',
+                numBathrooms: 9,
+                numBedrooms: 10,
+                number: '11',
+                sqFeet: '12',
+                monthlyRentAsPercentOfIncome: '13',
+                bmrProgramChart: true,
+                unitTypes: {
+                  id: unitType.id,
+                },
+                amiChart: {
+                  id: amiChart.id,
+                },
+                unitAccessibilityPriorityTypes: {
+                  id: unitAccessibilityPriorityType.id,
+                },
+                unitRentTypes: {
+                  id: rentType.id,
+                },
+              },
+            ],
+            unitsSummary: [
+              {
+                unitTypes: {
+                  id: unitType.id,
+                },
+                monthlyRentMin: 1,
+                monthlyRentMax: 2,
+                monthlyRentAsPercentOfIncome: '3',
+                amiPercentage: 4,
+                minimumIncomeMin: '5',
+                minimumIncomeMax: '6',
+                maxOccupancy: 7,
+                minOccupancy: 8,
+                floorMin: 9,
+                floorMax: 10,
+                sqFeetMin: '11',
+                sqFeetMax: '12',
+                unitAccessibilityPriorityTypes: {
+                  id: unitAccessibilityPriorityType.id,
+                },
+                totalCount: 13,
+                totalAvailable: 14,
+              },
+            ],
+            unitGroups: [],
+          }),
       listingMultiselectQuestions: [
         {
           id: multiselectQuestion.id,
@@ -274,30 +360,6 @@ describe('Listing Controller Tests', () => {
               assets: exampleAsset,
             },
           ],
-        },
-      ],
-      unitsSummary: [
-        {
-          unitTypes: {
-            id: unitType.id,
-          },
-          monthlyRentMin: 1,
-          monthlyRentMax: 2,
-          monthlyRentAsPercentOfIncome: '3',
-          amiPercentage: 4,
-          minimumIncomeMin: '5',
-          minimumIncomeMax: '6',
-          maxOccupancy: 7,
-          minOccupancy: 8,
-          floorMin: 9,
-          floorMax: 10,
-          sqFeetMin: '11',
-          sqFeetMax: '12',
-          unitAccessibilityPriorityTypes: {
-            id: unitAccessibilityPriorityType.id,
-          },
-          totalCount: 13,
-          totalAvailable: 14,
         },
       ],
       listingsApplicationPickUpAddress: exampleAddress,
@@ -382,6 +444,7 @@ describe('Listing Controller Tests', () => {
         : undefined,
       homeType: 'apartment',
       marketingType: undefined,
+      requiredFields: [],
     };
   };
 
@@ -473,14 +536,18 @@ describe('Listing Controller Tests', () => {
 
     it('should get listings from list endpoint when params are sent', async () => {
       const listing1 = await listingFactory(jurisdictionAId, prisma, {
-        listing: { name: 'filterListing1' } as Prisma.ListingsCreateInput,
+        listing: {
+          name: `listing endpoint 1 ${randomName()}`,
+        } as Prisma.ListingsCreateInput,
       });
       const listing1Created = await prisma.listings.create({
         data: listing1,
       });
 
       const listing2 = await listingFactory(jurisdictionAId, prisma, {
-        listing: { name: 'filterListing2' } as Prisma.ListingsCreateInput,
+        listing: {
+          name: `listing endpoint 2 ${randomName()}`,
+        } as Prisma.ListingsCreateInput,
       });
       const listing2Created = await prisma.listings.create({
         data: listing2,
@@ -568,7 +635,7 @@ describe('Listing Controller Tests', () => {
 
     beforeAll(async () => {
       jurisdictionB = await prisma.jurisdictions.create({
-        data: jurisdictionFactory(),
+        data: jurisdictionFactory(`filterableList B ${randomName()}`),
       });
       multiselectQuestionPreference = await prisma.multiselectQuestions.create({
         data: multiselectQuestionFactory(jurisdictionB.id, {
@@ -610,6 +677,9 @@ describe('Listing Controller Tests', () => {
       });
       listing1WithUnits = await prisma.listings.create({
         data: listing1Input,
+        include: {
+          listingsBuildingAddress: true,
+        },
       });
 
       const listing2Input = await listingFactory(jurisdictionB.id, prisma, {
@@ -641,14 +711,14 @@ describe('Listing Controller Tests', () => {
       });
 
       jurisdictionC = await prisma.jurisdictions.create({
-        data: jurisdictionFactory(),
+        data: jurisdictionFactory(`filterableList C ${randomName()}`),
       });
       const listing3Input = await listingFactory(jurisdictionC.id, prisma);
       listing3WithUnits = await prisma.listings.create({
         data: listing3Input,
       });
       jurisdictionDWithUnitGroups = await prisma.jurisdictions.create({
-        data: jurisdictionFactory(),
+        data: jurisdictionFactory(`filterableList D ${randomName()}`),
       });
       const listing4Input = await listingFactory(
         jurisdictionDWithUnitGroups.id,
@@ -1864,6 +1934,138 @@ describe('Listing Controller Tests', () => {
       const ids = res.body.items.map((listing) => listing.id);
       expect(ids).toContain(listing1WithUnits.id);
     });
+
+    it('should return only the correct fields based on name view', async () => {
+      const query: ListingsQueryBody = {
+        page: 1,
+        view: ListingViews.name,
+        filter: [
+          {
+            $comparison: Compare.IN,
+            ids: [listing1WithUnits.id],
+          },
+        ],
+      };
+
+      const res = await request(app.getHttpServer())
+        .post(`/listings/list`)
+        .send(query)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .expect(201);
+
+      expect(res.body.items.length).toBe(1);
+
+      expect(res.body.items[0]).toEqual({
+        name: listing1WithUnits.name,
+        id: listing1WithUnits.id,
+        jurisdictions: {
+          id: jurisdictionB.id,
+          name: jurisdictionB.name,
+        },
+        showWaitlist: false,
+        urlSlug: expect.anything(),
+        whatToExpect: null,
+        whatToExpectAdditionalText: null,
+      });
+    });
+
+    it('should return only the correct fields based on address view', async () => {
+      const query: ListingsQueryBody = {
+        page: 1,
+        view: ListingViews.address,
+        filter: [
+          {
+            $comparison: Compare.IN,
+            ids: [listing1WithUnits.id],
+          },
+        ],
+      };
+
+      const res = await request(app.getHttpServer())
+        .post(`/listings/list`)
+        .send(query)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .expect(201);
+
+      expect(res.body.items.length).toBe(1);
+
+      expect(res.body.items[0]).toEqual({
+        name: listing1WithUnits.name,
+        id: listing1WithUnits.id,
+        listingsBuildingAddress: {
+          street: listing1WithUnits.listingsBuildingAddress.street,
+          street2: listing1WithUnits.listingsBuildingAddress.street2,
+          zipCode: listing1WithUnits.listingsBuildingAddress.zipCode,
+          city: listing1WithUnits.listingsBuildingAddress.city,
+          state: listing1WithUnits.listingsBuildingAddress.state,
+          county: listing1WithUnits.listingsBuildingAddress.county,
+          latitude: expect.anything(),
+          longitude: expect.anything(),
+        },
+        showWaitlist: false,
+        urlSlug: expect.anything(),
+        whatToExpect: null,
+        whatToExpectAdditionalText: null,
+      });
+    });
+
+    it('should return only the correct fields based on fundamental view', async () => {
+      const query: ListingsQueryBody = {
+        page: 1,
+        view: ListingViews.fundamentals,
+        filter: [
+          {
+            $comparison: Compare.IN,
+            ids: [listing1WithUnits.id],
+          },
+        ],
+      };
+
+      const res = await request(app.getHttpServer())
+        .post(`/listings/list`)
+        .send(query)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .expect(201);
+
+      expect(res.body.items.length).toBe(1);
+
+      // verify random fields to be or not be there
+      expect(res.body.items[0].jurisdictions).not.toBeNull();
+      expect(res.body.items[0].name).toBe(listing1WithUnits.name);
+      expect(res.body.items[0].lastApplicationUpdateAt).not.toBeNull();
+      expect(res.body.items[0].listingImages).toBeUndefined();
+      expect(res.body.items[0].listingFeatures).toBeUndefined();
+    });
+
+    it('should return only the correct fields based on full view', async () => {
+      const query: ListingsQueryBody = {
+        page: 1,
+        view: ListingViews.full,
+        filter: [
+          {
+            $comparison: Compare.IN,
+            ids: [listing1WithUnits.id],
+          },
+        ],
+      };
+
+      const res = await request(app.getHttpServer())
+        .post(`/listings/list`)
+        .send(query)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .expect(201);
+
+      expect(res.body.items.length).toBe(1);
+
+      // verify random fields to be or not be there
+      expect(res.body.items[0].jurisdictions).not.toBeNull();
+      expect(res.body.items[0].name).toBe(listing1WithUnits.name);
+      expect(res.body.items[0].lastApplicationUpdateAt).not.toBeNull();
+      expect(res.body.items[0].listingImages).not.toBeUndefined();
+      expect(res.body.items[0].listingFeatures).not.toBeUndefined();
+      expect(res.body.items[0].units).not.toBeUndefined();
+      expect(res.body.items[0].listingsLeasingAgentAddress).not.toBeUndefined();
+    });
   });
 
   describe('retrieve listings endpoint', () => {
@@ -1930,7 +2132,7 @@ describe('Listing Controller Tests', () => {
 
     it('should delete listing', async () => {
       const jurisdictionA = await prisma.jurisdictions.create({
-        data: jurisdictionFactory(),
+        data: jurisdictionFactory(`delete ${randomName()}`),
       });
       await reservedCommunityTypeFactoryAll(jurisdictionA.id, prisma);
       const listingData = await listingFactory(jurisdictionA.id, prisma, {
@@ -1965,6 +2167,9 @@ describe('Listing Controller Tests', () => {
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send({
           id: id,
+          status: ListingsStatusEnum.pending,
+          name: randomName(),
+          jurisdictions: { id: jurisdictionAId },
         } as IdDTO)
         .set('Cookie', adminAccessToken)
         .expect(404);
@@ -1975,7 +2180,7 @@ describe('Listing Controller Tests', () => {
 
     it('should update listing', async () => {
       const jurisdictionA = await prisma.jurisdictions.create({
-        data: jurisdictionFactory(),
+        data: jurisdictionFactory(`update ${randomName()}`),
       });
       await reservedCommunityTypeFactoryAll(jurisdictionA.id, prisma);
       const listingData = await listingFactory(jurisdictionA.id, prisma);
@@ -1999,7 +2204,11 @@ describe('Listing Controller Tests', () => {
 
   describe('create endpoint', () => {
     it('should create listing', async () => {
-      const val = await constructFullListingData();
+      const val = await constructFullListingData(
+        undefined,
+        undefined,
+        `create listing ${randomName()}`,
+      );
 
       const res = await request(app.getHttpServer())
         .post('/listings')
@@ -2019,6 +2228,307 @@ describe('Listing Controller Tests', () => {
       expect(newDBValues.length).toBeGreaterThanOrEqual(1);
       expect(newDBValues[0].listingFeatures).toMatchObject(listingFeatures);
       expect(newDBValues[0].listingUtilities).toMatchObject(listingUtilities);
+    });
+
+    describe('listing deposit type validation', () => {
+      it("should create listing when deposit is 'fixedDeposit', 'depositValue' is set and 'depositRangeMin' and 'depositRangeMax' are missing", async () => {
+        const val = await constructFullListingData(
+          undefined,
+          undefined,
+          `create listing ${randomName()}`,
+        );
+
+        const res = await request(app.getHttpServer())
+          .post('/listings')
+          .set({ passkey: process.env.API_PASS_KEY || '' })
+          .send({
+            ...val,
+            depositType: DepositTypeEnum.fixedDeposit,
+            depositValue: 1000,
+          })
+          .set('Cookie', adminAccessToken)
+          .expect(201);
+
+        expect(res.body.name).toEqual(val.name);
+
+        const newDBValues = await prisma.listings.findFirst({
+          where: { id: res.body.id },
+        });
+
+        expect(newDBValues).toBeDefined();
+        expect(newDBValues.depositType).toEqual(DepositTypeEnum.fixedDeposit);
+        expect(newDBValues.depositRangeMax).toBeNull();
+        expect(newDBValues.depositRangeMin).toBeNull();
+        expect(Number(newDBValues.depositValue)).toEqual(1000);
+      });
+
+      it("should fail when deposit is 'fixedDeposit' but 'depositRangeMin' and 'depositRangeMax' are set", async () => {
+        const val = await constructFullListingData(
+          undefined,
+          undefined,
+          `create listing ${randomName()}`,
+        );
+
+        const res = await request(app.getHttpServer())
+          .post('/listings')
+          .set({ passkey: process.env.API_PASS_KEY || '' })
+          .send({
+            ...val,
+            depositType: DepositTypeEnum.fixedDeposit,
+            depositValue: 1000,
+            depositRangeMin: 100,
+            depositRangeMax: 500,
+          })
+          .set('Cookie', adminAccessToken)
+          .expect(400);
+
+        expect(res.body.message[0]).toEqual(
+          'When deposit is of type "fixedDeposit" the "depositValue" must be filled and the "depositRangeMin"|"depositRangeMax" fields must be null',
+        );
+      });
+
+      it("should fail when deposit is 'fixedDeposit' but 'depositValue' is missing", async () => {
+        const val = await constructFullListingData(
+          undefined,
+          undefined,
+          `create listing ${randomName()}`,
+        );
+
+        const res = await request(app.getHttpServer())
+          .post('/listings')
+          .set({ passkey: process.env.API_PASS_KEY || '' })
+          .send({
+            ...val,
+            depositType: DepositTypeEnum.fixedDeposit,
+          })
+          .set('Cookie', adminAccessToken)
+          .expect(400);
+
+        expect(res.body.message[0]).toEqual(
+          'When deposit is of type "fixedDeposit" the "depositValue" must be filled and the "depositRangeMin"|"depositRangeMax" fields must be null',
+        );
+      });
+
+      it("should create listing when deposit is 'rangeDeposit', 'depositRangeMin' and 'depositRangeMax' are set and 'depositValue' is missing", async () => {
+        const val = await constructFullListingData(
+          undefined,
+          undefined,
+          `create listing ${randomName()}`,
+        );
+
+        const res = await request(app.getHttpServer())
+          .post('/listings')
+          .set({ passkey: process.env.API_PASS_KEY || '' })
+          .send({
+            ...val,
+            depositType: DepositTypeEnum.depositRange,
+            depositRangeMin: 100,
+            depositRangeMax: 500,
+            depositValue: null,
+          })
+          .set('Cookie', adminAccessToken)
+          .expect(201);
+
+        expect(res.body.name).toEqual(val.name);
+
+        const newDBValues = await prisma.listings.findFirst({
+          where: { id: res.body.id },
+        });
+
+        expect(newDBValues).toBeDefined();
+        expect(newDBValues.depositType).toEqual(DepositTypeEnum.depositRange);
+        expect(Number(newDBValues.depositRangeMax)).toEqual(500);
+        expect(Number(newDBValues.depositRangeMin)).toEqual(100);
+        expect(newDBValues.depositValue).toBeNull();
+      });
+
+      it("should fail when deposit is 'rangeDeposit' but 'depositValue' is set", async () => {
+        const val = await constructFullListingData(
+          undefined,
+          undefined,
+          `create listing ${randomName()}`,
+        );
+
+        const res = await request(app.getHttpServer())
+          .post('/listings')
+          .set({ passkey: process.env.API_PASS_KEY || '' })
+          .send({
+            ...val,
+            depositType: DepositTypeEnum.depositRange,
+            depositValue: 1000,
+            depositRangeMin: 100,
+            depositRangeMax: 500,
+          })
+          .set('Cookie', adminAccessToken)
+          .expect(400);
+
+        expect(res.body.message[0]).toEqual(
+          'When deposit is of type "depositRange" the "depositRangeMin" and "depositRangeMax" fields must be filled and "depositValue" must be null',
+        );
+      });
+
+      it("should fail when deposit is 'rangeDeposit' but 'depositRangeMin' and 'depositRangeMax' are missing", async () => {
+        const val = await constructFullListingData(
+          undefined,
+          undefined,
+          `create listing ${randomName()}`,
+        );
+
+        const res = await request(app.getHttpServer())
+          .post('/listings')
+          .set({ passkey: process.env.API_PASS_KEY || '' })
+          .send({
+            ...val,
+            depositType: DepositTypeEnum.depositRange,
+            depositValue: null,
+            depositRangeMin: null,
+            depositRangeMax: null,
+          })
+          .set('Cookie', adminAccessToken)
+          .expect(400);
+
+        expect(res.body.message[0]).toEqual(
+          'When deposit is of type "depositRange" the "depositRangeMin" and "depositRangeMax" fields must be filled and "depositValue" must be null',
+        );
+      });
+    });
+
+    describe('listing unit group rent type validation', () => {
+      it("should create listing when unit group rent type is 'fixedRent' and the 'flatRentValueFrom' and 'flatRentValueFrom' are missing", async () => {
+        const val = await constructFullListingData(
+          undefined,
+          undefined,
+          `create listing ${randomName()}`,
+          true,
+        );
+
+        const res = await request(app.getHttpServer())
+          .post('/listings')
+          .set({ passkey: process.env.API_PASS_KEY || '' })
+          .send({
+            ...val,
+            unitGroups: val.unitGroups.map((entry) => ({
+              ...entry,
+              rentType: RentTypeEnum.fixedRent,
+              flatRentValueFrom: null,
+              flatRentValueTo: null,
+            })),
+          })
+          .set('Cookie', adminAccessToken)
+          .expect(201);
+
+        expect(res.body.name).toEqual(val.name);
+
+        const newDBValues = await prisma.listings.findFirst({
+          where: { id: res.body.id },
+          include: { unitGroups: true },
+        });
+
+        expect(newDBValues).toBeDefined();
+        expect(newDBValues.unitGroups).toHaveLength(1);
+        expect(newDBValues.unitGroups[0].rentType).toEqual(
+          RentTypeEnum.fixedRent,
+        );
+        expect(newDBValues.unitGroups[0].flatRentValueFrom).toBeNull();
+        expect(newDBValues.unitGroups[0].flatRentValueTo).toBeNull();
+      });
+
+      it("should create listing when unit group rent type is 'rentRange' and the 'flatRentValueFrom' and 'flatRentValueFrom' are set", async () => {
+        const val = await constructFullListingData(
+          undefined,
+          undefined,
+          `create listing ${randomName()}`,
+          true,
+        );
+
+        const res = await request(app.getHttpServer())
+          .post('/listings')
+          .set({ passkey: process.env.API_PASS_KEY || '' })
+          .send({
+            ...val,
+            unitGroups: val.unitGroups.map((entry) => ({
+              ...entry,
+              rentType: RentTypeEnum.rentRange,
+              flatRentValueFrom: 100,
+              flatRentValueTo: 500,
+            })),
+          })
+          .set('Cookie', adminAccessToken)
+          .expect(201);
+
+        expect(res.body.name).toEqual(val.name);
+
+        const newDBValues = await prisma.listings.findFirst({
+          where: { id: res.body.id },
+          include: { unitGroups: true },
+        });
+
+        expect(newDBValues).toBeDefined();
+        expect(newDBValues.unitGroups).toHaveLength(1);
+        expect(newDBValues.unitGroups[0].rentType).toEqual(
+          RentTypeEnum.rentRange,
+        );
+        expect(Number(newDBValues.unitGroups[0].flatRentValueFrom)).toEqual(
+          100,
+        );
+        expect(Number(newDBValues.unitGroups[0].flatRentValueTo)).toEqual(500);
+      });
+
+      it("should fail to create listing when unit group rent type is 'fixedRent' but the 'flatRentValueFrom' and 'flatRentValueFrom' are set", async () => {
+        const val = await constructFullListingData(
+          undefined,
+          undefined,
+          `create listing ${randomName()}`,
+          true,
+        );
+
+        const res = await request(app.getHttpServer())
+          .post('/listings')
+          .set({ passkey: process.env.API_PASS_KEY || '' })
+          .send({
+            ...val,
+            unitGroups: val.unitGroups.map((entry) => ({
+              ...entry,
+              rentType: RentTypeEnum.fixedRent,
+              flatRentValueFrom: 100,
+              flatRentValueTo: 400,
+            })),
+          })
+          .set('Cookie', adminAccessToken)
+          .expect(400);
+
+        expect(res.body.message[0]).toEqual(
+          'unitGroups.0.When rent is of type "fixedRent" the "flatRentValueFrom" and "flatRentValueTo" fields must be empty',
+        );
+      });
+
+      it("should fail to create listing when unit group rent type is 'rentRange' but the 'flatRentValueFrom' and 'flatRentValueFrom' are missing", async () => {
+        const val = await constructFullListingData(
+          undefined,
+          undefined,
+          `create listing ${randomName()}`,
+          true,
+        );
+
+        const res = await request(app.getHttpServer())
+          .post('/listings')
+          .set({ passkey: process.env.API_PASS_KEY || '' })
+          .send({
+            ...val,
+            unitGroups: val.unitGroups.map((entry) => ({
+              ...entry,
+              rentType: RentTypeEnum.rentRange,
+              flatRentValueFrom: null,
+              flatRentValueTo: null,
+            })),
+          })
+          .set('Cookie', adminAccessToken)
+          .expect(400);
+
+        expect(res.body.message[0]).toEqual(
+          'unitGroups.0.When rent is of type "rentRange" the "flatRentValueFrom" and "flatRentValueTo" fields must be filled',
+        );
+      });
     });
   });
 
@@ -2065,7 +2575,7 @@ describe('Listing Controller Tests', () => {
     it('should duplicate listing, include unit groups', async () => {
       const jurisdictionWithUnitGroupsEnabled =
         await prisma.jurisdictions.create({
-          data: jurisdictionFactory(randomName(), {
+          data: jurisdictionFactory(`duplicate unit groups ${randomName()}`, {
             featureFlags: [FeatureFlagEnum.enableUnitGroups],
           }),
         });
@@ -2119,7 +2629,7 @@ describe('Listing Controller Tests', () => {
 
     it('should duplicate listing, exclude units', async () => {
       const jurisdictionA = await prisma.jurisdictions.create({
-        data: jurisdictionFactory(),
+        data: jurisdictionFactory(`duplicate exclude units ${randomName()}`),
       });
       await reservedCommunityTypeFactoryAll(jurisdictionA.id, prisma);
       const listingData = await listingFactory(jurisdictionA.id, prisma, {
@@ -2160,7 +2670,9 @@ describe('Listing Controller Tests', () => {
 
     it('should duplicate listing, exclude units with unit groups', async () => {
       const jurisdictionA = await prisma.jurisdictions.create({
-        data: jurisdictionFactory(),
+        data: jurisdictionFactory(
+          `duplicate exclude units unit groups ${randomName()}`,
+        ),
       });
       await reservedCommunityTypeFactoryAll(jurisdictionA.id, prisma);
       const listingData = await listingFactory(jurisdictionA.id, prisma, {
@@ -2206,7 +2718,7 @@ describe('Listing Controller Tests', () => {
   describe('process endpoint', () => {
     it('should successfully process listings that are past due', async () => {
       const jurisdictionA = await prisma.jurisdictions.create({
-        data: jurisdictionFactory(),
+        data: jurisdictionFactory(`process listings ${randomName()}`),
       });
       await reservedCommunityTypeFactoryAll(jurisdictionA.id, prisma);
       const listingData = await listingFactory(jurisdictionA.id, prisma, {
@@ -2236,7 +2748,7 @@ describe('Listing Controller Tests', () => {
 
     it('should only process listings that are past due', async () => {
       const jurisdictionA = await prisma.jurisdictions.create({
-        data: jurisdictionFactory(),
+        data: jurisdictionFactory(`process some listings ${randomName()}`),
       });
       await reservedCommunityTypeFactoryAll(jurisdictionA.id, prisma);
       const pastDueListingData = await listingFactory(
@@ -2298,13 +2810,14 @@ describe('Listing Controller Tests', () => {
     let listing,
       adminUser,
       jurisAdmin,
-      wrongJurisAdmin,
+      limitedJurisdictionA,
       jurisdictionA,
       partnerUser,
-      adminAccessToken;
+      adminAccessToken,
+      supportAdmin;
     beforeAll(async () => {
       jurisdictionA = await prisma.jurisdictions.create({
-        data: jurisdictionFactory('jurisdictionA', {
+        data: jurisdictionFactory(`approval notifications A ${randomName()}`, {
           listingApprovalPermissions: [
             UserRoleEnum.admin,
             UserRoleEnum.jurisdictionAdmin,
@@ -2312,7 +2825,7 @@ describe('Listing Controller Tests', () => {
         }),
       });
       const jurisdictionB = await prisma.jurisdictions.create({
-        data: jurisdictionFactory('jurisdictionB'),
+        data: jurisdictionFactory(`approval notifications B ${randomName()}`),
       });
       adminUser = await prisma.userAccounts.create({
         data: await userFactory({
@@ -2323,10 +2836,10 @@ describe('Listing Controller Tests', () => {
           confirmedAt: new Date(),
         }),
       });
-      wrongJurisAdmin = await prisma.userAccounts.create({
+      limitedJurisdictionA = await prisma.userAccounts.create({
         data: await userFactory({
           roles: {
-            isJurisdictionalAdmin: true,
+            isLimitedJurisdictionalAdmin: true,
           },
           jurisdictionIds: [jurisdictionB.id],
         }),
@@ -2335,6 +2848,15 @@ describe('Listing Controller Tests', () => {
         data: await userFactory({
           roles: {
             isJurisdictionalAdmin: true,
+          },
+          jurisdictionIds: [jurisdictionA.id],
+        }),
+      });
+
+      supportAdmin = await prisma.userAccounts.create({
+        data: await userFactory({
+          roles: {
+            isSupportAdmin: true,
           },
           jurisdictionIds: [jurisdictionA.id],
         }),
@@ -2405,9 +2927,14 @@ describe('Listing Controller Tests', () => {
         expect.arrayContaining([adminUser.email, jurisAdmin.email]),
         process.env.PARTNERS_PORTAL_URL,
       );
-      //ensure juris admin is not included since don't have approver permissions in alameda seed
+
       expect(mockRequestApproval.mock.calls[0]['emails']).toEqual(
-        expect.not.arrayContaining([wrongJurisAdmin.email, partnerUser.email]),
+        expect.not.arrayContaining([
+          jurisdictionA.email,
+          partnerUser.email,
+          supportAdmin.email,
+          limitedJurisdictionA.email,
+        ]),
       );
     });
 
@@ -2464,6 +2991,280 @@ describe('Listing Controller Tests', () => {
         { id: listing.id, name: val.name, juris: expect.anything() },
         expect.arrayContaining([partnerUser.email]),
         process.env.PARTNERS_PORTAL_URL,
+      );
+    });
+  });
+
+  describe('dynamic required fields validation', () => {
+    let customJurisdiction;
+    let defaultJurisdiction;
+    let unitGroupJurisdiction;
+
+    beforeAll(async () => {
+      // Create a jurisdiction with custom required fields
+      customJurisdiction = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(`dynamic required custom ${randomName()}`, {
+          requiredListingFields: ['name', 'listingsBuildingAddress'],
+        }),
+      });
+
+      // Create a jurisdiction without specified required fields (should use default strict validation)
+      defaultJurisdiction = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(`dynamic required default ${randomName()}`),
+      });
+
+      // Create a unit group jurisdiction
+      unitGroupJurisdiction = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(
+          `dynamic required unit group ${randomName()}`,
+          {
+            featureFlags: [FeatureFlagEnum.enableUnitGroups],
+            requiredListingFields: ['name', 'unitGroups'],
+          },
+        ),
+      });
+    });
+
+    it('should allow saving active listing with requiredListingFields declared in jurisdiction', async () => {
+      const listingData = {
+        name: 'Minimal Listing for custom jurisdiction',
+        status: ListingsStatusEnum.active,
+        listingsBuildingAddress: addressFactory() as AddressCreate,
+        jurisdictions: {
+          id: customJurisdiction.id,
+        },
+      };
+
+      const res = await request(app.getHttpServer())
+        .post('/listings')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send(listingData)
+        .set('Cookie', adminAccessToken)
+        .expect(201);
+
+      expect(res.body.name).toEqual(listingData.name);
+      expect(res.body.status).toEqual(ListingsStatusEnum.active);
+    });
+
+    it('should fail saving active listing without requiredListingFields declared in jurisdictions', async () => {
+      const incompleteData = {
+        name: 'Minimal Listing for custom jurisdiction',
+        status: ListingsStatusEnum.active,
+        jurisdictions: {
+          id: customJurisdiction.id,
+        },
+      };
+
+      // Should fail due to missing required fields from requiredListingFields
+      const res = await request(app.getHttpServer())
+        .post('/listings')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send(incompleteData)
+        .set('Cookie', adminAccessToken)
+        .expect(400);
+
+      expect(res.body.message).toContain(
+        'listingsBuildingAddress is required when publishing the listing',
+      );
+    });
+
+    it('should enforce default strict validation when jurisdiction has no requiredListingFields', async () => {
+      const incompleteData = {
+        name: 'Default Jurisdiction Listing',
+        status: ListingsStatusEnum.active,
+        listingsBuildingAddress: addressFactory() as AddressCreate,
+        jurisdictions: {
+          id: defaultJurisdiction.id,
+        },
+      };
+
+      // Should fail due to missing required fields from default validation
+      const response = await request(app.getHttpServer())
+        .post('/listings')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send(incompleteData)
+        .set('Cookie', adminAccessToken)
+        .expect(400);
+
+      expect(response.body.message).toHaveLength(6);
+      expect(response.body.message.sort()).toEqual(
+        [
+          'listingImages is required when publishing the listing',
+          'developer is required when publishing the listing',
+          'leasingAgentEmail is required when publishing the listing',
+          'leasingAgentName is required when publishing the listing',
+          'leasingAgentPhone is required when publishing the listing',
+          'units must contain at least 1 element',
+        ].sort(),
+      );
+    });
+
+    it('should allow saving non-active listing with only name and jurisdiction field', async () => {
+      const minimalData = {
+        name: 'Minimal Draft Listing',
+        status: ListingsStatusEnum.pending,
+        jurisdictions: {
+          id: defaultJurisdiction.id,
+        },
+      };
+
+      const res = await request(app.getHttpServer())
+        .post('/listings')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send(minimalData)
+        .set('Cookie', adminAccessToken)
+        .expect(201);
+
+      expect(res.body.name).toEqual(minimalData.name);
+      expect(res.body.status).toEqual(ListingsStatusEnum.pending);
+    });
+
+    it('should validate optional fields when provided even if not required', async () => {
+      const invalidOptionalData = {
+        name: 'Invalid Optional Fields',
+        status: ListingsStatusEnum.pending,
+        jurisdictions: {
+          id: customJurisdiction.id,
+        },
+        leasingAgentEmail: 'not-a-valid-email', // Optional but should be validated if provided
+      };
+
+      const res = await request(app.getHttpServer())
+        .post('/listings')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send(invalidOptionalData)
+        .set('Cookie', adminAccessToken)
+        .expect(400);
+
+      expect(res.body.message).toContain('leasingAgentEmail must be an email');
+    });
+
+    it('should error if sending units on a unit group', async () => {
+      const wrongData = {
+        name: 'Minimal Listing for unit group jurisdiction',
+        status: ListingsStatusEnum.active,
+        jurisdictions: {
+          id: unitGroupJurisdiction.id,
+        },
+        units: [{}],
+      };
+      // Should fail due to missing required fields from requiredListingFields
+      const res = await request(app.getHttpServer())
+        .post('/listings')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send(wrongData)
+        .set('Cookie', adminAccessToken)
+        .expect(400);
+      expect(res.body.message).toContain(
+        'units cannot exist on this jurisdiction',
+      );
+    });
+
+    it('should error if sending unit groups on a unit jurisdiction', async () => {
+      const wrongData = {
+        name: 'Minimal Listing for unit group jurisdiction',
+        status: ListingsStatusEnum.active,
+        jurisdictions: {
+          id: customJurisdiction.id,
+        },
+        unitGroups: [{}],
+      };
+      // Should fail due to missing required fields from requiredListingFields
+      const res = await request(app.getHttpServer())
+        .post('/listings')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send(wrongData)
+        .set('Cookie', adminAccessToken)
+        .expect(400);
+      expect(res.body.message).toContain(
+        'unitGroups cannot exist on this jurisdiction',
+      );
+    });
+
+    it('should validate length of unit groups if a required field', async () => {
+      const incompleteData = {
+        name: 'partial unit group',
+        status: ListingsStatusEnum.active,
+        jurisdictions: {
+          id: unitGroupJurisdiction.id,
+        },
+      };
+      // Should fail due to missing required fields from requiredListingFields
+      const res = await request(app.getHttpServer())
+        .post('/listings')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send(incompleteData)
+        .set('Cookie', adminAccessToken)
+        .expect(400);
+      expect(res.body.message).toContain(
+        'unitGroups must contain at least 1 element',
+      );
+    });
+
+    it('should ignore unit group validation if not active', async () => {
+      const incompleteData = {
+        name: 'partial unit group',
+        status: ListingsStatusEnum.pending,
+        jurisdictions: {
+          id: unitGroupJurisdiction.id,
+        },
+      };
+      // Should pass since not publishing
+      await request(app.getHttpServer())
+        .post('/listings')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send(incompleteData)
+        .set('Cookie', adminAccessToken)
+        .expect(201);
+    });
+
+    it('should validate applicationDueDate only if not waitlist', async () => {
+      // Create a jurisdiction applicationDueDate required
+      const applicationDueDateJurisdiction = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(`dynamic required custom ${randomName()}`, {
+          requiredListingFields: ['name', 'applicationDueDate'],
+        }),
+      });
+      const completeData = {
+        name: 'waitlist listing',
+        status: ListingsStatusEnum.active,
+        reviewOrderType: ReviewOrderTypeEnum.waitlist,
+        listingsBuildingAddress: {
+          city: 'Bloomington',
+          state: 'AK',
+          street: 'Main st.',
+          zipCode: '12345',
+        },
+        jurisdictions: {
+          id: applicationDueDateJurisdiction.id,
+        },
+      };
+      // Should pass since is of type waitlist
+      await request(app.getHttpServer())
+        .post('/listings')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send(completeData)
+        .set('Cookie', adminAccessToken)
+        .expect(201);
+
+      // Should fail on validation when fcfs
+      const incompleteData = {
+        name: 'fcfs listing',
+        status: ListingsStatusEnum.active,
+        reviewOrderType: ReviewOrderTypeEnum.firstComeFirstServe,
+        jurisdictions: {
+          id: applicationDueDateJurisdiction.id,
+        },
+      };
+      const res = await request(app.getHttpServer())
+        .post('/listings')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send(incompleteData)
+        .set('Cookie', adminAccessToken)
+        .expect(400);
+
+      expect(res.body.message).toContain(
+        'applicationDueDate is required when publishing the listing',
       );
     });
   });

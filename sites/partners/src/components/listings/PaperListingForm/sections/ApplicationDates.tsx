@@ -12,7 +12,7 @@ import {
   Select,
   maskNumber,
 } from "@bloom-housing/ui-components"
-import { Button, Dialog, Drawer, Link, Grid, FieldValue } from "@bloom-housing/ui-seeds"
+import { Button, Dialog, Drawer, Link, Grid } from "@bloom-housing/ui-seeds"
 import { FormListing, TempEvent } from "../../../../lib/listings/formTypes"
 import { OpenHouseForm } from "../OpenHouseForm"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
@@ -22,18 +22,21 @@ import {
   FeatureFlagEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { AuthContext } from "@bloom-housing/shared-helpers"
-import { fieldMessage, fieldHasError } from "../../../../lib/helpers"
+import { fieldMessage, fieldHasError, getLabel } from "../../../../lib/helpers"
+import styles from "../ListingForm.module.scss"
 
 type ApplicationDatesProps = {
   openHouseEvents: TempEvent[]
   setOpenHouseEvents: (events: TempEvent[]) => void
   listing?: FormListing
+  requiredFields: string[]
 }
 
 const ApplicationDates = ({
   listing,
   openHouseEvents,
   setOpenHouseEvents,
+  requiredFields,
 }: ApplicationDatesProps) => {
   const openHouseHeaders = {
     date: "t.date",
@@ -67,7 +70,7 @@ const ApplicationDates = ({
               <Button
                 type="button"
                 size="sm"
-                className="font-semibold"
+                className={"font-semibold darker-link"}
                 onClick={() => setDrawerOpenHouse(event)}
                 variant="text"
               >
@@ -76,7 +79,7 @@ const ApplicationDates = ({
               <Button
                 type="button"
                 size="sm"
-                className="font-semibold text-alert"
+                className={"font-semibold darker-alert"}
                 onClick={() => setModalDeleteOpenHouse(event)}
                 variant="text"
               >
@@ -131,7 +134,11 @@ const ApplicationDates = ({
         <Grid.Row columns={2}>
           <Grid.Cell>
             <DateField
-              label={t("listings.applicationDeadline")}
+              label={getLabel(
+                "applicationDueDate",
+                requiredFields,
+                t("listings.applicationDeadline")
+              )}
               name={"applicationDueDateField"}
               id={"applicationDueDateField"}
               register={register}
@@ -160,7 +167,11 @@ const ApplicationDates = ({
           </Grid.Cell>
           <Grid.Cell>
             <TimeField
-              label={t("listings.applicationDueTime")}
+              label={getLabel(
+                "applicationDueDate",
+                requiredFields,
+                t("listings.applicationDueTime")
+              )}
               name={"applicationDueTimeField"}
               id={"applicationDueTimeField"}
               register={register}
@@ -189,29 +200,29 @@ const ApplicationDates = ({
         {enableMarketingStatus && (
           <Grid.Row columns={2}>
             <Grid.Cell>
-              <FieldValue label={t("listings.marketingSection.status")}>
-                <FieldGroup
-                  name="marketingType"
-                  type="radio"
-                  register={register}
-                  fields={[
-                    {
-                      label: t("listings.marketing"),
-                      value: MarketingTypeEnum.marketing,
-                      id: "marketingStatusMarketing",
-                      defaultChecked:
-                        !listing?.marketingType ||
-                        listing?.marketingType === MarketingTypeEnum.marketing,
-                    },
-                    {
-                      label: t("listings.underConstruction"),
-                      value: MarketingTypeEnum.comingSoon,
-                      id: "marketingStatusComingSoon",
-                      defaultChecked: listing?.marketingType === MarketingTypeEnum.comingSoon,
-                    },
-                  ]}
-                />
-              </FieldValue>
+              <FieldGroup
+                name="marketingType"
+                type="radio"
+                register={register}
+                groupLabel={t("listings.marketingSection.status")}
+                fieldLabelClassName={`${styles["label-option"]} seeds-m-bs-2`}
+                fields={[
+                  {
+                    label: t("listings.marketing"),
+                    value: MarketingTypeEnum.marketing,
+                    id: "marketingStatusMarketing",
+                    defaultChecked:
+                      !listing?.marketingType ||
+                      listing?.marketingType === MarketingTypeEnum.marketing,
+                  },
+                  {
+                    label: t("listings.underConstruction"),
+                    value: MarketingTypeEnum.comingSoon,
+                    id: "marketingStatusComingSoon",
+                    defaultChecked: listing?.marketingType === MarketingTypeEnum.comingSoon,
+                  },
+                ]}
+              />
             </Grid.Cell>
             {marketingTypeChoice === MarketingTypeEnum.comingSoon && (
               <Grid.Cell>
@@ -239,12 +250,10 @@ const ApplicationDates = ({
                     </div>
 
                     <Field
-                      name={"marketingStartDate"}
-                      id={"marketingStartDate"}
+                      name={"marketingYear"}
+                      id={"marketingYear"}
                       placeholder={t("account.settings.placeholders.year")}
-                      defaultValue={
-                        listing?.marketingDate ? dayjs(listing.marketingDate).year() : null
-                      }
+                      defaultValue={listing?.marketingYear}
                       register={register}
                       validation={{
                         validate: {
@@ -259,20 +268,15 @@ const ApplicationDates = ({
                       }}
                       inputProps={{
                         onChange: (e) => {
-                          fieldHasError(errors?.marketingDate) && clearErrors("marketingDate")
-                          fieldHasError(errors?.marketingStartDate) &&
-                            clearErrors("marketingStartDate")
+                          fieldHasError(errors?.marketingYear) && clearErrors("marketingYear")
                           if (!setValue) return
-                          setValue("marketingStartDate", maskNumber(e.target?.value))
+                          setValue("marketingYear", maskNumber(e.target?.value))
                         },
                         maxLength: 4,
                       }}
                       className="w-1/3"
-                      error={
-                        fieldHasError(errors?.marketingDate) ||
-                        fieldHasError(errors?.marketingStartDate)
-                      }
-                      errorMessage={fieldMessage(errors?.marketingDate) || t("errors.dateError")}
+                      error={fieldHasError(errors?.marketingYear)}
+                      errorMessage={fieldMessage(errors?.marketingYear) || t("errors.dateError")}
                     />
                   </div>
                   <p className="field-sub-note">{t("listings.marketingSection.dateSubtitle")}</p>
