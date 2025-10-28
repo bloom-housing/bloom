@@ -1,0 +1,177 @@
+configs:
+  nginx:
+    # Docker compose templates in variables with '$' so we need to use '$$' for the nginx config.
+    content: |
+      events {}
+      http {
+        log_format default '$$time_local from:$$remote_addr req:$$request resp:$$status upstream:$$upstream_addr in:$$request_time';
+        access_log /dev/stdout default;
+
+        # Hack to get the DNS server address from /etc/resolv.conf at nginx container startup.
+        include /etc/nginx/resolver.conf;
+
+        # We need to use a $$backend variable here otherwise nginx attempts to resolve the hostname
+        # at startup (we want it to resolve the IP at request time not startup time).
+        server {
+          listen 3100;
+          location / {
+            set $$backend "http://api:3100";
+            proxy_pass $$backend;
+          }
+        }
+        server {
+          listen 3001;
+          location / {
+            set $$backend "http://partners:3001";
+            proxy_pass $$backend;
+          }
+        }
+        server {
+          listen 3000;
+          location / {
+            set $$backend "http://public:3000";
+            proxy_pass $$backend;
+          }
+        }
+      }
+
+services:
+  lb:
+    image: nginx:stable
+    ports:
+      - "3100:3100"
+      - "3000:3000"
+      - "3001:3001"
+    configs:
+    - source: nginx
+      target: /etc/nginx/nginx.conf
+    command:
+      - /bin/bash
+      - -c
+      - |
+        # Hack to get the DNS server address from /etc/resolv.conf at nginx container startup.
+        dnsip=$$(cat /etc/resolv.conf | grep nameserver | cut -d' ' -f2)
+        if [[ "$${dnsip}" == "" ]]; then
+          echo "DNS IP address not found"
+          exit 1
+        fi
+        echo "resolver $${dnsip} valid=5s;" > /etc/nginx/resolver.conf && \
+        nginx -g "daemon off;"
+
+  db:
+    image: docker.io/postgres:18
+    restart: no
+    expose:
+      - "5432"
+    environment:
+      PGUSER: "postgres"
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "example"
+      POSTGRES_DB: "bloom_prisma"
+    healthcheck:
+      test: ["CMD-SHELL", "PGPASSWORD=example", "psql", "--host=127.0.0.1", "--port=5432", "--username=postgres", "--command='SELECT 1;'"]
+      interval: "2s"
+      timeout: "1s"
+      retries: 20
+      start_period: "1s"
+
+  dbseed:
+    build:
+      context: ./api
+      dockerfile: Dockerfile.dbseed.dev
+    restart: no
+    environment:
+      DATABASE_URL: "postgres://postgres:example@db:5432/bloom_prisma"
+    command:
+    - "yarn"
+    - "db:seed:staging"
+    depends_on:
+      api: # Need the API to start first so it can create the bloom_prisma table and apply migrations.
+        condition: service_healthy
+
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    restart: no
+    expose:
+      - "3100"
+    deploy:
+      endpoint_mode: 'dnsrr'
+      mode: replicated
+      replicas: ${API_REPLICAS:-1}
+    environment:
+      PORT: 3100
+      NODE_ENV: "production"
+      APP_SECRET: "totally a secret"
+      DATABASE_URL: "postgres://postgres:example@db:5432/bloom_prisma"
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://127.0.0.1:3100/"]
+      interval: "2s"
+      timeout: "1s"
+      retries: 20
+      start_period: "1s"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  partners:
+    build:
+      context: .
+      dockerfile: Dockerfile.sites.partners
+    restart: no
+    expose:
+      - "3001"
+    deploy:
+      endpoint_mode: 'dnsrr'
+      mode: replicated
+      replicas: ${PARTNERS_REPLICAS:-1}
+    environment:
+      NODE_ENV: "production"
+      NEXTJS_PORT: 3001
+      BACKEND_API_BASE: "http://lb:3100"
+      LISTINGS_QUERY: "/listings"
+    depends_on:
+      dbseed: # wait for the db to have data so next build works correctly
+        condition: service_completed_successfully
+      lb:
+        condition: service_started
+
+  public:
+    build:
+      context: .
+      dockerfile: Dockerfile.sites.public
+    restart: no
+    expose:
+      - "3000"
+    deploy:
+      endpoint_mode: 'dnsrr'
+      mode: replicated
+      replicas: ${PUBLIC_REPLICAS:-1}
+    environment:
+      NODE_ENV: "production"
+      NEXTJS_PORT: 3000
+      BACKEND_API_BASE: "http://lb:3100"
+      BACKEND_API_BASE_NEW: "http://lb:3100"
+      LISTINGS_QUERY: "/listings"
+      MAX_BROWSE_LISTINGS: 10
+      HOUSING_COUNSELOR_SERVICE_URL: "/get-assistance"
+
+      JURISDICTION_NAME: "Bloomington"
+      CLOUDINARY_CLOUD_NAME: "exygy"
+
+      LANGUAGES: "en,es,zh,vi,tl"
+      RTL_LANGUAGES: "ar"
+
+      IDLE_TIEMOUT: 5      # seconds
+      CACHE_REVALIDATE: 30 # seconds
+
+      SHOW_PUBLIC_LOTTERY: "TRUE"
+      SHOW_MANDATED_ACCOUNTS: "FALSE"
+      SHOW_PWDLESS: "FALSE"
+      SHOW_NEW_SEEDS_DESIGNS: "FALSE"
+    depends_on:
+      dbseed: # wait for the db to have data so next build works correctly
+        condition: service_completed_successfully
+      lb:
+        condition: service_started
