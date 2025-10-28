@@ -11,7 +11,7 @@
     "registry": "https://registry.npmjs.org"
   },
   "scripts": {
-    "dev": "NODE_OPTIONS='--inspect=9230' next -p ${NEXTJS_PORT:-3000}",
+    "dev": "NODE_OPTIONS=\"--inspect=9230\" next -p ${NEXTJS_PORT:-3000}",
     "build": "next build",
     "test": "concurrently \"yarn dev\" \"cypress open\"",
     "test:headless": "concurrently \"yarn dev\" \"cypress run\"",
