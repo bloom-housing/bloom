@@ -75,7 +75,7 @@ const RankingsAndResults = ({
     FeatureFlagEnum.enableWaitlistAdditionalFields,
     selectedJurisdictionId
   )
-  // TODO: Change may be done in this file
+
   const enableWaitlistLottery = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableWaitlistLottery,
     selectedJurisdictionId
@@ -91,12 +91,11 @@ const RankingsAndResults = ({
     selectedJurisdictionId
   )
 
-  // This is the boolean I need to change showLotteryFields
-  // It needs to be set when waitlist open is true
+  const showWaitlistOpenSection = waitlistOpen && !enableWaitlistLottery
+
   // Ensure the lottery fields only show when it's "available units" listing
   const showLotteryFields =
-    (availabilityQuestion !== "openWaitlist" || enableUnitGroups) &&
-    reviewOrder === "reviewOrderLottery"
+    (showWaitlistOpenSection || enableUnitGroups) && reviewOrder === "reviewOrderLottery"
 
   const yesNoRadioOptions = [
     {
@@ -115,7 +114,7 @@ const RankingsAndResults = ({
         heading={t("listings.sections.rankingsResultsTitle")}
         subheading={t("listings.sections.rankingsResultsSubtitle")}
       >
-        {(availabilityQuestion !== "openWaitlist" || enableUnitGroups) && (
+        {(showWaitlistOpenSection || enableUnitGroups) && (
           <Grid.Row columns={2} className={"flex items-center"}>
             <Grid.Cell>
               <FieldGroup
