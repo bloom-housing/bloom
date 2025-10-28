@@ -94,7 +94,7 @@ const RankingsAndResults = ({
 
   // Ensure the lottery fields only show when it's "available units" listing
   const showLotteryFields =
-    (availabilityQuestion !== "openWaitlist" || enableUnitGroups || enableWaitlistLottery) &&
+    (availabilityQuestion !== "openWaitlist" || enableUnitGroups) &&
     reviewOrder === "reviewOrderLottery"
 
   const yesNoRadioOptions = [
