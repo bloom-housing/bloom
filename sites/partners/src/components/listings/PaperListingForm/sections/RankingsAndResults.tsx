@@ -91,6 +91,8 @@ const RankingsAndResults = ({
     selectedJurisdictionId
   )
 
+  // This is the boolean I need to change showLotteryFields
+  // It needs to be set when waitlist open is true
   // Ensure the lottery fields only show when it's "available units" listing
   const showLotteryFields =
     (availabilityQuestion !== "openWaitlist" || enableUnitGroups) &&
