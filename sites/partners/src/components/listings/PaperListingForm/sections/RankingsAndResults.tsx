@@ -76,6 +76,12 @@ const RankingsAndResults = ({
     selectedJurisdictionId
   )
   // TODO: Change may be done in this file
+
+  const enableWaitlistLottery = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableWaitlistLottery,
+    selectedJurisdictionId
+  )
+
   const enableUnitGroups = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableUnitGroups,
     selectedJurisdictionId
@@ -88,7 +94,7 @@ const RankingsAndResults = ({
 
   // Ensure the lottery fields only show when it's "available units" listing
   const showLotteryFields =
-    (availabilityQuestion !== "openWaitlist" || enableUnitGroups) &&
+    (availabilityQuestion !== "openWaitlist" || enableUnitGroups || enableWaitlistLottery) &&
     reviewOrder === "reviewOrderLottery"
 
   const yesNoRadioOptions = [
