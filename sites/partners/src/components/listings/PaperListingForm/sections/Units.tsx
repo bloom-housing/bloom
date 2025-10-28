@@ -319,8 +319,6 @@ const FormUnits = ({
     },
   ]
 
-  // this is the comp line 387
-
   return (
     <>
       <hr className="spacer-section-above spacer-section" />
