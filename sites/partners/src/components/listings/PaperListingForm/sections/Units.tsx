@@ -319,6 +319,8 @@ const FormUnits = ({
     },
   ]
 
+  // this is the comp line 387
+
   return (
     <>
       <hr className="spacer-section-above spacer-section" />
@@ -393,6 +395,7 @@ const FormUnits = ({
             </Grid.Cell>
           </Grid.Row>
         )}
+
         <SectionWithGrid.HeadingRow>{t("listings.units")}</SectionWithGrid.HeadingRow>
 
         <Grid.Row className={"grid-cols-1 gap-0"}>
