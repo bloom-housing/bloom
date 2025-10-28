@@ -76,7 +76,6 @@ const RankingsAndResults = ({
     selectedJurisdictionId
   )
   // TODO: Change may be done in this file
-
   const enableWaitlistLottery = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableWaitlistLottery,
     selectedJurisdictionId
