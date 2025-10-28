@@ -87,7 +87,7 @@ describe("applications pages", () => {
   describe("back button to summary step", () => {
     it("no listing available should redirect to listings page", async () => {
       const { pushMock } = mockNextRouter()
-      const conductor = new ApplicationConductor({}, null)
+      const conductor = new ApplicationConductor(mockApplication, null)
       render(
         <AppSubmissionContext.Provider
           value={{
@@ -113,7 +113,7 @@ describe("applications pages", () => {
 
     it("listing available should not redirect to listings page", async () => {
       const { pushMock } = mockNextRouter()
-      const conductor = new ApplicationConductor({}, {})
+      const conductor = new ApplicationConductor(mockApplication, {})
       render(
         <AppSubmissionContext.Provider
           value={{
