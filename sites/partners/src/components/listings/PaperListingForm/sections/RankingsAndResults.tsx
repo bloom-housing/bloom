@@ -35,7 +35,7 @@ const RankingsAndResults = ({
   whatToExpectAdditionalTextEditor,
 }: RankingsAndResultsProps) => {
   const formMethods = useFormContext()
-  const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
+  const { doJurisdictionsHaveFeatureFlagOn, profile } = useContext(AuthContext)
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, setValue, watch, control, errors } = formMethods
@@ -90,8 +90,11 @@ const RankingsAndResults = ({
     FeatureFlagEnum.enableWhatToExpectAdditionalField,
     selectedJurisdictionId
   )
-
-  const showWaitlistOpenSection = waitlistOpen && enableWaitlistLottery
+  const waitListLotterUser =
+    profile.userRoles.isAdmin ||
+    profile.userRoles.isJurisdictionalAdmin ||
+    profile.userRoles.isLimitedJurisdictionalAdmin
+  const showWaitlistOpenSection = waitlistOpen && enableWaitlistLottery && waitListLotterUser
 
   // Ensure the lottery fields only show when it's "available units" listing
   const showLotteryFields =
