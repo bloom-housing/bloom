@@ -1,0 +1,25 @@
+# Keep up to date with Active LTS: https://nodejs.org/en/about/previous-releases
+FROM node:22@sha256:23c24e85395992be118734a39903e08c8f7d1abc73978c46b6bda90060091a49
+
+# Create a non-root user to build and run (principle of least privilege).
+WORKDIR /app
+RUN groupadd --gid 2002 next && useradd --gid 2002 --uid 2002 --home /app next
+RUN chown 2002:2002 /app
+USER 2002:2002
+
+# Copy package.json and yarn.lock in a separate layer from the source code and install the
+# dependencies. This allows docker to cache this step if dependencies haven't changed from the last
+# docker build, making build times a lot faster.
+COPY --chown=2002:2002 package.json yarn.lock .
+COPY --chown=2002:2002 shared-helpers ./shared-helpers
+COPY --chown=2002:2002 sites/public/package.json ./sites/public/
+WORKDIR /app/sites/public
+RUN yarn install --frozen-lockfile
+
+# Copy in the source code. `next build` needs the tsconfig.json at repo root for type
+# checking.
+COPY --chown=2002:2002 tsconfig.json /app/tsconfig.json
+COPY --chown=2002:2002 sites/public .
+
+ENV NEXT_TELEMETRY_DISABLED=1
+CMD [ "/bin/bash", "-c", "yarn build && yarn start" ]

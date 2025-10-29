@@ -1,0 +1,21 @@
+# Keep up to date with Active LTS: https://nodejs.org/en/about/previous-releases
+FROM node:22 AS build
+
+# Create a non-root user to build (priciple of least priviledge).
+WORKDIR /dbseed
+RUN groupadd --gid 2002 dbseed && useradd --gid 2002 --uid 2002 --home /dbseed dbseed
+RUN chown 2002:2002 /dbseed
+USER 2002:2002
+
+# Copy package.json and yarn.lock in a separate layer from the source code and install the
+# dependencies. This allows docker to cache this step if package.json and yarn.lock haven't changed
+# from the last docker build, making build times a lot faster.
+WORKDIR /build
+COPY --chown=2002:2002 package.json yarn.lock ./
+RUN yarn install --frozen-lockfile
+
+# Copy the source code and generate the prisma client.
+COPY --chown=2002:2002 . .
+RUN yarn prisma generate
+
+CMD [ "yarn", "db:seed:staging" ]
