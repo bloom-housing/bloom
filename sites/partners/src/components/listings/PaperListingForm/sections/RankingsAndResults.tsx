@@ -91,7 +91,7 @@ const RankingsAndResults = ({
     selectedJurisdictionId
   )
   const waitListLotteryUser =
-    profile?.userRoles?.isAdmin ||
+    isAdmin ||
     profile?.userRoles?.isJurisdictionalAdmin ||
     profile?.userRoles?.isLimitedJurisdictionalAdmin
   const showFSFCLotterySection =
