@@ -91,9 +91,9 @@ const RankingsAndResults = ({
     selectedJurisdictionId
   )
   const waitListLotterUser =
-    profile.userRoles.isAdmin ||
-    profile.userRoles.isJurisdictionalAdmin ||
-    profile.userRoles.isLimitedJurisdictionalAdmin
+    profile?.userRoles?.isAdmin ||
+    profile?.userRoles?.isJurisdictionalAdmin ||
+    profile?.userRoles?.isLimitedJurisdictionalAdmin
   const showWaitlistOpenSection = waitlistOpen && enableWaitlistLottery && waitListLotterUser
 
   // Ensure the lottery fields only show when it's "available units" listing
