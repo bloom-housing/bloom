@@ -393,7 +393,6 @@ const FormUnits = ({
             </Grid.Cell>
           </Grid.Row>
         )}
-
         <SectionWithGrid.HeadingRow>{t("listings.units")}</SectionWithGrid.HeadingRow>
 
         <Grid.Row className={"grid-cols-1 gap-0"}>
