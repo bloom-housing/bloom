@@ -94,8 +94,7 @@ const RankingsAndResults = ({
     isAdmin ||
     profile?.userRoles?.isJurisdictionalAdmin ||
     profile?.userRoles?.isLimitedJurisdictionalAdmin
-  const showFSFCLotterySection =
-    availabilityQuestion === "openWaitlist" && enableWaitlistLottery && waitListLotteryUser
+  const showFSFCLotterySection = waitlistOpen && enableWaitlistLottery && waitListLotteryUser
 
   // Ensure the lottery fields only show when it's "available units" listing
   const showLotteryFields =
