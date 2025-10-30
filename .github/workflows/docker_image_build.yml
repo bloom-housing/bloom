@@ -11,16 +11,29 @@ permissions:
   packages: write
 
 env:
-  # Connects the image to the repository: https://docs.github.com/en/packages/learn-github-packages/connecting-a-repository-to-a-package.
-  label: org.opencontainers.image.source=https://github.com/${{ github.repository }}
   image_base: ghcr.io/${{ github.repository }}
-  gitsha_tag: gitsha-${{ github.sha }}
 
 jobs:
-  build-images:
+  build-image:
+    # Builds each image in a separate job in parallel.
+    strategy:
+      matrix:
+        # The docker/build-push-action uses the git repo as the docker build context instead of
+        # cloning the repo to the action runner disk and using the disk context. For the API image
+        # we need to set the context to just the api/ directory which the '{{defaultContext}}:api'
+        # syntax does: https://github.com/docker/build-push-action?tab=readme-ov-file#git-context.
+        include:
+          - container: api
+            docker_context: "{{defaultContext}}:api"
+            dockerfile: Dockerfile
+          - container: partners
+            docker_context: "{{defaultContext}}"
+            dockerfile: Dockerfile.sites.partners
+          - container: public
+            docker_context: "{{defaultContext}}"
+            dockerfile: Dockerfile.sites.public
     runs-on: ubuntu-latest
     steps:
-      # Required to push to ghcr.io.
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v3.6.0
         with:
@@ -32,39 +45,16 @@ jobs:
       - name: Setup Docker Buildx
         uses: docker/setup-buildx-action@v3.11.1
 
-      - name: "API: Build and push image"
+      - name: "Build and push image"
         uses: docker/build-push-action@v6.18.0
         with:
           push: true
-          cache-to: type=registry,mode=max,ref=${{ env.image_base }}/api/container-layer-cache:latest
-          cache-from: type=registry,ref=${{ env.image_base }}/api/container-layer-cache:latest
-          context: "{{defaultContext}}:api"
-          file: Dockerfile
+          cache-to: type=registry,mode=max,ref=${{ env.image_base }}/${{ matrix.container }}/container-layer-cache:latest
+          cache-from: type=registry,ref=${{ env.image_base }}/${{ matrix.container }}/container-layer-cache:latest
+          context: ${{ matrix.docker_context }}
+          file: ${{ matrix.dockerfile }}
           tags: |
-            ${{ env.image_base }}/api:latest
-            ${{ env.image_base }}/api:${{ env.gitsha_tag }}
-          labels: ${{ env.label }}
-
-      - name: "Partners: Build and push image"
-        uses: docker/build-push-action@v6.18.0
-        with:
-          push: true
-          cache-to: type=registry,mode=max,ref=${{ env.image_base }}/partners/container-layer-cache:latest
-          cache-from: type=registry,ref=${{ env.image_base }}/partners/container-layer-cache:latest
-          file: Dockerfile.sites.partners
-          tags: |
-            ${{ env.image_base }}/partners:latest
-            ${{ env.image_base }}/partners:${{ env.gitsha_tag }}
-          labels: ${{ env.label }}
-
-      - name: "Public: Build and push image"
-        uses: docker/build-push-action@v6.18.0
-        with:
-          push: true
-          cache-to: type=registry,mode=max,ref=${{ env.image_base }}/public/container-layer-cache:latest
-          cache-from: type=registry,ref=${{ env.image_base }}/public/container-layer-cache:latest
-          file: Dockerfile.sites.public
-          tags: |
-            ${{ env.image_base }}/public:latest
-            ${{ env.image_base }}/public:${{ env.gitsha_tag }}
-          labels: ${{ env.label }}
+            ${{ env.image_base }}/${{ matrix.container }}:latest
+            ${{ env.image_base }}/${{ matrix.container }}:gitsha-${{ github.sha }}
+          # Connects the image to the repository: https://docs.github.com/en/packages/learn-github-packages/connecting-a-repository-to-a-package.
+          labels: org.opencontainers.image.source=https://github.com/${{ github.repository }}
