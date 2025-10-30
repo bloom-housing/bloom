@@ -11,10 +11,11 @@ permissions:
   packages: write
 
 env:
-  image_base: ghcr.io/${{ github.repository_owner }}
-  gitsha_tag: gitsha-${{ github.sha }}
   # Connects the image to the repository: https://docs.github.com/en/packages/learn-github-packages/connecting-a-repository-to-a-package.
   label: org.opencontainers.image.source=https://github.com/${{ github.repository }}
+  image_base: ghcr.io/${{ github.repository }}
+  gitsha_tag: gitsha-${{ github.sha }}
+  cache_tag: image_layer_cache
 
 jobs:
   build-images:
@@ -36,35 +37,35 @@ jobs:
         uses: docker/build-push-action@v6.18.0
         with:
           push: true
-          cache-to: type=registry,mode=max,ref=${{ env.image_base }}/api:layercachelatest
-          cache-from: type=registry,ref=${{ env.image_base }}/bloom-build-cache/api:latest
+          cache-to: type=registry,mode=max,ref=${{ env.image_base }}/api:${{ env.cache_tag}
+          cache-from: type=registry,ref=${{ env.image_base }}/api:${{ env.cache_tag }}
           context: "{{defaultContext}}:api"
           file: Dockerfile
           tags: |
-            ${{ env.image_base }}/bloom/api:latest
-            ${{ env.image_base }}/bloom/api:${{ env.gitsha_tag }}
+            ${{ env.image_base }}/api:latest
+            ${{ env.image_base }}/api:${{ env.gitsha_tag }}
           labels: ${{ env.label }}
 
       - name: "Partners: Build and push image"
         uses: docker/build-push-action@v6.18.0
         with:
           push: true
-          cache-to: type=registry,mode=max,ref=${{ env.image_base }}/partners:layercachelatest
-          cache-from: type=registry,ref=${{ env.image_base }}/bloom-build-cache/partners:latest
+          cache-to: type=registry,mode=max,ref=${{ env.image_base }}/partners:${{ env.cache_tag}
+          cache-from: type=registry,ref=${{ env.image_base }}/partners:${{ env.cache_tag }}
           file: Dockerfile.sites.partners
           tags: |
-            ${{ env.image_base }}/bloom/partners:latest
-            ${{ env.image_base }}/bloom/partners:${{ env.gitsha_tag }}
+            ${{ env.image_base }}/partners:latest
+            ${{ env.image_base }}/partners:${{ env.gitsha_tag }}
           labels: ${{ env.label }}
 
       - name: "Public: Build and push image"
         uses: docker/build-push-action@v6.18.0
         with:
           push: true
-          cache-to: type=registry,mode=max,ref=${{ env.image_base }}/public:layercachelatest
-          cache-from: type=registry,ref=${{ env.image_base }}/bloom-build-cache/public:latest
+          cache-to: type=registry,mode=max,ref=${{ env.image_base }}/public:${{ env.cache_tag}
+          cache-from: type=registry,ref=${{ env.image_base }}/public:${{ env.cache_tag }}
           file: Dockerfile.sites.public
           tags: |
-            ${{ env.image_base }}/bloom/public:latest
-            ${{ env.image_base }}/bloom/public:${{ env.gitsha_tag }}
+            ${{ env.image_base }}/public:latest
+            ${{ env.image_base }}/public:${{ env.gitsha_tag }}
           labels: ${{ env.label }}
