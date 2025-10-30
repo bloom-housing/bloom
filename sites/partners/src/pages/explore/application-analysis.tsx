@@ -9,7 +9,11 @@ import DemographicsSection from "../../components/explore/raceAndEthnicity"
 import PrimaryApplicantSection from "../../components/explore/applicantAndHouseholdData"
 import ReportSummary from "../../components/explore/ReportSummary"
 import { FilteringSlideOut } from "../../components/explore/FilteringSlideOut"
-import { getReportDataFastAPI, ApiFilters } from "../../lib/explore/data-explorer"
+import {
+  getReportDataFastAPI,
+  ApiFilters,
+  IncomeHouseholdSizeCrossTab,
+} from "../../lib/explore/data-explorer"
 import { FormValues } from "../../components/explore/filtering/mainForm"
 import { useRouter } from "next/router"
 import { ReportProducts } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -22,7 +26,7 @@ const ApplicationAnalysis = () => {
 
   const [isFilterPanelOpen, setIsFilterPanelOpen] = useState(false)
   const [chartData, setChartData] = useState<ReportProducts>({
-    incomeHouseholdSizeCrossTab: {},
+    incomeHouseholdSizeCrossTab: {} as IncomeHouseholdSizeCrossTab,
     raceFrequencies: [],
     ethnicityFrequencies: [],
     residentialLocationFrequencies: [],
@@ -154,7 +158,10 @@ const ApplicationAnalysis = () => {
           </div>
           <div className="">
             <HouseholdIncomeReport
-              chartData={{ incomeHouseholdSizeCrossTab: chartData.incomeHouseholdSizeCrossTab }}
+              chartData={{
+                incomeHouseholdSizeCrossTab:
+                  chartData.incomeHouseholdSizeCrossTab as IncomeHouseholdSizeCrossTab,
+              }}
             />
             <DemographicsSection
               chartData={{

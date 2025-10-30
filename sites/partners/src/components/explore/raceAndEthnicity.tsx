@@ -89,12 +89,14 @@ export default function DemographicsSection({ chartData }: DemographicsSectionPr
   const maxRace = Math.max(...raceFrequencies.map((d) => d.count))
   const raceChartData = raceFrequencies.map((d) => ({
     ...d,
+    percentage: d.percentage !== undefined ? d.percentage : 0,
     max: maxRace,
   }))
 
   const maxEthnicity = Math.max(...ethnicityFrequencies.map((d) => d.count))
   const ethnicityChartData = ethnicityFrequencies.map((d) => ({
     ...d,
+    percentage: d.percentage !== undefined ? d.percentage : 0,
     max: maxEthnicity,
   }))
 
