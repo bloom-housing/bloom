@@ -76,10 +76,10 @@ export default class AdditionalMetadataFormatter extends Formatter {
       this.data.listingAvailabilityQuestion === "openWaitlist" &&
       !this.metadata.enableUnitGroups
     ) {
-      // is here where I need to set up to use ?
-      // maybe checking for the feature flag here?
-      // to choose wether return ReviewOrderTypeEnum.waitlistLottery or ReviewOrderTypeEnum.waitlist
-      this.data.reviewOrderType = ReviewOrderTypeEnum.waitlist
+      this.data.reviewOrderType =
+        this.data.reviewOrderType === ReviewOrderTypeEnum.lottery
+          ? ReviewOrderTypeEnum.waitlistLottery
+          : ReviewOrderTypeEnum.waitlist
     }
 
     if (this.data.accessibilityFeatures) {
