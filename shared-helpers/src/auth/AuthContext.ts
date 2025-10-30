@@ -34,6 +34,7 @@ import {
   SuccessDTO,
   LotteryService,
   LanguagesEnum,
+  DataExplorerService,
   FeatureFlagsService,
 } from "../types/backend-swagger"
 import { getListingRedirectUrl } from "../utilities/getListingRedirectUrl"
@@ -42,6 +43,7 @@ import { useRouter } from "next/router"
 type ContextProps = {
   amiChartsService: AmiChartsService
   applicationsService: ApplicationsService
+  dataExplorerService: DataExplorerService
   applicationFlaggedSetsService: ApplicationFlaggedSetsService
   listingsService: ListingsService
   jurisdictionsService: JurisdictionsService
@@ -221,6 +223,7 @@ export const AuthProvider: FunctionComponent<React.PropsWithChildren> = ({ child
   const contextValues: ContextProps = {
     amiChartsService: new AmiChartsService(),
     applicationsService: new ApplicationsService(),
+    dataExplorerService: new DataExplorerService(),
     applicationFlaggedSetsService: new ApplicationFlaggedSetsService(),
     listingsService: new ListingsService(),
     jurisdictionsService: new JurisdictionsService(),
