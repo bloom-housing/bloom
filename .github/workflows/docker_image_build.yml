@@ -10,8 +10,14 @@ permissions:
   contents: read
   packages: write
 
+env:
+  image_base: ghcr.io/${{ github.repository_owner }}
+  gitsha_tag: gitsha-${{ github.sha }}
+  # Connects the image to the repository: https://docs.github.com/en/packages/learn-github-packages/connecting-a-repository-to-a-package.
+  label: org.opencontainers.image.source=https://github.com/${{ github.repository }}
+
 jobs:
-  build-image:
+  build-images:
     runs-on: ubuntu-latest
     steps:
       - name: Log in to GitHub Container Registry
@@ -27,15 +33,12 @@ jobs:
       - name: Build and push api image
         uses: docker/build-push-action@v6.18.0
         with:
-          labels: org.opencontainers.image.source=https://github.com/${{ github.repository }}
           push: true
           cache-from: type=gha
           cache-to: type=gha,mode=max
           context: "{{defaultContext}}:api"
           file: Dockerfile
-          # ghcr.io/bloom-housing/bloom/api
-          # ghcr.io/bloom-housing/bloom/public
-          # ghcr.io/bloom-housing/bloom/partners
           tags: |
-            bloom/api:latest
-            bloom/api:gitsha-${{ github.sha }}
+            ${{ env.image_base }}/bloom/api:latest
+            ${{ env.image_base }}/bloom/api:${{ env.gitsha_tag }}
+          labels: ${{ env.label }}
