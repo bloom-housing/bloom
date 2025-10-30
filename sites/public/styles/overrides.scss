@@ -1,4 +1,22 @@
 :root {
+  @import url("https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap");
+
+  // Seeds token overrides
+  --seeds-font-alt-sans: "Source Sans 3", "Open Sans", "Helvetica", "Arial", "Verdana", "sans-serif";
+  --seeds-font-sans: "Source Sans 3", "Open Sans", "Helvetica", "Arial", "Verdana", "sans-serif";
+  --seeds-font-serif: "Source Sans 3", "Droid Serif", "Georgia", "Times", "serif";
+  --seeds-color-primary-darker: #173b64;
+  --seeds-color-primary-dark: #215792;
+  --seeds-color-primary: #2a70bc;
+  --seeds-color-primary-light: #c0d8f1;
+  --seeds-color-primary-lighter: #eaf2fa;
+  --seeds-color-secondary-darker: #10193d;
+  --seeds-color-secondary-dark: #1a2965;
+  --seeds-color-secondary: #253a8e;
+  --seeds-color-secondary-light: #c2cbef;
+  --seeds-color-secondary-lighter: #ebeefa;
+  --seeds-bg-color-surface-primary-inverse: var(--seeds-color-secondary-dark);
+
   .seeds-button {
     -webkit-font-smoothing: antialiased; // restore macOS styling that had been unset
   }

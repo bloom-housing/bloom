@@ -10,6 +10,9 @@
   "listing.tags.mobilityUnits": "Mobility units",
   "listing.tags.visionAndHearingUnits": "Hearing & vision units",
   "listing.tags.visionUnits": "Vision units",
+  "listings.showAll": "Show all listings",
+  "nav.siteTitle": "Affordable & Accessible Housing Registry",
+  "region.name": "Los Angeles",
   "resources.contactDescription": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
   "resources.contactEmail": "bloomington@housing.org",
   "resources.contactInfo": "Bloomington's Housing & Community Development Department",
@@ -18,7 +21,6 @@
   "resources.immediateHousingSubtitle": "If you're fleeing domestic violence, sexual assault or human trafficking and in immediate danger, call 911.",
   "resources.immediateHousingTitle": "Immediate housing assistance",
   "resources.mockCardDescription": "Lorem ipsum dolor sit amet consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-  "listings.showAll": "Show all listings",
   "resources.mockCardTitle": "Lorem Ipsum",
   "t.formSubmitted": "Submitting form, wait"
 }

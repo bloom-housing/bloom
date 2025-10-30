@@ -12,7 +12,7 @@ const CustomSiteFooter = () => {
           <div className={styles["footer"]}>
             <div className={styles["icon-container"]}>
               <a href={"/"} className={styles["jurisdiction-icon"]}>
-                <img src="/images/default-housing-logo.svg" alt={"Jurisdiction Logo"} />
+                <img src="/images/la-logo-grayscale.svg" alt={"Jurisdiction Logo"} />
               </a>
             </div>
             <div className={styles["text-container"]}>
