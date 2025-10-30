@@ -1,0 +1,29 @@
+name: Docker Image Build
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  build-image:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build and push api image
+        uses: docker/build-push-action@v6.18.0
+        with:
+          context: ./api
+          file: Dockerfile
+          labels: org.opencontainers.image.source=https://github.com/${{GITHUB_REPOSITORY}}
+          push: true
+          # ghcr.io/bloom-housing/bloom/api
+          # ghcr.io/bloom-housing/bloom/public
+          # ghcr.io/bloom-housing/bloom/partners
+          tags: |
+            bloom/api:latest
+            bloom/api:${{GITHUB_SHA}}
