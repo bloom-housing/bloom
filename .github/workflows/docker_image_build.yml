@@ -37,7 +37,7 @@ jobs:
         uses: docker/build-push-action@v6.18.0
         with:
           push: true
-          cache-to: type=registry,mode=max,ref=${{ env.image_base }}/api:${{ env.cache_tag}
+          cache-to: type=registry,mode=max,ref=${{ env.image_base }}/api:${{ env.cache_tag }}
           cache-from: type=registry,ref=${{ env.image_base }}/api:${{ env.cache_tag }}
           context: "{{defaultContext}}:api"
           file: Dockerfile
@@ -50,7 +50,7 @@ jobs:
         uses: docker/build-push-action@v6.18.0
         with:
           push: true
-          cache-to: type=registry,mode=max,ref=${{ env.image_base }}/partners:${{ env.cache_tag}
+          cache-to: type=registry,mode=max,ref=${{ env.image_base }}/partners:${{ env.cache_tag }}
           cache-from: type=registry,ref=${{ env.image_base }}/partners:${{ env.cache_tag }}
           file: Dockerfile.sites.partners
           tags: |
@@ -62,7 +62,7 @@ jobs:
         uses: docker/build-push-action@v6.18.0
         with:
           push: true
-          cache-to: type=registry,mode=max,ref=${{ env.image_base }}/public:${{ env.cache_tag}
+          cache-to: type=registry,mode=max,ref=${{ env.image_base }}/public:${{ env.cache_tag }}
           cache-from: type=registry,ref=${{ env.image_base }}/public:${{ env.cache_tag }}
           file: Dockerfile.sites.public
           tags: |
