@@ -30,7 +30,7 @@ jobs:
       - name: Setup Docker Buildx
         uses: docker/setup-buildx-action@v3.11.1
 
-      - name: Build and push api image
+      - name: API: Build and push image
         uses: docker/build-push-action@v6.18.0
         with:
           push: true
@@ -41,4 +41,28 @@ jobs:
           tags: |
             ${{ env.image_base }}/bloom/api:latest
             ${{ env.image_base }}/bloom/api:${{ env.gitsha_tag }}
+          labels: ${{ env.label }}
+
+      - name: Partners: Build and push image
+        uses: docker/build-push-action@v6.18.0
+        with:
+          push: true
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          file: Dockerfile.sites.partners
+          tags: |
+            ${{ env.image_base }}/bloom/partners:latest
+            ${{ env.image_base }}/bloom/partners:${{ env.gitsha_tag }}
+          labels: ${{ env.label }}
+
+      - name: Public: Build and push image
+        uses: docker/build-push-action@v6.18.0
+        with:
+          push: true
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          file: Dockerfile.sites.public
+          tags: |
+            ${{ env.image_base }}/bloom/public:latest
+            ${{ env.image_base }}/bloom/public:${{ env.gitsha_tag }}
           labels: ${{ env.label }}
