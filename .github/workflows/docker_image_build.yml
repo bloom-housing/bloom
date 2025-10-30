@@ -15,7 +15,6 @@ env:
   label: org.opencontainers.image.source=https://github.com/${{ github.repository }}
   image_base: ghcr.io/${{ github.repository }}
   gitsha_tag: gitsha-${{ github.sha }}
-  cache_tag: image_layer_cache
 
 jobs:
   build-images:
@@ -37,8 +36,8 @@ jobs:
         uses: docker/build-push-action@v6.18.0
         with:
           push: true
-          cache-to: type=registry,mode=max,ref=${{ env.image_base }}/api:${{ env.cache_tag }}
-          cache-from: type=registry,ref=${{ env.image_base }}/api:${{ env.cache_tag }}
+          cache-to: type=registry,mode=max,ref=${{ env.image_base }}/api/container-layer-cache:latest
+          cache-from: type=registry,ref=${{ env.image_base }}/api/container-layer-cache:latest
           context: "{{defaultContext}}:api"
           file: Dockerfile
           tags: |
@@ -50,8 +49,8 @@ jobs:
         uses: docker/build-push-action@v6.18.0
         with:
           push: true
-          cache-to: type=registry,mode=max,ref=${{ env.image_base }}/partners:${{ env.cache_tag }}
-          cache-from: type=registry,ref=${{ env.image_base }}/partners:${{ env.cache_tag }}
+          cache-to: type=registry,mode=max,ref=${{ env.image_base }}/partners/container-layer-cache:latest
+          cache-from: type=registry,ref=${{ env.image_base }}/partners/container-layer-cache:latest
           file: Dockerfile.sites.partners
           tags: |
             ${{ env.image_base }}/partners:latest
@@ -62,8 +61,8 @@ jobs:
         uses: docker/build-push-action@v6.18.0
         with:
           push: true
-          cache-to: type=registry,mode=max,ref=${{ env.image_base }}/public:${{ env.cache_tag }}
-          cache-from: type=registry,ref=${{ env.image_base }}/public:${{ env.cache_tag }}
+          cache-to: type=registry,mode=max,ref=${{ env.image_base }}/public/container-layer-cache:latest
+          cache-from: type=registry,ref=${{ env.image_base }}/public/container-layer-cache:latest
           file: Dockerfile.sites.public
           tags: |
             ${{ env.image_base }}/public:latest
