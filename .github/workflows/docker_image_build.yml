@@ -19,11 +19,11 @@ jobs:
         with:
           context: ./api
           file: Dockerfile
-          labels: org.opencontainers.image.source=https://github.com/${{GITHUB_REPOSITORY}}
+          labels: org.opencontainers.image.source=https://github.com/${{ github.repository }}
           push: true
           # ghcr.io/bloom-housing/bloom/api
           # ghcr.io/bloom-housing/bloom/public
           # ghcr.io/bloom-housing/bloom/partners
           tags: |
             bloom/api:latest
-            bloom/api:${{GITHUB_SHA}}
+            bloom/api:${{ github.sha }}
