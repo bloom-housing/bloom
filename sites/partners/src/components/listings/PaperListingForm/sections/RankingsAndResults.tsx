@@ -138,7 +138,9 @@ const RankingsAndResults = ({
                     label: t("listings.lotteryTitle"),
                     value: "reviewOrderLottery",
                     id: "reviewOrderLottery",
-                    defaultChecked: listing?.reviewOrderType === ReviewOrderTypeEnum.lottery,
+                    defaultChecked:
+                      listing?.reviewOrderType === ReviewOrderTypeEnum.lottery ||
+                      listing?.reviewOrderType === ReviewOrderTypeEnum.waitlistLottery,
                   },
                 ]}
               />
