@@ -36,7 +36,7 @@ jobs:
         uses: docker/build-push-action@v6.18.0
         with:
           push: true
-          cache-to: type=registry,mode=max,ref=${{ env.image_base }}/bloom-build-cache/api:latest
+          cache-to: type=registry,mode=max,ref=${{ env.image_base }}/api:layercachelatest
           cache-from: type=registry,ref=${{ env.image_base }}/bloom-build-cache/api:latest
           context: "{{defaultContext}}:api"
           file: Dockerfile
@@ -49,7 +49,7 @@ jobs:
         uses: docker/build-push-action@v6.18.0
         with:
           push: true
-          cache-to: type=registry,mode=max,ref=${{ env.image_base }}/bloom-build-cache/partners:latest
+          cache-to: type=registry,mode=max,ref=${{ env.image_base }}/partners:layercachelatest
           cache-from: type=registry,ref=${{ env.image_base }}/bloom-build-cache/partners:latest
           file: Dockerfile.sites.partners
           tags: |
@@ -61,7 +61,7 @@ jobs:
         uses: docker/build-push-action@v6.18.0
         with:
           push: true
-          cache-to: type=registry,mode=max,ref=${{ env.image_base }}/bloom-build-cache/public:latest
+          cache-to: type=registry,mode=max,ref=${{ env.image_base }}/public:layercachelatest
           cache-from: type=registry,ref=${{ env.image_base }}/bloom-build-cache/public:latest
           file: Dockerfile.sites.public
           tags: |
