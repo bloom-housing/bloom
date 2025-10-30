@@ -36,8 +36,8 @@ jobs:
         uses: docker/build-push-action@v6.18.0
         with:
           push: true
-          cache-to: type=registry,mode=max,ref=${{ image_base }}/bloom-build-cache/api:latest
-          cache-from: type=registry,ref=${{ image_base }}/bloom-build-cache/api:latest
+          cache-to: type=registry,mode=max,ref=${{ env.image_base }}/bloom-build-cache/api:latest
+          cache-from: type=registry,ref=${{ env.image_base }}/bloom-build-cache/api:latest
           context: "{{defaultContext}}:api"
           file: Dockerfile
           tags: |
@@ -49,8 +49,8 @@ jobs:
         uses: docker/build-push-action@v6.18.0
         with:
           push: true
-          cache-to: type=registry,mode=max,ref=${{ image_base }}/bloom-build-cache/partners:latest
-          cache-from: type=registry,ref=${{ image_base }}/bloom-build-cache/partners:latest
+          cache-to: type=registry,mode=max,ref=${{ env.image_base }}/bloom-build-cache/partners:latest
+          cache-from: type=registry,ref=${{ env.image_base }}/bloom-build-cache/partners:latest
           file: Dockerfile.sites.partners
           tags: |
             ${{ env.image_base }}/bloom/partners:latest
@@ -61,8 +61,8 @@ jobs:
         uses: docker/build-push-action@v6.18.0
         with:
           push: true
-          cache-to: type=registry,mode=max,ref=${{ image_base }}/bloom-build-cache/public:latest
-          cache-from: type=registry,ref=${{ image_base }}/bloom-build-cache/public:latest
+          cache-to: type=registry,mode=max,ref=${{ env.image_base }}/bloom-build-cache/public:latest
+          cache-from: type=registry,ref=${{ env.image_base }}/bloom-build-cache/public:latest
           file: Dockerfile.sites.public
           tags: |
             ${{ env.image_base }}/bloom/public:latest
