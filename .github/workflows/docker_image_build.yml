@@ -17,7 +17,7 @@ jobs:
       - name: Build and push api image
         uses: docker/build-push-action@v6.18.0
         with:
-          context: ./api
+          context: "{{defaultContext}}:api"
           file: Dockerfile
           labels: org.opencontainers.image.source=https://github.com/${{ github.repository }}
           push: true
@@ -26,4 +26,4 @@ jobs:
           # ghcr.io/bloom-housing/bloom/partners
           tags: |
             bloom/api:latest
-            bloom/api:${{ github.sha }}
+            bloom/api:git-${{ github.sha }}
