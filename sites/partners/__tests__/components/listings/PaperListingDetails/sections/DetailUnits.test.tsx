@@ -17,7 +17,7 @@ function mockJurisdictionsHaveFeatureFlagOn(
   enableHomeType = true,
   enableSection8Question = true,
   enableUnitGroups = false,
-  enableWaitlistLottery = true
+  enableWaitlistLottery = false
 ) {
   switch (featureFlag) {
     case FeatureFlagEnum.enableHomeType:
@@ -37,13 +37,13 @@ describe("DetailUnits", () => {
       <AuthContext.Provider
         value={{
           doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
-            mockJurisdictionsHaveFeatureFlagOn(featureFlag, false),
+            mockJurisdictionsHaveFeatureFlagOn(featureFlag, false, false, false, true),
         }}
       >
         <ListingContext.Provider
           value={{
             ...listing,
-            reviewOrderType: ReviewOrderTypeEnum.waitlist,
+            reviewOrderType: ReviewOrderTypeEnum.waitlistLottery,
             units: [],
           }}
         >
