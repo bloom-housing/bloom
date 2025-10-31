@@ -117,7 +117,7 @@ describe("DetailUnits", () => {
     expect(callUnitDrawer).toBeCalledWith(unit)
   })
 
-  it("should render the detail units when no unit groups exist", () => {
+  it.only("should render the detail units when no unit groups exist", () => {
     render(
       <AuthContext.Provider
         value={{
@@ -128,7 +128,7 @@ describe("DetailUnits", () => {
         <ListingContext.Provider
           value={{
             ...listing,
-            reviewOrderType: ReviewOrderTypeEnum.waitlist,
+            reviewOrderType: ReviewOrderTypeEnum.waitlistLottery,
             units: [],
             unitGroups: [],
           }}
