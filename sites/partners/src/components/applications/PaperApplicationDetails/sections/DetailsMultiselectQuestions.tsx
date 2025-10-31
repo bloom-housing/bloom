@@ -59,7 +59,7 @@ const DetailsMultiselectQuestions = ({
       <Grid.Row columns={2}>
         {listingQuestions?.map((listingQuestion) => {
           return (
-            <Grid.Cell>
+            <Grid.Cell key={listingQuestion?.multiselectQuestions.text}>
               <FieldValue
                 key={listingQuestion?.multiselectQuestions.text}
                 label={listingQuestion?.multiselectQuestions.text}
