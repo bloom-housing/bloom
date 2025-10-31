@@ -17,7 +17,7 @@ export default class EventsFormatter extends Formatter {
         )
     )
     if (
-      this.data.listingAvailabilityQuestion !== "openWaitlist" &&
+      this.data.listingAvailabilityQuestion &&
       this.data.reviewOrderQuestion === "reviewOrderLottery" &&
       this.data.lotteryDate &&
       this.data.lotteryDate.day &&
