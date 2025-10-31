@@ -90,11 +90,8 @@ const RankingsAndResults = ({
     FeatureFlagEnum.enableWhatToExpectAdditionalField,
     selectedJurisdictionId
   )
-  const waitListLotteryUser =
-    isAdmin ||
-    profile?.userRoles?.isJurisdictionalAdmin ||
-    profile?.userRoles?.isLimitedJurisdictionalAdmin
-  const showFSFCLotterySection = waitlistOpen && enableWaitlistLottery && waitListLotteryUser
+
+  const showFSFCLotterySection = waitlistOpen && enableWaitlistLottery
 
   // Ensure the lottery fields only show when it's "available units" listing
   const showLotteryFields =
