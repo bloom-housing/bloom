@@ -117,7 +117,7 @@ describe("DetailUnits", () => {
     expect(callUnitDrawer).toBeCalledWith(unit)
   })
 
-  it.only("should render the detail units when no unit groups exist", () => {
+  it("should render the detail units when no unit groups exist", () => {
     render(
       <AuthContext.Provider
         value={{
