@@ -35,7 +35,7 @@ const RankingsAndResults = ({
   whatToExpectAdditionalTextEditor,
 }: RankingsAndResultsProps) => {
   const formMethods = useFormContext()
-  const { doJurisdictionsHaveFeatureFlagOn, profile } = useContext(AuthContext)
+  const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, setValue, watch, control, errors } = formMethods
