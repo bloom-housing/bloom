@@ -2,7 +2,7 @@ import React from "react"
 import { user } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import { ResetPassword } from "../../src/pages/reset-password"
 import { setupServer } from "msw/lib/node"
-import { render, mockNextRouter, screen, act, waitFor } from "../testUtils"
+import { render, mockNextRouter, screen, waitFor } from "../testUtils"
 import userEvent from "@testing-library/user-event"
 import { rest } from "msw"
 

@@ -63,6 +63,7 @@ export const stagingSeed = async (
         FeatureFlagEnum.enablePartnerSettings,
         FeatureFlagEnum.enableSection8Question,
         FeatureFlagEnum.enableSingleUseCode,
+        FeatureFlagEnum.enableSupportAdmin,
         FeatureFlagEnum.enableUtilitiesIncluded,
         FeatureFlagEnum.enableWaitlistLottery,
         FeatureFlagEnum.enableWhatToExpectAdditionalField,

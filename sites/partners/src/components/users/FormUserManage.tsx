@@ -70,7 +70,11 @@ const FormUserManage = ({
   }
   if (profile?.userRoles?.isAdmin) {
     possibleUserRoles.push(RoleOption.Administrator)
-    possibleUserRoles.push(RoleOption.AdminSupport)
+    // If any jurisdiction has enableSupportAdmin than admins can add an "Admin (support)" user
+    // This means that there can be a scenario where jurisdictions get access to this role when they don't have it enabled
+    if (doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableSupportAdmin)) {
+      possibleUserRoles.push(RoleOption.AdminSupport)
+    }
   }
 
   let defaultValues: FormUserManageValues = {}
