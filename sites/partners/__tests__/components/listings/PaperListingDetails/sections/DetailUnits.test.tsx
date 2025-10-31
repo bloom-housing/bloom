@@ -125,7 +125,7 @@ describe("DetailUnits", () => {
         <ListingContext.Provider
           value={{
             ...listing,
-            reviewOrderType: ReviewOrderTypeEnum.waitlist,
+            reviewOrderType: ReviewOrderTypeEnum.waitlistLottery,
             units: [],
             unitGroups: [],
           }}
