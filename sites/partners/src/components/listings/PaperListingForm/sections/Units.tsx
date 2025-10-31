@@ -379,14 +379,18 @@ const FormUnits = ({
                     value: "availableUnits",
                     id: "availableUnits",
                     dataTestId: "listingAvailability.availableUnits",
-                    defaultChecked: listing?.reviewOrderType !== ReviewOrderTypeEnum.waitlist,
+                    defaultChecked:
+                      listing?.reviewOrderType !== ReviewOrderTypeEnum.waitlist ||
+                      listing?.reviewOrderType !== ReviewOrderTypeEnum.waitlistLottery,
                   },
                   {
                     label: t("listings.waitlist.open"),
                     value: "openWaitlist",
                     id: "openWaitlist",
                     dataTestId: "listingAvailability.openWaitlist",
-                    defaultChecked: listing?.reviewOrderType === ReviewOrderTypeEnum.waitlist,
+                    defaultChecked:
+                      listing?.reviewOrderType === ReviewOrderTypeEnum.waitlist ||
+                      listing?.reviewOrderType === ReviewOrderTypeEnum.waitlistLottery,
                   },
                 ]}
               />

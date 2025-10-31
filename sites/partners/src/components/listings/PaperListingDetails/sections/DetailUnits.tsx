@@ -124,9 +124,15 @@ const DetailUnits = ({ setUnitDrawer }: DetailUnitsProps) => {
   )
 
   const listingAvailabilityText = useMemo(() => {
-    if (listing.reviewOrderType !== ReviewOrderTypeEnum.waitlist) {
+    if (
+      listing.reviewOrderType !== ReviewOrderTypeEnum.waitlist ||
+      ReviewOrderTypeEnum.waitlistLottery
+    ) {
       return t("listings.availableUnits")
-    } else if (listing.reviewOrderType === ReviewOrderTypeEnum.waitlist) {
+    } else if (
+      listing.reviewOrderType === ReviewOrderTypeEnum.waitlist ||
+      ReviewOrderTypeEnum.waitlistLottery
+    ) {
       return t("listings.waitlist.open")
     }
     return t("t.none")
