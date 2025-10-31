@@ -150,7 +150,7 @@ describe("Admin User Mangement Tests", () => {
         []
       )
     })
-    cy.getByTestId("jurisdictions").first().click()
+    cy.getByTestId("jurisdictions").eq(1).click()
     cy.getByTestId("listings_Bloomington").first().click({ force: true })
     cy.getByTestId("listings_Bloomington").last().click({ force: true })
     cy.getByID("invite-user").click()
