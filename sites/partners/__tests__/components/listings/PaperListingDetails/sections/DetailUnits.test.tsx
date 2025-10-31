@@ -17,7 +17,6 @@ function mockJurisdictionsHaveFeatureFlagOn(
   enableHomeType = true,
   enableSection8Question = true,
   enableUnitGroups = false,
-  enableWaitlistLottery = false
 ) {
   switch (featureFlag) {
     case FeatureFlagEnum.enableHomeType:
@@ -26,8 +25,6 @@ function mockJurisdictionsHaveFeatureFlagOn(
       return enableSection8Question
     case FeatureFlagEnum.enableUnitGroups:
       return enableUnitGroups
-    case FeatureFlagEnum.enableWaitlistLottery:
-      return enableWaitlistLottery
   }
 }
 
@@ -37,7 +34,7 @@ describe("DetailUnits", () => {
       <AuthContext.Provider
         value={{
           doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
-            mockJurisdictionsHaveFeatureFlagOn(featureFlag, false, false, false, true),
+            mockJurisdictionsHaveFeatureFlagOn(featureFlag, false, false),
         }}
       >
         <ListingContext.Provider
@@ -122,7 +119,7 @@ describe("DetailUnits", () => {
       <AuthContext.Provider
         value={{
           doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
-            mockJurisdictionsHaveFeatureFlagOn(featureFlag, false, true, false, true),
+            mockJurisdictionsHaveFeatureFlagOn(featureFlag, false, true, false),
         }}
       >
         <ListingContext.Provider
