@@ -424,6 +424,8 @@
   "application.start.whatToExpect.title": "這次申請預期事項。",
   "application.start.whatToExpect.waitlist.finePrint": "* 申请人申请的是开放的候补名单，而不是目前可用的公寓。\n* 请注意，每个家庭成员只能出现在每个列表的一个申请中。\n* 当有空置房屋时，物业经理将按照先到先得的原则联系符合条件的申请人。\n* 您提供的所有信息都将得到验证，并确认您的资格。\n* 如果您做出任何欺诈性陈述，您的申请可能会被删除。\n* 对于有住房偏好的物业，如果我们无法验证您所声称的住房偏好，您将不会获得该偏好，但不会受到其他处罚。",
   "application.start.whatToExpect.waitlist.steps": "1. 首先，我们会询问您和您计划一起生活的人的情况。\n2. 然后，我们会询问您的收入。\n3. 最后，我们会看看您是否有资格获得任何经济适用住房优惠（如适用）。",
+  "application.start.whatToExpect.waitlistLottery.finePrint": "* 申请人申请的是开放的候补名单，而不是目前可用的公寓。\n* 请注意，每个家庭成员只能出现在每个列表的一个申请中。\n* 當有空位時，房地產經紀人將按照抽籤順序聯繫申請人，直到填滿為止.\n* 您提供的所有信息都将得到验证，并确认您的资格。\n* 如果您做出任何欺诈性陈述，您的申请可能会被删除。\n* 对于有住房偏好的物业，如果我们无法验证您所声称的住房偏好，您将不会获得该偏好，但不会受到其他处罚。",
+  "application.start.whatToExpect.waitlistLottery.steps": "1. 首先，我们会询问您和您计划一起生活的人的情况。\n2. 然后，我们会询问您的收入。\n3. 最后，我们会看看您是否有资格获得任何经济适用住房优惠（如适用）。",
   "application.status": "狀態",
   "application.statuses.inProgress": "进行中",
   "application.statuses.neverSubmitted": "从未提交",
