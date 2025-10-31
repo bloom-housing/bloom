@@ -380,7 +380,7 @@ const FormUnits = ({
                     id: "availableUnits",
                     dataTestId: "listingAvailability.availableUnits",
                     defaultChecked:
-                      listing?.reviewOrderType !== ReviewOrderTypeEnum.waitlist ||
+                      listing?.reviewOrderType !== ReviewOrderTypeEnum.waitlist &&
                       listing?.reviewOrderType !== ReviewOrderTypeEnum.waitlistLottery,
                   },
                   {
