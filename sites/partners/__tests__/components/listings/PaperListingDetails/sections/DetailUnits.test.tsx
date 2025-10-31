@@ -34,7 +34,7 @@ describe("DetailUnits", () => {
       <AuthContext.Provider
         value={{
           doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
-            mockJurisdictionsHaveFeatureFlagOn(featureFlag, false, false),
+            mockJurisdictionsHaveFeatureFlagOn(featureFlag, false),
         }}
       >
         <ListingContext.Provider
