@@ -127,7 +127,7 @@ const DetailUnits = ({ setUnitDrawer }: DetailUnitsProps) => {
   const isWaitListLotteryListing = listing?.reviewOrderType === ReviewOrderTypeEnum.waitlistLottery
 
   const listingAvailabilityText = useMemo(() => {
-    if (!isWaitListListing || !isWaitListLotteryListing) {
+    if (!isWaitListListing && !isWaitListLotteryListing) {
       return t("listings.availableUnits")
     } else if (isWaitListListing || isWaitListLotteryListing) {
       return t("listings.waitlist.open")
