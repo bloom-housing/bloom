@@ -80,7 +80,7 @@ Cypress.Commands.add("signOut", () => {
 })
 
 Cypress.Commands.add("signOutApi", (fix = "user") => {
-  cy.fixture(fix).then((user) => {
+  cy.fixture(fix).then((_user) => {
     cy.request("GET", "/api/adapter/auth/logout").then((response) => {
       expect(response.status).eq(200)
     })

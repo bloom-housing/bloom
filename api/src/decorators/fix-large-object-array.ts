@@ -10,7 +10,6 @@ import { Transform } from 'class-transformer';
  * objects with key-pairs of indices and values. This can break data input at the controller level.
  * The following decorator restores that object to a standard array.
  * See: https://stackoverflow.com/a/75380449
- * 
  * @returns {PropertyDecorator}
  */
 export function FixLargeObjectArray(): PropertyDecorator {
