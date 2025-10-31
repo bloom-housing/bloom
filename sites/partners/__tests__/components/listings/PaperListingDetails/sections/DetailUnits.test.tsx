@@ -16,7 +16,7 @@ function mockJurisdictionsHaveFeatureFlagOn(
   featureFlag: string,
   enableHomeType = true,
   enableSection8Question = true,
-  enableUnitGroups = false,
+  enableUnitGroups = false
 ) {
   switch (featureFlag) {
     case FeatureFlagEnum.enableHomeType:
