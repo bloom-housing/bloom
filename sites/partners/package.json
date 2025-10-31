@@ -47,6 +47,7 @@
     "clone-deep": "^4.0.1",
     "dayjs": "^1.10.7",
     "dotenv": "^8.2.0",
+    "mapbox-gl": "^3.16.0",
     "markdown-to-jsx": "^7.7.16",
     "nanoid": "^3.1.12",
     "next": "^15.5.6",
