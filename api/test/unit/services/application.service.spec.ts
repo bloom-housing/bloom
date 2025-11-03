@@ -1498,9 +1498,16 @@ describe('Testing application service', () => {
       commonDigitalApplication: true,
     });
 
+    prisma.applications.updateMany = jest.fn().mockResolvedValue({});
     prisma.applications.create = jest.fn().mockResolvedValue({
       id: randomUUID(),
     });
+    prisma.$transaction = jest
+      .fn()
+      .mockResolvedValue([
+        prisma.applications.updateMany,
+        prisma.applications.create,
+      ]);
 
     const exampleAddress = addressFactory() as AddressCreate;
     const dto = mockCreateApplicationData(exampleAddress, new Date());
@@ -1530,9 +1537,18 @@ describe('Testing application service', () => {
       },
     });
 
+    expect(prisma.applications.updateMany).toHaveBeenCalledWith({
+      data: {
+        isNewest: false,
+      },
+      where: {
+        userId: 'requestingUser id',
+      },
+    });
     expect(prisma.applications.create).toHaveBeenCalledWith({
       include: { ...detailView },
       data: {
+        isNewest: true,
         contactPreferences: ['example contact preference'],
         status: ApplicationStatusEnum.submitted,
         submissionType: ApplicationSubmissionTypeEnum.electronical,
@@ -1811,9 +1827,16 @@ describe('Testing application service', () => {
       id: randomUUID(),
     });
 
-    prisma.applications.create = jest.fn().mockResolvedValue({
-      id: randomUUID(),
-    });
+    prisma.$transaction = jest.fn().mockResolvedValue([
+      // update previous applications
+      jest.fn().mockResolvedValue({
+        id: randomUUID(),
+      }),
+      // application create mock
+      jest.fn().mockResolvedValue({
+        id: randomUUID(),
+      }),
+    ]);
 
     prisma.jurisdictions.findFirst = jest
       .fn()
@@ -1848,6 +1871,7 @@ describe('Testing application service', () => {
         ...detailView,
       },
       data: {
+        isNewest: true,
         contactPreferences: ['example contact preference'],
         status: ApplicationStatusEnum.submitted,
         submissionType: ApplicationSubmissionTypeEnum.electronical,
