@@ -264,6 +264,25 @@ export const stagingSeed = async (
       requiredListingFields: ['name'],
     }),
   });
+  const angelopolisJurisdiction = await prismaClient.jurisdictions.create({
+    data: jurisdictionFactory('Angelopolis', {
+      featureFlags: [],
+      requiredListingFields: [
+        'listingsBuildingAddress',
+        'name',
+        'listingImages',
+        'leasingAgentEmail',
+        'leasingAgentName',
+        'leasingAgentPhone',
+        'jurisdictions',
+        'units',
+        'digitalApplication',
+        'paperApplication',
+        'referralOpportunity',
+        'rentalAssistance',
+      ],
+    }),
+  });
   // create super admin user
   await prismaClient.userAccounts.create({
     data: await userFactory({
@@ -275,6 +294,7 @@ export const stagingSeed = async (
         lakeviewJurisdiction.id,
         bridgeBayJurisdiction.id,
         nadaHill.id,
+        angelopolisJurisdiction.id,
       ],
       acceptedTerms: true,
       password: 'abcdef',
@@ -314,6 +334,7 @@ export const stagingSeed = async (
         lakeviewJurisdiction.id,
         bridgeBayJurisdiction.id,
         nadaHill.id,
+        angelopolisJurisdiction.id,
       ],
     }),
   });
@@ -390,6 +411,7 @@ export const stagingSeed = async (
         lakeviewJurisdiction.id,
         bridgeBayJurisdiction.id,
         nadaHill.id,
+        angelopolisJurisdiction.id,
       ],
       acceptedTerms: true,
     }),
