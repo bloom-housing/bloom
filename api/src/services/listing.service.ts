@@ -70,30 +70,47 @@ export type getListingsArgs = {
   where: Prisma.ListingsWhereInput;
 };
 
-export const views: Partial<Record<ListingViews, Prisma.ListingsInclude>> = {
+export const selectViews: Partial<Record<ListingViews, Prisma.ListingsSelect>> =
+  {
+    name: {
+      name: true,
+      id: true,
+      jurisdictions: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
+    },
+  };
+
+selectViews.address = {
+  name: true,
+  id: true,
+  listingsBuildingAddress: {
+    select: {
+      city: true,
+      county: true,
+      street: true,
+      street2: true,
+      zipCode: true,
+      state: true,
+      latitude: true,
+      longitude: true,
+    },
+  },
+};
+
+export const includeViews: Partial<
+  Record<ListingViews, Prisma.ListingsInclude>
+> = {
   fundamentals: {
     jurisdictions: true,
   },
 };
 
-views.name = {
-  Listings: {
-    select: {
-      name: true,
-      id: true,
-    },
-  },
-  jurisdictions: {
-    select: {
-      id: true,
-      name: true,
-    },
-  },
-};
-
-views.base = {
-  ...views.fundamentals,
-  requiredDocumentsList: true,
+includeViews.base = {
+  ...includeViews.fundamentals,
   listingsBuildingAddress: true,
   reservedCommunityTypes: true,
   listingImages: {
@@ -131,8 +148,8 @@ views.base = {
   },
 };
 
-views.full = {
-  ...views.base,
+includeViews.full = {
+  ...includeViews.base,
   applicationMethods: {
     include: {
       paperApplications: {
@@ -231,13 +248,24 @@ export class ListingService implements OnModuleInit {
       }
     }
 
-    const listingsRaw = await this.prisma.listings.findMany({
+    const query = {
       skip: calculateSkip(params.limit, page),
       take: calculateTake(params.limit),
       orderBy: buildOrderByForListings(params.orderBy, params.orderDir),
-      include: views[params.view ?? 'full'],
       where: whereClause,
-    });
+    };
+    const hasSelectView = selectViews[params.view];
+
+    // Prisma only allows either select or include so two separate
+    const listingsRaw = hasSelectView
+      ? await this.prisma.listings.findMany({
+          ...query,
+          select: selectViews[params.view],
+        })
+      : await this.prisma.listings.findMany({
+          ...query,
+          include: includeViews[params.view ?? 'full'],
+        });
 
     const listings = mapTo(Listing, listingsRaw);
 
@@ -1257,7 +1285,7 @@ export class ListingService implements OnModuleInit {
     const { requiredFields, ...listingData } = dto;
 
     const rawListing = await this.prisma.listings.create({
-      include: views.full,
+      include: includeViews.full,
       data: {
         ...listingData,
         displayWaitlistSize: dto.displayWaitlistSize ?? false,
@@ -1785,14 +1813,22 @@ export class ListingService implements OnModuleInit {
     a listing view can be provided which will add the joins to produce that view correctly
   */
   async findOrThrow(id: string, view?: ListingViews) {
-    const viewInclude = view ? views[view] : undefined;
+    const hasSelectView = view && selectViews[view];
+    const viewInclude = view ? includeViews[view] : undefined;
 
-    const listing = await this.prisma.listings.findUnique({
-      include: viewInclude,
-      where: {
-        id,
-      },
-    });
+    const listing = hasSelectView
+      ? await this.prisma.listings.findUnique({
+          select: selectViews[view],
+          where: {
+            id,
+          },
+        })
+      : await this.prisma.listings.findUnique({
+          include: viewInclude,
+          where: {
+            id,
+          },
+        });
 
     if (!listing) {
       throw new NotFoundException(
@@ -2446,7 +2482,7 @@ export class ListingService implements OnModuleInit {
             },
           },
         },
-        include: views.full,
+        include: includeViews.full,
         where: {
           id: incomingDto.id,
         },

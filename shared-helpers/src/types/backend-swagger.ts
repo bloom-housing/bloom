@@ -2477,7 +2477,7 @@ export class ScriptRunnerService {
     })
   }
   /**
-   * An example of how the script runner can work
+   * A script to migrate MSQ data and options to refactored schema
    */
   migrateMultiselectDataToRefactor(options: IRequestOptions = {}): Promise<SuccessDTO> {
     return new Promise((resolve, reject) => {
@@ -2493,7 +2493,7 @@ export class ScriptRunnerService {
     })
   }
   /**
-   * An example of how the script runner can work
+   * A script to migrate application MSQ selections to refactored schema
    */
   migrateMultiselectApplicationDataToRefactor(
     params: {
@@ -2508,6 +2508,38 @@ export class ScriptRunnerService {
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
 
       let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * A script that sets the initial values for expire_after on applications
+   */
+  setInitialExpireAfterValues(options: IRequestOptions = {}): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/scriptRunner/setInitialExpireAfterValues"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = null
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * A script that sets is_newest field on application if newest application for applicant
+   */
+  setIsNewestApplicationValues(options: IRequestOptions = {}): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/scriptRunner/setIsNewestApplicationValues"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = null
 
       configs.data = data
 
@@ -7291,6 +7323,7 @@ export enum EnumListingFilterParamsComparison {
   "NA" = "NA",
 }
 export enum ListingViews {
+  "address" = "address",
   "base" = "base",
   "csv" = "csv",
   "full" = "full",
@@ -7350,6 +7383,7 @@ export enum ReviewOrderTypeEnum {
   "lottery" = "lottery",
   "firstComeFirstServe" = "firstComeFirstServe",
   "waitlist" = "waitlist",
+  "waitlistLottery" = "waitlistLottery",
 }
 
 export enum LotteryStatusEnum {
@@ -7583,6 +7617,7 @@ export enum FeatureFlagEnum {
   "enableUnitGroups" = "enableUnitGroups",
   "enableUtilitiesIncluded" = "enableUtilitiesIncluded",
   "enableWaitlistAdditionalFields" = "enableWaitlistAdditionalFields",
+  "enableWaitlistLottery" = "enableWaitlistLottery",
   "enableWhatToExpectAdditionalField" = "enableWhatToExpectAdditionalField",
   "enableV2MSQ" = "enableV2MSQ",
   "example" = "example",
