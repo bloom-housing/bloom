@@ -409,6 +409,12 @@ describe("Create Account Page", () => {
       const createAccountButton = screen.getByRole("button", { name: /create account/i })
       expect(createAccountButton).toBeInTheDocument()
       await userEvent.click(createAccountButton)
+      await userEvent.click(
+        screen.getByRole("checkbox", {
+          name: "I have reviewed, understand and agree to the Terms of Use.",
+        })
+      )
+      await userEvent.click(screen.getByRole("button", { name: "Finish" }))
 
       expect(await screen.findByText(value)).toBeInTheDocument()
     })

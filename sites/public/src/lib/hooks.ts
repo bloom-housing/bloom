@@ -17,7 +17,7 @@ import {
   OrderByEnum,
   PaginatedListing,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { ApplicationStatusProps } from "@bloom-housing/ui-components"
+import { ApplicationStatusProps, t } from "@bloom-housing/ui-components"
 import { ParsedUrlQuery } from "querystring"
 import { AppSubmissionContext } from "./applications/AppSubmissionContext"
 import { getListingApplicationStatus, fetchFavoriteListingIds } from "./helpers"
@@ -28,7 +28,6 @@ import {
   useToastyRef,
 } from "@bloom-housing/shared-helpers"
 import { runtimeConfig } from "./runtime-config"
-import { t } from "@bloom-housing/ui-components"
 
 /**
  * This ensures a listing is present in memory and no application has yet been submitted

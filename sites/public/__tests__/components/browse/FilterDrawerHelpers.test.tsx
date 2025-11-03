@@ -21,7 +21,7 @@ import {
   RentSection,
   SearchSection,
 } from "../../../src/components/browse/FilterDrawerHelpers"
-import { act, mockNextRouter, render } from "../../testUtils"
+import { mockNextRouter, render } from "../../testUtils"
 import { useForm } from "react-hook-form"
 import { t } from "@bloom-housing/ui-components"
 import userEvent from "@testing-library/user-event"
