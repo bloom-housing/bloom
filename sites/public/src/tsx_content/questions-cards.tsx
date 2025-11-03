@@ -316,7 +316,7 @@ export function questionsLinkableCards(): React.ReactElement<CardProps>[] {
           <DoorwayCollapsibleSection title={t("help.faq.lotteryResults.additionalQuestions")}>
             <span>
               {t("help.faq.lotteryResults.additionalQuestionsResp1")}{" "}
-              <a href={`mailto:doorway@housingbayarea.org`}>
+              <a href={`mailto:doorway@bayareametro.gov`}>
                 {t("help.faq.lotteryResults.additionalQuestionsResp2")}
               </a>{" "}
               {t("help.faq.lotteryResults.additionalQuestionsResp3")}
