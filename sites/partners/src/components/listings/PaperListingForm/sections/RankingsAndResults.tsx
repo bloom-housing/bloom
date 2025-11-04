@@ -93,7 +93,7 @@ const RankingsAndResults = ({
 
   const showFSFCLotterySection =
     (enableWaitlistLottery && waitlistOpen) ||
-    (availabilityQuestion == "availableUnits" && !enableWaitlistLottery)
+    (availabilityQuestion !== "openWaitlist" && !enableWaitlistLottery)
 
   // Ensure the lottery fields only show when it's "available units" listing
   const showLotteryFields =
