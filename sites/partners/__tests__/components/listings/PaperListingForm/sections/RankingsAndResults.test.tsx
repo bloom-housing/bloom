@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react"
 import { rest } from "msw"
 import { setupServer } from "msw/node"
