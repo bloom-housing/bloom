@@ -76,12 +76,10 @@ const RankingsAndResults = ({
     selectedJurisdictionId
   )
 
-  // const enableWaitlistLottery = doJurisdictionsHaveFeatureFlagOn(
-  //   FeatureFlagEnum.enableWaitlistLottery,
-  //   selectedJurisdictionId
-  // )
-
-  const enableWaitlistLottery = false
+  const enableWaitlistLottery = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableWaitlistLottery,
+    selectedJurisdictionId
+  )
 
   const enableUnitGroups = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableUnitGroups,
