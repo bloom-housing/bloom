@@ -6,6 +6,7 @@ import { defaultFieldProps } from "../../../../lib/helpers"
 import { AuthContext, listingUtilities } from "@bloom-housing/shared-helpers"
 import {
   EnumListingDepositType,
+  EnumListingListingType,
   FeatureFlagEnum,
   ListingUtilities,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -26,6 +27,7 @@ const AdditionalFees = (props: AdditionalFeesProps) => {
 
   const jurisdiction = watch("jurisdictions.id")
   const depositType = watch("depositType")
+  const listingType = watch("listingType")
 
   const utilitiesFields = useMemo(() => {
     return listingUtilities.map((utility) => {
@@ -73,79 +75,83 @@ const AdditionalFees = (props: AdditionalFeesProps) => {
             />
           </Grid.Cell>
         </Grid.Row>
-        <GridRow>
-          <Grid.Cell>
-            <FieldGroup
-              register={register}
-              type="radio"
-              name="depositType"
-              groupLabel={t("listings.depositTitle")}
-              fields={[
-                {
-                  id: "depositTypeFixed",
-                  label: t("listings.depositFixed"),
-                  value: EnumListingDepositType.fixedDeposit,
-                  defaultChecked: !depositType,
-                },
-                {
-                  id: "depositTypeRange",
-                  label: t("listings.depositRange"),
-                  value: EnumListingDepositType.depositRange,
-                },
-              ]}
-            />
-          </Grid.Cell>
-        </GridRow>
-        <Grid.Row columns={2}>
-          {depositType === EnumListingDepositType.fixedDeposit && (
-            <Grid.Cell>
-              <Field
-                type={"currency"}
-                prepend={"$"}
-                register={register}
-                {...defaultFieldProps(
-                  "depositValue",
-                  t("listings.depositValue"),
-                  props.requiredFields,
-                  errors,
-                  clearErrors
-                )}
-              />
-            </Grid.Cell>
-          )}
-          {depositType === EnumListingDepositType.depositRange && (
-            <>
+        {listingType === EnumListingListingType.nonRegulated && (
+          <>
+            <GridRow>
               <Grid.Cell>
-                <Field
-                  type={"currency"}
-                  prepend={"$"}
+                <FieldGroup
                   register={register}
-                  {...defaultFieldProps(
-                    "depositRangeMin",
-                    t("listings.depositMin"),
-                    props.requiredFields,
-                    errors,
-                    clearErrors
-                  )}
+                  type="radio"
+                  name="depositType"
+                  groupLabel={t("listings.depositTitle")}
+                  fields={[
+                    {
+                      id: "depositTypeFixed",
+                      label: t("listings.depositFixed"),
+                      value: EnumListingDepositType.fixedDeposit,
+                      defaultChecked: !depositType,
+                    },
+                    {
+                      id: "depositTypeRange",
+                      label: t("listings.depositRange"),
+                      value: EnumListingDepositType.depositRange,
+                    },
+                  ]}
                 />
               </Grid.Cell>
-              <Grid.Cell>
-                <Field
-                  type={"currency"}
-                  prepend={"$"}
-                  register={register}
-                  {...defaultFieldProps(
-                    "depositRangeMax",
-                    t("listings.depositMax"),
-                    props.requiredFields,
-                    errors,
-                    clearErrors
-                  )}
-                />
-              </Grid.Cell>
-            </>
-          )}
-        </Grid.Row>
+            </GridRow>
+            <Grid.Row columns={2}>
+              {depositType === EnumListingDepositType.fixedDeposit && (
+                <Grid.Cell>
+                  <Field
+                    type={"currency"}
+                    prepend={"$"}
+                    register={register}
+                    {...defaultFieldProps(
+                      "depositValue",
+                      t("listings.depositValue"),
+                      props.requiredFields,
+                      errors,
+                      clearErrors
+                    )}
+                  />
+                </Grid.Cell>
+              )}
+              {depositType === EnumListingDepositType.depositRange && (
+                <>
+                  <Grid.Cell>
+                    <Field
+                      type={"currency"}
+                      prepend={"$"}
+                      register={register}
+                      {...defaultFieldProps(
+                        "depositRangeMin",
+                        t("listings.depositMin"),
+                        props.requiredFields,
+                        errors,
+                        clearErrors
+                      )}
+                    />
+                  </Grid.Cell>
+                  <Grid.Cell>
+                    <Field
+                      type={"currency"}
+                      prepend={"$"}
+                      register={register}
+                      {...defaultFieldProps(
+                        "depositRangeMax",
+                        t("listings.depositMax"),
+                        props.requiredFields,
+                        errors,
+                        clearErrors
+                      )}
+                    />
+                  </Grid.Cell>
+                </>
+              )}
+            </Grid.Row>
+          </>
+        )}
         <Grid.Row>
           <Grid.Cell>
             <Textarea
