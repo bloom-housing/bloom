@@ -19,6 +19,7 @@ import styles from "../ListingForm.module.scss"
 interface ListingIntroProps {
   jurisdictions: Jurisdiction[]
   requiredFields: string[]
+  isNonRegulatedListing?: boolean
 }
 
 const ListingIntro = (props: ListingIntroProps) => {
@@ -133,7 +134,9 @@ const ListingIntro = (props: ListingIntroProps) => {
               register={register}
               {...defaultFieldProps(
                 "developer",
-                t("listings.developer"),
+                listingType === EnumListingListingType.regulated
+                  ? t("listings.developer")
+                  : t("listings.propertyManager"),
                 props.requiredFields,
                 errors,
                 clearErrors
