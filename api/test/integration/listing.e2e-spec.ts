@@ -706,6 +706,9 @@ describe('Listing Controller Tests', () => {
       });
       listing1WithUnits = await prisma.listings.create({
         data: listing1Input,
+        include: {
+          listingsBuildingAddress: true,
+        },
       });
 
       const listing2Input = await listingFactory(jurisdictionB.id, prisma, {
@@ -1959,6 +1962,138 @@ describe('Listing Controller Tests', () => {
 
       const ids = res.body.items.map((listing) => listing.id);
       expect(ids).toContain(listing1WithUnits.id);
+    });
+
+    it('should return only the correct fields based on name view', async () => {
+      const query: ListingsQueryBody = {
+        page: 1,
+        view: ListingViews.name,
+        filter: [
+          {
+            $comparison: Compare.IN,
+            ids: [listing1WithUnits.id],
+          },
+        ],
+      };
+
+      const res = await request(app.getHttpServer())
+        .post(`/listings/list`)
+        .send(query)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .expect(201);
+
+      expect(res.body.items.length).toBe(1);
+
+      expect(res.body.items[0]).toEqual({
+        name: listing1WithUnits.name,
+        id: listing1WithUnits.id,
+        jurisdictions: {
+          id: jurisdictionB.id,
+          name: jurisdictionB.name,
+        },
+        showWaitlist: false,
+        urlSlug: expect.anything(),
+        whatToExpect: null,
+        whatToExpectAdditionalText: null,
+      });
+    });
+
+    it('should return only the correct fields based on address view', async () => {
+      const query: ListingsQueryBody = {
+        page: 1,
+        view: ListingViews.address,
+        filter: [
+          {
+            $comparison: Compare.IN,
+            ids: [listing1WithUnits.id],
+          },
+        ],
+      };
+
+      const res = await request(app.getHttpServer())
+        .post(`/listings/list`)
+        .send(query)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .expect(201);
+
+      expect(res.body.items.length).toBe(1);
+
+      expect(res.body.items[0]).toEqual({
+        name: listing1WithUnits.name,
+        id: listing1WithUnits.id,
+        listingsBuildingAddress: {
+          street: listing1WithUnits.listingsBuildingAddress.street,
+          street2: listing1WithUnits.listingsBuildingAddress.street2,
+          zipCode: listing1WithUnits.listingsBuildingAddress.zipCode,
+          city: listing1WithUnits.listingsBuildingAddress.city,
+          state: listing1WithUnits.listingsBuildingAddress.state,
+          county: listing1WithUnits.listingsBuildingAddress.county,
+          latitude: expect.anything(),
+          longitude: expect.anything(),
+        },
+        showWaitlist: false,
+        urlSlug: expect.anything(),
+        whatToExpect: null,
+        whatToExpectAdditionalText: null,
+      });
+    });
+
+    it('should return only the correct fields based on fundamental view', async () => {
+      const query: ListingsQueryBody = {
+        page: 1,
+        view: ListingViews.fundamentals,
+        filter: [
+          {
+            $comparison: Compare.IN,
+            ids: [listing1WithUnits.id],
+          },
+        ],
+      };
+
+      const res = await request(app.getHttpServer())
+        .post(`/listings/list`)
+        .send(query)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .expect(201);
+
+      expect(res.body.items.length).toBe(1);
+
+      // verify random fields to be or not be there
+      expect(res.body.items[0].jurisdictions).not.toBeNull();
+      expect(res.body.items[0].name).toBe(listing1WithUnits.name);
+      expect(res.body.items[0].lastApplicationUpdateAt).not.toBeNull();
+      expect(res.body.items[0].listingImages).toBeUndefined();
+      expect(res.body.items[0].listingFeatures).toBeUndefined();
+    });
+
+    it('should return only the correct fields based on full view', async () => {
+      const query: ListingsQueryBody = {
+        page: 1,
+        view: ListingViews.full,
+        filter: [
+          {
+            $comparison: Compare.IN,
+            ids: [listing1WithUnits.id],
+          },
+        ],
+      };
+
+      const res = await request(app.getHttpServer())
+        .post(`/listings/list`)
+        .send(query)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .expect(201);
+
+      expect(res.body.items.length).toBe(1);
+
+      // verify random fields to be or not be there
+      expect(res.body.items[0].jurisdictions).not.toBeNull();
+      expect(res.body.items[0].name).toBe(listing1WithUnits.name);
+      expect(res.body.items[0].lastApplicationUpdateAt).not.toBeNull();
+      expect(res.body.items[0].listingImages).not.toBeUndefined();
+      expect(res.body.items[0].listingFeatures).not.toBeUndefined();
+      expect(res.body.items[0].units).not.toBeUndefined();
+      expect(res.body.items[0].listingsLeasingAgentAddress).not.toBeUndefined();
     });
   });
 

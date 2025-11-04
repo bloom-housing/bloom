@@ -326,7 +326,12 @@ export const ListingView = (props: ListingProps) => {
   }
 
   let lotterySection
-  if (publicLottery && (!lotteryResults || (lotteryResults && !lotteryResults.url))) {
+
+  if (
+    publicLottery &&
+    (!lotteryResults || (lotteryResults && !lotteryResults.url)) &&
+    (listing.status === ListingsStatusEnum.active || !lotteryResults)
+  ) {
     lotterySection = publicLottery.startDate && (
       <EventSection
         headerText={t("listings.publicLottery.header")}
@@ -334,20 +339,6 @@ export const ListingView = (props: ListingProps) => {
         events={[getEvent(publicLottery)]}
       />
     )
-    if (dayjs(publicLottery.startTime) < dayjs() && lotteryResults && !lotteryResults.url) {
-      lotterySection = (
-        <EventSection
-          headerText={t("listings.lotteryResults.header")}
-          sectionHeader={true}
-          events={[
-            getEvent(
-              lotteryResults,
-              lotteryResults.note || t("listings.lotteryResults.completeResultsWillBePosted")
-            ),
-          ]}
-        />
-      )
-    }
   }
 
   const getReservedTitle = () => {

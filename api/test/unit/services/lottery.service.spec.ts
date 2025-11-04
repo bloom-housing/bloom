@@ -710,7 +710,7 @@ describe('Testing lottery service', () => {
       });
 
       expect(listingService.getUserEmailInfo).toBeCalledWith(
-        ['admin', 'jurisdictionAdmin', 'partner'],
+        ['admin', 'jurisdictionAdmin', 'partner', 'supportAdmin'],
         'example id',
         'jurisId',
         false,

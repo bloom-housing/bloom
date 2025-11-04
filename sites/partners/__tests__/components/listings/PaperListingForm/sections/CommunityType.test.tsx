@@ -2,7 +2,7 @@ import React from "react"
 import { rest } from "msw"
 import { setupServer } from "msw/node"
 import { FormProvider, useForm } from "react-hook-form"
-import { act, screen } from "@testing-library/react"
+import { screen } from "@testing-library/react"
 import CommunityType from "../../../../../src/components/listings/PaperListingForm/sections/CommunityType"
 import { formDefaults, FormListing } from "../../../../../src/lib/listings/formTypes"
 import { mockNextRouter, render } from "../../../../testUtils"
@@ -143,15 +143,13 @@ describe("CommunityType", () => {
     await screen.findByRole("heading", { level: 2, name: "Community type" })
     await screen.findByRole("option", { name: "Seniors" })
 
-    await act(() =>
-      userEvent.selectOptions(
-        screen.getByRole("combobox", { name: "Reserved community type" }),
-        "Seniors"
-      )
+    await userEvent.selectOptions(
+      screen.getByRole("combobox", { name: "Reserved community type" }),
+      "Seniors"
     )
     expect(screen.getByRole("radio", { name: "Yes" })).not.toBeDisabled()
     expect(screen.getByRole("radio", { name: "No" })).not.toBeDisabled()
-    await act(() => userEvent.click(screen.getByRole("radio", { name: "Yes" })))
+    await userEvent.click(screen.getByRole("radio", { name: "Yes" }))
 
     expect(
       screen.getByRole("textbox", { name: "Reserved community disclaimer title *" })

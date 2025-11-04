@@ -368,10 +368,14 @@ export class AuthService {
   */
   async confirmUser(dto: Confirm, res?: Response): Promise<SuccessDTO> {
     const token = verify(dto.token, process.env.APP_SECRET) as IdAndEmail;
-    let user = await this.userService.findUserOrError({ userId: token.id });
-    if (user.confirmationToken !== dto.token) {
+
+    const foundUser = await this.userService.findUserOrError({
+      userId: token.id,
+    });
+
+    if (foundUser.confirmationToken !== dto.token) {
       throw new BadRequestException(
-        `Confirmation token mismatch for user stored: ${user.confirmationToken}, incoming token: ${dto.token}`,
+        `Confirmation token mismatch for user stored: ${foundUser.confirmationToken}, incoming token: ${dto.token}`,
       );
     }
     const data: Prisma.UserAccountsUpdateInput = {
@@ -385,15 +389,16 @@ export class AuthService {
     if (token.email) {
       data.email = token.email;
     }
-    user = await this.prisma.userAccounts.update({
+
+    const updatedUser = await this.prisma.userAccounts.update({
       data,
       where: {
-        id: user.id,
+        id: foundUser.id,
       },
     });
     return await this.setCredentials(
       res,
-      mapTo(User, user),
+      mapTo(User, updatedUser),
       undefined,
       undefined,
       undefined,

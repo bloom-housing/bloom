@@ -1214,6 +1214,7 @@ enum ReviewOrderTypeEnum {
   lottery
   firstComeFirstServe
   waitlist
+  waitlistLottery
 
   @@map("listings_review_order_type_enum")
 }

@@ -1,5 +1,5 @@
 import React from "react"
-import { act, screen, waitFor } from "@testing-library/react"
+import { screen, waitFor } from "@testing-library/react"
 import {
   FeatureFlagEnum,
   Listing,
@@ -108,13 +108,11 @@ describe("<FormUserManage>", () => {
           await userEvent.type(screen.getByRole("textbox", { name: "First name" }), "firstName")
           await userEvent.type(screen.getByRole("textbox", { name: "Last name" }), "lastName")
           await userEvent.type(screen.getByRole("textbox", { name: "Email" }), "email@example.com")
-          await act(async () => {
-            await userEvent.selectOptions(
-              screen.getByRole("combobox", { name: "Role" }),
-              screen.getByRole("option", { name: "Administrator" })
-            )
-            await userEvent.click(screen.getByRole("button", { name: "Invite" }))
-          })
+          await userEvent.selectOptions(
+            screen.getByRole("combobox", { name: "Role" }),
+            screen.getByRole("option", { name: "Administrator" })
+          )
+          await userEvent.click(screen.getByRole("button", { name: "Invite" }))
           await waitFor(() => {
             expect(requestSpy).toHaveBeenCalledWith({
               firstName: "firstName",
@@ -178,13 +176,11 @@ describe("<FormUserManage>", () => {
           await userEvent.type(screen.getByRole("textbox", { name: "First name" }), "firstName")
           await userEvent.type(screen.getByRole("textbox", { name: "Last name" }), "lastName")
           await userEvent.type(screen.getByRole("textbox", { name: "Email" }), "eamil@example.com")
-          await act(async () => {
-            await userEvent.selectOptions(
-              screen.getByRole("combobox", { name: "Role" }),
-              screen.getByRole("option", { name: "Jurisdictional admin" })
-            )
-            await userEvent.click(screen.getByRole("button", { name: "Invite" }))
-          })
+          await userEvent.selectOptions(
+            screen.getByRole("combobox", { name: "Role" }),
+            screen.getByRole("option", { name: "Jurisdictional admin" })
+          )
+          await userEvent.click(screen.getByRole("button", { name: "Invite" }))
           expect(screen.getByText("This field is required"))
           // Should display both jurisdiction options
           expect(
@@ -193,13 +189,11 @@ describe("<FormUserManage>", () => {
           expect(
             screen.getByRole("option", { name: "jurisdictionWithJurisdictionAdmin2" })
           ).toBeInTheDocument()
-          await act(async () => {
-            await userEvent.selectOptions(
-              screen.getByRole("combobox", { name: "Jurisdiction" }),
-              screen.getByRole("option", { name: "jurisdictionWithJurisdictionAdmin" })
-            )
-            await userEvent.click(screen.getByRole("button", { name: "Invite" }))
-          })
+          await userEvent.selectOptions(
+            screen.getByRole("combobox", { name: "Jurisdiction" }),
+            screen.getByRole("option", { name: "jurisdictionWithJurisdictionAdmin" })
+          )
+          await userEvent.click(screen.getByRole("button", { name: "Invite" }))
           await waitFor(() => {
             expect(requestSpy).toHaveBeenCalledWith({
               firstName: "firstName",
@@ -267,13 +261,11 @@ describe("<FormUserManage>", () => {
           await userEvent.type(screen.getByRole("textbox", { name: "First name" }), "firstName")
           await userEvent.type(screen.getByRole("textbox", { name: "Last name" }), "lastName")
           await userEvent.type(screen.getByRole("textbox", { name: "Email" }), "email@example.com")
-          await act(async () => {
-            await userEvent.selectOptions(
-              screen.getByRole("combobox", { name: "Role" }),
-              screen.getByRole("option", { name: "Partner" })
-            )
-            await userEvent.click(screen.getByRole("button", { name: "Invite" }))
-          })
+          await userEvent.selectOptions(
+            screen.getByRole("combobox", { name: "Role" }),
+            screen.getByRole("option", { name: "Partner" })
+          )
+          await userEvent.click(screen.getByRole("button", { name: "Invite" }))
           expect(screen.getByText("This field is required"))
           // Should display both jurisdiction options as checkboxes
           expect(
@@ -282,17 +274,13 @@ describe("<FormUserManage>", () => {
           expect(
             screen.getByRole("checkbox", { name: "jurisdictionWithJurisdictionAdmin2" })
           ).toBeInTheDocument()
-          await act(async () => {
-            await userEvent.click(
-              screen.getByRole("checkbox", { name: "jurisdictionWithJurisdictionAdmin" })
-            )
-          })
+          await userEvent.click(
+            screen.getByRole("checkbox", { name: "jurisdictionWithJurisdictionAdmin" })
+          )
           await waitFor(() => screen.getByText("jurisdictionWithJurisdictionAdmin listings"))
-          await act(async () => {
-            await userEvent.click(screen.getByRole("checkbox", { name: "listing1" }))
-            await userEvent.click(screen.getByRole("checkbox", { name: "listing3" }))
-            await userEvent.click(screen.getByRole("button", { name: "Invite" }))
-          })
+          await userEvent.click(screen.getByRole("checkbox", { name: "listing1" }))
+          await userEvent.click(screen.getByRole("checkbox", { name: "listing3" }))
+          await userEvent.click(screen.getByRole("button", { name: "Invite" }))
           await waitFor(() => {
             expect(requestSpy).toHaveBeenCalledWith({
               firstName: "firstName",
@@ -403,13 +391,10 @@ describe("<FormUserManage>", () => {
         ).toBeInTheDocument()
         expect(screen.getByRole("option", { name: "Partner" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Invite" })).toBeInTheDocument()
-
-        await act(async () => {
-          await userEvent.selectOptions(
-            screen.getByRole("combobox", { name: "Role" }),
-            screen.getByRole("option", { name: "Jurisdictional admin" })
-          )
-        })
+        await userEvent.selectOptions(
+          screen.getByRole("combobox", { name: "Role" }),
+          screen.getByRole("option", { name: "Jurisdictional admin" })
+        )
         expect(
           screen.getByRole("option", { name: "jurisdictionWithJurisdictionAdmin2" })
         ).toBeInTheDocument()
@@ -557,12 +542,10 @@ describe("<FormUserManage>", () => {
       expect(screen.getByRole("checkbox", { name: "listing1", checked: true })).toBeInTheDocument()
       expect(screen.getByRole("checkbox", { name: "listing2", checked: true })).toBeInTheDocument()
       expect(screen.getByRole("checkbox", { name: "listing3", checked: false })).toBeInTheDocument()
-      await act(async () => {
-        // Select and unselect listings
-        await userEvent.click(screen.getByRole("checkbox", { name: "listing3" }))
-        await userEvent.click(screen.getByRole("checkbox", { name: "listing2" }))
-        await userEvent.click(screen.getByRole("button", { name: "Save" }))
-      })
+      // Select and unselect listings
+      await userEvent.click(screen.getByRole("checkbox", { name: "listing3" }))
+      await userEvent.click(screen.getByRole("checkbox", { name: "listing2" }))
+      await userEvent.click(screen.getByRole("button", { name: "Save" }))
       await waitFor(() => {
         expect(requestSpy).toHaveBeenCalledWith({
           id: "existingUserId",
@@ -637,10 +620,8 @@ describe("<FormUserManage>", () => {
       )
 
       await waitFor(() => screen.getByText("Administrator"))
-      await act(async () => {
-        // Select and unselect listings
-        await userEvent.click(screen.getByRole("button", { name: "Resend invite" }))
-      })
+      // Select and unselect listings
+      await userEvent.click(screen.getByRole("button", { name: "Resend invite" }))
       await waitFor(() => {
         expect(requestSpy).toHaveBeenCalledWith({
           appUrl: "http://localhost",
@@ -700,15 +681,11 @@ describe("<FormUserManage>", () => {
       )
 
       await waitFor(() => screen.getByText("Administrator"))
-      await act(async () => {
-        // Click first delete button
-        await userEvent.click(screen.getByRole("button", { name: "Delete" }))
-      })
+      // Click first delete button
+      await userEvent.click(screen.getByRole("button", { name: "Delete" }))
       await waitFor(() => screen.getByText("Do you really want to delete this user?"))
-      await act(async () => {
-        // Hit confirmation
-        await userEvent.click(screen.getAllByRole("button", { name: "Delete" })[1])
-      })
+      // Hit confirmation
+      await userEvent.click(screen.getAllByRole("button", { name: "Delete" })[1])
       await waitFor(() => expect(onDrawerClose).toBeCalled())
       await waitFor(() => {
         expect(requestSpy).toHaveBeenCalledWith({

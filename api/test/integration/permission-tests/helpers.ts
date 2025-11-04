@@ -826,7 +826,7 @@ export const createComplexApplication = async (
         birthYear: nameAndDOBIndicator,
       },
       listingId: listing,
-      householdMember: [householdMember],
+      householdMember: householdMember ? [householdMember] : null,
     }),
     include: {
       applicant: true,

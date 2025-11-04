@@ -82,6 +82,10 @@ You can also run each process individually from separate terminals with the foll
 
 We have a number of default users seeded for local development, the most basic of which being (email: `admin@example.com`, password: `abcdef`) which will login to both the public and partners sites, but you can view other default seeded users and their permissions by checking out the user section of the [seed file](https://github.com/metrotranscom/doorway/blob/e3efdf29712cdf02ab9f0156406e0bb8d16f25d2/api/prisma/seed-staging.ts#L237).
 
+### Running locally in docker
+
+Docker documentation is in [docker.md](./docker.md).
+
 ### Bloom UIC development
 
 Because Bloom's ui-components package is a separate open source repository, developing in Bloom while concurrently iterating in ui-components requires linking the folders with the following steps:
