@@ -110,8 +110,6 @@ const RankingsAndResults = ({
     },
   ]
 
-  console.log("result", listing?.reviewOrderType)
-
   return (
     <>
       <SectionWithGrid
