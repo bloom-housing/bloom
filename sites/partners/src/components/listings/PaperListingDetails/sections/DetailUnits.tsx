@@ -124,13 +124,17 @@ const DetailUnits = ({ setUnitDrawer }: DetailUnitsProps) => {
   )
 
   const listingAvailabilityText = useMemo(() => {
-    if (listing.reviewOrderType !== ReviewOrderTypeEnum.waitlist) {
-      return t("listings.availableUnits")
-    } else if (listing.reviewOrderType === ReviewOrderTypeEnum.waitlist) {
-      return t("listings.waitlist.open")
+    switch (listing?.reviewOrderType) {
+      case ReviewOrderTypeEnum.waitlist:
+      case ReviewOrderTypeEnum.waitlistLottery:
+        return t("listings.waitlist.open")
+      case ReviewOrderTypeEnum.lottery:
+      case ReviewOrderTypeEnum.firstComeFirstServe:
+        return t("listings.availableUnits")
+      default:
+        return t("t.none")
     }
-    return t("t.none")
-  }, [listing])
+  }, [listing?.reviewOrderType])
 
   return (
     <SectionWithGrid heading={t("listings.units")} inset>
