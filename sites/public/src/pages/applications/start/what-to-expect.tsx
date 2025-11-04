@@ -48,7 +48,7 @@ const ApplicationWhatToExpect = () => {
       case ReviewOrderTypeEnum.waitlistLottery:
         return {
           steps: t(`application.start.whatToExpect.${listing.reviewOrderType}.steps`),
-          finePrint: t(`application.start.whatToExpect.${listing.reviewOrderType}.finePrint`)
+          finePrint: t(`application.start.whatToExpect.${listing.reviewOrderType}.finePrint`),
         }
       default:
         return { steps: "", finePrint: "" }
