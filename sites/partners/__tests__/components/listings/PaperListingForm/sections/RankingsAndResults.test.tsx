@@ -131,4 +131,35 @@ describe("RankingsAndResults", () => {
     expect(screen.getByRole("radio", { name: /First come first serve/i })).toBeInTheDocument()
     expect(screen.getByRole("radio", { name: "Lottery" })).toBeInTheDocument()
   })
+
+  it("should show review order options when availabilityQuestion is availableUnits and enableWaitlistLottery is false", async () => {
+    document.cookie = "access-token-available=True"
+    server.use(
+      rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
+        return res(ctx.json(adminUserWithoutWaitlistLotteryFlag))
+      })
+    )
+
+    render(
+      <FormComponent
+        values={{
+          ...formDefaults,
+          jurisdictions: { id: "jurisdiction1" },
+          listingAvailabilityQuestion: "availableUnits",
+        }}
+      >
+        <RankingsAndResults
+          requiredFields={[]}
+          whatToExpectEditor={null}
+          whatToExpectAdditionalTextEditor={null}
+        />
+      </FormComponent>
+    )
+
+    screen.getByRole("heading", { name: "Rankings & results" })
+    expect(screen.getByText("How is the application review order determined?")).toBeInTheDocument()
+
+    expect(screen.getByRole("radio", { name: /First come first serve/i })).toBeInTheDocument()
+    expect(screen.getByRole("radio", { name: "Lottery" })).toBeInTheDocument()
+  })
 })
