@@ -91,13 +91,13 @@ const RankingsAndResults = ({
     selectedJurisdictionId
   )
 
-  const showFSFCLotterySection = enableWaitlistLottery && waitlistOpen
-  const showDefaultLayout = availabilityQuestion == "availableUnits" && !enableWaitlistLottery
+  const showFSFCLotterySection =
+    (enableWaitlistLottery && waitlistOpen) ||
+    (availabilityQuestion == "availableUnits" && !enableWaitlistLottery)
 
   // Ensure the lottery fields only show when it's "available units" listing
   const showLotteryFields =
-    (showFSFCLotterySection || enableUnitGroups || showDefaultLayout) &&
-    reviewOrder === "reviewOrderLottery"
+    (showFSFCLotterySection || enableUnitGroups) && reviewOrder === "reviewOrderLottery"
 
   const yesNoRadioOptions = [
     {
@@ -118,7 +118,7 @@ const RankingsAndResults = ({
         heading={t("listings.sections.rankingsResultsTitle")}
         subheading={t("listings.sections.rankingsResultsSubtitle")}
       >
-        {(showFSFCLotterySection || showDefaultLayout || enableUnitGroups) && (
+        {(showFSFCLotterySection || enableUnitGroups) && (
           <Grid.Row columns={2} className={"flex items-center"}>
             <Grid.Cell>
               <FieldGroup
