@@ -130,7 +130,9 @@ describe("RankingsAndResults", () => {
     const waitlistYesRadio = await screen.findByRole("radio", { name: "Yes" })
     await userEvent.click(waitlistYesRadio)
 
-    expect(screen.queryByText("How is the application review order determined?")).not.toBeInTheDocument()
+    expect(
+      screen.queryByText("How is the application review order determined?")
+    ).not.toBeInTheDocument()
 
     expect(screen.queryByTestId("lottery-start-date")).not.toBeInTheDocument()
     expect(screen.queryByTestId("lottery-start-time")).not.toBeInTheDocument()
@@ -167,14 +169,18 @@ describe("RankingsAndResults", () => {
     await userEvent.click(waitlistYesRadio)
 
     await waitFor(() => {
-      expect(screen.getByText("How is the application review order determined?")).toBeInTheDocument()
+      expect(
+        screen.getByText("How is the application review order determined?")
+      ).toBeInTheDocument()
     })
 
     const waitlistNoRadio = document.getElementById("waitlistOpenNo") as HTMLInputElement
     await userEvent.click(waitlistNoRadio)
 
     await waitFor(() => {
-      expect(screen.queryByText("How is the application review order determined?")).not.toBeInTheDocument()
+      expect(
+        screen.queryByText("How is the application review order determined?")
+      ).not.toBeInTheDocument()
     })
 
     expect(screen.queryByTestId("lottery-start-date")).not.toBeInTheDocument()
