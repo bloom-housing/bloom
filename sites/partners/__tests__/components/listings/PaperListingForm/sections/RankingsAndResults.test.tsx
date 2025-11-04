@@ -9,10 +9,6 @@ import { mockNextRouter, render } from "../../../../testUtils"
 import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import userEvent from "@testing-library/user-event"
 
-jest.mock("../../../../../src/components/shared/TextEditor", () => ({
-  TextEditor: () => <div data-testid="mock-text-editor">Mocked TextEditor</div>,
-}))
-
 const FormComponent = ({ children, values }: { values?: FormListing; children }) => {
   const formMethods = useForm<FormListing>({
     defaultValues: { ...formDefaults, ...values },
