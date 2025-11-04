@@ -6,6 +6,7 @@ import {
   ListingsStatusEnum,
   MarketingSeasonEnum,
   MarketingTypeEnum,
+  MonthEnum,
   ReviewOrderTypeEnum,
   UnitTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -387,7 +388,22 @@ describe("helpers", () => {
   })
 
   describe("getListingStatusMessageContent", () => {
-    it("should return correctly with under construction and marketing enabled", () => {
+    it("should return correctly with under construction and marketing enabled only year", () => {
+      expect(
+        getListingStatusMessageContent(
+          ListingsStatusEnum.active,
+          dayjs(new Date()).add(5, "days").toDate(),
+          true,
+          false,
+          MarketingTypeEnum.comingSoon,
+          null,
+          null,
+          2026,
+          false
+        )
+      ).toEqual("Residents should apply in 2026")
+    })
+    it("should return correctly with under construction and marketing season enabled", () => {
       expect(
         getListingStatusMessageContent(
           ListingsStatusEnum.active,
@@ -396,11 +412,26 @@ describe("helpers", () => {
           false,
           MarketingTypeEnum.comingSoon,
           MarketingSeasonEnum.spring,
-          null,
+          MonthEnum.april,
           2026,
           false
         )
       ).toEqual("Residents should apply in Spring 2026")
+    })
+    it("should return correctly with under construction and marketing month enabled", () => {
+      expect(
+        getListingStatusMessageContent(
+          ListingsStatusEnum.active,
+          dayjs(new Date()).add(5, "days").toDate(),
+          true,
+          true,
+          MarketingTypeEnum.comingSoon,
+          MarketingSeasonEnum.spring,
+          MonthEnum.april,
+          2026,
+          false
+        )
+      ).toEqual("Residents should apply in April 2026")
     })
     it("should return correctly under with construction and marketing disabled", () => {
       const result = getListingStatusMessageContent(
@@ -410,8 +441,8 @@ describe("helpers", () => {
         false,
         MarketingTypeEnum.comingSoon,
         MarketingSeasonEnum.spring,
-        null,
-        new Date(2026, 1, 1, 10, 30, 0),
+        MonthEnum.april,
+        2026,
         false
       )
       expect(result).toContain("Application due:")
@@ -426,7 +457,7 @@ describe("helpers", () => {
         MarketingTypeEnum.comingSoon,
         MarketingSeasonEnum.spring,
         null,
-        new Date(2026, 1, 1, 10, 30, 0),
+        2026,
         true
       )
       expect(result).toContain("Application due:")
