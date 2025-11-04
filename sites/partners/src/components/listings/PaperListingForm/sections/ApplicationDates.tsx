@@ -20,6 +20,7 @@ import {
   MarketingTypeEnum,
   MarketingSeasonEnum,
   FeatureFlagEnum,
+  MonthEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import { fieldMessage, fieldHasError, getLabel } from "../../../../lib/helpers"
@@ -52,6 +53,13 @@ const ApplicationDates = ({
     FeatureFlagEnum.enableMarketingStatus,
     listing?.jurisdictions?.id
   )
+
+  const enableMarketingStatusMonths = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableMarketingStatusMonths,
+    listing?.jurisdictions?.id
+  )
+
+  console.log(enableMarketingStatusMonths)
 
   const openHouseTableData = useMemo(() => {
     return openHouseEvents.map((event) => {
@@ -230,23 +238,31 @@ const ApplicationDates = ({
                   <p className={"field-label pb-0"}>{t("listings.marketingSection.date")}</p>
                   <div className={"flex items-baseline h-auto"}>
                     <div className="w-2/3">
-                      <Select
-                        id="marketingSeason"
-                        name="marketingSeason"
-                        defaultValue={listing?.marketingSeason}
-                        register={register}
-                        label={t("listings.marketingSection.seasons")}
-                        labelClassName="sr-only"
-                        controlClassName="control"
-                        options={[
-                          "",
-                          MarketingSeasonEnum.spring,
-                          MarketingSeasonEnum.summer,
-                          MarketingSeasonEnum.fall,
-                          MarketingSeasonEnum.winter,
-                        ]}
-                        keyPrefix="seasons"
-                      />
+                      {enableMarketingStatusMonths ? (
+                        <Select
+                          id="marketingMonth"
+                          name="marketingMonth"
+                          defaultValue={listing?.marketingMonth}
+                          register={register}
+                          label={t("listings.marketingSection.month")}
+                          labelClassName="sr-only"
+                          controlClassName="control"
+                          options={["", ...Object.values(MonthEnum)]}
+                          keyPrefix={"months"}
+                        />
+                      ) : (
+                        <Select
+                          id="marketingSeason"
+                          name="marketingSeason"
+                          defaultValue={listing?.marketingSeason}
+                          register={register}
+                          label={t("listings.marketingSection.season")}
+                          labelClassName="sr-only"
+                          controlClassName="control"
+                          options={["", ...Object.values(MarketingSeasonEnum)]}
+                          keyPrefix={"seasons"}
+                        />
+                      )}
                     </div>
 
                     <Field

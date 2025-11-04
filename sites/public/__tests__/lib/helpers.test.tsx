@@ -393,8 +393,10 @@ describe("helpers", () => {
           ListingsStatusEnum.active,
           dayjs(new Date()).add(5, "days").toDate(),
           true,
+          false,
           MarketingTypeEnum.comingSoon,
           MarketingSeasonEnum.spring,
+          null,
           2026,
           false
         )
@@ -405,8 +407,10 @@ describe("helpers", () => {
         ListingsStatusEnum.active,
         dayjs(new Date()).add(5, "days").hour(10).minute(30).toDate(),
         false,
+        false,
         MarketingTypeEnum.comingSoon,
         MarketingSeasonEnum.spring,
+        null,
         new Date(2026, 1, 1, 10, 30, 0),
         false
       )
@@ -418,8 +422,10 @@ describe("helpers", () => {
         ListingsStatusEnum.active,
         dayjs(new Date()).add(5, "days").hour(10).minute(30).toDate(),
         false,
+        false,
         MarketingTypeEnum.comingSoon,
         MarketingSeasonEnum.spring,
+        null,
         new Date(2026, 1, 1, 10, 30, 0),
         true
       )
@@ -433,6 +439,8 @@ describe("helpers", () => {
         ListingsStatusEnum.closed,
         dayjs(new Date()).subtract(5, "days").toDate(),
         false,
+        false,
+        null,
         null,
         null,
         null,
@@ -446,6 +454,8 @@ describe("helpers", () => {
         ListingsStatusEnum.active,
         null,
         false,
+        false,
+        null,
         null,
         null,
         null,
