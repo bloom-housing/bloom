@@ -43,7 +43,7 @@
     "axios-cookiejar-support": "^5.0.5",
     "clone-deep": "^4.0.1",
     "dayjs": "^1.10.7",
-    "dotenv": "^8.2.0",
+    "dotenv": "^17.2.3",
     "markdown-to-jsx": "^7.7.12",
     "next": "^14.2.28",
     "qs": "^6.10.1",
