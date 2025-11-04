@@ -44,10 +44,19 @@ export enum FeatureFlagEnum {
   swapCommunityTypeWithPrograms = 'swapCommunityTypeWithPrograms',
 }
 
+type FlagDependency = {
+  flagName: FeatureFlagEnum;
+  requiredState: boolean;
+};
+
 // List of all of existing flags and their descriptions.
 // This should be the source of all feature flags in our system.
 // Keep alphabetized for readability.
-export const featureFlagMap: { name: string; description: string }[] = [
+export const featureFlagMap: {
+  name: string;
+  description: string;
+  dependencies?: FlagDependency[];
+}[] = [
   {
     name: FeatureFlagEnum.disableCommonApplication,
     description:
@@ -154,6 +163,9 @@ export const featureFlagMap: { name: string; description: string }[] = [
     name: FeatureFlagEnum.enableMarketingStatusMonths,
     description:
       "When true, the 'marketing status' sub-section uses months instead of seasons",
+    dependencies: [
+      { flagName: FeatureFlagEnum.enableMarketingStatus, requiredState: true },
+    ],
   },
   {
     name: FeatureFlagEnum.enableNeighborhoodAmenities,
