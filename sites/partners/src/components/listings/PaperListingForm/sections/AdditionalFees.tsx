@@ -57,7 +57,7 @@ const AdditionalFees = (props: AdditionalFeesProps) => {
         heading={t("listings.sections.additionalFees")}
         subheading={t("listings.sections.additionalFeesSubtitle")}
       >
-        <Grid.Row>
+        <Grid.Row columns={2}>
           <Grid.Cell>
             <Field
               register={register}
