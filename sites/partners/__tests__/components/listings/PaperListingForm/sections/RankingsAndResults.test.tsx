@@ -9,6 +9,11 @@ import { mockNextRouter, render } from "../../../../testUtils"
 import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import userEvent from "@testing-library/user-event"
 
+
+jest.mock("../../../../../src/components/shared/TextEditor", () => ({
+  TextEditor: () => <div data-testid="mock-text-editor">Mocked TextEditor</div>,
+}))
+
 const FormComponent = ({ children, values }: { values?: FormListing; children }) => {
   const formMethods = useForm<FormListing>({
     defaultValues: { ...formDefaults, ...values },
@@ -70,8 +75,8 @@ describe("RankingsAndResults", () => {
       >
         <RankingsAndResults
           requiredFields={[]}
-          whatToExpectEditor={null}
-          whatToExpectAdditionalTextEditor={null}
+          whatToExpectEditor={null as any}
+          whatToExpectAdditionalTextEditor={null as any}
         />
       </FormComponent>
     )
@@ -115,8 +120,8 @@ describe("RankingsAndResults", () => {
       >
         <RankingsAndResults
           requiredFields={[]}
-          whatToExpectEditor={null}
-          whatToExpectAdditionalTextEditor={null}
+          whatToExpectEditor={null as any}
+          whatToExpectAdditionalTextEditor={null as any}
         />
       </FormComponent>
     )
@@ -126,9 +131,7 @@ describe("RankingsAndResults", () => {
     const waitlistYesRadio = await screen.findByRole("radio", { name: "Yes" })
     await userEvent.click(waitlistYesRadio)
 
-    expect(
-      screen.queryByText("How is the application review order determined?")
-    ).not.toBeInTheDocument()
+    expect(screen.queryByText("How is the application review order determined?")).not.toBeInTheDocument()
 
     expect(screen.queryByTestId("lottery-start-date")).not.toBeInTheDocument()
     expect(screen.queryByTestId("lottery-start-time")).not.toBeInTheDocument()
@@ -153,8 +156,8 @@ describe("RankingsAndResults", () => {
       >
         <RankingsAndResults
           requiredFields={[]}
-          whatToExpectEditor={null}
-          whatToExpectAdditionalTextEditor={null}
+          whatToExpectEditor={null as any}
+          whatToExpectAdditionalTextEditor={null as any}
         />
       </FormComponent>
     )
@@ -165,18 +168,14 @@ describe("RankingsAndResults", () => {
     await userEvent.click(waitlistYesRadio)
 
     await waitFor(() => {
-      expect(
-        screen.getByText("How is the application review order determined?")
-      ).toBeInTheDocument()
+      expect(screen.getByText("How is the application review order determined?")).toBeInTheDocument()
     })
 
     const waitlistNoRadio = document.getElementById("waitlistOpenNo") as HTMLInputElement
     await userEvent.click(waitlistNoRadio)
 
     await waitFor(() => {
-      expect(
-        screen.queryByText("How is the application review order determined?")
-      ).not.toBeInTheDocument()
+      expect(screen.queryByText("How is the application review order determined?")).not.toBeInTheDocument()
     })
 
     expect(screen.queryByTestId("lottery-start-date")).not.toBeInTheDocument()
