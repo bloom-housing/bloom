@@ -162,10 +162,7 @@ export const featureFlagMap: {
   {
     name: FeatureFlagEnum.enableMarketingStatusMonths,
     description:
-      "When true, the 'marketing status' sub-section uses months instead of seasons",
-    dependencies: [
-      { flagName: FeatureFlagEnum.enableMarketingStatus, requiredState: true },
-    ],
+      "When true, the 'marketing status' sub-section uses months instead of seasons (functions only if enableMarketingStatus is also true)",
   },
   {
     name: FeatureFlagEnum.enableNeighborhoodAmenities,
