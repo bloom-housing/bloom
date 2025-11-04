@@ -8,11 +8,12 @@ import {
   ValidateNested,
 } from 'class-validator';
 import { MultiselectLink } from './multiselect-link.dto';
+import { AbstractDTO } from '../shared/abstract.dto';
 import { IdDTO } from '../shared/id.dto';
 import { ValidationMethod } from '../../enums/multiselect-questions/validation-method-enum';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 
-export class MultiselectOption {
+export class MultiselectOption extends AbstractDTO {
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
@@ -105,6 +106,11 @@ export class MultiselectOption {
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
   text: string;
+
+  @Expose()
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  untranslatedName?: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })

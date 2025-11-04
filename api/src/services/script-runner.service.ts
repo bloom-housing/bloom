@@ -586,6 +586,7 @@ export class ScriptRunnerService {
         jurisdictions: jurisInfo.map((juris) => {
           return { id: juris.id };
         }),
+        status: 'draft',
       });
     }
 
@@ -631,6 +632,7 @@ export class ScriptRunnerService {
           jurisdictions: jurisInfo.map((juris) => {
             return { id: juris.id };
           }),
+          status: 'draft',
         });
 
       const listingsInfo: { ordinal; listing_id }[] = await this.prisma

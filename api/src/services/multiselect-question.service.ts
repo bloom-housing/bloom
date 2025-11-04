@@ -1,26 +1,54 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Inject,
+  Injectable,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
+import {
+  ListingsStatusEnum,
+  MultiselectQuestionsStatusEnum,
+  Prisma,
+} from '@prisma/client';
 import { PrismaService } from './prisma.service';
+import { Jurisdiction } from '../dtos/jurisdictions/jurisdiction.dto';
 import { MultiselectQuestion } from '../dtos/multiselect-questions/multiselect-question.dto';
-import { MultiselectQuestionUpdate } from '../dtos/multiselect-questions/multiselect-question-update.dto';
 import { MultiselectQuestionCreate } from '../dtos/multiselect-questions/multiselect-question-create.dto';
-import { mapTo } from '../utilities/mapTo';
-import { SuccessDTO } from '../dtos/shared/success.dto';
-import { MultiselectQuestionsStatusEnum, Prisma } from '@prisma/client';
-import { buildFilter } from '../utilities/build-filter';
-import { MultiselectQuestionFilterKeys } from '../enums/multiselect-questions/filter-key-enum';
+import { MultiselectQuestionUpdate } from '../dtos/multiselect-questions/multiselect-question-update.dto';
 import { MultiselectQuestionQueryParams } from '../dtos/multiselect-questions/multiselect-question-query-params.dto';
+import { SuccessDTO } from '../dtos/shared/success.dto';
+import { FeatureFlagEnum } from '../enums/feature-flags/feature-flags-enum';
+import { MultiselectQuestionFilterKeys } from '../enums/multiselect-questions/filter-key-enum';
+import { MultiselectQuestionViews } from '../enums/multiselect-questions/view-enum';
+import { buildFilter } from '../utilities/build-filter';
+import { doJurisdictionHaveFeatureFlagSet } from '../utilities/feature-flag-utilities';
+import { mapTo } from '../utilities/mapTo';
 
-const view: Prisma.MultiselectQuestionsInclude = {
-  jurisdiction: true,
+export const includeViews: Partial<
+  Record<MultiselectQuestionViews, Prisma.MultiselectQuestionsInclude>
+> = {
+  fundamentals: {
+    jurisdiction: true,
+    multiselectOptions: true,
+  },
+};
+
+includeViews.base = {
+  ...includeViews.fundamentals,
+  listings: true,
 };
 
 /*
   this is the service for multiselect questions
-  it handles all the backend's business logic for reading/writing/deleting multiselect questione data
+  it handles all the backend's business logic for reading/writing/deleting multiselect question data
 */
 @Injectable()
 export class MultiselectQuestionService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    @Inject(Logger)
+    private logger = new Logger(MultiselectQuestionService.name),
+  ) {}
 
   /*
     this will get a set of multiselect questions given the params passed in
@@ -30,15 +58,24 @@ export class MultiselectQuestionService {
   ): Promise<MultiselectQuestion[]> {
     let rawMultiselectQuestions =
       await this.prisma.multiselectQuestions.findMany({
-        include: view,
+        include: includeViews.fundamentals,
         where: this.buildWhere(params),
       });
 
-    // TODO: Temporary until front end accepts MSQ refactor
-    rawMultiselectQuestions = rawMultiselectQuestions.map((msq) => ({
-      ...msq,
-      jurisdictions: [msq.jurisdiction],
-    }));
+    rawMultiselectQuestions = rawMultiselectQuestions.map((msq) => {
+      if (
+        doJurisdictionHaveFeatureFlagSet(
+          msq.jurisdiction as unknown as Jurisdiction,
+          FeatureFlagEnum.enableV2MSQ,
+        )
+      ) {
+        return msq;
+      }
+      return {
+        ...msq,
+        jurisdictions: [msq.jurisdiction],
+      };
+    });
     return mapTo(MultiselectQuestion, rawMultiselectQuestions);
   }
 
@@ -93,142 +130,13 @@ export class MultiselectQuestionService {
   /*
     this will return 1 multiselect question or error
   */
-  async findOne(multiSelectQuestionId: string): Promise<MultiselectQuestion> {
-    const rawMultiselectQuestion =
-      await this.prisma.multiselectQuestions.findFirst({
-        where: {
-          id: {
-            equals: multiSelectQuestionId,
-          },
-        },
-        include: view,
-      });
-
-    if (!rawMultiselectQuestion) {
-      throw new NotFoundException(
-        `multiselectQuestionId ${multiSelectQuestionId} was requested but not found`,
-      );
-    }
-
-    // TODO: Temporary until front end accepts MSQ refactor
-    rawMultiselectQuestion['jurisdictions'] = [
-      rawMultiselectQuestion.jurisdiction,
-    ];
-    return mapTo(MultiselectQuestion, rawMultiselectQuestion);
-  }
-
-  /*
-    this will create a multiselect question
-  */
-  async create(
-    incomingData: MultiselectQuestionCreate,
-  ): Promise<MultiselectQuestion> {
-    const { jurisdictions, links, options, ...createData } = incomingData;
-
-    const rawMultiselectQuestion =
-      await this.prisma.multiselectQuestions.create({
-        data: {
-          ...createData,
-          jurisdiction: {
-            connect: jurisdictions?.at(0)?.id
-              ? { id: jurisdictions?.at(0)?.id }
-              : undefined,
-          },
-          links: links
-            ? (links as unknown as Prisma.InputJsonArray)
-            : undefined,
-          options: options
-            ? (options as unknown as Prisma.InputJsonArray)
-            : undefined,
-          status: MultiselectQuestionsStatusEnum.draft,
-
-          // TODO: Temporary until after MSQ refactor
-          isExclusive: false,
-          multiselectOptions: undefined,
-          name: createData.text,
-        },
-        include: view,
-      });
-
-    // TODO: Temporary until front end accepts MSQ refactor
-    rawMultiselectQuestion['jurisdictions'] = [
-      rawMultiselectQuestion.jurisdiction,
-    ];
-    return mapTo(MultiselectQuestion, rawMultiselectQuestion);
-  }
-
-  /*
-    this will update a multiselect question's name or items field
-    if no multiselect question has the id of the incoming argument an error is thrown
-  */
-  async update(
-    incomingData: MultiselectQuestionUpdate,
-  ): Promise<MultiselectQuestion> {
-    const { id, jurisdictions, links, options, ...updateData } = incomingData;
-
-    await this.findOrThrow(id);
-
-    const rawMultiselectQuestion =
-      await this.prisma.multiselectQuestions.update({
-        data: {
-          ...updateData,
-          id: undefined,
-          jurisdiction: {
-            connect: jurisdictions?.at(0)?.id
-              ? { id: jurisdictions?.at(0)?.id }
-              : undefined,
-          },
-          links: links
-            ? (links as unknown as Prisma.InputJsonArray)
-            : undefined,
-          options: options
-            ? (options as unknown as Prisma.InputJsonArray)
-            : undefined,
-
-          // TODO: Temporary until after MSQ refactor
-          isExclusive: false,
-          multiselectOptions: undefined,
-          name: updateData.text,
-        },
-        where: {
-          id: id,
-        },
-        include: view,
-      });
-
-    // TODO: Temporary until front end accepts MSQ refactor
-    rawMultiselectQuestion['jurisdictions'] = [
-      rawMultiselectQuestion?.jurisdiction,
-    ];
-    return mapTo(MultiselectQuestion, rawMultiselectQuestion);
-  }
-
-  /*
-    this will delete a multiselect question
-  */
-  async delete(multiSelectQuestionId: string): Promise<SuccessDTO> {
-    await this.findOrThrow(multiSelectQuestionId);
-    await this.prisma.multiselectQuestions.delete({
-      where: {
-        id: multiSelectQuestionId,
-      },
-    });
-    return {
-      success: true,
-    } as SuccessDTO;
-  }
-
-  /*
-    this will either find a record or throw a customized error
-  */
-  async findOrThrow(
+  async findOne(
     multiselectQuestionId: string,
+    view: MultiselectQuestionViews = MultiselectQuestionViews.fundamentals,
   ): Promise<MultiselectQuestion> {
     const rawMultiselectQuestion =
-      await this.prisma.multiselectQuestions.findFirst({
-        include: {
-          jurisdiction: true,
-        },
+      await this.prisma.multiselectQuestions.findUnique({
+        include: includeViews[view],
         where: {
           id: multiselectQuestionId,
         },
@@ -240,19 +148,259 @@ export class MultiselectQuestionService {
       );
     }
 
-    // TODO: Temporary until front end accepts MSQ refactor
-    rawMultiselectQuestion['jurisdictions'] = [
-      rawMultiselectQuestion.jurisdiction,
-    ];
+    if (
+      !doJurisdictionHaveFeatureFlagSet(
+        rawMultiselectQuestion.jurisdiction as unknown as Jurisdiction,
+        FeatureFlagEnum.enableV2MSQ,
+      )
+    ) {
+      rawMultiselectQuestion['jurisdictions'] = [
+        rawMultiselectQuestion.jurisdiction,
+      ];
+    }
+
     return mapTo(MultiselectQuestion, rawMultiselectQuestion);
+  }
+
+  /*
+    this will create a multiselect question
+  */
+  async create(
+    incomingData: MultiselectQuestionCreate,
+  ): Promise<MultiselectQuestion> {
+    const {
+      isExclusive,
+      jurisdiction,
+      jurisdictions,
+      links,
+      multiselectOptions,
+      name,
+      options,
+      status,
+      ...createData
+    } = incomingData;
+
+    const rawJurisdiction = await this.prisma.jurisdictions.findFirstOrThrow({
+      select: {
+        featureFlags: true,
+        id: true,
+      },
+      where: {
+        id: jurisdiction
+          ? jurisdiction.id
+          : jurisdictions?.at(0)
+          ? jurisdictions?.at(0)?.id
+          : undefined,
+      },
+    });
+
+    const enableV2MSQ = doJurisdictionHaveFeatureFlagSet(
+      rawJurisdiction as Jurisdiction,
+      FeatureFlagEnum.enableV2MSQ,
+    );
+
+    if (
+      status &&
+      !(
+        status === MultiselectQuestionsStatusEnum.draft ||
+        status === MultiselectQuestionsStatusEnum.visible
+      )
+    ) {
+      throw new BadRequestException(
+        "status must be 'draft' or 'visible' on create",
+      );
+    }
+
+    const rawMultiselectQuestion =
+      await this.prisma.multiselectQuestions.create({
+        data: {
+          ...createData,
+          jurisdiction: {
+            connect: { id: rawJurisdiction.id },
+          },
+          links: links
+            ? (links as unknown as Prisma.InputJsonArray)
+            : undefined,
+
+          // TODO: Can be removed after MSQ refactor
+          options: options
+            ? (options as unknown as Prisma.InputJsonArray)
+            : undefined,
+
+          // TODO: Use of the feature flag is temporary until after MSQ refactor
+          isExclusive: enableV2MSQ ? isExclusive : false,
+          name: enableV2MSQ ? name : createData.text,
+          status: enableV2MSQ ? status : MultiselectQuestionsStatusEnum.draft,
+
+          multiselectOptions: enableV2MSQ
+            ? {
+                createMany: {
+                  data: multiselectOptions?.map((option) => {
+                    // TODO: Can be removed after MSQ refactor
+                    delete option['collectAddress'];
+                    delete option['collectName'];
+                    delete option['collectRelationship'];
+                    delete option['exclusive'];
+                    delete option['text'];
+                    return {
+                      ...option,
+                      links: option.links as unknown as Prisma.InputJsonArray,
+                      name: option.name,
+                    };
+                  }),
+                },
+              }
+            : undefined,
+        },
+        include: includeViews.fundamentals,
+      });
+
+    if (!enableV2MSQ) {
+      rawMultiselectQuestion['jurisdictions'] = [
+        rawMultiselectQuestion.jurisdiction,
+      ];
+    }
+    return mapTo(MultiselectQuestion, rawMultiselectQuestion);
+  }
+
+  /*
+    this will update a multiselect question's name or items field
+    if no multiselect question has the id of the incoming argument an error is thrown
+  */
+  async update(
+    incomingData: MultiselectQuestionUpdate,
+  ): Promise<MultiselectQuestion> {
+    const {
+      id,
+      isExclusive,
+      jurisdiction,
+      jurisdictions,
+      links,
+      multiselectOptions,
+      name,
+      options,
+      status,
+      ...updateData
+    } = incomingData;
+
+    const currentMultiselectQuestion = await this.findOne(id);
+
+    const rawJurisdiction = await this.prisma.jurisdictions.findFirstOrThrow({
+      select: {
+        featureFlags: true,
+        id: true,
+      },
+      where: {
+        id: jurisdiction
+          ? jurisdiction.id
+          : jurisdictions?.at(0)
+          ? jurisdictions?.at(0)?.id
+          : undefined,
+      },
+    });
+
+    const enableV2MSQ = doJurisdictionHaveFeatureFlagSet(
+      rawJurisdiction as Jurisdiction,
+      FeatureFlagEnum.enableV2MSQ,
+    );
+
+    if (enableV2MSQ) {
+      this.validateStatusStateTransition(
+        currentMultiselectQuestion.status,
+        status,
+      );
+    }
+
+    const rawMultiselectQuestion =
+      await this.prisma.multiselectQuestions.update({
+        data: {
+          ...updateData,
+          id: undefined,
+          jurisdiction: {
+            connect: { id: rawJurisdiction.id },
+          },
+          links: links
+            ? (links as unknown as Prisma.InputJsonArray)
+            : undefined,
+          // TODO: Can be removed after MSQ refactor
+          options: options
+            ? (options as unknown as Prisma.InputJsonArray)
+            : undefined,
+
+          // TODO: Use of the feature flag is temporary until after MSQ refactor
+          isExclusive: enableV2MSQ ? isExclusive : false,
+          name: enableV2MSQ ? name : updateData.text,
+          status: enableV2MSQ ? status : MultiselectQuestionsStatusEnum.draft,
+
+          multiselectOptions: enableV2MSQ
+            ? {
+                createMany: {
+                  data: multiselectOptions?.map((option) => {
+                    // TODO: Can be removed after MSQ refactor
+                    delete option['collectAddress'];
+                    delete option['collectName'];
+                    delete option['collectRelationship'];
+                    delete option['exclusive'];
+                    delete option['text'];
+                    return {
+                      ...option,
+                      links: option.links as unknown as Prisma.InputJsonArray,
+                      name: option.name,
+                    };
+                  }),
+                },
+              }
+            : undefined,
+        },
+        where: {
+          id: id,
+        },
+        include: includeViews.fundamentals,
+      });
+
+    // TODO: Temporary until front end accepts MSQ refactor
+    if (!enableV2MSQ) {
+      rawMultiselectQuestion['jurisdictions'] = [
+        rawMultiselectQuestion.jurisdiction,
+      ];
+    }
+    return mapTo(MultiselectQuestion, rawMultiselectQuestion);
+  }
+
+  /*
+    this will delete a multiselect question
+  */
+  async delete(multiselectQuestionId: string): Promise<SuccessDTO> {
+    const currentMultiselectQuestion = await this.findOne(
+      multiselectQuestionId,
+    );
+
+    const enableV2MSQ = doJurisdictionHaveFeatureFlagSet(
+      currentMultiselectQuestion.jurisdiction as Jurisdiction,
+      FeatureFlagEnum.enableV2MSQ,
+    );
+
+    if (enableV2MSQ) {
+      this.validateStatusStateTransition(
+        currentMultiselectQuestion.status,
+        currentMultiselectQuestion.status,
+      );
+    }
+
+    await this.prisma.multiselectQuestions.delete({
+      where: {
+        id: multiselectQuestionId,
+      },
+    });
+    return {
+      success: true,
+    } as SuccessDTO;
   }
 
   async findByListingId(listingId: string): Promise<MultiselectQuestion[]> {
     let rawMultiselectQuestions =
       await this.prisma.multiselectQuestions.findMany({
-        include: {
-          listings: true,
-        },
+        include: includeViews.base,
         where: {
           listings: {
             some: {
@@ -268,5 +416,244 @@ export class MultiselectQuestionService {
       jurisdictions: [{ id: msq.jurisdictionId }],
     }));
     return mapTo(MultiselectQuestion, rawMultiselectQuestions);
+  }
+
+  /**
+    validates that the attempted status state transition is allowed in the state machine,
+    if not it throws a custom error
+  */
+  validateStatusStateTransition(
+    currentState: MultiselectQuestionsStatusEnum,
+    nextState: MultiselectQuestionsStatusEnum,
+  ) {
+    if (currentState === nextState) {
+      if (
+        nextState === MultiselectQuestionsStatusEnum.active ||
+        nextState === MultiselectQuestionsStatusEnum.toRetire ||
+        nextState === MultiselectQuestionsStatusEnum.retired
+      ) {
+        throw new BadRequestException(
+          `A multiselect question of status '${nextState}' cannot be edited or deleted`,
+        );
+      }
+      return;
+    }
+
+    switch (currentState) {
+      case MultiselectQuestionsStatusEnum.draft:
+        if (nextState !== MultiselectQuestionsStatusEnum.visible) {
+          throw new BadRequestException(
+            "status 'draft' can only change to 'visible'",
+          );
+        }
+        break;
+      case MultiselectQuestionsStatusEnum.visible:
+        if (
+          nextState !== MultiselectQuestionsStatusEnum.draft &&
+          nextState !== MultiselectQuestionsStatusEnum.active
+        ) {
+          throw new BadRequestException(
+            "status 'visible' can only change to 'draft' or 'active'",
+          );
+        }
+        break;
+      case MultiselectQuestionsStatusEnum.active:
+        if (
+          nextState !== MultiselectQuestionsStatusEnum.toRetire &&
+          nextState !== MultiselectQuestionsStatusEnum.retired
+        ) {
+          throw new BadRequestException(
+            "status 'active' can only change to 'toRetire' or 'retired'",
+          );
+        }
+        break;
+
+      case MultiselectQuestionsStatusEnum.toRetire:
+        if (
+          nextState !== MultiselectQuestionsStatusEnum.retired &&
+          nextState !== MultiselectQuestionsStatusEnum.active
+        ) {
+          throw new BadRequestException(
+            "status 'toRetire' can only change to 'retired'",
+          );
+        }
+        break;
+
+      case MultiselectQuestionsStatusEnum.retired:
+        throw new BadRequestException("status 'retired' cannot be changed");
+
+      default:
+        throw new BadRequestException(
+          `current status is not of type MultiselectQuestionsStatusEnum: ${currentState}`,
+        );
+    }
+  }
+
+  /**
+    moves a multiselect question to a new status state
+  */
+  async statusStateTransition(
+    multiselectQuestion: MultiselectQuestion,
+    status: MultiselectQuestionsStatusEnum,
+  ) {
+    this.validateStatusStateTransition(multiselectQuestion.status, status);
+
+    await this.prisma.multiselectQuestions.update({
+      data: {
+        status: status,
+      },
+      where: {
+        id: multiselectQuestion.id,
+      },
+    });
+  }
+
+  /**
+    actives any visible multiselect questions
+  */
+  async activateMany(
+    multiselectQuestions: MultiselectQuestion[],
+  ): Promise<SuccessDTO> {
+    // What if one fails?
+    for (const multiselectQuestion of multiselectQuestions) {
+      if (
+        multiselectQuestion.status === MultiselectQuestionsStatusEnum.visible
+      ) {
+        await this.statusStateTransition(
+          multiselectQuestion,
+          MultiselectQuestionsStatusEnum.active,
+        );
+      }
+    }
+    return {
+      success: true,
+    } as SuccessDTO;
+  }
+
+  async reActivate(multiselectQuestionId: string): Promise<SuccessDTO> {
+    const multiselectQuestion = await this.findOne(multiselectQuestionId);
+
+    await this.statusStateTransition(
+      multiselectQuestion,
+      MultiselectQuestionsStatusEnum.active,
+    );
+
+    return {
+      success: true,
+    } as SuccessDTO;
+  }
+
+  /**
+    attempts to move a multiselect question to retired status,
+    if it is still associated with open listings it is moved to toRetire
+  */
+  async retire(multiselectQuestionId: string): Promise<SuccessDTO> {
+    const rawMultiselectQuestion =
+      await this.prisma.multiselectQuestions.findUnique({
+        include: {
+          listings: {
+            include: {
+              listings: true,
+            },
+          },
+        },
+        where: {
+          id: multiselectQuestionId,
+        },
+      });
+
+    if (!rawMultiselectQuestion) {
+      throw new NotFoundException(
+        `multiselectQuestionId ${multiselectQuestionId} was requested but not found`,
+      );
+    }
+
+    const multiselectQuestion = mapTo(
+      MultiselectQuestion,
+      rawMultiselectQuestion,
+    );
+
+    if (
+      rawMultiselectQuestion.listings.every(
+        ({ listings }) => listings.status === ListingsStatusEnum.closed,
+      )
+    ) {
+      await this.statusStateTransition(
+        multiselectQuestion,
+        MultiselectQuestionsStatusEnum.retired,
+      );
+    } else {
+      await this.statusStateTransition(
+        multiselectQuestion,
+        MultiselectQuestionsStatusEnum.toRetire,
+      );
+    }
+
+    return {
+      success: true,
+    } as SuccessDTO;
+  }
+
+  /**
+    runs the job to auto retire multiselect questions that are waiting to be retired
+  */
+  async retireMultiselectQuestions(): Promise<SuccessDTO> {
+    this.logger.warn('retireMultiselectQuestionsCron job running');
+    await this.markCronJobAsStarted('MSQ_RETIRE_CRON_JOB');
+
+    const res = await this.prisma.multiselectQuestions.updateMany({
+      data: {
+        status: MultiselectQuestionsStatusEnum.retired,
+      },
+      where: {
+        listings: {
+          every: {
+            listings: {
+              status: ListingsStatusEnum.closed,
+            },
+          },
+        },
+        status: MultiselectQuestionsStatusEnum.toRetire,
+      },
+    });
+
+    this.logger.warn(
+      `Changed the status of ${res?.count} multiselect questions`,
+    );
+
+    return {
+      success: true,
+    };
+  }
+
+  /**
+    marks the db record for this cronjob as begun or creates a cronjob that
+    is marked as begun if one does not already exist
+  */
+  async markCronJobAsStarted(cronJobName: string): Promise<void> {
+    const job = await this.prisma.cronJob.findFirst({
+      where: {
+        name: cronJobName,
+      },
+    });
+    if (job) {
+      // if a job exists then we update db entry
+      await this.prisma.cronJob.update({
+        data: {
+          lastRunDate: new Date(),
+        },
+        where: {
+          id: job.id,
+        },
+      });
+    } else {
+      // if no job we create a new entry
+      await this.prisma.cronJob.create({
+        data: {
+          lastRunDate: new Date(),
+          name: cronJobName,
+        },
+      });
+    }
   }
 }

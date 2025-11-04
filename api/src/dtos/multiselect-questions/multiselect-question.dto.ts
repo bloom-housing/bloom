@@ -36,7 +36,7 @@ class MultiselectQuestion extends AbstractDTO {
   description?: string;
 
   // TODO: Temporarily optional until after MSQ refactor
-  // @Expose()
+  @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   isExclusive?: boolean;
@@ -47,7 +47,7 @@ class MultiselectQuestion extends AbstractDTO {
   hideFromListing?: boolean;
 
   // TODO: Temporarily optional until after MSQ refactor
-  // @Expose()
+  @Expose()
   // @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => IdDTO)
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
@@ -68,7 +68,7 @@ class MultiselectQuestion extends AbstractDTO {
   links?: MultiselectLink[];
 
   // TODO: Temporarily optional until after MSQ refactor
-  // @Expose()
+  @Expose()
   // @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => MultiselectOption)
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
@@ -76,7 +76,7 @@ class MultiselectQuestion extends AbstractDTO {
   multiselectOptions?: MultiselectOption[];
 
   // TODO: Temporarily optional until after MSQ refactor
-  // @Expose()
+  @Expose()
   // @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
@@ -95,14 +95,15 @@ class MultiselectQuestion extends AbstractDTO {
   optOutText?: string;
 
   // TODO: Temporarily optional until after MSQ refactor
-  // @Expose()
-  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @Expose()
+  // @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @IsEnum(MultiselectQuestionsStatusEnum, {
     groups: [ValidationsGroupsEnum.default],
   })
-  @ApiProperty({
+  @ApiPropertyOptional({
     enum: MultiselectQuestionsStatusEnum,
     enumName: 'MultiselectQuestionsStatusEnum',
+    example: 'draft',
   })
   status: MultiselectQuestionsStatusEnum;
 
@@ -116,6 +117,11 @@ class MultiselectQuestion extends AbstractDTO {
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
   text: string;
+
+  @Expose()
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  untranslatedName?: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })

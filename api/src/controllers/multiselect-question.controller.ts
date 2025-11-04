@@ -18,22 +18,24 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
-import { MultiselectQuestionService } from '../services/multiselect-question.service';
+import { PermissionAction } from '../decorators/permission-action.decorator';
+import { PermissionTypeDecorator } from '../decorators/permission-type.decorator';
 import { MultiselectQuestion } from '../dtos/multiselect-questions/multiselect-question.dto';
 import { MultiselectQuestionCreate } from '../dtos/multiselect-questions/multiselect-question-create.dto';
+import { MultiselectQuestionFilterParams } from '../dtos/multiselect-questions/multiselect-question-filter-params.dto';
 import { MultiselectQuestionUpdate } from '../dtos/multiselect-questions/multiselect-question-update.dto';
 import { MultiselectQuestionQueryParams } from '../dtos/multiselect-questions/multiselect-question-query-params.dto';
-import { defaultValidationPipeOptions } from '../utilities/default-validation-pipe-options';
 import { IdDTO } from '../dtos/shared/id.dto';
-import { SuccessDTO } from '../dtos/shared/success.dto';
-import { MultiselectQuestionFilterParams } from '../dtos/multiselect-questions/multiselect-question-filter-params.dto';
 import { PaginationMeta } from '../dtos/shared/pagination.dto';
-import { PermissionTypeDecorator } from '../decorators/permission-type.decorator';
+import { SuccessDTO } from '../dtos/shared/success.dto';
+import { permissionActions } from '../enums/permissions/permission-actions-enum';
+import { ApiKeyGuard } from '../guards/api-key.guard';
+import { AdminOrJurisdictionalAdminGuard } from '../guards/admin-or-jurisdiction-admin.guard';
 import { OptionalAuthGuard } from '../guards/optional.guard';
 import { PermissionGuard } from '../guards/permission.guard';
-import { AdminOrJurisdictionalAdminGuard } from '../guards/admin-or-jurisdiction-admin.guard';
 import { ActivityLogInterceptor } from '../interceptors/activity-log.interceptor';
-import { ApiKeyGuard } from '../guards/api-key.guard';
+import { MultiselectQuestionService } from '../services/multiselect-question.service';
+import { defaultValidationPipeOptions } from '../utilities/default-validation-pipe-options';
 
 @Controller('multiselectQuestions')
 @ApiTags('multiselectQuestions')
@@ -62,18 +64,6 @@ export class MultiselectQuestionController {
     return await this.multiselectQuestionService.list(queryParams);
   }
 
-  @Get(`:multiselectQuestionId`)
-  @ApiOperation({
-    summary: 'Get multiselect question by id',
-    operationId: 'retrieve',
-  })
-  @ApiOkResponse({ type: MultiselectQuestion })
-  async retrieve(
-    @Param('multiselectQuestionId') multiselectQuestionId: string,
-  ): Promise<MultiselectQuestion> {
-    return this.multiselectQuestionService.findOne(multiselectQuestionId);
-  }
-
   @Post()
   @ApiOperation({
     summary: 'Create multiselect question',
@@ -87,7 +77,7 @@ export class MultiselectQuestionController {
     return await this.multiselectQuestionService.create(multiselectQuestion);
   }
 
-  @Put(`:multiselectQuestionId`)
+  @Put()
   @ApiOperation({
     summary: 'Update multiselect question',
     operationId: 'update',
@@ -110,5 +100,52 @@ export class MultiselectQuestionController {
   @UseInterceptors(ActivityLogInterceptor)
   async delete(@Body() dto: IdDTO): Promise<SuccessDTO> {
     return await this.multiselectQuestionService.delete(dto.id);
+  }
+
+  @Put('reActivate')
+  @ApiOperation({
+    summary: 'Re-activate a multiselect question',
+    operationId: 'reActivate',
+  })
+  @ApiOkResponse({ type: SuccessDTO })
+  @UseGuards(OptionalAuthGuard, AdminOrJurisdictionalAdminGuard)
+  async reActivate(@Body() dto: IdDTO): Promise<SuccessDTO> {
+    return await this.multiselectQuestionService.reActivate(dto.id);
+  }
+
+  @Put('retire')
+  @ApiOperation({
+    summary: 'Retire a multiselect question',
+    operationId: 'retire',
+  })
+  @ApiOkResponse({ type: SuccessDTO })
+  @UseGuards(OptionalAuthGuard, AdminOrJurisdictionalAdminGuard)
+  async retire(@Body() dto: IdDTO): Promise<SuccessDTO> {
+    return await this.multiselectQuestionService.retire(dto.id);
+  }
+
+  @Put('retireMultiselectQuestions')
+  @ApiOperation({
+    summary: 'Trigger the retirement of multiselect questions cron job',
+    operationId: 'retireMultiselectQuestions',
+  })
+  @ApiOkResponse({ type: SuccessDTO })
+  @PermissionAction(permissionActions.submit)
+  @UseInterceptors(ActivityLogInterceptor)
+  @UseGuards(ApiKeyGuard, OptionalAuthGuard, AdminOrJurisdictionalAdminGuard)
+  async retireMultiselectQuestions(): Promise<SuccessDTO> {
+    return await this.multiselectQuestionService.retireMultiselectQuestions();
+  }
+
+  @Get(`:multiselectQuestionId`)
+  @ApiOperation({
+    summary: 'Get multiselect question by id',
+    operationId: 'retrieve',
+  })
+  @ApiOkResponse({ type: MultiselectQuestion })
+  async retrieve(
+    @Param('multiselectQuestionId') multiselectQuestionId: string,
+  ): Promise<MultiselectQuestion> {
+    return this.multiselectQuestionService.findOne(multiselectQuestionId);
   }
 }
