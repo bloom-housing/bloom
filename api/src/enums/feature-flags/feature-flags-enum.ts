@@ -44,18 +44,12 @@ export enum FeatureFlagEnum {
   swapCommunityTypeWithPrograms = 'swapCommunityTypeWithPrograms',
 }
 
-type FlagDependency = {
-  flagName: FeatureFlagEnum;
-  requiredState: boolean;
-};
-
 // List of all of existing flags and their descriptions.
 // This should be the source of all feature flags in our system.
 // Keep alphabetized for readability.
 export const featureFlagMap: {
   name: string;
   description: string;
-  dependencies?: FlagDependency[];
 }[] = [
   {
     name: FeatureFlagEnum.disableCommonApplication,
