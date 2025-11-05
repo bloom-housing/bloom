@@ -42,8 +42,7 @@ const PageHeader = (props: PageHeaderProps) => {
               <HeadingGroup
                 heading={props.heading}
                 subheading={props.subheading}
-                size="4xl"
-                headingPriority={1}
+                headingProps={{ size: "4xl", priority: 1 }}
                 className={styles["page-header-text-group"]}
               />
             ) : (
