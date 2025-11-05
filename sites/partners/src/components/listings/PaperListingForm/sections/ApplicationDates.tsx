@@ -59,8 +59,6 @@ const ApplicationDates = ({
     listing?.jurisdictions?.id
   )
 
-  console.log(enableMarketingStatusMonths)
-
   const openHouseTableData = useMemo(() => {
     return openHouseEvents.map((event) => {
       const { startTime, endTime, url } = event
