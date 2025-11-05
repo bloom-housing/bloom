@@ -155,7 +155,7 @@ export const stagingSeed = async (
   });
   const angelopolisJurisdiction = await prismaClient.jurisdictions.create({
     data: jurisdictionFactory('Angelopolis', {
-      featureFlags: [],
+      featureFlags: [FeatureFlagEnum.enableHousingDeveloperOwner],
       requiredListingFields: [
         'listingsBuildingAddress',
         'name',

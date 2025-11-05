@@ -7554,6 +7554,7 @@ export enum FeatureFlagEnum {
   "enableGeocodingPreferences" = "enableGeocodingPreferences",
   "enableGeocodingRadiusMethod" = "enableGeocodingRadiusMethod",
   "enableHomeType" = "enableHomeType",
+  "enableHousingDeveloperOwner" = "enableHousingDeveloperOwner",
   "enableIsVerified" = "enableIsVerified",
   "enableLimitedHowDidYouHear" = "enableLimitedHowDidYouHear",
   "enableListingFavoriting" = "enableListingFavoriting",
