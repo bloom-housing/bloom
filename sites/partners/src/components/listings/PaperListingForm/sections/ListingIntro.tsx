@@ -15,7 +15,6 @@ import {
 } from "../../../../lib/helpers"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 import styles from "../ListingForm.module.scss"
-import { AuthContext } from "@bloom-housing/shared-helpers"
 
 interface ListingIntroProps {
   jurisdictions: Jurisdiction[]
