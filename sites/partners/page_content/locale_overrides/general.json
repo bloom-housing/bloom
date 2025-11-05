@@ -280,6 +280,7 @@
   "listings.isDigitalApplication": "Is there a digital application?",
   "listings.isPaperApplication": "Is there a paper application?",
   "listings.isReferralOpportunity": "Is there a referral opportunity?",
+  "listings.housingDeveloperOwner": "Housing developer / owner",
   "listings.latitude": "Latitude",
   "listings.leasingAgentAddress": "Leasing agent address",
   "listings.listingAvailabilityQuestion": "What is the listing availability?",
