@@ -2,7 +2,7 @@ import React from "react"
 import { rest } from "msw"
 import { setupServer } from "msw/node"
 import { FormProvider, useForm } from "react-hook-form"
-import { screen, fireEvent, act } from "@testing-library/react"
+import { screen } from "@testing-library/react"
 import RankingsAndResults from "../../../../../src/components/listings/PaperListingForm/sections/RankingsAndResults"
 import { formDefaults, FormListing } from "../../../../../src/lib/listings/formTypes"
 import { mockNextRouter, mockTipTapEditor, render } from "../../../../testUtils"
@@ -176,9 +176,7 @@ describe("Verifying text when selecting lottery radio button", () => {
 
     screen.getByRole("heading", { name: "Rankings & results" })
     const lotteryRadio = await screen.findByRole("radio", { name: "Lottery" })
-    act(() => {
-      fireEvent.click(lotteryRadio)
-    })
+    await userEvent.click(lotteryRadio)
     expect(
       screen.getByText(
         "Your lottery will be run in the Partners Portal. If you want to make alternative arrangements, please contact staff."
@@ -201,9 +199,7 @@ describe("Verifying text when selecting lottery radio button", () => {
 
     screen.getByRole("heading", { name: "Rankings & results" })
     const lotteryRadio = await screen.findByRole("radio", { name: "Lottery" })
-    act(() => {
-      fireEvent.click(lotteryRadio)
-    })
+    await userEvent.click(lotteryRadio)
     expect(screen.getByText("Will the lottery be run in the partner portal?")).toBeInTheDocument()
   })
 })
