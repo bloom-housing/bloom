@@ -30,10 +30,9 @@ beforeAll(() => {
   mockTipTapEditor()
 })
 
-afterEach(() => server.resetHandlers())
-afterAll(() => server.close())
-
 describe("RankingsAndResults", () => {
+  afterEach(() => server.resetHandlers())
+  afterAll(() => server.close())
   const userWithWaitlistLotteryFlag = {
     jurisdictions: [
       {
@@ -161,15 +160,10 @@ describe("RankingsAndResults", () => {
     expect(screen.getByRole("radio", { name: /First come first serve/i })).toBeInTheDocument()
     expect(screen.getByRole("radio", { name: "Lottery" })).toBeInTheDocument()
   })
-
+})
+describe("Verifying text when selecting lottery radio button", () => {
   it("should show proper message when selecting lottery as a non admin user", async () => {
     process.env.showLottery = "true"
-    document.cookie = "access-token-available=True"
-    server.use(
-      rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
-        return res(ctx.json(userWithWaitlistLotteryFlag))
-      })
-    )
     render(
       <FormComponent>
         <RankingsAndResults
@@ -193,12 +187,6 @@ describe("RankingsAndResults", () => {
   })
   it("should show proper message when selecting lottery as an admin user", async () => {
     process.env.showLottery = "true"
-    document.cookie = "access-token-available=True"
-    server.use(
-      rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
-        return res(ctx.json(userWithWaitlistLotteryFlag))
-      })
-    )
     render(
       <FormComponent>
         <RankingsAndResults
