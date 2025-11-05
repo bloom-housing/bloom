@@ -41,7 +41,7 @@ const NeighborhoodAmenities = () => {
     return rows
   }, [visibleAmenities])
 
-  if (!enableNeighborhoodAmenities) {
+  if (!enableNeighborhoodAmenities || !jurisdiction) {
     return <></>
   }
 
