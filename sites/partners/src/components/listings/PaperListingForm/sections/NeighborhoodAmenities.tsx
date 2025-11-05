@@ -10,45 +10,6 @@ import {
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { useJurisdiction } from "../../../../lib/hooks"
 
-type AmenityConfig = {
-  key: NeighborhoodAmenitiesEnum
-  labelKey: string
-  fieldName: string
-}
-
-const amenitiesConfig: AmenityConfig[] = [
-  {
-    key: NeighborhoodAmenitiesEnum.groceryStores,
-    labelKey: "listings.amenities.groceryStores",
-    fieldName: "listingNeighborhoodAmenities.groceryStores",
-  },
-  {
-    key: NeighborhoodAmenitiesEnum.publicTransportation,
-    labelKey: "listings.amenities.publicTransportation",
-    fieldName: "listingNeighborhoodAmenities.publicTransportation",
-  },
-  {
-    key: NeighborhoodAmenitiesEnum.schools,
-    labelKey: "listings.amenities.schools",
-    fieldName: "listingNeighborhoodAmenities.schools",
-  },
-  {
-    key: NeighborhoodAmenitiesEnum.parksAndCommunityCenters,
-    labelKey: "listings.amenities.parksAndCommunityCenters",
-    fieldName: "listingNeighborhoodAmenities.parksAndCommunityCenters",
-  },
-  {
-    key: NeighborhoodAmenitiesEnum.pharmacies,
-    labelKey: "listings.amenities.pharmacies",
-    fieldName: "listingNeighborhoodAmenities.pharmacies",
-  },
-  {
-    key: NeighborhoodAmenitiesEnum.healthCareResources,
-    labelKey: "listings.amenities.healthCareResources",
-    fieldName: "listingNeighborhoodAmenities.healthCareResources",
-  },
-]
-
 const NeighborhoodAmenities = () => {
   const formMethods = useFormContext()
   const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
@@ -66,12 +27,14 @@ const NeighborhoodAmenities = () => {
 
   const visibleAmenities = useMemo(() => {
     const visibleAmenitiesList = jurisdictionData?.visibleNeighborhoodAmenities || []
-    return amenitiesConfig.filter((amenity) => visibleAmenitiesList.includes(amenity.key))
+    return Object.values(NeighborhoodAmenitiesEnum).filter((amenity) =>
+      visibleAmenitiesList.includes(amenity)
+    )
   }, [jurisdictionData?.visibleNeighborhoodAmenities])
 
   // Group amenities into rows of 2
   const amenityRows = useMemo(() => {
-    const rows: AmenityConfig[][] = []
+    const rows: NeighborhoodAmenitiesEnum[][] = []
     for (let i = 0; i < visibleAmenities.length; i += 2) {
       rows.push(visibleAmenities.slice(i, i + 2))
     }
@@ -92,11 +55,11 @@ const NeighborhoodAmenities = () => {
         {amenityRows.map((row, rowIndex) => (
           <Grid.Row key={rowIndex} columns={2}>
             {row.map((amenity) => (
-              <Grid.Cell key={amenity.key}>
+              <Grid.Cell key={amenity}>
                 <Textarea
-                  label={t(amenity.labelKey)}
-                  name={amenity.fieldName}
-                  id={amenity.fieldName}
+                  label={t(`listings.amenities.${amenity}`)}
+                  name={`listingNeighborhoodAmenities.${amenity}`}
+                  id={`listingNeighborhoodAmenities.${amenity}`}
                   fullWidth={true}
                   register={register}
                   placeholder={""}
