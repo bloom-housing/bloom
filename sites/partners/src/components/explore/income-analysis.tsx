@@ -64,101 +64,114 @@ export default function HouseholdIncomeReport({ chartData }: HouseholdIncomeRepo
         <p className="text-sm text-gray-600 mb-6">
           Below is a summary of applicants household size and household income
         </p>
-
-        <div className="w-full h-3/5 p-4">
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart
-              data={barChartData}
-              barGap={2}
-              barCategoryGap="25%"
-              margin={{ top: 10, bottom: 10 }}
-              onMouseMove={handleBarMouseOver}
-              onMouseLeave={handleBarMouseOut}
-            >
-              <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" vertical={false} />
-              <XAxis
-                dataKey="amiRange"
-                axisLine={false}
-                tickLine={false}
-                label={{ value: "AMI Range", position: "insideBottom", offset: -6 }}
-              />
-              <YAxis
-                axisLine={false}
-                tickLine={false}
-                label={{
-                  value: "Number of Applicants",
-                  angle: -90,
-                  position: "insideLeft",
-                  style: { textAnchor: "middle" },
-                  dx: 0,
-                }}
-              />
-              <ReTooltip
-                contentStyle={{ borderRadius: 4, borderColor: "#E5E7EB" }}
-                cursor={{ opacity: 0.3 }}
-              />
-              <Legend
-                verticalAlign="top"
-                height={36}
-                iconType="circle"
-                align="right"
-                formatter={(value) => <span style={{ color: "#374151" }}>{value}</span>}
-              />
-
-              {/* one Bar per household size */}
-              {hhSizes.map((size, index) => (
-                <Bar
-                  key={size}
-                  dataKey={`${size} bedroom`}
-                  fill={
-                    ["#205493", "#0067BE", "#0077DA", "#DAEEFF"][index] // blue-900, blue-700, blue-500, blue-300
-                  }
-                  opacity={activeBar && activeBar !== `${size} bedroom` ? 0.6 : 1}
-                  maxBarSize={24}
-                  radius={[4, 4, 0, 0]}
+        {barChartData.length === 0 ? (
+          <div className="w-full flex justify-center items-center h-64">
+            <p className="text-gray-600">No data available for the selected filters.</p>
+          </div>
+        ) : (
+          <>
+            <div className="w-full h-3/5 p-4">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart
+                  data={barChartData}
+                  barGap={2}
+                  barCategoryGap="25%"
+                  margin={{ top: 10, bottom: 10 }}
+                  onMouseMove={handleBarMouseOver}
+                  onMouseLeave={handleBarMouseOut}
                 >
-                  <LabelList
-                    dataKey={`${size} bedroom`}
-                    position="top"
-                    style={{ fontSize: "12px", fill: "#374151" }}
+                  <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" vertical={false} />
+                  <XAxis
+                    dataKey="amiRange"
+                    axisLine={false}
+                    tickLine={false}
+                    label={{ value: "AMI Range", position: "insideBottom", offset: -6 }}
                   />
-                </Bar>
-              ))}
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
+                  <YAxis
+                    axisLine={false}
+                    tickLine={false}
+                    label={{
+                      value: "Number of Applicants",
+                      angle: -90,
+                      position: "insideLeft",
+                      style: { textAnchor: "middle" },
+                      dx: 0,
+                    }}
+                  />
+                  <ReTooltip
+                    contentStyle={{ borderRadius: 4, borderColor: "#E5E7EB" }}
+                    cursor={{ opacity: 0.3 }}
+                  />
+                  <Legend
+                    verticalAlign="top"
+                    height={36}
+                    iconType="circle"
+                    align="right"
+                    formatter={(value) => <span style={{ color: "#374151" }}>{value}</span>}
+                  />
 
-        <div className="mt-6">
-          <table className="min-w-full">
-            <thead className="bg-white border-b-0">
-              <tr className="bg-white">
-                <th className="px-4 py-2 text-left text-sm font-bold text-gray-750 bg-white normal-case border-b-0">
-                  AMI Range
-                </th>
-                {hhSizes.map((size) => (
-                  <th
-                    key={size}
-                    className="px-4 py-2 text-right text-sm font-bold text-gray-750 bg-white normal-case border-b-0"
-                  >
-                    {size} person
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {tableData.map((row) => (
-                <tr key={String(row.amiRange)} className="bg-white border-t border-gray-450">
-                  <td className="px-4 py-2 text-sm text-gray-700">{String(row.amiRange)}</td>
-                  {hhSizes.map((size) => (
-                    <td key={size} className="px-4 py-2 text-sm text-right text-gray-700">
-                      {row[`${size} person`]}
-                    </td>
+                  {/* one Bar per household size */}
+                  {hhSizes.map((size, index) => (
+                    <Bar
+                      key={size}
+                      dataKey={`${size} bedroom`}
+                      fill={
+                        ["#205493", "#0067BE", "#0077DA", "#DAEEFF"][index] // blue-900, blue-700, blue-500, blue-300
+                      }
+                      opacity={activeBar && activeBar !== `${size} bedroom` ? 0.6 : 1}
+                      maxBarSize={24}
+                      radius={[4, 4, 0, 0]}
+                    >
+                      <LabelList
+                        dataKey={`${size} bedroom`}
+                        position="top"
+                        style={{ fontSize: "12px", fill: "#374151" }}
+                      />
+                    </Bar>
                   ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+
+            {tableData.length === 0 ? (
+              <div className="w-full flex justify-center items-center h-32 mt-6">
+                <p className="text-gray-600">No data available for the selected filters.</p>
+              </div>
+            ) : (
+              <div className="mt-6">
+                <table className="min-w-full">
+                  <thead className="bg-white border-b-0">
+                    <tr className="bg-white">
+                      <th className="px-4 py-2 text-left text-sm font-bold text-gray-750 bg-white normal-case border-b-0">
+                        AMI Range
+                      </th>
+                      {hhSizes.map((size) => (
+                        <th
+                          key={size}
+                          className="px-4 py-2 text-right text-sm font-bold text-gray-750 bg-white normal-case border-b-0"
+                        >
+                          {size} person
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {tableData.map((row) => (
+                      <tr key={String(row.amiRange)} className="bg-white border-t border-gray-450">
+                        <td className="px-4 py-2 text-sm text-gray-700">{String(row.amiRange)}</td>
+                        {hhSizes.map((size) => (
+                          <td key={size} className="px-4 py-2 text-sm text-right text-gray-700">
+                            {row[`${size} person`]}
+                          </td>
+                        ))}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </>
+        )}
       </div>
     </div>
   )

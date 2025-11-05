@@ -31,50 +31,58 @@ function DemographicChart({ title, data, dataKey }: DemographicChartProps) {
   return (
     <div className="mb-12 w-1/2">
       <h3 className="text-lg font-semibold mb-2">{title}</h3>
-      <div className="w-full h-64">
-        <ResponsiveContainer>
-          <BarChart
-            layout="vertical"
-            data={data}
-            margin={{ top: 20, right: 30, left: 20, bottom: 20 }}
-          >
-            <CartesianGrid stroke="#EFEFEF" horizontal={false} vertical={true} />
-            <XAxis
-              type="number"
-              tick={{ fontSize: 12, fill: "#4B5563" }}
-              tickLine={false}
-              axisLine={false}
-              label={{
-                value: "Count",
-                position: "insideBottom",
-                offset: -10,
-                style: { textAnchor: "middle", fontSize: "12px", fill: "#4B5563" },
-              }}
-            />
-            <YAxis
-              type="category"
-              dataKey={dataKey}
-              tick={{ fontSize: 12, fill: "##767676" }}
-              tickLine={false}
-              axisLine={false}
-            />
-            <ReTooltip
-              formatter={(val: number) => [`${val}`, "Count"]}
-              cursor={{ fill: "#CBD5E1", opacity: 0.3 }}
-            />
+      {data.length === 0 ? (
+        <div className="w-full flex justify-center items-center h-64">
+          <p className="text-gray-600">No data available for the selected filters.</p>
+        </div>
+      ) : (
+        <>
+          <div className="w-full h-64">
+            <ResponsiveContainer>
+              <BarChart
+                layout="vertical"
+                data={data}
+                margin={{ top: 20, right: 30, left: 20, bottom: 20 }}
+              >
+                <CartesianGrid stroke="#EFEFEF" horizontal={false} vertical={true} />
+                <XAxis
+                  type="number"
+                  tick={{ fontSize: 12, fill: "#4B5563" }}
+                  tickLine={false}
+                  axisLine={false}
+                  label={{
+                    value: "Count",
+                    position: "insideBottom",
+                    offset: -10,
+                    style: { textAnchor: "middle", fontSize: "12px", fill: "#4B5563" },
+                  }}
+                />
+                <YAxis
+                  type="category"
+                  dataKey={dataKey}
+                  tick={{ fontSize: 12, fill: "##767676" }}
+                  tickLine={false}
+                  axisLine={false}
+                />
+                <ReTooltip
+                  formatter={(val: number) => [`${val}`, "Count"]}
+                  cursor={{ fill: "#CBD5E1", opacity: 0.3 }}
+                />
 
-            <Bar dataKey="count" fill={BLUE_500} barSize={24} radius={[0, 4, 4, 0]}>
-              <LabelList
-                dataKey="count"
-                position="right"
-                style={{ fontSize: "12px", fill: "#4B5563" }}
-              />
-            </Bar>
-          </BarChart>
-        </ResponsiveContainer>
-      </div>
+                <Bar dataKey="count" fill={BLUE_500} barSize={24} radius={[0, 4, 4, 0]}>
+                  <LabelList
+                    dataKey="count"
+                    position="right"
+                    style={{ fontSize: "12px", fill: "#4B5563" }}
+                  />
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
 
-      <DataTable title={title} data={data} dataKey={dataKey} />
+          <DataTable title={title} data={data} dataKey={dataKey} />
+        </>
+      )}
     </div>
   )
 }
