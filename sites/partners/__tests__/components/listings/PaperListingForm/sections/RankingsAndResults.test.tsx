@@ -162,7 +162,7 @@ describe("RankingsAndResults", () => {
     expect(screen.getByRole("radio", { name: "Lottery" })).toBeInTheDocument()
   })
 
-  it("should show review order options when availabilityQuestion is openWaitlist and enableWaitlistLottery is true as a non admin user", async () => {
+  it("should show proper message when selecting lottery as a non admin user", async () => {
     process.env.showLottery = "true"
     document.cookie = "access-token-available=True"
     server.use(
@@ -170,15 +170,8 @@ describe("RankingsAndResults", () => {
         return res(ctx.json(userWithWaitlistLotteryFlag))
       })
     )
-
     render(
-      <FormComponent
-        values={{
-          ...formDefaults,
-          jurisdictions: { id: "jurisdiction1" },
-          listingAvailabilityQuestion: "openWaitlist",
-        }}
-      >
+      <FormComponent>
         <RankingsAndResults
           requiredFields={[]}
           whatToExpectEditor={null}
@@ -198,7 +191,7 @@ describe("RankingsAndResults", () => {
       )
     ).toBeInTheDocument()
   })
-  it("should show review order options when availabilityQuestion is openWaitlist and enableWaitlistLottery is true as an admin user", async () => {
+  it("should show proper message when selecting lottery as an admin user", async () => {
     process.env.showLottery = "true"
     document.cookie = "access-token-available=True"
     server.use(
@@ -206,15 +199,8 @@ describe("RankingsAndResults", () => {
         return res(ctx.json(userWithWaitlistLotteryFlag))
       })
     )
-
     render(
-      <FormComponent
-        values={{
-          ...formDefaults,
-          jurisdictions: { id: "jurisdiction1" },
-          listingAvailabilityQuestion: "openWaitlist",
-        }}
-      >
+      <FormComponent>
         <RankingsAndResults
           isAdmin={true}
           listing={null}
