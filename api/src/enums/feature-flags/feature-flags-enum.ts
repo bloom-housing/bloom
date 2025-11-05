@@ -14,6 +14,7 @@ export enum FeatureFlagEnum {
   enableGeocodingPreferences = 'enableGeocodingPreferences',
   enableGeocodingRadiusMethod = 'enableGeocodingRadiusMethod',
   enableHomeType = 'enableHomeType',
+  enableHousingDeveloperOwner = 'enableHousingDeveloperOwner',
   enableIsVerified = 'enableIsVerified',
   enableLimitedHowDidYouHear = 'enableLimitedHowDidYouHear',
   enableListingFavoriting = 'enableListingFavoriting',
@@ -103,6 +104,11 @@ export const featureFlagMap: { name: string; description: string }[] = [
   {
     name: FeatureFlagEnum.enableHomeType,
     description: 'When true, home type feature is turned on',
+  },
+  {
+    name: FeatureFlagEnum.enableHousingDeveloperOwner,
+    description:
+      "When true, the 'Housing developer' field label becomes 'Housing developer / owner'",
   },
   {
     name: FeatureFlagEnum.enableIsVerified,
