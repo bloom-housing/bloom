@@ -92,6 +92,7 @@ const ListingIntro = (props: ListingIntroProps) => {
                     }
                   },
                   "aria-required": fieldIsRequired("jurisdictions", props.requiredFields),
+                  "aria-hidden": !!defaultJurisdiction,
                 }}
               />
             </Grid.Cell>
