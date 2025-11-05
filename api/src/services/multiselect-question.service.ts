@@ -553,7 +553,11 @@ export class MultiselectQuestionService {
         include: {
           listings: {
             include: {
-              listings: true,
+              listings: {
+                select: {
+                  status: true,
+                },
+              },
             },
           },
         },

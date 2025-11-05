@@ -1,23 +1,26 @@
-import { Test, TestingModule } from '@nestjs/testing';
+import { randomUUID } from 'crypto';
 import { Logger } from '@nestjs/common';
-import { PrismaService } from '../../../src/services/prisma.service';
-import { MultiselectQuestionService } from '../../../src/services/multiselect-question.service';
-import { MultiselectQuestionCreate } from '../../../src/dtos/multiselect-questions/multiselect-question-create.dto';
-import { MultiselectQuestionUpdate } from '../../../src/dtos/multiselect-questions/multiselect-question-update.dto';
+import { Test, TestingModule } from '@nestjs/testing';
 import {
+  ListingsStatusEnum,
   MultiselectQuestionsApplicationSectionEnum,
   MultiselectQuestionsStatusEnum,
 } from '@prisma/client';
+import MultiselectQuestion from '../../../src/dtos/multiselect-questions/multiselect-question.dto';
+import { MultiselectQuestionCreate } from '../../../src/dtos/multiselect-questions/multiselect-question-create.dto';
 import { MultiselectQuestionQueryParams } from '../../../src/dtos/multiselect-questions/multiselect-question-query-params.dto';
+import { MultiselectQuestionUpdate } from '../../../src/dtos/multiselect-questions/multiselect-question-update.dto';
 import { Compare } from '../../../src/dtos/shared/base-filter.dto';
-import { randomUUID } from 'crypto';
 import { FeatureFlagEnum } from '../../../src/enums/feature-flags/feature-flags-enum';
+import { MultiselectQuestionService } from '../../../src/services/multiselect-question.service';
+import { PrismaService } from '../../../src/services/prisma.service';
 
 export const mockMultiselectQuestion = (
   position: number,
   date: Date,
   section?: MultiselectQuestionsApplicationSectionEnum,
   enableV2MSQ = false,
+  status: MultiselectQuestionsStatusEnum = MultiselectQuestionsStatusEnum.visible,
 ) => {
   return {
     id: randomUUID(),
@@ -41,9 +44,7 @@ export const mockMultiselectQuestion = (
     },
     isExclusive: enableV2MSQ ? true : false,
     name: enableV2MSQ ? `name ${position}` : `text ${position}`,
-    status: enableV2MSQ
-      ? MultiselectQuestionsStatusEnum.visible
-      : MultiselectQuestionsStatusEnum.draft,
+    status: enableV2MSQ ? status : MultiselectQuestionsStatusEnum.draft,
     multiselectOptions: [],
   };
 };
@@ -689,7 +690,11 @@ describe('Testing multiselect question service', () => {
           ...params,
           links: undefined,
           jurisdiction: { connect: { id: 'jurisdictionId' } },
-          multiselectOptions: undefined,
+          multiselectOptions: {
+            createMany: {
+              data: undefined,
+            },
+          },
           options: undefined,
         },
         where: {
@@ -804,27 +809,546 @@ describe('Testing multiselect question service', () => {
     });
   });
 
-  // describe('validateStatusStateTransition', () => {
-  //   describe('draft transitions', () => {});
+  describe('validateStatusStateTransition', () => {
+    describe('draft transitions', () => {
+      it('should allow draft to draft', () => {
+        expect(
+          service.validateStatusStateTransition(
+            MultiselectQuestionsStatusEnum.draft,
+            MultiselectQuestionsStatusEnum.draft,
+          ),
+        ).toBeNull;
+      });
+      it('should allow draft to visible', () => {
+        expect(
+          service.validateStatusStateTransition(
+            MultiselectQuestionsStatusEnum.draft,
+            MultiselectQuestionsStatusEnum.visible,
+          ),
+        ).toBeNull;
+      });
+      it('should error when moving draft to a state other than visible', () => {
+        expect(async () =>
+          service.validateStatusStateTransition(
+            MultiselectQuestionsStatusEnum.draft,
+            MultiselectQuestionsStatusEnum.active,
+          ),
+        ).rejects.toThrowError();
 
-  //   describe('visible transitions', () => {});
+        expect(async () =>
+          service.validateStatusStateTransition(
+            MultiselectQuestionsStatusEnum.retired,
+            MultiselectQuestionsStatusEnum.toRetire,
+          ),
+        ).rejects.toThrowError();
 
-  //   describe('active transitions', () => {});
+        expect(async () =>
+          service.validateStatusStateTransition(
+            MultiselectQuestionsStatusEnum.retired,
+            MultiselectQuestionsStatusEnum.retired,
+          ),
+        ).rejects.toThrowError();
+      });
+    });
 
-  //   describe('toRetire transitions', () => {});
+    describe('visible transitions', () => {
+      it('should allow visible to visible', () => {
+        expect(
+          service.validateStatusStateTransition(
+            MultiselectQuestionsStatusEnum.visible,
+            MultiselectQuestionsStatusEnum.visible,
+          ),
+        ).toBeNull;
+      });
+      it('should allow visible to draft', () => {
+        expect(
+          service.validateStatusStateTransition(
+            MultiselectQuestionsStatusEnum.visible,
+            MultiselectQuestionsStatusEnum.draft,
+          ),
+        ).toBeNull;
+      });
+      it('should allow visible to active', () => {
+        expect(
+          service.validateStatusStateTransition(
+            MultiselectQuestionsStatusEnum.visible,
+            MultiselectQuestionsStatusEnum.active,
+          ),
+        ).toBeNull;
+      });
+      it('should error when moving visible to a state other than draft or active', () => {
+        expect(async () =>
+          service.validateStatusStateTransition(
+            MultiselectQuestionsStatusEnum.visible,
+            MultiselectQuestionsStatusEnum.toRetire,
+          ),
+        ).rejects.toThrowError();
 
-  //   describe('retire transitions', () => {});
-  // });
+        expect(async () =>
+          service.validateStatusStateTransition(
+            MultiselectQuestionsStatusEnum.retired,
+            MultiselectQuestionsStatusEnum.retired,
+          ),
+        ).rejects.toThrowError();
+      });
+    });
 
-  // describe('statusStateTransition', () => {});
+    describe('active transitions', () => {
+      it('should allow active to toRetire', () => {
+        expect(
+          service.validateStatusStateTransition(
+            MultiselectQuestionsStatusEnum.active,
+            MultiselectQuestionsStatusEnum.toRetire,
+          ),
+        ).toBeNull;
+      });
+      it('should allow active to retired', () => {
+        expect(
+          service.validateStatusStateTransition(
+            MultiselectQuestionsStatusEnum.active,
+            MultiselectQuestionsStatusEnum.retired,
+          ),
+        ).toBeNull;
+      });
+      it('should not allow active to active', () => {
+        expect(async () =>
+          service.validateStatusStateTransition(
+            MultiselectQuestionsStatusEnum.active,
+            MultiselectQuestionsStatusEnum.active,
+          ),
+        ).rejects.toThrowError();
+      });
+      it('should error when moving active to a state other than toRetire or retired', () => {
+        expect(async () =>
+          service.validateStatusStateTransition(
+            MultiselectQuestionsStatusEnum.active,
+            MultiselectQuestionsStatusEnum.draft,
+          ),
+        ).rejects.toThrowError();
 
-  // describe('activateMany', () => {});
+        expect(async () =>
+          service.validateStatusStateTransition(
+            MultiselectQuestionsStatusEnum.active,
+            MultiselectQuestionsStatusEnum.visible,
+          ),
+        ).rejects.toThrowError();
+      });
+    });
 
-  // describe('reActivate', () => {});
+    describe('toRetire transitions', () => {
+      it('should allow toRetire to active', () => {
+        expect(
+          service.validateStatusStateTransition(
+            MultiselectQuestionsStatusEnum.toRetire,
+            MultiselectQuestionsStatusEnum.active,
+          ),
+        ).toBeNull;
+      });
+      it('should allow toRetire to retired', () => {
+        expect(
+          service.validateStatusStateTransition(
+            MultiselectQuestionsStatusEnum.toRetire,
+            MultiselectQuestionsStatusEnum.retired,
+          ),
+        ).toBeNull;
+      });
+      it('should not allow toRetire to toRetire', () => {
+        expect(async () =>
+          service.validateStatusStateTransition(
+            MultiselectQuestionsStatusEnum.toRetire,
+            MultiselectQuestionsStatusEnum.toRetire,
+          ),
+        ).rejects.toThrowError();
+      });
+      it('should error when moving toRetire to a state other than active or retired', () => {
+        expect(async () =>
+          service.validateStatusStateTransition(
+            MultiselectQuestionsStatusEnum.toRetire,
+            MultiselectQuestionsStatusEnum.draft,
+          ),
+        ).rejects.toThrowError();
 
-  // describe('retire', () => {});
+        expect(async () =>
+          service.validateStatusStateTransition(
+            MultiselectQuestionsStatusEnum.toRetire,
+            MultiselectQuestionsStatusEnum.visible,
+          ),
+        ).rejects.toThrowError();
+      });
+    });
 
-  // describe('retireMultiselectQuestions', () => {});
+    describe('retired transitions', () => {
+      it('should not allow retired to retired', () => {
+        expect(async () =>
+          service.validateStatusStateTransition(
+            MultiselectQuestionsStatusEnum.retired,
+            MultiselectQuestionsStatusEnum.retired,
+          ),
+        ).rejects.toThrowError();
+      });
+      it('should error when moving retired to any state', () => {
+        expect(async () =>
+          service.validateStatusStateTransition(
+            MultiselectQuestionsStatusEnum.retired,
+            MultiselectQuestionsStatusEnum.draft,
+          ),
+        ).rejects.toThrowError();
+
+        expect(async () =>
+          service.validateStatusStateTransition(
+            MultiselectQuestionsStatusEnum.retired,
+            MultiselectQuestionsStatusEnum.visible,
+          ),
+        ).rejects.toThrowError();
+
+        expect(async () =>
+          service.validateStatusStateTransition(
+            MultiselectQuestionsStatusEnum.retired,
+            MultiselectQuestionsStatusEnum.active,
+          ),
+        ).rejects.toThrowError();
+
+        expect(async () =>
+          service.validateStatusStateTransition(
+            MultiselectQuestionsStatusEnum.retired,
+            MultiselectQuestionsStatusEnum.toRetire,
+          ),
+        ).rejects.toThrowError();
+      });
+    });
+  });
+
+  describe('statusStateTransition', () => {
+    it('should update the status of a multiselectQuestion with a valid transition', async () => {
+      const date = new Date();
+      const mockedMultiselectQuestion = mockMultiselectQuestion(
+        1,
+        date,
+        MultiselectQuestionsApplicationSectionEnum.programs,
+        true,
+      );
+
+      prisma.multiselectQuestions.update = jest.fn().mockResolvedValue(null);
+
+      expect(
+        await service.statusStateTransition(
+          mockedMultiselectQuestion as unknown as MultiselectQuestion,
+          MultiselectQuestionsStatusEnum.active,
+        ),
+      ).toBeNull;
+
+      expect(prisma.multiselectQuestions.update).toHaveBeenCalledWith({
+        data: {
+          status: MultiselectQuestionsStatusEnum.active,
+        },
+        where: {
+          id: mockedMultiselectQuestion.id,
+        },
+      });
+    });
+
+    it('should error with an invalid transition', async () => {
+      const date = new Date();
+      const mockedMultiselectQuestion = mockMultiselectQuestion(
+        2,
+        date,
+        MultiselectQuestionsApplicationSectionEnum.programs,
+        true,
+      );
+
+      prisma.multiselectQuestions.update = jest.fn().mockResolvedValue(null);
+
+      expect(
+        async () =>
+          await service.statusStateTransition(
+            mockedMultiselectQuestion as unknown as MultiselectQuestion,
+            MultiselectQuestionsStatusEnum.retired,
+          ),
+      ).rejects.toThrowError();
+
+      expect(prisma.multiselectQuestions.update).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('activateMany', () => {
+    it('should update status to active for multiselectQuestions in visible state', async () => {
+      const date = new Date();
+      const mockedVisible = mockMultiselectQuestion(
+        1,
+        date,
+        MultiselectQuestionsApplicationSectionEnum.programs,
+        true,
+      );
+      const mockedActive = mockMultiselectQuestion(
+        2,
+        date,
+        MultiselectQuestionsApplicationSectionEnum.programs,
+        true,
+        MultiselectQuestionsStatusEnum.active,
+      );
+
+      prisma.multiselectQuestions.update = jest.fn().mockResolvedValue(null);
+
+      expect(
+        await service.activateMany([
+          mockedVisible as unknown as MultiselectQuestion,
+          mockedActive as unknown as MultiselectQuestion,
+        ]),
+      ).toEqual({
+        success: true,
+      });
+
+      expect(prisma.multiselectQuestions.update).toHaveBeenCalledTimes(1);
+      expect(prisma.multiselectQuestions.update).toHaveBeenCalledWith({
+        data: {
+          status: MultiselectQuestionsStatusEnum.active,
+        },
+        where: {
+          id: mockedVisible.id,
+        },
+      });
+    });
+  });
+
+  describe('reActivate', () => {
+    it('should update status to active for a multiselectQuestion in toRetire state', async () => {
+      const date = new Date();
+      const mockedMultiselectQuestion = mockMultiselectQuestion(
+        1,
+        date,
+        MultiselectQuestionsApplicationSectionEnum.programs,
+        true,
+        MultiselectQuestionsStatusEnum.toRetire,
+      );
+
+      prisma.multiselectQuestions.findUnique = jest
+        .fn()
+        .mockResolvedValue(mockedMultiselectQuestion);
+      prisma.multiselectQuestions.update = jest.fn().mockResolvedValue(null);
+
+      expect(await service.reActivate(mockedMultiselectQuestion.id)).toEqual({
+        success: true,
+      });
+
+      expect(prisma.multiselectQuestions.findUnique).toHaveBeenCalledWith({
+        include: {
+          jurisdiction: true,
+          multiselectOptions: true,
+        },
+        where: {
+          id: mockedMultiselectQuestion.id,
+        },
+      });
+      expect(prisma.multiselectQuestions.update).toHaveBeenCalledWith({
+        data: {
+          status: MultiselectQuestionsStatusEnum.active,
+        },
+        where: {
+          id: mockedMultiselectQuestion.id,
+        },
+      });
+    });
+
+    it('should error with an invalid transition', async () => {
+      const date = new Date();
+      const mockedMultiselectQuestion = mockMultiselectQuestion(
+        2,
+        date,
+        MultiselectQuestionsApplicationSectionEnum.programs,
+        true,
+        MultiselectQuestionsStatusEnum.active,
+      );
+
+      prisma.multiselectQuestions.findUnique = jest
+        .fn()
+        .mockResolvedValue(mockedMultiselectQuestion);
+      prisma.multiselectQuestions.update = jest.fn().mockResolvedValue(null);
+
+      expect(
+        async () => await service.reActivate(mockedMultiselectQuestion.id),
+      ).rejects.toThrowError();
+
+      expect(prisma.multiselectQuestions.findUnique).toHaveBeenCalledWith({
+        include: {
+          jurisdiction: true,
+          multiselectOptions: true,
+        },
+        where: {
+          id: mockedMultiselectQuestion.id,
+        },
+      });
+      expect(prisma.multiselectQuestions.update).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('retire', () => {
+    it('should update status to retired for a multiselectQuestion with closed listings', async () => {
+      const date = new Date();
+      const mockedMultiselectQuestion = mockMultiselectQuestion(
+        1,
+        date,
+        MultiselectQuestionsApplicationSectionEnum.programs,
+        true,
+        MultiselectQuestionsStatusEnum.active,
+      );
+
+      prisma.multiselectQuestions.findUnique = jest.fn().mockResolvedValue({
+        ...mockedMultiselectQuestion,
+        listings: [{ listings: { status: ListingsStatusEnum.closed } }],
+      });
+      prisma.multiselectQuestions.update = jest.fn().mockResolvedValue(null);
+
+      expect(await service.retire(mockedMultiselectQuestion.id)).toEqual({
+        success: true,
+      });
+
+      expect(prisma.multiselectQuestions.findUnique).toHaveBeenCalledWith({
+        include: {
+          listings: {
+            include: {
+              listings: {
+                select: {
+                  status: true,
+                },
+              },
+            },
+          },
+        },
+        where: {
+          id: mockedMultiselectQuestion.id,
+        },
+      });
+      expect(prisma.multiselectQuestions.update).toHaveBeenCalledWith({
+        data: {
+          status: MultiselectQuestionsStatusEnum.retired,
+        },
+        where: {
+          id: mockedMultiselectQuestion.id,
+        },
+      });
+    });
+
+    it('should update status to toRetire for a multiselectQuestion with active listings', async () => {
+      const date = new Date();
+      const mockedMultiselectQuestion = mockMultiselectQuestion(
+        1,
+        date,
+        MultiselectQuestionsApplicationSectionEnum.programs,
+        true,
+        MultiselectQuestionsStatusEnum.active,
+      );
+
+      prisma.multiselectQuestions.findUnique = jest.fn().mockResolvedValue({
+        ...mockedMultiselectQuestion,
+        listings: [
+          { listings: { status: ListingsStatusEnum.closed } },
+          { listings: { status: ListingsStatusEnum.active } },
+        ],
+      });
+      prisma.multiselectQuestions.update = jest.fn().mockResolvedValue(null);
+
+      expect(await service.retire(mockedMultiselectQuestion.id)).toEqual({
+        success: true,
+      });
+
+      expect(prisma.multiselectQuestions.findUnique).toHaveBeenCalledWith({
+        include: {
+          listings: {
+            include: {
+              listings: {
+                select: {
+                  status: true,
+                },
+              },
+            },
+          },
+        },
+        where: {
+          id: mockedMultiselectQuestion.id,
+        },
+      });
+      expect(prisma.multiselectQuestions.update).toHaveBeenCalledWith({
+        data: {
+          status: MultiselectQuestionsStatusEnum.toRetire,
+        },
+        where: {
+          id: mockedMultiselectQuestion.id,
+        },
+      });
+    });
+
+    it('should error with an invalid transition', async () => {
+      const date = new Date();
+      const mockedMultiselectQuestion = mockMultiselectQuestion(
+        2,
+        date,
+        MultiselectQuestionsApplicationSectionEnum.programs,
+        true,
+      );
+
+      prisma.multiselectQuestions.findUnique = jest.fn().mockResolvedValue({
+        ...mockedMultiselectQuestion,
+        listings: [{ listings: { status: ListingsStatusEnum.closed } }],
+      });
+      prisma.multiselectQuestions.update = jest.fn().mockResolvedValue(null);
+
+      expect(
+        async () => await service.retire(mockedMultiselectQuestion.id),
+      ).rejects.toThrowError();
+
+      expect(prisma.multiselectQuestions.findUnique).toHaveBeenCalledWith({
+        include: {
+          listings: {
+            include: {
+              listings: {
+                select: {
+                  status: true,
+                },
+              },
+            },
+          },
+        },
+        where: {
+          id: mockedMultiselectQuestion.id,
+        },
+      });
+      expect(prisma.multiselectQuestions.update).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('retireMultiselectQuestions', () => {
+    it('should call updateMany', async () => {
+      prisma.cronJob.findFirst = jest
+        .fn()
+        .mockResolvedValue({ id: randomUUID() });
+      prisma.cronJob.update = jest.fn().mockResolvedValue(true);
+      prisma.multiselectQuestions.updateMany = jest
+        .fn()
+        .mockResolvedValue({ count: 2 });
+
+      expect(await service.retireMultiselectQuestions()).toEqual({
+        success: true,
+      });
+
+      expect(prisma.cronJob.findFirst).toHaveBeenCalled();
+      expect(prisma.cronJob.update).toHaveBeenCalled();
+      expect(prisma.multiselectQuestions.updateMany).toHaveBeenCalledWith({
+        data: {
+          status: MultiselectQuestionsStatusEnum.retired,
+        },
+        where: {
+          listings: {
+            every: {
+              listings: {
+                status: ListingsStatusEnum.closed,
+              },
+            },
+          },
+          status: MultiselectQuestionsStatusEnum.toRetire,
+        },
+      });
+    });
+  });
 
   describe('markCronJobAsStarted', () => {
     it('should create new cronjob entry if none is present', async () => {

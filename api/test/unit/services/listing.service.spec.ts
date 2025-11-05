@@ -5220,7 +5220,7 @@ describe('Testing listing service', () => {
   });
 
   describe('Test closeListings endpoint', () => {
-    it('should call the purge if no listings needed to get processed', async () => {
+    it('should call the purge if listings needed to get processed', async () => {
       prisma.listings.findMany = jest.fn().mockResolvedValue([
         {
           id: 'example id1',
