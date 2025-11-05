@@ -2,7 +2,7 @@ import React from "react"
 import { rest } from "msw"
 import { setupServer } from "msw/node"
 import { FormProvider, useForm } from "react-hook-form"
-import { screen } from "@testing-library/react"
+import { screen, fireEvent, act } from "@testing-library/react"
 import RankingsAndResults from "../../../../../src/components/listings/PaperListingForm/sections/RankingsAndResults"
 import { formDefaults, FormListing } from "../../../../../src/lib/listings/formTypes"
 import { mockNextRouter, mockTipTapEditor, render } from "../../../../testUtils"
@@ -34,7 +34,7 @@ afterEach(() => server.resetHandlers())
 afterAll(() => server.close())
 
 describe("RankingsAndResults", () => {
-  const adminUserWithWaitlistLotteryFlag = {
+  const userWithWaitlistLotteryFlag = {
     jurisdictions: [
       {
         id: "jurisdiction1",
@@ -48,8 +48,7 @@ describe("RankingsAndResults", () => {
       },
     ],
   }
-
-  const adminUserWithoutWaitlistLotteryFlag = {
+  const userWithoutWaitlistLotteryFlag = {
     jurisdictions: [
       {
         id: "jurisdiction1",
@@ -63,7 +62,7 @@ describe("RankingsAndResults", () => {
     document.cookie = "access-token-available=True"
     server.use(
       rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
-        return res(ctx.json(adminUserWithoutWaitlistLotteryFlag))
+        return res(ctx.json(userWithoutWaitlistLotteryFlag))
       })
     )
 
@@ -101,7 +100,7 @@ describe("RankingsAndResults", () => {
     document.cookie = "access-token-available=True"
     server.use(
       rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
-        return res(ctx.json(adminUserWithWaitlistLotteryFlag))
+        return res(ctx.json(userWithWaitlistLotteryFlag))
       })
     )
 
@@ -136,7 +135,7 @@ describe("RankingsAndResults", () => {
     document.cookie = "access-token-available=True"
     server.use(
       rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
-        return res(ctx.json(adminUserWithoutWaitlistLotteryFlag))
+        return res(ctx.json(userWithoutWaitlistLotteryFlag))
       })
     )
 
@@ -161,5 +160,76 @@ describe("RankingsAndResults", () => {
 
     expect(screen.getByRole("radio", { name: /First come first serve/i })).toBeInTheDocument()
     expect(screen.getByRole("radio", { name: "Lottery" })).toBeInTheDocument()
+  })
+
+  it("should show review order options when availabilityQuestion is openWaitlist and enableWaitlistLottery is true as a non admin user", async () => {
+    process.env.showLottery = "true"
+    document.cookie = "access-token-available=True"
+    server.use(
+      rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
+        return res(ctx.json(userWithWaitlistLotteryFlag))
+      })
+    )
+
+    render(
+      <FormComponent
+        values={{
+          ...formDefaults,
+          jurisdictions: { id: "jurisdiction1" },
+          listingAvailabilityQuestion: "openWaitlist",
+        }}
+      >
+        <RankingsAndResults
+          requiredFields={[]}
+          whatToExpectEditor={null}
+          whatToExpectAdditionalTextEditor={null}
+        />
+      </FormComponent>
+    )
+
+    screen.getByRole("heading", { name: "Rankings & results" })
+    const lotteryRadio = await screen.findByRole("radio", { name: "Lottery" })
+    act(() => {
+      fireEvent.click(lotteryRadio)
+    })
+    expect(
+      screen.getByText(
+        "Your lottery will be run in the Partners Portal. If you want to make alternative arrangements, please contact staff."
+      )
+    ).toBeInTheDocument()
+  })
+  it("should show review order options when availabilityQuestion is openWaitlist and enableWaitlistLottery is true as an admin user", async () => {
+    process.env.showLottery = "true"
+    document.cookie = "access-token-available=True"
+    server.use(
+      rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
+        return res(ctx.json(userWithWaitlistLotteryFlag))
+      })
+    )
+
+    render(
+      <FormComponent
+        values={{
+          ...formDefaults,
+          jurisdictions: { id: "jurisdiction1" },
+          listingAvailabilityQuestion: "openWaitlist",
+        }}
+      >
+        <RankingsAndResults
+          isAdmin={true}
+          listing={null}
+          requiredFields={[]}
+          whatToExpectEditor={null}
+          whatToExpectAdditionalTextEditor={null}
+        />
+      </FormComponent>
+    )
+
+    screen.getByRole("heading", { name: "Rankings & results" })
+    const lotteryRadio = await screen.findByRole("radio", { name: "Lottery" })
+    act(() => {
+      fireEvent.click(lotteryRadio)
+    })
+    expect(screen.getByText("Will the lottery be run in the partner portal?")).toBeInTheDocument()
   })
 })
