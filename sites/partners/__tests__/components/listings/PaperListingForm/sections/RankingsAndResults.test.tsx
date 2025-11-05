@@ -132,7 +132,7 @@ describe("RankingsAndResults", () => {
     expect(screen.getByRole("radio", { name: "Lottery" })).toBeInTheDocument()
   })
 
-  it("should show review order options when availabilityQuestion is availableUnits and enableWaitlistLottery is false", async () => {
+  it("should show review order options when availabilityQuestion is availableUnits and enableWaitlistLottery is false", () => {
     document.cookie = "access-token-available=True"
     server.use(
       rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
