@@ -319,7 +319,9 @@ export class ListingService implements OnModuleInit {
           filter[ListingFilterKeys.availability] ===
           FilterAvailabilityEnum.waitlistOpen
         ) {
-          whereClauseArray.push(`combined.review_order_type = 'waitlist'`);
+          whereClauseArray.push(
+            `combined.review_order_type in {'waitlist', 'waitlistLottery'}`,
+          );
         } else if (
           filter[ListingFilterKeys.availability] ===
           FilterAvailabilityEnum.unitsAvailable
