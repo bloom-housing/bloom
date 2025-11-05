@@ -22,9 +22,9 @@ import { FeatureFlagEnum } from '../enums/feature-flags/feature-flags-enum';
 import { MultiselectQuestionFilterKeys } from '../enums/multiselect-questions/filter-key-enum';
 import { MultiselectQuestionViews } from '../enums/multiselect-questions/view-enum';
 import { buildFilter } from '../utilities/build-filter';
+import { startCronJob } from '../utilities/cron-job-starter';
 import { doJurisdictionHaveFeatureFlagSet } from '../utilities/feature-flag-utilities';
 import { mapTo } from '../utilities/mapTo';
-import { startCronJob } from 'src/utilities/cron-job-starter';
 
 export const includeViews: Partial<
   Record<MultiselectQuestionViews, Prisma.MultiselectQuestionsInclude>
@@ -530,6 +530,17 @@ export class MultiselectQuestionService {
   async activateMany(
     multiselectQuestions: MultiselectQuestion[],
   ): Promise<SuccessDTO> {
+    if (
+      multiselectQuestions.some(
+        (multiselectQuestion) =>
+          multiselectQuestion.status === MultiselectQuestionsStatusEnum.draft ||
+          multiselectQuestion.status === MultiselectQuestionsStatusEnum.retired,
+      )
+    ) {
+      throw new BadRequestException(
+        'only multiselect questions in visible, active or toRetire status can be associated with a listing being published',
+      );
+    }
     // What if one fails?
     for (const multiselectQuestion of multiselectQuestions) {
       if (

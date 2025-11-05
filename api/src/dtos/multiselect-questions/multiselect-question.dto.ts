@@ -94,13 +94,12 @@ class MultiselectQuestion extends AbstractDTO {
   @ApiPropertyOptional()
   optOutText?: string;
 
-  // TODO: Temporarily optional until after MSQ refactor
   @Expose()
-  // @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @IsEnum(MultiselectQuestionsStatusEnum, {
     groups: [ValidationsGroupsEnum.default],
   })
-  @ApiPropertyOptional({
+  @ApiProperty({
     enum: MultiselectQuestionsStatusEnum,
     enumName: 'MultiselectQuestionsStatusEnum',
     example: 'draft',
