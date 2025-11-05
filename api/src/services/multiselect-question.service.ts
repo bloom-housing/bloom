@@ -5,6 +5,7 @@ import {
   Logger,
   NotFoundException,
 } from '@nestjs/common';
+import { SchedulerRegistry } from '@nestjs/schedule';
 import {
   ListingsStatusEnum,
   MultiselectQuestionsStatusEnum,
@@ -23,6 +24,7 @@ import { MultiselectQuestionViews } from '../enums/multiselect-questions/view-en
 import { buildFilter } from '../utilities/build-filter';
 import { doJurisdictionHaveFeatureFlagSet } from '../utilities/feature-flag-utilities';
 import { mapTo } from '../utilities/mapTo';
+import { startCronJob } from 'src/utilities/cron-job-starter';
 
 export const includeViews: Partial<
   Record<MultiselectQuestionViews, Prisma.MultiselectQuestionsInclude>
@@ -38,6 +40,8 @@ includeViews.base = {
   listings: true,
 };
 
+const MSQ_RETIRE_CRON_JOB_NAME = 'MSQ_RETIRE_CRON_JOB';
+
 /*
   this is the service for multiselect questions
   it handles all the backend's business logic for reading/writing/deleting multiselect question data
@@ -48,7 +52,19 @@ export class MultiselectQuestionService {
     private prisma: PrismaService,
     @Inject(Logger)
     private logger = new Logger(MultiselectQuestionService.name),
+    private schedulerRegistry: SchedulerRegistry,
   ) {}
+
+  onModuleInit() {
+    startCronJob(
+      this.prisma,
+      MSQ_RETIRE_CRON_JOB_NAME,
+      process.env.MSQ_RETIRE_CRON_STRING,
+      this.retireMultiselectQuestions.bind(this),
+      this.logger,
+      this.schedulerRegistry,
+    );
+  }
 
   /*
     this will get a set of multiselect questions given the params passed in
