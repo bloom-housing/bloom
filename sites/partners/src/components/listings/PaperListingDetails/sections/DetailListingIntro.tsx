@@ -4,9 +4,17 @@ import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { ListingContext } from "../../ListingContext"
 import { getDetailFieldString } from "./helpers"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
+import { AuthContext } from "@bloom-housing/shared-helpers"
+import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 const DetailListingIntro = () => {
   const listing = useContext(ListingContext)
+  const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
+
+  const enableHousingDeveloperOwner = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableHousingDeveloperOwner,
+    listing.jurisdictions.id
+  )
 
   return (
     <SectionWithGrid heading={t("listings.sections.introTitle")} inset>
@@ -24,7 +32,14 @@ const DetailListingIntro = () => {
           </FieldValue>
         </Grid.Cell>
         <Grid.Cell>
-          <FieldValue id="developer" label={t("listings.developer")}>
+          <FieldValue
+            id="developer"
+            label={
+              enableHousingDeveloperOwner
+                ? t("listings.housingDeveloperOwner")
+                : t("listings.developer")
+            }
+          >
             {getDetailFieldString(listing.developer)}
           </FieldValue>
         </Grid.Cell>
