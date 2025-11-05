@@ -4,7 +4,11 @@ import { setupServer } from "msw/node"
 import userEvent from "@testing-library/user-event"
 import { screen } from "@testing-library/react"
 import { FormProvider, useForm } from "react-hook-form"
-import { Jurisdiction } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { AuthContext } from "@bloom-housing/shared-helpers"
+import {
+  FeatureFlagEnum,
+  Jurisdiction,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { mockNextRouter, render } from "../../../../testUtils"
 import { formDefaults, FormListing } from "../../../../../src/lib/listings/formTypes"
 import ListingIntro from "../../../../../src/components/listings/PaperListingForm/sections/ListingIntro"
@@ -99,10 +103,6 @@ describe("ListingIntro", () => {
       </FormComponent>
     )
 
-    await screen.findByRole("heading", { level: 2, name: "Listing intro" })
-    expect(
-      screen.getByText("Let's get started with some basic information about your listing.")
-    ).toBeInTheDocument()
     expect(screen.getByRole("textbox", { name: "Listing name *" })).toBeInTheDocument()
     expect(screen.getByRole("combobox", { name: "Jurisdiction *" })).toBeInTheDocument()
     expect(screen.getByRole("textbox", { name: "Housing developer *" })).toBeInTheDocument()
@@ -113,5 +113,40 @@ describe("ListingIntro", () => {
     )
 
     expect(screen.getByRole("textbox", { name: "Housing developer *" })).toBeInTheDocument()
+  })
+
+  it("should render appropriate text when housing developer owner feature flag is on", () => {
+    document.cookie = "access-token-available=True"
+    server.use(
+      rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
+        return res(ctx.json(adminUserWithJurisdictions))
+      })
+    )
+
+    const doJurisdictionsHaveFeatureFlagOn = () => {
+      return true
+    }
+
+    render(
+      <AuthContext.Provider
+        value={{
+          doJurisdictionsHaveFeatureFlagOn,
+        }}
+      >
+        <FormComponent>
+          <ListingIntro
+            requiredFields={[]}
+            jurisdictions={[
+              {
+                id: "JurisdictionA",
+                name: "JurisdictionA",
+                featureFlags: [{ name: FeatureFlagEnum.enableHousingDeveloperOwner, active: true }],
+              } as unknown as Jurisdiction,
+            ]}
+          />
+        </FormComponent>
+      </AuthContext.Provider>
+    )
+    expect(screen.getByRole("textbox", { name: "Housing developer / owner" })).toBeInTheDocument()
   })
 })

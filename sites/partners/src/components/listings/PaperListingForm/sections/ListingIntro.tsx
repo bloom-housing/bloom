@@ -1,11 +1,12 @@
 import React, { useContext } from "react"
 import { useFormContext } from "react-hook-form"
+import { t, Field, SelectOption, Select } from "@bloom-housing/ui-components"
+import { Grid } from "@bloom-housing/ui-seeds"
 import {
   FeatureFlagEnum,
   Jurisdiction,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { t, Field, SelectOption, Select } from "@bloom-housing/ui-components"
-import { Grid } from "@bloom-housing/ui-seeds"
+import { AuthContext } from "@bloom-housing/shared-helpers"
 import {
   fieldMessage,
   fieldHasError,
@@ -14,7 +15,6 @@ import {
 } from "../../../../lib/helpers"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 import styles from "../ListingForm.module.scss"
-import { AuthContext } from "@bloom-housing/shared-helpers"
 
 interface ListingIntroProps {
   jurisdictions: Jurisdiction[]
