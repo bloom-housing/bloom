@@ -1,4 +1,8 @@
-import { listingFeatures, listingUtilities } from "@bloom-housing/shared-helpers"
+import {
+  listingFeatures,
+  listingRequiredDocumentsOptions,
+  listingUtilities,
+} from "@bloom-housing/shared-helpers"
 import {
   ReviewOrderTypeEnum,
   YesNoEnum,
@@ -88,6 +92,19 @@ export default class AdditionalMetadataFormatter extends Formatter {
         }
       }, {})
     }
+
+    if (this.data.selectedRequiredDocuments) {
+      this.data.requiredDocumentsList = listingRequiredDocumentsOptions.reduce((acc, current) => {
+        const isSelected = this.data.selectedRequiredDocuments.some(
+          (document) => document === current
+        )
+        return {
+          ...acc,
+          [current]: isSelected,
+        }
+      }, {})
+    }
+
     if (this.data.utilities) {
       this.data.listingUtilities = listingUtilities.reduce((acc, current) => {
         const isSelected = this.data.utilities.some((utility) => utility === current)

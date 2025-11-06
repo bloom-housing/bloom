@@ -5,21 +5,13 @@ import { FieldGroup, t, Textarea } from "@bloom-housing/ui-components"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 import { defaultFieldProps } from "../../../../lib/helpers"
 import styles from "../ListingForm.module.scss"
+import { ListingDocuments } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { listingRequiredDocumentsOptions } from "@bloom-housing/shared-helpers"
 
 type AdditionalDetailsProps = {
   defaultText?: string
+  exisistingDocumnets: ListingDocuments
   requiredFields: string[]
-}
-enum RequiredDocumentEnum {
-  "socialSecurityCard" = "socialSecurityCard",
-  "currentLandlordReference" = "currentLandlordReference",
-  "birthCertificate" = "birthCertificate",
-  "previousLandlordReference" = "previousLandlordReference",
-  "governmentIssuedId" = "governmentIssuedId",
-  "proofOfAssets" = "proofOfAssets",
-  "proofOfIncome" = "proofOfIncome",
-  "residencyDocuments" = "residencyDocuments",
-  "proofOfCustody" = "proofOfCustody",
 }
 
 const AdditionalDetails = (props: AdditionalDetailsProps) => {
@@ -40,7 +32,7 @@ const AdditionalDetails = (props: AdditionalDetailsProps) => {
         <Grid.Row columns={1}>
           <Grid.Cell>
             <FieldGroup
-              name={"requiredDocumentsOptions"}
+              name={"selectedRequiredDocuments"}
               groupLabel={
                 <span>
                   {t("listings.requiredDocuments")}
@@ -49,10 +41,11 @@ const AdditionalDetails = (props: AdditionalDetailsProps) => {
               }
               register={register}
               type="checkbox"
-              fields={Object.keys(RequiredDocumentEnum).map((key) => ({
-                id: `requiredDocuments.${key}`,
+              fields={listingRequiredDocumentsOptions.map((key) => ({
+                id: key,
                 label: t(`listings.requiredDocuments.${key}`),
-                value: key,
+                register,
+                defaultChecked: props.exisistingDocumnets ? props.exisistingDocumnets[key] : false,
               }))}
               fieldGroupClassName="grid grid-cols-2 mt-2"
             />

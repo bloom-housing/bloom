@@ -525,7 +525,10 @@ const ListingForm = ({ listing, editMode, setListingName, updateListing }: Listi
                             requiredFields={requiredFields}
                           />
                           <BuildingSelectionCriteria />
-                          <AdditionalDetails requiredFields={requiredFields} />
+                          <AdditionalDetails
+                            requiredFields={requiredFields}
+                            exisistingDocumnets={listing?.requiredDocumentsList}
+                          />
                           <ListingVerification />
                           <div className="text-right -mr-8 -mt-8 relative" style={{ top: "7rem" }}>
                             <Button
