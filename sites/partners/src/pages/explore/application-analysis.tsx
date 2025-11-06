@@ -19,11 +19,10 @@ import {
   veryLowData,
   InsufficientNumberOfApplications,
   ReportData,
-  ReportProducts,
 } from "../../lib/explore/data-explorer"
 import { FormValues } from "../../components/explore/filtering/mainForm"
 import { useRouter } from "next/router"
-// import { ReportProducts } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { ReportProducts } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { AiPermissionModal } from "../../components/explore/aiPermissionModal"
 import { AiInsightsPanel } from "../../components/explore/AIInsightsPanel"
 
@@ -40,7 +39,7 @@ const ApplicationAnalysis = () => {
   const [isAiConsentPanelOpen, setIsAiConsentPanelOpen] = useState(false)
   const [dataOverride, setDataOverride] = useState<string>("none")
   const [chartData, setChartData] = useState<ReportProducts>({
-    incomeHouseholdSizeCrossTab: {},
+    incomeHouseholdSizeCrossTab: {} as IncomeHouseholdSizeCrossTab,
     raceFrequencies: [],
     ethnicityFrequencies: [],
     residentialLocationFrequencies: [],
@@ -244,7 +243,8 @@ const ApplicationAnalysis = () => {
             <div className="">
               <HouseholdIncomeReport
                 chartData={{
-                  incomeHouseholdSizeCrossTab: chartData.incomeHouseholdSizeCrossTab,
+                  incomeHouseholdSizeCrossTab:
+                    chartData.incomeHouseholdSizeCrossTab as IncomeHouseholdSizeCrossTab,
                 }}
               />
               <DemographicsSection
