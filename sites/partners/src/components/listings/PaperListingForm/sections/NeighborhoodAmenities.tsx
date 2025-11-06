@@ -1,6 +1,6 @@
 import React, { useContext, useMemo } from "react"
 import { useFormContext } from "react-hook-form"
-import { t, Textarea } from "@bloom-housing/ui-components"
+import { t, Textarea, Select } from "@bloom-housing/ui-components"
 import { Grid } from "@bloom-housing/ui-seeds"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 import { AuthContext } from "@bloom-housing/shared-helpers"
@@ -24,6 +24,25 @@ const NeighborhoodAmenities = () => {
     FeatureFlagEnum.enableNeighborhoodAmenities,
     jurisdiction
   )
+
+  const enableNeighborhoodAmenitiesDropdown = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableNeighborhoodAmenitiesDropdown,
+    jurisdiction
+  )
+
+  const neighborhoodAmenityKeys: string[] = [
+    "",
+    "onSite",
+    "oneBlock",
+    "twoBlocks",
+    "threeBlocks",
+    "fourBlocks",
+    "fiveBlocks",
+    "withinOneMile",
+    "withinTwoMiles",
+    "withinThreeMiles",
+    "withinFourMiles",
+  ]
 
   const visibleAmenities = useMemo(() => {
     const visibleAmenitiesList = jurisdictionData?.visibleNeighborhoodAmenities || []
@@ -56,14 +75,26 @@ const NeighborhoodAmenities = () => {
           <Grid.Row key={rowIndex} columns={2}>
             {row.map((amenity) => (
               <Grid.Cell key={amenity}>
-                <Textarea
-                  label={t(`listings.amenities.${amenity}`)}
-                  name={`listingNeighborhoodAmenities.${amenity}`}
-                  id={`listingNeighborhoodAmenities.${amenity}`}
-                  fullWidth={true}
-                  register={register}
-                  placeholder={""}
-                />
+                {enableNeighborhoodAmenitiesDropdown ? (
+                  <Select
+                    id={`listingNeighborhoodAmenities.${amenity}`}
+                    name={`listingNeighborhoodAmenities.${amenity}`}
+                    label={t(`listings.amenities.${amenity}`)}
+                    register={register}
+                    options={neighborhoodAmenityKeys}
+                    controlClassName="control"
+                    keyPrefix="neighborhoodAmenities.distance"
+                  />
+                ) : (
+                  <Textarea
+                    label={t(`listings.amenities.${amenity}`)}
+                    name={`listingNeighborhoodAmenities.${amenity}`}
+                    id={`listingNeighborhoodAmenities.${amenity}`}
+                    fullWidth={true}
+                    register={register}
+                    placeholder={""}
+                  />
+                )}
               </Grid.Cell>
             ))}
           </Grid.Row>
