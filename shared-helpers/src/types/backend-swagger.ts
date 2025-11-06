@@ -5960,6 +5960,9 @@ export interface JurisdictionCreate {
 
   /**  */
   requiredListingFields: []
+
+  /**  */
+  visibleNeighborhoodAmenities: NeighborhoodAmenitiesEnum[]
 }
 
 export interface JurisdictionUpdate {
@@ -6019,6 +6022,9 @@ export interface JurisdictionUpdate {
 
   /**  */
   requiredListingFields: []
+
+  /**  */
+  visibleNeighborhoodAmenities: NeighborhoodAmenitiesEnum[]
 }
 
 export interface FeatureFlag {
@@ -6113,6 +6119,9 @@ export interface Jurisdiction {
 
   /**  */
   requiredListingFields: []
+
+  /**  */
+  visibleNeighborhoodAmenities: NeighborhoodAmenitiesEnum[]
 }
 
 export interface MultiselectQuestionCreate {
@@ -7541,6 +7550,15 @@ export enum UserRoleEnum {
   "supportAdmin" = "supportAdmin",
 }
 
+export enum NeighborhoodAmenitiesEnum {
+  "groceryStores" = "groceryStores",
+  "publicTransportation" = "publicTransportation",
+  "schools" = "schools",
+  "parksAndCommunityCenters" = "parksAndCommunityCenters",
+  "pharmacies" = "pharmacies",
+  "healthCareResources" = "healthCareResources",
+}
+
 export enum FeatureFlagEnum {
   "disableCommonApplication" = "disableCommonApplication",
   "disableJurisdictionalAdmin" = "disableJurisdictionalAdmin",
@@ -7554,6 +7572,7 @@ export enum FeatureFlagEnum {
   "enableGeocodingPreferences" = "enableGeocodingPreferences",
   "enableGeocodingRadiusMethod" = "enableGeocodingRadiusMethod",
   "enableHomeType" = "enableHomeType",
+  "enableHousingDeveloperOwner" = "enableHousingDeveloperOwner",
   "enableIsVerified" = "enableIsVerified",
   "enableLimitedHowDidYouHear" = "enableLimitedHowDidYouHear",
   "enableListingFavoriting" = "enableListingFavoriting",

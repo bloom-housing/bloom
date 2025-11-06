@@ -91,7 +91,9 @@ const RankingsAndResults = ({
     selectedJurisdictionId
   )
 
-  const showFSFCLotterySection = enableWaitlistLottery && waitlistOpen
+  const showFSFCLotterySection =
+    (enableWaitlistLottery && waitlistOpen) ||
+    (availabilityQuestion !== "openWaitlist" && !enableWaitlistLottery)
 
   // Ensure the lottery fields only show when it's "available units" listing
   const showLotteryFields =
