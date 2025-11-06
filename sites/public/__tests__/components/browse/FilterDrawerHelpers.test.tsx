@@ -21,7 +21,7 @@ import {
   RentSection,
   SearchSection,
 } from "../../../src/components/browse/FilterDrawerHelpers"
-import { act, mockNextRouter, render } from "../../testUtils"
+import { mockNextRouter, render } from "../../testUtils"
 import { useForm } from "react-hook-form"
 import { t } from "@bloom-housing/ui-components"
 import userEvent from "@testing-library/user-event"
@@ -847,11 +847,9 @@ describe("filter drawer helpers", () => {
     })
     it("should display error message when min rent is greater than max rent", async () => {
       render(<DefaultRentSection />)
-      await act(async () => {
-        await userEvent.type(screen.getByRole("textbox", { name: "Min rent" }), "1000.00")
-        await userEvent.type(screen.getByRole("textbox", { name: "Max rent" }), "500.00")
-        await userEvent.tab()
-      })
+      await userEvent.type(screen.getByRole("textbox", { name: "Min rent" }), "1000.00")
+      await userEvent.type(screen.getByRole("textbox", { name: "Max rent" }), "500.00")
+      await userEvent.tab()
 
       expect(
         screen.getByText("Min rent must be less than or equal to max rent")
@@ -862,20 +860,16 @@ describe("filter drawer helpers", () => {
     })
     it("should clear error message when min rent is less than max rent", async () => {
       render(<DefaultRentSection />)
-      await act(async () => {
-        await userEvent.type(screen.getByRole("textbox", { name: "Min rent" }), "1000.00")
-        await userEvent.type(screen.getByRole("textbox", { name: "Max rent" }), "500.00")
-        await userEvent.tab()
-      })
+      await userEvent.type(screen.getByRole("textbox", { name: "Min rent" }), "1000.00")
+      await userEvent.type(screen.getByRole("textbox", { name: "Max rent" }), "500.00")
+      await userEvent.tab()
 
       expect(
         screen.getByText("Min rent must be less than or equal to max rent")
       ).toBeInTheDocument()
 
-      await act(async () => {
-        await userEvent.type(screen.getByRole("textbox", { name: "Max rent" }), "1500.00")
-        await userEvent.tab()
-      })
+      await userEvent.type(screen.getByRole("textbox", { name: "Max rent" }), "1500.00")
+      await userEvent.tab()
 
       expect(
         screen.queryByText("Min rent must be less than or equal to max rent")

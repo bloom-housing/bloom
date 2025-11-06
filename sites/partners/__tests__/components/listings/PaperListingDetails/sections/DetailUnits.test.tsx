@@ -280,6 +280,56 @@ describe("DetailUnits", () => {
     expect(bath).toHaveTextContent("1 - 2")
   })
 
+  describe("Listing availability text", () => {
+    it("should render 'Open waitlist' for waitlistLottery review order type", () => {
+      render(
+        <AuthContext.Provider
+          value={{
+            doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
+              mockJurisdictionsHaveFeatureFlagOn(featureFlag, false),
+          }}
+        >
+          <ListingContext.Provider
+            value={{
+              ...listing,
+              reviewOrderType: ReviewOrderTypeEnum.waitlistLottery,
+              units: [],
+            }}
+          >
+            <DetailUnits setUnitDrawer={jest.fn()} />
+          </ListingContext.Provider>
+        </AuthContext.Provider>
+      )
+
+      expect(screen.getByText("What is the listing availability?")).toBeInTheDocument()
+      expect(screen.getByText("Open waitlist")).toBeInTheDocument()
+    })
+
+    it("should render 'Available units' for lottery review order type", () => {
+      render(
+        <AuthContext.Provider
+          value={{
+            doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
+              mockJurisdictionsHaveFeatureFlagOn(featureFlag, false),
+          }}
+        >
+          <ListingContext.Provider
+            value={{
+              ...listing,
+              reviewOrderType: ReviewOrderTypeEnum.lottery,
+              disableUnitsAccordion: true,
+            }}
+          >
+            <DetailUnits setUnitDrawer={jest.fn()} />
+          </ListingContext.Provider>
+        </AuthContext.Provider>
+      )
+
+      expect(screen.getByText("What is the listing availability?")).toBeInTheDocument()
+      expect(screen.getByText("Available units")).toBeInTheDocument()
+    })
+  })
+
   describe("Home type", () => {
     it("should render the home type if enabled", () => {
       const callUnitDrawer = jest.fn()

@@ -1,4 +1,3 @@
-import { act } from "react-test-renderer"
 import { render, screen, waitFor, within } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { rest } from "msw"
@@ -124,7 +123,7 @@ describe("<UnitGroupForm>", () => {
     const addAmiButton = screen.getByRole("button", { name: /add ami level/i })
     expect(addAmiButton).toBeInTheDocument()
 
-    await act(() => userEvent.click(addAmiButton))
+    await userEvent.click(addAmiButton)
 
     const drawerHeader = screen.getByRole("heading", { level: 1, name: /add ami level/i })
     expect(drawerHeader).toBeInTheDocument()
@@ -143,10 +142,10 @@ describe("<UnitGroupForm>", () => {
     expect(fixedAmountOption).toBeInTheDocument()
     expect(percentageOption).toBeInTheDocument()
 
-    await act(() => userEvent.click(fixedAmountOption))
+    await userEvent.click(fixedAmountOption)
     expect(within(drawerContainer).getByLabelText(/monthly rent/i)).toBeInTheDocument()
 
-    await act(() => userEvent.click(percentageOption))
+    await userEvent.click(percentageOption)
     expect(within(drawerContainer).getAllByLabelText(/% of income/i)).toHaveLength(2)
   })
 
@@ -246,7 +245,7 @@ describe("<UnitGroupForm>", () => {
     const editButton = within(amiTable).getByRole("button", { name: /edit/i })
     expect(editButton).toBeInTheDocument()
 
-    await act(() => userEvent.click(editButton))
+    await userEvent.click(editButton)
     const drawerHeader = await screen.findByRole("heading", { level: 1, name: /add ami level/i })
     expect(drawerHeader).toBeInTheDocument()
 
@@ -293,7 +292,7 @@ describe("<UnitGroupForm>", () => {
       let deleteButton = within(rows[0]).getByRole("button", { name: /delete/i })
       expect(deleteButton).toBeInTheDocument()
 
-      await act(() => userEvent.click(deleteButton))
+      await userEvent.click(deleteButton)
 
       let deleteModalHeader = screen.getByRole("heading", {
         level: 1,
@@ -313,7 +312,7 @@ describe("<UnitGroupForm>", () => {
         name: /delete/i,
       })
 
-      await act(() => userEvent.click(confirmDeleteButton))
+      await userEvent.click(confirmDeleteButton)
 
       rows = within(headAndBody[1]).getAllByRole("row")
       expect(rows).toHaveLength(1)
@@ -321,7 +320,7 @@ describe("<UnitGroupForm>", () => {
       deleteButton = within(rows[0]).getByRole("button", { name: /delete/i })
       expect(deleteButton).toBeInTheDocument()
 
-      await act(() => userEvent.click(deleteButton))
+      await userEvent.click(deleteButton)
 
       deleteModalHeader = screen.getByRole("heading", {
         level: 1,
@@ -334,7 +333,7 @@ describe("<UnitGroupForm>", () => {
         name: /delete/i,
       })
 
-      await act(() => userEvent.click(confirmDeleteButton))
+      await userEvent.click(confirmDeleteButton)
 
       expect(screen.queryByRole("table")).not.toBeInTheDocument()
     })
@@ -369,7 +368,7 @@ describe("<UnitGroupForm>", () => {
       const deleteButton = within(rows[0]).getByRole("button", { name: /delete/i })
       expect(deleteButton).toBeInTheDocument()
 
-      await act(() => userEvent.click(deleteButton))
+      await userEvent.click(deleteButton)
 
       let deleteModalHeader = screen.getByRole("heading", {
         level: 1,
@@ -386,7 +385,7 @@ describe("<UnitGroupForm>", () => {
       expect(screen.getByRole("table")).toBeInTheDocument()
 
       // Repeat the deletion process
-      await act(() => userEvent.click(deleteButton))
+      await userEvent.click(deleteButton)
 
       deleteModalHeader = screen.getByRole("heading", {
         level: 1,
@@ -398,7 +397,7 @@ describe("<UnitGroupForm>", () => {
         "button",
         { name: /cancel/i }
       )
-      await act(() => userEvent.click(cancelButton))
+      await userEvent.click(cancelButton)
 
       // Verify that the table still exists, i.e no rows have been removed
       expect(screen.getByRole("table")).toBeInTheDocument()
@@ -424,7 +423,7 @@ describe("<UnitGroupForm>", () => {
 
     const saveAndExitButton = screen.getByRole("button", { name: /save & exit/i })
     expect(saveAndExitButton).toBeInTheDocument()
-    await act(() => userEvent.click(saveAndExitButton))
+    await userEvent.click(saveAndExitButton)
 
     expect(await screen.findByText(/this field is required/i))
   })
@@ -451,10 +450,8 @@ describe("<UnitGroupForm>", () => {
     expect(minOccupancyInput).toBeInTheDocument()
     expect(maxOccupancyInput).toBeInTheDocument()
 
-    await act(async () => {
-      await userEvent.selectOptions(minOccupancyInput, "7")
-      await userEvent.selectOptions(maxOccupancyInput, "1")
-    })
+    await userEvent.selectOptions(minOccupancyInput, "7")
+    await userEvent.selectOptions(maxOccupancyInput, "1")
 
     expect(
       await screen.findByText(/Occupancy must be greater than or equal to/i)
@@ -471,10 +468,8 @@ describe("<UnitGroupForm>", () => {
     expect(minSqftInput).toBeInTheDocument()
     expect(maxSqftInput).toBeInTheDocument()
 
-    await act(async () => {
-      await userEvent.type(minSqftInput, "100")
-      await userEvent.type(maxSqftInput, "50")
-    })
+    await userEvent.type(minSqftInput, "100")
+    await userEvent.type(maxSqftInput, "50")
 
     expect(
       await screen.findByText(
@@ -498,10 +493,8 @@ describe("<UnitGroupForm>", () => {
     expect(minFloorInput).toBeInTheDocument()
     expect(maxFloorInput).toBeInTheDocument()
 
-    await act(async () => {
-      await userEvent.selectOptions(minFloorInput, "3")
-      await userEvent.selectOptions(maxFloorInput, "1")
-    })
+    await userEvent.selectOptions(minFloorInput, "3")
+    await userEvent.selectOptions(maxFloorInput, "1")
 
     expect(await screen.findByText(/floor must be greater than or equal to/i)).toBeInTheDocument()
 
@@ -516,10 +509,8 @@ describe("<UnitGroupForm>", () => {
     expect(minBathroomsInput).toBeInTheDocument()
     expect(maxBathroomsInput).toBeInTheDocument()
 
-    await act(async () => {
-      await userEvent.selectOptions(minBathroomsInput, "4")
-      await userEvent.selectOptions(maxBathroomsInput, "1")
-    })
+    await userEvent.selectOptions(minBathroomsInput, "4")
+    await userEvent.selectOptions(maxBathroomsInput, "1")
 
     expect(
       await screen.findByText(
@@ -535,7 +526,7 @@ describe("<UnitGroupForm>", () => {
     const addAmiButton = screen.getByRole("button", { name: /add ami level/i })
     expect(addAmiButton).toBeInTheDocument()
 
-    await act(() => userEvent.click(addAmiButton))
+    await userEvent.click(addAmiButton)
 
     const drawerHeader = screen.getByRole("heading", { level: 1, name: /add ami level/i })
     expect(drawerHeader).toBeInTheDocument()
@@ -544,7 +535,7 @@ describe("<UnitGroupForm>", () => {
 
     const saveButton = within(drawerContainer).getByRole("button", { name: /save/i })
     expect(saveButton).toBeInTheDocument()
-    await act(() => userEvent.click(saveButton))
+    await userEvent.click(saveButton)
 
     expect(await within(drawerContainer).findAllByText(/this field is required/i)).toHaveLength(3)
   })
@@ -577,13 +568,13 @@ describe("<UnitGroupForm>", () => {
 
     const studioButton = await screen.findByLabelText(/studio/i)
     expect(studioButton).toBeInTheDocument()
-    await act(() => userEvent.click(studioButton))
+    await userEvent.click(studioButton)
 
     const quantityInput = screen.getByRole("spinbutton", {
       name: /affordable unit group quantity/i,
     })
 
-    await act(() => userEvent.type(quantityInput, "4"))
+    await userEvent.type(quantityInput, "4")
 
     // ----------------------------- Occupancy Section -----------------------------
     const minOccupancyInput = screen.getByRole("combobox", {
@@ -596,10 +587,8 @@ describe("<UnitGroupForm>", () => {
     expect(minOccupancyInput).toBeInTheDocument()
     expect(maxOccupancyInput).toBeInTheDocument()
 
-    await act(async () => {
-      await userEvent.selectOptions(minOccupancyInput, "1")
-      await userEvent.selectOptions(maxOccupancyInput, "4")
-    })
+    await userEvent.selectOptions(minOccupancyInput, "1")
+    await userEvent.selectOptions(maxOccupancyInput, "4")
 
     // ----------------------------- Square Footage Section -----------------------------
     const minSqftInput = screen.getByRole("spinbutton", {
@@ -612,10 +601,8 @@ describe("<UnitGroupForm>", () => {
     expect(minSqftInput).toBeInTheDocument()
     expect(maxSqftInput).toBeInTheDocument()
 
-    await act(async () => {
-      await userEvent.type(minSqftInput, "380")
-      await userEvent.type(maxSqftInput, "720")
-    })
+    await userEvent.type(minSqftInput, "380")
+    await userEvent.type(maxSqftInput, "720")
 
     // ----------------------------- Floor Section -----------------------------
     const minFloorInput = screen.getByRole("combobox", {
@@ -628,10 +615,8 @@ describe("<UnitGroupForm>", () => {
     expect(minFloorInput).toBeInTheDocument()
     expect(maxFloorInput).toBeInTheDocument()
 
-    await act(async () => {
-      await userEvent.selectOptions(minFloorInput, "1")
-      await userEvent.selectOptions(maxFloorInput, "8")
-    })
+    await userEvent.selectOptions(minFloorInput, "1")
+    await userEvent.selectOptions(maxFloorInput, "8")
 
     // ----------------------------- Bathroom Section -----------------------------
     const minBathroomsInput = screen.getByRole("combobox", {
@@ -644,23 +629,21 @@ describe("<UnitGroupForm>", () => {
     expect(minBathroomsInput).toBeInTheDocument()
     expect(maxBathroomsInput).toBeInTheDocument()
 
-    await act(async () => {
-      await userEvent.selectOptions(minBathroomsInput, "1")
-      await userEvent.selectOptions(maxBathroomsInput, "2")
-    })
+    await userEvent.selectOptions(minBathroomsInput, "1")
+    await userEvent.selectOptions(maxBathroomsInput, "2")
 
     const vacanciesInput = screen.getByRole("spinbutton", { name: /unit group vacancies/i })
-    await act(() => userEvent.type(vacanciesInput, "3"))
+    await userEvent.type(vacanciesInput, "3")
 
     const openWaitlistOption = screen.getByRole("radio", { name: /^open$/i })
-    await act(() => userEvent.click(openWaitlistOption))
+    await userEvent.click(openWaitlistOption)
 
     // ---------------------- AMI DRAWER SECTION -------------------------
 
     const addAmiButton = screen.getByRole("button", { name: /add ami level/i })
     expect(addAmiButton).toBeInTheDocument()
 
-    await act(() => userEvent.click(addAmiButton))
+    await userEvent.click(addAmiButton)
 
     const drawerHeader = screen.getByRole("heading", { level: 1, name: /add ami level/i })
     expect(drawerHeader).toBeInTheDocument()
@@ -674,33 +657,33 @@ describe("<UnitGroupForm>", () => {
     const amiChartInput = within(drawerContainer).getByRole("combobox", { name: /ami chart/i })
     expect(amiChartInput).toBeInTheDocument()
 
-    await act(() => userEvent.selectOptions(amiChartInput, "Mock AMI"))
+    await userEvent.selectOptions(amiChartInput, "Mock AMI")
 
     const amiPercentageInput = within(drawerContainer).getByRole("combobox", {
       name: /percentage of ami/i,
     })
     expect(amiPercentageInput).toBeInTheDocument()
-    await act(() => userEvent.selectOptions(amiPercentageInput, "30"))
+    await userEvent.selectOptions(amiPercentageInput, "30")
 
     const fixedAmountOption = within(drawerContainer).getByRole("radio", { name: /fixed amount/i })
     expect(fixedAmountOption).toBeInTheDocument()
-    await act(() => userEvent.click(fixedAmountOption))
+    await userEvent.click(fixedAmountOption)
 
     const monthlyRentInput = within(drawerContainer).getByRole("spinbutton", {
       name: /monthly rent/i,
     })
     expect(monthlyRentInput).toBeInTheDocument()
-    await act(() => userEvent.type(monthlyRentInput, "1500"))
+    await userEvent.type(monthlyRentInput, "1500")
 
     const saveButton = within(drawerContainer).getByRole("button", { name: /save/i })
     expect(saveButton).toBeInTheDocument()
-    await act(() => userEvent.click(saveButton))
+    await userEvent.click(saveButton)
 
     expect(await screen.findByRole("table")).toBeInTheDocument()
 
     const saveAndExitButton = screen.getByRole("button", { name: /save & exit/i })
     expect(saveAndExitButton).toBeInTheDocument()
-    await act(() => userEvent.click(saveAndExitButton))
+    await userEvent.click(saveAndExitButton)
 
     await waitFor(() => {
       expect(mockSubmit).toHaveBeenCalledWith(
