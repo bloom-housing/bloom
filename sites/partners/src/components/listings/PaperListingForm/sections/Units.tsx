@@ -394,8 +394,8 @@ const FormUnits = ({
                     id: "openWaitlist",
                     dataTestId: "listingAvailability.openWaitlist",
                     defaultChecked:
-                      listing?.reviewOrderType !== ReviewOrderTypeEnum.waitlist &&
-                      listing?.reviewOrderType !== ReviewOrderTypeEnum.waitlistLottery,
+                      listing?.reviewOrderType === ReviewOrderTypeEnum.waitlist &&
+                      listing?.reviewOrderType === ReviewOrderTypeEnum.waitlistLottery,
                     disabled:
                       disableListingAvailability &&
                       listing?.reviewOrderType === ReviewOrderTypeEnum.waitlist,
