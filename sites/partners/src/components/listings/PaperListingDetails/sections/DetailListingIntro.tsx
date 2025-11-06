@@ -4,6 +4,7 @@ import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { ListingContext } from "../../ListingContext"
 import { getDetailFieldString } from "./helpers"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
+import { EnumListingListingType } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 const DetailListingIntro = () => {
   const listing = useContext(ListingContext)
@@ -28,6 +29,22 @@ const DetailListingIntro = () => {
             {getDetailFieldString(listing.developer)}
           </FieldValue>
         </Grid.Cell>
+      </Grid.Row>
+      <Grid.Row>
+        <Grid.Cell>
+          <FieldValue id="listingType" label={t("listings.listingTypeTile")}>
+            {listing.listingType === EnumListingListingType.regulated
+              ? t("listings.regulatedListing")
+              : t("listings.nonRegulatedListing")}
+          </FieldValue>
+        </Grid.Cell>
+        {listing.listingType === EnumListingListingType.nonRegulated && (
+          <Grid.Cell>
+            <FieldValue id="hasHudEbllClearance" label={t("listings.hasEbllClearanceTitle")}>
+              {listing.hasHudEbllClearance ? t("t.yes") : t("t.no")}
+            </FieldValue>
+          </Grid.Cell>
+        )}
       </Grid.Row>
     </SectionWithGrid>
   )
