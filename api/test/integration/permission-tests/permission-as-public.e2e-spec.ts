@@ -3,7 +3,12 @@ import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import cookieParser from 'cookie-parser';
 import { stringify } from 'qs';
-import { FlaggedSetStatusEnum, RuleEnum, UnitTypeEnum } from '@prisma/client';
+import {
+  FlaggedSetStatusEnum,
+  MultiselectQuestionsStatusEnum,
+  RuleEnum,
+  UnitTypeEnum,
+} from '@prisma/client';
 import { AppModule } from '../../../src/modules/app.module';
 import { PrismaService } from '../../../src/services/prisma.service';
 import { userFactory } from '../../../prisma/seed-helpers/user-factory';
@@ -82,7 +87,7 @@ describe('Testing Permissioning of endpoints as public user', () => {
   let userService: UserService;
   let storedUserId: string;
   let cookies = '';
-  let jurisdictionAId = '';
+  let jurisdictionId = '';
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -98,11 +103,11 @@ describe('Testing Permissioning of endpoints as public user', () => {
     app.use(cookieParser());
     await app.init();
 
-    jurisdictionAId = await generateJurisdiction(
+    jurisdictionId = await generateJurisdiction(
       prisma,
       'public permission juris',
     );
-    await reservedCommunityTypeFactoryAll(jurisdictionAId, prisma);
+    await reservedCommunityTypeFactoryAll(jurisdictionId, prisma);
 
     const storedUser = await prisma.userAccounts.create({
       data: await userFactory({
@@ -131,10 +136,10 @@ describe('Testing Permissioning of endpoints as public user', () => {
   describe('Testing ami-chart endpoints', () => {
     it('should error as forbidden for list endpoint', async () => {
       await prisma.amiChart.create({
-        data: amiChartFactory(10, jurisdictionAId),
+        data: amiChartFactory(10, jurisdictionId),
       });
       const queryParams: AmiChartQueryParams = {
-        jurisdictionId: jurisdictionAId,
+        jurisdictionId: jurisdictionId,
       };
       const query = stringify(queryParams as any);
 
@@ -147,7 +152,7 @@ describe('Testing Permissioning of endpoints as public user', () => {
 
     it('should error as forbidden for retrieve endpoint', async () => {
       const amiChartA = await prisma.amiChart.create({
-        data: amiChartFactory(10, jurisdictionAId),
+        data: amiChartFactory(10, jurisdictionId),
       });
 
       await request(app.getHttpServer())
@@ -161,14 +166,14 @@ describe('Testing Permissioning of endpoints as public user', () => {
       await request(app.getHttpServer())
         .post('/amiCharts')
         .set({ passkey: process.env.API_PASS_KEY || '' })
-        .send(buildAmiChartCreateMock(jurisdictionAId))
+        .send(buildAmiChartCreateMock(jurisdictionId))
         .set('Cookie', cookies)
         .expect(403);
     });
 
     it('should error as forbidden for update endpoint', async () => {
       const amiChartA = await prisma.amiChart.create({
-        data: amiChartFactory(10, jurisdictionAId),
+        data: amiChartFactory(10, jurisdictionId),
       });
 
       await request(app.getHttpServer())
@@ -181,7 +186,7 @@ describe('Testing Permissioning of endpoints as public user', () => {
 
     it('should error as forbidden for delete endpoint', async () => {
       const amiChartA = await prisma.amiChart.create({
-        data: amiChartFactory(10, jurisdictionAId),
+        data: amiChartFactory(10, jurisdictionId),
       });
 
       await request(app.getHttpServer())
@@ -210,7 +215,7 @@ describe('Testing Permissioning of endpoints as public user', () => {
     });
 
     it('should succeed for list endpoint', async () => {
-      const listing1 = await listingFactory(jurisdictionAId, prisma);
+      const listing1 = await listingFactory(jurisdictionId, prisma);
       const listing1Created = await prisma.listings.create({
         data: listing1,
       });
@@ -227,7 +232,7 @@ describe('Testing Permissioning of endpoints as public user', () => {
         prisma,
         UnitTypeEnum.oneBdrm,
       );
-      const listing1 = await listingFactory(jurisdictionAId, prisma);
+      const listing1 = await listingFactory(jurisdictionId, prisma);
       const listing1Created = await prisma.listings.create({
         data: listing1,
       });
@@ -255,7 +260,7 @@ describe('Testing Permissioning of endpoints as public user', () => {
         prisma,
         UnitTypeEnum.oneBdrm,
       );
-      const listing1 = await listingFactory(jurisdictionAId, prisma);
+      const listing1 = await listingFactory(jurisdictionId, prisma);
       const listing1Created = await prisma.listings.create({
         data: listing1,
       });
@@ -284,7 +289,7 @@ describe('Testing Permissioning of endpoints as public user', () => {
         prisma,
         UnitTypeEnum.oneBdrm,
       );
-      const listing1 = await listingFactory(jurisdictionAId, prisma, {
+      const listing1 = await listingFactory(jurisdictionId, prisma, {
         digitalApp: true,
       });
       const listing1Created = await prisma.listings.create({
@@ -312,7 +317,7 @@ describe('Testing Permissioning of endpoints as public user', () => {
         prisma,
         UnitTypeEnum.oneBdrm,
       );
-      const listing1 = await listingFactory(jurisdictionAId, prisma, {
+      const listing1 = await listingFactory(jurisdictionId, prisma, {
         digitalApp: true,
       });
       const listing1Created = await prisma.listings.create({
@@ -340,7 +345,7 @@ describe('Testing Permissioning of endpoints as public user', () => {
         prisma,
         UnitTypeEnum.oneBdrm,
       );
-      const listing1 = await listingFactory(jurisdictionAId, prisma);
+      const listing1 = await listingFactory(jurisdictionId, prisma);
       const listing1Created = await prisma.listings.create({
         data: listing1,
       });
@@ -377,7 +382,7 @@ describe('Testing Permissioning of endpoints as public user', () => {
         prisma,
         UnitTypeEnum.oneBdrm,
       );
-      const listing1 = await listingFactory(jurisdictionAId, prisma);
+      const listing1 = await listingFactory(jurisdictionId, prisma);
       const listing1Created = await prisma.listings.create({
         data: listing1,
       });
@@ -400,7 +405,7 @@ describe('Testing Permissioning of endpoints as public user', () => {
 
     it('should error as forbidden for csv endpoint', async () => {
       const application = await applicationFactory();
-      const listing1 = await listingFactory(jurisdictionAId, prisma, {
+      const listing1 = await listingFactory(jurisdictionId, prisma, {
         applications: [application],
       });
       const listing1Created = await prisma.listings.create({
@@ -436,7 +441,7 @@ describe('Testing Permissioning of endpoints as public user', () => {
 
     it('should succeed for retrieve endpoint', async () => {
       await request(app.getHttpServer())
-        .get(`/jurisdictions/${jurisdictionAId}`)
+        .get(`/jurisdictions/${jurisdictionId}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
         .expect(200);
@@ -509,7 +514,7 @@ describe('Testing Permissioning of endpoints as public user', () => {
     it('should error as forbidden for retrieve endpoint', async () => {
       const reservedCommunityTypeA = await reservedCommunityTypeFactoryGet(
         prisma,
-        jurisdictionAId,
+        jurisdictionId,
       );
 
       await request(app.getHttpServer())
@@ -523,7 +528,7 @@ describe('Testing Permissioning of endpoints as public user', () => {
       await request(app.getHttpServer())
         .post('/reservedCommunityTypes')
         .set({ passkey: process.env.API_PASS_KEY || '' })
-        .send(buildReservedCommunityTypeCreateMock(jurisdictionAId))
+        .send(buildReservedCommunityTypeCreateMock(jurisdictionId))
         .set('Cookie', cookies)
         .expect(403);
     });
@@ -531,7 +536,7 @@ describe('Testing Permissioning of endpoints as public user', () => {
     it('should error as forbidden for update endpoint', async () => {
       const reservedCommunityTypeA = await reservedCommunityTypeFactoryGet(
         prisma,
-        jurisdictionAId,
+        jurisdictionId,
       );
 
       await request(app.getHttpServer())
@@ -545,7 +550,7 @@ describe('Testing Permissioning of endpoints as public user', () => {
     it('should error as forbidden for delete endpoint', async () => {
       const reservedCommunityTypeA = await reservedCommunityTypeFactoryGet(
         prisma,
-        jurisdictionAId,
+        jurisdictionId,
       );
 
       await request(app.getHttpServer())
@@ -765,7 +770,7 @@ describe('Testing Permissioning of endpoints as public user', () => {
 
     it('should succeed for retrieve endpoint', async () => {
       const multiselectQuestionA = await prisma.multiselectQuestions.create({
-        data: multiselectQuestionFactory(jurisdictionAId),
+        data: multiselectQuestionFactory(jurisdictionId),
       });
 
       await request(app.getHttpServer())
@@ -778,7 +783,7 @@ describe('Testing Permissioning of endpoints as public user', () => {
     it('should error as forbidden for create endpoint', async () => {
       await request(app.getHttpServer())
         .post('/multiselectQuestions')
-        .send(buildMultiselectQuestionCreateMock(jurisdictionAId))
+        .send(buildMultiselectQuestionCreateMock(jurisdictionId))
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
         .expect(403);
@@ -786,7 +791,7 @@ describe('Testing Permissioning of endpoints as public user', () => {
 
     it('should error as forbidden for update endpoint', async () => {
       const multiselectQuestionA = await prisma.multiselectQuestions.create({
-        data: multiselectQuestionFactory(jurisdictionAId),
+        data: multiselectQuestionFactory(jurisdictionId),
       });
 
       await request(app.getHttpServer())
@@ -794,7 +799,7 @@ describe('Testing Permissioning of endpoints as public user', () => {
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send(
           buildMultiselectQuestionUpdateMock(
-            jurisdictionAId,
+            jurisdictionId,
             multiselectQuestionA.id,
           ),
         )
@@ -804,7 +809,7 @@ describe('Testing Permissioning of endpoints as public user', () => {
 
     it('should error as forbidden for delete endpoint', async () => {
       const multiselectQuestionA = await prisma.multiselectQuestions.create({
-        data: multiselectQuestionFactory(jurisdictionAId),
+        data: multiselectQuestionFactory(jurisdictionId),
       });
 
       await request(app.getHttpServer())
@@ -813,6 +818,60 @@ describe('Testing Permissioning of endpoints as public user', () => {
         .send({
           id: multiselectQuestionA.id,
         } as IdDTO)
+        .set('Cookie', cookies)
+        .expect(403);
+    });
+
+    it('should error as forbidden for reActivate endpoint', async () => {
+      const multiselectQuestionA = await prisma.multiselectQuestions.create({
+        data: multiselectQuestionFactory(
+          jurisdictionId,
+          {
+            multiselectQuestion: {
+              status: MultiselectQuestionsStatusEnum.toRetire,
+            },
+          },
+          true,
+        ),
+      });
+
+      await request(app.getHttpServer())
+        .put('/multiselectQuestions/reActivate')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({
+          id: multiselectQuestionA.id,
+        } as IdDTO)
+        .set('Cookie', cookies)
+        .expect(403);
+    });
+
+    it('should error as forbidden for retire endpoint', async () => {
+      const multiselectQuestionA = await prisma.multiselectQuestions.create({
+        data: multiselectQuestionFactory(
+          jurisdictionId,
+          {
+            multiselectQuestion: {
+              status: MultiselectQuestionsStatusEnum.active,
+            },
+          },
+          true,
+        ),
+      });
+
+      await request(app.getHttpServer())
+        .put('/multiselectQuestions/retire')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({
+          id: multiselectQuestionA.id,
+        } as IdDTO)
+        .set('Cookie', cookies)
+        .expect(403);
+    });
+
+    it('should error as forbidden for retireMultiselectQuestions endpoint', async () => {
+      await request(app.getHttpServer())
+        .put('/multiselectQuestions/retireMultiselectQuestions')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
         .expect(403);
     });
@@ -1019,13 +1078,13 @@ describe('Testing Permissioning of endpoints as public user', () => {
 
     it('should succeed for retrieveListings endpoint', async () => {
       const multiselectQuestion1 = await prisma.multiselectQuestions.create({
-        data: multiselectQuestionFactory(jurisdictionAId, {
+        data: multiselectQuestionFactory(jurisdictionId, {
           multiselectQuestion: {
             text: 'example a',
           },
         }),
       });
-      const listingA = await listingFactory(jurisdictionAId, prisma, {
+      const listingA = await listingFactory(jurisdictionId, prisma, {
         multiselectQuestions: [multiselectQuestion1],
       });
       const listingACreated = await prisma.listings.create({
@@ -1044,7 +1103,7 @@ describe('Testing Permissioning of endpoints as public user', () => {
     });
 
     it('should succeed for retrieveListings endpoint', async () => {
-      const listingA = await listingFactory(jurisdictionAId, prisma);
+      const listingA = await listingFactory(jurisdictionId, prisma);
       const listingACreated = await prisma.listings.create({
         data: listingA,
         include: {
@@ -1059,7 +1118,7 @@ describe('Testing Permissioning of endpoints as public user', () => {
     });
 
     it('should error as forbidden for delete endpoint', async () => {
-      const listingData = await listingFactory(jurisdictionAId, prisma);
+      const listingData = await listingFactory(jurisdictionId, prisma);
       const listing = await prisma.listings.create({
         data: listingData,
       });
@@ -1075,7 +1134,7 @@ describe('Testing Permissioning of endpoints as public user', () => {
     });
 
     it('should error as forbidden for update endpoint', async () => {
-      const listingData = await listingFactory(jurisdictionAId, prisma);
+      const listingData = await listingFactory(jurisdictionId, prisma);
       const listing = await prisma.listings.create({
         data: listingData,
       });
@@ -1083,7 +1142,7 @@ describe('Testing Permissioning of endpoints as public user', () => {
       const val = await constructFullListingData(
         prisma,
         listing.id,
-        jurisdictionAId,
+        jurisdictionId,
       );
 
       await request(app.getHttpServer())
@@ -1106,7 +1165,7 @@ describe('Testing Permissioning of endpoints as public user', () => {
     });
 
     it('should error as forbidden for duplicate endpoint', async () => {
-      const listingData = await listingFactory(jurisdictionAId, prisma);
+      const listingData = await listingFactory(jurisdictionId, prisma);
       const listing = await prisma.listings.create({
         data: listingData,
       });
@@ -1290,7 +1349,7 @@ describe('Testing Permissioning of endpoints as public user', () => {
     });
 
     it('should error as forbidden for lottery status endpoint', async () => {
-      const listingData = await listingFactory(jurisdictionAId, prisma, {
+      const listingData = await listingFactory(jurisdictionId, prisma, {
         status: 'closed',
       });
       const listing = await prisma.listings.create({

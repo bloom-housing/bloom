@@ -11,6 +11,7 @@ import {
   MultiselectQuestionsStatusEnum,
   Prisma,
 } from '@prisma/client';
+import { PermissionService } from './permission.service';
 import { PrismaService } from './prisma.service';
 import { Jurisdiction } from '../dtos/jurisdictions/jurisdiction.dto';
 import { MultiselectQuestion } from '../dtos/multiselect-questions/multiselect-question.dto';
@@ -18,9 +19,11 @@ import { MultiselectQuestionCreate } from '../dtos/multiselect-questions/multise
 import { MultiselectQuestionUpdate } from '../dtos/multiselect-questions/multiselect-question-update.dto';
 import { MultiselectQuestionQueryParams } from '../dtos/multiselect-questions/multiselect-question-query-params.dto';
 import { SuccessDTO } from '../dtos/shared/success.dto';
+import { User } from '../dtos/users/user.dto';
 import { FeatureFlagEnum } from '../enums/feature-flags/feature-flags-enum';
 import { MultiselectQuestionFilterKeys } from '../enums/multiselect-questions/filter-key-enum';
 import { MultiselectQuestionViews } from '../enums/multiselect-questions/view-enum';
+import { permissionActions } from '../enums/permissions/permission-actions-enum';
 import { buildFilter } from '../utilities/build-filter';
 import { startCronJob } from '../utilities/cron-job-starter';
 import { doJurisdictionHaveFeatureFlagSet } from '../utilities/feature-flag-utilities';
@@ -52,6 +55,7 @@ export class MultiselectQuestionService {
     private prisma: PrismaService,
     @Inject(Logger)
     private logger = new Logger(MultiselectQuestionService.name),
+    private permissionService: PermissionService,
     private schedulerRegistry: SchedulerRegistry,
   ) {}
 
@@ -183,6 +187,7 @@ export class MultiselectQuestionService {
   */
   async create(
     incomingData: MultiselectQuestionCreate,
+    requestingUser: User,
   ): Promise<MultiselectQuestion> {
     const {
       isExclusive,
@@ -209,6 +214,15 @@ export class MultiselectQuestionService {
           : undefined,
       },
     });
+
+    await this.permissionService.canOrThrow(
+      requestingUser,
+      'multiselectQuestion',
+      permissionActions.create,
+      {
+        jurisdictionId: rawJurisdiction.id,
+      },
+    );
 
     const enableV2MSQ = doJurisdictionHaveFeatureFlagSet(
       rawJurisdiction as Jurisdiction,
@@ -285,6 +299,7 @@ export class MultiselectQuestionService {
   */
   async update(
     incomingData: MultiselectQuestionUpdate,
+    requestingUser: User,
   ): Promise<MultiselectQuestion> {
     const {
       id,
@@ -314,6 +329,16 @@ export class MultiselectQuestionService {
           : undefined,
       },
     });
+
+    await this.permissionService.canOrThrow(
+      requestingUser,
+      'multiselectQuestion',
+      permissionActions.update,
+      {
+        id: id,
+        jurisdictionId: rawJurisdiction.id,
+      },
+    );
 
     const enableV2MSQ = doJurisdictionHaveFeatureFlagSet(
       rawJurisdiction as Jurisdiction,
@@ -386,7 +411,10 @@ export class MultiselectQuestionService {
   /*
     this will delete a multiselect question
   */
-  async delete(multiselectQuestionId: string): Promise<SuccessDTO> {
+  async delete(
+    multiselectQuestionId: string,
+    requestingUser: User,
+  ): Promise<SuccessDTO> {
     const currentMultiselectQuestion = await this.findOne(
       multiselectQuestionId,
     );
@@ -394,6 +422,16 @@ export class MultiselectQuestionService {
     const enableV2MSQ = doJurisdictionHaveFeatureFlagSet(
       currentMultiselectQuestion.jurisdiction as Jurisdiction,
       FeatureFlagEnum.enableV2MSQ,
+    );
+
+    await this.permissionService.canOrThrow(
+      requestingUser,
+      'multiselectQuestion',
+      permissionActions.delete,
+      {
+        id: multiselectQuestionId,
+        jurisdictionId: currentMultiselectQuestion.jurisdiction.id,
+      },
     );
 
     if (enableV2MSQ) {
@@ -557,8 +595,21 @@ export class MultiselectQuestionService {
     } as SuccessDTO;
   }
 
-  async reActivate(multiselectQuestionId: string): Promise<SuccessDTO> {
+  async reActivate(
+    multiselectQuestionId: string,
+    requestingUser: User,
+  ): Promise<SuccessDTO> {
     const multiselectQuestion = await this.findOne(multiselectQuestionId);
+
+    await this.permissionService.canOrThrow(
+      requestingUser,
+      'multiselectQuestion',
+      permissionActions.update,
+      {
+        id: multiselectQuestionId,
+        jurisdictionId: multiselectQuestion.jurisdiction.id,
+      },
+    );
 
     await this.statusStateTransition(
       multiselectQuestion,
@@ -574,10 +625,14 @@ export class MultiselectQuestionService {
     attempts to move a multiselect question to retired status,
     if it is still associated with open listings it is moved to toRetire
   */
-  async retire(multiselectQuestionId: string): Promise<SuccessDTO> {
+  async retire(
+    multiselectQuestionId: string,
+    requestingUser: User,
+  ): Promise<SuccessDTO> {
     const rawMultiselectQuestion =
       await this.prisma.multiselectQuestions.findUnique({
         include: {
+          jurisdiction: true,
           listings: {
             include: {
               listings: {
@@ -598,6 +653,16 @@ export class MultiselectQuestionService {
         `multiselectQuestionId ${multiselectQuestionId} was requested but not found`,
       );
     }
+
+    await this.permissionService.canOrThrow(
+      requestingUser,
+      'multiselectQuestion',
+      permissionActions.update,
+      {
+        id: multiselectQuestionId,
+        jurisdictionId: rawMultiselectQuestion.jurisdiction.id,
+      },
+    );
 
     const multiselectQuestion = mapTo(
       MultiselectQuestion,

@@ -12,9 +12,14 @@ import { MultiselectQuestionCreate } from '../../../src/dtos/multiselect-questio
 import { MultiselectQuestionQueryParams } from '../../../src/dtos/multiselect-questions/multiselect-question-query-params.dto';
 import { MultiselectQuestionUpdate } from '../../../src/dtos/multiselect-questions/multiselect-question-update.dto';
 import { Compare } from '../../../src/dtos/shared/base-filter.dto';
+import { User } from '../../../src/dtos/users/user.dto';
 import { FeatureFlagEnum } from '../../../src/enums/feature-flags/feature-flags-enum';
 import { MultiselectQuestionService } from '../../../src/services/multiselect-question.service';
+import { PermissionService } from '../../../src/services/permission.service';
 import { PrismaService } from '../../../src/services/prisma.service';
+
+const user = new User();
+const canOrThrowMock = jest.fn();
 
 export const mockMultiselectQuestion = (
   position: number,
@@ -67,6 +72,12 @@ describe('Testing multiselect question service', () => {
       providers: [
         Logger,
         MultiselectQuestionService,
+        {
+          provide: PermissionService,
+          useValue: {
+            canOrThrow: canOrThrowMock,
+          },
+        },
         PrismaService,
         SchedulerRegistry,
       ],
@@ -440,7 +451,7 @@ describe('Testing multiselect question service', () => {
         text: 'text 1',
       };
 
-      expect(await service.create(params)).toEqual({
+      expect(await service.create(params, user)).toEqual({
         ...params,
         id: mockedValue.id,
         createdAt: date,
@@ -515,7 +526,7 @@ describe('Testing multiselect question service', () => {
         text: 'text 2',
       };
 
-      expect(await service.create(params)).toEqual({
+      expect(await service.create(params, user)).toEqual({
         ...params,
         id: mockedMultiselectQuestion.id,
         createdAt: date,
@@ -578,7 +589,7 @@ describe('Testing multiselect question service', () => {
         text: '',
       };
 
-      expect(await service.update(params)).toEqual({
+      expect(await service.update(params, user)).toEqual({
         ...mockedMultiselectQuestion,
         ...params,
         jurisdiction: {
@@ -669,7 +680,7 @@ describe('Testing multiselect question service', () => {
         text: '',
       };
 
-      expect(await service.update(params)).toEqual({
+      expect(await service.update(params, user)).toEqual({
         ...mockedMultiselectQuestion,
         ...params,
         jurisdiction: {
@@ -728,7 +739,7 @@ describe('Testing multiselect question service', () => {
       };
 
       await expect(
-        async () => await service.update(params),
+        async () => await service.update(params, user),
       ).rejects.toThrowError();
 
       expect(prisma.multiselectQuestions.findUnique).toHaveBeenCalledWith({
@@ -755,7 +766,7 @@ describe('Testing multiselect question service', () => {
         .mockResolvedValue(mockedMultiselectQuestion);
       const id = mockedMultiselectQuestion.id;
 
-      expect(await service.delete(id)).toEqual({
+      expect(await service.delete(id, user)).toEqual({
         success: true,
       });
 
@@ -793,7 +804,7 @@ describe('Testing multiselect question service', () => {
 
       const id = mockedMultiselectQuestion.id;
 
-      expect(await service.delete(id)).toEqual({
+      expect(await service.delete(id, user)).toEqual({
         success: true,
       });
 
@@ -1132,7 +1143,9 @@ describe('Testing multiselect question service', () => {
         .mockResolvedValue(mockedMultiselectQuestion);
       prisma.multiselectQuestions.update = jest.fn().mockResolvedValue(null);
 
-      expect(await service.reActivate(mockedMultiselectQuestion.id)).toEqual({
+      expect(
+        await service.reActivate(mockedMultiselectQuestion.id, user),
+      ).toEqual({
         success: true,
       });
 
@@ -1171,7 +1184,8 @@ describe('Testing multiselect question service', () => {
       prisma.multiselectQuestions.update = jest.fn().mockResolvedValue(null);
 
       expect(
-        async () => await service.reActivate(mockedMultiselectQuestion.id),
+        async () =>
+          await service.reActivate(mockedMultiselectQuestion.id, user),
       ).rejects.toThrowError();
 
       expect(prisma.multiselectQuestions.findUnique).toHaveBeenCalledWith({
@@ -1204,12 +1218,13 @@ describe('Testing multiselect question service', () => {
       });
       prisma.multiselectQuestions.update = jest.fn().mockResolvedValue(null);
 
-      expect(await service.retire(mockedMultiselectQuestion.id)).toEqual({
+      expect(await service.retire(mockedMultiselectQuestion.id, user)).toEqual({
         success: true,
       });
 
       expect(prisma.multiselectQuestions.findUnique).toHaveBeenCalledWith({
         include: {
+          jurisdiction: true,
           listings: {
             include: {
               listings: {
@@ -1253,12 +1268,13 @@ describe('Testing multiselect question service', () => {
       });
       prisma.multiselectQuestions.update = jest.fn().mockResolvedValue(null);
 
-      expect(await service.retire(mockedMultiselectQuestion.id)).toEqual({
+      expect(await service.retire(mockedMultiselectQuestion.id, user)).toEqual({
         success: true,
       });
 
       expect(prisma.multiselectQuestions.findUnique).toHaveBeenCalledWith({
         include: {
+          jurisdiction: true,
           listings: {
             include: {
               listings: {
@@ -1299,11 +1315,12 @@ describe('Testing multiselect question service', () => {
       prisma.multiselectQuestions.update = jest.fn().mockResolvedValue(null);
 
       expect(
-        async () => await service.retire(mockedMultiselectQuestion.id),
+        async () => await service.retire(mockedMultiselectQuestion.id, user),
       ).rejects.toThrowError();
 
       expect(prisma.multiselectQuestions.findUnique).toHaveBeenCalledWith({
         include: {
+          jurisdiction: true,
           listings: {
             include: {
               listings: {

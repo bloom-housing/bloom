@@ -1,3 +1,4 @@
+import { Request as ExpressRequest } from 'express';
 import {
   Body,
   Controller,
@@ -6,6 +7,7 @@ import {
   Param,
   Post,
   Put,
+  Request,
   Query,
   UseGuards,
   UseInterceptors,
@@ -28,6 +30,7 @@ import { MultiselectQuestionQueryParams } from '../dtos/multiselect-questions/mu
 import { IdDTO } from '../dtos/shared/id.dto';
 import { PaginationMeta } from '../dtos/shared/pagination.dto';
 import { SuccessDTO } from '../dtos/shared/success.dto';
+import { User } from '../dtos/users/user.dto';
 import { permissionActions } from '../enums/permissions/permission-actions-enum';
 import { ApiKeyGuard } from '../guards/api-key.guard';
 import { AdminOrJurisdictionalAdminGuard } from '../guards/admin-or-jurisdiction-admin.guard';
@@ -36,6 +39,7 @@ import { PermissionGuard } from '../guards/permission.guard';
 import { ActivityLogInterceptor } from '../interceptors/activity-log.interceptor';
 import { MultiselectQuestionService } from '../services/multiselect-question.service';
 import { defaultValidationPipeOptions } from '../utilities/default-validation-pipe-options';
+import { mapTo } from '../utilities/mapTo';
 
 @Controller('multiselectQuestions')
 @ApiTags('multiselectQuestions')
@@ -49,7 +53,7 @@ import { defaultValidationPipeOptions } from '../utilities/default-validation-pi
   IdDTO,
 )
 @PermissionTypeDecorator('multiselectQuestion')
-@UseGuards(ApiKeyGuard, OptionalAuthGuard, PermissionGuard)
+@UseGuards(ApiKeyGuard, OptionalAuthGuard)
 export class MultiselectQuestionController {
   constructor(
     private readonly multiselectQuestionService: MultiselectQuestionService,
@@ -70,11 +74,15 @@ export class MultiselectQuestionController {
     operationId: 'create',
   })
   @ApiOkResponse({ type: MultiselectQuestion })
-  @UseGuards(OptionalAuthGuard, AdminOrJurisdictionalAdminGuard)
+  @UseGuards(AdminOrJurisdictionalAdminGuard)
   async create(
     @Body() multiselectQuestion: MultiselectQuestionCreate,
+    @Request() req: ExpressRequest,
   ): Promise<MultiselectQuestion> {
-    return await this.multiselectQuestionService.create(multiselectQuestion);
+    return await this.multiselectQuestionService.create(
+      multiselectQuestion,
+      mapTo(User, req['user']),
+    );
   }
 
   @Put()
@@ -83,11 +91,15 @@ export class MultiselectQuestionController {
     operationId: 'update',
   })
   @ApiOkResponse({ type: MultiselectQuestion })
-  @UseGuards(OptionalAuthGuard, AdminOrJurisdictionalAdminGuard)
+  @UseGuards(AdminOrJurisdictionalAdminGuard)
   async update(
     @Body() multiselectQuestion: MultiselectQuestionUpdate,
+    @Request() req: ExpressRequest,
   ): Promise<MultiselectQuestion> {
-    return await this.multiselectQuestionService.update(multiselectQuestion);
+    return await this.multiselectQuestionService.update(
+      multiselectQuestion,
+      mapTo(User, req['user']),
+    );
   }
 
   @Delete()
@@ -96,10 +108,16 @@ export class MultiselectQuestionController {
     operationId: 'delete',
   })
   @ApiOkResponse({ type: SuccessDTO })
-  @UseGuards(OptionalAuthGuard, AdminOrJurisdictionalAdminGuard)
+  @UseGuards(AdminOrJurisdictionalAdminGuard)
   @UseInterceptors(ActivityLogInterceptor)
-  async delete(@Body() dto: IdDTO): Promise<SuccessDTO> {
-    return await this.multiselectQuestionService.delete(dto.id);
+  async delete(
+    @Body() dto: IdDTO,
+    @Request() req: ExpressRequest,
+  ): Promise<SuccessDTO> {
+    return await this.multiselectQuestionService.delete(
+      dto.id,
+      mapTo(User, req['user']),
+    );
   }
 
   @Put('reActivate')
@@ -108,9 +126,15 @@ export class MultiselectQuestionController {
     operationId: 'reActivate',
   })
   @ApiOkResponse({ type: SuccessDTO })
-  @UseGuards(OptionalAuthGuard, AdminOrJurisdictionalAdminGuard)
-  async reActivate(@Body() dto: IdDTO): Promise<SuccessDTO> {
-    return await this.multiselectQuestionService.reActivate(dto.id);
+  @UseGuards(AdminOrJurisdictionalAdminGuard)
+  async reActivate(
+    @Body() dto: IdDTO,
+    @Request() req: ExpressRequest,
+  ): Promise<SuccessDTO> {
+    return await this.multiselectQuestionService.reActivate(
+      dto.id,
+      mapTo(User, req['user']),
+    );
   }
 
   @Put('retire')
@@ -119,9 +143,15 @@ export class MultiselectQuestionController {
     operationId: 'retire',
   })
   @ApiOkResponse({ type: SuccessDTO })
-  @UseGuards(OptionalAuthGuard, AdminOrJurisdictionalAdminGuard)
-  async retire(@Body() dto: IdDTO): Promise<SuccessDTO> {
-    return await this.multiselectQuestionService.retire(dto.id);
+  @UseGuards(AdminOrJurisdictionalAdminGuard)
+  async retire(
+    @Body() dto: IdDTO,
+    @Request() req: ExpressRequest,
+  ): Promise<SuccessDTO> {
+    return await this.multiselectQuestionService.retire(
+      dto.id,
+      mapTo(User, req['user']),
+    );
   }
 
   @Put('retireMultiselectQuestions')
@@ -132,7 +162,7 @@ export class MultiselectQuestionController {
   @ApiOkResponse({ type: SuccessDTO })
   @PermissionAction(permissionActions.submit)
   @UseInterceptors(ActivityLogInterceptor)
-  @UseGuards(ApiKeyGuard, OptionalAuthGuard, AdminOrJurisdictionalAdminGuard)
+  @UseGuards(ApiKeyGuard, AdminOrJurisdictionalAdminGuard)
   async retireMultiselectQuestions(): Promise<SuccessDTO> {
     return await this.multiselectQuestionService.retireMultiselectQuestions();
   }
