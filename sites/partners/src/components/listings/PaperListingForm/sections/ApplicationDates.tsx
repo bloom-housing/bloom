@@ -49,16 +49,6 @@ const ApplicationDates = ({
 
   const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
 
-  const enableMarketingStatus = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableMarketingStatus,
-    listing?.jurisdictions?.id
-  )
-
-  const enableMarketingStatusMonths = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableMarketingStatusMonths,
-    listing?.jurisdictions?.id
-  )
-
   const openHouseTableData = useMemo(() => {
     return openHouseEvents.map((event) => {
       const { startTime, endTime, url } = event
@@ -102,6 +92,18 @@ const ApplicationDates = ({
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { errors, register, setValue, watch, clearErrors } = formMethods
+
+  const jurisdiction = watch("jurisdictions.id")
+
+  const enableMarketingStatus = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableMarketingStatus,
+    jurisdiction
+  )
+
+  const enableMarketingStatusMonths = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableMarketingStatusMonths,
+    jurisdiction
+  )
 
   const [drawerOpenHouse, setDrawerOpenHouse] = useState<TempEvent | boolean>(false)
   const [modalDeleteOpenHouse, setModalDeleteOpenHouse] = useState<TempEvent | null>(null)
