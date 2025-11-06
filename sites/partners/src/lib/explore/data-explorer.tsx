@@ -131,12 +131,12 @@ export const getReportDataFastAPI = async (filters?: ApiFilters) => {
   } catch (error) {
     console.error("Error returning data:", error)
     console.log("Falling back to default report data")
-    return reportDataOption1
+    return defaultReport
   }
 }
 
 // ── Option 1: Balanced distribution (more random) ─────────────────────────────
-export const reportDataOption1: ReportData = {
+export const defaultReport: ReportData = {
   reportFilters: { dateRange: "01/01/2025 - 06/30/2025" },
   totalProcessedApplications: 13293,
   totalListings: 24,
@@ -196,7 +196,7 @@ export const reportDataOption1: ReportData = {
 }
 
 // ── Option 2: Low-income & younger skew ──────────────────────────────────────────
-export const reportDataOption2: ReportData = {
+export const lowIncomeAndYounger: ReportData = {
   reportFilters: { dateRange: "01/01/2025 - 06/30/2025" },
   totalProcessedApplications: 800,
   totalListings: 18,
@@ -256,7 +256,7 @@ export const reportDataOption2: ReportData = {
 }
 
 // ── Option 3: High-income & older skew ──────────────────────────────────────────
-export const reportDataOption3: ReportData = {
+export const highIncomeAndOlder: ReportData = {
   reportFilters: { dateRange: "01/01/2025 - 06/30/2025" },
   totalProcessedApplications: 1200,
   totalListings: 32,
@@ -314,10 +314,69 @@ export const reportDataOption3: ReportData = {
   reportErrors: [],
 }
 
-// ── Option 4: Error state (insufficient data) ─────────────────────────────────
-export const reportDataOption4: ReportData = {
+export const veryLowData: ReportData = {
   reportFilters: { dateRange: "01/01/2025 - 06/30/2025" },
-  totalProcessedApplications: 50,
+  totalProcessedApplications: 22,
+  totalListings: 3,
+  isSufficient: true,
+  kAnonScore: 2,
+  products: {
+    incomeHouseholdSizeCrossTab: {
+      "1": { "0-30% AMI": 2, "31-50% AMI": 3, "51-80% AMI": 4, "81-120% AMI": 1 },
+      "2": { "0-30% AMI": 3, "31-50% AMI": 2, "51-80% AMI": 3, "81-120% AMI": 2 },
+      "3": { "0-30% AMI": 1, "31-50% AMI": 0, "51-80% AMI": 1, "81-120% AMI": 0 },
+      "4+": { "0-30% AMI": 0, "31-50% AMI": 0, "51-80% AMI": 0, "81-120% AMI": 0 },
+    },
+    raceFrequencies: [
+      { race: "Asian", count: 5, percentage: 0.227 },
+      { race: "Black or African American", count: 3, percentage: 0.136 },
+      { race: "Hispanic or Latino", count: 7, percentage: 0.318 },
+      { race: "White", count: 6, percentage: 0.273 },
+      { race: "Multiracial", count: 1, percentage: 0.046 },
+    ],
+    ethnicityFrequencies: [
+      { ethnicity: "Hispanic or Latino", count: 7, percentage: 0.318 },
+      { ethnicity: "Not Hispanic or Latino", count: 15, percentage: 0.682 },
+    ],
+    subsidyOrVoucherTypeFrequencies: [
+      { subsidyType: "Section 8", count: 8, percentage: 0.364 },
+      { subsidyType: "Housing Choice Voucher", count: 5, percentage: 0.227 },
+      { subsidyType: "Project-Based Voucher", count: 2, percentage: 0.091 },
+      { subsidyType: "None", count: 7, percentage: 0.318 },
+    ],
+    accessibilityTypeFrequencies: [
+      { accessibilityType: "Wheelchair Accessible", count: 3, percentage: 0.136 },
+      { accessibilityType: "Hearing Impaired", count: 1, percentage: 0.045 },
+      { accessibilityType: "Visual Impairment", count: 1, percentage: 0.045 },
+      { accessibilityType: "None", count: 17, percentage: 0.773 },
+    ],
+    ageFrequencies: [
+      { age: "18-24", count: 2, percentage: 0.091 },
+      { age: "25-34", count: 6, percentage: 0.273 },
+      { age: "35-44", count: 7, percentage: 0.318 },
+      { age: "45-54", count: 4, percentage: 0.182 },
+      { age: "55+", count: 3, percentage: 0.136 },
+    ],
+    residentialLocationFrequencies: [
+      { location: "Oakland", count: 9, percentage: 0.409 },
+      { location: "Berkeley", count: 7, percentage: 0.318 },
+      { location: "Alameda", count: 4, percentage: 0.182 },
+      { location: "Other", count: 2, percentage: 0.091 },
+    ],
+    languageFrequencies: [
+      { language: "English", count: 18, percentage: 0.818 },
+      { language: "Spanish", count: 3, percentage: 0.136 },
+      { language: "Chinese", count: 1, percentage: 0.046 },
+      { language: "Other", count: 0, percentage: 0.0 },
+    ],
+  },
+  reportErrors: [],
+}
+
+// ── Option 4: Error state (insufficient data) ─────────────────────────────────
+export const InsufficientNumberOfApplications: ReportData = {
+  reportFilters: { dateRange: "01/01/2025 - 06/30/2025" },
+  totalProcessedApplications: 5,
   totalListings: 5,
   isSufficient: false,
   kAnonScore: 2,

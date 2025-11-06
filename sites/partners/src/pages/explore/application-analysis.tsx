@@ -13,10 +13,18 @@ import {
   getReportDataFastAPI,
   ApiFilters,
   IncomeHouseholdSizeCrossTab,
+  defaultReport,
+  lowIncomeAndYounger,
+  highIncomeAndOlder,
+  veryLowData,
+  InsufficientNumberOfApplications,
+  ReportData,
 } from "../../lib/explore/data-explorer"
 import { FormValues } from "../../components/explore/filtering/mainForm"
 import { useRouter } from "next/router"
 import { ReportProducts } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { AiPermissionModal } from "../../components/explore/aiPermissionModal"
+import { AiInsightsPanel } from "../../components/explore/AIInsightsPanel"
 
 const ApplicationAnalysis = () => {
   const router = useRouter()
@@ -24,7 +32,12 @@ const ApplicationAnalysis = () => {
     void router.replace("/")
   }
 
+  const [hasUserConsentedToAI, setHasUserConsentedToAI] = useState(false)
+
   const [isFilterPanelOpen, setIsFilterPanelOpen] = useState(false)
+  const [isAiInsightsPanelOpen, setIsAiInsightsPanelOpen] = useState(false)
+  const [isAiConsentPanelOpen, setIsAiConsentPanelOpen] = useState(false)
+  const [dataOverride, setDataOverride] = useState<string>("none")
   const [chartData, setChartData] = useState<ReportProducts>({
     incomeHouseholdSizeCrossTab: {} as IncomeHouseholdSizeCrossTab,
     raceFrequencies: [],
@@ -51,7 +64,34 @@ const ApplicationAnalysis = () => {
 
   const fetchData = async (filters?: ApiFilters) => {
     try {
-      const reportData = await getReportDataFastAPI(filters)
+      let reportData: ReportData
+
+      // Check if manual override is selected
+      if (dataOverride !== "none") {
+        switch (dataOverride) {
+          case "default":
+            reportData = defaultReport
+            break
+          case "lowIncome":
+            reportData = lowIncomeAndYounger
+            break
+          case "highIncome":
+            reportData = highIncomeAndOlder
+            break
+          case "veryLow":
+            reportData = veryLowData
+            break
+          case "insufficient":
+            reportData = InsufficientNumberOfApplications
+            break
+          default:
+            reportData = await getReportDataFastAPI(filters)
+        }
+      } else {
+        // No override - fetch from API
+        reportData = await getReportDataFastAPI(filters)
+      }
+
       setChartData({
         incomeHouseholdSizeCrossTab: reportData.products.incomeHouseholdSizeCrossTab,
         raceFrequencies: reportData.products.raceFrequencies,
@@ -76,6 +116,11 @@ const ApplicationAnalysis = () => {
     void fetchData()
   }, [])
 
+  // Refetch data when data override changes
+  useEffect(() => {
+    void fetchData(appliedFilters)
+  }, [dataOverride])
+
   // Effect to disable body scroll when filter panel is open
   useEffect(() => {
     if (isFilterPanelOpen) {
@@ -91,8 +136,6 @@ const ApplicationAnalysis = () => {
   }, [isFilterPanelOpen])
 
   const handleApplyFilters = (filters: FormValues) => {
-    console.log("Raw filter values:", filters)
-
     // Helper function to handle numeric fields - convert NaN to null, keep all other values
     const getNumericValue = (num: number | null | undefined): number | null =>
       num !== undefined && !isNaN(num) ? num : null
@@ -138,47 +181,155 @@ const ApplicationAnalysis = () => {
       <NavigationHeader
         className="relative bg-white border-b border-gray-450"
         title="Application Report"
-      ></NavigationHeader>
+      />
       <div className="w-full bg-gray-100">
-        <div className="flex flex-col bg-gray-100 max-w-7xl mx-auto my-4 px-5">
-          <ReportSummary
-            dateRange={filterInformation.dataRange}
-            totalApplications={filterInformation.totalProcessedApplications}
-            totalListings={filterInformation.totalListings}
-          />
-          <div className="pb-8 ml-auto">
-            <Button
-              variant="primary"
-              size="sm"
-              onClick={() => setIsFilterPanelOpen(true)}
-              className="ml-auto"
+        <div className="relative flex justify-center gap-4 px-4">
+          {/* Main Content - Centered with dynamic width based on panel state */}
+          <div
+            className={`flex flex-col bg-gray-100 w-full my-4 px-5 transition-all duration-300 ${
+              isAiInsightsPanelOpen ? "max-w-4xl" : "max-w-7xl"
+            }`}
+          >
+            <ReportSummary
+              dateRange={filterInformation.dataRange}
+              totalApplications={filterInformation.totalProcessedApplications}
+              totalListings={filterInformation.totalListings}
+            />
+
+            {/* Test Data Override Dropdown */}
+            <div className="mb-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+              <label
+                htmlFor="dataOverride"
+                className="block text-sm font-medium text-gray-700 mb-2"
+              >
+                🧪 Test Data Override
+              </label>
+              <select
+                id="dataOverride"
+                value={dataOverride}
+                onChange={(e) => setDataOverride(e.target.value)}
+                className="block w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="none">No Override (Use API/Filters)</option>
+                <option value="default">Default Report (Balanced Distribution)</option>
+                <option value="lowIncome">Low Income & Younger Skew</option>
+                <option value="highIncome">High Income & Older Skew</option>
+                <option value="veryLow">Very Low Data (~22 applications)</option>
+                <option value="insufficient">Insufficient Data (Error State)</option>
+              </select>
+              <p className="mt-2 text-xs text-gray-600">
+                Select a test dataset to override the normal data fetching behavior
+              </p>
+            </div>
+
+            <div className="pb-8 ml-auto flex gap-2">
+              <Button
+                variant="primary"
+                size="sm"
+                onClick={() => setIsFilterPanelOpen(true)}
+                className="ml-auto"
+              >
+                Customize Report
+              </Button>
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={() => setIsAiInsightsPanelOpen(!isAiInsightsPanelOpen)}
+                className="ml-auto"
+              >
+                See Data Summary
+              </Button>
+            </div>
+            <div className="">
+              <HouseholdIncomeReport
+                chartData={{
+                  incomeHouseholdSizeCrossTab:
+                    chartData.incomeHouseholdSizeCrossTab as IncomeHouseholdSizeCrossTab,
+                }}
+              />
+              <DemographicsSection
+                chartData={{
+                  raceFrequencies: chartData.raceFrequencies,
+                  ethnicityFrequencies: chartData.ethnicityFrequencies,
+                }}
+              />
+              <PrimaryApplicantSection
+                chartData={{
+                  residentialLocationFrequencies: chartData.residentialLocationFrequencies,
+                  ageFrequencies: chartData.ageFrequencies,
+                  languageFrequencies: chartData.languageFrequencies,
+                  subsidyOrVoucherTypeFrequencies: chartData.subsidyOrVoucherTypeFrequencies,
+                  accessibilityTypeFrequencies: chartData.accessibilityTypeFrequencies,
+                }}
+              />
+            </div>
+          </div>
+
+          {/* GenAI Insights Panel - Positioned alongside main content */}
+          {isAiInsightsPanelOpen && (
+            <div
+              className="flex-shrink-0 w-80 my-4 bg-white rounded-lg p-6 max-h-[calc(100vh-10rem)] overflow-y-auto sticky shadow top-4 animate-slide-in-right"
+              style={{ height: "min-content" }}
             >
-              Customize Report
-            </Button>
-          </div>
-          <div className="">
-            <HouseholdIncomeReport
-              chartData={{
-                incomeHouseholdSizeCrossTab:
-                  chartData.incomeHouseholdSizeCrossTab as IncomeHouseholdSizeCrossTab,
-              }}
-            />
-            <DemographicsSection
-              chartData={{
-                raceFrequencies: chartData.raceFrequencies,
-                ethnicityFrequencies: chartData.ethnicityFrequencies,
-              }}
-            />
-            <PrimaryApplicantSection
-              chartData={{
-                residentialLocationFrequencies: chartData.residentialLocationFrequencies,
-                ageFrequencies: chartData.ageFrequencies,
-                languageFrequencies: chartData.languageFrequencies,
-                subsidyOrVoucherTypeFrequencies: chartData.subsidyOrVoucherTypeFrequencies,
-                accessibilityTypeFrequencies: chartData.accessibilityTypeFrequencies,
-              }}
-            />
-          </div>
+              <div className="relative">
+                {/* Close Button */}
+                <button
+                  onClick={() => setIsAiInsightsPanelOpen(false)}
+                  className="absolute top-0 right-0 text-gray-400 hover:text-gray-600 transition-colors"
+                  aria-label="Close AI Insights"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                </button>
+
+                {hasUserConsentedToAI ? (
+                  <AiInsightsPanel />
+                ) : (
+                  <>
+                    <div className="flex items-center gap-2 mb-4">
+                      <svg
+                        className="w-5 h-5 text-blue-600"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M13 10V3L4 14h7v7l9-11h-7z"
+                        />
+                      </svg>
+                      <h3 className="text-lg font-semibold text-gray-900">
+                        Enable Gen AI Insights
+                      </h3>
+                    </div>
+                    <div className="space-y-4">
+                      <div className="p-4 bg-blue-50 rounded-md">
+                        <p className="text-sm text-gray-700">
+                          Leverage the power of Generative AI to gain deeper insights into your data
+                        </p>
+                      </div>
+                      <Button
+                        variant="primary"
+                        size="sm"
+                        onClick={() => setIsAiConsentPanelOpen(true)}
+                        className="w-full"
+                      >
+                        Enable AI Insights
+                      </Button>
+                    </div>
+                  </>
+                )}
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
@@ -186,6 +337,15 @@ const ApplicationAnalysis = () => {
         isOpen={isFilterPanelOpen}
         onClose={() => setIsFilterPanelOpen(false)}
         onApplyFilters={handleApplyFilters}
+      />
+
+      <AiPermissionModal
+        showOnboardingModal={isAiConsentPanelOpen}
+        setShowOnboardingModal={() => setIsAiConsentPanelOpen(false)}
+        handleConfirmGenAI={() => {
+          setIsAiConsentPanelOpen(false)
+          setHasUserConsentedToAI(true)
+        }}
       />
     </Layout>
   )

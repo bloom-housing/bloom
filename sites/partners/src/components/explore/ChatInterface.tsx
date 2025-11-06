@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react"
 import { Button } from "@bloom-housing/ui-seeds"
 import { chatWithAI } from "../../lib/ai/conversational-ai"
-import { reportDataOption1 as reportData } from "../../lib/explore/data-explorer"
+import { defaultReport as reportData } from "../../lib/explore/data-explorer"
 // import Markdown from "react-markdown"
 
 export interface Message {
