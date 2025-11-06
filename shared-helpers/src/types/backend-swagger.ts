@@ -6297,6 +6297,9 @@ export interface JurisdictionCreate {
 
   /**  */
   requiredListingFields: []
+
+  /**  */
+  visibleNeighborhoodAmenities: NeighborhoodAmenitiesEnum[]
 }
 
 export interface JurisdictionUpdate {
@@ -6359,6 +6362,9 @@ export interface JurisdictionUpdate {
 
   /**  */
   requiredListingFields: []
+
+  /**  */
+  visibleNeighborhoodAmenities: NeighborhoodAmenitiesEnum[]
 }
 
 export interface FeatureFlag {
@@ -6456,6 +6462,9 @@ export interface Jurisdiction {
 
   /**  */
   requiredListingFields: []
+
+  /**  */
+  visibleNeighborhoodAmenities: NeighborhoodAmenitiesEnum[]
 }
 
 export interface MultiselectQuestionCreate {
@@ -7928,6 +7937,15 @@ export enum UserRoleEnum {
   "jurisdictionAdmin" = "jurisdictionAdmin",
   "limitedJurisdictionAdmin" = "limitedJurisdictionAdmin",
   "supportAdmin" = "supportAdmin",
+}
+
+export enum NeighborhoodAmenitiesEnum {
+  "groceryStores" = "groceryStores",
+  "publicTransportation" = "publicTransportation",
+  "schools" = "schools",
+  "parksAndCommunityCenters" = "parksAndCommunityCenters",
+  "pharmacies" = "pharmacies",
+  "healthCareResources" = "healthCareResources",
 }
 
 export enum FeatureFlagEnum {

@@ -114,6 +114,7 @@ export const buildJurisdictionCreateMock = (
     listingApprovalPermissions: [],
     duplicateListingPermissions: [],
     requiredListingFields: [],
+    visibleNeighborhoodAmenities: [],
   };
 };
 
@@ -138,6 +139,7 @@ export const buildJurisdictionUpdateMock = (
     listingApprovalPermissions: [],
     duplicateListingPermissions: [],
     requiredListingFields: [],
+    visibleNeighborhoodAmenities: [],
   };
 };
 

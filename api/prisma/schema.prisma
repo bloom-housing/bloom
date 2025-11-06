@@ -178,12 +178,12 @@ model ApplicationSelectionOptions {
   addressHolderAddressId    String?               @unique() @map("address_holder_address_id") @db.Uuid
   addressHolderName         String?               @map("address_holder_name")
   addressHolderRelationship String?               @map("address_holder_relationship")
-  applicationSelectionId	  String                @map("application_selection_id") @db.Uuid
-  isGeocodingVerified	      Boolean?              @map("is_geocoding_verified")
-  multiselectOptionId 	    String                @map("multiselect_option_id") @db.Uuid
-  addressHolderAddress	    Address?              @relation("application_selection_address", fields: [addressHolderAddressId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  applicationSelections	    ApplicationSelections @relation(fields: [applicationSelectionId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  multiselectOption  	      MultiselectOptions    @relation(fields: [multiselectOptionId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  applicationSelectionId    String                @map("application_selection_id") @db.Uuid
+  isGeocodingVerified       Boolean?              @map("is_geocoding_verified")
+  multiselectOptionId       String                @map("multiselect_option_id") @db.Uuid
+  addressHolderAddress      Address?              @relation("application_selection_address", fields: [addressHolderAddressId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  applicationSelections     ApplicationSelections @relation(fields: [applicationSelectionId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  multiselectOption         MultiselectOptions    @relation(fields: [multiselectOptionId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@map("application_selection_options")
 }
@@ -195,9 +195,9 @@ model ApplicationSelections {
   applicationId         String                        @map("application_id") @db.Uuid
   hasOptedOut           Boolean?                      @map("has_opted_out")
   multiselectQuestionId String                        @map("multiselect_question_id") @db.Uuid
-  application 			    Applications                  @relation(fields: [applicationId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  multiselectQuestion	  MultiselectQuestions          @relation(fields: [multiselectQuestionId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  selections			      ApplicationSelectionOptions[]
+  application           Applications                  @relation(fields: [applicationId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  multiselectQuestion   MultiselectQuestions          @relation(fields: [multiselectQuestionId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  selections            ApplicationSelectionOptions[]
 
   @@map("application_selections")
 }
@@ -371,25 +371,25 @@ model HouseholdMember {
 
 // Note: [name] formerly max length 256
 model Jurisdictions {
-  id                            String                   @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  createdAt                     DateTime                 @default(now()) @map("created_at") @db.Timestamp(6)
-  updatedAt                     DateTime                 @updatedAt @map("updated_at") @db.Timestamp(6)
-  name                          String                   @unique()
-  notificationsSignUpUrl        String?                  @map("notifications_sign_up_url")
-  languages                     LanguagesEnum[]          @default([en])
-  partnerTerms                  String?                  @map("partner_terms")
-  publicUrl                     String                   @default("") @map("public_url")
-  emailFromAddress              String?                  @map("email_from_address")
-  rentalAssistanceDefault       String                   @map("rental_assistance_default")
-  whatToExpect                  String                   @default("Applicants will be contacted by the property agent in rank order until vacancies are filled. All of the information that you have provided will be verified and your eligibility confirmed. Your application will be removed from the waitlist if you have made any fraudulent statements. If we cannot verify a housing preference that you have claimed, you will not receive the preference but will not be otherwise penalized. Should your application be chosen, be prepared to fill out a more detailed application and provide required supporting documents.") @map("what_to_expect")
-  whatToExpectAdditionalText    String                   @default("") @map("what_to_expect_additional_text")
-  whatToExpectUnderConstruction String                   @default("") @map("what_to_expect_under_construction")
-  enablePartnerSettings         Boolean                  @default(false) @map("enable_partner_settings")
-  enablePartnerDemographics     Boolean                  @default(false) @map("enable_partner_demographics")
-  enableGeocodingPreferences    Boolean                  @default(false) @map("enable_geocoding_preferences")
-  enableGeocodingRadiusMethod   Boolean                  @default(false) @map("enable_geocoding_radius_method")
-  enableListingOpportunity      Boolean                  @default(false) @map("enable_listing_opportunity")
-  allowSingleUseCodeLogin       Boolean                  @default(false) @map("allow_single_use_code_login")
+  id                            String                      @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  createdAt                     DateTime                    @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt                     DateTime                    @updatedAt @map("updated_at") @db.Timestamp(6)
+  name                          String                      @unique()
+  notificationsSignUpUrl        String?                     @map("notifications_sign_up_url")
+  languages                     LanguagesEnum[]             @default([en])
+  partnerTerms                  String?                     @map("partner_terms")
+  publicUrl                     String                      @default("") @map("public_url")
+  emailFromAddress              String?                     @map("email_from_address")
+  rentalAssistanceDefault       String                      @map("rental_assistance_default")
+  whatToExpect                  String                      @default("Applicants will be contacted by the property agent in rank order until vacancies are filled. All of the information that you have provided will be verified and your eligibility confirmed. Your application will be removed from the waitlist if you have made any fraudulent statements. If we cannot verify a housing preference that you have claimed, you will not receive the preference but will not be otherwise penalized. Should your application be chosen, be prepared to fill out a more detailed application and provide required supporting documents.") @map("what_to_expect")
+  whatToExpectAdditionalText    String                      @default("") @map("what_to_expect_additional_text")
+  whatToExpectUnderConstruction String                      @default("") @map("what_to_expect_under_construction")
+  enablePartnerSettings         Boolean                     @default(false) @map("enable_partner_settings")
+  enablePartnerDemographics     Boolean                     @default(false) @map("enable_partner_demographics")
+  enableGeocodingPreferences    Boolean                     @default(false) @map("enable_geocoding_preferences")
+  enableGeocodingRadiusMethod   Boolean                     @default(false) @map("enable_geocoding_radius_method")
+  enableListingOpportunity      Boolean                     @default(false) @map("enable_listing_opportunity")
+  allowSingleUseCodeLogin       Boolean                     @default(false) @map("allow_single_use_code_login")
   amiChart                      AmiChart[]
   featureFlags                  FeatureFlags[]
   multiselectQuestions          MultiselectQuestions[]
@@ -397,9 +397,10 @@ model Jurisdictions {
   reservedCommunityTypes        ReservedCommunityTypes[]
   translations                  Translations[]
   user_accounts                 UserAccounts[]
-  listingApprovalPermissions    UserRoleEnum[]           @map("listing_approval_permission")
-  duplicateListingPermissions   UserRoleEnum[]           @map("duplicate_listing_permissions")
-  requiredListingFields         String[]                 @default([]) @map("required_listing_fields")
+  listingApprovalPermissions    UserRoleEnum[]              @map("listing_approval_permission")
+  duplicateListingPermissions   UserRoleEnum[]              @map("duplicate_listing_permissions")
+  requiredListingFields         String[]                    @default([]) @map("required_listing_fields")
+  visibleNeighborhoodAmenities  NeighborhoodAmenitiesEnum[] @default([groceryStores, publicTransportation, schools, parksAndCommunityCenters, pharmacies, healthCareResources]) @map("visible_neighborhood_amenities")
 
   @@map("jurisdictions")
 }
@@ -977,15 +978,15 @@ model UserAccounts {
 }
 
 model UserRoles {
-  isAdmin                       Boolean         @default(false) @map("is_admin")
-  isJurisdictionalAdmin         Boolean         @default(false) @map("is_jurisdictional_admin")
-  isLimitedJurisdictionalAdmin  Boolean         @default(false) @map("is_limited_jurisdictional_admin")
-  isPartner                     Boolean         @default(false) @map("is_partner")
-  isSupportAdmin                Boolean         @default(false) @map("is_support_admin")
+  isAdmin                      Boolean      @default(false) @map("is_admin")
+  isJurisdictionalAdmin        Boolean      @default(false) @map("is_jurisdictional_admin")
+  isLimitedJurisdictionalAdmin Boolean      @default(false) @map("is_limited_jurisdictional_admin")
+  isPartner                    Boolean      @default(false) @map("is_partner")
+  isSupportAdmin               Boolean      @default(false) @map("is_support_admin")
   // Role for maintainers of the code base. Should have access to everything as well as developer specific pages
-  isSuperAdmin                  Boolean         @default(false) @map("is_super_admin")
-  userId                        String          @id() @map("user_id") @db.Uuid
-  userAccounts                  UserAccounts    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  isSuperAdmin                 Boolean      @default(false) @map("is_super_admin")
+  userId                       String       @id() @map("user_id") @db.Uuid
+  userAccounts                 UserAccounts @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("user_roles")
 }
@@ -1386,4 +1387,15 @@ enum ValidationMethodEnum {
   none
 
   @@map("validation_method_enum")
+}
+
+enum NeighborhoodAmenitiesEnum {
+  groceryStores
+  publicTransportation
+  schools
+  parksAndCommunityCenters
+  pharmacies
+  healthCareResources
+
+  @@map("neighborhood_amenities_enum")
 }
