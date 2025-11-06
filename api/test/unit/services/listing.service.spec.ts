@@ -1453,7 +1453,10 @@ describe('Testing listing service', () => {
             OR: [
               {
                 reviewOrderType: {
-                  equals: ReviewOrderTypeEnum.waitlist,
+                  in: [
+                    ReviewOrderTypeEnum.waitlist,
+                    ReviewOrderTypeEnum.waitlistLottery,
+                  ],
                 },
               },
             ],
