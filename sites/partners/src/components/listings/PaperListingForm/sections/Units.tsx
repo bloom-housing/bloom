@@ -65,6 +65,10 @@ const FormUnits = ({
   const enableUnitGroups =
     featureFlags?.find((flag) => flag.name === FeatureFlagEnum.enableUnitGroups)?.active || false
 
+  const enableNonRegulatedListings =
+    featureFlags?.find((flag) => flag.name === FeatureFlagEnum.enableNonRegulatedListings)
+      ?.active || false
+
   const listingAvailability = useWatch({
     control,
     name: "listingAvailabilityQuestion",
@@ -507,7 +511,9 @@ const FormUnits = ({
             defaultUnitGroup={defaultUnitGroup}
             draft={!unitGroups.some((unitGroup) => unitGroup.tempId === defaultUnitGroup?.tempId)}
             nextId={nextId}
-            isNonRegulated={listingType === EnumListingListingType.nonRegulated}
+            isNonRegulated={
+              enableNonRegulatedListings && listingType === EnumListingListingType.nonRegulated
+            }
           />
         ) : (
           <UnitForm
@@ -530,7 +536,9 @@ const FormUnits = ({
             draft={!units.some((unit) => unit.tempId === defaultUnit?.tempId)}
             defaultUnit={defaultUnit}
             nextId={nextId}
-            isNonRegulated={listingType === EnumListingListingType.nonRegulated}
+            isNonRegulated={
+              enableNonRegulatedListings && listingType === EnumListingListingType.nonRegulated
+            }
           />
         )}
       </Drawer>

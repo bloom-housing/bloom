@@ -91,6 +91,8 @@ const BuildingDetails = ({
     name: "listingType",
   })
 
+  const jurisdiction = watch("jurisdictions.id")
+
   const displayMapPreview = () => {
     return (
       buildingAddress?.city &&
@@ -166,6 +168,11 @@ const BuildingDetails = ({
   const enableRegions = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableRegions,
     jurisdictions?.id
+  )
+
+  const enableNonRegulatedListings = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableNonRegulatedListings,
+    jurisdiction
   )
 
   useEffect(() => {
@@ -332,7 +339,7 @@ const BuildingDetails = ({
                 {...defaultFieldProps("region", t("t.region"), requiredFields, errors, clearErrors)}
               />
             ) : (
-              listingType === EnumListingListingType.regulated && (
+              (listingType === EnumListingListingType.regulated || !enableNonRegulatedListings) && (
                 <Field
                   type={"number"}
                   register={register}
@@ -348,23 +355,24 @@ const BuildingDetails = ({
             )}
           </Grid.Cell>
         </Grid.Row>
-        {enableRegions && listingType === EnumListingListingType.regulated && (
-          <Grid.Row columns={3}>
-            <Grid.Cell>
-              <Field
-                type={"number"}
-                register={register}
-                {...defaultFieldProps(
-                  "yearBuilt",
-                  t("listings.yearBuilt"),
-                  requiredFields,
-                  errors,
-                  clearErrors
-                )}
-              />
-            </Grid.Cell>
-          </Grid.Row>
-        )}
+        {enableRegions &&
+          (listingType === EnumListingListingType.regulated || !enableNonRegulatedListings) && (
+            <Grid.Row columns={3}>
+              <Grid.Cell>
+                <Field
+                  type={"number"}
+                  register={register}
+                  {...defaultFieldProps(
+                    "yearBuilt",
+                    t("listings.yearBuilt"),
+                    requiredFields,
+                    errors,
+                    clearErrors
+                  )}
+                />
+              </Grid.Cell>
+            </Grid.Row>
+          )}
         <Grid.Row columns={3}>
           <Grid.Cell className="seeds-grid-span-2">
             <FieldValue label={t("listings.mapPreview")} className={styles["custom-label"]}>

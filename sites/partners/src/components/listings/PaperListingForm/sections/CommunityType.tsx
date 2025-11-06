@@ -43,6 +43,11 @@ const CommunityType = ({ listing, requiredFields }: CommunityTypeProps) => {
     !jurisdiction
   )
 
+  const enableNonRegulatedListings = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableNonRegulatedListings,
+    jurisdiction
+  )
+
   const [options, setOptions] = useState([])
   const [currentCommunityType, setCurrentCommunityType] = useState(
     listing?.reservedCommunityTypes?.id
@@ -95,7 +100,7 @@ const CommunityType = ({ listing, requiredFields }: CommunityTypeProps) => {
         heading={t("listings.sections.communityType")}
         subheading={t("listings.sections.communityTypeSubtitle")}
       >
-        {listingType === EnumListingListingType.nonRegulated ? (
+        {listingType === EnumListingListingType.nonRegulated && enableNonRegulatedListings ? (
           <>
             <Grid.Row columns={1}>
               <Grid.Cell>

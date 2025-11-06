@@ -45,6 +45,11 @@ const AdditionalFees = (props: AdditionalFeesProps) => {
     jurisdiction
   )
 
+  const enableNonRegulatedListings = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableNonRegulatedListings,
+    jurisdiction
+  )
+
   useEffect(() => {
     // clear the utilities values if the new jurisdiction doesn't have utilities included functionality
     if (!enableUtilitiesIncluded) {
@@ -75,7 +80,7 @@ const AdditionalFees = (props: AdditionalFeesProps) => {
             />
           </Grid.Cell>
         </Grid.Row>
-        {listingType === EnumListingListingType.nonRegulated && (
+        {enableNonRegulatedListings && listingType === EnumListingListingType.nonRegulated && (
           <>
             <GridRow>
               <Grid.Cell>

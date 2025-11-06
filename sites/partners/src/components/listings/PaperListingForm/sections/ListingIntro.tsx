@@ -1,7 +1,8 @@
-import React from "react"
+import React, { useContext } from "react"
 import { useFormContext } from "react-hook-form"
 import {
   EnumListingListingType,
+  FeatureFlagEnum,
   Jurisdiction,
   YesNoEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -15,6 +16,7 @@ import {
 } from "../../../../lib/helpers"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 import styles from "../ListingForm.module.scss"
+import { AuthContext } from "@bloom-housing/shared-helpers"
 
 interface ListingIntroProps {
   jurisdictions: Jurisdiction[]
@@ -24,12 +26,19 @@ interface ListingIntroProps {
 
 const ListingIntro = (props: ListingIntroProps) => {
   const formMethods = useFormContext()
+  const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, clearErrors, errors, getValues, watch } = formMethods
   const listing = getValues()
 
   const listingType = watch("listingType")
+  const jurisdiction = watch("jurisdictions.id")
+
+  const enableNonRegulatedListings = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableNonRegulatedListings,
+    jurisdiction
+  )
 
   const jurisdictionOptions: SelectOption[] = [
     { label: "", value: "" },
@@ -47,31 +56,33 @@ const ListingIntro = (props: ListingIntroProps) => {
         heading={t("listings.sections.introTitle")}
         subheading={t("listings.sections.introSubtitle")}
       >
-        <Grid.Row columns={1}>
-          <Grid.Cell>
-            <FieldGroup
-              name="listingType"
-              type="radio"
-              register={register}
-              groupLabel={t("listings.listingTypeTile")}
-              fields={[
-                {
-                  id: "regulatedListing",
-                  label: t("listings.regulatedListing"),
-                  value: EnumListingListingType.regulated,
-                  defaultChecked: !listing?.listingType,
-                },
-                {
-                  id: "nonRegulatedListing",
-                  label: t("listings.nonRegulatedListing"),
-                  value: EnumListingListingType.nonRegulated,
-                },
-              ]}
-              error={fieldHasError(errors.listingType)}
-              errorMessage={fieldMessage(errors.listingType)}
-            />
-          </Grid.Cell>
-        </Grid.Row>
+        {enableNonRegulatedListings && (
+          <Grid.Row columns={1}>
+            <Grid.Cell>
+              <FieldGroup
+                name="listingType"
+                type="radio"
+                register={register}
+                groupLabel={t("listings.listingTypeTile")}
+                fields={[
+                  {
+                    id: "regulatedListing",
+                    label: t("listings.regulatedListing"),
+                    value: EnumListingListingType.regulated,
+                    defaultChecked: !listing?.listingType,
+                  },
+                  {
+                    id: "nonRegulatedListing",
+                    label: t("listings.nonRegulatedListing"),
+                    value: EnumListingListingType.nonRegulated,
+                  },
+                ]}
+                error={fieldHasError(errors.listingType)}
+                errorMessage={fieldMessage(errors.listingType)}
+              />
+            </Grid.Cell>
+          </Grid.Row>
+        )}
         <Grid.Row columns={1}>
           <Grid.Cell>
             <Field
@@ -134,7 +145,7 @@ const ListingIntro = (props: ListingIntroProps) => {
               register={register}
               {...defaultFieldProps(
                 "developer",
-                listingType === EnumListingListingType.regulated
+                listingType === EnumListingListingType.regulated || !enableNonRegulatedListings
                   ? t("listings.developer")
                   : t("listings.propertyManager"),
                 props.requiredFields,
@@ -144,7 +155,7 @@ const ListingIntro = (props: ListingIntroProps) => {
             />
           </Grid.Cell>
         </Grid.Row>
-        {listingType === EnumListingListingType.nonRegulated && (
+        {listingType === EnumListingListingType.nonRegulated && enableNonRegulatedListings && (
           <Grid.Row columns={1}>
             <Grid.Cell>
               <FieldGroup
