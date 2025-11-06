@@ -172,6 +172,7 @@ includeViews.full = {
   listingsApplicationDropOffAddress: true,
   listingsApplicationMailingAddress: true,
   requestedChangesUser: true,
+  requiredDocumentsList: true,
   units: {
     include: {
       unitAmiChartOverrides: true,
@@ -1142,7 +1143,7 @@ export class ListingService implements OnModuleInit {
       listing.leasingAgentAddress = listing.listingsLeasingAgentAddress;
     }
     if (listing.requiredDocumentsList) {
-      listing.requiredDocuments = listing.requiredDocumentsList;
+      listing.requiredDocumentsList = listing.requiredDocumentsList;
     }
     if (listing.listingUtilities) {
       listing.utilities = listing.listingUtilities;
