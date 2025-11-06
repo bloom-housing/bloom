@@ -457,6 +457,103 @@ describe("<FormUserManage>", () => {
         ).not.toBeInTheDocument()
       })
     })
+
+    describe("enableSupportAdmin", () => {
+      it("should not show support admin role when feature flag not enabled", async () => {
+        const adminUserWithJurisdictionsAndAllDisabled = {
+          ...adminUser,
+          jurisdictions: [
+            {
+              id: "jurisdiction1",
+              name: "jurisdictionWithoutSupportAdmin",
+            },
+            {
+              id: "jurisdiction2",
+              name: "jurisdictionWithoutSupportAdmin2",
+            },
+          ],
+        }
+        server.use(
+          rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
+            return res(ctx.json(adminUserWithJurisdictionsAndAllDisabled))
+          }),
+          rest.post("http://localhost/api/adapter/user/invite", (_req, res, ctx) => {
+            return res(ctx.json({ success: true }))
+          })
+        )
+        const onCancel = jest.fn()
+        const onDrawerClose = jest.fn()
+        document.cookie = "access-token-available=True"
+
+        render(
+          <FormUserManage
+            isOpen={true}
+            title={t("users.addUser")}
+            mode={"add"}
+            listings={[]}
+            onCancel={onCancel}
+            onDrawerClose={onDrawerClose}
+          />
+        )
+
+        await waitFor(() => screen.getByText("Administrator"))
+        expect(screen.getByText("Add user")).toBeInTheDocument()
+        expect(screen.getByText("User details")).toBeInTheDocument()
+        // "Role" select should not have Support Admin
+        expect(screen.getByRole("combobox", { name: "Role" })).toBeInTheDocument()
+        expect(screen.getByRole("option", { name: "Administrator" })).toBeInTheDocument()
+        expect(screen.getByRole("option", { name: "Partner" })).toBeInTheDocument()
+        expect(screen.queryByRole("option", { name: "Admin (support)" })).not.toBeInTheDocument()
+      })
+
+      it("should show support admin role when feature flag enabled", async () => {
+        const adminUserWithJurisdictionsAndOneEnabled = {
+          ...adminUser,
+          jurisdictions: [
+            {
+              id: "jurisdiction1",
+              name: "jurisdictionWithSupportAdmin",
+            },
+            {
+              id: "jurisdiction2",
+              name: "jurisdictionWithSupportAdmin2",
+              featureFlags: [{ name: FeatureFlagEnum.enableSupportAdmin, active: true }],
+            },
+          ],
+        }
+        server.use(
+          rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
+            return res(ctx.json(adminUserWithJurisdictionsAndOneEnabled))
+          }),
+          rest.post("http://localhost/api/adapter/user/invite", (_req, res, ctx) => {
+            return res(ctx.json({ success: true }))
+          })
+        )
+        const onCancel = jest.fn()
+        const onDrawerClose = jest.fn()
+        document.cookie = "access-token-available=True"
+
+        render(
+          <FormUserManage
+            isOpen={true}
+            title={t("users.addUser")}
+            mode={"add"}
+            listings={[]}
+            onCancel={onCancel}
+            onDrawerClose={onDrawerClose}
+          />
+        )
+
+        await waitFor(() => screen.getByText("Administrator"))
+        expect(screen.getByText("Add user")).toBeInTheDocument()
+        expect(screen.getByText("User details")).toBeInTheDocument()
+        // "Role" select should not Support Admin
+        expect(screen.getByRole("combobox", { name: "Role" })).toBeInTheDocument()
+        expect(screen.queryByRole("option", { name: "Admin (support)" })).toBeInTheDocument()
+        expect(screen.getByRole("option", { name: "Administrator" })).toBeInTheDocument()
+        expect(screen.getByRole("option", { name: "Partner" })).toBeInTheDocument()
+      })
+    })
   })
 
   describe("Edit User", () => {
