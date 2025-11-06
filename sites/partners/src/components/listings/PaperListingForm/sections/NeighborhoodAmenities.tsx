@@ -10,6 +10,19 @@ import {
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { useJurisdiction } from "../../../../lib/hooks"
 
+enum NeighborhoodAmenityDistanceEnum {
+  onSite = "onSite",
+  oneBlock = "oneBlock",
+  twoBlocks = "twoBlocks",
+  threeBlocks = "threeBlocks",
+  fourBlocks = "fourBlocks",
+  fiveBlocks = "fiveBlocks",
+  withinOneMile = "withinOneMile",
+  withinTwoMiles = "withinTwoMiles",
+  withinThreeMiles = "withinThreeMiles",
+  withinFourMiles = "withinFourMiles",
+}
+
 const NeighborhoodAmenities = () => {
   const formMethods = useFormContext()
   const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
@@ -30,18 +43,14 @@ const NeighborhoodAmenities = () => {
     jurisdiction
   )
 
-  const neighborhoodAmenityKeys: string[] = [
+  const neighborhoodAmenityOptions = [
     "",
-    "onSite",
-    "oneBlock",
-    "twoBlocks",
-    "threeBlocks",
-    "fourBlocks",
-    "fiveBlocks",
-    "withinOneMile",
-    "withinTwoMiles",
-    "withinThreeMiles",
-    "withinFourMiles",
+    ...Object.values(NeighborhoodAmenityDistanceEnum).map((val) => {
+      return {
+        value: t(`neighborhoodAmenities.distance.${val}`),
+        label: t(`neighborhoodAmenities.distance.${val}`),
+      }
+    }),
   ]
 
   const visibleAmenities = useMemo(() => {
@@ -81,9 +90,8 @@ const NeighborhoodAmenities = () => {
                     name={`listingNeighborhoodAmenities.${amenity}`}
                     label={t(`listings.amenities.${amenity}`)}
                     register={register}
-                    options={neighborhoodAmenityKeys}
+                    options={neighborhoodAmenityOptions}
                     controlClassName="control"
-                    keyPrefix="neighborhoodAmenities.distance"
                   />
                 ) : (
                   <Textarea
