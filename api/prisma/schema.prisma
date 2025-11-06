@@ -178,12 +178,14 @@ model ApplicationSelectionOptions {
   addressHolderAddressId    String?               @unique() @map("address_holder_address_id") @db.Uuid
   addressHolderName         String?               @map("address_holder_name")
   addressHolderRelationship String?               @map("address_holder_relationship")
-  applicationSelectionId    String                @map("application_selection_id") @db.Uuid
-  isGeocodingVerified       Boolean?              @map("is_geocoding_verified")
-  multiselectOptionId       String                @map("multiselect_option_id") @db.Uuid
-  addressHolderAddress      Address?              @relation("application_selection_address", fields: [addressHolderAddressId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  applicationSelections     ApplicationSelections @relation(fields: [applicationSelectionId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  multiselectOption         MultiselectOptions    @relation(fields: [multiselectOptionId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  applicationSelectionId	  String                @map("application_selection_id") @db.Uuid
+  isGeocodingVerified	      Boolean?              @map("is_geocoding_verified")
+  multiselectOptionId 	    String                @map("multiselect_option_id") @db.Uuid
+  addressHolderAddress	    Address?              @relation("application_selection_address", fields: [addressHolderAddressId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  applicationSelections	    ApplicationSelections @relation(fields: [applicationSelectionId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  multiselectOption  	      MultiselectOptions    @relation(fields: [multiselectOptionId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@map("application_selection_options")
 }
 
 model ApplicationSelections {
@@ -193,9 +195,11 @@ model ApplicationSelections {
   applicationId         String                        @map("application_id") @db.Uuid
   hasOptedOut           Boolean?                      @map("has_opted_out")
   multiselectQuestionId String                        @map("multiselect_question_id") @db.Uuid
-  application           Applications                  @relation(fields: [applicationId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  multiselectQuestion   MultiselectQuestions          @relation(fields: [multiselectQuestionId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  selections            ApplicationSelectionOptions[]
+  application 			    Applications                  @relation(fields: [applicationId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  multiselectQuestion	  MultiselectQuestions          @relation(fields: [multiselectQuestionId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  selections			      ApplicationSelectionOptions[]
+
+  @@map("application_selections")
 }
 
 model Applications {
@@ -758,7 +762,7 @@ model MultiselectQuestions {
   name                        String
   options                     Json?
   optOutText                  String?                                    @map("opt_out_text")
-  status                      MultiselectQuestionsStatusEnum
+  status                      MultiselectQuestionsStatusEnum             @default(draft)
   subText                     String?                                    @map("sub_text")
   text                        String
   // Used to denote when a multiselect question was transferred from another jurisdiction
@@ -1118,6 +1122,7 @@ enum ReviewOrderTypeEnum {
   lottery
   firstComeFirstServe
   waitlist
+  waitlistLottery
 
   @@map("listings_review_order_type_enum")
 }

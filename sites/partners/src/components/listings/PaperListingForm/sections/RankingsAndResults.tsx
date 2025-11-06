@@ -76,15 +76,26 @@ const RankingsAndResults = ({
     selectedJurisdictionId
   )
 
+  const enableWaitlistLottery = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableWaitlistLottery,
+    selectedJurisdictionId
+  )
+
   const enableUnitGroups = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableUnitGroups,
     selectedJurisdictionId
   )
 
+  const enableWhatToExpectAdditionalField = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableWhatToExpectAdditionalField,
+    selectedJurisdictionId
+  )
+
+  const showFSFCLotterySection = enableWaitlistLottery && waitlistOpen
+
   // Ensure the lottery fields only show when it's "available units" listing
   const showLotteryFields =
-    (availabilityQuestion !== "openWaitlist" || enableUnitGroups) &&
-    reviewOrder === "reviewOrderLottery"
+    (showFSFCLotterySection || enableUnitGroups) && reviewOrder === "reviewOrderLottery"
 
   const yesNoRadioOptions = [
     {
@@ -103,7 +114,7 @@ const RankingsAndResults = ({
         heading={t("listings.sections.rankingsResultsTitle")}
         subheading={t("listings.sections.rankingsResultsSubtitle")}
       >
-        {(availabilityQuestion !== "openWaitlist" || enableUnitGroups) && (
+        {(showFSFCLotterySection || enableUnitGroups) && (
           <Grid.Row columns={2} className={"flex items-center"}>
             <Grid.Cell>
               <FieldGroup
@@ -124,7 +135,9 @@ const RankingsAndResults = ({
                     label: t("listings.lotteryTitle"),
                     value: "reviewOrderLottery",
                     id: "reviewOrderLottery",
-                    defaultChecked: listing?.reviewOrderType === ReviewOrderTypeEnum.lottery,
+                    defaultChecked:
+                      listing?.reviewOrderType === ReviewOrderTypeEnum.lottery ||
+                      listing?.reviewOrderType === ReviewOrderTypeEnum.waitlistLottery,
                   },
                 ]}
               />
@@ -372,21 +385,23 @@ const RankingsAndResults = ({
             />
           </Grid.Cell>
         </Grid.Row>
-        <Grid.Row columns={3}>
-          <Grid.Cell className="seeds-grid-span-2">
-            <TextEditor
-              editor={whatToExpectAdditionalTextEditor}
-              editorId={"whatToExpectAdditionalText"}
-              error={fieldHasError(errors?.whatToExpectAdditionalText)}
-              label={getLabel(
-                "whatToExpectAdditionalText",
-                requiredFields,
-                t("listings.whatToExpectAdditionalTextLabel")
-              )}
-              errorMessage={fieldMessage(errors.whatToExpectAdditionalText)}
-            />
-          </Grid.Cell>
-        </Grid.Row>
+        {enableWhatToExpectAdditionalField && (
+          <Grid.Row columns={3}>
+            <Grid.Cell className="seeds-grid-span-2">
+              <TextEditor
+                editor={whatToExpectAdditionalTextEditor}
+                editorId={"whatToExpectAdditionalText"}
+                error={fieldHasError(errors?.whatToExpectAdditionalText)}
+                label={getLabel(
+                  "whatToExpectAdditionalText",
+                  requiredFields,
+                  t("listings.whatToExpectAdditionalTextLabel")
+                )}
+                errorMessage={fieldMessage(errors.whatToExpectAdditionalText)}
+              />
+            </Grid.Cell>
+          </Grid.Row>
+        )}
       </SectionWithGrid>
     </>
   )

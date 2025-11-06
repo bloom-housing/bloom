@@ -1,4 +1,5 @@
 export enum ListingViews {
+  address = 'address',
   base = 'base',
   csv = 'csv',
   full = 'full',

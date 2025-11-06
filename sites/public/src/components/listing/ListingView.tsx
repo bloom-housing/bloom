@@ -90,7 +90,7 @@ const getUnhiddenMultiselectQuestions = (
 export const ListingView = (props: ListingProps) => {
   const { initialStateLoaded, profile, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
   let buildingSelectionCriteria, preferencesSection, programsSection
-  const { listing } = props
+  const { listing, jurisdiction } = props
 
   const statusContent = getListingApplicationStatus(listing)
 
@@ -310,7 +310,12 @@ export const ListingView = (props: ListingProps) => {
   }
 
   let lotterySection
-  if (publicLottery && (!lotteryResults || (lotteryResults && !lotteryResults.url))) {
+
+  if (
+    publicLottery &&
+    (!lotteryResults || (lotteryResults && !lotteryResults.url)) &&
+    (listing.status === ListingsStatusEnum.active || !lotteryResults)
+  ) {
     lotterySection = publicLottery.startDate && (
       <EventSection
         headerText={t("listings.publicLottery.header")}
@@ -318,20 +323,6 @@ export const ListingView = (props: ListingProps) => {
         events={[getEvent(publicLottery)]}
       />
     )
-    if (dayjs(publicLottery.startTime) < dayjs() && lotteryResults && !lotteryResults.url) {
-      lotterySection = (
-        <EventSection
-          headerText={t("listings.lotteryResults.header")}
-          sectionHeader={true}
-          events={[
-            getEvent(
-              lotteryResults,
-              lotteryResults.note || t("listings.lotteryResults.completeResultsWillBePosted")
-            ),
-          ]}
-        />
-      )
-    }
   }
 
   const getReservedTitle = () => {
@@ -929,7 +920,11 @@ export const ListingView = (props: ListingProps) => {
               <ExpandableSection
                 content={<Markdown className={"bloom-markdown"}>{listing.whatToExpect}</Markdown>}
                 expandableContent={
-                  listing.whatToExpectAdditionalText ? (
+                  listing.whatToExpectAdditionalText &&
+                  isFeatureFlagOn(
+                    jurisdiction,
+                    FeatureFlagEnum.enableWhatToExpectAdditionalField
+                  ) ? (
                     <Markdown className={"bloom-markdown"}>
                       {listing.whatToExpectAdditionalText}
                     </Markdown>

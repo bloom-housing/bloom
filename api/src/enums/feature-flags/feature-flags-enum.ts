@@ -14,6 +14,7 @@ export enum FeatureFlagEnum {
   enableGeocodingPreferences = 'enableGeocodingPreferences',
   enableGeocodingRadiusMethod = 'enableGeocodingRadiusMethod',
   enableHomeType = 'enableHomeType',
+  enableHousingDeveloperOwner = 'enableHousingDeveloperOwner',
   enableIsVerified = 'enableIsVerified',
   enableLimitedHowDidYouHear = 'enableLimitedHowDidYouHear',
   enableListingFavoriting = 'enableListingFavoriting',
@@ -34,6 +35,8 @@ export enum FeatureFlagEnum {
   enableUnitGroups = 'enableUnitGroups',
   enableUtilitiesIncluded = 'enableUtilitiesIncluded',
   enableWaitlistAdditionalFields = 'enableWaitlistAdditionalFields',
+  enableWaitlistLottery = 'enableWaitlistLottery',
+  enableWhatToExpectAdditionalField = 'enableWhatToExpectAdditionalField',
   enableV2MSQ = 'enableV2MSQ',
   example = 'example', // sample feature flag for testing purposes
   hideCloseListingButton = 'hideCloseListingButton',
@@ -101,6 +104,11 @@ export const featureFlagMap: { name: string; description: string }[] = [
   {
     name: FeatureFlagEnum.enableHomeType,
     description: 'When true, home type feature is turned on',
+  },
+  {
+    name: FeatureFlagEnum.enableHousingDeveloperOwner,
+    description:
+      "When true, the 'Housing developer' field label becomes 'Housing developer / owner'",
   },
   {
     name: FeatureFlagEnum.enableIsVerified,
@@ -196,6 +204,16 @@ export const featureFlagMap: { name: string; description: string }[] = [
     name: FeatureFlagEnum.enableWaitlistAdditionalFields,
     description:
       'When true, the waitlist additional fields are displayed in the waitlist section of the listing form',
+  },
+  {
+    name: FeatureFlagEnum.enableWaitlistLottery,
+    description:
+      'When true, jurisdiction supports lotteries for waitlist opportunities',
+  },
+  {
+    name: FeatureFlagEnum.enableWhatToExpectAdditionalField,
+    description:
+      'When true, the what to expect additional field is displayed in listing creation/edit form on the partner site',
   },
   {
     name: FeatureFlagEnum.enableV2MSQ,
