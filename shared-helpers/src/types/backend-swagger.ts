@@ -6295,9 +6295,6 @@ export interface MultiselectQuestionCreate {
 
 export interface MultiselectOptionUpdate {
   /**  */
-  id: string
-
-  /**  */
   collectAddress?: boolean
 
   /**  */
@@ -6350,6 +6347,9 @@ export interface MultiselectOptionUpdate {
 
   /**  */
   validationMethod?: ValidationMethodEnum
+
+  /**  */
+  id?: string
 }
 
 export interface MultiselectQuestionUpdate {

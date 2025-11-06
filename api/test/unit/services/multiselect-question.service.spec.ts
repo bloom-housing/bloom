@@ -1,5 +1,6 @@
 import { randomUUID } from 'crypto';
 import { Logger } from '@nestjs/common';
+import { SchedulerRegistry } from '@nestjs/schedule';
 import { Test, TestingModule } from '@nestjs/testing';
 import {
   ListingsStatusEnum,
@@ -63,7 +64,12 @@ describe('Testing multiselect question service', () => {
 
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [Logger, MultiselectQuestionService, PrismaService],
+      providers: [
+        Logger,
+        MultiselectQuestionService,
+        PrismaService,
+        SchedulerRegistry,
+      ],
     }).compile();
 
     service = module.get<MultiselectQuestionService>(

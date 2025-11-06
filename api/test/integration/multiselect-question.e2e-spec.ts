@@ -2,13 +2,16 @@ import cookieParser from 'cookie-parser';
 import { randomUUID } from 'crypto';
 import { stringify } from 'qs';
 import request from 'supertest';
-import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
+import { Test, TestingModule } from '@nestjs/testing';
 import {
+  ListingsStatusEnum,
   MultiselectQuestionsApplicationSectionEnum,
   MultiselectQuestionsStatusEnum,
 } from '@prisma/client';
+import { createAllFeatureFlags } from '../../prisma/seed-helpers/feature-flag-factory';
 import { jurisdictionFactory } from '../../prisma/seed-helpers/jurisdiction-factory';
+import { listingFactory } from '../../prisma/seed-helpers/listing-factory';
 import { multiselectQuestionFactory } from '../../prisma/seed-helpers/multiselect-question-factory';
 import { userFactory } from '../../prisma/seed-helpers/user-factory';
 import { Login } from '../../src/dtos/auth/login.dto';
@@ -20,7 +23,6 @@ import { IdDTO } from '../../src/dtos/shared/id.dto';
 import { FeatureFlagEnum } from '../../src/enums/feature-flags/feature-flags-enum';
 import { AppModule } from '../../src/modules/app.module';
 import { PrismaService } from '../../src/services/prisma.service';
-import { createAllFeatureFlags } from '../../prisma/seed-helpers/feature-flag-factory';
 
 describe('MultiselectQuestion Controller Tests', () => {
   let app: INestApplication;
@@ -78,7 +80,7 @@ describe('MultiselectQuestion Controller Tests', () => {
           data: jurisdictionFactory(),
         });
 
-        const multiselectQuestionA = await prisma.multiselectQuestions.create({
+        const multiselectQuestion = await prisma.multiselectQuestions.create({
           data: multiselectQuestionFactory(jurisdictionB.id),
         });
         const multiselectQuestionB = await prisma.multiselectQuestions.create({
@@ -93,12 +95,12 @@ describe('MultiselectQuestion Controller Tests', () => {
 
         expect(res.body.length).toBeGreaterThanOrEqual(2);
         const multiselectQuestions = res.body.map((value) => value.text);
-        expect(multiselectQuestions).toContain(multiselectQuestionA.text);
+        expect(multiselectQuestions).toContain(multiselectQuestion.text);
         expect(multiselectQuestions).toContain(multiselectQuestionB.text);
       });
 
       it('should get multiselect questions from list endpoint when params are sent', async () => {
-        const multiselectQuestionA = await prisma.multiselectQuestions.create({
+        const multiselectQuestion = await prisma.multiselectQuestions.create({
           data: multiselectQuestionFactory(jurisdictionId),
         });
         const multiselectQuestionB = await prisma.multiselectQuestions.create({
@@ -123,7 +125,7 @@ describe('MultiselectQuestion Controller Tests', () => {
 
         expect(res.body.length).toBeGreaterThanOrEqual(2);
         const multiselectQuestions = res.body.map((value) => value.text);
-        expect(multiselectQuestions).toContain(multiselectQuestionA.text);
+        expect(multiselectQuestions).toContain(multiselectQuestion.text);
         expect(multiselectQuestions).toContain(multiselectQuestionB.text);
       });
     });
@@ -253,7 +255,7 @@ describe('MultiselectQuestion Controller Tests', () => {
       });
 
       it('should update multiselect question', async () => {
-        const multiselectQuestionA = await prisma.multiselectQuestions.create({
+        const multiselectQuestion = await prisma.multiselectQuestions.create({
           data: multiselectQuestionFactory(jurisdictionId),
         });
 
@@ -261,7 +263,7 @@ describe('MultiselectQuestion Controller Tests', () => {
           .put('/multiselectQuestions')
           .set({ passkey: process.env.API_PASS_KEY || '' })
           .send({
-            id: multiselectQuestionA.id,
+            id: multiselectQuestion.id,
             text: 'example text',
             subText: 'example subText',
             description: 'example description',
@@ -334,7 +336,7 @@ describe('MultiselectQuestion Controller Tests', () => {
       });
 
       it('should delete multiselect question', async () => {
-        const multiselectQuestionA = await prisma.multiselectQuestions.create({
+        const multiselectQuestion = await prisma.multiselectQuestions.create({
           data: multiselectQuestionFactory(jurisdictionId),
         });
 
@@ -342,7 +344,7 @@ describe('MultiselectQuestion Controller Tests', () => {
           .delete(`/multiselectQuestions`)
           .set({ passkey: process.env.API_PASS_KEY || '' })
           .send({
-            id: multiselectQuestionA.id,
+            id: multiselectQuestion.id,
           } as IdDTO)
           .set('Cookie', cookies)
           .expect(200);
@@ -365,17 +367,17 @@ describe('MultiselectQuestion Controller Tests', () => {
       });
 
       it('should get multiselect question when retrieve endpoint is called and id exists', async () => {
-        const multiselectQuestionA = await prisma.multiselectQuestions.create({
+        const multiselectQuestion = await prisma.multiselectQuestions.create({
           data: multiselectQuestionFactory(jurisdictionId),
         });
 
         const res = await request(app.getHttpServer())
-          .get(`/multiselectQuestions/${multiselectQuestionA.id}`)
+          .get(`/multiselectQuestions/${multiselectQuestion.id}`)
           .set({ passkey: process.env.API_PASS_KEY || '' })
           .set('Cookie', cookies)
           .expect(200);
 
-        expect(res.body.text).toEqual(multiselectQuestionA.text);
+        expect(res.body.text).toEqual(multiselectQuestion.text);
       });
     });
   });
@@ -540,7 +542,7 @@ describe('MultiselectQuestion Controller Tests', () => {
       });
 
       it('should update multiselect question', async () => {
-        const multiselectQuestionA = await prisma.multiselectQuestions.create({
+        const multiselectQuestion = await prisma.multiselectQuestions.create({
           data: multiselectQuestionFactory(
             jurisdictionId,
             {
@@ -570,10 +572,10 @@ describe('MultiselectQuestion Controller Tests', () => {
           .put('/multiselectQuestions')
           .set({ passkey: process.env.API_PASS_KEY || '' })
           .send({
-            id: multiselectQuestionA.id,
-            applicationSection: multiselectQuestionA.applicationSection,
-            isExclusive: multiselectQuestionA.isExclusive,
-            jurisdiction: { id: multiselectQuestionA.jurisdictionId },
+            id: multiselectQuestion.id,
+            applicationSection: multiselectQuestion.applicationSection,
+            isExclusive: multiselectQuestion.isExclusive,
+            jurisdiction: { id: multiselectQuestion.jurisdictionId },
             multiselectOptions: [
               {
                 description: 'example option description',
@@ -587,12 +589,11 @@ describe('MultiselectQuestion Controller Tests', () => {
             status: MultiselectQuestionsStatusEnum.visible,
 
             // TODO: Can be removed after MSQ refactor
-            jurisdictions: [{ id: multiselectQuestionA.jurisdictionId }],
-            text: multiselectQuestionA.text,
+            jurisdictions: [{ id: multiselectQuestion.jurisdictionId }],
+            text: multiselectQuestion.text,
           } as MultiselectQuestionUpdate)
-          .set('Cookie', cookies);
-        // .expect(200);
-        console.log(res);
+          .set('Cookie', cookies)
+          .expect(200);
 
         expect(res.body.name).toEqual('example name');
       });
@@ -615,7 +616,7 @@ describe('MultiselectQuestion Controller Tests', () => {
       });
 
       it('should delete multiselect question', async () => {
-        const multiselectQuestionA = await prisma.multiselectQuestions.create({
+        const multiselectQuestion = await prisma.multiselectQuestions.create({
           data: multiselectQuestionFactory(jurisdictionId, {}, true),
         });
 
@@ -623,7 +624,7 @@ describe('MultiselectQuestion Controller Tests', () => {
           .delete(`/multiselectQuestions`)
           .set({ passkey: process.env.API_PASS_KEY || '' })
           .send({
-            id: multiselectQuestionA.id,
+            id: multiselectQuestion.id,
           } as IdDTO)
           .set('Cookie', cookies)
           .expect(200);
@@ -632,11 +633,332 @@ describe('MultiselectQuestion Controller Tests', () => {
       });
     });
 
-    // describe('reActivate', () => {});
+    describe('reActivate', () => {
+      it('should re-activate a multiselectQuestion in the toRetire status', async () => {
+        const multiselectQuestion = await prisma.multiselectQuestions.create({
+          data: multiselectQuestionFactory(
+            jurisdictionId,
+            {
+              multiselectQuestion: {
+                status: MultiselectQuestionsStatusEnum.toRetire,
+              },
+            },
+            true,
+          ),
+        });
 
-    // describe('retire', () => {});
+        const res = await request(app.getHttpServer())
+          .put('/multiselectQuestions/reActivate')
+          .set({ passkey: process.env.API_PASS_KEY || '' })
+          .send({
+            id: multiselectQuestion.id,
+          } as IdDTO)
+          .set('Cookie', cookies)
+          .expect(200);
 
-    // describe('retireMultiselectQuestions', () => {});
+        expect(res.body.success).toEqual(true);
+
+        const updatedData = await prisma.multiselectQuestions.findUnique({
+          select: { status: true },
+          where: { id: multiselectQuestion.id },
+        });
+        expect(updatedData.status).toEqual(
+          MultiselectQuestionsStatusEnum.active,
+        );
+      });
+
+      it('should throw error when reActivate endpoint is hit with an multiselectQuestion not in toRetire status', async () => {
+        const multiselectQuestion = await prisma.multiselectQuestions.create({
+          data: multiselectQuestionFactory(
+            jurisdictionId,
+            {
+              multiselectQuestion: {
+                status: MultiselectQuestionsStatusEnum.retired,
+              },
+            },
+            true,
+          ),
+        });
+
+        const res = await request(app.getHttpServer())
+          .put('/multiselectQuestions/reActivate')
+          .set({ passkey: process.env.API_PASS_KEY || '' })
+          .send({
+            id: multiselectQuestion.id,
+          } as IdDTO)
+          .set('Cookie', cookies)
+          .expect(400);
+
+        expect(res.body.message).toEqual("status 'retired' cannot be changed");
+      });
+
+      it('should throw error when reActivate endpoint is hit with nonexistent id', async () => {
+        const id = randomUUID();
+        const res = await request(app.getHttpServer())
+          .put('/multiselectQuestions/reActivate')
+          .set({ passkey: process.env.API_PASS_KEY || '' })
+          .send({
+            id: id,
+          } as IdDTO)
+          .set('Cookie', cookies)
+          .expect(404);
+
+        expect(res.body.message).toEqual(
+          `multiselectQuestionId ${id} was requested but not found`,
+        );
+      });
+    });
+
+    describe('retire', () => {
+      it('should retire a multiselectQuestion in the active status with no active listings', async () => {
+        const multiselectQuestion = await prisma.multiselectQuestions.create({
+          data: multiselectQuestionFactory(
+            jurisdictionId,
+            {
+              multiselectQuestion: {
+                status: MultiselectQuestionsStatusEnum.active,
+              },
+            },
+            true,
+          ),
+        });
+
+        const listingData = await listingFactory(jurisdictionId, prisma, {
+          multiselectQuestions: [multiselectQuestion],
+          status: ListingsStatusEnum.closed,
+        });
+        await prisma.listings.create({
+          data: listingData,
+        });
+
+        const res = await request(app.getHttpServer())
+          .put('/multiselectQuestions/retire')
+          .set({ passkey: process.env.API_PASS_KEY || '' })
+          .send({
+            id: multiselectQuestion.id,
+          } as IdDTO)
+          .set('Cookie', cookies)
+          .expect(200);
+
+        expect(res.body.success).toEqual(true);
+
+        const updatedData = await prisma.multiselectQuestions.findUnique({
+          select: { status: true },
+          where: { id: multiselectQuestion.id },
+        });
+        expect(updatedData.status).toEqual(
+          MultiselectQuestionsStatusEnum.retired,
+        );
+      });
+
+      it('should set toRetire a multiselectQuestion in the active status with active listings', async () => {
+        const multiselectQuestion = await prisma.multiselectQuestions.create({
+          data: multiselectQuestionFactory(
+            jurisdictionId,
+            {
+              multiselectQuestion: {
+                status: MultiselectQuestionsStatusEnum.active,
+              },
+            },
+            true,
+          ),
+        });
+
+        const listingData = await listingFactory(jurisdictionId, prisma, {
+          multiselectQuestions: [multiselectQuestion],
+          status: ListingsStatusEnum.active,
+        });
+        await prisma.listings.create({
+          data: listingData,
+        });
+
+        const res = await request(app.getHttpServer())
+          .put('/multiselectQuestions/retire')
+          .set({ passkey: process.env.API_PASS_KEY || '' })
+          .send({
+            id: multiselectQuestion.id,
+          } as IdDTO)
+          .set('Cookie', cookies)
+          .expect(200);
+
+        expect(res.body.success).toEqual(true);
+
+        const updatedData = await prisma.multiselectQuestions.findUnique({
+          select: { status: true },
+          where: { id: multiselectQuestion.id },
+        });
+        expect(updatedData.status).toEqual(
+          MultiselectQuestionsStatusEnum.toRetire,
+        );
+      });
+
+      it('should throw error when retire endpoint is hit with an multiselectQuestion not in active status', async () => {
+        const multiselectQuestion = await prisma.multiselectQuestions.create({
+          data: multiselectQuestionFactory(jurisdictionId, {}, true),
+        });
+
+        const res = await request(app.getHttpServer())
+          .put('/multiselectQuestions/retire')
+          .set({ passkey: process.env.API_PASS_KEY || '' })
+          .send({
+            id: multiselectQuestion.id,
+          } as IdDTO)
+          .set('Cookie', cookies)
+          .expect(400);
+
+        expect(res.body.message).toEqual(
+          "status 'draft' can only change to 'visible'",
+        );
+      });
+
+      it('should throw error when retire endpoint is hit with nonexistent id', async () => {
+        const id = randomUUID();
+        const res = await request(app.getHttpServer())
+          .put('/multiselectQuestions/retire')
+          .set({ passkey: process.env.API_PASS_KEY || '' })
+          .send({
+            id: id,
+          } as IdDTO)
+          .set('Cookie', cookies)
+          .expect(404);
+
+        expect(res.body.message).toEqual(
+          `multiselectQuestionId ${id} was requested but not found`,
+        );
+      });
+    });
+
+    describe('retireMultiselectQuestions', () => {
+      it('should retire multiselectQuestions in toRetire status with no active listings', async () => {
+        const jurisdictionAll = await prisma.jurisdictions.create({
+          data: jurisdictionFactory('enableV2 juris retire all', {
+            featureFlags: [FeatureFlagEnum.enableV2MSQ],
+          }),
+        });
+        const multiselectQuestionClosedListing =
+          await prisma.multiselectQuestions.create({
+            data: multiselectQuestionFactory(
+              jurisdictionAll.id,
+              {
+                multiselectQuestion: {
+                  status: MultiselectQuestionsStatusEnum.toRetire,
+                },
+              },
+              true,
+            ),
+          });
+        const multiselectQuestionNoListing =
+          await prisma.multiselectQuestions.create({
+            data: multiselectQuestionFactory(
+              jurisdictionAll.id,
+              {
+                multiselectQuestion: {
+                  status: MultiselectQuestionsStatusEnum.toRetire,
+                },
+              },
+              true,
+            ),
+          });
+
+        const listingData = await listingFactory(jurisdictionId, prisma, {
+          multiselectQuestions: [multiselectQuestionClosedListing],
+          status: ListingsStatusEnum.closed,
+        });
+        await prisma.listings.create({
+          data: listingData,
+        });
+
+        const res = await request(app.getHttpServer())
+          .put('/multiselectQuestions/retireMultiselectQuestions')
+          .set({ passkey: process.env.API_PASS_KEY || '' })
+          .set('Cookie', cookies)
+          .expect(200);
+
+        expect(res.body.success).toEqual(true);
+
+        const updatedDataA = await prisma.multiselectQuestions.findUnique({
+          select: { status: true },
+          where: { id: multiselectQuestionClosedListing.id },
+        });
+        expect(updatedDataA.status).toEqual(
+          MultiselectQuestionsStatusEnum.retired,
+        );
+
+        const updatedDataB = await prisma.multiselectQuestions.findUnique({
+          select: { status: true },
+          where: { id: multiselectQuestionNoListing.id },
+        });
+        expect(updatedDataB.status).toEqual(
+          MultiselectQuestionsStatusEnum.retired,
+        );
+      });
+
+      it('should not retire multiselectQuestions in toRetire status with active listings', async () => {
+        const jurisdictionSome = await prisma.jurisdictions.create({
+          data: jurisdictionFactory('enableV2 juris retire some', {
+            featureFlags: [FeatureFlagEnum.enableV2MSQ],
+          }),
+        });
+        const multiselectQuestionActiveListing =
+          await prisma.multiselectQuestions.create({
+            data: multiselectQuestionFactory(
+              jurisdictionSome.id,
+              {
+                multiselectQuestion: {
+                  status: MultiselectQuestionsStatusEnum.toRetire,
+                },
+              },
+              true,
+            ),
+          });
+        const multiselectQuestionNoListing =
+          await prisma.multiselectQuestions.create({
+            data: multiselectQuestionFactory(
+              jurisdictionSome.id,
+              {
+                multiselectQuestion: {
+                  status: MultiselectQuestionsStatusEnum.toRetire,
+                },
+              },
+              true,
+            ),
+          });
+
+        const listingData = await listingFactory(jurisdictionId, prisma, {
+          multiselectQuestions: [multiselectQuestionActiveListing],
+          status: ListingsStatusEnum.active,
+        });
+        await prisma.listings.create({
+          data: listingData,
+        });
+
+        const res = await request(app.getHttpServer())
+          .put('/multiselectQuestions/retireMultiselectQuestions')
+          .set({ passkey: process.env.API_PASS_KEY || '' })
+          .set('Cookie', cookies)
+          .expect(200);
+
+        expect(res.body.success).toEqual(true);
+
+        const updatedDataActiveListing =
+          await prisma.multiselectQuestions.findUnique({
+            select: { status: true },
+            where: { id: multiselectQuestionActiveListing.id },
+          });
+        expect(updatedDataActiveListing.status).toEqual(
+          MultiselectQuestionsStatusEnum.toRetire,
+        );
+
+        const updatedDataNoListing =
+          await prisma.multiselectQuestions.findUnique({
+            select: { status: true },
+            where: { id: multiselectQuestionNoListing.id },
+          });
+        expect(updatedDataNoListing.status).toEqual(
+          MultiselectQuestionsStatusEnum.retired,
+        );
+      });
+    });
 
     describe('retrieve', () => {
       it('should throw error when retrieve endpoint is hit with nonexistent id', async () => {
@@ -646,23 +968,24 @@ describe('MultiselectQuestion Controller Tests', () => {
           .set({ passkey: process.env.API_PASS_KEY || '' })
           .set('Cookie', cookies)
           .expect(404);
+
         expect(res.body.message).toEqual(
           `multiselectQuestionId ${id} was requested but not found`,
         );
       });
 
       it('should get multiselect question when retrieve endpoint is called and id exists', async () => {
-        const multiselectQuestionA = await prisma.multiselectQuestions.create({
+        const multiselectQuestion = await prisma.multiselectQuestions.create({
           data: multiselectQuestionFactory(jurisdictionId, {}, true),
         });
 
         const res = await request(app.getHttpServer())
-          .get(`/multiselectQuestions/${multiselectQuestionA.id}`)
+          .get(`/multiselectQuestions/${multiselectQuestion.id}`)
           .set({ passkey: process.env.API_PASS_KEY || '' })
           .set('Cookie', cookies)
           .expect(200);
 
-        expect(res.body.name).toEqual(multiselectQuestionA.name);
+        expect(res.body.name).toEqual(multiselectQuestion.name);
       });
     });
   });

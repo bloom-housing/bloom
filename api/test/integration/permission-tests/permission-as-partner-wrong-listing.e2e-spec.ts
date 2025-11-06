@@ -813,7 +813,7 @@ describe('Testing Permissioning of endpoints as partner with wrong listing', () 
       });
 
       await request(app.getHttpServer())
-        .put(`/multiselectQuestions/${multiselectQuestionA.id}`)
+        .put('/multiselectQuestions')
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send(
           buildMultiselectQuestionUpdateMock(jurisId, multiselectQuestionA.id),

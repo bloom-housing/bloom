@@ -828,7 +828,7 @@ describe('Testing Permissioning of endpoints as Admin User', () => {
       });
 
       await request(app.getHttpServer())
-        .put(`/multiselectQuestions/${multiselectQuestionA.id}`)
+        .put('/multiselectQuestions')
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send(
           buildMultiselectQuestionUpdateMock(
