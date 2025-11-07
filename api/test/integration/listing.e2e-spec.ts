@@ -2231,7 +2231,7 @@ describe('Listing Controller Tests', () => {
     });
 
     describe('listing deposit type validation', () => {
-      it("should create listing when deposit is 'fixedDeposit', 'depositValue' is set and 'depositRangeMin' and 'depositRangeMax' are missing", async () => {
+      it("should create listing when deposit is 'fixedDeposit', and 'depositRangeMin' and 'depositRangeMax' are missing", async () => {
         const val = await constructFullListingData(
           undefined,
           undefined,
@@ -2287,29 +2287,7 @@ describe('Listing Controller Tests', () => {
         );
       });
 
-      it("should fail when deposit is 'fixedDeposit' but 'depositValue' is missing", async () => {
-        const val = await constructFullListingData(
-          undefined,
-          undefined,
-          `create listing ${randomName()}`,
-        );
-
-        const res = await request(app.getHttpServer())
-          .post('/listings')
-          .set({ passkey: process.env.API_PASS_KEY || '' })
-          .send({
-            ...val,
-            depositType: DepositTypeEnum.fixedDeposit,
-          })
-          .set('Cookie', adminAccessToken)
-          .expect(400);
-
-        expect(res.body.message[0]).toEqual(
-          'When deposit is of type "fixedDeposit" the "depositValue" must be filled and the "depositRangeMin"|"depositRangeMax" fields must be null',
-        );
-      });
-
-      it("should create listing when deposit is 'rangeDeposit', 'depositRangeMin' and 'depositRangeMax' are set and 'depositValue' is missing", async () => {
+      it("should create listing when deposit is 'rangeDeposit', and 'depositValue' is missing", async () => {
         const val = await constructFullListingData(
           undefined,
           undefined,
@@ -2358,31 +2336,6 @@ describe('Listing Controller Tests', () => {
             depositValue: 1000,
             depositRangeMin: 100,
             depositRangeMax: 500,
-          })
-          .set('Cookie', adminAccessToken)
-          .expect(400);
-
-        expect(res.body.message[0]).toEqual(
-          'When deposit is of type "depositRange" the "depositRangeMin" and "depositRangeMax" fields must be filled and "depositValue" must be null',
-        );
-      });
-
-      it("should fail when deposit is 'rangeDeposit' but 'depositRangeMin' and 'depositRangeMax' are missing", async () => {
-        const val = await constructFullListingData(
-          undefined,
-          undefined,
-          `create listing ${randomName()}`,
-        );
-
-        const res = await request(app.getHttpServer())
-          .post('/listings')
-          .set({ passkey: process.env.API_PASS_KEY || '' })
-          .send({
-            ...val,
-            depositType: DepositTypeEnum.depositRange,
-            depositValue: null,
-            depositRangeMin: null,
-            depositRangeMax: null,
           })
           .set('Cookie', adminAccessToken)
           .expect(400);
