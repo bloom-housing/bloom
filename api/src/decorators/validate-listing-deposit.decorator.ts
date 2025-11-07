@@ -38,13 +38,13 @@ export class DepositValueConstraint implements ValidatorConstraintInterface {
     }
 
     // Verify if both fields are either filled or empty
-    const areBothFieldsValid =
+    const areFieldsInvalid =
       (this.isFieldEmpty(depositRangeMin) &&
         !this.isFieldEmpty(depositRangeMax)) ||
       (!this.isFieldEmpty(depositRangeMin) &&
         this.isFieldEmpty(depositRangeMax));
 
-    return this.isFieldEmpty(depositValue) && areBothFieldsValid;
+    return this.isFieldEmpty(depositValue) && !areFieldsInvalid;
   }
   defaultMessage(args?: ValidationArguments): string {
     const value = args.value as DepositTypeEnum;
