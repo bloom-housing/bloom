@@ -602,7 +602,7 @@ describe('Testing listing service', () => {
           listingsBuildingAddress: true,
           requestedChangesUser: true,
           reservedCommunityTypes: true,
-
+          requiredDocumentsList: true,
           listingImages: {
             include: {
               assets: true,
@@ -2361,6 +2361,7 @@ describe('Testing listing service', () => {
           listingsBuildingAddress: true,
           requestedChangesUser: true,
           reservedCommunityTypes: true,
+          requiredDocumentsList: true,
           lastUpdatedByUser: true,
           listingImages: {
             include: {
@@ -2878,6 +2879,7 @@ describe('Testing listing service', () => {
           requestedChangesUser: true,
           lastUpdatedByUser: true,
           reservedCommunityTypes: true,
+          requiredDocumentsList: true,
           listingImages: {
             include: {
               assets: true,
@@ -3181,6 +3183,7 @@ describe('Testing listing service', () => {
           listingsResult: true,
           requestedChangesUser: true,
           reservedCommunityTypes: true,
+          requiredDocumentsList: true,
           units: {
             include: {
               amiChart: {
@@ -3306,6 +3309,7 @@ describe('Testing listing service', () => {
           listingsResult: true,
           requestedChangesUser: true,
           reservedCommunityTypes: true,
+          requiredDocumentsList: true,
           units: {
             include: {
               amiChart: {
@@ -3671,6 +3675,7 @@ describe('Testing listing service', () => {
           listingsResult: true,
           requestedChangesUser: true,
           reservedCommunityTypes: true,
+          requiredDocumentsList: true,
           units: {
             include: {
               amiChart: {
@@ -3810,6 +3815,7 @@ describe('Testing listing service', () => {
           listingsResult: true,
           requestedChangesUser: true,
           reservedCommunityTypes: true,
+          requiredDocumentsList: true,
           units: {
             include: {
               amiChart: {
@@ -4142,6 +4148,7 @@ describe('Testing listing service', () => {
           listingsResult: true,
           requestedChangesUser: true,
           reservedCommunityTypes: true,
+          requiredDocumentsList: true,
           units: {
             include: {
               amiChart: {
@@ -4250,6 +4257,7 @@ describe('Testing listing service', () => {
           listingsResult: true,
           requestedChangesUser: true,
           reservedCommunityTypes: true,
+          requiredDocumentsList: true,
           units: {
             include: {
               amiChart: {
@@ -4349,6 +4357,7 @@ describe('Testing listing service', () => {
           listingsResult: true,
           requestedChangesUser: true,
           reservedCommunityTypes: true,
+          requiredDocumentsList: true,
           units: {
             include: {
               amiChart: {
@@ -4774,6 +4783,7 @@ describe('Testing listing service', () => {
           listingsResult: true,
           requestedChangesUser: true,
           reservedCommunityTypes: true,
+          requiredDocumentsList: true,
           units: {
             include: {
               amiChart: {
