@@ -29,14 +29,20 @@ const ListingIntro = (props: ListingIntroProps) => {
   const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, clearErrors, errors, getValues, watch } = formMethods
+  const { register, clearErrors, errors, watch, getValues } = formMethods
+  const jurisdiction = watch("jurisdictions.id")
+
   const listing = getValues()
 
   const listingType = watch("listingType")
-  const jurisdiction = watch("jurisdictions.id")
 
   const enableNonRegulatedListings = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableNonRegulatedListings,
+    jurisdiction
+  )
+
+  const enableHousingDeveloperOwner = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableHousingDeveloperOwner,
     jurisdiction
   )
 
@@ -49,6 +55,15 @@ const ListingIntro = (props: ListingIntroProps) => {
   ]
 
   const defaultJurisdiction = props.jurisdictions.length === 1 ? props.jurisdictions[0].id : ""
+
+  let developerFieldTitle = t("listings.developer")
+  if (enableHousingDeveloperOwner) {
+    developerFieldTitle = t("listings.housingDeveloperOwner")
+  } else if (listingType === EnumListingListingType.regulated || !enableNonRegulatedListings) {
+    developerFieldTitle = t("listings.developer")
+  } else {
+    developerFieldTitle = t("listings.propertyManager")
+  }
 
   return (
     <>
@@ -145,9 +160,7 @@ const ListingIntro = (props: ListingIntroProps) => {
               register={register}
               {...defaultFieldProps(
                 "developer",
-                listingType === EnumListingListingType.regulated || !enableNonRegulatedListings
-                  ? t("listings.developer")
-                  : t("listings.propertyManager"),
+                developerFieldTitle,
                 props.requiredFields,
                 errors,
                 clearErrors
