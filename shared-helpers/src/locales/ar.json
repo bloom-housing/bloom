@@ -768,7 +768,7 @@
   "listings.requiredDocuments.residencyDocuments": "وثائق الهجرة/الإقامة (البطاقة الخضراء، إلخ)",
   "listings.requiredDocuments.proofOfAssets": "إثبات الأصول (كشوف الحسابات المصرفية، إلخ)",
   "listings.requiredDocuments.proofOfIncome": "إثبات دخل الأسرة (قسائم شيكات، نموذج W-2، إلخ)",
-  "listings.requiredDocuments.proofOfCustody": "إثبات الحضانة/الوصاية)",
+  "listings.requiredDocuments.proofOfCustody": "إثبات الحضانة/الوصاية",
   "listings.requiredDocuments.currentLandlordReference": "مرجع المالك الحالي",
   "listings.requiredDocuments.previousLandlordReference": "مرجع المالك السابق",
   "listings.reservedCommunityBuilding": "مبنى %{type}",

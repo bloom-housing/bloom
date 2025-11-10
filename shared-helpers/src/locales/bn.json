@@ -768,7 +768,7 @@
   "listings.requiredDocuments.residencyDocuments": "অভিবাসন/আবাসিক নথি (সবুজ কার্ড, ইত্যাদি)",
   "listings.requiredDocuments.proofOfAssets": "সম্পদ প্রমাণ (ব্যাংক স্টেটমেন্ট, ইত্যাদি)",
   "listings.requiredDocuments.proofOfIncome": "পরিবারের আয়ের প্রমাণ (চেক স্টাব, W-2, ইত্যাদি)",
-  "listings.requiredDocuments.proofOfCustody": "হেফাজত/অভিভাবকের প্রমাণ)",
+  "listings.requiredDocuments.proofOfCustody": "হেফাজত/অভিভাবকের প্রমাণ",
   "listings.requiredDocuments.currentLandlordReference": "বর্তমান বাড়িওয়ালার রেফারেন্স",
   "listings.requiredDocuments.previousLandlordReference": "পূর্ববর্তী বাড়িওয়ালার রেফারেন্স",
   "listings.reservedCommunityBuilding": "%{টাইপ} বিল্ডিং",
