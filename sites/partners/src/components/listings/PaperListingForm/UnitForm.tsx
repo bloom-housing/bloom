@@ -157,7 +157,7 @@ const UnitForm = ({
   useEffect(() => {
     void resetDefaultValues()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [amiCharts])
+  }, [])
 
   const fetchAmiChart = async (defaultChartID?: string) => {
     try {
