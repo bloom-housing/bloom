@@ -530,26 +530,51 @@ export class ListingService implements OnModuleInit {
                   key: ListingFilterKeys.availabilities,
                   caseSensitive: true,
                 });
+                const reviewOrderFilter = buildFilter({
+                  $comparison: Compare['='],
+                  $include_nulls: false,
+                  value: ReviewOrderTypeEnum.waitlistLottery,
+                  key: ListingFilterKeys.availabilities,
+                  caseSensitive: true,
+                });
                 return {
-                  AND: builtFilter
-                    .map((filt) => ({
-                      unitGroups: {
-                        some: {
-                          [FilterAvailabilityEnum.openWaitlist]: filt,
-                        },
-                      },
-                    }))
-                    .concat(
-                      notUnderConstruction.map((filt) => ({
-                        marketingType: filt,
-                      })),
-                    ),
+                  OR: [
+                    {
+                      AND: builtFilter
+                        .map((filt) => ({
+                          unitGroups: {
+                            some: {
+                              [FilterAvailabilityEnum.openWaitlist]: filt,
+                            },
+                          },
+                        }))
+                        .concat(
+                          notUnderConstruction.map((filt) => ({
+                            marketingType: filt,
+                          })),
+                        ),
+                    },
+                    {
+                      AND: reviewOrderFilter
+                        .map((filt) => ({
+                          reviewOrderType: filt,
+                        }))
+                        .concat(
+                          notUnderConstruction.map((filt) => ({
+                            marketingType: filt,
+                          })),
+                        ),
+                    },
+                  ],
                 };
               } else if (availability === FilterAvailabilityEnum.waitlistOpen) {
                 const builtFilter = buildFilter({
-                  $comparison: Compare['='],
+                  $comparison: Compare.IN,
                   $include_nulls: false,
-                  value: ReviewOrderTypeEnum.waitlist,
+                  value: [
+                    ReviewOrderTypeEnum.waitlist,
+                    ReviewOrderTypeEnum.waitlistLottery,
+                  ],
                   key: ListingFilterKeys.availabilities,
                   caseSensitive: true,
                 });
@@ -641,6 +666,13 @@ export class ListingService implements OnModuleInit {
             key: ListingFilterKeys.availability,
             caseSensitive: true,
           });
+          const reviewOrderFilter = buildFilter({
+            $comparison: filter.$comparison,
+            $include_nulls: false,
+            value: ReviewOrderTypeEnum.waitlistLottery,
+            key: ListingFilterKeys.availability,
+            caseSensitive: true,
+          });
           filters.push({
             OR: [
               {
@@ -649,6 +681,17 @@ export class ListingService implements OnModuleInit {
                     unitGroups: {
                       some: { [FilterAvailabilityEnum.openWaitlist]: filt },
                     },
+                  }))
+                  .concat(
+                    notUnderConstruction.map((filt) => ({
+                      marketingType: filt,
+                    })),
+                  ),
+              },
+              {
+                AND: reviewOrderFilter
+                  .map((filt) => ({
+                    reviewOrderType: filt,
                   }))
                   .concat(
                     notUnderConstruction.map((filt) => ({
