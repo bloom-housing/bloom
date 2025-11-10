@@ -80,7 +80,7 @@ describe("<UnitGroupForm>", () => {
     expect(screen.getByLabelText(/4 bedroom/i)).toBeInTheDocument()
 
     // Details Section
-    expect(screen.getByLabelText(/Affordable Unit Group Quantity/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/Unit Group Quantity/i)).toBeInTheDocument()
     expect(screen.getByLabelText(/Minimum occupancy/i)).toBeInTheDocument()
     expect(screen.getByLabelText(/Max occupancy/i)).toBeInTheDocument()
     expect(screen.getByLabelText(/Min square footage/i)).toBeInTheDocument()
@@ -571,7 +571,7 @@ describe("<UnitGroupForm>", () => {
     await userEvent.click(studioButton)
 
     const quantityInput = screen.getByRole("spinbutton", {
-      name: /affordable unit group quantity/i,
+      name: /unit group quantity/i,
     })
 
     await userEvent.type(quantityInput, "4")
