@@ -18,7 +18,6 @@ import { UserStatus } from "../../../lib/constants"
 import {
   isFeatureFlagOn,
   isUnitGroupAppBase,
-  isUnitGroupAppWaitlist,
   untranslateMultiselectQuestion,
 } from "../../../lib/helpers"
 import {
@@ -114,26 +113,19 @@ const ApplicationTerms = () => {
   const content = useMemo(() => {
     switch (listing?.reviewOrderType) {
       case ReviewOrderTypeEnum.firstComeFirstServe:
-        if (isUnitGroupAppWaitlist(listing, conductor.config)) {
-          return {
-            text: t("application.review.terms.waitlist.text"),
-          }
-        }
         if (isUnitGroupAppBase(listing, conductor.config)) {
           return {
             text: t("application.review.terms.base.text"),
           }
         }
         return {
-          text: t("application.review.terms.fcfs.text"),
+          text: t("application.review.terms.standard.text"),
         }
       case ReviewOrderTypeEnum.lottery:
-        return {
-          text: t("application.review.terms.lottery.text"),
-        }
       case ReviewOrderTypeEnum.waitlist:
+      case ReviewOrderTypeEnum.waitlistLottery:
         return {
-          text: t("application.review.terms.waitlist.text"),
+          text: t(`application.review.terms.standard.text`),
         }
       default:
         return { text: "" }
