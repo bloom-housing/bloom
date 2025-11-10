@@ -1,12 +1,16 @@
-import React from "react"
+import React, { useContext } from "react"
 import { useFormContext } from "react-hook-form"
 import { Grid } from "@bloom-housing/ui-seeds"
 import { FieldGroup, t, Textarea } from "@bloom-housing/ui-components"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 import { defaultFieldProps, getLabel } from "../../../../lib/helpers"
 import styles from "../ListingForm.module.scss"
-import { ListingDocuments } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { listingRequiredDocumentsOptions } from "@bloom-housing/shared-helpers"
+import {
+  EnumListingListingType,
+  FeatureFlagEnum,
+  ListingDocuments,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { AuthContext, listingRequiredDocumentsOptions } from "@bloom-housing/shared-helpers"
 
 type AdditionalDetailsProps = {
   defaultText?: string
@@ -16,9 +20,21 @@ type AdditionalDetailsProps = {
 
 const AdditionalDetails = (props: AdditionalDetailsProps) => {
   const formMethods = useFormContext()
+  const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, errors, clearErrors } = formMethods
+  const { register, errors, clearErrors, watch } = formMethods
+
+  const jurisdiction = watch("jurisdictions.id")
+  const listingType = watch("listingType")
+
+  const enableNonRegulatedListings = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableNonRegulatedListings,
+    jurisdiction
+  )
+
+  const showRequiredDocumentsListField =
+    enableNonRegulatedListings && listingType === EnumListingListingType.nonRegulated
 
   return (
     <>
@@ -27,27 +43,31 @@ const AdditionalDetails = (props: AdditionalDetailsProps) => {
         heading={t("listings.sections.additionalDetails")}
         subheading={t("listings.sections.additionalDetailsSubtitle")}
       >
-        <Grid.Row columns={1}>
-          <Grid.Cell>
-            <FieldGroup
-              name={"selectedRequiredDocuments"}
-              groupLabel={getLabel(
-                "selectedRequiredDocuments",
-                props.requiredFields,
-                t("listings.requiredDocuments")
-              )}
-              register={register}
-              type="checkbox"
-              fields={listingRequiredDocumentsOptions.map((key) => ({
-                id: key,
-                label: t(`listings.requiredDocuments.${key}`),
-                register,
-                defaultChecked: props.exisistingDocumnets ? props.exisistingDocumnets[key] : false,
-              }))}
-              fieldGroupClassName="grid grid-cols-2 mt-2"
-            />
-          </Grid.Cell>
-        </Grid.Row>
+        {showRequiredDocumentsListField && (
+          <Grid.Row columns={1}>
+            <Grid.Cell>
+              <FieldGroup
+                name={"selectedRequiredDocuments"}
+                groupLabel={getLabel(
+                  "selectedRequiredDocuments",
+                  props.requiredFields,
+                  t("listings.requiredDocuments")
+                )}
+                register={register}
+                type="checkbox"
+                fields={listingRequiredDocumentsOptions.map((key) => ({
+                  id: key,
+                  label: t(`listings.requiredDocuments.${key}`),
+                  register,
+                  defaultChecked: props.exisistingDocumnets
+                    ? props.exisistingDocumnets[key]
+                    : false,
+                }))}
+                fieldGroupClassName="grid grid-cols-2 mt-2"
+              />
+            </Grid.Cell>
+          </Grid.Row>
+        )}
         <Grid.Row columns={2}>
           <Grid.Cell>
             <Textarea
@@ -58,7 +78,9 @@ const AdditionalDetails = (props: AdditionalDetailsProps) => {
               placeholder={""}
               {...defaultFieldProps(
                 "requiredDocuments",
-                t("listings.requiredDocumentsAdditionalInfo"),
+                showRequiredDocumentsListField
+                  ? t("listings.requiredDocumentsAdditionalInfo")
+                  : t("listings.requiredDocuments"),
                 props.requiredFields,
                 errors,
                 clearErrors
