@@ -1413,22 +1413,29 @@ describe('Testing listing service', () => {
         } as ListingFilterParams,
       ];
       const whereClause = service.buildWhereClause(filter, '');
+      console.log('result', JSON.stringify(whereClause));
 
       expect(whereClause).toStrictEqual({
         AND: [
           {
             OR: [
               {
-                AND: [
+                OR: [
                   {
-                    unitGroups: {
-                      some: { openWaitlist: { equals: true } },
-                    },
+                    AND: [
+                      {
+                        unitGroups: {
+                          some: { openWaitlist: { equals: true } },
+                        },
+                      },
+                      { marketingType: { not: { equals: 'comingSoon' } } },
+                    ],
                   },
                   {
-                    marketingType: {
-                      not: { equals: MarketingTypeEnum.comingSoon },
-                    },
+                    AND: [
+                      { reviewOrderType: { equals: 'waitlistLottery' } },
+                      { marketingType: { not: { equals: 'comingSoon' } } },
+                    ],
                   },
                 ],
               },
@@ -1613,7 +1620,6 @@ describe('Testing listing service', () => {
         } as ListingFilterParams,
       ];
       const whereClause = service.buildWhereClause(filter, '');
-
       expect(whereClause).toStrictEqual({
         AND: [
           {
@@ -1622,12 +1628,34 @@ describe('Testing listing service', () => {
                 AND: [
                   {
                     unitGroups: {
-                      some: { openWaitlist: { equals: true } },
+                      some: {
+                        openWaitlist: {
+                          equals: true,
+                        },
+                      },
                     },
                   },
                   {
                     marketingType: {
-                      not: { equals: MarketingTypeEnum.comingSoon },
+                      not: {
+                        equals: 'comingSoon',
+                      },
+                    },
+                  },
+                ],
+              },
+              {
+                AND: [
+                  {
+                    reviewOrderType: {
+                      equals: 'waitlistLottery',
+                    },
+                  },
+                  {
+                    marketingType: {
+                      not: {
+                        equals: 'comingSoon',
+                      },
                     },
                   },
                 ],
