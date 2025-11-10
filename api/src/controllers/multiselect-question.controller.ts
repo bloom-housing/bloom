@@ -35,7 +35,6 @@ import { permissionActions } from '../enums/permissions/permission-actions-enum'
 import { ApiKeyGuard } from '../guards/api-key.guard';
 import { AdminOrJurisdictionalAdminGuard } from '../guards/admin-or-jurisdiction-admin.guard';
 import { OptionalAuthGuard } from '../guards/optional.guard';
-import { PermissionGuard } from '../guards/permission.guard';
 import { ActivityLogInterceptor } from '../interceptors/activity-log.interceptor';
 import { MultiselectQuestionService } from '../services/multiselect-question.service';
 import { defaultValidationPipeOptions } from '../utilities/default-validation-pipe-options';

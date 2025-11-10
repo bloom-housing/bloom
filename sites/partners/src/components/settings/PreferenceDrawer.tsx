@@ -13,6 +13,7 @@ import { AuthContext } from "@bloom-housing/shared-helpers"
 import { useForm } from "react-hook-form"
 import {
   MultiselectOption,
+  MultiselectOptionCreate,
   MultiselectQuestion,
   MultiselectQuestionCreate,
   MultiselectQuestionsApplicationSectionEnum,
@@ -891,7 +892,7 @@ const PreferenceDrawer = ({
                 return questionData?.options?.length ? questionData?.options.length + 1 : 1
               }
 
-              const newOptionData: MultiselectOption = {
+              const newOptionData: MultiselectOptionCreate = {
                 text: formData.optionTitle,
                 description: formData.optionDescription,
                 links: formData.optionUrl

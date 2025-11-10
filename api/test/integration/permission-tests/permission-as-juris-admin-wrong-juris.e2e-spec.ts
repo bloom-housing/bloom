@@ -46,7 +46,6 @@ import { EmailAndAppUrl } from '../../../src/dtos/users/email-and-app-url.dto';
 import { ConfirmationRequest } from '../../../src/dtos/users/confirmation-request.dto';
 import { UserService } from '../../../src/services/user.service';
 import { EmailService } from '../../../src/services/email.service';
-import { permissionActions } from '../../../src/enums/permissions/permission-actions-enum';
 import { AfsResolve } from '../../../src/dtos/application-flagged-sets/afs-resolve.dto';
 import {
   generateJurisdiction,
