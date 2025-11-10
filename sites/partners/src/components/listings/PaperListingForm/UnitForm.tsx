@@ -26,9 +26,17 @@ type UnitFormProps = {
   defaultUnit: TempUnit | undefined
   nextId: number
   draft: boolean
+  jurisdiction: string
 }
 
-const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormProps) => {
+const UnitForm = ({
+  onSubmit,
+  onClose,
+  defaultUnit,
+  nextId,
+  draft,
+  jurisdiction,
+}: UnitFormProps) => {
   const { amiChartsService } = useContext(AuthContext)
 
   const [amiChartsOptions, setAmiChartsOptions] = useState([])
@@ -49,12 +57,10 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
     control,
     reset,
     clearErrors,
-    watch,
   } = useForm({
     mode: "onChange",
     shouldFocusError: false,
   })
-  const jurisdiction: string = watch("jurisdictions.id")
   /**
    * fetch form options
    */

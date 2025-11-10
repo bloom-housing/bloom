@@ -1,5 +1,6 @@
 import { render, screen, waitFor, within } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
+import { randomUUID } from "crypto"
 import { rest } from "msw"
 import { setupServer } from "msw/lib/node"
 import React from "react"
@@ -21,6 +22,20 @@ beforeAll(() => {
   server.listen()
 })
 
+beforeEach(() => {
+  server.use(
+    rest.get("http://localhost:3100/unitTypes", (_req, res, ctx) => {
+      return res(ctx.json(unitTypes))
+    }),
+    rest.get("http://localhost:3100/unitAccessibilityPriorityTypes", (_req, res, ctx) => {
+      return res(ctx.json([]))
+    }),
+    rest.get("http://localhost:3100/amiCharts", (_req, res, ctx) => {
+      return res(ctx.json(amiCharts))
+    })
+  )
+})
+
 afterEach(() => {
   server.resetHandlers()
 })
@@ -38,24 +53,13 @@ const tempUnitGroup: TempUnitGroup = {
   })),
 }
 
-server.use(
-  rest.get("http://localhost:3100/unitTypes", (_req, res, ctx) => {
-    return res(ctx.json(unitTypes))
-  }),
-  rest.get("http://localhost:3100/unitAccessibilityPriorityTypes", (_req, res, ctx) => {
-    return res(ctx.json([]))
-  }),
-  rest.get("http://localhost:3100/amiCharts", (_req, res, ctx) => {
-    return res(ctx.json(amiCharts))
-  })
-)
-
 describe("<UnitGroupForm>", () => {
   it("should render the unit group form", async () => {
     render(
       <AuthProvider>
         <FormProviderWrapper>
           <UnitGroupForm
+            jurisdiction={randomUUID()}
             onClose={jest.fn()}
             onSubmit={jest.fn()}
             defaultUnitGroup={{
@@ -110,6 +114,7 @@ describe("<UnitGroupForm>", () => {
       <AuthProvider>
         <FormProviderWrapper>
           <UnitGroupForm
+            jurisdiction={randomUUID()}
             onClose={jest.fn()}
             onSubmit={jest.fn()}
             defaultUnitGroup={tempUnitGroup}
@@ -133,7 +138,11 @@ describe("<UnitGroupForm>", () => {
     expect(
       within(drawerContainer).getByRole("heading", { level: 2, name: /^ami level$/i })
     ).toBeInTheDocument()
-    expect(within(drawerContainer).getByLabelText(/ami chart/i)).toBeInTheDocument()
+    const amiChartSelector = within(drawerContainer).getByRole("combobox", { name: /ami chart/i })
+    expect(amiChartSelector).toBeInTheDocument()
+    expect(within(amiChartSelector).getByRole("option", { name: "Select one" })).toBeInTheDocument()
+    expect(within(amiChartSelector).getByRole("option", { name: "Mock AMI" })).toBeInTheDocument()
+    expect(within(amiChartSelector).getByRole("option", { name: "Mock AMI 2" })).toBeInTheDocument()
     expect(within(drawerContainer).getByLabelText(/percentage of ami/i)).toBeInTheDocument()
     expect(within(drawerContainer).getByText(/how is rent determined\?/i)).toBeInTheDocument()
 
@@ -154,6 +163,7 @@ describe("<UnitGroupForm>", () => {
       <AuthProvider>
         <FormProviderWrapper>
           <UnitGroupForm
+            jurisdiction={randomUUID()}
             onClose={jest.fn()}
             onSubmit={jest.fn()}
             defaultUnitGroup={tempUnitGroup}
@@ -226,6 +236,7 @@ describe("<UnitGroupForm>", () => {
       <AuthProvider>
         <FormProviderWrapper>
           <UnitGroupForm
+            jurisdiction={randomUUID()}
             onClose={jest.fn()}
             onSubmit={jest.fn()}
             defaultUnitGroup={{
@@ -270,6 +281,7 @@ describe("<UnitGroupForm>", () => {
         <AuthProvider>
           <FormProviderWrapper>
             <UnitGroupForm
+              jurisdiction={randomUUID()}
               onClose={jest.fn()}
               onSubmit={jest.fn()}
               defaultUnitGroup={tempUnitGroup}
@@ -343,6 +355,7 @@ describe("<UnitGroupForm>", () => {
         <AuthProvider>
           <FormProviderWrapper>
             <UnitGroupForm
+              jurisdiction={randomUUID()}
               onClose={jest.fn()}
               onSubmit={jest.fn()}
               defaultUnitGroup={{
@@ -409,6 +422,7 @@ describe("<UnitGroupForm>", () => {
       <AuthProvider>
         <FormProviderWrapper>
           <UnitGroupForm
+            jurisdiction={randomUUID()}
             onClose={jest.fn()}
             onSubmit={jest.fn()}
             defaultUnitGroup={null}
@@ -433,6 +447,7 @@ describe("<UnitGroupForm>", () => {
       <AuthProvider>
         <FormProviderWrapper>
           <UnitGroupForm
+            jurisdiction={randomUUID()}
             onClose={jest.fn()}
             onSubmit={jest.fn()}
             defaultUnitGroup={null}
@@ -556,6 +571,7 @@ describe("<UnitGroupForm>", () => {
       <AuthProvider>
         <FormProviderWrapper>
           <UnitGroupForm
+            jurisdiction={randomUUID()}
             onClose={jest.fn()}
             onSubmit={mockSubmit}
             defaultUnitGroup={null}
