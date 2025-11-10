@@ -12,7 +12,6 @@ import {
 import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { blankApplication } from "@bloom-housing/shared-helpers"
 import userEvent from "@testing-library/user-event"
-import { act } from "react-test-renderer"
 
 window.scrollTo = jest.fn()
 
@@ -93,7 +92,7 @@ describe("applications pages", () => {
     it("should require form input", async () => {
       render(<ApplicationAddress />)
 
-      await act(() => userEvent.click(screen.getByRole("button", { name: /next/i })))
+      await userEvent.click(screen.getByRole("button", { name: /next/i }))
       expect(
         await screen.findByText("There are errors you'll need to resolve before moving on.")
       ).toBeInTheDocument()
@@ -114,8 +113,8 @@ describe("applications pages", () => {
       expect(phoneInput).toBeEnabled()
       expect(phoneSelect).toBeEnabled()
 
-      await act(() =>
-        userEvent.click(screen.getByRole("checkbox", { name: /i don't have a telephone number/i }))
+      await userEvent.click(
+        screen.getByRole("checkbox", { name: /i don't have a telephone number/i })
       )
 
       expect(phoneInput).toBeDisabled()

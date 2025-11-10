@@ -2827,6 +2827,38 @@ export class ScriptRunnerService {
       axios(configs, resolve, reject)
     })
   }
+  /**
+   * A script that sets the initial values for expire_after on applications
+   */
+  setInitialExpireAfterValues(options: IRequestOptions = {}): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/scriptRunner/setInitialExpireAfterValues"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = null
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * A script that sets is_newest field on application if newest application for applicant
+   */
+  setIsNewestApplicationValues(options: IRequestOptions = {}): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/scriptRunner/setIsNewestApplicationValues"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = null
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
 }
 
 export class FeatureFlagsService {
@@ -7647,6 +7679,7 @@ export enum EnumListingFilterParamsComparison {
   "NA" = "NA",
 }
 export enum ListingViews {
+  "address" = "address",
   "base" = "base",
   "csv" = "csv",
   "full" = "full",
@@ -7706,6 +7739,7 @@ export enum ReviewOrderTypeEnum {
   "lottery" = "lottery",
   "firstComeFirstServe" = "firstComeFirstServe",
   "waitlist" = "waitlist",
+  "waitlistLottery" = "waitlistLottery",
 }
 
 export enum LotteryStatusEnum {
@@ -7929,6 +7963,7 @@ export enum FeatureFlagEnum {
   "enableUnitGroups" = "enableUnitGroups",
   "enableUtilitiesIncluded" = "enableUtilitiesIncluded",
   "enableWaitlistAdditionalFields" = "enableWaitlistAdditionalFields",
+  "enableWaitlistLottery" = "enableWaitlistLottery",
   "enableWhatToExpectAdditionalField" = "enableWhatToExpectAdditionalField",
   "enableV2MSQ" = "enableV2MSQ",
   "example" = "example",

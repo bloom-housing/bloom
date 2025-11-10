@@ -1,7 +1,6 @@
 import { render, screen, waitFor } from "@testing-library/react"
 import React from "react"
 import userEvent from "@testing-library/user-event"
-import { act } from "react-dom/test-utils"
 import {
   ApplicationSubmissionTypeEnum,
   LanguagesEnum,
@@ -50,11 +49,9 @@ describe("<FormApplicationData>", () => {
     const dayInput = screen.getByTestId("dateSubmitted-day")
     const yearInput = screen.getByTestId("dateSubmitted-year")
 
-    await act(async () => {
-      await userEvent.type(monthInput, "2")
-      await userEvent.type(dayInput, "10")
-      await userEvent.type(yearInput, "2025")
-    })
+    await userEvent.type(monthInput, "2")
+    await userEvent.type(dayInput, "10")
+    await userEvent.type(yearInput, "2025")
 
     await waitFor(() => {
       expect(timeHours).not.toBeDisabled()
@@ -90,27 +87,21 @@ describe("<FormApplicationData>", () => {
     const dayInput = screen.getByTestId("dateSubmitted-day")
     const yearInput = screen.getByTestId("dateSubmitted-year")
 
-    await act(async () => {
-      await userEvent.type(monthInput, "2")
-      await userEvent.type(dayInput, "10")
-      await userEvent.type(yearInput, "2025")
-    })
+    await userEvent.type(monthInput, "2")
+    await userEvent.type(dayInput, "10")
+    await userEvent.type(yearInput, "2025")
 
-    await act(async () => {
-      await userEvent.type(timeHours, "12")
-      await userEvent.type(timeMinutes, "30")
-      await userEvent.selectOptions(timePeriod, "pm")
-    })
+    await userEvent.type(timeHours, "12")
+    await userEvent.type(timeMinutes, "30")
+    await userEvent.selectOptions(timePeriod, "pm")
 
     expect((timeHours as HTMLInputElement).value).toBe("12")
     expect((timeMinutes as HTMLInputElement).value).toBe("30")
     expect((timePeriod as HTMLSelectElement).value).toBe("pm")
 
-    await act(async () => {
-      await userEvent.clear(monthInput)
-      await userEvent.clear(dayInput)
-      await userEvent.clear(yearInput)
-    })
+    await userEvent.clear(monthInput)
+    await userEvent.clear(dayInput)
+    await userEvent.clear(yearInput)
 
     expect(timeHours).toBeDisabled()
     expect(timeMinutes).toBeDisabled()

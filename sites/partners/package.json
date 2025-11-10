@@ -11,7 +11,7 @@
     "registry": "https://registry.npmjs.org"
   },
   "scripts": {
-    "dev": "NODE_OPTIONS='--inspect=9231' next -p ${NEXTJS_PORT:-3001}",
+    "dev": "NODE_OPTIONS=\"--inspect=9231\" next -p ${NEXTJS_PORT:-3001}",
     "build": "next build",
     "test": "concurrently \"yarn dev\" \"cypress open\"",
     "test:unit": "jest -w 1",
@@ -70,8 +70,8 @@
     "@cypress/webpack-preprocessor": "^6.0.4",
     "@next/bundle-analyzer": "^10.1.0",
     "@testing-library/dom": "^10.4.0",
-    "@testing-library/jest-dom": "5.17.0",
-    "@testing-library/react": "14.0.0",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.2.0",
     "@testing-library/user-event": "^14.4.3",
     "@types/mapbox__mapbox-sdk": "^0.13.2",
     "@types/markdown-to-jsx": "^6.11.2",

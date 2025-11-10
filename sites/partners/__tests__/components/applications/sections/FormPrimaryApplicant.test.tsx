@@ -3,7 +3,6 @@ import React from "react"
 import { FormPrimaryApplicant } from "../../../../src/components/applications/PaperApplicationForm/sections/FormPrimaryApplicant"
 import { FormProviderWrapper } from "./helpers"
 import userEvent from "@testing-library/user-event"
-import { act } from "react-dom/test-utils"
 
 describe("<FormPrimaryApplicant>", () => {
   it("renders the form with primary applicant fields", () => {
@@ -71,9 +70,7 @@ describe("<FormPrimaryApplicant>", () => {
 
     expect(phoneInput).toBeInTheDocument()
 
-    await act(async () => {
-      await userEvent.type(phoneInput, "(424) 242-4242")
-    })
+    await userEvent.type(phoneInput, "(424) 242-4242")
 
     expect(phoneTypeSelect).toBeEnabled()
   })
@@ -95,9 +92,7 @@ describe("<FormPrimaryApplicant>", () => {
 
     expect(additonalPhoneInput).toBeInTheDocument()
 
-    await act(async () => {
-      await userEvent.type(additonalPhoneInput, "(424) 242-4242")
-    })
+    await userEvent.type(additonalPhoneInput, "(424) 242-4242")
 
     expect(additionalPhoneTypeSelect).toBeEnabled()
   })
@@ -112,7 +107,7 @@ describe("<FormPrimaryApplicant>", () => {
 
     const workInTheRegionButton = screen.getByLabelText("Yes")
 
-    await act(() => userEvent.click(workInTheRegionButton))
+    await userEvent.click(workInTheRegionButton)
 
     await waitFor(() => {
       expect(workInTheRegionButton).toBeChecked()
@@ -135,7 +130,7 @@ describe("<FormPrimaryApplicant>", () => {
 
     const sendMailToAddress = screen.getByLabelText(/send my mail to a different address/i)
 
-    await act(() => userEvent.click(sendMailToAddress))
+    await userEvent.click(sendMailToAddress)
 
     await waitFor(() => {
       expect(sendMailToAddress).toBeChecked()

@@ -175,6 +175,7 @@ export const stagingSeed = async (
         FeatureFlagEnum.enableSection8Question,
         FeatureFlagEnum.enableSingleUseCode,
         FeatureFlagEnum.enableUtilitiesIncluded,
+        FeatureFlagEnum.enableWaitlistLottery,
         FeatureFlagEnum.enableWhatToExpectAdditionalField,
       ],
       languages: Object.values(LanguagesEnum),

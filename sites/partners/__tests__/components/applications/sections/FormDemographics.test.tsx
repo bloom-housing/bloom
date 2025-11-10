@@ -1,4 +1,3 @@
-import { act } from "react-dom/test-utils"
 import { FormDemographics } from "../../../../src/components/applications/PaperApplicationForm/sections/FormDemographics"
 import { mockNextRouter, render, screen } from "../../../testUtils"
 import { FormProviderWrapper } from "./helpers"
@@ -123,10 +122,8 @@ describe("<FormDemographics>", () => {
     const asianCheckbox = screen.getByLabelText(/asian/i)
     const latinoCheckbox = screen.getByLabelText(/latino/i)
 
-    await act(async () => {
-      await userEvent.click(asianCheckbox)
-      await userEvent.click(latinoCheckbox)
-    })
+    await userEvent.click(asianCheckbox)
+    await userEvent.click(latinoCheckbox)
 
     expect(screen.getByLabelText(/Chinese/i)).toBeInTheDocument()
     expect(screen.getByLabelText(/Filipino/i)).toBeInTheDocument()
@@ -173,12 +170,10 @@ describe("<FormDemographics>", () => {
     expect(screen.getByRole("option", { name: "Not Listed" })).toBeInTheDocument()
     expect(screen.queryAllByRole("textbox", { name: "Please specify:" })).toHaveLength(0)
 
-    await act(async () => {
-      await userEvent.selectOptions(
-        screen.getByRole("combobox", { name: "Spoken language" }),
-        screen.getByRole("option", { name: "Not Listed" })
-      )
-    })
+    await userEvent.selectOptions(
+      screen.getByRole("combobox", { name: "Spoken language" }),
+      screen.getByRole("option", { name: "Not Listed" })
+    )
 
     expect(screen.getByRole("textbox", { name: "Please specify:" })).toBeInTheDocument()
   })

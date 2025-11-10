@@ -1,4 +1,10 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  BadRequestException,
+  NotImplementedException,
+  Inject,
+  Logger,
+} from '@nestjs/common';
 import {
   ApplicationMethodsTypeEnum,
   LanguagesEnum,
@@ -47,6 +53,8 @@ export class ScriptRunnerService {
     private assetService: AssetService,
     private multiselectQuestionService: MultiselectQuestionService,
     private prisma: PrismaService,
+    @Inject(Logger)
+    private logger = new Logger(ScriptRunnerService.name),
   ) {}
 
   /**
@@ -2767,6 +2775,99 @@ export class ScriptRunnerService {
       `migrate multiselect application data to refactor with page ${
         page || 1
       } of size ${pageSize || 5_000}`,
+      requestingUser,
+    );
+    return { success: true };
+  }
+
+  /**
+   * @param req incoming request object
+   * @returns successDTO
+   * @description for all closed listings populate the expire_after on applications
+   */
+  async setInitialExpireAfterValues(req: ExpressRequest): Promise<SuccessDTO> {
+    const requestingUser = mapTo(User, req['user']);
+    if (!process.env.APPLICATION_DAYS_TILL_EXPIRY) {
+      throw new NotImplementedException(
+        'APPLICATION_DAYS_TILL_EXPIRY env variable is not set',
+      );
+    }
+    await this.markScriptAsRunStart(
+      'set initial expire_after value',
+      requestingUser,
+    );
+
+    // Set the expire_after field on applications tied to closed listings
+    const closedListings = await this.prisma.listings.findMany({
+      select: { id: true, closedAt: true },
+      where: { status: ListingsStatusEnum.closed, closedAt: { not: null } },
+    });
+    this.logger.log(
+      `updating expireAfter for ${closedListings.length} closed listings`,
+    );
+    for (const listing of closedListings) {
+      const expireAfter = dayjs(listing.closedAt)
+        .add(Number(process.env.APPLICATION_DAYS_TILL_EXPIRY), 'days')
+        .toDate();
+      const updatedApplications = await this.prisma.applications.updateMany({
+        data: { expireAfter: expireAfter },
+        where: { listingId: listing.id },
+      });
+      this.logger.log(
+        `updated ${updatedApplications.count} applications for ${listing.id}`,
+      );
+    }
+
+    await this.markScriptAsComplete(
+      'set initial expire_after value',
+      requestingUser,
+    );
+    return { success: true };
+  }
+
+  /**
+   *
+   * @param req incoming request object
+   * @returns successDTO
+   * @description Set the is_newest field on application if newest application for applicant
+   */
+  async setIsNewestApplicationValues(req: ExpressRequest): Promise<SuccessDTO> {
+    const requestingUser = mapTo(User, req['user']);
+    await this.markScriptAsRunStart(
+      'set is_newest field on applications',
+      requestingUser,
+    );
+
+    const userCount = await this.prisma.userAccounts.count({
+      where: { userRoles: { is: null } },
+    });
+    this.logger.log(`total public user count ${userCount}`);
+    // Batch in groups of 1000
+    for (let currentCount = 0; currentCount < userCount; currentCount += 1000) {
+      const applicationsToUpdate: {
+        user_id: string;
+        application_id: string;
+      }[] = await this.prisma
+        .$queryRaw`select a.user_id, (a.application_ids::jsonb)[0]::text as application_id from (
+                    select a.user_id, json_agg(a.id ORDER BY a.created_at DESC) as application_ids from applications a
+                    GROUP BY a.user_id) a
+                    OFFSET ${currentCount}
+                    LIMIT 1000;`;
+      this.logger.log(`updating ${applicationsToUpdate.length} applications`);
+      await this.prisma.applications.updateMany({
+        data: { isNewest: true },
+        where: {
+          id: {
+            in: applicationsToUpdate.map((app) =>
+              app.application_id.replace('"', '').replace('"', ''),
+            ),
+          },
+        },
+      });
+    }
+
+    await this.markScriptAsComplete(
+      'set is_newest field on applications',
       requestingUser,
     );
     return { success: true };

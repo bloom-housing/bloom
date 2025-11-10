@@ -1,4 +1,4 @@
-import { fireEvent, mockNextRouter, render, waitFor, screen, act } from "../testUtils"
+import { fireEvent, mockNextRouter, render, waitFor, screen } from "../testUtils"
 import { user } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import React from "react"
 import CreateAccount from "../../src/pages/create-account"
@@ -99,7 +99,7 @@ describe("Create Account Page", () => {
 
       const createAccountButton = screen.getByRole("button", { name: /create account/i })
       expect(createAccountButton).toBeInTheDocument()
-      await act(() => userEvent.click(createAccountButton))
+      await userEvent.click(createAccountButton)
 
       expect(screen.getByRole("textbox", { name: /first or given name/i })).toBeInvalid()
       expect(screen.getByText("Please enter a first name")).toBeInTheDocument()
@@ -252,17 +252,15 @@ describe("Create Account Page", () => {
       it.each(TEST_PASSWORDS)("%s", async (entry) => {
         const { password, valid } = entry
 
-        act(() => {
-          render(<CreateAccount />)
-        })
+        render(<CreateAccount />)
 
         const createAccountButton = screen.getByRole("button", { name: /create account/i })
         const passwordInput = screen.getByLabelText(/^password/i, { selector: "input" })
         expect(passwordInput).toBeInTheDocument()
         expect(createAccountButton).toBeInTheDocument()
 
-        await act(() => userEvent.type(passwordInput, password))
-        await act(() => userEvent.click(createAccountButton))
+        await userEvent.type(passwordInput, password)
+        await userEvent.click(createAccountButton)
 
         if (valid) {
           await waitFor(() => {
@@ -289,9 +287,9 @@ describe("Create Account Page", () => {
       expect(passwordConfirmInput).toBeInTheDocument()
       expect(createAccountButton).toBeInTheDocument()
 
-      await act(() => userEvent.type(passwordInput, "P@ssw0rd#123"))
-      await act(() => userEvent.type(passwordConfirmInput, "Test"))
-      await act(() => userEvent.click(createAccountButton))
+      await userEvent.type(passwordInput, "P@ssw0rd#123")
+      await userEvent.type(passwordConfirmInput, "Test")
+      await userEvent.click(createAccountButton)
 
       expect(passwordInput).toBeValid()
       expect(passwordConfirmInput).toBeInvalid()
@@ -366,6 +364,8 @@ describe("Create Account Page", () => {
     )
 
     it.each(ERROR_RESPONSES)("show the %s error response message", async (response) => {
+      // Hide the console.warn statement to not flood the testing logs
+      jest.spyOn(console, "error").mockImplementation()
       const { message, value, status } = response
       server.use(
         rest.post("http://localhost/api/adapter/user", (_req, res, ctx) => {
@@ -385,58 +385,6 @@ describe("Create Account Page", () => {
 
       expect(screen.getByRole("heading", { name: /create account/i, level: 1 })).toBeInTheDocument()
 
-      await act(async () => {
-        await userEvent.type(screen.getByRole("textbox", { name: /first or given name/i }), "John")
-        await userEvent.type(screen.getByRole("textbox", { name: /middle name/i }), "Admin")
-        await userEvent.type(screen.getByRole("textbox", { name: /last or family name/i }), "Doe")
-        await userEvent.type(screen.getByRole("textbox", { name: /month/i }), "2")
-        await userEvent.type(screen.getByRole("textbox", { name: /day/i }), "4")
-        await userEvent.type(screen.getByRole("textbox", { name: /year/i }), "2000")
-        await userEvent.type(
-          screen.getByRole("textbox", { name: /your email address/i }),
-          "johndoe@example.com"
-        )
-        await userEvent.type(
-          screen.getByLabelText(/^password/i, { selector: "input" }),
-          "P@ssw0rd#123"
-        )
-        await userEvent.type(
-          screen.getByLabelText(/re-enter your password/i, {
-            selector: "input",
-          }),
-          "P@ssw0rd#123"
-        )
-      })
-
-      const createAccountButton = screen.getByRole("button", { name: /create account/i })
-      expect(createAccountButton).toBeInTheDocument()
-      await act(() => userEvent.click(createAccountButton))
-      await act(() =>
-        userEvent.click(
-          screen.getByRole("checkbox", {
-            name: "I have reviewed, understand and agree to the Terms of Use.",
-          })
-        )
-      )
-      await act(() => userEvent.click(screen.getByRole("button", { name: "Finish" })))
-
-      expect(await screen.findByText(value)).toBeInTheDocument()
-    })
-  })
-
-  it("should navigate to confirmation modal on success", async () => {
-    process.env.showPwdless = "TRUE"
-    const { pushMock } = mockNextRouter()
-    server.use(
-      rest.post("http://localhost/api/adapter/user", (_req, res, ctx) => {
-        return res(ctx.json(user))
-      })
-    )
-    render(<CreateAccount />)
-
-    expect(screen.getByRole("heading", { name: /create account/i, level: 1 })).toBeInTheDocument()
-
-    await act(async () => {
       await userEvent.type(screen.getByRole("textbox", { name: /first or given name/i }), "John")
       await userEvent.type(screen.getByRole("textbox", { name: /middle name/i }), "Admin")
       await userEvent.type(screen.getByRole("textbox", { name: /last or family name/i }), "Doe")
@@ -457,11 +405,54 @@ describe("Create Account Page", () => {
         }),
         "P@ssw0rd#123"
       )
+
+      const createAccountButton = screen.getByRole("button", { name: /create account/i })
+      expect(createAccountButton).toBeInTheDocument()
+      await userEvent.click(createAccountButton)
+      await userEvent.click(
+        screen.getByRole("checkbox", {
+          name: "I have reviewed, understand and agree to the Terms of Use.",
+        })
+      )
+      await userEvent.click(screen.getByRole("button", { name: "Finish" }))
+
+      expect(await screen.findByText(value)).toBeInTheDocument()
     })
+  })
+
+  it("should navigate to confirmation modal on success", async () => {
+    process.env.showPwdless = "TRUE"
+    const { pushMock } = mockNextRouter()
+    server.use(
+      rest.post("http://localhost/api/adapter/user", (_req, res, ctx) => {
+        return res(ctx.json(user))
+      })
+    )
+    render(<CreateAccount />)
+
+    expect(screen.getByRole("heading", { name: /create account/i, level: 1 })).toBeInTheDocument()
+
+    await userEvent.type(screen.getByRole("textbox", { name: /first or given name/i }), "John")
+    await userEvent.type(screen.getByRole("textbox", { name: /middle name/i }), "Admin")
+    await userEvent.type(screen.getByRole("textbox", { name: /last or family name/i }), "Doe")
+    await userEvent.type(screen.getByRole("textbox", { name: /month/i }), "2")
+    await userEvent.type(screen.getByRole("textbox", { name: /day/i }), "4")
+    await userEvent.type(screen.getByRole("textbox", { name: /year/i }), "2000")
+    await userEvent.type(
+      screen.getByRole("textbox", { name: /your email address/i }),
+      "johndoe@example.com"
+    )
+    await userEvent.type(screen.getByLabelText(/^password/i, { selector: "input" }), "P@ssw0rd#123")
+    await userEvent.type(
+      screen.getByLabelText(/re-enter your password/i, {
+        selector: "input",
+      }),
+      "P@ssw0rd#123"
+    )
 
     const createAccountButton = screen.getByRole("button", { name: /create account/i })
     expect(createAccountButton).toBeInTheDocument()
-    await act(() => userEvent.click(createAccountButton))
+    await userEvent.click(createAccountButton)
 
     expect(screen.queryByText("Please enter a first name")).not.toBeInTheDocument()
     expect(screen.queryByText("Must not be more than 64 characters.")).not.toBeInTheDocument()
@@ -492,9 +483,9 @@ describe("Create Account Page", () => {
     })
     expect(confirmCheckbox).toBeInTheDocument()
     expect(screen.getByRole("button", { name: "Finish" })).toBeDisabled()
-    await act(() => userEvent.click(confirmCheckbox))
+    await userEvent.click(confirmCheckbox)
     expect(screen.getByRole("button", { name: "Finish" })).toBeEnabled()
-    await act(() => userEvent.click(screen.getByRole("button", { name: "Finish" })))
+    await userEvent.click(screen.getByRole("button", { name: "Finish" }))
 
     await waitFor(() => {
       expect(pushMock).toBeCalledWith({

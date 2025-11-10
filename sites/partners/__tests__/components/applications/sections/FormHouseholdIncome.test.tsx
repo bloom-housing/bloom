@@ -1,6 +1,6 @@
 import React from "react"
 import { FormHouseholdIncome } from "../../../../src/components/applications/PaperApplicationForm/sections/FormHouseholdIncome"
-import { act, mockNextRouter, render, screen } from "../../../testUtils"
+import { mockNextRouter, render, screen } from "../../../testUtils"
 import { FormProviderWrapper } from "./helpers"
 import userEvent from "@testing-library/user-event"
 
@@ -49,12 +49,12 @@ describe("<FormHouseholdIncome>", () => {
     const perYearOption = screen.getByLabelText(/per year/i)
     const perMonthOption = screen.getByLabelText(/per month/i)
 
-    await act(() => userEvent.click(perYearOption))
+    await userEvent.click(perYearOption)
 
     expect(annualIncomeInput).toBeEnabled()
     expect(monthlyIncomeInput).toBeDisabled()
 
-    await act(() => userEvent.click(perMonthOption))
+    await userEvent.click(perMonthOption)
 
     expect(annualIncomeInput).toBeDisabled()
     expect(monthlyIncomeInput).toBeEnabled()

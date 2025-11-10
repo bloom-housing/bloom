@@ -904,7 +904,10 @@ describe('Testing Permissioning of endpoints as Jurisdictional Admin in the corr
 
     it('should error as forbidden for delete endpoint', async () => {
       const userA = await prisma.userAccounts.create({
-        data: await userFactory({ jurisdictionIds: [jurisId] }),
+        data: await userFactory({
+          jurisdictionIds: [jurisId],
+          roles: { isJurisdictionalAdmin: true },
+        }),
       });
 
       await request(app.getHttpServer())

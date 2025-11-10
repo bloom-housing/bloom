@@ -777,39 +777,50 @@ export class ApplicationFlaggedSetService implements OnModuleInit {
       process.env.DUPLICATES_CLOSE_DATE &&
       dayjs(process.env.DUPLICATES_CLOSE_DATE, 'YYYY-MM-DD HH:mm Z');
 
+    const whereClause: Prisma.ListingsWhereInput = {
+      lastApplicationUpdateAt: {
+        not: null,
+      },
+      id: listingId,
+      // If DUPLICATES_CLOSE_DATE is in the past only run this job on closed listings
+      // from before DUPLICATES_CLOSE_DATE
+      closedAt:
+        duplicatesCloseDate && duplicatesCloseDate < dayjs(new Date())
+          ? { lte: duplicatesCloseDate.toDate() }
+          : undefined,
+      AND: [
+        {
+          OR: [
+            {
+              afsLastRunAt: {
+                equals: null,
+              },
+            },
+            {
+              afsLastRunAt: {
+                lte: this.prisma.listings.fields.lastApplicationUpdateAt,
+              },
+            },
+          ],
+        },
+      ],
+    };
+
+    if (duplicatesCloseDate && duplicatesCloseDate < dayjs(new Date())) {
+      (whereClause.AND as Prisma.ListingsWhereInput[]).push({
+        AND: [
+          { closedAt: { lte: duplicatesCloseDate.toDate() } },
+          { status: { not: 'active' } },
+        ],
+      });
+    }
+
     const outOfDateListings = await this.prisma.listings.findMany({
       select: {
         id: true,
         afsLastRunAt: true,
       },
-      where: {
-        lastApplicationUpdateAt: {
-          not: null,
-        },
-        id: listingId,
-        // If DUPLICATES_CLOSE_DATE is in the past only run this job on closed listings
-        // from before DUPLICATES_CLOSE_DATE
-        closedAt:
-          duplicatesCloseDate && duplicatesCloseDate < dayjs(new Date())
-            ? { lte: duplicatesCloseDate.toDate() }
-            : undefined,
-        AND: [
-          {
-            OR: [
-              {
-                afsLastRunAt: {
-                  equals: null,
-                },
-              },
-              {
-                afsLastRunAt: {
-                  lte: this.prisma.listings.fields.lastApplicationUpdateAt,
-                },
-              },
-            ],
-          },
-        ],
-      },
+      where: whereClause,
     });
     this.logger.warn(
       `updating the flagged sets for ${outOfDateListings.length} listings`,

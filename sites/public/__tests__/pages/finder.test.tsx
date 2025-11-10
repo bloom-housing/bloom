@@ -2,8 +2,9 @@ import React from "react"
 import RentalsFinder from "../../src/components/finder/RentalsFinder"
 import { render, screen, mockNextRouter, waitFor, within } from "../testUtils"
 import userEvent from "@testing-library/user-event"
-import { act } from "react-dom/test-utils"
 import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+
+window.scrollTo = jest.fn()
 
 beforeAll(() => {
   mockNextRouter()
@@ -102,7 +103,7 @@ describe("<RentalsFinder>", () => {
 
       const nextButton = screen.getByRole("button", { name: /next/i })
       expect(nextButton).toBeInTheDocument()
-      await act(() => userEvent.click(nextButton))
+      await userEvent.click(nextButton)
 
       // ----------- Section 1 - Housing Needs | Step Skipped - Region  -------------------
       expect(
@@ -170,7 +171,7 @@ describe("<RentalsFinder>", () => {
 
       const nextButton = screen.getByRole("button", { name: /next/i })
       expect(nextButton).toBeInTheDocument()
-      await act(() => userEvent.click(nextButton))
+      await userEvent.click(nextButton)
 
       // ----------- Section 1 - Housing Needs | Step 2 - Regions -------------------
       expect(within(sectionOne).getByText(/housing needs/i)).toBeInTheDocument()
@@ -192,7 +193,7 @@ describe("<RentalsFinder>", () => {
           /we will use your selections to find you rentals that may match your housing needs./i
         )
       ).toBeInTheDocument()
-      await act(() => userEvent.click(nextButton))
+      await userEvent.click(nextButton)
 
       // ----------- Section 1 - Housing Needs | Step 3 - Rent -------------------
       expect(within(sectionOne).getByText(/housing needs/i)).toBeInTheDocument()
@@ -212,7 +213,7 @@ describe("<RentalsFinder>", () => {
         )
       ).toBeInTheDocument()
 
-      await act(() => userEvent.click(nextButton))
+      await userEvent.click(nextButton)
 
       // ----------- Section 2 - Accessibility | Step Skipped -------------------
 
@@ -293,7 +294,7 @@ describe("<RentalsFinder>", () => {
 
     const nextButton = screen.getByRole("button", { name: /next/i })
     expect(nextButton).toBeInTheDocument()
-    await act(() => userEvent.click(nextButton))
+    await userEvent.click(nextButton)
 
     // ----------- Section 1 - Housing Needs | Step 2 - Regions -------------------
     expect(within(sectionOne).getByText(/housing needs/i)).toBeInTheDocument()
@@ -328,7 +329,7 @@ describe("<RentalsFinder>", () => {
     expect(
       screen.getByRole("button", { name: /skip this and show me listings/i })
     ).toBeInTheDocument()
-    await act(() => userEvent.click(nextButton))
+    await userEvent.click(nextButton)
 
     // ----------- Section 1 - Housing Needs | Step 3 - Rent -------------------
     expect(within(sectionOne).getByText(/housing needs/i)).toBeInTheDocument()
@@ -366,7 +367,7 @@ describe("<RentalsFinder>", () => {
     expect(
       screen.getByRole("button", { name: /skip this and show me listings/i })
     ).toBeInTheDocument()
-    await act(() => userEvent.click(nextButton))
+    await userEvent.click(nextButton)
 
     // ----------- Section 2 - Accessibility | Step 1 - Listing Features -------------------
     expect(within(sectionOne).getByText(/housing needs/i)).toBeInTheDocument()
@@ -432,7 +433,7 @@ describe("<RentalsFinder>", () => {
     expect(
       screen.getByRole("button", { name: /skip this and show me listings/i })
     ).toBeInTheDocument()
-    await act(() => userEvent.click(nextButton))
+    await userEvent.click(nextButton)
 
     // ----------- Section 3 - Building Types | Step 1 - Community Types -------------------
 
@@ -475,7 +476,7 @@ describe("<RentalsFinder>", () => {
     expect(
       screen.getByRole("button", { name: /skip this and show me listings/i })
     ).toBeInTheDocument()
-    await act(() => userEvent.click(nextButton))
+    await userEvent.click(nextButton)
 
     // --------------------------- Disclaimer --------------------------------------
     expect(within(sectionOne).getByText(/housing needs/i)).toBeInTheDocument()
@@ -539,10 +540,8 @@ describe("<RentalsFinder>", () => {
     expect(studioCheckbox).not.toBeChecked()
     expect(oneBdrmCheckbox).not.toBeChecked()
 
-    await act(async () => {
-      await userEvent.click(studioCheckbox)
-      await userEvent.click(oneBdrmCheckbox)
-    })
+    await userEvent.click(studioCheckbox)
+    await userEvent.click(oneBdrmCheckbox)
 
     // should be checked aftert user interaction
     expect(studioCheckbox).toBeChecked()
@@ -551,19 +550,19 @@ describe("<RentalsFinder>", () => {
     const nextButton = screen.getByRole("button", { name: /next/i })
     expect(nextButton).toBeInTheDocument()
 
-    await act(() => userEvent.click(nextButton))
+    await userEvent.click(nextButton)
 
     let eastsideCheckbox = screen.getByRole("checkbox", { name: /eastside/i })
     expect(eastsideCheckbox).toBeInTheDocument()
     expect(eastsideCheckbox).not.toBeChecked()
 
-    await act(() => userEvent.click(eastsideCheckbox))
+    await userEvent.click(eastsideCheckbox)
     expect(eastsideCheckbox).toBeChecked()
 
     const backButton = screen.getByRole("button", { name: /back/i })
     expect(backButton).toBeInTheDocument()
 
-    await act(() => userEvent.click(backButton))
+    await userEvent.click(backButton)
 
     studioCheckbox = screen.getByRole("checkbox", { name: /studio/i })
     oneBdrmCheckbox = screen.getByRole("checkbox", { name: /1 bedroom/i })
@@ -572,7 +571,7 @@ describe("<RentalsFinder>", () => {
     expect(studioCheckbox).toBeChecked()
     expect(oneBdrmCheckbox).toBeChecked()
 
-    await act(() => userEvent.click(nextButton))
+    await userEvent.click(nextButton)
 
     eastsideCheckbox = screen.getByRole("checkbox", { name: /eastside/i })
     expect(eastsideCheckbox).toBeInTheDocument()
@@ -592,7 +591,7 @@ describe("<RentalsFinder>", () => {
     const skipButton = screen.getByRole("button", { name: /skip this and show me listings/i })
     expect(skipButton).toBeInTheDocument()
 
-    await act(() => userEvent.click(skipButton))
+    await userEvent.click(skipButton)
 
     const finderHeaderTitle = screen.getByRole("heading", {
       name: /find listings for you/i,
@@ -655,13 +654,13 @@ describe("<RentalsFinder>", () => {
 
       while (!screen.queryByRole("button", { name: /finish/i })) {
         const nextButton = screen.getByRole("button", { name: /next/i })
-        await act(() => userEvent.click(nextButton))
+        await userEvent.click(nextButton)
       }
 
       const finishButton = screen.getByRole("button", { name: /finish/i })
       expect(finishButton).toBeInTheDocument()
 
-      await act(() => userEvent.click(finishButton))
+      await userEvent.click(finishButton)
 
       await waitFor(() => {
         expect(pushMock).toBeCalledWith("/listings")
@@ -687,14 +686,12 @@ describe("<RentalsFinder>", () => {
       expect(studioCheckbox).toBeInTheDocument()
       expect(oneBdrmCheckbox).toBeInTheDocument()
 
-      await act(async () => {
-        await userEvent.click(studioCheckbox)
-        await userEvent.click(oneBdrmCheckbox)
-      })
+      await userEvent.click(studioCheckbox)
+      await userEvent.click(oneBdrmCheckbox)
 
       const nextButton = screen.getByRole("button", { name: /next/i })
       expect(nextButton).toBeInTheDocument()
-      await act(() => userEvent.click(nextButton))
+      await userEvent.click(nextButton)
 
       // ----------- Section 1 - Housing Needs | Step 2 - Regions -------------------
 
@@ -703,11 +700,9 @@ describe("<RentalsFinder>", () => {
       expect(greaterDowntownCheckbox).toBeInTheDocument()
       expect(westsideCheckbox).toBeInTheDocument()
 
-      await act(async () => {
-        await userEvent.click(greaterDowntownCheckbox)
-        await userEvent.click(westsideCheckbox)
-        await userEvent.click(nextButton)
-      })
+      await userEvent.click(greaterDowntownCheckbox)
+      await userEvent.click(westsideCheckbox)
+      await userEvent.click(nextButton)
 
       // ----------- Section 1 - Housing Needs | Step 3 - Rent -------------------
 
@@ -721,12 +716,10 @@ describe("<RentalsFinder>", () => {
       expect(maxRentInput).toBeInTheDocument()
       expect(section8Button).toBeInTheDocument()
 
-      await act(async () => {
-        await userEvent.type(minRentInput, "1500")
-        await userEvent.type(maxRentInput, "3000")
-        await userEvent.click(section8Button)
-        await userEvent.click(nextButton)
-      })
+      await userEvent.type(minRentInput, "1500")
+      await userEvent.type(maxRentInput, "3000")
+      await userEvent.click(section8Button)
+      await userEvent.click(nextButton)
 
       // ----------- Section 2 - Accessibility | Step 1 - Listing Features -------------------
       const wheelchairCheckbox = screen.getByRole("checkbox", { name: /wheelchair ramp/i })
@@ -737,27 +730,23 @@ describe("<RentalsFinder>", () => {
       expect(elevatorCheckbox).toBeInTheDocument()
       expect(animalCheckbox).toBeInTheDocument()
 
-      await act(async () => {
-        await userEvent.click(wheelchairCheckbox)
-        await userEvent.click(elevatorCheckbox)
-        await userEvent.click(animalCheckbox)
-        await userEvent.click(nextButton)
-      })
+      await userEvent.click(wheelchairCheckbox)
+      await userEvent.click(elevatorCheckbox)
+      await userEvent.click(animalCheckbox)
+      await userEvent.click(nextButton)
 
       // ----------- Section 3 - Building Types | Step 1 - Community Types -------------------
       const veteranCheckbox = screen.getByRole("checkbox", { name: /rentals for veterans/i })
       expect(veteranCheckbox).toBeInTheDocument()
 
-      await act(async () => {
-        await userEvent.click(veteranCheckbox)
-        await userEvent.click(nextButton)
-      })
+      await userEvent.click(veteranCheckbox)
+      await userEvent.click(nextButton)
 
       // --------------------------- Disclaimer --------------------------------------
       const finishButton = screen.getByRole("button", { name: /finish/i })
       expect(finishButton).toBeInTheDocument()
 
-      await act(() => userEvent.click(finishButton))
+      await userEvent.click(finishButton)
 
       await waitFor(() => {
         expect(pushMock).toBeCalledWith(

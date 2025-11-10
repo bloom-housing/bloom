@@ -17,7 +17,7 @@ import {
   ListingEventsTypeEnum,
   MarketingTypeEnum,
 } from '@prisma/client';
-import { views } from './listing.service';
+import { includeViews } from './listing.service';
 import { PrismaService } from './prisma.service';
 import {
   CsvExporterServiceInterface,
@@ -52,7 +52,7 @@ import {
 import { UnitGroupSummary } from '../dtos/unit-groups/unit-group-summary.dto';
 import { addUnitGroupsSummarized } from '../utilities/unit-groups-transformations';
 
-views.csv = {
+includeViews.csv = {
   listingMultiselectQuestions: {
     include: {
       multiselectQuestions: {
@@ -62,7 +62,7 @@ views.csv = {
       },
     },
   },
-  ...views.full,
+  ...includeViews.full,
   copyOf: {
     select: {
       id: true,
@@ -166,7 +166,7 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
       );
 
     const listings = await this.prisma.listings.findMany({
-      include: views.csv,
+      include: includeViews.csv,
       where: whereClause,
     });
 
@@ -1339,7 +1339,7 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
         user.userRoles?.isJurisdictionalAdmin ||
         user.userRoles?.isLimitedJurisdictionalAdmin ||
         user.userRoles?.isPartner ||
-        user.userRoles.isSupportAdmin)
+        user.userRoles?.isSupportAdmin)
     ) {
       return;
     } else {
