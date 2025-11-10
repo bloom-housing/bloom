@@ -134,6 +134,14 @@ class Listing extends AbstractDTO {
   developer?: string;
 
   @Expose()
+  @ValidateListingPublish('listingFileNumber', {
+    groups: [ValidationsGroupsEnum.default],
+  })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  listingFileNumber?: string;
+
+  @Expose()
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   householdSizeMax?: number;
