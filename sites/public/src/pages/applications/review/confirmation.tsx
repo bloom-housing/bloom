@@ -62,19 +62,13 @@ const ApplicationConfirmation = () => {
           ),
         }
       case ReviewOrderTypeEnum.lottery:
-        return {
-          text: t(
-            `application.review.confirmation.whatHappensNext${
-              disableListingPreferences ? ".noPref" : ""
-            }.lottery`
-          ),
-        }
       case ReviewOrderTypeEnum.waitlist:
+      case ReviewOrderTypeEnum.waitlistLottery:
         return {
           text: t(
             `application.review.confirmation.whatHappensNext${
               disableListingPreferences ? ".noPref" : ""
-            }.waitlist`
+            }.${listing.reviewOrderType}`
           ),
         }
       default:
