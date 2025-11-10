@@ -21,6 +21,11 @@ interface ListingIntroProps {
   requiredFields: string[]
 }
 
+const getDeveloperLabel = (jurisdiction: string, enableHousingDeveloperOwner: boolean) => {
+  if (!jurisdiction) return t("listings.developer")
+  return enableHousingDeveloperOwner ? t("listings.housingDeveloperOwner") : t("listings.developer")
+}
+
 const ListingIntro = (props: ListingIntroProps) => {
   const formMethods = useFormContext()
   const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
@@ -113,9 +118,7 @@ const ListingIntro = (props: ListingIntroProps) => {
               register={register}
               {...defaultFieldProps(
                 "developer",
-                enableHousingDeveloperOwner
-                  ? t("listings.housingDeveloperOwner")
-                  : t("listings.developer"),
+                getDeveloperLabel(jurisdiction, enableHousingDeveloperOwner),
                 props.requiredFields,
                 errors,
                 clearErrors
