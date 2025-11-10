@@ -10,16 +10,18 @@ const DetailAdditionalDetails = () => {
 
   const getRequiredDocuments = () => {
     let documentsExist = false
-    const documents = Object.keys(listing?.requiredDocumentsList ?? {}).map((document) => {
-      if (document) {
-        documentsExist = true
-        return (
-          <li key={document} className={"list-disc mx-5 mb-1 w-full grow text-nowrap"}>
-            {t(`listings.requiredDocuments.${document.trim()}`)}
-          </li>
-        )
+    const documents = Object.entries(listing?.requiredDocumentsList ?? {}).map(
+      ([document, value]) => {
+        if (document && value) {
+          documentsExist = true
+          return (
+            <li key={document} className={"list-disc mx-5 mb-1 w-full grow text-nowrap"}>
+              {t(`listings.requiredDocuments.${document.trim()}`)}
+            </li>
+          )
+        }
       }
-    })
+    )
     return documentsExist ? <ul className={"flex flex-wrap"}>{documents}</ul> : <>{t("t.none")}</>
   }
 
