@@ -4,7 +4,6 @@ import { Grid } from "@bloom-housing/ui-seeds"
 import { FieldGroup, t, Textarea } from "@bloom-housing/ui-components"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 import { defaultFieldProps, getLabel } from "../../../../lib/helpers"
-import styles from "../ListingForm.module.scss"
 import {
   EnumListingListingType,
   FeatureFlagEnum,
