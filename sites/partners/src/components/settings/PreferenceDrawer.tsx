@@ -16,6 +16,7 @@ import {
   MultiselectQuestion,
   MultiselectQuestionCreate,
   MultiselectQuestionsApplicationSectionEnum,
+  MultiselectQuestionsStatusEnum,
   MultiselectQuestionUpdate,
   ValidationMethodEnum,
   YesNoEnum,
@@ -493,9 +494,14 @@ const PreferenceDrawer = ({
 
               const formattedQuestionData: MultiselectQuestionUpdate | MultiselectQuestionCreate = {
                 applicationSection: MultiselectQuestionsApplicationSectionEnum.preferences,
-                text: formValues.text,
                 description: formValues.description,
                 hideFromListing: formValues.showOnListingQuestion === YesNoEnum.no,
+                jurisdictions: [
+                  profile.jurisdictions.find((juris) => juris.id === formValues.jurisdictionId),
+                ],
+                links: formValues.preferenceUrl
+                  ? [{ title: formValues.preferenceLinkTitle, url: formValues.preferenceUrl }]
+                  : [],
                 optOutText:
                   optOutQuestion === YesNoEnum.yes &&
                   formValues.optOutText &&
@@ -503,12 +509,8 @@ const PreferenceDrawer = ({
                     ? formValues.optOutText
                     : null,
                 options: questionData?.options,
-                jurisdictions: [
-                  profile.jurisdictions.find((juris) => juris.id === formValues.jurisdictionId),
-                ],
-                links: formValues.preferenceUrl
-                  ? [{ title: formValues.preferenceLinkTitle, url: formValues.preferenceUrl }]
-                  : [],
+                status: questionData?.status ?? MultiselectQuestionsStatusEnum.draft,
+                text: formValues.text,
               }
               clearErrors()
               clearErrors("questions")
