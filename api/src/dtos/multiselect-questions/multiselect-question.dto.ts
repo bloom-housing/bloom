@@ -54,6 +54,7 @@ class MultiselectQuestion extends AbstractDTO {
   @ApiPropertyOptional({ type: IdDTO })
   jurisdiction?: IdDTO;
 
+  // TODO: This will be sunseted after MSQ refactor but still required at the moment
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => IdDTO)
@@ -89,6 +90,7 @@ class MultiselectQuestion extends AbstractDTO {
   @ApiPropertyOptional({ type: MultiselectOption, isArray: true })
   options?: MultiselectOption[];
 
+  // TODO: This will be sunseted after MSQ refactor
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
@@ -111,6 +113,7 @@ class MultiselectQuestion extends AbstractDTO {
   @ApiPropertyOptional()
   subText?: string;
 
+  // TODO: This will be sunseted after MSQ refactor but still required at the moment
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
@@ -122,6 +125,7 @@ class MultiselectQuestion extends AbstractDTO {
   @ApiPropertyOptional()
   untranslatedName?: string;
 
+  // TODO: This will be sunseted after MSQ refactor
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()

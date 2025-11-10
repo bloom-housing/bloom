@@ -14,16 +14,19 @@ import { ValidationMethod } from '../../enums/multiselect-questions/validation-m
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 
 export class MultiselectOption extends AbstractDTO {
+  // TODO: This will be sunseted after MSQ refactor
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   collectAddress?: boolean;
 
+  // TODO: This will be sunseted after MSQ refactor
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   collectName?: boolean;
 
+  // TODO: This will be sunseted after MSQ refactor
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
