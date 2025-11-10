@@ -3643,6 +3643,9 @@ export interface UnitGroup {
   flatRentValueTo?: number
 
   /**  */
+  monthlyRent?: number
+
+  /**  */
   floorMin?: number
 
   /**  */
@@ -3921,6 +3924,9 @@ export interface UnitsSummary {
 
   /**  */
   flatRentValueTo?: number
+
+  /**  */
+  monthlyRent?: number
 }
 
 export interface ApplicationLotteryTotal {
@@ -4453,6 +4459,9 @@ export interface UnitGroupCreate {
   flatRentValueTo?: number
 
   /**  */
+  monthlyRent?: number
+
+  /**  */
   floorMin?: number
 
   /**  */
@@ -4588,6 +4597,9 @@ export interface UnitsSummaryCreate {
 
   /**  */
   flatRentValueTo?: number
+
+  /**  */
+  monthlyRent?: number
 }
 
 export interface ListingImageCreate {

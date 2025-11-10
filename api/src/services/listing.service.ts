@@ -1512,6 +1512,7 @@ export class ListingService implements OnModuleInit {
                 rentType: group.rentType,
                 flatRentValueFrom: group.flatRentValueFrom,
                 flatRentValueTo: group.flatRentValueTo,
+                monthlyRent: group.monthlyRent,
                 totalAvailable: group.totalAvailable,
                 totalCount: group.totalCount,
                 unitGroupAmiLevels: {
@@ -2372,6 +2373,7 @@ export class ListingService implements OnModuleInit {
                   rentType: group.rentType,
                   flatRentValueFrom: group.flatRentValueFrom,
                   flatRentValueTo: group.flatRentValueTo,
+                  monthlyRent: group.monthlyRent,
                   sqFeetMin: group.sqFeetMin,
                   sqFeetMax: group.sqFeetMax,
                   totalCount: group.totalCount,

@@ -17,6 +17,7 @@ export default class UnitGroupsFormatter extends Formatter {
       unitGroup.bathroomMax = stringToNumber(unitGroup.bathroomMax)
       unitGroup.flatRentValueFrom = stringToNumber(unitGroup.flatRentValueFrom)
       unitGroup.flatRentValueTo = stringToNumber(unitGroup.flatRentValueTo)
+      unitGroup.monthlyRent = stringToNumber(unitGroup.monthlyRent)
       unitGroup.sqFeetMin = stringToNumber(unitGroup.sqFeetMin)
       unitGroup.sqFeetMax = stringToNumber(unitGroup.sqFeetMax)
       unitGroup.totalCount = stringToNumber(unitGroup.totalCount)

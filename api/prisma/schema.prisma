@@ -1028,8 +1028,9 @@ model UnitGroup {
   updatedAt                      DateTime                        @default(now()) @updatedAt @map("updated_at") @db.Timestamp(6)
   maxOccupancy                   Int?                            @map("max_occupancy")
   minOccupancy                   Int?                            @map("min_occupancy")
-  flatRentValueFrom              Decimal?                        @map("flat_rent_value_from")
-  flatRentValueTo                Decimal?                        @map("flat_rent_value_to")
+  flatRentValueFrom              Decimal?                        @map("flat_rent_value_from") @db.Decimal
+  flatRentValueTo                Decimal?                        @map("flat_rent_value_to") @db.Decimal
+  monthlyRent                    Decimal?                        @map("monthly_rent") @db.Decimal
   floorMin                       Int?                            @map("floor_min")
   floorMax                       Int?                            @map("floor_max")
   totalCount                     Int?                            @map("total_count")
