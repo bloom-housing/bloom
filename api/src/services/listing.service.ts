@@ -522,30 +522,10 @@ export class ListingService implements OnModuleInit {
                 return builtFilter.map((filt) => ({
                   marketingType: filt,
                 }));
-              } else if (availability === FilterAvailabilityEnum.openWaitlist) {
-                const builtFilter = buildFilter({
-                  $comparison: Compare['='],
-                  $include_nulls: false,
-                  value: true,
-                  key: ListingFilterKeys.availabilities,
-                  caseSensitive: true,
-                });
-                return {
-                  AND: builtFilter
-                    .map((filt) => ({
-                      unitGroups: {
-                        some: {
-                          [FilterAvailabilityEnum.openWaitlist]: filt,
-                        },
-                      },
-                    }))
-                    .concat(
-                      notUnderConstruction.map((filt) => ({
-                        marketingType: filt,
-                      })),
-                    ),
-                };
-              } else if (availability === FilterAvailabilityEnum.waitlistOpen) {
+              } else if (
+                availability === FilterAvailabilityEnum.openWaitlist ||
+                availability === FilterAvailabilityEnum.waitlistOpen
+              ) {
                 const builtFilter = buildFilter({
                   $comparison: Compare.IN,
                   $include_nulls: false,
