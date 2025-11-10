@@ -3,7 +3,7 @@ import { useFormContext } from "react-hook-form"
 import { Grid } from "@bloom-housing/ui-seeds"
 import { FieldGroup, t, Textarea } from "@bloom-housing/ui-components"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
-import { defaultFieldProps } from "../../../../lib/helpers"
+import { defaultFieldProps, getLabel } from "../../../../lib/helpers"
 import styles from "../ListingForm.module.scss"
 import { ListingDocuments } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { listingRequiredDocumentsOptions } from "@bloom-housing/shared-helpers"
@@ -18,9 +18,7 @@ const AdditionalDetails = (props: AdditionalDetailsProps) => {
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, errors, clearErrors, watch } = formMethods
-
-  const jurisdiction = watch("jurisdictions.id")
+  const { register, errors, clearErrors } = formMethods
 
   return (
     <>
@@ -33,12 +31,11 @@ const AdditionalDetails = (props: AdditionalDetailsProps) => {
           <Grid.Cell>
             <FieldGroup
               name={"selectedRequiredDocuments"}
-              groupLabel={
-                <span>
-                  {t("listings.requiredDocuments")}
-                  {jurisdiction && <span className={styles["asterisk"]}>{` ${"*"}`}</span>}
-                </span>
-              }
+              groupLabel={getLabel(
+                "selectedRequiredDocuments",
+                props.requiredFields,
+                t("listings.requiredDocuments")
+              )}
               register={register}
               type="checkbox"
               fields={listingRequiredDocumentsOptions.map((key) => ({
