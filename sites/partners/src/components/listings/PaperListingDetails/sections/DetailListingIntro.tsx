@@ -19,6 +19,23 @@ const DetailListingIntro = () => {
     listing.jurisdictions.id
   )
 
+  const enableNonRegulatedListings = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableNonRegulatedListings,
+    listing.jurisdictions.id
+  )
+
+  let developerFieldTitle = t("listings.developer")
+  if (enableHousingDeveloperOwner) {
+    developerFieldTitle = t("listings.housingDeveloperOwner")
+  } else if (
+    listing.listingType === EnumListingListingType.regulated ||
+    !enableNonRegulatedListings
+  ) {
+    developerFieldTitle = t("listings.developer")
+  } else {
+    developerFieldTitle = t("listings.propertyManager")
+  }
+
   return (
     <SectionWithGrid heading={t("listings.sections.introTitle")} inset>
       <Grid.Row>
@@ -35,14 +52,7 @@ const DetailListingIntro = () => {
           </FieldValue>
         </Grid.Cell>
         <Grid.Cell>
-          <FieldValue
-            id="developer"
-            label={
-              enableHousingDeveloperOwner
-                ? t("listings.housingDeveloperOwner")
-                : t("listings.developer")
-            }
-          >
+          <FieldValue id="developer" label={developerFieldTitle}>
             {getDetailFieldString(listing.developer)}
           </FieldValue>
         </Grid.Cell>
