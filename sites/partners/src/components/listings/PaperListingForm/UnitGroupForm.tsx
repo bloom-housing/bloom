@@ -430,6 +430,10 @@ const UnitGroupForm = ({
                           error={fieldHasError(errors?.flatRentValueFrom)}
                           type="number"
                           prepend="$"
+                          onChange={() => {
+                            void trigger("flatRentValueTo")
+                            void trigger("flatRentValueFrom")
+                          }}
                         />
                       </Grid.Cell>
                       <Grid.Cell>
@@ -444,6 +448,10 @@ const UnitGroupForm = ({
                           error={fieldHasError(errors?.flatRentValueTo)}
                           type="number"
                           prepend="$"
+                          onChange={() => {
+                            void trigger("flatRentValueTo")
+                            void trigger("flatRentValueFrom")
+                          }}
                         />
                       </Grid.Cell>
                     </Grid.Row>
