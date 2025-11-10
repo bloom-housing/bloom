@@ -6,8 +6,8 @@ export default class BooleansFormatter extends Formatter {
   /** Format all of the Yes/No questions in the form */
   process() {
     this.processBoolean("hasHudEbllClearance", {
-      when: this.data.hasHudEbllClearance === YesNoEnum.yes,
-      falseCase: () => (this.data.hasHudEbllClearance === YesNoEnum.no ? false : null),
+      when: this.data.listingHasHudEbllClearance === YesNoEnum.yes,
+      falseCase: () => (this.data.listingHasHudEbllClearance === YesNoEnum.no ? false : null),
     })
     this.processBoolean("applicationDropOffAddressType", {
       when:

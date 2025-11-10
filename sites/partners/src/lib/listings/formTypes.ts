@@ -78,7 +78,7 @@ export type FormListing = Omit<Listing, "countyCode"> & {
   listingAvailabilityQuestion?: string
   waitlistOpenQuestion?: YesNoEnum
   waitlistSizeQuestion?: YesNoEnum
-  hasHudEbllClearance?: YesNoEnum
+  listingHasHudEbllClearance?: YesNoEnum
   whereApplicationsDroppedOff?: ApplicationAddressTypeEnum | AnotherAddressEnum
   whereApplicationsPickedUp?: ApplicationAddressTypeEnum | AnotherAddressEnum
   whereApplicationsMailedIn?: ApplicationAddressTypeEnum | AnotherAddressEnum
@@ -154,7 +154,6 @@ export const formDefaults: FormListing = {
   listingsBuildingAddress: null,
   buildingTotalUnits: 0,
   developer: null,
-  hasHudEbllClearance: null,
   householdSizeMax: 0,
   householdSizeMin: 0,
   neighborhood: undefined,

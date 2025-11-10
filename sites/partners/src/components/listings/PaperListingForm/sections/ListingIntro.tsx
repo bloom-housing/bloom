@@ -172,24 +172,26 @@ const ListingIntro = (props: ListingIntroProps) => {
           <Grid.Row columns={1}>
             <Grid.Cell>
               <FieldGroup
-                name="hasHudEbllClearance"
+                name="listingHasHudEbllClearance"
                 type="radio"
                 register={register}
                 groupLabel={t("listings.hasEbllClearanceTitle")}
                 fields={[
                   {
-                    id: "ebllYes",
+                    id: "listingHasHudEbllClearanceYes",
                     label: t("t.yes"),
                     value: YesNoEnum.yes,
+                    defaultChecked: listing?.hasHudEbllClearance,
                   },
                   {
-                    id: "ebllNo",
+                    id: "listingHasHudEbllClearanceNo",
                     label: t("t.no"),
                     value: YesNoEnum.no,
+                    defaultChecked: !listing?.hasHudEbllClearance,
                   },
                 ]}
-                error={fieldHasError(errors.hasEbllClearance)}
-                errorMessage={fieldMessage(errors.hasEbllClearance)}
+                error={fieldHasError(errors.listingHasHudEbllClearance)}
+                errorMessage={fieldMessage(errors.listingHasHudEbllClearance)}
               />
             </Grid.Cell>
           </Grid.Row>
