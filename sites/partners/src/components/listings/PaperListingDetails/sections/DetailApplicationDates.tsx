@@ -192,7 +192,10 @@ const DetailApplicationDates = () => {
                   listing.marketingMonth &&
                   t(`months.${listing.marketingMonth}`)}{" "}
                 {listing.marketingYear && listing.marketingYear}
-                {!listing.marketingSeason && !listing.marketingYear && t("t.none")}
+                {!listing.marketingSeason &&
+                  !listing.marketingYear &&
+                  !listing.marketingMonth &&
+                  t("t.none")}
               </FieldValue>
             </Grid.Cell>
           </Grid.Row>
