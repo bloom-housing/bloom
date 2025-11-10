@@ -571,7 +571,10 @@ export class ListingService implements OnModuleInit {
                 const builtFilter = buildFilter({
                   $comparison: Compare['='],
                   $include_nulls: false,
-                  value: ReviewOrderTypeEnum.waitlist,
+                  value: [
+                    ReviewOrderTypeEnum.waitlist,
+                    ReviewOrderTypeEnum.waitlistLottery,
+                  ],
                   key: ListingFilterKeys.availabilities,
                   caseSensitive: true,
                 });
