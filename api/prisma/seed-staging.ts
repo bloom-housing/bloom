@@ -1,5 +1,6 @@
 import {
   ApplicationSubmissionTypeEnum,
+  NeighborhoodAmenitiesEnum,
   LanguagesEnum,
   MonthlyRentDeterminationTypeEnum,
   MultiselectQuestions,
@@ -63,6 +64,7 @@ export const stagingSeed = async (
         FeatureFlagEnum.enablePartnerSettings,
         FeatureFlagEnum.enableSection8Question,
         FeatureFlagEnum.enableSingleUseCode,
+        FeatureFlagEnum.enableSupportAdmin,
         FeatureFlagEnum.enableUtilitiesIncluded,
         FeatureFlagEnum.enableWaitlistLottery,
         FeatureFlagEnum.enableWhatToExpectAdditionalField,
@@ -155,7 +157,11 @@ export const stagingSeed = async (
   });
   const angelopolisJurisdiction = await prismaClient.jurisdictions.create({
     data: jurisdictionFactory('Angelopolis', {
-      featureFlags: [FeatureFlagEnum.enableHousingDeveloperOwner],
+      featureFlags: [FeatureFlagEnum.enableNeighborhoodAmenities, FeatureFlagEnum.enableHousingDeveloperOwner],
+      visibleNeighborhoodAmenities: [
+        NeighborhoodAmenitiesEnum.groceryStores,
+        NeighborhoodAmenitiesEnum.pharmacies,
+      ],
       requiredListingFields: [
         'listingsBuildingAddress',
         'name',
