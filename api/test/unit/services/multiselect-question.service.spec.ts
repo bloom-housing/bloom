@@ -393,6 +393,13 @@ describe('Testing multiselect question service', () => {
           name: 'jurisdiction3',
           ordinal: undefined,
         },
+        jurisdictions: [
+          {
+            id: mockedMultiselectQuestion.jurisdiction.id,
+            name: 'jurisdiction3',
+            ordinal: undefined,
+          },
+        ],
       });
 
       expect(prisma.multiselectQuestions.findUnique).toHaveBeenCalledWith({
@@ -536,6 +543,13 @@ describe('Testing multiselect question service', () => {
           name: 'jurisdiction2',
           ordinal: undefined,
         },
+        jurisdictions: [
+          {
+            id: mockedMultiselectQuestion.jurisdiction.id,
+            name: 'jurisdiction2',
+            ordinal: undefined,
+          },
+        ],
       });
 
       delete params['jurisdictions'];
@@ -574,6 +588,15 @@ describe('Testing multiselect question service', () => {
           MultiselectQuestionsApplicationSectionEnum.preferences,
         jurisdiction: { name: 'jurisdiction1', id: 'jurisdictionId' },
       });
+      prisma.$transaction = jest.fn().mockResolvedValue([
+        {
+          ...mockedMultiselectQuestion,
+          text: '',
+          applicationSection:
+            MultiselectQuestionsApplicationSectionEnum.preferences,
+          jurisdiction: { name: 'jurisdiction1', id: 'jurisdictionId' },
+        },
+      ]);
 
       prisma.jurisdictions.findFirstOrThrow = jest.fn().mockResolvedValue({
         name: 'jurisdiction1',
@@ -661,6 +684,19 @@ describe('Testing multiselect question service', () => {
         status: MultiselectQuestionsStatusEnum.draft,
         text: '',
       });
+      prisma.$transaction = jest.fn().mockResolvedValue([
+        {
+          ...mockedMultiselectQuestion,
+          applicationSection:
+            MultiselectQuestionsApplicationSectionEnum.preferences,
+          isExclusive: false,
+          jurisdiction: { name: 'jurisdiction1', id: 'jurisdictionId' },
+          jurisdictions: undefined,
+          name: 'name change',
+          status: MultiselectQuestionsStatusEnum.draft,
+          text: '',
+        },
+      ]);
 
       prisma.jurisdictions.findFirstOrThrow = jest.fn().mockResolvedValue({
         name: 'jurisdiction1',
@@ -688,6 +724,13 @@ describe('Testing multiselect question service', () => {
           name: 'jurisdiction1',
           ordinal: undefined,
         },
+        jurisdictions: [
+          {
+            id: 'jurisdictionId',
+            name: 'jurisdiction1',
+            ordinal: undefined,
+          },
+        ],
       });
 
       expect(prisma.multiselectQuestions.findUnique).toHaveBeenCalledWith({
@@ -729,6 +772,7 @@ describe('Testing multiselect question service', () => {
         .fn()
         .mockResolvedValue(null);
       prisma.multiselectQuestions.update = jest.fn().mockResolvedValue(null);
+      prisma.$transaction = jest.fn().mockResolvedValue([]);
 
       const params: MultiselectQuestionUpdate = {
         id: 'example id',

@@ -83,14 +83,6 @@ export class MultiselectQuestionService {
       });
 
     rawMultiselectQuestions = rawMultiselectQuestions.map((msq) => {
-      if (
-        doJurisdictionHaveFeatureFlagSet(
-          msq.jurisdiction as unknown as Jurisdiction,
-          FeatureFlagEnum.enableV2MSQ,
-        )
-      ) {
-        return msq;
-      }
       return {
         ...msq,
         jurisdictions: [msq.jurisdiction],
@@ -168,16 +160,10 @@ export class MultiselectQuestionService {
       );
     }
 
-    if (
-      !doJurisdictionHaveFeatureFlagSet(
-        rawMultiselectQuestion.jurisdiction as unknown as Jurisdiction,
-        FeatureFlagEnum.enableV2MSQ,
-      )
-    ) {
-      rawMultiselectQuestion['jurisdictions'] = [
-        rawMultiselectQuestion.jurisdiction,
-      ];
-    }
+    // TODO: Can be removed after MSQ refactor
+    rawMultiselectQuestion['jurisdictions'] = [
+      rawMultiselectQuestion.jurisdiction,
+    ];
 
     return mapTo(MultiselectQuestion, rawMultiselectQuestion);
   }
@@ -285,11 +271,10 @@ export class MultiselectQuestionService {
         include: includeViews.fundamentals,
       });
 
-    if (!enableV2MSQ) {
-      rawMultiselectQuestion['jurisdictions'] = [
-        rawMultiselectQuestion.jurisdiction,
-      ];
-    }
+    // TODO: Can be removed after MSQ refactor
+    rawMultiselectQuestion['jurisdictions'] = [
+      rawMultiselectQuestion.jurisdiction,
+    ];
     return mapTo(MultiselectQuestion, rawMultiselectQuestion);
   }
 
@@ -352,8 +337,17 @@ export class MultiselectQuestionService {
       );
     }
 
-    const rawMultiselectQuestion =
-      await this.prisma.multiselectQuestions.update({
+    // Wrap the deletion and update in one transaction so that multiselectOptions aren't lost if update fails
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const transactions = await this.prisma.$transaction([
+      // delete the multiselect options
+      this.prisma.multiselectOptions.deleteMany({
+        where: {
+          multiselectQuestionId: id,
+        },
+      }),
+      // update the multiselect question
+      this.prisma.multiselectQuestions.update({
         data: {
           ...updateData,
           id: undefined,
@@ -377,7 +371,8 @@ export class MultiselectQuestionService {
             ? {
                 createMany: {
                   data: multiselectOptions?.map((option) => {
-                    // TODO: Can be removed after MSQ refactor
+                    delete option['id'];
+                    // TODO: The following 5 deletes can be removed after MSQ refactor
                     delete option['collectAddress'];
                     delete option['collectName'];
                     delete option['collectRelationship'];
@@ -397,14 +392,17 @@ export class MultiselectQuestionService {
           id: id,
         },
         include: includeViews.fundamentals,
-      });
+      }),
+    ]);
+    const rawMultiselectQuestion = transactions[
+      transactions.length - 1
+    ] as unknown as MultiselectQuestion;
 
-    // TODO: Temporary until front end accepts MSQ refactor
-    if (!enableV2MSQ) {
-      rawMultiselectQuestion['jurisdictions'] = [
-        rawMultiselectQuestion.jurisdiction,
-      ];
-    }
+    // TODO: Can be removed after MSQ refactor
+    rawMultiselectQuestion['jurisdictions'] = [
+      rawMultiselectQuestion.jurisdiction,
+    ];
+
     return mapTo(MultiselectQuestion, rawMultiselectQuestion);
   }
 
