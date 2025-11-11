@@ -10,8 +10,18 @@ Cloud Native Computing Foundation.
   is a set of resources that are all managed together. Each root module has a state file that
   records the results of the latest apply operation.
 
+   - [bloom_dev](./tofu_root_modules/bloom_dev/README.md): Configures the bloom-dev AWS account.
    - [bloom_dev_deployer_permission_set](./tofu_root_modules/bloom_dev_deployer_permission_set/README.md):
      Configures the bloom-dev-deployer permission set that is assigned on the bloom-dev account.
+
+- [tofu_importable_modules](./tofu_importable_modules): Contains all the Open Tofu importable
+  modules. An importable module is a reusable set of resources configured through input
+  parameters. Root modules import importable modules.
+
+   - [bloom_deployment](./tofu_importable_modules/bloom_deployment/README.md): Configures all the
+     resources needed for a Bloom deployment in a single AWS account.
+
+
 
 ## Infrastructure-as-code mental model
 
@@ -122,6 +132,8 @@ directory.
    (Log in via https://d-9067ac8222.awsapps.com/start). If there are unexpected results, go back to
    step 1. In some cases you may have to manually modify or delete resources directly to 'unstick'
    Open Tofu.
+6. To delete only the resources provisioned by the bloom-dev module, run `tofu destroy
+   -target=module.bloom-dev`.
 
 ## AWS setup done manually
 
