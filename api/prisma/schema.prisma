@@ -998,6 +998,12 @@ model ListingNeighborhoodAmenities {
   parksAndCommunityCenters String?   @map("parks_and_community_centers")
   schools                  String?
   publicTransportation     String?   @map("public_transportation")
+  shoppingVenues           String?   @map("shopping_venues")
+  hospitals                String?
+  seniorCenter             String?   @map("senior_center")
+  recreationalFacilities   String?   @map("recreational_facilities")
+  playgrounds              String?
+  busStops                 String?   @map("bus_stops")
   listings                 Listings?
 
   @@map("listing_neighborhood_amenities")
@@ -1304,6 +1310,12 @@ enum NeighborhoodAmenitiesEnum {
   parksAndCommunityCenters
   pharmacies
   healthCareResources
+  shoppingVenues
+  hospitals
+  seniorCenter
+  recreationalFacilities
+  playgrounds
+  busStops
 
   @@map("neighborhood_amenities_enum")
 }

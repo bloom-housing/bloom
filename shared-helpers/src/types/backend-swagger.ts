@@ -3923,6 +3923,24 @@ export interface ListingNeighborhoodAmenities {
 
   /**  */
   healthCareResources?: string
+
+  /**  */
+  shoppingVenues?: string
+
+  /**  */
+  hospitals?: string
+
+  /**  */
+  seniorCenter?: string
+
+  /**  */
+  recreationalFacilities?: string
+
+  /**  */
+  playgrounds?: string
+
+  /**  */
+  busStops?: string
 }
 
 export interface Listing {
@@ -7557,6 +7575,12 @@ export enum NeighborhoodAmenitiesEnum {
   "parksAndCommunityCenters" = "parksAndCommunityCenters",
   "pharmacies" = "pharmacies",
   "healthCareResources" = "healthCareResources",
+  "shoppingVenues" = "shoppingVenues",
+  "hospitals" = "hospitals",
+  "seniorCenter" = "seniorCenter",
+  "recreationalFacilities" = "recreationalFacilities",
+  "playgrounds" = "playgrounds",
+  "busStops" = "busStops",
 }
 
 export enum FeatureFlagEnum {

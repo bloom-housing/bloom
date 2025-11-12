@@ -36,6 +36,12 @@ describe("NeighborhoodAmenities", () => {
       NeighborhoodAmenitiesEnum.parksAndCommunityCenters,
       NeighborhoodAmenitiesEnum.pharmacies,
       NeighborhoodAmenitiesEnum.healthCareResources,
+      NeighborhoodAmenitiesEnum.shoppingVenues,
+      NeighborhoodAmenitiesEnum.hospitals,
+      NeighborhoodAmenitiesEnum.seniorCenter,
+      NeighborhoodAmenitiesEnum.recreationalFacilities,
+      NeighborhoodAmenitiesEnum.playgrounds,
+      NeighborhoodAmenitiesEnum.busStops,
     ],
   }
 

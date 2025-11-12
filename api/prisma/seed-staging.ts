@@ -165,6 +165,12 @@ export const stagingSeed = async (
       visibleNeighborhoodAmenities: [
         NeighborhoodAmenitiesEnum.groceryStores,
         NeighborhoodAmenitiesEnum.pharmacies,
+        NeighborhoodAmenitiesEnum.shoppingVenues,
+        NeighborhoodAmenitiesEnum.hospitals,
+        NeighborhoodAmenitiesEnum.seniorCenter,
+        NeighborhoodAmenitiesEnum.recreationalFacilities,
+        NeighborhoodAmenitiesEnum.playgrounds,
+        NeighborhoodAmenitiesEnum.busStops,
       ],
       requiredListingFields: [
         'listingsBuildingAddress',
