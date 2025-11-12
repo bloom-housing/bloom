@@ -1142,9 +1142,6 @@ export class ListingService implements OnModuleInit {
     if (listing.listingsLeasingAgentAddress) {
       listing.leasingAgentAddress = listing.listingsLeasingAgentAddress;
     }
-    if (listing.requiredDocumentsList) {
-      listing.requiredDocumentsList = listing.requiredDocumentsList;
-    }
     if (listing.listingUtilities) {
       listing.utilities = listing.listingUtilities;
     }
