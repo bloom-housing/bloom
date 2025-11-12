@@ -144,7 +144,7 @@ describe("<Neighborhood>", () => {
           {
             id: "jurisdiction1",
             featureFlags: [
-              { name: FeatureFlagEnum.enableNeighborhoodAmenitiesDropdown, value: true },
+              { name: FeatureFlagEnum.enableNeighborhoodAmenitiesDropdown, active: true },
             ],
           } as unknown as Jurisdiction
         }
