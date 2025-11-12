@@ -27,6 +27,7 @@ type UnitFormProps = {
   defaultUnit: TempUnit | undefined
   nextId: number
   draft: boolean
+  jurisdiction: string
   isNonRegulated?: boolean
 }
 
@@ -36,6 +37,7 @@ const UnitForm = ({
   defaultUnit,
   nextId,
   draft,
+  jurisdiction,
   isNonRegulated,
 }: UnitFormProps) => {
   const { amiChartsService } = useContext(AuthContext)
@@ -58,12 +60,10 @@ const UnitForm = ({
     control,
     reset,
     clearErrors,
-    watch,
   } = useForm({
     mode: "onChange",
     shouldFocusError: false,
   })
-  const jurisdiction: string = watch("jurisdictions.id")
   /**
    * fetch form options
    */

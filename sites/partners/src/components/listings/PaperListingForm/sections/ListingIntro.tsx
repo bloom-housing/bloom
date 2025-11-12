@@ -1,13 +1,14 @@
 import React, { useContext } from "react"
 import { useFormContext } from "react-hook-form"
+import { t, Field, SelectOption, Select, FieldGroup } from "@bloom-housing/ui-components"
+import { Grid } from "@bloom-housing/ui-seeds"
 import {
   EnumListingListingType,
   FeatureFlagEnum,
   Jurisdiction,
   YesNoEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { t, Field, SelectOption, Select, FieldGroup } from "@bloom-housing/ui-components"
-import { Grid } from "@bloom-housing/ui-seeds"
+import { AuthContext } from "@bloom-housing/shared-helpers"
 import {
   fieldMessage,
   fieldHasError,
@@ -16,11 +17,27 @@ import {
 } from "../../../../lib/helpers"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 import styles from "../ListingForm.module.scss"
-import { AuthContext } from "@bloom-housing/shared-helpers"
 
 interface ListingIntroProps {
   jurisdictions: Jurisdiction[]
   requiredFields: string[]
+}
+
+const getDeveloperLabel = (
+  jurisdiction: string,
+  listingType: EnumListingListingType,
+  enableHousingDeveloperOwner: boolean,
+  enableNonRegulatedListings: boolean
+) => {
+  if (!jurisdiction) return t("listings.developer")
+
+  if (enableHousingDeveloperOwner) {
+    return t("listings.housingDeveloperOwner")
+  } else if (listingType === EnumListingListingType.regulated || !enableNonRegulatedListings) {
+    return t("listings.developer")
+  } else {
+    return t("listings.propertyManager")
+  }
 }
 
 const ListingIntro = (props: ListingIntroProps) => {
@@ -54,15 +71,6 @@ const ListingIntro = (props: ListingIntroProps) => {
   ]
 
   const defaultJurisdiction = props.jurisdictions.length === 1 ? props.jurisdictions[0].id : ""
-
-  let developerFieldTitle = t("listings.developer")
-  if (enableHousingDeveloperOwner) {
-    developerFieldTitle = t("listings.housingDeveloperOwner")
-  } else if (listingType === EnumListingListingType.regulated || !enableNonRegulatedListings) {
-    developerFieldTitle = t("listings.developer")
-  } else {
-    developerFieldTitle = t("listings.propertyManager")
-  }
 
   return (
     <>
@@ -150,6 +158,7 @@ const ListingIntro = (props: ListingIntroProps) => {
                     }
                   },
                   "aria-required": fieldIsRequired("jurisdictions", props.requiredFields),
+                  "aria-hidden": !!defaultJurisdiction,
                 }}
               />
             </Grid.Cell>
@@ -159,7 +168,12 @@ const ListingIntro = (props: ListingIntroProps) => {
               register={register}
               {...defaultFieldProps(
                 "developer",
-                developerFieldTitle,
+                getDeveloperLabel(
+                  jurisdiction,
+                  listingType,
+                  enableHousingDeveloperOwner,
+                  enableNonRegulatedListings
+                ),
                 props.requiredFields,
                 errors,
                 clearErrors

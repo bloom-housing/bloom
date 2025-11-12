@@ -505,8 +505,8 @@ const ListingForm = ({ listing, editMode, setListingName, updateListing }: Listi
                           />
                           <CommunityType listing={listing} requiredFields={requiredFields} />
                           <Units
+                            jurisdiction={selectedJurisdiction}
                             disableUnitsAccordion={listing?.disableUnitsAccordion}
-                            featureFlags={activeFeatureFlags}
                             requiredFields={requiredFields}
                             setUnitGroups={setUnitGroups}
                             setUnits={setUnits}
