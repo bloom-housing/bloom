@@ -7607,6 +7607,7 @@ export enum FeatureFlagEnum {
   "enableMarketingStatus" = "enableMarketingStatus",
   "enableMarketingStatusMonths" = "enableMarketingStatusMonths",
   "enableNeighborhoodAmenities" = "enableNeighborhoodAmenities",
+  "enableNeighborhoodAmenitiesDropdown" = "enableNeighborhoodAmenitiesDropdown",
   "enableNonRegulatedListings" = "enableNonRegulatedListings",
   "enablePartnerDemographics" = "enablePartnerDemographics",
   "enablePartnerSettings" = "enablePartnerSettings",
