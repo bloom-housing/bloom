@@ -247,8 +247,26 @@ describe("NeighborhoodAmenities", () => {
     expect(select).toBeInTheDocument()
 
     const options = within(select).getAllByRole("option")
-    // distance options + empty option
-    expect(options.length).toBe(11)
+
+    const optionTexts = options.map((option) => option.textContent)
+    const expectedDistanceOptions = [
+      "On site",
+      "One block",
+      "Two blocks",
+      "Three blocks",
+      "Four blocks",
+      "Five blocks",
+      "Within one mile",
+      "Within two miles",
+      "Within three miles",
+      "Within four miles",
+    ]
+    expect(optionTexts).toContain("Select one")
+    expect(optionTexts.length).toBe(expectedDistanceOptions.length + 1)
+
+    for (const distanceOption of expectedDistanceOptions) {
+      expect(optionTexts).toContain(distanceOption)
+    }
   })
 
   it("should render partial amenities in 1 row when there are less or equal to 2 amenities", async () => {
