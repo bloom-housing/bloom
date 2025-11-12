@@ -4,9 +4,15 @@ import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { ListingContext } from "../../ListingContext"
 import { getDetailFieldString } from "./helpers"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
+import { AuthContext } from "@bloom-housing/shared-helpers"
+import {
+  EnumListingListingType,
+  FeatureFlagEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 const DetailAdditionalDetails = () => {
   const listing = useContext(ListingContext)
+  const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
 
   const getRequiredDocuments = () => {
     let documentsExist = false
@@ -25,18 +31,35 @@ const DetailAdditionalDetails = () => {
     return documentsExist ? <ul className={"flex flex-wrap"}>{documents}</ul> : <>{t("t.none")}</>
   }
 
+  const enableNonRegulatedListings = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableNonRegulatedListings,
+    listing.jurisdictions.id
+  )
+
+  const showRequiredDocumentsListField =
+    enableNonRegulatedListings && listing.listingType === EnumListingListingType.nonRegulated
+
   return (
     <SectionWithGrid heading={t("listings.sections.additionalDetails")} inset>
-      <Grid.Row>
-        <GridCell>
-          <FieldValue id="requiredDocumentsList" label={t("listings.requiredDocuments")}>
-            {getRequiredDocuments()}
-          </FieldValue>
-        </GridCell>
-      </Grid.Row>
+      {showRequiredDocumentsListField && (
+        <Grid.Row>
+          <GridCell>
+            <FieldValue id="requiredDocumentsList" label={t("listings.requiredDocuments")}>
+              {getRequiredDocuments()}
+            </FieldValue>
+          </GridCell>
+        </Grid.Row>
+      )}
       <Grid.Row>
         <Grid.Cell>
-          <FieldValue id="requiredDocuments" label={t("listings.requiredDocumentsAdditionalInfo")}>
+          <FieldValue
+            id="requiredDocuments"
+            label={
+              showRequiredDocumentsListField
+                ? t("listings.requiredDocumentsAdditionalInfo")
+                : t("listings.requiredDocuments")
+            }
+          >
             {getDetailFieldString(listing.requiredDocuments)}
           </FieldValue>
         </Grid.Cell>
