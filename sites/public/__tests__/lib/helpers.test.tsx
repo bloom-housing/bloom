@@ -12,6 +12,7 @@ import {
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { listing, jurisdiction } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import {
+  getApplicationSeason,
   getListingStatusMessage,
   getListingStatusMessageContent,
   getStatusPrefix,
@@ -563,5 +564,34 @@ describe("helpers", () => {
       )
     )
     expect(view.getByText("Custom content")).toBeDefined()
+  })
+
+  describe("getApplicationSeason", () => {
+    it("should return empty if no data", () => {
+      expect(getApplicationSeason(null, null, null)).toEqual(null)
+    })
+    it("should return only month", () => {
+      expect(getApplicationSeason(null, MonthEnum.april, null)).toEqual(
+        "Residents should apply in April"
+      )
+    })
+    it("should return only season", () => {
+      expect(getApplicationSeason(MarketingSeasonEnum.spring, null, null)).toEqual(
+        "Residents should apply in Spring"
+      )
+    })
+    it("should return only year", () => {
+      expect(getApplicationSeason(null, null, 2027)).toEqual("Residents should apply in 2027")
+    })
+    it("should return month and year", () => {
+      expect(getApplicationSeason(null, MonthEnum.april, 2027)).toEqual(
+        "Residents should apply in April 2027"
+      )
+    })
+    it("should return season and year", () => {
+      expect(getApplicationSeason(MarketingSeasonEnum.spring, null, 2027)).toEqual(
+        "Residents should apply in Spring 2027"
+      )
+    })
   })
 })
