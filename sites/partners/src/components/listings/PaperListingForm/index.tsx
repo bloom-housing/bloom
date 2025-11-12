@@ -9,6 +9,7 @@ import ChevronLeftIcon from "@heroicons/react/20/solid/ChevronLeftIcon"
 import ChevronRightIcon from "@heroicons/react/20/solid/ChevronRightIcon"
 import { AuthContext, MessageContext, listingSectionQuestions } from "@bloom-housing/shared-helpers"
 import {
+  EnumListingListingType,
   FeatureFlag,
   FeatureFlagEnum,
   Jurisdiction,
@@ -215,6 +216,10 @@ const ListingForm = ({ listing, editMode, setListingName, updateListing }: Listi
     activeFeatureFlags?.find((flag) => flag.name === FeatureFlagEnum.disableListingPreferences)
       ?.active || false
 
+  const enableNonRegulatedListings =
+    activeFeatureFlags?.find((flag) => flag.name === FeatureFlagEnum.enableNonRegulatedListings)
+      ?.active || false
+
   useEffect(() => {
     if (listing?.units) {
       const tempUnits = listing.units.map((unit, i) => ({
@@ -341,6 +346,10 @@ const ListingForm = ({ listing, editMode, setListingName, updateListing }: Listi
 
           if (!enableSection8) {
             formData.listingSection8Acceptance = YesNoEnum.no
+          }
+
+          if (!enableNonRegulatedListings) {
+            formData.listingType = null
           }
 
           if (successful) {
