@@ -706,7 +706,7 @@ export class ListingService implements OnModuleInit {
           FilterAvailabilityEnum.waitlistOpen
         ) {
           const builtFilter = buildFilter({
-            $comparison: filter.$comparison,
+            $comparison: Compare.IN,
             $include_nulls: false,
             value: [
               ReviewOrderTypeEnum.waitlist,
