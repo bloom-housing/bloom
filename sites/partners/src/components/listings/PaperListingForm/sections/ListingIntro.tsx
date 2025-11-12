@@ -21,7 +21,6 @@ import { AuthContext } from "@bloom-housing/shared-helpers"
 interface ListingIntroProps {
   jurisdictions: Jurisdiction[]
   requiredFields: string[]
-  isNonRegulatedListing?: boolean
 }
 
 const ListingIntro = (props: ListingIntroProps) => {
