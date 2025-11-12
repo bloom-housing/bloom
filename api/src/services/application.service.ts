@@ -642,7 +642,7 @@ export class ApplicationService {
       transactions.push(
         this.prisma.applications.updateMany({
           data: { isNewest: false },
-          where: { userId: requestingUser.id },
+          where: { userId: requestingUser.id, isNewest: true },
         }),
       );
     }

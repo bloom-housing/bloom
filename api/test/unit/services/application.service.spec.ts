@@ -1543,6 +1543,7 @@ describe('Testing application service', () => {
       },
       where: {
         userId: 'requestingUser id',
+        isNewest: true,
       },
     });
     expect(prisma.applications.create).toHaveBeenCalledWith({
