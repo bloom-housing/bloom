@@ -8,6 +8,7 @@ import {
   PrismaClient,
   ReservedCommunityTypes,
   ReviewOrderTypeEnum,
+  ListingTypeEnum,
 } from '@prisma/client';
 import { randomInt } from 'crypto';
 import dayjs from 'dayjs';
@@ -273,7 +274,9 @@ export const listingFactory = async (
       optionalParams?.optionalFeatures,
       optionalParams?.optionalUtilities,
     ),
-    ...listingsRequiredDocuments(optionalParams?.requiredDocumentsList),
+    ...(optionalParams?.listing?.listingType === ListingTypeEnum.nonRegulated
+      ? listingsRequiredDocuments(optionalParams?.requiredDocumentsList)
+      : {}),
     ...previousListing,
   };
 };
