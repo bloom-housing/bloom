@@ -161,9 +161,7 @@ describe("NeighborhoodAmenities", () => {
       expect(screen.getByRole("heading", { name: "Neighborhood amenities" })).toBeInTheDocument()
     })
     expect(
-      screen.getByText(
-        "Provide details about any local amenities including grocery stores, health services and parks within 2 miles of your listing."
-      )
+      screen.getByText("Please provide details about any nearby amenities.")
     ).toBeInTheDocument()
 
     // Test all visible amenities are rendered as SELECT dropdowns
