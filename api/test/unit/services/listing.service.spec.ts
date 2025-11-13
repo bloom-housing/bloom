@@ -1419,22 +1419,16 @@ describe('Testing listing service', () => {
           {
             OR: [
               {
-                OR: [
+                AND: [
                   {
-                    AND: [
-                      {
-                        unitGroups: {
-                          some: { openWaitlist: { equals: true } },
-                        },
-                      },
-                      { marketingType: { not: { equals: 'comingSoon' } } },
-                    ],
+                    unitGroups: {
+                      some: { openWaitlist: { equals: true } },
+                    },
                   },
                   {
-                    AND: [
-                      { reviewOrderType: { equals: 'waitlistLottery' } },
-                      { marketingType: { not: { equals: 'comingSoon' } } },
-                    ],
+                    marketingType: {
+                      not: { equals: MarketingTypeEnum.comingSoon },
+                    },
                   },
                 ],
               },
@@ -1521,42 +1515,16 @@ describe('Testing listing service', () => {
           {
             OR: [
               {
-                OR: [
+                AND: [
                   {
-                    AND: [
-                      {
-                        unitGroups: {
-                          some: {
-                            openWaitlist: {
-                              equals: true,
-                            },
-                          },
-                        },
-                      },
-                      {
-                        marketingType: {
-                          not: {
-                            equals: 'comingSoon',
-                          },
-                        },
-                      },
-                    ],
+                    unitGroups: {
+                      some: { openWaitlist: { equals: true } },
+                    },
                   },
                   {
-                    AND: [
-                      {
-                        reviewOrderType: {
-                          equals: 'waitlistLottery',
-                        },
-                      },
-                      {
-                        marketingType: {
-                          not: {
-                            equals: 'comingSoon',
-                          },
-                        },
-                      },
-                    ],
+                    marketingType: {
+                      not: { equals: MarketingTypeEnum.comingSoon },
+                    },
                   },
                 ],
               },
@@ -1645,6 +1613,7 @@ describe('Testing listing service', () => {
         } as ListingFilterParams,
       ];
       const whereClause = service.buildWhereClause(filter, '');
+
       expect(whereClause).toStrictEqual({
         AND: [
           {
@@ -1653,34 +1622,12 @@ describe('Testing listing service', () => {
                 AND: [
                   {
                     unitGroups: {
-                      some: {
-                        openWaitlist: {
-                          equals: true,
-                        },
-                      },
+                      some: { openWaitlist: { equals: true } },
                     },
                   },
                   {
                     marketingType: {
-                      not: {
-                        equals: 'comingSoon',
-                      },
-                    },
-                  },
-                ],
-              },
-              {
-                AND: [
-                  {
-                    reviewOrderType: {
-                      equals: 'waitlistLottery',
-                    },
-                  },
-                  {
-                    marketingType: {
-                      not: {
-                        equals: 'comingSoon',
-                      },
+                      not: { equals: MarketingTypeEnum.comingSoon },
                     },
                   },
                 ],
