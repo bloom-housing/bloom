@@ -2012,27 +2012,6 @@ export class ListingService implements OnModuleInit {
       ];
     }
 
-    if (
-      !incomingDto.requiredDocumentsList &&
-      storedListing.requiredDocumentsList?.id
-    ) {
-      await this.prisma.listings.update({
-        data: {
-          requiredDocumentsList: {
-            disconnect: {
-              id: storedListing.requiredDocumentsList.id,
-            },
-          },
-        },
-        where: { id: storedListing.id },
-      });
-      await this.prisma.listingDocuments.delete({
-        where: {
-          id: storedListing.requiredDocumentsList.id,
-        },
-      });
-    }
-
     const pickUpAddress = await this.addressUpdate(
       storedListing,
       incomingDto,
@@ -2548,6 +2527,27 @@ export class ListingService implements OnModuleInit {
       } else {
         await this.afsService.process(incomingDto.id);
       }
+    }
+
+    if (
+      !incomingDto.requiredDocumentsList &&
+      storedListing.requiredDocumentsList?.id
+    ) {
+      await this.prisma.listings.update({
+        data: {
+          requiredDocumentsList: {
+            disconnect: {
+              id: storedListing.requiredDocumentsList.id,
+            },
+          },
+        },
+        where: { id: storedListing.id },
+      });
+      await this.prisma.listingDocuments.delete({
+        where: {
+          id: storedListing.requiredDocumentsList.id,
+        },
+      });
     }
 
     await this.cachePurge(
