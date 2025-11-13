@@ -9,6 +9,7 @@ import {
   ListingsStatusEnum,
   MarketingSeasonEnum,
   MarketingTypeEnum,
+  MonthEnum,
   ReviewOrderTypeEnum,
   UnitTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -152,7 +153,7 @@ describe("<Availability>", () => {
       expect(view.getByText("100 units")).toBeDefined()
     })
 
-    it("shows correct data for under construction with enableMarketingStatus on", () => {
+    it("shows correct data for under construction with enableMarketingStatus season on", () => {
       const dueDate = dayjs(new Date()).add(5, "days").hour(10).minute(30).toDate()
       const view = render(
         <Availability
@@ -185,6 +186,36 @@ describe("<Availability>", () => {
           "Eligible applicants will be contacted on a first come first serve basis until vacancies are filled."
         )
       )
+    })
+
+    it("shows correct data for under construction with enableMarketingStatus month on", () => {
+      const dueDate = dayjs(new Date()).add(5, "days").hour(10).minute(30).toDate()
+      const view = render(
+        <Availability
+          listing={{
+            ...listing,
+            reviewOrderType: ReviewOrderTypeEnum.firstComeFirstServe,
+            status: ListingsStatusEnum.active,
+            waitlistOpenSpots: null,
+            applicationDueDate: dueDate,
+            marketingType: MarketingTypeEnum.comingSoon,
+            marketingSeason: MarketingSeasonEnum.spring,
+            marketingMonth: MonthEnum.april,
+            marketingYear: 2026,
+          }}
+          jurisdiction={{
+            ...jurisdiction,
+            featureFlags: [
+              { name: FeatureFlagEnum.enableMarketingStatus, active: true } as FeatureFlag,
+              { name: FeatureFlagEnum.enableMarketingStatusMonths, active: true } as FeatureFlag,
+            ],
+          }}
+        />
+      )
+      expect(view.getByText("Availability")).toBeDefined()
+      expect(view.getAllByText("Under construction").length).toBe(2)
+      expect(view.getByText("Residents should apply in April 2026")).toBeDefined()
+      expect(view.queryByText("Application due:", { exact: false })).toBeNull()
     })
 
     it("shows correct data for closed waitlist listing, due date, no spots", () => {

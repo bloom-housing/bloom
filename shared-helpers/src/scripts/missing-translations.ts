@@ -39,9 +39,13 @@ function main() {
   }
 
   let missingTranslations = false
+  console.log(
+    "Save the below data including the t_ headers per-language in a csv, and pass it to get-machine-translations.ts to get machine translated strings in the correct format."
+  )
   allTranslations.forEach((foreignKeys) => {
     console.log("--------------------")
     console.log(`Missing Public Site ${foreignKeys.language} Translations:`)
+    console.log("t_key,t_value")
     const missingPublicSiteTranslations = findMissingStrings(
       englishTranslations,
       foreignKeys.translationKeys
@@ -51,7 +55,7 @@ function main() {
       console.log(`${missingKey},${JSON.stringify(englishTranslations[missingKey])}`)
     )
   })
-  if (missingTranslations) throw Error
+  if (missingTranslations) throw Error("Missing translations found")
 }
 
 void main()
