@@ -75,9 +75,10 @@ const FormUnits = ({
     true
   )
 
-  const enableNonRegulatedListings =
-    featureFlags?.find((flag) => flag.name === FeatureFlagEnum.enableNonRegulatedListings)
-      ?.active || false
+  const enableNonRegulatedListings = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableNonRegulatedListings,
+    jurisdiction
+  )
 
   const listingAvailability = useWatch({
     control,
