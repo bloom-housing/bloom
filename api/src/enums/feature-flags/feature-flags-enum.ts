@@ -23,6 +23,7 @@ export enum FeatureFlagEnum {
   enableListingPagination = 'enableListingPagination',
   enableListingUpdatedAt = 'enableListingUpdatedAt',
   enableMarketingStatus = 'enableMarketingStatus',
+  enableMarketingStatusMonths = 'enableMarketingStatusMonths',
   enableNeighborhoodAmenities = 'enableNeighborhoodAmenities',
   enableNeighborhoodAmenitiesDropdown = 'enableNeighborhoodAmenitiesDropdown',
   enableNonRegulatedListings = 'enableNonRegulatedListings',
@@ -47,7 +48,10 @@ export enum FeatureFlagEnum {
 // List of all of existing flags and their descriptions.
 // This should be the source of all feature flags in our system.
 // Keep alphabetized for readability.
-export const featureFlagMap: { name: string; description: string }[] = [
+export const featureFlagMap: {
+  name: string;
+  description: string;
+}[] = [
   {
     name: FeatureFlagEnum.disableCommonApplication,
     description:
@@ -149,6 +153,11 @@ export const featureFlagMap: { name: string; description: string }[] = [
     name: FeatureFlagEnum.enableMarketingStatus,
     description:
       "When true, the 'marketing status' sub-section is displayed in listing creation/edit and the public listing view",
+  },
+  {
+    name: FeatureFlagEnum.enableMarketingStatusMonths,
+    description:
+      "When true, the 'marketing status' sub-section uses months instead of seasons (functions only if enableMarketingStatus is also true)",
   },
   {
     name: FeatureFlagEnum.enableNeighborhoodAmenities,
