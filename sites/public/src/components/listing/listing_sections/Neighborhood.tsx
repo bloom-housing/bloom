@@ -72,7 +72,7 @@ export const Neighborhood = ({
           <HeadingGroup
             heading={t("t.region")}
             subheading={region}
-            headingProps={{ priorty: 3, size: "lg" }}
+            headingProps={{ priority: 3, size: "lg" }}
             className={`${styles["heading-group"]} seeds-m-bs-section`}
           />
         )}

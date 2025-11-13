@@ -30,8 +30,8 @@
   },
   "dependencies": {
     "@bloom-housing/shared-helpers": "^7.7.1",
-    "@bloom-housing/ui-components": "13.0.1",
-    "@bloom-housing/ui-seeds": "bloom-housing/ui-seeds#fix-react-19-type-errors",
+    "@bloom-housing/ui-components": "bloom-housing/ui-components#4328/remove-listing-map",
+    "@bloom-housing/ui-seeds": "3.1.1",
     "@heroicons/react": "^2.2.0",
     "@mapbox/mapbox-sdk": "^0.13.0",
     "@tiptap/core": "^2.24.0",
@@ -56,6 +56,7 @@
     "react-dom": "19.2.0",
     "react-google-recaptcha-v3": "^1.10.1",
     "react-hook-form": "^6.15.5",
+    "react-map-gl": "^8.1.0",
     "swr": "^2.1.2",
     "tailwindcss": "2.2.10"
   },

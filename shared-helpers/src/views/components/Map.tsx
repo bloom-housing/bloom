@@ -1,7 +1,6 @@
 import React, { useState, useCallback, useEffect, useMemo } from "react"
 import "mapbox-gl/dist/mapbox-gl.css"
-import MapGL from "react-map-gl/mapbox"
-import { Marker } from "react-map-gl/mapbox"
+import { Map as MapGL, Marker } from "@vis.gl/react-mapbox"
 
 import styles from "./Map.module.scss"
 import { MultiLineAddress } from "./MultiLineAddress"
@@ -71,16 +70,16 @@ const Map = (props: MapProps) => {
   const onMarkerDragEnd = useCallback((event: any) => {
     if (props.setLatLong) {
       props.setLatLong({
-        latitude: event.lngLat[1],
-        longitude: event.lngLat[0],
+        latitude: event.lngLat.lat,
+        longitude: event.lngLat.lng,
       })
     }
     if (props.setCustomMapPositionChosen) {
       props.setCustomMapPositionChosen(true)
     }
     setMarker({
-      latitude: event.lngLat[1],
-      longitude: event.lngLat[0],
+      latitude: event.lngLat.lat,
+      longitude: event.lngLat.lng,
     })
   }, [])
 

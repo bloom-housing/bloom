@@ -96,8 +96,6 @@
   },
   "dependencies": {},
   "resolutions": {
-    "@types/react": "19.2.2",
-    "@fortawesome/react-fontawesome": "3.1.0",
-    "react-map-gl": "8.1.0"
+    "@fortawesome/react-fontawesome": "3.1.0"
   }
 }

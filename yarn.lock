@@ -1006,16 +1006,14 @@
   resolved "https://registry.npmjs.org/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@bloom-housing/ui-components@13.0.1":
-  version "13.0.1"
-  resolved "https://registry.yarnpkg.com/@bloom-housing/ui-components/-/ui-components-13.0.1.tgz#369d37a4e9c43cfc2665024ae97343d0deec483f"
-  integrity sha512-FXN+MXpr9Pqp1I6gTzcaueP+4pHTvdQ+F79l6UmIkGQOFtGd0O8QF6uHqNb7fDdoxRT/+8ORMVTutAOdb5EkIg==
+"@bloom-housing/ui-components@bloom-housing/ui-components#4328/remove-listing-map":
+  version "7.2.2"
+  resolved "https://codeload.github.com/bloom-housing/ui-components/tar.gz/cf8d5ec5010454e4ae7f260f0bb6f566385ae20f"
   dependencies:
     "@fortawesome/fontawesome-svg-core" "^6.1.1"
     "@fortawesome/free-regular-svg-icons" "^6.1.1"
     "@fortawesome/free-solid-svg-icons" "^6.1.1"
     "@fortawesome/react-fontawesome" "^0.1.18"
-    "@mapbox/mapbox-sdk" "^0.13.0"
     ag-grid-community "^26.0.0"
     ag-grid-react "^26.0.0"
     aria-autocomplete "^1.4.0"
@@ -1031,7 +1029,6 @@
     react-dropzone "^11.3.2"
     react-focus-lock "^2.9.4"
     react-hook-form "^6.15.5"
-    react-map-gl "^6.1.16"
     react-media "^1.10.0"
     react-remove-scroll "2.5.4"
     react-tabs "^6.0.0"
@@ -1041,9 +1038,10 @@
     tailwindcss-rtl "^0.9.0"
     typesafe-actions "^5.1.0"
 
-"@bloom-housing/ui-seeds@bloom-housing/ui-seeds#fix-react-19-type-errors":
-  version "0.1.0"
-  resolved "https://codeload.github.com/bloom-housing/ui-seeds/tar.gz/12c16b416d021fa681775c2fb5ab9363124efcc6"
+"@bloom-housing/ui-seeds@3.1.1":
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/@bloom-housing/ui-seeds/-/ui-seeds-3.1.1.tgz#42b86abf64a587e797a7d82b00934ea0d60bb81c"
+  integrity sha512-p4xu6Npooh/YG5R/yFXZrywssCDCzaAdWDdWCGPvw89KyHMC8sBcmbqoX18/Qya2Hl627X/swzrVck0tAMw9mA==
   dependencies:
     "@fortawesome/fontawesome-svg-core" "^6.3.0"
     "@fortawesome/react-fontawesome" "^0.2.0"
@@ -3078,7 +3076,7 @@
   resolved "https://registry.yarnpkg.com/@types/react-transition-group/-/react-transition-group-4.4.12.tgz#b5d76568485b02a307238270bfe96cb51ee2a044"
   integrity sha512-8TV6R3h2j7a91c+1DXdJi3Syo69zzIZbz7Lg5tORM5LEJG7X/E6a1V3drRyBRZq7/utz7A+c4OgYLiLcYGHG6w==
 
-"@types/react@*", "@types/react@19.2.2", "@types/react@^19.1.1", "@types/react@^19.2.2":
+"@types/react@*", "@types/react@^19.1.1", "@types/react@^19.2.2":
   version "19.2.2"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-19.2.2.tgz#ba123a75d4c2a51158697160a4ea2ff70aa6bf36"
   integrity sha512-6mDvHUFSjyT2B2yeNx2nUgMxh9LtOWvkhIU3uePn2I2oyNymUAX1NIsdgviM4CH+JSrp2D2hsMvJOkxY+0wNRA==
@@ -10163,7 +10161,7 @@ react-is@^19.2.0:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-19.2.0.tgz#ddc3b4a4e0f3336c3847f18b806506388d7b9973"
   integrity sha512-x3Ax3kNSMIIkyVYhWPyO09bu0uttcAIoecO/um/rKGQ4EltYWVYtyiGkS/3xMynrbVQdS69Jhlv8FXUEZehlzA==
 
-react-map-gl@8.1.0, react-map-gl@^6.1.16, react-map-gl@^8.1.0:
+react-map-gl@^8.1.0:
   version "8.1.0"
   resolved "https://registry.yarnpkg.com/react-map-gl/-/react-map-gl-8.1.0.tgz#97ce754e3bbdd49421fc10283119d189db945e00"
   integrity sha512-vDx/QXR3Tb+8/ap/z6gdMjJQ8ZEyaZf6+uMSPz7jhWF5VZeIsKsGfPvwHVPPwGF43Ryn+YR4bd09uEFNR5OPdg==
