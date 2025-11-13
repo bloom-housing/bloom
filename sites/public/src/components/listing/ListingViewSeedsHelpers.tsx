@@ -527,10 +527,8 @@ export const getEligibilitySections = (
                   return {
                     heading: t(
                       question.multiselectQuestions.untranslatedText
-                        ? t(
-                            `listingFilters.program.${question.multiselectQuestions.untranslatedText}`
-                          )
-                        : t(`listingFilters.program.${question.multiselectQuestions.text}`)
+                        ? `listingFilters.program.${question.multiselectQuestions.untranslatedText}`
+                        : `listingFilters.program.${question.multiselectQuestions.text}`
                     ),
                     description: question.multiselectQuestions.description,
                   }

@@ -4275,6 +4275,9 @@ export interface Listing {
   marketingSeason?: MarketingSeasonEnum
 
   /**  */
+  marketingMonth?: MonthEnum
+
+  /**  */
   homeType?: HomeTypeEnum
 
   /**  */
@@ -4878,6 +4881,9 @@ export interface ListingCreate {
   marketingSeason?: MarketingSeasonEnum
 
   /**  */
+  marketingMonth?: MonthEnum
+
+  /**  */
   homeType?: HomeTypeEnum
 
   /**  */
@@ -5216,6 +5222,9 @@ export interface ListingUpdate {
 
   /**  */
   marketingSeason?: MarketingSeasonEnum
+
+  /**  */
+  marketingMonth?: MonthEnum
 
   /**  */
   homeType?: HomeTypeEnum
@@ -5960,6 +5969,9 @@ export interface JurisdictionCreate {
 
   /**  */
   requiredListingFields: []
+
+  /**  */
+  visibleNeighborhoodAmenities: NeighborhoodAmenitiesEnum[]
 }
 
 export interface JurisdictionUpdate {
@@ -6019,6 +6031,9 @@ export interface JurisdictionUpdate {
 
   /**  */
   requiredListingFields: []
+
+  /**  */
+  visibleNeighborhoodAmenities: NeighborhoodAmenitiesEnum[]
 }
 
 export interface FeatureFlag {
@@ -6113,6 +6128,9 @@ export interface Jurisdiction {
 
   /**  */
   requiredListingFields: []
+
+  /**  */
+  visibleNeighborhoodAmenities: NeighborhoodAmenitiesEnum[]
 }
 
 export interface MultiselectQuestionCreate {
@@ -7431,6 +7449,21 @@ export enum MarketingSeasonEnum {
   "fall" = "fall",
   "winter" = "winter",
 }
+
+export enum MonthEnum {
+  "january" = "january",
+  "february" = "february",
+  "march" = "march",
+  "april" = "april",
+  "may" = "may",
+  "june" = "june",
+  "july" = "july",
+  "august" = "august",
+  "september" = "september",
+  "october" = "october",
+  "november" = "november",
+  "december" = "december",
+}
 export enum EnumListingDepositType {
   "fixedDeposit" = "fixedDeposit",
   "depositRange" = "depositRange",
@@ -7541,6 +7574,15 @@ export enum UserRoleEnum {
   "supportAdmin" = "supportAdmin",
 }
 
+export enum NeighborhoodAmenitiesEnum {
+  "groceryStores" = "groceryStores",
+  "publicTransportation" = "publicTransportation",
+  "schools" = "schools",
+  "parksAndCommunityCenters" = "parksAndCommunityCenters",
+  "pharmacies" = "pharmacies",
+  "healthCareResources" = "healthCareResources",
+}
+
 export enum FeatureFlagEnum {
   "disableCommonApplication" = "disableCommonApplication",
   "disableJurisdictionalAdmin" = "disableJurisdictionalAdmin",
@@ -7554,6 +7596,7 @@ export enum FeatureFlagEnum {
   "enableGeocodingPreferences" = "enableGeocodingPreferences",
   "enableGeocodingRadiusMethod" = "enableGeocodingRadiusMethod",
   "enableHomeType" = "enableHomeType",
+  "enableHousingDeveloperOwner" = "enableHousingDeveloperOwner",
   "enableIsVerified" = "enableIsVerified",
   "enableLimitedHowDidYouHear" = "enableLimitedHowDidYouHear",
   "enableListingFavoriting" = "enableListingFavoriting",
@@ -7562,7 +7605,9 @@ export enum FeatureFlagEnum {
   "enableListingPagination" = "enableListingPagination",
   "enableListingUpdatedAt" = "enableListingUpdatedAt",
   "enableMarketingStatus" = "enableMarketingStatus",
+  "enableMarketingStatusMonths" = "enableMarketingStatusMonths",
   "enableNeighborhoodAmenities" = "enableNeighborhoodAmenities",
+  "enableNeighborhoodAmenitiesDropdown" = "enableNeighborhoodAmenitiesDropdown",
   "enableNonRegulatedListings" = "enableNonRegulatedListings",
   "enablePartnerDemographics" = "enablePartnerDemographics",
   "enablePartnerSettings" = "enablePartnerSettings",

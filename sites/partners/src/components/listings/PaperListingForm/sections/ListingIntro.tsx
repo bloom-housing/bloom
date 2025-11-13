@@ -1,8 +1,12 @@
-import React from "react"
+import React, { useContext } from "react"
 import { useFormContext } from "react-hook-form"
-import { Jurisdiction } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { t, Field, SelectOption, Select } from "@bloom-housing/ui-components"
 import { Grid } from "@bloom-housing/ui-seeds"
+import {
+  FeatureFlagEnum,
+  Jurisdiction,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { AuthContext } from "@bloom-housing/shared-helpers"
 import {
   fieldMessage,
   fieldHasError,
@@ -17,11 +21,23 @@ interface ListingIntroProps {
   requiredFields: string[]
 }
 
+const getDeveloperLabel = (jurisdiction: string, enableHousingDeveloperOwner: boolean) => {
+  if (!jurisdiction) return t("listings.developer")
+  return enableHousingDeveloperOwner ? t("listings.housingDeveloperOwner") : t("listings.developer")
+}
+
 const ListingIntro = (props: ListingIntroProps) => {
   const formMethods = useFormContext()
+  const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, clearErrors, errors } = formMethods
+  const { register, clearErrors, errors, watch } = formMethods
+  const jurisdiction = watch("jurisdictions.id")
+
+  const enableHousingDeveloperOwner = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableHousingDeveloperOwner,
+    jurisdiction
+  )
 
   const jurisdictionOptions: SelectOption[] = [
     { label: "", value: "" },
@@ -92,6 +108,7 @@ const ListingIntro = (props: ListingIntroProps) => {
                     }
                   },
                   "aria-required": fieldIsRequired("jurisdictions", props.requiredFields),
+                  "aria-hidden": !!defaultJurisdiction,
                 }}
               />
             </Grid.Cell>
@@ -101,7 +118,7 @@ const ListingIntro = (props: ListingIntroProps) => {
               register={register}
               {...defaultFieldProps(
                 "developer",
-                t("listings.developer"),
+                getDeveloperLabel(jurisdiction, enableHousingDeveloperOwner),
                 props.requiredFields,
                 errors,
                 clearErrors
