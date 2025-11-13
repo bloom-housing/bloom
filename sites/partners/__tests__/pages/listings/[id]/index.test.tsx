@@ -13,6 +13,7 @@ import DetailPreferences from "../../../../src/components/listings/PaperListingD
 import {
   ApplicationAddressTypeEnum,
   ApplicationMethodsTypeEnum,
+  EnumListingListingType,
   FeatureFlagEnum,
   LanguagesEnum,
   ListingEventsTypeEnum,
@@ -195,20 +196,85 @@ describe("listing data", () => {
       })
     })
 
-    it("should display Listing Intro section", () => {
-      render(
-        <ListingContext.Provider value={listing}>
-          <DetailListingIntro />
-        </ListingContext.Provider>
-      )
+    describe("should display Listing Intro section", () => {
+      it("should display Listing Intro section without listing type selection", () => {
+        render(
+          <ListingContext.Provider value={listing}>
+            <DetailListingIntro />
+          </ListingContext.Provider>
+        )
 
-      expect(screen.getByText("Listing intro")).toBeInTheDocument()
-      expect(screen.getByText("Listing name")).toBeInTheDocument()
-      expect(screen.getByText("Archer Studios")).toBeInTheDocument()
-      expect(screen.getByText("Jurisdiction")).toBeInTheDocument()
-      expect(screen.getByText("San Jose")).toBeInTheDocument()
-      expect(screen.getByText("Housing developer")).toBeInTheDocument()
-      expect(screen.getByText("Charities Housing")).toBeInTheDocument()
+        expect(screen.getByText("Listing intro")).toBeInTheDocument()
+        expect(screen.getByText("Listing name")).toBeInTheDocument()
+        expect(screen.getByText("Archer Studios")).toBeInTheDocument()
+        expect(screen.getByText("Jurisdiction")).toBeInTheDocument()
+        expect(screen.getByText("San Jose")).toBeInTheDocument()
+        expect(screen.getByText("Housing developer")).toBeInTheDocument()
+        expect(screen.getByText("Charities Housing")).toBeInTheDocument()
+
+        expect(screen.queryByText("What kind of listing is this?")).not.toBeInTheDocument()
+        expect(screen.queryByText("Regulated")).not.toBeInTheDocument()
+        expect(screen.queryByText("Non-regulated")).not.toBeInTheDocument()
+        expect(
+          screen.queryByText("Has this property received HUD EBLL clearance?")
+        ).not.toBeInTheDocument()
+      })
+
+      it("should display Listing Intro for regulated listing", () => {
+        render(
+          <AuthContext.Provider
+            value={{
+              profile: { ...user, jurisdictions: [jurisdiction], listings: [] },
+              doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
+                featureFlag === FeatureFlagEnum.enableNonRegulatedListings,
+            }}
+          >
+            <ListingContext.Provider
+              value={{
+                ...listing,
+                listingType: EnumListingListingType.regulated,
+              }}
+            >
+              <DetailListingIntro />
+            </ListingContext.Provider>
+          </AuthContext.Provider>
+        )
+
+        expect(screen.getByText("What kind of listing is this?")).toBeInTheDocument()
+        expect(screen.getByText("Regulated")).toBeInTheDocument()
+        expect(screen.queryByText("Non-regulated")).not.toBeInTheDocument()
+        expect(
+          screen.queryByText("Has this property received HUD EBLL clearance?")
+        ).not.toBeInTheDocument()
+      })
+
+      it("should display Listing Intro for non-regulated listing", () => {
+        render(
+          <AuthContext.Provider
+            value={{
+              profile: { ...user, jurisdictions: [jurisdiction], listings: [] },
+              doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
+                featureFlag === FeatureFlagEnum.enableNonRegulatedListings,
+            }}
+          >
+            <ListingContext.Provider
+              value={{
+                ...listing,
+                listingType: EnumListingListingType.nonRegulated,
+              }}
+            >
+              <DetailListingIntro />
+            </ListingContext.Provider>
+          </AuthContext.Provider>
+        )
+
+        expect(screen.getByText("What kind of listing is this?")).toBeInTheDocument()
+        expect(screen.queryByText("Regulated")).not.toBeInTheDocument()
+        expect(screen.getByText("Non-regulated")).toBeInTheDocument()
+        expect(
+          screen.getByText("Has this property received HUD EBLL clearance?")
+        ).toBeInTheDocument()
+      })
     })
 
     describe("should display Lisiting Photo section", () => {
@@ -276,70 +342,72 @@ describe("listing data", () => {
       })
     })
 
-    it("should display Building Details section - without region", () => {
-      render(
-        <ListingContext.Provider value={{ ...listing, region: RegionEnum.Southwest }}>
-          <DetailBuildingDetails />
-        </ListingContext.Provider>
-      )
-
-      expect(screen.getByText("Building details")).toBeInTheDocument()
-      expect(screen.getByText("Building address")).toBeInTheDocument()
-      expect(screen.getByText("Street address")).toBeInTheDocument()
-      expect(screen.getByText("98 Archer Street")).toBeInTheDocument()
-      expect(screen.getByText("City")).toBeInTheDocument()
-      expect(screen.getByText("San Jose")).toBeInTheDocument()
-      expect(screen.getByText("Longitude")).toBeInTheDocument()
-      expect(screen.getByText("-121.91071")).toBeInTheDocument()
-      expect(screen.getByText("State")).toBeInTheDocument()
-      expect(screen.getByText("CA")).toBeInTheDocument()
-      expect(screen.getByText("Latitude")).toBeInTheDocument()
-      expect(screen.getByText("37.36537")).toBeInTheDocument()
-      expect(screen.getByText("Zip code")).toBeInTheDocument()
-      expect(screen.getByText("95112")).toBeInTheDocument()
-      expect(screen.getByText("Neighborhood")).toBeInTheDocument()
-      expect(screen.getByText("Rosemary Gardens Park")).toBeInTheDocument()
-      expect(screen.getByText("Year built")).toBeInTheDocument()
-      expect(screen.getByText("2012")).toBeInTheDocument()
-      expect(screen.queryByText("Region")).not.toBeInTheDocument()
-      expect(screen.queryByText("Southwest")).not.toBeInTheDocument()
-    })
-
-    it("should display Building Details section - with region", () => {
-      render(
-        <AuthContext.Provider
-          value={{
-            profile: { ...user, jurisdictions: [], listings: [] },
-            doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
-              mockJurisdictionsHaveFeatureFlagOn(featureFlag),
-          }}
-        >
+    describe("should display Building Details section", () => {
+      it("should display Building Details section - without region", () => {
+        render(
           <ListingContext.Provider value={{ ...listing, region: RegionEnum.Southwest }}>
             <DetailBuildingDetails />
           </ListingContext.Provider>
-        </AuthContext.Provider>
-      )
+        )
 
-      expect(screen.getByText("Building details")).toBeInTheDocument()
-      expect(screen.getByText("Building address")).toBeInTheDocument()
-      expect(screen.getByText("Street address")).toBeInTheDocument()
-      expect(screen.getByText("98 Archer Street")).toBeInTheDocument()
-      expect(screen.getByText("City")).toBeInTheDocument()
-      expect(screen.getByText("San Jose")).toBeInTheDocument()
-      expect(screen.getByText("Longitude")).toBeInTheDocument()
-      expect(screen.getByText("-121.91071")).toBeInTheDocument()
-      expect(screen.getByText("State")).toBeInTheDocument()
-      expect(screen.getByText("CA")).toBeInTheDocument()
-      expect(screen.getByText("Latitude")).toBeInTheDocument()
-      expect(screen.getByText("37.36537")).toBeInTheDocument()
-      expect(screen.getByText("Zip code")).toBeInTheDocument()
-      expect(screen.getByText("95112")).toBeInTheDocument()
-      expect(screen.getByText("Neighborhood")).toBeInTheDocument()
-      expect(screen.getByText("Rosemary Gardens Park")).toBeInTheDocument()
-      expect(screen.getByText("Year built")).toBeInTheDocument()
-      expect(screen.getByText("2012")).toBeInTheDocument()
-      expect(screen.getByText("Region")).toBeInTheDocument()
-      expect(screen.getByText("Southwest")).toBeInTheDocument()
+        expect(screen.getByText("Building details")).toBeInTheDocument()
+        expect(screen.getByText("Building address")).toBeInTheDocument()
+        expect(screen.getByText("Street address")).toBeInTheDocument()
+        expect(screen.getByText("98 Archer Street")).toBeInTheDocument()
+        expect(screen.getByText("City")).toBeInTheDocument()
+        expect(screen.getByText("San Jose")).toBeInTheDocument()
+        expect(screen.getByText("Longitude")).toBeInTheDocument()
+        expect(screen.getByText("-121.91071")).toBeInTheDocument()
+        expect(screen.getByText("State")).toBeInTheDocument()
+        expect(screen.getByText("CA")).toBeInTheDocument()
+        expect(screen.getByText("Latitude")).toBeInTheDocument()
+        expect(screen.getByText("37.36537")).toBeInTheDocument()
+        expect(screen.getByText("Zip code")).toBeInTheDocument()
+        expect(screen.getByText("95112")).toBeInTheDocument()
+        expect(screen.getByText("Neighborhood")).toBeInTheDocument()
+        expect(screen.getByText("Rosemary Gardens Park")).toBeInTheDocument()
+        expect(screen.getByText("Year built")).toBeInTheDocument()
+        expect(screen.getByText("2012")).toBeInTheDocument()
+        expect(screen.queryByText("Region")).not.toBeInTheDocument()
+        expect(screen.queryByText("Southwest")).not.toBeInTheDocument()
+      })
+
+      it("should display Building Details section - with region", () => {
+        render(
+          <AuthContext.Provider
+            value={{
+              profile: { ...user, jurisdictions: [], listings: [] },
+              doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
+                mockJurisdictionsHaveFeatureFlagOn(featureFlag),
+            }}
+          >
+            <ListingContext.Provider value={{ ...listing, region: RegionEnum.Southwest }}>
+              <DetailBuildingDetails />
+            </ListingContext.Provider>
+          </AuthContext.Provider>
+        )
+
+        expect(screen.getByText("Building details")).toBeInTheDocument()
+        expect(screen.getByText("Building address")).toBeInTheDocument()
+        expect(screen.getByText("Street address")).toBeInTheDocument()
+        expect(screen.getByText("98 Archer Street")).toBeInTheDocument()
+        expect(screen.getByText("City")).toBeInTheDocument()
+        expect(screen.getByText("San Jose")).toBeInTheDocument()
+        expect(screen.getByText("Longitude")).toBeInTheDocument()
+        expect(screen.getByText("-121.91071")).toBeInTheDocument()
+        expect(screen.getByText("State")).toBeInTheDocument()
+        expect(screen.getByText("CA")).toBeInTheDocument()
+        expect(screen.getByText("Latitude")).toBeInTheDocument()
+        expect(screen.getByText("37.36537")).toBeInTheDocument()
+        expect(screen.getByText("Zip code")).toBeInTheDocument()
+        expect(screen.getByText("95112")).toBeInTheDocument()
+        expect(screen.getByText("Neighborhood")).toBeInTheDocument()
+        expect(screen.getByText("Rosemary Gardens Park")).toBeInTheDocument()
+        expect(screen.getByText("Year built")).toBeInTheDocument()
+        expect(screen.getByText("2012")).toBeInTheDocument()
+        expect(screen.getByText("Region")).toBeInTheDocument()
+        expect(screen.getByText("Southwest")).toBeInTheDocument()
+      })
     })
 
     describe("should display Community Type section", () => {
@@ -894,29 +962,183 @@ describe("listing data", () => {
       })
     })
 
-    it("should display Additional Details section", () => {
-      render(
-        <ListingContext.Provider
-          value={{
-            ...listing,
-          }}
-        >
-          <DetailAdditionalDetails />
-        </ListingContext.Provider>
-      )
-
-      expect(screen.getByText("Required documents")).toBeInTheDocument()
-      expect(
-        screen.getByText("Completed application and government issued IDs")
-      ).toBeInTheDocument()
-      expect(screen.getByText("Important program rules")).toBeInTheDocument()
-      expect(
-        screen.getByText(
-          "Applicants must adhere to minimum & maximum income limits. Tenant Selection Criteria applies."
+    describe("should display Additional Details section", () => {
+      it("should display Additional Details section for regulated listings", () => {
+        render(
+          <ListingContext.Provider
+            value={{
+              ...listing,
+            }}
+          >
+            <DetailAdditionalDetails />
+          </ListingContext.Provider>
         )
-      ).toBeInTheDocument()
-      expect(screen.getByText("Special notes")).toBeInTheDocument()
-      expect(screen.getByText("Special notes description")).toBeInTheDocument()
+
+        expect(screen.getByText("Required documents")).toBeInTheDocument()
+        expect(
+          screen.getByText("Completed application and government issued IDs")
+        ).toBeInTheDocument()
+        expect(screen.getByText("Important program rules")).toBeInTheDocument()
+        expect(
+          screen.getByText(
+            "Applicants must adhere to minimum & maximum income limits. Tenant Selection Criteria applies."
+          )
+        ).toBeInTheDocument()
+        expect(screen.getByText("Special notes")).toBeInTheDocument()
+        expect(screen.getByText("Special notes description")).toBeInTheDocument()
+      })
+
+      it("shoudld display Additional Details section for non-regulated listings - show all documents options", () => {
+        render(
+          <AuthContext.Provider
+            value={{
+              profile: { ...user, listings: [], jurisdictions: [jurisdiction] },
+              doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
+                featureFlag === FeatureFlagEnum.enableNonRegulatedListings,
+            }}
+          >
+            <ListingContext.Provider
+              value={{
+                ...listing,
+                listingType: EnumListingListingType.nonRegulated,
+                requiredDocumentsList: {
+                  socialSecurityCard: true,
+                  currentLandlordReference: true,
+                  birthCertificate: true,
+                  previousLandlordReference: true,
+                  governmentIssuedId: true,
+                  proofOfAssets: true,
+                  proofOfIncome: true,
+                  residencyDocuments: true,
+                  proofOfCustody: true,
+                },
+              }}
+            >
+              <DetailAdditionalDetails />
+            </ListingContext.Provider>
+          </AuthContext.Provider>
+        )
+
+        const requiredDocumentsListTitle = screen.getByText("Required documents")
+        expect(requiredDocumentsListTitle).toBeInTheDocument()
+        const requiredDocumentsListContainer = requiredDocumentsListTitle.parentElement
+
+        expect(
+          within(requiredDocumentsListContainer).getByText("Social Security card")
+        ).toBeInTheDocument()
+        expect(
+          within(requiredDocumentsListContainer).getByText("Current landlord reference")
+        ).toBeInTheDocument()
+        expect(
+          within(requiredDocumentsListContainer).getByText(
+            "Birth Certificate (all household members 18+)"
+          )
+        ).toBeInTheDocument()
+        expect(
+          within(requiredDocumentsListContainer).getByText("Previous landlord reference")
+        ).toBeInTheDocument()
+        expect(
+          within(requiredDocumentsListContainer).getByText(
+            "Government-issued ID (all household members 18+)"
+          )
+        ).toBeInTheDocument()
+        expect(
+          within(requiredDocumentsListContainer).getByText(
+            "Proof of Assets (bank statements, etc.)"
+          )
+        ).toBeInTheDocument()
+        expect(
+          within(requiredDocumentsListContainer).getByText(
+            "Proof of household income (check stubs, W-2, etc.)"
+          )
+        ).toBeInTheDocument()
+        expect(
+          within(requiredDocumentsListContainer).getByText(
+            "Immigration/Residency documents (green card, etc.)"
+          )
+        ).toBeInTheDocument()
+        expect(
+          within(requiredDocumentsListContainer).getByText("Proof of Custody/Guardianship")
+        ).toBeInTheDocument()
+
+        expect(screen.getByText("Required documents (Additional Info)")).toBeInTheDocument()
+      })
+
+      it("shoudld display Additional Details section for non-regulated listings - show partial documents options", () => {
+        render(
+          <AuthContext.Provider
+            value={{
+              profile: { ...user, listings: [], jurisdictions: [jurisdiction] },
+              doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
+                featureFlag === FeatureFlagEnum.enableNonRegulatedListings,
+            }}
+          >
+            <ListingContext.Provider
+              value={{
+                ...listing,
+                listingType: EnumListingListingType.nonRegulated,
+                requiredDocumentsList: {
+                  socialSecurityCard: true,
+                  currentLandlordReference: true,
+                  birthCertificate: true,
+                  previousLandlordReference: true,
+                  governmentIssuedId: false,
+                  proofOfAssets: false,
+                  proofOfIncome: false,
+                  residencyDocuments: false,
+                  proofOfCustody: false,
+                },
+              }}
+            >
+              <DetailAdditionalDetails />
+            </ListingContext.Provider>
+          </AuthContext.Provider>
+        )
+
+        const requiredDocumentsListTitle = screen.getByText("Required documents")
+        expect(requiredDocumentsListTitle).toBeInTheDocument()
+        const requiredDocumentsListContainer = requiredDocumentsListTitle.parentElement
+
+        expect(
+          within(requiredDocumentsListContainer).getByText("Social Security card")
+        ).toBeInTheDocument()
+        expect(
+          within(requiredDocumentsListContainer).getByText("Current landlord reference")
+        ).toBeInTheDocument()
+        expect(
+          within(requiredDocumentsListContainer).getByText(
+            "Birth Certificate (all household members 18+)"
+          )
+        ).toBeInTheDocument()
+        expect(
+          within(requiredDocumentsListContainer).getByText("Previous landlord reference")
+        ).toBeInTheDocument()
+        expect(
+          within(requiredDocumentsListContainer).queryByText(
+            "Government-issued ID (all household members 18+)"
+          )
+        ).not.toBeInTheDocument()
+        expect(
+          within(requiredDocumentsListContainer).queryByText(
+            "Proof of Assets (bank statements, etc.)"
+          )
+        ).not.toBeInTheDocument()
+        expect(
+          within(requiredDocumentsListContainer).queryByText(
+            "Proof of household income (check stubs, W-2, etc.)"
+          )
+        ).not.toBeInTheDocument()
+        expect(
+          within(requiredDocumentsListContainer).queryByText(
+            "Immigration/Residency documents (green card, etc.)"
+          )
+        ).not.toBeInTheDocument()
+        expect(
+          within(requiredDocumentsListContainer).queryByText("Proof of Custody/Guardianship")
+        ).not.toBeInTheDocument()
+
+        expect(screen.getByText("Required documents (Additional Info)")).toBeInTheDocument()
+      })
     })
 
     describe("should display Rankings & Results section", () => {
