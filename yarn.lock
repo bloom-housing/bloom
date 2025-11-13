@@ -1041,10 +1041,10 @@
     tailwindcss-rtl "^0.9.0"
     typesafe-actions "^5.1.0"
 
-"@bloom-housing/ui-seeds@2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@bloom-housing/ui-seeds/-/ui-seeds-2.0.0.tgz#3da460d3858029462bc0ac96769feda71f7dc772"
-  integrity sha512-G5n3SrvjJSYHITymnW138auqSBJeGSjqY3wTt4zUxScV0wzTZNBSfjSjDaYkvIUxYMv10YtrFXpvxcXVm/K3ng==
+"@bloom-housing/ui-seeds@2.0.2":
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/@bloom-housing/ui-seeds/-/ui-seeds-2.0.2.tgz#5a7348efc347160e5aad9c5f2279d332dd59458b"
+  integrity sha512-ezcvsS3RZFnbydRFNg8qDB1bDWtu0TCaKxdYmEixcS/TrK3niUnLTf3c2mSK5HuCiN92X3ajL+tp5bG/I3GESw==
   dependencies:
     "@fortawesome/fontawesome-svg-core" "^6.3.0"
     "@fortawesome/react-fontawesome" "^0.2.0"
