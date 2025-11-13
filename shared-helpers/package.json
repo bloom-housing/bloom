@@ -20,7 +20,9 @@
     "@bloom-housing/ui-components": "13.0.1",
     "@bloom-housing/ui-seeds": "bloom-housing/ui-seeds#fix-react-19-type-errors",
     "@heroicons/react": "^2.1.1",
-    "axios-cookiejar-support": "^5.0.5"
+    "axios-cookiejar-support": "^5.0.5",
+    "markdown-to-jsx": "^7.7.16",
+    "react-map-gl": "^8.1.0"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "6.9.1",

@@ -10163,7 +10163,7 @@ react-is@^19.2.0:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-19.2.0.tgz#ddc3b4a4e0f3336c3847f18b806506388d7b9973"
   integrity sha512-x3Ax3kNSMIIkyVYhWPyO09bu0uttcAIoecO/um/rKGQ4EltYWVYtyiGkS/3xMynrbVQdS69Jhlv8FXUEZehlzA==
 
-react-map-gl@8.1.0, react-map-gl@^6.1.16:
+react-map-gl@8.1.0, react-map-gl@^6.1.16, react-map-gl@^8.1.0:
   version "8.1.0"
   resolved "https://registry.yarnpkg.com/react-map-gl/-/react-map-gl-8.1.0.tgz#97ce754e3bbdd49421fc10283119d189db945e00"
   integrity sha512-vDx/QXR3Tb+8/ap/z6gdMjJQ8ZEyaZf6+uMSPz7jhWF5VZeIsKsGfPvwHVPPwGF43Ryn+YR4bd09uEFNR5OPdg==
