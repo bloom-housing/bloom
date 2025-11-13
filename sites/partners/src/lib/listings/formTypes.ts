@@ -1,6 +1,7 @@
 import { LatitudeLongitude, TimeFieldPeriod } from "@bloom-housing/ui-components"
 import {
   ApplicationAddressTypeEnum,
+  EnumListingDepositType,
   Listing,
   ListingEvent,
   ListingsStatusEnum,
@@ -116,6 +117,7 @@ export const formDefaults: FormListing = {
   costsNotIncluded: "",
   creditHistory: "",
   criminalBackground: "",
+  depositType: EnumListingDepositType.fixedDeposit,
   depositMax: "0",
   depositMin: "0",
   depositHelperText: "or one month's rent may be higher for lower credit scores",
