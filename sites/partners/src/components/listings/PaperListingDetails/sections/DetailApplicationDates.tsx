@@ -23,6 +23,11 @@ const DetailApplicationDates = () => {
     listing?.jurisdictions?.id
   )
 
+  const enableMarketingStatusMonths = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableMarketingStatusMonths,
+    listing?.jurisdictions?.id
+  )
+
   const openHouseHeaders = {
     date: "t.date",
     startTime: "t.startTime",
@@ -180,9 +185,17 @@ const DetailApplicationDates = () => {
             </Grid.Cell>
             <Grid.Cell>
               <FieldValue id="marketingSeasonDate" label={t("listings.marketingSection.date")}>
-                {listing.marketingSeason && t(`seasons.${listing.marketingSeason}`)}{" "}
+                {!enableMarketingStatusMonths &&
+                  listing.marketingSeason &&
+                  t(`seasons.${listing.marketingSeason}`)}{" "}
+                {enableMarketingStatusMonths &&
+                  listing.marketingMonth &&
+                  t(`months.${listing.marketingMonth}`)}{" "}
                 {listing.marketingYear && listing.marketingYear}
-                {!listing.marketingSeason && !listing.marketingYear && t("t.none")}
+                {!listing.marketingSeason &&
+                  !listing.marketingYear &&
+                  !listing.marketingMonth &&
+                  t("t.none")}
               </FieldValue>
             </Grid.Cell>
           </Grid.Row>
