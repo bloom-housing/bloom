@@ -78,7 +78,11 @@ const NeighborhoodAmenities = () => {
       <hr className="spacer-section-above spacer-section" />
       <SectionWithGrid
         heading={t("listings.sections.neighborhoodAmenitiesTitle")}
-        subheading={t("listings.sections.neighborhoodAmenitiesSubtitle")}
+        subheading={
+          enableNeighborhoodAmenitiesDropdown
+            ? t("listings.sections.neighborhoodAmenitiesSubtitleAlt")
+            : t("listings.sections.neighborhoodAmenitiesSubtitle")
+        }
       >
         {amenityRows.map((row, rowIndex) => (
           <Grid.Row key={rowIndex} columns={2}>
