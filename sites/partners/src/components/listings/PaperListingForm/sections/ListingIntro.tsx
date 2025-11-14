@@ -59,7 +59,7 @@ const ListingIntro = (props: ListingIntroProps) => {
         heading={t("listings.sections.introTitle")}
         subheading={t("listings.sections.introSubtitle")}
       >
-        {enableListingFileNumber && (
+        {enableListingFileNumber && jurisdiction && (
           <Grid.Row columns={1}>
             <Grid.Cell>
               <Field
