@@ -349,7 +349,7 @@ const ListingForm = ({ listing, editMode, setListingName, updateListing }: Listi
           }
 
           if (!enableNonRegulatedListings) {
-            formData.listingType = null
+            formData.listingType = undefined
           }
 
           if (successful) {
