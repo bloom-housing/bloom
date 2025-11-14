@@ -122,6 +122,7 @@ export const formDefaults: FormListing = {
   listingEvents: [],
   listingImages: [],
   listingFeatures: null,
+  listingFileNumber: "",
   listingNeighborhoodAmenities: null,
   listingUtilities: null,
   listingsLeasingAgentAddress: null,

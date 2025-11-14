@@ -566,6 +566,7 @@ model Listings {
   amenities                             String?
   buildingTotalUnits                    Int?                          @map("building_total_units")
   developer                             String?
+  listingFileNumber                     String?                       @map("listing_file_number")
   householdSizeMax                      Int?                          @map("household_size_max")
   householdSizeMin                      Int?                          @map("household_size_min")
   neighborhood                          String?

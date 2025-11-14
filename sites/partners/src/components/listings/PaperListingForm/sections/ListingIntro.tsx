@@ -38,6 +38,10 @@ const ListingIntro = (props: ListingIntroProps) => {
     FeatureFlagEnum.enableHousingDeveloperOwner,
     jurisdiction
   )
+  const enableListingFileNumber = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableListingFileNumber,
+    jurisdiction
+  )
 
   const jurisdictionOptions: SelectOption[] = [
     { label: "", value: "" },
@@ -55,6 +59,22 @@ const ListingIntro = (props: ListingIntroProps) => {
         heading={t("listings.sections.introTitle")}
         subheading={t("listings.sections.introSubtitle")}
       >
+        {enableListingFileNumber && jurisdiction && (
+          <Grid.Row columns={1}>
+            <Grid.Cell>
+              <Field
+                register={register}
+                {...defaultFieldProps(
+                  "listingFileNumber",
+                  t("listings.listingFileNumber"),
+                  props.requiredFields,
+                  errors,
+                  clearErrors
+                )}
+              />
+            </Grid.Cell>
+          </Grid.Row>
+        )}
         <Grid.Row columns={1}>
           <Grid.Cell>
             <Field

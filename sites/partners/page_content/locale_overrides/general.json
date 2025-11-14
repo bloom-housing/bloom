@@ -259,6 +259,7 @@
   "listings.listingAvailabilityQuestion": "What is the listing availability?",
   "listings.listingIsAlreadyLive": "This listing is already live. Updates will affect the applicant experience on the housing portal.",
   "listings.listingName": "Listing name",
+  "listings.listingFileNumber": "Listing file number",
   "listings.listingPhoto": "Listing photo",
   "listings.listingStatus.active": "Open",
   "listings.listingStatus.changesRequested": "Changes requested",

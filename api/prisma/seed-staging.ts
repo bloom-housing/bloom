@@ -160,6 +160,7 @@ export const stagingSeed = async (
       featureFlags: [
         FeatureFlagEnum.enableAccessibilityFeatures,
         FeatureFlagEnum.enableHousingDeveloperOwner,
+        FeatureFlagEnum.enableListingFileNumber,
         FeatureFlagEnum.enableListingFiltering,
         FeatureFlagEnum.enableMarketingStatus,
         FeatureFlagEnum.enableMarketingStatusMonths,
@@ -177,6 +178,7 @@ export const stagingSeed = async (
         'leasingAgentEmail',
         'leasingAgentName',
         'leasingAgentPhone',
+        'listingFileNumber',
         'listingImages',
         'listingsBuildingAddress',
         'name',
