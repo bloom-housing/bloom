@@ -35,6 +35,7 @@ type UnitGroupFormProps = {
   defaultUnitGroup: TempUnitGroup | undefined
   draft: boolean
   nextId: number
+  jurisdiction: string
 }
 
 const UnitGroupForm = ({
@@ -43,6 +44,7 @@ const UnitGroupForm = ({
   defaultUnitGroup,
   draft,
   nextId,
+  jurisdiction,
 }: UnitGroupFormProps) => {
   const [amiChartsOptions, setAmiChartsOptions] = useState([])
   const [unitPrioritiesOptions, setUnitPrioritiesOptions] = useState([])
@@ -68,12 +70,10 @@ const UnitGroupForm = ({
     control,
     getValues,
     reset,
-    watch,
   } = useForm({
     mode: "onChange",
     shouldFocusError: false,
   })
-  const jurisdiction: string = watch("jurisdictions.id")
   /**
    * fetch form options
    */

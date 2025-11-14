@@ -269,6 +269,7 @@ export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: Li
                   ? listing.region?.toString().replace("_", " ")
                   : null
               }
+              visibleNeighborhoodAmenities={jurisdiction?.visibleNeighborhoodAmenities}
             />
             <AdditionalInformation additionalInformation={getAdditionalInformation(listing)} />
           </div>

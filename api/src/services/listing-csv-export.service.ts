@@ -16,6 +16,7 @@ import {
   ApplicationMethodsTypeEnum,
   ListingEventsTypeEnum,
   MarketingTypeEnum,
+  NeighborhoodAmenitiesEnum,
 } from '@prisma/client';
 import { includeViews } from './listing.service';
 import { PrismaService } from './prisma.service';
@@ -451,7 +452,12 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
       },
       {
         path: 'developer',
-        label: 'Developer',
+        label: doAnyJurisdictionHaveFeatureFlagSet(
+          user.jurisdictions,
+          FeatureFlagEnum.enableHousingDeveloperOwner,
+        )
+          ? 'Housing developer / owner'
+          : 'Developer',
       },
       {
         path: 'listingsBuildingAddress.street',
@@ -818,34 +824,44 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
         FeatureFlagEnum.enableNeighborhoodAmenities,
       )
     ) {
-      headers.push(
-        ...[
-          {
-            path: 'listingNeighborhoodAmenities.groceryStores',
-            label: 'Neighborhood Amenities - Grocery Stores',
-          },
-          {
-            path: 'listingNeighborhoodAmenities.publicTransportation',
-            label: 'Neighborhood Amenities - Public Transportation',
-          },
-          {
-            path: 'listingNeighborhoodAmenities.schools',
-            label: 'Neighborhood Amenities - Schools',
-          },
-          {
-            path: 'listingNeighborhoodAmenities.parksAndCommunityCenters',
-            label: 'Neighborhood Amenities - Parks and Community Centers',
-          },
-          {
-            path: 'listingNeighborhoodAmenities.pharmacies',
-            label: 'Neighborhood Amenities - Pharmacies',
-          },
-          {
-            path: 'listingNeighborhoodAmenities.healthCareResources',
-            label: 'Neighborhood Amenities - Health Care Resources',
-          },
-        ],
+      const visibleAmenities = new Set<string>(
+        (user.jurisdictions || [])
+          .flatMap((j) => j.visibleNeighborhoodAmenities || [])
+          .filter(Boolean),
       );
+
+      const amenityHeaderMap: Record<string, CsvHeader> = {
+        [NeighborhoodAmenitiesEnum.groceryStores]: {
+          path: 'listingNeighborhoodAmenities.groceryStores',
+          label: 'Neighborhood Amenities - Grocery Stores',
+        },
+        [NeighborhoodAmenitiesEnum.publicTransportation]: {
+          path: 'listingNeighborhoodAmenities.publicTransportation',
+          label: 'Neighborhood Amenities - Public Transportation',
+        },
+        [NeighborhoodAmenitiesEnum.schools]: {
+          path: 'listingNeighborhoodAmenities.schools',
+          label: 'Neighborhood Amenities - Schools',
+        },
+        [NeighborhoodAmenitiesEnum.parksAndCommunityCenters]: {
+          path: 'listingNeighborhoodAmenities.parksAndCommunityCenters',
+          label: 'Neighborhood Amenities - Parks and Community Centers',
+        },
+        [NeighborhoodAmenitiesEnum.pharmacies]: {
+          path: 'listingNeighborhoodAmenities.pharmacies',
+          label: 'Neighborhood Amenities - Pharmacies',
+        },
+        [NeighborhoodAmenitiesEnum.healthCareResources]: {
+          path: 'listingNeighborhoodAmenities.healthCareResources',
+          label: 'Neighborhood Amenities - Health Care Resources',
+        },
+      };
+
+      Object.keys(amenityHeaderMap).forEach((key) => {
+        if (visibleAmenities.has(key)) {
+          headers.push(amenityHeaderMap[key]);
+        }
+      });
     }
 
     headers.push(
