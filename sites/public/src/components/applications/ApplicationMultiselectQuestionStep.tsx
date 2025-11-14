@@ -214,6 +214,9 @@ const ApplicationMultiselectQuestionStep = ({
       collectAddress: false,
       exclusive: true,
       ordinal: question.options.length + 1,
+      id: null,
+      createdAt: null,
+      updatedAt: null,
     })
   }
 

@@ -231,6 +231,9 @@ const FormMultiselectQuestions = ({
                               collectAddress: false,
                               exclusive: true,
                               ordinal: question.options.length,
+                              id: null,
+                              createdAt: null,
+                              updatedAt: null,
                             },
                             question
                           )}
@@ -251,6 +254,9 @@ const FormMultiselectQuestions = ({
                               collectAddress: false,
                               exclusive: true,
                               ordinal: question.options.length,
+                              id: null,
+                              createdAt: null,
+                              updatedAt: null,
                             },
                             question,
                             setValue
