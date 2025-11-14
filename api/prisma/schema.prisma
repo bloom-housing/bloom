@@ -662,6 +662,7 @@ model Listings {
   marketingType                         MarketingTypeEnum             @default(marketing) @map("marketing_type")
   marketingYear                         Int?                          @map("marketing_year")
   marketingSeason                       MarketingSeasonEnum?          @map("marketing_season")
+  marketingMonth                        MonthEnum?                    @map("marketing_month")
   whatToExpectAdditionalText            String?                       @map("what_to_expect_additional_text")
   section8Acceptance                    Boolean?                      @map("section8_acceptance")
   neighborhoodAmenitiesId               String?                       @unique() @map("neighborhood_amenities_id") @db.Uuid
@@ -1246,6 +1247,23 @@ enum MarketingSeasonEnum {
   winter
 
   @@map("listings_marketing_season_enum")
+}
+
+enum MonthEnum {
+  january
+  february
+  march
+  april
+  may
+  june
+  july
+  august
+  september
+  october
+  november
+  december
+
+  @@map("month_enum")
 }
 
 enum MarketingTypeEnum {
