@@ -14,6 +14,7 @@ import { mockNextRouter } from "../../../testUtils"
 import { FormProviderWrapper } from "../../applications/sections/helpers"
 import { TempUnitGroup } from "../../../../src/lib/listings/formTypes"
 import UnitGroupForm from "../../../../src/components/listings/PaperListingForm/UnitGroupForm"
+import { EnumListingListingType } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 const server = setupServer()
 
@@ -84,7 +85,13 @@ describe("<UnitGroupForm>", () => {
     expect(screen.getByLabelText(/4 bedroom/i)).toBeInTheDocument()
 
     // Details Section
-    expect(screen.getByLabelText(/Affordable Unit Group Quantity/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/Unit Group Quantity/i)).toBeInTheDocument()
+    expect(screen.queryByRole("group", { name: /^rent type$/i })).not.toBeInTheDocument()
+    expect(screen.queryByRole("spinbutton", { name: /^monthly rent$/i })).not.toBeInTheDocument()
+    expect(
+      screen.queryByRole("spinbutton", { name: /^monthly rent from$/i })
+    ).not.toBeInTheDocument()
+    expect(screen.queryByRole("spinbutton", { name: /^monthly rent to$/i })).not.toBeInTheDocument()
     expect(screen.getByLabelText(/Minimum occupancy/i)).toBeInTheDocument()
     expect(screen.getByLabelText(/Max occupancy/i)).toBeInTheDocument()
     expect(screen.getByLabelText(/Min square footage/i)).toBeInTheDocument()
@@ -273,6 +280,102 @@ describe("<UnitGroupForm>", () => {
     expect(within(drawerContainer).getByRole("spinbutton", { name: /monthly rent/i })).toHaveValue(
       1500
     )
+  })
+
+  it("should render the unit group form for non-regulated listings", async () => {
+    render(
+      <AuthProvider>
+        <FormProviderWrapper
+          values={{
+            listingType: EnumListingListingType.nonRegulated,
+          }}
+        >
+          <UnitGroupForm
+            jurisdiction={randomUUID()}
+            onClose={jest.fn()}
+            onSubmit={jest.fn()}
+            defaultUnitGroup={{
+              ...tempUnitGroup,
+              unitGroupAmiLevels: [],
+            }}
+            draft={true}
+            nextId={1}
+            isNonRegulated={true}
+          />
+        </FormProviderWrapper>
+      </AuthProvider>
+    )
+
+    expect(screen.getAllByRole("heading", { level: 2, name: /details/i })).toHaveLength(2)
+
+    // Unit Types Section
+    expect(screen.getByText(/unit type/i)).toBeInTheDocument()
+    expect(await screen.findByRole("checkbox", { name: /studio/i })).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: /1 bedroom/i })).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: /2 bedroom/i })).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: /3 bedroom/i })).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: /4 bedroom/i })).toBeInTheDocument()
+
+    // Details Section
+    expect(screen.getByRole("spinbutton", { name: /Unit Group Quantity/i })).toBeInTheDocument()
+
+    expect(screen.getByRole("group", { name: /^rent type$/i })).toBeInTheDocument()
+    const fixedRentOption = screen.getByRole("radio", { name: /^fixed rent$/i })
+    const rentRangeOption = screen.getByRole("radio", { name: /^rent range$/i })
+    expect(fixedRentOption).toBeInTheDocument()
+    expect(fixedRentOption).not.toBeChecked()
+    expect(rentRangeOption).toBeInTheDocument()
+    expect(rentRangeOption).not.toBeChecked()
+
+    expect(screen.queryByRole("spinbutton", { name: /^monthly rent$/i })).not.toBeInTheDocument()
+    expect(
+      screen.queryByRole("spinbutton", { name: /^monthly rent from$/i })
+    ).not.toBeInTheDocument()
+    expect(screen.queryByRole("spinbutton", { name: /^monthly rent to$/i })).not.toBeInTheDocument()
+
+    await userEvent.click(fixedRentOption)
+    expect(fixedRentOption).toBeChecked()
+    expect(rentRangeOption).not.toBeChecked()
+
+    expect(screen.getByRole("spinbutton", { name: /^monthly rent$/i })).toBeInTheDocument()
+    expect(
+      screen.queryByRole("spinbutton", { name: /^monthly rent from$/i })
+    ).not.toBeInTheDocument()
+    expect(screen.queryByRole("spinbutton", { name: /^monthly rent to$/i })).not.toBeInTheDocument()
+
+    await userEvent.click(rentRangeOption)
+    expect(fixedRentOption).not.toBeChecked()
+    expect(rentRangeOption).toBeChecked()
+
+    expect(screen.queryByRole("spinbutton", { name: /^monthly rent$/i })).not.toBeInTheDocument()
+    expect(screen.getByRole("spinbutton", { name: /^monthly rent from$/i })).toBeInTheDocument()
+    expect(screen.getByRole("spinbutton", { name: /^monthly rent to$/i })).toBeInTheDocument()
+
+    expect(screen.getByRole("combobox", { name: /Minimum occupancy/i })).toBeInTheDocument()
+    expect(screen.getByRole("combobox", { name: /Max occupancy/i })).toBeInTheDocument()
+    expect(
+      screen.queryByRole("spinbutton", { name: /Min square footage/i })
+    ).not.toBeInTheDocument()
+    expect(
+      screen.queryByRole("spinbutton", { name: /Max square footage/i })
+    ).not.toBeInTheDocument()
+    expect(screen.queryByRole("combobox", { name: /Minimum floor/i })).not.toBeInTheDocument()
+    expect(screen.queryByRole("combobox", { name: /Maximum floor/i })).not.toBeInTheDocument()
+    expect(screen.getByRole("combobox", { name: /Min number of bathrooms/i })).toBeInTheDocument()
+    expect(screen.getByRole("combobox", { name: /Max number of bathrooms/i })).toBeInTheDocument()
+
+    // Availability Section
+    expect(screen.getByRole("heading", { level: 2, name: /availability/i })).toBeInTheDocument()
+
+    expect(screen.getByLabelText(/Unit group vacancies/i)).toBeInTheDocument()
+    expect(screen.queryByRole("group", { name: /Waitlist status/i })).not.toBeInTheDocument()
+    expect(screen.queryByLabelText(/^Open$/i)).not.toBeInTheDocument()
+    expect(screen.queryByLabelText(/Closed/i)).not.toBeInTheDocument()
+
+    // Eligibility Section
+    expect(screen.queryByRole("heading", { level: 2, name: "Eligibility" })).not.toBeInTheDocument()
+    expect(screen.queryByRole("table")).not.toBeInTheDocument()
+    expect(screen.queryByRole("button", { name: "Add AMI level" })).not.toBeInTheDocument()
   })
 
   describe("ami levels table delete functionality", () => {
@@ -587,7 +690,7 @@ describe("<UnitGroupForm>", () => {
     await userEvent.click(studioButton)
 
     const quantityInput = screen.getByRole("spinbutton", {
-      name: /affordable unit group quantity/i,
+      name: /unit group quantity/i,
     })
 
     await userEvent.type(quantityInput, "4")

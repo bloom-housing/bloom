@@ -33,6 +33,11 @@ class UnitGroup extends AbstractDTO {
   @Expose()
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
+  monthlyRent?: number;
+
+  @Expose()
+  @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
   floorMin?: number;
 
   @Expose()

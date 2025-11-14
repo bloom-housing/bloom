@@ -33,17 +33,18 @@ export class DepositValueConstraint implements ValidatorConstraintInterface {
 
     if (value === DepositTypeEnum.fixedDeposit) {
       return (
-        !this.isFieldEmpty(depositValue) &&
-        this.isFieldEmpty(depositRangeMin) &&
-        this.isFieldEmpty(depositRangeMax)
+        this.isFieldEmpty(depositRangeMin) && this.isFieldEmpty(depositRangeMax)
       );
     }
 
-    return (
-      this.isFieldEmpty(depositValue) &&
-      !this.isFieldEmpty(depositRangeMin) &&
-      !this.isFieldEmpty(depositRangeMax)
-    );
+    // Verify if both fields are either filled or empty
+    const areFieldsInvalid =
+      (this.isFieldEmpty(depositRangeMin) &&
+        !this.isFieldEmpty(depositRangeMax)) ||
+      (!this.isFieldEmpty(depositRangeMin) &&
+        this.isFieldEmpty(depositRangeMax));
+
+    return this.isFieldEmpty(depositValue) && !areFieldsInvalid;
   }
   defaultMessage(args?: ValidationArguments): string {
     const value = args.value as DepositTypeEnum;

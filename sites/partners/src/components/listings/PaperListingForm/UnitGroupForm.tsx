@@ -21,6 +21,7 @@ import {
 import {
   AmiChart,
   EnumUnitGroupAmiLevelMonthlyRentDeterminationType,
+  RentTypeEnum,
   UnitAccessibilityPriorityType,
   YesNoEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -36,6 +37,7 @@ type UnitGroupFormProps = {
   draft: boolean
   nextId: number
   jurisdiction: string
+  isNonRegulated?: boolean
 }
 
 const UnitGroupForm = ({
@@ -45,6 +47,7 @@ const UnitGroupForm = ({
   draft,
   nextId,
   jurisdiction,
+  isNonRegulated,
 }: UnitGroupFormProps) => {
   const [amiChartsOptions, setAmiChartsOptions] = useState([])
   const [unitPrioritiesOptions, setUnitPrioritiesOptions] = useState([])
@@ -85,6 +88,9 @@ const UnitGroupForm = ({
   const minOccupancy: number = useWatch({ control, name: "minOccupancy" })
   const maxOccupancy: number = useWatch({ control, name: "maxOccupancy" })
 
+  const flatRentValueFrom: number = useWatch({ control, name: "flatRentValueFrom" })
+  const flatRentValueTo: number = useWatch({ control, name: "flatRentValueTo" })
+
   // Controls for validating square footage
   const sqFeetMin: number = useWatch({ control, name: "sqFeetMin" })
   const sqFeetMax: number = useWatch({ control, name: "sqFeetMax" })
@@ -98,6 +104,7 @@ const UnitGroupForm = ({
   const bathroomMax: number = useWatch({ control, name: "bathroomMax" })
 
   const totalAvailable: number = useWatch({ control, name: "totalAvailable" })
+  const rentType = useWatch({ control, name: "rentType" })
   const totalCount: number = useWatch({ control, name: "totalCount" })
 
   const numberOccupancyOptions = 8
@@ -370,6 +377,87 @@ const UnitGroupForm = ({
                   />
                 </Grid.Cell>
               </Grid.Row>
+              {isNonRegulated && (
+                <>
+                  <Grid.Row columns={3}>
+                    <Grid.Cell>
+                      <FieldGroup
+                        name="rentType"
+                        type="radio"
+                        register={register}
+                        groupLabel={t("listings.unitGroup.rentType")}
+                        fields={[
+                          {
+                            label: t("listings.unitGroup.fixedRent"),
+                            value: RentTypeEnum.fixedRent,
+                            id: "rentTypeFixed",
+                          },
+                          {
+                            label: t("listings.unitGroup.rentRange"),
+                            value: RentTypeEnum.rentRange,
+                            id: "rentTypeRange",
+                          },
+                        ]}
+                      />
+                    </Grid.Cell>
+                  </Grid.Row>
+                  {rentType === RentTypeEnum.fixedRent && (
+                    <Grid.Row columns={3}>
+                      <Grid.Cell>
+                        <Field
+                          id="monthlyRent"
+                          name="monthlyRent"
+                          label={t("listings.unit.monthlyRent")}
+                          register={register}
+                          placeholder="0.00"
+                          type="number"
+                          prepend="$"
+                        />
+                      </Grid.Cell>
+                    </Grid.Row>
+                  )}
+                  {rentType === RentTypeEnum.rentRange && (
+                    <Grid.Row columns={3}>
+                      <Grid.Cell>
+                        <Field
+                          id="flatRentValueFrom"
+                          name="flatRentValueFrom"
+                          label={t("listings.unitGroup.flatRentValueFrom")}
+                          register={register}
+                          placeholder="0.00"
+                          validation={{ max: flatRentValueTo }}
+                          errorMessage={t("errors.minGreaterThanFlatRentValueTo")}
+                          error={fieldHasError(errors?.flatRentValueFrom)}
+                          type="number"
+                          prepend="$"
+                          onChange={() => {
+                            void trigger("flatRentValueTo")
+                            void trigger("flatRentValueFrom")
+                          }}
+                        />
+                      </Grid.Cell>
+                      <Grid.Cell>
+                        <Field
+                          id="flatRentValueTo"
+                          name="flatRentValueTo"
+                          label={t("listings.unitGroup.flatRentValueTo")}
+                          register={register}
+                          placeholder="0.00"
+                          validation={{ min: flatRentValueFrom }}
+                          errorMessage={t("errors.maxLessThanFlatRentValueFrom")}
+                          error={fieldHasError(errors?.flatRentValueTo)}
+                          type="number"
+                          prepend="$"
+                          onChange={() => {
+                            void trigger("flatRentValueTo")
+                            void trigger("flatRentValueFrom")
+                          }}
+                        />
+                      </Grid.Cell>
+                    </Grid.Row>
+                  )}
+                </>
+              )}
               <Grid.Row columns={3}>
                 <Grid.Cell>
                   <Select
@@ -398,60 +486,84 @@ const UnitGroupForm = ({
                   />
                 </Grid.Cell>
               </Grid.Row>
-              <Grid.Row columns={3}>
-                <Grid.Cell>
-                  <Field
-                    label={t("listings.unit.minSquareFootage")}
-                    id="sqFeetMin"
-                    name="sqFeetMin"
-                    register={register}
-                    type="number"
-                    errorMessage={t("errors.minGreaterThanMaxFootageError")}
-                    error={fieldHasError(errors?.sqFeetMin)}
-                    validation={{ max: sqFeetMax }}
-                  />
-                </Grid.Cell>
-                <Grid.Cell>
-                  <Field
-                    label={t("listings.unit.maxSquareFootage")}
-                    id="sqFeetMax"
-                    name="sqFeetMax"
-                    register={register}
-                    type="number"
-                    errorMessage={t("errors.maxLessThanMinFootageError")}
-                    error={fieldHasError(errors?.sqFeetMax)}
-                    validation={{ min: sqFeetMin }}
-                  />
-                </Grid.Cell>
-              </Grid.Row>
-              <Grid.Row columns={3}>
-                <Grid.Cell>
-                  <Select
-                    controlClassName="control"
-                    label={t("listings.unit.minFloor")}
-                    name="floorMin"
-                    id="floorMin"
-                    options={numberOptions(numberFloorsOptions)}
-                    register={register}
-                    errorMessage={t("errors.minGreaterThanMaxFloorError")}
-                    error={fieldHasError(errors?.floorMin)}
-                    validation={{ max: floorMax || numberFloorsOptions }}
-                  />
-                </Grid.Cell>
-                <Grid.Cell>
-                  <Select
-                    controlClassName="control"
-                    label={t("listings.unit.maxFloor")}
-                    name="floorMax"
-                    id="floorMax"
-                    options={numberOptions(numberFloorsOptions)}
-                    register={register}
-                    errorMessage={t("errors.maxLessThanMinFloorError")}
-                    error={fieldHasError(errors?.floorMax)}
-                    validation={{ min: floorMin }}
-                  />
-                </Grid.Cell>
-              </Grid.Row>
+              {!isNonRegulated && (
+                <>
+                  <Grid.Row columns={3}>
+                    <Grid.Cell>
+                      <Field
+                        label={t("listings.unit.minSquareFootage")}
+                        id="sqFeetMin"
+                        name="sqFeetMin"
+                        register={register}
+                        type="number"
+                        errorMessage={t("errors.minGreaterThanMaxFootageError")}
+                        error={fieldHasError(errors?.sqFeetMin)}
+                        validation={{ max: sqFeetMax }}
+                        onChange={() => {
+                          void trigger("sqFeetMin")
+                          void trigger("sqFeetMax")
+                        }}
+                      />
+                    </Grid.Cell>
+                    <Grid.Cell>
+                      <Field
+                        label={t("listings.unit.maxSquareFootage")}
+                        id="sqFeetMax"
+                        name="sqFeetMax"
+                        register={register}
+                        type="number"
+                        errorMessage={t("errors.maxLessThanMinFootageError")}
+                        error={fieldHasError(errors?.sqFeetMax)}
+                        validation={{ min: sqFeetMin }}
+                        onChange={() => {
+                          void trigger("sqFeetMin")
+                          void trigger("sqFeetMax")
+                        }}
+                      />
+                    </Grid.Cell>
+                  </Grid.Row>
+                  <Grid.Row columns={3}>
+                    <Grid.Cell>
+                      <Select
+                        controlClassName="control"
+                        label={t("listings.unit.minFloor")}
+                        name="floorMin"
+                        id="floorMin"
+                        options={numberOptions(numberFloorsOptions)}
+                        register={register}
+                        errorMessage={t("errors.minGreaterThanMaxFloorError")}
+                        error={fieldHasError(errors?.floorMin)}
+                        validation={{ max: floorMax || numberFloorsOptions }}
+                        inputProps={{
+                          onChange: () => {
+                            void trigger("floorMin")
+                            void trigger("floorMax")
+                          },
+                        }}
+                      />
+                    </Grid.Cell>
+                    <Grid.Cell>
+                      <Select
+                        controlClassName="control"
+                        label={t("listings.unit.maxFloor")}
+                        name="floorMax"
+                        id="floorMax"
+                        options={numberOptions(numberFloorsOptions)}
+                        register={register}
+                        errorMessage={t("errors.maxLessThanMinFloorError")}
+                        error={fieldHasError(errors?.floorMax)}
+                        validation={{ min: floorMin }}
+                        inputProps={{
+                          onChange: () => {
+                            void trigger("floorMin")
+                            void trigger("floorMax")
+                          },
+                        }}
+                      />
+                    </Grid.Cell>
+                  </Grid.Row>
+                </>
+              )}
               <Grid.Row columns={3}>
                 <Grid.Cell>
                   <Select
@@ -502,59 +614,65 @@ const UnitGroupForm = ({
                     }}
                   />
                 </Grid.Cell>
-                <Grid.Cell>
-                  <FieldGroup
-                    name="openWaitlist"
-                    type="radio"
-                    fields={[
-                      {
-                        id: "waitlistStatusOpen",
-                        dataTestId: "waitlistStatusOpen",
-                        label: t("listings.listingStatus.active"),
-                        value: YesNoEnum.yes,
-                        defaultChecked: !defaultUnitGroup,
-                      },
-                      {
-                        id: "waitlistStatusClosed",
-                        dataTestId: "waitlistStatusClosed",
-                        label: t("listings.listingStatus.closed"),
-                        value: YesNoEnum.no,
-                      },
-                    ]}
-                    register={register}
-                    fieldClassName="m-0"
-                    fieldGroupClassName="flex h-12 items-center"
-                    error={errors?.openWaitlist !== undefined}
-                    errorMessage={t("errors.requiredFieldError")}
-                    dataTestId="openWaitListQuestion"
-                    groupLabel={t("listings.unit.waitlistStatus")}
-                    fieldLabelClassName={styles["label-option"]}
-                  />
-                </Grid.Cell>
+                {!isNonRegulated && (
+                  <Grid.Cell>
+                    <FieldGroup
+                      name="openWaitlist"
+                      type="radio"
+                      fields={[
+                        {
+                          id: "waitlistStatusOpen",
+                          dataTestId: "waitlistStatusOpen",
+                          label: t("listings.listingStatus.active"),
+                          value: YesNoEnum.yes,
+                          defaultChecked: !defaultUnitGroup,
+                        },
+                        {
+                          id: "waitlistStatusClosed",
+                          dataTestId: "waitlistStatusClosed",
+                          label: t("listings.listingStatus.closed"),
+                          value: YesNoEnum.no,
+                        },
+                      ]}
+                      register={register}
+                      fieldClassName="m-0"
+                      fieldGroupClassName="flex h-12 items-center"
+                      error={errors?.openWaitlist !== undefined}
+                      errorMessage={t("errors.requiredFieldError")}
+                      dataTestId="openWaitListQuestion"
+                      groupLabel={t("listings.unit.waitlistStatus")}
+                      fieldLabelClassName={styles["label-option"]}
+                    />
+                  </Grid.Cell>
+                )}
               </Grid.Row>
             </SectionWithGrid>
-            <hr className="spacer-section-above spacer-section" />
-            <SectionWithGrid heading={t("listings.sections.eligibilityTitle")}>
-              <Grid.Row>
-                <Grid.Cell className="grid-inset-section">
-                  {!!amiLevels.length && (
-                    <div className="mb-5">
-                      <MinimalTable headers={amiTableHeaders} data={amiLevelsTableData} />
-                    </div>
-                  )}
-                  <Button
-                    onClick={() => {
-                      setAmiSummary((amiLevels.length || 0) + 1)
-                    }}
-                    id="addAmiLevelButton"
-                    type="button"
-                    variant="primary-outlined"
-                  >
-                    {t("listings.unit.amiAdd")}
-                  </Button>
-                </Grid.Cell>
-              </Grid.Row>
-            </SectionWithGrid>
+            {!isNonRegulated && (
+              <>
+                <hr className="spacer-section-above spacer-section" />
+                <SectionWithGrid heading={t("listings.sections.eligibilityTitle")}>
+                  <Grid.Row>
+                    <Grid.Cell className="grid-inset-section">
+                      {!!amiLevels.length && (
+                        <div className="mb-5">
+                          <MinimalTable headers={amiTableHeaders} data={amiLevelsTableData} />
+                        </div>
+                      )}
+                      <Button
+                        onClick={() => {
+                          setAmiSummary((amiLevels.length || 0) + 1)
+                        }}
+                        id="addAmiLevelButton"
+                        type="button"
+                        variant="primary-outlined"
+                      >
+                        {t("listings.unit.amiAdd")}
+                      </Button>
+                    </Grid.Cell>
+                  </Grid.Row>
+                </SectionWithGrid>
+              </>
+            )}
           </Card.Section>
         </Card>
       </Drawer.Content>

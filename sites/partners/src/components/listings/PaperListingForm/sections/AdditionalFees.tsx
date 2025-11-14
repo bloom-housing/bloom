@@ -5,11 +5,14 @@ import { Grid } from "@bloom-housing/ui-seeds"
 import { defaultFieldProps } from "../../../../lib/helpers"
 import { AuthContext, listingUtilities } from "@bloom-housing/shared-helpers"
 import {
+  EnumListingDepositType,
+  EnumListingListingType,
   FeatureFlagEnum,
   ListingUtilities,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 import styles from "../ListingForm.module.scss"
+import { GridRow } from "@bloom-housing/ui-seeds/src/layout/Grid"
 
 type AdditionalFeesProps = {
   existingUtilities: ListingUtilities
@@ -23,6 +26,8 @@ const AdditionalFees = (props: AdditionalFeesProps) => {
   const { register, watch, errors, clearErrors, setValue } = formMethods
 
   const jurisdiction = watch("jurisdictions.id")
+  const depositType = watch("depositType")
+  const listingType = watch("listingType")
 
   const utilitiesFields = useMemo(() => {
     return listingUtilities.map((utility) => {
@@ -40,12 +45,20 @@ const AdditionalFees = (props: AdditionalFeesProps) => {
     jurisdiction
   )
 
+  const enableNonRegulatedListings = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableNonRegulatedListings,
+    jurisdiction
+  )
+
   useEffect(() => {
     // clear the utilities values if the new jurisdiction doesn't have utilities included functionality
     if (!enableUtilitiesIncluded) {
       setValue("utilities", undefined)
     }
   }, [enableUtilitiesIncluded, setValue])
+
+  const showAsNonRegulated =
+    enableNonRegulatedListings && listingType === EnumListingListingType.nonRegulated
 
   return (
     <>
@@ -54,7 +67,7 @@ const AdditionalFees = (props: AdditionalFeesProps) => {
         heading={t("listings.sections.additionalFees")}
         subheading={t("listings.sections.additionalFeesSubtitle")}
       >
-        <Grid.Row>
+        <Grid.Row columns={showAsNonRegulated ? 2 : 3}>
           <Grid.Cell>
             <Field
               register={register}
@@ -69,35 +82,116 @@ const AdditionalFees = (props: AdditionalFeesProps) => {
               )}
             />
           </Grid.Cell>
-          <Grid.Cell>
-            <Field
-              register={register}
-              type={"currency"}
-              prepend={"$"}
-              {...defaultFieldProps(
-                "depositMin",
-                t("listings.depositMin"),
-                props.requiredFields,
-                errors,
-                clearErrors
-              )}
-            />
-          </Grid.Cell>
-          <Grid.Cell>
-            <Field
-              register={register}
-              type={"currency"}
-              prepend={"$"}
-              {...defaultFieldProps(
-                "depositMax",
-                t("listings.depositMax"),
-                props.requiredFields,
-                errors,
-                clearErrors
-              )}
-            />
-          </Grid.Cell>
+          {!showAsNonRegulated && (
+            <>
+              <Grid.Cell>
+                <Field
+                  register={register}
+                  type={"currency"}
+                  prepend={"$"}
+                  {...defaultFieldProps(
+                    "depositMin",
+                    t("listings.depositMin"),
+                    props.requiredFields,
+                    errors,
+                    clearErrors
+                  )}
+                />
+              </Grid.Cell>
+              <Grid.Cell>
+                <Field
+                  register={register}
+                  type={"currency"}
+                  prepend={"$"}
+                  {...defaultFieldProps(
+                    "depositMax",
+                    t("listings.depositMax"),
+                    props.requiredFields,
+                    errors,
+                    clearErrors
+                  )}
+                />
+              </Grid.Cell>
+            </>
+          )}
         </Grid.Row>
+        {showAsNonRegulated && (
+          <>
+            <GridRow>
+              <Grid.Cell>
+                <FieldGroup
+                  register={register}
+                  type="radio"
+                  name="depositType"
+                  groupLabel={t("listings.depositTitle")}
+                  fields={[
+                    {
+                      id: "depositTypeFixed",
+                      label: t("listings.depositFixed"),
+                      value: EnumListingDepositType.fixedDeposit,
+                      defaultChecked: !depositType,
+                    },
+                    {
+                      id: "depositTypeRange",
+                      label: t("listings.depositRange"),
+                      value: EnumListingDepositType.depositRange,
+                    },
+                  ]}
+                />
+              </Grid.Cell>
+            </GridRow>
+            <Grid.Row columns={2}>
+              {depositType === EnumListingDepositType.fixedDeposit && (
+                <Grid.Cell>
+                  <Field
+                    type={"currency"}
+                    prepend={"$"}
+                    register={register}
+                    {...defaultFieldProps(
+                      "depositValue",
+                      t("listings.depositValue"),
+                      props.requiredFields,
+                      errors,
+                      clearErrors
+                    )}
+                  />
+                </Grid.Cell>
+              )}
+              {depositType === EnumListingDepositType.depositRange && (
+                <>
+                  <Grid.Cell>
+                    <Field
+                      type={"currency"}
+                      prepend={"$"}
+                      register={register}
+                      {...defaultFieldProps(
+                        "depositRangeMin",
+                        t("listings.depositMin"),
+                        props.requiredFields,
+                        errors,
+                        clearErrors
+                      )}
+                    />
+                  </Grid.Cell>
+                  <Grid.Cell>
+                    <Field
+                      type={"currency"}
+                      prepend={"$"}
+                      register={register}
+                      {...defaultFieldProps(
+                        "depositRangeMax",
+                        t("listings.depositMax"),
+                        props.requiredFields,
+                        errors,
+                        clearErrors
+                      )}
+                    />
+                  </Grid.Cell>
+                </>
+              )}
+            </Grid.Row>
+          </>
+        )}
         <Grid.Row>
           <Grid.Cell>
             <Textarea

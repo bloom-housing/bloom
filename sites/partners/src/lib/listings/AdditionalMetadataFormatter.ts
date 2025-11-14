@@ -1,7 +1,12 @@
-import { listingFeatures, listingUtilities } from "@bloom-housing/shared-helpers"
+import {
+  listingFeatures,
+  listingRequiredDocumentsOptions,
+  listingUtilities,
+} from "@bloom-housing/shared-helpers"
 import {
   ReviewOrderTypeEnum,
   YesNoEnum,
+  EnumListingListingType,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import Formatter from "./Formatter"
 
@@ -91,6 +96,24 @@ export default class AdditionalMetadataFormatter extends Formatter {
         }
       }, {})
     }
+
+    if (
+      this.data.selectedRequiredDocuments &&
+      this.data.listingType === EnumListingListingType.nonRegulated
+    ) {
+      this.data.requiredDocumentsList = listingRequiredDocumentsOptions.reduce((acc, current) => {
+        const isSelected = this.data.selectedRequiredDocuments.some(
+          (document) => document === current
+        )
+        return {
+          ...acc,
+          [current]: isSelected,
+        }
+      }, {})
+    } else {
+      this.data.requiredDocumentsList = null
+    }
+
     if (this.data.utilities) {
       this.data.listingUtilities = listingUtilities.reduce((acc, current) => {
         const isSelected = this.data.utilities.some((utility) => utility === current)

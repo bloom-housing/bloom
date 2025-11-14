@@ -277,6 +277,18 @@ export const listingFeatures = [
   "loweredCabinets",
 ]
 
+export const listingRequiredDocumentsOptions = [
+  "socialSecurityCard",
+  "currentLandlordReference",
+  "birthCertificate",
+  "previousLandlordReference",
+  "governmentIssuedId",
+  "proofOfAssets",
+  "proofOfIncome",
+  "residencyDocuments",
+  "proofOfCustody",
+]
+
 export enum RoleOption {
   Administrator = "administrator",
   Partner = "partner",
