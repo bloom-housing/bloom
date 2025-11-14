@@ -167,7 +167,7 @@ export const stagingSeed = async (
         NeighborhoodAmenitiesEnum.pharmacies,
         NeighborhoodAmenitiesEnum.shoppingVenues,
         NeighborhoodAmenitiesEnum.hospitals,
-        NeighborhoodAmenitiesEnum.seniorCenter,
+        NeighborhoodAmenitiesEnum.seniorCenters,
         NeighborhoodAmenitiesEnum.recreationalFacilities,
         NeighborhoodAmenitiesEnum.playgrounds,
         NeighborhoodAmenitiesEnum.busStops,

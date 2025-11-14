@@ -1000,7 +1000,7 @@ model ListingNeighborhoodAmenities {
   publicTransportation     String?   @map("public_transportation")
   shoppingVenues           String?   @map("shopping_venues")
   hospitals                String?
-  seniorCenter             String?   @map("senior_center")
+  seniorCenters            String?   @map("senior_centers")
   recreationalFacilities   String?   @map("recreational_facilities")
   playgrounds              String?
   busStops                 String?   @map("bus_stops")
@@ -1312,7 +1312,7 @@ enum NeighborhoodAmenitiesEnum {
   healthCareResources
   shoppingVenues
   hospitals
-  seniorCenter
+  seniorCenters
   recreationalFacilities
   playgrounds
   busStops

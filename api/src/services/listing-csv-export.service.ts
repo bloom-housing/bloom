@@ -851,9 +851,9 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
           path: 'listingNeighborhoodAmenities.hospitals',
           label: 'Neighborhood Amenities - Hospitals',
         },
-        [NeighborhoodAmenitiesEnum.seniorCenter]: {
-          path: 'listingNeighborhoodAmenities.seniorCenter',
-          label: 'Neighborhood Amenities - Senior Center',
+        [NeighborhoodAmenitiesEnum.seniorCenters]: {
+          path: 'listingNeighborhoodAmenities.seniorCenters',
+          label: 'Neighborhood Amenities - Senior Centers',
         },
         [NeighborhoodAmenitiesEnum.recreationalFacilities]: {
           path: 'listingNeighborhoodAmenities.recreationalFacilities',

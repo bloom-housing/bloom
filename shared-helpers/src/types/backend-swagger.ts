@@ -3931,7 +3931,7 @@ export interface ListingNeighborhoodAmenities {
   hospitals?: string
 
   /**  */
-  seniorCenter?: string
+  seniorCenters?: string
 
   /**  */
   recreationalFacilities?: string
@@ -7577,7 +7577,7 @@ export enum NeighborhoodAmenitiesEnum {
   "healthCareResources" = "healthCareResources",
   "shoppingVenues" = "shoppingVenues",
   "hospitals" = "hospitals",
-  "seniorCenter" = "seniorCenter",
+  "seniorCenters" = "seniorCenters",
   "recreationalFacilities" = "recreationalFacilities",
   "playgrounds" = "playgrounds",
   "busStops" = "busStops",

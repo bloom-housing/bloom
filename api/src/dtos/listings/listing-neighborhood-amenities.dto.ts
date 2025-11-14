@@ -56,7 +56,7 @@ export class ListingNeighborhoodAmenities {
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
-  seniorCenter?: string | null;
+  seniorCenters?: string | null;
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })

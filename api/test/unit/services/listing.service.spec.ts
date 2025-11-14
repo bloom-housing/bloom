@@ -577,7 +577,7 @@ describe('Testing listing service', () => {
         hospitals: 'hospitals',
         playgrounds: 'playgrounds',
         recreationalFacilities: 'recreational facilities',
-        seniorCenter: 'senior center',
+        seniorCenters: 'senior centers',
         shoppingVenues: 'shopping venues',
       },
       marketingType: undefined,
@@ -3492,7 +3492,7 @@ describe('Testing listing service', () => {
               hospitals: 'hospitals',
               playgrounds: 'playgrounds',
               recreationalFacilities: 'recreational facilities',
-              seniorCenter: 'senior center',
+              seniorCenters: 'senior centers',
               shoppingVenues: 'shopping venues',
             },
           },
@@ -4000,7 +4000,7 @@ describe('Testing listing service', () => {
               hospitals: 'hospitals',
               playgrounds: 'playgrounds',
               recreationalFacilities: 'recreational facilities',
-              seniorCenter: 'senior center',
+              seniorCenters: 'senior centers',
               shoppingVenues: 'shopping venues',
             },
           },
@@ -4485,7 +4485,7 @@ describe('Testing listing service', () => {
         hospitals: 'hospitals',
         playgrounds: 'playgrounds',
         recreationalFacilities: 'recreational facilities',
-        seniorCenter: 'senior center',
+        seniorCenters: 'senior centers',
         shoppingVenues: 'shopping venues',
       };
 
@@ -4870,7 +4870,7 @@ describe('Testing listing service', () => {
                 hospitals: null,
                 playgrounds: null,
                 recreationalFacilities: null,
-                seniorCenter: null,
+                seniorCenters: null,
                 shoppingVenues: null,
               },
               update: {
@@ -4884,7 +4884,7 @@ describe('Testing listing service', () => {
                 hospitals: null,
                 playgrounds: null,
                 recreationalFacilities: null,
-                seniorCenter: null,
+                seniorCenters: null,
                 shoppingVenues: null,
               },
               where: {
@@ -5033,7 +5033,7 @@ describe('Testing listing service', () => {
                 hospitals: null,
                 playgrounds: null,
                 recreationalFacilities: null,
-                seniorCenter: null,
+                seniorCenters: null,
                 shoppingVenues: null,
               },
               update: {
@@ -5047,7 +5047,7 @@ describe('Testing listing service', () => {
                 hospitals: null,
                 playgrounds: null,
                 recreationalFacilities: null,
-                seniorCenter: null,
+                seniorCenters: null,
                 shoppingVenues: null,
               },
               where: {
