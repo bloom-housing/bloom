@@ -45,6 +45,8 @@ export const buildOrderByForListings = (
       case ListingOrderByKeys.marketingSeason:
         return { marketingSeason: orderDir[index] };
       case ListingOrderByKeys.applicationDates:
+      case ListingOrderByKeys.listingType:
+        return { listingType: orderDir[index] };
       case undefined:
         // Default to ordering by applicationDates (i.e. applicationDueDate
         // and applicationOpenDate) if no orderBy param is specified.
