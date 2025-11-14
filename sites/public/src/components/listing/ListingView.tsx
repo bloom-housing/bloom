@@ -529,15 +529,11 @@ export const ListingView = (props: ListingProps) => {
     return (
       <QuantityRowSection
         quantityRows={
-          listing.reviewOrderType === ReviewOrderTypeEnum.waitlist ||
-          listing.reviewOrderType === ReviewOrderTypeEnum.waitlistLottery
-            ? waitlistRow
-            : unitRow
+          listing.reviewOrderType === ReviewOrderTypeEnum.waitlist ? waitlistRow : unitRow
         }
         strings={{
           sectionTitle:
-            listing.reviewOrderType === ReviewOrderTypeEnum.waitlist ||
-            listing.reviewOrderType === ReviewOrderTypeEnum.waitlistLottery
+            listing.reviewOrderType === ReviewOrderTypeEnum.waitlist
               ? t("listings.waitlist.isOpen")
               : t("listings.vacantUnitsAvailable"),
           description: description(),
