@@ -9,7 +9,6 @@ import ChevronLeftIcon from "@heroicons/react/20/solid/ChevronLeftIcon"
 import ChevronRightIcon from "@heroicons/react/20/solid/ChevronRightIcon"
 import { AuthContext, MessageContext, listingSectionQuestions } from "@bloom-housing/shared-helpers"
 import {
-  EnumListingListingType,
   FeatureFlag,
   FeatureFlagEnum,
   Jurisdiction,
