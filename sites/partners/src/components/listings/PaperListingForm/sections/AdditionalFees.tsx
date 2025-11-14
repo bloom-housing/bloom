@@ -57,6 +57,9 @@ const AdditionalFees = (props: AdditionalFeesProps) => {
     }
   }, [enableUtilitiesIncluded, setValue])
 
+  const showAsNonRegulated =
+    enableNonRegulatedListings && listingType === EnumListingListingType.nonRegulated
+
   return (
     <>
       <hr className="spacer-section-above spacer-section" />
@@ -64,7 +67,7 @@ const AdditionalFees = (props: AdditionalFeesProps) => {
         heading={t("listings.sections.additionalFees")}
         subheading={t("listings.sections.additionalFeesSubtitle")}
       >
-        <Grid.Row columns={2}>
+        <Grid.Row columns={showAsNonRegulated ? 2 : 3}>
           <Grid.Cell>
             <Field
               register={register}
@@ -79,8 +82,40 @@ const AdditionalFees = (props: AdditionalFeesProps) => {
               )}
             />
           </Grid.Cell>
+          {!showAsNonRegulated && (
+            <>
+              <Grid.Cell>
+                <Field
+                  register={register}
+                  type={"currency"}
+                  prepend={"$"}
+                  {...defaultFieldProps(
+                    "depositMin",
+                    t("listings.depositMin"),
+                    props.requiredFields,
+                    errors,
+                    clearErrors
+                  )}
+                />
+              </Grid.Cell>
+              <Grid.Cell>
+                <Field
+                  register={register}
+                  type={"currency"}
+                  prepend={"$"}
+                  {...defaultFieldProps(
+                    "depositMax",
+                    t("listings.depositMax"),
+                    props.requiredFields,
+                    errors,
+                    clearErrors
+                  )}
+                />
+              </Grid.Cell>
+            </>
+          )}
         </Grid.Row>
-        {enableNonRegulatedListings && listingType === EnumListingListingType.nonRegulated && (
+        {showAsNonRegulated && (
           <>
             <GridRow>
               <Grid.Cell>
