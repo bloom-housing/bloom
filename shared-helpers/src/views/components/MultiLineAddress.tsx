@@ -26,12 +26,7 @@ const MultiLineAddress = ({ address }: MultiLineAddressProps) => {
   }
   addressHTML = `<span>${addressHTML}</span>`
 
-  return (
-    <Markdown
-      options={{ disableParsingRawHTML: false }}
-      children={addressHTML}
-    />
-  )
+  return <Markdown options={{ disableParsingRawHTML: false }} children={addressHTML} />
 }
 
 export { MultiLineAddress as default, MultiLineAddress }

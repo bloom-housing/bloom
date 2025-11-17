@@ -7,7 +7,7 @@ const SignUpBenefitsHeadingGroup = (props: { mobileView: boolean }) => {
     <HeadingGroup
       heading={t("account.signUpSaveTime.title")}
       subheading={t("account.signUpSaveTime.subTitle")}
-      headingProps={{ size: "2xl"}}
+      headingProps={{ size: "2xl" }}
       className={props.mobileView ? styles["sign-up-benefits-heading-group"] : ""}
     />
   )
