@@ -96,6 +96,18 @@ const LotteryResults = () => {
       ? `$(t("account.application.lottery.resultsHeader")) for the waitlist`
       : t("account.application.lottery.resultsHeader")
 
+  const isWaitListLottery = listing.reviewOrderType === ReviewOrderTypeEnum.waitlistLottery
+  const applications = totals?.find((total) => !total.multiselectQuestionId).total
+
+  const resultsSubheaderWaitlist = t(
+    `account.application.lottery.resultsSubheaderWaitlistLottery${
+      listing?.unitsAvailable !== 1 ? "Plural" : ""
+    }`,
+    {
+      applications,
+    }
+  )
+
   return (
     <>
       <RequireLogin signInPath="/sign-in" signInMessage={t("t.loginIsRequired")}>
@@ -125,15 +137,17 @@ const LotteryResults = () => {
                       {lotteryResultText}
                     </Heading>
                     <p className="mt-4">
-                      {t(
-                        `account.application.lottery.resultsSubheader${
-                          listing?.unitsAvailable !== 1 ? "Plural" : ""
-                        }`,
-                        {
-                          applications: totals?.find((total) => !total.multiselectQuestionId).total,
-                          units: listing?.unitsAvailable,
-                        }
-                      )}
+                      {isWaitListLottery
+                        ? resultsSubheaderWaitlist
+                        : t(
+                            `account.application.lottery.resultsSubheader${
+                              listing?.unitsAvailable !== 1 ? "Plural" : ""
+                            }`,
+                            {
+                              applications,
+                              units: listing?.unitsAvailable,
+                            }
+                          )}
                     </p>
                   </Card.Section>
                   <Card.Section
