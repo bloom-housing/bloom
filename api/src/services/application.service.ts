@@ -3,8 +3,11 @@ import {
   Injectable,
   NotFoundException,
   ForbiddenException,
+  Logger,
+  Inject,
 } from '@nestjs/common';
 import crypto from 'crypto';
+import dayjs from 'dayjs';
 import { Request as ExpressRequest } from 'express';
 import {
   ListingEventsTypeEnum,
@@ -36,7 +39,7 @@ import { MostRecentApplicationQueryParams } from '../dtos/applications/most-rece
 import { PublicAppsViewQueryParams } from '../dtos/applications/public-apps-view-params.dto';
 import { ApplicationsFilterEnum } from '../enums/applications/filter-enum';
 import { PublicAppsViewResponse } from '../dtos/applications/public-apps-view-response.dto';
-import dayjs from 'dayjs';
+import { CronJobService } from './cron-job.service';
 
 export const view: Partial<
   Record<ApplicationViews, Prisma.ApplicationsInclude>
@@ -266,6 +269,8 @@ view.details = {
   },
 };
 
+const PII_DELETION_CRON_JOB_NAME = 'PII_DELETION_CRON_JOB';
+
 /*
   this is the service for applicationss
   it handles all the backend's business logic for reading/writing/deleting application data
@@ -277,7 +282,17 @@ export class ApplicationService {
     private emailService: EmailService,
     private permissionService: PermissionService,
     private geocodingService: GeocodingService,
+    @Inject(Logger)
+    private logger = new Logger(ApplicationService.name),
+    private cronJobService: CronJobService,
   ) {}
+  onModuleInit() {
+    this.cronJobService.startCronJob(
+      PII_DELETION_CRON_JOB_NAME,
+      process.env.PII_DELETION_CRON_STRING,
+      this.removePIICronJon.bind(this),
+    );
+  }
 
   /*
     this will get a set of applications given the params passed in
@@ -1095,6 +1110,133 @@ export class ApplicationService {
       jurisdictionId: listingJurisdiction?.id,
       userId: applicantUserId,
     });
+  }
+
+  /*
+   * Remove all PII fields from the passed in application
+   */
+  async removePII(applicationId: string): Promise<void> {
+    const application = await this.prisma.applications.findFirst({
+      include: {
+        applicant: true,
+        householdMember: true,
+        alternateContact: true,
+      },
+      where: {
+        id: applicationId,
+      },
+    });
+
+    if (!application) return;
+
+    const transactions = [];
+    const addressDeletionData = (id: string) => {
+      return this.prisma.address.update({
+        data: {
+          latitude: null,
+          longitude: null,
+          street: null,
+          street2: null,
+        },
+        where: {
+          id: id,
+        },
+      });
+    };
+
+    if (application.applicant?.addressId) {
+      transactions.push(addressDeletionData(application.applicant?.addressId));
+    }
+
+    if (application.applicant?.workAddressId) {
+      transactions.push(
+        addressDeletionData(application.applicant?.workAddressId),
+      );
+    }
+
+    if (application.applicant) {
+      transactions.push(
+        this.prisma.applicant.update({
+          data: {
+            birthDay: null,
+            birthMonth: null,
+            birthYear: null,
+            emailAddress: null,
+            firstName: null,
+            lastName: null,
+            middleName: null,
+            phoneNumber: null,
+          },
+          where: {
+            id: application.applicant.id,
+          },
+        }),
+      );
+    }
+
+    if (application.alternateContact?.mailingAddressId) {
+      transactions.push(
+        addressDeletionData(application.alternateContact.mailingAddressId),
+      );
+    }
+
+    if (application.alternateContact) {
+      transactions.push(
+        this.prisma.alternateContact.update({
+          data: {
+            emailAddress: null,
+            firstName: null,
+            lastName: null,
+            phoneNumber: null,
+          },
+          where: {
+            id: application.alternateContact.id,
+          },
+        }),
+      );
+    }
+
+    for (const householdMember of application.householdMember) {
+      transactions.push(addressDeletionData(householdMember.addressId));
+
+      transactions.push(
+        this.prisma.householdMember.update({
+          data: {
+            birthDay: null,
+            birthMonth: null,
+            birthYear: null,
+            firstName: null,
+            lastName: null,
+          },
+          where: {
+            id: householdMember.id,
+          },
+        }),
+      );
+    }
+
+    await this.prisma.$transaction(transactions);
+  }
+
+  async removePIICronJon(): Promise<SuccessDTO> {
+    if (process.env.APPLICATION_DAYS_TILL_EXPIRY) {
+      this.logger.warn('removePIICron job running');
+      await this.cronJobService.markCronJobAsStarted(
+        PII_DELETION_CRON_JOB_NAME,
+      );
+      // Only delete applications that are scheduled to be expired and is not that most
+      // recent application for that user
+      const applications = await this.prisma.applications.findMany({
+        select: { id: true },
+        where: { expireAfter: { lte: new Date() }, isNewest: false },
+      });
+      for (const application of applications) {
+        this.removePII(application.id);
+      }
+    }
+    return {
+      success: true,
+    };
   }
 
   /*

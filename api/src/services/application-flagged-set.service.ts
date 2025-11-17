@@ -33,8 +33,8 @@ import { AfsResolve } from '../dtos/application-flagged-sets/afs-resolve.dto';
 import { User } from '../dtos/users/user.dto';
 import { Application } from '../dtos/applications/application.dto';
 import { IdDTO } from '../dtos/shared/id.dto';
-import { startCronJob } from '../utilities/cron-job-starter';
 import dayjs from 'dayjs';
+import { CronJobService } from './cron-job.service';
 
 /*
   this is the service for application flaged sets
@@ -56,25 +56,19 @@ export class ApplicationFlaggedSetService implements OnModuleInit {
     private prisma: PrismaService,
     @Inject(Logger)
     private logger = new Logger(ApplicationFlaggedSetService.name),
-    private schedulerRegistry: SchedulerRegistry,
+    private cronJobService: CronJobService,
   ) {}
 
   onModuleInit() {
-    startCronJob(
-      this.prisma,
+    this.cronJobService.startCronJob(
       OLD_CRON_JOB_NAME,
       process.env.AFS_PROCESSING_CRON_STRING,
       this.process.bind(this),
-      this.logger,
-      this.schedulerRegistry,
     );
-    startCronJob(
-      this.prisma,
+    this.cronJobService.startCronJob(
       CRON_JOB_NAME,
       process.env.DUPLICATES_PROCESSING_CRON_STRING,
       this.processDuplicates.bind(this),
-      this.logger,
-      this.schedulerRegistry,
     );
   }
 
@@ -486,7 +480,7 @@ export class ApplicationFlaggedSetService implements OnModuleInit {
     forceProcess?: boolean,
   ): Promise<SuccessDTO> {
     this.logger.warn('running the Application flagged sets version 2 cron job');
-    await this.markCronJobAsStarted(CRON_JOB_NAME);
+    await this.cronJobService.markCronJobAsStarted(CRON_JOB_NAME);
     const duplicatesCloseDate =
       !!process.env.DUPLICATES_CLOSE_DATE &&
       dayjs(process.env.DUPLICATES_CLOSE_DATE, 'YYYY-MM-DD HH:mm Z');
@@ -772,7 +766,7 @@ export class ApplicationFlaggedSetService implements OnModuleInit {
   */
   async process(listingId?: string): Promise<SuccessDTO> {
     this.logger.warn('running the Application flagged sets cron job');
-    await this.markCronJobAsStarted(OLD_CRON_JOB_NAME);
+    await this.cronJobService.markCronJobAsStarted(OLD_CRON_JOB_NAME);
     const duplicatesCloseDate =
       process.env.DUPLICATES_CLOSE_DATE &&
       dayjs(process.env.DUPLICATES_CLOSE_DATE, 'YYYY-MM-DD HH:mm Z');
@@ -855,37 +849,6 @@ export class ApplicationFlaggedSetService implements OnModuleInit {
     return {
       success: true,
     };
-  }
-
-  /**
-    marks the db record for this cronjob as begun or creates a cronjob that
-    is marked as begun if one does not already exist 
-  */
-  async markCronJobAsStarted(name: string): Promise<void> {
-    const job = await this.prisma.cronJob.findFirst({
-      where: {
-        name: name,
-      },
-    });
-    if (job) {
-      // if a job exists then we update db entry
-      await this.prisma.cronJob.update({
-        data: {
-          lastRunDate: new Date(),
-        },
-        where: {
-          id: job.id,
-        },
-      });
-    } else {
-      // if no job we create a new entry
-      await this.prisma.cronJob.create({
-        data: {
-          lastRunDate: new Date(),
-          name: name,
-        },
-      });
-    }
   }
 
   /**

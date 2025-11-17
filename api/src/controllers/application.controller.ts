@@ -286,4 +286,14 @@ export class ApplicationController {
       mapTo(User, req['user']),
     );
   }
+
+  @Put('removePIICronJob')
+  @ApiOperation({
+    summary: 'trigger the remove PII cron job',
+    operationId: 'removePIICronJob',
+  })
+  @ApiOkResponse({ type: SuccessDTO })
+  async process(): Promise<SuccessDTO> {
+    return await this.applicationService.removePIICronJon();
+  }
 }
