@@ -30,6 +30,7 @@ import { OrderByEnum } from '../../../src/enums/shared/order-by-enum';
 import { LotteryService } from '../../../src/services/lottery.service';
 import { ListingLotteryStatus } from '../../../src/dtos/listings/listing-lottery-status.dto';
 import { permissionActions } from '../../../src/enums/permissions/permission-actions-enum';
+import { CronJobService } from '../../../src/services/cron-job.service';
 
 const canOrThrowMock = jest.fn();
 const lotteryReleasedMock = jest.fn();
@@ -79,6 +80,7 @@ describe('Testing lottery service', () => {
         Logger,
         SchedulerRegistry,
         GoogleTranslateService,
+        CronJobService,
       ],
       imports: [HttpModule],
     }).compile();

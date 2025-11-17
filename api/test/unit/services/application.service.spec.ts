@@ -10,6 +10,8 @@ import {
   ListingsStatusEnum,
   LotteryStatusEnum,
 } from '@prisma/client';
+import { Logger } from '@nestjs/common';
+import { SchedulerRegistry } from '@nestjs/schedule';
 import { randomUUID } from 'crypto';
 import dayjs from 'dayjs';
 import { Request as ExpressRequest } from 'express';
@@ -34,6 +36,7 @@ import { HouseholdMemberRelationship } from '../../../src/enums/applications/hou
 import { PublicAppsViewQueryParams } from '../../../src/dtos/applications/public-apps-view-params.dto';
 import { ApplicationsFilterEnum } from '../../../src/enums/applications/filter-enum';
 import { FeatureFlagEnum } from '../../../src/enums/feature-flags/feature-flags-enum';
+import { CronJobService } from '../../../src/services/cron-job.service';
 
 export const mockApplication = (options: {
   date: Date;
@@ -703,6 +706,9 @@ describe('Testing application service', () => {
         ApplicationService,
         PrismaService,
         GeocodingService,
+        Logger,
+        CronJobService,
+        SchedulerRegistry,
         {
           provide: EmailService,
           useValue: {
