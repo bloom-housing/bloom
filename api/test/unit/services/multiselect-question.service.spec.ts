@@ -571,6 +571,42 @@ describe('Testing multiselect question service', () => {
         },
       });
     });
+
+    it('should error invalid status is passed to create()', async () => {
+      const date = new Date();
+      const mockedMultiselectQuestion = mockMultiselectQuestion(
+        2,
+        date,
+        MultiselectQuestionsApplicationSectionEnum.programs,
+        true,
+      );
+      prisma.multiselectQuestions.create = jest.fn().mockResolvedValue(null);
+
+      prisma.jurisdictions.findFirstOrThrow = jest
+        .fn()
+        .mockResolvedValue(mockedMultiselectQuestion.jurisdiction);
+
+      const params: MultiselectQuestionCreate = {
+        applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
+        description: 'description 2',
+        isExclusive: true,
+        hideFromListing: false,
+        jurisdiction: { id: mockedMultiselectQuestion.jurisdiction.id },
+        jurisdictions: undefined,
+        links: [],
+        multiselectOptions: [],
+        name: 'name 2',
+        options: [],
+        optOutText: 'optOutText 2',
+        status: MultiselectQuestionsStatusEnum.active,
+        subText: 'subText 2',
+        text: 'text 2',
+      };
+
+      await expect(
+        async () => await service.create(params, user),
+      ).rejects.toThrowError("status must be 'draft' or 'visible' on create");
+    });
   });
 
   describe('update', () => {
