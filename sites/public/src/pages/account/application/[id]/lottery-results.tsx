@@ -98,11 +98,10 @@ const LotteryResults = () => {
 
   const isWaitListLottery = listing.reviewOrderType === ReviewOrderTypeEnum.waitlistLottery
   const applications = totals?.find((total) => !total.multiselectQuestionId).total
+  const isPruralText = listing?.unitsAvailable !== 1 ? "Plural" : ""
 
-  const resultsSubheaderWaitlist = t(
-    `account.application.lottery.resultsSubheaderWaitlistLottery${
-      listing?.unitsAvailable !== 1 ? "Plural" : ""
-    }`,
+  const resultsSubheaderWaitlistLottery = t(
+    `account.application.lottery.resultsSubheaderWaitlistLottery${isPruralText}`,
     {
       applications,
     }
@@ -138,16 +137,11 @@ const LotteryResults = () => {
                     </Heading>
                     <p className="mt-4">
                       {isWaitListLottery
-                        ? resultsSubheaderWaitlist
-                        : t(
-                            `account.application.lottery.resultsSubheader${
-                              listing?.unitsAvailable !== 1 ? "Plural" : ""
-                            }`,
-                            {
-                              applications,
-                              units: listing?.unitsAvailable,
-                            }
-                          )}
+                        ? resultsSubheaderWaitlistLottery
+                        : t(`account.application.lottery.resultsSubheader${isPruralText}`, {
+                            applications,
+                            units: listing?.unitsAvailable,
+                          })}
                     </p>
                   </Card.Section>
                   <Card.Section
