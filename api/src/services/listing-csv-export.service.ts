@@ -459,6 +459,17 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
           ? 'Housing developer / owner'
           : 'Developer',
       },
+      ...(doAnyJurisdictionHaveFeatureFlagSet(
+        user.jurisdictions,
+        FeatureFlagEnum.enableListingFileNumber,
+      )
+        ? [
+            {
+              path: 'listingFileNumber',
+              label: 'Listing File Number',
+            },
+          ]
+        : []),
       {
         path: 'listingsBuildingAddress.street',
         label: 'Building Street Address',
