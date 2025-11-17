@@ -423,6 +423,26 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
         path: 'name',
         label: 'Listing Name',
       },
+      ...(doAnyJurisdictionHaveFeatureFlagSet(
+        user.jurisdictions,
+        FeatureFlagEnum.enableNonRegulatedListings,
+      )
+        ? [
+            {
+              path: 'listingType',
+              label: 'Listing Type',
+              format: (val: ListingTypeEnum) => {
+                if (!val) {
+                  return '';
+                }
+
+                return val === ListingTypeEnum.regulated
+                  ? 'Regulated'
+                  : 'Non-regulated';
+              },
+            },
+          ]
+        : []),
       {
         path: 'status',
         label: 'Listing Status',
