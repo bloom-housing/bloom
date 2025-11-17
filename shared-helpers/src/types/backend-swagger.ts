@@ -3923,6 +3923,24 @@ export interface ListingNeighborhoodAmenities {
 
   /**  */
   healthCareResources?: string
+
+  /**  */
+  shoppingVenues?: string
+
+  /**  */
+  hospitals?: string
+
+  /**  */
+  seniorCenters?: string
+
+  /**  */
+  recreationalFacilities?: string
+
+  /**  */
+  playgrounds?: string
+
+  /**  */
+  busStops?: string
 }
 
 export interface Listing {
@@ -3961,6 +3979,9 @@ export interface Listing {
 
   /**  */
   developer?: string
+
+  /**  */
+  listingFileNumber?: string
 
   /**  */
   householdSizeMax?: number
@@ -4653,6 +4674,9 @@ export interface ListingCreate {
   developer?: string
 
   /**  */
+  listingFileNumber?: string
+
+  /**  */
   householdSizeMax?: number
 
   /**  */
@@ -4994,6 +5018,9 @@ export interface ListingUpdate {
 
   /**  */
   developer?: string
+
+  /**  */
+  listingFileNumber?: string
 
   /**  */
   householdSizeMax?: number
@@ -7581,6 +7608,12 @@ export enum NeighborhoodAmenitiesEnum {
   "parksAndCommunityCenters" = "parksAndCommunityCenters",
   "pharmacies" = "pharmacies",
   "healthCareResources" = "healthCareResources",
+  "shoppingVenues" = "shoppingVenues",
+  "hospitals" = "hospitals",
+  "seniorCenters" = "seniorCenters",
+  "recreationalFacilities" = "recreationalFacilities",
+  "playgrounds" = "playgrounds",
+  "busStops" = "busStops",
 }
 
 export enum FeatureFlagEnum {
@@ -7600,6 +7633,7 @@ export enum FeatureFlagEnum {
   "enableIsVerified" = "enableIsVerified",
   "enableLimitedHowDidYouHear" = "enableLimitedHowDidYouHear",
   "enableListingFavoriting" = "enableListingFavoriting",
+  "enableListingFileNumber" = "enableListingFileNumber",
   "enableListingFiltering" = "enableListingFiltering",
   "enableListingOpportunity" = "enableListingOpportunity",
   "enableListingPagination" = "enableListingPagination",
