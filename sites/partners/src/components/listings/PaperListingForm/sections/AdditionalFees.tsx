@@ -13,6 +13,7 @@ import styles from "../ListingForm.module.scss"
 
 type AdditionalFeesProps = {
   existingUtilities: ListingUtilities
+  jurisdiction: string
   requiredFields: string[]
 }
 
@@ -20,9 +21,7 @@ const AdditionalFees = (props: AdditionalFeesProps) => {
   const formMethods = useFormContext()
   const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, watch, errors, clearErrors, setValue } = formMethods
-
-  const jurisdiction = watch("jurisdictions.id")
+  const { register, errors, clearErrors, setValue } = formMethods
 
   const utilitiesFields = useMemo(() => {
     return listingUtilities.map((utility) => {
@@ -37,7 +36,7 @@ const AdditionalFees = (props: AdditionalFeesProps) => {
 
   const enableUtilitiesIncluded = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableUtilitiesIncluded,
-    jurisdiction
+    props.jurisdiction
   )
 
   useEffect(() => {

@@ -9,12 +9,14 @@ export interface StatusBarProps {
 const StatusBar = (props: StatusBarProps) => {
   return (
     <section className={styles["status-bar"]}>
-      <div
-        className={`${styles["status-bar__row"]} ${!props.backButton ? styles["tag-only"] : ""}`}
-      >
-        {props.backButton}
-        <div className={styles["status-bar__tag"]}>{props.children}</div>
-      </div>
+      {props.children && (
+        <div
+          className={`${styles["status-bar__row"]} ${!props.backButton ? styles["tag-only"] : ""}`}
+        >
+          {props.backButton}
+          <div className={styles["status-bar__tag"]}>{props.children}</div>
+        </div>
+      )}
     </section>
   )
 }

@@ -27,17 +27,19 @@ import { fieldMessage, fieldHasError, getLabel } from "../../../../lib/helpers"
 import styles from "../ListingForm.module.scss"
 
 type ApplicationDatesProps = {
-  openHouseEvents: TempEvent[]
-  setOpenHouseEvents: (events: TempEvent[]) => void
+  jurisdiction: string
   listing?: FormListing
+  openHouseEvents: TempEvent[]
   requiredFields: string[]
+  setOpenHouseEvents: (events: TempEvent[]) => void
 }
 
 const ApplicationDates = ({
+  jurisdiction,
   listing,
   openHouseEvents,
-  setOpenHouseEvents,
   requiredFields,
+  setOpenHouseEvents,
 }: ApplicationDatesProps) => {
   const openHouseHeaders = {
     date: "t.date",
@@ -92,8 +94,6 @@ const ApplicationDates = ({
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { errors, register, setValue, watch, clearErrors } = formMethods
-
-  const jurisdiction = watch("jurisdictions.id")
 
   const enableMarketingStatus = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableMarketingStatus,

@@ -5,16 +5,18 @@ import { useContext } from "react"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import styles from "../ListingForm.module.scss"
 
-const ListingVerification = () => {
+type ListingVerificationProps = {
+  jurisdiction: string
+}
+
+const ListingVerification = (props: ListingVerificationProps) => {
   const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, watch } = formMethods
+  const { register } = formMethods
 
-  const jurisdiction = watch("jurisdictions.id")
-
-  const enableIsVerified = doJurisdictionsHaveFeatureFlagOn("enableIsVerified", jurisdiction)
+  const enableIsVerified = doJurisdictionsHaveFeatureFlagOn("enableIsVerified", props.jurisdiction)
 
   return (
     <>

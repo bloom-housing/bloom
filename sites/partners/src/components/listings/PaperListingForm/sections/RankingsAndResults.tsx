@@ -21,6 +21,7 @@ import styles from "../ListingForm.module.scss"
 
 type RankingsAndResultsProps = {
   isAdmin?: boolean
+  jurisdiction: string
   listing?: FormListing
   requiredFields: string[]
   whatToExpectEditor: Editor
@@ -29,6 +30,7 @@ type RankingsAndResultsProps = {
 
 const RankingsAndResults = ({
   isAdmin,
+  jurisdiction,
   listing,
   requiredFields,
   whatToExpectEditor,
@@ -66,29 +68,24 @@ const RankingsAndResults = ({
     name: "listingAvailabilityQuestion",
   })
 
-  const selectedJurisdictionId: string = useWatch({
-    control,
-    name: "jurisdictions.id",
-  })
-
   const enableWaitlistAdditionalFields = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableWaitlistAdditionalFields,
-    selectedJurisdictionId
+    jurisdiction
   )
 
   const enableWaitlistLottery = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableWaitlistLottery,
-    selectedJurisdictionId
+    jurisdiction
   )
 
   const enableUnitGroups = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableUnitGroups,
-    selectedJurisdictionId
+    jurisdiction
   )
 
   const enableWhatToExpectAdditionalField = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableWhatToExpectAdditionalField,
-    selectedJurisdictionId
+    jurisdiction
   )
 
   const showFSFCLotterySection =
