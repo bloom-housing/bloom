@@ -3,7 +3,12 @@ import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import cookieParser from 'cookie-parser';
 import { stringify } from 'qs';
-import { FlaggedSetStatusEnum, RuleEnum, UnitTypeEnum } from '@prisma/client';
+import {
+  FlaggedSetStatusEnum,
+  MultiselectQuestionsStatusEnum,
+  RuleEnum,
+  UnitTypeEnum,
+} from '@prisma/client';
 import { AppModule } from '../../../src/modules/app.module';
 import { PrismaService } from '../../../src/services/prisma.service';
 import { userFactory } from '../../../prisma/seed-helpers/user-factory';
@@ -353,7 +358,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         .set('Cookie', cookies)
         .expect(201);
     });
-    it('should succed for update endpoint', async () => {
+    it('should succeed for update endpoint', async () => {
       const unitTypeA = await unitTypeFactorySingle(
         prisma,
         UnitTypeEnum.oneBdrm,
@@ -835,7 +840,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
       });
 
       await request(app.getHttpServer())
-        .put(`/multiselectQuestions/${multiselectQuestionA.id}`)
+        .put('/multiselectQuestions')
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send(
           buildMultiselectQuestionUpdateMock(
@@ -858,6 +863,60 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         .send({
           id: multiselectQuestionA.id,
         } as IdDTO)
+        .set('Cookie', cookies)
+        .expect(403);
+    });
+
+    it('should error as forbidden for reActivate endpoint', async () => {
+      const multiselectQuestionA = await prisma.multiselectQuestions.create({
+        data: multiselectQuestionFactory(
+          jurisdictionId,
+          {
+            multiselectQuestion: {
+              status: MultiselectQuestionsStatusEnum.toRetire,
+            },
+          },
+          true,
+        ),
+      });
+
+      await request(app.getHttpServer())
+        .put('/multiselectQuestions/reActivate')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({
+          id: multiselectQuestionA.id,
+        } as IdDTO)
+        .set('Cookie', cookies)
+        .expect(403);
+    });
+
+    it('should error as forbidden for retire endpoint', async () => {
+      const multiselectQuestionA = await prisma.multiselectQuestions.create({
+        data: multiselectQuestionFactory(
+          jurisdictionId,
+          {
+            multiselectQuestion: {
+              status: MultiselectQuestionsStatusEnum.active,
+            },
+          },
+          true,
+        ),
+      });
+
+      await request(app.getHttpServer())
+        .put('/multiselectQuestions/retire')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({
+          id: multiselectQuestionA.id,
+        } as IdDTO)
+        .set('Cookie', cookies)
+        .expect(403);
+    });
+
+    it('should error as forbidden for retireMultiselectQuestions endpoint', async () => {
+      await request(app.getHttpServer())
+        .put('/multiselectQuestions/retireMultiselectQuestions')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
         .expect(403);
     });

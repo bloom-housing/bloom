@@ -17,10 +17,10 @@ p, limitedJurisdictionAdmin, asset, true, .*
 p, partner, asset, true, .*
 
 p, admin, multiselectQuestion, true, .*
-p, supportAdmin, multiselectQuestion, true, .*
-p, jurisdictionAdmin, multiselectQuestion, true, .*
-p, limitedJurisdictionAdmin, multiselectQuestion, true, .*
-p, partner, multiselectQuestion, true, .*
+p, supportAdmin, multiselectQuestion, true, read
+p, jurisdictionAdmin, multiselectQuestion, true, read
+p, limitedJurisdictionAdmin, multiselectQuestion, true, read
+p, partner, multiselectQuestion, true, read
 p, anonymous, multiselectQuestion, true, read
 
 p, admin, applicationMethod, true, .*

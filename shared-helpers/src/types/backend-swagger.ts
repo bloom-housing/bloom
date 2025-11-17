@@ -1312,6 +1312,28 @@ export class MultiselectQuestionsService {
     })
   }
   /**
+   * Update multiselect question
+   */
+  update(
+    params: {
+      /** requestBody */
+      body?: MultiselectQuestionUpdate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<MultiselectQuestion> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/multiselectQuestions"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
    * Delete multiselect question by id
    */
   delete(
@@ -1327,6 +1349,66 @@ export class MultiselectQuestionsService {
       const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
 
       let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Re-activate a multiselect question
+   */
+  reActivate(
+    params: {
+      /** requestBody */
+      body?: IdDTO
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/multiselectQuestions/reActivate"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Retire a multiselect question
+   */
+  retire(
+    params: {
+      /** requestBody */
+      body?: IdDTO
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/multiselectQuestions/retire"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Trigger the retirement of multiselect questions cron job
+   */
+  retireMultiselectQuestions(options: IRequestOptions = {}): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/multiselectQuestions/retireMultiselectQuestions"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = null
 
       configs.data = data
 
@@ -1350,28 +1432,6 @@ export class MultiselectQuestionsService {
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
 
       /** 适配ios13，get请求不允许带body */
-
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Update multiselect question
-   */
-  update(
-    params: {
-      /** requestBody */
-      body?: MultiselectQuestionUpdate
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<MultiselectQuestion> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/multiselectQuestions/{multiselectQuestionId}"
-
-      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
 
       axios(configs, resolve, reject)
     })
@@ -3051,6 +3111,15 @@ export interface MultiselectLink {
 
 export interface MultiselectOption {
   /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
   collectAddress?: boolean
 
   /**  */
@@ -3100,6 +3169,9 @@ export interface MultiselectOption {
 
   /**  */
   text: string
+
+  /**  */
+  untranslatedName?: string
 
   /**  */
   untranslatedText?: string
@@ -3159,6 +3231,9 @@ export interface MultiselectQuestion {
 
   /**  */
   text: string
+
+  /**  */
+  untranslatedName?: string
 
   /**  */
   untranslatedText?: string
@@ -6160,6 +6235,62 @@ export interface Jurisdiction {
   visibleNeighborhoodAmenities: NeighborhoodAmenitiesEnum[]
 }
 
+export interface MultiselectOptionCreate {
+  /**  */
+  collectAddress?: boolean
+
+  /**  */
+  collectName?: boolean
+
+  /**  */
+  collectRelationship?: boolean
+
+  /**  */
+  description?: string
+
+  /**  */
+  exclusive?: boolean
+
+  /**  */
+  isOptOut?: boolean
+
+  /**  */
+  links?: MultiselectLink[]
+
+  /**  */
+  mapLayerId?: string
+
+  /**  */
+  mapPinPosition?: string
+
+  /**  */
+  multiselectQuestion?: IdDTO
+
+  /**  */
+  name?: string
+
+  /**  */
+  ordinal: number
+
+  /**  */
+  radiusSize?: number
+
+  /**  */
+  shouldCollectAddress?: boolean
+
+  /**  */
+  shouldCollectName?: boolean
+
+  /**  */
+  shouldCollectRelationship?: boolean
+
+  /**  */
+  text: string
+
+  /**  */
+  validationMethod?: ValidationMethodEnum
+}
+
 export interface MultiselectQuestionCreate {
   /**  */
   applicationSection: MultiselectQuestionsApplicationSectionEnum
@@ -6183,16 +6314,13 @@ export interface MultiselectQuestionCreate {
   links?: MultiselectLink[]
 
   /**  */
-  multiselectOptions?: MultiselectOption[]
-
-  /**  */
   name?: string
 
   /**  */
-  options?: MultiselectOption[]
+  optOutText?: string
 
   /**  */
-  optOutText?: string
+  status: MultiselectQuestionsStatusEnum
 
   /**  */
   subText?: string
@@ -6202,6 +6330,71 @@ export interface MultiselectQuestionCreate {
 
   /**  */
   untranslatedOptOutText?: string
+
+  /**  */
+  multiselectOptions?: MultiselectOptionCreate[]
+
+  /**  */
+  options?: MultiselectOptionCreate[]
+}
+
+export interface MultiselectOptionUpdate {
+  /**  */
+  collectAddress?: boolean
+
+  /**  */
+  collectName?: boolean
+
+  /**  */
+  collectRelationship?: boolean
+
+  /**  */
+  description?: string
+
+  /**  */
+  exclusive?: boolean
+
+  /**  */
+  isOptOut?: boolean
+
+  /**  */
+  links?: MultiselectLink[]
+
+  /**  */
+  mapLayerId?: string
+
+  /**  */
+  mapPinPosition?: string
+
+  /**  */
+  multiselectQuestion?: IdDTO
+
+  /**  */
+  name?: string
+
+  /**  */
+  ordinal: number
+
+  /**  */
+  radiusSize?: number
+
+  /**  */
+  shouldCollectAddress?: boolean
+
+  /**  */
+  shouldCollectName?: boolean
+
+  /**  */
+  shouldCollectRelationship?: boolean
+
+  /**  */
+  text: string
+
+  /**  */
+  validationMethod?: ValidationMethodEnum
+
+  /**  */
+  id?: string
 }
 
 export interface MultiselectQuestionUpdate {
@@ -6230,16 +6423,13 @@ export interface MultiselectQuestionUpdate {
   links?: MultiselectLink[]
 
   /**  */
-  multiselectOptions?: MultiselectOption[]
-
-  /**  */
   name?: string
 
   /**  */
-  options?: MultiselectOption[]
+  optOutText?: string
 
   /**  */
-  optOutText?: string
+  status: MultiselectQuestionsStatusEnum
 
   /**  */
   subText?: string
@@ -6249,6 +6439,12 @@ export interface MultiselectQuestionUpdate {
 
   /**  */
   untranslatedOptOutText?: string
+
+  /**  */
+  multiselectOptions?: MultiselectOptionUpdate[]
+
+  /**  */
+  options?: MultiselectOptionUpdate[]
 }
 
 export interface MultiselectQuestionQueryParams {
