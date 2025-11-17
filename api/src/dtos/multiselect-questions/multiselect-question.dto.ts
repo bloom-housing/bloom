@@ -83,6 +83,7 @@ class MultiselectQuestion extends AbstractDTO {
   @ApiPropertyOptional()
   name?: string;
 
+  // TODO: This will be sunseted after MSQ refactor
   @Expose()
   @ArrayMaxSize(64, { groups: [ValidationsGroupsEnum.default] })
   @Type(() => MultiselectOption)

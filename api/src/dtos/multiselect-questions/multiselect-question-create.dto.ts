@@ -16,6 +16,7 @@ export class MultiselectQuestionCreate extends OmitType(
   @ApiPropertyOptional({ type: MultiselectOptionCreate, isArray: true })
   multiselectOptions?: MultiselectOptionCreate[];
 
+  // TODO: This will be sunseted after MSQ refactor
   @Expose()
   @ArrayMaxSize(64, { groups: [ValidationsGroupsEnum.default] })
   @Type(() => MultiselectOptionCreate)

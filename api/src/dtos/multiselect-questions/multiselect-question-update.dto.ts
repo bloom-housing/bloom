@@ -20,6 +20,7 @@ export class MultiselectQuestionUpdate extends OmitType(MultiselectQuestion, [
   @ApiPropertyOptional({ type: MultiselectOptionUpdate, isArray: true })
   multiselectOptions?: MultiselectOptionUpdate[];
 
+  // TODO: This will be sunseted after MSQ refactor
   @Expose()
   @ArrayMaxSize(64, { groups: [ValidationsGroupsEnum.default] })
   @Type(() => MultiselectOptionUpdate)
