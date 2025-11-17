@@ -115,8 +115,7 @@ export const stagingSeed = async (
   });
   const napaCounty = await prismaClient.jurisdictions.create({
     data: jurisdictionFactory('Napa', {
-      listingApprovalPermissions,
-      duplicateListingPermissions,
+      ...doorwaySpecificSettings,
     }),
   });
   const sanFranciscoCounty = await prismaClient.jurisdictions.create({
@@ -136,8 +135,7 @@ export const stagingSeed = async (
   });
   const solanaCounty = await prismaClient.jurisdictions.create({
     data: jurisdictionFactory('Solano', {
-      listingApprovalPermissions,
-      duplicateListingPermissions,
+      ...doorwaySpecificSettings,
     }),
   });
   const sonomaCounty = await prismaClient.jurisdictions.create({
