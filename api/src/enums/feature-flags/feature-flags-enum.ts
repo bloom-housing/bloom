@@ -18,12 +18,15 @@ export enum FeatureFlagEnum {
   enableIsVerified = 'enableIsVerified',
   enableLimitedHowDidYouHear = 'enableLimitedHowDidYouHear',
   enableListingFavoriting = 'enableListingFavoriting',
+  enableListingFileNumber = 'enableListingFileNumber',
   enableListingFiltering = 'enableListingFiltering',
   enableListingOpportunity = 'enableListingOpportunity',
   enableListingPagination = 'enableListingPagination',
   enableListingUpdatedAt = 'enableListingUpdatedAt',
   enableMarketingStatus = 'enableMarketingStatus',
+  enableMarketingStatusMonths = 'enableMarketingStatusMonths',
   enableNeighborhoodAmenities = 'enableNeighborhoodAmenities',
+  enableNeighborhoodAmenitiesDropdown = 'enableNeighborhoodAmenitiesDropdown',
   enableNonRegulatedListings = 'enableNonRegulatedListings',
   enablePartnerDemographics = 'enablePartnerDemographics',
   enablePartnerSettings = 'enablePartnerSettings',
@@ -46,7 +49,10 @@ export enum FeatureFlagEnum {
 // List of all of existing flags and their descriptions.
 // This should be the source of all feature flags in our system.
 // Keep alphabetized for readability.
-export const featureFlagMap: { name: string; description: string }[] = [
+export const featureFlagMap: {
+  name: string;
+  description: string;
+}[] = [
   {
     name: FeatureFlagEnum.disableCommonApplication,
     description:
@@ -126,6 +132,11 @@ export const featureFlagMap: { name: string; description: string }[] = [
       'When true, a Favorite button is shown for public listings and users can view their favorited listings',
   },
   {
+    name: FeatureFlagEnum.enableListingFileNumber,
+    description:
+      'When true, partners can enter and export a listing file number',
+  },
+  {
     name: FeatureFlagEnum.enableListingFiltering,
     description:
       'When true, a filter button is shown on listings browse and users can filter with the options in the drawer',
@@ -150,9 +161,19 @@ export const featureFlagMap: { name: string; description: string }[] = [
       "When true, the 'marketing status' sub-section is displayed in listing creation/edit and the public listing view",
   },
   {
+    name: FeatureFlagEnum.enableMarketingStatusMonths,
+    description:
+      "When true, the 'marketing status' sub-section uses months instead of seasons (functions only if enableMarketingStatus is also true)",
+  },
+  {
     name: FeatureFlagEnum.enableNeighborhoodAmenities,
     description:
       "When true, the 'neighborhood amenities' section is displayed in listing creation/edit and the public listing view",
+  },
+  {
+    name: FeatureFlagEnum.enableNeighborhoodAmenitiesDropdown,
+    description:
+      'When true, neighborhood amenities inputs render as dropdowns with distance options instead of textareas',
   },
   {
     name: FeatureFlagEnum.enableNonRegulatedListings,

@@ -3998,6 +3998,24 @@ export interface ListingNeighborhoodAmenities {
 
   /**  */
   healthCareResources?: string
+
+  /**  */
+  shoppingVenues?: string
+
+  /**  */
+  hospitals?: string
+
+  /**  */
+  seniorCenters?: string
+
+  /**  */
+  recreationalFacilities?: string
+
+  /**  */
+  playgrounds?: string
+
+  /**  */
+  busStops?: string
 }
 
 export interface Listing {
@@ -4036,6 +4054,9 @@ export interface Listing {
 
   /**  */
   developer?: string
+
+  /**  */
+  listingFileNumber?: string
 
   /**  */
   householdSizeMax?: number
@@ -4348,6 +4369,9 @@ export interface Listing {
 
   /**  */
   marketingSeason?: MarketingSeasonEnum
+
+  /**  */
+  marketingMonth?: MonthEnum
 
   /**  */
   homeType?: HomeTypeEnum
@@ -4725,6 +4749,9 @@ export interface ListingCreate {
   developer?: string
 
   /**  */
+  listingFileNumber?: string
+
+  /**  */
   householdSizeMax?: number
 
   /**  */
@@ -4953,6 +4980,9 @@ export interface ListingCreate {
   marketingSeason?: MarketingSeasonEnum
 
   /**  */
+  marketingMonth?: MonthEnum
+
+  /**  */
   homeType?: HomeTypeEnum
 
   /**  */
@@ -5063,6 +5093,9 @@ export interface ListingUpdate {
 
   /**  */
   developer?: string
+
+  /**  */
+  listingFileNumber?: string
 
   /**  */
   householdSizeMax?: number
@@ -5291,6 +5324,9 @@ export interface ListingUpdate {
 
   /**  */
   marketingSeason?: MarketingSeasonEnum
+
+  /**  */
+  marketingMonth?: MonthEnum
 
   /**  */
   homeType?: HomeTypeEnum
@@ -7636,6 +7672,21 @@ export enum MarketingSeasonEnum {
   "fall" = "fall",
   "winter" = "winter",
 }
+
+export enum MonthEnum {
+  "january" = "january",
+  "february" = "february",
+  "march" = "march",
+  "april" = "april",
+  "may" = "may",
+  "june" = "june",
+  "july" = "july",
+  "august" = "august",
+  "september" = "september",
+  "october" = "october",
+  "november" = "november",
+  "december" = "december",
+}
 export enum EnumListingDepositType {
   "fixedDeposit" = "fixedDeposit",
   "depositRange" = "depositRange",
@@ -7753,6 +7804,12 @@ export enum NeighborhoodAmenitiesEnum {
   "parksAndCommunityCenters" = "parksAndCommunityCenters",
   "pharmacies" = "pharmacies",
   "healthCareResources" = "healthCareResources",
+  "shoppingVenues" = "shoppingVenues",
+  "hospitals" = "hospitals",
+  "seniorCenters" = "seniorCenters",
+  "recreationalFacilities" = "recreationalFacilities",
+  "playgrounds" = "playgrounds",
+  "busStops" = "busStops",
 }
 
 export enum FeatureFlagEnum {
@@ -7772,12 +7829,15 @@ export enum FeatureFlagEnum {
   "enableIsVerified" = "enableIsVerified",
   "enableLimitedHowDidYouHear" = "enableLimitedHowDidYouHear",
   "enableListingFavoriting" = "enableListingFavoriting",
+  "enableListingFileNumber" = "enableListingFileNumber",
   "enableListingFiltering" = "enableListingFiltering",
   "enableListingOpportunity" = "enableListingOpportunity",
   "enableListingPagination" = "enableListingPagination",
   "enableListingUpdatedAt" = "enableListingUpdatedAt",
   "enableMarketingStatus" = "enableMarketingStatus",
+  "enableMarketingStatusMonths" = "enableMarketingStatusMonths",
   "enableNeighborhoodAmenities" = "enableNeighborhoodAmenities",
+  "enableNeighborhoodAmenitiesDropdown" = "enableNeighborhoodAmenitiesDropdown",
   "enableNonRegulatedListings" = "enableNonRegulatedListings",
   "enablePartnerDemographics" = "enablePartnerDemographics",
   "enablePartnerSettings" = "enablePartnerSettings",

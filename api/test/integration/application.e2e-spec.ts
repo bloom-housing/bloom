@@ -49,7 +49,7 @@ import { PublicAppsViewQueryParams } from '../../src/dtos/applications/public-ap
 describe('Application Controller Tests', () => {
   let app: INestApplication;
   let prisma: PrismaService;
-  let cookies = '';
+  let adminCookies = '';
 
   const testEmailService = {
     /* eslint-disable @typescript-eslint/no-empty-function */
@@ -115,7 +115,11 @@ describe('Application Controller Tests', () => {
       } as Login)
       .expect(201);
 
-    cookies = resLogIn.headers['set-cookie'];
+    adminCookies = resLogIn.headers['set-cookie'];
+  });
+
+  afterEach(() => {
+    jest.resetAllMocks();
   });
 
   afterAll(async () => {
@@ -137,7 +141,7 @@ describe('Application Controller Tests', () => {
       const res = await request(app.getHttpServer())
         .get(`/applications?${query}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
-        .set('Cookie', cookies)
+        .set('Cookie', adminCookies)
         .expect(200);
       expect(res.body.items.length).toBe(0);
     });
@@ -185,7 +189,7 @@ describe('Application Controller Tests', () => {
       const res = await request(app.getHttpServer())
         .get(`/applications?${query}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
-        .set('Cookie', cookies)
+        .set('Cookie', adminCookies)
         .expect(200);
 
       expect(res.body.items.length).toBeGreaterThanOrEqual(2);
@@ -224,7 +228,7 @@ describe('Application Controller Tests', () => {
       const res = await request(app.getHttpServer())
         .get(`/applications`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
-        .set('Cookie', cookies)
+        .set('Cookie', adminCookies)
         .expect(200);
 
       expect(res.body.items.length).toBeGreaterThanOrEqual(2);
@@ -257,7 +261,7 @@ describe('Application Controller Tests', () => {
       const res = await request(app.getHttpServer())
         .get(`/applications/${applicationA.id}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
-        .set('Cookie', cookies)
+        .set('Cookie', adminCookies)
         .expect(200);
 
       expect(res.body.applicant.firstName).toEqual(
@@ -271,7 +275,7 @@ describe('Application Controller Tests', () => {
       const res = await request(app.getHttpServer())
         .get(`/applications/${id}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
-        .set('Cookie', cookies)
+        .set('Cookie', adminCookies)
         .expect(404);
 
       expect(res.body.message).toEqual(
@@ -310,7 +314,7 @@ describe('Application Controller Tests', () => {
         .send({
           id: applicationA.id,
         })
-        .set('Cookie', cookies)
+        .set('Cookie', adminCookies)
         .expect(200);
 
       expect(res.body.success).toEqual(true);
@@ -344,6 +348,26 @@ describe('Application Controller Tests', () => {
   });
 
   describe('submit endpoint', () => {
+    let publicUserCookies = '';
+    let storedUser = { id: '', email: '' };
+    beforeAll(async () => {
+      storedUser = await prisma.userAccounts.create({
+        data: await userFactory({
+          mfaEnabled: false,
+          confirmedAt: new Date(),
+        }),
+      });
+      const resLogIn = await request(app.getHttpServer())
+        .post('/auth/login')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({
+          email: storedUser.email,
+          password: 'Abcdef12345!',
+        } as Login)
+        .expect(201);
+
+      publicUserCookies = resLogIn.headers['set-cookie'];
+    });
     it('should create application from public site', async () => {
       const unitTypeA = await unitTypeFactorySingle(
         prisma,
@@ -502,10 +526,232 @@ describe('Application Controller Tests', () => {
         .post(`/applications/submit`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send(dto)
-        .set('Cookie', cookies)
+        .set('Cookie', publicUserCookies)
         .expect(201);
 
       expect(res.body.id).not.toBeNull();
+      expect(res.body).toEqual({
+        id: expect.any(String),
+        createdAt: expect.any(String),
+        updatedAt: expect.any(String),
+        deletedAt: null,
+        appUrl: 'http://www.example.com',
+        additionalPhone: true,
+        additionalPhoneNumber: '111-111-1111',
+        additionalPhoneNumberType: 'example type',
+        contactPreferences: ['example contact preference'],
+        householdSize: 2,
+        housingStatus: 'example status',
+        sendMailToMailingAddress: true,
+        householdExpectingChanges: false,
+        householdStudent: false,
+        incomeVouchers: false,
+        income: '36000',
+        incomePeriod: 'perYear',
+        status: 'submitted',
+        language: 'en',
+        acceptedTerms: true,
+        submissionType: 'electronical',
+        submissionDate: expect.any(String),
+        markedAsDuplicate: false,
+        confirmationCode: expect.any(String),
+        reviewStatus: 'valid',
+        applicationsMailingAddress: {
+          id: expect.any(String),
+          placeName: exampleAddress.placeName,
+          city: exampleAddress.city,
+          county: exampleAddress.county,
+          state: exampleAddress.state,
+          street: exampleAddress.street,
+          street2: null,
+          zipCode: exampleAddress.zipCode,
+          latitude: exampleAddress.latitude,
+          longitude: exampleAddress.longitude,
+        },
+        applicationsAlternateAddress: {
+          id: expect.any(String),
+          placeName: exampleAddress.placeName,
+          city: exampleAddress.city,
+          county: exampleAddress.county,
+          state: exampleAddress.state,
+          street: exampleAddress.street,
+          street2: null,
+          zipCode: exampleAddress.zipCode,
+          latitude: exampleAddress.latitude,
+          longitude: exampleAddress.longitude,
+        },
+        accessibility: {
+          id: expect.any(String),
+          mobility: false,
+          vision: false,
+          hearing: false,
+          other: null,
+        },
+        demographics: {
+          id: expect.any(String),
+          createdAt: expect.any(String),
+          updatedAt: expect.any(String),
+          ethnicity: 'example ethnicity',
+          gender: 'example gender',
+          sexualOrientation: 'example sexual orientation',
+          howDidYouHear: ['example how did you hear'],
+          race: ['example race'],
+        },
+        preferredUnitTypes: [
+          {
+            id: unitTypeA.id,
+            name: 'oneBdrm',
+            numBedrooms: 1,
+          },
+        ],
+        applicant: {
+          id: expect.any(String),
+          firstName: 'applicant first name',
+          middleName: 'applicant middle name',
+          lastName: 'applicant last name',
+          birthMonth: '12',
+          birthDay: '17',
+          birthYear: '1993',
+          emailAddress: 'example@email.com',
+          noEmail: false,
+          phoneNumber: '111-111-1111',
+          phoneNumberType: 'Cell',
+          noPhone: false,
+          workInRegion: 'yes',
+          fullTimeStudent: null,
+          applicantWorkAddress: {
+            id: expect.any(String),
+            placeName: exampleAddress.placeName,
+            city: exampleAddress.city,
+            county: exampleAddress.county,
+            state: exampleAddress.state,
+            street: exampleAddress.street,
+            street2: null,
+            zipCode: exampleAddress.zipCode,
+            latitude: exampleAddress.latitude,
+            longitude: exampleAddress.longitude,
+          },
+          applicantAddress: {
+            id: expect.any(String),
+            placeName: exampleAddress.placeName,
+            city: exampleAddress.city,
+            county: exampleAddress.county,
+            state: exampleAddress.state,
+            street: exampleAddress.street,
+            street2: null,
+            zipCode: exampleAddress.zipCode,
+            latitude: exampleAddress.latitude,
+            longitude: exampleAddress.longitude,
+          },
+        },
+        alternateContact: {
+          id: expect.any(String),
+          type: 'friend',
+          otherType: 'example other type',
+          firstName: 'example first name',
+          lastName: 'example last name',
+          agency: 'example agency',
+          phoneNumber: '111-111-1111',
+          emailAddress: 'example@email.com',
+          address: {
+            id: expect.any(String),
+            placeName: exampleAddress.placeName,
+            city: exampleAddress.city,
+            county: exampleAddress.county,
+            state: exampleAddress.state,
+            street: exampleAddress.street,
+            street2: null,
+            zipCode: exampleAddress.zipCode,
+            latitude: exampleAddress.latitude,
+            longitude: exampleAddress.longitude,
+          },
+        },
+        householdMember: [
+          {
+            birthDay: '17',
+            birthMonth: '12',
+            birthYear: '1993',
+            firstName: 'example first name',
+            fullTimeStudent: null,
+            householdMemberAddress: {
+              id: expect.any(String),
+              placeName: exampleAddress.placeName,
+              city: exampleAddress.city,
+              county: exampleAddress.county,
+              state: exampleAddress.state,
+              street: exampleAddress.street,
+              street2: null,
+              zipCode: exampleAddress.zipCode,
+              latitude: exampleAddress.latitude,
+              longitude: exampleAddress.longitude,
+            },
+            householdMemberWorkAddress: {
+              id: expect.any(String),
+              placeName: exampleAddress.placeName,
+              city: exampleAddress.city,
+              county: exampleAddress.county,
+              state: exampleAddress.state,
+              street: exampleAddress.street,
+              street2: null,
+              zipCode: exampleAddress.zipCode,
+              latitude: exampleAddress.latitude,
+              longitude: exampleAddress.longitude,
+            },
+            id: expect.any(String),
+            lastName: 'example last name',
+            middleName: 'example middle name',
+            orderId: 0,
+            relationship: 'friend',
+            sameAddress: 'yes',
+            workInRegion: 'yes',
+          },
+        ],
+        preferences: [
+          {
+            claimed: true,
+            key: 'example key',
+            multiselectQuestionId: expect.any(String),
+            options: [
+              {
+                checked: true,
+                extraData: [
+                  {
+                    key: 'example key',
+                    type: 'boolean',
+                    value: true,
+                  },
+                ],
+                key: 'example key',
+              },
+            ],
+          },
+        ],
+        programs: [
+          {
+            claimed: true,
+            key: 'example key',
+            multiselectQuestionId: expect.any(String),
+            options: [
+              {
+                checked: true,
+                extraData: [
+                  {
+                    key: 'example key',
+                    type: 'boolean',
+                    value: true,
+                  },
+                ],
+                key: 'example key',
+              },
+            ],
+          },
+        ],
+        listings: {
+          id: listing1Created.id,
+          name: listing1.name,
+        },
+        isNewest: true,
+      });
       expect(mockApplicationConfirmation).toBeCalledTimes(1);
     });
 
@@ -667,11 +913,151 @@ describe('Application Controller Tests', () => {
         .post(`/applications/submit`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send(dto)
-        .set('Cookie', cookies)
+        .set('Cookie', publicUserCookies)
         .expect(400);
       expect(res.body.message).toEqual(
         `Listing is not open for application submission`,
       );
+    });
+
+    it('should set the isNewest flag', async () => {
+      const unitTypeA = await unitTypeFactorySingle(
+        prisma,
+        UnitTypeEnum.oneBdrm,
+      );
+      const jurisdiction = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(),
+      });
+      await reservedCommunityTypeFactoryAll(jurisdiction.id, prisma);
+      const listing1 = await listingFactory(jurisdiction.id, prisma, {
+        digitalApp: true,
+      });
+      const listing1Created = await prisma.listings.create({
+        data: listing1,
+      });
+
+      const listing2 = await listingFactory(jurisdiction.id, prisma, {
+        digitalApp: true,
+      });
+      const listing2Created = await prisma.listings.create({
+        data: listing2,
+      });
+
+      // create previous applications for the user with one being the newest
+      await prisma.applications.create({
+        data: {
+          listings: { connect: { id: listing2Created.id } },
+          confirmationCode: randomUUID(),
+          preferences: [],
+          submissionType: ApplicationSubmissionTypeEnum.electronical,
+          status: ApplicationStatusEnum.submitted,
+          isNewest: true,
+        },
+      });
+
+      await prisma.applications.create({
+        data: {
+          listings: { connect: { id: listing2Created.id } },
+          confirmationCode: randomUUID(),
+          preferences: [],
+          submissionType: ApplicationSubmissionTypeEnum.electronical,
+          status: ApplicationStatusEnum.submitted,
+          isNewest: false,
+        },
+      });
+
+      const submissionDate = new Date();
+      const exampleAddress = addressFactory() as AddressCreate;
+      const dto: ApplicationCreate = {
+        contactPreferences: ['example contact preference'],
+        preferences: [],
+        status: ApplicationStatusEnum.submitted,
+        submissionType: ApplicationSubmissionTypeEnum.electronical,
+        applicant: {
+          firstName: 'applicant first name',
+          middleName: 'applicant middle name',
+          lastName: 'applicant last name',
+          birthMonth: '12',
+          birthDay: '17',
+          birthYear: '1993',
+          emailAddress: 'example@email.com',
+          noEmail: false,
+          phoneNumber: '111-111-1111',
+          phoneNumberType: 'Cell',
+          noPhone: false,
+          workInRegion: YesNoEnum.yes,
+          applicantWorkAddress: exampleAddress,
+          applicantAddress: exampleAddress,
+        },
+        accessibility: {
+          mobility: false,
+          vision: false,
+          hearing: false,
+        },
+        alternateContact: {
+          type: AlternateContactRelationship.friend,
+          otherType: 'example other type',
+          firstName: 'example first name',
+          lastName: 'example last name',
+          agency: 'example agency',
+          phoneNumber: '111-111-1111',
+          emailAddress: 'example@email.com',
+          address: exampleAddress,
+        },
+        applicationsAlternateAddress: exampleAddress,
+        applicationsMailingAddress: exampleAddress,
+        listings: {
+          id: listing1Created.id,
+        },
+        demographics: {
+          ethnicity: 'example ethnicity',
+          gender: 'example gender',
+          sexualOrientation: 'example sexual orientation',
+          howDidYouHear: ['example how did you hear'],
+          race: ['example race'],
+        },
+        preferredUnitTypes: [
+          {
+            id: unitTypeA.id,
+          },
+        ],
+        householdMember: [],
+        appUrl: 'http://www.example.com',
+        additionalPhone: true,
+        additionalPhoneNumber: '111-111-1111',
+        additionalPhoneNumberType: 'example type',
+        householdSize: 2,
+        housingStatus: 'example status',
+        sendMailToMailingAddress: true,
+        householdExpectingChanges: false,
+        householdStudent: false,
+        incomeVouchers: false,
+        income: '36000',
+        incomePeriod: IncomePeriodEnum.perYear,
+        language: LanguagesEnum.en,
+        acceptedTerms: true,
+        submissionDate: submissionDate,
+        reviewStatus: ApplicationReviewStatusEnum.valid,
+        programs: [],
+      };
+      const res = await request(app.getHttpServer())
+        .post(`/applications/submit`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send(dto)
+        .set('Cookie', publicUserCookies)
+        .expect(201);
+
+      expect(res.body.id).not.toBeNull();
+      expect(res.body.isNewest).toBe(true);
+      expect(mockApplicationConfirmation).toBeCalledTimes(1);
+
+      const otherUserApplications = await prisma.applications.findMany({
+        select: { id: true, isNewest: true },
+        where: { userId: storedUser.id, id: { not: res.body.id } },
+      });
+      otherUserApplications.forEach((application) => {
+        expect(application.isNewest).toBe(false);
+      });
     });
 
     it('should calculate geocoding on application', async () => {
@@ -1017,7 +1403,7 @@ describe('Application Controller Tests', () => {
         .post(`/applications/`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send(dto)
-        .set('Cookie', cookies)
+        .set('Cookie', adminCookies)
         .expect(201);
 
       expect(res.body.id).not.toBeNull();
@@ -1195,7 +1581,7 @@ describe('Application Controller Tests', () => {
         .put(`/applications/${applicationA.id}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send(dto)
-        .set('Cookie', cookies)
+        .set('Cookie', adminCookies)
         .expect(200);
 
       expect(res.body.applicant.firstName).toEqual(dto.applicant.firstName);
@@ -1620,7 +2006,7 @@ describe('Application Controller Tests', () => {
       const res = await request(app.getHttpServer())
         .get(`/applications/publicAppsView?${query}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
-        .set('Cookie', cookies)
+        .set('Cookie', adminCookies)
         .expect(200);
 
       expect(res.body.applicationsCount.total).toEqual(3);
@@ -1647,7 +2033,7 @@ describe('Application Controller Tests', () => {
       const res = await request(app.getHttpServer())
         .get(`/applications/publicAppsView?${query}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
-        .set('Cookie', cookies)
+        .set('Cookie', adminCookies)
         .expect(200);
 
       expect(res.body.applicationsCount.total).toEqual(0);

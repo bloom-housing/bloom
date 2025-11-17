@@ -566,6 +566,7 @@ model Listings {
   amenities                             String?
   buildingTotalUnits                    Int?                          @map("building_total_units")
   developer                             String?
+  listingFileNumber                     String?                       @map("listing_file_number")
   householdSizeMax                      Int?                          @map("household_size_max")
   householdSizeMin                      Int?                          @map("household_size_min")
   neighborhood                          String?
@@ -661,6 +662,7 @@ model Listings {
   marketingType                         MarketingTypeEnum             @default(marketing) @map("marketing_type")
   marketingYear                         Int?                          @map("marketing_year")
   marketingSeason                       MarketingSeasonEnum?          @map("marketing_season")
+  marketingMonth                        MonthEnum?                    @map("marketing_month")
   whatToExpectAdditionalText            String?                       @map("what_to_expect_additional_text")
   section8Acceptance                    Boolean?                      @map("section8_acceptance")
   neighborhoodAmenitiesId               String?                       @unique() @map("neighborhood_amenities_id") @db.Uuid
@@ -998,6 +1000,12 @@ model ListingNeighborhoodAmenities {
   parksAndCommunityCenters String?   @map("parks_and_community_centers")
   schools                  String?
   publicTransportation     String?   @map("public_transportation")
+  shoppingVenues           String?   @map("shopping_venues")
+  hospitals                String?
+  seniorCenters            String?   @map("senior_centers")
+  recreationalFacilities   String?   @map("recreational_facilities")
+  playgrounds              String?
+  busStops                 String?   @map("bus_stops")
   listings                 Listings?
 
   @@map("listing_neighborhood_amenities")
@@ -1247,6 +1255,23 @@ enum MarketingSeasonEnum {
   @@map("listings_marketing_season_enum")
 }
 
+enum MonthEnum {
+  january
+  february
+  march
+  april
+  may
+  june
+  july
+  august
+  september
+  october
+  november
+  december
+
+  @@map("month_enum")
+}
+
 enum MarketingTypeEnum {
   marketing
   comingSoon
@@ -1304,6 +1329,12 @@ enum NeighborhoodAmenitiesEnum {
   parksAndCommunityCenters
   pharmacies
   healthCareResources
+  shoppingVenues
+  hospitals
+  seniorCenters
+  recreationalFacilities
+  playgrounds
+  busStops
 
   @@map("neighborhood_amenities_enum")
 }
