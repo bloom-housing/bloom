@@ -8,6 +8,7 @@ import {
   Listing,
   MultiselectQuestionsApplicationSectionEnum,
   PublicLotteryResult,
+  ReviewOrderTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { Card, Button, Heading, Icon, Message } from "@bloom-housing/ui-seeds"
 import FormsLayout from "../../../../layouts/forms"
@@ -90,6 +91,11 @@ const LotteryResults = () => {
     )
   }
 
+  const lotteryResultText =
+    listing.reviewOrderType === ReviewOrderTypeEnum.waitlistLottery
+      ? `$(t("account.application.lottery.resultsHeader")) for the waitlist`
+      : t("account.application.lottery.resultsHeader")
+
   return (
     <>
       <RequireLogin signInPath="/sign-in" signInMessage={t("t.loginIsRequired")}>
@@ -116,7 +122,7 @@ const LotteryResults = () => {
                       {t("t.back")}
                     </Button>
                     <Heading priority={2} size={"2xl"} className="mt-6">
-                      {t("account.application.lottery.resultsHeader")}
+                      {lotteryResultText}
                     </Heading>
                     <p className="mt-4">
                       {t(
