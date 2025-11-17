@@ -2,13 +2,13 @@ import React, { useContext, useMemo } from "react"
 import { useFormContext } from "react-hook-form"
 import { t, Textarea, Select } from "@bloom-housing/ui-components"
 import { Grid } from "@bloom-housing/ui-seeds"
-import SectionWithGrid from "../../../shared/SectionWithGrid"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import {
   FeatureFlagEnum,
   NeighborhoodAmenitiesEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { useJurisdiction } from "../../../../lib/hooks"
+import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 enum NeighborhoodAmenityDistanceEnum {
   onSite = "onSite",
@@ -23,24 +23,27 @@ enum NeighborhoodAmenityDistanceEnum {
   withinFourMiles = "withinFourMiles",
 }
 
-const NeighborhoodAmenities = () => {
+type NeighborhoodAmenitiesProps = {
+  jurisdiction: string
+}
+
+const NeighborhoodAmenities = (props: NeighborhoodAmenitiesProps) => {
   const formMethods = useFormContext()
   const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, watch } = formMethods
-  const jurisdiction = watch("jurisdictions.id")
+  const { register } = formMethods
 
-  const { data: jurisdictionData } = useJurisdiction(jurisdiction)
+  const { data: jurisdictionData } = useJurisdiction(props.jurisdiction)
 
   const enableNeighborhoodAmenities = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableNeighborhoodAmenities,
-    jurisdiction
+    props.jurisdiction
   )
 
   const enableNeighborhoodAmenitiesDropdown = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableNeighborhoodAmenitiesDropdown,
-    jurisdiction
+    props.jurisdiction
   )
 
   const neighborhoodAmenityOptions = [
@@ -69,7 +72,7 @@ const NeighborhoodAmenities = () => {
     return rows
   }, [visibleAmenities])
 
-  if (!enableNeighborhoodAmenities || !jurisdiction) {
+  if (!enableNeighborhoodAmenities) {
     return <></>
   }
 

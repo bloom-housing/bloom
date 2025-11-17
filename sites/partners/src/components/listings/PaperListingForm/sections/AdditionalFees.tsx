@@ -17,6 +17,7 @@ import { ListingContext } from "../../ListingContext"
 
 type AdditionalFeesProps = {
   existingUtilities: ListingUtilities
+  jurisdiction: string
   requiredFields: string[]
 }
 
@@ -26,7 +27,6 @@ const AdditionalFees = (props: AdditionalFeesProps) => {
   const listing = useContext(ListingContext)
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, watch, errors, clearErrors, setValue } = formMethods
-  const jurisdiction = watch("jurisdictions.id")
   const depositType = watch("depositType")
   const listingType = watch("listingType")
 
@@ -43,17 +43,17 @@ const AdditionalFees = (props: AdditionalFeesProps) => {
 
   const enableUtilitiesIncluded = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableUtilitiesIncluded,
-    jurisdiction
+    props.jurisdiction
   )
 
   const enableNonRegulatedListings = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableNonRegulatedListings,
-    jurisdiction
+    props.jurisdiction
   )
 
   const enableCreditScreeningFee = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableCreditScreeningFee,
-    jurisdiction
+    props.jurisdiction
   )
 
   useEffect(() => {
@@ -238,7 +238,7 @@ const AdditionalFees = (props: AdditionalFeesProps) => {
             />
           </Grid.Cell>
         </Grid.Row>
-        {enableCreditScreeningFee && jurisdiction && (
+        {enableCreditScreeningFee && (
           <Grid.Row columns={3}>
             <Grid.Cell>
               <Field

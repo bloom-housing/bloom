@@ -14,6 +14,7 @@ import {
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 type LeasingAgentProps = {
+  jurisdiction: string
   requiredFields: string[]
 }
 
@@ -25,11 +26,10 @@ const LeasingAgent = (props: LeasingAgentProps) => {
   const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
 
   const leasingAgentPhoneField: string = watch("leasingAgentPhone")
-  const jurisdiction = watch("jurisdictions.id")
 
   const enableCompanyWebsite = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableCompanyWebsite,
-    jurisdiction
+    props.jurisdiction
   )
   const [phoneField, setPhoneField] = useState(leasingAgentPhoneField)
 

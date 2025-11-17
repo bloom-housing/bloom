@@ -1,36 +1,28 @@
 import React, { useContext } from "react"
 import { useFormContext } from "react-hook-form"
-import { t, Field, SelectOption, Select, FieldGroup } from "@bloom-housing/ui-components"
+import { t, Field, FieldGroup } from "@bloom-housing/ui-components"
 import { Grid } from "@bloom-housing/ui-seeds"
 import {
   EnumListingListingType,
   FeatureFlagEnum,
-  Jurisdiction,
   YesNoEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { AuthContext } from "@bloom-housing/shared-helpers"
-import {
-  fieldMessage,
-  fieldHasError,
-  fieldIsRequired,
-  defaultFieldProps,
-} from "../../../../lib/helpers"
+import { defaultFieldProps } from "../../../../lib/helpers"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
-import styles from "../ListingForm.module.scss"
 
 interface ListingIntroProps {
-  jurisdictions: Jurisdiction[]
+  jurisdiction: string
+  jurisdictionName: string
+  listingId: string
   requiredFields: string[]
 }
 
 const getDeveloperLabel = (
-  jurisdiction: string,
   listingType: EnumListingListingType,
   enableHousingDeveloperOwner: boolean,
   enableNonRegulatedListings: boolean
 ) => {
-  if (!jurisdiction) return t("listings.developer")
-
   if (enableHousingDeveloperOwner) {
     return t("listings.housingDeveloperOwner")
   } else if (listingType === EnumListingListingType.regulated || !enableNonRegulatedListings) {
@@ -46,7 +38,6 @@ const ListingIntro = (props: ListingIntroProps) => {
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, clearErrors, errors, watch, getValues } = formMethods
-  const jurisdiction = watch("jurisdictions.id")
 
   const listing = getValues()
 
@@ -54,30 +45,23 @@ const ListingIntro = (props: ListingIntroProps) => {
 
   const enableNonRegulatedListings = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableNonRegulatedListings,
-    jurisdiction
+    props.jurisdiction
   )
 
   const enableHousingDeveloperOwner = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableHousingDeveloperOwner,
-    jurisdiction
+    props.jurisdiction
   )
   const enableListingFileNumber = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableListingFileNumber,
-    jurisdiction
+    props.jurisdiction
   )
-
-  const jurisdictionOptions: SelectOption[] = [
-    { label: "", value: "" },
-    ...props.jurisdictions.map((jurisdiction) => ({
-      label: jurisdiction.name,
-      value: jurisdiction.id,
-    })),
-  ]
-
-  const defaultJurisdiction = props.jurisdictions.length === 1 ? props.jurisdictions[0].id : ""
 
   return (
     <>
+      {(props.listingId || props.jurisdictionName) && (
+        <hr className="spacer-section-above spacer-section" />
+      )}
       <SectionWithGrid
         heading={t("listings.sections.introTitle")}
         subheading={t("listings.sections.introSubtitle")}
@@ -109,7 +93,7 @@ const ListingIntro = (props: ListingIntroProps) => {
             </Grid.Cell>
           </Grid.Row>
         )}
-        {enableListingFileNumber && jurisdiction && (
+        {enableListingFileNumber && (
           <Grid.Row columns={1}>
             <Grid.Cell>
               <Field
@@ -142,54 +126,12 @@ const ListingIntro = (props: ListingIntroProps) => {
           </Grid.Cell>
         </Grid.Row>
         <Grid.Row columns={2}>
-          <div className={`${defaultJurisdiction ? "hidden" : ""}`}>
-            <Grid.Cell>
-              <Select
-                id={"jurisdictions.id"}
-                defaultValue={defaultJurisdiction}
-                name={"jurisdictions.id"}
-                label={
-                  <span>
-                    {t("t.jurisdiction")}
-                    <span className={styles["asterisk"]}>{` ${"*"}`}</span>
-                  </span>
-                }
-                register={register}
-                controlClassName={`control ${defaultJurisdiction ? "hidden" : ""}`}
-                error={
-                  fieldHasError(errors?.jurisdictions) ||
-                  fieldHasError(errors?.["jurisdictions.id"])
-                }
-                errorMessage={
-                  fieldMessage(errors?.jurisdictions) ??
-                  fieldMessage(errors?.["jurisdictions.id"]) ??
-                  undefined
-                }
-                keyPrefix={"jurisdictions"}
-                options={jurisdictionOptions}
-                inputProps={{
-                  onChange: () => {
-                    if (
-                      fieldHasError(errors?.jurisdictions) ||
-                      fieldHasError(errors?.["jurisdictions.id"])
-                    ) {
-                      clearErrors("jurisdictions.id")
-                      clearErrors("jurisdictions")
-                    }
-                  },
-                  "aria-required": fieldIsRequired("jurisdictions", props.requiredFields),
-                  "aria-hidden": !!defaultJurisdiction,
-                }}
-              />
-            </Grid.Cell>
-          </div>
           <Grid.Cell>
             <Field
               register={register}
               {...defaultFieldProps(
                 "developer",
                 getDeveloperLabel(
-                  jurisdiction,
                   listingType,
                   enableHousingDeveloperOwner,
                   enableNonRegulatedListings

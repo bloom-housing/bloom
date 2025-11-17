@@ -77,11 +77,12 @@ export const phoneMask = (incomingNewValue: string): string => {
 }
 
 type ApplicationTypesProps = {
+  jurisdiction: string
   listing: FormListing
   requiredFields: string[]
 }
 
-const ApplicationTypes = ({ listing, requiredFields }: ApplicationTypesProps) => {
+const ApplicationTypes = ({ jurisdiction, listing, requiredFields }: ApplicationTypesProps) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, setValue, watch, errors, getValues } = useFormContext()
   const { doJurisdictionsHaveFeatureFlagOn, getJurisdictionLanguages } = useContext(AuthContext)
@@ -117,7 +118,6 @@ const ApplicationTypes = ({ listing, requiredFields }: ApplicationTypesProps) =>
   }
 
   // watch fields
-  const jurisdiction: string = watch("jurisdictions.id")
   const digitalApplicationChoice = watch("digitalApplicationChoice")
   const commonDigitalApplicationChoice = watch("commonDigitalApplicationChoice")
   const paperApplicationChoice = watch("paperApplicationChoice")

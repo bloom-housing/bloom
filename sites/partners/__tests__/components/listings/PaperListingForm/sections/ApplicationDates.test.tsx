@@ -53,6 +53,7 @@ describe("ApplicationDates", () => {
     render(
       <FormComponent>
         <ApplicationDates
+          jurisdiction="JurisdictionA"
           listing={{} as unknown as FormListing}
           requiredFields={[]}
           openHouseEvents={[]}
@@ -102,6 +103,7 @@ describe("ApplicationDates", () => {
     render(
       <FormComponent>
         <ApplicationDates
+          jurisdiction="JurisdictionA"
           listing={{} as unknown as FormListing}
           requiredFields={["applicationDueDate"]}
           openHouseEvents={[]}
@@ -140,6 +142,7 @@ describe("ApplicationDates", () => {
     render(
       <FormComponent>
         <ApplicationDates
+          jurisdiction="JurisdictionA"
           listing={{} as unknown as FormListing}
           requiredFields={[]}
           openHouseEvents={[]}
@@ -191,6 +194,7 @@ describe("ApplicationDates", () => {
     render(
       <FormComponent>
         <ApplicationDates
+          jurisdiction="JurisdictionA"
           listing={{} as unknown as FormListing}
           requiredFields={[]}
           openHouseEvents={[]}
@@ -250,6 +254,7 @@ describe("ApplicationDates", () => {
     render(
       <FormComponent>
         <ApplicationDates
+          jurisdiction="JurisdictionA"
           listing={{} as unknown as FormListing}
           requiredFields={[]}
           openHouseEvents={[]}

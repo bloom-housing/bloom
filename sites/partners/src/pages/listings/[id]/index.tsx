@@ -107,7 +107,7 @@ export default function ListingDetail(props: ListingProps) {
 
                 <div className="flex flex-row flex-wrap ">
                   <div className="info-card md:w-9/12 overflow-hidden">
-                    <DetailListingData />
+                    <DetailListingData showJurisdictionName={profile?.jurisdictions?.length > 1} />
                     <DetailListingNotes />
                     <DetailListingIntro />
                     <DetailListingPhotos />

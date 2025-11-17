@@ -46,6 +46,7 @@ interface MapboxApiResponse {
 
 type BuildingDetailsProps = {
   customMapPositionChosen?: boolean
+  jurisdiction: string
   latLong?: LatitudeLongitude
   listing?: FormListing
   requiredFields: string[]
@@ -55,6 +56,7 @@ type BuildingDetailsProps = {
 
 const BuildingDetails = ({
   customMapPositionChosen,
+  jurisdiction,
   latLong,
   listing,
   requiredFields,
@@ -163,11 +165,11 @@ const BuildingDetails = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mapPinPosition])
 
-  const { neighborhood, region, jurisdictions } = watch(["neighborhood", "region", "jurisdictions"])
+  const { neighborhood, region } = watch(["neighborhood", "region"])
 
   const enableRegions = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableRegions,
-    jurisdictions?.id
+    jurisdiction
   )
 
   const enableNonRegulatedListings = doJurisdictionsHaveFeatureFlagOn(

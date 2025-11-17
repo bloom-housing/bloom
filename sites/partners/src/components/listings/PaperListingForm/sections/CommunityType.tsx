@@ -22,17 +22,17 @@ import SectionWithGrid from "../../../shared/SectionWithGrid"
 import styles from "../ListingForm.module.scss"
 
 type CommunityTypeProps = {
+  jurisdiction: string
   listing?: FormListing
   requiredFields: string[]
 }
 
-const CommunityType = ({ listing, requiredFields }: CommunityTypeProps) => {
+const CommunityType = ({ jurisdiction, listing, requiredFields }: CommunityTypeProps) => {
   const formMethods = useFormContext()
   const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, setValue, watch, errors, clearErrors } = formMethods
-  const jurisdiction = watch("jurisdictions.id")
   const reservedCommunityType = watch("reservedCommunityTypes.id")
 
   const swapCommunityTypeWithPrograms = doJurisdictionsHaveFeatureFlagOn(

@@ -13,6 +13,7 @@ import styles from "../ListingForm.module.scss"
 
 type BuildingFeaturesProps = {
   existingFeatures: ListingFeatures
+  jurisdiction: string
   requiredFields: string[]
 }
 
@@ -21,8 +22,7 @@ const BuildingFeatures = (props: BuildingFeaturesProps) => {
   const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, watch, setValue, errors, clearErrors } = formMethods
-  const jurisdiction = watch("jurisdictions.id")
+  const { register, setValue, errors, clearErrors } = formMethods
 
   const featureOptions = useMemo(() => {
     return listingFeatures.map((item) => ({
@@ -35,7 +35,7 @@ const BuildingFeatures = (props: BuildingFeaturesProps) => {
 
   const enableAccessibilityFeatures = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableAccessibilityFeatures,
-    jurisdiction
+    props.jurisdiction
   )
 
   useEffect(() => {
