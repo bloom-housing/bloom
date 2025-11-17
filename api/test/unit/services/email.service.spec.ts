@@ -789,7 +789,7 @@ describe('Testing email service', () => {
         '<span class="intro">Rental opportunity at</span> <br />test listing',
       );
       expect(emailMock).toMatch(
-        'Please view listing for the most updated information',
+        'THIS INFORMATION MAY CHANGE - Please view listing for the most updated information',
       );
       expect(emailMock).toMatch(
         /<td class="bold">\s*Applications Due\s*<\/td>/,
