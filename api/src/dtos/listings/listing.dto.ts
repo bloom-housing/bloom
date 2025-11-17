@@ -248,6 +248,22 @@ class Listing extends AbstractDTO {
   applicationFee?: string;
 
   @Expose()
+  @ValidateListingPublish('creditScreeningFee', {
+    groups: [ValidationsGroupsEnum.default],
+  })
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  creditScreeningFee?: boolean;
+
+  @Expose()
+  @ValidateListingPublish('creditScreeningFeeAmount', {
+    groups: [ValidationsGroupsEnum.default],
+  })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  creditScreeningFeeAmount?: string;
+
+  @Expose()
   @ValidateListingPublish('applicationOrganization', {
     groups: [ValidationsGroupsEnum.default],
   })

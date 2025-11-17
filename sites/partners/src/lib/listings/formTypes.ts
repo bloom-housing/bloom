@@ -83,6 +83,7 @@ export type FormListing = Omit<Listing, "countyCode"> & {
   whereApplicationsMailedIn?: ApplicationAddressTypeEnum | AnotherAddressEnum
   accessibilityFeatures?: string[]
   utilities?: string[]
+  creditScreeningFeeChoice?: YesNoEnum
 }
 
 export const addressTypes = {
@@ -139,6 +140,9 @@ export const formDefaults: FormListing = {
   rentalAssistance: null,
   rentalHistory: "",
   requiredDocuments: "",
+  creditScreeningFee: false,
+  creditScreeningFeeChoice: YesNoEnum.no,
+  creditScreeningFeeAmount: null,
   status: ListingsStatusEnum.pending,
   waitlistCurrentSize: null,
   waitlistMaxSize: null,

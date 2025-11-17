@@ -2,7 +2,7 @@ import React, { useContext } from "react"
 import { t } from "@bloom-housing/ui-components"
 import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { ListingContext } from "../../ListingContext"
-import { getDetailFieldString } from "./helpers"
+import { getDetailBoolean, getDetailFieldString } from "./helpers"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -13,6 +13,11 @@ const DetailAdditionalFees = () => {
 
   const enableUtilitiesIncluded = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableUtilitiesIncluded,
+    listing.jurisdictions.id
+  )
+
+  const enableCreditScreeningFee = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableCreditScreeningFee,
     listing.jurisdictions.id
   )
 
@@ -62,6 +67,26 @@ const DetailAdditionalFees = () => {
           </FieldValue>
         </Grid.Cell>
       </Grid.Row>
+      {enableCreditScreeningFee && (
+        <Grid.Row>
+          <Grid.Cell>
+            <FieldValue
+              id="creditScreeningFee"
+              label={t("listings.sections.creditScreeningFeeQuestion")}
+            >
+              {getDetailBoolean(listing.creditScreeningFee)}
+            </FieldValue>
+          </Grid.Cell>
+          <Grid.Cell>
+            <FieldValue
+              id="creditScreeningFeeAmount"
+              label={t("listings.creditScreeningFeeAmount")}
+            >
+              {getDetailFieldString(listing.creditScreeningFeeAmount)}
+            </FieldValue>
+          </Grid.Cell>
+        </Grid.Row>
+      )}
       {enableUtilitiesIncluded && (
         <Grid.Row>
           <Grid.Cell>

@@ -779,6 +779,23 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
           path: 'costsNotIncluded',
           label: 'Costs Not Included',
         },
+        ...(doAnyJurisdictionHaveFeatureFlagSet(
+          user.jurisdictions,
+          FeatureFlagEnum.enableCreditScreeningFee,
+        )
+          ? [
+              {
+                path: 'creditScreeningFee',
+                label: 'Credit Screening Fee',
+                format: this.formatYesNo,
+              },
+              {
+                path: 'creditScreeningFeeAmount',
+                label: 'Credit Screening Fee Amount',
+                format: this.formatCurrency,
+              },
+            ]
+          : []),
         {
           path: 'amenities',
           label: 'Property Amenities',

@@ -100,5 +100,9 @@ export default class AdditionalMetadataFormatter extends Formatter {
         }
       }, {})
     }
+
+    if (this.data.creditScreeningFeeChoice === YesNoEnum.no) {
+      this.data.creditScreeningFeeAmount = null
+    }
   }
 }

@@ -12,6 +12,9 @@ type AdditionalFeesProps = {
   depositMax: string | null
   depositMin: string | null
   utilitiesIncluded: string[]
+  creditScreeningFee?: boolean | null
+  creditScreeningFeeAmount?: string | null
+  jurisdiction?: { featureFlags?: Array<{ name: string; active: boolean }> }
 }
 
 export const AdditionalFees = ({
@@ -21,6 +24,8 @@ export const AdditionalFees = ({
   depositMax,
   depositMin,
   utilitiesIncluded,
+  creditScreeningFee,
+  creditScreeningFeeAmount,
 }: AdditionalFeesProps) => {
   return (
     <>
@@ -28,7 +33,8 @@ export const AdditionalFees = ({
       depositMin ||
       depositMax ||
       costsNotIncluded ||
-      utilitiesIncluded.length ? (
+      utilitiesIncluded.length ||
+      creditScreeningFee ? (
         <Card className={"seeds-m-bs-header"}>
           <Card.Section>
             <Heading size={"lg"} priority={3} className={"seeds-m-be-header"}>
@@ -56,6 +62,19 @@ export const AdditionalFees = ({
                     </div>
                   )}
                   <div>{depositHelperText}</div>
+                </div>
+              )}
+              {creditScreeningFee && (
+                <div className={styles["split-card-cell"]}>
+                  <Heading size={"md"} className={listingStyles["thin-heading"]} priority={4}>
+                    {t("listings.creditScreeningFee")}
+                  </Heading>
+
+                  <div className={styles.emphasized}>
+                    {creditScreeningFeeAmount ? <>{`$${creditScreeningFeeAmount}`}</> : t("t.n/a")}
+                  </div>
+
+                  <div>{t("listings.creditScreeningFeeDescription")}</div>
                 </div>
               )}
             </div>

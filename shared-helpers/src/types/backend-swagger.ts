@@ -4002,6 +4002,12 @@ export interface Listing {
   applicationFee?: string
 
   /**  */
+  creditScreeningFee?: boolean
+
+  /**  */
+  creditScreeningFeeAmount?: string
+
+  /**  */
   applicationOrganization?: string
 
   /**  */
@@ -4692,6 +4698,12 @@ export interface ListingCreate {
   applicationFee?: string
 
   /**  */
+  creditScreeningFee?: boolean
+
+  /**  */
+  creditScreeningFeeAmount?: string
+
+  /**  */
   applicationOrganization?: string
 
   /**  */
@@ -5033,6 +5045,12 @@ export interface ListingUpdate {
 
   /**  */
   applicationFee?: string
+
+  /**  */
+  creditScreeningFee?: boolean
+
+  /**  */
+  creditScreeningFeeAmount?: string
 
   /**  */
   applicationOrganization?: string
@@ -7592,6 +7610,7 @@ export enum FeatureFlagEnum {
   "enableAdaOtherOption" = "enableAdaOtherOption",
   "enableAdditionalResources" = "enableAdditionalResources",
   "enableCompanyWebsite" = "enableCompanyWebsite",
+  "enableCreditScreeningFee" = "enableCreditScreeningFee",
   "enableFullTimeStudentQuestion" = "enableFullTimeStudentQuestion",
   "enableGeocodingPreferences" = "enableGeocodingPreferences",
   "enableGeocodingRadiusMethod" = "enableGeocodingRadiusMethod",

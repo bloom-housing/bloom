@@ -159,6 +159,7 @@ export const stagingSeed = async (
     data: jurisdictionFactory('Angelopolis', {
       featureFlags: [
         FeatureFlagEnum.enableAccessibilityFeatures,
+        FeatureFlagEnum.enableCreditScreeningFee,
         FeatureFlagEnum.enableHousingDeveloperOwner,
         FeatureFlagEnum.enableListingFiltering,
         FeatureFlagEnum.enableMarketingStatus,
@@ -172,6 +173,7 @@ export const stagingSeed = async (
       ],
 
       requiredListingFields: [
+        'creditScreeningFee',
         'digitalApplication',
         'jurisdictions',
         'leasingAgentEmail',

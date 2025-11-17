@@ -664,6 +664,8 @@ model Listings {
   marketingMonth                        MonthEnum?                    @map("marketing_month")
   whatToExpectAdditionalText            String?                       @map("what_to_expect_additional_text")
   section8Acceptance                    Boolean?                      @map("section8_acceptance")
+  creditScreeningFee                    Boolean?                      @map("credit_screening_fee")
+  creditScreeningFeeAmount              String?                       @map("credit_screening_fee_amount")
   neighborhoodAmenitiesId               String?                       @unique() @map("neighborhood_amenities_id") @db.Uuid
   verifiedAt                            DateTime?                     @map("verified_at") @db.Timestamptz(6)
   homeType                              HomeTypeEnum?                 @map("home_type")

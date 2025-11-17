@@ -513,6 +513,7 @@ const ListingForm = ({ listing, editMode, setListingName, updateListing }: Listi
                           />
                           <AdditionalFees
                             existingUtilities={listing?.listingUtilities}
+                            existingCreditScreeningFee={listing?.creditScreeningFee}
                             requiredFields={requiredFields}
                           />
                           <BuildingFeatures

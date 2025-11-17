@@ -2,17 +2,19 @@ import React, { useContext, useMemo, useEffect } from "react"
 import { useFormContext } from "react-hook-form"
 import { t, Field, Textarea, FieldGroup } from "@bloom-housing/ui-components"
 import { Grid } from "@bloom-housing/ui-seeds"
-import { defaultFieldProps } from "../../../../lib/helpers"
+import { defaultFieldProps, fieldHasError, fieldMessage, getLabel } from "../../../../lib/helpers"
 import { AuthContext, listingUtilities } from "@bloom-housing/shared-helpers"
 import {
   FeatureFlagEnum,
   ListingUtilities,
+  YesNoEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 import styles from "../ListingForm.module.scss"
 
 type AdditionalFeesProps = {
   existingUtilities: ListingUtilities
+  existingCreditScreeningFee: boolean
   requiredFields: string[]
 }
 
@@ -21,8 +23,8 @@ const AdditionalFees = (props: AdditionalFeesProps) => {
   const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, watch, errors, clearErrors, setValue } = formMethods
-
   const jurisdiction = watch("jurisdictions.id")
+  const creditScreeningFeeChoice = watch("creditScreeningFeeChoice")
 
   const utilitiesFields = useMemo(() => {
     return listingUtilities.map((utility) => {
@@ -37,6 +39,11 @@ const AdditionalFees = (props: AdditionalFeesProps) => {
 
   const enableUtilitiesIncluded = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableUtilitiesIncluded,
+    jurisdiction
+  )
+
+  const enableCreditScreeningFee = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableCreditScreeningFee,
     jurisdiction
   )
 
@@ -130,7 +137,64 @@ const AdditionalFees = (props: AdditionalFeesProps) => {
             />
           </Grid.Cell>
         </Grid.Row>
-        {enableUtilitiesIncluded && (
+        {enableCreditScreeningFee && jurisdiction && (
+          <>
+            <Grid.Row>
+              <Grid.Cell
+                className={fieldHasError(errors?.creditScreeningFee) ? styles["label-error"] : ""}
+              >
+                <FieldGroup
+                  name={"creditScreeningFeeChoice"}
+                  type={"radio"}
+                  groupLabel={getLabel(
+                    "creditScreeningFee",
+                    props.requiredFields,
+                    t("listings.sections.creditScreeningFeeQuestion")
+                  )}
+                  error={
+                    fieldHasError(errors?.creditScreeningFee) && creditScreeningFeeChoice === null
+                  }
+                  errorMessage={fieldMessage(errors?.creditScreeningFee)}
+                  register={register}
+                  fieldLabelClassName={`${styles["label-option"]} seeds-m-bs-2`}
+                  fields={[
+                    {
+                      id: "creditScreeningFeeYes",
+                      label: t("t.yes"),
+                      value: YesNoEnum.yes,
+                      defaultChecked: props.existingCreditScreeningFee === true,
+                    },
+                    {
+                      id: "creditScreeningFeeNo",
+                      label: t("t.no"),
+                      value: YesNoEnum.no,
+                      defaultChecked: props.existingCreditScreeningFee === false,
+                    },
+                  ]}
+                />
+              </Grid.Cell>
+            </Grid.Row>
+            {creditScreeningFeeChoice === YesNoEnum.yes && (
+              <Grid.Row columns={3}>
+                <Grid.Cell>
+                  <Field
+                    register={register}
+                    type={"currency"}
+                    prepend={"$"}
+                    {...defaultFieldProps(
+                      "creditScreeningFeeAmount",
+                      t("listings.creditScreeningFeeAmount"),
+                      props.requiredFields,
+                      errors,
+                      clearErrors
+                    )}
+                  />
+                </Grid.Cell>
+              </Grid.Row>
+            )}
+          </>
+        )}
+        {enableUtilitiesIncluded && jurisdiction && (
           <Grid.Row>
             <Grid.Cell>
               <FieldGroup
