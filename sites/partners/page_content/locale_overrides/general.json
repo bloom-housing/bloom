@@ -270,6 +270,7 @@
   "listings.regulatedListing": "Regulated",
   "listings.nonRegulatedListing": "Non-regulated",
   "listings.listingName": "Listing name",
+  "listings.listingFileNumber": "Listing file number",
   "listings.listingPhoto": "Listing photo",
   "listings.listingStatus.active": "Open",
   "listings.listingStatus.changesRequested": "Changes requested",
