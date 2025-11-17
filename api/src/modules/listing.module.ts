@@ -11,6 +11,7 @@ import { ApplicationFlaggedSetModule } from './application-flagged-set.module';
 import { EmailModule } from './email.module';
 import { PermissionModule } from './permission.module';
 import { ListingCsvExporterService } from '../services/listing-csv-export.service';
+import { CronJobModule } from './cron-job.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { ListingCsvExporterService } from '../services/listing-csv-export.servic
     EmailModule,
     ApplicationFlaggedSetModule,
     PermissionModule,
+    CronJobModule,
   ],
   controllers: [ListingController],
   providers: [
@@ -27,7 +29,6 @@ import { ListingCsvExporterService } from '../services/listing-csv-export.servic
     GoogleTranslateService,
     ConfigService,
     Logger,
-    SchedulerRegistry,
     ListingCsvExporterService,
   ],
   exports: [ListingService],
