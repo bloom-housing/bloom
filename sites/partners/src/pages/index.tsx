@@ -315,7 +315,10 @@ export default function ListingsList() {
                       onClick={() => {
                         // also check if feature flags
                         if (defaultJurisdiction) {
-                          void router.push(`/listings/add/?jurisdictionId=${defaultJurisdiction}`)
+                          void router.push({
+                            pathname: "/listings/add",
+                            query: { jurisdictionId: defaultJurisdiction },
+                          })
                         } else {
                           setListingSelectModal(true)
                         }

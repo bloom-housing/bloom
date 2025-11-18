@@ -1,6 +1,7 @@
 import React from "react"
 import { AuthContext, MessageProvider } from "@bloom-housing/shared-helpers"
-import { fireEvent, screen } from "@testing-library/react"
+import { fireEvent, screen, waitFor } from "@testing-library/react"
+import userEvent from "@testing-library/user-event"
 import { act } from "react-dom/test-utils"
 import { rest } from "msw"
 import { setupServer } from "msw/node"
@@ -502,5 +503,145 @@ describe("listings", () => {
     })
     const success = await findByText("The file has been exported")
     expect(success).toBeInTheDocument()
+  })
+
+  it("should open add listing modal if user has access to multiple jurisdictions", async () => {
+    window.URL.createObjectURL = jest.fn()
+    document.cookie = "access-token-available=True"
+    const { pushMock } = mockNextRouter()
+    server.use(
+      rest.get("http://localhost:3100/listings", (_req, res, ctx) => {
+        return res(ctx.json({ items: [listing], meta: { totalItems: 1, totalPages: 1 } }))
+      }),
+      rest.get("http://localhost/api/adapter/listings", (_req, res, ctx) => {
+        return res(ctx.json({ items: [listing], meta: { totalItems: 1, totalPages: 1 } }))
+      }),
+      rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
+        return res(
+          ctx.json({
+            id: "user1",
+            roles: { id: "user1", isAdmin: true, isPartner: false },
+          })
+        )
+      }),
+      rest.post("http://localhost:3100/auth/token", (_req, res, ctx) => {
+        return res(ctx.json(""))
+      })
+    )
+
+    render(
+      <AuthContext.Provider
+        value={{
+          initialStateLoaded: true,
+          profile: {
+            ...mockUser,
+            userRoles: { isAdmin: true, isPartner: false },
+            jurisdictions: [
+              {
+                id: "id1",
+                name: "JurisdictionA",
+                featureFlags: [],
+              } as Jurisdiction,
+              {
+                id: "id2",
+                name: "JurisdictionB",
+                featureFlags: [],
+              } as Jurisdiction,
+            ],
+          },
+          doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
+            mockJurisdictionsHaveFeatureFlagOn(featureFlag, false, false),
+        }}
+      >
+        <ListingsList />
+      </AuthContext.Provider>
+    )
+
+    const addListingButton = await screen.findByRole("button", { name: "Add listing" })
+    expect(addListingButton).toBeInTheDocument()
+    await userEvent.click(addListingButton)
+
+    expect(
+      screen.getByRole("heading", { level: 1, name: "Create listing dialog header" })
+    ).toBeInTheDocument()
+    expect(screen.getByText("Create listing dialog content")).toBeInTheDocument()
+
+    expect(screen.getByRole("option", { name: "JurisdictionA" })).toBeInTheDocument()
+    expect(screen.getByRole("option", { name: "JurisdictionB" })).toBeInTheDocument()
+
+    await userEvent.selectOptions(screen.getByLabelText("Jurisdiction"), "JurisdictionA")
+
+    await userEvent.click(screen.getByRole("button", { name: "Create listing" }))
+    await waitFor(() => {
+      expect(pushMock).toHaveBeenCalledWith({
+        pathname: "/listings/add",
+        query: { jurisdictionId: "id1" },
+      })
+    })
+  })
+
+  it("should not open add listing modal if user has access to only one jurisdiction", async () => {
+    window.URL.createObjectURL = jest.fn()
+    document.cookie = "access-token-available=True"
+    const { pushMock } = mockNextRouter()
+    server.use(
+      rest.get("http://localhost:3100/listings", (_req, res, ctx) => {
+        return res(ctx.json({ items: [listing], meta: { totalItems: 1, totalPages: 1 } }))
+      }),
+      rest.get("http://localhost/api/adapter/listings", (_req, res, ctx) => {
+        return res(ctx.json({ items: [listing], meta: { totalItems: 1, totalPages: 1 } }))
+      }),
+      rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
+        return res(
+          ctx.json({
+            id: "user1",
+            roles: { id: "user1", isAdmin: true, isPartner: false },
+          })
+        )
+      }),
+      rest.post("http://localhost:3100/auth/token", (_req, res, ctx) => {
+        return res(ctx.json(""))
+      })
+    )
+
+    render(
+      <AuthContext.Provider
+        value={{
+          initialStateLoaded: true,
+          profile: {
+            ...mockUser,
+            userRoles: { isAdmin: true, isPartner: false },
+            jurisdictions: [
+              {
+                id: "id1",
+                name: "JurisdictionA",
+                featureFlags: [],
+              } as Jurisdiction,
+            ],
+          },
+          doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
+            mockJurisdictionsHaveFeatureFlagOn(featureFlag, false, false),
+        }}
+      >
+        <ListingsList />
+      </AuthContext.Provider>
+    )
+
+    const addListingButton = await screen.findByRole("button", { name: "Add listing" })
+    expect(addListingButton).toBeInTheDocument()
+    await userEvent.click(addListingButton)
+
+    expect(
+      screen.queryByRole("heading", { level: 1, name: "Create listing dialog header" })
+    ).not.toBeInTheDocument()
+
+    expect(screen.queryByRole("option", { name: "JurisdictionA" })).not.toBeInTheDocument()
+
+    await waitFor(() => {
+      expect(pushMock).toHaveBeenCalledWith({
+        pathname: "/listings/add",
+        query: { jurisdictionId: "id1" },
+      })
+    })
   })
 })
