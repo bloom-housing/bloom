@@ -6,8 +6,6 @@ import {
   MultiselectQuestionsApplicationSectionEnum,
   ReviewOrderTypeEnum,
 } from '@prisma/client';
-import { mockDeep } from 'jest-mock-extended';
-
 import { randomUUID } from 'crypto';
 import { Request as ExpressRequest } from 'express';
 import { User } from '../../../src/dtos/users/user.dto';

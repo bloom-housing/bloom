@@ -10,16 +10,15 @@ describe("Listing Management Tests", () => {
   it("error messaging & save dialogs", () => {
     // Test to check that the appropriate error messages happen on submit
     cy.visit("/")
-    cy.get("a").contains("Add listing").click()
+    cy.get("button").contains("Add listing").click()
+    cy.getByID("jurisdiction").select("Bloomington")
+    cy.get("button").contains("Create listing").click()
     cy.contains("New listing")
     // Save an empty listing as a draft and should show errors for appropriate fields
     cy.getByID("saveDraftButton").contains("Save as draft").click()
     cy.contains("Please resolve any errors before saving or publishing your listing.")
     cy.getByID("name-error").contains("This field is required")
-    cy.getByID("jurisdictions.id-error").contains("This field is required")
     // Fill out minimum fields and errors get removed
-    cy.getByID("jurisdictions.id").select("Bloomington")
-    cy.getByID("jurisdictions.id-error").should("not.include.text", "This field is required")
     cy.getByID("name").type("Test - error messaging")
     cy.getByID("name-error").should("to.be.empty")
     cy.getByID("saveDraftButton").contains("Save as draft").click()
@@ -77,9 +76,10 @@ describe("Listing Management Tests", () => {
 
   it("error messaging publish with minimal fields", () => {
     cy.visit("/")
-    cy.get("a").contains("Add listing").click()
+    cy.get("button").contains("Add listing").click()
+    cy.getByID("jurisdiction").select("Lakeview")
+    cy.get("button").contains("Create listing").click()
     cy.contains("New listing")
-    cy.getByID("jurisdictions.id").select("Lakeview")
     // Try to publish a listing and should show errors for appropriate fields
     cy.getByID("publishButton").contains("Publish").click()
     cy.getByID("publishButtonConfirm").contains("Publish").click()
@@ -108,9 +108,12 @@ describe("Listing Management Tests", () => {
 
   it("full listing publish", () => {
     cy.visit("/")
-    cy.get("a").contains("Add listing").click()
-    cy.contains("New listing")
+
     cy.fixture("listing").then((listing) => {
+      cy.get("button").contains("Add listing").click()
+      cy.getByID("jurisdiction").select(listing["jurisdiction.id"])
+      cy.get("button").contains("Create listing").click()
+      cy.contains("New listing")
       fillOutListing(cy, listing)
       verifyDetails(cy, listing)
       verifyAutofill(cy, listing)
@@ -131,7 +134,6 @@ describe("Listing Management Tests", () => {
         fixture: "cypress-automated-image-upload-071e2ab9-5a52-4f34-85f0-e41f696f4b96.jpeg",
       }
     )
-    cy.getByID("jurisdictions.id").select(listing["jurisdiction.id"])
     cy.getByID("name").type(listing["name"])
     cy.getByID("developer").type(listing["developer"])
     // Test photo upload
@@ -461,9 +463,6 @@ describe("Listing Management Tests", () => {
   function verifyAutofill(cy: Cypress.cy, listing: any): void {
     cy.findAndOpenListing(listing["name"])
     cy.getByID("listingEditButton").contains("Edit").click()
-    cy.getByID("jurisdictions.id")
-      .find("option:selected")
-      .should("have.text", listing["jurisdiction.id"])
 
     cy.getByID("name").should("have.value", listing["name"])
     cy.getByID("developer").should("have.value", listing["developer"])
