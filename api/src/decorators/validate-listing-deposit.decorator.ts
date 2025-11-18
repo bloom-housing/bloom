@@ -31,34 +31,27 @@ export class DepositValueConstraint implements ValidatorConstraintInterface {
     const { depositValue, depositMin, depositMax, listingType } =
       args.object as Listing;
 
-    console.log(depositValue, depositMin, depositMax, listingType);
-
     if (!listingType || listingType === ListingTypeEnum.regulated) {
       return true;
     }
 
-    // Verify if both fields are either filled or empty
-    const areRangeFieldsInvalid =
-      (this.isFieldEmpty(depositMin) && !this.isFieldEmpty(depositMax)) ||
-      (!this.isFieldEmpty(depositMin) && this.isFieldEmpty(depositMax));
-
     if (value === DepositTypeEnum.fixedDeposit) {
-      return (
-        this.isFieldEmpty(depositMin) &&
-        this.isFieldEmpty(depositMax) &&
-        !this.isFieldEmpty(depositValue)
-      );
+      return this.isFieldEmpty(depositMin) && this.isFieldEmpty(depositMax);
+    }
+    if (value === DepositTypeEnum.depositRange) {
+      return this.isFieldEmpty(depositValue);
     }
 
-    return this.isFieldEmpty(depositValue) && !areRangeFieldsInvalid;
+    // If no Deposit type is selected then validate that it's either just depositValue or just the range values
+    return (
+      this.isFieldEmpty(depositValue) ||
+      (this.isFieldEmpty(depositMin) && this.isFieldEmpty(depositMax))
+    );
   }
   defaultMessage(args?: ValidationArguments): string {
     const value = args.value as DepositTypeEnum;
-    const { listingType } = args.object as Listing;
 
-    if (!listingType || listingType === ListingTypeEnum.regulated) {
-      return 'The "depositMin" and "depositMax" fields must be filled';
-    } else if (value === DepositTypeEnum.fixedDeposit) {
+    if (value === DepositTypeEnum.fixedDeposit) {
       return 'When deposit is of type "fixedDeposit" the "depositValue" must be filled and the "depositMin"|"depositMax" fields must be null';
     }
     return 'When deposit is of type "depositRange" the "depositMin" and "depositMax" fields must be filled and "depositValue" must be null';
