@@ -59,13 +59,6 @@ describe("RankingsAndResults", () => {
     }
 
     it("should not show lottery fields when enableWaitlistLottery is false and waitlist is open", async () => {
-      document.cookie = "access-token-available=True"
-      server.use(
-        rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
-          return res(ctx.json(userWithoutWaitlistLotteryFlag))
-        })
-      )
-
       render(
         <FormComponent
           values={{
@@ -78,6 +71,10 @@ describe("RankingsAndResults", () => {
             requiredFields={[]}
             whatToExpectEditor={null}
             whatToExpectAdditionalTextEditor={null}
+            enableUnitGroups={false}
+            enableWaitlistAdditionalFields={false}
+            enableWaitlistLottery={false}
+            enableWhatToExpectAdditionalField={false}
           />
         </FormComponent>
       )
@@ -97,13 +94,6 @@ describe("RankingsAndResults", () => {
     })
 
     it("should show review order options when waitlist is open and feature flag is enabled", async () => {
-      document.cookie = "access-token-available=True"
-      server.use(
-        rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
-          return res(ctx.json(userWithWaitlistLotteryFlag))
-        })
-      )
-
       render(
         <FormComponent
           values={{
@@ -116,6 +106,10 @@ describe("RankingsAndResults", () => {
             requiredFields={[]}
             whatToExpectEditor={null}
             whatToExpectAdditionalTextEditor={null}
+            enableUnitGroups={false}
+            enableWaitlistAdditionalFields={false}
+            enableWaitlistLottery={true}
+            enableWhatToExpectAdditionalField={false}
           />
         </FormComponent>
       )
@@ -132,13 +126,6 @@ describe("RankingsAndResults", () => {
     })
 
     it("should show review order options when availabilityQuestion is availableUnits and enableWaitlistLottery is false", () => {
-      document.cookie = "access-token-available=True"
-      server.use(
-        rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
-          return res(ctx.json(userWithoutWaitlistLotteryFlag))
-        })
-      )
-
       render(
         <FormComponent
           values={{
@@ -151,6 +138,10 @@ describe("RankingsAndResults", () => {
             requiredFields={[]}
             whatToExpectEditor={null}
             whatToExpectAdditionalTextEditor={null}
+            enableUnitGroups={false}
+            enableWaitlistAdditionalFields={false}
+            enableWaitlistLottery={false}
+            enableWhatToExpectAdditionalField={false}
           />
         </FormComponent>
       )
@@ -173,6 +164,10 @@ describe("RankingsAndResults", () => {
             requiredFields={[]}
             whatToExpectEditor={null}
             whatToExpectAdditionalTextEditor={null}
+            enableUnitGroups={false}
+            enableWaitlistAdditionalFields={false}
+            enableWaitlistLottery={false}
+            enableWhatToExpectAdditionalField={false}
           />
         </FormComponent>
       )
@@ -196,6 +191,10 @@ describe("RankingsAndResults", () => {
             requiredFields={[]}
             whatToExpectEditor={null}
             whatToExpectAdditionalTextEditor={null}
+            enableUnitGroups={false}
+            enableWaitlistAdditionalFields={false}
+            enableWaitlistLottery={false}
+            enableWhatToExpectAdditionalField={false}
           />
         </FormComponent>
       )

@@ -107,7 +107,7 @@ describe("listing data", () => {
             createdAt: new Date("February 3, 2025, 10:13"),
           }}
         >
-          <DetailListingData />
+          <DetailListingData showJurisdictionName={true} />
         </ListingContext.Provider>
       )
 
@@ -116,6 +116,28 @@ describe("listing data", () => {
       expect(screen.getByText("Uvbk5qurpB2WI9V6WnNdH")).toBeInTheDocument()
       expect(screen.getByText("Date created")).toBeInTheDocument()
       expect(screen.getByText("02/03/2025 at 10:13 AM")).toBeInTheDocument()
+      expect(screen.getByText("Jurisdiction")).toBeInTheDocument()
+      expect(screen.getByText("Bloomington")).toBeInTheDocument()
+    })
+
+    it("should display Listing Data section but no jurisdiction", () => {
+      render(
+        <ListingContext.Provider
+          value={{
+            ...listing,
+            createdAt: new Date("February 3, 2025, 10:13"),
+          }}
+        >
+          <DetailListingData showJurisdictionName={false} />
+        </ListingContext.Provider>
+      )
+
+      expect(screen.getByText("Listing data")).toBeInTheDocument()
+      expect(screen.getByText("Listing ID")).toBeInTheDocument()
+      expect(screen.getByText("Uvbk5qurpB2WI9V6WnNdH")).toBeInTheDocument()
+      expect(screen.getByText("Date created")).toBeInTheDocument()
+      expect(screen.getByText("02/03/2025 at 10:13 AM")).toBeInTheDocument()
+      expect(screen.queryByText("Jurisdiction")).not.toBeInTheDocument()
     })
 
     describe("should display Listing Notes section", () => {
@@ -277,7 +299,7 @@ describe("listing data", () => {
       })
     })
 
-    describe("should display Lisiting Photo section", () => {
+    describe("should display Listing Photo section", () => {
       it("should display section with missing data", () => {
         render(
           <ListingContext.Provider
@@ -660,6 +682,7 @@ describe("listing data", () => {
                   text: "Test Name_1",
                   description: "Test Description_1",
                   applicationSection: MultiselectQuestionsApplicationSectionEnum.preferences,
+                  status: MultiselectQuestionsStatusEnum.active,
                 },
               },
               {
@@ -671,6 +694,7 @@ describe("listing data", () => {
                   text: "Test Name_2",
                   description: "Test Description_2",
                   applicationSection: MultiselectQuestionsApplicationSectionEnum.preferences,
+                  status: MultiselectQuestionsStatusEnum.active,
                 },
               },
             ],

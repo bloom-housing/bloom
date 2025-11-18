@@ -1,18 +1,18 @@
-import React, { useContext } from "react"
+import React from "react"
 import { useFormContext } from "react-hook-form"
 import { t, Field, FieldGroup } from "@bloom-housing/ui-components"
 import { Grid } from "@bloom-housing/ui-seeds"
 import {
   EnumListingListingType,
-  FeatureFlagEnum,
   YesNoEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { AuthContext } from "@bloom-housing/shared-helpers"
-import { defaultFieldProps } from "../../../../lib/helpers"
+import { defaultFieldProps, fieldHasError, fieldMessage } from "../../../../lib/helpers"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 interface ListingIntroProps {
-  jurisdiction: string
+  enableHousingDeveloperOwner: boolean
+  enableListingFileNumber: boolean
+  enableNonRegulatedListings: boolean
   jurisdictionName: string
   listingId: string
   requiredFields: string[]
@@ -34,7 +34,6 @@ const getDeveloperLabel = (
 
 const ListingIntro = (props: ListingIntroProps) => {
   const formMethods = useFormContext()
-  const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, clearErrors, errors, watch, getValues } = formMethods
@@ -42,20 +41,6 @@ const ListingIntro = (props: ListingIntroProps) => {
   const listing = getValues()
 
   const listingType = watch("listingType")
-
-  const enableNonRegulatedListings = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableNonRegulatedListings,
-    props.jurisdiction
-  )
-
-  const enableHousingDeveloperOwner = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableHousingDeveloperOwner,
-    props.jurisdiction
-  )
-  const enableListingFileNumber = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableListingFileNumber,
-    props.jurisdiction
-  )
 
   return (
     <>
@@ -66,7 +51,7 @@ const ListingIntro = (props: ListingIntroProps) => {
         heading={t("listings.sections.introTitle")}
         subheading={t("listings.sections.introSubtitle")}
       >
-        {enableNonRegulatedListings && (
+        {props.enableNonRegulatedListings && (
           <Grid.Row columns={1}>
             <Grid.Cell>
               <FieldGroup
@@ -93,7 +78,7 @@ const ListingIntro = (props: ListingIntroProps) => {
             </Grid.Cell>
           </Grid.Row>
         )}
-        {enableListingFileNumber && (
+        {props.enableListingFileNumber && (
           <Grid.Row columns={1}>
             <Grid.Cell>
               <Field
@@ -133,8 +118,8 @@ const ListingIntro = (props: ListingIntroProps) => {
                 "developer",
                 getDeveloperLabel(
                   listingType,
-                  enableHousingDeveloperOwner,
-                  enableNonRegulatedListings
+                  props.enableHousingDeveloperOwner,
+                  props.enableNonRegulatedListings
                 ),
                 props.requiredFields,
                 errors,
@@ -143,34 +128,35 @@ const ListingIntro = (props: ListingIntroProps) => {
             />
           </Grid.Cell>
         </Grid.Row>
-        {listingType === EnumListingListingType.nonRegulated && enableNonRegulatedListings && (
-          <Grid.Row columns={1}>
-            <Grid.Cell>
-              <FieldGroup
-                name="listingHasHudEbllClearance"
-                type="radio"
-                register={register}
-                groupLabel={t("listings.hasEbllClearanceTitle")}
-                fields={[
-                  {
-                    id: "listingHasHudEbllClearanceYes",
-                    label: t("t.yes"),
-                    value: YesNoEnum.yes,
-                    defaultChecked: listing?.hasHudEbllClearance,
-                  },
-                  {
-                    id: "listingHasHudEbllClearanceNo",
-                    label: t("t.no"),
-                    value: YesNoEnum.no,
-                    defaultChecked: !listing?.hasHudEbllClearance,
-                  },
-                ]}
-                error={fieldHasError(errors.listingHasHudEbllClearance)}
-                errorMessage={fieldMessage(errors.listingHasHudEbllClearance)}
-              />
-            </Grid.Cell>
-          </Grid.Row>
-        )}
+        {listingType === EnumListingListingType.nonRegulated &&
+          props.enableNonRegulatedListings && (
+            <Grid.Row columns={1}>
+              <Grid.Cell>
+                <FieldGroup
+                  name="listingHasHudEbllClearance"
+                  type="radio"
+                  register={register}
+                  groupLabel={t("listings.hasEbllClearanceTitle")}
+                  fields={[
+                    {
+                      id: "listingHasHudEbllClearanceYes",
+                      label: t("t.yes"),
+                      value: YesNoEnum.yes,
+                      defaultChecked: listing?.hasHudEbllClearance,
+                    },
+                    {
+                      id: "listingHasHudEbllClearanceNo",
+                      label: t("t.no"),
+                      value: YesNoEnum.no,
+                      defaultChecked: !listing?.hasHudEbllClearance,
+                    },
+                  ]}
+                  error={fieldHasError(errors.listingHasHudEbllClearance)}
+                  errorMessage={fieldMessage(errors.listingHasHudEbllClearance)}
+                />
+              </Grid.Cell>
+            </Grid.Row>
+          )}
       </SectionWithGrid>
     </>
   )
