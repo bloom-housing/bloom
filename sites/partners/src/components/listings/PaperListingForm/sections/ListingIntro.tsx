@@ -32,22 +32,6 @@ const ListingIntro = (props: ListingIntroProps) => {
         heading={t("listings.sections.introTitle")}
         subheading={t("listings.sections.introSubtitle")}
       >
-        {props.enableListingFileNumber && (
-          <Grid.Row columns={2}>
-            <Grid.Cell>
-              <Field
-                register={register}
-                {...defaultFieldProps(
-                  "listingFileNumber",
-                  t("listings.listingFileNumber"),
-                  props.requiredFields,
-                  errors,
-                  clearErrors
-                )}
-              />
-            </Grid.Cell>
-          </Grid.Row>
-        )}
         <Grid.Row columns={1}>
           <Grid.Cell>
             <Field
@@ -65,6 +49,20 @@ const ListingIntro = (props: ListingIntroProps) => {
           </Grid.Cell>
         </Grid.Row>
         <Grid.Row columns={2}>
+          {props.enableListingFileNumber && (
+            <Grid.Cell>
+              <Field
+                register={register}
+                {...defaultFieldProps(
+                  "listingFileNumber",
+                  t("listings.listingFileNumber"),
+                  props.requiredFields,
+                  errors,
+                  clearErrors
+                )}
+              />
+            </Grid.Cell>
+          )}
           <Grid.Cell>
             <Field
               register={register}
