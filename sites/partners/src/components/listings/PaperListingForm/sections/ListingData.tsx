@@ -14,10 +14,10 @@ const ListingData = (props: ListingIntroProps) => {
   if (!props.jurisdictionName && !props.listingId) return null
   return (
     <>
-      <SectionWithGrid heading={"Listing data"}>
+      <SectionWithGrid heading={t("listings.details.listingData")}>
         {props.jurisdictionName && (
           <Grid.Cell>
-            <FieldValue label={"Jurisdiction"}>{props.jurisdictionName}</FieldValue>
+            <FieldValue label={t("t.jurisdiction")}>{props.jurisdictionName}</FieldValue>
           </Grid.Cell>
         )}
         {props.listingId && (
