@@ -562,9 +562,9 @@ describe("listings", () => {
     await userEvent.click(addListingButton)
 
     expect(
-      screen.getByRole("heading", { level: 1, name: "Create listing dialog header" })
+      screen.getByRole("heading", { level: 1, name: "Add listing dialog header" })
     ).toBeInTheDocument()
-    expect(screen.getByText("Create listing dialog content")).toBeInTheDocument()
+    expect(screen.getByText("Add listing dialog content")).toBeInTheDocument()
 
     expect(screen.getByRole("option", { name: "JurisdictionA" })).toBeInTheDocument()
     expect(screen.getByRole("option", { name: "JurisdictionB" })).toBeInTheDocument()
@@ -632,7 +632,7 @@ describe("listings", () => {
     await userEvent.click(addListingButton)
 
     expect(
-      screen.queryByRole("heading", { level: 1, name: "Create listing dialog header" })
+      screen.queryByRole("heading", { level: 1, name: "Add listing dialog header" })
     ).not.toBeInTheDocument()
 
     expect(screen.queryByRole("option", { name: "JurisdictionA" })).not.toBeInTheDocument()
