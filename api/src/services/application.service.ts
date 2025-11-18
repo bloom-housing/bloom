@@ -1197,7 +1197,9 @@ export class ApplicationService {
     }
 
     for (const householdMember of application.householdMember) {
-      transactions.push(addressDeletionData(householdMember.addressId));
+      if (householdMember.addressId) {
+        transactions.push(addressDeletionData(householdMember.addressId));
+      }
 
       transactions.push(
         this.prisma.householdMember.update({
@@ -1230,9 +1232,16 @@ export class ApplicationService {
         select: { id: true },
         where: { expireAfter: { lte: new Date() }, isNewest: false },
       });
+      this.logger.warn(
+        `removing PII information for ${applications.length} applications`,
+      );
       for (const application of applications) {
-        this.removePII(application.id);
+        await this.removePII(application.id);
       }
+    } else {
+      this.logger.warn(
+        'APPLICATION_DAYS_TILL_EXPIRY not set so cron job not run',
+      );
     }
     return {
       success: true,

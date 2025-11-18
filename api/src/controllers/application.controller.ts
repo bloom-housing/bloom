@@ -266,6 +266,16 @@ export class ApplicationController {
     };
   }
 
+  @Put('removePIICronJob')
+  @ApiOperation({
+    summary: 'trigger the remove PII cron job',
+    operationId: 'removePIICronJob',
+  })
+  @ApiOkResponse({ type: SuccessDTO })
+  async process(): Promise<SuccessDTO> {
+    return await this.applicationService.removePIICronJon();
+  }
+
   @Put(`:id`)
   @ApiOperation({ summary: 'Update application by id', operationId: 'update' })
   @ApiOkResponse({ type: Application })
@@ -285,15 +295,5 @@ export class ApplicationController {
       dto.id,
       mapTo(User, req['user']),
     );
-  }
-
-  @Put('removePIICronJob')
-  @ApiOperation({
-    summary: 'trigger the remove PII cron job',
-    operationId: 'removePIICronJob',
-  })
-  @ApiOkResponse({ type: SuccessDTO })
-  async process(): Promise<SuccessDTO> {
-    return await this.applicationService.removePIICronJon();
   }
 }

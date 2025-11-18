@@ -25,13 +25,14 @@ export const applicationFactory = async (optionalParams?: {
   householdSize?: number;
   unitTypeId?: string;
   applicant?: Prisma.ApplicantCreateWithoutApplicationsInput;
-  overrides?: Prisma.ApplicationsCreateInput;
   listingId?: string;
   householdMember?: Prisma.HouseholdMemberCreateWithoutApplicationsInput[];
   demographics?: Prisma.DemographicsCreateWithoutApplicationsInput;
   multiselectQuestions?: Partial<MultiselectQuestions>[];
   userId?: string;
   submissionType?: ApplicationSubmissionTypeEnum;
+  isNewest?: boolean;
+  expireAfter?: Date;
 }): Promise<Prisma.ApplicationsCreateInput> => {
   let preferredUnitTypes: Prisma.UnitTypesCreateNestedManyWithoutApplicationsInput;
   if (optionalParams?.unitTypeId) {
@@ -90,7 +91,6 @@ export const applicationFactory = async (optionalParams?: {
           },
         }
       : undefined,
-    ...optionalParams?.overrides,
     householdMember: optionalParams?.householdMember
       ? {
           create: optionalParams.householdMember,
@@ -111,6 +111,8 @@ export const applicationFactory = async (optionalParams?: {
     additionalPhoneNumber: additionalPhone ? '(456) 456-4564' : undefined,
     additionalPhone,
     additionalPhoneNumberType: additionalPhone ? 'cell' : undefined,
+    isNewest: optionalParams?.isNewest || false,
+    expireAfter: optionalParams?.expireAfter,
   };
 };
 
