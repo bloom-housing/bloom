@@ -96,10 +96,9 @@ const LotteryResults = () => {
     : t("account.application.lottery.resultsHeader")
 
   const applications = totals?.find((total) => !total.multiselectQuestionId).total
-  const isPruralText = listing?.unitsAvailable !== 1 ? "Plural" : ""
 
   const resultsSubheaderWaitlistLottery = t(
-    `account.application.lottery.resultsSubheaderWaitlistLottery${isPruralText}`,
+    `account.application.lottery.resultsSubheaderWaitlistLottery`,
     {
       applications,
     }
@@ -136,10 +135,15 @@ const LotteryResults = () => {
                     <p className="mt-4">
                       {isWaitListLottery
                         ? resultsSubheaderWaitlistLottery
-                        : t(`account.application.lottery.resultsSubheader${isPruralText}`, {
-                            applications,
-                            units: listing?.unitsAvailable,
-                          })}
+                        : t(
+                            `account.application.lottery.resultsSubheader${
+                              listing?.unitsAvailable !== 1 ? "Plural" : ""
+                            }`,
+                            {
+                              applications,
+                              units: listing?.unitsAvailable,
+                            }
+                          )}
                     </p>
                   </Card.Section>
                   <Card.Section

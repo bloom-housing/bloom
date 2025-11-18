@@ -20,7 +20,6 @@
   "account.application.lottery.resultsSubheader": "%{applications} applications were submitted for %{units} unit",
   "account.application.lottery.resultsSubheaderWaitlistLottery": "%{applications} applications were submitted",
   "account.application.lottery.resultsSubheaderPlural": "%{applications} applications were submitted for %{units} units",
-  "account.application.lottery.resultsSubheaderWaitlistLotteryPlural": "%{applications} applications were submitted",
   "account.application.lottery.viewResults": "View lottery results",
   "account.application.noAccessError": "You are unauthorized to view this application",
   "account.application.noApplicationError": "No application with that ID exists",
