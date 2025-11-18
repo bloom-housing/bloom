@@ -410,7 +410,7 @@ Cypress.Commands.add("addMinimalListing", (listingName, isLottery, isApproval, j
   cy.getByID("addListingButton").contains("Add listing").click()
   if (jurisdiction) {
     cy.getByID("jurisdiction").select("Bloomington")
-    cy.get("button").contains("Create listing").click()
+    cy.get("button").contains("Get started").click()
   }
   cy.contains("New listing")
   cy.fixture("minimalListing").then((listing) => {
