@@ -80,7 +80,7 @@ const DetailAdditionalFees = () => {
           <Grid.Cell>
             <FieldValue
               id="creditScreeningFeeAmount"
-              label={t("listings.creditScreeningFeeAmount")}
+              label={t("listings.sections.creditScreeningFeeAmount")}
             >
               {getDetailFieldString(listing.creditScreeningFeeAmount)}
             </FieldValue>

@@ -183,7 +183,7 @@ const AdditionalFees = (props: AdditionalFeesProps) => {
                     prepend={"$"}
                     {...defaultFieldProps(
                       "creditScreeningFeeAmount",
-                      t("listings.creditScreeningFeeAmount"),
+                      t("listings.sections.creditScreeningFeeAmount"),
                       props.requiredFields,
                       errors,
                       clearErrors
