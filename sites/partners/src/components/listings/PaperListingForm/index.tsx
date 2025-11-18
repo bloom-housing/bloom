@@ -225,22 +225,8 @@ const ListingForm = ({
     jurisdictionId
   )
 
-  const enableSection8Question = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableSection8Question,
-    jurisdictionId
-  )
-
   const disableListingPreferences = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.disableListingPreferences,
-    jurisdictionId
-  )
-
-  const enableHousingDeveloperOwner = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableHousingDeveloperOwner,
-    jurisdictionId
-  )
-  const enableListingFileNumber = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableListingFileNumber,
     jurisdictionId
   )
 
@@ -249,68 +235,6 @@ const ListingForm = ({
     jurisdictionId,
     !jurisdictionId
   )
-
-  const enableNeighborhoodAmenities = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableNeighborhoodAmenities,
-    jurisdictionId
-  )
-
-  const enableNeighborhoodAmenitiesDropdown = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableNeighborhoodAmenitiesDropdown,
-    jurisdictionId
-  )
-
-  const enableWaitlistAdditionalFields = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableWaitlistAdditionalFields,
-    jurisdictionId
-  )
-
-  const enableWaitlistLottery = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableWaitlistLottery,
-    jurisdictionId
-  )
-
-  const enableWhatToExpectAdditionalField = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableWhatToExpectAdditionalField,
-    jurisdictionId
-  )
-
-  const enableUtilitiesIncluded = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableUtilitiesIncluded,
-    jurisdictionId
-  )
-
-  const enableMarketingStatus = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableMarketingStatus,
-    jurisdictionId
-  )
-
-  const enableMarketingStatusMonths = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableMarketingStatusMonths,
-    jurisdictionId
-  )
-
-  const disableCommonApplication = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.disableCommonApplication,
-    jurisdictionId
-  )
-
-  const enableRegions = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableRegions,
-    jurisdictionId
-  )
-
-  const enableAccessibilityFeatures = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableAccessibilityFeatures,
-    jurisdictionId
-  )
-
-  const enableCompanyWebsite = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableCompanyWebsite,
-    jurisdictionId
-  )
-
-  const enableIsVerified = doJurisdictionsHaveFeatureFlagOn("enableIsVerified", jurisdictionId)
 
   useEffect(() => {
     if (listing?.units) {
@@ -401,7 +325,12 @@ const ListingForm = ({
             whatToExpectAdditionalDetailsEditor?.getHTML()
           )
 
-          if (!enableSection8Question) {
+          if (
+            !doJurisdictionsHaveFeatureFlagOn(
+              FeatureFlagEnum.enableSection8Question,
+              jurisdictionId
+            )
+          ) {
             formData.listingSection8Acceptance = YesNoEnum.no
           }
 
@@ -559,8 +488,14 @@ const ListingForm = ({
                             listingId={listing?.id}
                           />
                           <ListingIntro
-                            enableHousingDeveloperOwner={enableHousingDeveloperOwner}
-                            enableListingFileNumber={enableListingFileNumber}
+                            enableHousingDeveloperOwner={doJurisdictionsHaveFeatureFlagOn(
+                              FeatureFlagEnum.enableHousingDeveloperOwner,
+                              jurisdictionId
+                            )}
+                            enableListingFileNumber={doJurisdictionsHaveFeatureFlagOn(
+                              FeatureFlagEnum.enableListingFileNumber,
+                              jurisdictionId
+                            )}
                             jurisdictionName={
                               profile?.jurisdictions?.length > 1
                                 ? selectedJurisdictionData?.name
@@ -573,7 +508,10 @@ const ListingForm = ({
                           <BuildingDetails
                             customMapPositionChosen={customMapPositionChosen}
                             requiredFields={requiredFields}
-                            enableRegions={enableRegions}
+                            enableRegions={doJurisdictionsHaveFeatureFlagOn(
+                              FeatureFlagEnum.enableRegions,
+                              jurisdictionId
+                            )}
                             jurisdiction={jurisdictionId}
                             latLong={latLong}
                             listing={listing}
@@ -604,21 +542,31 @@ const ListingForm = ({
                             swapCommunityTypeWithPrograms={swapCommunityTypeWithPrograms}
                           />
                           <AdditionalFees
-                            enableUtilitiesIncluded={enableUtilitiesIncluded}
+                            enableUtilitiesIncluded={doJurisdictionsHaveFeatureFlagOn(
+                              FeatureFlagEnum.enableUtilitiesIncluded,
+                              jurisdictionId
+                            )}
                             existingUtilities={listing?.listingUtilities}
                             requiredFields={requiredFields}
                           />
                           <BuildingFeatures
                             existingFeatures={listing?.listingFeatures}
-                            enableAccessibilityFeatures={enableAccessibilityFeatures}
+                            enableAccessibilityFeatures={doJurisdictionsHaveFeatureFlagOn(
+                              FeatureFlagEnum.enableAccessibilityFeatures,
+                              jurisdictionId
+                            )}
                             jurisdiction={jurisdictionId}
                             requiredFields={requiredFields}
                           />
                           <NeighborhoodAmenities
-                            enableNeighborhoodAmenities={enableNeighborhoodAmenities}
-                            enableNeighborhoodAmenitiesDropdown={
-                              enableNeighborhoodAmenitiesDropdown
-                            }
+                            enableNeighborhoodAmenities={doJurisdictionsHaveFeatureFlagOn(
+                              FeatureFlagEnum.enableNeighborhoodAmenities,
+                              jurisdictionId
+                            )}
+                            enableNeighborhoodAmenitiesDropdown={doJurisdictionsHaveFeatureFlagOn(
+                              FeatureFlagEnum.enableNeighborhoodAmenitiesDropdown,
+                              jurisdictionId
+                            )}
                             visibleNeighborhoodAmenities={
                               selectedJurisdictionData?.visibleNeighborhoodAmenities
                             }
@@ -634,7 +582,12 @@ const ListingForm = ({
                           />
                           <BuildingSelectionCriteria />
                           <AdditionalDetails requiredFields={requiredFields} />
-                          <ListingVerification enableIsVerified={enableIsVerified} />
+                          <ListingVerification
+                            enableIsVerified={doJurisdictionsHaveFeatureFlagOn(
+                              "enableIsVerified",
+                              jurisdictionId
+                            )}
+                          />
                           <div className="text-right -mr-8 -mt-8 relative" style={{ top: "7rem" }}>
                             <Button
                               id="applicationProcessButton"
@@ -660,28 +613,49 @@ const ListingForm = ({
                           </p>
                           <RankingsAndResults
                             enableUnitGroups={enableUnitGroups}
-                            enableWaitlistAdditionalFields={enableWaitlistAdditionalFields}
-                            enableWaitlistLottery={enableWaitlistLottery}
-                            enableWhatToExpectAdditionalField={enableWhatToExpectAdditionalField}
+                            enableWaitlistAdditionalFields={doJurisdictionsHaveFeatureFlagOn(
+                              FeatureFlagEnum.enableWaitlistAdditionalFields,
+                              jurisdictionId
+                            )}
+                            enableWaitlistLottery={doJurisdictionsHaveFeatureFlagOn(
+                              FeatureFlagEnum.enableWaitlistLottery,
+                              jurisdictionId
+                            )}
+                            enableWhatToExpectAdditionalField={doJurisdictionsHaveFeatureFlagOn(
+                              FeatureFlagEnum.enableWhatToExpectAdditionalField,
+                              jurisdictionId
+                            )}
                             isAdmin={profile?.userRoles.isAdmin}
                             requiredFields={requiredFields}
                             whatToExpectAdditionalTextEditor={whatToExpectAdditionalDetailsEditor}
                             whatToExpectEditor={whatToExpectEditor}
                           />
                           <LeasingAgent
-                            enableCompanyWebsite={enableCompanyWebsite}
+                            enableCompanyWebsite={doJurisdictionsHaveFeatureFlagOn(
+                              FeatureFlagEnum.enableCompanyWebsite,
+                              jurisdictionId
+                            )}
                             requiredFields={requiredFields}
                           />
                           <ApplicationTypes
-                            disableCommonApplication={disableCommonApplication}
+                            disableCommonApplication={doJurisdictionsHaveFeatureFlagOn(
+                              FeatureFlagEnum.disableCommonApplication,
+                              jurisdictionId
+                            )}
                             jurisdiction={jurisdictionId}
                             listing={listing}
                             requiredFields={requiredFields}
                           />
                           <ApplicationAddress requiredFields={requiredFields} />
                           <ApplicationDates
-                            enableMarketingStatus={enableMarketingStatus}
-                            enableMarketingStatusMonths={enableMarketingStatusMonths}
+                            enableMarketingStatus={doJurisdictionsHaveFeatureFlagOn(
+                              FeatureFlagEnum.enableMarketingStatus,
+                              jurisdictionId
+                            )}
+                            enableMarketingStatusMonths={doJurisdictionsHaveFeatureFlagOn(
+                              FeatureFlagEnum.enableMarketingStatusMonths,
+                              jurisdictionId
+                            )}
                             jurisdiction={jurisdictionId}
                             openHouseEvents={openHouseEvents}
                             requiredFields={requiredFields}
