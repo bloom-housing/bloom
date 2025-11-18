@@ -530,6 +530,7 @@ const ListingForm = ({
                             setLatLong={setLatitudeLongitude}
                           />
                           <CommunityType
+                            listing={listing}
                             swapCommunityTypeWithPrograms={swapCommunityTypeWithPrograms}
                             requiredFields={requiredFields}
                           />
@@ -588,11 +589,8 @@ const ListingForm = ({
                             }
                           />
                           <AdditionalEligibility
-                            defaultText={
-                              listing?.rentalAssistance ||
-                              selectedJurisdictionData?.rentalAssistanceDefault ||
-                              null
-                            }
+                            defaultText={selectedJurisdictionData?.rentalAssistanceDefault}
+                            listing={listing}
                             jurisdiction={jurisdictionId}
                             requiredFields={requiredFields}
                           />
@@ -648,6 +646,7 @@ const ListingForm = ({
                             requiredFields={requiredFields}
                             whatToExpectAdditionalTextEditor={whatToExpectAdditionalDetailsEditor}
                             whatToExpectEditor={whatToExpectEditor}
+                            listing={listing}
                           />
                           <LeasingAgent
                             enableCompanyWebsite={doJurisdictionsHaveFeatureFlagOn(
@@ -665,7 +664,7 @@ const ListingForm = ({
                             listing={listing}
                             requiredFields={requiredFields}
                           />
-                          <ApplicationAddress requiredFields={requiredFields} />
+                          <ApplicationAddress requiredFields={requiredFields} listing={listing} />
                           <ApplicationDates
                             enableMarketingStatus={doJurisdictionsHaveFeatureFlagOn(
                               FeatureFlagEnum.enableMarketingStatus,
@@ -675,6 +674,7 @@ const ListingForm = ({
                               FeatureFlagEnum.enableMarketingStatusMonths,
                               jurisdictionId
                             )}
+                            listing={listing}
                             jurisdiction={jurisdictionId}
                             openHouseEvents={openHouseEvents}
                             requiredFields={requiredFields}

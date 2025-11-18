@@ -4,9 +4,11 @@ import { Grid } from "@bloom-housing/ui-seeds"
 import { t, Textarea } from "@bloom-housing/ui-components"
 import { defaultFieldProps } from "../../../../lib/helpers"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
+import { FormListing } from "../../../../lib/listings/formTypes"
 
 type AdditionalEligibilityProps = {
   defaultText: string | null
+  listing: FormListing
   jurisdiction: string
   requiredFields: string[]
 }
@@ -15,16 +17,11 @@ const AdditionalEligibility = (props: AdditionalEligibilityProps) => {
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, errors, clearErrors, setValue, getValues } = formMethods
-
-  const currentValue = getValues().rentalAssistance
+  const { register, errors, clearErrors, setValue } = formMethods
 
   useEffect(() => {
-    if (!currentValue) {
-      setValue("rentalAssistance", props.defaultText)
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+    setValue("rentalAssistance", props.listing?.rentalAssistance || props.defaultText)
+  }, [props.listing, props.defaultText, setValue])
 
   return (
     <>
@@ -86,7 +83,7 @@ const AdditionalEligibility = (props: AdditionalEligibilityProps) => {
               placeholder={""}
               fullWidth={true}
               register={register}
-              defaultValue={props.defaultText}
+              defaultValue={props.listing ? props.listing.rentalAssistance : props.defaultText}
               {...defaultFieldProps(
                 "rentalAssistance",
                 t("listings.sections.rentalAssistanceTitle"),
