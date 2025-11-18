@@ -459,6 +459,17 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
           ? 'Housing developer / owner'
           : 'Developer',
       },
+      ...(doAnyJurisdictionHaveFeatureFlagSet(
+        user.jurisdictions,
+        FeatureFlagEnum.enableListingFileNumber,
+      )
+        ? [
+            {
+              path: 'listingFileNumber',
+              label: 'Listing File Number',
+            },
+          ]
+        : []),
       {
         path: 'listingsBuildingAddress.street',
         label: 'Building Street Address',
@@ -859,6 +870,30 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
         [NeighborhoodAmenitiesEnum.healthCareResources]: {
           path: 'listingNeighborhoodAmenities.healthCareResources',
           label: 'Neighborhood Amenities - Health Care Resources',
+        },
+        [NeighborhoodAmenitiesEnum.shoppingVenues]: {
+          path: 'listingNeighborhoodAmenities.shoppingVenues',
+          label: 'Neighborhood Amenities - Shopping Venues',
+        },
+        [NeighborhoodAmenitiesEnum.hospitals]: {
+          path: 'listingNeighborhoodAmenities.hospitals',
+          label: 'Neighborhood Amenities - Hospitals',
+        },
+        [NeighborhoodAmenitiesEnum.seniorCenters]: {
+          path: 'listingNeighborhoodAmenities.seniorCenters',
+          label: 'Neighborhood Amenities - Senior Centers',
+        },
+        [NeighborhoodAmenitiesEnum.recreationalFacilities]: {
+          path: 'listingNeighborhoodAmenities.recreationalFacilities',
+          label: 'Neighborhood Amenities - Recreational Facilities',
+        },
+        [NeighborhoodAmenitiesEnum.playgrounds]: {
+          path: 'listingNeighborhoodAmenities.playgrounds',
+          label: 'Neighborhood Amenities - Playgrounds',
+        },
+        [NeighborhoodAmenitiesEnum.busStops]: {
+          path: 'listingNeighborhoodAmenities.busStops',
+          label: 'Neighborhood Amenities - Bus Stops',
         },
       };
 

@@ -282,6 +282,7 @@ export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: Li
                   : null
               }
               visibleNeighborhoodAmenities={jurisdiction?.visibleNeighborhoodAmenities}
+              jurisdiction={jurisdiction}
             />
             <AdditionalInformation additionalInformation={getAdditionalInformation(listing)} />
           </div>

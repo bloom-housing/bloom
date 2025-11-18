@@ -161,6 +161,7 @@ export const stagingSeed = async (
         FeatureFlagEnum.enableAccessibilityFeatures,
         FeatureFlagEnum.enableCreditScreeningFee,
         FeatureFlagEnum.enableHousingDeveloperOwner,
+        FeatureFlagEnum.enableListingFileNumber,
         FeatureFlagEnum.enableListingFiltering,
         FeatureFlagEnum.enableMarketingStatus,
         FeatureFlagEnum.enableMarketingStatusMonths,
@@ -170,6 +171,12 @@ export const stagingSeed = async (
       visibleNeighborhoodAmenities: [
         NeighborhoodAmenitiesEnum.groceryStores,
         NeighborhoodAmenitiesEnum.pharmacies,
+        NeighborhoodAmenitiesEnum.shoppingVenues,
+        NeighborhoodAmenitiesEnum.hospitals,
+        NeighborhoodAmenitiesEnum.seniorCenters,
+        NeighborhoodAmenitiesEnum.recreationalFacilities,
+        NeighborhoodAmenitiesEnum.playgrounds,
+        NeighborhoodAmenitiesEnum.busStops,
       ],
 
       requiredListingFields: [
@@ -179,6 +186,7 @@ export const stagingSeed = async (
         'leasingAgentEmail',
         'leasingAgentName',
         'leasingAgentPhone',
+        'listingFileNumber',
         'listingImages',
         'listingsBuildingAddress',
         'name',
