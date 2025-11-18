@@ -4178,12 +4178,6 @@ export interface Listing {
   depositValue?: number
 
   /**  */
-  depositRangeMin?: number
-
-  /**  */
-  depositRangeMax?: number
-
-  /**  */
   depositHelperText?: string
 
   /**  */
@@ -4880,12 +4874,6 @@ export interface ListingCreate {
   depositValue?: number
 
   /**  */
-  depositRangeMin?: number
-
-  /**  */
-  depositRangeMax?: number
-
-  /**  */
   depositHelperText?: string
 
   /**  */
@@ -5227,12 +5215,6 @@ export interface ListingUpdate {
 
   /**  */
   depositValue?: number
-
-  /**  */
-  depositRangeMin?: number
-
-  /**  */
-  depositRangeMax?: number
 
   /**  */
   depositHelperText?: string

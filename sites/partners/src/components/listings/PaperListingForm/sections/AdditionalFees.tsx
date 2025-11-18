@@ -87,7 +87,7 @@ const AdditionalFees = (props: AdditionalFeesProps) => {
               <Grid.Cell>
                 <Field
                   register={register}
-                  type={"currency"}
+                  type={"number"}
                   prepend={"$"}
                   {...defaultFieldProps(
                     "depositMin",
@@ -101,7 +101,7 @@ const AdditionalFees = (props: AdditionalFeesProps) => {
               <Grid.Cell>
                 <Field
                   register={register}
-                  type={"currency"}
+                  type={"number"}
                   prepend={"$"}
                   {...defaultFieldProps(
                     "depositMax",
@@ -144,7 +144,7 @@ const AdditionalFees = (props: AdditionalFeesProps) => {
               {depositType === EnumListingDepositType.fixedDeposit && (
                 <Grid.Cell>
                   <Field
-                    type={"currency"}
+                    type={"number"}
                     prepend={"$"}
                     register={register}
                     {...defaultFieldProps(
@@ -161,11 +161,11 @@ const AdditionalFees = (props: AdditionalFeesProps) => {
                 <>
                   <Grid.Cell>
                     <Field
-                      type={"currency"}
+                      type={"number"}
                       prepend={"$"}
                       register={register}
                       {...defaultFieldProps(
-                        "depositRangeMin",
+                        "depositMin",
                         t("listings.depositMin"),
                         props.requiredFields,
                         errors,
@@ -175,11 +175,11 @@ const AdditionalFees = (props: AdditionalFeesProps) => {
                   </Grid.Cell>
                   <Grid.Cell>
                     <Field
-                      type={"currency"}
+                      type={"number"}
                       prepend={"$"}
                       register={register}
                       {...defaultFieldProps(
-                        "depositRangeMax",
+                        "depositMax",
                         t("listings.depositMax"),
                         props.requiredFields,
                         errors,

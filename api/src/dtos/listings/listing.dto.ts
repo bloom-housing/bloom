@@ -400,22 +400,6 @@ class Listing extends AbstractDTO {
   depositValue?: number;
 
   @Expose()
-  @ValidateListingPublish('depositRangeMin', {
-    groups: [ValidationsGroupsEnum.default],
-  })
-  @IsNumber()
-  @ApiPropertyOptional()
-  depositRangeMin?: number;
-
-  @Expose()
-  @ValidateListingPublish('depositRangeMax', {
-    groups: [ValidationsGroupsEnum.default],
-  })
-  @IsNumber()
-  @ApiPropertyOptional()
-  depositRangeMax?: number;
-
-  @Expose()
   @ValidateListingPublish('depositHelperText', {
     groups: [ValidationsGroupsEnum.default],
   })

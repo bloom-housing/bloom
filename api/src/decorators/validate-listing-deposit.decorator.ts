@@ -7,7 +7,7 @@ import {
   ValidatorOptions,
 } from 'class-validator';
 import Listing from '../dtos/listings/listing.dto';
-import { DepositTypeEnum } from '@prisma/client';
+import { DepositTypeEnum, ListingTypeEnum } from '@prisma/client';
 
 export function ValidateListingDeposit(validationOptions?: ValidatorOptions) {
   return function (object: object, propertyName: string) {
@@ -28,29 +28,39 @@ export class DepositValueConstraint implements ValidatorConstraintInterface {
   }
 
   validate(value: DepositTypeEnum, args: ValidationArguments) {
-    const { depositValue, depositRangeMin, depositRangeMax } =
+    const { depositValue, depositMin, depositMax, listingType } =
       args.object as Listing;
 
-    if (value === DepositTypeEnum.fixedDeposit) {
-      return (
-        this.isFieldEmpty(depositRangeMin) && this.isFieldEmpty(depositRangeMax)
-      );
+    console.log(depositValue, depositMin, depositMax, listingType);
+
+    if (!listingType || listingType === ListingTypeEnum.regulated) {
+      return true;
     }
 
     // Verify if both fields are either filled or empty
-    const areFieldsInvalid =
-      (this.isFieldEmpty(depositRangeMin) &&
-        !this.isFieldEmpty(depositRangeMax)) ||
-      (!this.isFieldEmpty(depositRangeMin) &&
-        this.isFieldEmpty(depositRangeMax));
+    const areRangeFieldsInvalid =
+      (this.isFieldEmpty(depositMin) && !this.isFieldEmpty(depositMax)) ||
+      (!this.isFieldEmpty(depositMin) && this.isFieldEmpty(depositMax));
 
-    return this.isFieldEmpty(depositValue) && !areFieldsInvalid;
+    if (value === DepositTypeEnum.fixedDeposit) {
+      return (
+        this.isFieldEmpty(depositMin) &&
+        this.isFieldEmpty(depositMax) &&
+        !this.isFieldEmpty(depositValue)
+      );
+    }
+
+    return this.isFieldEmpty(depositValue) && !areRangeFieldsInvalid;
   }
   defaultMessage(args?: ValidationArguments): string {
     const value = args.value as DepositTypeEnum;
-    if (value === DepositTypeEnum.fixedDeposit) {
-      return 'When deposit is of type "fixedDeposit" the "depositValue" must be filled and the "depositRangeMin"|"depositRangeMax" fields must be null';
+    const { listingType } = args.object as Listing;
+
+    if (!listingType || listingType === ListingTypeEnum.regulated) {
+      return 'The "depositMin" and "depositMax" fields must be filled';
+    } else if (value === DepositTypeEnum.fixedDeposit) {
+      return 'When deposit is of type "fixedDeposit" the "depositValue" must be filled and the "depositMin"|"depositMax" fields must be null';
     }
-    return 'When deposit is of type "depositRange" the "depositRangeMin" and "depositRangeMax" fields must be filled and "depositValue" must be null';
+    return 'When deposit is of type "depositRange" the "depositMin" and "depositMax" fields must be filled and "depositValue" must be null';
   }
 }
