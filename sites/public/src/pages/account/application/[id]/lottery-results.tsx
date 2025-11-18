@@ -90,9 +90,9 @@ const LotteryResults = () => {
       </Card.Section>
     )
   }
-  const isWaitListLottery = listing.reviewOrderType === ReviewOrderTypeEnum.waitlistLottery
-  const lotteryResultText = isWaitListLottery
-    ? `$(t("account.application.lottery.resultsHeader")) for the waitlist`
+  const isWaitListLottery = listing?.reviewOrderType === ReviewOrderTypeEnum.waitlistLottery
+  const lotteryResultHeaderText = isWaitListLottery
+    ? t("account.application.lottery.resultsHeaderWaitlistLoterry")
     : t("account.application.lottery.resultsHeader")
 
   const applications = totals?.find((total) => !total.multiselectQuestionId).total
@@ -131,7 +131,7 @@ const LotteryResults = () => {
                       {t("t.back")}
                     </Button>
                     <Heading priority={2} size={"2xl"} className="mt-6">
-                      {lotteryResultText}
+                      {lotteryResultHeaderText}
                     </Heading>
                     <p className="mt-4">
                       {isWaitListLottery
