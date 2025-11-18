@@ -14,6 +14,8 @@ describe("<AdditionalFees>", () => {
         depositMax={null}
         depositMin={null}
         utilitiesIncluded={[]}
+        creditScreeningFee={null}
+        creditScreeningFeeAmount={null}
       />
     )
     expect(queryByText("Additional fees")).toBeNull()
@@ -27,6 +29,8 @@ describe("<AdditionalFees>", () => {
         depositMax={"200"}
         depositMin={"100"}
         utilitiesIncluded={["Water, Electricity"]}
+        creditScreeningFee={true}
+        creditScreeningFeeAmount={"25"}
       />
     )
     expect(getByText("Additional fees")).toBeDefined()
@@ -36,6 +40,9 @@ describe("<AdditionalFees>", () => {
     expect(getByText("$50")).toBeDefined()
     expect(getByText("Deposit")).toBeDefined()
     expect(getByText("$100 – $200", { exact: false })).toBeDefined()
+    expect(getByText("Credit screening")).toBeDefined()
+    expect(getByText("$25")).toBeDefined()
+    expect(getByText("covers the cost of reviewing your credit and rental history")).toBeDefined()
     expect(getByText("Utilities included")).toBeDefined()
     expect(getByText("Water, Electricity")).toBeDefined()
     expect(getByText("Costs not included")).toBeDefined()
@@ -50,6 +57,8 @@ describe("<AdditionalFees>", () => {
         depositMax={"200"}
         depositMin={"100"}
         utilitiesIncluded={[]}
+        creditScreeningFee={true}
+        creditScreeningFeeAmount={"25"}
       />
     )
     expect(getByText("Additional fees")).toBeDefined()
@@ -59,6 +68,9 @@ describe("<AdditionalFees>", () => {
     expect(getByText("$50")).toBeDefined()
     expect(getByText("Deposit")).toBeDefined()
     expect(getByText("$100 – $200", { exact: false })).toBeDefined()
+    expect(getByText("Credit screening")).toBeDefined()
+    expect(getByText("$25")).toBeDefined()
+    expect(getByText("covers the cost of reviewing your credit and rental history")).toBeDefined()
     expect(queryByText("Utilities included")).toBeNull()
   })
   it("renders just deposit min", () => {
@@ -70,6 +82,8 @@ describe("<AdditionalFees>", () => {
         depositMax={null}
         depositMin={"100"}
         utilitiesIncluded={[]}
+        creditScreeningFee={null}
+        creditScreeningFeeAmount={null}
       />
     )
     expect(getByText("Additional fees")).toBeDefined()
@@ -85,10 +99,48 @@ describe("<AdditionalFees>", () => {
         depositMax={"200"}
         depositMin={null}
         utilitiesIncluded={[]}
+        creditScreeningFee={null}
+        creditScreeningFeeAmount={null}
       />
     )
     expect(getByText("Additional fees")).toBeDefined()
     expect(getByText("Deposit")).toBeDefined()
     expect(getByText("$200", { exact: false })).toBeDefined()
+  })
+  it("renders credit screening fee with amount", () => {
+    const { getByText } = render(
+      <AdditionalFees
+        applicationFee={null}
+        costsNotIncluded={null}
+        depositHelperText={null}
+        depositMax={null}
+        depositMin={null}
+        utilitiesIncluded={[]}
+        creditScreeningFee={true}
+        creditScreeningFeeAmount={"30"}
+      />
+    )
+    expect(getByText("Additional fees")).toBeDefined()
+    expect(getByText("Credit screening")).toBeDefined()
+    expect(getByText("$30")).toBeDefined()
+    expect(getByText("covers the cost of reviewing your credit and rental history")).toBeDefined()
+  })
+  it("renders credit screening fee without amount", () => {
+    const { getByText } = render(
+      <AdditionalFees
+        applicationFee={null}
+        costsNotIncluded={null}
+        depositHelperText={null}
+        depositMax={null}
+        depositMin={null}
+        utilitiesIncluded={[]}
+        creditScreeningFee={true}
+        creditScreeningFeeAmount={null}
+      />
+    )
+    expect(getByText("Additional fees")).toBeDefined()
+    expect(getByText("Credit screening")).toBeDefined()
+    expect(getByText("n/a")).toBeDefined()
+    expect(getByText("covers the cost of reviewing your credit and rental history")).toBeDefined()
   })
 })
