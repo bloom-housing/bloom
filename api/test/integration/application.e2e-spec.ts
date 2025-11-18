@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication } from '@nestjs/common';
+import { INestApplication, Logger } from '@nestjs/common';
 import {
   ApplicationReviewStatusEnum,
   ApplicationStatusEnum,
@@ -45,11 +45,13 @@ import { AlternateContactRelationship } from '../../src/enums/applications/alter
 import { HouseholdMemberRelationship } from '../../src/enums/applications/household-member-relationship-enum';
 import { ApplicationsFilterEnum } from '../../src/enums/applications/filter-enum';
 import { PublicAppsViewQueryParams } from '../../src/dtos/applications/public-apps-view-params.dto';
+import dayjs from 'dayjs';
 
 describe('Application Controller Tests', () => {
   let app: INestApplication;
   let prisma: PrismaService;
   let adminCookies = '';
+  let logger: Logger;
 
   const testEmailService = {
     /* eslint-disable @typescript-eslint/no-empty-function */
@@ -88,10 +90,17 @@ describe('Application Controller Tests', () => {
     })
       .overrideProvider(EmailService)
       .useValue(testEmailService)
+      .overrideProvider(Logger)
+      .useValue({
+        log: jest.fn(),
+        warn: jest.fn(),
+        error: jest.fn(),
+      })
       .compile();
 
     app = moduleFixture.createNestApplication();
     prisma = moduleFixture.get<PrismaService>(PrismaService);
+    logger = moduleFixture.get<Logger>(Logger);
     app.use(cookieParser());
     await app.init();
     await unitTypeFactoryAll(prisma);
@@ -1933,6 +1942,7 @@ describe('Application Controller Tests', () => {
       ]);
     });
   });
+
   describe('publicAppsView endpoint', () => {
     it('should retrieve applications and counts when they exist', async () => {
       const unitTypeA = await unitTypeFactorySingle(
@@ -2038,6 +2048,146 @@ describe('Application Controller Tests', () => {
 
       expect(res.body.applicationsCount.total).toEqual(0);
       expect(res.body.displayApplications.length).toEqual(0);
+    });
+  });
+
+  describe('removePIICronJob endpoint', () => {
+    it('should run the removePII cron job for expired applications', async () => {
+      process.env.APPLICATION_DAYS_TILL_EXPIRY = '90';
+      const juris = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(),
+      });
+      await reservedCommunityTypeFactoryAll(juris.id, prisma);
+      const listing = await prisma.listings.create({
+        data: await listingFactory(juris.id, prisma, {
+          status: ListingsStatusEnum.active,
+        }),
+      });
+
+      // Application that is the newest for a user
+      await prisma.applications.create({
+        data: await applicationFactory({
+          listingId: listing.id,
+          isNewest: true,
+          expireAfter: dayjs(new Date()).subtract(180, 'days').toDate(),
+        }),
+      });
+      // Application that expires in the future
+      await prisma.applications.create({
+        data: await applicationFactory({
+          listingId: listing.id,
+          isNewest: false,
+          expireAfter: dayjs(new Date()).add(3, 'days').toDate(),
+        }),
+      });
+      const applicationToBeCleaned = await prisma.applications.create({
+        data: await applicationFactory({
+          listingId: listing.id,
+          isNewest: false,
+          expireAfter: dayjs(new Date()).subtract(2, 'days').toDate(),
+          householdMember: [
+            {
+              firstName: 'firstNameMember',
+              lastName: 'lastNameMember',
+              birthDay: 2,
+              birthMonth: 2,
+              birthYear: 2002,
+              householdMemberAddress: {
+                create: addressFactory(),
+              },
+            },
+          ],
+        }),
+      });
+      await prisma.applications.create({
+        data: await applicationFactory({
+          listingId: listing.id,
+          isNewest: false,
+          expireAfter: dayjs(new Date()).subtract(2, 'days').toDate(),
+        }),
+      });
+
+      await request(app.getHttpServer())
+        .put(`/applications/removePIICronJob`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', adminCookies)
+        .expect(200);
+
+      expect(logger.warn).toBeCalledWith(
+        expect.stringContaining('removing PII information for '),
+      );
+
+      const applicant1 = await prisma.applicant.findFirst({
+        where: { id: applicationToBeCleaned.applicantId },
+      });
+      expect(applicant1).toEqual({
+        id: applicationToBeCleaned.applicantId,
+        createdAt: expect.anything(),
+        updatedAt: expect.anything(),
+        firstName: null,
+        middleName: null,
+        lastName: null,
+        birthMonth: null,
+        birthDay: null,
+        birthYear: null,
+        emailAddress: null,
+        noEmail: false,
+        phoneNumber: null,
+        phoneNumberType: 'home',
+        noPhone: false,
+        workInRegion: 'no',
+        fullTimeStudent: null,
+        workAddressId: expect.anything(),
+        addressId: expect.anything(),
+      });
+      const applicant1WorkAddress = await prisma.address.findFirst({
+        where: { id: applicant1.workAddressId },
+      });
+      expect(applicant1WorkAddress).toEqual({
+        id: applicant1.workAddressId,
+        createdAt: expect.anything(),
+        updatedAt: expect.anything(),
+        latitude: null,
+        longitude: null,
+        placeName: expect.anything(),
+        street: null,
+        street2: null,
+        city: expect.anything(),
+        county: expect.anything(),
+        state: expect.anything(),
+        zipCode: expect.anything(),
+      });
+      const applicant1AlternateContact =
+        await prisma.alternateContact.findFirst({
+          where: { id: applicationToBeCleaned.alternateContactId },
+        });
+      expect(applicant1AlternateContact.emailAddress).toBeNull();
+      expect(applicant1AlternateContact.firstName).toBeNull();
+      expect(applicant1AlternateContact.lastName).toBeNull();
+      expect(applicant1AlternateContact.phoneNumber).toBeNull();
+
+      const applicant1HouseholdMember = await prisma.householdMember.findFirst({
+        where: { applicationId: applicationToBeCleaned.id },
+      });
+      expect(applicant1HouseholdMember).toEqual({
+        id: expect.anything(),
+        createdAt: expect.anything(),
+        updatedAt: expect.anything(),
+        addressId: expect.anything(),
+        applicationId: applicationToBeCleaned.id,
+        birthDay: null,
+        birthMonth: null,
+        birthYear: null,
+        firstName: null,
+        fullTimeStudent: null,
+        lastName: null,
+        middleName: null,
+        orderId: null,
+        relationship: null,
+        sameAddress: null,
+        workAddressId: null,
+        workInRegion: null,
+      });
     });
   });
 });
