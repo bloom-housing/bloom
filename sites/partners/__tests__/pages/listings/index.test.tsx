@@ -571,7 +571,7 @@ describe("listings", () => {
 
     await userEvent.selectOptions(screen.getByLabelText("Jurisdiction"), "JurisdictionA")
 
-    await userEvent.click(screen.getByRole("button", { name: "Create listing" }))
+    await userEvent.click(screen.getByRole("button", { name: "Get started" }))
     await waitFor(() => {
       expect(pushMock).toHaveBeenCalledWith({
         pathname: "/listings/add",

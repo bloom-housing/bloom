@@ -12,7 +12,7 @@ describe("Listing Management Tests", () => {
     cy.visit("/")
     cy.get("button").contains("Add listing").click()
     cy.getByID("jurisdiction").select("Bloomington")
-    cy.get("button").contains("Create listing").click()
+    cy.get("button").contains("Get started").click()
     cy.contains("New listing")
     // Save an empty listing as a draft and should show errors for appropriate fields
     cy.getByID("saveDraftButton").contains("Save as draft").click()
@@ -78,7 +78,7 @@ describe("Listing Management Tests", () => {
     cy.visit("/")
     cy.get("button").contains("Add listing").click()
     cy.getByID("jurisdiction").select("Lakeview")
-    cy.get("button").contains("Create listing").click()
+    cy.get("button").contains("Get started").click()
     cy.contains("New listing")
     // Try to publish a listing and should show errors for appropriate fields
     cy.getByID("publishButton").contains("Publish").click()
@@ -112,7 +112,7 @@ describe("Listing Management Tests", () => {
     cy.fixture("listing").then((listing) => {
       cy.get("button").contains("Add listing").click()
       cy.getByID("jurisdiction").select(listing["jurisdiction.id"])
-      cy.get("button").contains("Create listing").click()
+      cy.get("button").contains("Get started").click()
       cy.contains("New listing")
       fillOutListing(cy, listing)
       verifyDetails(cy, listing)
