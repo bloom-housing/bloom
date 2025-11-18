@@ -359,11 +359,11 @@ export default function ListingsList() {
       >
         <Form id="listing-select-form" onSubmit={handleSubmit(onSubmit)}>
           <Dialog.Header id="listing-select-dialog-header">
-            {"Create listing dialog header"}
+            {"Add listing dialog header"}
           </Dialog.Header>
 
           <Dialog.Content id="listing-select-dialog-content">
-            {"Create listing dialog content"}
+            {"Add listing dialog content"}
             <Grid>
               <Grid.Row columns={3}>
                 <Grid.Cell className={"seeds-grid-span-2"}>
@@ -395,7 +395,7 @@ export default function ListingsList() {
           </Dialog.Content>
           <Dialog.Footer>
             <Button variant="primary" size="sm" type={"submit"}>
-              {t("listings.createListing")}
+              {t("listings.getStarted")}
             </Button>
             <Button
               variant="primary-outlined"
