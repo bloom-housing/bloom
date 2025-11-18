@@ -145,7 +145,7 @@ describe("PreferencesAndPrograms", () => {
       const firstRowCells = within(tableRows[0]).getAllByRole("cell")
       expect(firstRowCells[0]).toHaveTextContent("1")
       expect(firstRowCells[1]).toHaveTextContent(/city employees/i)
-      expect(tableHeaders[3]).toHaveTextContent(/actions/i)
+      expect(firstRowCells[2]).toHaveTextContent("")
       expect(within(firstRowCells[3]).getByRole("button", { name: /delete/i })).toBeInTheDocument()
 
       const secondRowCells = within(tableRows[1]).getAllByRole("cell")

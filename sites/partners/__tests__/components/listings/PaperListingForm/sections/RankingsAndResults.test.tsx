@@ -1,5 +1,4 @@
 import React from "react"
-import { rest } from "msw"
 import { setupServer } from "msw/node"
 import { FormProvider, useForm } from "react-hook-form"
 import { screen } from "@testing-library/react"
