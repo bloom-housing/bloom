@@ -90,13 +90,11 @@ const LotteryResults = () => {
       </Card.Section>
     )
   }
-
-  const lotteryResultText =
-    listing.reviewOrderType === ReviewOrderTypeEnum.waitlistLottery
-      ? `$(t("account.application.lottery.resultsHeader")) for the waitlist`
-      : t("account.application.lottery.resultsHeader")
-
   const isWaitListLottery = listing.reviewOrderType === ReviewOrderTypeEnum.waitlistLottery
+  const lotteryResultText = isWaitListLottery
+    ? `$(t("account.application.lottery.resultsHeader")) for the waitlist`
+    : t("account.application.lottery.resultsHeader")
+
   const applications = totals?.find((total) => !total.multiselectQuestionId).total
   const isPruralText = listing?.unitsAvailable !== 1 ? "Plural" : ""
 
