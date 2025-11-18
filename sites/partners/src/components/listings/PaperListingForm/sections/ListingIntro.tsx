@@ -1,14 +1,13 @@
-import React, { useContext } from "react"
+import React from "react"
 import { useFormContext } from "react-hook-form"
 import { t, Field } from "@bloom-housing/ui-components"
 import { Grid } from "@bloom-housing/ui-seeds"
-import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { AuthContext } from "@bloom-housing/shared-helpers"
 import { defaultFieldProps } from "../../../../lib/helpers"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 interface ListingIntroProps {
-  jurisdiction: string
+  enableHousingDeveloperOwner: boolean
+  enableListingFileNumber: boolean
   jurisdictionName: string
   listingId: string
   requiredFields: string[]
@@ -20,19 +19,9 @@ const getDeveloperLabel = (enableHousingDeveloperOwner: boolean) => {
 
 const ListingIntro = (props: ListingIntroProps) => {
   const formMethods = useFormContext()
-  const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, clearErrors, errors } = formMethods
-
-  const enableHousingDeveloperOwner = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableHousingDeveloperOwner,
-    props.jurisdiction
-  )
-  const enableListingFileNumber = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableListingFileNumber,
-    props.jurisdiction
-  )
 
   return (
     <>
@@ -43,7 +32,7 @@ const ListingIntro = (props: ListingIntroProps) => {
         heading={t("listings.sections.introTitle")}
         subheading={t("listings.sections.introSubtitle")}
       >
-        {enableListingFileNumber && (
+        {props.enableListingFileNumber && (
           <Grid.Row columns={2}>
             <Grid.Cell>
               <Field
@@ -81,7 +70,7 @@ const ListingIntro = (props: ListingIntroProps) => {
               register={register}
               {...defaultFieldProps(
                 "developer",
-                getDeveloperLabel(enableHousingDeveloperOwner),
+                getDeveloperLabel(props.enableHousingDeveloperOwner),
                 props.requiredFields,
                 errors,
                 clearErrors

@@ -1,7 +1,5 @@
-import React, { useContext } from "react"
-import { AuthContext } from "@bloom-housing/shared-helpers"
+import React from "react"
 import {
-  FeatureFlagEnum,
   MultiselectQuestion,
   MultiselectQuestionsApplicationSectionEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -11,6 +9,8 @@ import { useJurisdictionalMultiselectQuestionList } from "../../../../lib/hooks"
 import { FormListing } from "../../../../lib/listings/formTypes"
 
 type ProgramsAndPreferencesProps = {
+  disableListingPreferences: boolean
+  swapCommunityTypeWithPrograms: boolean
   listing?: FormListing
   jurisdiction: string
   preferences: MultiselectQuestion[]
@@ -20,6 +20,8 @@ type ProgramsAndPreferencesProps = {
 }
 
 const ProgramsAndPreferences = ({
+  disableListingPreferences,
+  swapCommunityTypeWithPrograms,
   listing,
   jurisdiction,
   preferences,
@@ -27,19 +29,6 @@ const ProgramsAndPreferences = ({
   programs,
   setPrograms,
 }: ProgramsAndPreferencesProps) => {
-  const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
-
-  const swapCommunityTypeWithPrograms = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.swapCommunityTypeWithPrograms,
-    jurisdiction
-  )
-
-  const disableListingPreferences = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.disableListingPreferences,
-    jurisdiction,
-    !jurisdiction
-  )
-
   const programComponent = !swapCommunityTypeWithPrograms ? (
     <SelectAndOrder
       addText={t("listings.addProgram")}

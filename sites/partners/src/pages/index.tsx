@@ -113,11 +113,13 @@ export default function ListingsList() {
   const [listingSelectModal, setListingSelectModal] = useState(false)
 
   const defaultJurisdiction =
-    profile?.jurisdictions.length === 1 ? profile.jurisdictions[0].id : null
+    profile?.jurisdictions?.length === 1 ? profile.jurisdictions[0].id : null
+
+  const jurisdictions = profile?.jurisdictions || []
 
   const jurisdictionOptions: SelectOption[] = [
     { label: "", value: "" },
-    ...profile.jurisdictions.map((jurisdiction) => ({
+    ...jurisdictions.map((jurisdiction) => ({
       label: jurisdiction.name,
       value: jurisdiction.id,
     })),

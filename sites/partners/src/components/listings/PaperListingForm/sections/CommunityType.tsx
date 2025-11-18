@@ -1,10 +1,8 @@
-import React, { useContext, useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 import { useFormContext } from "react-hook-form"
 import { t, Select, Textarea, FieldGroup, Field } from "@bloom-housing/ui-components"
 import { Grid } from "@bloom-housing/ui-seeds"
-import { AuthContext } from "@bloom-housing/shared-helpers"
 import {
-  FeatureFlagEnum,
   ReservedCommunityType,
   YesNoEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -22,24 +20,21 @@ import SectionWithGrid from "../../../shared/SectionWithGrid"
 import styles from "../ListingForm.module.scss"
 
 type CommunityTypeProps = {
-  jurisdiction: string
   listing?: FormListing
   requiredFields: string[]
+  swapCommunityTypeWithPrograms: boolean
 }
 
-const CommunityType = ({ jurisdiction, listing, requiredFields }: CommunityTypeProps) => {
+const CommunityType = ({
+  listing,
+  requiredFields,
+  swapCommunityTypeWithPrograms,
+}: CommunityTypeProps) => {
   const formMethods = useFormContext()
-  const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, setValue, watch, errors, clearErrors } = formMethods
   const reservedCommunityType = watch("reservedCommunityTypes.id")
-
-  const swapCommunityTypeWithPrograms = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.swapCommunityTypeWithPrograms,
-    jurisdiction,
-    !jurisdiction
-  )
 
   const [options, setOptions] = useState([])
   const [currentCommunityType, setCurrentCommunityType] = useState(

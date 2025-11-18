@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useContext } from "react"
+import React, { useState, useMemo } from "react"
 import { useFormContext } from "react-hook-form"
 import { getDetailFieldDate, getDetailFieldTime } from "../../PaperListingDetails/sections/helpers"
 import dayjs from "dayjs"
@@ -19,23 +19,24 @@ import SectionWithGrid from "../../../shared/SectionWithGrid"
 import {
   MarketingTypeEnum,
   MarketingSeasonEnum,
-  FeatureFlagEnum,
   MonthEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { AuthContext } from "@bloom-housing/shared-helpers"
 import { fieldMessage, fieldHasError, getLabel } from "../../../../lib/helpers"
 import styles from "../ListingForm.module.scss"
 
 type ApplicationDatesProps = {
-  jurisdiction: string
-  listing?: FormListing
+  enableMarketingStatus: boolean
+  enableMarketingStatusMonths: boolean
   openHouseEvents: TempEvent[]
   requiredFields: string[]
+  listing?: FormListing
+  jurisdiction: string
   setOpenHouseEvents: (events: TempEvent[]) => void
 }
 
 const ApplicationDates = ({
-  jurisdiction,
+  enableMarketingStatus,
+  enableMarketingStatusMonths,
   listing,
   openHouseEvents,
   requiredFields,
@@ -48,8 +49,6 @@ const ApplicationDates = ({
     url: "t.link",
     action: "",
   }
-
-  const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
 
   const openHouseTableData = useMemo(() => {
     return openHouseEvents.map((event) => {
@@ -94,16 +93,6 @@ const ApplicationDates = ({
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { errors, register, setValue, watch, clearErrors } = formMethods
-
-  const enableMarketingStatus = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableMarketingStatus,
-    jurisdiction
-  )
-
-  const enableMarketingStatusMonths = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableMarketingStatusMonths,
-    jurisdiction
-  )
 
   const [drawerOpenHouse, setDrawerOpenHouse] = useState<TempEvent | boolean>(false)
   const [modalDeleteOpenHouse, setModalDeleteOpenHouse] = useState<TempEvent | null>(null)
