@@ -14,7 +14,6 @@ type AdditionalFeesProps = {
   utilitiesIncluded: string[]
   creditScreeningFee?: boolean | null
   creditScreeningFeeAmount?: string | null
-  jurisdiction?: { featureFlags?: Array<{ name: string; active: boolean }> }
 }
 
 export const AdditionalFees = ({

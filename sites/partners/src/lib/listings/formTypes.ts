@@ -142,7 +142,7 @@ export const formDefaults: FormListing = {
   rentalHistory: "",
   requiredDocuments: "",
   creditScreeningFee: false,
-  creditScreeningFeeChoice: YesNoEnum.no,
+  creditScreeningFeeChoice: null,
   creditScreeningFeeAmount: null,
   status: ListingsStatusEnum.pending,
   waitlistCurrentSize: null,

@@ -181,7 +181,6 @@ export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: Li
         depositHelperText={listing.depositHelperText}
         depositMax={listing.depositMax}
         depositMin={listing.depositMin}
-        jurisdiction={jurisdiction}
         utilitiesIncluded={
           isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableUtilitiesIncluded)
             ? getUtilitiesIncluded(listing)
