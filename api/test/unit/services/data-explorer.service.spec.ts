@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { DataExplorerService } from '../../../src/services/data-explorer.service';
 import { PermissionService } from '../../../src/services/permission.service';
-import { DataExplorerReport } from '../../../src/dtos/applications/data-explorer-report.dto';
+import { DataExplorerReport } from '../../../src/dtos/applications/data-explorer/products/data-explorer-report.dto';
 
 describe('DataExplorerService', () => {
   let service: DataExplorerService;

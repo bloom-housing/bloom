@@ -11,8 +11,8 @@ import { mapTo } from '../utilities/mapTo';
 import { PermissionService } from './permission.service';
 import { User } from '../dtos/users/user.dto';
 import { permissionActions } from '../enums/permissions/permission-actions-enum';
-import { DataExplorerParams } from '../dtos/applications/data-explorer-params.dto';
-import { DataExplorerReport } from '../dtos/applications/data-explorer-report.dto';
+import { DataExplorerParams } from '../dtos/applications/data-explorer/params/data-explorer-params.dto';
+import { DataExplorerReport } from '../dtos/applications/data-explorer/products/data-explorer-report.dto';
 import axios from 'axios';
 /*
   this is the service for calling the FastAPI housing-reports endpoint
@@ -46,7 +46,7 @@ export class DataExplorerService {
       params.jurisdictionId,
     );
 
-    const reportData = await this.getReportDataFastAPI();
+    const reportData = await this.getReportDataFastAPI(params.filters);
     if (!reportData) {
       console.error('No report data returned from API');
       throw new NotFoundException('No report data found');
@@ -67,7 +67,7 @@ export class DataExplorerService {
     return mappedData;
   }
 
-  async getReportDataFastAPI(): Promise<DataExplorerReport> {
+  async getReportDataFastAPI(filters?: any): Promise<DataExplorerReport> {
     try {
       const API_BASE_URL = process.env.FAST_API_URL;
       if (!process.env.FAST_API_KEY || !process.env.FAST_API_URL) {
@@ -75,17 +75,20 @@ export class DataExplorerService {
           'FastAPI key or URL is not configured in environment variables',
         );
       }
-      const response = await axios.get(
+      const response = await axios.post(
         `${API_BASE_URL}/api/v1/secure/generate-report`,
+        { filters: filters || {} }, // Pass filters in request body
         {
           headers: {
             'X-API-Key': process.env.FAST_API_KEY,
+            'Content-Type': 'application/json',
           },
         },
       );
 
       return response.data as DataExplorerReport;
     } catch (error) {
+      console.error('Error fetching report data from FastAPI:', error);
       throw new NotFoundException('No report data found');
     }
   }

@@ -1,6 +1,7 @@
 import {
   Controller,
   Get,
+  Post,
   Query,
   Request,
   UseGuards,
@@ -17,8 +18,8 @@ import { PermissionTypeDecorator } from '../decorators/permission-type.decorator
 import { ApiKeyGuard } from '../guards/api-key.guard';
 import { JwtAuthGuard } from '../guards/jwt.guard';
 import { DataExplorerService } from '../services/data-explorer.service';
-import { DataExplorerParams } from '../dtos/applications/data-explorer-params.dto';
-import { DataExplorerReport } from '../dtos/applications/data-explorer-report.dto';
+import { DataExplorerParams } from '../dtos/applications/data-explorer/params/data-explorer-params.dto';
+import { DataExplorerReport } from '../dtos/applications/data-explorer/products/data-explorer-report.dto';
 
 @Controller('generate-report')
 @ApiTags('data-explorer')
@@ -34,7 +35,7 @@ import { DataExplorerReport } from '../dtos/applications/data-explorer-report.dt
 export class DataExplorerController {
   constructor(private readonly dataExplorerService: DataExplorerService) {}
 
-  @Get()
+  @Post()
   @ApiOperation({
     summary: 'Generate a report',
     operationId: 'generateReport',
