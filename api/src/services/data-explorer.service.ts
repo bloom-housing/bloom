@@ -67,6 +67,7 @@ export class DataExplorerService {
     return mappedData;
   }
 
+  // TODO: Change this to use the correct filters
   async getReportDataFastAPI(filters?: any): Promise<DataExplorerReport> {
     try {
       const API_BASE_URL = process.env.FAST_API_URL;
