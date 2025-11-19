@@ -90,10 +90,11 @@ const LotteryResults = () => {
       </Card.Section>
     )
   }
-  const isWaitListLottery = listing?.reviewOrderType === ReviewOrderTypeEnum.waitlistLottery
-  const lotteryResultHeaderText = isWaitListLottery
-    ? t("account.application.lottery.resultsHeaderWaitlistLoterry")
-    : t("account.application.lottery.resultsHeader")
+
+  const lotteryResultHeaderText =
+    listing?.reviewOrderType === ReviewOrderTypeEnum.waitlistLottery
+      ? t("account.application.lottery.resultsHeaderWaitlistLoterry")
+      : t("account.application.lottery.resultsHeader")
 
   const applications = totals?.find((total) => !total.multiselectQuestionId).total
 
@@ -133,7 +134,7 @@ const LotteryResults = () => {
                       {lotteryResultHeaderText}
                     </Heading>
                     <p className="mt-4">
-                      {isWaitListLottery
+                      {listing?.reviewOrderType === ReviewOrderTypeEnum.waitlistLottery
                         ? resultsSubheaderWaitlistLottery
                         : t(
                             `account.application.lottery.resultsSubheader${
