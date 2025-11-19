@@ -6,7 +6,6 @@ import {
   NotFoundException,
   OnModuleInit,
 } from '@nestjs/common';
-import { SchedulerRegistry } from '@nestjs/schedule';
 import {
   ApplicationReviewStatusEnum,
   ApplicationStatusEnum,
