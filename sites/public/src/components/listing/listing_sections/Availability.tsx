@@ -246,7 +246,6 @@ export const Availability = ({ listing, jurisdiction }: AvailabilityProps) => {
         case ReviewOrderTypeEnum.lottery:
           return [lotteryContent]
         case ReviewOrderTypeEnum.waitlist:
-        case ReviewOrderTypeEnum.waitlistLottery:
           return [waitlistContent]
         default:
           return [fcfsContent]
