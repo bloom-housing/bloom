@@ -269,7 +269,7 @@ view.details = {
   },
 };
 
-const PII_DELETION_CRON_JOB_NAME = 'PII_DELETION_CRON_JOB';
+const PII_DELETION_CRON_JOB_NAME = 'PII_DELETION_CRON_STRING';
 
 /*
   this is the service for applicationss
@@ -1117,10 +1117,30 @@ export class ApplicationService {
    */
   async removePII(applicationId: string): Promise<void> {
     const application = await this.prisma.applications.findFirst({
-      include: {
-        applicant: true,
-        householdMember: true,
-        alternateContact: true,
+      select: {
+        id: true,
+        mailingAddressId: true,
+        additionalPhoneNumber: true,
+        applicant: {
+          select: {
+            id: true,
+            addressId: true,
+            workAddressId: true,
+          },
+        },
+        householdMember: {
+          select: {
+            id: true,
+            addressId: true,
+            workAddressId: true,
+          },
+        },
+        alternateContact: {
+          select: {
+            id: true,
+            mailingAddressId: true,
+          },
+        },
       },
       where: {
         id: applicationId,
@@ -1144,6 +1164,10 @@ export class ApplicationService {
       });
     };
 
+    if (application.mailingAddressId) {
+      transactions.push(addressDeletionData(application.mailingAddressId));
+    }
+
     if (application.applicant?.addressId) {
       transactions.push(addressDeletionData(application.applicant?.addressId));
     }
@@ -1154,7 +1178,7 @@ export class ApplicationService {
       );
     }
 
-    if (application.applicant) {
+    if (application.applicant?.id) {
       transactions.push(
         this.prisma.applicant.update({
           data: {
@@ -1200,6 +1224,9 @@ export class ApplicationService {
       if (householdMember.addressId) {
         transactions.push(addressDeletionData(householdMember.addressId));
       }
+      if (householdMember.workAddressId) {
+        transactions.push(addressDeletionData(householdMember.workAddressId));
+      }
 
       transactions.push(
         this.prisma.householdMember.update({
@@ -1208,10 +1235,24 @@ export class ApplicationService {
             birthMonth: null,
             birthYear: null,
             firstName: null,
+            middleName: null,
             lastName: null,
           },
           where: {
             id: householdMember.id,
+          },
+        }),
+      );
+    }
+
+    if (application.additionalPhoneNumber) {
+      transactions.push(
+        this.prisma.applications.update({
+          data: {
+            additionalPhone: null,
+          },
+          where: {
+            id: application.id,
           },
         }),
       );
