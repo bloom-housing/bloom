@@ -359,11 +359,11 @@ export default function ListingsList() {
       >
         <Form id="listing-select-form" onSubmit={handleSubmit(onSubmit)}>
           <Dialog.Header id="listing-select-dialog-header">
-            {"Add listing dialog header"}
+            {t("listings.selectJurisdictionTitle")}
           </Dialog.Header>
 
           <Dialog.Content id="listing-select-dialog-content">
-            {"Add listing dialog content"}
+            {t("listings.selectJurisdictionContent")}
             <Grid>
               <Grid.Row columns={3}>
                 <Grid.Cell className={"seeds-grid-span-2"}>
