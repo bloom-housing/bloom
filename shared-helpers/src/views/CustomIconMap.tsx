@@ -3,6 +3,7 @@ import { Application, Door, Profile } from "./CustomIcons"
 import LockClosedIcon from "@heroicons/react/24/solid/LockClosedIcon"
 import ChevronLeftIcon from "@heroicons/react/20/solid/ChevronLeftIcon"
 import Clock from "@heroicons/react/24/outline/ClockIcon"
+import Cog8ToothIcon from "@heroicons/react/24/solid/Cog8ToothIcon"
 import HeartIcon from "@heroicons/react/24/outline/HeartIcon"
 import HeartIconSolid from "@heroicons/react/24/solid/HeartIcon"
 import HomeModernIcon from "@heroicons/react/24/outline/HomeModernIcon"
@@ -19,6 +20,7 @@ export const CustomIconMap = {
   lockClosed: <LockClosedIcon />,
   chevronLeft: <ChevronLeftIcon />,
   clock: <Clock />,
+  cog: <Cog8ToothIcon />,
   heartIcon: <HeartIcon />,
   heartIconSolid: <HeartIconSolid />,
   home: <HomeModernIcon />,

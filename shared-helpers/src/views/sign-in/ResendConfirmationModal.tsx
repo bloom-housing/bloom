@@ -1,8 +1,9 @@
-import { t, Form, Field } from "@bloom-housing/ui-components"
+import { t, Field } from "@bloom-housing/ui-components"
 import { Button, Dialog } from "@bloom-housing/ui-seeds"
 import React, { useCallback, useEffect, useMemo } from "react"
 import { useForm } from "react-hook-form"
 import { emailRegex } from "../../utilities/regex"
+import { Form } from "../components/Form"
 
 export type ResendConfirmationModalProps = {
   isOpen: boolean

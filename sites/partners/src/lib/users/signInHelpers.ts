@@ -104,17 +104,23 @@ export const onSubmitMfaCodeWithPhone =
     mfaType,
     setRenderStep,
     requestMfaCode,
+    determineNetworkError,
     setAllowPhoneNumberEdit,
     setPhoneNumber,
     resetNetworkError
   ) =>
   async (data: { phoneNumber: string }) => {
     const { phoneNumber } = data
-    await requestMfaCode(email, password, mfaType, phoneNumber)
-    resetNetworkError()
-    setRenderStep(EnumRenderStep.enterCode)
-    setAllowPhoneNumberEdit(true)
-    setPhoneNumber(phoneNumber)
+    try {
+      await requestMfaCode(email, password, mfaType, phoneNumber)
+      resetNetworkError()
+      setRenderStep(EnumRenderStep.enterCode)
+      setAllowPhoneNumberEdit(true)
+      setPhoneNumber(phoneNumber)
+    } catch(error) {
+      const { status } = error.response || {}
+      determineNetworkError(status, error, true)
+    }
   }
 
 export const onSubmitMfaCode =
