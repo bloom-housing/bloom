@@ -14,15 +14,19 @@ export enum FeatureFlagEnum {
   enableGeocodingPreferences = 'enableGeocodingPreferences',
   enableGeocodingRadiusMethod = 'enableGeocodingRadiusMethod',
   enableHomeType = 'enableHomeType',
+  enableHousingDeveloperOwner = 'enableHousingDeveloperOwner',
   enableIsVerified = 'enableIsVerified',
   enableLimitedHowDidYouHear = 'enableLimitedHowDidYouHear',
   enableListingFavoriting = 'enableListingFavoriting',
+  enableListingFileNumber = 'enableListingFileNumber',
   enableListingFiltering = 'enableListingFiltering',
   enableListingOpportunity = 'enableListingOpportunity',
   enableListingPagination = 'enableListingPagination',
   enableListingUpdatedAt = 'enableListingUpdatedAt',
   enableMarketingStatus = 'enableMarketingStatus',
+  enableMarketingStatusMonths = 'enableMarketingStatusMonths',
   enableNeighborhoodAmenities = 'enableNeighborhoodAmenities',
+  enableNeighborhoodAmenitiesDropdown = 'enableNeighborhoodAmenitiesDropdown',
   enableNonRegulatedListings = 'enableNonRegulatedListings',
   enablePartnerDemographics = 'enablePartnerDemographics',
   enablePartnerSettings = 'enablePartnerSettings',
@@ -45,7 +49,10 @@ export enum FeatureFlagEnum {
 // List of all of existing flags and their descriptions.
 // This should be the source of all feature flags in our system.
 // Keep alphabetized for readability.
-export const featureFlagMap: { name: string; description: string }[] = [
+export const featureFlagMap: {
+  name: string;
+  description: string;
+}[] = [
   {
     name: FeatureFlagEnum.disableCommonApplication,
     description:
@@ -105,6 +112,11 @@ export const featureFlagMap: { name: string; description: string }[] = [
     description: 'When true, home type feature is turned on',
   },
   {
+    name: FeatureFlagEnum.enableHousingDeveloperOwner,
+    description:
+      "When true, the 'Housing developer' field label becomes 'Housing developer / owner'",
+  },
+  {
     name: FeatureFlagEnum.enableIsVerified,
     description:
       'When true, the listing can ba have its contents manually verified by a user',
@@ -118,6 +130,11 @@ export const featureFlagMap: { name: string; description: string }[] = [
     name: FeatureFlagEnum.enableListingFavoriting,
     description:
       'When true, a Favorite button is shown for public listings and users can view their favorited listings',
+  },
+  {
+    name: FeatureFlagEnum.enableListingFileNumber,
+    description:
+      'When true, partners can enter and export a listing file number',
   },
   {
     name: FeatureFlagEnum.enableListingFiltering,
@@ -144,9 +161,19 @@ export const featureFlagMap: { name: string; description: string }[] = [
       "When true, the 'marketing status' sub-section is displayed in listing creation/edit and the public listing view",
   },
   {
+    name: FeatureFlagEnum.enableMarketingStatusMonths,
+    description:
+      "When true, the 'marketing status' sub-section uses months instead of seasons (functions only if enableMarketingStatus is also true)",
+  },
+  {
     name: FeatureFlagEnum.enableNeighborhoodAmenities,
     description:
       "When true, the 'neighborhood amenities' section is displayed in listing creation/edit and the public listing view",
+  },
+  {
+    name: FeatureFlagEnum.enableNeighborhoodAmenitiesDropdown,
+    description:
+      'When true, neighborhood amenities inputs render as dropdowns with distance options instead of textareas',
   },
   {
     name: FeatureFlagEnum.enableNonRegulatedListings,

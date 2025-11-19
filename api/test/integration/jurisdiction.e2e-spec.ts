@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
-import { LanguagesEnum } from '@prisma/client';
+import { LanguagesEnum, NeighborhoodAmenitiesEnum } from '@prisma/client';
 import { randomUUID } from 'crypto';
 import request from 'supertest';
 import cookieParser from 'cookie-parser';
@@ -135,6 +135,10 @@ describe('Jurisdiction Controller Tests', () => {
       listingApprovalPermissions: [],
       duplicateListingPermissions: [],
       requiredListingFields: [],
+      visibleNeighborhoodAmenities: [
+        NeighborhoodAmenitiesEnum.groceryStores,
+        NeighborhoodAmenitiesEnum.pharmacies,
+      ],
     };
     const res = await request(app.getHttpServer())
       .post('/jurisdictions')
@@ -165,6 +169,10 @@ describe('Jurisdiction Controller Tests', () => {
       listingApprovalPermissions: [],
       duplicateListingPermissions: [],
       requiredListingFields: [],
+      visibleNeighborhoodAmenities: [
+        NeighborhoodAmenitiesEnum.groceryStores,
+        NeighborhoodAmenitiesEnum.pharmacies,
+      ],
     };
     const res = await request(app.getHttpServer())
       .put(`/jurisdictions/${id}`)
@@ -199,6 +207,10 @@ describe('Jurisdiction Controller Tests', () => {
       listingApprovalPermissions: [],
       duplicateListingPermissions: [],
       requiredListingFields: [],
+      visibleNeighborhoodAmenities: [
+        NeighborhoodAmenitiesEnum.groceryStores,
+        NeighborhoodAmenitiesEnum.pharmacies,
+      ],
     };
 
     const res = await request(app.getHttpServer())

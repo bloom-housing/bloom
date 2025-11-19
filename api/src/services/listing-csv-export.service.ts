@@ -16,6 +16,7 @@ import {
   ApplicationMethodsTypeEnum,
   ListingEventsTypeEnum,
   MarketingTypeEnum,
+  NeighborhoodAmenitiesEnum,
 } from '@prisma/client';
 import { includeViews } from './listing.service';
 import { PrismaService } from './prisma.service';
@@ -451,8 +452,24 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
       },
       {
         path: 'developer',
-        label: 'Developer',
+        label: doAnyJurisdictionHaveFeatureFlagSet(
+          user.jurisdictions,
+          FeatureFlagEnum.enableHousingDeveloperOwner,
+        )
+          ? 'Housing developer / owner'
+          : 'Developer',
       },
+      ...(doAnyJurisdictionHaveFeatureFlagSet(
+        user.jurisdictions,
+        FeatureFlagEnum.enableListingFileNumber,
+      )
+        ? [
+            {
+              path: 'listingFileNumber',
+              label: 'Listing File Number',
+            },
+          ]
+        : []),
       {
         path: 'listingsBuildingAddress.street',
         label: 'Building Street Address',
@@ -806,34 +823,68 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
         FeatureFlagEnum.enableNeighborhoodAmenities,
       )
     ) {
-      headers.push(
-        ...[
-          {
-            path: 'listingNeighborhoodAmenities.groceryStores',
-            label: 'Neighborhood Amenities - Grocery Stores',
-          },
-          {
-            path: 'listingNeighborhoodAmenities.publicTransportation',
-            label: 'Neighborhood Amenities - Public Transportation',
-          },
-          {
-            path: 'listingNeighborhoodAmenities.schools',
-            label: 'Neighborhood Amenities - Schools',
-          },
-          {
-            path: 'listingNeighborhoodAmenities.parksAndCommunityCenters',
-            label: 'Neighborhood Amenities - Parks and Community Centers',
-          },
-          {
-            path: 'listingNeighborhoodAmenities.pharmacies',
-            label: 'Neighborhood Amenities - Pharmacies',
-          },
-          {
-            path: 'listingNeighborhoodAmenities.healthCareResources',
-            label: 'Neighborhood Amenities - Health Care Resources',
-          },
-        ],
+      const visibleAmenities = new Set<string>(
+        (user.jurisdictions || [])
+          .flatMap((j) => j.visibleNeighborhoodAmenities || [])
+          .filter(Boolean),
       );
+
+      const amenityHeaderMap: Record<string, CsvHeader> = {
+        [NeighborhoodAmenitiesEnum.groceryStores]: {
+          path: 'listingNeighborhoodAmenities.groceryStores',
+          label: 'Neighborhood Amenities - Grocery Stores',
+        },
+        [NeighborhoodAmenitiesEnum.publicTransportation]: {
+          path: 'listingNeighborhoodAmenities.publicTransportation',
+          label: 'Neighborhood Amenities - Public Transportation',
+        },
+        [NeighborhoodAmenitiesEnum.schools]: {
+          path: 'listingNeighborhoodAmenities.schools',
+          label: 'Neighborhood Amenities - Schools',
+        },
+        [NeighborhoodAmenitiesEnum.parksAndCommunityCenters]: {
+          path: 'listingNeighborhoodAmenities.parksAndCommunityCenters',
+          label: 'Neighborhood Amenities - Parks and Community Centers',
+        },
+        [NeighborhoodAmenitiesEnum.pharmacies]: {
+          path: 'listingNeighborhoodAmenities.pharmacies',
+          label: 'Neighborhood Amenities - Pharmacies',
+        },
+        [NeighborhoodAmenitiesEnum.healthCareResources]: {
+          path: 'listingNeighborhoodAmenities.healthCareResources',
+          label: 'Neighborhood Amenities - Health Care Resources',
+        },
+        [NeighborhoodAmenitiesEnum.shoppingVenues]: {
+          path: 'listingNeighborhoodAmenities.shoppingVenues',
+          label: 'Neighborhood Amenities - Shopping Venues',
+        },
+        [NeighborhoodAmenitiesEnum.hospitals]: {
+          path: 'listingNeighborhoodAmenities.hospitals',
+          label: 'Neighborhood Amenities - Hospitals',
+        },
+        [NeighborhoodAmenitiesEnum.seniorCenters]: {
+          path: 'listingNeighborhoodAmenities.seniorCenters',
+          label: 'Neighborhood Amenities - Senior Centers',
+        },
+        [NeighborhoodAmenitiesEnum.recreationalFacilities]: {
+          path: 'listingNeighborhoodAmenities.recreationalFacilities',
+          label: 'Neighborhood Amenities - Recreational Facilities',
+        },
+        [NeighborhoodAmenitiesEnum.playgrounds]: {
+          path: 'listingNeighborhoodAmenities.playgrounds',
+          label: 'Neighborhood Amenities - Playgrounds',
+        },
+        [NeighborhoodAmenitiesEnum.busStops]: {
+          path: 'listingNeighborhoodAmenities.busStops',
+          label: 'Neighborhood Amenities - Bus Stops',
+        },
+      };
+
+      Object.keys(amenityHeaderMap).forEach((key) => {
+        if (visibleAmenities.has(key)) {
+          headers.push(amenityHeaderMap[key]);
+        }
+      });
     }
 
     headers.push(
