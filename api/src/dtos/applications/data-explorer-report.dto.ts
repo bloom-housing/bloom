@@ -12,6 +12,17 @@ import {
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 import { AbstractDTO } from '../shared/abstract.dto';
 
+export class ReportFilters {
+  @Expose()
+  @ApiProperty({
+    type: String,
+    example: '01/01/2025 - 06/30/2025',
+    description: 'Date range for the report',
+  })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  dateRange: string;
+}
+
 export class FrequencyData {
   @Expose()
   @ApiProperty({
@@ -226,6 +237,15 @@ export class ReportProducts {
 export class DataExplorerReport extends AbstractDTO {
   @Expose()
   @ApiProperty({
+    type: ReportFilters,
+    description: 'Filters applied to generate this report',
+  })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => ReportFilters)
+  reportFilters: ReportFilters;
+
+  @Expose()
+  @ApiProperty({
     type: Number,
     example: 1200,
     description: 'Total number of processed applications',
@@ -262,6 +282,16 @@ export class DataExplorerReport extends AbstractDTO {
   })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   validResponse: boolean;
+
+  @Expose()
+  @ApiProperty({
+    type: Boolean,
+    example: true,
+    description:
+      'Whether there is sufficient data for analysis (alias for validResponse)',
+  })
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  isSufficient: boolean;
 
   @Expose()
   @ApiProperty({

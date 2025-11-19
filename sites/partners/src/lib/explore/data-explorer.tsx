@@ -124,7 +124,7 @@ export interface ApiFilters {
 export const getReportDataFastAPI = async (filters?: ApiFilters) => {
   console.log("Fetching data from API...")
   try {
-    const url = `${API_BASE_URL}/generate-report`
+    const url = `${API_BASE_URL}/data-explorer/generate-report`
     const response = filters ? await axios.post(url, filters) : await axios.get(url)
     console.log("Data returned from API:", response.data)
     return response.data as ReportData

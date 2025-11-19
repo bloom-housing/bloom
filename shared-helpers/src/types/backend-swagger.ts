@@ -1881,6 +1881,28 @@ export class UserService {
     })
   }
   /**
+   * Update AI consent preference
+   */
+  updateAiConsent(
+    params: {
+      /** requestBody */
+      body?: UserAiConsent
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<User> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user/ai-consent"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
    * Invite partner user
    */
   invite(
@@ -2900,16 +2922,83 @@ export class DataExplorerService {
       jurisdictionId?: string
       /**  */
       userId?: string
+      /** Filter by household size */
+      householdSize?: any | null[]
+      /** Minimum income */
+      minIncome?: number
+      /** Maximum income */
+      maxIncome?: number
+      /** Filter by AMI levels */
+      amiLevels?: any | null[]
+      /** Filter by voucher statuses */
+      voucherStatuses?: any | null[]
+      /** Filter by accessibility types */
+      accessibilityTypes?: any | null[]
+      /** Filter by races */
+      races?: any | null[]
+      /** Filter by ethnicities */
+      ethnicities?: any | null[]
+      /** Filter by applicant residential counties */
+      applicantResidentialCounties?: any | null[]
+      /** Filter by applicant work counties */
+      applicantWorkCounties?: any | null[]
+      /** Minimum age */
+      minAge?: number
+      /** Maximum age */
+      maxAge?: number
+      /** Start date for filtering */
+      startDate?: string
+      /** End date for filtering */
+      endDate?: string
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<DataExplorerReport> {
     return new Promise((resolve, reject) => {
-      let url = basePath + "/generate-report"
+      let url = basePath + "/data-explorer/generate-report"
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-      configs.params = { jurisdictionId: params["jurisdictionId"], userId: params["userId"] }
+      configs.params = {
+        jurisdictionId: params["jurisdictionId"],
+        userId: params["userId"],
+        householdSize: params["householdSize"],
+        minIncome: params["minIncome"],
+        maxIncome: params["maxIncome"],
+        amiLevels: params["amiLevels"],
+        voucherStatuses: params["voucherStatuses"],
+        accessibilityTypes: params["accessibilityTypes"],
+        races: params["races"],
+        ethnicities: params["ethnicities"],
+        applicantResidentialCounties: params["applicantResidentialCounties"],
+        applicantWorkCounties: params["applicantWorkCounties"],
+        minAge: params["minAge"],
+        maxAge: params["maxAge"],
+        startDate: params["startDate"],
+        endDate: params["endDate"],
+      }
 
       /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Generate AI insights from data
+   */
+  generateInsight(
+    params: {
+      /** requestBody */
+      body?: GenerateInsightParams
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<GenerateInsightResponse> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/data-explorer/generate-insight"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
 
       axios(configs, resolve, reject)
     })
@@ -6883,6 +6972,12 @@ export interface User {
   agreedToTermsOfService: boolean
 
   /**  */
+  hasConsentedToAI?: boolean
+
+  /**  */
+  aiConsentGivenAt?: Date
+
+  /**  */
   hitConfirmationURL?: Date
 
   /**  */
@@ -6906,6 +7001,11 @@ export interface PaginatedUser {
 
   /**  */
   meta: PaginationMeta
+}
+
+export interface UserAiConsent {
+  /** Whether the user has consented to AI features */
+  hasConsented: boolean
 }
 
 export interface UserCreate {
@@ -6932,6 +7032,9 @@ export interface UserCreate {
 
   /**  */
   agreedToTermsOfService: boolean
+
+  /**  */
+  hasConsentedToAI?: boolean
 
   /**  */
   favoriteListings?: IdDTO[]
@@ -6982,6 +7085,9 @@ export interface UserInvite {
 
   /**  */
   language?: LanguagesEnum
+
+  /**  */
+  hasConsentedToAI?: boolean
 
   /**  */
   favoriteListings?: IdDTO[]
@@ -7047,6 +7153,9 @@ export interface UserUpdate {
 
   /**  */
   agreedToTermsOfService: boolean
+
+  /**  */
+  hasConsentedToAI?: boolean
 
   /**  */
   favoriteListings?: IdDTO[]
@@ -7272,6 +7381,11 @@ export interface PublicLotteryTotal {
   multiselectQuestionId?: string
 }
 
+export interface ReportFilters {
+  /** Date range for the report */
+  dateRange: string
+}
+
 export interface RaceFrequency {
   /** Count of occurrences */
   count: number
@@ -7385,6 +7499,9 @@ export interface DataExplorerReport {
   /**  */
   updatedAt: Date
 
+  /** Filters applied to generate this report */
+  reportFilters: CombinedReportFiltersTypes
+
   /** Total number of processed applications */
   totalProcessedApplications: number
 
@@ -7397,6 +7514,9 @@ export interface DataExplorerReport {
   /** Whether the data passes k-anonymity requirements and has no errors */
   validResponse: boolean
 
+  /** Whether there is sufficient data for analysis (alias for validResponse) */
+  isSufficient: boolean
+
   /** K-anonymity score for the dataset */
   kAnonScore: number
 
@@ -7405,6 +7525,34 @@ export interface DataExplorerReport {
 
   /** Any errors encountered during report generation */
   reportErrors?: string[]
+}
+
+export interface GenerateInsightParams {
+  /** The current data object containing report products */
+  data: CombinedDataTypes
+
+  /** The prompt to send to the AI for generating insights */
+  prompt: string
+
+  /**  */
+  jurisdictionId?: string
+
+  /**  */
+  userId?: string
+}
+
+export interface GenerateInsightResponse {
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /** Markdown-formatted AI-generated insights */
+  insight: string
 }
 
 export enum FilterAvailabilityEnum {
@@ -7781,4 +7929,6 @@ export enum MfaType {
   "sms" = "sms",
   "email" = "email",
 }
+export type CombinedReportFiltersTypes = ReportFilters
 export type CombinedProductsTypes = ReportProducts
+export type CombinedDataTypes = ReportProducts

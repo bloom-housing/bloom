@@ -126,6 +126,17 @@ export class User extends AbstractDTO {
   agreedToTermsOfService: boolean;
 
   @Expose()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  hasConsentedToAI?: boolean;
+
+  @Expose()
+  @IsDate({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => Date)
+  @ApiPropertyOptional()
+  aiConsentGivenAt?: Date;
+
+  @Expose()
   @IsDate({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Date)
   @ApiPropertyOptional()

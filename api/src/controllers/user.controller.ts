@@ -48,6 +48,7 @@ import { AdminOrJurisdictionalAdminGuard } from '../guards/admin-or-jurisdiction
 import { ActivityLogInterceptor } from '../interceptors/activity-log.interceptor';
 import { PermissionTypeDecorator } from '../decorators/permission-type.decorator';
 import { UserFilterParams } from '../dtos/users/user-filter-params.dto';
+import { UserAiConsentDto } from '../dtos/users/user-ai-consent.dto';
 import { UserCsvExporterService } from '../services/user-csv-export.service';
 import { ExportLogInterceptor } from '../interceptors/export-log.interceptor';
 import { RequestSingleUseCode } from '../dtos/single-use-code/request-single-use-code.dto';
@@ -128,6 +129,22 @@ export class UserController {
     @Request() req: ExpressRequest,
   ): Promise<SuccessDTO> {
     return await this.userService.delete(dto.id, mapTo(User, req['user']));
+  }
+
+  @Put('ai-consent')
+  @ApiOperation({
+    summary: 'Update AI consent preference',
+    operationId: 'updateAiConsent',
+  })
+  @ApiOkResponse({ type: User })
+  @UseGuards(JwtAuthGuard)
+  @UseInterceptors(ActivityLogInterceptor)
+  async updateAIConsent(
+    @Request() req: ExpressRequest,
+    @Body() body: UserAiConsentDto,
+  ): Promise<User> {
+    const user = mapTo(User, req['user']);
+    return await this.userService.updateAIConsent(user.id, body.hasConsented);
   }
 
   @Post()
