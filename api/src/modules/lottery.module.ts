@@ -1,5 +1,4 @@
 import { Logger, Module } from '@nestjs/common';
-import { SchedulerRegistry } from '@nestjs/schedule';
 import { ApplicationExporterModule } from './application-exporter.module';
 import { ConfigService } from '@nestjs/config';
 import { EmailModule } from './email.module';
