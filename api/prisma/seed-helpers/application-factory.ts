@@ -22,7 +22,7 @@ import { randomBoolean } from './boolean-generator';
 
 export const applicationFactory = async (optionalParams?: {
   createdAt?: Date;
-  householdSize?: number;
+  // householdSize?: number;
   unitTypeId?: string;
   applicant?: Prisma.ApplicantCreateWithoutApplicationsInput;
   listingId?: string;
@@ -47,6 +47,10 @@ export const applicationFactory = async (optionalParams?: {
   }
   const demographics = await demographicsFactory();
   const additionalPhone = randomBoolean();
+  let householdSize = 1;
+  if (optionalParams?.householdMember) {
+    householdSize = optionalParams.householdMember.length + 1;
+  }
   return {
     createdAt: optionalParams?.createdAt || new Date(),
     confirmationCode: generateConfirmationCode(),
@@ -57,7 +61,7 @@ export const applicationFactory = async (optionalParams?: {
       optionalParams?.submissionType ??
       ApplicationSubmissionTypeEnum.electronical,
     submissionDate: new Date(),
-    householdSize: optionalParams?.householdSize ?? 1,
+    householdSize: householdSize,
     income: '40000',
     incomePeriod: randomBoolean()
       ? IncomePeriodEnum.perYear
