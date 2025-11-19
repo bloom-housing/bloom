@@ -776,6 +776,7 @@ export const stagingSeed = async (
             ? dayjs(new Date()).subtract(10, 'days').toDate()
             : undefined,
         }),
+        // applications below should have their PII removed via the cron job
         await applicationFactory({
           isNewest: false,
           expireAfter: process.env.APPLICATION_DAYS_TILL_EXPIRY

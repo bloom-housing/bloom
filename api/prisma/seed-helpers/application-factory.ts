@@ -33,6 +33,7 @@ export const applicationFactory = async (optionalParams?: {
   submissionType?: ApplicationSubmissionTypeEnum;
   isNewest?: boolean;
   expireAfter?: Date;
+  wasPIICleared?: boolean;
 }): Promise<Prisma.ApplicationsCreateInput> => {
   let preferredUnitTypes: Prisma.UnitTypesCreateNestedManyWithoutApplicationsInput;
   if (optionalParams?.unitTypeId) {
@@ -113,6 +114,7 @@ export const applicationFactory = async (optionalParams?: {
     additionalPhoneNumberType: additionalPhone ? 'cell' : undefined,
     isNewest: optionalParams?.isNewest || false,
     expireAfter: optionalParams?.expireAfter,
+    wasPIICleared: optionalParams?.wasPIICleared || false,
   };
 };
 

@@ -2065,7 +2065,7 @@ describe('Application Controller Tests', () => {
       });
 
       // Application that is the newest for a user
-      await prisma.applications.create({
+      const newestApplication = await prisma.applications.create({
         data: await applicationFactory({
           listingId: listing.id,
           isNewest: true,
@@ -2073,13 +2073,14 @@ describe('Application Controller Tests', () => {
         }),
       });
       // Application that expires in the future
-      await prisma.applications.create({
+      const futureApplication = await prisma.applications.create({
         data: await applicationFactory({
           listingId: listing.id,
           isNewest: false,
           expireAfter: dayjs(new Date()).add(3, 'days').toDate(),
         }),
       });
+      // This application should have the PII script run against it
       const applicationToBeCleaned = await prisma.applications.create({
         data: await applicationFactory({
           listingId: listing.id,
@@ -2099,10 +2100,12 @@ describe('Application Controller Tests', () => {
           ],
         }),
       });
+      // Application that already had PII cleared
       await prisma.applications.create({
         data: await applicationFactory({
           listingId: listing.id,
           isNewest: false,
+          wasPIICleared: true,
           expireAfter: dayjs(new Date()).subtract(2, 'days').toDate(),
         }),
       });
@@ -2188,6 +2191,24 @@ describe('Application Controller Tests', () => {
         workAddressId: null,
         workInRegion: null,
       });
+
+      const application1 = await prisma.applications.findFirst({
+        where: { id: applicationToBeCleaned.id },
+      });
+      expect(application1.wasPIICleared).toBe(true);
+      expect(application1.additionalPhone).toBeNull();
+
+      // Verify that the other applications didn't have their data cleared
+      const application2 = await prisma.applications.findFirst({
+        select: { wasPIICleared: true },
+        where: { id: newestApplication.id },
+      });
+      expect(application2.wasPIICleared).toBe(false);
+      const application3 = await prisma.applications.findFirst({
+        select: { wasPIICleared: true },
+        where: { id: futureApplication.id },
+      });
+      expect(application3.wasPIICleared).toBe(false);
     });
   });
 });
