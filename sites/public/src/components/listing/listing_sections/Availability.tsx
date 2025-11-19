@@ -103,7 +103,7 @@ export const getAvailabilityHeading = (reviewOrderType: ReviewOrderTypeEnum) => 
     case ReviewOrderTypeEnum.lottery:
       return t("listings.lottery")
     case ReviewOrderTypeEnum.waitlist:
-      return "testing"
+       return t("listings.waitlist.label")
     default:
       return t("listings.applicationFCFS")
   }
