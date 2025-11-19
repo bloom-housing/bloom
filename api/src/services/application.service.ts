@@ -1245,18 +1245,17 @@ export class ApplicationService {
       );
     }
 
-    if (application.additionalPhoneNumber) {
-      transactions.push(
-        this.prisma.applications.update({
-          data: {
-            additionalPhone: null,
-          },
-          where: {
-            id: application.id,
-          },
-        }),
-      );
-    }
+    transactions.push(
+      this.prisma.applications.update({
+        data: {
+          additionalPhone: null,
+          wasPIICleared: true,
+        },
+        where: {
+          id: application.id,
+        },
+      }),
+    );
 
     await this.prisma.$transaction(transactions);
   }
@@ -1271,7 +1270,11 @@ export class ApplicationService {
       // recent application for that user
       const applications = await this.prisma.applications.findMany({
         select: { id: true },
-        where: { expireAfter: { lte: new Date() }, isNewest: false },
+        where: {
+          expireAfter: { lte: new Date() },
+          isNewest: false,
+          wasPIICleared: false,
+        },
       });
       this.logger.warn(
         `removing PII information for ${applications.length} applications`,
