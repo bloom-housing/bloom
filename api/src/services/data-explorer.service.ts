@@ -113,6 +113,7 @@ export class DataExplorerService {
 
       return response.data as DataExplorerReport;
     } catch (error) {
+      console.error('Error fetching report data from FastAPI:', error);
       throw new NotFoundException('No report data found');
     }
   }

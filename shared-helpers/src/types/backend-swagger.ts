@@ -2922,33 +2922,33 @@ export class DataExplorerService {
       jurisdictionId?: string
       /**  */
       userId?: string
-      /** Filter by household size */
+      /** Filter by household size categories */
       householdSize?: any | null[]
-      /** Minimum income */
+      /** Minimum household income in USD */
       minIncome?: number
-      /** Maximum income */
+      /** Maximum household income in USD */
       maxIncome?: number
-      /** Filter by AMI levels */
+      /** Area Median Income level categories */
       amiLevels?: any | null[]
-      /** Filter by voucher statuses */
+      /** Housing voucher or subsidy status */
       voucherStatuses?: any | null[]
-      /** Filter by accessibility types */
+      /** Accessibility accommodation types */
       accessibilityTypes?: any | null[]
-      /** Filter by races */
+      /** Racial categories for filtering */
       races?: any | null[]
-      /** Filter by ethnicities */
+      /** Ethnicity categories for filtering */
       ethnicities?: any | null[]
-      /** Filter by applicant residential counties */
+      /** Counties where applicants currently reside */
       applicantResidentialCounties?: any | null[]
-      /** Filter by applicant work counties */
+      /** Counties where applicants work */
       applicantWorkCounties?: any | null[]
-      /** Minimum age */
+      /** Minimum age of applicant */
       minAge?: number
-      /** Maximum age */
+      /** Maximum age of applicant */
       maxAge?: number
-      /** Start date for filtering */
+      /** Start date for filtering applications (ISO 8601 format) */
       startDate?: string
-      /** End date for filtering */
+      /** End date for filtering applications (ISO 8601 format) */
       endDate?: string
     } = {} as any,
     options: IRequestOptions = {}
@@ -2976,7 +2976,9 @@ export class DataExplorerService {
         endDate: params["endDate"],
       }
 
-      /** 适配ios13，get请求不允许带body */
+      let data = null
+
+      configs.data = data
 
       axios(configs, resolve, reject)
     })
