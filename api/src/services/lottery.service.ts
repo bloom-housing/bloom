@@ -6,7 +6,6 @@ import {
   Injectable,
   Logger,
 } from '@nestjs/common';
-import { SchedulerRegistry } from '@nestjs/schedule';
 import { ConfigService } from '@nestjs/config';
 import {
   LanguagesEnum,

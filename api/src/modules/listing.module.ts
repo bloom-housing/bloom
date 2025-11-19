@@ -1,6 +1,5 @@
 import { Logger, Module } from '@nestjs/common';
 import { HttpModule } from '@nestjs/axios';
-import { SchedulerRegistry } from '@nestjs/schedule';
 import { ConfigService } from '@nestjs/config';
 import { ListingController } from '../controllers/listing.controller';
 import { ListingService } from '../services/listing.service';

@@ -10,7 +10,6 @@ import {
 } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
-import { SchedulerRegistry } from '@nestjs/schedule';
 import {
   LanguagesEnum,
   ListingEventsTypeEnum,
