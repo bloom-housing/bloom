@@ -2900,16 +2900,63 @@ export class DataExplorerService {
       jurisdictionId?: string
       /**  */
       userId?: string
+      /** Filter by household size categories */
+      householdSize?: any | null[]
+      /** Minimum household income in USD */
+      minIncome?: number
+      /** Maximum household income in USD */
+      maxIncome?: number
+      /** Area Median Income level categories */
+      amiLevels?: any | null[]
+      /** Housing voucher or subsidy status */
+      voucherStatuses?: any | null[]
+      /** Accessibility accommodation types */
+      accessibilityTypes?: any | null[]
+      /** Racial categories for filtering */
+      races?: any | null[]
+      /** Ethnicity categories for filtering */
+      ethnicities?: any | null[]
+      /** Counties where applicants currently reside */
+      applicantResidentialCounties?: any | null[]
+      /** Counties where applicants work */
+      applicantWorkCounties?: any | null[]
+      /** Minimum age of applicant */
+      minAge?: number
+      /** Maximum age of applicant */
+      maxAge?: number
+      /** Start date for filtering applications (ISO 8601 format) */
+      startDate?: string
+      /** End date for filtering applications (ISO 8601 format) */
+      endDate?: string
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<DataExplorerReport> {
     return new Promise((resolve, reject) => {
       let url = basePath + "/generate-report"
 
-      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-      configs.params = { jurisdictionId: params["jurisdictionId"], userId: params["userId"] }
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+      configs.params = {
+        jurisdictionId: params["jurisdictionId"],
+        userId: params["userId"],
+        householdSize: params["householdSize"],
+        minIncome: params["minIncome"],
+        maxIncome: params["maxIncome"],
+        amiLevels: params["amiLevels"],
+        voucherStatuses: params["voucherStatuses"],
+        accessibilityTypes: params["accessibilityTypes"],
+        races: params["races"],
+        ethnicities: params["ethnicities"],
+        applicantResidentialCounties: params["applicantResidentialCounties"],
+        applicantWorkCounties: params["applicantWorkCounties"],
+        minAge: params["minAge"],
+        maxAge: params["maxAge"],
+        startDate: params["startDate"],
+        endDate: params["endDate"],
+      }
 
-      /** 适配ios13，get请求不允许带body */
+      let data = null
+
+      configs.data = data
 
       axios(configs, resolve, reject)
     })
