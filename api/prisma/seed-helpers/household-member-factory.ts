@@ -8,6 +8,7 @@ import {
   randomBirthMonth,
   randomBirthYear,
 } from './number-generator';
+import { randomBoolean } from './boolean-generator';
 
 export const householdMemberFactorySingle = (
   index: number,
@@ -17,22 +18,27 @@ export const householdMemberFactorySingle = (
   const lastName = randomNoun();
 
   const relationshipKeys = Object.values(HouseholdMemberRelationship);
+  const sameAddress = randomBoolean();
+  const workInRegion = randomBoolean();
 
   return {
     firstName: firstName,
     middleName: randomNoun(),
     lastName: lastName,
-    // Question: why are these strings?
     birthMonth: randomBirthMonth(),
     birthDay: randomBirthDay(),
     birthYear: randomBirthYear(),
-    sameAddress: YesNoEnum.yes,
+    sameAddress: sameAddress ? YesNoEnum.yes : YesNoEnum.no,
     relationship: relationshipKeys[randomInt(relationshipKeys.length)],
-    workInRegion: YesNoEnum.yes,
-    householdMemberAddress: { create: addressFactory() },
-    householdMemberWorkAddress: {
-      create: addressFactory(),
-    },
+    workInRegion: workInRegion ? YesNoEnum.yes : YesNoEnum.no,
+    householdMemberAddress: sameAddress
+      ? undefined
+      : { create: addressFactory() },
+    householdMemberWorkAddress: workInRegion
+      ? {
+          create: addressFactory(),
+        }
+      : undefined,
     orderId: index,
     ...overrides,
   };

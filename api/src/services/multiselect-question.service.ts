@@ -11,6 +11,7 @@ import {
   MultiselectQuestionsStatusEnum,
   Prisma,
 } from '@prisma/client';
+import { CronJobService } from './cron-job.service';
 import { PermissionService } from './permission.service';
 import { PrismaService } from './prisma.service';
 import { Jurisdiction } from '../dtos/jurisdictions/jurisdiction.dto';
@@ -25,7 +26,6 @@ import { MultiselectQuestionFilterKeys } from '../enums/multiselect-questions/fi
 import { MultiselectQuestionViews } from '../enums/multiselect-questions/view-enum';
 import { permissionActions } from '../enums/permissions/permission-actions-enum';
 import { buildFilter } from '../utilities/build-filter';
-import { startCronJob } from '../utilities/cron-job-starter';
 import { doJurisdictionHaveFeatureFlagSet } from '../utilities/feature-flag-utilities';
 import { mapTo } from '../utilities/mapTo';
 
@@ -57,16 +57,14 @@ export class MultiselectQuestionService {
     private logger = new Logger(MultiselectQuestionService.name),
     private permissionService: PermissionService,
     private schedulerRegistry: SchedulerRegistry,
+    private cronJobService: CronJobService,
   ) {}
 
   onModuleInit() {
-    startCronJob(
-      this.prisma,
+    this.cronJobService.startCronJob(
       MSQ_RETIRE_CRON_JOB_NAME,
       process.env.MSQ_RETIRE_CRON_STRING,
       this.retireMultiselectQuestions.bind(this),
-      this.logger,
-      this.schedulerRegistry,
     );
   }
 
@@ -693,7 +691,7 @@ export class MultiselectQuestionService {
   */
   async retireMultiselectQuestions(): Promise<SuccessDTO> {
     this.logger.warn('retireMultiselectQuestionsCron job running');
-    await this.markCronJobAsStarted('MSQ_RETIRE_CRON_JOB');
+    await this.cronJobService.markCronJobAsStarted('MSQ_RETIRE_CRON_JOB');
 
     const res = await this.prisma.multiselectQuestions.updateMany({
       data: {
@@ -718,36 +716,5 @@ export class MultiselectQuestionService {
     return {
       success: true,
     };
-  }
-
-  /**
-    marks the db record for this cronjob as begun or creates a cronjob that
-    is marked as begun if one does not already exist
-  */
-  async markCronJobAsStarted(cronJobName: string): Promise<void> {
-    const job = await this.prisma.cronJob.findFirst({
-      where: {
-        name: cronJobName,
-      },
-    });
-    if (job) {
-      // if a job exists then we update db entry
-      await this.prisma.cronJob.update({
-        data: {
-          lastRunDate: new Date(),
-        },
-        where: {
-          id: job.id,
-        },
-      });
-    } else {
-      // if no job we create a new entry
-      await this.prisma.cronJob.create({
-        data: {
-          lastRunDate: new Date(),
-          name: cronJobName,
-        },
-      });
-    }
   }
 }
