@@ -31,8 +31,6 @@ export class DepositValueConstraint implements ValidatorConstraintInterface {
     const { depositValue, depositMin, depositMax, listingType } =
       args.object as Listing;
 
-    console.log(depositValue, depositMin, depositMax, listingType);
-
     if (!listingType || listingType === ListingTypeEnum.regulated) {
       return true;
     }
