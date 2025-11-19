@@ -21,21 +21,21 @@ import SectionWithGrid from "../../shared/SectionWithGrid"
 import styles from "./ListingForm.module.scss"
 
 type UnitFormProps = {
-  onSubmit: (unit: TempUnit) => void
-  onClose: (openNextUnit: boolean, openCurrentUnit: boolean, defaultUnit: TempUnit) => void
   defaultUnit: TempUnit | undefined
-  nextId: number
   draft: boolean
   jurisdiction: string
+  nextId: number
+  onClose: (openNextUnit: boolean, openCurrentUnit: boolean, defaultUnit: TempUnit) => void
+  onSubmit: (unit: TempUnit) => void
 }
 
 const UnitForm = ({
-  onSubmit,
-  onClose,
   defaultUnit,
-  nextId,
   draft,
   jurisdiction,
+  nextId,
+  onClose,
+  onSubmit,
 }: UnitFormProps) => {
   const { amiChartsService } = useContext(AuthContext)
 

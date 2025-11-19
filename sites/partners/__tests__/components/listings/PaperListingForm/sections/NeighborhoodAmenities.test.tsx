@@ -1,13 +1,7 @@
 import React from "react"
 import { screen, waitFor, within } from "@testing-library/react"
 import { FormProvider, useForm } from "react-hook-form"
-import { AuthContext } from "@bloom-housing/shared-helpers"
-import {
-  FeatureFlagEnum,
-  Jurisdiction,
-  JurisdictionsService,
-  NeighborhoodAmenitiesEnum,
-} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { NeighborhoodAmenitiesEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { t } from "@bloom-housing/ui-components"
 import { mockNextRouter, render } from "../../../../testUtils"
 import { formDefaults, FormListing } from "../../../../../src/lib/listings/formTypes"
@@ -55,67 +49,32 @@ describe("NeighborhoodAmenities", () => {
   }
 
   it("should not render when feature flag is disabled", () => {
-    const doJurisdictionsHaveFeatureFlagOn = () => false
-
     const { container } = render(
-      <AuthContext.Provider
-        value={{
-          doJurisdictionsHaveFeatureFlagOn,
-        }}
-      >
-        <FormComponent
-          values={{ ...formDefaults, jurisdictions: { id: "jurisdiction1" } as Jurisdiction }}
-        >
-          <NeighborhoodAmenities />
-        </FormComponent>
-      </AuthContext.Provider>
-    )
-
-    expect(container.firstChild).toBeNull()
-  })
-
-  it("should not render when no jurisdiction is selected", () => {
-    const doJurisdictionsHaveFeatureFlagOn = () => true
-
-    const { container } = render(
-      <AuthContext.Provider
-        value={{
-          doJurisdictionsHaveFeatureFlagOn,
-        }}
-      >
-        <FormComponent>
-          <NeighborhoodAmenities />
-        </FormComponent>
-      </AuthContext.Provider>
+      <FormComponent>
+        <NeighborhoodAmenities
+          enableNeighborhoodAmenities={false}
+          enableNeighborhoodAmenitiesDropdown={false}
+          visibleNeighborhoodAmenities={
+            mockJurisdictionWithAllAmenities.visibleNeighborhoodAmenities
+          }
+        />
+      </FormComponent>
     )
 
     expect(container.firstChild).toBeNull()
   })
 
   it("should render all neighborhood amenities as textareas when dropdown is disabled", async () => {
-    const mockRetrieve = jest.fn().mockResolvedValue(mockJurisdictionWithAllAmenities)
-
-    const doJurisdictionsHaveFeatureFlagOn = (flag: FeatureFlagEnum) => {
-      if (flag === FeatureFlagEnum.enableNeighborhoodAmenities) return true
-      if (flag === FeatureFlagEnum.enableNeighborhoodAmenitiesDropdown) return false
-      return false
-    }
-
     render(
-      <AuthContext.Provider
-        value={{
-          doJurisdictionsHaveFeatureFlagOn,
-          jurisdictionsService: {
-            retrieve: mockRetrieve,
-          } as unknown as JurisdictionsService,
-        }}
-      >
-        <FormComponent
-          values={{ ...formDefaults, jurisdictions: { id: "jurisdiction1" } as Jurisdiction }}
-        >
-          <NeighborhoodAmenities />
-        </FormComponent>
-      </AuthContext.Provider>
+      <FormComponent>
+        <NeighborhoodAmenities
+          enableNeighborhoodAmenities={true}
+          enableNeighborhoodAmenitiesDropdown={false}
+          visibleNeighborhoodAmenities={
+            mockJurisdictionWithAllAmenities.visibleNeighborhoodAmenities
+          }
+        />
+      </FormComponent>
     )
 
     await screen.findByRole("heading", { name: "Neighborhood amenities" })
@@ -135,32 +94,16 @@ describe("NeighborhoodAmenities", () => {
   })
 
   it("should render neighborhood amenities with dropdowns when dropdown is enabled", async () => {
-    const mockRetrieve = jest.fn().mockResolvedValue(mockJurisdictionWithAllAmenities)
-
-    const doJurisdictionsHaveFeatureFlagOn = (flag: FeatureFlagEnum) => {
-      if (flag === FeatureFlagEnum.enableNeighborhoodAmenities) return true
-      if (flag === FeatureFlagEnum.enableNeighborhoodAmenitiesDropdown) return true
-      return false
-    }
-
     render(
-      <AuthContext.Provider
-        value={{
-          doJurisdictionsHaveFeatureFlagOn,
-          jurisdictionsService: {
-            retrieve: mockRetrieve,
-          } as unknown as JurisdictionsService,
-        }}
-      >
-        <FormComponent
-          values={{
-            ...formDefaults,
-            jurisdictions: { id: "jurisdiction1" } as Jurisdiction,
-          }}
-        >
-          <NeighborhoodAmenities />
-        </FormComponent>
-      </AuthContext.Provider>
+      <FormComponent>
+        <NeighborhoodAmenities
+          enableNeighborhoodAmenities={true}
+          enableNeighborhoodAmenitiesDropdown={true}
+          visibleNeighborhoodAmenities={
+            mockJurisdictionWithAllAmenities.visibleNeighborhoodAmenities
+          }
+        />
+      </FormComponent>
     )
 
     await waitFor(() => {
@@ -180,32 +123,16 @@ describe("NeighborhoodAmenities", () => {
   })
 
   it("should only render visible amenities from jurisdiction configuration", async () => {
-    const mockRetrieve = jest.fn().mockResolvedValue(mockJurisdictionWithLimitedAmenities)
-
-    const doJurisdictionsHaveFeatureFlagOn = (flag: FeatureFlagEnum) => {
-      if (flag === FeatureFlagEnum.enableNeighborhoodAmenities) return true
-      if (flag === FeatureFlagEnum.enableNeighborhoodAmenitiesDropdown) return false
-      return false
-    }
-
     render(
-      <AuthContext.Provider
-        value={{
-          doJurisdictionsHaveFeatureFlagOn,
-          jurisdictionsService: {
-            retrieve: mockRetrieve,
-          } as unknown as JurisdictionsService,
-        }}
-      >
-        <FormComponent
-          values={{
-            ...formDefaults,
-            jurisdictions: { id: "jurisdiction2" } as Jurisdiction,
-          }}
-        >
-          <NeighborhoodAmenities />
-        </FormComponent>
-      </AuthContext.Provider>
+      <FormComponent>
+        <NeighborhoodAmenities
+          enableNeighborhoodAmenities={true}
+          enableNeighborhoodAmenitiesDropdown={false}
+          visibleNeighborhoodAmenities={
+            mockJurisdictionWithLimitedAmenities.visibleNeighborhoodAmenities
+          }
+        />
+      </FormComponent>
     )
 
     await screen.findByRole("heading", { name: "Neighborhood amenities" })
@@ -222,29 +149,16 @@ describe("NeighborhoodAmenities", () => {
   })
 
   it("should include distance options in dropdown when enabled", async () => {
-    const mockRetrieve = jest.fn().mockResolvedValue(mockJurisdictionWithLimitedAmenities)
-
-    const doJurisdictionsHaveFeatureFlagOn = (flag: FeatureFlagEnum) => {
-      if (flag === FeatureFlagEnum.enableNeighborhoodAmenities) return true
-      if (flag === FeatureFlagEnum.enableNeighborhoodAmenitiesDropdown) return true
-      return false
-    }
-
     render(
-      <AuthContext.Provider
-        value={{
-          doJurisdictionsHaveFeatureFlagOn,
-          jurisdictionsService: {
-            retrieve: mockRetrieve,
-          } as unknown as JurisdictionsService,
-        }}
-      >
-        <FormComponent
-          values={{ ...formDefaults, jurisdictions: { id: "jurisdiction1" } as Jurisdiction }}
-        >
-          <NeighborhoodAmenities />
-        </FormComponent>
-      </AuthContext.Provider>
+      <FormComponent>
+        <NeighborhoodAmenities
+          enableNeighborhoodAmenities={true}
+          enableNeighborhoodAmenitiesDropdown={true}
+          visibleNeighborhoodAmenities={
+            mockJurisdictionWithLimitedAmenities.visibleNeighborhoodAmenities
+          }
+        />
+      </FormComponent>
     )
 
     const select = await screen.findByRole("combobox", { name: "Grocery stores" })
@@ -274,28 +188,16 @@ describe("NeighborhoodAmenities", () => {
   })
 
   it("should render partial amenities in 1 row when there are less or equal to 2 amenities", async () => {
-    const mockRetrieve = jest.fn().mockResolvedValue(mockJurisdictionWithLimitedAmenities)
-
-    const doJurisdictionsHaveFeatureFlagOn = (flag: FeatureFlagEnum) => {
-      if (flag === FeatureFlagEnum.enableNeighborhoodAmenities) return true
-      return false
-    }
-
     const { container } = render(
-      <AuthContext.Provider
-        value={{
-          doJurisdictionsHaveFeatureFlagOn,
-          jurisdictionsService: {
-            retrieve: mockRetrieve,
-          } as unknown as JurisdictionsService,
-        }}
-      >
-        <FormComponent
-          values={{ ...formDefaults, jurisdictions: { id: "jurisdiction2" } as Jurisdiction }}
-        >
-          <NeighborhoodAmenities />
-        </FormComponent>
-      </AuthContext.Provider>
+      <FormComponent>
+        <NeighborhoodAmenities
+          enableNeighborhoodAmenities={true}
+          enableNeighborhoodAmenitiesDropdown={false}
+          visibleNeighborhoodAmenities={
+            mockJurisdictionWithLimitedAmenities.visibleNeighborhoodAmenities
+          }
+        />
+      </FormComponent>
     )
 
     await screen.findByRole("heading", { name: "Neighborhood amenities" })

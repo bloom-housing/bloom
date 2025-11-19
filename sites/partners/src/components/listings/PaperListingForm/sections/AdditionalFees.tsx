@@ -1,28 +1,23 @@
-import React, { useContext, useMemo, useEffect } from "react"
+import React, { useMemo, useEffect } from "react"
 import { useFormContext } from "react-hook-form"
 import { t, Field, Textarea, FieldGroup } from "@bloom-housing/ui-components"
 import { Grid } from "@bloom-housing/ui-seeds"
 import { defaultFieldProps } from "../../../../lib/helpers"
-import { AuthContext, listingUtilities } from "@bloom-housing/shared-helpers"
-import {
-  FeatureFlagEnum,
-  ListingUtilities,
-} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { listingUtilities } from "@bloom-housing/shared-helpers"
+import { ListingUtilities } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 import styles from "../ListingForm.module.scss"
 
 type AdditionalFeesProps = {
+  enableUtilitiesIncluded: boolean
   existingUtilities: ListingUtilities
   requiredFields: string[]
 }
 
 const AdditionalFees = (props: AdditionalFeesProps) => {
   const formMethods = useFormContext()
-  const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, watch, errors, clearErrors, setValue } = formMethods
-
-  const jurisdiction = watch("jurisdictions.id")
+  const { register, errors, clearErrors, setValue } = formMethods
 
   const utilitiesFields = useMemo(() => {
     return listingUtilities.map((utility) => {
@@ -35,17 +30,12 @@ const AdditionalFees = (props: AdditionalFeesProps) => {
     })
   }, [props.existingUtilities, register])
 
-  const enableUtilitiesIncluded = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableUtilitiesIncluded,
-    jurisdiction
-  )
-
   useEffect(() => {
     // clear the utilities values if the new jurisdiction doesn't have utilities included functionality
-    if (!enableUtilitiesIncluded) {
+    if (!props.enableUtilitiesIncluded) {
       setValue("utilities", undefined)
     }
-  }, [enableUtilitiesIncluded, setValue])
+  }, [props.enableUtilitiesIncluded, setValue])
 
   return (
     <>
@@ -130,7 +120,7 @@ const AdditionalFees = (props: AdditionalFeesProps) => {
             />
           </Grid.Cell>
         </Grid.Row>
-        {enableUtilitiesIncluded && (
+        {props.enableUtilitiesIncluded && (
           <Grid.Row>
             <Grid.Cell>
               <FieldGroup

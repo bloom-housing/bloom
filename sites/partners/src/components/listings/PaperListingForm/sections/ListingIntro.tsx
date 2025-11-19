@@ -1,80 +1,37 @@
-import React, { useContext } from "react"
+import React from "react"
 import { useFormContext } from "react-hook-form"
-import { t, Field, SelectOption, Select } from "@bloom-housing/ui-components"
+import { t, Field } from "@bloom-housing/ui-components"
 import { Grid } from "@bloom-housing/ui-seeds"
-import {
-  FeatureFlagEnum,
-  Jurisdiction,
-} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { AuthContext } from "@bloom-housing/shared-helpers"
-import {
-  fieldMessage,
-  fieldHasError,
-  fieldIsRequired,
-  defaultFieldProps,
-} from "../../../../lib/helpers"
+import { defaultFieldProps } from "../../../../lib/helpers"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
-import styles from "../ListingForm.module.scss"
 
 interface ListingIntroProps {
-  jurisdictions: Jurisdiction[]
+  enableHousingDeveloperOwner: boolean
+  enableListingFileNumber: boolean
+  jurisdictionName: string
+  listingId: string
   requiredFields: string[]
 }
 
-const getDeveloperLabel = (jurisdiction: string, enableHousingDeveloperOwner: boolean) => {
-  if (!jurisdiction) return t("listings.developer")
+const getDeveloperLabel = (enableHousingDeveloperOwner: boolean) => {
   return enableHousingDeveloperOwner ? t("listings.housingDeveloperOwner") : t("listings.developer")
 }
 
 const ListingIntro = (props: ListingIntroProps) => {
   const formMethods = useFormContext()
-  const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, clearErrors, errors, watch } = formMethods
-  const jurisdiction = watch("jurisdictions.id")
-
-  const enableHousingDeveloperOwner = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableHousingDeveloperOwner,
-    jurisdiction
-  )
-  const enableListingFileNumber = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableListingFileNumber,
-    jurisdiction
-  )
-
-  const jurisdictionOptions: SelectOption[] = [
-    { label: "", value: "" },
-    ...props.jurisdictions.map((jurisdiction) => ({
-      label: jurisdiction.name,
-      value: jurisdiction.id,
-    })),
-  ]
-
-  const defaultJurisdiction = props.jurisdictions.length === 1 ? props.jurisdictions[0].id : ""
+  const { register, clearErrors, errors } = formMethods
 
   return (
     <>
+      {(props.listingId || props.jurisdictionName) && (
+        <hr className="spacer-section-above spacer-section" />
+      )}
       <SectionWithGrid
         heading={t("listings.sections.introTitle")}
         subheading={t("listings.sections.introSubtitle")}
       >
-        {enableListingFileNumber && jurisdiction && (
-          <Grid.Row columns={1}>
-            <Grid.Cell>
-              <Field
-                register={register}
-                {...defaultFieldProps(
-                  "listingFileNumber",
-                  t("listings.listingFileNumber"),
-                  props.requiredFields,
-                  errors,
-                  clearErrors
-                )}
-              />
-            </Grid.Cell>
-          </Grid.Row>
-        )}
         <Grid.Row columns={1}>
           <Grid.Cell>
             <Field
@@ -92,53 +49,26 @@ const ListingIntro = (props: ListingIntroProps) => {
           </Grid.Cell>
         </Grid.Row>
         <Grid.Row columns={2}>
-          <div className={`${defaultJurisdiction ? "hidden" : ""}`}>
+          {props.enableListingFileNumber && (
             <Grid.Cell>
-              <Select
-                id={"jurisdictions.id"}
-                defaultValue={defaultJurisdiction}
-                name={"jurisdictions.id"}
-                label={
-                  <span>
-                    {t("t.jurisdiction")}
-                    <span className={styles["asterisk"]}>{` ${"*"}`}</span>
-                  </span>
-                }
+              <Field
                 register={register}
-                controlClassName={`control ${defaultJurisdiction ? "hidden" : ""}`}
-                error={
-                  fieldHasError(errors?.jurisdictions) ||
-                  fieldHasError(errors?.["jurisdictions.id"])
-                }
-                errorMessage={
-                  fieldMessage(errors?.jurisdictions) ??
-                  fieldMessage(errors?.["jurisdictions.id"]) ??
-                  undefined
-                }
-                keyPrefix={"jurisdictions"}
-                options={jurisdictionOptions}
-                inputProps={{
-                  onChange: () => {
-                    if (
-                      fieldHasError(errors?.jurisdictions) ||
-                      fieldHasError(errors?.["jurisdictions.id"])
-                    ) {
-                      clearErrors("jurisdictions.id")
-                      clearErrors("jurisdictions")
-                    }
-                  },
-                  "aria-required": fieldIsRequired("jurisdictions", props.requiredFields),
-                  "aria-hidden": !!defaultJurisdiction,
-                }}
+                {...defaultFieldProps(
+                  "listingFileNumber",
+                  t("listings.listingFileNumber"),
+                  props.requiredFields,
+                  errors,
+                  clearErrors
+                )}
               />
             </Grid.Cell>
-          </div>
+          )}
           <Grid.Cell>
             <Field
               register={register}
               {...defaultFieldProps(
                 "developer",
-                getDeveloperLabel(jurisdiction, enableHousingDeveloperOwner),
+                getDeveloperLabel(props.enableHousingDeveloperOwner),
                 props.requiredFields,
                 errors,
                 clearErrors

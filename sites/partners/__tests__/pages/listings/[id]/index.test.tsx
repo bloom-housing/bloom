@@ -18,6 +18,7 @@ import {
   ListingEventsTypeEnum,
   ListingsStatusEnum,
   MultiselectQuestionsApplicationSectionEnum,
+  MultiselectQuestionsStatusEnum,
   RegionEnum,
   ReviewOrderTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -105,7 +106,7 @@ describe("listing data", () => {
             createdAt: new Date("February 3, 2025, 10:13"),
           }}
         >
-          <DetailListingData />
+          <DetailListingData showJurisdictionName={true} />
         </ListingContext.Provider>
       )
 
@@ -114,6 +115,28 @@ describe("listing data", () => {
       expect(getByText("Uvbk5qurpB2WI9V6WnNdH")).toBeInTheDocument()
       expect(getByText("Date created")).toBeInTheDocument()
       expect(getByText("02/03/2025 at 10:13 AM")).toBeInTheDocument()
+      expect(getByText("Jurisdiction")).toBeInTheDocument()
+      expect(getByText("Bloomington")).toBeInTheDocument()
+    })
+
+    it("should display Listing Data section but no jurisdiction", () => {
+      const { getByText, queryByText } = render(
+        <ListingContext.Provider
+          value={{
+            ...listing,
+            createdAt: new Date("February 3, 2025, 10:13"),
+          }}
+        >
+          <DetailListingData showJurisdictionName={false} />
+        </ListingContext.Provider>
+      )
+
+      expect(getByText("Listing data")).toBeInTheDocument()
+      expect(getByText("Listing ID")).toBeInTheDocument()
+      expect(getByText("Uvbk5qurpB2WI9V6WnNdH")).toBeInTheDocument()
+      expect(getByText("Date created")).toBeInTheDocument()
+      expect(getByText("02/03/2025 at 10:13 AM")).toBeInTheDocument()
+      expect(queryByText("Jurisdiction")).not.toBeInTheDocument()
     })
 
     describe("should display Listing Notes section", () => {
@@ -195,7 +218,7 @@ describe("listing data", () => {
     })
 
     it("should display Listing Intro section", () => {
-      const { getByText } = render(
+      const { getByText, queryByText } = render(
         <ListingContext.Provider value={listing}>
           <DetailListingIntro />
         </ListingContext.Provider>
@@ -204,8 +227,7 @@ describe("listing data", () => {
       expect(getByText("Listing intro")).toBeInTheDocument()
       expect(getByText("Listing name")).toBeInTheDocument()
       expect(getByText("Archer Studios")).toBeInTheDocument()
-      expect(getByText("Jurisdiction")).toBeInTheDocument()
-      expect(getByText("San Jose")).toBeInTheDocument()
+      expect(queryByText("Jurisdiction")).not.toBeInTheDocument()
       expect(getByText("Housing developer")).toBeInTheDocument()
       expect(getByText("Charities Housing")).toBeInTheDocument()
     })
@@ -585,6 +607,7 @@ describe("listing data", () => {
                   text: "Test Name_1",
                   description: "Test Description_1",
                   applicationSection: MultiselectQuestionsApplicationSectionEnum.preferences,
+                  status: MultiselectQuestionsStatusEnum.active,
                 },
               },
               {
@@ -596,6 +619,7 @@ describe("listing data", () => {
                   text: "Test Name_2",
                   description: "Test Description_2",
                   applicationSection: MultiselectQuestionsApplicationSectionEnum.preferences,
+                  status: MultiselectQuestionsStatusEnum.active,
                 },
               },
             ],
@@ -631,6 +655,7 @@ describe("listing data", () => {
                   text: "Test Program Name_1",
                   description: "Test Program Description_1",
                   applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
+                  status: MultiselectQuestionsStatusEnum.active,
                 },
               },
               {
@@ -642,6 +667,7 @@ describe("listing data", () => {
                   text: "Test Program Name_2",
                   description: "Test Program Description_2",
                   applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
+                  status: MultiselectQuestionsStatusEnum.active,
                 },
               },
             ],
