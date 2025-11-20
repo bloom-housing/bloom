@@ -70,74 +70,88 @@ const ApplicationAnalysis = () => {
     }
   }, [appliedFilters])
 
-  const fetchData = async (filters?: ApiFilters) => {
-    try {
-      let reportData: ReportData
+  const fetchData = React.useCallback(
+    async (filters?: ApiFilters) => {
+      try {
+        let reportData: ReportData
 
-      // Check if manual override is selected
-      if (dataOverride !== "none") {
-        switch (dataOverride) {
-          case "default":
-            reportData = defaultReport
-            break
-          case "lowIncome":
-            reportData = lowIncomeAndYounger
-            break
-          case "highIncome":
-            reportData = highIncomeAndOlder
-            break
-          case "veryLow":
-            reportData = veryLowData
-            break
-          case "insufficient":
-            reportData = InsufficientNumberOfApplications
-            break
-          default: {
-            const apiData = await dataExplorerService.generateReport(filters || {})
-            reportData = {
-              ...apiData,
-              totalListings: apiData.totalListings || 0,
-            } as ReportData
-            break
+        // Check if manual override is selected
+        if (dataOverride !== "none") {
+          switch (dataOverride) {
+            case "default":
+              reportData = defaultReport
+              break
+            case "lowIncome":
+              reportData = lowIncomeAndYounger
+              break
+            case "highIncome":
+              reportData = highIncomeAndOlder
+              break
+            case "veryLow":
+              reportData = veryLowData
+              break
+            case "insufficient":
+              reportData = InsufficientNumberOfApplications
+              break
+            default: {
+              const apiData = await dataExplorerService.generateReport(filters || {})
+              reportData = {
+                dateRange: apiData.dateRange,
+                totalProcessedApplications: apiData.totalProcessedApplications,
+                totalListings: apiData.totalListings || 0,
+                isSufficient: apiData.isSufficient,
+                kAnonScore: apiData.kAnonScore,
+                products: apiData.products,
+                reportErrors: apiData.reportErrors || [],
+              } as ReportData
+              break
+            }
           }
+        } else {
+          // No override - fetch from API through the service
+          const apiData = await dataExplorerService.generateReport(filters || {})
+          reportData = {
+            dateRange: apiData.dateRange,
+            totalProcessedApplications: apiData.totalProcessedApplications,
+            totalListings: apiData.totalListings || 0,
+            isSufficient: apiData.isSufficient,
+            kAnonScore: apiData.kAnonScore,
+            products: apiData.products,
+            reportErrors: apiData.reportErrors || [],
+          } as ReportData
         }
-      } else {
-        // No override - fetch from API through the service
-        const apiData = await dataExplorerService.generateReport(filters || {})
-        reportData = {
-          ...apiData,
-          totalListings: apiData.totalListings || 0,
-        } as ReportData
-      }
 
-      setChartData({
-        incomeHouseholdSizeCrossTab: reportData.products.incomeHouseholdSizeCrossTab,
-        raceFrequencies: reportData.products.raceFrequencies,
-        ethnicityFrequencies: reportData.products.ethnicityFrequencies,
-        residentialLocationFrequencies: reportData.products.residentialLocationFrequencies,
-        ageFrequencies: reportData.products.ageFrequencies,
-        languageFrequencies: reportData.products.languageFrequencies,
-        subsidyOrVoucherTypeFrequencies: reportData.products.subsidyOrVoucherTypeFrequencies,
-        accessibilityTypeFrequencies: reportData.products.accessibilityTypeFrequencies,
-      })
-      setFilterInformation({
-        dataRange: reportData.reportFilters.dateRange,
-        totalProcessedApplications: reportData.totalProcessedApplications,
-        totalListings: reportData.totalListings,
-      })
-    } catch (error) {
-      console.error("Error fetching report data:", error)
-    }
-  }
+        setChartData({
+          incomeHouseholdSizeCrossTab: reportData.products.incomeHouseholdSizeCrossTab,
+          raceFrequencies: reportData.products.raceFrequencies,
+          ethnicityFrequencies: reportData.products.ethnicityFrequencies,
+          residentialLocationFrequencies: reportData.products.residentialLocationFrequencies,
+          ageFrequencies: reportData.products.ageFrequencies,
+          languageFrequencies: reportData.products.languageFrequencies,
+          subsidyOrVoucherTypeFrequencies: reportData.products.subsidyOrVoucherTypeFrequencies,
+          accessibilityTypeFrequencies: reportData.products.accessibilityTypeFrequencies,
+        })
+        setFilterInformation({
+          dataRange: reportData.dateRange,
+          totalProcessedApplications: reportData.totalProcessedApplications,
+          totalListings: reportData.totalListings,
+        })
+      } catch (error) {
+        console.error("Error fetching report data:", error)
+      }
+    },
+    [dataExplorerService, dataOverride]
+  )
 
   useEffect(() => {
     void fetchData()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   // Refetch data when data override changes
   useEffect(() => {
     void fetchData(appliedFilters)
-  }, [dataOverride])
+  }, [dataOverride, appliedFilters, fetchData])
 
   // Effect to disable body scroll when filter panel is open
   useEffect(() => {

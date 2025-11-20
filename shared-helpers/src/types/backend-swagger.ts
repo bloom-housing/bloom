@@ -2976,9 +2976,7 @@ export class DataExplorerService {
         endDate: params["endDate"],
       }
 
-      let data = null
-
-      configs.data = data
+      /** 适配ios13，get请求不允许带body */
 
       axios(configs, resolve, reject)
     })
@@ -7383,11 +7381,6 @@ export interface PublicLotteryTotal {
   multiselectQuestionId?: string
 }
 
-export interface ReportFilters {
-  /** Date range for the report */
-  dateRange: string
-}
-
 export interface RaceFrequency {
   /** Count of occurrences */
   count: number
@@ -7501,8 +7494,8 @@ export interface DataExplorerReport {
   /**  */
   updatedAt: Date
 
-  /** Filters applied to generate this report */
-  reportFilters: CombinedReportFiltersTypes
+  /** Date range for the report */
+  dateRange: string
 
   /** Total number of processed applications */
   totalProcessedApplications: number
@@ -7931,6 +7924,5 @@ export enum MfaType {
   "sms" = "sms",
   "email" = "email",
 }
-export type CombinedReportFiltersTypes = ReportFilters
 export type CombinedProductsTypes = ReportProducts
 export type CombinedDataTypes = ReportProducts

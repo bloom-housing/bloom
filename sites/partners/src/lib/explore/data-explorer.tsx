@@ -1,9 +1,5 @@
 import axios from "axios"
 
-export interface ReportFilters {
-  dateRange: string
-}
-
 export interface IncomeHouseholdSizeCrossTab {
   [householdSize: string]: {
     [AMI: string]: number
@@ -55,7 +51,7 @@ export interface ReportProducts {
 }
 
 export interface ReportData {
-  reportFilters: ReportFilters
+  dateRange: string
   totalProcessedApplications: number
   totalListings: number
   isSufficient: boolean
@@ -137,7 +133,7 @@ export const getReportDataFastAPI = async (filters?: ApiFilters) => {
 
 // ── Option 1: Balanced distribution (more random) ─────────────────────────────
 export const defaultReport: ReportData = {
-  reportFilters: { dateRange: "01/01/2025 - 06/30/2025" },
+  dateRange: "01/01/2025 - 06/30/2025",
   totalProcessedApplications: 13293,
   totalListings: 24,
   isSufficient: true,
@@ -197,7 +193,7 @@ export const defaultReport: ReportData = {
 
 // ── Option 2: Low-income & younger skew ──────────────────────────────────────────
 export const lowIncomeAndYounger: ReportData = {
-  reportFilters: { dateRange: "01/01/2025 - 06/30/2025" },
+  dateRange: "01/01/2025 - 06/30/2025",
   totalProcessedApplications: 800,
   totalListings: 18,
   isSufficient: true,
@@ -257,7 +253,7 @@ export const lowIncomeAndYounger: ReportData = {
 
 // ── Option 3: High-income & older skew ──────────────────────────────────────────
 export const highIncomeAndOlder: ReportData = {
-  reportFilters: { dateRange: "01/01/2025 - 06/30/2025" },
+  dateRange: "01/01/2025 - 06/30/2025",
   totalProcessedApplications: 1200,
   totalListings: 32,
   isSufficient: true,
@@ -315,7 +311,7 @@ export const highIncomeAndOlder: ReportData = {
 }
 
 export const veryLowData: ReportData = {
-  reportFilters: { dateRange: "01/01/2025 - 06/30/2025" },
+  dateRange: "01/01/2025 - 06/30/2025",
   totalProcessedApplications: 22,
   totalListings: 3,
   isSufficient: true,
@@ -375,7 +371,7 @@ export const veryLowData: ReportData = {
 
 // ── Option 4: Error state (insufficient data) ─────────────────────────────────
 export const InsufficientNumberOfApplications: ReportData = {
-  reportFilters: { dateRange: "01/01/2025 - 06/30/2025" },
+  dateRange: "01/01/2025 - 06/30/2025",
   totalProcessedApplications: 5,
   totalListings: 5,
   isSufficient: false,

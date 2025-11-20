@@ -19,10 +19,10 @@ import { PermissionTypeDecorator } from '../decorators/permission-type.decorator
 import { ApiKeyGuard } from '../guards/api-key.guard';
 import { JwtAuthGuard } from '../guards/jwt.guard';
 import { DataExplorerService } from '../services/data-explorer.service';
-import { DataExplorerParams } from '../dtos/applications/data-explorer-params.dto';
-import { DataExplorerReport } from '../dtos/applications/data-explorer-report.dto';
-import { GenerateInsightParams } from '../dtos/applications/generate-insight-params.dto';
-import { GenerateInsightResponse } from '../dtos/applications/generate-insight-response.dto';
+import { DataExplorerParams } from '../dtos/applications/data-explorer/params/data-explorer-params.dto';
+import { DataExplorerReport } from '../dtos/applications/data-explorer/products/data-explorer-report.dto';
+import { GenerateInsightParams } from '../dtos/applications/data-explorer/generate-insight-params.dto';
+import { GenerateInsightResponse } from '../dtos/applications/data-explorer/generate-insight-response.dto';
 
 @Controller('data-explorer')
 @ApiTags('data-explorer')

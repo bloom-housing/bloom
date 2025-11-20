@@ -1,9 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { DataExplorerService } from '../../../src/services/data-explorer.service';
 import { PermissionService } from '../../../src/services/permission.service';
-import { DataExplorerReport } from '../../../src/dtos/applications/data-explorer-report.dto';
-import { GenerateInsightResponse } from '../../../src/dtos/applications/generate-insight-response.dto';
-import { ReportProducts } from '../../../src/dtos/applications/data-explorer-report.dto';
+import { DataExplorerReport } from '../../../src/dtos/applications/data-explorer/products/data-explorer-report.dto';
+import { GenerateInsightResponse } from '../../../src/dtos/applications/data-explorer/generate-insight-response.dto';
+import { ReportProducts } from '../../../src/dtos/applications/data-explorer/products/data-explorer-report-products.dto';
 
 describe('DataExplorerService', () => {
   let service: DataExplorerService;
@@ -14,9 +14,7 @@ describe('DataExplorerService', () => {
     id: 'mock-report-id',
     createdAt: new Date('2023-01-01'),
     updatedAt: new Date('2023-01-01'),
-    reportFilters: {
-      dateRange: '01/01/2023 - 12/31/2023',
-    },
+    dateRange: '01/01/2023 - 12/31/2023',
     totalProcessedApplications: 100,
     totalApplicants: 95,
     totalListings: 5,

@@ -11,10 +11,10 @@ import { mapTo } from '../utilities/mapTo';
 import { PermissionService } from './permission.service';
 import { User } from '../dtos/users/user.dto';
 import { permissionActions } from '../enums/permissions/permission-actions-enum';
-import { DataExplorerParams } from '../dtos/applications/data-explorer-params.dto';
-import { DataExplorerReport } from '../dtos/applications/data-explorer-report.dto';
-import { GenerateInsightParams } from '../dtos/applications/generate-insight-params.dto';
-import { GenerateInsightResponse } from '../dtos/applications/generate-insight-response.dto';
+import { DataExplorerParams } from '../dtos/applications/data-explorer/params/data-explorer-params.dto';
+import { DataExplorerReport } from '../dtos/applications/data-explorer/products/data-explorer-report.dto';
+import { GenerateInsightParams } from '../dtos/applications/data-explorer/generate-insight-params.dto';
+import { GenerateInsightResponse } from '../dtos/applications/data-explorer/generate-insight-response.dto';
 import axios from 'axios';
 /*
   this is the service for calling the FastAPI housing-reports endpoint

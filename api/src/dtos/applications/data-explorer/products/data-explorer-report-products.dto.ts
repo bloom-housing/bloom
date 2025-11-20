@@ -1,14 +1,6 @@
 import { Expose, Type } from 'class-transformer';
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import {
-  IsString,
-  IsNumber,
-  IsBoolean,
-  IsArray,
-  ValidateNested,
-  IsOptional,
-  IsObject,
-} from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
+import { IsArray, ValidateNested, IsObject } from 'class-validator';
 import { ValidationsGroupsEnum } from '../../../../enums/shared/validation-groups-enum';
 import { AccessibilityFrequency } from './frequency/accessibility-frequency.dto';
 import { AgeFrequency } from './frequency/age-frequency.dto';

@@ -1,8 +1,8 @@
 import { Expose, Type } from 'class-transformer';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsString, IsObject, ValidateNested } from 'class-validator';
-import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
-import { ReportProducts } from './data-explorer-report.dto';
+import { ValidationsGroupsEnum } from '../../../enums/shared/validation-groups-enum';
+import { ReportProducts } from './products/data-explorer-report-products.dto';
 
 export class GenerateInsightParams {
   @Expose()
