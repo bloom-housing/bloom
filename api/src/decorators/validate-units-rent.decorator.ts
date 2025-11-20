@@ -54,6 +54,5 @@ export class RentValueConstraint implements ValidatorConstraintInterface {
     if (rentType === RentTypeEnum.rentRange) {
       return 'When rent is of type "rentRange" the "flatRentValueFrom" and "flatRentValueTo" fields must be filled';
     }
-    return 'When rent is of type "fixedRent" the "flatRentValueFrom" and "flatRentValueTo" fields must be empty';
   }
 }
