@@ -1,6 +1,6 @@
 import React from "react"
 import { FormProviderWrapper } from "./helpers"
-import { FormHouseholdMembers } from "../../../../src/components/applications/PaperApplicationForm/sections/FormHouseholdMembers"
+import { FormHouseholdMembers } from "../../../../../src/components/applications/PaperApplicationForm/sections/FormHouseholdMembers"
 import { render, screen, within } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import {
