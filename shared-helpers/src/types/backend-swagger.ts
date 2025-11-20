@@ -1881,6 +1881,28 @@ export class UserService {
     })
   }
   /**
+   * Update AI consent preference
+   */
+  updateAiConsent(
+    params: {
+      /** requestBody */
+      body?: UserAiConsent
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<User> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user/ai-consent"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
    * Invite partner user
    */
   invite(
@@ -2884,6 +2906,99 @@ export class LotteryService {
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
 
       /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject)
+    })
+  }
+}
+
+export class DataExplorerService {
+  /**
+   * Generate a report
+   */
+  generateReport(
+    params: {
+      /**  */
+      jurisdictionId?: string
+      /**  */
+      userId?: string
+      /** Filter by household size categories */
+      householdSize?: any | null[]
+      /** Minimum household income in USD */
+      minIncome?: number
+      /** Maximum household income in USD */
+      maxIncome?: number
+      /** Area Median Income level categories */
+      amiLevels?: any | null[]
+      /** Housing voucher or subsidy status */
+      voucherStatuses?: any | null[]
+      /** Accessibility accommodation types */
+      accessibilityTypes?: any | null[]
+      /** Racial categories for filtering */
+      races?: any | null[]
+      /** Ethnicity categories for filtering */
+      ethnicities?: any | null[]
+      /** Counties where applicants currently reside */
+      applicantResidentialCounties?: any | null[]
+      /** Counties where applicants work */
+      applicantWorkCounties?: any | null[]
+      /** Minimum age of applicant */
+      minAge?: number
+      /** Maximum age of applicant */
+      maxAge?: number
+      /** Start date for filtering applications (ISO 8601 format) */
+      startDate?: string
+      /** End date for filtering applications (ISO 8601 format) */
+      endDate?: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<DataExplorerReport> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/data-explorer/generate-report"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+      configs.params = {
+        jurisdictionId: params["jurisdictionId"],
+        userId: params["userId"],
+        householdSize: params["householdSize"],
+        minIncome: params["minIncome"],
+        maxIncome: params["maxIncome"],
+        amiLevels: params["amiLevels"],
+        voucherStatuses: params["voucherStatuses"],
+        accessibilityTypes: params["accessibilityTypes"],
+        races: params["races"],
+        ethnicities: params["ethnicities"],
+        applicantResidentialCounties: params["applicantResidentialCounties"],
+        applicantWorkCounties: params["applicantWorkCounties"],
+        minAge: params["minAge"],
+        maxAge: params["maxAge"],
+        startDate: params["startDate"],
+        endDate: params["endDate"],
+      }
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Generate AI insights from data
+   */
+  generateInsight(
+    params: {
+      /** requestBody */
+      body?: GenerateInsightParams
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<GenerateInsightResponse> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/data-explorer/generate-insight"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
 
       axios(configs, resolve, reject)
     })
@@ -6857,6 +6972,12 @@ export interface User {
   agreedToTermsOfService: boolean
 
   /**  */
+  hasConsentedToAI?: boolean
+
+  /**  */
+  aiConsentGivenAt?: Date
+
+  /**  */
   hitConfirmationURL?: Date
 
   /**  */
@@ -6880,6 +7001,11 @@ export interface PaginatedUser {
 
   /**  */
   meta: PaginationMeta
+}
+
+export interface UserAiConsent {
+  /** Whether the user has consented to AI features */
+  hasConsented: boolean
 }
 
 export interface UserCreate {
@@ -6906,6 +7032,9 @@ export interface UserCreate {
 
   /**  */
   agreedToTermsOfService: boolean
+
+  /**  */
+  hasConsentedToAI?: boolean
 
   /**  */
   favoriteListings?: IdDTO[]
@@ -6956,6 +7085,9 @@ export interface UserInvite {
 
   /**  */
   language?: LanguagesEnum
+
+  /**  */
+  hasConsentedToAI?: boolean
 
   /**  */
   favoriteListings?: IdDTO[]
@@ -7021,6 +7153,9 @@ export interface UserUpdate {
 
   /**  */
   agreedToTermsOfService: boolean
+
+  /**  */
+  hasConsentedToAI?: boolean
 
   /**  */
   favoriteListings?: IdDTO[]
@@ -7244,6 +7379,175 @@ export interface PublicLotteryTotal {
 
   /**  */
   multiselectQuestionId?: string
+}
+
+export interface RaceFrequency {
+  /** Count of occurrences */
+  count: number
+
+  /** Percentage of total */
+  percentage?: number
+
+  /** Race category */
+  race: string
+}
+
+export interface EthnicityFrequency {
+  /** Count of occurrences */
+  count: number
+
+  /** Percentage of total */
+  percentage?: number
+
+  /** Ethnicity category */
+  ethnicity: string
+}
+
+export interface SubsidyFrequency {
+  /** Count of occurrences */
+  count: number
+
+  /** Percentage of total */
+  percentage?: number
+
+  /** Subsidy or voucher type */
+  subsidyType: string
+}
+
+export interface AccessibilityFrequency {
+  /** Count of occurrences */
+  count: number
+
+  /** Percentage of total */
+  percentage?: number
+
+  /** Accessibility type */
+  accessibilityType: string
+}
+
+export interface AgeFrequency {
+  /** Count of occurrences */
+  count: number
+
+  /** Percentage of total */
+  percentage?: number
+
+  /** Age range */
+  age: string
+}
+
+export interface LocationFrequency {
+  /** Count of occurrences */
+  count: number
+
+  /** Percentage of total */
+  percentage?: number
+
+  /** Residential location */
+  location: string
+}
+
+export interface LanguageFrequency {
+  /** Count of occurrences */
+  count: number
+
+  /** Percentage of total */
+  percentage?: number
+
+  /** Language preference */
+  language: string
+}
+
+export interface ReportProducts {
+  /** Cross-tabulation of income bands by household size. Keys are household sizes, values are income band distributions. */
+  incomeHouseholdSizeCrossTab: object
+
+  /** Frequency distribution by race */
+  raceFrequencies: RaceFrequency[]
+
+  /** Frequency distribution by ethnicity */
+  ethnicityFrequencies: EthnicityFrequency[]
+
+  /** Frequency distribution by subsidy or voucher type */
+  subsidyOrVoucherTypeFrequencies: SubsidyFrequency[]
+
+  /** Frequency distribution by accessibility type */
+  accessibilityTypeFrequencies: AccessibilityFrequency[]
+
+  /** Frequency distribution by age range */
+  ageFrequencies: AgeFrequency[]
+
+  /** Frequency distribution by residential location */
+  residentialLocationFrequencies: LocationFrequency[]
+
+  /** Frequency distribution by language preference */
+  languageFrequencies: LanguageFrequency[]
+}
+
+export interface DataExplorerReport {
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /** Date range for the report */
+  dateRange: string
+
+  /** Total number of processed applications */
+  totalProcessedApplications: number
+
+  /** Total number of applicants */
+  totalApplicants?: number
+
+  /** Total number of listings */
+  totalListings?: number
+
+  /** Whether the data passes k-anonymity requirements and has no errors */
+  validResponse: boolean
+
+  /** Whether there is sufficient data for analysis (alias for validResponse) */
+  isSufficient: boolean
+
+  /** K-anonymity score for the dataset */
+  kAnonScore: number
+
+  /** Report data products containing various frequency distributions */
+  products: CombinedProductsTypes
+
+  /** Any errors encountered during report generation */
+  reportErrors?: string[]
+}
+
+export interface GenerateInsightParams {
+  /** The current data object containing report products */
+  data: CombinedDataTypes
+
+  /** The prompt to send to the AI for generating insights */
+  prompt: string
+
+  /**  */
+  jurisdictionId?: string
+
+  /**  */
+  userId?: string
+}
+
+export interface GenerateInsightResponse {
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /** Markdown-formatted AI-generated insights */
+  insight: string
 }
 
 export enum FilterAvailabilityEnum {
@@ -7620,3 +7924,5 @@ export enum MfaType {
   "sms" = "sms",
   "email" = "email",
 }
+export type CombinedProductsTypes = ReportProducts
+export type CombinedDataTypes = ReportProducts

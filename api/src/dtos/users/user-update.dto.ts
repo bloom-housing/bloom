@@ -32,6 +32,7 @@ export class UserUpdate extends OmitType(User, [
   'activeAccessToken',
   'activeRefreshToken',
   'jurisdictions',
+  'aiConsentGivenAt',
 ]) {
   @Expose()
   @ApiPropertyOptional()

@@ -346,6 +346,22 @@ export class UserService {
   }
 
   /*
+    this will update the AI consent status for a user
+  */
+  async updateAIConsent(userId: string, hasConsented: boolean): Promise<User> {
+    const updatedUser = await this.prisma.userAccounts.update({
+      include: views.full,
+      where: { id: userId },
+      data: {
+        hasConsentedToAI: hasConsented,
+        aiConsentGivenAt: hasConsented ? new Date() : null,
+      },
+    });
+
+    return mapTo(User, updatedUser);
+  }
+
+  /*
     resends a confirmation email or errors if no user matches the incoming email
     if forPublic is true then we resend a confirmation for a public site user
     if forPublic is false then we resend a confirmation for a partner site user
