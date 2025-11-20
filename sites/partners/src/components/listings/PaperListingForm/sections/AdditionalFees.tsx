@@ -13,6 +13,7 @@ import {
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 import styles from "../ListingForm.module.scss"
 import { GridRow } from "@bloom-housing/ui-seeds/src/layout/Grid"
+import { ListingContext } from "../../ListingContext"
 
 type AdditionalFeesProps = {
   existingUtilities: ListingUtilities
@@ -22,6 +23,7 @@ type AdditionalFeesProps = {
 const AdditionalFees = (props: AdditionalFeesProps) => {
   const formMethods = useFormContext()
   const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
+  const listing = useContext(ListingContext)
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, watch, errors, clearErrors, setValue } = formMethods
 
@@ -57,6 +59,14 @@ const AdditionalFees = (props: AdditionalFeesProps) => {
     }
   }, [enableUtilitiesIncluded, setValue])
 
+  // After submitting the deposit max, min, and value can be removed via AdditionalMetadataFormatter.
+  // On a save and continue flow the values need to be updated in the form
+  useEffect(() => {
+    setValue("depositMax", listing?.depositMax)
+    setValue("depositMin", listing?.depositMin)
+    setValue("depositValue", listing?.depositValue)
+  }, [listing?.depositMax, listing?.depositMin, listing?.depositValue, setValue])
+
   const showAsNonRegulated =
     enableNonRegulatedListings && listingType === EnumListingListingType.nonRegulated
 
@@ -87,7 +97,7 @@ const AdditionalFees = (props: AdditionalFeesProps) => {
               <Grid.Cell>
                 <Field
                   register={register}
-                  type={"currency"}
+                  type={"number"}
                   prepend={"$"}
                   {...defaultFieldProps(
                     "depositMin",
@@ -101,7 +111,7 @@ const AdditionalFees = (props: AdditionalFeesProps) => {
               <Grid.Cell>
                 <Field
                   register={register}
-                  type={"currency"}
+                  type={"number"}
                   prepend={"$"}
                   {...defaultFieldProps(
                     "depositMax",
@@ -144,7 +154,7 @@ const AdditionalFees = (props: AdditionalFeesProps) => {
               {depositType === EnumListingDepositType.fixedDeposit && (
                 <Grid.Cell>
                   <Field
-                    type={"currency"}
+                    type={"number"}
                     prepend={"$"}
                     register={register}
                     {...defaultFieldProps(
@@ -161,11 +171,11 @@ const AdditionalFees = (props: AdditionalFeesProps) => {
                 <>
                   <Grid.Cell>
                     <Field
-                      type={"currency"}
+                      type={"number"}
                       prepend={"$"}
                       register={register}
                       {...defaultFieldProps(
-                        "depositRangeMin",
+                        "depositMin",
                         t("listings.depositMin"),
                         props.requiredFields,
                         errors,
@@ -175,11 +185,11 @@ const AdditionalFees = (props: AdditionalFeesProps) => {
                   </Grid.Cell>
                   <Grid.Cell>
                     <Field
-                      type={"currency"}
+                      type={"number"}
                       prepend={"$"}
                       register={register}
                       {...defaultFieldProps(
-                        "depositRangeMax",
+                        "depositMax",
                         t("listings.depositMax"),
                         props.requiredFields,
                         errors,

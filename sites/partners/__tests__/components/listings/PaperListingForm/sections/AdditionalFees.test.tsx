@@ -171,17 +171,17 @@ describe("AdditionalFees", () => {
     expect(depositRangeOption).toBeInTheDocument()
     expect(depositRangeOption).not.toBeChecked()
 
-    expect(screen.getByRole("textbox", { name: /^deposit$/i })).toBeInTheDocument()
-    expect(screen.queryByRole("textbox", { name: /^deposit min$/i })).not.toBeInTheDocument()
-    expect(screen.queryByRole("textbox", { name: /^deposit max$/i })).not.toBeInTheDocument()
+    expect(screen.getByRole("spinbutton", { name: /^deposit$/i })).toBeInTheDocument()
+    expect(screen.queryByRole("spinbutton", { name: /^deposit min$/i })).not.toBeInTheDocument()
+    expect(screen.queryByRole("spinbutton", { name: /^deposit max$/i })).not.toBeInTheDocument()
 
     await userEvent.click(depositRangeOption)
 
     expect(fixedDepositOption).not.toBeChecked()
     expect(depositRangeOption).toBeChecked()
 
-    expect(screen.getByRole("textbox", { name: /^deposit min$/i })).toBeInTheDocument()
-    expect(screen.getByRole("textbox", { name: /^deposit max$/i })).toBeInTheDocument()
-    expect(screen.queryByRole("textbox", { name: /^deposit$/i })).not.toBeInTheDocument()
+    expect(screen.getByRole("spinbutton", { name: /^deposit min$/i })).toBeInTheDocument()
+    expect(screen.getByRole("spinbutton", { name: /^deposit max$/i })).toBeInTheDocument()
+    expect(screen.queryByRole("spinbutton", { name: /^deposit$/i })).not.toBeInTheDocument()
   })
 })
