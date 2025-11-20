@@ -1,6 +1,6 @@
 import { render, screen, waitFor, within } from "@testing-library/react"
 import React from "react"
-import { FormPrimaryApplicant } from "../../../../src/components/applications/PaperApplicationForm/sections/FormPrimaryApplicant"
+import { FormPrimaryApplicant } from "../../../../../src/components/applications/PaperApplicationForm/sections/FormPrimaryApplicant"
 import { FormProviderWrapper } from "./helpers"
 import userEvent from "@testing-library/user-event"
 

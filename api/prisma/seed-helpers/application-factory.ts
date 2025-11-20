@@ -22,7 +22,6 @@ import { randomBoolean } from './boolean-generator';
 
 export const applicationFactory = async (optionalParams?: {
   createdAt?: Date;
-  // householdSize?: number;
   unitTypeId?: string;
   applicant?: Prisma.ApplicantCreateWithoutApplicationsInput;
   listingId?: string;

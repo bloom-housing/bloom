@@ -3,7 +3,7 @@ import React from "react"
 import userEvent from "@testing-library/user-event"
 import { LanguagesEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { FormProviderWrapper } from "./helpers"
-import { FormApplicationData } from "../../../../src/components/applications/PaperApplicationForm/sections/FormApplicationData"
+import { FormApplicationData } from "../../../../../src/components/applications/PaperApplicationForm/sections/FormApplicationData"
 
 describe("<FormApplicationData>", () => {
   it("renders the form with application data fields", () => {

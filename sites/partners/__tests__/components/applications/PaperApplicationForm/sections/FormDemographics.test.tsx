@@ -1,5 +1,5 @@
-import { FormDemographics } from "../../../../src/components/applications/PaperApplicationForm/sections/FormDemographics"
-import { mockNextRouter, render, screen } from "../../../testUtils"
+import { FormDemographics } from "../../../../../src/components/applications/PaperApplicationForm/sections/FormDemographics"
+import { mockNextRouter, render, screen } from "../../../../testUtils"
 import { FormProviderWrapper } from "./helpers"
 import React from "react"
 import userEvent from "@testing-library/user-event"
