@@ -3101,6 +3101,35 @@ export interface IdDTO {
   ordinal?: number
 }
 
+export interface ListingDocuments {
+  /**  */
+  socialSecurityCard?: boolean
+
+  /**  */
+  currentLandlordReference?: boolean
+
+  /**  */
+  birthCertificate?: boolean
+
+  /**  */
+  previousLandlordReference?: boolean
+
+  /**  */
+  governmentIssuedId?: boolean
+
+  /**  */
+  proofOfAssets?: boolean
+
+  /**  */
+  proofOfIncome?: boolean
+
+  /**  */
+  residencyDocuments?: boolean
+
+  /**  */
+  proofOfCustody?: boolean
+}
+
 export interface MultiselectLink {
   /**  */
   title: string
@@ -3689,6 +3718,9 @@ export interface UnitGroup {
   flatRentValueTo?: number
 
   /**  */
+  monthlyRent?: number
+
+  /**  */
   floorMin?: number
 
   /**  */
@@ -3967,6 +3999,9 @@ export interface UnitsSummary {
 
   /**  */
   flatRentValueTo?: number
+
+  /**  */
+  monthlyRent?: number
 }
 
 export interface ApplicationLotteryTotal {
@@ -4143,12 +4178,6 @@ export interface Listing {
   depositValue?: number
 
   /**  */
-  depositRangeMin?: number
-
-  /**  */
-  depositRangeMax?: number
-
-  /**  */
   depositHelperText?: string
 
   /**  */
@@ -4195,6 +4224,9 @@ export interface Listing {
 
   /**  */
   requiredDocuments?: string
+
+  /**  */
+  requiredDocumentsList?: ListingDocuments
 
   /**  */
   specialNotes?: string
@@ -4520,6 +4552,9 @@ export interface UnitGroupCreate {
   flatRentValueTo?: number
 
   /**  */
+  monthlyRent?: number
+
+  /**  */
   floorMin?: number
 
   /**  */
@@ -4655,6 +4690,9 @@ export interface UnitsSummaryCreate {
 
   /**  */
   flatRentValueTo?: number
+
+  /**  */
+  monthlyRent?: number
 }
 
 export interface ListingImageCreate {
@@ -4836,12 +4874,6 @@ export interface ListingCreate {
   depositValue?: number
 
   /**  */
-  depositRangeMin?: number
-
-  /**  */
-  depositRangeMax?: number
-
-  /**  */
   depositHelperText?: string
 
   /**  */
@@ -4888,6 +4920,9 @@ export interface ListingCreate {
 
   /**  */
   requiredDocuments?: string
+
+  /**  */
+  requiredDocumentsList?: ListingDocuments
 
   /**  */
   specialNotes?: string
@@ -5182,12 +5217,6 @@ export interface ListingUpdate {
   depositValue?: number
 
   /**  */
-  depositRangeMin?: number
-
-  /**  */
-  depositRangeMax?: number
-
-  /**  */
   depositHelperText?: string
 
   /**  */
@@ -5234,6 +5263,9 @@ export interface ListingUpdate {
 
   /**  */
   requiredDocuments?: string
+
+  /**  */
+  requiredDocumentsList?: ListingDocuments
 
   /**  */
   specialNotes?: string
@@ -7768,6 +7800,11 @@ export enum AlternateContactRelationship {
   "caseManager" = "caseManager",
   "other" = "other",
   "noContact" = "noContact",
+}
+
+export enum RentTypeEnum {
+  "fixedRent" = "fixedRent",
+  "rentRange" = "rentRange",
 }
 
 export enum HouseholdMemberRelationship {

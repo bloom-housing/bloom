@@ -16,7 +16,7 @@ import { isUnitGroupAppBase, isUnitGroupAppWaitlist } from "../../../lib/helpers
 
 const ApplicationWhatToExpect = () => {
   const { profile } = useContext(AuthContext)
-  const { conductor, listing } = useFormConductor("whatToExpect", true)
+  const { conductor, listing } = useFormConductor("whatToExpect")
   const router = useRouter()
 
   const { handleSubmit } = useForm()
