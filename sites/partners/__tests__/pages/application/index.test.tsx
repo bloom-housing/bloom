@@ -11,15 +11,11 @@ import {
   UnitTypeEnum,
   YesNoEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { AuthContext } from "@bloom-housing/shared-helpers"
 import { ApplicationContext } from "../../../src/components/applications/ApplicationContext"
-import DetailsApplicationData from "../../../src/components/applications/PaperApplicationDetails/sections/DetailsApplicationData"
-import DetailsPrimaryApplicant from "../../../src/components/applications/PaperApplicationDetails/sections/DetailsPrimaryApplicant"
 import DetailsAlternateContact from "../../../src/components/applications/PaperApplicationDetails/sections/DetailsAlternateContact"
 import DetailsHouseholdDetails from "../../../src/components/applications/PaperApplicationDetails/sections/DetailsHouseholdDetails"
 import DetailsHouseholdIncome from "../../../src/components/applications/PaperApplicationDetails/sections/DetailsHouseholdIncome"
 import DetailsTerms from "../../../src/components/applications/PaperApplicationDetails/sections/DetailsTerms"
-import DetailsHouseholdMembers from "../../../src/components/applications/PaperApplicationDetails/sections/DetailsHouseholdMembers"
 
 const server = setupServer()
 
@@ -78,98 +74,6 @@ describe("partners_application_index", () => {
     const { findByText } = render(<ApplicationsList />)
     const submissionStatus = await findByText("Submitted")
     expect(submissionStatus).toBeInTheDocument()
-  })
-
-  it("should display Application Data section info", () => {
-    const { getByText } = render(
-      <AuthContext.Provider
-        value={{
-          profile: { ...user, listings: [], jurisdictions: [] },
-        }}
-      >
-        <ApplicationContext.Provider
-          value={{
-            ...application,
-            language: LanguagesEnum.es,
-            submissionDate: new Date("January 28, 2025 13:09:00"),
-          }}
-        >
-          <DetailsApplicationData />
-        </ApplicationContext.Provider>
-      </AuthContext.Provider>
-    )
-
-    expect(getByText("Application data")).toBeInTheDocument()
-    expect(getByText("Confirmation code")).toBeInTheDocument()
-    expect(getByText("ABCD1234")).toBeInTheDocument()
-    expect(getByText("Application submission type")).toBeInTheDocument()
-    expect(getByText("Electronic")).toBeInTheDocument()
-    expect(getByText("Application submitted date")).toBeInTheDocument()
-    expect(getByText("1/28/2025")).toBeInTheDocument()
-    expect(getByText("Application submitted time")).toBeInTheDocument()
-    expect(getByText("1:09:00 PM UTC")).toBeInTheDocument()
-    expect(getByText("Application language")).toBeInTheDocument()
-    expect(getByText("Español")).toBeInTheDocument()
-    expect(getByText("Total household size")).toBeInTheDocument()
-    expect(getByText("2")).toBeInTheDocument()
-    expect(getByText("Submitted by")).toBeInTheDocument()
-    expect(getByText("Applicant First Applicant Last")).toBeInTheDocument()
-  })
-
-  it("should display Primary Applicant section info", () => {
-    const { getByText, getAllByText } = render(
-      <ApplicationContext.Provider value={application}>
-        <DetailsPrimaryApplicant />
-      </ApplicationContext.Provider>
-    )
-
-    expect(getByText("Primary applicant")).toBeInTheDocument()
-    expect(getByText("First name")).toBeInTheDocument()
-    expect(getByText("Middle name")).toBeInTheDocument()
-    expect(getByText("Last name")).toBeInTheDocument()
-    expect(getByText("Date of birth")).toBeInTheDocument()
-    expect(getByText("Email")).toBeInTheDocument()
-    expect(getByText("Phone")).toBeInTheDocument()
-    expect(getByText("Second phone")).toBeInTheDocument()
-    expect(getByText("Preferred contact")).toBeInTheDocument()
-    expect(getByText("Work in region")).toBeInTheDocument()
-    expect(getByText("Residence address")).toBeInTheDocument()
-    expect(getByText("Mailing address")).toBeInTheDocument()
-    expect(getByText("Work address")).toBeInTheDocument()
-    expect(getAllByText("Street address")).toHaveLength(3)
-    expect(getAllByText("Apt or unit #")).toHaveLength(3)
-    expect(getAllByText("City")).toHaveLength(3)
-    expect(getAllByText("State")).toHaveLength(3)
-    expect(getAllByText("Zip code")).toHaveLength(3)
-  })
-
-  it("should display Primary Applicant section info with full time student question", () => {
-    const { getByText, getAllByText } = render(
-      <ApplicationContext.Provider value={application}>
-        <DetailsPrimaryApplicant enableFullTimeStudentQuestion={true} />
-      </ApplicationContext.Provider>
-    )
-
-    expect(getByText("Primary applicant")).toBeInTheDocument()
-    expect(getByText("First name")).toBeInTheDocument()
-    expect(getByText("Middle name")).toBeInTheDocument()
-    expect(getByText("Last name")).toBeInTheDocument()
-    expect(getByText("Date of birth")).toBeInTheDocument()
-    expect(getByText("Email")).toBeInTheDocument()
-    expect(getByText("Phone")).toBeInTheDocument()
-    expect(getByText("Second phone")).toBeInTheDocument()
-    expect(getByText("Preferred contact")).toBeInTheDocument()
-    expect(getByText("Work in region")).toBeInTheDocument()
-    expect(getByText("Residence address")).toBeInTheDocument()
-    expect(getByText("Mailing address")).toBeInTheDocument()
-    expect(getByText("Work address")).toBeInTheDocument()
-    expect(getAllByText("Street address")).toHaveLength(3)
-    expect(getAllByText("Apt or unit #")).toHaveLength(3)
-    expect(getAllByText("City")).toHaveLength(3)
-    expect(getAllByText("State")).toHaveLength(3)
-    expect(getAllByText("Zip code")).toHaveLength(3)
-    expect(getByText("Full-time student")).toBeInTheDocument()
-    expect(getByText("No")).toBeInTheDocument()
   })
 
   it("should display no contact Alternate Contact section info", () => {
@@ -249,89 +153,6 @@ describe("partners_application_index", () => {
     expect(getByText("State")).toBeInTheDocument()
     expect(getByText("ME")).toBeInTheDocument()
     expect(getByText("Zip code")).toBeInTheDocument()
-  })
-
-  it("should display Houshold Members section table", () => {
-    const { getByRole, queryByText } = render(
-      <ApplicationContext.Provider value={application}>
-        {/* eslint-disable-next-line @typescript-eslint/no-empty-function */}
-        <DetailsHouseholdMembers setMembersDrawer={() => {}} />
-      </ApplicationContext.Provider>
-    )
-
-    // Check the section header
-    expect(getByRole("heading", { name: "Household members" })).toBeInTheDocument()
-
-    // Get the table and check headers
-    const table = getByRole("table")
-    const tableHeaders = within(table).getAllByRole("columnheader")
-    expect(tableHeaders).toHaveLength(6)
-
-    const [name, dob, relationship, residence, work, actions] = tableHeaders
-    expect(name).toHaveTextContent(/name/i)
-    expect(dob).toHaveTextContent(/date of birth/i)
-    expect(relationship).toHaveTextContent(/relationship/i)
-    expect(residence).toHaveTextContent(/same residence/i)
-    expect(work).toHaveTextContent(/work in region/i)
-    expect(actions).toHaveTextContent(/actions/i)
-
-    // Check table body rows
-    const tableBodyRows = within(table).getAllByRole("row")
-    expect(tableBodyRows).toHaveLength(2) // 1 for the header row + 1 for the Household member row
-
-    const [nameVal, dobVal, relationshipVal, residenceVal, workVal, actionsVal] = within(
-      tableBodyRows[1]
-    ).getAllByRole("cell")
-
-    expect(nameVal).toHaveTextContent("Household First Household Last")
-    expect(dobVal).toHaveTextContent("11/25/1966")
-    expect(relationshipVal).toHaveTextContent("Friend")
-    expect(residenceVal).toHaveTextContent("No")
-    expect(workVal).toHaveTextContent("Yes")
-    expect(within(actionsVal).getByText("View")).toBeInTheDocument()
-
-    expect(queryByText("Full-time student")).not.toBeInTheDocument()
-  })
-
-  it("should display Houshold Members section table with full time student question", () => {
-    const { getByRole } = render(
-      <ApplicationContext.Provider value={application}>
-        {/* eslint-disable-next-line @typescript-eslint/no-empty-function */}
-        <DetailsHouseholdMembers setMembersDrawer={() => {}} enableFullTimeStudentQuestion={true} />
-      </ApplicationContext.Provider>
-    )
-
-    // Check the section header
-    expect(getByRole("heading", { name: "Household members" })).toBeInTheDocument()
-
-    // Get the table and check headers
-    const table = getByRole("table")
-    const tableHeaders = within(table).getAllByRole("columnheader")
-    expect(tableHeaders).toHaveLength(7)
-
-    const [name, dob, relationship, residence, work, student, actions] = tableHeaders
-    expect(name).toHaveTextContent(/name/i)
-    expect(dob).toHaveTextContent(/date of birth/i)
-    expect(relationship).toHaveTextContent(/relationship/i)
-    expect(residence).toHaveTextContent(/same residence/i)
-    expect(work).toHaveTextContent(/work in region/i)
-    expect(student).toHaveTextContent("Full-time student")
-    expect(actions).toHaveTextContent(/actions/i)
-
-    // Check table body rows
-    const tableBodyRows = within(table).getAllByRole("row")
-    expect(tableBodyRows).toHaveLength(2) // 1 for the header row + 1 for the Household member row
-
-    const [nameVal, dobVal, relationshipVal, residenceVal, workVal, studentVal, actionsVal] =
-      within(tableBodyRows[1]).getAllByRole("cell")
-
-    expect(nameVal).toHaveTextContent("Household First Household Last")
-    expect(dobVal).toHaveTextContent("11/25/1966")
-    expect(relationshipVal).toHaveTextContent("Friend")
-    expect(residenceVal).toHaveTextContent("No")
-    expect(workVal).toHaveTextContent("Yes")
-    expect(studentVal).toHaveTextContent("No")
-    expect(within(actionsVal).getByText("View")).toBeInTheDocument()
   })
 
   it("should display Houshold Details info", () => {

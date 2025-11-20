@@ -1,7 +1,7 @@
 import React from "react"
-import { mockNextRouter, render, screen } from "../../../testUtils"
+import { mockNextRouter, render, screen } from "../../../../testUtils"
 import { FormProviderWrapper } from "./helpers"
-import { FormHouseholdDetails } from "../../../../src/components/applications/PaperApplicationForm/sections/FormHouseholdDetails"
+import { FormHouseholdDetails } from "../../../../../src/components/applications/PaperApplicationForm/sections/FormHouseholdDetails"
 import { UnitTypeEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { unit } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 
