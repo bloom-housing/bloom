@@ -139,9 +139,22 @@ const DetailUnits = ({ setUnitDrawer }: DetailUnitsProps) => {
         monthlyRent: { content: unit.monthlyRent },
         sqFeet: { content: unit.sqFeet },
         unitAccessibilityPriorityTypes: { content: unit.unitAccessibilityPriorityTypes?.name },
+        action: {
+          content: (
+            <Button
+              type="button"
+              variant="text"
+              size="sm"
+              className={"font-semibold darker-link"}
+              onClick={() => setUnitDrawer(unit)}
+            >
+              {t("t.view")}
+            </Button>
+          ),
+        },
       }))
     }
-  }, [listing.units, listing.unitGroups, enableUnitGroups, showNonRegulated])
+  }, [listing.units, listing.unitGroups, enableUnitGroups, showNonRegulated, setUnitDrawer])
 
   const listingAvailabilityText = useMemo(() => {
     switch (listing?.reviewOrderType) {
