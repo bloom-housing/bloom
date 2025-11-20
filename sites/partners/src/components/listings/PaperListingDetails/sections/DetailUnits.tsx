@@ -55,7 +55,6 @@ const DetailUnits = ({ setUnitDrawer }: DetailUnitsProps) => {
         occupancy: "listings.unit.occupancy",
         ...(!showNonRegulated ? { sqFeet: "listings.unit.sqft" } : {}),
         bath: "listings.unit.bath",
-        action: "",
       }
     : {
         number: "listings.unit.number",
