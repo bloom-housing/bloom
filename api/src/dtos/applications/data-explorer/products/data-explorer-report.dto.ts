@@ -7,13 +7,21 @@ import {
   IsArray,
   ValidateNested,
   IsOptional,
-  IsObject,
 } from 'class-validator';
 import { ValidationsGroupsEnum } from '../../../../enums/shared/validation-groups-enum';
 import { AbstractDTO } from '../../../shared/abstract.dto';
 import { ReportProducts } from './data-explorer-report-products.dto';
 
 export class DataExplorerReport extends AbstractDTO {
+  @Expose()
+  @ApiProperty({
+    type: String,
+    example: '01/01/2025 - 06/30/2025',
+    description: 'Date range for the report',
+  })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  dateRange: string;
+
   @Expose()
   @ApiProperty({
     type: Number,
@@ -52,6 +60,16 @@ export class DataExplorerReport extends AbstractDTO {
   })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   validResponse: boolean;
+
+  @Expose()
+  @ApiProperty({
+    type: Boolean,
+    example: true,
+    description:
+      'Whether there is sufficient data for analysis (alias for validResponse)',
+  })
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  isSufficient: boolean;
 
   @Expose()
   @ApiProperty({

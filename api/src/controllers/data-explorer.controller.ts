@@ -2,6 +2,7 @@ import {
   Controller,
   Get,
   Post,
+  Body,
   Query,
   Request,
   UseGuards,
@@ -20,8 +21,10 @@ import { JwtAuthGuard } from '../guards/jwt.guard';
 import { DataExplorerService } from '../services/data-explorer.service';
 import { DataExplorerParams } from '../dtos/applications/data-explorer/params/data-explorer-params.dto';
 import { DataExplorerReport } from '../dtos/applications/data-explorer/products/data-explorer-report.dto';
+import { GenerateInsightParams } from '../dtos/applications/data-explorer/generate-insight-params.dto';
+import { GenerateInsightResponse } from '../dtos/applications/data-explorer/generate-insight-response.dto';
 
-@Controller('generate-report')
+@Controller('data-explorer')
 @ApiTags('data-explorer')
 @UsePipes(
   new ValidationPipe({
@@ -35,7 +38,7 @@ import { DataExplorerReport } from '../dtos/applications/data-explorer/products/
 export class DataExplorerController {
   constructor(private readonly dataExplorerService: DataExplorerService) {}
 
-  @Post()
+  @Get('generate-report')
   @ApiOperation({
     summary: 'Generate a report',
     operationId: 'generateReport',
@@ -46,5 +49,18 @@ export class DataExplorerController {
     @Query() queryParams: DataExplorerParams,
   ) {
     return await this.dataExplorerService.generateReport(queryParams, req);
+  }
+
+  @Post('generate-insight')
+  @ApiOperation({
+    summary: 'Generate AI insights from data',
+    operationId: 'generateInsight',
+  })
+  @ApiOkResponse({ type: GenerateInsightResponse })
+  async generateInsight(
+    @Request() req: ExpressRequest,
+    @Body() body: GenerateInsightParams,
+  ) {
+    return await this.dataExplorerService.generateInsight(body, req);
   }
 }

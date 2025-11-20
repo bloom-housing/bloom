@@ -1881,6 +1881,28 @@ export class UserService {
     })
   }
   /**
+   * Update AI consent preference
+   */
+  updateAiConsent(
+    params: {
+      /** requestBody */
+      body?: UserAiConsent
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<User> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user/ai-consent"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
    * Invite partner user
    */
   invite(
@@ -2932,9 +2954,9 @@ export class DataExplorerService {
     options: IRequestOptions = {}
   ): Promise<DataExplorerReport> {
     return new Promise((resolve, reject) => {
-      let url = basePath + "/generate-report"
+      let url = basePath + "/data-explorer/generate-report"
 
-      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
       configs.params = {
         jurisdictionId: params["jurisdictionId"],
         userId: params["userId"],
@@ -2954,7 +2976,27 @@ export class DataExplorerService {
         endDate: params["endDate"],
       }
 
-      let data = null
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Generate AI insights from data
+   */
+  generateInsight(
+    params: {
+      /** requestBody */
+      body?: GenerateInsightParams
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<GenerateInsightResponse> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/data-explorer/generate-insight"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
 
       configs.data = data
 
@@ -6930,6 +6972,12 @@ export interface User {
   agreedToTermsOfService: boolean
 
   /**  */
+  hasConsentedToAI?: boolean
+
+  /**  */
+  aiConsentGivenAt?: Date
+
+  /**  */
   hitConfirmationURL?: Date
 
   /**  */
@@ -6953,6 +7001,11 @@ export interface PaginatedUser {
 
   /**  */
   meta: PaginationMeta
+}
+
+export interface UserAiConsent {
+  /** Whether the user has consented to AI features */
+  hasConsented: boolean
 }
 
 export interface UserCreate {
@@ -6979,6 +7032,9 @@ export interface UserCreate {
 
   /**  */
   agreedToTermsOfService: boolean
+
+  /**  */
+  hasConsentedToAI?: boolean
 
   /**  */
   favoriteListings?: IdDTO[]
@@ -7029,6 +7085,9 @@ export interface UserInvite {
 
   /**  */
   language?: LanguagesEnum
+
+  /**  */
+  hasConsentedToAI?: boolean
 
   /**  */
   favoriteListings?: IdDTO[]
@@ -7094,6 +7153,9 @@ export interface UserUpdate {
 
   /**  */
   agreedToTermsOfService: boolean
+
+  /**  */
+  hasConsentedToAI?: boolean
 
   /**  */
   favoriteListings?: IdDTO[]
@@ -7432,6 +7494,9 @@ export interface DataExplorerReport {
   /**  */
   updatedAt: Date
 
+  /** Date range for the report */
+  dateRange: string
+
   /** Total number of processed applications */
   totalProcessedApplications: number
 
@@ -7444,6 +7509,9 @@ export interface DataExplorerReport {
   /** Whether the data passes k-anonymity requirements and has no errors */
   validResponse: boolean
 
+  /** Whether there is sufficient data for analysis (alias for validResponse) */
+  isSufficient: boolean
+
   /** K-anonymity score for the dataset */
   kAnonScore: number
 
@@ -7452,6 +7520,34 @@ export interface DataExplorerReport {
 
   /** Any errors encountered during report generation */
   reportErrors?: string[]
+}
+
+export interface GenerateInsightParams {
+  /** The current data object containing report products */
+  data: CombinedDataTypes
+
+  /** The prompt to send to the AI for generating insights */
+  prompt: string
+
+  /**  */
+  jurisdictionId?: string
+
+  /**  */
+  userId?: string
+}
+
+export interface GenerateInsightResponse {
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /** Markdown-formatted AI-generated insights */
+  insight: string
 }
 
 export enum FilterAvailabilityEnum {
@@ -7829,3 +7925,4 @@ export enum MfaType {
   "email" = "email",
 }
 export type CombinedProductsTypes = ReportProducts
+export type CombinedDataTypes = ReportProducts

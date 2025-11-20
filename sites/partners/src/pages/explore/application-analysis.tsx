@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useContext } from "react"
 import Head from "next/head"
 import { t } from "@bloom-housing/ui-components"
+import { AuthContext } from "@bloom-housing/shared-helpers/src/auth/AuthContext"
 import { Button } from "@bloom-housing/ui-seeds"
 import Layout from "../../layouts"
 import { NavigationHeader } from "../../components/shared/NavigationHeader"
@@ -10,7 +11,6 @@ import PrimaryApplicantSection from "../../components/explore/applicantAndHouseh
 import ReportSummary from "../../components/explore/ReportSummary"
 import { FilteringSlideOut } from "../../components/explore/FilteringSlideOut"
 import {
-  getReportDataFastAPI,
   ApiFilters,
   IncomeHouseholdSizeCrossTab,
   defaultReport,
@@ -32,7 +32,15 @@ const ApplicationAnalysis = () => {
     void router.replace("/")
   }
 
-  const [hasUserConsentedToAI, setHasUserConsentedToAI] = useState(false)
+  const { dataExplorerService, profile, userService } = useContext(AuthContext)
+
+  // Initialize from user profile
+  const [hasUserConsentedToAI, setHasUserConsentedToAI] = useState(
+    profile?.hasConsentedToAI || false
+  )
+  const [aiInsight, setAiInsight] = useState<string>("")
+  const [isLoadingInsight, setIsLoadingInsight] = useState(false)
+  const [insightError, setInsightError] = useState<string | null>(null)
 
   const [isFilterPanelOpen, setIsFilterPanelOpen] = useState(false)
   const [isAiInsightsPanelOpen, setIsAiInsightsPanelOpen] = useState(false)
@@ -62,64 +70,88 @@ const ApplicationAnalysis = () => {
     }
   }, [appliedFilters])
 
-  const fetchData = async (filters?: ApiFilters) => {
-    try {
-      let reportData: ReportData
+  const fetchData = React.useCallback(
+    async (filters?: ApiFilters) => {
+      try {
+        let reportData: ReportData
 
-      // Check if manual override is selected
-      if (dataOverride !== "none") {
-        switch (dataOverride) {
-          case "default":
-            reportData = defaultReport
-            break
-          case "lowIncome":
-            reportData = lowIncomeAndYounger
-            break
-          case "highIncome":
-            reportData = highIncomeAndOlder
-            break
-          case "veryLow":
-            reportData = veryLowData
-            break
-          case "insufficient":
-            reportData = InsufficientNumberOfApplications
-            break
-          default:
-            reportData = await getReportDataFastAPI(filters)
+        // Check if manual override is selected
+        if (dataOverride !== "none") {
+          switch (dataOverride) {
+            case "default":
+              reportData = defaultReport
+              break
+            case "lowIncome":
+              reportData = lowIncomeAndYounger
+              break
+            case "highIncome":
+              reportData = highIncomeAndOlder
+              break
+            case "veryLow":
+              reportData = veryLowData
+              break
+            case "insufficient":
+              reportData = InsufficientNumberOfApplications
+              break
+            default: {
+              const apiData = await dataExplorerService.generateReport(filters || {})
+              reportData = {
+                dateRange: apiData.dateRange,
+                totalProcessedApplications: apiData.totalProcessedApplications,
+                totalListings: apiData.totalListings || 0,
+                isSufficient: apiData.isSufficient,
+                kAnonScore: apiData.kAnonScore,
+                products: apiData.products,
+                reportErrors: apiData.reportErrors || [],
+              } as ReportData
+              break
+            }
+          }
+        } else {
+          // No override - fetch from API through the service
+          const apiData = await dataExplorerService.generateReport(filters || {})
+          reportData = {
+            dateRange: apiData.dateRange,
+            totalProcessedApplications: apiData.totalProcessedApplications,
+            totalListings: apiData.totalListings || 0,
+            isSufficient: apiData.isSufficient,
+            kAnonScore: apiData.kAnonScore,
+            products: apiData.products,
+            reportErrors: apiData.reportErrors || [],
+          } as ReportData
         }
-      } else {
-        // No override - fetch from API
-        reportData = await getReportDataFastAPI(filters)
-      }
 
-      setChartData({
-        incomeHouseholdSizeCrossTab: reportData.products.incomeHouseholdSizeCrossTab,
-        raceFrequencies: reportData.products.raceFrequencies,
-        ethnicityFrequencies: reportData.products.ethnicityFrequencies,
-        residentialLocationFrequencies: reportData.products.residentialLocationFrequencies,
-        ageFrequencies: reportData.products.ageFrequencies,
-        languageFrequencies: reportData.products.languageFrequencies,
-        subsidyOrVoucherTypeFrequencies: reportData.products.subsidyOrVoucherTypeFrequencies,
-        accessibilityTypeFrequencies: reportData.products.accessibilityTypeFrequencies,
-      })
-      setFilterInformation({
-        dataRange: reportData.reportFilters.dateRange,
-        totalProcessedApplications: reportData.totalProcessedApplications,
-        totalListings: reportData.totalListings,
-      })
-    } catch (error) {
-      console.error("Error fetching report data:", error)
-    }
-  }
+        setChartData({
+          incomeHouseholdSizeCrossTab: reportData.products.incomeHouseholdSizeCrossTab,
+          raceFrequencies: reportData.products.raceFrequencies,
+          ethnicityFrequencies: reportData.products.ethnicityFrequencies,
+          residentialLocationFrequencies: reportData.products.residentialLocationFrequencies,
+          ageFrequencies: reportData.products.ageFrequencies,
+          languageFrequencies: reportData.products.languageFrequencies,
+          subsidyOrVoucherTypeFrequencies: reportData.products.subsidyOrVoucherTypeFrequencies,
+          accessibilityTypeFrequencies: reportData.products.accessibilityTypeFrequencies,
+        })
+        setFilterInformation({
+          dataRange: reportData.dateRange,
+          totalProcessedApplications: reportData.totalProcessedApplications,
+          totalListings: reportData.totalListings,
+        })
+      } catch (error) {
+        console.error("Error fetching report data:", error)
+      }
+    },
+    [dataExplorerService, dataOverride]
+  )
 
   useEffect(() => {
     void fetchData()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   // Refetch data when data override changes
   useEffect(() => {
     void fetchData(appliedFilters)
-  }, [dataOverride])
+  }, [dataOverride, appliedFilters, fetchData])
 
   // Effect to disable body scroll when filter panel is open
   useEffect(() => {
@@ -171,6 +203,56 @@ const ApplicationAnalysis = () => {
     console.log("Applied filters:", cleanedFilters)
     void fetchData(cleanedFilters)
     setIsFilterPanelOpen(false)
+  }
+
+  const fetchAiInsights = async () => {
+    if (!hasUserConsentedToAI || !chartData) {
+      return
+    }
+
+    setIsLoadingInsight(true)
+    setInsightError(null)
+
+    try {
+      const response = await dataExplorerService.generateInsight({
+        body: {
+          data: chartData,
+          prompt:
+            "Analyze this housing application data and provide key insights about demographics, income distribution, and accessibility needs. Focus on actionable insights for housing policy makers.",
+        },
+      })
+
+      setAiInsight(response.insight)
+    } catch (error) {
+      console.error("Error fetching AI insights:", error)
+      setInsightError("Failed to generate insights. Please try again.")
+    } finally {
+      setIsLoadingInsight(false)
+    }
+  }
+
+  // Fetch AI insights when panel opens and user has consented
+  useEffect(() => {
+    if (isAiInsightsPanelOpen && hasUserConsentedToAI && !aiInsight) {
+      void fetchAiInsights()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isAiInsightsPanelOpen, hasUserConsentedToAI, aiInsight])
+
+  const handleAIConsent = async () => {
+    try {
+      // Update on server
+      await userService.updateAiConsent({ body: { hasConsented: true } })
+
+      // Update local state
+      setHasUserConsentedToAI(true)
+      setIsAiConsentPanelOpen(false)
+    } catch (error) {
+      console.error("Failed to update AI consent:", error)
+      // Still update local state as fallback
+      setHasUserConsentedToAI(true)
+      setIsAiConsentPanelOpen(false)
+    }
   }
 
   return (
@@ -289,7 +371,15 @@ const ApplicationAnalysis = () => {
                 </button>
 
                 {hasUserConsentedToAI ? (
-                  <AiInsightsPanel />
+                  <AiInsightsPanel
+                    insight={aiInsight}
+                    isLoading={isLoadingInsight}
+                    error={insightError}
+                    onRegenerate={() => {
+                      setAiInsight("")
+                      void fetchAiInsights()
+                    }}
+                  />
                 ) : (
                   <>
                     <div className="flex items-center gap-2 mb-4">
@@ -342,10 +432,7 @@ const ApplicationAnalysis = () => {
       <AiPermissionModal
         showOnboardingModal={isAiConsentPanelOpen}
         setShowOnboardingModal={() => setIsAiConsentPanelOpen(false)}
-        handleConfirmGenAI={() => {
-          setIsAiConsentPanelOpen(false)
-          setHasUserConsentedToAI(true)
-        }}
+        handleConfirmGenAI={handleAIConsent}
       />
     </Layout>
   )

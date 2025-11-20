@@ -2,6 +2,8 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { DataExplorerService } from '../../../src/services/data-explorer.service';
 import { PermissionService } from '../../../src/services/permission.service';
 import { DataExplorerReport } from '../../../src/dtos/applications/data-explorer/products/data-explorer-report.dto';
+import { GenerateInsightResponse } from '../../../src/dtos/applications/data-explorer/generate-insight-response.dto';
+import { ReportProducts } from '../../../src/dtos/applications/data-explorer/products/data-explorer-report-products.dto';
 
 describe('DataExplorerService', () => {
   let service: DataExplorerService;
@@ -12,10 +14,12 @@ describe('DataExplorerService', () => {
     id: 'mock-report-id',
     createdAt: new Date('2023-01-01'),
     updatedAt: new Date('2023-01-01'),
+    dateRange: '01/01/2023 - 12/31/2023',
     totalProcessedApplications: 100,
     totalApplicants: 95,
     totalListings: 5,
     validResponse: true,
+    isSufficient: true,
     kAnonScore: 10,
     products: {
       incomeHouseholdSizeCrossTab: {
@@ -163,6 +167,122 @@ describe('DataExplorerService', () => {
         'read',
         { jurisdictionId: 'test-jurisdiction' },
       );
+    });
+  });
+
+  describe('generateInsight', () => {
+    const mockInsightData = {
+      id: 'mock-insight-id',
+      createdAt: new Date('2023-01-01'),
+      updatedAt: new Date('2023-01-01'),
+      insight: '# Analysis Results\n\nThe data shows significant trends...',
+    } as GenerateInsightResponse;
+
+    const mockProductsData: ReportProducts = {
+      incomeHouseholdSizeCrossTab: {
+        '1': { '0-30 AMI': 45 },
+      },
+      raceFrequencies: [{ count: 120, percentage: 25.5, race: 'Asian' }],
+      ethnicityFrequencies: [
+        { count: 150, percentage: 31.9, ethnicity: 'Hispanic or Latino' },
+      ],
+      subsidyOrVoucherTypeFrequencies: [
+        { count: 75, percentage: 16.0, subsidyType: 'Section 8' },
+      ],
+      accessibilityTypeFrequencies: [
+        {
+          count: 45,
+          percentage: 9.6,
+          accessibilityType: 'Wheelchair Accessible',
+        },
+      ],
+      ageFrequencies: [{ count: 85, percentage: 18.1, age: '18-24' }],
+      residentialLocationFrequencies: [
+        { count: 180, percentage: 38.3, location: 'Oakland' },
+      ],
+      languageFrequencies: [
+        { count: 350, percentage: 74.5, language: 'English' },
+      ],
+    };
+
+    beforeEach(() => {
+      jest.clearAllMocks();
+    });
+
+    afterEach(() => {
+      jest.restoreAllMocks();
+    });
+
+    it('should throw a forbidden exception if no user is present in the request', async () => {
+      await expect(
+        service.generateInsight(
+          {
+            data: mockProductsData,
+            prompt: 'Test prompt',
+            jurisdictionId: 'test-jurisdiction',
+          },
+          {
+            user: null,
+          } as any,
+        ),
+      ).rejects.toThrow('Forbidden');
+      expect(canOrThrowMock).not.toHaveBeenCalled();
+    });
+
+    it('should throw a forbidden exception if user is not authorized', async () => {
+      canOrThrowMock.mockRejectedValueOnce(new Error('Forbidden'));
+      await expect(
+        service.generateInsight(
+          {
+            data: mockProductsData,
+            prompt: 'Test prompt',
+            jurisdictionId: 'test-jurisdiction',
+          },
+          { user: { id: 'test-user' } } as any,
+        ),
+      ).rejects.toThrow('Forbidden');
+      expect(canOrThrowMock).toHaveBeenCalled();
+    });
+
+    it('should return insight data if user is authorized', async () => {
+      jest
+        .spyOn(service, 'getInsightFromFastAPI')
+        .mockResolvedValue(mockInsightData as GenerateInsightResponse);
+      canOrThrowMock.mockResolvedValueOnce(true);
+
+      const result = await service.generateInsight(
+        {
+          data: mockProductsData,
+          prompt: 'Test prompt',
+          jurisdictionId: 'test-jurisdiction',
+        },
+        { user: { id: 'test-user' } } as any,
+      );
+
+      expect(result).toEqual(mockInsightData);
+      expect(canOrThrowMock).toHaveBeenCalledWith(
+        expect.objectContaining({ id: 'test-user' }),
+        'application',
+        'read',
+        { jurisdictionId: 'test-jurisdiction' },
+      );
+    });
+
+    it('should not call authorization if no jurisdictionId is provided', async () => {
+      jest
+        .spyOn(service, 'getInsightFromFastAPI')
+        .mockResolvedValue(mockInsightData as GenerateInsightResponse);
+
+      const result = await service.generateInsight(
+        {
+          data: mockProductsData,
+          prompt: 'Test prompt',
+        },
+        { user: { id: 'test-user' } } as any,
+      );
+
+      expect(result).toEqual(mockInsightData);
+      expect(canOrThrowMock).not.toHaveBeenCalled();
     });
   });
 });
