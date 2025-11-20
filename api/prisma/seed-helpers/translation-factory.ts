@@ -53,6 +53,8 @@ const translations = (jurisdictionName?: string, language?: LanguagesEnum) => {
             'Once the application period closes, eligible applicants will be placed in order based on lottery rank order.',
           waitlist:
             'Eligible applicants will be placed on the waitlist on a first come first serve basis until waitlist spots are filled.',
+          waitlistLottery:
+            'Eligible applicants will be placed on the waitlist based on lottery rank order.',
           fcfsPreference:
             'Housing preferences, if applicable, will affect first come first serve order.',
           waitlistContact:
