@@ -290,6 +290,7 @@ describe('Testing listing service', () => {
     service = module.get<ListingService>(ListingService);
     prisma = module.get<PrismaService>(PrismaService);
     config = module.get<ConfigService>(ConfigService);
+    process.env.APPLICATION_DAYS_TILL_EXPIRY = null;
   });
 
   afterAll(() => {
@@ -5380,6 +5381,49 @@ describe('Testing listing service', () => {
       expect(prisma.cronJob.findFirst).toHaveBeenCalled();
       expect(prisma.cronJob.update).toHaveBeenCalled();
       process.env.PROXY_URL = undefined;
+    });
+
+    it('should set expire_after on applications if APPLICATION_DAYS_TILL_EXPIRY', async () => {
+      jest.useFakeTimers().setSystemTime(new Date('2025-11-21T12:25:00.000Z'));
+      prisma.listings.findMany = jest.fn().mockResolvedValue([
+        {
+          id: 'example id1',
+        },
+        {
+          id: 'example id2',
+        },
+      ]);
+      prisma.listings.updateMany = jest.fn().mockResolvedValue({ count: 2 });
+      prisma.activityLog.createMany = jest.fn().mockResolvedValue({ count: 2 });
+      prisma.cronJob.findFirst = jest
+        .fn()
+        .mockResolvedValue({ id: randomUUID() });
+      prisma.cronJob.update = jest.fn().mockResolvedValue(true);
+      prisma.applications.updateMany = jest
+        .fn()
+        .mockResolvedValue({ count: 2 });
+
+      process.env.APPLICATION_DAYS_TILL_EXPIRY = '90';
+      await service.closeListings();
+
+      expect(prisma.applications.updateMany).toBeCalledTimes(2);
+      expect(prisma.applications.updateMany).toBeCalledWith({
+        data: {
+          expireAfter: new Date('2026-02-19T12:25:00.000Z'),
+        },
+        where: {
+          listingId: 'example id1',
+        },
+      });
+      expect(prisma.applications.updateMany).toBeCalledWith({
+        data: {
+          expireAfter: new Date('2026-02-19T12:25:00.000Z'),
+        },
+        where: {
+          listingId: 'example id2',
+        },
+      });
+      process.env.APPLICATION_DAYS_TILL_EXPIRY = null;
     });
   });
 
