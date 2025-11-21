@@ -665,7 +665,10 @@ export class EmailService {
       ]);
 
       for (const language in emails) {
-        void (await this.loadTranslations(null, language as LanguagesEnum));
+        void (await this.loadTranslations(
+          jurisdiction,
+          language as LanguagesEnum,
+        ));
         this.logger.log(
           `Sending lottery published ${language} email for listing ${listingInfo.name} to ${emails[language]?.length} emails`,
         );
