@@ -478,7 +478,7 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
           FeatureFlagEnum.enableHousingDeveloperOwner,
         )
           ? 'Housing developer / owner'
-          : 'Developer',
+          : 'Housing Provider',
       },
       ...(doAnyJurisdictionHaveFeatureFlagSet(
         user.jurisdictions,
