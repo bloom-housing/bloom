@@ -46,6 +46,7 @@ import { RentSummary } from "./listing_sections/RentSummary"
 import { UnitSummaries } from "./listing_sections/UnitSummaries"
 import styles from "./ListingViewSeeds.module.scss"
 import { ReadMore } from "../../patterns/ReadMore"
+import { OtherFeatures } from "./listing_sections/OtherFeatures"
 
 interface ListingProps {
   listing: Listing
@@ -177,6 +178,7 @@ export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: Li
             : []
         }
       />
+      <OtherFeatures />
     </>
   )
 
