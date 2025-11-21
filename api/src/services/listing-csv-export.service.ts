@@ -758,16 +758,6 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
           label: 'Deposit Helper Text',
         },
         {
-          path: 'depositMin',
-          label: 'Deposit Min',
-          format: this.formatCurrency,
-        },
-        {
-          path: 'depositMax',
-          label: 'Deposit Max',
-          format: this.formatCurrency,
-        },
-        {
           path: 'depositType',
           label: 'Deposit Type',
         },
@@ -777,13 +767,13 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
           format: this.formatCurrency,
         },
         {
-          path: 'depositRangeMin',
-          label: 'Deposit Range Min',
+          path: 'depositMin',
+          label: 'Deposit Min',
           format: this.formatCurrency,
         },
         {
-          path: 'depositRangeMax',
-          label: 'Deposit Range Max',
+          path: 'depositMax',
+          label: 'Deposit Max',
           format: this.formatCurrency,
         },
         {

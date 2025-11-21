@@ -215,6 +215,10 @@ const ListingForm = ({ listing, editMode, setListingName, updateListing }: Listi
     activeFeatureFlags?.find((flag) => flag.name === FeatureFlagEnum.disableListingPreferences)
       ?.active || false
 
+  const enableNonRegulatedListings =
+    activeFeatureFlags?.find((flag) => flag.name === FeatureFlagEnum.enableNonRegulatedListings)
+      ?.active || false
+
   useEffect(() => {
     if (listing?.units) {
       const tempUnits = listing.units.map((unit, i) => ({
@@ -341,6 +345,10 @@ const ListingForm = ({ listing, editMode, setListingName, updateListing }: Listi
 
           if (!enableSection8) {
             formData.listingSection8Acceptance = YesNoEnum.no
+          }
+
+          if (!enableNonRegulatedListings) {
+            formData.listingType = undefined
           }
 
           if (successful) {
@@ -526,7 +534,10 @@ const ListingForm = ({ listing, editMode, setListingName, updateListing }: Listi
                             requiredFields={requiredFields}
                           />
                           <BuildingSelectionCriteria />
-                          <AdditionalDetails requiredFields={requiredFields} />
+                          <AdditionalDetails
+                            requiredFields={requiredFields}
+                            exisistingDocumnets={listing?.requiredDocumentsList}
+                          />
                           <ListingVerification />
                           <div className="text-right -mr-8 -mt-8 relative" style={{ top: "7rem" }}>
                             <Button

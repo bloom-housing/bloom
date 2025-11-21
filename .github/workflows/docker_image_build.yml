@@ -26,6 +26,9 @@ jobs:
           - container: api
             docker_context: "{{defaultContext}}:api"
             dockerfile: Dockerfile
+          - container: dbseed
+            docker_context: "{{defaultContext}}:api"
+            dockerfile: Dockerfile.dbseed
           - container: partners
             docker_context: "{{defaultContext}}"
             dockerfile: Dockerfile.sites.partners
