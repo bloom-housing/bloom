@@ -3748,7 +3748,7 @@ export interface UnitGroup {
   sqFeetMax?: number
 
   /**  */
-  rentType?: string
+  rentType?: RentTypeEnum
 
   /**  */
   unitAccessibilityPriorityTypes?: UnitAccessibilityPriorityType
@@ -4585,7 +4585,7 @@ export interface UnitGroupCreate {
   sqFeetMax?: number
 
   /**  */
-  rentType?: string
+  rentType?: RentTypeEnum
 
   /**  */
   unitAccessibilityPriorityTypes?: IdDTO
@@ -7697,6 +7697,11 @@ export enum UnitTypeEnum {
 export enum UnitRentTypeEnum {
   "fixed" = "fixed",
   "percentageOfIncome" = "percentageOfIncome",
+}
+
+export enum RentTypeEnum {
+  "fixedRent" = "fixedRent",
+  "rentRange" = "rentRange",
 }
 export enum EnumUnitGroupAmiLevelMonthlyRentDeterminationType {
   "flatRent" = "flatRent",
