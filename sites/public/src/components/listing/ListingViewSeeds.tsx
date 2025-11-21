@@ -173,6 +173,12 @@ export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: Li
         depositHelperText={listing.depositHelperText}
         depositMax={listing.depositMax}
         depositMin={listing.depositMin}
+        depositValue={listing.depositValue}
+        depositType={listing.depositType}
+        isNonRegulated={
+          isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableNonRegulatedListings) &&
+          listing.listingType === EnumListingListingType.nonRegulated
+        }
         utilitiesIncluded={
           isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableUtilitiesIncluded)
             ? getUtilitiesIncluded(listing)
