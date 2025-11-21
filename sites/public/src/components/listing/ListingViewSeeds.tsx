@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import Markdown from "markdown-to-jsx"
 import {
+  EnumListingListingType,
   FeatureFlagEnum,
   Jurisdiction,
   Listing,
@@ -178,7 +179,10 @@ export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: Li
             : []
         }
       />
-      <OtherFeatures />
+      {isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableNonRegulatedListings) &&
+        listing.listingType === EnumListingListingType.nonRegulated && (
+          <OtherFeatures hasEbllClearence={listing.hasHudEbllClearance} />
+        )}
     </>
   )
 
