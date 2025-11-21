@@ -109,6 +109,22 @@ const ListingIntro = (props: ListingIntroProps) => {
             </Grid.Cell>
           </Grid.Row>
         )}
+        {enableListingFileNumber && jurisdiction && (
+          <Grid.Row columns={1}>
+            <Grid.Cell>
+              <Field
+                register={register}
+                {...defaultFieldProps(
+                  "listingFileNumber",
+                  t("listings.listingFileNumber"),
+                  props.requiredFields,
+                  errors,
+                  clearErrors
+                )}
+              />
+            </Grid.Cell>
+          </Grid.Row>
+        )}
         <Grid.Row columns={1}>
           <Grid.Cell>
             <Field
