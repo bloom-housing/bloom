@@ -18,6 +18,7 @@ import {
   singleUseCodePresent,
   singleUseCodeInvalid,
 } from '../utilities/passport-validator-utilities';
+import { isPasswordOutdated } from 'src/utilities/password-helpers';
 
 @Injectable()
 export class SingleUseCodeStrategy extends PassportStrategy(
@@ -45,6 +46,7 @@ export class SingleUseCodeStrategy extends PassportStrategy(
         metatype: LoginViaSingleUseCode,
       },
     );
+
     const jurisName = req?.headers?.jurisdictionname;
     if (!jurisName) {
       throw new BadRequestException(
@@ -83,6 +85,18 @@ export class SingleUseCodeStrategy extends PassportStrategy(
     if (!rawUser) {
       throw new UnauthorizedException(
         `user ${dto.email} attempted to log in, but does not exist`,
+      );
+    }
+    // TODO: adding code to verify if the password is expired after clicking get code to sign in
+    if (
+      isPasswordOutdated(
+        rawUser.passwordValidForDays,
+        rawUser.passwordUpdatedAt,
+      )
+    ) {
+      // if password TTL is expired
+      throw new UnauthorizedException(
+        `user ${rawUser.id} attempted to login, but password is no longer valid`,
       );
     }
 
