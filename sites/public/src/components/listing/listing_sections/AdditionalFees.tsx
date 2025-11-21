@@ -12,8 +12,7 @@ type AdditionalFeesProps = {
   depositMax: string | null
   depositMin: string | null
   utilitiesIncluded: string[]
-  creditScreeningFee?: boolean | null
-  creditScreeningFeeAmount?: string | null
+  creditScreeningFee?: string | null
 }
 
 export const AdditionalFees = ({
@@ -24,7 +23,6 @@ export const AdditionalFees = ({
   depositMin,
   utilitiesIncluded,
   creditScreeningFee,
-  creditScreeningFeeAmount,
 }: AdditionalFeesProps) => {
   return (
     <>
@@ -69,9 +67,7 @@ export const AdditionalFees = ({
                     {t("listings.creditScreeningFee")}
                   </Heading>
 
-                  <div className={styles.emphasized}>
-                    {creditScreeningFeeAmount ? <>{`$${creditScreeningFeeAmount}`}</> : t("t.n/a")}
-                  </div>
+                  <div className={styles.emphasized}>{`$${creditScreeningFee}`}</div>
 
                   <div>{t("listings.creditScreeningFeeDescription")}</div>
                 </div>

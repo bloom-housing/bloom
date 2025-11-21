@@ -173,11 +173,6 @@ export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: Li
             ? listing.creditScreeningFee
             : null
         }
-        creditScreeningFeeAmount={
-          isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableCreditScreeningFee)
-            ? listing.creditScreeningFeeAmount
-            : null
-        }
         depositHelperText={listing.depositHelperText}
         depositMax={listing.depositMax}
         depositMin={listing.depositMin}

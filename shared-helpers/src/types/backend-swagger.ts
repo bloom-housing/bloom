@@ -4133,10 +4133,7 @@ export interface Listing {
   applicationFee?: string
 
   /**  */
-  creditScreeningFee?: boolean
-
-  /**  */
-  creditScreeningFeeAmount?: string
+  creditScreeningFee?: string
 
   /**  */
   applicationOrganization?: string
@@ -4835,10 +4832,7 @@ export interface ListingCreate {
   applicationFee?: string
 
   /**  */
-  creditScreeningFee?: boolean
-
-  /**  */
-  creditScreeningFeeAmount?: string
+  creditScreeningFee?: string
 
   /**  */
   applicationOrganization?: string
@@ -5184,10 +5178,7 @@ export interface ListingUpdate {
   applicationFee?: string
 
   /**  */
-  creditScreeningFee?: boolean
-
-  /**  */
-  creditScreeningFeeAmount?: string
+  creditScreeningFee?: string
 
   /**  */
   applicationOrganization?: string
@@ -7818,11 +7809,6 @@ export enum AlternateContactRelationship {
   "caseManager" = "caseManager",
   "other" = "other",
   "noContact" = "noContact",
-}
-
-export enum RentTypeEnum {
-  "fixedRent" = "fixedRent",
-  "rentRange" = "rentRange",
 }
 
 export enum HouseholdMemberRelationship {

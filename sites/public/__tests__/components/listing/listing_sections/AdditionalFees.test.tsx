@@ -15,11 +15,11 @@ describe("<AdditionalFees>", () => {
         depositMin={null}
         utilitiesIncluded={[]}
         creditScreeningFee={null}
-        creditScreeningFeeAmount={null}
       />
     )
     expect(queryByText("Additional fees")).toBeNull()
   })
+
   it("renders all content", () => {
     const { getByText } = render(
       <AdditionalFees
@@ -29,8 +29,7 @@ describe("<AdditionalFees>", () => {
         depositMax={"200"}
         depositMin={"100"}
         utilitiesIncluded={["Water, Electricity"]}
-        creditScreeningFee={true}
-        creditScreeningFeeAmount={"25"}
+        creditScreeningFee={"25"}
       />
     )
     expect(getByText("Additional fees")).toBeDefined()
@@ -48,6 +47,7 @@ describe("<AdditionalFees>", () => {
     expect(getByText("Costs not included")).toBeDefined()
     expect(getByText("Gas, internet")).toBeDefined()
   })
+
   it("renders all content except utilities included", () => {
     const { getByText, queryByText } = render(
       <AdditionalFees
@@ -57,8 +57,7 @@ describe("<AdditionalFees>", () => {
         depositMax={"200"}
         depositMin={"100"}
         utilitiesIncluded={[]}
-        creditScreeningFee={true}
-        creditScreeningFeeAmount={"25"}
+        creditScreeningFee={"25"}
       />
     )
     expect(getByText("Additional fees")).toBeDefined()
@@ -73,6 +72,7 @@ describe("<AdditionalFees>", () => {
     expect(getByText("covers the cost of reviewing your credit and rental history")).toBeDefined()
     expect(queryByText("Utilities included")).toBeNull()
   })
+
   it("renders just deposit min", () => {
     const { getByText } = render(
       <AdditionalFees
@@ -83,13 +83,13 @@ describe("<AdditionalFees>", () => {
         depositMin={"100"}
         utilitiesIncluded={[]}
         creditScreeningFee={null}
-        creditScreeningFeeAmount={null}
       />
     )
     expect(getByText("Additional fees")).toBeDefined()
     expect(getByText("Deposit")).toBeDefined()
     expect(getByText("$100", { exact: false })).toBeDefined()
   })
+
   it("renders just deposit max", () => {
     const { getByText } = render(
       <AdditionalFees
@@ -100,14 +100,14 @@ describe("<AdditionalFees>", () => {
         depositMin={null}
         utilitiesIncluded={[]}
         creditScreeningFee={null}
-        creditScreeningFeeAmount={null}
       />
     )
     expect(getByText("Additional fees")).toBeDefined()
     expect(getByText("Deposit")).toBeDefined()
     expect(getByText("$200", { exact: false })).toBeDefined()
   })
-  it("renders credit screening fee with amount", () => {
+
+  it("renders credit screening fee", () => {
     const { getByText } = render(
       <AdditionalFees
         applicationFee={null}
@@ -116,8 +116,7 @@ describe("<AdditionalFees>", () => {
         depositMax={null}
         depositMin={null}
         utilitiesIncluded={[]}
-        creditScreeningFee={true}
-        creditScreeningFeeAmount={"30"}
+        creditScreeningFee={"30"}
       />
     )
     expect(getByText("Additional fees")).toBeDefined()
@@ -125,22 +124,20 @@ describe("<AdditionalFees>", () => {
     expect(getByText("$30")).toBeDefined()
     expect(getByText("covers the cost of reviewing your credit and rental history")).toBeDefined()
   })
-  it("renders credit screening fee without amount", () => {
-    const { getByText } = render(
+
+  it("does not render credit screening fee when empty", () => {
+    const { getByText, queryByText } = render(
       <AdditionalFees
-        applicationFee={null}
+        applicationFee={"10"}
         costsNotIncluded={null}
         depositHelperText={null}
         depositMax={null}
         depositMin={null}
         utilitiesIncluded={[]}
-        creditScreeningFee={true}
-        creditScreeningFeeAmount={null}
+        creditScreeningFee={""}
       />
     )
     expect(getByText("Additional fees")).toBeDefined()
-    expect(getByText("Credit screening")).toBeDefined()
-    expect(getByText("n/a")).toBeDefined()
-    expect(getByText("covers the cost of reviewing your credit and rental history")).toBeDefined()
+    expect(queryByText("Credit screening")).toBeNull()
   })
 })

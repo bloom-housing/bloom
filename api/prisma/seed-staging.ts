@@ -180,7 +180,6 @@ export const stagingSeed = async (
       ],
 
       requiredListingFields: [
-        'creditScreeningFee',
         'digitalApplication',
         'jurisdictions',
         'leasingAgentEmail',

@@ -788,11 +788,6 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
               {
                 path: 'creditScreeningFee',
                 label: 'Credit Screening Fee',
-                format: this.formatYesNo,
-              },
-              {
-                path: 'creditScreeningFeeAmount',
-                label: 'Credit Screening Fee Amount',
                 format: this.formatCurrency,
               },
             ]
