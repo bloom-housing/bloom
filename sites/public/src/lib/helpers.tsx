@@ -189,6 +189,7 @@ export const getStatusPrefix = (
       case ReviewOrderTypeEnum.lottery:
         return { label: t("listings.lottery"), variant: "primary" }
       case ReviewOrderTypeEnum.waitlist:
+      case ReviewOrderTypeEnum.waitlistLottery:
         return { label: t("listings.waitlist.open"), variant: "secondary" }
       default:
         return { label: t("listings.applicationFCFS"), variant: "primary" }
