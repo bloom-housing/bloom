@@ -150,7 +150,7 @@ resource "aws_ecs_service" "bloom_site_public" {
   launch_type                   = "FARGATE"
   scheduling_strategy           = "REPLICA"
   availability_zone_rebalancing = "ENABLED"
-  desired_count                 = local.is_prod ? 2 : 1
+  desired_count                 = var.high_availability ? 2 : 1
   deployment_configuration {
     strategy = "ROLLING"
   }

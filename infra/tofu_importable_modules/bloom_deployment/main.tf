@@ -28,6 +28,11 @@ variable "aws_region" {
     error_message = "Must be 'us-east-1', 'us-east-2', 'us-west-1', or 'us-west-2'."
   }
 }
+variable "high_availability" {
+  type        = bool
+  description = "Deploy the Bloom services in a highly-available manner. If true, a minimum of 2 instances will be running for each Bloom service."
+  default     = true
+}
 variable "env_type" {
   type        = string
   description = "Type of environment this deployment is going in."
@@ -42,6 +47,33 @@ variable "env_type" {
 locals {
   is_prod = var.env_type == "production"
 }
+variable "database_config" {
+  description = "Settings for the Bloom database. Defaults are provided based on the env_type setting."
+  type = object({
+    # Pricing: https://aws.amazon.com/rds/postgresql/pricing/?pg=pr&loc=3
+    # Machine specs: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.DBInstanceClass.Summary.html#hardware-specifications.burstable-inst-classes
+    instance_class        = string
+    starting_storage_gb   = number
+    max_storage_gb        = number
+    backup_retention_days = number
+  })
+  default = null
+}
+locals {
+  database_config = var.database_config != null ? var.database_config : (local.is_prod ? {
+    # Prod defaults
+    instance_class        = "db.t4g.medium"
+    starting_storage_gb   = 10
+    max_storage_gb        = 100
+    backup_retention_days = 30
+    } : {
+    # Non-prod defaults
+    instance_class        = "db.t4g.micro"
+    starting_storage_gb   = 5 # minimum
+    max_storage_gb        = 10
+    backup_retention_days = 7
+  })
+}
 
 variable "domain_name" {
   type        = string
@@ -51,6 +83,7 @@ variable "aws_certificate_arn" {
   type        = string
   description = "ARN of the validated certificate for the domain_name"
 }
+
 variable "bloom_api_image" {
   type        = string
   description = "Container image for the Bloom API."
