@@ -573,6 +573,12 @@ describe('Testing listing service', () => {
         parksAndCommunityCenters: 'parks',
         schools: 'schools',
         publicTransportation: 'public transportation',
+        busStops: 'bus stops',
+        hospitals: 'hospitals',
+        playgrounds: 'playgrounds',
+        recreationalFacilities: 'recreational facilities',
+        seniorCenters: 'senior centers',
+        shoppingVenues: 'shopping venues',
       },
       marketingType: undefined,
     };
@@ -3492,6 +3498,12 @@ describe('Testing listing service', () => {
               parksAndCommunityCenters: 'parks',
               schools: 'schools',
               publicTransportation: 'public transportation',
+              busStops: 'bus stops',
+              hospitals: 'hospitals',
+              playgrounds: 'playgrounds',
+              recreationalFacilities: 'recreational facilities',
+              seniorCenters: 'senior centers',
+              shoppingVenues: 'shopping venues',
             },
           },
           jurisdictions: {
@@ -3996,6 +4008,12 @@ describe('Testing listing service', () => {
               parksAndCommunityCenters: 'parks',
               schools: 'schools',
               publicTransportation: 'public transportation',
+              busStops: 'bus stops',
+              hospitals: 'hospitals',
+              playgrounds: 'playgrounds',
+              recreationalFacilities: 'recreational facilities',
+              seniorCenters: 'senior centers',
+              shoppingVenues: 'shopping venues',
             },
           },
           jurisdictions: {
@@ -4478,6 +4496,12 @@ describe('Testing listing service', () => {
         parksAndCommunityCenters: 'parks',
         schools: 'schools',
         publicTransportation: 'public transportation',
+        busStops: 'bus stops',
+        hospitals: 'hospitals',
+        playgrounds: 'playgrounds',
+        recreationalFacilities: 'recreational facilities',
+        seniorCenters: 'senior centers',
+        shoppingVenues: 'shopping venues',
       };
 
       const calculatedUnitsAvailable = service.calculateUnitsAvailable(
@@ -4858,6 +4882,12 @@ describe('Testing listing service', () => {
                 pharmacies: null,
                 publicTransportation: null,
                 schools: null,
+                busStops: null,
+                hospitals: null,
+                playgrounds: null,
+                recreationalFacilities: null,
+                seniorCenters: null,
+                shoppingVenues: null,
               },
               update: {
                 groceryStores: null,
@@ -4866,6 +4896,12 @@ describe('Testing listing service', () => {
                 pharmacies: null,
                 publicTransportation: null,
                 schools: null,
+                busStops: null,
+                hospitals: null,
+                playgrounds: null,
+                recreationalFacilities: null,
+                seniorCenters: null,
+                shoppingVenues: null,
               },
               where: {
                 id: undefined,
@@ -5009,6 +5045,12 @@ describe('Testing listing service', () => {
                 pharmacies: null,
                 publicTransportation: null,
                 schools: null,
+                busStops: null,
+                hospitals: null,
+                playgrounds: null,
+                recreationalFacilities: null,
+                seniorCenters: null,
+                shoppingVenues: null,
               },
               update: {
                 groceryStores: null,
@@ -5017,6 +5059,12 @@ describe('Testing listing service', () => {
                 pharmacies: null,
                 publicTransportation: null,
                 schools: null,
+                busStops: null,
+                hospitals: null,
+                playgrounds: null,
+                recreationalFacilities: null,
+                seniorCenters: null,
+                shoppingVenues: null,
               },
               where: {
                 id: undefined,
@@ -5236,7 +5284,7 @@ describe('Testing listing service', () => {
   });
 
   describe('Test closeListings endpoint', () => {
-    it('should call the purge if no listings needed to get processed', async () => {
+    it('should call the purge if listings needed to get processed', async () => {
       prisma.listings.findMany = jest.fn().mockResolvedValue([
         {
           id: 'example id1',

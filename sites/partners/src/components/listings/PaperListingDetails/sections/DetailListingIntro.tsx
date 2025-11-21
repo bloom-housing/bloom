@@ -18,6 +18,10 @@ const DetailListingIntro = () => {
     FeatureFlagEnum.enableHousingDeveloperOwner,
     listing.jurisdictions.id
   )
+  const enableListingFileNumber = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableListingFileNumber,
+    listing.jurisdictions.id
+  )
 
   const enableNonRegulatedListings = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableNonRegulatedListings,
@@ -38,6 +42,15 @@ const DetailListingIntro = () => {
 
   return (
     <SectionWithGrid heading={t("listings.sections.introTitle")} inset>
+      {enableListingFileNumber && (
+        <Grid.Row>
+          <Grid.Cell>
+            <FieldValue id="listingFileNumber" label={t("listings.listingFileNumber")}>
+              {getDetailFieldString(listing.listingFileNumber)}
+            </FieldValue>
+          </Grid.Cell>
+        </Grid.Row>
+      )}
       <Grid.Row>
         <Grid.Cell>
           <FieldValue id="name" label={t("listings.listingName")}>

@@ -136,6 +136,14 @@ class Listing extends AbstractDTO {
   developer?: string;
 
   @Expose()
+  @ValidateListingPublish('listingFileNumber', {
+    groups: [ValidationsGroupsEnum.default],
+  })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  listingFileNumber?: string;
+
+  @Expose()
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   householdSizeMax?: number;
@@ -390,22 +398,6 @@ class Listing extends AbstractDTO {
   @IsNumber()
   @ApiPropertyOptional()
   depositValue?: number;
-
-  @Expose()
-  @ValidateListingPublish('depositRangeMin', {
-    groups: [ValidationsGroupsEnum.default],
-  })
-  @IsNumber()
-  @ApiPropertyOptional()
-  depositRangeMin?: number;
-
-  @Expose()
-  @ValidateListingPublish('depositRangeMax', {
-    groups: [ValidationsGroupsEnum.default],
-  })
-  @IsNumber()
-  @ApiPropertyOptional()
-  depositRangeMax?: number;
 
   @Expose()
   @ValidateListingPublish('depositHelperText', {

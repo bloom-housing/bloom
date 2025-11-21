@@ -61,6 +61,10 @@ const ListingIntro = (props: ListingIntroProps) => {
     FeatureFlagEnum.enableHousingDeveloperOwner,
     jurisdiction
   )
+  const enableListingFileNumber = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableListingFileNumber,
+    jurisdiction
+  )
 
   const jurisdictionOptions: SelectOption[] = [
     { label: "", value: "" },

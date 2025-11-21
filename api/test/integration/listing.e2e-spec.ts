@@ -8,6 +8,7 @@ import {
   LanguagesEnum,
   ListingEventsTypeEnum,
   ListingsStatusEnum,
+  ListingTypeEnum,
   MarketingTypeEnum,
   MultiselectQuestionsApplicationSectionEnum,
   Prisma,
@@ -2231,7 +2232,7 @@ describe('Listing Controller Tests', () => {
     });
 
     describe('listing deposit type validation', () => {
-      it("should create listing when deposit is 'fixedDeposit', and 'depositRangeMin' and 'depositRangeMax' are missing", async () => {
+      it("should create listing when deposit is 'fixedDeposit', and 'depositMin' and 'depositMax' are missing", async () => {
         const val = await constructFullListingData(
           undefined,
           undefined,
@@ -2243,7 +2244,10 @@ describe('Listing Controller Tests', () => {
           .set({ passkey: process.env.API_PASS_KEY || '' })
           .send({
             ...val,
+            listingType: ListingTypeEnum.nonRegulated,
             depositType: DepositTypeEnum.fixedDeposit,
+            depositMin: null,
+            depositMax: null,
             depositValue: 1000,
           })
           .set('Cookie', adminAccessToken)
@@ -2257,12 +2261,12 @@ describe('Listing Controller Tests', () => {
 
         expect(newDBValues).toBeDefined();
         expect(newDBValues.depositType).toEqual(DepositTypeEnum.fixedDeposit);
-        expect(newDBValues.depositRangeMax).toBeNull();
-        expect(newDBValues.depositRangeMin).toBeNull();
+        expect(newDBValues.depositMin).toBeNull();
+        expect(newDBValues.depositMax).toBeNull();
         expect(Number(newDBValues.depositValue)).toEqual(1000);
       });
 
-      it("should fail when deposit is 'fixedDeposit' but 'depositRangeMin' and 'depositRangeMax' are set", async () => {
+      it("should fail when deposit is 'fixedDeposit' but 'depositMin' and 'depositMax' are set", async () => {
         const val = await constructFullListingData(
           undefined,
           undefined,
@@ -2274,16 +2278,17 @@ describe('Listing Controller Tests', () => {
           .set({ passkey: process.env.API_PASS_KEY || '' })
           .send({
             ...val,
+            listingType: ListingTypeEnum.nonRegulated,
             depositType: DepositTypeEnum.fixedDeposit,
             depositValue: 1000,
-            depositRangeMin: 100,
-            depositRangeMax: 500,
+            depositMin: '100',
+            depositMax: '500',
           })
           .set('Cookie', adminAccessToken)
           .expect(400);
 
         expect(res.body.message[0]).toEqual(
-          'When deposit is of type "fixedDeposit" the "depositValue" must be filled and the "depositRangeMin"|"depositRangeMax" fields must be null',
+          'When deposit is of type "fixedDeposit" the "depositValue" must be filled and the "depositMin"|"depositMax" fields must be null',
         );
       });
 
@@ -2299,9 +2304,10 @@ describe('Listing Controller Tests', () => {
           .set({ passkey: process.env.API_PASS_KEY || '' })
           .send({
             ...val,
+            listingType: ListingTypeEnum.nonRegulated,
             depositType: DepositTypeEnum.depositRange,
-            depositRangeMin: 100,
-            depositRangeMax: 500,
+            depositMin: '100',
+            depositMax: '500',
             depositValue: null,
           })
           .set('Cookie', adminAccessToken)
@@ -2315,8 +2321,8 @@ describe('Listing Controller Tests', () => {
 
         expect(newDBValues).toBeDefined();
         expect(newDBValues.depositType).toEqual(DepositTypeEnum.depositRange);
-        expect(Number(newDBValues.depositRangeMax)).toEqual(500);
-        expect(Number(newDBValues.depositRangeMin)).toEqual(100);
+        expect(Number(newDBValues.depositMax)).toEqual(500);
+        expect(Number(newDBValues.depositMin)).toEqual(100);
         expect(newDBValues.depositValue).toBeNull();
       });
 
@@ -2332,16 +2338,17 @@ describe('Listing Controller Tests', () => {
           .set({ passkey: process.env.API_PASS_KEY || '' })
           .send({
             ...val,
+            listingType: ListingTypeEnum.nonRegulated,
             depositType: DepositTypeEnum.depositRange,
             depositValue: 1000,
-            depositRangeMin: 100,
-            depositRangeMax: 500,
+            depositMin: '100',
+            depositMax: '500',
           })
           .set('Cookie', adminAccessToken)
           .expect(400);
 
         expect(res.body.message[0]).toEqual(
-          'When deposit is of type "depositRange" the "depositRangeMin" and "depositRangeMax" fields must be filled and "depositValue" must be null',
+          'When deposit is of type "depositRange" the "depositMin" and "depositMax" fields must be filled and "depositValue" must be null',
         );
       });
     });

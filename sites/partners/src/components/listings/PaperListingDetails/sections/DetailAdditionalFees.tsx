@@ -76,13 +76,13 @@ const DetailAdditionalFees = () => {
           ) : (
             <>
               <Grid.Cell>
-                <FieldValue id="depositRangeMin" label={t("listings.depositMin")}>
-                  {getDetailFieldNumber(listing.depositRangeMin)}
+                <FieldValue id="depositMin" label={t("listings.depositMin")}>
+                  {getDetailFieldString(listing.depositMin)}
                 </FieldValue>
               </Grid.Cell>
               <Grid.Cell>
-                <FieldValue id="depositRangeMax" label={t("listings.depositMax")}>
-                  {getDetailFieldNumber(listing.depositRangeMax)}
+                <FieldValue id="depositMax" label={t("listings.depositMax")}>
+                  {getDetailFieldString(listing.depositMax)}
                 </FieldValue>
               </Grid.Cell>
             </>
