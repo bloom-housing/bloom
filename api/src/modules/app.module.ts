@@ -23,6 +23,7 @@ import { ThrottleGuard } from '../guards/throttler.guard';
 import { ScriptRunnerModule } from './script-runner.module';
 import { LotteryModule } from './lottery.module';
 import { FeatureFlagModule } from './feature-flag.module';
+import { CronJobModule } from './cron-job.module';
 
 @Module({
   imports: [
@@ -44,6 +45,7 @@ import { FeatureFlagModule } from './feature-flag.module';
     ScriptRunnerModule,
     LotteryModule,
     FeatureFlagModule,
+    CronJobModule,
     ThrottlerModule.forRoot([
       {
         ttl: Number(process.env.THROTTLE_TTL),

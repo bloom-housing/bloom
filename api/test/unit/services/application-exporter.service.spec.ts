@@ -29,6 +29,7 @@ import {
   unitTypeToReadable,
 } from '../../../src/utilities/application-export-helpers';
 import { FeatureFlagEnum } from '../../../src/enums/feature-flags/feature-flags-enum';
+import { CronJobService } from '../../../src/services/cron-job.service';
 
 describe('Testing application export service', () => {
   let service: ApplicationExporterService;
@@ -56,6 +57,7 @@ describe('Testing application export service', () => {
         ConfigService,
         Logger,
         SchedulerRegistry,
+        CronJobService,
         GoogleTranslateService,
       ],
       imports: [HttpModule],
