@@ -10,6 +10,7 @@ export enum FeatureFlagEnum {
   enableAdaOtherOption = 'enableAdaOtherOption',
   enableAdditionalResources = 'enableAdditionalResources',
   enableCompanyWebsite = 'enableCompanyWebsite',
+  enableCreditScreeningFee = 'enableCreditScreeningFee',
   enableFullTimeStudentQuestion = 'enableFullTimeStudentQuestion',
   enableGeocodingPreferences = 'enableGeocodingPreferences',
   enableGeocodingRadiusMethod = 'enableGeocodingRadiusMethod',
@@ -91,6 +92,10 @@ export const featureFlagMap: {
     name: FeatureFlagEnum.enableCompanyWebsite,
     description:
       'When true, allows partners to add company website information',
+  },
+  {
+    name: FeatureFlagEnum.enableCreditScreeningFee,
+    description: 'When true, credit screening fee is enabled for listings',
   },
   {
     name: FeatureFlagEnum.enableFullTimeStudentQuestion,

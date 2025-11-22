@@ -87,7 +87,10 @@ class UnitGroup extends AbstractDTO {
   @ValidateUnitGroupRent({
     groups: [ValidationsGroupsEnum.default],
   })
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    enum: RentTypeEnum,
+    enumName: 'RentTypeEnum',
+  })
   rentType?: RentTypeEnum;
 
   @Expose()

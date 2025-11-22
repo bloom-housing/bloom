@@ -713,6 +713,8 @@
   "listings.confirmedPreferenceList": "確認 %{preference} 名單",
   "listings.costsNotIncluded": "费用不包括",
   "listings.creditHistory": "信用记录",
+  "listings.creditScreeningFee": "信用筛选",
+  "listings.creditScreeningFeeDescription": "支付审核您的信用和租赁历史的费用",
   "listings.criminalBackground": "犯罪背景",
   "listings.depositMayBeHigherForLowerCredit": "可能高於或低於的信用分數",
   "listings.depositOrMonthsRent": "或一個月租金",

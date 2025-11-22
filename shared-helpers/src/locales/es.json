@@ -713,6 +713,8 @@
   "listings.confirmedPreferenceList": "Lista de %{preference} confirmada",
   "listings.costsNotIncluded": "Costos no incluidos",
   "listings.creditHistory": "Historial de crédito",
+  "listings.creditScreeningFee": "Investigación de crédito",
+  "listings.creditScreeningFeeDescription": "cubre el costo de revisar su historial crediticio y de alquiler",
   "listings.criminalBackground": "Antecedentes penales",
   "listings.depositMayBeHigherForLowerCredit": "Puede ser mayor para calificaciones de crédito más bajas",
   "listings.depositOrMonthsRent": "o el alquiler de un mes",

@@ -708,6 +708,8 @@
   "listings.confirmedPreferenceList": "تم تأكيد قائمة %{preference}",
   "listings.costsNotIncluded": "التكاليف غير متضمنة",
   "listings.creditHistory": "تاريخ الائتمان",
+  "listings.creditScreeningFee": "فحص الائتمان",
+  "listings.creditScreeningFeeDescription": "يغطي تكلفة مراجعة تاريخ الائتمان والإيجار الخاص بك",
   "listings.criminalBackground": "الخلفية الجنائية",
   "listings.depositMayBeHigherForLowerCredit": "قد تكون أعلى للحصول على درجات ائتمانية أقل",
   "listings.depositOrMonthsRent": "أو إيجار شهر",
