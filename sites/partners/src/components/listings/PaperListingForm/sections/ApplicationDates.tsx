@@ -351,7 +351,7 @@ const ApplicationDates = ({
         </Grid.Row>
       </SectionWithGrid>
 
-      {enableMarketingFlyer && (
+      {enableMarketingFlyer && jurisdiction && (
         <MarketingFlyer
           currentData={{
             marketingFlyer: watch("marketingFlyer"),
