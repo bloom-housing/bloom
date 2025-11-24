@@ -20,7 +20,7 @@
     "@bloom-housing/ui-components": "12.7.7",
     "@bloom-housing/ui-seeds": "2.0.3",
     "@heroicons/react": "^2.1.1",
-    "axios-cookiejar-support": "^5.0.5"
+    "axios-cookiejar-support": "^6.0.4"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.6.3",
