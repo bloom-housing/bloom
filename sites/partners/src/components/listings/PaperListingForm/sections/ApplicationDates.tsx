@@ -136,18 +136,16 @@ const ApplicationDates = ({
 
   const onMarketingFlyerSubmit = (data: MarketingFlyerData) => {
     if (data.marketingFlyer !== undefined) {
-      setValue("marketingFlyer", data.marketingFlyer, { shouldDirty: true })
+      setValue("marketingFlyer", data.marketingFlyer)
     }
     if (data.listingsMarketingFlyerFile) {
-      setValue("listingsMarketingFlyerFile", data.listingsMarketingFlyerFile, { shouldDirty: true })
+      setValue("listingsMarketingFlyerFile", data.listingsMarketingFlyerFile)
     }
     if (data.accessibleMarketingFlyer !== undefined) {
-      setValue("accessibleMarketingFlyer", data.accessibleMarketingFlyer, { shouldDirty: true })
+      setValue("accessibleMarketingFlyer", data.accessibleMarketingFlyer)
     }
     if (data.listingsAccessibleMarketingFlyerFile) {
-      setValue("listingsAccessibleMarketingFlyerFile", data.listingsAccessibleMarketingFlyerFile, {
-        shouldDirty: true,
-      })
+      setValue("listingsAccessibleMarketingFlyerFile", data.listingsAccessibleMarketingFlyerFile)
     }
   }
 
