@@ -108,12 +108,12 @@ describe("ListingIntro", () => {
     expect(screen.getByRole("textbox", { name: "Listing file number" })).toBeInTheDocument()
   })
 
-  it("should render the ListingIntro section with regulated fields when feature flag is on", () => {
+  it("should render the ListingIntro section with regulated fields when feature flag is off", () => {
     render(
       <FormComponent>
         <ListingIntro
           requiredFields={[]}
-          enableNonRegulatedListings={true}
+          enableNonRegulatedListings={false}
           enableHousingDeveloperOwner={false}
           enableListingFileNumber={false}
           jurisdictionName={"JurisdictionA"}
@@ -131,12 +131,12 @@ describe("ListingIntro", () => {
     ).not.toBeInTheDocument()
   })
 
-  it("should not render the ListingIntro section with regulated fields when feature flag is off", async () => {
+  it("should not render the ListingIntro section with regulated fields when feature flag is on", async () => {
     render(
       <FormComponent>
         <ListingIntro
           requiredFields={[]}
-          enableNonRegulatedListings={false}
+          enableNonRegulatedListings={true}
           enableHousingDeveloperOwner={false}
           enableListingFileNumber={false}
           jurisdictionName={"JurisdictionA"}
@@ -144,6 +144,8 @@ describe("ListingIntro", () => {
         />
       </FormComponent>
     )
+
+    expect(screen.getByRole("heading", { level: 2, name: "Listing intro" })).toBeInTheDocument()
 
     expect(
       await screen.findByRole("group", { name: "What kind of listing is this?" })

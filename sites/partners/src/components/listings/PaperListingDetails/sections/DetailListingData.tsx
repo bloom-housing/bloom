@@ -5,11 +5,11 @@ import SectionWithGrid from "../../../shared/SectionWithGrid"
 import { ListingContext } from "../../ListingContext"
 import { getDetailFieldDate, getDetailFieldString, getDetailFieldTime } from "./helpers"
 
-type DetailsListingDataProps = {
+type DetailListingDataProps = {
   showJurisdictionName: boolean
 }
 
-const DetailListingData = (props: DetailsListingDataProps) => {
+const DetailListingData = (props: DetailListingDataProps) => {
   const listing = useContext(ListingContext)
 
   return (

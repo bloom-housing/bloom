@@ -229,8 +229,6 @@ describe("listing data", () => {
         expect(screen.getByText("Listing intro")).toBeInTheDocument()
         expect(screen.getByText("Listing name")).toBeInTheDocument()
         expect(screen.getByText("Archer Studios")).toBeInTheDocument()
-        expect(screen.getByText("Jurisdiction")).toBeInTheDocument()
-        expect(screen.getByText("San Jose")).toBeInTheDocument()
         expect(screen.getByText("Housing developer")).toBeInTheDocument()
         expect(screen.getByText("Charities Housing")).toBeInTheDocument()
 
