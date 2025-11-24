@@ -624,16 +624,16 @@ const UnitForm = ({
                             name="isFixedRent"
                             type="radio"
                             register={register}
-                            groupLabel="Rent Type"
+                            groupLabel={t("listings.unitGroup.rentType")}
                             fieldLabelClassName={`${styles["label-option"]} seeds-m-bs-2`}
                             fields={[
                               {
-                                label: "Fixed Rent",
+                                label: t("listings.unitGroup.fixedRent"),
                                 value: "true",
                                 id: "isFixedRentYes",
                               },
                               {
-                                label: "Rent Range",
+                                label: t("listings.unitGroup.rentRange"),
                                 value: "false",
                                 id: "isFixedRentNo",
                               },
