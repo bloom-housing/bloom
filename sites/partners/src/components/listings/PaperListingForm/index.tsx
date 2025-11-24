@@ -566,7 +566,6 @@ const ListingForm = ({ listing, editMode, setListingName, updateListing }: Listi
                             setOpenHouseEvents={setOpenHouseEvents}
                             requiredFields={requiredFields}
                           />
-
                           <div className="-ml-8 -mt-8 relative" style={{ top: "7rem" }}>
                             <Button
                               type="button"

@@ -379,13 +379,22 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
     return value ? `$${value}` : '';
   }
 
-  cloudinaryPdfFromId(publicId: string, listing?: Listing): string {
+  cloudinaryPdfFromId(
+    publicId: string,
+    listing?: Listing,
+    fallbackField?: keyof Listing,
+  ): string {
     if (publicId) {
       const cloudName =
         process.env.cloudinaryCloudName || process.env.CLOUDINARY_CLOUD_NAME;
       return `https://res.cloudinary.com/${cloudName}/image/upload/${publicId}.pdf`;
-    } else if (!publicId && listing?.buildingSelectionCriteria) {
-      return listing.buildingSelectionCriteria;
+    }
+
+    if (fallbackField && listing) {
+      const fallbackValue = listing[fallbackField];
+      if (typeof fallbackValue === 'string') {
+        return fallbackValue;
+      }
     }
 
     return '';
@@ -908,7 +917,12 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
         {
           path: 'buildingSelectionCriteriaFileId',
           label: 'Building Selection Criteria',
-          format: this.cloudinaryPdfFromId,
+          format: (publicId: string, listing?: Listing): string =>
+            this.cloudinaryPdfFromId(
+              publicId,
+              listing,
+              'buildingSelectionCriteria',
+            ),
         },
         {
           path: 'programRules',
@@ -1183,6 +1197,29 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
               .join(', ');
           },
         },
+        ...(doAnyJurisdictionHaveFeatureFlagSet(
+          user.jurisdictions,
+          FeatureFlagEnum.enableMarketingFlyer,
+        )
+          ? [
+              {
+                path: 'marketingFlyerFileId',
+                label: 'Marketing Flyer',
+                format: (publicId: string, listing?: Listing): string =>
+                  this.cloudinaryPdfFromId(publicId, listing, 'marketingFlyer'),
+              },
+              {
+                path: 'accessibleMarketingFlyerFileId',
+                label: 'Accessible Marketing Flyer',
+                format: (publicId: string, listing?: Listing): string =>
+                  this.cloudinaryPdfFromId(
+                    publicId,
+                    listing,
+                    'accessibleMarketingFlyer',
+                  ),
+              },
+            ]
+          : []),
         {
           path: 'userAccounts',
           label: 'Partners Who Have Access',

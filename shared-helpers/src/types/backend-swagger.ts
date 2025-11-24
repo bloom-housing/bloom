@@ -4119,6 +4119,12 @@ export interface Listing {
   buildingSelectionCriteria?: string
 
   /**  */
+  marketingFlyer?: string
+
+  /**  */
+  accessibleMarketingFlyer?: string
+
+  /**  */
   cocInfo?: string
 
   /**  */
@@ -4300,6 +4306,12 @@ export interface Listing {
 
   /**  */
   listingsBuildingSelectionCriteriaFile?: Asset
+
+  /**  */
+  listingsMarketingFlyerFile?: Asset
+
+  /**  */
+  listingsAccessibleMarketingFlyerFile?: Asset
 
   /**  */
   jurisdictions: IdDTO
@@ -4812,6 +4824,12 @@ export interface ListingCreate {
   buildingSelectionCriteria?: string
 
   /**  */
+  marketingFlyer?: string
+
+  /**  */
+  accessibleMarketingFlyer?: string
+
+  /**  */
   cocInfo?: string
 
   /**  */
@@ -5037,6 +5055,12 @@ export interface ListingCreate {
   listingsBuildingSelectionCriteriaFile?: AssetCreate
 
   /**  */
+  listingsMarketingFlyerFile?: AssetCreate
+
+  /**  */
+  listingsAccessibleMarketingFlyerFile?: AssetCreate
+
+  /**  */
   listingsResult?: AssetCreate
 
   /**  */
@@ -5156,6 +5180,12 @@ export interface ListingUpdate {
 
   /**  */
   buildingSelectionCriteria?: string
+
+  /**  */
+  marketingFlyer?: string
+
+  /**  */
+  accessibleMarketingFlyer?: string
 
   /**  */
   cocInfo?: string
@@ -5381,6 +5411,12 @@ export interface ListingUpdate {
 
   /**  */
   listingsBuildingSelectionCriteriaFile?: AssetCreate
+
+  /**  */
+  listingsMarketingFlyerFile?: AssetCreate
+
+  /**  */
+  listingsAccessibleMarketingFlyerFile?: AssetCreate
 
   /**  */
   listingsResult?: AssetCreate
@@ -7834,6 +7870,7 @@ export enum FeatureFlagEnum {
   "enableListingOpportunity" = "enableListingOpportunity",
   "enableListingPagination" = "enableListingPagination",
   "enableListingUpdatedAt" = "enableListingUpdatedAt",
+  "enableMarketingFlyer" = "enableMarketingFlyer",
   "enableMarketingStatus" = "enableMarketingStatus",
   "enableMarketingStatusMonths" = "enableMarketingStatusMonths",
   "enableNeighborhoodAmenities" = "enableNeighborhoodAmenities",
