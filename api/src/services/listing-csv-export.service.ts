@@ -405,6 +405,11 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
   };
 
   async getCsvHeaders(user: User): Promise<CsvHeader[]> {
+    const enableNonRegulatedListings = doAnyJurisdictionHaveFeatureFlagSet(
+      user.jurisdictions,
+      FeatureFlagEnum.enableNonRegulatedListings,
+    );
+
     const headers: CsvHeader[] = [
       {
         path: 'id',
@@ -424,10 +429,7 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
         path: 'name',
         label: 'Listing Name',
       },
-      ...(doAnyJurisdictionHaveFeatureFlagSet(
-        user.jurisdictions,
-        FeatureFlagEnum.enableNonRegulatedListings,
-      )
+      ...(enableNonRegulatedListings
         ? [
             {
               path: 'listingType',
@@ -480,6 +482,15 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
           ? 'Housing developer / owner'
           : 'Housing Provider',
       },
+      ...(enableNonRegulatedListings
+        ? [
+            {
+              path: 'hasHudEbllClearance',
+              label: 'Has HUD EBLL Clearance',
+              format: this.formatYesNo,
+            },
+          ]
+        : []),
       ...(doAnyJurisdictionHaveFeatureFlagSet(
         user.jurisdictions,
         FeatureFlagEnum.enableListingFileNumber,
