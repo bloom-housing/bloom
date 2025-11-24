@@ -2677,10 +2677,15 @@ export class ListingService implements OnModuleInit {
       const expireAfterDate = dayjs(new Date())
         .add(Number(process.env.APPLICATION_DAYS_TILL_EXPIRY), 'days')
         .toDate();
-      await this.prisma.applications.updateMany({
+      const expiredApplications = await this.prisma.applications.updateMany({
         data: { expireAfter: expireAfterDate },
         where: { listingId: listingId },
       });
+      this.logger.log(
+        `setting expireAfter of ${expireAfterDate.toDateString()} on ${
+          expiredApplications.count
+        } application for listing ${listingId}`,
+      );
     }
   };
 

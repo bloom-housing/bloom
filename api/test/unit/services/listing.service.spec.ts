@@ -241,6 +241,7 @@ describe('Testing listing service', () => {
 
   const afsMock = {
     process: jest.fn().mockResolvedValue(true),
+    processDuplicates: jest.fn().mockResolvedValue(true),
   };
 
   beforeAll(async () => {
@@ -5132,6 +5133,73 @@ describe('Testing listing service', () => {
           id: 'example id',
         },
       );
+    });
+
+    it('should process duplicates and expire applications on listing close', async () => {
+      jest.useFakeTimers().setSystemTime(new Date('2025-11-22T12:25:00.000Z'));
+      process.env.APPLICATION_DAYS_TILL_EXPIRY = '90';
+      process.env.DUPLICATES_CLOSE_DATE = '2024-06-28 00:00 -08:00';
+      const listingId = randomUUID();
+      prisma.listings.findUnique = jest.fn().mockResolvedValue({
+        id: listingId,
+        name: 'example name',
+        status: ListingsStatusEnum.active,
+      });
+      prisma.listings.update = jest.fn().mockResolvedValue({
+        id: listingId,
+        name: 'example name',
+      });
+      prisma.listingEvents.findMany = jest.fn().mockResolvedValue([]);
+      prisma.listingEvents.update = jest.fn().mockResolvedValue({
+        id: 'example id',
+        name: 'example name',
+      });
+      prisma.assets.delete = jest.fn().mockResolvedValue({
+        id: 'example id',
+        name: 'example name',
+      });
+      prisma.$transaction = jest
+        .fn()
+        .mockResolvedValue([{ id: listingId, name: 'example name' }]);
+      prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue(null);
+
+      prisma.applications.updateMany = jest
+        .fn()
+        .mockResolvedValue({ count: 10 });
+
+      await service.update(
+        {
+          id: listingId,
+          name: 'example listing name',
+          depositMin: '5',
+          assets: [
+            {
+              fileId: randomUUID(),
+              label: 'example asset',
+            },
+          ],
+          jurisdictions: {
+            id: randomUUID(),
+          },
+          status: ListingsStatusEnum.closed,
+          displayWaitlistSize: false,
+          unitsSummary: null,
+          listingEvents: [],
+          lastUpdatedByUser: user,
+        } as ListingUpdate,
+        user,
+      );
+
+      expect(afsMock.processDuplicates).toHaveBeenCalledWith(listingId);
+      expect(prisma.applications.updateMany).toHaveBeenCalledWith({
+        data: {
+          expireAfter: new Date('2026-02-20T12:25:00.000Z'),
+        },
+        where: {
+          listingId: listingId,
+        },
+      });
+      process.env.APPLICATION_DAYS_TILL_EXPIRY = null;
     });
   });
 
