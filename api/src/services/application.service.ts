@@ -789,6 +789,9 @@ export class ApplicationService {
               }
             : undefined,
           expireAfter: expireAfterDate,
+
+          // TODO: Temporary until after MSQ refactor
+          applicationSelections: undefined,
         },
         include: view.details,
       }),
