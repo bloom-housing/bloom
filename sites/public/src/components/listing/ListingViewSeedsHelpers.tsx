@@ -580,7 +580,10 @@ export const getEligibilitySections = (
 
 export const getAdditionalInformation = (listing: Listing) => {
   const cardContent: ContentCardProps[] = []
-  if (listing.requiredDocumentsList) {
+  if (
+    listing.requiredDocumentsList &&
+    Object.values(listing.requiredDocumentsList).filter((value) => !!value).length
+  ) {
     cardContent.push({
       heading: t("listings.requiredDocuments"),
       description: (
