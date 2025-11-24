@@ -313,7 +313,6 @@ export default function ListingsList() {
                       size="sm"
                       variant="primary"
                       onClick={() => {
-                        // also check if feature flags
                         if (defaultJurisdiction) {
                           void router.push({
                             pathname: "/listings/add",

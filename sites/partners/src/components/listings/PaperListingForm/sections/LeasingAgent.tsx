@@ -13,7 +13,7 @@ import {
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 type LeasingAgentProps = {
-  enableCompanyWebsite: boolean
+  enableCompanyWebsite?: boolean
   requiredFields: string[]
 }
 

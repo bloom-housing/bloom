@@ -10,9 +10,9 @@ import { defaultFieldProps, fieldHasError, fieldMessage } from "../../../../lib/
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 interface ListingIntroProps {
-  enableHousingDeveloperOwner: boolean
-  enableListingFileNumber: boolean
-  enableNonRegulatedListings: boolean
+  enableHousingDeveloperOwner?: boolean
+  enableListingFileNumber?: boolean
+  enableNonRegulatedListings?: boolean
   jurisdictionName: string
   listingId: string
   requiredFields: string[]

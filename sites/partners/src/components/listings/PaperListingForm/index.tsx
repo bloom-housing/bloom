@@ -64,7 +64,6 @@ import ListingApprovalDialog from "./dialogs/ListingApprovalDialog"
 import SaveBeforeExitDialog from "./dialogs/SaveBeforeExitDialog"
 
 import * as styles from "./ListingForm.module.scss"
-
 const CHARACTER_LIMIT = 1000
 
 type ListingFormProps = {
@@ -187,11 +186,11 @@ const ListingForm = ({
 
   useEffect(() => {
     if (profile) {
-      setSelectedJurisdictionData(
-        profile?.jurisdictions?.find((juris) => jurisdictionId === juris.id)
-      )
+      const jurisdiction = profile?.jurisdictions?.find((juris) => jurisdictionId === juris.id)
+      if (!jurisdiction) void router.replace("/")
+      setSelectedJurisdictionData(jurisdiction)
     }
-  }, [profile, jurisdictionId])
+  }, [profile, jurisdictionId, router])
 
   useEffect(() => {
     if (selectedJurisdictionData && !listing) {

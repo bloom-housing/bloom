@@ -19,10 +19,10 @@ import styles from "../ListingForm.module.scss"
 import { FormListing } from "../../../../lib/listings/formTypes"
 
 type RankingsAndResultsProps = {
-  enableUnitGroups: boolean
-  enableWaitlistAdditionalFields: boolean
-  enableWaitlistLottery: boolean
-  enableWhatToExpectAdditionalField: boolean
+  enableUnitGroups?: boolean
+  enableWaitlistAdditionalFields?: boolean
+  enableWaitlistLottery?: boolean
+  enableWhatToExpectAdditionalField?: boolean
   isAdmin?: boolean
   listing?: FormListing
   requiredFields: string[]

@@ -19,8 +19,8 @@ enum NeighborhoodAmenityDistanceEnum {
 }
 
 type NeighborhoodAmenitiesProps = {
-  enableNeighborhoodAmenities: boolean
-  enableNeighborhoodAmenitiesDropdown: boolean
+  enableNeighborhoodAmenities?: boolean
+  enableNeighborhoodAmenitiesDropdown?: boolean
   visibleNeighborhoodAmenities: NeighborhoodAmenitiesEnum[]
 }
 

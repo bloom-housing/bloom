@@ -9,8 +9,8 @@ import { useJurisdictionalMultiselectQuestionList } from "../../../../lib/hooks"
 import { FormListing } from "../../../../lib/listings/formTypes"
 
 type ProgramsAndPreferencesProps = {
-  disableListingPreferences: boolean
-  swapCommunityTypeWithPrograms: boolean
+  disableListingPreferences?: boolean
+  swapCommunityTypeWithPrograms?: boolean
   listing?: FormListing
   jurisdiction: string
   preferences: MultiselectQuestion[]

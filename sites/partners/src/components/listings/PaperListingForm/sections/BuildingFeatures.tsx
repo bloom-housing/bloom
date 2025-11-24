@@ -9,7 +9,7 @@ import { defaultFieldProps } from "../../../../lib/helpers"
 import styles from "../ListingForm.module.scss"
 
 type BuildingFeaturesProps = {
-  enableAccessibilityFeatures: boolean
+  enableAccessibilityFeatures?: boolean
   existingFeatures: ListingFeatures
   requiredFields: string[]
 }

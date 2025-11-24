@@ -25,8 +25,8 @@ import { fieldMessage, fieldHasError, getLabel } from "../../../../lib/helpers"
 import styles from "../ListingForm.module.scss"
 
 type ApplicationDatesProps = {
-  enableMarketingStatus: boolean
-  enableMarketingStatusMonths: boolean
+  enableMarketingStatus?: boolean
+  enableMarketingStatusMonths?: boolean
   openHouseEvents: TempEvent[]
   requiredFields: string[]
   listing?: FormListing

@@ -23,9 +23,9 @@ const EditListing = (props: { listing: Listing }) => {
     setListingName(updatedListing.name)
   }, [])
 
-  const selectedJurisdiction = listing.jurisdictions.id
-
   if (!listing) return false
+
+  const selectedJurisdiction = listing.jurisdictions.id
 
   return (
     <ListingContext.Provider value={listing}>

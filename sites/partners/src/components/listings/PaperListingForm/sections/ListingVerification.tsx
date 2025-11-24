@@ -4,7 +4,7 @@ import { useFormContext } from "react-hook-form"
 import styles from "../ListingForm.module.scss"
 
 type ListingVerificationProps = {
-  enableIsVerified: boolean
+  enableIsVerified?: boolean
 }
 
 const ListingVerification = (props: ListingVerificationProps) => {

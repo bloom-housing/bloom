@@ -45,8 +45,8 @@ interface MapboxApiResponse {
 
 type BuildingDetailsProps = {
   customMapPositionChosen?: boolean
-  enableNonRegulatedListings: boolean
-  enableRegions: boolean
+  enableNonRegulatedListings?: boolean
+  enableRegions?: boolean
   latLong?: LatitudeLongitude
   listing?: FormListing
   requiredFields: string[]

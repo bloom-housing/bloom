@@ -22,7 +22,7 @@ import styles from "../ListingForm.module.scss"
 type CommunityTypeProps = {
   listing?: FormListing
   requiredFields: string[]
-  swapCommunityTypeWithPrograms: boolean
+  swapCommunityTypeWithPrograms?: boolean
 }
 
 const CommunityType = ({
