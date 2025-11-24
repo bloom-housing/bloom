@@ -36,7 +36,7 @@ class MultiselectQuestion extends AbstractDTO {
   description?: string;
 
   // TODO: Temporarily optional until after MSQ refactor
-  // @Expose()
+  @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   isExclusive?: boolean;
@@ -47,13 +47,14 @@ class MultiselectQuestion extends AbstractDTO {
   hideFromListing?: boolean;
 
   // TODO: Temporarily optional until after MSQ refactor
-  // @Expose()
+  @Expose()
   // @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => IdDTO)
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional({ type: IdDTO })
   jurisdiction?: IdDTO;
 
+  // TODO: This will be sunseted after MSQ refactor but still required at the moment
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => IdDTO)
@@ -68,7 +69,7 @@ class MultiselectQuestion extends AbstractDTO {
   links?: MultiselectLink[];
 
   // TODO: Temporarily optional until after MSQ refactor
-  // @Expose()
+  @Expose()
   // @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => MultiselectOption)
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
@@ -76,12 +77,13 @@ class MultiselectQuestion extends AbstractDTO {
   multiselectOptions?: MultiselectOption[];
 
   // TODO: Temporarily optional until after MSQ refactor
-  // @Expose()
+  @Expose()
   // @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   name?: string;
 
+  // TODO: This will be sunseted after MSQ refactor
   @Expose()
   @ArrayMaxSize(64, { groups: [ValidationsGroupsEnum.default] })
   @Type(() => MultiselectOption)
@@ -89,13 +91,13 @@ class MultiselectQuestion extends AbstractDTO {
   @ApiPropertyOptional({ type: MultiselectOption, isArray: true })
   options?: MultiselectOption[];
 
+  // TODO: This will be sunseted after MSQ refactor
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   optOutText?: string;
 
-  // TODO: Temporarily optional until after MSQ refactor
-  // @Expose()
+  @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @IsEnum(MultiselectQuestionsStatusEnum, {
     groups: [ValidationsGroupsEnum.default],
@@ -103,6 +105,7 @@ class MultiselectQuestion extends AbstractDTO {
   @ApiProperty({
     enum: MultiselectQuestionsStatusEnum,
     enumName: 'MultiselectQuestionsStatusEnum',
+    example: 'draft',
   })
   status: MultiselectQuestionsStatusEnum;
 
@@ -111,12 +114,19 @@ class MultiselectQuestion extends AbstractDTO {
   @ApiPropertyOptional()
   subText?: string;
 
+  // TODO: This will be sunseted after MSQ refactor but still required at the moment
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
   text: string;
 
+  @Expose()
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  untranslatedName?: string;
+
+  // TODO: This will be sunseted after MSQ refactor
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()

@@ -2,7 +2,7 @@ import React from "react"
 import { rest } from "msw"
 import { setupServer } from "msw/node"
 import userEvent from "@testing-library/user-event"
-import { screen } from "@testing-library/react"
+import { screen, within } from "@testing-library/react"
 import { FormProvider, useForm } from "react-hook-form"
 import {
   FeatureFlagEnum,
@@ -74,6 +74,7 @@ describe("ListingIntro", () => {
     expect(screen.getByRole("textbox", { name: "Listing name *" })).toBeInTheDocument()
     expect(screen.queryByRole("combobox", { name: "Jurisdiction *" })).not.toBeInTheDocument()
     expect(screen.getByRole("textbox", { name: "Housing developer" })).toBeInTheDocument()
+    expect(screen.queryByRole("textbox", { name: "Listing file number" })).not.toBeInTheDocument()
   })
 
   it("should render the ListingIntro section with multiple jurisdictions and required developer", async () => {
@@ -112,6 +113,7 @@ describe("ListingIntro", () => {
     )
 
     expect(screen.getByRole("textbox", { name: "Housing developer *" })).toBeInTheDocument()
+    expect(screen.queryByRole("textbox", { name: "Listing file number" })).not.toBeInTheDocument()
   })
 
   it("should render appropriate text when housing developer owner feature flag is on", async () => {
@@ -149,5 +151,151 @@ describe("ListingIntro", () => {
     await screen.findByRole("textbox", { name: "Housing developer / owner" })
     expect(screen.getByRole("textbox", { name: "Housing developer / owner" })).toBeInTheDocument()
     expect(screen.queryByRole("textbox", { name: "Housing developer" })).not.toBeInTheDocument()
+  })
+
+  it("should render listing file number field when feature flag is on after jurisdiction is selected", async () => {
+    document.cookie = "access-token-available=True"
+    server.use(
+      rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
+        return res(
+          ctx.json({
+            jurisdictions: [
+              {
+                id: "JurisdictionA",
+                name: "jurisdictionWithJurisdictionAdmin",
+                featureFlags: [{ name: FeatureFlagEnum.enableListingFileNumber, active: true }],
+              },
+            ],
+          })
+        )
+      })
+    )
+
+    render(
+      <FormComponent>
+        <ListingIntro
+          requiredFields={[]}
+          jurisdictions={[
+            {
+              id: "JurisdictionA",
+              name: "JurisdictionA",
+              featureFlags: [{ name: FeatureFlagEnum.enableListingFileNumber, active: true }],
+            } as unknown as Jurisdiction,
+            {
+              id: "JurisdictionB",
+              name: "JurisdictionB",
+              featureFlags: [{ name: FeatureFlagEnum.enableListingFileNumber, active: true }],
+            } as unknown as Jurisdiction,
+          ]}
+        />
+      </FormComponent>
+    )
+
+    expect(screen.queryByRole("textbox", { name: "Listing file number" })).not.toBeInTheDocument()
+
+    await userEvent.selectOptions(
+      screen.getByRole("combobox", { name: "Jurisdiction *" }),
+      screen.getByRole("option", { name: "JurisdictionA" })
+    )
+
+    expect(screen.getByRole("textbox", { name: "Listing file number" })).toBeInTheDocument()
+  })
+
+  it("should render the ListingIntro section with regulated fields when feature flag is on", async () => {
+    document.cookie = "access-token-available=True"
+    server.use(
+      rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
+        return res(
+          ctx.json({
+            jurisdictions: [
+              {
+                id: "JurisdictionA",
+                name: "JurisdictionA",
+                featureFlags: [{ name: FeatureFlagEnum.enableNonRegulatedListings, active: false }],
+              },
+              {
+                id: "JurisdictionB",
+                name: "JurisdictionB",
+                featureFlags: [{ name: FeatureFlagEnum.enableNonRegulatedListings, active: true }],
+              },
+            ],
+          })
+        )
+      })
+    )
+
+    render(
+      <FormComponent>
+        <ListingIntro
+          requiredFields={[]}
+          jurisdictions={[
+            {
+              id: "JurisdictionA",
+              name: "JurisdictionA",
+              featureFlags: [{ name: FeatureFlagEnum.enableNonRegulatedListings, active: false }],
+            } as unknown as Jurisdiction,
+            {
+              id: "JurisdictionB",
+              name: "JurisdictionB",
+              featureFlags: [{ name: FeatureFlagEnum.enableNonRegulatedListings, active: true }],
+            } as unknown as Jurisdiction,
+          ]}
+        />
+      </FormComponent>
+    )
+
+    const jurisdictionSelect = await screen.findByRole("combobox", { name: /jurisdiction/i })
+    expect(jurisdictionSelect).toBeInTheDocument()
+    await userEvent.selectOptions(jurisdictionSelect, "JurisdictionA")
+
+    // Verify that without the feature flag new fields are not renderd
+    expect(
+      await screen.queryByRole("group", { name: "What kind of listing is this?" })
+    ).not.toBeInTheDocument()
+    expect(screen.getByRole("textbox", { name: /^housing developer$/i })).toBeInTheDocument()
+    expect(
+      screen.queryByRole("textbox", { name: /^property management account$/i })
+    ).not.toBeInTheDocument()
+
+    let ebllQuestionLabel = screen.queryByRole("group", {
+      name: "Has this property received HUD EBLL clearance?",
+    })
+
+    // Switch to the jurisdiction with the feature flag enabled
+    await userEvent.selectOptions(jurisdictionSelect, "JurisdictionB")
+
+    expect(
+      await screen.findByRole("group", { name: "What kind of listing is this?" })
+    ).toBeInTheDocument()
+    const requlatedListingOption = screen.getByRole("radio", { name: /^regulated$/i })
+    const nonRequlatedListingOption = screen.getByRole("radio", { name: /^non-regulated$/i })
+    expect(requlatedListingOption).toBeInTheDocument()
+    expect(requlatedListingOption).toBeChecked()
+    expect(nonRequlatedListingOption).toBeInTheDocument()
+    expect(nonRequlatedListingOption).not.toBeChecked()
+
+    ebllQuestionLabel = screen.queryByRole("group", {
+      name: "Has this property received HUD EBLL clearance?",
+    })
+    expect(ebllQuestionLabel).not.toBeInTheDocument()
+
+    await userEvent.click(nonRequlatedListingOption)
+
+    expect(
+      screen.getByRole("textbox", { name: /^property management account$/i })
+    ).toBeInTheDocument()
+    expect(screen.queryByRole("textbox", { name: /^housing developer$/i })).not.toBeInTheDocument()
+
+    ebllQuestionLabel = screen.queryByRole("group", {
+      name: "Has this property received HUD EBLL clearance?",
+    })
+    expect(ebllQuestionLabel).toBeInTheDocument()
+    const ebllQuestionContainer = ebllQuestionLabel.parentElement
+    const ebllYesOption = within(ebllQuestionContainer).getByRole("radio", { name: /^yes$/i })
+    const ebllNoOption = within(ebllQuestionContainer).getByRole("radio", { name: /^no$/i })
+    expect(ebllYesOption).toBeInTheDocument()
+    expect(ebllYesOption).not.toBeChecked()
+    expect(ebllNoOption).toBeInTheDocument()
+    expect(ebllNoOption).toBeChecked()
   })
 })

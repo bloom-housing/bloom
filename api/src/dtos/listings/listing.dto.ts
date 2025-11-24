@@ -62,6 +62,7 @@ import {
   ValidateOnlyUnitsOrUnitGroups,
 } from '../../decorators/validate-units-required.decorator';
 import { ValidateListingDeposit } from '../../decorators/validate-listing-deposit.decorator';
+import { ListingDocuments } from './listing-documents.dto';
 
 class Listing extends AbstractDTO {
   @Expose()
@@ -133,6 +134,14 @@ class Listing extends AbstractDTO {
   @MaxLength(256, { groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   developer?: string;
+
+  @Expose()
+  @ValidateListingPublish('listingFileNumber', {
+    groups: [ValidationsGroupsEnum.default],
+  })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  listingFileNumber?: string;
 
   @Expose()
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
@@ -391,22 +400,6 @@ class Listing extends AbstractDTO {
   depositValue?: number;
 
   @Expose()
-  @ValidateListingPublish('depositRangeMin', {
-    groups: [ValidationsGroupsEnum.default],
-  })
-  @IsNumber()
-  @ApiPropertyOptional()
-  depositRangeMin?: number;
-
-  @Expose()
-  @ValidateListingPublish('depositRangeMax', {
-    groups: [ValidationsGroupsEnum.default],
-  })
-  @IsNumber()
-  @ApiPropertyOptional()
-  depositRangeMax?: number;
-
-  @Expose()
   @ValidateListingPublish('depositHelperText', {
     groups: [ValidationsGroupsEnum.default],
   })
@@ -545,6 +538,15 @@ class Listing extends AbstractDTO {
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   requiredDocuments?: string;
+
+  @Expose()
+  @ValidateListingPublish('requiredDocumentsList', {
+    groups: [ValidationsGroupsEnum.default],
+  })
+  @Type(() => ListingDocuments)
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @ApiPropertyOptional({ type: ListingDocuments })
+  requiredDocumentsList?: ListingDocuments;
 
   @Expose()
   @ValidateListingPublish('specialNotes', {

@@ -18,6 +18,7 @@ export enum FeatureFlagEnum {
   enableIsVerified = 'enableIsVerified',
   enableLimitedHowDidYouHear = 'enableLimitedHowDidYouHear',
   enableListingFavoriting = 'enableListingFavoriting',
+  enableListingFileNumber = 'enableListingFileNumber',
   enableListingFiltering = 'enableListingFiltering',
   enableListingOpportunity = 'enableListingOpportunity',
   enableListingPagination = 'enableListingPagination',
@@ -129,6 +130,11 @@ export const featureFlagMap: {
     name: FeatureFlagEnum.enableListingFavoriting,
     description:
       'When true, a Favorite button is shown for public listings and users can view their favorited listings',
+  },
+  {
+    name: FeatureFlagEnum.enableListingFileNumber,
+    description:
+      'When true, partners can enter and export a listing file number',
   },
   {
     name: FeatureFlagEnum.enableListingFiltering,
