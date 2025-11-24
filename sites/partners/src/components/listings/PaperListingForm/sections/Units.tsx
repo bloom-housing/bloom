@@ -37,6 +37,34 @@ type UnitProps = {
   jurisdiction: string
 }
 
+type getTableActionItemsProps = {
+  onEdit: () => void
+  onDelete: () => void
+}
+
+const getTableActionItems = ({ onEdit, onDelete }: getTableActionItemsProps) => (
+  <div className="flex gap-3">
+    <Button
+      type="button"
+      className={"font-semibold darker-link"}
+      onClick={onEdit}
+      variant="text"
+      size="sm"
+    >
+      {t("t.edit")}
+    </Button>
+    <Button
+      type="button"
+      className={"font-semibold darker-alert"}
+      onClick={onDelete}
+      variant="text"
+      size="sm"
+    >
+      {t("t.delete")}
+    </Button>
+  </div>
+)
+
 const FormUnits = ({
   disableUnitsAccordion,
   requiredFields,
@@ -243,28 +271,10 @@ const FormUnits = ({
             occupancy: { content: formatRange(unitGroup.minOccupancy, unitGroup.maxOccupancy) },
             bath: { content: formatRange(unitGroup.bathroomMin, unitGroup.bathroomMax) },
             action: {
-              content: (
-                <div className="flex gap-3">
-                  <Button
-                    type="button"
-                    className={"font-semibold darker-link"}
-                    onClick={() => editUnitGroup(unitGroup.tempId)}
-                    variant="text"
-                    size="sm"
-                  >
-                    {t("t.edit")}
-                  </Button>
-                  <Button
-                    type="button"
-                    className={"font-semibold darker-alert"}
-                    onClick={() => setUnitDeleteModal(unitGroup.tempId)}
-                    variant="text"
-                    size="sm"
-                  >
-                    {t("t.delete")}
-                  </Button>
-                </div>
-              ),
+              content: getTableActionItems({
+                onEdit: () => editUnitGroup(unitGroup.tempId),
+                onDelete: () => setUnitDeleteModal(unitGroup.tempId),
+              }),
             },
           }
         })
@@ -308,28 +318,10 @@ const FormUnits = ({
             sqFeet: { content: formatRange(unitGroup.sqFeetMin, unitGroup.sqFeetMax) },
             bath: { content: formatRange(unitGroup.bathroomMin, unitGroup.bathroomMax) },
             action: {
-              content: (
-                <div className="flex gap-3">
-                  <Button
-                    type="button"
-                    className={"font-semibold darker-link"}
-                    onClick={() => editUnitGroup(unitGroup.tempId)}
-                    variant="text"
-                    size="sm"
-                  >
-                    {t("t.edit")}
-                  </Button>
-                  <Button
-                    type="button"
-                    className={"font-semibold darker-alert"}
-                    onClick={() => setUnitDeleteModal(unitGroup.tempId)}
-                    variant="text"
-                    size="sm"
-                  >
-                    {t("t.delete")}
-                  </Button>
-                </div>
-              ),
+              content: getTableActionItems({
+                onEdit: () => editUnitGroup(unitGroup.tempId),
+                onDelete: () => setUnitDeleteModal(unitGroup.tempId),
+              }),
             },
           }
         })
@@ -343,28 +335,10 @@ const FormUnits = ({
         sqFeet: { content: unit.sqFeet },
         unitAccessibilityPriorityTypes: { content: unit.unitAccessibilityPriorityTypes?.name },
         action: {
-          content: (
-            <div className="flex gap-3">
-              <Button
-                type="button"
-                className={"font-semibold darker-link"}
-                onClick={() => editUnit(unit.tempId)}
-                variant="text"
-                size="sm"
-              >
-                {t("t.edit")}
-              </Button>
-              <Button
-                type="button"
-                className={"font-semibold darker-alert"}
-                onClick={() => setUnitDeleteModal(unit.tempId)}
-                variant="text"
-                size="sm"
-              >
-                {t("t.delete")}
-              </Button>
-            </div>
-          ),
+          content: getTableActionItems({
+            onEdit: () => editUnit(unit.tempId),
+            onDelete: () => setUnitDeleteModal(unit.tempId),
+          }),
         },
       }))
     }
