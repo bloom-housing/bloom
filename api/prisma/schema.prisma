@@ -529,6 +529,24 @@ model ListingUtilities {
   @@map("listing_utilities")
 }
 
+model ListingDocuments {
+  id                        String    @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  createdAt                 DateTime  @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt                 DateTime  @updatedAt @map("updated_at") @db.Timestamp(6)
+  socialSecurityCard        Boolean?  @map("social_security_card")
+  currentLandlordReference  Boolean?  @map("current_landlord_reference")
+  birthCertificate          Boolean?  @map("birth_certificate")
+  previousLandlordReference Boolean?  @map("previous_landlord_reference")
+  governmentIssuedId        Boolean?  @map("government_issued_id")
+  proofOfAssets             Boolean?  @map("proof_of_assets")
+  proofOfIncome             Boolean?  @map("proof_of_income")
+  residencyDocuments        Boolean?  @map("residency_documents")
+  proofOfCustody            Boolean?  @map("proof_of_custody")
+  listings                  Listings?
+
+  @@map("listing_documents")
+}
+
 enum ListingTypeEnum {
   regulated
   nonRegulated
@@ -598,8 +616,6 @@ model Listings {
   depositMax                            String?                       @map("deposit_max")
   depositType                           DepositTypeEnum?              @map("deposit_type")
   depositValue                          Decimal?                      @map("deposit_value") @db.Decimal(8, 2)
-  depositRangeMin                       Int?                          @map("deposit_range_min")
-  depositRangeMax                       Int?                          @map("deposit_range_max")
   depositHelperText                     String?                       @map("deposit_helper_text")
   disableUnitsAccordion                 Boolean?                      @map("disable_units_accordion")
   hasHudEbllClearance                   Boolean?                      @map("has_hud_ebll_clearance")
@@ -615,6 +631,7 @@ model Listings {
   rentalAssistance                      String?                       @map("rental_assistance")
   rentalHistory                         String?                       @map("rental_history")
   requiredDocuments                     String?                       @map("required_documents")
+  requiredDocumentsList                 ListingDocuments?             @relation(fields: [documentsId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   specialNotes                          String?                       @map("special_notes")
   waitlistCurrentSize                   Int?                          @map("waitlist_current_size")
   waitlistMaxSize                       Int?                          @map("waitlist_max_size")
@@ -650,6 +667,7 @@ model Listings {
   resultId                              String?                       @map("result_id") @db.Uuid
   featuresId                            String?                       @unique() @map("features_id") @db.Uuid
   utilitiesId                           String?                       @unique() @map("utilities_id") @db.Uuid
+  documentsId                           String?                       @unique() @map("documents_id") @db.Uuid
   includeCommunityDisclaimer            Boolean?                      @map("include_community_disclaimer")
   communityDisclaimerTitle              String?                       @map("community_disclaimer_title")
   communityDisclaimerDescription        String?                       @map("community_disclaimer_description")
@@ -1024,8 +1042,9 @@ model UnitGroup {
   updatedAt                      DateTime                        @default(now()) @updatedAt @map("updated_at") @db.Timestamp(6)
   maxOccupancy                   Int?                            @map("max_occupancy")
   minOccupancy                   Int?                            @map("min_occupancy")
-  flatRentValueFrom              Decimal?                        @map("flat_rent_value_from")
-  flatRentValueTo                Decimal?                        @map("flat_rent_value_to")
+  flatRentValueFrom              Decimal?                        @map("flat_rent_value_from") @db.Decimal
+  flatRentValueTo                Decimal?                        @map("flat_rent_value_to") @db.Decimal
+  monthlyRent                    Decimal?                        @map("monthly_rent") @db.Decimal
   floorMin                       Int?                            @map("floor_min")
   floorMax                       Int?                            @map("floor_max")
   totalCount                     Int?                            @map("total_count")
