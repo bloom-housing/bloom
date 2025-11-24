@@ -562,7 +562,7 @@ describe("listings", () => {
     await userEvent.click(addListingButton)
 
     expect(
-      screen.getByRole("heading", { level: 1, name: "Select a jurisdiction" })
+      screen.getByRole("heading", { level: 1, name: "Select jurisdiction" })
     ).toBeInTheDocument()
     expect(
       screen.getByText("Once you create this listing, the jurisdiction cannot be changed.")
@@ -634,7 +634,7 @@ describe("listings", () => {
     await userEvent.click(addListingButton)
 
     expect(
-      screen.queryByRole("heading", { level: 1, name: "Select a jurisdiction" })
+      screen.queryByRole("heading", { level: 1, name: "Select jurisdiction" })
     ).not.toBeInTheDocument()
 
     expect(screen.queryByRole("option", { name: "JurisdictionA" })).not.toBeInTheDocument()
