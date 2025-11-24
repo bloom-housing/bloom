@@ -5,7 +5,6 @@ import { screen } from "@testing-library/react"
 import RankingsAndResults from "../../../../../src/components/listings/PaperListingForm/sections/RankingsAndResults"
 import { formDefaults, FormListing } from "../../../../../src/lib/listings/formTypes"
 import { mockNextRouter, mockTipTapEditor, render } from "../../../../testUtils"
-import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import userEvent from "@testing-library/user-event"
 
 const FormComponent = ({
@@ -33,29 +32,6 @@ describe("RankingsAndResults", () => {
   describe("RankingsAndResults enableWaitlistLottery", () => {
     afterEach(() => server.resetHandlers())
     afterAll(() => server.close())
-    const userWithWaitlistLotteryFlag = {
-      jurisdictions: [
-        {
-          id: "jurisdiction1",
-          name: "jurisdictionWithWaitlistLottery",
-          featureFlags: [
-            {
-              name: FeatureFlagEnum.enableWaitlistLottery,
-              active: true,
-            },
-          ],
-        },
-      ],
-    }
-    const userWithoutWaitlistLotteryFlag = {
-      jurisdictions: [
-        {
-          id: "jurisdiction1",
-          name: "jurisdictionWithoutWaitlistLottery",
-          featureFlags: [],
-        },
-      ],
-    }
 
     it("should not show lottery fields when enableWaitlistLottery is false and waitlist is open", async () => {
       render(

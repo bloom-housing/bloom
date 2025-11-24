@@ -30,7 +30,6 @@ type ApplicationDatesProps = {
   openHouseEvents: TempEvent[]
   requiredFields: string[]
   listing?: FormListing
-  jurisdiction: string
   setOpenHouseEvents: (events: TempEvent[]) => void
 }
 

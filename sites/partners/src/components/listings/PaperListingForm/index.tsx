@@ -523,7 +523,6 @@ const ListingForm = ({
                               FeatureFlagEnum.enableRegions,
                               jurisdictionId
                             )}
-                            jurisdiction={jurisdictionId}
                             latLong={latLong}
                             listing={listing}
                             setCustomMapPositionChosen={setCustomMapPositionChosen}
@@ -572,7 +571,6 @@ const ListingForm = ({
                               FeatureFlagEnum.enableAccessibilityFeatures,
                               jurisdictionId
                             )}
-                            jurisdiction={jurisdictionId}
                             requiredFields={requiredFields}
                           />
                           <NeighborhoodAmenities
@@ -591,7 +589,6 @@ const ListingForm = ({
                           <AdditionalEligibility
                             defaultText={selectedJurisdictionData?.rentalAssistanceDefault}
                             listing={listing}
-                            jurisdiction={jurisdictionId}
                             requiredFields={requiredFields}
                           />
                           <BuildingSelectionCriteria />
@@ -675,7 +672,6 @@ const ListingForm = ({
                               jurisdictionId
                             )}
                             listing={listing}
-                            jurisdiction={jurisdictionId}
                             openHouseEvents={openHouseEvents}
                             requiredFields={requiredFields}
                             setOpenHouseEvents={setOpenHouseEvents}

@@ -11,7 +11,6 @@ import styles from "../ListingForm.module.scss"
 type BuildingFeaturesProps = {
   enableAccessibilityFeatures: boolean
   existingFeatures: ListingFeatures
-  jurisdiction: string
   requiredFields: string[]
 }
 

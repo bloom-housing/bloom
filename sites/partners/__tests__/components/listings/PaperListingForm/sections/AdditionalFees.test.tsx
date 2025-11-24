@@ -13,7 +13,6 @@ import {
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import userEvent from "@testing-library/user-event"
 import "@testing-library/jest-dom"
-import { elmVillage } from "../../../../../../../api/prisma/seed-helpers/listing-data/elm-village"
 
 const FormComponent = ({ children, values }: { values?: Partial<FormListing>; children }) => {
   const formMethods = useForm<FormListing>({

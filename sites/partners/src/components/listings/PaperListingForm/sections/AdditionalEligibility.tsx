@@ -9,7 +9,6 @@ import { FormListing } from "../../../../lib/listings/formTypes"
 type AdditionalEligibilityProps = {
   defaultText: string | null
   listing: FormListing
-  jurisdiction: string
   requiredFields: string[]
 }
 

@@ -45,7 +45,6 @@ interface MapboxApiResponse {
 
 type BuildingDetailsProps = {
   customMapPositionChosen?: boolean
-  jurisdiction: string
   enableNonRegulatedListings: boolean
   enableRegions: boolean
   latLong?: LatitudeLongitude
@@ -93,8 +92,6 @@ const BuildingDetails = ({
     control,
     name: "listingType",
   })
-
-  const jurisdiction = watch("jurisdictions.id")
 
   const displayMapPreview = () => {
     return (
