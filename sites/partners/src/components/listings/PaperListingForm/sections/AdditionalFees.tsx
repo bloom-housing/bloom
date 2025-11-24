@@ -256,7 +256,7 @@ const AdditionalFees = (props: AdditionalFeesProps) => {
             </Grid.Cell>
           </Grid.Row>
         )}
-        {enableUtilitiesIncluded && jurisdiction && (
+        {enableUtilitiesIncluded && (
           <Grid.Row>
             <Grid.Cell>
               <FieldGroup
