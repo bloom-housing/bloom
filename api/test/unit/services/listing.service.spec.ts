@@ -4947,6 +4947,9 @@ describe('Testing listing service', () => {
         id: 'example id',
         name: 'example name',
       });
+      prisma.applications.updateMany = jest
+        .fn()
+        .mockResolvedValue({ count: 10 });
       prisma.$transaction = jest
         .fn()
         .mockResolvedValue([{ id: 'example id', name: 'example name' }]);
@@ -5124,6 +5127,8 @@ describe('Testing listing service', () => {
           id: expect.anything(),
         },
       });
+
+      expect(prisma.applications.updateMany).toHaveBeenCalledTimes(0);
 
       expect(canOrThrowMock).toHaveBeenCalledWith(
         user,

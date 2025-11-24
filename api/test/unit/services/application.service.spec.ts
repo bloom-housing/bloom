@@ -2089,6 +2089,7 @@ describe('Testing application service', () => {
     });
 
     it('should create an application from partner site when listing is closed', async () => {
+      process.env.APPLICATION_DAYS_TILL_EXPIRY = '60';
       prisma.listings.findUnique = jest.fn().mockResolvedValue({
         id: randomUUID(),
         status: ListingsStatusEnum.closed,
@@ -2129,7 +2130,7 @@ describe('Testing application service', () => {
         },
         data: {
           isNewest: true,
-          expireAfter: new Date('2024-07-27T08:00:00.000Z'),
+          expireAfter: new Date('2024-06-27T08:00:00.000Z'),
           contactPreferences: ['example contact preference'],
           status: ApplicationStatusEnum.submitted,
           submissionType: ApplicationSubmissionTypeEnum.electronical,
@@ -2315,6 +2316,7 @@ describe('Testing application service', () => {
           jurisdictionId: expect.anything(),
         },
       );
+      process.env.APPLICATION_DAYS_TILL_EXPIRY = null;
     });
   });
 
