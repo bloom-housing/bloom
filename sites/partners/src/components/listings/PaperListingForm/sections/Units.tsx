@@ -570,7 +570,6 @@ const FormUnits = ({
             draft={!units.some((unit) => unit.tempId === defaultUnit?.tempId)}
             defaultUnit={defaultUnit}
             nextId={nextId}
-            isNonRegulated={showNonRegulated}
           />
         )}
       </Drawer>
