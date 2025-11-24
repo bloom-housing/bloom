@@ -2681,10 +2681,10 @@ export class ListingService implements OnModuleInit {
         data: { expireAfter: expireAfterDate },
         where: { listingId: listingId },
       });
-      this.logger.log(
+      this.logger.warn(
         `setting expireAfter of ${expireAfterDate.toDateString()} on ${
           expiredApplications.count
-        } application for listing ${listingId}`,
+        } applications for listing ${listingId}`,
       );
     }
   };
