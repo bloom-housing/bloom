@@ -138,6 +138,7 @@ export default function ListingsList() {
         resizable: true,
         cellRenderer: "ListingsLink",
         minWidth: 140,
+        comparator: () => 0,
         valueFormatter: ({ value }) => {
           if (!value) {
             return t("t.none")
