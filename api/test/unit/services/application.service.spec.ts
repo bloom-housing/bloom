@@ -812,397 +812,405 @@ describe('Testing application service', () => {
     },
   };
 
-  it('should get applications from list() when applications are available', async () => {
-    const mockedValue = mockApplicationSet(3, date);
-    prisma.applications.findMany = jest.fn().mockResolvedValue(mockedValue);
-    prisma.applications.count = jest.fn().mockResolvedValue(3);
-    prisma.applications.findFirst = jest.fn().mockResolvedValue({
-      id: 'example id',
-    });
-    prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue(null);
+  describe('listing endpoint', () => {
+    it('should get applications from list() when applications are available', async () => {
+      const mockedValue = mockApplicationSet(3, date);
+      prisma.applications.findMany = jest.fn().mockResolvedValue(mockedValue);
+      prisma.applications.count = jest.fn().mockResolvedValue(3);
+      prisma.applications.findFirst = jest.fn().mockResolvedValue({
+        id: 'example id',
+      });
+      prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue(null);
 
-    const params: ApplicationQueryParams = {
-      orderBy: ApplicationOrderByKeys.createdAt,
-      order: OrderByEnum.ASC,
-      listingId: 'example listing id',
-      limit: 3,
-      page: 1,
-    };
+      const params: ApplicationQueryParams = {
+        orderBy: ApplicationOrderByKeys.createdAt,
+        order: OrderByEnum.ASC,
+        listingId: 'example listing id',
+        limit: 3,
+        page: 1,
+      };
 
-    expect(
-      await service.list(params, {
-        user: requestingUser,
-      } as unknown as ExpressRequest),
-    ).toEqual({
-      items: mockedValue.map((mock) => ({ ...mock, flagged: true })),
-      meta: {
-        currentPage: 1,
-        itemCount: 3,
-        itemsPerPage: 3,
-        totalItems: 3,
-        totalPages: 1,
-      },
-    });
+      expect(
+        await service.list(params, {
+          user: requestingUser,
+        } as unknown as ExpressRequest),
+      ).toEqual({
+        items: mockedValue.map((mock) => ({ ...mock, flagged: true })),
+        meta: {
+          currentPage: 1,
+          itemCount: 3,
+          itemsPerPage: 3,
+          totalItems: 3,
+          totalPages: 1,
+        },
+      });
 
-    expect(prisma.applications.count).toHaveBeenCalledWith({
-      where: {
-        AND: [
-          {
-            listingId: 'example listing id',
+      expect(prisma.applications.count).toHaveBeenCalledWith({
+        where: {
+          AND: [
+            {
+              listingId: 'example listing id',
+            },
+            {
+              deletedAt: null,
+            },
+          ],
+        },
+      });
+
+      expect(prisma.applications.findFirst).toHaveBeenNthCalledWith(1, {
+        select: {
+          id: true,
+        },
+        where: {
+          id: mockedValue[0].id,
+          applicationFlaggedSet: {
+            some: {},
           },
-          {
-            deletedAt: null,
+        },
+      });
+      expect(prisma.applications.findFirst).toHaveBeenNthCalledWith(2, {
+        select: {
+          id: true,
+        },
+        where: {
+          id: mockedValue[1].id,
+          applicationFlaggedSet: {
+            some: {},
           },
-        ],
-      },
-    });
-
-    expect(prisma.applications.findFirst).toHaveBeenNthCalledWith(1, {
-      select: {
-        id: true,
-      },
-      where: {
-        id: mockedValue[0].id,
-        applicationFlaggedSet: {
-          some: {},
         },
-      },
-    });
-    expect(prisma.applications.findFirst).toHaveBeenNthCalledWith(2, {
-      select: {
-        id: true,
-      },
-      where: {
-        id: mockedValue[1].id,
-        applicationFlaggedSet: {
-          some: {},
+      });
+      expect(prisma.applications.findFirst).toHaveBeenNthCalledWith(3, {
+        select: {
+          id: true,
         },
-      },
-    });
-    expect(prisma.applications.findFirst).toHaveBeenNthCalledWith(3, {
-      select: {
-        id: true,
-      },
-      where: {
-        id: mockedValue[2].id,
-        applicationFlaggedSet: {
-          some: {},
+        where: {
+          id: mockedValue[2].id,
+          applicationFlaggedSet: {
+            some: {},
+          },
         },
-      },
+      });
     });
   });
 
-  it('should get publicAppsView() info when applications are available and filterType is all', async () => {
-    const mockedValues = mockApplicationSet(3, date);
-    const listingStatuses = [
-      { status: ListingsStatusEnum.active },
-      { status: ListingsStatusEnum.closed },
-      {
-        status: ListingsStatusEnum.closed,
-        lotteryStatus: LotteryStatusEnum.publishedToPublic,
-      },
-    ];
-    const mockedValuesWithListing = mockedValues.map((mockedValue, idx) => {
-      return {
-        ...mockedValue,
-        listings: listingStatuses[idx],
+  describe('publicAppsView endpoint', () => {
+    it('should get publicAppsView() info when applications are available and filterType is all', async () => {
+      const mockedValues = mockApplicationSet(3, date);
+      const listingStatuses = [
+        { status: ListingsStatusEnum.active },
+        { status: ListingsStatusEnum.closed },
+        {
+          status: ListingsStatusEnum.closed,
+          lotteryStatus: LotteryStatusEnum.publishedToPublic,
+        },
+      ];
+      const mockedValuesWithListing = mockedValues.map((mockedValue, idx) => {
+        return {
+          ...mockedValue,
+          listings: listingStatuses[idx],
+        };
+      });
+      prisma.applications.findMany = jest
+        .fn()
+        .mockResolvedValue(getPublicAppsFindManyMock(mockedValuesWithListing));
+
+      const params: PublicAppsViewQueryParams = {
+        userId: requestingUser.id,
+        filterType: ApplicationsFilterEnum.all,
+        includeLotteryApps: true,
       };
-    });
-    prisma.applications.findMany = jest
-      .fn()
-      .mockResolvedValue(getPublicAppsFindManyMock(mockedValuesWithListing));
 
-    const params: PublicAppsViewQueryParams = {
-      userId: requestingUser.id,
-      filterType: ApplicationsFilterEnum.all,
-      includeLotteryApps: true,
-    };
-
-    const res = await service.publicAppsView(params, {
-      user: requestingUser,
-    } as unknown as ExpressRequest);
-
-    expect(res.displayApplications.length).toEqual(3);
-    expect(res.applicationsCount).toEqual({
-      total: 3,
-      open: 1,
-      closed: 1,
-      lottery: 1,
-    });
-
-    expect(prisma.applications.findMany).toHaveBeenCalledWith(
-      publicAppsFindManyCalledWith,
-    );
-  });
-
-  it('should get publicAppsView() info when there are lottery listings but includeLottery is false and filter type is all', async () => {
-    const mockedValues = mockApplicationSet(3, date);
-    const listingStatuses = [
-      { status: ListingsStatusEnum.active },
-      { status: ListingsStatusEnum.closed },
-      {
-        status: ListingsStatusEnum.closed,
-        lotteryStatus: LotteryStatusEnum.publishedToPublic,
-      },
-    ];
-    const mockedValuesWithListing = mockedValues.map((mockedValue, idx) => {
-      return {
-        ...mockedValue,
-        listings: listingStatuses[idx],
-      };
-    });
-    prisma.applications.findMany = jest
-      .fn()
-      .mockResolvedValue(getPublicAppsFindManyMock(mockedValuesWithListing));
-
-    const params: PublicAppsViewQueryParams = {
-      userId: requestingUser.id,
-      filterType: ApplicationsFilterEnum.all,
-      includeLotteryApps: false,
-    };
-
-    const res = await service.publicAppsView(params, {
-      user: requestingUser,
-    } as unknown as ExpressRequest);
-
-    expect(res.displayApplications.length).toEqual(3);
-    expect(res.applicationsCount).toEqual({
-      total: 3,
-      open: 1,
-      closed: 2,
-      lottery: 0,
-    });
-
-    expect(prisma.applications.findMany).toHaveBeenCalledWith(
-      publicAppsFindManyCalledWith,
-    );
-  });
-
-  it('should get publicAppsView() info when applications are available and filterType is open', async () => {
-    const mockedValues = mockApplicationSet(3, date);
-    const listingStatuses = [
-      { status: ListingsStatusEnum.active },
-      { status: ListingsStatusEnum.active },
-      {
-        status: ListingsStatusEnum.closed,
-        lotteryStatus: LotteryStatusEnum.publishedToPublic,
-      },
-    ];
-    const mockedValuesWithListing = mockedValues.map((mockedValue, idx) => {
-      return {
-        ...mockedValue,
-        listings: listingStatuses[idx],
-      };
-    });
-    prisma.applications.findMany = jest
-      .fn()
-      .mockResolvedValue(getPublicAppsFindManyMock(mockedValuesWithListing));
-
-    const params: PublicAppsViewQueryParams = {
-      userId: requestingUser.id,
-      filterType: ApplicationsFilterEnum.open,
-      includeLotteryApps: true,
-    };
-
-    const res = await service.publicAppsView(params, {
-      user: requestingUser,
-    } as unknown as ExpressRequest);
-
-    expect(res.displayApplications.length).toEqual(2);
-    expect(res.applicationsCount).toEqual({
-      total: 3,
-      open: 2,
-      closed: 0,
-      lottery: 1,
-    });
-
-    expect(prisma.applications.findMany).toHaveBeenCalledWith(
-      publicAppsFindManyCalledWith,
-    );
-  });
-
-  it('should get publicAppsView() info when applications are available and filterType is closed', async () => {
-    const mockedValues = mockApplicationSet(3, date);
-    const listingStatuses = [
-      { status: ListingsStatusEnum.closed },
-      { status: ListingsStatusEnum.closed },
-      {
-        status: ListingsStatusEnum.closed,
-        lotteryStatus: LotteryStatusEnum.publishedToPublic,
-      },
-    ];
-    const mockedValuesWithListing = mockedValues.map((mockedValue, idx) => {
-      return {
-        ...mockedValue,
-        listings: listingStatuses[idx],
-      };
-    });
-    prisma.applications.findMany = jest
-      .fn()
-      .mockResolvedValue(getPublicAppsFindManyMock(mockedValuesWithListing));
-
-    const params: PublicAppsViewQueryParams = {
-      userId: requestingUser.id,
-      filterType: ApplicationsFilterEnum.closed,
-      includeLotteryApps: true,
-    };
-
-    const res = await service.publicAppsView(params, {
-      user: requestingUser,
-    } as unknown as ExpressRequest);
-
-    expect(res.displayApplications.length).toEqual(2);
-    expect(res.applicationsCount).toEqual({
-      total: 3,
-      open: 0,
-      closed: 2,
-      lottery: 1,
-    });
-
-    expect(prisma.applications.findMany).toHaveBeenCalledWith(
-      publicAppsFindManyCalledWith,
-    );
-  });
-
-  it('should get publicAppsView() info when applications are available and filterType is lottery', async () => {
-    const mockedValues = mockApplicationSet(3, date);
-    const listingStatuses = [
-      { status: ListingsStatusEnum.active },
-      {
-        status: ListingsStatusEnum.closed,
-        lotteryStatus: LotteryStatusEnum.publishedToPublic,
-      },
-      {
-        status: ListingsStatusEnum.closed,
-        lotteryStatus: LotteryStatusEnum.publishedToPublic,
-      },
-    ];
-    const mockedValuesWithListing = mockedValues.map((mockedValue, idx) => {
-      return {
-        ...mockedValue,
-        listings: listingStatuses[idx],
-      };
-    });
-    prisma.applications.findMany = jest
-      .fn()
-      .mockResolvedValue(getPublicAppsFindManyMock(mockedValuesWithListing));
-
-    const params: PublicAppsViewQueryParams = {
-      userId: requestingUser.id,
-      filterType: ApplicationsFilterEnum.lottery,
-      includeLotteryApps: true,
-    };
-
-    const res = await service.publicAppsView(params, {
-      user: requestingUser,
-    } as unknown as ExpressRequest);
-
-    expect(res.displayApplications.length).toEqual(2);
-    expect(res.applicationsCount).toEqual({
-      total: 3,
-      open: 1,
-      closed: 0,
-      lottery: 2,
-    });
-
-    expect(prisma.applications.findMany).toHaveBeenCalledWith(
-      publicAppsFindManyCalledWith,
-    );
-  });
-
-  it('should not error when publicAppsView() is called when applications are unavailable', async () => {
-    prisma.applications.findMany = jest
-      .fn()
-      .mockResolvedValue(getPublicAppsFindManyMock([]));
-
-    const params: PublicAppsViewQueryParams = {
-      userId: requestingUser.id,
-      filterType: ApplicationsFilterEnum.all,
-      includeLotteryApps: true,
-    };
-
-    const res = await service.publicAppsView(params, {
-      user: requestingUser,
-    } as unknown as ExpressRequest);
-
-    expect(res.displayApplications.length).toEqual(0);
-    expect(res.applicationsCount).toEqual({
-      total: 0,
-      open: 0,
-      closed: 0,
-      lottery: 0,
-    });
-
-    expect(prisma.applications.findMany).toHaveBeenCalledWith(
-      publicAppsFindManyCalledWith,
-    );
-  });
-
-  it('should get an application when findOne() is called and Id exists', async () => {
-    const mockedValue = mockApplication({ date: date, position: 3 });
-    prisma.applications.findUnique = jest.fn().mockResolvedValue(mockedValue);
-    prisma.jurisdictions.findFirst = jest
-      .fn()
-      .mockResolvedValue({ id: randomUUID() });
-
-    expect(
-      await service.findOne('example Id', {
+      const res = await service.publicAppsView(params, {
         user: requestingUser,
-      } as unknown as ExpressRequest),
-    ).toEqual(mockedValue);
+      } as unknown as ExpressRequest);
 
-    expect(prisma.applications.findUnique).toHaveBeenCalledWith({
-      where: {
-        id: 'example Id',
-      },
-      include: {
-        ...detailView,
-      },
+      expect(res.displayApplications.length).toEqual(3);
+      expect(res.applicationsCount).toEqual({
+        total: 3,
+        open: 1,
+        closed: 1,
+        lottery: 1,
+      });
+
+      expect(prisma.applications.findMany).toHaveBeenCalledWith(
+        publicAppsFindManyCalledWith,
+      );
+    });
+
+    it('should get publicAppsView() info when there are lottery listings but includeLottery is false and filter type is all', async () => {
+      const mockedValues = mockApplicationSet(3, date);
+      const listingStatuses = [
+        { status: ListingsStatusEnum.active },
+        { status: ListingsStatusEnum.closed },
+        {
+          status: ListingsStatusEnum.closed,
+          lotteryStatus: LotteryStatusEnum.publishedToPublic,
+        },
+      ];
+      const mockedValuesWithListing = mockedValues.map((mockedValue, idx) => {
+        return {
+          ...mockedValue,
+          listings: listingStatuses[idx],
+        };
+      });
+      prisma.applications.findMany = jest
+        .fn()
+        .mockResolvedValue(getPublicAppsFindManyMock(mockedValuesWithListing));
+
+      const params: PublicAppsViewQueryParams = {
+        userId: requestingUser.id,
+        filterType: ApplicationsFilterEnum.all,
+        includeLotteryApps: false,
+      };
+
+      const res = await service.publicAppsView(params, {
+        user: requestingUser,
+      } as unknown as ExpressRequest);
+
+      expect(res.displayApplications.length).toEqual(3);
+      expect(res.applicationsCount).toEqual({
+        total: 3,
+        open: 1,
+        closed: 2,
+        lottery: 0,
+      });
+
+      expect(prisma.applications.findMany).toHaveBeenCalledWith(
+        publicAppsFindManyCalledWith,
+      );
+    });
+
+    it('should get publicAppsView() info when applications are available and filterType is open', async () => {
+      const mockedValues = mockApplicationSet(3, date);
+      const listingStatuses = [
+        { status: ListingsStatusEnum.active },
+        { status: ListingsStatusEnum.active },
+        {
+          status: ListingsStatusEnum.closed,
+          lotteryStatus: LotteryStatusEnum.publishedToPublic,
+        },
+      ];
+      const mockedValuesWithListing = mockedValues.map((mockedValue, idx) => {
+        return {
+          ...mockedValue,
+          listings: listingStatuses[idx],
+        };
+      });
+      prisma.applications.findMany = jest
+        .fn()
+        .mockResolvedValue(getPublicAppsFindManyMock(mockedValuesWithListing));
+
+      const params: PublicAppsViewQueryParams = {
+        userId: requestingUser.id,
+        filterType: ApplicationsFilterEnum.open,
+        includeLotteryApps: true,
+      };
+
+      const res = await service.publicAppsView(params, {
+        user: requestingUser,
+      } as unknown as ExpressRequest);
+
+      expect(res.displayApplications.length).toEqual(2);
+      expect(res.applicationsCount).toEqual({
+        total: 3,
+        open: 2,
+        closed: 0,
+        lottery: 1,
+      });
+
+      expect(prisma.applications.findMany).toHaveBeenCalledWith(
+        publicAppsFindManyCalledWith,
+      );
+    });
+
+    it('should get publicAppsView() info when applications are available and filterType is closed', async () => {
+      const mockedValues = mockApplicationSet(3, date);
+      const listingStatuses = [
+        { status: ListingsStatusEnum.closed },
+        { status: ListingsStatusEnum.closed },
+        {
+          status: ListingsStatusEnum.closed,
+          lotteryStatus: LotteryStatusEnum.publishedToPublic,
+        },
+      ];
+      const mockedValuesWithListing = mockedValues.map((mockedValue, idx) => {
+        return {
+          ...mockedValue,
+          listings: listingStatuses[idx],
+        };
+      });
+      prisma.applications.findMany = jest
+        .fn()
+        .mockResolvedValue(getPublicAppsFindManyMock(mockedValuesWithListing));
+
+      const params: PublicAppsViewQueryParams = {
+        userId: requestingUser.id,
+        filterType: ApplicationsFilterEnum.closed,
+        includeLotteryApps: true,
+      };
+
+      const res = await service.publicAppsView(params, {
+        user: requestingUser,
+      } as unknown as ExpressRequest);
+
+      expect(res.displayApplications.length).toEqual(2);
+      expect(res.applicationsCount).toEqual({
+        total: 3,
+        open: 0,
+        closed: 2,
+        lottery: 1,
+      });
+
+      expect(prisma.applications.findMany).toHaveBeenCalledWith(
+        publicAppsFindManyCalledWith,
+      );
+    });
+
+    it('should get publicAppsView() info when applications are available and filterType is lottery', async () => {
+      const mockedValues = mockApplicationSet(3, date);
+      const listingStatuses = [
+        { status: ListingsStatusEnum.active },
+        {
+          status: ListingsStatusEnum.closed,
+          lotteryStatus: LotteryStatusEnum.publishedToPublic,
+        },
+        {
+          status: ListingsStatusEnum.closed,
+          lotteryStatus: LotteryStatusEnum.publishedToPublic,
+        },
+      ];
+      const mockedValuesWithListing = mockedValues.map((mockedValue, idx) => {
+        return {
+          ...mockedValue,
+          listings: listingStatuses[idx],
+        };
+      });
+      prisma.applications.findMany = jest
+        .fn()
+        .mockResolvedValue(getPublicAppsFindManyMock(mockedValuesWithListing));
+
+      const params: PublicAppsViewQueryParams = {
+        userId: requestingUser.id,
+        filterType: ApplicationsFilterEnum.lottery,
+        includeLotteryApps: true,
+      };
+
+      const res = await service.publicAppsView(params, {
+        user: requestingUser,
+      } as unknown as ExpressRequest);
+
+      expect(res.displayApplications.length).toEqual(2);
+      expect(res.applicationsCount).toEqual({
+        total: 3,
+        open: 1,
+        closed: 0,
+        lottery: 2,
+      });
+
+      expect(prisma.applications.findMany).toHaveBeenCalledWith(
+        publicAppsFindManyCalledWith,
+      );
+    });
+
+    it('should not error when publicAppsView() is called when applications are unavailable', async () => {
+      prisma.applications.findMany = jest
+        .fn()
+        .mockResolvedValue(getPublicAppsFindManyMock([]));
+
+      const params: PublicAppsViewQueryParams = {
+        userId: requestingUser.id,
+        filterType: ApplicationsFilterEnum.all,
+        includeLotteryApps: true,
+      };
+
+      const res = await service.publicAppsView(params, {
+        user: requestingUser,
+      } as unknown as ExpressRequest);
+
+      expect(res.displayApplications.length).toEqual(0);
+      expect(res.applicationsCount).toEqual({
+        total: 0,
+        open: 0,
+        closed: 0,
+        lottery: 0,
+      });
+
+      expect(prisma.applications.findMany).toHaveBeenCalledWith(
+        publicAppsFindManyCalledWith,
+      );
     });
   });
 
-  it("should throw error when findOne() is called and Id doens't exists", async () => {
-    prisma.applications.findUnique = jest.fn().mockResolvedValue(null);
+  describe('findOne endpoint', () => {
+    it('should get an application when findOne() is called and Id exists', async () => {
+      const mockedValue = mockApplication({ date: date, position: 3 });
+      prisma.applications.findUnique = jest.fn().mockResolvedValue(mockedValue);
+      prisma.jurisdictions.findFirst = jest
+        .fn()
+        .mockResolvedValue({ id: randomUUID() });
 
-    await expect(
-      async () =>
+      expect(
         await service.findOne('example Id', {
           user: requestingUser,
         } as unknown as ExpressRequest),
-    ).rejects.toThrowError(
-      'applicationId example Id was requested but not found',
-    );
+      ).toEqual(mockedValue);
 
-    expect(prisma.applications.findUnique).toHaveBeenCalledWith({
-      where: {
-        id: 'example Id',
-      },
-      include: {
-        ...detailView,
-      },
+      expect(prisma.applications.findUnique).toHaveBeenCalledWith({
+        where: {
+          id: 'example Id',
+        },
+        include: {
+          ...detailView,
+        },
+      });
+    });
+
+    it("should throw error when findOne() is called and Id doens't exists", async () => {
+      prisma.applications.findUnique = jest.fn().mockResolvedValue(null);
+
+      await expect(
+        async () =>
+          await service.findOne('example Id', {
+            user: requestingUser,
+          } as unknown as ExpressRequest),
+      ).rejects.toThrowError(
+        'applicationId example Id was requested but not found',
+      );
+
+      expect(prisma.applications.findUnique).toHaveBeenCalledWith({
+        where: {
+          id: 'example Id',
+        },
+        include: {
+          ...detailView,
+        },
+      });
     });
   });
 
-  it('should get record from getDuplicateFlagsForApplication()', async () => {
-    prisma.applications.findFirst = jest
-      .fn()
-      .mockResolvedValue({ id: 'example id' });
+  describe('getDuplicateFlagsForApplication endpoint', () => {
+    it('should get record from getDuplicateFlagsForApplication()', async () => {
+      prisma.applications.findFirst = jest
+        .fn()
+        .mockResolvedValue({ id: 'example id' });
 
-    const res = await service.getDuplicateFlagsForApplication('example id');
+      const res = await service.getDuplicateFlagsForApplication('example id');
 
-    expect(prisma.applications.findFirst).toHaveBeenCalledWith({
-      select: {
-        id: true,
-      },
-      where: {
-        id: 'example id',
-        applicationFlaggedSet: {
-          some: {},
+      expect(prisma.applications.findFirst).toHaveBeenCalledWith({
+        select: {
+          id: true,
         },
-      },
-    });
+        where: {
+          id: 'example id',
+          applicationFlaggedSet: {
+            some: {},
+          },
+        },
+      });
 
-    expect(res).toEqual({ id: 'example id' });
+      expect(res).toEqual({ id: 'example id' });
+    });
   });
 
   it('should return no filters when no params passed to buildWhereClause()', () => {
@@ -1216,1346 +1224,1600 @@ describe('Testing application service', () => {
     });
   });
 
-  it('should return userId filter when userId param passed to buildWhereClause()', () => {
-    const res = service.buildWhereClause({
-      userId: 'example user id',
-    });
-    expect(res).toEqual({
-      AND: [
-        {
-          userAccounts: {
-            id: 'example user id',
+  describe('buildWhereClause helper function', () => {
+    it('should return userId filter when userId param passed to buildWhereClause()', () => {
+      const res = service.buildWhereClause({
+        userId: 'example user id',
+      });
+      expect(res).toEqual({
+        AND: [
+          {
+            userAccounts: {
+              id: 'example user id',
+            },
           },
-        },
-        {
-          deletedAt: null,
-        },
-      ],
-    });
-  });
-
-  it('should return listingId filter when listingId param passed to buildWhereClause()', () => {
-    const res = service.buildWhereClause({
-      listingId: 'example listing id',
-    });
-    expect(res).toEqual({
-      AND: [
-        {
-          listingId: 'example listing id',
-        },
-        {
-          deletedAt: null,
-        },
-      ],
-    });
-  });
-
-  it('should return markedAsDuplicate filter when markedAsDuplicate param passed to buildWhereClause()', () => {
-    const res = service.buildWhereClause({
-      markedAsDuplicate: false,
-    });
-    expect(res).toEqual({
-      AND: [
-        {
-          markedAsDuplicate: false,
-        },
-        {
-          deletedAt: null,
-        },
-      ],
-    });
-  });
-
-  it('should return mixed filters when several params passed to buildWhereClause()', () => {
-    const res = service.buildWhereClause({
-      userId: 'example user id',
-      listingId: 'example listing id',
-      markedAsDuplicate: false,
-    });
-    expect(res).toEqual({
-      AND: [
-        {
-          userAccounts: {
-            id: 'example user id',
+          {
+            deletedAt: null,
           },
+        ],
+      });
+    });
+
+    it('should return listingId filter when listingId param passed to buildWhereClause()', () => {
+      const res = service.buildWhereClause({
+        listingId: 'example listing id',
+      });
+      expect(res).toEqual({
+        AND: [
+          {
+            listingId: 'example listing id',
+          },
+          {
+            deletedAt: null,
+          },
+        ],
+      });
+    });
+
+    it('should return markedAsDuplicate filter when markedAsDuplicate param passed to buildWhereClause()', () => {
+      const res = service.buildWhereClause({
+        markedAsDuplicate: false,
+      });
+      expect(res).toEqual({
+        AND: [
+          {
+            markedAsDuplicate: false,
+          },
+          {
+            deletedAt: null,
+          },
+        ],
+      });
+    });
+
+    it('should return mixed filters when several params passed to buildWhereClause()', () => {
+      const res = service.buildWhereClause({
+        userId: 'example user id',
+        listingId: 'example listing id',
+        markedAsDuplicate: false,
+      });
+      expect(res).toEqual({
+        AND: [
+          {
+            userAccounts: {
+              id: 'example user id',
+            },
+          },
+          {
+            listingId: 'example listing id',
+          },
+          {
+            markedAsDuplicate: false,
+          },
+          {
+            deletedAt: null,
+          },
+        ],
+      });
+    });
+
+    it('should return search filter when search param passed to buildWhereClause()', () => {
+      const res = service.buildWhereClause({
+        search: 'test',
+      });
+      const searchFilter = { contains: 'test', mode: 'insensitive' };
+      expect(res).toEqual({
+        AND: [
+          {
+            OR: [
+              {
+                confirmationCode: searchFilter,
+              },
+              {
+                applicant: {
+                  firstName: searchFilter,
+                },
+              },
+              {
+                applicant: {
+                  lastName: searchFilter,
+                },
+              },
+              {
+                applicant: {
+                  emailAddress: searchFilter,
+                },
+              },
+              {
+                applicant: {
+                  phoneNumber: searchFilter,
+                },
+              },
+              {
+                alternateContact: {
+                  firstName: searchFilter,
+                },
+              },
+              {
+                alternateContact: {
+                  lastName: searchFilter,
+                },
+              },
+              {
+                alternateContact: {
+                  emailAddress: searchFilter,
+                },
+              },
+              {
+                alternateContact: {
+                  phoneNumber: searchFilter,
+                },
+              },
+            ],
+          },
+          {
+            deletedAt: null,
+          },
+        ],
+      });
+    });
+  });
+
+  describe('findOrThrow endpoint', () => {
+    it('should return application with no view when one exists', async () => {
+      prisma.applications.findUnique = jest
+        .fn()
+        .mockResolvedValue({ id: randomUUID() });
+
+      await service.findOrThrow('example Id');
+      expect(prisma.applications.findUnique).toHaveBeenCalledWith({
+        where: {
+          id: 'example Id',
         },
-        {
-          listingId: 'example listing id',
+      });
+    });
+
+    it('should return application with base view when one exists', async () => {
+      prisma.applications.findUnique = jest
+        .fn()
+        .mockResolvedValue({ id: randomUUID() });
+
+      await service.findOrThrow('example Id', ApplicationViews.base);
+      expect(prisma.applications.findUnique).toHaveBeenCalledWith({
+        where: {
+          id: 'example Id',
         },
-        {
-          markedAsDuplicate: false,
+        include: {
+          ...baseView,
         },
-        {
-          deletedAt: null,
+      });
+    });
+
+    it("should throw error when asking for application that doesen't exist", async () => {
+      prisma.applications.findUnique = jest.fn().mockResolvedValue(null);
+
+      await expect(
+        async () => await service.findOrThrow('example Id'),
+      ).rejects.toThrowError(
+        'applicationId example Id was requested but not found',
+      );
+
+      expect(prisma.applications.findUnique).toHaveBeenCalledWith({
+        where: {
+          id: 'example Id',
         },
-      ],
+      });
     });
   });
 
-  it('should return search filter when search param passed to buildWhereClause()', () => {
-    const res = service.buildWhereClause({
-      search: 'test',
-    });
-    const searchFilter = { contains: 'test', mode: 'insensitive' };
-    expect(res).toEqual({
-      AND: [
-        {
-          OR: [
-            {
-              confirmationCode: searchFilter,
-            },
-            {
-              applicant: {
-                firstName: searchFilter,
-              },
-            },
-            {
-              applicant: {
-                lastName: searchFilter,
-              },
-            },
-            {
-              applicant: {
-                emailAddress: searchFilter,
-              },
-            },
-            {
-              applicant: {
-                phoneNumber: searchFilter,
-              },
-            },
-            {
-              alternateContact: {
-                firstName: searchFilter,
-              },
-            },
-            {
-              alternateContact: {
-                lastName: searchFilter,
-              },
-            },
-            {
-              alternateContact: {
-                emailAddress: searchFilter,
-              },
-            },
-            {
-              alternateContact: {
-                phoneNumber: searchFilter,
-              },
-            },
-          ],
+  describe('updateListingApplicationEditTimestamp endpoint', () => {
+    it('should update listing application edit timestamp', async () => {
+      prisma.listings.update = jest
+        .fn()
+        .mockResolvedValue({ id: randomUUID() });
+      await service.updateListingApplicationEditTimestamp(randomUUID());
+
+      expect(prisma.listings.update).toHaveBeenCalledWith({
+        where: {
+          id: expect.anything(),
         },
-        {
-          deletedAt: null,
+        data: {
+          lastApplicationUpdateAt: expect.anything(),
         },
-      ],
+      });
     });
   });
 
-  it('should return application with no view when one exists', async () => {
-    prisma.applications.findUnique = jest
-      .fn()
-      .mockResolvedValue({ id: randomUUID() });
-
-    await service.findOrThrow('example Id');
-    expect(prisma.applications.findUnique).toHaveBeenCalledWith({
-      where: {
-        id: 'example Id',
-      },
+  describe('generateConfirmationCode helper function', () => {
+    it('should generate random confirmation code', () => {
+      const res = service.generateConfirmationCode();
+      expect(res.length).toEqual(8);
     });
   });
 
-  it('should return application with base view when one exists', async () => {
-    prisma.applications.findUnique = jest
-      .fn()
-      .mockResolvedValue({ id: randomUUID() });
+  describe('delete endpoint', () => {
+    it('should delete application when one exists', async () => {
+      prisma.applications.findUnique = jest
+        .fn()
+        .mockResolvedValue({ id: randomUUID(), listingId: randomUUID() });
+      prisma.listings.update = jest
+        .fn()
+        .mockResolvedValue({ id: randomUUID() });
+      prisma.applications.update = jest
+        .fn()
+        .mockResolvedValue({ id: randomUUID() });
 
-    await service.findOrThrow('example Id', ApplicationViews.base);
-    expect(prisma.applications.findUnique).toHaveBeenCalledWith({
-      where: {
-        id: 'example Id',
-      },
-      include: {
-        ...baseView,
-      },
-    });
-  });
+      prisma.jurisdictions.findFirst = jest
+        .fn()
+        .mockResolvedValue({ id: randomUUID() });
 
-  it("should throw error when asking for application that doesen't exist", async () => {
-    prisma.applications.findUnique = jest.fn().mockResolvedValue(null);
-
-    await expect(
-      async () => await service.findOrThrow('example Id'),
-    ).rejects.toThrowError(
-      'applicationId example Id was requested but not found',
-    );
-
-    expect(prisma.applications.findUnique).toHaveBeenCalledWith({
-      where: {
-        id: 'example Id',
-      },
-    });
-  });
-
-  it('should update listing application edit timestamp', async () => {
-    prisma.listings.update = jest.fn().mockResolvedValue({ id: randomUUID() });
-    await service.updateListingApplicationEditTimestamp(randomUUID());
-
-    expect(prisma.listings.update).toHaveBeenCalledWith({
-      where: {
-        id: expect.anything(),
-      },
-      data: {
-        lastApplicationUpdateAt: expect.anything(),
-      },
-    });
-  });
-
-  it('should generate random confirmation code', () => {
-    const res = service.generateConfirmationCode();
-    expect(res.length).toEqual(8);
-  });
-
-  it('should delete application when one exists', async () => {
-    prisma.applications.findUnique = jest
-      .fn()
-      .mockResolvedValue({ id: randomUUID(), listingId: randomUUID() });
-    prisma.listings.update = jest.fn().mockResolvedValue({ id: randomUUID() });
-    prisma.applications.update = jest
-      .fn()
-      .mockResolvedValue({ id: randomUUID() });
-
-    prisma.jurisdictions.findFirst = jest
-      .fn()
-      .mockResolvedValue({ id: randomUUID() });
-
-    await service.delete('example Id', {
-      id: 'requestingUser id',
-      userRoles: { isAdmin: true },
-    } as unknown as User);
-
-    expect(prisma.applications.findUnique).toHaveBeenCalledWith({
-      where: {
-        id: 'example Id',
-      },
-    });
-    expect(prisma.listings.update).toHaveBeenCalledWith({
-      where: {
-        id: expect.anything(),
-      },
-      data: {
-        lastApplicationUpdateAt: expect.anything(),
-      },
-    });
-    expect(prisma.applications.update).toHaveBeenCalledWith({
-      where: {
-        id: 'example Id',
-      },
-      data: {
-        deletedAt: expect.anything(),
-      },
-    });
-
-    expect(canOrThrowMock).toHaveBeenCalledWith(
-      {
+      await service.delete('example Id', {
         id: 'requestingUser id',
         userRoles: { isAdmin: true },
-      } as unknown as User,
-      'application',
-      permissionActions.delete,
-      expect.anything(),
-    );
-  });
+      } as unknown as User);
 
-  it("should throw error when trying to delete application that doesen't exist", async () => {
-    prisma.applications.findUnique = jest.fn().mockResolvedValue(null);
+      expect(prisma.applications.findUnique).toHaveBeenCalledWith({
+        where: {
+          id: 'example Id',
+        },
+      });
+      expect(prisma.listings.update).toHaveBeenCalledWith({
+        where: {
+          id: expect.anything(),
+        },
+        data: {
+          lastApplicationUpdateAt: expect.anything(),
+        },
+      });
+      expect(prisma.applications.update).toHaveBeenCalledWith({
+        where: {
+          id: 'example Id',
+        },
+        data: {
+          deletedAt: expect.anything(),
+        },
+      });
 
-    await expect(
-      async () =>
-        await service.delete('example Id', {
+      expect(canOrThrowMock).toHaveBeenCalledWith(
+        {
           id: 'requestingUser id',
           userRoles: { isAdmin: true },
-        } as unknown as User),
-    ).rejects.toThrowError(
-      'applicationId example Id was requested but not found',
-    );
-
-    expect(prisma.applications.findUnique).toHaveBeenCalledWith({
-      where: {
-        id: 'example Id',
-      },
+        } as unknown as User,
+        'application',
+        permissionActions.delete,
+        expect.anything(),
+      );
     });
 
-    expect(canOrThrowMock).not.toHaveBeenCalled();
+    it("should throw error when trying to delete application that doesen't exist", async () => {
+      prisma.applications.findUnique = jest.fn().mockResolvedValue(null);
+
+      await expect(
+        async () =>
+          await service.delete('example Id', {
+            id: 'requestingUser id',
+            userRoles: { isAdmin: true },
+          } as unknown as User),
+      ).rejects.toThrowError(
+        'applicationId example Id was requested but not found',
+      );
+
+      expect(prisma.applications.findUnique).toHaveBeenCalledWith({
+        where: {
+          id: 'example Id',
+        },
+      });
+
+      expect(canOrThrowMock).not.toHaveBeenCalled();
+    });
   });
 
-  it('should create an application from public site', async () => {
-    prisma.listings.findUnique = jest.fn().mockResolvedValue({
-      id: randomUUID(),
-      applicationDueDate: dayjs(new Date()).add(5, 'days').toDate(),
-      digitalApplication: true,
-      commonDigitalApplication: true,
+  describe('create endpoint', () => {
+    it('should create an application from public site', async () => {
+      prisma.listings.findUnique = jest.fn().mockResolvedValue({
+        id: randomUUID(),
+        applicationDueDate: dayjs(new Date()).add(5, 'days').toDate(),
+        digitalApplication: true,
+        commonDigitalApplication: true,
+      });
+
+      prisma.applications.updateMany = jest.fn().mockResolvedValue({});
+      prisma.applications.create = jest.fn().mockResolvedValue({
+        id: randomUUID(),
+      });
+      prisma.$transaction = jest
+        .fn()
+        .mockResolvedValue([
+          prisma.applications.updateMany,
+          prisma.applications.create,
+        ]);
+
+      const exampleAddress = addressFactory() as AddressCreate;
+      const dto = mockCreateApplicationData(exampleAddress, new Date());
+
+      prisma.jurisdictions.findFirst = jest
+        .fn()
+        .mockResolvedValue({ id: randomUUID() });
+
+      await service.create(dto, true, {
+        id: 'requestingUser id',
+        userRoles: { isAdmin: true },
+      } as unknown as User);
+
+      expect(prisma.listings.findUnique).toHaveBeenCalledWith({
+        where: {
+          id: expect.anything(),
+        },
+        include: {
+          jurisdictions: true,
+          unitGroups: true,
+          listingsBuildingAddress: true,
+          listingMultiselectQuestions: {
+            include: {
+              multiselectQuestions: true,
+            },
+          },
+        },
+      });
+
+      expect(prisma.applications.updateMany).toHaveBeenCalledWith({
+        data: {
+          isNewest: false,
+        },
+        where: {
+          userId: 'requestingUser id',
+          isNewest: true,
+        },
+      });
+      expect(prisma.applications.create).toHaveBeenCalledWith({
+        include: { ...detailView },
+        data: {
+          isNewest: true,
+          contactPreferences: ['example contact preference'],
+          status: ApplicationStatusEnum.submitted,
+          submissionType: ApplicationSubmissionTypeEnum.electronical,
+          appUrl: 'http://www.example.com',
+          additionalPhone: true,
+          additionalPhoneNumber: '111-111-1111',
+          additionalPhoneNumberType: 'example additional phone number type',
+          householdSize: 2,
+          housingStatus: 'example housing status',
+          sendMailToMailingAddress: true,
+          householdExpectingChanges: false,
+          householdStudent: false,
+          incomeVouchers: false,
+          income: '36000',
+          incomePeriod: IncomePeriodEnum.perYear,
+          language: LanguagesEnum.en,
+          acceptedTerms: true,
+          // Submission date is the moment it was created
+          submissionDate: expect.any(Date),
+          reviewStatus: ApplicationReviewStatusEnum.valid,
+          confirmationCode: expect.anything(),
+          applicant: {
+            create: {
+              firstName: 'applicant first name',
+              middleName: 'applicant middle name',
+              lastName: 'applicant last name',
+              birthMonth: 12,
+              birthDay: 17,
+              birthYear: 1993,
+              emailAddress: 'example@email.com',
+              noEmail: false,
+              phoneNumber: '111-111-1111',
+              phoneNumberType: 'Cell',
+              noPhone: false,
+              workInRegion: YesNoEnum.yes,
+              applicantAddress: {
+                create: {
+                  ...exampleAddress,
+                },
+              },
+              applicantWorkAddress: {
+                create: {
+                  ...exampleAddress,
+                },
+              },
+            },
+          },
+          accessibility: {
+            create: {
+              mobility: false,
+              vision: false,
+              hearing: false,
+              other: false,
+            },
+          },
+          alternateContact: {
+            create: {
+              type: AlternateContactRelationship.other,
+              otherType: 'example other type',
+              firstName: 'example first name',
+              lastName: 'example last name',
+              agency: 'example agency',
+              phoneNumber: '111-111-1111',
+              emailAddress: 'example@email.com',
+              address: {
+                create: {
+                  ...exampleAddress,
+                },
+              },
+            },
+          },
+          applicationsAlternateAddress: {
+            create: {
+              ...exampleAddress,
+            },
+          },
+          applicationsMailingAddress: {
+            create: {
+              ...exampleAddress,
+            },
+          },
+          listings: {
+            connect: {
+              id: dto.listings.id,
+            },
+          },
+          demographics: {
+            create: {
+              ethnicity: 'example ethnicity',
+              gender: 'example gender',
+              sexualOrientation: 'example sexual orientation',
+              howDidYouHear: ['example how did you hear'],
+              race: ['example race'],
+            },
+          },
+          preferredUnitTypes: {
+            connect: [
+              {
+                id: expect.anything(),
+              },
+            ],
+          },
+          householdMember: {
+            create: [
+              {
+                orderId: 0,
+                firstName: 'example first name',
+                middleName: 'example middle name',
+                lastName: 'example last name',
+                birthMonth: 12,
+                birthDay: 17,
+                birthYear: 1993,
+                sameAddress: YesNoEnum.yes,
+                relationship: HouseholdMemberRelationship.other,
+                workInRegion: YesNoEnum.yes,
+                householdMemberAddress: {
+                  create: {
+                    ...exampleAddress,
+                  },
+                },
+                householdMemberWorkAddress: {
+                  create: {
+                    ...exampleAddress,
+                  },
+                },
+              },
+            ],
+          },
+          programs: [
+            {
+              key: 'example key',
+              claimed: true,
+              options: [
+                {
+                  key: 'example key',
+                  checked: true,
+                  extraData: [
+                    {
+                      type: InputType.boolean,
+                      key: 'example key',
+                      value: true,
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+          preferences: [
+            {
+              key: 'example key',
+              claimed: true,
+              options: [
+                {
+                  key: 'example key',
+                  checked: true,
+                  extraData: [
+                    {
+                      type: InputType.boolean,
+                      key: 'example key',
+                      value: true,
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+          userAccounts: {
+            connect: {
+              id: 'requestingUser id',
+            },
+          },
+        },
+      });
+
+      expect(canOrThrowMock).not.toHaveBeenCalled();
     });
 
-    prisma.applications.updateMany = jest.fn().mockResolvedValue({});
-    prisma.applications.create = jest.fn().mockResolvedValue({
-      id: randomUUID(),
+    it('should error while creating an application from public site because submissions are closed', async () => {
+      prisma.listings.findUnique = jest.fn().mockResolvedValue({
+        id: randomUUID(),
+        applicationDueDate: new Date(0),
+        digitalApplication: true,
+        commonDigitalApplication: true,
+      });
+
+      prisma.applications.create = jest.fn().mockResolvedValue({
+        id: randomUUID(),
+      });
+
+      const exampleAddress = addressFactory() as AddressCreate;
+      const dto = mockCreateApplicationData(exampleAddress, new Date());
+
+      prisma.jurisdictions.findFirst = jest
+        .fn()
+        .mockResolvedValue({ id: randomUUID() });
+
+      await expect(
+        async () =>
+          await service.create(dto, true, {
+            id: 'requestingUser id',
+            userRoles: { isAdmin: true },
+          } as unknown as User),
+      ).rejects.toThrowError('Listing is not open for application submission');
+
+      expect(prisma.listings.findUnique).toHaveBeenCalledWith({
+        where: {
+          id: expect.anything(),
+        },
+        include: {
+          jurisdictions: true,
+          unitGroups: true,
+          listingsBuildingAddress: true,
+          listingMultiselectQuestions: {
+            include: {
+              multiselectQuestions: true,
+            },
+          },
+        },
+      });
+
+      expect(prisma.applications.create).not.toHaveBeenCalled();
+
+      expect(canOrThrowMock).not.toHaveBeenCalled();
     });
-    prisma.$transaction = jest
-      .fn()
-      .mockResolvedValue([
-        prisma.applications.updateMany,
-        prisma.applications.create,
+
+    it('should error while creating an application from public site on a listing without common app', async () => {
+      prisma.listings.findUnique = jest.fn().mockResolvedValue({
+        id: randomUUID(),
+        applicationDueDate: new Date(0),
+        digitalApplication: false,
+        commonDigitalApplication: false,
+      });
+
+      prisma.applications.create = jest.fn().mockResolvedValue({
+        id: randomUUID(),
+      });
+
+      const exampleAddress = addressFactory() as AddressCreate;
+      const dto = mockCreateApplicationData(exampleAddress, new Date());
+
+      prisma.jurisdictions.findFirst = jest
+        .fn()
+        .mockResolvedValue({ id: randomUUID() });
+
+      await expect(
+        async () =>
+          await service.create(dto, true, {
+            id: 'requestingUser id',
+            userRoles: { isAdmin: true },
+          } as unknown as User),
+      ).rejects.toThrowError('Listing is not open for application submission');
+
+      expect(prisma.listings.findUnique).toHaveBeenCalledWith({
+        where: {
+          id: expect.anything(),
+        },
+        include: {
+          jurisdictions: true,
+          unitGroups: true,
+          listingsBuildingAddress: true,
+          listingMultiselectQuestions: {
+            include: {
+              multiselectQuestions: true,
+            },
+          },
+        },
+      });
+
+      expect(prisma.applications.create).not.toHaveBeenCalled();
+
+      expect(canOrThrowMock).not.toHaveBeenCalled();
+    });
+
+    it('should create an application from partner site', async () => {
+      prisma.listings.findUnique = jest.fn().mockResolvedValue({
+        id: randomUUID(),
+      });
+      prisma.applications.create = jest.fn().mockResolvedValue({
+        id: randomUUID(),
+      });
+      prisma.listings.update = jest.fn().mockResolvedValue({
+        id: randomUUID(),
+      });
+      prisma.$transaction = jest.fn().mockResolvedValue([
+        // update previous applications
+        jest.fn().mockResolvedValue({
+          id: randomUUID(),
+        }),
+        // application create mock
+        jest.fn().mockResolvedValue({
+          id: randomUUID(),
+        }),
       ]);
 
-    const exampleAddress = addressFactory() as AddressCreate;
-    const dto = mockCreateApplicationData(exampleAddress, new Date());
+      prisma.jurisdictions.findFirst = jest
+        .fn()
+        .mockResolvedValue({ id: randomUUID() });
 
-    prisma.jurisdictions.findFirst = jest
-      .fn()
-      .mockResolvedValue({ id: randomUUID() });
+      const exampleAddress = addressFactory() as AddressCreate;
+      const dto = mockCreateApplicationData(exampleAddress, new Date());
 
-    await service.create(dto, true, {
-      id: 'requestingUser id',
-      userRoles: { isAdmin: true },
-    } as unknown as User);
-
-    expect(prisma.listings.findUnique).toHaveBeenCalledWith({
-      where: {
-        id: expect.anything(),
-      },
-      include: {
-        jurisdictions: true,
-        unitGroups: true,
-        listingsBuildingAddress: true,
-        listingMultiselectQuestions: {
-          include: {
-            multiselectQuestions: true,
-          },
-        },
-      },
-    });
-
-    expect(prisma.applications.updateMany).toHaveBeenCalledWith({
-      data: {
-        isNewest: false,
-      },
-      where: {
-        userId: 'requestingUser id',
-        isNewest: true,
-      },
-    });
-    expect(prisma.applications.create).toHaveBeenCalledWith({
-      include: { ...detailView },
-      data: {
-        isNewest: true,
-        contactPreferences: ['example contact preference'],
-        status: ApplicationStatusEnum.submitted,
-        submissionType: ApplicationSubmissionTypeEnum.electronical,
-        appUrl: 'http://www.example.com',
-        additionalPhone: true,
-        additionalPhoneNumber: '111-111-1111',
-        additionalPhoneNumberType: 'example additional phone number type',
-        householdSize: 2,
-        housingStatus: 'example housing status',
-        sendMailToMailingAddress: true,
-        householdExpectingChanges: false,
-        householdStudent: false,
-        incomeVouchers: false,
-        income: '36000',
-        incomePeriod: IncomePeriodEnum.perYear,
-        language: LanguagesEnum.en,
-        acceptedTerms: true,
-        // Submission date is the moment it was created
-        submissionDate: expect.any(Date),
-        reviewStatus: ApplicationReviewStatusEnum.valid,
-        confirmationCode: expect.anything(),
-        applicant: {
-          create: {
-            firstName: 'applicant first name',
-            middleName: 'applicant middle name',
-            lastName: 'applicant last name',
-            birthMonth: 12,
-            birthDay: 17,
-            birthYear: 1993,
-            emailAddress: 'example@email.com',
-            noEmail: false,
-            phoneNumber: '111-111-1111',
-            phoneNumberType: 'Cell',
-            noPhone: false,
-            workInRegion: YesNoEnum.yes,
-            applicantAddress: {
-              create: {
-                ...exampleAddress,
-              },
-            },
-            applicantWorkAddress: {
-              create: {
-                ...exampleAddress,
-              },
-            },
-          },
-        },
-        accessibility: {
-          create: {
-            mobility: false,
-            vision: false,
-            hearing: false,
-            other: false,
-          },
-        },
-        alternateContact: {
-          create: {
-            type: AlternateContactRelationship.other,
-            otherType: 'example other type',
-            firstName: 'example first name',
-            lastName: 'example last name',
-            agency: 'example agency',
-            phoneNumber: '111-111-1111',
-            emailAddress: 'example@email.com',
-            address: {
-              create: {
-                ...exampleAddress,
-              },
-            },
-          },
-        },
-        applicationsAlternateAddress: {
-          create: {
-            ...exampleAddress,
-          },
-        },
-        applicationsMailingAddress: {
-          create: {
-            ...exampleAddress,
-          },
-        },
-        listings: {
-          connect: {
-            id: dto.listings.id,
-          },
-        },
-        demographics: {
-          create: {
-            ethnicity: 'example ethnicity',
-            gender: 'example gender',
-            sexualOrientation: 'example sexual orientation',
-            howDidYouHear: ['example how did you hear'],
-            race: ['example race'],
-          },
-        },
-        preferredUnitTypes: {
-          connect: [
-            {
-              id: expect.anything(),
-            },
-          ],
-        },
-        householdMember: {
-          create: [
-            {
-              orderId: 0,
-              firstName: 'example first name',
-              middleName: 'example middle name',
-              lastName: 'example last name',
-              birthMonth: 12,
-              birthDay: 17,
-              birthYear: 1993,
-              sameAddress: YesNoEnum.yes,
-              relationship: HouseholdMemberRelationship.other,
-              workInRegion: YesNoEnum.yes,
-              householdMemberAddress: {
-                create: {
-                  ...exampleAddress,
-                },
-              },
-              householdMemberWorkAddress: {
-                create: {
-                  ...exampleAddress,
-                },
-              },
-            },
-          ],
-        },
-        programs: [
-          {
-            key: 'example key',
-            claimed: true,
-            options: [
-              {
-                key: 'example key',
-                checked: true,
-                extraData: [
-                  {
-                    type: InputType.boolean,
-                    key: 'example key',
-                    value: true,
-                  },
-                ],
-              },
-            ],
-          },
-        ],
-        preferences: [
-          {
-            key: 'example key',
-            claimed: true,
-            options: [
-              {
-                key: 'example key',
-                checked: true,
-                extraData: [
-                  {
-                    type: InputType.boolean,
-                    key: 'example key',
-                    value: true,
-                  },
-                ],
-              },
-            ],
-          },
-        ],
-        userAccounts: {
-          connect: {
-            id: 'requestingUser id',
-          },
-        },
-      },
-    });
-
-    expect(canOrThrowMock).not.toHaveBeenCalled();
-  });
-
-  it('should error while creating an application from public site because submissions are closed', async () => {
-    prisma.listings.findUnique = jest.fn().mockResolvedValue({
-      id: randomUUID(),
-      applicationDueDate: new Date(0),
-      digitalApplication: true,
-      commonDigitalApplication: true,
-    });
-
-    prisma.applications.create = jest.fn().mockResolvedValue({
-      id: randomUUID(),
-    });
-
-    const exampleAddress = addressFactory() as AddressCreate;
-    const dto = mockCreateApplicationData(exampleAddress, new Date());
-
-    prisma.jurisdictions.findFirst = jest
-      .fn()
-      .mockResolvedValue({ id: randomUUID() });
-
-    await expect(
-      async () =>
-        await service.create(dto, true, {
-          id: 'requestingUser id',
-          userRoles: { isAdmin: true },
-        } as unknown as User),
-    ).rejects.toThrowError('Listing is not open for application submission');
-
-    expect(prisma.listings.findUnique).toHaveBeenCalledWith({
-      where: {
-        id: expect.anything(),
-      },
-      include: {
-        jurisdictions: true,
-        unitGroups: true,
-        listingsBuildingAddress: true,
-        listingMultiselectQuestions: {
-          include: {
-            multiselectQuestions: true,
-          },
-        },
-      },
-    });
-
-    expect(prisma.applications.create).not.toHaveBeenCalled();
-
-    expect(canOrThrowMock).not.toHaveBeenCalled();
-  });
-
-  it('should error while creating an application from public site on a listing without common app', async () => {
-    prisma.listings.findUnique = jest.fn().mockResolvedValue({
-      id: randomUUID(),
-      applicationDueDate: new Date(0),
-      digitalApplication: false,
-      commonDigitalApplication: false,
-    });
-
-    prisma.applications.create = jest.fn().mockResolvedValue({
-      id: randomUUID(),
-    });
-
-    const exampleAddress = addressFactory() as AddressCreate;
-    const dto = mockCreateApplicationData(exampleAddress, new Date());
-
-    prisma.jurisdictions.findFirst = jest
-      .fn()
-      .mockResolvedValue({ id: randomUUID() });
-
-    await expect(
-      async () =>
-        await service.create(dto, true, {
-          id: 'requestingUser id',
-          userRoles: { isAdmin: true },
-        } as unknown as User),
-    ).rejects.toThrowError('Listing is not open for application submission');
-
-    expect(prisma.listings.findUnique).toHaveBeenCalledWith({
-      where: {
-        id: expect.anything(),
-      },
-      include: {
-        jurisdictions: true,
-        unitGroups: true,
-        listingsBuildingAddress: true,
-        listingMultiselectQuestions: {
-          include: {
-            multiselectQuestions: true,
-          },
-        },
-      },
-    });
-
-    expect(prisma.applications.create).not.toHaveBeenCalled();
-
-    expect(canOrThrowMock).not.toHaveBeenCalled();
-  });
-
-  it('should create an application from partner site', async () => {
-    prisma.listings.findUnique = jest.fn().mockResolvedValue({
-      id: randomUUID(),
-    });
-
-    prisma.$transaction = jest.fn().mockResolvedValue([
-      // update previous applications
-      jest.fn().mockResolvedValue({
-        id: randomUUID(),
-      }),
-      // application create mock
-      jest.fn().mockResolvedValue({
-        id: randomUUID(),
-      }),
-    ]);
-
-    prisma.jurisdictions.findFirst = jest
-      .fn()
-      .mockResolvedValue({ id: randomUUID() });
-
-    const exampleAddress = addressFactory() as AddressCreate;
-    const dto = mockCreateApplicationData(exampleAddress, new Date());
-
-    await service.create(dto, false, {
-      id: 'requestingUser id',
-      userRoles: { isAdmin: true },
-    } as unknown as User);
-
-    expect(prisma.listings.findUnique).toHaveBeenCalledWith({
-      where: {
-        id: expect.anything(),
-      },
-      include: {
-        jurisdictions: true,
-        unitGroups: true,
-        listingsBuildingAddress: true,
-        listingMultiselectQuestions: {
-          include: {
-            multiselectQuestions: true,
-          },
-        },
-      },
-    });
-
-    expect(prisma.applications.create).toHaveBeenCalledWith({
-      include: {
-        ...detailView,
-      },
-      data: {
-        isNewest: true,
-        contactPreferences: ['example contact preference'],
-        status: ApplicationStatusEnum.submitted,
-        submissionType: ApplicationSubmissionTypeEnum.electronical,
-        appUrl: 'http://www.example.com',
-        additionalPhone: true,
-        additionalPhoneNumber: '111-111-1111',
-        additionalPhoneNumberType: 'example additional phone number type',
-        householdSize: 2,
-        housingStatus: 'example housing status',
-        sendMailToMailingAddress: true,
-        householdExpectingChanges: false,
-        householdStudent: false,
-        incomeVouchers: false,
-        income: '36000',
-        incomePeriod: IncomePeriodEnum.perYear,
-        language: LanguagesEnum.en,
-        acceptedTerms: true,
-        submissionDate: expect.anything(),
-        reviewStatus: ApplicationReviewStatusEnum.valid,
-        confirmationCode: expect.anything(),
-        applicant: {
-          create: {
-            firstName: 'applicant first name',
-            middleName: 'applicant middle name',
-            lastName: 'applicant last name',
-            birthMonth: 12,
-            birthDay: 17,
-            birthYear: 1993,
-            emailAddress: 'example@email.com',
-            noEmail: false,
-            phoneNumber: '111-111-1111',
-            phoneNumberType: 'Cell',
-            noPhone: false,
-            workInRegion: YesNoEnum.yes,
-            applicantAddress: {
-              create: {
-                ...exampleAddress,
-              },
-            },
-            applicantWorkAddress: {
-              create: {
-                ...exampleAddress,
-              },
-            },
-          },
-        },
-        accessibility: {
-          create: {
-            mobility: false,
-            vision: false,
-            hearing: false,
-            other: false,
-          },
-        },
-        alternateContact: {
-          create: {
-            type: AlternateContactRelationship.other,
-            otherType: 'example other type',
-            firstName: 'example first name',
-            lastName: 'example last name',
-            agency: 'example agency',
-            phoneNumber: '111-111-1111',
-            emailAddress: 'example@email.com',
-            address: {
-              create: {
-                ...exampleAddress,
-              },
-            },
-          },
-        },
-        applicationsAlternateAddress: {
-          create: {
-            ...exampleAddress,
-          },
-        },
-        applicationsMailingAddress: {
-          create: {
-            ...exampleAddress,
-          },
-        },
-        listings: {
-          connect: {
-            id: dto.listings.id,
-          },
-        },
-        demographics: {
-          create: {
-            ethnicity: 'example ethnicity',
-            gender: 'example gender',
-            sexualOrientation: 'example sexual orientation',
-            howDidYouHear: ['example how did you hear'],
-            race: ['example race'],
-          },
-        },
-        preferredUnitTypes: {
-          connect: [
-            {
-              id: expect.anything(),
-            },
-          ],
-        },
-        householdMember: {
-          create: [
-            {
-              orderId: 0,
-              firstName: 'example first name',
-              middleName: 'example middle name',
-              lastName: 'example last name',
-              birthMonth: 12,
-              birthDay: 17,
-              birthYear: 1993,
-              sameAddress: YesNoEnum.yes,
-              relationship: HouseholdMemberRelationship.other,
-              workInRegion: YesNoEnum.yes,
-              householdMemberAddress: {
-                create: {
-                  ...exampleAddress,
-                },
-              },
-              householdMemberWorkAddress: {
-                create: {
-                  ...exampleAddress,
-                },
-              },
-            },
-          ],
-        },
-        programs: [
-          {
-            key: 'example key',
-            claimed: true,
-            options: [
-              {
-                key: 'example key',
-                checked: true,
-                extraData: [
-                  {
-                    type: InputType.boolean,
-                    key: 'example key',
-                    value: true,
-                  },
-                ],
-              },
-            ],
-          },
-        ],
-        preferences: [
-          {
-            key: 'example key',
-            claimed: true,
-            options: [
-              {
-                key: 'example key',
-                checked: true,
-                extraData: [
-                  {
-                    type: InputType.boolean,
-                    key: 'example key',
-                    value: true,
-                  },
-                ],
-              },
-            ],
-          },
-        ],
-        userAccounts: {
-          connect: {
-            id: 'requestingUser id',
-          },
-        },
-      },
-    });
-
-    expect(canOrThrowMock).toHaveBeenCalledWith(
-      {
+      await service.create(dto, false, {
         id: 'requestingUser id',
         userRoles: { isAdmin: true },
-      } as unknown as User,
-      'application',
-      permissionActions.create,
-      {
-        listingId: dto.listings.id,
-        jurisdictionId: expect.anything(),
-      },
-    );
-  });
+      } as unknown as User);
 
-  it('should update an application when one exists', async () => {
-    prisma.applications.findUnique = jest
-      .fn()
-      .mockResolvedValue({ id: randomUUID() });
-
-    prisma.listings.update = jest.fn().mockResolvedValue({
-      id: randomUUID(),
-    });
-
-    prisma.applications.update = jest.fn().mockResolvedValue({
-      id: randomUUID(),
-      listingId: randomUUID(),
-    });
-
-    const exampleAddress = addressFactory() as AddressCreate;
-    const submissionDate = new Date();
-
-    const dto: ApplicationUpdate = {
-      ...mockCreateApplicationData(exampleAddress, submissionDate),
-      id: randomUUID(),
-    };
-
-    prisma.jurisdictions.findFirst = jest
-      .fn()
-      .mockResolvedValue({ id: randomUUID() });
-    prisma.listings.findFirst = jest
-      .fn()
-      .mockResolvedValue({ id: randomUUID() });
-    prisma.householdMember.deleteMany = jest.fn().mockResolvedValue(null);
-
-    await service.update(dto, {
-      id: 'requestingUser id',
-      userRoles: { isAdmin: true },
-    } as unknown as User);
-
-    expect(prisma.applications.findUnique).toHaveBeenCalledWith({
-      where: {
-        id: expect.anything(),
-      },
-    });
-
-    expect(prisma.applications.update).toHaveBeenCalledWith({
-      include: {
-        ...detailView,
-      },
-      data: {
-        contactPreferences: ['example contact preference'],
-        status: ApplicationStatusEnum.submitted,
-        submissionType: ApplicationSubmissionTypeEnum.electronical,
-        appUrl: 'http://www.example.com',
-        additionalPhone: true,
-        additionalPhoneNumber: '111-111-1111',
-        additionalPhoneNumberType: 'example additional phone number type',
-        householdSize: 2,
-        housingStatus: 'example housing status',
-        sendMailToMailingAddress: true,
-        householdExpectingChanges: false,
-        householdStudent: false,
-        incomeVouchers: false,
-        income: '36000',
-        incomePeriod: IncomePeriodEnum.perYear,
-        language: LanguagesEnum.en,
-        acceptedTerms: true,
-        submissionDate: submissionDate,
-        reviewStatus: ApplicationReviewStatusEnum.valid,
-        applicant: {
-          create: {
-            firstName: 'applicant first name',
-            middleName: 'applicant middle name',
-            lastName: 'applicant last name',
-            birthMonth: 12,
-            birthDay: 17,
-            birthYear: 1993,
-            emailAddress: 'example@email.com',
-            noEmail: false,
-            phoneNumber: '111-111-1111',
-            phoneNumberType: 'Cell',
-            noPhone: false,
-            workInRegion: YesNoEnum.yes,
-            applicantAddress: {
-              create: {
-                ...exampleAddress,
-              },
-            },
-            applicantWorkAddress: {
-              create: {
-                ...exampleAddress,
-              },
+      expect(prisma.listings.findUnique).toHaveBeenCalledWith({
+        where: {
+          id: expect.anything(),
+        },
+        include: {
+          jurisdictions: true,
+          unitGroups: true,
+          listingsBuildingAddress: true,
+          listingMultiselectQuestions: {
+            include: {
+              multiselectQuestions: true,
             },
           },
         },
-        accessibility: {
-          create: {
-            mobility: false,
-            vision: false,
-            hearing: false,
-            other: false,
-          },
+      });
+
+      expect(prisma.applications.create).toHaveBeenCalledWith({
+        include: {
+          ...detailView,
         },
-        alternateContact: {
-          create: {
-            type: AlternateContactRelationship.other,
-            otherType: 'example other type',
-            firstName: 'example first name',
-            lastName: 'example last name',
-            agency: 'example agency',
-            phoneNumber: '111-111-1111',
-            emailAddress: 'example@email.com',
-            address: {
-              create: {
-                ...exampleAddress,
-              },
-            },
-          },
-        },
-        applicationsAlternateAddress: {
-          create: {
-            ...exampleAddress,
-          },
-        },
-        applicationsMailingAddress: {
-          create: {
-            ...exampleAddress,
-          },
-        },
-        listings: {
-          connect: {
-            id: dto.listings.id,
-          },
-        },
-        demographics: {
-          create: {
-            ethnicity: 'example ethnicity',
-            gender: 'example gender',
-            sexualOrientation: 'example sexual orientation',
-            howDidYouHear: ['example how did you hear'],
-            race: ['example race'],
-          },
-        },
-        preferredUnitTypes: {
-          set: [{ id: expect.anything() }],
-        },
-        householdMember: {
-          create: [
-            {
-              orderId: 0,
-              firstName: 'example first name',
-              middleName: 'example middle name',
-              lastName: 'example last name',
+        data: {
+          isNewest: true,
+          contactPreferences: ['example contact preference'],
+          status: ApplicationStatusEnum.submitted,
+          submissionType: ApplicationSubmissionTypeEnum.electronical,
+          appUrl: 'http://www.example.com',
+          additionalPhone: true,
+          additionalPhoneNumber: '111-111-1111',
+          additionalPhoneNumberType: 'example additional phone number type',
+          householdSize: 2,
+          housingStatus: 'example housing status',
+          sendMailToMailingAddress: true,
+          householdExpectingChanges: false,
+          householdStudent: false,
+          incomeVouchers: false,
+          income: '36000',
+          incomePeriod: IncomePeriodEnum.perYear,
+          language: LanguagesEnum.en,
+          acceptedTerms: true,
+          submissionDate: expect.anything(),
+          reviewStatus: ApplicationReviewStatusEnum.valid,
+          confirmationCode: expect.anything(),
+          applicant: {
+            create: {
+              firstName: 'applicant first name',
+              middleName: 'applicant middle name',
+              lastName: 'applicant last name',
               birthMonth: 12,
               birthDay: 17,
               birthYear: 1993,
-              sameAddress: YesNoEnum.yes,
-              relationship: HouseholdMemberRelationship.other,
+              emailAddress: 'example@email.com',
+              noEmail: false,
+              phoneNumber: '111-111-1111',
+              phoneNumberType: 'Cell',
+              noPhone: false,
               workInRegion: YesNoEnum.yes,
-              householdMemberAddress: {
+              applicantAddress: {
                 create: {
                   ...exampleAddress,
                 },
               },
-              householdMemberWorkAddress: {
+              applicantWorkAddress: {
                 create: {
                   ...exampleAddress,
                 },
               },
+            },
+          },
+          accessibility: {
+            create: {
+              mobility: false,
+              vision: false,
+              hearing: false,
+              other: false,
+            },
+          },
+          alternateContact: {
+            create: {
+              type: AlternateContactRelationship.other,
+              otherType: 'example other type',
+              firstName: 'example first name',
+              lastName: 'example last name',
+              agency: 'example agency',
+              phoneNumber: '111-111-1111',
+              emailAddress: 'example@email.com',
+              address: {
+                create: {
+                  ...exampleAddress,
+                },
+              },
+            },
+          },
+          applicationsAlternateAddress: {
+            create: {
+              ...exampleAddress,
+            },
+          },
+          applicationsMailingAddress: {
+            create: {
+              ...exampleAddress,
+            },
+          },
+          listings: {
+            connect: {
+              id: dto.listings.id,
+            },
+          },
+          demographics: {
+            create: {
+              ethnicity: 'example ethnicity',
+              gender: 'example gender',
+              sexualOrientation: 'example sexual orientation',
+              howDidYouHear: ['example how did you hear'],
+              race: ['example race'],
+            },
+          },
+          preferredUnitTypes: {
+            connect: [
+              {
+                id: expect.anything(),
+              },
+            ],
+          },
+          householdMember: {
+            create: [
+              {
+                orderId: 0,
+                firstName: 'example first name',
+                middleName: 'example middle name',
+                lastName: 'example last name',
+                birthMonth: 12,
+                birthDay: 17,
+                birthYear: 1993,
+                sameAddress: YesNoEnum.yes,
+                relationship: HouseholdMemberRelationship.other,
+                workInRegion: YesNoEnum.yes,
+                householdMemberAddress: {
+                  create: {
+                    ...exampleAddress,
+                  },
+                },
+                householdMemberWorkAddress: {
+                  create: {
+                    ...exampleAddress,
+                  },
+                },
+              },
+            ],
+          },
+          programs: [
+            {
+              key: 'example key',
+              claimed: true,
+              options: [
+                {
+                  key: 'example key',
+                  checked: true,
+                  extraData: [
+                    {
+                      type: InputType.boolean,
+                      key: 'example key',
+                      value: true,
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+          preferences: [
+            {
+              key: 'example key',
+              claimed: true,
+              options: [
+                {
+                  key: 'example key',
+                  checked: true,
+                  extraData: [
+                    {
+                      type: InputType.boolean,
+                      key: 'example key',
+                      value: true,
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+          userAccounts: {
+            connect: {
+              id: 'requestingUser id',
+            },
+          },
+        },
+      });
+
+      expect(canOrThrowMock).toHaveBeenCalledWith(
+        {
+          id: 'requestingUser id',
+          userRoles: { isAdmin: true },
+        } as unknown as User,
+        'application',
+        permissionActions.create,
+        {
+          listingId: dto.listings.id,
+          jurisdictionId: expect.anything(),
+        },
+      );
+    });
+
+    it('should create an application from partner site when listing is closed', async () => {
+      prisma.listings.findUnique = jest.fn().mockResolvedValue({
+        id: randomUUID(),
+        status: ListingsStatusEnum.closed,
+        closedAt: new Date('2024-04-28 00:00 -08:00'),
+      });
+      prisma.applications.create = jest.fn().mockResolvedValue({
+        id: randomUUID(),
+      });
+      prisma.listings.update = jest.fn().mockResolvedValue({
+        id: randomUUID(),
+      });
+      prisma.$transaction = jest.fn().mockResolvedValue([
+        // update previous applications
+        jest.fn().mockResolvedValue({
+          id: randomUUID(),
+        }),
+        // application create mock
+        jest.fn().mockResolvedValue({
+          id: randomUUID(),
+        }),
+      ]);
+
+      prisma.jurisdictions.findFirst = jest
+        .fn()
+        .mockResolvedValue({ id: randomUUID() });
+
+      const exampleAddress = addressFactory() as AddressCreate;
+      const dto = mockCreateApplicationData(exampleAddress, new Date());
+
+      await service.create(dto, false, {
+        id: 'requestingUser id',
+        userRoles: { isAdmin: true },
+      } as unknown as User);
+
+      expect(prisma.applications.create).toHaveBeenCalledWith({
+        include: {
+          ...detailView,
+        },
+        data: {
+          isNewest: true,
+          expireAfter: new Date('2024-07-27T08:00:00.000Z'),
+          contactPreferences: ['example contact preference'],
+          status: ApplicationStatusEnum.submitted,
+          submissionType: ApplicationSubmissionTypeEnum.electronical,
+          appUrl: 'http://www.example.com',
+          additionalPhone: true,
+          additionalPhoneNumber: '111-111-1111',
+          additionalPhoneNumberType: 'example additional phone number type',
+          householdSize: 2,
+          housingStatus: 'example housing status',
+          sendMailToMailingAddress: true,
+          householdExpectingChanges: false,
+          householdStudent: false,
+          incomeVouchers: false,
+          income: '36000',
+          incomePeriod: IncomePeriodEnum.perYear,
+          language: LanguagesEnum.en,
+          acceptedTerms: true,
+          submissionDate: expect.anything(),
+          reviewStatus: ApplicationReviewStatusEnum.valid,
+          confirmationCode: expect.anything(),
+          applicant: {
+            create: {
+              firstName: 'applicant first name',
+              middleName: 'applicant middle name',
+              lastName: 'applicant last name',
+              birthMonth: 12,
+              birthDay: 17,
+              birthYear: 1993,
+              emailAddress: 'example@email.com',
+              noEmail: false,
+              phoneNumber: '111-111-1111',
+              phoneNumberType: 'Cell',
+              noPhone: false,
+              workInRegion: YesNoEnum.yes,
+              applicantAddress: {
+                create: {
+                  ...exampleAddress,
+                },
+              },
+              applicantWorkAddress: {
+                create: {
+                  ...exampleAddress,
+                },
+              },
+            },
+          },
+          accessibility: {
+            create: {
+              mobility: false,
+              vision: false,
+              hearing: false,
+              other: false,
+            },
+          },
+          alternateContact: {
+            create: {
+              type: AlternateContactRelationship.other,
+              otherType: 'example other type',
+              firstName: 'example first name',
+              lastName: 'example last name',
+              agency: 'example agency',
+              phoneNumber: '111-111-1111',
+              emailAddress: 'example@email.com',
+              address: {
+                create: {
+                  ...exampleAddress,
+                },
+              },
+            },
+          },
+          applicationsAlternateAddress: {
+            create: {
+              ...exampleAddress,
+            },
+          },
+          applicationsMailingAddress: {
+            create: {
+              ...exampleAddress,
+            },
+          },
+          listings: {
+            connect: {
+              id: dto.listings.id,
+            },
+          },
+          demographics: {
+            create: {
+              ethnicity: 'example ethnicity',
+              gender: 'example gender',
+              sexualOrientation: 'example sexual orientation',
+              howDidYouHear: ['example how did you hear'],
+              race: ['example race'],
+            },
+          },
+          preferredUnitTypes: {
+            connect: [
+              {
+                id: expect.anything(),
+              },
+            ],
+          },
+          householdMember: {
+            create: [
+              {
+                orderId: 0,
+                firstName: 'example first name',
+                middleName: 'example middle name',
+                lastName: 'example last name',
+                birthMonth: 12,
+                birthDay: 17,
+                birthYear: 1993,
+                sameAddress: YesNoEnum.yes,
+                relationship: HouseholdMemberRelationship.other,
+                workInRegion: YesNoEnum.yes,
+                householdMemberAddress: {
+                  create: {
+                    ...exampleAddress,
+                  },
+                },
+                householdMemberWorkAddress: {
+                  create: {
+                    ...exampleAddress,
+                  },
+                },
+              },
+            ],
+          },
+          programs: [
+            {
+              key: 'example key',
+              claimed: true,
+              options: [
+                {
+                  key: 'example key',
+                  checked: true,
+                  extraData: [
+                    {
+                      type: InputType.boolean,
+                      key: 'example key',
+                      value: true,
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+          preferences: [
+            {
+              key: 'example key',
+              claimed: true,
+              options: [
+                {
+                  key: 'example key',
+                  checked: true,
+                  extraData: [
+                    {
+                      type: InputType.boolean,
+                      key: 'example key',
+                      value: true,
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+          userAccounts: {
+            connect: {
+              id: 'requestingUser id',
+            },
+          },
+        },
+      });
+
+      expect(canOrThrowMock).toHaveBeenCalledWith(
+        {
+          id: 'requestingUser id',
+          userRoles: { isAdmin: true },
+        } as unknown as User,
+        'application',
+        permissionActions.create,
+        {
+          listingId: dto.listings.id,
+          jurisdictionId: expect.anything(),
+        },
+      );
+    });
+  });
+
+  describe('update endpoint', () => {
+    it('should update an application when one exists', async () => {
+      prisma.applications.findUnique = jest
+        .fn()
+        .mockResolvedValue({ id: randomUUID() });
+
+      prisma.listings.update = jest.fn().mockResolvedValue({
+        id: randomUUID(),
+      });
+
+      prisma.applications.update = jest.fn().mockResolvedValue({
+        id: randomUUID(),
+        listingId: randomUUID(),
+      });
+
+      const exampleAddress = addressFactory() as AddressCreate;
+      const submissionDate = new Date();
+
+      const dto: ApplicationUpdate = {
+        ...mockCreateApplicationData(exampleAddress, submissionDate),
+        id: randomUUID(),
+      };
+
+      prisma.jurisdictions.findFirst = jest
+        .fn()
+        .mockResolvedValue({ id: randomUUID() });
+      prisma.listings.findFirst = jest
+        .fn()
+        .mockResolvedValue({ id: randomUUID() });
+      prisma.householdMember.deleteMany = jest.fn().mockResolvedValue(null);
+
+      await service.update(dto, {
+        id: 'requestingUser id',
+        userRoles: { isAdmin: true },
+      } as unknown as User);
+
+      expect(prisma.applications.findUnique).toHaveBeenCalledWith({
+        where: {
+          id: expect.anything(),
+        },
+      });
+
+      expect(prisma.applications.update).toHaveBeenCalledWith({
+        include: {
+          ...detailView,
+        },
+        data: {
+          contactPreferences: ['example contact preference'],
+          status: ApplicationStatusEnum.submitted,
+          submissionType: ApplicationSubmissionTypeEnum.electronical,
+          appUrl: 'http://www.example.com',
+          additionalPhone: true,
+          additionalPhoneNumber: '111-111-1111',
+          additionalPhoneNumberType: 'example additional phone number type',
+          householdSize: 2,
+          housingStatus: 'example housing status',
+          sendMailToMailingAddress: true,
+          householdExpectingChanges: false,
+          householdStudent: false,
+          incomeVouchers: false,
+          income: '36000',
+          incomePeriod: IncomePeriodEnum.perYear,
+          language: LanguagesEnum.en,
+          acceptedTerms: true,
+          submissionDate: submissionDate,
+          reviewStatus: ApplicationReviewStatusEnum.valid,
+          applicant: {
+            create: {
+              firstName: 'applicant first name',
+              middleName: 'applicant middle name',
+              lastName: 'applicant last name',
+              birthMonth: 12,
+              birthDay: 17,
+              birthYear: 1993,
+              emailAddress: 'example@email.com',
+              noEmail: false,
+              phoneNumber: '111-111-1111',
+              phoneNumberType: 'Cell',
+              noPhone: false,
+              workInRegion: YesNoEnum.yes,
+              applicantAddress: {
+                create: {
+                  ...exampleAddress,
+                },
+              },
+              applicantWorkAddress: {
+                create: {
+                  ...exampleAddress,
+                },
+              },
+            },
+          },
+          accessibility: {
+            create: {
+              mobility: false,
+              vision: false,
+              hearing: false,
+              other: false,
+            },
+          },
+          alternateContact: {
+            create: {
+              type: AlternateContactRelationship.other,
+              otherType: 'example other type',
+              firstName: 'example first name',
+              lastName: 'example last name',
+              agency: 'example agency',
+              phoneNumber: '111-111-1111',
+              emailAddress: 'example@email.com',
+              address: {
+                create: {
+                  ...exampleAddress,
+                },
+              },
+            },
+          },
+          applicationsAlternateAddress: {
+            create: {
+              ...exampleAddress,
+            },
+          },
+          applicationsMailingAddress: {
+            create: {
+              ...exampleAddress,
+            },
+          },
+          listings: {
+            connect: {
+              id: dto.listings.id,
+            },
+          },
+          demographics: {
+            create: {
+              ethnicity: 'example ethnicity',
+              gender: 'example gender',
+              sexualOrientation: 'example sexual orientation',
+              howDidYouHear: ['example how did you hear'],
+              race: ['example race'],
+            },
+          },
+          preferredUnitTypes: {
+            set: [{ id: expect.anything() }],
+          },
+          householdMember: {
+            create: [
+              {
+                orderId: 0,
+                firstName: 'example first name',
+                middleName: 'example middle name',
+                lastName: 'example last name',
+                birthMonth: 12,
+                birthDay: 17,
+                birthYear: 1993,
+                sameAddress: YesNoEnum.yes,
+                relationship: HouseholdMemberRelationship.other,
+                workInRegion: YesNoEnum.yes,
+                householdMemberAddress: {
+                  create: {
+                    ...exampleAddress,
+                  },
+                },
+                householdMemberWorkAddress: {
+                  create: {
+                    ...exampleAddress,
+                  },
+                },
+              },
+            ],
+          },
+          programs: [
+            {
+              key: 'example key',
+              claimed: true,
+              options: [
+                {
+                  key: 'example key',
+                  checked: true,
+                  extraData: [
+                    {
+                      type: InputType.boolean,
+                      key: 'example key',
+                      value: true,
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+          preferences: [
+            {
+              key: 'example key',
+              claimed: true,
+              options: [
+                {
+                  key: 'example key',
+                  checked: true,
+                  extraData: [
+                    {
+                      type: InputType.boolean,
+                      key: 'example key',
+                      value: true,
+                    },
+                  ],
+                },
+              ],
             },
           ],
         },
-        programs: [
-          {
-            key: 'example key',
-            claimed: true,
-            options: [
-              {
-                key: 'example key',
-                checked: true,
-                extraData: [
-                  {
-                    type: InputType.boolean,
-                    key: 'example key',
-                    value: true,
-                  },
-                ],
-              },
-            ],
-          },
-        ],
-        preferences: [
-          {
-            key: 'example key',
-            claimed: true,
-            options: [
-              {
-                key: 'example key',
-                checked: true,
-                extraData: [
-                  {
-                    type: InputType.boolean,
-                    key: 'example key',
-                    value: true,
-                  },
-                ],
-              },
-            ],
-          },
-        ],
-      },
-      where: {
-        id: expect.anything(),
-      },
-    });
+        where: {
+          id: expect.anything(),
+        },
+      });
 
-    expect(prisma.listings.update).toHaveBeenCalledWith({
-      where: {
-        id: expect.anything(),
-      },
-      data: {
-        lastApplicationUpdateAt: expect.anything(),
-      },
-    });
+      expect(prisma.listings.update).toHaveBeenCalledWith({
+        where: {
+          id: expect.anything(),
+        },
+        data: {
+          lastApplicationUpdateAt: expect.anything(),
+        },
+      });
 
-    expect(canOrThrowMock).toHaveBeenCalledWith(
-      {
-        id: 'requestingUser id',
-        userRoles: { isAdmin: true },
-      } as unknown as User,
-      'application',
-      permissionActions.update,
-      expect.anything(),
-    );
-  });
-
-  it("should error trying to update an application when one doesn't exists", async () => {
-    prisma.applications.findUnique = jest.fn().mockResolvedValue(null);
-
-    prisma.listings.update = jest.fn().mockResolvedValue({
-      id: randomUUID(),
-    });
-
-    prisma.applications.update = jest.fn().mockResolvedValue({
-      id: randomUUID(),
-      listingId: randomUUID(),
-    });
-
-    const exampleAddress = addressFactory() as AddressCreate;
-    const submissionDate = new Date();
-
-    const dto: ApplicationUpdate = {
-      ...mockCreateApplicationData(exampleAddress, submissionDate),
-      id: randomUUID(),
-    };
-
-    prisma.jurisdictions.findFirst = jest
-      .fn()
-      .mockResolvedValue({ id: randomUUID() });
-
-    await expect(
-      async () =>
-        await service.update(dto, {
+      expect(canOrThrowMock).toHaveBeenCalledWith(
+        {
           id: 'requestingUser id',
           userRoles: { isAdmin: true },
-        } as unknown as User),
-    ).rejects.toThrowError(expect.anything());
-
-    expect(prisma.applications.findUnique).toHaveBeenCalledWith({
-      where: {
-        id: expect.anything(),
-      },
+        } as unknown as User,
+        'application',
+        permissionActions.update,
+        expect.anything(),
+      );
     });
 
-    expect(prisma.applications.update).not.toHaveBeenCalled();
+    it("should error trying to update an application when one doesn't exists", async () => {
+      prisma.applications.findUnique = jest.fn().mockResolvedValue(null);
 
-    expect(prisma.listings.update).not.toHaveBeenCalled();
+      prisma.listings.update = jest.fn().mockResolvedValue({
+        id: randomUUID(),
+      });
 
-    expect(canOrThrowMock).not.toHaveBeenCalled();
+      prisma.applications.update = jest.fn().mockResolvedValue({
+        id: randomUUID(),
+        listingId: randomUUID(),
+      });
+
+      const exampleAddress = addressFactory() as AddressCreate;
+      const submissionDate = new Date();
+
+      const dto: ApplicationUpdate = {
+        ...mockCreateApplicationData(exampleAddress, submissionDate),
+        id: randomUUID(),
+      };
+
+      prisma.jurisdictions.findFirst = jest
+        .fn()
+        .mockResolvedValue({ id: randomUUID() });
+
+      await expect(
+        async () =>
+          await service.update(dto, {
+            id: 'requestingUser id',
+            userRoles: { isAdmin: true },
+          } as unknown as User),
+      ).rejects.toThrowError(expect.anything());
+
+      expect(prisma.applications.findUnique).toHaveBeenCalledWith({
+        where: {
+          id: expect.anything(),
+        },
+      });
+
+      expect(prisma.applications.update).not.toHaveBeenCalled();
+
+      expect(prisma.listings.update).not.toHaveBeenCalled();
+
+      expect(canOrThrowMock).not.toHaveBeenCalled();
+    });
   });
 
-  it('should get most recent application for a user', async () => {
-    const mockedValue = mockApplication({ position: 3, date });
-    prisma.applications.findUnique = jest.fn().mockResolvedValue(mockedValue);
-    prisma.applications.findFirst = jest
-      .fn()
-      .mockResolvedValue({ id: mockedValue.id });
+  describe('mostRecentlyCreated endpoint', () => {
+    it('should get most recent application for a user', async () => {
+      const mockedValue = mockApplication({ position: 3, date });
+      prisma.applications.findUnique = jest.fn().mockResolvedValue(mockedValue);
+      prisma.applications.findFirst = jest
+        .fn()
+        .mockResolvedValue({ id: mockedValue.id });
 
-    expect(
-      await service.mostRecentlyCreated({ userId: 'example Id' }, {
-        user: requestingUser,
-      } as unknown as ExpressRequest),
-    ).toEqual(mockedValue);
-    expect(prisma.applications.findFirst).toHaveBeenCalledWith({
-      select: {
-        id: true,
-      },
-      orderBy: { createdAt: 'desc' },
-      where: {
-        userId: 'example Id',
-      },
-    });
-    expect(prisma.applications.findUnique).toHaveBeenCalledWith({
-      where: {
-        id: mockedValue.id,
-      },
-      include: {
-        applicant: {
-          select: {
-            id: true,
-            firstName: true,
-            middleName: true,
-            lastName: true,
-            birthMonth: true,
-            birthDay: true,
-            birthYear: true,
-            emailAddress: true,
-            noEmail: true,
-            phoneNumber: true,
-            phoneNumberType: true,
-            noPhone: true,
-            workInRegion: true,
-            fullTimeStudent: true,
-            applicantAddress: {
-              select: {
-                id: true,
-                placeName: true,
-                city: true,
-                county: true,
-                state: true,
-                street: true,
-                street2: true,
-                zipCode: true,
-                latitude: true,
-                longitude: true,
+      expect(
+        await service.mostRecentlyCreated({ userId: 'example Id' }, {
+          user: requestingUser,
+        } as unknown as ExpressRequest),
+      ).toEqual(mockedValue);
+      expect(prisma.applications.findFirst).toHaveBeenCalledWith({
+        select: {
+          id: true,
+        },
+        orderBy: { createdAt: 'desc' },
+        where: {
+          userId: 'example Id',
+        },
+      });
+      expect(prisma.applications.findUnique).toHaveBeenCalledWith({
+        where: {
+          id: mockedValue.id,
+        },
+        include: {
+          applicant: {
+            select: {
+              id: true,
+              firstName: true,
+              middleName: true,
+              lastName: true,
+              birthMonth: true,
+              birthDay: true,
+              birthYear: true,
+              emailAddress: true,
+              noEmail: true,
+              phoneNumber: true,
+              phoneNumberType: true,
+              noPhone: true,
+              workInRegion: true,
+              fullTimeStudent: true,
+              applicantAddress: {
+                select: {
+                  id: true,
+                  placeName: true,
+                  city: true,
+                  county: true,
+                  state: true,
+                  street: true,
+                  street2: true,
+                  zipCode: true,
+                  latitude: true,
+                  longitude: true,
+                },
               },
-            },
-            applicantWorkAddress: {
-              select: {
-                id: true,
-                placeName: true,
-                city: true,
-                county: true,
-                state: true,
-                street: true,
-                street2: true,
-                zipCode: true,
-                latitude: true,
-                longitude: true,
-              },
-            },
-          },
-        },
-        accessibility: {
-          select: {
-            id: true,
-            mobility: true,
-            vision: true,
-            hearing: true,
-            other: true,
-          },
-        },
-        applicationsMailingAddress: {
-          select: {
-            id: true,
-            placeName: true,
-            city: true,
-            county: true,
-            state: true,
-            street: true,
-            street2: true,
-            zipCode: true,
-            latitude: true,
-            longitude: true,
-          },
-        },
-        applicationsAlternateAddress: {
-          select: {
-            id: true,
-            placeName: true,
-            city: true,
-            county: true,
-            state: true,
-            street: true,
-            street2: true,
-            zipCode: true,
-            latitude: true,
-            longitude: true,
-          },
-        },
-        alternateContact: {
-          select: {
-            id: true,
-            type: true,
-            otherType: true,
-            firstName: true,
-            lastName: true,
-            agency: true,
-            phoneNumber: true,
-            emailAddress: true,
-            address: {
-              select: {
-                id: true,
-                placeName: true,
-                city: true,
-                county: true,
-                state: true,
-                street: true,
-                street2: true,
-                zipCode: true,
-                latitude: true,
-                longitude: true,
+              applicantWorkAddress: {
+                select: {
+                  id: true,
+                  placeName: true,
+                  city: true,
+                  county: true,
+                  state: true,
+                  street: true,
+                  street2: true,
+                  zipCode: true,
+                  latitude: true,
+                  longitude: true,
+                },
               },
             },
           },
-        },
-        demographics: {
-          select: {
-            id: true,
-            createdAt: true,
-            updatedAt: true,
-            ethnicity: true,
-            gender: true,
-            sexualOrientation: true,
-            howDidYouHear: true,
-            race: true,
+          accessibility: {
+            select: {
+              id: true,
+              mobility: true,
+              vision: true,
+              hearing: true,
+              other: true,
+            },
           },
-        },
-        preferredUnitTypes: {
-          select: {
-            id: true,
-            name: true,
-            numBedrooms: true,
+          applicationsMailingAddress: {
+            select: {
+              id: true,
+              placeName: true,
+              city: true,
+              county: true,
+              state: true,
+              street: true,
+              street2: true,
+              zipCode: true,
+              latitude: true,
+              longitude: true,
+            },
           },
-        },
-        listings: {
-          select: {
-            id: true,
-            name: true,
-            jurisdictions: {
-              select: {
-                id: true,
-                name: true,
+          applicationsAlternateAddress: {
+            select: {
+              id: true,
+              placeName: true,
+              city: true,
+              county: true,
+              state: true,
+              street: true,
+              street2: true,
+              zipCode: true,
+              latitude: true,
+              longitude: true,
+            },
+          },
+          alternateContact: {
+            select: {
+              id: true,
+              type: true,
+              otherType: true,
+              firstName: true,
+              lastName: true,
+              agency: true,
+              phoneNumber: true,
+              emailAddress: true,
+              address: {
+                select: {
+                  id: true,
+                  placeName: true,
+                  city: true,
+                  county: true,
+                  state: true,
+                  street: true,
+                  street2: true,
+                  zipCode: true,
+                  latitude: true,
+                  longitude: true,
+                },
               },
             },
           },
-        },
-        householdMember: {
-          select: {
-            id: true,
-            orderId: true,
-            firstName: true,
-            middleName: true,
-            lastName: true,
-            birthMonth: true,
-            birthDay: true,
-            birthYear: true,
-            sameAddress: true,
-            relationship: true,
-            workInRegion: true,
-            fullTimeStudent: true,
-            householdMemberAddress: {
-              select: {
-                id: true,
-                placeName: true,
-                city: true,
-                county: true,
-                state: true,
-                street: true,
-                street2: true,
-                zipCode: true,
-                latitude: true,
-                longitude: true,
-              },
+          demographics: {
+            select: {
+              id: true,
+              createdAt: true,
+              updatedAt: true,
+              ethnicity: true,
+              gender: true,
+              sexualOrientation: true,
+              howDidYouHear: true,
+              race: true,
             },
-            householdMemberWorkAddress: {
-              select: {
-                id: true,
-                placeName: true,
-                city: true,
-                county: true,
-                state: true,
-                street: true,
-                street2: true,
-                zipCode: true,
-                latitude: true,
-                longitude: true,
+          },
+          preferredUnitTypes: {
+            select: {
+              id: true,
+              name: true,
+              numBedrooms: true,
+            },
+          },
+          listings: {
+            select: {
+              id: true,
+              name: true,
+              jurisdictions: {
+                select: {
+                  id: true,
+                  name: true,
+                },
               },
             },
           },
-        },
-        userAccounts: {
-          select: {
-            id: true,
-            firstName: true,
-            lastName: true,
-            email: true,
+          householdMember: {
+            select: {
+              id: true,
+              orderId: true,
+              firstName: true,
+              middleName: true,
+              lastName: true,
+              birthMonth: true,
+              birthDay: true,
+              birthYear: true,
+              sameAddress: true,
+              relationship: true,
+              workInRegion: true,
+              fullTimeStudent: true,
+              householdMemberAddress: {
+                select: {
+                  id: true,
+                  placeName: true,
+                  city: true,
+                  county: true,
+                  state: true,
+                  street: true,
+                  street2: true,
+                  zipCode: true,
+                  latitude: true,
+                  longitude: true,
+                },
+              },
+              householdMemberWorkAddress: {
+                select: {
+                  id: true,
+                  placeName: true,
+                  city: true,
+                  county: true,
+                  state: true,
+                  street: true,
+                  street2: true,
+                  zipCode: true,
+                  latitude: true,
+                  longitude: true,
+                },
+              },
+            },
+          },
+          userAccounts: {
+            select: {
+              id: true,
+              firstName: true,
+              lastName: true,
+              email: true,
+            },
           },
         },
-      },
+      });
     });
   });
 });
