@@ -221,12 +221,18 @@ describe('Testing listing csv export service', () => {
     });
     it('should create the listing csv with marketing type seasons', async () => {
       await service.createCsv('sampleFile.csv', undefined, {
-        listings: [mockBaseListing],
+        listings: [
+          {
+            ...mockBaseListing,
+            marketingMonth: null,
+            showWaitlist: false,
+            referralApplication: null,
+          },
+        ],
         user: {
           jurisdictions: [
             {
               ...mockBaseJurisdiction,
-              marketingMonth: null,
               featureFlags: [
                 {
                   name: FeatureFlagEnum.enableMarketingStatus,
@@ -251,12 +257,18 @@ describe('Testing listing csv export service', () => {
     });
     it('should create the listing csv with marketing type months', async () => {
       await service.createCsv('sampleFile.csv', undefined, {
-        listings: [mockBaseListing],
+        listings: [
+          {
+            ...mockBaseListing,
+            marketingSeason: null,
+            showWaitlist: false,
+            referralApplication: null,
+          },
+        ],
         user: {
           jurisdictions: [
             {
               ...mockBaseJurisdiction,
-              marketingSeason: null,
               featureFlags: [
                 {
                   name: FeatureFlagEnum.enableMarketingStatus,
