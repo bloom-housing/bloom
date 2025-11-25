@@ -957,32 +957,51 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
         FeatureFlagEnum.enableMarketingStatus,
       )
     ) {
-      headers.push(
-        ...[
-          {
-            path: 'marketingType',
-            label: 'Marketing Status',
-            format: (val: string): string => {
-              if (!val) return '';
-              return val === MarketingTypeEnum.marketing
-                ? 'Marketing'
-                : 'Under Construction';
-            },
+      headers.push({
+        path: 'marketingType',
+        label: 'Marketing Status',
+        format: (val: string): string => {
+          if (!val) return '';
+          return val === MarketingTypeEnum.marketing
+            ? 'Marketing'
+            : 'Under Construction';
+        },
+      });
+
+      if (
+        doAnyJurisdictionHaveFeatureFlagSet(
+          user.jurisdictions,
+          FeatureFlagEnum.enableMarketingStatusMonths,
+        )
+      )
+        headers.push({
+          path: 'marketingMonth',
+          label: 'Marketing Month',
+          format: (val: string): string => {
+            if (!val) return '';
+            return val.charAt(0).toUpperCase() + val.slice(1);
           },
-          {
-            path: 'marketingSeason',
-            label: 'Marketing Season',
-            format: (val: string): string => {
-              if (!val) return '';
-              return val.charAt(0).toUpperCase() + val.slice(1);
-            },
+        });
+
+      if (
+        doAnyJurisdictionHaveFalsyFeatureFlagValue(
+          user.jurisdictions,
+          FeatureFlagEnum.enableMarketingStatusMonths,
+        )
+      )
+        headers.push({
+          path: 'marketingSeason',
+          label: 'Marketing Season',
+          format: (val: string): string => {
+            if (!val) return '';
+            return val.charAt(0).toUpperCase() + val.slice(1);
           },
-          {
-            path: 'marketingYear',
-            label: 'Marketing Year',
-          },
-        ],
-      );
+        });
+
+      headers.push({
+        path: 'marketingYear',
+        label: 'Marketing Year',
+      });
     }
     headers.push(
       ...[
