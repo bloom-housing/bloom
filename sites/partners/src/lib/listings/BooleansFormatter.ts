@@ -5,6 +5,10 @@ import { addressTypes } from "./formTypes"
 export default class BooleansFormatter extends Formatter {
   /** Format all of the Yes/No questions in the form */
   process() {
+    this.processBoolean("hasHudEbllClearance", {
+      when: this.data.listingHasHudEbllClearance === YesNoEnum.yes,
+      falseCase: () => (this.data.listingHasHudEbllClearance === YesNoEnum.no ? false : null),
+    })
     this.processBoolean("applicationDropOffAddressType", {
       when:
         this.data.canApplicationsBeDroppedOff === YesNoEnum.yes &&
@@ -85,7 +89,6 @@ export default class BooleansFormatter extends Formatter {
       falseCase: () =>
         this.data.includeCommunityDisclaimerQuestion === YesNoEnum.no ? false : null,
     })
-
     this.processBoolean("section8Acceptance", {
       when: this.data.listingSection8Acceptance === YesNoEnum.yes,
       falseCase: () => (this.data.listingSection8Acceptance === YesNoEnum.no ? false : null),

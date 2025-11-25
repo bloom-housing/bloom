@@ -10,6 +10,7 @@ export enum FeatureFlagEnum {
   enableAdaOtherOption = 'enableAdaOtherOption',
   enableAdditionalResources = 'enableAdditionalResources',
   enableCompanyWebsite = 'enableCompanyWebsite',
+  enableCreditScreeningFee = 'enableCreditScreeningFee',
   enableFullTimeStudentQuestion = 'enableFullTimeStudentQuestion',
   enableGeocodingPreferences = 'enableGeocodingPreferences',
   enableGeocodingRadiusMethod = 'enableGeocodingRadiusMethod',
@@ -18,6 +19,7 @@ export enum FeatureFlagEnum {
   enableIsVerified = 'enableIsVerified',
   enableLimitedHowDidYouHear = 'enableLimitedHowDidYouHear',
   enableListingFavoriting = 'enableListingFavoriting',
+  enableListingFileNumber = 'enableListingFileNumber',
   enableListingFiltering = 'enableListingFiltering',
   enableListingOpportunity = 'enableListingOpportunity',
   enableListingPagination = 'enableListingPagination',
@@ -92,6 +94,10 @@ export const featureFlagMap: {
       'When true, allows partners to add company website information',
   },
   {
+    name: FeatureFlagEnum.enableCreditScreeningFee,
+    description: 'When true, credit screening fee is enabled for listings',
+  },
+  {
     name: FeatureFlagEnum.enableFullTimeStudentQuestion,
     description:
       'When true, the full time student question is displayed in the application form',
@@ -129,6 +135,11 @@ export const featureFlagMap: {
     name: FeatureFlagEnum.enableListingFavoriting,
     description:
       'When true, a Favorite button is shown for public listings and users can view their favorited listings',
+  },
+  {
+    name: FeatureFlagEnum.enableListingFileNumber,
+    description:
+      'When true, partners can enter and export a listing file number',
   },
   {
     name: FeatureFlagEnum.enableListingFiltering,

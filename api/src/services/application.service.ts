@@ -36,6 +36,7 @@ import { MostRecentApplicationQueryParams } from '../dtos/applications/most-rece
 import { PublicAppsViewQueryParams } from '../dtos/applications/public-apps-view-params.dto';
 import { ApplicationsFilterEnum } from '../enums/applications/filter-enum';
 import { PublicAppsViewResponse } from '../dtos/applications/public-apps-view-response.dto';
+import dayjs from 'dayjs';
 
 export const view: Partial<
   Record<ApplicationViews, Prisma.ApplicationsInclude>
@@ -636,6 +637,18 @@ export class ApplicationService {
       }
     }
 
+    // If a new application comes in after close and PII needs to be deleted
+    let expireAfterDate = undefined;
+    if (
+      listing.status === ListingsStatusEnum.closed &&
+      process.env.APPLICATION_DAYS_TILL_EXPIRY &&
+      !isNaN(Number(process.env.APPLICATION_DAYS_TILL_EXPIRY))
+    ) {
+      expireAfterDate = dayjs(listing.closedAt)
+        .add(Number(process.env.APPLICATION_DAYS_TILL_EXPIRY), 'days')
+        .toDate();
+    }
+
     const transactions = [];
     // Set all previous applications for the user to not be the newest
     if (requestingUser?.id) {
@@ -775,6 +788,7 @@ export class ApplicationService {
                 },
               }
             : undefined,
+          expireAfter: expireAfterDate,
 
           // TODO: Temporary until after MSQ refactor
           applicationSelections: undefined,
