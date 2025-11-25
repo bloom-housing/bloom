@@ -47,7 +47,7 @@ describe("AdditionalDetails", () => {
         <FormComponent>
           <AdditionalDetails
             defaultText="This is a mock default text"
-            exisistingDocumnets={{
+            existingDocuments={{
               socialSecurityCard: true,
               currentLandlordReference: true,
               birthCertificate: true,
@@ -98,7 +98,7 @@ describe("AdditionalDetails", () => {
         >
           <AdditionalDetails
             defaultText="This is a mock default text"
-            exisistingDocumnets={{
+            existingDocuments={{
               socialSecurityCard: true,
               currentLandlordReference: true,
               birthCertificate: true,
