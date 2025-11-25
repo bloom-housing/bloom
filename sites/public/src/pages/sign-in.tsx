@@ -19,6 +19,7 @@ import {
   FormSignInPwdless,
 } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../lib/constants"
+import PasswordExpiredModal from "../components/account/PasswordExpiredModal"
 import {
   FeatureFlagEnum,
   Jurisdiction,
@@ -65,6 +66,7 @@ const SignIn = (props: SignInProps) => {
   const [loading, setLoading] = useState(false)
   const [reCaptchaToken, setReCaptchaToken] = useState(null)
   const [refreshReCaptcha, setRefreshReCaptcha] = useState(false)
+  const [passwordExpired, setPasswordExpired] = useState(false)
 
   const {
     mutate: mutateResendConfirmation,
@@ -129,6 +131,13 @@ const SignIn = (props: SignInProps) => {
         query: queryParams,
       })
     } catch (error) {
+      if (
+        error?.response?.data?.message?.includes(
+          "attempted to login, but password is no longer valid"
+        )
+      ) {
+        setPasswordExpired(true)
+      }
       setLoading(false)
       const { status } = error.response || {}
       determineNetworkError(status, error)
@@ -160,6 +169,7 @@ const SignIn = (props: SignInProps) => {
       await redirectToPage()
       addToast(t(`authentication.signIn.success`, { name: user.firstName }), { variant: "success" })
     } catch (error) {
+      console.log("error result", error)
       setLoading(false)
       if (sendToReCaptchaFlow(error.response.data.name)) {
         await singleUseCodeFlow(email, true)
@@ -323,6 +333,17 @@ const SignIn = (props: SignInProps) => {
           )}
         </div>
       </FormsLayout>
+      <PasswordExpiredModal
+        isOpen={passwordExpired}
+        onClose={() => {
+          setConfirmationStatusModal(false)
+          resetResendConfirmation()
+          resetNetworkError()
+        }}
+        initialEmailValue={emailValue.current as string}
+        onSubmit={(email) => onResendConfirmationSubmit(email)}
+        loadingMessage={isResendConfirmationLoading && t("t.formSubmitted")}
+      />
 
       <ResendConfirmationModal
         isOpen={confirmationStatusModal}
