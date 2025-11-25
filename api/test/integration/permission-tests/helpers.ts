@@ -10,6 +10,7 @@ import {
   ListingEventsTypeEnum,
   ListingsStatusEnum,
   MultiselectQuestionsApplicationSectionEnum,
+  MultiselectQuestionsStatusEnum,
   Prisma,
   ReviewOrderTypeEnum,
   UnitTypeEnum,
@@ -169,9 +170,10 @@ export const buildMultiselectQuestionCreateMock = (
   jurisId: string,
 ): MultiselectQuestionCreate => {
   return {
-    text: 'example text',
-    subText: 'example subText',
+    applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
     description: 'example description',
+    hideFromListing: false,
+    jurisdictions: [{ id: jurisId }],
     links: [
       {
         title: 'title 1',
@@ -182,7 +184,6 @@ export const buildMultiselectQuestionCreateMock = (
         url: 'https://title-2.com',
       },
     ],
-    jurisdictions: [{ id: jurisId }],
     options: [
       {
         text: 'example option text 1',
@@ -212,8 +213,9 @@ export const buildMultiselectQuestionCreateMock = (
       },
     ],
     optOutText: 'example optOutText',
-    hideFromListing: false,
-    applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
+    status: MultiselectQuestionsStatusEnum.draft,
+    subText: 'example subText',
+    text: 'example text',
   };
 };
 
@@ -223,51 +225,7 @@ export const buildMultiselectQuestionUpdateMock = (
 ): MultiselectQuestionUpdate => {
   return {
     id,
-    text: 'example text',
-    subText: 'example subText',
-    description: 'example description',
-    links: [
-      {
-        title: 'title 1',
-        url: 'https://title-1.com',
-      },
-      {
-        title: 'title 2',
-        url: 'https://title-2.com',
-      },
-    ],
-    jurisdictions: [{ id: jurisId }],
-    options: [
-      {
-        text: 'example option text 1',
-        ordinal: 1,
-        description: 'example option description 1',
-        links: [
-          {
-            title: 'title 3',
-            url: 'https://title-3.com',
-          },
-        ],
-        collectAddress: true,
-        exclusive: false,
-      },
-      {
-        text: 'example option text 2',
-        ordinal: 2,
-        description: 'example option description 2',
-        links: [
-          {
-            title: 'title 4',
-            url: 'https://title-4.com',
-          },
-        ],
-        collectAddress: true,
-        exclusive: false,
-      },
-    ],
-    optOutText: 'example optOutText',
-    hideFromListing: false,
-    applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
+    ...buildMultiselectQuestionCreateMock(jurisId),
   };
 };
 

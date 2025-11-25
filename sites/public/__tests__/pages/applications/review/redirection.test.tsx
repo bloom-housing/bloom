@@ -13,6 +13,8 @@ window.scrollTo = jest.fn()
 
 const server = setupServer()
 
+const mockApplication = JSON.parse(JSON.stringify(blankApplication))
+
 beforeAll(() => {
   server.listen()
 })
@@ -31,12 +33,12 @@ describe("applications pages", () => {
   describe("back button to ada step", () => {
     it("no listing available should redirect to listings page", async () => {
       const { pushMock } = mockNextRouter()
-      const conductor = new ApplicationConductor({}, {})
+      const conductor = new ApplicationConductor(mockApplication, null)
       render(
         <AppSubmissionContext.Provider
           value={{
             conductor: conductor,
-            application: JSON.parse(JSON.stringify(blankApplication)),
+            application: mockApplication,
             listing: null,
             syncApplication: () => {
               return
@@ -57,12 +59,12 @@ describe("applications pages", () => {
 
     it("listing available should not redirect to listings page", async () => {
       const { pushMock } = mockNextRouter()
-      const conductor = new ApplicationConductor({}, {})
+      const conductor = new ApplicationConductor(mockApplication, {})
       render(
         <AppSubmissionContext.Provider
           value={{
             conductor: conductor,
-            application: JSON.parse(JSON.stringify(blankApplication)),
+            application: mockApplication,
             listing: {} as Listing,
             syncApplication: () => {
               return
@@ -85,12 +87,12 @@ describe("applications pages", () => {
   describe("back button to summary step", () => {
     it("no listing available should redirect to listings page", async () => {
       const { pushMock } = mockNextRouter()
-      const conductor = new ApplicationConductor({}, {})
+      const conductor = new ApplicationConductor(mockApplication, null)
       render(
         <AppSubmissionContext.Provider
           value={{
             conductor: conductor,
-            application: JSON.parse(JSON.stringify(blankApplication)),
+            application: mockApplication,
             listing: null,
             syncApplication: () => {
               return
@@ -111,12 +113,12 @@ describe("applications pages", () => {
 
     it("listing available should not redirect to listings page", async () => {
       const { pushMock } = mockNextRouter()
-      const conductor = new ApplicationConductor({}, {})
+      const conductor = new ApplicationConductor(mockApplication, {})
       render(
         <AppSubmissionContext.Provider
           value={{
             conductor: conductor,
-            application: JSON.parse(JSON.stringify(blankApplication)),
+            application: mockApplication,
             listing: {} as Listing,
             syncApplication: () => {
               return

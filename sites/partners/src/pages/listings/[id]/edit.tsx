@@ -25,6 +25,8 @@ const EditListing = (props: { listing: Listing }) => {
 
   if (!listing) return false
 
+  const selectedJurisdiction = listing.jurisdictions.id
+
   return (
     <ListingContext.Provider value={listing}>
       <ListingGuard>
@@ -40,15 +42,7 @@ const EditListing = (props: { listing: Listing }) => {
           />
 
           <NavigationHeader
-            title={
-              <>
-                <p className="font-sans font-semibold uppercase text-2xl">
-                  {t("t.edit")}: {listingName}
-                </p>
-
-                <p className="font-sans text-base mt-1">{listing.id}</p>
-              </>
-            }
+            title={`${t("t.edit")}: ${listingName}`}
             breadcrumbs={
               <Breadcrumbs>
                 <BreadcrumbLink href="/">{t("t.listing")}</BreadcrumbLink>
@@ -59,8 +53,8 @@ const EditListing = (props: { listing: Listing }) => {
               </Breadcrumbs>
             }
           />
-
           <PaperListingForm
+            jurisdictionId={selectedJurisdiction}
             listing={listing}
             editMode
             setListingName={setListingName}
