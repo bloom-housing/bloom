@@ -37,7 +37,6 @@ export class SingleUseCodeStrategy extends PassportStrategy(
     returns the verified user
   */
   async validate(req: Request): Promise<User> {
-    console.log('single-use-code.strategy.ts');
     const validationPipe = new ValidationPipe(defaultValidationPipeOptions);
     const dto: LoginViaSingleUseCode = await validationPipe.transform(
       req.body,
@@ -46,7 +45,6 @@ export class SingleUseCodeStrategy extends PassportStrategy(
         metatype: LoginViaSingleUseCode,
       },
     );
-
     const jurisName = req?.headers?.jurisdictionname;
     if (!jurisName) {
       throw new BadRequestException(
