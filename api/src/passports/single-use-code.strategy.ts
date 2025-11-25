@@ -85,6 +85,7 @@ export class SingleUseCodeStrategy extends PassportStrategy(
         `user ${dto.email} attempted to log in, but does not exist`,
       );
     }
+
     rawUser.failedLoginAttemptsCount = checkUserLockout(
       rawUser.lastLoginAt,
       rawUser.failedLoginAttemptsCount,
