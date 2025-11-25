@@ -1,8 +1,7 @@
-import { t, Form, Field } from "@bloom-housing/ui-components"
+import { t } from "@bloom-housing/ui-components"
 import { Button, Dialog } from "@bloom-housing/ui-seeds"
-import React, { useCallback, useEffect, useMemo } from "react"
-import { useForm } from "react-hook-form"
-import { emailRegex } from "@bloom-housing/shared-helpers"
+import React, { useCallback } from "react"
+import { useRouter } from "next/router"
 
 export type ResendConfirmationModalProps = {
   isOpen: boolean
@@ -16,35 +15,8 @@ export type ResendConfirmationModalForm = {
   onSubmit: (email: string) => void
 }
 
-const PasswordExpiredModal = ({
-  isOpen,
-  initialEmailValue,
-  loadingMessage,
-  onClose,
-  onSubmit,
-}: ResendConfirmationModalProps) => {
-  // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, errors, reset, getValues, trigger } = useForm({
-    defaultValues: useMemo(() => {
-      return {
-        emailResend: initialEmailValue,
-      }
-    }, [initialEmailValue]),
-  })
-
-  useEffect(() => {
-    reset({
-      emailResend: initialEmailValue,
-    })
-  }, [initialEmailValue, reset])
-
-  const onFormSubmit = async () => {
-    const isValid = await trigger()
-    if (!isValid) return
-
-    const { emailResend } = getValues()
-    onSubmit(emailResend)
-  }
+const PasswordExpiredModal = ({ isOpen, onClose }: ResendConfirmationModalProps) => {
+  const router = useRouter()
 
   const closeCallback = useCallback(() => {
     onClose()
@@ -55,40 +27,20 @@ const PasswordExpiredModal = ({
     <Dialog
       isOpen={isOpen}
       onClose={closeCallback}
-      ariaLabelledBy="resend-confirmation-dialog-header"
+      ariaLabelledBy="confirm-add-application-dialog-header"
     >
-      <Dialog.Header id="resend-confirmation-dialog-header">
-        {t("authentication.signIn.yourAccountIsNotConfirmed")}
-      </Dialog.Header>
+      <Dialog.Header id="confirm-add-application-dialog-header">Password Expired</Dialog.Header>
       <Dialog.Content>
-        <Form>
-          <Field
-            type="email"
-            name="emailResend"
-            label={t("authentication.createAccount.resendAnEmailTo")}
-            placeholder="example@web.com"
-            validation={{ required: true, pattern: emailRegex }}
-            error={!!errors.emailResend}
-            errorMessage={t("authentication.signIn.loginError")}
-            register={register}
-            labelClassName={"text__caps-spaced"}
-          />
-        </Form>
-
-        <p className="pt-4">{t("authentication.createAccount.resendEmailInfo")}</p>
+        The password tied to your account has expired. Please reset it to continue.
       </Dialog.Content>
       <Dialog.Footer>
         <Button
           type="button"
           variant="primary"
-          onClick={() => onFormSubmit()}
-          loadingMessage={loadingMessage}
+          onClick={() => router.push("/forgot-password")}
           size="sm"
         >
-          {t("authentication.createAccount.resendTheEmail")}
-        </Button>
-        <Button type="button" variant="alert" onClick={closeCallback} size="sm">
-          {t("t.cancel")}
+          {t("account.pwdless.continue")}
         </Button>
       </Dialog.Footer>
     </Dialog>
