@@ -469,6 +469,11 @@ describe('Testing listing service', () => {
       listingsLeasingAgentAddress: exampleAddress,
       listingsBuildingSelectionCriteriaFile: exampleAsset,
       listingsResult: exampleAsset,
+      marketingFlyer: 'https://example.com/marketing-flyer.pdf',
+      accessibleMarketingFlyer:
+        'https://example.com/accessible-marketing-flyer.pdf',
+      listingsMarketingFlyerFile: exampleAsset,
+      listingsAccessibleMarketingFlyerFile: exampleAsset,
       listingEvents: [
         {
           type: ListingEventsTypeEnum.openHouse,
@@ -635,6 +640,8 @@ describe('Testing listing service', () => {
             },
           },
           listingsBuildingSelectionCriteriaFile: true,
+          listingsMarketingFlyerFile: true,
+          listingsAccessibleMarketingFlyerFile: true,
           listingEvents: {
             include: {
               assets: true,
@@ -2400,6 +2407,8 @@ describe('Testing listing service', () => {
             },
           },
           listingsBuildingSelectionCriteriaFile: true,
+          listingsMarketingFlyerFile: true,
+          listingsAccessibleMarketingFlyerFile: true,
           listingEvents: {
             include: {
               assets: true,
@@ -2917,6 +2926,8 @@ describe('Testing listing service', () => {
             },
           },
           listingsBuildingSelectionCriteriaFile: true,
+          listingsMarketingFlyerFile: true,
+          listingsAccessibleMarketingFlyerFile: true,
           listingEvents: {
             include: {
               assets: true,
@@ -3193,6 +3204,8 @@ describe('Testing listing service', () => {
           listingsApplicationMailingAddress: true,
           listingsBuildingAddress: true,
           listingsBuildingSelectionCriteriaFile: true,
+          listingsMarketingFlyerFile: true,
+          listingsAccessibleMarketingFlyerFile: true,
           listingsLeasingAgentAddress: true,
           listingsResult: true,
           requestedChangesUser: true,
@@ -3319,6 +3332,8 @@ describe('Testing listing service', () => {
           listingsApplicationMailingAddress: true,
           listingsBuildingAddress: true,
           listingsBuildingSelectionCriteriaFile: true,
+          listingsMarketingFlyerFile: true,
+          listingsAccessibleMarketingFlyerFile: true,
           listingsLeasingAgentAddress: true,
           listingsResult: true,
           requestedChangesUser: true,
@@ -3442,6 +3457,16 @@ describe('Testing listing service', () => {
             },
           },
           listingsBuildingSelectionCriteriaFile: {
+            create: {
+              ...exampleAsset,
+            },
+          },
+          listingsMarketingFlyerFile: {
+            create: {
+              ...exampleAsset,
+            },
+          },
+          listingsAccessibleMarketingFlyerFile: {
             create: {
               ...exampleAsset,
             },
@@ -3691,6 +3716,8 @@ describe('Testing listing service', () => {
           listingsApplicationMailingAddress: true,
           listingsBuildingAddress: true,
           listingsBuildingSelectionCriteriaFile: true,
+          listingsMarketingFlyerFile: true,
+          listingsAccessibleMarketingFlyerFile: true,
           listingsLeasingAgentAddress: true,
           listingsResult: true,
           requestedChangesUser: true,
@@ -3831,6 +3858,8 @@ describe('Testing listing service', () => {
           listingsApplicationMailingAddress: true,
           listingsBuildingAddress: true,
           listingsBuildingSelectionCriteriaFile: true,
+          listingsMarketingFlyerFile: true,
+          listingsAccessibleMarketingFlyerFile: true,
           listingsLeasingAgentAddress: true,
           listingsResult: true,
           requestedChangesUser: true,
@@ -3952,6 +3981,16 @@ describe('Testing listing service', () => {
             },
           },
           listingsBuildingSelectionCriteriaFile: {
+            create: {
+              ...exampleAsset,
+            },
+          },
+          listingsMarketingFlyerFile: {
+            create: {
+              ...exampleAsset,
+            },
+          },
+          listingsAccessibleMarketingFlyerFile: {
             create: {
               ...exampleAsset,
             },
@@ -4169,6 +4208,8 @@ describe('Testing listing service', () => {
           listingsApplicationPickUpAddress: true,
           listingsBuildingAddress: true,
           listingsBuildingSelectionCriteriaFile: true,
+          listingsMarketingFlyerFile: true,
+          listingsAccessibleMarketingFlyerFile: true,
           listingsApplicationMailingAddress: true,
           listingsLeasingAgentAddress: true,
           listingsResult: true,
@@ -4278,6 +4319,8 @@ describe('Testing listing service', () => {
           listingsApplicationPickUpAddress: true,
           listingsBuildingAddress: true,
           listingsBuildingSelectionCriteriaFile: true,
+          listingsMarketingFlyerFile: true,
+          listingsAccessibleMarketingFlyerFile: true,
           listingsApplicationMailingAddress: true,
           listingsLeasingAgentAddress: true,
           listingsResult: true,
@@ -4378,6 +4421,8 @@ describe('Testing listing service', () => {
           listingsApplicationPickUpAddress: true,
           listingsBuildingAddress: true,
           listingsBuildingSelectionCriteriaFile: true,
+          listingsMarketingFlyerFile: true,
+          listingsAccessibleMarketingFlyerFile: true,
           listingsApplicationMailingAddress: true,
           listingsLeasingAgentAddress: true,
           listingsResult: true,
@@ -4810,6 +4855,8 @@ describe('Testing listing service', () => {
           listingsApplicationPickUpAddress: true,
           listingsBuildingAddress: true,
           listingsBuildingSelectionCriteriaFile: true,
+          listingsMarketingFlyerFile: true,
+          listingsAccessibleMarketingFlyerFile: true,
           listingsApplicationMailingAddress: true,
           listingsLeasingAgentAddress: true,
           listingsResult: true,
@@ -4873,6 +4920,12 @@ describe('Testing listing service', () => {
             create: [],
           },
           listingsBuildingSelectionCriteriaFile: {
+            disconnect: true,
+          },
+          listingsMarketingFlyerFile: {
+            disconnect: true,
+          },
+          listingsAccessibleMarketingFlyerFile: {
             disconnect: true,
           },
           listingNeighborhoodAmenities: {
@@ -5083,6 +5136,12 @@ describe('Testing listing service', () => {
             create: [],
           },
           listingsBuildingSelectionCriteriaFile: {
+            disconnect: true,
+          },
+          listingsMarketingFlyerFile: {
+            disconnect: true,
+          },
+          listingsAccessibleMarketingFlyerFile: {
             disconnect: true,
           },
           unitsAvailable: 5,

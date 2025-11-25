@@ -160,6 +160,8 @@ includeViews.full = {
     },
   },
   listingsBuildingSelectionCriteriaFile: true,
+  listingsMarketingFlyerFile: true,
+  listingsAccessibleMarketingFlyerFile: true,
   listingEvents: {
     include: {
       assets: true,
@@ -1395,6 +1397,21 @@ export class ListingService implements OnModuleInit {
                 },
               }
             : undefined,
+        listingsMarketingFlyerFile: dto.listingsMarketingFlyerFile
+          ? {
+              create: {
+                ...dto.listingsMarketingFlyerFile,
+              },
+            }
+          : undefined,
+        listingsAccessibleMarketingFlyerFile:
+          dto.listingsAccessibleMarketingFlyerFile
+            ? {
+                create: {
+                  ...dto.listingsAccessibleMarketingFlyerFile,
+                },
+              }
+            : undefined,
         listingUtilities: dto.listingUtilities
           ? {
               create: {
@@ -2217,7 +2234,7 @@ export class ListingService implements OnModuleInit {
                 },
               }
             : undefined,
-          // Three options for the building selection criteria file
+          // Three options for the building selection criteria and marketing Flyers files
           // create new one, connect existing one, or deleted (disconnect)
           listingsBuildingSelectionCriteriaFile:
             incomingDto.listingsBuildingSelectionCriteriaFile
@@ -2236,6 +2253,47 @@ export class ListingService implements OnModuleInit {
                 : {
                     create: {
                       ...incomingDto.listingsBuildingSelectionCriteriaFile,
+                    },
+                  }
+              : {
+                  disconnect: true,
+                },
+          listingsMarketingFlyerFile: incomingDto.listingsMarketingFlyerFile
+            ? incomingDto.listingsMarketingFlyerFile.id
+              ? {
+                  connectOrCreate: {
+                    where: {
+                      id: incomingDto.listingsMarketingFlyerFile.id,
+                    },
+                    create: {
+                      ...incomingDto.listingsMarketingFlyerFile,
+                    },
+                  },
+                }
+              : {
+                  create: {
+                    ...incomingDto.listingsMarketingFlyerFile,
+                  },
+                }
+            : {
+                disconnect: true,
+              },
+          listingsAccessibleMarketingFlyerFile:
+            incomingDto.listingsAccessibleMarketingFlyerFile
+              ? incomingDto.listingsAccessibleMarketingFlyerFile.id
+                ? {
+                    connectOrCreate: {
+                      where: {
+                        id: incomingDto.listingsAccessibleMarketingFlyerFile.id,
+                      },
+                      create: {
+                        ...incomingDto.listingsAccessibleMarketingFlyerFile,
+                      },
+                    },
+                  }
+                : {
+                    create: {
+                      ...incomingDto.listingsAccessibleMarketingFlyerFile,
                     },
                   }
               : {

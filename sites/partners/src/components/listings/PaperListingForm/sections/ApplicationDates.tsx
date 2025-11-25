@@ -16,6 +16,7 @@ import { Button, Dialog, Drawer, Link, Grid } from "@bloom-housing/ui-seeds"
 import { FormListing, TempEvent } from "../../../../lib/listings/formTypes"
 import { OpenHouseForm } from "../OpenHouseForm"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
+import MarketingFlyer, { MarketingFlyerData } from "./MarketingFlyer"
 import {
   MarketingTypeEnum,
   MarketingSeasonEnum,
@@ -105,6 +106,11 @@ const ApplicationDates = ({
     jurisdiction
   )
 
+  const enableMarketingFlyer = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableMarketingFlyer,
+    jurisdiction
+  )
+
   const [drawerOpenHouse, setDrawerOpenHouse] = useState<TempEvent | boolean>(false)
   const [modalDeleteOpenHouse, setModalDeleteOpenHouse] = useState<TempEvent | null>(null)
 
@@ -126,6 +132,21 @@ const ApplicationDates = ({
     const newEvents = openHouseEvents.filter((event) => event !== eventToDelete)
     setOpenHouseEvents(newEvents)
     setModalDeleteOpenHouse(null)
+  }
+
+  const onMarketingFlyerSubmit = (data: MarketingFlyerData) => {
+    if (data.marketingFlyer !== undefined) {
+      setValue("marketingFlyer", data.marketingFlyer)
+    }
+    if (data.listingsMarketingFlyerFile) {
+      setValue("listingsMarketingFlyerFile", data.listingsMarketingFlyerFile)
+    }
+    if (data.accessibleMarketingFlyer !== undefined) {
+      setValue("accessibleMarketingFlyer", data.accessibleMarketingFlyer)
+    }
+    if (data.listingsAccessibleMarketingFlyerFile) {
+      setValue("listingsAccessibleMarketingFlyerFile", data.listingsAccessibleMarketingFlyerFile)
+    }
   }
 
   const hasDueDateError = errors?.applicationDueDate || errors?.applicationDueDateField
@@ -327,6 +348,18 @@ const ApplicationDates = ({
           </Grid.Cell>
         </Grid.Row>
       </SectionWithGrid>
+
+      {enableMarketingFlyer && jurisdiction && (
+        <MarketingFlyer
+          currentData={{
+            marketingFlyer: watch("marketingFlyer"),
+            listingsMarketingFlyerFile: watch("listingsMarketingFlyerFile"),
+            accessibleMarketingFlyer: watch("accessibleMarketingFlyer"),
+            listingsAccessibleMarketingFlyerFile: watch("listingsAccessibleMarketingFlyerFile"),
+          }}
+          onSubmit={onMarketingFlyerSubmit}
+        />
+      )}
 
       <Drawer
         isOpen={!!drawerOpenHouse}

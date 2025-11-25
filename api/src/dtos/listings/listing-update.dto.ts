@@ -43,6 +43,8 @@ export class ListingUpdate extends OmitType(Listing, [
   'listingsLeasingAgentAddress',
   'listingsBuildingAddress',
   'listingsBuildingSelectionCriteriaFile',
+  'listingsMarketingFlyerFile',
+  'listingsAccessibleMarketingFlyerFile',
   'listingEvents',
   'listingFeatures',
   'listingUtilities',
@@ -189,6 +191,24 @@ export class ListingUpdate extends OmitType(Listing, [
   @Type(() => AssetCreate)
   @ApiPropertyOptional({ type: AssetCreate })
   listingsBuildingSelectionCriteriaFile?: AssetCreate;
+
+  @Expose()
+  @ValidateListingPublish('listingsMarketingFlyerFile', {
+    groups: [ValidationsGroupsEnum.default],
+  })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => AssetCreate)
+  @ApiPropertyOptional({ type: AssetCreate })
+  listingsMarketingFlyerFile?: AssetCreate;
+
+  @Expose()
+  @ValidateListingPublish('listingsAccessibleMarketingFlyerFile', {
+    groups: [ValidationsGroupsEnum.default],
+  })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => AssetCreate)
+  @ApiPropertyOptional({ type: AssetCreate })
+  listingsAccessibleMarketingFlyerFile?: AssetCreate;
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })

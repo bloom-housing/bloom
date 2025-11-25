@@ -24,6 +24,7 @@ export enum FeatureFlagEnum {
   enableListingOpportunity = 'enableListingOpportunity',
   enableListingPagination = 'enableListingPagination',
   enableListingUpdatedAt = 'enableListingUpdatedAt',
+  enableMarketingFlyer = 'enableMarketingFlyer',
   enableMarketingStatus = 'enableMarketingStatus',
   enableMarketingStatusMonths = 'enableMarketingStatusMonths',
   enableNeighborhoodAmenities = 'enableNeighborhoodAmenities',
@@ -159,6 +160,11 @@ export const featureFlagMap: {
   {
     name: FeatureFlagEnum.enableListingUpdatedAt,
     description: 'When true, listings detail will display an updated at date',
+  },
+  {
+    name: FeatureFlagEnum.enableMarketingFlyer,
+    description:
+      "When true, the 'marketing flyer' sub-section is displayed in listing creation/edit and the public listing view",
   },
   {
     name: FeatureFlagEnum.enableMarketingStatus,
