@@ -131,13 +131,6 @@ const SignIn = (props: SignInProps) => {
         query: queryParams,
       })
     } catch (error) {
-      if (
-        error?.response?.data?.message?.includes(
-          "attempted to login, but password is no longer valid"
-        )
-      ) {
-        setPasswordExpired(true)
-      }
       setLoading(false)
       const { status } = error.response || {}
       determineNetworkError(status, error)
@@ -274,6 +267,16 @@ const SignIn = (props: SignInProps) => {
     }
   }, [networkError])
 
+  useEffect(() => {
+    if (
+      networkError?.error?.response?.data?.message?.includes(
+        "attempted to login, but password is no longer valid"
+      )
+    ) {
+      setPasswordExpired(true)
+    }
+  }, [networkError])
+
   return (
     <>
       <FormsLayout
@@ -333,15 +336,12 @@ const SignIn = (props: SignInProps) => {
         </div>
       </FormsLayout>
       <PasswordExpiredModal
-        isOpen={passwordExpired}
         onClose={() => {
-          setConfirmationStatusModal(false)
+          setPasswordExpired(false)
           resetResendConfirmation()
           resetNetworkError()
         }}
-        initialEmailValue={emailValue.current as string}
-        onSubmit={(email) => onResendConfirmationSubmit(email)}
-        loadingMessage={isResendConfirmationLoading && t("t.formSubmitted")}
+        isOpen={passwordExpired}
       />
 
       <ResendConfirmationModal

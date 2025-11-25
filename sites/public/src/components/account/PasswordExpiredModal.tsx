@@ -5,14 +5,7 @@ import { useRouter } from "next/router"
 
 export type ResendConfirmationModalProps = {
   isOpen: boolean
-  initialEmailValue: string
   onClose: () => void
-  onSubmit: (email: string) => void
-  loadingMessage?: string
-}
-
-export type ResendConfirmationModalForm = {
-  onSubmit: (email: string) => void
 }
 
 const PasswordExpiredModal = ({ isOpen, onClose }: ResendConfirmationModalProps) => {
