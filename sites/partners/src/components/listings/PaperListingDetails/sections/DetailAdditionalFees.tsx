@@ -20,6 +20,11 @@ const DetailAdditionalFees = () => {
     listing.jurisdictions.id
   )
 
+  const enableCreditScreeningFee = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableCreditScreeningFee,
+    listing.jurisdictions.id
+  )
+
   const getUtilitiesIncluded = () => {
     let utilitiesExist = false
     const utilities = Object.keys(listing?.listingUtilities ?? {}).map((utility) => {
@@ -101,6 +106,15 @@ const DetailAdditionalFees = () => {
           </FieldValue>
         </Grid.Cell>
       </Grid.Row>
+      {enableCreditScreeningFee && (
+        <Grid.Row>
+          <Grid.Cell>
+            <FieldValue id="creditScreeningFee" label={t("listings.sections.creditScreeningFee")}>
+              {getDetailFieldString(listing.creditScreeningFee)}
+            </FieldValue>
+          </Grid.Cell>
+        </Grid.Row>
+      )}
       {enableUtilitiesIncluded && (
         <Grid.Row>
           <Grid.Cell>

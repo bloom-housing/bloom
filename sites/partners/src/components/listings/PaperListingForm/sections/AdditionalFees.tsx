@@ -26,7 +26,6 @@ const AdditionalFees = (props: AdditionalFeesProps) => {
   const listing = useContext(ListingContext)
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, watch, errors, clearErrors, setValue } = formMethods
-
   const jurisdiction = watch("jurisdictions.id")
   const depositType = watch("depositType")
   const listingType = watch("listingType")
@@ -49,6 +48,11 @@ const AdditionalFees = (props: AdditionalFeesProps) => {
 
   const enableNonRegulatedListings = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableNonRegulatedListings,
+    jurisdiction
+  )
+
+  const enableCreditScreeningFee = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableCreditScreeningFee,
     jurisdiction
   )
 
@@ -234,6 +238,24 @@ const AdditionalFees = (props: AdditionalFeesProps) => {
             />
           </Grid.Cell>
         </Grid.Row>
+        {enableCreditScreeningFee && jurisdiction && (
+          <Grid.Row columns={3}>
+            <Grid.Cell>
+              <Field
+                register={register}
+                type={"currency"}
+                prepend={"$"}
+                {...defaultFieldProps(
+                  "creditScreeningFee",
+                  t("listings.sections.creditScreeningFee"),
+                  props.requiredFields,
+                  errors,
+                  clearErrors
+                )}
+              />
+            </Grid.Cell>
+          </Grid.Row>
+        )}
         {enableUtilitiesIncluded && (
           <Grid.Row>
             <Grid.Cell>

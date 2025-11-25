@@ -712,6 +712,8 @@
   "listings.confirmedPreferenceList": "Confirmed %{preference} List",
   "listings.costsNotIncluded": "Costs not included",
   "listings.creditHistory": "Credit history",
+  "listings.creditScreeningFee": "Credit screening",
+  "listings.creditScreeningFeeDescription": "covers the cost of reviewing your credit and rental history",
   "listings.criminalBackground": "Criminal background",
   "listings.depositMayBeHigherForLowerCredit": "May be higher for lower credit scores",
   "listings.depositOrMonthsRent": "or one month's rent",
