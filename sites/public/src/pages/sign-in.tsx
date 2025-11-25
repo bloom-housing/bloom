@@ -169,7 +169,6 @@ const SignIn = (props: SignInProps) => {
       await redirectToPage()
       addToast(t(`authentication.signIn.success`, { name: user.firstName }), { variant: "success" })
     } catch (error) {
-      console.log("error result", error)
       setLoading(false)
       if (sendToReCaptchaFlow(error.response.data.name)) {
         await singleUseCodeFlow(email, true)
