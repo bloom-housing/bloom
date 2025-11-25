@@ -70,8 +70,8 @@ const DetailListingIntro = () => {
           <Grid.Cell>
             <FieldValue id="listingType" label={t("listings.listingTypeTile")}>
               {listing.listingType === EnumListingListingType.regulated
-                ? t("listings.regulatedListing")
-                : t("listings.nonRegulatedListing")}
+                ? t("listings.regulated")
+                : t("listings.nonRegulated")}
             </FieldValue>
           </Grid.Cell>
           {listing.listingType === EnumListingListingType.nonRegulated && (

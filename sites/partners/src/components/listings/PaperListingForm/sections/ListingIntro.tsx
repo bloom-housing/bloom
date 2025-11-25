@@ -62,13 +62,13 @@ const ListingIntro = (props: ListingIntroProps) => {
                 fields={[
                   {
                     id: "regulatedListing",
-                    label: t("listings.regulatedListing"),
+                    label: t("listings.regulated"),
                     value: EnumListingListingType.regulated,
                     defaultChecked: !listing?.listingType,
                   },
                   {
                     id: "nonRegulatedListing",
-                    label: t("listings.nonRegulatedListing"),
+                    label: t("listings.nonRegulated"),
                     value: EnumListingListingType.nonRegulated,
                   },
                 ]}

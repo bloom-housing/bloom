@@ -15,6 +15,7 @@ import {
 import {
   ApplicationMethodsTypeEnum,
   ListingEventsTypeEnum,
+  ListingTypeEnum,
   MarketingTypeEnum,
   NeighborhoodAmenitiesEnum,
 } from '@prisma/client';
@@ -404,6 +405,11 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
   };
 
   async getCsvHeaders(user: User): Promise<CsvHeader[]> {
+    const enableNonRegulatedListings = doAnyJurisdictionHaveFeatureFlagSet(
+      user.jurisdictions,
+      FeatureFlagEnum.enableNonRegulatedListings,
+    );
+
     const headers: CsvHeader[] = [
       {
         path: 'id',
@@ -423,6 +429,23 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
         path: 'name',
         label: 'Listing Name',
       },
+      ...(enableNonRegulatedListings
+        ? [
+            {
+              path: 'listingType',
+              label: 'Listing Type',
+              format: (val: ListingTypeEnum) => {
+                if (!val) {
+                  return '';
+                }
+
+                return val === ListingTypeEnum.regulated
+                  ? 'Regulated'
+                  : 'Non-regulated';
+              },
+            },
+          ]
+        : []),
       {
         path: 'status',
         label: 'Listing Status',
@@ -457,8 +480,17 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
           FeatureFlagEnum.enableHousingDeveloperOwner,
         )
           ? 'Housing developer / owner'
-          : 'Developer',
+          : 'Housing Provider',
       },
+      ...(enableNonRegulatedListings
+        ? [
+            {
+              path: 'hasHudEbllClearance',
+              label: 'Has HUD EBLL Clearance',
+              format: this.formatYesNo,
+            },
+          ]
+        : []),
       ...(doAnyJurisdictionHaveFeatureFlagSet(
         user.jurisdictions,
         FeatureFlagEnum.enableListingFileNumber,
