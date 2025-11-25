@@ -1,6 +1,7 @@
 import React from "react"
 import { render, cleanup, screen } from "@testing-library/react"
 import { AdditionalFees } from "../../../../src/components/listing/listing_sections/AdditionalFees"
+import { EnumListingDepositType } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 afterEach(cleanup)
 
@@ -109,5 +110,45 @@ describe("<AdditionalFees>", () => {
     expect(screen.getByText("Additional fees")).toBeDefined()
     expect(screen.getByText("Deposit")).toBeDefined()
     expect(screen.getByText("$200", { exact: false })).toBeDefined()
+  })
+
+  it("renders deposit value for non-regulated listing", () => {
+    render(
+      <AdditionalFees
+        applicationFee={null}
+        costsNotIncluded={null}
+        depositHelperText={null}
+        depositMax={null}
+        depositMin={null}
+        utilitiesIncluded={[]}
+        depositValue={2137}
+        depositType={EnumListingDepositType.fixedDeposit}
+        isNonRegulated={true}
+      />
+    )
+
+    expect(screen.getByRole("heading", { level: 3, name: "Additional fees" })).toBeInTheDocument()
+    expect(screen.getByRole("heading", { level: 4, name: "Deposit" })).toBeInTheDocument()
+    expect(screen.getByText("$ 2137")).toBeInTheDocument()
+  })
+
+  it("renders deposit range for non-regulated listing", () => {
+    render(
+      <AdditionalFees
+        applicationFee={null}
+        costsNotIncluded={null}
+        depositHelperText={null}
+        depositMax={"480"}
+        depositMin={"250"}
+        utilitiesIncluded={[]}
+        depositValue={null}
+        depositType={EnumListingDepositType.depositRange}
+        isNonRegulated={true}
+      />
+    )
+
+    expect(screen.getByRole("heading", { level: 3, name: "Additional fees" })).toBeInTheDocument()
+    expect(screen.getByRole("heading", { level: 4, name: "Deposit" })).toBeInTheDocument()
+    expect(screen.getByText(/\$250.*\$480/, { exact: false })).toBeDefined()
   })
 })
