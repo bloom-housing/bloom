@@ -1,4 +1,5 @@
-import { LatitudeLongitude, TimeFieldPeriod } from "@bloom-housing/ui-components"
+import { TimeFieldPeriod } from "@bloom-housing/ui-components"
+import { LatitudeLongitude } from "@bloom-housing/shared-helpers"
 import {
   ApplicationAddressTypeEnum,
   EnumListingDepositType,

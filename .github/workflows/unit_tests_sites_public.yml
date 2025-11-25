@@ -16,7 +16,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v1
         with:
-          node-version: 18
+          node-version: 22
 
       - name: yarn in root dir
         run: yarn

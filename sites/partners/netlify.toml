@@ -6,8 +6,8 @@ ignore = "/bin/false"
 
 [build.environment]
 
-NODE_VERSION = "18.17.0"
-YARN_VERSION = "1.22.4"
+NODE_VERSION = "22.21.1"
+YARN_VERSION = "1.22.22"
 NEXT_TELEMETRY_DISABLED = "1"
 NODE_OPTIONS = "--max_old_space_size=4096"
 

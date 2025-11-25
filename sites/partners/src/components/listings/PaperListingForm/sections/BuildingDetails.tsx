@@ -1,16 +1,8 @@
 import React, { useContext, useEffect, useState } from "react"
 import { useFormContext, useWatch } from "react-hook-form"
-import {
-  t,
-  Field,
-  Select,
-  FieldGroup,
-  ListingMap,
-  LatitudeLongitude,
-  GridCell,
-} from "@bloom-housing/ui-components"
+import { t, Field, Select, FieldGroup, GridCell } from "@bloom-housing/ui-components"
 import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
-import { AuthContext, stateKeys } from "@bloom-housing/shared-helpers"
+import { AuthContext, stateKeys, Map, LatitudeLongitude } from "@bloom-housing/shared-helpers"
 import { FormListing } from "../../../../lib/listings/formTypes"
 import GeocodeService, {
   GeocodeService as GeocodeServiceType,
@@ -377,7 +369,7 @@ const BuildingDetails = ({
           <Grid.Cell className="seeds-grid-span-2">
             <FieldValue label={t("listings.mapPreview")} className={styles["custom-label"]}>
               {displayMapPreview() ? (
-                <ListingMap
+                <Map
                   listingName={listing?.name}
                   address={{
                     city: buildingAddress.city,

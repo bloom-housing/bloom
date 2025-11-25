@@ -197,8 +197,11 @@ const BuildingSelectionCriteria = () => {
 
   return (
     <>
+      {/* @ts-ignore */}
       <input type="hidden" {...register("buildingSelectionCriteria")} />
+      {/* @ts-ignore */}
       <input type="hidden" {...register("listingsBuildingSelectionCriteriaFile.fileId")} />
+      {/* @ts-ignore */}
       <input type="hidden" {...register("listingsBuildingSelectionCriteriaFile.label")} />
 
       {((listingCriteriaURL && listingCriteriaURL != "") ||
