@@ -22,10 +22,10 @@ const PasswordExpiredModal = ({ isOpen, onClose }: ResendConfirmationModalProps)
       onClose={closeCallback}
       ariaLabelledBy="confirm-add-application-dialog-header"
     >
-      <Dialog.Header id="confirm-add-application-dialog-header">Password Expired</Dialog.Header>
-      <Dialog.Content>
-        The password tied to your account has expired. Please reset it to continue.
-      </Dialog.Content>
+      <Dialog.Header id="confirm-add-application-dialog-header">
+        {t("account.pwdless.passwordOutdatedModalHeader")}
+      </Dialog.Header>
+      <Dialog.Content>{t("account.pwdless.passwordOutdatedModalContent")}</Dialog.Content>
       <Dialog.Footer>
         <Button
           type="button"
