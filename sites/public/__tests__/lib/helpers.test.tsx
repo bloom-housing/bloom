@@ -6,11 +6,13 @@ import {
   ListingsStatusEnum,
   MarketingSeasonEnum,
   MarketingTypeEnum,
+  MonthEnum,
   ReviewOrderTypeEnum,
   UnitTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { listing, jurisdiction } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import {
+  getApplicationSeason,
   getListingStatusMessage,
   getListingStatusMessageContent,
   getStatusPrefix,
@@ -387,27 +389,61 @@ describe("helpers", () => {
   })
 
   describe("getListingStatusMessageContent", () => {
-    it("should return correctly with under construction and marketing enabled", () => {
+    it("should return correctly with under construction and marketing enabled only year", () => {
       expect(
         getListingStatusMessageContent(
           ListingsStatusEnum.active,
           dayjs(new Date()).add(5, "days").toDate(),
           true,
+          false,
+          MarketingTypeEnum.comingSoon,
+          null,
+          null,
+          2026,
+          false
+        )
+      ).toEqual("Residents should apply in 2026")
+    })
+    it("should return correctly with under construction and marketing season enabled", () => {
+      expect(
+        getListingStatusMessageContent(
+          ListingsStatusEnum.active,
+          dayjs(new Date()).add(5, "days").toDate(),
+          true,
+          false,
           MarketingTypeEnum.comingSoon,
           MarketingSeasonEnum.spring,
+          MonthEnum.april,
           2026,
           false
         )
       ).toEqual("Residents should apply in Spring 2026")
+    })
+    it("should return correctly with under construction and marketing month enabled", () => {
+      expect(
+        getListingStatusMessageContent(
+          ListingsStatusEnum.active,
+          dayjs(new Date()).add(5, "days").toDate(),
+          true,
+          true,
+          MarketingTypeEnum.comingSoon,
+          MarketingSeasonEnum.spring,
+          MonthEnum.april,
+          2026,
+          false
+        )
+      ).toEqual("Residents should apply in April 2026")
     })
     it("should return correctly under with construction and marketing disabled", () => {
       const result = getListingStatusMessageContent(
         ListingsStatusEnum.active,
         dayjs(new Date()).add(5, "days").hour(10).minute(30).toDate(),
         false,
+        false,
         MarketingTypeEnum.comingSoon,
         MarketingSeasonEnum.spring,
-        new Date(2026, 1, 1, 10, 30, 0),
+        MonthEnum.april,
+        2026,
         false
       )
       expect(result).toContain("Application due:")
@@ -418,9 +454,11 @@ describe("helpers", () => {
         ListingsStatusEnum.active,
         dayjs(new Date()).add(5, "days").hour(10).minute(30).toDate(),
         false,
+        false,
         MarketingTypeEnum.comingSoon,
         MarketingSeasonEnum.spring,
-        new Date(2026, 1, 1, 10, 30, 0),
+        null,
+        2026,
         true
       )
       expect(result).toContain("Application due:")
@@ -433,6 +471,8 @@ describe("helpers", () => {
         ListingsStatusEnum.closed,
         dayjs(new Date()).subtract(5, "days").toDate(),
         false,
+        false,
+        null,
         null,
         null,
         null,
@@ -446,6 +486,8 @@ describe("helpers", () => {
         ListingsStatusEnum.active,
         null,
         false,
+        false,
+        null,
         null,
         null,
         null,
@@ -522,5 +564,34 @@ describe("helpers", () => {
       )
     )
     expect(view.getByText("Custom content")).toBeDefined()
+  })
+
+  describe("getApplicationSeason", () => {
+    it("should return empty if no data", () => {
+      expect(getApplicationSeason(null, null, null)).toEqual(null)
+    })
+    it("should return only month", () => {
+      expect(getApplicationSeason(null, MonthEnum.april, null)).toEqual(
+        "Residents should apply in April"
+      )
+    })
+    it("should return only season", () => {
+      expect(getApplicationSeason(MarketingSeasonEnum.spring, null, null)).toEqual(
+        "Residents should apply in Spring"
+      )
+    })
+    it("should return only year", () => {
+      expect(getApplicationSeason(null, null, 2027)).toEqual("Residents should apply in 2027")
+    })
+    it("should return month and year", () => {
+      expect(getApplicationSeason(null, MonthEnum.april, 2027)).toEqual(
+        "Residents should apply in April 2027"
+      )
+    })
+    it("should return season and year", () => {
+      expect(getApplicationSeason(MarketingSeasonEnum.spring, null, 2027)).toEqual(
+        "Residents should apply in Spring 2027"
+      )
+    })
   })
 })

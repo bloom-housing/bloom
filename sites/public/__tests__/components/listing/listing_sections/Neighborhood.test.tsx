@@ -1,7 +1,11 @@
 import React from "react"
 import { render, cleanup, screen } from "@testing-library/react"
 import { Neighborhood } from "../../../../src/components/listing/listing_sections/Neighborhood"
-import { NeighborhoodAmenitiesEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  FeatureFlagEnum,
+  Jurisdiction,
+  NeighborhoodAmenitiesEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 afterEach(cleanup)
 
@@ -111,5 +115,50 @@ describe("<Neighborhood>", () => {
     expect(screen.queryByText("Bus")).toBeNull()
     expect(screen.queryByText("School")).toBeNull()
     expect(screen.queryByText("Health center")).toBeNull()
+  })
+
+  it("shows neighborhood amenities copy when enableNeighborhoodAmenitiesDropdown flag is enabled", () => {
+    render(
+      <Neighborhood
+        address={{
+          id: "id",
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          city: "Address city",
+          street: "Address street",
+          street2: "Address unit",
+          zipCode: "67890",
+          state: "CA",
+          latitude: 1,
+          longitude: 2,
+        }}
+        name={"Listing name"}
+        neighborhood={"Westend"}
+        region={"Downtown"}
+        neighborhoodAmenities={{ groceryStores: "Four blocks", pharmacies: "Two blocks" }}
+        visibleNeighborhoodAmenities={[
+          NeighborhoodAmenitiesEnum.groceryStores,
+          NeighborhoodAmenitiesEnum.pharmacies,
+        ]}
+        jurisdiction={
+          {
+            id: "jurisdiction1",
+            featureFlags: [
+              { name: FeatureFlagEnum.enableNeighborhoodAmenitiesDropdown, active: true },
+            ],
+          } as unknown as Jurisdiction
+        }
+      />
+    )
+    expect(screen.getByRole("heading", { name: "Resources in the area", level: 3 })).toBeDefined()
+    expect(
+      screen.getByText(
+        "The neighborhood around this property offers access to the following services and community resources:"
+      )
+    ).toBeDefined()
+    expect(screen.getByRole("heading", { name: "Grocery stores", level: 4 })).toBeDefined()
+    expect(screen.getByText("Four blocks")).toBeDefined()
+    expect(screen.getByRole("heading", { name: "Pharmacies", level: 4 })).toBeDefined()
+    expect(screen.getByText("Two blocks")).toBeDefined()
   })
 })

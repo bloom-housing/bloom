@@ -172,6 +172,7 @@ includeViews.full = {
   listingsApplicationDropOffAddress: true,
   listingsApplicationMailingAddress: true,
   requestedChangesUser: true,
+  requiredDocumentsList: true,
   units: {
     include: {
       unitAmiChartOverrides: true,
@@ -547,9 +548,12 @@ export class ListingService implements OnModuleInit {
                 };
               } else if (availability === FilterAvailabilityEnum.waitlistOpen) {
                 const builtFilter = buildFilter({
-                  $comparison: Compare['='],
+                  $comparison: Compare.IN,
                   $include_nulls: false,
-                  value: ReviewOrderTypeEnum.waitlist,
+                  value: [
+                    ReviewOrderTypeEnum.waitlist,
+                    ReviewOrderTypeEnum.waitlistLottery,
+                  ],
                   key: ListingFilterKeys.availabilities,
                   caseSensitive: true,
                 });
@@ -663,9 +667,12 @@ export class ListingService implements OnModuleInit {
           FilterAvailabilityEnum.waitlistOpen
         ) {
           const builtFilter = buildFilter({
-            $comparison: filter.$comparison,
+            $comparison: Compare.IN,
             $include_nulls: false,
-            value: ReviewOrderTypeEnum.waitlist,
+            value: [
+              ReviewOrderTypeEnum.waitlist,
+              ReviewOrderTypeEnum.waitlistLottery,
+            ],
             key: ListingFilterKeys.availability,
             caseSensitive: true,
           });
@@ -1315,6 +1322,11 @@ export class ListingService implements OnModuleInit {
               })),
             }
           : undefined,
+        requiredDocumentsList: dto.requiredDocumentsList
+          ? {
+              create: { ...dto.requiredDocumentsList },
+            }
+          : undefined,
         listingEvents: dto.listingEvents
           ? {
               create: dto.listingEvents.map((event) => ({
@@ -1503,6 +1515,7 @@ export class ListingService implements OnModuleInit {
                 rentType: group.rentType,
                 flatRentValueFrom: group.flatRentValueFrom,
                 flatRentValueTo: group.flatRentValueTo,
+                monthlyRent: group.monthlyRent,
                 totalAvailable: group.totalAvailable,
                 totalCount: group.totalCount,
                 unitGroupAmiLevels: {
@@ -2193,6 +2206,17 @@ export class ListingService implements OnModuleInit {
                 },
               }
             : undefined,
+          requiredDocumentsList: dto.requiredDocumentsList
+            ? {
+                upsert: {
+                  where: {
+                    id: storedListing.requiredDocumentsList?.id,
+                  },
+                  create: { ...incomingDto.requiredDocumentsList },
+                  update: { ...incomingDto.requiredDocumentsList },
+                },
+              }
+            : undefined,
           // Three options for the building selection criteria file
           // create new one, connect existing one, or deleted (disconnect)
           listingsBuildingSelectionCriteriaFile:
@@ -2352,6 +2376,7 @@ export class ListingService implements OnModuleInit {
                   rentType: group.rentType,
                   flatRentValueFrom: group.flatRentValueFrom,
                   flatRentValueTo: group.flatRentValueTo,
+                  monthlyRent: group.monthlyRent,
                   sqFeetMin: group.sqFeetMin,
                   sqFeetMax: group.sqFeetMax,
                   totalCount: group.totalCount,
@@ -2508,6 +2533,27 @@ export class ListingService implements OnModuleInit {
       } else {
         await this.afsService.process(incomingDto.id);
       }
+    }
+
+    if (
+      !incomingDto.requiredDocumentsList &&
+      storedListing.requiredDocumentsList?.id
+    ) {
+      await this.prisma.listings.update({
+        data: {
+          requiredDocumentsList: {
+            disconnect: {
+              id: storedListing.requiredDocumentsList.id,
+            },
+          },
+        },
+        where: { id: storedListing.id },
+      });
+      await this.prisma.listingDocuments.delete({
+        where: {
+          id: storedListing.requiredDocumentsList.id,
+        },
+      });
     }
 
     await this.cachePurge(

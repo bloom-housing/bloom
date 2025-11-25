@@ -10,8 +10,6 @@ CREATE TYPE "rent_type_enum" AS ENUM ('fixedRent', 'rentRange');
 -- AlterTable
 ALTER TABLE "listings" 
 ADD COLUMN     "coc_info" TEXT,
-ADD COLUMN     "deposit_range_max" INTEGER,
-ADD COLUMN     "deposit_range_min" INTEGER,
 ADD COLUMN     "deposit_type" "deposit_type_enum",
 ADD COLUMN     "deposit_value" DECIMAL(65,30),
 ADD COLUMN     "has_hud_ebll_clearance" BOOLEAN,
