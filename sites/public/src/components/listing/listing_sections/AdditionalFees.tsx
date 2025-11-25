@@ -34,6 +34,7 @@ export const AdditionalFees = ({
       {applicationFee ||
       depositMin ||
       depositMax ||
+      depositValue ||
       costsNotIncluded ||
       utilitiesIncluded.length ? (
         <Card className={"seeds-m-bs-header"}>
