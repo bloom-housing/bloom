@@ -1,25 +1,29 @@
 import React from "react"
-import { render, cleanup } from "@testing-library/react"
+import { render, cleanup, screen } from "@testing-library/react"
 import { AdditionalFees } from "../../../../src/components/listing/listing_sections/AdditionalFees"
 
 afterEach(cleanup)
 
 describe("<AdditionalFees>", () => {
   it("shows nothing if no content", () => {
-    const { queryByText } = render(
+    render(
       <AdditionalFees
         applicationFee={null}
         costsNotIncluded={null}
         depositHelperText={null}
         depositMax={null}
         depositMin={null}
+        depositValue={null}
+        depositType={null}
+        isNonRegulated={null}
         utilitiesIncluded={[]}
       />
     )
-    expect(queryByText("Additional fees")).toBeNull()
+    expect(screen.queryByText("Additional fees")).toBeNull()
   })
-  it("renders all content", () => {
-    const { getByText } = render(
+
+  it("renders all content (regulated listing)", () => {
+    render(
       <AdditionalFees
         applicationFee={"50"}
         costsNotIncluded={"Gas, internet"}
@@ -27,22 +31,26 @@ describe("<AdditionalFees>", () => {
         depositMax={"200"}
         depositMin={"100"}
         utilitiesIncluded={["Water, Electricity"]}
+        depositValue={null}
+        depositType={null}
+        isNonRegulated={false}
       />
     )
-    expect(getByText("Additional fees")).toBeDefined()
-    expect(getByText("Application fee")).toBeDefined()
-    expect(getByText("per applicant age 18 and over")).toBeDefined()
-    expect(getByText("Due at interview")).toBeDefined()
-    expect(getByText("$50")).toBeDefined()
-    expect(getByText("Deposit")).toBeDefined()
-    expect(getByText("$100 – $200", { exact: false })).toBeDefined()
-    expect(getByText("Utilities included")).toBeDefined()
-    expect(getByText("Water, Electricity")).toBeDefined()
-    expect(getByText("Costs not included")).toBeDefined()
-    expect(getByText("Gas, internet")).toBeDefined()
+    expect(screen.getByText("Additional fees")).toBeDefined()
+    expect(screen.getByText("Application fee")).toBeDefined()
+    expect(screen.getByText("per applicant age 18 and over")).toBeDefined()
+    expect(screen.getByText("Due at interview")).toBeDefined()
+    expect(screen.getByText("$50")).toBeDefined()
+    expect(screen.getByText("Deposit")).toBeDefined()
+    expect(screen.getByText("$100 – $200", { exact: false })).toBeDefined()
+    expect(screen.getByText("Utilities included")).toBeDefined()
+    expect(screen.getByText("Water, Electricity")).toBeDefined()
+    expect(screen.getByText("Costs not included")).toBeDefined()
+    expect(screen.getByText("Gas, internet")).toBeDefined()
   })
-  it("renders all content except utilities included", () => {
-    const { getByText, queryByText } = render(
+
+  it("renders all content except utilities included (regulated listing)", () => {
+    render(
       <AdditionalFees
         applicationFee={"50"}
         costsNotIncluded={"Costs not included"}
@@ -50,19 +58,23 @@ describe("<AdditionalFees>", () => {
         depositMax={"200"}
         depositMin={"100"}
         utilitiesIncluded={[]}
+        depositValue={null}
+        depositType={null}
+        isNonRegulated={false}
       />
     )
-    expect(getByText("Additional fees")).toBeDefined()
-    expect(getByText("Application fee")).toBeDefined()
-    expect(getByText("per applicant age 18 and over")).toBeDefined()
-    expect(getByText("Due at interview")).toBeDefined()
-    expect(getByText("$50")).toBeDefined()
-    expect(getByText("Deposit")).toBeDefined()
-    expect(getByText("$100 – $200", { exact: false })).toBeDefined()
-    expect(queryByText("Utilities included")).toBeNull()
+    expect(screen.getByText("Additional fees")).toBeDefined()
+    expect(screen.getByText("Application fee")).toBeDefined()
+    expect(screen.getByText("per applicant age 18 and over")).toBeDefined()
+    expect(screen.getByText("Due at interview")).toBeDefined()
+    expect(screen.getByText("$50")).toBeDefined()
+    expect(screen.getByText("Deposit")).toBeDefined()
+    expect(screen.getByText("$100 – $200", { exact: false })).toBeDefined()
+    expect(screen.queryByText("Utilities included")).toBeNull()
   })
-  it("renders just deposit min", () => {
-    const { getByText } = render(
+
+  it("renders just deposit min (regulated)", () => {
+    render(
       <AdditionalFees
         applicationFee={null}
         costsNotIncluded={null}
@@ -70,14 +82,18 @@ describe("<AdditionalFees>", () => {
         depositMax={null}
         depositMin={"100"}
         utilitiesIncluded={[]}
+        depositValue={null}
+        depositType={null}
+        isNonRegulated={false}
       />
     )
-    expect(getByText("Additional fees")).toBeDefined()
-    expect(getByText("Deposit")).toBeDefined()
-    expect(getByText("$100", { exact: false })).toBeDefined()
+    expect(screen.getByText("Additional fees")).toBeDefined()
+    expect(screen.getByText("Deposit")).toBeDefined()
+    expect(screen.getByText("$100", { exact: false })).toBeDefined()
   })
-  it("renders just deposit max", () => {
-    const { getByText } = render(
+
+  it("renders just deposit max (regulated)", () => {
+    render(
       <AdditionalFees
         applicationFee={null}
         costsNotIncluded={null}
@@ -85,10 +101,13 @@ describe("<AdditionalFees>", () => {
         depositMax={"200"}
         depositMin={null}
         utilitiesIncluded={[]}
+        depositValue={null}
+        depositType={null}
+        isNonRegulated={false}
       />
     )
-    expect(getByText("Additional fees")).toBeDefined()
-    expect(getByText("Deposit")).toBeDefined()
-    expect(getByText("$200", { exact: false })).toBeDefined()
+    expect(screen.getByText("Additional fees")).toBeDefined()
+    expect(screen.getByText("Deposit")).toBeDefined()
+    expect(screen.getByText("$200", { exact: false })).toBeDefined()
   })
 })
