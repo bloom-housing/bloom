@@ -15,8 +15,8 @@ import {
 } from "@bloom-housing/shared-helpers"
 
 // TODO: Make these not-global
-import "ag-grid-community/dist/styles/ag-grid.css"
-import "ag-grid-community/dist/styles/ag-theme-alpine.css"
+// import "ag-grid-community/dist/styles/ag-grid.css"
+// import "ag-grid-community/dist/styles/ag-theme-alpine.css"
 
 import LinkComponent from "../components/core/LinkComponent"
 import { translations, overrideTranslations } from "../lib/translations"

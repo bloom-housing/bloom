@@ -13,6 +13,7 @@ import { useListingExport, useListingsData } from "../lib/hooks"
 import Layout from "../layouts"
 import { MetaTags } from "../components/shared/MetaTags"
 import { NavigationHeader } from "../components/shared/NavigationHeader"
+import { DataTable } from "../components/shared/DataTable"
 
 class formatLinkCell {
   link: HTMLAnchorElement
@@ -279,8 +280,8 @@ export default function ListingsList() {
       <MetaTags title={t("nav.siteTitlePartners")} description={metaDescription} />
       <NavigationHeader title={t("nav.listings")}></NavigationHeader>
       <section>
-        <article className="flex-row flex-wrap relative max-w-screen-xl mx-auto py-8 px-4">
-          <AgTable
+        <div className="flex-row flex-wrap relative max-w-screen-xl mx-auto py-8 px-4">
+          {/* <AgTable
             id="listings-table"
             pagination={{
               perPage: tableOptions.pagination.itemsPerPage,
@@ -346,8 +347,9 @@ export default function ListingsList() {
                 )}
               </div>
             }
-          />
-        </article>
+          /> */}
+          <DataTable />
+        </div>
       </section>
 
       <Dialog
