@@ -7,6 +7,9 @@ import {
   ReviewOrderTypeEnum,
 } from '@prisma/client';
 import { randomUUID } from 'crypto';
+// Removing the below is causing frontend testing typing issues
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { mockDeep } from 'jest-mock-extended';
 import { Request as ExpressRequest } from 'express';
 import { User } from '../../../src/dtos/users/user.dto';
 import { AmiChartService } from '../../../src/services/ami-chart.service';
