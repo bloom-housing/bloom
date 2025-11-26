@@ -2283,6 +2283,7 @@ describe('Testing user service', () => {
       emailService.sendSingleUseCode = jest.fn();
       prisma.userAccounts.findFirst = jest.fn().mockResolvedValue({
         id,
+        passwordUpdatedAt: new Date(),
       });
       prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue(null);
       prisma.userAccounts.update = jest.fn().mockResolvedValue({
@@ -2328,6 +2329,7 @@ describe('Testing user service', () => {
       emailService.sendSingleUseCode = jest.fn();
       prisma.userAccounts.findFirst = jest.fn().mockResolvedValue({
         id,
+        passwordUpdatedAt: new Date(),
       });
       prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue({
         id,
@@ -2370,6 +2372,7 @@ describe('Testing user service', () => {
         id,
         singleUseCode: '00000',
         singleUseCodeUpdatedAt: new Date(),
+        passwordUpdatedAt: new Date(),
       });
       prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue({
         id,
@@ -2424,6 +2427,7 @@ describe('Testing user service', () => {
       prisma.userAccounts.findFirst = jest.fn().mockResolvedValue({
         id,
         singleUseCode: '00000',
+        passwordUpdatedAt: new Date(),
         singleUseCodeUpdatedAt: new Date(
           new Date().getTime() - Number(process.env.MFA_CODE_VALUE) * 2,
         ),
