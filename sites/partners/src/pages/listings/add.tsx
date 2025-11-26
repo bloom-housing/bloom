@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 import Head from "next/head"
 import { t, Breadcrumbs, BreadcrumbLink } from "@bloom-housing/ui-components"
 import Layout from "../../layouts"
@@ -6,10 +6,20 @@ import PaperListingForm from "../../components/listings/PaperListingForm"
 import { MetaTags } from "../../components/shared/MetaTags"
 import { NavigationHeader } from "../../components/shared/NavigationHeader"
 import ListingGuard from "../../components/shared/ListingGuard"
+import { useRouter } from "next/router"
 
 const NewListing = () => {
   const metaDescription = ""
   const metaImage = "" // TODO: replace with hero image
+
+  const router = useRouter()
+  const selectedJurisdiction = router.query.jurisdictionId as string
+
+  useEffect(() => {
+    if (!selectedJurisdiction) {
+      void router.replace("/")
+    }
+  }, [router, selectedJurisdiction])
 
   return (
     <ListingGuard>
@@ -34,7 +44,7 @@ const NewListing = () => {
             </Breadcrumbs>
           }
         />
-        <PaperListingForm />
+        <PaperListingForm jurisdictionId={selectedJurisdiction} />
       </Layout>
     </ListingGuard>
   )

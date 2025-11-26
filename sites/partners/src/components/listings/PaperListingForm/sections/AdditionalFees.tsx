@@ -1,13 +1,12 @@
-import React, { useContext, useMemo, useEffect } from "react"
+import React, { useMemo, useEffect, useContext } from "react"
 import { useFormContext } from "react-hook-form"
 import { t, Field, Textarea, FieldGroup } from "@bloom-housing/ui-components"
 import { Grid } from "@bloom-housing/ui-seeds"
 import { defaultFieldProps } from "../../../../lib/helpers"
-import { AuthContext, listingUtilities } from "@bloom-housing/shared-helpers"
+import { listingUtilities } from "@bloom-housing/shared-helpers"
 import {
   EnumListingDepositType,
   EnumListingListingType,
-  FeatureFlagEnum,
   ListingUtilities,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
@@ -16,17 +15,18 @@ import { GridRow } from "@bloom-housing/ui-seeds/src/layout/Grid"
 import { ListingContext } from "../../ListingContext"
 
 type AdditionalFeesProps = {
+  enableCreditScreeningFee?: boolean
+  enableNonRegulatedListings?: boolean
+  enableUtilitiesIncluded?: boolean
   existingUtilities: ListingUtilities
   requiredFields: string[]
 }
 
 const AdditionalFees = (props: AdditionalFeesProps) => {
   const formMethods = useFormContext()
-  const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
   const listing = useContext(ListingContext)
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, watch, errors, clearErrors, setValue } = formMethods
-  const jurisdiction = watch("jurisdictions.id")
   const depositType = watch("depositType")
   const listingType = watch("listingType")
 
@@ -41,27 +41,12 @@ const AdditionalFees = (props: AdditionalFeesProps) => {
     })
   }, [props.existingUtilities, register])
 
-  const enableUtilitiesIncluded = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableUtilitiesIncluded,
-    jurisdiction
-  )
-
-  const enableNonRegulatedListings = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableNonRegulatedListings,
-    jurisdiction
-  )
-
-  const enableCreditScreeningFee = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableCreditScreeningFee,
-    jurisdiction
-  )
-
   useEffect(() => {
     // clear the utilities values if the new jurisdiction doesn't have utilities included functionality
-    if (!enableUtilitiesIncluded) {
+    if (!props.enableUtilitiesIncluded) {
       setValue("utilities", undefined)
     }
-  }, [enableUtilitiesIncluded, setValue])
+  }, [props.enableUtilitiesIncluded, setValue])
 
   // After submitting the deposit max, min, and value can be removed via AdditionalMetadataFormatter.
   // On a save and continue flow the values need to be updated in the form
@@ -72,7 +57,7 @@ const AdditionalFees = (props: AdditionalFeesProps) => {
   }, [listing?.depositMax, listing?.depositMin, listing?.depositValue, setValue])
 
   const showAsNonRegulated =
-    enableNonRegulatedListings && listingType === EnumListingListingType.nonRegulated
+    props.enableNonRegulatedListings && listingType === EnumListingListingType.nonRegulated
 
   return (
     <>
@@ -238,7 +223,7 @@ const AdditionalFees = (props: AdditionalFeesProps) => {
             />
           </Grid.Cell>
         </Grid.Row>
-        {enableCreditScreeningFee && jurisdiction && (
+        {props.enableCreditScreeningFee && (
           <Grid.Row columns={3}>
             <Grid.Cell>
               <Field
@@ -256,7 +241,7 @@ const AdditionalFees = (props: AdditionalFeesProps) => {
             </Grid.Cell>
           </Grid.Row>
         )}
-        {enableUtilitiesIncluded && (
+        {props.enableUtilitiesIncluded && (
           <Grid.Row>
             <Grid.Cell>
               <FieldGroup
