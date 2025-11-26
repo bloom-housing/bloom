@@ -1,12 +1,12 @@
 import React from "react"
-import { render, cleanup } from "@testing-library/react"
+import { render, cleanup, screen } from "@testing-library/react"
 import { AdditionalInformation } from "../../../../src/components/listing/listing_sections/AdditionalInformation"
 
 afterEach(cleanup)
 
 describe("<AdditionalInformation>", () => {
   it("shows all content", () => {
-    const { getByText, getAllByText } = render(
+    render(
       <AdditionalInformation
         additionalInformation={[
           {
@@ -20,15 +20,17 @@ describe("<AdditionalInformation>", () => {
         ]}
       />
     )
-    expect(getAllByText("Additional information").length).toBeGreaterThan(0)
-    expect(getAllByText("Required documents and selection criteria").length).toBeGreaterThan(0)
-    expect(getByText("Additional information 1 heading")).toBeDefined()
-    expect(getByText("Description for additional information 1")).toBeDefined()
-    expect(getByText("Additional information 2 heading")).toBeDefined()
-    expect(getByText("Description for additional information 2")).toBeDefined()
+    expect(screen.getAllByText("Additional information").length).toBeGreaterThan(0)
+    expect(screen.getAllByText("Required documents and selection criteria").length).toBeGreaterThan(
+      0
+    )
+    expect(screen.getByText("Additional information 1 heading")).toBeDefined()
+    expect(screen.getByText("Description for additional information 1")).toBeDefined()
+    expect(screen.getByText("Additional information 2 heading")).toBeDefined()
+    expect(screen.getByText("Description for additional information 2")).toBeDefined()
   })
   it("shows nothing if no additional information passed", () => {
-    const { queryByText } = render(<AdditionalInformation additionalInformation={[]} />)
-    expect(queryByText("Additional information")).toBeNull()
+    render(<AdditionalInformation additionalInformation={[]} />)
+    expect(screen.queryByText("Additional information")).toBeNull()
   })
 })
