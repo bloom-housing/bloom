@@ -1,19 +1,23 @@
 import { useCallback, useContext, useState, useEffect } from "react"
 import useSWR from "swr"
+import axios, { AxiosError } from "axios"
 import qs from "qs"
 import dayjs from "dayjs"
 import utc from "dayjs/plugin/utc"
 import tz from "dayjs/plugin/timezone"
-import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
+import { AuthContext, CatchNetworkError, MessageContext } from "@bloom-housing/shared-helpers"
 import { t } from "@bloom-housing/ui-components"
 import {
   ApplicationOrderByKeys,
   EnumListingFilterParamsComparison,
   EnumMultiselectQuestionFilterParamsComparison,
+  Listing,
+  ListingOrderByKeys,
   ListingViews,
   MultiselectQuestionFilterParams,
   MultiselectQuestionsApplicationSectionEnum,
   OrderByEnum,
+  PaginationMeta,
   UserRole,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
@@ -49,7 +53,7 @@ type UseListingsDataProps = PaginationProps & {
   search?: string
   sort?: ColumnOrder[]
   roles?: UserRole
-  userJurisidctionIds?: string[]
+  userJurisdictionIds?: string[]
   view?: ListingViews
 }
 
@@ -66,6 +70,73 @@ export function useSingleListingData(listingId: string) {
   }
 }
 
+interface BaseListingData {
+  limit?: number | "all"
+  orderBy?: ListingOrderByKeys[]
+  orderDir?: OrderByEnum[]
+  page?: number
+  roles?: UserRole
+  search?: string
+  userId?: string
+  userJurisdictionIds?: string[]
+  view?: ListingViews
+}
+
+export async function fetchBaseListingData({
+  limit,
+  orderBy,
+  orderDir,
+  page,
+  roles,
+  search = "",
+  userId,
+  userJurisdictionIds,
+  view,
+}: BaseListingData): Promise<{
+  items: Listing[] | null
+  meta: PaginationMeta | null
+  error: AxiosError<CatchNetworkError> | null
+}> {
+  let listings: Listing[] = []
+  let pagination: PaginationMeta | null = null
+  try {
+    const params: BaseListingData = {
+      limit: limit || "all",
+      orderBy: orderBy || [ListingOrderByKeys.status],
+      orderDir: orderDir || [OrderByEnum.asc],
+      search: search || null,
+      roles: roles || null,
+      page: page || 1,
+      userId: userId || null,
+      userJurisdictionIds: userJurisdictionIds || null,
+      view: view || ListingViews.base,
+    }
+
+    const response = await axios.post(`/api/adapter/listings/list`, params, {
+      headers: {
+        passkey: process.env.API_PASS_KEY,
+      },
+    })
+
+    listings = response.data.items
+    pagination = response.data.meta || null
+  } catch (e) {
+    console.log("fetchBaseListingData error: ", e)
+
+    return {
+      items: null,
+      meta: null,
+      error: e,
+    }
+  }
+
+  return {
+    items: listings,
+    meta: pagination,
+    error: null,
+  }
+}
+
 export function useListingsData({
   page,
   limit,
@@ -73,7 +144,7 @@ export function useListingsData({
   search = "",
   sort,
   roles,
-  userJurisidctionIds,
+  userJurisdictionIds,
   view,
 }: UseListingsDataProps) {
   const params = {
@@ -101,7 +172,7 @@ export function useListingsData({
   } else if (roles?.isJurisdictionalAdmin || roles?.isLimitedJurisdictionalAdmin) {
     params.filter.push({
       $comparison: EnumListingFilterParamsComparison.IN,
-      jurisdiction: userJurisidctionIds[0],
+      jurisdiction: userJurisdictionIds[0],
     })
   }
 
