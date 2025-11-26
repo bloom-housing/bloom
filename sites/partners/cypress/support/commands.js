@@ -483,7 +483,7 @@ Cypress.Commands.add("addMinimalListing", (listingName, isLottery, isApproval, j
 
 Cypress.Commands.add("addMinimalApplication", (listingName) => {
   cy.visit("/")
-  cy.getByTestId(`listing-status-cell-${listingName}`).click()
+  cy.getByID(`listing-status-cell-${listingName}`).click()
   cy.getByID("addApplicationButton").contains("Add application").click()
   cy.fixture("applicantOnlyData").then((application) => {
     cy.fillPrimaryApplicant(application, [
@@ -498,6 +498,6 @@ Cypress.Commands.add("addMinimalApplication", (listingName) => {
 Cypress.Commands.add("findAndOpenListing", (listingName) => {
   cy.visit("/")
   cy.contains("Listings")
-  cy.getByTestId("ag-search-input").should("be.visible").type(listingName, { force: true })
-  cy.getByTestId(listingName).first().click()
+  cy.getByTestId("column-search-Name").should("be.visible").type(listingName, { force: true })
+  cy.getByID(listingName).first().click()
 })
