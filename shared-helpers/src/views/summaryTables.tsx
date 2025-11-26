@@ -15,6 +15,7 @@ import {
   UnitGroupSummary,
   UnitSummary,
   Listing,
+  EnumListingListingType,
 } from "../types/backend-swagger"
 import { numberOrdinal } from "../utilities/numberOrdinal"
 
@@ -812,7 +813,7 @@ export const getUnitGroupSummariesTable = (listing: Listing) => {
     unitType: t("t.unitType"),
     rent: t("t.rent"),
     availability: t("t.availability"),
-    ami: "ami",
+    ...(listing.listingType === EnumListingListingType.regulated ? { ami: "ami" } : {}),
   }
   let groupedUnitData = null
 

@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import Markdown from "markdown-to-jsx"
 import {
+  EnumListingListingType,
   FeatureFlagEnum,
   Jurisdiction,
   Listing,
@@ -46,6 +47,7 @@ import { RentSummary } from "./listing_sections/RentSummary"
 import { UnitSummaries } from "./listing_sections/UnitSummaries"
 import styles from "./ListingViewSeeds.module.scss"
 import { ReadMore } from "../../patterns/ReadMore"
+import { OtherFeatures } from "./listing_sections/OtherFeatures"
 
 interface ListingProps {
   listing: Listing
@@ -176,12 +178,22 @@ export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: Li
         depositHelperText={listing.depositHelperText}
         depositMax={listing.depositMax}
         depositMin={listing.depositMin}
+        depositValue={listing.depositValue}
+        depositType={listing.depositType}
+        isNonRegulated={
+          isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableNonRegulatedListings) &&
+          listing.listingType === EnumListingListingType.nonRegulated
+        }
         utilitiesIncluded={
           isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableUtilitiesIncluded)
             ? getUtilitiesIncluded(listing)
             : []
         }
       />
+      {isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableNonRegulatedListings) &&
+        listing.listingType === EnumListingListingType.nonRegulated && (
+          <OtherFeatures hasEbllClearence={listing.hasHudEbllClearance} />
+        )}
     </>
   )
 
