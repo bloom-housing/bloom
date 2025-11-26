@@ -12,7 +12,7 @@ afterEach(cleanup)
 
 describe("<RentSummary>", () => {
   it("shows all content for one percentage", () => {
-    const { getAllByText, getByText, queryByText } = render(
+    render(
       <RentSummary
         amiValues={[30]}
         reviewOrderType={ReviewOrderTypeEnum.firstComeFirstServe}
@@ -29,14 +29,14 @@ describe("<RentSummary>", () => {
         section8Acceptance={false}
       />
     )
-    expect(getAllByText("Rent").length).toBeGreaterThan(0)
-    expect(getByText("Unit type")).toBeDefined()
-    expect(getByText("Minimum income")).toBeDefined()
-    expect(getByText("Availability")).toBeDefined()
-    expect(queryByText("Section 8 Housing Choice Voucher")).toBeNull()
+    expect(screen.getAllByText("Rent").length).toBeGreaterThan(0)
+    expect(screen.getByText("Unit type")).toBeDefined()
+    expect(screen.getByText("Minimum income")).toBeDefined()
+    expect(screen.getByText("Availability")).toBeDefined()
+    expect(screen.queryByText("Section 8 Housing Choice Voucher")).toBeNull()
   })
   it("shows all content for multiple percentages", () => {
-    const { getAllByText, getByText } = render(
+    render(
       <RentSummary
         amiValues={[30, 60]}
         reviewOrderType={ReviewOrderTypeEnum.firstComeFirstServe}
@@ -56,16 +56,16 @@ describe("<RentSummary>", () => {
         section8Acceptance={true}
       />
     )
-    expect(getAllByText("Rent").length).toBeGreaterThan(0)
-    expect(getByText("30% AMI unit")).toBeDefined()
-    expect(getByText("60% AMI unit")).toBeDefined()
-    expect(getAllByText("Unit type").length).toBe(2)
-    expect(getAllByText("Minimum income").length).toBe(2)
-    expect(getAllByText("Availability").length).toBe(2)
-    expect(getByText("Section 8 Housing Choice Voucher")).toBeDefined()
+    expect(screen.getAllByText("Rent").length).toBeGreaterThan(0)
+    expect(screen.getByText("30% AMI unit")).toBeDefined()
+    expect(screen.getByText("60% AMI unit")).toBeDefined()
+    expect(screen.getAllByText("Unit type").length).toBe(2)
+    expect(screen.getAllByText("Minimum income").length).toBe(2)
+    expect(screen.getAllByText("Availability").length).toBe(2)
+    expect(screen.getByText("Section 8 Housing Choice Voucher")).toBeDefined()
   })
   it("shows nothing if no data", () => {
-    const { queryByText } = render(
+    render(
       <RentSummary
         amiValues={[]}
         reviewOrderType={ReviewOrderTypeEnum.firstComeFirstServe}
@@ -82,7 +82,7 @@ describe("<RentSummary>", () => {
         section8Acceptance={false}
       />
     )
-    expect(queryByText("Rent")).toBeNull()
+    expect(screen.queryByText("Rent")).toBeNull()
   })
   it("shows all content for non-regulated listings", () => {
     render(
