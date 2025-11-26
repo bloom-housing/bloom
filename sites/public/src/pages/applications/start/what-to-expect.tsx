@@ -44,14 +44,11 @@ const ApplicationWhatToExpect = () => {
           finePrint: t("application.start.whatToExpect.fcfs.finePrint"),
         }
       case ReviewOrderTypeEnum.lottery:
-        return {
-          steps: t("application.start.whatToExpect.lottery.steps"),
-          finePrint: t("application.start.whatToExpect.lottery.finePrint"),
-        }
       case ReviewOrderTypeEnum.waitlist:
+      case ReviewOrderTypeEnum.waitlistLottery:
         return {
-          steps: t("application.start.whatToExpect.waitlist.steps"),
-          finePrint: t("application.start.whatToExpect.waitlist.finePrint"),
+          steps: t(`application.start.whatToExpect.${listing.reviewOrderType}.steps`),
+          finePrint: t(`application.start.whatToExpect.${listing.reviewOrderType}.finePrint`),
         }
       default:
         return { steps: "", finePrint: "" }

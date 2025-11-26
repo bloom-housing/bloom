@@ -1,9 +1,8 @@
-import React, { useEffect, useState, useContext } from "react"
+import React, { useEffect, useState } from "react"
 import { useFormContext } from "react-hook-form"
 import { t, Textarea, Field, PhoneField, Select } from "@bloom-housing/ui-components"
 import { Grid } from "@bloom-housing/ui-seeds"
-import { stateKeys, AuthContext } from "@bloom-housing/shared-helpers"
-import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { stateKeys } from "@bloom-housing/shared-helpers"
 import {
   fieldMessage,
   defaultFieldProps,
@@ -14,6 +13,7 @@ import {
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 type LeasingAgentProps = {
+  enableCompanyWebsite?: boolean
   requiredFields: string[]
 }
 
@@ -22,15 +22,9 @@ const LeasingAgent = (props: LeasingAgentProps) => {
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, control, errors, clearErrors, watch, getValues } = formMethods
-  const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
 
   const leasingAgentPhoneField: string = watch("leasingAgentPhone")
-  const jurisdiction = watch("jurisdictions.id")
 
-  const enableCompanyWebsite = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableCompanyWebsite,
-    jurisdiction
-  )
   const [phoneField, setPhoneField] = useState(leasingAgentPhoneField)
 
   useEffect(() => {
@@ -114,7 +108,7 @@ const LeasingAgent = (props: LeasingAgentProps) => {
                 clearErrors
               )}
             />
-            {enableCompanyWebsite && (
+            {props.enableCompanyWebsite && (
               <Field
                 register={register}
                 {...defaultFieldProps(

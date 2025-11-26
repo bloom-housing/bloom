@@ -16,6 +16,7 @@ type AdditionalFeesProps = {
   depositType: EnumListingDepositType | null
   isNonRegulated: boolean
   utilitiesIncluded: string[]
+  creditScreeningFee?: string | null
 }
 
 export const AdditionalFees = ({
@@ -28,6 +29,7 @@ export const AdditionalFees = ({
   depositType,
   isNonRegulated,
   utilitiesIncluded,
+  creditScreeningFee,
 }: AdditionalFeesProps) => {
   return (
     <>
@@ -36,7 +38,8 @@ export const AdditionalFees = ({
       depositMax ||
       depositValue ||
       costsNotIncluded ||
-      utilitiesIncluded.length ? (
+      utilitiesIncluded.length ||
+      creditScreeningFee ? (
         <Card className={"seeds-m-bs-header"}>
           <Card.Section>
             <Heading size={"lg"} priority={3} className={"seeds-m-be-header"}>
@@ -68,6 +71,17 @@ export const AdditionalFees = ({
                     depositType == EnumListingDepositType.fixedDeposit &&
                     depositValue && <div className={styles.emphasized}>{`$ ${depositValue}`}</div>}
                   <div>{depositHelperText}</div>
+                </div>
+              )}
+              {creditScreeningFee && (
+                <div className={styles["split-card-cell"]}>
+                  <Heading size={"md"} className={listingStyles["thin-heading"]} priority={4}>
+                    {t("listings.creditScreeningFee")}
+                  </Heading>
+
+                  <div className={styles.emphasized}>{`$${creditScreeningFee}`}</div>
+
+                  <div>{t("listings.creditScreeningFeeDescription")}</div>
                 </div>
               )}
             </div>

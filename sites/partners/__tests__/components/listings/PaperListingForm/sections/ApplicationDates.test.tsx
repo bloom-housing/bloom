@@ -1,9 +1,7 @@
 import React from "react"
-import { rest } from "msw"
 import { setupServer } from "msw/node"
 import { screen } from "@testing-library/react"
 import { FormProvider, useForm } from "react-hook-form"
-import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { mockNextRouter, render } from "../../../../testUtils"
 import { formDefaults, FormListing } from "../../../../../src/lib/listings/formTypes"
 import ApplicationDates from "../../../../../src/components/listings/PaperListingForm/sections/ApplicationDates"
@@ -33,26 +31,12 @@ afterAll(() => server.close())
 
 describe("ApplicationDates", () => {
   it("should render the ApplicationDates section with default fields", () => {
-    document.cookie = "access-token-available=True"
-    server.use(
-      rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
-        return res(
-          ctx.json({
-            jurisdictions: [
-              {
-                id: "JurisdictionA",
-                name: "JurisdictionA",
-                featureFlags: [{ name: FeatureFlagEnum.enableMarketingStatus, active: false }],
-              },
-            ],
-          })
-        )
-      })
-    )
-
     render(
       <FormComponent>
         <ApplicationDates
+          jurisdiction="JurisdictionA"
+          enableMarketingStatus={false}
+          enableMarketingStatusMonths={false}
           listing={{} as unknown as FormListing}
           requiredFields={[]}
           openHouseEvents={[]}
@@ -82,26 +66,12 @@ describe("ApplicationDates", () => {
   })
 
   it("should mark due date as required", () => {
-    document.cookie = "access-token-available=True"
-    server.use(
-      rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
-        return res(
-          ctx.json({
-            jurisdictions: [
-              {
-                id: "JurisdictionA",
-                name: "JurisdictionA",
-                featureFlags: [{ name: FeatureFlagEnum.enableMarketingStatus, active: false }],
-              },
-            ],
-          })
-        )
-      })
-    )
-
     render(
       <FormComponent>
         <ApplicationDates
+          jurisdiction="JurisdictionA"
+          enableMarketingStatus={false}
+          enableMarketingStatusMonths={false}
           listing={{} as unknown as FormListing}
           requiredFields={["applicationDueDate"]}
           openHouseEvents={[]}
@@ -117,29 +87,12 @@ describe("ApplicationDates", () => {
   })
 
   it("should show marketing status section with seasons", async () => {
-    document.cookie = "access-token-available=True"
-    server.use(
-      rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
-        return res(
-          ctx.json({
-            jurisdictions: [
-              {
-                id: "JurisdictionA",
-                name: "JurisdictionA",
-                featureFlags: [
-                  { name: FeatureFlagEnum.enableMarketingStatus, active: true },
-                  { name: FeatureFlagEnum.enableMarketingStatusMonths, active: false },
-                ],
-              },
-            ],
-          })
-        )
-      })
-    )
-
     render(
       <FormComponent>
         <ApplicationDates
+          jurisdiction="JurisdictionA"
+          enableMarketingStatus={true}
+          enableMarketingStatusMonths={false}
           listing={{} as unknown as FormListing}
           requiredFields={[]}
           openHouseEvents={[]}
@@ -168,29 +121,12 @@ describe("ApplicationDates", () => {
   })
 
   it("should show marketing status section with months", async () => {
-    document.cookie = "access-token-available=True"
-    server.use(
-      rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
-        return res(
-          ctx.json({
-            jurisdictions: [
-              {
-                id: "JurisdictionA",
-                name: "JurisdictionA",
-                featureFlags: [
-                  { name: FeatureFlagEnum.enableMarketingStatus, active: true },
-                  { name: FeatureFlagEnum.enableMarketingStatusMonths, active: true },
-                ],
-              },
-            ],
-          })
-        )
-      })
-    )
-
     render(
       <FormComponent>
         <ApplicationDates
+          jurisdiction="JurisdictionA"
+          enableMarketingStatus={true}
+          enableMarketingStatusMonths={true}
           listing={{} as unknown as FormListing}
           requiredFields={[]}
           openHouseEvents={[]}
@@ -227,29 +163,12 @@ describe("ApplicationDates", () => {
   })
 
   it("should not show marketing section unless both feature flags are on", () => {
-    document.cookie = "access-token-available=True"
-    server.use(
-      rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
-        return res(
-          ctx.json({
-            jurisdictions: [
-              {
-                id: "JurisdictionA",
-                name: "JurisdictionA",
-                featureFlags: [
-                  { name: FeatureFlagEnum.enableMarketingStatus, active: false },
-                  { name: FeatureFlagEnum.enableMarketingStatusMonths, active: false },
-                ],
-              },
-            ],
-          })
-        )
-      })
-    )
-
     render(
       <FormComponent>
         <ApplicationDates
+          jurisdiction="JurisdictionA"
+          enableMarketingStatus={false}
+          enableMarketingStatusMonths={true}
           listing={{} as unknown as FormListing}
           requiredFields={[]}
           openHouseEvents={[]}

@@ -8,6 +8,7 @@
 .split-card {
   display: flex;
   flex-direction: row;
+  gap: var(--seeds-spacer-content) 0;
   flex-wrap: wrap;
 }
 

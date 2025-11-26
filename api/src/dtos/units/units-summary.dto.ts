@@ -112,7 +112,10 @@ class UnitsSummary {
   @ValidateUnitGroupRent({
     groups: [ValidationsGroupsEnum.default],
   })
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    enum: RentTypeEnum,
+    enumName: 'RentTypeEnum',
+  })
   rentType?: RentTypeEnum;
 
   @Expose()
