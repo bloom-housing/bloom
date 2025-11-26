@@ -3,6 +3,7 @@ import { SWRConfig } from "swr"
 import type { AppProps } from "next/app"
 import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3"
 
+// TODO: Figure out how to not import tables here
 import "@bloom-housing/ui-components/src/global/css-imports.scss"
 import "@bloom-housing/ui-components/src/global/app-css.scss"
 import "@bloom-housing/ui-seeds/src/global/app-css.scss"
