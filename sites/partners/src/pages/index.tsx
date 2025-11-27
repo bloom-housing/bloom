@@ -9,12 +9,13 @@ import { Button, Dialog, Grid, Icon } from "@bloom-housing/ui-seeds"
 import { t, AgTable, useAgTable, Select, Form, SelectOption } from "@bloom-housing/ui-components"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { useListingExport, useListingsData } from "../lib/hooks"
+import { fetchBaseListingData, useListingExport, useListingsData } from "../lib/hooks"
 import Layout from "../layouts"
 import { MetaTags } from "../components/shared/MetaTags"
 import { NavigationHeader } from "../components/shared/NavigationHeader"
-import { Data, DataTable, TableData } from "../components/shared/DataTable"
-import { ColumnDef } from "@tanstack/react-table"
+import { DataTable, TableData, TableDataRow } from "../components/shared/DataTable"
+import { ColumnDef, PaginationState } from "@tanstack/react-table"
+import { listing } from "../../../../shared-helpers/__tests__/testHelpers"
 
 // class formatLinkCell {
 //   link: HTMLAnchorElement
@@ -278,17 +279,41 @@ export default function ListingsList() {
   //   return columns
   // }, [])
 
-  const { listingDtos, listingsLoading } = useListingsData({
+  const {
+    items: listingDtos,
+    loading: listingsLoading,
+    error: listingsError,
+    meta: listingsMeta,
+  } = useListingsData({
     page: tableOptions.pagination.currentPage,
     limit: tableOptions.pagination.itemsPerPage,
     search: tableOptions.filter.filterValue,
     userId: profile?.id,
     sort: tableOptions.sort.sortOptions,
     roles: profile?.userRoles,
-    userJurisidctionIds: profile?.jurisdictions?.map((jurisdiction) => jurisdiction.id),
+    userJurisdictionIds: profile?.jurisdictions?.map((jurisdiction) => jurisdiction.id),
   })
 
-  const mappedListingsData: Data[] = listingDtos?.items.map((listing) => ({
+  // const fetchListingsData = async (pagination: PaginationState): Promise<TableData> => {
+  //   const data = useListingsData({
+  //     page: pagination.pageIndex + 1,
+  //     limit: pagination.pageSize,
+  //     search: tableOptions.filter.filterValue,
+  //     userId: profile?.id,
+  //     sort: tableOptions.sort.sortOptions,
+  //     roles: profile?.userRoles,
+  //     userJurisdictionIds: profile?.jurisdictions?.map((jurisdiction) => jurisdiction.id),
+  //   })
+
+  //   return {
+  //     items: data.items as unknown as TableDataRow[],
+  //     error: data.error,
+  //     loading: data.loading,
+  //     meta: data.meta,
+  //   }
+  // }
+
+  const mappedListingsData: TableDataRow[] = listingDtos?.map((listing) => ({
     name: (
       <a
         className="text-blue-700"
@@ -310,7 +335,7 @@ export default function ListingsList() {
     applicationDueDate: listing.applicationDueDate
       ? dayjs(listing.applicationDueDate).format("MM/DD/YYYY")
       : t("t.none"),
-  })) as Data
+  }))
 
   const onSubmit = (data: CreateListingFormFields) => {
     void router.push({
@@ -319,7 +344,7 @@ export default function ListingsList() {
     })
   }
 
-  const columns = React.useMemo<ColumnDef<TableData>[]>(
+  const columns = React.useMemo<ColumnDef<TableDataRow>[]>(
     () => [
       {
         accessorKey: "name",
@@ -329,40 +354,55 @@ export default function ListingsList() {
         footer: (props) => props.column.id,
       },
       {
-        // accessorFn: (row) => row.lastName,
         accessorKey: "status",
         id: "status",
-        cell: (info) => info.getValue(),
+        cell: (info) => t(`listings.listingStatus.${info.getValue() as string}`),
         header: () => <span>Status</span>,
         footer: (props) => props.column.id,
       },
       {
         accessorKey: "createdAt",
         id: "createdAt",
+        cell: (info) =>
+          info.getValue() ? dayjs(info.getValue() as string).format("MM/DD/YYYY") : t("t.none"),
         header: () => <span>Created date</span>,
         footer: (props) => props.column.id,
       },
       {
         accessorKey: "updatedAt",
         id: "updatedAt",
+        cell: (info) =>
+          info.getValue() ? dayjs(info.getValue() as string).format("MM/DD/YYYY") : t("t.none"),
         header: () => <span>Updated date</span>,
         footer: (props) => props.column.id,
       },
       {
         accessorKey: "publishedAt",
         id: "publishedAt",
+        cell: (info) =>
+          info.getValue() ? dayjs(info.getValue() as string).format("MM/DD/YYYY") : t("t.none"),
         header: () => <span>Published date</span>,
         footer: (props) => props.column.id,
       },
       {
         accessorKey: "applicationDueDate",
         id: "applicationDueDate",
+        cell: (info) =>
+          info.getValue() ? dayjs(info.getValue() as string).format("MM/DD/YYYY") : t("t.none"),
         header: () => <span>Due date</span>,
         footer: (props) => props.column.id,
       },
     ],
     []
   )
+
+  const fetchListingsData = async (pagination: PaginationState) => {
+    const data = await fetchBaseListingData({
+      page: pagination.pageIndex + 1,
+      limit: pagination.pageSize,
+    })
+    return data
+  }
 
   return (
     <Layout>
@@ -419,7 +459,7 @@ export default function ListingsList() {
                     >
                       {t("listings.addListing")}
                     </Button>
-                    <Button
+                    <Buttonack
                       id="export-listings"
                       variant="primary-outlined"
                       onClick={() => onExport()}
@@ -440,7 +480,16 @@ export default function ListingsList() {
               </div>
             }
           /> */}
-          <DataTable columns={columns} data={mappedListingsData ?? []} />
+          <DataTable
+            columns={columns}
+            data={{
+              items: mappedListingsData,
+              error: listingsError,
+              loading: listingsLoading,
+              meta: listingsMeta,
+            }}
+            fetchData={fetchListingsData}
+          />
         </div>
       </section>
 

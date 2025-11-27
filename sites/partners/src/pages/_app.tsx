@@ -23,6 +23,7 @@ import LinkComponent from "../components/core/LinkComponent"
 import { translations, overrideTranslations } from "../lib/translations"
 
 import "../../styles/overrides.scss"
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 
 const signInMessage = "Login is required to view this page."
 const skipLoginRoutes = [
@@ -53,19 +54,23 @@ function BloomApp({ Component, router, pageProps }: AppProps) {
     }
   }, [locale])
 
+  const queryClient = new QueryClient()
+
   const pageContent = (
-    <ConfigProvider apiUrl={process.env.backendApiBase}>
-      <AuthProvider>
-        <RequireLogin
-          signInPath="/sign-in"
-          termsPath="/users/terms"
-          signInMessage={signInMessage}
-          skipForRoutes={skipLoginRoutes}
-        >
-          <MessageProvider>{hasMounted && <Component {...pageProps} />}</MessageProvider>
-        </RequireLogin>
-      </AuthProvider>
-    </ConfigProvider>
+    <QueryClientProvider client={queryClient}>
+      <ConfigProvider apiUrl={process.env.backendApiBase}>
+        <AuthProvider>
+          <RequireLogin
+            signInPath="/sign-in"
+            termsPath="/users/terms"
+            signInMessage={signInMessage}
+            skipForRoutes={skipLoginRoutes}
+          >
+            <MessageProvider>{hasMounted && <Component {...pageProps} />}</MessageProvider>
+          </RequireLogin>
+        </AuthProvider>
+      </ConfigProvider>
+    </QueryClientProvider>
   )
 
   return (

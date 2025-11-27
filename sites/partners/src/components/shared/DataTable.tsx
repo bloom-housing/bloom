@@ -1,10 +1,8 @@
 import React from "react"
 
 import {
-  Column,
   ColumnDef,
   PaginationState,
-  Table,
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
@@ -12,14 +10,24 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table"
+import { keepPreviousData, useQuery } from "@tanstack/react-query"
 import styles from "./DataTable.module.scss"
 import { Button } from "@bloom-housing/ui-seeds"
+import { PaginationMeta } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
-export type TableData = { [key: string]: string | React.ReactNode }[]
+export type TableDataRow = { [key: string]: string | React.ReactNode }
+
+export interface TableData {
+  items: TableDataRow[]
+  error?: any
+  loading?: boolean
+  meta?: PaginationMeta
+}
 
 interface DataTableProps {
-  data: TableData[]
-  columns: ColumnDef<TableData>[]
+  columns: ColumnDef<TableDataRow>[]
+  data: TableData
+  fetchData: (pagination: PaginationState) => Promise<TableData>
 }
 
 export const DataTable = (props: DataTableProps) => {
@@ -31,12 +39,13 @@ export const DataTable = (props: DataTableProps) => {
         {...{
           data: props.data,
           columns: props.columns,
+          fetchData: props.fetchData,
         }}
       />
-      <hr />
-      <div>
+      {/* <hr /> */}
+      {/* <div>
         <button onClick={() => rerender()}>Force Rerender</button>
-      </div>
+      </div> */}
     </>
   )
 }
@@ -47,15 +56,27 @@ const MyTable = (props: DataTableProps) => {
     pageSize: 10,
   })
 
+  const dataQuery = useQuery({
+    queryKey: ["data", pagination],
+    queryFn: () => props.fetchData(pagination),
+    placeholderData: keepPreviousData, // don't have 0 rows flash while changing pages/loading next page
+  })
+
+  const defaultData = React.useMemo(() => [], [])
+
+  console.log("dataQuery.data", dataQuery.data)
+
   const table = useReactTable({
     columns: props.columns,
-    data: props.data,
+    data: dataQuery.data?.items ?? defaultData,
+    rowCount: dataQuery.data?.meta?.totalItems,
     debugTable: true,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     onPaginationChange: setPagination,
+    manualPagination: true,
     //no need to pass pageCount or rowCount with client-side pagination as it is calculated automatically
     state: {
       pagination,
@@ -141,7 +162,7 @@ const MyTable = (props: DataTableProps) => {
                 table.setPageSize(Number(e.target.value))
               }}
             >
-              {[10, 20, 30, 40, 50].map((pageSize) => (
+              {[3, 10, 20, 30, 40, 50].map((pageSize) => (
                 <option key={pageSize} value={pageSize}>
                   Show {pageSize}
                 </option>
@@ -153,7 +174,7 @@ const MyTable = (props: DataTableProps) => {
           </div>
         </div>
       </div>
-      <pre>{JSON.stringify(table.getState().pagination, null, 2)}</pre>
+      {/* <pre>{JSON.stringify(table.getState().pagination, null, 2)}</pre> */}
     </div>
   )
 }

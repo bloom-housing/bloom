@@ -1,15 +1,21 @@
 import { useCallback, useContext, useState, useEffect } from "react"
 import useSWR from "swr"
+import axios from "axios"
 import qs from "qs"
 import dayjs from "dayjs"
 import utc from "dayjs/plugin/utc"
 import tz from "dayjs/plugin/timezone"
 import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
 import { t } from "@bloom-housing/ui-components"
+import { user } from "../../../../shared-helpers/__tests__/testHelpers"
 import {
   ApplicationOrderByKeys,
   EnumListingFilterParamsComparison,
   EnumMultiselectQuestionFilterParamsComparison,
+  FeatureFlagEnum,
+  Jurisdiction,
+  ListingFilterParams,
+  ListingOrderByKeys,
   ListingViews,
   MultiselectQuestionFilterParams,
   MultiselectQuestionsApplicationSectionEnum,
@@ -49,7 +55,7 @@ type UseListingsDataProps = PaginationProps & {
   search?: string
   sort?: ColumnOrder[]
   roles?: UserRole
-  userJurisidctionIds?: string[]
+  userJurisdictionIds?: string[]
   view?: ListingViews
 }
 
@@ -66,6 +72,93 @@ export function useSingleListingData(listingId: string) {
   }
 }
 
+let jurisdiction: Jurisdiction | null = null
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// export async function fetchJurisdictionByName(req?: any) {
+//   try {
+//     if (jurisdiction) {
+//       return jurisdiction
+//     }
+
+//     const jurisdictionName = process.env.jurisdictionName
+
+//     const headers = {
+//       passkey: process.env.API_PASS_KEY,
+//     }
+//     if (req) {
+//       headers["x-forwarded-for"] = req.headers["x-forwarded-for"] ?? req.socket.remoteAddress
+//     }
+//     const jurisdictionRes = await axios.get(
+//       `${process.env.backendApiBase}/jurisdictions/byName/${jurisdictionName}`,
+//       {
+//         headers,
+//       }
+//     )
+//     jurisdiction = jurisdictionRes?.data
+//   } catch (error) {
+//     console.log("error = ", error)
+//   }
+
+//   return jurisdiction
+// }
+
+interface BaseListingData {
+  limit?: number | "all"
+  orderBy?: ListingOrderByKeys[]
+  orderDir?: OrderByEnum[]
+  page?: number
+  roles?: UserRole
+  search?: string
+  userId?: string
+  userJurisdictionIds?: string[]
+  view?: ListingViews
+}
+
+export async function fetchBaseListingData({
+  limit,
+  orderBy,
+  orderDir,
+  page,
+  roles,
+  search,
+  userId,
+  userJurisdictionIds,
+  view,
+}: BaseListingData) {
+  let listings
+  let pagination
+  try {
+    const params: BaseListingData = {
+      limit: limit || "all",
+      orderBy: orderBy || [ListingOrderByKeys.status],
+      orderDir: orderDir || [OrderByEnum.asc],
+      search: search || null,
+      roles: roles || null,
+      page: page || 1,
+      userId: userId || null,
+      userJurisdictionIds: userJurisdictionIds || null,
+      view: view || ListingViews.base,
+    }
+
+    const response = await axios.post(`${process.env.listingServiceUrl}/list`, params, {
+      headers: {
+        passkey: process.env.API_PASS_KEY,
+      },
+    })
+
+    listings = response.data.items
+    pagination = response.data.meta || null
+  } catch (e) {
+    console.log("fetchBaseListingData error: ", e)
+  }
+
+  return {
+    items: listings,
+    meta: pagination,
+  }
+}
+
 export function useListingsData({
   page,
   limit,
@@ -73,7 +166,7 @@ export function useListingsData({
   search = "",
   sort,
   roles,
-  userJurisidctionIds,
+  userJurisdictionIds,
   view,
 }: UseListingsDataProps) {
   const params = {
@@ -101,7 +194,7 @@ export function useListingsData({
   } else if (roles?.isJurisdictionalAdmin || roles?.isLimitedJurisdictionalAdmin) {
     params.filter.push({
       $comparison: EnumListingFilterParamsComparison.IN,
-      jurisdiction: userJurisidctionIds[0],
+      jurisdiction: userJurisdictionIds[0],
     })
   }
 
@@ -120,9 +213,10 @@ export function useListingsData({
   const { data, error } = useSWR(`/api/adapter/listings?${paramsString}`, fetcher)
 
   return {
-    listingDtos: data,
-    listingsLoading: !error && !data,
-    listingsError: error,
+    items: data?.items,
+    meta: data?.meta,
+    loading: !error && !data,
+    error: error,
   }
 }
 
