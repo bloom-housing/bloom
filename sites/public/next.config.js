@@ -69,6 +69,19 @@ module.exports = withBundleAnalyzer({
       type: "asset/source",
     })
 
+    config.optimization = {
+      ...config.optimization,
+      minimize: true,
+      splitChunks: {
+        chunks: "all",
+        minSize: 20000, // 20KB minimum
+        maxSize: 244000, // 244KB maximum
+        minChunks: 1,
+        maxAsyncRequests: 30,
+        maxInitialRequests: 30,
+      },
+    }
+
     return config
   },
   eslint: {
