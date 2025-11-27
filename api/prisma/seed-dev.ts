@@ -151,6 +151,15 @@ export const devSeeding = async (
     ),
   });
 
+  await prismaClient.featureFlags.create({
+    data: featureFlagFactory(
+      'enableReferralQuestionUnits',
+      false,
+      'When true listings show referral only units question in listing application creation form',
+      [jurisdiction.id],
+    ),
+  });
+
   for (let index = 0; index < LISTINGS_TO_SEED; index++) {
     const applications = [];
 
