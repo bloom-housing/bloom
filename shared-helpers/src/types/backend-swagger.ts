@@ -4079,6 +4079,9 @@ export interface Listing {
   referralOpportunity?: boolean
 
   /**  */
+  referralOnlyUnits?: boolean
+
+  /**  */
   accessibility?: string
 
   /**  */
@@ -4778,6 +4781,9 @@ export interface ListingCreate {
   referralOpportunity?: boolean
 
   /**  */
+  referralOnlyUnits?: boolean
+
+  /**  */
   accessibility?: string
 
   /**  */
@@ -5122,6 +5128,9 @@ export interface ListingUpdate {
 
   /**  */
   referralOpportunity?: boolean
+
+  /**  */
+  referralOnlyUnits?: boolean
 
   /**  */
   accessibility?: string

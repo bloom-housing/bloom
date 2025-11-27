@@ -103,6 +103,14 @@ class Listing extends AbstractDTO {
   referralOpportunity?: boolean;
 
   @Expose()
+  @ValidateListingPublish('referralOnlyUnits', {
+    groups: [ValidationsGroupsEnum.default],
+  })
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  referralOnlyUnits?: boolean;
+
+  @Expose()
   @ValidateListingPublish('accessibility', {
     groups: [ValidationsGroupsEnum.default],
   })
