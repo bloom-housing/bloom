@@ -19,6 +19,11 @@ const DetailApplicationTypes = () => {
     listing?.jurisdictions?.id
   )
 
+  const enableReferralQuestionUnits = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableReferralQuestionUnits,
+    listing?.jurisdictions?.id
+  )
+
   const digitalMethod = listing.applicationMethods.find(
     (method) =>
       method.type === ApplicationMethodsTypeEnum.Internal ||
@@ -105,8 +110,17 @@ const DetailApplicationTypes = () => {
 
       <Grid.Row columns={2}>
         <Grid.Cell>
-          <FieldValue id="referralOpportunity" label={t("listings.applicationType.referral")}>
-            {getDetailBoolean(listing.referralOpportunity)}
+          <FieldValue
+            id="referralOpportunity"
+            label={t(
+              enableReferralQuestionUnits
+                ? "listings.applicationType.referralOnlyUnits"
+                : "listings.applicationType.referral"
+            )}
+          >
+            {enableReferralQuestionUnits
+              ? getDetailBoolean(listing.referralOnlyUnits)
+              : getDetailBoolean(listing.referralOpportunity)}
           </FieldValue>
         </Grid.Cell>
         {referralMethod && (

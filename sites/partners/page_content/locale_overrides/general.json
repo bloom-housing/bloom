@@ -203,6 +203,7 @@
   "listings.applicationType.digitalApplication": "Common digital application",
   "listings.applicationType.paperApplication": "Paper applications",
   "listings.applicationType.referral": "Referral",
+  "listings.applicationType.referralOnlyUnits": "Has referral only units",
   "listings.applicationAddress.mailApplication": "Can applications be mailed in?",
   "listings.applicationAddress.mailApplicationType": "Where can applications be mailed in?",
   "listings.approval.approveAndPublish": "Approve & publish",
