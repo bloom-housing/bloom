@@ -2278,6 +2278,50 @@ describe('Testing user service', () => {
       });
     });
 
+    it('should fail because user password is outdated', async () => {
+      const id = randomUUID();
+      emailService.sendSingleUseCode = jest.fn();
+
+      prisma.userAccounts.findFirst = jest.fn().mockResolvedValue({
+        id,
+        email: 'example@exygy.com',
+        passwordValidForDays: 100,
+        passwordUpdatedAt: new Date(0),
+        jurisdictions: [],
+      });
+      prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue({
+        id,
+        allowSingleUseCodeLogin: true,
+      });
+      prisma.userAccounts.update = jest.fn().mockResolvedValue({
+        id,
+      });
+
+      await expect(
+        async () =>
+          await service.requestSingleUseCode(
+            {
+              email: 'example@exygy.com',
+            },
+            { headers: { jurisdictionname: 'juris 1' } } as unknown as Request,
+          ),
+      ).rejects.toThrowError(
+        `user ${id} attempted to login, but password is no longer valid`,
+      );
+
+      expect(prisma.userAccounts.findFirst).toHaveBeenCalledWith({
+        where: {
+          email: 'example@exygy.com',
+        },
+        include: {
+          jurisdictions: true,
+        },
+      });
+      expect(prisma.jurisdictions.findFirst).not.toHaveBeenCalled();
+      expect(prisma.userAccounts.update).not.toHaveBeenCalled();
+      expect(emailService.sendSingleUseCode).not.toHaveBeenCalled();
+    });
+
     it('should request single use code but jurisdiction does not exist', async () => {
       const id = randomUUID();
       emailService.sendSingleUseCode = jest.fn();
