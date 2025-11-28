@@ -258,6 +258,7 @@
   "listings.fieldError": "Please resolve any errors before saving or publishing your listing.",
   "listings.firstComeFirstServe": "First come first serve",
   "listings.getStarted": "Get started",
+  "listings.hasReferralOnlyUnits": "Are there units set aside for referral only?",
   "listings.housingDeveloperOwner": "Housing developer / owner",
   "listings.isDigitalApplication": "Is there a digital application?",
   "listings.isPaperApplication": "Is there a paper application?",

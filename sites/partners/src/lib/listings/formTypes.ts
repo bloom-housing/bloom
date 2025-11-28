@@ -48,6 +48,7 @@ export type FormListing = Omit<Listing, "countyCode"> & {
   commonDigitalApplicationChoice?: YesNoEnum
   paperApplicationChoice?: YesNoEnum
   referralOpportunityChoice?: YesNoEnum
+  referralOnlyUnitsChoice?: YesNoEnum
   criteriaAttachType?: string
   includeCommunityDisclaimerQuestion?: YesNoEnum
   listingSection8Acceptance?: YesNoEnum

@@ -14,6 +14,7 @@ import { Button, Card, Drawer, Grid } from "@bloom-housing/ui-seeds"
 import {
   ApplicationMethodCreate,
   ApplicationMethodsTypeEnum,
+  FeatureFlagEnum,
   LanguagesEnum,
   YesNoEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -90,7 +91,7 @@ const ApplicationTypes = ({
 }: ApplicationTypesProps) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, setValue, watch, errors, getValues } = useFormContext()
-  const { getJurisdictionLanguages } = useContext(AuthContext)
+  const { getJurisdictionLanguages, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
 
   const getDefaultMethods = () => {
     const temp: Methods = {
@@ -127,6 +128,12 @@ const ApplicationTypes = ({
   const commonDigitalApplicationChoice = watch("commonDigitalApplicationChoice")
   const paperApplicationChoice = watch("paperApplicationChoice")
   const referralOpportunityChoice = watch("referralOpportunityChoice")
+  const referralOnlyUnitsChoice = watch("referralOnlyUnitsChoice")
+
+  const enableReferralQuestionUnits = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableReferralQuestionUnits,
+    jurisdiction
+  )
 
   /*
     Set state for methods, drawer, upload progress, and more
@@ -167,6 +174,38 @@ const ApplicationTypes = ({
     language: "t.language",
     actions: "",
   }
+
+  const referralQuestionFields = [
+    {
+      ...yesNoRadioOptions[0],
+      id: "referralOpportunityYes",
+      defaultChecked: listing?.referralOpportunity === true,
+      inputProps: {
+        onChange: () => {
+          setMethods({
+            ...methods,
+            referral: {
+              ...methods.referral,
+              type: ApplicationMethodsTypeEnum.Referral,
+            },
+          })
+        },
+      },
+    },
+    {
+      ...yesNoRadioOptions[1],
+      id: "referralOpportunityNo",
+      defaultChecked: listing?.referralOpportunity === false,
+      inputProps: {
+        onChange: () => {
+          setMethods({
+            ...methods,
+            referral: null,
+          })
+        },
+      },
+    },
+  ]
 
   const savePaperApplication = () => {
     const paperApplications = methods.paper?.paperApplications ?? []
@@ -482,55 +521,43 @@ const ApplicationTypes = ({
           <Grid.Cell
             className={fieldHasError(errors?.referralOpportunity) ? styles["label-error"] : ""}
           >
-            <FieldGroup
-              name="referralOpportunityChoice"
-              type="radio"
-              register={register}
-              fieldLabelClassName={`${styles["label-option"]} seeds-m-bs-2`}
-              groupLabel={getLabel(
-                "referralOpportunity",
-                requiredFields,
-                t("listings.isReferralOpportunity")
-              )}
-              error={
-                fieldHasError(errors?.referralOpportunity) && referralOpportunityChoice === null
-              }
-              errorMessage={fieldMessage(errors?.referralOpportunity)}
-              fields={[
-                {
-                  ...yesNoRadioOptions[0],
-                  id: "referralOpportunityYes",
-                  defaultChecked: listing?.referralOpportunity === true,
-                  inputProps: {
-                    onChange: () => {
-                      setMethods({
-                        ...methods,
-                        referral: {
-                          ...methods.referral,
-                          type: ApplicationMethodsTypeEnum.Referral,
-                        },
-                      })
-                    },
-                  },
-                },
-                {
-                  ...yesNoRadioOptions[1],
-                  id: "referralOpportunityNo",
-                  defaultChecked: listing?.referralOpportunity === false,
-                  inputProps: {
-                    onChange: () => {
-                      setMethods({
-                        ...methods,
-                        referral: null,
-                      })
-                    },
-                  },
-                },
-              ]}
-            />
+            {enableReferralQuestionUnits ? (
+              <FieldGroup
+                type="radio"
+                register={register}
+                fieldLabelClassName={`${styles["label-option"]} seeds-m-bs-2`}
+                name="referralOnlyUnitsChoice"
+                groupLabel={getLabel(
+                  "referralOnlyUnits",
+                  requiredFields,
+                  t("listings.hasReferralOnlyUnits")
+                )}
+                error={fieldHasError(errors?.referralOnlyUnits) && referralOnlyUnitsChoice === null}
+                errorMessage={fieldMessage(errors?.referralOnlyUnits)}
+                fields={referralQuestionFields}
+              />
+            ) : (
+              <FieldGroup
+                type="radio"
+                register={register}
+                fieldLabelClassName={`${styles["label-option"]} seeds-m-bs-2`}
+                name="referralOpportunityChoice"
+                groupLabel={getLabel(
+                  "referralOpportunity",
+                  requiredFields,
+                  t("listings.isReferralOpportunity")
+                )}
+                error={
+                  fieldHasError(errors?.referralOpportunity) && referralOpportunityChoice === null
+                }
+                errorMessage={fieldMessage(errors?.referralOpportunity)}
+                fields={referralQuestionFields}
+              />
+            )}
           </Grid.Cell>
         </Grid.Row>
-        {referralOpportunityChoice === YesNoEnum.yes && (
+        {(referralOpportunityChoice === YesNoEnum.yes ||
+          referralOnlyUnitsChoice === YesNoEnum.yes) && (
           <Grid.Row columns={3}>
             <Grid.Cell>
               <Field
