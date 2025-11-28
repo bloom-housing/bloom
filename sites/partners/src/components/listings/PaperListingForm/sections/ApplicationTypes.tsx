@@ -179,7 +179,10 @@ const ApplicationTypes = ({
     {
       ...yesNoRadioOptions[0],
       id: "referralOpportunityYes",
-      defaultChecked: listing?.referralOpportunity === true,
+      defaultChecked:
+        (enableReferralQuestionUnits
+          ? listing?.referralOnlyUnits
+          : listing?.referralOpportunity) === true,
       inputProps: {
         onChange: () => {
           setMethods({
@@ -195,7 +198,10 @@ const ApplicationTypes = ({
     {
       ...yesNoRadioOptions[1],
       id: "referralOpportunityNo",
-      defaultChecked: listing?.referralOpportunity === false,
+      defaultChecked:
+        (enableReferralQuestionUnits
+          ? listing?.referralOnlyUnits
+          : listing?.referralOpportunity) === false,
       inputProps: {
         onChange: () => {
           setMethods({
