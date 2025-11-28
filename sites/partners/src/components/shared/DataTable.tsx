@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 
 import {
   ColumnDef,
@@ -12,8 +12,9 @@ import {
 } from "@tanstack/react-table"
 import { keepPreviousData, useQuery } from "@tanstack/react-query"
 import styles from "./DataTable.module.scss"
-import { Button } from "@bloom-housing/ui-seeds"
+import { Button, LoadingState } from "@bloom-housing/ui-seeds"
 import { PaginationMeta } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { data } from "autoprefixer"
 
 export type TableDataRow = { [key: string]: string | React.ReactNode }
 
@@ -51,10 +52,12 @@ export const DataTable = (props: DataTableProps) => {
 }
 
 const MyTable = (props: DataTableProps) => {
-  const [pagination, setPagination] = React.useState<PaginationState>({
+  const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
-    pageSize: 10,
+    pageSize: props.data.meta?.itemCount || 8,
   })
+
+  const [delayedLoading, setDelayedLoading] = useState(false)
 
   const dataQuery = useQuery({
     queryKey: ["data", pagination],
@@ -64,13 +67,23 @@ const MyTable = (props: DataTableProps) => {
 
   const defaultData = React.useMemo(() => [], [])
 
-  console.log("dataQuery.data", dataQuery.data)
+  useEffect(() => {
+    if (dataQuery.isLoading || (dataQuery.isFetching && !dataQuery.isFetched)) {
+      const timer = setTimeout(() => {
+        setDelayedLoading(true)
+      }, 300) // 300ms delay
+
+      return () => clearTimeout(timer)
+    } else {
+      setDelayedLoading(false)
+    }
+  }, [dataQuery.isLoading, dataQuery.isFetching, dataQuery.isFetched])
 
   const table = useReactTable({
     columns: props.columns,
     data: dataQuery.data?.items ?? defaultData,
     rowCount: dataQuery.data?.meta?.totalItems,
-    debugTable: true,
+    // debugTable: true,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
@@ -81,53 +94,100 @@ const MyTable = (props: DataTableProps) => {
     state: {
       pagination,
     },
+    // defaultColumn: {
+    //   size: 200, //starting column size
+    //   minSize: 50, //enforced during column resizing
+    //   maxSize: 500, //enforced during column resizing
+    // },
     // autoResetPageIndex: false, // turn off page index reset when sorting or filtering
   })
+
+  const ROW_HEIGHT = 56.5
+  const HEADER_HEIGHT = 64.5
+
+  const tableHeaders = (
+    <thead>
+      {table.getHeaderGroups().map((headerGroup) => (
+        <tr key={headerGroup.id}>
+          {headerGroup.headers.map((header) => {
+            return (
+              <th key={header.id} colSpan={header.colSpan}>
+                <button
+                  {...{
+                    className: header.column.getCanSort() ? "cursor-pointer select-none" : "",
+                    onClick: header.column.getToggleSortingHandler(),
+                  }}
+                >
+                  {flexRender(header.column.columnDef.header, header.getContext())}
+                  {{
+                    asc: " 🔼",
+                    desc: " 🔽",
+                  }[header.column.getIsSorted() as string] ?? null}
+                </button>
+              </th>
+            )
+          })}
+        </tr>
+      ))}
+    </thead>
+  )
+
+  const getBodyContent = () => {
+    if (delayedLoading) {
+      return (
+        <tr className={styles["loading-row"]}>
+          <td
+            colSpan={props.columns.length}
+            style={{ height: `${ROW_HEIGHT * dataQuery.data?.meta?.itemCount + HEADER_HEIGHT}px` }}
+          >
+            <LoadingState loading={delayedLoading} className={styles["loading-spinner"]}>
+              <div className={styles["loading-content"]} style={{ height: "150px" }}></div>
+            </LoadingState>
+          </td>
+        </tr>
+      )
+    } else if (dataQuery.data?.items.length === 0) {
+      return (
+        <>
+          {tableHeaders}
+          <tbody>
+            <tr>
+              <td colSpan={props.columns.length} className="text-center p-4">
+                No data available.
+              </td>
+            </tr>
+          </tbody>
+        </>
+      )
+    } else {
+      return (
+        <>
+          {tableHeaders}
+          <tbody>
+            {table.getRowModel().rows.map((row) => {
+              return (
+                <tr key={row.id}>
+                  {row.getVisibleCells().map((cell) => {
+                    return (
+                      <td key={cell.id}>
+                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      </td>
+                    )
+                  })}
+                </tr>
+              )
+            })}
+          </tbody>
+        </>
+      )
+    }
+  }
 
   return (
     <div className="p-2">
       <div className="h-2" />
-      <table className={styles["data-table"]}>
-        <thead>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <tr key={headerGroup.id}>
-              {headerGroup.headers.map((header) => {
-                return (
-                  <th key={header.id} colSpan={header.colSpan}>
-                    <div
-                      {...{
-                        className: header.column.getCanSort() ? "cursor-pointer select-none" : "",
-                        onClick: header.column.getToggleSortingHandler(),
-                      }}
-                    >
-                      {flexRender(header.column.columnDef.header, header.getContext())}
-                      {{
-                        asc: " 🔼",
-                        desc: " 🔽",
-                      }[header.column.getIsSorted() as string] ?? null}
-                    </div>
-                  </th>
-                )
-              })}
-            </tr>
-          ))}
-        </thead>
-        <tbody>
-          {table.getRowModel().rows.map((row) => {
-            return (
-              <tr key={row.id}>
-                {row.getVisibleCells().map((cell) => {
-                  return (
-                    <td key={cell.id}>
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                    </td>
-                  )
-                })}
-              </tr>
-            )
-          })}
-        </tbody>
-      </table>
+      <table className={styles["data-table"]}>{getBodyContent()}</table>
+
       <div>
         <div className={styles["pagination"]}>
           <Button onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()}>
@@ -142,32 +202,26 @@ const MyTable = (props: DataTableProps) => {
                 {table.getPageCount().toLocaleString()}
               </strong>
             </span>
-            <span className="flex items-center gap-1">
-              Go to page:
-              <input
-                type="number"
-                min="1"
-                max={table.getPageCount()}
-                defaultValue={table.getState().pagination.pageIndex + 1}
+            <span className={styles["show-numbers-container"]}>
+              <label htmlFor="show-numbers" className={styles["show-label"]}>
+                Show
+              </label>
+              <select
+                value={table.getState().pagination.pageSize}
                 onChange={(e) => {
-                  const page = e.target.value ? Number(e.target.value) - 1 : 0
-                  table.setPageIndex(page)
+                  table.setPageSize(Number(e.target.value))
                 }}
-                className="border p-1 rounded w-16"
-              />
+                id={"show-numbers"}
+                className={styles["show-select"]}
+              >
+                {[3, 8, 25, 50, 100].map((pageSize) => (
+                  <option key={pageSize} value={pageSize}>
+                    {pageSize}
+                  </option>
+                ))}
+              </select>
             </span>
-            <select
-              value={table.getState().pagination.pageSize}
-              onChange={(e) => {
-                table.setPageSize(Number(e.target.value))
-              }}
-            >
-              {[3, 10, 20, 30, 40, 50].map((pageSize) => (
-                <option key={pageSize} value={pageSize}>
-                  Show {pageSize}
-                </option>
-              ))}
-            </select>
+
             <Button onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
               Next
             </Button>

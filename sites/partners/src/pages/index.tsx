@@ -352,6 +352,8 @@ export default function ListingsList() {
         cell: (info) => info.getValue(),
         header: () => <span>Name</span>,
         footer: (props) => props.column.id,
+        size: 200,
+        maxSize: Number.MAX_SAFE_INTEGER,
       },
       {
         accessorKey: "status",
@@ -359,6 +361,8 @@ export default function ListingsList() {
         cell: (info) => t(`listings.listingStatus.${info.getValue() as string}`),
         header: () => <span>Status</span>,
         footer: (props) => props.column.id,
+        size: 100,
+        maxSize: 100,
       },
       {
         accessorKey: "createdAt",
@@ -367,6 +371,8 @@ export default function ListingsList() {
           info.getValue() ? dayjs(info.getValue() as string).format("MM/DD/YYYY") : t("t.none"),
         header: () => <span>Created date</span>,
         footer: (props) => props.column.id,
+        size: 50,
+        maxSize: 50,
       },
       {
         accessorKey: "updatedAt",
@@ -375,6 +381,8 @@ export default function ListingsList() {
           info.getValue() ? dayjs(info.getValue() as string).format("MM/DD/YYYY") : t("t.none"),
         header: () => <span>Updated date</span>,
         footer: (props) => props.column.id,
+        size: 50,
+        maxSize: 50,
       },
       {
         accessorKey: "publishedAt",
@@ -383,6 +391,8 @@ export default function ListingsList() {
           info.getValue() ? dayjs(info.getValue() as string).format("MM/DD/YYYY") : t("t.none"),
         header: () => <span>Published date</span>,
         footer: (props) => props.column.id,
+        size: 50,
+        maxSize: 50,
       },
       {
         accessorKey: "applicationDueDate",
@@ -391,6 +401,8 @@ export default function ListingsList() {
           info.getValue() ? dayjs(info.getValue() as string).format("MM/DD/YYYY") : t("t.none"),
         header: () => <span>Due date</span>,
         footer: (props) => props.column.id,
+        size: 50,
+        maxSize: 50,
       },
     ],
     []
