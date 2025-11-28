@@ -1,8 +1,9 @@
 import React from "react"
-import { render, fireEvent, waitFor } from "@testing-library/react"
+import { render, waitFor } from "@testing-library/react"
 import { useRouter } from "next/router"
 // eslint-disable-next-line import/no-named-as-default
 import PasswordExpiredModal from "../../../src/components/account/PasswordExpiredModal"
+import userEvent from "@testing-library/user-event"
 
 jest.mock("next/router", () => ({
   useRouter: jest.fn(),
@@ -36,9 +37,7 @@ describe("PasswordExpiredModal", () => {
   })
 
   it("does not render modal content when isOpen is false", () => {
-    const { queryByText } = render(
-      <PasswordExpiredModal isOpen={false} onClose={mockOnClose} />
-    )
+    const { queryByText } = render(<PasswordExpiredModal isOpen={false} onClose={mockOnClose} />)
 
     expect(queryByText("Password Expired")).not.toBeInTheDocument()
     expect(
@@ -50,7 +49,7 @@ describe("PasswordExpiredModal", () => {
     const { getByRole } = render(<PasswordExpiredModal isOpen={true} onClose={mockOnClose} />)
 
     const continueButton = getByRole("button", { name: "Continue" })
-    fireEvent.click(continueButton)
+    await userEvent.click(continueButton)
 
     await waitFor(() => {
       expect(mockPush).toHaveBeenCalledWith("/forgot-password")
