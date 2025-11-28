@@ -1,9 +1,9 @@
 import React from "react"
-import { render, waitFor } from "@testing-library/react"
 import { useRouter } from "next/router"
 // eslint-disable-next-line import/no-named-as-default
 import PasswordExpiredModal from "../../../src/components/account/PasswordExpiredModal"
 import userEvent from "@testing-library/user-event"
+import { render, waitFor } from "../../../../partners/__tests__/testUtils"
 
 jest.mock("next/router", () => ({
   useRouter: jest.fn(),
