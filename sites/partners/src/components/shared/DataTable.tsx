@@ -14,7 +14,6 @@ import { keepPreviousData, useQuery } from "@tanstack/react-query"
 import styles from "./DataTable.module.scss"
 import { Button, LoadingState } from "@bloom-housing/ui-seeds"
 import { PaginationMeta } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { data } from "autoprefixer"
 
 export type TableDataRow = { [key: string]: string | React.ReactNode }
 
@@ -138,7 +137,9 @@ const MyTable = (props: DataTableProps) => {
         <tr className={styles["loading-row"]}>
           <td
             colSpan={props.columns.length}
-            style={{ height: `${ROW_HEIGHT * dataQuery.data?.meta?.itemCount + HEADER_HEIGHT}px` }}
+            style={{
+              height: `${ROW_HEIGHT * (dataQuery.data?.meta?.itemCount || 8) + HEADER_HEIGHT}px`,
+            }}
           >
             <LoadingState loading={delayedLoading} className={styles["loading-spinner"]}>
               <div className={styles["loading-content"]} style={{ height: "150px" }}></div>
@@ -184,23 +185,22 @@ const MyTable = (props: DataTableProps) => {
   }
 
   return (
-    <div className="p-2">
-      <div className="h-2" />
+    <div>
       <table className={styles["data-table"]}>{getBodyContent()}</table>
-
       <div>
         <div className={styles["pagination"]}>
-          <Button onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()}>
+          <Button
+            onClick={() => table.previousPage()}
+            disabled={!table.getCanPreviousPage()}
+            variant={"primary-outlined"}
+          >
             Previous
           </Button>
 
           <div className={styles["pagination-info-right"]}>
-            <span className="flex items-center gap-1">
-              <div>Page</div>
-              <strong>
-                {table.getState().pagination.pageIndex + 1} of{" "}
-                {table.getPageCount().toLocaleString()}
-              </strong>
+            <span className={styles["page-info"]}>
+              Page {table.getState().pagination.pageIndex + 1} of{" "}
+              {table.getPageCount().toLocaleString()}
             </span>
             <span className={styles["show-numbers-container"]}>
               <label htmlFor="show-numbers" className={styles["show-label"]}>
@@ -222,7 +222,11 @@ const MyTable = (props: DataTableProps) => {
               </select>
             </span>
 
-            <Button onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
+            <Button
+              onClick={() => table.nextPage()}
+              disabled={!table.getCanNextPage()}
+              variant={"primary-outlined"}
+            >
               Next
             </Button>
           </div>
