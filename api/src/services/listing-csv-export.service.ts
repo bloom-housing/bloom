@@ -1131,6 +1131,11 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
           format: this.formatYesNo,
         },
         {
+          path: 'referralOnlyUnits',
+          label: 'Has referral only units',
+          format: this.formatYesNo,
+        },
+        {
           path: 'applicationMailingAddressId',
           label: 'Can applications be mailed in?',
           format: this.formatYesNo,
