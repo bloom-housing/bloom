@@ -1,7 +1,6 @@
 import React from "react"
-import { FormHouseholdIncome } from "../../../../src/components/applications/PaperApplicationForm/sections/FormHouseholdIncome"
-import { mockNextRouter, render, screen } from "../../../testUtils"
-import { FormProviderWrapper } from "./helpers"
+import { FormHouseholdIncome } from "../../../../../src/components/applications/PaperApplicationForm/sections/FormHouseholdIncome"
+import { mockNextRouter, render, screen, FormProviderWrapper } from "../../../../testUtils"
 import userEvent from "@testing-library/user-event"
 
 beforeAll(() => {

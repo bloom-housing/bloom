@@ -8,13 +8,14 @@ import {
   ListingsStatusEnum,
   RuleEnum,
 } from '@prisma/client';
+import { randomUUID } from 'node:crypto';
 import { ApplicationFlaggedSetService } from '../../../src/services/application-flagged-set.service';
 import { PrismaService } from '../../../src/services/prisma.service';
 import { View } from '../../../src/enums/application-flagged-sets/view';
 import { Application } from '../../../src/dtos/applications/application.dto';
 import { OrderByEnum } from '../../../src/enums/shared/order-by-enum';
 import { User } from '../../../src/dtos/users/user.dto';
-import { randomUUID } from 'node:crypto';
+import { CronJobService } from '../../../src/services/cron-job.service';
 
 describe('Testing application flagged set service', () => {
   let service: ApplicationFlaggedSetService;
@@ -26,6 +27,7 @@ describe('Testing application flagged set service', () => {
         PrismaService,
         Logger,
         SchedulerRegistry,
+        CronJobService,
       ],
     }).compile();
 
@@ -703,58 +705,6 @@ describe('Testing application flagged set service', () => {
       expect(prisma.applicationFlaggedSet.findFirst).toHaveBeenCalledWith({
         where: {
           id: 'example id',
-        },
-      });
-    });
-  });
-
-  describe('Test markCronJobAsStarted', () => {
-    it('should mark existing job as begun', async () => {
-      prisma.cronJob.findFirst = jest.fn().mockResolvedValue({
-        id: 'example id',
-      });
-
-      prisma.cronJob.update = jest.fn().mockResolvedValue({
-        id: 'example id',
-      });
-
-      await service.markCronJobAsStarted('AFS_CRON_JOB');
-
-      expect(prisma.cronJob.findFirst).toHaveBeenCalledWith({
-        where: {
-          name: 'AFS_CRON_JOB',
-        },
-      });
-
-      expect(prisma.cronJob.update).toHaveBeenCalledWith({
-        data: {
-          lastRunDate: expect.anything(),
-        },
-        where: {
-          id: 'example id',
-        },
-      });
-    });
-
-    it('should create cronjob as begun', async () => {
-      prisma.cronJob.findFirst = jest.fn().mockResolvedValue(null);
-
-      prisma.cronJob.create = jest.fn().mockResolvedValue({
-        id: 'example id',
-      });
-
-      await service.markCronJobAsStarted('AFS_CRON_JOB');
-
-      expect(prisma.cronJob.findFirst).toHaveBeenCalledWith({
-        where: {
-          name: 'AFS_CRON_JOB',
-        },
-      });
-
-      expect(prisma.cronJob.create).toHaveBeenCalledWith({
-        data: {
-          lastRunDate: expect.anything(),
-          name: 'AFS_CRON_JOB',
         },
       });
     });
