@@ -107,10 +107,10 @@ services:
       DATABASE_URL: "postgres://postgres:example@db:5432/bloom_prisma"
     healthcheck:
       test: ["CMD", "curl", "--fail", "http://127.0.0.1:3100/"]
-      interval: "2s"
-      timeout: "1s"
-      retries: 20
-      start_period: "1s"
+      interval: "5s"
+      timeout: "2s"
+      retries: 10
+      start_period: "5s"
     depends_on:
       db:
         condition: service_healthy
