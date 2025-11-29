@@ -48,7 +48,7 @@ export const useCatchNetworkError = () => {
       setNetworkError({
         title: t("authentication.signIn.passwordOutdated"),
         description: `<a href="/forgot-password">${t(
-          "t.authentication.signIn.changeYourPassword"
+          "authentication.signIn.changeYourPassword"
         )}</a>`,
         error,
       })
