@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react"
-
 import {
-  Column,
   ColumnDef,
   ColumnFiltersState,
+  Header,
   PaginationState,
   SortingState,
   flexRender,
@@ -17,24 +16,20 @@ import { keepPreviousData, useQuery } from "@tanstack/react-query"
 import ArrowsUpDownIcon from "@heroicons/react/16/solid/ArrowsUpDownIcon"
 import ArrowUpIcon from "@heroicons/react/16/solid/ArrowUpIcon"
 import ArrowDownIcon from "@heroicons/react/16/solid/ArrowDownIcon"
-
-import styles from "./DataTable.module.scss"
 import { Button, Icon, LoadingState } from "@bloom-housing/ui-seeds"
-import { PaginationMeta } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { data } from "autoprefixer"
+import styles from "./DataTable.module.scss"
 
 export type TableDataRow = { [key: string]: string | React.ReactNode }
 
 export type MetaType = {
   enabled?: boolean
+  filterLabelName?: string
 }
 
 export interface TableData {
   errorMessage?: string
   items: TableDataRow[]
-  loading?: boolean
-  meta?: PaginationMeta
-  search?: boolean
+  totalItems?: number
 }
 
 export interface FetchDataParams {
@@ -47,11 +42,22 @@ interface DataTableProps {
   defaultItemsPerPage?: number
   enableHorizontalScroll?: boolean
   initialSort?: SortingState
+  minSearchCharacters?: number
   fetchData: (
     pagination?: PaginationState,
     search?: ColumnFiltersState,
     sort?: SortingState
   ) => Promise<TableData>
+}
+
+const getHeaderAriaLabel = (header: Header<any, unknown>) => {
+  if (!header.column.getIsSorted()) {
+    return "Activate ascending sort"
+  } else if (header.column.getIsSorted() === "asc") {
+    return "Activate descending sort"
+  } else if (header.column.getIsSorted() === "desc") {
+    return "Deactivate sorting"
+  }
 }
 
 export const DataTable = (props: DataTableProps) => {
@@ -68,7 +74,7 @@ export const DataTable = (props: DataTableProps) => {
   const dataQuery = useQuery({
     queryKey: ["data", pagination, columnFilters, sorting],
     queryFn: () => props.fetchData(pagination, columnFilters, sorting),
-    placeholderData: keepPreviousData, // don't have 0 rows flash while changing pages/loading next page
+    placeholderData: keepPreviousData, // prevent row flash between quick fetches
   })
 
   const defaultData = React.useMemo(() => [], [])
@@ -109,12 +115,17 @@ export const DataTable = (props: DataTableProps) => {
     onColumnVisibilityChange: setColumnVisibility,
     onPaginationChange: setPagination,
     onSortingChange: setSorting,
-    rowCount: dataQuery.data?.meta?.totalItems,
+    rowCount: dataQuery.data?.totalItems,
     state: {
       columnFilters,
       columnVisibility,
       pagination,
       sorting,
+    },
+    defaultColumn: {
+      size: props.enableHorizontalScroll ? 100 : 150,
+      minSize: 100,
+      maxSize: Number.MAX_SAFE_INTEGER,
     },
   })
 
@@ -132,37 +143,40 @@ export const DataTable = (props: DataTableProps) => {
                 }}
               >
                 {header.column.getCanSort() ? (
-                  <button
-                    {...{
-                      className: header.column.getCanSort() ? "cursor-pointer select-none" : "",
-                      onClick: header.column.getToggleSortingHandler(),
-                    }}
-                  >
+                  <>
                     {flexRender(header.column.columnDef.header, header.getContext())}
-                    {{
-                      asc: (
-                        <Icon className={styles["sort-icon"]}>
-                          <ArrowUpIcon />
-                        </Icon>
-                      ),
-                      desc: (
-                        <Icon className={styles["sort-icon"]}>
-                          <ArrowDownIcon />
-                        </Icon>
-                      ),
-                      false: (
-                        <Icon className={styles["sort-icon"]}>
-                          <ArrowsUpDownIcon />
-                        </Icon>
-                      ),
-                    }[header.column.getIsSorted() as string] ?? null}
-                  </button>
+                    <button
+                      {...{
+                        className: header.column.getCanSort() ? "cursor-pointer select-none" : "",
+                        onClick: header.column.getToggleSortingHandler(),
+                      }}
+                      aria-label={getHeaderAriaLabel(header)}
+                    >
+                      {{
+                        asc: (
+                          <Icon className={styles["sort-icon"]} aria-label={"Sort ascending"}>
+                            <ArrowUpIcon />
+                          </Icon>
+                        ),
+                        desc: (
+                          <Icon className={styles["sort-icon"]} aria-label={"Sort descending"}>
+                            <ArrowDownIcon />
+                          </Icon>
+                        ),
+                        false: (
+                          <Icon className={styles["sort-icon"]} aria-label={"Sort not applied"}>
+                            <ArrowsUpDownIcon />
+                          </Icon>
+                        ),
+                      }[header.column.getIsSorted() as string] ?? null}
+                    </button>
+                  </>
                 ) : (
                   flexRender(header.column.columnDef.header, header.getContext())
                 )}
                 {header.column.getCanFilter() ? (
                   <div>
-                    <Filter column={header.column} />
+                    <Filter header={header} minSearchCharacters={props.minSearchCharacters || 3} />
                   </div>
                 ) : null}
               </th>
@@ -195,7 +209,10 @@ export const DataTable = (props: DataTableProps) => {
           {tableHeaders}
           <tbody>
             <tr>
-              <td colSpan={table.getVisibleFlatColumns().length} className="text-center p-4">
+              <td
+                colSpan={table.getVisibleFlatColumns().length}
+                className={`${styles["full-width-text-cell"]} ${styles["error-cell"]}`}
+              >
                 <div>{dataQuery.data.errorMessage}</div>
               </td>
             </tr>
@@ -208,7 +225,10 @@ export const DataTable = (props: DataTableProps) => {
           {tableHeaders}
           <tbody>
             <tr>
-              <td colSpan={props.columns.length} className="text-center p-4">
+              <td
+                colSpan={table.getVisibleFlatColumns().length}
+                className={styles["full-width-text-cell"]}
+              >
                 No data available
               </td>
             </tr>
@@ -270,8 +290,8 @@ export const DataTable = (props: DataTableProps) => {
 
           {dataQuery.data?.items?.length > 0 && !dataQuery.data?.errorMessage && (
             <span className={styles["total-items"]}>
-              {dataQuery.data?.meta?.totalItems} Total{" "}
-              {dataQuery.data?.meta?.totalItems === 1 ? "listing" : "listings"}
+              {dataQuery.data?.totalItems} Total{" "}
+              {dataQuery.data?.totalItems === 1 ? "listing" : "listings"}
             </span>
           )}
           <span className={styles["show-items-per-page"]}>
@@ -308,15 +328,25 @@ export const DataTable = (props: DataTableProps) => {
   )
 }
 
-function Filter({ column }: { column: Column<any, unknown> }) {
-  const columnFilterValue = column.getFilterValue()
+function Filter({
+  header,
+  minSearchCharacters,
+}: {
+  header: Header<any, unknown>
+  minSearchCharacters: number
+}) {
+  const columnFilterValue = header.column.getFilterValue()
 
   return (
     <DebouncedInput
-      onChange={(value) => column.setFilterValue(value)}
+      onChange={(value) => header.column.setFilterValue(value)}
       placeholder={`Search`}
+      minCharacters={minSearchCharacters}
       type="text"
       value={(columnFilterValue ?? "") as string}
+      inputName={
+        (header.column.columnDef.meta as MetaType)?.filterLabelName || header.column.columnDef.id
+      }
     />
   )
 }
@@ -325,13 +355,15 @@ function DebouncedInput({
   value: initialValue,
   onChange,
   debounce = 500,
-  minCharacters = 3,
+  minCharacters,
+  inputName,
   ...props
 }: {
   value: string | number
   onChange: (value: string | number) => void
   debounce?: number
   minCharacters?: number
+  inputName: string
 } & Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange">) {
   const [value, setValue] = React.useState(initialValue)
 
@@ -352,8 +384,12 @@ function DebouncedInput({
 
   return (
     <>
+      <label htmlFor={inputName} className="sr-only">
+        {`Search listings by ${inputName}`}
+      </label>
       <input
         {...props}
+        id={inputName}
         value={value}
         onChange={(e) => setValue(e.target.value)}
         className={styles["search-input"]}
@@ -366,41 +402,3 @@ function DebouncedInput({
     </>
   )
 }
-
-// function Filter({ column, table }: { column: Column<any, any>; table: Table<any> }) {
-//   const firstValue = table.getPreFilteredRowModel().flatRows[0]?.getValue(column.id)
-
-//   const columnFilterValue = column.getFilterValue()
-
-//   return typeof firstValue === "number" ? (
-//     <div className="flex space-x-2" onClick={(e) => e.stopPropagation()}>
-//       <input
-//         type="number"
-//         value={(columnFilterValue as [number, number])?.[0] ?? ""}
-//         onChange={(e) =>
-//           column.setFilterValue((old: [number, number]) => [e.target.value, old?.[1]])
-//         }
-//         placeholder={`Min`}
-//         className="w-24 border shadow rounded"
-//       />
-//       <input
-//         type="number"
-//         value={(columnFilterValue as [number, number])?.[1] ?? ""}
-//         onChange={(e) =>
-//           column.setFilterValue((old: [number, number]) => [old?.[0], e.target.value])
-//         }
-//         placeholder={`Max`}
-//         className="w-24 border shadow rounded"
-//       />
-//     </div>
-//   ) : (
-//     <input
-//       className="w-36 border shadow rounded"
-//       onChange={(e) => column.setFilterValue(e.target.value)}
-//       onClick={(e) => e.stopPropagation()}
-//       placeholder={`Search...`}
-//       type="text"
-//       value={(columnFilterValue ?? "") as string}
-//     />
-//   )
-// }

@@ -57,6 +57,8 @@ export default function ListingsList() {
   const { onExport, csvExportLoading } = useListingExport()
   const router = useRouter()
 
+  const MIN_SEARCH_CHARACTERS = 3
+
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, errors, handleSubmit, clearErrors } = useForm<CreateListingFormFields>()
 
@@ -97,9 +99,12 @@ export default function ListingsList() {
             {props.getValue() as string}
           </Link>
         ),
-        header: () => <span>Name</span>,
+        header: () => t("t.name"),
         footer: (props) => props.column.id,
-        minSize: 400,
+        minSize: 430,
+        meta: {
+          filterLabelName: t("t.name"),
+        },
       }),
       columnHelper.accessor("status", {
         id: "status",
@@ -119,10 +124,10 @@ export default function ListingsList() {
             return statusString
           }
         },
-        header: () => <span>Status</span>,
+        header: () => t("application.status"),
         footer: (props) => props.column.id,
         enableColumnFilter: false,
-        minSize: 100,
+        minSize: 120,
         meta: {
           enabled: true,
         },
@@ -131,17 +136,17 @@ export default function ListingsList() {
         id: "createdAt",
         cell: (props) =>
           props.getValue() ? dayjs(props.getValue() as string).format("MM/DD/YYYY") : t("t.none"),
-        header: () => <span>Created date</span>,
+        header: () => t("listings.createdDate"),
         footer: (props) => props.column.id,
         enableColumnFilter: false,
         enableSorting: false,
-        minSize: 170,
+        minSize: 140,
       }),
       columnHelper.accessor("publishedAt", {
         id: "mostRecentlyPublished",
         cell: (props) =>
           props.getValue() ? dayjs(props.getValue() as string).format("MM/DD/YYYY") : t("t.none"),
-        header: () => <span>Published date</span>,
+        header: () => t("listings.publishedDate"),
         footer: (props) => props.column.id,
         enableColumnFilter: false,
         minSize: 190,
@@ -150,7 +155,7 @@ export default function ListingsList() {
         id: "applicationDates",
         cell: (props) =>
           props.getValue() ? dayjs(props.getValue() as string).format("MM/DD/YYYY") : t("t.none"),
-        header: () => <span>Due date</span>,
+        header: () => t("listings.applicationDueDate"),
         footer: (props) => props.column.id,
         enableColumnFilter: false,
         minSize: 140,
@@ -158,7 +163,7 @@ export default function ListingsList() {
       columnHelper.accessor("isVerified", {
         id: "isVerified",
         cell: (props) => (props.getValue() ? t("t.yes") : t("t.no")),
-        header: () => <span>{t("t.verified")}</span>,
+        header: () => t("t.verified"),
         footer: (props) => props.column.id,
         enableColumnFilter: false,
         enableSorting: false,
@@ -174,7 +179,7 @@ export default function ListingsList() {
       columnHelper.accessor("unitsAvailable", {
         id: "unitsAvailable",
         cell: (props) => props.getValue(),
-        header: () => <span>{t("listings.availableUnits")}</span>,
+        header: () => t("listings.availableUnits"),
         footer: (props) => props.column.id,
         enableColumnFilter: false,
         enableSorting: false,
@@ -193,7 +198,7 @@ export default function ListingsList() {
           const isWaitlistOpen = (props.row.original.waitlistOpenSpots as number) > 0
           return isWaitlistOpen ? t("t.yes") : t("t.no")
         },
-        header: () => <span>{t("listings.waitlist.open")}</span>,
+        header: () => t("listings.waitlist.open"),
         footer: (props) => props.column.id,
         enableColumnFilter: false,
         enableSorting: false,
@@ -210,7 +215,7 @@ export default function ListingsList() {
         id: "contentUpdatedAt",
         cell: (props) =>
           props.getValue() ? dayjs(props.getValue() as string).format("MM/DD/YYYY") : t("t.none"),
-        header: () => <span>{t("t.lastUpdated")}</span>,
+        header: () => t("t.lastUpdated"),
         footer: (props) => props.column.id,
         enableColumnFilter: false,
         enableSorting: false,
@@ -235,11 +240,21 @@ export default function ListingsList() {
     const data = await fetchBaseListingData({
       page: pagination?.pageIndex ? pagination.pageIndex + 1 : 0,
       limit: pagination?.pageSize || 8,
-      search: search[0]?.value as string,
+      search:
+        (search[0]?.value as string)?.length >= MIN_SEARCH_CHARACTERS
+          ? (search[0]?.value as string)
+          : undefined,
       orderBy: sort?.[0]?.id ? [sort[0].id as ListingOrderByKeys] : [ListingOrderByKeys.status],
       orderDir: sort?.[0]?.desc ? [OrderByEnum.desc] : [OrderByEnum.asc],
+      userJurisdictionIds: profile?.jurisdictions?.map((jurisdiction) => jurisdiction.id),
+      roles: profile?.userRoles,
+      userId: profile?.id,
     })
-    return data
+    return {
+      items: data.items as unknown as TableDataRow[],
+      totalItems: data.meta.totalItems,
+      errorMessage: data.error ? data.error.response.data.message[0] : null,
+    }
   }
 
   return (
@@ -294,6 +309,7 @@ export default function ListingsList() {
             columns={columns}
             enableHorizontalScroll={true}
             initialSort={[{ id: "status", desc: false }]}
+            minSearchCharacters={MIN_SEARCH_CHARACTERS}
             fetchData={fetchListingsData}
           />
         </div>

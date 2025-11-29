@@ -43,6 +43,15 @@
     background-color: var(--seeds-color-white);
   }
 
+  .full-width-text-cell {
+    text-align: center;
+    padding: var(--seeds-s8);
+  }
+  .error-cell {
+    text-align: center;
+    color: var(--seeds-color-alert);
+  }
+
   .sort-icon {
     margin-inline-start: var(--seeds-s2);
   }

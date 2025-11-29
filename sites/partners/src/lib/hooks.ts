@@ -1,25 +1,23 @@
 import { useCallback, useContext, useState, useEffect } from "react"
 import useSWR from "swr"
-import axios from "axios"
+import axios, { AxiosError } from "axios"
 import qs from "qs"
 import dayjs from "dayjs"
 import utc from "dayjs/plugin/utc"
 import tz from "dayjs/plugin/timezone"
-import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
+import { AuthContext, CatchNetworkError, MessageContext } from "@bloom-housing/shared-helpers"
 import { t } from "@bloom-housing/ui-components"
-import { user } from "../../../../shared-helpers/__tests__/testHelpers"
 import {
   ApplicationOrderByKeys,
   EnumListingFilterParamsComparison,
   EnumMultiselectQuestionFilterParamsComparison,
-  FeatureFlagEnum,
-  Jurisdiction,
-  ListingFilterParams,
+  Listing,
   ListingOrderByKeys,
   ListingViews,
   MultiselectQuestionFilterParams,
   MultiselectQuestionsApplicationSectionEnum,
   OrderByEnum,
+  PaginationMeta,
   UserRole,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
@@ -72,37 +70,6 @@ export function useSingleListingData(listingId: string) {
   }
 }
 
-let jurisdiction: Jurisdiction | null = null
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-// export async function fetchJurisdictionByName(req?: any) {
-//   try {
-//     if (jurisdiction) {
-//       return jurisdiction
-//     }
-
-//     const jurisdictionName = process.env.jurisdictionName
-
-//     const headers = {
-//       passkey: process.env.API_PASS_KEY,
-//     }
-//     if (req) {
-//       headers["x-forwarded-for"] = req.headers["x-forwarded-for"] ?? req.socket.remoteAddress
-//     }
-//     const jurisdictionRes = await axios.get(
-//       `${process.env.backendApiBase}/jurisdictions/byName/${jurisdictionName}`,
-//       {
-//         headers,
-//       }
-//     )
-//     jurisdiction = jurisdictionRes?.data
-//   } catch (error) {
-//     console.log("error = ", error)
-//   }
-
-//   return jurisdiction
-// }
-
 interface BaseListingData {
   limit?: number | "all"
   orderBy?: ListingOrderByKeys[]
@@ -121,13 +88,17 @@ export async function fetchBaseListingData({
   orderDir,
   page,
   roles,
-  search,
+  search = "",
   userId,
   userJurisdictionIds,
   view,
-}: BaseListingData) {
-  let listings
-  let pagination
+}: BaseListingData): Promise<{
+  items: Listing[] | null
+  meta: PaginationMeta | null
+  error: AxiosError<CatchNetworkError> | null
+}> {
+  let listings: Listing[] = []
+  let pagination: PaginationMeta | null = null
   try {
     const params: BaseListingData = {
       limit: limit || "all",
@@ -151,17 +122,18 @@ export async function fetchBaseListingData({
     pagination = response.data.meta || null
   } catch (e) {
     console.log("fetchBaseListingData error: ", e)
+
     return {
       items: null,
       meta: null,
       error: e,
-      errorMessage: e.error.response.data.message[0],
     }
   }
 
   return {
     items: listings,
     meta: pagination,
+    error: null,
   }
 }
 
