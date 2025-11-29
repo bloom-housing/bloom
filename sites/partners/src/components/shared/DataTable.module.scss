@@ -79,25 +79,46 @@
 
 .pagination {
   display: flex;
-  gap: var(--seeds-s4);
+  flex-wrap: wrap;
+  gap: var(--seeds-s8);
+  @media (max-width: theme("screens.sm")) {
+    gap: var(--seeds-s4);
+  }
   padding: var(--seeds-s4);
   width: 100%;
   justify-content: space-between;
+  align-items: center;
   border: var(--seeds-border-1) solid var(--seeds-color-gray-500);
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
   background-color: var(--seeds-bg-color-canvas);
   color: var(--seeds-text-color-dark);
-  .pagination-info-right {
-    display: flex;
-    align-items: center;
-    gap: var(--seeds-s8);
-    .page-info {
-      font-weight: var(--seeds-font-weight-semibold);
+
+  .total-items {
+    font-weight: var(--seeds-font-weight-semibold);
+    order: 1;
+    margin-left: auto;
+    @media (max-width: theme("screens.sm")) {
+      order: 2;
     }
   }
-  .show-numbers-container {
+
+  .next-page-button {
+    order: 3;
+    @media (max-width: theme("screens.sm")) {
+      order: 1;
+    }
+  }
+  .previous-page-button {
+    order: 0;
+  }
+
+  .show-items-per-page {
     height: 100%;
+    order: 2;
+    @media (max-width: theme("screens.sm")) {
+      order: 2;
+    }
     .show-label {
       margin-inline-end: var(--seeds-s2);
     }

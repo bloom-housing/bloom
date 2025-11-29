@@ -1,85 +1,29 @@
-import React, { useMemo, useContext, useState } from "react"
+import React, { useContext, useState } from "react"
 import Head from "next/head"
 import DocumentArrowDownIcon from "@heroicons/react/24/solid/DocumentArrowDownIcon"
 import { useRouter } from "next/router"
+import {
+  ColumnDef,
+  ColumnFiltersState,
+  createColumnHelper,
+  PaginationState,
+  SortingState,
+} from "@tanstack/react-table"
 import { useForm } from "react-hook-form"
 import dayjs from "dayjs"
-import { ColDef, ColGroupDef } from "ag-grid-community"
-import { Button, Dialog, Grid, Icon } from "@bloom-housing/ui-seeds"
-import { t, AgTable, useAgTable, Select, Form, SelectOption } from "@bloom-housing/ui-components"
+import { Button, Dialog, Grid, Icon, Link } from "@bloom-housing/ui-seeds"
+import { t, Select, Form, SelectOption } from "@bloom-housing/ui-components"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import {
   FeatureFlagEnum,
   ListingOrderByKeys,
   OrderByEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { fetchBaseListingData, useListingExport, useListingsData } from "../lib/hooks"
+import { fetchBaseListingData, useListingExport } from "../lib/hooks"
 import Layout from "../layouts"
 import { MetaTags } from "../components/shared/MetaTags"
 import { NavigationHeader } from "../components/shared/NavigationHeader"
-import { DataTable, TableData, TableDataRow } from "../components/shared/DataTable"
-import { ColumnDef, ColumnFiltersState, PaginationState, SortingState } from "@tanstack/react-table"
-import { listing } from "../../../../shared-helpers/__tests__/testHelpers"
-
-// class formatLinkCell {
-//   link: HTMLAnchorElement
-
-//   init(params) {
-//     this.link = document.createElement("a")
-//     this.link.classList.add("text-blue-700")
-//     this.link.setAttribute("href", `/listings/${params.data.id}/applications`)
-//     this.link.innerText = params.valueFormatted || params.value
-//     this.link.style.textDecoration = "underline"
-//   }
-
-//   getGui() {
-//     return this.link
-//   }
-// }
-
-// class formatWaitlistStatus {
-//   text: HTMLSpanElement
-
-//   init({ data }) {
-//     const isWaitlistOpen = data.waitlistOpenSpots > 0
-
-//     this.text = document.createElement("span")
-//     this.text.innerHTML = isWaitlistOpen ? t("t.yes") : t("t.no")
-//   }
-
-//   getGui() {
-//     return this.text
-//   }
-// }
-
-// class formatIsVerified {
-//   text: HTMLSpanElement
-
-//   init({ data }) {
-//     this.text = document.createElement("span")
-//     this.text.innerHTML = data.isVerified ? t("t.yes") : t("t.no")
-//   }
-
-//   getGui() {
-//     return this.text
-//   }
-// }
-
-// class ApplicationsLink extends formatLinkCell {
-//   init(params) {
-//     super.init(params)
-//     this.link.setAttribute("href", `/listings/${params.data.id}/applications`)
-//     this.link.setAttribute("data-testid", `listing-status-cell-${params.data.name}`)
-//   }
-// }
-
-// class ListingsLink extends formatLinkCell {
-//   init(params) {
-//     super.init(params)
-//     this.link.setAttribute("href", `/listings/${params.data.id}`)
-//     this.link.setAttribute("data-testid", params.data.name)
-//   }
-// }
+import { DataTable, TableDataRow } from "../components/shared/DataTable"
 
 export const getFlagInAllJurisdictions = (
   flagName: FeatureFlagEnum,
@@ -101,28 +45,6 @@ type CreateListingFormFields = {
   jurisdiction: string
 }
 
-type ColumnOrder = {
-  orderBy: string
-  orderDir: string
-}
-
-type TableOptions = {
-  filter: {
-    filterValue: string
-    setFilterValue: React.Dispatch<React.SetStateAction<string>>
-  }
-  sort: {
-    sortOptions: ColumnOrder[]
-    setSortOptions: React.Dispatch<React.SetStateAction<ColumnOrder[]>>
-  }
-  pagination: {
-    itemsPerPage: number
-    setItemsPerPage: React.Dispatch<React.SetStateAction<number>>
-    currentPage: number
-    setCurrentPage: React.Dispatch<React.SetStateAction<number>>
-  }
-}
-
 export default function ListingsList() {
   const metaDescription = t("pageDescription.welcome", { regionName: t("region.name") })
   const { profile, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
@@ -134,7 +56,6 @@ export default function ListingsList() {
     false
   const { onExport, csvExportLoading } = useListingExport()
   const router = useRouter()
-  const tableOptions = useAgTable()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, errors, handleSubmit, clearErrors } = useForm<CreateListingFormFields>()
@@ -154,193 +75,6 @@ export default function ListingsList() {
     })),
   ]
 
-  // const gridComponents = {
-  //   ApplicationsLink,
-  //   formatLinkCell,
-  //   formatWaitlistStatus,
-  //   formatIsVerified,
-  //   ListingsLink,
-  // }
-  // const columnDefs = useMemo(() => {
-  //   const columns: (ColDef | ColGroupDef)[] = [
-  //     {
-  //       headerName: t("listings.listingName"),
-  //       field: "name",
-  //       sortable: true,
-  //       unSortIcon: true,
-  //       filter: false,
-  //       resizable: true,
-  //       cellRenderer: "ListingsLink",
-  //       minWidth: 250,
-  //       flex: 1,
-  //     },
-  //     {
-  //       headerName: t("listings.listingStatusText"),
-  //       field: "status",
-  //       sortable: true,
-  //       unSortIcon: true,
-  //       sort: "asc",
-  //       // disable frontend sorting
-  //       comparator: () => 0,
-  //       filter: false,
-  //       resizable: true,
-  //       valueFormatter: ({ value }) => t(`listings.listingStatus.${value}`),
-  //       cellRenderer: !profile?.userRoles?.isLimitedJurisdictionalAdmin ? "ApplicationsLink" : "",
-  //       minWidth: 190,
-  //     },
-  //     {
-  //       headerName: t("listings.createdDate"),
-  //       field: "createdAt",
-  //       sortable: false,
-  //       filter: false,
-  //       resizable: true,
-  //       valueFormatter: ({ value }) => (value ? dayjs(value).format("MM/DD/YYYY") : t("t.none")),
-  //       maxWidth: 140,
-  //     },
-  //     {
-  //       headerName: t("listings.publishedDate"),
-  //       field: "publishedAt",
-  //       sortable: false,
-  //       filter: false,
-  //       resizable: true,
-  //       valueFormatter: ({ value }) => (value ? dayjs(value).format("MM/DD/YYYY") : t("t.none")),
-  //       maxWidth: 150,
-  //     },
-  //     {
-  //       headerName: t("listings.applicationDueDate"),
-  //       field: "applicationDueDate",
-  //       sortable: false,
-  //       filter: false,
-  //       resizable: true,
-  //       valueFormatter: ({ value }) => (value ? dayjs(value).format("MM/DD/YYYY") : t("t.none")),
-  //       maxWidth: 120,
-  //     },
-  //   ]
-
-  //   if (
-  //     getFlagInAllJurisdictions(
-  //       FeatureFlagEnum.enableIsVerified,
-  //       true,
-  //       doJurisdictionsHaveFeatureFlagOn
-  //     )
-  //   ) {
-  //     columns.push({
-  //       headerName: t("t.verified"),
-  //       field: "isVerified",
-  //       sortable: false,
-  //       filter: false,
-  //       resizable: true,
-  //       cellRenderer: "formatIsVerified",
-  //       maxWidth: 100,
-  //     })
-  //   }
-
-  //   if (
-  //     getFlagInAllJurisdictions(
-  //       FeatureFlagEnum.enableUnitGroups,
-  //       false,
-  //       doJurisdictionsHaveFeatureFlagOn
-  //     )
-  //   ) {
-  //     columns.push(
-  //       {
-  //         headerName: t("listings.availableUnits"),
-  //         field: "unitsAvailable",
-  //         sortable: false,
-  //         filter: false,
-  //         resizable: true,
-  //         maxWidth: 120,
-  //       },
-  //       {
-  //         headerName: t("listings.waitlist.open"),
-  //         field: "waitlistCurrentSize",
-  //         sortable: false,
-  //         filter: false,
-  //         resizable: true,
-  //         cellRenderer: "formatWaitlistStatus",
-  //         maxWidth: 160,
-  //       }
-  //     )
-  //   }
-  //   if (
-  //     getFlagInAllJurisdictions(
-  //       FeatureFlagEnum.enableListingUpdatedAt,
-  //       true,
-  //       doJurisdictionsHaveFeatureFlagOn
-  //     )
-  //   ) {
-  //     columns.push({
-  //       headerName: t("t.lastUpdated"),
-  //       field: "contentUpdatedAt",
-  //       sortable: false,
-  //       filter: false,
-  //       resizable: true,
-  //       valueFormatter: ({ value }) => (value ? dayjs(value).format("MM/DD/YYYY") : t("t.none")),
-  //       maxWidth: 140,
-  //     })
-  //   }
-
-  //   return columns
-  // }, [])
-
-  const {
-    items: listingDtos,
-    loading: listingsLoading,
-    error: listingsError,
-    meta: listingsMeta,
-  } = useListingsData({
-    page: tableOptions.pagination.currentPage,
-    limit: tableOptions.pagination.itemsPerPage,
-    search: tableOptions.filter.filterValue,
-    userId: profile?.id,
-    sort: tableOptions.sort.sortOptions,
-    roles: profile?.userRoles,
-    userJurisdictionIds: profile?.jurisdictions?.map((jurisdiction) => jurisdiction.id),
-  })
-
-  // const fetchListingsData = async (pagination: PaginationState): Promise<TableData> => {
-  //   const data = useListingsData({
-  //     page: pagination.pageIndex + 1,
-  //     limit: pagination.pageSize,
-  //     search: tableOptions.filter.filterValue,
-  //     userId: profile?.id,
-  //     sort: tableOptions.sort.sortOptions,
-  //     roles: profile?.userRoles,
-  //     userJurisdictionIds: profile?.jurisdictions?.map((jurisdiction) => jurisdiction.id),
-  //   })
-
-  //   return {
-  //     items: data.items as unknown as TableDataRow[],
-  //     error: data.error,
-  //     loading: data.loading,
-  //     meta: data.meta,
-  //   }
-  // }
-
-  const mappedListingsData: TableDataRow[] = listingDtos?.map((listing) => ({
-    name: (
-      <a
-        className="text-blue-700"
-        href={`/listings/${listing.id}`}
-        data-testid={listing.name}
-        style={{ textDecoration: "underline" }}
-      >
-        {listing.name}
-      </a>
-    ),
-    status: t(`listings.listingStatus.${listing.status}`),
-    createdAt: listing.createdAt ? dayjs(listing.createdAt).format("MM/DD/YYYY") : t("t.none"),
-    updatedAt: listing.contentUpdatedAt
-      ? dayjs(listing.contentUpdatedAt).format("MM/DD/YYYY")
-      : t("t.none"),
-    publishedAt: listing.publishedAt
-      ? dayjs(listing.publishedAt).format("MM/DD/YYYY")
-      : t("t.none"),
-    applicationDueDate: listing.applicationDueDate
-      ? dayjs(listing.applicationDueDate).format("MM/DD/YYYY")
-      : t("t.none"),
-  }))
-
   const onSubmit = (data: CreateListingFormFields) => {
     void router.push({
       pathname: "/listings/add",
@@ -348,57 +82,147 @@ export default function ListingsList() {
     })
   }
 
+  const columnHelper = createColumnHelper<TableDataRow>()
+
   const columns = React.useMemo<ColumnDef<TableDataRow>[]>(
     () => [
-      {
-        accessorKey: "name",
+      columnHelper.accessor("name", {
         id: "name",
-        cell: (info) => info.getValue(),
+        cell: (props) => (
+          <Link
+            href={`/listings/${props.row.original.id as string}`}
+            data-testid={props.getValue() as string}
+            className="text-blue-700 underline"
+          >
+            {props.getValue() as string}
+          </Link>
+        ),
         header: () => <span>Name</span>,
         footer: (props) => props.column.id,
         minSize: 400,
-      },
-
-      {
-        accessorKey: "status",
+      }),
+      columnHelper.accessor("status", {
         id: "status",
-        cell: (info) => t(`listings.listingStatus.${info.getValue() as string}`),
+        cell: (props) => {
+          const statusString = t(`listings.listingStatus.${props.getValue() as string}`)
+          if (!profile?.userRoles?.isLimitedJurisdictionalAdmin) {
+            return (
+              <Link
+                href={`/listings/${props.row.original.id as string}/applications`}
+                data-testid={`listing-status-cell-${props.row.original.name as string}`}
+                className="text-blue-700 underline"
+              >
+                {statusString}
+              </Link>
+            )
+          } else {
+            return statusString
+          }
+        },
         header: () => <span>Status</span>,
         footer: (props) => props.column.id,
         enableColumnFilter: false,
         minSize: 100,
-      },
-      {
-        accessorKey: "createdAt",
+        meta: {
+          enabled: true,
+        },
+      }),
+      columnHelper.accessor("createdAt", {
         id: "createdAt",
-        cell: (info) =>
-          info.getValue() ? dayjs(info.getValue() as string).format("MM/DD/YYYY") : t("t.none"),
+        cell: (props) =>
+          props.getValue() ? dayjs(props.getValue() as string).format("MM/DD/YYYY") : t("t.none"),
         header: () => <span>Created date</span>,
         footer: (props) => props.column.id,
         enableColumnFilter: false,
         enableSorting: false,
-        minSize: 190,
-      },
-      {
-        accessorKey: "publishedAt",
+        minSize: 170,
+      }),
+      columnHelper.accessor("publishedAt", {
         id: "mostRecentlyPublished",
-        cell: (info) =>
-          info.getValue() ? dayjs(info.getValue() as string).format("MM/DD/YYYY") : t("t.none"),
+        cell: (props) =>
+          props.getValue() ? dayjs(props.getValue() as string).format("MM/DD/YYYY") : t("t.none"),
         header: () => <span>Published date</span>,
         footer: (props) => props.column.id,
         enableColumnFilter: false,
         minSize: 190,
-      },
-      {
-        accessorKey: "applicationDueDate",
+      }),
+      columnHelper.accessor("applicationDueDate", {
         id: "applicationDates",
-        cell: (info) =>
-          info.getValue() ? dayjs(info.getValue() as string).format("MM/DD/YYYY") : t("t.none"),
+        cell: (props) =>
+          props.getValue() ? dayjs(props.getValue() as string).format("MM/DD/YYYY") : t("t.none"),
         header: () => <span>Due date</span>,
         footer: (props) => props.column.id,
         enableColumnFilter: false,
-        minSize: 190,
-      },
+        minSize: 140,
+      }),
+      columnHelper.accessor("isVerified", {
+        id: "isVerified",
+        cell: (props) => (props.getValue() ? t("t.yes") : t("t.no")),
+        header: () => <span>{t("t.verified")}</span>,
+        footer: (props) => props.column.id,
+        enableColumnFilter: false,
+        enableSorting: false,
+        minSize: 100,
+        meta: {
+          enabled: getFlagInAllJurisdictions(
+            FeatureFlagEnum.enableIsVerified,
+            true,
+            doJurisdictionsHaveFeatureFlagOn
+          ),
+        },
+      }),
+      columnHelper.accessor("unitsAvailable", {
+        id: "unitsAvailable",
+        cell: (props) => props.getValue(),
+        header: () => <span>{t("listings.availableUnits")}</span>,
+        footer: (props) => props.column.id,
+        enableColumnFilter: false,
+        enableSorting: false,
+        minSize: 160,
+        meta: {
+          enabled: getFlagInAllJurisdictions(
+            FeatureFlagEnum.enableUnitGroups,
+            false,
+            doJurisdictionsHaveFeatureFlagOn
+          ),
+        },
+      }),
+      columnHelper.accessor("waitlistCurrentSize", {
+        id: "waitlistCurrentSize",
+        cell: (props) => {
+          const isWaitlistOpen = (props.row.original.waitlistOpenSpots as number) > 0
+          return isWaitlistOpen ? t("t.yes") : t("t.no")
+        },
+        header: () => <span>{t("listings.waitlist.open")}</span>,
+        footer: (props) => props.column.id,
+        enableColumnFilter: false,
+        enableSorting: false,
+        minSize: 150,
+        meta: {
+          enabled: getFlagInAllJurisdictions(
+            FeatureFlagEnum.enableUnitGroups,
+            false,
+            doJurisdictionsHaveFeatureFlagOn
+          ),
+        },
+      }),
+      columnHelper.accessor("contentUpdatedAt", {
+        id: "contentUpdatedAt",
+        cell: (props) =>
+          props.getValue() ? dayjs(props.getValue() as string).format("MM/DD/YYYY") : t("t.none"),
+        header: () => <span>{t("t.lastUpdated")}</span>,
+        footer: (props) => props.column.id,
+        enableColumnFilter: false,
+        enableSorting: false,
+        minSize: 150,
+        meta: {
+          enabled: getFlagInAllJurisdictions(
+            FeatureFlagEnum.enableListingUpdatedAt,
+            true,
+            doJurisdictionsHaveFeatureFlagOn
+          ),
+        },
+      }),
     ],
     []
   )
@@ -408,7 +232,6 @@ export default function ListingsList() {
     search?: ColumnFiltersState,
     sort?: SortingState
   ) => {
-    console.log({ sort })
     const data = await fetchBaseListingData({
       page: pagination?.pageIndex ? pagination.pageIndex + 1 : 1,
       limit: pagination?.pageSize || 8,
@@ -428,73 +251,6 @@ export default function ListingsList() {
       <NavigationHeader title={t("nav.listings")}></NavigationHeader>
       <section>
         <div className="flex-row flex-wrap relative max-w-screen-xl mx-auto py-8 px-4">
-          {/* <AgTable
-            id="listings-table"
-            pagination={{
-              perPage: tableOptions.pagination.itemsPerPage,
-              setPerPage: tableOptions.pagination.setItemsPerPage,
-              currentPage: tableOptions.pagination.currentPage,
-              setCurrentPage: tableOptions.pagination.setCurrentPage,
-            }}
-            config={{
-              gridComponents,
-              columns: columnDefs,
-              totalItemsLabel: t("listings.totalListings"),
-            }}
-            data={{
-              items: listingDtos?.items,
-              loading: listingsLoading,
-              totalItems: listingDtos?.meta.totalItems,
-              totalPages: listingDtos?.meta.totalPages,
-            }}
-            search={{
-              setSearch: tableOptions.filter.setFilterValue,
-            }}
-            sort={{
-              setSort: tableOptions.sort.setSortOptions,
-            }}
-            headerContent={
-              <div className="flex gap-2 items-center">
-                {isAdmin && (
-                  <>
-                    <Button
-                      size="sm"
-                      variant="primary"
-                      onClick={() => {
-                        if (defaultJurisdiction) {
-                          void router.push({
-                            pathname: "/listings/add",
-                            query: { jurisdictionId: defaultJurisdiction },
-                          })
-                        } else {
-                          setListingSelectModal(true)
-                        }
-                      }}
-                      id="addListingButton"
-                    >
-                      {t("listings.addListing")}
-                    </Button>
-                    <Buttonack
-                      id="export-listings"
-                      variant="primary-outlined"
-                      onClick={() => onExport()}
-                      leadIcon={
-                        !csvExportLoading ? (
-                          <Icon>
-                            <DocumentArrowDownIcon />
-                          </Icon>
-                        ) : null
-                      }
-                      size="sm"
-                      loadingMessage={csvExportLoading && t("t.formSubmitted")}
-                    >
-                      {t("t.exportToCSV")}
-                    </Button>
-                  </>
-                )}
-              </div>
-            }
-          /> */}
           <div className="flex gap-2 items-center w-full mb-4 justify-end">
             {isAdmin && (
               <>
@@ -536,12 +292,6 @@ export default function ListingsList() {
           </div>
           <DataTable
             columns={columns}
-            data={{
-              items: mappedListingsData,
-              error: listingsError,
-              loading: listingsLoading,
-              meta: listingsMeta,
-            }}
             enableHorizontalScroll={true}
             fetchData={fetchListingsData}
           />

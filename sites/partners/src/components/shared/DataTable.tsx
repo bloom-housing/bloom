@@ -24,6 +24,10 @@ import { PaginationMeta } from "@bloom-housing/shared-helpers/src/types/backend-
 
 export type TableDataRow = { [key: string]: string | React.ReactNode }
 
+export type MetaType = {
+  enabled?: boolean
+}
+
 export interface TableData {
   items: TableDataRow[]
   error?: any
@@ -39,7 +43,6 @@ export interface FetchDataParams {
 
 interface DataTableProps {
   columns: ColumnDef<TableDataRow>[]
-  data: TableData
   enableHorizontalScroll?: boolean
   fetchData: (
     pagination?: PaginationState,
@@ -49,8 +52,6 @@ interface DataTableProps {
 }
 
 export const DataTable = (props: DataTableProps) => {
-  const rerender = React.useReducer(() => ({}), {})[1]
-
   return (
     <>
       <MyTable
@@ -69,12 +70,11 @@ export const DataTable = (props: DataTableProps) => {
 const MyTable = (props: DataTableProps) => {
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
-    pageSize: props.data.meta?.itemCount || 8,
+    pageSize: 8,
   })
-
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]) // can set initial column filter state here
-
   const [sorting, setSorting] = useState<SortingState>([]) // can set initial sorting state here
+  const [columnVisibility, setColumnVisibility] = React.useState({})
 
   const [delayedLoading, setDelayedLoading] = useState(false)
 
@@ -98,6 +98,16 @@ const MyTable = (props: DataTableProps) => {
     }
   }, [dataQuery.isLoading, dataQuery.isFetching, dataQuery.isFetched])
 
+  useEffect(() => {
+    table.getHeaderGroups().map((headerGroup) => {
+      headerGroup.headers.map((header) => {
+        if ((header.column.columnDef.meta as MetaType)?.enabled === false) {
+          header.column.toggleVisibility(false)
+        }
+      })
+    })
+  }, [])
+
   const table = useReactTable({
     columns: props.columns,
     data: dataQuery.data?.items ?? defaultData,
@@ -112,10 +122,12 @@ const MyTable = (props: DataTableProps) => {
     manualSorting: true,
     onColumnFiltersChange: setColumnFilters,
     onSortingChange: setSorting,
+    onColumnVisibilityChange: setColumnVisibility,
     state: {
       pagination,
       columnFilters,
       sorting,
+      columnVisibility,
     },
     // defaultColumn: {
     //   size: 200, //starting column size
@@ -270,45 +282,46 @@ const MyTable = (props: DataTableProps) => {
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
             variant={"primary-outlined"}
+            id="previous-page-button"
+            className={styles["previous-page-button"]}
           >
             Previous
           </Button>
 
-          <div className={styles["pagination-info-right"]}>
-            {dataQuery.data?.items?.length > 0 && !dataQuery.data?.error && (
-              <span className={styles["page-info"]}>
-                {dataQuery.data?.meta?.totalItems} Total{" "}
-                {dataQuery.data?.meta?.totalItems === 1 ? "listing" : "listings"}
-              </span>
-            )}
-            <span className={styles["show-numbers-container"]}>
-              <label htmlFor="show-numbers" className={styles["show-label"]}>
-                Show
-              </label>
-              <select
-                value={table.getState().pagination.pageSize}
-                onChange={(e) => {
-                  table.setPageSize(Number(e.target.value))
-                }}
-                id={"show-numbers"}
-                className={styles["show-select"]}
-              >
-                {[3, 8, 25, 50, 100].map((pageSize) => (
-                  <option key={pageSize} value={pageSize}>
-                    {pageSize}
-                  </option>
-                ))}
-              </select>
+          {dataQuery.data?.items?.length > 0 && !dataQuery.data?.error && (
+            <span className={styles["total-items"]}>
+              {dataQuery.data?.meta?.totalItems} Total{" "}
+              {dataQuery.data?.meta?.totalItems === 1 ? "listing" : "listings"}
             </span>
-
-            <Button
-              onClick={() => table.nextPage()}
-              disabled={!table.getCanNextPage()}
-              variant={"primary-outlined"}
+          )}
+          <span className={styles["show-items-per-page"]}>
+            <label htmlFor="show-numbers" className={styles["show-label"]}>
+              Show
+            </label>
+            <select
+              value={table.getState().pagination.pageSize}
+              onChange={(e) => {
+                table.setPageSize(Number(e.target.value))
+              }}
+              id={"show-numbers"}
+              className={styles["show-select"]}
             >
-              Next
-            </Button>
-          </div>
+              {[3, 8, 25, 50, 100].map((pageSize) => (
+                <option key={pageSize} value={pageSize}>
+                  {pageSize}
+                </option>
+              ))}
+            </select>
+          </span>
+
+          <Button
+            onClick={() => table.nextPage()}
+            disabled={!table.getCanNextPage()}
+            variant={"primary-outlined"}
+            className={styles["next-page-button"]}
+          >
+            Next
+          </Button>
         </div>
       </div>
       {/* <pre>{JSON.stringify(table.getState().pagination, null, 2)}</pre> */}
