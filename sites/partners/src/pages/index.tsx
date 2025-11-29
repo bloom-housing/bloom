@@ -233,7 +233,7 @@ export default function ListingsList() {
     sort?: SortingState
   ) => {
     const data = await fetchBaseListingData({
-      page: pagination?.pageIndex ? pagination.pageIndex + 1 : 1,
+      page: pagination?.pageIndex ? pagination.pageIndex + 1 : 0,
       limit: pagination?.pageSize || 8,
       search: search[0]?.value as string,
       orderBy: sort?.[0]?.id ? [sort[0].id as ListingOrderByKeys] : [ListingOrderByKeys.status],
@@ -293,6 +293,7 @@ export default function ListingsList() {
           <DataTable
             columns={columns}
             enableHorizontalScroll={true}
+            initialSort={[{ id: "status", desc: false }]}
             fetchData={fetchListingsData}
           />
         </div>

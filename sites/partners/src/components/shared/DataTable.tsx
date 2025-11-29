@@ -21,6 +21,7 @@ import ArrowDownIcon from "@heroicons/react/16/solid/ArrowDownIcon"
 import styles from "./DataTable.module.scss"
 import { Button, Icon, LoadingState } from "@bloom-housing/ui-seeds"
 import { PaginationMeta } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { data } from "autoprefixer"
 
 export type TableDataRow = { [key: string]: string | React.ReactNode }
 
@@ -29,8 +30,8 @@ export type MetaType = {
 }
 
 export interface TableData {
+  errorMessage?: string
   items: TableDataRow[]
-  error?: any
   loading?: boolean
   meta?: PaginationMeta
   search?: boolean
@@ -43,7 +44,9 @@ export interface FetchDataParams {
 
 interface DataTableProps {
   columns: ColumnDef<TableDataRow>[]
+  defaultItemsPerPage?: number
   enableHorizontalScroll?: boolean
+  initialSort?: SortingState
   fetchData: (
     pagination?: PaginationState,
     search?: ColumnFiltersState,
@@ -52,30 +55,14 @@ interface DataTableProps {
 }
 
 export const DataTable = (props: DataTableProps) => {
-  return (
-    <>
-      <MyTable
-        {...{
-          ...props,
-        }}
-      />
-      {/* <hr /> */}
-      {/* <div>
-        <button onClick={() => rerender()}>Force Rerender</button>
-      </div> */}
-    </>
-  )
-}
-
-const MyTable = (props: DataTableProps) => {
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
-    pageSize: 8,
+    pageSize: props.defaultItemsPerPage || 8,
   })
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]) // can set initial column filter state here
-  const [sorting, setSorting] = useState<SortingState>([]) // can set initial sorting state here
-  const [columnVisibility, setColumnVisibility] = React.useState({})
 
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+  const [sorting, setSorting] = useState<SortingState>(props.initialSort ?? [])
+  const [columnVisibility, setColumnVisibility] = React.useState({})
   const [delayedLoading, setDelayedLoading] = useState(false)
 
   const dataQuery = useQuery({
@@ -90,7 +77,7 @@ const MyTable = (props: DataTableProps) => {
     if (dataQuery.isLoading || (dataQuery.isFetching && !dataQuery.isFetched)) {
       const timer = setTimeout(() => {
         setDelayedLoading(true)
-      }, 300) // 300ms delay
+      }, 300)
 
       return () => clearTimeout(timer)
     } else {
@@ -111,33 +98,25 @@ const MyTable = (props: DataTableProps) => {
   const table = useReactTable({
     columns: props.columns,
     data: dataQuery.data?.items ?? defaultData,
-    rowCount: dataQuery.data?.meta?.totalItems,
     getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
-    onPaginationChange: setPagination,
-    manualPagination: true,
+    getSortedRowModel: getSortedRowModel(),
     manualFiltering: true,
+    manualPagination: true,
     manualSorting: true,
     onColumnFiltersChange: setColumnFilters,
-    onSortingChange: setSorting,
     onColumnVisibilityChange: setColumnVisibility,
+    onPaginationChange: setPagination,
+    onSortingChange: setSorting,
+    rowCount: dataQuery.data?.meta?.totalItems,
     state: {
-      pagination,
       columnFilters,
-      sorting,
       columnVisibility,
+      pagination,
+      sorting,
     },
-    // defaultColumn: {
-    //   size: 200, //starting column size
-    //   minSize: 50, //enforced during column resizing
-    //   maxSize: 500, //enforced during column resizing
-    // },
   })
-
-  const ROW_HEIGHT = 56.5
-  const HEADER_HEIGHT = 64.5
 
   const tableHeaders = (
     <thead>
@@ -199,25 +178,25 @@ const MyTable = (props: DataTableProps) => {
       return (
         <tr className={styles["loading-row"]}>
           <td
-            colSpan={props.columns.length}
+            colSpan={table.getVisibleFlatColumns().length}
             style={{
-              height: `${ROW_HEIGHT * (dataQuery.data?.meta?.itemCount || 8) + HEADER_HEIGHT}px`,
+              height: `${document.getElementById("data-table")?.offsetHeight}px`,
             }}
           >
             <LoadingState loading={delayedLoading} className={styles["loading-spinner"]}>
-              <div className={styles["loading-content"]} style={{ height: "150px" }}></div>
+              <div className={styles["loading-content"]} />
             </LoadingState>
           </td>
         </tr>
       )
-    } else if (dataQuery.data?.error) {
+    } else if (dataQuery.data?.errorMessage) {
       return (
         <>
           {tableHeaders}
           <tbody>
             <tr>
-              <td colSpan={props.columns.length} className="text-center p-4">
-                <div>{dataQuery.data.error.response.data.message[0]}</div>
+              <td colSpan={table.getVisibleFlatColumns().length} className="text-center p-4">
+                <div>{dataQuery.data.errorMessage}</div>
               </td>
             </tr>
           </tbody>
@@ -272,6 +251,7 @@ const MyTable = (props: DataTableProps) => {
           className={`${styles["data-table"]} ${
             props.enableHorizontalScroll ? styles["enable-scroll"] : ""
           }`}
+          id={"data-table"}
         >
           {getBodyContent()}
         </table>
@@ -288,7 +268,7 @@ const MyTable = (props: DataTableProps) => {
             Previous
           </Button>
 
-          {dataQuery.data?.items?.length > 0 && !dataQuery.data?.error && (
+          {dataQuery.data?.items?.length > 0 && !dataQuery.data?.errorMessage && (
             <span className={styles["total-items"]}>
               {dataQuery.data?.meta?.totalItems} Total{" "}
               {dataQuery.data?.meta?.totalItems === 1 ? "listing" : "listings"}
@@ -324,7 +304,6 @@ const MyTable = (props: DataTableProps) => {
           </Button>
         </div>
       </div>
-      {/* <pre>{JSON.stringify(table.getState().pagination, null, 2)}</pre> */}
     </>
   )
 }

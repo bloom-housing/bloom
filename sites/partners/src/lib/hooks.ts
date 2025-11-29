@@ -155,6 +155,7 @@ export async function fetchBaseListingData({
       items: null,
       meta: null,
       error: e,
+      errorMessage: e.error.response.data.message[0],
     }
   }
 
