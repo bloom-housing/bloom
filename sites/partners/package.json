@@ -43,7 +43,6 @@
     "ag-grid-community": "^26.0.0",
     "@tanstack/react-query": "^5.90.11",
     "@tanstack/react-table": "^8.8.5",
-    "@faker-js/faker": "^7.6.0",
     "autoprefixer": "^10.3.4",
     "axios": "^1.8.3",
     "axios-cookiejar-support": "^5.0.5",
