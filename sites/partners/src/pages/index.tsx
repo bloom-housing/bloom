@@ -8,13 +8,17 @@ import { ColDef, ColGroupDef } from "ag-grid-community"
 import { Button, Dialog, Grid, Icon } from "@bloom-housing/ui-seeds"
 import { t, AgTable, useAgTable, Select, Form, SelectOption } from "@bloom-housing/ui-components"
 import { AuthContext } from "@bloom-housing/shared-helpers"
-import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  FeatureFlagEnum,
+  ListingOrderByKeys,
+  OrderByEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { fetchBaseListingData, useListingExport, useListingsData } from "../lib/hooks"
 import Layout from "../layouts"
 import { MetaTags } from "../components/shared/MetaTags"
 import { NavigationHeader } from "../components/shared/NavigationHeader"
 import { DataTable, TableData, TableDataRow } from "../components/shared/DataTable"
-import { ColumnDef, PaginationState } from "@tanstack/react-table"
+import { ColumnDef, ColumnFiltersState, PaginationState, SortingState } from "@tanstack/react-table"
 import { listing } from "../../../../shared-helpers/__tests__/testHelpers"
 
 // class formatLinkCell {
@@ -370,10 +374,11 @@ export default function ListingsList() {
         header: () => <span>Created date</span>,
         footer: (props) => props.column.id,
         enableColumnFilter: false,
+        enableSorting: false,
       },
       {
         accessorKey: "updatedAt",
-        id: "updatedAt",
+        id: "mostRecentlyUpdated",
         cell: (info) =>
           info.getValue() ? dayjs(info.getValue() as string).format("MM/DD/YYYY") : t("t.none"),
         header: () => <span>Updated date</span>,
@@ -382,7 +387,7 @@ export default function ListingsList() {
       },
       {
         accessorKey: "publishedAt",
-        id: "publishedAt",
+        id: "mostRecentlyPublished",
         cell: (info) =>
           info.getValue() ? dayjs(info.getValue() as string).format("MM/DD/YYYY") : t("t.none"),
         header: () => <span>Published date</span>,
@@ -391,7 +396,7 @@ export default function ListingsList() {
       },
       {
         accessorKey: "applicationDueDate",
-        id: "applicationDueDate",
+        id: "applicationDates",
         cell: (info) =>
           info.getValue() ? dayjs(info.getValue() as string).format("MM/DD/YYYY") : t("t.none"),
         header: () => <span>Due date</span>,
@@ -402,11 +407,18 @@ export default function ListingsList() {
     []
   )
 
-  const fetchListingsData = async (pagination?: PaginationState, search?: string) => {
+  const fetchListingsData = async (
+    pagination?: PaginationState,
+    search?: ColumnFiltersState,
+    sort?: SortingState
+  ) => {
+    console.log({ sort })
     const data = await fetchBaseListingData({
       page: pagination?.pageIndex ? pagination.pageIndex + 1 : 1,
       limit: pagination?.pageSize || 8,
-      search: search,
+      search: search[0]?.value as string,
+      orderBy: sort?.[0]?.id ? [sort[0].id as ListingOrderByKeys] : [ListingOrderByKeys.status],
+      orderDir: sort?.[0]?.desc ? [OrderByEnum.desc] : [OrderByEnum.asc],
     })
     return data
   }
@@ -487,7 +499,7 @@ export default function ListingsList() {
               </div>
             }
           /> */}
-          <div className="flex gap-2 items-center w-full">
+          <div className="flex gap-2 items-center w-full mb-4 justify-end">
             {isAdmin && (
               <>
                 <Button

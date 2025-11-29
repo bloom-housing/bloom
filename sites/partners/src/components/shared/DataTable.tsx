@@ -5,6 +5,7 @@ import {
   ColumnDef,
   ColumnFiltersState,
   PaginationState,
+  SortingState,
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
@@ -13,10 +14,13 @@ import {
   useReactTable,
 } from "@tanstack/react-table"
 import { keepPreviousData, useQuery } from "@tanstack/react-query"
+import ArrowsUpDownIcon from "@heroicons/react/16/solid/ArrowsUpDownIcon"
+import ArrowUpIcon from "@heroicons/react/16/solid/ArrowUpIcon"
+import ArrowDownIcon from "@heroicons/react/16/solid/ArrowDownIcon"
+
 import styles from "./DataTable.module.scss"
-import { Button, LoadingState } from "@bloom-housing/ui-seeds"
+import { Button, Icon, LoadingState } from "@bloom-housing/ui-seeds"
 import { PaginationMeta } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { data } from "autoprefixer"
 
 export type TableDataRow = { [key: string]: string | React.ReactNode }
 
@@ -36,7 +40,11 @@ export interface FetchDataParams {
 interface DataTableProps {
   columns: ColumnDef<TableDataRow>[]
   data: TableData
-  fetchData: (pagination?: PaginationState, search?: string) => Promise<TableData>
+  fetchData: (
+    pagination?: PaginationState,
+    search?: ColumnFiltersState,
+    sort?: SortingState
+  ) => Promise<TableData>
 }
 
 export const DataTable = (props: DataTableProps) => {
@@ -64,13 +72,14 @@ const MyTable = (props: DataTableProps) => {
   })
 
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]) // can set initial column filter state here
-  console.log("columnFilters:", columnFilters)
+
+  const [sorting, setSorting] = useState<SortingState>([]) // can set initial sorting state here
 
   const [delayedLoading, setDelayedLoading] = useState(false)
 
   const dataQuery = useQuery({
-    queryKey: ["data", pagination, columnFilters],
-    queryFn: () => props.fetchData(pagination, columnFilters[0]?.value as string),
+    queryKey: ["data", pagination, columnFilters, sorting],
+    queryFn: () => props.fetchData(pagination, columnFilters, sorting),
     placeholderData: keepPreviousData, // don't have 0 rows flash while changing pages/loading next page
   })
 
@@ -100,11 +109,14 @@ const MyTable = (props: DataTableProps) => {
     onPaginationChange: setPagination,
     manualPagination: true,
     manualFiltering: true,
+    manualSorting: true,
     onColumnFiltersChange: setColumnFilters,
+    onSortingChange: setSorting,
     //no need to pass pageCount or rowCount with client-side pagination as it is calculated automatically
     state: {
       pagination,
       columnFilters,
+      sorting,
     },
     // defaultColumn: {
     //   size: 200, //starting column size
@@ -124,19 +136,35 @@ const MyTable = (props: DataTableProps) => {
           {headerGroup.headers.map((header) => {
             return (
               <th key={header.id} colSpan={header.colSpan}>
-                <button
-                  {...{
-                    className: header.column.getCanSort() ? "cursor-pointer select-none" : "",
-                    onClick: header.column.getToggleSortingHandler(),
-                  }}
-                >
-                  {flexRender(header.column.columnDef.header, header.getContext())}
-                  {{
-                    asc: " 🔼",
-                    desc: " 🔽",
-                    false: " <>",
-                  }[header.column.getIsSorted() as string] ?? null}
-                </button>
+                {header.column.getCanSort() ? (
+                  <button
+                    {...{
+                      className: header.column.getCanSort() ? "cursor-pointer select-none" : "",
+                      onClick: header.column.getToggleSortingHandler(),
+                    }}
+                  >
+                    {flexRender(header.column.columnDef.header, header.getContext())}
+                    {{
+                      asc: (
+                        <Icon className={styles["sort-icon"]}>
+                          <ArrowUpIcon />
+                        </Icon>
+                      ),
+                      desc: (
+                        <Icon className={styles["sort-icon"]}>
+                          <ArrowDownIcon />
+                        </Icon>
+                      ),
+                      false: (
+                        <Icon className={styles["sort-icon"]}>
+                          <ArrowsUpDownIcon />
+                        </Icon>
+                      ),
+                    }[header.column.getIsSorted() as string] ?? null}
+                  </button>
+                ) : (
+                  flexRender(header.column.columnDef.header, header.getContext())
+                )}
                 {header.column.getCanFilter() ? (
                   <div>
                     <Filter column={header.column} />
@@ -150,7 +178,6 @@ const MyTable = (props: DataTableProps) => {
     </thead>
   )
 
-  console.log(dataQuery)
   const getBodyContent = () => {
     if (delayedLoading) {
       return (
@@ -217,12 +244,10 @@ const MyTable = (props: DataTableProps) => {
     }
   }
 
+  console.log(dataQuery.data)
+
   return (
     <div>
-      {/* <div className={styles["filter-bar"]}>
-        <span>Filter</span>
-        {props.topContent ? props.topContent : null}
-      </div> */}
       <table className={styles["data-table"]}>{getBodyContent()}</table>
       <div>
         <div className={styles["pagination"]}>
@@ -235,10 +260,12 @@ const MyTable = (props: DataTableProps) => {
           </Button>
 
           <div className={styles["pagination-info-right"]}>
-            <span className={styles["page-info"]}>
-              Page {table.getState().pagination.pageIndex + 1} of{" "}
-              {table.getPageCount().toLocaleString()}
-            </span>
+            {dataQuery.data?.items?.length > 0 && !dataQuery.data?.error && (
+              <span className={styles["page-info"]}>
+                {dataQuery.data?.meta?.totalItems} Total{" "}
+                {dataQuery.data?.meta?.totalItems === 1 ? "listing" : "listings"}
+              </span>
+            )}
             <span className={styles["show-numbers-container"]}>
               <label htmlFor="show-numbers" className={styles["show-label"]}>
                 Show
@@ -280,7 +307,7 @@ function Filter({ column }: { column: Column<any, unknown> }) {
   return (
     <DebouncedInput
       onChange={(value) => column.setFilterValue(value)}
-      placeholder={`Filter`}
+      placeholder={`Search`}
       type="text"
       value={(columnFilterValue ?? "") as string}
     />
@@ -291,19 +318,24 @@ function DebouncedInput({
   value: initialValue,
   onChange,
   debounce = 500,
+  minCharacters = 3,
   ...props
 }: {
   value: string | number
   onChange: (value: string | number) => void
   debounce?: number
+  minCharacters?: number
 } & Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange">) {
   const [value, setValue] = React.useState(initialValue)
 
-  React.useEffect(() => {
+  useEffect(() => {
     setValue(initialValue)
   }, [initialValue])
 
-  React.useEffect(() => {
+  useEffect(() => {
+    if (minCharacters && value.toString().length > 0 && value.toString().length < minCharacters) {
+      return
+    }
     const timeout = setTimeout(() => {
       onChange(value)
     }, debounce)
@@ -312,12 +344,19 @@ function DebouncedInput({
   }, [value])
 
   return (
-    <input
-      {...props}
-      value={value}
-      onChange={(e) => setValue(e.target.value)}
-      className={styles["search-input"]}
-    />
+    <>
+      <input
+        {...props}
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+        className={styles["search-input"]}
+      />
+      {minCharacters && (
+        <div
+          className={styles["min-characters-info"]}
+        >{`Enter at least ${minCharacters} characters`}</div>
+      )}
+    </>
   )
 }
 
