@@ -237,14 +237,12 @@ export default function ListingsList() {
     search?: ColumnFiltersState,
     sort?: SortingState
   ) => {
+    const searchValue = search[0]?.value as string
     const data = await fetchBaseListingData({
       page: pagination?.pageIndex ? pagination.pageIndex + 1 : 0,
       limit: pagination?.pageSize || 8,
-      search:
-        (search[0]?.value as string)?.length >= MIN_SEARCH_CHARACTERS
-          ? (search[0]?.value as string)
-          : undefined,
-      orderBy: sort?.[0]?.id ? [sort[0].id as ListingOrderByKeys] : [ListingOrderByKeys.status],
+      search: searchValue?.length >= MIN_SEARCH_CHARACTERS ? searchValue : undefined,
+      orderBy: sort?.[0]?.id ? [sort[0].id as ListingOrderByKeys] : undefined,
       orderDir: sort?.[0]?.desc ? [OrderByEnum.desc] : [OrderByEnum.asc],
       userJurisdictionIds: profile?.jurisdictions?.map((jurisdiction) => jurisdiction.id),
       roles: profile?.userRoles,

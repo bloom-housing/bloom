@@ -2,8 +2,8 @@ import React, { useEffect, useMemo, useState } from "react"
 import { SWRConfig } from "swr"
 import type { AppProps } from "next/app"
 import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3"
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 
-// TODO: Figure out how to not import tables here
 import "@bloom-housing/ui-components/src/global/css-imports.scss"
 import "@bloom-housing/ui-components/src/global/app-css.scss"
 import "@bloom-housing/ui-seeds/src/global/app-css.scss"
@@ -16,14 +16,13 @@ import {
 } from "@bloom-housing/shared-helpers"
 
 // TODO: Make these not-global
-// import "ag-grid-community/dist/styles/ag-grid.css"
-// import "ag-grid-community/dist/styles/ag-theme-alpine.css"
+import "ag-grid-community/dist/styles/ag-grid.css"
+import "ag-grid-community/dist/styles/ag-theme-alpine.css"
 
 import LinkComponent from "../components/core/LinkComponent"
 import { translations, overrideTranslations } from "../lib/translations"
 
 import "../../styles/overrides.scss"
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 
 const signInMessage = "Login is required to view this page."
 const skipLoginRoutes = [

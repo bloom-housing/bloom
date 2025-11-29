@@ -199,7 +199,7 @@ export const DataTable = (props: DataTableProps) => {
     </thead>
   )
 
-  const getBodyContent = () => {
+  const getTableContent = () => {
     if (delayedLoading) {
       return (
         <tr className={styles["loading-row"]}>
@@ -283,59 +283,55 @@ export const DataTable = (props: DataTableProps) => {
           className={`${styles["data-table"]} ${
             props.enableHorizontalScroll ? styles["enable-scroll"] : ""
           }`}
-          id={"data-table"}
         >
-          {getBodyContent()}
+          {getTableContent()}
         </table>
       </div>
-      <div>
-        <div className={styles["pagination"]}>
-          <Button
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
-            variant={"primary-outlined"}
-            id="previous-page-button"
-            className={styles["previous-page-button"]}
-          >
-            {t("t.previous")}
-          </Button>
-          {dataQuery.data?.items?.length > 0 && !dataQuery.data?.errorMessage && (
-            <span className={styles["total-items"]}>
-              {dataQuery.data?.totalItems}{" "}
-              {dataQuery.data?.totalItems === 1
-                ? t("listings.totalListing")
-                : t("listings.totalListings")}
-            </span>
-          )}
-          <span className={styles["show-items-per-page"]}>
-            <label htmlFor="show-numbers" className={styles["show-label"]}>
-              {t("t.show")}
-            </label>
-            <select
-              value={table.getState().pagination.pageSize}
-              onChange={(e) => {
-                table.setPageSize(Number(e.target.value))
-              }}
-              id={"show-numbers"}
-              className={styles["show-select"]}
-            >
-              {[3, 8, 25, 50, 100].map((pageSize) => (
-                <option key={pageSize} value={pageSize}>
-                  {pageSize}
-                </option>
-              ))}
-            </select>
+      <div className={styles["pagination"]}>
+        <Button
+          onClick={() => table.previousPage()}
+          disabled={!table.getCanPreviousPage()}
+          variant={"primary-outlined"}
+          className={styles["previous-page-button"]}
+        >
+          {t("t.previous")}
+        </Button>
+        {dataQuery.data?.items?.length > 0 && !dataQuery.data?.errorMessage && (
+          <span className={styles["total-items"]}>
+            {dataQuery.data?.totalItems}{" "}
+            {dataQuery.data?.totalItems === 1
+              ? t("listings.totalListing")
+              : t("listings.totalListings")}
           </span>
-
-          <Button
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
-            variant={"primary-outlined"}
-            className={styles["next-page-button"]}
+        )}
+        <span className={styles["show-items-per-page"]}>
+          <label htmlFor="show-numbers" className={styles["show-label"]}>
+            {t("t.show")}
+          </label>
+          <select
+            value={table.getState().pagination.pageSize}
+            onChange={(e) => {
+              table.setPageSize(Number(e.target.value))
+            }}
+            className={styles["show-select"]}
           >
-            {t("t.next")}
-          </Button>
-        </div>
+            {/* TODO: Remove 3 before merge, just for easier pagination testing purposes */}
+            {[3, 8, 25, 50, 100].map((pageSize) => (
+              <option key={pageSize} value={pageSize}>
+                {pageSize}
+              </option>
+            ))}
+          </select>
+        </span>
+
+        <Button
+          onClick={() => table.nextPage()}
+          disabled={!table.getCanNextPage()}
+          variant={"primary-outlined"}
+          className={styles["next-page-button"]}
+        >
+          {t("t.next")}
+        </Button>
       </div>
     </div>
   )
@@ -382,6 +378,7 @@ export const DataTableDebouncedInput = (props: DataTableDebouncedInputProps) => 
   useEffect(() => {
     setValue(props.value)
   }, [props.value])
+
   useEffect(() => {
     if (
       props.minCharacters &&
