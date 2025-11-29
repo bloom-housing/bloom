@@ -277,7 +277,7 @@ export const DataTable = (props: DataTableProps) => {
   }
 
   return (
-    <>
+    <div className={styles["data-table-wrapper"]}>
       <div className={styles["data-table-container"]}>
         <table
           className={`${styles["data-table"]} ${
@@ -337,7 +337,7 @@ export const DataTable = (props: DataTableProps) => {
           </Button>
         </div>
       </div>
-    </>
+    </div>
   )
 }
 
