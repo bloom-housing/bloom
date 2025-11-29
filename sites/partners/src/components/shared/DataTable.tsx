@@ -40,6 +40,7 @@ export interface FetchDataParams {
 interface DataTableProps {
   columns: ColumnDef<TableDataRow>[]
   data: TableData
+  enableHorizontalScroll?: boolean
   fetchData: (
     pagination?: PaginationState,
     search?: ColumnFiltersState,
@@ -101,7 +102,6 @@ const MyTable = (props: DataTableProps) => {
     columns: props.columns,
     data: dataQuery.data?.items ?? defaultData,
     rowCount: dataQuery.data?.meta?.totalItems,
-    // debugTable: true,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
@@ -112,7 +112,6 @@ const MyTable = (props: DataTableProps) => {
     manualSorting: true,
     onColumnFiltersChange: setColumnFilters,
     onSortingChange: setSorting,
-    //no need to pass pageCount or rowCount with client-side pagination as it is calculated automatically
     state: {
       pagination,
       columnFilters,
@@ -123,7 +122,6 @@ const MyTable = (props: DataTableProps) => {
     //   minSize: 50, //enforced during column resizing
     //   maxSize: 500, //enforced during column resizing
     // },
-    // autoResetPageIndex: false, // turn off page index reset when sorting or filtering
   })
 
   const ROW_HEIGHT = 56.5
@@ -135,7 +133,13 @@ const MyTable = (props: DataTableProps) => {
         <tr key={headerGroup.id}>
           {headerGroup.headers.map((header) => {
             return (
-              <th key={header.id} colSpan={header.colSpan}>
+              <th
+                key={header.id}
+                colSpan={header.colSpan}
+                style={{
+                  width: header.getSize(),
+                }}
+              >
                 {header.column.getCanSort() ? (
                   <button
                     {...{
@@ -230,7 +234,12 @@ const MyTable = (props: DataTableProps) => {
                 <tr key={row.id}>
                   {row.getVisibleCells().map((cell) => {
                     return (
-                      <td key={cell.id}>
+                      <td
+                        key={cell.id}
+                        style={{
+                          width: cell.column.getSize(),
+                        }}
+                      >
                         {flexRender(cell.column.columnDef.cell, cell.getContext())}
                       </td>
                     )
@@ -244,11 +253,17 @@ const MyTable = (props: DataTableProps) => {
     }
   }
 
-  console.log(dataQuery.data)
-
   return (
-    <div>
-      <table className={styles["data-table"]}>{getBodyContent()}</table>
+    <>
+      <div className={styles["data-table-container"]}>
+        <table
+          className={`${styles["data-table"]} ${
+            props.enableHorizontalScroll ? styles["enable-scroll"] : ""
+          }`}
+        >
+          {getBodyContent()}
+        </table>
+      </div>
       <div>
         <div className={styles["pagination"]}>
           <Button
@@ -297,7 +312,7 @@ const MyTable = (props: DataTableProps) => {
         </div>
       </div>
       {/* <pre>{JSON.stringify(table.getState().pagination, null, 2)}</pre> */}
-    </div>
+    </>
   )
 }
 

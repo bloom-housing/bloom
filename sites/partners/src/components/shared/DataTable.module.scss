@@ -1,10 +1,19 @@
-.data-table {
-  border-spacing: 0;
+.data-table-container {
+  overflow-x: auto;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
+  border: var(--seeds-border-1) solid var(--seeds-color-gray-500);
+  border-bottom: 0;
+}
+
+.enable-scroll {
+  table-layout: fixed;
+}
+
+.data-table {
+  border-spacing: 0;
   border-collapse: separate;
   overflow: hidden;
-  border: var(--seeds-border-1) solid var(--seeds-color-gray-500);
   border-bottom: 0;
   width: 100%;
   thead {

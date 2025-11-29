@@ -356,8 +356,9 @@ export default function ListingsList() {
         cell: (info) => info.getValue(),
         header: () => <span>Name</span>,
         footer: (props) => props.column.id,
-        maxSize: Number.MAX_SAFE_INTEGER,
+        minSize: 400,
       },
+
       {
         accessorKey: "status",
         id: "status",
@@ -365,6 +366,7 @@ export default function ListingsList() {
         header: () => <span>Status</span>,
         footer: (props) => props.column.id,
         enableColumnFilter: false,
+        minSize: 100,
       },
       {
         accessorKey: "createdAt",
@@ -375,15 +377,7 @@ export default function ListingsList() {
         footer: (props) => props.column.id,
         enableColumnFilter: false,
         enableSorting: false,
-      },
-      {
-        accessorKey: "updatedAt",
-        id: "mostRecentlyUpdated",
-        cell: (info) =>
-          info.getValue() ? dayjs(info.getValue() as string).format("MM/DD/YYYY") : t("t.none"),
-        header: () => <span>Updated date</span>,
-        footer: (props) => props.column.id,
-        enableColumnFilter: false,
+        minSize: 190,
       },
       {
         accessorKey: "publishedAt",
@@ -393,6 +387,7 @@ export default function ListingsList() {
         header: () => <span>Published date</span>,
         footer: (props) => props.column.id,
         enableColumnFilter: false,
+        minSize: 190,
       },
       {
         accessorKey: "applicationDueDate",
@@ -402,6 +397,7 @@ export default function ListingsList() {
         header: () => <span>Due date</span>,
         footer: (props) => props.column.id,
         enableColumnFilter: false,
+        minSize: 190,
       },
     ],
     []
@@ -546,6 +542,7 @@ export default function ListingsList() {
               loading: listingsLoading,
               meta: listingsMeta,
             }}
+            enableHorizontalScroll={true}
             fetchData={fetchListingsData}
           />
         </div>
