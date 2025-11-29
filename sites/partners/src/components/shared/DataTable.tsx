@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react"
 
 import {
+  Column,
   ColumnDef,
+  ColumnFiltersState,
   PaginationState,
   flexRender,
   getCoreRowModel,
@@ -14,6 +16,7 @@ import { keepPreviousData, useQuery } from "@tanstack/react-query"
 import styles from "./DataTable.module.scss"
 import { Button, LoadingState } from "@bloom-housing/ui-seeds"
 import { PaginationMeta } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { data } from "autoprefixer"
 
 export type TableDataRow = { [key: string]: string | React.ReactNode }
 
@@ -22,12 +25,18 @@ export interface TableData {
   error?: any
   loading?: boolean
   meta?: PaginationMeta
+  search?: boolean
+}
+
+export interface FetchDataParams {
+  pagination?: PaginationState
+  search?: string
 }
 
 interface DataTableProps {
   columns: ColumnDef<TableDataRow>[]
   data: TableData
-  fetchData: (pagination: PaginationState) => Promise<TableData>
+  fetchData: (pagination?: PaginationState, search?: string) => Promise<TableData>
 }
 
 export const DataTable = (props: DataTableProps) => {
@@ -37,9 +46,7 @@ export const DataTable = (props: DataTableProps) => {
     <>
       <MyTable
         {...{
-          data: props.data,
-          columns: props.columns,
-          fetchData: props.fetchData,
+          ...props,
         }}
       />
       {/* <hr /> */}
@@ -56,11 +63,14 @@ const MyTable = (props: DataTableProps) => {
     pageSize: props.data.meta?.itemCount || 8,
   })
 
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]) // can set initial column filter state here
+  console.log("columnFilters:", columnFilters)
+
   const [delayedLoading, setDelayedLoading] = useState(false)
 
   const dataQuery = useQuery({
-    queryKey: ["data", pagination],
-    queryFn: () => props.fetchData(pagination),
+    queryKey: ["data", pagination, columnFilters],
+    queryFn: () => props.fetchData(pagination, columnFilters[0]?.value as string),
     placeholderData: keepPreviousData, // don't have 0 rows flash while changing pages/loading next page
   })
 
@@ -89,9 +99,12 @@ const MyTable = (props: DataTableProps) => {
     getPaginationRowModel: getPaginationRowModel(),
     onPaginationChange: setPagination,
     manualPagination: true,
+    manualFiltering: true,
+    onColumnFiltersChange: setColumnFilters,
     //no need to pass pageCount or rowCount with client-side pagination as it is calculated automatically
     state: {
       pagination,
+      columnFilters,
     },
     // defaultColumn: {
     //   size: 200, //starting column size
@@ -121,8 +134,14 @@ const MyTable = (props: DataTableProps) => {
                   {{
                     asc: " 🔼",
                     desc: " 🔽",
+                    false: " <>",
                   }[header.column.getIsSorted() as string] ?? null}
                 </button>
+                {header.column.getCanFilter() ? (
+                  <div>
+                    <Filter column={header.column} />
+                  </div>
+                ) : null}
               </th>
             )
           })}
@@ -131,6 +150,7 @@ const MyTable = (props: DataTableProps) => {
     </thead>
   )
 
+  console.log(dataQuery)
   const getBodyContent = () => {
     if (delayedLoading) {
       return (
@@ -147,14 +167,27 @@ const MyTable = (props: DataTableProps) => {
           </td>
         </tr>
       )
-    } else if (dataQuery.data?.items.length === 0) {
+    } else if (dataQuery.data?.error) {
       return (
         <>
           {tableHeaders}
           <tbody>
             <tr>
               <td colSpan={props.columns.length} className="text-center p-4">
-                No data available.
+                <div>{dataQuery.data.error.response.data.message[0]}</div>
+              </td>
+            </tr>
+          </tbody>
+        </>
+      )
+    } else if (dataQuery.data?.items?.length === 0) {
+      return (
+        <>
+          {tableHeaders}
+          <tbody>
+            <tr>
+              <td colSpan={props.columns.length} className="text-center p-4">
+                No data available
               </td>
             </tr>
           </tbody>
@@ -186,6 +219,10 @@ const MyTable = (props: DataTableProps) => {
 
   return (
     <div>
+      {/* <div className={styles["filter-bar"]}>
+        <span>Filter</span>
+        {props.topContent ? props.topContent : null}
+      </div> */}
       <table className={styles["data-table"]}>{getBodyContent()}</table>
       <div>
         <div className={styles["pagination"]}>
@@ -234,6 +271,53 @@ const MyTable = (props: DataTableProps) => {
       </div>
       {/* <pre>{JSON.stringify(table.getState().pagination, null, 2)}</pre> */}
     </div>
+  )
+}
+
+function Filter({ column }: { column: Column<any, unknown> }) {
+  const columnFilterValue = column.getFilterValue()
+
+  return (
+    <DebouncedInput
+      onChange={(value) => column.setFilterValue(value)}
+      placeholder={`Filter`}
+      type="text"
+      value={(columnFilterValue ?? "") as string}
+    />
+  )
+}
+
+function DebouncedInput({
+  value: initialValue,
+  onChange,
+  debounce = 500,
+  ...props
+}: {
+  value: string | number
+  onChange: (value: string | number) => void
+  debounce?: number
+} & Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange">) {
+  const [value, setValue] = React.useState(initialValue)
+
+  React.useEffect(() => {
+    setValue(initialValue)
+  }, [initialValue])
+
+  React.useEffect(() => {
+    const timeout = setTimeout(() => {
+      onChange(value)
+    }, debounce)
+
+    return () => clearTimeout(timeout)
+  }, [value])
+
+  return (
+    <input
+      {...props}
+      value={value}
+      onChange={(e) => setValue(e.target.value)}
+      className={styles["search-input"]}
+    />
   )
 }
 

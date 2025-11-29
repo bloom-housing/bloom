@@ -49,6 +49,13 @@
   }
 }
 
+.filter-bar {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  margin-block: var(--seeds-s4);
+}
+
 .pagination {
   display: flex;
   gap: var(--seeds-s4);
@@ -90,4 +97,11 @@
       background-size: 0.75rem;
     }
   }
+}
+
+.search-input {
+  border: var(--seeds-border-1) solid var(--seeds-color-gray-500);
+  padding: var(--seeds-s2);
+  margin-block-start: var(--seeds-s2);
+  width: 100%;
 }

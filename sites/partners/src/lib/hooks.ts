@@ -151,6 +151,11 @@ export async function fetchBaseListingData({
     pagination = response.data.meta || null
   } catch (e) {
     console.log("fetchBaseListingData error: ", e)
+    return {
+      items: null,
+      meta: null,
+      error: e,
+    }
   }
 
   return {

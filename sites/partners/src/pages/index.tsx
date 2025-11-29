@@ -352,7 +352,6 @@ export default function ListingsList() {
         cell: (info) => info.getValue(),
         header: () => <span>Name</span>,
         footer: (props) => props.column.id,
-        size: 200,
         maxSize: Number.MAX_SAFE_INTEGER,
       },
       {
@@ -361,8 +360,7 @@ export default function ListingsList() {
         cell: (info) => t(`listings.listingStatus.${info.getValue() as string}`),
         header: () => <span>Status</span>,
         footer: (props) => props.column.id,
-        size: 100,
-        maxSize: 100,
+        enableColumnFilter: false,
       },
       {
         accessorKey: "createdAt",
@@ -371,8 +369,7 @@ export default function ListingsList() {
           info.getValue() ? dayjs(info.getValue() as string).format("MM/DD/YYYY") : t("t.none"),
         header: () => <span>Created date</span>,
         footer: (props) => props.column.id,
-        size: 50,
-        maxSize: 50,
+        enableColumnFilter: false,
       },
       {
         accessorKey: "updatedAt",
@@ -381,8 +378,7 @@ export default function ListingsList() {
           info.getValue() ? dayjs(info.getValue() as string).format("MM/DD/YYYY") : t("t.none"),
         header: () => <span>Updated date</span>,
         footer: (props) => props.column.id,
-        size: 50,
-        maxSize: 50,
+        enableColumnFilter: false,
       },
       {
         accessorKey: "publishedAt",
@@ -391,8 +387,7 @@ export default function ListingsList() {
           info.getValue() ? dayjs(info.getValue() as string).format("MM/DD/YYYY") : t("t.none"),
         header: () => <span>Published date</span>,
         footer: (props) => props.column.id,
-        size: 50,
-        maxSize: 50,
+        enableColumnFilter: false,
       },
       {
         accessorKey: "applicationDueDate",
@@ -401,17 +396,17 @@ export default function ListingsList() {
           info.getValue() ? dayjs(info.getValue() as string).format("MM/DD/YYYY") : t("t.none"),
         header: () => <span>Due date</span>,
         footer: (props) => props.column.id,
-        size: 50,
-        maxSize: 50,
+        enableColumnFilter: false,
       },
     ],
     []
   )
 
-  const fetchListingsData = async (pagination: PaginationState) => {
+  const fetchListingsData = async (pagination?: PaginationState, search?: string) => {
     const data = await fetchBaseListingData({
-      page: pagination.pageIndex + 1,
-      limit: pagination.pageSize,
+      page: pagination?.pageIndex ? pagination.pageIndex + 1 : 1,
+      limit: pagination?.pageSize || 8,
+      search: search,
     })
     return data
   }
@@ -492,6 +487,45 @@ export default function ListingsList() {
               </div>
             }
           /> */}
+          <div className="flex gap-2 items-center w-full">
+            {isAdmin && (
+              <>
+                <Button
+                  size="sm"
+                  variant="primary"
+                  onClick={() => {
+                    if (defaultJurisdiction) {
+                      void router.push({
+                        pathname: "/listings/add",
+                        query: { jurisdictionId: defaultJurisdiction },
+                      })
+                    } else {
+                      setListingSelectModal(true)
+                    }
+                  }}
+                  id="addListingButton"
+                >
+                  {t("listings.addListing")}
+                </Button>
+                <Button
+                  id="export-listings"
+                  variant="primary-outlined"
+                  onClick={() => onExport()}
+                  leadIcon={
+                    !csvExportLoading ? (
+                      <Icon>
+                        <DocumentArrowDownIcon />
+                      </Icon>
+                    ) : null
+                  }
+                  size="sm"
+                  loadingMessage={csvExportLoading && t("t.formSubmitted")}
+                >
+                  {t("t.exportToCSV")}
+                </Button>
+              </>
+            )}
+          </div>
           <DataTable
             columns={columns}
             data={{
