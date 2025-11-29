@@ -17,6 +17,7 @@ import ArrowsUpDownIcon from "@heroicons/react/16/solid/ArrowsUpDownIcon"
 import ArrowUpIcon from "@heroicons/react/16/solid/ArrowUpIcon"
 import ArrowDownIcon from "@heroicons/react/16/solid/ArrowDownIcon"
 import { Button, Icon, LoadingState } from "@bloom-housing/ui-seeds"
+import { t } from "@bloom-housing/ui-components"
 import styles from "./DataTable.module.scss"
 
 export type TableDataRow = { [key: string]: string | React.ReactNode }
@@ -32,11 +33,6 @@ export interface TableData {
   totalItems?: number
 }
 
-export interface FetchDataParams {
-  pagination?: PaginationState
-  search?: string
-}
-
 interface DataTableProps {
   columns: ColumnDef<TableDataRow>[]
   defaultItemsPerPage?: number
@@ -50,13 +46,14 @@ interface DataTableProps {
   ) => Promise<TableData>
 }
 
-const getHeaderAriaLabel = (header: Header<any, unknown>) => {
+// Returns appropriate aria-label for sortable headers based on current sort state
+const getHeaderAriaLabel = (header: Header<TableDataRow, unknown>) => {
   if (!header.column.getIsSorted()) {
-    return "Activate ascending sort"
+    return t("table.activateAscending")
   } else if (header.column.getIsSorted() === "asc") {
-    return "Activate descending sort"
+    return t("table.activateDescending")
   } else if (header.column.getIsSorted() === "desc") {
-    return "Deactivate sorting"
+    return t("table.clearSort")
   }
 }
 
@@ -74,11 +71,10 @@ export const DataTable = (props: DataTableProps) => {
   const dataQuery = useQuery({
     queryKey: ["data", pagination, columnFilters, sorting],
     queryFn: () => props.fetchData(pagination, columnFilters, sorting),
-    placeholderData: keepPreviousData, // prevent row flash between quick fetches
+    placeholderData: keepPreviousData,
   })
 
-  const defaultData = React.useMemo(() => [], [])
-
+  // Slightly delay loading state to prevent flickering on fast fetches
   useEffect(() => {
     if (dataQuery.isLoading || (dataQuery.isFetching && !dataQuery.isFetched)) {
       const timer = setTimeout(() => {
@@ -91,6 +87,7 @@ export const DataTable = (props: DataTableProps) => {
     }
   }, [dataQuery.isLoading, dataQuery.isFetching, dataQuery.isFetched])
 
+  // On initial load, hide any columns that have been disabled via meta.enabled = false
   useEffect(() => {
     table.getHeaderGroups().map((headerGroup) => {
       headerGroup.headers.map((header) => {
@@ -99,7 +96,10 @@ export const DataTable = (props: DataTableProps) => {
         }
       })
     })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  const defaultData = React.useMemo(() => [], [])
 
   const table = useReactTable({
     columns: props.columns,
@@ -154,17 +154,26 @@ export const DataTable = (props: DataTableProps) => {
                     >
                       {{
                         asc: (
-                          <Icon className={styles["sort-icon"]} aria-label={"Sort ascending"}>
+                          <Icon
+                            className={styles["sort-icon"]}
+                            aria-label={t("table.sortAscending")}
+                          >
                             <ArrowUpIcon />
                           </Icon>
                         ),
                         desc: (
-                          <Icon className={styles["sort-icon"]} aria-label={"Sort descending"}>
+                          <Icon
+                            className={styles["sort-icon"]}
+                            aria-label={t("table.sortDescending")}
+                          >
                             <ArrowDownIcon />
                           </Icon>
                         ),
                         false: (
-                          <Icon className={styles["sort-icon"]} aria-label={"Sort not applied"}>
+                          <Icon
+                            className={styles["sort-icon"]}
+                            aria-label={t("table.sortNotApplied")}
+                          >
                             <ArrowsUpDownIcon />
                           </Icon>
                         ),
@@ -176,7 +185,10 @@ export const DataTable = (props: DataTableProps) => {
                 )}
                 {header.column.getCanFilter() ? (
                   <div>
-                    <Filter header={header} minSearchCharacters={props.minSearchCharacters || 3} />
+                    <DataTableFilter
+                      header={header}
+                      minSearchCharacters={props.minSearchCharacters || 3}
+                    />
                   </div>
                 ) : null}
               </th>
@@ -213,7 +225,7 @@ export const DataTable = (props: DataTableProps) => {
                 colSpan={table.getVisibleFlatColumns().length}
                 className={`${styles["full-width-text-cell"]} ${styles["error-cell"]}`}
               >
-                <div>{dataQuery.data.errorMessage}</div>
+                {dataQuery.data.errorMessage}
               </td>
             </tr>
           </tbody>
@@ -229,7 +241,7 @@ export const DataTable = (props: DataTableProps) => {
                 colSpan={table.getVisibleFlatColumns().length}
                 className={styles["full-width-text-cell"]}
               >
-                No data available
+                {t("table.noData")}
               </td>
             </tr>
           </tbody>
@@ -285,18 +297,19 @@ export const DataTable = (props: DataTableProps) => {
             id="previous-page-button"
             className={styles["previous-page-button"]}
           >
-            Previous
+            {t("t.previous")}
           </Button>
-
           {dataQuery.data?.items?.length > 0 && !dataQuery.data?.errorMessage && (
             <span className={styles["total-items"]}>
-              {dataQuery.data?.totalItems} Total{" "}
-              {dataQuery.data?.totalItems === 1 ? "listing" : "listings"}
+              {dataQuery.data?.totalItems}{" "}
+              {dataQuery.data?.totalItems === 1
+                ? t("listings.totalListing")
+                : t("listings.totalListings")}
             </span>
           )}
           <span className={styles["show-items-per-page"]}>
             <label htmlFor="show-numbers" className={styles["show-label"]}>
-              Show
+              {t("t.show")}
             </label>
             <select
               value={table.getState().pagination.pageSize}
@@ -320,7 +333,7 @@ export const DataTable = (props: DataTableProps) => {
             variant={"primary-outlined"}
             className={styles["next-page-button"]}
           >
-            Next
+            {t("t.next")}
           </Button>
         </div>
       </div>
@@ -328,76 +341,79 @@ export const DataTable = (props: DataTableProps) => {
   )
 }
 
-function Filter({
-  header,
-  minSearchCharacters,
-}: {
-  header: Header<any, unknown>
+interface DataTableFilterProps {
+  header: Header<TableDataRow, unknown>
   minSearchCharacters: number
-}) {
-  const columnFilterValue = header.column.getFilterValue()
+}
 
+const DataTableFilter = (props: DataTableFilterProps) => {
+  const columnFilterValue = props.header.column.getFilterValue()
   return (
-    <DebouncedInput
-      onChange={(value) => header.column.setFilterValue(value)}
-      placeholder={`Search`}
-      minCharacters={minSearchCharacters}
-      type="text"
-      value={(columnFilterValue ?? "") as string}
+    <DataTableDebouncedInput
       inputName={
-        (header.column.columnDef.meta as MetaType)?.filterLabelName || header.column.columnDef.id
+        (props.header.column.columnDef.meta as MetaType)?.filterLabelName ||
+        props.header.column.columnDef.id
       }
+      minCharacters={props.minSearchCharacters}
+      onChange={(value) => props.header.column.setFilterValue(value)}
+      inputProps={{
+        placeholder: t("t.search"),
+        type: "text",
+      }}
+      value={(columnFilterValue ?? "") as string}
     />
   )
 }
 
-function DebouncedInput({
-  value: initialValue,
-  onChange,
-  debounce = 500,
-  minCharacters,
-  inputName,
-  ...props
-}: {
-  value: string | number
-  onChange: (value: string | number) => void
+interface DataTableDebouncedInputProps {
   debounce?: number
-  minCharacters?: number
   inputName: string
-} & Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange">) {
-  const [value, setValue] = React.useState(initialValue)
+  inputProps: React.InputHTMLAttributes<HTMLInputElement>
+  minCharacters?: number
+  onChange: (value: string | number) => void
+  value: string | number
+}
+
+export const DataTableDebouncedInput = (props: DataTableDebouncedInputProps) => {
+  const [value, setValue] = React.useState(props.value)
+
+  const debounce = props.debounce || 500
 
   useEffect(() => {
-    setValue(initialValue)
-  }, [initialValue])
-
+    setValue(props.value)
+  }, [props.value])
   useEffect(() => {
-    if (minCharacters && value.toString().length > 0 && value.toString().length < minCharacters) {
+    if (
+      props.minCharacters &&
+      value.toString().length > 0 &&
+      value.toString().length < props.minCharacters
+    ) {
       return
     }
     const timeout = setTimeout(() => {
-      onChange(value)
+      props.onChange(value)
     }, debounce)
 
     return () => clearTimeout(timeout)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value])
 
   return (
     <>
-      <label htmlFor={inputName} className="sr-only">
-        {`Search listings by ${inputName}`}
+      <label htmlFor={props.inputName} className="sr-only">
+        {t("listings.table.searchBy", { column: props.inputName })}
       </label>
       <input
-        {...props}
-        id={inputName}
-        value={value}
-        onChange={(e) => setValue(e.target.value)}
         className={styles["search-input"]}
+        id={props.inputName}
+        onChange={(e) => setValue(e.target.value)}
+        value={value}
+        {...props.inputProps}
       />
-      {minCharacters && (
-        <div
-          className={styles["min-characters-info"]}
-        >{`Enter at least ${minCharacters} characters`}</div>
+      {props.minCharacters && (
+        <div className={styles["min-characters-info"]}>
+          {t("table.searchSubtext", { char: props.minCharacters })}
+        </div>
       )}
     </>
   )
