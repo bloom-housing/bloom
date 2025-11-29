@@ -484,7 +484,7 @@
   "authentication.signIn.loginError": "Pakilagay ang tamang email address",
   "authentication.signIn.mfaError": "Ito ay isang partner na account, na para sa mga kadahilanang pangseguridad ay hindi makapag-log in sa pampublikong site.",
   "authentication.signIn.passwordError": "Pakilagay ang tamang password",
-  "authentication.signIn.passwordOutdated": "Nag-expire na ang password mo. Paki-reset ang password mo.",
+  "authentication.signIn.passwordOutdated": "Ang password na nauugnay sa iyong account ay nag-expire na. Kakailanganin mong i-reset ito upang ma-access ang iyong account.",
   "authentication.signIn.pwdless.createAccountCopy": "Mag-sign up nang mabilis nang hindi na kailangang tandaan ang anumang mga password.",
   "authentication.signIn.pwdless.emailHelperText": "Ilagay ang iyong email at padadalhan ka namin ng code para mag-sign in.",
   "authentication.signIn.pwdless.error": "Ang code na iyong ginamit ay hindi wasto o nag-expire.",
