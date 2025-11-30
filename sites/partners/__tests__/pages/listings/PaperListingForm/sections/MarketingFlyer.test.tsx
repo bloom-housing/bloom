@@ -49,8 +49,8 @@ describe("MarketingFlyer", () => {
     expect(screen.getByRole("heading", { level: 3, name: "Marketing flyer" })).toBeInTheDocument()
     expect(screen.getByText("test_file_id")).toBeInTheDocument()
     expect(screen.getByText("accessible_file_id")).toBeInTheDocument()
-    expect(screen.getByRole("button", { name: "Edit" })).toBeInTheDocument()
-    expect(screen.getByRole("button", { name: "Delete" })).toBeInTheDocument()
+    expect(screen.getByRole("button", { name: "Edit marketing flyer" })).toBeInTheDocument()
+    expect(screen.getAllByRole("button", { name: "Delete" })).toHaveLength(2)
   })
 
   it("should display both marketing and accessible flyer URL entries", () => {
@@ -67,8 +67,8 @@ describe("MarketingFlyer", () => {
     expect(screen.getByRole("heading", { level: 3, name: "Marketing flyer" })).toBeInTheDocument()
     expect(screen.getByText("http://test.url.com")).toBeInTheDocument()
     expect(screen.getByText("http://accessible.url.com")).toBeInTheDocument()
-    expect(screen.getByRole("button", { name: "Edit" })).toBeInTheDocument()
-    expect(screen.getByRole("button", { name: "Delete" })).toBeInTheDocument()
+    expect(screen.getByRole("button", { name: "Edit marketing flyer" })).toBeInTheDocument()
+    expect(screen.getAllByRole("button", { name: "Delete" })).toHaveLength(2)
   })
 
   it("should render file and URL values with mixed data", () => {
@@ -183,7 +183,7 @@ describe("MarketingFlyer", () => {
       />
     )
 
-    const editButton = screen.getByRole("button", { name: "Edit" })
+    const editButton = screen.getByRole("button", { name: "Edit marketing flyer" })
     await userEvent.click(editButton)
 
     const existingMarketingFiles = screen.getAllByText("original.pdf")
@@ -240,7 +240,7 @@ describe("MarketingFlyer", () => {
     })
   })
 
-  it("should handle delete action and clear both flyers", async () => {
+  it("should handle delete action for individual flyers", async () => {
     render(
       <MarketingFlyer
         currentData={{
@@ -254,14 +254,27 @@ describe("MarketingFlyer", () => {
       />
     )
 
-    const deleteButton = screen.getByRole("button", { name: "Delete" })
-    await userEvent.click(deleteButton)
+    const deleteButtons = screen.getAllByRole("button", { name: "Delete" })
+    await userEvent.click(deleteButtons[0])
 
     expect(mockOnSubmit).toHaveBeenCalledWith({
       marketingFlyer: "",
       listingsMarketingFlyerFile: {
         fileId: "",
         label: "",
+      },
+      accessibleMarketingFlyer: "http://accessible.url.com",
+      listingsAccessibleMarketingFlyerFile: undefined,
+    })
+
+    mockOnSubmit.mockClear()
+    await userEvent.click(deleteButtons[1])
+
+    expect(mockOnSubmit).toHaveBeenCalledWith({
+      marketingFlyer: undefined,
+      listingsMarketingFlyerFile: {
+        fileId: "test_file_id",
+        label: "test_file",
       },
       accessibleMarketingFlyer: "",
       listingsAccessibleMarketingFlyerFile: {
