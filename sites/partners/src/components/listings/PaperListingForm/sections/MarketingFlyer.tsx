@@ -95,6 +95,7 @@ const MarketingFlyer = ({ currentData, onSubmit }: MarketingFlyerProps) => {
     register,
     watch,
     reset,
+    setValue,
     handleSubmit,
     formState: { errors },
   } = useForm<MarketingFlyerFormValues>({
@@ -148,124 +149,124 @@ const MarketingFlyer = ({ currentData, onSubmit }: MarketingFlyerProps) => {
     setDrawerState(true)
   }
 
-  const clearAllFlyers = () => {
+  const clearMarketingFlyer = () => {
     onSubmit({
       marketingFlyer: "",
       listingsMarketingFlyerFile: EMPTY_FILE,
+      accessibleMarketingFlyer: accessibleMarketingFlyerValue,
+      listingsAccessibleMarketingFlyerFile: accessibleMarketingFlyerFile,
+    })
+  }
+
+  const clearAccessibleFlyer = () => {
+    onSubmit({
+      marketingFlyer: marketingFlyerValue,
+      listingsMarketingFlyerFile: marketingFlyerFile,
       accessibleMarketingFlyer: "",
       listingsAccessibleMarketingFlyerFile: EMPTY_FILE,
     })
   }
 
-  const flyerTableHeaders = {
-    preview: "t.preview",
-    fileName: "t.fileName",
-    actions: "",
-  }
-
-  const urlTableHeaders = {
-    fileName: "t.url",
-    actions: "",
-  }
-
   const marketingFlyerFileName = getFileNameFromId(marketingFlyerFile?.fileId)
   const accessibleFlyerFileName = getFileNameFromId(accessibleMarketingFlyerFile?.fileId)
 
-  const flyerBlocks = [
-    {
-      key: "marketing",
-      label: t("listings.marketingFlyer.title"),
-      preview: marketingFlyerFile?.fileId ? (
-        <TableThumbnail>
-          <img src={cloudinaryUrlFromId(marketingFlyerFile.fileId)} alt={"Marketing flyer"} />
-        </TableThumbnail>
-      ) : null,
-      text: marketingFlyerFileName || marketingFlyerValue || "",
-    },
-    {
-      key: "accessible",
-      label: t("listings.marketingFlyer.accessibleTitle"),
-      preview: accessibleMarketingFlyerFile?.fileId ? (
-        <TableThumbnail>
-          <img
-            src={cloudinaryUrlFromId(accessibleMarketingFlyerFile.fileId)}
-            alt={"Accessible marketing flyer"}
-          />
-        </TableThumbnail>
-      ) : null,
-      text: accessibleFlyerFileName || accessibleMarketingFlyerValue || "",
-    },
-  ].filter((block) => block.preview || block.text)
+  const hasFlyerFile = !!marketingFlyerFile?.fileId
+  const hasAccessibleFlyerFile = !!accessibleMarketingFlyerFile?.fileId
+  const hasMarketingUrl = !!(marketingFlyerValue && !hasFlyerFile)
+  const hasAccessibleUrl = !!(accessibleMarketingFlyerValue && !hasAccessibleFlyerFile)
 
-  const hasAnyPreview = flyerBlocks.some((block) => Boolean(block.preview))
-  const hasAnyUrl = flyerBlocks.some((block) => Boolean(block.text && !block.preview))
+  const hasAnyUpload = hasFlyerFile || hasAccessibleFlyerFile
+  const hasAnyUrl = hasMarketingUrl || hasAccessibleUrl
+  const hasAnyFlyer = hasAnyUpload || hasAnyUrl
 
-  const actionsContent = (
-    <div className="flex gap-3">
-      <Button
-        type="button"
-        className={"font-semibold darker-link"}
-        onClick={handleDrawerOpen}
-        variant="text"
-        size="sm"
-      >
-        {t("t.edit")}
-      </Button>
-      <Button
-        type="button"
-        className={"font-semibold darker-alert"}
-        onClick={clearAllFlyers}
-        variant="text"
-        size="sm"
-      >
-        {t("t.delete")}
-      </Button>
-    </div>
-  )
+  const getFileNameHeader = () => {
+    if (hasAnyUpload && hasAnyUrl) return `${t("t.fileName")} / ${t("t.url")}`
+    if (hasAnyUrl) return "t.url"
+    return "t.fileName"
+  }
 
-  const flyerTableRows: StandardTableData = flyerBlocks.length
-    ? [
-        {
-          preview: hasAnyPreview
-            ? {
-                content: (
-                  <div className="flex flex-col gap-4">
-                    {flyerBlocks.map(
-                      ({ key, preview }) => preview && <div key={`${key}-preview`}>{preview}</div>
-                    )}
-                  </div>
-                ),
-              }
-            : undefined,
-          fileName: {
+  const tableHeaders = {
+    ...(hasAnyUpload && { preview: "t.preview" }),
+    fileName: getFileNameHeader(),
+    actions: "",
+  }
+
+  const buildFlyerTableRow = (
+    hasFile: boolean,
+    hasUrl: boolean,
+    fileId: string | undefined,
+    fileName: string,
+    urlValue: string | undefined,
+    label: string,
+    onDelete: () => void
+  ): StandardTableData[number] | null => {
+    if (!hasFile && !hasUrl) return null
+
+    return {
+      preview: hasFile
+        ? {
             content: (
-              <div className="flex flex-col gap-4">
-                {flyerBlocks.map(({ key, label, text }) => (
-                  <div key={`${key}-details`} className="flex flex-col gap-1">
-                    <div className="font-semibold">{label}</div>
-                    {text && <div className="text-xs break-all">{text}</div>}
-                  </div>
-                ))}
-              </div>
+              <TableThumbnail>
+                <img src={cloudinaryUrlFromId(fileId)} alt={label} />
+              </TableThumbnail>
             ),
-          },
-          actions: {
-            content: actionsContent,
-          },
-        },
-      ]
-    : []
+          }
+        : { content: "" },
+      fileName: {
+        content: (
+          <div className="flex flex-col gap-1">
+            <div className="font-semibold">{label}</div>
+            <div className="text-xs break-all">{fileName || urlValue || ""}</div>
+          </div>
+        ),
+      },
+      actions: {
+        content: (
+          <Button
+            type="button"
+            className="font-semibold darker-alert"
+            onClick={onDelete}
+            variant="text"
+            size="sm"
+          >
+            {t("t.delete")}
+          </Button>
+        ),
+      },
+    }
+  }
+
+  const flyerTableRows = [
+    buildFlyerTableRow(
+      hasFlyerFile,
+      hasMarketingUrl,
+      marketingFlyerFile?.fileId,
+      marketingFlyerFileName,
+      marketingFlyerValue,
+      t("listings.marketingFlyer.title"),
+      clearMarketingFlyer
+    ),
+    buildFlyerTableRow(
+      hasAccessibleFlyerFile,
+      hasAccessibleUrl,
+      accessibleMarketingFlyerFile?.fileId,
+      accessibleFlyerFileName,
+      accessibleMarketingFlyerValue,
+      t("listings.marketingFlyer.accessibleTitle"),
+      clearAccessibleFlyer
+    ),
+  ].filter(Boolean)
 
   const pdfUploader = async (file: File) => {
-    void (await cloudinaryFileUploader({ file, setCloudinaryData, setProgressValue }))
+    await cloudinaryFileUploader({ file, setCloudinaryData, setProgressValue })
   }
 
   const accessiblePdfUploader = async (file: File) => {
-    void (await cloudinaryFileUploader({
+    await cloudinaryFileUploader({
       file,
       setCloudinaryData: setAccessibleCloudinaryData,
       setProgressValue: setAccessibleProgressValue,
-    }))
+    })
   }
 
   const buildPreviewTableRow = (data: CloudinaryData, onDelete: () => void): StandardTableData => {
@@ -301,11 +302,13 @@ const MarketingFlyer = ({ currentData, onSubmit }: MarketingFlyerProps) => {
   const marketingPreviewTableRows = buildPreviewTableRow(cloudinaryData, () => {
     setCloudinaryData(EMPTY_CLOUDINARY_DATA)
     setProgressValue(0)
+    setValue("marketingFlyerAttachType", null)
   })
 
   const accessiblePreviewTableRows = buildPreviewTableRow(accessibleCloudinaryData, () => {
     setAccessibleCloudinaryData(EMPTY_CLOUDINARY_DATA)
     setAccessibleProgressValue(0)
+    setValue("accessibleMarketingFlyerAttachType", null)
   })
 
   const previewHeaders = {
@@ -361,16 +364,6 @@ const MarketingFlyer = ({ currentData, onSubmit }: MarketingFlyerProps) => {
     resetDrawerState()
   }
 
-  const getTableHeaders = () => {
-    if (hasAnyPreview) {
-      return flyerTableHeaders
-    }
-    if (hasAnyUrl) {
-      return urlTableHeaders
-    }
-    return flyerTableHeaders
-  }
-
   return (
     <>
       <Heading size="lg" priority={3} className="spacer-header">
@@ -379,23 +372,24 @@ const MarketingFlyer = ({ currentData, onSubmit }: MarketingFlyerProps) => {
       <Grid spacing="lg" className="grid-inset-section">
         <Grid.Row>
           <Grid.Cell>
-            {flyerTableRows.length > 0 ? (
-              <MinimalTable
-                headers={getTableHeaders()}
-                data={flyerTableRows}
-                id="marketing-flyer-table"
-              />
-            ) : (
-              <Button
-                id="addMarketingFlyerButton"
-                type="button"
-                variant="primary-outlined"
-                size="sm"
-                onClick={handleDrawerOpen}
-              >
-                {t("listings.marketingFlyer.add")}
-              </Button>
+            {flyerTableRows.length > 0 && (
+              <div className="mb-5">
+                <MinimalTable
+                  headers={tableHeaders}
+                  data={flyerTableRows}
+                  id="marketing-flyer-table"
+                />
+              </div>
             )}
+            <Button
+              id="addMarketingFlyerButton"
+              type="button"
+              variant="primary-outlined"
+              size="sm"
+              onClick={handleDrawerOpen}
+            >
+              {t(hasAnyFlyer ? "listings.marketingFlyer.edit" : "listings.marketingFlyer.add")}
+            </Button>
           </Grid.Cell>
         </Grid.Row>
       </Grid>
