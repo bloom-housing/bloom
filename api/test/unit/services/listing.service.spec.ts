@@ -470,9 +470,8 @@ describe('Testing listing service', () => {
       listingsBuildingSelectionCriteriaFile: exampleAsset,
       listingsResult: exampleAsset,
       marketingFlyer: 'https://example.com/marketing-flyer.pdf',
-      accessibleMarketingFlyer:
-        'https://example.com/accessible-marketing-flyer.pdf',
-      listingsMarketingFlyerFile: exampleAsset,
+      accessibleMarketingFlyer: undefined,
+      listingsMarketingFlyerFile: null,
       listingsAccessibleMarketingFlyerFile: exampleAsset,
       listingEvents: [
         {
@@ -3461,11 +3460,7 @@ describe('Testing listing service', () => {
               ...exampleAsset,
             },
           },
-          listingsMarketingFlyerFile: {
-            create: {
-              ...exampleAsset,
-            },
-          },
+          listingsMarketingFlyerFile: undefined,
           listingsAccessibleMarketingFlyerFile: {
             create: {
               ...exampleAsset,
@@ -3985,11 +3980,7 @@ describe('Testing listing service', () => {
               ...exampleAsset,
             },
           },
-          listingsMarketingFlyerFile: {
-            create: {
-              ...exampleAsset,
-            },
-          },
+          listingsMarketingFlyerFile: undefined,
           listingsAccessibleMarketingFlyerFile: {
             create: {
               ...exampleAsset,
