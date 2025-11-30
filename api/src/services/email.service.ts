@@ -376,7 +376,13 @@ export class EmailService {
           'confirmation.eligible.fcfsPreference',
         );
       } else if (hasUnitGroups) {
-        eligibleText = this.polyglot.t('confirmation.eligible.waitlist');
+        if (listing.reviewOrderType === ReviewOrderTypeEnum.waitlistLottery) {
+          eligibleText = this.polyglot.t(
+            'confirmation.eligible.waitlistLottery',
+          );
+        } else {
+          eligibleText = this.polyglot.t('confirmation.eligible.waitlist');
+        }
         contactText = this.polyglot.t('confirmation.eligible.waitlistContact');
         preferenceText = this.polyglot.t(
           'confirmation.eligible.waitlistPreference',
@@ -397,6 +403,13 @@ export class EmailService {
       }
       if (listing.reviewOrderType === ReviewOrderTypeEnum.waitlist) {
         eligibleText = this.polyglot.t('confirmation.eligible.waitlist');
+        contactText = this.polyglot.t('confirmation.eligible.waitlistContact');
+        preferenceText = this.polyglot.t(
+          'confirmation.eligible.waitlistPreference',
+        );
+      }
+      if (listing.reviewOrderType === ReviewOrderTypeEnum.waitlistLottery) {
+        eligibleText = this.polyglot.t('confirmation.eligible.waitlistLottery');
         contactText = this.polyglot.t('confirmation.eligible.waitlistContact');
         preferenceText = this.polyglot.t(
           'confirmation.eligible.waitlistPreference',
@@ -665,7 +678,10 @@ export class EmailService {
       ]);
 
       for (const language in emails) {
-        void (await this.loadTranslations(null, language as LanguagesEnum));
+        void (await this.loadTranslations(
+          jurisdiction,
+          language as LanguagesEnum,
+        ));
         this.logger.log(
           `Sending lottery published ${language} email for listing ${listingInfo.name} to ${emails[language]?.length} emails`,
         );

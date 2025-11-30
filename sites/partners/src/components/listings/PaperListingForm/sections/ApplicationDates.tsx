@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useContext } from "react"
+import React, { useState, useMemo } from "react"
 import { useFormContext } from "react-hook-form"
 import { getDetailFieldDate, getDetailFieldTime } from "../../PaperListingDetails/sections/helpers"
 import dayjs from "dayjs"
@@ -20,25 +20,29 @@ import MarketingFlyer, { MarketingFlyerData } from "./MarketingFlyer"
 import {
   MarketingTypeEnum,
   MarketingSeasonEnum,
-  FeatureFlagEnum,
   MonthEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { AuthContext } from "@bloom-housing/shared-helpers"
 import { fieldMessage, fieldHasError, getLabel } from "../../../../lib/helpers"
 import styles from "../ListingForm.module.scss"
 
 type ApplicationDatesProps = {
+  enableMarketingFlyer?: boolean
+  enableMarketingStatus?: boolean
+  enableMarketingStatusMonths?: boolean
   openHouseEvents: TempEvent[]
-  setOpenHouseEvents: (events: TempEvent[]) => void
-  listing?: FormListing
   requiredFields: string[]
+  listing?: FormListing
+  setOpenHouseEvents: (events: TempEvent[]) => void
 }
 
 const ApplicationDates = ({
+  enableMarketingFlyer,
+  enableMarketingStatus,
+  enableMarketingStatusMonths,
   listing,
   openHouseEvents,
-  setOpenHouseEvents,
   requiredFields,
+  setOpenHouseEvents,
 }: ApplicationDatesProps) => {
   const openHouseHeaders = {
     date: "t.date",
@@ -47,8 +51,6 @@ const ApplicationDates = ({
     url: "t.link",
     action: "",
   }
-
-  const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
 
   const openHouseTableData = useMemo(() => {
     return openHouseEvents.map((event) => {
@@ -93,23 +95,6 @@ const ApplicationDates = ({
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { errors, register, setValue, watch, clearErrors } = formMethods
-
-  const jurisdiction = watch("jurisdictions.id")
-
-  const enableMarketingStatus = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableMarketingStatus,
-    jurisdiction
-  )
-
-  const enableMarketingStatusMonths = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableMarketingStatusMonths,
-    jurisdiction
-  )
-
-  const enableMarketingFlyer = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableMarketingFlyer,
-    jurisdiction
-  )
 
   const [drawerOpenHouse, setDrawerOpenHouse] = useState<TempEvent | boolean>(false)
   const [modalDeleteOpenHouse, setModalDeleteOpenHouse] = useState<TempEvent | null>(null)
@@ -349,7 +334,7 @@ const ApplicationDates = ({
         </Grid.Row>
       </SectionWithGrid>
 
-      {enableMarketingFlyer && jurisdiction && (
+      {enableMarketingFlyer && (
         <MarketingFlyer
           currentData={{
             marketingFlyer: watch("marketingFlyer"),
