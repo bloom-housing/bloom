@@ -125,7 +125,7 @@ const Users = () => {
     search: tableOptions.filter.filterValue,
   })
 
-  const { items: listingDtos } = useListingsData({
+  const { listingDtos } = useListingsData({
     limit: "all",
     view: ListingViews.name,
   })
@@ -213,7 +213,7 @@ const Users = () => {
           title={userDrawer?.type === "add" ? t("users.addUser") : t("users.editUser")}
           mode={userDrawer?.type}
           user={userDrawer?.user}
-          listings={listingDtos}
+          listings={listingDtos?.items}
           onCancel={() => setUserDrawer(null)}
           onDrawerClose={() => {
             setUserDrawer(null)

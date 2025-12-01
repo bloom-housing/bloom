@@ -191,10 +191,9 @@ export function useListingsData({
   const { data, error } = useSWR(`/api/adapter/listings?${paramsString}`, fetcher)
 
   return {
-    items: data?.items,
-    meta: data?.meta,
-    loading: !error && !data,
-    error: error,
+    listingDtos: data,
+    listingsLoading: !error && !data,
+    listingsError: error,
   }
 }
 

@@ -297,32 +297,35 @@ export const DataTable = (props: DataTableProps) => {
           {t("t.previous")}
         </Button>
         {dataQuery.data?.items?.length > 0 && !dataQuery.data?.errorMessage && (
-          <span className={styles["total-items"]}>
-            {dataQuery.data?.totalItems}{" "}
-            {dataQuery.data?.totalItems === 1
-              ? t("listings.totalListing")
-              : t("listings.totalListings")}
-          </span>
+          <>
+            <span className={styles["total-items"]}>
+              {dataQuery.data?.totalItems}{" "}
+              {dataQuery.data?.totalItems === 1
+                ? t("listings.totalListing")
+                : t("listings.totalListings")}
+            </span>
+
+            <span className={styles["show-items-per-page"]}>
+              <label htmlFor="show-numbers" className={styles["show-label"]}>
+                {t("t.show")}
+              </label>
+              <select
+                value={table.getState().pagination.pageSize}
+                onChange={(e) => {
+                  table.setPageSize(Number(e.target.value))
+                }}
+                className={styles["show-select"]}
+              >
+                {/* TODO: Remove 3 before merge, just for easier pagination testing purposes */}
+                {[3, 8, 25, 50, 100].map((pageSize) => (
+                  <option key={pageSize} value={pageSize}>
+                    {pageSize}
+                  </option>
+                ))}
+              </select>
+            </span>
+          </>
         )}
-        <span className={styles["show-items-per-page"]}>
-          <label htmlFor="show-numbers" className={styles["show-label"]}>
-            {t("t.show")}
-          </label>
-          <select
-            value={table.getState().pagination.pageSize}
-            onChange={(e) => {
-              table.setPageSize(Number(e.target.value))
-            }}
-            className={styles["show-select"]}
-          >
-            {/* TODO: Remove 3 before merge, just for easier pagination testing purposes */}
-            {[3, 8, 25, 50, 100].map((pageSize) => (
-              <option key={pageSize} value={pageSize}>
-                {pageSize}
-              </option>
-            ))}
-          </select>
-        </span>
 
         <Button
           onClick={() => table.nextPage()}
