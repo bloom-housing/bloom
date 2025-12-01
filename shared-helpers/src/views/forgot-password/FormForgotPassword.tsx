@@ -67,7 +67,7 @@ const FormForgotPassword = ({
             <Field
               name="email"
               label={t("t.email")}
-              note={t("t.authentication.forgotPassword.sendEmailNotes")}
+              note={t("authentication.forgotPassword.sendEmailNotes")}
               validation={{ required: true, pattern: emailRegex }}
               error={errors.email}
               errorMessage={errors.email ? t("authentication.signIn.loginError") : undefined}
