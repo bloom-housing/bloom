@@ -79,7 +79,7 @@ export const DataTable = (props: DataTableProps) => {
     if (dataQuery.isLoading || (dataQuery.isFetching && !dataQuery.isFetched)) {
       const timer = setTimeout(() => {
         setDelayedLoading(true)
-      }, 500)
+      }, 350)
 
       return () => clearTimeout(timer)
     } else {
@@ -203,7 +203,7 @@ export const DataTable = (props: DataTableProps) => {
   )
 
   const getTableContent = () => {
-    if (delayedLoading) {
+    if (delayedLoading || dataQuery.data === undefined) {
       return (
         <tr className={styles["loading-row"]}>
           <td
@@ -212,7 +212,7 @@ export const DataTable = (props: DataTableProps) => {
               height: `${document.getElementById("data-table")?.offsetHeight}px`,
             }}
           >
-            <LoadingState loading={delayedLoading} className={styles["loading-spinner"]}>
+            <LoadingState loading={true} className={styles["loading-spinner"]}>
               <div className={styles["loading-content"]} />
             </LoadingState>
           </td>
