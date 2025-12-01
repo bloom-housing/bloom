@@ -347,6 +347,17 @@ interface DataTableFilterProps {
 
 const DataTableFilter = (props: DataTableFilterProps) => {
   const columnFilterValue = props.header.column.getFilterValue()
+  const [value, setValue] = React.useState((columnFilterValue ?? "") as string)
+
+  // Reset filter if input length becomes less than minSearchCharacters
+  // Does not make more than one call due to request caching in useQuery
+  useEffect(() => {
+    if (value.length > 0 && value.length < props.minSearchCharacters) {
+      props.header.column.setFilterValue("")
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [value])
+
   return (
     <DataTableDebouncedInput
       inputName={
@@ -359,7 +370,8 @@ const DataTableFilter = (props: DataTableFilterProps) => {
         placeholder: t("t.search"),
         type: "text",
       }}
-      value={(columnFilterValue ?? "") as string}
+      setValue={setValue}
+      value={value}
     />
   )
 }
@@ -370,33 +382,33 @@ interface DataTableDebouncedInputProps {
   inputProps: React.InputHTMLAttributes<HTMLInputElement>
   minCharacters?: number
   onChange: (value: string | number) => void
-  value: string | number
+  setValue: React.Dispatch<React.SetStateAction<string>>
+  value: string
 }
 
 export const DataTableDebouncedInput = (props: DataTableDebouncedInputProps) => {
-  const [value, setValue] = React.useState(props.value)
-
   const debounce = props.debounce || 500
 
   useEffect(() => {
-    setValue(props.value)
+    props.setValue(props.value)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.value])
 
   useEffect(() => {
     if (
       props.minCharacters &&
-      value.toString().length > 0 &&
-      value.toString().length < props.minCharacters
+      props.value.toString().length > 0 &&
+      props.value.toString().length < props.minCharacters
     ) {
       return
     }
     const timeout = setTimeout(() => {
-      props.onChange(value)
+      props.onChange(props.value)
     }, debounce)
 
     return () => clearTimeout(timeout)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [value])
+  }, [props.value])
 
   return (
     <>
@@ -406,8 +418,8 @@ export const DataTableDebouncedInput = (props: DataTableDebouncedInputProps) => 
       <input
         className={styles["search-input"]}
         id={props.inputName}
-        onChange={(e) => setValue(e.target.value)}
-        value={value}
+        onChange={(e) => props.setValue(e.target.value)}
+        value={props.value}
         {...props.inputProps}
       />
       {props.minCharacters && (
