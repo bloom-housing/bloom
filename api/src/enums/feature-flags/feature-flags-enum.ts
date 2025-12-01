@@ -56,6 +56,11 @@ export const featureFlagMap: {
   description: string;
 }[] = [
   {
+    name: FeatureFlagEnum.disableBuildingSelectionCriteria,
+    description:
+      'When true, building selection criteria is not displayed in the listing',
+  },
+  {
     name: FeatureFlagEnum.disableCommonApplication,
     description:
       'When true, the digital common application is not an option for listings',
