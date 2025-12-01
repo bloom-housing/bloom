@@ -472,6 +472,7 @@
   "authentication.forgotPassword.passwordConfirmation": "Confirmación de contraseña",
   "authentication.forgotPassword.sendEmail": "Ingrese su correo electrónico para obtener un enlace de restablecimiento de contraseña",
   "authentication.forgotPassword.sendEmailButton": "Enviar correo electrónico",
+  "authentication.forgotPassword.sendEmailNotes": "Introduce tu correo electrónico para que podamos enviarte un enlace para restablecer tu contraseña. Si no recibes un correo electrónico, es posible que no tengas una cuenta.",
   "authentication.signIn.accountHasBeenLocked": "Por razones de seguridad, esta cuenta ha sido bloqueada.",
   "authentication.signIn.afterFailedAttempts": "Por razones de seguridad, después de %{count} intentos fallidos, deberá esperar 30 minutos antes de volver a intentarlo.",
   "authentication.signIn.changeYourPassword": "Haga clic aquí para restablecer su contraseña",

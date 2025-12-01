@@ -472,6 +472,7 @@
   "authentication.forgotPassword.passwordConfirmation": "密码确认",
   "authentication.forgotPassword.sendEmail": "輸入您的電子郵件地址以獲取密碼重設鏈接",
   "authentication.forgotPassword.sendEmailButton": "傳送電子郵件",
+  "authentication.forgotPassword.sendEmailNotes": "請輸入您的電子郵件地址，以便我們向您發送密碼重設連結。如果您沒有收到電子郵件，則可能您還沒有帳戶。",
   "authentication.signIn.accountHasBeenLocked": "基於安全原因，此帳戶已遭到鎖定。",
   "authentication.signIn.afterFailedAttempts": "基於安全原因，只要失敗嘗試達 %{count} 次，您就必須等待 30 分鐘才能再試一次。",
   "authentication.signIn.changeYourPassword": "點這裡重設密碼",

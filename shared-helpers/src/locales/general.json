@@ -470,6 +470,7 @@
   "authentication.forgotPassword.message": "If there is an account made with that email, you'll receive an email with a link to reset your password. The reset link is valid for 1 hour.",
   "authentication.forgotPassword.passwordConfirmation": "Password confirmation",
   "authentication.forgotPassword.sendEmail": "Enter your email to get a password reset link",
+  "authentication.forgotPassword.sendEmailNotes": "Please enter your email address so we can send you a password reset link. If you don’t receive an email, you may not have an account.",
   "authentication.forgotPassword.sendEmailButton": "Send email",
   "authentication.signIn.accountHasBeenLocked": "For security reasons, this account has been locked.",
   "authentication.signIn.afterFailedAttempts": "For security reasons, after %{count} failed attempts, you’ll have to wait 30 minutes before trying again.",
