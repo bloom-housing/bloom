@@ -909,7 +909,6 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
           path: 'listingsBuildingSelectionCriteriaFile',
           label: 'Building Selection Criteria',
           format: (val: Asset): string => {
-            console.log({ val });
             return this.cloudinaryPdfFromId(val.fileId);
           },
         },
@@ -1119,7 +1118,6 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
               (appMethod) => appMethod.paperApplications.length > 0,
             );
             const paperApps = method.length ? method[0].paperApplications : [];
-            console.log(paperApps.length);
             return paperApps.length
               ? paperApps
                   .map((app) => this.cloudinaryPdfFromId(app.assets.fileId))
