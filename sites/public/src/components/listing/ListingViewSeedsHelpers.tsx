@@ -6,6 +6,7 @@ import {
   ApplicationAddressTypeEnum,
   ApplicationMethod,
   ApplicationMethodsTypeEnum,
+  Asset,
   FeatureFlagEnum,
   IdDTO,
   Jurisdiction,
@@ -607,7 +608,7 @@ export const getMarketingFlyers = (
     return []
   }
 
-  const getFlyerUrl = (file?: { fileId?: string }, url?: string) => {
+  const getFlyerUrl = (file?: Asset, url?: string) => {
     if (file?.fileId) {
       return cloudinaryPdfFromId(file.fileId, process.env.cloudinaryCloudName)
     }

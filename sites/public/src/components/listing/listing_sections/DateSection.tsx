@@ -7,8 +7,8 @@ import { t } from "@bloom-housing/ui-components"
 import styles from "../ListingViewSeeds.module.scss"
 
 export type DateSectionFlyer = {
-  url?: string | null
-  label?: string | null
+  url?: string
+  label?: string
 }
 
 type DateSectionProps = {
