@@ -7,6 +7,7 @@ import cookieParser from 'cookie-parser';
 import { AppModule } from '../../src/modules/app.module';
 import { PrismaService } from '../../src/services/prisma.service';
 import { jurisdictionFactory } from '../../prisma/seed-helpers/jurisdiction-factory';
+import { randomName } from '../../prisma/seed-helpers/word-generator';
 import { ReservedCommunityTypeQueryParams } from '../../src/dtos/reserved-community-types/reserved-community-type-query-params.dto';
 import {
   reservedCommunityTypeFactory,
@@ -18,7 +19,6 @@ import { ReservedCommunityTypeUpdate } from '../../src/dtos/reserved-community-t
 import { IdDTO } from '../../src/dtos/shared/id.dto';
 import { userFactory } from '../../prisma/seed-helpers/user-factory';
 import { Login } from '../../src/dtos/auth/login.dto';
-import { randomName } from 'prisma/seed-helpers/word-generator';
 
 describe('ReservedCommunityType Controller Tests', () => {
   let app: INestApplication;
