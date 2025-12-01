@@ -265,8 +265,7 @@ const SignIn = (props: SignInProps) => {
   useEffect(() => {
     if (networkError?.error?.response?.data?.message?.includes("but is not confirmed")) {
       setConfirmationStatusModal(true)
-    }
-    if (
+    } else if (
       networkError?.error?.response?.data?.message?.includes(NetworkErrorMessage.PasswordOutdated)
     ) {
       setPasswordExpired(true)
