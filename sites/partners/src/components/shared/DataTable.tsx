@@ -79,7 +79,7 @@ export const DataTable = (props: DataTableProps) => {
     if (dataQuery.isLoading || (dataQuery.isFetching && !dataQuery.isFetched)) {
       const timer = setTimeout(() => {
         setDelayedLoading(true)
-      }, 300)
+      }, 500)
 
       return () => clearTimeout(timer)
     } else {
@@ -283,6 +283,7 @@ export const DataTable = (props: DataTableProps) => {
           className={`${styles["data-table"]} ${
             props.enableHorizontalScroll ? styles["enable-scroll"] : ""
           }`}
+          id="data-table"
         >
           {getTableContent()}
         </table>
