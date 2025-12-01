@@ -3,7 +3,8 @@ import { useRouter } from "next/router"
 // eslint-disable-next-line import/no-named-as-default
 import PasswordExpiredModal from "../../../src/components/account/PasswordExpiredModal"
 import userEvent from "@testing-library/user-event"
-import { render, waitFor } from "../../../../partners/__tests__/testUtils"
+import { waitFor } from "../../../../partners/__tests__/testUtils"
+import { render, screen } from "@testing-library/react"
 
 jest.mock("next/router", () => ({
   useRouter: jest.fn(),
@@ -25,30 +26,30 @@ describe("PasswordExpiredModal", () => {
   })
 
   it("renders modal when isOpen is true", () => {
-    const { getByText, getByRole } = render(
+      render(
       <PasswordExpiredModal isOpen={true} onClose={mockOnClose} />
     )
 
-    expect(getByRole("heading", { level: 1, name: "Password Expired" })).toBeInTheDocument()
+    expect(screen.getByRole("heading", { level: 1, name: "Password Expired" })).toBeInTheDocument()
     expect(
-      getByText("The password tied to your account has expired. Please reset it to continue.")
+      screen.getByText("The password tied to your account has expired. Please reset it to continue.")
     ).toBeInTheDocument()
-    expect(getByRole("button", { name: "Continue" })).toBeInTheDocument()
+    expect(screen.getByRole("button", { name: "Continue" })).toBeInTheDocument()
   })
 
   it("does not render modal content when isOpen is false", () => {
-    const { queryByText } = render(<PasswordExpiredModal isOpen={false} onClose={mockOnClose} />)
+    render(<PasswordExpiredModal isOpen={false} onClose={mockOnClose} />)
 
-    expect(queryByText("Password Expired")).not.toBeInTheDocument()
+    expect(screen.queryByText("Password Expired")).not.toBeInTheDocument()
     expect(
       queryByText("The password tied to your account has expired. Please reset it to continue.")
     ).not.toBeInTheDocument()
   })
 
   it("navigates to forgot-password page when continue button is clicked", async () => {
-    const { getByRole } = render(<PasswordExpiredModal isOpen={true} onClose={mockOnClose} />)
+    render(<PasswordExpiredModal isOpen={true} onClose={mockOnClose} />)
 
-    const continueButton = getByRole("button", { name: "Continue" })
+    const continueButton = screen.getByRole("button", { name: "Continue" })
     await userEvent.click(continueButton)
 
     await waitFor(() => {
