@@ -74,7 +74,6 @@ const FormForgotPassword = ({
               register={register}
               onChange={() => networkError.reset()}
               labelClassName={"text__caps-spaced"}
-              className="rounded-full"
             />
             <div className="flex gap-6">
               <Button
