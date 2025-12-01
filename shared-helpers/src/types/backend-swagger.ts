@@ -1312,6 +1312,28 @@ export class MultiselectQuestionsService {
     })
   }
   /**
+   * Update multiselect question
+   */
+  update(
+    params: {
+      /** requestBody */
+      body?: MultiselectQuestionUpdate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<MultiselectQuestion> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/multiselectQuestions"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
    * Delete multiselect question by id
    */
   delete(
@@ -1327,6 +1349,66 @@ export class MultiselectQuestionsService {
       const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
 
       let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Re-activate a multiselect question
+   */
+  reActivate(
+    params: {
+      /** requestBody */
+      body?: IdDTO
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/multiselectQuestions/reActivate"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Retire a multiselect question
+   */
+  retire(
+    params: {
+      /** requestBody */
+      body?: IdDTO
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/multiselectQuestions/retire"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Trigger the retirement of multiselect questions cron job
+   */
+  retireMultiselectQuestions(options: IRequestOptions = {}): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/multiselectQuestions/retireMultiselectQuestions"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = null
 
       configs.data = data
 
@@ -1350,28 +1432,6 @@ export class MultiselectQuestionsService {
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
 
       /** 适配ios13，get请求不允许带body */
-
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Update multiselect question
-   */
-  update(
-    params: {
-      /** requestBody */
-      body?: MultiselectQuestionUpdate
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<MultiselectQuestion> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/multiselectQuestions/{multiselectQuestionId}"
-
-      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
 
       axios(configs, resolve, reject)
     })
@@ -3156,6 +3216,35 @@ export interface IdDTO {
   ordinal?: number
 }
 
+export interface ListingDocuments {
+  /**  */
+  socialSecurityCard?: boolean
+
+  /**  */
+  currentLandlordReference?: boolean
+
+  /**  */
+  birthCertificate?: boolean
+
+  /**  */
+  previousLandlordReference?: boolean
+
+  /**  */
+  governmentIssuedId?: boolean
+
+  /**  */
+  proofOfAssets?: boolean
+
+  /**  */
+  proofOfIncome?: boolean
+
+  /**  */
+  residencyDocuments?: boolean
+
+  /**  */
+  proofOfCustody?: boolean
+}
+
 export interface MultiselectLink {
   /**  */
   title: string
@@ -3165,6 +3254,15 @@ export interface MultiselectLink {
 }
 
 export interface MultiselectOption {
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
   /**  */
   collectAddress?: boolean
 
@@ -3215,6 +3313,9 @@ export interface MultiselectOption {
 
   /**  */
   text: string
+
+  /**  */
+  untranslatedName?: string
 
   /**  */
   untranslatedText?: string
@@ -3274,6 +3375,9 @@ export interface MultiselectQuestion {
 
   /**  */
   text: string
+
+  /**  */
+  untranslatedName?: string
 
   /**  */
   untranslatedText?: string
@@ -3729,6 +3833,9 @@ export interface UnitGroup {
   flatRentValueTo?: number
 
   /**  */
+  monthlyRent?: number
+
+  /**  */
   floorMin?: number
 
   /**  */
@@ -3756,7 +3863,7 @@ export interface UnitGroup {
   sqFeetMax?: number
 
   /**  */
-  rentType?: string
+  rentType?: RentTypeEnum
 
   /**  */
   unitAccessibilityPriorityTypes?: UnitAccessibilityPriorityType
@@ -4007,6 +4114,9 @@ export interface UnitsSummary {
 
   /**  */
   flatRentValueTo?: number
+
+  /**  */
+  monthlyRent?: number
 }
 
 export interface ApplicationLotteryTotal {
@@ -4038,6 +4148,24 @@ export interface ListingNeighborhoodAmenities {
 
   /**  */
   healthCareResources?: string
+
+  /**  */
+  shoppingVenues?: string
+
+  /**  */
+  hospitals?: string
+
+  /**  */
+  seniorCenters?: string
+
+  /**  */
+  recreationalFacilities?: string
+
+  /**  */
+  playgrounds?: string
+
+  /**  */
+  busStops?: string
 }
 
 export interface Listing {
@@ -4078,6 +4206,9 @@ export interface Listing {
   developer?: string
 
   /**  */
+  listingFileNumber?: string
+
+  /**  */
   householdSizeMax?: number
 
   /**  */
@@ -4115,6 +4246,9 @@ export interface Listing {
 
   /**  */
   applicationFee?: string
+
+  /**  */
+  creditScreeningFee?: string
 
   /**  */
   applicationOrganization?: string
@@ -4160,12 +4294,6 @@ export interface Listing {
 
   /**  */
   depositValue?: number
-
-  /**  */
-  depositRangeMin?: number
-
-  /**  */
-  depositRangeMax?: number
 
   /**  */
   depositHelperText?: string
@@ -4214,6 +4342,9 @@ export interface Listing {
 
   /**  */
   requiredDocuments?: string
+
+  /**  */
+  requiredDocumentsList?: ListingDocuments
 
   /**  */
   specialNotes?: string
@@ -4390,6 +4521,9 @@ export interface Listing {
   marketingSeason?: MarketingSeasonEnum
 
   /**  */
+  marketingMonth?: MonthEnum
+
+  /**  */
   homeType?: HomeTypeEnum
 
   /**  */
@@ -4536,6 +4670,9 @@ export interface UnitGroupCreate {
   flatRentValueTo?: number
 
   /**  */
+  monthlyRent?: number
+
+  /**  */
   floorMin?: number
 
   /**  */
@@ -4563,7 +4700,7 @@ export interface UnitGroupCreate {
   sqFeetMax?: number
 
   /**  */
-  rentType?: string
+  rentType?: RentTypeEnum
 
   /**  */
   unitAccessibilityPriorityTypes?: IdDTO
@@ -4671,6 +4808,9 @@ export interface UnitsSummaryCreate {
 
   /**  */
   flatRentValueTo?: number
+
+  /**  */
+  monthlyRent?: number
 }
 
 export interface ListingImageCreate {
@@ -4765,6 +4905,9 @@ export interface ListingCreate {
   developer?: string
 
   /**  */
+  listingFileNumber?: string
+
+  /**  */
   householdSizeMax?: number
 
   /**  */
@@ -4802,6 +4945,9 @@ export interface ListingCreate {
 
   /**  */
   applicationFee?: string
+
+  /**  */
+  creditScreeningFee?: string
 
   /**  */
   applicationOrganization?: string
@@ -4847,12 +4993,6 @@ export interface ListingCreate {
 
   /**  */
   depositValue?: number
-
-  /**  */
-  depositRangeMin?: number
-
-  /**  */
-  depositRangeMax?: number
 
   /**  */
   depositHelperText?: string
@@ -4901,6 +5041,9 @@ export interface ListingCreate {
 
   /**  */
   requiredDocuments?: string
+
+  /**  */
+  requiredDocumentsList?: ListingDocuments
 
   /**  */
   specialNotes?: string
@@ -4991,6 +5134,9 @@ export interface ListingCreate {
 
   /**  */
   marketingSeason?: MarketingSeasonEnum
+
+  /**  */
+  marketingMonth?: MonthEnum
 
   /**  */
   homeType?: HomeTypeEnum
@@ -5105,6 +5251,9 @@ export interface ListingUpdate {
   developer?: string
 
   /**  */
+  listingFileNumber?: string
+
+  /**  */
   householdSizeMax?: number
 
   /**  */
@@ -5142,6 +5291,9 @@ export interface ListingUpdate {
 
   /**  */
   applicationFee?: string
+
+  /**  */
+  creditScreeningFee?: string
 
   /**  */
   applicationOrganization?: string
@@ -5187,12 +5339,6 @@ export interface ListingUpdate {
 
   /**  */
   depositValue?: number
-
-  /**  */
-  depositRangeMin?: number
-
-  /**  */
-  depositRangeMax?: number
 
   /**  */
   depositHelperText?: string
@@ -5241,6 +5387,9 @@ export interface ListingUpdate {
 
   /**  */
   requiredDocuments?: string
+
+  /**  */
+  requiredDocumentsList?: ListingDocuments
 
   /**  */
   specialNotes?: string
@@ -5331,6 +5480,9 @@ export interface ListingUpdate {
 
   /**  */
   marketingSeason?: MarketingSeasonEnum
+
+  /**  */
+  marketingMonth?: MonthEnum
 
   /**  */
   homeType?: HomeTypeEnum
@@ -6075,6 +6227,9 @@ export interface JurisdictionCreate {
 
   /**  */
   requiredListingFields: []
+
+  /**  */
+  visibleNeighborhoodAmenities: NeighborhoodAmenitiesEnum[]
 }
 
 export interface JurisdictionUpdate {
@@ -6134,6 +6289,9 @@ export interface JurisdictionUpdate {
 
   /**  */
   requiredListingFields: []
+
+  /**  */
+  visibleNeighborhoodAmenities: NeighborhoodAmenitiesEnum[]
 }
 
 export interface FeatureFlag {
@@ -6228,6 +6386,65 @@ export interface Jurisdiction {
 
   /**  */
   requiredListingFields: []
+
+  /**  */
+  visibleNeighborhoodAmenities: NeighborhoodAmenitiesEnum[]
+}
+
+export interface MultiselectOptionCreate {
+  /**  */
+  collectAddress?: boolean
+
+  /**  */
+  collectName?: boolean
+
+  /**  */
+  collectRelationship?: boolean
+
+  /**  */
+  description?: string
+
+  /**  */
+  exclusive?: boolean
+
+  /**  */
+  isOptOut?: boolean
+
+  /**  */
+  links?: MultiselectLink[]
+
+  /**  */
+  mapLayerId?: string
+
+  /**  */
+  mapPinPosition?: string
+
+  /**  */
+  multiselectQuestion?: IdDTO
+
+  /**  */
+  name?: string
+
+  /**  */
+  ordinal: number
+
+  /**  */
+  radiusSize?: number
+
+  /**  */
+  shouldCollectAddress?: boolean
+
+  /**  */
+  shouldCollectName?: boolean
+
+  /**  */
+  shouldCollectRelationship?: boolean
+
+  /**  */
+  text: string
+
+  /**  */
+  validationMethod?: ValidationMethodEnum
 }
 
 export interface MultiselectQuestionCreate {
@@ -6253,16 +6470,13 @@ export interface MultiselectQuestionCreate {
   links?: MultiselectLink[]
 
   /**  */
-  multiselectOptions?: MultiselectOption[]
-
-  /**  */
   name?: string
 
   /**  */
-  options?: MultiselectOption[]
+  optOutText?: string
 
   /**  */
-  optOutText?: string
+  status: MultiselectQuestionsStatusEnum
 
   /**  */
   subText?: string
@@ -6272,6 +6486,71 @@ export interface MultiselectQuestionCreate {
 
   /**  */
   untranslatedOptOutText?: string
+
+  /**  */
+  multiselectOptions?: MultiselectOptionCreate[]
+
+  /**  */
+  options?: MultiselectOptionCreate[]
+}
+
+export interface MultiselectOptionUpdate {
+  /**  */
+  collectAddress?: boolean
+
+  /**  */
+  collectName?: boolean
+
+  /**  */
+  collectRelationship?: boolean
+
+  /**  */
+  description?: string
+
+  /**  */
+  exclusive?: boolean
+
+  /**  */
+  isOptOut?: boolean
+
+  /**  */
+  links?: MultiselectLink[]
+
+  /**  */
+  mapLayerId?: string
+
+  /**  */
+  mapPinPosition?: string
+
+  /**  */
+  multiselectQuestion?: IdDTO
+
+  /**  */
+  name?: string
+
+  /**  */
+  ordinal: number
+
+  /**  */
+  radiusSize?: number
+
+  /**  */
+  shouldCollectAddress?: boolean
+
+  /**  */
+  shouldCollectName?: boolean
+
+  /**  */
+  shouldCollectRelationship?: boolean
+
+  /**  */
+  text: string
+
+  /**  */
+  validationMethod?: ValidationMethodEnum
+
+  /**  */
+  id?: string
 }
 
 export interface MultiselectQuestionUpdate {
@@ -6300,16 +6579,13 @@ export interface MultiselectQuestionUpdate {
   links?: MultiselectLink[]
 
   /**  */
-  multiselectOptions?: MultiselectOption[]
-
-  /**  */
   name?: string
 
   /**  */
-  options?: MultiselectOption[]
+  optOutText?: string
 
   /**  */
-  optOutText?: string
+  status: MultiselectQuestionsStatusEnum
 
   /**  */
   subText?: string
@@ -6319,6 +6595,12 @@ export interface MultiselectQuestionUpdate {
 
   /**  */
   untranslatedOptOutText?: string
+
+  /**  */
+  multiselectOptions?: MultiselectOptionUpdate[]
+
+  /**  */
+  options?: MultiselectOptionUpdate[]
 }
 
 export interface MultiselectQuestionQueryParams {
@@ -7720,6 +8002,11 @@ export enum UnitRentTypeEnum {
   "fixed" = "fixed",
   "percentageOfIncome" = "percentageOfIncome",
 }
+
+export enum RentTypeEnum {
+  "fixedRent" = "fixedRent",
+  "rentRange" = "rentRange",
+}
 export enum EnumUnitGroupAmiLevelMonthlyRentDeterminationType {
   "flatRent" = "flatRent",
   "percentageOfIncome" = "percentageOfIncome",
@@ -7734,6 +8021,21 @@ export enum MarketingSeasonEnum {
   "summer" = "summer",
   "fall" = "fall",
   "winter" = "winter",
+}
+
+export enum MonthEnum {
+  "january" = "january",
+  "february" = "february",
+  "march" = "march",
+  "april" = "april",
+  "may" = "may",
+  "june" = "june",
+  "july" = "july",
+  "august" = "august",
+  "september" = "september",
+  "october" = "october",
+  "november" = "november",
+  "december" = "december",
 }
 export enum EnumListingDepositType {
   "fixedDeposit" = "fixedDeposit",
@@ -7845,6 +8147,21 @@ export enum UserRoleEnum {
   "supportAdmin" = "supportAdmin",
 }
 
+export enum NeighborhoodAmenitiesEnum {
+  "groceryStores" = "groceryStores",
+  "publicTransportation" = "publicTransportation",
+  "schools" = "schools",
+  "parksAndCommunityCenters" = "parksAndCommunityCenters",
+  "pharmacies" = "pharmacies",
+  "healthCareResources" = "healthCareResources",
+  "shoppingVenues" = "shoppingVenues",
+  "hospitals" = "hospitals",
+  "seniorCenters" = "seniorCenters",
+  "recreationalFacilities" = "recreationalFacilities",
+  "playgrounds" = "playgrounds",
+  "busStops" = "busStops",
+}
+
 export enum FeatureFlagEnum {
   "disableCommonApplication" = "disableCommonApplication",
   "disableJurisdictionalAdmin" = "disableJurisdictionalAdmin",
@@ -7854,19 +8171,24 @@ export enum FeatureFlagEnum {
   "enableAdaOtherOption" = "enableAdaOtherOption",
   "enableAdditionalResources" = "enableAdditionalResources",
   "enableCompanyWebsite" = "enableCompanyWebsite",
+  "enableCreditScreeningFee" = "enableCreditScreeningFee",
   "enableFullTimeStudentQuestion" = "enableFullTimeStudentQuestion",
   "enableGeocodingPreferences" = "enableGeocodingPreferences",
   "enableGeocodingRadiusMethod" = "enableGeocodingRadiusMethod",
   "enableHomeType" = "enableHomeType",
+  "enableHousingDeveloperOwner" = "enableHousingDeveloperOwner",
   "enableIsVerified" = "enableIsVerified",
   "enableLimitedHowDidYouHear" = "enableLimitedHowDidYouHear",
   "enableListingFavoriting" = "enableListingFavoriting",
+  "enableListingFileNumber" = "enableListingFileNumber",
   "enableListingFiltering" = "enableListingFiltering",
   "enableListingOpportunity" = "enableListingOpportunity",
   "enableListingPagination" = "enableListingPagination",
   "enableListingUpdatedAt" = "enableListingUpdatedAt",
   "enableMarketingStatus" = "enableMarketingStatus",
+  "enableMarketingStatusMonths" = "enableMarketingStatusMonths",
   "enableNeighborhoodAmenities" = "enableNeighborhoodAmenities",
+  "enableNeighborhoodAmenitiesDropdown" = "enableNeighborhoodAmenitiesDropdown",
   "enableNonRegulatedListings" = "enableNonRegulatedListings",
   "enablePartnerDemographics" = "enablePartnerDemographics",
   "enablePartnerSettings" = "enablePartnerSettings",

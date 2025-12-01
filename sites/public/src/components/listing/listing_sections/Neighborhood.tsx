@@ -4,9 +4,12 @@ import { HeadingGroup, Link } from "@bloom-housing/ui-seeds"
 import { oneLineAddress } from "@bloom-housing/shared-helpers"
 import {
   Address,
+  FeatureFlagEnum,
+  Jurisdiction,
   ListingNeighborhoodAmenities,
+  NeighborhoodAmenitiesEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { getGenericAddress } from "../../../lib/helpers"
+import { getGenericAddress, isFeatureFlagOn } from "../../../lib/helpers"
 import { CollapsibleSection } from "../../../patterns/CollapsibleSection"
 import styles from "../ListingViewSeeds.module.scss"
 
@@ -16,6 +19,8 @@ type NeighborhoodProps = {
   neighborhood?: string
   neighborhoodAmenities?: ListingNeighborhoodAmenities
   region?: string
+  visibleNeighborhoodAmenities?: NeighborhoodAmenitiesEnum[]
+  jurisdiction?: Jurisdiction
 }
 
 export const Neighborhood = ({
@@ -24,10 +29,26 @@ export const Neighborhood = ({
   neighborhood,
   neighborhoodAmenities,
   region,
+  visibleNeighborhoodAmenities = [],
+  jurisdiction,
 }: NeighborhoodProps) => {
   const googleMapsHref = "https://www.google.com/maps/place/" + oneLineAddress(address)
+
+  const enableNeighborhoodAmenitiesDropdown = isFeatureFlagOn(
+    jurisdiction,
+    FeatureFlagEnum.enableNeighborhoodAmenitiesDropdown
+  )
+
+  const isAmenityVisible = (amenity: string) =>
+    visibleNeighborhoodAmenities.includes(amenity as NeighborhoodAmenitiesEnum)
+
   const hasNeighborhoodAmenities = neighborhoodAmenities
-    ? Object.values(neighborhoodAmenities).some((value) => value !== null && value !== undefined)
+    ? Object.keys(neighborhoodAmenities).some(
+        (key) =>
+          neighborhoodAmenities[key] !== null &&
+          neighborhoodAmenities[key] !== undefined &&
+          isAmenityVisible(key)
+      )
     : null
 
   const showSection = address || neighborhood || region || hasNeighborhoodAmenities
@@ -69,14 +90,22 @@ export const Neighborhood = ({
         {hasNeighborhoodAmenities && (
           <>
             <HeadingGroup
-              heading={t("listings.sections.neighborhoodAmenitiesTitle")}
-              subheading={t("listings.sections.neighborhoodAmenitiesSubtitle")}
+              heading={
+                enableNeighborhoodAmenitiesDropdown
+                  ? t("listings.sections.neighborhoodAmenitiesTitleAlt")
+                  : t("listings.sections.neighborhoodAmenitiesTitle")
+              }
+              subheading={
+                enableNeighborhoodAmenitiesDropdown
+                  ? t("listings.sections.neighborhoodAmenitiesSubtitleAlt")
+                  : t("listings.sections.neighborhoodAmenitiesSubtitle")
+              }
               size={"lg"}
               headingPriority={3}
               className={`${styles["heading-group"]} seeds-m-bs-section`}
             />
             {Object.keys(neighborhoodAmenities).map((amenity, index) => {
-              if (!neighborhoodAmenities[amenity]) return
+              if (!neighborhoodAmenities[amenity] || !isAmenityVisible(amenity)) return
               return (
                 <HeadingGroup
                   heading={t(`listings.amenities.${amenity}`)}

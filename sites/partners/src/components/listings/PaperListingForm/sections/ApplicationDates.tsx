@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useContext } from "react"
+import React, { useState, useMemo } from "react"
 import { useFormContext } from "react-hook-form"
 import { getDetailFieldDate, getDetailFieldTime } from "../../PaperListingDetails/sections/helpers"
 import dayjs from "dayjs"
@@ -19,24 +19,27 @@ import SectionWithGrid from "../../../shared/SectionWithGrid"
 import {
   MarketingTypeEnum,
   MarketingSeasonEnum,
-  FeatureFlagEnum,
+  MonthEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { AuthContext } from "@bloom-housing/shared-helpers"
 import { fieldMessage, fieldHasError, getLabel } from "../../../../lib/helpers"
 import styles from "../ListingForm.module.scss"
 
 type ApplicationDatesProps = {
+  enableMarketingStatus?: boolean
+  enableMarketingStatusMonths?: boolean
   openHouseEvents: TempEvent[]
-  setOpenHouseEvents: (events: TempEvent[]) => void
-  listing?: FormListing
   requiredFields: string[]
+  listing?: FormListing
+  setOpenHouseEvents: (events: TempEvent[]) => void
 }
 
 const ApplicationDates = ({
+  enableMarketingStatus,
+  enableMarketingStatusMonths,
   listing,
   openHouseEvents,
-  setOpenHouseEvents,
   requiredFields,
+  setOpenHouseEvents,
 }: ApplicationDatesProps) => {
   const openHouseHeaders = {
     date: "t.date",
@@ -45,13 +48,6 @@ const ApplicationDates = ({
     url: "t.link",
     action: "",
   }
-
-  const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
-
-  const enableMarketingStatus = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableMarketingStatus,
-    listing?.jurisdictions?.id
-  )
 
   const openHouseTableData = useMemo(() => {
     return openHouseEvents.map((event) => {
@@ -227,59 +223,73 @@ const ApplicationDates = ({
             {marketingTypeChoice === MarketingTypeEnum.comingSoon && (
               <Grid.Cell>
                 <div className={"flex flex-col"}>
-                  <p className={"field-label pb-0"}>{t("listings.marketingSection.date")}</p>
-                  <div className={"flex items-baseline h-auto"}>
-                    <div className="w-2/3">
-                      <Select
-                        id="marketingSeason"
-                        name="marketingSeason"
-                        defaultValue={listing?.marketingSeason}
-                        register={register}
-                        label={t("listings.marketingSection.seasons")}
+                  <fieldset>
+                    <legend>
+                      <p className={"field-label"}>{t("listings.marketingSection.date")}</p>
+                    </legend>
+                    <div className={"flex items-baseline h-auto"}>
+                      <div className="w-2/3">
+                        {enableMarketingStatusMonths ? (
+                          <Select
+                            id="marketingMonth"
+                            name="marketingMonth"
+                            defaultValue={listing?.marketingMonth}
+                            register={register}
+                            label={t("listings.marketingSection.month")}
+                            labelClassName="sr-only"
+                            controlClassName="control"
+                            options={["", ...Object.values(MonthEnum)]}
+                            keyPrefix={"months"}
+                          />
+                        ) : (
+                          <Select
+                            id="marketingSeason"
+                            name="marketingSeason"
+                            defaultValue={listing?.marketingSeason}
+                            register={register}
+                            label={t("listings.marketingSection.season")}
+                            labelClassName="sr-only"
+                            controlClassName="control"
+                            options={["", ...Object.values(MarketingSeasonEnum)]}
+                            keyPrefix={"seasons"}
+                          />
+                        )}
+                      </div>
+
+                      <Field
+                        name={"marketingYear"}
+                        id={"marketingYear"}
+                        label={t("listings.marketingSection.year")}
                         labelClassName="sr-only"
-                        controlClassName="control"
-                        options={[
-                          "",
-                          MarketingSeasonEnum.spring,
-                          MarketingSeasonEnum.summer,
-                          MarketingSeasonEnum.fall,
-                          MarketingSeasonEnum.winter,
-                        ]}
-                        keyPrefix="seasons"
+                        placeholder={t("account.settings.placeholders.year")}
+                        defaultValue={listing?.marketingYear}
+                        register={register}
+                        validation={{
+                          validate: {
+                            yearRange: (value: string) => {
+                              if (!value?.length) return true
+
+                              const numVal = parseInt(value)
+                              if (isNaN(numVal)) return false
+                              return !(numVal < 1900 || numVal > dayjs().year() + 10)
+                            },
+                          },
+                        }}
+                        inputProps={{
+                          onChange: (e) => {
+                            fieldHasError(errors?.marketingYear) && clearErrors("marketingYear")
+                            if (!setValue) return
+                            setValue("marketingYear", maskNumber(e.target?.value))
+                          },
+                          maxLength: 4,
+                        }}
+                        className="w-1/3"
+                        error={fieldHasError(errors?.marketingYear)}
+                        errorMessage={fieldMessage(errors?.marketingYear) || t("errors.dateError")}
                       />
                     </div>
-
-                    <Field
-                      name={"marketingYear"}
-                      id={"marketingYear"}
-                      placeholder={t("account.settings.placeholders.year")}
-                      defaultValue={listing?.marketingYear}
-                      register={register}
-                      validation={{
-                        validate: {
-                          yearRange: (value: string) => {
-                            if (!value?.length) return true
-
-                            const numVal = parseInt(value)
-                            if (isNaN(numVal)) return false
-                            return !(numVal < 1900 || numVal > dayjs().year() + 10)
-                          },
-                        },
-                      }}
-                      inputProps={{
-                        onChange: (e) => {
-                          fieldHasError(errors?.marketingYear) && clearErrors("marketingYear")
-                          if (!setValue) return
-                          setValue("marketingYear", maskNumber(e.target?.value))
-                        },
-                        maxLength: 4,
-                      }}
-                      className="w-1/3"
-                      error={fieldHasError(errors?.marketingYear)}
-                      errorMessage={fieldMessage(errors?.marketingYear) || t("errors.dateError")}
-                    />
-                  </div>
-                  <p className="field-sub-note">{t("listings.marketingSection.dateSubtitle")}</p>
+                    <p className="field-sub-note">{t("listings.marketingSection.dateSubtitle")}</p>
+                  </fieldset>
                 </div>
               </Grid.Cell>
             )}

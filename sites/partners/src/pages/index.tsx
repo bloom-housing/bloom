@@ -1,16 +1,18 @@
-import React, { useMemo, useContext } from "react"
+import React, { useMemo, useContext, useState } from "react"
 import Head from "next/head"
-import { Button, Icon } from "@bloom-housing/ui-seeds"
-import { t, AgTable, useAgTable } from "@bloom-housing/ui-components"
-import { AuthContext } from "@bloom-housing/shared-helpers"
-import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import DocumentArrowDownIcon from "@heroicons/react/24/solid/DocumentArrowDownIcon"
+import { useRouter } from "next/router"
+import { useForm } from "react-hook-form"
 import dayjs from "dayjs"
 import { ColDef, ColGroupDef } from "ag-grid-community"
+import { Button, Dialog, Grid, Icon } from "@bloom-housing/ui-seeds"
+import { t, AgTable, useAgTable, Select, Form, SelectOption } from "@bloom-housing/ui-components"
+import { AuthContext } from "@bloom-housing/shared-helpers"
+import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { useListingExport, useListingsData } from "../lib/hooks"
 import Layout from "../layouts"
 import { MetaTags } from "../components/shared/MetaTags"
 import { NavigationHeader } from "../components/shared/NavigationHeader"
-import DocumentArrowDownIcon from "@heroicons/react/24/solid/DocumentArrowDownIcon"
 
 class formatLinkCell {
   link: HTMLAnchorElement
@@ -88,6 +90,10 @@ export const getFlagInAllJurisdictions = (
   }
 }
 
+type CreateListingFormFields = {
+  jurisdiction: string
+}
+
 export default function ListingsList() {
   const metaDescription = t("pageDescription.welcome", { regionName: t("region.name") })
   const { profile, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
@@ -98,8 +104,26 @@ export default function ListingsList() {
     profile?.userRoles?.isLimitedJurisdictionalAdmin ||
     false
   const { onExport, csvExportLoading } = useListingExport()
-
+  const router = useRouter()
   const tableOptions = useAgTable()
+
+  // eslint-disable-next-line @typescript-eslint/unbound-method
+  const { register, errors, handleSubmit, clearErrors } = useForm<CreateListingFormFields>()
+
+  const [listingSelectModal, setListingSelectModal] = useState(false)
+
+  const defaultJurisdiction =
+    profile?.jurisdictions?.length === 1 ? profile.jurisdictions[0].id : null
+
+  const jurisdictions = profile?.jurisdictions || []
+
+  const jurisdictionOptions: SelectOption[] = [
+    { label: "", value: "" },
+    ...jurisdictions.map((jurisdiction) => ({
+      label: jurisdiction.name,
+      value: jurisdiction.id,
+    })),
+  ]
 
   const gridComponents = {
     ApplicationsLink,
@@ -240,6 +264,13 @@ export default function ListingsList() {
     userJurisidctionIds: profile?.jurisdictions?.map((jurisdiction) => jurisdiction.id),
   })
 
+  const onSubmit = (data: CreateListingFormFields) => {
+    void router.push({
+      pathname: "/listings/add",
+      query: { jurisdictionId: data.jurisdiction },
+    })
+  }
+
   return (
     <Layout>
       <Head>
@@ -278,7 +309,21 @@ export default function ListingsList() {
               <div className="flex gap-2 items-center">
                 {isAdmin && (
                   <>
-                    <Button size="sm" variant="primary" href="/listings/add" id="addListingButton">
+                    <Button
+                      size="sm"
+                      variant="primary"
+                      onClick={() => {
+                        if (defaultJurisdiction) {
+                          void router.push({
+                            pathname: "/listings/add",
+                            query: { jurisdictionId: defaultJurisdiction },
+                          })
+                        } else {
+                          setListingSelectModal(true)
+                        }
+                      }}
+                      id="addListingButton"
+                    >
                       {t("listings.addListing")}
                     </Button>
                     <Button
@@ -304,6 +349,66 @@ export default function ListingsList() {
           />
         </article>
       </section>
+
+      <Dialog
+        isOpen={listingSelectModal}
+        ariaLabelledBy="listing-select-dialog-header"
+        ariaDescribedBy="listing-select-dialog-content"
+        onClose={() => setListingSelectModal(false)}
+      >
+        <Form id="listing-select-form" onSubmit={handleSubmit(onSubmit)}>
+          <Dialog.Header id="listing-select-dialog-header">
+            {t("listings.selectJurisdictionTitle")}
+          </Dialog.Header>
+
+          <Dialog.Content id="listing-select-dialog-content">
+            {t("listings.selectJurisdictionContent")}
+            <Grid>
+              <Grid.Row columns={3}>
+                <Grid.Cell className={"seeds-grid-span-2"}>
+                  <div className={`${defaultJurisdiction ? "hidden" : ""} seeds-m-bs-4`}>
+                    <Select
+                      id={"jurisdiction"}
+                      defaultValue={defaultJurisdiction}
+                      name={"jurisdiction"}
+                      label={t("t.jurisdiction")}
+                      register={register}
+                      controlClassName={`control ${defaultJurisdiction ? "hidden" : ""}`}
+                      error={!!errors?.jurisdiction}
+                      errorMessage={t("errors.requiredFieldError")}
+                      keyPrefix={"jurisdictions"}
+                      options={jurisdictionOptions}
+                      validation={{ required: !defaultJurisdiction }}
+                      inputProps={{
+                        onChange: () => {
+                          clearErrors("jurisdiction")
+                        },
+                        "aria-required": true,
+                        "aria-hidden": !!defaultJurisdiction,
+                      }}
+                    />
+                  </div>
+                </Grid.Cell>
+              </Grid.Row>
+            </Grid>
+          </Dialog.Content>
+          <Dialog.Footer>
+            <Button variant="primary" size="sm" type={"submit"}>
+              {t("listings.getStarted")}
+            </Button>
+            <Button
+              variant="primary-outlined"
+              onClick={() => {
+                setListingSelectModal(false)
+              }}
+              size="sm"
+              type={"button"}
+            >
+              {t("t.cancel")}
+            </Button>
+          </Dialog.Footer>
+        </Form>
+      </Dialog>
     </Layout>
   )
 }

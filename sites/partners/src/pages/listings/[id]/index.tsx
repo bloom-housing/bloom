@@ -74,7 +74,8 @@ export default function ListingDetail(props: ListingProps) {
                 lotteryLabel:
                   listing.status === ListingsStatusEnum.closed &&
                   listing?.lotteryOptIn &&
-                  listing?.reviewOrderType === ReviewOrderTypeEnum.lottery &&
+                  (listing?.reviewOrderType === ReviewOrderTypeEnum.lottery ||
+                    listing?.reviewOrderType === ReviewOrderTypeEnum.waitlistLottery) &&
                   !profile?.userRoles?.isLimitedJurisdictionalAdmin
                     ? t("listings.lotteryTitle")
                     : undefined,
@@ -106,7 +107,7 @@ export default function ListingDetail(props: ListingProps) {
 
                 <div className="flex flex-row flex-wrap ">
                   <div className="info-card md:w-9/12 overflow-hidden">
-                    <DetailListingData />
+                    <DetailListingData showJurisdictionName={profile?.jurisdictions?.length > 1} />
                     <DetailListingNotes />
                     <DetailListingIntro />
                     <DetailListingPhotos />

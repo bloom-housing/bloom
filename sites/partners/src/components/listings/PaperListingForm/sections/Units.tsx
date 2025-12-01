@@ -8,15 +8,15 @@ import {
 } from "@bloom-housing/ui-components"
 import { Button, Dialog, Drawer, Grid, Tag } from "@bloom-housing/ui-seeds"
 import {
+  EnumListingListingType,
   EnumUnitGroupAmiLevelMonthlyRentDeterminationType,
-  FeatureFlag,
   FeatureFlagEnum,
   HomeTypeEnum,
   MinMax,
   ReviewOrderTypeEnum,
   YesNoEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { MessageContext } from "@bloom-housing/shared-helpers"
+import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
 import UnitForm from "../UnitForm"
 import { useFormContext, useWatch } from "react-hook-form"
 import { TempUnit, TempUnitGroup } from "../../../../lib/listings/formTypes"
@@ -28,45 +28,66 @@ import styles from "../ListingForm.module.scss"
 
 type UnitProps = {
   disableUnitsAccordion: boolean
-  featureFlags?: FeatureFlag[]
   requiredFields: string[]
   setUnitGroups: (unitGroups: TempUnitGroup[]) => void
   setUnits: (units: TempUnit[]) => void
   unitGroups: TempUnitGroup[]
   units: TempUnit[]
+  jurisdiction: string
 }
 
 const FormUnits = ({
   disableUnitsAccordion,
-  featureFlags,
   requiredFields,
   setUnitGroups,
   setUnits,
   unitGroups,
   units,
+  jurisdiction,
 }: UnitProps) => {
   const { addToast } = useContext(MessageContext)
+  const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
   const [unitDrawerOpen, setUnitDrawerOpen] = useState(false)
   const [unitDeleteModal, setUnitDeleteModal] = useState<number | null>(null)
   const [defaultUnit, setDefaultUnit] = useState<TempUnit | null>(null)
   const [defaultUnitGroup, setDefaultUnitGroup] = useState<TempUnitGroup | null>(null)
-  const [homeTypeEnabled, setHomeTypeEnabled] = useState(false)
 
   const formMethods = useFormContext()
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, errors, clearErrors, getValues, control, setValue } = formMethods
   const listing = getValues()
 
-  const enableSection8Question =
-    featureFlags?.find((flag) => flag.name === FeatureFlagEnum.enableSection8Question)?.active ||
-    false
+  const homeTypeEnabled = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableHomeType,
+    jurisdiction,
+    true
+  )
 
-  const enableUnitGroups =
-    featureFlags?.find((flag) => flag.name === FeatureFlagEnum.enableUnitGroups)?.active || false
+  const enableSection8Question = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableSection8Question,
+    jurisdiction,
+    true
+  )
+
+  const enableUnitGroups = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableUnitGroups,
+    jurisdiction,
+    true
+  )
+
+  const enableNonRegulatedListings = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableNonRegulatedListings,
+    jurisdiction
+  )
 
   const listingAvailability = useWatch({
     control,
     name: "listingAvailabilityQuestion",
+  })
+
+  const listingType = useWatch({
+    control,
+    name: "listingType",
   })
 
   const homeTypes = [
@@ -124,16 +145,10 @@ const FormUnits = ({
 
   // If hometype feature flag is not turned on for selected jurisdiction we need to reset the value
   useEffect(() => {
-    if (featureFlags) {
-      const isHomeTypeEnabled = featureFlags.some(
-        (flag) => flag.name === FeatureFlagEnum.enableHomeType
-      )
-      setHomeTypeEnabled(isHomeTypeEnabled)
-      if (!isHomeTypeEnabled) {
-        setValue("homeType", "")
-      }
+    if (!homeTypeEnabled) {
+      setValue("homeType", "")
     }
-  }, [featureFlags, setValue])
+  }, [homeTypeEnabled, setValue])
 
   const editUnit = useCallback(
     (tempId: number) => {
@@ -379,14 +394,18 @@ const FormUnits = ({
                     value: "availableUnits",
                     id: "availableUnits",
                     dataTestId: "listingAvailability.availableUnits",
-                    defaultChecked: listing?.reviewOrderType !== ReviewOrderTypeEnum.waitlist,
+                    defaultChecked:
+                      listing?.reviewOrderType !== ReviewOrderTypeEnum.waitlist &&
+                      listing?.reviewOrderType !== ReviewOrderTypeEnum.waitlistLottery,
                   },
                   {
                     label: t("listings.waitlist.open"),
                     value: "openWaitlist",
                     id: "openWaitlist",
                     dataTestId: "listingAvailability.openWaitlist",
-                    defaultChecked: listing?.reviewOrderType === ReviewOrderTypeEnum.waitlist,
+                    defaultChecked:
+                      listing?.reviewOrderType === ReviewOrderTypeEnum.waitlist ||
+                      listing?.reviewOrderType === ReviewOrderTypeEnum.waitlistLottery,
                   },
                 ]}
               />
@@ -491,6 +510,7 @@ const FormUnits = ({
         </Drawer.Header>
         {enableUnitGroups ? (
           <UnitGroupForm
+            jurisdiction={listing.jurisdictions?.id}
             onSubmit={(unitGroup) => {
               saveUnitGroup(unitGroup)
             }}
@@ -501,9 +521,13 @@ const FormUnits = ({
             defaultUnitGroup={defaultUnitGroup}
             draft={!unitGroups.some((unitGroup) => unitGroup.tempId === defaultUnitGroup?.tempId)}
             nextId={nextId}
+            isNonRegulated={
+              enableNonRegulatedListings && listingType === EnumListingListingType.nonRegulated
+            }
           />
         ) : (
           <UnitForm
+            jurisdiction={listing.jurisdictions?.id}
             onSubmit={(unit) => {
               saveUnit(unit)
             }}

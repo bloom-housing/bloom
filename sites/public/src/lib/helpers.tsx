@@ -29,6 +29,7 @@ import {
   MarketingSeasonEnum,
   MarketingTypeEnum,
   ModificationEnum,
+  MonthEnum,
   ReviewOrderTypeEnum,
   UnitGroupsSummarized,
   UnitsSummarized,
@@ -188,6 +189,7 @@ export const getStatusPrefix = (
       case ReviewOrderTypeEnum.lottery:
         return { label: t("listings.lottery"), variant: "primary" }
       case ReviewOrderTypeEnum.waitlist:
+      case ReviewOrderTypeEnum.waitlistLottery:
         return { label: t("listings.waitlist.open"), variant: "secondary" }
       default:
         return { label: t("listings.applicationFCFS"), variant: "primary" }
@@ -199,8 +201,10 @@ export const getListingStatusMessageContent = (
   status: ListingsStatusEnum,
   applicationDueDate: Date,
   enableMarketingStatus: boolean,
+  enableMarketingStatusMonths: boolean,
   marketingType: MarketingTypeEnum,
   marketingSeason: MarketingSeasonEnum,
+  marketingMonth: MonthEnum,
   marketingYear: number,
   hideTime?: boolean
 ) => {
@@ -227,7 +231,11 @@ export const getListingStatusMessageContent = (
     }
 
     if (marketingType === MarketingTypeEnum.comingSoon && enableMarketingStatus) {
-      content = getApplicationSeason(marketingSeason, marketingYear)
+      content = getApplicationSeason(
+        !enableMarketingStatusMonths ? marketingSeason : null,
+        enableMarketingStatusMonths ? marketingMonth : null,
+        marketingYear
+      )
     }
   }
   return content
@@ -244,6 +252,7 @@ export const getListingStatusMessage = (
   if (!listing) return
 
   const enableMarketingStatus = isFeatureFlagOn(jurisdiction, "enableMarketingStatus")
+  const enableMarketingStatusMonths = isFeatureFlagOn(jurisdiction, "enableMarketingStatusMonths")
   const enableUnitGroups = isFeatureFlagOn(jurisdiction, "enableUnitGroups")
   const prefix = getStatusPrefix(listing, enableMarketingStatus, enableUnitGroups)
 
@@ -296,8 +305,10 @@ export const getListingStatusMessage = (
                 listing.status,
                 listing.applicationDueDate,
                 enableMarketingStatus,
+                enableMarketingStatusMonths,
                 listing.marketingType,
                 listing.marketingSeason,
+                listing.marketingMonth,
                 listing.marketingYear,
                 hideTime
               )}
@@ -311,16 +322,20 @@ export const getListingStatusMessage = (
 
 export const getApplicationSeason = (
   marketingSeason: MarketingSeasonEnum,
+  marketingMonth: MonthEnum,
   marketingYear: number
 ) => {
   let label = t("listings.apply.applicationSeason")
+  if (marketingMonth) {
+    label = label.concat(` ${t(`months.${marketingMonth}`)}`)
+  }
   if (marketingSeason) {
     label = label.concat(` ${t(`seasons.${marketingSeason}`)}`)
   }
   if (marketingYear) {
     label = label.concat(` ${marketingYear}`)
   }
-  return marketingSeason || marketingYear ? label : null
+  return marketingSeason || marketingYear || marketingMonth ? label : null
 }
 
 export const getListings = (listings) => {

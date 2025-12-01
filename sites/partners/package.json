@@ -11,7 +11,7 @@
     "registry": "https://registry.npmjs.org"
   },
   "scripts": {
-    "dev": "NODE_OPTIONS='--inspect=9231' next -p ${NEXTJS_PORT:-3001}",
+    "dev": "NODE_OPTIONS=\"--inspect=9231\" next -p ${NEXTJS_PORT:-3001}",
     "build": "next build",
     "test": "concurrently \"yarn dev\" \"cypress open\"",
     "test:unit": "jest -w 1",
@@ -31,7 +31,7 @@
   "dependencies": {
     "@bloom-housing/shared-helpers": "^7.7.1",
     "@bloom-housing/ui-components": "12.7.7",
-    "@bloom-housing/ui-seeds": "2.0.0",
+    "@bloom-housing/ui-seeds": "2.0.3",
     "@heroicons/react": "^2.2.0",
     "@mapbox/mapbox-sdk": "^0.13.0",
     "@tiptap/core": "^2.24.0",
@@ -46,7 +46,7 @@
     "axios-cookiejar-support": "^5.0.5",
     "clone-deep": "^4.0.1",
     "dayjs": "^1.10.7",
-    "dotenv": "^8.2.0",
+    "dotenv": "^17.2.3",
     "markdown-to-jsx": "^7.7.12",
     "nanoid": "^3.1.12",
     "next": "^14.2.28",

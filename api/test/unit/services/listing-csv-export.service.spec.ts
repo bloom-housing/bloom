@@ -1,6 +1,12 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { Logger } from '@nestjs/common';
-import { ListingEventsTypeEnum, ListingsStatusEnum } from '@prisma/client';
+import {
+  ListingEventsTypeEnum,
+  ListingsStatusEnum,
+  MarketingSeasonEnum,
+  MarketingTypeEnum,
+  MonthEnum,
+} from '@prisma/client';
 import dayjs from 'dayjs';
 import { randomUUID } from 'crypto';
 import fs from 'fs';
@@ -8,6 +14,10 @@ import { ListingCsvExporterService } from '../../../src/services/listing-csv-exp
 import { PrismaService } from '../../../src/services/prisma.service';
 import Listing from '../../../src/dtos/listings/listing.dto';
 import { User } from '../../../src/dtos/users/user.dto';
+import { Unit } from '../../../src/dtos/units/unit.dto';
+import { FeatureFlagEnum } from '../../../src/enums/feature-flags/feature-flags-enum';
+import { Jurisdiction } from '../../../src/dtos/jurisdictions/jurisdiction.dto';
+import { FeatureFlag } from '../../../src/dtos/feature-flags/feature-flag.dto';
 
 describe('Testing listing csv export service', () => {
   let service: ListingCsvExporterService;
@@ -33,109 +43,256 @@ describe('Testing listing csv export service', () => {
     });
     jest.restoreAllMocks();
   });
+  const timestamp = new Date(1759430299657);
 
-  describe('crateCsv', () => {
-    it('should create the listing csv', async () => {
-      const timestamp = new Date(1759430299657);
-      const unit = {
-        number: 1,
-        numBathrooms: 2,
-        floor: 3,
-        sqFeet: 1200,
-        minOccupancy: 1,
-        maxOccupancy: 8,
-        amiPercentage: 80,
-        monthlyRentAsPercentOfIncome: null,
-        monthlyRent: 4000,
-        unitTypes: { id: randomUUID(), name: 'studio' },
-        amiChart: { id: randomUUID(), name: 'Ami Chart Name' },
-      };
-      const mockListing = {
-        id: 'listing1-ID',
-        name: `listing1-Name`,
+  const mockBaseJurisdiction: Jurisdiction = {
+    id: 'jurisdiction-ID',
+    name: 'jurisdiction-Name',
+    createdAt: timestamp,
+    updatedAt: timestamp,
+    featureFlags: [],
+    languages: ['en', 'es'],
+    multiselectQuestions: [],
+    publicUrl: '',
+    emailFromAddress: '',
+    rentalAssistanceDefault: '',
+    whatToExpect: '',
+    whatToExpectAdditionalText: '',
+    whatToExpectUnderConstruction: '',
+    allowSingleUseCodeLogin: false,
+    listingApprovalPermissions: [],
+    duplicateListingPermissions: [],
+    requiredListingFields: [],
+    visibleNeighborhoodAmenities: [],
+  };
+
+  const mockBaseUnit: Unit = {
+    number: '1',
+    numBathrooms: 2,
+    floor: 3,
+    sqFeet: '1200',
+    minOccupancy: 1,
+    maxOccupancy: 8,
+    amiPercentage: '80',
+    monthlyRentAsPercentOfIncome: null,
+    monthlyRent: '4000',
+    unitTypes: {
+      id: randomUUID(),
+      name: 'studio',
+      createdAt: timestamp,
+      updatedAt: timestamp,
+      numBedrooms: 1,
+    },
+    amiChart: {
+      id: randomUUID(),
+      name: 'Ami Chart Name',
+      createdAt: timestamp,
+      updatedAt: timestamp,
+      items: [],
+      jurisdictions: null,
+    },
+    id: 'unit1-ID',
+    createdAt: timestamp,
+    updatedAt: timestamp,
+  };
+  type MockListing = Listing & {
+    userAccounts: User[];
+  };
+  const mockBaseListing: MockListing = {
+    id: 'listing1-ID',
+    name: `listing1-Name`,
+    createdAt: timestamp,
+    jurisdictions: mockBaseJurisdiction,
+    status: ListingsStatusEnum.active,
+    publishedAt: timestamp,
+    contentUpdatedAt: timestamp,
+    developer: 'developer',
+    listingsBuildingAddress: {
+      street: '123 main st',
+      city: 'Bloomington',
+      state: 'BL',
+      zipCode: '01234',
+      latitude: 100.5,
+      longitude: 200.5,
+      id: 'listingbuildingaddress1-ID',
+      createdAt: timestamp,
+      updatedAt: timestamp,
+    },
+    neighborhood: 'neighborhood',
+    yearBuilt: 2025,
+    listingEvents: [
+      {
+        type: ListingEventsTypeEnum.publicLottery,
+        startTime: timestamp,
+        endTime: dayjs(timestamp).add(2, 'hours').toDate(),
+        note: 'lottery note',
+        id: 'listingevent1-ID',
         createdAt: timestamp,
-        jurisdictions: { id: 'jurisdiction-ID', name: 'jurisdiction-Name' },
-        status: ListingsStatusEnum.active,
-        publishedAt: timestamp,
-        contentUpdatedAt: timestamp,
-        developer: 'developer',
-        listingsBuildingAddress: {
-          street: '123 main st',
-          city: 'Bloomington',
-          state: 'BL',
-          zipCode: '01234',
-          latitude: 'latitude',
-          longitude: 'longitude',
-        },
-        neighborhood: 'neighborhood',
-        yearBuilt: '2025',
-        listingEvents: [
-          {
-            type: ListingEventsTypeEnum.publicLottery,
-            startTime: timestamp,
-            endTime: dayjs(timestamp).add(2, 'hours').toDate(),
-            note: 'lottery note',
-          },
-        ],
-        applicationFee: 45,
-        depositHelperText: 'sample deposit helper text',
-        depositMin: 12,
-        depositMax: 120,
-        costsNotIncluded: 'sample costs not included',
-        amenities: 'sample amenities',
-        accessibility: 'sample accessibility',
-        unitAmenities: 'sample unit amenities',
-        smokingPolicy: 'sample smoking policy',
-        petPolicy: 'sample pet policy',
-        servicesOffered: 'sample services offered',
-        leasingAgentName: 'Name of leasing agent',
-        leasingAgentEmail: 'Email of leasing agent',
-        leasingAgentTitle: 'Title of leasing agent',
-        leasingAgentOfficeHours: 'office hours',
-        listingsLeasingAgentAddress: {
-          street: '321 main st',
-          city: 'Bloomington',
-          state: 'BL',
-          zipCode: '01234',
-          latitude: 'latitude',
-          longitude: 'longitude',
-        },
-        listingsApplicationMailingAddress: {
-          street: '456 main st',
-          city: 'Bloomington',
-          state: 'BL',
-          zipCode: '01234',
-          latitude: 'latitude',
-          longitude: 'longitude',
-        },
-        listingsApplicationPickUpAddress: {
-          street: '789 main st',
-          city: 'Bloomington',
-          state: 'BL',
-          zipCode: '01234',
-          latitude: 'latitude',
-          longitude: 'longitude',
-        },
-        applicationDueDate: timestamp,
-        listingMultiselectQuestions: [],
-        applicationMethods: [],
-        userAccounts: [{ firstName: 'userFirst', lastName: 'userLast' }],
-        units: [unit],
-      };
+        updatedAt: timestamp,
+      },
+    ],
+    applicationFee: '45',
+    depositHelperText: 'sample deposit helper text',
+    depositMin: '12',
+    depositMax: '120',
+    costsNotIncluded: 'sample costs not included',
+    amenities: 'sample amenities',
+    accessibility: 'sample accessibility',
+    unitAmenities: 'sample unit amenities',
+    smokingPolicy: 'sample smoking policy',
+    petPolicy: 'sample pet policy',
+    servicesOffered: 'sample services offered',
+    leasingAgentName: 'Name of leasing agent',
+    leasingAgentEmail: 'Email of leasing agent',
+    leasingAgentTitle: 'Title of leasing agent',
+    leasingAgentOfficeHours: 'office hours',
+    listingsLeasingAgentAddress: {
+      street: '321 main st',
+      city: 'Bloomington',
+      state: 'BL',
+      zipCode: '01234',
+      latitude: 100.5,
+      longitude: 200.5,
+      id: 'listingleasingagentaddress1-ID',
+      createdAt: timestamp,
+      updatedAt: timestamp,
+    },
+    listingsApplicationMailingAddress: {
+      street: '456 main st',
+      city: 'Bloomington',
+      state: 'BL',
+      zipCode: '01234',
+      latitude: 100.5,
+      longitude: 200.5,
+      id: 'listingmailingaddress1-ID',
+      createdAt: timestamp,
+      updatedAt: timestamp,
+    },
+    listingsApplicationPickUpAddress: {
+      street: '789 main st',
+      city: 'Bloomington',
+      state: 'BL',
+      zipCode: '01234',
+      latitude: 100.5,
+      longitude: 200.5,
+      id: 'listingpickupaddress1-ID',
+      createdAt: timestamp,
+      updatedAt: timestamp,
+    },
+    applicationDueDate: timestamp,
+    listingMultiselectQuestions: [],
+    applicationMethods: [],
+    units: [mockBaseUnit],
+    displayWaitlistSize: false,
+    showWaitlist: false,
+    referralApplication: null,
+    assets: [],
+    applicationLotteryTotals: null,
+    updatedAt: timestamp,
+    marketingType: MarketingTypeEnum.comingSoon,
+    marketingSeason: MarketingSeasonEnum.summer,
+    marketingMonth: MonthEnum.july,
+    marketingYear: 2025,
+    userAccounts: [
+      {
+        firstName: 'userFirst',
+        lastName: 'userLast',
+      } as User,
+    ],
+  };
+
+  describe('createCsv', () => {
+    it('should create the listing csv with no feature flags', async () => {
       await service.createCsv('sampleFile.csv', undefined, {
-        listings: [mockListing as unknown as Listing],
-        user: { jurisdictions: [] } as unknown as User,
+        listings: [mockBaseListing],
+        user: { jurisdictions: [mockBaseJurisdiction] } as unknown as User,
       });
 
       expect(writeStream.bytesWritten).toBeGreaterThan(0);
       const content = fs.readFileSync('sampleFile.csv', 'utf8');
       // Validate headers
       expect(content).toContain(
-        'Listing Id,Created At Date,Jurisdiction,Listing Name,Listing Status,Publish Date,Last Updated,Copy or Original,Copied From,Developer,Building Street Address,Building City,Building State,Building Zip,Building Neighborhood,Building Year Built,Community Types,Latitude,Longitude,Listing Availability,Review Order,Lottery Date,Lottery Start,Lottery End,Lottery Notes,Housing Preferences,Application Fee,Deposit Helper Text,Deposit Min,Deposit Max,Deposit Type,Deposit Value,Deposit Range Min,Deposit Range Max,Costs Not Included,Property Amenities,Additional Accessibility,Unit Amenities,Smoking Policy,Pets Policy,Services Offered,Eligibility Rules - Credit History,Eligibility Rules - Rental History,Eligibility Rules - Criminal Background,Eligibility Rules - Rental Assistance,Building Selection Criteria,Important Program Rules,Required Documents,Special Notes,Waitlist,Leasing Agent Name,Leasing Agent Email,Leasing Agent Phone,Leasing Agent Title,Leasing Agent Office Hours,Leasing Agent Street Address,Leasing Agent Apt/Unit #,Leasing Agent City,Leasing Agent State,Leasing Agent Zip,Leasing Agency Mailing Address,Leasing Agency Mailing Address Street 2,Leasing Agency Mailing Address City,Leasing Agency Mailing Address State,Leasing Agency Mailing Address Zip,Leasing Agency Pickup Address,Leasing Agency Pickup Address Street 2,Leasing Agency Pickup Address City,Leasing Agency Pickup Address State,Leasing Agency Pickup Address Zip,Leasing Pick Up Office Hours,Digital Application,Digital Application URL,Paper Application,Paper Application URL,Referral Opportunity,Can applications be mailed in?,Can applications be picked up?,Can applications be dropped off?,Postmark,Additional Application Submission Notes,Application Due Date,Application Due Time,Open House,Partners Who Have Access',
+        'Listing Id,Created At Date,Jurisdiction,Listing Name,Listing Status,Publish Date,Last Updated,Copy or Original,Copied From,Developer,Building Street Address,Building City,Building State,Building Zip,Building Neighborhood,Building Year Built,Reserved Community Types,Latitude,Longitude,Number of Units,Listing Availability,Review Order,Lottery Date,Lottery Start,Lottery End,Lottery Notes,Housing Preferences,Housing Programs,Application Fee,Deposit Helper Text,Deposit Type,Deposit Value,Deposit Min,Deposit Max,Costs Not Included,Property Amenities,Additional Accessibility,Unit Amenities,Smoking Policy,Pets Policy,Services Offered,Eligibility Rules - Credit History,Eligibility Rules - Rental History,Eligibility Rules - Criminal Background,Eligibility Rules - Rental Assistance,Building Selection Criteria,Important Program Rules,Required Documents,Special Notes,Waitlist,Leasing Agent Name,Leasing Agent Email,Leasing Agent Phone,Leasing Agent Title,Leasing Agent Office Hours,Leasing Agent Street Address,Leasing Agent Apt/Unit #,Leasing Agent City,Leasing Agent State,Leasing Agent Zip,Leasing Agency Mailing Address,Leasing Agency Mailing Address Street 2,Leasing Agency Mailing Address City,Leasing Agency Mailing Address State,Leasing Agency Mailing Address Zip,Leasing Agency Pickup Address,Leasing Agency Pickup Address Street 2,Leasing Agency Pickup Address City,Leasing Agency Pickup Address State,Leasing Agency Pickup Address Zip,Leasing Pick Up Office Hours,Digital Application,Digital Application URL,Paper Application,Paper Application URL,Referral Opportunity,Can applications be mailed in?,Can applications be picked up?,Can applications be dropped off?,Postmark,Additional Application Submission Notes,Application Due Date,Application Due Time,Open House,Partners Who Have Access',
       );
       // Validate first row
       expect(content).toContain(
-        '"listing1-ID","10-02-2025 11:38:19AM PDT","jurisdiction-Name","listing1-Name","Public","10-02-2025 11:38:19AM PDT","10-02-2025 11:38:19AM PDT","Original",,"developer","123 main st","Bloomington","BL","01234","neighborhood","2025",,"latitude","longitude","Available Units",,"10-02-2025","11:38AM PDT","01:38PM PDT","lottery note",,"$45","sample deposit helper text","$12","$120",,,,,"sample costs not included","sample amenities","sample accessibility","sample unit amenities","sample smoking policy","sample pet policy","sample services offered",,,,,,,,,"No","Name of leasing agent","Email of leasing agent",,"Title of leasing agent","office hours","321 main st",,"Bloomington","BL","01234","456 main st",,"Bloomington","BL","01234","789 main st",,"Bloomington","BL","01234",,"No",,"No",,"No","No","No","No",,,"10-02-2025","11:38AM PDT",,"userFirst userLast"',
+        '"listing1-ID","10-02-2025 11:38:19AM PDT","jurisdiction-Name","listing1-Name","Public","10-02-2025 11:38:19AM PDT","10-02-2025 11:38:19AM PDT","Original",,"developer","123 main st","Bloomington","BL","01234","neighborhood","2025",,"100.5","200.5","1","Available Units",,"10-02-2025","11:38AM PDT","01:38PM PDT","lottery note",,,"$45","sample deposit helper text",,,"$12","$120","sample costs not included","sample amenities","sample accessibility","sample unit amenities","sample smoking policy","sample pet policy","sample services offered",,,,,,,,,"No","Name of leasing agent","Email of leasing agent",,"Title of leasing agent","office hours","321 main st",,"Bloomington","BL","01234","456 main st",,"Bloomington","BL","01234","789 main st",,"Bloomington","BL","01234",,"No",,"No",,"No","No","No","No",,,"10-02-2025","11:38AM PDT",,"userFirst userLast"',
+      );
+    });
+    it('should create the listing csv with marketing type seasons', async () => {
+      await service.createCsv('sampleFile.csv', undefined, {
+        listings: [
+          {
+            ...mockBaseListing,
+            marketingMonth: null,
+            showWaitlist: false,
+            referralApplication: null,
+          },
+        ],
+        user: {
+          jurisdictions: [
+            {
+              ...mockBaseJurisdiction,
+              featureFlags: [
+                {
+                  name: FeatureFlagEnum.enableMarketingStatus,
+                  active: true,
+                } as FeatureFlag,
+              ],
+            },
+          ],
+        } as unknown as User,
+      });
+
+      expect(writeStream.bytesWritten).toBeGreaterThan(0);
+      const content = fs.readFileSync('sampleFile.csv', 'utf8');
+      // Validate headers
+      expect(content).toContain(
+        'Listing Id,Created At Date,Jurisdiction,Listing Name,Listing Status,Publish Date,Last Updated,Copy or Original,Copied From,Developer,Building Street Address,Building City,Building State,Building Zip,Building Neighborhood,Building Year Built,Reserved Community Types,Latitude,Longitude,Number of Units,Listing Availability,Review Order,Lottery Date,Lottery Start,Lottery End,Lottery Notes,Housing Preferences,Housing Programs,Application Fee,Deposit Helper Text,Deposit Type,Deposit Value,Deposit Min,Deposit Max,Costs Not Included,Property Amenities,Additional Accessibility,Unit Amenities,Smoking Policy,Pets Policy,Services Offered,Eligibility Rules - Credit History,Eligibility Rules - Rental History,Eligibility Rules - Criminal Background,Eligibility Rules - Rental Assistance,Building Selection Criteria,Important Program Rules,Required Documents,Special Notes,Waitlist,Marketing Status,Marketing Season,Marketing Year,Leasing Agent Name,Leasing Agent Email,Leasing Agent Phone,Leasing Agent Title,Leasing Agent Office Hours,Leasing Agent Street Address,Leasing Agent Apt/Unit #,Leasing Agent City,Leasing Agent State,Leasing Agent Zip,Leasing Agency Mailing Address,Leasing Agency Mailing Address Street 2,Leasing Agency Mailing Address City,Leasing Agency Mailing Address State,Leasing Agency Mailing Address Zip,Leasing Agency Pickup Address,Leasing Agency Pickup Address Street 2,Leasing Agency Pickup Address City,Leasing Agency Pickup Address State,Leasing Agency Pickup Address Zip,Leasing Pick Up Office Hours,Digital Application,Digital Application URL,Paper Application,Paper Application URL,Referral Opportunity,Can applications be mailed in?,Can applications be picked up?,Can applications be dropped off?,Postmark,Additional Application Submission Notes,Application Due Date,Application Due Time,Open House,Partners Who Have Access',
+      );
+      // Validate first row
+      expect(content).toContain(
+        '"listing1-ID","10-02-2025 11:38:19AM PDT","jurisdiction-Name","listing1-Name","Public","10-02-2025 11:38:19AM PDT","10-02-2025 11:38:19AM PDT","Original",,"developer","123 main st","Bloomington","BL","01234","neighborhood","2025",,"100.5","200.5","1","Available Units",,"10-02-2025","11:38AM PDT","01:38PM PDT","lottery note",,,"$45","sample deposit helper text",,,"$12","$120","sample costs not included","sample amenities","sample accessibility","sample unit amenities","sample smoking policy","sample pet policy","sample services offered",,,,,,,,,"No","Under Construction","Summer","2025","Name of leasing agent","Email of leasing agent",,"Title of leasing agent","office hours","321 main st",,"Bloomington","BL","01234","456 main st",,"Bloomington","BL","01234","789 main st",,"Bloomington","BL","01234",,"No",,"No",,"No","No","No","No",,,"10-02-2025","11:38AM PDT",,"userFirst userLast"',
+      );
+    });
+    it('should create the listing csv with marketing type months', async () => {
+      await service.createCsv('sampleFile.csv', undefined, {
+        listings: [
+          {
+            ...mockBaseListing,
+            marketingSeason: null,
+            showWaitlist: false,
+            referralApplication: null,
+          },
+        ],
+        user: {
+          jurisdictions: [
+            {
+              ...mockBaseJurisdiction,
+              featureFlags: [
+                {
+                  name: FeatureFlagEnum.enableMarketingStatus,
+                  active: true,
+                } as FeatureFlag,
+                {
+                  name: FeatureFlagEnum.enableMarketingStatusMonths,
+                  active: true,
+                } as FeatureFlag,
+              ],
+            },
+          ],
+        } as unknown as User,
+      });
+
+      expect(writeStream.bytesWritten).toBeGreaterThan(0);
+      const content = fs.readFileSync('sampleFile.csv', 'utf8');
+      // Validate headers
+      expect(content).toContain(
+        'Listing Id,Created At Date,Jurisdiction,Listing Name,Listing Status,Publish Date,Last Updated,Copy or Original,Copied From,Developer,Building Street Address,Building City,Building State,Building Zip,Building Neighborhood,Building Year Built,Reserved Community Types,Latitude,Longitude,Number of Units,Listing Availability,Review Order,Lottery Date,Lottery Start,Lottery End,Lottery Notes,Housing Preferences,Housing Programs,Application Fee,Deposit Helper Text,Deposit Type,Deposit Value,Deposit Min,Deposit Max,Costs Not Included,Property Amenities,Additional Accessibility,Unit Amenities,Smoking Policy,Pets Policy,Services Offered,Eligibility Rules - Credit History,Eligibility Rules - Rental History,Eligibility Rules - Criminal Background,Eligibility Rules - Rental Assistance,Building Selection Criteria,Important Program Rules,Required Documents,Special Notes,Waitlist,Marketing Status,Marketing Month,Marketing Year,Leasing Agent Name,Leasing Agent Email,Leasing Agent Phone,Leasing Agent Title,Leasing Agent Office Hours,Leasing Agent Street Address,Leasing Agent Apt/Unit #,Leasing Agent City,Leasing Agent State,Leasing Agent Zip,Leasing Agency Mailing Address,Leasing Agency Mailing Address Street 2,Leasing Agency Mailing Address City,Leasing Agency Mailing Address State,Leasing Agency Mailing Address Zip,Leasing Agency Pickup Address,Leasing Agency Pickup Address Street 2,Leasing Agency Pickup Address City,Leasing Agency Pickup Address State,Leasing Agency Pickup Address Zip,Leasing Pick Up Office Hours,Digital Application,Digital Application URL,Paper Application,Paper Application URL,Referral Opportunity,Can applications be mailed in?,Can applications be picked up?,Can applications be dropped off?,Postmark,Additional Application Submission Notes,Application Due Date,Application Due Time,Open House,Partners Who Have Access',
+      );
+      // Validate first row
+      expect(content).toContain(
+        '"listing1-ID","10-02-2025 11:38:19AM PDT","jurisdiction-Name","listing1-Name","Public","10-02-2025 11:38:19AM PDT","10-02-2025 11:38:19AM PDT","Original",,"developer","123 main st","Bloomington","BL","01234","neighborhood","2025",,"100.5","200.5","1","Available Units",,"10-02-2025","11:38AM PDT","01:38PM PDT","lottery note",,,"$45","sample deposit helper text",,,"$12","$120","sample costs not included","sample amenities","sample accessibility","sample unit amenities","sample smoking policy","sample pet policy","sample services offered",,,,,,,,,"No","Under Construction","July","2025","Name of leasing agent","Email of leasing agent",,"Title of leasing agent","office hours","321 main st",,"Bloomington","BL","01234","456 main st",,"Bloomington","BL","01234","789 main st",,"Bloomington","BL","01234",,"No",,"No",,"No","No","No","No",,,"10-02-2025","11:38AM PDT",,"userFirst userLast"',
       );
     });
     it.todo('should create the listing csv with feature flagged columns');

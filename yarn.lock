@@ -1041,10 +1041,10 @@
     tailwindcss-rtl "^0.9.0"
     typesafe-actions "^5.1.0"
 
-"@bloom-housing/ui-seeds@2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@bloom-housing/ui-seeds/-/ui-seeds-2.0.0.tgz#3da460d3858029462bc0ac96769feda71f7dc772"
-  integrity sha512-G5n3SrvjJSYHITymnW138auqSBJeGSjqY3wTt4zUxScV0wzTZNBSfjSjDaYkvIUxYMv10YtrFXpvxcXVm/K3ng==
+"@bloom-housing/ui-seeds@2.0.3":
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/@bloom-housing/ui-seeds/-/ui-seeds-2.0.3.tgz#bf49806647418a6f44648c39cbed0e17a75329de"
+  integrity sha512-a8bXSBOBCXwFg2PrkRC6BxFWwpRvnkZPQGqnGwUeznMBiuwcKkbhOwEwb1uY0xIlLhh7JZqQ0rl/u1V4yTmt4Q==
   dependencies:
     "@fortawesome/fontawesome-svg-core" "^6.3.0"
     "@fortawesome/react-fontawesome" "^0.2.0"
@@ -5147,10 +5147,10 @@ dot-prop@^5.1.0:
   dependencies:
     is-obj "^2.0.0"
 
-dotenv@^8.2.0:
-  version "8.2.0"
-  resolved "https://registry.npmjs.org/dotenv/-/dotenv-8.2.0.tgz"
-  integrity sha512-8sJ78ElpbDJBHNeBzUbUVLsqKdccaa/BXF1uPTw3GrvQTBgrQrtObr2mUrE38vzYd8cEv+m/JBfDLioYcfXoaw==
+dotenv@^17.2.3:
+  version "17.2.3"
+  resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-17.2.3.tgz#ad995d6997f639b11065f419a22fabf567cdb9a2"
+  integrity sha512-JVUnt+DUIzu87TABbhPmNfVdBDt18BLOWjMUFJMSi/Qqg7NTYtabbvSNJGOJ7afbRuv9D/lngizHtP7QyLQ+9w==
 
 dunder-proto@^1.0.0, dunder-proto@^1.0.1:
   version "1.0.1"

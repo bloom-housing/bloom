@@ -1,4 +1,4 @@
-import React, { useContext } from "react"
+import React from "react"
 import dayjs from "dayjs"
 import utc from "dayjs/plugin/utc"
 dayjs.extend(utc)
@@ -6,10 +6,8 @@ import { Editor } from "@tiptap/react"
 import { useFormContext, useWatch } from "react-hook-form"
 import { t, Field, FieldGroup, Textarea, DateField, TimeField } from "@bloom-housing/ui-components"
 import { Grid } from "@bloom-housing/ui-seeds"
-import { FormListing } from "../../../../lib/listings/formTypes"
-import { AuthContext, getLotteryEvent } from "@bloom-housing/shared-helpers"
+import { getLotteryEvent } from "@bloom-housing/shared-helpers"
 import {
-  FeatureFlagEnum,
   Listing,
   ReviewOrderTypeEnum,
   YesNoEnum,
@@ -18,24 +16,32 @@ import { fieldHasError, fieldMessage, getLabel } from "../../../../lib/helpers"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 import { TextEditor } from "../../../shared/TextEditor"
 import styles from "../ListingForm.module.scss"
+import { FormListing } from "../../../../lib/listings/formTypes"
 
 type RankingsAndResultsProps = {
+  enableUnitGroups?: boolean
+  enableWaitlistAdditionalFields?: boolean
+  enableWaitlistLottery?: boolean
+  enableWhatToExpectAdditionalField?: boolean
   isAdmin?: boolean
   listing?: FormListing
   requiredFields: string[]
-  whatToExpectEditor: Editor
   whatToExpectAdditionalTextEditor: Editor
+  whatToExpectEditor: Editor
 }
 
 const RankingsAndResults = ({
+  enableUnitGroups,
+  enableWaitlistAdditionalFields,
+  enableWaitlistLottery,
+  enableWhatToExpectAdditionalField,
   isAdmin,
   listing,
   requiredFields,
-  whatToExpectEditor,
   whatToExpectAdditionalTextEditor,
+  whatToExpectEditor,
 }: RankingsAndResultsProps) => {
   const formMethods = useFormContext()
-  const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, setValue, watch, control, errors } = formMethods
@@ -66,30 +72,13 @@ const RankingsAndResults = ({
     name: "listingAvailabilityQuestion",
   })
 
-  const selectedJurisdictionId: string = useWatch({
-    control,
-    name: "jurisdictions.id",
-  })
-
-  const enableWaitlistAdditionalFields = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableWaitlistAdditionalFields,
-    selectedJurisdictionId
-  )
-
-  const enableUnitGroups = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableUnitGroups,
-    selectedJurisdictionId
-  )
-
-  const enableWhatToExpectAdditionalField = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableWhatToExpectAdditionalField,
-    selectedJurisdictionId
-  )
+  const showFSFCLotterySection =
+    (enableWaitlistLottery && waitlistOpen) ||
+    (availabilityQuestion !== "openWaitlist" && !enableWaitlistLottery)
 
   // Ensure the lottery fields only show when it's "available units" listing
   const showLotteryFields =
-    (availabilityQuestion !== "openWaitlist" || enableUnitGroups) &&
-    reviewOrder === "reviewOrderLottery"
+    (showFSFCLotterySection || enableUnitGroups) && reviewOrder === "reviewOrderLottery"
 
   const yesNoRadioOptions = [
     {
@@ -108,7 +97,7 @@ const RankingsAndResults = ({
         heading={t("listings.sections.rankingsResultsTitle")}
         subheading={t("listings.sections.rankingsResultsSubtitle")}
       >
-        {(availabilityQuestion !== "openWaitlist" || enableUnitGroups) && (
+        {(showFSFCLotterySection || enableUnitGroups) && (
           <Grid.Row columns={2} className={"flex items-center"}>
             <Grid.Cell>
               <FieldGroup
@@ -129,7 +118,9 @@ const RankingsAndResults = ({
                     label: t("listings.lotteryTitle"),
                     value: "reviewOrderLottery",
                     id: "reviewOrderLottery",
-                    defaultChecked: listing?.reviewOrderType === ReviewOrderTypeEnum.lottery,
+                    defaultChecked:
+                      listing?.reviewOrderType === ReviewOrderTypeEnum.lottery ||
+                      listing?.reviewOrderType === ReviewOrderTypeEnum.waitlistLottery,
                   },
                 ]}
               />

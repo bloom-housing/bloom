@@ -36,6 +36,7 @@ import { MostRecentApplicationQueryParams } from '../dtos/applications/most-rece
 import { PublicAppsViewQueryParams } from '../dtos/applications/public-apps-view-params.dto';
 import { ApplicationsFilterEnum } from '../enums/applications/filter-enum';
 import { PublicAppsViewResponse } from '../dtos/applications/public-apps-view-response.dto';
+import dayjs from 'dayjs';
 
 export const view: Partial<
   Record<ApplicationViews, Prisma.ApplicationsInclude>
@@ -636,137 +637,168 @@ export class ApplicationService {
       }
     }
 
-    const rawApplication = await this.prisma.applications.create({
-      data: {
-        ...dto,
-        confirmationCode: this.generateConfirmationCode(),
-        applicant: dto.applicant
-          ? {
-              create: {
-                ...dto.applicant,
-                applicantAddress: {
-                  create: {
-                    ...dto.applicant.applicantAddress,
-                  },
-                },
-                applicantWorkAddress: {
-                  create: {
-                    ...dto.applicant.applicantWorkAddress,
-                  },
-                },
-                firstName: dto.applicant.firstName?.trim(),
-                lastName: dto.applicant.lastName?.trim(),
-                birthDay: dto.applicant.birthDay
-                  ? Number(dto.applicant.birthDay)
-                  : undefined,
-                birthMonth: dto.applicant.birthMonth
-                  ? Number(dto.applicant.birthMonth)
-                  : undefined,
-                birthYear: dto.applicant.birthYear
-                  ? Number(dto.applicant.birthYear)
-                  : undefined,
-                fullTimeStudent: dto.applicant.fullTimeStudent,
-              },
-            }
-          : undefined,
-        accessibility: dto.accessibility
-          ? {
-              create: {
-                ...dto.accessibility,
-              },
-            }
-          : undefined,
-        alternateContact: dto.alternateContact
-          ? {
-              create: {
-                ...dto.alternateContact,
-                address: {
-                  create: {
-                    ...dto.alternateContact.address,
-                  },
-                },
-              },
-            }
-          : undefined,
-        applicationsAlternateAddress: dto.applicationsAlternateAddress
-          ? {
-              create: {
-                ...dto.applicationsAlternateAddress,
-              },
-            }
-          : undefined,
-        applicationsMailingAddress: dto.applicationsMailingAddress
-          ? {
-              create: {
-                ...dto.applicationsMailingAddress,
-              },
-            }
-          : undefined,
-        listings: dto.listings
-          ? {
-              connect: {
-                id: dto.listings.id,
-              },
-            }
-          : undefined,
-        demographics: dto.demographics
-          ? {
-              create: {
-                ...dto.demographics,
-              },
-            }
-          : undefined,
-        preferredUnitTypes: dto.preferredUnitTypes
-          ? {
-              connect: dto.preferredUnitTypes.map((unitType) => ({
-                id: unitType.id,
-              })),
-            }
-          : undefined,
-        householdMember: dto.householdMember
-          ? {
-              create: dto.householdMember.map((member) => ({
-                ...member,
-                sameAddress: member.sameAddress || YesNoEnum.no,
-                workInRegion: member.workInRegion || YesNoEnum.no,
-                householdMemberAddress: {
-                  create: {
-                    ...member.householdMemberAddress,
-                  },
-                },
-                householdMemberWorkAddress: {
-                  create: {
-                    ...member.householdMemberWorkAddress,
-                  },
-                },
-                firstName: member.firstName?.trim(),
-                lastName: member.lastName?.trim(),
-                birthDay: member.birthDay ? Number(member.birthDay) : undefined,
-                birthMonth: member.birthMonth
-                  ? Number(member.birthMonth)
-                  : undefined,
-                birthYear: member.birthYear
-                  ? Number(member.birthYear)
-                  : undefined,
-                fullTimeStudent: member.fullTimeStudent,
-              })),
-            }
-          : undefined,
-        programs: dto.programs as unknown as Prisma.JsonArray,
-        preferences: dto.preferences as unknown as Prisma.JsonArray,
-        userAccounts: requestingUser
-          ? {
-              connect: {
-                id: requestingUser.id,
-              },
-            }
-          : undefined,
+    // If a new application comes in after close and PII needs to be deleted
+    let expireAfterDate = undefined;
+    if (
+      listing.status === ListingsStatusEnum.closed &&
+      process.env.APPLICATION_DAYS_TILL_EXPIRY &&
+      !isNaN(Number(process.env.APPLICATION_DAYS_TILL_EXPIRY))
+    ) {
+      expireAfterDate = dayjs(listing.closedAt)
+        .add(Number(process.env.APPLICATION_DAYS_TILL_EXPIRY), 'days')
+        .toDate();
+    }
 
-        // TODO: Temporary until after MSQ refactor
-        applicationSelections: undefined,
-      },
-      include: view.details,
-    });
+    const transactions = [];
+    // Set all previous applications for the user to not be the newest
+    if (requestingUser?.id) {
+      transactions.push(
+        this.prisma.applications.updateMany({
+          data: { isNewest: false },
+          where: { userId: requestingUser.id, isNewest: true },
+        }),
+      );
+    }
+    transactions.push(
+      this.prisma.applications.create({
+        data: {
+          ...dto,
+          isNewest: true,
+          confirmationCode: this.generateConfirmationCode(),
+          applicant: dto.applicant
+            ? {
+                create: {
+                  ...dto.applicant,
+                  applicantAddress: {
+                    create: {
+                      ...dto.applicant.applicantAddress,
+                    },
+                  },
+                  applicantWorkAddress: {
+                    create: {
+                      ...dto.applicant.applicantWorkAddress,
+                    },
+                  },
+                  firstName: dto.applicant.firstName?.trim(),
+                  lastName: dto.applicant.lastName?.trim(),
+                  birthDay: dto.applicant.birthDay
+                    ? Number(dto.applicant.birthDay)
+                    : undefined,
+                  birthMonth: dto.applicant.birthMonth
+                    ? Number(dto.applicant.birthMonth)
+                    : undefined,
+                  birthYear: dto.applicant.birthYear
+                    ? Number(dto.applicant.birthYear)
+                    : undefined,
+                  fullTimeStudent: dto.applicant.fullTimeStudent,
+                },
+              }
+            : undefined,
+          accessibility: dto.accessibility
+            ? {
+                create: {
+                  ...dto.accessibility,
+                },
+              }
+            : undefined,
+          alternateContact: dto.alternateContact
+            ? {
+                create: {
+                  ...dto.alternateContact,
+                  address: {
+                    create: {
+                      ...dto.alternateContact.address,
+                    },
+                  },
+                },
+              }
+            : undefined,
+          applicationsAlternateAddress: dto.applicationsAlternateAddress
+            ? {
+                create: {
+                  ...dto.applicationsAlternateAddress,
+                },
+              }
+            : undefined,
+          applicationsMailingAddress: dto.applicationsMailingAddress
+            ? {
+                create: {
+                  ...dto.applicationsMailingAddress,
+                },
+              }
+            : undefined,
+          listings: dto.listings
+            ? {
+                connect: {
+                  id: dto.listings.id,
+                },
+              }
+            : undefined,
+          demographics: dto.demographics
+            ? {
+                create: {
+                  ...dto.demographics,
+                },
+              }
+            : undefined,
+          preferredUnitTypes: dto.preferredUnitTypes
+            ? {
+                connect: dto.preferredUnitTypes.map((unitType) => ({
+                  id: unitType.id,
+                })),
+              }
+            : undefined,
+          householdMember: dto.householdMember
+            ? {
+                create: dto.householdMember.map((member) => ({
+                  ...member,
+                  sameAddress: member.sameAddress || YesNoEnum.no,
+                  workInRegion: member.workInRegion || YesNoEnum.no,
+                  householdMemberAddress: {
+                    create: {
+                      ...member.householdMemberAddress,
+                    },
+                  },
+                  householdMemberWorkAddress: {
+                    create: {
+                      ...member.householdMemberWorkAddress,
+                    },
+                  },
+                  firstName: member.firstName?.trim(),
+                  lastName: member.lastName?.trim(),
+                  birthDay: member.birthDay
+                    ? Number(member.birthDay)
+                    : undefined,
+                  birthMonth: member.birthMonth
+                    ? Number(member.birthMonth)
+                    : undefined,
+                  birthYear: member.birthYear
+                    ? Number(member.birthYear)
+                    : undefined,
+                  fullTimeStudent: member.fullTimeStudent,
+                })),
+              }
+            : undefined,
+          programs: dto.programs as unknown as Prisma.JsonArray,
+          preferences: dto.preferences as unknown as Prisma.JsonArray,
+          userAccounts: requestingUser
+            ? {
+                connect: {
+                  id: requestingUser.id,
+                },
+              }
+            : undefined,
+          expireAfter: expireAfterDate,
+
+          // TODO: Temporary until after MSQ refactor
+          applicationSelections: undefined,
+        },
+        include: view.details,
+      }),
+    );
+
+    const prismaTransactions = await this.prisma.$transaction(transactions);
+    const rawApplication = prismaTransactions[prismaTransactions.length - 1];
 
     const mappedApplication = mapTo(Application, rawApplication);
     if (dto.applicant.emailAddress && forPublic) {

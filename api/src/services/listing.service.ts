@@ -172,6 +172,7 @@ includeViews.full = {
   listingsApplicationDropOffAddress: true,
   listingsApplicationMailingAddress: true,
   requestedChangesUser: true,
+  requiredDocumentsList: true,
   units: {
     include: {
       unitAmiChartOverrides: true,
@@ -547,9 +548,12 @@ export class ListingService implements OnModuleInit {
                 };
               } else if (availability === FilterAvailabilityEnum.waitlistOpen) {
                 const builtFilter = buildFilter({
-                  $comparison: Compare['='],
+                  $comparison: Compare.IN,
                   $include_nulls: false,
-                  value: ReviewOrderTypeEnum.waitlist,
+                  value: [
+                    ReviewOrderTypeEnum.waitlist,
+                    ReviewOrderTypeEnum.waitlistLottery,
+                  ],
                   key: ListingFilterKeys.availabilities,
                   caseSensitive: true,
                 });
@@ -663,9 +667,12 @@ export class ListingService implements OnModuleInit {
           FilterAvailabilityEnum.waitlistOpen
         ) {
           const builtFilter = buildFilter({
-            $comparison: filter.$comparison,
+            $comparison: Compare.IN,
             $include_nulls: false,
-            value: ReviewOrderTypeEnum.waitlist,
+            value: [
+              ReviewOrderTypeEnum.waitlist,
+              ReviewOrderTypeEnum.waitlistLottery,
+            ],
             key: ListingFilterKeys.availability,
             caseSensitive: true,
           });
@@ -1315,6 +1322,11 @@ export class ListingService implements OnModuleInit {
               })),
             }
           : undefined,
+        requiredDocumentsList: dto.requiredDocumentsList
+          ? {
+              create: { ...dto.requiredDocumentsList },
+            }
+          : undefined,
         listingEvents: dto.listingEvents
           ? {
               create: dto.listingEvents.map((event) => ({
@@ -1503,6 +1515,7 @@ export class ListingService implements OnModuleInit {
                 rentType: group.rentType,
                 flatRentValueFrom: group.flatRentValueFrom,
                 flatRentValueTo: group.flatRentValueTo,
+                monthlyRent: group.monthlyRent,
                 totalAvailable: group.totalAvailable,
                 totalCount: group.totalCount,
                 unitGroupAmiLevels: {
@@ -2193,6 +2206,17 @@ export class ListingService implements OnModuleInit {
                 },
               }
             : undefined,
+          requiredDocumentsList: dto.requiredDocumentsList
+            ? {
+                upsert: {
+                  where: {
+                    id: storedListing.requiredDocumentsList?.id,
+                  },
+                  create: { ...incomingDto.requiredDocumentsList },
+                  update: { ...incomingDto.requiredDocumentsList },
+                },
+              }
+            : undefined,
           // Three options for the building selection criteria file
           // create new one, connect existing one, or deleted (disconnect)
           listingsBuildingSelectionCriteriaFile:
@@ -2352,6 +2376,7 @@ export class ListingService implements OnModuleInit {
                   rentType: group.rentType,
                   flatRentValueFrom: group.flatRentValueFrom,
                   flatRentValueTo: group.flatRentValueTo,
+                  monthlyRent: group.monthlyRent,
                   sqFeetMin: group.sqFeetMin,
                   sqFeetMax: group.sqFeetMax,
                   totalCount: group.totalCount,
@@ -2478,6 +2503,28 @@ export class ListingService implements OnModuleInit {
       throw new HttpException('listing failed to save', 500);
     }
 
+    // Incoming update removes the requiredDocumentsList. Need to disconnect before deleting
+    if (
+      !incomingDto.requiredDocumentsList &&
+      storedListing.requiredDocumentsList?.id
+    ) {
+      await this.prisma.listings.update({
+        data: {
+          requiredDocumentsList: {
+            disconnect: {
+              id: storedListing.requiredDocumentsList.id,
+            },
+          },
+        },
+        where: { id: storedListing.id },
+      });
+      await this.prisma.listingDocuments.delete({
+        where: {
+          id: storedListing.requiredDocumentsList.id,
+        },
+      });
+    }
+
     const listingApprovalPermissions = (
       await this.prisma.jurisdictions.findFirst({
         where: { id: incomingDto.jurisdictions.id },
@@ -2494,11 +2541,11 @@ export class ListingService implements OnModuleInit {
         jurisId: incomingDto.jurisdictions.id,
       });
 
-    // if listing is closed for the first time the application flag set job needs to run
     if (
       storedListing.status === ListingsStatusEnum.active &&
       incomingDto.status === ListingsStatusEnum.closed
     ) {
+      // if listing is closed for the first time the application flag set job needs to run
       if (
         process.env.DUPLICATES_CLOSE_DATE &&
         dayjs(process.env.DUPLICATES_CLOSE_DATE, 'YYYY-MM-DD HH:mm Z') <
@@ -2508,6 +2555,9 @@ export class ListingService implements OnModuleInit {
       } else {
         await this.afsService.process(incomingDto.id);
       }
+
+      // if the listing is closed for the first time the expire_after value should be set on all applications
+      void this.setExpireAfterValueOnApplications(rawListing.id);
     }
 
     await this.cachePurge(
@@ -2619,6 +2669,26 @@ export class ListingService implements OnModuleInit {
     return mapTo(Listing, listingsRaw);
   };
 
+  setExpireAfterValueOnApplications = async (listingId: string) => {
+    if (
+      process.env.APPLICATION_DAYS_TILL_EXPIRY &&
+      !isNaN(Number(process.env.APPLICATION_DAYS_TILL_EXPIRY))
+    ) {
+      const expireAfterDate = dayjs(new Date())
+        .add(Number(process.env.APPLICATION_DAYS_TILL_EXPIRY), 'days')
+        .toDate();
+      const expiredApplications = await this.prisma.applications.updateMany({
+        data: { expireAfter: expireAfterDate },
+        where: { listingId: listingId },
+      });
+      this.logger.warn(
+        `setting expireAfter of ${expireAfterDate.toDateString()} on ${
+          expiredApplications.count
+        } applications for listing ${listingId}`,
+      );
+    }
+  };
+
   /**
     runs the job to auto close listings that are passed their due date
     will call the the cache purge to purge all listings as long as updates had to be made
@@ -2678,6 +2748,9 @@ export class ListingService implements OnModuleInit {
         ListingsStatusEnum.active,
         '',
       );
+      for (const listing of listingIds) {
+        await this.setExpireAfterValueOnApplications(listing);
+      }
     }
 
     return {

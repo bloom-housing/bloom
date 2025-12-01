@@ -14,15 +14,9 @@ import styles from "../ListingForm.module.scss"
 type SelectAndOrderSection = MultiselectQuestion
 
 type SelectAndOrderProps = {
-  listingData: SelectAndOrderSection[]
-  setListingData: (listingData: SelectAndOrderSection[]) => void
-  title: string
-  subtitle: string
-  editText: string
+  formKey: string
   addText: string
-  drawerTitle: string
-  drawerSubtitle?: string
-  drawerButtonText: string
+  applicationSection: MultiselectQuestionsApplicationSectionEnum
   dataFetcher: (
     jurisdiction?: string,
     applicationSection?: MultiselectQuestionsApplicationSectionEnum
@@ -31,25 +25,33 @@ type SelectAndOrderProps = {
     loading: boolean
     error: any
   }
-  formKey: string
-  applicationSection: MultiselectQuestionsApplicationSectionEnum
+  drawerButtonText: string
+  drawerSubtitle?: string
+  drawerTitle: string
+  editText: string
+  jurisdiction: string
+  listingData: SelectAndOrderSection[]
+  setListingData: (listingData: SelectAndOrderSection[]) => void
   subNote?: string
+  subtitle: string
+  title: string
 }
 
 const SelectAndOrder = ({
+  addText,
   applicationSection,
+  dataFetcher,
+  drawerButtonText,
+  drawerSubtitle,
+  drawerTitle,
+  editText,
+  formKey,
+  jurisdiction,
   listingData,
   setListingData,
-  title,
-  subtitle,
-  editText,
-  addText,
-  drawerTitle,
-  drawerSubtitle,
-  drawerButtonText,
-  dataFetcher,
-  formKey,
   subNote,
+  subtitle,
+  title,
 }: SelectAndOrderProps) => {
   const [tableDrawer, setTableDrawer] = useState<boolean | null>(null)
   const [selectDrawer, setSelectDrawer] = useState<boolean | null>(null)
@@ -59,7 +61,7 @@ const SelectAndOrder = ({
 
   const formMethods = useFormContext()
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, getValues, watch, setValue } = formMethods
+  const { register, getValues, setValue } = formMethods
 
   const deleteItem = useCallback(
     (item: SelectAndOrderSection, setRootData?: boolean) => {
@@ -165,8 +167,6 @@ const SelectAndOrder = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dragOrder])
-
-  const jurisdiction: string = watch("jurisdictions.id")
 
   const { data: fetchedData = [] } = dataFetcher(
     jurisdiction,
@@ -363,59 +363,55 @@ const SelectAndOrder = ({
         <Drawer.Content>
           <Card>
             <Card.Section>
-              {jurisdiction
-                ? fetchedData.map((item, index) => {
-                    const previewShown = openPreviews.some((preview) => preview === index)
-                    return (
-                      <Grid key={index}>
-                        <Grid.Row>
-                          <Grid.Cell>
-                            <Field
-                              className={`font-semibold ${styles["label-option"]}`}
-                              id={`${formKey}.${item.id}`}
-                              name={`${formKey}.${item.id}`}
-                              type="checkbox"
-                              label={item.text}
-                              register={register}
-                              inputProps={{
-                                defaultChecked: draftListingData.some(
-                                  (existingItem) => existingItem.id === item.id
-                                ),
-                              }}
-                            />
-                            {getPreviewSection(previewShown, index, item)}
-                          </Grid.Cell>
-                        </Grid.Row>
-                      </Grid>
-                    )
-                  })
-                : t("listings.selectJurisdiction")}
+              {fetchedData.map((item, index) => {
+                const previewShown = openPreviews.some((preview) => preview === index)
+                return (
+                  <Grid key={index}>
+                    <Grid.Row>
+                      <Grid.Cell>
+                        <Field
+                          className={`font-semibold ${styles["label-option"]}`}
+                          id={`${formKey}.${item.id}`}
+                          name={`${formKey}.${item.id}`}
+                          type="checkbox"
+                          label={item.text}
+                          register={register}
+                          inputProps={{
+                            defaultChecked: draftListingData.some(
+                              (existingItem) => existingItem.id === item.id
+                            ),
+                          }}
+                        />
+                        {getPreviewSection(previewShown, index, item)}
+                      </Grid.Cell>
+                    </Grid.Row>
+                  </Grid>
+                )
+              })}
             </Card.Section>
           </Card>
         </Drawer.Content>
-        {jurisdiction && (
-          <Drawer.Footer>
-            <Button
-              id="addPreferenceSaveButton"
-              type="button"
-              variant="primary"
-              onClick={() => {
-                const formData = getValues()
-                const formItems = []
-                fetchedData.forEach((uniqueItem) => {
-                  if (formData[formKey] && formData[formKey][uniqueItem.id]) {
-                    formItems.push(uniqueItem)
-                  }
-                })
-                setDraftListingData(formItems)
-                setSelectDrawer(null)
-                setOpenPreviews([])
-              }}
-            >
-              {t("t.save")}
-            </Button>
-          </Drawer.Footer>
-        )}
+        <Drawer.Footer>
+          <Button
+            id="addPreferenceSaveButton"
+            type="button"
+            variant="primary"
+            onClick={() => {
+              const formData = getValues()
+              const formItems = []
+              fetchedData.forEach((uniqueItem) => {
+                if (formData[formKey] && formData[formKey][uniqueItem.id]) {
+                  formItems.push(uniqueItem)
+                }
+              })
+              setDraftListingData(formItems)
+              setSelectDrawer(null)
+              setOpenPreviews([])
+            }}
+          >
+            {t("t.save")}
+          </Button>
+        </Drawer.Footer>
       </Drawer>
     </>
   )
