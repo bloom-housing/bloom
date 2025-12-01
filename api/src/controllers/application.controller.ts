@@ -272,7 +272,7 @@ export class ApplicationController {
     operationId: 'removePIICronJob',
   })
   @ApiOkResponse({ type: SuccessDTO })
-  async process(): Promise<SuccessDTO> {
+  async removePIICronJob(): Promise<SuccessDTO> {
     return await this.applicationService.removePIICronJon();
   }
 

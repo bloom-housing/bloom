@@ -40,6 +40,7 @@ import { PublicAppsViewQueryParams } from '../dtos/applications/public-apps-view
 import { ApplicationsFilterEnum } from '../enums/applications/filter-enum';
 import { PublicAppsViewResponse } from '../dtos/applications/public-apps-view-response.dto';
 import { CronJobService } from './cron-job.service';
+import { DefaultArgs } from '@prisma/client/runtime/library';
 
 export const view: Partial<
   Record<ApplicationViews, Prisma.ApplicationsInclude>
@@ -1112,6 +1113,20 @@ export class ApplicationService {
     });
   }
 
+  addressDeletionData = (id: string) => {
+    return this.prisma.address.update({
+      data: {
+        latitude: null,
+        longitude: null,
+        street: null,
+        street2: null,
+      },
+      where: {
+        id: id,
+      },
+    });
+  };
+
   /*
    * Remove all PII fields from the passed in application
    */
@@ -1150,31 +1165,20 @@ export class ApplicationService {
     if (!application) return;
 
     const transactions = [];
-    const addressDeletionData = (id: string) => {
-      return this.prisma.address.update({
-        data: {
-          latitude: null,
-          longitude: null,
-          street: null,
-          street2: null,
-        },
-        where: {
-          id: id,
-        },
-      });
-    };
 
     if (application.mailingAddressId) {
-      transactions.push(addressDeletionData(application.mailingAddressId));
+      transactions.push(this.addressDeletionData(application.mailingAddressId));
     }
 
     if (application.applicant?.addressId) {
-      transactions.push(addressDeletionData(application.applicant?.addressId));
+      transactions.push(
+        this.addressDeletionData(application.applicant?.addressId),
+      );
     }
 
     if (application.applicant?.workAddressId) {
       transactions.push(
-        addressDeletionData(application.applicant?.workAddressId),
+        this.addressDeletionData(application.applicant?.workAddressId),
       );
     }
 
@@ -1200,7 +1204,7 @@ export class ApplicationService {
 
     if (application.alternateContact?.mailingAddressId) {
       transactions.push(
-        addressDeletionData(application.alternateContact.mailingAddressId),
+        this.addressDeletionData(application.alternateContact.mailingAddressId),
       );
     }
 
@@ -1222,10 +1226,12 @@ export class ApplicationService {
 
     for (const householdMember of application.householdMember) {
       if (householdMember.addressId) {
-        transactions.push(addressDeletionData(householdMember.addressId));
+        transactions.push(this.addressDeletionData(householdMember.addressId));
       }
       if (householdMember.workAddressId) {
-        transactions.push(addressDeletionData(householdMember.workAddressId));
+        transactions.push(
+          this.addressDeletionData(householdMember.workAddressId),
+        );
       }
 
       transactions.push(
