@@ -35,6 +35,7 @@ import { ApplicationMethod } from '../dtos/application-methods/application-metho
 import Unit from '../dtos/units/unit.dto';
 import Listing from '../dtos/listings/listing.dto';
 import { mapTo } from '../utilities/mapTo';
+import { Asset } from '../../src/dtos/assets/asset.dto';
 import { ListingMultiselectQuestion } from '../dtos/listings/listing-multiselect-question.dto';
 import { ListingUtilities } from '../dtos/listings/listing-utility.dto';
 import { ListingFeatures } from '../dtos/listings/listing-feature.dto';
@@ -52,7 +53,6 @@ import {
 } from '../utilities/feature-flag-utilities';
 import { UnitGroupSummary } from '../dtos/unit-groups/unit-group-summary.dto';
 import { addUnitGroupsSummarized } from '../utilities/unit-groups-transformations';
-import { Asset } from 'src/dtos/assets/asset.dto';
 
 includeViews.csv = {
   listingMultiselectQuestions: {
