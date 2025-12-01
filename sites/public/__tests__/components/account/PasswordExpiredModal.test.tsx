@@ -29,7 +29,7 @@ describe("PasswordExpiredModal", () => {
       <PasswordExpiredModal isOpen={true} onClose={mockOnClose} />
     )
 
-    expect(getByText("Password Expired")).toBeInTheDocument()
+    expect(getByRole("heading", { level: 1, name: "Password Expired" })).toBeInTheDocument()
     expect(
       getByText("The password tied to your account has expired. Please reset it to continue.")
     ).toBeInTheDocument()
