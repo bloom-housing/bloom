@@ -31,6 +31,7 @@ import { downloadExternalPDF, isFeatureFlagOn } from "../../lib/helpers"
 import { CardList, ContentCardProps } from "../../patterns/CardList"
 import { OrderedCardList } from "../../patterns/OrderedCardList"
 import { ReadMore } from "../../patterns/ReadMore"
+import { DateSectionFlyer } from "./listing_sections/DateSection"
 
 export const getFilteredMultiselectQuestions = (
   multiselectQuestions: ListingMultiselectQuestion[],
@@ -595,6 +596,45 @@ export const getAdditionalInformation = (listing: Listing) => {
       description: <ReadMore content={listing.specialNotes} />,
     })
   return cardContent
+}
+
+export const getMarketingFlyers = (
+  listing: Listing,
+  jurisdiction?: Jurisdiction
+): DateSectionFlyer[] => {
+  const enableMarketingFlyer = isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableMarketingFlyer)
+  if (!enableMarketingFlyer) {
+    return []
+  }
+
+  const getFlyerUrl = (file?: { fileId?: string }, url?: string) => {
+    if (file?.fileId) {
+      return cloudinaryPdfFromId(file.fileId, process.env.cloudinaryCloudName)
+    }
+    return url
+  }
+
+  const marketingFlyers: DateSectionFlyer[] = []
+  const marketingFlyerUrl = getFlyerUrl(listing.listingsMarketingFlyerFile, listing.marketingFlyer)
+  const accessibleMarketingFlyerUrl = getFlyerUrl(
+    listing.listingsAccessibleMarketingFlyerFile,
+    listing.accessibleMarketingFlyer
+  )
+
+  if (marketingFlyerUrl) {
+    marketingFlyers.push({
+      url: marketingFlyerUrl,
+      label: t("listings.openHouseAndMarketing.marketingFlyerLink"),
+    })
+  }
+  if (accessibleMarketingFlyerUrl) {
+    marketingFlyers.push({
+      url: accessibleMarketingFlyerUrl,
+      label: t("listings.openHouseAndMarketing.accessibleMarketingFlyerLink"),
+    })
+  }
+
+  return marketingFlyers
 }
 
 interface PaperApplicationDialogProps {

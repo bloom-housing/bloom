@@ -6,13 +6,19 @@ import { ListingEventCreate } from "@bloom-housing/shared-helpers/src/types/back
 import { t } from "@bloom-housing/ui-components"
 import styles from "../ListingViewSeeds.module.scss"
 
+export type DateSectionFlyer = {
+  url?: string | null
+  label?: string | null
+}
+
 type DateSectionProps = {
-  events: ListingEventCreate[]
+  events?: ListingEventCreate[]
+  marketingFlyers?: DateSectionFlyer[]
   heading: string
 }
 
-export const DateSection = ({ events, heading }: DateSectionProps) => {
-  if (!events.length) return
+export const DateSection = ({ events, marketingFlyers, heading }: DateSectionProps) => {
+  if (!events?.length && !marketingFlyers?.length) return null
   return (
     <Card className={`${styles["mobile-full-width-card"]} ${styles["mobile-no-bottom-border"]}`}>
       <Card.Section>
@@ -41,6 +47,13 @@ export const DateSection = ({ events, heading }: DateSectionProps) => {
             </div>
           )
         })}
+        {marketingFlyers?.map((marketingFlyer, index) => (
+          <div key={`marketingFlyer-${index}`} className={"seeds-m-bs-header"}>
+            <Link href={marketingFlyer.url} hideExternalLinkIcon={true}>
+              {marketingFlyer.label}
+            </Link>
+          </div>
+        ))}
       </Card.Section>
     </Card>
   )

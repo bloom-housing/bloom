@@ -25,6 +25,7 @@ import {
   getDateString,
   getEligibilitySections,
   getFeatures,
+  getMarketingFlyers,
   getPaperApplications,
   getUtilitiesIncluded,
   PaperApplicationDialog,
@@ -102,10 +103,15 @@ export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: Li
 
   const OpenHouses = (
     <DateSection
-      heading={t("listings.openHouseEvent.header")}
+      heading={
+        isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableMarketingFlyer)
+          ? t("listings.openHouseAndMarketing.header")
+          : t("listings.openHouseEvent.header")
+      }
       events={listing.listingEvents?.filter(
         (event) => event.type === ListingEventsTypeEnum.openHouse
       )}
+      marketingFlyers={getMarketingFlyers(listing, jurisdiction)}
     />
   )
 
