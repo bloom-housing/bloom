@@ -954,6 +954,8 @@ model UserAccounts {
   failedLoginAttemptsCount  Int                     @default(0) @map("failed_login_attempts_count")
   phoneNumberVerified       Boolean?                @default(false) @map("phone_number_verified")
   agreedToTermsOfService    Boolean                 @default(false) @map("agreed_to_terms_of_service")
+  hasConsentedToAI          Boolean?                @default(false) @map("has_consented_to_ai")
+  aiConsentGivenAt          DateTime?               @map("ai_consent_given_at") @db.Timestamptz(6)
   hitConfirmationUrl        DateTime?               @map("hit_confirmation_url") @db.Timestamptz(6)
   activeAccessToken         String?                 @map("active_access_token") @db.VarChar
   activeRefreshToken        String?                 @map("active_refresh_token") @db.VarChar

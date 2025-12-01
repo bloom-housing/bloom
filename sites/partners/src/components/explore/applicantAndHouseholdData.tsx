@@ -10,12 +10,12 @@ import {
   CartesianGrid,
 } from "recharts"
 import {
-  AccessibilityFrequency,
+  LocationFrequency,
   AgeFrequency,
   LanguageFrequency,
-  LocationFrequency,
   SubsidyFrequency,
-} from "../../lib/explore/data-explorer"
+  AccessibilityFrequency,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import DataTable from "./DataTable"
 
 interface ChartData {

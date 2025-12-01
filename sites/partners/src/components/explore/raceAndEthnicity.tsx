@@ -9,7 +9,10 @@ import {
   LabelList,
   CartesianGrid,
 } from "recharts"
-import { EthnicityFrequency, RaceFrequency } from "../../lib/explore/data-explorer"
+import {
+  RaceFrequency,
+  EthnicityFrequency,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import DataTable from "./DataTable"
 
 interface DemographicsSectionProps {
@@ -94,12 +97,14 @@ export default function DemographicsSection({ chartData }: DemographicsSectionPr
   const maxRace = Math.max(...raceFrequencies.map((d) => d.count))
   const raceChartData = raceFrequencies.map((d) => ({
     ...d,
+    percentage: d.percentage !== undefined ? d.percentage : 0,
     max: maxRace,
   }))
 
   const maxEthnicity = Math.max(...ethnicityFrequencies.map((d) => d.count))
   const ethnicityChartData = ethnicityFrequencies.map((d) => ({
     ...d,
+    percentage: d.percentage !== undefined ? d.percentage : 0,
     max: maxEthnicity,
   }))
 
