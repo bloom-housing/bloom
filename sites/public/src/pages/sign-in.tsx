@@ -17,6 +17,7 @@ import {
   ResendConfirmationModal,
   FormSignInDefault,
   FormSignInPwdless,
+  NetworkErrorMessage,
 } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../lib/constants"
 import PasswordExpiredModal from "../components/account/PasswordExpiredModal"
@@ -269,9 +270,7 @@ const SignIn = (props: SignInProps) => {
 
   useEffect(() => {
     if (
-      networkError?.error?.response?.data?.message?.includes(
-        "attempted to login, but password is no longer valid"
-      )
+      networkError?.error?.response?.data?.message?.includes(NetworkErrorMessage.PasswordOutdated)
     ) {
       setPasswordExpired(true)
     }
