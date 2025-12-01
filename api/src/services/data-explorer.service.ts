@@ -66,6 +66,22 @@ export class DataExplorerService {
         reportData.products.incomeHouseholdSizeCrossTab;
     }
 
+    // Preserve all frequency arrays that might get stripped by class-transformer
+    if (reportData.products && mappedData.products) {
+      mappedData.products.raceFrequencies = reportData.products.raceFrequencies;
+      mappedData.products.ethnicityFrequencies =
+        reportData.products.ethnicityFrequencies;
+      mappedData.products.subsidyOrVoucherTypeFrequencies =
+        reportData.products.subsidyOrVoucherTypeFrequencies;
+      mappedData.products.accessibilityTypeFrequencies =
+        reportData.products.accessibilityTypeFrequencies;
+      mappedData.products.ageFrequencies = reportData.products.ageFrequencies;
+      mappedData.products.residentialLocationFrequencies =
+        reportData.products.residentialLocationFrequencies;
+      mappedData.products.languageFrequencies =
+        reportData.products.languageFrequencies;
+    }
+
     // Ensure isSufficient matches validResponse
     if (mappedData.validResponse !== undefined) {
       mappedData.isSufficient = mappedData.validResponse;
@@ -85,35 +101,227 @@ export class DataExplorerService {
         );
       }
 
+      // Helper function to filter out placeholder values like "all", "any", empty strings, and zero
+      const filterPlaceholders = (
+        arr: any[] | undefined | null,
+      ): any[] | null => {
+        if (!arr || !Array.isArray(arr)) return null;
+        const filtered = arr.filter(
+          (val) => val !== 'all' && val !== 'any' && val !== '' && val !== 0,
+        );
+        return filtered.length > 0 ? filtered : null;
+      };
+
+      // Helper to check if a value is meaningful (not null, not 0, not empty string)
+      const isMeaningful = (val: any): boolean => {
+        return val !== null && val !== undefined && val !== '' && val !== 0;
+      };
+
       // Build filter object from params (exclude jurisdictionId and userId)
-      const filters: Record<string, any> = {};
+      // Map flat structure to nested structure expected by FastAPI
+      let filters = null;
       if (params) {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { jurisdictionId, userId, ...filterParams } = params;
-        Object.assign(filters, filterParams);
+
+        // Only build filters if there are actual filter parameters
+        if (Object.keys(filterParams).length > 0) {
+          const householdSizeArray = filterPlaceholders(
+            filterParams.householdSize,
+          );
+          const races = filterPlaceholders(filterParams.races);
+          const ethnicities = filterPlaceholders(filterParams.ethnicities);
+          const accessibilityTypes = filterPlaceholders(
+            filterParams.accessibilityTypes,
+          );
+          const residentialCounties = filterPlaceholders(
+            filterParams.applicantResidentialCounties,
+          );
+          const workCounties = filterPlaceholders(
+            filterParams.applicantWorkCounties,
+          );
+
+          // Convert household size array to HouseholdSize object {min, max}
+          let householdSize = null;
+          if (householdSizeArray && householdSizeArray.length > 0) {
+            const numericSizes = householdSizeArray
+              .map((s) => (typeof s === 'string' ? parseInt(s, 10) : s))
+              .filter((s) => !isNaN(s));
+            if (numericSizes.length > 0) {
+              householdSize = {
+                min: Math.min(...numericSizes),
+                max: Math.max(...numericSizes),
+              };
+            }
+          }
+
+          // Convert income to HouseholdIncome object {min, max}
+          let householdIncome = null;
+          if (
+            isMeaningful(filterParams.minIncome) ||
+            isMeaningful(filterParams.maxIncome)
+          ) {
+            householdIncome = {
+              min: isMeaningful(filterParams.minIncome)
+                ? filterParams.minIncome
+                : null,
+              max: isMeaningful(filterParams.maxIncome)
+                ? filterParams.maxIncome
+                : null,
+            };
+          }
+
+          // income_vouchers is a boolean - true if any voucher filters are present
+          const hasVoucherFilters = filterPlaceholders(
+            filterParams.voucherStatuses,
+          );
+          const incomeVouchers =
+            hasVoucherFilters && hasVoucherFilters.length > 0 ? true : null;
+
+          // Convert age filters to array format expected by FastAPI
+          let ageArray = null;
+          if (
+            isMeaningful(filterParams.minAge) ||
+            isMeaningful(filterParams.maxAge)
+          ) {
+            // Create age range strings
+            const minAge = filterParams.minAge;
+            const maxAge = filterParams.maxAge;
+            if (minAge && maxAge) {
+              ageArray = [`${minAge}-${maxAge}`];
+            } else if (minAge) {
+              ageArray = [`${minAge}+`];
+            } else if (maxAge) {
+              ageArray = [`0-${maxAge}`];
+            }
+          }
+
+          // Build Household object - only include if at least one field is present
+          let household = null;
+          if (
+            householdSize ||
+            householdIncome ||
+            incomeVouchers ||
+            accessibilityTypes
+          ) {
+            household = {
+              household_size: householdSize,
+              household_income: householdIncome,
+              income_vouchers: incomeVouchers,
+              accessibility: accessibilityTypes,
+            };
+          }
+
+          // Build Demographics object - only include if at least one field is present
+          let demographics = null;
+          if (races || ethnicities || ageArray) {
+            demographics = {
+              race: races,
+              ethnicity: ethnicities,
+              age: ageArray,
+            };
+          }
+
+          // Build Geography object - only include if at least one field is present
+          let geography = null;
+          if (residentialCounties || workCounties) {
+            geography = {
+              cities: residentialCounties,
+              census_tracts: null,
+              zip_codes: workCounties,
+            };
+          }
+
+          filters = {
+            date_range:
+              isMeaningful(filterParams.startDate) ||
+              isMeaningful(filterParams.endDate)
+                ? {
+                    start_date: filterParams.startDate,
+                    end_date: filterParams.endDate,
+                  }
+                : null,
+            household: household,
+            demographics: demographics,
+            geography: geography,
+          };
+        }
       }
 
-      // Use POST if filters are provided, GET otherwise
-      const response =
-        Object.keys(filters).length > 0
-          ? await axios.post(
-              `${API_BASE_URL}/api/v1/secure/generate-report`,
-              filters,
-              {
-                headers: {
-                  'X-API-Key': process.env.FAST_API_KEY,
-                },
-              },
-            )
-          : await axios.get(`${API_BASE_URL}/api/v1/secure/generate-report`, {
-              headers: {
-                'X-API-Key': process.env.FAST_API_KEY,
-              },
-            });
+      const response = await axios.post(
+        `${API_BASE_URL}/api/v1/secure/generate-report`,
+        filters,
+        {
+          headers: {
+            'X-API-Key': process.env.FAST_API_KEY,
+          },
+        },
+      );
 
-      return response.data as DataExplorerReport;
+      // Map FastAPI response to NestJS DataExplorerReport structure
+      const fastApiData = response.data;
+
+      // Helper to extract value array from metric objects
+      const extractMetricValue = (metric: any): any[] => {
+        if (!metric) return [];
+        // If metric has a 'value' property, return it; otherwise return the metric itself
+        return metric.value || metric;
+      };
+
+      // Transform the response to match our DTO structure
+      const transformedData = {
+        dateRange: fastApiData.date_range || 'N/A',
+        totalProcessedApplications:
+          fastApiData.total_processed_applications || 0,
+        totalApplicants: fastApiData.total_applicants,
+        totalListings: fastApiData.total_listings,
+        validResponse: fastApiData.is_sufficient || false,
+        isSufficient: fastApiData.is_sufficient || false,
+        kAnonScore: fastApiData.k_anonymity_score || 0,
+        reportErrors: fastApiData.report_errors || [],
+        products: {
+          // Extract the value from the cross-tab metric
+          incomeHouseholdSizeCrossTab:
+            fastApiData.metrics?.income_household_size_cross_tab?.value ||
+            fastApiData.metrics?.income_household_size_cross_tab ||
+            {},
+          // Use race_frequency_inclusive by default (could also use exclusive)
+          raceFrequencies: extractMetricValue(
+            fastApiData.metrics?.race_frequency_inclusive,
+          ),
+          ethnicityFrequencies: extractMetricValue(
+            fastApiData.metrics?.ethnicity_frequency,
+          ),
+          subsidyOrVoucherTypeFrequencies: extractMetricValue(
+            fastApiData.metrics?.voucher_usage_frequency,
+          ),
+          accessibilityTypeFrequencies: extractMetricValue(
+            fastApiData.metrics?.accessibility_frequency,
+          ),
+          ageFrequencies: extractMetricValue(
+            fastApiData.metrics?.age_frequency,
+          ),
+          residentialLocationFrequencies: extractMetricValue(
+            fastApiData.metrics?.city_frequency,
+          ),
+          languageFrequencies: extractMetricValue(
+            fastApiData.metrics?.language_frequency,
+          ),
+        },
+      };
+
+      return transformedData as DataExplorerReport;
     } catch (error) {
       console.error('Error fetching report data from FastAPI:', error);
+      if (axios.isAxiosError(error)) {
+        // Log detailed validation errors if it's a 422
+        if (error.response?.status === 422 && error.response?.data?.detail) {
+          console.error(
+            'FastAPI validation errors:',
+            JSON.stringify(error.response.data.detail, null, 2),
+          );
+        }
+      }
       throw new NotFoundException('No report data found');
     }
   }

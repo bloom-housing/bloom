@@ -94,7 +94,10 @@ const ApplicationAnalysis = () => {
               reportData = InsufficientNumberOfApplications
               break
             default: {
-              const apiData = await dataExplorerService.generateReport(filters || {})
+              const apiData = await dataExplorerService.generateReport({
+                ...filters,
+                jurisdictionId: profile?.jurisdictions?.[0]?.id,
+              })
               reportData = {
                 dateRange: apiData.dateRange,
                 totalProcessedApplications: apiData.totalProcessedApplications,
@@ -109,7 +112,10 @@ const ApplicationAnalysis = () => {
           }
         } else {
           // No override - fetch from API through the service
-          const apiData = await dataExplorerService.generateReport(filters || {})
+          const apiData = await dataExplorerService.generateReport({
+            ...filters,
+            jurisdictionId: profile?.jurisdictions?.[0]?.id,
+          })
           reportData = {
             dateRange: apiData.dateRange,
             totalProcessedApplications: apiData.totalProcessedApplications,
