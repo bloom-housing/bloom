@@ -35,7 +35,6 @@ import { ApplicationMethod } from '../dtos/application-methods/application-metho
 import Unit from '../dtos/units/unit.dto';
 import Listing from '../dtos/listings/listing.dto';
 import { mapTo } from '../utilities/mapTo';
-import { Asset } from '../../src/dtos/assets/asset.dto';
 import { ListingMultiselectQuestion } from '../dtos/listings/listing-multiselect-question.dto';
 import { ListingUtilities } from '../dtos/listings/listing-utility.dto';
 import { ListingFeatures } from '../dtos/listings/listing-feature.dto';
@@ -92,6 +91,10 @@ export const formatCommunityType = {
   seniorVeterans: 'Senior Veteran',
   veteran: 'Veteran',
   schoolEmployee: 'School Employee',
+};
+
+export const formatCloudinaryUrl = (fileId: string): string => {
+  return `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload/${fileId}.pdf`;
 };
 
 @Injectable()
@@ -380,11 +383,18 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
     return value ? `$${value}` : '';
   }
 
+  buildingSelectionCriteria(value: string, listing?: Listing): string {
+    if (value) return listing.buildingSelectionCriteria;
+    if (listing?.listingsBuildingSelectionCriteriaFile?.fileId)
+      return formatCloudinaryUrl(
+        listing.listingsBuildingSelectionCriteriaFile?.fileId,
+      );
+    return '';
+  }
+
   cloudinaryPdfFromId(publicId: string): string {
     if (publicId) {
-      const cloudName =
-        process.env.cloudinaryCloudName || process.env.CLOUDINARY_CLOUD_NAME;
-      return `https://res.cloudinary.com/${cloudName}/image/upload/${publicId}.pdf`;
+      return formatCloudinaryUrl(publicId);
     }
     return '';
   }
@@ -906,11 +916,9 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
           label: 'Eligibility Rules - Rental Assistance',
         },
         {
-          path: 'listingsBuildingSelectionCriteriaFile',
+          path: 'buildingSelectionCriteria',
           label: 'Building Selection Criteria',
-          format: (val: Asset): string => {
-            return this.cloudinaryPdfFromId(val.fileId);
-          },
+          format: this.buildingSelectionCriteria,
         },
         {
           path: 'programRules',
