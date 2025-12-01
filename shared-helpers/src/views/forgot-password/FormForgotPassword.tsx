@@ -80,7 +80,7 @@ const FormForgotPassword = ({
               variant="primary"
               className={styles["forgot-password-submit-button"]}
             >
-              {t("authentication.forgotPassword.sendEmail")}
+              {t("authentication.forgotPassword.sendEmailButton")}
             </Button>
 
             <div className={"mt-4"}>

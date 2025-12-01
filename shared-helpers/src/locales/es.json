@@ -471,6 +471,7 @@
   "authentication.forgotPassword.message": "Si hay una cuenta creada con ese correo electrónico, recibirás un correo electrónico con un enlace para restablecer tu contraseña. El enlace de reinicio es válido por 1 hora.",
   "authentication.forgotPassword.passwordConfirmation": "Confirmación de contraseña",
   "authentication.forgotPassword.sendEmail": "Ingrese su correo electrónico para obtener un enlace de restablecimiento de contraseña",
+  "authentication.forgotPassword.sendEmailButton": "Enviar correo electrónico",
   "authentication.signIn.accountHasBeenLocked": "Por razones de seguridad, esta cuenta ha sido bloqueada.",
   "authentication.signIn.afterFailedAttempts": "Por razones de seguridad, después de %{count} intentos fallidos, deberá esperar 30 minutos antes de volver a intentarlo.",
   "authentication.signIn.changeYourPassword": "Haga clic aquí para restablecer su contraseña",

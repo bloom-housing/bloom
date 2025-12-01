@@ -466,6 +466,7 @@
   "authentication.forgotPassword.message": "যদি সেই ইমেল দিয়ে একটি অ্যাকাউন্ট তৈরি করা হয়, তাহলে আপনি আপনার পাসওয়ার্ড রিসেট করার জন্য একটি লিঙ্ক সহ একটি ইমেল পাবেন।",
   "authentication.forgotPassword.passwordConfirmation": "পাসওয়ার্ড নিশ্চিতকরণ",
   "authentication.forgotPassword.sendEmail": "পাসওয়ার্ড রিসেট লিঙ্ক পেতে আপনার ইমেল ঠিকানা লিখুন",
+  "authentication.forgotPassword.sendEmailButton": "ইমেইল",
   "authentication.signIn.accountHasBeenLocked": "নিরাপত্তার কারণে, এই অ্যাকাউন্টটি লক করা হয়েছে।",
   "authentication.signIn.afterFailedAttempts": "নিরাপত্তার কারণে, %{count} ব্যর্থ প্রচেষ্টার পরে, আবার চেষ্টা করার আগে আপনাকে 30 মিনিট অপেক্ষা করতে হবে।",
   "authentication.signIn.changeYourPassword": "আপনার পাসওয়ার্ড রিসেট করতে এখানে ক্লিক করুন",

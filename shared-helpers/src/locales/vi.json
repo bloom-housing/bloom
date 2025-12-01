@@ -471,6 +471,7 @@
   "authentication.forgotPassword.message": "Nếu có tài khoản được tạo bằng email đó, bạn sẽ nhận được email có liên kết để đặt lại mật khẩu của mình. Liên kết đặt lại có hiệu lực trong 1 giờ.",
   "authentication.forgotPassword.passwordConfirmation": "Xác nhận mật khẩu",
   "authentication.forgotPassword.sendEmail": "Nhập email của bạn để nhận liên kết đặt lại mật khẩu",
+  "authentication.forgotPassword.sendEmailButton": "Gửi email",
   "authentication.signIn.accountHasBeenLocked": "Vì lý do bảo mật, tài khoản này đã bị khóa.",
   "authentication.signIn.afterFailedAttempts": "Vì lý do bảo mật, quý vị sẽ phải chờ 30 phút trước khi thử lại sau %{count} lần thử không thành công.",
   "authentication.signIn.changeYourPassword": "Mag-click dito upang i-reset ang iyong password",
