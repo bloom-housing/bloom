@@ -76,7 +76,7 @@ const FormForgotPassword = ({
               labelClassName={"text__caps-spaced"}
               className="rounded-full"
             />
-            <div className="flex gap-8">
+            <div className="flex gap-6">
               <Button
                 type="submit"
                 className={(styles["forgot-password-submit-button"], "rounded-full py-2")}
