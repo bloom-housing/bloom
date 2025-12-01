@@ -202,6 +202,8 @@ export const DataTable = (props: DataTableProps) => {
     </thead>
   )
 
+  const APPROX_ROW_HEIGHT = 55
+
   const getTableContent = () => {
     if (delayedLoading || dataQuery.data === undefined) {
       return (
@@ -209,7 +211,11 @@ export const DataTable = (props: DataTableProps) => {
           <td
             colSpan={table.getVisibleFlatColumns().length}
             style={{
-              height: `${document.getElementById("data-table")?.offsetHeight}px`,
+              height: `${
+                dataQuery.data === undefined
+                  ? APPROX_ROW_HEIGHT * (props.defaultItemsPerPage || 8)
+                  : document.getElementById("data-table")?.offsetHeight
+              }px`,
             }}
           >
             <LoadingState loading={true} className={styles["loading-spinner"]}>
