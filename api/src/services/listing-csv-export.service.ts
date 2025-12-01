@@ -907,11 +907,18 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
           path: 'rentalAssistance',
           label: 'Eligibility Rules - Rental Assistance',
         },
-        {
-          path: 'buildingSelectionCriteriaFileId',
-          label: 'Building Selection Criteria',
-          format: this.cloudinaryPdfFromId,
-        },
+        ...(!doAnyJurisdictionHaveFeatureFlagSet(
+          user.jurisdictions,
+          FeatureFlagEnum.disableBuildingSelectionCriteria,
+        )
+          ? [
+              {
+                path: 'buildingSelectionCriteriaFileId',
+                label: 'Building Selection Criteria',
+                format: this.cloudinaryPdfFromId,
+              },
+            ]
+          : []),
         {
           path: 'programRules',
           label: 'Important Program Rules',

@@ -3992,7 +3992,7 @@ export interface UnitsSummary {
   totalAvailable?: number
 
   /**  */
-  rentType?: string
+  rentType?: RentTypeEnum
 
   /**  */
   flatRentValueFrom?: number
@@ -4686,7 +4686,7 @@ export interface UnitsSummaryCreate {
   totalAvailable?: number
 
   /**  */
-  rentType?: string
+  rentType?: RentTypeEnum
 
   /**  */
   flatRentValueFrom?: number
@@ -7859,6 +7859,7 @@ export enum NeighborhoodAmenitiesEnum {
 }
 
 export enum FeatureFlagEnum {
+  "disableBuildingSelectionCriteria" = "disableBuildingSelectionCriteria",
   "disableCommonApplication" = "disableCommonApplication",
   "disableJurisdictionalAdmin" = "disableJurisdictionalAdmin",
   "disableListingPreferences" = "disableListingPreferences",

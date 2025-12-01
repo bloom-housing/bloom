@@ -2,6 +2,7 @@
 // Note, these are just used to keep backend and frontend in sync. We store feature flags as strings so this list might not include every flag.
 // Keep alphabetized for readability.
 export enum FeatureFlagEnum {
+  disableBuildingSelectionCriteria = 'disableBuildingSelectionCriteria',
   disableCommonApplication = 'disableCommonApplication',
   disableJurisdictionalAdmin = 'disableJurisdictionalAdmin',
   disableListingPreferences = 'disableListingPreferences',
