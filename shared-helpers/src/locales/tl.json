@@ -470,7 +470,7 @@
   "authentication.forgotPassword.errors.tokenMissing": "Hindi nahanap ang token. Humiling ng bago.",
   "authentication.forgotPassword.message": "Kung may account na ginawa gamit ang email na iyon, makakatanggap ka ng email na may link para i-reset ang iyong password. Ang link sa pag-reset ay may bisa sa loob ng 1 oras.",
   "authentication.forgotPassword.passwordConfirmation": "Pagkumpirma ng password",
-  "authentication.forgotPassword.sendEmail": "Magpadala ng email",
+  "authentication.forgotPassword.sendEmail": "Ilagay ang iyong email para makakuha ng link sa pag-reset ng password",
   "authentication.signIn.accountHasBeenLocked": "Para sa mga kadahilanang pangseguridad, ang account na ito isinara na.",
   "authentication.signIn.afterFailedAttempts": "Para sa mga kadahilanang pangseguridad, pagkatapos ng %{count} nabigong pagtatangka, kailangan mong maghintay ng 30 minuto bago subukang muli.",
   "authentication.signIn.changeYourPassword": "Maaari mong palitan ang iyong password",
