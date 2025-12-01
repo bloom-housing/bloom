@@ -93,7 +93,7 @@ export const formatCommunityType = {
   schoolEmployee: 'School Employee',
 };
 
-export const formatCloudinaryUrl = (fileId: string): string => {
+export const formatCloudinaryPdfUrl = (fileId: string): string => {
   return `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload/${fileId}.pdf`;
 };
 
@@ -386,7 +386,7 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
   buildingSelectionCriteria(value: string, listing?: Listing): string {
     if (value) return listing.buildingSelectionCriteria;
     if (listing?.listingsBuildingSelectionCriteriaFile?.fileId)
-      return formatCloudinaryUrl(
+      return formatCloudinaryPdfUrl(
         listing.listingsBuildingSelectionCriteriaFile?.fileId,
       );
     return '';
@@ -394,7 +394,7 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
 
   cloudinaryPdfFromId(publicId: string): string {
     if (publicId) {
-      return formatCloudinaryUrl(publicId);
+      return formatCloudinaryPdfUrl(publicId);
     }
     return '';
   }
