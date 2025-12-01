@@ -112,7 +112,7 @@ export async function fetchBaseListingData({
       view: view || ListingViews.base,
     }
 
-    const response = await axios.post(`${process.env.listingServiceUrl}/list`, params, {
+    const response = await axios.post(`/api/adapter/listings/list`, params, {
       headers: {
         passkey: process.env.API_PASS_KEY,
       },
