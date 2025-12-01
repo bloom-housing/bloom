@@ -37,13 +37,13 @@ interface DataTableProps {
   columns: ColumnDef<TableDataRow>[]
   defaultItemsPerPage?: number
   enableHorizontalScroll?: boolean
-  initialSort?: SortingState
-  minSearchCharacters?: number
   fetchData: (
     pagination?: PaginationState,
     search?: ColumnFiltersState,
     sort?: SortingState
   ) => Promise<TableData>
+  initialSort?: SortingState
+  minSearchCharacters?: number
 }
 
 // Returns appropriate aria-label for sortable headers based on current sort state
@@ -113,7 +113,10 @@ export const DataTable = (props: DataTableProps) => {
     manualSorting: true,
     onColumnFiltersChange: setColumnFilters,
     onColumnVisibilityChange: setColumnVisibility,
-    onPaginationChange: setPagination,
+    onPaginationChange: (props) => {
+      setPagination(props)
+      document.getElementById("data-table")?.scrollIntoView({ behavior: "auto", block: "start" })
+    },
     onSortingChange: setSorting,
     rowCount: dataQuery.data?.totalItems,
     state: {
