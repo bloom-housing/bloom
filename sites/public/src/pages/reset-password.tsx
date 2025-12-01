@@ -76,6 +76,7 @@ const ResetPassword = () => {
           )}
           <CardSection>
             <Form id="sign-in" onSubmit={handleSubmit(onSubmit)}>
+              <p className="field-label mb-2">{t("authentication.createAccount.passwordInfo")}</p>
               <Field
                 name="password"
                 label={t("authentication.createAccount.password")}
@@ -106,6 +107,7 @@ const ResetPassword = () => {
                 type="submit"
                 variant="primary"
                 loadingMessage={loading ? t("t.loading") : undefined}
+                className="rounded-full py-2"
               >
                 {t("authentication.forgotPassword.changePassword")}
               </Button>
