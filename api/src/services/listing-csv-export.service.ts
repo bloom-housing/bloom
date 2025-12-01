@@ -52,6 +52,7 @@ import {
 } from '../utilities/feature-flag-utilities';
 import { UnitGroupSummary } from '../dtos/unit-groups/unit-group-summary.dto';
 import { addUnitGroupsSummarized } from '../utilities/unit-groups-transformations';
+import { Asset } from 'src/dtos/assets/asset.dto';
 
 includeViews.csv = {
   listingMultiselectQuestions: {
@@ -379,15 +380,12 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
     return value ? `$${value}` : '';
   }
 
-  cloudinaryPdfFromId(publicId: string, listing?: Listing): string {
+  cloudinaryPdfFromId(publicId: string): string {
     if (publicId) {
       const cloudName =
         process.env.cloudinaryCloudName || process.env.CLOUDINARY_CLOUD_NAME;
       return `https://res.cloudinary.com/${cloudName}/image/upload/${publicId}.pdf`;
-    } else if (!publicId && listing?.buildingSelectionCriteria) {
-      return listing.buildingSelectionCriteria;
     }
-
     return '';
   }
 
@@ -908,9 +906,12 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
           label: 'Eligibility Rules - Rental Assistance',
         },
         {
-          path: 'buildingSelectionCriteriaFileId',
+          path: 'listingsBuildingSelectionCriteriaFile',
           label: 'Building Selection Criteria',
-          format: this.cloudinaryPdfFromId,
+          format: (val: Asset): string => {
+            console.log({ val });
+            return this.cloudinaryPdfFromId(val.fileId);
+          },
         },
         {
           path: 'programRules',
@@ -1118,6 +1119,7 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
               (appMethod) => appMethod.paperApplications.length > 0,
             );
             const paperApps = method.length ? method[0].paperApplications : [];
+            console.log(paperApps.length);
             return paperApps.length
               ? paperApps
                   .map((app) => this.cloudinaryPdfFromId(app.assets.fileId))
