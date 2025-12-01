@@ -18,6 +18,7 @@ import { ReservedCommunityTypeUpdate } from '../../src/dtos/reserved-community-t
 import { IdDTO } from '../../src/dtos/shared/id.dto';
 import { userFactory } from '../../prisma/seed-helpers/user-factory';
 import { Login } from '../../src/dtos/auth/login.dto';
+import { randomName } from 'prisma/seed-helpers/word-generator';
 
 describe('ReservedCommunityType Controller Tests', () => {
   let app: INestApplication;
@@ -65,11 +66,11 @@ describe('ReservedCommunityType Controller Tests', () => {
 
   it('testing list endpoint without params', async () => {
     const jurisdictionA = await prisma.jurisdictions.create({
-      data: jurisdictionFactory(),
+      data: jurisdictionFactory(`reservedCommunityTypeA-${randomName()}`),
     });
     await reservedCommunityTypeFactoryAll(jurisdictionA.id, prisma);
     const jurisdictionB = await prisma.jurisdictions.create({
-      data: jurisdictionFactory(),
+      data: jurisdictionFactory(`reservedCommunityTypeB-${randomName()}`),
     });
     await reservedCommunityTypeFactoryAll(jurisdictionB.id, prisma);
 
