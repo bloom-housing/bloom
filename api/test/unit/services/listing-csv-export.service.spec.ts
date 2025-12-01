@@ -199,6 +199,13 @@ describe('Testing listing csv export service', () => {
         lastName: 'userLast',
       } as User,
     ],
+    listingsBuildingSelectionCriteriaFile: {
+      id: 'asset1-ID',
+      fileId: 'buildingSelectionCriteriaFileId',
+      createdAt: timestamp,
+      updatedAt: timestamp,
+      label: 'Building Selection Criteria Label',
+    },
   };
 
   describe('createCsv', () => {
@@ -216,7 +223,7 @@ describe('Testing listing csv export service', () => {
       );
       // Validate first row
       expect(content).toContain(
-        '"listing1-ID","10-02-2025 11:38:19AM PDT","jurisdiction-Name","listing1-Name","Public","10-02-2025 11:38:19AM PDT","10-02-2025 11:38:19AM PDT","Original",,"developer","123 main st","Bloomington","BL","01234","neighborhood","2025",,"100.5","200.5","1","Available Units",,"10-02-2025","11:38AM PDT","01:38PM PDT","lottery note",,,"$45","sample deposit helper text",,,"$12","$120","sample costs not included","sample amenities","sample accessibility","sample unit amenities","sample smoking policy","sample pet policy","sample services offered",,,,,,,,,"No","Name of leasing agent","Email of leasing agent",,"Title of leasing agent","office hours","321 main st",,"Bloomington","BL","01234","456 main st",,"Bloomington","BL","01234","789 main st",,"Bloomington","BL","01234",,"No",,"No",,"No","No","No","No",,,"10-02-2025","11:38AM PDT",,"userFirst userLast"',
+        '"listing1-ID","10-02-2025 11:38:19AM PDT","jurisdiction-Name","listing1-Name","Public","10-02-2025 11:38:19AM PDT","10-02-2025 11:38:19AM PDT","Original",,"developer","123 main st","Bloomington","BL","01234","neighborhood","2025",,"100.5","200.5","1","Available Units",,"10-02-2025","11:38AM PDT","01:38PM PDT","lottery note",,,"$45","sample deposit helper text",,,"$12","$120","sample costs not included","sample amenities","sample accessibility","sample unit amenities","sample smoking policy","sample pet policy","sample services offered",,,,,"https://res.cloudinary.com/exygy/image/upload/buildingSelectionCriteriaFileId.pdf",,,,"No","Name of leasing agent","Email of leasing agent",,"Title of leasing agent","office hours","321 main st",,"Bloomington","BL","01234","456 main st",,"Bloomington","BL","01234","789 main st",,"Bloomington","BL","01234",,"No",,"No",,"No","No","No","No",,,"10-02-2025","11:38AM PDT",,"userFirst userLast"',
       );
     });
     it('should create the listing csv with marketing type seasons', async () => {
@@ -227,6 +234,9 @@ describe('Testing listing csv export service', () => {
             marketingMonth: null,
             showWaitlist: false,
             referralApplication: null,
+            listingsBuildingSelectionCriteriaFile: null,
+            buildingSelectionCriteria:
+              'https://www.example.com/building-criteria.pdf',
           },
         ],
         user: {
@@ -252,7 +262,7 @@ describe('Testing listing csv export service', () => {
       );
       // Validate first row
       expect(content).toContain(
-        '"listing1-ID","10-02-2025 11:38:19AM PDT","jurisdiction-Name","listing1-Name","Public","10-02-2025 11:38:19AM PDT","10-02-2025 11:38:19AM PDT","Original",,"developer","123 main st","Bloomington","BL","01234","neighborhood","2025",,"100.5","200.5","1","Available Units",,"10-02-2025","11:38AM PDT","01:38PM PDT","lottery note",,,"$45","sample deposit helper text",,,"$12","$120","sample costs not included","sample amenities","sample accessibility","sample unit amenities","sample smoking policy","sample pet policy","sample services offered",,,,,,,,,"No","Under Construction","Summer","2025","Name of leasing agent","Email of leasing agent",,"Title of leasing agent","office hours","321 main st",,"Bloomington","BL","01234","456 main st",,"Bloomington","BL","01234","789 main st",,"Bloomington","BL","01234",,"No",,"No",,"No","No","No","No",,,"10-02-2025","11:38AM PDT",,"userFirst userLast"',
+        '"listing1-ID","10-02-2025 11:38:19AM PDT","jurisdiction-Name","listing1-Name","Public","10-02-2025 11:38:19AM PDT","10-02-2025 11:38:19AM PDT","Original",,"developer","123 main st","Bloomington","BL","01234","neighborhood","2025",,"100.5","200.5","1","Available Units",,"10-02-2025","11:38AM PDT","01:38PM PDT","lottery note",,,"$45","sample deposit helper text",,,"$12","$120","sample costs not included","sample amenities","sample accessibility","sample unit amenities","sample smoking policy","sample pet policy","sample services offered",,,,,"https://www.example.com/building-criteria.pdf",,,,"No","Under Construction","Summer","2025","Name of leasing agent","Email of leasing agent",,"Title of leasing agent","office hours","321 main st",,"Bloomington","BL","01234","456 main st",,"Bloomington","BL","01234","789 main st",,"Bloomington","BL","01234",,"No",,"No",,"No","No","No","No",,,"10-02-2025","11:38AM PDT",,"userFirst userLast"',
       );
     });
     it('should create the listing csv with marketing type months', async () => {
@@ -292,7 +302,7 @@ describe('Testing listing csv export service', () => {
       );
       // Validate first row
       expect(content).toContain(
-        '"listing1-ID","10-02-2025 11:38:19AM PDT","jurisdiction-Name","listing1-Name","Public","10-02-2025 11:38:19AM PDT","10-02-2025 11:38:19AM PDT","Original",,"developer","123 main st","Bloomington","BL","01234","neighborhood","2025",,"100.5","200.5","1","Available Units",,"10-02-2025","11:38AM PDT","01:38PM PDT","lottery note",,,"$45","sample deposit helper text",,,"$12","$120","sample costs not included","sample amenities","sample accessibility","sample unit amenities","sample smoking policy","sample pet policy","sample services offered",,,,,,,,,"No","Under Construction","July","2025","Name of leasing agent","Email of leasing agent",,"Title of leasing agent","office hours","321 main st",,"Bloomington","BL","01234","456 main st",,"Bloomington","BL","01234","789 main st",,"Bloomington","BL","01234",,"No",,"No",,"No","No","No","No",,,"10-02-2025","11:38AM PDT",,"userFirst userLast"',
+        '"listing1-ID","10-02-2025 11:38:19AM PDT","jurisdiction-Name","listing1-Name","Public","10-02-2025 11:38:19AM PDT","10-02-2025 11:38:19AM PDT","Original",,"developer","123 main st","Bloomington","BL","01234","neighborhood","2025",,"100.5","200.5","1","Available Units",,"10-02-2025","11:38AM PDT","01:38PM PDT","lottery note",,,"$45","sample deposit helper text",,,"$12","$120","sample costs not included","sample amenities","sample accessibility","sample unit amenities","sample smoking policy","sample pet policy","sample services offered",,,,,"https://res.cloudinary.com/exygy/image/upload/buildingSelectionCriteriaFileId.pdf",,,,"No","Under Construction","July","2025","Name of leasing agent","Email of leasing agent",,"Title of leasing agent","office hours","321 main st",,"Bloomington","BL","01234","456 main st",,"Bloomington","BL","01234","789 main st",,"Bloomington","BL","01234",,"No",,"No",,"No","No","No","No",,,"10-02-2025","11:38AM PDT",,"userFirst userLast"',
       );
     });
     it.todo('should create the listing csv with feature flagged columns');
