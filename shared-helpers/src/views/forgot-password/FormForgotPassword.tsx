@@ -74,12 +74,12 @@ const FormForgotPassword = ({
               register={register}
               onChange={() => networkError.reset()}
               labelClassName={"text__caps-spaced"}
+              className="rounded-full"
             />
             <div className="flex gap-8">
               <Button
                 type="submit"
-                variant="primary"
-                className={styles["forgot-password-submit-button"]}
+                className={(styles["forgot-password-submit-button"], "rounded-full py-2")}
               >
                 {t("authentication.forgotPassword.sendEmailButton")}
               </Button>
