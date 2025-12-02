@@ -153,7 +153,7 @@ describe("<ListingViewSeeds>", () => {
     expect(view.getAllByText("Listing updated: Dec 31, 2019")).toHaveLength(2)
   })
 
-  it("doesnt render positive HUD EBLL clearance for non-regulated listing", () => {
+  it("should render positive HUD EBLL clearance for non-regulated listing", () => {
     render(
       <ListingViewSeeds
         listing={{
@@ -189,7 +189,7 @@ describe("<ListingViewSeeds>", () => {
     ).not.toBeInTheDocument()
   })
 
-  it("doesnt render negative HUD EBLL clearance for non-regulated listing", () => {
+  it("should render negative HUD EBLL clearance for non-regulated listing", () => {
     render(
       <ListingViewSeeds
         listing={{
