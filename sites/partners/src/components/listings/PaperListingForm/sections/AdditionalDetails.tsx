@@ -13,7 +13,7 @@ import { AuthContext, listingRequiredDocumentsOptions } from "@bloom-housing/sha
 
 type AdditionalDetailsProps = {
   defaultText?: string
-  exisistingDocumnets: ListingDocuments
+  existingDocuments: ListingDocuments
   requiredFields: string[]
 }
 
@@ -58,9 +58,7 @@ const AdditionalDetails = (props: AdditionalDetailsProps) => {
                   id: key,
                   label: t(`listings.requiredDocuments.${key}`),
                   register,
-                  defaultChecked: props.exisistingDocumnets
-                    ? props.exisistingDocumnets[key]
-                    : false,
+                  defaultChecked: props.existingDocuments ? props.existingDocuments[key] : false,
                 }))}
                 fieldGroupClassName="grid grid-cols-2 mt-2"
               />

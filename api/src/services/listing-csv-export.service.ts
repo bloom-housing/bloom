@@ -94,6 +94,10 @@ export const formatCommunityType = {
   schoolEmployee: 'School Employee',
 };
 
+export const formatCloudinaryPdfUrl = (fileId: string): string => {
+  return `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload/${fileId}.pdf`;
+};
+
 @Injectable()
 export class ListingCsvExporterService implements CsvExporterServiceInterface {
   readonly dateFormat: string = 'MM-DD-YYYY hh:mm:ssA z';
@@ -380,15 +384,19 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
     return value ? `$${value}` : '';
   }
 
-  cloudinaryPdfFromId(publicId: string, listing?: Listing): string {
-    if (publicId) {
-      const cloudName =
-        process.env.cloudinaryCloudName || process.env.CLOUDINARY_CLOUD_NAME;
-      return `https://res.cloudinary.com/${cloudName}/image/upload/${publicId}.pdf`;
-    } else if (!publicId && listing?.buildingSelectionCriteria) {
-      return listing.buildingSelectionCriteria;
-    }
+  buildingSelectionCriteria(value: string, listing?: Listing): string {
+    if (value) return listing.buildingSelectionCriteria;
+    if (listing?.listingsBuildingSelectionCriteriaFile?.fileId)
+      return formatCloudinaryPdfUrl(
+        listing.listingsBuildingSelectionCriteriaFile?.fileId,
+      );
+    return '';
+  }
 
+  cloudinaryPdfFromId(publicId: string): string {
+    if (publicId) {
+      return formatCloudinaryPdfUrl(publicId);
+    }
     return '';
   }
 
@@ -812,6 +820,18 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
           path: 'costsNotIncluded',
           label: 'Costs Not Included',
         },
+        ...(doAnyJurisdictionHaveFeatureFlagSet(
+          user.jurisdictions,
+          FeatureFlagEnum.enableCreditScreeningFee,
+        )
+          ? [
+              {
+                path: 'creditScreeningFee',
+                label: 'Credit Screening Fee',
+                format: this.formatCurrency,
+              },
+            ]
+          : []),
         {
           path: 'amenities',
           label: 'Property Amenities',
@@ -928,9 +948,9 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
           label: 'Eligibility Rules - Rental Assistance',
         },
         {
-          path: 'buildingSelectionCriteriaFileId',
+          path: 'buildingSelectionCriteria',
           label: 'Building Selection Criteria',
-          format: this.cloudinaryPdfFromId,
+          format: this.buildingSelectionCriteria,
         },
         {
           path: 'programRules',
@@ -977,32 +997,51 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
         FeatureFlagEnum.enableMarketingStatus,
       )
     ) {
-      headers.push(
-        ...[
-          {
-            path: 'marketingType',
-            label: 'Marketing Status',
-            format: (val: string): string => {
-              if (!val) return '';
-              return val === MarketingTypeEnum.marketing
-                ? 'Marketing'
-                : 'Under Construction';
-            },
+      headers.push({
+        path: 'marketingType',
+        label: 'Marketing Status',
+        format: (val: string): string => {
+          if (!val) return '';
+          return val === MarketingTypeEnum.marketing
+            ? 'Marketing'
+            : 'Under Construction';
+        },
+      });
+
+      if (
+        doAnyJurisdictionHaveFeatureFlagSet(
+          user.jurisdictions,
+          FeatureFlagEnum.enableMarketingStatusMonths,
+        )
+      )
+        headers.push({
+          path: 'marketingMonth',
+          label: 'Marketing Month',
+          format: (val: string): string => {
+            if (!val) return '';
+            return val.charAt(0).toUpperCase() + val.slice(1);
           },
-          {
-            path: 'marketingSeason',
-            label: 'Marketing Season',
-            format: (val: string): string => {
-              if (!val) return '';
-              return val.charAt(0).toUpperCase() + val.slice(1);
-            },
+        });
+
+      if (
+        doAnyJurisdictionHaveFalsyFeatureFlagValue(
+          user.jurisdictions,
+          FeatureFlagEnum.enableMarketingStatusMonths,
+        )
+      )
+        headers.push({
+          path: 'marketingSeason',
+          label: 'Marketing Season',
+          format: (val: string): string => {
+            if (!val) return '';
+            return val.charAt(0).toUpperCase() + val.slice(1);
           },
-          {
-            path: 'marketingYear',
-            label: 'Marketing Year',
-          },
-        ],
-      );
+        });
+
+      headers.push({
+        path: 'marketingYear',
+        label: 'Marketing Year',
+      });
     }
     headers.push(
       ...[

@@ -60,11 +60,6 @@ const DetailListingIntro = () => {
       </Grid.Row>
       <Grid.Row>
         <Grid.Cell>
-          <FieldValue id="jurisdictions.name" label={t("t.jurisdiction")}>
-            {getDetailFieldString(listing.jurisdictions.name)}
-          </FieldValue>
-        </Grid.Cell>
-        <Grid.Cell>
           <FieldValue id="developer" label={developerFieldTitle}>
             {getDetailFieldString(listing.developer)}
           </FieldValue>

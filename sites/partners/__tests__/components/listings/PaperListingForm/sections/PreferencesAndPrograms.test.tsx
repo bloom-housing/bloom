@@ -5,6 +5,7 @@ import { AuthContext } from "@bloom-housing/shared-helpers"
 import {
   MultiselectQuestion,
   MultiselectQuestionsApplicationSectionEnum,
+  MultiselectQuestionsStatusEnum,
   ValidationMethodEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { render, screen, within } from "@testing-library/react"
@@ -38,22 +39,17 @@ describe("PreferencesAndPrograms", () => {
       const setFn = jest.fn()
 
       render(
-        <AuthContext.Provider
-          value={{
-            doJurisdictionsHaveFeatureFlagOn: () => {
-              return false
-            },
-          }}
-        >
-          <FormComponent values={{ ...formDefaults }}>
-            <PreferencesAndPrograms
-              preferences={[]}
-              programs={[]}
-              setPreferences={setFn}
-              setPrograms={setFn}
-            />
-          </FormComponent>
-        </AuthContext.Provider>
+        <FormComponent values={{ ...formDefaults }}>
+          <PreferencesAndPrograms
+            jurisdiction={"jurisdiction1"}
+            preferences={[]}
+            programs={[]}
+            setPreferences={setFn}
+            setPrograms={setFn}
+            disableListingPreferences={false}
+            swapCommunityTypeWithPrograms={false}
+          />
+        </FormComponent>
       )
 
       expect(screen.getByRole("heading", { level: 2, name: /preferences/i })).toBeInTheDocument()
@@ -75,6 +71,7 @@ describe("PreferencesAndPrograms", () => {
           jurisdictions: [],
           hideFromListing: false,
           applicationSection: MultiselectQuestionsApplicationSectionEnum.preferences,
+          status: MultiselectQuestionsStatusEnum.active,
         },
         {
           id: "preference_id_2",
@@ -102,6 +99,7 @@ describe("PreferencesAndPrograms", () => {
           ],
           hideFromListing: false,
           applicationSection: MultiselectQuestionsApplicationSectionEnum.preferences,
+          status: MultiselectQuestionsStatusEnum.active,
         },
       ]
       const setFn = jest.fn()
@@ -120,6 +118,9 @@ describe("PreferencesAndPrograms", () => {
               programs={[]}
               setPreferences={setFn}
               setPrograms={setFn}
+              disableListingPreferences={false}
+              swapCommunityTypeWithPrograms={false}
+              jurisdiction={"jurisdiction1"}
             />
           </FormComponent>
         </AuthContext.Provider>
@@ -137,15 +138,14 @@ describe("PreferencesAndPrograms", () => {
       expect(tableHeaders[0]).toHaveTextContent(/order/i)
       expect(tableHeaders[1]).toHaveTextContent(/name/i)
       expect(tableHeaders[2]).toHaveTextContent(/additional fields/i)
-      expect(tableHeaders[3]).not.toHaveTextContent()
-
+      expect(tableHeaders[3]).toHaveTextContent(/actions/i)
       const tableRows = within(body).getAllByRole("row")
       expect(tableRows).toHaveLength(2)
 
       const firstRowCells = within(tableRows[0]).getAllByRole("cell")
       expect(firstRowCells[0]).toHaveTextContent("1")
       expect(firstRowCells[1]).toHaveTextContent(/city employees/i)
-      expect(firstRowCells[2]).not.toHaveTextContent()
+      expect(firstRowCells[2]).toHaveTextContent("")
       expect(within(firstRowCells[3]).getByRole("button", { name: /delete/i })).toBeInTheDocument()
 
       const secondRowCells = within(tableRows[1]).getAllByRole("cell")
@@ -178,6 +178,9 @@ describe("PreferencesAndPrograms", () => {
               programs={[]}
               setPreferences={setFn}
               setPrograms={setFn}
+              disableListingPreferences={true}
+              swapCommunityTypeWithPrograms={false}
+              jurisdiction={"jurisdiction1"}
             />
           </FormComponent>
         </AuthContext.Provider>
@@ -216,6 +219,7 @@ describe("PreferencesAndPrograms", () => {
             text: "Families",
             applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
             jurisdictions: undefined,
+            status: MultiselectQuestionsStatusEnum.active,
           },
         ]
         const setFn = jest.fn()
@@ -233,6 +237,9 @@ describe("PreferencesAndPrograms", () => {
                 setPreferences={setFn}
                 programs={programs}
                 setPrograms={setFn}
+                disableListingPreferences={false}
+                swapCommunityTypeWithPrograms={false}
+                jurisdiction={"jurisdiction1"}
               />
             </FormComponent>
           </AuthContext.Provider>
@@ -259,6 +266,7 @@ describe("PreferencesAndPrograms", () => {
             text: "Community 1",
             applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
             jurisdictions: undefined,
+            status: MultiselectQuestionsStatusEnum.active,
           },
         ]
         const setFn = jest.fn()
@@ -276,6 +284,9 @@ describe("PreferencesAndPrograms", () => {
                 setPreferences={setFn}
                 programs={programs}
                 setPrograms={setFn}
+                disableListingPreferences={false}
+                swapCommunityTypeWithPrograms={true}
+                jurisdiction={"jurisdiction1"}
               />
             </FormComponent>
           </AuthContext.Provider>

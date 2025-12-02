@@ -12,6 +12,7 @@ import {
   FeatureFlagEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import userEvent from "@testing-library/user-event"
+import "@testing-library/jest-dom"
 
 const FormComponent = ({ children, values }: { values?: Partial<FormListing>; children }) => {
   const formMethods = useForm<FormListing>({
@@ -46,6 +47,8 @@ describe("AdditionalFees", () => {
       >
         <FormComponent>
           <AdditionalFees
+            enableNonRegulatedListings={false}
+            enableUtilitiesIncluded={false}
             existingUtilities={{
               water: true,
               gas: true,
@@ -80,7 +83,7 @@ describe("AdditionalFees", () => {
     expect(screen.queryByRole("checkbox", { name: /^internet$/i })).not.toBeInTheDocument()
   })
 
-  it("should render the AdditionalFees section with utlities included", async () => {
+  it("should render the AdditionalFees section with utilities included", async () => {
     render(
       <AuthContext.Provider
         value={{
@@ -91,6 +94,8 @@ describe("AdditionalFees", () => {
       >
         <FormComponent>
           <AdditionalFees
+            enableNonRegulatedListings={false}
+            enableUtilitiesIncluded={true}
             existingUtilities={{
               water: true,
               gas: true,
@@ -151,7 +156,12 @@ describe("AdditionalFees", () => {
         }}
       >
         <FormComponent values={{ listingType: EnumListingListingType.nonRegulated }}>
-          <AdditionalFees existingUtilities={{}} requiredFields={[]} />
+          <AdditionalFees
+            existingUtilities={{}}
+            requiredFields={[]}
+            enableNonRegulatedListings={true}
+            enableUtilitiesIncluded={false}
+          />
         </FormComponent>
       </AuthContext.Provider>
     )

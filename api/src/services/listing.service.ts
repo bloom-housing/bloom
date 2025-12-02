@@ -2517,38 +2517,7 @@ export class ListingService implements OnModuleInit {
       throw new HttpException('listing failed to save', 500);
     }
 
-    const listingApprovalPermissions = (
-      await this.prisma.jurisdictions.findFirst({
-        where: { id: incomingDto.jurisdictions.id },
-      })
-    )?.listingApprovalPermissions;
-
-    if (listingApprovalPermissions?.length > 0)
-      await this.listingApprovalNotify({
-        user: requestingUser,
-        listingInfo: { id: incomingDto.id, name: incomingDto.name },
-        approvingRoles: listingApprovalPermissions,
-        status: incomingDto.status,
-        previousStatus: storedListing.status,
-        jurisId: incomingDto.jurisdictions.id,
-      });
-
-    // if listing is closed for the first time the application flag set job needs to run
-    if (
-      storedListing.status === ListingsStatusEnum.active &&
-      incomingDto.status === ListingsStatusEnum.closed
-    ) {
-      if (
-        process.env.DUPLICATES_CLOSE_DATE &&
-        dayjs(process.env.DUPLICATES_CLOSE_DATE, 'YYYY-MM-DD HH:mm Z') <
-          dayjs(new Date())
-      ) {
-        await this.afsService.processDuplicates(incomingDto.id);
-      } else {
-        await this.afsService.process(incomingDto.id);
-      }
-    }
-
+    // Incoming update removes the requiredDocumentsList. Need to disconnect before deleting
     if (
       !incomingDto.requiredDocumentsList &&
       storedListing.requiredDocumentsList?.id
@@ -2568,6 +2537,41 @@ export class ListingService implements OnModuleInit {
           id: storedListing.requiredDocumentsList.id,
         },
       });
+    }
+
+    const listingApprovalPermissions = (
+      await this.prisma.jurisdictions.findFirst({
+        where: { id: incomingDto.jurisdictions.id },
+      })
+    )?.listingApprovalPermissions;
+
+    if (listingApprovalPermissions?.length > 0)
+      await this.listingApprovalNotify({
+        user: requestingUser,
+        listingInfo: { id: incomingDto.id, name: incomingDto.name },
+        approvingRoles: listingApprovalPermissions,
+        status: incomingDto.status,
+        previousStatus: storedListing.status,
+        jurisId: incomingDto.jurisdictions.id,
+      });
+
+    if (
+      storedListing.status === ListingsStatusEnum.active &&
+      incomingDto.status === ListingsStatusEnum.closed
+    ) {
+      // if listing is closed for the first time the application flag set job needs to run
+      if (
+        process.env.DUPLICATES_CLOSE_DATE &&
+        dayjs(process.env.DUPLICATES_CLOSE_DATE, 'YYYY-MM-DD HH:mm Z') <
+          dayjs(new Date())
+      ) {
+        await this.afsService.processDuplicates(incomingDto.id);
+      } else {
+        await this.afsService.process(incomingDto.id);
+      }
+
+      // if the listing is closed for the first time the expire_after value should be set on all applications
+      void this.setExpireAfterValueOnApplications(rawListing.id);
     }
 
     await this.cachePurge(
@@ -2679,6 +2683,26 @@ export class ListingService implements OnModuleInit {
     return mapTo(Listing, listingsRaw);
   };
 
+  setExpireAfterValueOnApplications = async (listingId: string) => {
+    if (
+      process.env.APPLICATION_DAYS_TILL_EXPIRY &&
+      !isNaN(Number(process.env.APPLICATION_DAYS_TILL_EXPIRY))
+    ) {
+      const expireAfterDate = dayjs(new Date())
+        .add(Number(process.env.APPLICATION_DAYS_TILL_EXPIRY), 'days')
+        .toDate();
+      const expiredApplications = await this.prisma.applications.updateMany({
+        data: { expireAfter: expireAfterDate },
+        where: { listingId: listingId },
+      });
+      this.logger.warn(
+        `setting expireAfter of ${expireAfterDate.toDateString()} on ${
+          expiredApplications.count
+        } applications for listing ${listingId}`,
+      );
+    }
+  };
+
   /**
     runs the job to auto close listings that are passed their due date
     will call the the cache purge to purge all listings as long as updates had to be made
@@ -2738,6 +2762,9 @@ export class ListingService implements OnModuleInit {
         ListingsStatusEnum.active,
         '',
       );
+      for (const listing of listingIds) {
+        await this.setExpireAfterValueOnApplications(listing);
+      }
     }
 
     return {

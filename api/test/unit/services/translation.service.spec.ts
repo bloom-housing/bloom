@@ -186,38 +186,6 @@ describe('Testing translations service', () => {
     mockConsoleWarn.mockRestore();
   });
 
-  it('Should fall back to english if language does not exist', async () => {
-    const jurisdictionId = randomUUID();
-    const translations = {
-      id: 'translations id 1',
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      language: LanguagesEnum.en,
-      jurisdictionId: jurisdictionId,
-      translations: {
-        translation1: 'translation 1',
-        translation2: 'translation 2',
-      },
-    };
-    // first call fails to find value so moves to the fallback
-    prisma.translations.findFirst = jest
-      .fn()
-      .mockResolvedValueOnce(null)
-      .mockResolvedValueOnce(translations);
-
-    const result =
-      await service.getTranslationByLanguageAndJurisdictionOrDefaultEn(
-        LanguagesEnum.es,
-        jurisdictionId,
-      );
-
-    expect(prisma.translations.findFirst).toHaveBeenCalledTimes(2);
-    expect(result).toEqual(translations);
-    expect(mockConsoleWarn).toHaveBeenCalledWith(
-      `Fetching translations for es failed on jurisdiction ${jurisdictionId}, defaulting to english.`,
-    );
-  });
-
   it('Should get unique translations by language and jurisdiction', async () => {
     const jurisdictionId = randomUUID();
     const translations = {
@@ -235,11 +203,10 @@ describe('Testing translations service', () => {
       .fn()
       .mockResolvedValueOnce(translations);
 
-    const result =
-      await service.getTranslationByLanguageAndJurisdictionOrDefaultEn(
-        LanguagesEnum.es,
-        jurisdictionId,
-      );
+    const result = await service.getTranslationByLanguageAndJurisdiction(
+      LanguagesEnum.es,
+      jurisdictionId,
+    );
 
     expect(result).toEqual(translations);
     expect(prisma.translations.findFirst).toHaveBeenCalledTimes(1);

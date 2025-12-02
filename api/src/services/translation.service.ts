@@ -23,28 +23,27 @@ export class TranslationService {
     if (language && language !== LanguagesEnum.en) {
       if (jurisdictionId) {
         jurisdictionalTranslations =
-          this.getTranslationByLanguageAndJurisdictionOrDefaultEn(
+          this.getTranslationByLanguageAndJurisdiction(
             language,
             jurisdictionId,
           );
       }
-      genericTranslations =
-        this.getTranslationByLanguageAndJurisdictionOrDefaultEn(language, null);
+      genericTranslations = this.getTranslationByLanguageAndJurisdiction(
+        language,
+        null,
+      );
     }
 
     if (jurisdictionId) {
       jurisdictionalDefaultTranslations =
-        this.getTranslationByLanguageAndJurisdictionOrDefaultEn(
+        this.getTranslationByLanguageAndJurisdiction(
           LanguagesEnum.en,
           jurisdictionId,
         );
     }
 
     const genericDefaultTranslations =
-      this.getTranslationByLanguageAndJurisdictionOrDefaultEn(
-        LanguagesEnum.en,
-        null,
-      );
+      this.getTranslationByLanguageAndJurisdiction(LanguagesEnum.en, null);
 
     const [genericDefault, generic, jurisdictionalDefault, jurisdictional] =
       await Promise.all([
@@ -53,6 +52,7 @@ export class TranslationService {
         jurisdictionalDefaultTranslations,
         jurisdictionalTranslations,
       ]);
+
     // Deep merge
     const translations = lodash.merge(
       genericDefault?.translations,
@@ -64,23 +64,13 @@ export class TranslationService {
     return translations;
   }
 
-  public async getTranslationByLanguageAndJurisdictionOrDefaultEn(
+  public async getTranslationByLanguageAndJurisdiction(
     language: LanguagesEnum,
     jurisdictionId: string | null,
-  ) {
-    let translations = await this.prisma.translations.findFirst({
+  ): Promise<Translations | null> {
+    return await this.prisma.translations.findFirst({
       where: { AND: [{ language: language }, { jurisdictionId }] },
     });
-
-    if (translations === null && language !== LanguagesEnum.en) {
-      console.warn(
-        `Fetching translations for ${language} failed on jurisdiction ${jurisdictionId}, defaulting to english.`,
-      );
-      translations = await this.prisma.translations.findFirst({
-        where: { AND: [{ language: LanguagesEnum.en }, { jurisdictionId }] },
-      });
-    }
-    return translations;
   }
 
   public async translateListing(listing: Listing, language: LanguagesEnum) {

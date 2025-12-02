@@ -88,7 +88,7 @@ describe("CommunityType", () => {
 
     render(
       <FormComponent>
-        <CommunityType requiredFields={[]} />
+        <CommunityType requiredFields={[]} swapCommunityTypeWithPrograms={false} />
       </FormComponent>
     )
 
@@ -135,7 +135,7 @@ describe("CommunityType", () => {
 
     render(
       <FormComponent>
-        <CommunityType requiredFields={[]} />
+        <CommunityType requiredFields={[]} swapCommunityTypeWithPrograms={false} />
       </FormComponent>
     )
 
@@ -174,7 +174,7 @@ describe("CommunityType", () => {
 
     const results = render(
       <FormComponent>
-        <CommunityType requiredFields={[]} />
+        <CommunityType requiredFields={[]} swapCommunityTypeWithPrograms={true} />
       </FormComponent>
     )
 
