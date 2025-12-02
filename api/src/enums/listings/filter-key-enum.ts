@@ -21,4 +21,5 @@ export enum ListingFilterKeys {
   section8Acceptance = 'section8Acceptance',
   status = 'status',
   zipCode = 'zipCode',
+  listingType = 'listingType',
 }
