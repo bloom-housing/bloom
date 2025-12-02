@@ -907,7 +907,7 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
           path: 'rentalAssistance',
           label: 'Eligibility Rules - Rental Assistance',
         },
-        ...(!doAnyJurisdictionHaveFeatureFlagSet(
+        ...(doAnyJurisdictionHaveFalsyFeatureFlagValue(
           user.jurisdictions,
           FeatureFlagEnum.disableBuildingSelectionCriteria,
         )
