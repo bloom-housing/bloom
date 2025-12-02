@@ -1049,6 +1049,20 @@ export class ListingService implements OnModuleInit {
             })),
           });
         }
+        if (filter[ListingFilterKeys.listingType]) {
+          const builtFilter = buildFilter({
+            $comparison: filter.$comparison,
+            $include_nulls: false,
+            value: filter[ListingFilterKeys.listingType],
+            key: ListingFilterKeys.listingType,
+            caseSensitive: true,
+          });
+          filters.push({
+            OR: builtFilter.map((filt) => ({
+              [ListingFilterKeys.listingType]: filt,
+            })),
+          });
+        }
       });
     }
 
