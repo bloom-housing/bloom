@@ -12,7 +12,7 @@ export const OtherFeatures = ({ hasEbllClearence }: OtherFeaturesProps) => {
       <HeadingGroup
         heading={t("t.other")}
         size="lg"
-        headingPriority={4}
+        headingPriority={3}
         subheading={
           hasEbllClearence ? t("listings.hasEbllClearance") : t("listings.noEbllClearance")
         }
