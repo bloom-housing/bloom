@@ -42,7 +42,9 @@ describe("PasswordExpiredModal", () => {
 
     expect(screen.queryByText("Password Expired")).not.toBeInTheDocument()
     expect(
-      screen.queryByText("The password tied to your account has expired. Please reset it to continue.")
+      screen.queryByText(
+        "The password tied to your account has expired. Please reset it to continue."
+      )
     ).not.toBeInTheDocument()
   })
 
