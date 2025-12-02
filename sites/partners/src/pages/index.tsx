@@ -112,13 +112,14 @@ export default function ListingsList() {
           const statusString = t(`listings.listingStatus.${props.getValue() as string}`)
           if (!profile?.userRoles?.isLimitedJurisdictionalAdmin) {
             return (
-              <Link
-                href={`/listings/${props.row.original.id as string}/applications`}
-                data-testid={`listing-status-cell-${props.row.original.name as string}`}
-                className="text-blue-700 underline"
-              >
-                {statusString}
-              </Link>
+              <div data-testid={`listing-status-cell-${props.row.original.name as string}`}>
+                <Link
+                  href={`/listings/${props.row.original.id as string}/applications`}
+                  className="text-blue-700 underline"
+                >
+                  {statusString}
+                </Link>
+              </div>
             )
           } else {
             return statusString
