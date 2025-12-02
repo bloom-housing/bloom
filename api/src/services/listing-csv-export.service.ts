@@ -93,6 +93,10 @@ export const formatCommunityType = {
   schoolEmployee: 'School Employee',
 };
 
+export const formatCloudinaryPdfUrl = (fileId: string): string => {
+  return `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload/${fileId}.pdf`;
+};
+
 @Injectable()
 export class ListingCsvExporterService implements CsvExporterServiceInterface {
   readonly dateFormat: string = 'MM-DD-YYYY hh:mm:ssA z';
@@ -379,15 +383,19 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
     return value ? `$${value}` : '';
   }
 
-  cloudinaryPdfFromId(publicId: string, listing?: Listing): string {
-    if (publicId) {
-      const cloudName =
-        process.env.cloudinaryCloudName || process.env.CLOUDINARY_CLOUD_NAME;
-      return `https://res.cloudinary.com/${cloudName}/image/upload/${publicId}.pdf`;
-    } else if (!publicId && listing?.buildingSelectionCriteria) {
-      return listing.buildingSelectionCriteria;
-    }
+  buildingSelectionCriteria(value: string, listing?: Listing): string {
+    if (value) return listing.buildingSelectionCriteria;
+    if (listing?.listingsBuildingSelectionCriteriaFile?.fileId)
+      return formatCloudinaryPdfUrl(
+        listing.listingsBuildingSelectionCriteriaFile?.fileId,
+      );
+    return '';
+  }
 
+  cloudinaryPdfFromId(publicId: string): string {
+    if (publicId) {
+      return formatCloudinaryPdfUrl(publicId);
+    }
     return '';
   }
 
@@ -908,9 +916,9 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
           label: 'Eligibility Rules - Rental Assistance',
         },
         {
-          path: 'buildingSelectionCriteriaFileId',
+          path: 'buildingSelectionCriteria',
           label: 'Building Selection Criteria',
-          format: this.cloudinaryPdfFromId,
+          format: this.buildingSelectionCriteria,
         },
         {
           path: 'programRules',
