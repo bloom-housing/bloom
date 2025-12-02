@@ -26,13 +26,13 @@ describe("PasswordExpiredModal", () => {
   })
 
   it("renders modal when isOpen is true", () => {
-      render(
-      <PasswordExpiredModal isOpen={true} onClose={mockOnClose} />
-    )
+    render(<PasswordExpiredModal isOpen={true} onClose={mockOnClose} />)
 
     expect(screen.getByRole("heading", { level: 1, name: "Password Expired" })).toBeInTheDocument()
     expect(
-      screen.getByText("The password tied to your account has expired. Please reset it to continue.")
+      screen.getByText(
+        "The password tied to your account has expired. Please reset it to continue."
+      )
     ).toBeInTheDocument()
     expect(screen.getByRole("button", { name: "Continue" })).toBeInTheDocument()
   })

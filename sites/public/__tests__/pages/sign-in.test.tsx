@@ -536,6 +536,63 @@ describe("User is not confirmed flow", () => {
   })
 })
 
+describe("User's password is out of date flow", () => {
+  let originalShowPwdless
+
+  beforeEach(() => {
+    jest.clearAllMocks()
+    ;(useRouter as jest.Mock).mockReturnValue({
+      query: {},
+      push: jest.fn(),
+    })
+
+    originalShowPwdless = process.env.showPwdless
+    process.env.showPwdless = ""
+  })
+
+  afterEach(() => {
+    process.env.showPwdless = originalShowPwdless
+  })
+
+  it("shows password expired modal when user login fails with 'but password is no longer valid' error", async () => {
+    // Mock login to throw an error with the "not confirmed" message
+    const mockError = {
+      response: {
+        status: 401,
+        data: {
+          message: "User 1234-test-id attempted to login, but password is no longer valid",
+        },
+      },
+    }
+    const mockLogin = jest.fn().mockRejectedValue(mockError)
+
+    const { getByLabelText, getByRole, findByText } = render(
+      <AuthContext.Provider
+        value={{
+          initialStateLoaded: true,
+          profile: undefined,
+          login: mockLogin,
+        }}
+      >
+        <MessageContext.Provider value={TOAST_MESSAGE}>
+          <SignInComponent />
+        </MessageContext.Provider>
+      </AuthContext.Provider>
+    )
+
+    fireEvent.change(getByLabelText("Email"), { target: { value: "user@example.com" } })
+    fireEvent.change(getByLabelText("Password"), { target: { value: "password123" } })
+    fireEvent.click(getByRole("button", { name: /sign in/i }))
+
+    expect(
+      await findByText(
+        "The password tied to your account has expired. Please reset it to continue."
+      )
+    ).toBeInTheDocument()
+    expect(await findByText("Password Expired")).toBeInTheDocument()
+  })
+})
+
 describe("Resend confirmation flow", () => {
   let originalShowPwdless
 
