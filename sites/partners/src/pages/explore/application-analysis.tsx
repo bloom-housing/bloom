@@ -220,9 +220,11 @@ const ApplicationAnalysis = () => {
     setInsightError(null)
 
     try {
+      // Send data products for AI analysis
+      // TODO: Optimize data size
       const response = await dataExplorerService.generateInsight({
         body: {
-          data: chartData,
+          data: defaultReport.products,
           prompt:
             "Analyze this housing application data and provide key insights about demographics, income distribution, and accessibility needs. Focus on actionable insights for housing policy makers.",
         },
@@ -307,6 +309,37 @@ const ApplicationAnalysis = () => {
               </select>
               <p className="mt-2 text-xs text-gray-600">
                 Select a test dataset to override the normal data fetching behavior
+              </p>
+            </div>
+
+            {/* Dev AI Consent Override */}
+            <div className="mb-4 p-4 bg-purple-50 border border-purple-200 rounded-lg">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                👨‍💻 Dev: AI Consent Override
+              </label>
+              <div className="flex gap-2">
+                <Button
+                  variant="primary"
+                  size="sm"
+                  onClick={() => setHasUserConsentedToAI(true)}
+                  className={hasUserConsentedToAI ? "opacity-50" : ""}
+                >
+                  Grant Consent
+                </Button>
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  onClick={() => {
+                    setHasUserConsentedToAI(false)
+                    setAiInsight("")
+                  }}
+                  className={!hasUserConsentedToAI ? "opacity-50" : ""}
+                >
+                  Revoke Consent
+                </Button>
+              </div>
+              <p className="mt-2 text-xs text-gray-600">
+                Current status: {hasUserConsentedToAI ? "✅ Consented" : "❌ Not Consented"}
               </p>
             </div>
 

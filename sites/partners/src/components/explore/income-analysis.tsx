@@ -8,7 +8,6 @@ import {
   Tooltip as ReTooltip,
   Legend,
   ResponsiveContainer,
-  LabelList,
 } from "recharts"
 import { IncomeHouseholdSizeCrossTab } from "../../lib/explore/data-explorer"
 
@@ -16,6 +15,27 @@ interface HouseholdIncomeReportProps {
   chartData: {
     incomeHouseholdSizeCrossTab: IncomeHouseholdSizeCrossTab
   }
+}
+
+// Custom label renderer for 45-degree angle
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const CustomLabel = (props: any): React.ReactElement => {
+  const { x, y, width, value } = props as { x: number; y: number; width: number; value: number }
+  return (
+    <g transform={`translate(${x + width / 2}, ${y})`}>
+      <text
+        x={0}
+        y={0}
+        dy={-4}
+        textAnchor="start"
+        fill="#374151"
+        fontSize={12}
+        style={{ transform: "rotate(-45deg)", transformOrigin: "0 0" }}
+      >
+        {value}
+      </text>
+    </g>
+  )
 }
 
 export default function HouseholdIncomeReport({ chartData }: HouseholdIncomeReportProps) {
@@ -27,10 +47,13 @@ export default function HouseholdIncomeReport({ chartData }: HouseholdIncomeRepo
   const barChartData = amiRanges.map((range) => {
     const entry: Record<string, string | number> = { amiRange: range }
     hhSizes.forEach((size) => {
-      entry[`${size} bedroom`] = crossTab[size]?.[range] || 0
+      entry[`${size} person`] = crossTab[size]?.[range] || 0
     })
     return entry
   })
+
+  console.log("Bar Chart Data:", barChartData)
+  console.log("Chart Data:", chartData)
 
   // Transform data for DataTable with AMI ranges as rows and household sizes as columns
   const tableData = amiRanges.map((range) => {
@@ -114,20 +137,15 @@ export default function HouseholdIncomeReport({ chartData }: HouseholdIncomeRepo
                   {hhSizes.map((size, index) => (
                     <Bar
                       key={size}
-                      dataKey={`${size} bedroom`}
+                      dataKey={`${size} person`}
                       fill={
                         ["#205493", "#0067BE", "#0077DA", "#DAEEFF"][index] // blue-900, blue-700, blue-500, blue-300
                       }
-                      opacity={activeBar && activeBar !== `${size} bedroom` ? 0.6 : 1}
+                      opacity={activeBar && activeBar !== `${size} person` ? 0.6 : 1}
                       maxBarSize={24}
                       radius={[4, 4, 0, 0]}
-                    >
-                      <LabelList
-                        dataKey={`${size} bedroom`}
-                        position="top"
-                        style={{ fontSize: "12px", fill: "#374151" }}
-                      />
-                    </Bar>
+                      label={<CustomLabel />}
+                    />
                   ))}
                 </BarChart>
               </ResponsiveContainer>

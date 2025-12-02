@@ -40,7 +40,7 @@ function DemographicChart({ title, data, dataKey }: DemographicChartProps) {
         </div>
       ) : (
         <>
-          <div className="w-full h-64">
+          <div className="w-full h-80">
             <ResponsiveContainer>
               <BarChart
                 layout="vertical"
@@ -63,16 +63,17 @@ function DemographicChart({ title, data, dataKey }: DemographicChartProps) {
                 <YAxis
                   type="category"
                   dataKey={dataKey}
-                  tick={{ fontSize: 12, fill: "##767676" }}
+                  tick={{ fontSize: 12, fill: "#767676", width: 180 }}
                   tickLine={false}
                   axisLine={false}
+                  width={180}
                 />
                 <ReTooltip
                   formatter={(val: number) => [`${val}`, "Count"]}
                   cursor={{ fill: "#CBD5E1", opacity: 0.3 }}
                 />
 
-                <Bar dataKey="count" fill={BLUE_500} barSize={24} radius={[0, 4, 4, 0]}>
+                <Bar dataKey="count" fill={BLUE_500} barSize={32} radius={[0, 4, 4, 0]}>
                   <LabelList
                     dataKey="count"
                     position="right"

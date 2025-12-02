@@ -46,7 +46,7 @@ export default function PrimaryApplicantSection({ chartData }: PrimaryApplicantS
     {
       title: "Age",
       data: ageFrequencies,
-      key: "age",
+      key: "bucket",
       tableLabel: "Age",
     },
     {
@@ -123,11 +123,7 @@ export default function PrimaryApplicantSection({ chartData }: PrimaryApplicantS
               </p>
             </div>
           ) : (
-            <DataTable
-              title="Accessibility"
-              data={accessibilityTypeFrequencies}
-              dataKey="accessibilityType"
-            />
+            <DataTable title="Accessibility" data={accessibilityTypeFrequencies} dataKey="type" />
           )}
 
           {subsidyOrVoucherTypeFrequencies.length === 0 ? (
@@ -140,7 +136,7 @@ export default function PrimaryApplicantSection({ chartData }: PrimaryApplicantS
             <DataTable
               title="Subsidy or voucher"
               data={subsidyOrVoucherTypeFrequencies}
-              dataKey="subsidyType"
+              dataKey="voucher"
             />
           )}
         </div>

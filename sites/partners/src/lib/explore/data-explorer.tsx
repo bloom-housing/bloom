@@ -200,13 +200,13 @@ export const lowIncomeAndYounger: ReportData = {
   kAnonScore: 3,
   products: {
     incomeHouseholdSizeCrossTab: {
-      "1": { "0-30% AMI": 120, "31-50% AMI": 50, "51-80% AMI": 20, "81-120% AMI": 10 },
+      "1": { "0-30% AMI": 120, "31-50% AMI": 50, "51-80% AMI": 20, "81-120% AMI": -1 },
       "2": { "0-30% AMI": 150, "31-50% AMI": 80, "51-80% AMI": 30, "81-120% AMI": 20 },
       "3": { "0-30% AMI": 100, "31-50% AMI": 60, "51-80% AMI": 40, "81-120% AMI": 20 },
       "4+": { "0-30% AMI": 80, "31-50% AMI": 40, "51-80% AMI": 30, "81-120% AMI": 10 },
     },
     raceFrequencies: [
-      { race: "Asian", count: 80, percentage: 0.1 },
+      { race: "Asian", count: -1, percentage: 0.1 },
       { race: "Black or African American", count: 240, percentage: 0.3 },
       { race: "Hispanic or Latino", count: 160, percentage: 0.2 },
       { race: "White", count: 240, percentage: 0.3 },
@@ -229,7 +229,7 @@ export const lowIncomeAndYounger: ReportData = {
       { accessibilityType: "None", count: 600, percentage: 0.75 },
     ],
     ageFrequencies: [
-      { age: "18-24", count: 240, percentage: 0.3 },
+      { age: "18-24", count: -1, percentage: 0.3 },
       { age: "25-34", count: 280, percentage: 0.35 },
       { age: "35-44", count: 160, percentage: 0.2 },
       { age: "45-54", count: 80, percentage: 0.1 },
