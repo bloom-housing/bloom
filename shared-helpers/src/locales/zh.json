@@ -721,6 +721,7 @@
   "listings.developmentalDisabilities": "發展障礙人士",
   "listings.developmentalDisabilitiesDescription": "此樓宇有部分單位留給有發展障礙的人士。請瀏覽 <a href='http://www.housingchoices.org/' target='_blank'>housingchoices.org</a> 以了解有關申請資格、要求、索取申請表方法等資訊；網站還可回答有關申請過程的任何其他疑問。",
   "listings.downloadPdf": "下載 PDF 檔案",
+  "listings.hasEbllClearance": "该房产已获得美国住房和城市发展部 (HUD) EBLL 许可。",
   "listings.eligibilityNotebook": "资格笔记本",
   "listings.eligibleApplicants.FCFS": "我們將按照「先申請先入住」的原則聯絡合格的申請人，直至空置房被入住為止。",
   "listings.enterLotteryForWaitlist": "提交申請表，列入 %{units} 個單位候補名單的空缺名額。",

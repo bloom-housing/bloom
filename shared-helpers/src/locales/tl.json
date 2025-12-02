@@ -721,6 +721,7 @@
   "listings.developmentalDisabilities": "Mga taong may kapansanan sa pag-unlad",
   "listings.developmentalDisabilitiesDescription": "Ang isang bahaging bilang ng mga unit sa gusaling ito ay nakalaan para sa mga taong may kapansanan sa pag-unlad. Mangyaring bisitahin ang <a href='http://www.housingchoices.org/' target='_blank'>housingchoices.org</a> para sa impormasyon sa pagiging kwalipikado, mga kinakailangan, kung paano makakuha ng application at para sa mga sagot sa iba pang mga katanungan maaaring mayroon ka tungkol sa proseso.",
   "listings.downloadPdf": "I-download ang PDF",
+  "listings.hasEbllClearance": "Nakatanggap ang property na ito ng HUD EBLL clearance.",
   "listings.eligibilityNotebook": "Kwalipikadong notebook",
   "listings.eligibleApplicants.FCFS": "Ang mga kwalipikadong aplikante ay ilalagay sa waitlist sa batayang first come first serve hanggang sa mapuno ang mga puwesto ng waitlist.",
   "listings.enterLotteryForWaitlist": "Magsumite ng application para sa bukas ng slot ng waitlist para sa %{units} na unit.",
