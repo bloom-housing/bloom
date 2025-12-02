@@ -181,7 +181,7 @@ describe("listings", () => {
     expect(screen.queryByText("Verified")).toBeNull()
   })
 
-  it("should show is waitlist and available units columns if unit groups feature flag is off", () => {
+  it("should show is waitlist and available units columns if unit groups feature flag is off", async () => {
     window.URL.createObjectURL = jest.fn()
     document.cookie = "access-token-available=True"
     server.use(
@@ -233,7 +233,7 @@ describe("listings", () => {
         </AuthContext.Provider>
       </QueryClientProvider>
     )
-    expect(screen.getByText("Available units")).toBeDefined()
+    expect(await screen.findByText("Available units")).toBeDefined()
     expect(screen.getByText("Open waitlist")).toBeDefined()
   })
 
@@ -293,7 +293,7 @@ describe("listings", () => {
     expect(screen.queryByText("Open waitlist")).toBeNull()
   })
 
-  it("should show is verified column if feature flag is on", () => {
+  it("should show is verified column if feature flag is on", async () => {
     window.URL.createObjectURL = jest.fn()
     document.cookie = "access-token-available=True"
     server.use(
@@ -345,7 +345,7 @@ describe("listings", () => {
         </AuthContext.Provider>
       </QueryClientProvider>
     )
-    expect(screen.getByText("Verified")).toBeDefined()
+    expect(await screen.findByText("Verified")).toBeDefined()
   })
 
   it("should not show last updated column if feature flag is off", () => {
@@ -402,7 +402,7 @@ describe("listings", () => {
     expect(screen.queryByText("Last updated")).toBeNull()
   })
 
-  it("should show is last updated column if feature flag is on", () => {
+  it("should show is last updated column if feature flag is on", async () => {
     window.URL.createObjectURL = jest.fn()
     document.cookie = "access-token-available=True"
     server.use(
@@ -453,7 +453,7 @@ describe("listings", () => {
         </AuthContext.Provider>
       </QueryClientProvider>
     )
-    expect(screen.getByText("Last updated")).toBeDefined()
+    expect(await screen.findByText("Last updated")).toBeDefined()
   })
   // Skipping for now until the CSV endpoints are created
   it.skip("should render the error text when listings csv api call fails", async () => {

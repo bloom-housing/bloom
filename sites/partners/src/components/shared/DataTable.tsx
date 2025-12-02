@@ -207,22 +207,24 @@ export const DataTable = (props: DataTableProps) => {
   const getTableContent = () => {
     if (delayedLoading || dataQuery.data === undefined) {
       return (
-        <tr className={styles["loading-row"]}>
-          <td
-            colSpan={table.getVisibleFlatColumns().length}
-            style={{
-              height: `${
-                dataQuery.data === undefined
-                  ? APPROX_ROW_HEIGHT * (props.defaultItemsPerPage || 8)
-                  : document.getElementById("data-table")?.offsetHeight
-              }px`,
-            }}
-          >
-            <LoadingState loading={true} className={styles["loading-spinner"]}>
-              <div className={styles["loading-content"]} />
-            </LoadingState>
-          </td>
-        </tr>
+        <tbody>
+          <tr className={styles["loading-row"]}>
+            <td
+              colSpan={table.getVisibleFlatColumns().length}
+              style={{
+                height: `${
+                  dataQuery.data === undefined
+                    ? APPROX_ROW_HEIGHT * (props.defaultItemsPerPage || 8)
+                    : document.getElementById("data-table")?.offsetHeight
+                }px`,
+              }}
+            >
+              <LoadingState loading={true} className={styles["loading-spinner"]}>
+                <div className={styles["loading-content"]} />
+              </LoadingState>
+            </td>
+          </tr>
+        </tbody>
       )
     } else if (dataQuery.data?.errorMessage) {
       return (
@@ -325,6 +327,7 @@ export const DataTable = (props: DataTableProps) => {
                   table.setPageSize(Number(e.target.value))
                 }}
                 className={styles["show-select"]}
+                id={"show-numbers"}
               >
                 {/* TODO: Remove 3 before merge, just for easier pagination testing purposes */}
                 {[3, 8, 25, 50, 100].map((pageSize) => (
