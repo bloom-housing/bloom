@@ -4,9 +4,11 @@ import { DetailUnits } from "../../../../../src/components/listings/PaperListing
 import { ListingContext } from "../../../../../src/components/listings/ListingContext"
 import { listing, unit } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import {
+  EnumListingListingType,
   EnumUnitGroupAmiLevelMonthlyRentDeterminationType,
   FeatureFlagEnum,
   HomeTypeEnum,
+  RentTypeEnum,
   ReviewOrderTypeEnum,
   UnitTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -16,7 +18,8 @@ function mockJurisdictionsHaveFeatureFlagOn(
   featureFlag: string,
   enableHomeType = true,
   enableSection8Question = true,
-  enableUnitGroups = false
+  enableUnitGroups = false,
+  enableNonRegulatedListings = false
 ) {
   switch (featureFlag) {
     case FeatureFlagEnum.enableHomeType:
@@ -25,6 +28,8 @@ function mockJurisdictionsHaveFeatureFlagOn(
       return enableSection8Question
     case FeatureFlagEnum.enableUnitGroups:
       return enableUnitGroups
+    case FeatureFlagEnum.enableNonRegulatedListings:
+      return enableNonRegulatedListings
   }
 }
 
@@ -149,7 +154,7 @@ describe("DetailUnits", () => {
     expect(screen.getByText("None")).toBeInTheDocument()
   })
 
-  it("should render the detail units with unit groups", () => {
+  it("should render the detail units with unit groups for regulated listing", () => {
     render(
       <AuthContext.Provider
         value={{
@@ -278,6 +283,128 @@ describe("DetailUnits", () => {
     expect(occupancy).toHaveTextContent("1 - 4")
     expect(sqFeet).toHaveTextContent("20 - 64")
     expect(bath).toHaveTextContent("1 - 2")
+  })
+
+  it("should render the detail units with unit groups for non-regulated listing", () => {
+    render(
+      <AuthContext.Provider
+        value={{
+          doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
+            mockJurisdictionsHaveFeatureFlagOn(featureFlag, false, true, true, true),
+        }}
+      >
+        <ListingContext.Provider
+          value={{
+            ...listing,
+            listingType: EnumListingListingType.nonRegulated,
+            reviewOrderType: ReviewOrderTypeEnum.waitlist,
+            units: [],
+            unitGroups: [
+              {
+                id: "test_unit_group_id_1",
+                createdAt: new Date(2025, 4, 8),
+                updatedAt: new Date(2025, 4, 8),
+                rentType: RentTypeEnum.fixedRent,
+                monthlyRent: 2000,
+                unitTypes: [
+                  {
+                    id: "test_id_1",
+                    createdAt: new Date(),
+                    updatedAt: new Date(),
+                    name: UnitTypeEnum.twoBdrm,
+                    numBedrooms: 2,
+                  },
+                  {
+                    id: "test_id_2",
+                    createdAt: new Date(),
+                    updatedAt: new Date(),
+                    name: UnitTypeEnum.SRO,
+                    numBedrooms: 5,
+                  },
+                ],
+                totalCount: 2,
+                minOccupancy: 1,
+                maxOccupancy: 4,
+                bathroomMin: 1,
+                bathroomMax: 2,
+              },
+              {
+                id: "test_unit_group_id_2",
+                createdAt: new Date(2025, 4, 8),
+                updatedAt: new Date(2025, 4, 8),
+                rentType: RentTypeEnum.rentRange,
+                flatRentValueFrom: 1250,
+                flatRentValueTo: 1750,
+                unitTypes: [
+                  {
+                    id: "test_id_3",
+                    createdAt: new Date(),
+                    updatedAt: new Date(),
+                    name: UnitTypeEnum.fourBdrm,
+                    numBedrooms: 2,
+                  },
+                ],
+                totalCount: 1,
+                minOccupancy: 2,
+                maxOccupancy: 5,
+                bathroomMin: 2,
+                bathroomMax: 2,
+              },
+            ],
+          }}
+        >
+          <DetailUnits setUnitDrawer={jest.fn()} />
+        </ListingContext.Provider>
+      </AuthContext.Provider>
+    )
+
+    // Above the table
+    expect(screen.getByRole("heading", { level: 2, name: /listing units/i })).toBeInTheDocument()
+    expect(
+      screen.queryByText("Do you want to show unit types or individual units?")
+    ).not.toBeInTheDocument()
+    expect(screen.queryByText("Individual units")).not.toBeInTheDocument()
+    expect(screen.queryByText("What is the listing availability?")).not.toBeInTheDocument()
+    expect(screen.queryByText("Open waitlist")).not.toBeInTheDocument()
+    expect(screen.queryAllByText("Home type")).toHaveLength(0)
+
+    // Table
+    const table = screen.getByRole("table")
+    const headAndBody = within(table).getAllByRole("rowgroup")
+    expect(headAndBody).toHaveLength(2)
+    const [head, body] = headAndBody
+
+    const columnHeaders = within(head).getAllByRole("columnheader")
+    expect(columnHeaders).toHaveLength(5)
+
+    expect(columnHeaders[0]).toHaveTextContent("Unit type")
+    expect(columnHeaders[1]).toHaveTextContent("# of units")
+    expect(columnHeaders[2]).toHaveTextContent("Rent")
+    expect(columnHeaders[3]).toHaveTextContent("Occupancy")
+    expect(columnHeaders[4]).toHaveTextContent("Bath")
+
+    const rows = within(body).getAllByRole("row")
+    expect(rows).toHaveLength(2)
+    // Validate first row
+    const [firstUnitType, firstUnitsNumber, firstRent, firstOccupancy, firstBath] = within(
+      rows[0]
+    ).getAllByRole("cell")
+
+    expect(firstUnitType).toHaveTextContent("2 BR, SRO")
+    expect(firstUnitsNumber).toHaveTextContent("2")
+    expect(firstRent).toHaveTextContent("2000")
+    expect(firstOccupancy).toHaveTextContent("1 - 4")
+    expect(firstBath).toHaveTextContent("1 - 2")
+
+    const [secondUnitType, secondUnitsNumber, secondRent, secondOccupancy, secondBath] = within(
+      rows[1]
+    ).getAllByRole("cell")
+
+    expect(secondUnitType).toHaveTextContent("4 BR")
+    expect(secondUnitsNumber).toHaveTextContent("1")
+    expect(secondRent).toHaveTextContent("1250 - 1750")
+    expect(secondOccupancy).toHaveTextContent("2 - 5")
+    expect(secondBath).toHaveTextContent("2")
   })
 
   describe("Listing availability text", () => {
