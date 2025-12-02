@@ -393,6 +393,22 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
     return '';
   }
 
+  marketingFlyer(value: string, listing?: Listing): string {
+    if (value) return listing.marketingFlyer;
+    if (listing?.listingsMarketingFlyerFile?.fileId)
+      return formatCloudinaryPdfUrl(listing.listingsMarketingFlyerFile?.fileId);
+    return '';
+  }
+
+  accessibleMarketingFlyer(value: string, listing?: Listing): string {
+    if (value) return listing.accessibleMarketingFlyer;
+    if (listing?.listingsAccessibleMarketingFlyerFile?.fileId)
+      return formatCloudinaryPdfUrl(
+        listing.listingsAccessibleMarketingFlyerFile?.fileId,
+      );
+    return '';
+  }
+
   cloudinaryPdfFromId(publicId: string): string {
     if (publicId) {
       return formatCloudinaryPdfUrl(publicId);
@@ -1244,6 +1260,23 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
               .join(', ');
           },
         },
+        ...(doAnyJurisdictionHaveFeatureFlagSet(
+          user.jurisdictions,
+          FeatureFlagEnum.enableMarketingFlyer,
+        )
+          ? [
+              {
+                path: 'marketingFlyer',
+                label: 'Marketing Flyer',
+                format: this.marketingFlyer,
+              },
+              {
+                path: 'accessibleMarketingFlyer',
+                label: 'Accessible Marketing Flyer',
+                format: this.accessibleMarketingFlyer,
+              },
+            ]
+          : []),
         {
           path: 'userAccounts',
           label: 'Partners Who Have Access',
