@@ -401,6 +401,11 @@ export const getEligibilitySections = (
     FeatureFlagEnum.disableListingPreferences
   )
 
+  const disableBuildingSelectionCriteria = isFeatureFlagOn(
+    jurisdiction,
+    FeatureFlagEnum.disableBuildingSelectionCriteria
+  )
+
   // Reserved community type
   if (!swapCommunityTypeWithPrograms && listing.reservedCommunityTypes) {
     eligibilityFeatures.push({
@@ -546,8 +551,8 @@ export const getEligibilitySections = (
     listing.creditHistory ||
     listing.rentalHistory ||
     listing.criminalBackground ||
-    listing.listingsBuildingSelectionCriteriaFile ||
-    listing.buildingSelectionCriteria
+    ((listing.listingsBuildingSelectionCriteriaFile || listing.buildingSelectionCriteria) &&
+      !disableBuildingSelectionCriteria)
   ) {
     const cardContent: ContentCardProps[] = []
     if (listing.creditHistory)
@@ -571,7 +576,7 @@ export const getEligibilitySections = (
       content: (
         <>
           <CardList cardContent={cardContent} />
-          {getBuildingSelectionCriteria(listing)}
+          {!disableBuildingSelectionCriteria && getBuildingSelectionCriteria(listing)}
         </>
       ),
     })

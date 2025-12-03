@@ -2,6 +2,7 @@
 // Note, these are just used to keep backend and frontend in sync. We store feature flags as strings so this list might not include every flag.
 // Keep alphabetized for readability.
 export enum FeatureFlagEnum {
+  disableBuildingSelectionCriteria = 'disableBuildingSelectionCriteria',
   disableCommonApplication = 'disableCommonApplication',
   disableJurisdictionalAdmin = 'disableJurisdictionalAdmin',
   disableListingPreferences = 'disableListingPreferences',
@@ -55,6 +56,11 @@ export const featureFlagMap: {
   name: string;
   description: string;
 }[] = [
+  {
+    name: FeatureFlagEnum.disableBuildingSelectionCriteria,
+    description:
+      'When true, building selection criteria is not displayed in the listing',
+  },
   {
     name: FeatureFlagEnum.disableCommonApplication,
     description:
