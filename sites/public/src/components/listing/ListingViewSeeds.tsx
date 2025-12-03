@@ -157,6 +157,22 @@ export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: Li
     </>
   )
 
+  const lisitngUtilities = getUtilitiesIncluded(listing)
+
+  const hasUnitFeature =
+    listing.units.length ||
+    listing.applicationFee ||
+    listing.depositMin ||
+    listing.depositMax ||
+    listing.depositValue ||
+    listing.costsNotIncluded ||
+    (isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableCreditScreeningFee) &&
+      listing.creditScreeningFee) ||
+    (isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableUtilitiesIncluded) &&
+      lisitngUtilities.length) ||
+    (isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableNonRegulatedListings) &&
+      listing.listingType === EnumListingListingType.nonRegulated)
+
   const UnitFeatures = (
     <>
       <Heading size={"lg"} className={"seeds-m-be-header"} priority={3}>
@@ -186,7 +202,7 @@ export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: Li
         }
         utilitiesIncluded={
           isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableUtilitiesIncluded)
-            ? getUtilitiesIncluded(listing)
+            ? lisitngUtilities
             : []
         }
       />
@@ -272,7 +288,9 @@ export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: Li
           <div className={styles["main-content"]}>
             <div className={styles["hide-desktop"]}>{ApplyBar}</div>
             <Eligibility eligibilitySections={getEligibilitySections(jurisdiction, listing)} />
-            <Features features={getFeatures(listing, jurisdiction)}>{UnitFeatures}</Features>
+            <Features features={getFeatures(listing, jurisdiction)}>
+              {hasUnitFeature && UnitFeatures}
+            </Features>
             <Neighborhood
               address={listing.listingsBuildingAddress}
               name={listing.name}
