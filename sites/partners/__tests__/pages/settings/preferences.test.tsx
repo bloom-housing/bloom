@@ -8,13 +8,13 @@ import {
   listing,
   multiselectQuestionPreference,
 } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
-import { mockNextRouter, render } from "../../testUtils"
-import SettingsPreferences from "../../../src/pages/settings/preferences"
 import {
   FeatureFlagEnum,
   Jurisdiction,
   User,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { mockNextRouter, render } from "../../testUtils"
+import SettingsPreferences from "../../../src/pages/settings/preferences"
 
 const server = setupServer()
 
