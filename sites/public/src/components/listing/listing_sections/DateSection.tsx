@@ -25,7 +25,7 @@ export const DateSection = ({ events, marketingFlyers, heading }: DateSectionPro
         <Heading size={"lg"} priority={2} className={"seeds-p-be-header"}>
           {heading}
         </Heading>
-        {events.map((event, index) => {
+        {events?.map((event, index) => {
           const dateString = dayjs(event.startDate).format("MMMM D, YYYY")
           const timeString = getTimeRangeString(event.startTime, event.endTime)
           return (
@@ -48,7 +48,10 @@ export const DateSection = ({ events, marketingFlyers, heading }: DateSectionPro
           )
         })}
         {marketingFlyers?.map((marketingFlyer, index) => (
-          <div key={`marketingFlyer-${index}`} className={"seeds-m-bs-header"}>
+          <div
+            key={`marketingFlyer-${index}`}
+            className={`${events?.length || index > 0 ? "seeds-m-bs-header" : ""}`}
+          >
             <Link href={marketingFlyer.url} hideExternalLinkIcon={true}>
               {marketingFlyer.label}
             </Link>

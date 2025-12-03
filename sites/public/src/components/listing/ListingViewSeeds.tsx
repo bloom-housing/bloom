@@ -101,17 +101,29 @@ export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: Li
     paperApplications?.length ? paperApplications[0].fileURL : undefined
   )
 
+  const openHouseEvents = listing.listingEvents?.filter(
+    (event) => event.type === ListingEventsTypeEnum.openHouse
+  )
+  const marketingFlyers = getMarketingFlyers(listing, jurisdiction)
+
+  const getOpenHousesHeading = () => {
+    if (
+      isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableMarketingFlyer) &&
+      marketingFlyers?.length
+    ) {
+      if (openHouseEvents?.length) {
+        return t("listings.openHouseAndMarketing.header")
+      }
+      return t("listings.marketing.header")
+    }
+    return t("listings.openHouseEvent.header")
+  }
+
   const OpenHouses = (
     <DateSection
-      heading={
-        isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableMarketingFlyer)
-          ? t("listings.openHouseAndMarketing.header")
-          : t("listings.openHouseEvent.header")
-      }
-      events={listing.listingEvents?.filter(
-        (event) => event.type === ListingEventsTypeEnum.openHouse
-      )}
-      marketingFlyers={getMarketingFlyers(listing, jurisdiction)}
+      heading={getOpenHousesHeading()}
+      events={openHouseEvents}
+      marketingFlyers={marketingFlyers}
     />
   )
 
