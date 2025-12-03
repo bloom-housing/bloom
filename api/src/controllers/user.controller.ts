@@ -257,6 +257,16 @@ export class UserController {
     );
   }
 
+  @Put('userWarnCronJob')
+  @ApiOperation({
+    summary: 'trigger the user warn of deletion cron job',
+    operationId: 'removePIICronJob',
+  })
+  @ApiOkResponse({ type: SuccessDTO })
+  async removePIICronJob(): Promise<SuccessDTO> {
+    return await this.userService.warnUserOfDeletionCronJob();
+  }
+
   @Put(':id')
   @ApiOperation({ summary: 'Update user', operationId: 'update' })
   @ApiOkResponse({ type: User })

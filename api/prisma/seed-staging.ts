@@ -203,6 +203,7 @@ export const stagingSeed = async (
       roles: { isSuperAdmin: true, isAdmin: true },
       email: 'superadmin@example.com',
       confirmedAt: new Date(),
+      mfaEnabled: true,
       jurisdictionIds: [
         mainJurisdiction.id,
         lakeviewJurisdiction.id,

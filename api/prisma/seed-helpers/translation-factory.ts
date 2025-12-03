@@ -193,6 +193,12 @@ const translations = (jurisdictionName?: string, language?: LanguagesEnum) => {
           'If you want to learn about how lotteries work, please see the lottery section of the',
         otherOpportunities4: 'Housing Portal Help Center',
       },
+      accountRemoval: {
+        subject: 'Bloom Housing Account Removal Due to Inactivity',
+        courtesyText:
+          'This is a courtesy email to let you know that because your Bloom Housing Portal account has been inactive for 3 years, your account will be deleted in 30 days per our Terms of Use and Privacy Policy. If you’d like to keep your account, please log in sometime in the next month and we’ll consider your account active again.',
+        signIn: 'Sign in to Bloom Housing',
+      },
     };
   } else if (language === LanguagesEnum.es) {
     return {
