@@ -48,7 +48,7 @@
   "account.pwdless.loginMessage": "如果有使用該電子郵件建立的帳戶，我們將在 10 分鐘內發送代碼。如果您沒有收到驗證碼，請使用密碼登入並在帳戶設定下確認您的電子郵件地址。",
   "account.pwdless.loginReCaptchaMessage": "系統會要求您驗證身份，作為額外的安全層。我們向 %{email} 發送了一個代碼以完成登入。",
   "account.pwdless.notReceived": "沒有收到您的代碼？",
-  "account.pwdless.passwordOutdatedModalContent": "與您的帳戶關聯的密碼已過期。請重置它以繼續。",
+  "account.pwdless.passwordOutdatedModalContent": "與您的帳戶關聯的密碼已過期。您需要重設密碼才能存取您的帳戶。點選“繼續”重設密碼。",
   "account.pwdless.passwordOutdatedModalHeader": "密碼已過期",
   "account.pwdless.resend": "重发",
   "account.pwdless.resendCode": "重新发送代码",
