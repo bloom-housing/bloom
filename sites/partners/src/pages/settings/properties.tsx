@@ -4,7 +4,6 @@ import Head from "next/head"
 import { t } from "@bloom-housing/ui-components"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { doAnyJurisdictionHaveFalsyFeatureFlagValue } from "../../../../../api/src/utilities/feature-flag-utilities"
 import TabView from "../../layouts/TabView"
 import Layout from "../../layouts"
 import { NavigationHeader } from "../../components/shared/NavigationHeader"
@@ -14,9 +13,10 @@ const SettingsProperties = () => {
   const router = useRouter()
   const { profile, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
   const enableProperties = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableProperties)
-  const atLeastOneJurisdictionEnablesPreferences = doAnyJurisdictionHaveFalsyFeatureFlagValue(
-    profile?.jurisdictions || [],
-    FeatureFlagEnum.disableListingPreferences
+  const atLeastOneJurisdictionEnablesPreferences = !doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.disableListingPreferences,
+    null,
+    true
   )
 
   if (profile?.userRoles?.isPartner || profile?.userRoles?.isSupportAdmin || !enableProperties) {

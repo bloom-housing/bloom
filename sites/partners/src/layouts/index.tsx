@@ -12,7 +12,6 @@ import {
 import { AuthContext, ExygyFooter, MessageContext } from "@bloom-housing/shared-helpers"
 import { Toast } from "@bloom-housing/ui-seeds"
 import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { doAnyJurisdictionHaveFalsyFeatureFlagValue } from "../../../../api/src/utilities/feature-flag-utilities"
 
 const Layout = (props) => {
   const { profile, signOut, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
@@ -33,10 +32,12 @@ const Layout = (props) => {
     })
   }
   const enableProperties = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableProperties)
-  const atLeastOneJurisdictionEnablesPreferences = doAnyJurisdictionHaveFalsyFeatureFlagValue(
-    profile?.jurisdictions || [],
-    FeatureFlagEnum.disableListingPreferences
+  const atLeastOneJurisdictionEnablesPreferences = !doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.disableListingPreferences,
+    null,
+    true
   )
+
   if (
     profile?.jurisdictions?.some((jurisdiction) => !!jurisdiction.enablePartnerSettings) &&
     (profile?.userRoles?.isAdmin ||

@@ -1,15 +1,20 @@
 import React from "react"
 import { setupServer } from "msw/lib/node"
-import { fireEvent, within } from "@testing-library/react"
-import Settings from "../../../src/pages/settings"
+import { fireEvent, screen, within } from "@testing-library/react"
 import { rest } from "msw"
+import { AuthContext, MessageContext, MessageProvider } from "@bloom-housing/shared-helpers"
+import { Toast } from "@bloom-housing/ui-seeds"
 import {
   listing,
   multiselectQuestionPreference,
 } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import { mockNextRouter, render } from "../../testUtils"
-import { MessageContext, MessageProvider } from "@bloom-housing/shared-helpers"
-import { Toast } from "@bloom-housing/ui-seeds"
+import SettingsPreferences from "../../../src/pages/settings/preferences"
+import {
+  FeatureFlagEnum,
+  Jurisdiction,
+  User,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 const server = setupServer()
 
@@ -51,7 +56,7 @@ describe("settings", () => {
         )
       )
 
-      const { getByText, findByText } = render(<Settings />)
+      const { getByText, findByText } = render(<SettingsPreferences />)
 
       expect(getByText("Settings")).toBeInTheDocument()
       expect(getByText("Preferences")).toBeInTheDocument()
@@ -60,7 +65,165 @@ describe("settings", () => {
       expect(getByText("None")).toBeInTheDocument()
     })
 
+    it("should render tabs if multiple settings are on", () => {
+      window.URL.createObjectURL = jest.fn()
+      document.cookie = "access-token-available=True"
+      server.use(
+        rest.get("http://localhost:3100/multiselectQuestions", (_req, res, ctx) => {
+          return res(ctx.json([]))
+        }),
+        rest.get("http://localhost:3100/multiselectQuestions", (_req, res, ctx) => {
+          return res(ctx.json([multiselectQuestionPreference]))
+        }),
+        rest.get(
+          "http://localhost/api/adapter/multiselectQuestions/listings/id1",
+          (_req, res, ctx) => {
+            return res(ctx.json([listing]))
+          }
+        ),
+        rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
+          return res(
+            ctx.json({
+              id: "user1",
+              roles: { id: "user1", isAdmin: false, isPartner: true },
+              jurisdictions: [
+                {
+                  id: "jurisdiction1",
+                  name: "jurisdictionWithJurisdictionAdmin",
+                  featureFlags: [{ name: FeatureFlagEnum.enableProperties, active: true }],
+                },
+                {
+                  id: "jurisdiction2",
+                  name: "jurisdictionWithJurisdictionAdmin2",
+                  featureFlags: [],
+                },
+              ],
+            })
+          )
+        })
+      )
+
+      render(
+        <AuthContext.Provider
+          value={{
+            doJurisdictionsHaveFeatureFlagOn: (featureFlag: FeatureFlagEnum) => {
+              switch (featureFlag) {
+                case FeatureFlagEnum.disableListingPreferences:
+                  return false
+                case FeatureFlagEnum.enableProperties:
+                  return true
+                default:
+                  return false
+              }
+            },
+            profile: {
+              id: "user1",
+              userRoles: { isPartner: true },
+              jurisdictions: [
+                {
+                  id: "jurisdiction1",
+                  name: "jurisdictionWithJurisdictionAdmin",
+                  featureFlags: [{ name: FeatureFlagEnum.enableProperties, active: true }],
+                } as Jurisdiction,
+                {
+                  id: "jurisdiction2",
+                  name: "jurisdictionWithJurisdictionAdmin2",
+                  featureFlags: [],
+                } as Jurisdiction,
+              ],
+            } as User,
+          }}
+        >
+          <SettingsPreferences />
+        </AuthContext.Provider>
+      )
+      expect(screen.getByText("Settings")).toBeInTheDocument()
+      expect(screen.getByRole("tablist")).toBeInTheDocument()
+      expect(screen.getByRole("heading", { level: 2, name: "Preferences" })).toBeInTheDocument()
+      expect(screen.getByText("Properties")).toBeInTheDocument()
+    })
+
+    it("should not render tabs if only preferences is on", () => {
+      window.URL.createObjectURL = jest.fn()
+      document.cookie = "access-token-available=True"
+      server.use(
+        rest.get("http://localhost:3100/multiselectQuestions", (_req, res, ctx) => {
+          return res(ctx.json([]))
+        }),
+        rest.get("http://localhost:3100/multiselectQuestions", (_req, res, ctx) => {
+          return res(ctx.json([multiselectQuestionPreference]))
+        }),
+        rest.get(
+          "http://localhost/api/adapter/multiselectQuestions/listings/id1",
+          (_req, res, ctx) => {
+            return res(ctx.json([listing]))
+          }
+        ),
+        rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
+          return res(
+            ctx.json({
+              id: "user1",
+              roles: { id: "user1", isAdmin: false, isPartner: true },
+              jurisdictions: [
+                {
+                  id: "jurisdiction1",
+                  name: "jurisdictionWithJurisdictionAdmin",
+                  featureFlags: [{ name: FeatureFlagEnum.enableProperties, active: false }],
+                },
+                {
+                  id: "jurisdiction2",
+                  name: "jurisdictionWithJurisdictionAdmin2",
+                  featureFlags: [],
+                },
+              ],
+            })
+          )
+        })
+      )
+
+      render(
+        <AuthContext.Provider
+          value={{
+            doJurisdictionsHaveFeatureFlagOn: (featureFlag: FeatureFlagEnum) => {
+              switch (featureFlag) {
+                case FeatureFlagEnum.disableListingPreferences:
+                  return false
+                case FeatureFlagEnum.enableProperties:
+                  return false
+                default:
+                  return false
+              }
+            },
+            profile: {
+              id: "user1",
+              userRoles: { isPartner: true },
+              jurisdictions: [
+                {
+                  id: "jurisdiction1",
+                  name: "jurisdictionWithJurisdictionAdmin",
+                  featureFlags: [{ name: FeatureFlagEnum.enableProperties, active: true }],
+                } as Jurisdiction,
+                {
+                  id: "jurisdiction2",
+                  name: "jurisdictionWithJurisdictionAdmin2",
+                  featureFlags: [],
+                } as Jurisdiction,
+              ],
+            } as User,
+          }}
+        >
+          <SettingsPreferences />
+        </AuthContext.Provider>
+      )
+      expect(screen.getByText("Settings")).toBeInTheDocument()
+      expect(screen.queryByRole("tablist")).not.toBeInTheDocument()
+      expect(screen.getByRole("heading", { level: 2, name: "Preferences" })).toBeInTheDocument()
+      expect(screen.queryByText("Properties")).not.toBeInTheDocument()
+    })
+
     it("should render the preference table", async () => {
+      window.URL.createObjectURL = jest.fn()
+      document.cookie = "access-token-available=True"
       server.use(
         rest.get("http://localhost:3100/multiselectQuestions", (_req, res, ctx) => {
           return res(ctx.json([multiselectQuestionPreference]))
@@ -75,7 +238,7 @@ describe("settings", () => {
           }
         )
       )
-      const { getByText, findByText, getByRole } = render(<Settings key="1" />)
+      const { getByText, findByText, getByRole } = render(<SettingsPreferences key="1" />)
 
       expect(getByText("Settings")).toBeInTheDocument()
       expect(getByText("Preferences")).toBeInTheDocument()
@@ -147,7 +310,7 @@ describe("settings", () => {
 
       const { findByText, getByTestId, findByRole, queryAllByText } = render(
         <ToastProvider>
-          <Settings key={"2"} />
+          <SettingsPreferences key={"2"} />
         </ToastProvider>
       )
 
@@ -199,7 +362,7 @@ describe("settings", () => {
       )
 
       const { findByText, getByTestId, findByRole, queryAllByText, getByText } = render(
-        <Settings key="5" />
+        <SettingsPreferences key="5" />
       )
 
       await findByText(multiselectQuestionPreference.text)
@@ -250,7 +413,9 @@ describe("settings", () => {
         )
       )
 
-      const { findByText, getByTestId, queryAllByText, getByText } = render(<Settings key="6" />)
+      const { findByText, getByTestId, queryAllByText, getByText } = render(
+        <SettingsPreferences key="6" />
+      )
 
       await findByText(multiselectQuestionPreference.text)
 
@@ -295,7 +460,9 @@ describe("settings", () => {
         })
       )
 
-      const { findByText, getByTestId, queryAllByText, getByText } = render(<Settings key="7" />)
+      const { findByText, getByTestId, queryAllByText, getByText } = render(
+        <SettingsPreferences key="7" />
+      )
 
       await findByText(multiselectQuestionPreference.text)
 

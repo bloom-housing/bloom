@@ -26,7 +26,6 @@ import {
   MultiselectQuestionsApplicationSectionEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { PreferenceEditModal } from "../../components/settings/PreferenceEditModal"
-import { doAnyJurisdictionHaveFalsyFeatureFlagValue } from "../../../../../api/src/utilities/feature-flag-utilities"
 import TabView from "../../layouts/TabView"
 import { getSettingsTabs, SettingsIndexEnum } from "../../components/settings/SettingsViewHelpers"
 
@@ -58,9 +57,10 @@ const SettingsPreferences = () => {
   )
 
   const enableProperties = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableProperties)
-  const atLeastOneJurisdictionEnablesPreferences = doAnyJurisdictionHaveFalsyFeatureFlagValue(
-    profile?.jurisdictions || [],
-    FeatureFlagEnum.disableListingPreferences
+  const atLeastOneJurisdictionEnablesPreferences = !doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.disableListingPreferences,
+    null,
+    true
   )
 
   const tableData = useMemo(() => {
