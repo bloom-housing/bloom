@@ -1,7 +1,7 @@
 import React, { useContext, useState, useMemo, useEffect } from "react"
 import Head from "next/head"
+import { useRouter } from "next/router"
 import { useSWRConfig } from "swr"
-
 import {
   LoadingOverlay,
   MinimalTable,
@@ -19,19 +19,25 @@ import ManageIconSection from "../../components/settings/ManageIconSection"
 import { PreferenceDeleteModal } from "../../components/settings/PreferenceDeleteModal"
 import { NavigationHeader } from "../../components/shared/NavigationHeader"
 import {
+  FeatureFlagEnum,
   MultiselectQuestion,
   MultiselectQuestionCreate,
   MultiselectQuestionUpdate,
   MultiselectQuestionsApplicationSectionEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { PreferenceEditModal } from "../../components/settings/PreferenceEditModal"
+import { doAnyJurisdictionHaveFalsyFeatureFlagValue } from "../../../../../api/src/utilities/feature-flag-utilities"
+import TabView from "../../layouts/TabView"
+import { getSettingsTabs, SettingsIndexEnum } from "../../components/settings/SettingsViewHelpers"
 
 export type DrawerType = "add" | "edit"
 
-const Settings = () => {
+const SettingsPreferences = () => {
   const { mutate } = useSWRConfig()
+  const router = useRouter()
 
-  const { profile, multiselectQuestionsService } = useContext(AuthContext)
+  const { profile, multiselectQuestionsService, doJurisdictionsHaveFeatureFlagOn } =
+    useContext(AuthContext)
   const { addToast } = useContext(MessageContext)
 
   const { mutate: updateQuestion, isLoading: isUpdateLoading } = useMutate()
@@ -49,6 +55,12 @@ const Settings = () => {
   const { data, loading, cacheKey } = useJurisdictionalMultiselectQuestionList(
     profile?.jurisdictions?.map((jurisdiction) => jurisdiction.id).toString(),
     MultiselectQuestionsApplicationSectionEnum.preferences
+  )
+
+  const enableProperties = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableProperties)
+  const atLeastOneJurisdictionEnablesPreferences = doAnyJurisdictionHaveFalsyFeatureFlagValue(
+    profile?.jurisdictions || [],
+    FeatureFlagEnum.disableListingPreferences
   )
 
   const tableData = useMemo(() => {
@@ -171,7 +183,11 @@ const Settings = () => {
     )
   }
 
-  if (profile?.userRoles?.isPartner || profile?.userRoles?.isSupportAdmin) {
+  if (
+    profile?.userRoles?.isPartner ||
+    profile?.userRoles?.isSupportAdmin ||
+    !atLeastOneJurisdictionEnablesPreferences
+  ) {
     window.location.href = "/unauthorized"
   }
 
@@ -182,31 +198,32 @@ const Settings = () => {
           <title>{`Settings - ${t("nav.siteTitlePartners")}`}</title>
         </Head>
         <NavigationHeader className="relative" title={t("t.settings")} />
-        <section>
-          <article className="flex-row flex-wrap relative max-w-screen-xl mx-auto py-8 px-4">
-            <LoadingOverlay isLoading={loading}>
-              <StandardCard
-                title={t("t.preferences")}
-                emptyStateMessage={t("t.none")}
-                footer={
-                  <Button
-                    size="sm"
-                    onClick={() => {
-                      setQuestionData(null)
-                      setPreferenceDrawerOpen("add")
-                    }}
-                    id={"preference-add-item"}
-                    disabled={loading}
-                  >
-                    {t("t.addItem")}
-                  </Button>
-                }
-              >
-                {getCardContent()}
-              </StandardCard>
-            </LoadingOverlay>
-          </article>
-        </section>
+        <TabView
+          hideTabs={!(atLeastOneJurisdictionEnablesPreferences && enableProperties)}
+          tabs={getSettingsTabs(SettingsIndexEnum.preferences, router)}
+        >
+          <LoadingOverlay isLoading={loading}>
+            <StandardCard
+              title={t("t.preferences")}
+              emptyStateMessage={t("t.none")}
+              footer={
+                <Button
+                  size="sm"
+                  onClick={() => {
+                    setQuestionData(null)
+                    setPreferenceDrawerOpen("add")
+                  }}
+                  id={"preference-add-item"}
+                  disabled={loading}
+                >
+                  {t("t.addItem")}
+                </Button>
+              }
+            >
+              {getCardContent()}
+            </StandardCard>
+          </LoadingOverlay>
+        </TabView>
       </Layout>
 
       <PreferenceDrawer
@@ -281,4 +298,4 @@ const Settings = () => {
   )
 }
 
-export default Settings
+export default SettingsPreferences
