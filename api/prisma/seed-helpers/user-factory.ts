@@ -18,9 +18,13 @@ export const userFactory = async (optionalParams?: {
   phoneNumberVerified?: boolean;
   roles?: Prisma.UserRolesUncheckedCreateWithoutUserAccountsInput;
   singleUseCode?: string;
+  lastLoginAt?: Date;
+  wasWarnedOfDeletion?: boolean;
 }): Promise<Prisma.UserAccountsCreateInput> => ({
   agreedToTermsOfService: optionalParams?.acceptedTerms || false,
   confirmedAt: optionalParams?.confirmedAt || null,
+  lastLoginAt: optionalParams?.lastLoginAt || new Date(),
+  wasWarnedOfDeletion: optionalParams?.wasWarnedOfDeletion || false,
   email:
     optionalParams?.email?.toLocaleLowerCase() ||
     `${randomNoun().toLowerCase()}${randomNoun().toLowerCase()}@${randomAdjective().toLowerCase()}.com`,

@@ -1154,6 +1154,7 @@ export class UserService {
         where: {
           lastLoginAt: { lte: warnDate },
           userRoles: null,
+          wasWarnedOfDeletion: false,
         },
       });
       this.logger.warn(`warning ${users.length} users of account deletion`);
@@ -1175,6 +1176,9 @@ export class UserService {
       this.logger.warn(
         'USERS_DAYS_TILL_EXPIRY not set so warnUserOfDeletion cron job not run',
       );
+      return {
+        success: false,
+      };
     }
     return {
       success: true,

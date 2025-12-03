@@ -263,6 +263,7 @@ export class UserController {
     operationId: 'removePIICronJob',
   })
   @ApiOkResponse({ type: SuccessDTO })
+  @UseGuards(OptionalAuthGuard, AdminOrJurisdictionalAdminGuard)
   async removePIICronJob(): Promise<SuccessDTO> {
     return await this.userService.warnUserOfDeletionCronJob();
   }

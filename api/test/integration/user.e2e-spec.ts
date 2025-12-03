@@ -23,6 +23,7 @@ import { EmailService } from '../../src/services/email.service';
 import { Login } from '../../src/dtos/auth/login.dto';
 import { RequestMfaCode } from '../../src/dtos/mfa/request-mfa-code.dto';
 import { ModificationEnum } from '../../src/enums/shared/modification-enum';
+import dayjs from 'dayjs';
 
 describe('User Controller Tests', () => {
   let app: INestApplication;
@@ -40,6 +41,7 @@ describe('User Controller Tests', () => {
     forgotPassword: jest.fn(),
     sendMfaCode: jest.fn(),
     sendCSV: jest.fn(),
+    warnOfAccountRemoval: jest.fn(),
   };
 
   beforeEach(() => {
@@ -941,6 +943,78 @@ describe('User Controller Tests', () => {
 
       expect(res.body.message).toEqual(
         `listingId ${invalidId} was requested but not found`,
+      );
+    });
+  });
+
+  describe('warnUserOfDeletionCronJob endpoint', () => {
+    let userA;
+    let userB;
+    let userC;
+    let userD;
+    beforeAll(async () => {
+      process.env.USERS_DAYS_TILL_EXPIRY = '1095';
+      // Public User that should be warned
+      userA = await prisma.userAccounts.create({
+        data: await userFactory({
+          confirmedAt: new Date(),
+          lastLoginAt: dayjs(new Date()).subtract(4, 'years').toDate(),
+        }),
+      });
+      // User that has logged in recently
+      userB = await prisma.userAccounts.create({
+        data: await userFactory({
+          confirmedAt: new Date(),
+          lastLoginAt: dayjs(new Date()).subtract(4, 'days').toDate(),
+        }),
+      });
+      // Partner user
+      userC = await prisma.userAccounts.create({
+        data: await userFactory({
+          confirmedAt: new Date(),
+          roles: { isAdmin: true },
+          lastLoginAt: dayjs(new Date()).subtract(1200, 'days').toDate(),
+        }),
+      });
+      // User that has already been warned
+      userD = await prisma.userAccounts.create({
+        data: await userFactory({
+          confirmedAt: new Date(),
+          lastLoginAt: dayjs(new Date()).subtract(4, 'years').toDate(),
+          wasWarnedOfDeletion: true,
+        }),
+      });
+    });
+    it('should send warning email to only public users over the date', async () => {
+      const mockWarnOfAccountRemoval = jest.spyOn(
+        testEmailService,
+        'warnOfAccountRemoval',
+      );
+      const res = await request(app.getHttpServer())
+        .put(`/user/userWarnCronJob`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .expect(200);
+      expect(res.text).toBe('{"success":true}');
+      const updatedUserA = await prisma.userAccounts.findFirst({
+        where: { id: userA.id },
+      });
+      expect(updatedUserA.wasWarnedOfDeletion).toBe(true);
+      const updatedUserB = await prisma.userAccounts.findFirst({
+        where: { id: userB.id },
+      });
+      expect(updatedUserB.wasWarnedOfDeletion).toBe(false);
+      const updatedUserC = await prisma.userAccounts.findFirst({
+        where: { id: userC.id },
+      });
+      expect(updatedUserC.wasWarnedOfDeletion).toBe(false);
+      const updatedUserD = await prisma.userAccounts.findFirst({
+        where: { id: userD.id },
+      });
+      expect(updatedUserD.wasWarnedOfDeletion).toBe(true);
+      expect(mockWarnOfAccountRemoval.mock.calls.length).toBe(1);
+      expect(mockWarnOfAccountRemoval).toBeCalledWith(
+        expect.objectContaining({ email: userA.email, id: userA.id }),
       );
     });
   });
