@@ -1,7 +1,7 @@
 /* eslint-disable import/no-named-as-default */
 import React from "react"
 import { setupServer } from "msw/lib/node"
-import { fireEvent, mockNextRouter, render, screen, within } from "../../../testUtils"
+import { fireEvent, mockNextRouter, queryByText, render, screen, within } from "../../../testUtils"
 import { ListingContext } from "../../../../src/components/listings/ListingContext"
 import { jurisdiction, listing, user } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import DetailListingData from "../../../../src/components/listings/PaperListingDetails/sections/DetailListingData"
@@ -1739,15 +1739,23 @@ describe("listing data", () => {
     describe("should display Application Dates section", () => {
       it("should display section with mising data", () => {
         render(
-          <ListingContext.Provider
+          <AuthContext.Provider
             value={{
-              ...listing,
-              applicationDueDate: undefined,
-              listingEvents: [],
+              profile: { ...user, jurisdictions: [], listings: [] },
+              doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
+                featureFlag === FeatureFlagEnum.enableMarketingFlyer,
             }}
           >
-            <DetailApplicationDates />
-          </ListingContext.Provider>
+            <ListingContext.Provider
+              value={{
+                ...listing,
+                applicationDueDate: undefined,
+                listingEvents: [],
+              }}
+            >
+              <DetailApplicationDates />
+            </ListingContext.Provider>
+          </AuthContext.Provider>
         )
 
         expect(screen.getByText("Application dates")).toBeInTheDocument()
@@ -1762,31 +1770,59 @@ describe("listing data", () => {
         expect(screen.queryByText("URL")).not.toBeInTheDocument()
         expect(screen.queryByText("Open house notes")).not.toBeInTheDocument()
         expect(screen.queryByText("Done")).not.toBeInTheDocument()
+        expect(screen.queryByText("Marketing flyer")).not.toBeInTheDocument()
+        expect(screen.queryByText("Preview")).not.toBeInTheDocument()
+        expect(screen.queryByText("File name")).not.toBeInTheDocument()
+        expect(screen.queryByText("Accessible marketing flyer")).not.toBeInTheDocument()
       })
 
       it("should display all the Application Dates data", () => {
         render(
-          <ListingContext.Provider
+          <AuthContext.Provider
             value={{
-              ...listing,
-              applicationDueDate: new Date(2024, 11, 20, 15, 30),
-              listingEvents: [
-                {
-                  id: "event_id_1",
-                  createdAt: new Date(),
-                  updatedAt: new Date(),
-                  type: ListingEventsTypeEnum.openHouse,
-                  startDate: new Date(2024, 1, 18, 10, 30),
-                  startTime: new Date(2024, 1, 18, 10, 30),
-                  endTime: new Date(2024, 1, 18, 12, 15),
-                  url: "http://test.url.com",
-                  note: "Test lottery note",
-                },
-              ],
+              profile: { ...user, jurisdictions: [], listings: [] },
+              doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
+                featureFlag === FeatureFlagEnum.enableMarketingFlyer,
             }}
           >
-            <DetailApplicationDates />
-          </ListingContext.Provider>
+            <ListingContext.Provider
+              value={{
+                ...listing,
+                applicationDueDate: new Date(2024, 11, 20, 15, 30),
+                listingEvents: [
+                  {
+                    id: "event_id_1",
+                    createdAt: new Date(),
+                    updatedAt: new Date(),
+                    type: ListingEventsTypeEnum.openHouse,
+                    startDate: new Date(2024, 1, 18, 10, 30),
+                    startTime: new Date(2024, 1, 18, 10, 30),
+                    endTime: new Date(2024, 1, 18, 12, 15),
+                    url: "http://test.url.com",
+                    note: "Test lottery note",
+                  },
+                ],
+                marketingFlyer: "http://test.url.com",
+                listingsMarketingFlyerFile: {
+                  id: "file_id",
+                  createdAt: new Date(),
+                  updatedAt: new Date(),
+                  fileId: "file_id",
+                  label: "test_file",
+                },
+                accessibleMarketingFlyer: "http://test.url.com",
+                listingsAccessibleMarketingFlyerFile: {
+                  id: "file_id_2",
+                  createdAt: new Date(),
+                  updatedAt: new Date(),
+                  fileId: "file_id_2",
+                  label: "test_file_2",
+                },
+              }}
+            >
+              <DetailApplicationDates />
+            </ListingContext.Provider>
+          </AuthContext.Provider>
         )
 
         expect(screen.getByText("Application dates")).toBeInTheDocument()
@@ -1808,6 +1844,12 @@ describe("listing data", () => {
         expect(urlButton).toHaveAttribute("href", "http://test.url.com")
 
         expect(screen.getByText("View")).toBeInTheDocument()
+        expect(screen.getByText("Marketing flyer")).toBeInTheDocument()
+        expect(screen.getAllByText("Preview")).toHaveLength(2)
+        expect(screen.getAllByText("File name")).toHaveLength(2)
+        expect(screen.getByText("file_id.pdf")).toBeInTheDocument()
+        expect(screen.getByText("Accessible marketing flyer")).toBeInTheDocument()
+        expect(screen.getByText("file_id_2.pdf")).toBeInTheDocument()
       })
     })
 
