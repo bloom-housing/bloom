@@ -75,19 +75,14 @@ const FormForgotPassword = ({
               onChange={() => networkError.reset()}
               labelClassName={"text__caps-spaced"}
             />
-            <div className="flex gap-6">
-              <Button
-                type="submit"
-                className={(styles["forgot-password-submit-button"], "rounded-full py-2")}
-              >
-                {t("authentication.forgotPassword.sendEmailButton")}
-              </Button>
+            <Button type="submit" className={styles["forgot-password-submit-button"]}>
+              {t("authentication.forgotPassword.sendEmailButton")}
+            </Button>
 
-              <div className={"mt-4"}>
-                <Button onClick={() => router.back()} variant="text">
-                  {t("t.cancel")}
-                </Button>
-              </div>
+            <div className={"mt-4"}>
+              <Button onClick={() => router.back()} variant="text">
+                {t("t.cancel")}
+              </Button>
             </div>
           </Form>
         </CardSection>
