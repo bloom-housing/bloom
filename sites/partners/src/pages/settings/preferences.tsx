@@ -195,7 +195,7 @@ const SettingsPreferences = () => {
     <>
       <Layout>
         <Head>
-          <title>{`Settings - ${t("nav.siteTitlePartners")}`}</title>
+          <title>{`Settings - Preferences - ${t("nav.siteTitlePartners")}`}</title>
         </Head>
         <NavigationHeader className="relative" title={t("t.settings")} />
         <TabView
