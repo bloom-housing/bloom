@@ -182,7 +182,7 @@ describe("<ListingViewSeeds>", () => {
       />
     )
 
-    expect(screen.getByRole("heading", { level: 4, name: /^other$/i })).toBeInTheDocument()
+    expect(screen.getByRole("heading", { level: 3, name: /^other$/i })).toBeInTheDocument()
     expect(screen.getByText("This property has received HUD EBLL clearance.")).toBeInTheDocument()
     expect(
       screen.queryByText("This property has not received HUD EBLL clearance.")
@@ -218,7 +218,7 @@ describe("<ListingViewSeeds>", () => {
       />
     )
 
-    expect(screen.getByRole("heading", { level: 4, name: /^other$/i })).toBeInTheDocument()
+    expect(screen.getByRole("heading", { level: 3, name: /^other$/i })).toBeInTheDocument()
     expect(
       screen.getByText("This property has not received HUD EBLL clearance.")
     ).toBeInTheDocument()
@@ -256,7 +256,7 @@ describe("<ListingViewSeeds>", () => {
       />
     )
 
-    expect(screen.queryByRole("heading", { level: 4, name: /^other$/i })).not.toBeInTheDocument()
+    expect(screen.queryByRole("heading", { level: 3, name: /^other$/i })).not.toBeInTheDocument()
     expect(
       screen.queryByText("This property has not received HUD EBLL clearance.")
     ).not.toBeInTheDocument()
@@ -294,7 +294,7 @@ describe("<ListingViewSeeds>", () => {
       />
     )
 
-    expect(screen.queryByRole("heading", { level: 4, name: /^other$/i })).not.toBeInTheDocument()
+    expect(screen.queryByRole("heading", { level: 3, name: /^other$/i })).not.toBeInTheDocument()
     expect(
       screen.queryByText("This property has not received HUD EBLL clearance.")
     ).not.toBeInTheDocument()
