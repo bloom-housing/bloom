@@ -107,7 +107,6 @@ const ResetPassword = () => {
                 type="submit"
                 variant="primary"
                 loadingMessage={loading ? t("t.loading") : undefined}
-                className="rounded-full py-2"
               >
                 {t("authentication.forgotPassword.changePassword")}
               </Button>
