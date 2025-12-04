@@ -24,7 +24,12 @@ describe("Forgot Password Page", () => {
   it("renders all page elements including fields, buttons and links", () => {
     const { getByText, getByLabelText } = renderForgotPasswordPage()
 
-    expect(getByText("Send email", { selector: "h1" })).toBeInTheDocument()
+    expect(getByText("Enter your email to get a password reset link")).toBeInTheDocument()
+    expect(
+      getByText(
+        "Please enter your email address so we can send you a password reset link. If you don’t receive an email, you may not have an account."
+      )
+    ).toBeInTheDocument()
     expect(getByLabelText("Email")).toBeInTheDocument()
     expect(getByText("Send email", { selector: "button" })).toBeInTheDocument()
     expect(getByText("Cancel", { selector: "button" })).toBeInTheDocument()
