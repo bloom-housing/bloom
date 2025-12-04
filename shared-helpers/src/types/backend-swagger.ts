@@ -3748,7 +3748,7 @@ export interface UnitGroup {
   sqFeetMax?: number
 
   /**  */
-  rentType?: string
+  rentType?: RentTypeEnum
 
   /**  */
   unitAccessibilityPriorityTypes?: UnitAccessibilityPriorityType
@@ -3992,7 +3992,7 @@ export interface UnitsSummary {
   totalAvailable?: number
 
   /**  */
-  rentType?: string
+  rentType?: RentTypeEnum
 
   /**  */
   flatRentValueFrom?: number
@@ -4133,6 +4133,9 @@ export interface Listing {
   applicationFee?: string
 
   /**  */
+  creditScreeningFee?: string
+
+  /**  */
   applicationOrganization?: string
 
   /**  */
@@ -4152,6 +4155,12 @@ export interface Listing {
 
   /**  */
   buildingSelectionCriteria?: string
+
+  /**  */
+  marketingFlyer?: string
+
+  /**  */
+  accessibleMarketingFlyer?: string
 
   /**  */
   cocInfo?: string
@@ -4332,6 +4341,12 @@ export interface Listing {
 
   /**  */
   listingsBuildingSelectionCriteriaFile?: Asset
+
+  /**  */
+  listingsMarketingFlyerFile?: Asset
+
+  /**  */
+  listingsAccessibleMarketingFlyerFile?: Asset
 
   /**  */
   jurisdictions: IdDTO
@@ -4582,7 +4597,7 @@ export interface UnitGroupCreate {
   sqFeetMax?: number
 
   /**  */
-  rentType?: string
+  rentType?: RentTypeEnum
 
   /**  */
   unitAccessibilityPriorityTypes?: IdDTO
@@ -4683,7 +4698,7 @@ export interface UnitsSummaryCreate {
   totalAvailable?: number
 
   /**  */
-  rentType?: string
+  rentType?: RentTypeEnum
 
   /**  */
   flatRentValueFrom?: number
@@ -4829,6 +4844,9 @@ export interface ListingCreate {
   applicationFee?: string
 
   /**  */
+  creditScreeningFee?: string
+
+  /**  */
   applicationOrganization?: string
 
   /**  */
@@ -4848,6 +4866,12 @@ export interface ListingCreate {
 
   /**  */
   buildingSelectionCriteria?: string
+
+  /**  */
+  marketingFlyer?: string
+
+  /**  */
+  accessibleMarketingFlyer?: string
 
   /**  */
   cocInfo?: string
@@ -5072,6 +5096,12 @@ export interface ListingCreate {
   listingsBuildingSelectionCriteriaFile?: AssetCreate
 
   /**  */
+  listingsMarketingFlyerFile?: AssetCreate
+
+  /**  */
+  listingsAccessibleMarketingFlyerFile?: AssetCreate
+
+  /**  */
   listingsResult?: AssetCreate
 
   /**  */
@@ -5172,6 +5202,9 @@ export interface ListingUpdate {
   applicationFee?: string
 
   /**  */
+  creditScreeningFee?: string
+
+  /**  */
   applicationOrganization?: string
 
   /**  */
@@ -5191,6 +5224,12 @@ export interface ListingUpdate {
 
   /**  */
   buildingSelectionCriteria?: string
+
+  /**  */
+  marketingFlyer?: string
+
+  /**  */
+  accessibleMarketingFlyer?: string
 
   /**  */
   cocInfo?: string
@@ -5413,6 +5452,12 @@ export interface ListingUpdate {
 
   /**  */
   listingsBuildingSelectionCriteriaFile?: AssetCreate
+
+  /**  */
+  listingsMarketingFlyerFile?: AssetCreate
+
+  /**  */
+  listingsAccessibleMarketingFlyerFile?: AssetCreate
 
   /**  */
   listingsResult?: AssetCreate
@@ -7689,6 +7734,11 @@ export enum UnitRentTypeEnum {
   "fixed" = "fixed",
   "percentageOfIncome" = "percentageOfIncome",
 }
+
+export enum RentTypeEnum {
+  "fixedRent" = "fixedRent",
+  "rentRange" = "rentRange",
+}
 export enum EnumUnitGroupAmiLevelMonthlyRentDeterminationType {
   "flatRent" = "flatRent",
   "percentageOfIncome" = "percentageOfIncome",
@@ -7802,11 +7852,6 @@ export enum AlternateContactRelationship {
   "noContact" = "noContact",
 }
 
-export enum RentTypeEnum {
-  "fixedRent" = "fixedRent",
-  "rentRange" = "rentRange",
-}
-
 export enum HouseholdMemberRelationship {
   "spouse" = "spouse",
   "registeredDomesticPartner" = "registeredDomesticPartner",
@@ -7850,6 +7895,7 @@ export enum NeighborhoodAmenitiesEnum {
 }
 
 export enum FeatureFlagEnum {
+  "disableBuildingSelectionCriteria" = "disableBuildingSelectionCriteria",
   "disableCommonApplication" = "disableCommonApplication",
   "disableJurisdictionalAdmin" = "disableJurisdictionalAdmin",
   "disableListingPreferences" = "disableListingPreferences",
@@ -7858,6 +7904,7 @@ export enum FeatureFlagEnum {
   "enableAdaOtherOption" = "enableAdaOtherOption",
   "enableAdditionalResources" = "enableAdditionalResources",
   "enableCompanyWebsite" = "enableCompanyWebsite",
+  "enableCreditScreeningFee" = "enableCreditScreeningFee",
   "enableFullTimeStudentQuestion" = "enableFullTimeStudentQuestion",
   "enableGeocodingPreferences" = "enableGeocodingPreferences",
   "enableGeocodingRadiusMethod" = "enableGeocodingRadiusMethod",
@@ -7871,6 +7918,7 @@ export enum FeatureFlagEnum {
   "enableListingOpportunity" = "enableListingOpportunity",
   "enableListingPagination" = "enableListingPagination",
   "enableListingUpdatedAt" = "enableListingUpdatedAt",
+  "enableMarketingFlyer" = "enableMarketingFlyer",
   "enableMarketingStatus" = "enableMarketingStatus",
   "enableMarketingStatusMonths" = "enableMarketingStatusMonths",
   "enableNeighborhoodAmenities" = "enableNeighborhoodAmenities",

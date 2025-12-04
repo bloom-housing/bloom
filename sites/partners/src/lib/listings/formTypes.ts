@@ -50,6 +50,8 @@ export type FormListing = Omit<Listing, "countyCode"> & {
   paperApplicationChoice?: YesNoEnum
   referralOpportunityChoice?: YesNoEnum
   criteriaAttachType?: string
+  marketingFlyerAttachType?: "upload" | "url"
+  accessibleMarketingFlyerAttachType?: "upload" | "url"
   includeCommunityDisclaimerQuestion?: YesNoEnum
   listingSection8Acceptance?: YesNoEnum
   communityDisclaimerTitle?: string
@@ -114,6 +116,10 @@ export const formDefaults: FormListing = {
   buildingSelectionCriteria: "",
   listingsBuildingSelectionCriteriaFile: null,
   criteriaAttachType: "",
+  marketingFlyer: "",
+  listingsMarketingFlyerFile: null,
+  accessibleMarketingFlyer: "",
+  listingsAccessibleMarketingFlyerFile: null,
   jurisdictions: undefined,
   costsNotIncluded: "",
   creditHistory: "",
@@ -145,6 +151,7 @@ export const formDefaults: FormListing = {
   rentalAssistance: null,
   rentalHistory: "",
   requiredDocuments: "",
+  creditScreeningFee: null,
   status: ListingsStatusEnum.pending,
   waitlistCurrentSize: null,
   waitlistMaxSize: null,

@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useContext } from "react"
+import React, { useState, useMemo } from "react"
 import { useFormContext } from "react-hook-form"
 import { getDetailFieldDate, getDetailFieldTime } from "../../PaperListingDetails/sections/helpers"
 import dayjs from "dayjs"
@@ -16,28 +16,33 @@ import { Button, Dialog, Drawer, Link, Grid } from "@bloom-housing/ui-seeds"
 import { FormListing, TempEvent } from "../../../../lib/listings/formTypes"
 import { OpenHouseForm } from "../OpenHouseForm"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
+import MarketingFlyer, { MarketingFlyerData } from "./MarketingFlyer"
 import {
   MarketingTypeEnum,
   MarketingSeasonEnum,
-  FeatureFlagEnum,
   MonthEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { AuthContext } from "@bloom-housing/shared-helpers"
 import { fieldMessage, fieldHasError, getLabel } from "../../../../lib/helpers"
 import styles from "../ListingForm.module.scss"
 
 type ApplicationDatesProps = {
+  enableMarketingFlyer?: boolean
+  enableMarketingStatus?: boolean
+  enableMarketingStatusMonths?: boolean
   openHouseEvents: TempEvent[]
-  setOpenHouseEvents: (events: TempEvent[]) => void
-  listing?: FormListing
   requiredFields: string[]
+  listing?: FormListing
+  setOpenHouseEvents: (events: TempEvent[]) => void
 }
 
 const ApplicationDates = ({
+  enableMarketingFlyer,
+  enableMarketingStatus,
+  enableMarketingStatusMonths,
   listing,
   openHouseEvents,
-  setOpenHouseEvents,
   requiredFields,
+  setOpenHouseEvents,
 }: ApplicationDatesProps) => {
   const openHouseHeaders = {
     date: "t.date",
@@ -46,8 +51,6 @@ const ApplicationDates = ({
     url: "t.link",
     action: "",
   }
-
-  const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
 
   const openHouseTableData = useMemo(() => {
     return openHouseEvents.map((event) => {
@@ -93,18 +96,6 @@ const ApplicationDates = ({
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { errors, register, setValue, watch, clearErrors } = formMethods
 
-  const jurisdiction = watch("jurisdictions.id")
-
-  const enableMarketingStatus = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableMarketingStatus,
-    jurisdiction
-  )
-
-  const enableMarketingStatusMonths = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableMarketingStatusMonths,
-    jurisdiction
-  )
-
   const [drawerOpenHouse, setDrawerOpenHouse] = useState<TempEvent | boolean>(false)
   const [modalDeleteOpenHouse, setModalDeleteOpenHouse] = useState<TempEvent | null>(null)
 
@@ -126,6 +117,21 @@ const ApplicationDates = ({
     const newEvents = openHouseEvents.filter((event) => event !== eventToDelete)
     setOpenHouseEvents(newEvents)
     setModalDeleteOpenHouse(null)
+  }
+
+  const onMarketingFlyerSubmit = (data: MarketingFlyerData) => {
+    if (data.marketingFlyer !== undefined) {
+      setValue("marketingFlyer", data.marketingFlyer)
+    }
+    if (data.listingsMarketingFlyerFile) {
+      setValue("listingsMarketingFlyerFile", data.listingsMarketingFlyerFile)
+    }
+    if (data.accessibleMarketingFlyer !== undefined) {
+      setValue("accessibleMarketingFlyer", data.accessibleMarketingFlyer)
+    }
+    if (data.listingsAccessibleMarketingFlyerFile) {
+      setValue("listingsAccessibleMarketingFlyerFile", data.listingsAccessibleMarketingFlyerFile)
+    }
   }
 
   const hasDueDateError = errors?.applicationDueDate || errors?.applicationDueDateField
@@ -327,6 +333,18 @@ const ApplicationDates = ({
           </Grid.Cell>
         </Grid.Row>
       </SectionWithGrid>
+
+      {enableMarketingFlyer && (
+        <MarketingFlyer
+          currentData={{
+            marketingFlyer: watch("marketingFlyer"),
+            listingsMarketingFlyerFile: watch("listingsMarketingFlyerFile"),
+            accessibleMarketingFlyer: watch("accessibleMarketingFlyer"),
+            listingsAccessibleMarketingFlyerFile: watch("listingsAccessibleMarketingFlyerFile"),
+          }}
+          onSubmit={onMarketingFlyerSubmit}
+        />
+      )}
 
       <Drawer
         isOpen={!!drawerOpenHouse}

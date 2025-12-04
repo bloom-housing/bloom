@@ -1,8 +1,5 @@
-import React, { useContext } from "react"
-import { useFormContext } from "react-hook-form"
-import { AuthContext } from "@bloom-housing/shared-helpers"
+import React from "react"
 import {
-  FeatureFlagEnum,
   MultiselectQuestion,
   MultiselectQuestionsApplicationSectionEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -12,7 +9,10 @@ import { useJurisdictionalMultiselectQuestionList } from "../../../../lib/hooks"
 import { FormListing } from "../../../../lib/listings/formTypes"
 
 type ProgramsAndPreferencesProps = {
+  disableListingPreferences?: boolean
+  swapCommunityTypeWithPrograms?: boolean
   listing?: FormListing
+  jurisdiction: string
   preferences: MultiselectQuestion[]
   setPreferences: (multiselectQuestions: MultiselectQuestion[]) => void
   programs: MultiselectQuestion[]
@@ -20,58 +20,45 @@ type ProgramsAndPreferencesProps = {
 }
 
 const ProgramsAndPreferences = ({
+  disableListingPreferences,
+  swapCommunityTypeWithPrograms,
   listing,
+  jurisdiction,
   preferences,
   setPreferences,
   programs,
   setPrograms,
 }: ProgramsAndPreferencesProps) => {
-  const formMethods = useFormContext()
-  const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
-
-  // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { watch } = formMethods
-  const jurisdiction = watch("jurisdictions.id")
-
-  const swapCommunityTypeWithPrograms = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.swapCommunityTypeWithPrograms,
-    jurisdiction
-  )
-
-  const disableListingPreferences = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.disableListingPreferences,
-    jurisdiction,
-    !jurisdiction
-  )
-
   const programComponent = !swapCommunityTypeWithPrograms ? (
     <SelectAndOrder
       addText={t("listings.addProgram")}
+      applicationSection={MultiselectQuestionsApplicationSectionEnum.programs}
+      dataFetcher={useJurisdictionalMultiselectQuestionList}
+      drawerButtonText={t("listings.selectPrograms")}
       drawerTitle={t("listings.addPrograms")}
       editText={t("listings.editPrograms")}
+      formKey={"program"}
+      jurisdiction={jurisdiction}
       listingData={programs || []}
       setListingData={setPrograms}
       subtitle={t("listings.sections.housingProgramsSubtext")}
       title={t("listings.sections.housingProgramsTitle")}
-      drawerButtonText={t("listings.selectPrograms")}
-      dataFetcher={useJurisdictionalMultiselectQuestionList}
-      formKey={"program"}
-      applicationSection={MultiselectQuestionsApplicationSectionEnum.programs}
     />
   ) : (
     <SelectAndOrder
       addText={t("listings.addCommunityTypes")}
+      applicationSection={MultiselectQuestionsApplicationSectionEnum.programs}
+      dataFetcher={useJurisdictionalMultiselectQuestionList}
+      drawerButtonText={t("listings.selectCommunityTypes")}
       drawerTitle={t("listings.addCommunityTypes")}
       editText={t("listings.editCommunities")}
+      formKey={"program"}
+      jurisdiction={jurisdiction}
       listingData={programs || []}
       setListingData={setPrograms}
+      subNote={`${t("listing.choosePopulations")}.`}
       subtitle={t("listings.sections.communityType.tellUs")}
       title={t("t.communityTypes")}
-      drawerButtonText={t("listings.selectCommunityTypes")}
-      dataFetcher={useJurisdictionalMultiselectQuestionList}
-      formKey={"program"}
-      applicationSection={MultiselectQuestionsApplicationSectionEnum.programs}
-      subNote={`${t("listing.choosePopulations")}.`}
     />
   )
 
@@ -80,21 +67,22 @@ const ProgramsAndPreferences = ({
       {!disableListingPreferences && (
         <SelectAndOrder
           addText={t("listings.addPreference")}
-          drawerTitle={t("listings.addPreferences")}
+          applicationSection={MultiselectQuestionsApplicationSectionEnum.preferences}
+          dataFetcher={useJurisdictionalMultiselectQuestionList}
+          drawerButtonText={t("listings.selectPreferences")}
           drawerSubtitle={
             process.env.showLottery && listing?.lotteryOptIn
               ? t("listings.lotteryPreferenceSubtitle")
               : null
           }
+          drawerTitle={t("listings.addPreferences")}
           editText={t("listings.editPreferences")}
+          formKey={"preference"}
+          jurisdiction={jurisdiction}
           listingData={preferences || []}
           setListingData={setPreferences}
           subtitle={t("listings.sections.housingPreferencesSubtext")}
           title={t("listings.sections.housingPreferencesTitle")}
-          drawerButtonText={t("listings.selectPreferences")}
-          dataFetcher={useJurisdictionalMultiselectQuestionList}
-          formKey={"preference"}
-          applicationSection={MultiselectQuestionsApplicationSectionEnum.preferences}
         />
       )}
       {programComponent}

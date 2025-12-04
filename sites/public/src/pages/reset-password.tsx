@@ -76,6 +76,7 @@ const ResetPassword = () => {
           )}
           <CardSection>
             <Form id="sign-in" onSubmit={handleSubmit(onSubmit)}>
+              <p className="field-label mb-2">{t("authentication.createAccount.passwordInfo")}</p>
               <Field
                 name="password"
                 label={t("authentication.createAccount.password")}

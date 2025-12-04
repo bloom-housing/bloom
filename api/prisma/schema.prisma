@@ -278,6 +278,8 @@ model Assets {
   listingEvents                 ListingEvents[]
   listingImages                 ListingImages[]
   buildingSelectionCriteriaFile Listings[]          @relation("building_selection_criteria_file")
+  marketingFlyerFile            Listings[]          @relation("marketing_flyer_file")
+  accessibleMarketingFlyerFile  Listings[]          @relation("accessible_marketing_flyer_file")
   listingsResult                Listings[]          @relation("listings_result")
   paperApplications             PaperApplications[]
 
@@ -604,6 +606,8 @@ model Listings {
   applicationDropOffAddressType         ApplicationAddressTypeEnum?   @map("application_drop_off_address_type")
   applicationMailingAddressType         ApplicationAddressTypeEnum?   @map("application_mailing_address_type")
   buildingSelectionCriteria             String?                       @map("building_selection_criteria")
+  marketingFlyer                        String?                       @map("marketing_flyer")
+  accessibleMarketingFlyer              String?                       @map("accessible_marketing_flyer")
   cocInfo                               String?                       @map("coc_info")
   costsNotIncluded                      String?                       @map("costs_not_included")
   creditHistory                         String?                       @map("credit_history")
@@ -654,6 +658,8 @@ model Listings {
   applicationDropOffAddressId           String?                       @map("application_drop_off_address_id") @db.Uuid
   applicationMailingAddressId           String?                       @map("application_mailing_address_id") @db.Uuid
   buildingSelectionCriteriaFileId       String?                       @map("building_selection_criteria_file_id") @db.Uuid
+  marketingFlyerFileId                  String?                       @map("marketing_flyer_file_id") @db.Uuid
+  accessibleMarketingFlyerFileId        String?                       @map("accessible_marketing_flyer_file_id") @db.Uuid
   copyOfId                              String?                       @map("copy_of_id") @db.Uuid
   jurisdictionId                        String?                       @map("jurisdiction_id") @db.Uuid
   leasingAgentAddressId                 String?                       @map("leasing_agent_address_id") @db.Uuid
@@ -683,6 +689,7 @@ model Listings {
   marketingMonth                        MonthEnum?                    @map("marketing_month")
   whatToExpectAdditionalText            String?                       @map("what_to_expect_additional_text")
   section8Acceptance                    Boolean?                      @map("section8_acceptance")
+  creditScreeningFee                    String?                       @map("credit_screening_fee")
   neighborhoodAmenitiesId               String?                       @unique() @map("neighborhood_amenities_id") @db.Uuid
   verifiedAt                            DateTime?                     @map("verified_at") @db.Timestamptz(6)
   homeType                              HomeTypeEnum?                 @map("home_type")
@@ -698,6 +705,8 @@ model Listings {
   listingsApplicationDropOffAddress     Address?                      @relation("application_drop_off_address", fields: [applicationDropOffAddressId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   reservedCommunityTypes                ReservedCommunityTypes?       @relation(fields: [reservedCommunityTypeId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   listingsBuildingSelectionCriteriaFile Assets?                       @relation("building_selection_criteria_file", fields: [buildingSelectionCriteriaFileId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  listingsMarketingFlyerFile            Assets?                       @relation("marketing_flyer_file", fields: [marketingFlyerFileId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  listingsAccessibleMarketingFlyerFile  Assets?                       @relation("accessible_marketing_flyer_file", fields: [accessibleMarketingFlyerFileId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   listingsResult                        Assets?                       @relation("listings_result", fields: [resultId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   listingUtilities                      ListingUtilities?             @relation(fields: [utilitiesId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   listingsApplicationMailingAddress     Address?                      @relation("application_mailing_address", fields: [applicationMailingAddressId], references: [id], onDelete: NoAction, onUpdate: NoAction)

@@ -257,6 +257,14 @@ class Listing extends AbstractDTO {
   applicationFee?: string;
 
   @Expose()
+  @ValidateListingPublish('creditScreeningFee', {
+    groups: [ValidationsGroupsEnum.default],
+  })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  creditScreeningFee?: string;
+
+  @Expose()
   @ValidateListingPublish('applicationOrganization', {
     groups: [ValidationsGroupsEnum.default],
   })
@@ -330,6 +338,30 @@ class Listing extends AbstractDTO {
     { groups: [ValidationsGroupsEnum.default] },
   )
   buildingSelectionCriteria?: string;
+
+  @Expose()
+  @ValidateListingPublish('marketingFlyer', {
+    groups: [ValidationsGroupsEnum.default],
+  })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  @IsUrl(
+    { require_protocol: true },
+    { groups: [ValidationsGroupsEnum.default] },
+  )
+  marketingFlyer?: string;
+
+  @Expose()
+  @ValidateListingPublish('accessibleMarketingFlyer', {
+    groups: [ValidationsGroupsEnum.default],
+  })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  @IsUrl(
+    { require_protocol: true },
+    { groups: [ValidationsGroupsEnum.default] },
+  )
+  accessibleMarketingFlyer?: string;
 
   @Expose()
   @ValidateListingPublish('cocInfo7', {
@@ -843,6 +875,24 @@ class Listing extends AbstractDTO {
   @Type(() => Asset)
   @ApiPropertyOptional({ type: Asset })
   listingsBuildingSelectionCriteriaFile?: Asset;
+
+  @Expose()
+  @ValidateListingPublish('listingsMarketingFlyerFile', {
+    groups: [ValidationsGroupsEnum.default],
+  })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => Asset)
+  @ApiPropertyOptional({ type: Asset })
+  listingsMarketingFlyerFile?: Asset;
+
+  @Expose()
+  @ValidateListingPublish('listingsAccessibleMarketingFlyerFile', {
+    groups: [ValidationsGroupsEnum.default],
+  })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => Asset)
+  @ApiPropertyOptional({ type: Asset })
+  listingsAccessibleMarketingFlyerFile?: Asset;
 
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })

@@ -2,6 +2,7 @@
 // Note, these are just used to keep backend and frontend in sync. We store feature flags as strings so this list might not include every flag.
 // Keep alphabetized for readability.
 export enum FeatureFlagEnum {
+  disableBuildingSelectionCriteria = 'disableBuildingSelectionCriteria',
   disableCommonApplication = 'disableCommonApplication',
   disableJurisdictionalAdmin = 'disableJurisdictionalAdmin',
   disableListingPreferences = 'disableListingPreferences',
@@ -10,6 +11,7 @@ export enum FeatureFlagEnum {
   enableAdaOtherOption = 'enableAdaOtherOption',
   enableAdditionalResources = 'enableAdditionalResources',
   enableCompanyWebsite = 'enableCompanyWebsite',
+  enableCreditScreeningFee = 'enableCreditScreeningFee',
   enableFullTimeStudentQuestion = 'enableFullTimeStudentQuestion',
   enableGeocodingPreferences = 'enableGeocodingPreferences',
   enableGeocodingRadiusMethod = 'enableGeocodingRadiusMethod',
@@ -23,6 +25,7 @@ export enum FeatureFlagEnum {
   enableListingOpportunity = 'enableListingOpportunity',
   enableListingPagination = 'enableListingPagination',
   enableListingUpdatedAt = 'enableListingUpdatedAt',
+  enableMarketingFlyer = 'enableMarketingFlyer',
   enableMarketingStatus = 'enableMarketingStatus',
   enableMarketingStatusMonths = 'enableMarketingStatusMonths',
   enableNeighborhoodAmenities = 'enableNeighborhoodAmenities',
@@ -53,6 +56,11 @@ export const featureFlagMap: {
   name: string;
   description: string;
 }[] = [
+  {
+    name: FeatureFlagEnum.disableBuildingSelectionCriteria,
+    description:
+      'When true, building selection criteria is not displayed in the listing',
+  },
   {
     name: FeatureFlagEnum.disableCommonApplication,
     description:
@@ -91,6 +99,10 @@ export const featureFlagMap: {
     name: FeatureFlagEnum.enableCompanyWebsite,
     description:
       'When true, allows partners to add company website information',
+  },
+  {
+    name: FeatureFlagEnum.enableCreditScreeningFee,
+    description: 'When true, credit screening fee is enabled for listings',
   },
   {
     name: FeatureFlagEnum.enableFullTimeStudentQuestion,
@@ -154,6 +166,11 @@ export const featureFlagMap: {
   {
     name: FeatureFlagEnum.enableListingUpdatedAt,
     description: 'When true, listings detail will display an updated at date',
+  },
+  {
+    name: FeatureFlagEnum.enableMarketingFlyer,
+    description:
+      "When true, the 'marketing flyer' sub-section is displayed in listing creation/edit and the public listing view",
   },
   {
     name: FeatureFlagEnum.enableMarketingStatus,
