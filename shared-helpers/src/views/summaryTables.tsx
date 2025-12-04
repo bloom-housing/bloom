@@ -444,7 +444,8 @@ export const stackedUnitSummariesTable = (
 
 export const getAvailabilityText = (
   group: UnitGroupSummary,
-  isComingSoon?: boolean
+  isComingSoon?: boolean,
+  isNonRegulated?: boolean
 ): { text: string } => {
   if (isComingSoon) {
     return {
@@ -467,7 +468,9 @@ export const getAvailabilityText = (
     )
   }
 
-  statusElements.push(waitlistStatus)
+  if (!isNonRegulated) {
+    statusElements.push(waitlistStatus)
+  }
 
   // Combine statuses with proper formatting
   let availability = null
@@ -864,7 +867,11 @@ export const getUnitGroupSummariesTable = (listing: Listing) => {
       ami = `${group.amiPercentageRange.min} - ${group.amiPercentageRange.max}%`
     }
 
-    const availability = getAvailabilityText(group, isComingSoon)
+    const availability = getAvailabilityText(
+      group,
+      isComingSoon,
+      listing.listingType === EnumListingListingType.nonRegulated
+    )
 
     return {
       unitType: {
