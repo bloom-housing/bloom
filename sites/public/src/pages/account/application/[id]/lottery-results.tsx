@@ -105,6 +105,8 @@ const LotteryResults = () => {
     }
   )
 
+  // TODO: Part of the changes will be done inside this component
+
   return (
     <>
       <RequireLogin signInPath="/sign-in" signInMessage={t("t.loginIsRequired")}>
