@@ -67,6 +67,7 @@ const FormForgotPassword = ({
             <Field
               name="email"
               label={t("t.email")}
+              note={t("authentication.forgotPassword.sendEmailNotes")}
               validation={{ required: true, pattern: emailRegex }}
               error={errors.email}
               errorMessage={errors.email ? t("authentication.signIn.loginError") : undefined}
@@ -74,13 +75,8 @@ const FormForgotPassword = ({
               onChange={() => networkError.reset()}
               labelClassName={"text__caps-spaced"}
             />
-
-            <Button
-              type="submit"
-              variant="primary"
-              className={styles["forgot-password-submit-button"]}
-            >
-              {t("authentication.forgotPassword.sendEmail")}
+            <Button type="submit" className={styles["forgot-password-submit-button"]}>
+              {t("authentication.forgotPassword.sendEmailButton")}
             </Button>
 
             <div className={"mt-4"}>
