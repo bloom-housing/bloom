@@ -62,12 +62,11 @@
         }
 
         .full-width-text-cell {
-          text-align: center;
+          text-align: left;
           padding: var(--seeds-s8);
         }
 
         .error-cell {
-          text-align: center;
           color: var(--seeds-color-alert);
         }
         tr:nth-of-type(even) {

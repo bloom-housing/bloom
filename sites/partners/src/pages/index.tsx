@@ -310,10 +310,10 @@ export default function ListingsList() {
     })
     return {
       items: data.items as unknown as TableDataRow[],
-      totalItems: data.meta.totalItems,
-      errorMessage: data.error ? data.error.response.data.message[0] : null,
-      currentPage: data.meta.currentPage,
-      itemsPerPage: data.meta.itemsPerPage,
+      totalItems: data.meta?.totalItems,
+      errorMessage: data.error ? data.error.response.data.message : null,
+      currentPage: data.meta?.currentPage,
+      itemsPerPage: data.meta?.itemsPerPage,
     }
   }
 

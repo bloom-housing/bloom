@@ -13,6 +13,7 @@ import {
   EnumMultiselectQuestionFilterParamsComparison,
   EnumPropertyFilterParamsComparison,
   Listing,
+  ListingFilterParams,
   ListingOrderByKeys,
   ListingViews,
   MultiselectQuestionFilterParams,
@@ -77,6 +78,7 @@ export function useSingleListingData(listingId: string) {
 }
 
 interface BaseListingData {
+  filter?: ListingFilterParams[]
   limit?: number | "all"
   orderBy?: ListingOrderByKeys[]
   orderDir?: OrderByEnum[]
@@ -89,6 +91,7 @@ interface BaseListingData {
 }
 
 export async function fetchBaseListingData({
+  filter = [],
   limit,
   orderBy,
   orderDir,
@@ -107,6 +110,7 @@ export async function fetchBaseListingData({
   let pagination: PaginationMeta | null = null
   try {
     const params: BaseListingData = {
+      filter,
       limit: limit || "all",
       orderBy: orderBy || [ListingOrderByKeys.status],
       orderDir: orderDir || [OrderByEnum.asc],
@@ -115,7 +119,20 @@ export async function fetchBaseListingData({
       page: page || 1,
       userId: userId || null,
       userJurisdictionIds: userJurisdictionIds || null,
-      view: view || ListingViews.base,
+      view: view || ListingViews.fundamentals,
+    }
+
+    // filter if logged user is an agent
+    if (roles?.isPartner) {
+      params.filter.push({
+        $comparison: EnumListingFilterParamsComparison["="],
+        leasingAgent: userId,
+      })
+    } else if (roles?.isJurisdictionalAdmin || roles?.isLimitedJurisdictionalAdmin) {
+      params.filter.push({
+        $comparison: EnumListingFilterParamsComparison.IN,
+        jurisdiction: userJurisdictionIds[0],
+      })
     }
 
     const response = await axios.post(`/api/adapter/listings/list`, params, {
