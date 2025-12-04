@@ -722,6 +722,7 @@
   "listings.developmentalDisabilitiesDescription": "Una porción del número de viviendas en este edificio esta destinada a personas con discapacidades del desarrollo. Sírvase visitar <a href='http://www.housingchoices.org/' target='_blank'>housingchoices.org</a> para obtener información sobre la elegibilidad, requisitos, cómo obtener una solicitud y obtener respuesta a cualquier pregunta que usted pudiera tener acerca del proceso.",
   "listings.downloadPdf": "Descargar PDF",
   "listings.hasEbllClearance": "Esta propiedad ha recibido la autorización EBLL de HUD.",
+  "listings.noEbllClearance": "Esta propiedad no ha recibido la autorización EBLL de HUD",
   "listings.eligibilityNotebook": "Cuaderno de elegibilidad",
   "listings.eligibleApplicants.FCFS": "Se contactará a los solicitantes elegibles por orden hasta que se cubran las vacantes.",
   "listings.enterLotteryForWaitlist": "Enviar una solicitud para un lugar abierto en la lista de espera de %{units} viviendas.",
