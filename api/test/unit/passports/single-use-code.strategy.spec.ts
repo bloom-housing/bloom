@@ -163,6 +163,7 @@ describe('Testing single-use-code strategy', () => {
     expect(prisma.userAccounts.update).toHaveBeenCalledWith({
       data: {
         failedLoginAttemptsCount: 0,
+        wasWarnedOfDeletion: false,
       },
       where: {
         id,
@@ -232,6 +233,7 @@ describe('Testing single-use-code strategy', () => {
     expect(prisma.userAccounts.update).toHaveBeenCalledWith({
       data: {
         failedLoginAttemptsCount: 0,
+        wasWarnedOfDeletion: false,
       },
       where: {
         id,
@@ -301,6 +303,7 @@ describe('Testing single-use-code strategy', () => {
     expect(prisma.userAccounts.update).toHaveBeenCalledWith({
       data: {
         failedLoginAttemptsCount: 0,
+        wasWarnedOfDeletion: false,
       },
       where: {
         id,
