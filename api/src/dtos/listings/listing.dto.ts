@@ -1,7 +1,6 @@
 import { Expose, Transform, TransformFnParams, Type } from 'class-transformer';
 import {
   ArrayMaxSize,
-  ArrayMinSize,
   IsArray,
   IsBoolean,
   IsDate,
@@ -63,7 +62,7 @@ import {
 } from '../../decorators/validate-units-required.decorator';
 import { ValidateListingDeposit } from '../../decorators/validate-listing-deposit.decorator';
 import { ListingDocuments } from './listing-documents.dto';
-import { ValidateListingImages } from 'src/decorators/validate-listing-images.decorator';
+import { ValidateListingImages } from '../../decorators/validate-listing-images.decorator';
 
 class Listing extends AbstractDTO {
   @Expose()
