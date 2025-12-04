@@ -135,11 +135,7 @@ export async function fetchBaseListingData({
       })
     }
 
-    const response = await axios.post(`/api/adapter/listings/list`, params, {
-      headers: {
-        passkey: process.env.API_PASS_KEY,
-      },
-    })
+    const response = await axios.post(`/api/adapter/listings/list`, params)
 
     listings = response.data.items
     pagination = response.data.meta || null
