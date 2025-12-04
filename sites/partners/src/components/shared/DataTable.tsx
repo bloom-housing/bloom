@@ -250,7 +250,23 @@ export const DataTable = (props: DataTableProps) => {
   const APPROX_ROW_HEIGHT = 55
 
   const getTableContent = () => {
-    if (delayedLoading || dataQuery.data === undefined) {
+    if (dataQuery.data?.errorMessage) {
+      return (
+        <>
+          {tableHeaders}
+          <tbody>
+            <tr>
+              <td
+                colSpan={table.getVisibleFlatColumns().length}
+                className={`${styles["full-width-text-cell"]} ${styles["error-cell"]}`}
+              >
+                {dataQuery.data.errorMessage}
+              </td>
+            </tr>
+          </tbody>
+        </>
+      )
+    } else if (delayedLoading || dataQuery.data === undefined) {
       return (
         <tbody>
           <tr className={styles["loading-row"]}>
@@ -270,22 +286,6 @@ export const DataTable = (props: DataTableProps) => {
             </td>
           </tr>
         </tbody>
-      )
-    } else if (dataQuery.data?.errorMessage) {
-      return (
-        <>
-          {tableHeaders}
-          <tbody>
-            <tr>
-              <td
-                colSpan={table.getVisibleFlatColumns().length}
-                className={`${styles["full-width-text-cell"]} ${styles["error-cell"]}`}
-              >
-                {dataQuery.data.errorMessage}
-              </td>
-            </tr>
-          </tbody>
-        </>
       )
     } else if (dataQuery.data?.items?.length === 0) {
       return (
