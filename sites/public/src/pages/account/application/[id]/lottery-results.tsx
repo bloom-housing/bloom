@@ -106,6 +106,7 @@ const LotteryResults = () => {
   )
 
   // TODO: Part of the changes will be done inside this component
+  // account.application.lottery.preferences
 
   return (
     <>
