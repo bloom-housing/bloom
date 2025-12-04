@@ -201,7 +201,7 @@ describe("settings", () => {
                 {
                   id: "jurisdiction1",
                   name: "jurisdictionWithJurisdictionAdmin",
-                  featureFlags: [{ name: FeatureFlagEnum.enableProperties, active: true }],
+                  featureFlags: [{ name: FeatureFlagEnum.enableProperties, active: false }],
                 } as Jurisdiction,
                 {
                   id: "jurisdiction2",
