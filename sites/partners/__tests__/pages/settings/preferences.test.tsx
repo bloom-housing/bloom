@@ -238,7 +238,7 @@ describe("settings", () => {
           }
         )
       )
-      const { getByText, findByText, getByRole } = render(<SettingsPreferences key="1" />)
+      const { getByText, findByText, getByRole } = render(<SettingsPreferences />)
 
       expect(getByText("Settings")).toBeInTheDocument()
       expect(getByText("Preferences")).toBeInTheDocument()
@@ -310,7 +310,7 @@ describe("settings", () => {
 
       const { findByText, getByTestId, findByRole, queryAllByText } = render(
         <ToastProvider>
-          <SettingsPreferences key={"2"} />
+          <SettingsPreferences />
         </ToastProvider>
       )
 
@@ -362,7 +362,7 @@ describe("settings", () => {
       )
 
       const { findByText, getByTestId, findByRole, queryAllByText, getByText } = render(
-        <SettingsPreferences key="5" />
+        <SettingsPreferences />
       )
 
       await findByText(multiselectQuestionPreference.text)
@@ -413,9 +413,7 @@ describe("settings", () => {
         )
       )
 
-      const { findByText, getByTestId, queryAllByText, getByText } = render(
-        <SettingsPreferences key="6" />
-      )
+      const { findByText, getByTestId, queryAllByText, getByText } = render(<SettingsPreferences />)
 
       await findByText(multiselectQuestionPreference.text)
 
@@ -460,9 +458,7 @@ describe("settings", () => {
         })
       )
 
-      const { findByText, getByTestId, queryAllByText, getByText } = render(
-        <SettingsPreferences key="7" />
-      )
+      const { findByText, getByTestId, queryAllByText, getByText } = render(<SettingsPreferences />)
 
       await findByText(multiselectQuestionPreference.text)
 
