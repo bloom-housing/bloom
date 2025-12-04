@@ -1,5 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
+import { LanguagesEnum } from '@prisma/client';
 import { randomUUID } from 'crypto';
 import { stringify } from 'qs';
 import request from 'supertest';
@@ -467,6 +468,9 @@ describe('User Controller Tests', () => {
     });
 
     it('should fail to verify token when incorrect user id is provided', async () => {
+      const mockConsoleError = jest
+        .spyOn(console, 'error')
+        .mockImplementation();
       const userA = await prisma.userAccounts.create({
         data: await userFactory(),
       });
@@ -508,6 +512,10 @@ describe('User Controller Tests', () => {
       });
 
       expect(userPostResend.hitConfirmationUrl).toBeNull();
+      expect(mockConsoleError).toHaveBeenCalledWith(
+        'isUserConfirmationTokenValid error = ',
+        expect.anything(),
+      );
     });
 
     it('should fail to verify token when token mismatch', async () => {
@@ -952,6 +960,7 @@ describe('User Controller Tests', () => {
     let userB;
     let userC;
     let userD;
+    let userE;
     beforeAll(async () => {
       process.env.USERS_DAYS_TILL_EXPIRY = '1095';
       // Public User that should be warned
@@ -984,6 +993,14 @@ describe('User Controller Tests', () => {
           wasWarnedOfDeletion: true,
         }),
       });
+      // Public User that should be warned in spanish
+      userE = await prisma.userAccounts.create({
+        data: await userFactory({
+          confirmedAt: new Date(),
+          lastLoginAt: dayjs(new Date()).subtract(4, 'years').toDate(),
+          language: LanguagesEnum.es,
+        }),
+      });
     });
     it('should send warning email to only public users over the date', async () => {
       const mockWarnOfAccountRemoval = jest.spyOn(
@@ -1012,9 +1029,16 @@ describe('User Controller Tests', () => {
         where: { id: userD.id },
       });
       expect(updatedUserD.wasWarnedOfDeletion).toBe(true);
-      expect(mockWarnOfAccountRemoval.mock.calls.length).toBe(1);
+      expect(mockWarnOfAccountRemoval.mock.calls.length).toBe(2);
       expect(mockWarnOfAccountRemoval).toBeCalledWith(
         expect.objectContaining({ email: userA.email, id: userA.id }),
+      );
+      expect(mockWarnOfAccountRemoval).toBeCalledWith(
+        expect.objectContaining({
+          email: userE.email,
+          id: userE.id,
+          language: LanguagesEnum.es,
+        }),
       );
     });
   });
