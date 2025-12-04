@@ -1135,7 +1135,6 @@ export class ApplicationService {
       select: {
         id: true,
         mailingAddressId: true,
-        additionalPhoneNumber: true,
         applicant: {
           select: {
             id: true,
@@ -1159,6 +1158,7 @@ export class ApplicationService {
       },
       where: {
         id: applicationId,
+        wasPIICleared: false,
       },
     });
 
@@ -1254,7 +1254,7 @@ export class ApplicationService {
     transactions.push(
       this.prisma.applications.update({
         data: {
-          additionalPhone: null,
+          additionalPhoneNumber: null,
           wasPIICleared: true,
         },
         where: {
@@ -1290,7 +1290,7 @@ export class ApplicationService {
       }
     } else {
       this.logger.warn(
-        'APPLICATION_DAYS_TILL_EXPIRY not set so cron job not run',
+        'APPLICATION_DAYS_TILL_EXPIRY variable not set so the cron job will not run',
       );
     }
     return {

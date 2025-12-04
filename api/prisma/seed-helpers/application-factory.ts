@@ -33,6 +33,7 @@ export const applicationFactory = async (optionalParams?: {
   isNewest?: boolean;
   expireAfter?: Date;
   wasPIICleared?: boolean;
+  additionalPhone?: string;
 }): Promise<Prisma.ApplicationsCreateInput> => {
   let preferredUnitTypes: Prisma.UnitTypesCreateNestedManyWithoutApplicationsInput;
   if (optionalParams?.unitTypeId) {
@@ -45,7 +46,8 @@ export const applicationFactory = async (optionalParams?: {
     };
   }
   const demographics = await demographicsFactory();
-  const additionalPhone = randomBoolean();
+  const includeAdditionalPhone =
+    !!optionalParams?.additionalPhone || randomBoolean();
   let householdSize = 1;
   if (optionalParams?.householdMember) {
     householdSize = optionalParams.householdMember.length + 1;
@@ -112,9 +114,11 @@ export const applicationFactory = async (optionalParams?: {
         }
       : undefined,
     incomeVouchers: randomBoolean(),
-    additionalPhoneNumber: additionalPhone ? '(456) 456-4564' : undefined,
-    additionalPhone,
-    additionalPhoneNumberType: additionalPhone ? 'cell' : undefined,
+    additionalPhoneNumber: includeAdditionalPhone
+      ? optionalParams?.additionalPhone || '(456) 456-4564'
+      : undefined,
+    additionalPhone: includeAdditionalPhone,
+    additionalPhoneNumberType: includeAdditionalPhone ? 'cell' : undefined,
     isNewest: optionalParams?.isNewest || false,
     expireAfter: optionalParams?.expireAfter,
     wasPIICleared: optionalParams?.wasPIICleared || false,

@@ -12,7 +12,7 @@ import { SuccessDTO } from '../dtos/shared/success.dto';
 import { PrismaService } from './prisma.service';
 import { CronJobService } from './cron-job.service';
 
-const CRON_JOB_NAME = 'TEMP_FILE_CLEAR_CRON_JOB';
+const TEMP_FILE_CLEAR_CRON_JOB_NAME = 'TEMP_FILE_CLEAR_CRON_JOB';
 
 @Injectable()
 export class AppService implements OnModuleInit {
@@ -25,7 +25,7 @@ export class AppService implements OnModuleInit {
 
   onModuleInit() {
     this.cronJobService.startCronJob(
-      CRON_JOB_NAME,
+      TEMP_FILE_CLEAR_CRON_JOB_NAME,
       process.env.TEMP_FILE_CLEAR_CRON_STRING,
       this.clearTempFiles.bind(this),
     );
@@ -43,7 +43,9 @@ export class AppService implements OnModuleInit {
   */
   async clearTempFiles(): Promise<SuccessDTO> {
     this.logger.warn('listing csv clear job running');
-    await this.cronJobService.markCronJobAsStarted(CRON_JOB_NAME);
+    await this.cronJobService.markCronJobAsStarted(
+      TEMP_FILE_CLEAR_CRON_JOB_NAME,
+    );
     let filesDeletedCount = 0;
     await fs.readdir(join(process.cwd(), 'src/temp/'), (err, files) => {
       if (err) {

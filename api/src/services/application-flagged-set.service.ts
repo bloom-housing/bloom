@@ -14,26 +14,26 @@ import {
   Prisma,
   RuleEnum,
 } from '@prisma/client';
-import { PrismaService } from './prisma.service';
-import { mapTo } from '../utilities/mapTo';
-import { SuccessDTO } from '../dtos/shared/success.dto';
+import dayjs from 'dayjs';
+import { AfsMeta } from '../dtos/application-flagged-sets/afs-meta.dto';
+import { AfsQueryParams } from '../dtos/application-flagged-sets/afs-query-params.dto';
+import { AfsResolve } from '../dtos/application-flagged-sets/afs-resolve.dto';
 import { ApplicationFlaggedSet } from '../dtos/application-flagged-sets/application-flagged-set.dto';
 import { PaginatedAfsDto } from '../dtos/application-flagged-sets/paginated-afs.dto';
-import { AfsQueryParams } from '../dtos/application-flagged-sets/afs-query-params.dto';
-import { AfsMeta } from '../dtos/application-flagged-sets/afs-meta.dto';
-import { OrderByEnum } from '../enums/shared/order-by-enum';
+import { Application } from '../dtos/applications/application.dto';
+import { IdDTO } from '../dtos/shared/id.dto';
+import { SuccessDTO } from '../dtos/shared/success.dto';
+import { User } from '../dtos/users/user.dto';
 import { View } from '../enums/application-flagged-sets/view';
+import { OrderByEnum } from '../enums/shared/order-by-enum';
+import { mapTo } from '../utilities/mapTo';
 import {
   buildPaginationMetaInfo,
   calculateSkip,
   calculateTake,
 } from '../utilities/pagination-helpers';
-import { AfsResolve } from '../dtos/application-flagged-sets/afs-resolve.dto';
-import { User } from '../dtos/users/user.dto';
-import { Application } from '../dtos/applications/application.dto';
-import { IdDTO } from '../dtos/shared/id.dto';
-import dayjs from 'dayjs';
 import { CronJobService } from './cron-job.service';
+import { PrismaService } from './prisma.service';
 
 /*
   this is the service for application flaged sets

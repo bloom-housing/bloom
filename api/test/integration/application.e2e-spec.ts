@@ -2085,6 +2085,7 @@ describe('Application Controller Tests', () => {
         data: await applicationFactory({
           listingId: listing.id,
           isNewest: false,
+          additionalPhone: '(123) 456-7890',
           expireAfter: dayjs(new Date()).subtract(2, 'days').toDate(),
           householdMember: [
             {
@@ -2196,7 +2197,7 @@ describe('Application Controller Tests', () => {
         where: { id: applicationToBeCleaned.id },
       });
       expect(application1.wasPIICleared).toBe(true);
-      expect(application1.additionalPhone).toBeNull();
+      expect(application1.additionalPhoneNumber).toBeNull();
 
       // Verify that the other applications didn't have their data cleared
       const application2 = await prisma.applications.findFirst({
