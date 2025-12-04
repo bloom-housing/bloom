@@ -63,6 +63,7 @@ import {
 } from '../../decorators/validate-units-required.decorator';
 import { ValidateListingDeposit } from '../../decorators/validate-listing-deposit.decorator';
 import { ListingDocuments } from './listing-documents.dto';
+import { ValidateListingImages } from 'src/decorators/validate-listing-images.decorator';
 
 class Listing extends AbstractDTO {
   @Expose()
@@ -922,7 +923,7 @@ class Listing extends AbstractDTO {
   })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => ListingImage)
-  @ArrayMinSize(1, { groups: [ValidationsGroupsEnum.default] })
+  @ValidateListingImages({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional({ type: ListingImage, isArray: true })
   listingImages?: ListingImage[];
 
@@ -1148,6 +1149,9 @@ class Listing extends AbstractDTO {
 
   @Expose()
   requiredFields?: string[];
+
+  @Expose()
+  minimumImagesRequired?: number;
 
   @Expose()
   @ApiPropertyOptional()

@@ -26,6 +26,7 @@ import {
   ValidateAtLeastOneUnit,
   ValidateOnlyUnitsOrUnitGroups,
 } from '../../decorators/validate-units-required.decorator';
+import { ValidateListingImages } from 'src/decorators/validate-listing-images.decorator';
 
 export class ListingUpdate extends OmitType(Listing, [
   // fields get their type changed
@@ -134,7 +135,7 @@ export class ListingUpdate extends OmitType(Listing, [
   })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => ListingImageCreate)
-  @ArrayMinSize(1, { groups: [ValidationsGroupsEnum.default] })
+  @ValidateListingImages({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional({ type: ListingImageCreate, isArray: true })
   listingImages?: ListingImageCreate[];
 
