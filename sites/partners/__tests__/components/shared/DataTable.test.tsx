@@ -41,6 +41,8 @@ describe("DataTable", () => {
     mockFetch.mockReturnValue({
       items: [{ firstName: "TestFirst", lastName: "TestLast" }],
       totalItems: 1,
+      currentPage: 1,
+      itemsPerPage: 8,
       errorMessage: null,
     })
 
@@ -64,6 +66,7 @@ describe("DataTable", () => {
     expect(screen.getByRole("option", { name: "25" })).toBeInTheDocument()
     expect(screen.getByRole("option", { name: "50" })).toBeInTheDocument()
     expect(screen.getByRole("option", { name: "100" })).toBeInTheDocument()
+    expect(screen.getByText("Page 1 of 1")).toBeInTheDocument()
     expect(screen.getByText("1 Total listing")).toBeInTheDocument()
     expect(screen.queryByRole("textbox")).not.toBeInTheDocument()
   })
@@ -77,6 +80,8 @@ describe("DataTable", () => {
         { firstName: "TestFirst2", lastName: "TestLast2" },
       ],
       totalItems: 5,
+      currentPage: 1,
+      itemsPerPage: 2,
       errorMessage: null,
     })
 
@@ -103,6 +108,8 @@ describe("DataTable", () => {
     expect(screen.getByRole("cell", { name: "TestLast1" })).toBeInTheDocument()
     expect(screen.getByRole("cell", { name: "TestFirst2" })).toBeInTheDocument()
     expect(screen.getByRole("cell", { name: "TestLast2" })).toBeInTheDocument()
+    expect(screen.getByText("Page 1 of 3")).toBeInTheDocument()
+
     expect(screen.getByTestId("sort-button-firstName")).toBeInTheDocument()
     expect(screen.getByTestId("sort-button-lastName")).toBeInTheDocument()
 
@@ -117,6 +124,8 @@ describe("DataTable", () => {
         { firstName: "TestFirst4", lastName: "TestLast4" },
       ],
       totalItems: 5,
+      currentPage: 2,
+      itemsPerPage: 2,
       errorMessage: null,
     })
     fireEvent.click(nextButton)
@@ -127,12 +136,16 @@ describe("DataTable", () => {
     expect(screen.getByRole("cell", { name: "TestLast3" })).toBeInTheDocument()
     expect(screen.getByRole("cell", { name: "TestFirst4" })).toBeInTheDocument()
     expect(screen.getByRole("cell", { name: "TestLast4" })).toBeInTheDocument()
+    expect(screen.getByText("Page 2 of 3")).toBeInTheDocument()
+
     expect(within(screen.getAllByRole("rowgroup")[1]).getAllByRole("row")).toHaveLength(2)
     expect(nextButton).toBeEnabled()
     expect(previousButton).toBeEnabled()
     mockFetch.mockReturnValueOnce({
       items: [{ firstName: "TestFirst5", lastName: "TestLast5" }],
       totalItems: 5,
+      currentPage: 3,
+      itemsPerPage: 2,
       errorMessage: null,
     })
     fireEvent.click(nextButton)
@@ -142,6 +155,7 @@ describe("DataTable", () => {
     expect(await screen.findByRole("cell", { name: "TestFirst5" })).toBeInTheDocument()
     expect(within(screen.getAllByRole("rowgroup")[1]).getAllByRole("row")).toHaveLength(1)
     expect(screen.getByRole("cell", { name: "TestLast5" })).toBeInTheDocument()
+    expect(screen.getByText("Page 3 of 3")).toBeInTheDocument()
     expect(nextButton).toBeDisabled()
     expect(previousButton).toBeEnabled()
     mockFetch.mockReturnValueOnce({
@@ -150,6 +164,8 @@ describe("DataTable", () => {
         { firstName: "TestFirst4", lastName: "TestLast4" },
       ],
       totalItems: 5,
+      currentPage: 2,
+      itemsPerPage: 2,
       errorMessage: null,
     })
     fireEvent.click(previousButton)
@@ -159,6 +175,7 @@ describe("DataTable", () => {
     expect(screen.getByRole("cell", { name: "TestLast3" })).toBeInTheDocument()
     expect(screen.getByRole("cell", { name: "TestFirst4" })).toBeInTheDocument()
     expect(screen.getByRole("cell", { name: "TestLast4" })).toBeInTheDocument()
+    expect(screen.getByText("Page 2 of 3")).toBeInTheDocument()
     expect(within(screen.getAllByRole("rowgroup")[1]).getAllByRole("row")).toHaveLength(2)
   })
   it("should filter on columns", async () => {
@@ -177,6 +194,8 @@ describe("DataTable", () => {
     mockFetch.mockReturnValue({
       items: defaultItems,
       totalItems: 8,
+      currentPage: 1,
+      itemsPerPage: 8,
       errorMessage: null,
     })
 
@@ -214,6 +233,7 @@ describe("DataTable", () => {
     expect(await screen.findByRole("columnheader", { name: /First name/i })).toBeInTheDocument()
     expect(screen.getByRole("columnheader", { name: /Last name/i })).toBeInTheDocument()
     expect(screen.getByText("8 Total listings")).toBeInTheDocument()
+    expect(screen.getByText("Page 1 of 1")).toBeInTheDocument()
 
     expect(screen.queryByRole("button", { description: "Activate ascending sort" })).toBeNull()
     const firstNameInput = screen.getByTestId("column-search-First name")
@@ -229,11 +249,14 @@ describe("DataTable", () => {
     mockFetch.mockReturnValueOnce({
       items: [{ firstName: "TestFirstA", lastName: "TestLastA" }],
       totalItems: 1,
+      currentPage: 1,
+      itemsPerPage: 8,
       errorMessage: null,
     })
     fireEvent.change(firstNameInput, { target: { value: "TestFirstA" } })
     expect(await screen.findByText("1 Total listing")).toBeInTheDocument()
     expect(await screen.findByRole("cell", { name: "TestFirstA" })).toBeInTheDocument()
+    expect(screen.getByText("Page 1 of 1")).toBeInTheDocument()
     expect(mockFetch).toHaveBeenCalledTimes(2)
     expect(mockFetch).toHaveBeenCalledWith(
       { pageIndex: 0, pageSize: 8 },
@@ -244,11 +267,14 @@ describe("DataTable", () => {
     mockFetch.mockReturnValueOnce({
       items: defaultItems,
       totalItems: 8,
+      currentPage: 1,
+      itemsPerPage: 8,
       errorMessage: null,
     })
     fireEvent.change(firstNameInput, { target: { value: "Te" } })
     expect(await screen.findByText("8 Total listings")).toBeInTheDocument()
     expect(await screen.findByRole("cell", { name: "TestFirstB" })).toBeInTheDocument()
+    expect(screen.getByText("Page 1 of 1")).toBeInTheDocument()
     expect(mockFetch).toHaveBeenCalledTimes(3)
     expect(mockFetch).toHaveBeenCalledWith({ pageIndex: 0, pageSize: 8 }, [], [])
   })
@@ -269,6 +295,8 @@ describe("DataTable", () => {
     mockFetch.mockReturnValue({
       items: defaultItems,
       totalItems: 8,
+      currentPage: 1,
+      itemsPerPage: 8,
       errorMessage: null,
     })
 
@@ -317,6 +345,7 @@ describe("DataTable", () => {
     expect(await screen.findByRole("columnheader", { name: "First name" })).toBeInTheDocument()
     expect(screen.getByRole("columnheader", { name: "Last name" })).toBeInTheDocument()
     expect(screen.getByText("8 Total listings")).toBeInTheDocument()
+    expect(screen.getByText("Page 1 of 1")).toBeInTheDocument()
 
     expect(screen.getByTestId("sort-button-firstName")).toHaveAccessibleDescription(
       "Activate ascending sort for column First name"
@@ -404,6 +433,8 @@ describe("DataTable", () => {
     mockFetch.mockReturnValue({
       items: defaultItems,
       totalItems: 8,
+      currentPage: 1,
+      itemsPerPage: 8,
       errorMessage: null,
     })
 
@@ -451,6 +482,7 @@ describe("DataTable", () => {
     expect(screen.getByRole("columnheader", { name: "Last name" })).toBeInTheDocument()
     expect(screen.queryByRole("columnheader", { name: "Middle name" })).not.toBeInTheDocument()
     expect(screen.getByText("8 Total listings")).toBeInTheDocument()
+    expect(screen.getByText("Page 1 of 1")).toBeInTheDocument()
   })
   it("should render empty state", async () => {
     const mockFetch = jest.fn()
@@ -531,6 +563,8 @@ describe("DataTable", () => {
     mockFetch.mockReturnValue({
       items: fullItems.slice(0, 8),
       totalItems: 25,
+      currentPage: 1,
+      itemsPerPage: 8,
       errorMessage: null,
     })
 
@@ -548,6 +582,7 @@ describe("DataTable", () => {
     expect(await screen.findByRole("columnheader", { name: /First name/i })).toBeInTheDocument()
     expect(screen.getByRole("columnheader", { name: /Last name/i })).toBeInTheDocument()
     expect(screen.getByText("25 Total listings")).toBeInTheDocument()
+    expect(screen.getByText("Page 1 of 4")).toBeInTheDocument()
 
     expect(mockFetch).toHaveBeenCalledTimes(1)
     expect(mockFetch).toHaveBeenCalledWith({ pageIndex: 0, pageSize: 8 }, [], [])
@@ -555,10 +590,13 @@ describe("DataTable", () => {
     mockFetch.mockReturnValueOnce({
       items: fullItems,
       totalItems: 25,
+      currentPage: 1,
+      itemsPerPage: 25,
       errorMessage: null,
     })
     fireEvent.change(showInput, { target: { value: "25" } })
     expect(mockFetch).toHaveBeenCalledTimes(2)
     expect(mockFetch).toHaveBeenCalledWith({ pageIndex: 0, pageSize: 25 }, [], [])
+    expect(await screen.findByText("Page 1 of 1")).toBeInTheDocument()
   })
 })
