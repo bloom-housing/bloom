@@ -180,7 +180,7 @@ export const stagingSeed = async (
         NeighborhoodAmenitiesEnum.playgrounds,
         NeighborhoodAmenitiesEnum.busStops,
       ],
-
+      minimumListingPublishImagesRequired: 3,
       requiredListingFields: [
         'digitalApplication',
         'jurisdictions',
