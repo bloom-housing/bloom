@@ -54,11 +54,6 @@ graph TB
   class HUMANS,GRP_DEVELOPERS,GRP_PROD_DEPLOYERS,GRP_PROD_IAM,PS_DEV_IAM,PS_PROD_IAM,PS_DEV,PS_PROD,DEV,PROD,CREATED,S3 manual
 ```
 
-+   %% Green for Terraform created
-+   classDef terraform fill:#e8f5e9,stroke:#388e3c,stroke-width:2px
-+   %% Apply terraform style (green)
-+   class POL_DEV_INLINE,POL_PROD_INLINE,L3 terraform
-
 *Diagram created by prompting Claude Opus 4.1 and manually edited.*
 
 ## Before these steps

@@ -5,7 +5,7 @@ uses Open Tofu: https://opentofu.org/, a drop-in replacement for Terraform that 
 Cloud Native Computing Foundation.
 
 - For instructions on deploying Bloom to an AWS organization, see
-  [./AWS_DEPLOYMENT_GUIDE.md](./AWS_DEPLOYMENT_GUIDE.md).
+  [./AWS_DEPLOYMENT_GUIDE.md](./aws_deployment_guide/0_README.md).
 - For instructions on developing the Open Tofu modules, see [./DEVELOPMENT.md](./DEVELOPMENT.md).
 
 ## Structure
