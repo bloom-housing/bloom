@@ -22,16 +22,18 @@ import { randomBoolean } from './boolean-generator';
 
 export const applicationFactory = async (optionalParams?: {
   createdAt?: Date;
-  householdSize?: number;
   unitTypeId?: string;
   applicant?: Prisma.ApplicantCreateWithoutApplicationsInput;
-  overrides?: Prisma.ApplicationsCreateInput;
   listingId?: string;
   householdMember?: Prisma.HouseholdMemberCreateWithoutApplicationsInput[];
   demographics?: Prisma.DemographicsCreateWithoutApplicationsInput;
   multiselectQuestions?: Partial<MultiselectQuestions>[];
   userId?: string;
   submissionType?: ApplicationSubmissionTypeEnum;
+  isNewest?: boolean;
+  expireAfter?: Date;
+  wasPIICleared?: boolean;
+  additionalPhone?: string;
 }): Promise<Prisma.ApplicationsCreateInput> => {
   let preferredUnitTypes: Prisma.UnitTypesCreateNestedManyWithoutApplicationsInput;
   if (optionalParams?.unitTypeId) {
@@ -44,7 +46,12 @@ export const applicationFactory = async (optionalParams?: {
     };
   }
   const demographics = await demographicsFactory();
-  const additionalPhone = randomBoolean();
+  const includeAdditionalPhone =
+    !!optionalParams?.additionalPhone || randomBoolean();
+  let householdSize = 1;
+  if (optionalParams?.householdMember) {
+    householdSize = optionalParams.householdMember.length + 1;
+  }
   return {
     createdAt: optionalParams?.createdAt || new Date(),
     confirmationCode: generateConfirmationCode(),
@@ -55,7 +62,7 @@ export const applicationFactory = async (optionalParams?: {
       optionalParams?.submissionType ??
       ApplicationSubmissionTypeEnum.electronical,
     submissionDate: new Date(),
-    householdSize: optionalParams?.householdSize ?? 1,
+    householdSize: householdSize,
     income: '40000',
     incomePeriod: randomBoolean()
       ? IncomePeriodEnum.perYear
@@ -90,7 +97,6 @@ export const applicationFactory = async (optionalParams?: {
           },
         }
       : undefined,
-    ...optionalParams?.overrides,
     householdMember: optionalParams?.householdMember
       ? {
           create: optionalParams.householdMember,
@@ -108,9 +114,14 @@ export const applicationFactory = async (optionalParams?: {
         }
       : undefined,
     incomeVouchers: randomBoolean(),
-    additionalPhoneNumber: additionalPhone ? '(456) 456-4564' : undefined,
-    additionalPhone,
-    additionalPhoneNumberType: additionalPhone ? 'cell' : undefined,
+    additionalPhoneNumber: includeAdditionalPhone
+      ? optionalParams?.additionalPhone || '(456) 456-4564'
+      : undefined,
+    additionalPhone: includeAdditionalPhone,
+    additionalPhoneNumberType: includeAdditionalPhone ? 'cell' : undefined,
+    isNewest: optionalParams?.isNewest || false,
+    expireAfter: optionalParams?.expireAfter,
+    wasPIICleared: optionalParams?.wasPIICleared || false,
   };
 };
 

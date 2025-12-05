@@ -36,6 +36,7 @@ import { littleVillageApartments } from './seed-helpers/listing-data/little-vill
 import { elmVillage } from './seed-helpers/listing-data/elm-village';
 import { lakeviewVilla } from './seed-helpers/listing-data/lakeview-villa';
 import { sunshineFlats } from './seed-helpers/listing-data/sunshine-flats';
+import dayjs from 'dayjs';
 
 export const stagingSeed = async (
   prismaClient: PrismaClient,
@@ -770,6 +771,38 @@ export const stagingSeed = async (
     {
       jurisdictionId: mainJurisdiction.id,
       listing: valleyHeightsSeniorCommunity,
+      applications: [
+        await applicationFactory({
+          isNewest: true,
+          expireAfter: process.env.APPLICATION_DAYS_TILL_EXPIRY
+            ? dayjs(new Date()).subtract(10, 'days').toDate()
+            : undefined,
+        }),
+        // applications below should have their PII removed via the cron job
+        await applicationFactory({
+          isNewest: false,
+          expireAfter: process.env.APPLICATION_DAYS_TILL_EXPIRY
+            ? dayjs(new Date()).subtract(10, 'days').toDate()
+            : undefined,
+        }),
+        await applicationFactory({
+          isNewest: false,
+          expireAfter: process.env.APPLICATION_DAYS_TILL_EXPIRY
+            ? dayjs(new Date()).subtract(10, 'days').toDate()
+            : undefined,
+        }),
+        await applicationFactory({
+          isNewest: false,
+          expireAfter: process.env.APPLICATION_DAYS_TILL_EXPIRY
+            ? dayjs(new Date()).subtract(10, 'days').toDate()
+            : undefined,
+          householdMember: [
+            householdMemberFactorySingle(1, {}),
+            householdMemberFactorySingle(2, {}),
+            householdMemberFactorySingle(4, {}),
+          ],
+        }),
+      ],
       userAccounts: [{ id: partnerUser.id }],
     },
     {

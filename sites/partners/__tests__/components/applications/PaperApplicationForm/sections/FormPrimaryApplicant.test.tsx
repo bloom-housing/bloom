@@ -1,8 +1,18 @@
-import { render, screen, waitFor, within } from "@testing-library/react"
+import {
+  render,
+  screen,
+  waitFor,
+  within,
+  FormProviderWrapper,
+  mockNextRouter,
+} from "../../../../testUtils"
 import React from "react"
-import { FormPrimaryApplicant } from "../../../../src/components/applications/PaperApplicationForm/sections/FormPrimaryApplicant"
-import { FormProviderWrapper } from "./helpers"
+import { FormPrimaryApplicant } from "../../../../../src/components/applications/PaperApplicationForm/sections/FormPrimaryApplicant"
 import userEvent from "@testing-library/user-event"
+
+beforeAll(() => {
+  mockNextRouter()
+})
 
 describe("<FormPrimaryApplicant>", () => {
   it("renders the form with primary applicant fields", () => {

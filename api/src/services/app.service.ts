@@ -8,12 +8,11 @@ import {
   Logger,
   OnModuleInit,
 } from '@nestjs/common';
-import { SchedulerRegistry } from '@nestjs/schedule';
-import { startCronJob } from '../utilities/cron-job-starter';
 import { SuccessDTO } from '../dtos/shared/success.dto';
 import { PrismaService } from './prisma.service';
+import { CronJobService } from './cron-job.service';
 
-const CRON_JOB_NAME = 'TEMP_FILE_CLEAR_CRON_JOB';
+const TEMP_FILE_CLEAR_CRON_JOB_NAME = 'TEMP_FILE_CLEAR_CRON_JOB';
 
 @Injectable()
 export class AppService implements OnModuleInit {
@@ -21,17 +20,14 @@ export class AppService implements OnModuleInit {
     private prisma: PrismaService,
     @Inject(Logger)
     private logger = new Logger(AppService.name),
-    private schedulerRegistry: SchedulerRegistry,
+    private cronJobService: CronJobService,
   ) {}
 
   onModuleInit() {
-    startCronJob(
-      this.prisma,
-      CRON_JOB_NAME,
+    this.cronJobService.startCronJob(
+      TEMP_FILE_CLEAR_CRON_JOB_NAME,
       process.env.TEMP_FILE_CLEAR_CRON_STRING,
       this.clearTempFiles.bind(this),
-      this.logger,
-      this.schedulerRegistry,
     );
   }
 
@@ -47,7 +43,9 @@ export class AppService implements OnModuleInit {
   */
   async clearTempFiles(): Promise<SuccessDTO> {
     this.logger.warn('listing csv clear job running');
-    await this.markCronJobAsStarted();
+    await this.cronJobService.markCronJobAsStarted(
+      TEMP_FILE_CLEAR_CRON_JOB_NAME,
+    );
     let filesDeletedCount = 0;
     await fs.readdir(join(process.cwd(), 'src/temp/'), (err, files) => {
       if (err) {
@@ -80,37 +78,6 @@ export class AppService implements OnModuleInit {
     return {
       success: true,
     };
-  }
-
-  /**
-      marks the db record for this cronjob as begun or creates a cronjob that
-      is marked as begun if one does not already exist 
-      */
-  async markCronJobAsStarted(): Promise<void> {
-    const job = await this.prisma.cronJob.findFirst({
-      where: {
-        name: CRON_JOB_NAME,
-      },
-    });
-    if (job) {
-      // if a job exists then we update db entry
-      await this.prisma.cronJob.update({
-        data: {
-          lastRunDate: new Date(),
-        },
-        where: {
-          id: job.id,
-        },
-      });
-    } else {
-      // if no job we create a new entry
-      await this.prisma.cronJob.create({
-        data: {
-          lastRunDate: new Date(),
-          name: CRON_JOB_NAME,
-        },
-      });
-    }
   }
 
   // art pulled from: https://www.asciiart.eu/food-and-drinks/coffee-and-tea

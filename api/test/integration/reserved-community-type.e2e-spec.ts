@@ -7,6 +7,7 @@ import cookieParser from 'cookie-parser';
 import { AppModule } from '../../src/modules/app.module';
 import { PrismaService } from '../../src/services/prisma.service';
 import { jurisdictionFactory } from '../../prisma/seed-helpers/jurisdiction-factory';
+import { randomName } from '../../prisma/seed-helpers/word-generator';
 import { ReservedCommunityTypeQueryParams } from '../../src/dtos/reserved-community-types/reserved-community-type-query-params.dto';
 import {
   reservedCommunityTypeFactory,
@@ -65,11 +66,11 @@ describe('ReservedCommunityType Controller Tests', () => {
 
   it('testing list endpoint without params', async () => {
     const jurisdictionA = await prisma.jurisdictions.create({
-      data: jurisdictionFactory(),
+      data: jurisdictionFactory(`reservedCommunityTypeA-${randomName()}`),
     });
     await reservedCommunityTypeFactoryAll(jurisdictionA.id, prisma);
     const jurisdictionB = await prisma.jurisdictions.create({
-      data: jurisdictionFactory(),
+      data: jurisdictionFactory(`reservedCommunityTypeB-${randomName()}`),
     });
     await reservedCommunityTypeFactoryAll(jurisdictionB.id, prisma);
 
