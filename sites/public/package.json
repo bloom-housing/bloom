@@ -30,7 +30,7 @@
   },
   "dependencies": {
     "@bloom-housing/shared-helpers": "^7.7.1",
-    "@bloom-housing/ui-components": "bloom-housing/ui-components#4328/remove-listing-map",
+    "@bloom-housing/ui-components": "13.0.2",
     "@bloom-housing/ui-seeds": "3.1.1",
     "@heroicons/react": "^2.1.1",
     "@mapbox/mapbox-sdk": "^0.13.0",
@@ -43,7 +43,7 @@
     "dotenv": "^17.2.3",
     "mapbox-gl": "^3.16.0",
     "markdown-to-jsx": "^7.7.16",
-    "next": "^15.5.6",
+    "next": "^15.5.7",
     "qs": "^6.10.1",
     "react": "19.2.0",
     "react-dom": "19.2.0",
