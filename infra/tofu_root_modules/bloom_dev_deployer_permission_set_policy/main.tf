@@ -1,21 +1,22 @@
 terraform {
   backend "s3" {
-    region       = local.iam_identity_center_region
     profile      = local.sso_profile_id
+    region       = local.tofu_state_bucket_region
     bucket       = local.tofu_state_bucket_name
-    key          = "${local.permission_set_name}-permissionset-policy/state"
+    key          = local.tofu_state_key_prefix
     use_lockfile = true
   }
 }
 
 locals {
-  tofu_state_bucket_name = "bloom-core-tofu-state-files"
-  sso_profile_id         = "bloom-dev-iam-admin"
+  sso_profile_id = "bloom-dev-iam-admin"
+
+  tofu_state_bucket_region = "us-east-1"
+  tofu_state_bucket_name   = "bloom-core-tofu-state-files"
+  tofu_state_key_prefix    = "bloom-dev-deployer-permissionset-policy/state"
 
   iam_identity_center_region       = "us-east-1"
   iam_identity_center_instance_arn = "arn:aws:sso:::instance/ssoins-72233fa322bcade3"
-
-  permission_set_name              = "bloom-dev-deployer"
   permission_set_arn               = "arn:aws:sso:::permissionSet/ssoins-72233fa322bcade3/ps-72232137320b912d"
 
   # Config for the bloom deployment this permission set policy allows to deploy.
