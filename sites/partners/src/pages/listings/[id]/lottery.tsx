@@ -360,7 +360,8 @@ const Lottery = (props: { listing: Listing | undefined }) => {
                 lotteryLabel:
                   listing.status === ListingsStatusEnum.closed &&
                   listing?.lotteryOptIn &&
-                  listing?.reviewOrderType === ReviewOrderTypeEnum.lottery
+                  (listing?.reviewOrderType === ReviewOrderTypeEnum.lottery ||
+                    listing?.reviewOrderType === ReviewOrderTypeEnum.waitlistLottery)
                     ? t("listings.lotteryTitle")
                     : undefined,
               }}

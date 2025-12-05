@@ -78,22 +78,33 @@ afterAll(() => {
 
 function mockJurisdictionsHaveFeatureFlagOn(
   featureFlag: string,
-  enableHomeType = true,
-  enableSection8Question = true,
-  enableUnitGroups = false,
-  enableIsVerified = true
+  overrides?: {
+    enableHomeType?: boolean
+    enableSection8Question?: boolean
+    enableUnitGroups?: boolean
+    enableIsVerified?: boolean
+    enableMarketingStatus?: boolean
+    enableAccessibilityFeatures?: boolean
+    enableRegions?: boolean
+  }
 ) {
   switch (featureFlag) {
     case FeatureFlagEnum.enableHomeType:
-      return enableHomeType
+      return overrides?.enableHomeType ?? true
     case FeatureFlagEnum.enableSection8Question:
-      return enableSection8Question
+      return overrides?.enableSection8Question ?? true
     case FeatureFlagEnum.enableUnitGroups:
-      return enableUnitGroups
+      return overrides?.enableUnitGroups ?? false
     case FeatureFlagEnum.enableIsVerified:
-      return enableIsVerified
+      return overrides?.enableIsVerified ?? true
+    case FeatureFlagEnum.enableMarketingStatus:
+      return overrides?.enableMarketingStatus ?? false
+    case FeatureFlagEnum.enableAccessibilityFeatures:
+      return overrides?.enableAccessibilityFeatures ?? true
+    case FeatureFlagEnum.enableRegions:
+      return overrides?.enableRegions ?? true
     default:
-      return true
+      return false
   }
 }
 
@@ -1860,7 +1871,12 @@ describe("listing data", () => {
             value={{
               profile: { ...user, jurisdictions: [], listings: [] },
               doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
-                mockJurisdictionsHaveFeatureFlagOn(featureFlag, true, true, false, false),
+                mockJurisdictionsHaveFeatureFlagOn(featureFlag, {
+                  enableHomeType: true,
+                  enableSection8Question: true,
+                  enableUnitGroups: false,
+                  enableIsVerified: false,
+                }),
             }}
           >
             <ListingContext.Provider
@@ -2277,5 +2293,72 @@ describe("listing data", () => {
 
     unitDrawerHeader = screen.queryByText("Unit", { selector: "h1" })
     expect(unitDrawerHeader).not.toBeInTheDocument()
+  })
+
+  it("should display correct nav links on non-lottery", async () => {
+    window.URL.createObjectURL = jest.fn()
+    document.cookie = "access-token-available=True"
+    render(
+      <AuthContext.Provider
+        value={{
+          profile: {
+            ...user,
+            listings: [],
+            jurisdictions: [jurisdiction],
+          },
+          doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
+            mockJurisdictionsHaveFeatureFlagOn(featureFlag),
+        }}
+      >
+        <ListingDetail listing={listing} />
+      </AuthContext.Provider>
+    )
+
+    const secondaryNavigation = await screen.findByRole("navigation", {
+      name: "Secondary navigation",
+    })
+    expect(secondaryNavigation).toBeInTheDocument()
+    expect(within(secondaryNavigation).getByRole("link", { name: "Listing" })).toBeInTheDocument()
+    expect(
+      within(secondaryNavigation).getByRole("link", { name: "Applications" })
+    ).toBeInTheDocument()
+    expect(within(secondaryNavigation).queryAllByRole("link", { name: "Lottery" })).toHaveLength(0)
+  })
+
+  it("should display correct nav links for lottery", async () => {
+    window.URL.createObjectURL = jest.fn()
+    document.cookie = "access-token-available=True"
+    render(
+      <AuthContext.Provider
+        value={{
+          profile: {
+            ...user,
+            listings: [],
+            jurisdictions: [jurisdiction],
+          },
+          doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
+            mockJurisdictionsHaveFeatureFlagOn(featureFlag),
+        }}
+      >
+        <ListingDetail
+          listing={{
+            ...listing,
+            reviewOrderType: ReviewOrderTypeEnum.waitlistLottery,
+            lotteryOptIn: true,
+            status: ListingsStatusEnum.closed,
+          }}
+        />
+      </AuthContext.Provider>
+    )
+
+    const secondaryNavigation = await screen.findByRole("navigation", {
+      name: "Secondary navigation",
+    })
+    expect(secondaryNavigation).toBeInTheDocument()
+    expect(within(secondaryNavigation).getByRole("link", { name: "Listing" })).toBeInTheDocument()
+    expect(
+      within(secondaryNavigation).getByRole("link", { name: "Applications" })
+    ).toBeInTheDocument()
+    expect(within(secondaryNavigation).getByRole("link", { name: "Lottery" })).toBeInTheDocument()
   })
 })
