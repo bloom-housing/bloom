@@ -17,6 +17,7 @@ import {
   ApplicationListingCard,
 } from "../../../../components/account/ApplicationCards"
 import styles from "../../../../../styles/lottery-results.module.scss"
+import Markdown from "markdown-to-jsx"
 
 const LotteryResults = () => {
   const router = useRouter()
@@ -181,12 +182,14 @@ const LotteryResults = () => {
                       <Heading priority={3} size={"xl"} className={`${styles["section-heading"]}`}>
                         {t("account.application.lottery.preferencesHeader")}
                       </Heading>
-                      <p>
-                        {t("account.application.lottery.preferences", {
-                          closedListingPageLink: "https://vercel.com/",
-                          closedListingName: "vercel page",
-                        })}
-                      </p>
+                      <Message>
+                        <Markdown>
+                          {t("account.application.lottery.preferences", {
+                            closedListingPageLink: "https://vercel.com/",
+                            closedListingName: "vercel page",
+                          })}
+                        </Markdown>
+                      </Message>
                     </div>
                     <div>
                       <Button
