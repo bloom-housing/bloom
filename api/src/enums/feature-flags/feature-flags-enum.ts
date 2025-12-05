@@ -33,6 +33,7 @@ export enum FeatureFlagEnum {
   enableNonRegulatedListings = 'enableNonRegulatedListings',
   enablePartnerDemographics = 'enablePartnerDemographics',
   enablePartnerSettings = 'enablePartnerSettings',
+  enableProperties = 'enableProperties',
   enableRegions = 'enableRegions',
   enableSection8Question = 'enableSection8Question',
   enableSingleUseCode = 'enableSingleUseCode',
@@ -205,6 +206,10 @@ export const featureFlagMap: {
   {
     name: FeatureFlagEnum.enablePartnerSettings,
     description: "When true, the 'settings' tab in the partner site is visible",
+  },
+  {
+    name: FeatureFlagEnum.enableProperties,
+    description: 'When true, the properties feature is enabled',
   },
   {
     name: FeatureFlagEnum.enableRegions,
