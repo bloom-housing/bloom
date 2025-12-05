@@ -25,8 +25,7 @@ export const Features = ({ children, features }: FeaturesProps) => {
             <HeadingGroup
               heading={feature.heading}
               subheading={feature.subheading}
-              size={"lg"}
-              headingPriority={3}
+              headingProps={{ size: "lg", priority: 3 }}
               className={`${styles["heading-group"]} seeds-m-be-section`}
               key={index}
             />

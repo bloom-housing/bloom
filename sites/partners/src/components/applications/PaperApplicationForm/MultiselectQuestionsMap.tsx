@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react"
-import { FieldGroup, LatitudeLongitude, ListingMap, t } from "@bloom-housing/ui-components"
+import { FieldGroup, t } from "@bloom-housing/ui-components"
+import { Map, LatitudeLongitude } from "@bloom-housing/shared-helpers"
 import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { useFormContext, useWatch } from "react-hook-form"
 import { GeocodeService as GeocodeServiceType } from "@mapbox/mapbox-sdk/services/geocoding"
@@ -132,7 +133,7 @@ const MultiselectQuestionsMap = ({ geocodingClient, dataKey }: MultiselectQuesti
         <Grid.Cell>
           <FieldValue label={t("listings.mapPreview")}>
             {displayMapPreview() ? (
-              <ListingMap
+              <Map
                 address={{
                   city: buildingAddress.city,
                   state: buildingAddress.state,
