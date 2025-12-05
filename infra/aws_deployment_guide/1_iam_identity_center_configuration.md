@@ -3,6 +3,12 @@
 These steps will create the following resources:
 
 ```mermaid
+---
+config:
+  flowchart:
+    wrappingWidth: 400
+---
+
 graph TB
   subgraph ORG[AWS Organization]
       direction TB
