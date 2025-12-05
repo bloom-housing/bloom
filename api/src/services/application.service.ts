@@ -610,7 +610,7 @@ export class ApplicationService {
   async create(
     dto: ApplicationCreate,
     forPublic: boolean,
-    requestingUser: User,
+    requestingUser?: User,
   ): Promise<Application> {
     if (!forPublic) {
       await this.authorizeAction(
@@ -679,7 +679,7 @@ export class ApplicationService {
       this.prisma.applications.create({
         data: {
           ...dto,
-          isNewest: true,
+          isNewest: !!requestingUser?.id && forPublic,
           confirmationCode: this.generateConfirmationCode(),
           applicant: dto.applicant
             ? {
@@ -1272,7 +1272,7 @@ export class ApplicationService {
       await this.cronJobService.markCronJobAsStarted(
         PII_DELETION_CRON_JOB_NAME,
       );
-      // Only delete applications that are scheduled to be expired and is not that most
+      // Only delete applications that are scheduled to be expired and is not the most
       // recent application for that user
       const applications = await this.prisma.applications.findMany({
         select: { id: true },
