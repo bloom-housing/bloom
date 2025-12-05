@@ -185,8 +185,8 @@ const LotteryResults = () => {
                       <Message>
                         <Markdown>
                           {t("account.application.lottery.preferences", {
-                            closedListingPageLink: "https://vercel.com/",
-                            closedListingName: "vercel page",
+                            closedListingPageLink: `/listing/${listing.id}`,
+                            closedListingName: listing?.name,
                           })}
                         </Markdown>
                       </Message>
