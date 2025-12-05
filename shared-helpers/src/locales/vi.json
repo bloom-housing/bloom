@@ -723,6 +723,8 @@
   "listings.developmentalDisabilities": "Những người bị chậm phát triển",
   "listings.developmentalDisabilitiesDescription": "Một số căn nhà trong tòa nhà này được dành cho những người bị chậm phát triển. Vui lòng truy cập <a href='http://www.housingchoices.org/' target='_blank'>housingchoices.org</a> để biết thông tin về điều kiện hội đủ, các yêu cầu, cách nhận đơn ghi danh và để có các câu trả lời cho bất kỳ câu hỏi nào khác mà quý vị có thể có về quy trình này.",
   "listings.downloadPdf": "Tải xuống file PDF",
+  "listings.hasEbllClearance": "Bất động sản này đã được HUD EBLL cấp phép.",
+  "listings.noEbllClearance": "Bất động sản này chưa được HUD EBLL chấp thuận.",
   "listings.eligibilityNotebook": "Notebook hội đủ điều kiện",
   "listings.eligibleApplicants.FCFS": "Những người nộp đơn hội đủ điều kiện sẽ được liên lạc trên cơ sở ai đến trước được phục vụ trước cho đến khi hết căn hộ trống.",
   "listings.enterLotteryForWaitlist": "Gửi đơn ghi danh một suất mở trong danh sách chờ cho %{units} căn nhà.",

@@ -2,7 +2,10 @@ import React from "react"
 import { fireEvent, render, screen } from "@testing-library/react"
 import { listing, jurisdiction } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import { ListingViewSeeds } from "../../../src/components/listing/ListingViewSeeds"
-import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  EnumListingListingType,
+  FeatureFlagEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 describe("<ListingViewSeeds>", () => {
   it("shows error state if listing is null", () => {
@@ -148,5 +151,155 @@ describe("<ListingViewSeeds>", () => {
       />
     )
     expect(view.getAllByText("Listing updated: Dec 31, 2019")).toHaveLength(2)
+  })
+
+  it("should render positive HUD EBLL clearance for non-regulated listing", () => {
+    render(
+      <ListingViewSeeds
+        listing={{
+          ...listing,
+          creditHistory: "",
+          rentalHistory: "",
+          whatToExpect: "Normal What to expect",
+          whatToExpectAdditionalText: "What to expect additional text",
+          listingType: EnumListingListingType.nonRegulated,
+          hasHudEbllClearance: true,
+        }}
+        jurisdiction={{
+          ...jurisdiction,
+          featureFlags: [
+            {
+              id: "test_id",
+              name: FeatureFlagEnum.enableNonRegulatedListings,
+              active: true,
+              createdAt: new Date(),
+              updatedAt: new Date(),
+              description: "",
+              jurisdictions: [],
+            },
+          ],
+        }}
+      />
+    )
+
+    expect(screen.getByRole("heading", { level: 3, name: /^other$/i })).toBeInTheDocument()
+    expect(screen.getByText("This property has received HUD EBLL clearance.")).toBeInTheDocument()
+    expect(
+      screen.queryByText("This property has not received HUD EBLL clearance.")
+    ).not.toBeInTheDocument()
+  })
+
+  it("should render negative HUD EBLL clearance for non-regulated listing", () => {
+    render(
+      <ListingViewSeeds
+        listing={{
+          ...listing,
+          creditHistory: "",
+          rentalHistory: "",
+          whatToExpect: "Normal What to expect",
+          whatToExpectAdditionalText: "What to expect additional text",
+          listingType: EnumListingListingType.nonRegulated,
+          hasHudEbllClearance: false,
+        }}
+        jurisdiction={{
+          ...jurisdiction,
+          featureFlags: [
+            {
+              id: "test_id",
+              name: FeatureFlagEnum.enableNonRegulatedListings,
+              active: true,
+              createdAt: new Date(),
+              updatedAt: new Date(),
+              description: "",
+              jurisdictions: [],
+            },
+          ],
+        }}
+      />
+    )
+
+    expect(screen.getByRole("heading", { level: 3, name: /^other$/i })).toBeInTheDocument()
+    expect(
+      screen.getByText("This property has not received HUD EBLL clearance.")
+    ).toBeInTheDocument()
+    expect(
+      screen.queryByText("This property has received HUD EBLL clearance.")
+    ).not.toBeInTheDocument()
+  })
+
+  it("doesnt render HUD EBLL clearance when non regulated listings feature flag is turned off", () => {
+    render(
+      <ListingViewSeeds
+        listing={{
+          ...listing,
+          listingType: EnumListingListingType.nonRegulated,
+          hasHudEbllClearance: true,
+          creditHistory: "",
+          rentalHistory: "",
+          whatToExpect: "Normal What to expect",
+          whatToExpectAdditionalText: "What to expect additional text",
+        }}
+        jurisdiction={{
+          ...jurisdiction,
+          featureFlags: [
+            {
+              id: "test_id",
+              name: FeatureFlagEnum.enableNonRegulatedListings,
+              active: false,
+              createdAt: new Date(),
+              updatedAt: new Date(),
+              description: "",
+              jurisdictions: [],
+            },
+          ],
+        }}
+      />
+    )
+
+    expect(screen.queryByRole("heading", { level: 3, name: /^other$/i })).not.toBeInTheDocument()
+    expect(
+      screen.queryByText("This property has not received HUD EBLL clearance.")
+    ).not.toBeInTheDocument()
+    expect(
+      screen.queryByText("This property has received HUD EBLL clearance.")
+    ).not.toBeInTheDocument()
+  })
+
+  it("doesnt render HUD EBLL clearance when listing is regulated", () => {
+    render(
+      <ListingViewSeeds
+        listing={{
+          ...listing,
+          listingType: EnumListingListingType.regulated,
+          hasHudEbllClearance: true,
+          creditHistory: "",
+          rentalHistory: "",
+          whatToExpect: "Normal What to expect",
+          whatToExpectAdditionalText: "What to expect additional text",
+        }}
+        jurisdiction={{
+          ...jurisdiction,
+          featureFlags: [
+            {
+              id: "test_id",
+              name: FeatureFlagEnum.enableNonRegulatedListings,
+              active: true,
+              createdAt: new Date(),
+              updatedAt: new Date(),
+              description: "",
+              jurisdictions: [],
+            },
+          ],
+        }}
+      />
+    )
+
+    expect(screen.queryByRole("heading", { level: 3, name: /^other$/i })).not.toBeInTheDocument()
+    expect(
+      screen.queryByText("This property has not received HUD EBLL clearance.")
+    ).not.toBeInTheDocument()
+    expect(
+      screen.queryByText("This property has received HUD EBLL clearance.")
+    ).not.toBeInTheDocument()
   })
 })

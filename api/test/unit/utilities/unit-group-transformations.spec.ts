@@ -1114,5 +1114,149 @@ describe('Unit Group Transformations', () => {
       });
       expect(result.householdMaxIncomeSummary.rows).toHaveLength(2);
     });
+
+    it('should currently summarize unit groups for non-regulated listing', () => {
+      const unitGroups: UnitGroup[] = [
+        {
+          id: 'e8ebae55-103d-4a38-ab57-a4d974a11075',
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          maxOccupancy: 2,
+          minOccupancy: 1,
+          flatRentValueFrom: null,
+          flatRentValueTo: null,
+          monthlyRent: 3000,
+          floorMin: null,
+          floorMax: null,
+          totalCount: 4,
+          totalAvailable: 3,
+          bathroomMin: 1,
+          bathroomMax: 1,
+          openWaitlist: false,
+          sqFeetMin: null,
+          sqFeetMax: null,
+          rentType: 'fixedRent',
+          unitGroupAmiLevels: [],
+          unitTypes: [
+            {
+              id: 'f70e3cfe-80d3-4e9c-88e0-0b8e4c587b17',
+              createdAt: new Date(),
+              updatedAt: new Date(),
+              name: 'studio',
+              numBedrooms: 0,
+            },
+          ],
+        },
+        {
+          id: '2d758f88-eadb-4cc6-ab01-912955455b22',
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          maxOccupancy: 4,
+          minOccupancy: 2,
+          flatRentValueFrom: 1500,
+          flatRentValueTo: 2200,
+          monthlyRent: null,
+          floorMin: null,
+          floorMax: null,
+          totalCount: 3,
+          totalAvailable: 2,
+          bathroomMin: 1,
+          bathroomMax: 2,
+          openWaitlist: false,
+          sqFeetMin: null,
+          sqFeetMax: null,
+          rentType: 'rentRange',
+          unitGroupAmiLevels: [],
+          unitTypes: [
+            {
+              id: 'ccc0dc7c-2e2b-4ed7-b7ec-a74a7d48d373',
+              createdAt: new Date(),
+              updatedAt: new Date(),
+              name: 'twoBdrm',
+              numBedrooms: 2,
+            },
+            {
+              id: '1e371562-572a-4de2-9734-065608be1073',
+              createdAt: new Date(),
+              updatedAt: new Date(),
+              name: 'fourBdrm',
+              numBedrooms: 4,
+            },
+          ],
+        },
+      ];
+
+      const result = summarizeUnitGroups(unitGroups, [], true);
+
+      expect(result).toHaveProperty('unitGroupSummary');
+      expect(result).toHaveProperty('householdMaxIncomeSummary');
+
+      expect(result.unitGroupSummary).toHaveLength(2);
+      const testUnitType = result.unitGroupSummary;
+      expect(testUnitType[0]).toEqual(
+        expect.objectContaining({
+          unitTypes: expect.arrayContaining([
+            expect.objectContaining({
+              name: 'studio',
+              numBedrooms: 0,
+            }),
+          ]),
+          rentRange: {
+            min: '$3000',
+            max: '$3000',
+          },
+          openWaitlist: false,
+          unitVacancies: 3,
+          bathroomRange: {
+            min: 1,
+            max: 1,
+          },
+          floorRange: {
+            min: null,
+            max: null,
+          },
+          sqFeetRange: {
+            min: null,
+            max: null,
+          },
+        }),
+      );
+
+      expect(testUnitType[1]).toEqual(
+        expect.objectContaining({
+          unitTypes: expect.arrayContaining([
+            expect.objectContaining({
+              name: 'twoBdrm',
+              numBedrooms: 2,
+            }),
+            expect.objectContaining({
+              name: 'fourBdrm',
+              numBedrooms: 4,
+            }),
+          ]),
+          openWaitlist: false,
+          unitVacancies: 2,
+          bathroomRange: {
+            min: 1,
+            max: 2,
+          },
+          floorRange: {
+            min: null,
+            max: null,
+          },
+          sqFeetRange: {
+            min: null,
+            max: null,
+          },
+        }),
+      );
+
+      expect(result.householdMaxIncomeSummary).toMatchObject({
+        columns: {
+          householdSize: 'householdSize',
+        },
+        rows: [],
+      });
+    });
   });
 });

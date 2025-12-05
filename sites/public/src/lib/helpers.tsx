@@ -89,10 +89,15 @@ export const getListingStackedTableData = (unitsSummarized: UnitsSummarized) => 
 
 export const getListingStackedGroupTableData = (
   unitGroupsSummarized: UnitGroupsSummarized,
-  isComingSoon?: boolean
+  isComingSoon?: boolean,
+  isNonRegulated?: boolean
 ) => {
   return unitGroupsSummarized !== undefined
-    ? getStackedGroupSummariesTable(unitGroupsSummarized.unitGroupSummary, isComingSoon)
+    ? getStackedGroupSummariesTable(
+        unitGroupsSummarized.unitGroupSummary,
+        isComingSoon,
+        isNonRegulated
+      )
     : []
 }
 

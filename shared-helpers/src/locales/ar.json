@@ -718,6 +718,8 @@
   "listings.developmentalDisabilities": "الأشخاص الذين يعانون من إعاقات في النمو",
   "listings.developmentalDisabilitiesDescription": "تم تخصيص عدد من الوحدات في هذا المبنى للأشخاص الذين يعانون من إعاقات في النمو. يرجى زيارة <a href='http://www.housingchoices.org/' target='_blank'> Housingchoices.org </a> للحصول على معلومات حول الأهلية والمتطلبات وكيفية الحصول على طلب وللحصول على إجابات لأية أسئلة أخرى قد يكون لديك حول هذه العملية.",
   "listings.downloadPdf": "تحميل PDF",
+  "listings.hasEbllClearance": "لقد حصل هذا العقار على موافقة HUD EBLL.",
+  "listings.noEbllClearance": "لم يحصل هذا العقار على موافقة HUD EBLL.",
   "listings.eligibilityNotebook": "دفتر الأهلية",
   "listings.eligibleApplicants.FCFS": "سيتم الاتصال بالمتقدمين المؤهلين على أساس أسبقية الحضور حتى يتم شغل الوظائف الشاغرة.",
   "listings.enterLotteryForWaitlist": "قم بإرسال طلب للحصول على خانة مفتوحة في قائمة الانتظار لـ %{units} من الوحدات.",
