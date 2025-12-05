@@ -813,10 +813,10 @@ export const UnitTables = (props: UnitTablesProps) => {
 
 export const getUnitGroupSummariesTable = (listing: Listing) => {
   const unitGroupsSummariesHeaders = {
-    unitType: t("t.unitType"),
-    rent: t("t.rent"),
-    availability: t("t.availability"),
-    ...(listing.listingType === EnumListingListingType.regulated ? { ami: "ami" } : {}),
+    unitType: "t.unitType",
+    rent: "t.rent",
+    availability: "t.availability",
+    ...(listing.listingType === EnumListingListingType.regulated ? { ami: "t.ami" } : {}),
   }
   let groupedUnitData = null
 
