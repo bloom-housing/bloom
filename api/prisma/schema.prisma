@@ -370,35 +370,36 @@ model HouseholdMember {
 
 // Note: [name] formerly max length 256
 model Jurisdictions {
-  id                            String                      @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  createdAt                     DateTime                    @default(now()) @map("created_at") @db.Timestamp(6)
-  updatedAt                     DateTime                    @updatedAt @map("updated_at") @db.Timestamp(6)
-  name                          String                      @unique()
-  notificationsSignUpUrl        String?                     @map("notifications_sign_up_url")
-  languages                     LanguagesEnum[]             @default([en])
-  partnerTerms                  String?                     @map("partner_terms")
-  publicUrl                     String                      @default("") @map("public_url")
-  emailFromAddress              String?                     @map("email_from_address")
-  rentalAssistanceDefault       String                      @map("rental_assistance_default")
-  whatToExpect                  String                      @default("Applicants will be contacted by the property agent in rank order until vacancies are filled. All of the information that you have provided will be verified and your eligibility confirmed. Your application will be removed from the waitlist if you have made any fraudulent statements. If we cannot verify a housing preference that you have claimed, you will not receive the preference but will not be otherwise penalized. Should your application be chosen, be prepared to fill out a more detailed application and provide required supporting documents.") @map("what_to_expect")
-  whatToExpectAdditionalText    String                      @default("") @map("what_to_expect_additional_text")
-  whatToExpectUnderConstruction String                      @default("") @map("what_to_expect_under_construction")
-  enablePartnerSettings         Boolean                     @default(false) @map("enable_partner_settings")
-  enablePartnerDemographics     Boolean                     @default(false) @map("enable_partner_demographics")
-  enableGeocodingPreferences    Boolean                     @default(false) @map("enable_geocoding_preferences")
-  enableGeocodingRadiusMethod   Boolean                     @default(false) @map("enable_geocoding_radius_method")
-  allowSingleUseCodeLogin       Boolean                     @default(false) @map("allow_single_use_code_login")
-  amiChart                      AmiChart[]
-  featureFlags                  FeatureFlags[]
-  multiselectQuestions          MultiselectQuestions[]
-  listings                      Listings[]
-  reservedCommunityTypes        ReservedCommunityTypes[]
-  translations                  Translations[]
-  user_accounts                 UserAccounts[]
-  listingApprovalPermissions    UserRoleEnum[]              @map("listing_approval_permission")
-  duplicateListingPermissions   UserRoleEnum[]              @map("duplicate_listing_permissions")
-  requiredListingFields         String[]                    @default([]) @map("required_listing_fields")
-  visibleNeighborhoodAmenities  NeighborhoodAmenitiesEnum[] @default([groceryStores, publicTransportation, schools, parksAndCommunityCenters, pharmacies, healthCareResources]) @map("visible_neighborhood_amenities")
+  id                                  String                      @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  createdAt                           DateTime                    @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt                           DateTime                    @updatedAt @map("updated_at") @db.Timestamp(6)
+  name                                String                      @unique()
+  notificationsSignUpUrl              String?                     @map("notifications_sign_up_url")
+  languages                           LanguagesEnum[]             @default([en])
+  partnerTerms                        String?                     @map("partner_terms")
+  publicUrl                           String                      @default("") @map("public_url")
+  emailFromAddress                    String?                     @map("email_from_address")
+  rentalAssistanceDefault             String                      @map("rental_assistance_default")
+  whatToExpect                        String                      @default("Applicants will be contacted by the property agent in rank order until vacancies are filled. All of the information that you have provided will be verified and your eligibility confirmed. Your application will be removed from the waitlist if you have made any fraudulent statements. If we cannot verify a housing preference that you have claimed, you will not receive the preference but will not be otherwise penalized. Should your application be chosen, be prepared to fill out a more detailed application and provide required supporting documents.") @map("what_to_expect")
+  whatToExpectAdditionalText          String                      @default("") @map("what_to_expect_additional_text")
+  whatToExpectUnderConstruction       String                      @default("") @map("what_to_expect_under_construction")
+  enablePartnerSettings               Boolean                     @default(false) @map("enable_partner_settings")
+  enablePartnerDemographics           Boolean                     @default(false) @map("enable_partner_demographics")
+  enableGeocodingPreferences          Boolean                     @default(false) @map("enable_geocoding_preferences")
+  enableGeocodingRadiusMethod         Boolean                     @default(false) @map("enable_geocoding_radius_method")
+  allowSingleUseCodeLogin             Boolean                     @default(false) @map("allow_single_use_code_login")
+  amiChart                            AmiChart[]
+  featureFlags                        FeatureFlags[]
+  minimumListingPublishImagesRequired Int?                        @map("minimum_listing_publish_images_required")
+  multiselectQuestions                MultiselectQuestions[]
+  listings                            Listings[]
+  reservedCommunityTypes              ReservedCommunityTypes[]
+  translations                        Translations[]
+  user_accounts                       UserAccounts[]
+  listingApprovalPermissions          UserRoleEnum[]              @map("listing_approval_permission")
+  duplicateListingPermissions         UserRoleEnum[]              @map("duplicate_listing_permissions")
+  requiredListingFields               String[]                    @default([]) @map("required_listing_fields")
+  visibleNeighborhoodAmenities        NeighborhoodAmenitiesEnum[] @default([groceryStores, publicTransportation, schools, parksAndCommunityCenters, pharmacies, healthCareResources]) @map("visible_neighborhood_amenities")
 
   @@map("jurisdictions")
 }

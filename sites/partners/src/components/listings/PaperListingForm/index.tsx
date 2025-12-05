@@ -513,7 +513,10 @@ const ListingForm = ({
                             listingId={listing?.id}
                             requiredFields={requiredFields}
                           />
-                          <ListingPhotos requiredFields={requiredFields} />
+                          <ListingPhotos
+                            requiredFields={requiredFields}
+                            jurisdiction={selectedJurisdictionData}
+                          />
                           <BuildingDetails
                             customMapPositionChosen={customMapPositionChosen}
                             requiredFields={requiredFields}

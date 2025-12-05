@@ -137,7 +137,7 @@ describe("add listing", () => {
     // Listing Details Tab
     expect(screen.getByRole("button", { name: "Listing details" }))
     expect(screen.getByRole("heading", { level: 2, name: "Listing intro" }))
-    expect(screen.getByRole("heading", { level: 2, name: "Listing photo" }))
+    expect(screen.getByRole("heading", { level: 2, name: "Listing photos" }))
     expect(screen.getByRole("heading", { level: 2, name: "Building details" }))
     expect(screen.getByRole("heading", { level: 2, name: "Listing units" }))
     expect(screen.getByRole("heading", { level: 2, name: "Housing preferences" }))

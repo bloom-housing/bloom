@@ -297,7 +297,7 @@ describe("listing data", () => {
       })
     })
 
-    describe("should display Listing Photo section", () => {
+    describe("should display Listing Photos section", () => {
       it("should display section with missing data", () => {
         render(
           <ListingContext.Provider
@@ -310,7 +310,7 @@ describe("listing data", () => {
           </ListingContext.Provider>
         )
 
-        expect(screen.getByText("Listing photo")).toBeInTheDocument()
+        expect(screen.getByText("Listing photos")).toBeInTheDocument()
         expect(screen.getByText("None")).toBeInTheDocument()
         expect(screen.queryByText("Preview")).not.toBeInTheDocument()
         expect(screen.queryByText("Primary")).not.toBeInTheDocument()
@@ -349,7 +349,7 @@ describe("listing data", () => {
           </ListingContext.Provider>
         )
 
-        expect(screen.getByText("Listing photo", { selector: "h2" })).toBeInTheDocument()
+        expect(screen.getByText("Listing photos", { selector: "h2" })).toBeInTheDocument()
         expect(screen.getByText("Preview")).toBeInTheDocument()
         expect(screen.getByText("Primary")).toBeInTheDocument()
         expect(screen.getByText("Primary photo")).toBeInTheDocument()
@@ -357,7 +357,7 @@ describe("listing data", () => {
         expect(listingImages).toHaveLength(2)
         listingImages.forEach((imageElement) => {
           expect(imageElement).toHaveAttribute("src", "asset_file_id")
-          expect(imageElement).toHaveAttribute("alt", "Listing photo")
+          expect(imageElement).toHaveAttribute("alt", "Listing photos")
         })
       })
     })

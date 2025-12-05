@@ -132,6 +132,7 @@ describe('ListingCreateUpdateValidationPipe', () => {
 
       const expectedTransformedValue = {
         ...value,
+        minimumImagesRequired: 0,
         units: [],
         unitGroups: [],
         requiredFields: ['name', 'listingsBuildingAddress'],
@@ -142,7 +143,10 @@ describe('ListingCreateUpdateValidationPipe', () => {
 
       expect(mockPrisma.jurisdictions.findFirst).toHaveBeenCalledWith({
         where: { id: jurisdictionId },
-        select: { requiredListingFields: true },
+        select: {
+          requiredListingFields: true,
+          minimumListingPublishImagesRequired: true,
+        },
       });
 
       expect(mockSuperTransform).toHaveBeenCalledWith(
@@ -180,6 +184,7 @@ describe('ListingCreateUpdateValidationPipe', () => {
 
       const expectedTransformedValue = {
         ...value,
+        minimumImagesRequired: 0,
         units: [],
         unitGroups: [],
         requiredFields: expectedDefaultFields,
@@ -223,6 +228,7 @@ describe('ListingCreateUpdateValidationPipe', () => {
 
       const expectedTransformedValue = {
         ...value,
+        minimumImagesRequired: 0,
         units: [],
         unitGroups: [],
         requiredFields: expectedDefaultFields,
@@ -264,6 +270,7 @@ describe('ListingCreateUpdateValidationPipe', () => {
 
       const expectedTransformedValue = {
         ...value,
+        minimumImagesRequired: 0,
         units: [],
         unitGroups: [],
         requiredFields: expectedDefaultFields,
@@ -301,6 +308,7 @@ describe('ListingCreateUpdateValidationPipe', () => {
 
       const expectedTransformedValue = {
         ...value,
+        minimumImagesRequired: 0,
         units: [],
         unitGroups: [],
         requiredFields: ['name', 'leasingAgentEmail', 'digitalApplication'],
@@ -368,6 +376,7 @@ describe('ListingCreateUpdateValidationPipe', () => {
 
       const expectedTransformedValue = {
         ...value,
+        minimumImagesRequired: 0,
         units: [{ id: 'id1' }],
         unitGroups: [],
         requiredFields: ['name'],
@@ -404,6 +413,7 @@ describe('ListingCreateUpdateValidationPipe', () => {
         ...value,
         units: [],
         unitGroups: [{ id: 'id1' }],
+        minimumImagesRequired: 0,
         requiredFields: ['name'],
       };
       mockSuperTransform.mockResolvedValue(expectedTransformedValue);

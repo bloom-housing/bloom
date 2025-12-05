@@ -10,13 +10,18 @@ import {
 } from "@bloom-housing/ui-components"
 import { Button, Card, Drawer, Grid, Heading } from "@bloom-housing/ui-seeds"
 import { getUrlForListingImage, CLOUDINARY_BUILDING_LABEL } from "@bloom-housing/shared-helpers"
-import { Asset, ListingImage } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  Asset,
+  Jurisdiction,
+  ListingImage,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { cloudinaryFileUploader, fieldHasError, getLabel } from "../../../../lib/helpers"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 import styles from "../ListingForm.module.scss"
 
 interface ListingPhotosProps {
   requiredFields: string[]
+  jurisdiction: Jurisdiction
 }
 
 const ListingPhotos = (props: ListingPhotosProps) => {
@@ -194,6 +199,10 @@ const ListingPhotos = (props: ListingPhotosProps) => {
     }))
   }
 
+  const customImagesRules =
+    props.requiredFields.includes("listingImages") &&
+    props?.jurisdiction?.minimumListingPublishImagesRequired
+
   /*
    Register the field array, display the main form table, and set up the drawer
    */
@@ -212,7 +221,12 @@ const ListingPhotos = (props: ListingPhotosProps) => {
       ))}
       <SectionWithGrid
         heading={t("listings.sections.photoTitle")}
-        subheading={t("listings.sections.photoSubtitle")}
+        subheading={t(
+          customImagesRules
+            ? "listings.sections.photosSubtitle"
+            : "listings.sections.photoSubtitle",
+          { smart_count: props?.jurisdiction?.minimumListingPublishImagesRequired }
+        )}
         className={"gap-0"}
       >
         <div
@@ -248,7 +262,11 @@ const ListingPhotos = (props: ListingPhotosProps) => {
         </Grid.Row>
         {fieldHasError(errors?.listingImages) && (
           <span className={"text-sm text-alert seeds-m-bs-text"} id="photos-error">
-            {t("errors.requiredFieldError")}
+            {customImagesRules
+              ? t("listings.sections.photoError", {
+                  smart_count: props.jurisdiction?.minimumListingPublishImagesRequired || 1,
+                })
+              : t("errors.requiredFieldError")}
           </span>
         )}
       </SectionWithGrid>
@@ -266,7 +284,7 @@ const ListingPhotos = (props: ListingPhotosProps) => {
           <Card>
             <Card.Header>
               <Heading priority={2} size="xl">
-                Listing Photo
+                {t("listings.listingPhoto")}
               </Heading>
             </Card.Header>
             <Card.Section>
@@ -297,7 +315,14 @@ const ListingPhotos = (props: ListingPhotosProps) => {
                 <Dropzone
                   id="listing-photo-upload"
                   label={t("t.uploadFile")}
-                  helptext={t("listings.sections.photo.helperText")}
+                  helptext={`${t("listings.sections.photo.helperTextBase")} ${
+                    customImagesRules
+                      ? t("listings.sections.photo.helperTextLimits", {
+                          smart_count:
+                            props?.jurisdiction?.minimumListingPublishImagesRequired || 1,
+                        })
+                      : t("listings.sections.photo.helperTextLimit")
+                  }`}
                   uploader={photoUploader}
                   accept="image/*"
                   progress={progressValue}
