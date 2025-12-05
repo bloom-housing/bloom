@@ -12,6 +12,17 @@ export const doAnyJurisdictionHaveFeatureFlagSet = (
   });
 };
 
+export const doAllJurisdictionHaveFeatureFlagSet = (
+  jurisdictions: Jurisdiction[],
+  featureFlagName: FeatureFlagEnum,
+) => {
+  return jurisdictions.every((juris) => {
+    return juris.featureFlags.some(
+      (flag) => flag.name === featureFlagName && flag.active,
+    );
+  });
+};
+
 export const doJurisdictionHaveFeatureFlagSet = (
   jurisdiction: Jurisdiction,
   featureFlagName: FeatureFlagEnum,

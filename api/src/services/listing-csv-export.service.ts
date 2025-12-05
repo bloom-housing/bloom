@@ -48,6 +48,7 @@ import {
 } from '../utilities/unit-utilities';
 import { unitTypeToReadable } from '../utilities/application-export-helpers';
 import {
+  doAllJurisdictionHaveFeatureFlagSet,
   doAnyJurisdictionHaveFalsyFeatureFlagValue,
   doAnyJurisdictionHaveFeatureFlagSet,
 } from '../utilities/feature-flag-utilities';
@@ -1190,7 +1191,12 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
         },
         {
           path: 'referralOpportunity',
-          label: 'Referral Opportunity',
+          label: doAllJurisdictionHaveFeatureFlagSet(
+            user.jurisdictions,
+            FeatureFlagEnum.enableReferralQuestionUnits,
+          )
+            ? 'Referral Only Units'
+            : 'Referral Opportunity',
           format: this.formatYesNo,
         },
         {
