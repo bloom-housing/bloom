@@ -185,7 +185,7 @@ const LotteryResults = () => {
                       <Message>
                         <Markdown>
                           {t("account.application.lottery.preferences", {
-                            closedListingPageLink: `/listing/${listing.id}`,
+                            closedListingPageLink: `/listing/${listing?.id}`,
                             closedListingName: listing?.name,
                           })}
                         </Markdown>
