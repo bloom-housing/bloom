@@ -8,10 +8,13 @@ import { getTimeRangeString } from "@bloom-housing/shared-helpers"
 afterEach(cleanup)
 
 describe("<DateSection>", () => {
-  it("shows nothing if no events", () => {
-    const { queryByText } = render(<DateSection events={[]} heading={"Date heading"} />)
+  it("shows nothing if no events and no flyers", () => {
+    const { queryByText } = render(
+      <DateSection events={[]} marketingFlyers={[]} heading={"Date heading"} />
+    )
     expect(queryByText("Date heading")).toBeNull()
   })
+
   it("shows one event", () => {
     const startDate = dayjs(new Date()).add(5, "days").toDate()
     const startTime = dayjs(new Date()).add(5, "days").add(30, "minutes").toDate()
@@ -41,6 +44,7 @@ describe("<DateSection>", () => {
     )
     expect(getByText("Event note")).toBeDefined()
   })
+
   it("shows multiple events", () => {
     const startDate1 = dayjs(new Date()).add(5, "days").toDate()
     const startTime1 = dayjs(new Date()).add(5, "days").add(10, "minutes").toDate()
@@ -105,5 +109,42 @@ describe("<DateSection>", () => {
     )
     expect(getByText("Date heading")).toBeDefined()
     expect(getByText("See video")).toBeDefined()
+  })
+
+  it("shows marketing flyers only", () => {
+    const { getByText, getByRole } = render(
+      <DateSection
+        marketingFlyers={[
+          { label: "Flyer 1", url: "https://flyer1.com" },
+          { label: "Flyer 2", url: "https://flyer2.com" },
+        ]}
+        heading={"Date heading"}
+      />
+    )
+    expect(getByText("Date heading")).toBeDefined()
+    expect(getByRole("link", { name: "Flyer 1" })).toHaveAttribute("href", "https://flyer1.com")
+    expect(getByRole("link", { name: "Flyer 2" })).toHaveAttribute("href", "https://flyer2.com")
+  })
+
+  it("shows events and marketing flyers", () => {
+    const startDate = dayjs(new Date()).add(5, "days").toDate()
+    const { getByText, getByRole } = render(
+      <DateSection
+        events={[
+          {
+            type: ListingEventsTypeEnum.openHouse,
+            startDate,
+            label: "Event Link",
+            url: "https://event.com",
+          },
+        ]}
+        marketingFlyers={[{ label: "Flyer Link", url: "https://flyer.com" }]}
+        heading={"Date heading"}
+      />
+    )
+    expect(getByText("Date heading")).toBeDefined()
+    expect(getByText(dayjs(startDate).format("MMMM D, YYYY"))).toBeDefined()
+    expect(getByRole("link", { name: "Event Link" })).toHaveAttribute("href", "https://event.com")
+    expect(getByRole("link", { name: "Flyer Link" })).toHaveAttribute("href", "https://flyer.com")
   })
 })
