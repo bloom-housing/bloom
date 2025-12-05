@@ -4,9 +4,9 @@ import { render, screen, within } from "@testing-library/react"
 import { listing } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import { ListingContext } from "../../../../../src/components/listings/ListingContext"
 import DetailApplicationTypes from "../../../../../src/components/listings/PaperListingDetails/sections/DetailApplicationTypes"
-import { FeatureFlagEnum } from "../../../../../../../api/dist/src/enums/feature-flags/feature-flags-enum"
 import {
   ApplicationMethodsTypeEnum,
+  FeatureFlagEnum,
   LanguagesEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
