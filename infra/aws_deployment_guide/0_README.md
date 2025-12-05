@@ -7,14 +7,17 @@ instance in it.
 These steps will create the following resources:
 
 ```mermaid
-graph TD
+graph TB
   subgraph ORG[AWS Organization]
+      direction TB
+
       subgraph MA[AWS Management Account]
+          direction TB
+
           S3[Bloom Tofu State Files<br/>AWS S3 Bucket]
 
           subgraph IC[AWS IAM Identity Center]
           end
-
       end
       subgraph DEV[bloom-dev Account]
       end
@@ -23,8 +26,12 @@ graph TD
   end
 
   subgraph LEGEND
+      direction LR
+
       PREREQ[Pre-requisite]
       CREATED[Created]
+
+      PREREQ ~~~ CREATED
   end
 
   %% Invisible link to position legend at top

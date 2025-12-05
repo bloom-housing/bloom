@@ -3,10 +3,16 @@
 These steps will create the following resources:
 
 ```mermaid
-graph TD
+graph TB
   subgraph ORG[AWS Organization]
+      direction TB
+
       subgraph MA[AWS Management Account]
+          direction TB
+
           subgraph IC[AWS IAM Identity Center]
+              direction TB
+
               HUMANS@{ shape: processes, label: "User for each human identity" }
               GRP_DEVELOPERS[bloom-dev-deployers]
               GRP_PROD_DEPLOYERS[bloom-prod-deployers]
@@ -27,6 +33,8 @@ graph TD
               PS_PROD_IAM -.->|can edit| PS_PROD
           end
           subgraph IAM[AWS IAM]
+              direction TB
+
               SSO_ROLE_DEV_IAM[AWSReservedSSO_bloom-dev-iam-admin...<br/>Role]
               SSO_ROLE_PROD_IAM[AWSReservedSSO_bloom-prod-iam-admin...<br/>Role]
           end
@@ -47,6 +55,8 @@ graph TD
       PREREQ[Pre-requisite]
       CREATED[Created]
       GENERATED[AWS Generated]
+
+      PREREQ ~~~ CREATED ~~~ GENERATED
   end
 
   %% Invisible link to position legend at top
