@@ -490,7 +490,8 @@ export const getAvailabilityText = (
 
 export const getAvailabilityTextForGroup = (
   groups: UnitGroupSummary[],
-  isComingSoon?: boolean
+  isComingSoon?: boolean,
+  isNonRegulated?: boolean
 ): { text: string } => {
   // Add coming soon status if needed
   if (isComingSoon) {
@@ -502,11 +503,13 @@ export const getAvailabilityTextForGroup = (
   const statusSet = new Set<string>()
 
   // Collect information from all groups
-  statusSet.add(
-    groups.some((entry) => entry.openWaitlist)
-      ? t("listings.availability.openWaitlist")
-      : t("listings.availability.closedWaitlist")
-  )
+  if (!isNonRegulated) {
+    statusSet.add(
+      groups.some((entry) => entry.openWaitlist)
+        ? t("listings.availability.openWaitlist")
+        : t("listings.availability.closedWaitlist")
+    )
+  }
 
   const totalVacantUnits = groups.reduce((acc, group) => (acc += group.unitVacancies), 0)
 
@@ -537,7 +540,8 @@ export const getAvailabilityTextForGroup = (
 
 export const stackedUnitGroupsSummariesTable = (
   summaries: UnitGroupSummary[],
-  isComingSoon?: boolean
+  isComingSoon?: boolean,
+  isNonRegulated?: boolean
 ): Record<string, StackedTableRow>[] => {
   const ranges = mergeGroupSummaryRows(summaries)
 
@@ -586,7 +590,7 @@ export const stackedUnitGroupsSummariesTable = (
 
   const availability =
     summaries.length > 0
-      ? getAvailabilityTextForGroup(summaries, isComingSoon)
+      ? getAvailabilityTextForGroup(summaries, isComingSoon, isNonRegulated)
       : { text: t("t.n/a"), subText: "" }
 
   const rowData = {
@@ -631,12 +635,13 @@ export const getStackedSummariesTable = (
 
 export const getStackedGroupSummariesTable = (
   summaries: UnitGroupSummary[],
-  isComingSoon?: boolean
+  isComingSoon?: boolean,
+  isNonRegulated?: boolean
 ): Record<string, StackedTableRow>[] => {
   let unitSummaries: Record<string, StackedTableRow>[] = []
 
   if (summaries?.length > 0) {
-    unitSummaries = stackedUnitGroupsSummariesTable(summaries, isComingSoon)
+    unitSummaries = stackedUnitGroupsSummariesTable(summaries, isComingSoon, isNonRegulated)
   }
   return unitSummaries
 }
