@@ -30,7 +30,7 @@ The following containers are defined in the [docker-compose.yml](./docker-compos
 - `dbseed`: runs a [db seed script](./api/Dockerfile.dbseed.dev).
 - `api`: the [api](./api).
 - `partners`: the [partners site](./sites/partners).
-- `public`: the [public site](./sites/partners).
+- `public`: the [public site](./sites/public).
 
 Build, start, and tear down containers with the following commands. Each command takes an optional
 list of containers to operate on. By default the command operates on all containers.

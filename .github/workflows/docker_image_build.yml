@@ -26,15 +26,27 @@ jobs:
           - container: api
             docker_context: "{{defaultContext}}:api"
             dockerfile: Dockerfile
+            platforms: linux/amd64
           - container: dbseed
             docker_context: "{{defaultContext}}:api"
             dockerfile: Dockerfile.dbseed
+            platforms: linux/amd64
           - container: partners
             docker_context: "{{defaultContext}}"
             dockerfile: Dockerfile.sites.partners
+            platforms: linux/amd64
           - container: public
             docker_context: "{{defaultContext}}"
             dockerfile: Dockerfile.sites.public
+            platforms: linux/amd64
+          - container: infra
+            docker_context: "{{defaultContext}}:infra"
+            dockerfile: Dockerfile
+            platforms: linux/amd64,linux/arm64
+          - container: infra-dev
+            docker_context: "{{defaultContext}}:infra"
+            dockerfile: Dockerfile.dev
+            platforms: linux/amd64,linux/arm64
     runs-on: ubuntu-latest
     steps:
       - name: Log in to GitHub Container Registry
@@ -43,6 +55,10 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+
+      # Required to build multi-arch images.
+      - name: Setup Docker QEMU
+        uses: docker/setup-qemu-action@v3.7.0
 
       # Required to use image layer cache.
       - name: Setup Docker Buildx
@@ -56,6 +72,7 @@ jobs:
           cache-from: type=registry,ref=${{ env.image_base }}/${{ matrix.container }}/container-layer-cache:latest
           context: ${{ matrix.docker_context }}
           file: ${{ matrix.dockerfile }}
+          platforms: ${{ matrix.platforms }}
           tags: |
             ${{ env.image_base }}/${{ matrix.container }}:latest
             ${{ env.image_base }}/${{ matrix.container }}:gitsha-${{ github.sha }}
