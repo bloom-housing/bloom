@@ -7,10 +7,8 @@ This root module configures the bloom-dev AWS account.
 
 ## First apply
 
-The S3 bucket for the Tofu state and the AWS certificate used need to be created before the rest of
-the Bloom deployment can proceed:
+The AWS certificate used need to be created before the rest of the Bloom deployment can proceed:
 
-1. Comment out the `backend "s3" { ... }` block at the top of [main.tf](./main.tf).
 2. Run `tofu init`. This downloads the AWS tofu provider to your local system.
 3. Run `tofu apply -exclude=module.bloom_deployment`. This creates a S3 bucket for the Tofu state file and
    an AWS TLS certificate.
