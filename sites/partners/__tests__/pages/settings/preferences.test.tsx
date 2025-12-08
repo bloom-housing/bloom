@@ -190,13 +190,13 @@ describe("settings", () => {
           )
         })
       )
-      const { getByText, findByText, getByRole } = render(<SettingsPreferences />)
+      const { getByText, findByText, findByRole } = render(<SettingsPreferences />)
 
       expect(getByText("Settings")).toBeInTheDocument()
       expect(getByText("Preferences")).toBeInTheDocument()
 
       await findByText("Name")
-      const table = getByRole("table")
+      const table = await findByRole("table")
       const headAndBody = within(table).getAllByRole("rowgroup")
       expect(headAndBody).toHaveLength(2)
       const [head, body] = headAndBody
