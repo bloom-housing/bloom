@@ -4,7 +4,11 @@ import { UnitGroupsSummarized } from '../dtos/unit-groups/unit-groups-summarized
 import { AmiChart } from '../dtos/ami-charts/ami-chart.dto';
 import { UnitGroup } from '../dtos/unit-groups/unit-group.dto';
 import { MinMax } from '../dtos/shared/min-max.dto';
-import { MonthlyRentDeterminationTypeEnum } from '@prisma/client';
+import {
+  ListingTypeEnum,
+  MonthlyRentDeterminationTypeEnum,
+  RentTypeEnum,
+} from '@prisma/client';
 import { AmiChartItem } from '../dtos/units/ami-chart-item.dto';
 import Listing from '../dtos/listings/listing.dto';
 import { usd } from './unit-utilities';
@@ -27,6 +31,7 @@ export const setMinMax = (range: MinMax, value: number): MinMax => {
 // Used to display the main pricing table
 export const getUnitGroupSummary = (
   unitGroups: UnitGroup[] = [],
+  isNonRegulated?: boolean,
 ): UnitGroupSummary[] => {
   const summary: UnitGroupSummary[] = [];
 
@@ -55,21 +60,37 @@ export const getUnitGroupSummary = (
     let rentAsPercentIncomeRange: MinMax,
       rentRange: MinMax,
       amiPercentageRange: MinMax;
-    group.unitGroupAmiLevels.forEach((level) => {
-      if (
-        level.monthlyRentDeterminationType ===
-        MonthlyRentDeterminationTypeEnum.flatRent
-      ) {
-        rentRange = setMinMax(rentRange, level.flatRentValue);
-      } else {
-        rentAsPercentIncomeRange = setMinMax(
-          rentAsPercentIncomeRange,
-          level.percentageOfIncomeValue,
-        );
-      }
 
-      amiPercentageRange = setMinMax(amiPercentageRange, level.amiPercentage);
-    });
+    if (!isNonRegulated) {
+      group.unitGroupAmiLevels.forEach((level) => {
+        if (
+          level.monthlyRentDeterminationType ===
+          MonthlyRentDeterminationTypeEnum.flatRent
+        ) {
+          rentRange = setMinMax(rentRange, level.flatRentValue);
+        } else {
+          rentAsPercentIncomeRange = setMinMax(
+            rentAsPercentIncomeRange,
+            level.percentageOfIncomeValue,
+          );
+        }
+
+        amiPercentageRange = setMinMax(amiPercentageRange, level.amiPercentage);
+      });
+    } else {
+      if (group.rentType === RentTypeEnum.fixedRent) {
+        rentRange = {
+          max: group.monthlyRent,
+          min: group.monthlyRent,
+        };
+      } else {
+        rentRange = {
+          min: group.flatRentValueFrom,
+          max: group.flatRentValueTo,
+        };
+      }
+    }
+
     const groupSummary: UnitGroupSummary = {
       unitTypes: group.unitTypes.sort((a, b) =>
         a.numBedrooms < b.numBedrooms ? -1 : 1,
@@ -241,6 +262,7 @@ export const getHouseholdMaxIncomeSummary = (
 export const summarizeUnitGroups = (
   unitGroups: UnitGroup[] = [],
   amiCharts: AmiChart[] = [],
+  isNonRegulated?: boolean,
 ): UnitGroupsSummarized => {
   const data = {} as UnitGroupsSummarized;
 
@@ -248,7 +270,7 @@ export const summarizeUnitGroups = (
     return data;
   }
 
-  data.unitGroupSummary = getUnitGroupSummary(unitGroups);
+  data.unitGroupSummary = getUnitGroupSummary(unitGroups, isNonRegulated);
   data.householdMaxIncomeSummary = getHouseholdMaxIncomeSummary(
     unitGroups,
     amiCharts,
@@ -286,6 +308,7 @@ export const addUnitGroupsSummarized = (
       listing.unitGroupsSummarized = summarizeUnitGroups(
         listing.unitGroups,
         amiCharts,
+        listing.listingType === ListingTypeEnum.nonRegulated,
       );
     }
     return listing;
@@ -303,6 +326,7 @@ export const addUnitGroupsSummarized = (
       listing.unitGroupsSummarized = summarizeUnitGroups(
         listing.unitGroups,
         amiCharts,
+        listing.listingType === ListingTypeEnum.nonRegulated,
       );
     }
   });
