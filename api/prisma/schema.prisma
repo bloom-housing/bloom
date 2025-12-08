@@ -1096,6 +1096,20 @@ model UserPreferences {
 
 // END DETROIT SPECIFIC
 
+// START LA SEPCIFIC
+
+model Properties {
+  id          String     @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  createdAt   DateTime   @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt   DateTime   @updatedAt @map("updated_at") @db.Timestamp(6)
+  name        String
+  description String?
+  url         String?
+  urlTitle    String?    @map("url_title")
+}
+
+// END LA SPECIFIC
+
 model ScriptRuns {
   id             String   @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   createdAt      DateTime @default(now()) @map("created_at") @db.Timestamp(6)
