@@ -731,6 +731,10 @@ model Listings {
   Listings                              Listings[]                    @relation("copy_of")
   lastUpdatedByUserId                   String?                       @map("last_updated_by_user_id") @db.Uuid
   lastUpdatedByUser                     UserAccounts?                 @relation("last_updated_by_user", fields: [lastUpdatedByUserId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  // START LA SPECIFIC
+  property                              Properties?                   @relation(fields: [propertyId], references: [id])
+  propertyId                            String?                       @map("property_id") @db.Uuid
+  // END LA SPECIFIC
 
   @@index([jurisdictionId])
   @@map("listings")
@@ -1106,6 +1110,7 @@ model Properties {
   description String?
   url         String?
   urlTitle    String?    @map("url_title")
+  listings    Listings[]
 }
 
 // END LA SPECIFIC
