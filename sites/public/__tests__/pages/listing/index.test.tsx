@@ -27,6 +27,7 @@ const TOAST_MESSAGE = {
   addToast: jest.fn(),
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function renderListingPreview(listing: Listing, jurisdiction: Jurisdiction) {
   return render(
     <MessageContext.Provider value={TOAST_MESSAGE}>
