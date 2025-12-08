@@ -17,7 +17,6 @@ import {
   ApplicationListingCard,
 } from "../../../../components/account/ApplicationCards"
 import styles from "../../../../../styles/lottery-results.module.scss"
-import Markdown from "markdown-to-jsx"
 
 const LotteryResults = () => {
   const router = useRouter()
@@ -179,14 +178,12 @@ const LotteryResults = () => {
                       <Heading priority={3} size={"xl"} className={`${styles["section-heading"]}`}>
                         {t("account.application.lottery.preferencesHeader")}
                       </Heading>
-                      <Message>
-                        <Markdown>
-                          {t("account.application.lottery.preferences", {
-                            closedListingPageLink: `/listing/${listing?.id}`,
-                            closedListingName: listing?.name,
-                          })}
-                        </Markdown>
-                      </Message>
+
+                      <p>
+                        {t("account.application.lottery.preferences", {
+                          closedListingPageLink: `/listing/${listing?.id}`,
+                        })}
+                      </p>
                     </div>
                     <div>
                       <Button
