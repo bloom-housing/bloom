@@ -178,7 +178,6 @@ const LotteryResults = () => {
                       <Heading priority={3} size={"xl"} className={`${styles["section-heading"]}`}>
                         {t("account.application.lottery.preferencesHeader")}
                       </Heading>
-
                       <p>
                         {t("account.application.lottery.preferences", {
                           closedListingPageLink: `/listing/${listing?.id}`,
