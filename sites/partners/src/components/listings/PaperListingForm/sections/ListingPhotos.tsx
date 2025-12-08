@@ -381,7 +381,7 @@ const ListingPhotos = (props: ListingPhotosProps) => {
               }}
               id="add-photos-button"
             >
-              {t(listingFormPhotos.length > 0 ? "listings.editPhotos" : "listings.addPhoto")}
+              {t(listingFormPhotos.length > 0 ? "listings.editPhotos" : "listings.addPhotos")}
             </Button>
           </Grid.Cell>
         </Grid.Row>
@@ -399,7 +399,7 @@ const ListingPhotos = (props: ListingPhotosProps) => {
         ariaLabelledBy="listing-photos-drawer-header"
       >
         <Drawer.Header id="listing-photos-drawer-header">
-          {t(listingFormPhotos.length > 0 ? "listings.editPhotos" : "listings.addPhoto")}
+          {t(listingFormPhotos.length > 0 ? "listings.editPhotos" : "listings.addPhotos")}
         </Drawer.Header>
         <Drawer.Content>
           <Card>
