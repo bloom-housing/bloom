@@ -62,6 +62,7 @@ import {
 import { fillModelStringFields } from '../utilities/model-fields';
 import { doJurisdictionHaveFeatureFlagSet } from '../utilities/feature-flag-utilities';
 import { addUnitGroupsSummarized } from '../utilities/unit-groups-transformations';
+import { connect } from 'node:http2';
 
 export type getListingsArgs = {
   skip: number;
@@ -1635,6 +1636,13 @@ export class ListingService implements OnModuleInit {
             }
           : undefined,
         isVerified: !!dto.isVerified,
+        property: dto.property
+          ? {
+              connect: {
+                id: dto.property.id,
+              },
+            }
+          : undefined,
       },
     });
     if (rawListing.status === ListingsStatusEnum.pendingReview) {
@@ -2559,6 +2567,13 @@ export class ListingService implements OnModuleInit {
               },
             },
           },
+          property: incomingDto?.property
+            ? {
+                connect: {
+                  id: incomingDto.property.id,
+                },
+              }
+            : undefined,
         },
         include: includeViews.full,
         where: {
