@@ -119,10 +119,9 @@ const ListingPhotos = (props: ListingPhotosProps) => {
     return imageA.ordinal - imageB.ordinal
   })
 
-  const enableListingImageAltText = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableListingImageAltText,
+  const enableListingImageAltText =
+    doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableListingImageAltText, jurisdictionId) &&
     jurisdictionId
-  )
 
   const saveImageFields = (images: ListingImage[]) => {
     remove(fields.map((item, index) => index))

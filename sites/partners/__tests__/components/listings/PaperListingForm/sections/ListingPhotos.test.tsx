@@ -167,10 +167,10 @@ describe("<ListingPhotos>", () => {
         </AuthContext.Provider>
       )
 
-      const addPhotosButton = screen.getByRole("button", { name: "Add photo" })
+      const addPhotosButton = screen.getByRole("button", { name: "Add photos" })
       await userEvent.click(addPhotosButton)
 
-      const addPhotosDrawer = await screen.findByRole("dialog", { name: "Add photo" })
+      const addPhotosDrawer = await screen.findByRole("dialog", { name: "Add photos" })
       const dropzoneInput = within(addPhotosDrawer).getByTestId("dropzone-input")
 
       const newFile = new File(["dummy file"], "new-photo.jpg", { type: "image/jpeg" })
