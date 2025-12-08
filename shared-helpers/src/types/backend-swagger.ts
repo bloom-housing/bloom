@@ -3421,6 +3421,9 @@ export interface ListingImage {
 
   /**  */
   ordinal?: number
+
+  /**  */
+  description?: string
 }
 
 export interface ListingFeatures {
@@ -3992,7 +3995,7 @@ export interface UnitsSummary {
   totalAvailable?: number
 
   /**  */
-  rentType?: string
+  rentType?: RentTypeEnum
 
   /**  */
   flatRentValueFrom?: number
@@ -4686,7 +4689,7 @@ export interface UnitsSummaryCreate {
   totalAvailable?: number
 
   /**  */
-  rentType?: string
+  rentType?: RentTypeEnum
 
   /**  */
   flatRentValueFrom?: number
@@ -4704,6 +4707,9 @@ export interface ListingImageCreate {
 
   /**  */
   assets: AssetCreate
+
+  /**  */
+  description?: string
 }
 
 export interface AddressCreate {
@@ -7878,6 +7884,7 @@ export enum FeatureFlagEnum {
   "enableListingFavoriting" = "enableListingFavoriting",
   "enableListingFileNumber" = "enableListingFileNumber",
   "enableListingFiltering" = "enableListingFiltering",
+  "enableListingImageAltText" = "enableListingImageAltText",
   "enableListingOpportunity" = "enableListingOpportunity",
   "enableListingPagination" = "enableListingPagination",
   "enableListingUpdatedAt" = "enableListingUpdatedAt",
