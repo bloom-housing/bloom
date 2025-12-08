@@ -240,9 +240,6 @@ describe("settings", () => {
         }),
         rest.delete("http://localhost/api/adapter/multiselectQuestions", (_req, res, ctx) => {
           return res(ctx.json({}))
-        }),
-        rest.options("http://localhost/api/adapter/multiselectQuestions", (_req, res, ctx) => {
-          return res(ctx.json({}))
         })
       )
 
