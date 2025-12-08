@@ -182,13 +182,12 @@ const SettingsPreferences = () => {
       </>
     )
   }
-
   if (
     profile?.userRoles?.isPartner ||
     profile?.userRoles?.isSupportAdmin ||
     !atLeastOneJurisdictionEnablesPreferences
   ) {
-    window.location.href = "/unauthorized"
+    void router.push("/unauthorized")
   }
 
   return (

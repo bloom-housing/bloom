@@ -65,14 +65,14 @@ describe("settings", () => {
       expect(getByText("None")).toBeInTheDocument()
     })
 
-    it("should render tabs if multiple settings are on", () => {
+    it("should render tabs if multiple settings are on", async () => {
       window.URL.createObjectURL = jest.fn()
       document.cookie = "access-token-available=True"
       server.use(
         rest.get("http://localhost:3100/multiselectQuestions", (_req, res, ctx) => {
-          return res(ctx.json([]))
+          return res(ctx.json([multiselectQuestionPreference]))
         }),
-        rest.get("http://localhost:3100/multiselectQuestions", (_req, res, ctx) => {
+        rest.get("http://localhost/api/adapter/multiselectQuestions", (_req, res, ctx) => {
           return res(ctx.json([multiselectQuestionPreference]))
         }),
         rest.get(
@@ -103,54 +103,21 @@ describe("settings", () => {
         })
       )
 
-      render(
-        <AuthContext.Provider
-          value={{
-            doJurisdictionsHaveFeatureFlagOn: (featureFlag: FeatureFlagEnum) => {
-              switch (featureFlag) {
-                case FeatureFlagEnum.disableListingPreferences:
-                  return false
-                case FeatureFlagEnum.enableProperties:
-                  return true
-                default:
-                  return false
-              }
-            },
-            profile: {
-              id: "user1",
-              userRoles: { isPartner: true },
-              jurisdictions: [
-                {
-                  id: "jurisdiction1",
-                  name: "jurisdictionWithJurisdictionAdmin",
-                  featureFlags: [{ name: FeatureFlagEnum.enableProperties, active: true }],
-                } as Jurisdiction,
-                {
-                  id: "jurisdiction2",
-                  name: "jurisdictionWithJurisdictionAdmin2",
-                  featureFlags: [],
-                } as Jurisdiction,
-              ],
-            } as User,
-          }}
-        >
-          <SettingsPreferences />
-        </AuthContext.Provider>
-      )
+      render(<SettingsPreferences />)
       expect(screen.getByText("Settings")).toBeInTheDocument()
-      expect(screen.getByRole("tablist")).toBeInTheDocument()
+      expect(await screen.findByRole("tablist")).toBeInTheDocument()
       expect(screen.getByRole("heading", { level: 2, name: "Preferences" })).toBeInTheDocument()
       expect(screen.getByText("Properties")).toBeInTheDocument()
     })
 
-    it("should not render tabs if only preferences is on", () => {
+    it("should not render tabs if only preferences is on", async () => {
       window.URL.createObjectURL = jest.fn()
       document.cookie = "access-token-available=True"
       server.use(
         rest.get("http://localhost:3100/multiselectQuestions", (_req, res, ctx) => {
-          return res(ctx.json([]))
+          return res(ctx.json([multiselectQuestionPreference]))
         }),
-        rest.get("http://localhost:3100/multiselectQuestions", (_req, res, ctx) => {
+        rest.get("http://localhost/api/adapter/multiselectQuestions", (_req, res, ctx) => {
           return res(ctx.json([multiselectQuestionPreference]))
         }),
         rest.get(
@@ -168,12 +135,10 @@ describe("settings", () => {
                 {
                   id: "jurisdiction1",
                   name: "jurisdictionWithJurisdictionAdmin",
-                  featureFlags: [{ name: FeatureFlagEnum.enableProperties, active: false }],
-                },
-                {
-                  id: "jurisdiction2",
-                  name: "jurisdictionWithJurisdictionAdmin2",
-                  featureFlags: [],
+                  featureFlags: [
+                    { name: FeatureFlagEnum.enableProperties, active: false },
+                    { name: FeatureFlagEnum.disableListingPreferences, active: false },
+                  ],
                 },
               ],
             })
@@ -181,43 +146,12 @@ describe("settings", () => {
         })
       )
 
-      render(
-        <AuthContext.Provider
-          value={{
-            doJurisdictionsHaveFeatureFlagOn: (featureFlag: FeatureFlagEnum) => {
-              switch (featureFlag) {
-                case FeatureFlagEnum.disableListingPreferences:
-                  return false
-                case FeatureFlagEnum.enableProperties:
-                  return false
-                default:
-                  return false
-              }
-            },
-            profile: {
-              id: "user1",
-              userRoles: { isPartner: true },
-              jurisdictions: [
-                {
-                  id: "jurisdiction1",
-                  name: "jurisdictionWithJurisdictionAdmin",
-                  featureFlags: [{ name: FeatureFlagEnum.enableProperties, active: false }],
-                } as Jurisdiction,
-                {
-                  id: "jurisdiction2",
-                  name: "jurisdictionWithJurisdictionAdmin2",
-                  featureFlags: [],
-                } as Jurisdiction,
-              ],
-            } as User,
-          }}
-        >
-          <SettingsPreferences />
-        </AuthContext.Provider>
-      )
-      expect(screen.getByText("Settings")).toBeInTheDocument()
+      render(<SettingsPreferences />)
+      expect(await screen.findByText("Settings")).toBeInTheDocument()
+      expect(
+        await screen.findByRole("heading", { level: 2, name: "Preferences" })
+      ).toBeInTheDocument()
       expect(screen.queryByRole("tablist")).not.toBeInTheDocument()
-      expect(screen.getByRole("heading", { level: 2, name: "Preferences" })).toBeInTheDocument()
       expect(screen.queryByText("Properties")).not.toBeInTheDocument()
     })
 
@@ -228,7 +162,7 @@ describe("settings", () => {
         rest.get("http://localhost:3100/multiselectQuestions", (_req, res, ctx) => {
           return res(ctx.json([multiselectQuestionPreference]))
         }),
-        rest.get("http://localhost:3100/multiselectQuestions", (_req, res, ctx) => {
+        rest.get("http://localhost/api/adapter/multiselectQuestions", (_req, res, ctx) => {
           return res(ctx.json([multiselectQuestionPreference]))
         }),
         rest.get(
@@ -236,7 +170,25 @@ describe("settings", () => {
           (_req, res, ctx) => {
             return res(ctx.json([listing]))
           }
-        )
+        ),
+        rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
+          return res(
+            ctx.json({
+              id: "user1",
+              roles: { id: "user1", isAdmin: false, isPartner: true },
+              jurisdictions: [
+                {
+                  id: "jurisdiction1",
+                  name: "jurisdictionWithJurisdictionAdmin",
+                  featureFlags: [
+                    { name: FeatureFlagEnum.enableProperties, active: false },
+                    { name: FeatureFlagEnum.disableListingPreferences, active: false },
+                  ],
+                },
+              ],
+            })
+          )
+        })
       )
       const { getByText, findByText, getByRole } = render(<SettingsPreferences />)
 

@@ -20,7 +20,7 @@ const SettingsProperties = () => {
   )
 
   if (profile?.userRoles?.isPartner || profile?.userRoles?.isSupportAdmin || !enableProperties) {
-    window.location.href = "/unauthorized"
+    void router.push("/unauthorized")
   }
 
   return (
