@@ -52,6 +52,7 @@ import { UserCsvExporterService } from '../services/user-csv-export.service';
 import { ExportLogInterceptor } from '../interceptors/export-log.interceptor';
 import { RequestSingleUseCode } from '../dtos/single-use-code/request-single-use-code.dto';
 import { ApiKeyGuard } from '../guards/api-key.guard';
+import { UserDeleteDTO } from '../dtos/users/user-delete.dto';
 
 @Controller('user')
 @ApiTags('user')
@@ -124,10 +125,24 @@ export class UserController {
   @UseGuards(OptionalAuthGuard, PermissionGuard)
   @UseInterceptors(ActivityLogInterceptor)
   async delete(
-    @Body() dto: IdDTO,
+    @Body() dto: UserDeleteDTO,
     @Request() req: ExpressRequest,
   ): Promise<SuccessDTO> {
-    return await this.userService.delete(dto.id, mapTo(User, req['user']));
+    return await this.userService.delete(
+      dto.id,
+      mapTo(User, req['user']),
+      dto.shouldRemoveApplication,
+    );
+  }
+
+  @Put('deleteInactiveUsersCronJob')
+  @ApiOperation({
+    summary: 'trigger the delete inactive users cron job',
+    operationId: 'deleteInactiveUsersCronJob',
+  })
+  @ApiOkResponse({ type: SuccessDTO })
+  async process(): Promise<SuccessDTO> {
+    return await this.userService.deleteAfterInactivity();
   }
 
   @Post()
