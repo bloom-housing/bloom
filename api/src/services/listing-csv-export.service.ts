@@ -15,6 +15,7 @@ import {
 import {
   ApplicationMethodsTypeEnum,
   ListingEventsTypeEnum,
+  ListingTypeEnum,
   MarketingTypeEnum,
   NeighborhoodAmenitiesEnum,
 } from '@prisma/client';
@@ -91,6 +92,10 @@ export const formatCommunityType = {
   seniorVeterans: 'Senior Veteran',
   veteran: 'Veteran',
   schoolEmployee: 'School Employee',
+};
+
+export const formatCloudinaryPdfUrl = (fileId: string): string => {
+  return `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload/${fileId}.pdf`;
 };
 
 @Injectable()
@@ -379,15 +384,35 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
     return value ? `$${value}` : '';
   }
 
-  cloudinaryPdfFromId(publicId: string, listing?: Listing): string {
-    if (publicId) {
-      const cloudName =
-        process.env.cloudinaryCloudName || process.env.CLOUDINARY_CLOUD_NAME;
-      return `https://res.cloudinary.com/${cloudName}/image/upload/${publicId}.pdf`;
-    } else if (!publicId && listing?.buildingSelectionCriteria) {
-      return listing.buildingSelectionCriteria;
-    }
+  buildingSelectionCriteria(value: string, listing?: Listing): string {
+    if (value) return listing.buildingSelectionCriteria;
+    if (listing?.listingsBuildingSelectionCriteriaFile?.fileId)
+      return formatCloudinaryPdfUrl(
+        listing.listingsBuildingSelectionCriteriaFile?.fileId,
+      );
+    return '';
+  }
 
+  marketingFlyer(value: string, listing?: Listing): string {
+    if (value) return listing.marketingFlyer;
+    if (listing?.listingsMarketingFlyerFile?.fileId)
+      return formatCloudinaryPdfUrl(listing.listingsMarketingFlyerFile?.fileId);
+    return '';
+  }
+
+  accessibleMarketingFlyer(value: string, listing?: Listing): string {
+    if (value) return listing.accessibleMarketingFlyer;
+    if (listing?.listingsAccessibleMarketingFlyerFile?.fileId)
+      return formatCloudinaryPdfUrl(
+        listing.listingsAccessibleMarketingFlyerFile?.fileId,
+      );
+    return '';
+  }
+
+  cloudinaryPdfFromId(publicId: string): string {
+    if (publicId) {
+      return formatCloudinaryPdfUrl(publicId);
+    }
     return '';
   }
 
@@ -404,6 +429,11 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
   };
 
   async getCsvHeaders(user: User): Promise<CsvHeader[]> {
+    const enableNonRegulatedListings = doAnyJurisdictionHaveFeatureFlagSet(
+      user.jurisdictions,
+      FeatureFlagEnum.enableNonRegulatedListings,
+    );
+
     const headers: CsvHeader[] = [
       {
         path: 'id',
@@ -423,6 +453,23 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
         path: 'name',
         label: 'Listing Name',
       },
+      ...(enableNonRegulatedListings
+        ? [
+            {
+              path: 'listingType',
+              label: 'Listing Type',
+              format: (val: ListingTypeEnum) => {
+                if (!val) {
+                  return '';
+                }
+
+                return val === ListingTypeEnum.regulated
+                  ? 'Regulated'
+                  : 'Non-regulated';
+              },
+            },
+          ]
+        : []),
       {
         path: 'status',
         label: 'Listing Status',
@@ -457,8 +504,17 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
           FeatureFlagEnum.enableHousingDeveloperOwner,
         )
           ? 'Housing developer / owner'
-          : 'Developer',
+          : 'Housing Provider',
       },
+      ...(enableNonRegulatedListings
+        ? [
+            {
+              path: 'hasHudEbllClearance',
+              label: 'Has HUD EBLL Clearance',
+              format: this.formatYesNo,
+            },
+          ]
+        : []),
       ...(doAnyJurisdictionHaveFeatureFlagSet(
         user.jurisdictions,
         FeatureFlagEnum.enableListingFileNumber,
@@ -907,11 +963,18 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
           path: 'rentalAssistance',
           label: 'Eligibility Rules - Rental Assistance',
         },
-        {
-          path: 'buildingSelectionCriteriaFileId',
-          label: 'Building Selection Criteria',
-          format: this.cloudinaryPdfFromId,
-        },
+        ...(doAnyJurisdictionHaveFalsyFeatureFlagValue(
+          user.jurisdictions,
+          FeatureFlagEnum.disableBuildingSelectionCriteria,
+        )
+          ? [
+              {
+                path: 'buildingSelectionCriteria',
+                label: 'Building Selection Criteria',
+                format: this.buildingSelectionCriteria,
+              },
+            ]
+          : []),
         {
           path: 'programRules',
           label: 'Important Program Rules',
@@ -1204,6 +1267,23 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
               .join(', ');
           },
         },
+        ...(doAnyJurisdictionHaveFeatureFlagSet(
+          user.jurisdictions,
+          FeatureFlagEnum.enableMarketingFlyer,
+        )
+          ? [
+              {
+                path: 'marketingFlyer',
+                label: 'Marketing Flyer',
+                format: this.marketingFlyer,
+              },
+              {
+                path: 'accessibleMarketingFlyer',
+                label: 'Accessible Marketing Flyer',
+                format: this.accessibleMarketingFlyer,
+              },
+            ]
+          : []),
         {
           path: 'userAccounts',
           label: 'Partners Who Have Access',

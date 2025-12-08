@@ -377,7 +377,9 @@ export class EmailService {
         );
       } else if (hasUnitGroups) {
         if (listing.reviewOrderType === ReviewOrderTypeEnum.waitlistLottery) {
-          eligibleText = this.polyglot.t('confirmation.eligible.waitlistLottery');
+          eligibleText = this.polyglot.t(
+            'confirmation.eligible.waitlistLottery',
+          );
         } else {
           eligibleText = this.polyglot.t('confirmation.eligible.waitlist');
         }
