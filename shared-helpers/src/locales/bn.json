@@ -716,6 +716,8 @@
   "listings.developmentalDisabilities": "বিকাশের অক্ষম ব্যক্তিরা",
   "listings.developmentalDisabilitiesDescription": "এই ভবনের একক সংখ্যক ইউনিট উন্নয়নশীল প্রতিবন্ধীদের জন্য আলাদা রাখা হয়েছে। যোগ্যতা, প্রয়োজনীয়তা, কিভাবে আবেদন পেতে হয় এবং অন্য কোন প্রশ্নের উত্তরের জন্য তথ্যের জন্য দয়া করে <a href='http://www.housingchoices.org/' target='_blank'>housechoices.org </a> দেখুন আপনি প্রক্রিয়া সম্পর্কে থাকতে পারে।",
   "listings.downloadPdf": "পিডিএফ ডাউনলোড করুন",
+  "listings.hasEbllClearance": "এই সম্পত্তিটি HUD EBLL ছাড়পত্র পেয়েছে।",
+  "listings.noEbllClearance": "এই সম্পত্তিটি HUD EBLL ছাড়পত্র পায়নি।",
   "listings.eligibilityNotebook": "যোগ্যতা নোটবুক",
   "listings.eligibleApplicants.FCFS": "শূন্যপদ পূরণ না হওয়া পর্যন্ত যোগ্য আবেদনকারীদের সাথে আগে আসলে আগে পাবেন ভিত্তিতে যোগাযোগ করা হবে।",
   "listings.enterLotteryForWaitlist": "%{Units} ইউনিটের অপেক্ষার তালিকায় একটি খোলা স্লটের জন্য একটি আবেদন জমা দিন।",
