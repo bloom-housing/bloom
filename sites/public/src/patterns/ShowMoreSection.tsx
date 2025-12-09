@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import { Button } from "@bloom-housing/ui-seeds"
 import { t } from "@bloom-housing/ui-components"
 
-type CollapsibleUnitTableProps = {
+type ShowMoreSectionProps = {
   // Sets the default expanded state
   defaultExpanded?: boolean
   // Disables the show more/show less functionality
@@ -19,7 +19,7 @@ type CollapsibleUnitTableProps = {
   uniqueId: string
 }
 
-export const ShowMoreSection = (props: CollapsibleUnitTableProps) => {
+export const ShowMoreSection = (props: ShowMoreSectionProps) => {
   const [expanded, setExpanded] = useState(false)
   return (
     <div role={"region"} aria-live={"polite"}>

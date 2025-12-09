@@ -33,7 +33,7 @@ export const UnitSummaries = ({
             <ExpandableSection
               title={barContent}
               priority={4}
-              disableCollapse={disableUnitsAccordion}
+              disableCollapse={disableUnitsAccordion || unitsFormatted.length === 0}
               uniqueId={`unit-table-${index}`}
               defaultCollapse={disableUnitsAccordion}
             >
