@@ -781,7 +781,6 @@ export const getStackedUnitTableData = (units: Unit[], unitSummary: UnitSummary)
   if (!(noNumbers && noSqFeet && noBathrooms && noFloors && noA11yTypes)) {
     unitsFormatted = availableUnits.map((unit: Unit) => {
       let unitFormatted: FormattedUnit = {}
-      console.log(unit.number)
 
       if (!noA11yTypes) {
         unitFormatted = {
