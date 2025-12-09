@@ -17,6 +17,8 @@
   "account.application.lottery.rawRankHeader": "Ang ranggo mo raw",
   "account.application.lottery.resultsHeader": "Narito ang mga resulta ng iyong lottery",
   "account.application.lottery.resultsSubheader": "%{applications} applications ay isinumite para sa %{units} unit",
+  "account.application.lottery.resultsHeaderWaitlistLoterry": "Narito ang iyong resulta ng lottery para sa waitlist",
+  "account.application.lottery.resultsSubheaderWaitlistLottery": "Naipasa ang %{applications} aplikasyon",
   "account.application.lottery.resultsSubheaderPlural": "%{applications} applications ay isinumite para sa %{units} units",
   "account.application.lottery.viewResults": "Tingnan ang mga resulta ng lottery",
   "account.application.noAccessError": "Hindi ka pinapayagang makita ang application na ito",

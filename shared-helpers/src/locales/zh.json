@@ -16,6 +16,8 @@
   "account.application.lottery.rawRankButton": "什么是原始排名？",
   "account.application.lottery.rawRankHeader": "您的原始排名",
   "account.application.lottery.resultsHeader": "这是您的彩票结果",
+  "account.application.lottery.resultsHeaderWaitlistLoterry": "以下是候补名单的抽签结果",
+  "account.application.lottery.resultsSubheaderWaitlistLottery": "已提交 %{applications} 份申请",
   "account.application.lottery.resultsSubheader": "已提交 %{applications} 份申请，共 %{units} 个单位",
   "account.application.lottery.resultsSubheaderPlural": "已提交 %{applications} 份申请，共 %{units} 个单位",
   "account.application.lottery.viewResults": "查看抽奖结果",
