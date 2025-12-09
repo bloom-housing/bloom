@@ -6,6 +6,7 @@ import {
   UnitTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { UnitSummaries } from "../../../../src/components/listing/listing_sections/UnitSummaries"
+import { on } from "node:events"
 
 afterEach(cleanup)
 
@@ -80,9 +81,19 @@ describe("<UnitSummaries>", () => {
       numBedrooms: 2,
     },
   }
-  const mockedUnits: Unit[] = [oneBed, oneBed, twoBed, twoBed, twoBed]
 
   it("shows expandable summaries", () => {
+    const updatedOneBed = { ...oneBed, number: "101" }
+    const updatedTwoBed = { ...twoBed, number: "102" }
+
+    const mockedUnits: Unit[] = [
+      updatedOneBed,
+      updatedOneBed,
+      updatedTwoBed,
+      updatedTwoBed,
+      updatedTwoBed,
+    ]
+
     const { getAllByTestId, getAllByLabelText, getAllByText } = render(
       <UnitSummaries
         disableUnitsAccordion={false}
@@ -91,7 +102,32 @@ describe("<UnitSummaries>", () => {
       />
     )
     expect(getAllByTestId("listing-unit-summary").length).toBe(2)
-    expect(getAllByLabelText("Expand section").length).toBeGreaterThan(0)
+    expect(getAllByLabelText("Collapse section").length).toBeGreaterThan(0)
+    expect(getAllByText("1 BR").length).toBeGreaterThan(0)
+    expect(
+      getAllByText("2 units, 300 - 350 square feet, 2nd - 4th floors", { exact: false }).length
+    ).toBeGreaterThan(0)
+    expect(getAllByText("2 BR").length).toBeGreaterThan(0)
+
+    expect(
+      getAllByText("3 units, 500 - 600 square feet, 3rd - 5th floors", {
+        exact: false,
+      }).length
+    ).toBeGreaterThan(0)
+  })
+
+  it("don't show summaries if there would be no table data", () => {
+    const mockedUnits: Unit[] = [oneBed, oneBed, twoBed, twoBed, twoBed]
+
+    const { getAllByTestId, queryAllByLabelText, getAllByText } = render(
+      <UnitSummaries
+        disableUnitsAccordion={false}
+        units={mockedUnits}
+        unitSummary={mockedSummaries}
+      />
+    )
+    expect(getAllByTestId("listing-unit-summary").length).toBe(2)
+    expect(queryAllByLabelText("Collapse section").length).toBe(0)
     expect(getAllByText("1 BR").length).toBeGreaterThan(0)
     expect(
       getAllByText("2 units, 300 - 350 square feet, 2nd - 4th floors", { exact: false }).length
@@ -106,6 +142,8 @@ describe("<UnitSummaries>", () => {
   })
 
   it("shows disabled summaries", () => {
+    const mockedUnits: Unit[] = [oneBed, oneBed, twoBed, twoBed, twoBed]
+
     const { getAllByTestId, getAllByText, queryByLabelText } = render(
       <UnitSummaries
         disableUnitsAccordion={true}
@@ -114,7 +152,7 @@ describe("<UnitSummaries>", () => {
       />
     )
     expect(getAllByTestId("listing-unit-summary").length).toBe(2)
-    expect(queryByLabelText("Expand section")).toBeNull()
+    expect(queryByLabelText("Collapse section")).toBeNull()
 
     expect(getAllByText("1 BR").length).toBeGreaterThan(0)
     expect(
