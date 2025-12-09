@@ -2709,17 +2709,15 @@ describe('Testing user service', () => {
           userRoles: { isAdmin: true },
         },
       ]);
-      prisma.userAccounts.findUnique = jest
+      prisma.applications.findMany = jest
         .fn()
-        .mockResolvedValueOnce({ id: 'userId1', applications: [] })
-        .mockResolvedValueOnce({
-          id: 'userId3',
-          applications: [{ id: 'application1' }, { id: 'application2' }],
-        })
-        .mockResolvedValueOnce({
-          id: 'userId3',
-          applications: [{ id: 'application1' }, { id: 'application2' }],
-        });
+        .mockResolvedValueOnce([])
+        .mockResolvedValueOnce([{ id: 'application1' }, { id: 'application2' }])
+        .mockResolvedValueOnce([
+          { id: 'application3' },
+          { id: 'application4' },
+        ]);
+
       prisma.userRoles.delete = jest.fn().mockResolvedValue({});
       prisma.userAccounts.delete = jest.fn().mockResolvedValue({});
       process.env.USERS_DAYS_TILL_EXPIRY = '1095';

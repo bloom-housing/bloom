@@ -1031,34 +1031,30 @@ export class UserService {
   }
 
   private async deleteUserAndRelatedInfo(
-    userId: string,
+    user: User,
     removePIIFromApplications?: boolean,
   ) {
-    const userAccount = await this.prisma.userAccounts.findUnique({
-      select: {
-        id: true,
-        applications: { select: { id: true } },
-        userRoles: true,
-      },
-      where: { id: userId },
-    });
     if (removePIIFromApplications) {
-      for (const application of userAccount.applications) {
+      const applications = await this.prisma.applications.findMany({
+        select: { id: true },
+        where: { userId: user.id },
+      });
+      for (const application of applications) {
         await this.applicationService.removePII(application.id);
       }
     }
 
-    if (userAccount?.userRoles) {
+    if (user.userRoles) {
       await this.prisma.userRoles.delete({
         where: {
-          userId: userId,
+          userId: user.id,
         },
       });
     }
 
     await this.prisma.userAccounts.delete({
       where: {
-        id: userId,
+        id: user.id,
       },
     });
   }
@@ -1082,7 +1078,10 @@ export class UserService {
       permissionActions.delete,
     );
 
-    await this.deleteUserAndRelatedInfo(userId, shouldDeleteApplications);
+    await this.deleteUserAndRelatedInfo(
+      mapTo(User, targetUser),
+      shouldDeleteApplications,
+    );
 
     return {
       success: true,
@@ -1107,7 +1106,7 @@ export class UserService {
       .toDate();
     const usersToBeDeleted = await this.prisma.userAccounts.findMany({
       select: { id: true, wasWarnedOfDeletion: true },
-      where: { lastLoginAt: { lt: deleteBeforeDate } },
+      where: { lastLoginAt: { lt: deleteBeforeDate }, userRoles: null },
     });
 
     for (const user of usersToBeDeleted) {
@@ -1116,7 +1115,7 @@ export class UserService {
           `Unable to delete user ${user.id} because they have not been warned by email`,
         );
       } else {
-        await this.deleteUserAndRelatedInfo(user.id, true);
+        await this.deleteUserAndRelatedInfo(mapTo(User, user), true);
       }
     }
 

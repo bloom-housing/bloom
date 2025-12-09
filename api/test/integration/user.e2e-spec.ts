@@ -224,9 +224,26 @@ describe('User Controller Tests', () => {
   });
 
   describe('delete endpoint', () => {
-    it('should delete user when user exists', async () => {
+    it('should delete admin user when user exists', async () => {
       const userA = await prisma.userAccounts.create({
         data: await userFactory({ roles: { isAdmin: true } }),
+      });
+
+      const res = await request(app.getHttpServer())
+        .delete(`/user/`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({
+          id: userA.id,
+        } as IdDTO)
+        .set('Cookie', cookies)
+        .expect(200);
+
+      expect(res.body.success).toEqual(true);
+    });
+
+    it('should delete public user when user exists', async () => {
+      const userA = await prisma.userAccounts.create({
+        data: await userFactory(),
       });
 
       const res = await request(app.getHttpServer())
