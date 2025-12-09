@@ -2,7 +2,7 @@
 // Finds missing translations and automatically translates them using Google Translate API
 // Prints out translations in the JSON translation file format: "key": "translated string"
 // You will need to add the environment variables for Google Translate API access from the api env file, but ensure you do not commit them!
-// Example: `ts-node get-all-machine-translations.ts > any-filename-here.json`
+// Example: `ts-node get-machine-translations.ts > any-filename-here.json`
 import { Translate } from "@google-cloud/translate/build/src/v2"
 
 async function main() {
