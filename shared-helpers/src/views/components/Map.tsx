@@ -94,7 +94,7 @@ const Map = (props: MapProps) => {
 
   return (
     <div className={styles["map"]} ref={setIntersectingElement}>
-      <div className={styles["map-address-popup"]}>
+      <div id="map-address-popup" className={styles["map-address-popup"]}>
         {props.listingName && (
           <Heading priority={3} size="md" className={styles["map-listing-name"]}>
             {props.listingName}
