@@ -29,6 +29,7 @@ export const unitsHeaders = {
   sqFeet: "t.area",
   numBathrooms: "listings.bath",
   floor: "t.floor",
+  accessibilityType: "listings.unit.accessibilityType",
 }
 
 export const unitSummariesTable = (
@@ -734,28 +735,99 @@ export const getUnitTableData = (units: Unit[], unitSummary: UnitSummary) => {
   }
 }
 
+type FormattedUnit = {
+  number?: {
+    cellText: string
+  }
+  sqFeet?: {
+    cellText: string
+    cellSubText: string
+  }
+  numBathrooms?: {
+    cellText: string
+    cellSubText: string
+  }
+  floor?: {
+    cellText: string
+    cellSubText: string
+  }
+  accessibilityType: {
+    cellText: string
+  }
+}
+
 export const getStackedUnitTableData = (units: Unit[], unitSummary: UnitSummary) => {
   const availableUnits = units.filter(
     (unit: Unit) => unit.unitTypes?.name == unitSummary.unitTypes.name
   )
 
+  let adjustedHeaders: { [key: string]: string } = {
+    accessibilityType: "listings.unit.accessibilityType",
+  }
+
+  // Determine which fields have data to display, hide columns if all units have no data
+  const noNumbers = availableUnits.every(
+    (unit) => unit.number === null || unit.number === undefined
+  )
+  const noSqFeet = availableUnits.every((unit) => unit.sqFeet === null || unit.sqFeet === undefined)
+  const noBathrooms = availableUnits.every(
+    (unit) => unit.numBathrooms === null || unit.numBathrooms === undefined
+  )
+  const noFloors = availableUnits.every((unit) => unit.floor === null || unit.floor === undefined)
+
   let floorSection: React.ReactNode
-  const unitsFormatted = availableUnits.map((unit: Unit) => {
-    return {
-      number: { cellText: unit.number ? unit.number : "" },
-      sqFeet: {
-        cellText: unit.sqFeet ? `${unit.sqFeet} ${t("t.sqFeet")}` : "",
+  const unitsFormatted: FormattedUnit[] = availableUnits.map((unit: Unit) => {
+    let unitFormatted: FormattedUnit = {
+      accessibilityType: {
+        cellText: unit.unitAccessibilityPriorityTypes
+          ? t(`listings.unit.accessibilityType.${unit.unitAccessibilityPriorityTypes.name}`)
+          : t("t.n/a"),
       },
-      numBathrooms: {
-        cellText:
-          unit.numBathrooms === 0
-            ? t("listings.unit.sharedBathroom")
-            : unit.numBathrooms
-            ? unit.numBathrooms.toString()
-            : "",
-      },
-      floor: { cellText: unit.floor ? unit.floor.toString() : "" },
     }
+
+    if (!noFloors) {
+      unitFormatted = {
+        floor: {
+          cellText: unit.floor ? unit.floor.toString() : t("t.n/a"),
+          cellSubText: unit.floor ? t("t.floor") : "",
+        },
+        ...unitFormatted,
+      }
+      adjustedHeaders = { floor: "t.floor", ...adjustedHeaders }
+    }
+    if (!noBathrooms) {
+      unitFormatted = {
+        numBathrooms: {
+          cellText:
+            unit.numBathrooms === 0
+              ? t("listings.unit.sharedBathroom")
+              : unit.numBathrooms
+              ? unit.numBathrooms.toString()
+              : t("t.n/a"),
+          cellSubText: unit.numBathrooms ? t("listings.bath") : "",
+        },
+        ...unitFormatted,
+      }
+      adjustedHeaders = { numBathrooms: "listings.bath", ...adjustedHeaders }
+    }
+    if (!noSqFeet) {
+      unitFormatted = {
+        sqFeet: {
+          cellText: unit.sqFeet ? unit.sqFeet : t("t.n/a"),
+          cellSubText: unit.sqFeet ? t("t.sqFeet") : "",
+        },
+        ...unitFormatted,
+      }
+      adjustedHeaders = { sqFeet: "t.area", ...adjustedHeaders }
+    }
+    if (!noNumbers) {
+      unitFormatted = {
+        number: { cellText: unit.number ? unit.number : t("t.n/a") },
+        ...unitFormatted,
+      }
+      adjustedHeaders = { number: "t.unit", ...adjustedHeaders }
+    }
+    return unitFormatted
   })
 
   let areaRangeSection: React.ReactNode
@@ -778,6 +850,7 @@ export const getStackedUnitTableData = (units: Unit[], unitSummary: UnitSummary)
   )
 
   return {
+    adjustedHeaders,
     availableUnits,
     areaRangeSection,
     floorSection,
