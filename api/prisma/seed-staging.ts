@@ -355,6 +355,9 @@ export const stagingSeed = async (
   await prismaClient.amiChart.create({
     data: amiChartFactory(8, lakeviewJurisdiction.id, 2),
   });
+  await prismaClient.amiChart.create({
+    data: amiChartFactory(10, angelopolisJurisdiction.id, 2),
+  });
   // Create map layers
   await prismaClient.mapLayers.create({
     data: mapLayerFactory(
