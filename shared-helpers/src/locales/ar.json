@@ -16,7 +16,7 @@
   "account.application.lottery.rawRankButton": "ما هي المرتبة الخام؟",
   "account.application.lottery.rawRankHeader": "رتبتك الخام",
   "account.application.lottery.resultsHeader": "إليكم نتائج اليانصيب الخاصة بك",
-  "account.application.lottery.resultsHeaderWaitlistLoterry": "إليك نتائج السحب لقائمة الانتظار",
+  "account.application.lottery.resultsHeaderWaitlistLotterry": "إليك نتائج السحب لقائمة الانتظار",
   "account.application.lottery.resultsSubheader": "تم تقديم %{applications} طلبًا لـ %{units} وحدة",
   "account.application.lottery.resultsSubheaderPlural": "تم تقديم %{applications} طلبًا لـ %{units} وحدة",
   "account.application.lottery.resultsSubheaderWaitlistLottery": "تم تقديم %{applications} طلبًا",

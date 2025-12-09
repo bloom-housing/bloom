@@ -16,7 +16,7 @@
   "account.application.lottery.rawRankButton": "কাঁচা পদমর্যাদা কী?",
   "account.application.lottery.rawRankHeader": "আপনার কাঁচা র‍্যাঙ্ক",
   "account.application.lottery.resultsHeader": "এখানে আপনার লটারির ফলাফল দেওয়া হল",
-  "account.application.lottery.resultsHeaderWaitlistLoterry": "এখানে অপেক্ষমাণ তালিকার জন্য আপনার লটারির ফলাফল",
+  "account.application.lottery.resultsHeaderWaitlistLotterry": "এখানে অপেক্ষমাণ তালিকার জন্য আপনার লটারির ফলাফল",
   "account.application.lottery.resultsSubheader": "%{units} ইউনিটের জন্য %{applications} টি আবেদন জমা দেওয়া হয়েছে।",
   "account.application.lottery.resultsSubheaderPlural": "%{units} ইউনিটের জন্য %{applications} টি আবেদন জমা দেওয়া হয়েছে।",
   "account.application.lottery.resultsSubheaderWaitlistLottery": "%{applications}টি আবেদন জমা দেওয়া হয়েছে",

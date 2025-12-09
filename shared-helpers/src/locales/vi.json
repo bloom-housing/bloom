@@ -16,7 +16,7 @@
   "account.application.lottery.rawRankButton": "Xếp hạng thô là gì?",
   "account.application.lottery.rawRankHeader": "Xếp hạng thô của bạn",
   "account.application.lottery.resultsHeader": "Đây là kết quả xổ số của bạn",
-  "account.application.lottery.resultsHeaderWaitlistLoterry": "Đây là kết quả xổ số cho danh sách chờ",
+  "account.application.lottery.resultsHeaderWaitlistLotterry": "Đây là kết quả xổ số cho danh sách chờ",
   "account.application.lottery.resultsSubheader": "%{applications} đơn đăng ký đã được gửi cho %{units} đơn vị",
   "account.application.lottery.resultsSubheaderPlural": "%{applications} đơn xin đã được nộp cho %{units} đơn vị",
   "account.application.lottery.resultsSubheaderWaitlistLottery": "%{applications} đơn đã được nộp",

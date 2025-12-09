@@ -16,7 +16,7 @@
   "account.application.lottery.rawRankButton": "¿Qué es el rango bruto?",
   "account.application.lottery.rawRankHeader": "Tu rango bruto",
   "account.application.lottery.resultsHeader": "Aquí están tus resultados de lotería",
-  "account.application.lottery.resultsHeaderWaitlistLoterry": "Aquí están los resultados de la lotería para la lista de espera",
+  "account.application.lottery.resultsHeaderWaitlistLotterry": "Aquí están los resultados de la lotería para la lista de espera",
   "account.application.lottery.resultsSubheader": "Se enviaron %{applications} solicitudes para %{units} unidad",
   "account.application.lottery.resultsSubheaderPlural": "Se enviaron %{applications} solicitudes para %{units} unidades",
   "account.application.lottery.resultsSubheaderWaitlistLottery": "se presentaron %{applications} solicitudes",
