@@ -22,7 +22,7 @@ type ShowMoreSectionProps = {
 export const ShowMoreSection = (props: ShowMoreSectionProps) => {
   const [expanded, setExpanded] = useState(false)
   return (
-    <div role={"region"} aria-live={"polite"}>
+    <>
       <div id={props.uniqueId}>{expanded ? props.fullContent : props.minimizedContent}</div>
       {!props.disableShowMore && (
         <div className={"seeds-m-bs-2"}>
@@ -37,6 +37,6 @@ export const ShowMoreSection = (props: ShowMoreSectionProps) => {
           </Button>
         </div>
       )}
-    </div>
+    </>
   )
 }

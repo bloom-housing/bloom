@@ -745,11 +745,9 @@ type FormattedUnit = {
   }
   numBathrooms?: {
     cellText: string
-    cellSubText: string
   }
   floor?: {
     cellText: string
-    cellSubText: string
   }
   accessibilityType?: {
     cellText: string
@@ -777,7 +775,6 @@ export const getStackedUnitTableData = (units: Unit[], unitSummary: UnitSummary)
   )
   let unitsFormatted: FormattedUnit[] = []
 
-  let floorSection: React.ReactNode
   if (!(noNumbers && noSqFeet && noBathrooms && noFloors && noA11yTypes)) {
     unitsFormatted = availableUnits.map((unit: Unit) => {
       let unitFormatted: FormattedUnit = {}
@@ -796,7 +793,6 @@ export const getStackedUnitTableData = (units: Unit[], unitSummary: UnitSummary)
         unitFormatted = {
           floor: {
             cellText: unit.floor ? unit.floor.toString() : t("t.n/a"),
-            cellSubText: unit.floor ? t("t.floor") : "",
           },
           ...unitFormatted,
         }
@@ -811,7 +807,6 @@ export const getStackedUnitTableData = (units: Unit[], unitSummary: UnitSummary)
                 : unit.numBathrooms
                 ? unit.numBathrooms.toString()
                 : t("t.n/a"),
-            cellSubText: unit.numBathrooms ? t("listings.bath") : "",
           },
           ...unitFormatted,
         }
@@ -838,11 +833,12 @@ export const getStackedUnitTableData = (units: Unit[], unitSummary: UnitSummary)
     })
   }
 
-  let areaRangeSection: React.ReactNode
+  let areaRangeSection = ""
   if (unitSummary.areaRange?.min || unitSummary.areaRange?.max) {
     areaRangeSection = `, ${formatRange(unitSummary.areaRange)} ${t("t.squareFeet")}`
   }
 
+  let floorSection = ""
   if (unitSummary.floorRange && unitSummary.floorRange.min) {
     floorSection = `, ${formatRange(unitSummary.floorRange, true)} 
           ${unitSummary.floorRange.max > unitSummary.floorRange.min ? t("t.floors") : t("t.floor")}`
@@ -850,10 +846,8 @@ export const getStackedUnitTableData = (units: Unit[], unitSummary: UnitSummary)
 
   const barContent = (
     <div className={"toggle-header-content"}>
-      <strong>{t("listings.unitTypes." + unitSummary.unitTypes.name)}</strong>:&nbsp;
-      {unitsLabel(availableUnits)}
-      {areaRangeSection}
-      {floorSection}
+      <strong>{t("listings.unitTypes." + unitSummary.unitTypes.name)}</strong>
+      {` ${unitsLabel(availableUnits)}${areaRangeSection}${floorSection}`}
     </div>
   )
 
