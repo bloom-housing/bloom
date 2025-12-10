@@ -73,10 +73,10 @@ export class PropertyService {
     return mapTo(Property, propertyRaw);
   }
 
-  async create(propertDto: PropertyCreate) {
+  async create(propertyDto: PropertyCreate) {
     const rawProperty = this.prisma.properties.create({
       data: {
-        ...propertDto,
+        ...propertyDto,
       },
     });
 
