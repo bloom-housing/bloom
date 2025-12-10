@@ -82,4 +82,17 @@ export class PropertyService {
 
     return mapTo(Property, rawProperty);
   }
+
+  async update(propertyDto: PropertyUpdate) {
+    const rawProperty = await this.prisma.properties.update({
+      data: {
+        ...propertyDto,
+      },
+      where: {
+        id: propertyDto.id,
+      },
+    });
+
+    return mapTo(Property, rawProperty);
+  }
 }
