@@ -10,22 +10,18 @@ import {
   Textarea,
 } from "@bloom-housing/ui-components"
 import { Button, Card, Drawer, Grid, Heading } from "@bloom-housing/ui-seeds"
-import {
-  getUrlForListingImage,
-  CLOUDINARY_BUILDING_LABEL,
-  AuthContext,
-} from "@bloom-housing/shared-helpers"
+import { getUrlForListingImage, CLOUDINARY_BUILDING_LABEL } from "@bloom-housing/shared-helpers"
 import {
   Asset,
   ListingImage,
   Jurisdiction,
-  FeatureFlagEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { cloudinaryFileUploader, fieldHasError, getLabel } from "../../../../lib/helpers"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 import styles from "../ListingForm.module.scss"
 
 interface ListingPhotosProps {
+  enableListingImageAltText: boolean
   requiredFields: string[]
   jurisdiction: Jurisdiction
 }
@@ -107,12 +103,9 @@ const ListingPhotoEditor = ({ isOpen, onClose, image, onSave }: ListingPhotoEdit
 
 const ListingPhotos = (props: ListingPhotosProps) => {
   const formMethods = useFormContext()
-  const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, watch, errors, clearErrors } = formMethods
-
-  const jurisdictionId = watch("jurisdictions.id")
 
   const { fields, append, remove } = useFieldArray({
     name: "listingImages",
@@ -120,10 +113,6 @@ const ListingPhotos = (props: ListingPhotosProps) => {
   const listingFormPhotos: ListingImage[] = watch("listingImages").sort((imageA, imageB) => {
     return imageA.ordinal - imageB.ordinal
   })
-
-  const enableListingImageAltText =
-    doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableListingImageAltText, jurisdictionId) &&
-    jurisdictionId
 
   const saveImageFields = (images: ListingImage[]) => {
     remove(fields.map((item, index) => index))
@@ -166,10 +155,10 @@ const ListingPhotos = (props: ListingPhotosProps) => {
     setLatestUpload({ id: "", url: "" })
     setProgressValue(0)
 
-    if (enableListingImageAltText) {
+    if (props.enableListingImageAltText) {
       setEditingPhotoIndex(newImages.length - 1)
     }
-  }, [drawerImages, latestUpload, enableListingImageAltText])
+  }, [drawerImages, latestUpload, props.enableListingImageAltText])
 
   useEffect(() => {
     if (latestUpload.id != "") {
@@ -182,7 +171,7 @@ const ListingPhotos = (props: ListingPhotosProps) => {
    */
   const photoTableHeaders = {
     preview: "t.preview",
-    ...(enableListingImageAltText
+    ...(props.enableListingImageAltText
       ? { description: "listings.sections.photo.imageDescription" }
       : {}),
     actions: "",
@@ -198,14 +187,14 @@ const ListingPhotos = (props: ListingPhotosProps) => {
           </TableThumbnail>
         ),
       },
-      ...(enableListingImageAltText
+      ...(props.enableListingImageAltText
         ? {
             description: {
               content: image.description || "",
             },
           }
         : {}),
-      ...(!enableListingImageAltText
+      ...(!props.enableListingImageAltText
         ? {
             actions: {
               content: (
@@ -233,7 +222,7 @@ const ListingPhotos = (props: ListingPhotosProps) => {
   const drawerTableHeaders = {
     ordinal: "t.order",
     preview: "t.preview",
-    ...(enableListingImageAltText
+    ...(props.enableListingImageAltText
       ? { description: "listings.sections.photo.imageDescription" }
       : {}),
     actions: "",
@@ -261,7 +250,7 @@ const ListingPhotos = (props: ListingPhotosProps) => {
           ),
         },
         fileName: { content: image.fileId.split("/").slice(-1).join() },
-        ...(enableListingImageAltText
+        ...(props.enableListingImageAltText
           ? {
               description: {
                 content: item.description || "",
@@ -271,7 +260,7 @@ const ListingPhotos = (props: ListingPhotosProps) => {
         actions: {
           content: (
             <div className="flex gap-2">
-              {enableListingImageAltText && (
+              {props.enableListingImageAltText && (
                 <Button
                   variant="text"
                   className="ml-0"
@@ -303,7 +292,7 @@ const ListingPhotos = (props: ListingPhotosProps) => {
         },
       }
     })
-  }, [drawerImages, enableListingImageAltText])
+  }, [drawerImages, props.enableListingImageAltText])
 
   /*
    Pass the file for the dropzone callback along to the uploader

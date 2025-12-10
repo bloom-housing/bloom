@@ -430,7 +430,7 @@
   "listings.sections.photo.helperTextLimit": "Up to 10 uploaded images allowed.",
   "listings.sections.photo.helperTextLimits": "At least %{smart_count} image is required, and up to 10 images are allowed. |||| At least %{smart_count} images are required, and up to 10 images are allowed.",
   "listings.sections.photo.addImageDescription": "Add image description",
-  "listings.sections.photo.altTextHelper": "Write a concise description of the image (under 125 characters). Example: “Exterior view of a nine-story apartment building.”",
+  "listings.sections.photo.altTextHelper": "Write a concise description of the image. Example: “Exterior view of a nine-story apartment building.”",
   "listings.sections.photo.editPhoto": "Edit photo",
   "listings.sections.photo.imageDescription": "Image description",
   "listings.sections.photo.imageDescriptionAltText": "Image description (alt text)",

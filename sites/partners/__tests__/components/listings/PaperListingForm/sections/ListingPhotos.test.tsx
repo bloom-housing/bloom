@@ -1,9 +1,8 @@
 import React from "react"
+import "@testing-library/jest-dom"
 import { FormProvider, useForm } from "react-hook-form"
 import { render, screen, within } from "@testing-library/react"
-import { AuthContext } from "@bloom-housing/shared-helpers"
 import { jurisdiction, listing } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
-import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { setupServer } from "msw/lib/node"
 import { formDefaults, FormListing } from "../../../../../src/lib/listings/formTypes"
 import ListingPhotos from "../../../../../src/components/listings/PaperListingForm/sections/ListingPhotos"
@@ -11,10 +10,13 @@ import { mockNextRouter } from "../../../../testUtils"
 import userEvent from "@testing-library/user-event"
 import * as helpers from "../../../../../src/lib/helpers"
 
-jest.mock("../../../../../src/lib/helpers", () => ({
-  ...jest.requireActual("../../../../../src/lib/helpers"),
-  cloudinaryFileUploader: jest.fn(),
-}))
+jest.mock("../../../../../src/lib/helpers", () => {
+  const actual = jest.requireActual<typeof helpers>("../../../../../src/lib/helpers")
+  return {
+    ...actual,
+    cloudinaryFileUploader: jest.fn(),
+  }
+})
 
 const FormComponent = ({ children, values }: { values?: FormListing; children }) => {
   const formMethods = useForm<FormListing>({
@@ -41,13 +43,14 @@ afterAll(() => server.close())
 describe("<ListingPhotos>", () => {
   describe("should render empty section when data is missing", () => {
     it("listing images are not required", () => {
-      const doJurisdictionsHaveFeatureFlagOn = jest.fn(() => false)
       render(
-        <AuthContext.Provider value={{ doJurisdictionsHaveFeatureFlagOn }}>
-          <FormComponent>
-            <ListingPhotos requiredFields={[]} jurisdiction={jurisdiction} />
-          </FormComponent>
-        </AuthContext.Provider>
+        <FormComponent>
+          <ListingPhotos
+            enableListingImageAltText={false}
+            requiredFields={[]}
+            jurisdiction={jurisdiction}
+          />
+        </FormComponent>
       )
 
       expect(screen.getByRole("heading", { level: 2, name: "Listing photos" })).toBeInTheDocument()
@@ -62,16 +65,14 @@ describe("<ListingPhotos>", () => {
     })
 
     it("at least one image is required", () => {
-      const doJurisdictionsHaveFeatureFlagOn = jest.fn(() => false)
       render(
-        <AuthContext.Provider value={{ doJurisdictionsHaveFeatureFlagOn }}>
-          <FormComponent>
-            <ListingPhotos
-              requiredFields={["listingImages"]}
-              jurisdiction={{ ...jurisdiction, minimumListingPublishImagesRequired: 1 }}
-            />
-          </FormComponent>
-        </AuthContext.Provider>
+        <FormComponent>
+          <ListingPhotos
+            enableListingImageAltText={false}
+            requiredFields={["listingImages"]}
+            jurisdiction={{ ...jurisdiction, minimumListingPublishImagesRequired: 1 }}
+          />
+        </FormComponent>
       )
 
       expect(screen.getByRole("heading", { level: 2, name: "Listing photos" })).toBeInTheDocument()
@@ -86,16 +87,14 @@ describe("<ListingPhotos>", () => {
     })
 
     it("more than one image is required", () => {
-      const doJurisdictionsHaveFeatureFlagOn = jest.fn(() => false)
       render(
-        <AuthContext.Provider value={{ doJurisdictionsHaveFeatureFlagOn }}>
-          <FormComponent>
-            <ListingPhotos
-              requiredFields={["listingImages"]}
-              jurisdiction={{ ...jurisdiction, minimumListingPublishImagesRequired: 3 }}
-            />
-          </FormComponent>
-        </AuthContext.Provider>
+        <FormComponent>
+          <ListingPhotos
+            enableListingImageAltText={false}
+            requiredFields={["listingImages"]}
+            jurisdiction={{ ...jurisdiction, minimumListingPublishImagesRequired: 3 }}
+          />
+        </FormComponent>
       )
 
       expect(screen.getByRole("heading", { level: 2, name: "Listing photos" })).toBeInTheDocument()
@@ -110,42 +109,40 @@ describe("<ListingPhotos>", () => {
     })
 
     it("update button label when images have already been added", () => {
-      const doJurisdictionsHaveFeatureFlagOn = jest.fn(() => false)
       render(
-        <AuthContext.Provider value={{ doJurisdictionsHaveFeatureFlagOn }}>
-          <FormComponent
-            values={{
-              ...listing,
-              listingImages: [
-                {
-                  assets: {
-                    createdAt: new Date(),
-                    updatedAt: new Date(),
-                    fileId: "file_1_id",
-                    id: "asset_1_id",
-                    label: "Asset 1 Label",
-                  },
-                  ordinal: 1,
+        <FormComponent
+          values={{
+            ...listing,
+            listingImages: [
+              {
+                assets: {
+                  createdAt: new Date(),
+                  updatedAt: new Date(),
+                  fileId: "file_1_id",
+                  id: "asset_1_id",
+                  label: "Asset 1 Label",
                 },
-                {
-                  assets: {
-                    createdAt: new Date(),
-                    updatedAt: new Date(),
-                    fileId: "file_2_id",
-                    id: "asset_2_id",
-                    label: "Asset 2 Label",
-                  },
-                  ordinal: 2,
+                ordinal: 1,
+              },
+              {
+                assets: {
+                  createdAt: new Date(),
+                  updatedAt: new Date(),
+                  fileId: "file_2_id",
+                  id: "asset_2_id",
+                  label: "Asset 2 Label",
                 },
-              ],
-            }}
-          >
-            <ListingPhotos
-              requiredFields={["listingImages"]}
-              jurisdiction={{ ...jurisdiction, minimumListingPublishImagesRequired: 3 }}
-            />
-          </FormComponent>
-        </AuthContext.Provider>
+                ordinal: 2,
+              },
+            ],
+          }}
+        >
+          <ListingPhotos
+            enableListingImageAltText={false}
+            requiredFields={["listingImages"]}
+            jurisdiction={{ ...jurisdiction, minimumListingPublishImagesRequired: 3 }}
+          />
+        </FormComponent>
       )
 
       const imagesTable = screen.getByRole("table")
@@ -179,16 +176,14 @@ describe("<ListingPhotos>", () => {
 
   describe("should open images drawer on Add Button click", () => {
     it("should render table with proper description when images are not required", async () => {
-      const doJurisdictionsHaveFeatureFlagOn = jest.fn(() => false)
       render(
-        <AuthContext.Provider value={{ doJurisdictionsHaveFeatureFlagOn }}>
-          <FormComponent>
-            <ListingPhotos
-              requiredFields={[]}
-              jurisdiction={{ ...jurisdiction, minimumListingPublishImagesRequired: 3 }}
-            />
-          </FormComponent>
-        </AuthContext.Provider>
+        <FormComponent>
+          <ListingPhotos
+            enableListingImageAltText={false}
+            requiredFields={[]}
+            jurisdiction={{ ...jurisdiction, minimumListingPublishImagesRequired: 3 }}
+          />
+        </FormComponent>
       )
 
       const addButton = screen.getByRole("button", { name: "Add photos" })
@@ -212,16 +207,14 @@ describe("<ListingPhotos>", () => {
     })
 
     it("should render table with proper description when one image is required", async () => {
-      const doJurisdictionsHaveFeatureFlagOn = jest.fn(() => false)
       render(
-        <AuthContext.Provider value={{ doJurisdictionsHaveFeatureFlagOn }}>
-          <FormComponent>
-            <ListingPhotos
-              requiredFields={["listingImages"]}
-              jurisdiction={{ ...jurisdiction, minimumListingPublishImagesRequired: 1 }}
-            />
-          </FormComponent>
-        </AuthContext.Provider>
+        <FormComponent>
+          <ListingPhotos
+            enableListingImageAltText={false}
+            requiredFields={["listingImages"]}
+            jurisdiction={{ ...jurisdiction, minimumListingPublishImagesRequired: 1 }}
+          />
+        </FormComponent>
       )
 
       const addButton = screen.getByRole("button", { name: "Add photos" })
@@ -245,16 +238,14 @@ describe("<ListingPhotos>", () => {
     })
 
     it("should render table with proper description when more than one images is required", async () => {
-      const doJurisdictionsHaveFeatureFlagOn = jest.fn(() => true)
       render(
-        <AuthContext.Provider value={{ doJurisdictionsHaveFeatureFlagOn }}>
-          <FormComponent>
-            <ListingPhotos
-              requiredFields={["listingImages"]}
-              jurisdiction={{ ...jurisdiction, minimumListingPublishImagesRequired: 3 }}
-            />
-          </FormComponent>
-        </AuthContext.Provider>
+        <FormComponent>
+          <ListingPhotos
+            enableListingImageAltText={false}
+            requiredFields={["listingImages"]}
+            jurisdiction={{ ...jurisdiction, minimumListingPublishImagesRequired: 3 }}
+          />
+        </FormComponent>
       )
 
       const addButton = screen.getByRole("button", { name: "Add photos" })
@@ -304,25 +295,21 @@ describe("<ListingPhotos>", () => {
     ]
 
     it("shows description column and hides delete buttons when enabled", () => {
-      const doJurisdictionsHaveFeatureFlagOn = jest.fn(() => true)
       render(
-        <AuthContext.Provider value={{ doJurisdictionsHaveFeatureFlagOn }}>
-          <FormComponent
-            values={{
-              ...formDefaults,
-              ...listing,
-              jurisdictions: { id: "jurisdiction-id" },
-              listingImages,
-            }}
-          >
-            <ListingPhotos requiredFields={["listingImages"]} jurisdiction={jurisdiction} />
-          </FormComponent>
-        </AuthContext.Provider>
-      )
-
-      expect(doJurisdictionsHaveFeatureFlagOn).toHaveBeenCalledWith(
-        FeatureFlagEnum.enableListingImageAltText,
-        "jurisdiction-id"
+        <FormComponent
+          values={{
+            ...formDefaults,
+            ...listing,
+            jurisdictions: { id: "jurisdiction-id" },
+            listingImages,
+          }}
+        >
+          <ListingPhotos
+            enableListingImageAltText={true}
+            requiredFields={["listingImages"]}
+            jurisdiction={jurisdiction}
+          />
+        </FormComponent>
       )
 
       const imagesTable = screen.getByRole("table")
@@ -342,20 +329,21 @@ describe("<ListingPhotos>", () => {
     })
 
     it("opens alt text editor from drawer when enabled", async () => {
-      const doJurisdictionsHaveFeatureFlagOn = jest.fn(() => true)
       render(
-        <AuthContext.Provider value={{ doJurisdictionsHaveFeatureFlagOn }}>
-          <FormComponent
-            values={{
-              ...formDefaults,
-              ...listing,
-              jurisdictions: { id: "jurisdiction-id" },
-              listingImages,
-            }}
-          >
-            <ListingPhotos requiredFields={["listingImages"]} jurisdiction={jurisdiction} />
-          </FormComponent>
-        </AuthContext.Provider>
+        <FormComponent
+          values={{
+            ...formDefaults,
+            ...listing,
+            jurisdictions: { id: "jurisdiction-id" },
+            listingImages,
+          }}
+        >
+          <ListingPhotos
+            enableListingImageAltText={true}
+            requiredFields={["listingImages"]}
+            jurisdiction={jurisdiction}
+          />
+        </FormComponent>
       )
 
       const editPhotosButton = screen.getByRole("button", { name: "Edit photos" })
@@ -377,7 +365,6 @@ describe("<ListingPhotos>", () => {
     })
 
     it("opens alt text drawer after uploading a new photo when enabled", async () => {
-      const doJurisdictionsHaveFeatureFlagOn = jest.fn(() => true)
       const mockCloudinaryUploader = helpers.cloudinaryFileUploader as jest.MockedFunction<
         typeof helpers.cloudinaryFileUploader
       >
@@ -390,18 +377,20 @@ describe("<ListingPhotos>", () => {
       )
 
       render(
-        <AuthContext.Provider value={{ doJurisdictionsHaveFeatureFlagOn }}>
-          <FormComponent
-            values={{
-              ...formDefaults,
-              ...listing,
-              jurisdictions: { id: "jurisdiction-id" },
-              listingImages: [],
-            }}
-          >
-            <ListingPhotos requiredFields={["listingImages"]} jurisdiction={jurisdiction} />
-          </FormComponent>
-        </AuthContext.Provider>
+        <FormComponent
+          values={{
+            ...formDefaults,
+            ...listing,
+            jurisdictions: { id: "jurisdiction-id" },
+            listingImages: [],
+          }}
+        >
+          <ListingPhotos
+            enableListingImageAltText={true}
+            requiredFields={["listingImages"]}
+            jurisdiction={jurisdiction}
+          />
+        </FormComponent>
       )
 
       const addPhotosButton = screen.getByRole("button", { name: "Add photos" })
