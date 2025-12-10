@@ -1759,6 +1759,22 @@ export class ApplicationsService {
     })
   }
   /**
+   * trigger the remove PII cron job
+   */
+  removePiiCronJob(options: IRequestOptions = {}): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/applications/removePIICronJob"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = null
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
    * Update application by id
    */
   update(
@@ -1831,7 +1847,7 @@ export class UserService {
   delete(
     params: {
       /** requestBody */
-      body?: IdDTO
+      body?: UserDeleteDTO
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<SuccessDTO> {
@@ -1934,6 +1950,22 @@ export class UserService {
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
 
       let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * trigger the delete inactive users cron job
+   */
+  deleteInactiveUsersCronJob(options: IRequestOptions = {}): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user/deleteInactiveUsersCronJob"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = null
 
       configs.data = data
 
@@ -7210,6 +7242,14 @@ export interface PaginatedUser {
 
   /**  */
   meta: PaginationMeta
+}
+
+export interface UserDeleteDTO {
+  /**  */
+  id: string
+
+  /**  */
+  shouldRemoveApplication?: boolean
 }
 
 export interface UserCreate {
