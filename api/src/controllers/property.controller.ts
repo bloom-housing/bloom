@@ -63,6 +63,8 @@ export class PropertyController {
     summary: 'Add a new property entry',
     operationId: 'add',
   })
+  @UsePipes(ValidationPipe)
+  @ApiOkResponse({ type: Property })
   public async addProperty(@Body() propertyDto: PropertyCreate) {
     return await this.propertyService.create(propertyDto);
   }
