@@ -1574,7 +1574,8 @@ describe("listing data", () => {
           <AuthContext.Provider
             value={{
               profile: { ...user, jurisdictions: [], listings: [] },
-              doJurisdictionsHaveFeatureFlagOn: () => true,
+              doJurisdictionsHaveFeatureFlagOn: (featureFlag: FeatureFlagEnum) =>
+                featureFlag !== FeatureFlagEnum.enableReferralQuestionUnits,
             }}
           >
             <ListingContext.Provider

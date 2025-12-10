@@ -34,6 +34,7 @@ export enum FeatureFlagEnum {
   enablePartnerDemographics = 'enablePartnerDemographics',
   enablePartnerSettings = 'enablePartnerSettings',
   enableProperties = 'enableProperties',
+  enableReferralQuestionUnits = 'enableReferralQuestionUnits',
   enableRegions = 'enableRegions',
   enableSection8Question = 'enableSection8Question',
   enableSingleUseCode = 'enableSingleUseCode',
@@ -210,6 +211,10 @@ export const featureFlagMap: {
   {
     name: FeatureFlagEnum.enableProperties,
     description: 'When true, the properties feature is enabled',
+  },
+  {
+    name: FeatureFlagEnum.enableReferralQuestionUnits,
+    description: 'when true, updates the the referral details question labels',
   },
   {
     name: FeatureFlagEnum.enableRegions,
