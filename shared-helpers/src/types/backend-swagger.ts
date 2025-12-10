@@ -2126,6 +2126,22 @@ export class UserService {
     })
   }
   /**
+   * trigger the user warn of deletion cron job
+   */
+  userWarnCronJob(options: IRequestOptions = {}): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user/userWarnCronJob"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = null
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
    * Update user
    */
   update(

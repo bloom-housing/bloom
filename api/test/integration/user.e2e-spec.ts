@@ -1,5 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication, Logger } from '@nestjs/common';
+import { LanguagesEnum } from '@prisma/client';
 import { randomUUID } from 'crypto';
 import { stringify } from 'qs';
 import request from 'supertest';
@@ -42,6 +43,7 @@ describe('User Controller Tests', () => {
     forgotPassword: jest.fn(),
     sendMfaCode: jest.fn(),
     sendCSV: jest.fn(),
+    warnOfAccountRemoval: jest.fn(),
   };
 
   beforeEach(() => {
@@ -491,6 +493,9 @@ describe('User Controller Tests', () => {
     });
 
     it('should fail to verify token when incorrect user id is provided', async () => {
+      const mockConsoleError = jest
+        .spyOn(console, 'error')
+        .mockImplementation();
       const userA = await prisma.userAccounts.create({
         data: await userFactory(),
       });
@@ -532,6 +537,10 @@ describe('User Controller Tests', () => {
       });
 
       expect(userPostResend.hitConfirmationUrl).toBeNull();
+      expect(mockConsoleError).toHaveBeenCalledWith(
+        'isUserConfirmationTokenValid error = ',
+        expect.anything(),
+      );
     });
 
     it('should fail to verify token when token mismatch', async () => {
@@ -1044,6 +1053,94 @@ describe('User Controller Tests', () => {
       expect(updatedApplication.applicant.lastName).toBeNull();
       expect(updatedApplication.applicationsMailingAddress.street).toBeNull();
       expect(updatedApplication.applicationsMailingAddress.city).not.toBeNull();
+    });
+  });
+
+  describe('warnUserOfDeletionCronJob endpoint', () => {
+    let userA;
+    let userB;
+    let userC;
+    let userD;
+    let userE;
+    beforeAll(async () => {
+      process.env.USERS_DAYS_TILL_EXPIRY = '1095';
+      // Public User that should be warned
+      userA = await prisma.userAccounts.create({
+        data: await userFactory({
+          confirmedAt: new Date(),
+          lastLoginAt: dayjs(new Date()).subtract(4, 'years').toDate(),
+        }),
+      });
+      // User that has logged in recently
+      userB = await prisma.userAccounts.create({
+        data: await userFactory({
+          confirmedAt: new Date(),
+          lastLoginAt: dayjs(new Date()).subtract(4, 'days').toDate(),
+        }),
+      });
+      // Partner user
+      userC = await prisma.userAccounts.create({
+        data: await userFactory({
+          confirmedAt: new Date(),
+          roles: { isAdmin: true },
+          lastLoginAt: dayjs(new Date()).subtract(1200, 'days').toDate(),
+        }),
+      });
+      // User that has already been warned
+      userD = await prisma.userAccounts.create({
+        data: await userFactory({
+          confirmedAt: new Date(),
+          lastLoginAt: dayjs(new Date()).subtract(4, 'years').toDate(),
+          wasWarnedOfDeletion: true,
+        }),
+      });
+      // Public User that should be warned in spanish
+      userE = await prisma.userAccounts.create({
+        data: await userFactory({
+          confirmedAt: new Date(),
+          lastLoginAt: dayjs(new Date()).subtract(4, 'years').toDate(),
+          language: LanguagesEnum.es,
+        }),
+      });
+    });
+    it('should send warning email to only public users over the date', async () => {
+      const mockWarnOfAccountRemoval = jest.spyOn(
+        testEmailService,
+        'warnOfAccountRemoval',
+      );
+      const res = await request(app.getHttpServer())
+        .put(`/user/userWarnCronJob`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .expect(200);
+      expect(res.text).toBe('{"success":true}');
+      const updatedUserA = await prisma.userAccounts.findFirst({
+        where: { id: userA.id },
+      });
+      expect(updatedUserA.wasWarnedOfDeletion).toBe(true);
+      const updatedUserB = await prisma.userAccounts.findFirst({
+        where: { id: userB.id },
+      });
+      expect(updatedUserB.wasWarnedOfDeletion).toBe(false);
+      const updatedUserC = await prisma.userAccounts.findFirst({
+        where: { id: userC.id },
+      });
+      expect(updatedUserC.wasWarnedOfDeletion).toBe(false);
+      const updatedUserD = await prisma.userAccounts.findFirst({
+        where: { id: userD.id },
+      });
+      expect(updatedUserD.wasWarnedOfDeletion).toBe(true);
+      expect(mockWarnOfAccountRemoval.mock.calls.length).toBe(2);
+      expect(mockWarnOfAccountRemoval).toBeCalledWith(
+        expect.objectContaining({ email: userA.email, id: userA.id }),
+      );
+      expect(mockWarnOfAccountRemoval).toBeCalledWith(
+        expect.objectContaining({
+          email: userE.email,
+          id: userE.id,
+          language: LanguagesEnum.es,
+        }),
+      );
     });
   });
 });
