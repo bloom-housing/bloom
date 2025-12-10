@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication } from '@nestjs/common';
+import { INestApplication, Logger } from '@nestjs/common';
 import { randomUUID } from 'crypto';
 import { stringify } from 'qs';
 import request from 'supertest';
@@ -23,6 +23,7 @@ import { EmailService } from '../../src/services/email.service';
 import { Login } from '../../src/dtos/auth/login.dto';
 import { RequestMfaCode } from '../../src/dtos/mfa/request-mfa-code.dto';
 import { ModificationEnum } from '../../src/enums/shared/modification-enum';
+import dayjs from 'dayjs';
 
 describe('User Controller Tests', () => {
   let app: INestApplication;
@@ -30,6 +31,7 @@ describe('User Controller Tests', () => {
   let userService: UserService;
   let emailService: EmailService;
   let cookies = '';
+  let logger: Logger;
 
   const invitePartnerUserMock = jest.fn();
   const testEmailService = {
@@ -53,6 +55,12 @@ describe('User Controller Tests', () => {
     })
       .overrideProvider(EmailService)
       .useValue(testEmailService)
+      .overrideProvider(Logger)
+      .useValue({
+        log: jest.fn(),
+        warn: jest.fn(),
+        error: jest.fn(),
+      })
       .compile();
 
     app = moduleFixture.createNestApplication();
@@ -60,6 +68,7 @@ describe('User Controller Tests', () => {
     prisma = moduleFixture.get<PrismaService>(PrismaService);
     userService = moduleFixture.get<UserService>(UserService);
     emailService = moduleFixture.get<EmailService>(EmailService);
+    logger = moduleFixture.get<Logger>(Logger);
 
     await app.init();
 
@@ -959,6 +968,82 @@ describe('User Controller Tests', () => {
       expect(res.body.message).toEqual(
         `listingId ${invalidId} was requested but not found`,
       );
+    });
+  });
+
+  describe('delete after inactivity endpoint', () => {
+    it('should delete user after inactivity', async () => {
+      process.env.USERS_DAYS_TILL_EXPIRY = '1095';
+      const publicUserStillActive = await prisma.userAccounts.create({
+        data: await userFactory({
+          lastLoginAt: dayjs(new Date()).subtract(60, 'days').toDate(),
+          wasWarnedOfDeletion: false,
+        }),
+      });
+      const partnerUserInactive = await prisma.userAccounts.create({
+        data: await userFactory({
+          lastLoginAt: dayjs(new Date()).subtract(6000, 'days').toDate(),
+          wasWarnedOfDeletion: false,
+          roles: { isPartner: true },
+        }),
+      });
+      const publicUserInactiveNotWarned = await prisma.userAccounts.create({
+        data: await userFactory({
+          lastLoginAt: dayjs(new Date()).subtract(1100, 'days').toDate(),
+          wasWarnedOfDeletion: false,
+        }),
+      });
+      const publicUserInactiveWarned = await prisma.userAccounts.create({
+        data: await userFactory({
+          lastLoginAt: dayjs(new Date()).subtract(1100, 'days').toDate(),
+          wasWarnedOfDeletion: true,
+        }),
+      });
+      const data = await applicationFactory({
+        userId: publicUserInactiveWarned.id,
+      });
+      const application = await prisma.applications.create({
+        data,
+      });
+      await request(app.getHttpServer())
+        .put(`/user/deleteInactiveUsersCronJob`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .expect(200);
+
+      const deletedUser = await prisma.userAccounts.findFirst({
+        where: { id: publicUserInactiveWarned.id },
+      });
+      expect(deletedUser).toBeNull();
+
+      const nonDeletedUsers = await prisma.userAccounts.findMany({
+        where: {
+          id: {
+            in: [
+              publicUserInactiveNotWarned.id,
+              publicUserStillActive.id,
+              partnerUserInactive.id,
+            ],
+          },
+        },
+      });
+      expect(nonDeletedUsers).toHaveLength(3);
+      expect(logger.warn).toBeCalledWith(
+        `Unable to delete user ${publicUserInactiveNotWarned.id} because they have not been warned by email`,
+      );
+      // Validate PII was removed from applications
+      const updatedApplication = await prisma.applications.findFirst({
+        include: { applicant: true, applicationsMailingAddress: true },
+        where: { id: application.id },
+      });
+      expect(updatedApplication.additionalPhoneNumber).toBeNull();
+      expect(updatedApplication.applicant.birthDay).toBeNull();
+      expect(updatedApplication.applicant.birthMonth).toBeNull();
+      expect(updatedApplication.applicant.birthYear).toBeNull();
+      expect(updatedApplication.applicant.firstName).toBeNull();
+      expect(updatedApplication.applicant.lastName).toBeNull();
+      expect(updatedApplication.applicationsMailingAddress.street).toBeNull();
+      expect(updatedApplication.applicationsMailingAddress.city).not.toBeNull();
     });
   });
 });
