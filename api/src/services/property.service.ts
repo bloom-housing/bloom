@@ -13,6 +13,7 @@ import {
 import { mapTo } from 'src/utilities/mapTo';
 import Property from 'src/dtos/properties/property.dto';
 import { PagiantedPropertyDto } from 'src/dtos/properties/paginated-property.dto';
+import PropertyCreate from 'src/dtos/properties/property-create.dto';
 
 @Injectable()
 export class PropertyService {
@@ -70,5 +71,15 @@ export class PropertyService {
     }
 
     return mapTo(Property, propertyRaw);
+  }
+
+  async create(propertDto: PropertyCreate) {
+    const rawProperty = this.prisma.properties.create({
+      data: {
+        ...propertDto,
+      },
+    });
+
+    return mapTo(Property, rawProperty);
   }
 }

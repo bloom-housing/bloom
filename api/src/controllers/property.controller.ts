@@ -12,6 +12,7 @@ import { PermissionTypeDecorator } from 'src/decorators/permission-type.decorato
 import { PagiantedPropertyDto } from 'src/dtos/properties/paginated-property.dto';
 import { PropertyQueryParams } from 'src/dtos/properties/property-query-params.dto';
 import { PropertyService } from 'src/services/property.service';
+import PropertyCreate from 'src/dtos/properties/property-create.dto';
 @Controller('properties')
 @ApiTags('properties')
 @PermissionTypeDecorator('property')
@@ -49,5 +50,14 @@ export class PropertyController {
     @Body() queryParams: PropertyQueryParams,
   ) {
     return await this.propertyService.list(queryParams);
+  }
+
+  @Post()
+  @ApiOperation({
+    summary: 'Add a new property entry',
+    operationId: 'add',
+  })
+  public async addProperty(@Body() propertyDto: PropertyCreate) {
+    return await this.propertyService.create(propertyDto);
   }
 }
