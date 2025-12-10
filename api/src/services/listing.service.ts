@@ -1296,9 +1296,9 @@ export class ListingService implements OnModuleInit {
       dto.unitGroups,
     );
 
-    // Remove requiredFields property before saving to database
+    // Remove requiredFields and minimumImagesRequired properties before saving to database
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { requiredFields, ...listingData } = dto;
+    const { requiredFields, minimumImagesRequired, ...listingData } = dto;
 
     const rawListing = await this.prisma.listings.create({
       include: includeViews.full,
@@ -1969,9 +1969,9 @@ export class ListingService implements OnModuleInit {
     update a listing
   */
   async update(dto: ListingUpdate, requestingUser: User): Promise<Listing> {
-    // Remove requiredFields property before saving to database
+    // Remove requiredFields and minimumImagesRequired properties before saving to database
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { requiredFields, ...incomingDto } = dto;
+    const { requiredFields, minimumImagesRequired, ...incomingDto } = dto;
     const storedListing = await this.findOrThrow(
       incomingDto.id,
       ListingViews.full,
