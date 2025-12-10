@@ -190,6 +190,7 @@ export const stagingSeed = async (
         'leasingAgentPhone',
         'listingFileNumber',
         'listingImages',
+        'listingImages.description',
         'listingsBuildingAddress',
         'name',
         'paperApplication',

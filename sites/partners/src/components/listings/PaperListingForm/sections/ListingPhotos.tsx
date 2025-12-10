@@ -20,7 +20,12 @@ import {
   ListingImage,
   FeatureFlagEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { cloudinaryFileUploader, fieldHasError, getLabel } from "../../../../lib/helpers"
+import {
+  cloudinaryFileUploader,
+  fieldHasError,
+  fieldIsRequired,
+  getLabel,
+} from "../../../../lib/helpers"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 import styles from "../ListingForm.module.scss"
 
@@ -33,23 +38,50 @@ interface ListingPhotoEditorProps {
   onClose: () => void
   image?: ListingImage
   onSave: (description: string) => void
+  requiredFields: string[]
 }
 
-const ListingPhotoEditor = ({ isOpen, onClose, image, onSave }: ListingPhotoEditorProps) => {
+const ListingPhotoEditor = ({
+  isOpen,
+  onClose,
+  image,
+  onSave,
+  requiredFields,
+}: ListingPhotoEditorProps) => {
   const [description, setDescription] = useState("")
+  const [descriptionError, setDescriptionError] = useState<string | null>(null)
+
+  const descriptionIsRequired = fieldIsRequired("listingImages.description", requiredFields)
 
   useEffect(() => {
     if (isOpen && image) {
       setDescription(image.description || "")
+      setDescriptionError(null)
     }
   }, [isOpen, image])
 
   if (!image) return null
 
+  const handleSave = () => {
+    const trimmed = description?.trim() ?? ""
+    if (descriptionIsRequired && trimmed.length === 0) {
+      setDescriptionError(t("errors.requiredFieldError"))
+      return
+    }
+    setDescriptionError(null)
+    onSave(trimmed)
+  }
+
+  const handleClose = () => {
+    setDescription(image?.description || "")
+    setDescriptionError(null)
+    onClose()
+  }
+
   return (
     <Drawer
       isOpen={isOpen}
-      onClose={onClose}
+      onClose={handleClose}
       ariaLabelledBy="listing-photo-edit-drawer-header"
       nested={true}
     >
@@ -66,15 +98,24 @@ const ListingPhotoEditor = ({ isOpen, onClose, image, onSave }: ListingPhotoEdit
           <Card.Section>
             <div>
               <Textarea
-                label={t("listings.sections.photo.imageDescriptionAltText")}
+                label={getLabel(
+                  "listingImages.description",
+                  requiredFields,
+                  t("listings.sections.photo.imageDescriptionAltText")
+                )}
                 placeholder={""}
                 name={"imageDescription"}
                 id={"image-description"}
                 fullWidth={true}
                 rows={2}
                 inputProps={{
-                  onChange: (e) => setDescription(e.target.value),
+                  onChange: (e) => {
+                    setDescription(e.target.value)
+                    descriptionError && setDescriptionError(null)
+                  },
+                  "aria-required": descriptionIsRequired,
                 }}
+                errorMessage={descriptionError ?? undefined}
                 defaultValue={image.description || ""}
                 note={t("listings.sections.photo.altTextHelper")}
               />
@@ -95,7 +136,7 @@ const ListingPhotoEditor = ({ isOpen, onClose, image, onSave }: ListingPhotoEdit
         </Card>
       </Drawer.Content>
       <Drawer.Footer>
-        <Button variant="primary" type="button" size="sm" onClick={() => onSave(description)}>
+        <Button variant="primary" type="button" size="sm" onClick={handleSave}>
           {t("t.save")}
         </Button>
       </Drawer.Footer>
@@ -139,6 +180,7 @@ const ListingPhotos = (props: ListingPhotosProps) => {
    */
   const [drawerState, setDrawerState] = useState(false)
   const [editingPhotoIndex, setEditingPhotoIndex] = useState<number | null>(null)
+  const [pendingNewImage, setPendingNewImage] = useState<ListingImage | null>(null)
 
   const [progressValue, setProgressValue] = useState(0)
   const [latestUpload, setLatestUpload] = useState({
@@ -151,6 +193,7 @@ const ListingPhotos = (props: ListingPhotosProps) => {
     setDrawerState(false)
     setDrawerImages([])
     setEditingPhotoIndex(null)
+    setPendingNewImage(null)
   }
 
   const savePhoto = useCallback(() => {
@@ -159,14 +202,15 @@ const ListingPhotos = (props: ListingPhotosProps) => {
       assets: { fileId: latestUpload.id, label: CLOUDINARY_BUILDING_LABEL } as Asset,
       description: "",
     }
-    const newImages = [...drawerImages, newImage]
-    setDrawerImages(newImages)
+    if (enableListingImageAltText) {
+      setPendingNewImage(newImage)
+      setEditingPhotoIndex(null)
+    } else {
+      const newImages = [...drawerImages, newImage]
+      setDrawerImages(newImages)
+    }
     setLatestUpload({ id: "", url: "" })
     setProgressValue(0)
-
-    if (enableListingImageAltText) {
-      setEditingPhotoIndex(newImages.length - 1)
-    }
   }, [drawerImages, latestUpload, enableListingImageAltText])
 
   useEffect(() => {
@@ -315,6 +359,15 @@ const ListingPhotos = (props: ListingPhotosProps) => {
   }
 
   const saveEditedPhoto = (newDescription: string) => {
+    if (pendingNewImage) {
+      setDrawerImages([
+        ...drawerImages,
+        { ...pendingNewImage, description: newDescription, ordinal: drawerImages.length },
+      ])
+      setPendingNewImage(null)
+      setEditingPhotoIndex(null)
+      return
+    }
     if (editingPhotoIndex !== null) {
       const updatedImages = [...drawerImages]
       updatedImages[editingPhotoIndex] = {
@@ -324,6 +377,11 @@ const ListingPhotos = (props: ListingPhotosProps) => {
       setDrawerImages(updatedImages)
       setEditingPhotoIndex(null)
     }
+  }
+
+  const closePhotoEditor = () => {
+    if (pendingNewImage) setPendingNewImage(null)
+    setEditingPhotoIndex(null)
   }
 
   /*
@@ -468,12 +526,11 @@ const ListingPhotos = (props: ListingPhotosProps) => {
 
       {/* Nested drawer for editing alt text */}
       <ListingPhotoEditor
-        isOpen={editingPhotoIndex !== null}
-        onClose={() => {
-          setEditingPhotoIndex(null)
-        }}
-        image={drawerImages?.[editingPhotoIndex]}
+        isOpen={!!pendingNewImage || editingPhotoIndex !== null}
+        onClose={closePhotoEditor}
+        image={pendingNewImage ?? drawerImages?.[editingPhotoIndex]}
         onSave={saveEditedPhoto}
+        requiredFields={props.requiredFields}
       />
     </>
   )
