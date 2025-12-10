@@ -3,7 +3,7 @@ import { rest } from "msw"
 import { setupServer } from "msw/node"
 import { screen } from "@testing-library/react"
 import CommunityType from "../../../../../src/components/listings/PaperListingForm/sections/CommunityType"
-import { ListingFormComponent, mockNextRouter, render } from "../../../../testUtils"
+import { FormProviderWrapper, mockNextRouter, render } from "../../../../testUtils"
 import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import userEvent from "@testing-library/user-event"
 
@@ -77,9 +77,9 @@ describe("CommunityType", () => {
     )
 
     render(
-      <ListingFormComponent>
+      <FormProviderWrapper>
         <CommunityType requiredFields={[]} swapCommunityTypeWithPrograms={false} />
-      </ListingFormComponent>
+      </FormProviderWrapper>
     )
 
     // verify that the page has loaded as well as the community types
@@ -124,9 +124,9 @@ describe("CommunityType", () => {
     )
 
     render(
-      <ListingFormComponent>
+      <FormProviderWrapper>
         <CommunityType requiredFields={[]} swapCommunityTypeWithPrograms={false} />
-      </ListingFormComponent>
+      </FormProviderWrapper>
     )
 
     // verify that the page has loaded as well as the community types
@@ -163,9 +163,9 @@ describe("CommunityType", () => {
     document.cookie = "access-token-available=True"
 
     const results = render(
-      <ListingFormComponent>
+      <FormProviderWrapper>
         <CommunityType requiredFields={[]} swapCommunityTypeWithPrograms={true} />
-      </ListingFormComponent>
+      </FormProviderWrapper>
     )
 
     expect(results.queryAllByRole("heading", { level: 2, name: "Community type" })).toHaveLength(0)

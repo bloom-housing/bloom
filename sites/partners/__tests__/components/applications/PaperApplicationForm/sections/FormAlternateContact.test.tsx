@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react"
 import React from "react"
-import { FormProviderWrapper } from "./helpers"
-import { FormAlternateContact } from "../../../../src/components/applications/PaperApplicationForm/sections/FormAlternateContact"
+import { FormProviderWrapper } from "../../../../testUtils"
+import { FormAlternateContact } from "../../../../../src/components/applications/PaperApplicationForm/sections/FormAlternateContact"
 import userEvent from "@testing-library/user-event"
 
 describe("<FormAlternateContact>", () => {

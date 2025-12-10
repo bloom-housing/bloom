@@ -1,6 +1,6 @@
 import React from "react"
 import { setupServer } from "msw/lib/node"
-import { ListingFormComponent, mockNextRouter } from "../../../../testUtils"
+import { FormProviderWrapper, mockNextRouter } from "../../../../testUtils"
 import { render, screen } from "@testing-library/react"
 import AdditionalFees from "../../../../../src/components/listings/PaperListingForm/sections/AdditionalFees"
 import { AuthContext } from "@bloom-housing/shared-helpers"
@@ -35,7 +35,7 @@ describe("AdditionalFees", () => {
           doJurisdictionsHaveFeatureFlagOn: () => false,
         }}
       >
-        <ListingFormComponent>
+        <FormProviderWrapper>
           <AdditionalFees
             enableNonRegulatedListings={false}
             enableUtilitiesIncluded={false}
@@ -47,7 +47,7 @@ describe("AdditionalFees", () => {
             }}
             requiredFields={[]}
           />
-        </ListingFormComponent>
+        </FormProviderWrapper>
       </AuthContext.Provider>
     )
 
@@ -82,7 +82,7 @@ describe("AdditionalFees", () => {
             featureFlag === FeatureFlagEnum.enableUtilitiesIncluded,
         }}
       >
-        <ListingFormComponent>
+        <FormProviderWrapper>
           <AdditionalFees
             enableNonRegulatedListings={false}
             enableUtilitiesIncluded={true}
@@ -94,7 +94,7 @@ describe("AdditionalFees", () => {
             }}
             requiredFields={[]}
           />
-        </ListingFormComponent>
+        </FormProviderWrapper>
       </AuthContext.Provider>
     )
 
@@ -145,14 +145,14 @@ describe("AdditionalFees", () => {
             featureFlag === FeatureFlagEnum.enableNonRegulatedListings,
         }}
       >
-        <ListingFormComponent values={{ listingType: EnumListingListingType.nonRegulated }}>
+        <FormProviderWrapper values={{ listingType: EnumListingListingType.nonRegulated }}>
           <AdditionalFees
             existingUtilities={{}}
             requiredFields={[]}
             enableNonRegulatedListings={true}
             enableUtilitiesIncluded={false}
           />
-        </ListingFormComponent>
+        </FormProviderWrapper>
       </AuthContext.Provider>
     )
 

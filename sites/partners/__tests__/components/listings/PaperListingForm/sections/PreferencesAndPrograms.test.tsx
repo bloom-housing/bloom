@@ -10,7 +10,7 @@ import {
 import { render, screen, within } from "@testing-library/react"
 import PreferencesAndPrograms from "../../../../../src/components/listings/PaperListingForm/sections/PreferencesAndPrograms"
 import { formDefaults } from "../../../../../src/lib/listings/formTypes"
-import { ListingFormComponent } from "../../../../testUtils"
+import { FormProviderWrapper } from "../../../../testUtils"
 
 const server = setupServer()
 
@@ -31,7 +31,7 @@ describe("PreferencesAndPrograms", () => {
       const setFn = jest.fn()
 
       render(
-        <ListingFormComponent values={{ ...formDefaults }}>
+        <FormProviderWrapper values={{ ...formDefaults }}>
           <PreferencesAndPrograms
             jurisdiction={"jurisdiction1"}
             preferences={[]}
@@ -41,7 +41,7 @@ describe("PreferencesAndPrograms", () => {
             disableListingPreferences={false}
             swapCommunityTypeWithPrograms={false}
           />
-        </ListingFormComponent>
+        </FormProviderWrapper>
       )
 
       expect(screen.getByRole("heading", { level: 2, name: /preferences/i })).toBeInTheDocument()
@@ -104,7 +104,7 @@ describe("PreferencesAndPrograms", () => {
             },
           }}
         >
-          <ListingFormComponent values={{ ...formDefaults }}>
+          <FormProviderWrapper values={{ ...formDefaults }}>
             <PreferencesAndPrograms
               preferences={mockPreferences}
               programs={[]}
@@ -114,7 +114,7 @@ describe("PreferencesAndPrograms", () => {
               swapCommunityTypeWithPrograms={false}
               jurisdiction={"jurisdiction1"}
             />
-          </ListingFormComponent>
+          </FormProviderWrapper>
         </AuthContext.Provider>
       )
 
@@ -164,7 +164,7 @@ describe("PreferencesAndPrograms", () => {
             },
           }}
         >
-          <ListingFormComponent values={{ ...formDefaults }}>
+          <FormProviderWrapper values={{ ...formDefaults }}>
             <PreferencesAndPrograms
               preferences={[]}
               programs={[]}
@@ -174,7 +174,7 @@ describe("PreferencesAndPrograms", () => {
               swapCommunityTypeWithPrograms={false}
               jurisdiction={"jurisdiction1"}
             />
-          </ListingFormComponent>
+          </FormProviderWrapper>
         </AuthContext.Provider>
       )
 
@@ -223,7 +223,7 @@ describe("PreferencesAndPrograms", () => {
               },
             }}
           >
-            <ListingFormComponent values={{ ...formDefaults }}>
+            <FormProviderWrapper values={{ ...formDefaults }}>
               <PreferencesAndPrograms
                 preferences={[]}
                 setPreferences={setFn}
@@ -233,7 +233,7 @@ describe("PreferencesAndPrograms", () => {
                 swapCommunityTypeWithPrograms={false}
                 jurisdiction={"jurisdiction1"}
               />
-            </ListingFormComponent>
+            </FormProviderWrapper>
           </AuthContext.Provider>
         )
 
@@ -270,7 +270,7 @@ describe("PreferencesAndPrograms", () => {
               },
             }}
           >
-            <ListingFormComponent values={{ ...formDefaults }}>
+            <FormProviderWrapper values={{ ...formDefaults }}>
               <PreferencesAndPrograms
                 preferences={[]}
                 setPreferences={setFn}
@@ -280,7 +280,7 @@ describe("PreferencesAndPrograms", () => {
                 swapCommunityTypeWithPrograms={true}
                 jurisdiction={"jurisdiction1"}
               />
-            </ListingFormComponent>
+            </FormProviderWrapper>
           </AuthContext.Provider>
         )
 

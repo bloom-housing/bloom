@@ -2,7 +2,7 @@ import React from "react"
 import "@testing-library/jest-dom"
 import { setupServer } from "msw/node"
 import { screen } from "@testing-library/react"
-import { ListingFormComponent, mockNextRouter, render } from "../../../../testUtils"
+import { FormProviderWrapper, mockNextRouter, render } from "../../../../testUtils"
 import ListingData from "../../../../../src/components/listings/PaperListingForm/sections/ListingData"
 
 const server = setupServer()
@@ -22,13 +22,13 @@ afterAll(() => server.close())
 describe("ListingData", () => {
   it("should render all data", () => {
     render(
-      <ListingFormComponent>
+      <FormProviderWrapper>
         <ListingData
           createdAt={new Date("2023-01-01T10:00:00Z")}
           jurisdictionName={"Bloomington"}
           listingId={"1234"}
         />
-      </ListingFormComponent>
+      </FormProviderWrapper>
     )
 
     expect(screen.getByRole("heading", { level: 2, name: "Listing data" })).toBeInTheDocument()
@@ -42,9 +42,9 @@ describe("ListingData", () => {
 
   it("should render nothing if no data", () => {
     render(
-      <ListingFormComponent>
+      <FormProviderWrapper>
         <ListingData createdAt={null} jurisdictionName={null} listingId={null} />
-      </ListingFormComponent>
+      </FormProviderWrapper>
     )
     expect(
       screen.queryByRole("heading", { level: 2, name: "Listing data" })

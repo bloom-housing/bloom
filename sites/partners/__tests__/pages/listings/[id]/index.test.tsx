@@ -78,22 +78,33 @@ afterAll(() => {
 
 function mockJurisdictionsHaveFeatureFlagOn(
   featureFlag: string,
-  enableHomeType = true,
-  enableSection8Question = true,
-  enableUnitGroups = false,
-  enableIsVerified = true
+  overrides?: {
+    enableHomeType?: boolean
+    enableSection8Question?: boolean
+    enableUnitGroups?: boolean
+    enableIsVerified?: boolean
+    enableMarketingStatus?: boolean
+    enableAccessibilityFeatures?: boolean
+    enableRegions?: boolean
+  }
 ) {
   switch (featureFlag) {
     case FeatureFlagEnum.enableHomeType:
-      return enableHomeType
+      return overrides?.enableHomeType ?? true
     case FeatureFlagEnum.enableSection8Question:
-      return enableSection8Question
+      return overrides?.enableSection8Question ?? true
     case FeatureFlagEnum.enableUnitGroups:
-      return enableUnitGroups
+      return overrides?.enableUnitGroups ?? false
     case FeatureFlagEnum.enableIsVerified:
-      return enableIsVerified
+      return overrides?.enableIsVerified ?? true
+    case FeatureFlagEnum.enableMarketingStatus:
+      return overrides?.enableMarketingStatus ?? false
+    case FeatureFlagEnum.enableAccessibilityFeatures:
+      return overrides?.enableAccessibilityFeatures ?? true
+    case FeatureFlagEnum.enableRegions:
+      return overrides?.enableRegions ?? true
     default:
-      return true
+      return false
   }
 }
 
@@ -297,7 +308,7 @@ describe("listing data", () => {
       })
     })
 
-    describe("should display Listing Photo section", () => {
+    describe("should display Listing Photos section", () => {
       it("should display section with missing data", () => {
         render(
           <ListingContext.Provider
@@ -310,7 +321,7 @@ describe("listing data", () => {
           </ListingContext.Provider>
         )
 
-        expect(screen.getByText("Listing photo")).toBeInTheDocument()
+        expect(screen.getByText("Listing photos")).toBeInTheDocument()
         expect(screen.getByText("None")).toBeInTheDocument()
         expect(screen.queryByText("Preview")).not.toBeInTheDocument()
         expect(screen.queryByText("Primary")).not.toBeInTheDocument()
@@ -349,7 +360,7 @@ describe("listing data", () => {
           </ListingContext.Provider>
         )
 
-        expect(screen.getByText("Listing photo", { selector: "h2" })).toBeInTheDocument()
+        expect(screen.getByText("Listing photos", { selector: "h2" })).toBeInTheDocument()
         expect(screen.getByText("Preview")).toBeInTheDocument()
         expect(screen.getByText("Primary")).toBeInTheDocument()
         expect(screen.getByText("Primary photo")).toBeInTheDocument()
@@ -357,7 +368,7 @@ describe("listing data", () => {
         expect(listingImages).toHaveLength(2)
         listingImages.forEach((imageElement) => {
           expect(imageElement).toHaveAttribute("src", "asset_file_id")
-          expect(imageElement).toHaveAttribute("alt", "Listing photo")
+          expect(imageElement).toHaveAttribute("alt", "Listing photos")
         })
       })
     })
@@ -1861,7 +1872,12 @@ describe("listing data", () => {
             value={{
               profile: { ...user, jurisdictions: [], listings: [] },
               doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
-                mockJurisdictionsHaveFeatureFlagOn(featureFlag, true, true, false, false),
+                mockJurisdictionsHaveFeatureFlagOn(featureFlag, {
+                  enableHomeType: true,
+                  enableSection8Question: true,
+                  enableUnitGroups: false,
+                  enableIsVerified: false,
+                }),
             }}
           >
             <ListingContext.Provider
@@ -2278,5 +2294,72 @@ describe("listing data", () => {
 
     unitDrawerHeader = screen.queryByText("Unit", { selector: "h1" })
     expect(unitDrawerHeader).not.toBeInTheDocument()
+  })
+
+  it("should display correct nav links on non-lottery", async () => {
+    window.URL.createObjectURL = jest.fn()
+    document.cookie = "access-token-available=True"
+    render(
+      <AuthContext.Provider
+        value={{
+          profile: {
+            ...user,
+            listings: [],
+            jurisdictions: [jurisdiction],
+          },
+          doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
+            mockJurisdictionsHaveFeatureFlagOn(featureFlag),
+        }}
+      >
+        <ListingDetail listing={listing} />
+      </AuthContext.Provider>
+    )
+
+    const secondaryNavigation = await screen.findByRole("navigation", {
+      name: "Secondary navigation",
+    })
+    expect(secondaryNavigation).toBeInTheDocument()
+    expect(within(secondaryNavigation).getByRole("link", { name: "Listing" })).toBeInTheDocument()
+    expect(
+      within(secondaryNavigation).getByRole("link", { name: "Applications" })
+    ).toBeInTheDocument()
+    expect(within(secondaryNavigation).queryAllByRole("link", { name: "Lottery" })).toHaveLength(0)
+  })
+
+  it("should display correct nav links for lottery", async () => {
+    window.URL.createObjectURL = jest.fn()
+    document.cookie = "access-token-available=True"
+    render(
+      <AuthContext.Provider
+        value={{
+          profile: {
+            ...user,
+            listings: [],
+            jurisdictions: [jurisdiction],
+          },
+          doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
+            mockJurisdictionsHaveFeatureFlagOn(featureFlag),
+        }}
+      >
+        <ListingDetail
+          listing={{
+            ...listing,
+            reviewOrderType: ReviewOrderTypeEnum.waitlistLottery,
+            lotteryOptIn: true,
+            status: ListingsStatusEnum.closed,
+          }}
+        />
+      </AuthContext.Provider>
+    )
+
+    const secondaryNavigation = await screen.findByRole("navigation", {
+      name: "Secondary navigation",
+    })
+    expect(secondaryNavigation).toBeInTheDocument()
+    expect(within(secondaryNavigation).getByRole("link", { name: "Listing" })).toBeInTheDocument()
+    expect(
+      within(secondaryNavigation).getByRole("link", { name: "Applications" })
+    ).toBeInTheDocument()
+    expect(within(secondaryNavigation).getByRole("link", { name: "Lottery" })).toBeInTheDocument()
   })
 })

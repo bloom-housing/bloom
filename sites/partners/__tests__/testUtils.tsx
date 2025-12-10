@@ -71,7 +71,10 @@ export const mockTipTapEditor = () => {
   Range.prototype.getClientRects = (): DOMRectList => new FakeDOMRectList()
 }
 
-export const ListingFormComponent = ({ children, values }: { values?: FormListing; children }) => {
+export const FormProviderWrapper = ({
+  children,
+  values,
+}: React.PropsWithChildren<{ values?: Partial<FormListing> }>) => {
   const formMethods = useForm<FormListing>({
     defaultValues: { ...formDefaults, ...values },
     shouldUnregister: false,

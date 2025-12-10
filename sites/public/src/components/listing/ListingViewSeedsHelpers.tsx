@@ -6,6 +6,7 @@ import {
   ApplicationAddressTypeEnum,
   ApplicationMethod,
   ApplicationMethodsTypeEnum,
+  EnumListingListingType,
   Asset,
   FeatureFlagEnum,
   IdDTO,
@@ -586,9 +587,34 @@ export const getEligibilitySections = (
 
 export const getAdditionalInformation = (listing: Listing) => {
   const cardContent: ContentCardProps[] = []
-  if (listing.requiredDocuments)
+  if (
+    listing.requiredDocumentsList &&
+    Object.values(listing.requiredDocumentsList).filter((value) => !!value).length
+  ) {
     cardContent.push({
       heading: t("listings.requiredDocuments"),
+      description: (
+        <div>
+          <ul>
+            {Object.entries(listing.requiredDocumentsList).map(
+              ([key, value]) =>
+                value && (
+                  <li className={"list-disc mx-5 mb-1 text-nowrap"}>
+                    {t(`listings.requiredDocuments.${key}`)}
+                  </li>
+                )
+            )}
+          </ul>
+        </div>
+      ),
+    })
+  }
+  if (listing.requiredDocuments)
+    cardContent.push({
+      heading:
+        listing.listingType === EnumListingListingType.regulated
+          ? t("listings.requiredDocuments")
+          : t("listings.requiredDocumentsAdditionalInfo"),
       description: <ReadMore content={listing.requiredDocuments} />,
     })
   if (listing.programRules)

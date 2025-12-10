@@ -1,7 +1,7 @@
 import React from "react"
 import { setupServer } from "msw/node"
 import { screen, within } from "@testing-library/react"
-import { ListingFormComponent, mockNextRouter, render } from "../../../../testUtils"
+import { FormProviderWrapper, mockNextRouter, render } from "../../../../testUtils"
 import userEvent from "@testing-library/user-event"
 import ApplicationTypes from "../../../../../src/components/listings/PaperListingForm/sections/ApplicationTypes"
 import { jurisdiction, listing, user } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
@@ -28,14 +28,14 @@ afterAll(() => server.close())
 describe("ApplicationTypes", () => {
   it("should render the base section component", () => {
     render(
-      <ListingFormComponent>
+      <FormProviderWrapper>
         <ApplicationTypes
           disableCommonApplication={false}
           jurisdiction={jurisdiction.id}
           listing={listing}
           requiredFields={[]}
         />
-      </ListingFormComponent>
+      </FormProviderWrapper>
     )
 
     expect(screen.getByRole("heading", { level: 2, name: "Application types" })).toBeInTheDocument()
@@ -68,14 +68,14 @@ describe("ApplicationTypes", () => {
           getJurisdictionLanguages: () => [],
         }}
       >
-        <ListingFormComponent>
+        <FormProviderWrapper>
           <ApplicationTypes
             disableCommonApplication={false}
             jurisdiction={jurisdiction.id}
             listing={listing}
             requiredFields={[]}
           />
-        </ListingFormComponent>
+        </FormProviderWrapper>
       </AuthContext.Provider>
     )
 
@@ -89,14 +89,14 @@ describe("ApplicationTypes", () => {
 
   it("should show add paper application button when paper application is enabled", async () => {
     render(
-      <ListingFormComponent>
+      <FormProviderWrapper>
         <ApplicationTypes
           disableCommonApplication={false}
           jurisdiction={jurisdiction.id}
           listing={listing}
           requiredFields={[]}
         />
-      </ListingFormComponent>
+      </FormProviderWrapper>
     )
 
     const paperApplicationFieldset = screen.getByRole("group", {
@@ -125,14 +125,14 @@ describe("ApplicationTypes", () => {
           getJurisdictionLanguages: () => Object.values(LanguagesEnum),
         }}
       >
-        <ListingFormComponent>
+        <FormProviderWrapper>
           <ApplicationTypes
             disableCommonApplication={false}
             jurisdiction={jurisdiction.id}
             listing={listing}
             requiredFields={[]}
           />
-        </ListingFormComponent>
+        </FormProviderWrapper>
       </AuthContext.Provider>
     )
 
@@ -196,14 +196,14 @@ describe("ApplicationTypes", () => {
 
   it("should handle referral opportunity checkbox toggle", async () => {
     render(
-      <ListingFormComponent>
+      <FormProviderWrapper>
         <ApplicationTypes
           disableCommonApplication={false}
           jurisdiction={jurisdiction.id}
           listing={listing}
           requiredFields={[]}
         />
-      </ListingFormComponent>
+      </FormProviderWrapper>
     )
 
     const referralQuestionFieldset = screen.getByRole("group", {
@@ -227,14 +227,14 @@ describe("ApplicationTypes", () => {
 
   it("should apply phone mask to referral phone number", async () => {
     render(
-      <ListingFormComponent>
+      <FormProviderWrapper>
         <ApplicationTypes
           disableCommonApplication={false}
           jurisdiction={jurisdiction.id}
           listing={listing}
           requiredFields={[]}
         />
-      </ListingFormComponent>
+      </FormProviderWrapper>
     )
 
     const referralQuestionFieldset = screen.getByRole("group", {
@@ -253,14 +253,14 @@ describe("ApplicationTypes", () => {
 
   it("should show common digital application option when enabled", async () => {
     render(
-      <ListingFormComponent>
+      <FormProviderWrapper>
         <ApplicationTypes
           disableCommonApplication={false}
           jurisdiction={jurisdiction.id}
           listing={listing}
           requiredFields={[]}
         />
-      </ListingFormComponent>
+      </FormProviderWrapper>
     )
 
     const digitalApplicationFieldset = screen.getByRole("group", {
@@ -294,14 +294,14 @@ describe("ApplicationTypes", () => {
 
   it("should disable common application option when disableCommonApplication is true", async () => {
     render(
-      <ListingFormComponent>
+      <FormProviderWrapper>
         <ApplicationTypes
           disableCommonApplication={true}
           jurisdiction={jurisdiction.id}
           listing={listing}
           requiredFields={[]}
         />
-      </ListingFormComponent>
+      </FormProviderWrapper>
     )
 
     const digitalApplicationFieldset = screen.getByRole("group", {

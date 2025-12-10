@@ -3,7 +3,7 @@ import "@testing-library/jest-dom"
 import { setupServer } from "msw/node"
 import userEvent from "@testing-library/user-event"
 import { screen, within } from "@testing-library/react"
-import { ListingFormComponent, mockNextRouter, render } from "../../../../testUtils"
+import { FormProviderWrapper, mockNextRouter, render } from "../../../../testUtils"
 import ListingIntro from "../../../../../src/components/listings/PaperListingForm/sections/ListingIntro"
 
 const server = setupServer()
@@ -23,7 +23,7 @@ afterAll(() => server.close())
 describe("ListingIntro", () => {
   it("should render the ListingIntro section with one jurisdiction", () => {
     render(
-      <ListingFormComponent>
+      <FormProviderWrapper>
         <ListingIntro
           enableHousingDeveloperOwner={false}
           enableNonRegulatedListings={false}
@@ -32,7 +32,7 @@ describe("ListingIntro", () => {
           jurisdictionName={"JurisdictionA"}
           listingId={"1234"}
         />
-      </ListingFormComponent>
+      </FormProviderWrapper>
     )
 
     expect(
@@ -45,7 +45,7 @@ describe("ListingIntro", () => {
 
   it("should render the ListingIntro section with multiple jurisdictions and required developer", () => {
     render(
-      <ListingFormComponent>
+      <FormProviderWrapper>
         <ListingIntro
           enableHousingDeveloperOwner={false}
           enableNonRegulatedListings={false}
@@ -54,7 +54,7 @@ describe("ListingIntro", () => {
           jurisdictionName={"JurisdictionA"}
           listingId={"1234"}
         />
-      </ListingFormComponent>
+      </FormProviderWrapper>
     )
 
     expect(screen.getByRole("textbox", { name: "Listing name *" })).toBeInTheDocument()
@@ -66,7 +66,7 @@ describe("ListingIntro", () => {
 
   it("should render appropriate text when housing developer owner feature flag is on", () => {
     render(
-      <ListingFormComponent>
+      <FormProviderWrapper>
         <ListingIntro
           enableHousingDeveloperOwner={true}
           enableNonRegulatedListings={false}
@@ -75,7 +75,7 @@ describe("ListingIntro", () => {
           jurisdictionName={"JurisdictionA"}
           listingId={"1234"}
         />
-      </ListingFormComponent>
+      </FormProviderWrapper>
     )
     expect(screen.getByRole("textbox", { name: "Housing developer / owner" })).toBeInTheDocument()
     expect(screen.queryByRole("textbox", { name: "Housing developer" })).not.toBeInTheDocument()
@@ -83,7 +83,7 @@ describe("ListingIntro", () => {
 
   it("should render listing file number field when feature flag is on", () => {
     render(
-      <ListingFormComponent>
+      <FormProviderWrapper>
         <ListingIntro
           enableHousingDeveloperOwner={false}
           enableNonRegulatedListings={false}
@@ -92,7 +92,7 @@ describe("ListingIntro", () => {
           jurisdictionName={"JurisdictionA"}
           listingId={"1234"}
         />
-      </ListingFormComponent>
+      </FormProviderWrapper>
     )
 
     expect(screen.getByRole("textbox", { name: "Listing file number" })).toBeInTheDocument()
@@ -100,7 +100,7 @@ describe("ListingIntro", () => {
 
   it("should render the ListingIntro section with regulated fields when feature flag is off", () => {
     render(
-      <ListingFormComponent>
+      <FormProviderWrapper>
         <ListingIntro
           requiredFields={[]}
           enableNonRegulatedListings={false}
@@ -109,7 +109,7 @@ describe("ListingIntro", () => {
           jurisdictionName={"JurisdictionA"}
           listingId={"1234"}
         />
-      </ListingFormComponent>
+      </FormProviderWrapper>
     )
 
     expect(
@@ -123,7 +123,7 @@ describe("ListingIntro", () => {
 
   it("should not render the ListingIntro section with regulated fields when feature flag is on", async () => {
     render(
-      <ListingFormComponent>
+      <FormProviderWrapper>
         <ListingIntro
           requiredFields={[]}
           enableNonRegulatedListings={true}
@@ -132,7 +132,7 @@ describe("ListingIntro", () => {
           jurisdictionName={"JurisdictionA"}
           listingId={"1234"}
         />
-      </ListingFormComponent>
+      </FormProviderWrapper>
     )
 
     expect(screen.getByRole("heading", { level: 2, name: "Listing intro" })).toBeInTheDocument()

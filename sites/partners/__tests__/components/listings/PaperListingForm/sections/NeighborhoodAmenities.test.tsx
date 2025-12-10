@@ -2,7 +2,7 @@ import React from "react"
 import { screen, waitFor, within } from "@testing-library/react"
 import { NeighborhoodAmenitiesEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { t } from "@bloom-housing/ui-components"
-import { ListingFormComponent, mockNextRouter, render } from "../../../../testUtils"
+import { FormProviderWrapper, mockNextRouter, render } from "../../../../testUtils"
 import NeighborhoodAmenities from "../../../../../src/components/listings/PaperListingForm/sections/NeighborhoodAmenities"
 
 beforeAll(() => {
@@ -40,7 +40,7 @@ describe("NeighborhoodAmenities", () => {
 
   it("should not render when feature flag is disabled", () => {
     const { container } = render(
-      <ListingFormComponent>
+      <FormProviderWrapper>
         <NeighborhoodAmenities
           enableNeighborhoodAmenities={false}
           enableNeighborhoodAmenitiesDropdown={false}
@@ -48,7 +48,7 @@ describe("NeighborhoodAmenities", () => {
             mockJurisdictionWithAllAmenities.visibleNeighborhoodAmenities
           }
         />
-      </ListingFormComponent>
+      </FormProviderWrapper>
     )
 
     expect(container.firstChild).toBeNull()
@@ -56,7 +56,7 @@ describe("NeighborhoodAmenities", () => {
 
   it("should render all neighborhood amenities as textareas when dropdown is disabled", async () => {
     render(
-      <ListingFormComponent>
+      <FormProviderWrapper>
         <NeighborhoodAmenities
           enableNeighborhoodAmenities={true}
           enableNeighborhoodAmenitiesDropdown={false}
@@ -64,7 +64,7 @@ describe("NeighborhoodAmenities", () => {
             mockJurisdictionWithAllAmenities.visibleNeighborhoodAmenities
           }
         />
-      </ListingFormComponent>
+      </FormProviderWrapper>
     )
 
     await screen.findByRole("heading", { name: "Neighborhood amenities" })
@@ -85,7 +85,7 @@ describe("NeighborhoodAmenities", () => {
 
   it("should render neighborhood amenities with dropdowns when dropdown is enabled", async () => {
     render(
-      <ListingFormComponent>
+      <FormProviderWrapper>
         <NeighborhoodAmenities
           enableNeighborhoodAmenities={true}
           enableNeighborhoodAmenitiesDropdown={true}
@@ -93,7 +93,7 @@ describe("NeighborhoodAmenities", () => {
             mockJurisdictionWithAllAmenities.visibleNeighborhoodAmenities
           }
         />
-      </ListingFormComponent>
+      </FormProviderWrapper>
     )
 
     await waitFor(() => {
@@ -114,7 +114,7 @@ describe("NeighborhoodAmenities", () => {
 
   it("should only render visible amenities from jurisdiction configuration", async () => {
     render(
-      <ListingFormComponent>
+      <FormProviderWrapper>
         <NeighborhoodAmenities
           enableNeighborhoodAmenities={true}
           enableNeighborhoodAmenitiesDropdown={false}
@@ -122,7 +122,7 @@ describe("NeighborhoodAmenities", () => {
             mockJurisdictionWithLimitedAmenities.visibleNeighborhoodAmenities
           }
         />
-      </ListingFormComponent>
+      </FormProviderWrapper>
     )
 
     await screen.findByRole("heading", { name: "Neighborhood amenities" })
@@ -140,7 +140,7 @@ describe("NeighborhoodAmenities", () => {
 
   it("should include distance options in dropdown when enabled", async () => {
     render(
-      <ListingFormComponent>
+      <FormProviderWrapper>
         <NeighborhoodAmenities
           enableNeighborhoodAmenities={true}
           enableNeighborhoodAmenitiesDropdown={true}
@@ -148,7 +148,7 @@ describe("NeighborhoodAmenities", () => {
             mockJurisdictionWithLimitedAmenities.visibleNeighborhoodAmenities
           }
         />
-      </ListingFormComponent>
+      </FormProviderWrapper>
     )
 
     const select = await screen.findByRole("combobox", { name: "Grocery stores" })
@@ -179,7 +179,7 @@ describe("NeighborhoodAmenities", () => {
 
   it("should render partial amenities in 1 row when there are less or equal to 2 amenities", async () => {
     const { container } = render(
-      <ListingFormComponent>
+      <FormProviderWrapper>
         <NeighborhoodAmenities
           enableNeighborhoodAmenities={true}
           enableNeighborhoodAmenitiesDropdown={false}
@@ -187,7 +187,7 @@ describe("NeighborhoodAmenities", () => {
             mockJurisdictionWithLimitedAmenities.visibleNeighborhoodAmenities
           }
         />
-      </ListingFormComponent>
+      </FormProviderWrapper>
     )
 
     await screen.findByRole("heading", { name: "Neighborhood amenities" })

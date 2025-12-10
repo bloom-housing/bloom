@@ -1,6 +1,6 @@
 import React from "react"
 import { setupServer } from "msw/lib/node"
-import { ListingFormComponent, mockNextRouter } from "../../../../testUtils"
+import { FormProviderWrapper, mockNextRouter } from "../../../../testUtils"
 import { render, screen } from "@testing-library/react"
 import {
   EnumListingListingType,
@@ -34,7 +34,7 @@ describe("AdditionalDetails", () => {
             featureFlag === FeatureFlagEnum.enableNonRegulatedListings,
         }}
       >
-        <ListingFormComponent>
+        <FormProviderWrapper>
           <AdditionalDetails
             defaultText="This is a mock default text"
             existingDocuments={{
@@ -50,7 +50,7 @@ describe("AdditionalDetails", () => {
             }}
             requiredFields={[]}
           />
-        </ListingFormComponent>
+        </FormProviderWrapper>
       </AuthContext.Provider>
     )
 
@@ -81,7 +81,7 @@ describe("AdditionalDetails", () => {
             featureFlag === FeatureFlagEnum.enableNonRegulatedListings,
         }}
       >
-        <ListingFormComponent
+        <FormProviderWrapper
           values={{
             listingType: EnumListingListingType.nonRegulated,
           }}
@@ -101,7 +101,7 @@ describe("AdditionalDetails", () => {
             }}
             requiredFields={[]}
           />
-        </ListingFormComponent>
+        </FormProviderWrapper>
       </AuthContext.Provider>
     )
 
