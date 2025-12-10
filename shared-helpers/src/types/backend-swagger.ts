@@ -3024,6 +3024,9 @@ export interface ListingFilterParams {
 
   /**  */
   zipCode?: string
+
+  /**  */
+  listingType?: ListingTypeEnum
 }
 
 export interface ListingsQueryBody {
@@ -6111,6 +6114,9 @@ export interface JurisdictionCreate {
   languages: LanguagesEnum[]
 
   /**  */
+  minimumListingPublishImagesRequired?: number
+
+  /**  */
   partnerTerms?: string
 
   /**  */
@@ -6171,6 +6177,9 @@ export interface JurisdictionUpdate {
 
   /**  */
   languages: LanguagesEnum[]
+
+  /**  */
+  minimumListingPublishImagesRequired?: number
 
   /**  */
   partnerTerms?: string
@@ -6265,6 +6274,9 @@ export interface Jurisdiction {
 
   /**  */
   multiselectQuestions: IdDTO[]
+
+  /**  */
+  minimumListingPublishImagesRequired?: number
 
   /**  */
   partnerTerms?: string
@@ -7599,6 +7611,11 @@ export enum ListingsStatusEnum {
   "pendingReview" = "pendingReview",
   "changesRequested" = "changesRequested",
 }
+
+export enum ListingTypeEnum {
+  "regulated" = "regulated",
+  "nonRegulated" = "nonRegulated",
+}
 export enum EnumListingFilterParamsComparison {
   "=" = "=",
   "<>" = "<>",
@@ -7629,6 +7646,7 @@ export enum ListingOrderByKeys {
   "marketingType" = "marketingType",
   "marketingYear" = "marketingYear",
   "marketingSeason" = "marketingSeason",
+  "listingType" = "listingType",
 }
 
 export enum OrderByEnum {
@@ -7659,6 +7677,7 @@ export enum ListingFilterKeys {
   "section8Acceptance" = "section8Acceptance",
   "status" = "status",
   "zipCode" = "zipCode",
+  "listingType" = "listingType",
 }
 
 export enum ApplicationAddressTypeEnum {
@@ -7933,6 +7952,8 @@ export enum FeatureFlagEnum {
   "enableNonRegulatedListings" = "enableNonRegulatedListings",
   "enablePartnerDemographics" = "enablePartnerDemographics",
   "enablePartnerSettings" = "enablePartnerSettings",
+  "enableProperties" = "enableProperties",
+  "enableReferralQuestionUnits" = "enableReferralQuestionUnits",
   "enableRegions" = "enableRegions",
   "enableSection8Question" = "enableSection8Question",
   "enableSingleUseCode" = "enableSingleUseCode",

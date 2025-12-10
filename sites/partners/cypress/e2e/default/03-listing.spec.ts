@@ -32,7 +32,7 @@ describe("Listing Management Tests", () => {
     cy.getByID("publishButtonConfirm").contains("Publish").click()
     cy.contains("Please resolve any errors before saving or publishing your listing.")
     cy.getByID("developer-error").contains("This field is required")
-    cy.getByID("photos-error").contains("This field is required")
+    cy.getByID("photos-error").contains("At least 1 image is required")
     cy.getByID("listingsBuildingAddress.street-error").contains("Cannot enter a partial address")
     cy.getByID("listingsBuildingAddress.city-error").contains("Cannot enter a partial address")
     cy.getByID("listingsBuildingAddress.state-error").contains("Cannot enter a partial address")
