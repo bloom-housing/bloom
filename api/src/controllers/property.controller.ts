@@ -55,6 +55,7 @@ export class PropertyController {
     summary: 'Get a paginated filtered set of properties',
     operationId: 'filterableList',
   })
+  @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
   @ApiOkResponse({ type: PagiantedPropertyDto })
   public async getFiltrablePaginatedSet(
     @Body() queryParams: PropertyQueryParams,
@@ -67,7 +68,7 @@ export class PropertyController {
     summary: 'Add a new property entry',
     operationId: 'add',
   })
-  @UsePipes(ValidationPipe)
+  @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
   @ApiOkResponse({ type: Property })
   public async addProperty(@Body() propertyDto: PropertyCreate) {
     return await this.propertyService.create(propertyDto);
@@ -78,7 +79,7 @@ export class PropertyController {
     summary: 'Update an exiting property entry by id',
     operationId: 'update',
   })
-  @UsePipes(ValidationPipe)
+  @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
   @ApiOkResponse({ type: Property })
   public async updateProperty(@Body() propertyDto: PropertyUpdate) {
     return await this.propertyService.update(propertyDto);
