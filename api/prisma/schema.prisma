@@ -1111,6 +1111,8 @@ model Properties {
   url         String?
   urlTitle    String?    @map("url_title")
   listings    Listings[]
+
+  @@index([id, name])
 }
 
 // END LA SPECIFIC
