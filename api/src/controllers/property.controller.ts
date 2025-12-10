@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Query,
+  Param,
+  ParseUUIDPipe,
+} from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { PermissionTypeDecorator } from 'src/decorators/permission-type.decorator';
 import { PagiantedPropertyDto } from 'src/dtos/properties/paginated-property.dto';
@@ -18,6 +26,17 @@ export class PropertyController {
   @ApiOkResponse({ type: PagiantedPropertyDto })
   public async getPaginatedSet(@Query() queryParams: PropertyQueryParams) {
     return await this.propertyService.list(queryParams);
+  }
+
+  @Get(':id')
+  @ApiOperation({
+    summary: 'Get a proprty object by ID',
+    operationId: 'getById',
+  })
+  public async getPropertyById(
+    @Param('id', new ParseUUIDPipe({ version: '4' })) propertyId: string,
+  ) {
+    return this.propertyService.findOne(propertyId);
   }
 
   @Post('list')

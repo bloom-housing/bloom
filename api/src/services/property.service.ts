@@ -52,4 +52,23 @@ export class PropertyService {
       meta: buildPaginationMetaInfo(params, count, properites.length),
     };
   }
+
+  async findOne(propertyId?: string) {
+    if (!propertyId) {
+      throw new BadRequestException('a property ID must be provided');
+    }
+    const propertyRaw = await this.prisma.properties.findUnique({
+      where: {
+        id: propertyId,
+      },
+    });
+
+    if (!propertyRaw) {
+      throw new NotFoundException(
+        `property with id ${propertyId} was requested but not found `,
+      );
+    }
+
+    return mapTo(Property, propertyRaw);
+  }
 }
