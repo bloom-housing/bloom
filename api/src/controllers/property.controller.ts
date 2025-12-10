@@ -9,6 +9,7 @@ import {
   Put,
   UsePipes,
   ValidationPipe,
+  Delete,
 } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { PermissionTypeDecorator } from 'src/decorators/permission-type.decorator';
@@ -18,6 +19,9 @@ import { PropertyService } from 'src/services/property.service';
 import PropertyCreate from 'src/dtos/properties/property-create.dto';
 import { PropertyUpdate } from 'src/dtos/properties/property-update.dto';
 import Property from 'src/dtos/properties/property.dto';
+import { IdDTO } from 'src/dtos/shared/id.dto';
+import { SuccessDTO } from 'src/dtos/shared/success.dto';
+import { defaultValidationPipeOptions } from 'src/utilities/default-validation-pipe-options';
 
 @Controller('properties')
 @ApiTags('properties')
@@ -78,5 +82,16 @@ export class PropertyController {
   @ApiOkResponse({ type: Property })
   public async updateProperty(@Body() propertyDto: PropertyUpdate) {
     return await this.propertyService.update(propertyDto);
+  }
+
+  @Delete()
+  @ApiOperation({
+    summary: 'Delete an property entry by ID',
+    operationId: 'deleteById',
+  })
+  @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
+  @ApiOkResponse({ type: SuccessDTO })
+  public async deleteById(@Body() idDto: IdDTO) {
+    return await this.propertyService.deleteOne(idDto.id);
   }
 }

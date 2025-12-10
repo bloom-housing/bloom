@@ -14,6 +14,8 @@ import { mapTo } from 'src/utilities/mapTo';
 import Property from 'src/dtos/properties/property.dto';
 import { PagiantedPropertyDto } from 'src/dtos/properties/paginated-property.dto';
 import PropertyCreate from 'src/dtos/properties/property-create.dto';
+import { PropertyUpdate } from 'src/dtos/properties/property-update.dto';
+import { SuccessDTO } from 'src/dtos/shared/success.dto';
 
 @Injectable()
 export class PropertyService {
@@ -94,5 +96,21 @@ export class PropertyService {
     });
 
     return mapTo(Property, rawProperty);
+  }
+
+  async deleteOne(propertyId: string) {
+    if (!propertyId) {
+      throw new BadRequestException('a property ID must be provided');
+    }
+
+    await this.prisma.properties.delete({
+      where: {
+        id: propertyId,
+      },
+    });
+
+    return {
+      success: true,
+    } as SuccessDTO;
   }
 }
