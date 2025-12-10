@@ -42,7 +42,7 @@ describe("<DetailApplicationTypes>", () => {
     expect(screen.queryByText("Common digital application")).not.toBeInTheDocument()
   })
 
-  it("should render full section component contetn", () => {
+  it("should render full section component content", () => {
     render(
       <AuthContext.Provider
         value={{
