@@ -1,12 +1,11 @@
 import React, { useState, useCallback, useEffect, useMemo } from "react"
 import "mapbox-gl/dist/mapbox-gl.css"
-import { Map as MapGL, Marker } from "@vis.gl/react-mapbox"
-
-import styles from "./Map.module.scss"
+import { Map as MapGL, Marker, MarkerDragEvent } from "@vis.gl/react-mapbox"
+import { Heading } from "@bloom-housing/ui-seeds"
 import { MultiLineAddress } from "./MultiLineAddress"
 import { useIntersect } from "../../.."
-import { Heading } from "@bloom-housing/ui-seeds"
 import { Address } from "../../types/backend-swagger"
+import styles from "./Map.module.scss"
 
 export interface MapProps {
   address?: Omit<Address, "id" | "createdAt" | "updatedAt">
@@ -67,21 +66,26 @@ const Map = (props: MapProps) => {
     })
   }, [props.address?.latitude, props.address?.longitude, props.enableCustomPinPositioning])
 
-  const onMarkerDragEnd = useCallback((event: any) => {
-    if (props.setLatLong) {
-      props.setLatLong({
+  const { setLatLong, setCustomMapPositionChosen } = props
+
+  const onMarkerDragEnd = useCallback(
+    (event: MarkerDragEvent) => {
+      if (setLatLong) {
+        setLatLong({
+          latitude: event.lngLat.lat,
+          longitude: event.lngLat.lng,
+        })
+      }
+      if (setCustomMapPositionChosen) {
+        setCustomMapPositionChosen(true)
+      }
+      setMarker({
         latitude: event.lngLat.lat,
         longitude: event.lngLat.lng,
       })
-    }
-    if (props.setCustomMapPositionChosen) {
-      props.setCustomMapPositionChosen(true)
-    }
-    setMarker({
-      latitude: event.lngLat.lat,
-      longitude: event.lngLat.lng,
-    })
-  }, [])
+    },
+    [setLatLong, setCustomMapPositionChosen, setMarker]
+  )
 
   if (
     !props.address ||
