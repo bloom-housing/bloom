@@ -1,7 +1,7 @@
 import React from "react"
 import { useFormContext } from "react-hook-form"
 import { t, Field, FieldGroup } from "@bloom-housing/ui-components"
-import { Grid } from "@bloom-housing/ui-seeds"
+import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import {
   EnumListingListingType,
   YesNoEnum,
@@ -54,27 +54,11 @@ const ListingIntro = (props: ListingIntroProps) => {
         {props.enableNonRegulatedListings && (
           <Grid.Row columns={1}>
             <Grid.Cell>
-              <FieldGroup
-                name="listingType"
-                type="radio"
-                register={register}
-                groupLabel={t("listings.listingTypeTile")}
-                fields={[
-                  {
-                    id: "regulatedListing",
-                    label: t("listings.regulated"),
-                    value: EnumListingListingType.regulated,
-                    defaultChecked: !listing?.listingType,
-                  },
-                  {
-                    id: "nonRegulatedListing",
-                    label: t("listings.nonRegulated"),
-                    value: EnumListingListingType.nonRegulated,
-                  },
-                ]}
-                error={fieldHasError(errors.listingType)}
-                errorMessage={fieldMessage(errors.listingType)}
-              />
+              <FieldValue id="listingType" label={t("listings.listingTypeTile")}>
+                {listing.listingType === EnumListingListingType.regulated
+                  ? t("listings.regulated")
+                  : t("listings.nonRegulated")}
+              </FieldValue>
             </Grid.Cell>
           </Grid.Row>
         )}

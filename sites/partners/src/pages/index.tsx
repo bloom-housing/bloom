@@ -1,4 +1,4 @@
-import React, { useMemo, useContext, useState } from "react"
+import React, { useMemo, useContext, useState, useEffect } from "react"
 import Head from "next/head"
 import DocumentArrowDownIcon from "@heroicons/react/24/solid/DocumentArrowDownIcon"
 import { useRouter } from "next/router"
@@ -6,9 +6,21 @@ import { useForm } from "react-hook-form"
 import dayjs from "dayjs"
 import { ColDef, ColGroupDef } from "ag-grid-community"
 import { Button, Dialog, Grid, Icon } from "@bloom-housing/ui-seeds"
-import { t, AgTable, useAgTable, Select, Form, SelectOption } from "@bloom-housing/ui-components"
+import {
+  t,
+  AgTable,
+  useAgTable,
+  Select,
+  Form,
+  SelectOption,
+  FieldGroup,
+} from "@bloom-housing/ui-components"
 import { AuthContext } from "@bloom-housing/shared-helpers"
-import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  EnumListingListingType,
+  FeatureFlagEnum,
+  ListingTypeEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { useListingExport, useListingsData } from "../lib/hooks"
 import Layout from "../layouts"
 import { MetaTags } from "../components/shared/MetaTags"
@@ -92,6 +104,7 @@ export const getFlagInAllJurisdictions = (
 
 type CreateListingFormFields = {
   jurisdiction: string
+  listingType: ListingTypeEnum
 }
 
 export default function ListingsList() {
@@ -111,6 +124,7 @@ export default function ListingsList() {
   const { register, errors, handleSubmit, clearErrors } = useForm<CreateListingFormFields>()
 
   const [listingSelectModal, setListingSelectModal] = useState(false)
+  const [isNonRegulatedEnabled, setIsNonRegulatedEnabled] = useState(false)
 
   const defaultJurisdiction =
     profile?.jurisdictions?.length === 1 ? profile.jurisdictions[0].id : null
@@ -134,8 +148,18 @@ export default function ListingsList() {
   }
 
   const showForNonRegulated = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableNonRegulatedListings
+    FeatureFlagEnum.enableNonRegulatedListings,
+    undefined,
+    true
   )
+
+  useEffect(() => {
+    if (defaultJurisdiction) {
+      setIsNonRegulatedEnabled(
+        doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableNonRegulatedListings)
+      )
+    }
+  }, [defaultJurisdiction, doJurisdictionsHaveFeatureFlagOn])
 
   const columnDefs = useMemo(() => {
     const columns: (ColDef | ColGroupDef)[] = [
@@ -295,9 +319,16 @@ export default function ListingsList() {
   })
 
   const onSubmit = (data: CreateListingFormFields) => {
+    const query = {
+      jurisdictionId: data.jurisdiction,
+    }
+    if (data.listingType === ListingTypeEnum.nonRegulated) {
+      query["nonRegulated"] = true
+    }
+    console.log("data", data)
     void router.push({
       pathname: "/listings/add",
-      query: { jurisdictionId: data.jurisdiction },
+      query: query,
     })
   }
 
@@ -343,7 +374,7 @@ export default function ListingsList() {
                       size="sm"
                       variant="primary"
                       onClick={() => {
-                        if (defaultJurisdiction) {
+                        if (defaultJurisdiction && !isNonRegulatedEnabled) {
                           void router.push({
                             pathname: "/listings/add",
                             query: { jurisdictionId: defaultJurisdiction },
@@ -388,7 +419,9 @@ export default function ListingsList() {
       >
         <Form id="listing-select-form" onSubmit={handleSubmit(onSubmit)}>
           <Dialog.Header id="listing-select-dialog-header">
-            {t("listings.selectJurisdictionTitle")}
+            {defaultJurisdiction
+              ? t("listings.selectListingType")
+              : t("listings.selectJurisdictionTitle")}
           </Dialog.Header>
 
           <Dialog.Content id="listing-select-dialog-content">
@@ -410,7 +443,14 @@ export default function ListingsList() {
                       options={jurisdictionOptions}
                       validation={{ required: !defaultJurisdiction }}
                       inputProps={{
-                        onChange: () => {
+                        onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
+                          setIsNonRegulatedEnabled(
+                            e.target?.value &&
+                              doJurisdictionsHaveFeatureFlagOn(
+                                FeatureFlagEnum.enableNonRegulatedListings,
+                                e.target?.value
+                              )
+                          )
                           clearErrors("jurisdiction")
                         },
                         "aria-required": true,
@@ -418,6 +458,33 @@ export default function ListingsList() {
                       }}
                     />
                   </div>
+                </Grid.Cell>
+              </Grid.Row>
+              <Grid.Row columns={3}>
+                <Grid.Cell className={"seeds-grid-span-2"}>
+                  {isNonRegulatedEnabled && (
+                    <div>
+                      <FieldGroup
+                        name="listingType"
+                        type="radio"
+                        register={register}
+                        groupLabel={t("listings.listingTypeTile")}
+                        fields={[
+                          {
+                            id: "regulatedListing",
+                            label: t("listings.regulated"),
+                            value: EnumListingListingType.regulated,
+                            defaultChecked: true,
+                          },
+                          {
+                            id: "nonRegulatedListing",
+                            label: t("listings.nonRegulated"),
+                            value: EnumListingListingType.nonRegulated,
+                          },
+                        ]}
+                      />
+                    </div>
+                  )}
                 </Grid.Cell>
               </Grid.Row>
             </Grid>
