@@ -20,7 +20,7 @@ import {
   NetworkErrorMessage,
 } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../lib/constants"
-import PasswordExpiredModal from "../components/account/PasswordExpiredModal"
+import { PasswordExpiredModal } from "../components/account/PasswordExpiredModal"
 import {
   FeatureFlagEnum,
   Jurisdiction,
