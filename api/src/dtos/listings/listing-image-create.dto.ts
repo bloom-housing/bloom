@@ -4,7 +4,7 @@ import { IsDefined, ValidateNested } from 'class-validator';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 import { AssetCreate } from '../assets/asset-create.dto';
 import { ListingImage } from './listing-image.dto';
-import { ValidateListingPublish } from 'src/decorators/validate-listing-publish.decorator';
+import { ValidateListingPublish } from '../../decorators/validate-listing-publish.decorator';
 
 export class ListingImageCreate extends OmitType(ListingImage, [
   'assets',
