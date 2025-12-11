@@ -291,7 +291,7 @@ export class ApplicationService {
     this.cronJobService.startCronJob(
       PII_DELETION_CRON_JOB_NAME,
       process.env.PII_DELETION_CRON_STRING,
-      this.removePIICronJon.bind(this),
+      this.removePIICronJob.bind(this),
     );
   }
 
@@ -1266,7 +1266,7 @@ export class ApplicationService {
     await this.prisma.$transaction(transactions);
   }
 
-  async removePIICronJon(): Promise<SuccessDTO> {
+  async removePIICronJob(): Promise<SuccessDTO> {
     if (process.env.APPLICATION_DAYS_TILL_EXPIRY) {
       this.logger.warn('removePIICron job running');
       await this.cronJobService.markCronJobAsStarted(

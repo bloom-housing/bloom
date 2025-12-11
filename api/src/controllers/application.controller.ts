@@ -273,7 +273,7 @@ export class ApplicationController {
   })
   @ApiOkResponse({ type: SuccessDTO })
   async removePIICronJob(): Promise<SuccessDTO> {
-    return await this.applicationService.removePIICronJon();
+    return await this.applicationService.removePIICronJob();
   }
 
   @Put(`:id`)
