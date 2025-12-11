@@ -223,7 +223,7 @@ export class ListingController {
   @Get(`byMultiselectQuestion/:multiselectQuestionId`)
   @ApiOperation({
     summary: 'Get listings by multiselect question id',
-    operationId: 'retrieveListings',
+    operationId: 'retrieveListingsByMSQ',
   })
   @ApiOkResponse({ type: IdDTO, isArray: true })
   async retrieveListings(
@@ -232,6 +232,16 @@ export class ListingController {
     return await this.listingService.findListingsWithMultiSelectQuestion(
       multiselectQuestionId,
     );
+  }
+
+  @Get('byProperty/:propertyId')
+  @ApiOperation({
+    summary: 'Get listings by assigned porperty ID',
+    operationId: 'retrieveListingsByProperty',
+  })
+  @ApiOkResponse({ type: IdDTO, isArray: true })
+  async retreiveListingsByProperty(@Param('propertyId') propertyId: string) {
+    return await this.listingService.findListingsWithPorperty(propertyId);
   }
 
   // NestJS best practice to have get(':id') at the bottom of the file

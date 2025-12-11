@@ -2756,6 +2756,26 @@ export class ListingService implements OnModuleInit {
     return mapTo(Listing, listingsRaw);
   };
 
+  findListingsWithPorperty = async (propertyId: string) => {
+    if (!propertyId) {
+      throw new BadRequestException({
+        message: 'A property ID must be provided',
+      });
+    }
+
+    const listingsRaw = await this.prisma.listings.findMany({
+      select: {
+        id: true,
+        name: true,
+      },
+      where: {
+        propertyId: propertyId,
+      },
+    });
+
+    return mapTo(Listing, listingsRaw);
+  };
+
   setExpireAfterValueOnApplications = async (listingId: string) => {
     if (
       process.env.APPLICATION_DAYS_TILL_EXPIRY &&
