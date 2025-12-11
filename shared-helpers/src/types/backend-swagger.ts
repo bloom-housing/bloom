@@ -5856,6 +5856,15 @@ export interface Application {
   status: ApplicationStatusEnum
 
   /**  */
+  accessibleUnitWaitlistNumber?: number
+
+  /**  */
+  conventionalUnitWaitlistNumber?: number
+
+  /**  */
+  manualLotteryPositionNumber?: number
+
+  /**  */
   language?: LanguagesEnum
 
   /**  */
@@ -6687,6 +6696,15 @@ export interface PublicAppsFiltered {
   status: ApplicationStatusEnum
 
   /**  */
+  accessibleUnitWaitlistNumber?: number
+
+  /**  */
+  conventionalUnitWaitlistNumber?: number
+
+  /**  */
+  manualLotteryPositionNumber?: number
+
+  /**  */
   language?: LanguagesEnum
 
   /**  */
@@ -6967,6 +6985,15 @@ export interface ApplicationCreate {
   status: ApplicationStatusEnum
 
   /**  */
+  accessibleUnitWaitlistNumber?: number
+
+  /**  */
+  conventionalUnitWaitlistNumber?: number
+
+  /**  */
+  manualLotteryPositionNumber?: number
+
+  /**  */
   language?: LanguagesEnum
 
   /**  */
@@ -7066,6 +7093,15 @@ export interface ApplicationUpdate {
 
   /**  */
   status: ApplicationStatusEnum
+
+  /**  */
+  accessibleUnitWaitlistNumber?: number
+
+  /**  */
+  conventionalUnitWaitlistNumber?: number
+
+  /**  */
+  manualLotteryPositionNumber?: number
 
   /**  */
   language?: LanguagesEnum
@@ -7887,9 +7923,11 @@ export enum IncomePeriodEnum {
 }
 
 export enum ApplicationStatusEnum {
-  "draft" = "draft",
   "submitted" = "submitted",
-  "removed" = "removed",
+  "declined" = "declined",
+  "receivedUnit" = "receivedUnit",
+  "waitlist" = "waitlist",
+  "waitlistDeclined" = "waitlistDeclined",
 }
 
 export enum ApplicationSubmissionTypeEnum {
