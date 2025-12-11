@@ -84,6 +84,7 @@ type findByOptions = {
 };
 
 const USER_DELETION_CRON_JOB_NAME = 'USER_DELETION_CRON_STRING';
+const USER_DELETION_WARN_CRON_JOB_NAME = 'USER_DELETION_WARN_CRON_JOB';
 
 @Injectable()
 export class UserService {
@@ -104,6 +105,11 @@ export class UserService {
       USER_DELETION_CRON_JOB_NAME,
       process.env.USER_DELETION_CRON_STRING,
       this.deleteAfterInactivity.bind(this),
+    );
+    this.cronJobService.startCronJob(
+      USER_DELETION_WARN_CRON_JOB_NAME,
+      process.env.USER_DELETION_WARN_CRON_STRING,
+      this.warnUserOfDeletionCronJob.bind(this),
     );
   }
 
@@ -1120,5 +1126,61 @@ export class UserService {
     }
 
     return { success: true } as SuccessDTO;
+  }
+
+  /**
+   * Cron job for sending emails to users that have not logged in to the system in USERS_DAYS_TILL_EXPIRY
+   * informing them their account will be deleted in 30 days
+   */
+  async warnUserOfDeletionCronJob(): Promise<SuccessDTO> {
+    if (
+      this.configService.get('USERS_DAYS_TILL_EXPIRY') &&
+      !isNaN(Number(this.configService.get('USERS_DAYS_TILL_EXPIRY')))
+    ) {
+      await this.cronJobService.markCronJobAsStarted(
+        USER_DELETION_WARN_CRON_JOB_NAME,
+      );
+      // warning the user 30 days before the user account will be deleted
+      const warnDateNumber =
+        Number(this.configService.get('USERS_DAYS_TILL_EXPIRY')) - 30;
+      const warnDate = dayjs(new Date())
+        .subtract(warnDateNumber, 'days')
+        .toDate();
+      const users = await this.prisma.userAccounts.findMany({
+        include: {
+          jurisdictions: true,
+        },
+        where: {
+          lastLoginAt: { lte: warnDate },
+          userRoles: null,
+          wasWarnedOfDeletion: false,
+        },
+      });
+      this.logger.warn(`warning ${users.length} users of account deletion`);
+      for (const user of users) {
+        try {
+          await this.emailService.warnOfAccountRemoval(mapTo(User, user));
+          await this.prisma.userAccounts.update({
+            data: { wasWarnedOfDeletion: true },
+            where: { id: user.id },
+          });
+        } catch (e) {
+          this.logger.error(e);
+          this.logger.error(
+            `warnUserOfDeletion email failed for user ${user.id}`,
+          );
+        }
+      }
+    } else {
+      this.logger.warn(
+        'USERS_DAYS_TILL_EXPIRY not set so warnUserOfDeletion cron job not run',
+      );
+      return {
+        success: false,
+      };
+    }
+    return {
+      success: true,
+    };
   }
 }

@@ -203,6 +203,7 @@ describe('Testing mfa strategy', () => {
       data: {
         failedLoginAttemptsCount: 1,
         lastLoginAt: expect.anything(),
+        wasWarnedOfDeletion: false,
       },
       where: {
         id,
@@ -308,6 +309,7 @@ describe('Testing mfa strategy', () => {
     expect(prisma.userAccounts.update).toHaveBeenCalledWith({
       data: {
         failedLoginAttemptsCount: 0,
+        wasWarnedOfDeletion: false,
       },
       where: {
         id,
@@ -360,6 +362,7 @@ describe('Testing mfa strategy', () => {
     expect(prisma.userAccounts.update).toHaveBeenCalledWith({
       data: {
         failedLoginAttemptsCount: 0,
+        wasWarnedOfDeletion: false,
       },
       where: {
         id,
@@ -412,6 +415,7 @@ describe('Testing mfa strategy', () => {
     expect(prisma.userAccounts.update).toHaveBeenCalledWith({
       data: {
         failedLoginAttemptsCount: 0,
+        wasWarnedOfDeletion: false,
       },
       where: {
         id,
