@@ -14,6 +14,7 @@ import {
   Listing,
   ListingCreate,
   ListingEventsTypeEnum,
+  ListingTypeEnum,
   ListingUpdate,
   ListingsStatusEnum,
   MarketingTypeEnum,
@@ -70,6 +71,7 @@ type ListingFormProps = {
   jurisdictionId: string
   listing?: FormListing
   editMode?: boolean
+  isNonRegulated?: boolean
   setListingName?: React.Dispatch<React.SetStateAction<string>>
   updateListing?: (updatedListing: Listing) => void
 }
@@ -108,6 +110,7 @@ const ListingForm = ({
   editMode,
   setListingName,
   updateListing,
+  isNonRegulated,
 }: ListingFormProps) => {
   const defaultValues = editMode ? listing : formDefaults
   const formMethods = useForm<FormListing>({
@@ -118,7 +121,7 @@ const ListingForm = ({
   const router = useRouter()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { getValues, setError, clearErrors, reset, watch } = formMethods
+  const { getValues, setError, clearErrors, reset, watch, setValue } = formMethods
 
   const marketingTypeChoice = watch("marketingType")
 
@@ -244,6 +247,12 @@ const ListingForm = ({
     FeatureFlagEnum.enableListingImageAltText,
     jurisdictionId
   )
+
+  useEffect(() => {
+    if (enableNonRegulatedListings && isNonRegulated) {
+      setValue("listingType", ListingTypeEnum.nonRegulated)
+    }
+  }, [enableNonRegulatedListings, isNonRegulated, setValue])
 
   useEffect(() => {
     if (listing?.units) {
