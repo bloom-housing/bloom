@@ -4,18 +4,18 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from './prisma.service';
-import { PropertyQueryParams } from 'src/dtos/properties/property-query-params.dto';
+import { PropertyQueryParams } from '../dtos/properties/property-query-params.dto';
 import {
   buildPaginationMetaInfo,
   calculateSkip,
   calculateTake,
-} from 'src/utilities/pagination-helpers';
-import { mapTo } from 'src/utilities/mapTo';
-import Property from 'src/dtos/properties/property.dto';
-import { PagiantedPropertyDto } from 'src/dtos/properties/paginated-property.dto';
-import PropertyCreate from 'src/dtos/properties/property-create.dto';
-import { PropertyUpdate } from 'src/dtos/properties/property-update.dto';
-import { SuccessDTO } from 'src/dtos/shared/success.dto';
+} from '../utilities/pagination-helpers';
+import { mapTo } from '../utilities/mapTo';
+import Property from '../dtos/properties/property.dto';
+import { PagiantedPropertyDto } from '../dtos/properties/paginated-property.dto';
+import PropertyCreate from '../dtos/properties/property-create.dto';
+import { PropertyUpdate } from '../dtos/properties/property-update.dto';
+import { SuccessDTO } from '../dtos/shared/success.dto';
 
 @Injectable()
 export class PropertyService {

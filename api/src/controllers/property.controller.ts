@@ -12,16 +12,16 @@ import {
   Delete,
 } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { PermissionTypeDecorator } from 'src/decorators/permission-type.decorator';
-import { PagiantedPropertyDto } from 'src/dtos/properties/paginated-property.dto';
-import { PropertyQueryParams } from 'src/dtos/properties/property-query-params.dto';
-import { PropertyService } from 'src/services/property.service';
-import PropertyCreate from 'src/dtos/properties/property-create.dto';
-import { PropertyUpdate } from 'src/dtos/properties/property-update.dto';
-import Property from 'src/dtos/properties/property.dto';
-import { IdDTO } from 'src/dtos/shared/id.dto';
-import { SuccessDTO } from 'src/dtos/shared/success.dto';
-import { defaultValidationPipeOptions } from 'src/utilities/default-validation-pipe-options';
+import { PermissionTypeDecorator } from '../decorators/permission-type.decorator';
+import { PagiantedPropertyDto } from '../dtos/properties/paginated-property.dto';
+import { PropertyQueryParams } from '../dtos/properties/property-query-params.dto';
+import { PropertyService } from '../services/property.service';
+import PropertyCreate from '../dtos/properties/property-create.dto';
+import { PropertyUpdate } from '../dtos/properties/property-update.dto';
+import Property from '../dtos/properties/property.dto';
+import { IdDTO } from '../dtos/shared/id.dto';
+import { SuccessDTO } from '../dtos/shared/success.dto';
+import { defaultValidationPipeOptions } from '../utilities/default-validation-pipe-options';
 
 @Controller('properties')
 @ApiTags('properties')

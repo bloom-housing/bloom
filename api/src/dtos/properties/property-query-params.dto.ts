@@ -2,7 +2,7 @@ import { Expose } from 'class-transformer';
 import { PaginationAllowsAllQueryParams } from '../shared/pagination.dto';
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { MinLength } from 'class-validator';
-import { ValidationsGroupsEnum } from 'src/enums/shared/validation-groups-enum';
+import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 
 export class PropertyQueryParams extends PaginationAllowsAllQueryParams {
   @Expose()

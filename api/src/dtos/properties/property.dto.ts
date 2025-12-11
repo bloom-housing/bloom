@@ -1,7 +1,7 @@
 import { Expose } from 'class-transformer';
 import { AbstractDTO } from '../shared/abstract.dto';
 import { IsDefined, IsString, IsUrl } from 'class-validator';
-import { ValidationsGroupsEnum } from 'src/enums/shared/validation-groups-enum';
+import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export default class Property extends AbstractDTO {
