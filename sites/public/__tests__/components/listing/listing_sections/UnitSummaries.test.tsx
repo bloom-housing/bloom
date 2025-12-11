@@ -6,7 +6,6 @@ import {
   UnitTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { UnitSummaries } from "../../../../src/components/listing/listing_sections/UnitSummaries"
-import { on } from "node:events"
 
 afterEach(cleanup)
 
@@ -114,6 +113,42 @@ describe("<UnitSummaries>", () => {
         exact: false,
       }).length
     ).toBeGreaterThan(0)
+  })
+
+  it("limit to 3 rows", () => {
+    const updatedOneBed = { ...oneBed, number: "101" }
+    const updatedTwoBed = { ...twoBed, number: "102" }
+
+    const mockedUnits: Unit[] = [
+      updatedOneBed,
+      updatedOneBed,
+      updatedTwoBed,
+      updatedTwoBed,
+      updatedTwoBed,
+      updatedTwoBed,
+    ]
+
+    const { getAllByTestId, getAllByLabelText, getAllByText, getByLabelText } = render(
+      <UnitSummaries
+        disableUnitsAccordion={false}
+        units={mockedUnits}
+        unitSummary={mockedSummaries}
+      />
+    )
+    expect(getAllByTestId("listing-unit-summary").length).toBe(2)
+    expect(getAllByLabelText("Collapse section").length).toBeGreaterThan(0)
+    expect(getAllByText("1 BR").length).toBeGreaterThan(0)
+    expect(
+      getAllByText("2 units, 300 - 350 square feet, 2nd - 4th floors", { exact: false }).length
+    ).toBeGreaterThan(0)
+    expect(getAllByText("2 BR").length).toBeGreaterThan(0)
+
+    expect(
+      getAllByText("4 units, 500 - 600 square feet, 3rd - 5th floors", {
+        exact: false,
+      }).length
+    ).toBeGreaterThan(0)
+    expect(getByLabelText("Show more 2 bedroom units")).toBeInTheDocument()
   })
 
   it("don't show summaries if there would be no table data", () => {

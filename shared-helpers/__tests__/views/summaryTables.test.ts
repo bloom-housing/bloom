@@ -1,4 +1,5 @@
 import { cleanup } from "@testing-library/react"
+import { renderToString } from "react-dom/server"
 import { UnitSummary, UnitTypeEnum, UnitGroupSummary } from "../../src/types/backend-swagger"
 import {
   mergeSummaryRows,
@@ -6,20 +7,27 @@ import {
   mergeGroupSummaryRows,
   stackedUnitGroupsSummariesTable,
   getAvailabilityText,
+  getStackedUnitTableData,
 } from "../../src/views/summaryTables"
 
 afterEach(cleanup)
 
 // The backend won't accept null in the type, even though that's the data that is actually being generated, so I'm casting in order to test against realistic data
-const defaultUnit = {
+const defaultUnitType = {
   id: "a",
   createdAt: new Date(),
   updatedAt: new Date(),
   numBedrooms: null as unknown,
   name: null as unknown,
 }
-const defaultUnitSummary = {
-  unitTypes: defaultUnit,
+
+const defaultUnit = {
+  id: "a",
+  createdAt: new Date(),
+  updatedAt: new Date(),
+}
+const defaultUnitTypeSummary = {
+  unitTypes: defaultUnitType,
   minIncomeRange: { min: null as unknown, max: null as unknown },
   occupancyRange: { min: null as unknown, max: null as unknown },
   rentAsPercentIncomeRange: { min: null as unknown, max: null as unknown },
@@ -28,7 +36,7 @@ const defaultUnitSummary = {
   areaRange: { min: null as unknown, max: null as unknown },
 } as UnitSummary
 
-const defaultUnitGroupSummary = {
+const defaultUnitTypeGroupSummary = {
   unitTypes: [],
   rentRange: { min: null as unknown, max: null as unknown },
   rentAsPercentIncomeRange: { min: null as unknown, max: null as unknown },
@@ -39,9 +47,9 @@ const defaultUnitGroupSummary = {
 
 const rentNoRanges = [
   {
-    ...defaultUnitSummary,
+    ...defaultUnitTypeSummary,
     unitTypes: {
-      ...defaultUnit,
+      ...defaultUnitType,
       numBedrooms: 1,
       name: UnitTypeEnum.oneBdrm,
     },
@@ -49,9 +57,9 @@ const rentNoRanges = [
     rentRange: { min: "1200", max: "1200" },
   },
   {
-    ...defaultUnitSummary,
+    ...defaultUnitTypeSummary,
     unitTypes: {
-      ...defaultUnit,
+      ...defaultUnitType,
       numBedrooms: 1,
       name: UnitTypeEnum.oneBdrm,
     },
@@ -62,9 +70,9 @@ const rentNoRanges = [
 
 const rentRanges = [
   {
-    ...defaultUnitSummary,
+    ...defaultUnitTypeSummary,
     unitTypes: {
-      ...defaultUnit,
+      ...defaultUnitType,
       numBedrooms: 1,
       name: UnitTypeEnum.oneBdrm,
     },
@@ -72,9 +80,9 @@ const rentRanges = [
     rentRange: { min: "1400", max: "1500" },
   },
   {
-    ...defaultUnitSummary,
+    ...defaultUnitTypeSummary,
     unitTypes: {
-      ...defaultUnit,
+      ...defaultUnitType,
       numBedrooms: 1,
       name: UnitTypeEnum.oneBdrm,
     },
@@ -85,9 +93,9 @@ const rentRanges = [
 
 const percentageRentNoRanges = [
   {
-    ...defaultUnitSummary,
+    ...defaultUnitTypeSummary,
     unitTypes: {
-      ...defaultUnit,
+      ...defaultUnitType,
       numBedrooms: 1,
       name: UnitTypeEnum.oneBdrm,
     },
@@ -95,9 +103,9 @@ const percentageRentNoRanges = [
     rentAsPercentIncomeRange: { min: 30, max: 30 },
   },
   {
-    ...defaultUnitSummary,
+    ...defaultUnitTypeSummary,
     unitTypes: {
-      ...defaultUnit,
+      ...defaultUnitType,
       numBedrooms: 1,
       name: UnitTypeEnum.oneBdrm,
     },
@@ -108,9 +116,9 @@ const percentageRentNoRanges = [
 
 const percentageRent = [
   {
-    ...defaultUnitSummary,
+    ...defaultUnitTypeSummary,
     unitTypes: {
-      ...defaultUnit,
+      ...defaultUnitType,
       numBedrooms: 1,
       name: UnitTypeEnum.oneBdrm,
     },
@@ -118,9 +126,9 @@ const percentageRent = [
     rentAsPercentIncomeRange: { min: 5, max: 10 },
   },
   {
-    ...defaultUnitSummary,
+    ...defaultUnitTypeSummary,
     unitTypes: {
-      ...defaultUnit,
+      ...defaultUnitType,
       numBedrooms: 1,
       name: UnitTypeEnum.oneBdrm,
     },
@@ -131,9 +139,9 @@ const percentageRent = [
 
 const mixedRentUnits = [
   {
-    ...defaultUnitSummary,
+    ...defaultUnitTypeSummary,
     unitTypes: {
-      ...defaultUnit,
+      ...defaultUnitType,
       numBedrooms: 1,
       name: UnitTypeEnum.oneBdrm,
     },
@@ -141,9 +149,9 @@ const mixedRentUnits = [
     rentAsPercentIncomeRange: { min: 20, max: 30 },
   },
   {
-    ...defaultUnitSummary,
+    ...defaultUnitTypeSummary,
     unitTypes: {
-      ...defaultUnit,
+      ...defaultUnitType,
       numBedrooms: 3,
       name: UnitTypeEnum.threeBdrm,
     },
@@ -151,9 +159,9 @@ const mixedRentUnits = [
     rentAsPercentIncomeRange: { min: 10, max: 15 },
   },
   {
-    ...defaultUnitSummary,
+    ...defaultUnitTypeSummary,
     unitTypes: {
-      ...defaultUnit,
+      ...defaultUnitType,
       numBedrooms: 1,
       name: UnitTypeEnum.oneBdrm,
     },
@@ -161,9 +169,9 @@ const mixedRentUnits = [
     rentRange: { min: "450", max: "750" },
   },
   {
-    ...defaultUnitSummary,
+    ...defaultUnitTypeSummary,
     unitTypes: {
-      ...defaultUnit,
+      ...defaultUnitType,
       numBedrooms: 2,
       name: UnitTypeEnum.twoBdrm,
     },
@@ -174,17 +182,17 @@ const mixedRentUnits = [
 
 const noRentData = [
   {
-    ...defaultUnitSummary,
+    ...defaultUnitTypeSummary,
     unitTypes: {
-      ...defaultUnit,
+      ...defaultUnitType,
       numBedrooms: 1,
       name: UnitTypeEnum.oneBdrm,
     },
   },
   {
-    ...defaultUnitSummary,
+    ...defaultUnitTypeSummary,
     unitTypes: {
-      ...defaultUnit,
+      ...defaultUnitType,
       numBedrooms: 1,
       name: UnitTypeEnum.oneBdrm,
     },
@@ -194,10 +202,10 @@ const noRentData = [
 // Test data for unit groups
 const groupRentNoRanges = [
   {
-    ...defaultUnitGroupSummary,
+    ...defaultUnitTypeGroupSummary,
     unitTypes: [
       {
-        ...defaultUnit,
+        ...defaultUnitType,
         numBedrooms: 1,
         name: UnitTypeEnum.oneBdrm,
       },
@@ -205,10 +213,10 @@ const groupRentNoRanges = [
     rentRange: { min: "1200", max: "1200" },
   },
   {
-    ...defaultUnitGroupSummary,
+    ...defaultUnitTypeGroupSummary,
     unitTypes: [
       {
-        ...defaultUnit,
+        ...defaultUnitType,
         numBedrooms: 1,
         name: UnitTypeEnum.oneBdrm,
       },
@@ -219,10 +227,10 @@ const groupRentNoRanges = [
 
 const groupRentRanges = [
   {
-    ...defaultUnitGroupSummary,
+    ...defaultUnitTypeGroupSummary,
     unitTypes: [
       {
-        ...defaultUnit,
+        ...defaultUnitType,
         numBedrooms: 1,
         name: UnitTypeEnum.oneBdrm,
       },
@@ -230,10 +238,10 @@ const groupRentRanges = [
     rentRange: { min: "1400", max: "1500" },
   },
   {
-    ...defaultUnitGroupSummary,
+    ...defaultUnitTypeGroupSummary,
     unitTypes: [
       {
-        ...defaultUnit,
+        ...defaultUnitType,
         numBedrooms: 1,
         name: UnitTypeEnum.oneBdrm,
       },
@@ -244,10 +252,10 @@ const groupRentRanges = [
 
 const groupPercentageRentNoRanges = [
   {
-    ...defaultUnitGroupSummary,
+    ...defaultUnitTypeGroupSummary,
     unitTypes: [
       {
-        ...defaultUnit,
+        ...defaultUnitType,
         numBedrooms: 1,
         name: UnitTypeEnum.oneBdrm,
       },
@@ -255,10 +263,10 @@ const groupPercentageRentNoRanges = [
     rentAsPercentIncomeRange: { min: 30, max: 30 },
   },
   {
-    ...defaultUnitGroupSummary,
+    ...defaultUnitTypeGroupSummary,
     unitTypes: [
       {
-        ...defaultUnit,
+        ...defaultUnitType,
         numBedrooms: 1,
         name: UnitTypeEnum.oneBdrm,
       },
@@ -269,10 +277,10 @@ const groupPercentageRentNoRanges = [
 
 const groupPercentageRent = [
   {
-    ...defaultUnitGroupSummary,
+    ...defaultUnitTypeGroupSummary,
     unitTypes: [
       {
-        ...defaultUnit,
+        ...defaultUnitType,
         numBedrooms: 1,
         name: UnitTypeEnum.oneBdrm,
       },
@@ -280,10 +288,10 @@ const groupPercentageRent = [
     rentAsPercentIncomeRange: { min: 5, max: 10 },
   },
   {
-    ...defaultUnitGroupSummary,
+    ...defaultUnitTypeGroupSummary,
     unitTypes: [
       {
-        ...defaultUnit,
+        ...defaultUnitType,
         numBedrooms: 1,
         name: UnitTypeEnum.oneBdrm,
       },
@@ -294,10 +302,10 @@ const groupPercentageRent = [
 
 const groupMixedRentUnits = [
   {
-    ...defaultUnitGroupSummary,
+    ...defaultUnitTypeGroupSummary,
     unitTypes: [
       {
-        ...defaultUnit,
+        ...defaultUnitType,
         numBedrooms: 1,
         name: UnitTypeEnum.oneBdrm,
       },
@@ -305,10 +313,10 @@ const groupMixedRentUnits = [
     rentAsPercentIncomeRange: { min: 20, max: 30 },
   },
   {
-    ...defaultUnitGroupSummary,
+    ...defaultUnitTypeGroupSummary,
     unitTypes: [
       {
-        ...defaultUnit,
+        ...defaultUnitType,
         numBedrooms: 3,
         name: UnitTypeEnum.threeBdrm,
       },
@@ -316,10 +324,10 @@ const groupMixedRentUnits = [
     rentAsPercentIncomeRange: { min: 10, max: 15 },
   },
   {
-    ...defaultUnitGroupSummary,
+    ...defaultUnitTypeGroupSummary,
     unitTypes: [
       {
-        ...defaultUnit,
+        ...defaultUnitType,
         numBedrooms: 1,
         name: UnitTypeEnum.oneBdrm,
       },
@@ -327,10 +335,10 @@ const groupMixedRentUnits = [
     rentRange: { min: "450", max: "750" },
   },
   {
-    ...defaultUnitGroupSummary,
+    ...defaultUnitTypeGroupSummary,
     unitTypes: [
       {
-        ...defaultUnit,
+        ...defaultUnitType,
         numBedrooms: 2,
         name: UnitTypeEnum.twoBdrm,
       },
@@ -341,20 +349,20 @@ const groupMixedRentUnits = [
 
 const groupNoRentData = [
   {
-    ...defaultUnitGroupSummary,
+    ...defaultUnitTypeGroupSummary,
     unitTypes: [
       {
-        ...defaultUnit,
+        ...defaultUnitType,
         numBedrooms: 1,
         name: UnitTypeEnum.oneBdrm,
       },
     ],
   },
   {
-    ...defaultUnitGroupSummary,
+    ...defaultUnitTypeGroupSummary,
     unitTypes: [
       {
-        ...defaultUnit,
+        ...defaultUnitType,
         numBedrooms: 1,
         name: UnitTypeEnum.oneBdrm,
       },
@@ -364,15 +372,15 @@ const groupNoRentData = [
 
 const groupMultipleUnitTypes = [
   {
-    ...defaultUnitGroupSummary,
+    ...defaultUnitTypeGroupSummary,
     unitTypes: [
       {
-        ...defaultUnit,
+        ...defaultUnitType,
         numBedrooms: 1,
         name: UnitTypeEnum.oneBdrm,
       },
       {
-        ...defaultUnit,
+        ...defaultUnitType,
         numBedrooms: 2,
         name: UnitTypeEnum.twoBdrm,
       },
@@ -679,10 +687,10 @@ describe("stackedUnitGroupsSummariesTable", () => {
   it("should show availability text for open waitlist", () => {
     const openWaitlistGroup = [
       {
-        ...defaultUnitGroupSummary,
+        ...defaultUnitTypeGroupSummary,
         unitTypes: [
           {
-            ...defaultUnit,
+            ...defaultUnitType,
             numBedrooms: 1,
             name: UnitTypeEnum.oneBdrm,
           },
@@ -701,10 +709,10 @@ describe("stackedUnitGroupsSummariesTable", () => {
   it("should show availability text for vacant units", () => {
     const vacantUnitsGroup = [
       {
-        ...defaultUnitGroupSummary,
+        ...defaultUnitTypeGroupSummary,
         unitTypes: [
           {
-            ...defaultUnit,
+            ...defaultUnitType,
             numBedrooms: 1,
             name: UnitTypeEnum.oneBdrm,
           },
@@ -725,10 +733,10 @@ describe("stackedUnitGroupsSummariesTable", () => {
   it("should show coming soon text when isComingSoon is true", () => {
     const comingSoonGroup = [
       {
-        ...defaultUnitGroupSummary,
+        ...defaultUnitTypeGroupSummary,
         unitTypes: [
           {
-            ...defaultUnit,
+            ...defaultUnitType,
             numBedrooms: 1,
             name: UnitTypeEnum.oneBdrm,
           },
@@ -747,29 +755,255 @@ describe("stackedUnitGroupsSummariesTable", () => {
 
 describe("getAvailabilityText", () => {
   it("should show closed waitlist text", () => {
-    expect(getAvailabilityText(defaultUnitGroupSummary)).toEqual({ text: "Closed waitlist" })
+    expect(getAvailabilityText(defaultUnitTypeGroupSummary)).toEqual({ text: "Closed waitlist" })
   })
   it("should show open waitlist text", () => {
-    expect(getAvailabilityText({ ...defaultUnitGroupSummary, openWaitlist: true })).toEqual({
+    expect(getAvailabilityText({ ...defaultUnitTypeGroupSummary, openWaitlist: true })).toEqual({
       text: "Open waitlist",
     })
   })
   it("should show plural units available text", () => {
     expect(
-      getAvailabilityText({ ...defaultUnitGroupSummary, openWaitlist: true, unitVacancies: 10 })
+      getAvailabilityText({ ...defaultUnitTypeGroupSummary, openWaitlist: true, unitVacancies: 10 })
     ).toEqual({ text: "10 Vacant units & Open waitlist" })
   })
   it("should show singular units available text", () => {
     expect(
-      getAvailabilityText({ ...defaultUnitGroupSummary, openWaitlist: false, unitVacancies: 1 })
+      getAvailabilityText({ ...defaultUnitTypeGroupSummary, openWaitlist: false, unitVacancies: 1 })
     ).toEqual({ text: "1 Vacant unit & Closed waitlist" })
   })
   it("should show under construction text", () => {
     expect(
       getAvailabilityText(
-        { ...defaultUnitGroupSummary, openWaitlist: true, unitVacancies: 10 },
+        { ...defaultUnitTypeGroupSummary, openWaitlist: true, unitVacancies: 10 },
         true
       )
     ).toEqual({ text: "Under construction" })
+  })
+
+  describe("getStackedUnitTableData", () => {
+    it("returns empty values for no data", () => {
+      expect(getStackedUnitTableData([], defaultUnitTypeSummary)).toEqual(
+        expect.objectContaining({
+          floorSection: "",
+          areaRangeSection: "",
+          adjustedHeaders: {},
+        })
+      )
+    })
+    it("show all headers if all have data", () => {
+      const result = getStackedUnitTableData(
+        [
+          {
+            ...defaultUnit,
+            floor: 1,
+            sqFeet: "550",
+            number: "101",
+            numBathrooms: 1,
+            unitAccessibilityPriorityTypes: {
+              id: "a",
+              createdAt: new Date(),
+              updatedAt: new Date(),
+              name: "Mobility",
+            },
+            unitTypes: { ...defaultUnitType, name: UnitTypeEnum.oneBdrm, numBedrooms: 1 },
+          },
+        ],
+        {
+          ...defaultUnitTypeSummary,
+          unitTypes: {
+            ...defaultUnitType,
+            numBedrooms: 1,
+            name: UnitTypeEnum.oneBdrm,
+          },
+          floorRange: { min: 1, max: 1 },
+          areaRange: { min: 550, max: 550 },
+          minIncomeRange: { min: "150", max: "150" },
+          rentRange: { min: "1200", max: "1200" },
+        }
+      )
+      expect(result).toEqual(
+        expect.objectContaining({
+          adjustedHeaders: {
+            accessibilityType: "listings.unit.accessibilityType",
+            floor: "t.floor",
+            number: "t.unit",
+            sqFeet: "t.area",
+            numBathrooms: "listings.bath",
+          },
+        })
+      )
+      expect(renderToString(result.barContent)).toContain("1 BR")
+      expect(renderToString(result.barContent)).toContain("1 unit")
+    })
+    it("hide headers if no data", () => {
+      const resultNoFloor = getStackedUnitTableData(
+        [
+          {
+            ...defaultUnit,
+            sqFeet: "550",
+            number: "101",
+            numBathrooms: 1,
+            unitAccessibilityPriorityTypes: {
+              id: "a",
+              createdAt: new Date(),
+              updatedAt: new Date(),
+              name: "Mobility",
+            },
+            unitTypes: { ...defaultUnitType, name: UnitTypeEnum.oneBdrm, numBedrooms: 1 },
+          },
+        ],
+        {
+          ...defaultUnitTypeSummary,
+          unitTypes: {
+            ...defaultUnitType,
+            numBedrooms: 1,
+            name: UnitTypeEnum.oneBdrm,
+          },
+        }
+      )
+      expect(resultNoFloor).toEqual(
+        expect.objectContaining({
+          adjustedHeaders: {
+            accessibilityType: "listings.unit.accessibilityType",
+            number: "t.unit",
+            sqFeet: "t.area",
+            numBathrooms: "listings.bath",
+          },
+        })
+      )
+
+      const resultNoNumber = getStackedUnitTableData(
+        [
+          {
+            ...defaultUnit,
+            sqFeet: "550",
+            floor: 1,
+            numBathrooms: 1,
+            unitAccessibilityPriorityTypes: {
+              id: "a",
+              createdAt: new Date(),
+              updatedAt: new Date(),
+              name: "Mobility",
+            },
+            unitTypes: { ...defaultUnitType, name: UnitTypeEnum.oneBdrm, numBedrooms: 1 },
+          },
+        ],
+        {
+          ...defaultUnitTypeSummary,
+          unitTypes: {
+            ...defaultUnitType,
+            numBedrooms: 1,
+            name: UnitTypeEnum.oneBdrm,
+          },
+        }
+      )
+      expect(resultNoNumber).toEqual(
+        expect.objectContaining({
+          adjustedHeaders: {
+            accessibilityType: "listings.unit.accessibilityType",
+            floor: "t.floor",
+            sqFeet: "t.area",
+            numBathrooms: "listings.bath",
+          },
+        })
+      )
+
+      const resultNoArea = getStackedUnitTableData(
+        [
+          {
+            ...defaultUnit,
+            number: "101",
+            floor: 1,
+            numBathrooms: 1,
+            unitAccessibilityPriorityTypes: {
+              id: "a",
+              createdAt: new Date(),
+              updatedAt: new Date(),
+              name: "Mobility",
+            },
+            unitTypes: { ...defaultUnitType, name: UnitTypeEnum.oneBdrm, numBedrooms: 1 },
+          },
+        ],
+        {
+          ...defaultUnitTypeSummary,
+          unitTypes: {
+            ...defaultUnitType,
+            numBedrooms: 1,
+            name: UnitTypeEnum.oneBdrm,
+          },
+        }
+      )
+      expect(resultNoArea).toEqual(
+        expect.objectContaining({
+          adjustedHeaders: {
+            accessibilityType: "listings.unit.accessibilityType",
+            number: "t.unit",
+            floor: "t.floor",
+            numBathrooms: "listings.bath",
+          },
+        })
+      )
+
+      const resultNoA11y = getStackedUnitTableData(
+        [
+          {
+            ...defaultUnit,
+            sqFeet: "550",
+            number: "101",
+            floor: 1,
+            numBathrooms: 1,
+            unitTypes: { ...defaultUnitType, name: UnitTypeEnum.oneBdrm, numBedrooms: 1 },
+          },
+        ],
+        {
+          ...defaultUnitTypeSummary,
+          unitTypes: {
+            ...defaultUnitType,
+            numBedrooms: 1,
+            name: UnitTypeEnum.oneBdrm,
+          },
+        }
+      )
+      expect(resultNoA11y).toEqual(
+        expect.objectContaining({
+          adjustedHeaders: {
+            number: "t.unit",
+            floor: "t.floor",
+            sqFeet: "t.area",
+            numBathrooms: "listings.bath",
+          },
+        })
+      )
+
+      const resultNoBathrooms = getStackedUnitTableData(
+        [
+          {
+            ...defaultUnit,
+            sqFeet: "550",
+            number: "101",
+            floor: 1,
+            unitTypes: { ...defaultUnitType, name: UnitTypeEnum.oneBdrm, numBedrooms: 1 },
+          },
+        ],
+        {
+          ...defaultUnitTypeSummary,
+          unitTypes: {
+            ...defaultUnitType,
+            numBedrooms: 1,
+            name: UnitTypeEnum.oneBdrm,
+          },
+        }
+      )
+      expect(resultNoBathrooms).toEqual(
+        expect.objectContaining({
+          adjustedHeaders: {
+            number: "t.unit",
+            floor: "t.floor",
+            sqFeet: "t.area",
+          },
+        })
+      )
+    })
   })
 })
