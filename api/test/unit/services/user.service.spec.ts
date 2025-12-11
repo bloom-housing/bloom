@@ -2765,6 +2765,10 @@ describe('Testing user service', () => {
         .fn()
         .mockResolvedValue([{ id: 'id1' }, { id: 'id2' }]);
       prisma.userAccounts.update = jest.fn().mockResolvedValue({});
+      prisma.cronJob.findFirst = jest.fn().mockResolvedValue({});
+      prisma.cronJob.findFirst = jest.fn().mockResolvedValue({});
+      prisma.cronJob.create = jest.fn().mockResolvedValue({});
+      prisma.cronJob.update = jest.fn().mockResolvedValue({});
       emailService.warnOfAccountRemoval = jest.fn();
       const response = await service.warnUserOfDeletionCronJob();
       expect(prisma.userAccounts.findMany).toBeCalledWith({
@@ -2804,6 +2808,10 @@ describe('Testing user service', () => {
         .fn()
         .mockResolvedValue([{ id: 'id1' }, { id: 'id2' }]);
       prisma.userAccounts.update = jest.fn().mockResolvedValue({});
+      prisma.cronJob.findFirst = jest.fn().mockResolvedValue({});
+      prisma.cronJob.findFirst = jest.fn().mockResolvedValue({});
+      prisma.cronJob.create = jest.fn().mockResolvedValue({});
+      prisma.cronJob.update = jest.fn().mockResolvedValue({});
       emailService.warnOfAccountRemoval = jest
         .fn()
         .mockResolvedValueOnce({})
