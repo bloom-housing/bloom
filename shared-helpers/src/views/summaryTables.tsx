@@ -840,13 +840,16 @@ export const getStackedUnitTableData = (units: Unit[], unitSummary: UnitSummary)
 
   let floorSection = ""
   if (unitSummary.floorRange && unitSummary.floorRange.min) {
-    floorSection = `, ${formatRange(unitSummary.floorRange, true)} 
-          ${unitSummary.floorRange.max > unitSummary.floorRange.min ? t("t.floors") : t("t.floor")}`
+    floorSection = `, ${formatRange(unitSummary.floorRange, true)} ${
+      unitSummary.floorRange.max > unitSummary.floorRange.min ? t("t.floors") : t("t.floor")
+    }`
   }
 
   const barContent = (
     <div className={"toggle-header-content"}>
-      <strong>{t("listings.unitTypes." + unitSummary.unitTypes.name)}</strong>
+      <strong>
+        {unitSummary.unitTypes.name ? t("listings.unitTypes." + unitSummary.unitTypes.name) : ""}
+      </strong>
       {` ${unitsLabel(availableUnits)}${areaRangeSection}${floorSection}`}
     </div>
   )
