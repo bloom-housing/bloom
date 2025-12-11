@@ -344,19 +344,34 @@ export const stagingSeed = async (
   });
   // build ami charts
   const amiChart = await prismaClient.amiChart.create({
-    data: amiChartFactory(10, mainJurisdiction.id),
+    data: amiChartFactory(10, mainJurisdiction.id, null, mainJurisdiction.name),
   });
   await prismaClient.amiChart.create({
-    data: amiChartFactory(10, mainJurisdiction.id, 2),
+    data: amiChartFactory(10, mainJurisdiction.id, 2, mainJurisdiction.name),
   });
   const lakeviewAmiChart = await prismaClient.amiChart.create({
-    data: amiChartFactory(8, lakeviewJurisdiction.id),
+    data: amiChartFactory(
+      8,
+      lakeviewJurisdiction.id,
+      null,
+      lakeviewJurisdiction.name,
+    ),
   });
   await prismaClient.amiChart.create({
-    data: amiChartFactory(8, lakeviewJurisdiction.id, 2),
+    data: amiChartFactory(
+      8,
+      lakeviewJurisdiction.id,
+      2,
+      lakeviewJurisdiction.name,
+    ),
   });
   await prismaClient.amiChart.create({
-    data: amiChartFactory(10, angelopolisJurisdiction.id, 2),
+    data: amiChartFactory(
+      10,
+      angelopolisJurisdiction.id,
+      2,
+      angelopolisJurisdiction.name,
+    ),
   });
   // Create map layers
   await prismaClient.mapLayers.create({
