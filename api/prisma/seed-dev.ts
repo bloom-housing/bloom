@@ -109,7 +109,7 @@ export const devSeeding = async (
   });
   const unitTypes = await unitTypeFactoryAll(prismaClient);
   const amiChart = await prismaClient.amiChart.create({
-    data: amiChartFactory(10, jurisdiction.id),
+    data: amiChartFactory(10, jurisdiction.id, null, jurisdiction.name),
   });
   const multiselectQuestions = await Promise.all(
     await createMultiselect(jurisdiction.id, prismaClient),
