@@ -362,8 +362,6 @@ describe("listing data", () => {
 
         expect(screen.getByText("Listing photos", { selector: "h2" })).toBeInTheDocument()
         expect(screen.getByText("Preview")).toBeInTheDocument()
-        expect(screen.getByText("Primary")).toBeInTheDocument()
-        expect(screen.getByText("Primary photo")).toBeInTheDocument()
         const listingImages = screen.getAllByRole("img")
         expect(listingImages).toHaveLength(2)
         listingImages.forEach((imageElement) => {

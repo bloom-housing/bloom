@@ -1,12 +1,22 @@
 import React from "react"
+import "@testing-library/jest-dom"
 import { FormProvider, useForm } from "react-hook-form"
-import { formDefaults, FormListing } from "../../../../../src/lib/listings/formTypes"
-import { setupServer } from "msw/lib/node"
-import { mockNextRouter } from "../../../../testUtils"
 import { render, screen, within } from "@testing-library/react"
-import ListingPhotos from "../../../../../src/components/listings/PaperListingForm/sections/ListingPhotos"
 import { jurisdiction, listing } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
+import { setupServer } from "msw/lib/node"
+import { formDefaults, FormListing } from "../../../../../src/lib/listings/formTypes"
+import ListingPhotos from "../../../../../src/components/listings/PaperListingForm/sections/ListingPhotos"
+import { mockNextRouter } from "../../../../testUtils"
 import userEvent from "@testing-library/user-event"
+import * as helpers from "../../../../../src/lib/helpers"
+
+jest.mock("../../../../../src/lib/helpers", () => {
+  const actual = jest.requireActual<typeof helpers>("../../../../../src/lib/helpers")
+  return {
+    ...actual,
+    cloudinaryFileUploader: jest.fn(),
+  }
+})
 
 const FormComponent = ({ children, values }: { values?: FormListing; children }) => {
   const formMethods = useForm<FormListing>({
@@ -35,7 +45,11 @@ describe("<ListingPhotos>", () => {
     it("listing images are not required", () => {
       render(
         <FormComponent>
-          <ListingPhotos requiredFields={[]} jurisdiction={jurisdiction} />
+          <ListingPhotos
+            enableListingImageAltText={false}
+            requiredFields={[]}
+            jurisdiction={jurisdiction}
+          />
         </FormComponent>
       )
 
@@ -54,6 +68,7 @@ describe("<ListingPhotos>", () => {
       render(
         <FormComponent>
           <ListingPhotos
+            enableListingImageAltText={false}
             requiredFields={["listingImages"]}
             jurisdiction={{ ...jurisdiction, minimumListingPublishImagesRequired: 1 }}
           />
@@ -75,6 +90,7 @@ describe("<ListingPhotos>", () => {
       render(
         <FormComponent>
           <ListingPhotos
+            enableListingImageAltText={false}
             requiredFields={["listingImages"]}
             jurisdiction={{ ...jurisdiction, minimumListingPublishImagesRequired: 3 }}
           />
@@ -122,6 +138,7 @@ describe("<ListingPhotos>", () => {
           }}
         >
           <ListingPhotos
+            enableListingImageAltText={false}
             requiredFields={["listingImages"]}
             jurisdiction={{ ...jurisdiction, minimumListingPublishImagesRequired: 3 }}
           />
@@ -134,25 +151,22 @@ describe("<ListingPhotos>", () => {
       const [head, body] = within(imagesTable).getAllByRole("rowgroup")
 
       const headerColumns = within(head).getAllByRole("columnheader")
-      expect(headerColumns).toHaveLength(3)
-      const [previewHeader, primaryHeader, actionsHeader] = headerColumns
+      expect(headerColumns).toHaveLength(2)
+      const [previewHeader, actionsHeader] = headerColumns
       expect(previewHeader).toHaveTextContent("Preview")
-      expect(primaryHeader).toHaveTextContent("Primary")
       expect(actionsHeader).not.toHaveTextContent()
 
       const rows = within(body).getAllByRole("row")
       expect(rows).toHaveLength(2)
 
-      const [firstPreview, firstPrimary, firstActions] = within(rows[0]).getAllByRole("cell")
+      const [firstPreview, firstActions] = within(rows[0]).getAllByRole("cell")
       expect(within(firstPreview).getByRole("presentation")).toBeInTheDocument()
       expect(within(firstPreview).getByRole("presentation")).toHaveAttribute("src", "file_1_id")
-      expect(firstPrimary).toHaveTextContent("Primary photo")
       expect(within(firstActions).getByRole("button", { name: "Delete" })).toBeInTheDocument()
 
-      const [secondPreview, secondPrimary, secondActions] = within(rows[1]).getAllByRole("cell")
+      const [secondPreview, secondActions] = within(rows[1]).getAllByRole("cell")
       expect(within(secondPreview).getByRole("presentation")).toBeInTheDocument()
       expect(within(secondPreview).getByRole("presentation")).toHaveAttribute("src", "file_2_id")
-      expect(secondPrimary).not.toHaveTextContent("Primary photo")
       expect(within(secondActions).getByRole("button", { name: "Delete" })).toBeInTheDocument()
 
       expect(screen.queryByRole("button", { name: "Add photos" })).not.toBeInTheDocument()
@@ -165,6 +179,7 @@ describe("<ListingPhotos>", () => {
       render(
         <FormComponent>
           <ListingPhotos
+            enableListingImageAltText={false}
             requiredFields={[]}
             jurisdiction={{ ...jurisdiction, minimumListingPublishImagesRequired: 3 }}
           />
@@ -195,6 +210,7 @@ describe("<ListingPhotos>", () => {
       render(
         <FormComponent>
           <ListingPhotos
+            enableListingImageAltText={false}
             requiredFields={["listingImages"]}
             jurisdiction={{ ...jurisdiction, minimumListingPublishImagesRequired: 1 }}
           />
@@ -225,6 +241,7 @@ describe("<ListingPhotos>", () => {
       render(
         <FormComponent>
           <ListingPhotos
+            enableListingImageAltText={false}
             requiredFields={["listingImages"]}
             jurisdiction={{ ...jurisdiction, minimumListingPublishImagesRequired: 3 }}
           />
@@ -249,6 +266,146 @@ describe("<ListingPhotos>", () => {
       ).toBeInTheDocument()
 
       expect(within(dialogDrawer).getByRole("button", { name: "Save" })).toBeInTheDocument()
+    })
+  })
+  describe("enableListingImageAltText feature flag", () => {
+    const listingImages = [
+      {
+        assets: {
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          fileId: "file_1_id",
+          id: "asset_1_id",
+          label: "Asset 1 Label",
+        },
+        ordinal: 0,
+        description: "Front view of the building",
+      },
+      {
+        assets: {
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          fileId: "file_2_id",
+          id: "asset_2_id",
+          label: "Asset 2 Label",
+        },
+        ordinal: 1,
+        description: "Lobby interior view",
+      },
+    ]
+
+    it("shows description column and hides delete buttons when enabled", () => {
+      render(
+        <FormComponent
+          values={{
+            ...formDefaults,
+            ...listing,
+            jurisdictions: { id: "jurisdiction-id" },
+            listingImages,
+          }}
+        >
+          <ListingPhotos
+            enableListingImageAltText={true}
+            requiredFields={["listingImages"]}
+            jurisdiction={jurisdiction}
+          />
+        </FormComponent>
+      )
+
+      const imagesTable = screen.getByRole("table")
+      const [head, body] = within(imagesTable).getAllByRole("rowgroup")
+
+      const headerTexts = within(head)
+        .getAllByRole("columnheader")
+        .map((col) => col.textContent)
+      expect(headerTexts).toEqual(["Preview", "Image description", "Actions"])
+
+      const rows = within(body).getAllByRole("row")
+      const [firstPreview, firstDescription] = within(rows[0]).getAllByRole("cell")
+      expect(within(firstPreview).getByRole("img")).toHaveAttribute("src", "file_1_id")
+      expect(firstDescription).toHaveTextContent("Front view of the building")
+
+      expect(screen.queryByRole("button", { name: "Delete" })).not.toBeInTheDocument()
+    })
+
+    it("opens alt text editor from drawer when enabled", async () => {
+      render(
+        <FormComponent
+          values={{
+            ...formDefaults,
+            ...listing,
+            jurisdictions: { id: "jurisdiction-id" },
+            listingImages,
+          }}
+        >
+          <ListingPhotos
+            enableListingImageAltText={true}
+            requiredFields={["listingImages"]}
+            jurisdiction={jurisdiction}
+          />
+        </FormComponent>
+      )
+
+      const editPhotosButton = screen.getByRole("button", { name: "Edit photos" })
+      await userEvent.click(editPhotosButton)
+
+      const drawer = await screen.findByRole("dialog", { name: "Edit photos" })
+      expect(within(drawer).getByTestId("drawer-photos-table")).toBeInTheDocument()
+
+      const editButtons = within(drawer).getAllByRole("button", { name: "Edit" })
+      expect(editButtons).toHaveLength(2)
+
+      await userEvent.click(editButtons[0])
+
+      const altTextDrawer = await screen.findByRole("dialog", { name: "Add image description" })
+      expect(
+        within(altTextDrawer).getByLabelText("Image description (alt text)")
+      ).toBeInTheDocument()
+      expect(within(altTextDrawer).getByRole("button", { name: "Save" })).toBeInTheDocument()
+    })
+
+    it("opens alt text drawer after uploading a new photo when enabled", async () => {
+      const mockCloudinaryUploader = helpers.cloudinaryFileUploader as jest.MockedFunction<
+        typeof helpers.cloudinaryFileUploader
+      >
+      mockCloudinaryUploader.mockImplementation(
+        // eslint-disable-next-line @typescript-eslint/require-await
+        async ({ setCloudinaryData, setProgressValue }) => {
+          setProgressValue(100)
+          setCloudinaryData({ id: "new-file-id", url: "http://example.com/new-file" })
+        }
+      )
+
+      render(
+        <FormComponent
+          values={{
+            ...formDefaults,
+            ...listing,
+            jurisdictions: { id: "jurisdiction-id" },
+            listingImages: [],
+          }}
+        >
+          <ListingPhotos
+            enableListingImageAltText={true}
+            requiredFields={["listingImages"]}
+            jurisdiction={jurisdiction}
+          />
+        </FormComponent>
+      )
+
+      const addPhotosButton = screen.getByRole("button", { name: "Add photos" })
+      await userEvent.click(addPhotosButton)
+
+      const addPhotosDrawer = await screen.findByRole("dialog", { name: "Add photos" })
+      const dropzoneInput = within(addPhotosDrawer).getByTestId("dropzone-input")
+
+      const newFile = new File(["dummy file"], "new-photo.jpg", { type: "image/jpeg" })
+      await userEvent.upload(dropzoneInput, newFile)
+
+      const altTextDrawer = await screen.findByRole("dialog", { name: "Add image description" })
+      expect(
+        within(altTextDrawer).getByLabelText("Image description (alt text)")
+      ).toBeInTheDocument()
     })
   })
 })

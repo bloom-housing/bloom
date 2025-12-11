@@ -22,6 +22,7 @@ export enum FeatureFlagEnum {
   enableListingFavoriting = 'enableListingFavoriting',
   enableListingFileNumber = 'enableListingFileNumber',
   enableListingFiltering = 'enableListingFiltering',
+  enableListingImageAltText = 'enableListingImageAltText',
   enableListingOpportunity = 'enableListingOpportunity',
   enableListingPagination = 'enableListingPagination',
   enableListingUpdatedAt = 'enableListingUpdatedAt',
@@ -154,6 +155,10 @@ export const featureFlagMap: {
     name: FeatureFlagEnum.enableListingFiltering,
     description:
       'When true, a filter button is shown on listings browse and users can filter with the options in the drawer',
+  },
+  {
+    name: FeatureFlagEnum.enableListingImageAltText,
+    description: 'When true, allows partners to add alt text to listing images',
   },
   {
     name: FeatureFlagEnum.enableListingOpportunity,
