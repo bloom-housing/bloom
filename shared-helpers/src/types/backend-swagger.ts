@@ -2950,6 +2950,143 @@ export class LotteryService {
   }
 }
 
+export class PropertiesService {
+  /**
+   * Get a paginated set of properties
+   */
+  list(
+    params: {
+      /**  */
+      page?: number
+      /**  */
+      limit?: number | "all"
+      /**  */
+      search?: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<PagiantedProperty> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/properties"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+      configs.params = { page: params["page"], limit: params["limit"], search: params["search"] }
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Add a new property entry
+   */
+  add(
+    params: {
+      /** requestBody */
+      body?: PropertyCreate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Property> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/properties"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Update an exiting property entry by id
+   */
+  update(
+    params: {
+      /** requestBody */
+      body?: PropertyUpdate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Property> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/properties"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Delete an property entry by ID
+   */
+  deleteById(
+    params: {
+      /** requestBody */
+      body?: IdDTO
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/properties"
+
+      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Get a proprty object by ID
+   */
+  getById(
+    params: {
+      /**  */
+      id: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/properties/{id}"
+      url = url.replace("{id}", params["id"] + "")
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Get a paginated filtered set of properties
+   */
+  filterableList(
+    params: {
+      /** requestBody */
+      body?: PropertyQueryParams
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<PagiantedProperty> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/properties/list"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+}
+
 export interface SuccessDTO {
   /**  */
   success: boolean
@@ -3024,6 +3161,9 @@ export interface ListingFilterParams {
 
   /**  */
   zipCode?: string
+
+  /**  */
+  listingType?: ListingTypeEnum
 }
 
 export interface ListingsQueryBody {
@@ -4053,6 +4193,29 @@ export interface ListingNeighborhoodAmenities {
   busStops?: string
 }
 
+export interface Property {
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  name: string
+
+  /**  */
+  description?: string
+
+  /**  */
+  url?: string
+
+  /**  */
+  urlTitle?: string
+}
+
 export interface Listing {
   /**  */
   id: string
@@ -4434,6 +4597,9 @@ export interface Listing {
 
   /**  */
   lastUpdatedByUser?: IdDTO
+
+  /**  */
+  property?: Property
 }
 
 export interface PaginationMeta {
@@ -5057,6 +5223,9 @@ export interface ListingCreate {
   lastUpdatedByUser?: IdDTO
 
   /**  */
+  property?: Property
+
+  /**  */
   listingMultiselectQuestions?: IdDTO[]
 
   /**  */
@@ -5413,6 +5582,9 @@ export interface ListingUpdate {
 
   /**  */
   lastUpdatedByUser?: IdDTO
+
+  /**  */
+  property?: Property
 
   /**  */
   listingMultiselectQuestions?: IdDTO[]
@@ -7564,6 +7736,56 @@ export interface PublicLotteryTotal {
   multiselectQuestionId?: string
 }
 
+export interface PagiantedProperty {
+  /**  */
+  items: Property[]
+
+  /**  */
+  meta: PaginationMeta
+}
+
+export interface PropertyQueryParams {
+  /**  */
+  page?: number
+
+  /**  */
+  limit?: number | "all"
+
+  /**  */
+  search?: string
+}
+
+export interface PropertyCreate {
+  /**  */
+  name: string
+
+  /**  */
+  description?: string
+
+  /**  */
+  url?: string
+
+  /**  */
+  urlTitle?: string
+}
+
+export interface PropertyUpdate {
+  /**  */
+  id: string
+
+  /**  */
+  name: string
+
+  /**  */
+  description?: string
+
+  /**  */
+  url?: string
+
+  /**  */
+  urlTitle?: string
+}
+
 export enum FilterAvailabilityEnum {
   "closedWaitlist" = "closedWaitlist",
   "comingSoon" = "comingSoon",
@@ -7592,6 +7814,11 @@ export enum ListingsStatusEnum {
   "closed" = "closed",
   "pendingReview" = "pendingReview",
   "changesRequested" = "changesRequested",
+}
+
+export enum ListingTypeEnum {
+  "regulated" = "regulated",
+  "nonRegulated" = "nonRegulated",
 }
 export enum EnumListingFilterParamsComparison {
   "=" = "=",
@@ -7623,6 +7850,7 @@ export enum ListingOrderByKeys {
   "marketingType" = "marketingType",
   "marketingYear" = "marketingYear",
   "marketingSeason" = "marketingSeason",
+  "listingType" = "listingType",
 }
 
 export enum OrderByEnum {
@@ -7653,6 +7881,7 @@ export enum ListingFilterKeys {
   "section8Acceptance" = "section8Acceptance",
   "status" = "status",
   "zipCode" = "zipCode",
+  "listingType" = "listingType",
 }
 
 export enum ApplicationAddressTypeEnum {
