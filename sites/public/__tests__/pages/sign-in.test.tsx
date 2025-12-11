@@ -586,7 +586,7 @@ describe("User's password is out of date flow", () => {
 
     expect(
       await findByText(
-        "The password associated with your account has expired. You will need to reset it in order to access your account. Click continue to reset your password."
+        "Your password has expired. Click continue to reset your password and access your account."
       )
     ).toBeInTheDocument()
     expect(await findByText("Password Expired")).toBeInTheDocument()

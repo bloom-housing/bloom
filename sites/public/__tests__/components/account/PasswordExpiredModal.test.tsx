@@ -31,7 +31,7 @@ describe("PasswordExpiredModal", () => {
     expect(screen.getByRole("heading", { level: 1, name: "Password Expired" })).toBeInTheDocument()
     expect(
       screen.getByText(
-        "The password associated with your account has expired. You will need to reset it in order to access your account. Click continue to reset your password."
+        "Your password has expired. Click continue to reset your password and access your account."
       )
     ).toBeInTheDocument()
     expect(screen.getByRole("button", { name: "Continue" })).toBeInTheDocument()
@@ -43,7 +43,7 @@ describe("PasswordExpiredModal", () => {
     expect(screen.queryByText("Password Expired")).not.toBeInTheDocument()
     expect(
       screen.queryByText(
-        "The password associated with your account has expired. You will need to reset it in order to access your account. Click continue to reset your password."
+        "Your password has expired. Click continue to reset your password and access your account."
       )
     ).not.toBeInTheDocument()
   })
