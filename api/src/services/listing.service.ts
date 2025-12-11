@@ -10,7 +10,6 @@ import {
 } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
-import { SchedulerRegistry } from '@nestjs/schedule';
 import {
   LanguagesEnum,
   ListingEventsTypeEnum,
@@ -48,7 +47,6 @@ import { ListingFilterKeys } from '../enums/listings/filter-key-enum';
 import { permissionActions } from '../enums/permissions/permission-actions-enum';
 import { buildFilter } from '../utilities/build-filter';
 import { buildOrderByForListings } from '../utilities/build-order-by';
-import { startCronJob } from '../utilities/cron-job-starter';
 import { mapTo } from '../utilities/mapTo';
 import {
   buildPaginationMetaInfo,
@@ -62,6 +60,7 @@ import {
 import { fillModelStringFields } from '../utilities/model-fields';
 import { doJurisdictionHaveFeatureFlagSet } from '../utilities/feature-flag-utilities';
 import { addUnitGroupsSummarized } from '../utilities/unit-groups-transformations';
+import { CronJobService } from './cron-job.service';
 
 export type getListingsArgs = {
   skip: number;
@@ -207,18 +206,15 @@ export class ListingService implements OnModuleInit {
     private configService: ConfigService,
     @Inject(Logger)
     private logger = new Logger(ListingService.name),
-    private schedulerRegistry: SchedulerRegistry,
     private permissionService: PermissionService,
+    private cronJobService: CronJobService,
   ) {}
 
   onModuleInit() {
-    startCronJob(
-      this.prisma,
+    this.cronJobService.startCronJob(
       LISTING_CRON_JOB_NAME,
       process.env.LISTING_PROCESSING_CRON_STRING,
       this.closeListings.bind(this),
-      this.logger,
-      this.schedulerRegistry,
     );
   }
 
@@ -1300,9 +1296,9 @@ export class ListingService implements OnModuleInit {
       dto.unitGroups,
     );
 
-    // Remove requiredFields property before saving to database
+    // Remove requiredFields and minimumImagesRequired properties before saving to database
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { requiredFields, ...listingData } = dto;
+    const { requiredFields, minimumImagesRequired, ...listingData } = dto;
 
     const rawListing = await this.prisma.listings.create({
       include: includeViews.full,
@@ -1975,9 +1971,9 @@ export class ListingService implements OnModuleInit {
     update a listing
   */
   async update(dto: ListingUpdate, requestingUser: User): Promise<Listing> {
-    // Remove requiredFields property before saving to database
+    // Remove requiredFields and minimumImagesRequired properties before saving to database
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { requiredFields, ...incomingDto } = dto;
+    const { requiredFields, minimumImagesRequired, ...incomingDto } = dto;
     const storedListing = await this.findOrThrow(
       incomingDto.id,
       ListingViews.full,
@@ -2774,7 +2770,7 @@ export class ListingService implements OnModuleInit {
   */
   async closeListings(): Promise<SuccessDTO> {
     this.logger.warn('changeOverdueListingsStatusCron job running');
-    await this.markCronJobAsStarted(LISTING_CRON_JOB_NAME);
+    await this.cronJobService.markCronJobAsStarted(LISTING_CRON_JOB_NAME);
 
     const listings = await this.prisma.listings.findMany({
       select: {
@@ -2835,37 +2831,6 @@ export class ListingService implements OnModuleInit {
     return {
       success: true,
     };
-  }
-
-  /**
-    marks the db record for this cronjob as begun or creates a cronjob that
-    is marked as begun if one does not already exist
-  */
-  async markCronJobAsStarted(cronJobName: string): Promise<void> {
-    const job = await this.prisma.cronJob.findFirst({
-      where: {
-        name: cronJobName,
-      },
-    });
-    if (job) {
-      // if a job exists then we update db entry
-      await this.prisma.cronJob.update({
-        data: {
-          lastRunDate: new Date(),
-        },
-        where: {
-          id: job.id,
-        },
-      });
-    } else {
-      // if no job we create a new entry
-      await this.prisma.cronJob.create({
-        data: {
-          lastRunDate: new Date(),
-          name: cronJobName,
-        },
-      });
-    }
   }
 
   /**

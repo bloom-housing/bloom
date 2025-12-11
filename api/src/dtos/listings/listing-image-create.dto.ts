@@ -1,10 +1,10 @@
 import { ApiProperty, ApiPropertyOptional, OmitType } from '@nestjs/swagger';
 import { Expose, Type } from 'class-transformer';
-import { IsDefined, ValidateNested, MaxLength } from 'class-validator';
+import { IsDefined, ValidateNested } from 'class-validator';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 import { AssetCreate } from '../assets/asset-create.dto';
 import { ListingImage } from './listing-image.dto';
-import { ValidateListingPublish } from '../../decorators/validate-listing-publish.decorator';
+import { ValidateListingPublish } from 'src/decorators/validate-listing-publish.decorator';
 
 export class ListingImageCreate extends OmitType(ListingImage, [
   'assets',
@@ -21,8 +21,7 @@ export class ListingImageCreate extends OmitType(ListingImage, [
   @ValidateListingPublish('description', {
     groups: [ValidationsGroupsEnum.default],
   })
-  @MaxLength(125, { groups: [ValidationsGroupsEnum.default] })
-  @ApiPropertyOptional({ maxLength: 125 })
+  @ApiPropertyOptional()
   description?: string;
 
   // Needed so class-transformer keeps requiredFields for nested validation

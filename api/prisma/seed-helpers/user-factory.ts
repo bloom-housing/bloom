@@ -1,4 +1,4 @@
-import { Prisma } from '@prisma/client';
+import { LanguagesEnum, Prisma } from '@prisma/client';
 import { randomAdjective, randomNoun } from './word-generator';
 import { passwordToHash } from '../../src/utilities/password-helpers';
 
@@ -18,9 +18,14 @@ export const userFactory = async (optionalParams?: {
   phoneNumberVerified?: boolean;
   roles?: Prisma.UserRolesUncheckedCreateWithoutUserAccountsInput;
   singleUseCode?: string;
+  lastLoginAt?: Date;
+  wasWarnedOfDeletion?: boolean;
+  language?: LanguagesEnum;
 }): Promise<Prisma.UserAccountsCreateInput> => ({
   agreedToTermsOfService: optionalParams?.acceptedTerms || false,
   confirmedAt: optionalParams?.confirmedAt || null,
+  lastLoginAt: optionalParams?.lastLoginAt || new Date(),
+  wasWarnedOfDeletion: optionalParams?.wasWarnedOfDeletion || false,
   email:
     optionalParams?.email?.toLocaleLowerCase() ||
     `${randomNoun().toLowerCase()}${randomNoun().toLowerCase()}@${randomAdjective().toLowerCase()}.com`,
@@ -35,7 +40,7 @@ export const userFactory = async (optionalParams?: {
   phoneNumberVerified: optionalParams?.phoneNumberVerified || null,
   singleUseCode: optionalParams?.singleUseCode || null,
   singleUseCodeUpdatedAt: optionalParams?.mfaEnabled ? new Date() : undefined,
-
+  language: optionalParams?.language || undefined,
   favoriteListings: optionalParams?.favoriteListings
     ? {
         connect: optionalParams.favoriteListings.map((listing) => {

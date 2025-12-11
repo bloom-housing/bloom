@@ -1759,6 +1759,22 @@ export class ApplicationsService {
     })
   }
   /**
+   * trigger the remove PII cron job
+   */
+  removePiiCronJob(options: IRequestOptions = {}): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/applications/removePIICronJob"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = null
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
    * Update application by id
    */
   update(
@@ -1831,7 +1847,7 @@ export class UserService {
   delete(
     params: {
       /** requestBody */
-      body?: IdDTO
+      body?: UserDeleteDTO
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<SuccessDTO> {
@@ -1934,6 +1950,22 @@ export class UserService {
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
 
       let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * trigger the delete inactive users cron job
+   */
+  deleteInactiveUsersCronJob(options: IRequestOptions = {}): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user/deleteInactiveUsersCronJob"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = null
 
       configs.data = data
 
@@ -3024,6 +3056,9 @@ export interface ListingFilterParams {
 
   /**  */
   zipCode?: string
+
+  /**  */
+  listingType?: ListingTypeEnum
 }
 
 export interface ListingsQueryBody {
@@ -6111,6 +6146,9 @@ export interface JurisdictionCreate {
   languages: LanguagesEnum[]
 
   /**  */
+  minimumListingPublishImagesRequired?: number
+
+  /**  */
   partnerTerms?: string
 
   /**  */
@@ -6171,6 +6209,9 @@ export interface JurisdictionUpdate {
 
   /**  */
   languages: LanguagesEnum[]
+
+  /**  */
+  minimumListingPublishImagesRequired?: number
 
   /**  */
   partnerTerms?: string
@@ -6265,6 +6306,9 @@ export interface Jurisdiction {
 
   /**  */
   multiselectQuestions: IdDTO[]
+
+  /**  */
+  minimumListingPublishImagesRequired?: number
 
   /**  */
   partnerTerms?: string
@@ -7206,6 +7250,14 @@ export interface PaginatedUser {
   meta: PaginationMeta
 }
 
+export interface UserDeleteDTO {
+  /**  */
+  id: string
+
+  /**  */
+  shouldRemoveApplication?: boolean
+}
+
 export interface UserCreate {
   /**  */
   firstName: string
@@ -7599,6 +7651,11 @@ export enum ListingsStatusEnum {
   "pendingReview" = "pendingReview",
   "changesRequested" = "changesRequested",
 }
+
+export enum ListingTypeEnum {
+  "regulated" = "regulated",
+  "nonRegulated" = "nonRegulated",
+}
 export enum EnumListingFilterParamsComparison {
   "=" = "=",
   "<>" = "<>",
@@ -7629,6 +7686,7 @@ export enum ListingOrderByKeys {
   "marketingType" = "marketingType",
   "marketingYear" = "marketingYear",
   "marketingSeason" = "marketingSeason",
+  "listingType" = "listingType",
 }
 
 export enum OrderByEnum {
@@ -7659,6 +7717,7 @@ export enum ListingFilterKeys {
   "section8Acceptance" = "section8Acceptance",
   "status" = "status",
   "zipCode" = "zipCode",
+  "listingType" = "listingType",
 }
 
 export enum ApplicationAddressTypeEnum {
@@ -7933,6 +7992,8 @@ export enum FeatureFlagEnum {
   "enableNonRegulatedListings" = "enableNonRegulatedListings",
   "enablePartnerDemographics" = "enablePartnerDemographics",
   "enablePartnerSettings" = "enablePartnerSettings",
+  "enableProperties" = "enableProperties",
+  "enableReferralQuestionUnits" = "enableReferralQuestionUnits",
   "enableRegions" = "enableRegions",
   "enableSection8Question" = "enableSection8Question",
   "enableSingleUseCode" = "enableSingleUseCode",

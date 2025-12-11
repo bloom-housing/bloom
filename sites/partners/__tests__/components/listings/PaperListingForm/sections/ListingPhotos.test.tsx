@@ -1,22 +1,22 @@
 import React from "react"
-import { expect } from "@jest/globals"
 import "@testing-library/jest-dom"
 import { FormProvider, useForm } from "react-hook-form"
-import { formDefaults, FormListing } from "../../../../../src/lib/listings/formTypes"
-import { setupServer } from "msw/lib/node"
-import { mockNextRouter } from "../../../../testUtils"
 import { render, screen, within } from "@testing-library/react"
+import { jurisdiction, listing } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
+import { setupServer } from "msw/lib/node"
+import { formDefaults, FormListing } from "../../../../../src/lib/listings/formTypes"
 import ListingPhotos from "../../../../../src/components/listings/PaperListingForm/sections/ListingPhotos"
-import { listing } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
+import { mockNextRouter } from "../../../../testUtils"
 import userEvent from "@testing-library/user-event"
-import { AuthContext } from "@bloom-housing/shared-helpers"
-import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import * as helpers from "../../../../../src/lib/helpers"
 
-jest.mock("../../../../../src/lib/helpers", () => ({
-  ...jest.requireActual("../../../../../src/lib/helpers"),
-  cloudinaryFileUploader: jest.fn(),
-}))
+jest.mock("../../../../../src/lib/helpers", () => {
+  const actual = jest.requireActual<typeof helpers>("../../../../../src/lib/helpers")
+  return {
+    ...actual,
+    cloudinaryFileUploader: jest.fn(),
+  }
+})
 
 const FormComponent = ({ children, values }: { values?: FormListing; children }) => {
   const formMethods = useForm<FormListing>({
@@ -41,6 +41,233 @@ afterEach(() => server.resetHandlers())
 afterAll(() => server.close())
 
 describe("<ListingPhotos>", () => {
+  describe("should render empty section when data is missing", () => {
+    it("listing images are not required", () => {
+      render(
+        <FormComponent>
+          <ListingPhotos
+            enableListingImageAltText={false}
+            requiredFields={[]}
+            jurisdiction={jurisdiction}
+          />
+        </FormComponent>
+      )
+
+      expect(screen.getByRole("heading", { level: 2, name: "Listing photos" })).toBeInTheDocument()
+      expect(
+        screen.getByText("Upload an image for the listing that will be used as a preview.")
+      ).toBeInTheDocument()
+      expect(screen.getByText("Photos")).toBeInTheDocument()
+      expect(screen.getByRole("button", { name: "Add photos" })).toBeInTheDocument()
+
+      expect(screen.queryByRole("button", { name: "Edit photos" })).not.toBeInTheDocument()
+      expect(screen.queryByRole("table")).not.toBeInTheDocument()
+    })
+
+    it("at least one image is required", () => {
+      render(
+        <FormComponent>
+          <ListingPhotos
+            enableListingImageAltText={false}
+            requiredFields={["listingImages"]}
+            jurisdiction={{ ...jurisdiction, minimumListingPublishImagesRequired: 1 }}
+          />
+        </FormComponent>
+      )
+
+      expect(screen.getByRole("heading", { level: 2, name: "Listing photos" })).toBeInTheDocument()
+      expect(
+        screen.getByText("Upload at least 1 image for the listing that will be used as a preview.")
+      ).toBeInTheDocument()
+      expect(screen.getByText("Photos")).toBeInTheDocument()
+      expect(screen.getByRole("button", { name: "Add photos" })).toBeInTheDocument()
+
+      expect(screen.queryByRole("button", { name: "Edit photos" })).not.toBeInTheDocument()
+      expect(screen.queryByRole("table")).not.toBeInTheDocument()
+    })
+
+    it("more than one image is required", () => {
+      render(
+        <FormComponent>
+          <ListingPhotos
+            enableListingImageAltText={false}
+            requiredFields={["listingImages"]}
+            jurisdiction={{ ...jurisdiction, minimumListingPublishImagesRequired: 3 }}
+          />
+        </FormComponent>
+      )
+
+      expect(screen.getByRole("heading", { level: 2, name: "Listing photos" })).toBeInTheDocument()
+      expect(
+        screen.getByText("Upload at least 3 images for the listing that will be used as a preview.")
+      ).toBeInTheDocument()
+      expect(screen.getByText("Photos")).toBeInTheDocument()
+      expect(screen.getByRole("button", { name: "Add photos" })).toBeInTheDocument()
+
+      expect(screen.queryByRole("button", { name: "Edit photos" })).not.toBeInTheDocument()
+      expect(screen.queryByRole("table")).not.toBeInTheDocument()
+    })
+
+    it("update button label when images have already been added", () => {
+      render(
+        <FormComponent
+          values={{
+            ...listing,
+            listingImages: [
+              {
+                assets: {
+                  createdAt: new Date(),
+                  updatedAt: new Date(),
+                  fileId: "file_1_id",
+                  id: "asset_1_id",
+                  label: "Asset 1 Label",
+                },
+                ordinal: 1,
+              },
+              {
+                assets: {
+                  createdAt: new Date(),
+                  updatedAt: new Date(),
+                  fileId: "file_2_id",
+                  id: "asset_2_id",
+                  label: "Asset 2 Label",
+                },
+                ordinal: 2,
+              },
+            ],
+          }}
+        >
+          <ListingPhotos
+            enableListingImageAltText={false}
+            requiredFields={["listingImages"]}
+            jurisdiction={{ ...jurisdiction, minimumListingPublishImagesRequired: 3 }}
+          />
+        </FormComponent>
+      )
+
+      const imagesTable = screen.getByRole("table")
+      expect(imagesTable).toBeInTheDocument()
+
+      const [head, body] = within(imagesTable).getAllByRole("rowgroup")
+
+      const headerColumns = within(head).getAllByRole("columnheader")
+      expect(headerColumns).toHaveLength(2)
+      const [previewHeader, actionsHeader] = headerColumns
+      expect(previewHeader).toHaveTextContent("Preview")
+      expect(actionsHeader).not.toHaveTextContent()
+
+      const rows = within(body).getAllByRole("row")
+      expect(rows).toHaveLength(2)
+
+      const [firstPreview, firstActions] = within(rows[0]).getAllByRole("cell")
+      expect(within(firstPreview).getByRole("presentation")).toBeInTheDocument()
+      expect(within(firstPreview).getByRole("presentation")).toHaveAttribute("src", "file_1_id")
+      expect(within(firstActions).getByRole("button", { name: "Delete" })).toBeInTheDocument()
+
+      const [secondPreview, secondActions] = within(rows[1]).getAllByRole("cell")
+      expect(within(secondPreview).getByRole("presentation")).toBeInTheDocument()
+      expect(within(secondPreview).getByRole("presentation")).toHaveAttribute("src", "file_2_id")
+      expect(within(secondActions).getByRole("button", { name: "Delete" })).toBeInTheDocument()
+
+      expect(screen.queryByRole("button", { name: "Add photos" })).not.toBeInTheDocument()
+      expect(screen.getByRole("button", { name: "Edit photos" })).toBeInTheDocument()
+    })
+  })
+
+  describe("should open images drawer on Add Button click", () => {
+    it("should render table with proper description when images are not required", async () => {
+      render(
+        <FormComponent>
+          <ListingPhotos
+            enableListingImageAltText={false}
+            requiredFields={[]}
+            jurisdiction={{ ...jurisdiction, minimumListingPublishImagesRequired: 3 }}
+          />
+        </FormComponent>
+      )
+
+      const addButton = screen.getByRole("button", { name: "Add photos" })
+      expect(addButton).toBeInTheDocument()
+
+      await userEvent.click(addButton)
+
+      const dialogDrawer = await screen.findByRole("dialog", { name: "Add photos" })
+      expect(dialogDrawer).toBeInTheDocument()
+
+      expect(
+        within(dialogDrawer).getByRole("heading", { level: 2, name: "Listing photos" })
+      ).toBeInTheDocument()
+      expect(
+        within(dialogDrawer).getByText(
+          "Select JPEG or PNG file to upload. Please upload horizontal images only at approximately 1440px. Up to 10 uploaded images allowed."
+        )
+      ).toBeInTheDocument()
+
+      expect(within(dialogDrawer).getByRole("button", { name: "Save" })).toBeInTheDocument()
+    })
+
+    it("should render table with proper description when one image is required", async () => {
+      render(
+        <FormComponent>
+          <ListingPhotos
+            enableListingImageAltText={false}
+            requiredFields={["listingImages"]}
+            jurisdiction={{ ...jurisdiction, minimumListingPublishImagesRequired: 1 }}
+          />
+        </FormComponent>
+      )
+
+      const addButton = screen.getByRole("button", { name: "Add photos" })
+      expect(addButton).toBeInTheDocument()
+
+      await userEvent.click(addButton)
+
+      const dialogDrawer = await screen.findByRole("dialog", { name: "Add photos" })
+      expect(dialogDrawer).toBeInTheDocument()
+
+      expect(
+        within(dialogDrawer).getByRole("heading", { level: 2, name: "Listing photos" })
+      ).toBeInTheDocument()
+      expect(
+        within(dialogDrawer).getByText(
+          "Select JPEG or PNG file to upload. Please upload horizontal images only at approximately 1440px. At least 1 image is required, and up to 10 images are allowed."
+        )
+      ).toBeInTheDocument()
+
+      expect(within(dialogDrawer).getByRole("button", { name: "Save" })).toBeInTheDocument()
+    })
+
+    it("should render table with proper description when more than one images is required", async () => {
+      render(
+        <FormComponent>
+          <ListingPhotos
+            enableListingImageAltText={false}
+            requiredFields={["listingImages"]}
+            jurisdiction={{ ...jurisdiction, minimumListingPublishImagesRequired: 3 }}
+          />
+        </FormComponent>
+      )
+
+      const addButton = screen.getByRole("button", { name: "Add photos" })
+      expect(addButton).toBeInTheDocument()
+
+      await userEvent.click(addButton)
+
+      const dialogDrawer = await screen.findByRole("dialog", { name: "Add photos" })
+      expect(dialogDrawer).toBeInTheDocument()
+
+      expect(
+        within(dialogDrawer).getByRole("heading", { level: 2, name: "Listing photos" })
+      ).toBeInTheDocument()
+      expect(
+        within(dialogDrawer).getByText(
+          "Select JPEG or PNG file to upload. Please upload horizontal images only at approximately 1440px. At least 3 images are required, and up to 10 images are allowed."
+        )
+      ).toBeInTheDocument()
+
+      expect(within(dialogDrawer).getByRole("button", { name: "Save" })).toBeInTheDocument()
+    })
+  })
   describe("enableListingImageAltText feature flag", () => {
     const listingImages = [
       {
@@ -68,25 +295,21 @@ describe("<ListingPhotos>", () => {
     ]
 
     it("shows description column and hides delete buttons when enabled", () => {
-      const doJurisdictionsHaveFeatureFlagOn = jest.fn(() => true)
       render(
-        <AuthContext.Provider value={{ doJurisdictionsHaveFeatureFlagOn }}>
-          <FormComponent
-            values={{
-              ...formDefaults,
-              ...listing,
-              jurisdictions: { id: "jurisdiction-id" },
-              listingImages,
-            }}
-          >
-            <ListingPhotos requiredFields={["listingImages"]} />
-          </FormComponent>
-        </AuthContext.Provider>
-      )
-
-      expect(doJurisdictionsHaveFeatureFlagOn).toHaveBeenCalledWith(
-        FeatureFlagEnum.enableListingImageAltText,
-        "jurisdiction-id"
+        <FormComponent
+          values={{
+            ...formDefaults,
+            ...listing,
+            jurisdictions: { id: "jurisdiction-id" },
+            listingImages,
+          }}
+        >
+          <ListingPhotos
+            enableListingImageAltText={true}
+            requiredFields={["listingImages"]}
+            jurisdiction={jurisdiction}
+          />
+        </FormComponent>
       )
 
       const imagesTable = screen.getByRole("table")
@@ -106,20 +329,21 @@ describe("<ListingPhotos>", () => {
     })
 
     it("opens alt text editor from drawer when enabled", async () => {
-      const doJurisdictionsHaveFeatureFlagOn = jest.fn(() => true)
       render(
-        <AuthContext.Provider value={{ doJurisdictionsHaveFeatureFlagOn }}>
-          <FormComponent
-            values={{
-              ...formDefaults,
-              ...listing,
-              jurisdictions: { id: "jurisdiction-id" },
-              listingImages,
-            }}
-          >
-            <ListingPhotos requiredFields={["listingImages"]} />
-          </FormComponent>
-        </AuthContext.Provider>
+        <FormComponent
+          values={{
+            ...formDefaults,
+            ...listing,
+            jurisdictions: { id: "jurisdiction-id" },
+            listingImages,
+          }}
+        >
+          <ListingPhotos
+            enableListingImageAltText={true}
+            requiredFields={["listingImages"]}
+            jurisdiction={jurisdiction}
+          />
+        </FormComponent>
       )
 
       const editPhotosButton = screen.getByRole("button", { name: "Edit photos" })
@@ -153,18 +377,20 @@ describe("<ListingPhotos>", () => {
       )
 
       render(
-        <AuthContext.Provider value={{ doJurisdictionsHaveFeatureFlagOn: () => true }}>
-          <FormComponent
-            values={{
-              ...formDefaults,
-              ...listing,
-              jurisdictions: { id: "jurisdiction-id" },
-              listingImages: [],
-            }}
-          >
-            <ListingPhotos requiredFields={["listingImages"]} />
-          </FormComponent>
-        </AuthContext.Provider>
+        <FormComponent
+          values={{
+            ...formDefaults,
+            ...listing,
+            jurisdictions: { id: "jurisdiction-id" },
+            listingImages: [],
+          }}
+        >
+          <ListingPhotos
+            enableListingImageAltText={true}
+            requiredFields={["listingImages"]}
+            jurisdiction={jurisdiction}
+          />
+        </FormComponent>
       )
 
       const addPhotosButton = screen.getByRole("button", { name: "Add photos" })

@@ -10,15 +10,11 @@ import {
   Textarea,
 } from "@bloom-housing/ui-components"
 import { Button, Card, Drawer, Grid, Heading } from "@bloom-housing/ui-seeds"
-import {
-  getUrlForListingImage,
-  CLOUDINARY_BUILDING_LABEL,
-  AuthContext,
-} from "@bloom-housing/shared-helpers"
+import { getUrlForListingImage, CLOUDINARY_BUILDING_LABEL } from "@bloom-housing/shared-helpers"
 import {
   Asset,
   ListingImage,
-  FeatureFlagEnum,
+  Jurisdiction,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import {
   cloudinaryFileUploader,
@@ -30,7 +26,9 @@ import SectionWithGrid from "../../../shared/SectionWithGrid"
 import styles from "../ListingForm.module.scss"
 
 interface ListingPhotosProps {
+  enableListingImageAltText: boolean
   requiredFields: string[]
+  jurisdiction: Jurisdiction
 }
 
 interface ListingPhotoEditorProps {
@@ -40,7 +38,6 @@ interface ListingPhotoEditorProps {
   onSave: (description: string) => void
   requiredFields: string[]
 }
-
 const ListingPhotoEditor = ({
   isOpen,
   onClose,
@@ -146,12 +143,8 @@ const ListingPhotoEditor = ({
 
 const ListingPhotos = (props: ListingPhotosProps) => {
   const formMethods = useFormContext()
-  const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
-
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, watch, errors, clearErrors } = formMethods
-
-  const jurisdictionId = watch("jurisdictions.id")
 
   const { fields, append, remove } = useFieldArray({
     name: "listingImages",
@@ -159,10 +152,6 @@ const ListingPhotos = (props: ListingPhotosProps) => {
   const listingFormPhotos: ListingImage[] = watch("listingImages").sort((imageA, imageB) => {
     return imageA.ordinal - imageB.ordinal
   })
-
-  const enableListingImageAltText =
-    doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableListingImageAltText, jurisdictionId) &&
-    jurisdictionId
 
   const saveImageFields = (images: ListingImage[]) => {
     remove(fields.map((item, index) => index))
@@ -202,7 +191,7 @@ const ListingPhotos = (props: ListingPhotosProps) => {
       assets: { fileId: latestUpload.id, label: CLOUDINARY_BUILDING_LABEL } as Asset,
       description: "",
     }
-    if (enableListingImageAltText) {
+    if (props.enableListingImageAltText) {
       setPendingNewImage(newImage)
       setEditingPhotoIndex(null)
     } else {
@@ -211,7 +200,7 @@ const ListingPhotos = (props: ListingPhotosProps) => {
     }
     setLatestUpload({ id: "", url: "" })
     setProgressValue(0)
-  }, [drawerImages, latestUpload, enableListingImageAltText])
+  }, [drawerImages, latestUpload, props.enableListingImageAltText])
 
   useEffect(() => {
     if (latestUpload.id != "") {
@@ -224,7 +213,7 @@ const ListingPhotos = (props: ListingPhotosProps) => {
    */
   const photoTableHeaders = {
     preview: "t.preview",
-    ...(enableListingImageAltText
+    ...(props.enableListingImageAltText
       ? { description: "listings.sections.photo.imageDescription" }
       : {}),
     actions: "",
@@ -240,14 +229,14 @@ const ListingPhotos = (props: ListingPhotosProps) => {
           </TableThumbnail>
         ),
       },
-      ...(enableListingImageAltText
+      ...(props.enableListingImageAltText
         ? {
             description: {
               content: image.description || "",
             },
           }
         : {}),
-      ...(!enableListingImageAltText
+      ...(!props.enableListingImageAltText
         ? {
             actions: {
               content: (
@@ -275,7 +264,7 @@ const ListingPhotos = (props: ListingPhotosProps) => {
   const drawerTableHeaders = {
     ordinal: "t.order",
     preview: "t.preview",
-    ...(enableListingImageAltText
+    ...(props.enableListingImageAltText
       ? { description: "listings.sections.photo.imageDescription" }
       : {}),
     actions: "",
@@ -303,7 +292,7 @@ const ListingPhotos = (props: ListingPhotosProps) => {
           ),
         },
         fileName: { content: image.fileId.split("/").slice(-1).join() },
-        ...(enableListingImageAltText
+        ...(props.enableListingImageAltText
           ? {
               description: {
                 content: item.description || "",
@@ -313,7 +302,7 @@ const ListingPhotos = (props: ListingPhotosProps) => {
         actions: {
           content: (
             <div className="flex gap-2">
-              {enableListingImageAltText && (
+              {props.enableListingImageAltText && (
                 <Button
                   variant="text"
                   className="ml-0"
@@ -345,7 +334,7 @@ const ListingPhotos = (props: ListingPhotosProps) => {
         },
       }
     })
-  }, [drawerImages, enableListingImageAltText])
+  }, [drawerImages, props.enableListingImageAltText])
 
   /*
    Pass the file for the dropzone callback along to the uploader
@@ -384,6 +373,10 @@ const ListingPhotos = (props: ListingPhotosProps) => {
     setEditingPhotoIndex(null)
   }
 
+  const customImagesRules =
+    props.requiredFields.includes("listingImages") &&
+    props?.jurisdiction?.minimumListingPublishImagesRequired
+
   /*
    Register the field array, display the main form table, and set up the drawer
    */
@@ -408,7 +401,12 @@ const ListingPhotos = (props: ListingPhotosProps) => {
       ))}
       <SectionWithGrid
         heading={t("listings.sections.photoTitle")}
-        subheading={t("listings.sections.photoSubtitle")}
+        subheading={t(
+          customImagesRules
+            ? "listings.sections.photosSubtitle"
+            : "listings.sections.photoSubtitle",
+          { smart_count: props?.jurisdiction?.minimumListingPublishImagesRequired }
+        )}
         className={"gap-0"}
       >
         <div
@@ -444,7 +442,11 @@ const ListingPhotos = (props: ListingPhotosProps) => {
         </Grid.Row>
         {fieldHasError(errors?.listingImages) && (
           <span className={"text-sm text-alert seeds-m-bs-text"} id="photos-error">
-            {t("errors.requiredFieldError")}
+            {customImagesRules
+              ? t("listings.sections.photoError", {
+                  smart_count: props.jurisdiction?.minimumListingPublishImagesRequired || 1,
+                })
+              : t("errors.requiredFieldError")}
           </span>
         )}
       </SectionWithGrid>
@@ -495,7 +497,14 @@ const ListingPhotos = (props: ListingPhotosProps) => {
                 <Dropzone
                   id="listing-photo-upload"
                   label={t("t.uploadFiles")}
-                  helptext={t("listings.sections.photo.helperText")}
+                  helptext={`${t("listings.sections.photo.helperTextBase")} ${
+                    customImagesRules
+                      ? t("listings.sections.photo.helperTextLimits", {
+                          smart_count:
+                            props?.jurisdiction?.minimumListingPublishImagesRequired || 1,
+                        })
+                      : t("listings.sections.photo.helperTextLimit")
+                  }`}
                   uploader={photoUploader}
                   accept="image/*"
                   progress={progressValue}
