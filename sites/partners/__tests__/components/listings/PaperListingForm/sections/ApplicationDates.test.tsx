@@ -1,19 +1,10 @@
 import React from "react"
 import { setupServer } from "msw/node"
 import { screen } from "@testing-library/react"
-import { FormProvider, useForm } from "react-hook-form"
-import { mockNextRouter, render } from "../../../../testUtils"
-import { formDefaults, FormListing } from "../../../../../src/lib/listings/formTypes"
+import { FormProviderWrapper, mockNextRouter, render } from "../../../../testUtils"
+import { FormListing } from "../../../../../src/lib/listings/formTypes"
 import ApplicationDates from "../../../../../src/components/listings/PaperListingForm/sections/ApplicationDates"
 import userEvent from "@testing-library/user-event"
-
-const FormComponent = ({ children, values }: { values?: FormListing; children }) => {
-  const formMethods = useForm<FormListing>({
-    defaultValues: { ...formDefaults, ...values },
-    shouldUnregister: false,
-  })
-  return <FormProvider {...formMethods}>{children}</FormProvider>
-}
 
 const server = setupServer()
 
@@ -32,7 +23,7 @@ afterAll(() => server.close())
 describe("ApplicationDates", () => {
   it("should render the ApplicationDates section with default fields", () => {
     render(
-      <FormComponent>
+      <FormProviderWrapper>
         <ApplicationDates
           jurisdiction="JurisdictionA"
           enableMarketingStatus={false}
@@ -44,7 +35,7 @@ describe("ApplicationDates", () => {
             return
           }}
         />
-      </FormComponent>
+      </FormProviderWrapper>
     )
     expect(screen.getByRole("heading", { level: 2, name: "Application dates" })).toBeInTheDocument()
     expect(
@@ -67,7 +58,7 @@ describe("ApplicationDates", () => {
 
   it("should mark due date as required", () => {
     render(
-      <FormComponent>
+      <FormProviderWrapper>
         <ApplicationDates
           jurisdiction="JurisdictionA"
           enableMarketingStatus={false}
@@ -79,7 +70,7 @@ describe("ApplicationDates", () => {
             return
           }}
         />
-      </FormComponent>
+      </FormProviderWrapper>
     )
 
     expect(screen.getByRole("group", { name: "Application due date *" })).toBeInTheDocument()
@@ -88,7 +79,7 @@ describe("ApplicationDates", () => {
 
   it("should show marketing status section with seasons", async () => {
     render(
-      <FormComponent>
+      <FormProviderWrapper>
         <ApplicationDates
           jurisdiction="JurisdictionA"
           enableMarketingStatus={true}
@@ -100,7 +91,7 @@ describe("ApplicationDates", () => {
             return
           }}
         />
-      </FormComponent>
+      </FormProviderWrapper>
     )
     await screen.findByRole("group", { name: "Marketing status" })
     expect(screen.getByRole("group", { name: "Marketing status" })).toBeInTheDocument()
@@ -122,7 +113,7 @@ describe("ApplicationDates", () => {
 
   it("should show marketing status section with months", async () => {
     render(
-      <FormComponent>
+      <FormProviderWrapper>
         <ApplicationDates
           jurisdiction="JurisdictionA"
           enableMarketingStatus={true}
@@ -134,7 +125,7 @@ describe("ApplicationDates", () => {
             return
           }}
         />
-      </FormComponent>
+      </FormProviderWrapper>
     )
     await screen.findByRole("group", { name: "Marketing status" })
     expect(screen.getByRole("group", { name: "Marketing status" })).toBeInTheDocument()
@@ -164,7 +155,7 @@ describe("ApplicationDates", () => {
 
   it("should not show marketing section unless both feature flags are on", () => {
     render(
-      <FormComponent>
+      <FormProviderWrapper>
         <ApplicationDates
           jurisdiction="JurisdictionA"
           enableMarketingStatus={false}
@@ -176,7 +167,7 @@ describe("ApplicationDates", () => {
             return
           }}
         />
-      </FormComponent>
+      </FormProviderWrapper>
     )
     expect(screen.queryByText("Marketing status")).not.toBeInTheDocument()
   })

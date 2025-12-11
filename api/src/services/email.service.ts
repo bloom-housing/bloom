@@ -709,6 +709,25 @@ export class EmailService {
     }
   }
 
+  public async warnOfAccountRemoval(user: User) {
+    const jurisdiction = await this.getJurisdiction(user.jurisdictions);
+    void (await this.loadTranslations(jurisdiction, user.language));
+    const emailFromAddress = await this.getEmailToSendFrom(
+      user.jurisdictions,
+      jurisdiction,
+    );
+    const signInUrl = jurisdiction ? `${jurisdiction.publicUrl}/sign-in` : '';
+    await this.send(
+      user.email,
+      emailFromAddress,
+      this.polyglot.t('accountRemoval.subject'),
+      this.template('warn-removal')({
+        user: user,
+        signInUrl: signInUrl,
+      }),
+    );
+  }
+
   formatLocalDate(rawDate: string | Date, format: string): string {
     const utcDate = dayjs.utc(rawDate);
     return utcDate.format(format);

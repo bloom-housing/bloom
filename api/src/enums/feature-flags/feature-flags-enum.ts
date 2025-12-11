@@ -22,6 +22,7 @@ export enum FeatureFlagEnum {
   enableListingFavoriting = 'enableListingFavoriting',
   enableListingFileNumber = 'enableListingFileNumber',
   enableListingFiltering = 'enableListingFiltering',
+  enableListingImageAltText = 'enableListingImageAltText',
   enableListingOpportunity = 'enableListingOpportunity',
   enableListingPagination = 'enableListingPagination',
   enableListingUpdatedAt = 'enableListingUpdatedAt',
@@ -33,6 +34,8 @@ export enum FeatureFlagEnum {
   enableNonRegulatedListings = 'enableNonRegulatedListings',
   enablePartnerDemographics = 'enablePartnerDemographics',
   enablePartnerSettings = 'enablePartnerSettings',
+  enableProperties = 'enableProperties',
+  enableReferralQuestionUnits = 'enableReferralQuestionUnits',
   enableRegions = 'enableRegions',
   enableSection8Question = 'enableSection8Question',
   enableSingleUseCode = 'enableSingleUseCode',
@@ -154,6 +157,10 @@ export const featureFlagMap: {
       'When true, a filter button is shown on listings browse and users can filter with the options in the drawer',
   },
   {
+    name: FeatureFlagEnum.enableListingImageAltText,
+    description: 'When true, allows partners to add alt text to listing images',
+  },
+  {
     name: FeatureFlagEnum.enableListingOpportunity,
     description:
       "When true, any newly published listing will send a gov delivery email to everyone that has signed up for the 'listing alerts'",
@@ -205,6 +212,14 @@ export const featureFlagMap: {
   {
     name: FeatureFlagEnum.enablePartnerSettings,
     description: "When true, the 'settings' tab in the partner site is visible",
+  },
+  {
+    name: FeatureFlagEnum.enableProperties,
+    description: 'When true, the properties feature is enabled',
+  },
+  {
+    name: FeatureFlagEnum.enableReferralQuestionUnits,
+    description: 'when true, updates the the referral details question labels',
   },
   {
     name: FeatureFlagEnum.enableRegions,

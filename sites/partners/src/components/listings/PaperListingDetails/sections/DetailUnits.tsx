@@ -50,7 +50,7 @@ const DetailUnits = ({ setUnitDrawer }: DetailUnitsProps) => {
     ? {
         unitType: "listings.unit.type",
         number: "listings.unit.totalCount",
-        ...(!showNonRegulated ? { amiPercentage: "listings.unit.ami" } : {}),
+        ...(!showNonRegulated ? { amiPercentage: "t.ami" } : {}),
         monthlyRent: "listings.unit.rent",
         occupancy: "listings.unit.occupancy",
         ...(!showNonRegulated ? { sqFeet: "listings.unit.sqft" } : {}),
@@ -59,7 +59,7 @@ const DetailUnits = ({ setUnitDrawer }: DetailUnitsProps) => {
     : {
         number: "listings.unit.number",
         unitType: "listings.unit.type",
-        amiPercentage: "listings.unit.ami",
+        amiPercentage: "t.ami",
         monthlyRent: "listings.unit.rent",
         sqFeet: "listings.unit.sqft",
         unitAccessibilityPriorityTypes: "listings.unit.priorityType",

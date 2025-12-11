@@ -99,17 +99,19 @@ export const devSeeding = async (
   });
   // add jurisdiction specific translations and default ones
   await prismaClient.translations.create({
-    data: translationFactory(jurisdiction.id, jurisdiction.name),
+    data: translationFactory({
+      jurisdiction: { id: jurisdiction.id, name: jurisdiction.name },
+    }),
   });
   await prismaClient.translations.create({
-    data: translationFactory(undefined, undefined, LanguagesEnum.es),
+    data: translationFactory({ language: LanguagesEnum.es }),
   });
   await prismaClient.translations.create({
     data: translationFactory(),
   });
   const unitTypes = await unitTypeFactoryAll(prismaClient);
   const amiChart = await prismaClient.amiChart.create({
-    data: amiChartFactory(10, jurisdiction.id),
+    data: amiChartFactory(10, jurisdiction.id, null, jurisdiction.name),
   });
   const multiselectQuestions = await Promise.all(
     await createMultiselect(jurisdiction.id, prismaClient),
@@ -160,7 +162,6 @@ export const devSeeding = async (
         householdSize - 1,
       );
       const app = await applicationFactory({
-        householdSize,
         unitTypeId: unitTypes[randomInt(0, 5)].id,
         householdMember: householdMembers,
         multiselectQuestions,

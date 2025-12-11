@@ -142,9 +142,10 @@ export const MainDetails = ({
     <div>
       <ImageCard
         images={imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize)).map(
-          (imageUrl: string) => {
+          (imageUrl: string, index: number) => {
             return {
               url: imageUrl,
+              description: listing.listingImages?.[index]?.description,
             }
           }
         )}
