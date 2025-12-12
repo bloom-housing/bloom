@@ -1,0 +1,284 @@
+import { INestApplication } from '@nestjs/common';
+import { Test, TestingModule } from '@nestjs/testing';
+import request from 'supertest';
+import PropertyCreate from '../../src/dtos/properties/property-create.dto';
+import { AppModule } from '../../src/modules/app.module';
+import { PrismaService } from '../../src/services/prisma.service';
+import { PropertyQueryParams } from 'src/dtos/properties/property-query-params.dto';
+import { stringify } from 'qs';
+import { randomUUID } from 'crypto';
+
+describe('Properties Controller Tests', () => {
+  let app: INestApplication;
+  let prisma: PrismaService;
+
+  const mockProperties: PropertyCreate[] = [
+    {
+      name: 'Woodside Apartments',
+      description:
+        'An old apartment units complex in a silent part of the town',
+      url: 'https://properties.com/woodside_apartments',
+      urlTitle: 'Woodside Apt.',
+    },
+    {
+      name: 'Blue Creek Apartments',
+      description:
+        'A modern and small apartment unit complex ion the southern hill',
+      url: 'https://properties.com/blue_creek_apartments',
+      urlTitle: 'Blue Creek Apt.',
+    },
+  ];
+
+  beforeAll(async () => {
+    const moduleFixture: TestingModule = await Test.createTestingModule({
+      imports: [AppModule],
+    }).compile();
+
+    app = moduleFixture.createNestApplication();
+    prisma = moduleFixture.get<PrismaService>(PrismaService);
+
+    await app.init();
+    await prisma.properties.createMany({
+      data: mockProperties,
+    });
+  });
+
+  afterAll(async () => {
+    await prisma.$disconnect();
+    await app.close();
+  });
+
+  describe('list endpoint', () => {
+    it('should get default properties list from endpoint when no params are set', async () => {
+      const res = await request(app.getHttpServer())
+        .get('/properties')
+        .expect(200);
+
+      expect(res.body.items.length).toBe(2);
+
+      expect(res.body.items).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining(mockProperties[0]),
+          expect.objectContaining(mockProperties[1]),
+        ]),
+      );
+      expect(res.body.meta).toEqual({
+        currentPage: 1,
+        itemCount: 2,
+        itemsPerPage: 10,
+        totalItems: 2,
+        totalPages: 1,
+      });
+    });
+
+    it('should get listings when pagination params are sent', async () => {
+      const queryParams: PropertyQueryParams = {
+        limit: 1,
+        page: 3,
+      };
+
+      const res = await request(app.getHttpServer())
+        .get(`/properties?${stringify(queryParams as any)}`)
+        .expect(200);
+
+      expect(res.body.meta).toEqual({
+        currentPage: 3,
+        itemCount: 1,
+        itemsPerPage: 1,
+        totalItems: 2,
+        totalPages: 2,
+      });
+      expect(res.body.items).toHaveLength(1);
+    });
+
+    it('should get listings matching the search param', async () => {
+      const queryParams = {
+        search: 'Creek',
+      };
+
+      const res = await request(app.getHttpServer())
+        .get(`/properties?${stringify(queryParams as any)}`)
+        .expect(200);
+
+      expect(res.body.meta).toEqual({
+        currentPage: 1,
+        itemCount: 1,
+        itemsPerPage: 10,
+        totalItems: 1,
+        totalPages: 1,
+      });
+
+      expect(res.body.items).toHaveLength(1);
+      expect(res.body.items.pop()).toEqual(
+        expect.objectContaining(mockProperties[1]),
+      );
+    });
+  });
+
+  describe('create endpoint', () => {
+    it('should fail on empty request body', async () => {
+      const res = await request(app.getHttpServer())
+        .post('/properties')
+        .send({})
+        .expect(400);
+
+      expect(res.body.message).toHaveLength(1);
+      expect(res.body.message[0]).toBe('name should not be null or undefined');
+    });
+
+    it('should fail when no name field is missing', async () => {
+      const body: Partial<PropertyCreate> = {
+        description:
+          'A small villa placed with a beautiful view of the Toluca Lake',
+        url: 'https://properties.com/brookhaven_villa',
+        urlTitle: 'Brookhaven',
+      };
+      const res = await request(app.getHttpServer())
+        .post('/properties')
+        .send(body)
+        .expect(400);
+
+      expect(res.body.message).toHaveLength(1);
+      expect(res.body.message[0]).toBe('name should not be null or undefined');
+    });
+
+    it('should succeed when only a name is given', async () => {
+      const res = await request(app.getHttpServer())
+        .post('/properties')
+        .send({
+          name: 'Vineta Apartments',
+        })
+        .expect(201);
+
+      expect(res.body).toEqual({
+        id: expect.any(String),
+        name: 'Vineta Apartments',
+        createdAt: expect.anything(),
+        updatedAt: expect.anything(),
+        description: null,
+        url: null,
+        urlTitle: null,
+      });
+    });
+
+    it('should succeed when full body is passed', async () => {
+      const body: PropertyCreate = {
+        name: 'Rotfront Villa',
+        description: 'An old house in brutalist architectural style',
+        url: 'https://example.com/rotfront_villa',
+        urlTitle: 'Rotfront',
+      };
+      const res = await request(app.getHttpServer())
+        .post('/properties')
+        .send(body)
+        .expect(201);
+
+      expect(res.body).toEqual({
+        id: expect.any(String),
+        createdAt: expect.anything(),
+        updatedAt: expect.anything(),
+        ...body,
+      });
+    });
+  });
+
+  describe('update endpoint', () => {
+    it('should throw an error when no property ID is given', async () => {
+      const res = await request(app.getHttpServer())
+        .put('/properties')
+        .expect(400);
+
+      expect(res.body.message).toHaveLength(1);
+      expect(res.body.message[0]).toEqual('id should not be null or undefined');
+    });
+
+    it('should throw error when an given ID does not exist', async () => {
+      const randId = randomUUID();
+      const res = await request(app.getHttpServer())
+        .put('/properties')
+        .send({
+          id: randId,
+        })
+        .expect(400);
+
+      expect(res.body.message).toEqual(
+        `Property with id ${randId} was not found`,
+      );
+    });
+
+    it('should update a property', async () => {
+      const newListing = await prisma.properties.create({
+        data: {
+          name: 'Test name',
+          description: 'Test description',
+          url: 'https://test.com',
+          urlTitle: 'Test URL Title',
+        },
+      });
+
+      const updateDto = {
+        name: 'Updated Name',
+        description: 'Updated demo',
+        url: 'https://updated.com',
+        urlTitle: 'Updated URL title',
+      };
+
+      const res = await request(app.getHttpServer())
+        .put('/properties')
+        .send({ ...updateDto, id: newListing.id })
+        .expect(200);
+
+      expect(res.body).toEqual({
+        id: newListing.id,
+        createdAt: newListing.createdAt.toISOString(),
+        updatedAt: expect.anything(),
+        ...updateDto,
+      });
+    });
+  });
+
+  describe('delete endpoint', () => {
+    it('should throw an error when no property ID is given', async () => {
+      const res = await request(app.getHttpServer())
+        .delete('/properties')
+        .send({})
+        .expect(400);
+
+      expect(res.body.message).toHaveLength(1);
+      expect(res.body.message[0]).toBe('id should not be null or undefined');
+    });
+
+    it('should throw error when an given ID does not exist', async () => {
+      const randId = randomUUID();
+      const res = await request(app.getHttpServer())
+        .delete('/properties')
+        .send({
+          id: randId,
+        })
+        .expect(400);
+
+      expect(res.body.message).toBe(`Property with id ${randId} was not found`);
+    });
+
+    it('should delete the given entry by ID', async () => {
+      const tempProperty = await prisma.properties.create({
+        data: {
+          name: 'Property to delete',
+        },
+      });
+
+      const res = await request(app.getHttpServer())
+        .get(`/properties/${tempProperty.id}`)
+        .expect(200);
+
+      expect(res.body.name).toBe(tempProperty.name);
+
+      await request(app.getHttpServer())
+        .delete('/properties')
+        .send({
+          id: tempProperty.id,
+        })
+        .expect(200);
+    });
+  });
+});
