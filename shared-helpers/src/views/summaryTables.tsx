@@ -29,6 +29,7 @@ export const unitsHeaders = {
   sqFeet: "t.area",
   numBathrooms: "listings.bath",
   floor: "t.floor",
+  accessibilityType: "listings.unit.accessibilityType",
 }
 
 export const unitSummariesTable = (
@@ -734,50 +735,127 @@ export const getUnitTableData = (units: Unit[], unitSummary: UnitSummary) => {
   }
 }
 
+type FormattedUnit = {
+  number?: {
+    cellText: string
+  }
+  sqFeet?: {
+    cellText: string
+    cellSubText: string
+  }
+  numBathrooms?: {
+    cellText: string
+  }
+  floor?: {
+    cellText: string
+  }
+  accessibilityType?: {
+    cellText: string
+  }
+}
+
 export const getStackedUnitTableData = (units: Unit[], unitSummary: UnitSummary) => {
   const availableUnits = units.filter(
     (unit: Unit) => unit.unitTypes?.name == unitSummary.unitTypes.name
   )
 
-  let floorSection: React.ReactNode
-  const unitsFormatted = availableUnits.map((unit: Unit) => {
-    return {
-      number: { cellText: unit.number ? unit.number : "" },
-      sqFeet: {
-        cellText: unit.sqFeet ? `${unit.sqFeet} ${t("t.sqFeet")}` : "",
-      },
-      numBathrooms: {
-        cellText:
-          unit.numBathrooms === 0
-            ? t("listings.unit.sharedBathroom")
-            : unit.numBathrooms
-            ? unit.numBathrooms.toString()
-            : "",
-      },
-      floor: { cellText: unit.floor ? unit.floor.toString() : "" },
-    }
-  })
+  let adjustedHeaders: { [key: string]: string } = {}
+  const getFalsy = (val: string | number | undefined) => {
+    return val === null || val === undefined || val === ""
+  }
+  // Determine which fields have data to display, hide columns if all units have no data
+  const noNumbers = availableUnits.every((unit) => getFalsy(unit.number))
+  const noSqFeet = availableUnits.every((unit) => getFalsy(unit.sqFeet))
+  const noBathrooms = availableUnits.every((unit) => getFalsy(unit.numBathrooms))
+  const noFloors = availableUnits.every((unit) => getFalsy(unit.floor))
+  const noA11yTypes = availableUnits.every(
+    (unit) =>
+      unit.unitAccessibilityPriorityTypes === null ||
+      unit.unitAccessibilityPriorityTypes === undefined
+  )
+  let unitsFormatted: FormattedUnit[] = []
 
-  let areaRangeSection: React.ReactNode
+  if (!(noNumbers && noSqFeet && noBathrooms && noFloors && noA11yTypes)) {
+    unitsFormatted = availableUnits.map((unit: Unit) => {
+      let unitFormatted: FormattedUnit = {}
+
+      if (!noA11yTypes) {
+        unitFormatted = {
+          accessibilityType: {
+            cellText: unit.unitAccessibilityPriorityTypes
+              ? t(`listings.unit.accessibilityType.${unit.unitAccessibilityPriorityTypes.name}`)
+              : t("t.n/a"),
+          },
+        }
+        adjustedHeaders = { accessibilityType: "listings.unit.accessibilityType" }
+      }
+      if (!noFloors) {
+        unitFormatted = {
+          floor: {
+            cellText: unit.floor ? unit.floor.toString() : t("t.n/a"),
+          },
+          ...unitFormatted,
+        }
+        adjustedHeaders = { floor: "t.floor", ...adjustedHeaders }
+      }
+      if (!noBathrooms) {
+        unitFormatted = {
+          numBathrooms: {
+            cellText:
+              unit.numBathrooms === 0
+                ? t("listings.unit.sharedBathroom")
+                : unit.numBathrooms
+                ? unit.numBathrooms.toString()
+                : t("t.n/a"),
+          },
+          ...unitFormatted,
+        }
+        adjustedHeaders = { numBathrooms: "listings.bath", ...adjustedHeaders }
+      }
+      if (!noSqFeet) {
+        unitFormatted = {
+          sqFeet: {
+            cellText: unit.sqFeet ? unit.sqFeet : t("t.n/a"),
+            cellSubText: unit.sqFeet ? t("t.sqFeet") : "",
+          },
+          ...unitFormatted,
+        }
+        adjustedHeaders = { sqFeet: "t.area", ...adjustedHeaders }
+      }
+      if (!noNumbers) {
+        unitFormatted = {
+          number: { cellText: unit.number ? unit.number : t("t.n/a") },
+          ...unitFormatted,
+        }
+        adjustedHeaders = { number: "t.unit", ...adjustedHeaders }
+      }
+      return unitFormatted
+    })
+  }
+
+  let areaRangeSection = ""
   if (unitSummary.areaRange?.min || unitSummary.areaRange?.max) {
     areaRangeSection = `, ${formatRange(unitSummary.areaRange)} ${t("t.squareFeet")}`
   }
 
+  let floorSection = ""
   if (unitSummary.floorRange && unitSummary.floorRange.min) {
-    floorSection = `, ${formatRange(unitSummary.floorRange, true)} 
-          ${unitSummary.floorRange.max > unitSummary.floorRange.min ? t("t.floors") : t("t.floor")}`
+    floorSection = `, ${formatRange(unitSummary.floorRange, true)} ${
+      unitSummary.floorRange.max > unitSummary.floorRange.min ? t("t.floors") : t("t.floor")
+    }`
   }
 
   const barContent = (
     <div className={"toggle-header-content"}>
-      <strong>{t("listings.unitTypes." + unitSummary.unitTypes.name)}</strong>:&nbsp;
-      {unitsLabel(availableUnits)}
-      {areaRangeSection}
-      {floorSection}
+      <strong>
+        {unitSummary.unitTypes.name ? t("listings.unitTypes." + unitSummary.unitTypes.name) : ""}
+      </strong>
+      {` ${unitsLabel(availableUnits)}${areaRangeSection}${floorSection}`}
     </div>
   )
 
   return {
+    adjustedHeaders,
     availableUnits,
     areaRangeSection,
     floorSection,

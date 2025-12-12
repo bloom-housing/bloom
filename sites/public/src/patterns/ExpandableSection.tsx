@@ -9,6 +9,8 @@ interface ExpandableSectionProps {
   children: React.ReactNode
   /** Class name applied around children */
   contentClassName?: string
+  /** Sets the default collapsed state */
+  defaultCollapse?: boolean
   /** Toggles if the sections should expand or not */
   disableCollapse?: boolean
   /** Heading priority level */
@@ -41,7 +43,7 @@ const ButtonWrapper = (props: ButtonWrapperProps) => {
 }
 
 export const ExpandableSection = (props: ExpandableSectionProps) => {
-  const [collapsed, setCollapsed] = useState(true)
+  const [collapsed, setCollapsed] = useState(props.defaultCollapse ?? true)
 
   const HeadingContent = (
     <Heading priority={props.priority} size={"xl"} className={styles["heading"]}>
@@ -50,9 +52,11 @@ export const ExpandableSection = (props: ExpandableSectionProps) => {
   )
 
   const SectionContent = (
-    <div className={styles["expandable-section"]} id={props.uniqueId}>
+    <div className={styles["expandable-section"]}>
       <div className={styles["header"]}>
-        <div className={styles["header-content"]}>{HeadingContent}</div>
+        <div className={styles["header-content"]} aria-hidden={true}>
+          {HeadingContent}
+        </div>
         <div className={styles["button-container"]}>
           {!props.disableCollapse && (
             <div className={styles["header-button"]}>
@@ -80,13 +84,17 @@ export const ExpandableSection = (props: ExpandableSectionProps) => {
       ) : (
         <>{SectionContent}</>
       )}
-      {!collapsed && (
-        <div
-          className={`${styles["content"]} ${props.contentClassName ? props.contentClassName : ""}`}
-        >
-          {props.children}
-        </div>
-      )}
+      <div id={props.uniqueId}>
+        {!collapsed && (
+          <div
+            className={`${styles["content"]} ${
+              props.contentClassName ? props.contentClassName : ""
+            }`}
+          >
+            {props.children}
+          </div>
+        )}
+      </div>
     </>
   )
 }

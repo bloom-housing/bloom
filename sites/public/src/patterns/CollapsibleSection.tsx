@@ -45,7 +45,9 @@ export const CollapsibleSection = (props: CollapsibleSectionProps) => {
         className={styles["collapsible-button"]}
       >
         <div className={styles["header"]}>
-          <div className={styles["header-content"]}>{HeadingContent}</div>
+          <div className={styles["header-content"]} aria-hidden={true}>
+            {HeadingContent}
+          </div>
           <div className={styles["button-container"]}>
             <div className={styles["header-button"]}>
               {collapsed ? (
@@ -61,14 +63,17 @@ export const CollapsibleSection = (props: CollapsibleSectionProps) => {
           </div>
         </div>
       </button>
-      {!collapsed && (
-        <div
-          className={`${styles["content"]} ${props.contentClassName ? props.contentClassName : ""}`}
-          id={controlsId}
-        >
-          {props.children}
-        </div>
-      )}
+      <div id={controlsId}>
+        {!collapsed && (
+          <div
+            className={`${styles["content"]} ${
+              props.contentClassName ? props.contentClassName : ""
+            }`}
+          >
+            {props.children}
+          </div>
+        )}
+      </div>
     </div>
   )
 }
