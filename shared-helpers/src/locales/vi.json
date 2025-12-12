@@ -8,7 +8,7 @@
   "account.application.lottery.applicantList": "Trong số %{applicants} ứng viên trong danh sách này",
   "account.application.lottery.next": "Người quản lý bất động sản sẽ liên hệ với người nộp đơn theo thứ tự ưu tiên. Họ sẽ bắt đầu với ưu tiên có mức độ ưu tiên cao nhất. Nếu người quản lý bất động sản liên hệ với bạn, họ sẽ yêu cầu bạn cung cấp tài liệu để hỗ trợ những gì bạn đã trả lời trong đơn. Tài liệu đó có thể bao gồm phiếu lương, ví dụ. Họ cũng có thể cần thu thập thêm thông tin bằng cách yêu cầu bạn hoàn thành đơn bổ sung.",
   "account.application.lottery.nextHeader": "Chuyện gì xảy ra tiếp theo?",
-  "account.application.lottery.preferences": "Các ưu tiên xổ số cho đơn đăng ký của bạn được hiển thị ở đây theo thứ tự ưu tiên. Nếu bạn không đủ điều kiện cho bất kỳ ưu tiên xổ số nào, bạn sẽ thuộc danh mục xổ số chung. Danh mục xổ số chung là nhóm cuối cùng được xử lý.",
+  "account.application.lottery.preferences": "Các ưu tiên xổ số cho đơn đăng ký của bạn được hiển thị ở đây theo thứ tự ưu tiên. Nếu bạn không đủ điều kiện cho bất kỳ ưu tiên xổ số nào, bạn sẽ thuộc danh mục xổ số chung. Danh mục xổ số chung là nhóm cuối cùng được xử lý. Lưu ý rằng bạn sẽ chỉ thấy thứ hạng cho những sở thích mà bạn đã chọn, nhưng có thể có những sở thích khác <a className='lined' href='%{closedListingPageLink}'>cho danh sách này</a>.",
   "account.application.lottery.preferencesButton": "Sở thích xổ số là gì?",
   "account.application.lottery.preferencesHeader": "Sở thích xổ số của bạn",
   "account.application.lottery.preferencesMessage": "Những kết quả này dựa trên thông tin bạn cung cấp trong đơn đăng ký. Điều kiện ưu tiên có thể thay đổi sau khi thông tin của bạn được xác minh.",
