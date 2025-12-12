@@ -50,6 +50,8 @@
   "account.pwdless.loginMessage": "Nếu có tài khoản được tạo bằng email đó, chúng tôi sẽ gửi mã trong vòng 10 phút. Nếu bạn không nhận được mã, hãy đăng nhập bằng mật khẩu và xác nhận địa chỉ email của bạn trong cài đặt tài khoản.",
   "account.pwdless.loginReCaptchaMessage": "Bạn đang được yêu cầu xác minh danh tính của mình như một lớp bảo mật bổ sung. Chúng tôi đã gửi mã tới %{email} để hoàn tất đăng nhập. Xin lưu ý, mã sẽ hết hạn sau 10 phút.",
   "account.pwdless.notReceived": "Bạn không nhận được mã của mình?",
+  "account.pwdless.passwordOutdatedModalContent": "Mật khẩu của bạn đã hết hạn. Vui lòng nhấp vào tiếp tục để đặt lại mật khẩu và truy cập vào tài khoản của bạn.",
+  "account.pwdless.passwordOutdatedModalHeader": "Mật khẩu đã hết hạn",
   "account.pwdless.resend": "Gửi lại",
   "account.pwdless.resendCode": "Mã gửi lại",
   "account.pwdless.resendCodeButton": "Gửi lại mã",

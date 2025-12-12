@@ -50,6 +50,8 @@
   "account.pwdless.loginMessage": "إذا كان لديك حساب مُنشأ باستخدام %{email}، فسنرسل لك رمزًا خلال ١٠ دقائق. إذا لم تستلم الرمز، سجّل الدخول باستخدام كلمة مرورك وأكّد بريدك الإلكتروني في إعدادات الحساب.",
   "account.pwdless.loginReCaptchaMessage": "يُطلب منك تأكيد هويتك كخطوة إضافية لتعزيز الأمان. أرسلنا رمزًا إلى %{email} لإكمال تسجيل الدخول. يُرجى العلم أن صلاحية الرمز ستنتهي خلال ١٠ دقائق.",
   "account.pwdless.notReceived": "لم تستلم الرمز الخاص بك؟",
+  "account.pwdless.passwordOutdatedModalContent": "لقد انتهت صلاحية كلمة المرور الخاصة بك. انقر على متابعة لإعادة تعيين كلمة المرور والوصول إلى حسابك.",
+  "account.pwdless.passwordOutdatedModalHeader": "انتهت صلاحية كلمة المرور",
   "account.pwdless.resend": "إعادة الإرسال",
   "account.pwdless.resendCode": "إعادة إرسال الرمز",
   "account.pwdless.resendCodeButton": "إعادة إرسال الرمز",

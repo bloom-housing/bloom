@@ -50,6 +50,8 @@
   "account.pwdless.loginMessage": "Si hay una cuenta creada con ese correo electrónico, le enviaremos un código en 10 minutos. Si no recibe un código, inicie sesión con su contraseña y confirme su dirección de correo electrónico en la configuración de la cuenta.",
   "account.pwdless.loginReCaptchaMessage": "Se le solicita que verifique su identidad como capa adicional de seguridad. Enviamos un código a %{email} para finalizar el inicio de sesión. Tenga en cuenta que el código caducará en 10 minutos.",
   "account.pwdless.notReceived": "¿No recibiste tu código?",
+  "account.pwdless.passwordOutdatedModalContent": "Su contraseña ha caducado. Haga clic en continuar para restablecer su contraseña y acceder a su cuenta.",
+  "account.pwdless.passwordOutdatedModalHeader": "Contraseña caducada",
   "account.pwdless.resend": "Reenviar",
   "account.pwdless.resendCode": "Reenviar codigo",
   "account.pwdless.resendCodeButton": "Reenviar el código",
