@@ -192,7 +192,7 @@ describe("Listing Management Tests", () => {
     cy.getByID("listingsBuildingAddress.state").select(listing["buildingAddress.state"])
     cy.getByID("listingsBuildingAddress.zipCode").type(listing["buildingAddress.zipCode"])
     cy.getByID("yearBuilt").type(listing["yearBuilt"])
-    cy.get(".addressPopup").contains(listing["buildingAddress.street"])
+    cy.getByID("map-address-popup").contains(listing["buildingAddress.street"])
     cy.getByID("reservedCommunityTypes.id").select(listing["reservedCommunityType.id"], {
       force: true,
     })

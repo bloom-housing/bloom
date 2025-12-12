@@ -3,17 +3,9 @@ import { useFormContext, useWatch } from "react-hook-form"
 import GeocodeService, {
   GeocodeService as GeocodeServiceType,
 } from "@mapbox/mapbox-sdk/services/geocoding"
-import {
-  t,
-  Field,
-  Select,
-  FieldGroup,
-  ListingMap,
-  LatitudeLongitude,
-  GridCell,
-} from "@bloom-housing/ui-components"
+import { t, Field, Select, FieldGroup, GridCell } from "@bloom-housing/ui-components"
 import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
-import { stateKeys } from "@bloom-housing/shared-helpers"
+import { stateKeys, Map, LatitudeLongitude } from "@bloom-housing/shared-helpers"
 import {
   EnumListingListingType,
   RegionEnum,
@@ -367,7 +359,7 @@ const BuildingDetails = ({
           <Grid.Cell className="seeds-grid-span-2">
             <FieldValue label={t("listings.mapPreview")} className={styles["custom-label"]}>
               {displayMapPreview() ? (
-                <ListingMap
+                <Map
                   listingName={listing?.name}
                   address={{
                     city: buildingAddress.city,

@@ -14,7 +14,7 @@ type NavigationHeaderProps = {
   listingId?: string
   tabs?: NavigationHeaderTabs
   breadcrumbs?: React.ReactNode
-  children?: React.ReactChild
+  children?: React.ReactNode
 }
 
 type NavigationHeaderTabs = {

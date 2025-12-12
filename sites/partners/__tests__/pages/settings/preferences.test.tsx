@@ -2,17 +2,13 @@ import React from "react"
 import { setupServer } from "msw/lib/node"
 import { fireEvent, screen, within } from "@testing-library/react"
 import { rest } from "msw"
-import { AuthContext, MessageContext, MessageProvider } from "@bloom-housing/shared-helpers"
+import { MessageContext, MessageProvider } from "@bloom-housing/shared-helpers"
 import { Toast } from "@bloom-housing/ui-seeds"
 import {
   listing,
   multiselectQuestionPreference,
 } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
-import {
-  FeatureFlagEnum,
-  Jurisdiction,
-  User,
-} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { mockNextRouter, render } from "../../testUtils"
 import SettingsPreferences from "../../../src/pages/settings/preferences"
 

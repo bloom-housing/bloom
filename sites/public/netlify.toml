@@ -1,10 +1,10 @@
 [build]
 
-
 [build.environment]
+
+NODE_VERSION = "22.21.1"
 
 # reminder: URLs and fragments should *not* have a trailing /
 LISTINGS_QUERY = "/listings"
 
 [context.branch-deploy.environment]
-
