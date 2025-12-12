@@ -377,7 +377,9 @@ export class EmailService {
         );
       } else if (hasUnitGroups) {
         if (listing.reviewOrderType === ReviewOrderTypeEnum.waitlistLottery) {
-          eligibleText = this.polyglot.t('confirmation.eligible.waitlistLottery');
+          eligibleText = this.polyglot.t(
+            'confirmation.eligible.waitlistLottery',
+          );
         } else {
           eligibleText = this.polyglot.t('confirmation.eligible.waitlist');
         }
@@ -705,6 +707,25 @@ export class EmailService {
       console.log('lottery published applicant email failed', err);
       throw new HttpException('email failed', 500);
     }
+  }
+
+  public async warnOfAccountRemoval(user: User) {
+    const jurisdiction = await this.getJurisdiction(user.jurisdictions);
+    void (await this.loadTranslations(jurisdiction, user.language));
+    const emailFromAddress = await this.getEmailToSendFrom(
+      user.jurisdictions,
+      jurisdiction,
+    );
+    const signInUrl = jurisdiction ? `${jurisdiction.publicUrl}/sign-in` : '';
+    await this.send(
+      user.email,
+      emailFromAddress,
+      this.polyglot.t('accountRemoval.subject'),
+      this.template('warn-removal')({
+        user: user,
+        signInUrl: signInUrl,
+      }),
+    );
   }
 
   formatLocalDate(rawDate: string | Date, format: string): string {

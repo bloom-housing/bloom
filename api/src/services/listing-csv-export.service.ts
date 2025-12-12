@@ -15,6 +15,7 @@ import {
 import {
   ApplicationMethodsTypeEnum,
   ListingEventsTypeEnum,
+  ListingTypeEnum,
   MarketingTypeEnum,
   NeighborhoodAmenitiesEnum,
 } from '@prisma/client';
@@ -47,6 +48,7 @@ import {
 } from '../utilities/unit-utilities';
 import { unitTypeToReadable } from '../utilities/application-export-helpers';
 import {
+  doAllJurisdictionHaveFeatureFlagSet,
   doAnyJurisdictionHaveFalsyFeatureFlagValue,
   doAnyJurisdictionHaveFeatureFlagSet,
 } from '../utilities/feature-flag-utilities';
@@ -392,6 +394,22 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
     return '';
   }
 
+  marketingFlyer(value: string, listing?: Listing): string {
+    if (value) return listing.marketingFlyer;
+    if (listing?.listingsMarketingFlyerFile?.fileId)
+      return formatCloudinaryPdfUrl(listing.listingsMarketingFlyerFile?.fileId);
+    return '';
+  }
+
+  accessibleMarketingFlyer(value: string, listing?: Listing): string {
+    if (value) return listing.accessibleMarketingFlyer;
+    if (listing?.listingsAccessibleMarketingFlyerFile?.fileId)
+      return formatCloudinaryPdfUrl(
+        listing.listingsAccessibleMarketingFlyerFile?.fileId,
+      );
+    return '';
+  }
+
   cloudinaryPdfFromId(publicId: string): string {
     if (publicId) {
       return formatCloudinaryPdfUrl(publicId);
@@ -412,6 +430,11 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
   };
 
   async getCsvHeaders(user: User): Promise<CsvHeader[]> {
+    const enableNonRegulatedListings = doAnyJurisdictionHaveFeatureFlagSet(
+      user.jurisdictions,
+      FeatureFlagEnum.enableNonRegulatedListings,
+    );
+
     const headers: CsvHeader[] = [
       {
         path: 'id',
@@ -431,6 +454,23 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
         path: 'name',
         label: 'Listing Name',
       },
+      ...(enableNonRegulatedListings
+        ? [
+            {
+              path: 'listingType',
+              label: 'Listing Type',
+              format: (val: ListingTypeEnum) => {
+                if (!val) {
+                  return '';
+                }
+
+                return val === ListingTypeEnum.regulated
+                  ? 'Regulated'
+                  : 'Non-regulated';
+              },
+            },
+          ]
+        : []),
       {
         path: 'status',
         label: 'Listing Status',
@@ -465,8 +505,17 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
           FeatureFlagEnum.enableHousingDeveloperOwner,
         )
           ? 'Housing developer / owner'
-          : 'Developer',
+          : 'Housing Provider',
       },
+      ...(enableNonRegulatedListings
+        ? [
+            {
+              path: 'hasHudEbllClearance',
+              label: 'Has HUD EBLL Clearance',
+              format: this.formatYesNo,
+            },
+          ]
+        : []),
       ...(doAnyJurisdictionHaveFeatureFlagSet(
         user.jurisdictions,
         FeatureFlagEnum.enableListingFileNumber,
@@ -915,11 +964,18 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
           path: 'rentalAssistance',
           label: 'Eligibility Rules - Rental Assistance',
         },
-        {
-          path: 'buildingSelectionCriteria',
-          label: 'Building Selection Criteria',
-          format: this.buildingSelectionCriteria,
-        },
+        ...(doAnyJurisdictionHaveFalsyFeatureFlagValue(
+          user.jurisdictions,
+          FeatureFlagEnum.disableBuildingSelectionCriteria,
+        )
+          ? [
+              {
+                path: 'buildingSelectionCriteria',
+                label: 'Building Selection Criteria',
+                format: this.buildingSelectionCriteria,
+              },
+            ]
+          : []),
         {
           path: 'programRules',
           label: 'Important Program Rules',
@@ -1135,7 +1191,12 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
         },
         {
           path: 'referralOpportunity',
-          label: 'Referral Opportunity',
+          label: doAllJurisdictionHaveFeatureFlagSet(
+            user.jurisdictions,
+            FeatureFlagEnum.enableReferralQuestionUnits,
+          )
+            ? 'Referral Only Units'
+            : 'Referral Opportunity',
           format: this.formatYesNo,
         },
         {
@@ -1212,6 +1273,23 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
               .join(', ');
           },
         },
+        ...(doAnyJurisdictionHaveFeatureFlagSet(
+          user.jurisdictions,
+          FeatureFlagEnum.enableMarketingFlyer,
+        )
+          ? [
+              {
+                path: 'marketingFlyer',
+                label: 'Marketing Flyer',
+                format: this.marketingFlyer,
+              },
+              {
+                path: 'accessibleMarketingFlyer',
+                label: 'Accessible Marketing Flyer',
+                format: this.accessibleMarketingFlyer,
+              },
+            ]
+          : []),
         {
           path: 'userAccounts',
           label: 'Partners Who Have Access',

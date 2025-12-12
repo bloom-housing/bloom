@@ -1,174 +1,298 @@
 import React, { useContext, useState, useMemo, useEffect } from "react"
-import { AuthContext } from "@bloom-housing/shared-helpers"
+import Head from "next/head"
+import { useRouter } from "next/router"
+import { useSWRConfig } from "swr"
 import {
+  LoadingOverlay,
+  MinimalTable,
+  StandardCard,
+  t,
+  useMutate,
+} from "@bloom-housing/ui-components"
+import { Button, Dialog } from "@bloom-housing/ui-seeds"
+import dayjs from "dayjs"
+import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
+import Layout from "../../layouts"
+import PreferenceDrawer from "../../components/settings/PreferenceDrawer"
+import { useJurisdictionalMultiselectQuestionList } from "../../lib/hooks"
+import ManageIconSection from "../../components/settings/ManageIconSection"
+import { PreferenceDeleteModal } from "../../components/settings/PreferenceDeleteModal"
+import { NavigationHeader } from "../../components/shared/NavigationHeader"
+import {
+  FeatureFlagEnum,
   MultiselectQuestion,
+  MultiselectQuestionCreate,
+  MultiselectQuestionUpdate,
   MultiselectQuestionsApplicationSectionEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { AgTable, t, useAgTable } from "@bloom-housing/ui-components"
-import { Button, Tag } from "@bloom-housing/ui-seeds"
-import dayjs from "dayjs"
-import Head from "next/head"
-import Layout from "../../layouts"
-import { NavigationHeader } from "../../components/shared/NavigationHeader"
-import { useJurisdictionalMultiselectQuestionList } from "../../lib/hooks"
-import EditPreference, { DrawerType } from "../../components/settings/preferences/EditPreference"
-import styles from "./preferences.module.scss"
+import { PreferenceEditModal } from "../../components/settings/PreferenceEditModal"
+import TabView from "../../layouts/TabView"
+import { getSettingsTabs, SettingsIndexEnum } from "../../components/settings/SettingsViewHelpers"
+
+export type DrawerType = "add" | "edit"
 
 const SettingsPreferences = () => {
-  const { profile } = useContext(AuthContext)
-  const tableOptions = useAgTable()
+  const { mutate } = useSWRConfig()
+  const router = useRouter()
 
-  const [editConfirmModalOpen, setEditConfirmModalOpen] = useState<MultiselectQuestion | null>(null)
+  const { profile, multiselectQuestionsService, doJurisdictionsHaveFeatureFlagOn } =
+    useContext(AuthContext)
+  const { addToast } = useContext(MessageContext)
+
+  const { mutate: updateQuestion, isLoading: isUpdateLoading } = useMutate()
+  const { mutate: createQuestion, isLoading: isCreateLoading } = useMutate()
+
   const [preferenceDrawerOpen, setPreferenceDrawerOpen] = useState<DrawerType | null>(null)
+  const [copyModalOpen, setCopyModalOpen] = useState<MultiselectQuestion>(null)
   const [questionData, setQuestionData] = useState<MultiselectQuestion>(null)
-
-  const columns = useMemo(() => {
-    return [
-      {
-        headerName: t("t.preference"),
-        field: "name",
-        flex: 1.5,
-        cellRendererFramework: ({ data }) => {
-          const { preference, id, name } = data
-          return (
-            <Button
-              variant="text"
-              onClick={() => setEditConfirmModalOpen(preference)}
-              id={`preference-link-${id}`}
-            >
-              {name}
-            </Button>
-          )
-        },
-      },
-      {
-        headerName: t("application.status"),
-        field: "",
-        cellRendererFramework: ({ data }) => {
-          let variant = null
-          switch (data.status) {
-            case "draft":
-              variant = "primary"
-              break
-            case "active":
-              variant = "success"
-              break
-            case "retiring":
-              variant = "highlight-warm"
-              break
-          }
-          const statusText = data.status.charAt(0).toUpperCase() + data.status.slice(1)
-          return (
-            <Tag variant={variant} className={styles["tag-in-table"]}>
-              {statusText}
-            </Tag>
-          )
-        },
-      },
-      {
-        headerName: t("t.jurisdictions"),
-        field: "jurisdictions",
-        flex: 1.5,
-      },
-      { headerName: t("t.lastUpdated"), field: "updatedAt" },
-    ]
-  }, [])
+  const [updatedIds, setUpdatedIds] = useState<string[]>([])
+  const [deleteConfirmModalOpen, setDeleteConfirmModalOpen] = useState<MultiselectQuestion | null>(
+    null
+  )
+  const [editConfirmModalOpen, setEditConfirmModalOpen] = useState<MultiselectQuestion | null>(null)
 
   const { data, loading, cacheKey } = useJurisdictionalMultiselectQuestionList(
     profile?.jurisdictions?.map((jurisdiction) => jurisdiction.id).toString(),
     MultiselectQuestionsApplicationSectionEnum.preferences
   )
 
-  const items = useMemo(
-    () =>
-      (data || [])
-        .sort((a, b) => {
-          const aChar = a.text.toUpperCase()
-          const bChar = b.text.toUpperCase()
-          if (aChar === bChar)
-            return a.updatedAt > b.updatedAt ? -1 : a.updatedAt < b.updatedAt ? 1 : 0
-          return aChar.localeCompare(bChar)
-        })
-        .map((preference) => {
-          const { name, status, jurisdictions, updatedAt } = preference
-          return {
-            name,
-            status,
-            jurisdictions: jurisdictions.map((jurisdiction) => jurisdiction.name).join(", "),
-            updatedAt: dayjs(updatedAt).format("MM/DD/YYYY"),
-            preference,
-          }
-        }),
-    [data]
+  const enableProperties = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableProperties)
+  const atLeastOneJurisdictionEnablesPreferences = !doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.disableListingPreferences,
+    null,
+    true
   )
 
-  if (profile?.userRoles?.isPartner || profile?.userRoles?.isSupportAdmin) {
-    window.location.href = "/unauthorized"
+  const tableData = useMemo(() => {
+    return data
+      ?.sort((a, b) => {
+        const aChar = a.text.toUpperCase()
+        const bChar = b.text.toUpperCase()
+        if (aChar === bChar)
+          return a.updatedAt > b.updatedAt ? -1 : a.updatedAt < b.updatedAt ? 1 : 0
+        return aChar.localeCompare(bChar)
+      })
+      .map((preference) => {
+        return {
+          name: {
+            content: preference?.text,
+          },
+          jurisdiction: {
+            content: preference?.jurisdictions?.reduce((acc, item, index) => {
+              return `${acc}${index > 0 ? ", " : ""}${item.name}`
+            }, ""),
+          },
+
+          updated: {
+            content: dayjs(preference?.updatedAt).format("MM/DD/YYYY"),
+          },
+          icons: {
+            content: (
+              <ManageIconSection
+                onCopy={() => setCopyModalOpen(preference)}
+                copyTestId={`preference-copy-icon: ${preference.text}`}
+                onEdit={() => setEditConfirmModalOpen(preference)}
+                editTestId={`preference-edit-icon: ${preference.text}`}
+                onDelete={() => setDeleteConfirmModalOpen(preference)}
+                deleteTestId={`preference-delete-icon: ${preference.text}`}
+              />
+            ),
+          },
+        }
+      })
+  }, [data])
+
+  useEffect(() => {
+    if (!isCreateLoading) {
+      setCopyModalOpen(null)
+    }
+  }, [isCreateLoading])
+
+  const saveQuestion = (formattedData: MultiselectQuestionCreate, requestType: DrawerType) => {
+    if (requestType === "edit") {
+      void updateQuestion(() =>
+        multiselectQuestionsService
+          .update({
+            body: {
+              ...(formattedData as unknown as MultiselectQuestionUpdate),
+              id: questionData.id,
+            },
+          })
+          .then((result) => {
+            setUpdatedIds(
+              updatedIds.find((existingId) => existingId === result.id)
+                ? updatedIds
+                : [...updatedIds, result.id]
+            )
+            addToast(t(`settings.preferenceAlertUpdated`), { variant: "success" })
+          })
+          .catch((e) => {
+            addToast(t(`errors.alert.badRequest`), { variant: "alert" })
+            console.log(e)
+          })
+          .finally(() => {
+            setPreferenceDrawerOpen(null)
+            void mutate(cacheKey)
+          })
+      )
+    } else {
+      void createQuestion(() =>
+        multiselectQuestionsService
+          .create({
+            body: formattedData as unknown as MultiselectQuestionCreate,
+          })
+          .then((result) => {
+            setUpdatedIds(
+              updatedIds.find((existingId) => existingId === result.id)
+                ? updatedIds
+                : [...updatedIds, result.id]
+            )
+            addToast(t(`settings.preferenceAlertCreated`), { variant: "success" })
+          })
+          .catch((e) => {
+            addToast(t(`errors.alert.badRequest`), { variant: "alert" })
+            console.log(e)
+          })
+          .finally(() => {
+            setPreferenceDrawerOpen(null)
+            void mutate(cacheKey)
+          })
+      )
+    }
+  }
+
+  const getCardContent = () => {
+    if (!loading && data?.length === 0) return null
+    return (
+      <>
+        {data?.length ? (
+          <MinimalTable
+            headers={{
+              name: "t.name",
+              jurisdiction: "t.jurisdiction",
+              updated: "t.updated",
+              icons: "",
+            }}
+            cellClassName={"px-5 py-3"}
+            data={tableData}
+          />
+        ) : (
+          <div className={"ml-5 mb-5"}>{t("t.none")}</div>
+        )}
+      </>
+    )
+  }
+  if (
+    profile?.userRoles?.isPartner ||
+    profile?.userRoles?.isSupportAdmin ||
+    !atLeastOneJurisdictionEnablesPreferences
+  ) {
+    void router.push("/unauthorized")
   }
 
   return (
     <>
       <Layout>
         <Head>
-          <title>{`Preferences - ${t("nav.siteTitlePartners")}`}</title>
+          <title>{`Settings - Preferences - ${t("nav.siteTitlePartners")}`}</title>
         </Head>
-        <NavigationHeader className="relative" title={t("t.preferences")} />
-        <section className={styles["preferences-section"]}>
-          <div className={styles["table-wrapper"]}>
-            <AgTable
-              id="preferences-table"
-              pagination={{
-                perPage: tableOptions.pagination.itemsPerPage,
-                setPerPage: tableOptions.pagination.setItemsPerPage,
-                currentPage: tableOptions.pagination.currentPage,
-                setCurrentPage: tableOptions.pagination.setCurrentPage,
-              }}
-              config={{
-                columns,
-                totalItemsLabel: "items",
-              }}
-              data={{
-                items,
-                loading: loading,
-                totalItems: 2,
-                totalPages: 1,
-              }}
-              search={{
-                showSearch: false,
-                setSearch: tableOptions.filter.setFilterValue, // currently not used
-              }}
-              headerContent={
-                <>
-                  <span></span>
-                  <span>
-                    <Button
-                      variant="primary"
-                      size="sm"
-                      onClick={() => {
-                        setQuestionData(null)
-                        setPreferenceDrawerOpen("add")
-                      }}
-                      id={"add-preference"}
-                    >
-                      {t("t.addItem")}
-                    </Button>
-                  </span>
-                </>
+        <NavigationHeader className="relative" title={t("t.settings")} />
+        <TabView
+          hideTabs={!(atLeastOneJurisdictionEnablesPreferences && enableProperties)}
+          tabs={getSettingsTabs(SettingsIndexEnum.preferences, router)}
+        >
+          <LoadingOverlay isLoading={loading}>
+            <StandardCard
+              title={t("t.preferences")}
+              emptyStateMessage={t("t.none")}
+              footer={
+                <Button
+                  size="sm"
+                  onClick={() => {
+                    setQuestionData(null)
+                    setPreferenceDrawerOpen("add")
+                  }}
+                  id={"preference-add-item"}
+                  disabled={loading}
+                >
+                  {t("t.addItem")}
+                </Button>
               }
-            />
-          </div>
-        </section>
+            >
+              {getCardContent()}
+            </StandardCard>
+          </LoadingOverlay>
+        </TabView>
       </Layout>
 
-      <EditPreference
-        cacheKey={cacheKey}
-        editConfirmModalOpen={editConfirmModalOpen}
-        setEditConfirmModalOpen={setEditConfirmModalOpen}
-        preferenceDrawerOpen={preferenceDrawerOpen}
-        setPreferenceDrawerOpen={setPreferenceDrawerOpen}
+      <PreferenceDrawer
+        drawerOpen={!!preferenceDrawerOpen}
         questionData={questionData}
         setQuestionData={setQuestionData}
+        drawerType={preferenceDrawerOpen}
+        onDrawerClose={() => {
+          setPreferenceDrawerOpen(null)
+          void mutate(cacheKey)
+        }}
+        saveQuestion={saveQuestion}
+        isLoading={isCreateLoading || isUpdateLoading}
       />
+
+      <Dialog
+        isOpen={!!copyModalOpen}
+        ariaLabelledBy="settings-dialog-header"
+        onClose={() => setCopyModalOpen(null)}
+      >
+        <Dialog.Header id="settings-dialog-header">{t("t.copy")}</Dialog.Header>
+        <Dialog.Content>{t("settings.createCopyDescription")}</Dialog.Content>
+        <Dialog.Footer>
+          <Button
+            type="button"
+            variant="primary-outlined"
+            onClick={() => {
+              saveQuestion({ ...copyModalOpen, text: `${copyModalOpen.text} (Copy)` }, "add")
+            }}
+            id={"copy-button-confirm"}
+            loadingMessage={isCreateLoading && t("t.formSubmitted")}
+            size="sm"
+          >
+            {t("actions.copy")}
+          </Button>
+          <Button
+            variant="primary-outlined"
+            type="button"
+            onClick={() => {
+              setCopyModalOpen(null)
+            }}
+            disabled={isCreateLoading}
+            id={"copy-button-cancel"}
+            size="sm"
+          >
+            {t("t.cancel")}
+          </Button>
+        </Dialog.Footer>
+      </Dialog>
+      {deleteConfirmModalOpen && (
+        <PreferenceDeleteModal
+          multiselectQuestion={deleteConfirmModalOpen}
+          onClose={() => {
+            setDeleteConfirmModalOpen(null)
+            void mutate(cacheKey)
+          }}
+        />
+      )}
+      {editConfirmModalOpen && (
+        <PreferenceEditModal
+          multiselectQuestion={editConfirmModalOpen}
+          onClose={() => {
+            setEditConfirmModalOpen(null)
+          }}
+          onEdit={() => {
+            setQuestionData(editConfirmModalOpen)
+            setPreferenceDrawerOpen("edit")
+          }}
+        />
+      )}
     </>
   )
 }

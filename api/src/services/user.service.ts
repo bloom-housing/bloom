@@ -5,6 +5,8 @@ import {
   Injectable,
   NotFoundException,
   UnauthorizedException,
+  Logger,
+  Inject,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Prisma } from '@prisma/client';
@@ -45,6 +47,8 @@ import { RequestSingleUseCode } from '../dtos/single-use-code/request-single-use
 import { getSingleUseCode } from '../utilities/get-single-use-code';
 import { UserFavoriteListing } from '../dtos/users/user-favorite-listing.dto';
 import { ModificationEnum } from '../enums/shared/modification-enum';
+import { CronJobService } from './cron-job.service';
+import { ApplicationService } from './application.service';
 
 /*
   this is the service for users
@@ -79,6 +83,9 @@ type findByOptions = {
   resetToken?: string;
 };
 
+const USER_DELETION_CRON_JOB_NAME = 'USER_DELETION_CRON_STRING';
+const USER_DELETION_WARN_CRON_JOB_NAME = 'USER_DELETION_WARN_CRON_JOB';
+
 @Injectable()
 export class UserService {
   constructor(
@@ -86,8 +93,24 @@ export class UserService {
     private emailService: EmailService,
     private readonly configService: ConfigService,
     private permissionService: PermissionService,
+    private applicationService: ApplicationService,
+    @Inject(Logger)
+    private logger = new Logger(UserService.name),
+    private cronJobService: CronJobService,
   ) {
     dayjs.extend(advancedFormat);
+  }
+  onModuleInit() {
+    this.cronJobService.startCronJob(
+      USER_DELETION_CRON_JOB_NAME,
+      process.env.USER_DELETION_CRON_STRING,
+      this.deleteAfterInactivity.bind(this),
+    );
+    this.cronJobService.startCronJob(
+      USER_DELETION_WARN_CRON_JOB_NAME,
+      process.env.USER_DELETION_WARN_CRON_STRING,
+      this.warnUserOfDeletionCronJob.bind(this),
+    );
   }
 
   /*
@@ -311,38 +334,6 @@ export class UserService {
     });
 
     return mapTo(User, res);
-  }
-
-  /*
-    this will delete a user or error if no user is found with the Id
-  */
-  async delete(userId: string, requestingUser: User): Promise<SuccessDTO> {
-    const targetUser = await this.findUserOrError(
-      { userId: userId },
-      UserViews.base,
-    );
-
-    this.authorizeAction(
-      requestingUser,
-      mapTo(User, targetUser),
-      permissionActions.delete,
-    );
-
-    await this.prisma.userRoles.delete({
-      where: {
-        userId: userId,
-      },
-    });
-
-    await this.prisma.userAccounts.delete({
-      where: {
-        id: userId,
-      },
-    });
-
-    return {
-      success: true,
-    } as SuccessDTO;
   }
 
   /*
@@ -1043,5 +1034,153 @@ export class UserService {
     });
 
     return mapTo(User, rawResults);
+  }
+
+  private async deleteUserAndRelatedInfo(
+    user: User,
+    removePIIFromApplications?: boolean,
+  ) {
+    if (removePIIFromApplications) {
+      const applications = await this.prisma.applications.findMany({
+        select: { id: true },
+        where: { userId: user.id },
+      });
+      for (const application of applications) {
+        await this.applicationService.removePII(application.id);
+      }
+    }
+
+    if (user.userRoles) {
+      await this.prisma.userRoles.delete({
+        where: {
+          userId: user.id,
+        },
+      });
+    }
+
+    await this.prisma.userAccounts.delete({
+      where: {
+        id: user.id,
+      },
+    });
+  }
+
+  /*
+    this will delete a user or error if no user is found with the Id
+  */
+  async delete(
+    userId: string,
+    requestingUser: User,
+    shouldDeleteApplications?: boolean,
+  ): Promise<SuccessDTO> {
+    const targetUser = await this.findUserOrError(
+      { userId: userId },
+      UserViews.base,
+    );
+
+    this.authorizeAction(
+      requestingUser,
+      mapTo(User, targetUser),
+      permissionActions.delete,
+    );
+
+    await this.deleteUserAndRelatedInfo(
+      mapTo(User, targetUser),
+      shouldDeleteApplications,
+    );
+
+    return {
+      success: true,
+    } as SuccessDTO;
+  }
+
+  async deleteAfterInactivity(): Promise<SuccessDTO> {
+    if (
+      !this.configService.get('USERS_DAYS_TILL_EXPIRY') ||
+      isNaN(Number(this.configService.get('USERS_DAYS_TILL_EXPIRY')))
+    ) {
+      this.logger.warn(
+        'USERS_DAYS_TILL_EXPIRY variable is not set so deleteAfterInactivity will not run',
+      );
+      return { success: false } as SuccessDTO;
+    }
+    const deleteBeforeDate = dayjs(new Date())
+      .subtract(
+        Number(this.configService.get('USERS_DAYS_TILL_EXPIRY')),
+        'days',
+      )
+      .toDate();
+    const usersToBeDeleted = await this.prisma.userAccounts.findMany({
+      select: { id: true, wasWarnedOfDeletion: true },
+      where: { lastLoginAt: { lt: deleteBeforeDate }, userRoles: null },
+    });
+
+    for (const user of usersToBeDeleted) {
+      if (!user.wasWarnedOfDeletion) {
+        this.logger.warn(
+          `Unable to delete user ${user.id} because they have not been warned by email`,
+        );
+      } else {
+        await this.deleteUserAndRelatedInfo(mapTo(User, user), true);
+      }
+    }
+
+    return { success: true } as SuccessDTO;
+  }
+
+  /**
+   * Cron job for sending emails to users that have not logged in to the system in USERS_DAYS_TILL_EXPIRY
+   * informing them their account will be deleted in 30 days
+   */
+  async warnUserOfDeletionCronJob(): Promise<SuccessDTO> {
+    if (
+      this.configService.get('USERS_DAYS_TILL_EXPIRY') &&
+      !isNaN(Number(this.configService.get('USERS_DAYS_TILL_EXPIRY')))
+    ) {
+      await this.cronJobService.markCronJobAsStarted(
+        USER_DELETION_WARN_CRON_JOB_NAME,
+      );
+      // warning the user 30 days before the user account will be deleted
+      const warnDateNumber =
+        Number(this.configService.get('USERS_DAYS_TILL_EXPIRY')) - 30;
+      const warnDate = dayjs(new Date())
+        .subtract(warnDateNumber, 'days')
+        .toDate();
+      const users = await this.prisma.userAccounts.findMany({
+        include: {
+          jurisdictions: true,
+        },
+        where: {
+          lastLoginAt: { lte: warnDate },
+          userRoles: null,
+          wasWarnedOfDeletion: false,
+        },
+      });
+      this.logger.warn(`warning ${users.length} users of account deletion`);
+      for (const user of users) {
+        try {
+          await this.emailService.warnOfAccountRemoval(mapTo(User, user));
+          await this.prisma.userAccounts.update({
+            data: { wasWarnedOfDeletion: true },
+            where: { id: user.id },
+          });
+        } catch (e) {
+          this.logger.error(e);
+          this.logger.error(
+            `warnUserOfDeletion email failed for user ${user.id}`,
+          );
+        }
+      }
+    } else {
+      this.logger.warn(
+        'USERS_DAYS_TILL_EXPIRY not set so warnUserOfDeletion cron job not run',
+      );
+      return {
+        success: false,
+      };
+    }
+    return {
+      success: true,
+    };
   }
 }
