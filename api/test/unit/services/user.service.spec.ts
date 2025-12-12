@@ -80,6 +80,7 @@ describe('Testing user service', () => {
   };
   const LoggerServiceMock = {
     warn: jest.fn(),
+    error: jest.fn(),
   };
 
   const canOrThrowMock = jest.fn();
@@ -2737,6 +2738,109 @@ describe('Testing user service', () => {
       expect(prisma.userAccounts.delete).toBeCalledWith({
         where: { id: 'userId4' },
       });
+    });
+  });
+
+  describe('warnUserOfDeletionCronJob', () => {
+    it('should not run if USERS_DAYS_TILL_EXPIRY does not exist', async () => {
+      process.env.USERS_DAYS_TILL_EXPIRY = null;
+      const response = await service.warnUserOfDeletionCronJob();
+      expect(response).toEqual({ success: false });
+      expect(LoggerServiceMock.warn).toBeCalledWith(
+        'USERS_DAYS_TILL_EXPIRY not set so warnUserOfDeletion cron job not run',
+      );
+    });
+    it('should not run if USERS_DAYS_TILL_EXPIRY is not a number', async () => {
+      process.env.USERS_DAYS_TILL_EXPIRY = 'not a number';
+      const response = await service.warnUserOfDeletionCronJob();
+      expect(response).toEqual({ success: false });
+      expect(LoggerServiceMock.warn).toBeCalledWith(
+        'USERS_DAYS_TILL_EXPIRY not set so warnUserOfDeletion cron job not run',
+      );
+    });
+    it('should send warn email for all expired public users', async () => {
+      process.env.USERS_DAYS_TILL_EXPIRY = '1095';
+      jest.useFakeTimers().setSystemTime(new Date('2025-11-22T12:25:00.000Z'));
+      prisma.userAccounts.findMany = jest
+        .fn()
+        .mockResolvedValue([{ id: 'id1' }, { id: 'id2' }]);
+      prisma.userAccounts.update = jest.fn().mockResolvedValue({});
+      prisma.cronJob.findFirst = jest.fn().mockResolvedValue({});
+      prisma.cronJob.findFirst = jest.fn().mockResolvedValue({});
+      prisma.cronJob.create = jest.fn().mockResolvedValue({});
+      prisma.cronJob.update = jest.fn().mockResolvedValue({});
+      emailService.warnOfAccountRemoval = jest.fn();
+      const response = await service.warnUserOfDeletionCronJob();
+      expect(prisma.userAccounts.findMany).toBeCalledWith({
+        include: {
+          jurisdictions: true,
+        },
+        where: {
+          lastLoginAt: { lte: new Date('2022-12-23T12:25:00.000Z') },
+          userRoles: null,
+          wasWarnedOfDeletion: false,
+        },
+      });
+      expect(prisma.userAccounts.update).toBeCalledWith({
+        data: {
+          wasWarnedOfDeletion: true,
+        },
+        where: {
+          id: 'id1',
+        },
+      });
+      expect(prisma.userAccounts.update).toBeCalledWith({
+        data: {
+          wasWarnedOfDeletion: true,
+        },
+        where: {
+          id: 'id2',
+        },
+      });
+      expect(emailService.warnOfAccountRemoval).toBeCalledWith({ id: 'id1' });
+      expect(emailService.warnOfAccountRemoval).toBeCalledWith({ id: 'id2' });
+      expect(response).toEqual({ success: true });
+    });
+    it('should not update user if email failed', async () => {
+      process.env.USERS_DAYS_TILL_EXPIRY = '1095';
+      jest.useFakeTimers().setSystemTime(new Date('2025-11-22T12:25:00.000Z'));
+      prisma.userAccounts.findMany = jest
+        .fn()
+        .mockResolvedValue([{ id: 'id1' }, { id: 'id2' }]);
+      prisma.userAccounts.update = jest.fn().mockResolvedValue({});
+      prisma.cronJob.findFirst = jest.fn().mockResolvedValue({});
+      prisma.cronJob.findFirst = jest.fn().mockResolvedValue({});
+      prisma.cronJob.create = jest.fn().mockResolvedValue({});
+      prisma.cronJob.update = jest.fn().mockResolvedValue({});
+      emailService.warnOfAccountRemoval = jest
+        .fn()
+        .mockResolvedValueOnce({})
+        .mockRejectedValue('error sending email');
+      const response = await service.warnUserOfDeletionCronJob();
+      expect(prisma.userAccounts.findMany).toBeCalledWith({
+        include: {
+          jurisdictions: true,
+        },
+        where: {
+          lastLoginAt: { lte: new Date('2022-12-23T12:25:00.000Z') },
+          userRoles: null,
+          wasWarnedOfDeletion: false,
+        },
+      });
+      expect(emailService.warnOfAccountRemoval).toBeCalledTimes(2);
+      expect(prisma.userAccounts.update).toBeCalledTimes(1);
+      expect(prisma.userAccounts.update).toBeCalledWith({
+        data: {
+          wasWarnedOfDeletion: true,
+        },
+        where: {
+          id: 'id1',
+        },
+      });
+      expect(LoggerServiceMock.error).toBeCalledWith(
+        'warnUserOfDeletion email failed for user id2',
+      );
+      expect(response).toEqual({ success: true });
     });
   });
 });
