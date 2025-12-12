@@ -564,6 +564,9 @@ describe('Application Controller Tests', () => {
         submissionDate: expect.any(String),
         markedAsDuplicate: false,
         confirmationCode: expect.any(String),
+        accessibleUnitWaitlistNumber: null,
+        conventionalUnitWaitlistNumber: null,
+        manualLotteryPositionNumber: null,
         reviewStatus: 'valid',
         applicationsMailingAddress: {
           id: expect.any(String),
