@@ -50,6 +50,8 @@
   "account.pwdless.loginMessage": "Kung may account na ginawa gamit ang email na iyon, magpapadala kami ng code sa loob ng 10 minuto. Kung hindi ka makatanggap ng code, mag-sign in gamit ang iyong password at kumpirmahin ang iyong email address sa ilalim ng mga setting ng account.",
   "account.pwdless.loginReCaptchaMessage": "Hinihiling sa iyo na i-verify ang iyong pagkakakilanlan bilang isang karagdagang layer ng seguridad. Nagpadala kami ng code sa %{email} upang tapusin ang pag-log in. Magkaroon ng kamalayan, mag-e-expire ang code sa loob ng 10 minuto.",
   "account.pwdless.notReceived": "Hindi natanggap ang iyong code?",
+  "account.pwdless.passwordOutdatedModalContent": "Ang iyong password ay nag-expire na. I-click ang magpatuloy upang i-reset ang iyong password at i-access ang iyong account.",
+  "account.pwdless.passwordOutdatedModalHeader": "Nag-expire ang Password",
   "account.pwdless.resend": "Muling ipadala",
   "account.pwdless.resendCode": "Muling ipadala ang code",
   "account.pwdless.resendCodeButton": "Ipadala muli ang code",

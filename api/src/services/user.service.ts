@@ -29,7 +29,11 @@ import { UserQueryParams } from '../dtos/users/user-query-param.dto';
 import { PaginatedUserDto } from '../dtos/users/paginated-user.dto';
 import { OrderByEnum } from '../enums/shared/order-by-enum';
 import { UserUpdate } from '../dtos/users/user-update.dto';
-import { isPasswordValid, passwordToHash } from '../utilities/password-helpers';
+import {
+  isPasswordOutdated,
+  isPasswordValid,
+  passwordToHash,
+} from '../utilities/password-helpers';
 import { SuccessDTO } from '../dtos/shared/success.dto';
 import { EmailAndAppUrl } from '../dtos/users/email-and-app-url.dto';
 import { ConfirmationRequest } from '../dtos/users/confirmation-request.dto';
@@ -933,6 +937,12 @@ export class UserService {
     });
     if (!user) {
       return { success: true };
+    }
+    if (isPasswordOutdated(user.passwordValidForDays, user.passwordUpdatedAt)) {
+      // if password TTL is expired
+      throw new UnauthorizedException(
+        `user ${user.id} attempted to login, but password is no longer valid`,
+      );
     }
 
     const jurisdictionName = req?.headers?.jurisdictionname;
