@@ -10,6 +10,7 @@ export enum FeatureFlagEnum {
   enableAccessibilityFeatures = 'enableAccessibilityFeatures',
   enableAdaOtherOption = 'enableAdaOtherOption',
   enableAdditionalResources = 'enableAdditionalResources',
+  enableApplicationStatus = 'enableApplicationStatus',
   enableCompanyWebsite = 'enableCompanyWebsite',
   enableCreditScreeningFee = 'enableCreditScreeningFee',
   enableFullTimeStudentQuestion = 'enableFullTimeStudentQuestion',
@@ -97,6 +98,11 @@ export const featureFlagMap: {
     name: FeatureFlagEnum.enableAdditionalResources,
     description:
       "When true, the 'learn more' section is displayed on the home page",
+  },
+  {
+    name: FeatureFlagEnum.enableApplicationStatus,
+    description:
+      'When true, the application status and notifications feature is enabled on public and partners',
   },
   {
     name: FeatureFlagEnum.enableCompanyWebsite,
