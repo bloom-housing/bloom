@@ -64,7 +64,18 @@ export class MfaStrategy extends PassportStrategy(Strategy, 'mfa') {
       Number(process.env.AUTH_LOCK_LOGIN_AFTER_FAILED_ATTEMPTS),
       Number(process.env.AUTH_LOCK_LOGIN_COOLDOWN),
     );
-    if (!(await isPasswordValid(rawUser.passwordHash, dto.password))) {
+
+    if (
+      isPasswordOutdated(
+        rawUser.passwordValidForDays,
+        rawUser.passwordUpdatedAt,
+      )
+    ) {
+      // if password TTL is expired
+      throw new UnauthorizedException(
+        `user ${rawUser.id} attempted to login, but password is no longer valid`,
+      );
+    } else if (!(await isPasswordValid(rawUser.passwordHash, dto.password))) {
       // if incoming password does not match
       await this.updateFailedLoginCount(
         rawUser.failedLoginAttemptsCount + 1,
@@ -79,16 +90,6 @@ export class MfaStrategy extends PassportStrategy(Strategy, 'mfa') {
       // if user is not confirmed already
       throw new UnauthorizedException(
         `user ${rawUser.id} attempted to login, but is not confirmed`,
-      );
-    } else if (
-      isPasswordOutdated(
-        rawUser.passwordValidForDays,
-        rawUser.passwordUpdatedAt,
-      )
-    ) {
-      // if password TTL is expired
-      throw new UnauthorizedException(
-        `user ${rawUser.id} attempted to login, but password is no longer valid`,
       );
     }
 
