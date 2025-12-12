@@ -12,7 +12,7 @@ import {
 } from '../utilities/pagination-helpers';
 import { mapTo } from '../utilities/mapTo';
 import Property from '../dtos/properties/property.dto';
-import { PagiantedPropertyDto } from '../dtos/properties/paginated-property.dto';
+import { PaginatedPropertyDto } from '../dtos/properties/paginated-property.dto';
 import PropertyCreate from '../dtos/properties/property-create.dto';
 import { PropertyUpdate } from '../dtos/properties/property-update.dto';
 import { SuccessDTO } from '../dtos/shared/success.dto';
@@ -21,7 +21,7 @@ import { SuccessDTO } from '../dtos/shared/success.dto';
 export class PropertyService {
   constructor(private prisma: PrismaService) {}
 
-  async list(params: PropertyQueryParams): Promise<PagiantedPropertyDto> {
+  async list(params: PropertyQueryParams): Promise<PaginatedPropertyDto> {
     const whereClause = params?.search
       ? {
           name: {
@@ -86,6 +86,8 @@ export class PropertyService {
   }
 
   async update(propertyDto: PropertyUpdate) {
+    await this.findOrThrow(propertyDto.id);
+
     const rawProperty = await this.prisma.properties.update({
       data: {
         ...propertyDto,
@@ -103,6 +105,8 @@ export class PropertyService {
       throw new BadRequestException('a property ID must be provided');
     }
 
+    await this.findOrThrow(propertyId);
+
     await this.prisma.properties.delete({
       where: {
         id: propertyId,
@@ -112,5 +116,21 @@ export class PropertyService {
     return {
       success: true,
     } as SuccessDTO;
+  }
+
+  async findOrThrow(propertyId: string): Promise<boolean> {
+    const property = await this.prisma.properties.findFirst({
+      where: {
+        id: propertyId,
+      },
+    });
+
+    if (!property) {
+      throw new BadRequestException(
+        `Property with id ${propertyId} was not found`,
+      );
+    }
+
+    return true;
   }
 }

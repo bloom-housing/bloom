@@ -13,7 +13,7 @@ import {
 } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { PermissionTypeDecorator } from '../decorators/permission-type.decorator';
-import { PagiantedPropertyDto } from '../dtos/properties/paginated-property.dto';
+import { PaginatedPropertyDto } from '../dtos/properties/paginated-property.dto';
 import { PropertyQueryParams } from '../dtos/properties/property-query-params.dto';
 import { PropertyService } from '../services/property.service';
 import PropertyCreate from '../dtos/properties/property-create.dto';
@@ -34,14 +34,15 @@ export class PropertyController {
     summary: 'Get a paginated set of properties',
     operationId: 'list',
   })
-  @ApiOkResponse({ type: PagiantedPropertyDto })
+  @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
+  @ApiOkResponse({ type: PaginatedPropertyDto })
   public async getPaginatedSet(@Query() queryParams: PropertyQueryParams) {
     return await this.propertyService.list(queryParams);
   }
 
   @Get(':id')
   @ApiOperation({
-    summary: 'Get a proprty object by ID',
+    summary: 'Get a property object by ID',
     operationId: 'getById',
   })
   public async getPropertyById(
@@ -56,7 +57,7 @@ export class PropertyController {
     operationId: 'filterableList',
   })
   @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
-  @ApiOkResponse({ type: PagiantedPropertyDto })
+  @ApiOkResponse({ type: PaginatedPropertyDto })
   public async getFiltrablePaginatedSet(
     @Body() queryParams: PropertyQueryParams,
   ) {

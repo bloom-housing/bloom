@@ -1,4 +1,8 @@
 import { OmitType } from '@nestjs/swagger';
-import { PropertyUpdate } from './property-update.dto';
+import Property from './property.dto';
 
-export default class PropertyCreate extends OmitType(PropertyUpdate, ['id']) {}
+export default class PropertyCreate extends OmitType(Property, [
+  'id',
+  'createdAt',
+  'updatedAt',
+]) {}
