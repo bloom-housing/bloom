@@ -20,16 +20,14 @@ interface ListingIntroProps {
 
 const getDeveloperLabel = (
   listingType: EnumListingListingType,
-  enableHousingDeveloperOwner: boolean,
-  enableNonRegulatedListings: boolean
+  enableHousingDeveloperOwner: boolean
 ) => {
   if (enableHousingDeveloperOwner) {
     return t("listings.housingDeveloperOwner")
-  } else if (listingType === EnumListingListingType.regulated || !enableNonRegulatedListings) {
-    return t("listings.developer")
-  } else {
+  } else if (listingType === EnumListingListingType.nonRegulated) {
     return t("listings.propertyManager")
   }
+  return t("listings.developer")
 }
 
 const ListingIntro = (props: ListingIntroProps) => {
@@ -55,9 +53,9 @@ const ListingIntro = (props: ListingIntroProps) => {
           <Grid.Row columns={1}>
             <Grid.Cell>
               <FieldValue id="listingType" label={t("listings.listingTypeTile")}>
-                {listing.listingType === EnumListingListingType.regulated
-                  ? t("listings.regulated")
-                  : t("listings.nonRegulated")}
+                {listing.listingType === EnumListingListingType.nonRegulated
+                  ? t("listings.nonRegulated")
+                  : t("listings.regulated")}
               </FieldValue>
             </Grid.Cell>
           </Grid.Row>
@@ -98,11 +96,7 @@ const ListingIntro = (props: ListingIntroProps) => {
               register={register}
               {...defaultFieldProps(
                 "developer",
-                getDeveloperLabel(
-                  listingType,
-                  props.enableHousingDeveloperOwner,
-                  props.enableNonRegulatedListings
-                ),
+                getDeveloperLabel(listingType, props.enableHousingDeveloperOwner),
                 props.requiredFields,
                 errors,
                 clearErrors
