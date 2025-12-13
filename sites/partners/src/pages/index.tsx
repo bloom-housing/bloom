@@ -325,7 +325,6 @@ export default function ListingsList() {
     if (data.listingType === ListingTypeEnum.nonRegulated) {
       query["nonRegulated"] = true
     }
-    console.log("data", data)
     void router.push({
       pathname: "/listings/add",
       query: query,
