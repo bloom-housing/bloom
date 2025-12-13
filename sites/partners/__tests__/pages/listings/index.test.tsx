@@ -1,6 +1,6 @@
 import React from "react"
 import { AuthContext, MessageProvider } from "@bloom-housing/shared-helpers"
-import { fireEvent, screen, waitFor } from "@testing-library/react"
+import { fireEvent, screen, waitFor, within } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { act } from "react-dom/test-utils"
 import { rest } from "msw"
@@ -520,22 +520,7 @@ describe("listings", () => {
         return res(
           ctx.json({
             id: "user1",
-            roles: { id: "user1", isAdmin: true, isPartner: false },
-          })
-        )
-      }),
-      rest.post("http://localhost:3100/auth/token", (_req, res, ctx) => {
-        return res(ctx.json(""))
-      })
-    )
-
-    render(
-      <AuthContext.Provider
-        value={{
-          initialStateLoaded: true,
-          profile: {
-            ...mockUser,
-            userRoles: { isAdmin: true, isPartner: false },
+            userRoles: { id: "user1", isAdmin: true, isPartner: false },
             jurisdictions: [
               {
                 id: "id1",
@@ -548,14 +533,15 @@ describe("listings", () => {
                 featureFlags: [],
               } as Jurisdiction,
             ],
-          },
-          doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
-            mockJurisdictionsHaveFeatureFlagOn(featureFlag, false, false),
-        }}
-      >
-        <ListingsList />
-      </AuthContext.Provider>
+          })
+        )
+      }),
+      rest.post("http://localhost:3100/auth/token", (_req, res, ctx) => {
+        return res(ctx.json(""))
+      })
     )
+
+    render(<ListingsList />)
 
     const addListingButton = await screen.findByRole("button", { name: "Add listing" })
     expect(addListingButton).toBeInTheDocument()
@@ -565,7 +551,7 @@ describe("listings", () => {
       screen.getByRole("heading", { level: 1, name: "Select jurisdiction" })
     ).toBeInTheDocument()
     expect(
-      screen.getByText("Once you create this listing, the jurisdiction cannot be changed.")
+      screen.getByText("Once you create this listing, this selection cannot be changed.")
     ).toBeInTheDocument()
 
     expect(screen.getByRole("option", { name: "JurisdictionA" })).toBeInTheDocument()
@@ -578,6 +564,78 @@ describe("listings", () => {
       expect(pushMock).toHaveBeenCalledWith({
         pathname: "/listings/add",
         query: { jurisdictionId: "id1" },
+      })
+    })
+  })
+
+  it("should open add listing modal if user has access to one jurisdiction and enableNonRegulatedListings", async () => {
+    window.URL.createObjectURL = jest.fn()
+    document.cookie = "access-token-available=True"
+    const { pushMock } = mockNextRouter()
+    server.use(
+      rest.get("http://localhost:3100/listings", (_req, res, ctx) => {
+        return res(ctx.json({ items: [listing], meta: { totalItems: 1, totalPages: 1 } }))
+      }),
+      rest.get("http://localhost/api/adapter/listings", (_req, res, ctx) => {
+        return res(ctx.json({ items: [listing], meta: { totalItems: 1, totalPages: 1 } }))
+      }),
+      rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
+        return res(
+          ctx.json({
+            id: "user1",
+            userRoles: { id: "user1", isAdmin: true, isPartner: false },
+            jurisdictions: [
+              {
+                id: "id1",
+                name: "JurisdictionA",
+                featureFlags: [
+                  {
+                    id: "id_1",
+                    name: FeatureFlagEnum.enableNonRegulatedListings,
+                    active: true,
+                  },
+                ],
+              } as Jurisdiction,
+            ],
+          })
+        )
+      }),
+      rest.post("http://localhost:3100/auth/token", (_req, res, ctx) => {
+        return res(ctx.json(""))
+      })
+    )
+
+    render(<ListingsList />)
+
+    const addListingButton = await screen.findByRole("button", { name: "Add listing" })
+    expect(addListingButton).toBeInTheDocument()
+    await userEvent.click(addListingButton)
+
+    expect(
+      screen.getByRole("heading", { level: 1, name: "Select Listing Type" })
+    ).toBeInTheDocument()
+    expect(
+      screen.getByText("Once you create this listing, this selection cannot be changed.")
+    ).toBeInTheDocument()
+
+    const listingTypeRadioGroup = screen.getByRole("group", {
+      name: "What kind of listing is this?",
+    })
+    expect(listingTypeRadioGroup).toBeInTheDocument()
+    expect(
+      within(listingTypeRadioGroup).getByRole("radio", { name: "Regulated" })
+    ).toBeInTheDocument()
+    expect(
+      within(listingTypeRadioGroup).getByRole("radio", { name: "Non-regulated" })
+    ).toBeInTheDocument()
+
+    await userEvent.click(screen.getByRole("radio", { name: "Non-regulated" }))
+
+    await userEvent.click(screen.getByRole("button", { name: "Get started" }))
+    await waitFor(() => {
+      expect(pushMock).toHaveBeenCalledWith({
+        pathname: "/listings/add",
+        query: { jurisdictionId: "id1", nonRegulated: true },
       })
     })
   })
@@ -597,7 +655,14 @@ describe("listings", () => {
         return res(
           ctx.json({
             id: "user1",
-            roles: { id: "user1", isAdmin: true, isPartner: false },
+            userRoles: { id: "user1", isAdmin: true, isPartner: false },
+            jurisdictions: [
+              {
+                id: "id1",
+                name: "JurisdictionA",
+                featureFlags: [],
+              } as Jurisdiction,
+            ],
           })
         )
       }),
@@ -606,28 +671,7 @@ describe("listings", () => {
       })
     )
 
-    render(
-      <AuthContext.Provider
-        value={{
-          initialStateLoaded: true,
-          profile: {
-            ...mockUser,
-            userRoles: { isAdmin: true, isPartner: false },
-            jurisdictions: [
-              {
-                id: "id1",
-                name: "JurisdictionA",
-                featureFlags: [],
-              } as Jurisdiction,
-            ],
-          },
-          doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
-            mockJurisdictionsHaveFeatureFlagOn(featureFlag, false, false),
-        }}
-      >
-        <ListingsList />
-      </AuthContext.Provider>
-    )
+    render(<ListingsList />)
 
     const addListingButton = await screen.findByRole("button", { name: "Add listing" })
     expect(addListingButton).toBeInTheDocument()
