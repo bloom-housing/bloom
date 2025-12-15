@@ -161,6 +161,11 @@ export default function ListingsList() {
     }
   }, [defaultJurisdiction, doJurisdictionsHaveFeatureFlagOn])
 
+  const onModalClose = () => {
+    setListingSelectModal(false)
+    setIsNonRegulatedEnabled(showForNonRegulated)
+  }
+
   const columnDefs = useMemo(() => {
     const columns: (ColDef | ColGroupDef)[] = [
       {
@@ -414,7 +419,7 @@ export default function ListingsList() {
         isOpen={listingSelectModal}
         ariaLabelledBy="listing-select-dialog-header"
         ariaDescribedBy="listing-select-dialog-content"
-        onClose={() => setListingSelectModal(false)}
+        onClose={() => onModalClose()}
       >
         <Form id="listing-select-form" onSubmit={handleSubmit(onSubmit)}>
           <Dialog.Header id="listing-select-dialog-header">
