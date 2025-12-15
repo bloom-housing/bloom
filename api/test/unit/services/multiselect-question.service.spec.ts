@@ -17,6 +17,7 @@ import { FeatureFlagEnum } from '../../../src/enums/feature-flags/feature-flags-
 import { MultiselectQuestionService } from '../../../src/services/multiselect-question.service';
 import { PermissionService } from '../../../src/services/permission.service';
 import { PrismaService } from '../../../src/services/prisma.service';
+import { CronJobService } from '../../../src/services/cron-job.service';
 
 const user = new User();
 const canOrThrowMock = jest.fn();
@@ -71,6 +72,7 @@ describe('Testing multiselect question service', () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         Logger,
+        CronJobService,
         MultiselectQuestionService,
         {
           provide: PermissionService,
@@ -1448,50 +1450,6 @@ describe('Testing multiselect question service', () => {
             },
           },
           status: MultiselectQuestionsStatusEnum.toRetire,
-        },
-      });
-    });
-  });
-
-  describe('markCronJobAsStarted', () => {
-    it('should create new cronjob entry if none is present', async () => {
-      prisma.cronJob.findFirst = jest.fn().mockResolvedValue(null);
-      prisma.cronJob.create = jest.fn().mockResolvedValue(true);
-
-      await service.markCronJobAsStarted('MSQ_RETIRE_CRON_JOB');
-
-      expect(prisma.cronJob.findFirst).toHaveBeenCalledWith({
-        where: {
-          name: 'MSQ_RETIRE_CRON_JOB',
-        },
-      });
-      expect(prisma.cronJob.create).toHaveBeenCalledWith({
-        data: {
-          lastRunDate: expect.anything(),
-          name: 'MSQ_RETIRE_CRON_JOB',
-        },
-      });
-    });
-
-    it('should update cronjob entry if one is present', async () => {
-      prisma.cronJob.findFirst = jest
-        .fn()
-        .mockResolvedValue({ id: randomUUID() });
-      prisma.cronJob.update = jest.fn().mockResolvedValue(true);
-
-      await service.markCronJobAsStarted('MSQ_RETIRE_CRON_JOB');
-
-      expect(prisma.cronJob.findFirst).toHaveBeenCalledWith({
-        where: {
-          name: 'MSQ_RETIRE_CRON_JOB',
-        },
-      });
-      expect(prisma.cronJob.update).toHaveBeenCalledWith({
-        data: {
-          lastRunDate: expect.anything(),
-        },
-        where: {
-          id: expect.anything(),
         },
       });
     });

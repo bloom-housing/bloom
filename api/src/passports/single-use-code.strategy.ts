@@ -163,6 +163,9 @@ export class SingleUseCodeStrategy extends PassportStrategy(
       data: {
         failedLoginAttemptsCount: count,
         lastLoginAt,
+        // If a user logs in and was previously warned of deletion that needs to be reset so they can be warned again if
+        // they once again haven't logged in for USERS_DAYS_TILL_EXPIRY - 30 days
+        wasWarnedOfDeletion: false,
       },
       where: {
         id: userId,
