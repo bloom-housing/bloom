@@ -7997,6 +7997,7 @@ export enum FeatureFlagEnum {
   "enableListingFavoriting" = "enableListingFavoriting",
   "enableListingFileNumber" = "enableListingFileNumber",
   "enableListingFiltering" = "enableListingFiltering",
+  "enableLeasingAgentAltText" = "enableLeasingAgentAltText",
   "enableListingImageAltText" = "enableListingImageAltText",
   "enableListingOpportunity" = "enableListingOpportunity",
   "enableListingPagination" = "enableListingPagination",
