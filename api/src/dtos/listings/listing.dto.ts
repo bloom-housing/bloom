@@ -1,6 +1,7 @@
 import { Expose, Transform, TransformFnParams, Type } from 'class-transformer';
 import {
   ArrayMaxSize,
+  ArrayMinSize,
   IsArray,
   IsBoolean,
   IsDate,
@@ -62,7 +63,6 @@ import {
 } from '../../decorators/validate-units-required.decorator';
 import { ValidateListingDeposit } from '../../decorators/validate-listing-deposit.decorator';
 import { ListingDocuments } from './listing-documents.dto';
-import { ValidateListingImages } from '../../decorators/validate-listing-images.decorator';
 
 class Listing extends AbstractDTO {
   @Expose()
@@ -338,30 +338,6 @@ class Listing extends AbstractDTO {
     { groups: [ValidationsGroupsEnum.default] },
   )
   buildingSelectionCriteria?: string;
-
-  @Expose()
-  @ValidateListingPublish('marketingFlyer', {
-    groups: [ValidationsGroupsEnum.default],
-  })
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @ApiPropertyOptional()
-  @IsUrl(
-    { require_protocol: true },
-    { groups: [ValidationsGroupsEnum.default] },
-  )
-  marketingFlyer?: string;
-
-  @Expose()
-  @ValidateListingPublish('accessibleMarketingFlyer', {
-    groups: [ValidationsGroupsEnum.default],
-  })
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @ApiPropertyOptional()
-  @IsUrl(
-    { require_protocol: true },
-    { groups: [ValidationsGroupsEnum.default] },
-  )
-  accessibleMarketingFlyer?: string;
 
   @Expose()
   @ValidateListingPublish('cocInfo7', {
@@ -877,24 +853,6 @@ class Listing extends AbstractDTO {
   listingsBuildingSelectionCriteriaFile?: Asset;
 
   @Expose()
-  @ValidateListingPublish('listingsMarketingFlyerFile', {
-    groups: [ValidationsGroupsEnum.default],
-  })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => Asset)
-  @ApiPropertyOptional({ type: Asset })
-  listingsMarketingFlyerFile?: Asset;
-
-  @Expose()
-  @ValidateListingPublish('listingsAccessibleMarketingFlyerFile', {
-    groups: [ValidationsGroupsEnum.default],
-  })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => Asset)
-  @ApiPropertyOptional({ type: Asset })
-  listingsAccessibleMarketingFlyerFile?: Asset;
-
-  @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => IdDTO)
@@ -922,7 +880,7 @@ class Listing extends AbstractDTO {
   })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => ListingImage)
-  @ValidateListingImages({ groups: [ValidationsGroupsEnum.default] })
+  @ArrayMinSize(1, { groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional({ type: ListingImage, isArray: true })
   listingImages?: ListingImage[];
 
@@ -1148,9 +1106,6 @@ class Listing extends AbstractDTO {
 
   @Expose()
   requiredFields?: string[];
-
-  @Expose()
-  minimumImagesRequired?: number;
 
   @Expose()
   @ApiPropertyOptional()

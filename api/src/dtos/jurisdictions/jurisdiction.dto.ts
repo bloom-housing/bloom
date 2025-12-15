@@ -8,7 +8,6 @@ import {
   IsArray,
   ValidateNested,
   IsBoolean,
-  IsNumber,
 } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
@@ -55,11 +54,6 @@ export class Jurisdiction extends AbstractDTO {
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty({ type: IdDTO, isArray: true })
   multiselectQuestions: IdDTO[];
-
-  @Expose()
-  @IsNumber()
-  @ApiPropertyOptional()
-  minimumListingPublishImagesRequired?: number;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })

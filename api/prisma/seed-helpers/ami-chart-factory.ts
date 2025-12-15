@@ -5,9 +5,8 @@ export const amiChartFactory = (
   numberToCreate: number,
   jurisdictionId: string,
   offset?: number,
-  jurisdictionName?: string,
 ): Prisma.AmiChartCreateInput => ({
-  name: `${randomName()}${jurisdictionName ? ` - ${jurisdictionName}` : ''}`,
+  name: randomName(),
   items: amiChartItemsFactory(numberToCreate, offset),
   jurisdictions: {
     connect: {

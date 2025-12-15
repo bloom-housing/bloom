@@ -1,6 +1,7 @@
 import React from "react"
-import { FormHouseholdMembers } from "../../../../../src/components/applications/PaperApplicationForm/sections/FormHouseholdMembers"
-import { render, screen, within, FormProviderWrapper, mockNextRouter } from "../../../../testUtils"
+import { FormProviderWrapper } from "./helpers"
+import { FormHouseholdMembers } from "../../../../src/components/applications/PaperApplicationForm/sections/FormHouseholdMembers"
+import { render, screen, within } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import {
   HouseholdMemberRelationship,
@@ -31,10 +32,6 @@ const mockHouseholdMember = {
     street: "",
   },
 }
-
-beforeAll(() => {
-  mockNextRouter()
-})
 
 describe("<FormHouseholdMembers>", () => {
   it("should render the add household member button and drawer", async () => {

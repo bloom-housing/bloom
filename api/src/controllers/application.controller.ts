@@ -266,16 +266,6 @@ export class ApplicationController {
     };
   }
 
-  @Put('removePIICronJob')
-  @ApiOperation({
-    summary: 'trigger the remove PII cron job',
-    operationId: 'removePIICronJob',
-  })
-  @ApiOkResponse({ type: SuccessDTO })
-  async removePIICronJob(): Promise<SuccessDTO> {
-    return await this.applicationService.removePIICronJob();
-  }
-
   @Put(`:id`)
   @ApiOperation({ summary: 'Update application by id', operationId: 'update' })
   @ApiOkResponse({ type: Application })

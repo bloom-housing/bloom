@@ -4,7 +4,6 @@ import { Card, Heading } from "@bloom-housing/ui-seeds"
 import { getCurrencyRange } from "@bloom-housing/shared-helpers"
 import listingStyles from "../ListingViewSeeds.module.scss"
 import styles from "./AdditionalFees.module.scss"
-import { EnumListingDepositType } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 type AdditionalFeesProps = {
   applicationFee: string | null
@@ -12,9 +11,6 @@ type AdditionalFeesProps = {
   depositHelperText: string | null
   depositMax: string | null
   depositMin: string | null
-  depositValue: number | null
-  depositType: EnumListingDepositType | null
-  isNonRegulated: boolean
   utilitiesIncluded: string[]
   creditScreeningFee?: string | null
 }
@@ -25,9 +21,6 @@ export const AdditionalFees = ({
   depositHelperText,
   depositMax,
   depositMin,
-  depositValue,
-  depositType,
-  isNonRegulated,
   utilitiesIncluded,
   creditScreeningFee,
 }: AdditionalFeesProps) => {
@@ -36,7 +29,6 @@ export const AdditionalFees = ({
       {applicationFee ||
       depositMin ||
       depositMax ||
-      depositValue ||
       costsNotIncluded ||
       utilitiesIncluded.length ||
       creditScreeningFee ? (
@@ -56,20 +48,16 @@ export const AdditionalFees = ({
                   <div>{t("listings.applicationFeeDueAt")}</div>
                 </div>
               )}
-              {(depositMin || depositMax || depositHelperText || depositValue) && (
+              {(depositMin || depositMax || depositHelperText) && (
                 <div className={styles["split-card-cell"]}>
                   <Heading size={"md"} className={listingStyles["thin-heading"]} priority={4}>
                     {t("t.deposit")}
                   </Heading>
-                  {(depositMin || depositMax) &&
-                    (!isNonRegulated || depositType == EnumListingDepositType.depositRange) && (
-                      <div className={styles.emphasized}>
-                        {getCurrencyRange(parseInt(depositMin), parseInt(depositMax))}
-                      </div>
-                    )}
-                  {isNonRegulated &&
-                    depositType == EnumListingDepositType.fixedDeposit &&
-                    depositValue && <div className={styles.emphasized}>{`$ ${depositValue}`}</div>}
+                  {(depositMin || depositMax) && (
+                    <div className={styles.emphasized}>
+                      {getCurrencyRange(parseInt(depositMin), parseInt(depositMax))}
+                    </div>
+                  )}
                   <div>{depositHelperText}</div>
                 </div>
               )}

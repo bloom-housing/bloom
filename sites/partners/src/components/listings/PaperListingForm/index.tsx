@@ -240,11 +240,6 @@ const ListingForm = ({
     jurisdictionId
   )
 
-  const enableListingImageAltText = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableListingImageAltText,
-    jurisdictionId
-  )
-
   useEffect(() => {
     if (listing?.units) {
       const tempUnits = listing.units.map((unit, i) => ({
@@ -518,11 +513,7 @@ const ListingForm = ({
                             listingId={listing?.id}
                             requiredFields={requiredFields}
                           />
-                          <ListingPhotos
-                            enableListingImageAltText={enableListingImageAltText}
-                            requiredFields={requiredFields}
-                            jurisdiction={selectedJurisdictionData}
-                          />
+                          <ListingPhotos requiredFields={requiredFields} />
                           <BuildingDetails
                             customMapPositionChosen={customMapPositionChosen}
                             requiredFields={requiredFields}
@@ -599,10 +590,7 @@ const ListingForm = ({
                             listing={listing}
                             requiredFields={requiredFields}
                           />
-                          {!doJurisdictionsHaveFeatureFlagOn(
-                            FeatureFlagEnum.disableBuildingSelectionCriteria,
-                            jurisdictionId
-                          ) && <BuildingSelectionCriteria />}
+                          <BuildingSelectionCriteria />
                           <AdditionalDetails
                             existingDocuments={listing?.requiredDocumentsList}
                             requiredFields={requiredFields}
@@ -674,10 +662,6 @@ const ListingForm = ({
                           />
                           <ApplicationAddress requiredFields={requiredFields} listing={listing} />
                           <ApplicationDates
-                            enableMarketingFlyer={doJurisdictionsHaveFeatureFlagOn(
-                              FeatureFlagEnum.enableMarketingFlyer,
-                              jurisdictionId
-                            )}
                             enableMarketingStatus={doJurisdictionsHaveFeatureFlagOn(
                               FeatureFlagEnum.enableMarketingStatus,
                               jurisdictionId
@@ -691,6 +675,7 @@ const ListingForm = ({
                             requiredFields={requiredFields}
                             setOpenHouseEvents={setOpenHouseEvents}
                           />
+
                           <div className="-ml-8 -mt-8 relative" style={{ top: "7rem" }}>
                             <Button
                               type="button"

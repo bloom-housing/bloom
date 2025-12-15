@@ -1,6 +1,5 @@
 import React, { useMemo } from "react"
 import {
-  EnumListingListingType,
   FeatureFlagEnum,
   Jurisdiction,
   Listing,
@@ -80,8 +79,7 @@ export const ListingCard = ({
           }}
           stackedData={getListingStackedGroupTableData(
             listing.unitGroupsSummarized,
-            listing.marketingType === MarketingTypeEnum.comingSoon,
-            listing.listingType === EnumListingListingType.nonRegulated
+            listing.marketingType === MarketingTypeEnum.comingSoon
           )}
         />
       )

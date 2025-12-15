@@ -1,5 +1,6 @@
-import { FormTerms } from "../../../../../src/components/applications/PaperApplicationForm/sections/FormTerms"
-import { mockNextRouter, render, screen, FormProviderWrapper } from "../../../../testUtils"
+import { FormTerms } from "../../../../src/components/applications/PaperApplicationForm/sections/FormTerms"
+import { mockNextRouter, render, screen } from "../../../testUtils"
+import { FormProviderWrapper } from "./helpers"
 import React from "react"
 
 beforeAll(() => {

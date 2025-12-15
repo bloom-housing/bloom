@@ -4,12 +4,20 @@ import userEvent from "@testing-library/user-event"
 import { rest } from "msw"
 import { setupServer } from "msw/node"
 import LotteryResults from "../../../../../src/components/listings/PaperListingForm/sections/LotteryResults"
-import { formDefaults } from "../../../../../src/lib/listings/formTypes"
+import { FormProvider, useForm } from "react-hook-form"
+import { formDefaults, FormListing } from "../../../../../src/lib/listings/formTypes"
 import {
   ListingEvent,
   ListingEventsTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { FormProviderWrapper } from "../../../../testUtils"
+
+const FormComponent = ({ children, values }: { values?: FormListing; children }) => {
+  const formMethods = useForm<FormListing>({
+    defaultValues: { ...formDefaults, ...values },
+    shouldUnregister: false,
+  })
+  return <FormProvider {...formMethods}>{children}</FormProvider>
+}
 
 const server = setupServer()
 
@@ -29,9 +37,9 @@ describe("LotteryResults", () => {
     const submitFn = jest.fn()
     const showDrawerFn = jest.fn()
     const results = render(
-      <FormProviderWrapper>
+      <FormComponent>
         <LotteryResults submitCallback={submitFn} drawerState={false} showDrawer={showDrawerFn} />
-      </FormProviderWrapper>
+      </FormComponent>
     )
 
     expect(results.container.innerHTML).toEqual("")
@@ -41,9 +49,9 @@ describe("LotteryResults", () => {
     const submitFn = jest.fn()
     const showDrawerFn = jest.fn()
     const results = render(
-      <FormProviderWrapper>
+      <FormComponent>
         <LotteryResults submitCallback={submitFn} drawerState={true} showDrawer={showDrawerFn} />
-      </FormProviderWrapper>
+      </FormComponent>
     )
 
     expect(results.getByText("Add results")).toBeTruthy()
@@ -59,9 +67,9 @@ describe("LotteryResults", () => {
     const submitFn = jest.fn()
     const showDrawerFn = jest.fn()
     const results = render(
-      <FormProviderWrapper>
+      <FormComponent>
         <LotteryResults submitCallback={submitFn} drawerState={true} showDrawer={showDrawerFn} />
-      </FormProviderWrapper>
+      </FormComponent>
     )
 
     expect(results.getByText("Add results")).toBeTruthy()
@@ -81,9 +89,9 @@ describe("LotteryResults", () => {
     const submitFn = jest.fn()
     const showDrawerFn = jest.fn()
     const results = render(
-      <FormProviderWrapper values={{ ...formDefaults, listingEvents: [lotteryResultEvent] }}>
+      <FormComponent values={{ ...formDefaults, listingEvents: [lotteryResultEvent] }}>
         <LotteryResults submitCallback={submitFn} drawerState={true} showDrawer={showDrawerFn} />
-      </FormProviderWrapper>
+      </FormComponent>
     )
 
     expect(results.getByText("Edit results")).toBeTruthy()
@@ -110,9 +118,9 @@ describe("LotteryResults", () => {
     const submitFn = jest.fn()
     const showDrawerFn = jest.fn()
     const results = render(
-      <FormProviderWrapper>
+      <FormComponent>
         <LotteryResults submitCallback={submitFn} drawerState={true} showDrawer={showDrawerFn} />
-      </FormProviderWrapper>
+      </FormComponent>
     )
 
     expect(results.getByText("Add results")).toBeTruthy()

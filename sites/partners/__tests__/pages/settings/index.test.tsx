@@ -1,20 +1,15 @@
 import React from "react"
 import { setupServer } from "msw/lib/node"
-import { fireEvent, screen, within } from "@testing-library/react"
+import { fireEvent, within } from "@testing-library/react"
+import Settings from "../../../src/pages/settings"
 import { rest } from "msw"
-import { AuthContext, MessageContext, MessageProvider } from "@bloom-housing/shared-helpers"
-import { Toast } from "@bloom-housing/ui-seeds"
 import {
   listing,
   multiselectQuestionPreference,
 } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
-import {
-  FeatureFlagEnum,
-  Jurisdiction,
-  User,
-} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { mockNextRouter, render } from "../../testUtils"
-import SettingsPreferences from "../../../src/pages/settings/preferences"
+import { MessageContext, MessageProvider } from "@bloom-housing/shared-helpers"
+import { Toast } from "@bloom-housing/ui-seeds"
 
 const server = setupServer()
 
@@ -56,7 +51,7 @@ describe("settings", () => {
         )
       )
 
-      const { getByText, findByText } = render(<SettingsPreferences />)
+      const { getByText, findByText } = render(<Settings />)
 
       expect(getByText("Settings")).toBeInTheDocument()
       expect(getByText("Preferences")).toBeInTheDocument()
@@ -65,104 +60,12 @@ describe("settings", () => {
       expect(getByText("None")).toBeInTheDocument()
     })
 
-    it("should render tabs if multiple settings are on", async () => {
-      window.URL.createObjectURL = jest.fn()
-      document.cookie = "access-token-available=True"
-      server.use(
-        rest.get("http://localhost:3100/multiselectQuestions", (_req, res, ctx) => {
-          return res(ctx.json([multiselectQuestionPreference]))
-        }),
-        rest.get("http://localhost/api/adapter/multiselectQuestions", (_req, res, ctx) => {
-          return res(ctx.json([multiselectQuestionPreference]))
-        }),
-        rest.get(
-          "http://localhost/api/adapter/multiselectQuestions/listings/id1",
-          (_req, res, ctx) => {
-            return res(ctx.json([listing]))
-          }
-        ),
-        rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
-          return res(
-            ctx.json({
-              id: "user1",
-              roles: { id: "user1", isAdmin: false, isPartner: true },
-              jurisdictions: [
-                {
-                  id: "jurisdiction1",
-                  name: "jurisdictionWithJurisdictionAdmin",
-                  featureFlags: [{ name: FeatureFlagEnum.enableProperties, active: true }],
-                },
-                {
-                  id: "jurisdiction2",
-                  name: "jurisdictionWithJurisdictionAdmin2",
-                  featureFlags: [],
-                },
-              ],
-            })
-          )
-        })
-      )
-
-      render(<SettingsPreferences />)
-      expect(screen.getByText("Settings")).toBeInTheDocument()
-      expect(await screen.findByRole("tablist")).toBeInTheDocument()
-      expect(screen.getByRole("heading", { level: 2, name: "Preferences" })).toBeInTheDocument()
-      expect(screen.getByText("Properties")).toBeInTheDocument()
-    })
-
-    it("should not render tabs if only preferences is on", async () => {
-      window.URL.createObjectURL = jest.fn()
-      document.cookie = "access-token-available=True"
-      server.use(
-        rest.get("http://localhost:3100/multiselectQuestions", (_req, res, ctx) => {
-          return res(ctx.json([multiselectQuestionPreference]))
-        }),
-        rest.get("http://localhost/api/adapter/multiselectQuestions", (_req, res, ctx) => {
-          return res(ctx.json([multiselectQuestionPreference]))
-        }),
-        rest.get(
-          "http://localhost/api/adapter/multiselectQuestions/listings/id1",
-          (_req, res, ctx) => {
-            return res(ctx.json([listing]))
-          }
-        ),
-        rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
-          return res(
-            ctx.json({
-              id: "user1",
-              roles: { id: "user1", isAdmin: false, isPartner: true },
-              jurisdictions: [
-                {
-                  id: "jurisdiction1",
-                  name: "jurisdictionWithJurisdictionAdmin",
-                  featureFlags: [
-                    { name: FeatureFlagEnum.enableProperties, active: false },
-                    { name: FeatureFlagEnum.disableListingPreferences, active: false },
-                  ],
-                },
-              ],
-            })
-          )
-        })
-      )
-
-      render(<SettingsPreferences />)
-      expect(await screen.findByText("Settings")).toBeInTheDocument()
-      expect(
-        await screen.findByRole("heading", { level: 2, name: "Preferences" })
-      ).toBeInTheDocument()
-      expect(screen.queryByRole("tablist")).not.toBeInTheDocument()
-      expect(screen.queryByText("Properties")).not.toBeInTheDocument()
-    })
-
     it("should render the preference table", async () => {
-      window.URL.createObjectURL = jest.fn()
-      document.cookie = "access-token-available=True"
       server.use(
         rest.get("http://localhost:3100/multiselectQuestions", (_req, res, ctx) => {
           return res(ctx.json([multiselectQuestionPreference]))
         }),
-        rest.get("http://localhost/api/adapter/multiselectQuestions", (_req, res, ctx) => {
+        rest.get("http://localhost:3100/multiselectQuestions", (_req, res, ctx) => {
           return res(ctx.json([multiselectQuestionPreference]))
         }),
         rest.get(
@@ -170,33 +73,15 @@ describe("settings", () => {
           (_req, res, ctx) => {
             return res(ctx.json([listing]))
           }
-        ),
-        rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
-          return res(
-            ctx.json({
-              id: "user1",
-              roles: { id: "user1", isAdmin: false, isPartner: true },
-              jurisdictions: [
-                {
-                  id: "jurisdiction1",
-                  name: "jurisdictionWithJurisdictionAdmin",
-                  featureFlags: [
-                    { name: FeatureFlagEnum.enableProperties, active: false },
-                    { name: FeatureFlagEnum.disableListingPreferences, active: false },
-                  ],
-                },
-              ],
-            })
-          )
-        })
+        )
       )
-      const { getByText, findByText, findByRole } = render(<SettingsPreferences />)
+      const { getByText, findByText, getByRole } = render(<Settings key="1" />)
 
       expect(getByText("Settings")).toBeInTheDocument()
       expect(getByText("Preferences")).toBeInTheDocument()
 
       await findByText("Name")
-      const table = await findByRole("table")
+      const table = getByRole("table")
       const headAndBody = within(table).getAllByRole("rowgroup")
       expect(headAndBody).toHaveLength(2)
       const [head, body] = headAndBody
@@ -240,6 +125,9 @@ describe("settings", () => {
         }),
         rest.delete("http://localhost/api/adapter/multiselectQuestions", (_req, res, ctx) => {
           return res(ctx.json({}))
+        }),
+        rest.options("http://localhost/api/adapter/multiselectQuestions", (_req, res, ctx) => {
+          return res(ctx.json({}))
         })
       )
 
@@ -259,7 +147,7 @@ describe("settings", () => {
 
       const { findByText, getByTestId, findByRole, queryAllByText } = render(
         <ToastProvider>
-          <SettingsPreferences />
+          <Settings key={"2"} />
         </ToastProvider>
       )
 
@@ -311,7 +199,7 @@ describe("settings", () => {
       )
 
       const { findByText, getByTestId, findByRole, queryAllByText, getByText } = render(
-        <SettingsPreferences />
+        <Settings key="5" />
       )
 
       await findByText(multiselectQuestionPreference.text)
@@ -362,7 +250,7 @@ describe("settings", () => {
         )
       )
 
-      const { findByText, getByTestId, queryAllByText, getByText } = render(<SettingsPreferences />)
+      const { findByText, getByTestId, queryAllByText, getByText } = render(<Settings key="6" />)
 
       await findByText(multiselectQuestionPreference.text)
 
@@ -407,7 +295,7 @@ describe("settings", () => {
         })
       )
 
-      const { findByText, getByTestId, queryAllByText, getByText } = render(<SettingsPreferences />)
+      const { findByText, getByTestId, queryAllByText, getByText } = render(<Settings key="7" />)
 
       await findByText(multiselectQuestionPreference.text)
 

@@ -15,7 +15,6 @@ export const jurisdictionFactory = (
     requiredListingFields?: string[];
     languages?: LanguagesEnum[];
     visibleNeighborhoodAmenities?: NeighborhoodAmenitiesEnum[];
-    minimumListingPublishImagesRequired?: number;
   },
 ): Prisma.JurisdictionsCreateInput => ({
   name: jurisdictionName,
@@ -51,6 +50,4 @@ export const jurisdictionFactory = (
     : undefined,
   requiredListingFields: optionalFields?.requiredListingFields || [],
   visibleNeighborhoodAmenities: optionalFields?.visibleNeighborhoodAmenities,
-  minimumListingPublishImagesRequired:
-    optionalFields?.minimumListingPublishImagesRequired,
 });

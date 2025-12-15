@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState, useContext } from "react"
+import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { useFieldArray, useFormContext } from "react-hook-form"
 import {
   t,
@@ -7,98 +7,16 @@ import {
   TableThumbnail,
   StandardTableData,
   StandardTableCell,
-  Textarea,
 } from "@bloom-housing/ui-components"
 import { Button, Card, Drawer, Grid, Heading } from "@bloom-housing/ui-seeds"
 import { getUrlForListingImage, CLOUDINARY_BUILDING_LABEL } from "@bloom-housing/shared-helpers"
-import {
-  Asset,
-  ListingImage,
-  Jurisdiction,
-} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { Asset, ListingImage } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { cloudinaryFileUploader, fieldHasError, getLabel } from "../../../../lib/helpers"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 import styles from "../ListingForm.module.scss"
 
 interface ListingPhotosProps {
-  enableListingImageAltText: boolean
   requiredFields: string[]
-  jurisdiction: Jurisdiction
-}
-
-interface ListingPhotoEditorProps {
-  isOpen: boolean
-  onClose: () => void
-  image?: ListingImage
-  onSave: (description: string) => void
-}
-
-const ListingPhotoEditor = ({ isOpen, onClose, image, onSave }: ListingPhotoEditorProps) => {
-  const [description, setDescription] = useState("")
-
-  useEffect(() => {
-    if (isOpen && image) {
-      setDescription(image.description || "")
-    }
-  }, [isOpen, image])
-
-  if (!image) return null
-
-  return (
-    <Drawer
-      isOpen={isOpen}
-      onClose={onClose}
-      ariaLabelledBy="listing-photo-edit-drawer-header"
-      nested={true}
-    >
-      <Drawer.Header id="listing-photo-edit-drawer-header">
-        {t("listings.sections.photo.addImageDescription")}
-      </Drawer.Header>
-      <Drawer.Content>
-        <Card>
-          <Card.Header>
-            <Heading priority={2} size="xl">
-              {t("listings.sections.photo.imageDescriptionForListingPhoto")}
-            </Heading>
-          </Card.Header>
-          <Card.Section>
-            <div>
-              <Textarea
-                label={t("listings.sections.photo.imageDescriptionAltText")}
-                placeholder={""}
-                name={"imageDescription"}
-                id={"image-description"}
-                fullWidth={true}
-                rows={2}
-                inputProps={{
-                  onChange: (e) => setDescription(e.target.value),
-                }}
-                defaultValue={image.description || ""}
-                note={t("listings.sections.photo.altTextHelper")}
-              />
-            </div>
-            <div className="seeds-m-bs-content">
-              <span className="font-semibold text-gray-800 block seeds-m-be-header">
-                {t("listings.listingPhoto")}
-              </span>
-              <div className="border-2 border-gray-600 border-dashed seeds-p-content inline-block">
-                <img
-                  src={getUrlForListingImage(image.assets)}
-                  alt={image.description || ""}
-                  className={styles["photo-preview"]}
-                />
-              </div>
-            </div>
-          </Card.Section>
-        </Card>
-      </Drawer.Content>
-      <Drawer.Footer>
-        <Button variant="primary" type="button" size="sm" onClick={() => onSave(description)}>
-          {t("t.save")}
-        </Button>
-      </Drawer.Footer>
-    </Drawer>
-  )
 }
 
 const ListingPhotos = (props: ListingPhotosProps) => {
@@ -120,7 +38,6 @@ const ListingPhotos = (props: ListingPhotosProps) => {
       append({
         ordinal: index,
         assets: item.assets,
-        description: item.description,
       })
     })
   }
@@ -129,8 +46,6 @@ const ListingPhotos = (props: ListingPhotosProps) => {
    Set state for the drawer, upload progress, images in the drawer, and more
    */
   const [drawerState, setDrawerState] = useState(false)
-  const [editingPhotoIndex, setEditingPhotoIndex] = useState<number | null>(null)
-
   const [progressValue, setProgressValue] = useState(0)
   const [latestUpload, setLatestUpload] = useState({
     id: "",
@@ -141,24 +56,19 @@ const ListingPhotos = (props: ListingPhotosProps) => {
   const resetDrawerState = () => {
     setDrawerState(false)
     setDrawerImages([])
-    setEditingPhotoIndex(null)
   }
 
   const savePhoto = useCallback(() => {
-    const newImage: ListingImage = {
-      ordinal: drawerImages.length,
-      assets: { fileId: latestUpload.id, label: CLOUDINARY_BUILDING_LABEL } as Asset,
-      description: "",
-    }
-    const newImages = [...drawerImages, newImage]
-    setDrawerImages(newImages)
+    setDrawerImages([
+      ...drawerImages,
+      {
+        ordinal: drawerImages.length,
+        assets: { fileId: latestUpload.id, label: CLOUDINARY_BUILDING_LABEL } as Asset,
+      },
+    ])
     setLatestUpload({ id: "", url: "" })
     setProgressValue(0)
-
-    if (props.enableListingImageAltText) {
-      setEditingPhotoIndex(newImages.length - 1)
-    }
-  }, [drawerImages, latestUpload, props.enableListingImageAltText])
+  }, [drawerImages, latestUpload])
 
   useEffect(() => {
     if (latestUpload.id != "") {
@@ -171,9 +81,7 @@ const ListingPhotos = (props: ListingPhotosProps) => {
    */
   const photoTableHeaders = {
     preview: "t.preview",
-    ...(props.enableListingImageAltText
-      ? { description: "listings.sections.photo.imageDescription" }
-      : {}),
+    primary: "t.primary",
     actions: "",
   }
 
@@ -183,116 +91,97 @@ const ListingPhotos = (props: ListingPhotosProps) => {
       preview: {
         content: (
           <TableThumbnail>
-            <img src={getUrlForListingImage(image.assets)} alt={image.description || ""} />
+            <img src={getUrlForListingImage(image.assets)} alt="" />
           </TableThumbnail>
         ),
       },
-      ...(props.enableListingImageAltText
-        ? {
-            description: {
-              content: image.description || "",
-            },
-          }
-        : {}),
-      ...(!props.enableListingImageAltText
-        ? {
-            actions: {
-              content: (
-                <Button
-                  type="button"
-                  className={"darker-alert"}
-                  onClick={() => {
-                    saveImageFields(fields.filter((item, i2) => i2 != index) as ListingImage[])
-                  }}
-                  variant="text"
-                  size="sm"
-                >
-                  {t("t.delete")}
-                </Button>
-              ),
-            },
-          }
-        : {}),
+      fileName: { content: image.assets.fileId.split("/").slice(-1).join() },
+      primary: {
+        content: index == 0 ? t("listings.sections.photo.primaryPhoto") : "",
+      },
+      actions: {
+        content: (
+          <Button
+            type="button"
+            className={"darker-alert"}
+            onClick={() => {
+              saveImageFields(fields.filter((item, i2) => i2 != index) as ListingImage[])
+            }}
+            variant="text"
+            size="sm"
+          >
+            {t("t.delete")}
+          </Button>
+        ),
+      },
     })
   })
 
   /*
    Show a re-orderable list of uploaded images within the drawer
    */
-  const drawerTableHeaders = {
-    ordinal: "t.order",
-    preview: "t.preview",
-    ...(props.enableListingImageAltText
-      ? { description: "listings.sections.photo.imageDescription" }
-      : {}),
-    actions: "",
-  }
 
   const drawerTableRows: StandardTableData = useMemo(() => {
     return drawerImages.map((item, index) => {
       const image = item.assets
-      const ordinalContent = (
-        <span>
-          {item.ordinal + 1}
-          {index === 0 && <span className="font-normal"> ({t("t.primary")})</span>}
-        </span>
-      )
-
       return {
         ordinal: {
-          content: ordinalContent,
+          content: item.ordinal + 1,
         },
         preview: {
           content: (
             <TableThumbnail>
-              <img src={getUrlForListingImage(image)} alt={item.description || ""} />
+              <img src={getUrlForListingImage(image)} alt="" />
             </TableThumbnail>
           ),
         },
         fileName: { content: image.fileId.split("/").slice(-1).join() },
-        ...(props.enableListingImageAltText
-          ? {
-              description: {
-                content: item.description || "",
-              },
-            }
-          : {}),
-        actions: {
-          content: (
-            <div className="flex gap-2">
-              {props.enableListingImageAltText && (
-                <Button
-                  variant="text"
-                  className="ml-0"
-                  size="sm"
-                  onClick={() => {
-                    setEditingPhotoIndex(index)
-                  }}
-                >
-                  {t("t.edit")}
-                </Button>
-              )}
+        primary: {
+          content:
+            index == 0 ? (
+              t("listings.sections.photo.primaryPhoto")
+            ) : (
               <Button
-                type="button"
-                className="text-alert"
+                variant="text"
+                className="ml-0"
+                size="sm"
                 onClick={() => {
-                  const filteredImages = drawerImages.filter((item, i2) => i2 != index)
-                  filteredImages.forEach((item, i2) => {
+                  const resortedImages = [
+                    drawerImages[index],
+                    ...drawerImages.filter((item, i2) => i2 != index),
+                  ]
+                  resortedImages.forEach((item, i2) => {
                     item.ordinal = i2
                   })
-                  setDrawerImages(filteredImages)
+                  setDrawerImages(resortedImages)
                 }}
-                variant="text"
-                size="sm"
               >
-                {t("t.delete")}
+                {t("t.makePrimaryPhoto")}
               </Button>
-            </div>
+            ),
+        },
+        actions: {
+          content: (
+            <Button
+              type="button"
+              className="text-alert"
+              onClick={() => {
+                const filteredImages = drawerImages.filter((item, i2) => i2 != index)
+                filteredImages.forEach((item, i2) => {
+                  item.ordinal = i2
+                })
+                setDrawerImages(filteredImages)
+              }}
+              variant="text"
+              size="sm"
+            >
+              {t("t.delete")}
+            </Button>
           ),
         },
       }
     })
-  }, [drawerImages, props.enableListingImageAltText])
+  }, [drawerImages])
 
   /*
    Pass the file for the dropzone callback along to the uploader
@@ -304,22 +193,6 @@ const ListingPhotos = (props: ListingPhotosProps) => {
       setProgressValue,
     }))
   }
-
-  const saveEditedPhoto = (newDescription: string) => {
-    if (editingPhotoIndex !== null) {
-      const updatedImages = [...drawerImages]
-      updatedImages[editingPhotoIndex] = {
-        ...updatedImages[editingPhotoIndex],
-        description: newDescription,
-      }
-      setDrawerImages(updatedImages)
-      setEditingPhotoIndex(null)
-    }
-  }
-
-  const customImagesRules =
-    props.requiredFields.includes("listingImages") &&
-    props?.jurisdiction?.minimumListingPublishImagesRequired
 
   /*
    Register the field array, display the main form table, and set up the drawer
@@ -333,24 +206,13 @@ const ListingPhotos = (props: ListingPhotosProps) => {
             type="hidden"
             name={`listingImages[${index}].image.fileId`}
             ref={register()}
-            defaultValue={item?.assets?.fileId || item.assets?.fileId}
-          />
-          <input
-            type="hidden"
-            name={`listingImages[${index}].description`}
-            ref={register()}
-            defaultValue={item?.description ?? ""}
+            defaultValue={item.assets.fileId}
           />
         </span>
       ))}
       <SectionWithGrid
         heading={t("listings.sections.photoTitle")}
-        subheading={t(
-          customImagesRules
-            ? "listings.sections.photosSubtitle"
-            : "listings.sections.photoSubtitle",
-          { smart_count: props?.jurisdiction?.minimumListingPublishImagesRequired }
-        )}
+        subheading={t("listings.sections.photoSubtitle")}
         className={"gap-0"}
       >
         <div
@@ -380,17 +242,13 @@ const ListingPhotos = (props: ListingPhotosProps) => {
               }}
               id="add-photos-button"
             >
-              {t(listingFormPhotos.length > 0 ? "listings.editPhotos" : "listings.addPhotos")}
+              {t(listingFormPhotos.length > 0 ? "listings.editPhotos" : "listings.addPhoto")}
             </Button>
           </Grid.Cell>
         </Grid.Row>
         {fieldHasError(errors?.listingImages) && (
           <span className={"text-sm text-alert seeds-m-bs-text"} id="photos-error">
-            {customImagesRules
-              ? t("listings.sections.photoError", {
-                  smart_count: props.jurisdiction?.minimumListingPublishImagesRequired || 1,
-                })
-              : t("errors.requiredFieldError")}
+            {t("errors.requiredFieldError")}
           </span>
         )}
       </SectionWithGrid>
@@ -402,24 +260,22 @@ const ListingPhotos = (props: ListingPhotosProps) => {
         ariaLabelledBy="listing-photos-drawer-header"
       >
         <Drawer.Header id="listing-photos-drawer-header">
-          {t(listingFormPhotos.length > 0 ? "listings.editPhotos" : "listings.addPhotos")}
+          {t(listingFormPhotos.length > 0 ? "listings.editPhotos" : "listings.addPhoto")}
         </Drawer.Header>
         <Drawer.Content>
           <Card>
             <Card.Header>
               <Heading priority={2} size="xl">
-                {t("listings.listingPhoto")}
+                Listing Photo
               </Heading>
             </Card.Header>
             <Card.Section>
               {drawerImages.length > 0 && (
                 <div className="mb-10" data-testid="drawer-photos-table">
-                  <span className={"text-gray-800 block seeds-m-be-text"}>{t("t.photos")}</span>
-                  {/* hide order column (2nd column) from draggable prop to override it with new one with "1 (primary)" */}
+                  <span className={"text-tiny text-gray-800 block mb-2"}>{t("t.photos")}</span>
                   <MinimalTable
                     draggable={true}
                     flushLeft={true}
-                    className={styles["hide-order-column"]}
                     setData={(newData) => {
                       setDrawerImages(
                         newData.map((item: Record<string, StandardTableCell>, index) => {
@@ -432,7 +288,7 @@ const ListingPhotos = (props: ListingPhotosProps) => {
                         })
                       )
                     }}
-                    headers={drawerTableHeaders}
+                    headers={photoTableHeaders}
                     data={drawerTableRows}
                   ></MinimalTable>
                 </div>
@@ -440,15 +296,8 @@ const ListingPhotos = (props: ListingPhotosProps) => {
               {drawerImages.length < 10 ? (
                 <Dropzone
                   id="listing-photo-upload"
-                  label={t("t.uploadFiles")}
-                  helptext={`${t("listings.sections.photo.helperTextBase")} ${
-                    customImagesRules
-                      ? t("listings.sections.photo.helperTextLimits", {
-                          smart_count:
-                            props?.jurisdiction?.minimumListingPublishImagesRequired || 1,
-                        })
-                      : t("listings.sections.photo.helperTextLimit")
-                  }`}
+                  label={t("t.uploadFile")}
+                  helptext={t("listings.sections.photo.helperText")}
                   uploader={photoUploader}
                   accept="image/*"
                   progress={progressValue}
@@ -476,16 +325,6 @@ const ListingPhotos = (props: ListingPhotosProps) => {
           </Button>
         </Drawer.Footer>
       </Drawer>
-
-      {/* Nested drawer for editing alt text */}
-      <ListingPhotoEditor
-        isOpen={editingPhotoIndex !== null}
-        onClose={() => {
-          setEditingPhotoIndex(null)
-        }}
-        image={drawerImages?.[editingPhotoIndex]}
-        onSave={saveEditedPhoto}
-      />
     </>
   )
 }

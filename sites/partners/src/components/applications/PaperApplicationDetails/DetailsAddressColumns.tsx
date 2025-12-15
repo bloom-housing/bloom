@@ -49,7 +49,7 @@ const DetailsAddressColumns = ({
 
     if (type === AddressColsType.mailing) {
       if (application.sendMailToMailingAddress) {
-        address[item] = application.applicationsMailingAddress[item] || t("t.n/a")
+        address[item] = application.applicationsMailingAddress[item]
       } else {
         address[item] = application.applicant.applicantAddress[item] || t("t.n/a")
       }

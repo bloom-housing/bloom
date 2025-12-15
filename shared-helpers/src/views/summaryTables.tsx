@@ -15,7 +15,6 @@ import {
   UnitGroupSummary,
   UnitSummary,
   Listing,
-  EnumListingListingType,
 } from "../types/backend-swagger"
 import { numberOrdinal } from "../utilities/numberOrdinal"
 
@@ -444,8 +443,7 @@ export const stackedUnitSummariesTable = (
 
 export const getAvailabilityText = (
   group: UnitGroupSummary,
-  isComingSoon?: boolean,
-  isNonRegulated?: boolean
+  isComingSoon?: boolean
 ): { text: string } => {
   if (isComingSoon) {
     return {
@@ -468,9 +466,7 @@ export const getAvailabilityText = (
     )
   }
 
-  if (!isNonRegulated) {
-    statusElements.push(waitlistStatus)
-  }
+  statusElements.push(waitlistStatus)
 
   // Combine statuses with proper formatting
   let availability = null
@@ -490,8 +486,7 @@ export const getAvailabilityText = (
 
 export const getAvailabilityTextForGroup = (
   groups: UnitGroupSummary[],
-  isComingSoon?: boolean,
-  isNonRegulated?: boolean
+  isComingSoon?: boolean
 ): { text: string } => {
   // Add coming soon status if needed
   if (isComingSoon) {
@@ -503,13 +498,11 @@ export const getAvailabilityTextForGroup = (
   const statusSet = new Set<string>()
 
   // Collect information from all groups
-  if (!isNonRegulated) {
-    statusSet.add(
-      groups.some((entry) => entry.openWaitlist)
-        ? t("listings.availability.openWaitlist")
-        : t("listings.availability.closedWaitlist")
-    )
-  }
+  statusSet.add(
+    groups.some((entry) => entry.openWaitlist)
+      ? t("listings.availability.openWaitlist")
+      : t("listings.availability.closedWaitlist")
+  )
 
   const totalVacantUnits = groups.reduce((acc, group) => (acc += group.unitVacancies), 0)
 
@@ -540,8 +533,7 @@ export const getAvailabilityTextForGroup = (
 
 export const stackedUnitGroupsSummariesTable = (
   summaries: UnitGroupSummary[],
-  isComingSoon?: boolean,
-  isNonRegulated?: boolean
+  isComingSoon?: boolean
 ): Record<string, StackedTableRow>[] => {
   const ranges = mergeGroupSummaryRows(summaries)
 
@@ -590,7 +582,7 @@ export const stackedUnitGroupsSummariesTable = (
 
   const availability =
     summaries.length > 0
-      ? getAvailabilityTextForGroup(summaries, isComingSoon, isNonRegulated)
+      ? getAvailabilityTextForGroup(summaries, isComingSoon)
       : { text: t("t.n/a"), subText: "" }
 
   const rowData = {
@@ -635,13 +627,12 @@ export const getStackedSummariesTable = (
 
 export const getStackedGroupSummariesTable = (
   summaries: UnitGroupSummary[],
-  isComingSoon?: boolean,
-  isNonRegulated?: boolean
+  isComingSoon?: boolean
 ): Record<string, StackedTableRow>[] => {
   let unitSummaries: Record<string, StackedTableRow>[] = []
 
   if (summaries?.length > 0) {
-    unitSummaries = stackedUnitGroupsSummariesTable(summaries, isComingSoon, isNonRegulated)
+    unitSummaries = stackedUnitGroupsSummariesTable(summaries, isComingSoon)
   }
   return unitSummaries
 }
@@ -818,10 +809,10 @@ export const UnitTables = (props: UnitTablesProps) => {
 
 export const getUnitGroupSummariesTable = (listing: Listing) => {
   const unitGroupsSummariesHeaders = {
-    unitType: "t.unitType",
-    rent: "t.rent",
-    availability: "t.availability",
-    ...(listing.listingType === EnumListingListingType.regulated ? { ami: "t.ami" } : {}),
+    unitType: t("t.unitType"),
+    rent: t("t.rent"),
+    availability: t("t.availability"),
+    ami: "ami",
   }
   let groupedUnitData = null
 
@@ -872,11 +863,7 @@ export const getUnitGroupSummariesTable = (listing: Listing) => {
       ami = `${group.amiPercentageRange.min} - ${group.amiPercentageRange.max}%`
     }
 
-    const availability = getAvailabilityText(
-      group,
-      isComingSoon,
-      listing.listingType === EnumListingListingType.nonRegulated
-    )
+    const availability = getAvailabilityText(group, isComingSoon)
 
     return {
       unitType: {

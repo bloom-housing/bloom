@@ -1,40 +1,35 @@
-import { RecaptchaEnterpriseServiceClient } from '@google-cloud/recaptcha-enterprise';
-import { Logger } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { SchedulerRegistry } from '@nestjs/schedule';
 import { Test, TestingModule } from '@nestjs/testing';
-import { MailService } from '@sendgrid/mail';
 import { randomUUID } from 'crypto';
-import { Response } from 'express';
 import { sign } from 'jsonwebtoken';
-import { Jurisdiction } from '../../../src/dtos/jurisdictions/jurisdiction.dto';
-import { MfaType } from '../../../src/enums/mfa/mfa-type-enum';
-import { ApplicationService } from '../../../src/services/application.service';
+import { Response } from 'express';
+import { ConfigService } from '@nestjs/config';
+import { MailService } from '@sendgrid/mail';
+import { RecaptchaEnterpriseServiceClient } from '@google-cloud/recaptcha-enterprise';
 import {
   ACCESS_TOKEN_AVAILABLE_NAME,
   ACCESS_TOKEN_AVAILABLE_OPTIONS,
-  AUTH_COOKIE_OPTIONS,
   AuthService,
+  AUTH_COOKIE_OPTIONS,
   REFRESH_COOKIE_NAME,
   REFRESH_COOKIE_OPTIONS,
   TOKEN_COOKIE_NAME,
 } from '../../../src/services/auth.service';
-import { CronJobService } from '../../../src/services/cron-job.service';
-import { EmailService } from '../../../src/services/email.service';
-import { GeocodingService } from '../../../src/services/geocoding.service';
-import { GoogleTranslateService } from '../../../src/services/google-translate.service';
-import { JurisdictionService } from '../../../src/services/jurisdiction.service';
-import { PermissionService } from '../../../src/services/permission.service';
-import { PrismaService } from '../../../src/services/prisma.service';
-import { SendGridService } from '../../../src/services/sendgrid.service';
-import { SmsService } from '../../../src/services/sms.service';
-import { TranslationService } from '../../../src/services/translation.service';
 import { UserService } from '../../../src/services/user.service';
+import { PrismaService } from '../../../src/services/prisma.service';
+import { SmsService } from '../../../src/services/sms.service';
 import {
   generateSalt,
   hashPassword,
   passwordToHash,
 } from '../../../src/utilities/password-helpers';
+import { MfaType } from '../../../src/enums/mfa/mfa-type-enum';
+import { EmailService } from '../../../src/services/email.service';
+import { SendGridService } from '../../../src/services/sendgrid.service';
+import { TranslationService } from '../../../src/services/translation.service';
+import { JurisdictionService } from '../../../src/services/jurisdiction.service';
+import { GoogleTranslateService } from '../../../src/services/google-translate.service';
+import { PermissionService } from '../../../src/services/permission.service';
+import { Jurisdiction } from '../../../src/dtos/jurisdictions/jurisdiction.dto';
 
 jest.mock('@google-cloud/recaptcha-enterprise');
 const mockedRecaptcha =
@@ -58,11 +53,6 @@ describe('Testing auth service', () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         AuthService,
-        ApplicationService,
-        GeocodingService,
-        CronJobService,
-        SchedulerRegistry,
-        Logger,
         UserService,
         {
           provide: EmailService,

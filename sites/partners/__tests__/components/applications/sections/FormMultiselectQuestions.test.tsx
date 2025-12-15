@@ -1,7 +1,8 @@
 import React from "react"
-import { FormMultiselectQuestions } from "../../../../../src/components/applications/PaperApplicationForm/sections/FormMultiselectQuestions"
+import { FormMultiselectQuestions } from "../../../../src/components/applications/PaperApplicationForm/sections/FormMultiselectQuestions"
+import { FormProviderWrapper } from "./helpers"
 import { MultiselectQuestionsApplicationSectionEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { mockNextRouter, render, screen, FormProviderWrapper } from "../../../../testUtils"
+import { mockNextRouter, render, screen } from "../../../testUtils"
 import { multiselectQuestionPreference } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import userEvent from "@testing-library/user-event"
 

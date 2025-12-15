@@ -47,12 +47,7 @@ const DetailsHouseholdMembers = ({
       (a, b) => a.orderId - b.orderId
     )
     return orderedHouseholdMembers?.map((item) => ({
-      name: {
-        content:
-          item.firstName || item.middleName || item.lastName
-            ? `${item.firstName || ""} ${item.middleName || ""} ${item.lastName || ""}`
-            : t("t.n/a"),
-      },
+      name: { content: `${item.firstName} ${item.middleName || ""} ${item.lastName}` },
       birth: {
         content:
           item.birthMonth && item.birthDay && item.birthYear

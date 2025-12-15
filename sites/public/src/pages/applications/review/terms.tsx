@@ -130,7 +130,7 @@ const ApplicationTerms = () => {
       default:
         return { text: "" }
     }
-  }, [conductor.config, router.locale, listing])
+  }, [conductor.config, listing])
 
   useEffect(() => {
     if (application.confirmationCode && router.isReady) {

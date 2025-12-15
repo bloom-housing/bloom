@@ -10,8 +10,6 @@ import {
   ListingsStatusEnum,
   LotteryStatusEnum,
 } from '@prisma/client';
-import { Logger } from '@nestjs/common';
-import { SchedulerRegistry } from '@nestjs/schedule';
 import { randomUUID } from 'crypto';
 import dayjs from 'dayjs';
 import { Request as ExpressRequest } from 'express';
@@ -36,7 +34,6 @@ import { HouseholdMemberRelationship } from '../../../src/enums/applications/hou
 import { PublicAppsViewQueryParams } from '../../../src/dtos/applications/public-apps-view-params.dto';
 import { ApplicationsFilterEnum } from '../../../src/enums/applications/filter-enum';
 import { FeatureFlagEnum } from '../../../src/enums/feature-flags/feature-flags-enum';
-import { CronJobService } from '../../../src/services/cron-job.service';
 
 export const mockApplication = (options: {
   date: Date;
@@ -706,9 +703,6 @@ describe('Testing application service', () => {
         ApplicationService,
         PrismaService,
         GeocodingService,
-        Logger,
-        CronJobService,
-        SchedulerRegistry,
         {
           provide: EmailService,
           useValue: {
@@ -1519,7 +1513,7 @@ describe('Testing application service', () => {
   });
 
   describe('create endpoint', () => {
-    it('should create an application from public site with user account', async () => {
+    it('should create an application from public site', async () => {
       prisma.listings.findUnique = jest.fn().mockResolvedValue({
         id: randomUUID(),
         applicationDueDate: dayjs(new Date()).add(5, 'days').toDate(),
@@ -1547,6 +1541,7 @@ describe('Testing application service', () => {
 
       await service.create(dto, true, {
         id: 'requestingUser id',
+        userRoles: { isAdmin: true },
       } as unknown as User);
 
       expect(prisma.listings.findUnique).toHaveBeenCalledWith({
@@ -1755,228 +1750,6 @@ describe('Testing application service', () => {
       expect(canOrThrowMock).not.toHaveBeenCalled();
     });
 
-    it('should create an application from public site not logged in', async () => {
-      prisma.listings.findUnique = jest.fn().mockResolvedValue({
-        id: randomUUID(),
-        applicationDueDate: dayjs(new Date()).add(5, 'days').toDate(),
-        digitalApplication: true,
-        commonDigitalApplication: true,
-      });
-
-      prisma.applications.updateMany = jest.fn().mockResolvedValue({});
-      prisma.applications.create = jest.fn().mockResolvedValue({
-        id: randomUUID(),
-      });
-      prisma.$transaction = jest
-        .fn()
-        .mockResolvedValue([
-          prisma.applications.updateMany,
-          prisma.applications.create,
-        ]);
-
-      const exampleAddress = addressFactory() as AddressCreate;
-      const dto = mockCreateApplicationData(exampleAddress, new Date());
-
-      prisma.jurisdictions.findFirst = jest
-        .fn()
-        .mockResolvedValue({ id: randomUUID() });
-
-      await service.create(dto, true);
-
-      expect(prisma.listings.findUnique).toHaveBeenCalledWith({
-        where: {
-          id: expect.anything(),
-        },
-        include: {
-          jurisdictions: true,
-          unitGroups: true,
-          listingsBuildingAddress: true,
-          listingMultiselectQuestions: {
-            include: {
-              multiselectQuestions: true,
-            },
-          },
-        },
-      });
-
-      expect(prisma.applications.updateMany).toHaveBeenCalledTimes(0);
-      expect(prisma.applications.create).toHaveBeenCalledWith({
-        include: { ...detailView },
-        data: {
-          isNewest: false,
-          contactPreferences: ['example contact preference'],
-          status: ApplicationStatusEnum.submitted,
-          submissionType: ApplicationSubmissionTypeEnum.electronical,
-          appUrl: 'http://www.example.com',
-          additionalPhone: true,
-          additionalPhoneNumber: '111-111-1111',
-          additionalPhoneNumberType: 'example additional phone number type',
-          householdSize: 2,
-          housingStatus: 'example housing status',
-          sendMailToMailingAddress: true,
-          householdExpectingChanges: false,
-          householdStudent: false,
-          incomeVouchers: false,
-          income: '36000',
-          incomePeriod: IncomePeriodEnum.perYear,
-          language: LanguagesEnum.en,
-          acceptedTerms: true,
-          // Submission date is the moment it was created
-          submissionDate: expect.any(Date),
-          reviewStatus: ApplicationReviewStatusEnum.valid,
-          confirmationCode: expect.anything(),
-          applicant: {
-            create: {
-              firstName: 'applicant first name',
-              middleName: 'applicant middle name',
-              lastName: 'applicant last name',
-              birthMonth: 12,
-              birthDay: 17,
-              birthYear: 1993,
-              emailAddress: 'example@email.com',
-              noEmail: false,
-              phoneNumber: '111-111-1111',
-              phoneNumberType: 'Cell',
-              noPhone: false,
-              workInRegion: YesNoEnum.yes,
-              applicantAddress: {
-                create: {
-                  ...exampleAddress,
-                },
-              },
-              applicantWorkAddress: {
-                create: {
-                  ...exampleAddress,
-                },
-              },
-            },
-          },
-          accessibility: {
-            create: {
-              mobility: false,
-              vision: false,
-              hearing: false,
-              other: false,
-            },
-          },
-          alternateContact: {
-            create: {
-              type: AlternateContactRelationship.other,
-              otherType: 'example other type',
-              firstName: 'example first name',
-              lastName: 'example last name',
-              agency: 'example agency',
-              phoneNumber: '111-111-1111',
-              emailAddress: 'example@email.com',
-              address: {
-                create: {
-                  ...exampleAddress,
-                },
-              },
-            },
-          },
-          applicationsAlternateAddress: {
-            create: {
-              ...exampleAddress,
-            },
-          },
-          applicationsMailingAddress: {
-            create: {
-              ...exampleAddress,
-            },
-          },
-          listings: {
-            connect: {
-              id: dto.listings.id,
-            },
-          },
-          demographics: {
-            create: {
-              ethnicity: 'example ethnicity',
-              gender: 'example gender',
-              sexualOrientation: 'example sexual orientation',
-              howDidYouHear: ['example how did you hear'],
-              race: ['example race'],
-            },
-          },
-          preferredUnitTypes: {
-            connect: [
-              {
-                id: expect.anything(),
-              },
-            ],
-          },
-          householdMember: {
-            create: [
-              {
-                orderId: 0,
-                firstName: 'example first name',
-                middleName: 'example middle name',
-                lastName: 'example last name',
-                birthMonth: 12,
-                birthDay: 17,
-                birthYear: 1993,
-                sameAddress: YesNoEnum.yes,
-                relationship: HouseholdMemberRelationship.other,
-                workInRegion: YesNoEnum.yes,
-                householdMemberAddress: {
-                  create: {
-                    ...exampleAddress,
-                  },
-                },
-                householdMemberWorkAddress: {
-                  create: {
-                    ...exampleAddress,
-                  },
-                },
-              },
-            ],
-          },
-          programs: [
-            {
-              key: 'example key',
-              claimed: true,
-              options: [
-                {
-                  key: 'example key',
-                  checked: true,
-                  extraData: [
-                    {
-                      type: InputType.boolean,
-                      key: 'example key',
-                      value: true,
-                    },
-                  ],
-                },
-              ],
-            },
-          ],
-          preferences: [
-            {
-              key: 'example key',
-              claimed: true,
-              options: [
-                {
-                  key: 'example key',
-                  checked: true,
-                  extraData: [
-                    {
-                      type: InputType.boolean,
-                      key: 'example key',
-                      value: true,
-                    },
-                  ],
-                },
-              ],
-            },
-          ],
-          userAccounts: undefined,
-        },
-      });
-
-      expect(canOrThrowMock).not.toHaveBeenCalled();
-    });
-
     it('should error while creating an application from public site because submissions are closed', async () => {
       prisma.listings.findUnique = jest.fn().mockResolvedValue({
         id: randomUUID(),
@@ -2127,7 +1900,7 @@ describe('Testing application service', () => {
           ...detailView,
         },
         data: {
-          isNewest: false,
+          isNewest: true,
           contactPreferences: ['example contact preference'],
           status: ApplicationStatusEnum.submitted,
           submissionType: ApplicationSubmissionTypeEnum.electronical,
@@ -2356,7 +2129,7 @@ describe('Testing application service', () => {
           ...detailView,
         },
         data: {
-          isNewest: false,
+          isNewest: true,
           expireAfter: new Date('2024-06-27T08:00:00.000Z'),
           contactPreferences: ['example contact preference'],
           status: ApplicationStatusEnum.submitted,

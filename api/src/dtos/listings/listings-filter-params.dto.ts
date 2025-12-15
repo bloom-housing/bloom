@@ -1,10 +1,5 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import {
-  HomeTypeEnum,
-  ListingsStatusEnum,
-  ListingTypeEnum,
-  RegionEnum,
-} from '@prisma/client';
+import { HomeTypeEnum, ListingsStatusEnum, RegionEnum } from '@prisma/client';
 import { Expose, Type } from 'class-transformer';
 import {
   IsArray,
@@ -215,12 +210,4 @@ export class ListingFilterParams extends BaseFilter {
     example: '48211',
   })
   [ListingFilterKeys.zipCode]?: string;
-
-  @Expose()
-  @ApiPropertyOptional({
-    enum: ListingTypeEnum,
-    enumName: 'ListingTypeEnum',
-    example: 'regulated',
-  })
-  [ListingFilterKeys.listingType]?: ListingTypeEnum;
 }

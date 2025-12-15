@@ -6,8 +6,6 @@ import {
   ApplicationAddressTypeEnum,
   ApplicationMethod,
   ApplicationMethodsTypeEnum,
-  EnumListingListingType,
-  Asset,
   FeatureFlagEnum,
   IdDTO,
   Jurisdiction,
@@ -33,7 +31,6 @@ import { downloadExternalPDF, isFeatureFlagOn } from "../../lib/helpers"
 import { CardList, ContentCardProps } from "../../patterns/CardList"
 import { OrderedCardList } from "../../patterns/OrderedCardList"
 import { ReadMore } from "../../patterns/ReadMore"
-import { DateSectionFlyer } from "./listing_sections/DateSection"
 
 export const getFilteredMultiselectQuestions = (
   multiselectQuestions: ListingMultiselectQuestion[],
@@ -402,11 +399,6 @@ export const getEligibilitySections = (
     FeatureFlagEnum.disableListingPreferences
   )
 
-  const disableBuildingSelectionCriteria = isFeatureFlagOn(
-    jurisdiction,
-    FeatureFlagEnum.disableBuildingSelectionCriteria
-  )
-
   // Reserved community type
   if (!swapCommunityTypeWithPrograms && listing.reservedCommunityTypes) {
     eligibilityFeatures.push({
@@ -552,8 +544,8 @@ export const getEligibilitySections = (
     listing.creditHistory ||
     listing.rentalHistory ||
     listing.criminalBackground ||
-    ((listing.listingsBuildingSelectionCriteriaFile || listing.buildingSelectionCriteria) &&
-      !disableBuildingSelectionCriteria)
+    listing.listingsBuildingSelectionCriteriaFile ||
+    listing.buildingSelectionCriteria
   ) {
     const cardContent: ContentCardProps[] = []
     if (listing.creditHistory)
@@ -577,7 +569,7 @@ export const getEligibilitySections = (
       content: (
         <>
           <CardList cardContent={cardContent} />
-          {!disableBuildingSelectionCriteria && getBuildingSelectionCriteria(listing)}
+          {getBuildingSelectionCriteria(listing)}
         </>
       ),
     })
@@ -587,34 +579,9 @@ export const getEligibilitySections = (
 
 export const getAdditionalInformation = (listing: Listing) => {
   const cardContent: ContentCardProps[] = []
-  if (
-    listing.requiredDocumentsList &&
-    Object.values(listing.requiredDocumentsList).filter((value) => !!value).length
-  ) {
-    cardContent.push({
-      heading: t("listings.requiredDocuments"),
-      description: (
-        <div>
-          <ul>
-            {Object.entries(listing.requiredDocumentsList).map(
-              ([key, value]) =>
-                value && (
-                  <li className={"list-disc mx-5 mb-1 text-nowrap"}>
-                    {t(`listings.requiredDocuments.${key}`)}
-                  </li>
-                )
-            )}
-          </ul>
-        </div>
-      ),
-    })
-  }
   if (listing.requiredDocuments)
     cardContent.push({
-      heading:
-        listing.listingType === EnumListingListingType.regulated
-          ? t("listings.requiredDocuments")
-          : t("listings.requiredDocumentsAdditionalInfo"),
+      heading: t("listings.requiredDocuments"),
       description: <ReadMore content={listing.requiredDocuments} />,
     })
   if (listing.programRules)
@@ -628,45 +595,6 @@ export const getAdditionalInformation = (listing: Listing) => {
       description: <ReadMore content={listing.specialNotes} />,
     })
   return cardContent
-}
-
-export const getMarketingFlyers = (
-  listing: Listing,
-  jurisdiction?: Jurisdiction
-): DateSectionFlyer[] => {
-  const enableMarketingFlyer = isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableMarketingFlyer)
-  if (!enableMarketingFlyer) {
-    return []
-  }
-
-  const getFlyerUrl = (file?: Asset, url?: string) => {
-    if (file?.fileId) {
-      return cloudinaryPdfFromId(file.fileId, process.env.cloudinaryCloudName)
-    }
-    return url
-  }
-
-  const marketingFlyers: DateSectionFlyer[] = []
-  const marketingFlyerUrl = getFlyerUrl(listing.listingsMarketingFlyerFile, listing.marketingFlyer)
-  const accessibleMarketingFlyerUrl = getFlyerUrl(
-    listing.listingsAccessibleMarketingFlyerFile,
-    listing.accessibleMarketingFlyer
-  )
-
-  if (marketingFlyerUrl) {
-    marketingFlyers.push({
-      url: marketingFlyerUrl,
-      label: t("listings.openHouseAndMarketing.marketingFlyerLink"),
-    })
-  }
-  if (accessibleMarketingFlyerUrl) {
-    marketingFlyers.push({
-      url: accessibleMarketingFlyerUrl,
-      label: t("listings.openHouseAndMarketing.accessibleMarketingFlyerLink"),
-    })
-  }
-
-  return marketingFlyers
 }
 
 interface PaperApplicationDialogProps {

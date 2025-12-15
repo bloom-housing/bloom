@@ -51,12 +51,8 @@ export default class BooleansFormatter extends Formatter {
         !!this.data.listingImages[0].assets.fileId &&
         !!this.data.listingImages[0].assets.label,
       trueCase: () => {
-        return this.data.listingImages.map((listingImage) => {
-          return {
-            ordinal: listingImage.ordinal,
-            assets: listingImage.assets,
-            description: listingImage.description,
-          }
+        return this.data.listingImages.map((listingImages) => {
+          return { ordinal: listingImages.ordinal, assets: listingImages.assets }
         })
       },
     })

@@ -143,8 +143,7 @@ const ApplicationsList = () => {
             lotteryLabel:
               listingDto?.status === ListingsStatusEnum.closed &&
               listingDto?.lotteryOptIn &&
-              (listingDto?.reviewOrderType === ReviewOrderTypeEnum.lottery ||
-                listingDto?.reviewOrderType === ReviewOrderTypeEnum.waitlistLottery)
+              listingDto?.reviewOrderType === ReviewOrderTypeEnum.lottery
                 ? t("listings.lotteryTitle")
                 : undefined,
           }}

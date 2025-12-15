@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import Markdown from "markdown-to-jsx"
 import {
-  EnumListingListingType,
   FeatureFlagEnum,
   Jurisdiction,
   Listing,
@@ -26,7 +25,6 @@ import {
   getDateString,
   getEligibilitySections,
   getFeatures,
-  getMarketingFlyers,
   getPaperApplications,
   getUtilitiesIncluded,
   PaperApplicationDialog,
@@ -48,7 +46,6 @@ import { RentSummary } from "./listing_sections/RentSummary"
 import { UnitSummaries } from "./listing_sections/UnitSummaries"
 import styles from "./ListingViewSeeds.module.scss"
 import { ReadMore } from "../../patterns/ReadMore"
-import { OtherFeatures } from "./listing_sections/OtherFeatures"
 
 interface ListingProps {
   listing: Listing
@@ -103,29 +100,12 @@ export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: Li
     paperApplications?.length ? paperApplications[0].fileURL : undefined
   )
 
-  const openHouseEvents = listing.listingEvents?.filter(
-    (event) => event.type === ListingEventsTypeEnum.openHouse
-  )
-  const marketingFlyers = getMarketingFlyers(listing, jurisdiction)
-
-  const getOpenHousesHeading = () => {
-    if (
-      isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableMarketingFlyer) &&
-      marketingFlyers?.length
-    ) {
-      if (openHouseEvents?.length) {
-        return t("listings.openHouseAndMarketing.header")
-      }
-      return t("listings.marketing.header")
-    }
-    return t("listings.openHouseEvent.header")
-  }
-
   const OpenHouses = (
     <DateSection
-      heading={getOpenHousesHeading()}
-      events={openHouseEvents}
-      marketingFlyers={marketingFlyers}
+      heading={t("listings.openHouseEvent.header")}
+      events={listing.listingEvents?.filter(
+        (event) => event.type === ListingEventsTypeEnum.openHouse
+      )}
     />
   )
 
@@ -175,22 +155,6 @@ export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: Li
     </>
   )
 
-  const lisitngUtilities = getUtilitiesIncluded(listing)
-
-  const hasUnitFeature =
-    listing.units.length ||
-    listing.applicationFee ||
-    listing.depositMin ||
-    listing.depositMax ||
-    listing.depositValue ||
-    listing.costsNotIncluded ||
-    (isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableCreditScreeningFee) &&
-      listing.creditScreeningFee) ||
-    (isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableUtilitiesIncluded) &&
-      lisitngUtilities.length) ||
-    (isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableNonRegulatedListings) &&
-      listing.listingType === EnumListingListingType.nonRegulated)
-
   const UnitFeatures = (
     <>
       <Heading size={"lg"} className={"seeds-m-be-header"} priority={3}>
@@ -212,22 +176,12 @@ export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: Li
         depositHelperText={listing.depositHelperText}
         depositMax={listing.depositMax}
         depositMin={listing.depositMin}
-        depositValue={listing.depositValue}
-        depositType={listing.depositType}
-        isNonRegulated={
-          isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableNonRegulatedListings) &&
-          listing.listingType === EnumListingListingType.nonRegulated
-        }
         utilitiesIncluded={
           isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableUtilitiesIncluded)
-            ? lisitngUtilities
+            ? getUtilitiesIncluded(listing)
             : []
         }
       />
-      {isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableNonRegulatedListings) &&
-        listing.listingType === EnumListingListingType.nonRegulated && (
-          <OtherFeatures hasEbllClearence={listing.hasHudEbllClearance} />
-        )}
     </>
   )
 
@@ -306,9 +260,7 @@ export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: Li
           <div className={styles["main-content"]}>
             <div className={styles["hide-desktop"]}>{ApplyBar}</div>
             <Eligibility eligibilitySections={getEligibilitySections(jurisdiction, listing)} />
-            <Features features={getFeatures(listing, jurisdiction)}>
-              {hasUnitFeature && UnitFeatures}
-            </Features>
+            <Features features={getFeatures(listing, jurisdiction)}>{UnitFeatures}</Features>
             <Neighborhood
               address={listing.listingsBuildingAddress}
               name={listing.name}

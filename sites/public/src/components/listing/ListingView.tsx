@@ -501,7 +501,6 @@ export const ListingView = (props: ListingProps) => {
     const description = () => {
       switch (listing.reviewOrderType) {
         case ReviewOrderTypeEnum.waitlist:
-        case ReviewOrderTypeEnum.waitlistLottery:
           return t("listings.waitlist.submitForWaitlist")
         case ReviewOrderTypeEnum.firstComeFirstServe:
           return t("listings.eligibleApplicants.FCFS")

@@ -11,7 +11,6 @@ import {
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 import { ListingContext } from "../../ListingContext"
-import DetailMarketingFlyerSection from "./DetailMarketingFlyerSection"
 import { getDetailFieldDate, getDetailFieldString, getDetailFieldTime } from "./helpers"
 
 const DetailApplicationDates = () => {
@@ -26,11 +25,6 @@ const DetailApplicationDates = () => {
 
   const enableMarketingStatusMonths = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableMarketingStatusMonths,
-    listing?.jurisdictions?.id
-  )
-
-  const enableMarketingFlyer = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableMarketingFlyer,
     listing?.jurisdictions?.id
   )
 
@@ -206,11 +200,6 @@ const DetailApplicationDates = () => {
             </Grid.Cell>
           </Grid.Row>
         )}
-
-        <DetailMarketingFlyerSection
-          listing={listing}
-          enableMarketingFlyer={enableMarketingFlyer}
-        />
       </SectionWithGrid>
     </>
   )

@@ -1,6 +1,8 @@
 import React from "react"
+import { FormProvider, useForm } from "react-hook-form"
+import { formDefaults, FormListing } from "../../../../../src/lib/listings/formTypes"
 import { setupServer } from "msw/lib/node"
-import { FormProviderWrapper, mockNextRouter } from "../../../../testUtils"
+import { mockNextRouter } from "../../../../testUtils"
 import { render, screen } from "@testing-library/react"
 import {
   EnumListingListingType,
@@ -9,6 +11,14 @@ import {
 import AdditionalDetails from "../../../../../src/components/listings/PaperListingForm/sections/AdditionalDetails"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import { jurisdiction, user } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
+
+const FormComponent = ({ children, values }: { values?: Partial<FormListing>; children }) => {
+  const formMethods = useForm<FormListing>({
+    defaultValues: { ...formDefaults, ...values },
+    shouldUnregister: false,
+  })
+  return <FormProvider {...formMethods}>{children}</FormProvider>
+}
 
 const server = setupServer()
 
@@ -34,7 +44,7 @@ describe("AdditionalDetails", () => {
             featureFlag === FeatureFlagEnum.enableNonRegulatedListings,
         }}
       >
-        <FormProviderWrapper>
+        <FormComponent>
           <AdditionalDetails
             defaultText="This is a mock default text"
             existingDocuments={{
@@ -50,7 +60,7 @@ describe("AdditionalDetails", () => {
             }}
             requiredFields={[]}
           />
-        </FormProviderWrapper>
+        </FormComponent>
       </AuthContext.Provider>
     )
 
@@ -81,7 +91,7 @@ describe("AdditionalDetails", () => {
             featureFlag === FeatureFlagEnum.enableNonRegulatedListings,
         }}
       >
-        <FormProviderWrapper
+        <FormComponent
           values={{
             listingType: EnumListingListingType.nonRegulated,
           }}
@@ -101,7 +111,7 @@ describe("AdditionalDetails", () => {
             }}
             requiredFields={[]}
           />
-        </FormProviderWrapper>
+        </FormComponent>
       </AuthContext.Provider>
     )
 

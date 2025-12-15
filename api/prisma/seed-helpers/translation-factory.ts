@@ -1,23 +1,7 @@
 import { LanguagesEnum, Prisma } from '@prisma/client';
 
-const translations = (
-  jurisdiction?: {
-    id: string;
-    name: string;
-  },
-  language?: LanguagesEnum,
-) => {
+const translations = (jurisdictionName?: string, language?: LanguagesEnum) => {
   if (!language || language === LanguagesEnum.en) {
-    if (jurisdiction) {
-      return {
-        footer: {
-          line1: jurisdiction.name,
-          line2: '',
-          thankYou: 'Thank you',
-          footer: jurisdiction.name,
-        },
-      };
-    }
     return {
       t: {
         hello: 'Hello',
@@ -28,10 +12,10 @@ const translations = (
         reviewListing: 'Review Listing',
       },
       footer: {
-        line1: 'Bloom',
+        line1: `${jurisdictionName || 'Bloom'}`,
         line2: '',
         thankYou: 'Thank you',
-        footer: 'Bloom Housing',
+        footer: `${jurisdictionName || 'Bloom Housing'}`,
       },
       header: {
         logoUrl:
@@ -209,21 +193,12 @@ const translations = (
           'If you want to learn about how lotteries work, please see the lottery section of the',
         otherOpportunities4: 'Housing Portal Help Center',
       },
-      accountRemoval: {
-        subject: 'Bloom Housing Scheduled Account Removal Due to Inactivity',
-        courtesyText:
-          'This is a courtesy email to let you know that because your Bloom Housing Portal account has been inactive for 3 years, your account will be deleted in 30 days per our Terms of Use and Privacy Policy. If you’d like to keep your account, please log in sometime in the next month and we’ll consider your account active again.',
-        signIn: 'Sign in to Bloom Housing',
-      },
     };
   } else if (language === LanguagesEnum.es) {
     return {
-      t: {
-        hello: 'Hola',
-        seeListing: 'VER EL LISTADO',
-      },
+      t: { seeListing: 'VER EL LISTADO' },
       footer: {
-        line1: 'Bloom',
+        line1: `${jurisdictionName || 'Bloom'}`,
         line2: '',
       },
       confirmation: {
@@ -266,42 +241,22 @@ const translations = (
           'Si desea obtener información sobre cómo funcionan las loterías, consulte la sección de lotería del',
         otherOpportunities4: 'Housing Portal Centro de ayuda',
       },
-      accountRemoval: {
-        subject:
-          'Eliminación programada de cuenta de Bloom Housing debido a inactividad',
-        courtesyText:
-          'Este es un correo electrónico de cortesía para informarle que, debido a que su cuenta del Portal de Bloom Housing ha estado inactiva durante 3 años, se eliminará en 30 días según nuestros Términos de Uso y Política de Privacidad. Si desea conservar su cuenta, inicie sesión durante el próximo mes y la consideraremos activa de nuevo.',
-        signIn: 'Iniciar sesión en Bloom Housing',
-      },
-      register: {
-        welcome: 'Bienvenido',
-        welcomeMessage:
-          'Gracias por crear su cuenta en %{appUrl}. Ahora le resultará más fácil iniciar, guardar y enviar solicitudes en línea para los anuncios que aparecen en el sitio.',
-        confirmMyAccount: 'Confirmar mi cuenta',
-        toConfirmAccountMessage:
-          'Para completar la creación de su cuenta, haga clic en el siguiente enlace:',
-      },
     };
   }
 };
 
-export const translationFactory = (optionalParams?: {
-  jurisdiction?: {
-    id: string;
-    name: string;
-  };
-  language?: LanguagesEnum;
-}): Prisma.TranslationsCreateInput => {
+export const translationFactory = (
+  jurisdictionId?: string,
+  jurisdictionName?: string,
+  language?: LanguagesEnum,
+): Prisma.TranslationsCreateInput => {
   return {
-    language: optionalParams?.language || LanguagesEnum.en,
-    translations: translations(
-      optionalParams?.jurisdiction,
-      optionalParams?.language,
-    ),
-    jurisdictions: optionalParams?.jurisdiction
+    language: language || LanguagesEnum.en,
+    translations: translations(jurisdictionName, language),
+    jurisdictions: jurisdictionId
       ? {
           connect: {
-            id: optionalParams.jurisdiction.id,
+            id: jurisdictionId,
           },
         }
       : undefined,

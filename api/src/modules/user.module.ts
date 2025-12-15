@@ -1,22 +1,14 @@
 import { Logger, Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { UserController } from '../controllers/user.controller';
-import { UserCsvExporterService } from '../services/user-csv-export.service';
 import { UserService } from '../services/user.service';
-import { ApplicationModule } from './application.module';
-import { CronJobModule } from './cron-job.module';
+import { PrismaModule } from './prisma.module';
 import { EmailModule } from './email.module';
 import { PermissionModule } from './permission.module';
-import { PrismaModule } from './prisma.module';
+import { UserCsvExporterService } from '../services/user-csv-export.service';
 
 @Module({
-  imports: [
-    PrismaModule,
-    EmailModule,
-    PermissionModule,
-    CronJobModule,
-    ApplicationModule,
-  ],
+  imports: [PrismaModule, EmailModule, PermissionModule],
   controllers: [UserController],
   providers: [Logger, UserService, ConfigService, UserCsvExporterService],
   exports: [UserService],

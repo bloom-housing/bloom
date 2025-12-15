@@ -1,4 +1,4 @@
-import { Logger, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { ApplicationController } from '../controllers/application.controller';
 import { ApplicationExporterModule } from './application-exporter.module';
 import { ApplicationService } from '../services/application.service';
@@ -9,7 +9,6 @@ import { MultiselectQuestionModule } from './multiselect-question.module';
 import { PermissionModule } from './permission.module';
 import { PrismaModule } from './prisma.module';
 import { UnitTypeModule } from './unit-type.module';
-import { CronJobModule } from './cron-job.module';
 
 @Module({
   imports: [
@@ -20,10 +19,9 @@ import { CronJobModule } from './cron-job.module';
     MultiselectQuestionModule,
     PermissionModule,
     UnitTypeModule,
-    CronJobModule,
   ],
   controllers: [ApplicationController],
-  providers: [ApplicationService, GeocodingService, Logger],
+  providers: [ApplicationService, GeocodingService],
   exports: [ApplicationService],
 })
 export class ApplicationModule {}

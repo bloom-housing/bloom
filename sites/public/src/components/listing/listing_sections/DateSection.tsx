@@ -6,26 +6,20 @@ import { ListingEventCreate } from "@bloom-housing/shared-helpers/src/types/back
 import { t } from "@bloom-housing/ui-components"
 import styles from "../ListingViewSeeds.module.scss"
 
-export type DateSectionFlyer = {
-  url?: string
-  label?: string
-}
-
 type DateSectionProps = {
-  events?: ListingEventCreate[]
-  marketingFlyers?: DateSectionFlyer[]
+  events: ListingEventCreate[]
   heading: string
 }
 
-export const DateSection = ({ events, marketingFlyers, heading }: DateSectionProps) => {
-  if (!events?.length && !marketingFlyers?.length) return null
+export const DateSection = ({ events, heading }: DateSectionProps) => {
+  if (!events.length) return
   return (
     <Card className={`${styles["mobile-full-width-card"]} ${styles["mobile-no-bottom-border"]}`}>
       <Card.Section>
         <Heading size={"lg"} priority={2} className={"seeds-p-be-header"}>
           {heading}
         </Heading>
-        {events?.map((event, index) => {
+        {events.map((event, index) => {
           const dateString = dayjs(event.startDate).format("MMMM D, YYYY")
           const timeString = getTimeRangeString(event.startTime, event.endTime)
           return (
@@ -47,16 +41,6 @@ export const DateSection = ({ events, marketingFlyers, heading }: DateSectionPro
             </div>
           )
         })}
-        {marketingFlyers?.map((marketingFlyer, index) => (
-          <div
-            key={`marketingFlyer-${index}`}
-            className={`${events?.length || index > 0 ? "seeds-m-bs-header" : ""}`}
-          >
-            <Link href={marketingFlyer.url} hideExternalLinkIcon={true}>
-              {marketingFlyer.label}
-            </Link>
-          </div>
-        ))}
       </Card.Section>
     </Card>
   )

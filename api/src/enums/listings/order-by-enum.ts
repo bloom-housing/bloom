@@ -10,5 +10,4 @@ export enum ListingOrderByKeys {
   marketingType = 'marketingType',
   marketingYear = 'marketingYear',
   marketingSeason = 'marketingSeason',
-  listingType = 'listingType',
 }

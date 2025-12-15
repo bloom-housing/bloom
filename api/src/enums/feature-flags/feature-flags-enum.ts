@@ -2,7 +2,6 @@
 // Note, these are just used to keep backend and frontend in sync. We store feature flags as strings so this list might not include every flag.
 // Keep alphabetized for readability.
 export enum FeatureFlagEnum {
-  disableBuildingSelectionCriteria = 'disableBuildingSelectionCriteria',
   disableCommonApplication = 'disableCommonApplication',
   disableJurisdictionalAdmin = 'disableJurisdictionalAdmin',
   disableListingPreferences = 'disableListingPreferences',
@@ -10,7 +9,6 @@ export enum FeatureFlagEnum {
   enableAccessibilityFeatures = 'enableAccessibilityFeatures',
   enableAdaOtherOption = 'enableAdaOtherOption',
   enableAdditionalResources = 'enableAdditionalResources',
-  enableApplicationStatus = 'enableApplicationStatus',
   enableCompanyWebsite = 'enableCompanyWebsite',
   enableCreditScreeningFee = 'enableCreditScreeningFee',
   enableFullTimeStudentQuestion = 'enableFullTimeStudentQuestion',
@@ -23,11 +21,9 @@ export enum FeatureFlagEnum {
   enableListingFavoriting = 'enableListingFavoriting',
   enableListingFileNumber = 'enableListingFileNumber',
   enableListingFiltering = 'enableListingFiltering',
-  enableListingImageAltText = 'enableListingImageAltText',
   enableListingOpportunity = 'enableListingOpportunity',
   enableListingPagination = 'enableListingPagination',
   enableListingUpdatedAt = 'enableListingUpdatedAt',
-  enableMarketingFlyer = 'enableMarketingFlyer',
   enableMarketingStatus = 'enableMarketingStatus',
   enableMarketingStatusMonths = 'enableMarketingStatusMonths',
   enableNeighborhoodAmenities = 'enableNeighborhoodAmenities',
@@ -35,8 +31,6 @@ export enum FeatureFlagEnum {
   enableNonRegulatedListings = 'enableNonRegulatedListings',
   enablePartnerDemographics = 'enablePartnerDemographics',
   enablePartnerSettings = 'enablePartnerSettings',
-  enableProperties = 'enableProperties',
-  enableReferralQuestionUnits = 'enableReferralQuestionUnits',
   enableRegions = 'enableRegions',
   enableSection8Question = 'enableSection8Question',
   enableSingleUseCode = 'enableSingleUseCode',
@@ -60,11 +54,6 @@ export const featureFlagMap: {
   name: string;
   description: string;
 }[] = [
-  {
-    name: FeatureFlagEnum.disableBuildingSelectionCriteria,
-    description:
-      'When true, building selection criteria is not displayed in the listing',
-  },
   {
     name: FeatureFlagEnum.disableCommonApplication,
     description:
@@ -98,11 +87,6 @@ export const featureFlagMap: {
     name: FeatureFlagEnum.enableAdditionalResources,
     description:
       "When true, the 'learn more' section is displayed on the home page",
-  },
-  {
-    name: FeatureFlagEnum.enableApplicationStatus,
-    description:
-      'When true, the application status and notifications feature is enabled on public and partners',
   },
   {
     name: FeatureFlagEnum.enableCompanyWebsite,
@@ -163,10 +147,6 @@ export const featureFlagMap: {
       'When true, a filter button is shown on listings browse and users can filter with the options in the drawer',
   },
   {
-    name: FeatureFlagEnum.enableListingImageAltText,
-    description: 'When true, allows partners to add alt text to listing images',
-  },
-  {
     name: FeatureFlagEnum.enableListingOpportunity,
     description:
       "When true, any newly published listing will send a gov delivery email to everyone that has signed up for the 'listing alerts'",
@@ -179,11 +159,6 @@ export const featureFlagMap: {
   {
     name: FeatureFlagEnum.enableListingUpdatedAt,
     description: 'When true, listings detail will display an updated at date',
-  },
-  {
-    name: FeatureFlagEnum.enableMarketingFlyer,
-    description:
-      "When true, the 'marketing flyer' sub-section is displayed in listing creation/edit and the public listing view",
   },
   {
     name: FeatureFlagEnum.enableMarketingStatus,
@@ -218,14 +193,6 @@ export const featureFlagMap: {
   {
     name: FeatureFlagEnum.enablePartnerSettings,
     description: "When true, the 'settings' tab in the partner site is visible",
-  },
-  {
-    name: FeatureFlagEnum.enableProperties,
-    description: 'When true, the properties feature is enabled',
-  },
-  {
-    name: FeatureFlagEnum.enableReferralQuestionUnits,
-    description: 'when true, updates the the referral details question labels',
   },
   {
     name: FeatureFlagEnum.enableRegions,

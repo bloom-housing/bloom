@@ -132,11 +132,6 @@ export default function ListingsList() {
     formatIsVerified,
     ListingsLink,
   }
-
-  const showForNonRegulated = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableNonRegulatedListings
-  )
-
   const columnDefs = useMemo(() => {
     const columns: (ColDef | ColGroupDef)[] = [
       {
@@ -150,30 +145,6 @@ export default function ListingsList() {
         minWidth: 250,
         flex: 1,
       },
-    ]
-
-    if (showForNonRegulated) {
-      columns.push({
-        headerName: t("listings.listingType"),
-        field: "listingType",
-        sortable: true,
-        unSortIcon: true,
-        filter: false,
-        resizable: true,
-        cellRenderer: "ListingsLink",
-        minWidth: 140,
-        comparator: () => 0,
-        valueFormatter: ({ value }) => {
-          if (!value) {
-            return t("t.none")
-          }
-
-          return t(`listings.${value}`)
-        },
-      })
-    }
-
-    columns.push(
       {
         headerName: t("listings.listingStatusText"),
         field: "status",
@@ -214,8 +185,8 @@ export default function ListingsList() {
         resizable: true,
         valueFormatter: ({ value }) => (value ? dayjs(value).format("MM/DD/YYYY") : t("t.none")),
         maxWidth: 120,
-      }
-    )
+      },
+    ]
 
     if (
       getFlagInAllJurisdictions(
@@ -281,7 +252,6 @@ export default function ListingsList() {
     }
 
     return columns
-    //eslint-disable-next-line
   }, [])
 
   const { listingDtos, listingsLoading } = useListingsData({
