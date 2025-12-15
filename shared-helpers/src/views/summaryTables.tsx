@@ -760,19 +760,13 @@ export const getStackedUnitTableData = (units: Unit[], unitSummary: UnitSummary)
   )
 
   let adjustedHeaders: { [key: string]: string } = {}
-  const getFalsy = (val: string | number | undefined) => {
-    return val === null || val === undefined || val === ""
-  }
+
   // Determine which fields have data to display, hide columns if all units have no data
-  const noNumbers = availableUnits.every((unit) => getFalsy(unit.number))
-  const noSqFeet = availableUnits.every((unit) => getFalsy(unit.sqFeet))
-  const noBathrooms = availableUnits.every((unit) => getFalsy(unit.numBathrooms))
-  const noFloors = availableUnits.every((unit) => getFalsy(unit.floor))
-  const noA11yTypes = availableUnits.every(
-    (unit) =>
-      unit.unitAccessibilityPriorityTypes === null ||
-      unit.unitAccessibilityPriorityTypes === undefined
-  )
+  const noNumbers = !availableUnits.some((unit) => !!unit.number)
+  const noSqFeet = !availableUnits.some((unit) => !!unit.sqFeet)
+  const noBathrooms = !availableUnits.some((unit) => !!unit.numBathrooms)
+  const noFloors = !availableUnits.some((unit) => !!unit.floor)
+  const noA11yTypes = !availableUnits.some((unit) => !!unit.unitAccessibilityPriorityTypes)
   let unitsFormatted: FormattedUnit[] = []
 
   if (!(noNumbers && noSqFeet && noBathrooms && noFloors && noA11yTypes)) {
