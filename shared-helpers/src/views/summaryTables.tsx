@@ -704,6 +704,11 @@ export const getUnitTableData = (units: Unit[], unitSummary: UnitSummary) => {
         ),
       },
       floor: { content: <strong>{unit.floor}</strong> },
+      accessibilityType: {
+        content: unit.unitAccessibilityPriorityTypes
+          ? t(`listings.unit.accessibilityType.${unit.unitAccessibilityPriorityTypes.name}`)
+          : t("t.n/a"),
+      },
     }
   })
 
