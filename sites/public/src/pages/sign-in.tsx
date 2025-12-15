@@ -262,6 +262,7 @@ const SignIn = (props: SignInProps) => {
   useEffect(() => {
     if (networkError?.error?.response?.data?.message?.includes("but is not confirmed")) {
       setConfirmationStatusModal(true)
+      clearErrors()
     }
   }, [networkError])
 
