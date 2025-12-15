@@ -8,12 +8,21 @@ export enum SettingsIndexEnum {
   properties,
 }
 
-export const getSettingsTabs = (selectedIndex: SettingsIndexEnum, router: NextRouter) => {
+export const getSettingsTabs = (
+  selectedIndex: SettingsIndexEnum,
+  router: NextRouter,
+  newPreferences: boolean
+) => {
   const baseUrl = "/settings/"
+
   return (
     <Tabs
       verticalSidebar
-      onSelect={(index) => void router.push(`${baseUrl}/${SettingsIndexEnum[index]}`)}
+      onSelect={(index) => {
+        let subpath = SettingsIndexEnum[index]
+        if (newPreferences && subpath === "preferences") subpath = `${subpath}-new`
+        void router.push(`${baseUrl}/${subpath}`)
+      }}
       selectedIndex={selectedIndex}
     >
       <Tabs.TabList>

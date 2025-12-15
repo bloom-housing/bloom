@@ -1,6 +1,8 @@
 import React, { useContext, useState, useMemo, useEffect } from "react"
+import { useRouter } from "next/router"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import {
+  FeatureFlagEnum,
   MultiselectQuestion,
   MultiselectQuestionsApplicationSectionEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -13,10 +15,14 @@ import { NavigationHeader } from "../../components/shared/NavigationHeader"
 import { useJurisdictionalMultiselectQuestionList } from "../../lib/hooks"
 import EditPreference, { DrawerType } from "../../components/settings/preferences/EditPreference"
 import styles from "./preferences-new.module.scss"
+import TabView from "../../layouts/TabView"
+import { getSettingsTabs, SettingsIndexEnum } from "../../components/settings/SettingsViewHelpers"
 
 const SettingsPreferences = () => {
-  const { profile } = useContext(AuthContext)
+  const { profile, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
+  const router = useRouter()
   const tableOptions = useAgTable()
+  const enableProperties = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableProperties)
 
   const [editConfirmModalOpen, setEditConfirmModalOpen] = useState<MultiselectQuestion | null>(null)
   const [preferenceDrawerOpen, setPreferenceDrawerOpen] = useState<DrawerType | null>(null)
@@ -113,51 +119,56 @@ const SettingsPreferences = () => {
           <title>{`Preferences - ${t("nav.siteTitlePartners")}`}</title>
         </Head>
         <NavigationHeader className="relative" title={t("t.preferences")} />
-        <section className={styles["preferences-section"]}>
-          <div className={styles["table-wrapper"]}>
-            <AgTable
-              id="preferences-table"
-              pagination={{
-                perPage: tableOptions.pagination.itemsPerPage,
-                setPerPage: tableOptions.pagination.setItemsPerPage,
-                currentPage: tableOptions.pagination.currentPage,
-                setCurrentPage: tableOptions.pagination.setCurrentPage,
-              }}
-              config={{
-                columns,
-                totalItemsLabel: "items",
-              }}
-              data={{
-                items,
-                loading: loading,
-                totalItems: 2,
-                totalPages: 1,
-              }}
-              search={{
-                showSearch: false,
-                setSearch: tableOptions.filter.setFilterValue, // currently not used
-              }}
-              headerContent={
-                <>
-                  <span></span>
-                  <span>
-                    <Button
-                      variant="primary"
-                      size="sm"
-                      onClick={() => {
-                        setQuestionData(null)
-                        setPreferenceDrawerOpen("add")
-                      }}
-                      id={"add-preference"}
-                    >
-                      {t("t.addItem")}
-                    </Button>
-                  </span>
-                </>
-              }
-            />
-          </div>
-        </section>
+        <TabView
+          hideTabs={!enableProperties}
+          tabs={getSettingsTabs(SettingsIndexEnum.preferences, router, true)}
+        >
+          <section className={styles["preferences-section"]}>
+            <div className={styles["table-wrapper"]}>
+              <AgTable
+                id="preferences-table"
+                pagination={{
+                  perPage: tableOptions.pagination.itemsPerPage,
+                  setPerPage: tableOptions.pagination.setItemsPerPage,
+                  currentPage: tableOptions.pagination.currentPage,
+                  setCurrentPage: tableOptions.pagination.setCurrentPage,
+                }}
+                config={{
+                  columns,
+                  totalItemsLabel: "items",
+                }}
+                data={{
+                  items,
+                  loading: loading,
+                  totalItems: 2,
+                  totalPages: 1,
+                }}
+                search={{
+                  showSearch: false,
+                  setSearch: tableOptions.filter.setFilterValue, // currently not used
+                }}
+                headerContent={
+                  <>
+                    <span></span>
+                    <span>
+                      <Button
+                        variant="primary"
+                        size="sm"
+                        onClick={() => {
+                          setQuestionData(null)
+                          setPreferenceDrawerOpen("add")
+                        }}
+                        id={"add-preference"}
+                      >
+                        {t("t.addItem")}
+                      </Button>
+                    </span>
+                  </>
+                }
+              />
+            </div>
+          </section>
+        </TabView>
       </Layout>
 
       <EditPreference

@@ -62,6 +62,7 @@ const SettingsPreferences = () => {
     null,
     true
   )
+  const v2Preferences = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableV2MSQ)
 
   const tableData = useMemo(() => {
     return data
@@ -189,6 +190,7 @@ const SettingsPreferences = () => {
   ) {
     void router.push("/unauthorized")
   }
+  if (v2Preferences) void router.push("/settings/preferences-new")
 
   return (
     <>
@@ -198,8 +200,8 @@ const SettingsPreferences = () => {
         </Head>
         <NavigationHeader className="relative" title={t("t.settings")} />
         <TabView
-          hideTabs={!(atLeastOneJurisdictionEnablesPreferences && enableProperties)}
-          tabs={getSettingsTabs(SettingsIndexEnum.preferences, router)}
+          hideTabs={!enableProperties}
+          tabs={getSettingsTabs(SettingsIndexEnum.preferences, router, v2Preferences)}
         >
           <LoadingOverlay isLoading={loading}>
             <StandardCard
