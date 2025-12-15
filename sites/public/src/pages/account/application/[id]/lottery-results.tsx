@@ -94,7 +94,7 @@ const LotteryResults = () => {
 
   const lotteryResultHeaderText =
     listing?.reviewOrderType === ReviewOrderTypeEnum.waitlistLottery
-      ? t("account.application.lottery.resultsHeaderWaitlistLotterry")
+      ? t("account.application.lottery.resultsHeaderWaitlistLottery")
       : t("account.application.lottery.resultsHeader")
 
   const applications = totals?.find((total) => !total.multiselectQuestionId).total

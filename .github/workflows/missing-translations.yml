@@ -1,0 +1,39 @@
+name: Missing Translations
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  shared-helpers-unit:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 18
+
+      - name: yarn in root dir
+        run: yarn
+
+      # Rerun yarn in each app.
+      # It may seem unnecessary but there are some complex yarn package 
+      # versioning dependencies here, so best to run to be safe.
+      # See https://github.com/bloom-housing/bloom/issues/3217#issuecomment-1430301029 
+      # for more context.
+      - name: yarn in sites/public dir
+        working-directory: ./sites/public
+        run: yarn
+
+      - name: yarn in sites/partners dir
+        working-directory: ./sites/partners
+        run: yarn
+
+      # Tests
+      - name: yarn translations test shared/helpers
+        run: yarn test:shared-helpers:missing-translations
