@@ -19,7 +19,7 @@ const BuildingFeatures = (props: BuildingFeaturesProps) => {
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, setValue, errors, clearErrors, getValues } = formMethods
+  const { register, setValue, errors, clearErrors } = formMethods
 
   const featureOptions = useMemo(() => {
     return listingFeatures.map((item) => ({
