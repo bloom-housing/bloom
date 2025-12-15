@@ -1,6 +1,5 @@
 import React from "react"
 import { setupServer } from "msw/node"
-import { FormProvider, useForm } from "react-hook-form"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import {
   MultiselectQuestion,
@@ -10,15 +9,8 @@ import {
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { render, screen, within } from "@testing-library/react"
 import PreferencesAndPrograms from "../../../../../src/components/listings/PaperListingForm/sections/PreferencesAndPrograms"
-import { formDefaults, FormListing } from "../../../../../src/lib/listings/formTypes"
-
-const FormComponent = ({ children, values }: { values?: FormListing; children }) => {
-  const formMethods = useForm<FormListing>({
-    defaultValues: { ...formDefaults, ...values },
-    shouldUnregister: false,
-  })
-  return <FormProvider {...formMethods}>{children}</FormProvider>
-}
+import { formDefaults } from "../../../../../src/lib/listings/formTypes"
+import { FormProviderWrapper } from "../../../../testUtils"
 
 const server = setupServer()
 
@@ -39,7 +31,7 @@ describe("PreferencesAndPrograms", () => {
       const setFn = jest.fn()
 
       render(
-        <FormComponent values={{ ...formDefaults }}>
+        <FormProviderWrapper values={{ ...formDefaults }}>
           <PreferencesAndPrograms
             jurisdiction={"jurisdiction1"}
             preferences={[]}
@@ -49,7 +41,7 @@ describe("PreferencesAndPrograms", () => {
             disableListingPreferences={false}
             swapCommunityTypeWithPrograms={false}
           />
-        </FormComponent>
+        </FormProviderWrapper>
       )
 
       expect(screen.getByRole("heading", { level: 2, name: /preferences/i })).toBeInTheDocument()
@@ -112,7 +104,7 @@ describe("PreferencesAndPrograms", () => {
             },
           }}
         >
-          <FormComponent values={{ ...formDefaults }}>
+          <FormProviderWrapper values={{ ...formDefaults }}>
             <PreferencesAndPrograms
               preferences={mockPreferences}
               programs={[]}
@@ -122,7 +114,7 @@ describe("PreferencesAndPrograms", () => {
               swapCommunityTypeWithPrograms={false}
               jurisdiction={"jurisdiction1"}
             />
-          </FormComponent>
+          </FormProviderWrapper>
         </AuthContext.Provider>
       )
 
@@ -172,7 +164,7 @@ describe("PreferencesAndPrograms", () => {
             },
           }}
         >
-          <FormComponent values={{ ...formDefaults }}>
+          <FormProviderWrapper values={{ ...formDefaults }}>
             <PreferencesAndPrograms
               preferences={[]}
               programs={[]}
@@ -182,7 +174,7 @@ describe("PreferencesAndPrograms", () => {
               swapCommunityTypeWithPrograms={false}
               jurisdiction={"jurisdiction1"}
             />
-          </FormComponent>
+          </FormProviderWrapper>
         </AuthContext.Provider>
       )
 
@@ -231,7 +223,7 @@ describe("PreferencesAndPrograms", () => {
               },
             }}
           >
-            <FormComponent values={{ ...formDefaults }}>
+            <FormProviderWrapper values={{ ...formDefaults }}>
               <PreferencesAndPrograms
                 preferences={[]}
                 setPreferences={setFn}
@@ -241,7 +233,7 @@ describe("PreferencesAndPrograms", () => {
                 swapCommunityTypeWithPrograms={false}
                 jurisdiction={"jurisdiction1"}
               />
-            </FormComponent>
+            </FormProviderWrapper>
           </AuthContext.Provider>
         )
 
@@ -278,7 +270,7 @@ describe("PreferencesAndPrograms", () => {
               },
             }}
           >
-            <FormComponent values={{ ...formDefaults }}>
+            <FormProviderWrapper values={{ ...formDefaults }}>
               <PreferencesAndPrograms
                 preferences={[]}
                 setPreferences={setFn}
@@ -288,7 +280,7 @@ describe("PreferencesAndPrograms", () => {
                 swapCommunityTypeWithPrograms={true}
                 jurisdiction={"jurisdiction1"}
               />
-            </FormComponent>
+            </FormProviderWrapper>
           </AuthContext.Provider>
         )
 

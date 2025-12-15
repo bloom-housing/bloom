@@ -23,7 +23,7 @@ import {
   YesNoEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import ManageIconSection from "./ManageIconSection"
-import { DrawerType } from "../../pages/settings/index"
+import { DrawerType } from "../../pages/settings/preferences"
 import SectionWithGrid from "../shared/SectionWithGrid"
 import s from "./PreferenceDrawer.module.scss"
 import { useMapLayersList } from "../../lib/hooks"

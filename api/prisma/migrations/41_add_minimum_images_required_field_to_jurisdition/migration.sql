@@ -1,0 +1,1 @@
+ALTER TABLE "jurisdictions" ADD COLUMN     "minimum_listing_publish_images_required" INTEGER DEFAULT 1;

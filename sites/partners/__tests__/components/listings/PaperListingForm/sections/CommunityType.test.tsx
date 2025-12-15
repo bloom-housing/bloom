@@ -1,21 +1,11 @@
 import React from "react"
 import { rest } from "msw"
 import { setupServer } from "msw/node"
-import { FormProvider, useForm } from "react-hook-form"
 import { screen } from "@testing-library/react"
 import CommunityType from "../../../../../src/components/listings/PaperListingForm/sections/CommunityType"
-import { formDefaults, FormListing } from "../../../../../src/lib/listings/formTypes"
-import { mockNextRouter, render } from "../../../../testUtils"
+import { FormProviderWrapper, mockNextRouter, render } from "../../../../testUtils"
 import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import userEvent from "@testing-library/user-event"
-
-const FormComponent = ({ children, values }: { values?: FormListing; children }) => {
-  const formMethods = useForm<FormListing>({
-    defaultValues: { ...formDefaults, ...values },
-    shouldUnregister: false,
-  })
-  return <FormProvider {...formMethods}>{children}</FormProvider>
-}
 
 const reservedCommunityTypes = [
   {
@@ -87,9 +77,9 @@ describe("CommunityType", () => {
     )
 
     render(
-      <FormComponent>
+      <FormProviderWrapper>
         <CommunityType requiredFields={[]} swapCommunityTypeWithPrograms={false} />
-      </FormComponent>
+      </FormProviderWrapper>
     )
 
     // verify that the page has loaded as well as the community types
@@ -134,9 +124,9 @@ describe("CommunityType", () => {
     )
 
     render(
-      <FormComponent>
+      <FormProviderWrapper>
         <CommunityType requiredFields={[]} swapCommunityTypeWithPrograms={false} />
-      </FormComponent>
+      </FormProviderWrapper>
     )
 
     // verify that the page has loaded as well as the community types
@@ -173,9 +163,9 @@ describe("CommunityType", () => {
     document.cookie = "access-token-available=True"
 
     const results = render(
-      <FormComponent>
+      <FormProviderWrapper>
         <CommunityType requiredFields={[]} swapCommunityTypeWithPrograms={true} />
-      </FormComponent>
+      </FormProviderWrapper>
     )
 
     expect(results.queryAllByRole("heading", { level: 2, name: "Community type" })).toHaveLength(0)

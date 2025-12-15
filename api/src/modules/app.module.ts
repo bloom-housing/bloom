@@ -23,6 +23,7 @@ import { ThrottleGuard } from '../guards/throttler.guard';
 import { ScriptRunnerModule } from './script-runner.module';
 import { LotteryModule } from './lottery.module';
 import { FeatureFlagModule } from './feature-flag.module';
+import { CronJobModule } from './cron-job.module';
 import { PropertyModule } from './property.module';
 
 @Module({
@@ -45,6 +46,7 @@ import { PropertyModule } from './property.module';
     ScriptRunnerModule,
     LotteryModule,
     FeatureFlagModule,
+    CronJobModule,
     PropertyModule,
     ThrottlerModule.forRoot([
       {
