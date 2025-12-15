@@ -1071,7 +1071,12 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
       ...[
         {
           path: 'leasingAgentName',
-          label: 'Leasing Agent Name',
+          label: doAnyJurisdictionHaveFeatureFlagSet(
+            user.jurisdictions,
+            FeatureFlagEnum.enableLeasingAgentAltText,
+          )
+            ? 'Leasing agent or property manager name'
+            : 'Leasing Agent Name',
         },
         {
           path: 'leasingAgentEmail',
