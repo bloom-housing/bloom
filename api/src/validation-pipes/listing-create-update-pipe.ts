@@ -46,10 +46,13 @@ export class ListingCreateUpdateValidationPipe extends ValidationPipe {
       });
     }
 
-    // Get jurisdiction's required fields
+    // Get jurisdiction's listing configuration fields
     const jurisdiction = await this.prisma.jurisdictions.findFirst({
       where: { id: value.jurisdictions.id },
-      select: { requiredListingFields: true },
+      select: {
+        requiredListingFields: true,
+        minimumListingPublishImagesRequired: true,
+      },
     });
 
     // Use jurisdiction's required fields, falling back to defaults if none specified
@@ -57,12 +60,16 @@ export class ListingCreateUpdateValidationPipe extends ValidationPipe {
       ? jurisdiction.requiredListingFields
       : this.defaultRequiredFields;
 
+    const minimumImagesRequired =
+      jurisdiction?.minimumListingPublishImagesRequired || 0;
+
     // Add required fields to the value being validated
     const transformedValue = {
       ...value,
       units: value.units || [],
       unitGroups: value.unitGroups || [],
       requiredFields,
+      minimumImagesRequired,
     };
 
     // Transform using the appropriate DTO with validation groups

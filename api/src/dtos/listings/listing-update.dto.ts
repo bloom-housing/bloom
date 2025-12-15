@@ -1,11 +1,6 @@
 import { ApiPropertyOptional, OmitType } from '@nestjs/swagger';
 import { Expose, Type } from 'class-transformer';
-import {
-  ArrayMaxSize,
-  ArrayMinSize,
-  Validate,
-  ValidateNested,
-} from 'class-validator';
+import { ArrayMaxSize, Validate, ValidateNested } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 import { IdDTO } from '../shared/id.dto';
@@ -26,6 +21,7 @@ import {
   ValidateAtLeastOneUnit,
   ValidateOnlyUnitsOrUnitGroups,
 } from '../../decorators/validate-units-required.decorator';
+import { ValidateListingImages } from '../../decorators/validate-listing-images.decorator';
 
 export class ListingUpdate extends OmitType(Listing, [
   // fields get their type changed
@@ -43,6 +39,8 @@ export class ListingUpdate extends OmitType(Listing, [
   'listingsLeasingAgentAddress',
   'listingsBuildingAddress',
   'listingsBuildingSelectionCriteriaFile',
+  'listingsMarketingFlyerFile',
+  'listingsAccessibleMarketingFlyerFile',
   'listingEvents',
   'listingFeatures',
   'listingUtilities',
@@ -132,7 +130,7 @@ export class ListingUpdate extends OmitType(Listing, [
   })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => ListingImageCreate)
-  @ArrayMinSize(1, { groups: [ValidationsGroupsEnum.default] })
+  @ValidateListingImages({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional({ type: ListingImageCreate, isArray: true })
   listingImages?: ListingImageCreate[];
 
@@ -189,6 +187,24 @@ export class ListingUpdate extends OmitType(Listing, [
   @Type(() => AssetCreate)
   @ApiPropertyOptional({ type: AssetCreate })
   listingsBuildingSelectionCriteriaFile?: AssetCreate;
+
+  @Expose()
+  @ValidateListingPublish('listingsMarketingFlyerFile', {
+    groups: [ValidationsGroupsEnum.default],
+  })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => AssetCreate)
+  @ApiPropertyOptional({ type: AssetCreate })
+  listingsMarketingFlyerFile?: AssetCreate;
+
+  @Expose()
+  @ValidateListingPublish('listingsAccessibleMarketingFlyerFile', {
+    groups: [ValidationsGroupsEnum.default],
+  })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => AssetCreate)
+  @ApiPropertyOptional({ type: AssetCreate })
+  listingsAccessibleMarketingFlyerFile?: AssetCreate;
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })

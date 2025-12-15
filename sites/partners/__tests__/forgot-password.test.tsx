@@ -26,7 +26,13 @@ describe("forgot-password", () => {
 
     const { getByText, getByLabelText } = render(<ForgotPassword />)
 
-    expect(getByText("Send email", { selector: "h1" }))
+    expect(getByText("Enter your email to get a password reset link", { selector: "h1" }))
+    expect(
+      getByText(
+        "Please enter your email address so we can send you a password reset link. If you don’t receive an email, you may not have an account.",
+        { selector: "p" }
+      )
+    )
     expect(getByLabelText("Email"))
     expect(getByText("Send email", { selector: "button" }))
     expect(getByText("Cancel"))
