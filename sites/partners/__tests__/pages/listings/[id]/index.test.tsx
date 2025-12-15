@@ -1,7 +1,7 @@
 /* eslint-disable import/no-named-as-default */
 import React from "react"
 import { setupServer } from "msw/lib/node"
-import { fireEvent, mockNextRouter, render, screen, within } from "../../../testUtils"
+import { fireEvent, mockNextRouter, queryByText, render, screen, within } from "../../../testUtils"
 import { ListingContext } from "../../../../src/components/listings/ListingContext"
 import { jurisdiction, listing, user } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import DetailListingData from "../../../../src/components/listings/PaperListingDetails/sections/DetailListingData"
@@ -78,22 +78,33 @@ afterAll(() => {
 
 function mockJurisdictionsHaveFeatureFlagOn(
   featureFlag: string,
-  enableHomeType = true,
-  enableSection8Question = true,
-  enableUnitGroups = false,
-  enableIsVerified = true
+  overrides?: {
+    enableHomeType?: boolean
+    enableSection8Question?: boolean
+    enableUnitGroups?: boolean
+    enableIsVerified?: boolean
+    enableMarketingStatus?: boolean
+    enableAccessibilityFeatures?: boolean
+    enableRegions?: boolean
+  }
 ) {
   switch (featureFlag) {
     case FeatureFlagEnum.enableHomeType:
-      return enableHomeType
+      return overrides?.enableHomeType ?? true
     case FeatureFlagEnum.enableSection8Question:
-      return enableSection8Question
+      return overrides?.enableSection8Question ?? true
     case FeatureFlagEnum.enableUnitGroups:
-      return enableUnitGroups
+      return overrides?.enableUnitGroups ?? false
     case FeatureFlagEnum.enableIsVerified:
-      return enableIsVerified
+      return overrides?.enableIsVerified ?? true
+    case FeatureFlagEnum.enableMarketingStatus:
+      return overrides?.enableMarketingStatus ?? false
+    case FeatureFlagEnum.enableAccessibilityFeatures:
+      return overrides?.enableAccessibilityFeatures ?? true
+    case FeatureFlagEnum.enableRegions:
+      return overrides?.enableRegions ?? true
     default:
-      return true
+      return false
   }
 }
 
@@ -297,7 +308,7 @@ describe("listing data", () => {
       })
     })
 
-    describe("should display Listing Photo section", () => {
+    describe("should display Listing Photos section", () => {
       it("should display section with missing data", () => {
         render(
           <ListingContext.Provider
@@ -310,7 +321,7 @@ describe("listing data", () => {
           </ListingContext.Provider>
         )
 
-        expect(screen.getByText("Listing photo")).toBeInTheDocument()
+        expect(screen.getByText("Listing photos")).toBeInTheDocument()
         expect(screen.getByText("None")).toBeInTheDocument()
         expect(screen.queryByText("Preview")).not.toBeInTheDocument()
         expect(screen.queryByText("Primary")).not.toBeInTheDocument()
@@ -349,15 +360,13 @@ describe("listing data", () => {
           </ListingContext.Provider>
         )
 
-        expect(screen.getByText("Listing photo", { selector: "h2" })).toBeInTheDocument()
+        expect(screen.getByText("Listing photos", { selector: "h2" })).toBeInTheDocument()
         expect(screen.getByText("Preview")).toBeInTheDocument()
-        expect(screen.getByText("Primary")).toBeInTheDocument()
-        expect(screen.getByText("Primary photo")).toBeInTheDocument()
         const listingImages = screen.getAllByRole("img")
         expect(listingImages).toHaveLength(2)
         listingImages.forEach((imageElement) => {
           expect(imageElement).toHaveAttribute("src", "asset_file_id")
-          expect(imageElement).toHaveAttribute("alt", "Listing photo")
+          expect(imageElement).toHaveAttribute("alt", "Listing photos")
         })
       })
     })
@@ -1563,7 +1572,8 @@ describe("listing data", () => {
           <AuthContext.Provider
             value={{
               profile: { ...user, jurisdictions: [], listings: [] },
-              doJurisdictionsHaveFeatureFlagOn: () => true,
+              doJurisdictionsHaveFeatureFlagOn: (featureFlag: FeatureFlagEnum) =>
+                featureFlag !== FeatureFlagEnum.enableReferralQuestionUnits,
             }}
           >
             <ListingContext.Provider
@@ -1739,15 +1749,23 @@ describe("listing data", () => {
     describe("should display Application Dates section", () => {
       it("should display section with mising data", () => {
         render(
-          <ListingContext.Provider
+          <AuthContext.Provider
             value={{
-              ...listing,
-              applicationDueDate: undefined,
-              listingEvents: [],
+              profile: { ...user, jurisdictions: [], listings: [] },
+              doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
+                featureFlag === FeatureFlagEnum.enableMarketingFlyer,
             }}
           >
-            <DetailApplicationDates />
-          </ListingContext.Provider>
+            <ListingContext.Provider
+              value={{
+                ...listing,
+                applicationDueDate: undefined,
+                listingEvents: [],
+              }}
+            >
+              <DetailApplicationDates />
+            </ListingContext.Provider>
+          </AuthContext.Provider>
         )
 
         expect(screen.getByText("Application dates")).toBeInTheDocument()
@@ -1762,31 +1780,59 @@ describe("listing data", () => {
         expect(screen.queryByText("URL")).not.toBeInTheDocument()
         expect(screen.queryByText("Open house notes")).not.toBeInTheDocument()
         expect(screen.queryByText("Done")).not.toBeInTheDocument()
+        expect(screen.queryByText("Marketing flyer")).not.toBeInTheDocument()
+        expect(screen.queryByText("Preview")).not.toBeInTheDocument()
+        expect(screen.queryByText("File name")).not.toBeInTheDocument()
+        expect(screen.queryByText("Accessible marketing flyer")).not.toBeInTheDocument()
       })
 
       it("should display all the Application Dates data", () => {
         render(
-          <ListingContext.Provider
+          <AuthContext.Provider
             value={{
-              ...listing,
-              applicationDueDate: new Date(2024, 11, 20, 15, 30),
-              listingEvents: [
-                {
-                  id: "event_id_1",
-                  createdAt: new Date(),
-                  updatedAt: new Date(),
-                  type: ListingEventsTypeEnum.openHouse,
-                  startDate: new Date(2024, 1, 18, 10, 30),
-                  startTime: new Date(2024, 1, 18, 10, 30),
-                  endTime: new Date(2024, 1, 18, 12, 15),
-                  url: "http://test.url.com",
-                  note: "Test lottery note",
-                },
-              ],
+              profile: { ...user, jurisdictions: [], listings: [] },
+              doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
+                featureFlag === FeatureFlagEnum.enableMarketingFlyer,
             }}
           >
-            <DetailApplicationDates />
-          </ListingContext.Provider>
+            <ListingContext.Provider
+              value={{
+                ...listing,
+                applicationDueDate: new Date(2024, 11, 20, 15, 30),
+                listingEvents: [
+                  {
+                    id: "event_id_1",
+                    createdAt: new Date(),
+                    updatedAt: new Date(),
+                    type: ListingEventsTypeEnum.openHouse,
+                    startDate: new Date(2024, 1, 18, 10, 30),
+                    startTime: new Date(2024, 1, 18, 10, 30),
+                    endTime: new Date(2024, 1, 18, 12, 15),
+                    url: "http://test.url.com",
+                    note: "Test lottery note",
+                  },
+                ],
+                marketingFlyer: "http://test.url.com",
+                listingsMarketingFlyerFile: {
+                  id: "file_id",
+                  createdAt: new Date(),
+                  updatedAt: new Date(),
+                  fileId: "file_id",
+                  label: "test_file",
+                },
+                accessibleMarketingFlyer: "http://test.url.com",
+                listingsAccessibleMarketingFlyerFile: {
+                  id: "file_id_2",
+                  createdAt: new Date(),
+                  updatedAt: new Date(),
+                  fileId: "file_id_2",
+                  label: "test_file_2",
+                },
+              }}
+            >
+              <DetailApplicationDates />
+            </ListingContext.Provider>
+          </AuthContext.Provider>
         )
 
         expect(screen.getByText("Application dates")).toBeInTheDocument()
@@ -1808,6 +1854,12 @@ describe("listing data", () => {
         expect(urlButton).toHaveAttribute("href", "http://test.url.com")
 
         expect(screen.getByText("View")).toBeInTheDocument()
+        expect(screen.getByText("Marketing flyer")).toBeInTheDocument()
+        expect(screen.getAllByText("Preview")).toHaveLength(2)
+        expect(screen.getAllByText("File name")).toHaveLength(2)
+        expect(screen.getByText("file_id.pdf")).toBeInTheDocument()
+        expect(screen.getByText("Accessible marketing flyer")).toBeInTheDocument()
+        expect(screen.getByText("file_id_2.pdf")).toBeInTheDocument()
       })
     })
 
@@ -1818,7 +1870,12 @@ describe("listing data", () => {
             value={{
               profile: { ...user, jurisdictions: [], listings: [] },
               doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
-                mockJurisdictionsHaveFeatureFlagOn(featureFlag, true, true, false, false),
+                mockJurisdictionsHaveFeatureFlagOn(featureFlag, {
+                  enableHomeType: true,
+                  enableSection8Question: true,
+                  enableUnitGroups: false,
+                  enableIsVerified: false,
+                }),
             }}
           >
             <ListingContext.Provider
@@ -2235,5 +2292,72 @@ describe("listing data", () => {
 
     unitDrawerHeader = screen.queryByText("Unit", { selector: "h1" })
     expect(unitDrawerHeader).not.toBeInTheDocument()
+  })
+
+  it("should display correct nav links on non-lottery", async () => {
+    window.URL.createObjectURL = jest.fn()
+    document.cookie = "access-token-available=True"
+    render(
+      <AuthContext.Provider
+        value={{
+          profile: {
+            ...user,
+            listings: [],
+            jurisdictions: [jurisdiction],
+          },
+          doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
+            mockJurisdictionsHaveFeatureFlagOn(featureFlag),
+        }}
+      >
+        <ListingDetail listing={listing} />
+      </AuthContext.Provider>
+    )
+
+    const secondaryNavigation = await screen.findByRole("navigation", {
+      name: "Secondary navigation",
+    })
+    expect(secondaryNavigation).toBeInTheDocument()
+    expect(within(secondaryNavigation).getByRole("link", { name: "Listing" })).toBeInTheDocument()
+    expect(
+      within(secondaryNavigation).getByRole("link", { name: "Applications" })
+    ).toBeInTheDocument()
+    expect(within(secondaryNavigation).queryAllByRole("link", { name: "Lottery" })).toHaveLength(0)
+  })
+
+  it("should display correct nav links for lottery", async () => {
+    window.URL.createObjectURL = jest.fn()
+    document.cookie = "access-token-available=True"
+    render(
+      <AuthContext.Provider
+        value={{
+          profile: {
+            ...user,
+            listings: [],
+            jurisdictions: [jurisdiction],
+          },
+          doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
+            mockJurisdictionsHaveFeatureFlagOn(featureFlag),
+        }}
+      >
+        <ListingDetail
+          listing={{
+            ...listing,
+            reviewOrderType: ReviewOrderTypeEnum.waitlistLottery,
+            lotteryOptIn: true,
+            status: ListingsStatusEnum.closed,
+          }}
+        />
+      </AuthContext.Provider>
+    )
+
+    const secondaryNavigation = await screen.findByRole("navigation", {
+      name: "Secondary navigation",
+    })
+    expect(secondaryNavigation).toBeInTheDocument()
+    expect(within(secondaryNavigation).getByRole("link", { name: "Listing" })).toBeInTheDocument()
+    expect(
+      within(secondaryNavigation).getByRole("link", { name: "Applications" })
+    ).toBeInTheDocument()
+    expect(within(secondaryNavigation).getByRole("link", { name: "Lottery" })).toBeInTheDocument()
   })
 })
