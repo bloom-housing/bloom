@@ -42,17 +42,17 @@ export class PropertyService {
       }
     }
 
-    const properitesRaw = await this.prisma.properties.findMany({
+    const propertiesRaw = await this.prisma.properties.findMany({
       skip: calculateSkip(params.limit, page),
       take: calculateTake(params.limit),
       where: whereClause,
     });
 
-    const properites = mapTo(Property, properitesRaw);
+    const properties = mapTo(Property, propertiesRaw);
 
     return {
-      items: properites,
-      meta: buildPaginationMetaInfo(params, count, properites.length),
+      items: properties,
+      meta: buildPaginationMetaInfo(params, count, properties.length),
     };
   }
 
