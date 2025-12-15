@@ -267,6 +267,7 @@ const SignIn = (props: SignInProps) => {
       networkError?.error?.response?.data?.message?.includes(NetworkErrorMessage.PasswordOutdated)
     ) {
       setPasswordExpired(true)
+      clearErrors()
     }
   }, [networkError])
 
