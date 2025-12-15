@@ -31,6 +31,11 @@ const DetailBuildingFeatures = () => {
     listing.jurisdictions.id
   )
 
+  const enableSmokingPolicyRadio = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableSmokingPolicyRadio,
+    listing.jurisdictions.id
+  )
+
   return (
     <SectionWithGrid heading={t("listings.sections.buildingFeaturesTitle")} inset>
       <Grid.Row>
@@ -60,7 +65,9 @@ const DetailBuildingFeatures = () => {
       <Grid.Row>
         <Grid.Cell>
           <FieldValue id="smokingPolicy" label={t("t.smokingPolicy")}>
-            {getDetailFieldString(listing.smokingPolicy)}
+            {enableSmokingPolicyRadio
+              ? listing.smokingPolicy || t("listings.smokingPolicyOptions.unknown")
+              : getDetailFieldString(listing.smokingPolicy)}
           </FieldValue>
         </Grid.Cell>
       </Grid.Row>

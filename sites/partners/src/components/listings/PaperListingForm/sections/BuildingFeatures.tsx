@@ -5,11 +5,12 @@ import { Grid } from "@bloom-housing/ui-seeds"
 import { listingFeatures } from "@bloom-housing/shared-helpers"
 import { ListingFeatures } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
-import { defaultFieldProps } from "../../../../lib/helpers"
+import { defaultFieldProps, getLabel } from "../../../../lib/helpers"
 import styles from "../ListingForm.module.scss"
 
 type BuildingFeaturesProps = {
   enableAccessibilityFeatures?: boolean
+  enableSmokingPolicyRadio?: boolean
   existingFeatures: ListingFeatures
   requiredFields: string[]
 }
@@ -18,7 +19,7 @@ const BuildingFeatures = (props: BuildingFeaturesProps) => {
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, setValue, errors, clearErrors } = formMethods
+  const { register, setValue, errors, clearErrors, getValues } = formMethods
 
   const featureOptions = useMemo(() => {
     return listingFeatures.map((item) => ({
@@ -92,19 +93,52 @@ const BuildingFeatures = (props: BuildingFeaturesProps) => {
             />
           </Grid.Cell>
           <Grid.Cell>
-            <Textarea
-              fullWidth={true}
-              placeholder={""}
-              register={register}
-              maxLength={600}
-              {...defaultFieldProps(
-                "smokingPolicy",
-                t("t.smokingPolicy"),
-                props.requiredFields,
-                errors,
-                clearErrors
-              )}
-            />
+            {props.enableSmokingPolicyRadio ? (
+              <FieldGroup
+                type="radio"
+                name="smokingPolicy"
+                groupLabel={getLabel("smokingPolicy", props.requiredFields, t("t.smokingPolicy"))}
+                register={register}
+                fields={[
+                  {
+                    id: "smokingPolicyNoSmokingAllowed",
+                    dataTestId: "smokingPolicy.noSmokingAllowed",
+                    label: t("listings.smokingPolicyOptions.noSmokingAllowed"),
+                    value: "No smoking allowed",
+                  },
+                  {
+                    id: "smokingPolicySmokingAllowed",
+                    dataTestId: "smokingPolicy.smokingAllowed",
+                    label: t("listings.smokingPolicyOptions.smokingAllowed"),
+                    value: "Smoking allowed",
+                  },
+                  {
+                    id: "smokingPolicyUnknown",
+                    dataTestId: "smokingPolicy.unknown",
+                    label: t("listings.smokingPolicyOptions.unknown"),
+                    value: "",
+                    inputProps: {
+                      //without it empty value is overwritten by id
+                      defaultValue: "",
+                    },
+                  },
+                ]}
+              />
+            ) : (
+              <Textarea
+                fullWidth={true}
+                placeholder={""}
+                register={register}
+                maxLength={600}
+                {...defaultFieldProps(
+                  "smokingPolicy",
+                  t("t.smokingPolicy"),
+                  props.requiredFields,
+                  errors,
+                  clearErrors
+                )}
+              />
+            )}
           </Grid.Cell>
         </Grid.Row>
         <Grid.Row>
