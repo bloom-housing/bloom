@@ -879,6 +879,8 @@
   "listings.unit.accessibilityType.Visual": "Pangitain",
   "listings.unit.accessibilityType": "Uri ng pagiging naa-access",
   "listings.unit.sharedBathroom": "Ibinahagi",
+  "listings.unit.showLessUnits": "Magpakita ng mas kaunting %{type} unit",
+  "listings.unit.showMoreUnits": "Magpakita ng higit pang %{type} unit",
   "listings.unitsAreFor": "Ang mga unit na ito ay para sa %{type}.",
   "listings.unitsHaveAccessibilityFeaturesFor": "Ang mga unit na ito ay may mga feature ng accessibility para sa mga taong may %{type}.",
   "listings.unitsSummary.notAvailable": "Hindi available",

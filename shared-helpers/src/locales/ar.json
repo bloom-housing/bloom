@@ -879,6 +879,8 @@
   "listings.unit.accessibilityType.Visual": "رؤية",
   "listings.unit.accessibilityType": "نوع إمكانية الوصول",
   "listings.unit.sharedBathroom": "مشترك",
+  "listings.unit.showLessUnits": "إظهار عدد أقل من الوحدات %{type}",
+  "listings.unit.showMoreUnits": "عرض المزيد من الوحدات %{type}",
   "listings.unitsAreFor": "هذه الوحدات خاصة بـ %{type}.",
   "listings.unitsHaveAccessibilityFeaturesFor": "تحتوي هذه الوحدات على ميزات إمكانية الوصول للأشخاص الذين لديهم %{type}.",
   "listings.unitsSummary.notAvailable": "غير متوفر",
