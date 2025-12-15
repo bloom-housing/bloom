@@ -68,7 +68,7 @@ export class PropertyService {
 
     if (!propertyRaw) {
       throw new NotFoundException(
-        `property with id ${propertyId} was requested but not found `,
+        `property with id ${propertyId} was requested but not found`,
       );
     }
 

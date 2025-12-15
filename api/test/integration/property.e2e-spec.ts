@@ -115,6 +115,36 @@ describe('Properties Controller Tests', () => {
     });
   });
 
+  describe('get endpoint', () => {
+    it('should throw error when invalid property id is given', async () => {
+      const propertyId = randomUUID();
+      const res = await request(app.getHttpServer())
+        .get(`/properties/${propertyId}`)
+        .expect(404);
+
+      expect(res.body.message).toBe(
+        `property with id ${propertyId} was requested but not found`,
+      );
+    });
+
+    it.skip('should return property by id', async () => {
+      let res = await request(app.getHttpServer())
+        .get('/properties?limit=1')
+        .expect(200);
+
+      expect(res.body.items).toHaveLength(1);
+
+      // eslint-disable-next-line
+      const { id, createdAt, updatedAt, ...expectedData } = res.body.items[0];
+
+      res = await request(app.getHttpServer())
+        .get(`/properties/${id}`)
+        .expect(200);
+
+      expect(res.body).toEqual(expect.objectContaining(expectedData));
+    });
+  });
+
   describe('create endpoint', () => {
     it('should fail on empty request body', async () => {
       const res = await request(app.getHttpServer())
