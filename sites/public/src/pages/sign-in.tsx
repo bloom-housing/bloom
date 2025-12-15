@@ -251,6 +251,11 @@ const SignIn = (props: SignInProps) => {
     if (confirmationStatusMessage) return confirmationStatusMessage?.message
 
     // show default sign-in form network status
+    if (
+      networkError?.error?.response?.data?.message?.includes(NetworkErrorMessage.PasswordOutdated)
+    ) {
+      return undefined
+    }
     return networkError
   })()
 
@@ -267,7 +272,6 @@ const SignIn = (props: SignInProps) => {
       networkError?.error?.response?.data?.message?.includes(NetworkErrorMessage.PasswordOutdated)
     ) {
       setPasswordExpired(true)
-      clearErrors()
     }
   }, [networkError])
 
