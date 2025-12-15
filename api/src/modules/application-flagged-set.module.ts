@@ -4,9 +4,10 @@ import { ApplicationFlaggedSetController } from '../controllers/application-flag
 import { ApplicationFlaggedSetService } from '../services/application-flagged-set.service';
 import { PrismaModule } from './prisma.module';
 import { PermissionModule } from './permission.module';
+import { CronJobModule } from './cron-job.module';
 
 @Module({
-  imports: [PrismaModule, PermissionModule],
+  imports: [PrismaModule, PermissionModule, CronJobModule],
   controllers: [ApplicationFlaggedSetController],
   providers: [ApplicationFlaggedSetService, Logger, SchedulerRegistry],
   exports: [ApplicationFlaggedSetService],

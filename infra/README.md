@@ -10,47 +10,53 @@ Cloud Native Computing Foundation.
   is a set of resources that are all managed together. Each root module has a state file that
   records the results of the latest apply operation.
 
+   - [bloom_dev](./tofu_root_modules/bloom_dev/README.md): Configures the bloom-dev AWS account.
    - [bloom_dev_deployer_permission_set](./tofu_root_modules/bloom_dev_deployer_permission_set/README.md):
      Configures the bloom-dev-deployer permission set that is assigned on the bloom-dev account.
+
+- [tofu_importable_modules](./tofu_importable_modules): Contains all the Open Tofu importable
+  modules. An importable module is a reusable set of resources configured through input
+  parameters. Root modules import importable modules.
+
+   - [bloom_deployment](./tofu_importable_modules/bloom_deployment/): Configures all the resources
+     needed for a Bloom deployment in a single AWS account.
+
+
 
 ## Infrastructure-as-code mental model
 
 Let's say that you need to deploy Bloom to an AWS account. A straight-forward way of achieving this
 would be to log into the AWS web console and create all the required resources. The downside of this
-approach is that unless you take really good notes, it is a difficult process to replicate. Even if
-you take really good notes, the process might have a lot of steps which are all opportunities for
-making mistakes. Additionally, it is not possible to automate such a process (well, maybe if you
-have one of those neat AIs that can control your browser. But the AI could also make mistakes just
-like a human).
+approach is that unless you take really good notes, it is a difficult process to replicate.
 
 Another approach could be to write a bash script that calls a bunch of AWS CLI commands that create
 the resources. This improves on the web-based approach because all the steps are explicitly written
 down. However, the script only works on a fresh AWS account - if you run it again there will be
 a bunch of errors because the resources will have already been created. If you need to change how
-the account is configured, you need to write more scripts. That reminds me too much of database
-evolutions to seem like an good idea...
+the account is configured, you need to write more scripts.
 
-Enter infrastructure-as-code tools like Open Tofu. I like to think of them as CLI scripting with
-a bunch of functionality already built in. We have `.tf` files that contain [resource
-descriptions](https://opentofu.org/docs/language/resources/) for everything we want to configure. We
-can run the 'script' by running [`tofu apply`](https://opentofu.org/docs/cli/commands/apply/). If
-the AWS account already matches our desired configuration, Tofu gives us a nice message that the
-infrastructure matches the configuration. Otherwise, Tofu presents us with a list of planned changes
-it thinks it needs to make and asks if it should go forward with the plan.
+Enter infrastructure-as-code tools like Terraform and Open Tofu. I like to think of them as CLI
+scripting with a bunch of functionality already built in. `.tf` files contain [resource
+descriptions](https://opentofu.org/docs/language/resources/). Run the 'script' by running [`tofu
+apply`](https://opentofu.org/docs/cli/commands/apply/). If the AWS account already matches the
+desired configuration, Tofu prints a nice message that the infrastructure matches the
+configuration. Otherwise, Tofu presents a list of planned changes it wants to make and asks if it
+should go forward with the plan.
 
-These tools are not magic, however. It is still possible to misconfigure resources and get errors
-from the AWS API. These cases are not always handled gracefully and sometimes require deleting or
-configuring things manually to unbork the tool. Using a infrastructure-as-code still requires manual
-testing and knowledge of the underlying systems you are configuring. It is a heck of a lot better
-than shell scripting, however, at least in my experience :)
-
-_Monologue by Avritt Rohwer_
+It is still possible to misconfigure resources and get errors from the AWS API. These cases are not
+always handled gracefully and sometimes require deleting or configuring things manually to unblock
+the tool. Using a infrastructure-as-code still requires manual testing and knowledge of the
+underlying systems you are configuring. It is a heck of a lot better than shell scripting, however,
+at least in my experience :)
 
 ## Developer setup
 
-1. Install required tools:
-   1. Open Tofu: https://opentofu.org/docs/intro/install/
-   2. AWS CLI: https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
+1. Install required CLI tools:
+   1. bash: `which bash`
+   2. openssl: `which openssl`
+   3. tr: `which tr`
+   4. Open Tofu: https://opentofu.org/docs/intro/install/
+   5. AWS CLI: https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
 
       After installing, edit your `~/.aws/config` file for SSO authentication:
 
@@ -94,34 +100,41 @@ tofu init
 ```
 
 Once the provider dependences have been downloaded, you will not have to run `tofu init` again
-unless you add a provider. In that case, run:
+unless you add a provider.
 
-```bash
-tofu init
-```
-
-To update a required version for a provider, change the version in the relevant `main.tf` file then
-run:
+To update a required version for a provider, change the version then run:
 
 ```bash
 tofu init -upgrade
 ```
 
-Both of these command will download the new dependencies and update the `.terraform.lock.hcl` file in the root module
-directory.
+Both of these commands will download the new dependencies and update the `.terraform.lock.hcl` file
+in the root module directory.
 
 ### Applying changes
 
 1. Open a shell and change directory to the root module.
-2. Run `aws sso login` to authenticate to AWS. After 1 hour, you will need to re-authenticate using
-   the same command.
-3. Edit the `main.tf` file to update the desired configuration.
+2. Run `aws sso login --profile bloom-dev-deployer` to authenticate to AWS.
+3. Edit the `.tf` files.
 4. Run `tofu apply` and review the planned changes. If there are unexpected planned changes, go back
-   to step 1. If all the changes are expected, approve the apply.
+   to step 3. If all the changes are expected, approve the apply.
 5. Inspect the relevant AWS resources via the CLI or the AWS web console
    (Log in via https://d-9067ac8222.awsapps.com/start). If there are unexpected results, go back to
-   step 1. In some cases you may have to manually modify or delete resources directly to 'unstick'
+   step 3. In some cases you may have to manually modify or delete resources directly to 'unstick'
    Open Tofu.
+6. To delete only the resources provisioned by the bloom_deployment module, run `tofu destroy
+   -target=module.bloom_deployment`.
+
+#### Forcing resource recreation
+
+To force Tofu to replace a resource, run `tofu apply -replace=ADDRESS`. For example:
+
+```
+tofu apply -replace=module.bloom_deployment.aws_secretsmanager_secret.api_jwt_signing_key
+```
+
+This is helpful when testing the local-exec provisioner because the provisioner only runs on
+resource creation.
 
 ## AWS setup done manually
 
