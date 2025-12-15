@@ -8,7 +8,7 @@
   "account.application.lottery.applicantList": "Out of %{applicants} applicants on this list",
   "account.application.lottery.next": "The property manager will contact applicants in preference order. They will start with the highest priority preference.  If the property manager contacts you, they will ask you to provide documentation to support what you answered in the application. That documentation could include paystubs, for example. They might also need to gather more information by asking you to complete a supplemental application.",
   "account.application.lottery.nextHeader": "What happens next?",
-  "account.application.lottery.preferences": "Lottery preferences for your application are shown here in priority order. If you do not qualify for any lottery preferences, you will be part of the general lottery category. The general lottery category is the last group processed.",
+  "account.application.lottery.preferences": "Lottery preferences for your application are shown here in priority order. If you do not qualify for any lottery preferences, you will be part of the general lottery category, which is the last group processed. Note you will only see rankings for the preferences that you claimed, but there may be other preferences <a className='lined' href='%{closedListingPageLink}'>for this listing</a>.",
   "account.application.lottery.preferencesButton": "What are lottery preferences?",
   "account.application.lottery.preferencesHeader": "Your lottery preference(s)",
   "account.application.lottery.preferencesMessage": "These results are based on the information you provided in your application. Preference eligibility is subject to change once your information is verified.",
