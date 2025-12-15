@@ -17,6 +17,3 @@ ALTER TABLE "applications" ADD COLUMN     "accessible_unit_waitlist_number" INTE
 ADD COLUMN     "conventional_unit_waitlist_number" INTEGER,
 ADD COLUMN     "manual_lottery_position_number" INTEGER,
 ALTER COLUMN "status" SET DEFAULT 'submitted';
-
--- AlterTable
-ALTER TABLE "jurisdictions" ALTER COLUMN "minimum_listing_publish_images_required" DROP DEFAULT;

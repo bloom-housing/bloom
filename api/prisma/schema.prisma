@@ -393,7 +393,7 @@ model Jurisdictions {
   allowSingleUseCodeLogin             Boolean                     @default(false) @map("allow_single_use_code_login")
   amiChart                            AmiChart[]
   featureFlags                        FeatureFlags[]
-  minimumListingPublishImagesRequired Int?                        @map("minimum_listing_publish_images_required")
+  minimumListingPublishImagesRequired Int?                        @default(1) @map("minimum_listing_publish_images_required")
   multiselectQuestions                MultiselectQuestions[]
   listings                            Listings[]
   reservedCommunityTypes              ReservedCommunityTypes[]
