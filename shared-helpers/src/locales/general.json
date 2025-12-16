@@ -876,6 +876,8 @@
   "listings.unit.accessibilityType.Visual": "Vision",
   "listings.unit.accessibilityType": "Accessibility type",
   "listings.unit.sharedBathroom": "Shared",
+  "listings.unit.showLessUnits": "Show fewer %{type} units",
+  "listings.unit.showMoreUnits": "Show more %{type} units",
   "listings.unitsAreFor": "These units are for %{type}.",
   "listings.unitsHaveAccessibilityFeaturesFor": "These units have accessibility features for people with %{type}.",
   "listings.unitsSummary.notAvailable": "Not available",
