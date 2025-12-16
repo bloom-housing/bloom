@@ -1,16 +1,22 @@
-import React, { useContext } from "react"
+import React, { useContext, useMemo } from "react"
 import { useRouter } from "next/router"
 import Head from "next/head"
-import { t } from "@bloom-housing/ui-components"
+import { AgTable, t, useAgTable } from "@bloom-housing/ui-components"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import TabView from "../../layouts/TabView"
 import Layout from "../../layouts"
 import { NavigationHeader } from "../../components/shared/NavigationHeader"
 import { getSettingsTabs, SettingsIndexEnum } from "../../components/settings/SettingsViewHelpers"
+import { Button } from "@bloom-housing/ui-seeds"
+import { usePropertiesList } from "../../lib/hooks"
+import dayjs from "dayjs"
+import ManageIconSection from "../../components/settings/ManageIconSection"
+import { ColDef, ColGroupDef } from "ag-grid-community"
 
 const SettingsProperties = () => {
   const router = useRouter()
+  const tableOptions = useAgTable()
   const { profile, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
   const enableProperties = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableProperties)
   const atLeastOneJurisdictionEnablesPreferences = !doJurisdictionsHaveFeatureFlagOn(
@@ -23,21 +29,109 @@ const SettingsProperties = () => {
     void router.push("/unauthorized")
   }
 
+  const { data: propertiesData, loading } = usePropertiesList({
+    page: tableOptions.pagination.currentPage,
+    limit: tableOptions.pagination.itemsPerPage,
+    search: tableOptions.filter.filterValue,
+  })
+
+  const columnDefs: (ColDef | ColGroupDef)[] = useMemo(
+    () => [
+      {
+        headerName: t("t.name"),
+        field: "name",
+      },
+      {
+        headerName: t("t.description"),
+        field: "description",
+      },
+      {
+        headerName: t("t.url"),
+        field: "url",
+        cellRendererFramework: ({ value }) => {
+          return (
+            <a href={value} target="_blank">
+              {value}
+            </a>
+          )
+        },
+      },
+      {
+        headerName: t("t.updatedAt"),
+        field: "updatedAt",
+        valueFormatter: ({ value }) => (value ? dayjs(value).format("MM/DD/YYYY") : t("t.none")),
+      },
+      {
+        headerName: t("t.actions"),
+        field: "actions",
+        pinned: "right",
+        flex: 1,
+        resizable: false,
+        maxWidth: 150,
+        cellRendererFramework: ({ data }) => {
+          return (
+            <ManageIconSection
+              onCopy={() => console.log("Copy: ", data.name)}
+              copyTestId={`property-copy-icon: ${data.name}`}
+              onEdit={() => console.log("Copy: ", data.name)}
+              editTestId={`property-edit-icon: ${data.name}`}
+              onDelete={() => console.log("Copy: ", data.name)}
+              deleteTestId={`property-delete-icon: ${data.text}`}
+              align="start"
+            />
+          )
+        },
+      },
+    ],
+    []
+  )
+
   return (
-    <>
-      <Layout>
-        <Head>
-          <title>{`Settings - Properties - ${t("nav.siteTitlePartners")}`}</title>
-        </Head>
-        <NavigationHeader className="relative" title={t("t.settings")} />
-        <TabView
-          hideTabs={!(atLeastOneJurisdictionEnablesPreferences && enableProperties)}
-          tabs={getSettingsTabs(SettingsIndexEnum.properties, router)}
-        >
-          TODO
-        </TabView>
-      </Layout>
-    </>
+    <Layout>
+      <Head>
+        <title>
+          {`${"t.settings"} - ${t("settings.properties")} - ${t("nav.siteTitlePartners")}`}
+        </title>
+      </Head>
+      <NavigationHeader className="relative" title={t("t.settings")} />
+      <TabView
+        hideTabs={!(atLeastOneJurisdictionEnablesPreferences && enableProperties)}
+        tabs={getSettingsTabs(SettingsIndexEnum.properties, router)}
+      >
+        <AgTable
+          id="properties-table"
+          pagination={{
+            perPage: tableOptions.pagination.itemsPerPage,
+            setPerPage: tableOptions.pagination.setItemsPerPage,
+            currentPage: tableOptions.pagination.currentPage,
+            setCurrentPage: tableOptions.pagination.setCurrentPage,
+          }}
+          data={{
+            items: propertiesData?.items,
+            loading: loading,
+            totalItems: propertiesData?.meta.totalItems,
+            totalPages: propertiesData?.meta.totalPages,
+          }}
+          config={{
+            columns: columnDefs,
+            totalItemsLabel: t("properties.total"),
+          }}
+          search={{
+            setSearch: tableOptions.filter.setFilterValue,
+          }}
+          headerContent={
+            <Button
+              size="sm"
+              variant="primary"
+              onClick={() => console.log("TODO: Add property")}
+              id="addListingButton"
+            >
+              {t("properties.add")}
+            </Button>
+          }
+        />
+      </TabView>
+    </Layout>
   )
 }
 

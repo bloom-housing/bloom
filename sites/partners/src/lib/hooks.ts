@@ -53,6 +53,10 @@ type UseListingsDataProps = PaginationProps & {
   view?: ListingViews
 }
 
+type UsePropertiesListProps = PaginationProps & {
+  search?: string
+}
+
 export function useSingleListingData(listingId: string) {
   const { listingsService } = useContext(AuthContext)
   const fetcher = () => listingId && listingsService.retrieve({ id: listingId })
@@ -694,4 +698,31 @@ export function useWatchOnFormNumberFieldsChange(
     return () => clearTimeout(timeoutId)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fieldToTriggerWatch.join(","), fieldValuesToWatch.join(","), trigger])
+}
+
+export function usePropertiesList({ page, limit, search }: UsePropertiesListProps) {
+  const params = { page, limit, search }
+
+  if (search?.length < 3) {
+    delete params.search
+  } else {
+    Object.assign(params, { search })
+  }
+
+  const paramsString = qs.stringify(params)
+
+  const { propertiesService } = useContext(AuthContext)
+
+  const fetcher = () => propertiesService.list(params)
+
+  const cacheKey = `/api/adapter/properties?${paramsString}`
+
+  const { data, error } = useSWR(cacheKey, fetcher)
+
+  return {
+    cacheKey,
+    data,
+    loading: !error && !data,
+    error,
+  }
 }
