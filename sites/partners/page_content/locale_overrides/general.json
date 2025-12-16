@@ -268,6 +268,7 @@
   "listings.areReferralOnlyUnits": "Are there units set aside for referral only?",
   "listings.latitude": "Latitude",
   "listings.leasingAgentAddress": "Leasing agent address",
+  "listings.leasingAgentAddressManagerProp": "Leasing agent or property manager address",
   "listings.listingAvailabilityQuestion": "What is the listing availability?",
   "listings.listingIsAlreadyLive": "This listing is already live. Updates will affect the applicant experience on the housing portal.",
   "listings.listingTypeTile": "What kind of listing is this?",

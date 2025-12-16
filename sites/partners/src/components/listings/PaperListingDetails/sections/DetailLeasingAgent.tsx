@@ -29,6 +29,10 @@ const DetailLeasingAgent = () => {
     ? t("listings.sections.leasingAgentManagerPropTitle")
     : t("listings.sections.leasingAgentTitle")
 
+  const leasingAgentAddressText = enableLeasingAgentAltText
+    ? t("listings.leasingAgentAddressManagerProp")
+    : t("listings.leasingAgentAddress")
+
   return (
     <SectionWithGrid heading={leasingAgentTitleText} inset>
       <Grid.Row>
@@ -78,7 +82,7 @@ const DetailLeasingAgent = () => {
       {getDetailAddress(
         listing.listingsLeasingAgentAddress,
         "leasingAgentAddress",
-        t("listings.leasingAgentAddress")
+        leasingAgentAddressText
       )}
     </SectionWithGrid>
   )
