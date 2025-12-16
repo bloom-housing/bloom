@@ -13,6 +13,7 @@ type LeasingAgentProps = {
   phone?: string
   title?: string
   managementWebsite?: string
+  leasingAgentContactText?: string
 }
 
 export const formatPhone = (phone: string) => {
@@ -27,13 +28,14 @@ export const LeasingAgent = ({
   phone,
   title,
   managementWebsite,
+  leasingAgentContactText,
 }: LeasingAgentProps) => {
   if (!address && !email && !name && !officeHours && !phone && !managementWebsite) return
   return (
     <Card className={`${styles["mobile-full-width-card"]} ${styles["mobile-no-bottom-border"]}`}>
       <Card.Section>
         <Heading size={"lg"} priority={2} className={"seeds-m-be-header"}>
-          {t("leasingAgent.contact")}
+          {leasingAgentContactText}
         </Heading>
         {name && <p className={`${styles["thin-heading"]} seeds-m-be-text`}>{name}</p>}
         {title && <p>{title}</p>}

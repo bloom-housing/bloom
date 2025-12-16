@@ -60,6 +60,7 @@ interface ListingProps {
 export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: ListingProps) => {
   const { userService } = useContext(AuthContext)
   const { addToast } = useContext(MessageContext)
+  const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, watch } = useForm()
@@ -249,6 +250,15 @@ export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: Li
     </>
   )
 
+  const enableLeasingAgentAltText = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableLeasingAgentAltText,
+    listing.jurisdictions.id
+  )
+
+  const leasingAgentContactText = enableLeasingAgentAltText
+    ? t("leasingAgent.contactManagerProp")
+    : t("leasingAgent.contact")
+
   const ApplyBar = (
     <>
       <LotteryResults
@@ -277,6 +287,7 @@ export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: Li
             ? listing.managementWebsite
             : undefined
         }
+        leasingAgentContactText={leasingAgentContactText}
       />
       {ListingUpdatedAt}
     </>

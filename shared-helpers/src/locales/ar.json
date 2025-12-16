@@ -636,6 +636,7 @@
   "languages.vi": "Tiếng Việt",
   "languages.zh": "中文",
   "leasingAgent.contact": "اتصل بوكيل التأجير",
+  "leasingAgent.contactManagerProp": "اتصل بوكيل التأجير أو مدير الممتلكات",
   "leasingAgent.dueToHighCallVolume": "نظرًا لارتفاع حجم المكالمات ، قد تسمع رسالة.",
   "leasingAgent.officeHours": "ساعات العمل",
   "listingFilters.clear": "مسح",
