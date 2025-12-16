@@ -1,0 +1,43 @@
+.map {
+  position: relative;
+  min-height: 12rem;
+}
+
+.map-listing-name {
+  margin-block-end: var(--seeds-spacer-label);
+}
+
+.map-address-popup {
+  background-color: var(--seeds-color-white);
+  padding: var(--seeds-s4);
+  box-shadow: var(--seeds-shadow-md);
+  position: absolute;
+  left: 15px;
+  top: 15px;
+  z-index: 1;
+}
+
+.map-pin {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  border-radius: 50% 50% 50% 0;
+  background: var(--seeds-color-gray-650);
+  transform: rotate(-45deg);
+  left: 50%;
+  top: 50%;
+  margin: -20px 0 0 -20px;
+  animation-name: bounce;
+  animation-fill-mode: both;
+  animation-duration: 1s;
+
+  &:after {
+    position: absolute;
+    border-radius: 9999px;
+    content: "";
+    width: 14px;
+    height: 14px;
+    margin: 8px 0 0 8px;
+    background: var(--seeds-color-gray-900);
+  }
+}
