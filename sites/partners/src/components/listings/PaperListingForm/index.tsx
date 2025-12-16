@@ -459,6 +459,14 @@ const ListingForm = ({
       enableUnitGroups,
     ]
   )
+  const enableLeasingAgentAltText = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableLeasingAgentAltText,
+    listing.jurisdictions.id
+  )
+
+  const leasingAgentNameText = enableLeasingAgentAltText
+    ? t("leasingAgent.ManagerPropName")
+    : t("leasingAgent.name")
 
   return loading === true ? null : (
     <>
@@ -661,6 +669,7 @@ const ListingForm = ({
                               FeatureFlagEnum.enableCompanyWebsite,
                               jurisdictionId
                             )}
+                            leasingAgentName={leasingAgentNameText}
                             requiredFields={requiredFields}
                           />
                           <ApplicationTypes

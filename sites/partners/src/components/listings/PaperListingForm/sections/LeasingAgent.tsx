@@ -15,6 +15,7 @@ import SectionWithGrid from "../../../shared/SectionWithGrid"
 type LeasingAgentProps = {
   enableCompanyWebsite?: boolean
   requiredFields: string[]
+  leasingAgentName?: string
 }
 
 const LeasingAgent = (props: LeasingAgentProps) => {
@@ -60,7 +61,7 @@ const LeasingAgent = (props: LeasingAgentProps) => {
               register={register}
               {...defaultFieldProps(
                 "leasingAgentName",
-                t("leasingAgent.name"),
+                props.leasingAgentName,
                 props.requiredFields,
                 errors,
                 clearErrors

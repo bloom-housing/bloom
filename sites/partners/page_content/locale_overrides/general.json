@@ -163,6 +163,7 @@
   "flags.updateStatus": "Update status",
   "flags.combindationRule": "%{email} - %{name}: Email + Name + DOB",
   "leasingAgent.name": "Leasing agent name",
+  "leasingAgent.ManagerPropName": "Leasing agent or property manager name",
   "leasingAgent.namePlaceholder": "Full name",
   "leasingAgent.officeHoursPlaceholder": "ex: 9:00am - 5:00pm, Monday to Friday",
   "leasingAgent.title": "Leasing agent title",

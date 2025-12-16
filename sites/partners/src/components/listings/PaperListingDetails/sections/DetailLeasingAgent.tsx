@@ -16,11 +16,20 @@ const DetailLeasingAgent = () => {
     listing.jurisdictions.id
   )
 
+  const enableLeasingAgentAltText = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableLeasingAgentAltText,
+    listing.jurisdictions.id
+  )
+
+  const leasingAgentNameText = enableLeasingAgentAltText
+    ? t("leasingAgent.ManagerPropName")
+    : t("leasingAgent.name")
+
   return (
     <SectionWithGrid heading={t("listings.sections.leasingAgentTitle")} inset>
       <Grid.Row>
         <Grid.Cell>
-          <FieldValue id="leasingAgentName" label={t("leasingAgent.name")}>
+          <FieldValue id="leasingAgentName" label={leasingAgentNameText}>
             {getDetailFieldString(listing.leasingAgentName)}
           </FieldValue>
         </Grid.Cell>
