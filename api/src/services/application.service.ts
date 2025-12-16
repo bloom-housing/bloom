@@ -1,3 +1,14 @@
+import crypto from 'crypto';
+import dayjs from 'dayjs';
+import { Request as ExpressRequest } from 'express';
+import {
+  ApplicationSelections,
+  ListingEventsTypeEnum,
+  ListingsStatusEnum,
+  LotteryStatusEnum,
+  Prisma,
+  YesNoEnum,
+} from '@prisma/client';
 import {
   BadRequestException,
   Injectable,
@@ -5,42 +16,36 @@ import {
   ForbiddenException,
   Logger,
   Inject,
+  HttpException,
 } from '@nestjs/common';
-import crypto from 'crypto';
-import dayjs from 'dayjs';
-import { Request as ExpressRequest } from 'express';
-import {
-  ListingEventsTypeEnum,
-  ListingsStatusEnum,
-  LotteryStatusEnum,
-  Prisma,
-  YesNoEnum,
-} from '@prisma/client';
+import { EmailService } from './email.service';
+import { GeocodingService } from './geocoding.service';
+import { PermissionService } from './permission.service';
 import { PrismaService } from './prisma.service';
 import { Application } from '../dtos/applications/application.dto';
-import { mapTo } from '../utilities/mapTo';
+import { ApplicationCreate } from '../dtos/applications/application-create.dto';
 import { ApplicationQueryParams } from '../dtos/applications/application-query-params.dto';
-import { calculateSkip, calculateTake } from '../utilities/pagination-helpers';
-import { buildOrderByForApplications } from '../utilities/build-order-by';
-import { buildPaginationInfo } from '../utilities/build-pagination-meta';
+import ApplicationSelectionCreate from '../dtos/applications/application-selection-create.dto';
+import { ApplicationUpdate } from '../dtos/applications/application-update.dto';
+import { MostRecentApplicationQueryParams } from '../dtos/applications/most-recent-application-query-params.dto';
+import { PaginatedApplicationDto } from '../dtos/applications/paginated-application.dto';
+import { PublicAppsViewQueryParams } from '../dtos/applications/public-apps-view-params.dto';
+import { PublicAppsViewResponse } from '../dtos/applications/public-apps-view-response.dto';
+import { Jurisdiction } from '../dtos/jurisdictions/jurisdiction.dto';
+import Listing from '../dtos/listings/listing.dto';
 import { IdDTO } from '../dtos/shared/id.dto';
 import { SuccessDTO } from '../dtos/shared/success.dto';
-import { ApplicationViews } from '../enums/applications/view-enum';
-import { ApplicationUpdate } from '../dtos/applications/application-update.dto';
-import { ApplicationCreate } from '../dtos/applications/application-create.dto';
-import { PaginatedApplicationDto } from '../dtos/applications/paginated-application.dto';
-import { EmailService } from './email.service';
-import { PermissionService } from './permission.service';
-import Listing from '../dtos/listings/listing.dto';
 import { User } from '../dtos/users/user.dto';
-import { permissionActions } from '../enums/permissions/permission-actions-enum';
-import { GeocodingService } from './geocoding.service';
-import { MostRecentApplicationQueryParams } from '../dtos/applications/most-recent-application-query-params.dto';
-import { PublicAppsViewQueryParams } from '../dtos/applications/public-apps-view-params.dto';
 import { ApplicationsFilterEnum } from '../enums/applications/filter-enum';
-import { PublicAppsViewResponse } from '../dtos/applications/public-apps-view-response.dto';
 import { CronJobService } from './cron-job.service';
-import { DefaultArgs } from '@prisma/client/runtime/library';
+import { ApplicationViews } from '../enums/applications/view-enum';
+import { FeatureFlagEnum } from '../enums/feature-flags/feature-flags-enum';
+import { permissionActions } from '../enums/permissions/permission-actions-enum';
+import { buildOrderByForApplications } from '../utilities/build-order-by';
+import { buildPaginationInfo } from '../utilities/build-pagination-meta';
+import { doJurisdictionHaveFeatureFlagSet } from '../utilities/feature-flag-utilities';
+import { mapTo } from '../utilities/mapTo';
+import { calculateSkip, calculateTake } from '../utilities/pagination-helpers';
 
 export const view: Partial<
   Record<ApplicationViews, Prisma.ApplicationsInclude>
@@ -188,6 +193,30 @@ export const view: Partial<
 
 view.base = {
   ...view.partnerList,
+  applicationSelections: {
+    include: {
+      multiselectQuestion: true,
+      selections: {
+        include: {
+          addressHolderAddress: {
+            select: {
+              id: true,
+              placeName: true,
+              city: true,
+              county: true,
+              state: true,
+              street: true,
+              street2: true,
+              zipCode: true,
+              latitude: true,
+              longitude: true,
+            },
+          },
+          multiselectOption: true,
+        },
+      },
+    },
+  },
   demographics: {
     select: {
       id: true,
@@ -210,6 +239,7 @@ view.base = {
           name: true,
         },
       },
+      listingMultiselectQuestions: true,
     },
   },
   householdMember: {
@@ -273,7 +303,7 @@ view.details = {
 const PII_DELETION_CRON_JOB_NAME = 'PII_DELETION_CRON_STRING';
 
 /*
-  this is the service for applicationss
+  this is the service for applications
   it handles all the backend's business logic for reading/writing/deleting application data
 */
 @Injectable()
@@ -625,18 +655,39 @@ export class ApplicationService {
         id: dto.listings.id,
       },
       include: {
-        jurisdictions: true,
+        jurisdictions: { include: { featureFlags: true } },
+        // address is needed for geocoding
+        listingsBuildingAddress: true,
+        listingMultiselectQuestions: {
+          include: { multiselectQuestions: true },
+        },
         // support unit group availability logic in email
         unitGroups: true,
-        // multiselect questions and address is needed for geocoding
-        listingMultiselectQuestions: {
-          include: {
-            multiselectQuestions: true,
-          },
-        },
-        listingsBuildingAddress: true,
       },
     });
+
+    const enableV2MSQ = doJurisdictionHaveFeatureFlagSet(
+      listing?.jurisdictions as unknown as Jurisdiction,
+      FeatureFlagEnum.enableV2MSQ,
+    );
+
+    if (enableV2MSQ) {
+      const listingMultiselectIds = listing.listingMultiselectQuestions.map(
+        (msq) => {
+          return msq.multiselectQuestionId;
+        },
+      );
+      if (
+        !dto.applicationSelections.every(({ multiselectQuestion }) => {
+          return listingMultiselectIds.includes(multiselectQuestion.id);
+        })
+      ) {
+        throw new BadRequestException(
+          'Application selections contain multiselect question ids not present on the listing',
+        );
+      }
+    }
+
     // if its a public submission
     if (forPublic) {
       // SubmissionDate is time the application was created for public
@@ -679,8 +730,25 @@ export class ApplicationService {
       this.prisma.applications.create({
         data: {
           ...dto,
-          isNewest: !!requestingUser?.id && forPublic,
-          confirmationCode: this.generateConfirmationCode(),
+          accessibility: dto.accessibility
+            ? {
+                create: {
+                  ...dto.accessibility,
+                },
+              }
+            : undefined,
+          alternateContact: dto.alternateContact
+            ? {
+                create: {
+                  ...dto.alternateContact,
+                  address: {
+                    create: {
+                      ...dto.alternateContact.address,
+                    },
+                  },
+                },
+              }
+            : undefined,
           applicant: dto.applicant
             ? {
                 create: {
@@ -710,6 +778,201 @@ export class ApplicationService {
                 },
               }
             : undefined,
+          applicationSelections: undefined,
+          applicationsAlternateAddress: dto.applicationsAlternateAddress
+            ? {
+                create: {
+                  ...dto.applicationsAlternateAddress,
+                },
+              }
+            : undefined,
+          applicationsMailingAddress: dto.applicationsMailingAddress
+            ? {
+                create: {
+                  ...dto.applicationsMailingAddress,
+                },
+              }
+            : undefined,
+          confirmationCode: this.generateConfirmationCode(),
+          demographics: dto.demographics
+            ? {
+                create: {
+                  ...dto.demographics,
+                },
+              }
+            : undefined,
+          expireAfter: expireAfterDate,
+          householdMember: dto.householdMember
+            ? {
+                create: dto.householdMember.map((member) => ({
+                  ...member,
+                  sameAddress: member.sameAddress || YesNoEnum.no,
+                  workInRegion: member.workInRegion || YesNoEnum.no,
+                  householdMemberAddress: {
+                    create: {
+                      ...member.householdMemberAddress,
+                    },
+                  },
+                  householdMemberWorkAddress: {
+                    create: {
+                      ...member.householdMemberWorkAddress,
+                    },
+                  },
+                  firstName: member.firstName?.trim(),
+                  lastName: member.lastName?.trim(),
+                  birthDay: member.birthDay
+                    ? Number(member.birthDay)
+                    : undefined,
+                  birthMonth: member.birthMonth
+                    ? Number(member.birthMonth)
+                    : undefined,
+                  birthYear: member.birthYear
+                    ? Number(member.birthYear)
+                    : undefined,
+                  fullTimeStudent: member.fullTimeStudent,
+                })),
+              }
+            : undefined,
+          isNewest: !!requestingUser?.id && forPublic,
+          listings: dto.listings
+            ? {
+                connect: {
+                  id: dto.listings.id,
+                },
+              }
+            : undefined,
+          preferences: dto.preferences as unknown as Prisma.JsonArray,
+          preferredUnitTypes: dto.preferredUnitTypes
+            ? {
+                connect: dto.preferredUnitTypes.map((unitType) => ({
+                  id: unitType.id,
+                })),
+              }
+            : undefined,
+          programs: dto.programs as unknown as Prisma.JsonArray,
+          userAccounts: requestingUser
+            ? {
+                connect: {
+                  id: requestingUser.id,
+                },
+              }
+            : undefined,
+        },
+        include: view.details,
+      }),
+    );
+
+    const prismaTransactions = await this.prisma.$transaction(transactions);
+    const rawApplication = prismaTransactions[prismaTransactions.length - 1];
+
+    if (!rawApplication) {
+      throw new HttpException('Application failed to save', 500);
+    }
+
+    const rawSelections = [];
+    if (enableV2MSQ) {
+      // Nested CreateManys are not supported by Prisma,
+      // thus we must create the subobjects after creating the application
+      try {
+        for (const selection of dto.applicationSelections) {
+          const rawSelection = await this.createApplicationSelection(
+            selection,
+            rawApplication.id,
+          );
+          rawSelections.push(rawSelection);
+        }
+      } catch (error) {
+        // On error, all associated records should be delete.
+        // Deleting the application will cascade delete the other records
+        await this.prisma.applications.delete({
+          where: { id: rawApplication.id },
+        });
+        throw new BadRequestException(error);
+      }
+    }
+    rawApplication.applicationSelections = rawSelections;
+
+    const mappedApplication = mapTo(Application, rawApplication);
+    if (dto.applicant.emailAddress && forPublic) {
+      this.emailService.applicationConfirmation(
+        mapTo(Listing, listing),
+        mappedApplication,
+        listing.jurisdictions?.publicUrl,
+      );
+    }
+    // Update the lastApplicationUpdateAt to now after every submission
+    await this.updateListingApplicationEditTimestamp(listing.id);
+
+    // Calculate geocoding preferences after save and email sent
+    if (!enableV2MSQ && listing.jurisdictions?.enableGeocodingPreferences) {
+      try {
+        // TODO: Rewrite for V2MSQ
+        void this.geocodingService.validateGeocodingPreferences(
+          mappedApplication,
+          mapTo(Listing, listing),
+        );
+      } catch (e) {
+        // If the geocoding fails it should not prevent the request from completing so
+        // catching all errors here
+        console.warn('error while validating geocoding preferences');
+      }
+    }
+
+    return mappedApplication;
+  }
+
+  /*
+    this will update an application
+    if no application has the id of the incoming argument an error is thrown
+  */
+  async update(
+    dto: ApplicationUpdate,
+    requestingUser: User,
+  ): Promise<Application> {
+    const rawExistingApplication = await this.findOrThrow(
+      dto.id,
+      ApplicationViews.base,
+    );
+
+    await this.authorizeAction(
+      requestingUser,
+      rawExistingApplication.listingId,
+      permissionActions.update,
+    );
+
+    const listing = await this.prisma.listings.findUnique({
+      where: {
+        id: dto.listings.id,
+      },
+      include: {
+        jurisdictions: { include: { featureFlags: true } },
+        listingMultiselectQuestions: {
+          include: { multiselectQuestions: true },
+        },
+      },
+    });
+
+    const transactions = [];
+
+    // All connected household members should be deleted so they can be recreated in the update below.
+    // This solves for all cases of deleted members, updated members, and new members
+    transactions.push(
+      this.prisma.householdMember.deleteMany({
+        where: {
+          applicationId: dto.id,
+        },
+      }),
+    );
+
+    transactions.push(
+      this.prisma.applications.update({
+        where: {
+          id: dto.id,
+        },
+        include: view.details,
+        data: {
+          ...dto,
+          id: undefined,
           accessibility: dto.accessibility
             ? {
                 create: {
@@ -729,6 +992,36 @@ export class ApplicationService {
                 },
               }
             : undefined,
+          applicant: dto.applicant
+            ? {
+                create: {
+                  ...dto.applicant,
+                  applicantAddress: {
+                    create: {
+                      ...dto.applicant.applicantAddress,
+                    },
+                  },
+                  applicantWorkAddress: {
+                    create: {
+                      ...dto.applicant.applicantWorkAddress,
+                    },
+                  },
+                  firstName: dto.applicant.firstName?.trim(),
+                  lastName: dto.applicant.lastName?.trim(),
+                  birthDay: dto.applicant.birthDay
+                    ? Number(dto.applicant.birthDay)
+                    : undefined,
+                  birthMonth: dto.applicant.birthMonth
+                    ? Number(dto.applicant.birthMonth)
+                    : undefined,
+                  birthYear: dto.applicant.birthYear
+                    ? Number(dto.applicant.birthYear)
+                    : undefined,
+                  fullTimeStudent: dto.applicant.fullTimeStudent,
+                },
+              }
+            : undefined,
+          applicationSelections: dto.applicationSelections ? {} : undefined,
           applicationsAlternateAddress: dto.applicationsAlternateAddress
             ? {
                 create: {
@@ -743,25 +1036,11 @@ export class ApplicationService {
                 },
               }
             : undefined,
-          listings: dto.listings
-            ? {
-                connect: {
-                  id: dto.listings.id,
-                },
-              }
-            : undefined,
           demographics: dto.demographics
             ? {
                 create: {
                   ...dto.demographics,
                 },
-              }
-            : undefined,
-          preferredUnitTypes: dto.preferredUnitTypes
-            ? {
-                connect: dto.preferredUnitTypes.map((unitType) => ({
-                  id: unitType.id,
-                })),
               }
             : undefined,
           householdMember: dto.householdMember
@@ -795,217 +1074,39 @@ export class ApplicationService {
                 })),
               }
             : undefined,
-          programs: dto.programs as unknown as Prisma.JsonArray,
-          preferences: dto.preferences as unknown as Prisma.JsonArray,
-          userAccounts: requestingUser
+          listings: dto.listings
             ? {
                 connect: {
-                  id: requestingUser.id,
+                  id: dto.listings.id,
                 },
               }
             : undefined,
-          expireAfter: expireAfterDate,
+          preferredUnitTypes: dto.preferredUnitTypes
+            ? {
+                set: dto.preferredUnitTypes.map((unitType) => ({
+                  id: unitType.id,
+                })),
+              }
+            : undefined,
 
-          // TODO: Temporary until after MSQ refactor
-          applicationSelections: undefined,
+          // TODO: Can be removed after MSQ refactor
+          preferences: dto.preferences as unknown as Prisma.JsonArray,
+          programs: dto.programs as unknown as Prisma.JsonArray,
         },
-        include: view.details,
       }),
     );
 
     const prismaTransactions = await this.prisma.$transaction(transactions);
     const rawApplication = prismaTransactions[prismaTransactions.length - 1];
 
-    const mappedApplication = mapTo(Application, rawApplication);
-    if (dto.applicant.emailAddress && forPublic) {
-      this.emailService.applicationConfirmation(
-        mapTo(Listing, listing),
-        mappedApplication,
-        listing.jurisdictions?.publicUrl,
+    if (!rawApplication) {
+      throw new HttpException(
+        `Application ${rawExistingApplication.id} failed to update`,
+        500,
       );
     }
-    // Update the lastApplicationUpdateAt to now after every submission
-    await this.updateListingApplicationEditTimestamp(listing.id);
 
-    // Calculate geocoding preferences after save and email sent
-    if (listing.jurisdictions?.enableGeocodingPreferences) {
-      try {
-        void this.geocodingService.validateGeocodingPreferences(
-          mappedApplication,
-          mapTo(Listing, listing),
-        );
-      } catch (e) {
-        // If the geocoding fails it should not prevent the request from completing so
-        // catching all errors here
-        console.warn('error while validating geocoding preferences');
-      }
-    }
-
-    return mappedApplication;
-  }
-
-  /*
-    this will update an application
-    if no application has the id of the incoming argument an error is thrown
-  */
-  async update(
-    dto: ApplicationUpdate,
-    requestingUser: User,
-  ): Promise<Application> {
-    const rawApplication = await this.findOrThrow(dto.id);
-
-    await this.authorizeAction(
-      requestingUser,
-      rawApplication.listingId,
-      permissionActions.update,
-    );
-
-    // All connected household members should be deleted so they can be recreated in the update below.
-    // This solves for all cases of deleted members, updated members, and new members
-    await this.prisma.householdMember.deleteMany({
-      where: {
-        applicationId: dto.id,
-      },
-    });
-
-    const res = await this.prisma.applications.update({
-      where: {
-        id: dto.id,
-      },
-      include: view.details,
-      data: {
-        ...dto,
-        id: undefined,
-        applicant: dto.applicant
-          ? {
-              create: {
-                ...dto.applicant,
-                applicantAddress: {
-                  create: {
-                    ...dto.applicant.applicantAddress,
-                  },
-                },
-                applicantWorkAddress: {
-                  create: {
-                    ...dto.applicant.applicantWorkAddress,
-                  },
-                },
-                firstName: dto.applicant.firstName?.trim(),
-                lastName: dto.applicant.lastName?.trim(),
-                birthDay: dto.applicant.birthDay
-                  ? Number(dto.applicant.birthDay)
-                  : undefined,
-                birthMonth: dto.applicant.birthMonth
-                  ? Number(dto.applicant.birthMonth)
-                  : undefined,
-                birthYear: dto.applicant.birthYear
-                  ? Number(dto.applicant.birthYear)
-                  : undefined,
-                fullTimeStudent: dto.applicant.fullTimeStudent,
-              },
-            }
-          : undefined,
-        accessibility: dto.accessibility
-          ? {
-              create: {
-                ...dto.accessibility,
-              },
-            }
-          : undefined,
-        alternateContact: dto.alternateContact
-          ? {
-              create: {
-                ...dto.alternateContact,
-                address: {
-                  create: {
-                    ...dto.alternateContact.address,
-                  },
-                },
-              },
-            }
-          : undefined,
-        applicationsAlternateAddress: dto.applicationsAlternateAddress
-          ? {
-              create: {
-                ...dto.applicationsAlternateAddress,
-              },
-            }
-          : undefined,
-        applicationsMailingAddress: dto.applicationsMailingAddress
-          ? {
-              create: {
-                ...dto.applicationsMailingAddress,
-              },
-            }
-          : undefined,
-        listings: dto.listings
-          ? {
-              connect: {
-                id: dto.listings.id,
-              },
-            }
-          : undefined,
-        demographics: dto.demographics
-          ? {
-              create: {
-                ...dto.demographics,
-              },
-            }
-          : undefined,
-        preferredUnitTypes: dto.preferredUnitTypes
-          ? {
-              set: dto.preferredUnitTypes.map((unitType) => ({
-                id: unitType.id,
-              })),
-            }
-          : undefined,
-        householdMember: dto.householdMember
-          ? {
-              create: dto.householdMember.map((member) => ({
-                ...member,
-                sameAddress: member.sameAddress || YesNoEnum.no,
-                workInRegion: member.workInRegion || YesNoEnum.no,
-                householdMemberAddress: {
-                  create: {
-                    ...member.householdMemberAddress,
-                  },
-                },
-                householdMemberWorkAddress: {
-                  create: {
-                    ...member.householdMemberWorkAddress,
-                  },
-                },
-                firstName: member.firstName?.trim(),
-                lastName: member.lastName?.trim(),
-                birthDay: member.birthDay ? Number(member.birthDay) : undefined,
-                birthMonth: member.birthMonth
-                  ? Number(member.birthMonth)
-                  : undefined,
-                birthYear: member.birthYear
-                  ? Number(member.birthYear)
-                  : undefined,
-                fullTimeStudent: member.fullTimeStudent,
-              })),
-            }
-          : undefined,
-        programs: dto.programs as unknown as Prisma.JsonArray,
-        preferences: dto.preferences as unknown as Prisma.JsonArray,
-
-        // TODO: Temporary until after MSQ refactor
-        applicationSelections: undefined,
-      },
-    });
-
-    const listing = await this.prisma.listings.findFirst({
-      where: { id: dto.listings.id },
-      include: {
-        jurisdictions: true,
-        listingMultiselectQuestions: {
-          include: { multiselectQuestions: true },
-        },
-      },
-    });
-    const application = mapTo(Application, res);
+    const application = mapTo(Application, rawApplication);
 
     // Calculate geocoding preferences after save and email sent
     if (listing?.jurisdictions?.enableGeocodingPreferences) {
@@ -1021,7 +1122,7 @@ export class ApplicationService {
       }
     }
 
-    await this.updateListingApplicationEditTimestamp(res.listingId);
+    await this.updateListingApplicationEditTimestamp(rawApplication.listingId);
     return application;
   }
 
@@ -1056,7 +1157,7 @@ export class ApplicationService {
   }
 
   /*
-    finds the requested listing or throws an error
+    finds the requested application or throws an error
   */
   async findOrThrow(applicationId: string, includeView?: ApplicationViews) {
     const res = await this.prisma.applications.findUnique({
@@ -1303,5 +1404,69 @@ export class ApplicationService {
   */
   generateConfirmationCode(): string {
     return crypto.randomBytes(4).toString('hex').toUpperCase();
+  }
+
+  async createApplicationSelection(
+    selection: ApplicationSelectionCreate,
+    applicationId: string,
+  ): Promise<ApplicationSelections> {
+    const selectedOptions = [];
+
+    for (const selectionOption of selection.selections) {
+      let address;
+      // If an address is passed, create the address for the selection option
+      if (selectionOption.addressHolderAddress) {
+        address = await this.prisma.address.create({
+          data: {
+            ...selectionOption.addressHolderAddress,
+          },
+        });
+      }
+      // Build the create selection option body
+      const selectedOptionBody = {
+        addressHolderAddressId: address?.id,
+        addressHolderName: selectionOption.addressHolderName,
+        addressHolderRelationship: selectionOption.addressHolderRelationship,
+        isGeocodingVerified: selectionOption.isGeocodingVerified,
+        multiselectOptionId: selectionOption.multiselectOption.id,
+      };
+      // Push the selection option to a list for the createMany
+      selectedOptions.push(selectedOptionBody);
+    }
+    // Create the application selection with nested createMany applicationSelectionOptions
+    return await this.prisma.applicationSelections.create({
+      data: {
+        applicationId: applicationId,
+        hasOptedOut: selection.hasOptedOut ?? false,
+        multiselectQuestionId: selection.multiselectQuestion.id,
+        selections: {
+          createMany: {
+            data: selectedOptions,
+          },
+        },
+      },
+      include: {
+        multiselectQuestion: true,
+        selections: {
+          include: {
+            addressHolderAddress: {
+              select: {
+                id: true,
+                placeName: true,
+                city: true,
+                county: true,
+                state: true,
+                street: true,
+                street2: true,
+                zipCode: true,
+                latitude: true,
+                longitude: true,
+              },
+            },
+            multiselectOption: true,
+          },
+        },
+      },
+    });
   }
 }

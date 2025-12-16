@@ -31,7 +31,7 @@ import { Demographic } from './demographic.dto';
 import { HouseholdMember } from './household-member.dto';
 import { UnitType } from '../unit-types/unit-type.dto';
 import { ApplicationLotteryPosition } from './application-lottery-position.dto';
-import ApplicationSelections from './application-selections.dto';
+import ApplicationSelection from './application-selection.dto';
 
 export class Application extends AbstractDTO {
   @Expose()
@@ -243,16 +243,16 @@ export class Application extends AbstractDTO {
   householdMember: HouseholdMember[];
 
   // TODO: Temporarily optional until after MSQ refactor
-  // @Expose()
+  @Expose()
   // @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ArrayMaxSize(64, { groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @Type(() => ApplicationSelections)
+  @Type(() => ApplicationSelection)
   @ApiPropertyOptional({
-    type: ApplicationSelections,
+    type: ApplicationSelection,
     isArray: true,
   })
-  applicationSelections?: ApplicationSelections[];
+  applicationSelections?: ApplicationSelection[];
 
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
