@@ -18,6 +18,7 @@ type LeasingAgentProps = {
   leasingAgentSectionTitle?: string
   leasingAgentName?: string
   leasingAgentTitle?: string
+  leasingAgentSubtitle?: string
 }
 
 const LeasingAgent = (props: LeasingAgentProps) => {
@@ -55,7 +56,7 @@ const LeasingAgent = (props: LeasingAgentProps) => {
       <hr className="spacer-section-above spacer-section" />
       <SectionWithGrid
         heading={props.leasingAgentSectionTitle}
-        subheading={t("listings.sections.leasingAgentSubtitle")}
+        subheading={props.leasingAgentSubtitle}
       >
         <Grid.Row columns={3}>
           <Grid.Cell>

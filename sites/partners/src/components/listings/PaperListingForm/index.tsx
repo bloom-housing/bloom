@@ -476,6 +476,10 @@ const ListingForm = ({
     ? t("leasingAgent.leasingAgentManagerPropTitle")
     : t("leasingAgent.title")
 
+  const leasingAgentSubtitleText = enableLeasingAgentAltText
+    ? t("listings.sections.leasingAgentMaganerPropSubtitle")
+    : t("listings.sections.leasingAgentSubtitle")
+
   return loading === true ? null : (
     <>
       <LoadingOverlay isLoading={loading}>
@@ -680,6 +684,7 @@ const ListingForm = ({
                             leasingAgentName={leasingAgentNameText}
                             leasingAgentSectionTitle={leasingAgentSectionTitleText}
                             leasingAgentTitle={leasingAgentTitleText}
+                            leasingAgentSubtitle={leasingAgentSubtitleText}
                             requiredFields={requiredFields}
                           />
                           <ApplicationTypes
