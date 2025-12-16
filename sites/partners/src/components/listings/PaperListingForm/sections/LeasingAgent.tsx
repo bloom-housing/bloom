@@ -15,8 +15,9 @@ import SectionWithGrid from "../../../shared/SectionWithGrid"
 type LeasingAgentProps = {
   enableCompanyWebsite?: boolean
   requiredFields: string[]
-  leasingAgentTitle?: string
+  leasingAgentSectionTitle?: string
   leasingAgentName?: string
+  leasingAgentTitle?: string
 }
 
 const LeasingAgent = (props: LeasingAgentProps) => {
@@ -53,7 +54,7 @@ const LeasingAgent = (props: LeasingAgentProps) => {
     <>
       <hr className="spacer-section-above spacer-section" />
       <SectionWithGrid
-        heading={props.leasingAgentTitle}
+        heading={props.leasingAgentSectionTitle}
         subheading={t("listings.sections.leasingAgentSubtitle")}
       >
         <Grid.Row columns={3}>
@@ -104,7 +105,7 @@ const LeasingAgent = (props: LeasingAgentProps) => {
               register={register}
               {...defaultFieldProps(
                 "leasingAgentTitle",
-                t("leasingAgent.title"),
+                props.leasingAgentTitle,
                 props.requiredFields,
                 errors,
                 clearErrors

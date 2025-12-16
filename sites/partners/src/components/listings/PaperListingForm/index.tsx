@@ -468,9 +468,13 @@ const ListingForm = ({
     ? t("leasingAgent.ManagerPropName")
     : t("leasingAgent.name")
 
-  const leasingAgentTitleText = enableLeasingAgentAltText
-    ? t("listings.sections.leasingAgentManagerPropTitle")
+  const leasingAgentSectionTitleText = enableLeasingAgentAltText
+    ? t("listings.sections.leasingAgentManagerPropSectionTitle")
     : t("listings.sections.leasingAgentTitle")
+
+  const leasingAgentTitleText = enableLeasingAgentAltText
+    ? t("leasingAgent.leasingAgentManagerPropTitle")
+    : t("leasingAgent.title")
 
   return loading === true ? null : (
     <>
@@ -674,6 +678,7 @@ const ListingForm = ({
                               jurisdictionId
                             )}
                             leasingAgentName={leasingAgentNameText}
+                            leasingAgentSectionTitle={leasingAgentSectionTitleText}
                             leasingAgentTitle={leasingAgentTitleText}
                             requiredFields={requiredFields}
                           />
