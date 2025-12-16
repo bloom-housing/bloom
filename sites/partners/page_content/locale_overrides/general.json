@@ -273,7 +273,7 @@
   "listings.leasingAgentAddress": "Leasing agent address",
   "listings.listingAvailabilityQuestion": "What is the listing availability?",
   "listings.listingIsAlreadyLive": "This listing is already live. Updates will affect the applicant experience on the housing portal.",
-  "listings.listingTypeTile": "What kind of listing is this?",
+  "listings.listingTypeTitle": "What kind of listing is this?",
   "listings.hasEbllClearanceTitle": "Has this property received HUD EBLL clearance?",
   "listings.regulated": "Regulated",
   "listings.nonRegulated": "Non-regulated",

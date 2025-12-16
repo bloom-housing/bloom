@@ -52,7 +52,7 @@ const ListingIntro = (props: ListingIntroProps) => {
         {props.enableNonRegulatedListings && (
           <Grid.Row columns={1}>
             <Grid.Cell>
-              <FieldValue id="listingType" label={t("listings.listingTypeTile")}>
+              <FieldValue id="listingType" label={t("listings.listingTypeTitle")}>
                 {listing.listingType === EnumListingListingType.nonRegulated
                   ? t("listings.nonRegulated")
                   : t("listings.regulated")}

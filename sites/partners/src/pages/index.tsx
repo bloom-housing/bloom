@@ -467,7 +467,7 @@ export default function ListingsList() {
               </Grid.Row>
               {isNonRegulatedEnabled && (
                 <fieldset>
-                  <legend className={`text__caps-spaced`}>{t("listings.listingTypeTile")}</legend>
+                  <legend className={`text__caps-spaced`}>{t("listings.listingTypeTitle")}</legend>
                   <Grid.Row columns={4}>
                     <Grid.Cell className={"seeds-grid-span-2"}>
                       <div>
@@ -518,7 +518,7 @@ export default function ListingsList() {
                           name="listingType"
                           type="radio"
                           register={register}
-                          groupLabel={t("listings.listingTypeTile")}
+                          groupLabel={t("listings.listingTypeTitle")}
                           fields={[
                             {
                               id: "regulatedListing",

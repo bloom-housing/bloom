@@ -68,7 +68,7 @@ const DetailListingIntro = () => {
       {enableNonRegulatedListings && (
         <Grid.Row>
           <Grid.Cell>
-            <FieldValue id="listingType" label={t("listings.listingTypeTile")}>
+            <FieldValue id="listingType" label={t("listings.listingTypeTitle")}>
               {listing.listingType === EnumListingListingType.regulated
                 ? t("listings.regulated")
                 : t("listings.nonRegulated")}
