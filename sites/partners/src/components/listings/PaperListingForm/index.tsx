@@ -246,6 +246,11 @@ const ListingForm = ({
     jurisdictionId
   )
 
+  const enableListingImageAltText = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableListingImageAltText,
+    jurisdictionId
+  )
+
   useEffect(() => {
     if (listing?.units) {
       const tempUnits = listing.units.map((unit, i) => ({
@@ -519,7 +524,11 @@ const ListingForm = ({
                             listingId={listing?.id}
                             requiredFields={requiredFields}
                           />
-                          <ListingPhotos requiredFields={requiredFields} />
+                          <ListingPhotos
+                            enableListingImageAltText={enableListingImageAltText}
+                            requiredFields={requiredFields}
+                            jurisdiction={selectedJurisdictionData}
+                          />
                           <BuildingDetails
                             customMapPositionChosen={customMapPositionChosen}
                             requiredFields={requiredFields}

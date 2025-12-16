@@ -15,4 +15,8 @@ export class ListingImage {
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   ordinal?: number;
+
+  @Expose()
+  @ApiPropertyOptional()
+  description?: string;
 }
