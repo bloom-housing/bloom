@@ -13,6 +13,9 @@ export const blankApplication = {
   language: LanguagesEnum.en,
   acceptedTerms: false,
   status: ApplicationStatusEnum.submitted,
+  accessibleUnitWaitlistNumber: null,
+  conventionalUnitWaitlistNumber: null,
+  manualLotteryPositionNumber: null,
   applicant: {
     // orderId: undefined,
     firstName: "",

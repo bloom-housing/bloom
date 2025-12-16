@@ -880,6 +880,8 @@
   "listings.unit.accessibilityType.Visual": "想象",
   "listings.unit.accessibilityType": "无障碍类型",
   "listings.unit.sharedBathroom": "共享",
+  "listings.unit.showLessUnits": "顯示較少的 %{type} 單位",
+  "listings.unit.showMoreUnits": "顯示更多 %{type} 單位",
   "listings.unitsAreFor": "這些單位供 %{type} 申請。",
   "listings.unitsHaveAccessibilityFeaturesFor": "這些單位提供無障礙設施，供 %{type} 人士申請。",
   "listings.unitsSummary.notAvailable": "无法使用",

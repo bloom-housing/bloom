@@ -880,6 +880,8 @@
   "listings.unit.accessibilityType.Visual": "Tầm nhìn",
   "listings.unit.accessibilityType": "Loại khả năng truy cập",
   "listings.unit.sharedBathroom": "Chia sẻ",
+  "listings.unit.showLessUnits": "Hiển thị ít đơn vị %{type} hơn",
+  "listings.unit.showMoreUnits": "Hiển thị thêm %{type} đơn vị",
   "listings.unitsAreFor": "Các căn nhà này được dành cho %{type}.",
   "listings.unitsHaveAccessibilityFeaturesFor": "Các căn nhà này có các tính năng trợ giúp cho những người bị %{type}.",
   "listings.unitsSummary.notAvailable": "Không có sẵn",
