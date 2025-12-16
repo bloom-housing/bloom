@@ -42,11 +42,11 @@ type PreferenceDrawerProps = {
 }
 
 type OptionForm = {
-  collectAddress: YesNoEnum
+  shouldCollectAddress: YesNoEnum
   validationMethod?: ValidationMethodEnum
   radiusSize?: string
-  collectRelationship?: YesNoEnum
-  collectName?: YesNoEnum
+  shouldCollectRelationship?: YesNoEnum
+  shouldCollectName?: YesNoEnum
   exclusiveQuestion: "exclusive" | "multiselect"
   optionDescription: string
   optionLinkTitle: string
@@ -104,9 +104,9 @@ const PreferenceDrawer = ({
     (jurisdiction) => jurisdiction.enableGeocodingPreferences
   )
 
-  const collectAddressExpand =
-    ((optionData?.collectAddress && watch("collectAddress") === undefined) ||
-      watch("collectAddress") === YesNoEnum.yes) &&
+  const shouldCollectAddressExpand =
+    ((optionData?.shouldCollectAddress && watch("shouldCollectAddress") === undefined) ||
+      watch("shouldCollectAddress") === YesNoEnum.yes) &&
     isAdditionalDetailsEnabled
   const isValidationRadiusVisible =
     profile?.jurisdictions.find((juris) => juris.id === watch("jurisdictionId"))
@@ -246,19 +246,19 @@ const PreferenceDrawer = ({
                 <Grid.Row columns={3}>
                   <Grid.Cell className="seeds-grid-span-2">
                     <Field
-                      id="text"
-                      name="text"
+                      id="name"
+                      name="name"
                       label={t("t.title")}
                       placeholder={t("t.title")}
                       register={register}
                       type="text"
                       dataTestId={"preference-title"}
-                      defaultValue={questionData?.text}
+                      defaultValue={questionData?.name}
                       errorMessage={t("errors.requiredFieldError")}
                       validation={{ required: true }}
-                      error={errors.text}
+                      error={errors.name}
                       inputProps={{
-                        onChange: () => clearErrors("text"),
+                        onChange: () => clearErrors("name"),
                       }}
                     />
                   </Grid.Cell>
@@ -352,6 +352,34 @@ const PreferenceDrawer = ({
               </div>
 
               <Grid>
+                <Grid.Row columns={3}>
+                  <FieldValue label={t("settings.preferenceExclusiveQuestion")} className="mb-1">
+                    <FieldGroup
+                      name="exclusiveQuestion"
+                      type="radio"
+                      register={register}
+                      fields={[
+                        {
+                          id: "multiselect",
+                          label: t("settings.preferenceMultiSelect"),
+                          value: "multiselect",
+                          defaultChecked: optionData === null || !optionData?.exclusive,
+                          dataTestId: "exclusive-question-multiselect",
+                        },
+                        {
+                          id: "exclusive",
+                          label: t("settings.preferenceExclusive"),
+                          value: "exclusive",
+                          defaultChecked: optionData?.exclusive,
+                          dataTestId: "exclusive-question-exclusive",
+                        },
+                      ]}
+                      fieldClassName="m-0"
+                      fieldGroupClassName="flex h-12 items-center"
+                      dataTestId={"preference-exclusive-question"}
+                    />
+                  </FieldValue>
+                </Grid.Row>
                 <Grid.Row columns={3}>
                   <Grid.Cell>
                     <div className="pb-4">
@@ -511,7 +539,8 @@ const PreferenceDrawer = ({
                     : null,
                 options: questionData?.options,
                 status: questionData?.status ?? MultiselectQuestionsStatusEnum.draft,
-                text: formValues.text,
+                name: formValues.name,
+                text: "" // TODO: shouldn't this not be necessary anymore?
               }
               clearErrors()
               clearErrors("questions")
@@ -615,34 +644,6 @@ const PreferenceDrawer = ({
                     </FieldValue>
                   </Grid.Cell>
                 </Grid.Row>
-                <Grid.Row columns={3}>
-                  <FieldValue label={t("settings.preferenceExclusiveQuestion")} className="mb-1">
-                    <FieldGroup
-                      name="exclusiveQuestion"
-                      type="radio"
-                      register={register}
-                      fields={[
-                        {
-                          id: "multiselect",
-                          label: t("settings.preferenceMultiSelect"),
-                          value: "multiselect",
-                          defaultChecked: optionData === null || !optionData?.exclusive,
-                          dataTestId: "exclusive-question-multiselect",
-                        },
-                        {
-                          id: "exclusive",
-                          label: t("settings.preferenceExclusive"),
-                          value: "exclusive",
-                          defaultChecked: optionData?.exclusive,
-                          dataTestId: "exclusive-question-exclusive",
-                        },
-                      ]}
-                      fieldClassName="m-0"
-                      fieldGroupClassName="flex h-12 items-center"
-                      dataTestId={"preference-exclusive-question"}
-                    />
-                  </FieldValue>
-                </Grid.Row>
               </SectionWithGrid>
             </Card.Section>
 
@@ -653,21 +654,21 @@ const PreferenceDrawer = ({
                   <Grid.Cell className="pr-8">
                     <FieldValue label={t("settings.preferenceCollectAddress")}>
                       <FieldGroup
-                        name="collectAddress"
+                        name="shouldCollectAddress"
                         type="radio"
                         register={register}
                         validation={{ required: true }}
-                        error={errors.collectAddress}
+                        error={errors.shouldCollectAddress}
                         fields={[
                           {
                             label: t("t.yes"),
                             value: YesNoEnum.yes,
-                            defaultChecked: optionData?.collectAddress,
-                            id: "collectAddressYes",
+                            defaultChecked: optionData?.shouldCollectAddress,
+                            id: "shouldCollectAddressYes",
                             dataTestId: "collect-address-yes",
                             inputProps: {
                               onChange: () => {
-                                clearErrors("collectAddress")
+                                clearErrors("shouldCollectAddress")
                               },
                             },
                           },
@@ -675,13 +676,13 @@ const PreferenceDrawer = ({
                             label: t("t.no"),
                             value: YesNoEnum.no,
                             defaultChecked:
-                              optionData?.collectAddress !== undefined &&
-                              optionData?.collectAddress === false,
-                            id: "collectAddressNo",
+                              optionData?.shouldCollectAddress !== undefined &&
+                              optionData?.shouldCollectAddress === false,
+                            id: "shouldCollectAddressNo",
                             dataTestId: "collect-address-no",
                             inputProps: {
                               onChange: () => {
-                                clearErrors("collectAddress")
+                                clearErrors("shouldCollectAddress")
                               },
                             },
                           },
@@ -693,7 +694,7 @@ const PreferenceDrawer = ({
                     </FieldValue>
                   </Grid.Cell>
                   <Grid.Cell className="pr-12">
-                    {collectAddressExpand && (
+                    {shouldCollectAddressExpand && (
                       <FieldValue label={t("settings.preferenceValidatingAddress")}>
                         <FieldGroup
                           name="validationMethod"
@@ -710,7 +711,7 @@ const PreferenceDrawer = ({
                     )}
                   </Grid.Cell>
                   <Grid.Cell className="pr-8">
-                    {collectAddressExpand && readiusExpand && isValidationRadiusVisible && (
+                    {shouldCollectAddressExpand && readiusExpand && isValidationRadiusVisible && (
                       <FieldValue label={t("settings.preferenceValidatingAddress.howManyMiles")}>
                         <Field
                           id="radiusSize"
@@ -730,7 +731,7 @@ const PreferenceDrawer = ({
                         />
                       </FieldValue>
                     )}
-                    {collectAddressExpand && mapExpand && (
+                    {shouldCollectAddressExpand && mapExpand && (
                       <FieldValue label={t("settings.preferenceValidatingAddress.selectMapLayer")}>
                         <p className={s.helperText}>
                           {t("settings.preferenceValidatingAddress.selectMapLayerDescription")}
@@ -766,26 +767,26 @@ const PreferenceDrawer = ({
                     )}
                   </Grid.Cell>
                 </Grid.Row>
-                {collectAddressExpand && (
+                {shouldCollectAddressExpand && (
                   <Grid.Row columns={3}>
                     <Grid.Cell className="pr-8">
                       <FieldValue label={t("settings.preferenceCollectAddressHolderName")}>
                         <FieldGroup
-                          name="collectName"
+                          name="shouldCollectName"
                           type="radio"
                           register={register}
                           validation={{ required: true }}
-                          error={errors.collectName}
+                          error={errors.shouldCollectName}
                           fields={[
                             {
                               label: t("t.yes"),
                               value: YesNoEnum.yes,
-                              defaultChecked: optionData?.collectName,
-                              id: "collectNameYes",
+                              defaultChecked: optionData?.shouldCollectName,
+                              id: "shouldCollectNameYes",
                               dataTestId: "collect-name-yes",
                               inputProps: {
                                 onChange: () => {
-                                  clearErrors("collectName")
+                                  clearErrors("shouldCollectName")
                                 },
                               },
                             },
@@ -793,12 +794,12 @@ const PreferenceDrawer = ({
                               label: t("t.no"),
                               value: YesNoEnum.no,
                               defaultChecked:
-                                optionData?.collectName !== undefined && !optionData?.collectName,
-                              id: "collectNameNo",
+                                optionData?.shouldCollectName !== undefined && !optionData?.shouldCollectName,
+                              id: "shouldCollectNameNo",
                               dataTestId: "collect-name-no",
                               inputProps: {
                                 onChange: () => {
-                                  clearErrors("collectName")
+                                  clearErrors("shouldCollectName")
                                 },
                               },
                             },
@@ -812,21 +813,21 @@ const PreferenceDrawer = ({
                     <Grid.Cell className="pr-8">
                       <FieldValue label={t("settings.preferenceCollectAddressHolderRelationship")}>
                         <FieldGroup
-                          name="collectRelationship"
+                          name="shouldCollectRelationship"
                           type="radio"
                           register={register}
                           validation={{ required: true }}
-                          error={errors.collectRelationship}
+                          error={errors.shouldCollectRelationship}
                           fields={[
                             {
                               label: t("t.yes"),
                               value: YesNoEnum.yes,
-                              defaultChecked: optionData?.collectRelationship,
-                              id: "collectRelationshipYes",
+                              defaultChecked: optionData?.shouldCollectRelationship,
+                              id: "shouldCollectRelationshipYes",
                               dataTestId: "collect-relationship-yes",
                               inputProps: {
                                 onChange: () => {
-                                  clearErrors("collectRelationship")
+                                  clearErrors("shouldCollectRelationship")
                                 },
                               },
                             },
@@ -834,13 +835,13 @@ const PreferenceDrawer = ({
                               label: t("t.no"),
                               value: YesNoEnum.no,
                               defaultChecked:
-                                optionData?.collectRelationship !== undefined &&
-                                !optionData?.collectRelationship,
-                              id: "collectRelationshipNo",
+                                optionData?.shouldCollectRelationship !== undefined &&
+                                !optionData?.shouldCollectRelationship,
+                              id: "shouldCollectRelationshipNo",
                               dataTestId: "collect-relationship-no",
                               inputProps: {
                                 onChange: () => {
-                                  clearErrors("collectRelationship")
+                                  clearErrors("shouldCollectRelationship")
                                 },
                               },
                             },
@@ -875,9 +876,9 @@ const PreferenceDrawer = ({
               if (
                 Object.keys(formState.errors).some((field) =>
                   [
-                    "collectAddress",
-                    "collectName",
-                    "collectRelationship",
+                    "shouldCollectAddress",
+                    "shouldCollectName",
+                    "shouldCollectRelationship",
                     "validationMethod",
                     "radiusSize",
                     "mapLayerId",
@@ -899,13 +900,12 @@ const PreferenceDrawer = ({
                   ? [{ title: formData.optionLinkTitle, url: formData.optionUrl }]
                   : [],
                 ordinal: getNewOrdinal(),
-                exclusive: formData.exclusiveQuestion === "exclusive",
-                collectAddress: formData.collectAddress === YesNoEnum.yes,
+                shouldCollectAddress: formData.shouldCollectAddress === YesNoEnum.yes,
               }
-              if (formData.collectAddress === YesNoEnum.yes) {
+              if (formData.shouldCollectAddress === YesNoEnum.yes) {
                 newOptionData.validationMethod = formData.validationMethod
-                newOptionData.collectRelationship = formData.collectRelationship === YesNoEnum.yes
-                newOptionData.collectName = formData.collectName === YesNoEnum.yes
+                newOptionData.shouldCollectRelationship = formData.shouldCollectRelationship === YesNoEnum.yes
+                newOptionData.shouldCollectName = formData.shouldCollectName === YesNoEnum.yes
               }
               if (
                 formData.validationMethod === ValidationMethodEnum.radius &&

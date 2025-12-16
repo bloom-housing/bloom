@@ -14,7 +14,7 @@ import { PreferenceEditModal } from "./PreferenceEditModal"
 
 export type DrawerType = "add" | "edit"
 
-interface PreferencesEditingProps {
+interface EditPreferenceProps {
   cacheKey: string
   editConfirmModalOpen: MultiselectQuestion
   setEditConfirmModalOpen: React.Dispatch<React.SetStateAction<MultiselectQuestion>>
@@ -24,7 +24,7 @@ interface PreferencesEditingProps {
   setQuestionData: React.Dispatch<React.SetStateAction<MultiselectQuestion>>
 }
 
-const PreferencesEditing = ({
+const EditPreference = ({
   cacheKey,
   editConfirmModalOpen,
   setEditConfirmModalOpen,
@@ -32,7 +32,7 @@ const PreferencesEditing = ({
   setPreferenceDrawerOpen,
   questionData,
   setQuestionData,
-}: PreferencesEditingProps) => {
+}: EditPreferenceProps) => {
   const { mutate } = useSWRConfig()
 
   const { multiselectQuestionsService } = useContext(AuthContext)
@@ -180,4 +180,4 @@ const PreferencesEditing = ({
   )
 }
 
-export default PreferencesEditing
+export default EditPreference
