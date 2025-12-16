@@ -328,7 +328,6 @@ export default function ListingsList() {
     const query = {
       jurisdictionId: data.jurisdiction,
     }
-    console.log("data", data)
     if (data.listingType === ListingTypeEnum.nonRegulated) {
       query["nonRegulated"] = true
     }
