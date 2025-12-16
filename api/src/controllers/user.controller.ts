@@ -112,37 +112,17 @@ export class UserController {
     return await this.userCSVExportService.exportFile(req, res);
   }
 
-  @Put('forgot-password')
-  @ApiOperation({ summary: 'Forgot Password', operationId: 'forgotPassword' })
-  @ApiOkResponse({ type: SuccessDTO })
-  async forgotPassword(@Body() dto: EmailAndAppUrl): Promise<SuccessDTO> {
-    return await this.userService.forgotPassword(dto);
-  }
-
-  @Delete()
-  @ApiOperation({ summary: 'Delete user by id', operationId: 'delete' })
-  @ApiOkResponse({ type: SuccessDTO })
-  @UseGuards(OptionalAuthGuard, PermissionGuard)
-  @UseInterceptors(ActivityLogInterceptor)
-  async delete(
-    @Body() dto: UserDeleteDTO,
-    @Request() req: ExpressRequest,
-  ): Promise<SuccessDTO> {
-    return await this.userService.delete(
-      dto.id,
-      mapTo(User, req['user']),
-      dto.shouldRemoveApplication,
-    );
-  }
-
-  @Put('deleteInactiveUsersCronJob')
+  @Get('favoriteListings/:id')
   @ApiOperation({
-    summary: 'trigger the delete inactive users cron job',
-    operationId: 'deleteInactiveUsersCronJob',
+    summary: 'Get the ids of the user favorites',
+    operationId: 'favoriteListings',
   })
-  @ApiOkResponse({ type: SuccessDTO })
-  async process(): Promise<SuccessDTO> {
-    return await this.userService.deleteAfterInactivity();
+  @ApiOkResponse({ type: IdDTO, isArray: true })
+  @UseGuards(JwtAuthGuard, UserProfilePermissionGuard)
+  async favoriteListings(
+    @Param('id', new ParseUUIDPipe({ version: '4' })) userId: string,
+  ): Promise<IdDTO[]> {
+    return await this.userService.favoriteListings(userId);
   }
 
   @Post()
@@ -162,6 +142,22 @@ export class UserController {
       false,
       queryParams.noWelcomeEmail !== true,
       req,
+    );
+  }
+
+  @Delete()
+  @ApiOperation({ summary: 'Delete user by id', operationId: 'delete' })
+  @ApiOkResponse({ type: SuccessDTO })
+  @UseGuards(OptionalAuthGuard, PermissionGuard)
+  @UseInterceptors(ActivityLogInterceptor)
+  async delete(
+    @Body() dto: UserDeleteDTO,
+    @Request() req: ExpressRequest,
+  ): Promise<SuccessDTO> {
+    return await this.userService.delete(
+      dto.id,
+      mapTo(User, req['user']),
+      dto.shouldRemoveApplication,
     );
   }
 
@@ -227,17 +223,11 @@ export class UserController {
     return await this.userService.isUserConfirmationTokenValid(dto);
   }
 
-  @Get('favoriteListings/:id')
-  @ApiOperation({
-    summary: 'Get the ids of the user favorites',
-    operationId: 'favoriteListings',
-  })
-  @ApiOkResponse({ type: IdDTO, isArray: true })
-  @UseGuards(JwtAuthGuard, UserProfilePermissionGuard)
-  async favoriteListings(
-    @Param('id', new ParseUUIDPipe({ version: '4' })) userId: string,
-  ): Promise<IdDTO[]> {
-    return await this.userService.favoriteListings(userId);
+  @Put('forgot-password')
+  @ApiOperation({ summary: 'Forgot Password', operationId: 'forgotPassword' })
+  @ApiOkResponse({ type: SuccessDTO })
+  async forgotPassword(@Body() dto: EmailAndAppUrl): Promise<SuccessDTO> {
+    return await this.userService.forgotPassword(dto);
   }
 
   @Put(`modifyFavoriteListings`)
@@ -255,6 +245,27 @@ export class UserController {
       dto,
       mapTo(User, req['user']),
     );
+  }
+
+  @Put('userWarnCronJob')
+  @ApiOperation({
+    summary: 'trigger the user warn of deletion cron job',
+    operationId: 'userWarnCronJob',
+  })
+  @ApiOkResponse({ type: SuccessDTO })
+  @UseGuards(OptionalAuthGuard, AdminOrJurisdictionalAdminGuard)
+  async userWarnCronJob(): Promise<SuccessDTO> {
+    return await this.userService.warnUserOfDeletionCronJob();
+  }
+
+  @Put('deleteInactiveUsersCronJob')
+  @ApiOperation({
+    summary: 'trigger the delete inactive users cron job',
+    operationId: 'deleteInactiveUsersCronJob',
+  })
+  @ApiOkResponse({ type: SuccessDTO })
+  async process(): Promise<SuccessDTO> {
+    return await this.userService.deleteAfterInactivity();
   }
 
   @Put(':id')

@@ -1842,28 +1842,6 @@ export class UserService {
     })
   }
   /**
-   * Delete user by id
-   */
-  delete(
-    params: {
-      /** requestBody */
-      body?: UserDeleteDTO
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<SuccessDTO> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/user"
-
-      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
    * Creates a public only user
    */
   create(
@@ -1880,6 +1858,28 @@ export class UserService {
 
       const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
       configs.params = { noWelcomeEmail: params["noWelcomeEmail"] }
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Delete user by id
+   */
+  delete(
+    params: {
+      /** requestBody */
+      body?: UserDeleteDTO
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user"
+
+      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
 
       let data = params.body
 
@@ -1935,39 +1935,22 @@ export class UserService {
     })
   }
   /**
-   * Forgot Password
+   * Get the ids of the user favorites
    */
-  forgotPassword(
+  favoriteListings(
     params: {
-      /** requestBody */
-      body?: EmailAndAppUrl
+      /**  */
+      id: string
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<SuccessDTO> {
+  ): Promise<IdDTO[]> {
     return new Promise((resolve, reject) => {
-      let url = basePath + "/user/forgot-password"
+      let url = basePath + "/user/favoriteListings/{id}"
+      url = url.replace("{id}", params["id"] + "")
 
-      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
 
-      let data = params.body
-
-      configs.data = data
-
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * trigger the delete inactive users cron job
-   */
-  deleteInactiveUsersCronJob(options: IRequestOptions = {}): Promise<SuccessDTO> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/user/deleteInactiveUsersCronJob"
-
-      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
-
-      let data = null
-
-      configs.data = data
+      /** 适配ios13，get请求不允许带body */
 
       axios(configs, resolve, reject)
     })
@@ -2083,22 +2066,23 @@ export class UserService {
     })
   }
   /**
-   * Get the ids of the user favorites
+   * Forgot Password
    */
-  favoriteListings(
+  forgotPassword(
     params: {
-      /**  */
-      id: string
+      /** requestBody */
+      body?: EmailAndAppUrl
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<IdDTO[]> {
+  ): Promise<SuccessDTO> {
     return new Promise((resolve, reject) => {
-      let url = basePath + "/user/favoriteListings/{id}"
-      url = url.replace("{id}", params["id"] + "")
+      let url = basePath + "/user/forgot-password"
 
-      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
 
-      /** 适配ios13，get请求不允许带body */
+      let data = params.body
+
+      configs.data = data
 
       axios(configs, resolve, reject)
     })
@@ -2119,6 +2103,38 @@ export class UserService {
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
 
       let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * trigger the user warn of deletion cron job
+   */
+  userWarnCronJob(options: IRequestOptions = {}): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user/userWarnCronJob"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = null
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * trigger the delete inactive users cron job
+   */
+  deleteInactiveUsersCronJob(options: IRequestOptions = {}): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user/deleteInactiveUsersCronJob"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = null
 
       configs.data = data
 
@@ -7250,14 +7266,6 @@ export interface PaginatedUser {
   meta: PaginationMeta
 }
 
-export interface UserDeleteDTO {
-  /**  */
-  id: string
-
-  /**  */
-  shouldRemoveApplication?: boolean
-}
-
 export interface UserCreate {
   /**  */
   firstName: string
@@ -7306,6 +7314,14 @@ export interface UserCreate {
 
   /**  */
   jurisdictions?: IdDTO[]
+}
+
+export interface UserDeleteDTO {
+  /**  */
+  id: string
+
+  /**  */
+  shouldRemoveApplication?: boolean
 }
 
 export interface UserInvite {
@@ -7968,6 +7984,7 @@ export enum FeatureFlagEnum {
   "enableAccessibilityFeatures" = "enableAccessibilityFeatures",
   "enableAdaOtherOption" = "enableAdaOtherOption",
   "enableAdditionalResources" = "enableAdditionalResources",
+  "enableApplicationStatus" = "enableApplicationStatus",
   "enableCompanyWebsite" = "enableCompanyWebsite",
   "enableCreditScreeningFee" = "enableCreditScreeningFee",
   "enableFullTimeStudentQuestion" = "enableFullTimeStudentQuestion",
