@@ -68,6 +68,7 @@ const ApplicationsList = () => {
     }
   }
 
+  //TODO: Add new statuses
   const applicationStatus = useMemo(() => {
     switch (application?.status) {
       case ApplicationStatusEnum.submitted:
@@ -76,18 +77,8 @@ const ApplicationsList = () => {
             {t(`application.details.applicationStatus.submitted`)}
           </Tag>
         )
-      case ApplicationStatusEnum.removed:
-        return (
-          <Tag className="tag-uppercase" variant={"highlight-warm"} size={"lg"}>
-            {t(`application.details.applicationStatus.removed`)}
-          </Tag>
-        )
       default:
-        return (
-          <Tag className="tag-uppercase" variant={"primary"} size={"lg"}>
-            {t(`application.details.applicationStatus.draft`)}
-          </Tag>
-        )
+        return null
     }
   }, [application])
 
