@@ -25,8 +25,12 @@ const DetailLeasingAgent = () => {
     ? t("leasingAgent.ManagerPropName")
     : t("leasingAgent.name")
 
+  const leasingAgentTitleText = enableLeasingAgentAltText
+    ? t("listings.sections.leasingAgentManagerPropTitle")
+    : t("listings.sections.leasingAgentTitle")
+
   return (
-    <SectionWithGrid heading={t("listings.sections.leasingAgentTitle")} inset>
+    <SectionWithGrid heading={leasingAgentTitleText} inset>
       <Grid.Row>
         <Grid.Cell>
           <FieldValue id="leasingAgentName" label={leasingAgentNameText}>
