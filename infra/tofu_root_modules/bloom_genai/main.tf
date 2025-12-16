@@ -15,16 +15,16 @@ terraform {
 }
 
 locals {
-  bloom_deployment = "bloom-dev"
+  bloom_deployment = "bloom-genai-test"
   sso_profile_id   = "${local.bloom_deployment}-deployer"
 
   tofu_state_bucket_region = "us-east-1"
   tofu_state_bucket_name   = "bloom-core-tofu-state-files"
   tofu_state_key_prefix    = local.bloom_deployment
 
-  bloom_aws_account_number = 242477209009
+  bloom_aws_account_number = 344261432650
   bloom_aws_region         = "us-west-2"
-  domain_name              = "core-dev.bloomhousing.dev"
+  domain_name              = "genai-test.bloomhousing.dev"
 }
 
 provider "aws" {
@@ -73,11 +73,11 @@ module "bloom_deployment" {
   env_type          = "dev"
   high_availability = false
 
-  bloom_api_image           = "ghcr.io/bloom-housing/bloom/api:gitsha-f642fc1f3f056b9fa53429c4fa81689c5e856e5a"
-  bloom_site_partners_image = "ghcr.io/bloom-housing/bloom/partners:gitsha-f642fc1f3f056b9fa53429c4fa81689c5e856e5a"
-  bloom_site_public_image   = "ghcr.io/bloom-housing/bloom/public:gitsha-f642fc1f3f056b9fa53429c4fa81689c5e856e5a"
+  bloom_api_image           = "ghcr.io/bloom-housing/bloom/api:gitsha-f6b48498c8d023de468e27a9457db8ac2a6ad1f8"
+  bloom_site_partners_image = "ghcr.io/bloom-housing/bloom/partners:gitsha-f6b48498c8d023de468e27a9457db8ac2a6ad1f8"
+  bloom_site_public_image   = "ghcr.io/bloom-housing/bloom/public:gitsha-f6b48498c8d023de468e27a9457db8ac2a6ad1f8"
   bloom_site_public_env_vars = {
-    JURISDICTION_NAME     = "Bloomington"
+    JURISDICTION_NAME     = "Doorway"
     CLOUDINARY_CLOUD_NAME = "exygy"
     LANGUAGES             = "en,es,zh,vi,tl"
     RTL_LANGUAGES         = "ar"
