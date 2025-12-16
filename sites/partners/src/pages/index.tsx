@@ -5,7 +5,7 @@ import { useRouter } from "next/router"
 import { useForm } from "react-hook-form"
 import dayjs from "dayjs"
 import { ColDef, ColGroupDef } from "ag-grid-community"
-import { Button, Dialog, Grid, Icon } from "@bloom-housing/ui-seeds"
+import { Button, Dialog, FieldValue, Grid, Heading, Icon } from "@bloom-housing/ui-seeds"
 import {
   t,
   AgTable,
@@ -14,6 +14,7 @@ import {
   Form,
   SelectOption,
   FieldGroup,
+  Field,
 } from "@bloom-housing/ui-components"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import {
@@ -327,6 +328,7 @@ export default function ListingsList() {
     const query = {
       jurisdictionId: data.jurisdiction,
     }
+    console.log("data", data)
     if (data.listingType === ListingTypeEnum.nonRegulated) {
       query["nonRegulated"] = true
     }
@@ -430,7 +432,7 @@ export default function ListingsList() {
 
           <Dialog.Content id="listing-select-dialog-content">
             {t("listings.selectJurisdictionContent")}
-            <Grid>
+            <Grid spacing={"lg"}>
               <Grid.Row columns={3}>
                 <Grid.Cell className={"seeds-grid-span-2"}>
                   <div className={`${defaultJurisdiction ? "hidden" : ""} seeds-m-bs-4`}>
@@ -464,33 +466,83 @@ export default function ListingsList() {
                   </div>
                 </Grid.Cell>
               </Grid.Row>
-              <Grid.Row columns={3}>
-                <Grid.Cell className={"seeds-grid-span-2"}>
-                  {isNonRegulatedEnabled && (
-                    <div>
-                      <FieldGroup
-                        name="listingType"
-                        type="radio"
-                        register={register}
-                        groupLabel={t("listings.listingTypeTile")}
-                        fields={[
-                          {
-                            id: "regulatedListing",
-                            label: t("listings.regulated"),
+              {isNonRegulatedEnabled && (
+                <fieldset>
+                  <legend className={`text__caps-spaced`}>{t("listings.listingTypeTile")}</legend>
+                  <Grid.Row columns={4}>
+                    <Grid.Cell className={"seeds-grid-span-2"}>
+                      <div>
+                        <Field
+                          name="listingType"
+                          type="radio"
+                          className="mr-4"
+                          register={register}
+                          id={EnumListingListingType.regulated}
+                          label={t("listings.regulated")}
+                          inputProps={{
                             value: EnumListingListingType.regulated,
                             defaultChecked: true,
-                          },
-                          {
-                            id: "nonRegulatedListing",
-                            label: t("listings.nonRegulated"),
+                          }}
+                          subNote=" Covered by an ordinance or funding source that requires tenants to
+                      income-qualify to live in these units, e.g. inclusionary units, LIHTC, or
+                      other deed-restricted properties"
+                        />
+                      </div>
+                    </Grid.Cell>
+                    <Grid.Cell className={"seeds-grid-span-2"}>
+                      <div>
+                        <Field
+                          name="listingType"
+                          type="radio"
+                          register={register}
+                          id={EnumListingListingType.nonRegulated}
+                          label={t("listings.nonRegulated")}
+                          inputProps={{
                             value: EnumListingListingType.nonRegulated,
-                          },
-                        ]}
-                      />
-                    </div>
-                  )}
-                </Grid.Cell>
-              </Grid.Row>
+                          }}
+                          subNote=" Tenants do not not need to income qualify to live here, and there is no
+                      funding source or ordinance that regulates rent levels or other tenant
+                      qualifications."
+                        />
+                      </div>
+                    </Grid.Cell>
+                  </Grid.Row>
+                </fieldset>
+              )}
+
+              {/* <Grid.Row columns={2}>
+                {isNonRegulatedEnabled && (
+                  <>
+                    <Grid.Cell className={"seeds-grid-span-2"}>
+                      <div>
+                        <FieldGroup
+                          name="listingType"
+                          type="radio"
+                          register={register}
+                          groupLabel={t("listings.listingTypeTile")}
+                          fields={[
+                            {
+                              id: "regulatedListing",
+                              label: t("listings.regulated"),
+                              value: EnumListingListingType.regulated,
+                              defaultChecked: true,
+                              description:
+                                "Covered by an ordinance or funding source that requires tenants to income-qualify to live in these units, e.g. inclusionary units, LIHTC, or other deed-restricted properties",
+                            },
+                            {
+                              id: "nonRegulatedListing",
+                              label: t("listings.nonRegulated"),
+                              value: EnumListingListingType.nonRegulated,
+                              description:
+                                "Tenants do not not need to income qualify to live here, and there is no funding source or ordinance that regulates rent levels or other tenant qualifications.",
+                            },
+                          ]}
+                        />
+                      </div>
+                    </Grid.Cell>
+                  </>
+                )}
+              </Grid.Row> */}
             </Grid>
           </Dialog.Content>
           <Dialog.Footer>
