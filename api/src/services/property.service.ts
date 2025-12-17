@@ -16,19 +16,15 @@ import { PaginatedPropertyDto } from '../dtos/properties/paginated-property.dto'
 import PropertyCreate from '../dtos/properties/property-create.dto';
 import { PropertyUpdate } from '../dtos/properties/property-update.dto';
 import { SuccessDTO } from '../dtos/shared/success.dto';
+import { Prisma } from '@prisma/client';
+import { buildFilter } from 'src/utilities/build-filter';
 
 @Injectable()
 export class PropertyService {
   constructor(private prisma: PrismaService) {}
 
   async list(params: PropertyQueryParams): Promise<PaginatedPropertyDto> {
-    const whereClause = params?.search
-      ? {
-          name: {
-            contains: params.search,
-          },
-        }
-      : {};
+    const whereClause = this.buildWhere(params);
 
     const count = await this.prisma.properties.count({
       where: whereClause,
@@ -146,5 +142,47 @@ export class PropertyService {
     }
 
     return true;
+  }
+
+  buildWhere(params: PropertyQueryParams): Prisma.PropertiesWhereInput {
+    const filters: Prisma.PropertiesWhereInput[] = [];
+
+    if (params.search) {
+      filters.push({
+        AND: {
+          name: {
+            contains: params.search,
+          },
+        },
+      });
+    }
+
+    if (!params?.filter?.length) {
+      return {
+        AND: filters,
+      };
+    }
+
+    params.filter.forEach((filter) => {
+      const builtFilter = buildFilter({
+        $comparison: filter.$comparison,
+        $include_nulls: false,
+        value: filter.jurisdiction,
+        key: 'jurisdiction',
+        caseSensitive: true,
+      });
+
+      filters.push({
+        OR: builtFilter.map((entry) => ({
+          jurisdictions: {
+            id: entry,
+          },
+        })),
+      });
+    });
+
+    return {
+      AND: filters,
+    };
   }
 }
