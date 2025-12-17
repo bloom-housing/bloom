@@ -1,4 +1,5 @@
 import { INestApplication } from '@nestjs/common';
+import cookieParser from 'cookie-parser';
 import { Test, TestingModule } from '@nestjs/testing';
 import request from 'supertest';
 import PropertyCreate from '../../src/dtos/properties/property-create.dto';
@@ -7,10 +8,15 @@ import { PrismaService } from '../../src/services/prisma.service';
 import { PropertyQueryParams } from '../../src/dtos/properties/property-query-params.dto';
 import { stringify } from 'qs';
 import { randomUUID } from 'crypto';
+import { userFactory } from '../../prisma/seed-helpers/user-factory';
+import { Login } from '../../src/dtos/auth/login.dto';
+import { jurisdictionFactory } from '../../prisma/seed-helpers/jurisdiction-factory';
 
 describe('Properties Controller Tests', () => {
   let app: INestApplication;
   let prisma: PrismaService;
+  let jurisdictionId: string;
+  let cookies = '';
 
   const mockProperties: PropertyCreate[] = [
     {
@@ -36,8 +42,32 @@ describe('Properties Controller Tests', () => {
 
     app = moduleFixture.createNestApplication();
     prisma = moduleFixture.get<PrismaService>(PrismaService);
-
+    app.use(cookieParser());
     await app.init();
+
+    const jurisdiction = await prisma.jurisdictions.create({
+      data: jurisdictionFactory(),
+    });
+    jurisdictionId = jurisdiction.id;
+
+    const storedUser = await prisma.userAccounts.create({
+      data: await userFactory({
+        roles: { isAdmin: true },
+        mfaEnabled: false,
+        confirmedAt: new Date(),
+      }),
+    });
+    const resLogIn = await request(app.getHttpServer())
+      .post('/auth/login')
+      .set({ passkey: process.env.API_PASS_KEY || '' })
+      .send({
+        email: storedUser.email,
+        password: 'Abcdef12345!',
+      } as Login)
+      .expect(201);
+
+    cookies = resLogIn.headers['set-cookie'];
+
     await prisma.properties.createMany({
       data: mockProperties,
     });
@@ -150,6 +180,7 @@ describe('Properties Controller Tests', () => {
       const res = await request(app.getHttpServer())
         .post('/properties')
         .send({})
+        .set('Cookie', cookies)
         .expect(400);
 
       expect(res.body.message).toHaveLength(1);
@@ -166,6 +197,7 @@ describe('Properties Controller Tests', () => {
       const res = await request(app.getHttpServer())
         .post('/properties')
         .send(body)
+        .set('Cookie', cookies)
         .expect(400);
 
       expect(res.body.message).toHaveLength(1);
@@ -178,6 +210,7 @@ describe('Properties Controller Tests', () => {
         .send({
           name: 'Vineta Apartments',
         })
+        .set('Cookie', cookies)
         .expect(201);
 
       expect(res.body).toEqual({
@@ -201,6 +234,7 @@ describe('Properties Controller Tests', () => {
       const res = await request(app.getHttpServer())
         .post('/properties')
         .send(body)
+        .set('Cookie', cookies)
         .expect(201);
 
       expect(res.body).toEqual({
@@ -216,6 +250,7 @@ describe('Properties Controller Tests', () => {
     it('should throw an error when no property ID is given', async () => {
       const res = await request(app.getHttpServer())
         .put('/properties')
+        .set('Cookie', cookies)
         .expect(400);
 
       expect(res.body.message).toHaveLength(1);
@@ -229,6 +264,7 @@ describe('Properties Controller Tests', () => {
         .send({
           id: randId,
         })
+        .set('Cookie', cookies)
         .expect(400);
 
       expect(res.body.message).toEqual(
@@ -256,6 +292,7 @@ describe('Properties Controller Tests', () => {
       const res = await request(app.getHttpServer())
         .put('/properties')
         .send({ ...updateDto, id: newListing.id })
+        .set('Cookie', cookies)
         .expect(200);
 
       expect(res.body).toEqual({
@@ -272,6 +309,7 @@ describe('Properties Controller Tests', () => {
       const res = await request(app.getHttpServer())
         .delete('/properties')
         .send({})
+        .set('Cookie', cookies)
         .expect(400);
 
       expect(res.body.message).toHaveLength(1);
@@ -285,6 +323,7 @@ describe('Properties Controller Tests', () => {
         .send({
           id: randId,
         })
+        .set('Cookie', cookies)
         .expect(400);
 
       expect(res.body.message).toBe(`Property with id ${randId} was not found`);
@@ -305,6 +344,7 @@ describe('Properties Controller Tests', () => {
 
       await request(app.getHttpServer())
         .delete('/properties')
+        .set('Cookie', cookies)
         .send({
           id: tempProperty.id,
         })
