@@ -33,8 +33,8 @@ import { defaultValidationPipeOptions } from '../utilities/default-validation-pi
 import { OptionalAuthGuard } from '../guards/optional.guard';
 import { mapTo } from '../utilities/mapTo';
 import { User } from '../dtos/users/user.dto';
-import { PaginationMeta } from 'src/dtos/shared/pagination.dto';
-import { PropertyFilterParams } from 'src/dtos/properties/property-filter-params.dto';
+import { PaginationMeta } from '../dtos/shared/pagination.dto';
+import { PropertyFilterParams } from '../dtos/properties/property-filter-params.dto';
 
 @Controller('properties')
 @ApiTags('properties')
