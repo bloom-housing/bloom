@@ -459,27 +459,6 @@ const ListingForm = ({
       enableUnitGroups,
     ]
   )
-  const enableLeasingAgentAltText = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableLeasingAgentAltText,
-    listing.jurisdictions.id
-  )
-
-  const leasingAgentNameText = enableLeasingAgentAltText
-    ? t("leasingAgent.ManagerPropName")
-    : t("leasingAgent.name")
-
-  const leasingAgentSectionTitleText = enableLeasingAgentAltText
-    ? t("listings.sections.leasingAgentManagerPropSectionTitle")
-    : t("listings.sections.leasingAgentTitle")
-
-  const leasingAgentTitleText = enableLeasingAgentAltText
-    ? t("leasingAgent.leasingAgentManagerPropTitle")
-    : t("leasingAgent.title")
-
-  const leasingAgentSubtitleText = enableLeasingAgentAltText
-    ? t("listings.sections.leasingAgentMaganerPropSubtitle")
-    : t("listings.sections.leasingAgentSubtitle")
-
   return loading === true ? null : (
     <>
       <LoadingOverlay isLoading={loading}>
@@ -681,10 +660,6 @@ const ListingForm = ({
                               FeatureFlagEnum.enableCompanyWebsite,
                               jurisdictionId
                             )}
-                            leasingAgentName={leasingAgentNameText}
-                            leasingAgentSectionTitle={leasingAgentSectionTitleText}
-                            leasingAgentTitle={leasingAgentTitleText}
-                            leasingAgentSubtitle={leasingAgentSubtitleText}
                             requiredFields={requiredFields}
                           />
                           <ApplicationTypes
