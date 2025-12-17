@@ -10,7 +10,10 @@ import {
   UsePipes,
   ValidationPipe,
   Delete,
+  UseGuards,
+  Request,
 } from '@nestjs/common';
+import { Request as ExpressRequest } from 'express';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { PermissionTypeDecorator } from '../decorators/permission-type.decorator';
 import { PaginatedPropertyDto } from '../dtos/properties/paginated-property.dto';
@@ -22,9 +25,13 @@ import Property from '../dtos/properties/property.dto';
 import { IdDTO } from '../dtos/shared/id.dto';
 import { SuccessDTO } from '../dtos/shared/success.dto';
 import { defaultValidationPipeOptions } from '../utilities/default-validation-pipe-options';
+import { OptionalAuthGuard } from 'src/guards/optional.guard';
+import { mapTo } from 'src/utilities/mapTo';
+import { User } from 'src/dtos/users/user.dto';
 
 @Controller('properties')
 @ApiTags('properties')
+@UseGuards(OptionalAuthGuard)
 @PermissionTypeDecorator('property')
 export class PropertyController {
   constructor(private readonly propertyService: PropertyService) {}
@@ -71,8 +78,14 @@ export class PropertyController {
   })
   @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
   @ApiOkResponse({ type: Property })
-  public async addProperty(@Body() propertyDto: PropertyCreate) {
-    return await this.propertyService.create(propertyDto);
+  public async addProperty(
+    @Request() req: ExpressRequest,
+    @Body() propertyDto: PropertyCreate,
+  ) {
+    return await this.propertyService.create(
+      propertyDto,
+      mapTo(User, req['user']),
+    );
   }
 
   @Put()
@@ -82,8 +95,14 @@ export class PropertyController {
   })
   @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
   @ApiOkResponse({ type: Property })
-  public async updateProperty(@Body() propertyDto: PropertyUpdate) {
-    return await this.propertyService.update(propertyDto);
+  public async updateProperty(
+    @Request() req: ExpressRequest,
+    @Body() propertyDto: PropertyUpdate,
+  ) {
+    return await this.propertyService.update(
+      propertyDto,
+      mapTo(User, req['user']),
+    );
   }
 
   @Delete()
@@ -93,7 +112,13 @@ export class PropertyController {
   })
   @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
   @ApiOkResponse({ type: SuccessDTO })
-  public async deleteById(@Body() idDto: IdDTO) {
-    return await this.propertyService.deleteOne(idDto.id);
+  public async deleteById(
+    @Request() req: ExpressRequest,
+    @Body() idDto: IdDTO,
+  ) {
+    return await this.propertyService.deleteOne(
+      idDto.id,
+      mapTo(User, req['user']),
+    );
   }
 }
