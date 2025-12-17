@@ -4,7 +4,7 @@ import request from 'supertest';
 import PropertyCreate from '../../src/dtos/properties/property-create.dto';
 import { AppModule } from '../../src/modules/app.module';
 import { PrismaService } from '../../src/services/prisma.service';
-import { PropertyQueryParams } from 'src/dtos/properties/property-query-params.dto';
+import { PropertyQueryParams } from '../../src/dtos/properties/property-query-params.dto';
 import { stringify } from 'qs';
 import { randomUUID } from 'crypto';
 

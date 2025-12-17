@@ -17,10 +17,10 @@ import PropertyCreate from '../dtos/properties/property-create.dto';
 import { PropertyUpdate } from '../dtos/properties/property-update.dto';
 import { SuccessDTO } from '../dtos/shared/success.dto';
 import { Prisma } from '@prisma/client';
-import { buildFilter } from 'src/utilities/build-filter';
-import { User } from 'src/dtos/users/user.dto';
+import { buildFilter } from '../utilities/build-filter';
+import { User } from '../dtos/users/user.dto';
 import { PermissionService } from './permission.service';
-import { permissionActions } from 'src/enums/permissions/permission-actions-enum';
+import { permissionActions } from '../enums/permissions/permission-actions-enum';
 
 @Injectable()
 export class PropertyService {

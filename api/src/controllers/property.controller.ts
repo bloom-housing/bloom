@@ -25,9 +25,9 @@ import Property from '../dtos/properties/property.dto';
 import { IdDTO } from '../dtos/shared/id.dto';
 import { SuccessDTO } from '../dtos/shared/success.dto';
 import { defaultValidationPipeOptions } from '../utilities/default-validation-pipe-options';
-import { OptionalAuthGuard } from 'src/guards/optional.guard';
-import { mapTo } from 'src/utilities/mapTo';
-import { User } from 'src/dtos/users/user.dto';
+import { OptionalAuthGuard } from '../guards/optional.guard';
+import { mapTo } from '../utilities/mapTo';
+import { User } from '../dtos/users/user.dto';
 
 @Controller('properties')
 @ApiTags('properties')
