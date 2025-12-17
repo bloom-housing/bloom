@@ -1103,7 +1103,7 @@ model UserPreferences {
 
 // END DETROIT SPECIFIC
 
-// START LA SEPCIFIC
+// START LA SPECIFIC
 
 model Properties {
   id             String         @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
