@@ -7874,28 +7874,6 @@ export interface PublicLotteryTotal {
   multiselectQuestionId?: string
 }
 
-export interface PaginatedProperty {
-  /**  */
-  items: Property[]
-
-  /**  */
-  meta: PaginationMeta
-}
-
-export interface PropertyQueryParams {
-  /**  */
-  page?: number
-
-  /**  */
-  limit?: number | "all"
-
-  /**  */
-  search?: string
-
-  /**  */
-  filter?: string[]
-}
-
 export interface PropertyCreate {
   /**  */
   name: string
@@ -7931,6 +7909,36 @@ export interface PropertyUpdate {
 
   /**  */
   name?: string
+}
+
+export interface PropertyQueryParams {
+  /**  */
+  page?: number
+
+  /**  */
+  limit?: number | "all"
+
+  /**  */
+  search?: string
+
+  /**  */
+  filter?: string[]
+}
+
+export interface PropertyFilterParams {
+  /**  */
+  $comparison: EnumPropertyFilterParamsComparison
+
+  /**  */
+  jurisdiction?: string
+}
+
+export interface PaginatedProperty {
+  /**  */
+  items: Property[]
+
+  /**  */
+  meta: PaginationMeta
 }
 
 export enum FilterAvailabilityEnum {
@@ -8361,4 +8369,13 @@ export enum ModificationEnum {
 export enum MfaType {
   "sms" = "sms",
   "email" = "email",
+}
+export enum EnumPropertyFilterParamsComparison {
+  "=" = "=",
+  "<>" = "<>",
+  "IN" = "IN",
+  ">=" = ">=",
+  "<=" = "<=",
+  "LIKE" = "LIKE",
+  "NA" = "NA",
 }

@@ -14,7 +14,12 @@ import {
   Request,
 } from '@nestjs/common';
 import { Request as ExpressRequest } from 'express';
-import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+  ApiExtraModels,
+  ApiOkResponse,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
 import { PermissionTypeDecorator } from '../decorators/permission-type.decorator';
 import { PaginatedPropertyDto } from '../dtos/properties/paginated-property.dto';
 import { PropertyQueryParams } from '../dtos/properties/property-query-params.dto';
@@ -28,10 +33,20 @@ import { defaultValidationPipeOptions } from '../utilities/default-validation-pi
 import { OptionalAuthGuard } from '../guards/optional.guard';
 import { mapTo } from '../utilities/mapTo';
 import { User } from '../dtos/users/user.dto';
+import { PaginationMeta } from 'src/dtos/shared/pagination.dto';
+import { PropertyFilterParams } from 'src/dtos/properties/property-filter-params.dto';
 
 @Controller('properties')
 @ApiTags('properties')
 @UseGuards(OptionalAuthGuard)
+@ApiExtraModels(
+  PropertyCreate,
+  PropertyUpdate,
+  PropertyQueryParams,
+  PropertyFilterParams,
+  PaginationMeta,
+  IdDTO,
+)
 @PermissionTypeDecorator('property')
 export class PropertyController {
   constructor(private readonly propertyService: PropertyService) {}
