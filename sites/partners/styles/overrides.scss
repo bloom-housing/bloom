@@ -3,9 +3,7 @@
     --field-value-label-color: var(--seeds-color-alert);
   }
 
-  .tag-uppercase {
-    text-transform: uppercase;
-    letter-spacing: var(--seeds-letter-spacing-wider);
+  .tag-full-width {
     // Allows for status tags to take up the full width of their container
     width: 100%;
     display: flex;
