@@ -406,7 +406,7 @@ export class ListingsService {
   /**
    * Get listings by multiselect question id
    */
-  retrieveListings(
+  retrieveListingsByMsq(
     params: {
       /**  */
       multiselectQuestionId: string
@@ -416,6 +416,27 @@ export class ListingsService {
     return new Promise((resolve, reject) => {
       let url = basePath + "/listings/byMultiselectQuestion/{multiselectQuestionId}"
       url = url.replace("{multiselectQuestionId}", params["multiselectQuestionId"] + "")
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Get listings by assigned porperty ID
+   */
+  retrieveListingsByProperty(
+    params: {
+      /**  */
+      propertyId: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<IdDTO[]> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/listings/byProperty/{propertyId}"
+      url = url.replace("{propertyId}", params["propertyId"] + "")
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
 
@@ -3010,14 +3031,21 @@ export class PropertiesService {
       limit?: number | "all"
       /**  */
       search?: string
+      /**  */
+      filter?: any | null[]
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<PagiantedProperty> {
+  ): Promise<PaginatedProperty> {
     return new Promise((resolve, reject) => {
       let url = basePath + "/properties"
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-      configs.params = { page: params["page"], limit: params["limit"], search: params["search"] }
+      configs.params = {
+        page: params["page"],
+        limit: params["limit"],
+        search: params["search"],
+        filter: params["filter"],
+      }
 
       /** 适配ios13，get请求不允许带body */
 
@@ -3091,7 +3119,7 @@ export class PropertiesService {
     })
   }
   /**
-   * Get a proprty object by ID
+   * Get a property object by ID
    */
   getById(
     params: {
@@ -3120,7 +3148,7 @@ export class PropertiesService {
       body?: PropertyQueryParams
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<PagiantedProperty> {
+  ): Promise<PaginatedProperty> {
     return new Promise((resolve, reject) => {
       let url = basePath + "/properties/list"
 
@@ -4265,6 +4293,9 @@ export interface Property {
 
   /**  */
   urlTitle?: string
+
+  /**  */
+  jurisdictions?: IdDTO
 }
 
 export interface Listing {
@@ -7807,7 +7838,7 @@ export interface PublicLotteryTotal {
   multiselectQuestionId?: string
 }
 
-export interface PagiantedProperty {
+export interface PaginatedProperty {
   /**  */
   items: Property[]
 
@@ -7824,6 +7855,9 @@ export interface PropertyQueryParams {
 
   /**  */
   search?: string
+
+  /**  */
+  filter?: string[]
 }
 
 export interface PropertyCreate {
@@ -7838,14 +7872,14 @@ export interface PropertyCreate {
 
   /**  */
   urlTitle?: string
+
+  /**  */
+  jurisdictions?: IdDTO
 }
 
 export interface PropertyUpdate {
   /**  */
   id: string
-
-  /**  */
-  name: string
 
   /**  */
   description?: string
@@ -7855,6 +7889,12 @@ export interface PropertyUpdate {
 
   /**  */
   urlTitle?: string
+
+  /**  */
+  jurisdictions?: IdDTO
+
+  /**  */
+  name?: string
 }
 
 export enum FilterAvailabilityEnum {

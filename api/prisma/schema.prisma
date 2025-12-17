@@ -400,6 +400,7 @@ model Jurisdictions {
   duplicateListingPermissions         UserRoleEnum[]              @map("duplicate_listing_permissions")
   requiredListingFields               String[]                    @default([]) @map("required_listing_fields")
   visibleNeighborhoodAmenities        NeighborhoodAmenitiesEnum[] @default([groceryStores, publicTransportation, schools, parksAndCommunityCenters, pharmacies, healthCareResources]) @map("visible_neighborhood_amenities")
+  properties                          Properties[]
 
   @@map("jurisdictions")
 }
@@ -1105,16 +1106,19 @@ model UserPreferences {
 // START LA SEPCIFIC
 
 model Properties {
-  id          String     @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  createdAt   DateTime   @default(now()) @map("created_at") @db.Timestamp(6)
-  updatedAt   DateTime   @updatedAt @map("updated_at") @db.Timestamp(6)
-  name        String
-  description String?
-  url         String?
-  urlTitle    String?    @map("url_title")
-  listings    Listings[]
+  id             String         @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  createdAt      DateTime       @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt      DateTime       @updatedAt @map("updated_at") @db.Timestamp(6)
+  name           String
+  description    String?
+  url            String?
+  urlTitle       String?        @map("url_title")
+  jurisdictionId String?        @map("jurisdiction_id") @db.Uuid
+  listings       Listings[]
+  jurisdictions  Jurisdictions? @relation(fields: [jurisdictionId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@index([id, name])
+  @@map("properties")
 }
 
 // END LA SPECIFIC

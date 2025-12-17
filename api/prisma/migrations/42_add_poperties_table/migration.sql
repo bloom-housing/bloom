@@ -3,7 +3,7 @@ ALTER TABLE "listings"
 ADD COLUMN "property_id" UUID;
 
 -- CreateTable
-CREATE TABLE "Properties" (
+CREATE TABLE "properties" (
     "id" UUID NOT NULL DEFAULT uuid_generate_v4(),
     "created_at" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(6) NOT NULL,
@@ -11,12 +11,16 @@ CREATE TABLE "Properties" (
     "description" TEXT,
     "url" TEXT,
     "url_title" TEXT,
+    "jurisdiction_id" UUID,
 
-    CONSTRAINT "Properties_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "properties_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
-CREATE INDEX "Properties_id_name_idx" ON "Properties"("id", "name");
+CREATE INDEX "properties_id_name_idx" ON "properties"("id", "name");
 
 -- AddForeignKey
-ALTER TABLE "listings" ADD CONSTRAINT "listings_property_id_fkey" FOREIGN KEY ("property_id") REFERENCES "Properties"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "listings" ADD CONSTRAINT "listings_property_id_fkey" FOREIGN KEY ("property_id") REFERENCES "properties"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "properties" ADD CONSTRAINT "properties_jurisdiction_id_fkey" FOREIGN KEY ("jurisdiction_id") REFERENCES "jurisdictions"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;

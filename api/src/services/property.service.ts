@@ -79,6 +79,13 @@ export class PropertyService {
     const rawProperty = this.prisma.properties.create({
       data: {
         ...propertyDto,
+        jurisdictions: propertyDto.jurisdictions
+          ? {
+              connect: {
+                id: propertyDto.jurisdictions.id,
+              },
+            }
+          : undefined,
       },
     });
 
@@ -91,6 +98,13 @@ export class PropertyService {
     const rawProperty = await this.prisma.properties.update({
       data: {
         ...propertyDto,
+        jurisdictions: propertyDto.jurisdictions
+          ? {
+              connect: {
+                id: propertyDto.jurisdictions.id,
+              },
+            }
+          : undefined,
       },
       where: {
         id: propertyDto.id,
