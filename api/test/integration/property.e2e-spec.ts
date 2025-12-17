@@ -11,11 +11,13 @@ import { randomUUID } from 'crypto';
 import { userFactory } from '../../prisma/seed-helpers/user-factory';
 import { Login } from '../../src/dtos/auth/login.dto';
 import { jurisdictionFactory } from '../../prisma/seed-helpers/jurisdiction-factory';
+import { Compare } from '../../src/dtos/shared/base-filter.dto';
 
 describe('Properties Controller Tests', () => {
   let app: INestApplication;
   let prisma: PrismaService;
-  let jurisdictionId: string;
+  let jurisdictionAId: string;
+  let jurisdictionBId: string;
   let cookies = '';
 
   const mockProperties: PropertyCreate[] = [
@@ -45,10 +47,13 @@ describe('Properties Controller Tests', () => {
     app.use(cookieParser());
     await app.init();
 
-    const jurisdiction = await prisma.jurisdictions.create({
+    const jurisdictionA = await prisma.jurisdictions.create({
       data: jurisdictionFactory(),
     });
-    jurisdictionId = jurisdiction.id;
+
+    const jurisdictionB = await prisma.jurisdictions.create({
+      data: jurisdictionFactory(),
+    });
 
     const storedUser = await prisma.userAccounts.create({
       data: await userFactory({
@@ -68,8 +73,28 @@ describe('Properties Controller Tests', () => {
 
     cookies = resLogIn.headers['set-cookie'];
 
-    await prisma.properties.createMany({
-      data: mockProperties,
+    jurisdictionAId = jurisdictionA.id;
+    jurisdictionBId = jurisdictionB.id;
+
+    await prisma.properties.create({
+      data: {
+        ...mockProperties[0],
+        jurisdictions: {
+          connect: {
+            id: jurisdictionA.id,
+          },
+        },
+      },
+    });
+    await prisma.properties.create({
+      data: {
+        ...mockProperties[1],
+        jurisdictions: {
+          connect: {
+            id: jurisdictionB.id,
+          },
+        },
+      },
     });
   });
 
@@ -141,6 +166,60 @@ describe('Properties Controller Tests', () => {
       expect(res.body.items).toHaveLength(1);
       expect(res.body.items.pop()).toEqual(
         expect.objectContaining(mockProperties[1]),
+      );
+    });
+
+    it('should get listings matching the jurisdiction filters', async () => {
+      let queryParams: PropertyQueryParams = {
+        filter: [
+          {
+            $comparison: Compare.IN,
+            jurisdiction: jurisdictionBId,
+          },
+        ],
+      };
+
+      let res = await request(app.getHttpServer())
+        .get(`/properties?${stringify(queryParams as any)}`)
+        .expect(200);
+
+      expect(res.body.meta).toEqual({
+        currentPage: 1,
+        itemCount: 1,
+        itemsPerPage: 10,
+        totalItems: 1,
+        totalPages: 1,
+      });
+
+      expect(res.body.items).toHaveLength(1);
+      expect(res.body.items.pop()).toEqual(
+        expect.objectContaining(mockProperties[1]),
+      );
+
+      queryParams = {
+        filter: [
+          {
+            $comparison: Compare.IN,
+            jurisdiction: jurisdictionAId,
+          },
+        ],
+      };
+
+      res = await request(app.getHttpServer())
+        .get(`/properties?${stringify(queryParams as any)}`)
+        .expect(200);
+
+      expect(res.body.meta).toEqual({
+        currentPage: 1,
+        itemCount: 1,
+        itemsPerPage: 10,
+        totalItems: 1,
+        totalPages: 1,
+      });
+
+      expect(res.body.items).toHaveLength(1);
+      expect(res.body.items.pop()).toEqual(
+        expect.objectContaining(mockProperties[0]),
       );
     });
   });
