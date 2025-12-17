@@ -387,6 +387,20 @@ const detailView = {
       multiselectQuestion: true,
       selections: {
         include: {
+          addressHolderAddress: {
+            select: {
+              id: true,
+              placeName: true,
+              city: true,
+              county: true,
+              state: true,
+              street: true,
+              street2: true,
+              zipCode: true,
+              latitude: true,
+              longitude: true,
+            },
+          },
           multiselectOption: true,
         },
       },

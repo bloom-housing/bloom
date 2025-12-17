@@ -1011,8 +1011,11 @@ describe('Application Controller Tests', () => {
         updatedAt: expect.any(String),
         deletedAt: null,
         confirmationCode: expect.any(String),
+        accessibleUnitWaitlistNumber: null,
+        conventionalUnitWaitlistNumber: null,
         isNewest: true,
         markedAsDuplicate: false,
+        manualLotteryPositionNumber: null,
         submissionDate: expect.any(String),
         accessibility: {
           id: expect.any(String),
