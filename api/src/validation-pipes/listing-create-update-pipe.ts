@@ -72,6 +72,40 @@ export class ListingCreateUpdateValidationPipe extends ValidationPipe {
       minimumImagesRequired,
     };
 
+    // Check for nested required fields
+    // Only works when `requiredFields` property is in nested object dto
+    const hasNestedRequired = requiredFields.some((f) => f.includes('.'));
+    if (hasNestedRequired) {
+      const relevantForPath = (path: string) =>
+        (path
+          ? requiredFields.filter((f) => f.startsWith(`${path}.`))
+          : requiredFields
+        )
+          .map((f) => (path ? f.replace(`${path}.`, '') : f))
+          .filter(Boolean);
+
+      const injectRequiredFields = (node: any, path = '') => {
+        if (!node) return;
+        const currentRequired = relevantForPath(path);
+        if (currentRequired.length === 0 && path) return;
+
+        if (Array.isArray(node)) {
+          node.forEach((item) => injectRequiredFields(item, path));
+          return;
+        }
+
+        if (typeof node === 'object') {
+          node.requiredFields ??= currentRequired;
+          Object.entries(node).forEach(([key, child]) => {
+            const childPath = path ? `${path}.${key}` : key;
+            injectRequiredFields(child, childPath);
+          });
+        }
+      };
+
+      injectRequiredFields(transformedValue);
+    }
+
     // Transform using the appropriate DTO with validation groups
     return await super.transform(transformedValue, {
       ...metadata,
