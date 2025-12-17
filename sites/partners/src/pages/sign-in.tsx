@@ -105,7 +105,7 @@ const SignIn = () => {
     }
   }, [networkError])
 
-  let formToRender: JSX.Element
+  let formToRender: React.ReactNode
 
   if (Object.keys(errors).length && !!networkError) {
     resetNetworkError()

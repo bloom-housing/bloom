@@ -1,25 +1,15 @@
 import React from "react"
 import { setupServer } from "msw/node"
-import { FormProvider, useForm } from "react-hook-form"
 import { screen } from "@testing-library/react"
 import RankingsAndResults from "../../../../../src/components/listings/PaperListingForm/sections/RankingsAndResults"
-import { formDefaults, FormListing } from "../../../../../src/lib/listings/formTypes"
-import { mockNextRouter, mockTipTapEditor, render } from "../../../../testUtils"
+import { formDefaults } from "../../../../../src/lib/listings/formTypes"
+import {
+  FormProviderWrapper,
+  mockNextRouter,
+  mockTipTapEditor,
+  render,
+} from "../../../../testUtils"
 import userEvent from "@testing-library/user-event"
-
-const FormComponent = ({
-  children,
-  values,
-}: {
-  values?: FormListing
-  children: React.ReactNode
-}) => {
-  const formMethods = useForm<FormListing>({
-    defaultValues: { ...formDefaults, ...values },
-    shouldUnregister: false,
-  })
-  return <FormProvider {...formMethods}>{children}</FormProvider>
-}
 
 const server = setupServer()
 beforeAll(() => {
@@ -35,7 +25,7 @@ describe("RankingsAndResults", () => {
 
     it("should not show lottery fields when enableWaitlistLottery is false and waitlist is open", async () => {
       render(
-        <FormComponent
+        <FormProviderWrapper
           values={{
             ...formDefaults,
             jurisdictions: { id: "jurisdiction1" },
@@ -51,7 +41,7 @@ describe("RankingsAndResults", () => {
             enableWaitlistLottery={false}
             enableWhatToExpectAdditionalField={false}
           />
-        </FormComponent>
+        </FormProviderWrapper>
       )
 
       await screen.findByText("Rankings & results")
@@ -70,7 +60,7 @@ describe("RankingsAndResults", () => {
 
     it("should show review order options when waitlist is open and feature flag is enabled", async () => {
       render(
-        <FormComponent
+        <FormProviderWrapper
           values={{
             ...formDefaults,
             jurisdictions: { id: "jurisdiction1" },
@@ -86,7 +76,7 @@ describe("RankingsAndResults", () => {
             enableWaitlistLottery={true}
             enableWhatToExpectAdditionalField={false}
           />
-        </FormComponent>
+        </FormProviderWrapper>
       )
 
       screen.getByRole("heading", { name: "Rankings & results" })
@@ -102,7 +92,7 @@ describe("RankingsAndResults", () => {
 
     it("should show review order options when availabilityQuestion is availableUnits and enableWaitlistLottery is false", () => {
       render(
-        <FormComponent
+        <FormProviderWrapper
           values={{
             ...formDefaults,
             jurisdictions: { id: "jurisdiction1" },
@@ -118,7 +108,7 @@ describe("RankingsAndResults", () => {
             enableWaitlistLottery={false}
             enableWhatToExpectAdditionalField={false}
           />
-        </FormComponent>
+        </FormProviderWrapper>
       )
 
       screen.getByRole("heading", { name: "Rankings & results" })
@@ -134,7 +124,7 @@ describe("RankingsAndResults", () => {
     it("should show proper message when selecting lottery as a non admin user", async () => {
       process.env.showLottery = "true"
       render(
-        <FormComponent>
+        <FormProviderWrapper>
           <RankingsAndResults
             requiredFields={[]}
             whatToExpectEditor={null}
@@ -144,7 +134,7 @@ describe("RankingsAndResults", () => {
             enableWaitlistLottery={false}
             enableWhatToExpectAdditionalField={false}
           />
-        </FormComponent>
+        </FormProviderWrapper>
       )
 
       screen.getByRole("heading", { name: "Rankings & results" })
@@ -159,7 +149,7 @@ describe("RankingsAndResults", () => {
     it("should show proper message when selecting lottery as an admin user", async () => {
       process.env.showLottery = "true"
       render(
-        <FormComponent>
+        <FormProviderWrapper>
           <RankingsAndResults
             isAdmin={true}
             listing={null}
@@ -171,7 +161,7 @@ describe("RankingsAndResults", () => {
             enableWaitlistLottery={false}
             enableWhatToExpectAdditionalField={false}
           />
-        </FormComponent>
+        </FormProviderWrapper>
       )
 
       screen.getByRole("heading", { name: "Rankings & results" })

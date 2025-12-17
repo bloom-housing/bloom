@@ -1,8 +1,6 @@
 import React from "react"
-import { FormProvider, useForm } from "react-hook-form"
-import { formDefaults, FormListing } from "../../../../../src/lib/listings/formTypes"
 import { setupServer } from "msw/lib/node"
-import { mockNextRouter } from "../../../../testUtils"
+import { FormProviderWrapper, mockNextRouter } from "../../../../testUtils"
 import { render, screen } from "@testing-library/react"
 import AdditionalFees from "../../../../../src/components/listings/PaperListingForm/sections/AdditionalFees"
 import { AuthContext } from "@bloom-housing/shared-helpers"
@@ -13,14 +11,6 @@ import {
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import userEvent from "@testing-library/user-event"
 import "@testing-library/jest-dom"
-
-const FormComponent = ({ children, values }: { values?: Partial<FormListing>; children }) => {
-  const formMethods = useForm<FormListing>({
-    defaultValues: { ...formDefaults, ...values },
-    shouldUnregister: false,
-  })
-  return <FormProvider {...formMethods}>{children}</FormProvider>
-}
 
 const server = setupServer()
 
@@ -45,7 +35,7 @@ describe("AdditionalFees", () => {
           doJurisdictionsHaveFeatureFlagOn: () => false,
         }}
       >
-        <FormComponent>
+        <FormProviderWrapper>
           <AdditionalFees
             enableNonRegulatedListings={false}
             enableUtilitiesIncluded={false}
@@ -57,7 +47,7 @@ describe("AdditionalFees", () => {
             }}
             requiredFields={[]}
           />
-        </FormComponent>
+        </FormProviderWrapper>
       </AuthContext.Provider>
     )
 
@@ -92,7 +82,7 @@ describe("AdditionalFees", () => {
             featureFlag === FeatureFlagEnum.enableUtilitiesIncluded,
         }}
       >
-        <FormComponent>
+        <FormProviderWrapper>
           <AdditionalFees
             enableNonRegulatedListings={false}
             enableUtilitiesIncluded={true}
@@ -104,7 +94,7 @@ describe("AdditionalFees", () => {
             }}
             requiredFields={[]}
           />
-        </FormComponent>
+        </FormProviderWrapper>
       </AuthContext.Provider>
     )
 
@@ -155,14 +145,14 @@ describe("AdditionalFees", () => {
             featureFlag === FeatureFlagEnum.enableNonRegulatedListings,
         }}
       >
-        <FormComponent values={{ listingType: EnumListingListingType.nonRegulated }}>
+        <FormProviderWrapper values={{ listingType: EnumListingListingType.nonRegulated }}>
           <AdditionalFees
             existingUtilities={{}}
             requiredFields={[]}
             enableNonRegulatedListings={true}
             enableUtilitiesIncluded={false}
           />
-        </FormComponent>
+        </FormProviderWrapper>
       </AuthContext.Provider>
     )
 

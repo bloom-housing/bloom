@@ -62,6 +62,7 @@ module.exports = withBundleAnalyzer(
     },
     sassOptions: {
       additionalData: tailwindVars,
+      silenceDeprecations: ["import", "legacy-js-api", "global-builtin"], // TODO: this is hiding tech debt!
     },
     transpilePackages: [
       "@bloom-housing/ui-seeds",

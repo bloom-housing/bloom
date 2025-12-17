@@ -1759,6 +1759,22 @@ export class ApplicationsService {
     })
   }
   /**
+   * trigger the remove PII cron job
+   */
+  removePiiCronJob(options: IRequestOptions = {}): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/applications/removePIICronJob"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = null
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
    * Update application by id
    */
   update(
@@ -1826,28 +1842,6 @@ export class UserService {
     })
   }
   /**
-   * Delete user by id
-   */
-  delete(
-    params: {
-      /** requestBody */
-      body?: IdDTO
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<SuccessDTO> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/user"
-
-      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
    * Creates a public only user
    */
   create(
@@ -1864,6 +1858,28 @@ export class UserService {
 
       const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
       configs.params = { noWelcomeEmail: params["noWelcomeEmail"] }
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Delete user by id
+   */
+  delete(
+    params: {
+      /** requestBody */
+      body?: UserDeleteDTO
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user"
+
+      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
 
       let data = params.body
 
@@ -1919,23 +1935,22 @@ export class UserService {
     })
   }
   /**
-   * Forgot Password
+   * Get the ids of the user favorites
    */
-  forgotPassword(
+  favoriteListings(
     params: {
-      /** requestBody */
-      body?: EmailAndAppUrl
+      /**  */
+      id: string
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<SuccessDTO> {
+  ): Promise<IdDTO[]> {
     return new Promise((resolve, reject) => {
-      let url = basePath + "/user/forgot-password"
+      let url = basePath + "/user/favoriteListings/{id}"
+      url = url.replace("{id}", params["id"] + "")
 
-      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
 
-      let data = params.body
-
-      configs.data = data
+      /** 适配ios13，get请求不允许带body */
 
       axios(configs, resolve, reject)
     })
@@ -2073,22 +2088,23 @@ export class UserService {
     })
   }
   /**
-   * Get the ids of the user favorites
+   * Forgot Password
    */
-  favoriteListings(
+  forgotPassword(
     params: {
-      /**  */
-      id: string
+      /** requestBody */
+      body?: EmailAndAppUrl
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<IdDTO[]> {
+  ): Promise<SuccessDTO> {
     return new Promise((resolve, reject) => {
-      let url = basePath + "/user/favoriteListings/{id}"
-      url = url.replace("{id}", params["id"] + "")
+      let url = basePath + "/user/forgot-password"
 
-      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
 
-      /** 适配ios13，get请求不允许带body */
+      let data = params.body
+
+      configs.data = data
 
       axios(configs, resolve, reject)
     })
@@ -2109,6 +2125,38 @@ export class UserService {
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
 
       let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * trigger the user warn of deletion cron job
+   */
+  userWarnCronJob(options: IRequestOptions = {}): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user/userWarnCronJob"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = null
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * trigger the delete inactive users cron job
+   */
+  deleteInactiveUsersCronJob(options: IRequestOptions = {}): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user/deleteInactiveUsersCronJob"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = null
 
       configs.data = data
 
@@ -3139,6 +3187,9 @@ export interface ListingFilterParams {
 
   /**  */
   zipCode?: string
+
+  /**  */
+  listingType?: ListingTypeEnum
 }
 
 export interface ListingsQueryBody {
@@ -3536,6 +3587,9 @@ export interface ListingImage {
 
   /**  */
   ordinal?: number
+
+  /**  */
+  description?: string
 }
 
 export interface ListingFeatures {
@@ -4107,7 +4161,7 @@ export interface UnitsSummary {
   totalAvailable?: number
 
   /**  */
-  rentType?: string
+  rentType?: RentTypeEnum
 
   /**  */
   flatRentValueFrom?: number
@@ -4270,6 +4324,12 @@ export interface Listing {
 
   /**  */
   buildingSelectionCriteria?: string
+
+  /**  */
+  marketingFlyer?: string
+
+  /**  */
+  accessibleMarketingFlyer?: string
 
   /**  */
   cocInfo?: string
@@ -4450,6 +4510,12 @@ export interface Listing {
 
   /**  */
   listingsBuildingSelectionCriteriaFile?: Asset
+
+  /**  */
+  listingsMarketingFlyerFile?: Asset
+
+  /**  */
+  listingsAccessibleMarketingFlyerFile?: Asset
 
   /**  */
   jurisdictions: IdDTO
@@ -4801,7 +4867,7 @@ export interface UnitsSummaryCreate {
   totalAvailable?: number
 
   /**  */
-  rentType?: string
+  rentType?: RentTypeEnum
 
   /**  */
   flatRentValueFrom?: number
@@ -4819,6 +4885,9 @@ export interface ListingImageCreate {
 
   /**  */
   assets: AssetCreate
+
+  /**  */
+  description?: string
 }
 
 export interface AddressCreate {
@@ -4969,6 +5038,12 @@ export interface ListingCreate {
 
   /**  */
   buildingSelectionCriteria?: string
+
+  /**  */
+  marketingFlyer?: string
+
+  /**  */
+  accessibleMarketingFlyer?: string
 
   /**  */
   cocInfo?: string
@@ -5193,6 +5268,12 @@ export interface ListingCreate {
   listingsBuildingSelectionCriteriaFile?: AssetCreate
 
   /**  */
+  listingsMarketingFlyerFile?: AssetCreate
+
+  /**  */
+  listingsAccessibleMarketingFlyerFile?: AssetCreate
+
+  /**  */
   listingsResult?: AssetCreate
 
   /**  */
@@ -5315,6 +5396,12 @@ export interface ListingUpdate {
 
   /**  */
   buildingSelectionCriteria?: string
+
+  /**  */
+  marketingFlyer?: string
+
+  /**  */
+  accessibleMarketingFlyer?: string
 
   /**  */
   cocInfo?: string
@@ -5537,6 +5624,12 @@ export interface ListingUpdate {
 
   /**  */
   listingsBuildingSelectionCriteriaFile?: AssetCreate
+
+  /**  */
+  listingsMarketingFlyerFile?: AssetCreate
+
+  /**  */
+  listingsAccessibleMarketingFlyerFile?: AssetCreate
 
   /**  */
   listingsResult?: AssetCreate
@@ -5894,6 +5987,15 @@ export interface Application {
   status: ApplicationStatusEnum
 
   /**  */
+  accessibleUnitWaitlistNumber?: number
+
+  /**  */
+  conventionalUnitWaitlistNumber?: number
+
+  /**  */
+  manualLotteryPositionNumber?: number
+
+  /**  */
   language?: LanguagesEnum
 
   /**  */
@@ -6184,6 +6286,9 @@ export interface JurisdictionCreate {
   languages: LanguagesEnum[]
 
   /**  */
+  minimumListingPublishImagesRequired?: number
+
+  /**  */
   partnerTerms?: string
 
   /**  */
@@ -6244,6 +6349,9 @@ export interface JurisdictionUpdate {
 
   /**  */
   languages: LanguagesEnum[]
+
+  /**  */
+  minimumListingPublishImagesRequired?: number
 
   /**  */
   partnerTerms?: string
@@ -6338,6 +6446,9 @@ export interface Jurisdiction {
 
   /**  */
   multiselectQuestions: IdDTO[]
+
+  /**  */
+  minimumListingPublishImagesRequired?: number
 
   /**  */
   partnerTerms?: string
@@ -6716,6 +6827,15 @@ export interface PublicAppsFiltered {
   status: ApplicationStatusEnum
 
   /**  */
+  accessibleUnitWaitlistNumber?: number
+
+  /**  */
+  conventionalUnitWaitlistNumber?: number
+
+  /**  */
+  manualLotteryPositionNumber?: number
+
+  /**  */
   language?: LanguagesEnum
 
   /**  */
@@ -6996,6 +7116,15 @@ export interface ApplicationCreate {
   status: ApplicationStatusEnum
 
   /**  */
+  accessibleUnitWaitlistNumber?: number
+
+  /**  */
+  conventionalUnitWaitlistNumber?: number
+
+  /**  */
+  manualLotteryPositionNumber?: number
+
+  /**  */
   language?: LanguagesEnum
 
   /**  */
@@ -7095,6 +7224,15 @@ export interface ApplicationUpdate {
 
   /**  */
   status: ApplicationStatusEnum
+
+  /**  */
+  accessibleUnitWaitlistNumber?: number
+
+  /**  */
+  conventionalUnitWaitlistNumber?: number
+
+  /**  */
+  manualLotteryPositionNumber?: number
 
   /**  */
   language?: LanguagesEnum
@@ -7341,6 +7479,14 @@ export interface UserCreate {
 
   /**  */
   jurisdictions?: IdDTO[]
+}
+
+export interface UserDeleteDTO {
+  /**  */
+  id: string
+
+  /**  */
+  shouldRemoveApplication?: boolean
 }
 
 export interface UserInvite {
@@ -7861,6 +8007,11 @@ export enum ListingsStatusEnum {
   "pendingReview" = "pendingReview",
   "changesRequested" = "changesRequested",
 }
+
+export enum ListingTypeEnum {
+  "regulated" = "regulated",
+  "nonRegulated" = "nonRegulated",
+}
 export enum EnumListingFilterParamsComparison {
   "=" = "=",
   "<>" = "<>",
@@ -7891,6 +8042,7 @@ export enum ListingOrderByKeys {
   "marketingType" = "marketingType",
   "marketingYear" = "marketingYear",
   "marketingSeason" = "marketingSeason",
+  "listingType" = "listingType",
 }
 
 export enum OrderByEnum {
@@ -7921,6 +8073,7 @@ export enum ListingFilterKeys {
   "section8Acceptance" = "section8Acceptance",
   "status" = "status",
   "zipCode" = "zipCode",
+  "listingType" = "listingType",
 }
 
 export enum ApplicationAddressTypeEnum {
@@ -8090,9 +8243,11 @@ export enum IncomePeriodEnum {
 }
 
 export enum ApplicationStatusEnum {
-  "draft" = "draft",
   "submitted" = "submitted",
-  "removed" = "removed",
+  "declined" = "declined",
+  "receivedUnit" = "receivedUnit",
+  "waitlist" = "waitlist",
+  "waitlistDeclined" = "waitlistDeclined",
 }
 
 export enum ApplicationSubmissionTypeEnum {
@@ -8163,6 +8318,7 @@ export enum NeighborhoodAmenitiesEnum {
 }
 
 export enum FeatureFlagEnum {
+  "disableBuildingSelectionCriteria" = "disableBuildingSelectionCriteria",
   "disableCommonApplication" = "disableCommonApplication",
   "disableJurisdictionalAdmin" = "disableJurisdictionalAdmin",
   "disableListingPreferences" = "disableListingPreferences",
@@ -8170,6 +8326,7 @@ export enum FeatureFlagEnum {
   "enableAccessibilityFeatures" = "enableAccessibilityFeatures",
   "enableAdaOtherOption" = "enableAdaOtherOption",
   "enableAdditionalResources" = "enableAdditionalResources",
+  "enableApplicationStatus" = "enableApplicationStatus",
   "enableCompanyWebsite" = "enableCompanyWebsite",
   "enableCreditScreeningFee" = "enableCreditScreeningFee",
   "enableFullTimeStudentQuestion" = "enableFullTimeStudentQuestion",
@@ -8182,9 +8339,11 @@ export enum FeatureFlagEnum {
   "enableListingFavoriting" = "enableListingFavoriting",
   "enableListingFileNumber" = "enableListingFileNumber",
   "enableListingFiltering" = "enableListingFiltering",
+  "enableListingImageAltText" = "enableListingImageAltText",
   "enableListingOpportunity" = "enableListingOpportunity",
   "enableListingPagination" = "enableListingPagination",
   "enableListingUpdatedAt" = "enableListingUpdatedAt",
+  "enableMarketingFlyer" = "enableMarketingFlyer",
   "enableMarketingStatus" = "enableMarketingStatus",
   "enableMarketingStatusMonths" = "enableMarketingStatusMonths",
   "enableNeighborhoodAmenities" = "enableNeighborhoodAmenities",
@@ -8192,6 +8351,8 @@ export enum FeatureFlagEnum {
   "enableNonRegulatedListings" = "enableNonRegulatedListings",
   "enablePartnerDemographics" = "enablePartnerDemographics",
   "enablePartnerSettings" = "enablePartnerSettings",
+  "enableProperties" = "enableProperties",
+  "enableReferralQuestionUnits" = "enableReferralQuestionUnits",
   "enableRegions" = "enableRegions",
   "enableSection8Question" = "enableSection8Question",
   "enableSingleUseCode" = "enableSingleUseCode",

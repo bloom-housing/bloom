@@ -14,7 +14,6 @@ import {
   ListSection,
   ListingDetailItem,
   ListingDetails,
-  ListingMap,
   Message,
   OneLineAddress,
   EventSection,
@@ -41,6 +40,7 @@ import {
   IMAGE_FALLBACK_URL,
   pdfUrlFromListingEvents,
   AuthContext,
+  Map,
 } from "@bloom-housing/shared-helpers"
 import { Card, Heading as SeedsHeading } from "@bloom-housing/ui-seeds"
 import dayjs from "dayjs"
@@ -501,6 +501,7 @@ export const ListingView = (props: ListingProps) => {
     const description = () => {
       switch (listing.reviewOrderType) {
         case ReviewOrderTypeEnum.waitlist:
+        case ReviewOrderTypeEnum.waitlistLottery:
           return t("listings.waitlist.submitForWaitlist")
         case ReviewOrderTypeEnum.firstComeFirstServe:
           return t("listings.eligibleApplicants.FCFS")
@@ -1051,7 +1052,7 @@ export const ListingView = (props: ListingProps) => {
           desktopClass="bg-primary-lighter"
         >
           <div className="listing-detail-panel">
-            <ListingMap
+            <Map
               address={getGenericAddress(listing.listingsBuildingAddress)}
               listingName={listing.name}
             />

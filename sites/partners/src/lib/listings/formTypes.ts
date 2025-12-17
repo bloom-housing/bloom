@@ -1,4 +1,5 @@
-import { LatitudeLongitude, TimeFieldPeriod } from "@bloom-housing/ui-components"
+import { TimeFieldPeriod } from "@bloom-housing/ui-components"
+import { LatitudeLongitude } from "@bloom-housing/shared-helpers"
 import {
   ApplicationAddressTypeEnum,
   EnumListingDepositType,
@@ -49,6 +50,8 @@ export type FormListing = Omit<Listing, "countyCode"> & {
   paperApplicationChoice?: YesNoEnum
   referralOpportunityChoice?: YesNoEnum
   criteriaAttachType?: string
+  marketingFlyerAttachType?: "upload" | "url"
+  accessibleMarketingFlyerAttachType?: "upload" | "url"
   includeCommunityDisclaimerQuestion?: YesNoEnum
   listingSection8Acceptance?: YesNoEnum
   communityDisclaimerTitle?: string
@@ -113,6 +116,10 @@ export const formDefaults: FormListing = {
   buildingSelectionCriteria: "",
   listingsBuildingSelectionCriteriaFile: null,
   criteriaAttachType: "",
+  marketingFlyer: "",
+  listingsMarketingFlyerFile: null,
+  accessibleMarketingFlyer: "",
+  listingsAccessibleMarketingFlyerFile: null,
   jurisdictions: undefined,
   costsNotIncluded: "",
   creditHistory: "",

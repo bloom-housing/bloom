@@ -24,6 +24,7 @@ import { ScriptRunnerModule } from './script-runner.module';
 import { LotteryModule } from './lottery.module';
 import { FeatureFlagModule } from './feature-flag.module';
 import { DataExplorerModule } from './data-explorer.module';
+import { CronJobModule } from './cron-job.module';
 
 @Module({
   imports: [
@@ -46,6 +47,7 @@ import { DataExplorerModule } from './data-explorer.module';
     LotteryModule,
     FeatureFlagModule,
     DataExplorerModule,
+    CronJobModule,
     ThrottlerModule.forRoot([
       {
         ttl: Number(process.env.THROTTLE_TTL),

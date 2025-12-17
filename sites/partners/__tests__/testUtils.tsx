@@ -2,6 +2,8 @@ import React, { FC, ReactElement } from "react"
 import { render, RenderOptions } from "@testing-library/react"
 import { SWRConfig } from "swr"
 import { AuthProvider, ConfigProvider } from "@bloom-housing/shared-helpers"
+import { formDefaults, FormListing } from "../src/lib/listings/formTypes"
+import { FormProvider, useForm } from "react-hook-form"
 
 const AllTheProviders: FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
@@ -67,4 +69,15 @@ export const mockTipTapEditor = () => {
   HTMLElement.prototype.getClientRects = (): DOMRectList => new FakeDOMRectList()
   Range.prototype.getBoundingClientRect = getBoundingClientRect
   Range.prototype.getClientRects = (): DOMRectList => new FakeDOMRectList()
+}
+
+export const FormProviderWrapper = ({
+  children,
+  values,
+}: React.PropsWithChildren<{ values?: Partial<FormListing> }>) => {
+  const formMethods = useForm<FormListing>({
+    defaultValues: { ...formDefaults, ...values },
+    shouldUnregister: false,
+  })
+  return <FormProvider {...formMethods}>{children}</FormProvider>
 }
