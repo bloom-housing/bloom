@@ -104,6 +104,7 @@ export const stagingSeed = async (
         FeatureFlagEnum.enableHomeType,
         FeatureFlagEnum.enableIsVerified,
         FeatureFlagEnum.enableLimitedHowDidYouHear,
+        FeatureFlagEnum.enableLeasingAgentAltText,
         FeatureFlagEnum.enableListingFavoriting,
         FeatureFlagEnum.enableListingFiltering,
         FeatureFlagEnum.enableListingOpportunity,
@@ -141,6 +142,7 @@ export const stagingSeed = async (
       featureFlags: [
         FeatureFlagEnum.enableGeocodingPreferences,
         FeatureFlagEnum.enableGeocodingRadiusMethod,
+        FeatureFlagEnum.enableLeasingAgentAltText,
         FeatureFlagEnum.enableListingFiltering,
         FeatureFlagEnum.enableListingOpportunity,
         FeatureFlagEnum.enableListingPagination,
@@ -166,6 +168,7 @@ export const stagingSeed = async (
         FeatureFlagEnum.enableApplicationStatus,
         FeatureFlagEnum.enableCreditScreeningFee,
         FeatureFlagEnum.enableHousingDeveloperOwner,
+        FeatureFlagEnum.enableLeasingAgentAltText,
         FeatureFlagEnum.enableListingFileNumber,
         FeatureFlagEnum.enableListingFiltering,
         FeatureFlagEnum.enableListingImageAltText,
