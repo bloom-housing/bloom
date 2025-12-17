@@ -192,7 +192,7 @@ describe("Listing Management Tests", () => {
     cy.getByID("listingsBuildingAddress.state").select(listing["buildingAddress.state"])
     cy.getByID("listingsBuildingAddress.zipCode").type(listing["buildingAddress.zipCode"])
     cy.getByID("yearBuilt").type(listing["yearBuilt"])
-    cy.get(".addressPopup").contains(listing["buildingAddress.street"])
+    cy.getByID("map-address-popup").contains(listing["buildingAddress.street"])
     cy.getByID("reservedCommunityTypes.id").select(listing["reservedCommunityType.id"], {
       force: true,
     })
@@ -218,6 +218,7 @@ describe("Listing Management Tests", () => {
     cy.getByID("monthlyRent").type(listing["monthlyRent"])
     cy.getByID("unitAccessibilityPriorityTypes.id").select(listing["priorityType.id"])
     cy.get("button").contains("Save & exit").click()
+    cy.getByID("amiChart.id").find("option").should("have.length", 3)
     cy.getByID("amiChart.id").select(1).trigger("change")
     cy.getByID("amiPercentage").select(1)
     cy.get("button").contains("Save & exit").click()
