@@ -55,6 +55,7 @@ export const stagingSeed = async (
         FeatureFlagEnum.enableGeocodingRadiusMethod,
         FeatureFlagEnum.enableHomeType,
         FeatureFlagEnum.enableIsVerified,
+        FeatureFlagEnum.enableLeasingAgentAltText,
         FeatureFlagEnum.enableListingFavoriting,
         FeatureFlagEnum.enableListingFiltering,
         FeatureFlagEnum.enableListingOpportunity,
@@ -160,14 +161,13 @@ export const stagingSeed = async (
     data: jurisdictionFactory('Angelopolis', {
       featureFlags: [
         FeatureFlagEnum.disableBuildingSelectionCriteria,
-        FeatureFlagEnum.disableListingPreferences,
+        FeatureFlagEnum.enableListingFileNumber,
         FeatureFlagEnum.enableAccessibilityFeatures,
         FeatureFlagEnum.enableApplicationStatus,
         FeatureFlagEnum.enableCreditScreeningFee,
         FeatureFlagEnum.enableHousingDeveloperOwner,
         FeatureFlagEnum.enableListingFileNumber,
         FeatureFlagEnum.enableListingFiltering,
-        FeatureFlagEnum.enableLeasingAgentAltText,
         FeatureFlagEnum.enableListingImageAltText,
         FeatureFlagEnum.enableMarketingFlyer,
         FeatureFlagEnum.enableMarketingStatus,
