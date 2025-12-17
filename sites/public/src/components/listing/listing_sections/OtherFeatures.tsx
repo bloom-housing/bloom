@@ -11,8 +11,7 @@ export const OtherFeatures = ({ hasEbllClearence }: OtherFeaturesProps) => {
     <div className="seeds-m-bs-header">
       <HeadingGroup
         heading={t("t.other")}
-        size="lg"
-        headingPriority={3}
+        headingProps={{ size: "lg", priority: 3 }}
         subheading={
           hasEbllClearence ? t("listings.hasEbllClearance") : t("listings.noEbllClearance")
         }
