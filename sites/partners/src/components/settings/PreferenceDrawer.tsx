@@ -13,15 +13,17 @@ import { AuthContext } from "@bloom-housing/shared-helpers"
 import { useForm } from "react-hook-form"
 import {
   MultiselectOption,
+  MultiselectOptionCreate,
   MultiselectQuestion,
   MultiselectQuestionCreate,
   MultiselectQuestionsApplicationSectionEnum,
+  MultiselectQuestionsStatusEnum,
   MultiselectQuestionUpdate,
   ValidationMethodEnum,
   YesNoEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import ManageIconSection from "./ManageIconSection"
-import { DrawerType } from "../../pages/settings/index"
+import { DrawerType } from "../../pages/settings/preferences"
 import SectionWithGrid from "../shared/SectionWithGrid"
 import s from "./PreferenceDrawer.module.scss"
 import { useMapLayersList } from "../../lib/hooks"
@@ -493,9 +495,14 @@ const PreferenceDrawer = ({
 
               const formattedQuestionData: MultiselectQuestionUpdate | MultiselectQuestionCreate = {
                 applicationSection: MultiselectQuestionsApplicationSectionEnum.preferences,
-                text: formValues.text,
                 description: formValues.description,
                 hideFromListing: formValues.showOnListingQuestion === YesNoEnum.no,
+                jurisdictions: [
+                  profile.jurisdictions.find((juris) => juris.id === formValues.jurisdictionId),
+                ],
+                links: formValues.preferenceUrl
+                  ? [{ title: formValues.preferenceLinkTitle, url: formValues.preferenceUrl }]
+                  : [],
                 optOutText:
                   optOutQuestion === YesNoEnum.yes &&
                   formValues.optOutText &&
@@ -503,12 +510,8 @@ const PreferenceDrawer = ({
                     ? formValues.optOutText
                     : null,
                 options: questionData?.options,
-                jurisdictions: [
-                  profile.jurisdictions.find((juris) => juris.id === formValues.jurisdictionId),
-                ],
-                links: formValues.preferenceUrl
-                  ? [{ title: formValues.preferenceLinkTitle, url: formValues.preferenceUrl }]
-                  : [],
+                status: questionData?.status ?? MultiselectQuestionsStatusEnum.draft,
+                text: formValues.text,
               }
               clearErrors()
               clearErrors("questions")
@@ -889,7 +892,7 @@ const PreferenceDrawer = ({
                 return questionData?.options?.length ? questionData?.options.length + 1 : 1
               }
 
-              const newOptionData: MultiselectOption = {
+              const newOptionData: MultiselectOptionCreate = {
                 text: formData.optionTitle,
                 description: formData.optionDescription,
                 links: formData.optionUrl

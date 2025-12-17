@@ -27,9 +27,9 @@ const SectionWithGrid = (props: SectionWithGridProps) => {
     <section className="section-with-grid spacer-section">
       {props.subheading ? (
         <HeadingGroup
+          headingProps={{ size: "xl" }}
           heading={props.heading}
           subheading={props.subheading}
-          headingProps={{ size: "xl" }}
         />
       ) : (
         <Heading className="spacer-content" size="xl" priority={2}>

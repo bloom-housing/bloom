@@ -1,4 +1,9 @@
-import { LanguagesEnum, Prisma, UserRoleEnum } from '@prisma/client';
+import {
+  LanguagesEnum,
+  NeighborhoodAmenitiesEnum,
+  Prisma,
+  UserRoleEnum,
+} from '@prisma/client';
 import { randomName } from './word-generator';
 
 export const jurisdictionFactory = (
@@ -9,6 +14,8 @@ export const jurisdictionFactory = (
     featureFlags?: string[];
     requiredListingFields?: string[];
     languages?: LanguagesEnum[];
+    visibleNeighborhoodAmenities?: NeighborhoodAmenitiesEnum[];
+    minimumListingPublishImagesRequired?: number;
   },
 ): Prisma.JurisdictionsCreateInput => ({
   name: jurisdictionName,
@@ -43,4 +50,7 @@ export const jurisdictionFactory = (
       }
     : undefined,
   requiredListingFields: optionalFields?.requiredListingFields || [],
+  visibleNeighborhoodAmenities: optionalFields?.visibleNeighborhoodAmenities,
+  minimumListingPublishImagesRequired:
+    optionalFields?.minimumListingPublishImagesRequired,
 });

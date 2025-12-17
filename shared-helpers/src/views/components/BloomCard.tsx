@@ -34,14 +34,14 @@ const BloomCard = (props: BloomCardProps) => {
       if (props.subtitle) {
         return (
           <HeadingGroup
-            heading={props.title}
-            subheading={props.subtitle}
             headingProps={{
               id: props.titleId,
               priority: props.headingPriority || 1,
               size: "2xl",
               tabIndex: props.titleTabIndex,
             }}
+            heading={props.title}
+            subheading={props.subtitle}
             className={styles["card-heading-group"]}
           />
         )

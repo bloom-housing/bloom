@@ -20,7 +20,7 @@ If you don't have yarn installed, you can install homebrew with [these instructi
 
 #### Installing Node
 
-We are currently using Node version 18. You can install Node using homebrew with the following command: `brew install node@18`.
+We are currently using Node version 22. You can install Node using homebrew with the following command: `brew install node@22`.
 
 If you have multiple versions of Node installed, you can use [nvm](https://github.com/nvm-sh/nvm) (node version manager), or other similar tools, to switch between them. Ensure you're on the right version by checking with `node -v`.
 

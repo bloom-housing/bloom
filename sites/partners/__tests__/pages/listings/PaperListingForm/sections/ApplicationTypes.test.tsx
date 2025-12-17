@@ -7,8 +7,14 @@ import { LanguagesEnum } from "@bloom-housing/shared-helpers/src/types/backend-s
 import ApplicationTypes, {
   phoneMask,
 } from "../../../../../src/components/listings/PaperListingForm/sections/ApplicationTypes"
-import { act, mockNextRouter, render, screen, within, waitFor } from "../../../../testUtils"
-import { FormProviderWrapper } from "../../../../components/applications/sections/helpers"
+import {
+  mockNextRouter,
+  render,
+  screen,
+  within,
+  waitFor,
+  FormProviderWrapper,
+} from "../../../../testUtils"
 import * as helpers from "../../../../../src/lib/helpers"
 
 jest.mock("../../../../../src/lib/helpers", () => ({
@@ -43,7 +49,12 @@ describe("ApplicationTypes", () => {
   it("should render application types section", () => {
     render(
       <FormProviderWrapper>
-        <ApplicationTypes listing={listing} requiredFields={[]} />
+        <ApplicationTypes
+          listing={listing}
+          requiredFields={[]}
+          jurisdiction={"jurisdictionA"}
+          disableCommonApplication={false}
+        />
       </FormProviderWrapper>
     )
 
@@ -75,7 +86,12 @@ describe("ApplicationTypes", () => {
   it("should render referral opportunity section", async () => {
     render(
       <FormProviderWrapper>
-        <ApplicationTypes listing={listing} requiredFields={[]} />
+        <ApplicationTypes
+          listing={listing}
+          requiredFields={[]}
+          jurisdiction={"jurisdictionA"}
+          disableCommonApplication={false}
+        />
       </FormProviderWrapper>
     )
 
@@ -84,16 +100,14 @@ describe("ApplicationTypes", () => {
     const referralApplication = screen.getByRole("group", {
       name: "Is there a referral opportunity?",
     })
-    await act(() =>
-      userEvent.click(within(referralApplication).getByRole("radio", { name: "Yes" }))
-    )
+    await userEvent.click(within(referralApplication).getByRole("radio", { name: "Yes" }))
 
     const referralContactPhone = screen.getByRole("textbox", { name: "Referral contact phone" })
     expect(referralContactPhone).toBeInTheDocument()
     expect(screen.getByRole("textbox", { name: "Referral summary" })).toBeInTheDocument()
 
     // validate that the phone mask works
-    await act(() => userEvent.type(referralContactPhone, "1234567890"))
+    await userEvent.type(referralContactPhone, "1234567890")
     expect(referralContactPhone).toHaveValue("(123) 456-7890")
   })
 
@@ -113,23 +127,28 @@ describe("ApplicationTypes", () => {
     it("should open and close the paper application drawer", async () => {
       render(
         <FormProviderWrapper>
-          <ApplicationTypes listing={listing} requiredFields={[]} />
+          <ApplicationTypes
+            listing={listing}
+            requiredFields={[]}
+            jurisdiction={"jurisdictionA"}
+            disableCommonApplication={false}
+          />
         </FormProviderWrapper>
       )
 
       const paperApplication = screen.getByRole("group", {
         name: "Is there a paper application?",
       })
-      await act(() => userEvent.click(within(paperApplication).getByRole("radio", { name: "Yes" })))
+      await userEvent.click(within(paperApplication).getByRole("radio", { name: "Yes" }))
 
       const addPaperAppButton = screen.getByRole("button", { name: "Add paper application" })
       expect(addPaperAppButton).toBeInTheDocument()
 
-      await act(() => userEvent.click(addPaperAppButton))
+      await userEvent.click(addPaperAppButton)
       expect(screen.getByRole("heading", { name: "Add paper application" })).toBeInTheDocument()
 
       const cancelButton = screen.getByRole("button", { name: "Cancel" })
-      await act(() => userEvent.click(cancelButton))
+      await userEvent.click(cancelButton)
       expect(
         screen.queryByRole("heading", { name: "Add paper application" })
       ).not.toBeInTheDocument()
@@ -138,17 +157,22 @@ describe("ApplicationTypes", () => {
     it("should disable save button and hide dropzone when no language is selected", async () => {
       render(
         <FormProviderWrapper>
-          <ApplicationTypes listing={listing} requiredFields={[]} />
+          <ApplicationTypes
+            listing={listing}
+            requiredFields={[]}
+            jurisdiction={"jurisdictionA"}
+            disableCommonApplication={false}
+          />
         </FormProviderWrapper>
       )
 
       const paperApplication = screen.getByRole("group", {
         name: "Is there a paper application?",
       })
-      await act(() => userEvent.click(within(paperApplication).getByRole("radio", { name: "Yes" })))
+      await userEvent.click(within(paperApplication).getByRole("radio", { name: "Yes" }))
 
       const addPaperAppButton = screen.getByRole("button", { name: "Add paper application" })
-      await act(() => userEvent.click(addPaperAppButton))
+      await userEvent.click(addPaperAppButton)
 
       const saveButton = screen.getByRole("button", { name: "Save" })
       expect(saveButton).toBeDisabled()
@@ -160,7 +184,12 @@ describe("ApplicationTypes", () => {
       render(
         <AuthContext.Provider value={mockAuthContext}>
           <FormProviderWithJurisdiction>
-            <ApplicationTypes listing={listingWithJurisdiction} requiredFields={[]} />
+            <ApplicationTypes
+              listing={listingWithJurisdiction}
+              requiredFields={[]}
+              jurisdiction={"jurisdictionA"}
+              disableCommonApplication={false}
+            />
           </FormProviderWithJurisdiction>
         </AuthContext.Provider>
       )
@@ -168,17 +197,14 @@ describe("ApplicationTypes", () => {
       const paperApplication = screen.getByRole("group", {
         name: "Is there a paper application?",
       })
-      await act(() => userEvent.click(within(paperApplication).getByRole("radio", { name: "Yes" })))
+      await userEvent.click(within(paperApplication).getByRole("radio", { name: "Yes" }))
 
       const addPaperAppButton = screen.getByRole("button", { name: "Add paper application" })
-      await act(() => userEvent.click(addPaperAppButton))
+      await userEvent.click(addPaperAppButton)
 
       const languageSelect = screen.getByRole("combobox")
-      await act(() => userEvent.selectOptions(languageSelect, "en"))
-
-      await waitFor(() => {
-        expect(screen.getByText("Upload file")).toBeInTheDocument()
-      })
+      await userEvent.selectOptions(languageSelect, "en")
+      expect(screen.getByText("Upload file")).toBeInTheDocument()
     })
 
     it("should disable language selector and save button during file upload, then enable save after upload", async () => {
@@ -197,7 +223,12 @@ describe("ApplicationTypes", () => {
       render(
         <AuthContext.Provider value={mockAuthContext}>
           <FormProviderWithJurisdiction>
-            <ApplicationTypes listing={listingWithJurisdiction} requiredFields={[]} />
+            <ApplicationTypes
+              listing={listingWithJurisdiction}
+              requiredFields={[]}
+              jurisdiction={"jurisdictionA"}
+              disableCommonApplication={false}
+            />
           </FormProviderWithJurisdiction>
         </AuthContext.Provider>
       )
@@ -205,13 +236,13 @@ describe("ApplicationTypes", () => {
       const paperApplication = screen.getByRole("group", {
         name: "Is there a paper application?",
       })
-      await act(() => userEvent.click(within(paperApplication).getByRole("radio", { name: "Yes" })))
+      await userEvent.click(within(paperApplication).getByRole("radio", { name: "Yes" }))
 
       const addPaperAppButton = screen.getByRole("button", { name: "Add paper application" })
-      await act(() => userEvent.click(addPaperAppButton))
+      await userEvent.click(addPaperAppButton)
 
       const languageSelect = screen.getByRole("combobox")
-      await act(() => userEvent.selectOptions(languageSelect, "en"))
+      await userEvent.selectOptions(languageSelect, "en")
 
       await waitFor(() => {
         expect(screen.getByText("Upload file")).toBeInTheDocument()
@@ -225,9 +256,7 @@ describe("ApplicationTypes", () => {
       })
       const dropzone = screen.getByLabelText("Upload file")
 
-      await act(async () => {
-        await userEvent.upload(dropzone, file)
-      })
+      await userEvent.upload(dropzone, file)
 
       await waitFor(() => {
         expect(languageSelect).toBeDisabled()
@@ -237,7 +266,7 @@ describe("ApplicationTypes", () => {
         expect(saveButton).not.toBeDisabled()
       })
 
-      await act(() => userEvent.click(saveButton))
+      await userEvent.click(saveButton)
       expect(
         screen.queryByRole("heading", { name: "Add paper application" })
       ).not.toBeInTheDocument()

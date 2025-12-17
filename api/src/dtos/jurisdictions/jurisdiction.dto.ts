@@ -8,9 +8,14 @@ import {
   IsArray,
   ValidateNested,
   IsBoolean,
+  IsNumber,
 } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { LanguagesEnum, UserRoleEnum } from '@prisma/client';
+import {
+  LanguagesEnum,
+  UserRoleEnum,
+  NeighborhoodAmenitiesEnum,
+} from '@prisma/client';
 import { FeatureFlag } from '../feature-flags/feature-flag.dto';
 import { AbstractDTO } from '../shared/abstract.dto';
 import { IdDTO } from '../shared/id.dto';
@@ -50,6 +55,11 @@ export class Jurisdiction extends AbstractDTO {
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty({ type: IdDTO, isArray: true })
   multiselectQuestions: IdDTO[];
+
+  @Expose()
+  @IsNumber()
+  @ApiPropertyOptional()
+  minimumListingPublishImagesRequired?: number;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
@@ -160,4 +170,18 @@ export class Jurisdiction extends AbstractDTO {
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty({ isArray: true })
   requiredListingFields: string[];
+
+  @Expose()
+  @IsArray({ groups: [ValidationsGroupsEnum.default] })
+  @IsEnum(NeighborhoodAmenitiesEnum, {
+    groups: [ValidationsGroupsEnum.default],
+    each: true,
+  })
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ApiProperty({
+    enum: NeighborhoodAmenitiesEnum,
+    enumName: 'NeighborhoodAmenitiesEnum',
+    isArray: true,
+  })
+  visibleNeighborhoodAmenities: NeighborhoodAmenitiesEnum[];
 }

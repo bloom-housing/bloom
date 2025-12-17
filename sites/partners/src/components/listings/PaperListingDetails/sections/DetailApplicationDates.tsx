@@ -11,6 +11,7 @@ import {
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 import { ListingContext } from "../../ListingContext"
+import DetailMarketingFlyerSection from "./DetailMarketingFlyerSection"
 import { getDetailFieldDate, getDetailFieldString, getDetailFieldTime } from "./helpers"
 
 const DetailApplicationDates = () => {
@@ -20,6 +21,16 @@ const DetailApplicationDates = () => {
 
   const enableMarketingStatus = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableMarketingStatus,
+    listing?.jurisdictions?.id
+  )
+
+  const enableMarketingStatusMonths = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableMarketingStatusMonths,
+    listing?.jurisdictions?.id
+  )
+
+  const enableMarketingFlyer = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableMarketingFlyer,
     listing?.jurisdictions?.id
   )
 
@@ -180,13 +191,26 @@ const DetailApplicationDates = () => {
             </Grid.Cell>
             <Grid.Cell>
               <FieldValue id="marketingSeasonDate" label={t("listings.marketingSection.date")}>
-                {listing.marketingSeason && t(`seasons.${listing.marketingSeason}`)}{" "}
+                {!enableMarketingStatusMonths &&
+                  listing.marketingSeason &&
+                  t(`seasons.${listing.marketingSeason}`)}{" "}
+                {enableMarketingStatusMonths &&
+                  listing.marketingMonth &&
+                  t(`months.${listing.marketingMonth}`)}{" "}
                 {listing.marketingYear && listing.marketingYear}
-                {!listing.marketingSeason && !listing.marketingYear && t("t.none")}
+                {!listing.marketingSeason &&
+                  !listing.marketingYear &&
+                  !listing.marketingMonth &&
+                  t("t.none")}
               </FieldValue>
             </Grid.Cell>
           </Grid.Row>
         )}
+
+        <DetailMarketingFlyerSection
+          listing={listing}
+          enableMarketingFlyer={enableMarketingFlyer}
+        />
       </SectionWithGrid>
     </>
   )

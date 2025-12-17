@@ -112,7 +112,10 @@ class UnitsSummary {
   @ValidateUnitGroupRent({
     groups: [ValidationsGroupsEnum.default],
   })
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    enum: RentTypeEnum,
+    enumName: 'RentTypeEnum',
+  })
   rentType?: RentTypeEnum;
 
   @Expose()
@@ -124,6 +127,11 @@ class UnitsSummary {
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   flatRentValueTo?: number;
+
+  @Expose()
+  @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  monthlyRent?: number;
 }
 
 export { UnitsSummary as default, UnitsSummary };

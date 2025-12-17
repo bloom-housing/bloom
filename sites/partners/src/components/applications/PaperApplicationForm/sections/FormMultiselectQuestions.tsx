@@ -212,7 +212,7 @@ const FormMultiselectQuestions = ({
             const question = listingQuestion?.multiselectQuestions
             const inputType = getInputType(question.options as unknown as MultiselectOption[])
             return (
-              <Grid.Cell>
+              <Grid.Cell key={question.text}>
                 <FieldValue label={question.text}>
                   <fieldset className={"mt-4"}>
                     {inputType === "checkbox" ? (
@@ -231,6 +231,9 @@ const FormMultiselectQuestions = ({
                               collectAddress: false,
                               exclusive: true,
                               ordinal: question.options.length,
+                              id: null,
+                              createdAt: null,
+                              updatedAt: null,
                             },
                             question
                           )}
@@ -251,6 +254,9 @@ const FormMultiselectQuestions = ({
                               collectAddress: false,
                               exclusive: true,
                               ordinal: question.options.length,
+                              id: null,
+                              createdAt: null,
+                              updatedAt: null,
                             },
                             question,
                             setValue

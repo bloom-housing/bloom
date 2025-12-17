@@ -111,6 +111,11 @@ export const getAvailabilityHeading = (reviewOrderType: ReviewOrderTypeEnum) => 
 
 export const Availability = ({ listing, jurisdiction }: AvailabilityProps) => {
   const enableMarketingStatus = isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableMarketingStatus)
+  const enableMarketingStatusMonths = isFeatureFlagOn(
+    jurisdiction,
+    FeatureFlagEnum.enableMarketingStatusMonths
+  )
+
   const swapCommunityTypeWithPrograms = isFeatureFlagOn(
     jurisdiction,
     FeatureFlagEnum.swapCommunityTypeWithPrograms
@@ -130,8 +135,10 @@ export const Availability = ({ listing, jurisdiction }: AvailabilityProps) => {
     listing.status,
     listing.applicationDueDate,
     enableMarketingStatus,
+    enableMarketingStatusMonths,
     listing.marketingType,
     listing.marketingSeason,
+    listing.marketingMonth,
     listing.marketingYear,
     false
   )
@@ -164,7 +171,12 @@ export const Availability = ({ listing, jurisdiction }: AvailabilityProps) => {
         </Heading>
         {!alwaysShowStatusBar && subtitle && <p className={styles["bold-subheader"]}>{subtitle}</p>}
         {statusMessage && (
-          <p className={`${listingStyles["thin-heading-sm"]} seeds-m-bs-label`}>{statusMessage}</p>
+          <p
+            className={`${listingStyles["thin-heading-sm"]} seeds-m-bs-label`}
+            suppressHydrationWarning
+          >
+            {statusMessage}
+          </p>
         )}
         {content && <p className={"seeds-m-bs-label"}>{content}</p>}
         {subheading && subheading}
@@ -239,6 +251,7 @@ export const Availability = ({ listing, jurisdiction }: AvailabilityProps) => {
         case ReviewOrderTypeEnum.lottery:
           return [lotteryContent]
         case ReviewOrderTypeEnum.waitlist:
+        case ReviewOrderTypeEnum.waitlistLottery:
           return [waitlistContent]
         default:
           return [fcfsContent]

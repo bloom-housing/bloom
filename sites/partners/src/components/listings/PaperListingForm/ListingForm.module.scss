@@ -51,3 +51,14 @@
   color: var(--seeds-color-black);
   font-weight: var(--seeds-font-weight-semibold);
 }
+
+.hide-order-column {
+  th:nth-child(2),
+  td:nth-child(2) {
+    display: none;
+  }
+}
+
+.photo-preview {
+  max-height: var(--seeds-s72);
+}

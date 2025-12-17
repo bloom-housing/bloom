@@ -10,7 +10,6 @@ import {
 } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
-import { SchedulerRegistry } from '@nestjs/schedule';
 import {
   LanguagesEnum,
   ListingEventsTypeEnum,
@@ -48,7 +47,6 @@ import { ListingFilterKeys } from '../enums/listings/filter-key-enum';
 import { permissionActions } from '../enums/permissions/permission-actions-enum';
 import { buildFilter } from '../utilities/build-filter';
 import { buildOrderByForListings } from '../utilities/build-order-by';
-import { startCronJob } from '../utilities/cron-job-starter';
 import { mapTo } from '../utilities/mapTo';
 import {
   buildPaginationMetaInfo,
@@ -62,6 +60,7 @@ import {
 import { fillModelStringFields } from '../utilities/model-fields';
 import { doJurisdictionHaveFeatureFlagSet } from '../utilities/feature-flag-utilities';
 import { addUnitGroupsSummarized } from '../utilities/unit-groups-transformations';
+import { CronJobService } from './cron-job.service';
 
 export type getListingsArgs = {
   skip: number;
@@ -70,29 +69,47 @@ export type getListingsArgs = {
   where: Prisma.ListingsWhereInput;
 };
 
-export const views: Partial<Record<ListingViews, Prisma.ListingsInclude>> = {
+export const selectViews: Partial<Record<ListingViews, Prisma.ListingsSelect>> =
+  {
+    name: {
+      name: true,
+      id: true,
+      jurisdictions: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
+    },
+  };
+
+selectViews.address = {
+  name: true,
+  id: true,
+  listingsBuildingAddress: {
+    select: {
+      city: true,
+      county: true,
+      street: true,
+      street2: true,
+      zipCode: true,
+      state: true,
+      latitude: true,
+      longitude: true,
+    },
+  },
+};
+
+export const includeViews: Partial<
+  Record<ListingViews, Prisma.ListingsInclude>
+> = {
   fundamentals: {
     jurisdictions: true,
   },
 };
 
-views.name = {
-  Listings: {
-    select: {
-      name: true,
-      id: true,
-    },
-  },
-  jurisdictions: {
-    select: {
-      id: true,
-      name: true,
-    },
-  },
-};
-
-views.base = {
-  ...views.fundamentals,
+includeViews.base = {
+  ...includeViews.fundamentals,
   listingsBuildingAddress: true,
   reservedCommunityTypes: true,
   listingImages: {
@@ -130,8 +147,8 @@ views.base = {
   },
 };
 
-views.full = {
-  ...views.base,
+includeViews.full = {
+  ...includeViews.base,
   applicationMethods: {
     include: {
       paperApplications: {
@@ -142,6 +159,8 @@ views.full = {
     },
   },
   listingsBuildingSelectionCriteriaFile: true,
+  listingsMarketingFlyerFile: true,
+  listingsAccessibleMarketingFlyerFile: true,
   listingEvents: {
     include: {
       assets: true,
@@ -154,6 +173,7 @@ views.full = {
   listingsApplicationDropOffAddress: true,
   listingsApplicationMailingAddress: true,
   requestedChangesUser: true,
+  requiredDocumentsList: true,
   units: {
     include: {
       unitAmiChartOverrides: true,
@@ -186,18 +206,15 @@ export class ListingService implements OnModuleInit {
     private configService: ConfigService,
     @Inject(Logger)
     private logger = new Logger(ListingService.name),
-    private schedulerRegistry: SchedulerRegistry,
     private permissionService: PermissionService,
+    private cronJobService: CronJobService,
   ) {}
 
   onModuleInit() {
-    startCronJob(
-      this.prisma,
+    this.cronJobService.startCronJob(
       LISTING_CRON_JOB_NAME,
       process.env.LISTING_PROCESSING_CRON_STRING,
       this.closeListings.bind(this),
-      this.logger,
-      this.schedulerRegistry,
     );
   }
 
@@ -230,13 +247,24 @@ export class ListingService implements OnModuleInit {
       }
     }
 
-    const listingsRaw = await this.prisma.listings.findMany({
+    const query = {
       skip: calculateSkip(params.limit, page),
       take: calculateTake(params.limit),
       orderBy: buildOrderByForListings(params.orderBy, params.orderDir),
-      include: views[params.view ?? 'full'],
       where: whereClause,
-    });
+    };
+    const hasSelectView = selectViews[params.view];
+
+    // Prisma only allows either select or include so two separate
+    const listingsRaw = hasSelectView
+      ? await this.prisma.listings.findMany({
+          ...query,
+          select: selectViews[params.view],
+        })
+      : await this.prisma.listings.findMany({
+          ...query,
+          include: includeViews[params.view ?? 'full'],
+        });
 
     const listings = mapTo(Listing, listingsRaw);
 
@@ -518,9 +546,12 @@ export class ListingService implements OnModuleInit {
                 };
               } else if (availability === FilterAvailabilityEnum.waitlistOpen) {
                 const builtFilter = buildFilter({
-                  $comparison: Compare['='],
+                  $comparison: Compare.IN,
                   $include_nulls: false,
-                  value: ReviewOrderTypeEnum.waitlist,
+                  value: [
+                    ReviewOrderTypeEnum.waitlist,
+                    ReviewOrderTypeEnum.waitlistLottery,
+                  ],
                   key: ListingFilterKeys.availabilities,
                   caseSensitive: true,
                 });
@@ -634,9 +665,12 @@ export class ListingService implements OnModuleInit {
           FilterAvailabilityEnum.waitlistOpen
         ) {
           const builtFilter = buildFilter({
-            $comparison: filter.$comparison,
+            $comparison: Compare.IN,
             $include_nulls: false,
-            value: ReviewOrderTypeEnum.waitlist,
+            value: [
+              ReviewOrderTypeEnum.waitlist,
+              ReviewOrderTypeEnum.waitlistLottery,
+            ],
             key: ListingFilterKeys.availability,
             caseSensitive: true,
           });
@@ -1011,6 +1045,20 @@ export class ListingService implements OnModuleInit {
             })),
           });
         }
+        if (filter[ListingFilterKeys.listingType]) {
+          const builtFilter = buildFilter({
+            $comparison: filter.$comparison,
+            $include_nulls: false,
+            value: filter[ListingFilterKeys.listingType],
+            key: ListingFilterKeys.listingType,
+            caseSensitive: true,
+          });
+          filters.push({
+            OR: builtFilter.map((filt) => ({
+              [ListingFilterKeys.listingType]: filt,
+            })),
+          });
+        }
       });
     }
 
@@ -1248,12 +1296,12 @@ export class ListingService implements OnModuleInit {
       dto.unitGroups,
     );
 
-    // Remove requiredFields property before saving to database
+    // Remove requiredFields and minimumImagesRequired properties before saving to database
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { requiredFields, ...listingData } = dto;
+    const { requiredFields, minimumImagesRequired, ...listingData } = dto;
 
     const rawListing = await this.prisma.listings.create({
-      include: views.full,
+      include: includeViews.full,
       data: {
         ...listingData,
         displayWaitlistSize: dto.displayWaitlistSize ?? false,
@@ -1286,6 +1334,11 @@ export class ListingService implements OnModuleInit {
               })),
             }
           : undefined,
+        requiredDocumentsList: dto.requiredDocumentsList
+          ? {
+              create: { ...dto.requiredDocumentsList },
+            }
+          : undefined,
         listingEvents: dto.listingEvents
           ? {
               create: dto.listingEvents.map((event) => ({
@@ -1315,6 +1368,7 @@ export class ListingService implements OnModuleInit {
                   },
                 },
                 ordinal: image.ordinal,
+                description: image.description,
               })),
             }
           : undefined,
@@ -1351,6 +1405,21 @@ export class ListingService implements OnModuleInit {
             ? {
                 create: {
                   ...dto.listingsBuildingSelectionCriteriaFile,
+                },
+              }
+            : undefined,
+        listingsMarketingFlyerFile: dto.listingsMarketingFlyerFile
+          ? {
+              create: {
+                ...dto.listingsMarketingFlyerFile,
+              },
+            }
+          : undefined,
+        listingsAccessibleMarketingFlyerFile:
+          dto.listingsAccessibleMarketingFlyerFile
+            ? {
+                create: {
+                  ...dto.listingsAccessibleMarketingFlyerFile,
                 },
               }
             : undefined,
@@ -1474,6 +1543,7 @@ export class ListingService implements OnModuleInit {
                 rentType: group.rentType,
                 flatRentValueFrom: group.flatRentValueFrom,
                 flatRentValueTo: group.flatRentValueTo,
+                monthlyRent: group.monthlyRent,
                 totalAvailable: group.totalAvailable,
                 totalCount: group.totalCount,
                 unitGroupAmiLevels: {
@@ -1660,6 +1730,7 @@ export class ListingService implements OnModuleInit {
         label: unsavedImage.assets.label,
       },
       ordinal: unsavedImage.ordinal,
+      description: unsavedImage.description,
     }));
 
     const applicationMethods = mappedListing.applicationMethods?.map(
@@ -1776,14 +1847,22 @@ export class ListingService implements OnModuleInit {
     a listing view can be provided which will add the joins to produce that view correctly
   */
   async findOrThrow(id: string, view?: ListingViews) {
-    const viewInclude = view ? views[view] : undefined;
+    const hasSelectView = view && selectViews[view];
+    const viewInclude = view ? includeViews[view] : undefined;
 
-    const listing = await this.prisma.listings.findUnique({
-      include: viewInclude,
-      where: {
-        id,
-      },
-    });
+    const listing = hasSelectView
+      ? await this.prisma.listings.findUnique({
+          select: selectViews[view],
+          where: {
+            id,
+          },
+        })
+      : await this.prisma.listings.findUnique({
+          include: viewInclude,
+          where: {
+            id,
+          },
+        });
 
     if (!listing) {
       throw new NotFoundException(
@@ -1892,9 +1971,9 @@ export class ListingService implements OnModuleInit {
     update a listing
   */
   async update(dto: ListingUpdate, requestingUser: User): Promise<Listing> {
-    // Remove requiredFields property before saving to database
+    // Remove requiredFields and minimumImagesRequired properties before saving to database
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { requiredFields, ...incomingDto } = dto;
+    const { requiredFields, minimumImagesRequired, ...incomingDto } = dto;
     const storedListing = await this.findOrThrow(
       incomingDto.id,
       ListingViews.full,
@@ -1963,7 +2042,11 @@ export class ListingService implements OnModuleInit {
       allAssets = [
         ...allAssets,
         ...uploadedImages.map((image, index) => {
-          return { assets: image, ordinal: unsavedImages[index].ordinal };
+          return {
+            assets: image,
+            ordinal: unsavedImages[index].ordinal,
+            description: unsavedImages[index].description,
+          };
         }),
       ];
     }
@@ -2117,6 +2200,7 @@ export class ListingService implements OnModuleInit {
                 create: allAssets.map((asset) => {
                   return {
                     ordinal: asset.ordinal,
+                    description: asset.description,
                     assets: {
                       connect: {
                         id: asset.assets.id,
@@ -2156,7 +2240,18 @@ export class ListingService implements OnModuleInit {
                 },
               }
             : undefined,
-          // Three options for the building selection criteria file
+          requiredDocumentsList: dto.requiredDocumentsList
+            ? {
+                upsert: {
+                  where: {
+                    id: storedListing.requiredDocumentsList?.id,
+                  },
+                  create: { ...incomingDto.requiredDocumentsList },
+                  update: { ...incomingDto.requiredDocumentsList },
+                },
+              }
+            : undefined,
+          // Three options for the building selection criteria and marketing Flyers files
           // create new one, connect existing one, or deleted (disconnect)
           listingsBuildingSelectionCriteriaFile:
             incomingDto.listingsBuildingSelectionCriteriaFile
@@ -2175,6 +2270,47 @@ export class ListingService implements OnModuleInit {
                 : {
                     create: {
                       ...incomingDto.listingsBuildingSelectionCriteriaFile,
+                    },
+                  }
+              : {
+                  disconnect: true,
+                },
+          listingsMarketingFlyerFile: incomingDto.listingsMarketingFlyerFile
+            ? incomingDto.listingsMarketingFlyerFile.id
+              ? {
+                  connectOrCreate: {
+                    where: {
+                      id: incomingDto.listingsMarketingFlyerFile.id,
+                    },
+                    create: {
+                      ...incomingDto.listingsMarketingFlyerFile,
+                    },
+                  },
+                }
+              : {
+                  create: {
+                    ...incomingDto.listingsMarketingFlyerFile,
+                  },
+                }
+            : {
+                disconnect: true,
+              },
+          listingsAccessibleMarketingFlyerFile:
+            incomingDto.listingsAccessibleMarketingFlyerFile
+              ? incomingDto.listingsAccessibleMarketingFlyerFile.id
+                ? {
+                    connectOrCreate: {
+                      where: {
+                        id: incomingDto.listingsAccessibleMarketingFlyerFile.id,
+                      },
+                      create: {
+                        ...incomingDto.listingsAccessibleMarketingFlyerFile,
+                      },
+                    },
+                  }
+                : {
+                    create: {
+                      ...incomingDto.listingsAccessibleMarketingFlyerFile,
                     },
                   }
               : {
@@ -2315,6 +2451,7 @@ export class ListingService implements OnModuleInit {
                   rentType: group.rentType,
                   flatRentValueFrom: group.flatRentValueFrom,
                   flatRentValueTo: group.flatRentValueTo,
+                  monthlyRent: group.monthlyRent,
                   sqFeetMin: group.sqFeetMin,
                   sqFeetMax: group.sqFeetMax,
                   totalCount: group.totalCount,
@@ -2426,7 +2563,7 @@ export class ListingService implements OnModuleInit {
             },
           },
         },
-        include: views.full,
+        include: includeViews.full,
         where: {
           id: incomingDto.id,
         },
@@ -2439,6 +2576,28 @@ export class ListingService implements OnModuleInit {
 
     if (!rawListing) {
       throw new HttpException('listing failed to save', 500);
+    }
+
+    // Incoming update removes the requiredDocumentsList. Need to disconnect before deleting
+    if (
+      !incomingDto.requiredDocumentsList &&
+      storedListing.requiredDocumentsList?.id
+    ) {
+      await this.prisma.listings.update({
+        data: {
+          requiredDocumentsList: {
+            disconnect: {
+              id: storedListing.requiredDocumentsList.id,
+            },
+          },
+        },
+        where: { id: storedListing.id },
+      });
+      await this.prisma.listingDocuments.delete({
+        where: {
+          id: storedListing.requiredDocumentsList.id,
+        },
+      });
     }
 
     const listingApprovalPermissions = (
@@ -2457,11 +2616,11 @@ export class ListingService implements OnModuleInit {
         jurisId: incomingDto.jurisdictions.id,
       });
 
-    // if listing is closed for the first time the application flag set job needs to run
     if (
       storedListing.status === ListingsStatusEnum.active &&
       incomingDto.status === ListingsStatusEnum.closed
     ) {
+      // if listing is closed for the first time the application flag set job needs to run
       if (
         process.env.DUPLICATES_CLOSE_DATE &&
         dayjs(process.env.DUPLICATES_CLOSE_DATE, 'YYYY-MM-DD HH:mm Z') <
@@ -2471,6 +2630,9 @@ export class ListingService implements OnModuleInit {
       } else {
         await this.afsService.process(incomingDto.id);
       }
+
+      // if the listing is closed for the first time the expire_after value should be set on all applications
+      void this.setExpireAfterValueOnApplications(rawListing.id);
     }
 
     await this.cachePurge(
@@ -2582,13 +2744,33 @@ export class ListingService implements OnModuleInit {
     return mapTo(Listing, listingsRaw);
   };
 
+  setExpireAfterValueOnApplications = async (listingId: string) => {
+    if (
+      process.env.APPLICATION_DAYS_TILL_EXPIRY &&
+      !isNaN(Number(process.env.APPLICATION_DAYS_TILL_EXPIRY))
+    ) {
+      const expireAfterDate = dayjs(new Date())
+        .add(Number(process.env.APPLICATION_DAYS_TILL_EXPIRY), 'days')
+        .toDate();
+      const expiredApplications = await this.prisma.applications.updateMany({
+        data: { expireAfter: expireAfterDate },
+        where: { listingId: listingId },
+      });
+      this.logger.warn(
+        `setting expireAfter of ${expireAfterDate.toDateString()} on ${
+          expiredApplications.count
+        } applications for listing ${listingId}`,
+      );
+    }
+  };
+
   /**
     runs the job to auto close listings that are passed their due date
     will call the the cache purge to purge all listings as long as updates had to be made
   */
   async closeListings(): Promise<SuccessDTO> {
     this.logger.warn('changeOverdueListingsStatusCron job running');
-    await this.markCronJobAsStarted(LISTING_CRON_JOB_NAME);
+    await this.cronJobService.markCronJobAsStarted(LISTING_CRON_JOB_NAME);
 
     const listings = await this.prisma.listings.findMany({
       select: {
@@ -2641,42 +2823,14 @@ export class ListingService implements OnModuleInit {
         ListingsStatusEnum.active,
         '',
       );
+      for (const listing of listingIds) {
+        await this.setExpireAfterValueOnApplications(listing);
+      }
     }
 
     return {
       success: true,
     };
-  }
-
-  /**
-    marks the db record for this cronjob as begun or creates a cronjob that
-    is marked as begun if one does not already exist
-  */
-  async markCronJobAsStarted(cronJobName: string): Promise<void> {
-    const job = await this.prisma.cronJob.findFirst({
-      where: {
-        name: cronJobName,
-      },
-    });
-    if (job) {
-      // if a job exists then we update db entry
-      await this.prisma.cronJob.update({
-        data: {
-          lastRunDate: new Date(),
-        },
-        where: {
-          id: job.id,
-        },
-      });
-    } else {
-      // if no job we create a new entry
-      await this.prisma.cronJob.create({
-        data: {
-          lastRunDate: new Date(),
-          name: cronJobName,
-        },
-      });
-    }
   }
 
   /**

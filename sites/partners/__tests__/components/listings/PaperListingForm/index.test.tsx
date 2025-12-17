@@ -7,7 +7,6 @@ import {
   jurisdiction,
   mockBaseJurisdiction,
   mockUser,
-  user,
 } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import {
   FeatureFlag,
@@ -30,7 +29,9 @@ const jurisdictions = [
       { name: FeatureFlagEnum.enableRegions, active: true } as FeatureFlag,
       { name: FeatureFlagEnum.enableHomeType, active: true } as FeatureFlag,
       { name: FeatureFlagEnum.enableCompanyWebsite, active: true } as FeatureFlag,
+      { name: FeatureFlagEnum.enableWhatToExpectAdditionalField, active: true } as FeatureFlag,
     ],
+    whatToExpect: "Here's what you might expect from the process.",
     requiredListingFields: [
       "listingsBuildingAddress",
       "name",
@@ -126,16 +127,17 @@ describe("add listing", () => {
                 return false
             }
           },
+          getJurisdictionLanguages: () => [],
         }}
       >
-        <ListingForm />
+        <ListingForm jurisdictionId={"Bloomington"} />
       </AuthContext.Provider>
     )
 
     // Listing Details Tab
     expect(screen.getByRole("button", { name: "Listing details" }))
     expect(screen.getByRole("heading", { level: 2, name: "Listing intro" }))
-    expect(screen.getByRole("heading", { level: 2, name: "Listing photo" }))
+    expect(screen.getByRole("heading", { level: 2, name: "Listing photos" }))
     expect(screen.getByRole("heading", { level: 2, name: "Building details" }))
     expect(screen.getByRole("heading", { level: 2, name: "Listing units" }))
     expect(screen.getByRole("heading", { level: 2, name: "Housing preferences" }))
@@ -181,29 +183,41 @@ describe("add listing", () => {
         return res(ctx.json([]))
       })
     )
+
+    const mockRetrieve = jest.fn().mockResolvedValue({})
+
     render(
       <AuthContext.Provider
         value={{
-          profile: {
-            ...user,
-            listings: [],
-            jurisdictions: [jurisdiction],
-          },
-          getJurisdictionLanguages: () => [],
-          jurisdictionsService: new JurisdictionsService(),
           doJurisdictionsHaveFeatureFlagOn: (featureFlag: FeatureFlagEnum) => {
             switch (featureFlag) {
-              case FeatureFlagEnum.swapCommunityTypeWithPrograms:
-                return false
+              case FeatureFlagEnum.enableRegions:
+                return true
+              case FeatureFlagEnum.enableHomeType:
+                return true
+              case FeatureFlagEnum.enableCompanyWebsite:
+                return true
               case FeatureFlagEnum.enableWhatToExpectAdditionalField:
                 return true
               default:
                 return false
             }
           },
+          getJurisdictionLanguages,
+          profile: {
+            ...mockUser,
+            listings: [],
+            jurisdictions: jurisdictions as Jurisdiction[],
+            userRoles: {
+              isAdmin: true,
+            },
+          },
+          jurisdictionsService: {
+            retrieve: mockRetrieve,
+          } as unknown as JurisdictionsService,
         }}
       >
-        <ListingForm />
+        <ListingForm jurisdictionId={"Bloomington"} />
       </AuthContext.Provider>
     )
 
@@ -213,18 +227,11 @@ describe("add listing", () => {
       /tell the applicant what to expect from the process/i
     )
     expect(whatToExpectEditorLabel).toBeInTheDocument()
-    const whatToExpectEditorWrapper = whatToExpectEditorLabel.parentElement.parentElement
+    const whatToExpectEditorWrapper =
+      whatToExpectEditorLabel.parentElement.parentElement.parentElement
 
     expect(
-      await within(whatToExpectEditorWrapper).findByText(
-        "Applicants will be contacted by the property agent in rank order until vacancies are filled. All of the information that you have provided will be verified and your eligibility confirmed. Your application will be removed from the waitlist if you have made any fraudulent statements. If we cannot verify a housing preference that you have claimed, you will not receive the preference but will not be otherwise penalized. Should your application be chosen, be prepared to fill out a more detailed application and provide required supporting documents."
-      )
-    ).toBeInTheDocument()
-    expect(
-      within(whatToExpectEditorWrapper).getByText("You have 451 characters remaining")
-    ).toBeInTheDocument()
-    expect(
-      within(whatToExpectEditorWrapper).getByRole("menuitem", { name: "Bold" })
+      await within(whatToExpectEditorWrapper).findByRole("menuitem", { name: "Bold" })
     ).toBeInTheDocument()
     expect(
       within(whatToExpectEditorWrapper).getByRole("menuitem", { name: "Bullet list" })
@@ -241,6 +248,15 @@ describe("add listing", () => {
     expect(
       within(whatToExpectEditorWrapper).getByRole("menuitem", { name: "Unlink" })
     ).toBeInTheDocument()
+
+    expect(
+      within(whatToExpectEditorWrapper).getByText("Here's what you might expect from the process.")
+    ).toBeInTheDocument()
+
+    expect(
+      within(whatToExpectEditorWrapper).getByText("You have 954 characters remaining")
+    ).toBeInTheDocument()
+
     // Query issue: https://github.com/ueberdosis/tiptap/discussions/4008#discussioncomment-7623655
     const editor = screen.getByTestId("whatToExpect").firstElementChild.querySelector("p")
     act(() => {
@@ -260,15 +276,7 @@ describe("add listing", () => {
       whatToExpectAdditonalTextEditorLabel.parentElement.parentElement
 
     expect(
-      await within(whatToExpectAdditonalTextEditorWrapper).findByText(
-        "Property staff should walk you through the process to get on their waitlist."
-      )
-    ).toBeInTheDocument()
-    expect(
-      within(whatToExpectAdditonalTextEditorWrapper).getByText("You have 924 characters remaining")
-    ).toBeInTheDocument()
-    expect(
-      within(whatToExpectAdditonalTextEditorWrapper).getByRole("menuitem", { name: "Bold" })
+      await within(whatToExpectAdditonalTextEditorWrapper).findByRole("menuitem", { name: "Bold" })
     ).toBeInTheDocument()
     expect(
       within(whatToExpectAdditonalTextEditorWrapper).getByRole("menuitem", { name: "Bullet list" })
@@ -287,6 +295,17 @@ describe("add listing", () => {
     expect(
       within(whatToExpectAdditonalTextEditorWrapper).getByRole("menuitem", { name: "Unlink" })
     ).toBeInTheDocument()
+
+    expect(
+      within(whatToExpectAdditonalTextEditorWrapper).getByText(
+        "Property staff should walk you through the process to get on their waitlist."
+      )
+    ).toBeInTheDocument()
+
+    expect(
+      within(whatToExpectAdditonalTextEditorWrapper).getByText("You have 473 characters remaining")
+    ).toBeInTheDocument()
+
     // Query issue: https://github.com/ueberdosis/tiptap/discussions/4008#discussioncomment-7623655
     const whatToExpectAdditonalTextEditor = screen
       .getByTestId("whatToExpectAdditionalText")
@@ -358,11 +377,11 @@ describe("add listing", () => {
           } as unknown as JurisdictionsService,
         }}
       >
-        <ListingForm />
+        <ListingForm jurisdictionId={"Bloomington"} />
       </AuthContext.Provider>
     )
 
-    const requiredFields = ["Listing name", "Jurisdiction"]
+    const requiredFields = ["Listing name"]
 
     const unrequiredFields = [
       "Housing developer",
@@ -377,8 +396,6 @@ describe("add listing", () => {
       "Reserved community description",
       "Units",
       "Application fee",
-      "Deposit min",
-      "Deposit max",
       "Deposit helper text",
       "Costs not included",
       "Property amenities",
@@ -475,13 +492,12 @@ describe("add listing", () => {
           } as unknown as JurisdictionsService,
         }}
       >
-        <ListingForm />
+        <ListingForm jurisdictionId={"Bloomington"} />
       </AuthContext.Provider>
     )
 
     const possibleRequiredFields = [
       "Listing name",
-      "Jurisdiction",
       "Housing developer",
       "Photos",
       "Street address",
@@ -496,8 +512,6 @@ describe("add listing", () => {
       "Home type",
       "Units",
       "Application fee",
-      "Deposit min",
-      "Deposit max",
       "Deposit helper text",
       "Costs not included",
       "Property amenities",

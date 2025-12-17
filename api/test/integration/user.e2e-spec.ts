@@ -1,5 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication } from '@nestjs/common';
+import { INestApplication, Logger } from '@nestjs/common';
+import { LanguagesEnum } from '@prisma/client';
 import { randomUUID } from 'crypto';
 import { stringify } from 'qs';
 import request from 'supertest';
@@ -23,6 +24,7 @@ import { EmailService } from '../../src/services/email.service';
 import { Login } from '../../src/dtos/auth/login.dto';
 import { RequestMfaCode } from '../../src/dtos/mfa/request-mfa-code.dto';
 import { ModificationEnum } from '../../src/enums/shared/modification-enum';
+import dayjs from 'dayjs';
 
 describe('User Controller Tests', () => {
   let app: INestApplication;
@@ -30,6 +32,7 @@ describe('User Controller Tests', () => {
   let userService: UserService;
   let emailService: EmailService;
   let cookies = '';
+  let logger: Logger;
 
   const invitePartnerUserMock = jest.fn();
   const testEmailService = {
@@ -40,6 +43,7 @@ describe('User Controller Tests', () => {
     forgotPassword: jest.fn(),
     sendMfaCode: jest.fn(),
     sendCSV: jest.fn(),
+    warnOfAccountRemoval: jest.fn(),
   };
 
   beforeEach(() => {
@@ -53,6 +57,12 @@ describe('User Controller Tests', () => {
     })
       .overrideProvider(EmailService)
       .useValue(testEmailService)
+      .overrideProvider(Logger)
+      .useValue({
+        log: jest.fn(),
+        warn: jest.fn(),
+        error: jest.fn(),
+      })
       .compile();
 
     app = moduleFixture.createNestApplication();
@@ -60,6 +70,7 @@ describe('User Controller Tests', () => {
     prisma = moduleFixture.get<PrismaService>(PrismaService);
     userService = moduleFixture.get<UserService>(UserService);
     emailService = moduleFixture.get<EmailService>(EmailService);
+    logger = moduleFixture.get<Logger>(Logger);
 
     await app.init();
 
@@ -224,7 +235,24 @@ describe('User Controller Tests', () => {
   });
 
   describe('delete endpoint', () => {
-    it('should delete user when user exists', async () => {
+    it('should delete admin user when user exists', async () => {
+      const userA = await prisma.userAccounts.create({
+        data: await userFactory({ roles: { isAdmin: true } }),
+      });
+
+      const res = await request(app.getHttpServer())
+        .delete(`/user/`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({
+          id: userA.id,
+        } as IdDTO)
+        .set('Cookie', cookies)
+        .expect(200);
+
+      expect(res.body.success).toEqual(true);
+    });
+
+    it('should delete public user when user exists', async () => {
       const userA = await prisma.userAccounts.create({
         data: await userFactory(),
       });
@@ -465,6 +493,9 @@ describe('User Controller Tests', () => {
     });
 
     it('should fail to verify token when incorrect user id is provided', async () => {
+      const mockConsoleError = jest
+        .spyOn(console, 'error')
+        .mockImplementation();
       const userA = await prisma.userAccounts.create({
         data: await userFactory(),
       });
@@ -506,6 +537,10 @@ describe('User Controller Tests', () => {
       });
 
       expect(userPostResend.hitConfirmationUrl).toBeNull();
+      expect(mockConsoleError).toHaveBeenCalledWith(
+        'isUserConfirmationTokenValid error = ',
+        expect.anything(),
+      );
     });
 
     it('should fail to verify token when token mismatch', async () => {
@@ -941,6 +976,177 @@ describe('User Controller Tests', () => {
 
       expect(res.body.message).toEqual(
         `listingId ${invalidId} was requested but not found`,
+      );
+    });
+  });
+
+  describe('delete after inactivity endpoint', () => {
+    it('should delete user after inactivity', async () => {
+      process.env.USERS_DAYS_TILL_EXPIRY = '1095';
+      const publicUserStillActive = await prisma.userAccounts.create({
+        data: await userFactory({
+          lastLoginAt: dayjs(new Date()).subtract(60, 'days').toDate(),
+          wasWarnedOfDeletion: false,
+        }),
+      });
+      const partnerUserInactive = await prisma.userAccounts.create({
+        data: await userFactory({
+          lastLoginAt: dayjs(new Date()).subtract(6000, 'days').toDate(),
+          wasWarnedOfDeletion: false,
+          roles: { isPartner: true },
+        }),
+      });
+      const publicUserInactiveNotWarned = await prisma.userAccounts.create({
+        data: await userFactory({
+          lastLoginAt: dayjs(new Date()).subtract(1100, 'days').toDate(),
+          wasWarnedOfDeletion: false,
+        }),
+      });
+      const publicUserInactiveWarned = await prisma.userAccounts.create({
+        data: await userFactory({
+          lastLoginAt: dayjs(new Date()).subtract(1100, 'days').toDate(),
+          wasWarnedOfDeletion: true,
+        }),
+      });
+      const data = await applicationFactory({
+        userId: publicUserInactiveWarned.id,
+      });
+      const application = await prisma.applications.create({
+        data,
+      });
+      await request(app.getHttpServer())
+        .put(`/user/deleteInactiveUsersCronJob`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .expect(200);
+
+      const deletedUser = await prisma.userAccounts.findFirst({
+        where: { id: publicUserInactiveWarned.id },
+      });
+      expect(deletedUser).toBeNull();
+
+      const nonDeletedUsers = await prisma.userAccounts.findMany({
+        where: {
+          id: {
+            in: [
+              publicUserInactiveNotWarned.id,
+              publicUserStillActive.id,
+              partnerUserInactive.id,
+            ],
+          },
+        },
+      });
+      expect(nonDeletedUsers).toHaveLength(3);
+      expect(logger.warn).toBeCalledWith(
+        `Unable to delete user ${publicUserInactiveNotWarned.id} because they have not been warned by email`,
+      );
+      // Validate PII was removed from applications
+      const updatedApplication = await prisma.applications.findFirst({
+        include: { applicant: true, applicationsMailingAddress: true },
+        where: { id: application.id },
+      });
+      expect(updatedApplication.additionalPhoneNumber).toBeNull();
+      expect(updatedApplication.applicant.birthDay).toBeNull();
+      expect(updatedApplication.applicant.birthMonth).toBeNull();
+      expect(updatedApplication.applicant.birthYear).toBeNull();
+      expect(updatedApplication.applicant.firstName).toBeNull();
+      expect(updatedApplication.applicant.lastName).toBeNull();
+      expect(updatedApplication.applicationsMailingAddress.street).toBeNull();
+      expect(updatedApplication.applicationsMailingAddress.city).not.toBeNull();
+    });
+  });
+
+  describe('warnUserOfDeletionCronJob endpoint', () => {
+    let userA;
+    let userB;
+    let userC;
+    let userD;
+    let userE;
+    beforeAll(async () => {
+      process.env.USERS_DAYS_TILL_EXPIRY = '1095';
+      // Public User that should be warned
+      userA = await prisma.userAccounts.create({
+        data: await userFactory({
+          firstName: 'A',
+          confirmedAt: new Date(),
+          lastLoginAt: dayjs(new Date()).subtract(4, 'years').toDate(),
+        }),
+      });
+      // User that has logged in recently
+      userB = await prisma.userAccounts.create({
+        data: await userFactory({
+          firstName: 'B',
+          confirmedAt: new Date(),
+          lastLoginAt: dayjs(new Date()).subtract(4, 'days').toDate(),
+        }),
+      });
+      // Partner user
+      userC = await prisma.userAccounts.create({
+        data: await userFactory({
+          firstName: 'C',
+          confirmedAt: new Date(),
+          roles: { isAdmin: true },
+          lastLoginAt: dayjs(new Date()).subtract(1200, 'days').toDate(),
+        }),
+      });
+      // User that has already been warned
+      userD = await prisma.userAccounts.create({
+        data: await userFactory({
+          firstName: 'D',
+          confirmedAt: new Date(),
+          lastLoginAt: dayjs(new Date()).subtract(4, 'years').toDate(),
+          wasWarnedOfDeletion: true,
+        }),
+      });
+      // Public User that should be warned in spanish
+      userE = await prisma.userAccounts.create({
+        data: await userFactory({
+          firstName: 'E',
+          confirmedAt: new Date(),
+          lastLoginAt: dayjs(new Date()).subtract(4, 'years').toDate(),
+          language: LanguagesEnum.es,
+        }),
+      });
+    });
+    it('should send warning email to only public users over the date', async () => {
+      const mockWarnOfAccountRemoval = jest.spyOn(
+        testEmailService,
+        'warnOfAccountRemoval',
+      );
+      const res = await request(app.getHttpServer())
+        .put(`/user/userWarnCronJob`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .expect(200);
+      expect(res.text).toBe('{"success":true}');
+      const updatedUserA = await prisma.userAccounts.findFirst({
+        where: { id: userA.id },
+      });
+      expect(updatedUserA.wasWarnedOfDeletion).toBe(true);
+      const updatedUserB = await prisma.userAccounts.findFirst({
+        where: { id: userB.id },
+      });
+      expect(updatedUserB.wasWarnedOfDeletion).toBe(false);
+      const updatedUserC = await prisma.userAccounts.findFirst({
+        where: { id: userC.id },
+      });
+      expect(updatedUserC.wasWarnedOfDeletion).toBe(false);
+      const updatedUserD = await prisma.userAccounts.findFirst({
+        where: { id: userD.id },
+      });
+      expect(updatedUserD.wasWarnedOfDeletion).toBe(true);
+      expect(mockWarnOfAccountRemoval.mock.calls.length).toBeGreaterThanOrEqual(
+        2,
+      );
+      expect(mockWarnOfAccountRemoval).toBeCalledWith(
+        expect.objectContaining({ email: userA.email, id: userA.id }),
+      );
+      expect(mockWarnOfAccountRemoval).toBeCalledWith(
+        expect.objectContaining({
+          email: userE.email,
+          id: userE.id,
+          language: LanguagesEnum.es,
+        }),
       );
     });
   });

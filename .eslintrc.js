@@ -56,5 +56,7 @@ module.exports = {
     "**/.eslintrc.js",
     "sentry-example-page.js",
     "sentry-example-api.js",
+    "next-env.d.ts",
+    "*.csv",
   ],
 }

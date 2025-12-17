@@ -25,6 +25,7 @@ env:
   RECAPTCHA_KEY: "secret-key"
   GOOGLE_CLOUD_PROJECT_ID: "secret-key"
   LOTTERY_DAYS_TILL_EXPIRY: 45
+  CLOUDINARY_CLOUD_NAME: "exygy"
 
 jobs:
   backend-unit:
@@ -37,7 +38,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v1
         with:
-          node-version: 18
+          node-version: 22
 
       - name: yarn in api
         working-directory: ./api

@@ -1,21 +1,11 @@
 import React from "react"
 import { rest } from "msw"
 import { setupServer } from "msw/node"
-import { FormProvider, useForm } from "react-hook-form"
-import { act, screen } from "@testing-library/react"
+import { screen } from "@testing-library/react"
 import CommunityType from "../../../../../src/components/listings/PaperListingForm/sections/CommunityType"
-import { formDefaults, FormListing } from "../../../../../src/lib/listings/formTypes"
-import { mockNextRouter, render } from "../../../../testUtils"
+import { FormProviderWrapper, mockNextRouter, render } from "../../../../testUtils"
 import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import userEvent from "@testing-library/user-event"
-
-const FormComponent = ({ children, values }: { values?: FormListing; children }) => {
-  const formMethods = useForm<FormListing>({
-    defaultValues: { ...formDefaults, ...values },
-    shouldUnregister: false,
-  })
-  return <FormProvider {...formMethods}>{children}</FormProvider>
-}
 
 const reservedCommunityTypes = [
   {
@@ -87,9 +77,9 @@ describe("CommunityType", () => {
     )
 
     render(
-      <FormComponent>
-        <CommunityType requiredFields={[]} />
-      </FormComponent>
+      <FormProviderWrapper>
+        <CommunityType requiredFields={[]} swapCommunityTypeWithPrograms={false} />
+      </FormProviderWrapper>
     )
 
     // verify that the page has loaded as well as the community types
@@ -134,24 +124,22 @@ describe("CommunityType", () => {
     )
 
     render(
-      <FormComponent>
-        <CommunityType requiredFields={[]} />
-      </FormComponent>
+      <FormProviderWrapper>
+        <CommunityType requiredFields={[]} swapCommunityTypeWithPrograms={false} />
+      </FormProviderWrapper>
     )
 
     // verify that the page has loaded as well as the community types
     await screen.findByRole("heading", { level: 2, name: "Community type" })
     await screen.findByRole("option", { name: "Seniors" })
 
-    await act(() =>
-      userEvent.selectOptions(
-        screen.getByRole("combobox", { name: "Reserved community type" }),
-        "Seniors"
-      )
+    await userEvent.selectOptions(
+      screen.getByRole("combobox", { name: "Reserved community type" }),
+      "Seniors"
     )
     expect(screen.getByRole("radio", { name: "Yes" })).not.toBeDisabled()
     expect(screen.getByRole("radio", { name: "No" })).not.toBeDisabled()
-    await act(() => userEvent.click(screen.getByRole("radio", { name: "Yes" })))
+    await userEvent.click(screen.getByRole("radio", { name: "Yes" }))
 
     expect(
       screen.getByRole("textbox", { name: "Reserved community disclaimer title *" })
@@ -175,9 +163,9 @@ describe("CommunityType", () => {
     document.cookie = "access-token-available=True"
 
     const results = render(
-      <FormComponent>
-        <CommunityType requiredFields={[]} />
-      </FormComponent>
+      <FormProviderWrapper>
+        <CommunityType requiredFields={[]} swapCommunityTypeWithPrograms={true} />
+      </FormProviderWrapper>
     )
 
     expect(results.queryAllByRole("heading", { level: 2, name: "Community type" })).toHaveLength(0)

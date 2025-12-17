@@ -8,6 +8,7 @@ import {
   Listing,
   MultiselectQuestionsApplicationSectionEnum,
   PublicLotteryResult,
+  ReviewOrderTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { Card, Button, Heading, Icon, Message } from "@bloom-housing/ui-seeds"
 import FormsLayout from "../../../../layouts/forms"
@@ -16,6 +17,7 @@ import {
   ApplicationListingCard,
 } from "../../../../components/account/ApplicationCards"
 import styles from "../../../../../styles/lottery-results.module.scss"
+import Markdown from "markdown-to-jsx"
 
 const LotteryResults = () => {
   const router = useRouter()
@@ -90,6 +92,20 @@ const LotteryResults = () => {
     )
   }
 
+  const lotteryResultHeaderText =
+    listing?.reviewOrderType === ReviewOrderTypeEnum.waitlistLottery
+      ? t("account.application.lottery.resultsHeaderWaitlistLottery")
+      : t("account.application.lottery.resultsHeader")
+
+  const applications = totals?.find((total) => !total.multiselectQuestionId).total
+
+  const resultsSubheaderWaitlistLottery = t(
+    `account.application.lottery.resultsSubheaderWaitlistLottery`,
+    {
+      applications,
+    }
+  )
+
   return (
     <>
       <RequireLogin signInPath="/sign-in" signInMessage={t("t.loginIsRequired")}>
@@ -116,18 +132,20 @@ const LotteryResults = () => {
                       {t("t.back")}
                     </Button>
                     <Heading priority={2} size={"2xl"} className="mt-6">
-                      {t("account.application.lottery.resultsHeader")}
+                      {lotteryResultHeaderText}
                     </Heading>
                     <p className="mt-4">
-                      {t(
-                        `account.application.lottery.resultsSubheader${
-                          listing?.unitsAvailable !== 1 ? "Plural" : ""
-                        }`,
-                        {
-                          applications: totals?.find((total) => !total.multiselectQuestionId).total,
-                          units: listing?.unitsAvailable,
-                        }
-                      )}
+                      {listing?.reviewOrderType === ReviewOrderTypeEnum.waitlistLottery
+                        ? resultsSubheaderWaitlistLottery
+                        : t(
+                            `account.application.lottery.resultsSubheader${
+                              listing?.unitsAvailable !== 1 ? "Plural" : ""
+                            }`,
+                            {
+                              applications,
+                              units: listing?.unitsAvailable,
+                            }
+                          )}
                     </p>
                   </Card.Section>
                   <Card.Section
@@ -161,7 +179,11 @@ const LotteryResults = () => {
                       <Heading priority={3} size={"xl"} className={`${styles["section-heading"]}`}>
                         {t("account.application.lottery.preferencesHeader")}
                       </Heading>
-                      <p>{t("account.application.lottery.preferences")}</p>
+                      <Markdown>
+                        {t("account.application.lottery.preferences", {
+                          closedListingPageLink: `/listing/${listing?.id}`,
+                        })}
+                      </Markdown>
                     </div>
                     <div>
                       <Button

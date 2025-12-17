@@ -77,14 +77,21 @@ export const phoneMask = (incomingNewValue: string): string => {
 }
 
 type ApplicationTypesProps = {
+  disableCommonApplication: boolean
+  jurisdiction: string
   listing: FormListing
   requiredFields: string[]
 }
 
-const ApplicationTypes = ({ listing, requiredFields }: ApplicationTypesProps) => {
+const ApplicationTypes = ({
+  disableCommonApplication,
+  jurisdiction,
+  listing,
+  requiredFields,
+}: ApplicationTypesProps) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, setValue, watch, errors, getValues } = useFormContext()
-  const { doJurisdictionsHaveFeatureFlagOn, getJurisdictionLanguages } = useContext(AuthContext)
+  const { getJurisdictionLanguages, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
 
   const getDefaultMethods = () => {
     const temp: Methods = {
@@ -117,7 +124,6 @@ const ApplicationTypes = ({ listing, requiredFields }: ApplicationTypesProps) =>
   }
 
   // watch fields
-  const jurisdiction: string = watch("jurisdictions.id")
   const digitalApplicationChoice = watch("digitalApplicationChoice")
   const commonDigitalApplicationChoice = watch("commonDigitalApplicationChoice")
   const paperApplicationChoice = watch("paperApplicationChoice")
@@ -144,10 +150,10 @@ const ApplicationTypes = ({ listing, requiredFields }: ApplicationTypesProps) =>
     setDrawerState(false)
   }
 
-  const disableCommonApplication = jurisdiction
-    ? doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.disableCommonApplication, jurisdiction)
-    : false
-
+  const enableReferralQuestionUnits = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableReferralQuestionUnits,
+    jurisdiction
+  )
   const availableJurisdictionLanguages = jurisdiction ? getJurisdictionLanguages(jurisdiction) : []
 
   const yesNoRadioOptions = [
@@ -489,7 +495,11 @@ const ApplicationTypes = ({ listing, requiredFields }: ApplicationTypesProps) =>
               groupLabel={getLabel(
                 "referralOpportunity",
                 requiredFields,
-                t("listings.isReferralOpportunity")
+                t(
+                  enableReferralQuestionUnits
+                    ? "listings.areReferralOnlyUnits"
+                    : "listings.isReferralOpportunity"
+                )
               )}
               error={
                 fieldHasError(errors?.referralOpportunity) && referralOpportunityChoice === null

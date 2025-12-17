@@ -1,23 +1,16 @@
 import React from "react"
 import { setupServer } from "msw/node"
-import { FormProvider, useForm } from "react-hook-form"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import {
   MultiselectQuestion,
   MultiselectQuestionsApplicationSectionEnum,
+  MultiselectQuestionsStatusEnum,
   ValidationMethodEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { render, screen, within } from "@testing-library/react"
 import PreferencesAndPrograms from "../../../../../src/components/listings/PaperListingForm/sections/PreferencesAndPrograms"
-import { formDefaults, FormListing } from "../../../../../src/lib/listings/formTypes"
-
-const FormComponent = ({ children, values }: { values?: FormListing; children }) => {
-  const formMethods = useForm<FormListing>({
-    defaultValues: { ...formDefaults, ...values },
-    shouldUnregister: false,
-  })
-  return <FormProvider {...formMethods}>{children}</FormProvider>
-}
+import { formDefaults } from "../../../../../src/lib/listings/formTypes"
+import { FormProviderWrapper } from "../../../../testUtils"
 
 const server = setupServer()
 
@@ -38,22 +31,17 @@ describe("PreferencesAndPrograms", () => {
       const setFn = jest.fn()
 
       render(
-        <AuthContext.Provider
-          value={{
-            doJurisdictionsHaveFeatureFlagOn: () => {
-              return false
-            },
-          }}
-        >
-          <FormComponent values={{ ...formDefaults }}>
-            <PreferencesAndPrograms
-              preferences={[]}
-              programs={[]}
-              setPreferences={setFn}
-              setPrograms={setFn}
-            />
-          </FormComponent>
-        </AuthContext.Provider>
+        <FormProviderWrapper values={{ ...formDefaults }}>
+          <PreferencesAndPrograms
+            jurisdiction={"jurisdiction1"}
+            preferences={[]}
+            programs={[]}
+            setPreferences={setFn}
+            setPrograms={setFn}
+            disableListingPreferences={false}
+            swapCommunityTypeWithPrograms={false}
+          />
+        </FormProviderWrapper>
       )
 
       expect(screen.getByRole("heading", { level: 2, name: /preferences/i })).toBeInTheDocument()
@@ -75,6 +63,7 @@ describe("PreferencesAndPrograms", () => {
           jurisdictions: [],
           hideFromListing: false,
           applicationSection: MultiselectQuestionsApplicationSectionEnum.preferences,
+          status: MultiselectQuestionsStatusEnum.active,
         },
         {
           id: "preference_id_2",
@@ -102,6 +91,7 @@ describe("PreferencesAndPrograms", () => {
           ],
           hideFromListing: false,
           applicationSection: MultiselectQuestionsApplicationSectionEnum.preferences,
+          status: MultiselectQuestionsStatusEnum.active,
         },
       ]
       const setFn = jest.fn()
@@ -114,14 +104,17 @@ describe("PreferencesAndPrograms", () => {
             },
           }}
         >
-          <FormComponent values={{ ...formDefaults }}>
+          <FormProviderWrapper values={{ ...formDefaults }}>
             <PreferencesAndPrograms
               preferences={mockPreferences}
               programs={[]}
               setPreferences={setFn}
               setPrograms={setFn}
+              disableListingPreferences={false}
+              swapCommunityTypeWithPrograms={false}
+              jurisdiction={"jurisdiction1"}
             />
-          </FormComponent>
+          </FormProviderWrapper>
         </AuthContext.Provider>
       )
 
@@ -137,15 +130,14 @@ describe("PreferencesAndPrograms", () => {
       expect(tableHeaders[0]).toHaveTextContent(/order/i)
       expect(tableHeaders[1]).toHaveTextContent(/name/i)
       expect(tableHeaders[2]).toHaveTextContent(/additional fields/i)
-      expect(tableHeaders[3]).not.toHaveTextContent()
-
+      expect(tableHeaders[3]).toHaveTextContent(/actions/i)
       const tableRows = within(body).getAllByRole("row")
       expect(tableRows).toHaveLength(2)
 
       const firstRowCells = within(tableRows[0]).getAllByRole("cell")
       expect(firstRowCells[0]).toHaveTextContent("1")
       expect(firstRowCells[1]).toHaveTextContent(/city employees/i)
-      expect(firstRowCells[2]).not.toHaveTextContent()
+      expect(firstRowCells[2]).toHaveTextContent("")
       expect(within(firstRowCells[3]).getByRole("button", { name: /delete/i })).toBeInTheDocument()
 
       const secondRowCells = within(tableRows[1]).getAllByRole("cell")
@@ -172,14 +164,17 @@ describe("PreferencesAndPrograms", () => {
             },
           }}
         >
-          <FormComponent values={{ ...formDefaults }}>
+          <FormProviderWrapper values={{ ...formDefaults }}>
             <PreferencesAndPrograms
               preferences={[]}
               programs={[]}
               setPreferences={setFn}
               setPrograms={setFn}
+              disableListingPreferences={true}
+              swapCommunityTypeWithPrograms={false}
+              jurisdiction={"jurisdiction1"}
             />
-          </FormComponent>
+          </FormProviderWrapper>
         </AuthContext.Provider>
       )
 
@@ -216,6 +211,7 @@ describe("PreferencesAndPrograms", () => {
             text: "Families",
             applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
             jurisdictions: undefined,
+            status: MultiselectQuestionsStatusEnum.active,
           },
         ]
         const setFn = jest.fn()
@@ -227,14 +223,17 @@ describe("PreferencesAndPrograms", () => {
               },
             }}
           >
-            <FormComponent values={{ ...formDefaults }}>
+            <FormProviderWrapper values={{ ...formDefaults }}>
               <PreferencesAndPrograms
                 preferences={[]}
                 setPreferences={setFn}
                 programs={programs}
                 setPrograms={setFn}
+                disableListingPreferences={false}
+                swapCommunityTypeWithPrograms={false}
+                jurisdiction={"jurisdiction1"}
               />
-            </FormComponent>
+            </FormProviderWrapper>
           </AuthContext.Provider>
         )
 
@@ -259,6 +258,7 @@ describe("PreferencesAndPrograms", () => {
             text: "Community 1",
             applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
             jurisdictions: undefined,
+            status: MultiselectQuestionsStatusEnum.active,
           },
         ]
         const setFn = jest.fn()
@@ -270,14 +270,17 @@ describe("PreferencesAndPrograms", () => {
               },
             }}
           >
-            <FormComponent values={{ ...formDefaults }}>
+            <FormProviderWrapper values={{ ...formDefaults }}>
               <PreferencesAndPrograms
                 preferences={[]}
                 setPreferences={setFn}
                 programs={programs}
                 setPrograms={setFn}
+                disableListingPreferences={false}
+                swapCommunityTypeWithPrograms={true}
+                jurisdiction={"jurisdiction1"}
               />
-            </FormComponent>
+            </FormProviderWrapper>
           </AuthContext.Provider>
         )
 

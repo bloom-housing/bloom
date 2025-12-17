@@ -1,0 +1,19 @@
+.section-container {
+  display: flex;
+  flex-direction: row;
+  position: relative;
+  width: 100%;
+  max-width: var(--seeds-width-7xl);
+  margin-inline: auto;
+  padding-block: var(--seeds-s8);
+  padding-inline: var(--seeds-s6);
+  @media (max-width: theme("screens.md")) {
+    flex-direction: column;
+    gap: var(--seeds-s4);
+  }
+
+  .content-container {
+    width: 100%;
+    margin-inline: auto;
+  }
+}

@@ -80,7 +80,7 @@ Cypress.Commands.add("signOut", () => {
 })
 
 Cypress.Commands.add("signOutApi", (fix = "user") => {
-  cy.fixture(fix).then((user) => {
+  cy.fixture(fix).then((_user) => {
     cy.request("GET", "/api/adapter/auth/logout").then((response) => {
       expect(response.status).eq(200)
     })
@@ -408,12 +408,12 @@ Cypress.Commands.add("addMinimalListing", (listingName, isLottery, isApproval, j
   // Create and publish minimal FCFS or Lottery listing
   // TODO: test Open Waitlist, though maybe with integration test instead
   cy.getByID("addListingButton").contains("Add listing").click()
+  if (jurisdiction) {
+    cy.getByID("jurisdiction").select("Bloomington")
+    cy.get("button").contains("Get started").click()
+  }
   cy.contains("New listing")
   cy.fixture("minimalListing").then((listing) => {
-    if (jurisdiction) {
-      cy.getByID("jurisdictions.id").select("Bloomington")
-      cy.getByID("jurisdictions.id-error").should("not.include.text", "This field is required")
-    }
     cy.getByID("name").type(listingName)
     cy.getByID("developer").type(listing["developer"])
     cy.getByID("add-photos-button").contains("Add photo").click()

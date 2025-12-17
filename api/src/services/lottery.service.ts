@@ -6,7 +6,6 @@ import {
   Injectable,
   Logger,
 } from '@nestjs/common';
-import { SchedulerRegistry } from '@nestjs/schedule';
 import { ConfigService } from '@nestjs/config';
 import {
   LanguagesEnum,
@@ -36,10 +35,10 @@ import { mapTo } from '../utilities/mapTo';
 import { LotteryActivityLogItem } from '../dtos/lottery/lottery-activity-log-item.dto';
 import { ListingLotteryStatus } from '../../src/dtos/listings/listing-lottery-status.dto';
 import { ListingViews } from '../../src/enums/listings/view-enum';
-import { startCronJob } from '../utilities/cron-job-starter';
 import { EmailService } from './email.service';
 import { PublicLotteryResult } from '../../src/dtos/lottery/lottery-public-result.dto';
 import { PublicLotteryTotal } from '../../src/dtos/lottery/lottery-public-total.dto';
+import { CronJobService } from './cron-job.service';
 
 const LOTTERY_CRON_JOB_NAME = 'LOTTERY_CRON_JOB';
 const LOTTERY_PUBLISH_CRON_JOB_NAME = 'LOTTERY_PUBLISH_CRON_JOB';
@@ -61,26 +60,20 @@ export class LotteryService {
     private configService: ConfigService,
     @Inject(Logger)
     private logger = new Logger(LotteryService.name),
-    private schedulerRegistry: SchedulerRegistry,
     private permissionService: PermissionService,
+    private cronJobService: CronJobService,
   ) {}
 
   onModuleInit() {
-    startCronJob(
-      this.prisma,
+    this.cronJobService.startCronJob(
       LOTTERY_CRON_JOB_NAME,
       process.env.LOTTERY_PROCESSING_CRON_STRING,
       this.expireLotteries.bind(this),
-      this.logger,
-      this.schedulerRegistry,
     );
-    startCronJob(
-      this.prisma,
+    this.cronJobService.startCronJob(
       LOTTERY_PUBLISH_CRON_JOB_NAME,
       process.env.LOTTERY_PUBLISH_PROCESSING_CRON_STRING,
       this.autoPublishResults.bind(this),
-      this.logger,
-      this.schedulerRegistry,
     );
   }
 
@@ -403,6 +396,7 @@ export class LotteryService {
         UserRoleEnum.admin,
         UserRoleEnum.jurisdictionAdmin,
         UserRoleEnum.partner,
+        UserRoleEnum.supportAdmin,
       ],
       listing.id,
       listing.jurisdictions?.id,
@@ -505,6 +499,7 @@ export class LotteryService {
             UserRoleEnum.admin,
             UserRoleEnum.jurisdictionAdmin,
             UserRoleEnum.partner,
+            UserRoleEnum.supportAdmin,
           ],
           storedListing.id,
           storedListing.jurisdictionId,
@@ -657,7 +652,7 @@ export class LotteryService {
   */
   async autoPublishResults(): Promise<SuccessDTO> {
     this.logger.warn('autoPublishLotteryResults job running');
-    await this.listingService.markCronJobAsStarted(
+    await this.cronJobService.markCronJobAsStarted(
       LOTTERY_PUBLISH_CRON_JOB_NAME,
     );
     const tomorrow = dayjs(
@@ -720,7 +715,7 @@ export class LotteryService {
   async expireLotteries(): Promise<SuccessDTO> {
     if (process.env.LOTTERY_DAYS_TILL_EXPIRY) {
       this.logger.warn('changeExpiredLotteryStatusCron job running');
-      await this.listingService.markCronJobAsStarted(LOTTERY_CRON_JOB_NAME);
+      await this.cronJobService.markCronJobAsStarted(LOTTERY_CRON_JOB_NAME);
       const expiration_date = dayjs(new Date())
         .subtract(Number(process.env.LOTTERY_DAYS_TILL_EXPIRY), 'days')
         .toDate();

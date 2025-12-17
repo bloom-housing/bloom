@@ -8,15 +8,16 @@ import {
 } from "@bloom-housing/ui-components"
 import { Button, Dialog, Drawer, Grid, Tag } from "@bloom-housing/ui-seeds"
 import {
+  EnumListingListingType,
   EnumUnitGroupAmiLevelMonthlyRentDeterminationType,
-  FeatureFlag,
   FeatureFlagEnum,
   HomeTypeEnum,
   MinMax,
+  RentTypeEnum,
   ReviewOrderTypeEnum,
   YesNoEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { MessageContext } from "@bloom-housing/shared-helpers"
+import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
 import UnitForm from "../UnitForm"
 import { useFormContext, useWatch } from "react-hook-form"
 import { TempUnit, TempUnitGroup } from "../../../../lib/listings/formTypes"
@@ -28,46 +29,98 @@ import styles from "../ListingForm.module.scss"
 
 type UnitProps = {
   disableUnitsAccordion: boolean
-  featureFlags?: FeatureFlag[]
   requiredFields: string[]
   setUnitGroups: (unitGroups: TempUnitGroup[]) => void
   setUnits: (units: TempUnit[]) => void
   unitGroups: TempUnitGroup[]
   units: TempUnit[]
+  jurisdiction: string
 }
+
+type getTableActionItemsProps = {
+  onEdit: () => void
+  onDelete: () => void
+}
+
+const getTableActionItems = ({ onEdit, onDelete }: getTableActionItemsProps) => (
+  <div className="flex gap-3">
+    <Button
+      type="button"
+      className={"font-semibold darker-link"}
+      onClick={onEdit}
+      variant="text"
+      size="sm"
+    >
+      {t("t.edit")}
+    </Button>
+    <Button
+      type="button"
+      className={"font-semibold darker-alert"}
+      onClick={onDelete}
+      variant="text"
+      size="sm"
+    >
+      {t("t.delete")}
+    </Button>
+  </div>
+)
 
 const FormUnits = ({
   disableUnitsAccordion,
-  featureFlags,
   requiredFields,
   setUnitGroups,
   setUnits,
   unitGroups,
   units,
+  jurisdiction,
 }: UnitProps) => {
   const { addToast } = useContext(MessageContext)
+  const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
   const [unitDrawerOpen, setUnitDrawerOpen] = useState(false)
   const [unitDeleteModal, setUnitDeleteModal] = useState<number | null>(null)
   const [defaultUnit, setDefaultUnit] = useState<TempUnit | null>(null)
   const [defaultUnitGroup, setDefaultUnitGroup] = useState<TempUnitGroup | null>(null)
-  const [homeTypeEnabled, setHomeTypeEnabled] = useState(false)
 
   const formMethods = useFormContext()
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, errors, clearErrors, getValues, control, setValue } = formMethods
   const listing = getValues()
 
-  const enableSection8Question =
-    featureFlags?.find((flag) => flag.name === FeatureFlagEnum.enableSection8Question)?.active ||
-    false
+  const homeTypeEnabled = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableHomeType,
+    jurisdiction,
+    true
+  )
 
-  const enableUnitGroups =
-    featureFlags?.find((flag) => flag.name === FeatureFlagEnum.enableUnitGroups)?.active || false
+  const enableSection8Question = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableSection8Question,
+    jurisdiction,
+    true
+  )
+
+  const enableUnitGroups = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableUnitGroups,
+    jurisdiction,
+    true
+  )
+
+  const enableNonRegulatedListings = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableNonRegulatedListings,
+    jurisdiction
+  )
 
   const listingAvailability = useWatch({
     control,
     name: "listingAvailabilityQuestion",
   })
+
+  const listingType = useWatch({
+    control,
+    name: "listingType",
+  })
+
+  const showNonRegulated =
+    enableNonRegulatedListings && listingType === EnumListingListingType.nonRegulated
 
   const homeTypes = [
     "",
@@ -87,17 +140,17 @@ const FormUnits = ({
     ? {
         unitType: "listings.unit.type",
         number: "listings.unit.totalCount",
-        amiPercentage: "listings.unit.ami",
+        ...(!showNonRegulated ? { amiPercentage: "t.ami" } : {}),
         monthlyRent: "listings.unit.rent",
         occupancy: "listings.unit.occupancy",
-        sqFeet: "listings.unit.sqft",
+        ...(!showNonRegulated ? { sqFeet: "listings.unit.sqft" } : {}),
         bath: "listings.unit.bath",
         action: "",
       }
     : {
         number: "listings.unit.number",
         unitType: "listings.unit.type",
-        amiPercentage: "listings.unit.ami",
+        amiPercentage: "t.ami",
         monthlyRent: "listings.unit.rent",
         sqFeet: "listings.unit.sqft",
         unitAccessibilityPriorityTypes: "listings.unit.priorityType",
@@ -124,16 +177,10 @@ const FormUnits = ({
 
   // If hometype feature flag is not turned on for selected jurisdiction we need to reset the value
   useEffect(() => {
-    if (featureFlags) {
-      const isHomeTypeEnabled = featureFlags.some(
-        (flag) => flag.name === FeatureFlagEnum.enableHomeType
-      )
-      setHomeTypeEnabled(isHomeTypeEnabled)
-      if (!isHomeTypeEnabled) {
-        setValue("homeType", "")
-      }
+    if (!homeTypeEnabled) {
+      setValue("homeType", "")
     }
-  }, [featureFlags, setValue])
+  }, [homeTypeEnabled, setValue])
 
   const editUnit = useCallback(
     (tempId: number) => {
@@ -203,107 +250,100 @@ const FormUnits = ({
     }
   }
 
-  const unitTableData: StandardTableData = useMemo(
-    () =>
-      enableUnitGroups
-        ? unitGroups.map((unitGroup) => {
-            let amiRange: MinMax, rentRange: MinMax, percentIncomeRange: MinMax
+  const unitTableData: StandardTableData = useMemo(() => {
+    if (enableUnitGroups) {
+      if (showNonRegulated) {
+        return unitGroups.map((unitGroup) => {
+          const rentValue =
+            unitGroup.rentType === RentTypeEnum.fixedRent
+              ? unitGroup.monthlyRent
+              : formatRange(unitGroup.flatRentValueFrom, unitGroup.flatRentValueTo)
 
-            unitGroup.unitGroupAmiLevels.forEach((ami) => {
-              if (ami.amiPercentage) {
-                amiRange = minMaxFinder(amiRange, ami.amiPercentage)
-              }
-              if (
-                ami.flatRentValue &&
-                ami.monthlyRentDeterminationType ===
-                  EnumUnitGroupAmiLevelMonthlyRentDeterminationType.flatRent
-              ) {
-                rentRange = minMaxFinder(rentRange, ami.flatRentValue)
-              }
-              if (
-                ami.percentageOfIncomeValue &&
-                ami.monthlyRentDeterminationType ===
-                  EnumUnitGroupAmiLevelMonthlyRentDeterminationType.percentageOfIncome
-              ) {
-                percentIncomeRange = minMaxFinder(percentIncomeRange, ami.percentageOfIncomeValue)
-              }
-            })
+          return {
+            unitType: {
+              content:
+                unitGroup?.unitTypes
+                  .map((unitType) => t(`listings.unitTypes.${unitType.name}`))
+                  .join(", ") || "",
+            },
+            number: { content: unitGroup.totalCount },
+            monthlyRent: { content: rentValue },
+            occupancy: { content: formatRange(unitGroup.minOccupancy, unitGroup.maxOccupancy) },
+            bath: { content: formatRange(unitGroup.bathroomMin, unitGroup.bathroomMax) },
+            action: {
+              content: getTableActionItems({
+                onEdit: () => editUnitGroup(unitGroup.tempId),
+                onDelete: () => setUnitDeleteModal(unitGroup.tempId),
+              }),
+            },
+          }
+        })
+      } else {
+        return unitGroups.map((unitGroup) => {
+          let amiRange: MinMax, rentRange: MinMax, percentIncomeRange: MinMax
 
-            return {
-              unitType: {
-                content:
-                  unitGroup?.unitTypes
-                    .map((unitType) => t(`listings.unitTypes.${unitType.name}`))
-                    .join(", ") || "",
-              },
-              number: { content: unitGroup.totalCount },
-              amiPercentage: {
-                content: amiRange && formatRange(amiRange.min, amiRange.max, "", "%"),
-              },
-              monthlyRent: { content: formatRentRange(rentRange, percentIncomeRange) },
-              occupancy: { content: formatRange(unitGroup.minOccupancy, unitGroup.maxOccupancy) },
-              sqFeet: { content: formatRange(unitGroup.sqFeetMin, unitGroup.sqFeetMax) },
-              bath: { content: formatRange(unitGroup.bathroomMin, unitGroup.bathroomMax) },
-              action: {
-                content: (
-                  <div className="flex gap-3">
-                    <Button
-                      type="button"
-                      className={"font-semibold darker-link"}
-                      onClick={() => editUnitGroup(unitGroup.tempId)}
-                      variant="text"
-                      size="sm"
-                    >
-                      {t("t.edit")}
-                    </Button>
-                    <Button
-                      type="button"
-                      className={"font-semibold darker-alert"}
-                      onClick={() => setUnitDeleteModal(unitGroup.tempId)}
-                      variant="text"
-                      size="sm"
-                    >
-                      {t("t.delete")}
-                    </Button>
-                  </div>
-                ),
-              },
+          unitGroup.unitGroupAmiLevels.forEach((ami) => {
+            if (ami.amiPercentage) {
+              amiRange = minMaxFinder(amiRange, ami.amiPercentage)
+            }
+            if (
+              ami.flatRentValue &&
+              ami.monthlyRentDeterminationType ===
+                EnumUnitGroupAmiLevelMonthlyRentDeterminationType.flatRent
+            ) {
+              rentRange = minMaxFinder(rentRange, ami.flatRentValue)
+            }
+            if (
+              ami.percentageOfIncomeValue &&
+              ami.monthlyRentDeterminationType ===
+                EnumUnitGroupAmiLevelMonthlyRentDeterminationType.percentageOfIncome
+            ) {
+              percentIncomeRange = minMaxFinder(percentIncomeRange, ami.percentageOfIncomeValue)
             }
           })
-        : units.map((unit) => ({
-            number: { content: unit.number },
-            unitType: { content: unit.unitTypes && t(`listings.unitTypes.${unit.unitTypes.name}`) },
-            amiPercentage: { content: unit.amiPercentage },
-            monthlyRent: { content: unit.monthlyRent },
-            sqFeet: { content: unit.sqFeet },
-            unitAccessibilityPriorityTypes: { content: unit.unitAccessibilityPriorityTypes?.name },
-            action: {
-              content: (
-                <div className="flex gap-3">
-                  <Button
-                    type="button"
-                    className={"font-semibold darker-link"}
-                    onClick={() => editUnit(unit.tempId)}
-                    variant="text"
-                    size="sm"
-                  >
-                    {t("t.edit")}
-                  </Button>
-                  <Button
-                    type="button"
-                    className={"font-semibold darker-alert"}
-                    onClick={() => setUnitDeleteModal(unit.tempId)}
-                    variant="text"
-                    size="sm"
-                  >
-                    {t("t.delete")}
-                  </Button>
-                </div>
-              ),
+
+          return {
+            unitType: {
+              content:
+                unitGroup?.unitTypes
+                  .map((unitType) => t(`listings.unitTypes.${unitType.name}`))
+                  .join(", ") || "",
             },
-          })),
-    [editUnit, units, unitGroups, editUnitGroup, enableUnitGroups]
-  )
+            number: { content: unitGroup.totalCount },
+            amiPercentage: {
+              content: amiRange && formatRange(amiRange.min, amiRange.max, "", "%"),
+            },
+            monthlyRent: { content: formatRentRange(rentRange, percentIncomeRange) },
+            occupancy: { content: formatRange(unitGroup.minOccupancy, unitGroup.maxOccupancy) },
+            sqFeet: { content: formatRange(unitGroup.sqFeetMin, unitGroup.sqFeetMax) },
+            bath: { content: formatRange(unitGroup.bathroomMin, unitGroup.bathroomMax) },
+            action: {
+              content: getTableActionItems({
+                onEdit: () => editUnitGroup(unitGroup.tempId),
+                onDelete: () => setUnitDeleteModal(unitGroup.tempId),
+              }),
+            },
+          }
+        })
+      }
+    } else {
+      return units.map((unit) => ({
+        number: { content: unit.number },
+        unitType: { content: unit.unitTypes && t(`listings.unitTypes.${unit.unitTypes.name}`) },
+        amiPercentage: { content: unit.amiPercentage },
+        monthlyRent: { content: unit.monthlyRent },
+        sqFeet: { content: unit.sqFeet },
+        unitAccessibilityPriorityTypes: { content: unit.unitAccessibilityPriorityTypes?.name },
+        action: {
+          content: getTableActionItems({
+            onEdit: () => editUnit(unit.tempId),
+            onDelete: () => setUnitDeleteModal(unit.tempId),
+          }),
+        },
+      }))
+    }
+  }, [editUnit, units, unitGroups, editUnitGroup, enableUnitGroups, showNonRegulated])
+
   const disableUnitsAccordionOptions = [
     {
       id: "unitTypes",
@@ -379,14 +419,18 @@ const FormUnits = ({
                     value: "availableUnits",
                     id: "availableUnits",
                     dataTestId: "listingAvailability.availableUnits",
-                    defaultChecked: listing?.reviewOrderType !== ReviewOrderTypeEnum.waitlist,
+                    defaultChecked:
+                      listing?.reviewOrderType !== ReviewOrderTypeEnum.waitlist &&
+                      listing?.reviewOrderType !== ReviewOrderTypeEnum.waitlistLottery,
                   },
                   {
                     label: t("listings.waitlist.open"),
                     value: "openWaitlist",
                     id: "openWaitlist",
                     dataTestId: "listingAvailability.openWaitlist",
-                    defaultChecked: listing?.reviewOrderType === ReviewOrderTypeEnum.waitlist,
+                    defaultChecked:
+                      listing?.reviewOrderType === ReviewOrderTypeEnum.waitlist ||
+                      listing?.reviewOrderType === ReviewOrderTypeEnum.waitlistLottery,
                   },
                 ]}
               />
@@ -491,6 +535,7 @@ const FormUnits = ({
         </Drawer.Header>
         {enableUnitGroups ? (
           <UnitGroupForm
+            jurisdiction={jurisdiction}
             onSubmit={(unitGroup) => {
               saveUnitGroup(unitGroup)
             }}
@@ -501,9 +546,11 @@ const FormUnits = ({
             defaultUnitGroup={defaultUnitGroup}
             draft={!unitGroups.some((unitGroup) => unitGroup.tempId === defaultUnitGroup?.tempId)}
             nextId={nextId}
+            isNonRegulated={showNonRegulated}
           />
         ) : (
           <UnitForm
+            jurisdiction={jurisdiction}
             onSubmit={(unit) => {
               saveUnit(unit)
             }}

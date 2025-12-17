@@ -5,6 +5,10 @@ import { addressTypes } from "./formTypes"
 export default class BooleansFormatter extends Formatter {
   /** Format all of the Yes/No questions in the form */
   process() {
+    this.processBoolean("hasHudEbllClearance", {
+      when: this.data.listingHasHudEbllClearance === YesNoEnum.yes,
+      falseCase: () => (this.data.listingHasHudEbllClearance === YesNoEnum.no ? false : null),
+    })
     this.processBoolean("applicationDropOffAddressType", {
       when:
         this.data.canApplicationsBeDroppedOff === YesNoEnum.yes &&
@@ -47,8 +51,12 @@ export default class BooleansFormatter extends Formatter {
         !!this.data.listingImages[0].assets.fileId &&
         !!this.data.listingImages[0].assets.label,
       trueCase: () => {
-        return this.data.listingImages.map((listingImages) => {
-          return { ordinal: listingImages.ordinal, assets: listingImages.assets }
+        return this.data.listingImages.map((listingImage) => {
+          return {
+            ordinal: listingImage.ordinal,
+            assets: listingImage.assets,
+            description: listingImage.description,
+          }
         })
       },
     })
@@ -70,10 +78,7 @@ export default class BooleansFormatter extends Formatter {
       falseCase: () => (this.data.referralOpportunityChoice === YesNoEnum.no ? false : null),
     })
 
-    if (
-      this.data.reviewOrderQuestion !== "reviewOrderLottery" ||
-      this.data.listingAvailabilityQuestion === "openWaitlist"
-    ) {
+    if (this.data.reviewOrderQuestion !== "reviewOrderLottery") {
       this.data.lotteryOptIn = null
     } else {
       this.processBoolean("lotteryOptIn", {
@@ -88,7 +93,6 @@ export default class BooleansFormatter extends Formatter {
       falseCase: () =>
         this.data.includeCommunityDisclaimerQuestion === YesNoEnum.no ? false : null,
     })
-
     this.processBoolean("section8Acceptance", {
       when: this.data.listingSection8Acceptance === YesNoEnum.yes,
       falseCase: () => (this.data.listingSection8Acceptance === YesNoEnum.no ? false : null),

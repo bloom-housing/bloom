@@ -27,7 +27,11 @@ const translationServiceMock = {
 
 const jurisdictionServiceMock = {
   findOne: () => {
-    return { name: 'Jurisdiction 1', publicUrl: 'https://example.com' };
+    return {
+      id: 'jurisdictionId',
+      name: 'Jurisdiction 1',
+      publicUrl: 'https://example.com',
+    };
   },
 };
 
@@ -344,6 +348,39 @@ describe('Testing email service', () => {
         'You may be contacted while on the waitlist to confirm that you wish to remain on the waitlist',
       );
     });
+    it('Test waitlistLottery', async () => {
+      await service.applicationConfirmation(
+        { ...listing, reviewOrderType: ReviewOrderTypeEnum.waitlistLottery },
+        application as ApplicationCreate,
+        'http://localhost:3001',
+      );
+      expect(sendMock).toHaveBeenCalled();
+      expect(sendMock.mock.calls[0][0].to).toEqual(
+        'applicant.email@example.com',
+      );
+      expect(sendMock.mock.calls[0][0].subject).toEqual(
+        'Your Application Confirmation',
+      );
+      expect(sendMock.mock.calls[0][0].html).toContain(
+        '<td class="step step-complete"><img src="https://res.cloudinary.com/exygy/image/upload/v1652459517/core/step-left-active_vo3fnq.png" alt="indication of step completed" /></td>',
+      );
+      expect(sendMock.mock.calls[0][0].html).toContain(
+        '<td class="step step-complete"><span class="step-label" aria-current="true">Application <br />received</span></td>',
+      );
+      expect(sendMock.mock.calls[0][0].html).toContain('What happens next?');
+      expect(sendMock.mock.calls[0][0].html).toContain(
+        'Eligible applicants will be placed on the waitlist based on lottery rank order.',
+      );
+      expect(sendMock.mock.calls[0][0].html).toContain(
+        'Housing preferences, if applicable, will affect waitlist order.',
+      );
+      expect(sendMock.mock.calls[0][0].html).toContain(
+        'If you are contacted for an interview, you will be asked to fill out a more detailed application and provide supporting documents',
+      );
+      expect(sendMock.mock.calls[0][0].html).toContain(
+        'You may be contacted while on the waitlist to confirm that you wish to remain on the waitlist',
+      );
+    });
 
     it('Test leasing agent section with all fields present', async () => {
       const listingWithLeasingAgent = {
@@ -553,6 +590,32 @@ describe('Testing email service', () => {
         /href="https:\/\/example\.com\/en\/sign-in"/,
       );
       expect(emailMock.html).toMatch(/please visit https:\/\/example\.com/);
+    });
+
+    it('should load translations with jurisdiction for each language', async () => {
+      const emailArr = ['testOne@xample.com', 'testTwo@example.com'];
+      const getMergedTranslationsSpy = jest.spyOn(
+        translationServiceMock,
+        'getMergedTranslations',
+      );
+      const service = await module.resolve(EmailService);
+
+      await service.lotteryPublishedApplicant(
+        { name: 'listing name', id: 'listingId', juris: 'jurisdictionId' },
+        { en: emailArr, es: ['spanish@example.com'] },
+      );
+
+      expect(getMergedTranslationsSpy).toHaveBeenCalledTimes(2);
+      expect(getMergedTranslationsSpy).toHaveBeenNthCalledWith(
+        1,
+        'jurisdictionId',
+        'en',
+      );
+      expect(getMergedTranslationsSpy).toHaveBeenNthCalledWith(
+        2,
+        'jurisdictionId',
+        'es',
+      );
     });
   });
 });

@@ -59,6 +59,33 @@ export const multiselectQuestionPreference: MultiselectQuestion = {
   applicationSection: MultiselectQuestionsApplicationSectionEnum.preferences,
 }
 
+export const householdMember = {
+  id: "hh_member_id",
+  createdAt: new Date(),
+  updatedAt: new Date(),
+  firstName: "Household First",
+  lastName: "Household Last",
+  birthDay: "25",
+  birthMonth: "11",
+  birthYear: "1966",
+  relationship: HouseholdMemberRelationship.friend,
+  sameAddress: YesNoEnum.no,
+  workInRegion: YesNoEnum.yes,
+  fullTimeStudent: YesNoEnum.no,
+  householdMemberAddress: {
+    id: "member_address_id",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    placeName: "Arches National Park",
+    city: "Moab",
+    state: "UT",
+    street: "25 E Center St",
+    zipCode: "84532",
+    latitude: 38.6190099,
+    longitude: -109.6969108,
+  },
+}
+
 export const user = {
   agreedToTermsOfService: false,
   confirmedAt: new Date(),
@@ -238,34 +265,7 @@ export const application: Application = {
       longitude: -68.3173111,
     },
   },
-  householdMember: [
-    {
-      id: "hh_member_id",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      firstName: "Household First",
-      lastName: "Household Last",
-      birthDay: "25",
-      birthMonth: "11",
-      birthYear: "1966",
-      relationship: HouseholdMemberRelationship.friend,
-      sameAddress: YesNoEnum.no,
-      workInRegion: YesNoEnum.yes,
-      fullTimeStudent: YesNoEnum.no,
-      householdMemberAddress: {
-        id: "member_address_id",
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        placeName: "Arches National Park",
-        city: "Moab",
-        state: "UT",
-        street: "25 E Center St",
-        zipCode: "84532",
-        latitude: 38.6190099,
-        longitude: -109.6969108,
-      },
-    },
-  ],
+  householdMember: [householdMember],
   preferences: [
     {
       multiselectQuestionId: "1cd5dbc1-3fed-4a4d-b710-ff77749265d5",
@@ -521,89 +521,113 @@ export const unitGroup: UnitGroup = {
   ],
 }
 
+export const amiChart1 = {
+  id: "4e64914b-3169-4d6f-a8ef-d4b11b34ebcd",
+  createdAt: "2025-06-09T17:15:41.062Z",
+  updatedAt: "2025-06-09T17:15:41.062Z",
+  items: [
+    {
+      percentOfAmi: 10,
+      householdSize: 1,
+      income: 12000,
+    },
+    {
+      percentOfAmi: 10,
+      householdSize: 2,
+      income: 24000,
+    },
+    {
+      percentOfAmi: 10,
+      householdSize: 3,
+      income: 36000,
+    },
+    {
+      percentOfAmi: 10,
+      householdSize: 4,
+      income: 48000,
+    },
+    {
+      percentOfAmi: 10,
+      householdSize: 5,
+      income: 60000,
+    },
+    {
+      percentOfAmi: 20,
+      householdSize: 1,
+      income: 24000,
+    },
+    {
+      percentOfAmi: 20,
+      householdSize: 2,
+      income: 36000,
+    },
+    {
+      percentOfAmi: 20,
+      householdSize: 3,
+      income: 48000,
+    },
+    {
+      percentOfAmi: 20,
+      householdSize: 4,
+      income: 60000,
+    },
+    {
+      percentOfAmi: 20,
+      householdSize: 5,
+      income: 72000,
+    },
+    {
+      percentOfAmi: 30,
+      householdSize: 1,
+      income: 36000,
+    },
+    {
+      percentOfAmi: 30,
+      householdSize: 2,
+      income: 48000,
+    },
+    {
+      percentOfAmi: 30,
+      householdSize: 3,
+      income: 60000,
+    },
+    {
+      percentOfAmi: 30,
+      householdSize: 4,
+      income: 72000,
+    },
+    {
+      percentOfAmi: 30,
+      householdSize: 5,
+      income: 84000,
+    },
+  ],
+  name: "Mock AMI",
+  jurisdictions: {
+    id: "Uvbk5qurpB2WI9V6WnNdH",
+    name: "Test City",
+  },
+}
+
 export const amiCharts = [
+  amiChart1,
   {
-    id: "4e64914b-3169-4d6f-a8ef-d4b11b34ebcd",
+    id: "5f31548e-3169-4d6f-a8ef-d4b11b34ebcd",
     createdAt: "2025-06-09T17:15:41.062Z",
     updatedAt: "2025-06-09T17:15:41.062Z",
     items: [
       {
-        percentOfAmi: 10,
+        percentOfAmi: 45,
         householdSize: 1,
-        income: 12000,
+        income: 16000,
       },
       {
-        percentOfAmi: 10,
+        percentOfAmi: 45,
         householdSize: 2,
-        income: 24000,
-      },
-      {
-        percentOfAmi: 10,
-        householdSize: 3,
-        income: 36000,
-      },
-      {
-        percentOfAmi: 10,
-        householdSize: 4,
-        income: 48000,
-      },
-      {
-        percentOfAmi: 10,
-        householdSize: 5,
-        income: 60000,
-      },
-      {
-        percentOfAmi: 20,
-        householdSize: 1,
-        income: 24000,
-      },
-      {
-        percentOfAmi: 20,
-        householdSize: 2,
-        income: 36000,
-      },
-      {
-        percentOfAmi: 20,
-        householdSize: 3,
-        income: 48000,
-      },
-      {
-        percentOfAmi: 20,
-        householdSize: 4,
-        income: 60000,
-      },
-      {
-        percentOfAmi: 20,
-        householdSize: 5,
-        income: 72000,
-      },
-      {
-        percentOfAmi: 30,
-        householdSize: 1,
-        income: 36000,
-      },
-      {
-        percentOfAmi: 30,
-        householdSize: 2,
-        income: 48000,
-      },
-      {
-        percentOfAmi: 30,
-        householdSize: 3,
-        income: 60000,
-      },
-      {
-        percentOfAmi: 30,
-        householdSize: 4,
-        income: 72000,
-      },
-      {
-        percentOfAmi: 30,
-        householdSize: 5,
-        income: 84000,
+        income: 26000,
       },
     ],
-    name: "Mock AMI",
+    name: "Mock AMI 2",
     jurisdictions: {
       id: "Uvbk5qurpB2WI9V6WnNdH",
       name: "Test City",
@@ -692,7 +716,7 @@ export const listing: Listing = {
   applicationLotteryTotals: [],
   jurisdictions: {
     id: "id",
-    name: "San Jose",
+    name: "Bloomington",
   },
   depositMax: "",
   disableUnitsAccordion: false,

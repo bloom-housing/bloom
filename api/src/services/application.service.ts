@@ -3,8 +3,11 @@ import {
   Injectable,
   NotFoundException,
   ForbiddenException,
+  Logger,
+  Inject,
 } from '@nestjs/common';
 import crypto from 'crypto';
+import dayjs from 'dayjs';
 import { Request as ExpressRequest } from 'express';
 import {
   ListingEventsTypeEnum,
@@ -36,6 +39,8 @@ import { MostRecentApplicationQueryParams } from '../dtos/applications/most-rece
 import { PublicAppsViewQueryParams } from '../dtos/applications/public-apps-view-params.dto';
 import { ApplicationsFilterEnum } from '../enums/applications/filter-enum';
 import { PublicAppsViewResponse } from '../dtos/applications/public-apps-view-response.dto';
+import { CronJobService } from './cron-job.service';
+import { DefaultArgs } from '@prisma/client/runtime/library';
 
 export const view: Partial<
   Record<ApplicationViews, Prisma.ApplicationsInclude>
@@ -265,6 +270,8 @@ view.details = {
   },
 };
 
+const PII_DELETION_CRON_JOB_NAME = 'PII_DELETION_CRON_STRING';
+
 /*
   this is the service for applicationss
   it handles all the backend's business logic for reading/writing/deleting application data
@@ -276,7 +283,17 @@ export class ApplicationService {
     private emailService: EmailService,
     private permissionService: PermissionService,
     private geocodingService: GeocodingService,
+    @Inject(Logger)
+    private logger = new Logger(ApplicationService.name),
+    private cronJobService: CronJobService,
   ) {}
+  onModuleInit() {
+    this.cronJobService.startCronJob(
+      PII_DELETION_CRON_JOB_NAME,
+      process.env.PII_DELETION_CRON_STRING,
+      this.removePIICronJob.bind(this),
+    );
+  }
 
   /*
     this will get a set of applications given the params passed in
@@ -593,7 +610,7 @@ export class ApplicationService {
   async create(
     dto: ApplicationCreate,
     forPublic: boolean,
-    requestingUser: User,
+    requestingUser?: User,
   ): Promise<Application> {
     if (!forPublic) {
       await this.authorizeAction(
@@ -636,137 +653,168 @@ export class ApplicationService {
       }
     }
 
-    const rawApplication = await this.prisma.applications.create({
-      data: {
-        ...dto,
-        confirmationCode: this.generateConfirmationCode(),
-        applicant: dto.applicant
-          ? {
-              create: {
-                ...dto.applicant,
-                applicantAddress: {
-                  create: {
-                    ...dto.applicant.applicantAddress,
-                  },
-                },
-                applicantWorkAddress: {
-                  create: {
-                    ...dto.applicant.applicantWorkAddress,
-                  },
-                },
-                firstName: dto.applicant.firstName?.trim(),
-                lastName: dto.applicant.lastName?.trim(),
-                birthDay: dto.applicant.birthDay
-                  ? Number(dto.applicant.birthDay)
-                  : undefined,
-                birthMonth: dto.applicant.birthMonth
-                  ? Number(dto.applicant.birthMonth)
-                  : undefined,
-                birthYear: dto.applicant.birthYear
-                  ? Number(dto.applicant.birthYear)
-                  : undefined,
-                fullTimeStudent: dto.applicant.fullTimeStudent,
-              },
-            }
-          : undefined,
-        accessibility: dto.accessibility
-          ? {
-              create: {
-                ...dto.accessibility,
-              },
-            }
-          : undefined,
-        alternateContact: dto.alternateContact
-          ? {
-              create: {
-                ...dto.alternateContact,
-                address: {
-                  create: {
-                    ...dto.alternateContact.address,
-                  },
-                },
-              },
-            }
-          : undefined,
-        applicationsAlternateAddress: dto.applicationsAlternateAddress
-          ? {
-              create: {
-                ...dto.applicationsAlternateAddress,
-              },
-            }
-          : undefined,
-        applicationsMailingAddress: dto.applicationsMailingAddress
-          ? {
-              create: {
-                ...dto.applicationsMailingAddress,
-              },
-            }
-          : undefined,
-        listings: dto.listings
-          ? {
-              connect: {
-                id: dto.listings.id,
-              },
-            }
-          : undefined,
-        demographics: dto.demographics
-          ? {
-              create: {
-                ...dto.demographics,
-              },
-            }
-          : undefined,
-        preferredUnitTypes: dto.preferredUnitTypes
-          ? {
-              connect: dto.preferredUnitTypes.map((unitType) => ({
-                id: unitType.id,
-              })),
-            }
-          : undefined,
-        householdMember: dto.householdMember
-          ? {
-              create: dto.householdMember.map((member) => ({
-                ...member,
-                sameAddress: member.sameAddress || YesNoEnum.no,
-                workInRegion: member.workInRegion || YesNoEnum.no,
-                householdMemberAddress: {
-                  create: {
-                    ...member.householdMemberAddress,
-                  },
-                },
-                householdMemberWorkAddress: {
-                  create: {
-                    ...member.householdMemberWorkAddress,
-                  },
-                },
-                firstName: member.firstName?.trim(),
-                lastName: member.lastName?.trim(),
-                birthDay: member.birthDay ? Number(member.birthDay) : undefined,
-                birthMonth: member.birthMonth
-                  ? Number(member.birthMonth)
-                  : undefined,
-                birthYear: member.birthYear
-                  ? Number(member.birthYear)
-                  : undefined,
-                fullTimeStudent: member.fullTimeStudent,
-              })),
-            }
-          : undefined,
-        programs: dto.programs as unknown as Prisma.JsonArray,
-        preferences: dto.preferences as unknown as Prisma.JsonArray,
-        userAccounts: requestingUser
-          ? {
-              connect: {
-                id: requestingUser.id,
-              },
-            }
-          : undefined,
+    // If a new application comes in after close and PII needs to be deleted
+    let expireAfterDate = undefined;
+    if (
+      listing.status === ListingsStatusEnum.closed &&
+      process.env.APPLICATION_DAYS_TILL_EXPIRY &&
+      !isNaN(Number(process.env.APPLICATION_DAYS_TILL_EXPIRY))
+    ) {
+      expireAfterDate = dayjs(listing.closedAt)
+        .add(Number(process.env.APPLICATION_DAYS_TILL_EXPIRY), 'days')
+        .toDate();
+    }
 
-        // TODO: Temporary until after MSQ refactor
-        applicationSelections: undefined,
-      },
-      include: view.details,
-    });
+    const transactions = [];
+    // Set all previous applications for the user to not be the newest
+    if (requestingUser?.id) {
+      transactions.push(
+        this.prisma.applications.updateMany({
+          data: { isNewest: false },
+          where: { userId: requestingUser.id, isNewest: true },
+        }),
+      );
+    }
+    transactions.push(
+      this.prisma.applications.create({
+        data: {
+          ...dto,
+          isNewest: !!requestingUser?.id && forPublic,
+          confirmationCode: this.generateConfirmationCode(),
+          applicant: dto.applicant
+            ? {
+                create: {
+                  ...dto.applicant,
+                  applicantAddress: {
+                    create: {
+                      ...dto.applicant.applicantAddress,
+                    },
+                  },
+                  applicantWorkAddress: {
+                    create: {
+                      ...dto.applicant.applicantWorkAddress,
+                    },
+                  },
+                  firstName: dto.applicant.firstName?.trim(),
+                  lastName: dto.applicant.lastName?.trim(),
+                  birthDay: dto.applicant.birthDay
+                    ? Number(dto.applicant.birthDay)
+                    : undefined,
+                  birthMonth: dto.applicant.birthMonth
+                    ? Number(dto.applicant.birthMonth)
+                    : undefined,
+                  birthYear: dto.applicant.birthYear
+                    ? Number(dto.applicant.birthYear)
+                    : undefined,
+                  fullTimeStudent: dto.applicant.fullTimeStudent,
+                },
+              }
+            : undefined,
+          accessibility: dto.accessibility
+            ? {
+                create: {
+                  ...dto.accessibility,
+                },
+              }
+            : undefined,
+          alternateContact: dto.alternateContact
+            ? {
+                create: {
+                  ...dto.alternateContact,
+                  address: {
+                    create: {
+                      ...dto.alternateContact.address,
+                    },
+                  },
+                },
+              }
+            : undefined,
+          applicationsAlternateAddress: dto.applicationsAlternateAddress
+            ? {
+                create: {
+                  ...dto.applicationsAlternateAddress,
+                },
+              }
+            : undefined,
+          applicationsMailingAddress: dto.applicationsMailingAddress
+            ? {
+                create: {
+                  ...dto.applicationsMailingAddress,
+                },
+              }
+            : undefined,
+          listings: dto.listings
+            ? {
+                connect: {
+                  id: dto.listings.id,
+                },
+              }
+            : undefined,
+          demographics: dto.demographics
+            ? {
+                create: {
+                  ...dto.demographics,
+                },
+              }
+            : undefined,
+          preferredUnitTypes: dto.preferredUnitTypes
+            ? {
+                connect: dto.preferredUnitTypes.map((unitType) => ({
+                  id: unitType.id,
+                })),
+              }
+            : undefined,
+          householdMember: dto.householdMember
+            ? {
+                create: dto.householdMember.map((member) => ({
+                  ...member,
+                  sameAddress: member.sameAddress || YesNoEnum.no,
+                  workInRegion: member.workInRegion || YesNoEnum.no,
+                  householdMemberAddress: {
+                    create: {
+                      ...member.householdMemberAddress,
+                    },
+                  },
+                  householdMemberWorkAddress: {
+                    create: {
+                      ...member.householdMemberWorkAddress,
+                    },
+                  },
+                  firstName: member.firstName?.trim(),
+                  lastName: member.lastName?.trim(),
+                  birthDay: member.birthDay
+                    ? Number(member.birthDay)
+                    : undefined,
+                  birthMonth: member.birthMonth
+                    ? Number(member.birthMonth)
+                    : undefined,
+                  birthYear: member.birthYear
+                    ? Number(member.birthYear)
+                    : undefined,
+                  fullTimeStudent: member.fullTimeStudent,
+                })),
+              }
+            : undefined,
+          programs: dto.programs as unknown as Prisma.JsonArray,
+          preferences: dto.preferences as unknown as Prisma.JsonArray,
+          userAccounts: requestingUser
+            ? {
+                connect: {
+                  id: requestingUser.id,
+                },
+              }
+            : undefined,
+          expireAfter: expireAfterDate,
+
+          // TODO: Temporary until after MSQ refactor
+          applicationSelections: undefined,
+        },
+        include: view.details,
+      }),
+    );
+
+    const prismaTransactions = await this.prisma.$transaction(transactions);
+    const rawApplication = prismaTransactions[prismaTransactions.length - 1];
 
     const mappedApplication = mapTo(Application, rawApplication);
     if (dto.applicant.emailAddress && forPublic) {
@@ -1063,6 +1111,191 @@ export class ApplicationService {
       jurisdictionId: listingJurisdiction?.id,
       userId: applicantUserId,
     });
+  }
+
+  addressDeletionData = (id: string) => {
+    return this.prisma.address.update({
+      data: {
+        latitude: null,
+        longitude: null,
+        street: null,
+        street2: null,
+      },
+      where: {
+        id: id,
+      },
+    });
+  };
+
+  /*
+   * Remove all PII fields from the passed in application
+   */
+  async removePII(applicationId: string): Promise<void> {
+    const application = await this.prisma.applications.findFirst({
+      select: {
+        id: true,
+        mailingAddressId: true,
+        applicant: {
+          select: {
+            id: true,
+            addressId: true,
+            workAddressId: true,
+          },
+        },
+        householdMember: {
+          select: {
+            id: true,
+            addressId: true,
+            workAddressId: true,
+          },
+        },
+        alternateContact: {
+          select: {
+            id: true,
+            mailingAddressId: true,
+          },
+        },
+      },
+      where: {
+        id: applicationId,
+        wasPIICleared: false,
+      },
+    });
+
+    if (!application) return;
+
+    const transactions = [];
+
+    if (application.mailingAddressId) {
+      transactions.push(this.addressDeletionData(application.mailingAddressId));
+    }
+
+    if (application.applicant?.addressId) {
+      transactions.push(
+        this.addressDeletionData(application.applicant?.addressId),
+      );
+    }
+
+    if (application.applicant?.workAddressId) {
+      transactions.push(
+        this.addressDeletionData(application.applicant?.workAddressId),
+      );
+    }
+
+    if (application.applicant?.id) {
+      transactions.push(
+        this.prisma.applicant.update({
+          data: {
+            birthDay: null,
+            birthMonth: null,
+            birthYear: null,
+            emailAddress: null,
+            firstName: null,
+            lastName: null,
+            middleName: null,
+            phoneNumber: null,
+          },
+          where: {
+            id: application.applicant.id,
+          },
+        }),
+      );
+    }
+
+    if (application.alternateContact?.mailingAddressId) {
+      transactions.push(
+        this.addressDeletionData(application.alternateContact.mailingAddressId),
+      );
+    }
+
+    if (application.alternateContact) {
+      transactions.push(
+        this.prisma.alternateContact.update({
+          data: {
+            emailAddress: null,
+            firstName: null,
+            lastName: null,
+            phoneNumber: null,
+          },
+          where: {
+            id: application.alternateContact.id,
+          },
+        }),
+      );
+    }
+
+    for (const householdMember of application.householdMember) {
+      if (householdMember.addressId) {
+        transactions.push(this.addressDeletionData(householdMember.addressId));
+      }
+      if (householdMember.workAddressId) {
+        transactions.push(
+          this.addressDeletionData(householdMember.workAddressId),
+        );
+      }
+
+      transactions.push(
+        this.prisma.householdMember.update({
+          data: {
+            birthDay: null,
+            birthMonth: null,
+            birthYear: null,
+            firstName: null,
+            middleName: null,
+            lastName: null,
+          },
+          where: {
+            id: householdMember.id,
+          },
+        }),
+      );
+    }
+
+    transactions.push(
+      this.prisma.applications.update({
+        data: {
+          additionalPhoneNumber: null,
+          wasPIICleared: true,
+        },
+        where: {
+          id: application.id,
+        },
+      }),
+    );
+
+    await this.prisma.$transaction(transactions);
+  }
+
+  async removePIICronJob(): Promise<SuccessDTO> {
+    if (process.env.APPLICATION_DAYS_TILL_EXPIRY) {
+      this.logger.warn('removePIICron job running');
+      await this.cronJobService.markCronJobAsStarted(
+        PII_DELETION_CRON_JOB_NAME,
+      );
+      // Only delete applications that are scheduled to be expired and is not the most
+      // recent application for that user
+      const applications = await this.prisma.applications.findMany({
+        select: { id: true },
+        where: {
+          expireAfter: { lte: new Date() },
+          isNewest: false,
+          wasPIICleared: false,
+        },
+      });
+      this.logger.warn(
+        `removing PII information for ${applications.length} applications`,
+      );
+      for (const application of applications) {
+        await this.removePII(application.id);
+      }
+    } else {
+      this.logger.warn(
+        'APPLICATION_DAYS_TILL_EXPIRY variable not set so the cron job will not run',
+      );
+    }
+    return {
+      success: true,
+    };
   }
 
   /*

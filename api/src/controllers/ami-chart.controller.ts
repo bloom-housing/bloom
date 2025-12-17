@@ -17,6 +17,8 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
+// The linter struggles with this import. It flags it as not being used despite its usage
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { AmiChartService } from '../services/ami-chart.service';
 import { AmiChart } from '../dtos/ami-charts/ami-chart.dto';
 import { AmiChartCreate } from '../dtos/ami-charts/ami-chart-create.dto';

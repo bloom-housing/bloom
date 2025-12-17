@@ -1,20 +1,16 @@
-import React, { useContext, useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 import { useFormContext, useWatch } from "react-hook-form"
-import {
-  t,
-  Field,
-  Select,
-  FieldGroup,
-  ListingMap,
-  LatitudeLongitude,
-  GridCell,
-} from "@bloom-housing/ui-components"
-import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
-import { AuthContext, stateKeys } from "@bloom-housing/shared-helpers"
-import { FormListing } from "../../../../lib/listings/formTypes"
 import GeocodeService, {
   GeocodeService as GeocodeServiceType,
 } from "@mapbox/mapbox-sdk/services/geocoding"
+import { t, Field, Select, FieldGroup, GridCell } from "@bloom-housing/ui-components"
+import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
+import { stateKeys, Map, LatitudeLongitude } from "@bloom-housing/shared-helpers"
+import {
+  EnumListingListingType,
+  RegionEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { FormListing } from "../../../../lib/listings/formTypes"
 import {
   defaultFieldProps,
   fieldHasError,
@@ -23,12 +19,8 @@ import {
   getAddressErrorMessage,
   getLabel,
 } from "../../../../lib/helpers"
-import SectionWithGrid from "../../../shared/SectionWithGrid"
-import {
-  FeatureFlagEnum,
-  RegionEnum,
-} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { neighborhoodRegions } from "../../../../lib/listings/Neighborhoods"
+import SectionWithGrid from "../../../shared/SectionWithGrid"
 import styles from "../ListingForm.module.scss"
 
 interface MapBoxFeature {
@@ -45,6 +37,8 @@ interface MapboxApiResponse {
 
 type BuildingDetailsProps = {
   customMapPositionChosen?: boolean
+  enableNonRegulatedListings?: boolean
+  enableRegions?: boolean
   latLong?: LatitudeLongitude
   listing?: FormListing
   requiredFields: string[]
@@ -54,6 +48,8 @@ type BuildingDetailsProps = {
 
 const BuildingDetails = ({
   customMapPositionChosen,
+  enableNonRegulatedListings,
+  enableRegions,
   latLong,
   listing,
   requiredFields,
@@ -61,7 +57,6 @@ const BuildingDetails = ({
   setLatLong,
 }: BuildingDetailsProps) => {
   const formMethods = useFormContext()
-  const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, watch, control, getValues, setValue, errors, clearErrors } = formMethods
@@ -83,6 +78,11 @@ const BuildingDetails = ({
   const mapPinPosition = useWatch({
     control,
     name: "mapPinPosition",
+  })
+
+  const listingType = useWatch({
+    control,
+    name: "listingType",
   })
 
   const displayMapPreview = () => {
@@ -155,12 +155,7 @@ const BuildingDetails = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mapPinPosition])
 
-  const { neighborhood, region, jurisdictions } = watch(["neighborhood", "region", "jurisdictions"])
-
-  const enableRegions = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableRegions,
-    jurisdictions?.id
-  )
+  const { neighborhood, region } = watch(["neighborhood", "region"])
 
   useEffect(() => {
     const matchingConfig = neighborhoodRegions.find((entry) => entry.name == neighborhood)
@@ -326,42 +321,45 @@ const BuildingDetails = ({
                 {...defaultFieldProps("region", t("t.region"), requiredFields, errors, clearErrors)}
               />
             ) : (
-              <Field
-                type={"number"}
-                register={register}
-                {...defaultFieldProps(
-                  "yearBuilt",
-                  t("listings.yearBuilt"),
-                  requiredFields,
-                  errors,
-                  clearErrors
-                )}
-              />
+              (listingType === EnumListingListingType.regulated || !enableNonRegulatedListings) && (
+                <Field
+                  type={"number"}
+                  register={register}
+                  {...defaultFieldProps(
+                    "yearBuilt",
+                    t("listings.yearBuilt"),
+                    requiredFields,
+                    errors,
+                    clearErrors
+                  )}
+                />
+              )
             )}
           </Grid.Cell>
         </Grid.Row>
-        {enableRegions && (
-          <Grid.Row columns={3}>
-            <Grid.Cell>
-              <Field
-                type={"number"}
-                register={register}
-                {...defaultFieldProps(
-                  "yearBuilt",
-                  t("listings.yearBuilt"),
-                  requiredFields,
-                  errors,
-                  clearErrors
-                )}
-              />
-            </Grid.Cell>
-          </Grid.Row>
-        )}
+        {enableRegions &&
+          (listingType === EnumListingListingType.regulated || !enableNonRegulatedListings) && (
+            <Grid.Row columns={3}>
+              <Grid.Cell>
+                <Field
+                  type={"number"}
+                  register={register}
+                  {...defaultFieldProps(
+                    "yearBuilt",
+                    t("listings.yearBuilt"),
+                    requiredFields,
+                    errors,
+                    clearErrors
+                  )}
+                />
+              </Grid.Cell>
+            </Grid.Row>
+          )}
         <Grid.Row columns={3}>
           <Grid.Cell className="seeds-grid-span-2">
             <FieldValue label={t("listings.mapPreview")} className={styles["custom-label"]}>
               {displayMapPreview() ? (
-                <ListingMap
+                <Map
                   listingName={listing?.name}
                   address={{
                     city: buildingAddress.city,

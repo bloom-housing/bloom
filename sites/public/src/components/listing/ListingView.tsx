@@ -14,7 +14,6 @@ import {
   ListSection,
   ListingDetailItem,
   ListingDetails,
-  ListingMap,
   Message,
   OneLineAddress,
   EventSection,
@@ -41,6 +40,7 @@ import {
   IMAGE_FALLBACK_URL,
   pdfUrlFromListingEvents,
   AuthContext,
+  Map,
 } from "@bloom-housing/shared-helpers"
 import { Card, Heading as SeedsHeading } from "@bloom-housing/ui-seeds"
 import dayjs from "dayjs"
@@ -310,7 +310,12 @@ export const ListingView = (props: ListingProps) => {
   }
 
   let lotterySection
-  if (publicLottery && (!lotteryResults || (lotteryResults && !lotteryResults.url))) {
+
+  if (
+    publicLottery &&
+    (!lotteryResults || (lotteryResults && !lotteryResults.url)) &&
+    (listing.status === ListingsStatusEnum.active || !lotteryResults)
+  ) {
     lotterySection = publicLottery.startDate && (
       <EventSection
         headerText={t("listings.publicLottery.header")}
@@ -318,20 +323,6 @@ export const ListingView = (props: ListingProps) => {
         events={[getEvent(publicLottery)]}
       />
     )
-    if (dayjs(publicLottery.startTime) < dayjs() && lotteryResults && !lotteryResults.url) {
-      lotterySection = (
-        <EventSection
-          headerText={t("listings.lotteryResults.header")}
-          sectionHeader={true}
-          events={[
-            getEvent(
-              lotteryResults,
-              lotteryResults.note || t("listings.lotteryResults.completeResultsWillBePosted")
-            ),
-          ]}
-        />
-      )
-    }
   }
 
   const getReservedTitle = () => {
@@ -510,6 +501,7 @@ export const ListingView = (props: ListingProps) => {
     const description = () => {
       switch (listing.reviewOrderType) {
         case ReviewOrderTypeEnum.waitlist:
+        case ReviewOrderTypeEnum.waitlistLottery:
           return t("listings.waitlist.submitForWaitlist")
         case ReviewOrderTypeEnum.firstComeFirstServe:
           return t("listings.eligibleApplicants.FCFS")
@@ -521,11 +513,15 @@ export const ListingView = (props: ListingProps) => {
     return (
       <QuantityRowSection
         quantityRows={
-          listing.reviewOrderType === ReviewOrderTypeEnum.waitlist ? waitlistRow : unitRow
+          listing.reviewOrderType === ReviewOrderTypeEnum.waitlist ||
+          listing.reviewOrderType === ReviewOrderTypeEnum.waitlistLottery
+            ? waitlistRow
+            : unitRow
         }
         strings={{
           sectionTitle:
-            listing.reviewOrderType === ReviewOrderTypeEnum.waitlist
+            listing.reviewOrderType === ReviewOrderTypeEnum.waitlist ||
+            listing.reviewOrderType === ReviewOrderTypeEnum.waitlistLottery
               ? t("listings.waitlist.isOpen")
               : t("listings.vacantUnitsAvailable"),
           description: description(),
@@ -1056,7 +1052,7 @@ export const ListingView = (props: ListingProps) => {
           desktopClass="bg-primary-lighter"
         >
           <div className="listing-detail-panel">
-            <ListingMap
+            <Map
               address={getGenericAddress(listing.listingsBuildingAddress)}
               listingName={listing.name}
             />
