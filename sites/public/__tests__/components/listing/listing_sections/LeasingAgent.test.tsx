@@ -110,7 +110,7 @@ describe("<LeasingAgent>", () => {
     )
     expect(view.getByText("Contact leasing agent")).toBeDefined()
     expect(view.getByText("Agent Name")).toBeDefined()
-    expect(view.getByText("Agent title  ")).toBeDefined()
+    expect(view.getByText("Agent title")).toBeDefined()
     expect(view.getByRole("link", { name: `Call ${phoneNumber}` })).toHaveAttribute(
       "href",
       "tel:1234567890"
