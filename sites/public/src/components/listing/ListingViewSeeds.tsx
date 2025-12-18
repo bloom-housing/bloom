@@ -250,15 +250,6 @@ export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: Li
     </>
   )
 
-  const enableLeasingAgentAltText = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableLeasingAgentAltText,
-    listing.jurisdictions.id
-  )
-
-  const leasingAgentContactText = enableLeasingAgentAltText
-    ? t("leasingAgent.contactManagerProp")
-    : t("leasingAgent.contact")
-
   const ApplyBar = (
     <>
       <LotteryResults
@@ -287,7 +278,11 @@ export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: Li
             ? listing.managementWebsite
             : undefined
         }
-        leasingAgentContactText={leasingAgentContactText}
+        leasingAgentContactText={
+          isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableLeasingAgentAltText)
+            ? t("leasingAgent.contactManagerProp")
+            : t("leasingAgent.contact")
+        }
       />
       {ListingUpdatedAt}
     </>
