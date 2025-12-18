@@ -56,6 +56,14 @@ const SettingsProperties = () => {
           )
         },
       },
+      ...(profile.jurisdictions.length > 1
+        ? [
+            {
+              headerName: t("t.jurisdiction"),
+              field: "jurisdictions.name",
+            },
+          ]
+        : []),
       {
         headerName: t("t.updatedAt"),
         field: "updatedAt",
@@ -73,7 +81,10 @@ const SettingsProperties = () => {
             <ManageIconSection
               onCopy={() => console.log("Copy: ", data.name)}
               copyTestId={`property-copy-icon: ${data.name}`}
-              onEdit={() => console.log("Copy: ", data.name)}
+              onEdit={() => {
+                setIsDrawerOpen(true)
+                setSelectedProperty(data)
+              }}
               editTestId={`property-edit-icon: ${data.name}`}
               onDelete={() => console.log("Copy: ", data.name)}
               deleteTestId={`property-delete-icon: ${data.text}`}
@@ -83,55 +94,57 @@ const SettingsProperties = () => {
         },
       },
     ],
-    []
+    [profile.jurisdictions]
   )
 
   return (
-    <Layout>
-      <Head>
-        <title>
-          {`${"t.settings"} - ${t("settings.properties")} - ${t("nav.siteTitlePartners")}`}
-        </title>
-      </Head>
-      <NavigationHeader className="relative" title={t("t.settings")} />
-      <TabView
-        hideTabs={!(atLeastOneJurisdictionEnablesPreferences && enableProperties)}
-        tabs={getSettingsTabs(SettingsIndexEnum.properties, router)}
-      >
-        <AgTable
-          id="properties-table"
-          pagination={{
-            perPage: tableOptions.pagination.itemsPerPage,
-            setPerPage: tableOptions.pagination.setItemsPerPage,
-            currentPage: tableOptions.pagination.currentPage,
-            setCurrentPage: tableOptions.pagination.setCurrentPage,
-          }}
-          data={{
-            items: propertiesData?.items,
-            loading: loading,
-            totalItems: propertiesData?.meta.totalItems,
-            totalPages: propertiesData?.meta.totalPages,
-          }}
-          config={{
-            columns: columnDefs,
-            totalItemsLabel: t("properties.total"),
-          }}
-          search={{
-            setSearch: tableOptions.filter.setFilterValue,
-          }}
-          headerContent={
-            <Button
-              size="sm"
-              variant="primary"
-              onClick={() => console.log("TODO: Add property")}
-              id="addListingButton"
-            >
-              {t("properties.add")}
-            </Button>
-          }
-        />
-      </TabView>
-    </Layout>
+    <>
+      <Layout>
+        <Head>
+          <title>
+            {`${"t.settings"} - ${t("settings.properties")} - ${t("nav.siteTitlePartners")}`}
+          </title>
+        </Head>
+        <NavigationHeader className="relative" title={t("t.settings")} />
+        <TabView
+          hideTabs={!(atLeastOneJurisdictionEnablesPreferences && enableProperties)}
+          tabs={getSettingsTabs(SettingsIndexEnum.properties, router)}
+        >
+          <AgTable
+            id="properties-table"
+            pagination={{
+              perPage: tableOptions.pagination.itemsPerPage,
+              setPerPage: tableOptions.pagination.setItemsPerPage,
+              currentPage: tableOptions.pagination.currentPage,
+              setCurrentPage: tableOptions.pagination.setCurrentPage,
+            }}
+            data={{
+              items: propertiesData?.items,
+              loading: loading,
+              totalItems: propertiesData?.meta.totalItems,
+              totalPages: propertiesData?.meta.totalPages,
+            }}
+            config={{
+              columns: columnDefs,
+              totalItemsLabel: t("properties.total"),
+            }}
+            search={{
+              setSearch: tableOptions.filter.setFilterValue,
+            }}
+            headerContent={
+              <Button
+                size="sm"
+                variant="primary"
+                onClick={() => setIsDrawerOpen(true)}
+                id="addListingButton"
+              >
+                {t("properties.add")}
+              </Button>
+            }
+          />
+        </TabView>
+      </Layout>
+    </>
   )
 }
 
