@@ -1,0 +1,61 @@
+# This file creates a docker image with the required binaries to develop on the Bloom infra Open
+# Tofu modules. It is meant to be used for interactive development of the tofu source code. To use:
+#
+# 1. Clone the Bloom repo onto their host machine.
+# 2. Run this container, mounting the Bloom infra directory to /infra inside the container
+# filesystem. For example, if your shell is in the root of the Bloom git repo on your host:
+#
+#    If using docker:
+#    `docker container run --rm -it --user "$(id -u):$(id -g)" -v ./infra:/infra:z -v "${HOME}/.aws/sso/cache":/home/.aws/sso/cache:z <this_image_name> ...`
+#
+#    If using podman:
+#    `podman container run --rm -it --userns=keep-id -v ./infra:/infra:z -v "${HOME}/.aws/sso/cache":/home/.aws/sso/cache:z <this_image_name> ...`
+
+# Get OpenTofu binary following https://opentofu.org/docs/intro/install/docker/#method-1-using-a-multi-stage-build
+#
+# To update, find the latest stable version from:
+# https://github.com/opentofu/opentofu/pkgs/container/opentofu/versions?tag=latest
+#
+# Use the `<version>-minimal` image. Explicitly pin the version tag and image sha.
+#
+# IMPORTANT: keep this in sync with ./Dockerfile
+FROM ghcr.io/opentofu/opentofu:1.10.7-minimal@sha256:e8b80de6a840eb0e19d82aecbdaa2e2718cb107d15dbe849e6b550955aceacd2 AS opentofu
+
+# Use aws-cli image as the base image. It is built on amazonlinux base image.
+#
+# https://github.com/aws/aws-cli/blob/v2/docker/Dockerfile
+# https://docs.aws.amazon.com/linux/al2023/ug/what-is-amazon-linux.html
+#
+# To update, find the latest stable version from:
+# https://hub.docker.com/r/amazon/aws-cli/tags
+#
+# Explicitly pin the version tag and image sha.
+#
+# IMPORTANT: keep this in sync with ./Dockerfile
+FROM docker.io/amazon/aws-cli:2.32.9@sha256:734684f3fc98bbac0e7796c34f44c375c01f05febac52a10649a55eef1e96c24
+
+# Copy over the tofu binary.
+COPY --from=opentofu /usr/local/bin/tofu /usr/local/bin/tofu
+
+# Install other required binaries.
+RUN <<EOF
+dnf update -y
+dnf install -y shadow-utils # make groupadd and useradd available.
+dnf install -y openssl
+dnf clean all # clean the dnf cache from the final image.
+EOF
+
+# Setup a home directory inside the container and a directory for the git repo on the host to be
+# mounted on.
+RUN <<EOF
+mkdir /infra
+mkdir --parents /home/.aws
+ln --symbolic /infra/aws_sso_config /home/.aws/config
+EOF
+ENV HOME=/home
+
+# To help users disambiguate their shell if they run this container with `--entrypoint /bin/bash`.
+ENV PS1='bloom-infra-dev-container$ '
+
+WORKDIR /infra
+ENTRYPOINT [ "python3", "/infra/docker-entrypoint.py" ]

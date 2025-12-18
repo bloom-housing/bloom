@@ -1,0 +1,24 @@
+[profile bloom-dev-deployer]
+sso_session = sso
+sso_role_name = bloom-dev-deployer
+sso_account_id = 242477209009
+
+[profile bloom-prod-deployer]
+sso_session = sso
+sso_role_name = bloom-prod-deployer
+sso_account_id = 966936071156
+
+[profile bloom-dev-iam-admin]
+sso_session = sso
+sso_role_name = bloom-dev-iam-admin
+sso_account_id = 098472360576
+
+[profile bloom-prod-iam-admin]
+sso_session = sso
+sso_role_name = bloom-prod-iam-admin
+sso_account_id = 098472360576
+
+[sso-session sso]
+sso_start_url = https://d-9067ac8222.awsapps.com/start
+sso_region = us-east-1
+sso_registration_scopes = sso:account:access

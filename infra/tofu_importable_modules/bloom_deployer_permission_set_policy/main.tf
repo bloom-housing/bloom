@@ -1,75 +1,68 @@
 terraform {
   required_providers {
     aws = {
-      version = "6.16.0"
+      version = "6.21.0"
       source  = "hashicorp/aws"
     }
   }
-  backend "s3" {
-    region       = local.region
-    profile      = local.sso_profile_id
-    bucket       = "bloom-dev-deployer-tofu-state"
-    key          = "state"
-    use_lockfile = true
-  }
+}
+
+variable "iam_identity_center_instance_arn" {
+  type        = string
+  description = "ARN of the IAM Identity Center Instance where the bloom deployer permission set exists."
+}
+variable "permission_set_arn" {
+  type        = string
+  description = "ARN of the bloom deployer permission set to configure."
+}
+
+variable "bloom_deployment_aws_account_number" {
+  type        = string
+  description = "AWS account number of the bloom deployment account this permission set manages."
+}
+variable "bloom_deployment_aws_region" {
+  type        = string
+  description = "AWS region the bloom deployment will be deployed to."
+}
+variable "bloom_deployment_tofu_state_bucket_name" {
+  type        = string
+  description = "S3 bucket name that will store the OpenTofu state for the bloom deployment this permission set manages."
+}
+variable "bloom_deployment_tofu_state_file_prefix" {
+  type        = string
+  description = "Object name prefix for the OpenTofu state files for the bloom deployment this permission set manages."
 }
 
 locals {
-  region                           = "us-east-1"
-  sso_profile_id                   = "bloom-permission-set-editor"
-  iam_identity_center_instance_arn = "arn:aws:sso:::instance/ssoins-72233fa322bcade3"
+  region_account = "${var.bloom_deployment_aws_region}:${var.bloom_deployment_aws_account_number}"
 }
 
-provider "aws" {
-  profile = local.sso_profile_id
-  region  = local.region
+resource "aws_ssoadmin_permission_set_inline_policy" "deployer" {
+  instance_arn       = var.iam_identity_center_instance_arn
+  permission_set_arn = var.permission_set_arn
+  inline_policy      = data.aws_iam_policy_document.deployer.json
 }
-
-resource "aws_ssoadmin_permission_set" "bloom_dev_deployer" {
-  instance_arn     = local.iam_identity_center_instance_arn
-  name             = "bloom-dev-deployer"
-  description      = "Permission to configure a Bloom deployment in the bloom-dev-deployer account."
-  session_duration = "PT1H"
-}
-resource "aws_ssoadmin_permission_set_inline_policy" "bloom_dev_deployer" {
-  instance_arn       = local.iam_identity_center_instance_arn
-  permission_set_arn = aws_ssoadmin_permission_set.bloom_dev_deployer.arn
-  inline_policy      = data.aws_iam_policy_document.bloom_dev_deployer.json
-}
-data "aws_iam_policy_document" "bloom_dev_deployer" {
+data "aws_iam_policy_document" "deployer" {
   statement {
-    sid = "StateBucket"
+    sid = "TofuStateBucket"
     actions = [
-      "s3:CreateBucket",
-      "s3:DeleteBucket",
-      "s3:GetAccelerateConfiguration",
-      "s3:GetBucketAcl",
-      "s3:GetBucketCors",
-      "s3:GetBucketLogging",
-      "s3:GetBucketObjectLockConfiguration",
-      "s3:GetBucketPolicy",
-      "s3:GetBucketRequestPayment",
-      "s3:GetBucketTagging",
-      "s3:GetBucketVersioning",
-      "s3:GetBucketWebsite",
-      "s3:GetEncryptionConfiguration",
-      "s3:GetLifecycleConfiguration",
-      "s3:GetReplicationConfiguration",
       "s3:ListBucket",
-      "s3:PutBucketVersioning",
     ]
-    resources = ["arn:aws:s3:::bloom-dev-tofu-state"]
+    resources = [
+      "arn:aws:s3:::${var.bloom_deployment_tofu_state_bucket_name}",
+    ]
   }
   statement {
-    sid = "StateFiles"
+    sid = "TofuStateFiles"
     actions = [
       "s3:DeleteObject",
       "s3:GetObject",
       "s3:PutObject",
+      "s3:PutObjectAcl",
     ]
     resources = [
-      "arn:aws:s3:::bloom-dev-tofu-state/state",
-      "arn:aws:s3:::bloom-dev-tofu-state/state.tflock"
+      "arn:aws:s3:::${var.bloom_deployment_tofu_state_bucket_name}/${var.bloom_deployment_tofu_state_file_prefix}/state",
+      "arn:aws:s3:::${var.bloom_deployment_tofu_state_bucket_name}/${var.bloom_deployment_tofu_state_file_prefix}/state.tflock",
     ]
   }
   statement {
@@ -81,7 +74,7 @@ data "aws_iam_policy_document" "bloom_dev_deployer" {
       "cloudtrail:ListTags",
     ]
     resources = [
-      "arn:aws:cloudtrail:*:*:eventdatastore/*",
+      "arn:aws:cloudtrail:${local.region_account}:eventdatastore/*",
     ]
   }
   statement {
@@ -93,8 +86,8 @@ data "aws_iam_policy_document" "bloom_dev_deployer" {
       "iam:GetServiceLinkedRoleDeletionStatus",
     ]
     resources = [
-      "arn:aws:iam::*:role/aws-service-role/ecs.amazonaws.com/AWSServiceRoleForECS",
-      "arn:aws:iam::*:role/aws-service-role/elasticloadbalancing.amazonaws.com/AWSServiceRoleForElasticLoadBalancing",
+      "arn:aws:iam::${var.bloom_deployment_aws_account_number}:role/aws-service-role/ecs.amazonaws.com/AWSServiceRoleForECS",
+      "arn:aws:iam::${var.bloom_deployment_aws_account_number}:role/aws-service-role/elasticloadbalancing.amazonaws.com/AWSServiceRoleForElasticLoadBalancing",
     ]
   }
   statement {
@@ -185,28 +178,28 @@ data "aws_iam_policy_document" "bloom_dev_deployer" {
       "elasticloadbalancing:ModifyTargetGroupAttributes",
     ]
     resources = [
-      "arn:aws:acm:*:*:certificate/*",
-      "arn:aws:ec2:*:*:elastic-ip/*",
-      "arn:aws:ec2:*:*:internet-gateway/*",
-      "arn:aws:ec2:*:*:natgateway/*",
-      "arn:aws:ec2:*:*:route-table/*",
-      "arn:aws:ec2:*:*:security-group-rule/*",
-      "arn:aws:ec2:*:*:security-group/*",
-      "arn:aws:ec2:*:*:subnet/*",
-      "arn:aws:ec2:*:*:vpc-endpoint/*",
-      "arn:aws:ec2:*:*:vpc/*",
-      "arn:aws:elasticloadbalancing:*:*:listener-rule/app/bloom/*",
-      "arn:aws:elasticloadbalancing:*:*:listener/app/bloom/*",
-      "arn:aws:elasticloadbalancing:*:*:loadbalancer/app/bloom/*",
-      "arn:aws:elasticloadbalancing:*:*:targetgroup/bloom-site-partners/*",
-      "arn:aws:elasticloadbalancing:*:*:targetgroup/bloom-site-public/*",
+      "arn:aws:acm:${local.region_account}:certificate/*",
+      "arn:aws:ec2:${local.region_account}:elastic-ip/*",
+      "arn:aws:ec2:${local.region_account}:internet-gateway/*",
+      "arn:aws:ec2:${local.region_account}:natgateway/*",
+      "arn:aws:ec2:${local.region_account}:route-table/*",
+      "arn:aws:ec2:${local.region_account}:security-group-rule/*",
+      "arn:aws:ec2:${local.region_account}:security-group/*",
+      "arn:aws:ec2:${local.region_account}:subnet/*",
+      "arn:aws:ec2:${local.region_account}:vpc-endpoint/*",
+      "arn:aws:ec2:${local.region_account}:vpc/*",
+      "arn:aws:elasticloadbalancing:${local.region_account}:listener-rule/app/bloom/*",
+      "arn:aws:elasticloadbalancing:${local.region_account}:listener/app/bloom/*",
+      "arn:aws:elasticloadbalancing:${local.region_account}:loadbalancer/app/bloom/*",
+      "arn:aws:elasticloadbalancing:${local.region_account}:targetgroup/bloom-site-partners/*",
+      "arn:aws:elasticloadbalancing:${local.region_account}:targetgroup/bloom-site-public/*",
     ]
   }
   statement {
     sid     = "DisassociateAddress"
     actions = ["ec2:DisassociateAddress"]
     # For some reason the DisassociateAdress calls use this resource pattern.
-    resources = ["arn:aws:ec2:*:*:*/*"]
+    resources = ["arn:aws:ec2:${local.region_account}:*/*"]
   }
   statement {
     # https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/UsingWithRDS.IAM.ServiceLinkedRoles.html
@@ -215,7 +208,7 @@ data "aws_iam_policy_document" "bloom_dev_deployer" {
       "iam:CreateServiceLinkedRole",
     ]
     resources = [
-      "arn:aws:iam::*:role/aws-service-role/rds.amazonaws.com/AWSServiceRoleForRDS",
+      "arn:aws:iam::${var.bloom_deployment_aws_account_number}:role/aws-service-role/rds.amazonaws.com/AWSServiceRoleForRDS",
     ]
     condition {
       test     = "StringLike"
@@ -235,7 +228,7 @@ data "aws_iam_policy_document" "bloom_dev_deployer" {
   statement {
     sid       = "DescribeDB"
     actions   = ["rds:DescribeDBInstances"]
-    resources = ["arn:aws:rds:*:*:db:*"]
+    resources = ["arn:aws:rds:${local.region_account}:db:*"]
   }
   statement {
     # https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/security_iam_id-based-policy-examples-create-and-modify-examples.html
@@ -252,11 +245,11 @@ data "aws_iam_policy_document" "bloom_dev_deployer" {
       "rds:ModifyDBInstance",
     ]
     resources = [
-      "arn:aws:rds:*:*:db:bloom",
-      "arn:aws:rds:*:*:og:bloom",
-      "arn:aws:rds:*:*:pg:bloom",
-      "arn:aws:rds:*:*:snapshot:bloom-db-finalsnapshot",
-      "arn:aws:rds:*:*:subgrp:bloom",
+      "arn:aws:rds:${local.region_account}:db:bloom",
+      "arn:aws:rds:${local.region_account}:og:bloom",
+      "arn:aws:rds:${local.region_account}:pg:bloom",
+      "arn:aws:rds:${local.region_account}:snapshot:bloom-db-finalsnapshot",
+      "arn:aws:rds:${local.region_account}:subgrp:bloom",
     ]
   }
   statement {
@@ -307,18 +300,18 @@ data "aws_iam_policy_document" "bloom_dev_deployer" {
     ]
     resources = concat(
       [
-        "arn:aws:ecs:*:*:cluster/bloom",
-        "arn:aws:logs:*:*:log-group::log-stream:",
-        "arn:aws:servicediscovery:*:*:*/*"
+        "arn:aws:ecs:${local.region_account}:cluster/bloom",
+        "arn:aws:logs:${local.region_account}:log-group::log-stream:",
+        "arn:aws:servicediscovery:${local.region_account}:*/*"
       ],
       flatten(
         [for name in ["api", "site-partners", "site-public"] : [
-          "arn:aws:ecs:*:*:service-deployment/bloom/bloom-${name}/*",
-          "arn:aws:ecs:*:*:service/bloom/bloom-${name}",
-          "arn:aws:ecs:*:*:task-definition/bloom-${name}:*",
-          "arn:aws:iam::*:role/bloom-${name}-container",
-          "arn:aws:iam::*:role/bloom-${name}-ecs",
-          "arn:aws:logs:*:*:log-group:bloom-${name}*",
+          "arn:aws:ecs:${local.region_account}:service-deployment/bloom/bloom-${name}/*",
+          "arn:aws:ecs:${local.region_account}:service/bloom/bloom-${name}",
+          "arn:aws:ecs:${local.region_account}:task-definition/bloom-${name}:*",
+          "arn:aws:iam::${var.bloom_deployment_aws_account_number}:role/bloom-${name}-container",
+          "arn:aws:iam::${var.bloom_deployment_aws_account_number}:role/bloom-${name}-ecs",
+          "arn:aws:logs:${local.region_account}:log-group:bloom-${name}*",
         ]]
     ))
   }
@@ -333,6 +326,6 @@ data "aws_iam_policy_document" "bloom_dev_deployer" {
       "secretsmanager:PutSecretValue",
       "secretsmanager:TagResource",
     ]
-    resources = ["arn:aws:secretsmanager:*:*:secret:bloom-api-jwt-signing-key*"]
+    resources = ["arn:aws:secretsmanager:${local.region_account}:secret:bloom-api-jwt-signing-key*"]
   }
 }
