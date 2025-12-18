@@ -60,7 +60,6 @@ interface ListingProps {
 export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: ListingProps) => {
   const { userService } = useContext(AuthContext)
   const { addToast } = useContext(MessageContext)
-  const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, watch } = useForm()
