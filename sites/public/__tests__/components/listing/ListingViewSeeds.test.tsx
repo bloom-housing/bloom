@@ -72,7 +72,6 @@ describe("<ListingViewSeeds>", () => {
           }}
         />
       </AuthContext.Provider>
-
     )
     expect(screen.getAllByText("Normal What to expect")).toHaveLength(2)
     expect(screen.queryAllByText("What to expect additional text")).toHaveLength(0)

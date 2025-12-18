@@ -64,7 +64,10 @@ describe("<LeasingAgent>", () => {
       "href",
       "tel:1234567890"
     )
-    expect(view.getByRole("link", { name: "Email" })).toHaveAttribute("href", "mailto:leasing@agent.com")
+    expect(view.getByRole("link", { name: "Email" })).toHaveAttribute(
+      "href",
+      "mailto:leasing@agent.com"
+    )
     expect(view.getByText("Due to high call volume you may hear a message.")).toBeDefined()
     expect(view.getByText("Address street, Address unit")).toBeDefined()
     expect(view.getByText("Address city, CA 67890")).toBeDefined()
@@ -115,7 +118,10 @@ describe("<LeasingAgent>", () => {
       "href",
       "tel:1234567890"
     )
-    expect(view.getByRole("link", { name: "Email" })).toHaveAttribute("href", "mailto:leasing@agent.com")
+    expect(view.getByRole("link", { name: "Email" })).toHaveAttribute(
+      "href",
+      "mailto:leasing@agent.com"
+    )
     expect(view.getByText("Due to high call volume you may hear a message.")).toBeDefined()
     expect(view.getByText("Address street, Address unit")).toBeDefined()
     expect(view.getByText("Address city, CA 67890")).toBeDefined()
