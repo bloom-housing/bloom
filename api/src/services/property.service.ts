@@ -48,6 +48,9 @@ export class PropertyService {
       skip: calculateSkip(params.limit, page),
       take: calculateTake(params.limit),
       where: whereClause,
+      include: {
+        jurisdictions: true,
+      },
     });
 
     const properties = mapTo(Property, propertiesRaw);
@@ -65,6 +68,9 @@ export class PropertyService {
     const propertyRaw = await this.prisma.properties.findUnique({
       where: {
         id: propertyId,
+      },
+      include: {
+        jurisdictions: true,
       },
     });
 
