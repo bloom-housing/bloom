@@ -39,7 +39,10 @@ export const LeasingAgent = ({ listing, jurisdiction }: LeasingAgentProps) => {
     ? t("leasingAgent.contactManagerProp")
     : t("leasingAgent.contact")
 
-  const managementWebsite = isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableCompanyWebsite)
+  const managementWebsite = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableCompanyWebsite,
+    listing.jurisdictions.id
+  )
     ? listing.managementWebsite
     : undefined
 
