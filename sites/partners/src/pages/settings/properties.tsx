@@ -61,10 +61,12 @@ const SettingsProperties = () => {
       {
         headerName: t("t.description"),
         field: "description",
+        flex: 1,
       },
       {
         headerName: t("t.url"),
         field: "url",
+        flex: 1,
         cellRendererFramework: ({ value }) => {
           return (
             <a href={value} target="_blank">
