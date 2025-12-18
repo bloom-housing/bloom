@@ -3,12 +3,7 @@ import { Card, Heading, Link } from "@bloom-housing/ui-seeds"
 import { Address, AuthContext } from "@bloom-housing/shared-helpers"
 import { t } from "@bloom-housing/ui-components"
 import styles from "../ListingViewSeeds.module.scss"
-import {
-  FeatureFlagEnum,
-  Jurisdiction,
-  Listing,
-} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { isFeatureFlagOn } from "../../../lib/helpers"
+import { FeatureFlagEnum, Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 export const formatPhone = (phone: string) => {
   return phone.replace(/[-() ]/g, "")
@@ -16,9 +11,8 @@ export const formatPhone = (phone: string) => {
 
 type LeasingAgentProps = {
   listing: Listing
-  jurisdiction: Jurisdiction
 }
-export const LeasingAgent = ({ listing, jurisdiction }: LeasingAgentProps) => {
+export const LeasingAgent = ({ listing }: LeasingAgentProps) => {
   const {
     listingsLeasingAgentAddress: address,
     leasingAgentEmail: email,

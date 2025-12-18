@@ -5,7 +5,7 @@ import {
   formatPhone,
   LeasingAgent,
 } from "../../../../src/components/listing/listing_sections/LeasingAgent"
-import { listing, jurisdiction } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
+import { listing } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 
 afterEach(cleanup)
@@ -18,7 +18,7 @@ describe("<LeasingAgent>", () => {
           doJurisdictionsHaveFeatureFlagOn: () => true,
         }}
       >
-        <LeasingAgent listing={listing} jurisdiction={jurisdiction} />
+        <LeasingAgent listing={listing} />
       </AuthContext.Provider>
     )
     expect(view.queryByText("Leasing Agent")).toBeNull()
@@ -53,7 +53,6 @@ describe("<LeasingAgent>", () => {
             leasingAgentPhone: phoneNumber,
             leasingAgentTitle: "Agent title",
           }}
-          jurisdiction={jurisdiction}
         />
       </AuthContext.Provider>
     )
@@ -107,7 +106,6 @@ describe("<LeasingAgent>", () => {
             leasingAgentPhone: phoneNumber,
             leasingAgentTitle: "Agent title",
           }}
-          jurisdiction={jurisdiction}
         />
       </AuthContext.Provider>
     )
