@@ -1,9 +1,13 @@
-import React, { useContext, useMemo } from "react"
+import React, { useContext, useMemo, useState } from "react"
 import { useRouter } from "next/router"
 import Head from "next/head"
-import { AgTable, t, useAgTable } from "@bloom-housing/ui-components"
-import { AuthContext } from "@bloom-housing/shared-helpers"
-import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { AgTable, t, useAgTable, useMutate } from "@bloom-housing/ui-components"
+import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
+import {
+  FeatureFlagEnum,
+  Property,
+  PropertyCreate,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import TabView from "../../layouts/TabView"
 import Layout from "../../layouts"
 import { NavigationHeader } from "../../components/shared/NavigationHeader"
@@ -13,11 +17,19 @@ import { usePropertiesList } from "../../lib/hooks"
 import dayjs from "dayjs"
 import ManageIconSection from "../../components/settings/ManageIconSection"
 import { ColDef, ColGroupDef } from "ag-grid-community"
+import { PropertyDrawer } from "../../components/settings/PropertyDrawer"
+import { useSWRConfig } from "swr"
 
 const SettingsProperties = () => {
   const router = useRouter()
   const tableOptions = useAgTable()
-  const { profile, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
+  const { mutate } = useSWRConfig()
+  const { mutate: updateProperty, isLoading: isUpdateLoading } = useMutate()
+  const { mutate: createProperty, isLoading: isCreateLoading } = useMutate()
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false)
+  const [selectedProperty, setSelectedProperty] = useState<Property | null>(null)
+  const { addToast } = useContext(MessageContext)
+  const { profile, propertiesService, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
   const enableProperties = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableProperties)
   const atLeastOneJurisdictionEnablesPreferences = !doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.disableListingPreferences,
@@ -29,10 +41,15 @@ const SettingsProperties = () => {
     void router.push("/unauthorized")
   }
 
-  const { data: propertiesData, loading } = usePropertiesList({
+  const {
+    data: propertiesData,
+    loading,
+    cacheKey,
+  } = usePropertiesList({
     page: tableOptions.pagination.currentPage,
     limit: tableOptions.pagination.itemsPerPage,
     search: tableOptions.filter.filterValue,
+    jurisdictions: profile?.jurisdictions?.map((jurisdiction) => jurisdiction.id).toString(),
   })
 
   const columnDefs: (ColDef | ColGroupDef)[] = useMemo(
@@ -97,6 +114,44 @@ const SettingsProperties = () => {
     [profile.jurisdictions]
   )
 
+  const handleSave = (propertyData: PropertyCreate) => {
+    if (selectedProperty) {
+      void updateProperty(() =>
+        propertiesService
+          .update({
+            body: {
+              ...propertyData,
+              id: selectedProperty.id,
+            },
+          })
+          .catch((e) => {
+            addToast(t(`errors.alert.badRequest`), { variant: "alert" })
+            console.log(e)
+          })
+          .finally(() => {
+            setIsDrawerOpen(false)
+            setSelectedProperty(null)
+            void mutate(cacheKey)
+          })
+      )
+    } else {
+      void createProperty(() =>
+        propertiesService
+          .add({
+            body: propertyData,
+          })
+          .catch((e) => {
+            addToast(t(`errors.alert.badRequest`), { variant: "alert" })
+            console.log(e)
+          })
+          .finally(() => {
+            setIsDrawerOpen(false)
+            void mutate(cacheKey)
+          })
+      )
+    }
+  }
+
   return (
     <>
       <Layout>
@@ -144,6 +199,16 @@ const SettingsProperties = () => {
           />
         </TabView>
       </Layout>
+      <PropertyDrawer
+        drawerOpen={isDrawerOpen}
+        onDrawerClose={() => {
+          setIsDrawerOpen(false)
+          setSelectedProperty(null)
+        }}
+        editedProperty={selectedProperty}
+        saveQuestion={handleSave}
+        isLoading={isCreateLoading || isUpdateLoading}
+      />
     </>
   )
 }
