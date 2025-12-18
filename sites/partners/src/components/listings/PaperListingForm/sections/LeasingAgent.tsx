@@ -72,6 +72,10 @@ const LeasingAgent = (props: LeasingAgentProps) => {
     ? t("listings.sections.leasingAgentMaganerPropSubtitle")
     : t("listings.sections.leasingAgentSubtitle")
 
+  const leasingAgentAddressText = enableLeasingAgentAltText
+    ? t("listings.leasingAgentAddressManagerProp")
+    : t("listings.leasingAgentAddress")
+
   return (
     <>
       <hr className="spacer-section-above spacer-section" />
@@ -159,7 +163,7 @@ const LeasingAgent = (props: LeasingAgentProps) => {
             />
           </Grid.Cell>
         </Grid.Row>
-        <SectionWithGrid.HeadingRow>Leasing Agent Address</SectionWithGrid.HeadingRow>
+        <SectionWithGrid.HeadingRow>{t(leasingAgentAddressText)}</SectionWithGrid.HeadingRow>
         <Grid.Row columns={3}>
           <Grid.Cell className="seeds-grid-span-2">
             <Field
