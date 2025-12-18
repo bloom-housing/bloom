@@ -275,7 +275,7 @@ export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: Li
       {LotteryEvent}
       {ReferralApplication}
       {WhatToExpect}
-      <LeasingAgent listing={listing} jurisdictions={jurisdiction}/>
+      <LeasingAgent listing={listing} jurisdiction={jurisdiction} />
       {ListingUpdatedAt}
     </>
   )
