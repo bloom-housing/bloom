@@ -16,7 +16,15 @@ describe("<ListingViewSeeds>", () => {
   })
 
   it("shows listing name if listing is defined", () => {
-    const view = render(<ListingViewSeeds listing={listing} jurisdiction={jurisdiction} />)
+    const view = render(
+      <AuthContext.Provider
+        value={{
+          doJurisdictionsHaveFeatureFlagOn: () => true,
+        }}
+      >
+        <ListingViewSeeds listing={listing} jurisdiction={jurisdiction} />
+      </AuthContext.Provider>
+    )
     expect(view.getByRole("heading", { level: 1 })).toHaveTextContent(listing.name)
   })
 
@@ -45,19 +53,26 @@ describe("<ListingViewSeeds>", () => {
 
   it("does not renders what to expect additional field when feature flag off", () => {
     render(
-      <ListingViewSeeds
-        listing={{
-          ...listing,
-          creditHistory: "",
-          rentalHistory: "",
-          whatToExpect: "Normal What to expect",
-          whatToExpectAdditionalText: "What to expect additional text",
+      <AuthContext.Provider
+        value={{
+          doJurisdictionsHaveFeatureFlagOn: () => true,
         }}
-        jurisdiction={{
-          ...jurisdiction,
-          featureFlags: [],
-        }}
-      />
+      >
+        <ListingViewSeeds
+          listing={{
+            ...listing,
+            creditHistory: "",
+            rentalHistory: "",
+            whatToExpect: "Normal What to expect",
+            whatToExpectAdditionalText: "What to expect additional text",
+          }}
+          jurisdiction={{
+            ...jurisdiction,
+            featureFlags: [],
+          }}
+        />
+      </AuthContext.Provider>
+
     )
     expect(screen.getAllByText("Normal What to expect")).toHaveLength(2)
     expect(screen.queryAllByText("What to expect additional text")).toHaveLength(0)
