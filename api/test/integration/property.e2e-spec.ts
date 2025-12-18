@@ -1,16 +1,24 @@
 import { INestApplication } from '@nestjs/common';
+import cookieParser from 'cookie-parser';
 import { Test, TestingModule } from '@nestjs/testing';
 import request from 'supertest';
 import PropertyCreate from '../../src/dtos/properties/property-create.dto';
 import { AppModule } from '../../src/modules/app.module';
 import { PrismaService } from '../../src/services/prisma.service';
-import { PropertyQueryParams } from 'src/dtos/properties/property-query-params.dto';
+import { PropertyQueryParams } from '../../src/dtos/properties/property-query-params.dto';
 import { stringify } from 'qs';
 import { randomUUID } from 'crypto';
+import { userFactory } from '../../prisma/seed-helpers/user-factory';
+import { Login } from '../../src/dtos/auth/login.dto';
+import { jurisdictionFactory } from '../../prisma/seed-helpers/jurisdiction-factory';
+import { Compare } from '../../src/dtos/shared/base-filter.dto';
 
 describe('Properties Controller Tests', () => {
   let app: INestApplication;
   let prisma: PrismaService;
+  let jurisdictionAId: string;
+  let jurisdictionBId: string;
+  let cookies = '';
 
   const mockProperties: PropertyCreate[] = [
     {
@@ -36,10 +44,57 @@ describe('Properties Controller Tests', () => {
 
     app = moduleFixture.createNestApplication();
     prisma = moduleFixture.get<PrismaService>(PrismaService);
-
+    app.use(cookieParser());
     await app.init();
-    await prisma.properties.createMany({
-      data: mockProperties,
+
+    const jurisdictionA = await prisma.jurisdictions.create({
+      data: jurisdictionFactory(),
+    });
+
+    const jurisdictionB = await prisma.jurisdictions.create({
+      data: jurisdictionFactory(),
+    });
+
+    const storedUser = await prisma.userAccounts.create({
+      data: await userFactory({
+        roles: { isAdmin: true },
+        mfaEnabled: false,
+        confirmedAt: new Date(),
+      }),
+    });
+    const resLogIn = await request(app.getHttpServer())
+      .post('/auth/login')
+      .set({ passkey: process.env.API_PASS_KEY || '' })
+      .send({
+        email: storedUser.email,
+        password: 'Abcdef12345!',
+      } as Login)
+      .expect(201);
+
+    cookies = resLogIn.headers['set-cookie'];
+
+    jurisdictionAId = jurisdictionA.id;
+    jurisdictionBId = jurisdictionB.id;
+
+    await prisma.properties.create({
+      data: {
+        ...mockProperties[0],
+        jurisdictions: {
+          connect: {
+            id: jurisdictionA.id,
+          },
+        },
+      },
+    });
+    await prisma.properties.create({
+      data: {
+        ...mockProperties[1],
+        jurisdictions: {
+          connect: {
+            id: jurisdictionB.id,
+          },
+        },
+      },
     });
   });
 
@@ -113,6 +168,60 @@ describe('Properties Controller Tests', () => {
         expect.objectContaining(mockProperties[1]),
       );
     });
+
+    it('should get listings matching the jurisdiction filters', async () => {
+      let queryParams: PropertyQueryParams = {
+        filter: [
+          {
+            $comparison: Compare.IN,
+            jurisdiction: jurisdictionBId,
+          },
+        ],
+      };
+
+      let res = await request(app.getHttpServer())
+        .get(`/properties?${stringify(queryParams as any)}`)
+        .expect(200);
+
+      expect(res.body.meta).toEqual({
+        currentPage: 1,
+        itemCount: 1,
+        itemsPerPage: 10,
+        totalItems: 1,
+        totalPages: 1,
+      });
+
+      expect(res.body.items).toHaveLength(1);
+      expect(res.body.items.pop()).toEqual(
+        expect.objectContaining(mockProperties[1]),
+      );
+
+      queryParams = {
+        filter: [
+          {
+            $comparison: Compare.IN,
+            jurisdiction: jurisdictionAId,
+          },
+        ],
+      };
+
+      res = await request(app.getHttpServer())
+        .get(`/properties?${stringify(queryParams as any)}`)
+        .expect(200);
+
+      expect(res.body.meta).toEqual({
+        currentPage: 1,
+        itemCount: 1,
+        itemsPerPage: 10,
+        totalItems: 1,
+        totalPages: 1,
+      });
+
+      expect(res.body.items).toHaveLength(1);
+      expect(res.body.items.pop()).toEqual(
+        expect.objectContaining(mockProperties[0]),
+      );
+    });
   });
 
   describe('get endpoint', () => {
@@ -150,6 +259,7 @@ describe('Properties Controller Tests', () => {
       const res = await request(app.getHttpServer())
         .post('/properties')
         .send({})
+        .set('Cookie', cookies)
         .expect(400);
 
       expect(res.body.message).toHaveLength(1);
@@ -166,6 +276,7 @@ describe('Properties Controller Tests', () => {
       const res = await request(app.getHttpServer())
         .post('/properties')
         .send(body)
+        .set('Cookie', cookies)
         .expect(400);
 
       expect(res.body.message).toHaveLength(1);
@@ -178,6 +289,7 @@ describe('Properties Controller Tests', () => {
         .send({
           name: 'Vineta Apartments',
         })
+        .set('Cookie', cookies)
         .expect(201);
 
       expect(res.body).toEqual({
@@ -201,6 +313,7 @@ describe('Properties Controller Tests', () => {
       const res = await request(app.getHttpServer())
         .post('/properties')
         .send(body)
+        .set('Cookie', cookies)
         .expect(201);
 
       expect(res.body).toEqual({
@@ -216,6 +329,7 @@ describe('Properties Controller Tests', () => {
     it('should throw an error when no property ID is given', async () => {
       const res = await request(app.getHttpServer())
         .put('/properties')
+        .set('Cookie', cookies)
         .expect(400);
 
       expect(res.body.message).toHaveLength(1);
@@ -229,6 +343,7 @@ describe('Properties Controller Tests', () => {
         .send({
           id: randId,
         })
+        .set('Cookie', cookies)
         .expect(400);
 
       expect(res.body.message).toEqual(
@@ -256,6 +371,7 @@ describe('Properties Controller Tests', () => {
       const res = await request(app.getHttpServer())
         .put('/properties')
         .send({ ...updateDto, id: newListing.id })
+        .set('Cookie', cookies)
         .expect(200);
 
       expect(res.body).toEqual({
@@ -272,6 +388,7 @@ describe('Properties Controller Tests', () => {
       const res = await request(app.getHttpServer())
         .delete('/properties')
         .send({})
+        .set('Cookie', cookies)
         .expect(400);
 
       expect(res.body.message).toHaveLength(1);
@@ -285,6 +402,7 @@ describe('Properties Controller Tests', () => {
         .send({
           id: randId,
         })
+        .set('Cookie', cookies)
         .expect(400);
 
       expect(res.body.message).toBe(`Property with id ${randId} was not found`);
@@ -305,6 +423,7 @@ describe('Properties Controller Tests', () => {
 
       await request(app.getHttpServer())
         .delete('/properties')
+        .set('Cookie', cookies)
         .send({
           id: tempProperty.id,
         })

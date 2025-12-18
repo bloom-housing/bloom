@@ -39,7 +39,7 @@ describe("<Neighborhood>", () => {
         ]}
       />
     )
-    expect(screen.getAllByRole("heading", { name: "Neighborhood", level: 2 }).length).toBe(2)
+    expect(screen.getAllByRole("heading", { name: "Neighborhood", level: 2 }).length).toBe(1)
     expect(screen.getByRole("heading", { name: "Neighborhood", level: 3 })).toBeDefined()
     expect(screen.getAllByText("Location and transportation").length).toBe(2)
     expect(screen.getByRole("link", { name: "Get directions (opens in a new tab)" })).toBeDefined()
@@ -70,7 +70,7 @@ describe("<Neighborhood>", () => {
         name={"Listing name"}
       />
     )
-    expect(screen.getAllByRole("heading", { name: "Neighborhood", level: 2 }).length).toBe(2)
+    expect(screen.getAllByRole("heading", { name: "Neighborhood", level: 2 }).length).toBe(1)
     expect(screen.getAllByText("Location and transportation").length).toBe(2)
     expect(screen.getByRole("link", { name: "Get directions (opens in a new tab)" })).toBeDefined()
     expect(screen.queryByText("Region")).toBeNull()

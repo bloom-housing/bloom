@@ -16,19 +16,21 @@ import { PaginatedPropertyDto } from '../dtos/properties/paginated-property.dto'
 import PropertyCreate from '../dtos/properties/property-create.dto';
 import { PropertyUpdate } from '../dtos/properties/property-update.dto';
 import { SuccessDTO } from '../dtos/shared/success.dto';
+import { Prisma } from '@prisma/client';
+import { buildFilter } from '../utilities/build-filter';
+import { User } from '../dtos/users/user.dto';
+import { PermissionService } from './permission.service';
+import { permissionActions } from '../enums/permissions/permission-actions-enum';
 
 @Injectable()
 export class PropertyService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private permissionService: PermissionService,
+  ) {}
 
   async list(params: PropertyQueryParams): Promise<PaginatedPropertyDto> {
-    const whereClause = params?.search
-      ? {
-          name: {
-            contains: params.search,
-          },
-        }
-      : {};
+    const whereClause = this.buildWhere(params);
 
     const count = await this.prisma.properties.count({
       where: whereClause,
@@ -75,22 +77,79 @@ export class PropertyService {
     return mapTo(Property, propertyRaw);
   }
 
-  async create(propertyDto: PropertyCreate) {
+  async create(propertyDto: PropertyCreate, requestingUser: User) {
+    const rawJurisdiction = await this.prisma.jurisdictions.findFirstOrThrow({
+      select: {
+        featureFlags: true,
+        id: true,
+      },
+      where: {
+        id: propertyDto.jurisdictions
+          ? propertyDto.jurisdictions.id
+          : undefined,
+      },
+    });
+
+    await this.permissionService.canOrThrow(
+      requestingUser,
+      'properties',
+      permissionActions.create,
+      {
+        jurisdictionId: rawJurisdiction.id,
+      },
+    );
+
     const rawProperty = this.prisma.properties.create({
       data: {
         ...propertyDto,
+        jurisdictions: propertyDto.jurisdictions
+          ? {
+              connect: {
+                id: propertyDto.jurisdictions.id,
+              },
+            }
+          : undefined,
       },
     });
 
     return mapTo(Property, rawProperty);
   }
 
-  async update(propertyDto: PropertyUpdate) {
+  async update(propertyDto: PropertyUpdate, requestingUser: User) {
+    const rawJurisdiction = await this.prisma.jurisdictions.findFirstOrThrow({
+      select: {
+        featureFlags: true,
+        id: true,
+      },
+      where: {
+        id: propertyDto.jurisdictions
+          ? propertyDto.jurisdictions.id
+          : undefined,
+      },
+    });
+
+    await this.permissionService.canOrThrow(
+      requestingUser,
+      'properties',
+      permissionActions.update,
+      {
+        id: propertyDto.id,
+        jurisdictionId: rawJurisdiction.id,
+      },
+    );
+
     await this.findOrThrow(propertyDto.id);
 
     const rawProperty = await this.prisma.properties.update({
       data: {
         ...propertyDto,
+        jurisdictions: propertyDto.jurisdictions
+          ? {
+              connect: {
+                id: propertyDto.jurisdictions.id,
+              },
+            }
+          : undefined,
       },
       where: {
         id: propertyDto.id,
@@ -100,12 +159,33 @@ export class PropertyService {
     return mapTo(Property, rawProperty);
   }
 
-  async deleteOne(propertyId: string) {
+  async deleteOne(propertyId: string, requestingUser: User) {
     if (!propertyId) {
       throw new BadRequestException('a property ID must be provided');
     }
 
-    await this.findOrThrow(propertyId);
+    const propertyData = await this.findOrThrow(propertyId);
+
+    const rawJurisdiction = await this.prisma.jurisdictions.findFirstOrThrow({
+      select: {
+        featureFlags: true,
+        id: true,
+      },
+      where: {
+        id: propertyData.jurisdictions
+          ? propertyData.jurisdictions.id
+          : undefined,
+      },
+    });
+
+    await this.permissionService.canOrThrow(
+      requestingUser,
+      'properties',
+      permissionActions.create,
+      {
+        jurisdictionId: rawJurisdiction.id,
+      },
+    );
 
     await this.prisma.properties.delete({
       where: {
@@ -118,7 +198,7 @@ export class PropertyService {
     } as SuccessDTO;
   }
 
-  async findOrThrow(propertyId: string): Promise<boolean> {
+  async findOrThrow(propertyId: string): Promise<Property> {
     const property = await this.prisma.properties.findFirst({
       where: {
         id: propertyId,
@@ -131,6 +211,48 @@ export class PropertyService {
       );
     }
 
-    return true;
+    return property;
+  }
+
+  buildWhere(params: PropertyQueryParams): Prisma.PropertiesWhereInput {
+    const filters: Prisma.PropertiesWhereInput[] = [];
+
+    if (params.search) {
+      filters.push({
+        AND: {
+          name: {
+            contains: params.search,
+          },
+        },
+      });
+    }
+
+    if (!params?.filter?.length) {
+      return {
+        AND: filters,
+      };
+    }
+
+    params.filter.forEach((filter) => {
+      const builtFilter = buildFilter({
+        $comparison: filter.$comparison,
+        $include_nulls: false,
+        value: filter.jurisdiction,
+        key: 'jurisdiction',
+        caseSensitive: true,
+      });
+
+      filters.push({
+        OR: builtFilter.map((entry) => ({
+          jurisdictions: {
+            id: entry,
+          },
+        })),
+      });
+    });
+
+    return {
+      AND: filters,
+    };
   }
 }

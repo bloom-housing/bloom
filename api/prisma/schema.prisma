@@ -203,63 +203,66 @@ model ApplicationSelections {
 }
 
 model Applications {
-  id                           String                        @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  createdAt                    DateTime                      @default(now()) @map("created_at") @db.Timestamp(6)
-  updatedAt                    DateTime                      @updatedAt @map("updated_at") @db.Timestamp(6)
-  deletedAt                    DateTime?                     @map("deleted_at") @db.Timestamp(6)
-  appUrl                       String?                       @map("app_url")
-  additionalPhone              Boolean?                      @map("additional_phone")
-  additionalPhoneNumber        String?                       @map("additional_phone_number")
-  additionalPhoneNumberType    String?                       @map("additional_phone_number_type")
-  contactPreferences           String[]                      @map("contact_preferences")
-  householdSize                Int?                          @map("household_size")
-  housingStatus                String?                       @map("housing_status")
-  sendMailToMailingAddress     Boolean?                      @map("send_mail_to_mailing_address")
-  householdExpectingChanges    Boolean?                      @map("household_expecting_changes")
-  householdStudent             Boolean?                      @map("household_student")
-  incomeVouchers               Boolean?                      @map("income_vouchers")
-  income                       String?
-  incomePeriod                 IncomePeriodEnum?             @map("income_period")
-  preferences                  Json
-  programs                     Json?
-  status                       ApplicationStatusEnum
-  language                     LanguagesEnum?
-  submissionType               ApplicationSubmissionTypeEnum @map("submission_type")
-  acceptedTerms                Boolean?                      @map("accepted_terms")
-  submissionDate               DateTime?                     @map("submission_date") @db.Timestamptz(6)
+  id                             String                        @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  createdAt                      DateTime                      @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt                      DateTime                      @updatedAt @map("updated_at") @db.Timestamp(6)
+  deletedAt                      DateTime?                     @map("deleted_at") @db.Timestamp(6)
+  appUrl                         String?                       @map("app_url")
+  additionalPhone                Boolean?                      @map("additional_phone")
+  additionalPhoneNumber          String?                       @map("additional_phone_number")
+  additionalPhoneNumberType      String?                       @map("additional_phone_number_type")
+  contactPreferences             String[]                      @map("contact_preferences")
+  householdSize                  Int?                          @map("household_size")
+  housingStatus                  String?                       @map("housing_status")
+  sendMailToMailingAddress       Boolean?                      @map("send_mail_to_mailing_address")
+  householdExpectingChanges      Boolean?                      @map("household_expecting_changes")
+  householdStudent               Boolean?                      @map("household_student")
+  incomeVouchers                 Boolean?                      @map("income_vouchers")
+  income                         String?
+  incomePeriod                   IncomePeriodEnum?             @map("income_period")
+  preferences                    Json
+  programs                       Json?
+  status                         ApplicationStatusEnum         @default(submitted)
+  accessibleUnitWaitlistNumber   Int?                          @map("accessible_unit_waitlist_number")
+  conventionalUnitWaitlistNumber Int?                          @map("conventional_unit_waitlist_number")
+  manualLotteryPositionNumber    Int?                          @map("manual_lottery_position_number")
+  language                       LanguagesEnum?
+  submissionType                 ApplicationSubmissionTypeEnum @map("submission_type")
+  acceptedTerms                  Boolean?                      @map("accepted_terms")
+  submissionDate                 DateTime?                     @map("submission_date") @db.Timestamptz(6)
   // if this field is true then the application is a confirmed duplicate
   // meaning that the record in the application flagged set table has a status of duplicate
-  markedAsDuplicate            Boolean                       @default(false) @map("marked_as_duplicate")
-  confirmationCode             String                        @map("confirmation_code")
-  reviewStatus                 ApplicationReviewStatusEnum   @default(pending) @map("review_status")
+  markedAsDuplicate              Boolean                       @default(false) @map("marked_as_duplicate")
+  confirmationCode               String                        @map("confirmation_code")
+  reviewStatus                   ApplicationReviewStatusEnum   @default(pending) @map("review_status")
   // Used to denote when an application was transferred from another jurisdiction
-  wasCreatedExternally         Boolean                       @default(false) @map("was_created_externally")
-  userId                       String?                       @map("user_id") @db.Uuid
-  listingId                    String?                       @map("listing_id") @db.Uuid
+  wasCreatedExternally           Boolean                       @default(false) @map("was_created_externally")
+  userId                         String?                       @map("user_id") @db.Uuid
+  listingId                      String?                       @map("listing_id") @db.Uuid
   // This application is the most recent for the user
-  isNewest                     Boolean?                      @default(false) @map("is_newest")
-  wasPIICleared                Boolean?                      @default(false) @map("was_pii_cleared")
+  isNewest                       Boolean?                      @default(false) @map("is_newest")
+  wasPIICleared                  Boolean?                      @default(false) @map("was_pii_cleared")
   // Signifies when PII data should be cleared
-  expireAfter                  DateTime?                     @map("expire_after") @db.Timestamp(6)
-  applicantId                  String?                       @unique() @map("applicant_id") @db.Uuid
-  mailingAddressId             String?                       @unique() @map("mailing_address_id") @db.Uuid
-  alternateAddressId           String?                       @unique() @map("alternate_address_id") @db.Uuid
-  alternateContactId           String?                       @unique() @map("alternate_contact_id") @db.Uuid
-  accessibilityId              String?                       @unique() @map("accessibility_id") @db.Uuid
-  demographicsId               String?                       @unique() @map("demographics_id") @db.Uuid
-  applicationFlaggedSet        ApplicationFlaggedSet[]
-  applicationSelections        ApplicationSelections[]
-  applicant                    Applicant?                    @relation(fields: [applicantId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  accessibility                Accessibility?                @relation(fields: [accessibilityId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  alternateContact             AlternateContact?             @relation(fields: [alternateContactId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  applicationsAlternateAddress Address?                      @relation("applications_alternate_address", fields: [alternateAddressId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  userAccounts                 UserAccounts?                 @relation(fields: [userId], references: [id], onUpdate: NoAction)
-  applicationsMailingAddress   Address?                      @relation("applications_mailing_address", fields: [mailingAddressId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  listings                     Listings?                     @relation(fields: [listingId], references: [id], onDelete: SetNull, onUpdate: NoAction)
-  demographics                 Demographics?                 @relation(fields: [demographicsId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  preferredUnitTypes           UnitTypes[]
-  householdMember              HouseholdMember[]
-  applicationLotteryPositions  ApplicationLotteryPositions[]
+  expireAfter                    DateTime?                     @map("expire_after") @db.Timestamp(6)
+  applicantId                    String?                       @unique() @map("applicant_id") @db.Uuid
+  mailingAddressId               String?                       @unique() @map("mailing_address_id") @db.Uuid
+  alternateAddressId             String?                       @unique() @map("alternate_address_id") @db.Uuid
+  alternateContactId             String?                       @unique() @map("alternate_contact_id") @db.Uuid
+  accessibilityId                String?                       @unique() @map("accessibility_id") @db.Uuid
+  demographicsId                 String?                       @unique() @map("demographics_id") @db.Uuid
+  applicationFlaggedSet          ApplicationFlaggedSet[]
+  applicationSelections          ApplicationSelections[]
+  applicant                      Applicant?                    @relation(fields: [applicantId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  accessibility                  Accessibility?                @relation(fields: [accessibilityId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  alternateContact               AlternateContact?             @relation(fields: [alternateContactId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  applicationsAlternateAddress   Address?                      @relation("applications_alternate_address", fields: [alternateAddressId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  userAccounts                   UserAccounts?                 @relation(fields: [userId], references: [id], onUpdate: NoAction)
+  applicationsMailingAddress     Address?                      @relation("applications_mailing_address", fields: [mailingAddressId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  listings                       Listings?                     @relation(fields: [listingId], references: [id], onDelete: SetNull, onUpdate: NoAction)
+  demographics                   Demographics?                 @relation(fields: [demographicsId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  preferredUnitTypes             UnitTypes[]
+  householdMember                HouseholdMember[]
+  applicationLotteryPositions    ApplicationLotteryPositions[]
 
   @@unique([listingId, confirmationCode])
   @@index([listingId])
@@ -390,7 +393,7 @@ model Jurisdictions {
   allowSingleUseCodeLogin             Boolean                     @default(false) @map("allow_single_use_code_login")
   amiChart                            AmiChart[]
   featureFlags                        FeatureFlags[]
-  minimumListingPublishImagesRequired Int?                        @map("minimum_listing_publish_images_required")
+  minimumListingPublishImagesRequired Int?                        @default(1) @map("minimum_listing_publish_images_required")
   multiselectQuestions                MultiselectQuestions[]
   listings                            Listings[]
   reservedCommunityTypes              ReservedCommunityTypes[]
@@ -400,6 +403,7 @@ model Jurisdictions {
   duplicateListingPermissions         UserRoleEnum[]              @map("duplicate_listing_permissions")
   requiredListingFields               String[]                    @default([]) @map("required_listing_fields")
   visibleNeighborhoodAmenities        NeighborhoodAmenitiesEnum[] @default([groceryStores, publicTransportation, schools, parksAndCommunityCenters, pharmacies, healthCareResources]) @map("visible_neighborhood_amenities")
+  properties                          Properties[]
 
   @@map("jurisdictions")
 }
@@ -1102,19 +1106,22 @@ model UserPreferences {
 
 // END DETROIT SPECIFIC
 
-// START LA SEPCIFIC
+// START LA SPECIFIC
 
 model Properties {
-  id          String     @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  createdAt   DateTime   @default(now()) @map("created_at") @db.Timestamp(6)
-  updatedAt   DateTime   @updatedAt @map("updated_at") @db.Timestamp(6)
-  name        String
-  description String?
-  url         String?
-  urlTitle    String?    @map("url_title")
-  listings    Listings[]
+  id             String         @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  createdAt      DateTime       @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt      DateTime       @updatedAt @map("updated_at") @db.Timestamp(6)
+  name           String
+  description    String?
+  url            String?
+  urlTitle       String?        @map("url_title")
+  jurisdictionId String?        @map("jurisdiction_id") @db.Uuid
+  listings       Listings[]
+  jurisdictions  Jurisdictions? @relation(fields: [jurisdictionId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@index([id, name])
+  @@map("properties")
 }
 
 // END LA SPECIFIC
@@ -1256,9 +1263,11 @@ enum IncomePeriodEnum {
 }
 
 enum ApplicationStatusEnum {
-  draft
   submitted
-  removed
+  declined
+  receivedUnit
+  waitlist
+  waitlistDeclined
 
   @@map("application_status_enum")
 }

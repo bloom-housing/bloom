@@ -1,4 +1,4 @@
-name: Partners Unit
+name: Missing Translations
 
 on:
   pull_request:
@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  partners-unit:
+  shared-helpers-unit:
     runs-on: ubuntu-latest
 
     steps:
@@ -35,5 +35,5 @@ jobs:
         run: yarn
 
       # Tests
-      - name: yarn unit test sites/partners
-        run: yarn test:app:partners:unit
+      - name: yarn translations test shared/helpers
+        run: yarn test:shared-helpers:missing-translations
