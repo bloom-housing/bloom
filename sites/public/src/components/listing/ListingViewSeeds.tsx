@@ -60,6 +60,7 @@ interface ListingProps {
 export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: ListingProps) => {
   const { userService } = useContext(AuthContext)
   const { addToast } = useContext(MessageContext)
+  const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, watch } = useForm()
@@ -249,6 +250,15 @@ export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: Li
     </>
   )
 
+  const enableLeasingAgentAltText = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableLeasingAgentAltText,
+    listing.jurisdictions.id
+  )
+
+  const leasingAgentContactText = enableLeasingAgentAltText
+    ? t("leasingAgent.contactManagerProp")
+    : t("leasingAgent.contact")
+
   const ApplyBar = (
     <>
       <LotteryResults
@@ -265,24 +275,7 @@ export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: Li
       {LotteryEvent}
       {ReferralApplication}
       {WhatToExpect}
-      <LeasingAgent
-        address={listing.listingsLeasingAgentAddress}
-        email={listing.leasingAgentEmail}
-        name={listing.leasingAgentName}
-        officeHours={listing.leasingAgentOfficeHours}
-        phone={listing.leasingAgentPhone}
-        title={listing.leasingAgentTitle}
-        managementWebsite={
-          isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableCompanyWebsite)
-            ? listing.managementWebsite
-            : undefined
-        }
-        leasingAgentContactText={
-          isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableLeasingAgentAltText)
-            ? t("leasingAgent.contactManagerProp")
-            : t("leasingAgent.contact")
-        }
-      />
+      <LeasingAgent listing={listing} jurisdictions={jurisdiction}/>
       {ListingUpdatedAt}
     </>
   )
