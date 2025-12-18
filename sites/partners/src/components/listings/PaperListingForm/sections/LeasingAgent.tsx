@@ -53,7 +53,7 @@ const LeasingAgent = (props: LeasingAgentProps) => {
 
   const enableLeasingAgentAltText = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableLeasingAgentAltText,
-    listing.jurisdictions.id
+    listing?.jurisdictions?.id
   )
 
   const leasingAgentNameText = enableLeasingAgentAltText

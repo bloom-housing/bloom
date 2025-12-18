@@ -77,7 +77,7 @@ const DetailApplicationAddress = () => {
               className="seeds-grid-span-2"
               label={t("listings.wherePickupQuestion")}
             >
-              {t("listings.leasingAgentAddress")}
+              {leasingAgentAddressText}
             </FieldValue>
           </Grid.Cell>
         )}
@@ -123,7 +123,7 @@ const DetailApplicationAddress = () => {
               className="seeds-grid-span-2"
               label={t("listings.whereDropOffQuestion")}
             >
-              {t("listings.leasingAgentAddress")}
+              {leasingAgentAddressText}
             </FieldValue>
           </Grid.Cell>
         )}
