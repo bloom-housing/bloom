@@ -33,6 +33,7 @@ export enum FeatureFlagEnum {
   enableNeighborhoodAmenities = 'enableNeighborhoodAmenities',
   enableNeighborhoodAmenitiesDropdown = 'enableNeighborhoodAmenitiesDropdown',
   enableNonRegulatedListings = 'enableNonRegulatedListings',
+  enableParkingFee = 'enableParkingFee',
   enablePartnerDemographics = 'enablePartnerDemographics',
   enablePartnerSettings = 'enablePartnerSettings',
   enableProperties = 'enableProperties',
@@ -209,6 +210,10 @@ export const featureFlagMap: {
     name: FeatureFlagEnum.enableNonRegulatedListings,
     description:
       'When true, non-regulated listings are displayed in listing creation/edit and public listing view',
+  },
+  {
+    name: FeatureFlagEnum.enableParkingFee,
+    description: 'When true, the parking fee should be visible',
   },
   {
     name: FeatureFlagEnum.enablePartnerDemographics,

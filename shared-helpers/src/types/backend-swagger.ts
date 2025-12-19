@@ -7939,11 +7939,9 @@ export enum IncomePeriodEnum {
 }
 
 export enum ApplicationStatusEnum {
+  "draft" = "draft",
   "submitted" = "submitted",
-  "declined" = "declined",
-  "receivedUnit" = "receivedUnit",
-  "waitlist" = "waitlist",
-  "waitlistDeclined" = "waitlistDeclined",
+  "removed" = "removed",
 }
 
 export enum ApplicationSubmissionTypeEnum {
@@ -8045,6 +8043,7 @@ export enum FeatureFlagEnum {
   "enableNeighborhoodAmenities" = "enableNeighborhoodAmenities",
   "enableNeighborhoodAmenitiesDropdown" = "enableNeighborhoodAmenitiesDropdown",
   "enableNonRegulatedListings" = "enableNonRegulatedListings",
+  "enableParkingFee" = "enableParkingFee",
   "enablePartnerDemographics" = "enablePartnerDemographics",
   "enablePartnerSettings" = "enablePartnerSettings",
   "enableProperties" = "enableProperties",
