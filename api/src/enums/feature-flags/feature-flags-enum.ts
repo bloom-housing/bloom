@@ -213,7 +213,7 @@ export const featureFlagMap: {
   },
   {
     name: FeatureFlagEnum.enableParkingFee,
-    description: 'When true, the parking fee should be visible',
+    description: 'When true, the parking fee field should be visible',
   },
   {
     name: FeatureFlagEnum.enablePartnerDemographics,
