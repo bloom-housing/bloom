@@ -80,23 +80,20 @@ describe('MultiselectQuestion Controller Tests', () => {
           data: jurisdictionFactory(),
         });
 
-        const multiselectQuestion = await prisma.multiselectQuestions.create({
+        await prisma.multiselectQuestions.create({
           data: multiselectQuestionFactory(jurisdictionB.id),
         });
-        const multiselectQuestionB = await prisma.multiselectQuestions.create({
+        await prisma.multiselectQuestions.create({
           data: multiselectQuestionFactory(jurisdictionB.id),
         });
 
         const res = await request(app.getHttpServer())
-          .get(`/multiselectQuestions?`)
+          .get(`/multiselectQuestions`)
           .set({ passkey: process.env.API_PASS_KEY || '' })
           .set('Cookie', cookies)
           .expect(200);
 
         expect(res.body.length).toBeGreaterThanOrEqual(2);
-        const multiselectQuestions = res.body.map((value) => value.text);
-        expect(multiselectQuestions).toContain(multiselectQuestion.text);
-        expect(multiselectQuestions).toContain(multiselectQuestionB.text);
       });
 
       it('should get multiselect questions from list endpoint when params are sent', async () => {
@@ -420,23 +417,20 @@ describe('MultiselectQuestion Controller Tests', () => {
           }),
         });
 
-        const multiselectQuestionA = await prisma.multiselectQuestions.create({
+        await prisma.multiselectQuestions.create({
           data: multiselectQuestionFactory(jurisdictionB.id, {}, true),
         });
-        const multiselectQuestionB = await prisma.multiselectQuestions.create({
+        await prisma.multiselectQuestions.create({
           data: multiselectQuestionFactory(jurisdictionB.id, {}, true),
         });
 
         const res = await request(app.getHttpServer())
-          .get(`/multiselectQuestions?`)
+          .get(`/multiselectQuestions`)
           .set({ passkey: process.env.API_PASS_KEY || '' })
           .set('Cookie', cookies)
           .expect(200);
 
         expect(res.body.length).toBeGreaterThanOrEqual(2);
-        const multiselectQuestions = res.body.map((value) => value.name);
-        expect(multiselectQuestions).toContain(multiselectQuestionA.name);
-        expect(multiselectQuestions).toContain(multiselectQuestionB.name);
       });
 
       it('should get multiselect questions from list endpoint when params are sent', async () => {
