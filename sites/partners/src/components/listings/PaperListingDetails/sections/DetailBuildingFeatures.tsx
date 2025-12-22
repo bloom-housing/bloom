@@ -30,7 +30,7 @@ const DetailBuildingFeatures = () => {
     FeatureFlagEnum.enableAccessibilityFeatures,
     listing.jurisdictions.id
   )
-  // TODO: here change
+
   return (
     <SectionWithGrid heading={t("listings.sections.buildingFeaturesTitle")} inset>
       <Grid.Row>
@@ -94,7 +94,7 @@ const DetailBuildingFeatures = () => {
       <Grid.Row>
         <Grid.Cell>
           <FieldValue id="applicationFee" label={t("listings.applicationFee")}>
-            {getDetailFieldString(listing.applicationFee)}
+            {getDetailFieldString(listing.parkingFee)}
           </FieldValue>
         </Grid.Cell>
       </Grid.Row>
