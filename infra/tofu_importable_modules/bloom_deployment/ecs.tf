@@ -86,7 +86,7 @@ locals {
         {
           Action   = "secretsmanager:GetSecretValue"
           Effect   = "Allow"
-          Resource = aws_db_instance.bloom.master_user_secret[0].secret_arn
+          Resource = one([for s in aws_db_instance.bloom.master_user_secret : s.secret_arn if s.secret_status == "active"])
         },
         {
           Action   = "secretsmanager:GetSecretValue"
