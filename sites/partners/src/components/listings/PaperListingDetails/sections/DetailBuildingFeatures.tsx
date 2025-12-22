@@ -31,7 +31,6 @@ const DetailBuildingFeatures = () => {
     listing.jurisdictions.id
   )
   // TODO: here change
-
   return (
     <SectionWithGrid heading={t("listings.sections.buildingFeaturesTitle")} inset>
       <Grid.Row>

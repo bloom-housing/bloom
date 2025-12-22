@@ -4274,6 +4274,9 @@ export interface Listing {
   name: string
 
   /**  */
+  parkingFee?: string
+
+  /**  */
   postmarkedApplicationsReceivedByDate?: Date
 
   /**  */
@@ -4988,6 +4991,9 @@ export interface ListingCreate {
   name: string
 
   /**  */
+  parkingFee?: string
+
+  /**  */
   postmarkedApplicationsReceivedByDate?: Date
 
   /**  */
@@ -5344,6 +5350,9 @@ export interface ListingUpdate {
 
   /**  */
   name: string
+
+  /**  */
+  parkingFee?: string
 
   /**  */
   postmarkedApplicationsReceivedByDate?: Date
@@ -7939,9 +7948,11 @@ export enum IncomePeriodEnum {
 }
 
 export enum ApplicationStatusEnum {
-  "draft" = "draft",
   "submitted" = "submitted",
-  "removed" = "removed",
+  "declined" = "declined",
+  "receivedUnit" = "receivedUnit",
+  "waitlist" = "waitlist",
+  "waitlistDeclined" = "waitlistDeclined",
 }
 
 export enum ApplicationSubmissionTypeEnum {
