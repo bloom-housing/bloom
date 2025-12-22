@@ -1,7 +1,7 @@
 import React, { useMemo, useEffect, useContext } from "react"
 import { useFormContext } from "react-hook-form"
 import { t, Textarea, FieldGroup, Field } from "@bloom-housing/ui-components"
-import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
+import { Grid } from "@bloom-housing/ui-seeds"
 import { AuthContext, listingFeatures } from "@bloom-housing/shared-helpers"
 import {
   FeatureFlagEnum,
@@ -11,7 +11,6 @@ import SectionWithGrid from "../../../shared/SectionWithGrid"
 import { defaultFieldProps } from "../../../../lib/helpers"
 import styles from "../ListingForm.module.scss"
 import { ListingContext } from "../../ListingContext"
-import { getDetailFieldString } from "../../PaperListingDetails/sections/helpers"
 
 type BuildingFeaturesProps = {
   enableAccessibilityFeatures?: boolean
