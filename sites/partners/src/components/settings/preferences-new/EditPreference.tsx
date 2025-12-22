@@ -8,16 +8,14 @@ import {
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { t } from "@bloom-housing/ui-components"
 import { Button, Dialog } from "@bloom-housing/ui-seeds"
-import PreferenceDrawer from "./PreferenceDrawer"
+import PreferenceEditDrawer from "./PreferenceEditDrawer"
 import { PreferenceDeleteModal } from "./PreferenceDeleteModal"
-import { PreferenceEditModal } from "./PreferenceEditModal"
+import PreferenceViewDrawer from "./PreferenceViewDrawer"
 
-export type DrawerType = "add" | "edit"
+export type DrawerType = "add" | "edit" | "view"
 
 interface EditPreferenceProps {
   cacheKey: string
-  editConfirmModalOpen: MultiselectQuestion
-  setEditConfirmModalOpen: React.Dispatch<React.SetStateAction<MultiselectQuestion>>
   preferenceDrawerOpen: DrawerType
   setPreferenceDrawerOpen: React.Dispatch<React.SetStateAction<DrawerType>>
   questionData: MultiselectQuestion
@@ -26,8 +24,6 @@ interface EditPreferenceProps {
 
 const EditPreference = ({
   cacheKey,
-  editConfirmModalOpen,
-  setEditConfirmModalOpen,
   preferenceDrawerOpen,
   setPreferenceDrawerOpen,
   questionData,
@@ -108,8 +104,8 @@ const EditPreference = ({
 
   return (
     <>
-      <PreferenceDrawer
-        drawerOpen={!!preferenceDrawerOpen}
+      <PreferenceEditDrawer
+        drawerOpen={!!preferenceDrawerOpen && preferenceDrawerOpen != "view"}
         questionData={questionData}
         setQuestionData={setQuestionData}
         drawerType={preferenceDrawerOpen}
@@ -119,6 +115,14 @@ const EditPreference = ({
         }}
         saveQuestion={saveQuestion}
         isLoading={isCreateLoading || isUpdateLoading}
+      />
+
+      <PreferenceViewDrawer
+        drawerOpen={preferenceDrawerOpen === "view"}
+        questionData={questionData}
+        onDrawerClose={() => {
+          setPreferenceDrawerOpen(null)
+        }}
       />
 
       <Dialog
@@ -161,18 +165,6 @@ const EditPreference = ({
           onClose={() => {
             setDeleteConfirmModalOpen(null)
             void mutate(cacheKey)
-          }}
-        />
-      )}
-      {editConfirmModalOpen && (
-        <PreferenceEditModal
-          multiselectQuestion={editConfirmModalOpen}
-          onClose={() => {
-            setEditConfirmModalOpen(null)
-          }}
-          onEdit={() => {
-            setQuestionData(editConfirmModalOpen)
-            setPreferenceDrawerOpen("edit")
           }}
         />
       )}

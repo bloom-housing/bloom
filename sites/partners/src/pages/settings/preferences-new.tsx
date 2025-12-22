@@ -5,6 +5,7 @@ import {
   FeatureFlagEnum,
   MultiselectQuestion,
   MultiselectQuestionsApplicationSectionEnum,
+  MultiselectQuestionsStatusEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { AgTable, t, useAgTable } from "@bloom-housing/ui-components"
 import { Button, Tag } from "@bloom-housing/ui-seeds"
@@ -13,7 +14,9 @@ import Head from "next/head"
 import Layout from "../../layouts"
 import { NavigationHeader } from "../../components/shared/NavigationHeader"
 import { useJurisdictionalMultiselectQuestionList } from "../../lib/hooks"
-import EditPreference, { DrawerType } from "../../components/settings/preferences-new/EditPreference"
+import EditPreference, {
+  DrawerType,
+} from "../../components/settings/preferences-new/EditPreference"
 import styles from "./preferences-new.module.scss"
 import TabView from "../../layouts/TabView"
 import { getSettingsTabs, SettingsIndexEnum } from "../../components/settings/SettingsViewHelpers"
@@ -24,7 +27,6 @@ const SettingsPreferences = () => {
   const tableOptions = useAgTable()
   const enableProperties = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableProperties)
 
-  const [editConfirmModalOpen, setEditConfirmModalOpen] = useState<MultiselectQuestion | null>(null)
   const [preferenceDrawerOpen, setPreferenceDrawerOpen] = useState<DrawerType | null>(null)
   const [questionData, setQuestionData] = useState<MultiselectQuestion>(null)
 
@@ -34,18 +36,6 @@ const SettingsPreferences = () => {
         headerName: t("t.preference"),
         field: "name",
         flex: 1.5,
-        cellRendererFramework: ({ data }) => {
-          const { preference, id, name } = data
-          return (
-            <Button
-              variant="text"
-              onClick={() => setEditConfirmModalOpen(preference)}
-              id={`preference-link-${id}`}
-            >
-              {name}
-            </Button>
-          )
-        },
       },
       {
         headerName: t("application.status"),
@@ -53,22 +43,18 @@ const SettingsPreferences = () => {
         cellRendererFramework: ({ data }) => {
           let variant = null
           switch (data.status) {
-            case "draft":
+            case MultiselectQuestionsStatusEnum.draft:
               variant = "primary"
               break
-            case "active":
+            case MultiselectQuestionsStatusEnum.active:
               variant = "success"
               break
-            case "retiring":
+            case MultiselectQuestionsStatusEnum.retired:
               variant = "highlight-warm"
               break
           }
-          const statusText = data.status.charAt(0).toUpperCase() + data.status.slice(1)
-          return (
-            <Tag variant={variant} className={styles["tag-in-table"]}>
-              {statusText}
-            </Tag>
-          )
+          const statusText = `${data.status.charAt(0).toUpperCase()}${data.status.slice(1)}`
+          return <Tag variant={variant}>{statusText}</Tag>
         },
       },
       {
@@ -77,6 +63,37 @@ const SettingsPreferences = () => {
         flex: 1.5,
       },
       { headerName: t("t.lastUpdated"), field: "updatedAt" },
+      {
+        headerName: "actions",
+        field: "",
+        cellRendererFramework: ({ data }) => {
+          const { preference, id } = data
+          return preference.status === MultiselectQuestionsStatusEnum.draft ||
+            preference.status === MultiselectQuestionsStatusEnum.visible ? (
+            <Button
+              variant="text"
+              onClick={() => {
+                setQuestionData(preference)
+                setPreferenceDrawerOpen("edit")
+              }}
+              id={`preference-link-${id}`}
+            >
+              Edit
+            </Button>
+          ) : (
+            <Button
+              variant="text"
+              onClick={() => {
+                setQuestionData(preference)
+                setPreferenceDrawerOpen("view")
+              }}
+              id={`preference-link-${id}`}
+            >
+              View
+            </Button>
+          )
+        },
+      },
     ]
   }, [])
 
@@ -173,8 +190,6 @@ const SettingsPreferences = () => {
 
       <EditPreference
         cacheKey={cacheKey}
-        editConfirmModalOpen={editConfirmModalOpen}
-        setEditConfirmModalOpen={setEditConfirmModalOpen}
         preferenceDrawerOpen={preferenceDrawerOpen}
         setPreferenceDrawerOpen={setPreferenceDrawerOpen}
         questionData={questionData}

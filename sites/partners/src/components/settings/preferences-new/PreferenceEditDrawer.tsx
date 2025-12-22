@@ -25,10 +25,10 @@ import {
 import ManageIconSection from "../ManageIconSection"
 import { DrawerType } from "./EditPreference"
 import SectionWithGrid from "../../shared/SectionWithGrid"
-import s from "./PreferenceDrawer.module.scss"
+import s from "./PreferenceEditDrawer.module.scss"
 import { useMapLayersList } from "../../../lib/hooks"
 
-type PreferenceDrawerProps = {
+type PreferenceEditDrawerProps = {
   drawerOpen: boolean
   questionData: MultiselectQuestion
   setQuestionData: React.Dispatch<React.SetStateAction<MultiselectQuestion>>
@@ -52,10 +52,11 @@ type OptionForm = {
   optionLinkTitle: string
   optionTitle: string
   optionUrl: string
+  canYouOptOut: YesNoEnum
   mapLayerId?: string
 }
 
-const PreferenceDrawer = ({
+const PreferenceEditDrawer = ({
   drawerType,
   questionData,
   setQuestionData,
@@ -63,42 +64,17 @@ const PreferenceDrawer = ({
   onDrawerClose,
   saveQuestion,
   isLoading,
-}: PreferenceDrawerProps) => {
+}: PreferenceEditDrawerProps) => {
   const [optionDrawerOpen, setOptionDrawerOpen] = useState<DrawerType | null>(null)
   const [optionData, setOptionData] = useState<MultiselectOption>(null)
   const [dragOrder, setDragOrder] = useState([])
 
   const { profile } = useContext(AuthContext)
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const {
-    register,
-    getValues,
-    trigger,
-    errors,
-    clearErrors,
-    setError,
-    watch,
-    setValue,
-    formState,
-  } = useForm()
+  const { register, getValues, trigger, errors, clearErrors, setError, watch, formState } =
+    useForm()
 
   const { mapLayers } = useMapLayersList(watch("jurisdictionId"))
-
-  useEffect(() => {
-    if (!optOutQuestion) {
-      setValue(
-        "canYouOptOutQuestion",
-        questionData?.optOutText !== null ? YesNoEnum.yes : YesNoEnum.no
-      )
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [questionData])
-
-  const optOutQuestion = watch(
-    "canYouOptOutQuestion",
-    // set watch default value to mirror canYouOptOutQuestion default on load
-    questionData === null || questionData?.optOutText !== null ? YesNoEnum.yes : undefined
-  )
 
   const isAdditionalDetailsEnabled = profile?.jurisdictions?.some(
     (jurisdiction) => jurisdiction.enableGeocodingPreferences
@@ -112,7 +88,7 @@ const PreferenceDrawer = ({
     profile?.jurisdictions.find((juris) => juris.id === watch("jurisdictionId"))
       ?.enableGeocodingRadiusMethod ||
     profile?.jurisdictions.every((juris) => juris.enableGeocodingRadiusMethod)
-  const readiusExpand =
+  const radiusExpand =
     (optionData?.validationMethod === ValidationMethodEnum.radius &&
       watch("validationMethod") === undefined) ||
     watch("validationMethod") === ValidationMethodEnum.radius
@@ -124,44 +100,49 @@ const PreferenceDrawer = ({
 
   // Update local state with dragged state
   useEffect(() => {
-    if (questionData?.options?.length > 0 && dragOrder?.length > 0) {
+    if (questionData?.multiselectOptions?.length > 0 && dragOrder?.length > 0) {
       const newDragOrder = []
       dragOrder.forEach((item, index) => {
         newDragOrder.push({
-          ...questionData?.options?.filter((draftItem) => draftItem.text === item.name.content)[0],
+          ...questionData?.multiselectOptions?.filter(
+            (draftItem) => draftItem.name === item.name.content
+          )[0],
           ordinal: index + 1,
         })
       })
-      setQuestionData({ ...questionData, options: newDragOrder })
+      setQuestionData({ ...questionData, multiselectOptions: newDragOrder })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dragOrder])
 
   const draggableTableData: StandardTableData = useMemo(
     () =>
-      questionData?.options
+      questionData?.multiselectOptions
         ?.sort((a, b) => (a.ordinal < b.ordinal ? -1 : 1))
         .map((item) => ({
-          name: { content: item.text },
+          name: { content: item.name },
           description: { content: item.description },
           action: {
             content: (
               <ManageIconSection
                 onCopy={() => {
-                  const draftOptions = [...questionData.options]
-                  draftOptions.push({ ...item, ordinal: questionData.options.length + 1 })
-                  setQuestionData({ ...questionData, options: draftOptions })
+                  const draftOptions = [...questionData.multiselectOptions]
+                  draftOptions.push({
+                    ...item,
+                    ordinal: questionData.multiselectOptions.length + 1,
+                  })
+                  setQuestionData({ ...questionData, multiselectOptions: draftOptions })
                 }}
-                copyTestId={`option-copy-icon: ${item.text}`}
+                copyTestId={`option-copy-icon: ${item.name}`}
                 onEdit={() => {
                   setOptionData(item)
                   setOptionDrawerOpen("edit")
                 }}
-                editTestId={`option-edit-icon: ${item.text}`}
+                editTestId={`option-edit-icon: ${item.name}`}
                 onDelete={() => {
                   setQuestionData({
                     ...questionData,
-                    options: questionData.options
+                    multiselectOptions: questionData.multiselectOptions
                       .filter((option) => option.ordinal !== item.ordinal)
                       .map((option, index) => {
                         return { ...option, ordinal: index + 1 }
@@ -225,6 +206,62 @@ const PreferenceDrawer = ({
     validationMethodsFields = validationMethodsFields.filter(
       (field) => field.id !== "validationMethodRadius"
     )
+  }
+
+  const savePreference = async () => {
+    const validation = await trigger()
+    if (!questionData || !questionData?.multiselectOptions?.length) {
+      setError("questions", { message: t("errors.requiredFieldError") })
+      return
+    }
+    if (!validation) return
+    const formValues = getValues()
+    if (!isValidationRadiusVisible) {
+      questionData.multiselectOptions = questionData?.multiselectOptions.map((option) =>
+        option.validationMethod === ValidationMethodEnum.radius
+          ? {
+              ...option,
+              validationMethod: ValidationMethodEnum.none,
+              radiusSize: undefined,
+            }
+          : option
+      )
+    }
+
+    let newStatus = questionData?.status ?? MultiselectQuestionsStatusEnum.draft
+    if (
+      newStatus === MultiselectQuestionsStatusEnum.draft &&
+      formValues.showOnListingQuestion === YesNoEnum.yes
+    ) {
+      newStatus = MultiselectQuestionsStatusEnum.visible
+    } else if (
+      newStatus === MultiselectQuestionsStatusEnum.visible &&
+      formValues.showOnListingQuestion === YesNoEnum.no
+    ) {
+      newStatus = MultiselectQuestionsStatusEnum.draft
+    }
+
+    const formattedQuestionData: MultiselectQuestionUpdate | MultiselectQuestionCreate = {
+      applicationSection: MultiselectQuestionsApplicationSectionEnum.preferences,
+      description: formValues.description,
+      hideFromListing: formValues.showOnListingQuestion === YesNoEnum.no,
+      jurisdictions: [], // TODO: shouldn't this not be necessary anymore?
+      jurisdiction: profile.jurisdictions.find((juris) => juris.id === formValues.jurisdictionId),
+      links: formValues.preferenceUrl
+        ? [{ title: formValues.preferenceLinkTitle, url: formValues.preferenceUrl }]
+        : [],
+      isExclusive: formValues.exclusiveQuestion === "exclusive",
+      multiselectOptions: questionData?.multiselectOptions?.map((option) => {
+        option.text = "" // TODO: shouldn't this not be necessary anymore?
+        return option
+      }),
+      status: newStatus,
+      name: formValues.name,
+      text: "", // TODO: shouldn't this not be necessary anymore?
+    }
+    clearErrors()
+    clearErrors("questions")
+    saveQuestion(formattedQuestionData, drawerType)
   }
 
   return (
@@ -314,7 +351,7 @@ const PreferenceDrawer = ({
                   </Grid.Cell>
                 </Grid.Row>
               </SectionWithGrid>
-              {questionData?.options?.length > 0 && (
+              {questionData?.multiselectOptions?.length > 0 && (
                 <div className="mb-5">
                   <MinimalTable
                     headers={{
@@ -363,14 +400,14 @@ const PreferenceDrawer = ({
                           id: "multiselect",
                           label: t("settings.preferenceMultiSelect"),
                           value: "multiselect",
-                          defaultChecked: optionData === null || !optionData?.exclusive,
+                          defaultChecked: !questionData?.isExclusive,
                           dataTestId: "exclusive-question-multiselect",
                         },
                         {
                           id: "exclusive",
                           label: t("settings.preferenceExclusive"),
                           value: "exclusive",
-                          defaultChecked: optionData?.exclusive,
+                          defaultChecked: questionData?.isExclusive,
                           dataTestId: "exclusive-question-exclusive",
                         },
                       ]}
@@ -379,54 +416,6 @@ const PreferenceDrawer = ({
                       dataTestId={"preference-exclusive-question"}
                     />
                   </FieldValue>
-                </Grid.Row>
-                <Grid.Row columns={3}>
-                  <Grid.Cell>
-                    <div className="pb-4">
-                      <FieldGroup
-                        name="canYouOptOutQuestion"
-                        type="radio"
-                        register={register}
-                        groupLabel={t("settings.preferenceOptOut")}
-                        fields={[
-                          {
-                            id: "optOutYes",
-                            label: t("t.yes"),
-                            value: YesNoEnum.yes,
-                            defaultChecked:
-                              questionData === null || questionData?.optOutText !== null,
-                            dataTestId: "opt-out-question-yes",
-                          },
-                          {
-                            id: "optOutNo",
-                            label: t("t.no"),
-                            value: YesNoEnum.no,
-                            defaultChecked: questionData && questionData?.optOutText === null,
-                            dataTestId: "opt-out-question-no",
-                          },
-                        ]}
-                        fieldClassName="m-0"
-                        fieldGroupClassName="flex h-12 items-center"
-                        dataTestId={"preference-can-you-opt-out"}
-                      />
-                    </div>
-                  </Grid.Cell>
-                  {optOutQuestion === YesNoEnum.yes && (
-                    <Grid.Cell>
-                      <Field
-                        id="optOutText"
-                        name="optOutText"
-                        label={t("settings.preferenceOptOutLabel")}
-                        placeholder={t("settings.preferenceOptOutLabel")}
-                        register={register}
-                        type="text"
-                        dataTestId={"preference-opt-out-label"}
-                        defaultValue={
-                          questionData?.optOutText ?? t("application.preferences.dontWantSingular")
-                        }
-                      />
-                    </Grid.Cell>
-                  )}
                 </Grid.Row>
                 <Grid.Row columns={3}>
                   <Grid.Cell>
@@ -501,51 +490,7 @@ const PreferenceDrawer = ({
             type="button"
             variant="primary"
             loadingMessage={isLoading && t("t.formSubmitted")}
-            onClick={async () => {
-              const validation = await trigger()
-              if (!questionData || !questionData?.options?.length) {
-                setError("questions", { message: t("errors.requiredFieldError") })
-                return
-              }
-              if (!validation) return
-              const formValues = getValues()
-              if (!isValidationRadiusVisible) {
-                questionData.options = questionData?.options.map((option) =>
-                  option.validationMethod === ValidationMethodEnum.radius
-                    ? {
-                        ...option,
-                        validationMethod: ValidationMethodEnum.none,
-                        radiusSize: undefined,
-                      }
-                    : option
-                )
-              }
-
-              const formattedQuestionData: MultiselectQuestionUpdate | MultiselectQuestionCreate = {
-                applicationSection: MultiselectQuestionsApplicationSectionEnum.preferences,
-                description: formValues.description,
-                hideFromListing: formValues.showOnListingQuestion === YesNoEnum.no,
-                jurisdictions: [
-                  profile.jurisdictions.find((juris) => juris.id === formValues.jurisdictionId),
-                ],
-                links: formValues.preferenceUrl
-                  ? [{ title: formValues.preferenceLinkTitle, url: formValues.preferenceUrl }]
-                  : [],
-                optOutText:
-                  optOutQuestion === YesNoEnum.yes &&
-                  formValues.optOutText &&
-                  formValues.optOutText !== ""
-                    ? formValues.optOutText
-                    : null,
-                options: questionData?.options,
-                status: questionData?.status ?? MultiselectQuestionsStatusEnum.draft,
-                name: formValues.name,
-                text: "" // TODO: shouldn't this not be necessary anymore?
-              }
-              clearErrors()
-              clearErrors("questions")
-              saveQuestion(formattedQuestionData, drawerType)
-            }}
+            onClick={savePreference}
             id={"preference-save-button"}
           >
             {t("t.save")}
@@ -578,7 +523,7 @@ const PreferenceDrawer = ({
                         type="text"
                         readerOnly
                         dataTestId={"preference-option-title"}
-                        defaultValue={optionData?.text}
+                        defaultValue={optionData?.name}
                         errorMessage={t("errors.requiredFieldError")}
                         error={!!errors["optionTitle"]}
                         inputProps={{
@@ -642,6 +587,38 @@ const PreferenceDrawer = ({
                         }
                       />
                     </FieldValue>
+                  </Grid.Cell>
+                </Grid.Row>
+                <Grid.Row>
+                  <Grid.Cell>
+                    <div className="pb-4">
+                      <FieldGroup
+                        name="canYouOptOut"
+                        type="radio"
+                        register={register}
+                        groupLabel={t("settings.preferenceOptOut")}
+                        fields={[
+                          {
+                            id: "optOutYes",
+                            label: t("t.yes"),
+                            value: YesNoEnum.yes,
+                            defaultChecked: optionData?.isOptOut,
+                            dataTestId: "opt-out-question-yes",
+                          },
+                          {
+                            id: "optOutNo",
+                            label: t("t.no"),
+                            value: YesNoEnum.no,
+                            defaultChecked:
+                              optionData?.isOptOut !== undefined && optionData?.isOptOut === false,
+                            dataTestId: "opt-out-question-no",
+                          },
+                        ]}
+                        fieldClassName="m-0"
+                        fieldGroupClassName="flex h-12 items-center"
+                        dataTestId={"preference-can-you-opt-out"}
+                      />
+                    </div>
                   </Grid.Cell>
                 </Grid.Row>
               </SectionWithGrid>
@@ -711,7 +688,7 @@ const PreferenceDrawer = ({
                     )}
                   </Grid.Cell>
                   <Grid.Cell className="pr-8">
-                    {shouldCollectAddressExpand && readiusExpand && isValidationRadiusVisible && (
+                    {shouldCollectAddressExpand && radiusExpand && isValidationRadiusVisible && (
                       <FieldValue label={t("settings.preferenceValidatingAddress.howManyMiles")}>
                         <Field
                           id="radiusSize"
@@ -794,7 +771,8 @@ const PreferenceDrawer = ({
                               label: t("t.no"),
                               value: YesNoEnum.no,
                               defaultChecked:
-                                optionData?.shouldCollectName !== undefined && !optionData?.shouldCollectName,
+                                optionData?.shouldCollectName !== undefined &&
+                                !optionData?.shouldCollectName,
                               id: "shouldCollectNameNo",
                               dataTestId: "collect-name-no",
                               inputProps: {
@@ -870,7 +848,7 @@ const PreferenceDrawer = ({
                 return
               }
               if (formState.errors.optionUrl) return
-              const existingOptionData = questionData?.options?.find(
+              const existingOptionData = questionData?.multiselectOptions?.find(
                 (option) => optionData?.ordinal === option.ordinal
               )
               if (
@@ -890,21 +868,26 @@ const PreferenceDrawer = ({
 
               const getNewOrdinal = () => {
                 if (existingOptionData) return existingOptionData.ordinal
-                return questionData?.options?.length ? questionData?.options.length + 1 : 1
+                return questionData?.multiselectOptions?.length
+                  ? questionData?.multiselectOptions.length + 1
+                  : 1
               }
 
               const newOptionData: MultiselectOptionCreate = {
-                text: formData.optionTitle,
+                name: formData.optionTitle,
                 description: formData.optionDescription,
                 links: formData.optionUrl
                   ? [{ title: formData.optionLinkTitle, url: formData.optionUrl }]
                   : [],
                 ordinal: getNewOrdinal(),
                 shouldCollectAddress: formData.shouldCollectAddress === YesNoEnum.yes,
+                isOptOut: formData.canYouOptOut === YesNoEnum.yes,
+                text: "",
               }
               if (formData.shouldCollectAddress === YesNoEnum.yes) {
                 newOptionData.validationMethod = formData.validationMethod
-                newOptionData.shouldCollectRelationship = formData.shouldCollectRelationship === YesNoEnum.yes
+                newOptionData.shouldCollectRelationship =
+                  formData.shouldCollectRelationship === YesNoEnum.yes
                 newOptionData.shouldCollectName = formData.shouldCollectName === YesNoEnum.yes
               }
               if (
@@ -919,15 +902,15 @@ const PreferenceDrawer = ({
 
               let newOptions = []
               if (existingOptionData) {
-                newOptions = questionData.options.map((option) =>
+                newOptions = questionData.multiselectOptions.map((option) =>
                   option.ordinal === existingOptionData.ordinal ? newOptionData : option
                 )
               } else {
-                newOptions = questionData?.options
-                  ? [...questionData.options, newOptionData]
+                newOptions = questionData?.multiselectOptions
+                  ? [...questionData.multiselectOptions, newOptionData]
                   : [newOptionData]
               }
-              setQuestionData({ ...questionData, options: newOptions })
+              setQuestionData({ ...questionData, multiselectOptions: newOptions })
               setOptionDrawerOpen(null)
             }}
             id={"preference-option-save"}
@@ -940,4 +923,4 @@ const PreferenceDrawer = ({
   )
 }
 
-export default PreferenceDrawer
+export default PreferenceEditDrawer
