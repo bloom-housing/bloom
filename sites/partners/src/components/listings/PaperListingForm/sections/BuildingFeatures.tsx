@@ -149,7 +149,7 @@ const BuildingFeatures = (props: BuildingFeaturesProps) => {
               )}
             />
           </Grid.Cell>
-          {!enableParkingFee ? null : (
+          {enableParkingFee && (
             <Grid.Row>
               <Grid.Cell>
                 <Field
