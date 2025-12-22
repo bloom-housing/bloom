@@ -31,6 +31,11 @@ const DetailBuildingFeatures = () => {
     listing.jurisdictions.id
   )
 
+  const enableParkingFee = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableParkingFee,
+    listing.jurisdictions.id
+  )
+
   return (
     <SectionWithGrid heading={t("listings.sections.buildingFeaturesTitle")} inset>
       <Grid.Row>
@@ -91,13 +96,15 @@ const DetailBuildingFeatures = () => {
         </Grid.Row>
       )}
 
-      <Grid.Row>
-        <Grid.Cell>
-          <FieldValue id="applicationFee" label={t("listings.applicationFee")}>
-            {getDetailFieldString(listing.parkingFee)}
-          </FieldValue>
-        </Grid.Cell>
-      </Grid.Row>
+      {!enableParkingFee ? null : (
+        <Grid.Row>
+          <Grid.Cell>
+            <FieldValue id="applicationFee" label={t("listings.applicationFee")}>
+              {getDetailFieldString(listing.parkingFee)}
+            </FieldValue>
+          </Grid.Cell>
+        </Grid.Row>
+      )}
     </SectionWithGrid>
   )
 }
