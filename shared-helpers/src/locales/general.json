@@ -1071,6 +1071,7 @@
   "t.bathrooms": "Bathrooms",
   "t.bedrooms": "Bedrooms",
   "t.built": "Built",
+  "t.parkingFee": "Parking Fee",
   "t.call": "Call",
   "t.cancel": "Cancel",
   "t.chooseFromFolder": "Choose from folder",

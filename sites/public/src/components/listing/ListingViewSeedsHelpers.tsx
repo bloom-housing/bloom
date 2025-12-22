@@ -190,6 +190,12 @@ export const getFeatures = (
   if (listing.servicesOffered) {
     features.push({ heading: t("t.servicesOffered"), subheading: listing.servicesOffered })
   }
+  if (listing.parkingFee) {
+    features.push({
+      heading: t("t.parkingFee"),
+      subheading: listing.parkingFee,
+    })
+  }
   const accessibilityFeatures = getAccessibilityFeatures(listing)
   const enableAccessibilityFeatures = jurisdiction?.featureFlags?.some(
     (flag) => flag.name === "enableAccessibilityFeatures" && flag.active
