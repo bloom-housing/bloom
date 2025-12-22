@@ -1,6 +1,6 @@
 import React, { useMemo, useEffect, useContext } from "react"
 import { useFormContext } from "react-hook-form"
-import { t, Textarea, FieldGroup } from "@bloom-housing/ui-components"
+import { t, Textarea, FieldGroup, Field } from "@bloom-housing/ui-components"
 import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { AuthContext, listingFeatures } from "@bloom-housing/shared-helpers"
 import {
@@ -45,7 +45,7 @@ const BuildingFeatures = (props: BuildingFeaturesProps) => {
 
   const enableParkingFee = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableParkingFee,
-    listing.jurisdictions.id
+    listing?.jurisdictions?.id
   )
 
   return (
@@ -150,6 +150,24 @@ const BuildingFeatures = (props: BuildingFeaturesProps) => {
               )}
             />
           </Grid.Cell>
+          {!enableParkingFee ? null : (
+            <Grid.Row>
+              <Grid.Cell>
+                <Field
+                  register={register}
+                  type={"currency"}
+                  prepend={"$"}
+                  {...defaultFieldProps(
+                    "parkingFee",
+                    t("listings.sections.parkingFeeText"),
+                    props.requiredFields,
+                    errors,
+                    clearErrors
+                  )}
+                />
+              </Grid.Cell>
+            </Grid.Row>
+          )}
         </Grid.Row>
         {!props.enableAccessibilityFeatures ? null : (
           <Grid.Row>
@@ -162,15 +180,6 @@ const BuildingFeatures = (props: BuildingFeaturesProps) => {
               fieldGroupClassName="grid grid-cols-3 mt-2 gap-x-4"
               fieldLabelClassName={styles["label-option"]}
             />
-          </Grid.Row>
-        )}
-        {!enableParkingFee ? null : (
-          <Grid.Row>
-            <Grid.Cell>
-              <FieldValue id="parkingFee" label={t("listings.applicationFee")}>
-                {getDetailFieldString(listing.parkingFee)}
-              </FieldValue>
-            </Grid.Cell>
           </Grid.Row>
         )}
       </SectionWithGrid>

@@ -405,6 +405,7 @@
   "listings.sections.buildingDetailsTitle": "Building details",
   "listings.sections.buildingFeaturesSubtitle": "Provide details about any amenities and unit details.",
   "listings.sections.buildingFeaturesTitle": "Building features",
+  "listings.sections.parkingFeeText": "Parking fees",
   "listings.sections.neighborhoodPlaceholder": "Select neighborhood",
   "listings.sections.regionPlaceholder": "Select region",
   "listings.sections.communityType": "Community type",
