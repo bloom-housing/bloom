@@ -12,8 +12,6 @@ type FeaturesProps = {
   }[]
 }
 
-// TODO HERE CHANGE FOR PUBLIC
-
 export const Features = ({ children, features }: FeaturesProps) => {
   return (
     <CollapsibleSection
