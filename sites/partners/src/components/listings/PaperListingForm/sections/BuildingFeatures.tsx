@@ -151,7 +151,7 @@ const BuildingFeatures = (props: BuildingFeaturesProps) => {
           </Grid.Cell>
         </Grid.Row>
         {enableParkingFee && (
-          <Grid.Row columns={4}>
+          <Grid.Row columns={3}>
             <Grid.Cell>
               <Field
                 register={register}
