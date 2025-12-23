@@ -59,7 +59,10 @@ describe("<LeasingAgent>", () => {
       </AuthContext.Provider>
     )
 
-    expect(screen.getByRole("link", { name: "Website" })).toHaveAttribute("href", "https://example.com")
+    expect(screen.getByRole("link", { name: "Website" })).toHaveAttribute(
+      "href",
+      "https://example.com"
+    )
     expect(screen.getByText("Agent Name")).toBeInTheDocument()
     expect(screen.getByText("Agent title")).toBeInTheDocument()
     expect(screen.getByRole("link", { name: `Call ${phoneNumber}` })).toHaveAttribute(
