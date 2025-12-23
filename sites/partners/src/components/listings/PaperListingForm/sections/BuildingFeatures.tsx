@@ -149,25 +149,25 @@ const BuildingFeatures = (props: BuildingFeaturesProps) => {
               )}
             />
           </Grid.Cell>
-          {enableParkingFee && (
-            <Grid.Row>
-              <Grid.Cell>
-                <Field
-                  register={register}
-                  type={"currency"}
-                  prepend={"$"}
-                  {...defaultFieldProps(
-                    "parkingFee",
-                    t("listings.sections.parkingFeeText"),
-                    props.requiredFields,
-                    errors,
-                    clearErrors
-                  )}
-                />
-              </Grid.Cell>
-            </Grid.Row>
-          )}
         </Grid.Row>
+        {enableParkingFee && (
+          <Grid.Row columns={4}>
+            <Grid.Cell>
+              <Field
+                register={register}
+                type={"currency"}
+                prepend={"$"}
+                {...defaultFieldProps(
+                  "parkingFee",
+                  t("listings.sections.parkingFeeText"),
+                  props.requiredFields,
+                  errors,
+                  clearErrors
+                )}
+              />
+            </Grid.Cell>
+          </Grid.Row>
+        )}
         {!props.enableAccessibilityFeatures ? null : (
           <Grid.Row>
             <FieldGroup
