@@ -53,11 +53,13 @@ describe("<LeasingAgent>", () => {
             leasingAgentOfficeHours: "Leasing office hours",
             leasingAgentPhone: phoneNumber,
             leasingAgentTitle: "Agent title",
+            managementWebsite: "https://example.com",
           }}
         />
       </AuthContext.Provider>
     )
-    expect(screen.getByText("Contact leasing agent or property manager")).toBeInTheDocument()
+
+    expect(screen.getByRole("link", { name: "Website" })).toHaveAttribute("href", "https://example.com")
     expect(screen.getByText("Agent Name")).toBeInTheDocument()
     expect(screen.getByText("Agent title")).toBeInTheDocument()
     expect(screen.getByRole("link", { name: `Call ${phoneNumber}` })).toHaveAttribute(
@@ -77,6 +79,7 @@ describe("<LeasingAgent>", () => {
     )
     expect(screen.getByText("Office hours")).toBeInTheDocument()
     expect(screen.getByText("Leasing office hours")).toBeInTheDocument()
+    expect(screen.getByText("Contact leasing agent or property manager")).toBeInTheDocument()
   })
   it("shows all content enableLeasingAgentAltText off", () => {
     const phoneNumber = "(123) 456-7890"
