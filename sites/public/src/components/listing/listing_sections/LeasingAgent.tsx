@@ -22,7 +22,13 @@ export const LeasingAgent = ({ listing }: LeasingAgentProps) => {
     leasingAgentTitle: title,
   } = listing
   const { doJurisdictionsHaveFeatureFlagOn } = React.useContext(AuthContext)
-  if (!address && !email && !name && !officeHours && !title && !phone) return
+  const managementWebsite = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableCompanyWebsite,
+    listing.jurisdictions.id
+  )
+    ? listing.managementWebsite
+    : undefined
+  if (!address && !email && !name && !officeHours && !title && !phone && !managementWebsite) return
 
   const enableLeasingAgentAltText = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableLeasingAgentAltText,
@@ -32,13 +38,6 @@ export const LeasingAgent = ({ listing }: LeasingAgentProps) => {
   const leasingAgentContactText = enableLeasingAgentAltText
     ? t("leasingAgent.contactManagerProp")
     : t("leasingAgent.contact")
-
-  const managementWebsite = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableCompanyWebsite,
-    listing.jurisdictions.id
-  )
-    ? listing.managementWebsite
-    : undefined
 
   return (
     <Card className={`${styles["mobile-full-width-card"]} ${styles["mobile-no-bottom-border"]}`}>

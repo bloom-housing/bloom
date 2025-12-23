@@ -69,7 +69,7 @@ const LeasingAgent = (props: LeasingAgentProps) => {
     : t("leasingAgent.title")
 
   const leasingAgentSubtitleText = enableLeasingAgentAltText
-    ? t("listings.sections.leasingAgentMaganerPropSubtitle")
+    ? t("listings.sections.leasingAgentManagerPropSubtitle")
     : t("listings.sections.leasingAgentSubtitle")
 
   const leasingAgentAddressText = enableLeasingAgentAltText

@@ -7,12 +7,13 @@ import {
 } from "../../../../src/components/listing/listing_sections/LeasingAgent"
 import { listing } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import { AuthContext } from "@bloom-housing/shared-helpers"
+import { screen } from "../../../testUtils"
 
 afterEach(cleanup)
 
 describe("<LeasingAgent>", () => {
   it("shows nothing if no content passed", () => {
-    const view = render(
+    render(
       <AuthContext.Provider
         value={{
           doJurisdictionsHaveFeatureFlagOn: () => true,
@@ -21,12 +22,12 @@ describe("<LeasingAgent>", () => {
         <LeasingAgent listing={listing} />
       </AuthContext.Provider>
     )
-    expect(view.queryByText("Leasing Agent")).toBeNull()
+    expect(screen.queryByText("Leasing Agent")).toBeNull()
   })
 
   it("shows all content enableLeasingAgentAltText on", () => {
     const phoneNumber = "(123) 456-7890"
-    const view = render(
+    render(
       <AuthContext.Provider
         value={{
           doJurisdictionsHaveFeatureFlagOn: () => true,
@@ -56,30 +57,30 @@ describe("<LeasingAgent>", () => {
         />
       </AuthContext.Provider>
     )
-    expect(view.getByText("Contact leasing agent or property manager")).toBeDefined()
-    expect(view.getByText("Agent Name")).toBeDefined()
-    expect(view.getByText("Agent title")).toBeDefined()
-    expect(view.getByRole("link", { name: `Call ${phoneNumber}` })).toHaveAttribute(
+    expect(screen.getByText("Contact leasing agent or property manager")).toBeInTheDocument()
+    expect(screen.getByText("Agent Name")).toBeInTheDocument()
+    expect(screen.getByText("Agent title")).toBeInTheDocument()
+    expect(screen.getByRole("link", { name: `Call ${phoneNumber}` })).toHaveAttribute(
       "href",
       "tel:1234567890"
     )
-    expect(view.getByRole("link", { name: "Email" })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: "Email" })).toHaveAttribute(
       "href",
       "mailto:leasing@agent.com"
     )
-    expect(view.getByText("Due to high call volume you may hear a message.")).toBeDefined()
-    expect(view.getByText("Address street, Address unit")).toBeDefined()
-    expect(view.getByText("Address city, CA 67890")).toBeDefined()
-    expect(view.getByRole("link", { name: "Get directions" })).toHaveAttribute(
+    expect(screen.getByText("Due to high call volume you may hear a message.")).toBeInTheDocument()
+    expect(screen.getByText("Address street, Address unit")).toBeInTheDocument()
+    expect(screen.getByText("Address city, CA 67890")).toBeInTheDocument()
+    expect(screen.getByRole("link", { name: "Get directions" })).toHaveAttribute(
       "href",
       "https://www.google.com/maps/place/Address street, Address unit, Address city, CA 67890"
     )
-    expect(view.getByText("Office hours")).toBeDefined()
-    expect(view.getByText("Leasing office hours")).toBeDefined()
+    expect(screen.getByText("Office hours")).toBeInTheDocument()
+    expect(screen.getByText("Leasing office hours")).toBeInTheDocument()
   })
   it("shows all content enableLeasingAgentAltText off", () => {
     const phoneNumber = "(123) 456-7890"
-    const view = render(
+    render(
       <AuthContext.Provider
         value={{
           doJurisdictionsHaveFeatureFlagOn: () => false,
@@ -109,26 +110,26 @@ describe("<LeasingAgent>", () => {
         />
       </AuthContext.Provider>
     )
-    expect(view.getByText("Contact leasing agent")).toBeDefined()
-    expect(view.getByText("Agent Name")).toBeDefined()
-    expect(view.getByText("Agent title")).toBeDefined()
-    expect(view.getByRole("link", { name: `Call ${phoneNumber}` })).toHaveAttribute(
+    expect(screen.getByText("Contact leasing agent")).toBeInTheDocument()
+    expect(screen.getByText("Agent Name")).toBeInTheDocument()
+    expect(screen.getByText("Agent title")).toBeInTheDocument()
+    expect(screen.getByRole("link", { name: `Call ${phoneNumber}` })).toHaveAttribute(
       "href",
       "tel:1234567890"
     )
-    expect(view.getByRole("link", { name: "Email" })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: "Email" })).toHaveAttribute(
       "href",
       "mailto:leasing@agent.com"
     )
-    expect(view.getByText("Due to high call volume you may hear a message.")).toBeDefined()
-    expect(view.getByText("Address street, Address unit")).toBeDefined()
-    expect(view.getByText("Address city, CA 67890")).toBeDefined()
-    expect(view.getByRole("link", { name: "Get directions" })).toHaveAttribute(
+    expect(screen.getByText("Due to high call volume you may hear a message.")).toBeInTheDocument()
+    expect(screen.getByText("Address street, Address unit")).toBeInTheDocument()
+    expect(screen.getByText("Address city, CA 67890")).toBeInTheDocument()
+    expect(screen.getByRole("link", { name: "Get directions" })).toHaveAttribute(
       "href",
       "https://www.google.com/maps/place/Address street, Address unit, Address city, CA 67890"
     )
-    expect(view.getByText("Office hours")).toBeDefined()
-    expect(view.getByText("Leasing office hours")).toBeDefined()
+    expect(screen.getByText("Office hours")).toBeInTheDocument()
+    expect(screen.getByText("Leasing office hours")).toBeInTheDocument()
   })
 })
 

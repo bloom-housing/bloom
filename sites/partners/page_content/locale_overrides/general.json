@@ -421,7 +421,7 @@
   "listings.sections.introSubtitle": "Let's get started with some basic information about your listing.",
   "listings.sections.introTitle": "Listing intro",
   "listings.sections.leasingAgentSubtitle": "Provide details about the leasing agent who will be managing the application process.",
-  "listings.sections.leasingAgentMaganerPropSubtitle": "Provide details about the leasing agent or property manager who will be managing the application process.",
+  "listings.sections.leasingAgentManagerPropSubtitle": "Provide details about the leasing agent or property manager who will be managing the application process.",
   "listings.sections.leasingAgentTitle": "Leasing agent",
   "listings.sections.leasingAgentManagerPropTitle": "Leasing agent or property manager title",
   "listings.sections.leasingAgentManagerPropSectionTitle": "Leasing agent or property manager",

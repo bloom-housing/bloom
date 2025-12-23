@@ -6,7 +6,7 @@ import { getDetailFieldString, getDetailFieldTime, getDetailAddress } from "./he
 import dayjs from "dayjs"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { AuthContext } from "@bloom-housing/shared-helpers/src/auth/AuthContext"
+import { AuthContext } from "@bloom-housing/shared-helpers"
 
 const DetailApplicationAddress = () => {
   const listing = useContext(ListingContext)
