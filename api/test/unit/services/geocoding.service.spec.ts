@@ -1,18 +1,18 @@
-import { Test, TestingModule } from '@nestjs/testing';
 import { randomUUID } from 'crypto';
-import { GeocodingService } from '../../../src/services/geocoding.service';
-import { PrismaService } from '../../../src/services/prisma.service';
-import { Address } from '../../../src/dtos/addresses/address.dto';
-import { ValidationMethod } from '../../../src/enums/multiselect-questions/validation-method-enum';
-import { InputType } from '../../../src/enums/shared/input-type-enum';
-import Listing from '../../../src/dtos/listings/listing.dto';
+import { Test, TestingModule } from '@nestjs/testing';
+import { FeatureCollection } from '@turf/helpers';
 import {
   redlinedMap,
   simplifiedDCMap,
 } from '../../../prisma/seed-helpers/map-layer-factory';
-import { FeatureCollection } from '@turf/helpers';
-import { ApplicationMultiselectQuestion } from '../../../src/dtos/applications/application-multiselect-question.dto';
+import { Address } from '../../../src/dtos/addresses/address.dto';
 import { Application } from '../../../src/dtos/applications/application.dto';
+import { ApplicationMultiselectQuestion } from '../../../src/dtos/applications/application-multiselect-question.dto';
+import Listing from '../../../src/dtos/listings/listing.dto';
+import { InputType } from '../../../src/enums/shared/input-type-enum';
+import { ValidationMethod } from '../../../src/enums/multiselect-questions/validation-method-enum';
+import { GeocodingService } from '../../../src/services/geocoding.service';
+import { PrismaService } from '../../../src/services/prisma.service';
 
 describe('GeocodingService', () => {
   let service: GeocodingService;
@@ -481,6 +481,130 @@ describe('GeocodingService', () => {
           ]),
         },
       });
+    });
+  });
+
+  describe('validateGeocodingPreferencesV2', () => {
+    const mapLayer = { id: randomUUID(), featureCollection: simplifiedDCMap };
+    const mapOptionId = randomUUID();
+    const radiusOptionId = randomUUID();
+    const multiselectOptions = [
+      {
+        id: mapOptionId,
+        createdAt: date,
+        updatedAt: date,
+        mapLayerId: mapLayer.id,
+        name: 'Geocoding option by map',
+        ordinal: 1,
+        shouldCollectAddress: true,
+        text: 'Geocoding option by map',
+        validationMethod: ValidationMethod.map,
+      },
+      {
+        id: radiusOptionId,
+        createdAt: date,
+        updatedAt: date,
+        name: 'Geocoding option by radius',
+        ordinal: 2,
+        radiusSize: 5,
+        shouldCollectAddress: true,
+        text: 'Geocoding option by radius',
+        validationMethod: ValidationMethod.radius,
+      },
+      {
+        id: randomUUID(),
+        createdAt: date,
+        updatedAt: date,
+        name: 'non-geocoding option',
+        ordinal: 3,
+        text: 'non-geocoding option',
+      },
+    ];
+    const listingsBuildingAddress = address;
+
+    const selectionAddress = {
+      ...address,
+      latitude: 38.89485,
+      longitude: -77.04251,
+    };
+    const selectionOptionId1 = randomUUID();
+    const selectionOptionId2 = randomUUID();
+    const selectionOptionId3 = randomUUID();
+
+    const applicationSelections = [
+      {
+        id: randomUUID(),
+        createdAt: date,
+        updatedAt: date,
+        application: { id: randomUUID() },
+        multiselectQuestion: { id: randomUUID() },
+        selections: [
+          {
+            id: selectionOptionId1,
+            createdAt: date,
+            updatedAt: date,
+            addressHolderAddress: selectionAddress,
+            applicationSelection: { id: randomUUID() },
+            multiselectOption: {
+              id: mapOptionId,
+            },
+          },
+          {
+            id: selectionOptionId2,
+            createdAt: date,
+            updatedAt: date,
+            addressHolderAddress: selectionAddress,
+            applicationSelection: { id: randomUUID() },
+            multiselectOption: {
+              id: radiusOptionId,
+            },
+          },
+          {
+            id: selectionOptionId3,
+            createdAt: date,
+            updatedAt: date,
+            addressHolderAddress: selectionAddress,
+            applicationSelection: { id: randomUUID() },
+            multiselectOption: {
+              id: randomUUID(),
+            },
+          },
+        ],
+      },
+    ];
+
+    it('should save all updated preferences', async () => {
+      prisma.mapLayers.findMany = jest.fn().mockResolvedValue([mapLayer]);
+      prisma.applicationSelectionOptions.update = jest
+        .fn()
+        .mockResolvedValue('');
+      await service.validateGeocodingPreferencesV2(
+        applicationSelections,
+        listingsBuildingAddress,
+        multiselectOptions,
+      );
+
+      expect(prisma.applicationSelectionOptions.update).toHaveBeenCalledTimes(
+        2,
+      );
+      expect(prisma.applicationSelectionOptions.update).toHaveBeenNthCalledWith(
+        1,
+        {
+          data: {
+            isGeocodingVerified: true,
+          },
+          where: { id: selectionOptionId1 },
+        },
+      );
+      expect(prisma.applicationSelectionOptions.update).toHaveBeenNthCalledWith(
+        2,
+        {
+          data: {
+            isGeocodingVerified: true,
+          },
+          where: { id: selectionOptionId2 },
+        },
+      );
     });
   });
 });
