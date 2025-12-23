@@ -196,7 +196,7 @@ export const mapFormToApi = ({
   const householdStudent = getBooleanValue(data.application.householdStudent)
 
   const submissionType = editMode ? data.submissionType : ApplicationSubmissionTypeEnum.paper
-  const status = ApplicationStatusEnum.submitted
+  const status = data.application.status || ApplicationStatusEnum.submitted
 
   const listings = {
     id: listingId,
@@ -333,6 +333,7 @@ export const mapApiToForm = (applicationData: Application, listing: Listing) => 
       additionalPhoneNumber,
       additionalPhoneNumberType,
       alternateContact,
+      status,
     } = applicationData
 
     const incomeVouchers = getYesNoValue(applicationData.incomeVouchers)
@@ -377,6 +378,7 @@ export const mapApiToForm = (applicationData: Application, listing: Listing) => 
       acceptedTerms,
       alternateContact,
       programs,
+      status,
     }
 
     return result

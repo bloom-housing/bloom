@@ -315,8 +315,15 @@ export class EmailService {
     );
   }
 
-  public async sendSingleUseCode(user: User, singleUseCode: string) {
-    const jurisdiction = await this.getJurisdiction(user.jurisdictions);
+  public async sendSingleUseCode(
+    user: User,
+    singleUseCode: string,
+    jurisdictionName?: string,
+  ) {
+    const jurisdiction = await this.getJurisdiction(
+      user.jurisdictions,
+      jurisdictionName,
+    );
     void (await this.loadTranslations(jurisdiction, user.language));
     const emailFromAddress = await this.getEmailToSendFrom(
       user.jurisdictions,
