@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from "react"
 import { SWRConfig } from "swr"
 import type { AppProps } from "next/app"
 import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3"
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 
 import "@bloom-housing/ui-components/src/global/css-imports.scss"
 import "@bloom-housing/ui-components/src/global/app-css.scss"
@@ -52,19 +53,23 @@ function BloomApp({ Component, router, pageProps }: AppProps) {
     }
   }, [locale])
 
+  const queryClient = new QueryClient()
+
   const pageContent = (
-    <ConfigProvider apiUrl={process.env.backendApiBase}>
-      <AuthProvider>
-        <RequireLogin
-          signInPath="/sign-in"
-          termsPath="/users/terms"
-          signInMessage={signInMessage}
-          skipForRoutes={skipLoginRoutes}
-        >
-          <MessageProvider>{hasMounted && <Component {...pageProps} />}</MessageProvider>
-        </RequireLogin>
-      </AuthProvider>
-    </ConfigProvider>
+    <QueryClientProvider client={queryClient}>
+      <ConfigProvider apiUrl={process.env.backendApiBase}>
+        <AuthProvider>
+          <RequireLogin
+            signInPath="/sign-in"
+            termsPath="/users/terms"
+            signInMessage={signInMessage}
+            skipForRoutes={skipLoginRoutes}
+          >
+            <MessageProvider>{hasMounted && <Component {...pageProps} />}</MessageProvider>
+          </RequireLogin>
+        </AuthProvider>
+      </ConfigProvider>
+    </QueryClientProvider>
   )
 
   return (
