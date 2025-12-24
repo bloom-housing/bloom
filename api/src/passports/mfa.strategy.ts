@@ -64,7 +64,18 @@ export class MfaStrategy extends PassportStrategy(Strategy, 'mfa') {
       Number(process.env.AUTH_LOCK_LOGIN_AFTER_FAILED_ATTEMPTS),
       Number(process.env.AUTH_LOCK_LOGIN_COOLDOWN),
     );
-    if (!(await isPasswordValid(rawUser.passwordHash, dto.password))) {
+
+    if (
+      isPasswordOutdated(
+        rawUser.passwordValidForDays,
+        rawUser.passwordUpdatedAt,
+      )
+    ) {
+      // if password TTL is expired
+      throw new UnauthorizedException(
+        `user ${rawUser.id} attempted to login, but password is no longer valid`,
+      );
+    } else if (!(await isPasswordValid(rawUser.passwordHash, dto.password))) {
       // if incoming password does not match
       await this.updateFailedLoginCount(
         rawUser.failedLoginAttemptsCount + 1,
@@ -79,16 +90,6 @@ export class MfaStrategy extends PassportStrategy(Strategy, 'mfa') {
       // if user is not confirmed already
       throw new UnauthorizedException(
         `user ${rawUser.id} attempted to login, but is not confirmed`,
-      );
-    } else if (
-      isPasswordOutdated(
-        rawUser.passwordValidForDays,
-        rawUser.passwordUpdatedAt,
-      )
-    ) {
-      // if password TTL is expired
-      throw new UnauthorizedException(
-        `user ${rawUser.id} attempted to login, but password is no longer valid`,
       );
     }
 
@@ -174,6 +175,9 @@ export class MfaStrategy extends PassportStrategy(Strategy, 'mfa') {
       data: {
         failedLoginAttemptsCount: count,
         lastLoginAt,
+        // If a user logs in and was previously warned of deletion that needs to be reset so they can be warned again if
+        // they once again haven't logged in for USERS_DAYS_TILL_EXPIRY - 30 days
+        wasWarnedOfDeletion: false,
       },
       where: {
         id: userId,

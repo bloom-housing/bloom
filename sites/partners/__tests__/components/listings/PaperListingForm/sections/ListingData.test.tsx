@@ -2,18 +2,8 @@ import React from "react"
 import "@testing-library/jest-dom"
 import { setupServer } from "msw/node"
 import { screen } from "@testing-library/react"
-import { FormProvider, useForm } from "react-hook-form"
-import { mockNextRouter, render } from "../../../../testUtils"
-import { formDefaults, FormListing } from "../../../../../src/lib/listings/formTypes"
+import { FormProviderWrapper, mockNextRouter, render } from "../../../../testUtils"
 import ListingData from "../../../../../src/components/listings/PaperListingForm/sections/ListingData"
-
-const FormComponent = ({ children, values }: { values?: FormListing; children }) => {
-  const formMethods = useForm<FormListing>({
-    defaultValues: { ...formDefaults, ...values },
-    shouldUnregister: false,
-  })
-  return <FormProvider {...formMethods}>{children}</FormProvider>
-}
 
 const server = setupServer()
 
@@ -32,13 +22,13 @@ afterAll(() => server.close())
 describe("ListingData", () => {
   it("should render all data", () => {
     render(
-      <FormComponent>
+      <FormProviderWrapper>
         <ListingData
           createdAt={new Date("2023-01-01T10:00:00Z")}
           jurisdictionName={"Bloomington"}
           listingId={"1234"}
         />
-      </FormComponent>
+      </FormProviderWrapper>
     )
 
     expect(screen.getByRole("heading", { level: 2, name: "Listing data" })).toBeInTheDocument()
@@ -52,9 +42,9 @@ describe("ListingData", () => {
 
   it("should render nothing if no data", () => {
     render(
-      <FormComponent>
+      <FormProviderWrapper>
         <ListingData createdAt={null} jurisdictionName={null} listingId={null} />
-      </FormComponent>
+      </FormProviderWrapper>
     )
     expect(
       screen.queryByRole("heading", { level: 2, name: "Listing data" })

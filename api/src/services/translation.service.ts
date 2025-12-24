@@ -128,6 +128,15 @@ export class TranslationService {
         listing.listingEvents[index].label;
     });
 
+    if (listing.listingImages) {
+      listing.listingImages.forEach((image, index) => {
+        if (image.description) {
+          pathsToFilter[`listingImages[${index}].description`] =
+            image.description;
+        }
+      });
+    }
+
     if (listing.listingMultiselectQuestions) {
       listing.listingMultiselectQuestions.map((multiselectQuestion, index) => {
         multiselectQuestion.multiselectQuestions.untranslatedText =

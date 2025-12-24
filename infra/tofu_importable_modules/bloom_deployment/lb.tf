@@ -22,6 +22,7 @@ data "aws_acm_certificate" "bloom" {
   domain      = var.domain_name
   most_recent = true
 
+  # TODO: validate this stops creation of all other resources
   lifecycle {
     postcondition {
       condition     = self.status == "ISSUED"

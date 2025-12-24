@@ -17,6 +17,7 @@ import {
   ApplicationListingCard,
 } from "../../../../components/account/ApplicationCards"
 import styles from "../../../../../styles/lottery-results.module.scss"
+import Markdown from "markdown-to-jsx"
 
 const LotteryResults = () => {
   const router = useRouter()
@@ -93,7 +94,7 @@ const LotteryResults = () => {
 
   const lotteryResultHeaderText =
     listing?.reviewOrderType === ReviewOrderTypeEnum.waitlistLottery
-      ? t("account.application.lottery.resultsHeaderWaitlistLoterry")
+      ? t("account.application.lottery.resultsHeaderWaitlistLottery")
       : t("account.application.lottery.resultsHeader")
 
   const applications = totals?.find((total) => !total.multiselectQuestionId).total
@@ -178,7 +179,11 @@ const LotteryResults = () => {
                       <Heading priority={3} size={"xl"} className={`${styles["section-heading"]}`}>
                         {t("account.application.lottery.preferencesHeader")}
                       </Heading>
-                      <p>{t("account.application.lottery.preferences")}</p>
+                      <Markdown>
+                        {t("account.application.lottery.preferences", {
+                          closedListingPageLink: `/listing/${listing?.id}`,
+                        })}
+                      </Markdown>
                     </div>
                     <div>
                       <Button

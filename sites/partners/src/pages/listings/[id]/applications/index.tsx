@@ -50,6 +50,10 @@ const ApplicationsList = () => {
     FeatureFlagEnum.disableWorkInRegion,
     listingDto?.jurisdictions.id
   )
+  const enableApplicationStatus = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableApplicationStatus,
+    listingDto?.jurisdictions.id
+  )
   const includeDemographicsPartner =
     profile?.userRoles?.isPartner && listingJurisdiction?.enablePartnerDemographics
   const { onExport, exportLoading } = useZipExport(
@@ -115,8 +119,18 @@ const ApplicationsList = () => {
   }, [applications])
 
   const columnDefs = useMemo(() => {
-    return getColDefs(maxHouseholdSize, enableFullTimeStudentQuestion, disableWorkInRegion)
-  }, [maxHouseholdSize, enableFullTimeStudentQuestion, disableWorkInRegion])
+    return getColDefs(
+      maxHouseholdSize,
+      enableFullTimeStudentQuestion,
+      disableWorkInRegion,
+      enableApplicationStatus
+    )
+  }, [
+    maxHouseholdSize,
+    enableFullTimeStudentQuestion,
+    disableWorkInRegion,
+    enableApplicationStatus,
+  ])
 
   const gridComponents = {
     formatLinkCell,
@@ -143,7 +157,8 @@ const ApplicationsList = () => {
             lotteryLabel:
               listingDto?.status === ListingsStatusEnum.closed &&
               listingDto?.lotteryOptIn &&
-              listingDto?.reviewOrderType === ReviewOrderTypeEnum.lottery
+              (listingDto?.reviewOrderType === ReviewOrderTypeEnum.lottery ||
+                listingDto?.reviewOrderType === ReviewOrderTypeEnum.waitlistLottery)
                 ? t("listings.lotteryTitle")
                 : undefined,
           }}
