@@ -402,6 +402,7 @@ describe("add listing", () => {
       "Additional accessibility",
       "Unit amenities",
       "Smoking policy",
+      "Parking fee",
       "Pets policy",
       "Services offered",
       "Credit history",
