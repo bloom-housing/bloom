@@ -8,7 +8,8 @@ type FeaturesProps = {
   children: React.ReactNode
   features: {
     heading: string
-    subheading: string
+    subheading?: string
+    content?: React.ReactNode
   }[]
 }
 
@@ -22,13 +23,18 @@ export const Features = ({ children, features }: FeaturesProps) => {
       <div className={`${styles["mobile-inline-collapse-padding"]} seeds-m-bs-section`}>
         {features.map((feature, index) => {
           return (
-            <HeadingGroup
-              heading={feature.heading}
-              subheading={feature.subheading}
-              headingProps={{ size: "lg", priority: 3 }}
-              className={`${styles["heading-group"]} seeds-m-be-section`}
-              key={index}
-            />
+            <>
+              <HeadingGroup
+                heading={feature.heading}
+                subheading={feature.subheading}
+                headingProps={{ size: "lg", priority: 3 }}
+                className={`${styles["heading-group"]} ${
+                  !feature.content ? "seeds-m-be-section" : "seeds-m-be-label"
+                }`}
+                key={index}
+              />
+              <div className={"seeds-m-be-section"}>{feature.content}</div>
+            </>
           )
         })}
         {children}
