@@ -61,7 +61,6 @@ import { fillModelStringFields } from '../utilities/model-fields';
 import { doJurisdictionHaveFeatureFlagSet } from '../utilities/feature-flag-utilities';
 import { addUnitGroupsSummarized } from '../utilities/unit-groups-transformations';
 import { CronJobService } from './cron-job.service';
-import { connect } from 'node:http2';
 
 export type getListingsArgs = {
   skip: number;
