@@ -2759,6 +2759,12 @@ export class ListingService implements OnModuleInit {
     return mapTo(Listing, listingsRaw);
   };
 
+  /**
+   * Retrieves all listings associated with a specific property.
+   * @param {string} propertyId - The unique identifier of the property for which to find listings
+   * @returns {Promise<Listing[]>} A promise that resolves to an array of Listing objects containing id and name
+   * @throws {BadRequestException} Throws an exception if propertyId is not provided or is empty
+   */
   findListingsWithProperty = async (propertyId: string) => {
     if (!propertyId) {
       throw new BadRequestException({
