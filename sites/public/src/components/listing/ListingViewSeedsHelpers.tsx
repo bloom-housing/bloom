@@ -34,6 +34,7 @@ import { CardList, ContentCardProps } from "../../patterns/CardList"
 import { OrderedCardList } from "../../patterns/OrderedCardList"
 import { ReadMore } from "../../patterns/ReadMore"
 import { DateSectionFlyer } from "./listing_sections/DateSection"
+import styles from "./ListingViewSeeds.module.scss"
 
 export const getFilteredMultiselectQuestions = (
   multiselectQuestions: ListingMultiselectQuestion[],
@@ -140,15 +141,24 @@ export const getAccessibilityFeatures = (listing: Listing) => {
   const enabledFeatures = Object.entries(listing?.listingFeatures ?? {})
     .filter(([_, value]) => value)
     .map((item) => item[0])
+  const COLUMN_BREAKPOINT = 6
   if (enabledFeatures.length > 0) {
-    return enabledFeatures.map((feature, index) => {
-      return `${t(`eligibility.accessibility.${feature}`)}${
-        index < enabledFeatures.length - 1 ? ", " : ""
-      }`
-    })
+    return (
+      <ul className={enabledFeatures.length > COLUMN_BREAKPOINT ? styles["two-column-list"] : ""}>
+        {enabledFeatures
+          .sort((a, b) =>
+            t(`eligibility.accessibility.${a}`).localeCompare(t(`eligibility.accessibility.${b}`))
+          )
+          .map((feature, index) => (
+            <li key={index} className={styles["list-item"]}>
+              {t(`eligibility.accessibility.${feature}`)}
+            </li>
+          ))}
+      </ul>
+    )
   }
 
-  return []
+  return null
 }
 
 export const getUtilitiesIncluded = (listing: Listing) => {
@@ -194,8 +204,11 @@ export const getFeatures = (
   const enableAccessibilityFeatures = jurisdiction?.featureFlags?.some(
     (flag) => flag.name === "enableAccessibilityFeatures" && flag.active
   )
-  if (!!accessibilityFeatures.length && enableAccessibilityFeatures) {
-    features.push({ heading: t("t.accessibility"), subheading: accessibilityFeatures })
+  if (!!accessibilityFeatures && enableAccessibilityFeatures) {
+    features.push({
+      heading: t("t.accessibility"),
+      content: accessibilityFeatures,
+    })
   }
   if (listing.accessibility) {
     features.push({ heading: t("t.additionalAccessibility"), subheading: listing.accessibility })

@@ -41,7 +41,8 @@ function compareStrings(a, b, node, nextNode, isInverted) {
 export function getColDefs(
   maxHouseholdSize: number,
   enableFullTimeStudentQuestion?: boolean,
-  disableWorkInRegion?: boolean
+  disableWorkInRegion?: boolean,
+  enableApplicationStatus?: boolean
 ): ColDef[] {
   const defs: ColDef[] = [
     {
@@ -84,6 +85,22 @@ export function getColDefs(
       valueFormatter: ({ value }) => t(`application.details.submissionType.${value}`),
       comparator: compareStrings,
     },
+    ...(enableApplicationStatus
+      ? [
+          {
+            headerName: t("application.details.applicationStatus"),
+            field: "status",
+            sortable: false,
+            filter: false,
+            width: 160,
+            minWidth: 50,
+            valueFormatter: ({ data }) => {
+              if (!data.status) return ""
+              return t(`application.details.applicationStatus.${data.status}`)
+            },
+          },
+        ]
+      : []),
     {
       headerName: t("application.name.firstName"),
       field: "applicant.firstName",
