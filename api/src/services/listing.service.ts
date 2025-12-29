@@ -2759,7 +2759,7 @@ export class ListingService implements OnModuleInit {
     return mapTo(Listing, listingsRaw);
   };
 
-  findListingsWithPorperty = async (propertyId: string) => {
+  findListingsWithProperty = async (propertyId: string) => {
     if (!propertyId) {
       throw new BadRequestException({
         message: 'A property ID must be provided',
