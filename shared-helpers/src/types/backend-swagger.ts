@@ -406,7 +406,7 @@ export class ListingsService {
   /**
    * Get listings by multiselect question id
    */
-  retrieveListingsByMsq(
+  retrieveListings(
     params: {
       /**  */
       multiselectQuestionId: string

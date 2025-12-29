@@ -223,7 +223,7 @@ export class ListingController {
   @Get(`byMultiselectQuestion/:multiselectQuestionId`)
   @ApiOperation({
     summary: 'Get listings by multiselect question id',
-    operationId: 'retrieveListingsByMSQ',
+    operationId: 'retrieveListings',
   })
   @ApiOkResponse({ type: IdDTO, isArray: true })
   async retrieveListings(
