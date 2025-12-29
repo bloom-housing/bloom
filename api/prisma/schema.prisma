@@ -1118,7 +1118,8 @@ model Properties {
   listings       Listings[]
   jurisdictions  Jurisdictions? @relation(fields: [jurisdictionId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
-  @@index([id, name])
+  @@index(id)
+  @@index(name)
   @@map("properties")
 }
 
