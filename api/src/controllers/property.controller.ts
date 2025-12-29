@@ -34,7 +34,6 @@ import { OptionalAuthGuard } from '../guards/optional.guard';
 import { mapTo } from '../utilities/mapTo';
 import { User } from '../dtos/users/user.dto';
 import { PaginationMeta } from '../dtos/shared/pagination.dto';
-import { PropertyFilterParams } from '../dtos/properties/property-filter-params.dto';
 
 @Controller('properties')
 @ApiTags('properties')
@@ -43,7 +42,6 @@ import { PropertyFilterParams } from '../dtos/properties/property-filter-params.
   PropertyCreate,
   PropertyUpdate,
   PropertyQueryParams,
-  PropertyFilterParams,
   PaginationMeta,
   IdDTO,
 )

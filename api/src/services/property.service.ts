@@ -17,7 +17,6 @@ import PropertyCreate from '../dtos/properties/property-create.dto';
 import { PropertyUpdate } from '../dtos/properties/property-update.dto';
 import { SuccessDTO } from '../dtos/shared/success.dto';
 import { Prisma } from '@prisma/client';
-import { buildFilter } from '../utilities/build-filter';
 import { User } from '../dtos/users/user.dto';
 import { PermissionService } from './permission.service';
 import { permissionActions } from '../enums/permissions/permission-actions-enum';
@@ -48,6 +47,9 @@ export class PropertyService {
       skip: calculateSkip(params.limit, page),
       take: calculateTake(params.limit),
       where: whereClause,
+      include: {
+        jurisdictions: true,
+      },
     });
 
     const properties = mapTo(Property, propertiesRaw);
@@ -66,6 +68,9 @@ export class PropertyService {
       where: {
         id: propertyId,
       },
+      include: {
+        jurisdictions: true,
+      },
     });
 
     if (!propertyRaw) {
@@ -78,17 +83,25 @@ export class PropertyService {
   }
 
   async create(propertyDto: PropertyCreate, requestingUser: User) {
-    const rawJurisdiction = await this.prisma.jurisdictions.findFirstOrThrow({
+    if (!propertyDto.jurisdictions) {
+      throw new BadRequestException('A jurisdiction must be provided');
+    }
+
+    const rawJurisdiction = await this.prisma.jurisdictions.findFirst({
       select: {
         featureFlags: true,
         id: true,
       },
       where: {
-        id: propertyDto.jurisdictions
-          ? propertyDto.jurisdictions.id
-          : undefined,
+        id: propertyDto.jurisdictions.id,
       },
     });
+
+    if (!rawJurisdiction) {
+      throw new NotFoundException(
+        `Entry for the linked jurisdiction with id: ${propertyDto.jurisdictions.id} was not found`,
+      );
+    }
 
     await this.permissionService.canOrThrow(
       requestingUser,
@@ -110,23 +123,33 @@ export class PropertyService {
             }
           : undefined,
       },
+      include: {
+        jurisdictions: true,
+      },
     });
 
     return mapTo(Property, rawProperty);
   }
 
   async update(propertyDto: PropertyUpdate, requestingUser: User) {
-    const rawJurisdiction = await this.prisma.jurisdictions.findFirstOrThrow({
+    if (!propertyDto.jurisdictions) {
+      throw new BadRequestException('A jurisdiction must be provided');
+    }
+
+    const rawJurisdiction = await this.prisma.jurisdictions.findFirst({
       select: {
-        featureFlags: true,
         id: true,
       },
       where: {
-        id: propertyDto.jurisdictions
-          ? propertyDto.jurisdictions.id
-          : undefined,
+        id: propertyDto.jurisdictions.id,
       },
     });
+
+    if (!rawJurisdiction) {
+      throw new NotFoundException(
+        `Entry for the linked jurisdiction with id: ${propertyDto.jurisdictions.id} was not found`,
+      );
+    }
 
     await this.permissionService.canOrThrow(
       requestingUser,
@@ -154,6 +177,9 @@ export class PropertyService {
       where: {
         id: propertyDto.id,
       },
+      include: {
+        jurisdictions: true,
+      },
     });
 
     return mapTo(Property, rawProperty);
@@ -166,17 +192,26 @@ export class PropertyService {
 
     const propertyData = await this.findOrThrow(propertyId);
 
-    const rawJurisdiction = await this.prisma.jurisdictions.findFirstOrThrow({
+    if (!propertyData.jurisdictions) {
+      throw new NotFoundException(
+        'The property is not connected to any jurisdiction',
+      );
+    }
+
+    const rawJurisdiction = await this.prisma.jurisdictions.findFirst({
       select: {
-        featureFlags: true,
         id: true,
       },
       where: {
-        id: propertyData.jurisdictions
-          ? propertyData.jurisdictions.id
-          : undefined,
+        id: propertyData.jurisdictions.id,
       },
     });
+
+    if (!rawJurisdiction) {
+      throw new NotFoundException(
+        `Entry for the linked jurisdiction with id: ${propertyData.jurisdictions.id} was not found`,
+      );
+    }
 
     await this.permissionService.canOrThrow(
       requestingUser,
@@ -203,6 +238,9 @@ export class PropertyService {
       where: {
         id: propertyId,
       },
+      include: {
+        jurisdictions: true,
+      },
     });
 
     if (!property) {
@@ -227,29 +265,15 @@ export class PropertyService {
       });
     }
 
-    if (!params?.filter?.length) {
-      return {
-        AND: filters,
-      };
-    }
-
-    params.filter.forEach((filter) => {
-      const builtFilter = buildFilter({
-        $comparison: filter.$comparison,
-        $include_nulls: false,
-        value: filter.jurisdiction,
-        key: 'jurisdiction',
-        caseSensitive: true,
-      });
-
+    if (params.jurisdiction) {
       filters.push({
-        OR: builtFilter.map((entry) => ({
+        AND: {
           jurisdictions: {
-            id: entry,
+            id: params.jurisdiction,
           },
-        })),
+        },
       });
-    });
+    }
 
     return {
       AND: filters,
