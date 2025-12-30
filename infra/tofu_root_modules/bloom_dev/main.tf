@@ -6,54 +6,37 @@ terraform {
     }
   }
   backend "s3" {
-    region       = local.aws_region
     profile      = local.sso_profile_id
-    bucket       = local.state_bucket_name
-    key          = "state"
+    region       = local.tofu_state_bucket_region
+    bucket       = local.tofu_state_bucket_name
+    key          = "${local.tofu_state_key_prefix}/state"
     use_lockfile = true
   }
 }
 
 locals {
-  sso_profile_id    = "bloom-dev-deployer"
-  state_bucket_name = "bloom-dev-tofu-state"
+  bloom_deployment = "bloom-dev"
+  sso_profile_id   = "${local.bloom_deployment}-deployer"
 
-  aws_account_number = 242477209009
-  aws_region         = "us-west-2"
+  tofu_state_bucket_region = "us-east-1"
+  tofu_state_bucket_name   = "bloom-core-tofu-state-files"
+  tofu_state_key_prefix    = local.bloom_deployment
 
-  domain_name = "core-dev.bloomhousing.dev"
-
-  deletion_protection = false
+  bloom_aws_account_number = 242477209009
+  bloom_aws_region         = "us-west-2"
+  domain_name              = "core-dev.bloomhousing.dev"
 }
 
 provider "aws" {
   profile = local.sso_profile_id
-  region  = local.aws_region
-}
-
-# Create a bucket for this module's tofu state. See the README.md for more details about how this
-# works for the first apply of the module.
-resource "aws_s3_bucket" "tofu_state" {
-  region        = local.aws_region
-  bucket        = local.state_bucket_name
-  force_destroy = !local.deletion_protection
-}
-# https://opentofu.org/docs/v1.11/language/settings/backends/s3/:
-# "It is highly recommended that you enable Bucket Versioning"
-resource "aws_s3_bucket_versioning" "tofu_state" {
-  bucket = aws_s3_bucket.tofu_state.id
-  versioning_configuration {
-    status = "Enabled"
-  }
+  region  = local.bloom_aws_region
 }
 
 # We need to create and validate a certificate for bloom_deployment module to deploy
 # successfully. See the README.md for more details for how to deploy and validate the certificate
 # before deploying the bloom_deployment module.
-locals {
-}
 resource "aws_acm_certificate" "bloom" {
-  region            = local.aws_region
+  region            = local.bloom_aws_region
   validation_method = "DNS"
   domain_name       = local.domain_name
   subject_alternative_names = [
@@ -65,6 +48,7 @@ resource "aws_acm_certificate" "bloom" {
 }
 output "certificate_details" {
   value = {
+    certificate_arn    = aws_acm_certificate.bloom.arn
     certificate_status = aws_acm_certificate.bloom.status
     expires_at         = aws_acm_certificate.bloom.not_after
     managed_renewal = {
@@ -81,8 +65,8 @@ module "bloom_deployment" {
   source = "../../tofu_importable_modules/bloom_deployment"
 
   aws_profile        = local.sso_profile_id
-  aws_account_number = local.aws_account_number
-  aws_region         = local.aws_region
+  aws_account_number = local.bloom_aws_account_number
+  aws_region         = local.bloom_aws_region
 
   domain_name         = aws_acm_certificate.bloom.domain_name
   aws_certificate_arn = aws_acm_certificate.bloom.arn

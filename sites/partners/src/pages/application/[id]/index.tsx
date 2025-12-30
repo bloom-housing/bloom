@@ -1,8 +1,7 @@
-import React, { useMemo, useState, useContext } from "react"
+import React, { useState, useContext } from "react"
 import { useRouter } from "next/router"
 import Head from "next/head"
 import { t, AlertBox, Breadcrumbs, BreadcrumbLink } from "@bloom-housing/ui-components"
-import { Tag } from "@bloom-housing/ui-seeds"
 import { useSingleApplicationData, useSingleListingData } from "../../../lib/hooks"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import Layout from "../../../layouts"
@@ -22,10 +21,11 @@ import { DetailsHouseholdIncome } from "../../../components/applications/PaperAp
 import { DetailsTerms } from "../../../components/applications/PaperApplicationDetails/sections/DetailsTerms"
 import { Aside } from "../../../components/applications/Aside"
 import {
-  ApplicationStatusEnum,
   FeatureFlagEnum,
   MultiselectQuestionsApplicationSectionEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { StatusBar } from "../../../components/shared/StatusBar"
+import { ApplicationStatusTag } from "../../../components/listings/PaperListingDetails/sections/helpers"
 
 const ApplicationsList = () => {
   const router = useRouter()
@@ -68,29 +68,6 @@ const ApplicationsList = () => {
     }
   }
 
-  const applicationStatus = useMemo(() => {
-    switch (application?.status) {
-      case ApplicationStatusEnum.submitted:
-        return (
-          <Tag className="tag-uppercase" variant={"success"} size={"lg"}>
-            {t(`application.details.applicationStatus.submitted`)}
-          </Tag>
-        )
-      case ApplicationStatusEnum.removed:
-        return (
-          <Tag className="tag-uppercase" variant={"highlight-warm"} size={"lg"}>
-            {t(`application.details.applicationStatus.removed`)}
-          </Tag>
-        )
-      default:
-        return (
-          <Tag className="tag-uppercase" variant={"primary"} size={"lg"}>
-            {t(`application.details.applicationStatus.draft`)}
-          </Tag>
-        )
-    }
-  }, [application])
-
   if (!application) return null
 
   return (
@@ -127,11 +104,9 @@ const ApplicationsList = () => {
             </Breadcrumbs>
           }
         />
-        <section className="border-t bg-white">
-          <div className="flex flex-row w-full mx-auto max-w-screen-xl justify-end px-5 items-center my-3">
-            <div className="status-bar__status md:pl-6 md:w-3/12">{applicationStatus}</div>
-          </div>
-        </section>
+        <StatusBar>
+          <ApplicationStatusTag status={application?.status} />
+        </StatusBar>
 
         <section className="bg-primary-lighter">
           <div className="mx-auto px-5 mt-5 max-w-screen-xl">

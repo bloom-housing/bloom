@@ -91,6 +91,8 @@ describe('Testing mfa strategy', () => {
       failedLoginAttemptsCount: 0,
       confirmedAt: null,
       passwordHash: await passwordToHash('Abcdef12345!'),
+      passwordUpdatedAt: new Date(),
+      passwordValidFor: 180,
     });
 
     const request = {
