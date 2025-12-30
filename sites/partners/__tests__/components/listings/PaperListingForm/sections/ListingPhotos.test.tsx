@@ -3,6 +3,7 @@ import "@testing-library/jest-dom"
 import { FormProvider, useForm } from "react-hook-form"
 import { render, screen, within } from "@testing-library/react"
 import { jurisdiction, listing } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
+import { Jurisdiction } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { setupServer } from "msw/lib/node"
 import { formDefaults, FormListing } from "../../../../../src/lib/listings/formTypes"
 import ListingPhotos from "../../../../../src/components/listings/PaperListingForm/sections/ListingPhotos"
@@ -362,6 +363,57 @@ describe("<ListingPhotos>", () => {
         within(altTextDrawer).getByLabelText("Image description (alt text)")
       ).toBeInTheDocument()
       expect(within(altTextDrawer).getByRole("button", { name: "Save" })).toBeInTheDocument()
+    })
+
+    it("shows required error when alt text cleared after being present", async () => {
+      const jurisdictionWithAltTextRequirement = {
+        ...jurisdiction,
+        requiredListingFields: ["listingImages.description"],
+      }
+
+      render(
+        <FormComponent
+          values={{
+            ...formDefaults,
+            ...listing,
+            jurisdictions: { id: "jurisdiction-id" },
+            listingImages: [
+              {
+                assets: {
+                  createdAt: new Date(),
+                  updatedAt: new Date(),
+                  fileId: "file_1_id",
+                  id: "asset_1_id",
+                  label: "Asset 1 Label",
+                },
+                ordinal: 0,
+                description: "Alt description for image 1",
+              },
+            ],
+          }}
+        >
+          <ListingPhotos
+            enableListingImageAltText={true}
+            requiredFields={jurisdictionWithAltTextRequirement.requiredListingFields}
+            jurisdiction={jurisdictionWithAltTextRequirement as Jurisdiction}
+          />
+        </FormComponent>
+      )
+
+      const editPhotosButton = screen.getByRole("button", { name: "Edit photos" })
+      await userEvent.click(editPhotosButton)
+
+      const drawer = await screen.findByRole("dialog", { name: "Edit photos" })
+      await userEvent.click(within(drawer).getByRole("button", { name: "Edit" }))
+
+      const altTextDrawer = await screen.findByRole("dialog", { name: "Add image description" })
+      const altTextInput = within(altTextDrawer).getByLabelText(/Image description \(alt text\)/i, {
+        exact: false,
+      })
+      await userEvent.clear(altTextInput)
+      await userEvent.click(within(altTextDrawer).getByRole("button", { name: "Save" }))
+
+      expect(within(altTextDrawer).getByText("This field is required")).toBeInTheDocument()
     })
 
     it("opens alt text drawer after uploading a new photo when enabled", async () => {

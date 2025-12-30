@@ -131,6 +131,7 @@ const ApplicationsList = () => {
     enableFullTimeStudentQuestion,
     disableWorkInRegion,
     enableApplicationStatus,
+    listingDto?.reviewOrderType,
   ])
 
   const gridComponents = {

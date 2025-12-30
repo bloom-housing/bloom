@@ -11,7 +11,8 @@
   --subheading-margin: var(--seeds-s1);
   --subheading-margin-sm: var(--seeds-spacer-header);
 
-  &, p {
+  &,
+  p {
     overflow-wrap: anywhere;
   }
 }
@@ -133,4 +134,17 @@
 
 .link-no-gap {
   --link-interior-gap: 0;
+}
+
+.two-column-list {
+  columns: 2;
+  column-gap: var(--seeds-spacer-section);
+  @media (--md-down) {
+    columns: 1;
+  }
+}
+
+.list-item {
+  list-style: disc;
+  margin-inline-start: var(--seeds-s5);
 }
