@@ -93,6 +93,38 @@ const BuildingFeatures = (props: BuildingFeaturesProps) => {
             />
           </Grid.Cell>
           <Grid.Cell>
+            <Textarea
+              fullWidth={true}
+              placeholder={""}
+              register={register}
+              maxLength={600}
+              {...defaultFieldProps(
+                "petPolicy",
+                t("t.petsPolicy"),
+                props.requiredFields,
+                errors,
+                clearErrors
+              )}
+            />
+          </Grid.Cell>
+        </Grid.Row>
+        <Grid.Row>
+          <Grid.Cell>
+            <Textarea
+              fullWidth={true}
+              placeholder={""}
+              register={register}
+              maxLength={600}
+              {...defaultFieldProps(
+                "servicesOffered",
+                t("t.servicesOffered"),
+                props.requiredFields,
+                errors,
+                clearErrors
+              )}
+            />
+          </Grid.Cell>
+          <Grid.Cell>
             {props.enableSmokingPolicyRadio ? (
               <FieldGroup
                 type="radio"
@@ -139,38 +171,6 @@ const BuildingFeatures = (props: BuildingFeaturesProps) => {
                 )}
               />
             )}
-          </Grid.Cell>
-        </Grid.Row>
-        <Grid.Row>
-          <Grid.Cell>
-            <Textarea
-              fullWidth={true}
-              placeholder={""}
-              register={register}
-              maxLength={600}
-              {...defaultFieldProps(
-                "petPolicy",
-                t("t.petsPolicy"),
-                props.requiredFields,
-                errors,
-                clearErrors
-              )}
-            />
-          </Grid.Cell>
-          <Grid.Cell>
-            <Textarea
-              fullWidth={true}
-              placeholder={""}
-              register={register}
-              maxLength={600}
-              {...defaultFieldProps(
-                "servicesOffered",
-                t("t.servicesOffered"),
-                props.requiredFields,
-                errors,
-                clearErrors
-              )}
-            />
           </Grid.Cell>
         </Grid.Row>
         {!props.enableAccessibilityFeatures ? null : (

@@ -64,16 +64,6 @@ const DetailBuildingFeatures = () => {
 
       <Grid.Row>
         <Grid.Cell>
-          <FieldValue id="smokingPolicy" label={t("t.smokingPolicy")}>
-            {enableSmokingPolicyRadio
-              ? listing.smokingPolicy || t("listings.smokingPolicyOptions.unknown")
-              : getDetailFieldString(listing.smokingPolicy)}
-          </FieldValue>
-        </Grid.Cell>
-      </Grid.Row>
-
-      <Grid.Row>
-        <Grid.Cell>
           <FieldValue id="petPolicy" label={t("t.petsPolicy")}>
             {getDetailFieldString(listing.petPolicy)}
           </FieldValue>
@@ -84,6 +74,16 @@ const DetailBuildingFeatures = () => {
         <Grid.Cell>
           <FieldValue id="servicesOffered" label={t("t.servicesOffered")}>
             {getDetailFieldString(listing.servicesOffered)}
+          </FieldValue>
+        </Grid.Cell>
+      </Grid.Row>
+
+      <Grid.Row>
+        <Grid.Cell>
+          <FieldValue id="smokingPolicy" label={t("t.smokingPolicy")}>
+            {enableSmokingPolicyRadio
+              ? listing.smokingPolicy || t("listings.smokingPolicyOptions.unknown")
+              : getDetailFieldString(listing.smokingPolicy)}
           </FieldValue>
         </Grid.Cell>
       </Grid.Row>

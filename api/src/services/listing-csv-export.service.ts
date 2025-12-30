@@ -862,6 +862,14 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
           label: 'Unit Amenities',
         },
         {
+          path: 'petPolicy',
+          label: 'Pets Policy',
+        },
+        {
+          path: 'servicesOffered',
+          label: 'Services Offered',
+        },
+        {
           path: 'smokingPolicy',
           label: 'Smoking Policy',
           format: (val: string): string => {
@@ -873,14 +881,6 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
             if (!val) return enableSmokingPolicyRadio ? 'Policy unknown' : '';
             return val;
           },
-        },
-        {
-          path: 'petPolicy',
-          label: 'Pets Policy',
-        },
-        {
-          path: 'servicesOffered',
-          label: 'Services Offered',
         },
       ],
     );
