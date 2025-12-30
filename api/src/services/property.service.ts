@@ -28,6 +28,12 @@ export class PropertyService {
     private permissionService: PermissionService,
   ) {}
 
+  /**
+   * Returns a paginated list of properties matching the provided query parameters.
+   *
+   * @param params - Query parameters including pagination, search term, and filters.
+   * @returns A paginated DTO containing the matching properties and pagination metadata.
+   */
   async list(params: PropertyQueryParams): Promise<PaginatedPropertyDto> {
     const whereClause = this.buildWhere(params);
 
@@ -60,6 +66,14 @@ export class PropertyService {
     };
   }
 
+  /**
+   * Retrieves a single property by its ID, including its jurisdictions.
+   *
+   * @param propertyId - The unique identifier of the property to retrieve.
+   * @returns The mapped `Property` DTO for the requested property.
+   * @throws {BadRequestException} If no property ID is provided.
+   * @throws {NotFoundException} If no property is found for the given ID.
+   */
   async findOne(propertyId?: string) {
     if (!propertyId) {
       throw new BadRequestException('a property ID must be provided');
@@ -82,6 +96,15 @@ export class PropertyService {
     return mapTo(Property, propertyRaw);
   }
 
+  /**
+   * Creates a new property and links it to the provided jurisdiction.
+   *
+   * @param propertyDto - The data used to create the property.
+   * @param requestingUser - The user attempting to create the property.
+   * @returns The newly created property mapped to a `Property` DTO.
+   * @throws {BadRequestException} If a jurisdiction is not provided.
+   * @throws {NotFoundException} If the linked jurisdiction cannot be found.
+   */
   async create(propertyDto: PropertyCreate, requestingUser: User) {
     if (!propertyDto.jurisdictions) {
       throw new BadRequestException('A jurisdiction must be provided');
@@ -131,6 +154,15 @@ export class PropertyService {
     return mapTo(Property, rawProperty);
   }
 
+  /**
+   * Updates an existing property and its jurisdiction linkage.
+   *
+   * @param propertyDto - The updated property data, including ID and jurisdiction.
+   * @param requestingUser - The user attempting to update the property.
+   * @returns The updated property mapped to a `Property` DTO.
+   * @throws {BadRequestException} If a jurisdiction is not provided.
+   * @throws {NotFoundException} If the linked jurisdiction cannot be found.
+   */
   async update(propertyDto: PropertyUpdate, requestingUser: User) {
     if (!propertyDto.jurisdictions) {
       throw new BadRequestException('A jurisdiction must be provided');
@@ -185,6 +217,15 @@ export class PropertyService {
     return mapTo(Property, rawProperty);
   }
 
+  /**
+   * Deletes a property by its ID after validating jurisdiction linkage and permissions.
+   *
+   * @param propertyId - The ID of the property to delete.
+   * @param requestingUser - The user attempting to delete the property.
+   * @returns A `SuccessDTO` indicating that the delete operation completed successfully.
+   * @throws {BadRequestException} If no property ID is provided.
+   * @throws {NotFoundException} If the property or its linked jurisdiction is not found.
+   */
   async deleteOne(propertyId: string, requestingUser: User) {
     if (!propertyId) {
       throw new BadRequestException('a property ID must be provided');
@@ -233,6 +274,13 @@ export class PropertyService {
     } as SuccessDTO;
   }
 
+  /**
+   * Finds a property by ID or throws if it cannot be found.
+   *
+   * @param propertyId - The ID of the property to look up.
+   * @returns The raw property entity including its jurisdictions.
+   * @throws {BadRequestException} If no property is found for the given ID.
+   */
   async findOrThrow(propertyId: string): Promise<Property> {
     const property = await this.prisma.properties.findFirst({
       where: {
@@ -252,6 +300,12 @@ export class PropertyService {
     return property;
   }
 
+  /**
+   * Builds a valid Prisma filter object from the provided query parameters.
+   *
+   * @param params - Query parameters including search term and jurisdiction filter.
+   * @returns A Prisma-compatible where clause used to filter properties.
+   */
   buildWhere(params: PropertyQueryParams): Prisma.PropertiesWhereInput {
     const filters: Prisma.PropertiesWhereInput[] = [];
 
