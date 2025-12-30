@@ -4,8 +4,17 @@ import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { ApplicationContext } from "../../ApplicationContext"
 import { convertDataToLocal } from "../../../../lib/helpers"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
+import { ReviewOrderTypeEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
-const DetailsApplicationData = () => {
+type DetailsApplicationDataProps = {
+  enableApplicationStatus?: boolean
+  reviewOrderType?: ReviewOrderTypeEnum
+}
+
+const DetailsApplicationData = ({
+  enableApplicationStatus,
+  reviewOrderType,
+}: DetailsApplicationDataProps) => {
   const application = useContext(ApplicationContext)
 
   const applicationDate = useMemo(() => {
@@ -67,6 +76,32 @@ const DetailsApplicationData = () => {
           </FieldValue>
         </Grid.Cell>
       </Grid.Row>
+      {enableApplicationStatus && (
+        <Grid.Row columns={3}>
+          {application.accessibleUnitWaitlistNumber != null && (
+            <Grid.Cell>
+              <FieldValue label={t("application.details.accessibleUnitWaitlistNumber")}>
+                {application.accessibleUnitWaitlistNumber}
+              </FieldValue>
+            </Grid.Cell>
+          )}
+          {application.conventionalUnitWaitlistNumber != null && (
+            <Grid.Cell>
+              <FieldValue label={t("application.details.conventionalUnitWaitlistNumber")}>
+                {application.conventionalUnitWaitlistNumber}
+              </FieldValue>
+            </Grid.Cell>
+          )}
+          {reviewOrderType === ReviewOrderTypeEnum.lottery &&
+            application.manualLotteryPositionNumber != null && (
+              <Grid.Cell>
+                <FieldValue label={t("application.details.manualLotteryPositionNumber")}>
+                  {application.manualLotteryPositionNumber}
+                </FieldValue>
+              </Grid.Cell>
+            )}
+        </Grid.Row>
+      )}
     </SectionWithGrid>
   )
 }

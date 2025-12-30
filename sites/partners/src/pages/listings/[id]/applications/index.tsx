@@ -123,7 +123,8 @@ const ApplicationsList = () => {
       maxHouseholdSize,
       enableFullTimeStudentQuestion,
       disableWorkInRegion,
-      enableApplicationStatus
+      enableApplicationStatus,
+      listingDto?.reviewOrderType
     )
   }, [
     maxHouseholdSize,
