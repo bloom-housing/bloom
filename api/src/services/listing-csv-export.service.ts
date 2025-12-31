@@ -976,7 +976,7 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
         },
         {
           path: 'requiredDocumentsList',
-          label: 'Required documents (Additional Info)',
+          label: 'Required documents',
           format: this.buildSelectList,
         },
         {
