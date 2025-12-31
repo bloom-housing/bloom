@@ -14,6 +14,7 @@ import {
 } from 'express';
 import {
   ApplicationMethodsTypeEnum,
+  ListingDocuments,
   ListingEventsTypeEnum,
   ListingTypeEnum,
   MarketingTypeEnum,
@@ -429,6 +430,17 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
     return fieldValue;
   };
 
+  buildSelectList(val: ListingUtilities | ListingDocuments): string {
+    if (!val) return '';
+    const selectedValues = Object.entries(val).reduce((combined, entry) => {
+      if (entry[1] === true) {
+        combined.push(entry[0]);
+      }
+      return combined;
+    }, []);
+    return selectedValues.join(', ');
+  }
+
   async getCsvHeaders(user: User): Promise<CsvHeader[]> {
     const enableNonRegulatedListings = doAnyJurisdictionHaveFeatureFlagSet(
       user.jurisdictions,
@@ -655,19 +667,7 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
       headers.push({
         path: 'listingUtilities',
         label: 'Utilities Included',
-        format: (val: ListingUtilities): string => {
-          if (!val) return '';
-          const selectedValues = Object.entries(val).reduce(
-            (combined, entry) => {
-              if (entry[1] === true) {
-                combined.push(entry[0]);
-              }
-              return combined;
-            },
-            [],
-          );
-          return selectedValues.join(', ');
-        },
+        format: this.buildSelectList,
       });
     }
     if (
@@ -679,19 +679,7 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
       headers.push({
         path: 'listingFeatures',
         label: 'Property Amenities',
-        format: (val: ListingFeatures): string => {
-          if (!val) return '';
-          const selectedValues = Object.entries(val).reduce(
-            (combined, entry) => {
-              if (entry[1] === true) {
-                combined.push(entry[0]);
-              }
-              return combined;
-            },
-            [],
-          );
-          return selectedValues.join(', ');
-        },
+        format: this.buildSelectList,
       });
     }
 
@@ -982,7 +970,12 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
         },
         {
           path: 'requiredDocuments',
-          label: 'Required Documents',
+          label: 'Required documents (Additional Info)',
+        },
+        {
+          path: 'requiredDocumentsList',
+          label: 'Required documents (Additional Info)',
+          format: this.buildSelectList,
         },
         {
           path: 'specialNotes',
