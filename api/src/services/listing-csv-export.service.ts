@@ -430,7 +430,9 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
     return fieldValue;
   };
 
-  buildSelectList(val: ListingUtilities | ListingDocuments): string {
+  buildSelectList(
+    val: ListingUtilities | ListingDocuments | ListingFeatures,
+  ): string {
     if (!val) return '';
     const selectedValues = Object.entries(val).reduce((combined, entry) => {
       if (entry[1] === true) {
