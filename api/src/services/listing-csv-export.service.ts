@@ -14,7 +14,6 @@ import {
 } from 'express';
 import {
   ApplicationMethodsTypeEnum,
-  ListingDocuments,
   ListingEventsTypeEnum,
   ListingTypeEnum,
   MarketingTypeEnum,
@@ -55,6 +54,7 @@ import {
 } from '../utilities/feature-flag-utilities';
 import { UnitGroupSummary } from '../dtos/unit-groups/unit-group-summary.dto';
 import { addUnitGroupsSummarized } from '../utilities/unit-groups-transformations';
+import { ListingDocuments } from 'src/dtos/listings/listing-documents.dto';
 
 includeViews.csv = {
   listingMultiselectQuestions: {
@@ -971,13 +971,13 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
           label: 'Important Program Rules',
         },
         {
-          path: 'requiredDocuments',
-          label: 'Required documents (Additional Info)',
-        },
-        {
           path: 'requiredDocumentsList',
           label: 'Required documents',
           format: this.buildSelectList,
+        },
+        {
+          path: 'requiredDocuments',
+          label: 'Required documents (Additional Info)',
         },
         {
           path: 'specialNotes',
