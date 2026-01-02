@@ -114,7 +114,13 @@ const ListingForm = ({
   setListingName,
   updateListing,
 }: ListingFormProps) => {
-  const defaultValues = editMode ? listing : formDefaults
+  const rawDefaultValues = editMode ? listing : formDefaults
+
+  const defaultValues: FormListing = {
+    ...rawDefaultValues,
+    smokingPolicy: rawDefaultValues?.smokingPolicy ?? "",
+  }
+
   const formMethods = useForm<FormListing>({
     defaultValues,
     mode: "onBlur",
@@ -583,6 +589,10 @@ const ListingForm = ({
                             existingFeatures={listing?.listingFeatures}
                             enableAccessibilityFeatures={doJurisdictionsHaveFeatureFlagOn(
                               FeatureFlagEnum.enableAccessibilityFeatures,
+                              jurisdictionId
+                            )}
+                            enableSmokingPolicyRadio={doJurisdictionsHaveFeatureFlagOn(
+                              FeatureFlagEnum.enableSmokingPolicyRadio,
                               jurisdictionId
                             )}
                             requiredFields={requiredFields}
