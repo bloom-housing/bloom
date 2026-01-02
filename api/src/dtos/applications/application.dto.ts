@@ -20,19 +20,19 @@ import {
   MaxLength,
   ValidateNested,
 } from 'class-validator';
-import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
-import { Address } from '../addresses/address.dto';
-import { AbstractDTO } from '../shared/abstract.dto';
-import { IdDTO } from '../shared/id.dto';
 import { Accessibility } from './accessibility.dto';
 import { AlternateContact } from './alternate-contact.dto';
 import { Applicant } from './applicant.dto';
+import { ApplicationLotteryPosition } from './application-lottery-position.dto';
 import { ApplicationMultiselectQuestion } from './application-multiselect-question.dto';
+import { ApplicationSelection } from './application-selection.dto';
 import { Demographic } from './demographic.dto';
 import { HouseholdMember } from './household-member.dto';
+import { Address } from '../addresses/address.dto';
+import { AbstractDTO } from '../shared/abstract.dto';
+import { IdDTO } from '../shared/id.dto';
 import { UnitType } from '../unit-types/unit-type.dto';
-import { ApplicationLotteryPosition } from './application-lottery-position.dto';
-import ApplicationSelection from './application-selection.dto';
+import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 
 export class Application extends AbstractDTO {
   @Expose()

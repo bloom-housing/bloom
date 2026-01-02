@@ -1,15 +1,14 @@
 import { ApiProperty, OmitType } from '@nestjs/swagger';
 import { Expose, Type } from 'class-transformer';
 import { IsDefined, ValidateNested } from 'class-validator';
-import ApplicationSelectionUpdate from './application-selection-update.dto';
-import ApplicationSelectionOptionCreate from './application-selection-option-create.dto';
+import { ApplicationSelectionUpdate } from './application-selection-update.dto';
+import { ApplicationSelectionOptionCreate } from './application-selection-option-create.dto';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 
-class ApplicationSelectionCreate extends OmitType(ApplicationSelectionUpdate, [
-  'id',
-  'application',
-  'selections',
-]) {
+export class ApplicationSelectionCreate extends OmitType(
+  ApplicationSelectionUpdate,
+  ['id', 'application', 'selections'],
+) {
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
@@ -20,5 +19,3 @@ class ApplicationSelectionCreate extends OmitType(ApplicationSelectionUpdate, [
   })
   selections: ApplicationSelectionOptionCreate[];
 }
-
-export { ApplicationSelectionCreate as default, ApplicationSelectionCreate };

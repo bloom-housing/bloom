@@ -25,7 +25,7 @@ import { PrismaService } from './prisma.service';
 import { Application } from '../dtos/applications/application.dto';
 import { ApplicationCreate } from '../dtos/applications/application-create.dto';
 import { ApplicationQueryParams } from '../dtos/applications/application-query-params.dto';
-import ApplicationSelectionCreate from '../dtos/applications/application-selection-create.dto';
+import { ApplicationSelectionCreate } from '../dtos/applications/application-selection-create.dto';
 import { ApplicationUpdate } from '../dtos/applications/application-update.dto';
 import { MostRecentApplicationQueryParams } from '../dtos/applications/most-recent-application-query-params.dto';
 import { PaginatedApplicationDto } from '../dtos/applications/paginated-application.dto';

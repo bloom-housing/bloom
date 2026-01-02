@@ -1,11 +1,11 @@
 import { ApiProperty, ApiPropertyOptional, OmitType } from '@nestjs/swagger';
 import { Expose, Type } from 'class-transformer';
 import { IsDefined, IsString, IsUUID, ValidateNested } from 'class-validator';
-import ApplicationSelection from './application-selection.dto';
-import ApplicationSelectionOptionUpdate from './application-selection-option-update.dto';
+import { ApplicationSelection } from './application-selection.dto';
+import { ApplicationSelectionOptionUpdate } from './application-selection-option-update.dto';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 
-class ApplicationSelectionUpdate extends OmitType(ApplicationSelection, [
+export class ApplicationSelectionUpdate extends OmitType(ApplicationSelection, [
   'id',
   'createdAt',
   'updatedAt',
@@ -27,5 +27,3 @@ class ApplicationSelectionUpdate extends OmitType(ApplicationSelection, [
   })
   selections: ApplicationSelectionOptionUpdate[];
 }
-
-export { ApplicationSelectionUpdate as default, ApplicationSelectionUpdate };
