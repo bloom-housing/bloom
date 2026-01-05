@@ -762,6 +762,8 @@ describe('Testing application service', () => {
       userId: requestingUser.id,
       confirmationCode: mockValue.confirmationCode,
       updatedAt: mockValue.updatedAt,
+      status: mockValue.status,
+      markedAsDuplicate: mockValue.markedAsDuplicate,
       listings: {
         id: randomUUID(),
         name: 'listing name',
@@ -782,6 +784,8 @@ describe('Testing application service', () => {
       userId: true,
       confirmationCode: true,
       updatedAt: true,
+      status: true,
+      markedAsDuplicate: true,
       applicationLotteryPositions: {
         select: {
           id: true,
