@@ -69,7 +69,7 @@ services:
       POSTGRES_PASSWORD: "example"
       POSTGRES_DB: "bloom_prisma"
     healthcheck:
-      test: ["CMD-SHELL", "PGPASSWORD=example", "psql", "--host=127.0.0.1", "--port=5432", "--username=postgres", "--command='SELECT 1;'"]
+      test: ["CMD-SHELL", "PGPASSWORD=example psql --host=127.0.0.1 --port=5432 --username=postgres --command='SELECT 1;'"]
       interval: "2s"
       timeout: "1s"
       retries: 20
@@ -163,7 +163,7 @@ services:
       LANGUAGES: "en,es,zh,vi,tl"
       RTL_LANGUAGES: "ar"
 
-      IDLE_TIEMOUT: 5      # seconds
+      IDLE_TIMEMOUT: 5     # seconds
       CACHE_REVALIDATE: 30 # seconds
 
       SHOW_PUBLIC_LOTTERY: "TRUE"

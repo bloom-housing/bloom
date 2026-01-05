@@ -40,6 +40,7 @@ export enum FeatureFlagEnum {
   enableRegions = 'enableRegions',
   enableSection8Question = 'enableSection8Question',
   enableSingleUseCode = 'enableSingleUseCode',
+  enableSmokingPolicyRadio = 'enableSmokingPolicyRadio',
   enableSupportAdmin = 'enableSupportAdmin',
   enableUnderConstructionHome = 'enableUnderConstructionHome',
   enableUnitGroups = 'enableUnitGroups',
@@ -240,6 +241,11 @@ export const featureFlagMap: {
     name: FeatureFlagEnum.enableSingleUseCode,
     description:
       'When true, the backend allows for logging into this jurisdiction using the single use code flow',
+  },
+  {
+    name: FeatureFlagEnum.enableSmokingPolicyRadio,
+    description:
+      "When true, the listing 'Smoking policy' field is a radio group",
   },
   {
     name: FeatureFlagEnum.enableSupportAdmin,

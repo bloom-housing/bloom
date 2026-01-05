@@ -6,7 +6,6 @@ import { User } from '../dtos/users/user.dto';
 import { TOKEN_COOKIE_NAME } from '../services/auth.service';
 import { PrismaService } from '../services/prisma.service';
 import { mapTo } from '../utilities/mapTo';
-import { isPasswordOutdated } from '../utilities/password-helpers';
 
 type PayloadType = {
   sub: string;
@@ -55,17 +54,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
       // if there is no user matching the incoming id
       throw new UnauthorizedException(`user ${userId} does not exist`);
     }
-    if (
-      isPasswordOutdated(
-        rawUser.passwordValidForDays,
-        rawUser.passwordUpdatedAt,
-      )
-    ) {
-      // if we have a user and the user's password is outdated
-      throw new UnauthorizedException(
-        `user ${userId} attempted to log in, but password is outdated`,
-      );
-    } else if (rawUser.activeAccessToken !== rawToken) {
+    if (rawUser.activeAccessToken !== rawToken) {
       // if the incoming token is not the active token for the user, clear the user's tokens
       await this.prisma.userAccounts.update({
         data: {
