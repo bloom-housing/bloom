@@ -398,6 +398,8 @@ export class ApplicationService {
         userId: true,
         confirmationCode: true,
         updatedAt: true,
+        status: true,
+        markedAsDuplicate: true,
         listings: {
           select: {
             id: true,
