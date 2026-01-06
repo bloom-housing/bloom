@@ -431,7 +431,7 @@ export default function ListingsList() {
 
           <Dialog.Content id="listing-select-dialog-content">
             {t("listings.selectJurisdictionContent")}
-            <Grid spacing={"lg"}>
+            <Grid>
               <Grid.Row columns={3}>
                 <Grid.Cell className={"seeds-grid-span-2"}>
                   <div className={`${defaultJurisdiction ? "hidden" : ""} seeds-m-bs-4`}>
@@ -465,8 +465,8 @@ export default function ListingsList() {
                   </div>
                 </Grid.Cell>
               </Grid.Row>
-              <div aria-live="polite">
-                {isNonRegulatedEnabled && (
+              {isNonRegulatedEnabled && (
+                <div aria-live="polite">
                   <fieldset>
                     <legend className={`text__caps-spaced`}>
                       {t("listings.listingTypeTitle")}
@@ -506,8 +506,8 @@ export default function ListingsList() {
                       </Grid.Cell>
                     </Grid.Row>
                   </fieldset>
-                )}
-              </div>
+                </div>
+              )}
             </Grid>
           </Dialog.Content>
           <Dialog.Footer>
