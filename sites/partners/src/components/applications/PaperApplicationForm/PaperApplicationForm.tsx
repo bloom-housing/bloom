@@ -1,14 +1,12 @@
 import React, { useState, useContext, useEffect } from "react"
 import { useRouter } from "next/router"
 import { t, Form, AlertBox, LoadingOverlay } from "@bloom-housing/ui-components"
-import { Tag } from "@bloom-housing/ui-seeds"
 import { AuthContext, MessageContext, listingSectionQuestions } from "@bloom-housing/shared-helpers"
 import { useForm, FormProvider } from "react-hook-form"
 import {
   Application,
   ApplicationCreate,
   ApplicationReviewStatusEnum,
-  ApplicationStatusEnum,
   ApplicationUpdate,
   FeatureFlagEnum,
   HouseholdMember,
@@ -29,6 +27,7 @@ import { FormMultiselectQuestions } from "./sections/FormMultiselectQuestions"
 import { Aside } from "../Aside"
 import { FormTypes } from "../../../lib/applications/FormTypes"
 import { StatusBar } from "../../../components/shared/StatusBar"
+import { ApplicationStatusTag } from "../../listings/PaperListingDetails/sections/helpers"
 
 type ApplicationFormProps = {
   listingId: string
@@ -52,6 +51,12 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
     listingDto,
     MultiselectQuestionsApplicationSectionEnum.programs
   )
+
+  const enableApplicationStatus =
+    doJurisdictionsHaveFeatureFlagOn(
+      FeatureFlagEnum.enableApplicationStatus,
+      listingDto?.jurisdictions.id
+    ) && !!listingDto?.jurisdictions.id
 
   const enableUnitGroups = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableUnitGroups,
@@ -221,15 +226,7 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
     <LoadingOverlay isLoading={loading}>
       <>
         <StatusBar>
-          <Tag
-            className="tag-uppercase"
-            variant={application?.status == ApplicationStatusEnum.submitted ? "success" : "primary"}
-            size={"lg"}
-          >
-            {application?.status
-              ? t(`application.details.applicationStatus.${application.status}`)
-              : t(`application.details.applicationStatus.draft`)}
-          </Tag>
+          <ApplicationStatusTag status={application?.status} />
         </StatusBar>
 
         <FormProvider {...formMethods}>
@@ -246,7 +243,7 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
               <Form id="application-form" onSubmit={handleSubmit(triggerSubmit, onError)}>
                 <div className="flex flex-row flex-wrap">
                   <div className="info-card md:w-9/12">
-                    <FormApplicationData />
+                    <FormApplicationData enableApplicationStatus={enableApplicationStatus} />
 
                     <FormPrimaryApplicant
                       enableFullTimeStudentQuestion={enableFullTimeStudentQuestion}

@@ -862,16 +862,25 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
           label: 'Unit Amenities',
         },
         {
-          path: 'smokingPolicy',
-          label: 'Smoking Policy',
-        },
-        {
           path: 'petPolicy',
           label: 'Pets Policy',
         },
         {
           path: 'servicesOffered',
           label: 'Services Offered',
+        },
+        {
+          path: 'smokingPolicy',
+          label: 'Smoking Policy',
+          format: (val: string): string => {
+            const enableSmokingPolicyRadio =
+              doAllJurisdictionHaveFeatureFlagSet(
+                user.jurisdictions,
+                FeatureFlagEnum.enableSmokingPolicyRadio,
+              );
+            if (!val) return enableSmokingPolicyRadio ? 'Policy unknown' : '';
+            return val;
+          },
         },
       ],
     );
