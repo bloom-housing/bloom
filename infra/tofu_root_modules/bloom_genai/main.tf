@@ -126,7 +126,7 @@ module "data_explorer_backend" {
   bloom_api_security_group_id                = module.bloom_deployment.security_group_ids.api
   secrets_manager_endpoint_security_group_id = module.bloom_deployment.security_group_ids.secrets_manager_endpoint
 
-  data_explorer_backend_image = "ghcr.io/exygy/bloom-genai-backend:gitsha-027c79e4c163d7cd36d1b7be36b09203fb007163"
+  data_explorer_backend_image = "ghcr.io/exygy/housing-reports/bloom-genai-backend:gitsha-027c79e4c163d7cd36d1b7be36b09203fb007163"
 
   cors_origins = "https://${local.domain_name},https://partners.${local.domain_name}"
 
