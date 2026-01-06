@@ -26,6 +26,7 @@ import {
 import {
   cloudinaryPdfFromId,
   getOccupancyDescription,
+  listingUtilities,
   stackedOccupancyTable,
   stackedUnitGroupsOccupancyTable,
 } from "@bloom-housing/shared-helpers"
@@ -165,6 +166,7 @@ export const getUtilitiesIncluded = (listing: Listing) => {
   const enabledUtilities = Object.entries(listing?.listingUtilities ?? {})
     .filter(([_, value]) => value)
     .map((item) => item[0])
+    .filter((utility) => listingUtilities.includes(utility))
 
   if (enabledUtilities.length > 0) {
     return enabledUtilities.map((utility, index) => {
