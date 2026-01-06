@@ -114,7 +114,13 @@ const ListingForm = ({
   setListingName,
   updateListing,
 }: ListingFormProps) => {
-  const defaultValues = editMode ? listing : formDefaults
+  const rawDefaultValues = editMode ? listing : formDefaults
+
+  const defaultValues: FormListing = {
+    ...rawDefaultValues,
+    smokingPolicy: rawDefaultValues?.smokingPolicy ?? "",
+  }
+
   const formMethods = useForm<FormListing>({
     defaultValues,
     mode: "onBlur",
@@ -139,18 +145,20 @@ const ListingForm = ({
   const [unitGroups, setUnitGroups] = useState<TempUnitGroup[]>([])
   const [openHouseEvents, setOpenHouseEvents] = useState<TempEvent[]>([])
   const [preferences, setPreferences] = useState<MultiselectQuestion[]>(
-    listingSectionQuestions(listing, MultiselectQuestionsApplicationSectionEnum.preferences)?.map(
-      (listingPref) => {
-        return { ...listingPref?.multiselectQuestions }
-      }
-    ) ?? []
+    listingSectionQuestions(
+      listing as unknown as Listing,
+      MultiselectQuestionsApplicationSectionEnum.preferences
+    )?.map((listingPref) => {
+      return { ...listingPref?.multiselectQuestions }
+    }) ?? []
   )
   const [programs, setPrograms] = useState<MultiselectQuestion[]>(
-    listingSectionQuestions(listing, MultiselectQuestionsApplicationSectionEnum.programs)?.map(
-      (listingProg) => {
-        return { ...listingProg?.multiselectQuestions }
-      }
-    )
+    listingSectionQuestions(
+      listing as unknown as Listing,
+      MultiselectQuestionsApplicationSectionEnum.programs
+    )?.map((listingProg) => {
+      return { ...listingProg?.multiselectQuestions }
+    })
   )
 
   const [latLong, setLatLong] = useState<LatitudeLongitude>({
@@ -583,6 +591,10 @@ const ListingForm = ({
                             existingFeatures={listing?.listingFeatures}
                             enableAccessibilityFeatures={doJurisdictionsHaveFeatureFlagOn(
                               FeatureFlagEnum.enableAccessibilityFeatures,
+                              jurisdictionId
+                            )}
+                            enableSmokingPolicyRadio={doJurisdictionsHaveFeatureFlagOn(
+                              FeatureFlagEnum.enableSmokingPolicyRadio,
                               jurisdictionId
                             )}
                             enableParkingFee={doJurisdictionsHaveFeatureFlagOn(

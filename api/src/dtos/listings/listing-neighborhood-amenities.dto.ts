@@ -1,9 +1,10 @@
+import { AbstractDTO } from '../shared/abstract.dto';
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 import { IsOptional, IsString } from 'class-validator';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 
-export class ListingNeighborhoodAmenities {
+export class ListingNeighborhoodAmenities extends AbstractDTO {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })

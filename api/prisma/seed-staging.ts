@@ -176,6 +176,7 @@ export const stagingSeed = async (
         FeatureFlagEnum.enableParkingFee,
         FeatureFlagEnum.enableProperties,
         FeatureFlagEnum.enableReferralQuestionUnits,
+        FeatureFlagEnum.enableSmokingPolicyRadio,
       ],
       visibleNeighborhoodAmenities: [
         NeighborhoodAmenitiesEnum.groceryStores,
