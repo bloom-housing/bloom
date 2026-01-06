@@ -979,6 +979,18 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
           path: 'programRules',
           label: 'Important Program Rules',
         },
+        ...(doAnyJurisdictionHaveFeatureFlagSet(
+          user.jurisdictions,
+          FeatureFlagEnum.enableNonRegulatedListings,
+        )
+          ? [
+              {
+                path: 'requiredDocumentsList',
+                label: 'Required documents List',
+                format: this.buildSelectList,
+              },
+            ]
+          : []),
         {
           path: 'requiredDocuments',
           label: 'Required Documents',
@@ -994,18 +1006,6 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
         },
       ],
     );
-    if (
-      doAnyJurisdictionHaveFeatureFlagSet(
-        user.jurisdictions,
-        FeatureFlagEnum.enableNonRegulatedListings,
-      )
-    ) {
-      headers.push({
-        path: 'requiredDocumentsList',
-        label: 'Required documents List',
-        format: this.buildSelectList,
-      });
-    }
     if (
       doAnyJurisdictionHaveFeatureFlagSet(
         user.jurisdictions,
