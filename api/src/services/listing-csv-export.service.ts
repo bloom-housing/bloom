@@ -54,7 +54,7 @@ import {
 } from '../utilities/feature-flag-utilities';
 import { UnitGroupSummary } from '../dtos/unit-groups/unit-group-summary.dto';
 import { addUnitGroupsSummarized } from '../utilities/unit-groups-transformations';
-import { ListingDocuments } from 'src/dtos/listings/listing-documents.dto';
+import { ListingDocuments } from '../dtos/listings/listing-documents.dto';
 
 includeViews.csv = {
   listingMultiselectQuestions: {
