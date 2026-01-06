@@ -485,19 +485,38 @@ describe('GeocodingService', () => {
   });
 
   describe('validateGeocodingPreferencesV2', () => {
-    const mapLayer = { id: randomUUID(), featureCollection: simplifiedDCMap };
-    const mapOptionId = randomUUID();
+    const mapLayer1 = {
+      id: randomUUID(),
+      featureCollection: featureCollection,
+    };
+    const mapLayer2 = {
+      id: randomUUID(),
+      featureCollection: featureCollection2,
+    };
+    const mapOptionId1 = randomUUID();
+    const mapOptionId2 = randomUUID();
     const radiusOptionId = randomUUID();
     const multiselectOptions = [
       {
-        id: mapOptionId,
+        id: mapOptionId1,
         createdAt: date,
         updatedAt: date,
-        mapLayerId: mapLayer.id,
-        name: 'Geocoding option by map',
+        mapLayerId: mapLayer1.id,
+        name: 'Geocoding option by map DC',
         ordinal: 1,
         shouldCollectAddress: true,
-        text: 'Geocoding option by map',
+        text: 'Geocoding option by map DC',
+        validationMethod: ValidationMethod.map,
+      },
+      {
+        id: mapOptionId2,
+        createdAt: date,
+        updatedAt: date,
+        mapLayerId: mapLayer2.id,
+        name: 'Geocoding option by map redlined',
+        ordinal: 2,
+        shouldCollectAddress: true,
+        text: 'Geocoding option by map redlined',
         validationMethod: ValidationMethod.map,
       },
       {
@@ -505,7 +524,7 @@ describe('GeocodingService', () => {
         createdAt: date,
         updatedAt: date,
         name: 'Geocoding option by radius',
-        ordinal: 2,
+        ordinal: 3,
         radiusSize: 5,
         shouldCollectAddress: true,
         text: 'Geocoding option by radius',
@@ -516,7 +535,7 @@ describe('GeocodingService', () => {
         createdAt: date,
         updatedAt: date,
         name: 'non-geocoding option',
-        ordinal: 3,
+        ordinal: 4,
         text: 'non-geocoding option',
       },
     ];
@@ -530,6 +549,7 @@ describe('GeocodingService', () => {
     const selectionOptionId1 = randomUUID();
     const selectionOptionId2 = randomUUID();
     const selectionOptionId3 = randomUUID();
+    const selectionOptionId4 = randomUUID();
 
     const applicationSelections = [
       {
@@ -546,7 +566,7 @@ describe('GeocodingService', () => {
             addressHolderAddress: selectionAddress,
             applicationSelection: { id: randomUUID() },
             multiselectOption: {
-              id: mapOptionId,
+              id: mapOptionId1,
             },
           },
           {
@@ -556,11 +576,21 @@ describe('GeocodingService', () => {
             addressHolderAddress: selectionAddress,
             applicationSelection: { id: randomUUID() },
             multiselectOption: {
-              id: radiusOptionId,
+              id: mapOptionId2,
             },
           },
           {
             id: selectionOptionId3,
+            createdAt: date,
+            updatedAt: date,
+            addressHolderAddress: selectionAddress,
+            applicationSelection: { id: randomUUID() },
+            multiselectOption: {
+              id: radiusOptionId,
+            },
+          },
+          {
+            id: selectionOptionId4,
             createdAt: date,
             updatedAt: date,
             addressHolderAddress: selectionAddress,
@@ -574,7 +604,9 @@ describe('GeocodingService', () => {
     ];
 
     it('should save all updated preferences', async () => {
-      prisma.mapLayers.findMany = jest.fn().mockResolvedValue([mapLayer]);
+      prisma.mapLayers.findMany = jest
+        .fn()
+        .mockResolvedValue([mapLayer1, mapLayer2]);
       prisma.applicationSelectionOptions.update = jest
         .fn()
         .mockResolvedValue('');
@@ -585,7 +617,7 @@ describe('GeocodingService', () => {
       );
 
       expect(prisma.applicationSelectionOptions.update).toHaveBeenCalledTimes(
-        2,
+        3,
       );
       expect(prisma.applicationSelectionOptions.update).toHaveBeenNthCalledWith(
         1,
@@ -600,9 +632,18 @@ describe('GeocodingService', () => {
         2,
         {
           data: {
-            isGeocodingVerified: true,
+            isGeocodingVerified: false,
           },
           where: { id: selectionOptionId2 },
+        },
+      );
+      expect(prisma.applicationSelectionOptions.update).toHaveBeenNthCalledWith(
+        3,
+        {
+          data: {
+            isGeocodingVerified: true,
+          },
+          where: { id: selectionOptionId3 },
         },
       );
     });
