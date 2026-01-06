@@ -3,7 +3,7 @@ import { useFormContext } from "react-hook-form"
 import { t, Textarea, FieldGroup } from "@bloom-housing/ui-components"
 import { Grid } from "@bloom-housing/ui-seeds"
 import { listingFeatures } from "@bloom-housing/shared-helpers"
-import { ListingFeatures } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { ListingFeaturesCreate } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 import { defaultFieldProps, getLabel } from "../../../../lib/helpers"
 import styles from "../ListingForm.module.scss"
@@ -11,7 +11,7 @@ import styles from "../ListingForm.module.scss"
 type BuildingFeaturesProps = {
   enableAccessibilityFeatures?: boolean
   enableSmokingPolicyRadio?: boolean
-  existingFeatures: ListingFeatures
+  existingFeatures: ListingFeaturesCreate
   requiredFields: string[]
 }
 
