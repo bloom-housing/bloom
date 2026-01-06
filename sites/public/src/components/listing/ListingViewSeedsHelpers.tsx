@@ -26,6 +26,7 @@ import {
 import {
   cloudinaryPdfFromId,
   getOccupancyDescription,
+  listingFeatures,
   listingUtilities,
   stackedOccupancyTable,
   stackedUnitGroupsOccupancyTable,
@@ -142,6 +143,8 @@ export const getAccessibilityFeatures = (listing: Listing) => {
   const enabledFeatures = Object.entries(listing?.listingFeatures ?? {})
     .filter(([_, value]) => value)
     .map((item) => item[0])
+    .filter((feature) => listingFeatures.includes(feature))
+
   const COLUMN_BREAKPOINT = 6
   if (enabledFeatures.length > 0) {
     return (
