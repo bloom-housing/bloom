@@ -1,14 +1,12 @@
-import { OmitType, ApiPropertyOptional } from '@nestjs/swagger';
+import { ApplicationMethodUpdate } from './application-method-update.dto';
 import { Expose, Type } from 'class-transformer';
+import { OmitType, ApiPropertyOptional } from '@nestjs/swagger';
+import { PaperApplicationCreate } from '../paper-applications/paper-application-create.dto';
 import { ValidateNested } from 'class-validator';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
-import { PaperApplicationCreate } from '../paper-applications/paper-application-create.dto';
-import { ApplicationMethod } from './application-method.dto';
 
-export class ApplicationMethodCreate extends OmitType(ApplicationMethod, [
+export class ApplicationMethodCreate extends OmitType(ApplicationMethodUpdate, [
   'id',
-  'createdAt',
-  'updatedAt',
   'paperApplications',
 ]) {
   @Expose()

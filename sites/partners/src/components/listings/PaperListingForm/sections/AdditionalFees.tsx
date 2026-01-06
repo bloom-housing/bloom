@@ -7,7 +7,7 @@ import { listingUtilities } from "@bloom-housing/shared-helpers"
 import {
   EnumListingDepositType,
   EnumListingListingType,
-  ListingUtilities,
+  ListingUtilitiesCreate,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 import styles from "../ListingForm.module.scss"
@@ -18,7 +18,7 @@ type AdditionalFeesProps = {
   enableCreditScreeningFee?: boolean
   enableNonRegulatedListings?: boolean
   enableUtilitiesIncluded?: boolean
-  existingUtilities: ListingUtilities
+  existingUtilities: ListingUtilitiesCreate
   requiredFields: string[]
 }
 
