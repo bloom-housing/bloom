@@ -1,10 +1,10 @@
 import React from "react"
 import "@testing-library/jest-dom"
 import { setupServer } from "msw/node"
-import userEvent from "@testing-library/user-event"
-import { screen, within } from "@testing-library/react"
+import { screen } from "@testing-library/react"
 import { FormProviderWrapper, mockNextRouter, render } from "../../../../testUtils"
 import ListingIntro from "../../../../../src/components/listings/PaperListingForm/sections/ListingIntro"
+import { EnumListingListingType } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 const server = setupServer()
 
@@ -112,16 +112,14 @@ describe("ListingIntro", () => {
       </FormProviderWrapper>
     )
 
-    expect(
-      screen.queryByRole("group", { name: "What kind of listing is this?" })
-    ).not.toBeInTheDocument()
+    expect(screen.queryAllByText("What kind of listing is this?")).toHaveLength(0)
     expect(screen.getByRole("textbox", { name: /^housing developer$/i })).toBeInTheDocument()
     expect(
       screen.queryByRole("textbox", { name: /^property management account$/i })
     ).not.toBeInTheDocument()
   })
 
-  it("should not render the ListingIntro section with regulated fields when feature flag is on", async () => {
+  it("should render the ListingIntro section with regulated fields when feature flag is on and listing is not non-regulated", () => {
     render(
       <FormProviderWrapper>
         <ListingIntro
@@ -137,42 +135,48 @@ describe("ListingIntro", () => {
 
     expect(screen.getByRole("heading", { level: 2, name: "Listing intro" })).toBeInTheDocument()
 
+    expect(screen.getByText("What kind of listing is this?")).toBeInTheDocument()
+    expect(screen.getByText("Regulated")).toBeInTheDocument()
+
+    expect(screen.getByRole("textbox", { name: /^housing developer$/i })).toBeInTheDocument()
     expect(
-      await screen.findByRole("group", { name: "What kind of listing is this?" })
-    ).toBeInTheDocument()
-    const requlatedListingOption = screen.getByRole("radio", { name: /^regulated$/i })
-    const nonRequlatedListingOption = screen.getByRole("radio", { name: /^non-regulated$/i })
-    expect(requlatedListingOption).toBeInTheDocument()
-    expect(requlatedListingOption).toBeChecked()
-    expect(nonRequlatedListingOption).toBeInTheDocument()
-    expect(nonRequlatedListingOption).not.toBeChecked()
+      screen.queryByRole("textbox", { name: /^property management account$/i })
+    ).not.toBeInTheDocument()
 
-    let ebllQuestionLabel = screen.queryByRole("group", {
-      name: "Has this property received HUD EBLL clearance?",
-    })
+    expect(
+      screen.queryAllByRole("group", {
+        name: "Has this property received HUD EBLL clearance?",
+      })
+    ).toHaveLength(0)
+  })
 
-    ebllQuestionLabel = screen.queryByRole("group", {
-      name: "Has this property received HUD EBLL clearance?",
-    })
-    expect(ebllQuestionLabel).not.toBeInTheDocument()
+  it("should render the ListingIntro section with non-regulated fields when feature flag is on and listing is non-regulated", () => {
+    render(
+      <FormProviderWrapper values={{ listingType: EnumListingListingType.nonRegulated }}>
+        <ListingIntro
+          requiredFields={[]}
+          enableNonRegulatedListings={true}
+          enableHousingDeveloperOwner={false}
+          enableListingFileNumber={false}
+          jurisdictionName={"JurisdictionA"}
+          listingId={"1234"}
+        />
+      </FormProviderWrapper>
+    )
 
-    await userEvent.click(nonRequlatedListingOption)
+    expect(screen.getByRole("heading", { level: 2, name: "Listing intro" })).toBeInTheDocument()
+
+    expect(screen.getByText("What kind of listing is this?")).toBeInTheDocument()
+    expect(screen.getByText("Non-regulated")).toBeInTheDocument()
 
     expect(
       screen.getByRole("textbox", { name: /^property management account$/i })
     ).toBeInTheDocument()
-    expect(screen.queryByRole("textbox", { name: /^housing developer$/i })).not.toBeInTheDocument()
 
-    ebllQuestionLabel = screen.queryByRole("group", {
-      name: "Has this property received HUD EBLL clearance?",
-    })
-    expect(ebllQuestionLabel).toBeInTheDocument()
-    const ebllQuestionContainer = ebllQuestionLabel.parentElement
-    const ebllYesOption = within(ebllQuestionContainer).getByRole("radio", { name: /^yes$/i })
-    const ebllNoOption = within(ebllQuestionContainer).getByRole("radio", { name: /^no$/i })
-    expect(ebllYesOption).toBeInTheDocument()
-    expect(ebllYesOption).not.toBeChecked()
-    expect(ebllNoOption).toBeInTheDocument()
-    expect(ebllNoOption).toBeChecked()
+    expect(
+      screen.getByRole("group", {
+        name: "Has this property received HUD EBLL clearance?",
+      })
+    ).toBeInTheDocument()
   })
 })
