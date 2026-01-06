@@ -35,7 +35,7 @@ import { AddressCreate } from '../../src/dtos/addresses/address-create.dto';
 import { ApplicationCreate } from '../../src/dtos/applications/application-create.dto';
 import { ApplicationMultiselectQuestion } from '../../src/dtos/applications/application-multiselect-question.dto';
 import { ApplicationQueryParams } from '../../src/dtos/applications/application-query-params.dto';
-import ApplicationSelectionCreate from '../../src/dtos/applications/application-selection-create.dto';
+import { ApplicationSelectionCreate } from '../../src/dtos/applications/application-selection-create.dto';
 import { ApplicationUpdate } from '../../src/dtos/applications/application-update.dto';
 import { PublicAppsViewQueryParams } from '../../src/dtos/applications/public-apps-view-params.dto';
 import { Login } from '../../src/dtos/auth/login.dto';

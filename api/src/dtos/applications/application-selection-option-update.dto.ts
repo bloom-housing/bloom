@@ -1,12 +1,12 @@
 import { ApiPropertyOptional, OmitType } from '@nestjs/swagger';
 import { Expose, Type } from 'class-transformer';
 import { IsString, IsUUID, ValidateNested } from 'class-validator';
-import ApplicationSelectionOption from './application-selection-option.dto';
+import { ApplicationSelectionOption } from './application-selection-option.dto';
 import { AddressUpdate } from '../addresses/address-update.dto';
 import { IdDTO } from '../shared/id.dto';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 
-class ApplicationSelectionOptionUpdate extends OmitType(
+export class ApplicationSelectionOptionUpdate extends OmitType(
   ApplicationSelectionOption,
   [
     'id',
@@ -34,8 +34,3 @@ class ApplicationSelectionOptionUpdate extends OmitType(
   @ApiPropertyOptional({ type: IdDTO })
   applicationSelection?: IdDTO;
 }
-
-export {
-  ApplicationSelectionOptionUpdate as default,
-  ApplicationSelectionOptionUpdate,
-};

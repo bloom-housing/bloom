@@ -1,17 +1,12 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Expose, Type } from 'class-transformer';
-import {
-  ValidateNested,
-  IsBoolean,
-  IsDefined,
-  IsString,
-} from 'class-validator';
-import ApplicationSelectionOption from './application-selection-option.dto';
+import { ValidateNested, IsBoolean, IsDefined } from 'class-validator';
+import { ApplicationSelectionOption } from './application-selection-option.dto';
 import { AbstractDTO } from '../shared/abstract.dto';
 import { IdDTO } from '../shared/id.dto';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 
-class ApplicationSelection extends AbstractDTO {
+export class ApplicationSelection extends AbstractDTO {
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
@@ -37,5 +32,3 @@ class ApplicationSelection extends AbstractDTO {
   @ApiProperty({ type: ApplicationSelectionOption })
   selections: ApplicationSelectionOption[];
 }
-
-export { ApplicationSelection as default, ApplicationSelection };

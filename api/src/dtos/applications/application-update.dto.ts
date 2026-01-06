@@ -5,7 +5,7 @@ import { AccessibilityUpdate } from './accessibility-update.dto';
 import { AlternateContactUpdate } from './alternate-contact-update.dto';
 import { ApplicantUpdate } from './applicant-update.dto';
 import { Application } from './application.dto';
-import ApplicationSelectionUpdate from './application-selection-update.dto';
+import { ApplicationSelectionUpdate } from './application-selection-update.dto';
 import { DemographicUpdate } from './demographic-update.dto';
 import { HouseholdMemberUpdate } from './household-member-update.dto';
 import { AddressCreate } from '../addresses/address-create.dto';

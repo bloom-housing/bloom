@@ -11,7 +11,7 @@ import { IdDTO } from '../shared/id.dto';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 import { Address } from '../addresses/address.dto';
 
-class ApplicationSelectionOption extends AbstractDTO {
+export class ApplicationSelectionOption extends AbstractDTO {
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
@@ -47,5 +47,3 @@ class ApplicationSelectionOption extends AbstractDTO {
   @ApiProperty({ type: IdDTO })
   multiselectOption: IdDTO;
 }
-
-export { ApplicationSelectionOption as default, ApplicationSelectionOption };

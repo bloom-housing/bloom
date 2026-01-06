@@ -2,7 +2,7 @@ import { Expose, Type } from 'class-transformer';
 import { ArrayMaxSize, ValidateNested } from 'class-validator';
 import { ApiPropertyOptional, OmitType } from '@nestjs/swagger';
 import { ApplicationUpdate } from './application-update.dto';
-import ApplicationSelectionCreate from './application-selection-create.dto';
+import { ApplicationSelectionCreate } from './application-selection-create.dto';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 
 export class ApplicationCreate extends OmitType(ApplicationUpdate, [
