@@ -585,6 +585,10 @@ const ListingForm = ({
                               FeatureFlagEnum.enableAccessibilityFeatures,
                               jurisdictionId
                             )}
+                            enableParkingFee={doJurisdictionsHaveFeatureFlagOn(
+                              FeatureFlagEnum.enableParkingFee,
+                              jurisdictionId
+                            )}
                             requiredFields={requiredFields}
                           />
                           <NeighborhoodAmenities

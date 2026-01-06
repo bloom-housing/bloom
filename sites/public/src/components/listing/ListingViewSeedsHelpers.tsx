@@ -203,7 +203,7 @@ export const getFeatures = (
   if (listing.parkingFee) {
     features.push({
       heading: t("t.parkingFee"),
-      subheading: `$ ${listing.parkingFee}`,
+      subheading: `$${listing.parkingFee}`,
     })
   }
   const accessibilityFeatures = getAccessibilityFeatures(listing)

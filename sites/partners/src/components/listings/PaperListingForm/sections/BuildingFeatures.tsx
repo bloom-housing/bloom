@@ -1,27 +1,22 @@
-import React, { useMemo, useEffect, useContext } from "react"
+import React, { useMemo, useEffect } from "react"
 import { useFormContext } from "react-hook-form"
 import { t, Textarea, FieldGroup, Field } from "@bloom-housing/ui-components"
 import { Grid } from "@bloom-housing/ui-seeds"
-import { AuthContext, listingFeatures } from "@bloom-housing/shared-helpers"
-import {
-  FeatureFlagEnum,
-  ListingFeatures,
-} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { listingFeatures } from "@bloom-housing/shared-helpers"
+import { ListingFeatures } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 import { defaultFieldProps } from "../../../../lib/helpers"
 import styles from "../ListingForm.module.scss"
-import { ListingContext } from "../../ListingContext"
 
 type BuildingFeaturesProps = {
   enableAccessibilityFeatures?: boolean
+  enableParkingFee?: boolean
   existingFeatures: ListingFeatures
   requiredFields: string[]
 }
 
 const BuildingFeatures = (props: BuildingFeaturesProps) => {
   const formMethods = useFormContext()
-  const listing = useContext(ListingContext)
-  const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, setValue, errors, clearErrors } = formMethods
@@ -41,11 +36,6 @@ const BuildingFeatures = (props: BuildingFeaturesProps) => {
       setValue("accessibilityFeatures", undefined)
     }
   }, [props.enableAccessibilityFeatures, setValue])
-
-  const enableParkingFee = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableParkingFee,
-    listing?.jurisdictions?.id
-  )
 
   return (
     <>
@@ -150,7 +140,7 @@ const BuildingFeatures = (props: BuildingFeaturesProps) => {
             />
           </Grid.Cell>
         </Grid.Row>
-        {enableParkingFee && (
+        {props.enableParkingFee && (
           <Grid.Row columns={3}>
             <Grid.Cell>
               <Field
