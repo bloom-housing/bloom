@@ -59,7 +59,7 @@ const SettingsProperties = () => {
         field: "name",
       },
       {
-        headerName: t("t.description"),
+        headerName: t("t.descriptionTitle"),
         field: "description",
         flex: 1,
       },
@@ -106,14 +106,14 @@ const SettingsProperties = () => {
               }}
               editTestId={`property-edit-icon: ${data.name}`}
               onDelete={() => console.log("Copy: ", data.name)}
-              deleteTestId={`property-delete-icon: ${data.text}`}
+              deleteTestId={`property-delete-icon: ${data.name}`}
               align="start"
             />
           )
         },
       },
     ],
-    [profile.jurisdictions]
+    [profile?.jurisdictions]
   )
 
   const handleSave = (propertyData: PropertyCreate) => {
@@ -178,8 +178,8 @@ const SettingsProperties = () => {
             data={{
               items: propertiesData?.items,
               loading: loading,
-              totalItems: propertiesData?.meta.totalItems,
-              totalPages: propertiesData?.meta.totalPages,
+              totalItems: propertiesData?.meta?.totalItems,
+              totalPages: propertiesData?.meta?.totalPages,
             }}
             config={{
               columns: columnDefs,
