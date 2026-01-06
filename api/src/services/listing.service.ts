@@ -61,7 +61,6 @@ import { fillModelStringFields } from '../utilities/model-fields';
 import { doJurisdictionHaveFeatureFlagSet } from '../utilities/feature-flag-utilities';
 import { addUnitGroupsSummarized } from '../utilities/unit-groups-transformations';
 import { CronJobService } from './cron-job.service';
-import { connect } from 'node:http2';
 
 export type getListingsArgs = {
   skip: number;
@@ -2759,7 +2758,13 @@ export class ListingService implements OnModuleInit {
     return mapTo(Listing, listingsRaw);
   };
 
-  findListingsWithPorperty = async (propertyId: string) => {
+  /**
+   * Retrieves all listings associated with a specific property.
+   * @param {string} propertyId - The unique identifier of the property for which to find listings
+   * @returns {Promise<Listing[]>} A promise that resolves to an array of Listing objects containing id and name
+   * @throws {BadRequestException} Throws an exception if propertyId is not provided or is empty
+   */
+  findListingsWithProperty = async (propertyId: string) => {
     if (!propertyId) {
       throw new BadRequestException({
         message: 'A property ID must be provided',

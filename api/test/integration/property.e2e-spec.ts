@@ -11,7 +11,6 @@ import { randomUUID } from 'crypto';
 import { userFactory } from '../../prisma/seed-helpers/user-factory';
 import { Login } from '../../src/dtos/auth/login.dto';
 import { jurisdictionFactory } from '../../prisma/seed-helpers/jurisdiction-factory';
-import { Compare } from '../../src/dtos/shared/base-filter.dto';
 
 describe('Properties Controller Tests', () => {
   let app: INestApplication;
@@ -171,12 +170,7 @@ describe('Properties Controller Tests', () => {
 
     it('should get listings matching the jurisdiction filters', async () => {
       let queryParams: PropertyQueryParams = {
-        filter: [
-          {
-            $comparison: Compare.IN,
-            jurisdiction: jurisdictionBId,
-          },
-        ],
+        jurisdiction: jurisdictionBId,
       };
 
       let res = await request(app.getHttpServer())
@@ -197,12 +191,7 @@ describe('Properties Controller Tests', () => {
       );
 
       queryParams = {
-        filter: [
-          {
-            $comparison: Compare.IN,
-            jurisdiction: jurisdictionAId,
-          },
-        ],
+        jurisdiction: jurisdictionAId,
       };
 
       res = await request(app.getHttpServer())
@@ -236,7 +225,7 @@ describe('Properties Controller Tests', () => {
       );
     });
 
-    it.skip('should return property by id', async () => {
+    it('should return property by id', async () => {
       let res = await request(app.getHttpServer())
         .get('/properties?limit=1')
         .expect(200);
@@ -250,7 +239,13 @@ describe('Properties Controller Tests', () => {
         .get(`/properties/${id}`)
         .expect(200);
 
-      expect(res.body).toEqual(expect.objectContaining(expectedData));
+      expect(res.body).toEqual(
+        expect.objectContaining({
+          createdAt: expect.anything(),
+          updatedAt: expect.anything(),
+          ...expectedData,
+        }),
+      );
     });
   });
 
@@ -283,11 +278,12 @@ describe('Properties Controller Tests', () => {
       expect(res.body.message[0]).toBe('name should not be null or undefined');
     });
 
-    it('should succeed when only a name is given', async () => {
+    it('should succeed when only a name and jurisdiction is given', async () => {
       const res = await request(app.getHttpServer())
         .post('/properties')
         .send({
           name: 'Vineta Apartments',
+          jurisdictions: { id: jurisdictionAId },
         })
         .set('Cookie', cookies)
         .expect(201);
@@ -300,6 +296,9 @@ describe('Properties Controller Tests', () => {
         description: null,
         url: null,
         urlTitle: null,
+        jurisdictions: expect.objectContaining({
+          id: jurisdictionAId,
+        }),
       });
     });
 
@@ -309,6 +308,7 @@ describe('Properties Controller Tests', () => {
         description: 'An old house in brutalist architectural style',
         url: 'https://example.com/rotfront_villa',
         urlTitle: 'Rotfront',
+        jurisdictions: { id: jurisdictionAId },
       };
       const res = await request(app.getHttpServer())
         .post('/properties')
@@ -321,6 +321,9 @@ describe('Properties Controller Tests', () => {
         createdAt: expect.anything(),
         updatedAt: expect.anything(),
         ...body,
+        jurisdictions: expect.objectContaining({
+          id: body.jurisdictions.id,
+        }),
       });
     });
   });
@@ -342,6 +345,7 @@ describe('Properties Controller Tests', () => {
         .put('/properties')
         .send({
           id: randId,
+          jurisdictions: { id: jurisdictionAId },
         })
         .set('Cookie', cookies)
         .expect(400);
@@ -366,6 +370,7 @@ describe('Properties Controller Tests', () => {
         description: 'Updated demo',
         url: 'https://updated.com',
         urlTitle: 'Updated URL title',
+        jurisdictions: { id: jurisdictionAId },
       };
 
       const res = await request(app.getHttpServer())
@@ -379,6 +384,9 @@ describe('Properties Controller Tests', () => {
         createdAt: newListing.createdAt.toISOString(),
         updatedAt: expect.anything(),
         ...updateDto,
+        jurisdictions: expect.objectContaining({
+          id: updateDto.jurisdictions.id,
+        }),
       });
     });
   });
@@ -412,6 +420,11 @@ describe('Properties Controller Tests', () => {
       const tempProperty = await prisma.properties.create({
         data: {
           name: 'Property to delete',
+          jurisdictions: {
+            connect: {
+              id: jurisdictionBId,
+            },
+          },
         },
       });
 

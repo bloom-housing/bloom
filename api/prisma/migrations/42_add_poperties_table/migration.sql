@@ -17,7 +17,8 @@ CREATE TABLE "properties" (
 );
 
 -- CreateIndex
-CREATE INDEX "properties_id_name_idx" ON "properties"("id", "name");
+CREATE INDEX "properties_id_idx" ON "properties"("id");
+CREATE INDEX "properties_name_idx" ON "properties"("name");
 
 -- AddForeignKey
 ALTER TABLE "listings" ADD CONSTRAINT "listings_property_id_fkey" FOREIGN KEY ("property_id") REFERENCES "properties"("id") ON DELETE SET NULL ON UPDATE CASCADE;

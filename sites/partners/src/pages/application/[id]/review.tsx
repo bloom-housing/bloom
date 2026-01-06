@@ -127,7 +127,7 @@ const Flag = () => {
           }
         >
           <Tag
-            className="tag-uppercase"
+            className="tag-full-width"
             variant={data?.status === FlaggedSetStatusEnum.resolved ? "success" : "primary"}
             size={"lg"}
           >

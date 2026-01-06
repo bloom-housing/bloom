@@ -406,7 +406,7 @@ export class ListingsService {
   /**
    * Get listings by multiselect question id
    */
-  retrieveListingsByMsq(
+  retrieveListings(
     params: {
       /**  */
       multiselectQuestionId: string
@@ -3644,6 +3644,15 @@ export interface ListingImage {
 
 export interface ListingFeatures {
   /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
   elevator?: boolean
 
   /**  */
@@ -3705,6 +3714,15 @@ export interface ListingFeatures {
 }
 
 export interface ListingUtilities {
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
   /**  */
   water?: boolean
 
@@ -4236,6 +4254,15 @@ export interface ApplicationLotteryTotal {
 
 export interface ListingNeighborhoodAmenities {
   /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
   groceryStores?: string
 
   /**  */
@@ -4720,6 +4747,152 @@ export interface ListingMapMarker {
   lng: number
 }
 
+export interface AssetCreate {
+  /**  */
+  fileId: string
+
+  /**  */
+  label: string
+
+  /**  */
+  id?: string
+}
+
+export interface UnitsSummaryCreate {
+  /**  */
+  unitTypes: IdDTO
+
+  /**  */
+  monthlyRentMin?: number
+
+  /**  */
+  monthlyRentMax?: number
+
+  /**  */
+  monthlyRentAsPercentOfIncome?: string
+
+  /**  */
+  amiPercentage?: number
+
+  /**  */
+  minimumIncomeMin?: string
+
+  /**  */
+  minimumIncomeMax?: string
+
+  /**  */
+  maxOccupancy?: number
+
+  /**  */
+  minOccupancy?: number
+
+  /**  */
+  floorMin?: number
+
+  /**  */
+  floorMax?: number
+
+  /**  */
+  sqFeetMin?: string
+
+  /**  */
+  sqFeetMax?: string
+
+  /**  */
+  unitAccessibilityPriorityTypes?: IdDTO
+
+  /**  */
+  totalCount?: number
+
+  /**  */
+  totalAvailable?: number
+
+  /**  */
+  rentType?: RentTypeEnum
+
+  /**  */
+  flatRentValueFrom?: number
+
+  /**  */
+  flatRentValueTo?: number
+
+  /**  */
+  monthlyRent?: number
+}
+
+export interface ListingImageCreate {
+  /**  */
+  ordinal?: number
+
+  /**  */
+  assets: AssetCreate
+
+  /**  */
+  description?: string
+}
+
+export interface ListingFeaturesCreate {
+  /**  */
+  elevator?: boolean
+
+  /**  */
+  wheelchairRamp?: boolean
+
+  /**  */
+  serviceAnimalsAllowed?: boolean
+
+  /**  */
+  accessibleParking?: boolean
+
+  /**  */
+  parkingOnSite?: boolean
+
+  /**  */
+  inUnitWasherDryer?: boolean
+
+  /**  */
+  laundryInBuilding?: boolean
+
+  /**  */
+  barrierFreeEntrance?: boolean
+
+  /**  */
+  rollInShower?: boolean
+
+  /**  */
+  grabBars?: boolean
+
+  /**  */
+  heatingInUnit?: boolean
+
+  /**  */
+  acInUnit?: boolean
+
+  /**  */
+  hearing?: boolean
+
+  /**  */
+  visual?: boolean
+
+  /**  */
+  mobility?: boolean
+
+  /**  */
+  barrierFreeUnitEntrance?: boolean
+
+  /**  */
+  loweredLightSwitch?: boolean
+
+  /**  */
+  barrierFreeBathroom?: boolean
+
+  /**  */
+  wideDoorways?: boolean
+
+  /**  */
+  loweredCabinets?: boolean
+}
+
 export interface UnitAmiChartOverrideCreate {
   /**  */
   items: AmiChartItem[]
@@ -4857,17 +5030,6 @@ export interface UnitGroupCreate {
   unitGroupAmiLevels?: UnitGroupAmiLevelCreate[]
 }
 
-export interface AssetCreate {
-  /**  */
-  fileId: string
-
-  /**  */
-  label: string
-
-  /**  */
-  id?: string
-}
-
 export interface PaperApplicationCreate {
   /**  */
   language: LanguagesEnum
@@ -4894,79 +5056,6 @@ export interface ApplicationMethodCreate {
 
   /**  */
   paperApplications?: PaperApplicationCreate[]
-}
-
-export interface UnitsSummaryCreate {
-  /**  */
-  unitTypes: IdDTO
-
-  /**  */
-  monthlyRentMin?: number
-
-  /**  */
-  monthlyRentMax?: number
-
-  /**  */
-  monthlyRentAsPercentOfIncome?: string
-
-  /**  */
-  amiPercentage?: number
-
-  /**  */
-  minimumIncomeMin?: string
-
-  /**  */
-  minimumIncomeMax?: string
-
-  /**  */
-  maxOccupancy?: number
-
-  /**  */
-  minOccupancy?: number
-
-  /**  */
-  floorMin?: number
-
-  /**  */
-  floorMax?: number
-
-  /**  */
-  sqFeetMin?: string
-
-  /**  */
-  sqFeetMax?: string
-
-  /**  */
-  unitAccessibilityPriorityTypes?: IdDTO
-
-  /**  */
-  totalCount?: number
-
-  /**  */
-  totalAvailable?: number
-
-  /**  */
-  rentType?: RentTypeEnum
-
-  /**  */
-  flatRentValueFrom?: number
-
-  /**  */
-  flatRentValueTo?: number
-
-  /**  */
-  monthlyRent?: number
-}
-
-export interface ListingImageCreate {
-  /**  */
-  ordinal?: number
-
-  /**  */
-  assets: AssetCreate
-
-  /**  */
-  description?: string
 }
 
 export interface AddressCreate {
@@ -5022,6 +5111,70 @@ export interface ListingEventCreate {
 
   /**  */
   assets?: AssetCreate
+}
+
+export interface ListingUtilitiesCreate {
+  /**  */
+  water?: boolean
+
+  /**  */
+  gas?: boolean
+
+  /**  */
+  trash?: boolean
+
+  /**  */
+  sewer?: boolean
+
+  /**  */
+  electricity?: boolean
+
+  /**  */
+  cable?: boolean
+
+  /**  */
+  phone?: boolean
+
+  /**  */
+  internet?: boolean
+}
+
+export interface ListingNeighborhoodAmenitiesCreate {
+  /**  */
+  groceryStores?: string
+
+  /**  */
+  publicTransportation?: string
+
+  /**  */
+  schools?: string
+
+  /**  */
+  parksAndCommunityCenters?: string
+
+  /**  */
+  pharmacies?: string
+
+  /**  */
+  healthCareResources?: string
+
+  /**  */
+  shoppingVenues?: string
+
+  /**  */
+  hospitals?: string
+
+  /**  */
+  seniorCenters?: string
+
+  /**  */
+  recreationalFacilities?: string
+
+  /**  */
+  playgrounds?: string
+
+  /**  */
+  busStops?: string
 }
 
 export interface ListingCreate {
@@ -5302,9 +5455,6 @@ export interface ListingCreate {
   section8Acceptance?: boolean
 
   /**  */
-  listingNeighborhoodAmenities?: ListingNeighborhoodAmenities
-
-  /**  */
   lastUpdatedByUser?: IdDTO
 
   /**  */
@@ -5314,15 +5464,6 @@ export interface ListingCreate {
   listingMultiselectQuestions?: IdDTO[]
 
   /**  */
-  units?: UnitCreate[]
-
-  /**  */
-  unitGroups?: UnitGroupCreate[]
-
-  /**  */
-  applicationMethods?: ApplicationMethodCreate[]
-
-  /**  */
   assets?: AssetCreate[]
 
   /**  */
@@ -5330,6 +5471,33 @@ export interface ListingCreate {
 
   /**  */
   listingImages?: ListingImageCreate[]
+
+  /**  */
+  listingsBuildingSelectionCriteriaFile?: AssetCreate
+
+  /**  */
+  listingsMarketingFlyerFile?: AssetCreate
+
+  /**  */
+  listingsAccessibleMarketingFlyerFile?: AssetCreate
+
+  /**  */
+  listingsResult?: AssetCreate
+
+  /**  */
+  listingFeatures?: ListingFeaturesCreate
+
+  /**  */
+  requestedChangesUser?: IdDTO
+
+  /**  */
+  units?: UnitCreate[]
+
+  /**  */
+  unitGroups?: UnitGroupCreate[]
+
+  /**  */
+  applicationMethods?: ApplicationMethodCreate[]
 
   /**  */
   listingsApplicationPickUpAddress?: AddressCreate
@@ -5347,28 +5515,13 @@ export interface ListingCreate {
   listingsBuildingAddress?: AddressCreate
 
   /**  */
-  listingsBuildingSelectionCriteriaFile?: AssetCreate
-
-  /**  */
-  listingsMarketingFlyerFile?: AssetCreate
-
-  /**  */
-  listingsAccessibleMarketingFlyerFile?: AssetCreate
-
-  /**  */
-  listingsResult?: AssetCreate
-
-  /**  */
   listingEvents: ListingEventCreate[]
 
   /**  */
-  listingFeatures?: ListingFeatures
+  listingUtilities?: ListingUtilitiesCreate
 
   /**  */
-  listingUtilities?: ListingUtilities
-
-  /**  */
-  requestedChangesUser?: IdDTO
+  listingNeighborhoodAmenities?: ListingNeighborhoodAmenitiesCreate
 }
 
 export interface ListingDuplicate {
@@ -5380,6 +5533,385 @@ export interface ListingDuplicate {
 
   /**  */
   storedListing: IdDTO
+}
+
+export interface UnitAmiChartOverrideUpdate {
+  /**  */
+  items: AmiChartItem[]
+
+  /**  */
+  id?: string
+}
+
+export interface UnitUpdate {
+  /**  */
+  amiPercentage?: string
+
+  /**  */
+  annualIncomeMin?: string
+
+  /**  */
+  monthlyIncomeMin?: string
+
+  /**  */
+  floor?: number
+
+  /**  */
+  annualIncomeMax?: string
+
+  /**  */
+  maxOccupancy?: number
+
+  /**  */
+  minOccupancy?: number
+
+  /**  */
+  monthlyRent?: string
+
+  /**  */
+  numBathrooms?: number
+
+  /**  */
+  numBedrooms?: number
+
+  /**  */
+  number?: string
+
+  /**  */
+  sqFeet?: string
+
+  /**  */
+  monthlyRentAsPercentOfIncome?: string
+
+  /**  */
+  bmrProgramChart?: boolean
+
+  /**  */
+  id?: string
+
+  /**  */
+  unitTypes?: IdDTO
+
+  /**  */
+  amiChart?: IdDTO
+
+  /**  */
+  unitAccessibilityPriorityTypes?: IdDTO
+
+  /**  */
+  unitRentTypes?: IdDTO
+
+  /**  */
+  unitAmiChartOverrides?: UnitAmiChartOverrideUpdate
+}
+
+export interface UnitGroupAmiLevelUpdate {
+  /**  */
+  amiPercentage?: number
+
+  /**  */
+  monthlyRentDeterminationType?: EnumUnitGroupAmiLevelUpdateMonthlyRentDeterminationType
+
+  /**  */
+  percentageOfIncomeValue?: number
+
+  /**  */
+  flatRentValue?: number
+
+  /**  */
+  id?: string
+
+  /**  */
+  amiChart?: IdDTO
+}
+
+export interface UnitGroupUpdate {
+  /**  */
+  maxOccupancy?: number
+
+  /**  */
+  minOccupancy?: number
+
+  /**  */
+  flatRentValueFrom?: number
+
+  /**  */
+  flatRentValueTo?: number
+
+  /**  */
+  monthlyRent?: number
+
+  /**  */
+  floorMin?: number
+
+  /**  */
+  floorMax?: number
+
+  /**  */
+  totalCount?: number
+
+  /**  */
+  totalAvailable?: number
+
+  /**  */
+  bathroomMin?: number
+
+  /**  */
+  bathroomMax?: number
+
+  /**  */
+  openWaitlist?: boolean
+
+  /**  */
+  sqFeetMin?: number
+
+  /**  */
+  sqFeetMax?: number
+
+  /**  */
+  rentType?: RentTypeEnum
+
+  /**  */
+  id?: string
+
+  /**  */
+  unitAccessibilityPriorityTypes?: IdDTO
+
+  /**  */
+  unitTypes?: IdDTO[]
+
+  /**  */
+  unitGroupAmiLevels?: UnitGroupAmiLevelUpdate[]
+}
+
+export interface PaperApplicationUpdate {
+  /**  */
+  language: LanguagesEnum
+
+  /**  */
+  id?: string
+
+  /**  */
+  assets?: AssetCreate
+}
+
+export interface ApplicationMethodUpdate {
+  /**  */
+  type: ApplicationMethodsTypeEnum
+
+  /**  */
+  label?: string
+
+  /**  */
+  externalReference?: string
+
+  /**  */
+  acceptsPostmarkedApplications?: boolean
+
+  /**  */
+  phoneNumber?: string
+
+  /**  */
+  id?: string
+
+  /**  */
+  paperApplications?: PaperApplicationUpdate[]
+}
+
+export interface AddressUpdate {
+  /**  */
+  placeName?: string
+
+  /**  */
+  city: string
+
+  /**  */
+  county?: string
+
+  /**  */
+  state: string
+
+  /**  */
+  street: string
+
+  /**  */
+  street2?: string
+
+  /**  */
+  zipCode: string
+
+  /**  */
+  latitude?: number
+
+  /**  */
+  longitude?: number
+
+  /**  */
+  id?: string
+}
+
+export interface ListingEventUpdate {
+  /**  */
+  type: ListingEventsTypeEnum
+
+  /**  */
+  startDate?: Date
+
+  /**  */
+  startTime?: Date
+
+  /**  */
+  endTime?: Date
+
+  /**  */
+  url?: string
+
+  /**  */
+  note?: string
+
+  /**  */
+  label?: string
+
+  /**  */
+  assets?: AssetCreate
+
+  /**  */
+  id?: string
+}
+
+export interface ListingFeaturesUpdate {
+  /**  */
+  elevator?: boolean
+
+  /**  */
+  wheelchairRamp?: boolean
+
+  /**  */
+  serviceAnimalsAllowed?: boolean
+
+  /**  */
+  accessibleParking?: boolean
+
+  /**  */
+  parkingOnSite?: boolean
+
+  /**  */
+  inUnitWasherDryer?: boolean
+
+  /**  */
+  laundryInBuilding?: boolean
+
+  /**  */
+  barrierFreeEntrance?: boolean
+
+  /**  */
+  rollInShower?: boolean
+
+  /**  */
+  grabBars?: boolean
+
+  /**  */
+  heatingInUnit?: boolean
+
+  /**  */
+  acInUnit?: boolean
+
+  /**  */
+  hearing?: boolean
+
+  /**  */
+  visual?: boolean
+
+  /**  */
+  mobility?: boolean
+
+  /**  */
+  barrierFreeUnitEntrance?: boolean
+
+  /**  */
+  loweredLightSwitch?: boolean
+
+  /**  */
+  barrierFreeBathroom?: boolean
+
+  /**  */
+  wideDoorways?: boolean
+
+  /**  */
+  loweredCabinets?: boolean
+
+  /**  */
+  id?: string
+}
+
+export interface ListingUtilitiesUpdate {
+  /**  */
+  water?: boolean
+
+  /**  */
+  gas?: boolean
+
+  /**  */
+  trash?: boolean
+
+  /**  */
+  sewer?: boolean
+
+  /**  */
+  electricity?: boolean
+
+  /**  */
+  cable?: boolean
+
+  /**  */
+  phone?: boolean
+
+  /**  */
+  internet?: boolean
+
+  /**  */
+  id?: string
+}
+
+export interface ListingNeighborhoodAmenitiesUpdate {
+  /**  */
+  groceryStores?: string
+
+  /**  */
+  publicTransportation?: string
+
+  /**  */
+  schools?: string
+
+  /**  */
+  parksAndCommunityCenters?: string
+
+  /**  */
+  pharmacies?: string
+
+  /**  */
+  healthCareResources?: string
+
+  /**  */
+  shoppingVenues?: string
+
+  /**  */
+  hospitals?: string
+
+  /**  */
+  seniorCenters?: string
+
+  /**  */
+  recreationalFacilities?: string
+
+  /**  */
+  playgrounds?: string
+
+  /**  */
+  busStops?: string
+
+  /**  */
+  id?: string
 }
 
 export interface ListingUpdate {
@@ -5663,9 +6195,6 @@ export interface ListingUpdate {
   section8Acceptance?: boolean
 
   /**  */
-  listingNeighborhoodAmenities?: ListingNeighborhoodAmenities
-
-  /**  */
   lastUpdatedByUser?: IdDTO
 
   /**  */
@@ -5675,13 +6204,13 @@ export interface ListingUpdate {
   listingMultiselectQuestions?: IdDTO[]
 
   /**  */
-  units?: UnitCreate[]
+  units?: UnitUpdate[]
 
   /**  */
-  unitGroups?: UnitGroupCreate[]
+  unitGroups?: UnitGroupUpdate[]
 
   /**  */
-  applicationMethods?: ApplicationMethodCreate[]
+  applicationMethods?: ApplicationMethodUpdate[]
 
   /**  */
   assets?: AssetCreate[]
@@ -5693,19 +6222,19 @@ export interface ListingUpdate {
   listingImages?: ListingImageCreate[]
 
   /**  */
-  listingsApplicationPickUpAddress?: AddressCreate
+  listingsApplicationPickUpAddress?: AddressUpdate
 
   /**  */
-  listingsApplicationMailingAddress?: AddressCreate
+  listingsApplicationMailingAddress?: AddressUpdate
 
   /**  */
-  listingsApplicationDropOffAddress?: AddressCreate
+  listingsApplicationDropOffAddress?: AddressUpdate
 
   /**  */
-  listingsLeasingAgentAddress?: AddressCreate
+  listingsLeasingAgentAddress?: AddressUpdate
 
   /**  */
-  listingsBuildingAddress?: AddressCreate
+  listingsBuildingAddress?: AddressUpdate
 
   /**  */
   listingsBuildingSelectionCriteriaFile?: AssetCreate
@@ -5720,16 +6249,19 @@ export interface ListingUpdate {
   listingsResult?: AssetCreate
 
   /**  */
-  listingEvents: ListingEventCreate[]
+  listingEvents: ListingEventUpdate[]
 
   /**  */
-  listingFeatures?: ListingFeatures
+  listingFeatures?: ListingFeaturesUpdate
 
   /**  */
-  listingUtilities?: ListingUtilities
+  listingUtilities?: ListingUtilitiesUpdate
 
   /**  */
   requestedChangesUser?: IdDTO
+
+  /**  */
+  listingNeighborhoodAmenities?: ListingNeighborhoodAmenitiesUpdate
 }
 
 export interface Accessibility {
@@ -8173,6 +8705,10 @@ export enum EnumListingCreateListingType {
   "regulated" = "regulated",
   "nonRegulated" = "nonRegulated",
 }
+export enum EnumUnitGroupAmiLevelUpdateMonthlyRentDeterminationType {
+  "flatRent" = "flatRent",
+  "percentageOfIncome" = "percentageOfIncome",
+}
 export enum EnumListingUpdateDepositType {
   "fixedDeposit" = "fixedDeposit",
   "depositRange" = "depositRange",
@@ -8319,6 +8855,7 @@ export enum FeatureFlagEnum {
   "enableRegions" = "enableRegions",
   "enableSection8Question" = "enableSection8Question",
   "enableSingleUseCode" = "enableSingleUseCode",
+  "enableSmokingPolicyRadio" = "enableSmokingPolicyRadio",
   "enableSupportAdmin" = "enableSupportAdmin",
   "enableUnderConstructionHome" = "enableUnderConstructionHome",
   "enableUnitGroups" = "enableUnitGroups",

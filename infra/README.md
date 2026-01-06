@@ -1,26 +1,33 @@
 # Bloom Infrastructure
 
-This directory contains infrastructure-as-code configuration for the Bloom Core AWS deployments. We
-use Open Tofu: https://opentofu.org/, a drop-in replacement for Terraform that is maintained by the
+This directory contains infrastructure-as-code configuration for the Bloom Core AWS deployments. It
+uses OpenTofu: https://opentofu.org/, a drop-in replacement for Terraform that is maintained by the
 Cloud Native Computing Foundation.
+
+- For instructions on deploying Bloom to an AWS organization, see
+  [./aws_deployment_guide/0_README.md](./aws_deployment_guide/0_README.md).
+- For instructions on developing the OpenTofu modules, see [./DEVELOPMENT.md](./DEVELOPMENT.md).
 
 ## Structure
 
-- [tofu_root_modules](./tofu_root_modules): Contains all the Open Tofu root modules. A root module
+- [tofu_root_modules](./tofu_root_modules): Contains all the OpenTofu root modules. A root module
   is a set of resources that are all managed together. Each root module has a state file that
   records the results of the latest apply operation.
 
    - [bloom_dev](./tofu_root_modules/bloom_dev/README.md): Configures the bloom-dev AWS account.
-   - [bloom_dev_deployer_permission_set](./tofu_root_modules/bloom_dev_deployer_permission_set/README.md):
-     Configures the bloom-dev-deployer permission set that is assigned on the bloom-dev account.
+   - [bloom_dev_deployer_permission_set_policy](./tofu_root_modules/bloom_dev_deployer_permission_set_policy/main.tf):
+     Configures the bloom-dev-deployer permission set policy.
+   - [bloom_prod_deployer_permission_set_policy](./tofu_root_modules/bloom_prod_deployer_permission_set_policy/main.tf):
+     Configures the bloom-prod-deployer permission set policy.
 
-- [tofu_importable_modules](./tofu_importable_modules): Contains all the Open Tofu importable
+- [tofu_importable_modules](./tofu_importable_modules): Contains all the OpenTofu importable
   modules. An importable module is a reusable set of resources configured through input
   parameters. Root modules import importable modules.
 
+   - [bloom_deployer_permission_set_policy](./tofu_importable_modules/bloom_deployer_permission_set_policy/):
+     Configures an inline permission set policy with the required permissions to deploy Bloom.
    - [bloom_deployment](./tofu_importable_modules/bloom_deployment/): Configures all the resources
      needed for a Bloom deployment in a single AWS account.
-
 
 
 ## Infrastructure-as-code mental model
@@ -35,7 +42,7 @@ down. However, the script only works on a fresh AWS account - if you run it agai
 a bunch of errors because the resources will have already been created. If you need to change how
 the account is configured, you need to write more scripts.
 
-Enter infrastructure-as-code tools like Terraform and Open Tofu. I like to think of them as CLI
+Enter infrastructure-as-code tools like Terraform and OpenTofu. I like to think of them as CLI
 scripting with a bunch of functionality already built in. `.tf` files contain [resource
 descriptions](https://opentofu.org/docs/language/resources/). Run the 'script' by running [`tofu
 apply`](https://opentofu.org/docs/cli/commands/apply/). If the AWS account already matches the
@@ -48,159 +55,3 @@ always handled gracefully and sometimes require deleting or configuring things m
 the tool. Using a infrastructure-as-code still requires manual testing and knowledge of the
 underlying systems you are configuring. It is a heck of a lot better than shell scripting, however,
 at least in my experience :)
-
-## Developer setup
-
-1. Install required CLI tools:
-   1. bash: `which bash`
-   2. openssl: `which openssl`
-   3. tr: `which tr`
-   4. Open Tofu: https://opentofu.org/docs/intro/install/
-   5. AWS CLI: https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
-
-      After installing, edit your `~/.aws/config` file for SSO authentication:
-
-      ```
-      # Only needed if applying changes to the bloom_dev root module.
-      [profile bloom-dev-deployer]
-      sso_session = sso
-      sso_account_id = 242477209009
-      sso_role_name = bloom-dev-deployer
-      region = us-east-1
-
-      # Only needed if applying changes to the bloom_dev_deployer_permission_set root module.
-      [profile bloom-permission-set-editor]
-      sso_session = sso
-      sso_account_id = 098472360576
-      sso_role_name = bloom-permission-set-editor
-      region = us-east-1
-
-      [sso-session sso]
-      sso_start_url = https://d-9067ac8222.awsapps.com/start
-      sso_region = us-east-1
-      sso_registration_scopes = sso:account:access
-      ```
-
-## Working with root modules
-
-### Downloading provider dependencies
-
-To work with root modules on your local machine, open a shell and change directory to the root
-module directory:
-
-```bash
-cd infra/tofu_root_modules/bloom_dev
-```
-
-Open Tofu relies on provider dependencies being present locally in the
-`.terraform` directory in the root module directory. To download the dependencies, run:
-
-```bash
-tofu init
-```
-
-Once the provider dependences have been downloaded, you will not have to run `tofu init` again
-unless you add a provider.
-
-To update a required version for a provider, change the version then run:
-
-```bash
-tofu init -upgrade
-```
-
-Both of these commands will download the new dependencies and update the `.terraform.lock.hcl` file
-in the root module directory.
-
-### Applying changes
-
-1. Open a shell and change directory to the root module.
-2. Run `aws sso login --profile bloom-dev-deployer` to authenticate to AWS.
-3. Edit the `.tf` files.
-4. Run `tofu apply` and review the planned changes. If there are unexpected planned changes, go back
-   to step 3. If all the changes are expected, approve the apply.
-5. Inspect the relevant AWS resources via the CLI or the AWS web console
-   (Log in via https://d-9067ac8222.awsapps.com/start). If there are unexpected results, go back to
-   step 3. In some cases you may have to manually modify or delete resources directly to 'unstick'
-   Open Tofu.
-6. To delete only the resources provisioned by the bloom_deployment module, run `tofu destroy
-   -target=module.bloom_deployment`.
-
-#### Forcing resource recreation
-
-To force Tofu to replace a resource, run `tofu apply -replace=ADDRESS`. For example:
-
-```
-tofu apply -replace=module.bloom_deployment.aws_secretsmanager_secret.api_jwt_signing_key
-```
-
-This is helpful when testing the local-exec provisioner because the provisioner only runs on
-resource creation.
-
-## AWS setup done manually
-
-1. Exygy AWS Organization with an IAM Identity Center instance in the organization management
-   account.
-2. IAM Identity Center User for each developer.
-3. IAM Identity Center Groups:
-
-   1. `bloom-dev-deployers` containing the identities that can deploy Bloom to the `bloom-dev` AWS
-      account.
-
-4. `bloom-dev` AWS account in the Exygy organization.
-5. `bloom-permission-set-editor` IAM Identity Center Permission Set that is assigned on the
-   `bloom-dev` AWS account to the `bloom-dev-deployers` group with the following inline policy:
-
-   ```
-   {
-     "Version": "2012-10-17",
-     "Statement": [
-       {
-         "Sid": "StateBucket",
-         "Effect": "Allow",
-         "Action": [
-           "s3:ListBucket"
-         ],
-         "Resource": [
-           "arn:aws:s3:::bloom-dev-deployer-tofu-state"
-         ]
-       },
-       {
-         "Sid": "StateFiles",
-         "Effect": "Allow",
-         "Action": [
-           "s3:GetObject",
-           "s3:PutObject",
-           "s3:DeleteObject"
-         ],
-         "Resource": [
-           "arn:aws:s3:::bloom-dev-deployer-tofu-state/state",
-           "arn:aws:s3:::bloom-dev-deployer-tofu-state/state.tflock"
-         ]
-       },
-       {
-         "Sid": "PermissionSet",
-         "Effect": "Allow",
-         "Action": [
-           "sso:ListPermissionSetProvisioningStatus",
-           "sso:DescribePermissionSet",
-           "sso:DescribePermissionSetProvisioningStatus",
-           "sso:GetInlinePolicyForPermissionSet",
-           "sso:GetPermissionsBoundaryForPermissionSet",
-           "sso:GetPermissionSet",
-           "sso:PutInlinePolicyToPermissionSet",
-           "sso:UpdatePermissionSet",
-           "sso:DescribeInstance",
-           "sso:CreatePermissionSet",
-           "sso:ListTagsForResource",
-           "sso:ProvisionPermissionSet"
-         ],
-         "Resource": [
-           "arn:aws:sso:::account/242477209009",
-           "arn:aws:sso:::instance/ssoins-72233fa322bcade3",
-           "arn:aws:sso:::permissionSet/ssoins-72233fa322bcade3/ps-06b1fe8280547b14"
-         ]
-       }
-     ]
-   }
-   ```
-6. `bloom-dev-deployer-tofu-state` S3 bucket in the organization management account.

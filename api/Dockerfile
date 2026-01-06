@@ -46,7 +46,7 @@ COPY --from=build /build/prisma/schema.prisma ./prisma/schema.prisma
 COPY --from=build /build/prisma/migrations ./prisma/migrations
 COPY --from=build /build/node_modules/.prisma ./node_modules/.prisma
 
-# Create a non-root user to run (priciple of least priviledge).
+# Create a non-root user to run (principle of least privilege).
 WORKDIR /run
 RUN groupadd --gid 2002 run && useradd --gid 2002 --uid 2002 --home /run run
 RUN chown --recursive 2002:2002 /run
