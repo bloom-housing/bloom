@@ -465,83 +465,49 @@ export default function ListingsList() {
                   </div>
                 </Grid.Cell>
               </Grid.Row>
-              {isNonRegulatedEnabled && (
-                <fieldset>
-                  <legend className={`text__caps-spaced`}>{t("listings.listingTypeTitle")}</legend>
-                  <Grid.Row columns={4}>
-                    <Grid.Cell className={"seeds-grid-span-2"}>
-                      <div>
-                        <Field
-                          name="listingType"
-                          type="radio"
-                          className="mr-4"
-                          register={register}
-                          id={EnumListingListingType.regulated}
-                          label={t("listings.regulated")}
-                          inputProps={{
-                            value: EnumListingListingType.regulated,
-                            defaultChecked: true,
-                          }}
-                          subNote=" Covered by an ordinance or funding source that requires tenants to
-                      income-qualify to live in these units, e.g. inclusionary units, LIHTC, or
-                      other deed-restricted properties"
-                        />
-                      </div>
-                    </Grid.Cell>
-                    <Grid.Cell className={"seeds-grid-span-2"}>
-                      <div>
-                        <Field
-                          name="listingType"
-                          type="radio"
-                          register={register}
-                          id={EnumListingListingType.nonRegulated}
-                          label={t("listings.nonRegulated")}
-                          inputProps={{
-                            value: EnumListingListingType.nonRegulated,
-                          }}
-                          subNote=" Tenants do not not need to income qualify to live here, and there is no
-                      funding source or ordinance that regulates rent levels or other tenant
-                      qualifications."
-                        />
-                      </div>
-                    </Grid.Cell>
-                  </Grid.Row>
-                </fieldset>
-              )}
-
-              {/* <Grid.Row columns={2}>
+              <div aria-live="polite">
                 {isNonRegulatedEnabled && (
-                  <>
-                    <Grid.Cell className={"seeds-grid-span-2"}>
-                      <div>
-                        <FieldGroup
-                          name="listingType"
-                          type="radio"
-                          register={register}
-                          groupLabel={t("listings.listingTypeTitle")}
-                          fields={[
-                            {
-                              id: "regulatedListing",
-                              label: t("listings.regulated"),
+                  <fieldset>
+                    <legend className={`text__caps-spaced`}>
+                      {t("listings.listingTypeTitle")}
+                    </legend>
+                    <Grid.Row columns={4}>
+                      <Grid.Cell className={"seeds-grid-span-2"}>
+                        <div>
+                          <Field
+                            name="listingType"
+                            type="radio"
+                            className="mr-4"
+                            register={register}
+                            id={EnumListingListingType.regulated}
+                            label={t("listings.regulated")}
+                            inputProps={{
                               value: EnumListingListingType.regulated,
                               defaultChecked: true,
-                              description:
-                                "Covered by an ordinance or funding source that requires tenants to income-qualify to live in these units, e.g. inclusionary units, LIHTC, or other deed-restricted properties",
-                            },
-                            {
-                              id: "nonRegulatedListing",
-                              label: t("listings.nonRegulated"),
+                            }}
+                            subNote={t("listings.listingType.regulated.description")}
+                          />
+                        </div>
+                      </Grid.Cell>
+                      <Grid.Cell className={"seeds-grid-span-2"}>
+                        <div>
+                          <Field
+                            name="listingType"
+                            type="radio"
+                            register={register}
+                            id={EnumListingListingType.nonRegulated}
+                            label={t("listings.nonRegulated")}
+                            inputProps={{
                               value: EnumListingListingType.nonRegulated,
-                              description:
-                                "Tenants do not not need to income qualify to live here, and there is no funding source or ordinance that regulates rent levels or other tenant qualifications.",
-                            },
-                          ]}
-                        />
-                      </div>
-                    </Grid.Cell>
-                  </>
+                            }}
+                            subNote={t("listings.listingType.nonRegulated.description")}
+                          />
+                        </div>
+                      </Grid.Cell>
+                    </Grid.Row>
+                  </fieldset>
                 )}
-              </Grid.Row> */}
+              </div>
             </Grid>
           </Dialog.Content>
           <Dialog.Footer>
