@@ -97,7 +97,7 @@ const DetailBuildingFeatures = () => {
       {enableParkingFee && (
         <Grid.Row>
           <Grid.Cell>
-            <FieldValue id="parkingFee" label={t("listings.sections.parkingFeeText")}>
+            <FieldValue id="parkingFee" label={t("t.parkingFee")}>
               {getDetailFieldString(listing.parkingFee)}
             </FieldValue>
           </Grid.Cell>

@@ -159,7 +159,7 @@ const BuildingFeatures = (props: BuildingFeaturesProps) => {
                 prepend={"$"}
                 {...defaultFieldProps(
                   "parkingFee",
-                  t("listings.sections.parkingFeeText"),
+                  t("t.parkingFee"),
                   props.requiredFields,
                   errors,
                   clearErrors

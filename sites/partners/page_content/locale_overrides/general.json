@@ -431,7 +431,6 @@
   "listings.sections.neighborhoodAmenitiesSubtitle": "Provide details about any local amenities including grocery stores, health services and parks within 2 miles of your listing.",
   "listings.sections.neighborhoodAmenitiesSubtitleAlt": "Please provide details about any nearby amenities.",
   "listings.sections.openHouse": "Open house",
-  "listings.sections.parkingFeeText": "Parking fee",
   "listings.sections.photo.helperTextBase": "Select JPEG or PNG file to upload. Please upload horizontal images only at approximately 1440px.",
   "listings.sections.photo.helperTextLimit": "Up to 10 uploaded images allowed.",
   "listings.sections.photo.helperTextLimits": "At least %{smart_count} image is required, and up to 10 images are allowed. |||| At least %{smart_count} images are required, and up to 10 images are allowed.",
