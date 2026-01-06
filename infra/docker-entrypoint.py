@@ -40,6 +40,8 @@ def main():
         "bloom_dev_deployer_permission_set_policy": "bloom-dev-iam-admin",
         "bloom_prod": "bloom-prod-deployer",
         "bloom_prod_deployer_permission_set_policy": "bloom-prod-iam-admin",
+        "bloom_genai": "bloom-genai-deployer",
+        "bloom_genai_deployer_permission_set_policy": "bloom-genai-iam-admin",
     }
 
     p = argparse.ArgumentParser(
@@ -71,6 +73,7 @@ def main():
     if not args.skip_init:
         run_subprocess(["tofu", "init"], cwd=mod_path)
 
+    #run_subprocess(["tofu", "force-unlock", "-force", "0455afcb-c9c9-f574-458a-e7e016b66b6a"], cwd=mod_path, always_exit=True)
     run_subprocess(["tofu"] + args.open_tofu_args, cwd=mod_path, always_exit=True)
 
 

@@ -102,6 +102,11 @@ variable "bloom_api_env_vars" {
   description = "Environment variables for the Bloom API tasks. This is merged with the default env vars set in the ecs_api_task.tf file, with these variables taking precedence."
   default     = {}
 }
+variable "bloom_api_fast_api_key_secret_arn" {
+  type        = string
+  description = "Secrets Manager ARN containing the housing-reports backend API key. Injected into bloom-api as FAST_API_KEY."
+  default     = ""
+}
 variable "bloom_api_task_count" {
   description = "How many API tasks that should be running. Default is provided based on the high_availability setting."
   type        = number

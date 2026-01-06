@@ -15,7 +15,7 @@ terraform {
 }
 
 locals {
-  bloom_deployment = "bloom-genai-test"
+  bloom_deployment = "bloom-genai"
   sso_profile_id   = "${local.bloom_deployment}-deployer"
 
   tofu_state_bucket_region = "us-east-1"
@@ -77,13 +77,73 @@ module "bloom_deployment" {
   bloom_site_partners_image = "ghcr.io/bloom-housing/bloom/partners:gitsha-f6b48498c8d023de468e27a9457db8ac2a6ad1f8"
   bloom_site_public_image   = "ghcr.io/bloom-housing/bloom/public:gitsha-f6b48498c8d023de468e27a9457db8ac2a6ad1f8"
   bloom_site_public_env_vars = {
-    JURISDICTION_NAME     = "Doorway"
+    JURISDICTION_NAME     = "Doorway GenAI Test"
     CLOUDINARY_CLOUD_NAME = "exygy"
     LANGUAGES             = "en,es,zh,vi,tl"
     RTL_LANGUAGES         = "ar"
   }
+  bloom_api_env_vars = {
+    FAST_API_URL = "http://data-explorer-backend:8000"
+  }
+  bloom_api_fast_api_key_secret_arn = module.data_explorer_backend.api_key_secret_arn
 }
 output "aws_lb_dns_name" {
   value       = module.bloom_deployment.lb_dns_name
   description = "DNS name of the load balancer."
+}
+
+variable "apply_seed" {
+  type = bool
+  description = "If true, upload seed SQL and import it during DB bootstrap."
+  default = false
+}
+variable "seed_sql_path" {
+  type = string
+  description = "Local path to seed SQL file (required if apply_seed=true)."
+  default = ""
+}
+
+module "data_explorer_backend" {
+  source = "../../tofu_importable_modules/data_explorer_backend"
+
+  bloom_deployment = local.bloom_deployment
+
+  aws_profile        = local.sso_profile_id
+  aws_account_number = local.bloom_aws_account_number
+  aws_region         = local.bloom_aws_region
+
+  bootstrap_db = true
+  apply_seed = var.apply_seed
+  seed_sql_source_path = var.seed_sql_path
+
+  env_type          = "dev"
+  high_availability = false
+
+  vpc_id                                     = module.bloom_deployment.vpc_id
+  private_subnet_ids                         = module.bloom_deployment.private_subnet_ids
+  ecs_cluster_arn                            = module.bloom_deployment.ecs_cluster_arn
+  service_discovery_namespace_arn            = module.bloom_deployment.service_discovery_namespace_arn
+  bloom_api_security_group_id                = module.bloom_deployment.security_group_ids.api
+  secrets_manager_endpoint_security_group_id = module.bloom_deployment.security_group_ids.secrets_manager_endpoint
+
+  data_explorer_backend_image = "ghcr.io/exygy/bloom-genai-backend:gitsha-027c79e4c163d7cd36d1b7be36b09203fb007163"
+
+  cors_origins = "https://${local.domain_name},https://partners.${local.domain_name}"
+
+  gcp_project_id="abc"
+}
+
+output "data_explorer_api_key_secret_arn" {
+  value       = module.data_explorer_backend.api_key_secret_arn
+  description = "ARN of the API key secret for data explorer backend. Retrieve the value using: aws secretsmanager get-secret-value --secret-id <arn>"
+}
+
+output "data_explorer_service_name" {
+  value       = module.data_explorer_backend.service_discovery_name
+  description = "Service discovery name for data explorer backend. Bloom API can access it at http://data-explorer-backend:8000"
+}
+
+output "data_explorer_database_endpoint" {
+  value       = module.data_explorer_backend.database_endpoint
+  description = "Endpoint of the data explorer database."
 }

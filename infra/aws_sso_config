@@ -8,9 +8,9 @@ sso_session = sso
 sso_role_name = bloom-prod-deployer
 sso_account_id = 966936071156
 
-[profile bloom-genai-test-deployer]
+[profile bloom-genai-deployer]
 sso_session = sso
-sso_role_name = bloom-genai-test-deployer
+sso_role_name = bloom-genai-deployer
 sso_account_id = 344261432650
 
 [profile bloom-dev-iam-admin]
@@ -23,9 +23,9 @@ sso_session = sso
 sso_role_name = bloom-prod-iam-admin
 sso_account_id = 098472360576
 
-[profile bloom-genai-test-iam-admin]
+[profile bloom-genai-iam-admin]
 sso_session = sso
-sso_role_name = bloom-genai-test-iam-admin
+sso_role_name = bloom-genai-iam-admin
 sso_account_id = 098472360576
 
 [sso-session sso]

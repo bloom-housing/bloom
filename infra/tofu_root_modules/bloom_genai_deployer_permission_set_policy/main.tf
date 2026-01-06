@@ -9,7 +9,7 @@ terraform {
 }
 
 locals {
-  bloom_deployment = "bloom-genai-test"
+  bloom_deployment = "bloom-genai"
   sso_profile_id   = "${local.bloom_deployment}-iam-admin"
 
   tofu_state_bucket_region = "us-east-1"
@@ -18,7 +18,7 @@ locals {
 
   iam_identity_center_region       = "us-east-1"
   iam_identity_center_instance_arn = "arn:aws:sso:::instance/ssoins-72233fa322bcade3"
-  deployer_permission_set_arn      = "arn:aws:sso:::permissionSet/ssoins-72233fa322bcade3/ps-72239c22284ebfa2"
+  deployer_permission_set_arn      = "arn:aws:sso:::permissionSet/ssoins-72233fa322bcade3/ps-72233dc58f6a82f5"
 
   bloom_deployment_aws_account_number     = "344261432650"
   bloom_deployment_aws_region             = "us-west-2"
