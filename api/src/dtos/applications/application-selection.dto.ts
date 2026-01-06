@@ -1,12 +1,12 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Expose, Type } from 'class-transformer';
 import { ValidateNested, IsBoolean, IsDefined } from 'class-validator';
-import ApplicationSelectionOptions from './application-selection-options.dto';
+import { ApplicationSelectionOption } from './application-selection-option.dto';
 import { AbstractDTO } from '../shared/abstract.dto';
 import { IdDTO } from '../shared/id.dto';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 
-class ApplicationSelections extends AbstractDTO {
+export class ApplicationSelection extends AbstractDTO {
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
@@ -21,7 +21,6 @@ class ApplicationSelections extends AbstractDTO {
 
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => IdDTO)
   @ApiProperty({ type: IdDTO })
   multiselectQuestion: IdDTO;
@@ -29,9 +28,7 @@ class ApplicationSelections extends AbstractDTO {
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => ApplicationSelectionOptions)
-  @ApiProperty({ type: ApplicationSelectionOptions })
-  selections: ApplicationSelectionOptions[];
+  @Type(() => ApplicationSelectionOption)
+  @ApiProperty({ type: ApplicationSelectionOption })
+  selections: ApplicationSelectionOption[];
 }
-
-export { ApplicationSelections as default, ApplicationSelections };
