@@ -185,9 +185,6 @@ export const getFeatures = (
   if (listing.yearBuilt) {
     features.push({ heading: t("t.built"), subheading: listing.yearBuilt })
   }
-  if (listing.smokingPolicy) {
-    features.push({ heading: t("t.smokingPolicy"), subheading: listing.smokingPolicy })
-  }
   if (listing.petPolicy) {
     features.push({ heading: t("t.petsPolicy"), subheading: listing.petPolicy })
   }
@@ -199,6 +196,9 @@ export const getFeatures = (
   }
   if (listing.servicesOffered) {
     features.push({ heading: t("t.servicesOffered"), subheading: listing.servicesOffered })
+  }
+  if (listing.smokingPolicy) {
+    features.push({ heading: t("t.smokingPolicy"), subheading: listing.smokingPolicy })
   }
   const accessibilityFeatures = getAccessibilityFeatures(listing)
   const enableAccessibilityFeatures = jurisdiction?.featureFlags?.some(
