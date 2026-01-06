@@ -981,7 +981,7 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
         },
         {
           path: 'requiredDocuments',
-          label: 'Required documents',
+          label: 'Required Documents',
         },
         {
           path: 'specialNotes',
