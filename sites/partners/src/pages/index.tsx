@@ -473,7 +473,7 @@ export default function ListingsList() {
                     </legend>
                     <Grid.Row columns={4}>
                       <Grid.Cell className={"seeds-grid-span-2"}>
-                        <div>
+                        <div className="pb-4 sm:pb-0">
                           <Field
                             name="listingType"
                             type="radio"
