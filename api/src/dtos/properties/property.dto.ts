@@ -1,6 +1,12 @@
 import { Expose, Type } from 'class-transformer';
 import { AbstractDTO } from '../shared/abstract.dto';
-import { IsDefined, IsString, IsUrl, ValidateNested } from 'class-validator';
+import {
+  IsDefined,
+  IsString,
+  IsUrl,
+  ValidateIf,
+  ValidateNested,
+} from 'class-validator';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IdDTO } from '../shared/id.dto';
@@ -19,6 +25,9 @@ export default class Property extends AbstractDTO {
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateIf((o) => o.url && o.url.length > 0, {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @IsUrl(
     { require_protocol: true },
     { groups: [ValidationsGroupsEnum.default] },
