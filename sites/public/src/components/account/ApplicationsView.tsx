@@ -86,6 +86,38 @@ const ApplicationsView = (props: ApplicationsViewProps) => {
     }
   }
 
+  const getPageHeader = () => {
+    switch (props.filterType) {
+      case ApplicationsIndexEnum.closed:
+        return {
+          title: t("account.closedApplications"),
+          subtitle: t("account.closedApplicationsSubtitle"),
+        }
+      case ApplicationsIndexEnum.open:
+        return {
+          title: t("account.openApplications"),
+          subtitle: t("account.openApplicationsSubtitle"),
+        }
+      case ApplicationsIndexEnum.all:
+        return {
+          title: t("account.allMyApplications"),
+          subtitle: t("account.allMyApplicationsSubtitle"),
+        }
+      case ApplicationsIndexEnum.lottery:
+        return {
+          title: t("account.lotteryApplications"),
+          subtitle: t("account.lotteryApplicationsSubtitle"),
+        }
+      default:
+        return {
+          title: t("account.myApplications"),
+          subtitle: t("account.myApplicationsSubtitle"),
+        }
+    }
+  }
+
+  const { title, subtitle } = getPageHeader()
+
   const noApplicationsSection = () => {
     let headerText = t("account.noApplications")
     let buttonText = t("listings.browseListings")
@@ -174,8 +206,8 @@ const ApplicationsView = (props: ApplicationsViewProps) => {
             </Tabs>
             <BloomCard
               iconSymbol="application"
-              title={t("account.myApplications")}
-              subtitle={t("account.myApplicationsSubtitle")}
+              title={title}
+              subtitle={subtitle}
               headingPriority={1}
             >
               <LoadingState loading={loading}>
