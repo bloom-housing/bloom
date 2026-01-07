@@ -106,6 +106,7 @@ describe('Properties Controller Tests', () => {
     it('should get default properties list from endpoint when no params are set', async () => {
       const res = await request(app.getHttpServer())
         .get('/properties')
+        .set('Cookie', cookies)
         .expect(200);
 
       expect(res.body.items.length).toBe(2);
@@ -133,6 +134,7 @@ describe('Properties Controller Tests', () => {
 
       const res = await request(app.getHttpServer())
         .get(`/properties?${stringify(queryParams as any)}`)
+        .set('Cookie', cookies)
         .expect(200);
 
       expect(res.body.meta).toEqual({
@@ -152,6 +154,7 @@ describe('Properties Controller Tests', () => {
 
       const res = await request(app.getHttpServer())
         .get(`/properties?${stringify(queryParams as any)}`)
+        .set('Cookie', cookies)
         .expect(200);
 
       expect(res.body.meta).toEqual({
@@ -175,6 +178,7 @@ describe('Properties Controller Tests', () => {
 
       let res = await request(app.getHttpServer())
         .get(`/properties?${stringify(queryParams as any)}`)
+        .set('Cookie', cookies)
         .expect(200);
 
       expect(res.body.meta).toEqual({
@@ -196,6 +200,7 @@ describe('Properties Controller Tests', () => {
 
       res = await request(app.getHttpServer())
         .get(`/properties?${stringify(queryParams as any)}`)
+        .set('Cookie', cookies)
         .expect(200);
 
       expect(res.body.meta).toEqual({
@@ -218,6 +223,7 @@ describe('Properties Controller Tests', () => {
       const propertyId = randomUUID();
       const res = await request(app.getHttpServer())
         .get(`/properties/${propertyId}`)
+        .set('Cookie', cookies)
         .expect(404);
 
       expect(res.body.message).toBe(
@@ -228,6 +234,7 @@ describe('Properties Controller Tests', () => {
     it('should return property by id', async () => {
       let res = await request(app.getHttpServer())
         .get('/properties?limit=1')
+        .set('Cookie', cookies)
         .expect(200);
 
       expect(res.body.items).toHaveLength(1);
@@ -237,6 +244,7 @@ describe('Properties Controller Tests', () => {
 
       res = await request(app.getHttpServer())
         .get(`/properties/${id}`)
+        .set('Cookie', cookies)
         .expect(200);
 
       expect(res.body).toEqual(
@@ -332,6 +340,9 @@ describe('Properties Controller Tests', () => {
     it('should throw an error when no property ID is given', async () => {
       const res = await request(app.getHttpServer())
         .put('/properties')
+        .send({
+          name: 'Updated Name',
+        })
         .set('Cookie', cookies)
         .expect(400);
 
@@ -345,6 +356,7 @@ describe('Properties Controller Tests', () => {
         .put('/properties')
         .send({
           id: randId,
+          name: 'Updated Name',
           jurisdictions: { id: jurisdictionAId },
         })
         .set('Cookie', cookies)
@@ -430,16 +442,17 @@ describe('Properties Controller Tests', () => {
 
       const res = await request(app.getHttpServer())
         .get(`/properties/${tempProperty.id}`)
+        .set('Cookie', cookies)
         .expect(200);
 
       expect(res.body.name).toBe(tempProperty.name);
 
       await request(app.getHttpServer())
         .delete('/properties')
-        .set('Cookie', cookies)
         .send({
           id: tempProperty.id,
         })
+        .set('Cookie', cookies)
         .expect(200);
     });
   });
