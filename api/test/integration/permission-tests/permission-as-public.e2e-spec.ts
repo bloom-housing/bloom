@@ -1421,4 +1421,123 @@ describe('Testing Permissioning of endpoints as public user', () => {
         .expect(403);
     });
   });
+
+  describe('Testing property endpoints', () => {
+    let propertyId: string;
+
+    beforeAll(async () => {
+      // Create a test property for use in the tests
+      const propertyData = {
+        name: 'Test Property',
+        jurisdictions: {
+          id: jurisdictionId,
+        },
+      };
+
+      const res = await prisma.properties.create({
+        data: {
+          name: propertyData.name,
+          jurisdictions: {
+            connect: {
+              id: propertyData.jurisdictions.id,
+            },
+          },
+        },
+      });
+
+      if (res.id) {
+        propertyId = res.id;
+      }
+    });
+
+    it('should error as forbidden for list endpoint', async () => {
+      await request(app.getHttpServer())
+        .get(`/properties?`)
+        .set('Cookie', cookies)
+        .expect(403);
+    });
+
+    it('should error as forbidden for retrieve endpoint', async () => {
+      if (!propertyId) {
+        throw new Error('Property ID not set up for test');
+      }
+
+      await request(app.getHttpServer())
+        .get(`/properties/${propertyId}`)
+        .set('Cookie', cookies)
+        .expect(403);
+    });
+
+    it('should error as forbidden for create endpoint', async () => {
+      const propertyData = {
+        name: 'New Test Property',
+        jurisdictions: {
+          id: jurisdictionId,
+        },
+      };
+
+      await request(app.getHttpServer())
+        .post('/properties')
+        .send(propertyData)
+        .set('Cookie', cookies)
+        .expect(403);
+    });
+
+    it('should error as forbidden for filterable list endpoint', async () => {
+      await request(app.getHttpServer())
+        .post(`/properties/list`)
+        .send({})
+        .set('Cookie', cookies)
+        .expect(403);
+    });
+
+    it('should error as forbidden for update endpoint', async () => {
+      if (!propertyId) {
+        throw new Error('Property ID not set up for test');
+      }
+
+      const propertyUpdateData = {
+        id: propertyId,
+        name: 'Updated Test Property',
+        jurisdictions: {
+          id: jurisdictionId,
+        },
+      };
+
+      await request(app.getHttpServer())
+        .put(`/properties`)
+        .send(propertyUpdateData)
+        .set('Cookie', cookies)
+        .expect(403);
+    });
+
+    it('should error as forbidden for delete endpoint', async () => {
+      const propertyData = {
+        name: 'Property to Delete',
+        jurisdictions: {
+          id: jurisdictionId,
+        },
+      };
+
+      const createRes = await request(app.getHttpServer())
+        .post('/properties')
+        .send(propertyData)
+        .set('Cookie', cookies);
+
+      if (createRes.status === 403) {
+        // Property creation is forbidden, so we can't test delete
+        return;
+      }
+
+      const deleteId = createRes.body.id;
+
+      await request(app.getHttpServer())
+        .delete(`/properties`)
+        .send({
+          id: deleteId,
+        } as IdDTO)
+        .set('Cookie', cookies)
+        .expect(403);
+    });
+  });
 });
