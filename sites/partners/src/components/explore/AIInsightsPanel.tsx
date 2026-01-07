@@ -136,19 +136,6 @@ export const AiInsightsPanel = ({
           {markdownContent}
         </Markdown>
       </div>
-
-      {/* Chat Interface */}
-      {/* <div className="mt-auto pt-4 border-t-2 border-dashed border-blue-300">
-        <div className="bg-white border border-gray-200 rounded-lg">
-          <div className="bg-gray-50 px-4 py-3 border-b border-gray-200 rounded-t-lg">
-            <h4 className="font-medium text-gray-900 flex items-center">
-              <ChatBubbleOvalLeftEllipsisIcon className="h-5 w-5 mr-2" />
-              <span className="text-sm">Ask for more insights</span>
-            </h4>
-          </div>
-          <ChatInterface />
-        </div>
-      </div> */}
     </div>
   )
 }
