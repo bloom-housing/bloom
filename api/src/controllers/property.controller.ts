@@ -33,7 +33,7 @@ import { defaultValidationPipeOptions } from '../utilities/default-validation-pi
 import { mapTo } from '../utilities/mapTo';
 import { User } from '../dtos/users/user.dto';
 import { PaginationMeta } from '../dtos/shared/pagination.dto';
-import { JwtAuthGuard } from 'src/guards/jwt.guard';
+import { JwtAuthGuard } from '../guards/jwt.guard';
 
 @Controller('properties')
 @ApiTags('properties')
