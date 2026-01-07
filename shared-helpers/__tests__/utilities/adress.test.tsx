@@ -5,31 +5,31 @@ import { Address as AddressType } from "../../src/types/backend-swagger"
 
 describe("Address component integration tests", () => {
   const baseAddress = {
-    street: "123 Main St",
-    city: "San Francisco",
+    street: "Mile Drive",
+    city: "Pebble Beach",
     state: "CA",
-    zipCode: "94102",
+    zipCode: "93953",
   } as AddressType
 
-  describe("Rendering without getDirections", () => {
+  describe("Rendering without getDirections property", () => {
     it("should render address without placeName or street2", () => {
       const { container } = render(<Address address={baseAddress} />)
 
-      expect(screen.getByText("123 Main St")).toBeInTheDocument()
-      expect(screen.getByText("San Francisco, CA 94102")).toBeInTheDocument()
+      expect(screen.getByText("Mile Drive")).toBeInTheDocument()
+      expect(screen.getByText("Pebble Beach, CA 93953")).toBeInTheDocument()
       expect(container.querySelector("a")).not.toBeInTheDocument()
     })
 
     it("should render address with street2", () => {
       const addressWithStreet2 = {
         ...baseAddress,
-        street2: "Apt 4B",
+        street2: "The Lone Cypress",
       } as AddressType
 
       render(<Address address={addressWithStreet2} />)
 
-      expect(screen.getByText("123 Main St, Apt 4B")).toBeInTheDocument()
-      expect(screen.getByText("San Francisco, CA 94102")).toBeInTheDocument()
+      expect(screen.getByText("Mile Drive, The Lone Cypress")).toBeInTheDocument()
+      expect(screen.getByText("Pebble Beach, CA 93953")).toBeInTheDocument()
     })
 
     it("should render address with placeName", () => {
@@ -41,8 +41,8 @@ describe("Address component integration tests", () => {
       render(<Address address={addressWithPlaceName} />)
 
       expect(screen.getByText("City Hall")).toBeInTheDocument()
-      expect(screen.getByText("123 Main St")).toBeInTheDocument()
-      expect(screen.getByText("San Francisco, CA 94102")).toBeInTheDocument()
+      expect(screen.getByText("Mile Drive")).toBeInTheDocument()
+      expect(screen.getByText("Pebble Beach, CA 93953")).toBeInTheDocument()
     })
 
     it("should render address with both placeName and street2", () => {
@@ -83,14 +83,14 @@ describe("Address component integration tests", () => {
       expect(link).toBeInTheDocument()
       expect(link).toHaveAttribute(
         "href",
-        "https://www.google.com/maps/place/123 Main St, San Francisco, CA 94102"
+        "https://www.google.com/maps/place/Mile Drive, Pebble Beach, CA 93953"
       )
     })
 
     it("should render get directions link with street2", () => {
       const addressWithStreet2: AddressType = {
         ...baseAddress,
-        street2: "Apt 4B",
+        street2: "The Lone Cypress",
       }
 
       render(<Address address={addressWithStreet2} getDirections={true} />)
@@ -98,7 +98,7 @@ describe("Address component integration tests", () => {
       const link = screen.getByRole("link")
       expect(link).toHaveAttribute(
         "href",
-        "https://www.google.com/maps/place/123 Main St, Apt 4B, San Francisco, CA 94102"
+        "https://www.google.com/maps/place/Mile Drive, The Lone Cypress, Pebble Beach, CA 93953"
       )
     })
 
@@ -113,7 +113,7 @@ describe("Address component integration tests", () => {
       const link = screen.getByRole("link")
       expect(link).toHaveAttribute(
         "href",
-        "https://www.google.com/maps/place/123 Main St, San Francisco, CA 94102"
+        "https://www.google.com/maps/place/Mile Drive, Pebble Beach, CA 93953"
       )
     })
 
@@ -198,7 +198,7 @@ describe("Address component integration tests", () => {
     it("should format city, state, and zipCode with proper spacing", () => {
       render(<Address address={baseAddress} />)
 
-      expect(screen.getByText("San Francisco, CA 94102")).toBeInTheDocument()
+      expect(screen.getByText("Pebble Beach, CA 93953")).toBeInTheDocument()
     })
   })
 
