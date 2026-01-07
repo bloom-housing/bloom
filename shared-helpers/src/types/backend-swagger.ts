@@ -1274,7 +1274,19 @@ export class MultiselectQuestionsService {
   list(
     params: {
       /**  */
+      page?: number
+      /**  */
+      limit?: number | "all"
+      /**  */
       filter?: MultiselectQuestionFilterParams[]
+      /**  */
+      orderBy?: MultiselectQuestionOrderByKeys[]
+      /**  */
+      orderDir?: OrderByEnum[]
+      /**  */
+      search?: string
+      /**  */
+      view?: MultiselectQuestionViews
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<MultiselectQuestion[]> {
@@ -1282,7 +1294,15 @@ export class MultiselectQuestionsService {
       let url = basePath + "/multiselectQuestions"
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-      configs.params = { filter: params["filter"] }
+      configs.params = {
+        page: params["page"],
+        limit: params["limit"],
+        filter: params["filter"],
+        orderBy: params["orderBy"],
+        orderDir: params["orderDir"],
+        search: params["search"],
+        view: params["view"],
+      }
 
       /** 适配ios13，get请求不允许带body */
 
@@ -7133,7 +7153,25 @@ export interface MultiselectQuestionUpdate {
 
 export interface MultiselectQuestionQueryParams {
   /**  */
+  page?: number
+
+  /**  */
+  limit?: number | "all"
+
+  /**  */
   filter?: string[]
+
+  /**  */
+  orderBy?: MultiselectQuestionOrderByKeys[]
+
+  /**  */
+  orderDir?: OrderByEnum[]
+
+  /**  */
+  search?: string
+
+  /**  */
+  view?: MultiselectQuestionViews
 }
 
 export interface MultiselectQuestionFilterParams {
@@ -7141,10 +7179,13 @@ export interface MultiselectQuestionFilterParams {
   $comparison: EnumMultiselectQuestionFilterParamsComparison
 
   /**  */
+  applicationSection?: MultiselectQuestionsApplicationSectionEnum
+
+  /**  */
   jurisdiction?: string
 
   /**  */
-  applicationSection?: MultiselectQuestionsApplicationSectionEnum
+  status?: MultiselectQuestionsStatusEnum
 }
 
 export interface AddressInput {
@@ -8674,6 +8715,7 @@ export enum FeatureFlagEnum {
   "enableListingFavoriting" = "enableListingFavoriting",
   "enableListingFileNumber" = "enableListingFileNumber",
   "enableListingFiltering" = "enableListingFiltering",
+  "enableLeasingAgentAltText" = "enableLeasingAgentAltText",
   "enableListingImageAltText" = "enableListingImageAltText",
   "enableListingOpportunity" = "enableListingOpportunity",
   "enableListingPagination" = "enableListingPagination",
@@ -8703,6 +8745,18 @@ export enum FeatureFlagEnum {
   "example" = "example",
   "hideCloseListingButton" = "hideCloseListingButton",
   "swapCommunityTypeWithPrograms" = "swapCommunityTypeWithPrograms",
+}
+
+export enum MultiselectQuestionOrderByKeys {
+  "jurisdiction" = "jurisdiction",
+  "name" = "name",
+  "status" = "status",
+  "updatedAt" = "updatedAt",
+}
+
+export enum MultiselectQuestionViews {
+  "base" = "base",
+  "fundamentals" = "fundamentals",
 }
 export enum EnumMultiselectQuestionFilterParamsComparison {
   "=" = "=",

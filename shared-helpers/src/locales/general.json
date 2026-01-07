@@ -633,6 +633,7 @@
   "languages.vi": "Tiếng Việt",
   "languages.zh": "中文",
   "leasingAgent.contact": "Contact leasing agent",
+  "leasingAgent.contactManagerProp": "Contact leasing agent or property manager",
   "leasingAgent.dueToHighCallVolume": "Due to high call volume you may hear a message.",
   "leasingAgent.officeHours": "Office hours",
   "listingFilters.clear": "Clear",

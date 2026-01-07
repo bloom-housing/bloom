@@ -1,4 +1,5 @@
 export enum MultiselectQuestionFilterKeys {
-  jurisdiction = 'jurisdiction',
   applicationSection = 'applicationSection',
+  jurisdiction = 'jurisdiction',
+  status = 'status',
 }
