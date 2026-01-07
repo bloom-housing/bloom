@@ -257,7 +257,7 @@ export class PropertyService {
     await this.permissionService.canOrThrow(
       requestingUser,
       'properties',
-      permissionActions.create,
+      permissionActions.delete,
       {
         jurisdictionId: rawJurisdiction.id,
       },
