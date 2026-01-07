@@ -1,12 +1,12 @@
-import { Address } from './address.dto';
-import { ApiPropertyOptional, OmitType } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 import { IsString, IsUUID } from 'class-validator';
+import { ApiPropertyOptional, OmitType } from '@nestjs/swagger';
+import { Address } from './address.dto';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 
 export class AddressUpdate extends OmitType(Address, [
-  'createdAt',
   'id',
+  'createdAt',
   'updatedAt',
 ]) {
   @Expose()

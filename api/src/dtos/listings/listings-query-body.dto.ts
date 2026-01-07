@@ -54,7 +54,6 @@ export class ListingsQueryBody extends PaginationAllowsAllQueryParams {
   })
   @IsArray({ groups: [ValidationsGroupsEnum.default] })
   @ArrayMaxSize(16, { groups: [ValidationsGroupsEnum.default] })
-  @Type(() => ListingFilterParams)
   @IsEnum(ListingOrderByKeys, {
     groups: [ValidationsGroupsEnum.default],
     each: true,
