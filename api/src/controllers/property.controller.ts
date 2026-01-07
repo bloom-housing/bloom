@@ -30,14 +30,14 @@ import Property from '../dtos/properties/property.dto';
 import { IdDTO } from '../dtos/shared/id.dto';
 import { SuccessDTO } from '../dtos/shared/success.dto';
 import { defaultValidationPipeOptions } from '../utilities/default-validation-pipe-options';
-import { OptionalAuthGuard } from '../guards/optional.guard';
 import { mapTo } from '../utilities/mapTo';
 import { User } from '../dtos/users/user.dto';
 import { PaginationMeta } from '../dtos/shared/pagination.dto';
+import { JwtAuthGuard } from 'src/guards/jwt.guard';
 
 @Controller('properties')
 @ApiTags('properties')
-@UseGuards(OptionalAuthGuard)
+@UseGuards(JwtAuthGuard)
 @ApiExtraModels(
   PropertyCreate,
   PropertyUpdate,
