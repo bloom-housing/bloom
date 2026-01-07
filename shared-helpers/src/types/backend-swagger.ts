@@ -1295,7 +1295,19 @@ export class MultiselectQuestionsService {
   list(
     params: {
       /**  */
+      page?: number
+      /**  */
+      limit?: number | "all"
+      /**  */
       filter?: MultiselectQuestionFilterParams[]
+      /**  */
+      orderBy?: MultiselectQuestionOrderByKeys[]
+      /**  */
+      orderDir?: OrderByEnum[]
+      /**  */
+      search?: string
+      /**  */
+      view?: MultiselectQuestionViews
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<MultiselectQuestion[]> {
@@ -1303,7 +1315,15 @@ export class MultiselectQuestionsService {
       let url = basePath + "/multiselectQuestions"
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-      configs.params = { filter: params["filter"] }
+      configs.params = {
+        page: params["page"],
+        limit: params["limit"],
+        filter: params["filter"],
+        orderBy: params["orderBy"],
+        orderDir: params["orderDir"],
+        search: params["search"],
+        view: params["view"],
+      }
 
       /** 适配ios13，get请求不允许带body */
 
@@ -6454,7 +6474,7 @@ export interface HouseholdMember {
   householdMemberAddress: Address
 }
 
-export interface ApplicationSelectionOptions {
+export interface ApplicationSelectionOption {
   /**  */
   id: string
 
@@ -6465,7 +6485,7 @@ export interface ApplicationSelectionOptions {
   updatedAt: Date
 
   /**  */
-  addressHolderAddress: IdDTO
+  addressHolderAddress: Address
 
   /**  */
   addressHolderName?: string
@@ -6483,7 +6503,7 @@ export interface ApplicationSelectionOptions {
   multiselectOption: IdDTO
 }
 
-export interface ApplicationSelections {
+export interface ApplicationSelection {
   /**  */
   id: string
 
@@ -6503,7 +6523,7 @@ export interface ApplicationSelections {
   multiselectQuestion: IdDTO
 
   /**  */
-  selections: ApplicationSelectionOptions
+  selections: ApplicationSelectionOption
 }
 
 export interface ApplicationMultiselectQuestionOption {
@@ -6661,7 +6681,7 @@ export interface Application {
   householdMember: HouseholdMember[]
 
   /**  */
-  applicationSelections?: ApplicationSelections[]
+  applicationSelections?: ApplicationSelection[]
 
   /**  */
   preferences?: ApplicationMultiselectQuestion[]
@@ -7333,7 +7353,25 @@ export interface MultiselectQuestionUpdate {
 
 export interface MultiselectQuestionQueryParams {
   /**  */
+  page?: number
+
+  /**  */
+  limit?: number | "all"
+
+  /**  */
   filter?: string[]
+
+  /**  */
+  orderBy?: MultiselectQuestionOrderByKeys[]
+
+  /**  */
+  orderDir?: OrderByEnum[]
+
+  /**  */
+  search?: string
+
+  /**  */
+  view?: MultiselectQuestionViews
 }
 
 export interface MultiselectQuestionFilterParams {
@@ -7341,10 +7379,13 @@ export interface MultiselectQuestionFilterParams {
   $comparison: EnumMultiselectQuestionFilterParamsComparison
 
   /**  */
+  applicationSection?: MultiselectQuestionsApplicationSectionEnum
+
+  /**  */
   jurisdiction?: string
 
   /**  */
-  applicationSection?: MultiselectQuestionsApplicationSectionEnum
+  status?: MultiselectQuestionsStatusEnum
 }
 
 export interface AddressInput {
@@ -7501,7 +7542,7 @@ export interface PublicAppsFiltered {
   householdMember: HouseholdMember[]
 
   /**  */
-  applicationSelections?: ApplicationSelections[]
+  applicationSelections?: ApplicationSelection[]
 
   /**  */
   preferences?: ApplicationMultiselectQuestion[]
@@ -7539,6 +7580,46 @@ export interface PublicAppsViewResponse {
 
   /**  */
   applicationsCount: PublicAppsCount
+}
+
+export interface AccessibilityUpdate {
+  /**  */
+  mobility?: boolean
+
+  /**  */
+  vision?: boolean
+
+  /**  */
+  hearing?: boolean
+
+  /**  */
+  other?: boolean
+}
+
+export interface AlternateContactUpdate {
+  /**  */
+  type?: AlternateContactRelationship
+
+  /**  */
+  otherType?: string
+
+  /**  */
+  firstName?: string
+
+  /**  */
+  lastName?: string
+
+  /**  */
+  agency?: string
+
+  /**  */
+  phoneNumber?: string
+
+  /**  */
+  emailAddress?: string
+
+  /**  */
+  address: AddressCreate
 }
 
 export interface ApplicantUpdate {
@@ -7586,46 +7667,6 @@ export interface ApplicantUpdate {
 
   /**  */
   applicantWorkAddress: AddressCreate
-}
-
-export interface AlternateContactUpdate {
-  /**  */
-  type?: AlternateContactRelationship
-
-  /**  */
-  otherType?: string
-
-  /**  */
-  firstName?: string
-
-  /**  */
-  lastName?: string
-
-  /**  */
-  agency?: string
-
-  /**  */
-  phoneNumber?: string
-
-  /**  */
-  emailAddress?: string
-
-  /**  */
-  address: AddressCreate
-}
-
-export interface AccessibilityUpdate {
-  /**  */
-  mobility?: boolean
-
-  /**  */
-  vision?: boolean
-
-  /**  */
-  hearing?: boolean
-
-  /**  */
-  other?: boolean
 }
 
 export interface DemographicUpdate {
@@ -7687,6 +7728,69 @@ export interface HouseholdMemberUpdate {
 
   /**  */
   householdMemberWorkAddress?: AddressCreate
+}
+
+export interface AddressUpdate {
+  /**  */
+  placeName?: string
+
+  /**  */
+  city: string
+
+  /**  */
+  county?: string
+
+  /**  */
+  state: string
+
+  /**  */
+  street: string
+
+  /**  */
+  street2?: string
+
+  /**  */
+  zipCode: string
+
+  /**  */
+  latitude?: number
+
+  /**  */
+  longitude?: number
+
+  /**  */
+  id?: string
+}
+
+export interface ApplicationSelectionOptionCreate {
+  /**  */
+  addressHolderName?: string
+
+  /**  */
+  addressHolderRelationship?: string
+
+  /**  */
+  isGeocodingVerified?: boolean
+
+  /**  */
+  multiselectOption: IdDTO
+
+  /**  */
+  addressHolderAddress?: AddressUpdate
+
+  /**  */
+  applicationSelection?: IdDTO
+}
+
+export interface ApplicationSelectionCreate {
+  /**  */
+  hasOptedOut?: boolean
+
+  /**  */
+  multiselectQuestion: IdDTO
+
+  /**  */
+  selections: ApplicationSelectionOptionCreate[]
 }
 
 export interface ApplicationCreate {
@@ -7757,9 +7861,6 @@ export interface ApplicationCreate {
   reviewStatus?: ApplicationReviewStatusEnum
 
   /**  */
-  applicationSelections?: ApplicationSelections[]
-
-  /**  */
   preferences?: ApplicationMultiselectQuestion[]
 
   /**  */
@@ -7772,6 +7873,12 @@ export interface ApplicationCreate {
   isNewest?: boolean
 
   /**  */
+  accessibility: AccessibilityUpdate
+
+  /**  */
+  alternateContact: AlternateContactUpdate
+
+  /**  */
   applicant: ApplicantUpdate
 
   /**  */
@@ -7781,12 +7888,6 @@ export interface ApplicationCreate {
   applicationsAlternateAddress: AddressCreate
 
   /**  */
-  alternateContact: AlternateContactUpdate
-
-  /**  */
-  accessibility: AccessibilityUpdate
-
-  /**  */
   demographics: DemographicUpdate
 
   /**  */
@@ -7794,6 +7895,49 @@ export interface ApplicationCreate {
 
   /**  */
   preferredUnitTypes: IdDTO[]
+
+  /**  */
+  applicationSelections?: ApplicationSelectionCreate[]
+}
+
+export interface ApplicationSelectionOptionUpdate {
+  /**  */
+  addressHolderName?: string
+
+  /**  */
+  addressHolderRelationship?: string
+
+  /**  */
+  isGeocodingVerified?: boolean
+
+  /**  */
+  multiselectOption: IdDTO
+
+  /**  */
+  id?: string
+
+  /**  */
+  addressHolderAddress?: AddressUpdate
+
+  /**  */
+  applicationSelection?: IdDTO
+}
+
+export interface ApplicationSelectionUpdate {
+  /**  */
+  application: IdDTO
+
+  /**  */
+  hasOptedOut?: boolean
+
+  /**  */
+  multiselectQuestion: IdDTO
+
+  /**  */
+  id?: string
+
+  /**  */
+  selections: ApplicationSelectionOptionUpdate[]
 }
 
 export interface ApplicationUpdate {
@@ -7867,9 +8011,6 @@ export interface ApplicationUpdate {
   reviewStatus?: ApplicationReviewStatusEnum
 
   /**  */
-  applicationSelections?: ApplicationSelections[]
-
-  /**  */
   preferences?: ApplicationMultiselectQuestion[]
 
   /**  */
@@ -7882,19 +8023,22 @@ export interface ApplicationUpdate {
   isNewest?: boolean
 
   /**  */
+  accessibility: AccessibilityUpdate
+
+  /**  */
+  alternateContact: AlternateContactUpdate
+
+  /**  */
   applicant: ApplicantUpdate
+
+  /**  */
+  applicationSelections?: ApplicationSelectionUpdate[]
 
   /**  */
   applicationsMailingAddress: AddressCreate
 
   /**  */
   applicationsAlternateAddress: AddressCreate
-
-  /**  */
-  alternateContact: AlternateContactUpdate
-
-  /**  */
-  accessibility: AccessibilityUpdate
 
   /**  */
   demographics: DemographicUpdate
@@ -8838,6 +8982,7 @@ export enum FeatureFlagEnum {
   "enableListingFavoriting" = "enableListingFavoriting",
   "enableListingFileNumber" = "enableListingFileNumber",
   "enableListingFiltering" = "enableListingFiltering",
+  "enableLeasingAgentAltText" = "enableLeasingAgentAltText",
   "enableListingImageAltText" = "enableListingImageAltText",
   "enableListingOpportunity" = "enableListingOpportunity",
   "enableListingPagination" = "enableListingPagination",
@@ -8867,6 +9012,18 @@ export enum FeatureFlagEnum {
   "example" = "example",
   "hideCloseListingButton" = "hideCloseListingButton",
   "swapCommunityTypeWithPrograms" = "swapCommunityTypeWithPrograms",
+}
+
+export enum MultiselectQuestionOrderByKeys {
+  "jurisdiction" = "jurisdiction",
+  "name" = "name",
+  "status" = "status",
+  "updatedAt" = "updatedAt",
+}
+
+export enum MultiselectQuestionViews {
+  "base" = "base",
+  "fundamentals" = "fundamentals",
 }
 export enum EnumMultiselectQuestionFilterParamsComparison {
   "=" = "=",
