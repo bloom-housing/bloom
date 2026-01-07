@@ -73,7 +73,7 @@ module "bloom_deployment" {
   env_type          = "dev"
   high_availability = false
 
-  bloom_api_image           = "ghcr.io/bloom-housing/bloom/dbseed:gitsha-c2a913ae933314f0a26af56ae3c3f41138ed8fb2"
+  bloom_api_image           = "ghcr.io/bloom-housing/bloom/api:gitsha-c2a913ae933314f0a26af56ae3c3f41138ed8fb2"
   bloom_site_partners_image = "ghcr.io/bloom-housing/bloom/partners:gitsha-c2a913ae933314f0a26af56ae3c3f41138ed8fb2"
   bloom_site_public_image   = "ghcr.io/bloom-housing/bloom/public:gitsha-c2a913ae933314f0a26af56ae3c3f41138ed8fb2"
   bloom_site_public_env_vars = {
@@ -92,15 +92,30 @@ output "aws_lb_dns_name" {
   description = "DNS name of the load balancer."
 }
 
+variable "bootstrap_db" {
+  type        = bool
+  description = "If true, bootstrap the database schema and indexes. Only run with this true once upon first deployment."
+  default     = false
+}
 variable "apply_seed" {
-  type = bool
+  type        = bool
   description = "If true, upload seed SQL and import it during DB bootstrap."
-  default = false
+  default     = false
 }
 variable "seed_sql_path" {
-  type = string
+  type        = string
   description = "Local path to seed SQL file (required if apply_seed=true)."
-  default = ""
+  default     = ""
+}
+variable "vertex_credentials_json_secret_arn" {
+  type        = string
+  description = "ARN of an AWS Secrets Manager secret whose value will be injected into the bloom-genai-backend container as VERTEX_CREDENTIALS_JSON."
+  default     = ""
+}
+variable "gcp_project_id" {
+  type        = string
+  description = "GCP Project ID for the Vertex AI project associated with the Vertex AI credentials."
+  default     = "gen-lang-client-0598983018"
 }
 
 module "data_explorer_backend" {
@@ -112,8 +127,8 @@ module "data_explorer_backend" {
   aws_account_number = local.bloom_aws_account_number
   aws_region         = local.bloom_aws_region
 
-  bootstrap_db = true
-  apply_seed = var.apply_seed
+  bootstrap_db         = var.bootstrap_db
+  apply_seed           = var.apply_seed
   seed_sql_source_path = var.seed_sql_path
 
   env_type          = "dev"
@@ -126,11 +141,12 @@ module "data_explorer_backend" {
   bloom_api_security_group_id                = module.bloom_deployment.security_group_ids.api
   secrets_manager_endpoint_security_group_id = module.bloom_deployment.security_group_ids.secrets_manager_endpoint
 
-  data_explorer_backend_image = "ghcr.io/exygy/housing-reports/bloom-genai-backend:gitsha-027c79e4c163d7cd36d1b7be36b09203fb007163"
+  data_explorer_backend_image = "ghcr.io/exygy/housing-reports/bloom-genai-backend:gitsha-8c1ec44f90a3ce738ed63f1575ac5847ae9e8fe6"
 
   cors_origins = "https://${local.domain_name},https://partners.${local.domain_name}"
 
-  gcp_project_id="abc"
+  gcp_project_id = var.gcp_project_id
+  vertex_credentials_json_secret_arn = var.vertex_credentials_json_secret_arn
 }
 
 output "data_explorer_api_key_secret_arn" {

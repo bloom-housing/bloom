@@ -35,26 +35,35 @@ resource "aws_iam_role_policy" "data_explorer_ecs" {
   role = aws_iam_role.data_explorer_ecs.id
   policy = jsonencode({
     Version = "2012-10-17"
-    Statement = [
-      {
-        Action = [
-          "logs:CreateLogStream",
-          "logs:PutLogEvents",
-        ]
-        Effect   = "Allow"
-        Resource = "${aws_cloudwatch_log_group.data_explorer.arn}:log-stream:*"
-      },
-      {
-        Action   = "secretsmanager:GetSecretValue"
-        Effect   = "Allow"
-        Resource = aws_db_instance.data_explorer.master_user_secret[0].secret_arn
-      },
-      {
-        Action   = "secretsmanager:GetSecretValue"
-        Effect   = "Allow"
-        Resource = aws_secretsmanager_secret.api_key.arn
-      }
-    ]
+    Statement = concat(
+      [
+        {
+          Action = [
+            "logs:CreateLogStream",
+            "logs:PutLogEvents",
+          ]
+          Effect   = "Allow"
+          Resource = "${aws_cloudwatch_log_group.data_explorer.arn}:log-stream:*"
+        },
+        {
+          Action   = "secretsmanager:GetSecretValue"
+          Effect   = "Allow"
+          Resource = aws_db_instance.data_explorer.master_user_secret[0].secret_arn
+        },
+        {
+          Action   = "secretsmanager:GetSecretValue"
+          Effect   = "Allow"
+          Resource = aws_secretsmanager_secret.api_key.arn
+        }
+      ],
+      length(trimspace(var.vertex_credentials_json_secret_arn)) > 0 ? [
+        {
+          Action   = "secretsmanager:GetSecretValue"
+          Effect   = "Allow"
+          Resource = var.vertex_credentials_json_secret_arn
+        }
+      ] : []
+    )
   })
 }
 
@@ -107,6 +116,25 @@ locals {
     GCP_LOCATION   = var.gcp_location
     LOG_LEVEL      = "INFO"
   }
+
+  container_secrets = concat(
+    [
+      {
+        name      = "DB_PASSWORD"
+        valueFrom = "${aws_db_instance.data_explorer.master_user_secret[0].secret_arn}:password::"
+      },
+      {
+        name      = "API_KEY"
+        valueFrom = aws_secretsmanager_secret.api_key.arn
+      }
+    ],
+    length(trimspace(var.vertex_credentials_json_secret_arn)) > 0 ? [
+      {
+        name      = "VERTEX_CREDENTIALS_JSON"
+        valueFrom = var.vertex_credentials_json_secret_arn
+      }
+    ] : []
+  )
 }
 
 # ECS Task Definition
@@ -138,16 +166,7 @@ resource "aws_ecs_task_definition" "data_explorer" {
         # Format: postgresql+psycopg://user:password@host:port/dbname
         "export DATABASE_URL=\"postgresql+psycopg://${aws_db_instance.data_explorer.username}:$(echo $DB_PASSWORD | sed 's|%|%25|g; s| |%20|g; s|&|%26|g; s|/|%2F|g; s|:|%3A|g; s|=|%3D|g; s|?|%3F|g; s|@|%40|g; s|\\[|%5B|g; s|]|%5D|g')@${local.db_host}/${local.db_name}\" && exec uvicorn main:app --host 0.0.0.0 --port 8000",
       ]
-      secrets = [
-        {
-          name      = "DB_PASSWORD"
-          valueFrom = "${aws_db_instance.data_explorer.master_user_secret[0].secret_arn}:password::"
-        },
-        {
-          name      = "API_KEY"
-          valueFrom = aws_secretsmanager_secret.api_key.arn
-        }
-      ]
+      secrets = local.container_secrets
       environment = [for k, v in merge(local.default_env_vars, var.data_explorer_env_vars) : { name = k, value = tostring(v) }]
       portMappings = [
         {

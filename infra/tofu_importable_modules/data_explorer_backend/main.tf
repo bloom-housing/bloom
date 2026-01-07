@@ -196,6 +196,15 @@ variable "seed_sql_source_path" {
     error_message = "apply_seed=true requires seed_sql_source_path to be set."
   }
 }
+variable "vertex_credentials_json_secret_arn" {
+  type        = string
+  description = "ARN of an AWS Secrets Manager secret whose value will be injected into the container as VERTEX_CREDENTIALS_JSON."
+  default     = ""
+  validation {
+    condition     = var.ai_provider != "vertex_ai" || length(trimspace(var.vertex_credentials_json_secret_arn)) > 0
+    error_message = "vertex_credentials_json_secret_arn must be set when ai_provider = 'vertex_ai'."
+  }
+}
 
 # Outputs
 output "api_key_secret_arn" {
