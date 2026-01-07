@@ -8,7 +8,15 @@ import {
   t,
   Textarea,
 } from "@bloom-housing/ui-components"
-import { Button, Card, Drawer, FieldValue, FormErrorMessage, Grid } from "@bloom-housing/ui-seeds"
+import {
+  Button,
+  Card,
+  Drawer,
+  FieldValue,
+  FormErrorMessage,
+  Grid,
+  Tag,
+} from "@bloom-housing/ui-seeds"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import { useForm } from "react-hook-form"
 import {
@@ -38,6 +46,8 @@ type PreferenceEditDrawerProps = {
     formattedData: MultiselectQuestionCreate | MultiselectQuestionUpdate,
     requestType: DrawerType
   ) => void
+  copyQuestion: (data: MultiselectQuestionCreate) => void
+  setDeleteConfirmModalOpen: React.Dispatch<React.SetStateAction<MultiselectQuestion>>
   isLoading: boolean
 }
 
@@ -56,6 +66,8 @@ type OptionForm = {
   mapLayerId?: string
 }
 
+const alphaNumericPattern = /^[A-Z][a-zA-Z0-9 ']+$/
+
 const PreferenceEditDrawer = ({
   drawerType,
   questionData,
@@ -63,6 +75,8 @@ const PreferenceEditDrawer = ({
   drawerOpen,
   onDrawerClose,
   saveQuestion,
+  copyQuestion,
+  setDeleteConfirmModalOpen,
   isLoading,
 }: PreferenceEditDrawerProps) => {
   const [optionDrawerOpen, setOptionDrawerOpen] = useState<DrawerType | null>(null)
@@ -71,8 +85,17 @@ const PreferenceEditDrawer = ({
 
   const { profile } = useContext(AuthContext)
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, getValues, trigger, errors, clearErrors, setError, watch, formState } =
-    useForm()
+  const {
+    register,
+    getValues,
+    setValue,
+    trigger,
+    errors,
+    clearErrors,
+    setError,
+    watch,
+    formState,
+  } = useForm()
 
   const { mapLayers } = useMapLayersList(watch("jurisdictionId"))
 
@@ -163,6 +186,21 @@ const PreferenceEditDrawer = ({
     ? t("settings.preferenceEditOption")
     : t("settings.preferenceAddOption")
 
+  let variant = null
+  switch (questionData?.status) {
+    case MultiselectQuestionsStatusEnum.active:
+      variant = "success"
+      break
+    case MultiselectQuestionsStatusEnum.toRetire:
+    case MultiselectQuestionsStatusEnum.retired:
+      variant = "highlight-warm"
+      break
+  }
+  const statusText = `${questionData?.status.charAt(0).toUpperCase()}${questionData?.status.slice(
+    1
+  )}`
+  const statusTag = questionData?.status ? <Tag variant={variant}>{statusText}</Tag> : undefined
+
   let validationMethodsFields = [
     {
       label: t("settings.preferenceValidatingAddress.checkWithinRadius"),
@@ -208,6 +246,9 @@ const PreferenceEditDrawer = ({
     )
   }
 
+  /**
+   * Saves the preference and the associated options
+   */
   const savePreference = async () => {
     const validation = await trigger()
     if (!questionData || !questionData?.multiselectOptions?.length) {
@@ -243,12 +284,12 @@ const PreferenceEditDrawer = ({
 
     const formattedQuestionData: MultiselectQuestionUpdate | MultiselectQuestionCreate = {
       applicationSection: MultiselectQuestionsApplicationSectionEnum.preferences,
-      description: formValues.description,
+      description: formValues.description.trim(),
       hideFromListing: formValues.showOnListingQuestion === YesNoEnum.no,
       jurisdictions: [], // TODO: shouldn't this not be necessary anymore?
       jurisdiction: profile.jurisdictions.find((juris) => juris.id === formValues.jurisdictionId),
       links: formValues.preferenceUrl
-        ? [{ title: formValues.preferenceLinkTitle, url: formValues.preferenceUrl }]
+        ? [{ title: formValues.preferenceLinkTitle.trim(), url: formValues.preferenceUrl.trim() }]
         : [],
       isExclusive: formValues.exclusiveQuestion === "exclusive",
       multiselectOptions: questionData?.multiselectOptions?.map((option) => {
@@ -256,12 +297,20 @@ const PreferenceEditDrawer = ({
         return option
       }),
       status: newStatus,
-      name: formValues.name,
+      name: formValues.name.trim(),
       text: "", // TODO: shouldn't this not be necessary anymore?
     }
     clearErrors()
     clearErrors("questions")
     saveQuestion(formattedQuestionData, drawerType)
+  }
+
+  const toggleVisibility = () => {
+    setValue(
+      "showOnListingQuestion",
+      questionData?.status === MultiselectQuestionsStatusEnum.draft ? YesNoEnum.yes : YesNoEnum.no
+    )
+    void savePreference()
   }
 
   return (
@@ -275,7 +324,9 @@ const PreferenceEditDrawer = ({
         }}
         ariaLabelledBy="preference-drawer-header"
       >
-        <Drawer.Header id="preference-drawer-header">{drawerTitle}</Drawer.Header>
+        <Drawer.Header id="preference-drawer-header">
+          {drawerTitle} {statusTag}
+        </Drawer.Header>
         <Drawer.Content>
           <Card>
             <Card.Section>
@@ -291,8 +342,10 @@ const PreferenceEditDrawer = ({
                       type="text"
                       dataTestId={"preference-title"}
                       defaultValue={questionData?.name}
-                      errorMessage={t("errors.requiredFieldError")}
-                      validation={{ required: true }}
+                      errorMessage={`${t("errors.requiredFieldError")}. ${t(
+                        "errors.alphaNumericError"
+                      )}`}
+                      validation={{ required: true, pattern: alphaNumericPattern, maxLength: 32 }}
                       error={errors.name}
                       inputProps={{
                         onChange: () => clearErrors("name"),
@@ -429,14 +482,14 @@ const PreferenceEditDrawer = ({
                           id: "showOnListingYes",
                           label: t("t.yes"),
                           value: YesNoEnum.yes,
-                          defaultChecked: questionData === null || !questionData?.hideFromListing,
+                          defaultChecked: questionData && !questionData?.hideFromListing,
                           dataTestId: "show-on-listing-question-yes",
                         },
                         {
                           id: "showOnListingNo",
                           label: t("t.no"),
                           value: YesNoEnum.no,
-                          defaultChecked: questionData?.hideFromListing,
+                          defaultChecked: questionData === null || questionData?.hideFromListing,
                           dataTestId: "show-on-listing-question-no",
                         },
                       ]}
@@ -495,6 +548,37 @@ const PreferenceEditDrawer = ({
           >
             {t("t.save")}
           </Button>
+          <Button type="button" variant="primary-outlined" onClick={toggleVisibility}>
+            {questionData?.status === MultiselectQuestionsStatusEnum.draft
+              ? "Show to Partners"
+              : "Hide from Partners"}
+          </Button>
+          {
+            // TODO: how does a Copy button work when adding a new preference?
+          }
+          <Button
+            type="button"
+            variant="primary-outlined"
+            className="ml-auto"
+            onClick={() => {
+              copyQuestion(questionData)
+              onDrawerClose()
+            }}
+          >
+            {t("actions.copy")}
+          </Button>
+          <Button
+            type="button"
+            variant="alert-outlined"
+            onClick={() => {
+              if (drawerType === "edit") {
+                setDeleteConfirmModalOpen(questionData)
+              }
+              onDrawerClose()
+            }}
+          >
+            {t("t.delete")}
+          </Button>
         </Drawer.Footer>
       </Drawer>
 
@@ -520,11 +604,14 @@ const PreferenceEditDrawer = ({
                         label={t("t.title")}
                         placeholder={t("t.title")}
                         register={register}
+                        validation={{ required: true, pattern: alphaNumericPattern }}
                         type="text"
                         readerOnly
                         dataTestId={"preference-option-title"}
                         defaultValue={optionData?.name}
-                        errorMessage={t("errors.requiredFieldError")}
+                        errorMessage={`${t("errors.requiredFieldError")}. ${t(
+                          "errors.alphaNumericError"
+                        )}`}
                         error={!!errors["optionTitle"]}
                         inputProps={{
                           onChange: () => {
@@ -874,8 +961,8 @@ const PreferenceEditDrawer = ({
               }
 
               const newOptionData: MultiselectOptionCreate = {
-                name: formData.optionTitle,
-                description: formData.optionDescription,
+                name: formData.optionTitle.trim(),
+                description: formData.optionDescription.trim(),
                 links: formData.optionUrl
                   ? [{ title: formData.optionLinkTitle, url: formData.optionUrl }]
                   : [],

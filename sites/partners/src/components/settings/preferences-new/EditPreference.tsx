@@ -1,13 +1,13 @@
-import React, { useContext, useState, useEffect } from "react"
+import React, { useContext, useState } from "react"
 import { useSWRConfig } from "swr"
 import { AuthContext, MessageContext, useMutate } from "@bloom-housing/shared-helpers"
 import {
   MultiselectQuestion,
   MultiselectQuestionCreate,
+  MultiselectQuestionsStatusEnum,
   MultiselectQuestionUpdate,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { t } from "@bloom-housing/ui-components"
-import { Button, Dialog } from "@bloom-housing/ui-seeds"
 import PreferenceEditDrawer from "./PreferenceEditDrawer"
 import { PreferenceDeleteModal } from "./PreferenceDeleteModal"
 import PreferenceViewDrawer from "./PreferenceViewDrawer"
@@ -37,17 +37,23 @@ const EditPreference = ({
   const { mutate: updateQuestion, isLoading: isUpdateLoading } = useMutate()
   const { mutate: createQuestion, isLoading: isCreateLoading } = useMutate()
 
-  const [copyModalOpen, setCopyModalOpen] = useState<MultiselectQuestion>(null)
   const [updatedIds, setUpdatedIds] = useState<string[]>([])
   const [deleteConfirmModalOpen, setDeleteConfirmModalOpen] = useState<MultiselectQuestion | null>(
     null
   )
 
-  useEffect(() => {
-    if (!isCreateLoading) {
-      setCopyModalOpen(null)
+  const copyQuestion = (data: MultiselectQuestionCreate) => {
+    const newData = {
+      ...data,
+      name: `${data.name} (Copy)`,
+      text: "",
+      options: null,
+      status: MultiselectQuestionsStatusEnum.draft,
+      hideFromListing: true,
     }
-  }, [isCreateLoading])
+    newData.multiselectOptions.forEach((option) => (option.text = ""))
+    saveQuestion(newData, "add")
+  }
 
   const saveQuestion = (formattedData: MultiselectQuestionCreate, requestType: DrawerType) => {
     if (requestType === "edit") {
@@ -114,51 +120,22 @@ const EditPreference = ({
           void mutate(cacheKey)
         }}
         saveQuestion={saveQuestion}
+        copyQuestion={copyQuestion}
+        setDeleteConfirmModalOpen={setDeleteConfirmModalOpen}
         isLoading={isCreateLoading || isUpdateLoading}
       />
 
       <PreferenceViewDrawer
         drawerOpen={preferenceDrawerOpen === "view"}
         questionData={questionData}
+        questionsService={multiselectQuestionsService}
+        copyQuestion={copyQuestion}
+        cacheKey={cacheKey}
         onDrawerClose={() => {
           setPreferenceDrawerOpen(null)
         }}
       />
 
-      <Dialog
-        isOpen={!!copyModalOpen}
-        ariaLabelledBy="settings-dialog-header"
-        onClose={() => setCopyModalOpen(null)}
-      >
-        <Dialog.Header id="settings-dialog-header">{t("t.copy")}</Dialog.Header>
-        <Dialog.Content>{t("settings.createCopyDescription")}</Dialog.Content>
-        <Dialog.Footer>
-          <Button
-            type="button"
-            variant="primary-outlined"
-            onClick={() => {
-              saveQuestion({ ...copyModalOpen, text: `${copyModalOpen.text} (Copy)` }, "add")
-            }}
-            id={"copy-button-confirm"}
-            loadingMessage={isCreateLoading && t("t.formSubmitted")}
-            size="sm"
-          >
-            {t("actions.copy")}
-          </Button>
-          <Button
-            variant="primary-outlined"
-            type="button"
-            onClick={() => {
-              setCopyModalOpen(null)
-            }}
-            disabled={isCreateLoading}
-            id={"copy-button-cancel"}
-            size="sm"
-          >
-            {t("t.cancel")}
-          </Button>
-        </Dialog.Footer>
-      </Dialog>
       {deleteConfirmModalOpen && (
         <PreferenceDeleteModal
           multiselectQuestion={deleteConfirmModalOpen}

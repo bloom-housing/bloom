@@ -43,12 +43,10 @@ const SettingsPreferences = () => {
         cellRendererFramework: ({ data }) => {
           let variant = null
           switch (data.status) {
-            case MultiselectQuestionsStatusEnum.draft:
-              variant = "primary"
-              break
             case MultiselectQuestionsStatusEnum.active:
               variant = "success"
               break
+            case MultiselectQuestionsStatusEnum.toRetire:
             case MultiselectQuestionsStatusEnum.retired:
               variant = "highlight-warm"
               break
@@ -78,7 +76,7 @@ const SettingsPreferences = () => {
               }}
               id={`preference-link-${id}`}
             >
-              Edit
+              {t("t.edit")}
             </Button>
           ) : (
             <Button
@@ -89,7 +87,7 @@ const SettingsPreferences = () => {
               }}
               id={`preference-link-${id}`}
             >
-              View
+              {t("t.view")}
             </Button>
           )
         },
@@ -177,7 +175,7 @@ const SettingsPreferences = () => {
                         }}
                         id={"add-preference"}
                       >
-                        {t("t.addItem")}
+                        {t("settings.preferenceAdd")}
                       </Button>
                     </span>
                   </>

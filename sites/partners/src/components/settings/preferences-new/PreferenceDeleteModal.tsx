@@ -1,7 +1,6 @@
-import React, { useContext, useMemo } from "react"
-import { MinimalTable, t } from "@bloom-housing/ui-components"
-import { Button, Dialog, Link } from "@bloom-housing/ui-seeds"
-import { useListingsMultiselectQuestionList } from "../../../lib/hooks"
+import React, { useContext } from "react"
+import { t } from "@bloom-housing/ui-components"
+import { Button, Dialog } from "@bloom-housing/ui-seeds"
 import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
 import { MultiselectQuestion } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
@@ -16,21 +15,6 @@ export const PreferenceDeleteModal = ({
 }: PreferenceDeleteModalProps) => {
   const { multiselectQuestionsService } = useContext(AuthContext)
   const { addToast } = useContext(MessageContext)
-  const { data, loading } = useListingsMultiselectQuestionList(multiselectQuestion.id)
-
-  const listingsTableData = useMemo(
-    () =>
-      data?.map((listing) => ({
-        name: {
-          content: <Link href={`/listings/${listing.id}`}>{listing.name}</Link>,
-        },
-      })),
-    [data]
-  )
-
-  if (loading) {
-    return null
-  }
 
   const deletePreference = () => {
     multiselectQuestionsService
@@ -45,36 +29,6 @@ export const PreferenceDeleteModal = ({
         addToast(t("errors.alert.timeoutPleaseTryAgain"), { variant: "alert" })
         console.log(e)
       })
-  }
-
-  if (data?.length > 0) {
-    return (
-      <Dialog
-        isOpen={!!multiselectQuestion}
-        onClose={onClose}
-        ariaLabelledBy="preference-changes-modal-header"
-        ariaDescribedBy="preference-changes-modal-description"
-      >
-        <Dialog.Header id="preference-changes-modal-header">
-          {t("settings.preferenceChangesRequired")}
-        </Dialog.Header>
-        <Dialog.Content>
-          <div className="pb-3" id="preference-changes-modal-description">
-            {t("settings.preferenceDeleteError")}
-          </div>
-          <MinimalTable
-            headers={{ name: "listings.listingName" }}
-            data={listingsTableData}
-            cellClassName={" "}
-          />
-        </Dialog.Content>
-        <Dialog.Footer>
-          <Button type="button" variant="primary" onClick={onClose} size="sm">
-            {t("t.done")}
-          </Button>
-        </Dialog.Footer>
-      </Dialog>
-    )
   }
 
   return (

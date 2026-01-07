@@ -1,32 +1,52 @@
-import React, { useContext, useState } from "react"
+import React, { useState } from "react"
 import { MinimalTable, t } from "@bloom-housing/ui-components"
-import { Button, Card, Drawer, FieldValue, Grid } from "@bloom-housing/ui-seeds"
-import { AuthContext } from "@bloom-housing/shared-helpers"
+import { Button, Card, Drawer, FieldValue, Grid, Tag } from "@bloom-housing/ui-seeds"
 import {
   MultiselectOption,
   MultiselectQuestion,
+  MultiselectQuestionCreate,
+  MultiselectQuestionsService,
+  MultiselectQuestionsStatusEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { DrawerType } from "./EditPreference"
 import SectionWithGrid from "../../shared/SectionWithGrid"
+import { useSWRConfig } from "swr"
 
 type PreferenceViewDrawerProps = {
   drawerOpen: boolean
   questionData: MultiselectQuestion
+  questionsService: MultiselectQuestionsService
+  copyQuestion: (data: MultiselectQuestionCreate) => void
+  cacheKey: string
   onDrawerClose: () => void
 }
 
 const PreferenceViewDrawer = ({
-  questionData,
   drawerOpen,
+  questionData,
+  questionsService,
+  copyQuestion,
+  cacheKey,
   onDrawerClose,
 }: PreferenceViewDrawerProps) => {
-  const [optionDrawerOpen, setOptionDrawerOpen] = useState<DrawerType | null>(null)
+  const { mutate } = useSWRConfig()
   const [optionData, setOptionData] = useState<MultiselectOption>(null)
 
-  const { profile } = useContext(AuthContext)
-  // eslint-disable-next-line @typescript-eslint/unbound-method
-
   const drawerTitle = t("settings.preferenceView")
+
+  let variant = null
+  switch (questionData?.status) {
+    case MultiselectQuestionsStatusEnum.active:
+      variant = "success"
+      break
+    case MultiselectQuestionsStatusEnum.toRetire:
+    case MultiselectQuestionsStatusEnum.retired:
+      variant = "highlight-warm"
+      break
+  }
+  const statusText = `${questionData?.status.charAt(0).toUpperCase()}${questionData?.status.slice(
+    1
+  )}`
+  const statusTag = <Tag variant={variant}>{statusText}</Tag>
 
   return (
     <>
@@ -35,9 +55,11 @@ const PreferenceViewDrawer = ({
         onClose={() => {
           onDrawerClose()
         }}
-        ariaLabelledBy="preference-drawer-header"
+        ariaLabelledBy="preference-view-drawer-header"
       >
-        <Drawer.Header id="preference-drawer-header">{drawerTitle}</Drawer.Header>
+        <Drawer.Header id="preference-view-drawer-header">
+          {drawerTitle} {statusTag}
+        </Drawer.Header>
         <Drawer.Content>
           <Card>
             <Card.Section>
@@ -79,7 +101,13 @@ const PreferenceViewDrawer = ({
                           order: { content: item.ordinal },
                           name: { content: item.name },
                           description: { content: item.description },
-                          view: { content: <strong>wee</strong>},
+                          view: {
+                            content: (
+                              <Button variant="text" onClick={() => setOptionData(item)}>
+                                View
+                              </Button>
+                            ),
+                          },
                         }))}
                       />
                     </Grid.Cell>
@@ -94,9 +122,6 @@ const PreferenceViewDrawer = ({
                       ? t("settings.preferenceExclusive")
                       : t("settings.preferenceMultiSelect")}
                   </FieldValue>
-                  <FieldValue label={t("settings.preferenceShowOnListing")}>
-                    {questionData?.hideFromListing ? t("t.no") : t("t.yes")}
-                  </FieldValue>
                 </Grid.Row>
                 <Grid.Row columns={3}>
                   <FieldValue label={t("t.jurisdiction")}>
@@ -107,7 +132,109 @@ const PreferenceViewDrawer = ({
             </Card.Section>
           </Card>
         </Drawer.Content>
-        <Drawer.Footer>[ DONE ] | [ COPY ] [ RETIRE ]</Drawer.Footer>
+        <Drawer.Footer>
+          <Button type="button" variant="primary" onClick={onDrawerClose}>
+            {t("t.done")}
+          </Button>
+          <Button
+            type="button"
+            variant="primary-outlined"
+            className="ml-auto"
+            onClick={() => {
+              copyQuestion(questionData)
+              onDrawerClose()
+            }}
+          >
+            {t("actions.copy")}
+          </Button>
+          <Button
+            type="button"
+            variant={
+              questionData?.status === MultiselectQuestionsStatusEnum.active
+                ? "alert-outlined"
+                : "primary-outlined"
+            }
+            onClick={async () => {
+              questionData?.status === MultiselectQuestionsStatusEnum.retired ||
+              questionData?.status === MultiselectQuestionsStatusEnum.toRetire
+                ? await questionsService.reActivate({ body: { id: questionData.id } })
+                : await questionsService.retire({ body: { id: questionData.id } })
+              onDrawerClose()
+              await mutate(cacheKey)
+            }}
+          >
+            {questionData?.status === MultiselectQuestionsStatusEnum.retired ||
+            questionData?.status === MultiselectQuestionsStatusEnum.toRetire
+              ? "Return to Active"
+              : "Retire"}
+          </Button>
+        </Drawer.Footer>
+      </Drawer>
+
+      <Drawer
+        isOpen={!!optionData}
+        onClose={() => {
+          setOptionData(null)
+        }}
+        ariaLabelledBy="preference-nested-drawer-header"
+        nested
+      >
+        <Drawer.Header id="preference-nested-drawer-header">
+          {t("settings.preferenceViewOption")}
+        </Drawer.Header>
+        <Drawer.Content>
+          <Card>
+            <Card.Section>
+              <SectionWithGrid heading={t("t.option")}>
+                <Grid.Row columns={3}>
+                  <FieldValue label={t("t.title")}>{optionData?.name}</FieldValue>
+                  <FieldValue label={t("t.descriptionTitle")}>{optionData?.description}</FieldValue>
+                </Grid.Row>
+                <Grid.Row>
+                  <FieldValue label={t("t.url")}>
+                    {optionData?.links?.length > 0 ? optionData?.links[0].url : ""}
+                  </FieldValue>
+                  <FieldValue label={t("settings.preferenceLinkTitle")}>
+                    {optionData?.links?.length > 0 ? optionData?.links[0].title : ""}
+                  </FieldValue>
+                </Grid.Row>
+                <Grid.Row>
+                  <FieldValue label={t("settings.preferenceOptOut")}>
+                    {optionData?.isOptOut ? t("t.yes") : t("t.no")}
+                  </FieldValue>
+                  <FieldValue label={t("settings.preferenceCollectAddress")}>
+                    {optionData?.shouldCollectAddress ? t("t.yes") : t("t.no")}
+                  </FieldValue>
+                </Grid.Row>
+                <Grid.Row>
+                  <FieldValue label={t("settings.preferenceValidatingAddress")}>
+                    {optionData?.validationMethod}
+                  </FieldValue>
+                </Grid.Row>
+                <Grid.Row>
+                  <Grid.Cell>
+                    
+                    
+                    Radius: {optionData?.radiusSize}
+                    <br/>
+                    Map Layer: {optionData?.mapLayerId}
+                    <br/>
+                    Collect Name: {optionData?.shouldCollectName}
+                    <br/>
+                    Collect Relationship: {optionData?.shouldCollectRelationship}
+                    <br/>
+                    
+                  </Grid.Cell>
+                </Grid.Row>
+              </SectionWithGrid>
+            </Card.Section>
+          </Card>
+        </Drawer.Content>
+        <Drawer.Footer>
+          <Button type="button" variant="primary" onClick={() => setOptionData(null)}>
+            {t("t.done")}
+          </Button>
+        </Drawer.Footer>
       </Drawer>
     </>
   )
