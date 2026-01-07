@@ -23,6 +23,7 @@ export enum FeatureFlagEnum {
   enableListingFavoriting = 'enableListingFavoriting',
   enableListingFileNumber = 'enableListingFileNumber',
   enableListingFiltering = 'enableListingFiltering',
+  enableLeasingAgentAltText = 'enableLeasingAgentAltText',
   enableListingImageAltText = 'enableListingImageAltText',
   enableListingOpportunity = 'enableListingOpportunity',
   enableListingPagination = 'enableListingPagination',
@@ -162,6 +163,10 @@ export const featureFlagMap: {
     name: FeatureFlagEnum.enableListingFiltering,
     description:
       'When true, a filter button is shown on listings browse and users can filter with the options in the drawer',
+  },
+  {
+    name: FeatureFlagEnum.enableLeasingAgentAltText,
+    description: 'When true, shows alternative text for LA users',
   },
   {
     name: FeatureFlagEnum.enableListingImageAltText,
