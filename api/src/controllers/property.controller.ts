@@ -45,7 +45,7 @@ import { permissionActions } from '../enums/permissions/permission-actions-enum'
   PaginationMeta,
   IdDTO,
 )
-@PermissionTypeDecorator('property')
+@PermissionTypeDecorator('properties')
 @UseGuards(JwtAuthGuard, PermissionGuard)
 export class PropertyController {
   constructor(private readonly propertyService: PropertyService) {}
