@@ -32,7 +32,7 @@
     "@bloom-housing/shared-helpers": "^7.7.1",
     "@bloom-housing/ui-components": "13.0.3",
     "@bloom-housing/ui-seeds": "3.1.4",
-    "@heroicons/react": "^2.1.1",
+    "@heroicons/react": "^2.2.0",
     "@mapbox/mapbox-sdk": "^0.13.0",
     "@tiptap/core": "^2.24.0",
     "@tiptap/extension-character-count": "^2.24.0",
