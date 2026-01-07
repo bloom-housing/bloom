@@ -1,4 +1,4 @@
-# Apply Deployer Permission Set Open Tofu Modules
+# Apply Deployer Permission Set OpenTofu Modules
 
 This directory contains instructions for deploying Bloom dev and prod environments to an AWS
 organization. The guide is broken down into a series of files that should be followed in order:
@@ -40,8 +40,8 @@ graph TB
               end
           end
 
-          DEV_POLICY-.->|Open Tofu State file stored in|S3
-          PROD_POLICY-.->|Open Tofu State file stored in|S3
+          DEV_POLICY-.->|OpenTofu State file stored in|S3
+          PROD_POLICY-.->|OpenTofu State file stored in|S3
       end
   end
 
@@ -49,7 +49,7 @@ graph TB
       direction LR
 
       PREREQ[Pre-requisite]
-      CREATED[Created by Open Tofu]
+      CREATED[Created by OpenTofu]
 
       PREREQ ~~~ CREATED
   end
@@ -87,13 +87,13 @@ graph TB
 
 ## Steps
 
-1. Apply the dev deployer Open Tofu root module:
+1. Apply the dev deployer OpenTofu root module:
 
    ```bash
    docker run --rm -it ghcr.io/<YOUR_GITHUB_ORG>/bloom/infra:gitsha-SOMESHA bloom_dev_deployer_permission_set_policy apply
    ```
 
-2. Apply the prod deployer Open Tofu root module:
+2. Apply the prod deployer OpenTofu root module:
 
    ```bash
    docker run --rm -it ghcr.io/<YOUR_GITHUB_ORG>/bloom/infra:gitsha-SOMESHA bloom_prod_deployer_permission_set_policy apply

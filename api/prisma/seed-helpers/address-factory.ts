@@ -21,8 +21,8 @@ export const yellowstoneAddress = {
   state: 'WY',
   street: '3200 Old Faithful Inn Rd',
   zipCode: '82190',
-  latitude: 44.459928576661824,
-  longitude: -110.83109211487681,
+  latitude: 44.45992857666182,
+  longitude: -110.8310921148768,
 };
 
 export const yosemiteAddress = {

@@ -61,7 +61,7 @@ describe('Testing jwt strategy', () => {
     });
   });
 
-  it('should fail because user password is outdated', async () => {
+  it('should not fail because user password is outdated', async () => {
     const id = randomUUID();
     const token = sign(
       {
@@ -73,6 +73,11 @@ describe('Testing jwt strategy', () => {
       id,
       passwordValidForDays: 100,
       passwordUpdatedAt: new Date(0),
+      activeAccessToken: token,
+    });
+
+    prisma.userAccounts.update = jest.fn().mockResolvedValue({
+      id,
     });
 
     const request = {
@@ -81,12 +86,7 @@ describe('Testing jwt strategy', () => {
       },
     };
 
-    await expect(
-      async () =>
-        await strategy.validate(request as unknown as Request, { sub: id }),
-    ).rejects.toThrowError(
-      `user ${id} attempted to log in, but password is outdated`,
-    );
+    await strategy.validate(request as unknown as Request, { sub: id });
 
     expect(prisma.userAccounts.findFirst).toHaveBeenCalledWith({
       include: {
@@ -107,6 +107,8 @@ describe('Testing jwt strategy', () => {
         id,
       },
     });
+
+    expect(prisma.userAccounts.update).not.toHaveBeenCalled();
   });
 
   it('should fail because stored token does not match incoming token', async () => {

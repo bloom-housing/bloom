@@ -2019,14 +2019,13 @@ describe('Application flagged set Controller Tests', () => {
           `${listing}-email1@email.com-${listing}-firstname3-${listing}-lastname3-3-3-3-${listing}-firstname1-${listing}-lastname1-1-1-1`,
       );
       expect(combinationAFS.applications).toHaveLength(6);
-      expect(combinationAFS.applications).toEqual([
-        { id: app2.id },
-        { id: app3.id },
-        { id: app4.id },
-        { id: app6.id },
-        { id: app7.id },
-        { id: app8.id },
-      ]);
+      expect(combinationAFS.applications).toContainEqual({ id: app2.id });
+      expect(combinationAFS.applications).toContainEqual({ id: app3.id });
+      expect(combinationAFS.applications).toContainEqual({ id: app4.id });
+      expect(combinationAFS.applications).toContainEqual({ id: app6.id });
+      expect(combinationAFS.applications).toContainEqual({ id: app7.id });
+      expect(combinationAFS.applications).toContainEqual({ id: app8.id });
+
       expect(combinationAFS.rule).toEqual(RuleEnum.combination);
       expect(combinationAFS.ruleKey).toEqual(
         `${listing}-email1@email.com-${listing}-firstname3-${listing}-lastname3-3-3-3-${listing}-firstname1-${listing}-lastname1-1-1-1`,

@@ -48,6 +48,7 @@ resource "aws_acm_certificate" "bloom" {
 }
 output "certificate_details" {
   value = {
+    certificate_arn    = aws_acm_certificate.bloom.arn
     certificate_status = aws_acm_certificate.bloom.status
     expires_at         = aws_acm_certificate.bloom.not_after
     managed_renewal = {

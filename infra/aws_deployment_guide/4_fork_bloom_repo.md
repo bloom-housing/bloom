@@ -15,7 +15,7 @@ organization. The guide is broken down into a series of files that should be fol
 1. Complete the steps in [Create Tofu State S3 Bucket](./3_create_tofu_state_s3_bucket.md). The
    following notes from previous steps will be needed:
    1. AWS account numbers for the dev and prod Bloom accounts.
-   2. S3 bucket name and region for the Open Tofu state file bucket.
+   2. S3 bucket name and region for the OpenTofu state file bucket.
    3. IAM Identity Center Instance ARN, region, and AWS access portal URL.
    4. Permission set ARNs for `bloom-dev-deployer` and `bloom-prod-deployer`.
 2. Decide where you would like to host your Bloom fork. GitHub will work out-of-the-box. If choosing

@@ -26,11 +26,11 @@ variable "bloom_deployment_aws_region" {
 }
 variable "bloom_deployment_tofu_state_bucket_name" {
   type        = string
-  description = "S3 bucket name that will store the Open Tofu state for the bloom deployment this permission set manages."
+  description = "S3 bucket name that will store the OpenTofu state for the bloom deployment this permission set manages."
 }
 variable "bloom_deployment_tofu_state_file_prefix" {
   type        = string
-  description = "Object name prefix for the Open Tofu state files for the bloom deployment this permission set manages."
+  description = "Object name prefix for the OpenTofu state files for the bloom deployment this permission set manages."
 }
 
 locals {

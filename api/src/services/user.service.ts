@@ -972,6 +972,7 @@ export class UserService {
       select: {
         id: true,
         allowSingleUseCodeLogin: true,
+        name: true,
       },
       where: {
         name: jurisdictionName as string,
@@ -1003,7 +1004,11 @@ export class UserService {
       },
     });
 
-    await this.emailService.sendSingleUseCode(mapTo(User, user), singleUseCode);
+    await this.emailService.sendSingleUseCode(
+      mapTo(User, user),
+      singleUseCode,
+      juris.name,
+    );
 
     return { success: true };
   }

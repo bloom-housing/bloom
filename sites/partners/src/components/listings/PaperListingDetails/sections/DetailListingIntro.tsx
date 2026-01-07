@@ -51,6 +51,17 @@ const DetailListingIntro = () => {
           </Grid.Cell>
         </Grid.Row>
       )}
+      {enableNonRegulatedListings && (
+        <Grid.Row>
+          <Grid.Cell>
+            <FieldValue id="listingType" label={t("listings.listingTypeTitle")}>
+              {listing.listingType === EnumListingListingType.regulated
+                ? t("listings.regulated")
+                : t("listings.nonRegulated")}
+            </FieldValue>
+          </Grid.Cell>
+        </Grid.Row>
+      )}
       <Grid.Row>
         <Grid.Cell>
           <FieldValue id="name" label={t("listings.listingName")}>
@@ -65,24 +76,16 @@ const DetailListingIntro = () => {
           </FieldValue>
         </Grid.Cell>
       </Grid.Row>
-      {enableNonRegulatedListings && (
-        <Grid.Row>
-          <Grid.Cell>
-            <FieldValue id="listingType" label={t("listings.listingTypeTile")}>
-              {listing.listingType === EnumListingListingType.regulated
-                ? t("listings.regulated")
-                : t("listings.nonRegulated")}
-            </FieldValue>
-          </Grid.Cell>
-          {listing.listingType === EnumListingListingType.nonRegulated && (
+      {enableNonRegulatedListings &&
+        listing.listingType === EnumListingListingType.nonRegulated && (
+          <Grid.Row>
             <Grid.Cell>
               <FieldValue id="hasHudEbllClearance" label={t("listings.hasEbllClearanceTitle")}>
                 {listing.hasHudEbllClearance ? t("t.yes") : t("t.no")}
               </FieldValue>
             </Grid.Cell>
-          )}
-        </Grid.Row>
-      )}
+          </Grid.Row>
+        )}
     </SectionWithGrid>
   )
 }

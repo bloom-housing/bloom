@@ -1,4 +1,4 @@
-# Create Open Tofu State S3 Bucket
+# Create OpenTofu State S3 Bucket
 
 This directory contains instructions for deploying Bloom dev and prod environments to an AWS
 organization. The guide is broken down into a series of files that should be followed in order:
@@ -71,9 +71,9 @@ graph TB
 
 ## Steps
 
-### 1. Create a S3 Bucket to store the Open Tofu state files
+### 1. Create a S3 Bucket to store the OpenTofu state files
 
-An AWS S3 bucket is required to store Open Tofu state files. State files record the results of each
+An AWS S3 bucket is required to store OpenTofu state files. State files record the results of each
 apply command. The S3 bucket can be created in any suitable AWS account in your organization. For
 example, the S3 bucket used by the Bloom Core deployments is in Exygy's organization management
 account.

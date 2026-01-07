@@ -98,6 +98,14 @@ export const ListingView = (props: ListingProps) => {
     FeatureFlagEnum.disableListingPreferences,
     listing?.jurisdictions?.id
   )
+  const enableLeasingAgentAltText = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableLeasingAgentAltText,
+    listing.jurisdictions.id
+  )
+
+  const leasingAgentContactText = enableLeasingAgentAltText
+    ? t("leasingAgent.contactManagerProp")
+    : t("leasingAgent.contact")
 
   const appOpenInFuture = openInFuture(listing)
   const hasNonReferralMethods = listing?.applicationMethods
@@ -944,7 +952,7 @@ export const ListingView = (props: ListingProps) => {
             )}
             {!appOpenInFuture && (
               <Contact
-                sectionTitle={t("leasingAgent.contact")}
+                sectionTitle={leasingAgentContactText}
                 additionalInformation={
                   listing.leasingAgentOfficeHours
                     ? [

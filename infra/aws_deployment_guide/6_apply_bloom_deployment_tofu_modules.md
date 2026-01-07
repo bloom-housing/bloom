@@ -1,4 +1,4 @@
-# Apply Bloom Deployment Open Tofu Modules
+# Apply Bloom Deployment OpenTofu Modules
 
 This directory contains instructions for deploying Bloom dev and prod environments to an AWS
 organization. The guide is broken down into a series of files that should be followed in order:
@@ -10,7 +10,7 @@ organization. The guide is broken down into a series of files that should be fol
 5. [Apply Deployer Permission Set Tofu Modules](./5_apply_deployer_permission_set_tofu_modules.md)
 6. [Apply Bloom Deployment Tofu Modules](./6_apply_bloom_deployment_tofu_modules.md) (you are here)
 
-The steps in this file create the following resources (the Open Tofu files in
+The steps in this file create the following resources (the OpenTofu files in
 [bloom_deployment](../tofu_importable_modules/bloom_deployment) fully describe all resources that
 are created):
 
@@ -55,15 +55,15 @@ graph TB
       end
 
 
-      DEV-.->|Open Tofu State file stored in|S3
-      PROD-.->|Open Tofu State file stored in|S3
+      DEV-.->|OpenTofu State file stored in|S3
+      PROD-.->|OpenTofu State file stored in|S3
   end
 
   subgraph LEGEND
       direction LR
 
       PREREQ[Pre-requisite]
-      CREATED[Created by Open Tofu]
+      CREATED[Created by OpenTofu]
 
       PREREQ ~~~ CREATED
   end
@@ -123,6 +123,7 @@ graph TB
    Outputs:
 
    certificate_details = {
+     "certificate_arn" = "<arn>"
      "certificate_status" = "ISSUED"
      "expires_at" = "2026-12-18T23:59:59Z"
      "managed_renewal" = {
@@ -190,6 +191,7 @@ graph TB
    Outputs:
 
    certificate_details = {
+     "certificate_arn" = "<arn>"
      "certificate_status" = "ISSUED"
      "expires_at" = "2026-12-18T23:59:59Z"
      "managed_renewal" = {

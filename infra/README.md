@@ -1,16 +1,16 @@
 # Bloom Infrastructure
 
 This directory contains infrastructure-as-code configuration for the Bloom Core AWS deployments. It
-uses Open Tofu: https://opentofu.org/, a drop-in replacement for Terraform that is maintained by the
+uses OpenTofu: https://opentofu.org/, a drop-in replacement for Terraform that is maintained by the
 Cloud Native Computing Foundation.
 
 - For instructions on deploying Bloom to an AWS organization, see
   [./aws_deployment_guide/0_README.md](./aws_deployment_guide/0_README.md).
-- For instructions on developing the Open Tofu modules, see [./DEVELOPMENT.md](./DEVELOPMENT.md).
+- For instructions on developing the OpenTofu modules, see [./DEVELOPMENT.md](./DEVELOPMENT.md).
 
 ## Structure
 
-- [tofu_root_modules](./tofu_root_modules): Contains all the Open Tofu root modules. A root module
+- [tofu_root_modules](./tofu_root_modules): Contains all the OpenTofu root modules. A root module
   is a set of resources that are all managed together. Each root module has a state file that
   records the results of the latest apply operation.
 
@@ -20,7 +20,7 @@ Cloud Native Computing Foundation.
    - [bloom_prod_deployer_permission_set_policy](./tofu_root_modules/bloom_prod_deployer_permission_set_policy/main.tf):
      Configures the bloom-prod-deployer permission set policy.
 
-- [tofu_importable_modules](./tofu_importable_modules): Contains all the Open Tofu importable
+- [tofu_importable_modules](./tofu_importable_modules): Contains all the OpenTofu importable
   modules. An importable module is a reusable set of resources configured through input
   parameters. Root modules import importable modules.
 
@@ -42,7 +42,7 @@ down. However, the script only works on a fresh AWS account - if you run it agai
 a bunch of errors because the resources will have already been created. If you need to change how
 the account is configured, you need to write more scripts.
 
-Enter infrastructure-as-code tools like Terraform and Open Tofu. I like to think of them as CLI
+Enter infrastructure-as-code tools like Terraform and OpenTofu. I like to think of them as CLI
 scripting with a bunch of functionality already built in. `.tf` files contain [resource
 descriptions](https://opentofu.org/docs/language/resources/). Run the 'script' by running [`tofu
 apply`](https://opentofu.org/docs/cli/commands/apply/). If the AWS account already matches the

@@ -5,7 +5,7 @@
 1. bash: https://www.gnu.org/software/bash/bash.html
 2. openssl: https://github.com/openssl/openssl
 3. tr: https://man7.org/linux/man-pages/man1/tr.1.html
-4. Open Tofu: https://opentofu.org/docs/intro/install/
+4. OpenTofu: https://opentofu.org/docs/intro/install/
 5. AWS CLI: https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
 
 ### Infra-dev docker container
@@ -16,7 +16,10 @@ include the infra source code in its root filesystem - clone the Bloom repo on y
 the container access through volume mounts:
 
 1. `-v ./infra:/infra:z` makes the infra directory available to the container.
-2. `-v "${HOME}/.aws/sso/cache":/home/.aws/sso/cache:z` makes the AWS SSO cache available to the
+2. `-v "${HOME}/.aws/cli":/home/.aws/cli:z` makes the AWS cli directory available to the
+   container. This is required for successful use of aws CLI calls in local-exec resource
+   provisioners.
+3. `-v "${HOME}/.aws/sso/cache":/home/.aws/sso/cache:z` makes the AWS SSO cache available to the
    container. This volume mount is not required for the container to run, however you will need to
    go through the SSO flow on every run if not provided.
 
@@ -28,19 +31,20 @@ container, specifying the user the container process will run as is also necessa
 
 The container runs [./docker-entrypoint.py](./docker-entrypoint.py). The first argument is a root
 module name in [./tofu_root_modules](./tofu_root_modules). The rest of the arguments are passed
-directly to the Open Tofu binary. Because Open Tofu requires user input to approve apply operations,
+directly to the OpenTofu binary. Because OpenTofu requires user input to approve apply operations,
 use the `-it` flag when running the infra-dev container.
 
-Before running Open Tofu with the passed in args, the script automatically:
+Before running OpenTofu with the passed in args, the script automatically:
 
 1. Runs `aws sso login` on the correct profile for the selected root module.
 
-   `aws sso login` does not need to run every time because the credentials are temporarily cached
-   in `$HOME/.aws/sso/cache/`. To skip the auto sso step, pass `--skip-sso` or `-ss`.
+   `aws sso login` does not need to run every time because the credentials are cached in
+   `$HOME/.aws/sso/cache/`. Once the SSO credentials expire, you will need to go through the SSO
+   flow again. To skip the auto sso step, pass `--skip-sso` or `-ss`.
 
 2. Runs `tofu init` on the selected root module.
 
-   `tofu init` only needs to run when initially downloading the Open Tofu providers to your host's
+   `tofu init` only needs to run when initially downloading the OpenTofu providers to your host's
    filesystem or when changing providers and/or their versions. To skip the auto init step, pass
    `--skip-init` or `-si`.
 
@@ -50,6 +54,7 @@ All together:
 docker container run --rm -it \
 --user "$(id -u):$(id -g)" \
 -v ./infra:/infra:z \
+-v "${HOME}/.aws/cli":/home/.aws/cli:z \
 -v "${HOME}/.aws/sso/cache":/home/.aws/sso/cache:z \
 ghcr.io/bloom-housing/bloom/infra-dev \
 [[--skip-sso] | [--skip-init]] <ROOT_MODULE_NAME> <OPEN_TOFU_ARGS>
@@ -58,7 +63,7 @@ ghcr.io/bloom-housing/bloom/infra-dev \
 You may find it convenient to add an alias. From the root of the Bloom repo:
 
 ```bash
-alias bloomtofu="docker container run --rm -it --user $(id -u):$(id -g) -v ${PWD}/infra:/infra:z -v ${HOME}/.aws/sso/cache:/home/.aws/sso/cache:z ghcr.io/bloom-housing/bloom/infra-dev"
+alias bloomtofu="docker container run --rm -it --user $(id -u):$(id -g) -v ${PWD}/infra:/infra:z -v ${HOME}/.aws/cli:/home/.aws/cli:z -v ${HOME}/.aws/sso/cache:/home/.aws/sso/cache:z ghcr.io/bloom-housing/bloom/infra-dev"
 
 bloomtofu -ss -si bloom_dev apply
 ```
@@ -74,7 +79,7 @@ bloomtofu -ss -si bloom_dev apply
    update the `bloom_dev_deployer_permission_set_policy` root module, then retry step 2.
 4. Inspect the relevant AWS resources via the CLI or the AWS web console (Log in via
    https://d-9067ac8222.awsapps.com/start). If there are unexpected results, go back to step 1. In
-   some cases you may have to manually modify or delete resources directly to 'unstick' Open Tofu.
+   some cases you may have to manually modify or delete resources directly to 'unstick' OpenTofu.
 5. Test the deletion path for resources provisioned by the deployer importable module:
 
    ```bash
@@ -85,7 +90,7 @@ bloomtofu -ss -si bloom_dev apply
 
 ### Downloading provider dependencies
 
-Open Tofu relies on provider dependencies being present locally in the
+OpenTofu relies on provider dependencies being present locally in the
 `.terraform` directory in the root module directory. To download the dependencies, run:
 
 ```bash

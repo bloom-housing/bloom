@@ -7,14 +7,19 @@ export const getListingStatusTag = (listingStatus: ListingsStatusEnum) => {
   switch (listingStatus) {
     case ListingsStatusEnum.active:
       return (
-        <Tag className="tag-uppercase" variant={"success"} size={"lg"} id={"listing-status-active"}>
+        <Tag
+          className="tag-full-width"
+          variant={"success"}
+          size={"lg"}
+          id={"listing-status-active"}
+        >
           {t(`listings.listingStatus.active`)}
         </Tag>
       )
     case ListingsStatusEnum.closed:
       return (
         <Tag
-          className="tag-uppercase"
+          className="tag-full-width"
           variant={"secondary"}
           size={"lg"}
           id={"listing-status-closed"}
@@ -25,7 +30,7 @@ export const getListingStatusTag = (listingStatus: ListingsStatusEnum) => {
     case ListingsStatusEnum.pendingReview:
       return (
         <Tag
-          className="tag-uppercase"
+          className="tag-full-width"
           variant={"warn"}
           size={"lg"}
           id={"listing-status-pending-review"}
@@ -36,7 +41,7 @@ export const getListingStatusTag = (listingStatus: ListingsStatusEnum) => {
     case ListingsStatusEnum.changesRequested:
       return (
         <Tag
-          className="tag-uppercase"
+          className="tag-full-width"
           variant={"highlight-warm"}
           size={"lg"}
           id={"listing-status-changes-requested"}
@@ -47,7 +52,7 @@ export const getListingStatusTag = (listingStatus: ListingsStatusEnum) => {
     case ListingsStatusEnum.pending:
       return (
         <Tag
-          className="tag-uppercase"
+          className="tag-full-width"
           variant={"primary"}
           size={"lg"}
           id={"listing-status-pending"}

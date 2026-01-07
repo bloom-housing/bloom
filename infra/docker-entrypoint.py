@@ -24,12 +24,18 @@ def run_subprocess(cmd, cwd=None, always_exit=False):
     cmd_formatted = " ".join(cmd)
     print(f"== docker-entrypoint.py: DIRECTORY='{cwd}', CMD='{cmd_formatted}'", flush=True)
 
-    result = subprocess.run(cmd, cwd=cwd, capture_output=False, stdin=sys.stdout, stderr=sys.stderr)
+    try:
+        p = subprocess.Popen(cmd, cwd=cwd, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr)
+        p.wait()
+    except KeyboardInterrupt:
+        # The subprocess will get the Interrupt signal without us needing to do anything, so just
+        # wait on the subprocess to exit.
+        p.wait()
 
     if always_exit:
-        sys.exit(result.returncode)
+        sys.exit(p.returncode)
 
-    if result.returncode != 0:
+    if p.returncode != 0:
         sys.exit(f"FATAL: '{cmd_formatted}' returned non-0 exit code.")
 
 
@@ -46,7 +52,7 @@ def main():
 
     p = argparse.ArgumentParser(
         prog="docker-entrypoint.py",
-        description="CLI entrypoint for working with Bloom Open Tofu root modules.",
+        description="CLI entrypoint for working with Bloom OpenTofu root modules.",
         allow_abbrev=True)
 
     p.add_argument(
@@ -60,7 +66,7 @@ def main():
         choices=mod_to_aws_profile.keys())
     p.add_argument(
         "open_tofu_args",
-        help="Arguments that are directly passed to the Open Tofu binary.",
+        help="Arguments that are directly passed to the OpenTofu binary.",
         nargs=argparse.REMAINDER)
 
     args = p.parse_args()
@@ -73,7 +79,6 @@ def main():
     if not args.skip_init:
         run_subprocess(["tofu", "init"], cwd=mod_path)
 
-    #run_subprocess(["tofu", "force-unlock", "-force", "0455afcb-c9c9-f574-458a-e7e016b66b6a"], cwd=mod_path, always_exit=True)
     run_subprocess(["tofu"] + args.open_tofu_args, cwd=mod_path, always_exit=True)
 
 

@@ -1,7 +1,7 @@
 # This file creates a docker image that contains the required binaries and source code to deploy
 # Bloom root modules. It is meant to be used in deployment pipelines.
 
-# Get Open Tofu binary following https://opentofu.org/docs/intro/install/docker/#method-1-using-a-multi-stage-build
+# Get OpenTofu binary following https://opentofu.org/docs/intro/install/docker/#method-1-using-a-multi-stage-build
 #
 # To update, find the latest stable version from:
 # https://github.com/opentofu/opentofu/pkgs/container/opentofu/versions?tag=latest
