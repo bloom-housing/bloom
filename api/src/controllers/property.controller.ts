@@ -33,6 +33,8 @@ import { defaultValidationPipeOptions } from '../utilities/default-validation-pi
 import { PaginationMeta } from '../dtos/shared/pagination.dto';
 import { JwtAuthGuard } from '../guards/jwt.guard';
 import { PermissionGuard } from '../guards/permission.guard';
+import { PermissionAction } from '../decorators/permission-action.decorator';
+import { permissionActions } from '../enums/permissions/permission-actions-enum';
 
 @Controller('properties')
 @ApiTags('properties')
@@ -75,6 +77,7 @@ export class PropertyController {
     summary: 'Get a paginated filtered set of properties',
     operationId: 'filterableList',
   })
+  @PermissionAction(permissionActions.read)
   @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
   @ApiOkResponse({ type: PaginatedPropertyDto })
   public async getFiltrablePaginatedSet(
