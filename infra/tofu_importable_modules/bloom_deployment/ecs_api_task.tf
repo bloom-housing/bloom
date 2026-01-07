@@ -30,8 +30,7 @@ resource "aws_ecs_task_definition" "bloom_api" {
       command = [
         "/bin/bash",
         "-c",
-        # TODO: https://www.prisma.io/docs/orm/more/help-and-troubleshooting/dataguide/connection-uris#percent-encoding-values
-        "export DATABASE_URL=postgres://$DB_USER:$(echo $DB_PASSWORD | sed 's| |%20|; s|%|%25|; s|&|%26|; s|/|%2F|; s|:|%3A|; s|=|%3D|; s|?|%3F|; s|@|%40|; s|\\[|%5B|; s|]|%5D|')@$DB_HOST/bloomprisma && env && yarn db:migration:run && yarn start:prod",
+        "export DATABASE_URL=postgres://$DB_USER:$(node -e 'console.log(encodeURIComponent(process.argv[1]))' $DB_PASSWORD)@$DB_HOST/bloomprisma && env && yarn db:migration:run && yarn start:prod",
       ]
       secrets = [
         {

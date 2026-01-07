@@ -636,6 +636,7 @@
   "languages.vi": "Tiếng Việt",
   "languages.zh": "中文",
   "leasingAgent.contact": "লিজিং এজেন্টের সাথে যোগাযোগ করুন",
+  "leasingAgent.contactManagerProp": "লিজিং এজেন্ট বা সম্পত্তি ব্যবস্থাপকের সাথে যোগাযোগ করুন",
   "leasingAgent.dueToHighCallVolume": "উচ্চ কল ভলিউমের কারণে আপনি একটি বার্তা শুনতে পারেন।",
   "leasingAgent.officeHours": "অফিস সময়সূচী",
   "listingFilters.clear": "পরিষ্কার",
