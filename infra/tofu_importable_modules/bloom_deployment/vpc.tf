@@ -7,24 +7,25 @@
 # AWS services is configured through AWS PrivateLink endpoints so that traffic stays in the AWS
 # internal network rather than going over the internet.
 #
-# Ideally we would use the 10.0.0.0/8 space and provision a /16 range per subnet, incrementing the
-# second octet (10.0.0.0/16, 10.1.0.0/16, etc). This could be achieved by adding secondary cidr
-# ranges to the VPC, but the default quota is 5. It can be increased to 50 but requires approval
-# which takes significant wall time and is not handled very well by the aws tofu provider.
+# We get a /22 range (1,024 addresses total) and provision it into /26 blocks (64 addresses total,
+# 59 usable [1]) for each subnet. This provisioning strategy supports up to 8 subnets in the region
+# being deployed to. Assuming a base IP of 10.0.0.0, the subnet ranges will therefore be:
 #
-# So, we use 10.0.0.0/16 IP space and provision /20 blocks (4,096 addresses each) for each
-# subnet. The /20 prefix uses the 4 most significant bits of the third octet, so to increment /20
-# ranges we increment the third octet by 16 (https://cidr.xyz/#10.0.16.0/20 is a good visualization
-# for this). The subnet ranges will therefore be:
-#
-# cidr         | zone | type
-# -------------|------|--------
-# 10.0.0.0/20  |  a   | private
-# 10.0.16.0/20 |  a   | public
-# 10.0.32.0/20 |  b   | private
-# 10.0.48.0/20 |  b   | public
-# 10.0.64.0/20 |  c   | private
+# cidr          | zone | type
+# --------------|------|--------
+# 10.0.0.0/26   |  a   | private
+# 10.0.0.64/26  |  a   | public
+# 10.0.0.128/26 |  b   | private
+# 10.0.0.192/26 |  b   | public
+# 10.0.1.0/26   |  c   | private
+# 10.0.1.64/26  |  c   | public
 # ...
+#
+# [1]:
+#   From https://aws.amazon.com/vpc/faqs/:
+#
+#   > Amazon reserves the first four (4) IP addresses and the last one (1) IP address of every subnet for IP networking purposes.
+#   > The minimum size of a subnet is a /28 (or 14 IP addresses.)
 data "aws_availability_zones" "zones" {
   region = var.aws_region
   state  = "available"
@@ -42,7 +43,7 @@ locals {
 }
 resource "aws_vpc" "bloom" {
   region               = var.aws_region
-  cidr_block           = "10.0.0.0/16"
+  cidr_block           = var.vpc_cidr_range
   enable_dns_support   = true
   enable_dns_hostnames = true
   tags = {
@@ -50,15 +51,18 @@ resource "aws_vpc" "bloom" {
   }
 }
 locals {
-  prefix_increment = 16
-  stride           = local.prefix_increment * 2
+  # VPC range is a /22, each subnet gets a /26
+  newbits = 26 - 22
+
+  # Take even index ranges.
   private_subnets = zipmap(
     local.zones,
-    [for i in range(length(local.zones)) : "10.0.${local.stride * i}.0/20"]
+    [for i in range(0, (length(local.zones) * 2) - 1, 2) : cidrsubnet(var.vpc_cidr_range, local.newbits, i)]
   )
+  # Take odd index ranges.
   public_subnets = zipmap(
     local.zones,
-    [for i in range(length(local.zones)) : "10.0.${(local.stride * i) + local.prefix_increment}.0/20"]
+    [for i in range(1, length(local.zones) * 2, 2) : cidrsubnet(var.vpc_cidr_range, local.newbits, i)]
   )
 }
 # What makes a AWS subnet public is a direct route to the internet. This is controlled through the
