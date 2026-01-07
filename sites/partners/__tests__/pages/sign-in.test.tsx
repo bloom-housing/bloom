@@ -441,11 +441,9 @@ describe("Partners Sign In Page", () => {
         </AuthContext.Provider>
       )
 
-
       fireEvent.change(getByLabelText("Email"), { target: { value: "partner@example.com" } })
       fireEvent.change(getByLabelText("Password"), { target: { value: "password123" } })
       fireEvent.click(getByRole("button", { name: /sign in/i }))
-
 
       expect(
         await findByText(/how would you like us to verify that it's you?/i)
@@ -521,7 +519,10 @@ describe("Partners Sign In Page", () => {
           },
         },
       }
-      const mockLogin = jest.fn().mockRejectedValueOnce(mockError).mockRejectedValueOnce(mockMfaError)
+      const mockLogin = jest
+        .fn()
+        .mockRejectedValueOnce(mockError)
+        .mockRejectedValueOnce(mockMfaError)
       const mockRequestMfaCode = jest.fn().mockResolvedValue({ phoneNumberVerified: true })
 
       const { getByLabelText, getByRole, findByText, getByTestId } = render(
