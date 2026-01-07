@@ -70,16 +70,16 @@ describe("multiLineAddress", () => {
 
   it("should format address without placeName or street2", () => {
     const address = {
-      street: "123 Main St",
-      city: "San Francisco",
-      state: "CA",
-      zipCode: "94102",
+      street,
+      city,
+      state,
+      zipCode,
     } as AddressType
     const { container: resultContainer } = render(<>{multiLineAddress(address)}</>)
     const { container: expectedContainer } = render(
       <>
-        <span>123 Main St</span>
-        <span>San Francisco, CA 94102</span>
+        <span>Mile Drive</span>
+        <span>Pebble Beach, CA 93953</span>
       </>
     )
     expect(resultContainer.innerHTML).toBe(expectedContainer.innerHTML)
@@ -87,17 +87,17 @@ describe("multiLineAddress", () => {
 
   it("should format address with street2 but without placeName", () => {
     const address = {
-      street: "123 Main St",
-      street2: "Apt 4B",
-      city: "San Francisco",
-      state: "CA",
-      zipCode: "94102",
+      street,
+      street2,
+      city,
+      state,
+      zipCode,
     } as AddressType
     const { container: resultContainer } = render(<>{multiLineAddress(address)}</>)
     const { container: expectedContainer } = render(
       <>
-        <span>123 Main St, Apt 4B</span>
-        <span>San Francisco, CA 94102</span>
+        <span>Mile Drive, The Lone Cypress</span>
+        <span>Pebble Beach, CA 93953</span>
       </>
     )
     expect(resultContainer.innerHTML).toBe(expectedContainer.innerHTML)
@@ -106,17 +106,17 @@ describe("multiLineAddress", () => {
   it("should format address with placeName but without street2", () => {
     const address = {
       placeName: "Building A",
-      street: "456 Oak Ave",
-      city: "Los Angeles",
-      state: "CA",
-      zipCode: "90001",
+      street,
+      city,
+      state,
+      zipCode,
     } as AddressType
     const { container: resultContainer } = render(<>{multiLineAddress(address)}</>)
     const { container: expectedContainer } = render(
       <>
         <span>Building A</span>
-        <span>456 Oak Ave</span>
-        <span>Los Angeles, CA 90001</span>
+        <span>Mile Drive</span>
+        <span>Pebble Beach, CA 93953</span>
       </>
     )
     expect(resultContainer.innerHTML).toBe(expectedContainer.innerHTML)
@@ -125,18 +125,18 @@ describe("multiLineAddress", () => {
   it("should format address with both placeName and street2", () => {
     const address = {
       placeName: "Building A",
-      street: "789 Pine Rd",
-      street2: "Suite 200",
-      city: "Oakland",
-      state: "CA",
-      zipCode: "94612",
+      street,
+      street2,
+      city,
+      state,
+      zipCode,
     } as AddressType
     const { container: resultContainer } = render(<>{multiLineAddress(address)}</>)
     const { container: expectedContainer } = render(
       <>
         <span>Building A</span>
-        <span>789 Pine Rd, Suite 200</span>
-        <span>Oakland, CA 94612</span>
+        <span>Mile Drive, The Lone Cypress</span>
+        <span>Pebble Beach, CA 93953</span>
       </>
     )
     expect(resultContainer.innerHTML).toBe(expectedContainer.innerHTML)
@@ -144,17 +144,17 @@ describe("multiLineAddress", () => {
 
   it("should format address with empty street2", () => {
     const address = {
-      street: "321 Elm St",
+      street,
       street2: "",
-      city: "Berkeley",
-      state: "CA",
-      zipCode: "94704",
+      city,
+      state,
+      zipCode,
     } as AddressType
     const { container: resultContainer } = render(<>{multiLineAddress(address)}</>)
     const { container: expectedContainer } = render(
       <>
-        <span>321 Elm St</span>
-        <span>Berkeley, CA 94704</span>
+        <span>Mile Drive</span>
+        <span>Pebble Beach, CA 93953</span>
       </>
     )
     expect(resultContainer.innerHTML).toBe(expectedContainer.innerHTML)
@@ -163,16 +163,16 @@ describe("multiLineAddress", () => {
   it("should format address with empty placeName", () => {
     const address: AddressType = {
       placeName: "",
-      street: "555 Cedar Ln",
-      city: "San Jose",
-      state: "CA",
-      zipCode: "95110",
+      street,
+      city,
+      state,
+      zipCode,
     } as AddressType
     const { container: resultContainer } = render(<>{multiLineAddress(address)}</>)
     const { container: expectedContainer } = render(
       <>
-        <span>555 Cedar Ln</span>
-        <span>San Jose, CA 95110</span>
+        <span>Mile Drive</span>
+        <span>Pebble Beach, CA 93953</span>
       </>
     )
     expect(resultContainer.innerHTML).toBe(expectedContainer.innerHTML)
