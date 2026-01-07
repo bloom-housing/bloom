@@ -34,7 +34,7 @@ describe("Partners Sign In Page", () => {
     })
   })
 
-  describe("Form rendering", () => {
+  describe("Form rendering tests", () => {
     it("renders email and password form with all elements", () => {
       const { getByLabelText, getByRole, getByText } = render(
         <AuthContext.Provider
