@@ -73,9 +73,9 @@ module "bloom_deployment" {
   env_type          = "dev"
   high_availability = false
 
-  bloom_api_image           = "ghcr.io/bloom-housing/bloom/api:gitsha-f6b48498c8d023de468e27a9457db8ac2a6ad1f8"
-  bloom_site_partners_image = "ghcr.io/bloom-housing/bloom/partners:gitsha-f6b48498c8d023de468e27a9457db8ac2a6ad1f8"
-  bloom_site_public_image   = "ghcr.io/bloom-housing/bloom/public:gitsha-f6b48498c8d023de468e27a9457db8ac2a6ad1f8"
+  bloom_api_image           = "ghcr.io/bloom-housing/bloom/dbseed:gitsha-c2a913ae933314f0a26af56ae3c3f41138ed8fb2"
+  bloom_site_partners_image = "ghcr.io/bloom-housing/bloom/partners:gitsha-c2a913ae933314f0a26af56ae3c3f41138ed8fb2"
+  bloom_site_public_image   = "ghcr.io/bloom-housing/bloom/public:gitsha-c2a913ae933314f0a26af56ae3c3f41138ed8fb2"
   bloom_site_public_env_vars = {
     JURISDICTION_NAME     = "Doorway GenAI Test"
     CLOUDINARY_CLOUD_NAME = "exygy"
