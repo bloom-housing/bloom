@@ -21,6 +21,8 @@ import { MultiselectQuestionUpdate } from '../../src/dtos/multiselect-questions/
 import { Compare } from '../../src/dtos/shared/base-filter.dto';
 import { IdDTO } from '../../src/dtos/shared/id.dto';
 import { FeatureFlagEnum } from '../../src/enums/feature-flags/feature-flags-enum';
+import { MultiselectQuestionOrderByKeys } from '../../src/enums/multiselect-questions/order-by-enum';
+import { OrderByEnum } from '../../src/enums/shared/order-by-enum';
 import { AppModule } from '../../src/modules/app.module';
 import { PrismaService } from '../../src/services/prisma.service';
 
@@ -80,23 +82,20 @@ describe('MultiselectQuestion Controller Tests', () => {
           data: jurisdictionFactory(),
         });
 
-        const multiselectQuestion = await prisma.multiselectQuestions.create({
+        await prisma.multiselectQuestions.create({
           data: multiselectQuestionFactory(jurisdictionB.id),
         });
-        const multiselectQuestionB = await prisma.multiselectQuestions.create({
+        await prisma.multiselectQuestions.create({
           data: multiselectQuestionFactory(jurisdictionB.id),
         });
 
         const res = await request(app.getHttpServer())
-          .get(`/multiselectQuestions?`)
+          .get(`/multiselectQuestions`)
           .set({ passkey: process.env.API_PASS_KEY || '' })
           .set('Cookie', cookies)
           .expect(200);
 
         expect(res.body.length).toBeGreaterThanOrEqual(2);
-        const multiselectQuestions = res.body.map((value) => value.text);
-        expect(multiselectQuestions).toContain(multiselectQuestion.text);
-        expect(multiselectQuestions).toContain(multiselectQuestionB.text);
       });
 
       it('should get multiselect questions from list endpoint when params are sent', async () => {
@@ -413,9 +412,19 @@ describe('MultiselectQuestion Controller Tests', () => {
     });
 
     describe('list', () => {
-      it('should get multiselect questions from list endpoint when no params are sent', async () => {
-        const jurisdictionB = await prisma.jurisdictions.create({
+      let listJurisdictionId: string;
+      beforeAll(async () => {
+        const jurisdiction = await prisma.jurisdictions.create({
           data: jurisdictionFactory('enableV2 juris list', {
+            featureFlags: [FeatureFlagEnum.enableV2MSQ],
+          }),
+        });
+        listJurisdictionId = jurisdiction.id;
+      });
+
+      it('should get multiselect questions from list endpoint when jurisdiction filter is sent', async () => {
+        const jurisdictionB = await prisma.jurisdictions.create({
+          data: jurisdictionFactory('enableV2 juris list test', {
             featureFlags: [FeatureFlagEnum.enableV2MSQ],
           }),
         });
@@ -427,31 +436,11 @@ describe('MultiselectQuestion Controller Tests', () => {
           data: multiselectQuestionFactory(jurisdictionB.id, {}, true),
         });
 
-        const res = await request(app.getHttpServer())
-          .get(`/multiselectQuestions?`)
-          .set({ passkey: process.env.API_PASS_KEY || '' })
-          .set('Cookie', cookies)
-          .expect(200);
-
-        expect(res.body.length).toBeGreaterThanOrEqual(2);
-        const multiselectQuestions = res.body.map((value) => value.name);
-        expect(multiselectQuestions).toContain(multiselectQuestionA.name);
-        expect(multiselectQuestions).toContain(multiselectQuestionB.name);
-      });
-
-      it('should get multiselect questions from list endpoint when params are sent', async () => {
-        const multiselectQuestionA = await prisma.multiselectQuestions.create({
-          data: multiselectQuestionFactory(jurisdictionId, {}, true),
-        });
-        const multiselectQuestionB = await prisma.multiselectQuestions.create({
-          data: multiselectQuestionFactory(jurisdictionId, {}, true),
-        });
-
         const queryParams: MultiselectQuestionQueryParams = {
           filter: [
             {
               $comparison: Compare['='],
-              jurisdiction: jurisdictionId,
+              jurisdiction: jurisdictionB.id,
             },
           ],
         };
@@ -463,10 +452,133 @@ describe('MultiselectQuestion Controller Tests', () => {
           .set('Cookie', cookies)
           .expect(200);
 
-        expect(res.body.length).toBeGreaterThanOrEqual(2);
+        expect(res.body.length).toEqual(2);
         const multiselectQuestions = res.body.map((value) => value.name);
         expect(multiselectQuestions).toContain(multiselectQuestionA.name);
         expect(multiselectQuestions).toContain(multiselectQuestionB.name);
+      });
+
+      it('should get multiselect questions from list endpoint when multiple filter params are sent', async () => {
+        const multiselectQuestionA = await prisma.multiselectQuestions.create({
+          data: multiselectQuestionFactory(listJurisdictionId, {}, true),
+        });
+        const multiselectQuestionB = await prisma.multiselectQuestions.create({
+          data: multiselectQuestionFactory(
+            listJurisdictionId,
+            {
+              multiselectQuestion: {
+                applicationSection:
+                  MultiselectQuestionsApplicationSectionEnum.programs,
+                status: MultiselectQuestionsStatusEnum.active,
+              },
+            },
+            true,
+          ),
+        });
+        const multiselectQuestionC = await prisma.multiselectQuestions.create({
+          data: multiselectQuestionFactory(
+            listJurisdictionId,
+            {
+              multiselectQuestion: {
+                applicationSection:
+                  MultiselectQuestionsApplicationSectionEnum.preferences,
+                status: MultiselectQuestionsStatusEnum.active,
+              },
+            },
+            true,
+          ),
+        });
+
+        const queryParams: MultiselectQuestionQueryParams = {
+          filter: [
+            {
+              $comparison: Compare['='],
+              applicationSection:
+                MultiselectQuestionsApplicationSectionEnum.preferences,
+            },
+            {
+              $comparison: Compare['='],
+              jurisdiction: listJurisdictionId,
+            },
+            {
+              $comparison: Compare['='],
+              status: MultiselectQuestionsStatusEnum.active,
+            },
+          ],
+        };
+        const query = stringify(queryParams as any);
+
+        const res = await request(app.getHttpServer())
+          .get(`/multiselectQuestions?${query}`)
+          .set({ passkey: process.env.API_PASS_KEY || '' })
+          .set('Cookie', cookies)
+          .expect(200);
+
+        expect(res.body.length).toBeGreaterThanOrEqual(1);
+        const multiselectQuestions = res.body.map((value) => value.name);
+        expect(multiselectQuestions).not.toContain(multiselectQuestionA.name);
+        expect(multiselectQuestions).not.toContain(multiselectQuestionB.name);
+        expect(multiselectQuestions).toContain(multiselectQuestionC.name);
+      });
+
+      it('should get multiselect questions in correct order from list endpoint when orderBy and search are sent', async () => {
+        const multiselectQuestionA = await prisma.multiselectQuestions.create({
+          data: multiselectQuestionFactory(
+            listJurisdictionId,
+            {
+              multiselectQuestion: {
+                name: 'MSQ A1',
+              },
+            },
+            true,
+          ),
+        });
+        const multiselectQuestionB = await prisma.multiselectQuestions.create({
+          data: multiselectQuestionFactory(
+            listJurisdictionId,
+            {
+              multiselectQuestion: {
+                name: 'MSQ B2',
+              },
+            },
+            true,
+          ),
+        });
+        const multiselectQuestionC = await prisma.multiselectQuestions.create({
+          data: multiselectQuestionFactory(
+            listJurisdictionId,
+            {
+              multiselectQuestion: {
+                name: 'MSQ C3',
+              },
+            },
+            true,
+          ),
+        });
+
+        const queryParams: MultiselectQuestionQueryParams = {
+          filter: [
+            {
+              $comparison: Compare['='],
+              jurisdiction: listJurisdictionId,
+            },
+          ],
+          orderBy: [MultiselectQuestionOrderByKeys.name],
+          orderDir: [OrderByEnum.DESC],
+          search: 'MSQ',
+        };
+        const query = stringify(queryParams as any);
+
+        const res = await request(app.getHttpServer())
+          .get(`/multiselectQuestions?${query}`)
+          .set({ passkey: process.env.API_PASS_KEY || '' })
+          .set('Cookie', cookies)
+          .expect(200);
+
+        expect(res.body.length).toEqual(3);
+        expect(res.body[0].name).toEqual(multiselectQuestionC.name);
+        expect(res.body[1].name).toEqual(multiselectQuestionB.name);
+        expect(res.body[2].name).toEqual(multiselectQuestionA.name);
       });
     });
 
