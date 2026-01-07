@@ -175,7 +175,7 @@ export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: Li
     </>
   )
 
-  const lisitngUtilities = getUtilitiesIncluded(listing)
+  const listingUtilities = getUtilitiesIncluded(listing)
 
   const hasUnitFeature =
     listing.units.length ||
@@ -187,7 +187,7 @@ export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: Li
     (isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableCreditScreeningFee) &&
       listing.creditScreeningFee) ||
     (isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableUtilitiesIncluded) &&
-      lisitngUtilities.length) ||
+      listingUtilities.length) ||
     (isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableNonRegulatedListings) &&
       listing.listingType === EnumListingListingType.nonRegulated)
 
@@ -220,7 +220,7 @@ export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: Li
         }
         utilitiesIncluded={
           isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableUtilitiesIncluded)
-            ? lisitngUtilities
+            ? listingUtilities
             : []
         }
       />
