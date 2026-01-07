@@ -191,7 +191,7 @@ describe("Partners Sign In Page", () => {
     })
   })
 
-  describe("MFA flow", () => {
+  describe("MFA flow tests", () => {
     it("progresses to MFA type selection when mfaCodeIsMissing error is returned", async () => {
       const mockError = {
         response: {
@@ -297,7 +297,7 @@ describe("Partners Sign In Page", () => {
     })
   })
 
-  describe("Phone number addition flow", () => {
+  describe("Phone number addition flow tests", () => {
     it("prompts to add phone number when phoneNumberMissing error is returned", async () => {
       const mockError = {
         response: {
@@ -463,7 +463,7 @@ describe("Partners Sign In Page", () => {
     })
   })
 
-  describe("Error flows", () => {
+  describe("Error flows tests", () => {
     it("shows error message when login fails with invalid credentials", async () => {
       const mockError = {
         response: {
@@ -604,7 +604,7 @@ describe("Partners Sign In Page", () => {
     })
   })
 
-  describe("Resend confirmation modal", () => {
+  describe("Resend confirmation modal tests", () => {
     it("shows resend confirmation modal when account is not confirmed", async () => {
       const mockError = {
         response: {
