@@ -4,6 +4,8 @@ on:
   pull_request:
     branches:
       - main
+    paths-ignore:
+      - 'infra/**'
 env:
   APP_SECRET: 'SOME-LONG-SECRET-KEY'
   DATABASE_URL: postgres://bloom-dev:bloom@127.0.0.1:5432/bloom
