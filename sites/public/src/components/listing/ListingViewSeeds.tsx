@@ -265,19 +265,7 @@ export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: Li
       {LotteryEvent}
       {ReferralApplication}
       {WhatToExpect}
-      <LeasingAgent
-        address={listing.listingsLeasingAgentAddress}
-        email={listing.leasingAgentEmail}
-        name={listing.leasingAgentName}
-        officeHours={listing.leasingAgentOfficeHours}
-        phone={listing.leasingAgentPhone}
-        title={listing.leasingAgentTitle}
-        managementWebsite={
-          isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableCompanyWebsite)
-            ? listing.managementWebsite
-            : undefined
-        }
-      />
+      <LeasingAgent listing={listing} />
       {ListingUpdatedAt}
     </>
   )

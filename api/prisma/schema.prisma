@@ -182,7 +182,7 @@ model ApplicationSelectionOptions {
   isGeocodingVerified       Boolean?              @map("is_geocoding_verified")
   multiselectOptionId       String                @map("multiselect_option_id") @db.Uuid
   addressHolderAddress      Address?              @relation("application_selection_address", fields: [addressHolderAddressId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  applicationSelections     ApplicationSelections @relation(fields: [applicationSelectionId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  applicationSelection      ApplicationSelections @relation(fields: [applicationSelectionId], references: [id], onDelete: Cascade, onUpdate: NoAction)
   multiselectOption         MultiselectOptions    @relation(fields: [multiselectOptionId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@map("application_selection_options")
@@ -195,7 +195,7 @@ model ApplicationSelections {
   applicationId         String                        @map("application_id") @db.Uuid
   hasOptedOut           Boolean?                      @map("has_opted_out")
   multiselectQuestionId String                        @map("multiselect_question_id") @db.Uuid
-  application           Applications                  @relation(fields: [applicationId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  application           Applications                  @relation(fields: [applicationId], references: [id], onDelete: Cascade, onUpdate: NoAction)
   multiselectQuestion   MultiselectQuestions          @relation(fields: [multiselectQuestionId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   selections            ApplicationSelectionOptions[]
 
