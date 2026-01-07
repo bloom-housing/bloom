@@ -8,6 +8,7 @@ import {
   Prisma,
   PrismaClient,
   UserRoleEnum,
+  MultiselectQuestionsStatusEnum,
 } from '@prisma/client';
 import { jurisdictionFactory } from './seed-helpers/jurisdiction-factory';
 import { listingFactory } from './seed-helpers/listing-factory';
@@ -407,34 +408,39 @@ export const stagingSeed = async (
     }),
   });
   const workInCityQuestion = await prismaClient.multiselectQuestions.create({
-    data: multiselectQuestionFactory(mainJurisdiction.id, {
-      optOut: true,
-      multiselectQuestion: {
-        text: 'Work in the city',
-        description: 'At least one member of my household works in the city',
-        applicationSection:
-          MultiselectQuestionsApplicationSectionEnum.preferences,
-        options: [
-          {
-            text: 'At least one member of my household works in the city',
-            ordinal: 0,
-            collectAddress: true,
-            collectName: true,
-            collectRelationship: true,
-            mapLayerId: mapLayer.id,
-            validationMethod: ValidationMethod.map,
-          },
-          {
-            text: 'All members of the household work in the city',
-            ordinal: 1,
-            collectAddress: true,
-            ValidationMethod: ValidationMethod.none,
-            collectName: false,
-            collectRelationship: false,
-          },
-        ],
+    data: multiselectQuestionFactory(
+      mainJurisdiction.id,
+      {
+        optOut: true,
+        status: MultiselectQuestionsStatusEnum.active,
+        multiselectQuestion: {
+          name: 'Work in the city',
+          description: 'At least one member of my household works in the city',
+          applicationSection:
+            MultiselectQuestionsApplicationSectionEnum.preferences,
+          options: [
+            {
+              name: 'At least one member of my household works in the city',
+              ordinal: 0,
+              collectAddress: true,
+              collectName: true,
+              collectRelationship: true,
+              mapLayerId: mapLayer.id,
+              validationMethod: ValidationMethod.map,
+            },
+            {
+              name: 'All members of the household work in the city',
+              ordinal: 1,
+              collectAddress: true,
+              ValidationMethod: ValidationMethod.none,
+              collectName: false,
+              collectRelationship: false,
+            },
+          ],
+        },
       },
-    }),
+      true,
+    ),
   });
   const veteranProgramQuestion = await prismaClient.multiselectQuestions.create(
     {
