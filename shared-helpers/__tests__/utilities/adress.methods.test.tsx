@@ -5,53 +5,59 @@ import { Address as AddressType } from "../../src/types/backend-swagger"
 
 afterEach(cleanup)
 
+const street = "Mile Drive"
+const street2 = "The Lone Cypress"
+const city = "Pebble Beach"
+const zipCode = "93953"
+const state = "CA"
+
 describe("oneLineAddress", () => {
   it("should return empty string for null address", () => {
     expect(oneLineAddress(null)).toBe("")
   })
 
-  it("should format address without street2", () => {
+  it("should format address without street2 property", () => {
     const address = {
-      street: "123 Main St",
-      city: "San Francisco",
-      state: "CA",
-      zipCode: "94102",
+      street,
+      city,
+      state,
+      zipCode,
     } as AddressType
-    expect(oneLineAddress(address)).toBe("123 Main St, San Francisco, CA 94102")
+    expect(oneLineAddress(address)).toBe("Mile Drive, Pebble Beach, CA 93953")
   })
 
   it("should format address with street2", () => {
     const address = {
-      street: "123 Main St",
-      street2: "Apt 4B",
-      city: "San Francisco",
-      state: "CA",
-      zipCode: "94102",
+      street,
+      street2,
+      city,
+      state,
+      zipCode,
     } as AddressType
-    expect(oneLineAddress(address)).toBe("123 Main St, Apt 4B, San Francisco, CA 94102")
+    expect(oneLineAddress(address)).toBe("Mile Drive, The Lone Cypress, Pebble Beach, CA 93953")
   })
 
   it("should format address with empty street2", () => {
     const address = {
-      street: "456 Oak Ave",
+      street,
       street2: "",
-      city: "Los Angeles",
-      state: "CA",
-      zipCode: "90001",
+      city,
+      state,
+      zipCode,
     } as AddressType
-    expect(oneLineAddress(address)).toBe("456 Oak Ave, Los Angeles, CA 90001")
+    expect(oneLineAddress(address)).toBe("Mile Drive, Pebble Beach, CA 93953")
   })
 
   it("should format address with all fields including placeName", () => {
     const address = {
       placeName: "Building A",
-      street: "789 Pine Rd",
-      street2: "Suite 200",
-      city: "Oakland",
-      state: "CA",
-      zipCode: "94612",
+      street,
+      street2,
+      city,
+      state,
+      zipCode,
     } as AddressType
-    expect(oneLineAddress(address)).toBe("789 Pine Rd, Suite 200, Oakland, CA 94612")
+    expect(oneLineAddress(address)).toBe("Mile Drive, The Lone Cypress, Pebble Beach, CA 93953")
   })
 })
 
