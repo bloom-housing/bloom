@@ -30,15 +30,12 @@ import Property from '../dtos/properties/property.dto';
 import { IdDTO } from '../dtos/shared/id.dto';
 import { SuccessDTO } from '../dtos/shared/success.dto';
 import { defaultValidationPipeOptions } from '../utilities/default-validation-pipe-options';
-import { mapTo } from '../utilities/mapTo';
-import { User } from '../dtos/users/user.dto';
 import { PaginationMeta } from '../dtos/shared/pagination.dto';
 import { JwtAuthGuard } from '../guards/jwt.guard';
 import { PermissionGuard } from '../guards/permission.guard';
 
 @Controller('properties')
 @ApiTags('properties')
-@UseGuards(JwtAuthGuard, PermissionGuard)
 @ApiExtraModels(
   PropertyCreate,
   PropertyUpdate,
@@ -47,6 +44,7 @@ import { PermissionGuard } from '../guards/permission.guard';
   IdDTO,
 )
 @PermissionTypeDecorator('property')
+@UseGuards(JwtAuthGuard, PermissionGuard)
 export class PropertyController {
   constructor(private readonly propertyService: PropertyService) {}
 
@@ -96,10 +94,7 @@ export class PropertyController {
     @Request() req: ExpressRequest,
     @Body() propertyDto: PropertyCreate,
   ) {
-    return await this.propertyService.create(
-      propertyDto,
-      mapTo(User, req['user']),
-    );
+    return await this.propertyService.create(propertyDto);
   }
 
   @Put()
@@ -113,10 +108,7 @@ export class PropertyController {
     @Request() req: ExpressRequest,
     @Body() propertyDto: PropertyUpdate,
   ) {
-    return await this.propertyService.update(
-      propertyDto,
-      mapTo(User, req['user']),
-    );
+    return await this.propertyService.update(propertyDto);
   }
 
   @Delete()
@@ -130,9 +122,6 @@ export class PropertyController {
     @Request() req: ExpressRequest,
     @Body() idDto: IdDTO,
   ) {
-    return await this.propertyService.deleteOne(
-      idDto.id,
-      mapTo(User, req['user']),
-    );
+    return await this.propertyService.deleteOne(idDto.id);
   }
 }
