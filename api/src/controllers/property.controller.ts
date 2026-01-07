@@ -34,10 +34,11 @@ import { mapTo } from '../utilities/mapTo';
 import { User } from '../dtos/users/user.dto';
 import { PaginationMeta } from '../dtos/shared/pagination.dto';
 import { JwtAuthGuard } from '../guards/jwt.guard';
+import { PermissionGuard } from '../guards/permission.guard';
 
 @Controller('properties')
 @ApiTags('properties')
-@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard, PermissionGuard)
 @ApiExtraModels(
   PropertyCreate,
   PropertyUpdate,
