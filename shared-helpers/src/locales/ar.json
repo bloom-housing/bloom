@@ -3,7 +3,7 @@
   "account.accountSettingsSubtitle": "إعدادات الحساب والبريد الإلكتروني وكلمة المرور",
   "account.accountSettingsUpdate": "تحديث إعدادات الحساب",
   "account.allMyApplications": "جميع تطبيقاتي",
-  "account.allMyApplicationsSubtitle": "شاهد قوائم العقارات التي تقدمت بطلب للحصول عليها",
+  "account.allMyApplicationsSubtitle": "شاهد قوائم العقارات التي تقدمت بطلب للحصول عليها.",
   "account.application.confirmation": "تأكيد",
   "account.application.error": "خطأ",
   "account.application.lottery.applicantList": "من أصل %{applicants} من المتقدمين في هذه القائمة",

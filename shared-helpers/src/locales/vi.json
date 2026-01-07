@@ -3,7 +3,7 @@
   "account.accountSettingsSubtitle": "Cài đặt tài khoản, email và mật khẩu",
   "account.accountSettingsUpdate": "Cập nhật cài đặt tài khoản",
   "account.allMyApplications": "Tất cả các ứng dụng của tôi",
-  "account.allMyApplicationsSubtitle": "Xem danh sách các bất động sản mà bạn đã đăng ký",
+  "account.allMyApplicationsSubtitle": "Xem danh sách các bất động sản mà bạn đã đăng ký.",
   "account.application.confirmation": "Xác nhận",
   "account.application.error": "Lỗi",
   "account.application.lottery.applicantList": "Trong số %{applicants} ứng viên trong danh sách này",

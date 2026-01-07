@@ -3,7 +3,7 @@
   "account.accountSettingsSubtitle": "Account settings, email and password",
   "account.accountSettingsUpdate": "Update account settings",
   "account.allMyApplications": "All my applications",
-  "account.allMyApplicationsSubtitle": "See listings for properties for which you’ve applied",
+  "account.allMyApplicationsSubtitle": "See listings for properties for which you’ve applied.",
   "account.application.confirmation": "Confirmation",
   "account.application.error": "Error",
   "account.application.lottery.applicantList": "Out of %{applicants} applicants on this list",
