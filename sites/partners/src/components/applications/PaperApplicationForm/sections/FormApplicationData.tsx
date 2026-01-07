@@ -110,18 +110,6 @@ const FormApplicationData = ({
             </Grid.Cell>
           </Grid.Row>
           <Grid.Row columns={3}>
-            {reviewOrderType === ReviewOrderTypeEnum.lottery && (
-              <Grid.Cell>
-                <Field
-                  type="number"
-                  id="application.manualLotteryPositionNumber"
-                  name="application.manualLotteryPositionNumber"
-                  label={t("application.details.manualLotteryPositionNumber")}
-                  register={register}
-                  error={!!errors?.application?.manualLotteryPositionNumber}
-                />
-              </Grid.Cell>
-            )}
             <Grid.Cell className={isWaitlistStatus ? "" : "hidden"}>
               <Field
                 type="number"
@@ -160,6 +148,18 @@ const FormApplicationData = ({
                 >
                   {conventionalUnitWaitlistNumberValue}
                 </FieldValue>
+              </Grid.Cell>
+            )}
+            {reviewOrderType === ReviewOrderTypeEnum.lottery && (
+              <Grid.Cell>
+                <Field
+                  type="number"
+                  id="application.manualLotteryPositionNumber"
+                  name="application.manualLotteryPositionNumber"
+                  label={t("application.details.manualLotteryPositionNumber")}
+                  register={register}
+                  error={!!errors?.application?.manualLotteryPositionNumber}
+                />
               </Grid.Cell>
             )}
           </Grid.Row>
