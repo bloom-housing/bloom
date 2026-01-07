@@ -30,7 +30,7 @@ resource "aws_ecs_task_definition" "bloom_api" {
       command = [
         "/bin/bash",
         "-c",
-        "export DATABASE_URL=postgres://$DB_USER:$(node -e 'console.log(encodeURIComponent(process.argv[1]))' $DB_PASSWORD)@$DB_HOST/bloomprisma && env && yarn db:migration:run && yarn start:prod",
+        "export DATABASE_URL=postgres://$DB_USER:$(node -e 'console.log(encodeURIComponent(process.argv[1]))' $DB_PASSWORD)@$DB_HOST/bloomprisma && yarn db:migration:run && yarn db:seed:development && yarn start:prod",
       ]
       secrets = concat(
         [
