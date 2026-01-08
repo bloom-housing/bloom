@@ -482,7 +482,6 @@ const ListingForm = ({
       enableUnitGroups,
     ]
   )
-
   return loading === true ? null : (
     <>
       <LoadingOverlay isLoading={loading}>
