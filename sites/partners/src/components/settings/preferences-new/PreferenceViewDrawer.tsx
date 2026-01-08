@@ -10,6 +10,7 @@ import {
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import SectionWithGrid from "../../shared/SectionWithGrid"
 import { useSWRConfig } from "swr"
+import { useMapLayersList } from "../../../lib/hooks"
 
 type PreferenceViewDrawerProps = {
   drawerOpen: boolean
@@ -32,6 +33,9 @@ const PreferenceViewDrawer = ({
   const [optionData, setOptionData] = useState<MultiselectOption>(null)
 
   const drawerTitle = t("settings.preferenceView")
+
+  const { mapLayers } = useMapLayersList(questionData?.jurisdiction.id)
+  const mapLayerName = mapLayers?.find((item) => item.id === optionData?.mapLayerId)?.name
 
   let variant = null
   switch (questionData?.status) {
@@ -116,14 +120,19 @@ const PreferenceViewDrawer = ({
               )}
 
               <SectionWithGrid heading="" inset>
-                <Grid.Row columns={3}>
+                <Grid.Row>
                   <FieldValue label={t("settings.preferenceExclusiveQuestion")}>
                     {questionData?.isExclusive
                       ? t("settings.preferenceExclusive")
                       : t("settings.preferenceMultiSelect")}
                   </FieldValue>
                 </Grid.Row>
-                <Grid.Row columns={3}>
+                <Grid.Row>
+                  <FieldValue label={t("settings.preferenceShowOnListing")}>
+                    {questionData?.hideFromListing ? t("t.no") : t("t.yes")}
+                  </FieldValue>
+                </Grid.Row>
+                <Grid.Row>
                   <FieldValue label={t("t.jurisdiction")}>
                     {questionData?.jurisdiction.name}
                   </FieldValue>
@@ -210,20 +219,17 @@ const PreferenceViewDrawer = ({
                   <FieldValue label={t("settings.preferenceValidatingAddress")}>
                     {optionData?.validationMethod}
                   </FieldValue>
+                  <FieldValue label={"Map Layer"}>{mapLayerName}</FieldValue>
                 </Grid.Row>
                 <Grid.Row>
                   <Grid.Cell>
-                    
-                    
                     Radius: {optionData?.radiusSize}
-                    <br/>
-                    Map Layer: {optionData?.mapLayerId}
-                    <br/>
-                    Collect Name: {optionData?.shouldCollectName}
-                    <br/>
-                    Collect Relationship: {optionData?.shouldCollectRelationship}
-                    <br/>
-                    
+                    <br />
+                    {t("settings.preferenceCollectAddressHolderName")}:{" "}
+                    {optionData?.shouldCollectName ? t("t.yes") : t("t.no")}
+                    <br />
+                    {t("settings.preferenceCollectAddressHolderRelationship")}:{" "}
+                    {optionData?.shouldCollectRelationship ? t("t.yes") : t("t.no")}
                   </Grid.Cell>
                 </Grid.Row>
               </SectionWithGrid>

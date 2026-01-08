@@ -85,17 +85,8 @@ const PreferenceEditDrawer = ({
 
   const { profile } = useContext(AuthContext)
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const {
-    register,
-    getValues,
-    setValue,
-    trigger,
-    errors,
-    clearErrors,
-    setError,
-    watch,
-    formState,
-  } = useForm()
+  const { register, getValues, trigger, errors, clearErrors, setError, watch, formState } =
+    useForm()
 
   const { mapLayers } = useMapLayersList(watch("jurisdictionId"))
 
@@ -249,7 +240,7 @@ const PreferenceEditDrawer = ({
   /**
    * Saves the preference and the associated options
    */
-  const savePreference = async () => {
+  const savePreference = async (forceToVisible: boolean = null) => {
     const validation = await trigger()
     if (!questionData || !questionData?.multiselectOptions?.length) {
       setError("questions", { message: t("errors.requiredFieldError") })
@@ -270,15 +261,9 @@ const PreferenceEditDrawer = ({
     }
 
     let newStatus = questionData?.status ?? MultiselectQuestionsStatusEnum.draft
-    if (
-      newStatus === MultiselectQuestionsStatusEnum.draft &&
-      formValues.showOnListingQuestion === YesNoEnum.yes
-    ) {
+    if (newStatus === MultiselectQuestionsStatusEnum.draft && forceToVisible === true) {
       newStatus = MultiselectQuestionsStatusEnum.visible
-    } else if (
-      newStatus === MultiselectQuestionsStatusEnum.visible &&
-      formValues.showOnListingQuestion === YesNoEnum.no
-    ) {
+    } else if (newStatus === MultiselectQuestionsStatusEnum.visible && forceToVisible === false) {
       newStatus = MultiselectQuestionsStatusEnum.draft
     }
 
@@ -286,19 +271,19 @@ const PreferenceEditDrawer = ({
       applicationSection: MultiselectQuestionsApplicationSectionEnum.preferences,
       description: formValues.description.trim(),
       hideFromListing: formValues.showOnListingQuestion === YesNoEnum.no,
-      jurisdictions: [], // TODO: shouldn't this not be necessary anymore?
+      jurisdictions: [], // TODO: remove this when V2 schema is default
       jurisdiction: profile.jurisdictions.find((juris) => juris.id === formValues.jurisdictionId),
       links: formValues.preferenceUrl
         ? [{ title: formValues.preferenceLinkTitle.trim(), url: formValues.preferenceUrl.trim() }]
         : [],
       isExclusive: formValues.exclusiveQuestion === "exclusive",
       multiselectOptions: questionData?.multiselectOptions?.map((option) => {
-        option.text = "" // TODO: shouldn't this not be necessary anymore?
+        option.text = "" // TODO: remove this when V2 schema is default
         return option
       }),
       status: newStatus,
       name: formValues.name.trim(),
-      text: "", // TODO: shouldn't this not be necessary anymore?
+      text: "", // TODO: remove this when V2 schema is default
     }
     clearErrors()
     clearErrors("questions")
@@ -306,11 +291,14 @@ const PreferenceEditDrawer = ({
   }
 
   const toggleVisibility = () => {
-    setValue(
-      "showOnListingQuestion",
-      questionData?.status === MultiselectQuestionsStatusEnum.draft ? YesNoEnum.yes : YesNoEnum.no
+    // DELETE THIS
+    // setValue(
+    //   "showOnListingQuestion",
+    //   questionData?.status === MultiselectQuestionsStatusEnum.draft ? YesNoEnum.yes : YesNoEnum.no
+    // )
+    void savePreference(
+      !questionData || questionData?.status === MultiselectQuestionsStatusEnum.draft
     )
-    void savePreference()
   }
 
   return (
@@ -549,27 +537,27 @@ const PreferenceEditDrawer = ({
             {t("t.save")}
           </Button>
           <Button type="button" variant="primary-outlined" onClick={toggleVisibility}>
-            {questionData?.status === MultiselectQuestionsStatusEnum.draft
+            {!questionData || questionData?.status === MultiselectQuestionsStatusEnum.draft
               ? "Show to Partners"
               : "Hide from Partners"}
           </Button>
-          {
-            // TODO: how does a Copy button work when adding a new preference?
-          }
-          <Button
-            type="button"
-            variant="primary-outlined"
-            className="ml-auto"
-            onClick={() => {
-              copyQuestion(questionData)
-              onDrawerClose()
-            }}
-          >
-            {t("actions.copy")}
-          </Button>
+          {drawerType === "edit" && (
+            <Button
+              type="button"
+              variant="primary-outlined"
+              className="ml-auto"
+              onClick={() => {
+                copyQuestion(questionData)
+                onDrawerClose()
+              }}
+            >
+              {t("actions.copy")}
+            </Button>
+          )}
           <Button
             type="button"
             variant="alert-outlined"
+            className={drawerType === "add" ? "ml-auto" : undefined}
             onClick={() => {
               if (drawerType === "edit") {
                 setDeleteConfirmModalOpen(questionData)

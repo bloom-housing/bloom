@@ -66,6 +66,7 @@ const SettingsPreferences = () => {
         field: "",
         cellRendererFramework: ({ data }) => {
           const { preference, id } = data
+
           return preference.status === MultiselectQuestionsStatusEnum.draft ||
             preference.status === MultiselectQuestionsStatusEnum.visible ? (
             <Button
