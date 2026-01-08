@@ -30,6 +30,10 @@ const DetailBuildingFeatures = () => {
     FeatureFlagEnum.enableAccessibilityFeatures,
     listing.jurisdictions.id
   )
+  const enableParkingFee = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableParkingFee,
+    listing?.jurisdictions?.id
+  )
 
   const enableSmokingPolicyRadio = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableSmokingPolicyRadio,
@@ -93,6 +97,15 @@ const DetailBuildingFeatures = () => {
           <Grid.Cell>
             <FieldValue id="accessibilityFeatures" label={"Accessibility Features"}>
               {getAccessibilityFeatures()}
+            </FieldValue>
+          </Grid.Cell>
+        </Grid.Row>
+      )}
+      {enableParkingFee && (
+        <Grid.Row>
+          <Grid.Cell>
+            <FieldValue id="parkingFee" label={t("t.parkingFee")}>
+              {getDetailFieldString(listing.parkingFee)}
             </FieldValue>
           </Grid.Cell>
         </Grid.Row>
