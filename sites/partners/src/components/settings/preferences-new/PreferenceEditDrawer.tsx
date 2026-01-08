@@ -291,11 +291,6 @@ const PreferenceEditDrawer = ({
   }
 
   const toggleVisibility = () => {
-    // DELETE THIS
-    // setValue(
-    //   "showOnListingQuestion",
-    //   questionData?.status === MultiselectQuestionsStatusEnum.draft ? YesNoEnum.yes : YesNoEnum.no
-    // )
     void savePreference(
       !questionData || questionData?.status === MultiselectQuestionsStatusEnum.draft
     )
@@ -531,7 +526,7 @@ const PreferenceEditDrawer = ({
             type="button"
             variant="primary"
             loadingMessage={isLoading && t("t.formSubmitted")}
-            onClick={savePreference}
+            onClick={() => savePreference()}
             id={"preference-save-button"}
           >
             {t("t.save")}
