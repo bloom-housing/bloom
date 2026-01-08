@@ -605,6 +605,10 @@ const ListingForm = ({
                               FeatureFlagEnum.enableSmokingPolicyRadio,
                               jurisdictionId
                             )}
+                            enableParkingFee={doJurisdictionsHaveFeatureFlagOn(
+                              FeatureFlagEnum.enableParkingFee,
+                              jurisdictionId
+                            )}
                             requiredFields={requiredFields}
                           />
                           <NeighborhoodAmenities

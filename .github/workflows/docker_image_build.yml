@@ -74,7 +74,7 @@ jobs:
           file: ${{ matrix.dockerfile }}
           platforms: ${{ matrix.platforms }}
           tags: |
-            ${{ env.image_base }}/${{ matrix.container }}:latest
+            ${{ env.image_base }}/${{ matrix.container }}:gitbranch-${{ github.ref_name }}-latest
             ${{ env.image_base }}/${{ matrix.container }}:gitsha-${{ github.sha }}
           # Connects the image to the repository: https://docs.github.com/en/packages/learn-github-packages/connecting-a-repository-to-a-package.
           labels: org.opencontainers.image.source=https://github.com/${{ github.repository }}
