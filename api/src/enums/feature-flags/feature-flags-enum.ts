@@ -23,6 +23,7 @@ export enum FeatureFlagEnum {
   enableListingFavoriting = 'enableListingFavoriting',
   enableListingFileNumber = 'enableListingFileNumber',
   enableListingFiltering = 'enableListingFiltering',
+  enableLeasingAgentAltText = 'enableLeasingAgentAltText',
   enableListingImageAltText = 'enableListingImageAltText',
   enableListingOpportunity = 'enableListingOpportunity',
   enableListingPagination = 'enableListingPagination',
@@ -33,6 +34,7 @@ export enum FeatureFlagEnum {
   enableNeighborhoodAmenities = 'enableNeighborhoodAmenities',
   enableNeighborhoodAmenitiesDropdown = 'enableNeighborhoodAmenitiesDropdown',
   enableNonRegulatedListings = 'enableNonRegulatedListings',
+  enableParkingFee = 'enableParkingFee',
   enablePartnerDemographics = 'enablePartnerDemographics',
   enablePartnerSettings = 'enablePartnerSettings',
   enableProperties = 'enableProperties',
@@ -40,6 +42,7 @@ export enum FeatureFlagEnum {
   enableRegions = 'enableRegions',
   enableSection8Question = 'enableSection8Question',
   enableSingleUseCode = 'enableSingleUseCode',
+  enableSmokingPolicyRadio = 'enableSmokingPolicyRadio',
   enableSupportAdmin = 'enableSupportAdmin',
   enableUnderConstructionHome = 'enableUnderConstructionHome',
   enableUnitGroups = 'enableUnitGroups',
@@ -163,6 +166,10 @@ export const featureFlagMap: {
       'When true, a filter button is shown on listings browse and users can filter with the options in the drawer',
   },
   {
+    name: FeatureFlagEnum.enableLeasingAgentAltText,
+    description: 'When true, shows alternative text for LA users',
+  },
+  {
     name: FeatureFlagEnum.enableListingImageAltText,
     description: 'When true, allows partners to add alt text to listing images',
   },
@@ -211,6 +218,10 @@ export const featureFlagMap: {
       'When true, non-regulated listings are displayed in listing creation/edit and public listing view',
   },
   {
+    name: FeatureFlagEnum.enableParkingFee,
+    description: 'When true, the parking fee field should be visible',
+  },
+  {
     name: FeatureFlagEnum.enablePartnerDemographics,
     description:
       'When true, demographics data is included in application or lottery exports for partners',
@@ -240,6 +251,11 @@ export const featureFlagMap: {
     name: FeatureFlagEnum.enableSingleUseCode,
     description:
       'When true, the backend allows for logging into this jurisdiction using the single use code flow',
+  },
+  {
+    name: FeatureFlagEnum.enableSmokingPolicyRadio,
+    description:
+      "When true, the listing 'Smoking policy' field is a radio group",
   },
   {
     name: FeatureFlagEnum.enableSupportAdmin,

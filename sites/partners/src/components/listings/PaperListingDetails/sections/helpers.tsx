@@ -1,7 +1,10 @@
 import React from "react"
-import { AddressCreate } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  AddressCreate,
+  ApplicationStatusEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { t } from "@bloom-housing/ui-components"
-import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
+import { FieldValue, Grid, Tag } from "@bloom-housing/ui-seeds"
 import dayjs from "dayjs"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 import { TextEditorContent } from "../../../shared/TextEditor"
@@ -32,6 +35,39 @@ export const getDetailFieldTime = (listingTime: Date) => {
 
 export const getDetailBoolean = (listingBool: boolean) => {
   return listingBool === true ? t("t.yes") : listingBool === false ? t("t.no") : t("t.n/a")
+}
+
+export const getApplicationStatusVariant = (status?: ApplicationStatusEnum) => {
+  switch (status) {
+    case ApplicationStatusEnum.submitted:
+      return "primary"
+    case ApplicationStatusEnum.declined:
+      return "highlight-warm"
+    case ApplicationStatusEnum.receivedUnit:
+      return "success"
+    case ApplicationStatusEnum.waitlist:
+      return "warn"
+    case ApplicationStatusEnum.waitlistDeclined:
+      return "highlight-warm"
+    default:
+      return "secondary"
+  }
+}
+
+type ApplicationStatusTagProps = {
+  status?: ApplicationStatusEnum
+}
+
+export const ApplicationStatusTag = ({ status }: ApplicationStatusTagProps) => {
+  const variant = getApplicationStatusVariant(status)
+
+  return (
+    <Tag className="tag-full-width" variant={variant} size="lg">
+      {status
+        ? t(`application.details.applicationStatus.${status}`)
+        : t("application.details.applicationStatus.draft")}
+    </Tag>
+  )
 }
 
 export const cleanRichText = (listingString: string) => {

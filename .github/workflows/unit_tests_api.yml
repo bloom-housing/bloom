@@ -4,6 +4,8 @@ on:
   pull_request:
     branches:
       - main
+    paths-ignore:
+      - 'infra/**'
 env:
   APP_SECRET: 'SOME-LONG-SECRET-KEY'
   DATABASE_URL: postgres://bloom-dev:bloom@127.0.0.1:5432/bloom
@@ -38,7 +40,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v1
         with:
-          node-version: 18
+          node-version: 22
 
       - name: yarn in api
         working-directory: ./api

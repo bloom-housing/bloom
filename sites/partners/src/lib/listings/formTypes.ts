@@ -1,10 +1,13 @@
-import { LatitudeLongitude, TimeFieldPeriod } from "@bloom-housing/ui-components"
+import { TimeFieldPeriod } from "@bloom-housing/ui-components"
+import { LatitudeLongitude } from "@bloom-housing/shared-helpers"
 import {
   ApplicationAddressTypeEnum,
   EnumListingDepositType,
   Listing,
   ListingEvent,
+  ListingFeaturesCreate,
   ListingsStatusEnum,
+  ListingUtilitiesCreate,
   MultiselectQuestion,
   PaperApplication,
   PaperApplicationCreate,
@@ -19,7 +22,7 @@ export enum AnotherAddressEnum {
   anotherAddress = "anotherAddress",
 }
 
-export type FormListing = Omit<Listing, "countyCode"> & {
+export type FormListing = Omit<Listing, "countyCode" | "listingFeatures" | "listingUtilities"> & {
   applicationDueDateField?: {
     month: string
     day: string
@@ -88,6 +91,8 @@ export type FormListing = Omit<Listing, "countyCode"> & {
   accessibilityFeatures?: string[]
   utilities?: string[]
   selectedRequiredDocuments?: string[]
+  listingFeatures?: ListingFeaturesCreate
+  listingUtilities?: ListingUtilitiesCreate
 }
 
 export const addressTypes = {

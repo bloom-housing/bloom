@@ -1,15 +1,13 @@
 import { ApiPropertyOptional, OmitType } from '@nestjs/swagger';
+import { AssetCreate } from '../assets/asset-create.dto';
 import { Expose, Type } from 'class-transformer';
+import { PaperApplicationUpdate } from './paper-application-update.dto';
 import { ValidateNested } from 'class-validator';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
-import { PaperApplication } from './paper-application.dto';
-import { AssetCreate } from '../assets/asset-create.dto';
 
-export class PaperApplicationCreate extends OmitType(PaperApplication, [
-  'id',
-  'createdAt',
-  'updatedAt',
+export class PaperApplicationCreate extends OmitType(PaperApplicationUpdate, [
   'assets',
+  'id',
 ]) {
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
