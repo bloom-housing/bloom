@@ -129,6 +129,15 @@ variable "bloom_api_task_count" {
   type        = number
   default     = null
 }
+variable "bloom_dbseed_image" {
+  type        = string
+  description = "Container image for the Bloom dbseed image."
+}
+variable "apply_seed" {
+  type        = string
+  description = "When true, deploy the dbseed container to facilitate Bloom database seeding."
+  default     = false
+}
 locals {
   bloom_api_task_count = var.bloom_api_task_count != null ? var.bloom_api_task_count : (var.high_availability ? 2 : 1)
 }

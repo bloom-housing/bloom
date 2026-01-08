@@ -59,7 +59,6 @@ output "certificate_details" {
   description = "DNS records required to be manually added for the LB TLS certificate to be issued."
 }
 
-# Deploy bloom into the account.
 module "bloom_deployment" {
   source = "../../tofu_importable_modules/bloom_deployment"
 
@@ -73,11 +72,14 @@ module "bloom_deployment" {
   env_type          = "dev"
   high_availability = false
 
-  bloom_api_image           = "ghcr.io/bloom-housing/bloom/api:gitsha-c2a913ae933314f0a26af56ae3c3f41138ed8fb2"
-  bloom_site_partners_image = "ghcr.io/bloom-housing/bloom/partners:gitsha-c2a913ae933314f0a26af56ae3c3f41138ed8fb2"
-  bloom_site_public_image   = "ghcr.io/bloom-housing/bloom/public:gitsha-c2a913ae933314f0a26af56ae3c3f41138ed8fb2"
+  apply_seed = var.bloom_apply_seed
+
+  bloom_api_image           = "ghcr.io/bloom-housing/bloom/api:gitsha-0ce113e71e6f6e3d87d347406d045cdc920001a7"
+  bloom_site_partners_image = "ghcr.io/bloom-housing/bloom/partners:gitsha-0ce113e71e6f6e3d87d347406d045cdc920001a7"
+  bloom_site_public_image   = "ghcr.io/bloom-housing/bloom/public:gitsha-0ce113e71e6f6e3d87d347406d045cdc920001a7"
+  bloom_dbseed_image        = "ghcr.io/bloom-housing/bloom/dbseed:gitsha-0ce113e71e6f6e3d87d347406d045cdc920001a7"
   bloom_site_public_env_vars = {
-    JURISDICTION_NAME     = "Doorway GenAI Test"
+    JURISDICTION_NAME     = "Bloomington"
     CLOUDINARY_CLOUD_NAME = "exygy"
     LANGUAGES             = "en,es,zh,vi,tl"
     RTL_LANGUAGES         = "ar"
@@ -102,6 +104,11 @@ variable "apply_seed" {
   description = "If true, upload seed SQL and import it during DB bootstrap."
   default     = false
 }
+variable "bloom_apply_seed" {
+  type        = bool
+  description = "If true, run the dbseed container to seed the Bloom database."
+  default     = false
+}
 variable "seed_sql_path" {
   type        = string
   description = "Local path to seed SQL file (required if apply_seed=true)."
@@ -110,7 +117,7 @@ variable "seed_sql_path" {
 variable "vertex_credentials_json_secret_arn" {
   type        = string
   description = "ARN of an AWS Secrets Manager secret whose value will be injected into the bloom-genai-backend container as VERTEX_CREDENTIALS_JSON."
-  default     = ""
+  default     = "arn:aws:secretsmanager:us-west-2:344261432650:secret:vertex_credentials_json-4mFKgU"
 }
 variable "gcp_project_id" {
   type        = string
@@ -142,6 +149,7 @@ module "data_explorer_backend" {
   secrets_manager_endpoint_security_group_id = module.bloom_deployment.security_group_ids.secrets_manager_endpoint
 
   data_explorer_backend_image = "ghcr.io/exygy/housing-reports/bloom-genai-backend:gitsha-8c1ec44f90a3ce738ed63f1575ac5847ae9e8fe6"
+  
 
   cors_origins = "https://${local.domain_name},https://partners.${local.domain_name}"
 
