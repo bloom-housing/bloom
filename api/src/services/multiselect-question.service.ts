@@ -266,7 +266,7 @@ export class MultiselectQuestionService {
       },
       include: includeViews.fundamentals,
     };
-    console.log(finalCreateData.data.multiselectOptions.createMany);
+
     const rawMultiselectQuestion =
       await this.prisma.multiselectQuestions.create(finalCreateData);
 
