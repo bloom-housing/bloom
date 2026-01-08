@@ -79,7 +79,7 @@ module "bloom_deployment" {
   bloom_site_public_image   = "ghcr.io/bloom-housing/bloom/public:gitsha-0ce113e71e6f6e3d87d347406d045cdc920001a7"
   bloom_dbseed_image        = "ghcr.io/bloom-housing/bloom/dbseed:gitsha-0ce113e71e6f6e3d87d347406d045cdc920001a7"
   bloom_site_public_env_vars = {
-    JURISDICTION_NAME     = "Bloomington"
+    JURISDICTION_NAME     = "Doorway Data Explorer Test"
     CLOUDINARY_CLOUD_NAME = "exygy"
     LANGUAGES             = "en,es,zh,vi,tl"
     RTL_LANGUAGES         = "ar"

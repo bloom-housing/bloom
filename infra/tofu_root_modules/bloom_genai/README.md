@@ -46,3 +46,8 @@ To update the data in the data explorer database, you just need to provide the S
 ## Permissions changes
 
 A fair number of extra permissions need to be added to the deployer role. To be documented later.
+
+## Notes
+
+If you're developing on this and are repeatedly applying and destroying, it's helpful to do:
+`bloomtofu -ss -si bloom_genai destroy -exclude=aws_acm_certificate.bloom` so that you can skip the cert generation step and don't need to repeatedly update DNS.
