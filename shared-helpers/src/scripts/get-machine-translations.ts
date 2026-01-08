@@ -1,9 +1,11 @@
 /* eslint-disable @typescript-eslint/no-var-requires, import/no-unresolved */
 // Finds missing translations and automatically translates them using Google Translate API
 // Prints out translations in the JSON translation file format: "key": "translated string"
-// You will need to add the environment variables for Google Translate API access from the api env file, but ensure you do not commit them!
+// You will need to add the environment variables for Google Translate API access from the api env file into this env file
 // Example: `ts-node get-machine-translations.ts > any-filename-here.json`
 import { Translate } from "@google-cloud/translate/build/src/v2"
+import dotenv from "dotenv"
+dotenv.config({ quiet: true })
 
 async function main() {
   enum LanguagesEnum {
@@ -16,10 +18,9 @@ async function main() {
     "bn" = "bn",
   }
 
-  // DO NOT COMMIT THESE VALUES! REMOVE BEFORE COMMITTING
-  const GOOGLE_API_EMAIL = ``
-  const GOOGLE_API_ID = ``
-  const GOOGLE_API_KEY = ``
+  const GOOGLE_API_EMAIL = process.env.GOOGLE_API_EMAIL || ``
+  const GOOGLE_API_ID = process.env.GOOGLE_API_ID || ``
+  const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY || ``
 
   const makeTranslateService = () => {
     return new Translate({

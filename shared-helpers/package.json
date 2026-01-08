@@ -38,6 +38,7 @@
     "@types/react-transition-group": "^4.4.12",
     "@google-cloud/translate": "^9.2.0",
     "csv-parse": "^5.5.5",
+    "dotenv": "^17.2.3",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^26.5.3",
     "next": "^15.5.7",
