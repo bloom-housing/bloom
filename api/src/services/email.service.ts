@@ -347,7 +347,7 @@ export class EmailService {
 
   public async applicationConfirmation(
     listing: Listing,
-    application: ApplicationCreate,
+    application: Application,
     appUrl: string,
   ) {
     const jurisdiction = await this.getJurisdiction([listing.jurisdictions]);

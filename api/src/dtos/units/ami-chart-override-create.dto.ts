@@ -1,8 +1,7 @@
 import { OmitType } from '@nestjs/swagger';
-import { UnitAmiChartOverride } from './ami-chart-override.dto';
+import { UnitAmiChartOverrideUpdate } from './ami-chart-override-update.dto';
 
-export class UnitAmiChartOverrideCreate extends OmitType(UnitAmiChartOverride, [
-  'id',
-  'createdAt',
-  'updatedAt',
-]) {}
+export class UnitAmiChartOverrideCreate extends OmitType(
+  UnitAmiChartOverrideUpdate,
+  ['id'],
+) {}

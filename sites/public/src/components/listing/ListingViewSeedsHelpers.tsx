@@ -26,6 +26,8 @@ import {
 import {
   cloudinaryPdfFromId,
   getOccupancyDescription,
+  listingFeatures,
+  listingUtilities,
   stackedOccupancyTable,
   stackedUnitGroupsOccupancyTable,
 } from "@bloom-housing/shared-helpers"
@@ -141,6 +143,8 @@ export const getAccessibilityFeatures = (listing: Listing) => {
   const enabledFeatures = Object.entries(listing?.listingFeatures ?? {})
     .filter(([_, value]) => value)
     .map((item) => item[0])
+    .filter((feature) => listingFeatures.includes(feature))
+
   const COLUMN_BREAKPOINT = 6
   if (enabledFeatures.length > 0) {
     return (
@@ -165,6 +169,7 @@ export const getUtilitiesIncluded = (listing: Listing) => {
   const enabledUtilities = Object.entries(listing?.listingUtilities ?? {})
     .filter(([_, value]) => value)
     .map((item) => item[0])
+    .filter((utility) => listingUtilities.includes(utility))
 
   if (enabledUtilities.length > 0) {
     return enabledUtilities.map((utility, index) => {
@@ -185,9 +190,6 @@ export const getFeatures = (
   if (listing.yearBuilt) {
     features.push({ heading: t("t.built"), subheading: listing.yearBuilt })
   }
-  if (listing.smokingPolicy) {
-    features.push({ heading: t("t.smokingPolicy"), subheading: listing.smokingPolicy })
-  }
   if (listing.petPolicy) {
     features.push({ heading: t("t.petsPolicy"), subheading: listing.petPolicy })
   }
@@ -199,6 +201,15 @@ export const getFeatures = (
   }
   if (listing.servicesOffered) {
     features.push({ heading: t("t.servicesOffered"), subheading: listing.servicesOffered })
+  }
+  if (listing.parkingFee) {
+    features.push({
+      heading: t("t.parkingFee"),
+      subheading: `$${listing.parkingFee}`,
+    })
+  }
+  if (listing.smokingPolicy) {
+    features.push({ heading: t("t.smokingPolicy"), subheading: listing.smokingPolicy })
   }
   const accessibilityFeatures = getAccessibilityFeatures(listing)
   const enableAccessibilityFeatures = jurisdiction?.featureFlags?.some(
