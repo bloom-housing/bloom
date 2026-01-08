@@ -54,6 +54,7 @@ import {
 } from '../utilities/feature-flag-utilities';
 import { UnitGroupSummary } from '../dtos/unit-groups/unit-group-summary.dto';
 import { addUnitGroupsSummarized } from '../utilities/unit-groups-transformations';
+import { ListingDocuments } from '../dtos/listings/listing-documents.dto';
 
 includeViews.csv = {
   listingMultiselectQuestions: {
@@ -429,6 +430,19 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
     return fieldValue;
   };
 
+  buildSelectList(
+    val: ListingUtilities | ListingDocuments | ListingFeatures,
+  ): string {
+    if (!val) return '';
+    const selectedValues = Object.entries(val).reduce((combined, entry) => {
+      if (entry[1] === true) {
+        combined.push(entry[0]);
+      }
+      return combined;
+    }, []);
+    return selectedValues.join(', ');
+  }
+
   async getCsvHeaders(user: User): Promise<CsvHeader[]> {
     const enableNonRegulatedListings = doAnyJurisdictionHaveFeatureFlagSet(
       user.jurisdictions,
@@ -655,19 +669,7 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
       headers.push({
         path: 'listingUtilities',
         label: 'Utilities Included',
-        format: (val: ListingUtilities): string => {
-          if (!val) return '';
-          const selectedValues = Object.entries(val).reduce(
-            (combined, entry) => {
-              if (entry[1] === true) {
-                combined.push(entry[0]);
-              }
-              return combined;
-            },
-            [],
-          );
-          return selectedValues.join(', ');
-        },
+        format: this.buildSelectList,
       });
     }
     if (
@@ -679,19 +681,7 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
       headers.push({
         path: 'listingFeatures',
         label: 'Property Amenities',
-        format: (val: ListingFeatures): string => {
-          if (!val) return '';
-          const selectedValues = Object.entries(val).reduce(
-            (combined, entry) => {
-              if (entry[1] === true) {
-                combined.push(entry[0]);
-              }
-              return combined;
-            },
-            [],
-          );
-          return selectedValues.join(', ');
-        },
+        format: this.buildSelectList,
       });
     }
 
@@ -989,6 +979,18 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
           path: 'programRules',
           label: 'Important Program Rules',
         },
+        ...(doAnyJurisdictionHaveFeatureFlagSet(
+          user.jurisdictions,
+          FeatureFlagEnum.enableNonRegulatedListings,
+        )
+          ? [
+              {
+                path: 'requiredDocumentsList',
+                label: 'Required documents List',
+                format: this.buildSelectList,
+              },
+            ]
+          : []),
         {
           path: 'requiredDocuments',
           label: 'Required Documents',
