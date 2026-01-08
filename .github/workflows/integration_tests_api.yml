@@ -4,6 +4,8 @@ on:
   pull_request:
     branches:
       - main
+    paths-ignore:
+      - 'infra/**'
 env:
   PORT: 3100
   EMAIL_API_KEY: 'SG.SOME-LONG-SECRET-KEY'
@@ -52,7 +54,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v1
         with:
-          node-version: 18
+          node-version: 22
 
       - name: yarn in api dir
         working-directory: ./api

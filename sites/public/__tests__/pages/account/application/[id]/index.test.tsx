@@ -127,7 +127,7 @@ describe("Account Listing View", () => {
     expect(screen.getByText("ABCD1234")).toBeInTheDocument()
 
     // --------------------------- Applicant Section ------------------------------------
-    expect(screen.getByRole("heading", { level: 3, name: /you/i })).toBeInTheDocument()
+    expect(await screen.findByRole("heading", { level: 3, name: /you/i })).toBeInTheDocument()
 
     const applicantNameSection = screen.getByTestId("app-summary-applicant-name")
     expect(applicantNameSection).toBeInTheDocument()

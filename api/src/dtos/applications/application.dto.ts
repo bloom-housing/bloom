@@ -15,23 +15,24 @@ import {
   IsDefined,
   IsEnum,
   IsNumber,
+  IsOptional,
   IsString,
   MaxLength,
   ValidateNested,
 } from 'class-validator';
-import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
-import { Address } from '../addresses/address.dto';
-import { AbstractDTO } from '../shared/abstract.dto';
-import { IdDTO } from '../shared/id.dto';
 import { Accessibility } from './accessibility.dto';
 import { AlternateContact } from './alternate-contact.dto';
 import { Applicant } from './applicant.dto';
+import { ApplicationLotteryPosition } from './application-lottery-position.dto';
 import { ApplicationMultiselectQuestion } from './application-multiselect-question.dto';
+import { ApplicationSelection } from './application-selection.dto';
 import { Demographic } from './demographic.dto';
 import { HouseholdMember } from './household-member.dto';
+import { Address } from '../addresses/address.dto';
+import { AbstractDTO } from '../shared/abstract.dto';
+import { IdDTO } from '../shared/id.dto';
 import { UnitType } from '../unit-types/unit-type.dto';
-import { ApplicationLotteryPosition } from './application-lottery-position.dto';
-import ApplicationSelections from './application-selections.dto';
+import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 
 export class Application extends AbstractDTO {
   @Expose()
@@ -129,6 +130,24 @@ export class Application extends AbstractDTO {
     enumName: 'ApplicationStatusEnum',
   })
   status: ApplicationStatusEnum;
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  accessibleUnitWaitlistNumber?: number;
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  conventionalUnitWaitlistNumber?: number;
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  manualLotteryPositionNumber?: number;
 
   @Expose()
   @IsEnum(LanguagesEnum, { groups: [ValidationsGroupsEnum.default] })
@@ -243,16 +262,16 @@ export class Application extends AbstractDTO {
   householdMember: HouseholdMember[];
 
   // TODO: Temporarily optional until after MSQ refactor
-  // @Expose()
+  @Expose()
   // @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ArrayMaxSize(64, { groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @Type(() => ApplicationSelections)
+  @Type(() => ApplicationSelection)
   @ApiPropertyOptional({
-    type: ApplicationSelections,
+    type: ApplicationSelection,
     isArray: true,
   })
-  applicationSelections?: ApplicationSelections[];
+  applicationSelections?: ApplicationSelection[];
 
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })

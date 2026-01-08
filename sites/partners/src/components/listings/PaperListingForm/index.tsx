@@ -3,17 +3,23 @@ import { useRouter } from "next/router"
 import dayjs from "dayjs"
 import { CharacterCount as CharacterCountExtension } from "@tiptap/extension-character-count"
 import { useEditor } from "@tiptap/react"
-import { t, Form, AlertBox, LoadingOverlay, LatitudeLongitude } from "@bloom-housing/ui-components"
+import { t, Form, AlertBox, LoadingOverlay } from "@bloom-housing/ui-components"
 import { Button, Icon, Tabs } from "@bloom-housing/ui-seeds"
 import ChevronLeftIcon from "@heroicons/react/20/solid/ChevronLeftIcon"
 import ChevronRightIcon from "@heroicons/react/20/solid/ChevronRightIcon"
-import { AuthContext, MessageContext, listingSectionQuestions } from "@bloom-housing/shared-helpers"
+import {
+  AuthContext,
+  LatitudeLongitude,
+  MessageContext,
+  listingSectionQuestions,
+} from "@bloom-housing/shared-helpers"
 import {
   FeatureFlagEnum,
   Jurisdiction,
   Listing,
   ListingCreate,
   ListingEventsTypeEnum,
+  ListingTypeEnum,
   ListingUpdate,
   ListingsStatusEnum,
   MarketingTypeEnum,
@@ -70,6 +76,7 @@ type ListingFormProps = {
   jurisdictionId: string
   listing?: FormListing
   editMode?: boolean
+  isNonRegulated?: boolean
   setListingName?: React.Dispatch<React.SetStateAction<string>>
   updateListing?: (updatedListing: Listing) => void
 }
@@ -108,17 +115,25 @@ const ListingForm = ({
   editMode,
   setListingName,
   updateListing,
+  isNonRegulated,
 }: ListingFormProps) => {
-  const defaultValues = editMode ? listing : formDefaults
+  const rawDefaultValues = editMode ? listing : formDefaults
+
+  const defaultValues: FormListing = {
+    ...rawDefaultValues,
+    smokingPolicy: rawDefaultValues?.smokingPolicy ?? "",
+  }
+
   const formMethods = useForm<FormListing>({
     defaultValues,
+    mode: "onBlur",
     shouldUnregister: false,
   })
 
   const router = useRouter()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { getValues, setError, clearErrors, reset, watch } = formMethods
+  const { getValues, setError, clearErrors, reset, watch, setValue } = formMethods
 
   const marketingTypeChoice = watch("marketingType")
 
@@ -133,18 +148,20 @@ const ListingForm = ({
   const [unitGroups, setUnitGroups] = useState<TempUnitGroup[]>([])
   const [openHouseEvents, setOpenHouseEvents] = useState<TempEvent[]>([])
   const [preferences, setPreferences] = useState<MultiselectQuestion[]>(
-    listingSectionQuestions(listing, MultiselectQuestionsApplicationSectionEnum.preferences)?.map(
-      (listingPref) => {
-        return { ...listingPref?.multiselectQuestions }
-      }
-    ) ?? []
+    listingSectionQuestions(
+      listing as unknown as Listing,
+      MultiselectQuestionsApplicationSectionEnum.preferences
+    )?.map((listingPref) => {
+      return { ...listingPref?.multiselectQuestions }
+    }) ?? []
   )
   const [programs, setPrograms] = useState<MultiselectQuestion[]>(
-    listingSectionQuestions(listing, MultiselectQuestionsApplicationSectionEnum.programs)?.map(
-      (listingProg) => {
-        return { ...listingProg?.multiselectQuestions }
-      }
-    )
+    listingSectionQuestions(
+      listing as unknown as Listing,
+      MultiselectQuestionsApplicationSectionEnum.programs
+    )?.map((listingProg) => {
+      return { ...listingProg?.multiselectQuestions }
+    })
   )
 
   const [latLong, setLatLong] = useState<LatitudeLongitude>({
@@ -244,6 +261,12 @@ const ListingForm = ({
     FeatureFlagEnum.enableListingImageAltText,
     jurisdictionId
   )
+
+  useEffect(() => {
+    if (enableNonRegulatedListings && isNonRegulated) {
+      setValue("listingType", ListingTypeEnum.nonRegulated)
+    }
+  }, [enableNonRegulatedListings, isNonRegulated, setValue])
 
   useEffect(() => {
     if (listing?.units) {
@@ -459,7 +482,6 @@ const ListingForm = ({
       enableUnitGroups,
     ]
   )
-
   return loading === true ? null : (
     <>
       <LoadingOverlay isLoading={loading}>
@@ -577,6 +599,14 @@ const ListingForm = ({
                             existingFeatures={listing?.listingFeatures}
                             enableAccessibilityFeatures={doJurisdictionsHaveFeatureFlagOn(
                               FeatureFlagEnum.enableAccessibilityFeatures,
+                              jurisdictionId
+                            )}
+                            enableSmokingPolicyRadio={doJurisdictionsHaveFeatureFlagOn(
+                              FeatureFlagEnum.enableSmokingPolicyRadio,
+                              jurisdictionId
+                            )}
+                            enableParkingFee={doJurisdictionsHaveFeatureFlagOn(
+                              FeatureFlagEnum.enableParkingFee,
                               jurisdictionId
                             )}
                             requiredFields={requiredFields}

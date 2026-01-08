@@ -1,11 +1,18 @@
 import React from "react"
 import { t, Select, TimeField, DateField, DateFieldValues } from "@bloom-housing/ui-components"
 import { Grid } from "@bloom-housing/ui-seeds"
-import { LanguagesEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  LanguagesEnum,
+  ApplicationStatusEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { useFormContext } from "react-hook-form"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 
-const FormApplicationData = () => {
+type FormApplicationDataProps = {
+  enableApplicationStatus: boolean
+}
+
+const FormApplicationData = ({ enableApplicationStatus }: FormApplicationDataProps) => {
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -18,6 +25,7 @@ const FormApplicationData = () => {
   const isDateRequired =
     dateSubmittedValue?.day || dateSubmittedValue?.month || dateSubmittedValue?.year
 
+  const applicationStatusOptions = Array.from(Object.values(ApplicationStatusEnum))
   return (
     <SectionWithGrid heading={t("application.details.applicationData")}>
       <Grid.Row>
@@ -65,6 +73,21 @@ const FormApplicationData = () => {
           />
         </Grid.Cell>
       </Grid.Row>
+      {enableApplicationStatus && (
+        <Grid.Row columns={3}>
+          <Grid.Cell>
+            <Select
+              id="application.status"
+              name="application.status"
+              label={t("application.details.applicationStatus")}
+              register={register}
+              controlClassName="control"
+              options={applicationStatusOptions}
+              keyPrefix="application.details.applicationStatus"
+            />
+          </Grid.Cell>
+        </Grid.Row>
+      )}
     </SectionWithGrid>
   )
 }

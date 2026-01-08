@@ -7,7 +7,7 @@ locals {
     LISTINGS_QUERY                = "/listings"
     MAX_BROWSE_LISTINGS           = "10"
     HOUSING_COUNSELOR_SERVICE_URL = "/get-assistance"
-    IDLE_TIEMOUT                  = "5"  # seconds
+    IDLE_TIMEMOUT                 = "5"  # seconds
     CACHE_REVALIDATE              = "30" # seconds
     SHOW_PUBLIC_LOTTERY           = "TRUE"
     SHOW_MANDATED_ACCOUNTS        = "FALSE"
@@ -30,7 +30,7 @@ resource "aws_ecs_task_definition" "bloom_site_public" {
 
   # https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_definition_parameters.html#task_size
   cpu    = 2048     # 2 vCPU
-  memory = 6 * 1024 # 4 GiB in MiB
+  memory = 6 * 1024 # 6 GiB in MiB
 
   container_definitions = jsonencode([
     {
