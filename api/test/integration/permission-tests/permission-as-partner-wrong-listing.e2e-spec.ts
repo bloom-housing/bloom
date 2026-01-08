@@ -1487,17 +1487,18 @@ describe('Testing Permissioning of endpoints as partner with wrong listing', () 
         },
       };
 
-      const createRes = await request(app.getHttpServer())
-        .post('/properties')
-        .send(propertyData)
-        .set('Cookie', cookies);
+      const res = await prisma.properties.create({
+        data: {
+          name: propertyData.name,
+          jurisdictions: {
+            connect: {
+              id: propertyData.jurisdictions.id,
+            },
+          },
+        },
+      });
 
-      if (createRes.status === 403) {
-        // Property creation is forbidden, so we can't test delete
-        return;
-      }
-
-      const deleteId = createRes.body.id;
+      const deleteId = res.id;
 
       await request(app.getHttpServer())
         .delete(`/properties`)

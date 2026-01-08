@@ -1673,13 +1673,18 @@ describe('Testing Permissioning of endpoints as Admin User', () => {
         },
       };
 
-      const createRes = await request(app.getHttpServer())
-        .post('/properties')
-        .send(propertyData)
-        .set('Cookie', cookies)
-        .expect(201);
+      const res = await prisma.properties.create({
+        data: {
+          name: propertyData.name,
+          jurisdictions: {
+            connect: {
+              id: propertyData.jurisdictions.id,
+            },
+          },
+        },
+      });
 
-      const deleteId = createRes.body.id;
+      const deleteId = res.id;
 
       await request(app.getHttpServer())
         .delete(`/properties`)

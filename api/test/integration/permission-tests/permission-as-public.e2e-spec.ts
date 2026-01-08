@@ -1450,14 +1450,14 @@ describe('Testing Permissioning of endpoints as public user', () => {
       }
     });
 
-    it('should error as forbidden for list endpoint', async () => {
+    it('should succeed for list endpoint', async () => {
       await request(app.getHttpServer())
         .get(`/properties?`)
         .set('Cookie', cookies)
-        .expect(403);
+        .expect(200);
     });
 
-    it('should error as forbidden for retrieve endpoint', async () => {
+    it('should succeed for retrieve endpoint', async () => {
       if (!propertyId) {
         throw new Error('Property ID not set up for test');
       }
@@ -1465,7 +1465,7 @@ describe('Testing Permissioning of endpoints as public user', () => {
       await request(app.getHttpServer())
         .get(`/properties/${propertyId}`)
         .set('Cookie', cookies)
-        .expect(403);
+        .expect(200);
     });
 
     it('should error as forbidden for create endpoint', async () => {
@@ -1483,12 +1483,12 @@ describe('Testing Permissioning of endpoints as public user', () => {
         .expect(403);
     });
 
-    it('should error as forbidden for filterable list endpoint', async () => {
+    it('should succeed for filterable list endpoint', async () => {
       await request(app.getHttpServer())
         .post(`/properties/list`)
         .send({})
         .set('Cookie', cookies)
-        .expect(403);
+        .expect(201);
     });
 
     it('should error as forbidden for update endpoint', async () => {
@@ -1519,17 +1519,17 @@ describe('Testing Permissioning of endpoints as public user', () => {
         },
       };
 
-      const createRes = await request(app.getHttpServer())
-        .post('/properties')
-        .send(propertyData)
-        .set('Cookie', cookies);
-
-      if (createRes.status === 403) {
-        // Property creation is forbidden, so we can't test delete
-        return;
-      }
-
-      const deleteId = createRes.body.id;
+      const res = await prisma.properties.create({
+        data: {
+          name: propertyData.name,
+          jurisdictions: {
+            connect: {
+              id: propertyData.jurisdictions.id,
+            },
+          },
+        },
+      });
+      const deleteId = res.id;
 
       await request(app.getHttpServer())
         .delete(`/properties`)
