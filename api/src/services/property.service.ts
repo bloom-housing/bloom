@@ -119,7 +119,7 @@ export class PropertyService {
       );
     }
 
-    const rawProperty = this.prisma.properties.create({
+    const rawProperty = await this.prisma.properties.create({
       data: {
         ...propertyDto,
         jurisdictions: propertyDto.jurisdictions
@@ -277,6 +277,7 @@ export class PropertyService {
         AND: {
           name: {
             contains: params.search,
+            mode: Prisma.QueryMode.insensitive,
           },
         },
       });

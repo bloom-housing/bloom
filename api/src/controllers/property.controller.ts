@@ -70,7 +70,7 @@ export class PropertyController {
   public async getPropertyById(
     @Param('id', new ParseUUIDPipe({ version: '4' })) propertyId: string,
   ) {
-    return this.propertyService.findOne(propertyId);
+    return await this.propertyService.findOne(propertyId);
   }
 
   @Post('list')

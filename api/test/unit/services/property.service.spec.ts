@@ -1,4 +1,4 @@
-import { BadRequestException, NotFoundException } from '@nestjs/common';
+import { BadRequestException, NotFoundException, Query } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { randomUUID } from 'crypto';
 import { PropertyService } from '../../../src/services/property.service';
@@ -7,6 +7,7 @@ import { PermissionService } from '../../../src/services/permission.service';
 import { PropertyQueryParams } from '../../../src/dtos/properties/property-query-params.dto';
 import PropertyCreate from '../../../src/dtos/properties/property-create.dto';
 import { PropertyUpdate } from '../../../src/dtos/properties/property-update.dto';
+import { Prisma } from '@prisma/client';
 
 describe('Testing property service', () => {
   let service: PropertyService;
@@ -158,6 +159,7 @@ describe('Testing property service', () => {
               AND: {
                 name: {
                   contains: 'Woodside',
+                  mode: Prisma.QueryMode.insensitive,
                 },
               },
             },
@@ -181,6 +183,7 @@ describe('Testing property service', () => {
               AND: {
                 name: {
                   contains: 'Woodside',
+                  mode: Prisma.QueryMode.insensitive,
                 },
               },
             },
@@ -842,6 +845,7 @@ describe('Testing property service', () => {
             AND: {
               name: {
                 contains: 'Woodside',
+                mode: Prisma.QueryMode.insensitive,
               },
             },
           },
@@ -885,6 +889,7 @@ describe('Testing property service', () => {
             AND: {
               name: {
                 contains: 'Creek',
+                mode: Prisma.QueryMode.insensitive,
               },
             },
           },
