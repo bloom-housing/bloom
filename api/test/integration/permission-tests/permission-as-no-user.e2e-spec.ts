@@ -1382,6 +1382,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
     it('should error as unauthorized list endpoint', async () => {
       await request(app.getHttpServer())
         .get(`/properties?`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
         .expect(401);
     });
@@ -1393,6 +1394,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
 
       await request(app.getHttpServer())
         .get(`/properties/${propertyId}`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
         .expect(401);
     });
@@ -1408,6 +1410,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
       await request(app.getHttpServer())
         .post('/properties')
         .send(propertyData)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
         .expect(401);
     });
@@ -1416,6 +1419,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
       await request(app.getHttpServer())
         .post(`/properties/list`)
         .send({})
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
         .expect(401);
     });
@@ -1436,6 +1440,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
       await request(app.getHttpServer())
         .put(`/properties`)
         .send(propertyUpdateData)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
         .expect(401);
     });
@@ -1466,6 +1471,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
         .send({
           id: deleteId,
         } as IdDTO)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
         .expect(401);
     });

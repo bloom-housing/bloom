@@ -1515,6 +1515,8 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
     it('should succeed for list endpoint', async () => {
       await request(app.getHttpServer())
         .get(`/properties?`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+
         .set('Cookie', cookies)
         .expect(200);
     });
@@ -1526,6 +1528,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
 
       await request(app.getHttpServer())
         .get(`/properties/${propertyId}`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
         .expect(200);
     });
@@ -1541,6 +1544,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
       await request(app.getHttpServer())
         .post('/properties')
         .send(propertyData)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
         .expect(403);
     });
@@ -1549,6 +1553,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
       await request(app.getHttpServer())
         .post(`/properties/list`)
         .send({})
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
         .expect(201);
     });
@@ -1569,6 +1574,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
       await request(app.getHttpServer())
         .put(`/properties`)
         .send(propertyUpdateData)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
         .expect(403);
     });
@@ -1599,6 +1605,7 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
         .send({
           id: deleteId,
         } as IdDTO)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
         .expect(403);
     });

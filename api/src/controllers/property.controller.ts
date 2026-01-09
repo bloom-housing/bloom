@@ -35,6 +35,7 @@ import { JwtAuthGuard } from '../guards/jwt.guard';
 import { PermissionGuard } from '../guards/permission.guard';
 import { PermissionAction } from '../decorators/permission-action.decorator';
 import { permissionActions } from '../enums/permissions/permission-actions-enum';
+import { ApiKeyGuard } from '../guards/api-key.guard';
 
 @Controller('properties')
 @ApiTags('properties')
@@ -46,7 +47,7 @@ import { permissionActions } from '../enums/permissions/permission-actions-enum'
   IdDTO,
 )
 @PermissionTypeDecorator('properties')
-@UseGuards(JwtAuthGuard, PermissionGuard)
+@UseGuards(ApiKeyGuard, JwtAuthGuard, PermissionGuard)
 export class PropertyController {
   constructor(private readonly propertyService: PropertyService) {}
 
