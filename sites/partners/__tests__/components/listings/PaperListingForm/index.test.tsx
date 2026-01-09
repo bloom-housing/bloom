@@ -365,6 +365,8 @@ describe("add listing", () => {
                 return true
               case FeatureFlagEnum.enableHomeType:
                 return true
+              case FeatureFlagEnum.enableParkingFee:
+                return true
               case FeatureFlagEnum.enableCompanyWebsite:
                 return true
               default:
@@ -402,6 +404,7 @@ describe("add listing", () => {
       "Additional accessibility",
       "Unit amenities",
       "Smoking policy",
+      "Parking fee",
       "Pets policy",
       "Services offered",
       "Credit history",

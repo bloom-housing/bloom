@@ -482,7 +482,6 @@ const ListingForm = ({
       enableUnitGroups,
     ]
   )
-
   return loading === true ? null : (
     <>
       <LoadingOverlay isLoading={loading}>
@@ -604,6 +603,10 @@ const ListingForm = ({
                             )}
                             enableSmokingPolicyRadio={doJurisdictionsHaveFeatureFlagOn(
                               FeatureFlagEnum.enableSmokingPolicyRadio,
+                              jurisdictionId
+                            )}
+                            enableParkingFee={doJurisdictionsHaveFeatureFlagOn(
+                              FeatureFlagEnum.enableParkingFee,
                               jurisdictionId
                             )}
                             requiredFields={requiredFields}

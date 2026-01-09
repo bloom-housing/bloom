@@ -1,0 +1,85 @@
+name: Infra CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/infra_ci.yml'
+      - 'infra/**'
+
+permissions:
+  contents: read
+
+jobs:
+  check-tofu-fmt:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v6
+
+      - name: Check tofu fmt
+        shell: bash
+        run: |
+          if ! docker container run --rm \
+               -v ./infra:/infra \
+               --workdir /infra \
+               --entrypoint tofu \
+               ghcr.io/${{ github.repository }}/infra-dev:gitbranch-main-latest \
+               fmt -check -diff -recursive
+          then
+            echo 'ERROR: not all tofu files are correctly formatted'
+            exit 1
+          fi
+
+  check-tofu-provider-lock:
+    strategy:
+      matrix:
+        root_module:
+          - bloom_dev
+          - bloom_dev_deployer_permission_set_policy
+          # TODO: add once root mod is added: bloom_prod
+          - bloom_prod_deployer_permission_set_policy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v6
+
+      - name: Check tofu providers lock
+        shell: bash
+        run: |
+          if ! docker container run --rm \
+               -v ./infra:/infra \
+               --workdir /infra/tofu_root_modules/${{ matrix.root_module }} \
+               --entrypoint bash \
+               ghcr.io/${{ github.repository }}/infra-dev:gitbranch-main-latest \
+               -c 'sha256sum .terraform.lock.hcl > hash'
+          then
+            echo 'ERROR: recording sha256 of .terraform.lock.hcl failed'
+            exit 1
+          fi
+
+          if ! docker container run --rm \
+               -v ./infra:/infra \
+               --workdir /infra/tofu_root_modules/${{ matrix.root_module }} \
+               --entrypoint bash \
+               ghcr.io/${{ github.repository }}/infra-dev:gitbranch-main-latest \
+               -c 'tofu init -backend=false && tofu providers lock -platform=linux_amd64 -platform=linux_arm64 -platform=darwin_amd64 -platform=darwin_arm64'
+          then
+            echo 'ERROR: tofu providers lock did not run successfully'
+            exit 1
+          fi
+
+          if ! docker container run --rm \
+               -v ./infra:/infra \
+               --workdir /infra/tofu_root_modules/${{ matrix.root_module }} \
+               --entrypoint bash \
+               ghcr.io/${{ github.repository }}/infra-dev:gitbranch-main-latest \
+               -c 'sha256sum -c hash'
+          then
+            echo 'ERROR: .terraform.lock.hcl changed after running tofu providers lock'
+            exit 1
+          fi

@@ -42,6 +42,7 @@ RUN <<EOF
 dnf update -y
 dnf install -y shadow-utils # make groupadd and useradd available.
 dnf install -y openssl
+dnf install -y diffutils # used in the .github/workflows/infra_ci.yml check.
 dnf clean all # clean the dnf cache from the final image.
 EOF
 

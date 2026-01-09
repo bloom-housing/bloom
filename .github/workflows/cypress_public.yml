@@ -4,6 +4,8 @@ on:
   pull_request:
     branches:
       - main
+    paths-ignore:
+      - 'infra/**'
 env:
   PORT: 3100
   EMAIL_API_KEY: 'SOME-LONG-SECRET-KEY'

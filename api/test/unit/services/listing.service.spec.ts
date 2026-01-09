@@ -5299,7 +5299,7 @@ describe('Testing listing service', () => {
       });
 
       expect(service.getUserEmailInfo).toBeCalledWith(
-        ['partner', 'jurisdictionAdmin'],
+        ['partner', 'jurisdictionAdmin', 'limitedJurisdictionAdmin'],
         'id',
         'jurisId',
       );
