@@ -1,6 +1,6 @@
 import * as React from "react"
 import { Card, Heading, Link } from "@bloom-housing/ui-seeds"
-import { Address, AuthContext } from "@bloom-housing/shared-helpers"
+import { Address } from "@bloom-housing/shared-helpers"
 import { t } from "@bloom-housing/ui-components"
 import styles from "../ListingViewSeeds.module.scss"
 import {
