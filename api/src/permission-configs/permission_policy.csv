@@ -28,8 +28,6 @@ p, supportAdmin, properties, true, read
 p, jurisdictionAdmin, properties, true, read
 p, limitedJurisdictionAdmin, properties, true, read
 p, partner, properties, true, read
-p, anonymous, properties, true, read
-p, user, properties, true, read
 
 p, admin, applicationMethod, true, .*
 p, supportAdmin, applicationMethod, true, .*
