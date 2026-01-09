@@ -27,11 +27,7 @@ export const LeasingAgent = ({ listing, jurisdiction }: LeasingAgentProps) => {
     leasingAgentPhone: phone,
     leasingAgentTitle: title,
   } = listing
-  const { doJurisdictionsHaveFeatureFlagOn } = React.useContext(AuthContext)
-  const managementWebsite = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableCompanyWebsite,
-    listing.jurisdictions.id
-  )
+  const managementWebsite = isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableCompanyWebsite)
     ? listing.managementWebsite
     : undefined
   if (!address && !email && !name && !officeHours && !title && !phone && !managementWebsite) return

@@ -30,11 +30,7 @@ describe("<LeasingAgent>", () => {
     const phoneNumber = "(123) 456-7890"
     jest.spyOn(helpers, "isFeatureFlagOn").mockReturnValue(true)
     render(
-      <AuthContext.Provider
-        value={{
-          doJurisdictionsHaveFeatureFlagOn: () => true,
-        }}
-      >
+      <AuthContext.Provider value={{}}>
         <LeasingAgent
           listing={{
             ...listing,
@@ -90,11 +86,7 @@ describe("<LeasingAgent>", () => {
     const phoneNumber = "(123) 456-7890"
     jest.spyOn(helpers, "isFeatureFlagOn").mockReturnValue(false)
     render(
-      <AuthContext.Provider
-        value={{
-          doJurisdictionsHaveFeatureFlagOn: () => false,
-        }}
-      >
+      <AuthContext.Provider value={{}}>
         <LeasingAgent
           listing={{
             ...listing,
