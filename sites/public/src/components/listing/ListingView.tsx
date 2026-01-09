@@ -98,9 +98,9 @@ export const ListingView = (props: ListingProps) => {
     FeatureFlagEnum.disableListingPreferences,
     listing?.jurisdictions?.id
   )
-  const enableLeasingAgentAltText = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableLeasingAgentAltText,
-    listing.jurisdictions.id
+  const enableLeasingAgentAltText = isFeatureFlagOn(
+    props.jurisdiction,
+    FeatureFlagEnum.enableLeasingAgentAltText
   )
 
   const leasingAgentContactText = enableLeasingAgentAltText
