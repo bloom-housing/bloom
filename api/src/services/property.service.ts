@@ -17,16 +17,10 @@ import PropertyCreate from '../dtos/properties/property-create.dto';
 import { PropertyUpdate } from '../dtos/properties/property-update.dto';
 import { SuccessDTO } from '../dtos/shared/success.dto';
 import { Prisma } from '@prisma/client';
-import { User } from '../dtos/users/user.dto';
-import { PermissionService } from './permission.service';
-import { permissionActions } from '../enums/permissions/permission-actions-enum';
 
 @Injectable()
 export class PropertyService {
-  constructor(
-    private prisma: PrismaService,
-    private permissionService: PermissionService,
-  ) {}
+  constructor(private prisma: PrismaService) {}
 
   /**
    * Returns a paginated list of properties matching the provided query parameters.
@@ -100,12 +94,11 @@ export class PropertyService {
    * Creates a new property and links it to the provided jurisdiction.
    *
    * @param propertyDto - The data used to create the property.
-   * @param requestingUser - The user attempting to create the property.
    * @returns The newly created property mapped to a `Property` DTO.
    * @throws {BadRequestException} If a jurisdiction is not provided.
    * @throws {NotFoundException} If the linked jurisdiction cannot be found.
    */
-  async create(propertyDto: PropertyCreate, requestingUser: User) {
+  async create(propertyDto: PropertyCreate) {
     if (!propertyDto.jurisdictions) {
       throw new BadRequestException('A jurisdiction must be provided');
     }
@@ -126,16 +119,7 @@ export class PropertyService {
       );
     }
 
-    await this.permissionService.canOrThrow(
-      requestingUser,
-      'properties',
-      permissionActions.create,
-      {
-        jurisdictionId: rawJurisdiction.id,
-      },
-    );
-
-    const rawProperty = this.prisma.properties.create({
+    const rawProperty = await this.prisma.properties.create({
       data: {
         ...propertyDto,
         jurisdictions: propertyDto.jurisdictions
@@ -158,12 +142,11 @@ export class PropertyService {
    * Updates an existing property and its jurisdiction linkage.
    *
    * @param propertyDto - The updated property data, including ID and jurisdiction.
-   * @param requestingUser - The user attempting to update the property.
    * @returns The updated property mapped to a `Property` DTO.
    * @throws {BadRequestException} If a jurisdiction is not provided.
    * @throws {NotFoundException} If the linked jurisdiction cannot be found.
    */
-  async update(propertyDto: PropertyUpdate, requestingUser: User) {
+  async update(propertyDto: PropertyUpdate) {
     if (!propertyDto.jurisdictions) {
       throw new BadRequestException('A jurisdiction must be provided');
     }
@@ -182,16 +165,6 @@ export class PropertyService {
         `Entry for the linked jurisdiction with id: ${propertyDto.jurisdictions.id} was not found`,
       );
     }
-
-    await this.permissionService.canOrThrow(
-      requestingUser,
-      'properties',
-      permissionActions.update,
-      {
-        id: propertyDto.id,
-        jurisdictionId: rawJurisdiction.id,
-      },
-    );
 
     await this.findOrThrow(propertyDto.id);
 
@@ -221,12 +194,11 @@ export class PropertyService {
    * Deletes a property by its ID after validating jurisdiction linkage and permissions.
    *
    * @param propertyId - The ID of the property to delete.
-   * @param requestingUser - The user attempting to delete the property.
    * @returns A `SuccessDTO` indicating that the delete operation completed successfully.
    * @throws {BadRequestException} If no property ID is provided.
    * @throws {NotFoundException} If the property or its linked jurisdiction is not found.
    */
-  async deleteOne(propertyId: string, requestingUser: User) {
+  async deleteOne(propertyId: string) {
     if (!propertyId) {
       throw new BadRequestException('a property ID must be provided');
     }
@@ -253,15 +225,6 @@ export class PropertyService {
         `Entry for the linked jurisdiction with id: ${propertyData.jurisdictions.id} was not found`,
       );
     }
-
-    await this.permissionService.canOrThrow(
-      requestingUser,
-      'properties',
-      permissionActions.create,
-      {
-        jurisdictionId: rawJurisdiction.id,
-      },
-    );
 
     await this.prisma.properties.delete({
       where: {
@@ -314,6 +277,7 @@ export class PropertyService {
         AND: {
           name: {
             contains: params.search,
+            mode: Prisma.QueryMode.insensitive,
           },
         },
       });

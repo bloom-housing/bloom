@@ -1,7 +1,14 @@
 [build]
 
 command = "yarn run build"
-ignore = "/bin/false"
+
+# From https://docs.netlify.com/build/configure-builds/ignore-builds/:
+#
+# > An exit code of 1 indicates the contents have changed and the build process continues as
+# > usual. An exit code of 0 indicates that there are no changes and the build should stop.
+#
+# Ignore builds for pull requsets with only infra changes.
+ignore = "if [[ $PULL_REQUEST == 'false' ]]; then exit 1; else git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF -- ':(exclude)infra/'; fi"
 
 
 [build.environment]

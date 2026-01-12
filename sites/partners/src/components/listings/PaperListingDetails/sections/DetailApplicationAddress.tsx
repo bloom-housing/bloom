@@ -5,6 +5,8 @@ import { ListingContext } from "../../ListingContext"
 import { getDetailFieldString, getDetailFieldTime, getDetailAddress } from "./helpers"
 import dayjs from "dayjs"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
+import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { AuthContext } from "@bloom-housing/shared-helpers"
 
 const DetailApplicationAddress = () => {
   const listing = useContext(ListingContext)
@@ -12,6 +14,16 @@ const DetailApplicationAddress = () => {
   const postMarkDateFormat = (date: Date) => {
     return date ? dayjs(new Date(date)).format("MM/DD/YYYY") : t("t.none")
   }
+
+  const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
+
+  const enableLeasingAgentAltText = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableLeasingAgentAltText,
+    listing.jurisdictions.id
+  )
+  const leasingAgentAddressText = enableLeasingAgentAltText
+    ? t("listings.leasingAgentAddressManagerProp")
+    : t("listings.leasingAgentAddress")
 
   return (
     <SectionWithGrid heading={t("listings.sections.applicationAddressTitle")} inset>
@@ -33,7 +45,7 @@ const DetailApplicationAddress = () => {
               className="seeds-grid-span-2"
               label={t("listings.applicationAddress.mailApplicationType")}
             >
-              {t("listings.leasingAgentAddress")}
+              {leasingAgentAddressText}
             </FieldValue>
           </Grid.Cell>
         )}
@@ -65,7 +77,7 @@ const DetailApplicationAddress = () => {
               className="seeds-grid-span-2"
               label={t("listings.wherePickupQuestion")}
             >
-              {t("listings.leasingAgentAddress")}
+              {leasingAgentAddressText}
             </FieldValue>
           </Grid.Cell>
         )}
@@ -111,7 +123,7 @@ const DetailApplicationAddress = () => {
               className="seeds-grid-span-2"
               label={t("listings.whereDropOffQuestion")}
             >
-              {t("listings.leasingAgentAddress")}
+              {leasingAgentAddressText}
             </FieldValue>
           </Grid.Cell>
         )}

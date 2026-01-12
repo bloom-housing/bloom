@@ -9,11 +9,15 @@ import {
 } from '@prisma/client';
 import MultiselectQuestion from '../../../src/dtos/multiselect-questions/multiselect-question.dto';
 import { MultiselectQuestionCreate } from '../../../src/dtos/multiselect-questions/multiselect-question-create.dto';
+import { MultiselectQuestionFilterParams } from '../../../src/dtos/multiselect-questions/multiselect-question-filter-params.dto';
 import { MultiselectQuestionQueryParams } from '../../../src/dtos/multiselect-questions/multiselect-question-query-params.dto';
 import { MultiselectQuestionUpdate } from '../../../src/dtos/multiselect-questions/multiselect-question-update.dto';
 import { Compare } from '../../../src/dtos/shared/base-filter.dto';
 import { User } from '../../../src/dtos/users/user.dto';
 import { FeatureFlagEnum } from '../../../src/enums/feature-flags/feature-flags-enum';
+import { MultiselectQuestionOrderByKeys } from '../../../src/enums/multiselect-questions/order-by-enum';
+import { MultiselectQuestionViews } from '../../../src/enums/multiselect-questions/view-enum';
+import { OrderByEnum } from '../../../src/enums/shared/order-by-enum';
 import { MultiselectQuestionService } from '../../../src/services/multiselect-question.service';
 import { PermissionService } from '../../../src/services/permission.service';
 import { PrismaService } from '../../../src/services/prisma.service';
@@ -95,6 +99,7 @@ describe('Testing multiselect question service', () => {
     it('should get records with empty param call to list()', async () => {
       const date = new Date();
       const mockedValue = mockMultiselectQuestionSet(3, date);
+      prisma.multiselectQuestions.count = jest.fn().mockResolvedValue(3);
       prisma.multiselectQuestions.findMany = jest
         .fn()
         .mockResolvedValue(mockedValue);
@@ -200,20 +205,29 @@ describe('Testing multiselect question service', () => {
           jurisdiction: true,
           multiselectOptions: true,
         },
+        skip: 0,
         where: {
           AND: [],
         },
       });
     });
 
-    it('should get records with paramaterized call to list()', async () => {
+    it('should get records with parameterized call to list()', async () => {
       const date = new Date();
       const mockedValue = mockMultiselectQuestionSet(3, date);
+      prisma.multiselectQuestions.count = jest.fn().mockResolvedValue(3);
       prisma.multiselectQuestions.findMany = jest
         .fn()
         .mockResolvedValue(mockedValue);
 
       const params: MultiselectQuestionQueryParams = {
+        view: MultiselectQuestionViews.base,
+        page: 1,
+        limit: 10,
+        orderBy: [MultiselectQuestionOrderByKeys.name],
+        orderDir: [OrderByEnum.ASC],
+        // Because enableMSQV2 is off
+        search: 'text',
         filter: [
           {
             $comparison: Compare['='],
@@ -322,8 +336,19 @@ describe('Testing multiselect question service', () => {
       expect(prisma.multiselectQuestions.findMany).toHaveBeenCalledWith({
         include: {
           jurisdiction: true,
+          listings: true,
           multiselectOptions: true,
         },
+        orderBy: [
+          {
+            name: 'asc',
+          },
+          {
+            name: 'asc',
+          },
+        ],
+        skip: 0,
+        take: 10,
         where: {
           AND: [
             {
@@ -335,8 +360,128 @@ describe('Testing multiselect question service', () => {
                 },
               ],
             },
+            {
+              name: {
+                contains: 'text',
+                mode: 'insensitive',
+              },
+            },
           ],
         },
+      });
+    });
+
+    it('should return first page if params are more than count', async () => {
+      const date = new Date();
+      const mockedValue = mockMultiselectQuestionSet(5, date);
+      prisma.multiselectQuestions.count = jest.fn().mockResolvedValue(5);
+      prisma.multiselectQuestions.findMany = jest
+        .fn()
+        .mockResolvedValue(mockedValue);
+
+      const params: MultiselectQuestionQueryParams = {
+        view: MultiselectQuestionViews.base,
+        page: 1,
+        limit: 3,
+        orderBy: [MultiselectQuestionOrderByKeys.name],
+        orderDir: [OrderByEnum.ASC],
+      };
+
+      await service.list(params);
+
+      expect(prisma.multiselectQuestions.findMany).toHaveBeenCalledWith({
+        include: {
+          jurisdiction: true,
+          listings: true,
+          multiselectOptions: true,
+        },
+        orderBy: [
+          {
+            name: 'asc',
+          },
+          {
+            name: 'asc',
+          },
+        ],
+        skip: 0,
+        take: 3,
+        where: {
+          AND: [],
+        },
+      });
+
+      expect(prisma.multiselectQuestions.count).toHaveBeenCalledWith({
+        where: {
+          AND: [],
+        },
+      });
+    });
+  });
+
+  describe('buildWhere', () => {
+    it('should return a where clause for filter jurisdiction', () => {
+      const jurisdictionId = randomUUID();
+      const filter = [
+        {
+          $comparison: '=',
+          jurisdiction: jurisdictionId,
+        } as MultiselectQuestionFilterParams,
+      ];
+      const whereClause = service.buildWhere({ filter: filter });
+
+      expect(whereClause).toStrictEqual({
+        AND: [
+          {
+            OR: [
+              {
+                jurisdiction: {
+                  id: {
+                    equals: jurisdictionId,
+                  },
+                },
+              },
+            ],
+          },
+        ],
+      });
+    });
+
+    it('should return a where clause for filter status', () => {
+      const status = ListingsStatusEnum.active;
+      const filter = [
+        { $comparison: '=', status: status } as MultiselectQuestionFilterParams,
+      ];
+      const whereClause = service.buildWhere({ filter: filter });
+
+      expect(whereClause).toStrictEqual({
+        AND: [
+          {
+            OR: [
+              {
+                status: {
+                  equals: status,
+                },
+              },
+            ],
+          },
+        ],
+      });
+    });
+
+    it('should return a where clause for search', () => {
+      const search = 'searchName';
+
+      const whereClause = service.buildWhere({ search: search });
+
+      expect(whereClause).toStrictEqual({
+        AND: [
+          {
+            name: {
+              contains: search,
+              mode: 'insensitive',
+            },
+          },
+        ],
       });
     });
   });

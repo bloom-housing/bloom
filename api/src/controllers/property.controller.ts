@@ -30,14 +30,15 @@ import Property from '../dtos/properties/property.dto';
 import { IdDTO } from '../dtos/shared/id.dto';
 import { SuccessDTO } from '../dtos/shared/success.dto';
 import { defaultValidationPipeOptions } from '../utilities/default-validation-pipe-options';
-import { OptionalAuthGuard } from '../guards/optional.guard';
-import { mapTo } from '../utilities/mapTo';
-import { User } from '../dtos/users/user.dto';
 import { PaginationMeta } from '../dtos/shared/pagination.dto';
+import { JwtAuthGuard } from '../guards/jwt.guard';
+import { PermissionGuard } from '../guards/permission.guard';
+import { PermissionAction } from '../decorators/permission-action.decorator';
+import { permissionActions } from '../enums/permissions/permission-actions-enum';
+import { ApiKeyGuard } from '../guards/api-key.guard';
 
 @Controller('properties')
 @ApiTags('properties')
-@UseGuards(OptionalAuthGuard)
 @ApiExtraModels(
   PropertyCreate,
   PropertyUpdate,
@@ -45,7 +46,8 @@ import { PaginationMeta } from '../dtos/shared/pagination.dto';
   PaginationMeta,
   IdDTO,
 )
-@PermissionTypeDecorator('property')
+@PermissionTypeDecorator('properties')
+@UseGuards(ApiKeyGuard, JwtAuthGuard, PermissionGuard)
 export class PropertyController {
   constructor(private readonly propertyService: PropertyService) {}
 
@@ -68,7 +70,7 @@ export class PropertyController {
   public async getPropertyById(
     @Param('id', new ParseUUIDPipe({ version: '4' })) propertyId: string,
   ) {
-    return this.propertyService.findOne(propertyId);
+    return await this.propertyService.findOne(propertyId);
   }
 
   @Post('list')
@@ -76,6 +78,7 @@ export class PropertyController {
     summary: 'Get a paginated filtered set of properties',
     operationId: 'filterableList',
   })
+  @PermissionAction(permissionActions.read)
   @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
   @ApiOkResponse({ type: PaginatedPropertyDto })
   public async getFiltrablePaginatedSet(
@@ -95,10 +98,7 @@ export class PropertyController {
     @Request() req: ExpressRequest,
     @Body() propertyDto: PropertyCreate,
   ) {
-    return await this.propertyService.create(
-      propertyDto,
-      mapTo(User, req['user']),
-    );
+    return await this.propertyService.create(propertyDto);
   }
 
   @Put()
@@ -112,10 +112,7 @@ export class PropertyController {
     @Request() req: ExpressRequest,
     @Body() propertyDto: PropertyUpdate,
   ) {
-    return await this.propertyService.update(
-      propertyDto,
-      mapTo(User, req['user']),
-    );
+    return await this.propertyService.update(propertyDto);
   }
 
   @Delete()
@@ -129,9 +126,6 @@ export class PropertyController {
     @Request() req: ExpressRequest,
     @Body() idDto: IdDTO,
   ) {
-    return await this.propertyService.deleteOne(
-      idDto.id,
-      mapTo(User, req['user']),
-    );
+    return await this.propertyService.deleteOne(idDto.id);
   }
 }

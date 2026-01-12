@@ -1,4 +1,4 @@
-import { BadRequestException, NotFoundException } from '@nestjs/common';
+import { BadRequestException, NotFoundException, Query } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { randomUUID } from 'crypto';
 import { PropertyService } from '../../../src/services/property.service';
@@ -7,8 +7,7 @@ import { PermissionService } from '../../../src/services/permission.service';
 import { PropertyQueryParams } from '../../../src/dtos/properties/property-query-params.dto';
 import PropertyCreate from '../../../src/dtos/properties/property-create.dto';
 import { PropertyUpdate } from '../../../src/dtos/properties/property-update.dto';
-import { User } from '../../../src/dtos/users/user.dto';
-import { permissionActions } from '../../../src/enums/permissions/permission-actions-enum';
+import { Prisma } from '@prisma/client';
 
 describe('Testing property service', () => {
   let service: PropertyService;
@@ -45,13 +44,6 @@ describe('Testing property service', () => {
     return toReturn;
   };
 
-  const mockUser: User = {
-    id: randomUUID(),
-    userRoles: { isAdmin: true },
-  } as unknown as User;
-
-  const canOrThrowMock = jest.fn();
-
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [],
@@ -61,7 +53,7 @@ describe('Testing property service', () => {
         {
           provide: PermissionService,
           useValue: {
-            canOrThrow: canOrThrowMock,
+            canOrThrow: jest.fn(),
           },
         },
       ],
@@ -167,6 +159,7 @@ describe('Testing property service', () => {
               AND: {
                 name: {
                   contains: 'Woodside',
+                  mode: Prisma.QueryMode.insensitive,
                 },
               },
             },
@@ -190,6 +183,7 @@ describe('Testing property service', () => {
               AND: {
                 name: {
                   contains: 'Woodside',
+                  mode: Prisma.QueryMode.insensitive,
                 },
               },
             },
@@ -362,9 +356,8 @@ describe('Testing property service', () => {
       prisma.properties.create = jest
         .fn()
         .mockResolvedValue(mockCreatedProperty);
-      canOrThrowMock.mockResolvedValue(undefined);
 
-      const result = await service.create(propertyDto, mockUser);
+      const result = await service.create(propertyDto);
 
       expect(result).toEqual(mockCreatedProperty);
       expect(prisma.jurisdictions.findFirst).toHaveBeenCalledWith({
@@ -376,14 +369,6 @@ describe('Testing property service', () => {
           id: jurisdictionId,
         },
       });
-      expect(canOrThrowMock).toHaveBeenCalledWith(
-        mockUser,
-        'properties',
-        permissionActions.create,
-        {
-          jurisdictionId: jurisdictionId,
-        },
-      );
       expect(prisma.properties.create).toHaveBeenCalledWith({
         data: {
           ...propertyDto,
@@ -408,10 +393,10 @@ describe('Testing property service', () => {
       };
 
       await expect(
-        async () => await service.create(propertyDto, mockUser),
+        async () => await service.create(propertyDto),
       ).rejects.toThrow(BadRequestException);
       await expect(
-        async () => await service.create(propertyDto, mockUser),
+        async () => await service.create(propertyDto),
       ).rejects.toThrowError('A jurisdiction must be provided');
 
       expect(prisma.jurisdictions.findFirst).not.toHaveBeenCalled();
@@ -431,10 +416,10 @@ describe('Testing property service', () => {
       prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue(null);
 
       await expect(
-        async () => await service.create(propertyDto, mockUser),
+        async () => await service.create(propertyDto),
       ).rejects.toThrow(NotFoundException);
       await expect(
-        async () => await service.create(propertyDto, mockUser),
+        async () => await service.create(propertyDto),
       ).rejects.toThrowError(
         `Entry for the linked jurisdiction with id: ${jurisdictionId} was not found`,
       );
@@ -485,9 +470,8 @@ describe('Testing property service', () => {
       prisma.properties.create = jest
         .fn()
         .mockResolvedValue(mockCreatedProperty);
-      canOrThrowMock.mockResolvedValue(undefined);
 
-      const result = await service.create(propertyDto, mockUser);
+      const result = await service.create(propertyDto);
 
       expect(result).toEqual(mockCreatedProperty);
     });
@@ -541,9 +525,8 @@ describe('Testing property service', () => {
       prisma.properties.update = jest
         .fn()
         .mockResolvedValue(mockUpdatedProperty);
-      canOrThrowMock.mockResolvedValue(undefined);
 
-      const result = await service.update(propertyDto, mockUser);
+      const result = await service.update(propertyDto);
 
       expect(result).toEqual(mockUpdatedProperty);
       expect(prisma.jurisdictions.findFirst).toHaveBeenCalledWith({
@@ -554,15 +537,6 @@ describe('Testing property service', () => {
           id: jurisdictionId,
         },
       });
-      expect(canOrThrowMock).toHaveBeenCalledWith(
-        mockUser,
-        'properties',
-        permissionActions.update,
-        {
-          id: propertyId,
-          jurisdictionId: jurisdictionId,
-        },
-      );
       expect(prisma.properties.findFirst).toHaveBeenCalledWith({
         where: {
           id: propertyId,
@@ -597,10 +571,10 @@ describe('Testing property service', () => {
       };
 
       await expect(
-        async () => await service.update(propertyDto, mockUser),
+        async () => await service.update(propertyDto),
       ).rejects.toThrow(BadRequestException);
       await expect(
-        async () => await service.update(propertyDto, mockUser),
+        async () => await service.update(propertyDto),
       ).rejects.toThrowError('A jurisdiction must be provided');
 
       expect(prisma.jurisdictions.findFirst).not.toHaveBeenCalled();
@@ -619,10 +593,10 @@ describe('Testing property service', () => {
       prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue(null);
 
       await expect(
-        async () => await service.update(propertyDto, mockUser),
+        async () => await service.update(propertyDto),
       ).rejects.toThrow(NotFoundException);
       await expect(
-        async () => await service.update(propertyDto, mockUser),
+        async () => await service.update(propertyDto),
       ).rejects.toThrowError(
         `Entry for the linked jurisdiction with id: ${jurisdictionId} was not found`,
       );
@@ -655,13 +629,12 @@ describe('Testing property service', () => {
         .fn()
         .mockResolvedValue(mockJurisdiction);
       prisma.properties.findFirst = jest.fn().mockResolvedValue(null);
-      canOrThrowMock.mockResolvedValue(undefined);
 
       await expect(
-        async () => await service.update(propertyDto, mockUser),
+        async () => await service.update(propertyDto),
       ).rejects.toThrow(BadRequestException);
       await expect(
-        async () => await service.update(propertyDto, mockUser),
+        async () => await service.update(propertyDto),
       ).rejects.toThrowError(`Property with id ${propertyId} was not found`);
 
       expect(prisma.properties.update).not.toHaveBeenCalled();
@@ -693,9 +666,8 @@ describe('Testing property service', () => {
         .fn()
         .mockResolvedValue(mockJurisdiction);
       prisma.properties.delete = jest.fn().mockResolvedValue(mockProperty);
-      canOrThrowMock.mockResolvedValue(undefined);
 
-      const result = await service.deleteOne(propertyId, mockUser);
+      const result = await service.deleteOne(propertyId);
 
       expect(result).toEqual({ success: true });
       expect(prisma.properties.findFirst).toHaveBeenCalledWith({
@@ -714,14 +686,6 @@ describe('Testing property service', () => {
           id: jurisdictionId,
         },
       });
-      expect(canOrThrowMock).toHaveBeenCalledWith(
-        mockUser,
-        'properties',
-        permissionActions.create,
-        {
-          jurisdictionId: jurisdictionId,
-        },
-      );
       expect(prisma.properties.delete).toHaveBeenCalledWith({
         where: {
           id: propertyId,
@@ -730,11 +694,11 @@ describe('Testing property service', () => {
     });
 
     it('should error when property id is not provided', async () => {
+      await expect(async () => await service.deleteOne('')).rejects.toThrow(
+        BadRequestException,
+      );
       await expect(
-        async () => await service.deleteOne('', mockUser),
-      ).rejects.toThrow(BadRequestException);
-      await expect(
-        async () => await service.deleteOne('', mockUser),
+        async () => await service.deleteOne(''),
       ).rejects.toThrowError('a property ID must be provided');
 
       expect(prisma.properties.findFirst).not.toHaveBeenCalled();
@@ -747,10 +711,10 @@ describe('Testing property service', () => {
       prisma.properties.findFirst = jest.fn().mockResolvedValue(null);
 
       await expect(
-        async () => await service.deleteOne(propertyId, mockUser),
+        async () => await service.deleteOne(propertyId),
       ).rejects.toThrow(BadRequestException);
       await expect(
-        async () => await service.deleteOne(propertyId, mockUser),
+        async () => await service.deleteOne(propertyId),
       ).rejects.toThrowError(`Property with id ${propertyId} was not found`);
 
       expect(prisma.properties.delete).not.toHaveBeenCalled();
@@ -771,10 +735,10 @@ describe('Testing property service', () => {
       prisma.properties.findFirst = jest.fn().mockResolvedValue(mockProperty);
 
       await expect(
-        async () => await service.deleteOne(propertyId, mockUser),
+        async () => await service.deleteOne(propertyId),
       ).rejects.toThrow(NotFoundException);
       await expect(
-        async () => await service.deleteOne(propertyId, mockUser),
+        async () => await service.deleteOne(propertyId),
       ).rejects.toThrowError(
         'The property is not connected to any jurisdiction',
       );
@@ -801,10 +765,10 @@ describe('Testing property service', () => {
       prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue(null);
 
       await expect(
-        async () => await service.deleteOne(propertyId, mockUser),
+        async () => await service.deleteOne(propertyId),
       ).rejects.toThrow(NotFoundException);
       await expect(
-        async () => await service.deleteOne(propertyId, mockUser),
+        async () => await service.deleteOne(propertyId),
       ).rejects.toThrowError(
         `Entry for the linked jurisdiction with id: ${jurisdictionId} was not found`,
       );
@@ -881,6 +845,7 @@ describe('Testing property service', () => {
             AND: {
               name: {
                 contains: 'Woodside',
+                mode: Prisma.QueryMode.insensitive,
               },
             },
           },
@@ -924,6 +889,7 @@ describe('Testing property service', () => {
             AND: {
               name: {
                 contains: 'Creek',
+                mode: Prisma.QueryMode.insensitive,
               },
             },
           },

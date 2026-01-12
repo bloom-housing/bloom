@@ -1,6 +1,6 @@
 import React, { useMemo, useEffect } from "react"
 import { useFormContext } from "react-hook-form"
-import { t, Textarea, FieldGroup } from "@bloom-housing/ui-components"
+import { t, Textarea, FieldGroup, Field } from "@bloom-housing/ui-components"
 import { Grid } from "@bloom-housing/ui-seeds"
 import { listingFeatures } from "@bloom-housing/shared-helpers"
 import { ListingFeaturesCreate } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -10,6 +10,7 @@ import styles from "../ListingForm.module.scss"
 
 type BuildingFeaturesProps = {
   enableAccessibilityFeatures?: boolean
+  enableParkingFee?: boolean
   enableSmokingPolicyRadio?: boolean
   existingFeatures: ListingFeaturesCreate
   requiredFields: string[]
@@ -173,6 +174,24 @@ const BuildingFeatures = (props: BuildingFeaturesProps) => {
             )}
           </Grid.Cell>
         </Grid.Row>
+        {props.enableParkingFee && (
+          <Grid.Row columns={3}>
+            <Grid.Cell>
+              <Field
+                register={register}
+                type={"currency"}
+                prepend={"$"}
+                {...defaultFieldProps(
+                  "parkingFee",
+                  t("t.parkingFee"),
+                  props.requiredFields,
+                  errors,
+                  clearErrors
+                )}
+              />
+            </Grid.Cell>
+          </Grid.Row>
+        )}
         {!props.enableAccessibilityFeatures ? null : (
           <Grid.Row>
             <FieldGroup
