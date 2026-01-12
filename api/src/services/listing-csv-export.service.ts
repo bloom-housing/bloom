@@ -945,6 +945,18 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
       });
     }
 
+    if (
+      doAnyJurisdictionHaveFeatureFlagSet(
+        user.jurisdictions,
+        FeatureFlagEnum.enableParkingFee,
+      )
+    ) {
+      headers.push({
+        path: 'parkingFee',
+        label: 'Parking Fee',
+      });
+    }
+
     headers.push(
       ...[
         {

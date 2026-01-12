@@ -17,8 +17,8 @@
     "prettier": "prettier --write \"**/*.ts\""
   },
   "dependencies": {
-    "@bloom-housing/ui-components": "13.0.2",
-    "@bloom-housing/ui-seeds": "3.1.1",
+    "@bloom-housing/ui-components": "13.0.3",
+    "@bloom-housing/ui-seeds": "3.1.4",
     "@heroicons/react": "^2.1.1",
     "axios-cookiejar-support": "^5.0.5",
     "markdown-to-jsx": "^7.7.16",
@@ -38,6 +38,7 @@
     "@types/react-transition-group": "^4.4.12",
     "@google-cloud/translate": "^9.2.0",
     "csv-parse": "^5.5.5",
+    "dotenv": "^17.2.3",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^26.5.3",
     "next": "^15.5.7",

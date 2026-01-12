@@ -531,6 +531,14 @@ class Listing extends AbstractDTO {
   name: string;
 
   @Expose()
+  @ValidateListingPublish('parkingFee', {
+    groups: [ValidationsGroupsEnum.default],
+  })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  parkingFee?: string;
+
+  @Expose()
   @ValidateListingPublish('postmarkedApplicationsReceivedByDate', {
     groups: [ValidationsGroupsEnum.default],
   })
