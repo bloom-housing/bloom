@@ -17,6 +17,8 @@ interface BloomCardProps {
   id?: string
   subtitle?: string | React.ReactNode
   title?: string
+  titleTabIndex?: number
+  titleId?: string
   altHeading?: boolean
   variant?: "form" | "block"
 }
@@ -32,7 +34,12 @@ const BloomCard = (props: BloomCardProps) => {
       if (props.subtitle) {
         return (
           <HeadingGroup
-            headingProps={{ size: "2xl", priority: props.headingPriority || 1 }}
+            headingProps={{
+              id: props.titleId,
+              priority: props.headingPriority || 1,
+              size: "2xl",
+              tabIndex: props.titleTabIndex,
+            }}
             heading={props.title}
             subheading={props.subtitle}
             className={styles["card-heading-group"]}
@@ -44,6 +51,8 @@ const BloomCard = (props: BloomCardProps) => {
           size="2xl"
           priority={props.headingPriority || 1}
           className={props.altHeading ? styles["card-alt-heading-font"] : undefined}
+          id={props.titleId}
+          tabIndex={props.titleTabIndex}
         >
           {props.title}
         </Heading>
