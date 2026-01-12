@@ -1,9 +1,14 @@
 import * as React from "react"
 import { Card, Heading, Link } from "@bloom-housing/ui-seeds"
-import { Address, AuthContext } from "@bloom-housing/shared-helpers"
+import { Address } from "@bloom-housing/shared-helpers"
 import { t } from "@bloom-housing/ui-components"
 import styles from "../ListingViewSeeds.module.scss"
-import { FeatureFlagEnum, Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  FeatureFlagEnum,
+  Jurisdiction,
+  Listing,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { isFeatureFlagOn } from "../../../lib/helpers"
 
 export const formatPhone = (phone: string) => {
   return phone.replace(/[-() ]/g, "")
@@ -11,8 +16,9 @@ export const formatPhone = (phone: string) => {
 
 type LeasingAgentProps = {
   listing: Listing
+  jurisdiction?: Jurisdiction
 }
-export const LeasingAgent = ({ listing }: LeasingAgentProps) => {
+export const LeasingAgent = ({ listing, jurisdiction }: LeasingAgentProps) => {
   const {
     listingsLeasingAgentAddress: address,
     leasingAgentEmail: email,
@@ -21,18 +27,14 @@ export const LeasingAgent = ({ listing }: LeasingAgentProps) => {
     leasingAgentPhone: phone,
     leasingAgentTitle: title,
   } = listing
-  const { doJurisdictionsHaveFeatureFlagOn } = React.useContext(AuthContext)
-  const managementWebsite = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableCompanyWebsite,
-    listing.jurisdictions.id
-  )
+  const managementWebsite = isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableCompanyWebsite)
     ? listing.managementWebsite
     : undefined
   if (!address && !email && !name && !officeHours && !title && !phone && !managementWebsite) return
 
-  const enableLeasingAgentAltText = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableLeasingAgentAltText,
-    listing.jurisdictions.id
+  const enableLeasingAgentAltText = isFeatureFlagOn(
+    jurisdiction,
+    FeatureFlagEnum.enableLeasingAgentAltText
   )
 
   const leasingAgentContactText = enableLeasingAgentAltText
