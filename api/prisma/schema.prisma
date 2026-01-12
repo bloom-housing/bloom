@@ -596,6 +596,8 @@ model Listings {
   householdSizeMin                      Int?                          @map("household_size_min")
   neighborhood                          String?
   petPolicy                             String?                       @map("pet_policy")
+  allowsDogs                            Boolean?                      @map("allows_dogs")
+  allowsCats                            Boolean?                      @map("allows_cats")
   smokingPolicy                         String?                       @map("smoking_policy")
   unitsAvailable                        Int?                          @map("units_available")
   unitAmenities                         String?                       @map("unit_amenities")

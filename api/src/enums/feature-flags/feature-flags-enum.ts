@@ -37,6 +37,7 @@ export enum FeatureFlagEnum {
   enableParkingFee = 'enableParkingFee',
   enablePartnerDemographics = 'enablePartnerDemographics',
   enablePartnerSettings = 'enablePartnerSettings',
+  enablePetPolicyCheckbox = 'enablePetPolicyCheckbox',
   enableProperties = 'enableProperties',
   enableReferralQuestionUnits = 'enableReferralQuestionUnits',
   enableRegions = 'enableRegions',
@@ -229,6 +230,11 @@ export const featureFlagMap: {
   {
     name: FeatureFlagEnum.enablePartnerSettings,
     description: "When true, the 'settings' tab in the partner site is visible",
+  },
+  {
+    name: FeatureFlagEnum.enablePetPolicyCheckbox,
+    description:
+      'When true, the pet policy field in the listing form is displayed as checkboxes instead of a text area',
   },
   {
     name: FeatureFlagEnum.enableProperties,

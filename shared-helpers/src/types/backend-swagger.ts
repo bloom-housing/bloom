@@ -4210,6 +4210,12 @@ export interface Listing {
   petPolicy?: string
 
   /**  */
+  allowsDogs?: boolean
+
+  /**  */
+  allowsCats?: boolean
+
+  /**  */
   smokingPolicy?: string
 
   /**  */
@@ -5053,6 +5059,12 @@ export interface ListingCreate {
   petPolicy?: string
 
   /**  */
+  allowsDogs?: boolean
+
+  /**  */
+  allowsCats?: boolean
+
+  /**  */
   smokingPolicy?: string
 
   /**  */
@@ -5791,6 +5803,12 @@ export interface ListingUpdate {
 
   /**  */
   petPolicy?: string
+
+  /**  */
+  allowsDogs?: boolean
+
+  /**  */
+  allowsCats?: boolean
 
   /**  */
   smokingPolicy?: string
@@ -7539,38 +7557,6 @@ export interface HouseholdMemberUpdate {
   householdMemberWorkAddress?: AddressCreate
 }
 
-export interface AddressUpdate {
-  /**  */
-  placeName?: string
-
-  /**  */
-  city: string
-
-  /**  */
-  county?: string
-
-  /**  */
-  state: string
-
-  /**  */
-  street: string
-
-  /**  */
-  street2?: string
-
-  /**  */
-  zipCode: string
-
-  /**  */
-  latitude?: number
-
-  /**  */
-  longitude?: number
-
-  /**  */
-  id?: string
-}
-
 export interface ApplicationSelectionOptionCreate {
   /**  */
   addressHolderName?: string
@@ -8738,6 +8724,7 @@ export enum FeatureFlagEnum {
   "enableParkingFee" = "enableParkingFee",
   "enablePartnerDemographics" = "enablePartnerDemographics",
   "enablePartnerSettings" = "enablePartnerSettings",
+  "enablePetPolicyCheckbox" = "enablePetPolicyCheckbox",
   "enableProperties" = "enableProperties",
   "enableReferralQuestionUnits" = "enableReferralQuestionUnits",
   "enableRegions" = "enableRegions",

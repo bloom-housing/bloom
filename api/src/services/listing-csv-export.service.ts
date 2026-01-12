@@ -851,10 +851,34 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
           path: 'unitAmenities',
           label: 'Unit Amenities',
         },
-        {
-          path: 'petPolicy',
-          label: 'Pets Policy',
-        },
+        ...(!doAllJurisdictionHaveFeatureFlagSet(
+          user.jurisdictions,
+          FeatureFlagEnum.enablePetPolicyCheckbox,
+        )
+          ? [
+              {
+                path: 'petPolicy',
+                label: 'Pets Policy',
+              },
+            ]
+          : []),
+        ...(doAnyJurisdictionHaveFeatureFlagSet(
+          user.jurisdictions,
+          FeatureFlagEnum.enablePetPolicyCheckbox,
+        )
+          ? [
+              {
+                path: 'allowsDogs',
+                label: 'Allows Dogs',
+                format: this.formatYesNo,
+              },
+              {
+                path: 'allowsCats',
+                label: 'Allows Cats',
+                format: this.formatYesNo,
+              },
+            ]
+          : []),
         {
           path: 'servicesOffered',
           label: 'Services Offered',

@@ -601,6 +601,10 @@ const ListingForm = ({
                               FeatureFlagEnum.enableAccessibilityFeatures,
                               jurisdictionId
                             )}
+                            enablePetPolicyCheckbox={doJurisdictionsHaveFeatureFlagOn(
+                              FeatureFlagEnum.enablePetPolicyCheckbox,
+                              jurisdictionId
+                            )}
                             enableSmokingPolicyRadio={doJurisdictionsHaveFeatureFlagOn(
                               FeatureFlagEnum.enableSmokingPolicyRadio,
                               jurisdictionId
