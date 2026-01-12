@@ -1006,10 +1006,10 @@
   resolved "https://registry.npmjs.org/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@bloom-housing/ui-components@13.0.2":
-  version "13.0.2"
-  resolved "https://registry.yarnpkg.com/@bloom-housing/ui-components/-/ui-components-13.0.2.tgz#f352242c6303cf89523f96143317f178036ba671"
-  integrity sha512-YniyO9czP73flbWdV0FmIq7r2DRzBReDwrnp27M4G/DpodnFSyjYwJU5eA7V/ViXQqxGCHO4X7Du66xSJcWAbQ==
+"@bloom-housing/ui-components@13.0.3":
+  version "13.0.3"
+  resolved "https://registry.yarnpkg.com/@bloom-housing/ui-components/-/ui-components-13.0.3.tgz#7120699d7fce6603b7f5c1636baa06bb7edafb67"
+  integrity sha512-yMi1aIjWO7iNEJeX1YkRRvd1pemzJ9/Td3gpG9DiPkXh5gsnRH/CT5EATJAOzPtzq6w5VCpJ3yTOvbHraOVr0w==
   dependencies:
     "@fortawesome/fontawesome-svg-core" "^6.1.1"
     "@fortawesome/free-regular-svg-icons" "^6.1.1"
@@ -1023,10 +1023,10 @@
     markdown-to-jsx "7.1.8"
     nanoid "^3.1.12"
     node-polyglot "^2.4.0"
-    react "^19.1.1"
+    react "19.2.3"
     react-accessible-accordion "5.0.0"
     react-beautiful-dnd "^13.1.1"
-    react-dom "^19.1.1"
+    react-dom "19.2.3"
     react-dropzone "^11.3.2"
     react-focus-lock "^2.9.4"
     react-hook-form "^6.15.5"
@@ -1039,13 +1039,13 @@
     tailwindcss-rtl "^0.9.0"
     typesafe-actions "^5.1.0"
 
-"@bloom-housing/ui-seeds@3.1.1":
-  version "3.1.1"
-  resolved "https://registry.yarnpkg.com/@bloom-housing/ui-seeds/-/ui-seeds-3.1.1.tgz#42b86abf64a587e797a7d82b00934ea0d60bb81c"
-  integrity sha512-p4xu6Npooh/YG5R/yFXZrywssCDCzaAdWDdWCGPvw89KyHMC8sBcmbqoX18/Qya2Hl627X/swzrVck0tAMw9mA==
+"@bloom-housing/ui-seeds@3.1.4":
+  version "3.1.4"
+  resolved "https://registry.yarnpkg.com/@bloom-housing/ui-seeds/-/ui-seeds-3.1.4.tgz#d459b8be3d2ba416e401b244d272447870e18074"
+  integrity sha512-wg5ROd6D1U2W8SDv7EkeDoFrZwIH6dWRl/Ed1oAyYwLNYdoTrVMv7cXkVVTRRhOaTlARP0YiJKn/ss7+FMTv1w==
   dependencies:
     "@fortawesome/fontawesome-svg-core" "^6.3.0"
-    "@fortawesome/react-fontawesome" "^0.2.0"
+    "@fortawesome/react-fontawesome" "^3.1.0"
     "@heroicons/react" "^2.0.18"
     "@types/mdx" "^2.0.3"
     "@types/node" "^16.7.13"
@@ -1358,7 +1358,7 @@
   dependencies:
     "@fortawesome/fontawesome-common-types" "6.4.0"
 
-"@fortawesome/react-fontawesome@3.1.0", "@fortawesome/react-fontawesome@^0.2.0":
+"@fortawesome/react-fontawesome@3.1.0", "@fortawesome/react-fontawesome@^3.1.0":
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/@fortawesome/react-fontawesome/-/react-fontawesome-3.1.0.tgz#bb22f49622574a80ee74213ad8c68107f3f47e64"
   integrity sha512-5OUQH9aDH/xHJwnpD4J7oEdGvFGJgYnGe0UebaPIdMW9UxYC/f5jv2VjVEgnikdJN0HL8yQxp9Nq+7gqGZpIIA==
@@ -6298,27 +6298,20 @@ form-data@^2.2.0, form-data@^2.5.5:
     safe-buffer "^5.2.1"
 
 form-data@^3.0.0:
-  version "3.0.1"
-  resolved "https://registry.npmjs.org/form-data/-/form-data-3.0.1.tgz"
-  integrity sha512-RHkBKtLWUVwd7SqRIvCZMEvAMoGUp0XU+seQiZejj0COz3RI3hWP4sCv3gZWWLjJTd7rGwcsF5eKZGii0r/hbg==
+  version "3.0.4"
+  resolved "https://registry.yarnpkg.com/form-data/-/form-data-3.0.4.tgz#938273171d3f999286a4557528ce022dc2c98df1"
+  integrity sha512-f0cRzm6dkyVYV3nPoooP8XlccPQukegwhAnpoLcXy+X+A8KfpGOoXwDr9FLZd3wzgLaBGQBE3lY93Zm/i1JvIQ==
   dependencies:
     asynckit "^0.4.0"
     combined-stream "^1.0.8"
-    mime-types "^2.1.12"
+    es-set-tostringtag "^2.1.0"
+    hasown "^2.0.2"
+    mime-types "^2.1.35"
 
-form-data@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.npmjs.org/form-data/-/form-data-4.0.0.tgz"
-  integrity sha512-ETEklSGi5t0QMZuiXoA/Q6vcnxcLQP5vdugSpuAyi6SVGi2clPPp+xgEhuMaHC+zGgn31Kd235W35f7Hykkaww==
-  dependencies:
-    asynckit "^0.4.0"
-    combined-stream "^1.0.8"
-    mime-types "^2.1.12"
-
-form-data@~4.0.0:
-  version "4.0.3"
-  resolved "https://registry.yarnpkg.com/form-data/-/form-data-4.0.3.tgz#608b1b3f3e28be0fccf5901fc85fb3641e5cf0ae"
-  integrity sha512-qsITQPfmvMOSAdeyZ+12I1c+CKSstAFAwu+97zrnWAbIr5u8wfsExUzCesVLC8NgHuRUqNN4Zy6UPWUTRGslcA==
+form-data@^4.0.0, form-data@~4.0.0:
+  version "4.0.5"
+  resolved "https://registry.yarnpkg.com/form-data/-/form-data-4.0.5.tgz#b49e48858045ff4cbf6b03e1805cebcad3679053"
+  integrity sha512-8RipRLol37bNs2bhoV67fiTEvdTrbMUYcFTiy3+wuuOnUog2QBHCZWXDRijWQfAkhBj2Uf5UnVaiWwA5vdd82w==
   dependencies:
     asynckit "^0.4.0"
     combined-stream "^1.0.8"

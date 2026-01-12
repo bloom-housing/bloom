@@ -1575,4 +1575,130 @@ describe('Testing Permissioning of endpoints as Admin User', () => {
         .expect(200);
     });
   });
+
+  describe('Testing property endpoints', () => {
+    let propertyId: string;
+
+    beforeAll(async () => {
+      // Create a test property for use in the tests
+      const propertyData = {
+        name: 'Test Property',
+        jurisdictions: {
+          id: jurisdictionId,
+        },
+      };
+
+      const res = await prisma.properties.create({
+        data: {
+          name: propertyData.name,
+          jurisdictions: {
+            connect: {
+              id: propertyData.jurisdictions.id,
+            },
+          },
+        },
+      });
+
+      if (res.id) {
+        propertyId = res.id;
+      }
+    });
+
+    it('should succeed for list endpoint', async () => {
+      await request(app.getHttpServer())
+        .get(`/properties?`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .expect(200);
+    });
+
+    it('should succeed for retrieve endpoint', async () => {
+      if (!propertyId) {
+        throw new Error('Property ID not set up for test');
+      }
+
+      await request(app.getHttpServer())
+        .get(`/properties/${propertyId}`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .expect(200);
+    });
+
+    it('should succeed for create endpoint', async () => {
+      const propertyData = {
+        name: 'New Test Property',
+        jurisdictions: {
+          id: jurisdictionId,
+        },
+      };
+
+      await request(app.getHttpServer())
+        .post('/properties')
+        .send(propertyData)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .expect(201);
+    });
+
+    it('should succeed for filterable list endpoint', async () => {
+      await request(app.getHttpServer())
+        .post(`/properties/list`)
+        .send({})
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .expect(201);
+    });
+
+    it('should succeed for update endpoint', async () => {
+      if (!propertyId) {
+        throw new Error('Property ID not set up for test');
+      }
+
+      const propertyUpdateData = {
+        id: propertyId,
+        name: 'Updated Test Property',
+        jurisdictions: {
+          id: jurisdictionId,
+        },
+      };
+
+      await request(app.getHttpServer())
+        .put(`/properties`)
+        .send(propertyUpdateData)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .expect(200);
+    });
+
+    it('should succeed for delete endpoint', async () => {
+      const propertyData = {
+        name: 'Property to Delete',
+        jurisdictions: {
+          id: jurisdictionId,
+        },
+      };
+
+      const res = await prisma.properties.create({
+        data: {
+          name: propertyData.name,
+          jurisdictions: {
+            connect: {
+              id: propertyData.jurisdictions.id,
+            },
+          },
+        },
+      });
+
+      const deleteId = res.id;
+
+      await request(app.getHttpServer())
+        .delete(`/properties`)
+        .send({
+          id: deleteId,
+        } as IdDTO)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .expect(200);
+    });
+  });
 });

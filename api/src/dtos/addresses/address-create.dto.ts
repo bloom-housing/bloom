@@ -1,8 +1,4 @@
+import { AddressUpdate } from './address-update.dto';
 import { OmitType } from '@nestjs/swagger';
-import { Address } from './address.dto';
 
-export class AddressCreate extends OmitType(Address, [
-  'id',
-  'createdAt',
-  'updatedAt',
-]) {}
+export class AddressCreate extends OmitType(AddressUpdate, ['id']) {}

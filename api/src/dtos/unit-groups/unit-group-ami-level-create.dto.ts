@@ -1,19 +1,6 @@
-import { ApiPropertyOptional, OmitType } from '@nestjs/swagger';
-import { Expose, Type } from 'class-transformer';
-import { ValidateNested } from 'class-validator';
-import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
-import { IdDTO } from '../shared/id.dto';
-import { UnitGroupAmiLevel } from './unit-group-ami-level.dto';
+import { OmitType } from '@nestjs/swagger';
+import { UnitGroupAmiLevelUpdate } from './unit-group-ami-level-update.dto';
 
-export class UnitGroupAmiLevelCreate extends OmitType(UnitGroupAmiLevel, [
+export class UnitGroupAmiLevelCreate extends OmitType(UnitGroupAmiLevelUpdate, [
   'id',
-  'createdAt',
-  'updatedAt',
-  'amiChart',
-]) {
-  @Expose()
-  @Type(() => IdDTO)
-  @ApiPropertyOptional({ type: IdDTO })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  amiChart?: IdDTO;
-}
+]) {}

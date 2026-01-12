@@ -31,6 +31,7 @@ interface ApplicationsCount {
 
 interface ApplicationsViewProps {
   filterType: ApplicationsIndexEnum
+  enableApplicationStatus?: boolean
 }
 
 const ApplicationsView = (props: ApplicationsViewProps) => {
@@ -66,7 +67,7 @@ const ApplicationsView = (props: ApplicationsViewProps) => {
         })
         .finally(() => setLoading(false))
     }
-  }, [profile, applicationsService])
+  }, [profile, applicationsService, filterTypeString, loading, showPublicLottery])
 
   const selectionHandler = (index: number) => {
     const baseUrl = "/account/applications"
@@ -180,7 +181,13 @@ const ApplicationsView = (props: ApplicationsViewProps) => {
             >
               <LoadingState loading={loading}>
                 {applications?.map((application, index) => {
-                  return <StatusItemWrapper key={index} application={application} />
+                  return (
+                    <StatusItemWrapper
+                      key={index}
+                      application={application}
+                      enableApplicationStatus={props.enableApplicationStatus}
+                    />
+                  )
                 })}
                 {!applications?.length && !loading && noApplicationsSection()}
               </LoadingState>

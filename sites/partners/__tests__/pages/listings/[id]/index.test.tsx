@@ -835,6 +835,7 @@ describe("listing data", () => {
           )
         ).toBeInTheDocument()
         expect(screen.getByText("Services offered")).toBeInTheDocument()
+        expect(screen.getByText("Services offered")).toBeInTheDocument()
         expect(screen.getByText("Professional Help")).toBeInTheDocument()
       })
 
