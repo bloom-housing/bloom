@@ -144,15 +144,15 @@
       }
 
       .links-container-desktop {
-        @media (--sm-only) {
-          display: none;
-        }
         display: flex;
         flex-direction: row;
         align-items: flex-end;
         flex-wrap: wrap;
         margin-inline-start: auto;
         justify-content: flex-end;
+        @media (--sm-only) {
+          display: none;
+        }
       }
       .links-container-mobile {
         display: none;
