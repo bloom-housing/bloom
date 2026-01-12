@@ -851,18 +851,7 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
           path: 'unitAmenities',
           label: 'Unit Amenities',
         },
-        ...(!doAllJurisdictionHaveFeatureFlagSet(
-          user.jurisdictions,
-          FeatureFlagEnum.enablePetPolicyCheckbox,
-        )
-          ? [
-              {
-                path: 'petPolicy',
-                label: 'Pets Policy',
-              },
-            ]
-          : []),
-        ...(doAnyJurisdictionHaveFeatureFlagSet(
+        ...(doAllJurisdictionHaveFeatureFlagSet(
           user.jurisdictions,
           FeatureFlagEnum.enablePetPolicyCheckbox,
         )
@@ -878,7 +867,12 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
                 format: this.formatYesNo,
               },
             ]
-          : []),
+          : [
+              {
+                path: 'petPolicy',
+                label: 'Pets Policy',
+              },
+            ]),
         {
           path: 'servicesOffered',
           label: 'Services Offered',
