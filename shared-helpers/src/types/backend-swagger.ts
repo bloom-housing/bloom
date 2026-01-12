@@ -425,7 +425,7 @@ export class ListingsService {
     })
   }
   /**
-   * Get listings by assigned porperty ID
+   * Get listings by assigned property ID
    */
   retrieveListingsByProperty(
     params: {
@@ -3052,7 +3052,7 @@ export class PropertiesService {
       /**  */
       search?: string
       /**  */
-      filter?: any | null[]
+      jurisdiction?: string
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<PaginatedProperty> {
@@ -3064,7 +3064,7 @@ export class PropertiesService {
         page: params["page"],
         limit: params["limit"],
         search: params["search"],
-        filter: params["filter"],
+        jurisdiction: params["jurisdiction"],
       }
 
       /** 适配ios13，get请求不允许带body */
@@ -8567,6 +8567,9 @@ export interface PropertyUpdate {
   id: string
 
   /**  */
+  name: string
+
+  /**  */
   description?: string
 
   /**  */
@@ -8577,9 +8580,6 @@ export interface PropertyUpdate {
 
   /**  */
   jurisdictions?: IdDTO
-
-  /**  */
-  name?: string
 }
 
 export interface PropertyQueryParams {
@@ -8591,14 +8591,6 @@ export interface PropertyQueryParams {
 
   /**  */
   search?: string
-
-  /**  */
-  filter?: string[]
-}
-
-export interface PropertyFilterParams {
-  /**  */
-  $comparison: EnumPropertyFilterParamsComparison
 
   /**  */
   jurisdiction?: string
@@ -9060,13 +9052,4 @@ export enum ModificationEnum {
 export enum MfaType {
   "sms" = "sms",
   "email" = "email",
-}
-export enum EnumPropertyFilterParamsComparison {
-  "=" = "=",
-  "<>" = "<>",
-  "IN" = "IN",
-  ">=" = ">=",
-  "<=" = "<=",
-  "LIKE" = "LIKE",
-  "NA" = "NA",
 }

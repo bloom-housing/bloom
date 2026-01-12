@@ -648,6 +648,8 @@
   "listingFilters.program.Veterans": "Cựu chiến binh",
   "listings.additionalInformation": "Thông tin bổ sung",
   "listings.additionalInformationEnvelope": "Phong bì thông tin bổ sung",
+  "listings.allowsDogs": "Cho phép chó vào",
+  "listings.allowsCats": "Cho phép mèo",
   "listings.allUnits": "Tất cả các đơn vị",
   "listings.allUnitsReservedFor": "Tất cả các căn nhà được dành cho %{type}",
   "listings.amenities.busStops": "Trạm xe buýt",
