@@ -7,6 +7,7 @@ import {
   MultiselectQuestionCreate,
   MultiselectQuestionsService,
   MultiselectQuestionsStatusEnum,
+  ValidationMethodEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import SectionWithGrid from "../../shared/SectionWithGrid"
 import { useSWRConfig } from "swr"
@@ -199,14 +200,14 @@ const PreferenceViewDrawer = ({
                   <FieldValue label={t("t.title")}>{optionData?.name}</FieldValue>
                   <FieldValue label={t("t.descriptionTitle")}>{optionData?.description}</FieldValue>
                 </Grid.Row>
-                <Grid.Row>
-                  <FieldValue label={t("t.url")}>
-                    {optionData?.links?.length > 0 ? optionData?.links[0].url : ""}
-                  </FieldValue>
-                  <FieldValue label={t("settings.preferenceLinkTitle")}>
-                    {optionData?.links?.length > 0 ? optionData?.links[0].title : ""}
-                  </FieldValue>
-                </Grid.Row>
+                {optionData?.links?.length > 0 && (
+                  <Grid.Row>
+                    <FieldValue label={t("t.url")}>{optionData?.links[0].url}</FieldValue>
+                    <FieldValue label={t("settings.preferenceLinkTitle")}>
+                      {optionData?.links[0].title}
+                    </FieldValue>
+                  </Grid.Row>
+                )}
                 <Grid.Row>
                   <FieldValue label={t("settings.preferenceOptOut")}>
                     {optionData?.isOptOut ? t("t.yes") : t("t.no")}
@@ -215,23 +216,26 @@ const PreferenceViewDrawer = ({
                     {optionData?.shouldCollectAddress ? t("t.yes") : t("t.no")}
                   </FieldValue>
                 </Grid.Row>
-                <Grid.Row>
-                  <FieldValue label={t("settings.preferenceValidatingAddress")}>
-                    {optionData?.validationMethod}
-                  </FieldValue>
-                  <FieldValue label={"Map Layer"}>{mapLayerName}</FieldValue>
-                </Grid.Row>
-                <Grid.Row>
-                  <Grid.Cell>
-                    Radius: {optionData?.radiusSize}
-                    <br />
-                    {t("settings.preferenceCollectAddressHolderName")}:{" "}
-                    {optionData?.shouldCollectName ? t("t.yes") : t("t.no")}
-                    <br />
-                    {t("settings.preferenceCollectAddressHolderRelationship")}:{" "}
-                    {optionData?.shouldCollectRelationship ? t("t.yes") : t("t.no")}
-                  </Grid.Cell>
-                </Grid.Row>
+                {optionData?.shouldCollectAddress && optionData?.validationMethod && (
+                  <Grid.Row>
+                    {optionData?.validationMethod === ValidationMethodEnum.radius && (
+                      <FieldValue label={"Radius"}>{optionData?.radiusSize}</FieldValue>
+                    )}
+                    {optionData?.validationMethod === ValidationMethodEnum.map && (
+                      <FieldValue label={"Map Layer"}>{mapLayerName}</FieldValue>
+                    )}
+                  </Grid.Row>
+                )}
+                {optionData?.shouldCollectAddress && (
+                  <Grid.Row>
+                    <FieldValue label={t("settings.preferenceCollectAddressHolderName")}>
+                      {optionData?.shouldCollectName ? t("t.yes") : t("t.no")}
+                    </FieldValue>
+                    <FieldValue label={t("settings.preferenceCollectAddressHolderRelationship")}>
+                      {optionData?.shouldCollectRelationship ? t("t.yes") : t("t.no")}
+                    </FieldValue>
+                  </Grid.Row>
+                )}
               </SectionWithGrid>
             </Card.Section>
           </Card>
