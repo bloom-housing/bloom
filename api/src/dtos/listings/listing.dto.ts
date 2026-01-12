@@ -63,6 +63,7 @@ import {
 import { ValidateListingDeposit } from '../../decorators/validate-listing-deposit.decorator';
 import { ListingDocuments } from './listing-documents.dto';
 import { ValidateListingImages } from '../../decorators/validate-listing-images.decorator';
+import Property from '../properties/property.dto';
 
 class Listing extends AbstractDTO {
   @Expose()
@@ -1189,6 +1190,15 @@ class Listing extends AbstractDTO {
     },
   )
   lastUpdatedByUser?: IdDTO;
+
+  @Expose()
+  @ValidateListingPublish('property', {
+    groups: [ValidationsGroupsEnum.default],
+  })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => Property)
+  @ApiPropertyOptional({ type: Property })
+  property?: Property;
 }
 
 export { Listing as default, Listing };

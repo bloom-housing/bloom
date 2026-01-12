@@ -28,7 +28,7 @@ export class PermissionGuard implements CanActivate {
       this.reflector.get<string>('permission_action', context.getHandler()) ||
       httpMethodsToAction[req.method];
 
-    let resource;
+    let resource = {};
 
     if (req.params.id) {
       resource = ['GET'].includes(req.method)

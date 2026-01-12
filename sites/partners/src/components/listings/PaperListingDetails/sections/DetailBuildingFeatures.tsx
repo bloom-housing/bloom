@@ -3,7 +3,7 @@ import { t } from "@bloom-housing/ui-components"
 import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { ListingContext } from "../../ListingContext"
 import { getDetailFieldString } from "./helpers"
-import { AuthContext } from "@bloom-housing/shared-helpers"
+import { AuthContext, listingFeatures } from "@bloom-housing/shared-helpers"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
@@ -13,16 +13,18 @@ const DetailBuildingFeatures = () => {
 
   const getAccessibilityFeatures = () => {
     let featuresExist = false
-    const features = Object.keys(listing?.listingFeatures ?? {}).map((feature) => {
-      if (listing?.listingFeatures[feature]) {
-        featuresExist = true
-        return (
-          <li className={"list-disc mx-5 mb-1 md:w-1/3 w-full grow"} key={feature}>
-            {t(`eligibility.accessibility.${feature}`)}
-          </li>
-        )
-      }
-    })
+    const features = Object.keys(listing?.listingFeatures ?? {})
+      .filter((feature) => listingFeatures.includes(feature))
+      .map((feature) => {
+        if (listing?.listingFeatures[feature]) {
+          featuresExist = true
+          return (
+            <li className={"list-disc mx-5 mb-1 md:w-1/3 w-full grow"} key={feature}>
+              {t(`eligibility.accessibility.${feature}`)}
+            </li>
+          )
+        }
+      })
     return featuresExist ? <ul className={"flex flex-wrap"}>{features}</ul> : <>{t("t.none")}</>
   }
 

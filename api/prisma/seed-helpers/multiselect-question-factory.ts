@@ -91,5 +91,6 @@ const multiselectOptionFactoryV2 = (numberToMake: number) => {
   return [...new Array(numberToMake)].map((_, index) => ({
     name: randomNoun(),
     ordinal: index,
+    shouldCollectAddress: index % 2 === 0,
   }));
 };

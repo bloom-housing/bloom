@@ -8,6 +8,7 @@ import {
 import { listing } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import { screen } from "../../../testUtils"
+import * as helpers from "../../../../src/lib/helpers"
 
 afterEach(cleanup)
 
@@ -27,12 +28,9 @@ describe("<LeasingAgent>", () => {
 
   it("shows all content enableLeasingAgentAltText on", () => {
     const phoneNumber = "(123) 456-7890"
+    jest.spyOn(helpers, "isFeatureFlagOn").mockReturnValue(true)
     render(
-      <AuthContext.Provider
-        value={{
-          doJurisdictionsHaveFeatureFlagOn: () => true,
-        }}
-      >
+      <AuthContext.Provider value={{}}>
         <LeasingAgent
           listing={{
             ...listing,
@@ -86,12 +84,9 @@ describe("<LeasingAgent>", () => {
   })
   it("shows all content enableLeasingAgentAltText off", () => {
     const phoneNumber = "(123) 456-7890"
+    jest.spyOn(helpers, "isFeatureFlagOn").mockReturnValue(false)
     render(
-      <AuthContext.Provider
-        value={{
-          doJurisdictionsHaveFeatureFlagOn: () => false,
-        }}
-      >
+      <AuthContext.Provider value={{}}>
         <LeasingAgent
           listing={{
             ...listing,

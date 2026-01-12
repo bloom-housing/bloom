@@ -1,18 +1,20 @@
-import { FeatureCollection, Polygon, point } from '@turf/helpers';
-import buffer from '@turf/buffer';
-import booleanPointInPolygon from '@turf/boolean-point-in-polygon';
-import { MapLayers, Prisma } from '@prisma/client';
 import { Injectable } from '@nestjs/common';
+import { MapLayers, Prisma } from '@prisma/client';
+import buffer from '@turf/buffer';
+import { FeatureCollection, Polygon, point } from '@turf/helpers';
+import pointsWithinPolygon from '@turf/points-within-polygon';
+import booleanPointInPolygon from '@turf/boolean-point-in-polygon';
+import { PrismaService } from './prisma.service';
+import { Address } from '../dtos/addresses/address.dto';
 import { Application } from '../dtos/applications/application.dto';
+import { ApplicationMultiselectQuestion } from '../dtos/applications/application-multiselect-question.dto';
+import { ApplicationMultiselectQuestionOption } from '../dtos/applications/application-multiselect-question-option.dto';
+import { ApplicationSelection } from '../dtos/applications/application-selection.dto';
+import { ApplicationSelectionOption } from '../dtos/applications/application-selection-option.dto';
 import Listing from '../dtos/listings/listing.dto';
 import { MultiselectOption } from '../dtos/multiselect-questions/multiselect-option.dto';
-import { ApplicationMultiselectQuestion } from '../dtos/applications/application-multiselect-question.dto';
-import { PrismaService } from './prisma.service';
 import { ValidationMethod } from '../enums/multiselect-questions/validation-method-enum';
-import { ApplicationMultiselectQuestionOption } from '../dtos/applications/application-multiselect-question-option.dto';
-import { Address } from '../dtos/addresses/address.dto';
 import { InputType } from '../enums/shared/input-type-enum';
-import pointsWithinPolygon from '@turf/points-within-polygon';
 
 @Injectable()
 export class GeocodingService {
@@ -30,6 +32,89 @@ export class GeocodingService {
       where: { id: application.id },
       data: { preferences: preferences as unknown as Prisma.InputJsonObject },
     });
+  }
+
+  public async validateGeocodingPreferencesV2(
+    applicationSelections: ApplicationSelection[],
+    listingsBuildingAddress: Address,
+    multiselectOptions: MultiselectOption[],
+  ) {
+    const mapOptions: MultiselectOption[] = multiselectOptions.filter(
+      (option) =>
+        option.validationMethod === ValidationMethod.map && option.mapLayerId,
+    );
+    const radiusOptions: MultiselectOption[] = multiselectOptions.filter(
+      (option) => option.validationMethod === ValidationMethod.radius,
+    );
+
+    if (!mapOptions.length && !radiusOptions.length) {
+      return;
+    }
+
+    let mapOptionIds = [];
+    let mapLayers = [];
+    if (mapOptions.length) {
+      mapOptionIds = mapOptions.map((mapOption) => mapOption.id);
+      mapLayers = await this.prisma.mapLayers.findMany({
+        where: {
+          id: { in: mapOptions.map((option) => option.mapLayerId) },
+        },
+      });
+    }
+    const radiusOptionIds = radiusOptions.map(
+      (radiusOption) => radiusOption.id,
+    );
+
+    const selectionOptions: ApplicationSelectionOption[] =
+      applicationSelections.flatMap((selection) => selection.selections);
+
+    for (const selectionOption of selectionOptions) {
+      const addressData = selectionOption.addressHolderAddress;
+      if (addressData) {
+        // Checks if there are any preferences that have a validation method of 'map',
+        // validates those preferences addresses,
+        // and then adds the appropriate validation check field to those preferences
+        if (mapOptionIds.includes(selectionOption.multiselectOption.id)) {
+          const foundOption = mapOptions.find(
+            (option) => option.id === selectionOption.multiselectOption.id,
+          );
+          const layer = mapLayers.find(
+            (layer) => layer.id === foundOption.mapLayerId,
+          );
+          const geocodingVerified = this.verifyLayers(
+            addressData,
+            layer?.featureCollection as unknown as FeatureCollection,
+          );
+          await this.prisma.applicationSelectionOptions.update({
+            data: {
+              isGeocodingVerified: geocodingVerified,
+            },
+            where: { id: selectionOption.id },
+          });
+        }
+        // Checks if there are any preferences that have a validation method of radius,
+        // validates those preferences addresses,
+        // and then adds the appropriate validation check field to those preferences
+        else if (
+          radiusOptionIds.includes(selectionOption.multiselectOption.id)
+        ) {
+          const foundOption = radiusOptions.find(
+            (option) => option.id === selectionOption.multiselectOption.id,
+          );
+          const geocodingVerified = this.verifyRadius(
+            addressData,
+            foundOption.radiusSize,
+            listingsBuildingAddress,
+          );
+          await this.prisma.applicationSelectionOptions.update({
+            data: {
+              isGeocodingVerified: geocodingVerified,
+            },
+            where: { id: selectionOption.id },
+          });
+        }
+      }
+    }
   }
 
   verifyRadius(

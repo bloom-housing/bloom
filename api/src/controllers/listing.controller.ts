@@ -234,6 +234,16 @@ export class ListingController {
     );
   }
 
+  @Get('byProperty/:propertyId')
+  @ApiOperation({
+    summary: 'Get listings by assigned property ID',
+    operationId: 'retrieveListingsByProperty',
+  })
+  @ApiOkResponse({ type: IdDTO, isArray: true })
+  async retrieveListingsByProperty(@Param('propertyId') propertyId: string) {
+    return await this.listingService.findListingsWithProperty(propertyId);
+  }
+
   // NestJS best practice to have get(':id') at the bottom of the file
   @Get(`:id`)
   @ApiOperation({ summary: 'Get listing by id', operationId: 'retrieve' })
