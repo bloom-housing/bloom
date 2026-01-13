@@ -15,7 +15,6 @@ import { jurisdiction, user } from "@bloom-housing/shared-helpers/__tests__/test
 import dayjs from "dayjs"
 import userEvent from "@testing-library/user-event"
 import { ToastProps } from "@bloom-housing/ui-seeds/src/blocks/Toast"
-import { Jurisdiction } from "../../../../../api/dist/src/dtos/jurisdictions/jurisdiction.dto"
 
 const server = setupServer()
 
