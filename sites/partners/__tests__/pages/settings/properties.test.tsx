@@ -11,10 +11,11 @@ import {
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { mockNextRouter, render } from "../../testUtils"
 import SettingsProperties from "../../../src/pages/settings/properties"
-import { user } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
+import { jurisdiction, user } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import dayjs from "dayjs"
 import userEvent from "@testing-library/user-event"
 import { ToastProps } from "@bloom-housing/ui-seeds/src/blocks/Toast"
+import { Jurisdiction } from "../../../../../api/dist/src/dtos/jurisdictions/jurisdiction.dto"
 
 const server = setupServer()
 
@@ -155,7 +156,7 @@ describe("<SettingsProperties>", () => {
         value={{
           profile: {
             ...user,
-            jurisdictions: [{ id: "jurisdiction1", name: "Test Jurisdiction" } as any],
+            jurisdictions: [{ ...jurisdiction, id: "jurisdiction1", name: "Test Jurisdiction" }],
             listings: [],
           },
           propertiesService: new PropertiesService(),
@@ -225,8 +226,8 @@ describe("<SettingsProperties>", () => {
           profile: {
             ...user,
             jurisdictions: [
-              { id: "jurisdiction1", name: "Jurisdiction 1" } as any,
-              { id: "jurisdiction2", name: "Jurisdiction 2" } as any,
+              { ...jurisdiction, id: "jurisdiction1", name: "Jurisdiction 1" },
+              { ...jurisdiction, id: "jurisdiction2", name: "Jurisdiction 2" },
             ],
             listings: [],
           },
@@ -272,8 +273,8 @@ describe("<SettingsProperties>", () => {
           profile: {
             ...user,
             jurisdictions: [
-              { id: "jurisdiction1", name: "Jurisdiction 1" } as any,
-              { id: "jurisdiction2", name: "Jurisdiction 2" } as any,
+              { id: "jurisdiction1", name: "Jurisdiction 1" } as Jurisdiction,
+              { id: "jurisdiction2", name: "Jurisdiction 2" } as Jurisdiction,
             ],
             listings: [],
           },
@@ -328,8 +329,8 @@ describe("<SettingsProperties>", () => {
           profile: {
             ...user,
             jurisdictions: [
-              { id: "jurisdiction1", name: "Jurisdiction 1" } as any,
-              { id: "jurisdiction2", name: "Jurisdiction 2" } as any,
+              { ...jurisdiction, id: "jurisdiction1", name: "Jurisdiction 1" },
+              { ...jurisdiction, id: "jurisdiction2", name: "Jurisdiction 2" },
             ],
             listings: [],
           },
@@ -398,7 +399,7 @@ describe("<SettingsProperties>", () => {
           value={{
             profile: {
               ...user,
-              jurisdictions: [{ id: "jurisdiction1", name: "Test Jurisdiction" } as any],
+              jurisdictions: [{ ...jurisdiction, id: "jurisdiction1", name: "Test Jurisdiction" }],
               listings: [],
             },
             propertiesService: new PropertiesService(),
@@ -496,7 +497,7 @@ describe("<SettingsProperties>", () => {
           value={{
             profile: {
               ...user,
-              jurisdictions: [{ id: "jurisdiction1", name: "Test Jurisdiction" } as any],
+              jurisdictions: [{ ...jurisdiction, id: "jurisdiction1", name: "Test Jurisdiction" }],
               listings: [],
             },
             propertiesService: new PropertiesService(),
@@ -569,7 +570,7 @@ describe("<SettingsProperties>", () => {
               isSupportAdmin: false,
               isSuperAdmin: false,
             },
-            jurisdictions: [{ id: "jurisdiction1", name: "Test Jurisdiction" } as any],
+            jurisdictions: [{ ...jurisdiction, id: "jurisdiction1", name: "Test Jurisdiction" }],
             listings: [],
           },
           propertiesService: new PropertiesService(),
@@ -603,7 +604,7 @@ describe("<SettingsProperties>", () => {
         value={{
           profile: {
             ...user,
-            jurisdictions: [{ id: "jurisdiction1", name: "Test Jurisdiction" } as any],
+            jurisdictions: [{ ...jurisdiction, id: "jurisdiction1", name: "Test Jurisdiction" }],
             listings: [],
           },
           propertiesService: new PropertiesService(),
@@ -614,7 +615,7 @@ describe("<SettingsProperties>", () => {
       </AuthContext.Provider>
     )
 
-    await screen.findByText("Settings")
+    await screen.findAllByRole("heading", { level: 1, name: "Settings" })
     expect(pushMock).toHaveBeenCalledWith("/unauthorized")
   })
 
@@ -638,7 +639,7 @@ describe("<SettingsProperties>", () => {
         value={{
           profile: {
             ...user,
-            jurisdictions: [{ id: "jurisdiction1", name: "Test Jurisdiction" } as any],
+            jurisdictions: [{ ...jurisdiction, id: "jurisdiction1", name: "Test Jurisdiction" }],
             listings: [],
           },
           propertiesService: new PropertiesService(),
@@ -682,7 +683,7 @@ describe("<SettingsProperties>", () => {
         value={{
           profile: {
             ...user,
-            jurisdictions: [{ id: "jurisdiction1", name: "Test Jurisdiction" } as any],
+            jurisdictions: [{ ...jurisdiction, id: "jurisdiction1", name: "Test Jurisdiction" }],
             listings: [],
           },
           propertiesService: new PropertiesService(),
