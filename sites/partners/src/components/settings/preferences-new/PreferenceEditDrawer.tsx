@@ -187,9 +187,9 @@ const PreferenceEditDrawer = ({
       variant = "highlight-warm"
       break
   }
-  const statusText = `${questionData?.status.charAt(0).toUpperCase()}${questionData?.status.slice(
-    1
-  )}`
+  const statusText = `${questionData?.status
+    ?.charAt(0)
+    ?.toUpperCase()}${questionData?.status?.slice(1)}`
   const statusTag = questionData?.status ? <Tag variant={variant}>{statusText}</Tag> : undefined
 
   let validationMethodsFields = [

@@ -46,11 +46,13 @@ export const stagingSeed = async (
 ) => {
   // Seed feature flags
   await createAllFeatureFlags(prismaClient);
+  const optionalMainFlags = msqV2 ? [FeatureFlagEnum.enableV2MSQ] : [];
   // create main jurisdiction with as many feature flags turned on as possible
   const mainJurisdiction = await prismaClient.jurisdictions.create({
     data: jurisdictionFactory(jurisdictionName, {
       listingApprovalPermissions: [UserRoleEnum.admin],
       featureFlags: [
+        ...optionalMainFlags,
         FeatureFlagEnum.enableAccessibilityFeatures,
         FeatureFlagEnum.enableCompanyWebsite,
         FeatureFlagEnum.enableGeocodingPreferences,
@@ -398,8 +400,30 @@ export const stagingSeed = async (
       simplifiedDCMap,
     ),
   });
-  const cityEmployeeQuestion = await prismaClient.multiselectQuestions.create({
-    data: multiselectQuestionFactory(mainJurisdiction.id, {
+  let cityEmployeeMsqData: Prisma.MultiselectQuestionsCreateInput;
+  if (msqV2) {
+    cityEmployeeMsqData = multiselectQuestionFactory(
+      mainJurisdiction.id,
+      {
+        multiselectQuestion: {
+          status: MultiselectQuestionsStatusEnum.active,
+          name: 'City Employees',
+          description: 'Employees of the local city.',
+          applicationSection:
+            MultiselectQuestionsApplicationSectionEnum.preferences,
+          options: [
+            {
+              name: 'At least one member of my household is a city employee',
+              collectAddress: false,
+              ordinal: 0,
+            },
+          ],
+        },
+      },
+      true,
+    );
+  } else {
+    cityEmployeeMsqData = multiselectQuestionFactory(mainJurisdiction.id, {
       multiselectQuestion: {
         text: 'City Employees',
         description: 'Employees of the local city.',
@@ -407,17 +431,20 @@ export const stagingSeed = async (
           MultiselectQuestionsApplicationSectionEnum.preferences,
         options: [
           {
-            text: 'At least one member of my household is a city employee',
+            name: 'At least one member of my household is a city employee',
             collectAddress: false,
             ordinal: 0,
           },
         ],
       },
-    }),
+    });
+  }
+  const cityEmployeeQuestion = await prismaClient.multiselectQuestions.create({
+    data: cityEmployeeMsqData,
   });
-  let msqData: Prisma.MultiselectQuestionsCreateInput;
+  let workInCityMsqData: Prisma.MultiselectQuestionsCreateInput;
   if (msqV2) {
-    msqData = multiselectQuestionFactory(
+    workInCityMsqData = multiselectQuestionFactory(
       mainJurisdiction.id,
       {
         optOut: true,
@@ -451,7 +478,7 @@ export const stagingSeed = async (
       true,
     );
   } else {
-    msqData = multiselectQuestionFactory(mainJurisdiction.id, {
+    workInCityMsqData = multiselectQuestionFactory(mainJurisdiction.id, {
       optOut: true,
       multiselectQuestion: {
         text: 'Work in the city',
@@ -481,7 +508,7 @@ export const stagingSeed = async (
     });
   }
   const workInCityQuestion = await prismaClient.multiselectQuestions.create({
-    data: msqData,
+    data: workInCityMsqData,
   });
   const veteranProgramQuestion = await prismaClient.multiselectQuestions.create(
     {

@@ -35,7 +35,7 @@ const PreferenceViewDrawer = ({
 
   const drawerTitle = t("settings.preferenceView")
 
-  const { mapLayers } = useMapLayersList(questionData?.jurisdiction.id)
+  const { mapLayers } = useMapLayersList(questionData?.jurisdiction?.id)
   const mapLayerName = mapLayers?.find((item) => item.id === optionData?.mapLayerId)?.name
 
   let variant = null
@@ -48,9 +48,9 @@ const PreferenceViewDrawer = ({
       variant = "highlight-warm"
       break
   }
-  const statusText = `${questionData?.status.charAt(0).toUpperCase()}${questionData?.status.slice(
-    1
-  )}`
+  const statusText = `${questionData?.status
+    ?.charAt(0)
+    ?.toUpperCase()}${questionData?.status?.slice(1)}`
   const statusTag = <Tag variant={variant}>{statusText}</Tag>
 
   return (
@@ -135,7 +135,7 @@ const PreferenceViewDrawer = ({
                 </Grid.Row>
                 <Grid.Row>
                   <FieldValue label={t("t.jurisdiction")}>
-                    {questionData?.jurisdiction.name}
+                    {questionData?.jurisdiction?.name}
                   </FieldValue>
                 </Grid.Row>
               </SectionWithGrid>
@@ -190,7 +190,7 @@ const PreferenceViewDrawer = ({
         nested
       >
         <Drawer.Header id="preference-nested-drawer-header">
-          {t("settings.preferenceViewOption")}
+          {t("settings.preferenceOptionView")}
         </Drawer.Header>
         <Drawer.Content>
           <Card>
