@@ -10,6 +10,10 @@ organization. The guide is broken down into a series of files that should be fol
 5. [Apply Deployer Permission Set Tofu Modules](./5_apply_deployer_permission_set_tofu_modules.md)
 6. [Apply Bloom Deployment Tofu Modules](./6_apply_bloom_deployment_tofu_modules.md)
 
+WARNING: these instructions are not up-to-date with the current process and will be updated soon
+TODO(https://github.com/bloom-housing/bloom/issues/5760). If you are deploying Bloom before these
+instructions are updated, please reach out to avritt.rohwer@exygy.com for details on how to proceed.
+
 ## Before these steps
 
 1. Complete the steps in [Create Tofu State S3 Bucket](./3_create_tofu_state_s3_bucket.md). The

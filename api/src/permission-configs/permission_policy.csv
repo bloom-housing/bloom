@@ -23,6 +23,12 @@ p, limitedJurisdictionAdmin, multiselectQuestion, true, read
 p, partner, multiselectQuestion, true, read
 p, anonymous, multiselectQuestion, true, read
 
+p, admin, properties, true, .*
+p, supportAdmin, properties, true, read
+p, jurisdictionAdmin, properties, true, read
+p, limitedJurisdictionAdmin, properties, true, read
+p, partner, properties, true, read
+
 p, admin, applicationMethod, true, .*
 p, supportAdmin, applicationMethod, true, .*
 p, jurisdictionAdmin, applicationMethod, true, .*
