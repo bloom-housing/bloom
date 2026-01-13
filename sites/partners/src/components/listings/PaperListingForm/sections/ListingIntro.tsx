@@ -1,7 +1,7 @@
 import React from "react"
 import { useFormContext } from "react-hook-form"
 import { t, Field, FieldGroup } from "@bloom-housing/ui-components"
-import { Grid } from "@bloom-housing/ui-seeds"
+import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import {
   EnumListingListingType,
   YesNoEnum,
@@ -20,16 +20,14 @@ interface ListingIntroProps {
 
 const getDeveloperLabel = (
   listingType: EnumListingListingType,
-  enableHousingDeveloperOwner: boolean,
-  enableNonRegulatedListings: boolean
+  enableHousingDeveloperOwner: boolean
 ) => {
   if (enableHousingDeveloperOwner) {
     return t("listings.housingDeveloperOwner")
-  } else if (listingType === EnumListingListingType.regulated || !enableNonRegulatedListings) {
-    return t("listings.developer")
-  } else {
+  } else if (listingType === EnumListingListingType.nonRegulated) {
     return t("listings.propertyManager")
   }
+  return t("listings.developer")
 }
 
 const ListingIntro = (props: ListingIntroProps) => {
@@ -54,27 +52,11 @@ const ListingIntro = (props: ListingIntroProps) => {
         {props.enableNonRegulatedListings && (
           <Grid.Row columns={1}>
             <Grid.Cell>
-              <FieldGroup
-                name="listingType"
-                type="radio"
-                register={register}
-                groupLabel={t("listings.listingTypeTile")}
-                fields={[
-                  {
-                    id: "regulatedListing",
-                    label: t("listings.regulated"),
-                    value: EnumListingListingType.regulated,
-                    defaultChecked: !listing?.listingType,
-                  },
-                  {
-                    id: "nonRegulatedListing",
-                    label: t("listings.nonRegulated"),
-                    value: EnumListingListingType.nonRegulated,
-                  },
-                ]}
-                error={fieldHasError(errors.listingType)}
-                errorMessage={fieldMessage(errors.listingType)}
-              />
+              <FieldValue id="listingType" label={t("listings.listingTypeTitle")}>
+                {listing.listingType === EnumListingListingType.nonRegulated
+                  ? t("listings.nonRegulated")
+                  : t("listings.regulated")}
+              </FieldValue>
             </Grid.Cell>
           </Grid.Row>
         )}
@@ -114,11 +96,7 @@ const ListingIntro = (props: ListingIntroProps) => {
               register={register}
               {...defaultFieldProps(
                 "developer",
-                getDeveloperLabel(
-                  listingType,
-                  props.enableHousingDeveloperOwner,
-                  props.enableNonRegulatedListings
-                ),
+                getDeveloperLabel(listingType, props.enableHousingDeveloperOwner),
                 props.requiredFields,
                 errors,
                 clearErrors

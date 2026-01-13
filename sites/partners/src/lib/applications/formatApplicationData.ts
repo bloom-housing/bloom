@@ -21,10 +21,10 @@ import {
   AddressCreate,
   IncomePeriodEnum,
   ApplicationStatusEnum,
-  ApplicationUpdate,
   Accessibility,
   Listing,
   MultiselectQuestionsApplicationSectionEnum,
+  Application,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 dayjs.extend(customParseFormat)
 
@@ -272,7 +272,7 @@ export const mapFormToApi = ({
   Format data which comes from the API into correct react-hook-form format.
 */
 
-export const mapApiToForm = (applicationData: ApplicationUpdate, listing: Listing) => {
+export const mapApiToForm = (applicationData: Application, listing: Listing) => {
   const submissionDate = applicationData.submissionDate
     ? dayjs(new Date(applicationData.submissionDate))
     : null

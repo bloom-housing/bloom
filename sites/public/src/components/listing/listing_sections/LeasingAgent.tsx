@@ -1,39 +1,51 @@
 import * as React from "react"
 import { Card, Heading, Link } from "@bloom-housing/ui-seeds"
-import { Address as AddressType } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { Address } from "@bloom-housing/shared-helpers"
 import { t } from "@bloom-housing/ui-components"
 import styles from "../ListingViewSeeds.module.scss"
-
-type LeasingAgentProps = {
-  address?: AddressType
-  email?: string
-  name?: string
-  officeHours?: string
-  phone?: string
-  title?: string
-  managementWebsite?: string
-}
+import {
+  FeatureFlagEnum,
+  Jurisdiction,
+  Listing,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { isFeatureFlagOn } from "../../../lib/helpers"
 
 export const formatPhone = (phone: string) => {
   return phone.replace(/[-() ]/g, "")
 }
 
-export const LeasingAgent = ({
-  address,
-  email,
-  name,
-  officeHours,
-  phone,
-  title,
-  managementWebsite,
-}: LeasingAgentProps) => {
-  if (!address && !email && !name && !officeHours && !phone && !managementWebsite) return
+type LeasingAgentProps = {
+  listing: Listing
+  jurisdiction?: Jurisdiction
+}
+export const LeasingAgent = ({ listing, jurisdiction }: LeasingAgentProps) => {
+  const {
+    listingsLeasingAgentAddress: address,
+    leasingAgentEmail: email,
+    leasingAgentName: name,
+    leasingAgentOfficeHours: officeHours,
+    leasingAgentPhone: phone,
+    leasingAgentTitle: title,
+  } = listing
+  const managementWebsite = isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableCompanyWebsite)
+    ? listing.managementWebsite
+    : undefined
+  if (!address && !email && !name && !officeHours && !title && !phone && !managementWebsite) return
+
+  const enableLeasingAgentAltText = isFeatureFlagOn(
+    jurisdiction,
+    FeatureFlagEnum.enableLeasingAgentAltText
+  )
+
+  const leasingAgentContactText = enableLeasingAgentAltText
+    ? t("leasingAgent.contactManagerProp")
+    : t("leasingAgent.contact")
+
   return (
     <Card className={`${styles["mobile-full-width-card"]} ${styles["mobile-no-bottom-border"]}`}>
       <Card.Section>
         <Heading size={"lg"} priority={2} className={"seeds-m-be-header"}>
-          {t("leasingAgent.contact")}
+          {leasingAgentContactText}
         </Heading>
         {name && <p className={`${styles["thin-heading"]} seeds-m-be-text`}>{name}</p>}
         {title && <p>{title}</p>}
