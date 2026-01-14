@@ -124,8 +124,6 @@ const ListingForm = ({
     smokingPolicy: rawDefaultValues?.smokingPolicy ?? "",
   }
 
-  console.log({ rawDefaultValues })
-
   const formMethods = useForm<FormListing>({
     defaultValues,
     mode: "onBlur",

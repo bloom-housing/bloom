@@ -413,7 +413,6 @@ export const getFilterQueryFromURL = (url: ParsedUrlQuery) => {
 export const encodeFilterDataToQuery = (data: FilterData): string => {
   const queryArr = []
   const cleanedFilterData = removeUnselectedFilterData(data)
-  console.log({ data })
   Object.entries(cleanedFilterData).forEach(([filterType, userSelections]) => {
     if (arrayFilters.includes(ListingFilterKeys[filterType])) {
       const arrParam = `${ListingFilterKeys[filterType]}=${Object.keys(userSelections).join(",")}`
