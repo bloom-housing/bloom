@@ -57,16 +57,17 @@ const SettingsProperties = () => {
       {
         headerName: t("t.name"),
         field: "name",
+        minWidth: 100,
       },
       {
         headerName: t("t.descriptionTitle"),
         field: "description",
-        flex: 1,
+        minWidth: 130,
       },
       {
         headerName: t("t.url"),
         field: "url",
-        flex: 1,
+        minWidth: 100,
         cellRendererFramework: ({ value }) => {
           return (
             <a href={value} target="_blank">
@@ -86,6 +87,7 @@ const SettingsProperties = () => {
       {
         headerName: t("t.updatedAt"),
         field: "updatedAt",
+        minWidth: 130,
         valueFormatter: ({ value }) => (value ? dayjs(value).format("MM/DD/YYYY") : t("t.none")),
       },
       {
