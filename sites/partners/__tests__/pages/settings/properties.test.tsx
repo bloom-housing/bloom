@@ -295,7 +295,7 @@ describe("<SettingsProperties>", () => {
       within(addDialog).getByRole("heading", { level: 1, name: /add property/i })
     ).toBeInTheDocument()
 
-    expect(within(addDialog).getByRole("textbox", { name: /property label/i })).toBeInTheDocument()
+    expect(within(addDialog).getByRole("textbox", { name: /property name/i })).toBeInTheDocument()
     expect(
       within(addDialog).getByRole("textbox", { name: /property description/i })
     ).toBeInTheDocument()
@@ -348,7 +348,7 @@ describe("<SettingsProperties>", () => {
 
     const editDialog = await screen.findByRole("dialog")
     expect(editDialog)
-    const labelInput = within(editDialog).getByRole("textbox", { name: /property label/i })
+    const labelInput = within(editDialog).getByRole("textbox", { name: /property name/i })
     expect(labelInput).toHaveValue(mockProperty.name)
     const descriptionInput = within(editDialog).getByRole("textbox", {
       name: /property description/i,
@@ -421,7 +421,7 @@ describe("<SettingsProperties>", () => {
       within(addDrawer).getByRole("heading", { level: 1, name: /add property/i })
     ).toBeInTheDocument()
 
-    const labelInput = within(addDrawer).getByRole("textbox", { name: /property label/i })
+    const labelInput = within(addDrawer).getByRole("textbox", { name: /property name/i })
     expect(labelInput).toBeInTheDocument()
     await userEvent.type(labelInput, "New Property")
 
@@ -521,7 +521,7 @@ describe("<SettingsProperties>", () => {
       within(editDrawer).getByRole("heading", { level: 1, name: /edit property/i })
     ).toBeInTheDocument()
 
-    const labelInput = within(editDrawer).getByRole("textbox", { name: /property label/i })
+    const labelInput = within(editDrawer).getByRole("textbox", { name: /property name/i })
     await userEvent.type(labelInput, updatedProperty.name)
 
     const saveButton = screen.getByRole("button", { name: /save/i })
