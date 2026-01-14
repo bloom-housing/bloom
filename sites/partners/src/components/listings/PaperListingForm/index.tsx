@@ -264,7 +264,10 @@ const ListingForm = ({
 
   useEffect(() => {
     if (enableNonRegulatedListings && isNonRegulated) {
-      setValue("listingType", ListingTypeEnum.nonRegulated)
+      setValue(
+        "listingType",
+        isNonRegulated ? ListingTypeEnum.nonRegulated : ListingTypeEnum.regulated
+      )
     }
   }, [enableNonRegulatedListings, isNonRegulated, setValue])
 
