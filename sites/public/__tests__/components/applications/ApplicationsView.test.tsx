@@ -149,7 +149,7 @@ describe("<ApplicationsView>", () => {
     // Dashboard heading
     expect(screen.getByRole("heading", { level: 1, name: /my applications/i })).toBeInTheDocument()
     expect(
-      screen.getByText("See lottery dates and listings for properties for which you've applied")
+      screen.getByText("See listings for properties for which you’ve applied.")
     ).toBeInTheDocument()
 
     // Application section (Missing fallback component)
@@ -173,7 +173,7 @@ describe("<ApplicationsView>", () => {
         screen.getByRole("heading", { level: 1, name: /my applications/i })
       ).toBeInTheDocument()
       expect(
-        screen.getByText("See lottery dates and listings for properties for which you've applied")
+        screen.getByText("See listings for properties for which you’ve applied.")
       ).toBeInTheDocument()
 
       // Application section (Missing fallback component)
@@ -193,13 +193,13 @@ describe("<ApplicationsView>", () => {
 
       const closedApplicationsTab = screen.getByTestId("closed-applications-tab")
       expect(
-        within(closedApplicationsTab).getByText("Applications closed", { selector: "span" })
+        within(closedApplicationsTab).getByText("Closed applications", { selector: "span" })
       ).toBeInTheDocument()
       expect(within(closedApplicationsTab).getByText("0")).toBeInTheDocument()
 
       const openApplicationsTab = screen.getByTestId("open-applications-tab")
       expect(
-        within(openApplicationsTab).getByText("Accepting applications", { selector: "span" })
+        within(openApplicationsTab).getByText("Open applications", { selector: "span" })
       ).toBeInTheDocument()
       expect(within(openApplicationsTab).getByText("0")).toBeInTheDocument()
 
