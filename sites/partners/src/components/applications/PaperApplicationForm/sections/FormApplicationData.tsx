@@ -46,6 +46,9 @@ const FormApplicationData = ({
     applicationStatus === ApplicationStatusEnum.waitlist ||
     applicationStatus === ApplicationStatusEnum.waitlistDeclined
 
+  console.log("accessibleUnitWaitlistNumberValue", accessibleUnitWaitlistNumberValue)
+  console.log("conventionalUnitWaitlistNumberValue", conventionalUnitWaitlistNumberValue)
+
   const applicationStatusOptions = Array.from(Object.values(ApplicationStatusEnum))
   return (
     <SectionWithGrid heading={t("application.details.applicationData")}>
@@ -110,56 +113,56 @@ const FormApplicationData = ({
             </Grid.Cell>
           </Grid.Row>
           <Grid.Row columns={3}>
-            {!(isWaitlistStatus && !accessibleUnitWaitlistNumberValue) && (
-              <Grid.Cell>
-                {/* We need active hidden field to send value even when field is disabled */}
+            {/* We need active hidden field to send value even when field is not visible and disabled */}
+            <Grid.Cell
+              className={isWaitlistStatus && !accessibleUnitWaitlistNumberValue ? "hidden" : ""}
+            >
+              <Field
+                className={isWaitlistStatus ? "hidden" : ""}
+                type="number"
+                id="application.accessibleUnitWaitlistNumber"
+                name="application.accessibleUnitWaitlistNumber"
+                label={t("application.details.accessibleUnitWaitlistNumber")}
+                register={register}
+                error={!!errors?.application?.accessibleUnitWaitlistNumber}
+              />
+              {isWaitlistStatus && (
                 <Field
-                  className={isWaitlistStatus ? "hidden" : ""}
                   type="number"
-                  id="application.accessibleUnitWaitlistNumber"
                   name="application.accessibleUnitWaitlistNumber"
                   label={t("application.details.accessibleUnitWaitlistNumber")}
-                  register={register}
-                  error={!!errors?.application?.accessibleUnitWaitlistNumber}
+                  inputProps={{
+                    value: accessibleUnitWaitlistNumberValue,
+                  }}
+                  disabled
                 />
-                {isWaitlistStatus && (
-                  <Field
-                    type="number"
-                    name="application.accessibleUnitWaitlistNumber"
-                    label={t("application.details.accessibleUnitWaitlistNumber")}
-                    inputProps={{
-                      value: accessibleUnitWaitlistNumberValue,
-                    }}
-                    disabled
-                  />
-                )}
-              </Grid.Cell>
-            )}
-            {!(isWaitlistStatus && !conventionalUnitWaitlistNumberValue) && (
-              <Grid.Cell>
-                {/* We need active hidden field to send value even when field is disabled */}
+              )}
+            </Grid.Cell>
+            {/* We need active hidden field to send value even when field is not visible and disabled */}
+            <Grid.Cell
+              className={isWaitlistStatus && !conventionalUnitWaitlistNumberValue ? "hidden" : ""}
+            >
+              <Field
+                className={isWaitlistStatus ? "hidden" : ""}
+                type="number"
+                id="application.conventionalUnitWaitlistNumber"
+                name="application.conventionalUnitWaitlistNumber"
+                label={t("application.details.conventionalUnitWaitlistNumber")}
+                register={register}
+                error={!!errors?.application?.conventionalUnitWaitlistNumber}
+              />
+              {isWaitlistStatus && (
                 <Field
-                  className={isWaitlistStatus ? "hidden" : ""}
                   type="number"
-                  id="application.conventionalUnitWaitlistNumber"
                   name="application.conventionalUnitWaitlistNumber"
                   label={t("application.details.conventionalUnitWaitlistNumber")}
-                  register={register}
-                  error={!!errors?.application?.conventionalUnitWaitlistNumber}
+                  inputProps={{
+                    value: conventionalUnitWaitlistNumberValue,
+                  }}
+                  disabled
                 />
-                {isWaitlistStatus && (
-                  <Field
-                    type="number"
-                    name="application.conventionalUnitWaitlistNumber"
-                    label={t("application.details.conventionalUnitWaitlistNumber")}
-                    inputProps={{
-                      value: conventionalUnitWaitlistNumberValue,
-                    }}
-                    disabled
-                  />
-                )}
-              </Grid.Cell>
-            )}
+              )}
+            </Grid.Cell>
             {reviewOrderType === ReviewOrderTypeEnum.lottery && (
               <Grid.Cell>
                 <Field
