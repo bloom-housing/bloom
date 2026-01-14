@@ -161,7 +161,7 @@ const SettingsProperties = () => {
       <Layout>
         <Head>
           <title>
-            {`${"t.settings"} - ${t("settings.properties")} - ${t("nav.siteTitlePartners")}`}
+            {`${t("t.settings")} - ${t("settings.properties")} - ${t("nav.siteTitlePartners")}`}
           </title>
         </Head>
         <NavigationHeader className="relative" title={t("t.settings")} />
