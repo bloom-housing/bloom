@@ -16,6 +16,13 @@ const DetailBuildingDetails = () => {
     listing.jurisdictions.id
   )
 
+  const enableConfigurableRegions = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableConfigurableRegions,
+    listing.jurisdictions.id
+  )
+
+  const showInitialRegion = enableRegions || enableConfigurableRegions
+
   return (
     <SectionWithGrid heading={t("listings.sections.buildingDetailsTitle")} inset>
       <SectionWithGrid.HeadingRow>
@@ -55,12 +62,22 @@ const DetailBuildingDetails = () => {
                 {listing.listingsBuildingAddress?.zipCode}
               </FieldValue>
             </Grid.Cell>
-            {enableRegions ? (
-              <Grid.Cell className="seeds-grid-span-12">
-                <FieldValue id="buildingAdress.region" label={t("t.region")}>
-                  {listing.region ? listing.region.toString().replace("_", " ") : t("t.n/a")}
-                </FieldValue>
-              </Grid.Cell>
+            {showInitialRegion ? (
+              <>
+                {enableRegions ? (
+                  <Grid.Cell className="seeds-grid-span-2">
+                    <FieldValue id="buildingAddress.region" label={t("t.region")}>
+                      {listing.region ? listing.region.toString().replace("_", " ") : t("t.n/a")}
+                    </FieldValue>
+                  </Grid.Cell>
+                ) : (
+                  <Grid.Cell className="seeds-grid-span-2">
+                    <FieldValue id="buildingAddress.configurableRegion" label={t("t.region")}>
+                      {listing.configurableRegion ? listing.configurableRegion : t("t.n/a")}
+                    </FieldValue>
+                  </Grid.Cell>
+                )}
+              </>
             ) : (
               <Grid.Cell className="seeds-grid-span-2">
                 <FieldValue id="yearBuilt" label={t("listings.yearBuilt")}>
@@ -82,10 +99,10 @@ const DetailBuildingDetails = () => {
                   listing.listingsBuildingAddress.latitude.toString()}
               </FieldValue>
             </Grid.Cell>
-            {enableRegions && (
+            {showInitialRegion && (
               <Grid.Cell>
                 <FieldValue id="yearBuilt" label={t("listings.yearBuilt")}>
-                  {listing.yearBuilt}
+                  {listing.yearBuilt ? listing.yearBuilt : t("t.n/a")}
                 </FieldValue>
               </Grid.Cell>
             )}

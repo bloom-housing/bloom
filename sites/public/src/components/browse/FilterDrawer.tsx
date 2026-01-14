@@ -25,13 +25,14 @@ import {
 import { isTrue } from "../../lib/helpers"
 
 export interface FilterDrawerProps {
+  activeFeatureFlags?: FeatureFlagEnum[]
   filterState: FilterData
   isOpen: boolean
+  multiselectData: MultiselectQuestion[]
+  onClear: (resetFilters: (data: FilterData) => void) => void
   onClose: () => void
   onSubmit: (data: FilterData) => void
-  onClear: (resetFilters: (data: FilterData) => void) => void
-  multiselectData: MultiselectQuestion[]
-  activeFeatureFlags?: FeatureFlagEnum[]
+  regions?: string[]
 }
 
 const FilterDrawer = (props: FilterDrawerProps) => {
@@ -49,6 +50,14 @@ const FilterDrawer = (props: FilterDrawerProps) => {
 
   const enableUnitGroups = props.activeFeatureFlags?.some(
     (entry) => entry === FeatureFlagEnum.enableUnitGroups
+  )
+
+  const enableRegions = props.activeFeatureFlags?.some(
+    (entry) => entry === FeatureFlagEnum.enableRegions
+  )
+
+  const enableConfigurableRegions = props.activeFeatureFlags?.some(
+    (entry) => entry === FeatureFlagEnum.enableConfigurableRegions
   )
 
   const availabilityLabels = getAvailabilityValues(enableUnitGroups).map((key) =>
@@ -121,17 +130,34 @@ const FilterDrawer = (props: FilterDrawerProps) => {
             clearErrors={clearErrors}
             errors={errors}
           />
-          <CheckboxGroup
-            groupLabel={t("t.region")}
-            fields={Object.keys(RegionEnum).map((region) => {
-              return {
-                key: `${ListingFilterKeys.regions}.${region}`,
-                label: region.replace("_", " "),
-                defaultChecked: isTrue(props.filterState?.[ListingFilterKeys.regions]?.[region]),
-              }
-            })}
-            register={register}
-          />
+          {enableRegions && (
+            <CheckboxGroup
+              groupLabel={t("t.region")}
+              fields={Object.keys(RegionEnum).map((region) => {
+                return {
+                  key: `${ListingFilterKeys.regions}.${region}`,
+                  label: region.replace("_", " "),
+                  defaultChecked: isTrue(props.filterState?.[ListingFilterKeys.regions]?.[region]),
+                }
+              })}
+              register={register}
+            />
+          )}
+          {enableConfigurableRegions && (
+            <CheckboxGroup
+              groupLabel={t("t.region")}
+              fields={props.regions?.map((region) => {
+                return {
+                  key: `${ListingFilterKeys.configurableRegions}.${region}`,
+                  label: region,
+                  defaultChecked: isTrue(
+                    props.filterState?.[ListingFilterKeys.configurableRegions]?.[region]
+                  ),
+                }
+              })}
+              register={register}
+            />
+          )}
           <CheckboxGroup
             groupLabel={t("eligibility.accessibility.title")}
             fields={buildDefaultFilterFields(

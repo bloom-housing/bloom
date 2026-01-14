@@ -425,7 +425,7 @@ export class ListingsService {
     })
   }
   /**
-   * Get listings by assigned porperty ID
+   * Get listings by assigned property ID
    */
   retrieveListingsByProperty(
     params: {
@@ -3052,7 +3052,7 @@ export class PropertiesService {
       /**  */
       search?: string
       /**  */
-      filter?: any | null[]
+      jurisdiction?: string
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<PaginatedProperty> {
@@ -3064,7 +3064,7 @@ export class PropertiesService {
         page: params["page"],
         limit: params["limit"],
         search: params["search"],
-        filter: params["filter"],
+        jurisdiction: params["jurisdiction"],
       }
 
       /** 适配ios13，get请求不允许带body */
@@ -3244,7 +3244,10 @@ export interface ListingFilterParams {
   neighborhood?: string
 
   /**  */
-  regions?: RegionEnum[]
+  regions?: []
+
+  /**  */
+  configurableRegions?: []
 
   /**  */
   reservedCommunityTypes?: string[]
@@ -4398,6 +4401,9 @@ export interface Listing {
   region?: RegionEnum
 
   /**  */
+  configurableRegion?: string
+
+  /**  */
   petPolicy?: string
 
   /**  */
@@ -5244,6 +5250,9 @@ export interface ListingCreate {
   region?: RegionEnum
 
   /**  */
+  configurableRegion?: string
+
+  /**  */
   petPolicy?: string
 
   /**  */
@@ -5985,6 +5994,9 @@ export interface ListingUpdate {
 
   /**  */
   region?: RegionEnum
+
+  /**  */
+  configurableRegion?: string
 
   /**  */
   petPolicy?: string
@@ -6981,6 +6993,9 @@ export interface JurisdictionCreate {
 
   /**  */
   visibleNeighborhoodAmenities: NeighborhoodAmenitiesEnum[]
+
+  /**  */
+  regions: []
 }
 
 export interface JurisdictionUpdate {
@@ -7046,6 +7061,9 @@ export interface JurisdictionUpdate {
 
   /**  */
   visibleNeighborhoodAmenities: NeighborhoodAmenitiesEnum[]
+
+  /**  */
+  regions: []
 }
 
 export interface FeatureFlag {
@@ -7146,6 +7164,9 @@ export interface Jurisdiction {
 
   /**  */
   visibleNeighborhoodAmenities: NeighborhoodAmenitiesEnum[]
+
+  /**  */
+  regions: []
 }
 
 export interface MultiselectOptionCreate {
@@ -7737,38 +7758,6 @@ export interface HouseholdMemberUpdate {
 
   /**  */
   householdMemberWorkAddress?: AddressCreate
-}
-
-export interface AddressUpdate {
-  /**  */
-  placeName?: string
-
-  /**  */
-  city: string
-
-  /**  */
-  county?: string
-
-  /**  */
-  state: string
-
-  /**  */
-  street: string
-
-  /**  */
-  street2?: string
-
-  /**  */
-  zipCode: string
-
-  /**  */
-  latitude?: number
-
-  /**  */
-  longitude?: number
-
-  /**  */
-  id?: string
 }
 
 export interface ApplicationSelectionOptionCreate {
@@ -8581,6 +8570,9 @@ export interface PropertyUpdate {
   id: string
 
   /**  */
+  name: string
+
+  /**  */
   description?: string
 
   /**  */
@@ -8591,9 +8583,6 @@ export interface PropertyUpdate {
 
   /**  */
   jurisdictions?: IdDTO
-
-  /**  */
-  name?: string
 }
 
 export interface PropertyQueryParams {
@@ -8605,14 +8594,6 @@ export interface PropertyQueryParams {
 
   /**  */
   search?: string
-
-  /**  */
-  filter?: string[]
-}
-
-export interface PropertyFilterParams {
-  /**  */
-  $comparison: EnumPropertyFilterParamsComparison
 
   /**  */
   jurisdiction?: string
@@ -8639,13 +8620,6 @@ export enum HomeTypeEnum {
   "duplex" = "duplex",
   "house" = "house",
   "townhome" = "townhome",
-}
-
-export enum RegionEnum {
-  "Greater_Downtown" = "Greater_Downtown",
-  "Eastside" = "Eastside",
-  "Southwest" = "Southwest",
-  "Westside" = "Westside",
 }
 
 export enum ListingsStatusEnum {
@@ -8717,11 +8691,19 @@ export enum ListingFilterKeys {
   "name" = "name",
   "neighborhood" = "neighborhood",
   "regions" = "regions",
+  "configurableRegions" = "configurableRegions",
   "reservedCommunityTypes" = "reservedCommunityTypes",
   "section8Acceptance" = "section8Acceptance",
   "status" = "status",
   "zipCode" = "zipCode",
   "listingType" = "listingType",
+}
+
+export enum RegionEnum {
+  "Greater_Downtown" = "Greater_Downtown",
+  "Eastside" = "Eastside",
+  "Southwest" = "Southwest",
+  "Westside" = "Westside",
 }
 
 export enum ApplicationAddressTypeEnum {
@@ -8980,6 +8962,7 @@ export enum FeatureFlagEnum {
   "enableAdditionalResources" = "enableAdditionalResources",
   "enableApplicationStatus" = "enableApplicationStatus",
   "enableCompanyWebsite" = "enableCompanyWebsite",
+  "enableConfigurableRegions" = "enableConfigurableRegions",
   "enableCreditScreeningFee" = "enableCreditScreeningFee",
   "enableFullTimeStudentQuestion" = "enableFullTimeStudentQuestion",
   "enableGeocodingPreferences" = "enableGeocodingPreferences",
@@ -9073,13 +9056,4 @@ export enum ModificationEnum {
 export enum MfaType {
   "sms" = "sms",
   "email" = "email",
-}
-export enum EnumPropertyFilterParamsComparison {
-  "=" = "=",
-  "<>" = "<>",
-  "IN" = "IN",
-  ">=" = ">=",
-  "<=" = "<=",
-  "LIKE" = "LIKE",
-  "NA" = "NA",
 }

@@ -124,6 +124,8 @@ const ListingForm = ({
     smokingPolicy: rawDefaultValues?.smokingPolicy ?? "",
   }
 
+  console.log({ rawDefaultValues })
+
   const formMethods = useForm<FormListing>({
     defaultValues,
     mode: "onBlur",
@@ -263,8 +265,11 @@ const ListingForm = ({
   )
 
   useEffect(() => {
-    if (enableNonRegulatedListings && isNonRegulated) {
-      setValue("listingType", ListingTypeEnum.nonRegulated)
+    if (enableNonRegulatedListings) {
+      setValue(
+        "listingType",
+        isNonRegulated ? ListingTypeEnum.nonRegulated : ListingTypeEnum.regulated
+      )
     }
   }, [enableNonRegulatedListings, isNonRegulated, setValue])
 
@@ -548,11 +553,16 @@ const ListingForm = ({
                           <BuildingDetails
                             customMapPositionChosen={customMapPositionChosen}
                             requiredFields={requiredFields}
+                            enableConfigurableRegions={doJurisdictionsHaveFeatureFlagOn(
+                              FeatureFlagEnum.enableConfigurableRegions,
+                              jurisdictionId
+                            )}
                             enableNonRegulatedListings={enableNonRegulatedListings}
                             enableRegions={doJurisdictionsHaveFeatureFlagOn(
                               FeatureFlagEnum.enableRegions,
                               jurisdictionId
                             )}
+                            regions={selectedJurisdictionData?.regions}
                             latLong={latLong}
                             listing={listing}
                             setCustomMapPositionChosen={setCustomMapPositionChosen}
