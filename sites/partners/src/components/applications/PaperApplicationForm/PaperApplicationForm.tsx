@@ -243,7 +243,10 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
               <Form id="application-form" onSubmit={handleSubmit(triggerSubmit, onError)}>
                 <div className="flex flex-row flex-wrap">
                   <div className="info-card md:w-9/12">
-                    <FormApplicationData enableApplicationStatus={enableApplicationStatus} />
+                    <FormApplicationData
+                      enableApplicationStatus={enableApplicationStatus}
+                      reviewOrderType={listingDto?.reviewOrderType}
+                    />
 
                     <FormPrimaryApplicant
                       enableFullTimeStudentQuestion={enableFullTimeStudentQuestion}
