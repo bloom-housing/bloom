@@ -46,9 +46,6 @@ const FormApplicationData = ({
     applicationStatus === ApplicationStatusEnum.waitlist ||
     applicationStatus === ApplicationStatusEnum.waitlistDeclined
 
-  console.log("accessibleUnitWaitlistNumberValue", accessibleUnitWaitlistNumberValue)
-  console.log("conventionalUnitWaitlistNumberValue", conventionalUnitWaitlistNumberValue)
-
   const applicationStatusOptions = Array.from(Object.values(ApplicationStatusEnum))
   return (
     <SectionWithGrid heading={t("application.details.applicationData")}>
@@ -115,10 +112,10 @@ const FormApplicationData = ({
           <Grid.Row columns={3}>
             {/* We need active hidden field to send value even when field is not visible and disabled */}
             <Grid.Cell
-              className={isWaitlistStatus && !accessibleUnitWaitlistNumberValue ? "hidden" : ""}
+              className={isWaitlistStatus || accessibleUnitWaitlistNumberValue ? "" : "hidden"}
             >
               <Field
-                className={isWaitlistStatus ? "hidden" : ""}
+                className={isWaitlistStatus ? "" : "hidden"}
                 type="number"
                 id="application.accessibleUnitWaitlistNumber"
                 name="application.accessibleUnitWaitlistNumber"
@@ -126,7 +123,7 @@ const FormApplicationData = ({
                 register={register}
                 error={!!errors?.application?.accessibleUnitWaitlistNumber}
               />
-              {isWaitlistStatus && (
+              {!isWaitlistStatus && (
                 <Field
                   type="number"
                   name="application.accessibleUnitWaitlistNumber"
@@ -140,10 +137,10 @@ const FormApplicationData = ({
             </Grid.Cell>
             {/* We need active hidden field to send value even when field is not visible and disabled */}
             <Grid.Cell
-              className={isWaitlistStatus && !conventionalUnitWaitlistNumberValue ? "hidden" : ""}
+              className={isWaitlistStatus || conventionalUnitWaitlistNumberValue ? "" : "hidden"}
             >
               <Field
-                className={isWaitlistStatus ? "hidden" : ""}
+                className={isWaitlistStatus ? "" : "hidden"}
                 type="number"
                 id="application.conventionalUnitWaitlistNumber"
                 name="application.conventionalUnitWaitlistNumber"
@@ -151,7 +148,7 @@ const FormApplicationData = ({
                 register={register}
                 error={!!errors?.application?.conventionalUnitWaitlistNumber}
               />
-              {isWaitlistStatus && (
+              {!isWaitlistStatus && (
                 <Field
                   type="number"
                   name="application.conventionalUnitWaitlistNumber"
