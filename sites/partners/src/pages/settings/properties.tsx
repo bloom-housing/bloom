@@ -130,6 +130,9 @@ const SettingsProperties = () => {
               id: selectedProperty.id,
             },
           })
+          .then(() => {
+            addToast(t("properties.alertUpdated"), { variant: "success" })
+          })
           .catch((e) => {
             addToast(t(`errors.alert.badRequest`), { variant: "alert" })
             console.log(e)
@@ -145,6 +148,9 @@ const SettingsProperties = () => {
         propertiesService
           .add({
             body: propertyData,
+          })
+          .then(() => {
+            addToast(t("properties.alertCreated"), { variant: "success" })
           })
           .catch((e) => {
             addToast(t(`errors.alert.badRequest`), { variant: "alert" })
