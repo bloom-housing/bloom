@@ -433,7 +433,7 @@ describe("<ApplicationsView>", () => {
       })
     })
 
-    it("should not display application status when feature flag is disabled", () => {
+    it("should not display application status when feature flag is disabled", async () => {
       const mockApps = getApplications(1, 0, 0)
       mockApps.displayApplications[0].status = ApplicationStatusEnum.submitted
 
@@ -446,11 +446,11 @@ describe("<ApplicationsView>", () => {
       renderApplicationsView(ApplicationsIndexEnum.all, false)
 
       // Should show "Accepting applications" (Open applications) instead of "Submitted"
-      expect(screen.getByText("Accepting applications")).toBeInTheDocument()
+      expect(await screen.findByText("Open applications")).toBeInTheDocument()
       expect(screen.queryByText("Submitted")).not.toBeInTheDocument()
     })
 
-    it("should not display duplicate status when feature flag is disabled", () => {
+    it("should not display duplicate status when feature flag is disabled", async () => {
       const mockApps = getApplications(1, 0, 0)
       mockApps.displayApplications[0].markedAsDuplicate = true
 
@@ -463,7 +463,7 @@ describe("<ApplicationsView>", () => {
       renderApplicationsView(ApplicationsIndexEnum.all, false)
 
       // Should show "Accepting applications" (Open applications) instead of "Duplicate"
-      expect(screen.getByText("Accepting applications")).toBeInTheDocument()
+      expect(await screen.findByText("Open applications")).toBeInTheDocument()
       expect(screen.queryByText("Duplicate")).not.toBeInTheDocument()
     })
   })
