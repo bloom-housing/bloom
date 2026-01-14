@@ -209,18 +209,3 @@
 .darker-help-text {
   --field-value-help-text-color: var(--seeds-input-text-label-color);
 }
-
-.field-value-field-style {
-  [data-part="label"] {
-    font-family: var(--seeds-font-sans);
-    margin-bottom: 0;
-    padding-bottom: var(--seeds-s2);
-    padding-top: var(--seeds-s0_5);
-  }
-
-  [data-part="value"] {
-    margin-top: 0;
-    padding-top: calc(0.75rem + 1px);
-    padding-left: calc(0.75rem + 1px);
-  }
-}

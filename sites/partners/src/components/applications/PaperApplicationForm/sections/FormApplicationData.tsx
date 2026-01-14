@@ -7,7 +7,7 @@ import {
   DateFieldValues,
   Field,
 } from "@bloom-housing/ui-components"
-import { Grid, FieldValue } from "@bloom-housing/ui-seeds"
+import { Grid } from "@bloom-housing/ui-seeds"
 import {
   LanguagesEnum,
   ApplicationStatusEnum,
@@ -110,44 +110,54 @@ const FormApplicationData = ({
             </Grid.Cell>
           </Grid.Row>
           <Grid.Row columns={3}>
-            <Grid.Cell className={isWaitlistStatus ? "" : "hidden"}>
-              <Field
-                type="number"
-                id="application.accessibleUnitWaitlistNumber"
-                name="application.accessibleUnitWaitlistNumber"
-                label={t("application.details.accessibleUnitWaitlistNumber")}
-                register={register}
-                error={!!errors?.application?.accessibleUnitWaitlistNumber}
-              />
-            </Grid.Cell>
-            {!!accessibleUnitWaitlistNumberValue && !isWaitlistStatus && (
+            {!(isWaitlistStatus && !accessibleUnitWaitlistNumberValue) && (
               <Grid.Cell>
-                <FieldValue
+                {/* We need active hidden field to send value even when field is disabled */}
+                <Field
+                  className={isWaitlistStatus ? "hidden" : ""}
+                  type="number"
+                  id="application.accessibleUnitWaitlistNumber"
+                  name="application.accessibleUnitWaitlistNumber"
                   label={t("application.details.accessibleUnitWaitlistNumber")}
-                  className="field-value-field-style"
-                >
-                  {accessibleUnitWaitlistNumberValue}
-                </FieldValue>
+                  register={register}
+                  error={!!errors?.application?.accessibleUnitWaitlistNumber}
+                />
+                {isWaitlistStatus && (
+                  <Field
+                    type="number"
+                    name="application.accessibleUnitWaitlistNumber"
+                    label={t("application.details.accessibleUnitWaitlistNumber")}
+                    inputProps={{
+                      value: accessibleUnitWaitlistNumberValue,
+                    }}
+                    disabled
+                  />
+                )}
               </Grid.Cell>
             )}
-            <Grid.Cell className={isWaitlistStatus ? "" : "hidden"}>
-              <Field
-                type="number"
-                id="application.conventionalUnitWaitlistNumber"
-                name="application.conventionalUnitWaitlistNumber"
-                label={t("application.details.conventionalUnitWaitlistNumber")}
-                register={register}
-                error={!!errors?.application?.conventionalUnitWaitlistNumber}
-              />
-            </Grid.Cell>
-            {!!conventionalUnitWaitlistNumberValue && !isWaitlistStatus && (
+            {!(isWaitlistStatus && !conventionalUnitWaitlistNumberValue) && (
               <Grid.Cell>
-                <FieldValue
+                {/* We need active hidden field to send value even when field is disabled */}
+                <Field
+                  className={isWaitlistStatus ? "hidden" : ""}
+                  type="number"
+                  id="application.conventionalUnitWaitlistNumber"
+                  name="application.conventionalUnitWaitlistNumber"
                   label={t("application.details.conventionalUnitWaitlistNumber")}
-                  className="field-value-field-style"
-                >
-                  {conventionalUnitWaitlistNumberValue}
-                </FieldValue>
+                  register={register}
+                  error={!!errors?.application?.conventionalUnitWaitlistNumber}
+                />
+                {isWaitlistStatus && (
+                  <Field
+                    type="number"
+                    name="application.conventionalUnitWaitlistNumber"
+                    label={t("application.details.conventionalUnitWaitlistNumber")}
+                    inputProps={{
+                      value: conventionalUnitWaitlistNumberValue,
+                    }}
+                    disabled
+                  />
+                )}
               </Grid.Cell>
             )}
             {reviewOrderType === ReviewOrderTypeEnum.lottery && (
