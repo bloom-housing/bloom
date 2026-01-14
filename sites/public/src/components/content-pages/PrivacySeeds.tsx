@@ -4,7 +4,7 @@ import Markdown from "markdown-to-jsx"
 import { PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../../lib/constants"
 import Layout from "../../layouts/application"
-import pageContent from "../../md_content/privacy_policy.md"
+import pageContent from "../../md_content/generic_content.md"
 import { PageHeaderLayout } from "../../patterns/PageHeaderLayout"
 import styles from "../../patterns/PageHeaderLayout.module.scss"
 
