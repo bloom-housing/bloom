@@ -202,7 +202,7 @@ export const getFeatures = (
       features.push({
         heading: t("t.petsPolicy"),
         content: (
-          <ul>
+          <ul data-testid="pet-policy-list">
             {petPolicy.map((petPolicyItem, index) => (
               <li key={index} className={styles["list-item"]}>
                 {petPolicyItem}

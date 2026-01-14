@@ -54,7 +54,7 @@ const DetailBuildingFeatures = () => {
 
     if (petPolicyStrings.length > 0) {
       return (
-        <ul className={"flex flex-wrap"}>
+        <ul className={"flex flex-wrap"} data-testid="pet-policy-list">
           {petPolicyStrings.map((item, index) => (
             <li className={"list-disc mx-5 mb-1 md:w-1/3 w-full grow"} key={index}>
               {item}
