@@ -7,9 +7,6 @@ import { application, listing, user } from "@bloom-housing/shared-helpers/__test
 import ApplicationsList from "../../../src/pages/application/[id]"
 import {
   AlternateContactRelationship,
-  ApplicationStatusEnum,
-  LanguagesEnum,
-  ReviewOrderTypeEnum,
   UnitTypeEnum,
   YesNoEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
