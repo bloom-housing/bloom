@@ -119,6 +119,13 @@ export const PropertyDrawer = ({
                       errors,
                       clearErrors
                     )}
+                    type="url"
+                    error={!!errors?.url}
+                    errorMessage={
+                      errors?.url?.type === "https"
+                        ? t("errors.urlHttpsError")
+                        : t("errors.urlError")
+                    }
                   />
                 </Grid.Cell>
                 <Grid.Cell>
