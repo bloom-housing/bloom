@@ -58,11 +58,13 @@ const SettingsProperties = () => {
         headerName: t("t.name"),
         field: "name",
         minWidth: 100,
+        flex: 1,
       },
       {
         headerName: t("t.descriptionTitle"),
         field: "description",
         minWidth: 130,
+        flex: 1,
       },
       {
         headerName: t("t.url"),
