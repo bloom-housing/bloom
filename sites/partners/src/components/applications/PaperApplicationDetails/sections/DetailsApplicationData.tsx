@@ -4,12 +4,17 @@ import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { ApplicationContext } from "../../ApplicationContext"
 import { convertDataToLocal } from "../../../../lib/helpers"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
+import { ReviewOrderTypeEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 type DetailsApplicationDataProps = {
   enableApplicationStatus?: boolean
+  reviewOrderType?: ReviewOrderTypeEnum
 }
 
-const DetailsApplicationData = ({ enableApplicationStatus }: DetailsApplicationDataProps) => {
+const DetailsApplicationData = ({
+  enableApplicationStatus,
+  reviewOrderType,
+}: DetailsApplicationDataProps) => {
   const application = useContext(ApplicationContext)
 
   const applicationDate = useMemo(() => {
@@ -84,9 +89,11 @@ const DetailsApplicationData = ({ enableApplicationStatus }: DetailsApplicationD
             </FieldValue>
           </Grid.Cell>
           <Grid.Cell>
-            <FieldValue label={t("application.details.manualLotteryPositionNumber")}>
-              {application.manualLotteryPositionNumber ?? t("t.n/a")}
-            </FieldValue>
+            {reviewOrderType === ReviewOrderTypeEnum.lottery && (
+              <FieldValue label={t("application.details.manualLotteryPositionNumber")}>
+                {application.manualLotteryPositionNumber ?? t("t.n/a")}
+              </FieldValue>
+            )}
           </Grid.Cell>
         </Grid.Row>
       )}

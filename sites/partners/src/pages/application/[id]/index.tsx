@@ -128,7 +128,10 @@ const ApplicationsList = () => {
 
             <div className="flex flex-row flex-wrap ">
               <div className="info-card md:w-9/12">
-                <DetailsApplicationData enableApplicationStatus={enableApplicationStatus} />
+                <DetailsApplicationData
+                  enableApplicationStatus={enableApplicationStatus}
+                  reviewOrderType={listingDto?.reviewOrderType}
+                />
 
                 <DetailsPrimaryApplicant
                   enableFullTimeStudentQuestion={enableFullTimeStudentQuestion}
