@@ -160,8 +160,12 @@ describe("<FormApplicationData>", () => {
       const statusSelect = screen.getByLabelText(/status/i)
       await userEvent.selectOptions(statusSelect, ApplicationStatusEnum.waitlist)
 
-      expect(screen.getByLabelText(/accessible unit waitlist \(AUWL\)/i)).toBeInTheDocument()
-      expect(screen.getByLabelText(/conventional unit waitlist \(CUWL\)/i)).toBeInTheDocument()
+      const auwlInput = screen.getByLabelText(/accessible unit waitlist \(AUWL\)/i)
+      const cuwlInput = screen.getByLabelText(/conventional unit waitlist \(CUWL\)/i)
+      expect(auwlInput).toBeInTheDocument()
+      expect(cuwlInput).toBeInTheDocument()
+      expect(auwlInput.closest(".hidden")).not.toBeInTheDocument()
+      expect(cuwlInput.closest(".hidden")).not.toBeInTheDocument()
       expect(screen.queryByLabelText(/lottery number/i)).not.toBeInTheDocument()
     })
 
@@ -175,8 +179,12 @@ describe("<FormApplicationData>", () => {
       const statusSelect = screen.getByLabelText(/status/i)
       await userEvent.selectOptions(statusSelect, ApplicationStatusEnum.waitlistDeclined)
 
-      expect(screen.getByLabelText(/accessible unit waitlist \(AUWL\)/i)).toBeInTheDocument()
-      expect(screen.getByLabelText(/conventional unit waitlist \(CUWL\)/i)).toBeInTheDocument()
+      const auwlInput = screen.getByLabelText(/accessible unit waitlist \(AUWL\)/i)
+      const cuwlInput = screen.getByLabelText(/conventional unit waitlist \(CUWL\)/i)
+      expect(auwlInput).toBeInTheDocument()
+      expect(cuwlInput).toBeInTheDocument()
+      expect(auwlInput.closest(".hidden")).not.toBeInTheDocument()
+      expect(cuwlInput.closest(".hidden")).not.toBeInTheDocument()
     })
 
     it("does not render waitlist fields when status is not waitlist and no numbers are present", async () => {
