@@ -10,7 +10,6 @@ import {
   ApplicationOrderByKeys,
   EnumListingFilterParamsComparison,
   EnumMultiselectQuestionFilterParamsComparison,
-  EnumPropertyFilterParamsComparison,
   ListingViews,
   MultiselectQuestionFilterParams,
   MultiselectQuestionsApplicationSectionEnum,
@@ -717,7 +716,7 @@ export function usePropertiesList({ page, limit, search, jurisdictions }: UsePro
   }
 
   params.filter.push({
-    $comparison: EnumPropertyFilterParamsComparison.IN,
+    $comparison: "IN",
     jurisdiction: jurisdictions && jurisdictions !== "" ? jurisdictions : undefined,
   })
 
