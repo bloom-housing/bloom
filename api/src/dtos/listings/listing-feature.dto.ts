@@ -8,6 +8,11 @@ export class ListingFeatures extends AbstractDTO {
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
+  accessibleHeightToilet?: boolean;
+
+  @Expose()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
   accessibleParking?: boolean;
 
   @Expose()
@@ -28,7 +33,37 @@ export class ListingFeatures extends AbstractDTO {
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
+  barrierFreePropertyEntrance?: boolean;
+
+  @Expose()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
   barrierFreeUnitEntrance?: boolean;
+
+  @Expose()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  bathGrabBarsOrReinforcements?: boolean;
+
+  @Expose()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  bathroomCounterLowered27?: boolean;
+
+  @Expose()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  brailleSignageInBuilding?: boolean;
+
+  @Expose()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  carbonMonoxideDetectorWithStrobe?: boolean;
+
+  @Expose()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  carpetInUnit?: boolean;
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
@@ -38,12 +73,47 @@ export class ListingFeatures extends AbstractDTO {
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
+  extraAudibleCarbonMonoxideDetector?: boolean;
+
+  @Expose()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  extraAudibleSmokeDetector?: boolean;
+
+  @Expose()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  fireSuppressionSprinklerSystem?: boolean;
+
+  @Expose()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  frontControlsDishwasher?: boolean;
+
+  @Expose()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  frontControlsStoveCookTop?: boolean;
+
+  @Expose()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
   grabBars?: boolean;
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
+  hardFlooringInUnit?: boolean;
+
+  @Expose()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
   hearing?: boolean;
+
+  @Expose()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  hearingAndVision?: boolean;
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
@@ -58,7 +128,22 @@ export class ListingFeatures extends AbstractDTO {
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
+  kitchenCounterLowered27?: boolean;
+
+  @Expose()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
   laundryInBuilding?: boolean;
+
+  @Expose()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  leverHandlesOnDoors?: boolean;
+
+  @Expose()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  leverHandlesOnFaucets?: boolean;
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
@@ -78,7 +163,32 @@ export class ListingFeatures extends AbstractDTO {
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
+  noEntryStairs?: boolean;
+
+  @Expose()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  nonDigitalKitchenAppliances?: boolean;
+
+  @Expose()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  noStairsToParkingSpots?: boolean;
+
+  @Expose()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  noStairsWithinUnit?: boolean;
+
+  @Expose()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
   parkingOnSite?: boolean;
+
+  @Expose()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  refrigeratorWithBottomDoorFreezer?: boolean;
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
@@ -93,7 +203,37 @@ export class ListingFeatures extends AbstractDTO {
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
+  smokeDetectorWithStrobe?: boolean;
+
+  @Expose()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  streetLevelEntrance?: boolean;
+
+  @Expose()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  toiletGrabBarsOrReinforcements?: boolean;
+
+  @Expose()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  ttyAmplifiedPhone?: boolean;
+
+  @Expose()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  turningCircleInBathrooms?: boolean;
+
+  @Expose()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
   visual?: boolean;
+
+  @Expose()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  walkInShower?: boolean;
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
@@ -104,144 +244,4 @@ export class ListingFeatures extends AbstractDTO {
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   wideDoorways?: boolean;
-
-  @Expose()
-  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  @ApiPropertyOptional()
-  noEntryStairs?: boolean;
-
-  @Expose()
-  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  @ApiPropertyOptional()
-  streetLevelEntrance?: boolean;
-
-  @Expose()
-  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  @ApiPropertyOptional()
-  noStairsToParkingSpots?: boolean;
-
-  @Expose()
-  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  @ApiPropertyOptional()
-  barrierFreePropertyEntrance?: boolean;
-
-  @Expose()
-  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  @ApiPropertyOptional()
-  frontControlsStoveCookTop?: boolean;
-
-  @Expose()
-  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  @ApiPropertyOptional()
-  frontControlsDishwasher?: boolean;
-
-  @Expose()
-  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  @ApiPropertyOptional()
-  kitchenCounterLowered27?: boolean;
-
-  @Expose()
-  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  @ApiPropertyOptional()
-  noStairsWithinUnit?: boolean;
-
-  @Expose()
-  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  @ApiPropertyOptional()
-  refrigeratorWithBottomDoorFreezer?: boolean;
-
-  @Expose()
-  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  @ApiPropertyOptional()
-  leverHandlesOnDoors?: boolean;
-
-  @Expose()
-  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  @ApiPropertyOptional()
-  bathroomCounterLowered27?: boolean;
-
-  @Expose()
-  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  @ApiPropertyOptional()
-  toiletGrabBarsOrReinforcements?: boolean;
-
-  @Expose()
-  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  @ApiPropertyOptional()
-  bathGrabBarsOrReinforcements?: boolean;
-
-  @Expose()
-  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  @ApiPropertyOptional()
-  walkInShower?: boolean;
-
-  @Expose()
-  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  @ApiPropertyOptional()
-  accessibleHeightToilet?: boolean;
-
-  @Expose()
-  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  @ApiPropertyOptional()
-  turningCircleInBathrooms?: boolean;
-
-  @Expose()
-  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  @ApiPropertyOptional()
-  hardFlooringInUnit?: boolean;
-
-  @Expose()
-  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  @ApiPropertyOptional()
-  carpetInUnit?: boolean;
-
-  @Expose()
-  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  @ApiPropertyOptional()
-  leverHandlesOnFaucets?: boolean;
-
-  @Expose()
-  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  @ApiPropertyOptional()
-  fireSuppressionSprinklerSystem?: boolean;
-
-  @Expose()
-  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  @ApiPropertyOptional()
-  hearingAndVision?: boolean;
-
-  @Expose()
-  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  @ApiPropertyOptional()
-  brailleSignageInBuilding?: boolean;
-
-  @Expose()
-  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  @ApiPropertyOptional()
-  ttyAmplifiedPhone?: boolean;
-
-  @Expose()
-  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  @ApiPropertyOptional()
-  nonDigitalKitchenAppliances?: boolean;
-
-  @Expose()
-  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  @ApiPropertyOptional()
-  smokeDetectorWithStrobe?: boolean;
-
-  @Expose()
-  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  @ApiPropertyOptional()
-  extraAudibleSmokeDetector?: boolean;
-
-  @Expose()
-  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  @ApiPropertyOptional()
-  carbonMonoxideDetectorWithStrobe?: boolean;
-
-  @Expose()
-  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  @ApiPropertyOptional()
-  extraAudibleCarbonMonoxideDetector?: boolean;
 }
