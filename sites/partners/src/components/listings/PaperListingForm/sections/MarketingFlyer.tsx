@@ -8,6 +8,7 @@ import {
   TableThumbnail,
   FieldGroup,
   StandardTableData,
+  Form,
 } from "@bloom-housing/ui-components"
 import { Button, Card, Drawer, Grid, Heading } from "@bloom-housing/ui-seeds"
 import { cloudinaryUrlFromId } from "@bloom-housing/shared-helpers"
@@ -402,8 +403,8 @@ const MarketingFlyer = ({ currentData, onSubmit }: MarketingFlyerProps) => {
         <Drawer.Header id="marketing-flyer-drawer-header">
           {t("listings.marketingFlyer.add")}
         </Drawer.Header>
-        <form id="marketing-flyer-drawer-form" onSubmit={handleSubmit(onFlyerSubmit)}>
-          <Drawer.Content>
+        <Drawer.Content>
+          <Form id="marketing-flyer-drawer-form" onSubmit={handleSubmit(onFlyerSubmit)}>
             <Card className="mb-8">
               <Card.Section>
                 <FieldGroup
@@ -517,22 +518,28 @@ const MarketingFlyer = ({ currentData, onSubmit }: MarketingFlyerProps) => {
                 )}
               </Card.Section>
             </Card>
-          </Drawer.Content>
-          <Drawer.Footer>
-            <Button id="saveMarketingFlyerButton" key={0} type="submit" variant="primary" size="sm">
-              Save
-            </Button>
-            <Button
-              key={1}
-              type="button"
-              onClick={resetDrawerState}
-              size="sm"
-              variant="primary-outlined"
-            >
-              {t("t.cancel")}
-            </Button>
-          </Drawer.Footer>
-        </form>
+          </Form>
+        </Drawer.Content>
+        <Drawer.Footer>
+          <Button
+            id="saveMarketingFlyerButton"
+            key={0}
+            variant="primary"
+            size="sm"
+            onClick={handleSubmit(onFlyerSubmit)}
+          >
+            Save
+          </Button>
+          <Button
+            key={1}
+            type="button"
+            onClick={resetDrawerState}
+            size="sm"
+            variant="primary-outlined"
+          >
+            {t("t.cancel")}
+          </Button>
+        </Drawer.Footer>
       </Drawer>
     </>
   )

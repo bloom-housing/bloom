@@ -9193,6 +9193,7 @@ export enum FeatureFlagEnum {
   "enableApplicationStatus" = "enableApplicationStatus",
   "enableCompanyWebsite" = "enableCompanyWebsite",
   "enableCreditScreeningFee" = "enableCreditScreeningFee",
+  "enableExpandedAccessibilityFeatures" = "enableExpandedAccessibilityFeatures",
   "enableFullTimeStudentQuestion" = "enableFullTimeStudentQuestion",
   "enableGeocodingPreferences" = "enableGeocodingPreferences",
   "enableGeocodingRadiusMethod" = "enableGeocodingRadiusMethod",

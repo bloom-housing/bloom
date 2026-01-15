@@ -1,4 +1,8 @@
-import { HouseholdMemberRelationship, AlternateContactRelationship } from "../types/backend-swagger"
+import {
+  HouseholdMemberRelationship,
+  AlternateContactRelationship,
+  ListingFeatures,
+} from "../types/backend-swagger"
 
 export const stateKeys = [
   "",
@@ -254,27 +258,84 @@ export const bedroomKeys = [
   "fiveBdrm",
 ]
 
-export const listingFeatures = [
-  "wheelchairRamp",
-  "elevator",
-  "serviceAnimalsAllowed",
+export type ListingFeaturesValues = keyof Omit<ListingFeatures, "id" | "createdAt" | "updatedAt">
+
+export const listingFeatures: ListingFeaturesValues[] = [
   "accessibleParking",
-  "parkingOnSite",
+  "acInUnit",
+  "barrierFreeBathroom",
+  "barrierFreeEntrance",
+  "barrierFreeUnitEntrance",
+  "elevator",
+  "grabBars",
+  "hearing",
+  "heatingInUnit",
   "inUnitWasherDryer",
   "laundryInBuilding",
-  "barrierFreeEntrance",
-  "rollInShower",
-  "grabBars",
-  "heatingInUnit",
-  "acInUnit",
-  "hearing",
-  "mobility",
-  "visual",
-  "barrierFreeUnitEntrance",
-  "loweredLightSwitch",
-  "barrierFreeBathroom",
-  "wideDoorways",
   "loweredCabinets",
+  "loweredLightSwitch",
+  "mobility",
+  "parkingOnSite",
+  "rollInShower",
+  "serviceAnimalsAllowed",
+  "visual",
+  "wideDoorways",
+]
+
+export const expandedMobilityFeatures: ListingFeaturesValues[] = [
+  "accessibleParking",
+  "barrierFreePropertyEntrance",
+  "barrierFreeUnitEntrance",
+  "elevator",
+  "frontControlsDishwasher",
+  "frontControlsStoveCookTop",
+  "kitchenCounterLowered27",
+  "leverHandlesOnDoors",
+  "loweredLightSwitch",
+  "mobility",
+  "noEntryStairs",
+  "noStairsToParkingSpots",
+  "noStairsWithinUnit",
+  "refrigeratorWithBottomDoorFreezer",
+  "streetLevelEntrance",
+  "wheelchairRamp",
+]
+
+export const expandedBathroomFeatures: ListingFeaturesValues[] = [
+  "accessibleHeightToilet",
+  "barrierFreeBathroom",
+  "bathGrabBarsOrReinforcements",
+  "bathroomCounterLowered27",
+  "rollInShower",
+  "toiletGrabBarsOrReinforcements",
+  "turningCircleInBathrooms",
+  "walkInShower",
+  "wideDoorways",
+]
+
+export const expandedFlooringFeatures: ListingFeaturesValues[] = [
+  "carpetInUnit",
+  "hardFlooringInUnit",
+]
+
+export const expandedUtilityFeatures: ListingFeaturesValues[] = [
+  "acInUnit",
+  "fireSuppressionSprinklerSystem",
+  "heatingInUnit",
+  "inUnitWasherDryer",
+  "laundryInBuilding",
+  "leverHandlesOnFaucets",
+]
+
+export const expandedHearingVisionFeatures: ListingFeaturesValues[] = [
+  "brailleSignageInBuilding",
+  "carbonMonoxideDetectorWithStrobe",
+  "extraAudibleCarbonMonoxideDetector",
+  "extraAudibleSmokeDetector",
+  "hearingAndVision",
+  "nonDigitalKitchenAppliances",
+  "smokeDetectorWithStrobe",
+  "ttyAmplifiedPhone",
 ]
 
 export const listingRequiredDocumentsOptions = [
