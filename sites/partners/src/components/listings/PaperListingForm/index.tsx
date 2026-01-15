@@ -19,6 +19,7 @@ import {
   Listing,
   ListingCreate,
   ListingEventsTypeEnum,
+  ListingFeaturesCreate,
   ListingTypeEnum,
   ListingUpdate,
   ListingsStatusEnum,
@@ -71,6 +72,7 @@ import SaveBeforeExitDialog from "./dialogs/SaveBeforeExitDialog"
 
 import * as styles from "./ListingForm.module.scss"
 import AccessibilityFeatures from "./sections/AccessibilityFeatures"
+
 const CHARACTER_LIMIT = 1000
 
 type ListingFormProps = {
@@ -164,6 +166,8 @@ const ListingForm = ({
       return { ...listingProg?.multiselectQuestions }
     })
   )
+
+  const [accessibilityFeatures, setAccessibilityFeatures] = useState<ListingFeaturesCreate>(null)
 
   const [latLong, setLatLong] = useState<LatitudeLongitude>({
     latitude: listing?.listingsBuildingAddress?.latitude ?? null,
@@ -273,6 +277,12 @@ const ListingForm = ({
       )
     }
   }, [enableNonRegulatedListings, isNonRegulated, setValue])
+
+  useEffect(() => {
+    if (listing && listing.listingFeatures && accessibilityFeatures === null) {
+      setAccessibilityFeatures(listing.listingFeatures)
+    }
+  }, [listing, accessibilityFeatures])
 
   useEffect(() => {
     if (listing?.units) {
@@ -607,7 +617,7 @@ const ListingForm = ({
                             requiredFields={requiredFields}
                           />
                           <AccessibilityFeatures
-                            existingFeatures={listing?.listingFeatures}
+                            existingFeatures={accessibilityFeatures}
                             enableAccessibilityFeatures={doJurisdictionsHaveFeatureFlagOn(
                               FeatureFlagEnum.enableAccessibilityFeatures,
                               jurisdictionId
