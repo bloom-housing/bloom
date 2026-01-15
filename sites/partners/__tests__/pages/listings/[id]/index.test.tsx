@@ -836,9 +836,15 @@ describe("listing data", () => {
         expect(screen.getByText("Grab bars in bathrooms")).toBeInTheDocument()
         expect(screen.getByText("Heating in unit")).toBeInTheDocument()
         expect(screen.getByText("AC in unit")).toBeInTheDocument()
-        expect(screen.getByText("Units for those with hearing disabilities")).toBeInTheDocument()
-        expect(screen.getByText("Units for those with visual disabilities")).toBeInTheDocument()
-        expect(screen.getByText("Units for those with mobility disabilities")).toBeInTheDocument()
+        expect(
+          screen.getByText("Units for those with hearing accessibility needs")
+        ).toBeInTheDocument()
+        expect(
+          screen.getByText("Units for those with visual accessibility needs")
+        ).toBeInTheDocument()
+        expect(
+          screen.getByText("Units for those with mobility accessibility needs")
+        ).toBeInTheDocument()
         expect(screen.getByText("Lowered cabinets and countertops")).toBeInTheDocument()
         expect(screen.getByText("Lowered light switches")).toBeInTheDocument()
         expect(screen.getByText("Wide unit doorways for wheelchairs")).toBeInTheDocument()

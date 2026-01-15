@@ -418,13 +418,13 @@ describe("<RentalsFinder>", () => {
     expect(screen.getByRole("checkbox", { name: /heating in unit/i })).toBeInTheDocument()
     expect(screen.getByRole("checkbox", { name: /ac in unit/i })).toBeInTheDocument()
     expect(
-      screen.getByRole("checkbox", { name: /units for those with hearing disabilities/i })
+      screen.getByRole("checkbox", { name: /units for those with hearing accessibility needs/i })
     ).toBeInTheDocument()
     expect(
-      screen.getByRole("checkbox", { name: /units for those with mobility disabilities/i })
+      screen.getByRole("checkbox", { name: /units for those with mobility accessibility needs/i })
     ).toBeInTheDocument()
     expect(
-      screen.getByRole("checkbox", { name: /units for those with visual disabilities/i })
+      screen.getByRole("checkbox", { name: /units for those with visual accessibility needs/i })
     ).toBeInTheDocument()
     expect(
       screen.getByRole("checkbox", { name: /barrier-free \(no-step\) unit entrances/i })
