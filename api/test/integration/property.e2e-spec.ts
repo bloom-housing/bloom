@@ -11,6 +11,7 @@ import { randomUUID } from 'crypto';
 import { userFactory } from '../../prisma/seed-helpers/user-factory';
 import { Login } from '../../src/dtos/auth/login.dto';
 import { jurisdictionFactory } from '../../prisma/seed-helpers/jurisdiction-factory';
+import { Compare } from '../../src/dtos/shared/base-filter.dto';
 
 describe('Properties Controller Tests', () => {
   let app: INestApplication;
@@ -186,7 +187,12 @@ describe('Properties Controller Tests', () => {
 
     it('should get listings matching the jurisdiction filters', async () => {
       let queryParams: PropertyQueryParams = {
-        jurisdiction: jurisdictionBId,
+        filter: [
+          {
+            $comparison: Compare.IN,
+            jurisdiction: jurisdictionBId,
+          },
+        ],
       };
 
       let res = await request(app.getHttpServer())
@@ -209,7 +215,12 @@ describe('Properties Controller Tests', () => {
       );
 
       queryParams = {
-        jurisdiction: jurisdictionAId,
+        filter: [
+          {
+            $comparison: Compare.IN,
+            jurisdiction: jurisdictionAId,
+          },
+        ],
       };
 
       res = await request(app.getHttpServer())
