@@ -192,7 +192,7 @@ export const CheckboxGroup = (props: CheckboxGroupProps) => {
       <legend className={styles["filter-section-label"]}>{props.groupLabel}</legend>
       <Grid spacing="sm">
         <Grid.Row columns={props.customColumnNumber ?? 2}>
-          {props.fields.map((field) => {
+          {props.fields?.map((field) => {
             return (
               <Grid.Cell key={`${field.key}-cell`}>
                 <Field

@@ -1,6 +1,9 @@
 import { INestApplication, Logger } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { ListingsStatusEnum } from '@prisma/client';
+// Issue #4989
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { mockDeep } from 'jest-mock-extended';
 import cookieParser from 'cookie-parser';
 import request from 'supertest';
 import { PrismaService } from '../../src/services/prisma.service';

@@ -3052,7 +3052,7 @@ export class PropertiesService {
       /**  */
       search?: string
       /**  */
-      jurisdiction?: string
+      filter?: any | null[]
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<PaginatedProperty> {
@@ -3064,7 +3064,7 @@ export class PropertiesService {
         page: params["page"],
         limit: params["limit"],
         search: params["search"],
-        jurisdiction: params["jurisdiction"],
+        filter: params["filter"],
       }
 
       /** 适配ios13，get请求不允许带body */
@@ -3244,7 +3244,7 @@ export interface ListingFilterParams {
   neighborhood?: string
 
   /**  */
-  regions?: []
+  regions?: RegionEnum[]
 
   /**  */
   configurableRegions?: []
@@ -8596,7 +8596,7 @@ export interface PropertyQueryParams {
   search?: string
 
   /**  */
-  jurisdiction?: string
+  filter?: string[]
 }
 
 export interface PaginatedProperty {
@@ -8620,6 +8620,13 @@ export enum HomeTypeEnum {
   "duplex" = "duplex",
   "house" = "house",
   "townhome" = "townhome",
+}
+
+export enum RegionEnum {
+  "Greater_Downtown" = "Greater_Downtown",
+  "Eastside" = "Eastside",
+  "Southwest" = "Southwest",
+  "Westside" = "Westside",
 }
 
 export enum ListingsStatusEnum {
@@ -8697,13 +8704,6 @@ export enum ListingFilterKeys {
   "status" = "status",
   "zipCode" = "zipCode",
   "listingType" = "listingType",
-}
-
-export enum RegionEnum {
-  "Greater_Downtown" = "Greater_Downtown",
-  "Eastside" = "Eastside",
-  "Southwest" = "Southwest",
-  "Westside" = "Westside",
 }
 
 export enum ApplicationAddressTypeEnum {

@@ -642,6 +642,7 @@ const ListingForm = ({
                             jurisdictionId
                           ) && <BuildingSelectionCriteria />}
                           <AdditionalDetails
+                            enableNonRegulatedListings={enableNonRegulatedListings}
                             existingDocuments={listing?.requiredDocumentsList}
                             requiredFields={requiredFields}
                           />
@@ -704,6 +705,10 @@ const ListingForm = ({
                           <ApplicationTypes
                             disableCommonApplication={doJurisdictionsHaveFeatureFlagOn(
                               FeatureFlagEnum.disableCommonApplication,
+                              jurisdictionId
+                            )}
+                            enableReferralQuestionUnits={doJurisdictionsHaveFeatureFlagOn(
+                              FeatureFlagEnum.enableReferralQuestionUnits,
                               jurisdictionId
                             )}
                             jurisdiction={jurisdictionId}

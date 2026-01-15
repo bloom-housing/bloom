@@ -547,7 +547,7 @@ export const stagingSeed = async (
   // list of predefined listings WARNING: images only work if image setup is cloudinary on exygy account
   [
     {
-      jurisdictionId: mainJurisdiction.id,
+      jurisdictionId: angelopolisJurisdiction.id,
       listing: hollywoodHillsHeights,
       units: [
         {

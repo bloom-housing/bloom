@@ -375,7 +375,7 @@ describe("listing data", () => {
       it("should display Building Details section - without region", () => {
         render(
           <ListingContext.Provider value={{ ...listing, region: RegionEnum.Southwest }}>
-            <DetailBuildingDetails />
+            <DetailBuildingDetails enableRegions={false} enableConfigurableRegions={false} />
           </ListingContext.Provider>
         )
 
@@ -403,17 +403,9 @@ describe("listing data", () => {
 
       it("should display Building Details section - with region", () => {
         render(
-          <AuthContext.Provider
-            value={{
-              profile: { ...user, jurisdictions: [], listings: [] },
-              doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
-                mockJurisdictionsHaveFeatureFlagOn(featureFlag),
-            }}
-          >
-            <ListingContext.Provider value={{ ...listing, region: RegionEnum.Southwest }}>
-              <DetailBuildingDetails />
-            </ListingContext.Provider>
-          </AuthContext.Provider>
+          <ListingContext.Provider value={{ ...listing, region: RegionEnum.Southwest }}>
+            <DetailBuildingDetails enableRegions={true} enableConfigurableRegions={false} />
+          </ListingContext.Provider>
         )
 
         expect(screen.getByText("Building details")).toBeInTheDocument()
@@ -883,6 +875,9 @@ describe("listing data", () => {
                   barrierFreeBathroom: true,
                   wideDoorways: true,
                   loweredCabinets: true,
+                  id: "1",
+                  createdAt: new Date(),
+                  updatedAt: new Date(),
                 },
               }}
             >
