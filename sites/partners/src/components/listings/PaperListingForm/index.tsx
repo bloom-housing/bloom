@@ -167,7 +167,7 @@ const ListingForm = ({
     })
   )
 
-  const [accessibilityFeatures, setAccessibilityFeatures] = useState<ListingFeaturesCreate>(null)
+  const [accessibilityFeatures, setAccessibilityFeatures] = useState<string[]>(null)
 
   const [latLong, setLatLong] = useState<LatitudeLongitude>({
     latitude: listing?.listingsBuildingAddress?.latitude ?? null,
@@ -278,9 +278,17 @@ const ListingForm = ({
 
   useEffect(() => {
     if (listing && listing.listingFeatures && accessibilityFeatures === null) {
-      setAccessibilityFeatures(listing.listingFeatures)
+      setAccessibilityFeatures(
+        Object.keys(listing.listingFeatures)
+          .map((feature) => {
+            return listing.listingFeatures[feature] === true ? feature : null
+          })
+          .filter((feature) => feature !== null)
+      )
     }
   }, [listing, accessibilityFeatures])
+
+  console.log({ accessibilityFeatures })
 
   useEffect(() => {
     if (listing?.units) {
@@ -619,6 +627,7 @@ const ListingForm = ({
                               FeatureFlagEnum.enableExpandedAccessibilityFeatures,
                               jurisdictionId
                             )}
+                            setAccessibilityFeatures={setAccessibilityFeatures}
                           />
                           <BuildingFeatures
                             enableSmokingPolicyRadio={doJurisdictionsHaveFeatureFlagOn(
