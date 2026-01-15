@@ -41,6 +41,7 @@ import DetailPrograms from "../../../components/listings/PaperListingDetails/sec
 import DetailListingNotes from "../../../components/listings/PaperListingDetails/sections/DetailNotes"
 import CopyListingDialog from "../../../components/listings/PaperListingForm/dialogs/CopyListingDialog"
 import DetailListingVerification from "../../../components/listings/PaperListingDetails/sections/DetailListingVerification"
+import DetailAccessibilityFeatures from "../../../components/listings/PaperListingDetails/sections/DetailAccessibilityFeatures"
 
 interface ListingProps {
   listing: Listing
@@ -131,6 +132,7 @@ export default function ListingDetail(props: ListingProps) {
                     <DetailPreferences />
                     <DetailPrograms />
                     <DetailAdditionalFees />
+                    <DetailAccessibilityFeatures />
                     <DetailBuildingFeatures />
                     <DetailNeighborhoodAmenities />
                     <DetailAdditionalEligibility />

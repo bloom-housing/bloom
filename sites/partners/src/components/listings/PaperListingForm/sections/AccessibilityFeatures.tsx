@@ -10,14 +10,15 @@ import {
   expandedUtilityFeatures,
   expandedHearingVisionFeatures,
 } from "@bloom-housing/shared-helpers"
-import { ListingFeaturesCreate } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 import styles from "../ListingForm.module.scss"
+import { getDetailAccessibilityFeatures } from "../../PaperListingDetails/sections/DetailAccessibilityFeatures"
 
 type AccessibilityFeaturesProps = {
   enableAccessibilityFeatures: boolean
   enableExpandedAccessibilityFeatures: boolean
-  existingFeatures: ListingFeaturesCreate
+  existingFeatures: string[]
+  setAccessibilityFeatures: React.Dispatch<React.SetStateAction<string[]>>
 }
 
 const AccessibilityFeatures = (props: AccessibilityFeaturesProps) => {
@@ -25,13 +26,13 @@ const AccessibilityFeatures = (props: AccessibilityFeaturesProps) => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, setValue, errors, clearErrors, handleSubmit } = formMethods
+  const { register, setValue, errors, clearErrors, handleSubmit, getValues } = formMethods
 
   const featureOptions = useMemo(() => {
     return listingFeatures.map((item) => ({
       id: item,
       label: t(`eligibility.accessibility.${item}`),
-      defaultChecked: props.existingFeatures ? props.existingFeatures[item] : false,
+      defaultChecked: props.existingFeatures ? props.existingFeatures.includes(item) : false,
       register,
     }))
   }, [register, props.existingFeatures])
@@ -40,7 +41,7 @@ const AccessibilityFeatures = (props: AccessibilityFeaturesProps) => {
     return expandedMobilityFeatures.map((item) => ({
       id: item,
       label: t(`eligibility.accessibility.${item}`),
-      defaultChecked: props.existingFeatures ? props.existingFeatures[item] : false,
+      defaultChecked: props.existingFeatures ? props.existingFeatures.includes(item) : false,
       register,
     }))
   }, [register, props.existingFeatures])
@@ -49,7 +50,7 @@ const AccessibilityFeatures = (props: AccessibilityFeaturesProps) => {
     return expandedBathroomFeatures.map((item) => ({
       id: item,
       label: t(`eligibility.accessibility.${item}`),
-      defaultChecked: props.existingFeatures ? props.existingFeatures[item] : false,
+      defaultChecked: props.existingFeatures ? props.existingFeatures.includes(item) : false,
       register,
     }))
   }, [register, props.existingFeatures])
@@ -58,7 +59,7 @@ const AccessibilityFeatures = (props: AccessibilityFeaturesProps) => {
     return expandedFlooringFeatures.map((item) => ({
       id: item,
       label: t(`eligibility.accessibility.${item}`),
-      defaultChecked: props.existingFeatures ? props.existingFeatures[item] : false,
+      defaultChecked: props.existingFeatures ? props.existingFeatures.includes(item) : false,
       register,
     }))
   }, [register, props.existingFeatures])
@@ -67,7 +68,7 @@ const AccessibilityFeatures = (props: AccessibilityFeaturesProps) => {
     return expandedUtilityFeatures.map((item) => ({
       id: item,
       label: t(`eligibility.accessibility.${item}`),
-      defaultChecked: props.existingFeatures ? props.existingFeatures[item] : false,
+      defaultChecked: props.existingFeatures ? props.existingFeatures.includes(item) : false,
       register,
     }))
   }, [register, props.existingFeatures])
@@ -76,7 +77,7 @@ const AccessibilityFeatures = (props: AccessibilityFeaturesProps) => {
     return expandedHearingVisionFeatures.map((item) => ({
       id: item,
       label: t(`eligibility.accessibility.${item}`),
-      defaultChecked: props.existingFeatures ? props.existingFeatures[item] : false,
+      defaultChecked: props.existingFeatures ? props.existingFeatures.includes(item) : false,
       register,
     }))
   }, [register, props.existingFeatures])
@@ -88,12 +89,15 @@ const AccessibilityFeatures = (props: AccessibilityFeaturesProps) => {
   //     }
   //   }, [props.enableAccessibilityFeatures, setValue])
   const onDrawerSubmit = () => {
+    props.setAccessibilityFeatures(getValues("accessibilityFeatures"))
     setIsDrawerOpen(false)
   }
 
   if (!props.enableAccessibilityFeatures && !props.enableExpandedAccessibilityFeatures) {
     return null
   }
+
+  const hasFeaturesSelected = props.existingFeatures?.length > 0
 
   return (
     <>
@@ -107,15 +111,20 @@ const AccessibilityFeatures = (props: AccessibilityFeaturesProps) => {
             <Grid spacing="lg" className="grid-inset-section">
               <Grid.Row>
                 <Grid.Cell>
-                  <Button
-                    id="addFeaturesButton"
-                    type="button"
-                    variant="primary-outlined"
-                    size="sm"
-                    onClick={() => setIsDrawerOpen(true)}
-                  >
-                    Add features
-                  </Button>
+                  {hasFeaturesSelected
+                    ? getDetailAccessibilityFeatures(props.existingFeatures)
+                    : null}
+                  <div className={hasFeaturesSelected ? "seeds-m-bs-4" : ""}>
+                    <Button
+                      id="addFeaturesButton"
+                      type="button"
+                      variant="primary-outlined"
+                      size="sm"
+                      onClick={() => setIsDrawerOpen(true)}
+                    >
+                      {hasFeaturesSelected ? "Edit features" : "Add features"}
+                    </Button>
+                  </div>
                 </Grid.Cell>
               </Grid.Row>
             </Grid>
@@ -139,7 +148,9 @@ const AccessibilityFeatures = (props: AccessibilityFeaturesProps) => {
         onClose={() => setIsDrawerOpen(false)}
         ariaLabelledBy="a11y-features-drawer-header"
       >
-        <Drawer.Header id="a11y-features-drawer-header">{"Add features"}</Drawer.Header>
+        <Drawer.Header id="a11y-features-drawer-header">
+          {hasFeaturesSelected ? "Edit features" : "Add features"}
+        </Drawer.Header>
         <Drawer.Content>
           <Form id="a11y-features-drawer-form" onSubmit={handleSubmit(onDrawerSubmit)}>
             <Card>
