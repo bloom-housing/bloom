@@ -1,4 +1,4 @@
-import { BadRequestException, NotFoundException, Query } from '@nestjs/common';
+import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { randomUUID } from 'crypto';
 import { PropertyService } from '../../../src/services/property.service';
@@ -8,6 +8,7 @@ import { PropertyQueryParams } from '../../../src/dtos/properties/property-query
 import PropertyCreate from '../../../src/dtos/properties/property-create.dto';
 import { PropertyUpdate } from '../../../src/dtos/properties/property-update.dto';
 import { Prisma } from '@prisma/client';
+import { Compare } from '../../../src/dtos/shared/base-filter.dto';
 
 describe('Testing property service', () => {
   let service: PropertyService;
@@ -136,7 +137,12 @@ describe('Testing property service', () => {
         search: 'Woodside',
         page: 2,
         limit: 5,
-        jurisdiction: jurisdictionId,
+        filter: [
+          {
+            $comparison: Compare.IN,
+            jurisdiction: jurisdictionId,
+          },
+        ],
       };
 
       const result = await service.list(params);
@@ -164,11 +170,15 @@ describe('Testing property service', () => {
               },
             },
             {
-              AND: {
-                jurisdictions: {
-                  id: jurisdictionId,
+              OR: [
+                {
+                  jurisdictions: {
+                    id: {
+                      in: [jurisdictionId],
+                    },
+                  },
                 },
-              },
+              ],
             },
           ],
         },
@@ -188,11 +198,15 @@ describe('Testing property service', () => {
               },
             },
             {
-              AND: {
-                jurisdictions: {
-                  id: jurisdictionId,
+              OR: [
+                {
+                  jurisdictions: {
+                    id: {
+                      in: [jurisdictionId],
+                    },
+                  },
                 },
-              },
+              ],
             },
           ],
         },
@@ -856,7 +870,12 @@ describe('Testing property service', () => {
     it('should build where clause with jurisdiction param', () => {
       const jurisdictionId = randomUUID();
       const params: PropertyQueryParams = {
-        jurisdiction: jurisdictionId,
+        filter: [
+          {
+            $comparison: Compare.IN,
+            jurisdiction: jurisdictionId,
+          },
+        ],
       };
 
       const result = service.buildWhere(params);
@@ -864,11 +883,15 @@ describe('Testing property service', () => {
       expect(result).toEqual({
         AND: [
           {
-            AND: {
-              jurisdictions: {
-                id: jurisdictionId,
+            OR: [
+              {
+                jurisdictions: {
+                  id: {
+                    in: [jurisdictionId],
+                  },
+                },
               },
-            },
+            ],
           },
         ],
       });
@@ -878,7 +901,12 @@ describe('Testing property service', () => {
       const jurisdictionId = randomUUID();
       const params: PropertyQueryParams = {
         search: 'Creek',
-        jurisdiction: jurisdictionId,
+        filter: [
+          {
+            $comparison: Compare.IN,
+            jurisdiction: jurisdictionId,
+          },
+        ],
       };
 
       const result = service.buildWhere(params);
@@ -894,11 +922,15 @@ describe('Testing property service', () => {
             },
           },
           {
-            AND: {
-              jurisdictions: {
-                id: jurisdictionId,
+            OR: [
+              {
+                jurisdictions: {
+                  id: {
+                    in: [jurisdictionId],
+                  },
+                },
               },
-            },
+            ],
           },
         ],
       });
