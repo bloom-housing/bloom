@@ -93,6 +93,9 @@ export type FormListing = Omit<Listing, "countyCode" | "listingFeatures" | "list
   selectedRequiredDocuments?: string[]
   listingFeatures?: ListingFeaturesCreate
   listingUtilities?: ListingUtilitiesCreate
+  allowsDogs?: boolean
+  allowsCats?: boolean
+  petPolicyPreferences?: string[]
 }
 
 export const addressTypes = {
@@ -174,6 +177,9 @@ export const formDefaults: FormListing = {
   neighborhood: undefined,
   region: undefined,
   petPolicy: "",
+  allowsDogs: null,
+  allowsCats: null,
+  petPolicyPreferences: [],
   smokingPolicy: "",
   unitsAvailable: 0,
   unitAmenities: "",
