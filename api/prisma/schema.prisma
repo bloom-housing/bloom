@@ -404,6 +404,7 @@ model Jurisdictions {
   requiredListingFields               String[]                    @default([]) @map("required_listing_fields")
   visibleNeighborhoodAmenities        NeighborhoodAmenitiesEnum[] @default([groceryStores, publicTransportation, schools, parksAndCommunityCenters, pharmacies, healthCareResources]) @map("visible_neighborhood_amenities")
   properties                          Properties[]
+  agency                              Agency[]
 
   @@map("jurisdictions")
 }
@@ -1120,6 +1121,15 @@ model Properties {
   @@index(id)
   @@index(name)
   @@map("properties")
+}
+
+model Agency {
+  id              String         @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  createdAt       DateTime       @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt       DateTime       @updatedAt @map("updated_at") @db.Timestamp(6)
+  name            String
+  jurisdictions   Jurisdictions? @relation(fields: [jurisdictionsId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  jurisdictionsId String?        @db.Uuid
 }
 
 model ScriptRuns {
