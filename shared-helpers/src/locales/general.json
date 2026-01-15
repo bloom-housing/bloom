@@ -874,6 +874,7 @@
   "listings.section8Acceptance": "Accepts Section 8 Housing Choice Vouchers",
   "listings.section8VoucherInfo": "If you have a <strong>Section 8 Housing Choice Voucher</strong>, the income requirements do not apply and you will pay rent based on your income",
   "listings.sections.accessibilityFeatures": "Accessibility features",
+  "listings.sections.accessibilityFeaturesSubtitle": "Let applicants know about any amenities related to accessibility.",
   "listings.sections.additionalEligibilitySubtitle": "Applicants must also qualify under the rules of the building.",
   "listings.sections.additionalEligibilityTitle": "Additional eligibility rules",
   "listings.sections.additionalFees": "Additional fees",

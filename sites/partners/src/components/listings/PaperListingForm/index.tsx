@@ -70,6 +70,7 @@ import ListingApprovalDialog from "./dialogs/ListingApprovalDialog"
 import SaveBeforeExitDialog from "./dialogs/SaveBeforeExitDialog"
 
 import * as styles from "./ListingForm.module.scss"
+import AccessibilityFeatures from "./sections/AccessibilityFeatures"
 const CHARACTER_LIMIT = 1000
 
 type ListingFormProps = {
@@ -598,12 +599,18 @@ const ListingForm = ({
                             existingUtilities={listing?.listingUtilities}
                             requiredFields={requiredFields}
                           />
-                          <BuildingFeatures
+                          <AccessibilityFeatures
                             existingFeatures={listing?.listingFeatures}
                             enableAccessibilityFeatures={doJurisdictionsHaveFeatureFlagOn(
                               FeatureFlagEnum.enableAccessibilityFeatures,
                               jurisdictionId
                             )}
+                            enableExpandedAccessibilityFeatures={doJurisdictionsHaveFeatureFlagOn(
+                              FeatureFlagEnum.enableExpandedAccessibilityFeatures,
+                              jurisdictionId
+                            )}
+                          />
+                          <BuildingFeatures
                             enableSmokingPolicyRadio={doJurisdictionsHaveFeatureFlagOn(
                               FeatureFlagEnum.enableSmokingPolicyRadio,
                               jurisdictionId
