@@ -173,11 +173,11 @@ const BuildingDetails = ({
   }, [neighborhood, setValue])
 
   useEffect(() => {
-    if (regions && listing.configurableRegion && configurableRegion === "") {
+    if (regions && listing?.configurableRegion && configurableRegion === "") {
       setValue("configurableRegion", listing.configurableRegion)
     }
     //eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [regions, setValue])
+  }, [listing, regions, setValue])
 
   const getError = (subfield: string) => {
     return getAddressErrorMessage(
