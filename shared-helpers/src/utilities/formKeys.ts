@@ -350,6 +350,15 @@ export const listingRequiredDocumentsOptions = [
   "proofOfCustody",
 ]
 
+export const allListingFeatures = [
+  ...listingFeatures,
+  ...expandedBathroomFeatures,
+  ...expandedMobilityFeatures,
+  ...expandedFlooringFeatures,
+  ...expandedUtilityFeatures,
+  ...expandedHearingVisionFeatures,
+]
+
 export enum RoleOption {
   Administrator = "administrator",
   Partner = "partner",

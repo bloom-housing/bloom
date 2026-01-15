@@ -1,5 +1,5 @@
 import {
-  listingFeatures,
+  allListingFeatures,
   listingRequiredDocumentsOptions,
   listingUtilities,
 } from "@bloom-housing/shared-helpers"
@@ -89,7 +89,7 @@ export default class AdditionalMetadataFormatter extends Formatter {
     }
 
     if (this.data.accessibilityFeatures) {
-      this.data.listingFeatures = listingFeatures.reduce((acc, current) => {
+      this.data.listingFeatures = allListingFeatures.reduce((acc, current) => {
         const isSelected = this.data.accessibilityFeatures.some((feature) => feature === current)
         return {
           ...acc,
