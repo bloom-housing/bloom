@@ -43,8 +43,9 @@ describe("DetailBuildingDetails", () => {
     expect(screen.getByText(listing.listingsBuildingAddress.latitude)).toBeInTheDocument()
     expect(screen.getByText("Longitude")).toBeInTheDocument()
     expect(screen.getByText(listing.listingsBuildingAddress.longitude)).toBeInTheDocument()
+    expect(screen.queryByText("Region")).not.toBeInTheDocument()
   })
-  it("should render all data and region feature flag", () => {
+  it("should render region feature flag", () => {
     render(
       <ListingContext.Provider
         value={{
@@ -64,25 +65,10 @@ describe("DetailBuildingDetails", () => {
     expect(screen.getByRole("heading", { level: 3, name: "Building address" })).toBeInTheDocument()
 
     expect(screen.getByText("Street address")).toBeInTheDocument()
-    expect(screen.getByText(listing.listingsBuildingAddress.street)).toBeInTheDocument()
-    expect(screen.getByText("City")).toBeInTheDocument()
-    expect(screen.getByText(listing.listingsBuildingAddress.city)).toBeInTheDocument()
-    expect(screen.getByText("State")).toBeInTheDocument()
-    expect(screen.getByText(listing.listingsBuildingAddress.state)).toBeInTheDocument()
-    expect(screen.getByText("Zip code")).toBeInTheDocument()
-    expect(screen.getByText(listing.listingsBuildingAddress.zipCode)).toBeInTheDocument()
-    expect(screen.getByText("Year built")).toBeInTheDocument()
-    expect(screen.getByText(listing.yearBuilt)).toBeInTheDocument()
-    expect(screen.getByText("Neighborhood")).toBeInTheDocument()
-    expect(screen.getByText(listing.neighborhood)).toBeInTheDocument()
-    expect(screen.getByText("Latitude")).toBeInTheDocument()
-    expect(screen.getByText(listing.listingsBuildingAddress.latitude)).toBeInTheDocument()
-    expect(screen.getByText("Longitude")).toBeInTheDocument()
-    expect(screen.getByText(listing.listingsBuildingAddress.longitude)).toBeInTheDocument()
     expect(screen.getByText("Region")).toBeInTheDocument()
     expect(screen.getByText("Eastside")).toBeInTheDocument()
   })
-  it("should render all data and configurable region feature flag", () => {
+  it("should render configurable region feature flag", () => {
     render(
       <ListingContext.Provider
         value={{
@@ -100,21 +86,6 @@ describe("DetailBuildingDetails", () => {
     )
 
     expect(screen.getByText("Street address")).toBeInTheDocument()
-    expect(screen.getByText(listing.listingsBuildingAddress.street)).toBeInTheDocument()
-    expect(screen.getByText("City")).toBeInTheDocument()
-    expect(screen.getByText(listing.listingsBuildingAddress.city)).toBeInTheDocument()
-    expect(screen.getByText("State")).toBeInTheDocument()
-    expect(screen.getByText(listing.listingsBuildingAddress.state)).toBeInTheDocument()
-    expect(screen.getByText("Zip code")).toBeInTheDocument()
-    expect(screen.getByText(listing.listingsBuildingAddress.zipCode)).toBeInTheDocument()
-    expect(screen.getByText("Year built")).toBeInTheDocument()
-    expect(screen.getByText(listing.yearBuilt)).toBeInTheDocument()
-    expect(screen.getByText("Neighborhood")).toBeInTheDocument()
-    expect(screen.getByText(listing.neighborhood)).toBeInTheDocument()
-    expect(screen.getByText("Latitude")).toBeInTheDocument()
-    expect(screen.getByText(listing.listingsBuildingAddress.latitude)).toBeInTheDocument()
-    expect(screen.getByText("Longitude")).toBeInTheDocument()
-    expect(screen.getByText(listing.listingsBuildingAddress.longitude)).toBeInTheDocument()
     expect(screen.getByText("Region")).toBeInTheDocument()
     expect(screen.getByText("Harbor Area")).toBeInTheDocument()
   })
