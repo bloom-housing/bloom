@@ -2637,15 +2637,7 @@ export class ListingService implements OnModuleInit {
       incomingDto.status === ListingsStatusEnum.closed
     ) {
       // if listing is closed for the first time the application flag set job needs to run
-      if (
-        process.env.DUPLICATES_CLOSE_DATE &&
-        dayjs(process.env.DUPLICATES_CLOSE_DATE, 'YYYY-MM-DD HH:mm Z') <
-          dayjs(new Date())
-      ) {
-        await this.afsService.processDuplicates(incomingDto.id);
-      } else {
-        await this.afsService.process(incomingDto.id);
-      }
+      await this.afsService.processDuplicates(incomingDto.id);
 
       // if the listing is closed for the first time the expire_after value should be set on all applications
       void this.setExpireAfterValueOnApplications(rawListing.id);
