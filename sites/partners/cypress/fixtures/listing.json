@@ -66,7 +66,7 @@
   "accessibilityFeatures": [
     ["elevator", "Elevator"],
     ["mobility", "Units for those with mobility accessibility needs"],
-    ["visual", "Units for those with visual accessibility needs"]
+    ["visual", "Units for those with vision accessibility needs"]
   ],
   "referralContactPhone": "520-245-8811"
 }

@@ -165,10 +165,10 @@ describe("FilterDrawer", () => {
       screen.getByLabelText("Units for those with mobility accessibility needs")
     ).toBeInTheDocument()
     expect(
-      screen.getByRole("checkbox", { name: "Units for those with visual accessibility needs" })
+      screen.getByRole("checkbox", { name: "Units for those with vision accessibility needs" })
     ).not.toBeChecked()
     expect(
-      screen.getByLabelText("Units for those with visual accessibility needs")
+      screen.getByLabelText("Units for those with vision accessibility needs")
     ).toBeInTheDocument()
     expect(
       screen.getByRole("checkbox", { name: "Barrier-free (no-step) unit entrances" })
@@ -330,10 +330,10 @@ describe("FilterDrawer", () => {
       screen.getByLabelText("Units for those with mobility accessibility needs")
     ).toBeInTheDocument()
     expect(
-      screen.getByRole("checkbox", { name: "Units for those with visual accessibility needs" })
+      screen.getByRole("checkbox", { name: "Units for those with vision accessibility needs" })
     ).not.toBeChecked()
     expect(
-      screen.getByLabelText("Units for those with visual accessibility needs")
+      screen.getByLabelText("Units for those with vision accessibility needs")
     ).toBeInTheDocument()
     expect(
       screen.getByRole("checkbox", { name: "Barrier-free (no-step) unit entrances" })
