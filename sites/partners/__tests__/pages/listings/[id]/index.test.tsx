@@ -840,7 +840,7 @@ describe("listing data", () => {
           screen.getByText("Units for those with hearing accessibility needs")
         ).toBeInTheDocument()
         expect(
-          screen.getByText("Units for those with visual accessibility needs")
+          screen.getByText("Units for those with vision accessibility needs")
         ).toBeInTheDocument()
         expect(
           screen.getByText("Units for those with mobility accessibility needs")

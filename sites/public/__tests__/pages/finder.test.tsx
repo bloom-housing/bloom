@@ -424,7 +424,7 @@ describe("<RentalsFinder>", () => {
       screen.getByRole("checkbox", { name: /units for those with mobility accessibility needs/i })
     ).toBeInTheDocument()
     expect(
-      screen.getByRole("checkbox", { name: /units for those with visual accessibility needs/i })
+      screen.getByRole("checkbox", { name: /units for those with vision accessibility needs/i })
     ).toBeInTheDocument()
     expect(
       screen.getByRole("checkbox", { name: /barrier-free \(no-step\) unit entrances/i })
