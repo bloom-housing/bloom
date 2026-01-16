@@ -262,6 +262,8 @@ const ListingForm = ({
     jurisdictionId
   )
 
+  console.log("re-rendering")
+
   useEffect(() => {
     if (enableNonRegulatedListings) {
       setValue(

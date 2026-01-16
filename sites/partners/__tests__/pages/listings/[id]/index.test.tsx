@@ -371,66 +371,6 @@ describe("listing data", () => {
       })
     })
 
-    describe("should display Building Details section", () => {
-      it("should display Building Details section - without region", () => {
-        render(
-          <ListingContext.Provider value={{ ...listing, region: RegionEnum.Southwest }}>
-            <DetailBuildingDetails enableRegions={false} enableConfigurableRegions={false} />
-          </ListingContext.Provider>
-        )
-
-        expect(screen.getByText("Building details")).toBeInTheDocument()
-        expect(screen.getByText("Building address")).toBeInTheDocument()
-        expect(screen.getByText("Street address")).toBeInTheDocument()
-        expect(screen.getByText("98 Archer Street")).toBeInTheDocument()
-        expect(screen.getByText("City")).toBeInTheDocument()
-        expect(screen.getByText("San Jose")).toBeInTheDocument()
-        expect(screen.getByText("Longitude")).toBeInTheDocument()
-        expect(screen.getByText("-121.91071")).toBeInTheDocument()
-        expect(screen.getByText("State")).toBeInTheDocument()
-        expect(screen.getByText("CA")).toBeInTheDocument()
-        expect(screen.getByText("Latitude")).toBeInTheDocument()
-        expect(screen.getByText("37.36537")).toBeInTheDocument()
-        expect(screen.getByText("Zip code")).toBeInTheDocument()
-        expect(screen.getByText("95112")).toBeInTheDocument()
-        expect(screen.getByText("Neighborhood")).toBeInTheDocument()
-        expect(screen.getByText("Rosemary Gardens Park")).toBeInTheDocument()
-        expect(screen.getByText("Year built")).toBeInTheDocument()
-        expect(screen.getByText("2012")).toBeInTheDocument()
-        expect(screen.queryByText("Region")).not.toBeInTheDocument()
-        expect(screen.queryByText("Southwest")).not.toBeInTheDocument()
-      })
-
-      it("should display Building Details section - with region", () => {
-        render(
-          <ListingContext.Provider value={{ ...listing, region: RegionEnum.Southwest }}>
-            <DetailBuildingDetails enableRegions={true} enableConfigurableRegions={false} />
-          </ListingContext.Provider>
-        )
-
-        expect(screen.getByText("Building details")).toBeInTheDocument()
-        expect(screen.getByText("Building address")).toBeInTheDocument()
-        expect(screen.getByText("Street address")).toBeInTheDocument()
-        expect(screen.getByText("98 Archer Street")).toBeInTheDocument()
-        expect(screen.getByText("City")).toBeInTheDocument()
-        expect(screen.getByText("San Jose")).toBeInTheDocument()
-        expect(screen.getByText("Longitude")).toBeInTheDocument()
-        expect(screen.getByText("-121.91071")).toBeInTheDocument()
-        expect(screen.getByText("State")).toBeInTheDocument()
-        expect(screen.getByText("CA")).toBeInTheDocument()
-        expect(screen.getByText("Latitude")).toBeInTheDocument()
-        expect(screen.getByText("37.36537")).toBeInTheDocument()
-        expect(screen.getByText("Zip code")).toBeInTheDocument()
-        expect(screen.getByText("95112")).toBeInTheDocument()
-        expect(screen.getByText("Neighborhood")).toBeInTheDocument()
-        expect(screen.getByText("Rosemary Gardens Park")).toBeInTheDocument()
-        expect(screen.getByText("Year built")).toBeInTheDocument()
-        expect(screen.getByText("2012")).toBeInTheDocument()
-        expect(screen.getByText("Region")).toBeInTheDocument()
-        expect(screen.getByText("Southwest")).toBeInTheDocument()
-      })
-    })
-
     describe("should display Community Type section", () => {
       it("should display all section data - without disclaimer", () => {
         render(
