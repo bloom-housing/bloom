@@ -18,7 +18,8 @@
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "types": ["jest", "jest-extended"]
   },
   "exclude": ["node_modules", "dist"]
 }
