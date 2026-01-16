@@ -6,7 +6,6 @@ import { ListingContext } from "../../../../src/components/listings/ListingConte
 import { jurisdiction, listing, user } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import DetailListingData from "../../../../src/components/listings/PaperListingDetails/sections/DetailListingData"
 import DetailListingIntro from "../../../../src/components/listings/PaperListingDetails/sections/DetailListingIntro"
-import DetailBuildingDetails from "../../../../src/components/listings/PaperListingDetails/sections/DetailBuildingDetails"
 import DetailCommunityType from "../../../../src/components/listings/PaperListingDetails/sections/DetailCommunityType"
 import DetailUnits from "../../../../src/components/listings/PaperListingDetails/sections/DetailUnits"
 import DetailPreferences from "../../../../src/components/listings/PaperListingDetails/sections/DetailPreferences"
@@ -20,7 +19,6 @@ import {
   ListingsStatusEnum,
   MultiselectQuestionsApplicationSectionEnum,
   MultiselectQuestionsStatusEnum,
-  RegionEnum,
   ReviewOrderTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import DetailAdditionalFees from "../../../../src/components/listings/PaperListingDetails/sections/DetailAdditionalFees"
