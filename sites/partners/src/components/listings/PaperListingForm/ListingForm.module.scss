@@ -66,3 +66,24 @@
 .heading-group-in-section {
   --heading-color: var(--seeds-text-color-darker);
 }
+
+.two-columns {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr;
+  column-gap: var(--seeds-spacer-section);
+  width: 100%;
+  @media (--md-down) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.list-style {
+  li {
+    list-style: disc;
+    margin-left: var(--seeds-s5);
+  }
+}
+
+.text-on-secondary {
+  color: var(--seeds-input-text-highlight-color);
+}

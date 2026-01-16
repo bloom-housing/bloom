@@ -19,7 +19,6 @@ import {
   Listing,
   ListingCreate,
   ListingEventsTypeEnum,
-  ListingFeaturesCreate,
   ListingTypeEnum,
   ListingUpdate,
   ListingsStatusEnum,
@@ -48,6 +47,7 @@ import AdditionalEligibility from "./sections/AdditionalEligibility"
 import LeasingAgent from "./sections/LeasingAgent"
 import AdditionalFees from "./sections/AdditionalFees"
 import Units from "./sections/Units"
+import AccessibilityFeatures from "./sections/AccessibilityFeatures"
 import BuildingDetails from "./sections/BuildingDetails"
 import ListingIntro from "./sections/ListingIntro"
 import ListingPhotos from "./sections/ListingPhotos"
@@ -69,9 +69,7 @@ import PublishListingDialog from "./dialogs/PublishListingDialog"
 import LiveConfirmationDialog from "./dialogs/LiveConfirmationDialog"
 import ListingApprovalDialog from "./dialogs/ListingApprovalDialog"
 import SaveBeforeExitDialog from "./dialogs/SaveBeforeExitDialog"
-
 import * as styles from "./ListingForm.module.scss"
-import AccessibilityFeatures from "./sections/AccessibilityFeatures"
 
 const CHARACTER_LIMIT = 1000
 
@@ -289,8 +287,6 @@ const ListingForm = ({
       )
     }
   }, [listing, accessibilityFeatures])
-
-  console.log({ accessibilityFeatures })
 
   useEffect(() => {
     if (listing?.units) {
