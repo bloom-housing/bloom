@@ -9,25 +9,23 @@ import {
 } from "@bloom-housing/shared-helpers"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 import { ListingContext } from "../../ListingContext"
+import styles from "../../PaperListingForm/ListingForm.module.scss"
 
 const getAccessibilityFeatures = (featureSet: string[], listingFeatures: string[]) => {
   const filteredFeatures = listingFeatures.filter((feature) => featureSet.includes(feature))
   if (filteredFeatures.length === 0) return <>{t("t.none")}</>
-  return filteredFeatures.map((feature) => {
-    return (
-      <li className={"list-disc mx-5 mb-1 w-full grow"} key={feature}>
-        {t(`eligibility.accessibility.${feature}`)}
-      </li>
-    )
+  const listItems = filteredFeatures.map((feature) => {
+    return <li key={feature}>{t(`eligibility.accessibility.${feature}`)}</li>
   })
+  return <ul className={`${styles["list-style"]}`}>{listItems}</ul>
 }
 
 export const getDetailAccessibilityFeatures = (listingFeatures: string[]) => {
   return Object.entries(expandedAccessibilityFeatures).map(([category, features]) => {
     return (
-      <Grid.Row key={category} columns={1}>
+      <Grid.Row key={category} className={styles["text-on-secondary"]}>
         <Grid.Cell>
-          <Heading priority={4} size={"md"} className={"seeds-p-b-4"}>
+          <Heading size={"md"} className={"seeds-p-b-4"}>
             {t(`eligibility.accessibility.categoryTitle.${category}`)}
           </Heading>
           {getAccessibilityFeatures(features, listingFeatures)}
@@ -60,6 +58,8 @@ const DetailAccessibilityFeatures = () => {
   if (!enableAccessibilityFeatures && !enableExpandedAccessibilityFeatures) {
     return null
   }
+
+  console.log({ listingFeatures })
 
   return (
     <SectionWithGrid heading={"Accessibility features"} inset>

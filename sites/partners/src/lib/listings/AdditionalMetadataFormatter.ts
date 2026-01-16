@@ -98,6 +98,19 @@ export default class AdditionalMetadataFormatter extends Formatter {
       }, {})
     }
 
+    if (this.data.configurableAccessibilityFeatures) {
+      const flattenedFeatures = Object.values(this.data.configurableAccessibilityFeatures).flat()
+      const updatedFeatures = allListingFeatures.reduce((acc, current) => {
+        const isSelected = flattenedFeatures.some((feature) => feature === current)
+        return {
+          ...acc,
+          [current]: isSelected,
+        }
+      }, {})
+      console.log({ updatedFeatures })
+      this.data.listingFeatures = updatedFeatures
+    }
+
     if (
       this.data.selectedRequiredDocuments &&
       this.data.listingType === EnumListingListingType.nonRegulated

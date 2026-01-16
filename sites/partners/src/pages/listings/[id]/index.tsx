@@ -112,13 +112,13 @@ export default function ListingDetail(props: ListingProps) {
                     <DetailListingNotes />
                     <DetailListingIntro />
                     <DetailListingPhotos />
-                    <DetailAccessibilityFeatures />
                     <DetailBuildingDetails />
                     <DetailCommunityType />
                     <DetailUnits setUnitDrawer={setUnitDrawer} />
                     <DetailPreferences />
                     <DetailPrograms />
                     <DetailAdditionalFees />
+                    <DetailAccessibilityFeatures />
                     <DetailBuildingFeatures />
                     <DetailNeighborhoodAmenities />
                     <DetailAdditionalEligibility />
