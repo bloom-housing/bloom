@@ -62,18 +62,21 @@ const DetailAccessibilityFeatures = () => {
   console.log({ listingFeatures })
 
   return (
-    <SectionWithGrid heading={"Accessibility features"} inset>
+    <SectionWithGrid heading={t("listings.sections.accessibilityFeatures")} inset>
       {enableExpandedAccessibilityFeatures ? (
         <div>
           <Heading priority={3} size={"lg"}>
-            Accessibility features summary
+            {t("accessibility.summaryTitle")}
           </Heading>
           {getDetailAccessibilityFeatures(featuresAsString)}
         </div>
       ) : (
         <Grid.Row>
           <Grid.Cell>
-            <FieldValue id="accessibilityFeatures" label={"Accessibility Features"}>
+            <FieldValue
+              id="accessibilityFeatures"
+              label={t("listings.sections.accessibilityFeatures")}
+            >
               {getAccessibilityFeatures(listingFeatures, featuresAsString)}
             </FieldValue>
           </Grid.Cell>

@@ -62,31 +62,6 @@ const AccessibilityFeatures = (props: AccessibilityFeaturesProps) => {
     }))
   }, [register, props.existingFeatures])
 
-  const expandedMobilityOptions = useMemo(() => {
-    return getFeatureGroupValues(AccessibilitySubcategoriesEnum.Mobility)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [register, props.existingFeatures])
-
-  const expandedBathroomOptions = useMemo(() => {
-    return getFeatureGroupValues(AccessibilitySubcategoriesEnum.Bathroom)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [register, props.existingFeatures])
-
-  const expandedFlooringOptions = useMemo(() => {
-    return getFeatureGroupValues(AccessibilitySubcategoriesEnum.Flooring)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [register, props.existingFeatures])
-
-  const expandedUtilityOptions = useMemo(() => {
-    return getFeatureGroupValues(AccessibilitySubcategoriesEnum.Utility)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [register, props.existingFeatures])
-
-  const expandedHearingVisionOptions = useMemo(() => {
-    return getFeatureGroupValues(AccessibilitySubcategoriesEnum.HearingVision)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [register, props.existingFeatures])
-
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onDrawerSubmit = (formData: Record<string, any>) => {
     if (props.enableExpandedAccessibilityFeatures) {
@@ -117,8 +92,6 @@ const AccessibilityFeatures = (props: AccessibilityFeaturesProps) => {
     return null
   }
 
-  console.log(errors)
-
   return (
     <>
       <hr className="spacer-section-above spacer-section" />
@@ -127,33 +100,33 @@ const AccessibilityFeatures = (props: AccessibilityFeaturesProps) => {
         subheading={t("listings.sections.accessibilityFeaturesSubtitle")}
       >
         {props.enableExpandedAccessibilityFeatures ? (
-          <div>
-            <Grid spacing="lg" className="grid-inset-section">
-              <Grid.Row>
-                <Grid.Cell>
-                  {hasFeaturesSelected ? (
-                    <>
-                      <Heading priority={3} size={"lg"}>
-                        Accessibility features summary
-                      </Heading>
-                      {getDetailAccessibilityFeatures(props.existingFeatures)}
-                    </>
-                  ) : null}
-                  <div className={hasFeaturesSelected ? "seeds-m-bs-4" : ""}>
-                    <Button
-                      id="addFeaturesButton"
-                      type="button"
-                      variant="primary-outlined"
-                      size="sm"
-                      onClick={() => setIsDrawerOpen(true)}
-                    >
-                      {hasFeaturesSelected ? "Edit features" : "Add features"}
-                    </Button>
-                  </div>
-                </Grid.Cell>
-              </Grid.Row>
-            </Grid>
-          </div>
+          <Grid spacing="lg" className="grid-inset-section">
+            <Grid.Row>
+              <Grid.Cell>
+                {hasFeaturesSelected ? (
+                  <>
+                    <Heading priority={3} size={"lg"}>
+                      {t("accessibility.summaryTitle")}
+                    </Heading>
+                    {getDetailAccessibilityFeatures(props.existingFeatures)}
+                  </>
+                ) : null}
+                <div className={hasFeaturesSelected ? "seeds-m-bs-4" : ""}>
+                  <Button
+                    id="addFeaturesButton"
+                    type="button"
+                    variant="primary-outlined"
+                    size="sm"
+                    onClick={() => setIsDrawerOpen(true)}
+                  >
+                    {hasFeaturesSelected
+                      ? t("accessibility.drawerTitleEdit")
+                      : t("accessibility.drawerTitleAdd")}
+                  </Button>
+                </div>
+              </Grid.Cell>
+            </Grid.Row>
+          </Grid>
         ) : (
           <Grid.Row>
             <FieldGroup
@@ -174,97 +147,47 @@ const AccessibilityFeatures = (props: AccessibilityFeaturesProps) => {
         ariaLabelledBy="a11y-features-drawer-header"
       >
         <Drawer.Header id="a11y-features-drawer-header">
-          {hasFeaturesSelected ? "Edit features" : "Add features"}
+          {hasFeaturesSelected
+            ? t("accessibility.drawerTitleEdit")
+            : t("accessibility.drawerTitleAdd")}
         </Drawer.Header>
         <Drawer.Content>
           <Form id="a11y-features-drawer-form" onSubmit={handleSubmit(onDrawerSubmit)}>
             <Card>
               <Card.Section>
                 <SectionWithGrid
-                  heading={"Accessibility features"}
+                  heading={t("listings.sections.accessibilityFeatures")}
                   headingClassName={styles["heading-group-in-section"]}
                 >
-                  <Grid.Row columns={1}>
-                    <Grid.Cell>
-                      <div className={"field-label seeds-m-be-6"}>
-                        Select all accessibility features that apply to this listing. Fields marked
-                        with an asterisk (*) are required.
-                      </div>
-                      <FieldGroup
-                        type="checkbox"
-                        name="configurableAccessibilityFeatures.mobility"
-                        groupLabel={"Mobility features"}
-                        fields={expandedMobilityOptions}
-                        register={register}
-                        fieldGroupClassName={styles["two-columns"]}
-                        fieldLabelClassName={styles["label-option"]}
-                        error={errors.configurableAccessibilityFeatures?.mobility}
-                        errorMessage={errors.configurableAccessibilityFeatures?.mobility?.message}
-                      />
-                    </Grid.Cell>
-                  </Grid.Row>
-                  <Grid.Row columns={1}>
-                    <Grid.Cell>
-                      <FieldGroup
-                        type="checkbox"
-                        name="configurableAccessibilityFeatures.bathroom"
-                        groupLabel={"Bathroom features"}
-                        fields={expandedBathroomOptions}
-                        register={register}
-                        fieldGroupClassName={styles["two-columns"]}
-                        fieldLabelClassName={styles["label-option"]}
-                        error={errors.configurableAccessibilityFeatures?.bathroom}
-                        errorMessage={errors.configurableAccessibilityFeatures?.bathroom?.message}
-                      />
-                    </Grid.Cell>
-                  </Grid.Row>
-                  <Grid.Row columns={1}>
-                    <Grid.Cell>
-                      <FieldGroup
-                        type="checkbox"
-                        name="configurableAccessibilityFeatures.flooring"
-                        groupLabel={addAsterisk("Flooring")}
-                        fields={expandedFlooringOptions}
-                        register={register}
-                        fieldGroupClassName={styles["two-columns"]}
-                        fieldLabelClassName={styles["label-option"]}
-                        error={errors.configurableAccessibilityFeatures?.flooring}
-                        errorMessage={errors.configurableAccessibilityFeatures?.flooring?.message}
-                      />
-                    </Grid.Cell>
-                  </Grid.Row>
-                  <Grid.Row columns={1}>
-                    <Grid.Cell>
-                      <FieldGroup
-                        type="checkbox"
-                        name="configurableAccessibilityFeatures.utility"
-                        groupLabel={"Utility features"}
-                        fields={expandedUtilityOptions}
-                        register={register}
-                        fieldGroupClassName={styles["two-columns"]}
-                        fieldLabelClassName={styles["label-option"]}
-                        error={errors.configurableAccessibilityFeatures?.utility}
-                        errorMessage={errors.configurableAccessibilityFeatures?.utility?.message}
-                      />
-                    </Grid.Cell>
-                  </Grid.Row>
-                  <Grid.Row columns={1}>
-                    <Grid.Cell>
-                      <FieldGroup
-                        type="checkbox"
-                        name="configurableAccessibilityFeatures.hearingVision"
-                        groupLabel={"Hearing/Vision features"}
-                        fields={expandedHearingVisionOptions}
-                        register={register}
-                        fieldGroupClassName={styles["two-columns"]}
-                        fieldLabelClassName={styles["label-option"]}
-                        error={errors.configurableAccessibilityFeatures?.hearingVision}
-                        errorMessage={
-                          errors.configurableAccessibilityFeatures?.hearingVision?.message
-                        }
-                      />
-                    </Grid.Cell>
-                  </Grid.Row>
+                  <div className={"field-label seeds-m-be-6"}>{t("accessibility.drawerInfo")}</div>
+                  {Object.entries(expandedAccessibilityFeatures).map(([category]) => {
+                    const label = t(`accessibility.categoryTitle.${category}Features`)
+                    return (
+                      <Grid.Row columns={1}>
+                        <Grid.Cell>
+                          <FieldGroup
+                            type="checkbox"
+                            name={`configurableAccessibilityFeatures.${category}]`}
+                            groupLabel={
+                              requiredSections.includes(category as AccessibilitySubcategoriesEnum)
+                                ? addAsterisk(label)
+                                : label
+                            }
+                            fields={getFeatureGroupValues(
+                              category as AccessibilitySubcategoriesEnum
+                            )}
+                            register={register}
+                            fieldGroupClassName={styles["two-columns"]}
+                            fieldLabelClassName={styles["label-option"]}
+                            error={errors.configurableAccessibilityFeatures?.[category]}
+                            errorMessage={
+                              errors.configurableAccessibilityFeatures?.[category]?.message
+                            }
+                          />
+                        </Grid.Cell>
+                      </Grid.Row>
+                    )
+                  })}
                 </SectionWithGrid>
               </Card.Section>
             </Card>
