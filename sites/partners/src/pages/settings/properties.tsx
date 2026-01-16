@@ -57,7 +57,7 @@ const SettingsProperties = () => {
       {
         headerName: t("t.name"),
         field: "name",
-        minWidth: 100,
+        minWidth: 150,
         flex: 1,
       },
       {
@@ -83,13 +83,14 @@ const SettingsProperties = () => {
             {
               headerName: t("t.jurisdiction"),
               field: "jurisdictions.name",
+              width: 130,
             },
           ]
         : []),
       {
         headerName: t("t.updatedAt"),
         field: "updatedAt",
-        minWidth: 130,
+        width: 130,
         valueFormatter: ({ value }) => (value ? dayjs(value).format("MM/DD/YYYY") : t("t.none")),
       },
       {

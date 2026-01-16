@@ -3,6 +3,7 @@ import Head from "next/head"
 import axios from "axios"
 import { t, AlertBox, Breadcrumbs, BreadcrumbLink } from "@bloom-housing/ui-components"
 import {
+  FeatureFlagEnum,
   Listing,
   ListingsStatusEnum,
   ReviewOrderTypeEnum,
@@ -47,12 +48,22 @@ interface ListingProps {
 
 export default function ListingDetail(props: ListingProps) {
   const { listing } = props
-  const { profile } = useContext(AuthContext)
+  const { profile, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
   const [errorAlert, setErrorAlert] = useState<string>(null)
   const [unitDrawer, setUnitDrawer] = useState<UnitDrawer>(null)
   const [copyListingDialog, setCopyListingDialog] = useState(false)
 
   if (!listing) return null
+
+  const enableConfigurableRegions = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableConfigurableRegions,
+    listing.jurisdictions.id
+  )
+
+  const enableRegions = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableRegions,
+    listing.jurisdictions.id
+  )
 
   return (
     <ListingContext.Provider value={listing}>
@@ -111,7 +122,10 @@ export default function ListingDetail(props: ListingProps) {
                     <DetailListingNotes />
                     <DetailListingIntro />
                     <DetailListingPhotos />
-                    <DetailBuildingDetails />
+                    <DetailBuildingDetails
+                      enableRegions={enableRegions}
+                      enableConfigurableRegions={enableConfigurableRegions}
+                    />
                     <DetailCommunityType />
                     <DetailUnits setUnitDrawer={setUnitDrawer} />
                     <DetailPreferences />

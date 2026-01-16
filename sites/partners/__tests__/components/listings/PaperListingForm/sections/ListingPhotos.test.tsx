@@ -1,14 +1,14 @@
 import React from "react"
+import { setupServer } from "msw/lib/node"
 import "@testing-library/jest-dom"
 import { FormProvider, useForm } from "react-hook-form"
 import { render, screen, within } from "@testing-library/react"
+import userEvent from "@testing-library/user-event"
 import { jurisdiction, listing } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import { Jurisdiction } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { setupServer } from "msw/lib/node"
 import { formDefaults, FormListing } from "../../../../../src/lib/listings/formTypes"
 import ListingPhotos from "../../../../../src/components/listings/PaperListingForm/sections/ListingPhotos"
 import { mockNextRouter } from "../../../../testUtils"
-import userEvent from "@testing-library/user-event"
 import * as helpers from "../../../../../src/lib/helpers"
 
 jest.mock("../../../../../src/lib/helpers", () => {
@@ -155,7 +155,7 @@ describe("<ListingPhotos>", () => {
       expect(headerColumns).toHaveLength(2)
       const [previewHeader, actionsHeader] = headerColumns
       expect(previewHeader).toHaveTextContent("Preview")
-      expect(actionsHeader).not.toHaveTextContent()
+      expect(actionsHeader).toHaveTextContent("Actions")
 
       const rows = within(body).getAllByRole("row")
       expect(rows).toHaveLength(2)

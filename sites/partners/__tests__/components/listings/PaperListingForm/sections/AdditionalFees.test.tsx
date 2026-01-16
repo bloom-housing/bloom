@@ -1,16 +1,11 @@
 import React from "react"
 import { setupServer } from "msw/lib/node"
-import { FormProviderWrapper, mockNextRouter } from "../../../../testUtils"
-import { render, screen } from "@testing-library/react"
-import AdditionalFees from "../../../../../src/components/listings/PaperListingForm/sections/AdditionalFees"
-import { AuthContext } from "@bloom-housing/shared-helpers"
-import { jurisdiction, user } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
-import {
-  EnumListingListingType,
-  FeatureFlagEnum,
-} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import userEvent from "@testing-library/user-event"
 import "@testing-library/jest-dom"
+import { render, screen } from "@testing-library/react"
+import { EnumListingListingType } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { FormProviderWrapper, mockNextRouter } from "../../../../testUtils"
+import AdditionalFees from "../../../../../src/components/listings/PaperListingForm/sections/AdditionalFees"
 
 const server = setupServer()
 
@@ -29,26 +24,19 @@ afterAll(() => server.close())
 describe("AdditionalFees", () => {
   it("should render the base AdditionalFees", async () => {
     render(
-      <AuthContext.Provider
-        value={{
-          profile: { ...user, listings: [], jurisdictions: [jurisdiction] },
-          doJurisdictionsHaveFeatureFlagOn: () => false,
-        }}
-      >
-        <FormProviderWrapper>
-          <AdditionalFees
-            enableNonRegulatedListings={false}
-            enableUtilitiesIncluded={false}
-            existingUtilities={{
-              water: true,
-              gas: true,
-              trash: true,
-              sewer: true,
-            }}
-            requiredFields={[]}
-          />
-        </FormProviderWrapper>
-      </AuthContext.Provider>
+      <FormProviderWrapper>
+        <AdditionalFees
+          enableNonRegulatedListings={false}
+          enableUtilitiesIncluded={false}
+          existingUtilities={{
+            water: true,
+            gas: true,
+            trash: true,
+            sewer: true,
+          }}
+          requiredFields={[]}
+        />
+      </FormProviderWrapper>
     )
 
     expect(
@@ -75,27 +63,19 @@ describe("AdditionalFees", () => {
 
   it("should render the AdditionalFees section with utilities included", async () => {
     render(
-      <AuthContext.Provider
-        value={{
-          profile: { ...user, listings: [], jurisdictions: [jurisdiction] },
-          doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
-            featureFlag === FeatureFlagEnum.enableUtilitiesIncluded,
-        }}
-      >
-        <FormProviderWrapper>
-          <AdditionalFees
-            enableNonRegulatedListings={false}
-            enableUtilitiesIncluded={true}
-            existingUtilities={{
-              water: true,
-              gas: true,
-              trash: true,
-              sewer: true,
-            }}
-            requiredFields={[]}
-          />
-        </FormProviderWrapper>
-      </AuthContext.Provider>
+      <FormProviderWrapper>
+        <AdditionalFees
+          enableNonRegulatedListings={false}
+          enableUtilitiesIncluded={true}
+          existingUtilities={{
+            water: true,
+            gas: true,
+            trash: true,
+            sewer: true,
+          }}
+          requiredFields={[]}
+        />
+      </FormProviderWrapper>
     )
 
     expect(
@@ -138,22 +118,14 @@ describe("AdditionalFees", () => {
 
   it("should render the AdditionalFees section for non regulated fields", async () => {
     render(
-      <AuthContext.Provider
-        value={{
-          profile: { ...user, listings: [], jurisdictions: [jurisdiction] },
-          doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
-            featureFlag === FeatureFlagEnum.enableNonRegulatedListings,
-        }}
-      >
-        <FormProviderWrapper values={{ listingType: EnumListingListingType.nonRegulated }}>
-          <AdditionalFees
-            existingUtilities={{}}
-            requiredFields={[]}
-            enableNonRegulatedListings={true}
-            enableUtilitiesIncluded={false}
-          />
-        </FormProviderWrapper>
-      </AuthContext.Provider>
+      <FormProviderWrapper values={{ listingType: EnumListingListingType.nonRegulated }}>
+        <AdditionalFees
+          existingUtilities={{}}
+          requiredFields={[]}
+          enableNonRegulatedListings={true}
+          enableUtilitiesIncluded={false}
+        />
+      </FormProviderWrapper>
     )
 
     expect(

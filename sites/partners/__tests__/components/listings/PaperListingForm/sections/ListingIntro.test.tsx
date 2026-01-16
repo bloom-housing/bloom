@@ -2,9 +2,9 @@ import React from "react"
 import "@testing-library/jest-dom"
 import { setupServer } from "msw/node"
 import { screen } from "@testing-library/react"
-import { FormProviderWrapper, mockNextRouter, render } from "../../../../testUtils"
-import ListingIntro from "../../../../../src/components/listings/PaperListingForm/sections/ListingIntro"
 import { EnumListingListingType } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import ListingIntro from "../../../../../src/components/listings/PaperListingForm/sections/ListingIntro"
+import { FormProviderWrapper, mockNextRouter, render } from "../../../../testUtils"
 
 const server = setupServer()
 

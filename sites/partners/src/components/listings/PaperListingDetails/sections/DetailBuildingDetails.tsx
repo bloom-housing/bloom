@@ -2,19 +2,21 @@ import React, { useContext } from "react"
 import { t } from "@bloom-housing/ui-components"
 import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { ListingContext } from "../../ListingContext"
-import { getDetailFieldString } from "./helpers"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
-import { AuthContext } from "@bloom-housing/shared-helpers"
-import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { getDetailFieldString } from "./helpers"
 
-const DetailBuildingDetails = () => {
+type DetailBuildingDetailsProps = {
+  enableConfigurableRegions: boolean
+  enableRegions: boolean
+}
+
+const DetailBuildingDetails = ({
+  enableConfigurableRegions,
+  enableRegions,
+}: DetailBuildingDetailsProps) => {
   const listing = useContext(ListingContext)
-  const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
 
-  const enableRegions = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableRegions,
-    listing.jurisdictions.id
-  )
+  const showInitialRegion = enableRegions || enableConfigurableRegions
 
   return (
     <SectionWithGrid heading={t("listings.sections.buildingDetailsTitle")} inset>
@@ -55,16 +57,26 @@ const DetailBuildingDetails = () => {
                 {listing.listingsBuildingAddress?.zipCode}
               </FieldValue>
             </Grid.Cell>
-            {enableRegions ? (
-              <Grid.Cell className="seeds-grid-span-12">
-                <FieldValue id="buildingAdress.region" label={t("t.region")}>
-                  {listing.region ? listing.region.toString().replace("_", " ") : t("t.n/a")}
-                </FieldValue>
-              </Grid.Cell>
+            {showInitialRegion ? (
+              <>
+                {enableRegions ? (
+                  <Grid.Cell className="seeds-grid-span-2">
+                    <FieldValue id="buildingAddress.region" label={t("t.region")}>
+                      {listing.region ? listing.region.toString().replace("_", " ") : t("t.n/a")}
+                    </FieldValue>
+                  </Grid.Cell>
+                ) : (
+                  <Grid.Cell className="seeds-grid-span-2">
+                    <FieldValue id="buildingAddress.configurableRegion" label={t("t.region")}>
+                      {listing.configurableRegion ? listing.configurableRegion : t("t.n/a")}
+                    </FieldValue>
+                  </Grid.Cell>
+                )}
+              </>
             ) : (
               <Grid.Cell className="seeds-grid-span-2">
                 <FieldValue id="yearBuilt" label={t("listings.yearBuilt")}>
-                  {listing.yearBuilt}
+                  {listing.yearBuilt ? listing.yearBuilt : t("t.n/a")}
                 </FieldValue>
               </Grid.Cell>
             )}
@@ -82,10 +94,10 @@ const DetailBuildingDetails = () => {
                   listing.listingsBuildingAddress.latitude.toString()}
               </FieldValue>
             </Grid.Cell>
-            {enableRegions && (
+            {showInitialRegion && (
               <Grid.Cell>
                 <FieldValue id="yearBuilt" label={t("listings.yearBuilt")}>
-                  {listing.yearBuilt}
+                  {listing.yearBuilt ? listing.yearBuilt : t("t.n/a")}
                 </FieldValue>
               </Grid.Cell>
             )}

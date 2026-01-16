@@ -14,7 +14,6 @@ import { Button, Card, Drawer, Grid } from "@bloom-housing/ui-seeds"
 import {
   ApplicationMethodCreate,
   ApplicationMethodsTypeEnum,
-  FeatureFlagEnum,
   LanguagesEnum,
   YesNoEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -78,6 +77,7 @@ export const phoneMask = (incomingNewValue: string): string => {
 
 type ApplicationTypesProps = {
   disableCommonApplication: boolean
+  enableReferralQuestionUnits: boolean
   jurisdiction: string
   listing: FormListing
   requiredFields: string[]
@@ -85,13 +85,14 @@ type ApplicationTypesProps = {
 
 const ApplicationTypes = ({
   disableCommonApplication,
+  enableReferralQuestionUnits,
   jurisdiction,
   listing,
   requiredFields,
 }: ApplicationTypesProps) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, setValue, watch, errors, getValues } = useFormContext()
-  const { getJurisdictionLanguages, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
+  const { getJurisdictionLanguages } = useContext(AuthContext)
 
   const getDefaultMethods = () => {
     const temp: Methods = {
@@ -150,10 +151,6 @@ const ApplicationTypes = ({
     setDrawerState(false)
   }
 
-  const enableReferralQuestionUnits = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableReferralQuestionUnits,
-    jurisdiction
-  )
   const availableJurisdictionLanguages = jurisdiction ? getJurisdictionLanguages(jurisdiction) : []
 
   const yesNoRadioOptions = [

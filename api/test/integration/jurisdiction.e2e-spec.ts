@@ -139,6 +139,7 @@ describe('Jurisdiction Controller Tests', () => {
         NeighborhoodAmenitiesEnum.groceryStores,
         NeighborhoodAmenitiesEnum.pharmacies,
       ],
+      regions: [],
     };
     const res = await request(app.getHttpServer())
       .post('/jurisdictions')
@@ -173,6 +174,7 @@ describe('Jurisdiction Controller Tests', () => {
         NeighborhoodAmenitiesEnum.groceryStores,
         NeighborhoodAmenitiesEnum.pharmacies,
       ],
+      regions: [],
     };
     const res = await request(app.getHttpServer())
       .put(`/jurisdictions/${id}`)
@@ -211,6 +213,7 @@ describe('Jurisdiction Controller Tests', () => {
         NeighborhoodAmenitiesEnum.groceryStores,
         NeighborhoodAmenitiesEnum.pharmacies,
       ],
+      regions: [],
     };
 
     const res = await request(app.getHttpServer())

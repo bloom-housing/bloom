@@ -30,7 +30,7 @@ describe("<MainDetails>", () => {
           ...listing,
           reviewOrderType: ReviewOrderTypeEnum.lottery,
           reservedCommunityTypes: null,
-          listingFeatures: {},
+          listingFeatures: { id: "1", createdAt: new Date(), updatedAt: new Date() },
         }}
         jurisdiction={jurisdiction}
       />

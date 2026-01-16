@@ -94,7 +94,7 @@ describe("filter drawer helpers", () => {
 
   describe("getAvailabilityValues", () => {
     it("should return correct availability strings in order", () => {
-      expect(getAvailabilityValues()).toEqual([
+      expect(getAvailabilityValues(false)).toEqual([
         FilterAvailabilityEnum.unitsAvailable,
         FilterAvailabilityEnum.openWaitlist,
         FilterAvailabilityEnum.closedWaitlist,

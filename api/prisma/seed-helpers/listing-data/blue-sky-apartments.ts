@@ -3,6 +3,7 @@ import {
   ApplicationMethodsTypeEnum,
   HomeTypeEnum,
   ListingsStatusEnum,
+  Prisma,
   ReviewOrderTypeEnum,
 } from '@prisma/client';
 import dayjs from 'dayjs';
@@ -12,7 +13,7 @@ import {
   yosemiteAddress,
 } from '../address-factory';
 
-export const blueSkyApartments = {
+export const blueSkyApartments: Prisma.ListingsCreateInput = {
   additionalApplicationSubmissionNotes: null,
   digitalApplication: true,
   commonDigitalApplication: true,

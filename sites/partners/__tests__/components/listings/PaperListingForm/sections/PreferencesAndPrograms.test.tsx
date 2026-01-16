@@ -1,5 +1,6 @@
 import React from "react"
 import { setupServer } from "msw/node"
+import { render, screen, within } from "@testing-library/react"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import {
   MultiselectQuestion,
@@ -7,7 +8,6 @@ import {
   MultiselectQuestionsStatusEnum,
   ValidationMethodEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { render, screen, within } from "@testing-library/react"
 import PreferencesAndPrograms from "../../../../../src/components/listings/PaperListingForm/sections/PreferencesAndPrograms"
 import { formDefaults } from "../../../../../src/lib/listings/formTypes"
 import { FormProviderWrapper } from "../../../../testUtils"
@@ -80,6 +80,9 @@ describe("PreferencesAndPrograms", () => {
               collectName: true,
               collectRelationship: true,
               mapLayerId: "c1586f71-345d-4986-83a2-b83ebfa84af5",
+              id: "1",
+              createdAt: new Date(),
+              updatedAt: new Date(),
             },
             {
               text: "All members of the household work in the city",
@@ -87,6 +90,9 @@ describe("PreferencesAndPrograms", () => {
               collectAddress: true,
               collectName: false,
               collectRelationship: false,
+              id: "2",
+              createdAt: new Date(),
+              updatedAt: new Date(),
             },
           ],
           hideFromListing: false,
@@ -97,25 +103,17 @@ describe("PreferencesAndPrograms", () => {
       const setFn = jest.fn()
 
       render(
-        <AuthContext.Provider
-          value={{
-            doJurisdictionsHaveFeatureFlagOn: () => {
-              return false
-            },
-          }}
-        >
-          <FormProviderWrapper values={{ ...formDefaults }}>
-            <PreferencesAndPrograms
-              preferences={mockPreferences}
-              programs={[]}
-              setPreferences={setFn}
-              setPrograms={setFn}
-              disableListingPreferences={false}
-              swapCommunityTypeWithPrograms={false}
-              jurisdiction={"jurisdiction1"}
-            />
-          </FormProviderWrapper>
-        </AuthContext.Provider>
+        <FormProviderWrapper values={{ ...formDefaults }}>
+          <PreferencesAndPrograms
+            preferences={mockPreferences}
+            programs={[]}
+            setPreferences={setFn}
+            setPrograms={setFn}
+            disableListingPreferences={false}
+            swapCommunityTypeWithPrograms={false}
+            jurisdiction={"jurisdiction1"}
+          />
+        </FormProviderWrapper>
       )
 
       const table = screen.getByRole("table")
@@ -157,25 +155,17 @@ describe("PreferencesAndPrograms", () => {
       const setFn = jest.fn()
 
       render(
-        <AuthContext.Provider
-          value={{
-            doJurisdictionsHaveFeatureFlagOn: () => {
-              return true
-            },
-          }}
-        >
-          <FormProviderWrapper values={{ ...formDefaults }}>
-            <PreferencesAndPrograms
-              preferences={[]}
-              programs={[]}
-              setPreferences={setFn}
-              setPrograms={setFn}
-              disableListingPreferences={true}
-              swapCommunityTypeWithPrograms={false}
-              jurisdiction={"jurisdiction1"}
-            />
-          </FormProviderWrapper>
-        </AuthContext.Provider>
+        <FormProviderWrapper values={{ ...formDefaults }}>
+          <PreferencesAndPrograms
+            preferences={[]}
+            programs={[]}
+            setPreferences={setFn}
+            setPrograms={setFn}
+            disableListingPreferences={true}
+            swapCommunityTypeWithPrograms={false}
+            jurisdiction={"jurisdiction1"}
+          />
+        </FormProviderWrapper>
       )
 
       expect(
