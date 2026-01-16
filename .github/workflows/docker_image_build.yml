@@ -39,10 +39,6 @@ jobs:
             docker_context: "{{defaultContext}}"
             dockerfile: Dockerfile.sites.public
             platforms: linux/amd64
-          - container: infra
-            docker_context: "{{defaultContext}}:infra"
-            dockerfile: Dockerfile
-            platforms: linux/amd64,linux/arm64
           - container: infra-dev
             docker_context: "{{defaultContext}}:infra"
             dockerfile: Dockerfile.dev
