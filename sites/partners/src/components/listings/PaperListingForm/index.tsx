@@ -47,6 +47,7 @@ import AdditionalEligibility from "./sections/AdditionalEligibility"
 import LeasingAgent from "./sections/LeasingAgent"
 import AdditionalFees from "./sections/AdditionalFees"
 import Units from "./sections/Units"
+import AccessibilityFeatures from "./sections/AccessibilityFeatures"
 import BuildingDetails from "./sections/BuildingDetails"
 import ListingIntro from "./sections/ListingIntro"
 import ListingPhotos from "./sections/ListingPhotos"
@@ -68,8 +69,8 @@ import PublishListingDialog from "./dialogs/PublishListingDialog"
 import LiveConfirmationDialog from "./dialogs/LiveConfirmationDialog"
 import ListingApprovalDialog from "./dialogs/ListingApprovalDialog"
 import SaveBeforeExitDialog from "./dialogs/SaveBeforeExitDialog"
-
 import * as styles from "./ListingForm.module.scss"
+
 const CHARACTER_LIMIT = 1000
 
 type ListingFormProps = {
@@ -163,6 +164,8 @@ const ListingForm = ({
       return { ...listingProg?.multiselectQuestions }
     })
   )
+
+  const [accessibilityFeatures, setAccessibilityFeatures] = useState<string[]>(null)
 
   const [latLong, setLatLong] = useState<LatitudeLongitude>({
     latitude: listing?.listingsBuildingAddress?.latitude ?? null,
@@ -270,6 +273,18 @@ const ListingForm = ({
       )
     }
   }, [enableNonRegulatedListings, isNonRegulated, setValue])
+
+  useEffect(() => {
+    if (listing && listing.listingFeatures && accessibilityFeatures === null) {
+      setAccessibilityFeatures(
+        Object.keys(listing.listingFeatures)
+          .map((feature) => {
+            return listing.listingFeatures[feature] === true ? feature : null
+          })
+          .filter((feature) => feature !== null)
+      )
+    }
+  }, [listing, accessibilityFeatures])
 
   useEffect(() => {
     if (listing?.units) {
@@ -598,12 +613,19 @@ const ListingForm = ({
                             existingUtilities={listing?.listingUtilities}
                             requiredFields={requiredFields}
                           />
-                          <BuildingFeatures
-                            existingFeatures={listing?.listingFeatures}
+                          <AccessibilityFeatures
+                            existingFeatures={accessibilityFeatures}
                             enableAccessibilityFeatures={doJurisdictionsHaveFeatureFlagOn(
                               FeatureFlagEnum.enableAccessibilityFeatures,
                               jurisdictionId
                             )}
+                            enableExpandedAccessibilityFeatures={doJurisdictionsHaveFeatureFlagOn(
+                              FeatureFlagEnum.enableExpandedAccessibilityFeatures,
+                              jurisdictionId
+                            )}
+                            setAccessibilityFeatures={setAccessibilityFeatures}
+                          />
+                          <BuildingFeatures
                             enableSmokingPolicyRadio={doJurisdictionsHaveFeatureFlagOn(
                               FeatureFlagEnum.enableSmokingPolicyRadio,
                               jurisdictionId

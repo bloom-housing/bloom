@@ -93,6 +93,13 @@ export type FormListing = Omit<Listing, "countyCode" | "listingFeatures" | "list
   selectedRequiredDocuments?: string[]
   listingFeatures?: ListingFeaturesCreate
   listingUtilities?: ListingUtilitiesCreate
+  configurableAccessibilityFeatures?: {
+    bathroom: string[]
+    mobility: string[]
+    flooring: string[]
+    utility: string[]
+    hearingVision: string[]
+  }
 }
 
 export const addressTypes = {
@@ -184,6 +191,13 @@ export const formDefaults: FormListing = {
   reviewOrderType: null,
   unitsSummary: [],
   applicationLotteryTotals: [],
+  configurableAccessibilityFeatures: {
+    bathroom: [],
+    mobility: [],
+    flooring: [],
+    utility: [],
+    hearingVision: [],
+  },
 }
 
 export type TempUnit = Unit & {
