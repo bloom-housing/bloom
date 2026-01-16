@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import React from "react"
-import { screen } from "@testing-library/dom"
+import { screen, within } from "@testing-library/dom"
 import {
   FeatureFlagEnum,
   HomeTypeEnum,
@@ -57,8 +57,10 @@ describe("FilterDrawer", () => {
         isOpen={true}
         onClose={() => {}}
         onSubmit={() => {}}
+        onClear={() => {}}
         filterState={{}}
         multiselectData={mockMultiselect}
+        activeFeatureFlags={[FeatureFlagEnum.swapCommunityTypeWithPrograms]}
       />
     )
     expect(screen.getByLabelText("Close")).toBeInTheDocument()
@@ -216,8 +218,10 @@ describe("FilterDrawer", () => {
         isOpen={true}
         onClose={() => {}}
         onSubmit={() => {}}
+        onClear={() => {}}
         filterState={filterState}
         multiselectData={mockMultiselect}
+        activeFeatureFlags={[FeatureFlagEnum.swapCommunityTypeWithPrograms]}
       />
     )
     expect(screen.getByLabelText("Close")).toBeInTheDocument()
@@ -364,9 +368,13 @@ describe("FilterDrawer", () => {
         isOpen={true}
         onClose={() => {}}
         onSubmit={() => {}}
+        onClear={() => {}}
         filterState={{}}
         multiselectData={mockMultiselect}
-        activeFeatureFlags={[FeatureFlagEnum.enableUnitGroups]}
+        activeFeatureFlags={[
+          FeatureFlagEnum.enableUnitGroups,
+          FeatureFlagEnum.swapCommunityTypeWithPrograms,
+        ]}
       />
     )
 
@@ -383,5 +391,42 @@ describe("FilterDrawer", () => {
     expect(screen.getByRole("checkbox", { name: "4 bedroom" })).not.toBeChecked()
     expect(screen.queryByLabelText("SRO")).not.toBeInTheDocument()
     expect(screen.queryByLabelText("5 bedroom")).not.toBeInTheDocument()
+  })
+
+  it("should swap to reserved community type", () => {
+    render(
+      <FilterDrawer
+        isOpen={true}
+        onClose={() => {}}
+        onSubmit={() => {}}
+        onClear={() => {}}
+        filterState={{}}
+        multiselectData={[]}
+        activeFeatureFlags={[]}
+      />
+    )
+
+    const communityTitle = screen.getByText(/community/i)
+    expect(communityTitle).toBeInTheDocument()
+
+    const communityFilterSection = communityTitle.parentElement
+
+    expect(
+      within(communityFilterSection).getByText(/rentals for residents with disabilities/i)
+    ).toBeInTheDocument()
+    expect(
+      within(communityFilterSection).getByText(/rentals for seniors 55\+/i)
+    ).toBeInTheDocument()
+    expect(
+      within(communityFilterSection).getByRole("checkbox", { name: /rentals for seniors 62\+/i })
+    ).toBeInTheDocument()
+    expect(
+      within(communityFilterSection).getByRole("checkbox", {
+        name: /supportive housing for the homeless/i,
+      })
+    ).toBeInTheDocument()
+    expect(
+      within(communityFilterSection).getByRole("checkbox", { name: /rentals for veterans/i })
+    ).toBeInTheDocument()
   })
 })
