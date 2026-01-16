@@ -15,6 +15,7 @@ export const multiselectQuestionFactory = (
   optionalParams?: {
     optOut?: boolean;
     multiselectQuestion?: Partial<Prisma.MultiselectQuestionsCreateInput>;
+    status?: MultiselectQuestionsStatusEnum;
   },
   version2 = false,
 ): Prisma.MultiselectQuestionsCreateInput => {
@@ -56,7 +57,7 @@ export const multiselectQuestionFactory = (
     },
     name: name,
     subText: `sub text for ${name}`,
-    status: MultiselectQuestionsStatusEnum.draft,
+    status: optionalParams?.status || MultiselectQuestionsStatusEnum.draft,
     // TODO: Can be removed after MSQ refactor
     text: name,
   };

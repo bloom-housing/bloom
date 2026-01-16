@@ -36,6 +36,7 @@ const SettingsProperties = () => {
     null,
     true
   )
+  const v2Preferences = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableV2MSQ)
 
   if (profile?.userRoles?.isPartner || profile?.userRoles?.isSupportAdmin || !enableProperties) {
     void router.push("/unauthorized")
@@ -175,7 +176,7 @@ const SettingsProperties = () => {
         <NavigationHeader className="relative" title={t("t.settings")} />
         <TabView
           hideTabs={!(atLeastOneJurisdictionEnablesPreferences && enableProperties)}
-          tabs={getSettingsTabs(SettingsIndexEnum.properties, router)}
+          tabs={getSettingsTabs(SettingsIndexEnum.properties, router, v2Preferences)}
         >
           <AgTable
             id="properties-table"
