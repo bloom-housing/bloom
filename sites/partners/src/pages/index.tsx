@@ -289,15 +289,16 @@ export default function ListingsList() {
         },
       }),
     ],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   )
 
   const fetchListingsData = async (
     pagination?: PaginationState,
-    search?: ColumnFiltersState,
+    search?: ColumnFiltersState | string,
     sort?: SortingState
   ) => {
-    const searchValue = search[0]?.value as string
+    const searchValue = typeof search === "string" ? search : (search[0]?.value as string)
     const data = await fetchBaseListingData({
       page: pagination?.pageIndex ? pagination.pageIndex + 1 : 0,
       limit: pagination?.pageSize || 8,
@@ -317,6 +318,49 @@ export default function ListingsList() {
     }
   }
 
+  const tableHeaderContent = (
+    <>
+      {isAdmin && (
+        <div className={"flex"}>
+          <Button
+            size="sm"
+            variant="primary"
+            onClick={() => {
+              if (defaultJurisdiction) {
+                void router.push({
+                  pathname: "/listings/add",
+                  query: { jurisdictionId: defaultJurisdiction },
+                })
+              } else {
+                setListingSelectModal(true)
+              }
+            }}
+            id="addListingButton"
+            className={"mr-2"}
+          >
+            {t("listings.addListing")}
+          </Button>
+          <Button
+            id="export-listings"
+            variant="primary-outlined"
+            onClick={() => onExport()}
+            leadIcon={
+              !csvExportLoading ? (
+                <Icon>
+                  <DocumentArrowDownIcon />
+                </Icon>
+              ) : null
+            }
+            size="sm"
+            loadingMessage={csvExportLoading && t("t.formSubmitted")}
+          >
+            {t("t.exportToCSV")}
+          </Button>
+        </div>
+      )}
+    </>
+  )
+
   return (
     <Layout>
       <Head>
@@ -326,45 +370,6 @@ export default function ListingsList() {
       <NavigationHeader title={t("nav.listings")}></NavigationHeader>
       <section>
         <div className="flex-row flex-wrap relative max-w-screen-xl mx-auto py-8 px-4">
-          <div className="flex gap-2 items-center w-full mb-4 justify-end">
-            {isAdmin && (
-              <>
-                <Button
-                  size="sm"
-                  variant="primary"
-                  onClick={() => {
-                    if (defaultJurisdiction) {
-                      void router.push({
-                        pathname: "/listings/add",
-                        query: { jurisdictionId: defaultJurisdiction },
-                      })
-                    } else {
-                      setListingSelectModal(true)
-                    }
-                  }}
-                  id="addListingButton"
-                >
-                  {t("listings.addListing")}
-                </Button>
-                <Button
-                  id="export-listings"
-                  variant="primary-outlined"
-                  onClick={() => onExport()}
-                  leadIcon={
-                    !csvExportLoading ? (
-                      <Icon>
-                        <DocumentArrowDownIcon />
-                      </Icon>
-                    ) : null
-                  }
-                  size="sm"
-                  loadingMessage={csvExportLoading && t("t.formSubmitted")}
-                >
-                  {t("t.exportToCSV")}
-                </Button>
-              </>
-            )}
-          </div>
           <DataTable
             description={t("nav.listings")}
             columns={columns}
@@ -372,6 +377,8 @@ export default function ListingsList() {
             initialSort={[{ id: "status", desc: false }]}
             minSearchCharacters={MIN_SEARCH_CHARACTERS}
             fetchData={fetchListingsData}
+            filterType={"global"}
+            headerRightContent={tableHeaderContent}
           />
         </div>
       </section>

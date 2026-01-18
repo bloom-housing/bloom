@@ -54,12 +54,16 @@ interface DataTableProps {
   defaultItemsPerPage?: number
   // Whether to enable horizontal scrolling for wide tables, or autofit columns within the container
   enableHorizontalScroll?: boolean
+  // The type of filtering to use: global search or per-column filters
+  filterType: "global" | "per-column"
   // Function to fetch data for the table based on pagination, search, and sort parameters
   fetchData: (
     pagination?: PaginationState,
     search?: ColumnFiltersState,
     sort?: SortingState
   ) => Promise<TableData>
+  // Optional content to display in the header on the right side
+  headerRightContent?: React.ReactNode
   // Initial sort state for the table
   initialSort?: SortingState
   // Minimum number of characters required to trigger filtering
@@ -92,13 +96,16 @@ export const DataTable = (props: DataTableProps) => {
   })
 
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+  const [globalFilter, setGlobalFilter] = useState(null)
   const [sorting, setSorting] = useState<SortingState>(props.initialSort ?? [])
   const [columnVisibility, setColumnVisibility] = React.useState({})
   const [delayedLoading, setDelayedLoading] = useState(false)
 
+  const searchFilters = props.filterType === "global" ? globalFilter : columnFilters
+
   const dataQuery = useQuery({
-    queryKey: ["data", pagination, columnFilters, sorting],
-    queryFn: () => props.fetchData(pagination, columnFilters, sorting),
+    queryKey: ["data", pagination, searchFilters, sorting],
+    queryFn: () => props.fetchData(pagination, searchFilters, sorting),
     placeholderData: keepPreviousData,
   })
 
@@ -151,12 +158,14 @@ export const DataTable = (props: DataTableProps) => {
       setPagination((prev) => ({ ...prev, pageIndex: 0 }))
       setSorting(sorting)
     },
+    onGlobalFilterChange: setGlobalFilter,
     rowCount: dataQuery.data?.totalItems,
     state: {
       columnFilters,
       columnVisibility,
       pagination,
       sorting,
+      globalFilter,
     },
     defaultColumn: {
       size: props.enableHorizontalScroll ? 100 : 150,
@@ -229,13 +238,24 @@ export const DataTable = (props: DataTableProps) => {
                 ) : (
                   flexRender(header.column.columnDef.header, header.getContext())
                 )}
-                {header.column.getCanFilter() ? (
+                {props.filterType === "per-column" && header.column.getCanFilter() ? (
                   <div>
                     <DataTableFilter
                       columnFilterValue={(header.column.getFilterValue() as string) || ""}
-                      header={header}
                       minSearchCharacters={props.minSearchCharacters || 3}
                       setPagination={setPagination}
+                      getFilterValue={header.column.getFilterValue}
+                      setFilterValue={header.column.setFilterValue}
+                      inputName={
+                        (header.column.columnDef.meta as MetaType)?.plaintextName ||
+                        header.column.columnDef.id
+                      }
+                      filterType={props.filterType}
+                      ariaDescription={`${t("listings.table.searchBy", {
+                        column:
+                          (header.column.columnDef.meta as MetaType)?.plaintextName ||
+                          header.column.columnDef.id,
+                      })} - ${t("table.searchSubtext", { char: props.minSearchCharacters })}`}
                     />
                   </div>
                 ) : null}
@@ -399,6 +419,34 @@ export const DataTable = (props: DataTableProps) => {
 
   return (
     <div className={styles["data-table-wrapper"]}>
+      <div className={styles["header-container"]}>
+        {props.filterType === "global" && (
+          <div className={styles["header-left-content"]}>
+            <DataTableFilter
+              columnFilterValue={(globalFilter as string) || ""}
+              minSearchCharacters={props.minSearchCharacters || 3}
+              setPagination={setPagination}
+              getFilterValue={() => table.getState().globalFilter}
+              setFilterValue={table.setGlobalFilter}
+              inputName={"global-search"}
+              filterType={props.filterType}
+              ariaDescription={`${t("listings.table.searchByGeneric")} - ${t(
+                "table.searchSubtext",
+                { char: props.minSearchCharacters }
+              )}`}
+            />
+          </div>
+        )}
+        {props.headerRightContent && (
+          <div
+            className={`${styles["header-right-content"]} ${
+              props.filterType !== "global" ? styles["full-width"] : ""
+            }`}
+          >
+            {props.headerRightContent}
+          </div>
+        )}
+      </div>
       <div className={styles["data-table-container"]}>
         <table
           className={`${styles["data-table"]} ${
@@ -417,10 +465,15 @@ export const DataTable = (props: DataTableProps) => {
 }
 
 interface DataTableFilterProps {
+  ariaDescription: string
   columnFilterValue: string
-  header: Header<TableDataRow, unknown>
+  // header: Header<TableDataRow, unknown>
   minSearchCharacters: number
   setPagination: React.Dispatch<React.SetStateAction<PaginationState>>
+  getFilterValue: () => unknown
+  setFilterValue: (updater: unknown) => void
+  inputName: string
+  filterType: "global" | "per-column"
 }
 
 const DataTableFilter = (props: DataTableFilterProps) => {
@@ -430,8 +483,8 @@ const DataTableFilter = (props: DataTableFilterProps) => {
   useEffect(() => {
     // Only set filter value if it has changed
     if (
-      value === props.header.column.getFilterValue() ||
-      (value === "" && props.header.column.getFilterValue() === undefined)
+      value === props.getFilterValue() ||
+      (value === "" && props.getFilterValue() === undefined)
     ) {
       return
     }
@@ -442,9 +495,9 @@ const DataTableFilter = (props: DataTableFilterProps) => {
       // Reset filter if input length becomes less than minSearchCharacters
       // Does not make more than one call due to request caching in useQuery
       if (value.length > 0 && value.length < props.minSearchCharacters) {
-        props.header.column.setFilterValue("")
+        props.setFilterValue("")
       } else {
-        props.header.column.setFilterValue(value)
+        props.setFilterValue(value)
       }
     }, debounce)
 
@@ -452,16 +505,14 @@ const DataTableFilter = (props: DataTableFilterProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value])
 
-  const inputName =
-    (props.header.column.columnDef.meta as MetaType)?.plaintextName ||
-    props.header.column.columnDef.id
-
-  const inputId = `column-search-${inputName}`
+  const inputId = `column-search-${props.inputName}`
 
   return (
     <>
       <input
-        className={styles["search-input"]}
+        className={`${styles["search-input"]} ${
+          props.filterType === "global" ? styles["global-search-input"] : ""
+        }`}
         id={inputId}
         data-testid={inputId}
         onChange={(e) => {
@@ -470,10 +521,7 @@ const DataTableFilter = (props: DataTableFilterProps) => {
         placeholder={t("t.search")}
         type={"text"}
         value={value}
-        aria-description={`${t("listings.table.searchBy", { column: inputName })} - ${t(
-          "table.searchSubtext",
-          { char: props.minSearchCharacters }
-        )}`}
+        aria-description={props.ariaDescription}
       />
       {props.minSearchCharacters && (
         <div className={styles["min-characters-info"]} id={"input-helper"} aria-hidden="true">

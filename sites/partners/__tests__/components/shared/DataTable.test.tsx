@@ -48,7 +48,12 @@ describe("DataTable", () => {
 
     render(
       <QueryClientProvider client={queryClient}>
-        <DataTable columns={defaultColumns} fetchData={mockFetch} description={"Table caption"} />
+        <DataTable
+          columns={defaultColumns}
+          fetchData={mockFetch}
+          description={"Table caption"}
+          filterType={"per-column"}
+        />
       </QueryClientProvider>
     )
     expect(await screen.findByRole("columnheader", { name: "First name" })).toBeInTheDocument()
@@ -92,6 +97,7 @@ describe("DataTable", () => {
           fetchData={mockFetch}
           defaultItemsPerPage={2}
           description={"Table caption"}
+          filterType={"per-column"}
         />
       </QueryClientProvider>
     )
@@ -178,7 +184,7 @@ describe("DataTable", () => {
     expect(screen.getByText("Page 2 of 3")).toBeInTheDocument()
     expect(within(screen.getAllByRole("rowgroup")[1]).getAllByRole("row")).toHaveLength(2)
   })
-  it("should filter on columns", async () => {
+  it("should filter on columns per-column", async () => {
     const mockFetch = jest.fn()
 
     const defaultItems = [
@@ -225,6 +231,7 @@ describe("DataTable", () => {
           columns={filterColumns}
           fetchData={mockFetch}
           minSearchCharacters={5}
+          filterType={"per-column"}
           description={"Table caption"}
         />
       </QueryClientProvider>
@@ -277,6 +284,102 @@ describe("DataTable", () => {
     expect(screen.getByText("Page 1 of 1")).toBeInTheDocument()
     expect(mockFetch).toHaveBeenCalledTimes(3)
     expect(mockFetch).toHaveBeenCalledWith({ pageIndex: 0, pageSize: 8 }, [], [])
+  })
+
+  it("should filter on columns  global", async () => {
+    const mockFetch = jest.fn()
+
+    const defaultItems = [
+      { firstName: "TestFirstA", lastName: "TestLastA" },
+      { firstName: "TestFirstB", lastName: "TestLastB" },
+      { firstName: "TestFirstC", lastName: "TestLastC" },
+      { firstName: "TestFirstD", lastName: "TestLastD" },
+      { firstName: "TestFirstE", lastName: "TestLastE" },
+      { firstName: "TestFirstF", lastName: "TestLastF" },
+      { firstName: "TestFirstG", lastName: "TestLastG" },
+      { firstName: "TestFirstH", lastName: "TestLastH" },
+    ]
+    mockFetch.mockReturnValue({
+      items: defaultItems,
+      totalItems: 8,
+      currentPage: 1,
+      itemsPerPage: 8,
+      errorMessage: null,
+    })
+
+    const filterColumns = [
+      columnHelper.accessor("firstName", {
+        id: "firstName",
+        cell: (props) => props.getValue(),
+        header: () => "First name",
+        footer: (props) => props.column.id,
+        enableSorting: false,
+        meta: { plaintextName: "First name" },
+      }),
+      columnHelper.accessor("lastName", {
+        id: "lastName",
+        cell: (props) => props.getValue(),
+        header: () => "Last name",
+        footer: (props) => props.column.id,
+        enableSorting: false,
+        enableColumnFilter: false,
+        meta: { plaintextName: "Last name" },
+      }),
+    ]
+
+    render(
+      <QueryClientProvider client={queryClient}>
+        <DataTable
+          columns={filterColumns}
+          fetchData={mockFetch}
+          minSearchCharacters={5}
+          filterType={"global"}
+          description={"Table caption"}
+        />
+      </QueryClientProvider>
+    )
+
+    expect(await screen.findByRole("columnheader", { name: /First name/i })).toBeInTheDocument()
+    expect(screen.getByRole("columnheader", { name: /Last name/i })).toBeInTheDocument()
+    expect(screen.getByText("8 Total listings")).toBeInTheDocument()
+    expect(screen.getByText("Page 1 of 1")).toBeInTheDocument()
+
+    expect(screen.queryByRole("button", { description: "Activate ascending sort" })).toBeNull()
+    const firstNameInput = screen.getByTestId("column-search-global-search")
+    expect(firstNameInput).toHaveAccessibleDescription("Search items - Enter at least 5 characters")
+    expect(mockFetch).toHaveBeenCalledTimes(1)
+    expect(mockFetch).toHaveBeenCalledWith({ pageIndex: 0, pageSize: 8 }, null, [])
+
+    fireEvent.change(firstNameInput, { target: { value: "Te" } })
+    expect(mockFetch).toHaveBeenCalledTimes(1)
+
+    mockFetch.mockReturnValueOnce({
+      items: [{ firstName: "TestFirstA", lastName: "TestLastA" }],
+      totalItems: 1,
+      currentPage: 1,
+      itemsPerPage: 8,
+      errorMessage: null,
+    })
+    fireEvent.change(firstNameInput, { target: { value: "TestFirstA" } })
+    expect(await screen.findByText("1 Total listing")).toBeInTheDocument()
+    expect(await screen.findByRole("cell", { name: "TestFirstA" })).toBeInTheDocument()
+    expect(screen.getByText("Page 1 of 1")).toBeInTheDocument()
+    expect(mockFetch).toHaveBeenCalledTimes(2)
+    expect(mockFetch).toHaveBeenCalledWith({ pageIndex: 0, pageSize: 8 }, "TestFirstA", [])
+
+    mockFetch.mockReturnValueOnce({
+      items: defaultItems,
+      totalItems: 8,
+      currentPage: 1,
+      itemsPerPage: 8,
+      errorMessage: null,
+    })
+    fireEvent.change(firstNameInput, { target: { value: "Te" } })
+    expect(await screen.findByText("8 Total listings")).toBeInTheDocument()
+    expect(await screen.findByRole("cell", { name: "TestFirstB" })).toBeInTheDocument()
+    expect(screen.getByText("Page 1 of 1")).toBeInTheDocument()
+    expect(mockFetch).toHaveBeenCalledTimes(3)
+    expect(mockFetch).toHaveBeenCalledWith({ pageIndex: 0, pageSize: 8 }, "", [])
   })
   it("should sort on columns", async () => {
     const mockFetch = jest.fn()
@@ -338,6 +441,7 @@ describe("DataTable", () => {
           minSearchCharacters={5}
           initialSort={[{ id: "lastName", desc: false }]}
           description={"Table caption"}
+          filterType={"per-column"}
         />
       </QueryClientProvider>
     )
@@ -474,6 +578,7 @@ describe("DataTable", () => {
           fetchData={mockFetch}
           minSearchCharacters={5}
           initialSort={[{ id: "lastName", desc: false }]}
+          filterType={"per-column"}
         />
       </QueryClientProvider>
     )
@@ -519,6 +624,7 @@ describe("DataTable", () => {
           fetchData={mockFetch}
           description={"Table caption"}
           enableHorizontalScroll={true}
+          filterType={"per-column"}
         />
       </QueryClientProvider>
     )
@@ -575,6 +681,7 @@ describe("DataTable", () => {
           fetchData={mockFetch}
           minSearchCharacters={5}
           description={"Table caption"}
+          filterType={"per-column"}
         />
       </QueryClientProvider>
     )

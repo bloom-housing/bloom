@@ -477,6 +477,7 @@
   "listings.smokingPolicyOptions.unknown": "Policy unknown",
   "listings.streetAddressOrPOBox": "Street address or PO box",
   "listings.table.searchBy": "Search items by %{column}",
+  "listings.table.searchByGeneric": "Search items",
   "listings.totalListing": "Total listing",
   "listings.totalListings": "Total listings",
   "listings.unit.%incomeRent": "Percentage of income rent",
