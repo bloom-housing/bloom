@@ -97,9 +97,6 @@ describe("listings", () => {
     window.URL.createObjectURL = jest.fn()
     document.cookie = "access-token-available=True"
     server.use(
-      rest.get("http://localhost:3100/listings", (_req, res, ctx) => {
-        return res(ctx.json({ items: [listing], meta: { totalItems: 1, totalPages: 1 } }))
-      }),
       rest.post("http://localhost/api/adapter/listings/list", (_req, res, ctx) => {
         return res(ctx.json({ items: [listing], meta: { totalItems: 1, totalPages: 1 } }))
       }),
@@ -130,9 +127,6 @@ describe("listings", () => {
     window.URL.createObjectURL = jest.fn()
     document.cookie = "access-token-available=True"
     server.use(
-      rest.get("http://localhost:3100/listings", (_req, res, ctx) => {
-        return res(ctx.json({ items: [listing], meta: { totalItems: 1, totalPages: 1 } }))
-      }),
       rest.post("http://localhost/api/adapter/listings/list", (_req, res, ctx) => {
         return res(ctx.json({ items: [listing], meta: { totalItems: 1, totalPages: 1 } }))
       }),
@@ -185,9 +179,6 @@ describe("listings", () => {
     window.URL.createObjectURL = jest.fn()
     document.cookie = "access-token-available=True"
     server.use(
-      rest.get("http://localhost:3100/listings", (_req, res, ctx) => {
-        return res(ctx.json({ items: [listing], meta: { totalItems: 1, totalPages: 1 } }))
-      }),
       rest.post("http://localhost/api/adapter/listings/list", (_req, res, ctx) => {
         return res(ctx.json({ items: [listing], meta: { totalItems: 1, totalPages: 1 } }))
       }),
@@ -241,9 +232,6 @@ describe("listings", () => {
     window.URL.createObjectURL = jest.fn()
     document.cookie = "access-token-available=True"
     server.use(
-      rest.get("http://localhost:3100/listings", (_req, res, ctx) => {
-        return res(ctx.json({ items: [listing], meta: { totalItems: 1, totalPages: 1 } }))
-      }),
       rest.post("http://localhost/api/adapter/listings/list", (_req, res, ctx) => {
         return res(ctx.json({ items: [listing], meta: { totalItems: 1, totalPages: 1 } }))
       }),
@@ -297,9 +285,6 @@ describe("listings", () => {
     window.URL.createObjectURL = jest.fn()
     document.cookie = "access-token-available=True"
     server.use(
-      rest.get("http://localhost:3100/listings", (_req, res, ctx) => {
-        return res(ctx.json({ items: [listing], meta: { totalItems: 1, totalPages: 1 } }))
-      }),
       rest.post("http://localhost/api/adapter/listings/list", (_req, res, ctx) => {
         return res(ctx.json({ items: [listing], meta: { totalItems: 1, totalPages: 1 } }))
       }),
@@ -352,9 +337,6 @@ describe("listings", () => {
     window.URL.createObjectURL = jest.fn()
     document.cookie = "access-token-available=True"
     server.use(
-      rest.get("http://localhost:3100/listings", (_req, res, ctx) => {
-        return res(ctx.json({ items: [listing], meta: { totalItems: 1, totalPages: 1 } }))
-      }),
       rest.post("http://localhost/api/adapter/listings/list", (_req, res, ctx) => {
         return res(ctx.json({ items: [listing], meta: { totalItems: 1, totalPages: 1 } }))
       }),
@@ -406,9 +388,6 @@ describe("listings", () => {
     window.URL.createObjectURL = jest.fn()
     document.cookie = "access-token-available=True"
     server.use(
-      rest.get("http://localhost:3100/listings", (_req, res, ctx) => {
-        return res(ctx.json({ items: [listing], meta: { totalItems: 1, totalPages: 1 } }))
-      }),
       rest.post("http://localhost/api/adapter/listings/list", (_req, res, ctx) => {
         return res(ctx.json({ items: [listing], meta: { totalItems: 1, totalPages: 1 } }))
       }),
@@ -540,9 +519,6 @@ describe("listings", () => {
     document.cookie = "access-token-available=True"
     const { pushMock } = mockNextRouter()
     server.use(
-      rest.get("http://localhost:3100/listings", (_req, res, ctx) => {
-        return res(ctx.json({ items: [listing], meta: { totalItems: 1, totalPages: 1 } }))
-      }),
       rest.post("http://localhost/api/adapter/listings/list", (_req, res, ctx) => {
         return res(ctx.json({ items: [listing], meta: { totalItems: 1, totalPages: 1 } }))
       }),
@@ -590,7 +566,7 @@ describe("listings", () => {
       </QueryClientProvider>
     )
 
-    render(<ListingsList />)
+    // render(<ListingsList />)
 
     const addListingButton = await screen.findByRole("button", { name: "Add listing" })
     expect(addListingButton).toBeInTheDocument()
@@ -617,86 +593,231 @@ describe("listings", () => {
     })
   })
 
-  // it("should open add listing modal if user has access to one jurisdiction and enableNonRegulatedListings", async () => {
-  //   window.URL.createObjectURL = jest.fn()
-  //   document.cookie = "access-token-available=True"
-  //   const { pushMock } = mockNextRouter()
-  //   server.use(
-  //     rest.get("http://localhost:3100/listings", (_req, res, ctx) => {
-  //       return res(ctx.json({ items: [listing], meta: { totalItems: 1, totalPages: 1 } }))
-  //     }),
-  //     rest.post("http://localhost/api/adapter/listings/list", (_req, res, ctx) => {
-  //       return res(ctx.json({ items: [listing], meta: { totalItems: 1, totalPages: 1 } }))
-  //     }),
-  //     rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
-  //       return res(
-  //         ctx.json({
-  //           id: "user1",
-  //           userRoles: { id: "user1", isAdmin: true, isPartner: false },
-  //           jurisdictions: [
-  //             {
-  //               id: "id1",
-  //               name: "JurisdictionA",
-  //               featureFlags: [
-  //                 {
-  //                   id: "id_1",
-  //                   name: FeatureFlagEnum.enableNonRegulatedListings,
-  //                   active: true,
-  //                 },
-  //               ],
-  //             } as Jurisdiction,
-  //           ],
-  //         })
-  //       )
-  //     }),
-  //     rest.post("http://localhost:3100/auth/token", (_req, res, ctx) => {
-  //       return res(ctx.json(""))
-  //     })
-  //   )
-  //   const queryClient = new QueryClient()
+  it("should open add listing modal if user has access to one jurisdiction and enableNonRegulatedListings", async () => {
+    window.URL.createObjectURL = jest.fn()
+    document.cookie = "access-token-available=True"
+    const { pushMock } = mockNextRouter()
+    server.use(
+      rest.post("http://localhost/api/adapter/listings/list", (_req, res, ctx) => {
+        return res(ctx.json({ items: [listing], meta: { totalItems: 1, totalPages: 1 } }))
+      }),
+      rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
+        return res(
+          ctx.json({
+            id: "user1",
+            userRoles: { id: "user1", isAdmin: true, isPartner: false },
+            jurisdictions: [
+              {
+                id: "id1",
+                name: "JurisdictionA",
+                featureFlags: [
+                  {
+                    id: "id_1",
+                    name: FeatureFlagEnum.enableNonRegulatedListings,
+                    active: true,
+                  },
+                ],
+              } as Jurisdiction,
+            ],
+          })
+        )
+      }),
+      rest.post("http://localhost:3100/auth/token", (_req, res, ctx) => {
+        return res(ctx.json(""))
+      })
+    )
 
-  //   render(
-  //     <QueryClientProvider client={queryClient}>
-  //       <AuthContext.Provider
-  //         value={{
-  //           initialStateLoaded: true,
-  //           profile: {
-  //             ...mockUser,
-  //             userRoles: { isAdmin: true, isPartner: false },
-  //             jurisdictions: [
-  //               {
-  //                 id: "id1",
-  //                 name: "JurisdictionA",
-  //                 featureFlags: [],
-  //               } as Jurisdiction,
-  //             ],
-  //           },
-  //           doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
-  //             mockJurisdictionsHaveFeatureFlagOn(featureFlag, false, false),
-  //         }}
-  //       >
-  //         <ListingsList />
-  //       </AuthContext.Provider>
-  //     </QueryClientProvider>
-  //   )
+    const queryClient = new QueryClient()
 
-  //   render(<ListingsList />)
+    render(
+      <QueryClientProvider client={queryClient}>
+        <ListingsList />
+      </QueryClientProvider>
+    )
 
-  //   const addListingButton = await screen.findByRole("button", { name: "Add listing" })
-  //   expect(addListingButton).toBeInTheDocument()
-  //   await userEvent.click(addListingButton)
+    const addListingButton = await screen.findByRole("button", { name: "Add listing" })
+    expect(addListingButton).toBeInTheDocument()
+    await userEvent.click(addListingButton)
 
-  //   expect(
-  //     screen.queryByRole("heading", { level: 1, name: "Select jurisdiction" })
-  //   ).not.toBeInTheDocument()
+    expect(
+      screen.getByRole("heading", { level: 1, name: "Select Listing Type" })
+    ).toBeInTheDocument()
+    expect(
+      screen.getByText("Once you create this listing, this selection cannot be changed.")
+    ).toBeInTheDocument()
 
-  //   expect(screen.queryByRole("option", { name: "JurisdictionA" })).not.toBeInTheDocument()
+    const listingTypeRadioGroup = screen.getByRole("group", {
+      name: "What kind of listing is this?",
+    })
+    expect(listingTypeRadioGroup).toBeInTheDocument()
+    expect(
+      within(listingTypeRadioGroup).getByRole("radio", { name: "Regulated" })
+    ).toBeInTheDocument()
+    expect(
+      within(listingTypeRadioGroup).getByRole("radio", { name: "Non-regulated" })
+    ).toBeInTheDocument()
 
-  //   await waitFor(() => {
-  //     expect(pushMock).toHaveBeenCalledWith({
-  //       pathname: "/listings/add",
-  //       query: { jurisdictionId: "id1" },
-  //     })
-  //   })
-  // })
+    await userEvent.click(screen.getByRole("radio", { name: "Non-regulated" }))
+
+    await userEvent.click(screen.getByRole("button", { name: "Get started" }))
+    await waitFor(() => {
+      expect(pushMock).toHaveBeenCalledWith({
+        pathname: "/listings/add",
+        query: { jurisdictionId: "id1", nonRegulated: true },
+      })
+    })
+  })
+
+  it("should open add listing modal if user has access to multiple jurisdictions and enableNonRegulatedListings", async () => {
+    window.URL.createObjectURL = jest.fn()
+    document.cookie = "access-token-available=True"
+    const { pushMock } = mockNextRouter()
+    server.use(
+      rest.post("http://localhost/api/adapter/listings/list", (_req, res, ctx) => {
+        return res(ctx.json({ items: [listing], meta: { totalItems: 1, totalPages: 1 } }))
+      }),
+      rest.get("http://localhost/api/adapter/listings", (_req, res, ctx) => {
+        return res(ctx.json({ items: [listing], meta: { totalItems: 1, totalPages: 1 } }))
+      }),
+      rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
+        return res(
+          ctx.json({
+            id: "user1",
+            userRoles: { id: "user1", isAdmin: true, isPartner: false },
+            jurisdictions: [
+              {
+                id: "id1",
+                name: "JurisdictionA",
+                featureFlags: [],
+              } as Jurisdiction,
+              {
+                id: "id2",
+                name: "JurisdictionB",
+                featureFlags: [
+                  {
+                    id: "id_1",
+                    name: FeatureFlagEnum.enableNonRegulatedListings,
+                    active: true,
+                  },
+                ],
+              } as Jurisdiction,
+            ],
+          })
+        )
+      }),
+      rest.post("http://localhost:3100/auth/token", (_req, res, ctx) => {
+        return res(ctx.json(""))
+      })
+    )
+    const queryClient = new QueryClient()
+
+    render(
+      <QueryClientProvider client={queryClient}>
+        <ListingsList />
+      </QueryClientProvider>
+    )
+
+    const addListingButton = await screen.findByRole("button", { name: "Add listing" })
+    expect(addListingButton).toBeInTheDocument()
+    await userEvent.click(addListingButton)
+
+    expect(
+      screen.getByRole("heading", { level: 1, name: "Select jurisdiction" })
+    ).toBeInTheDocument()
+    expect(
+      screen.getByText("Once you create this listing, this selection cannot be changed.")
+    ).toBeInTheDocument()
+
+    // Listing type question not there without a jurisdiction selected
+    expect(
+      screen.queryAllByRole("group", {
+        name: "What kind of listing is this?",
+      })
+    ).toHaveLength(0)
+
+    // select the jurisdiction without the enableNonRegulatedListings and question shouldn't exist
+    await userEvent.selectOptions(screen.getByLabelText("Jurisdiction"), "JurisdictionA")
+    expect(
+      screen.queryAllByRole("group", {
+        name: "What kind of listing is this?",
+      })
+    ).toHaveLength(0)
+
+    // select the jurisdiction with the enableNonRegulatedListings and question should exist
+    await userEvent.selectOptions(screen.getByLabelText("Jurisdiction"), "JurisdictionB")
+    const listingTypeRadioGroup = screen.getByRole("group", {
+      name: "What kind of listing is this?",
+    })
+    expect(
+      within(listingTypeRadioGroup).getByRole("radio", { name: "Regulated" })
+    ).toBeInTheDocument()
+    expect(
+      within(listingTypeRadioGroup).getByRole("radio", { name: "Non-regulated" })
+    ).toBeInTheDocument()
+
+    await userEvent.click(screen.getByRole("button", { name: "Get started" }))
+    // Since Regulated is selected by default the nonRegulated flag is not passed to the next page
+    await waitFor(() => {
+      expect(pushMock).toHaveBeenCalledWith({
+        pathname: "/listings/add",
+        query: { jurisdictionId: "id2" },
+      })
+    })
+  })
+
+  it("should not open add listing modal if user has access to only one jurisdiction and no enableNonRegulatedListings", async () => {
+    window.URL.createObjectURL = jest.fn()
+    document.cookie = "access-token-available=True"
+    const { pushMock } = mockNextRouter()
+    server.use(
+      rest.post("http://localhost/api/adapter/listings/list", (_req, res, ctx) => {
+        return res(ctx.json({ items: [listing], meta: { totalItems: 1, totalPages: 1 } }))
+      }),
+      rest.get("http://localhost/api/adapter/listings", (_req, res, ctx) => {
+        return res(ctx.json({ items: [listing], meta: { totalItems: 1, totalPages: 1 } }))
+      }),
+      rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
+        return res(
+          ctx.json({
+            id: "user1",
+            userRoles: { id: "user1", isAdmin: true, isPartner: false },
+            jurisdictions: [
+              {
+                id: "id1",
+                name: "JurisdictionA",
+                featureFlags: [],
+              } as Jurisdiction,
+            ],
+          })
+        )
+      }),
+      rest.post("http://localhost:3100/auth/token", (_req, res, ctx) => {
+        return res(ctx.json(""))
+      })
+    )
+    const queryClient = new QueryClient()
+
+    render(
+      <QueryClientProvider client={queryClient}>
+        <ListingsList />
+      </QueryClientProvider>
+    )
+
+    const addListingButton = await screen.findByRole("button", { name: "Add listing" })
+    expect(addListingButton).toBeInTheDocument()
+    await userEvent.click(addListingButton)
+
+    expect(
+      screen.queryByRole("heading", { level: 1, name: "Select jurisdiction" })
+    ).not.toBeInTheDocument()
+
+    expect(screen.queryByRole("option", { name: "JurisdictionA" })).not.toBeInTheDocument()
+
+    await waitFor(() => {
+      expect(pushMock).toHaveBeenCalledWith({
+        pathname: "/listings/add",
+        query: { jurisdictionId: "id1" },
+      })
+    })
+  })
 })
