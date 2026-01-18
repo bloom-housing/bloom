@@ -714,8 +714,6 @@ describe("listings", () => {
       </QueryClientProvider>
     )
 
-    // render(<ListingsList />)
-
     const addListingButton = await screen.findByRole("button", { name: "Add listing" })
     expect(addListingButton).toBeInTheDocument()
     await userEvent.click(addListingButton)
@@ -788,7 +786,7 @@ describe("listings", () => {
     await userEvent.click(addListingButton)
 
     expect(
-      screen.getByRole("heading", { level: 1, name: "Select Listing Type" })
+      screen.getByRole("heading", { level: 1, name: "Select listing type" })
     ).toBeInTheDocument()
     expect(
       screen.getByText("Once you create this listing, this selection cannot be changed.")
@@ -963,7 +961,7 @@ describe("listings", () => {
     await userEvent.click(addListingButton)
 
     expect(
-      screen.getByRole("heading", { level: 1, name: "Select Listing Type" })
+      screen.getByRole("heading", { level: 1, name: "Select listing type" })
     ).toBeInTheDocument()
 
     const landUseRadioGroup = screen.getByRole("group", {
