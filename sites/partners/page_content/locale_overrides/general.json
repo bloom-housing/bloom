@@ -285,7 +285,7 @@
   "listings.listingSubmitted": "Listing submitted",
   "listings.listingType.nonRegulated.description": "Tenants do not not need to income qualify to live here, and there is no funding source or ordinance that regulates rent levels or other tenant qualifications.",
   "listings.listingType.regulated.description": "Covered by an ordinance or funding source that requires tenants to income-qualify to live in these units, e.g. inclusionary units, LIHTC, or other deed-restricted properties",
-  "listings.listingType": "Listing Type",
+  "listings.listingType": "Listing type",
   "listings.listingTypeTitle": "What kind of listing is this?",
   "listings.longitude": "Longitude",
   "listings.lottery.dataExpiryDescription": "Lottery data has expired for this listing and is no longer available for export.",
