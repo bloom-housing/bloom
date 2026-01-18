@@ -515,7 +515,7 @@ describe("listings", () => {
         </AuthContext.Provider>
       </QueryClientProvider>
     )
-    expect(await screen.findByText("Listing Type")).toBeDefined()
+    expect(await screen.findByText("Listing type")).toBeDefined()
   })
 
   it("should not show listing type column if no listing type feature flag is on", () => {
@@ -579,7 +579,7 @@ describe("listings", () => {
         <ListingsList />
       </AuthContext.Provider>
     )
-    expect(screen.queryByText("Listing Type")).toBeNull()
+    expect(screen.queryByText("Listing type")).toBeNull()
   })
 
   // Skipping for now until the CSV endpoints are created
