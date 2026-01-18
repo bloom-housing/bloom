@@ -467,7 +467,6 @@ export const DataTable = (props: DataTableProps) => {
 interface DataTableFilterProps {
   ariaDescription: string
   columnFilterValue: string
-  // header: Header<TableDataRow, unknown>
   minSearchCharacters: number
   setPagination: React.Dispatch<React.SetStateAction<PaginationState>>
   getFilterValue: () => unknown

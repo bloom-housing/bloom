@@ -326,7 +326,7 @@ export default function ListingsList() {
             size="sm"
             variant="primary"
             onClick={() => {
-              if (defaultJurisdiction) {
+              if (defaultJurisdiction && !isNonRegulatedEnabled) {
                 void router.push({
                   pathname: "/listings/add",
                   query: { jurisdictionId: defaultJurisdiction },
