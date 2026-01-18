@@ -1,5 +1,6 @@
 .data-table-wrapper {
   --data-table-border-color: var(--seeds-color-gray-500);
+  scroll-margin: var(--seeds-s4);
 
   .search-input {
     border: var(--seeds-border-1) solid var(--data-table-border-color);
@@ -98,6 +99,7 @@
       tbody {
         td {
           padding: var(--seeds-s4);
+          padding-inline: var(--seeds-s5);
           border-bottom: var(--seeds-border-1) solid var(--data-table-border-color);
         }
         tr:last-child > td {

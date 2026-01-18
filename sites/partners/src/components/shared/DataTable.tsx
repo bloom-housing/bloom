@@ -152,7 +152,9 @@ export const DataTable = (props: DataTableProps) => {
     onColumnVisibilityChange: setColumnVisibility,
     onPaginationChange: (props) => {
       setPagination(props)
-      document.getElementById("data-table")?.scrollIntoView({ behavior: "auto", block: "start" })
+      document
+        .getElementById("data-table-wrapper")
+        ?.scrollIntoView({ behavior: "auto", block: "start" })
     },
     onSortingChange: (sorting) => {
       setPagination((prev) => ({ ...prev, pageIndex: 0 }))
@@ -418,7 +420,7 @@ export const DataTable = (props: DataTableProps) => {
   )
 
   return (
-    <div className={styles["data-table-wrapper"]}>
+    <div className={styles["data-table-wrapper"]} id="data-table-wrapper">
       <div className={styles["header-container"]}>
         {props.filterType === "global" && (
           <div className={styles["header-left-content"]}>

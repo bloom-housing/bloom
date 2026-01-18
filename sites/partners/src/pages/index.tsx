@@ -131,7 +131,7 @@ export default function ListingsList() {
         ),
         header: () => t("t.name"),
         footer: (props) => props.column.id,
-        minSize: 430,
+        minSize: 300,
         meta: {
           plaintextName: t("t.name"),
         },

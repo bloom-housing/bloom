@@ -498,6 +498,8 @@ Cypress.Commands.add("addMinimalApplication", (listingName) => {
 Cypress.Commands.add("findAndOpenListing", (listingName) => {
   cy.visit("/")
   cy.contains("Listings")
-  cy.getByTestId("column-search-Name").should("be.visible").type(listingName, { force: true })
+  cy.getByTestId("column-search-global-search")
+    .should("be.visible")
+    .type(listingName, { force: true })
   cy.getByID(listingName).first().click()
 })
