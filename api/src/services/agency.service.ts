@@ -93,7 +93,7 @@ export class AgencyService {
    */
   async create(agencyDto: AgencyCreate) {
     if (!agencyDto.jurisdictions || !agencyDto.jurisdictions.id) {
-      throw new BadRequestException('A valid jurisdiction must be provided ');
+      throw new BadRequestException('A valid jurisdiction must be provided');
     }
 
     const rawJurisdiction = await this.prisma.jurisdictions.findUnique({
@@ -138,9 +138,7 @@ export class AgencyService {
    */
   async update(agencyDto: AgencyUpdate) {
     if (!agencyDto.jurisdictions || !agencyDto.jurisdictions.id) {
-      throw new BadRequestException(
-        'A valid jurisdiction entry must be provided',
-      );
+      throw new BadRequestException('A valid jurisdiction must be provided');
     }
 
     const rawJurisdiction = await this.prisma.jurisdictions.findUnique({
@@ -158,6 +156,18 @@ export class AgencyService {
       );
     }
 
+    const exitingAgency = await this.prisma.agencies.findUnique({
+      where: {
+        id: agencyDto.id,
+      },
+    });
+
+    if (!exitingAgency) {
+      throw new NotFoundException(
+        `An agency with id: ${agencyDto.id} was not found`,
+      );
+    }
+
     const rawAgency = await this.prisma.agencies.update({
       data: {
         ...agencyDto,
@@ -169,6 +179,9 @@ export class AgencyService {
       },
       where: {
         id: agencyDto.id,
+      },
+      include: {
+        jurisdictions: true,
       },
     });
 
@@ -183,7 +196,7 @@ export class AgencyService {
    * @throws {BadRequestException} If no property ID is provided.
    */
   async deleteOne(idDto: IdDTO) {
-    if (!idDto) {
+    if (!idDto || !idDto.id) {
       throw new BadRequestException('A agency ID must be provided');
     }
 
@@ -196,24 +209,9 @@ export class AgencyService {
       },
     });
 
-    if (!agencyData.jurisdictions) {
+    if (!agencyData) {
       throw new NotFoundException(
-        'The agency is not connected to any jurisdiction',
-      );
-    }
-
-    const rawJurisdiction = await this.prisma.jurisdictions.findFirst({
-      select: {
-        id: true,
-      },
-      where: {
-        id: agencyData.jurisdictions.id,
-      },
-    });
-
-    if (!rawJurisdiction) {
-      throw new NotFoundException(
-        `Entry for the linked jurisdiction with id: ${agencyData.jurisdictions.id} was not found`,
+        `The agency with ID: ${idDto.id} was not found`,
       );
     }
 
