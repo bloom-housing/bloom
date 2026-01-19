@@ -1130,6 +1130,8 @@ model Agency {
   name            String
   jurisdictions   Jurisdictions? @relation(fields: [jurisdictionsId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   jurisdictionsId String?        @db.Uuid
+
+  @@map("agencies")
 }
 
 model ScriptRuns {
