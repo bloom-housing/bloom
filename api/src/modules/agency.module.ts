@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
-import { AgencyController } from 'src/controllers/agency.controller';
-import { AgencyService } from 'src/services/agency.service';
-import { PermissionService } from 'src/services/permission.service';
+import { AgencyController } from '../controllers/agency.controller';
+import { AgencyService } from '../services/agency.service';
+import { PermissionService } from '../services/permission.service';
 import { PrismaModule } from './prisma.module';
 
 @Module({

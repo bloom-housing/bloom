@@ -1,7 +1,7 @@
 import { Expose, Type } from 'class-transformer';
 import { AbstractDTO } from '../shared/abstract.dto';
 import { IsDefined, IsString, ValidateNested } from 'class-validator';
-import { ValidationsGroupsEnum } from 'src/enums/shared/validation-groups-enum';
+import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 import { ApiProperty } from '@nestjs/swagger';
 import { IdDTO } from '../shared/id.dto';
 
