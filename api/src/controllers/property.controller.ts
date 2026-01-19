@@ -11,9 +11,7 @@ import {
   ValidationPipe,
   Delete,
   UseGuards,
-  Request,
 } from '@nestjs/common';
-import { Request as ExpressRequest } from 'express';
 import {
   ApiExtraModels,
   ApiOkResponse,
@@ -94,10 +92,7 @@ export class PropertyController {
   })
   @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
   @ApiOkResponse({ type: Property })
-  public async addProperty(
-    @Request() req: ExpressRequest,
-    @Body() propertyDto: PropertyCreate,
-  ) {
+  public async addProperty(@Body() propertyDto: PropertyCreate) {
     return await this.propertyService.create(propertyDto);
   }
 
@@ -108,10 +103,7 @@ export class PropertyController {
   })
   @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
   @ApiOkResponse({ type: Property })
-  public async updateProperty(
-    @Request() req: ExpressRequest,
-    @Body() propertyDto: PropertyUpdate,
-  ) {
+  public async updateProperty(@Body() propertyDto: PropertyUpdate) {
     return await this.propertyService.update(propertyDto);
   }
 
@@ -122,10 +114,7 @@ export class PropertyController {
   })
   @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
   @ApiOkResponse({ type: SuccessDTO })
-  public async deleteById(
-    @Request() req: ExpressRequest,
-    @Body() idDto: IdDTO,
-  ) {
+  public async deleteById(@Body() idDto: IdDTO) {
     return await this.propertyService.deleteOne(idDto.id);
   }
 }
