@@ -425,7 +425,7 @@ export class ListingsService {
     })
   }
   /**
-   * Get listings by assigned porperty ID
+   * Get listings by assigned property ID
    */
   retrieveListingsByProperty(
     params: {
@@ -3177,6 +3177,112 @@ export class PropertiesService {
       let data = params.body
 
       configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+}
+
+export class AgenciesService {
+  /**
+   * Get a paginated set of agencies
+   */
+  list(
+    params: {
+      /**  */
+      page?: number
+      /**  */
+      limit?: number | "all"
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<PaginatedAgency> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/agencies"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+      configs.params = { page: params["page"], limit: params["limit"] }
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Creates a new agency entry in the database
+   */
+  create(
+    params: {
+      /** requestBody */
+      body?: AgencyCreate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Agency> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/agencies"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Updates an exiting agency entry in the database
+   */
+  update(
+    params: {
+      /** requestBody */
+      body?: AgencyUpdate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Agency> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/agencies"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Deletes an agency entry from the database by its ID
+   */
+  deletes(
+    params: {
+      /** requestBody */
+      body?: IdDTO
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/agencies"
+
+      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Get a single agency by its ID
+   */
+  getById(options: IRequestOptions = {}): Promise<Agency> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/agencies/{id}"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      /** 适配ios13，get请求不允许带body */
 
       axios(configs, resolve, reject)
     })
@@ -7739,38 +7845,6 @@ export interface HouseholdMemberUpdate {
   householdMemberWorkAddress?: AddressCreate
 }
 
-export interface AddressUpdate {
-  /**  */
-  placeName?: string
-
-  /**  */
-  city: string
-
-  /**  */
-  county?: string
-
-  /**  */
-  state: string
-
-  /**  */
-  street: string
-
-  /**  */
-  street2?: string
-
-  /**  */
-  zipCode: string
-
-  /**  */
-  latitude?: number
-
-  /**  */
-  longitude?: number
-
-  /**  */
-  id?: string
-}
-
 export interface ApplicationSelectionOptionCreate {
   /**  */
   addressHolderName?: string
@@ -8581,6 +8655,9 @@ export interface PropertyUpdate {
   id: string
 
   /**  */
+  name: string
+
+  /**  */
   description?: string
 
   /**  */
@@ -8591,9 +8668,6 @@ export interface PropertyUpdate {
 
   /**  */
   jurisdictions?: IdDTO
-
-  /**  */
-  name?: string
 }
 
 export interface PropertyQueryParams {
@@ -8610,17 +8684,53 @@ export interface PropertyQueryParams {
   filter?: string[]
 }
 
-export interface PropertyFilterParams {
-  /**  */
-  $comparison: EnumPropertyFilterParamsComparison
-
-  /**  */
-  jurisdiction?: string
-}
-
 export interface PaginatedProperty {
   /**  */
   items: Property[]
+
+  /**  */
+  meta: PaginationMeta
+}
+
+export interface AgencyCreate {
+  /**  */
+  name: string
+
+  /**  */
+  jurisdictions: IdDTO
+}
+
+export interface Agency {
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  name: string
+
+  /**  */
+  jurisdictions: IdDTO
+}
+
+export interface AgencyUpdate {
+  /**  */
+  id: string
+
+  /**  */
+  name: string
+
+  /**  */
+  jurisdictions: IdDTO
+}
+
+export interface PaginatedAgency {
+  /**  */
+  items: Agency[]
 
   /**  */
   meta: PaginationMeta
@@ -9073,13 +9183,4 @@ export enum ModificationEnum {
 export enum MfaType {
   "sms" = "sms",
   "email" = "email",
-}
-export enum EnumPropertyFilterParamsComparison {
-  "=" = "=",
-  "<>" = "<>",
-  "IN" = "IN",
-  ">=" = ">=",
-  "<=" = "<=",
-  "LIKE" = "LIKE",
-  "NA" = "NA",
 }
