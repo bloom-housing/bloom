@@ -119,9 +119,10 @@ describe('Properties Controller Tests', () => {
         expect.arrayContaining([
           expect.objectContaining({
             name: expect.anything(),
-            description: expect.anything(),
-            url: expect.anything(),
-            urlTitle: expect.anything(),
+            description: expect.toBeOneOf([expect.any(String), null]),
+            url: expect.toBeOneOf([expect.any(String), null]),
+            urlTitle: expect.toBeOneOf([expect.any(String), null]),
+            jurisdictions: expect.anything(),
           }),
         ]),
       );
