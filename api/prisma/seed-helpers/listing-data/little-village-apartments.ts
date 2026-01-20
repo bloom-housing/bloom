@@ -1,11 +1,12 @@
 import {
   ApplicationMethodsTypeEnum,
   ListingsStatusEnum,
+  Prisma,
   ReviewOrderTypeEnum,
 } from '@prisma/client';
 import dayjs from 'dayjs';
 
-export const littleVillageApartments = {
+export const littleVillageApartments: Prisma.ListingsCreateInput = {
   additionalApplicationSubmissionNotes: null,
   digitalApplication: true,
   commonDigitalApplication: false,

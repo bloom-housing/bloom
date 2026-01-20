@@ -123,7 +123,7 @@ describe("applications pages", () => {
 
     it("should hide work in region question when flag enabled", () => {
       const conductor = new ApplicationConductor({}, listing)
-      const applicationConfig = retrieveApplicationConfig(conductor.listing)
+      const applicationConfig = retrieveApplicationConfig(conductor.listing, [])
       conductor.config = {
         ...applicationConfig,
         languages: [],

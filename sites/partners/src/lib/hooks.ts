@@ -10,12 +10,10 @@ import {
   ApplicationOrderByKeys,
   EnumListingFilterParamsComparison,
   EnumMultiselectQuestionFilterParamsComparison,
-  EnumPropertyFilterParamsComparison,
   ListingViews,
   MultiselectQuestionFilterParams,
   MultiselectQuestionsApplicationSectionEnum,
   OrderByEnum,
-  PropertyQueryParams,
   UserRole,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
@@ -718,7 +716,7 @@ export function usePropertiesList({ page, limit, search, jurisdictions }: UsePro
   }
 
   params.filter.push({
-    $comparison: EnumPropertyFilterParamsComparison.IN,
+    $comparison: "IN",
     jurisdiction: jurisdictions && jurisdictions !== "" ? jurisdictions : undefined,
   })
 

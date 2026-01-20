@@ -403,6 +403,7 @@ model Jurisdictions {
   duplicateListingPermissions         UserRoleEnum[]              @map("duplicate_listing_permissions")
   requiredListingFields               String[]                    @default([]) @map("required_listing_fields")
   visibleNeighborhoodAmenities        NeighborhoodAmenitiesEnum[] @default([groceryStores, publicTransportation, schools, parksAndCommunityCenters, pharmacies, healthCareResources]) @map("visible_neighborhood_amenities")
+  regions                             String[]                    @default([]) @map("regions")
   properties                          Properties[]
 
   @@map("jurisdictions")
@@ -701,6 +702,7 @@ model Listings {
   homeType                              HomeTypeEnum?                 @map("home_type")
   listingNeighborhoodAmenities          ListingNeighborhoodAmenities? @relation(fields: [neighborhoodAmenitiesId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   region                                RegionEnum?
+  configurableRegion                    String?                       @map("configurable_region")
   // END DETROIT SPECIFIC
   applicationFlaggedSet                 ApplicationFlaggedSet[]
   applicationMethods                    ApplicationMethods[]
