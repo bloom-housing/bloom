@@ -425,7 +425,7 @@ export class ListingsService {
     })
   }
   /**
-   * Get listings by assigned porperty ID
+   * Get listings by assigned property ID
    */
   retrieveListingsByProperty(
     params: {
@@ -620,6 +620,197 @@ export class ApplicationFlaggedSetsService {
       let data = params.body
 
       configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+}
+
+export class MultiselectQuestionsService {
+  /**
+   * List multiselect questions
+   */
+  list(
+    params: {
+      /**  */
+      page?: number
+      /**  */
+      limit?: number | "all"
+      /**  */
+      filter?: MultiselectQuestionFilterParams[]
+      /**  */
+      orderBy?: MultiselectQuestionOrderByKeys[]
+      /**  */
+      orderDir?: OrderByEnum[]
+      /**  */
+      search?: string
+      /**  */
+      view?: MultiselectQuestionViews
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<MultiselectQuestion[]> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/multiselectQuestions"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+      configs.params = {
+        page: params["page"],
+        limit: params["limit"],
+        filter: params["filter"],
+        orderBy: params["orderBy"],
+        orderDir: params["orderDir"],
+        search: params["search"],
+        view: params["view"],
+      }
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Create multiselect question
+   */
+  create(
+    params: {
+      /** requestBody */
+      body?: MultiselectQuestionCreate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<MultiselectQuestion> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/multiselectQuestions"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Update multiselect question
+   */
+  update(
+    params: {
+      /** requestBody */
+      body?: MultiselectQuestionUpdate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<MultiselectQuestion> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/multiselectQuestions"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Delete multiselect question by id
+   */
+  delete(
+    params: {
+      /** requestBody */
+      body?: IdDTO
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/multiselectQuestions"
+
+      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Re-activate a multiselect question
+   */
+  reActivate(
+    params: {
+      /** requestBody */
+      body?: IdDTO
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/multiselectQuestions/reActivate"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Retire a multiselect question
+   */
+  retire(
+    params: {
+      /** requestBody */
+      body?: IdDTO
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/multiselectQuestions/retire"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Trigger the retirement of multiselect questions cron job
+   */
+  retireMultiselectQuestions(options: IRequestOptions = {}): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/multiselectQuestions/retireMultiselectQuestions"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = null
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Get multiselect question by id
+   */
+  retrieve(
+    params: {
+      /**  */
+      multiselectQuestionId: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<MultiselectQuestion> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/multiselectQuestions/{multiselectQuestionId}"
+      url = url.replace("{multiselectQuestionId}", params["multiselectQuestionId"] + "")
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      /** 适配ios13，get请求不允许带body */
 
       axios(configs, resolve, reject)
     })
@@ -1278,197 +1469,6 @@ export class JurisdictionsService {
     return new Promise((resolve, reject) => {
       let url = basePath + "/jurisdictions/byName/{jurisdictionName}"
       url = url.replace("{jurisdictionName}", params["jurisdictionName"] + "")
-
-      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-
-      /** 适配ios13，get请求不允许带body */
-
-      axios(configs, resolve, reject)
-    })
-  }
-}
-
-export class MultiselectQuestionsService {
-  /**
-   * List multiselect questions
-   */
-  list(
-    params: {
-      /**  */
-      page?: number
-      /**  */
-      limit?: number | "all"
-      /**  */
-      filter?: MultiselectQuestionFilterParams[]
-      /**  */
-      orderBy?: MultiselectQuestionOrderByKeys[]
-      /**  */
-      orderDir?: OrderByEnum[]
-      /**  */
-      search?: string
-      /**  */
-      view?: MultiselectQuestionViews
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<MultiselectQuestion[]> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/multiselectQuestions"
-
-      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-      configs.params = {
-        page: params["page"],
-        limit: params["limit"],
-        filter: params["filter"],
-        orderBy: params["orderBy"],
-        orderDir: params["orderDir"],
-        search: params["search"],
-        view: params["view"],
-      }
-
-      /** 适配ios13，get请求不允许带body */
-
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Create multiselect question
-   */
-  create(
-    params: {
-      /** requestBody */
-      body?: MultiselectQuestionCreate
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<MultiselectQuestion> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/multiselectQuestions"
-
-      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Update multiselect question
-   */
-  update(
-    params: {
-      /** requestBody */
-      body?: MultiselectQuestionUpdate
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<MultiselectQuestion> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/multiselectQuestions"
-
-      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Delete multiselect question by id
-   */
-  delete(
-    params: {
-      /** requestBody */
-      body?: IdDTO
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<SuccessDTO> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/multiselectQuestions"
-
-      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Re-activate a multiselect question
-   */
-  reActivate(
-    params: {
-      /** requestBody */
-      body?: IdDTO
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<SuccessDTO> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/multiselectQuestions/reActivate"
-
-      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Retire a multiselect question
-   */
-  retire(
-    params: {
-      /** requestBody */
-      body?: IdDTO
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<SuccessDTO> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/multiselectQuestions/retire"
-
-      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Trigger the retirement of multiselect questions cron job
-   */
-  retireMultiselectQuestions(options: IRequestOptions = {}): Promise<SuccessDTO> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/multiselectQuestions/retireMultiselectQuestions"
-
-      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
-
-      let data = null
-
-      configs.data = data
-
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Get multiselect question by id
-   */
-  retrieve(
-    params: {
-      /**  */
-      multiselectQuestionId: string
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<MultiselectQuestion> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/multiselectQuestions/{multiselectQuestionId}"
-      url = url.replace("{multiselectQuestionId}", params["multiselectQuestionId"] + "")
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
 
@@ -6802,6 +6802,255 @@ export interface AfsResolve {
   applications: IdDTO[]
 }
 
+export interface MultiselectOptionCreate {
+  /**  */
+  collectAddress?: boolean
+
+  /**  */
+  collectName?: boolean
+
+  /**  */
+  collectRelationship?: boolean
+
+  /**  */
+  description?: string
+
+  /**  */
+  exclusive?: boolean
+
+  /**  */
+  isOptOut?: boolean
+
+  /**  */
+  links?: MultiselectLink[]
+
+  /**  */
+  mapLayerId?: string
+
+  /**  */
+  mapPinPosition?: string
+
+  /**  */
+  multiselectQuestion?: IdDTO
+
+  /**  */
+  name?: string
+
+  /**  */
+  ordinal: number
+
+  /**  */
+  radiusSize?: number
+
+  /**  */
+  shouldCollectAddress?: boolean
+
+  /**  */
+  shouldCollectName?: boolean
+
+  /**  */
+  shouldCollectRelationship?: boolean
+
+  /**  */
+  text: string
+
+  /**  */
+  validationMethod?: ValidationMethodEnum
+}
+
+export interface MultiselectQuestionCreate {
+  /**  */
+  applicationSection: MultiselectQuestionsApplicationSectionEnum
+
+  /**  */
+  description?: string
+
+  /**  */
+  isExclusive?: boolean
+
+  /**  */
+  hideFromListing?: boolean
+
+  /**  */
+  jurisdiction?: IdDTO
+
+  /**  */
+  jurisdictions: IdDTO[]
+
+  /**  */
+  links?: MultiselectLink[]
+
+  /**  */
+  name?: string
+
+  /**  */
+  optOutText?: string
+
+  /**  */
+  status: MultiselectQuestionsStatusEnum
+
+  /**  */
+  subText?: string
+
+  /**  */
+  text: string
+
+  /**  */
+  untranslatedOptOutText?: string
+
+  /**  */
+  multiselectOptions?: MultiselectOptionCreate[]
+
+  /**  */
+  options?: MultiselectOptionCreate[]
+}
+
+export interface MultiselectOptionUpdate {
+  /**  */
+  collectAddress?: boolean
+
+  /**  */
+  collectName?: boolean
+
+  /**  */
+  collectRelationship?: boolean
+
+  /**  */
+  description?: string
+
+  /**  */
+  exclusive?: boolean
+
+  /**  */
+  isOptOut?: boolean
+
+  /**  */
+  links?: MultiselectLink[]
+
+  /**  */
+  mapLayerId?: string
+
+  /**  */
+  mapPinPosition?: string
+
+  /**  */
+  multiselectQuestion?: IdDTO
+
+  /**  */
+  name?: string
+
+  /**  */
+  ordinal: number
+
+  /**  */
+  radiusSize?: number
+
+  /**  */
+  shouldCollectAddress?: boolean
+
+  /**  */
+  shouldCollectName?: boolean
+
+  /**  */
+  shouldCollectRelationship?: boolean
+
+  /**  */
+  text: string
+
+  /**  */
+  validationMethod?: ValidationMethodEnum
+
+  /**  */
+  id?: string
+}
+
+export interface MultiselectQuestionUpdate {
+  /**  */
+  id: string
+
+  /**  */
+  applicationSection: MultiselectQuestionsApplicationSectionEnum
+
+  /**  */
+  description?: string
+
+  /**  */
+  isExclusive?: boolean
+
+  /**  */
+  hideFromListing?: boolean
+
+  /**  */
+  jurisdiction?: IdDTO
+
+  /**  */
+  jurisdictions: IdDTO[]
+
+  /**  */
+  links?: MultiselectLink[]
+
+  /**  */
+  name?: string
+
+  /**  */
+  optOutText?: string
+
+  /**  */
+  status: MultiselectQuestionsStatusEnum
+
+  /**  */
+  subText?: string
+
+  /**  */
+  text: string
+
+  /**  */
+  untranslatedOptOutText?: string
+
+  /**  */
+  multiselectOptions?: MultiselectOptionUpdate[]
+
+  /**  */
+  options?: MultiselectOptionUpdate[]
+}
+
+export interface MultiselectQuestionQueryParams {
+  /**  */
+  page?: number
+
+  /**  */
+  limit?: number | "all"
+
+  /**  */
+  filter?: string[]
+
+  /**  */
+  orderBy?: MultiselectQuestionOrderByKeys[]
+
+  /**  */
+  orderDir?: OrderByEnum[]
+
+  /**  */
+  search?: string
+
+  /**  */
+  view?: MultiselectQuestionViews
+}
+
+export interface MultiselectQuestionFilterParams {
+  /**  */
+  $comparison: EnumMultiselectQuestionFilterParamsComparison
+
+  /**  */
+  applicationSection?: MultiselectQuestionsApplicationSectionEnum
+
+  /**  */
+  jurisdiction?: string
+
+  /**  */
+  status?: MultiselectQuestionsStatusEnum
+}
+
 export interface AmiChartQueryParams {
   /**  */
   jurisdictionId?: string
@@ -7148,255 +7397,6 @@ export interface Jurisdiction {
   visibleNeighborhoodAmenities: NeighborhoodAmenitiesEnum[]
 }
 
-export interface MultiselectOptionCreate {
-  /**  */
-  collectAddress?: boolean
-
-  /**  */
-  collectName?: boolean
-
-  /**  */
-  collectRelationship?: boolean
-
-  /**  */
-  description?: string
-
-  /**  */
-  exclusive?: boolean
-
-  /**  */
-  isOptOut?: boolean
-
-  /**  */
-  links?: MultiselectLink[]
-
-  /**  */
-  mapLayerId?: string
-
-  /**  */
-  mapPinPosition?: string
-
-  /**  */
-  multiselectQuestion?: IdDTO
-
-  /**  */
-  name?: string
-
-  /**  */
-  ordinal: number
-
-  /**  */
-  radiusSize?: number
-
-  /**  */
-  shouldCollectAddress?: boolean
-
-  /**  */
-  shouldCollectName?: boolean
-
-  /**  */
-  shouldCollectRelationship?: boolean
-
-  /**  */
-  text: string
-
-  /**  */
-  validationMethod?: ValidationMethodEnum
-}
-
-export interface MultiselectQuestionCreate {
-  /**  */
-  applicationSection: MultiselectQuestionsApplicationSectionEnum
-
-  /**  */
-  description?: string
-
-  /**  */
-  isExclusive?: boolean
-
-  /**  */
-  hideFromListing?: boolean
-
-  /**  */
-  jurisdiction?: IdDTO
-
-  /**  */
-  jurisdictions: IdDTO[]
-
-  /**  */
-  links?: MultiselectLink[]
-
-  /**  */
-  name?: string
-
-  /**  */
-  optOutText?: string
-
-  /**  */
-  status: MultiselectQuestionsStatusEnum
-
-  /**  */
-  subText?: string
-
-  /**  */
-  text: string
-
-  /**  */
-  untranslatedOptOutText?: string
-
-  /**  */
-  multiselectOptions?: MultiselectOptionCreate[]
-
-  /**  */
-  options?: MultiselectOptionCreate[]
-}
-
-export interface MultiselectOptionUpdate {
-  /**  */
-  collectAddress?: boolean
-
-  /**  */
-  collectName?: boolean
-
-  /**  */
-  collectRelationship?: boolean
-
-  /**  */
-  description?: string
-
-  /**  */
-  exclusive?: boolean
-
-  /**  */
-  isOptOut?: boolean
-
-  /**  */
-  links?: MultiselectLink[]
-
-  /**  */
-  mapLayerId?: string
-
-  /**  */
-  mapPinPosition?: string
-
-  /**  */
-  multiselectQuestion?: IdDTO
-
-  /**  */
-  name?: string
-
-  /**  */
-  ordinal: number
-
-  /**  */
-  radiusSize?: number
-
-  /**  */
-  shouldCollectAddress?: boolean
-
-  /**  */
-  shouldCollectName?: boolean
-
-  /**  */
-  shouldCollectRelationship?: boolean
-
-  /**  */
-  text: string
-
-  /**  */
-  validationMethod?: ValidationMethodEnum
-
-  /**  */
-  id?: string
-}
-
-export interface MultiselectQuestionUpdate {
-  /**  */
-  id: string
-
-  /**  */
-  applicationSection: MultiselectQuestionsApplicationSectionEnum
-
-  /**  */
-  description?: string
-
-  /**  */
-  isExclusive?: boolean
-
-  /**  */
-  hideFromListing?: boolean
-
-  /**  */
-  jurisdiction?: IdDTO
-
-  /**  */
-  jurisdictions: IdDTO[]
-
-  /**  */
-  links?: MultiselectLink[]
-
-  /**  */
-  name?: string
-
-  /**  */
-  optOutText?: string
-
-  /**  */
-  status: MultiselectQuestionsStatusEnum
-
-  /**  */
-  subText?: string
-
-  /**  */
-  text: string
-
-  /**  */
-  untranslatedOptOutText?: string
-
-  /**  */
-  multiselectOptions?: MultiselectOptionUpdate[]
-
-  /**  */
-  options?: MultiselectOptionUpdate[]
-}
-
-export interface MultiselectQuestionQueryParams {
-  /**  */
-  page?: number
-
-  /**  */
-  limit?: number | "all"
-
-  /**  */
-  filter?: string[]
-
-  /**  */
-  orderBy?: MultiselectQuestionOrderByKeys[]
-
-  /**  */
-  orderDir?: OrderByEnum[]
-
-  /**  */
-  search?: string
-
-  /**  */
-  view?: MultiselectQuestionViews
-}
-
-export interface MultiselectQuestionFilterParams {
-  /**  */
-  $comparison: EnumMultiselectQuestionFilterParamsComparison
-
-  /**  */
-  applicationSection?: MultiselectQuestionsApplicationSectionEnum
-
-  /**  */
-  jurisdiction?: string
-
-  /**  */
-  status?: MultiselectQuestionsStatusEnum
-}
-
 export interface AddressInput {
   /**  */
   type: InputType
@@ -7737,38 +7737,6 @@ export interface HouseholdMemberUpdate {
 
   /**  */
   householdMemberWorkAddress?: AddressCreate
-}
-
-export interface AddressUpdate {
-  /**  */
-  placeName?: string
-
-  /**  */
-  city: string
-
-  /**  */
-  county?: string
-
-  /**  */
-  state: string
-
-  /**  */
-  street: string
-
-  /**  */
-  street2?: string
-
-  /**  */
-  zipCode: string
-
-  /**  */
-  latitude?: number
-
-  /**  */
-  longitude?: number
-
-  /**  */
-  id?: string
 }
 
 export interface ApplicationSelectionOptionCreate {
@@ -8581,6 +8549,9 @@ export interface PropertyUpdate {
   id: string
 
   /**  */
+  name: string
+
+  /**  */
   description?: string
 
   /**  */
@@ -8591,9 +8562,6 @@ export interface PropertyUpdate {
 
   /**  */
   jurisdictions?: IdDTO
-
-  /**  */
-  name?: string
 }
 
 export interface PropertyQueryParams {
@@ -8608,14 +8576,6 @@ export interface PropertyQueryParams {
 
   /**  */
   filter?: string[]
-}
-
-export interface PropertyFilterParams {
-  /**  */
-  $comparison: EnumPropertyFilterParamsComparison
-
-  /**  */
-  jurisdiction?: string
 }
 
 export interface PaginatedProperty {
@@ -8945,6 +8905,26 @@ export enum HouseholdMemberRelationship {
   "other" = "other",
 }
 export type AllExtraDataTypes = BooleanInput | TextInput | AddressInput
+export enum MultiselectQuestionOrderByKeys {
+  "jurisdiction" = "jurisdiction",
+  "name" = "name",
+  "status" = "status",
+  "updatedAt" = "updatedAt",
+}
+
+export enum MultiselectQuestionViews {
+  "base" = "base",
+  "fundamentals" = "fundamentals",
+}
+export enum EnumMultiselectQuestionFilterParamsComparison {
+  "=" = "=",
+  "<>" = "<>",
+  "IN" = "IN",
+  ">=" = ">=",
+  "<=" = "<=",
+  "LIKE" = "LIKE",
+  "NA" = "NA",
+}
 export enum UserRoleEnum {
   "user" = "user",
   "partner" = "partner",
@@ -9024,26 +9004,6 @@ export enum FeatureFlagEnum {
   "swapCommunityTypeWithPrograms" = "swapCommunityTypeWithPrograms",
 }
 
-export enum MultiselectQuestionOrderByKeys {
-  "jurisdiction" = "jurisdiction",
-  "name" = "name",
-  "status" = "status",
-  "updatedAt" = "updatedAt",
-}
-
-export enum MultiselectQuestionViews {
-  "base" = "base",
-  "fundamentals" = "fundamentals",
-}
-export enum EnumMultiselectQuestionFilterParamsComparison {
-  "=" = "=",
-  "<>" = "<>",
-  "IN" = "IN",
-  ">=" = ">=",
-  "<=" = "<=",
-  "LIKE" = "LIKE",
-  "NA" = "NA",
-}
 export enum InputType {
   "boolean" = "boolean",
   "text" = "text",
@@ -9073,13 +9033,4 @@ export enum ModificationEnum {
 export enum MfaType {
   "sms" = "sms",
   "email" = "email",
-}
-export enum EnumPropertyFilterParamsComparison {
-  "=" = "=",
-  "<>" = "<>",
-  "IN" = "IN",
-  ">=" = ">=",
-  "<=" = "<=",
-  "LIKE" = "LIKE",
-  "NA" = "NA",
 }
