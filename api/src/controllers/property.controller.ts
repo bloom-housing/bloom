@@ -34,6 +34,7 @@ import { PermissionGuard } from '../guards/permission.guard';
 import { PermissionAction } from '../decorators/permission-action.decorator';
 import { permissionActions } from '../enums/permissions/permission-actions-enum';
 import { ApiKeyGuard } from '../guards/api-key.guard';
+import { PropertyFilterParams } from '../dtos/properties/property-filter-params.dto';
 
 @Controller('properties')
 @ApiTags('properties')
@@ -41,6 +42,7 @@ import { ApiKeyGuard } from '../guards/api-key.guard';
   PropertyCreate,
   PropertyUpdate,
   PropertyQueryParams,
+  PropertyFilterParams,
   PaginationMeta,
   IdDTO,
 )

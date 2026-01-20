@@ -8691,6 +8691,14 @@ export interface PropertyQueryParams {
   filter?: string[]
 }
 
+export interface PropertyFilterParams {
+  /**  */
+  $comparison: EnumPropertyFilterParamsComparison
+
+  /**  */
+  jurisdiction?: string
+}
+
 export interface PaginatedProperty {
   /**  */
   items: Property[]
@@ -9190,4 +9198,13 @@ export enum ModificationEnum {
 export enum MfaType {
   "sms" = "sms",
   "email" = "email",
+}
+export enum EnumPropertyFilterParamsComparison {
+  "=" = "=",
+  "<>" = "<>",
+  "IN" = "IN",
+  ">=" = ">=",
+  "<=" = "<=",
+  "LIKE" = "LIKE",
+  "NA" = "NA",
 }
