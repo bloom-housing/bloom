@@ -61,7 +61,7 @@ type ConfirmItem = {
   value: string
 }
 
-type ConfirmSections = {
+export type AppStatusConfirmSections = {
   changes: ConfirmItem[]
   removals: ConfirmItem[]
 }
@@ -81,7 +81,7 @@ const hasValue = (value: string) => value !== ""
 export const buildAppStatusConfirmSections = (
   data: FormTypes,
   defaultValues: Partial<FormTypes>
-): ConfirmSections => {
+): AppStatusConfirmSections => {
   const initialStatus = defaultValues?.application?.status
   const nextStatus = data?.application?.status
 

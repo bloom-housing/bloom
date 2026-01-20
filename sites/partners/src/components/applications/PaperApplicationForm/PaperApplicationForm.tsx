@@ -8,7 +8,6 @@ import {
   Application,
   ApplicationCreate,
   ApplicationReviewStatusEnum,
-  ApplicationStatusEnum,
   ApplicationUpdate,
   FeatureFlagEnum,
   HouseholdMember,
@@ -30,7 +29,7 @@ import { Aside } from "../Aside"
 import { FormTypes } from "../../../lib/applications/FormTypes"
 import { StatusBar } from "../../../components/shared/StatusBar"
 import { ApplicationStatusTag } from "../../listings/PaperListingDetails/sections/helpers"
-import { buildAppStatusConfirmSections } from "../helpers"
+import { AppStatusConfirmSections, buildAppStatusConfirmSections } from "../helpers"
 
 type ApplicationFormProps = {
   listingId: string
@@ -115,7 +114,7 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
   const [loading, setLoading] = useState<boolean>(false)
   const [householdMembers, setHouseholdMembers] = useState<HouseholdMember[]>([])
   const [confirmOpen, setConfirmOpen] = useState(false)
-  const [confirmSections, setConfirmSections] = useState<ConfirmSections>({
+  const [confirmSections, setConfirmSections] = useState<AppStatusConfirmSections>({
     changes: [],
     removals: [],
   })
