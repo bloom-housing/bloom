@@ -67,7 +67,6 @@ import {
   createSimpleApplication,
   createSimpleListing,
 } from './helpers';
-import { ApplicationFlaggedSetService } from '../../../src/services/application-flagged-set.service';
 
 const testEmailService = {
   confirmation: jest.fn(),
@@ -84,7 +83,6 @@ describe('Testing Permissioning of endpoints as Jurisdictional Admin in the corr
   let app: INestApplication;
   let prisma: PrismaService;
   let userService: UserService;
-  let applicationFlaggedSetService: ApplicationFlaggedSetService;
   let cookies = '';
   let jurisdictionId = '';
   beforeAll(async () => {
@@ -98,10 +96,6 @@ describe('Testing Permissioning of endpoints as Jurisdictional Admin in the corr
     app = moduleFixture.createNestApplication();
     prisma = moduleFixture.get<PrismaService>(PrismaService);
     userService = moduleFixture.get<UserService>(UserService);
-    applicationFlaggedSetService =
-      moduleFixture.get<ApplicationFlaggedSetService>(
-        ApplicationFlaggedSetService,
-      );
     app.use(cookieParser());
     await app.init();
 
