@@ -3247,6 +3247,9 @@ export interface ListingFilterParams {
   regions?: RegionEnum[]
 
   /**  */
+  configurableRegions?: []
+
+  /**  */
   reservedCommunityTypes?: string[]
 
   /**  */
@@ -4398,6 +4401,9 @@ export interface Listing {
   region?: RegionEnum
 
   /**  */
+  configurableRegion?: string
+
+  /**  */
   petPolicy?: string
 
   /**  */
@@ -5244,6 +5250,9 @@ export interface ListingCreate {
   region?: RegionEnum
 
   /**  */
+  configurableRegion?: string
+
+  /**  */
   petPolicy?: string
 
   /**  */
@@ -5985,6 +5994,9 @@ export interface ListingUpdate {
 
   /**  */
   region?: RegionEnum
+
+  /**  */
+  configurableRegion?: string
 
   /**  */
   petPolicy?: string
@@ -7230,6 +7242,9 @@ export interface JurisdictionCreate {
 
   /**  */
   visibleNeighborhoodAmenities: NeighborhoodAmenitiesEnum[]
+
+  /**  */
+  regions: []
 }
 
 export interface JurisdictionUpdate {
@@ -7295,6 +7310,9 @@ export interface JurisdictionUpdate {
 
   /**  */
   visibleNeighborhoodAmenities: NeighborhoodAmenitiesEnum[]
+
+  /**  */
+  regions: []
 }
 
 export interface FeatureFlag {
@@ -7395,6 +7413,9 @@ export interface Jurisdiction {
 
   /**  */
   visibleNeighborhoodAmenities: NeighborhoodAmenitiesEnum[]
+
+  /**  */
+  regions: []
 }
 
 export interface AddressInput {
@@ -8677,6 +8698,7 @@ export enum ListingFilterKeys {
   "name" = "name",
   "neighborhood" = "neighborhood",
   "regions" = "regions",
+  "configurableRegions" = "configurableRegions",
   "reservedCommunityTypes" = "reservedCommunityTypes",
   "section8Acceptance" = "section8Acceptance",
   "status" = "status",
@@ -8960,6 +8982,7 @@ export enum FeatureFlagEnum {
   "enableAdditionalResources" = "enableAdditionalResources",
   "enableApplicationStatus" = "enableApplicationStatus",
   "enableCompanyWebsite" = "enableCompanyWebsite",
+  "enableConfigurableRegions" = "enableConfigurableRegions",
   "enableCreditScreeningFee" = "enableCreditScreeningFee",
   "enableFullTimeStudentQuestion" = "enableFullTimeStudentQuestion",
   "enableGeocodingPreferences" = "enableGeocodingPreferences",

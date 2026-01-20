@@ -993,6 +993,20 @@ export class ListingService implements OnModuleInit {
             })),
           });
         }
+        if (filter[ListingFilterKeys.configurableRegions]) {
+          const builtFilter = buildFilter({
+            $comparison: filter.$comparison,
+            $include_nulls: false,
+            value: filter[ListingFilterKeys.configurableRegions],
+            key: ListingFilterKeys.configurableRegions,
+            caseSensitive: true,
+          });
+          filters.push({
+            OR: builtFilter.map((filt) => ({
+              configurableRegion: filt,
+            })),
+          });
+        }
         if (filter[ListingFilterKeys.reservedCommunityTypes]) {
           const builtFilter = buildFilter({
             $comparison: filter.$comparison,

@@ -17,6 +17,7 @@ export enum ListingFilterKeys {
   name = 'name',
   neighborhood = 'neighborhood',
   regions = 'regions',
+  configurableRegions = 'configurableRegions',
   reservedCommunityTypes = 'reservedCommunityTypes',
   section8Acceptance = 'section8Acceptance',
   status = 'status',
