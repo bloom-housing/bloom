@@ -3276,9 +3276,16 @@ export class AgenciesService {
   /**
    * Get a single agency by its ID
    */
-  getById(options: IRequestOptions = {}): Promise<Agency> {
+  getById(
+    params: {
+      /**  */
+      id: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Agency> {
     return new Promise((resolve, reject) => {
       let url = basePath + "/agencies/{id}"
+      url = url.replace("{id}", params["id"] + "")
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
 
