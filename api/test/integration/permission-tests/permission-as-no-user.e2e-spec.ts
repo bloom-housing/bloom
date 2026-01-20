@@ -1504,15 +1504,15 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
       }
     });
 
-    it('should error as forbidden  for list endpoint', async () => {
+    it('should error as unauthorized  for list endpoint', async () => {
       await request(app.getHttpServer())
         .get(`/agencies`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
-        .expect(403);
+        .expect(401);
     });
 
-    it('should error as forbidden for retrieve endpoint', async () => {
+    it('should error as unauthorized for retrieve endpoint', async () => {
       if (!agencyId) {
         throw new Error('Agency ID not set up for test');
       }
@@ -1521,7 +1521,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
         .get(`/agencies/${agencyId}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
-        .expect(403);
+        .expect(401);
     });
 
     it('should error as unauthorized for create endpoint', async () => {
