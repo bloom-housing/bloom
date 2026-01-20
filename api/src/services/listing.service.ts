@@ -1673,7 +1673,6 @@ export class ListingService implements OnModuleInit {
       enableV2MSQ &&
       mappedListing.status === ListingsStatusEnum.active
     ) {
-      console.log('HEY');
       const multiselectQuestions =
         mappedListing.listingMultiselectQuestions.map(
           (listingMultiselectQuestion) =>

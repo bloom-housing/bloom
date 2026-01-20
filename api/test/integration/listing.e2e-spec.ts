@@ -11,6 +11,7 @@ import {
   ListingTypeEnum,
   MarketingTypeEnum,
   MultiselectQuestionsApplicationSectionEnum,
+  MultiselectQuestionsStatusEnum,
   Prisma,
   RegionEnum,
   RentTypeEnum,
@@ -180,17 +181,23 @@ describe('Listing Controller Tests', () => {
     jurisdictionId?: string,
     jurisdictionName?: string,
     useUnitGroups?: boolean,
+    enableV2MSQ?: boolean,
   ): Promise<ListingCreate | ListingUpdate> => {
     let jurisdictionA: IdDTO = { id: '' };
 
     if (jurisdictionId) {
       jurisdictionA.id = jurisdictionId;
     } else {
+      const featureFlags = [];
+      if (useUnitGroups) {
+        featureFlags.push(FeatureFlagEnum.enableUnitGroups);
+      }
+      if (enableV2MSQ) {
+        featureFlags.push(FeatureFlagEnum.enableV2MSQ);
+      }
       jurisdictionA = await prisma.jurisdictions.create({
         data: jurisdictionFactory(jurisdictionName || randomName(), {
-          featureFlags: [
-            ...(useUnitGroups ? [FeatureFlagEnum.enableUnitGroups] : []),
-          ],
+          featureFlags: featureFlags,
           requiredListingFields: [
             ...defaultRequiredFields,
             ...(useUnitGroups ? ['unitGroups'] : ['units']),
@@ -210,7 +217,7 @@ describe('Listing Controller Tests', () => {
       data: unitRentTypeFactory(),
     });
     const multiselectQuestion = await prisma.multiselectQuestions.create({
-      data: multiselectQuestionFactory(jurisdictionA.id),
+      data: multiselectQuestionFactory(jurisdictionA.id, {}, enableV2MSQ),
     });
     await reservedCommunityTypeFactoryAll(jurisdictionA.id, prisma);
     const reservedCommunityType = await reservedCommunityTypeFactoryGet(
@@ -2201,6 +2208,39 @@ describe('Listing Controller Tests', () => {
       expect(res.body.id).toEqual(listing.id);
       expect(res.body.name).toEqual(val.name);
     });
+
+    it('should update listing with enableV2MSQ as true', async () => {
+      const jurisdictionA = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(`update ${randomName()}`, {
+          featureFlags: [FeatureFlagEnum.enableV2MSQ],
+        }),
+      });
+      await reservedCommunityTypeFactoryAll(jurisdictionA.id, prisma);
+      const listingData = await listingFactory(jurisdictionA.id, prisma);
+      const listing = await prisma.listings.create({
+        data: listingData,
+      });
+
+      const val = await constructFullListingData(
+        listing.id,
+        jurisdictionA.id,
+        undefined,
+        false,
+        true,
+      );
+      val.listingsApplicationMailingAddress = undefined;
+
+      const res = await request(app.getHttpServer())
+        .put(`/listings/${listing.id}`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send(val)
+        .set('Cookie', adminAccessToken)
+        .expect(200);
+      console.log(res);
+      expect(res.body.id).toEqual(listing.id);
+      expect(res.body.name).toEqual(val.name);
+      expect(res.body.listingMultiselectQuestions.length).toEqual(1);
+    });
   });
 
   describe('create endpoint', () => {
@@ -2229,6 +2269,45 @@ describe('Listing Controller Tests', () => {
       expect(newDBValues.length).toBeGreaterThanOrEqual(1);
       expect(newDBValues[0].listingFeatures).toMatchObject(listingFeatures);
       expect(newDBValues[0].listingUtilities).toMatchObject(listingUtilities);
+    });
+
+    it('should create listing with enableV2MSQ as true', async () => {
+      const val = await constructFullListingData(
+        undefined,
+        undefined,
+        `create listing ${randomName()}`,
+        false,
+        true,
+      );
+
+      const res = await request(app.getHttpServer())
+        .post('/listings')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send(val)
+        .set('Cookie', adminAccessToken)
+        .expect(201);
+      expect(res.body.name).toEqual(val.name);
+
+      const newDBValues = await prisma.listings.findMany({
+        include: {
+          listingMultiselectQuestions: true,
+        },
+        where: { name: val.name },
+      });
+      expect(newDBValues.length).toBeGreaterThanOrEqual(1);
+      const activatedMSQ = await prisma.multiselectQuestions.findFirst({
+        select: {
+          id: true,
+          status: true,
+        },
+        where: {
+          id: newDBValues[0]?.listingMultiselectQuestions[0]
+            .multiselectQuestionId,
+        },
+      });
+      expect(activatedMSQ.status).toEqual(
+        MultiselectQuestionsStatusEnum.active,
+      );
     });
 
     describe('listing deposit type validation', () => {
