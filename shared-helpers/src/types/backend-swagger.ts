@@ -9337,3 +9337,12 @@ export enum MfaType {
   "sms" = "sms",
   "email" = "email",
 }
+export enum EnumPropertyFilterParamsComparison {
+  "=" = "=",
+  "<>" = "<>",
+  "IN" = "IN",
+  ">=" = ">=",
+  "<=" = "<=",
+  "LIKE" = "LIKE",
+  "NA" = "NA",
+}
