@@ -174,6 +174,14 @@ class Listing extends AbstractDTO {
   region?: RegionEnum;
 
   @Expose()
+  @ValidateListingPublish('configurableRegion', {
+    groups: [ValidationsGroupsEnum.default],
+  })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  configurableRegion?: string;
+
+  @Expose()
   @ValidateListingPublish('petPolicy', {
     groups: [ValidationsGroupsEnum.default],
   })

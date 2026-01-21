@@ -12,6 +12,7 @@ export enum FeatureFlagEnum {
   enableAdditionalResources = 'enableAdditionalResources',
   enableApplicationStatus = 'enableApplicationStatus',
   enableCompanyWebsite = 'enableCompanyWebsite',
+  enableConfigurableRegions = 'enableConfigurableRegions',
   enableCreditScreeningFee = 'enableCreditScreeningFee',
   enableFullTimeStudentQuestion = 'enableFullTimeStudentQuestion',
   enableGeocodingPreferences = 'enableGeocodingPreferences',
@@ -112,6 +113,11 @@ export const featureFlagMap: {
     name: FeatureFlagEnum.enableCompanyWebsite,
     description:
       'When true, allows partners to add company website information',
+  },
+  {
+    name: FeatureFlagEnum.enableConfigurableRegions,
+    description:
+      'When true, allows for configurable regions per jurisdiction enabled on partners and public',
   },
   {
     name: FeatureFlagEnum.enableCreditScreeningFee,

@@ -262,6 +262,8 @@ const ListingForm = ({
     jurisdictionId
   )
 
+  console.log("re-rendering")
+
   useEffect(() => {
     if (enableNonRegulatedListings) {
       setValue(
@@ -551,11 +553,16 @@ const ListingForm = ({
                           <BuildingDetails
                             customMapPositionChosen={customMapPositionChosen}
                             requiredFields={requiredFields}
+                            enableConfigurableRegions={doJurisdictionsHaveFeatureFlagOn(
+                              FeatureFlagEnum.enableConfigurableRegions,
+                              jurisdictionId
+                            )}
                             enableNonRegulatedListings={enableNonRegulatedListings}
                             enableRegions={doJurisdictionsHaveFeatureFlagOn(
                               FeatureFlagEnum.enableRegions,
                               jurisdictionId
                             )}
+                            regions={selectedJurisdictionData?.regions}
                             latLong={latLong}
                             listing={listing}
                             setCustomMapPositionChosen={setCustomMapPositionChosen}
@@ -641,6 +648,7 @@ const ListingForm = ({
                             jurisdictionId
                           ) && <BuildingSelectionCriteria />}
                           <AdditionalDetails
+                            enableNonRegulatedListings={enableNonRegulatedListings}
                             existingDocuments={listing?.requiredDocumentsList}
                             requiredFields={requiredFields}
                           />
@@ -703,6 +711,10 @@ const ListingForm = ({
                           <ApplicationTypes
                             disableCommonApplication={doJurisdictionsHaveFeatureFlagOn(
                               FeatureFlagEnum.disableCommonApplication,
+                              jurisdictionId
+                            )}
+                            enableReferralQuestionUnits={doJurisdictionsHaveFeatureFlagOn(
+                              FeatureFlagEnum.enableReferralQuestionUnits,
                               jurisdictionId
                             )}
                             jurisdiction={jurisdictionId}

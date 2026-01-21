@@ -1,7 +1,5 @@
 import React from "react"
 import { fireEvent, render, screen, within } from "@testing-library/react"
-import { DetailUnits } from "../../../../../src/components/listings/PaperListingDetails/sections/DetailUnits"
-import { ListingContext } from "../../../../../src/components/listings/ListingContext"
 import { listing, unit } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import {
   EnumListingListingType,
@@ -13,6 +11,8 @@ import {
   UnitTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { AuthContext } from "@bloom-housing/shared-helpers"
+import { DetailUnits } from "../../../../../src/components/listings/PaperListingDetails/sections/DetailUnits"
+import { ListingContext } from "../../../../../src/components/listings/ListingContext"
 
 function mockJurisdictionsHaveFeatureFlagOn(
   featureFlag: string,

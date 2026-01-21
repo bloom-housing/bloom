@@ -572,6 +572,17 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
             },
           ]
         : []),
+      ...(doAnyJurisdictionHaveFeatureFlagSet(
+        user.jurisdictions,
+        FeatureFlagEnum.enableConfigurableRegions,
+      )
+        ? [
+            {
+              path: 'configurableRegion',
+              label: 'Building Region',
+            },
+          ]
+        : []),
       {
         path: 'yearBuilt',
         label: 'Building Year Built',

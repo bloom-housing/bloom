@@ -1,4 +1,4 @@
-import React, { useContext } from "react"
+import React from "react"
 import { useFormContext } from "react-hook-form"
 import { Grid } from "@bloom-housing/ui-seeds"
 import { FieldGroup, t, Textarea } from "@bloom-housing/ui-components"
@@ -6,34 +6,27 @@ import SectionWithGrid from "../../../shared/SectionWithGrid"
 import { defaultFieldProps, getLabel } from "../../../../lib/helpers"
 import {
   EnumListingListingType,
-  FeatureFlagEnum,
   ListingDocuments,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { AuthContext, listingRequiredDocumentsOptions } from "@bloom-housing/shared-helpers"
+import { listingRequiredDocumentsOptions } from "@bloom-housing/shared-helpers"
 
 type AdditionalDetailsProps = {
   defaultText?: string
+  enableNonRegulatedListings: boolean
   existingDocuments: ListingDocuments
   requiredFields: string[]
 }
 
 const AdditionalDetails = (props: AdditionalDetailsProps) => {
   const formMethods = useFormContext()
-  const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, errors, clearErrors, watch } = formMethods
 
-  const jurisdiction = watch("jurisdictions.id")
   const listingType = watch("listingType")
 
-  const enableNonRegulatedListings = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableNonRegulatedListings,
-    jurisdiction
-  )
-
   const showRequiredDocumentsListField =
-    enableNonRegulatedListings && listingType === EnumListingListingType.nonRegulated
+    props.enableNonRegulatedListings && listingType === EnumListingListingType.nonRegulated
 
   return (
     <>

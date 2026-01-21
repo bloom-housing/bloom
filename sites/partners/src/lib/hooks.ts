@@ -15,7 +15,6 @@ import {
   MultiselectQuestionFilterParams,
   MultiselectQuestionsApplicationSectionEnum,
   OrderByEnum,
-  PropertyQueryParams,
   UserRole,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
