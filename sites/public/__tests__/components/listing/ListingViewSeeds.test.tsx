@@ -1,5 +1,5 @@
 import React from "react"
-import { fireEvent, render, screen } from "@testing-library/react"
+import { fireEvent, render, screen, within } from "@testing-library/react"
 import { listing, jurisdiction } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import { ListingViewSeeds } from "../../../src/components/listing/ListingViewSeeds"
 import {
@@ -372,5 +372,44 @@ describe("<ListingViewSeeds>", () => {
     expect(
       screen.queryByText("This property has received HUD EBLL clearance.")
     ).not.toBeInTheDocument()
+  })
+
+  it("should render pet policy list when enabled", () => {
+    render(
+      <AuthContext.Provider
+        value={{
+          doJurisdictionsHaveFeatureFlagOn: () => true,
+        }}
+      >
+        <ListingViewSeeds
+          listing={{
+            ...listing,
+            allowsDogs: true,
+            allowsCats: true,
+          }}
+          jurisdiction={{
+            ...jurisdiction,
+            featureFlags: [
+              {
+                id: "test_id",
+                name: FeatureFlagEnum.enablePetPolicyCheckbox,
+                active: true,
+                createdAt: new Date(),
+                updatedAt: new Date(),
+                description: "",
+                jurisdictions: [],
+              },
+            ],
+          }}
+        />
+      </AuthContext.Provider>
+    )
+
+    expect(screen.getAllByRole("heading", { level: 3, name: /^pets policy$/i })).toHaveLength(1)
+
+    const list = screen.getByTestId("pet-policy-list")
+    const listItems = within(list).getAllByRole("listitem")
+    expect(listItems[0]).toHaveTextContent("Allows dogs")
+    expect(listItems[1]).toHaveTextContent("Allows cats")
   })
 })

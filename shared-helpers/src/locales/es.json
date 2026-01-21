@@ -690,6 +690,8 @@
   "listingFilters.program.Veterans": "Veteranos",
   "listings.additionalInformation": "Información adicional",
   "listings.additionalInformationEnvelope": "Sobre de información adicional",
+  "listings.allowsDogs": "Permite perros",
+  "listings.allowsCats": "Permite gatos",
   "listings.allUnits": "Todas las viviendas",
   "listings.allUnitsReservedFor": "Todas las viviendas reservadas para %{type}",
   "listings.amenities.busStops": "Paradas de autobús",
