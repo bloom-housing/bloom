@@ -92,8 +92,6 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
 
   const defaultValues = editMode ? mapApiToForm(application, listingDto) : {}
 
-  const isDuplicateApplication = editMode && application?.markedAsDuplicate
-
   const formMethods = useForm<FormTypes>({
     defaultValues,
   })
@@ -233,9 +231,9 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
         <FormProvider {...formMethods}>
           <section className="bg-primary-lighter py-5">
             <div className="max-w-screen-xl px-5 mx-auto">
-              {isDuplicateApplication && (
+              {editMode && application?.markedAsDuplicate && (
                 <AlertBox className="mb-5" type="alert">
-                  This application has been marked as a duplicate.
+                  {t("applications.duplicates.markedAsDuplicateAlert")}
                 </AlertBox>
               )}
               {alert && (
@@ -251,7 +249,7 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
                     <FormApplicationData
                       enableApplicationStatus={enableApplicationStatus}
                       disableApplicationStatusControls={
-                        enableApplicationStatus && isDuplicateApplication
+                        enableApplicationStatus && editMode && application?.markedAsDuplicate
                       }
                       reviewOrderType={listingDto?.reviewOrderType}
                     />
