@@ -160,17 +160,23 @@ describe("FilterDrawer", () => {
     expect(screen.getByRole("checkbox", { name: "AC in unit" })).not.toBeChecked()
     expect(screen.getByLabelText("AC in unit")).toBeInTheDocument()
     expect(
-      screen.getByRole("checkbox", { name: "Units for those with hearing disabilities" })
+      screen.getByRole("checkbox", { name: "Units for those with hearing accessibility needs" })
     ).not.toBeChecked()
-    expect(screen.getByLabelText("Units for those with hearing disabilities")).toBeInTheDocument()
     expect(
-      screen.getByRole("checkbox", { name: "Units for those with mobility disabilities" })
-    ).not.toBeChecked()
-    expect(screen.getByLabelText("Units for those with mobility disabilities")).toBeInTheDocument()
+      screen.getByLabelText("Units for those with hearing accessibility needs")
+    ).toBeInTheDocument()
     expect(
-      screen.getByRole("checkbox", { name: "Units for those with visual disabilities" })
+      screen.getByRole("checkbox", { name: "Units for those with mobility accessibility needs" })
     ).not.toBeChecked()
-    expect(screen.getByLabelText("Units for those with visual disabilities")).toBeInTheDocument()
+    expect(
+      screen.getByLabelText("Units for those with mobility accessibility needs")
+    ).toBeInTheDocument()
+    expect(
+      screen.getByRole("checkbox", { name: "Units for those with vision accessibility needs" })
+    ).not.toBeChecked()
+    expect(
+      screen.getByLabelText("Units for those with vision accessibility needs")
+    ).toBeInTheDocument()
     expect(
       screen.getByRole("checkbox", { name: "Barrier-free (no-step) unit entrances" })
     ).not.toBeChecked()
@@ -321,17 +327,23 @@ describe("FilterDrawer", () => {
     expect(screen.getByRole("checkbox", { name: "AC in unit" })).not.toBeChecked()
     expect(screen.getByLabelText("AC in unit")).toBeInTheDocument()
     expect(
-      screen.getByRole("checkbox", { name: "Units for those with hearing disabilities" })
+      screen.getByRole("checkbox", { name: "Units for those with hearing accessibility needs" })
     ).not.toBeChecked()
-    expect(screen.getByLabelText("Units for those with hearing disabilities")).toBeInTheDocument()
     expect(
-      screen.getByRole("checkbox", { name: "Units for those with mobility disabilities" })
-    ).not.toBeChecked()
-    expect(screen.getByLabelText("Units for those with mobility disabilities")).toBeInTheDocument()
+      screen.getByLabelText("Units for those with hearing accessibility needs")
+    ).toBeInTheDocument()
     expect(
-      screen.getByRole("checkbox", { name: "Units for those with visual disabilities" })
+      screen.getByRole("checkbox", { name: "Units for those with mobility accessibility needs" })
     ).not.toBeChecked()
-    expect(screen.getByLabelText("Units for those with visual disabilities")).toBeInTheDocument()
+    expect(
+      screen.getByLabelText("Units for those with mobility accessibility needs")
+    ).toBeInTheDocument()
+    expect(
+      screen.getByRole("checkbox", { name: "Units for those with vision accessibility needs" })
+    ).not.toBeChecked()
+    expect(
+      screen.getByLabelText("Units for those with vision accessibility needs")
+    ).toBeInTheDocument()
     expect(
       screen.getByRole("checkbox", { name: "Barrier-free (no-step) unit entrances" })
     ).not.toBeChecked()
