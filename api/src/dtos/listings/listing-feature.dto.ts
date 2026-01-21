@@ -48,7 +48,7 @@ export class ListingFeatures extends AbstractDTO {
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
-  bathroomCounterLowered27?: boolean;
+  bathroomCounterLowered?: boolean;
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
@@ -128,7 +128,7 @@ export class ListingFeatures extends AbstractDTO {
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
-  kitchenCounterLowered27?: boolean;
+  kitchenCounterLowered?: boolean;
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })

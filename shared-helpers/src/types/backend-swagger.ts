@@ -3700,7 +3700,7 @@ export interface ListingFeatures {
   bathGrabBarsOrReinforcements?: boolean
 
   /**  */
-  bathroomCounterLowered27?: boolean
+  bathroomCounterLowered?: boolean
 
   /**  */
   brailleSignageInBuilding?: boolean
@@ -3748,7 +3748,7 @@ export interface ListingFeatures {
   inUnitWasherDryer?: boolean
 
   /**  */
-  kitchenCounterLowered27?: boolean
+  kitchenCounterLowered?: boolean
 
   /**  */
   laundryInBuilding?: boolean
@@ -4970,7 +4970,7 @@ export interface ListingFeaturesCreate {
   bathGrabBarsOrReinforcements?: boolean
 
   /**  */
-  bathroomCounterLowered27?: boolean
+  bathroomCounterLowered?: boolean
 
   /**  */
   brailleSignageInBuilding?: boolean
@@ -5018,7 +5018,7 @@ export interface ListingFeaturesCreate {
   inUnitWasherDryer?: boolean
 
   /**  */
-  kitchenCounterLowered27?: boolean
+  kitchenCounterLowered?: boolean
 
   /**  */
   laundryInBuilding?: boolean
@@ -6008,7 +6008,7 @@ export interface ListingFeaturesUpdate {
   bathGrabBarsOrReinforcements?: boolean
 
   /**  */
-  bathroomCounterLowered27?: boolean
+  bathroomCounterLowered?: boolean
 
   /**  */
   brailleSignageInBuilding?: boolean
@@ -6056,7 +6056,7 @@ export interface ListingFeaturesUpdate {
   inUnitWasherDryer?: boolean
 
   /**  */
-  kitchenCounterLowered27?: boolean
+  kitchenCounterLowered?: boolean
 
   /**  */
   laundryInBuilding?: boolean
@@ -8837,6 +8837,14 @@ export interface PropertyUpdate {
   jurisdictions?: IdDTO
 }
 
+export interface PropertyFilterParams {
+  /**  */
+  $comparison: EnumPropertyFilterParamsComparison
+
+  /**  */
+  jurisdiction?: string
+}
+
 export interface PropertyQueryParams {
   /**  */
   page?: number
@@ -9308,4 +9316,13 @@ export enum ModificationEnum {
 export enum MfaType {
   "sms" = "sms",
   "email" = "email",
+}
+export enum EnumPropertyFilterParamsComparison {
+  "=" = "=",
+  "<>" = "<>",
+  "IN" = "IN",
+  ">=" = ">=",
+  "<=" = "<=",
+  "LIKE" = "LIKE",
+  "NA" = "NA",
 }
