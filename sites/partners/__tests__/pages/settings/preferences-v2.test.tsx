@@ -146,8 +146,8 @@ describe("settings", () => {
         </ToastProvider>
       )
 
-      user.click(await findByText("Edit"))
-      user.click(await findByText("Delete"))
+      await user.click(await findByText("Edit"))
+      await user.click(await findByText("Delete"))
 
       // verify modal has all of the correct fields
       const modal = await findByRole("dialog", { name: "Are you sure?" })
@@ -207,7 +207,7 @@ describe("settings", () => {
         </ToastProvider>
       )
 
-      await findByText(multiselectQuestionPreferenceV2.name as string)
+      await findByText(`${multiselectQuestionPreferenceV2.name}`)
 
       // Add a preference
       fireEvent.click(getByText("Add preference"))
