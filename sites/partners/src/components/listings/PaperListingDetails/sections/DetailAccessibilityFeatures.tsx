@@ -11,7 +11,7 @@ import SectionWithGrid from "../../../shared/SectionWithGrid"
 import { ListingContext } from "../../ListingContext"
 import styles from "../../PaperListingForm/ListingForm.module.scss"
 
-const getAccessibilityFeatures = (featureSet: string[], listingFeatures: string[]) => {
+const getAccessibilityFeaturesList = (featureSet: string[], listingFeatures: string[]) => {
   const filteredFeatures = listingFeatures.filter((feature) => featureSet.includes(feature))
   if (filteredFeatures.length === 0) return <>{t("t.none")}</>
   const listItems = filteredFeatures.map((feature) => {
@@ -20,7 +20,7 @@ const getAccessibilityFeatures = (featureSet: string[], listingFeatures: string[
   return <ul className={`${styles["list-style"]}`}>{listItems}</ul>
 }
 
-export const getDetailAccessibilityFeatures = (listingFeatures: string[]) => {
+export const getExpandedAccessibilityFeatures = (listingFeatures: string[]) => {
   return Object.entries(expandedAccessibilityFeatures).map(([category, features]) => {
     return (
       <Grid.Row key={category} className={styles["text-on-secondary"]}>
@@ -28,7 +28,7 @@ export const getDetailAccessibilityFeatures = (listingFeatures: string[]) => {
           <Heading size={"md"} className={"seeds-p-b-4"}>
             {t(`eligibility.accessibility.categoryTitle.${category}`)}
           </Heading>
-          {getAccessibilityFeatures(features, listingFeatures)}
+          {getAccessibilityFeaturesList(features, listingFeatures)}
         </Grid.Cell>
       </Grid.Row>
     )
@@ -59,8 +59,6 @@ const DetailAccessibilityFeatures = () => {
     return null
   }
 
-  console.log({ listingFeatures })
-
   return (
     <SectionWithGrid heading={t("listings.sections.accessibilityFeatures")} inset>
       {enableExpandedAccessibilityFeatures ? (
@@ -68,7 +66,7 @@ const DetailAccessibilityFeatures = () => {
           <Heading priority={3} size={"lg"}>
             {t("accessibility.summaryTitle")}
           </Heading>
-          {getDetailAccessibilityFeatures(featuresAsString)}
+          {getExpandedAccessibilityFeatures(featuresAsString)}
         </div>
       ) : (
         <Grid.Row>
@@ -77,7 +75,7 @@ const DetailAccessibilityFeatures = () => {
               id="accessibilityFeatures"
               label={t("listings.sections.accessibilityFeatures")}
             >
-              {getAccessibilityFeatures(listingFeatures, featuresAsString)}
+              {getAccessibilityFeaturesList(listingFeatures, featuresAsString)}
             </FieldValue>
           </Grid.Cell>
         </Grid.Row>

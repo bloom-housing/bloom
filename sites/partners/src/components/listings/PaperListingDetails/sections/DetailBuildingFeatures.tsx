@@ -1,20 +1,16 @@
 import React, { useContext } from "react"
 import { t } from "@bloom-housing/ui-components"
 import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
+import { AuthContext } from "@bloom-housing/shared-helpers"
+import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import SectionWithGrid from "../../../shared/SectionWithGrid"
 import { ListingContext } from "../../ListingContext"
 import { getDetailFieldString } from "./helpers"
-import { AuthContext } from "@bloom-housing/shared-helpers"
-import SectionWithGrid from "../../../shared/SectionWithGrid"
-import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 const DetailBuildingFeatures = () => {
   const listing = useContext(ListingContext)
   const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
 
-  const enableAccessibilityFeatures = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableAccessibilityFeatures,
-    listing.jurisdictions.id
-  )
   const enableParkingFee = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableParkingFee,
     listing?.jurisdictions?.id

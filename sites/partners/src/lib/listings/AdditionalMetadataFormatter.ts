@@ -107,7 +107,6 @@ export default class AdditionalMetadataFormatter extends Formatter {
           [current]: isSelected,
         }
       }, {})
-      console.log({ updatedFeatures })
       this.data.listingFeatures = updatedFeatures
     }
 

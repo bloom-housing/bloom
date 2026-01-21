@@ -65,10 +65,15 @@
 
 .heading-group-in-section {
   --heading-color: var(--seeds-text-color-darker);
+  margin-block-end: var(--seeds-spacer-header);
+}
+
+.spacer-bottom-none {
+  margin-block-start: 0;
 }
 
 .two-columns {
-  display: grid !important;
+  display: grid;
   grid-template-columns: 1fr 1fr;
   column-gap: var(--seeds-spacer-section);
   width: 100%;

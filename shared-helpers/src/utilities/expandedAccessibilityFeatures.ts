@@ -25,3 +25,7 @@ export const expandedAccessibilityFeatures: Record<
   [AccessibilitySubcategoriesEnum.Utility]: expandedUtilityFeatures,
   [AccessibilitySubcategoriesEnum.HearingVision]: expandedHearingVisionFeatures,
 }
+
+export const requiredAccessibilityFeaturesSections: AccessibilitySubcategoriesEnum[] = [
+  AccessibilitySubcategoriesEnum.Flooring,
+]

@@ -6,10 +6,11 @@ import {
   listingFeatures,
   expandedAccessibilityFeatures,
   AccessibilitySubcategoriesEnum,
+  requiredAccessibilityFeaturesSections,
 } from "@bloom-housing/shared-helpers"
 import { addAsterisk } from "../../../../lib/helpers"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
-import { getDetailAccessibilityFeatures } from "../../PaperListingDetails/sections/DetailAccessibilityFeatures"
+import { getExpandedAccessibilityFeatures } from "../../PaperListingDetails/sections/DetailAccessibilityFeatures"
 import styles from "../ListingForm.module.scss"
 
 type AccessibilityFeaturesProps = {
@@ -28,17 +29,13 @@ const AccessibilityFeatures = (props: AccessibilityFeaturesProps) => {
 
   const hasFeaturesSelected = props.existingFeatures?.length > 0
 
-  const requiredSections: AccessibilitySubcategoriesEnum[] = [
-    AccessibilitySubcategoriesEnum.Flooring,
-  ]
-
   useEffect(() => {
     if (!props.enableExpandedAccessibilityFeatures) {
       setValue("accessibilityFeatures", props.existingFeatures)
     }
   }, [props.existingFeatures, props.enableExpandedAccessibilityFeatures, setValue])
 
-  const getFeatureGroupValues = (subcategory: AccessibilitySubcategoriesEnum) => {
+  const getFeatureSectionValues = (subcategory: AccessibilitySubcategoriesEnum) => {
     return expandedAccessibilityFeatures[subcategory].map((item) => ({
       id: item,
       label: t(`eligibility.accessibility.${item}`),
@@ -68,7 +65,9 @@ const AccessibilityFeatures = (props: AccessibilityFeaturesProps) => {
     let errors = false
     Object.entries(expandedAccessibilityFeatures).forEach(([category, features]) => {
       if (
-        requiredSections.includes(category as AccessibilitySubcategoriesEnum) &&
+        requiredAccessibilityFeaturesSections.includes(
+          category as AccessibilitySubcategoriesEnum
+        ) &&
         !formData.configurableAccessibilityFeatures[category].some((feature) =>
           features.includes(feature)
         )
@@ -107,7 +106,7 @@ const AccessibilityFeatures = (props: AccessibilityFeaturesProps) => {
                     <Heading priority={3} size={"lg"}>
                       {t("accessibility.summaryTitle")}
                     </Heading>
-                    {getDetailAccessibilityFeatures(props.existingFeatures)}
+                    {getExpandedAccessibilityFeatures(props.existingFeatures)}
                   </>
                 ) : null}
                 <div className={hasFeaturesSelected ? "seeds-m-bs-4" : ""}>
@@ -157,8 +156,9 @@ const AccessibilityFeatures = (props: AccessibilityFeaturesProps) => {
                 <SectionWithGrid
                   heading={t("listings.sections.accessibilityFeatures")}
                   headingClassName={styles["heading-group-in-section"]}
+                  className={styles["spacer-bottom-none"]}
                 >
-                  <div className={"field-label seeds-m-be-6"}>{t("accessibility.drawerInfo")}</div>
+                  <div className={"field-label seeds-p-b-0_5"}>{t("accessibility.drawerInfo")}</div>
                   {Object.entries(expandedAccessibilityFeatures).map(([category]) => {
                     const label = t(`accessibility.categoryTitle.${category}Features`)
                     return (
@@ -168,11 +168,13 @@ const AccessibilityFeatures = (props: AccessibilityFeaturesProps) => {
                             type="checkbox"
                             name={`configurableAccessibilityFeatures.${category}`}
                             groupLabel={
-                              requiredSections.includes(category as AccessibilitySubcategoriesEnum)
+                              requiredAccessibilityFeaturesSections.includes(
+                                category as AccessibilitySubcategoriesEnum
+                              )
                                 ? addAsterisk(label)
                                 : label
                             }
-                            fields={getFeatureGroupValues(
+                            fields={getFeatureSectionValues(
                               category as AccessibilitySubcategoriesEnum
                             )}
                             register={register}
