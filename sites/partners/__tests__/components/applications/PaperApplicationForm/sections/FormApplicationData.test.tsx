@@ -217,5 +217,41 @@ describe("<FormApplicationData>", () => {
 
       expect(screen.getByLabelText(/lottery number/i)).toBeInTheDocument()
     })
+
+    it("shows disabled display fields when status controls are disabled", () => {
+      render(
+        <FormProviderWrapper>
+          <FormApplicationData
+            enableApplicationStatus={true}
+            disableApplicationStatusControls={true}
+            reviewOrderType={ReviewOrderTypeEnum.lottery}
+          />
+        </FormProviderWrapper>
+      )
+
+      const activeStatusSelect = screen.getByTestId("applicationStatusSelect")
+      const displayStatusSelect = screen.getByTestId("applicationStatusSelectDisplay")
+      expect(activeStatusSelect.closest(".hidden")).toBeInTheDocument()
+      expect(displayStatusSelect).toBeDisabled()
+
+      const activeAuwlInput = screen.getByTestId("applicationAccessibleUnitWaitlistNumber")
+      const displayAuwlInput = screen.getByTestId("applicationAccessibleUnitWaitlistNumberDisplay")
+      expect(activeAuwlInput.closest(".hidden")).toBeInTheDocument()
+      expect(displayAuwlInput).toBeDisabled()
+
+      const activeCuwlInput = screen.getByTestId("applicationConventionalUnitWaitlistNumber")
+      const displayCuwlInput = screen.getByTestId(
+        "applicationConventionalUnitWaitlistNumberDisplay"
+      )
+      expect(activeCuwlInput.closest(".hidden")).toBeInTheDocument()
+      expect(displayCuwlInput).toBeDisabled()
+
+      const activeLotteryInput = screen.getByTestId("applicationManualLotteryPositionNumber")
+      const displayLotteryInput = screen.getByTestId(
+        "applicationManualLotteryPositionNumberDisplay"
+      )
+      expect(activeLotteryInput.closest(".hidden")).toBeInTheDocument()
+      expect(displayLotteryInput).toBeDisabled()
+    })
   })
 })

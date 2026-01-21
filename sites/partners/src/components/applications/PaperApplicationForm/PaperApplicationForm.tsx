@@ -92,6 +92,8 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
 
   const defaultValues = editMode ? mapApiToForm(application, listingDto) : {}
 
+  const isDuplicateApplication = editMode && application?.markedAsDuplicate
+
   const formMethods = useForm<FormTypes>({
     defaultValues,
   })
@@ -228,10 +230,14 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
         <StatusBar>
           <ApplicationStatusTag status={application?.status} />
         </StatusBar>
-
         <FormProvider {...formMethods}>
           <section className="bg-primary-lighter py-5">
             <div className="max-w-screen-xl px-5 mx-auto">
+              {isDuplicateApplication && (
+                <AlertBox className="mb-5" type="alert">
+                  This application has been marked as a duplicate.
+                </AlertBox>
+              )}
               {alert && (
                 <AlertBox className="mb-5" onClose={() => setAlert(null)} closeable type="alert">
                   {alert === "form"
@@ -239,29 +245,27 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
                     : t("errors.alert.badRequest")}
                 </AlertBox>
               )}
-
               <Form id="application-form" onSubmit={handleSubmit(triggerSubmit, onError)}>
                 <div className="flex flex-row flex-wrap">
                   <div className="info-card md:w-9/12">
                     <FormApplicationData
                       enableApplicationStatus={enableApplicationStatus}
+                      disableApplicationStatusControls={
+                        enableApplicationStatus && isDuplicateApplication
+                      }
                       reviewOrderType={listingDto?.reviewOrderType}
                     />
-
                     <FormPrimaryApplicant
                       enableFullTimeStudentQuestion={enableFullTimeStudentQuestion}
                       disableWorkInRegion={disableWorkInRegion}
                     />
-
                     <FormAlternateContact />
-
                     <FormHouseholdMembers
                       householdMembers={householdMembers}
                       setHouseholdMembers={setHouseholdMembers}
                       enableFullTimeStudentQuestion={enableFullTimeStudentQuestion}
                       disableWorkInRegion={disableWorkInRegion}
                     />
-
                     <FormHouseholdDetails
                       listingUnits={units}
                       listingUnitGroups={listingDto?.unitGroups}
@@ -271,7 +275,6 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
                       enableUnitGroups={enableUnitGroups}
                       enableFullTimeStudentQuestion={enableFullTimeStudentQuestion}
                     />
-
                     <FormMultiselectQuestions
                       questions={programs}
                       applicationSection={MultiselectQuestionsApplicationSectionEnum.programs}
@@ -281,20 +284,16 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
                           : t("application.details.programs")
                       }
                     />
-
                     <FormHouseholdIncome />
-
                     <FormMultiselectQuestions
                       questions={preferences}
                       applicationSection={MultiselectQuestionsApplicationSectionEnum.preferences}
                       sectionTitle={t("application.details.preferences")}
                     />
-
                     <FormDemographics
                       formValues={application?.demographics}
                       enableLimitedHowDidYouHear={enableLimitedHowDidYouHear}
                     />
-
                     <FormTerms />
                   </div>
 
