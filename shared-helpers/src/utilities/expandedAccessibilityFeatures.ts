@@ -29,3 +29,15 @@ export const expandedAccessibilityFeatures: Record<
 export const requiredAccessibilityFeaturesSections: AccessibilitySubcategoriesEnum[] = [
   AccessibilitySubcategoriesEnum.Flooring,
 ]
+
+export type ExpandedAccessibilityFeaturesFormType = {
+  [K in AccessibilitySubcategoriesEnum]: string[]
+}
+
+export const expandedAccessibilityFeaturesFormDefaults: ExpandedAccessibilityFeaturesFormType = {
+  [AccessibilitySubcategoriesEnum.Mobility]: [],
+  [AccessibilitySubcategoriesEnum.Bathroom]: [],
+  [AccessibilitySubcategoriesEnum.Flooring]: [],
+  [AccessibilitySubcategoriesEnum.Utility]: [],
+  [AccessibilitySubcategoriesEnum.HearingVision]: [],
+}
