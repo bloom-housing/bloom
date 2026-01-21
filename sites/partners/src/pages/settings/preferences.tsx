@@ -190,7 +190,7 @@ const SettingsPreferences = () => {
   ) {
     void router.push("/unauthorized")
   }
-  if (v2Preferences) void router.push("/settings/preferences-new")
+  if (v2Preferences) void router.push("/settings/preferences-v2")
 
   return (
     <>

@@ -14,10 +14,8 @@ import Head from "next/head"
 import Layout from "../../layouts"
 import { NavigationHeader } from "../../components/shared/NavigationHeader"
 import { useJurisdictionalMultiselectQuestionList } from "../../lib/hooks"
-import EditPreference, {
-  DrawerType,
-} from "../../components/settings/preferences-new/EditPreference"
-import styles from "./preferences-new.module.scss"
+import EditPreference, { DrawerType } from "../../components/settings/preferences-v2/EditPreference"
+import styles from "./preferences-v2.module.scss"
 import TabView from "../../layouts/TabView"
 import { getSettingsTabs, SettingsIndexEnum } from "../../components/settings/SettingsViewHelpers"
 
