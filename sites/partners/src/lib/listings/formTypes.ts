@@ -179,6 +179,7 @@ export const formDefaults: FormListing = {
   unitAmenities: "",
   servicesOffered: "",
   yearBuilt: null,
+  configurableRegion: "",
   // urlSlug: undefined,
   // showWaitlist: false,
   reviewOrderType: null,

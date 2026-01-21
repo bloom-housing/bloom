@@ -21,6 +21,8 @@ const mockUserService = {
   favoriteListings: jest.fn(),
   modifyFavoriteListings: jest.fn(),
   profile: jest.fn(),
+  userWarnCronJob: jest.fn(),
+  deleteInactiveUsersCronJob: jest.fn(),
 }
 
 beforeEach(() => {
