@@ -12,7 +12,6 @@ import {
 import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { mockNextRouter, render } from "../../testUtils"
 import SettingsPreferences from "../../../src/pages/settings/preferences-v2"
-import { act } from "react"
 
 const server = setupServer()
 
@@ -28,6 +27,12 @@ beforeEach(() => {
     }),
     rest.get("http://localhost:3100/mapLayers", (_req, res, ctx) => {
       return res(ctx.json([]))
+    }),
+    rest.get("http://localhost:3100/multiselectQuestions", (_req, res, ctx) => {
+      return res(ctx.json([multiselectQuestionPreferenceV2]))
+    }),
+    rest.get("http://localhost/api/adapter/multiselectQuestions", (_req, res, ctx) => {
+      return res(ctx.json([multiselectQuestionPreferenceV2]))
     })
   )
 })
@@ -56,12 +61,6 @@ describe("settings", () => {
       window.URL.createObjectURL = jest.fn()
       document.cookie = "access-token-available=True"
       server.use(
-        rest.get("http://localhost:3100/multiselectQuestions", (_req, res, ctx) => {
-          return res(ctx.json([multiselectQuestionPreferenceV2]))
-        }),
-        rest.get("http://localhost/api/adapter/multiselectQuestions", (_req, res, ctx) => {
-          return res(ctx.json([multiselectQuestionPreferenceV2]))
-        }),
         rest.get(
           "http://localhost/api/adapter/multiselectQuestions/listings/id1",
           (_req, res, ctx) => {
@@ -117,12 +116,6 @@ describe("settings", () => {
       window.URL.createObjectURL = jest.fn()
       document.cookie = "access-token-available=True"
       server.use(
-        rest.get("http://localhost:3100/multiselectQuestions", (_req, res, ctx) => {
-          return res(ctx.json([multiselectQuestionPreferenceV2]))
-        }),
-        rest.get("http://localhost/api/adapter/multiselectQuestions", (_req, res, ctx) => {
-          return res(ctx.json([multiselectQuestionPreferenceV2]))
-        }),
         rest.delete("http://localhost/api/adapter/multiselectQuestions", (_req, res, ctx) => {
           return res(ctx.json({}))
         }),
@@ -188,12 +181,6 @@ describe("settings", () => {
               jurisdictions: [{ id: "id1", name: "Housing Jurisdiction" }],
             })
           )
-        }),
-        rest.get("http://localhost:3100/multiselectQuestions", (_req, res, ctx) => {
-          return res(ctx.json([multiselectQuestionPreferenceV2]))
-        }),
-        rest.get("http://localhost/api/adapter/multiselectQuestions", (_req, res, ctx) => {
-          return res(ctx.json([multiselectQuestionPreferenceV2]))
         }),
         rest.get(
           "http://localhost/api/adapter/multiselectQuestions/listings/id1",
