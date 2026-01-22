@@ -64,6 +64,7 @@ model Address {
   leasingAgentAddress          Listings[]                   @relation("leasing_agent_address")
   applicationPickUpAddress     Listings[]                   @relation("application_pick_up_address")
   buildingAddress              Listings[]                   @relation("building_address")
+  userAccounts                 UserAccounts[]
 
   @@map("address")
 }
@@ -1009,6 +1010,19 @@ model UserAccounts {
   lastUpdatedListingsByUser Listings[]              @relation("last_updated_by_user")
   wasWarnedOfDeletion       Boolean?                @default(false) @map("was_warned_of_deletion")
 
+  title                     String?
+  address                   Address?  @relation(fields: [addressId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  addressId                 String?   @map("address_id") @db.Uuid
+  phoneType                 String?   @map("phone_type")
+  phoneExtension            String?   @map("phone_extension")
+  additionalPhoneNumber     String?   @map("additional_phone_number")
+  additionalPhoneNumberType String?   @map("additional_phone_number_type")
+  additionalPhoneExtension  String?   @map("additional_phone_extension")
+  agency                    Agencies? @relation(fields: [agencyId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  agencyId                  String?   @map("agency_id") @db.Uuid
+  isApproved                Boolean   @default(false) @map("is_approved")
+  isAdvocate                Boolean   @default(false) @map("is_advocate")
+
   @@map("user_accounts")
 }
 
@@ -1130,6 +1144,7 @@ model Agencies {
   name            String
   jurisdictions   Jurisdictions? @relation(fields: [jurisdictionsId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   jurisdictionsId String?        @db.Uuid
+  userAccounts    UserAccounts[]
 
   @@map("agencies")
 }
