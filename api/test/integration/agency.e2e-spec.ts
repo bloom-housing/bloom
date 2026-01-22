@@ -12,7 +12,7 @@ import { stringify } from 'querystring';
 import { randomUUID } from 'crypto';
 import AgencyCreate from '../../src/dtos/agency/agency-create.dto';
 import { AgencyUpdate } from '../../src/dtos/agency/agency-update.dto';
-import { IdDTO } from 'src/dtos/shared/id.dto';
+import { IdDTO } from '../../src/dtos/shared/id.dto';
 
 describe('Agencies Controller Tests', () => {
   let app: INestApplication;
