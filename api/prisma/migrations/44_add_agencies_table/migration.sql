@@ -4,10 +4,15 @@ CREATE TABLE "agencies" (
     "created_at" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(6) NOT NULL,
     "name" TEXT NOT NULL,
-    "jurisdictionsId" UUID,
+    "jurisdictions_id" UUID,
 
     CONSTRAINT "agencies_pkey" PRIMARY KEY ("id")
 );
 
 -- AddForeignKey
-ALTER TABLE "agencies" ADD CONSTRAINT "agencies_jurisdictionsId_fkey" FOREIGN KEY ("jurisdictionsId") REFERENCES "jurisdictions"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE "agencies" 
+ADD CONSTRAINT "agencies_jurisdictions_id_fkey" 
+FOREIGN KEY ("jurisdictions_id") 
+REFERENCES "jurisdictions"("id") 
+ON DELETE NO ACTION 
+ON UPDATE NO ACTION;

@@ -1129,7 +1129,7 @@ model Agencies {
   updatedAt       DateTime       @updatedAt @map("updated_at") @db.Timestamp(6)
   name            String
   jurisdictions   Jurisdictions? @relation(fields: [jurisdictionsId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  jurisdictionsId String?        @db.Uuid
+  jurisdictionsId String?        @map("jurisdictions_id") @db.Uuid
 
   @@map("agencies")
 }
