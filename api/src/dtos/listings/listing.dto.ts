@@ -61,6 +61,7 @@ import {
   ValidateOnlyUnitsOrUnitGroups,
 } from '../../decorators/validate-units-required.decorator';
 import { ValidateListingDeposit } from '../../decorators/validate-listing-deposit.decorator';
+import { ValidateListingFeatures } from '../../decorators/validate-listing-features.decorator';
 import { ListingDocuments } from './listing-documents.dto';
 import { ValidateListingImages } from '../../decorators/validate-listing-images.decorator';
 import Property from '../properties/property.dto';
@@ -966,6 +967,7 @@ class Listing extends AbstractDTO {
   })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => ListingFeatures)
+  @ValidateListingFeatures({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional({ type: ListingFeatures })
   listingFeatures?: ListingFeatures;
 

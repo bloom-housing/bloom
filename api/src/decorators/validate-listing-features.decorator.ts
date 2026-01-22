@@ -8,6 +8,29 @@ import {
 } from 'class-validator';
 import { ListingFeaturesConfiguration } from '../../src/dtos/jurisdictions/listing-features-config.dto';
 
+const missingCategories = (
+  featuresConfiguration: ListingFeaturesConfiguration,
+  value: ListingFeatures,
+) => {
+  if (featuresConfiguration?.categories?.length) {
+    const requiredCategories = featuresConfiguration.categories.filter(
+      (category) => category.required,
+    );
+    const missingCategories = [];
+    console.log({ value });
+    requiredCategories.forEach((category) => {
+      console.log({ category });
+      const atLeastOneField = category.fields.some((field) => {
+        console.log(value[field.id]);
+        return value[field.id];
+      });
+      console.log(atLeastOneField);
+      if (!atLeastOneField) missingCategories.push(category.id);
+    });
+    return missingCategories;
+  }
+};
+
 export function ValidateListingFeatures(validationOptions?: ValidatorOptions) {
   return function (object: object, propertyName: string) {
     registerDecorator({
@@ -26,16 +49,19 @@ export class ListingFeaturesConstraint implements ValidatorConstraintInterface {
     value: ListingFeatures,
     validationArguments?: ValidationArguments,
   ): Promise<boolean> | boolean {
-    console.log({ validationArguments });
     const featuresConfiguration: ListingFeaturesConfiguration =
       validationArguments?.object['listingFeaturesConfiguration'];
-    console.log('VALUE!!!');
-    console.log({ value });
-    console.log('CONFIG!!!');
-    console.log({ featuresConfiguration });
-    return true;
+    const missingCategoriesList = missingCategories(
+      featuresConfiguration,
+      value,
+    );
+    return missingCategoriesList.length === 0;
   }
+
   defaultMessage(validationArguments?: ValidationArguments): string {
-    return `listingFeatures has required categories ${validationArguments?.object['minimumImagesRequired']} photos`;
+    return `listingFeatures has no data in these required categories: [${missingCategories(
+      validationArguments?.object['listingFeaturesConfiguration'],
+      validationArguments?.object['listingFeatures'],
+    ).join(', ')}]`;
   }
 }

@@ -395,6 +395,10 @@ const ListingForm = ({
             )
           }
 
+          if (!formData.configurableAccessibilityFeatures) {
+            formData.configurableAccessibilityFeatures = accessibilityFeatures
+          }
+
           if (successful) {
             const dataPipeline = new ListingDataPipeline(formData, {
               preferences: disableListingPreferences ? [] : preferences,

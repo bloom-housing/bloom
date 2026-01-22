@@ -4,9 +4,7 @@ import { AuthContext } from "@bloom-housing/shared-helpers"
 import {
   defaultListingFeaturesConfiguration,
   expandedListingFeaturesConfiguration,
-  jurisdiction,
   listing,
-  user,
 } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { ListingContext } from "../../../../../src/components/listings/ListingContext"

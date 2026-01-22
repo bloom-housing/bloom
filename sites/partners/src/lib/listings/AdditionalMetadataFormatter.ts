@@ -88,33 +88,40 @@ export default class AdditionalMetadataFormatter extends Formatter {
           : ReviewOrderTypeEnum.waitlist
     }
 
-    if (this.data.configurableAccessibilityFeatures) {
-      if (Array.isArray(this.data.configurableAccessibilityFeatures)) {
-        // No categories - form data is a string array
-        const updatedFeatures = allListingFeatures.reduce((acc, current) => {
-          const isSelected = this.data.configurableAccessibilityFeatures.some((feature) => {
-            // Remove `configurableAccessibilityFeatures.` prefix from form
-            const prefixIndex = (feature.indexOf(".") as number) + 1
-            return feature.substring(prefixIndex) === current
-          })
-          return {
-            ...acc,
-            [current]: isSelected,
-          }
-        }, {})
-        this.data.listingFeatures = updatedFeatures
-      } else {
-        // Categories - form data is an object of string arrays by category
-        const flattenedFeatures = Object.values(this.data.configurableAccessibilityFeatures).flat()
-        const updatedFeatures = allListingFeatures.reduce((acc, current) => {
-          const isSelected = flattenedFeatures.some((feature) => feature === current)
-          return {
-            ...acc,
-            [current]: isSelected,
-          }
-        }, {})
-        this.data.listingFeatures = updatedFeatures
-      }
+    if (Array.isArray(this.data.configurableAccessibilityFeatures)) {
+      // No categories - form data is a string array
+      const updatedFeatures = allListingFeatures.reduce((acc, current) => {
+        const isSelected = this.data.configurableAccessibilityFeatures.some((feature) => {
+          // Remove `configurableAccessibilityFeatures.` prefix from form
+          const prefixIndex = (feature.indexOf(".") as number) + 1
+          return feature.substring(prefixIndex) === current
+        })
+        return {
+          ...acc,
+          [current]: isSelected,
+        }
+      }, {})
+      this.data.listingFeatures = updatedFeatures
+    } else if (this.data.configurableAccessibilityFeatures) {
+      // Categories - form data is an object of string arrays by category
+      const flattenedFeatures = Object.values(this.data.configurableAccessibilityFeatures).flat()
+      const updatedFeatures = allListingFeatures.reduce((acc, current) => {
+        const isSelected = flattenedFeatures.some((feature) => feature === current)
+        return {
+          ...acc,
+          [current]: isSelected,
+        }
+      }, {})
+      this.data.listingFeatures = updatedFeatures
+    }
+    if (!this.data.configurableAccessibilityFeatures) {
+      const updatedFeatures = allListingFeatures.reduce((acc, current) => {
+        return {
+          ...acc,
+          [current]: false,
+        }
+      }, {})
+      this.data.listingFeatures = updatedFeatures
     }
 
     if (

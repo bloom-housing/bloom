@@ -87,6 +87,7 @@ const AccessibilityFeatures = (props: AccessibilityFeaturesProps) => {
       Object.values(formData.configurableAccessibilityFeatures).flat() as string[]
     )
     setIsDrawerOpen(false)
+    clearErrors("listingFeatures")
   }
 
   if (!props.enableAccessibilityFeatures || !props.listingFeaturesConfiguration) {
@@ -148,6 +149,13 @@ const AccessibilityFeatures = (props: AccessibilityFeaturesProps) => {
                 </Grid.Cell>
               </Grid.Row>
             </Grid>
+            {errors.listingFeatures && (
+              <div
+                className={`field-label text-xs ${styles["custom-label"]} ${styles["label-error"]} seeds-m-bs-2`}
+              >
+                This section has some required fields
+              </div>
+            )}
           </>
         ) : (
           <Grid.Row>
