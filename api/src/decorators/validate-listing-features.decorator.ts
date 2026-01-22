@@ -45,6 +45,9 @@ export class ListingFeaturesConstraint implements ValidatorConstraintInterface {
     value: ListingFeatures,
     validationArguments?: ValidationArguments,
   ): Promise<boolean> | boolean {
+    if (validationArguments?.object['status'] === 'pending') {
+      return true;
+    }
     const featuresConfiguration: ListingFeaturesConfiguration =
       validationArguments?.object['listingFeaturesConfiguration'];
     const missingCategoriesList = missingCategories(

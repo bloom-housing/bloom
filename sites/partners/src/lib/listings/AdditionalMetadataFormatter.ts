@@ -88,7 +88,14 @@ export default class AdditionalMetadataFormatter extends Formatter {
           : ReviewOrderTypeEnum.waitlist
     }
 
-    if (Array.isArray(this.data.configurableAccessibilityFeatures)) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const isStringArray = (value: any): value is string[] => {
+      return Object.keys(value).every((key) => {
+        return !Array.isArray(value[key])
+      })
+    }
+
+    if (isStringArray(this.data.configurableAccessibilityFeatures)) {
       // No categories - form data is a string array
       const updatedFeatures = allListingFeatures.reduce((acc, current) => {
         const values = this.data.configurableAccessibilityFeatures as string[]

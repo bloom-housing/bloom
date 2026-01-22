@@ -12,8 +12,8 @@ import styles from "../../PaperListingForm/ListingForm.module.scss"
 
 const getAccessibilityFeaturesList = (possibleFeatures: string[], listingFeatures: string[]) => {
   const filteredFeatures = possibleFeatures?.filter((field) => listingFeatures.includes(field))
-  if (filteredFeatures.length === 0) return <>{t("t.none")}</>
-  const listItems = filteredFeatures.map((feature) => {
+  if (!filteredFeatures || filteredFeatures.length === 0) return <>{t("t.none")}</>
+  const listItems = filteredFeatures?.map((feature) => {
     return <li key={feature}>{t(`eligibility.accessibility.${feature}`)}</li>
   })
   return (
@@ -90,7 +90,7 @@ const DetailAccessibilityFeatures = (props: DetailAccessibilityFeaturesProps) =>
               label={t("listings.sections.accessibilityFeatures")}
             >
               {getAccessibilityFeaturesList(
-                props?.listingFeaturesConfiguration.fields.map((feature) => feature.id),
+                props?.listingFeaturesConfiguration?.fields.map((feature) => feature.id),
                 featuresAsString
               )}
             </FieldValue>
