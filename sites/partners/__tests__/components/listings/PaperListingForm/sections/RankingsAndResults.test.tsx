@@ -1,6 +1,7 @@
 import React from "react"
 import { setupServer } from "msw/node"
 import { screen } from "@testing-library/react"
+import userEvent from "@testing-library/user-event"
 import RankingsAndResults from "../../../../../src/components/listings/PaperListingForm/sections/RankingsAndResults"
 import { formDefaults } from "../../../../../src/lib/listings/formTypes"
 import {
@@ -9,7 +10,6 @@ import {
   mockTipTapEditor,
   render,
 } from "../../../../testUtils"
-import userEvent from "@testing-library/user-event"
 
 const server = setupServer()
 beforeAll(() => {

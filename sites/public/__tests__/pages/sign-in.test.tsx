@@ -2,6 +2,7 @@ import React from "react"
 import { render, fireEvent, waitFor, act } from "@testing-library/react"
 import { useRouter } from "next/router"
 import { MessageContext, AuthContext } from "@bloom-housing/shared-helpers"
+import { jurisdiction } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import { User, UserService } from "../../../../shared-helpers/src/types/backend-swagger"
 import { SignIn as SignInComponent } from "../../src/pages/sign-in"
 import { Verify } from "../../src/pages/verify"
@@ -19,7 +20,7 @@ const TOAST_MESSAGE = {
 const renderSignInPage = () =>
   render(
     <MessageContext.Provider value={TOAST_MESSAGE}>
-      <SignInComponent />
+      <SignInComponent jurisdiction={jurisdiction} />
     </MessageContext.Provider>
   )
 
@@ -68,7 +69,7 @@ describe("Sign In Page", () => {
         }}
       >
         <MessageContext.Provider value={{ ...TOAST_MESSAGE, addToast: mockAddToast }}>
-          <SignInComponent />
+          <SignInComponent jurisdiction={jurisdiction} />
         </MessageContext.Provider>
       </AuthContext.Provider>
     )
@@ -146,7 +147,7 @@ describe("Sign In Page", () => {
       const { getByLabelText, getByText } = render(
         <AuthContext.Provider value={{ initialStateLoaded, profile }}>
           <MessageContext.Provider value={TOAST_MESSAGE}>
-            <SignInComponent />
+            <SignInComponent jurisdiction={jurisdiction} />
           </MessageContext.Provider>
         </AuthContext.Provider>
       )
@@ -166,7 +167,7 @@ describe("Passwordless Sign In page", () => {
   const renderSignInPage = () =>
     render(
       <MessageContext.Provider value={TOAST_MESSAGE}>
-        <SignInComponent />
+        <SignInComponent jurisdiction={jurisdiction} />
       </MessageContext.Provider>
     )
 
@@ -259,7 +260,7 @@ describe("Passwordless Sign In page", () => {
         }}
       >
         <MessageContext.Provider value={TOAST_MESSAGE}>
-          <SignInComponent />
+          <SignInComponent jurisdiction={jurisdiction} />
         </MessageContext.Provider>
       </AuthContext.Provider>
     )
@@ -295,7 +296,7 @@ describe("Passwordless Sign In page", () => {
         }}
       >
         <MessageContext.Provider value={{ ...TOAST_MESSAGE, addToast: mockAddToast }}>
-          <SignInComponent />
+          <SignInComponent jurisdiction={jurisdiction} />
         </MessageContext.Provider>
       </AuthContext.Provider>
     )
@@ -351,7 +352,7 @@ describe("Mandated accounts", () => {
   const renderSignInWithMandatedAccounts = () =>
     render(
       <MessageContext.Provider value={TOAST_MESSAGE}>
-        <SignInComponent />
+        <SignInComponent jurisdiction={jurisdiction} />
       </MessageContext.Provider>
     )
 
@@ -392,7 +393,7 @@ describe("Mandated accounts", () => {
           }}
         >
           <MessageContext.Provider value={{ ...TOAST_MESSAGE, addToast: mockAddToast }}>
-            <SignInComponent />
+            <SignInComponent jurisdiction={jurisdiction} />
           </MessageContext.Provider>
         </AuthContext.Provider>
       )
@@ -464,7 +465,7 @@ describe("Mandated accounts", () => {
             }}
           >
             <MessageContext.Provider value={{ ...TOAST_MESSAGE, addToast: mockAddToast }}>
-              <SignInComponent />
+              <SignInComponent jurisdiction={jurisdiction} />
             </MessageContext.Provider>
           </AuthContext.Provider>
         )
@@ -523,7 +524,7 @@ describe("User is not confirmed flow", () => {
         }}
       >
         <MessageContext.Provider value={TOAST_MESSAGE}>
-          <SignInComponent />
+          <SignInComponent jurisdiction={jurisdiction} />
         </MessageContext.Provider>
       </AuthContext.Provider>
     )
@@ -575,7 +576,7 @@ describe("User's password is out of date flow", () => {
         }}
       >
         <MessageContext.Provider value={TOAST_MESSAGE}>
-          <SignInComponent />
+          <SignInComponent jurisdiction={jurisdiction} />
         </MessageContext.Provider>
       </AuthContext.Provider>
     )
@@ -692,7 +693,7 @@ describe("Resend confirmation flow", () => {
         }}
       >
         <MessageContext.Provider value={TOAST_MESSAGE}>
-          <SignInComponent />
+          <SignInComponent jurisdiction={jurisdiction} />
         </MessageContext.Provider>
       </AuthContext.Provider>
     )

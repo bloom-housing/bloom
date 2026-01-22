@@ -181,6 +181,7 @@ export const ListingBrowse = (props: ListingBrowseProps) => {
         multiselectData={props.multiselectData}
         activeFeatureFlags={jurisdictionActiveFeatureFlags}
         onClear={onFilterClear}
+        regions={props.jurisdiction?.regions}
       />
       <LoadingState loading={isLoading}>
         <div className={styles["listing-directory"]}>

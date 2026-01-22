@@ -41,6 +41,7 @@ import { PropertyFilterParams } from '../dtos/properties/property-filter-params.
 @ApiExtraModels(
   PropertyCreate,
   PropertyUpdate,
+  PropertyFilterParams,
   PropertyQueryParams,
   PropertyFilterParams,
   PaginationMeta,

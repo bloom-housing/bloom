@@ -166,6 +166,7 @@ export const stagingSeed = async (
         FeatureFlagEnum.disableListingPreferences,
         FeatureFlagEnum.enableAccessibilityFeatures,
         FeatureFlagEnum.enableApplicationStatus,
+        FeatureFlagEnum.enableConfigurableRegions,
         FeatureFlagEnum.enableCreditScreeningFee,
         FeatureFlagEnum.enableHousingDeveloperOwner,
         FeatureFlagEnum.enableLeasingAgentAltText,
@@ -178,6 +179,7 @@ export const stagingSeed = async (
         FeatureFlagEnum.enableNeighborhoodAmenities,
         FeatureFlagEnum.enableNeighborhoodAmenitiesDropdown,
         FeatureFlagEnum.enableParkingFee,
+        FeatureFlagEnum.enablePetPolicyCheckbox,
         FeatureFlagEnum.enableProperties,
         FeatureFlagEnum.enableReferralQuestionUnits,
         FeatureFlagEnum.enableSmokingPolicyRadio,
@@ -191,6 +193,16 @@ export const stagingSeed = async (
         NeighborhoodAmenitiesEnum.recreationalFacilities,
         NeighborhoodAmenitiesEnum.playgrounds,
         NeighborhoodAmenitiesEnum.busStops,
+      ],
+      regions: [
+        'Metro Area',
+        'South Bay',
+        'East Valley',
+        'West Side',
+        'Downtown',
+        'Harbor Area',
+        'North Bay',
+        'Southwest',
       ],
       minimumListingPublishImagesRequired: 3,
       requiredListingFields: [
@@ -536,7 +548,7 @@ export const stagingSeed = async (
   // list of predefined listings WARNING: images only work if image setup is cloudinary on exygy account
   [
     {
-      jurisdictionId: mainJurisdiction.id,
+      jurisdictionId: angelopolisJurisdiction.id,
       listing: hollywoodHillsHeights,
       units: [
         {
