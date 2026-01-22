@@ -24,6 +24,7 @@ import {
   EnumUnitGroupAmiLevelMonthlyRentDeterminationType,
   UnitType,
   User,
+  MultiselectQuestionsStatusEnum,
 } from "../src/types/backend-swagger"
 
 export const multiselectQuestionPreference: MultiselectQuestion = {
@@ -34,6 +35,7 @@ export const multiselectQuestionPreference: MultiselectQuestion = {
   createdAt: new Date("2022-09-14T22:53:09.982Z"),
   updatedAt: new Date("2022-09-15T22:53:09.982Z"),
   description: "At least one household member lives or works in County",
+  status: MultiselectQuestionsStatusEnum.active,
   links: [
     {
       title: "Live/Work in County Link Title",
@@ -53,8 +55,18 @@ export const multiselectQuestionPreference: MultiselectQuestion = {
         },
       ],
       collectAddress: false,
+      id: "id",
+      createdAt: new Date(),
+      updatedAt: new Date(),
     },
-    { text: "Work in County", ordinal: 1, collectAddress: false },
+    {
+      text: "Work in County",
+      ordinal: 1,
+      collectAddress: false,
+      id: "id",
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
   ],
   applicationSection: MultiselectQuestionsApplicationSectionEnum.preferences,
 }
@@ -697,6 +709,9 @@ export const jurisdiction: Jurisdiction = {
     },
   ],
   allowSingleUseCodeLogin: false,
+  whatToExpectUnderConstruction: "",
+  visibleNeighborhoodAmenities: [],
+  regions: [],
 }
 
 export const listing: Listing = {
@@ -859,6 +874,9 @@ export const listing: Listing = {
   leasingAgentPhone: "(408) 217-8562",
   leasingAgentTitle: "",
   listingFeatures: {
+    id: "id",
+    createdAt: new Date(),
+    updatedAt: new Date(),
     elevator: true,
     wheelchairRamp: true,
     serviceAnimalsAllowed: true,
@@ -870,6 +888,9 @@ export const listing: Listing = {
   },
   servicesOffered: "Services offered description",
   listingUtilities: {
+    id: "id",
+    createdAt: new Date(),
+    updatedAt: new Date(),
     water: true,
     gas: true,
     electricity: true,
@@ -883,12 +904,16 @@ export const listing: Listing = {
         updatedAt: new Date(),
         text: "Preference 1",
         jurisdictions: [],
+        status: MultiselectQuestionsStatusEnum.active,
         applicationSection: MultiselectQuestionsApplicationSectionEnum.preferences,
         options: [
           {
             name: "option_1",
             text: "Option 1",
             ordinal: 1,
+            id: "id",
+            createdAt: new Date(),
+            updatedAt: new Date(),
           },
         ],
       },
@@ -901,12 +926,16 @@ export const listing: Listing = {
         updatedAt: new Date(),
         text: "Preference 2",
         jurisdictions: [],
+        status: MultiselectQuestionsStatusEnum.active,
         applicationSection: MultiselectQuestionsApplicationSectionEnum.preferences,
         options: [
           {
             name: "option_1",
             text: "Option 1",
             ordinal: 1,
+            id: "id",
+            createdAt: new Date(),
+            updatedAt: new Date(),
           },
         ],
       },
@@ -919,12 +948,16 @@ export const listing: Listing = {
         updatedAt: new Date(),
         text: "Families",
         jurisdictions: [],
+        status: MultiselectQuestionsStatusEnum.active,
         applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
         options: [
           {
             name: "option_1",
             text: "Option 1",
             ordinal: 1,
+            id: "id",
+            createdAt: new Date(),
+            updatedAt: new Date(),
           },
         ],
       },
@@ -937,12 +970,16 @@ export const listing: Listing = {
         updatedAt: new Date(),
         text: "Veterans",
         jurisdictions: [],
+        status: MultiselectQuestionsStatusEnum.active,
         applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
         options: [
           {
             name: "option_1",
             text: "Option 1",
             ordinal: 1,
+            id: "id",
+            createdAt: new Date(),
+            updatedAt: new Date(),
           },
         ],
       },
@@ -1168,6 +1205,9 @@ export const mockBaseJurisdiction: Jurisdiction = {
   allowSingleUseCodeLogin: false,
   featureFlags: [],
   requiredListingFields: [],
+  whatToExpectUnderConstruction: "",
+  visibleNeighborhoodAmenities: [],
+  regions: [],
 }
 
 export const mockUser: User = {

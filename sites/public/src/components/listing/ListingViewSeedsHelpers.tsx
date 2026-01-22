@@ -27,6 +27,7 @@ import {
   cloudinaryPdfFromId,
   getOccupancyDescription,
   listingFeatures,
+  ListingFeaturesValues,
   listingUtilities,
   stackedOccupancyTable,
   stackedUnitGroupsOccupancyTable,
@@ -143,7 +144,7 @@ export const getAccessibilityFeatures = (listing: Listing) => {
   const enabledFeatures = Object.entries(listing?.listingFeatures ?? {})
     .filter(([_, value]) => value)
     .map((item) => item[0])
-    .filter((feature) => listingFeatures.includes(feature))
+    .filter((feature: ListingFeaturesValues) => listingFeatures.includes(feature))
 
   const COLUMN_BREAKPOINT = 6
   if (enabledFeatures.length > 0) {
@@ -643,9 +644,9 @@ export const getAdditionalInformation = (listing: Listing) => {
         <div>
           <ul>
             {Object.entries(listing.requiredDocumentsList).map(
-              ([key, value]) =>
+              ([key, value], index) =>
                 value && (
-                  <li className={"list-disc mx-5 mb-1 text-nowrap"}>
+                  <li className={"list-disc mx-5 mb-1 text-nowrap"} key={index}>
                     {t(`listings.requiredDocuments.${key}`)}
                   </li>
                 )

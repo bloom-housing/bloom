@@ -17,7 +17,11 @@ const getAccessibilityFeaturesList = (featureSet: string[], listingFeatures: str
   const listItems = filteredFeatures.map((feature) => {
     return <li key={feature}>{t(`eligibility.accessibility.${feature}`)}</li>
   })
-  return <ul className={`${styles["list-style"]}`}>{listItems}</ul>
+  return (
+    <ul className={`${styles["list-style"]}`} data-testid="accessibility-features-list">
+      {listItems}
+    </ul>
+  )
 }
 
 export const getExpandedAccessibilityFeatures = (listingFeatures: string[]) => {
@@ -25,10 +29,12 @@ export const getExpandedAccessibilityFeatures = (listingFeatures: string[]) => {
     return (
       <Grid.Row key={category} className={styles["text-on-secondary"]}>
         <Grid.Cell>
-          <Heading size={"md"} className={"seeds-p-b-4"}>
-            {t(`eligibility.accessibility.categoryTitle.${category}`)}
-          </Heading>
-          {getAccessibilityFeaturesList(features, listingFeatures)}
+          <div data-testid={`accessibility-features-${category}`}>
+            <Heading size={"md"} className={"seeds-p-b-4"} priority={4}>
+              {t(`eligibility.accessibility.categoryTitle.${category}`)}
+            </Heading>
+            {getAccessibilityFeaturesList(features, listingFeatures)}
+          </div>
         </Grid.Cell>
       </Grid.Row>
     )

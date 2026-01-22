@@ -159,32 +159,34 @@ const AccessibilityFeatures = (props: AccessibilityFeaturesProps) => {
                   className={styles["spacer-bottom-none"]}
                 >
                   <div className={"field-label seeds-p-b-0_5"}>{t("accessibility.drawerInfo")}</div>
-                  {Object.entries(expandedAccessibilityFeatures).map(([category]) => {
+                  {Object.entries(expandedAccessibilityFeatures).map(([category], index) => {
                     const label = t(`accessibility.categoryTitle.${category}Features`)
                     return (
-                      <Grid.Row columns={1}>
+                      <Grid.Row columns={1} key={index}>
                         <Grid.Cell>
-                          <FieldGroup
-                            type="checkbox"
-                            name={`configurableAccessibilityFeatures.${category}`}
-                            groupLabel={
-                              requiredAccessibilityFeaturesSections.includes(
+                          <div data-testid={`accessibility-features-section-${category}`}>
+                            <FieldGroup
+                              type="checkbox"
+                              name={`configurableAccessibilityFeatures.${category}`}
+                              groupLabel={
+                                requiredAccessibilityFeaturesSections.includes(
+                                  category as AccessibilitySubcategoriesEnum
+                                )
+                                  ? addAsterisk(label)
+                                  : label
+                              }
+                              fields={getFeatureSectionValues(
                                 category as AccessibilitySubcategoriesEnum
-                              )
-                                ? addAsterisk(label)
-                                : label
-                            }
-                            fields={getFeatureSectionValues(
-                              category as AccessibilitySubcategoriesEnum
-                            )}
-                            register={register}
-                            fieldGroupClassName={styles["two-columns"]}
-                            fieldLabelClassName={styles["label-option"]}
-                            error={errors.configurableAccessibilityFeatures?.[category]}
-                            errorMessage={
-                              errors.configurableAccessibilityFeatures?.[category]?.message
-                            }
-                          />
+                              )}
+                              register={register}
+                              fieldGroupClassName={styles["two-columns"]}
+                              fieldLabelClassName={styles["label-option"]}
+                              error={errors.configurableAccessibilityFeatures?.[category]}
+                              errorMessage={
+                                errors.configurableAccessibilityFeatures?.[category]?.message
+                              }
+                            />
+                          </div>
                         </Grid.Cell>
                       </Grid.Row>
                     )

@@ -279,6 +279,7 @@ export const listingFeatures: ListingFeaturesValues[] = [
   "rollInShower",
   "serviceAnimalsAllowed",
   "visual",
+  "wheelchairRamp",
   "wideDoorways",
 ]
 
