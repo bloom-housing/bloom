@@ -32,10 +32,10 @@ import { PaginatedAgencyDto } from '../dtos/agency/paginated-agency.dto';
 import { AgencyQueryParams } from '../dtos/agency/agency-query-params.dto';
 import { PermissionTypeDecorator } from '../decorators/permission-type.decorator';
 
-@Controller('agencies')
-@ApiTags('agencies')
+@Controller('agency')
+@ApiTags('agency')
 @ApiExtraModels(AgencyCreate, Agency, AgencyUpdate, IdDTO)
-@PermissionTypeDecorator('agencies')
+@PermissionTypeDecorator('agency')
 @UseGuards(ApiKeyGuard, JwtAuthGuard, PermissionGuard)
 export class AgencyController {
   constructor(private agencyService: AgencyService) {}

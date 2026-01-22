@@ -6,7 +6,6 @@ import { AgencyService } from '../../../src/services/agency.service';
 import { PrismaService } from '../../../src/services/prisma.service';
 import { PermissionService } from '../../../src/services/permission.service';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
-import { jurisdictionFactory } from '../../../prisma/seed-helpers/jurisdiction-factory';
 
 describe('Testing agency service', () => {
   let service: AgencyService;
@@ -68,8 +67,8 @@ describe('Testing agency service', () => {
       const date = new Date();
       const jurisdictionId = randomUUID();
       const mockedValue = mockAgencySet(3, date, jurisdictionId);
-      prisma.agencies.findMany = jest.fn().mockResolvedValue(mockedValue);
-      prisma.agencies.count = jest.fn().mockResolvedValue(3);
+      prisma.agency.findMany = jest.fn().mockResolvedValue(mockedValue);
+      prisma.agency.count = jest.fn().mockResolvedValue(3);
 
       const result = await service.list({});
 
@@ -103,9 +102,9 @@ describe('Testing agency service', () => {
         },
       });
 
-      expect(prisma.agencies.count).toHaveBeenCalledWith();
+      expect(prisma.agency.count).toHaveBeenCalledWith();
 
-      expect(prisma.agencies.findMany).toHaveBeenCalledWith({
+      expect(prisma.agency.findMany).toHaveBeenCalledWith({
         skip: 0,
         take: undefined,
         include: {
@@ -118,8 +117,8 @@ describe('Testing agency service', () => {
       const date = new Date();
       const jurisdictionId = randomUUID();
       const mockedValue = mockAgencySet(3, date, jurisdictionId);
-      prisma.agencies.findMany = jest.fn().mockResolvedValue(mockedValue);
-      prisma.agencies.count = jest.fn().mockResolvedValue(6);
+      prisma.agency.findMany = jest.fn().mockResolvedValue(mockedValue);
+      prisma.agency.count = jest.fn().mockResolvedValue(6);
 
       const params: AgencyQueryParams = {
         page: 2,
@@ -139,7 +138,7 @@ describe('Testing agency service', () => {
         },
       });
 
-      expect(prisma.agencies.findMany).toHaveBeenCalledWith({
+      expect(prisma.agency.findMany).toHaveBeenCalledWith({
         skip: 5,
         take: 5,
         include: {
@@ -152,8 +151,8 @@ describe('Testing agency service', () => {
       const date = new Date();
       const jurisdictionId = randomUUID();
       const mockedValue = mockAgencySet(3, date, jurisdictionId);
-      prisma.agencies.findMany = jest.fn().mockResolvedValue(mockedValue);
-      prisma.agencies.count = jest.fn().mockResolvedValue(3);
+      prisma.agency.findMany = jest.fn().mockResolvedValue(mockedValue);
+      prisma.agency.count = jest.fn().mockResolvedValue(3);
 
       const params: AgencyQueryParams = {
         page: 2,
@@ -173,7 +172,7 @@ describe('Testing agency service', () => {
         },
       });
 
-      expect(prisma.agencies.findMany).toHaveBeenCalledWith({
+      expect(prisma.agency.findMany).toHaveBeenCalledWith({
         skip: 0,
         take: 5,
         include: {
@@ -186,8 +185,8 @@ describe('Testing agency service', () => {
       const date = new Date();
       const jurisdictionId = randomUUID();
       const mockedValue = mockAgencySet(10, date, jurisdictionId);
-      prisma.agencies.findMany = jest.fn().mockResolvedValue(mockedValue);
-      prisma.agencies.count = jest.fn().mockResolvedValue(10);
+      prisma.agency.findMany = jest.fn().mockResolvedValue(mockedValue);
+      prisma.agency.count = jest.fn().mockResolvedValue(10);
 
       const params: AgencyQueryParams = {
         limit: 'all',
@@ -197,7 +196,7 @@ describe('Testing agency service', () => {
       const result = await service.list(params);
 
       expect(result.items).toHaveLength(10);
-      expect(prisma.agencies.findMany).toHaveBeenCalledWith({
+      expect(prisma.agency.findMany).toHaveBeenCalledWith({
         skip: 0,
         take: undefined,
         include: {
@@ -209,7 +208,7 @@ describe('Testing agency service', () => {
 
   describe('findOne', () => {
     it('should throw error when the non exiting ID is passed', async () => {
-      prisma.agencies.findUnique = jest.fn().mockResolvedValue(null);
+      prisma.agency.findUnique = jest.fn().mockResolvedValue(null);
 
       await expect(
         async () => await service.findOne('example_ID'),
@@ -221,13 +220,13 @@ describe('Testing agency service', () => {
 
     it('should return agency when a valid ID is passed', async () => {
       const mockedValue = mockAgency(1, new Date(), randomUUID());
-      prisma.agencies.findUnique = jest.fn().mockReturnValue(mockedValue);
+      prisma.agency.findUnique = jest.fn().mockReturnValue(mockedValue);
 
       const result = await service.findOne('example_ID');
 
       expect(result).toEqual(mockedValue);
 
-      expect(prisma.agencies.findUnique).toHaveBeenCalledWith({
+      expect(prisma.agency.findUnique).toHaveBeenCalledWith({
         include: {
           jurisdictions: true,
         },
@@ -240,7 +239,7 @@ describe('Testing agency service', () => {
 
   describe('create', () => {
     it('should throw error when jurisdiction ID field is missing', async () => {
-      prisma.agencies.create = jest.fn().mockResolvedValue(null);
+      prisma.agency.create = jest.fn().mockResolvedValue(null);
       prisma.jurisdictions.findUnique = jest.fn().mockResolvedValue(null);
 
       const mockDTO = {
@@ -259,7 +258,7 @@ describe('Testing agency service', () => {
     });
 
     it('should throw error when jurisdiction is not found', async () => {
-      prisma.agencies.create = jest.fn().mockResolvedValue(null);
+      prisma.agency.create = jest.fn().mockResolvedValue(null);
       prisma.jurisdictions.findUnique = jest.fn().mockResolvedValue(null);
 
       const mockDTO = {
@@ -284,7 +283,7 @@ describe('Testing agency service', () => {
         featureFlags: {},
       };
 
-      prisma.agencies.create = jest.fn().mockResolvedValue(mockedValue);
+      prisma.agency.create = jest.fn().mockResolvedValue(mockedValue);
       prisma.jurisdictions.findUnique = jest
         .fn()
         .mockReturnValue(mockJurisdiction);
@@ -303,7 +302,7 @@ describe('Testing agency service', () => {
           id: mockedValue.jurisdictions.id,
         },
       });
-      expect(prisma.agencies.create).toHaveBeenCalledWith({
+      expect(prisma.agency.create).toHaveBeenCalledWith({
         data: {
           name: mockedValue.name,
           jurisdictions: {
@@ -321,7 +320,7 @@ describe('Testing agency service', () => {
 
   describe('update', () => {
     it('should throw error when jurisdiction ID is missing', async () => {
-      prisma.agencies.update = jest.fn().mockResolvedValue(null);
+      prisma.agency.update = jest.fn().mockResolvedValue(null);
       prisma.jurisdictions.findUnique = jest.fn().mockResolvedValue(null);
 
       const mockUpdateDto = {
@@ -341,7 +340,7 @@ describe('Testing agency service', () => {
     });
 
     it('should throw error when jurisdiction is not found', async () => {
-      prisma.agencies.update = jest.fn().mockResolvedValue(null);
+      prisma.agency.update = jest.fn().mockResolvedValue(null);
       prisma.jurisdictions.findUnique = jest.fn().mockResolvedValue(null);
 
       const mockUpdateDto = {
@@ -371,8 +370,8 @@ describe('Testing agency service', () => {
         },
       };
 
-      prisma.agencies.update = jest.fn().mockResolvedValue(null);
-      prisma.agencies.findUnique = jest.fn().mockResolvedValue(null);
+      prisma.agency.update = jest.fn().mockResolvedValue(null);
+      prisma.agency.findUnique = jest.fn().mockResolvedValue(null);
       prisma.jurisdictions.findUnique = jest
         .fn()
         .mockResolvedValue(mockUpdateDto.jurisdictions);
@@ -396,8 +395,8 @@ describe('Testing agency service', () => {
         },
       };
 
-      prisma.agencies.update = jest.fn().mockResolvedValue(mockUpdateDto);
-      prisma.agencies.findUnique = jest.fn().mockResolvedValue({
+      prisma.agency.update = jest.fn().mockResolvedValue(mockUpdateDto);
+      prisma.agency.findUnique = jest.fn().mockResolvedValue({
         ...mockUpdateDto,
         name: 'Old Agency',
       });
@@ -407,7 +406,7 @@ describe('Testing agency service', () => {
 
       const result = await service.update(mockUpdateDto);
       expect(result).toEqual(mockUpdateDto);
-      expect(prisma.agencies.update).toHaveBeenCalledWith({
+      expect(prisma.agency.update).toHaveBeenCalledWith({
         data: {
           ...mockUpdateDto,
           jurisdictions: {
@@ -428,7 +427,7 @@ describe('Testing agency service', () => {
 
   describe('deleteOne', () => {
     it('should throw error when agency ID is missing', async () => {
-      prisma.agencies.findUnique = jest.fn().mockResolvedValue(null);
+      prisma.agency.findUnique = jest.fn().mockResolvedValue(null);
       await expect(
         async () => await service.deleteOne(undefined),
       ).rejects.toThrow(BadRequestException);
@@ -439,7 +438,7 @@ describe('Testing agency service', () => {
 
     it('should throw error when agency is not found', async () => {
       const randID = randomUUID();
-      prisma.agencies.findUnique = jest.fn().mockResolvedValue(null);
+      prisma.agency.findUnique = jest.fn().mockResolvedValue(null);
       await expect(
         async () => await service.deleteOne({ id: randID }),
       ).rejects.toThrow(NotFoundException);
@@ -450,14 +449,14 @@ describe('Testing agency service', () => {
 
     it('should delete the agency entry', async () => {
       const randID = randomUUID();
-      prisma.agencies.findUnique = jest.fn().mockResolvedValue({
+      prisma.agency.findUnique = jest.fn().mockResolvedValue({
         ...mockAgency(1, new Date(), randomUUID()),
         id: randID,
       });
-      prisma.agencies.delete = jest.fn();
+      prisma.agency.delete = jest.fn();
 
       await service.deleteOne({ id: randID });
-      expect(prisma.agencies.delete).toHaveBeenCalledWith({
+      expect(prisma.agency.delete).toHaveBeenCalledWith({
         where: {
           id: randID,
         },

@@ -28,7 +28,7 @@ export class AgencyService {
    * @returns A paginated DTO containing the matching agencies and pagination metadata.
    */
   async list(params: AgencyQueryParams) {
-    const count = await this.prisma.agencies.count();
+    const count = await this.prisma.agency.count();
 
     let page = params.page;
 
@@ -38,7 +38,7 @@ export class AgencyService {
       }
     }
 
-    const agenciesRaw = await this.prisma.agencies.findMany({
+    const agenciesRaw = await this.prisma.agency.findMany({
       skip: calculateSkip(params.limit, page),
       take: calculateTake(params.limit),
       include: {
@@ -67,7 +67,7 @@ export class AgencyService {
       throw new BadRequestException('An agency ID must be provided');
     }
 
-    const agencyRaw = await this.prisma.agencies.findUnique({
+    const agencyRaw = await this.prisma.agency.findUnique({
       where: {
         id: agencyId,
       },
@@ -111,7 +111,7 @@ export class AgencyService {
       );
     }
 
-    const rawAgency = await this.prisma.agencies.create({
+    const rawAgency = await this.prisma.agency.create({
       data: {
         ...agencyDto,
         jurisdictions: {
@@ -156,7 +156,7 @@ export class AgencyService {
       );
     }
 
-    const exitingAgency = await this.prisma.agencies.findUnique({
+    const exitingAgency = await this.prisma.agency.findUnique({
       where: {
         id: agencyDto.id,
       },
@@ -168,7 +168,7 @@ export class AgencyService {
       );
     }
 
-    const rawAgency = await this.prisma.agencies.update({
+    const rawAgency = await this.prisma.agency.update({
       data: {
         ...agencyDto,
         jurisdictions: {
@@ -200,7 +200,7 @@ export class AgencyService {
       throw new BadRequestException('A agency ID must be provided');
     }
 
-    const agencyData = await this.prisma.agencies.findUnique({
+    const agencyData = await this.prisma.agency.findUnique({
       where: {
         id: idDto.id,
       },
@@ -215,7 +215,7 @@ export class AgencyService {
       );
     }
 
-    await this.prisma.agencies.delete({
+    await this.prisma.agency.delete({
       where: {
         id: idDto.id,
       },

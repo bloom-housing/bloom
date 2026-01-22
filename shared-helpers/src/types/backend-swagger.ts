@@ -3183,7 +3183,7 @@ export class PropertiesService {
   }
 }
 
-export class AgenciesService {
+export class AgencyService {
   /**
    * Get a paginated set of agencies
    */
@@ -3197,7 +3197,7 @@ export class AgenciesService {
     options: IRequestOptions = {}
   ): Promise<PaginatedAgency> {
     return new Promise((resolve, reject) => {
-      let url = basePath + "/agencies"
+      let url = basePath + "/agency"
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
       configs.params = { page: params["page"], limit: params["limit"] }
@@ -3218,7 +3218,7 @@ export class AgenciesService {
     options: IRequestOptions = {}
   ): Promise<Agency> {
     return new Promise((resolve, reject) => {
-      let url = basePath + "/agencies"
+      let url = basePath + "/agency"
 
       const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
 
@@ -3240,7 +3240,7 @@ export class AgenciesService {
     options: IRequestOptions = {}
   ): Promise<Agency> {
     return new Promise((resolve, reject) => {
-      let url = basePath + "/agencies"
+      let url = basePath + "/agency"
 
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
 
@@ -3262,7 +3262,7 @@ export class AgenciesService {
     options: IRequestOptions = {}
   ): Promise<SuccessDTO> {
     return new Promise((resolve, reject) => {
-      let url = basePath + "/agencies"
+      let url = basePath + "/agency"
 
       const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
 
@@ -3284,7 +3284,7 @@ export class AgenciesService {
     options: IRequestOptions = {}
   ): Promise<Agency> {
     return new Promise((resolve, reject) => {
-      let url = basePath + "/agencies/{id}"
+      let url = basePath + "/agency/{id}"
       url = url.replace("{id}", params["id"] + "")
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
