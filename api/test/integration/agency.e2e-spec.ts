@@ -370,7 +370,7 @@ describe('Agencies Controller Tests', () => {
         .expect(404);
 
       expect(res.body.message).toBe(
-        `The agency with ID: ${randId} was not found`,
+        `An agency with id: ${randId} was not found`,
       );
     });
 

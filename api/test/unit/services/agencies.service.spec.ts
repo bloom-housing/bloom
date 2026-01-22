@@ -215,7 +215,7 @@ describe('Testing agency service', () => {
       ).rejects.toThrow(NotFoundException);
       await expect(
         async () => await service.findOne('example_ID'),
-      ).rejects.toThrowError('Agency with ID: example_ID was not found');
+      ).rejects.toThrowError('An agency with id: example_ID was not found');
     });
 
     it('should return agency when a valid ID is passed', async () => {
@@ -444,7 +444,7 @@ describe('Testing agency service', () => {
       ).rejects.toThrow(NotFoundException);
       await expect(
         async () => await service.deleteOne({ id: randID }),
-      ).rejects.toThrowError(`The agency with ID: ${randID} was not found`);
+      ).rejects.toThrowError(`An agency with id: ${randID} was not found`);
     });
 
     it('should delete the agency entry', async () => {
