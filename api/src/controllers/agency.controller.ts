@@ -47,7 +47,9 @@ export class AgencyController {
   })
   @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
   @ApiOkResponse({ type: PaginatedAgencyDto })
-  public async getPaginatedList(@Query() queryParams: AgencyQueryParams) {
+  public async getPaginatedList(
+    @Query() queryParams: AgencyQueryParams,
+  ): Promise<PaginatedAgencyDto> {
     return await this.agencyService.list(queryParams);
   }
 
@@ -59,7 +61,7 @@ export class AgencyController {
   @ApiOkResponse({ type: Agency })
   public async getById(
     @Param('id', new ParseUUIDPipe({ version: '4' })) agencyId: string,
-  ) {
+  ): Promise<Agency> {
     return await this.agencyService.findOne(agencyId);
   }
 
@@ -70,7 +72,7 @@ export class AgencyController {
   })
   @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
   @ApiOkResponse({ type: Agency })
-  public async createAgency(@Body() agencyDto: AgencyCreate) {
+  public async createAgency(@Body() agencyDto: AgencyCreate): Promise<Agency> {
     return await this.agencyService.create(agencyDto);
   }
 
@@ -81,7 +83,7 @@ export class AgencyController {
   })
   @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
   @ApiOkResponse({ type: Agency })
-  public async update(@Body() agencyDto: AgencyUpdate) {
+  public async update(@Body() agencyDto: AgencyUpdate): Promise<Agency> {
     return await this.agencyService.update(agencyDto);
   }
 
@@ -91,7 +93,7 @@ export class AgencyController {
     operationId: 'deletes',
   })
   @ApiOkResponse({ type: SuccessDTO })
-  public async delete(@Body() idDto: IdDTO) {
+  public async delete(@Body() idDto: IdDTO): Promise<SuccessDTO> {
     return await this.agencyService.deleteOne(idDto);
   }
 }

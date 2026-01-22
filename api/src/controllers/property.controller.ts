@@ -58,7 +58,9 @@ export class PropertyController {
   })
   @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
   @ApiOkResponse({ type: PaginatedPropertyDto })
-  public async getPaginatedSet(@Query() queryParams: PropertyQueryParams) {
+  public async getPaginatedSet(
+    @Query() queryParams: PropertyQueryParams,
+  ): Promise<PaginatedPropertyDto> {
     return await this.propertyService.list(queryParams);
   }
 
@@ -67,9 +69,10 @@ export class PropertyController {
     summary: 'Get a property object by ID',
     operationId: 'getById',
   })
+  @ApiOkResponse({ type: Property })
   public async getPropertyById(
     @Param('id', new ParseUUIDPipe({ version: '4' })) propertyId: string,
-  ) {
+  ): Promise<Property> {
     return await this.propertyService.findOne(propertyId);
   }
 
@@ -83,7 +86,7 @@ export class PropertyController {
   @ApiOkResponse({ type: PaginatedPropertyDto })
   public async getFiltrablePaginatedSet(
     @Body() queryParams: PropertyQueryParams,
-  ) {
+  ): Promise<PaginatedPropertyDto> {
     return await this.propertyService.list(queryParams);
   }
 
@@ -94,7 +97,9 @@ export class PropertyController {
   })
   @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
   @ApiOkResponse({ type: Property })
-  public async addProperty(@Body() propertyDto: PropertyCreate) {
+  public async addProperty(
+    @Body() propertyDto: PropertyCreate,
+  ): Promise<Property> {
     return await this.propertyService.create(propertyDto);
   }
 
@@ -105,7 +110,9 @@ export class PropertyController {
   })
   @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
   @ApiOkResponse({ type: Property })
-  public async updateProperty(@Body() propertyDto: PropertyUpdate) {
+  public async updateProperty(
+    @Body() propertyDto: PropertyUpdate,
+  ): Promise<Property> {
     return await this.propertyService.update(propertyDto);
   }
 
@@ -116,7 +123,7 @@ export class PropertyController {
   })
   @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
   @ApiOkResponse({ type: SuccessDTO })
-  public async deleteById(@Body() idDto: IdDTO) {
+  public async deleteById(@Body() idDto: IdDTO): Promise<SuccessDTO> {
     return await this.propertyService.deleteOne(idDto.id);
   }
 }
