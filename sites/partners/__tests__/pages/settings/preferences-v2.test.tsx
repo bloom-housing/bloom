@@ -9,7 +9,10 @@ import {
   listing,
   multiselectQuestionPreferenceV2,
 } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
-import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  FeatureFlagEnum,
+  MultiselectQuestionsStatusEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { mockNextRouter, render } from "../../testUtils"
 import SettingsPreferences from "../../../src/pages/settings/preferences-v2"
 
@@ -33,6 +36,25 @@ beforeEach(() => {
     }),
     rest.get("http://localhost/api/adapter/multiselectQuestions", (_req, res, ctx) => {
       return res(ctx.json([multiselectQuestionPreferenceV2]))
+    }),
+    rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
+      return res(
+        ctx.json({
+          id: "user1",
+          roles: { id: "user1", isAdmin: false, isPartner: true },
+          jurisdictions: [
+            {
+              id: "jurisdiction1",
+              name: "jurisdictionWithJurisdictionAdmin",
+              featureFlags: [
+                { name: FeatureFlagEnum.enableProperties, active: false },
+                { name: FeatureFlagEnum.disableListingPreferences, active: false },
+                { name: FeatureFlagEnum.enableV2MSQ, active: true },
+              ],
+            },
+          ],
+        })
+      )
     })
   )
 })
@@ -66,26 +88,7 @@ describe("settings", () => {
           (_req, res, ctx) => {
             return res(ctx.json([listing]))
           }
-        ),
-        rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
-          return res(
-            ctx.json({
-              id: "user1",
-              roles: { id: "user1", isAdmin: false, isPartner: true },
-              jurisdictions: [
-                {
-                  id: "jurisdiction1",
-                  name: "jurisdictionWithJurisdictionAdmin",
-                  featureFlags: [
-                    { name: FeatureFlagEnum.enableProperties, active: false },
-                    { name: FeatureFlagEnum.disableListingPreferences, active: false },
-                    { name: FeatureFlagEnum.enableV2MSQ, active: true },
-                  ],
-                },
-              ],
-            })
-          )
-        })
+        )
       )
       const { getByText, findByText, findByRole } = render(<SettingsPreferences />)
 
@@ -118,25 +121,6 @@ describe("settings", () => {
       server.use(
         rest.delete("http://localhost/api/adapter/multiselectQuestions", (_req, res, ctx) => {
           return res(ctx.json({}))
-        }),
-        rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
-          return res(
-            ctx.json({
-              id: "user1",
-              roles: { id: "user1", isAdmin: false, isPartner: true },
-              jurisdictions: [
-                {
-                  id: "jurisdiction1",
-                  name: "jurisdictionWithJurisdictionAdmin",
-                  featureFlags: [
-                    { name: FeatureFlagEnum.enableProperties, active: false },
-                    { name: FeatureFlagEnum.disableListingPreferences, active: false },
-                    { name: FeatureFlagEnum.enableV2MSQ, active: true },
-                  ],
-                },
-              ],
-            })
-          )
         })
       )
 
@@ -260,6 +244,50 @@ describe("settings", () => {
           text: "",
         })
       })
+    })
+  })
+  describe("viewing preferences", () => {
+    it("should let you view a preference for active status", async () => {
+      const user = userEvent.setup()
+      window.URL.createObjectURL = jest.fn()
+      document.cookie = "access-token-available=True"
+      server.use(
+        rest.get("http://localhost/api/adapter/multiselectQuestions", (_req, res, ctx) => {
+          return res(
+            ctx.json([
+              {
+                ...multiselectQuestionPreferenceV2,
+                jurisdiction: { id: "jurisdiction1", name: "jurisdictionWithJurisdictionAdmin" },
+                status: MultiselectQuestionsStatusEnum.active,
+              },
+            ])
+          )
+        })
+      )
+
+      const { findByText, findByRole, findAllByRole, container } = render(
+        <ToastProvider>
+          <SettingsPreferences />
+        </ToastProvider>
+      )
+
+      await user.click(await findByText("View"))
+      const drawer = await findByRole("dialog")
+      within(drawer).getByText("View preference")
+      within(drawer).getByText("Live/Work in County")
+      within(drawer).getByText("At least one household member lives or works in County")
+      within(drawer).getByText("https://www.example.com")
+      within(drawer).getByText("Live/Work in County Link Title")
+      within(drawer).getByText("jurisdictionWithJurisdictionAdmin")
+
+      // test option drawer
+      await user.click(within(drawer).getAllByText("View")[0])
+      const nestedDrawer = (await findAllByRole("dialog"))[1]
+      within(nestedDrawer).getByText("Live in County")
+      within(nestedDrawer).getByText("A description of the option.")
+      within(nestedDrawer).getByText("https://www.example.com")
+      within(nestedDrawer).getByText("Live in County Link Title")
+      expect(within(nestedDrawer).getAllByText("No")).toHaveLength(2)
     })
   })
 })

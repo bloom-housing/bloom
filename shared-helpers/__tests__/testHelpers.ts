@@ -76,7 +76,7 @@ export const multiselectQuestionPreferenceV2: MultiselectQuestion = {
     },
   ],
   optOutText: "I don't want this preference",
-  options: [
+  multiselectOptions: [
     {
       name: "Live in County",
       ordinal: 1,
