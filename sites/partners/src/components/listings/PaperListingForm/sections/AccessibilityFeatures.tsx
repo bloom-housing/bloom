@@ -26,6 +26,12 @@ const AccessibilityFeatures = (props: AccessibilityFeaturesProps) => {
 
   const hasCategories = props.listingFeaturesConfiguration?.categories?.length > 0
 
+  const clearCategoryErrors = () => {
+    props.listingFeaturesConfiguration?.categories?.forEach((category) => {
+      clearErrors(`configurableAccessibilityFeatures.${category.id}`)
+    })
+  }
+
   useEffect(() => {
     if (!hasCategories && props.existingFeatures) {
       props.existingFeatures.forEach((feature) => {
@@ -33,6 +39,24 @@ const AccessibilityFeatures = (props: AccessibilityFeaturesProps) => {
       })
     }
   }, [props.existingFeatures, hasCategories, setValue])
+
+  useEffect(() => {
+    if (isDrawerOpen) {
+      props.listingFeaturesConfiguration?.categories?.forEach((category) => {
+        const categoryFeatures = props.existingFeatures.filter((feature) =>
+          category.fields.some((field) => field.id === feature)
+        )
+        categoryFeatures.forEach(() => {
+          setValue(`configurableAccessibilityFeatures.${category.id}`, categoryFeatures || [])
+        })
+      })
+    }
+  }, [
+    isDrawerOpen,
+    props.existingFeatures,
+    props.listingFeaturesConfiguration?.categories,
+    setValue,
+  ])
 
   const getFeatureSectionValues = (
     configuration: ListingFeaturesConfiguration,
@@ -69,7 +93,6 @@ const AccessibilityFeatures = (props: AccessibilityFeaturesProps) => {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onDrawerSubmit = () => {
-    console.log("onDrawerSubmit")
     const formData = getValues()
     let errors = false
     props.listingFeaturesConfiguration.categories?.forEach((category) => {
@@ -88,6 +111,7 @@ const AccessibilityFeatures = (props: AccessibilityFeaturesProps) => {
     )
     setIsDrawerOpen(false)
     clearErrors("listingFeatures")
+    clearCategoryErrors()
   }
 
   if (!props.enableAccessibilityFeatures || !props.listingFeaturesConfiguration) {
@@ -229,7 +253,9 @@ const AccessibilityFeatures = (props: AccessibilityFeaturesProps) => {
             key={0}
             variant="primary"
             size="sm"
-            onClick={onDrawerSubmit}
+            onClick={() => {
+              onDrawerSubmit()
+            }}
           >
             {t("t.save")}
           </Button>
@@ -237,6 +263,7 @@ const AccessibilityFeatures = (props: AccessibilityFeaturesProps) => {
             id="cancelFeaturesButton"
             type="button"
             onClick={() => {
+              clearCategoryErrors()
               setIsDrawerOpen(false)
             }}
             size="sm"

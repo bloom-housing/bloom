@@ -25,6 +25,7 @@ const missingCategories = (
     });
     return missingCategories;
   }
+  return [];
 };
 
 export function ValidateListingFeatures(validationOptions?: ValidatorOptions) {
