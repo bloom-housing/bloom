@@ -17,14 +17,10 @@ const missingCategories = (
       (category) => category.required,
     );
     const missingCategories = [];
-    console.log({ value });
     requiredCategories.forEach((category) => {
-      console.log({ category });
       const atLeastOneField = category.fields.some((field) => {
-        console.log(value[field.id]);
-        return value[field.id];
+        return value[field.id] === true;
       });
-      console.log(atLeastOneField);
       if (!atLeastOneField) missingCategories.push(category.id);
     });
     return missingCategories;

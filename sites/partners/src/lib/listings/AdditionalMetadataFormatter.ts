@@ -91,9 +91,10 @@ export default class AdditionalMetadataFormatter extends Formatter {
     if (Array.isArray(this.data.configurableAccessibilityFeatures)) {
       // No categories - form data is a string array
       const updatedFeatures = allListingFeatures.reduce((acc, current) => {
-        const isSelected = this.data.configurableAccessibilityFeatures.some((feature) => {
+        const values = this.data.configurableAccessibilityFeatures as string[]
+        const isSelected = values.some((feature) => {
           // Remove `configurableAccessibilityFeatures.` prefix from form
-          const prefixIndex = (feature.indexOf(".") as number) + 1
+          const prefixIndex = feature.indexOf(".") + 1
           return feature.substring(prefixIndex) === current
         })
         return {

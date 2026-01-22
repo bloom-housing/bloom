@@ -260,83 +260,55 @@ export const bedroomKeys = [
 
 export type ListingFeaturesValues = keyof Omit<ListingFeatures, "id" | "createdAt" | "updatedAt">
 
-export const listingFeatures: ListingFeaturesValues[] = [
+export const allListingFeatures: ListingFeaturesValues[] = [
+  "accessibleHeightToilet",
   "accessibleParking",
   "acInUnit",
   "barrierFreeBathroom",
   "barrierFreeEntrance",
+  "barrierFreePropertyEntrance",
   "barrierFreeUnitEntrance",
+  "bathGrabBarsOrReinforcements",
+  "bathroomCounterLowered",
+  "brailleSignageInBuilding",
+  "carbonMonoxideDetectorWithStrobe",
+  "carpetInUnit",
   "elevator",
+  "extraAudibleCarbonMonoxideDetector",
+  "extraAudibleSmokeDetector",
+  "fireSuppressionSprinklerSystem",
+  "frontControlsDishwasher",
+  "frontControlsStoveCookTop",
   "grabBars",
+  "hardFlooringInUnit",
   "hearing",
+  "hearingAndVision",
   "heatingInUnit",
   "inUnitWasherDryer",
+  "kitchenCounterLowered",
   "laundryInBuilding",
+  "leverHandlesOnDoors",
+  "leverHandlesOnFaucets",
   "loweredCabinets",
   "loweredLightSwitch",
   "mobility",
-  "parkingOnSite",
-  "rollInShower",
-  "serviceAnimalsAllowed",
-  "visual",
-  "wheelchairRamp",
-  "wideDoorways",
-]
-
-export const expandedMobilityFeatures: ListingFeaturesValues[] = [
-  "accessibleParking",
-  "barrierFreePropertyEntrance",
-  "barrierFreeUnitEntrance",
-  "elevator",
-  "frontControlsDishwasher",
-  "frontControlsStoveCookTop",
-  "kitchenCounterLowered",
-  "leverHandlesOnDoors",
-  "loweredLightSwitch",
-  "mobility",
   "noEntryStairs",
+  "nonDigitalKitchenAppliances",
   "noStairsToParkingSpots",
   "noStairsWithinUnit",
+  "parkingOnSite",
   "refrigeratorWithBottomDoorFreezer",
-  "streetLevelEntrance",
-  "wheelchairRamp",
-]
-
-export const expandedBathroomFeatures: ListingFeaturesValues[] = [
-  "accessibleHeightToilet",
-  "barrierFreeBathroom",
-  "bathGrabBarsOrReinforcements",
-  "bathroomCounterLowered",
   "rollInShower",
-  "toiletGrabBarsOrReinforcements",
-  "turningCircleInBathrooms",
-  "walkInShower",
-  "wideDoorways",
-]
-
-export const expandedFlooringFeatures: ListingFeaturesValues[] = [
-  "carpetInUnit",
-  "hardFlooringInUnit",
-]
-
-export const expandedUtilityFeatures: ListingFeaturesValues[] = [
-  "acInUnit",
-  "fireSuppressionSprinklerSystem",
-  "heatingInUnit",
-  "inUnitWasherDryer",
-  "laundryInBuilding",
-  "leverHandlesOnFaucets",
-]
-
-export const expandedHearingVisionFeatures: ListingFeaturesValues[] = [
-  "brailleSignageInBuilding",
-  "carbonMonoxideDetectorWithStrobe",
-  "extraAudibleCarbonMonoxideDetector",
-  "extraAudibleSmokeDetector",
-  "hearingAndVision",
-  "nonDigitalKitchenAppliances",
+  "serviceAnimalsAllowed",
   "smokeDetectorWithStrobe",
+  "streetLevelEntrance",
+  "toiletGrabBarsOrReinforcements",
   "ttyAmplifiedPhone",
+  "turningCircleInBathrooms",
+  "visual",
+  "walkInShower",
+  "wheelchairRamp",
+  "wideDoorways",
 ]
 
 export const listingRequiredDocumentsOptions = [
@@ -349,15 +321,6 @@ export const listingRequiredDocumentsOptions = [
   "proofOfIncome",
   "residencyDocuments",
   "proofOfCustody",
-]
-
-export const allListingFeatures = [
-  ...listingFeatures,
-  ...expandedBathroomFeatures,
-  ...expandedMobilityFeatures,
-  ...expandedFlooringFeatures,
-  ...expandedUtilityFeatures,
-  ...expandedHearingVisionFeatures,
 ]
 
 export enum RoleOption {

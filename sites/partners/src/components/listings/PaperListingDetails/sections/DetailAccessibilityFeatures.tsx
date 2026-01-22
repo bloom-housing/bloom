@@ -5,7 +5,7 @@ import {
   FeatureFlagEnum,
   ListingFeaturesConfiguration,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { AuthContext, listingFeatures } from "@bloom-housing/shared-helpers"
+import { AuthContext } from "@bloom-housing/shared-helpers"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 import { ListingContext } from "../../ListingContext"
 import styles from "../../PaperListingForm/ListingForm.module.scss"
@@ -89,7 +89,10 @@ const DetailAccessibilityFeatures = (props: DetailAccessibilityFeaturesProps) =>
               id="accessibilityFeatures"
               label={t("listings.sections.accessibilityFeatures")}
             >
-              {getAccessibilityFeaturesList(listingFeatures, featuresAsString)}
+              {getAccessibilityFeaturesList(
+                props?.listingFeaturesConfiguration.fields.map((feature) => feature.id),
+                featuresAsString
+              )}
             </FieldValue>
           </Grid.Cell>
         </Grid.Row>

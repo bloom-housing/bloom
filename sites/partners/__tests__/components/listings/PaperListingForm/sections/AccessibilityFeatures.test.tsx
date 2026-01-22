@@ -3,7 +3,6 @@ import { setupServer } from "msw/lib/node"
 import { render, screen, within } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import "@testing-library/jest-dom"
-import { listingFeatures } from "@bloom-housing/shared-helpers"
 import AccessibilityFeatures from "../../../../../src/components/listings/PaperListingForm/sections/AccessibilityFeatures"
 import { FormProviderWrapper, mockNextRouter } from "../../../../testUtils"
 import {
@@ -66,7 +65,7 @@ describe("AccessibilityFeatures", () => {
       .filter((box) => (box as HTMLInputElement).checked)
       .map((box) => (box as HTMLInputElement).value)
 
-    expect(checkboxes).toHaveLength(listingFeatures.length)
+    expect(checkboxes).toHaveLength(defaultListingFeaturesConfiguration.fields.length)
     expect(checkedValues).toEqual(
       expect.arrayContaining([
         "configurableAccessibilityFeatures.mobility",

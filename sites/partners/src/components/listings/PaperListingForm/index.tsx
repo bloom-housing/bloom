@@ -349,7 +349,6 @@ const ListingForm = ({
   const onSubmit = useCallback(
     async (formData: FormListing, continueEditing: boolean) => {
       if (!loading) {
-        console.log("main on submit")
         try {
           setLoading(true)
           clearErrors()

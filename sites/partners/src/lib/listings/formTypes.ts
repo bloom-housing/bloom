@@ -1,9 +1,5 @@
 import { TimeFieldPeriod } from "@bloom-housing/ui-components"
-import {
-  expandedAccessibilityFeaturesFormDefaults,
-  ExpandedAccessibilityFeaturesFormType,
-  LatitudeLongitude,
-} from "@bloom-housing/shared-helpers"
+import { LatitudeLongitude } from "@bloom-housing/shared-helpers"
 import {
   ApplicationAddressTypeEnum,
   EnumListingDepositType,
@@ -100,7 +96,7 @@ export type FormListing = Omit<Listing, "countyCode" | "listingFeatures" | "list
   allowsDogs?: boolean
   allowsCats?: boolean
   petPolicyPreferences?: string[]
-  configurableAccessibilityFeatures?: ExpandedAccessibilityFeaturesFormType
+  configurableAccessibilityFeatures?: unknown
 }
 
 export const addressTypes = {
@@ -196,7 +192,7 @@ export const formDefaults: FormListing = {
   reviewOrderType: null,
   unitsSummary: [],
   applicationLotteryTotals: [],
-  configurableAccessibilityFeatures: expandedAccessibilityFeaturesFormDefaults,
+  configurableAccessibilityFeatures: null,
 }
 
 export type TempUnit = Unit & {
