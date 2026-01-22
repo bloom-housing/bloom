@@ -42,6 +42,7 @@ import DetailListingNotes from "../../../components/listings/PaperListingDetails
 import CopyListingDialog from "../../../components/listings/PaperListingForm/dialogs/CopyListingDialog"
 import DetailListingVerification from "../../../components/listings/PaperListingDetails/sections/DetailListingVerification"
 import DetailAccessibilityFeatures from "../../../components/listings/PaperListingDetails/sections/DetailAccessibilityFeatures"
+import { useJurisdiction } from "../../../lib/hooks"
 
 interface ListingProps {
   listing: Listing
@@ -53,6 +54,8 @@ export default function ListingDetail(props: ListingProps) {
   const [errorAlert, setErrorAlert] = useState<string>(null)
   const [unitDrawer, setUnitDrawer] = useState<UnitDrawer>(null)
   const [copyListingDialog, setCopyListingDialog] = useState(false)
+
+  const { data: jurisdictionData } = useJurisdiction(listing.jurisdictions.id)
 
   if (!listing) return null
 
@@ -132,7 +135,9 @@ export default function ListingDetail(props: ListingProps) {
                     <DetailPreferences />
                     <DetailPrograms />
                     <DetailAdditionalFees />
-                    <DetailAccessibilityFeatures />
+                    <DetailAccessibilityFeatures
+                      listingFeaturesConfiguration={jurisdictionData?.listingFeaturesConfiguration}
+                    />
                     <DetailBuildingFeatures />
                     <DetailNeighborhoodAmenities />
                     <DetailAdditionalEligibility />

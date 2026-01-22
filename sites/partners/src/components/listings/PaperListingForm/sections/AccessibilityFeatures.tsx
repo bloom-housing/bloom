@@ -1,13 +1,8 @@
-import React, { useEffect, useMemo, useState } from "react"
+import React, { useEffect, useState } from "react"
 import { useFormContext } from "react-hook-form"
 import { t, FieldGroup, Form } from "@bloom-housing/ui-components"
 import { Button, Card, Drawer, Grid, Heading } from "@bloom-housing/ui-seeds"
-import {
-  listingFeatures,
-  expandedAccessibilityFeatures,
-  AccessibilitySubcategoriesEnum,
-  requiredAccessibilityFeaturesSections,
-} from "@bloom-housing/shared-helpers"
+import { ListingFeaturesConfiguration } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { addAsterisk, fieldHasError, getLabel } from "../../../../lib/helpers"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 import { getExpandedAccessibilityFeatures } from "../../PaperListingDetails/sections/DetailAccessibilityFeatures"
@@ -15,8 +10,8 @@ import styles from "../ListingForm.module.scss"
 
 type AccessibilityFeaturesProps = {
   enableAccessibilityFeatures: boolean
-  enableExpandedAccessibilityFeatures: boolean
   existingFeatures: string[]
+  listingFeaturesConfiguration: ListingFeaturesConfiguration
   setAccessibilityFeatures: React.Dispatch<React.SetStateAction<string[]>>
 }
 
@@ -25,54 +20,62 @@ const AccessibilityFeatures = (props: AccessibilityFeaturesProps) => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, handleSubmit, errors, clearErrors, setError, setValue } = formMethods
+  const { register, handleSubmit, errors, clearErrors, setError, setValue, getValues } = formMethods
 
   const hasFeaturesSelected = props.existingFeatures?.length > 0
 
-  useEffect(() => {
-    if (!props.enableExpandedAccessibilityFeatures) {
-      setValue("accessibilityFeatures", props.existingFeatures)
-    }
-  }, [props.existingFeatures, props.enableExpandedAccessibilityFeatures, setValue])
+  const hasCategories = props.listingFeaturesConfiguration?.categories?.length > 0
 
-  const getFeatureSectionValues = (subcategory: AccessibilitySubcategoriesEnum) => {
-    return expandedAccessibilityFeatures[subcategory].map((item) => ({
-      id: item,
-      label: t(`eligibility.accessibility.${item}`),
-      defaultChecked: props.existingFeatures ? props.existingFeatures.includes(item) : false,
-      register,
-      inputProps: {
-        onChange: () => {
-          if (errors.accessibilityFeatures?.[subcategory])
-            clearErrors(`accessibilityFeatures.${subcategory}`)
+  useEffect(() => {
+    if (!hasCategories && props.existingFeatures) {
+      props.existingFeatures.forEach((feature) => {
+        setValue(`configurableAccessibilityFeatures.${feature}`, true)
+      })
+    }
+  }, [props.existingFeatures, hasCategories, setValue])
+
+  const getFeatureSectionValues = (
+    configuration: ListingFeaturesConfiguration,
+    categoryId: string
+  ) => {
+    const features = configuration.categories.find((cat) => cat.id === categoryId)?.fields || []
+    return features.map((item) => {
+      return {
+        id: item.id,
+        label: t(`eligibility.accessibility.${item.id}`),
+        defaultChecked: props.existingFeatures ? props.existingFeatures.includes(item.id) : false,
+        register,
+        inputProps: {
+          onChange: () => {
+            if (errors.configurableAccessibilityFeatures?.[categoryId])
+              clearErrors(`configurableAccessibilityFeatures.${categoryId}`)
+          },
         },
-      },
-    }))
+      }
+    })
   }
 
-  const featureOptions = useMemo(() => {
-    return listingFeatures.map((item) => ({
-      id: item,
-      name: item,
-      label: t(`eligibility.accessibility.${item}`),
-      defaultChecked: props.existingFeatures ? props.existingFeatures.includes(item) : false,
-      register,
-    }))
-  }, [register, props.existingFeatures])
+  const featureOptions = props.listingFeaturesConfiguration?.fields
+    ? props.listingFeaturesConfiguration.fields
+        .sort((a, b) => a.id.localeCompare(b.id))
+        .map((item) => ({
+          id: `configurableAccessibilityFeatures.${item.id}`,
+          name: `configurableAccessibilityFeatures.${item.id}`,
+          label: t(`eligibility.accessibility.${item.id}`),
+          defaultChecked: props.existingFeatures ? props.existingFeatures.includes(item.id) : false,
+          register,
+        }))
+    : null
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const onDrawerSubmit = (formData: Record<string, any>) => {
+  const onDrawerSubmit = () => {
+    console.log("onDrawerSubmit")
+    const formData = getValues()
     let errors = false
-    Object.entries(expandedAccessibilityFeatures).forEach(([category, features]) => {
-      if (
-        requiredAccessibilityFeaturesSections.includes(
-          category as AccessibilitySubcategoriesEnum
-        ) &&
-        !formData.configurableAccessibilityFeatures[category].some((feature) =>
-          features.includes(feature)
-        )
-      ) {
-        setError(`configurableAccessibilityFeatures.${category}`, {
+    props.listingFeaturesConfiguration.categories?.forEach((category) => {
+      console.log({ formData })
+      if (category.required && !formData.configurableAccessibilityFeatures?.[category.id].length) {
+        setError(`configurableAccessibilityFeatures.${category.id}`, {
           message: t("errors.requiredFieldError"),
         })
         errors = true
@@ -86,7 +89,7 @@ const AccessibilityFeatures = (props: AccessibilityFeaturesProps) => {
     setIsDrawerOpen(false)
   }
 
-  if (!props.enableAccessibilityFeatures && !props.enableExpandedAccessibilityFeatures) {
+  if (!props.enableAccessibilityFeatures || !props.listingFeaturesConfiguration) {
     return null
   }
 
@@ -98,7 +101,7 @@ const AccessibilityFeatures = (props: AccessibilityFeaturesProps) => {
         subheading={t("listings.sections.accessibilityFeaturesSubtitle")}
         className={styles["no-gap-grid"]}
       >
-        {props.enableExpandedAccessibilityFeatures ? (
+        {hasCategories ? (
           <>
             <div
               className={`field-label ${styles["custom-label"]} ${
@@ -107,8 +110,10 @@ const AccessibilityFeatures = (props: AccessibilityFeaturesProps) => {
             >
               {getLabel(
                 "accessibilityFeatures",
-                requiredAccessibilityFeaturesSections.length > 0 ? ["accessibilityFeatures"] : [],
-                "Accessibility features"
+                props.listingFeaturesConfiguration.categories?.some((category) => category.required)
+                  ? ["accessibilityFeatures"]
+                  : [],
+                t("listings.sections.accessibilityFeatures")
               )}
             </div>
             <Grid className={`grid-inset-section`}>
@@ -119,7 +124,10 @@ const AccessibilityFeatures = (props: AccessibilityFeaturesProps) => {
                       <Heading priority={3} size={"lg"}>
                         {t("accessibility.summaryTitle")}
                       </Heading>
-                      {getExpandedAccessibilityFeatures(props.existingFeatures)}
+                      {getExpandedAccessibilityFeatures(
+                        props.existingFeatures,
+                        props.listingFeaturesConfiguration
+                      )}
                     </>
                   ) : null}
                   <div className={hasFeaturesSelected ? "seeds-m-bs-4" : ""}>
@@ -145,7 +153,7 @@ const AccessibilityFeatures = (props: AccessibilityFeaturesProps) => {
           <Grid.Row>
             <FieldGroup
               type="checkbox"
-              name="accessibilityFeatures"
+              name="configurableAccessibilityFeatures"
               groupLabel={t("listings.sections.accessibilityFeatures")}
               fields={featureOptions}
               register={register}
@@ -175,31 +183,26 @@ const AccessibilityFeatures = (props: AccessibilityFeaturesProps) => {
                   className={styles["spacer-bottom-none"]}
                 >
                   <div className={"field-label seeds-p-b-0_5"}>{t("accessibility.drawerInfo")}</div>
-                  {Object.entries(expandedAccessibilityFeatures).map(([category], index) => {
-                    const label = t(`accessibility.categoryTitle.${category}Features`)
+                  {props.listingFeaturesConfiguration.categories?.map((category, index) => {
+                    const label = t(`accessibility.categoryTitle.${category.id}Features`)
                     return (
                       <Grid.Row columns={1} key={index}>
                         <Grid.Cell>
-                          <div data-testid={`accessibility-features-section-${category}`}>
+                          <div data-testid={`accessibility-features-section-${category.id}`}>
                             <FieldGroup
                               type="checkbox"
-                              name={`configurableAccessibilityFeatures.${category}`}
-                              groupLabel={
-                                requiredAccessibilityFeaturesSections.includes(
-                                  category as AccessibilitySubcategoriesEnum
-                                )
-                                  ? addAsterisk(label)
-                                  : label
-                              }
+                              name={`configurableAccessibilityFeatures.${category.id}`}
+                              groupLabel={category.required ? addAsterisk(label) : label}
                               fields={getFeatureSectionValues(
-                                category as AccessibilitySubcategoriesEnum
+                                props.listingFeaturesConfiguration,
+                                category.id
                               )}
                               register={register}
                               fieldGroupClassName={styles["two-columns"]}
                               fieldLabelClassName={styles["label-option"]}
-                              error={errors.configurableAccessibilityFeatures?.[category]}
+                              error={errors.configurableAccessibilityFeatures?.[category.id]}
                               errorMessage={
-                                errors.configurableAccessibilityFeatures?.[category]?.message
+                                errors.configurableAccessibilityFeatures?.[category.id]?.message
                               }
                             />
                           </div>
@@ -218,7 +221,7 @@ const AccessibilityFeatures = (props: AccessibilityFeaturesProps) => {
             key={0}
             variant="primary"
             size="sm"
-            onClick={handleSubmit(onDrawerSubmit)}
+            onClick={onDrawerSubmit}
           >
             {t("t.save")}
           </Button>

@@ -64,6 +64,7 @@ import { ValidateListingDeposit } from '../../decorators/validate-listing-deposi
 import { ListingDocuments } from './listing-documents.dto';
 import { ValidateListingImages } from '../../decorators/validate-listing-images.decorator';
 import Property from '../properties/property.dto';
+import { ListingFeaturesConfiguration } from '../jurisdictions/listing-features-config.dto';
 
 class Listing extends AbstractDTO {
   @Expose()
@@ -1184,6 +1185,9 @@ class Listing extends AbstractDTO {
 
   @Expose()
   minimumImagesRequired?: number;
+
+  @Expose()
+  listingFeaturesConfiguration?: ListingFeaturesConfiguration;
 
   @Expose()
   @ApiPropertyOptional()

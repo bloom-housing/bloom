@@ -265,8 +265,6 @@ const ListingForm = ({
     jurisdictionId
   )
 
-  console.log("re-rendering")
-
   useEffect(() => {
     if (enableNonRegulatedListings) {
       setValue(
@@ -351,6 +349,7 @@ const ListingForm = ({
   const onSubmit = useCallback(
     async (formData: FormListing, continueEditing: boolean) => {
       if (!loading) {
+        console.log("main on submit")
         try {
           setLoading(true)
           clearErrors()
@@ -388,6 +387,12 @@ const ListingForm = ({
 
           if (!enableNonRegulatedListings) {
             formData.listingType = undefined
+          }
+
+          if (formData.configurableAccessibilityFeatures) {
+            setAccessibilityFeatures(
+              Object.values(formData.configurableAccessibilityFeatures).flat() as string[]
+            )
           }
 
           if (successful) {
@@ -626,11 +631,10 @@ const ListingForm = ({
                               FeatureFlagEnum.enableAccessibilityFeatures,
                               jurisdictionId
                             )}
-                            enableExpandedAccessibilityFeatures={doJurisdictionsHaveFeatureFlagOn(
-                              FeatureFlagEnum.enableExpandedAccessibilityFeatures,
-                              jurisdictionId
-                            )}
                             setAccessibilityFeatures={setAccessibilityFeatures}
+                            listingFeaturesConfiguration={
+                              selectedJurisdictionData?.listingFeaturesConfiguration
+                            }
                           />
                           <BuildingFeatures
                             enableSmokingPolicyRadio={doJurisdictionsHaveFeatureFlagOn(

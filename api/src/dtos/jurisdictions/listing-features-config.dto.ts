@@ -38,12 +38,24 @@ export class ListingFeatureCategory {
 
 export class ListingFeaturesConfiguration {
   @Expose()
-  @ApiProperty({
+  @ApiPropertyOptional({
     type: ListingFeatureCategory,
     isArray: true,
+    description: 'Categorized features (use this or the flat list, not both)',
   })
   @ValidateNested({ each: true })
   @Type(() => ListingFeatureCategory)
   @IsArray()
-  categories: ListingFeatureCategory[];
+  categories?: ListingFeatureCategory[];
+
+  @Expose()
+  @ApiPropertyOptional({
+    type: ListingFeatureField,
+    isArray: true,
+    description: 'Flat list of features (use this or the categories, not both)',
+  })
+  @ValidateNested({ each: true })
+  @Type(() => ListingFeatureField)
+  @IsArray()
+  fields?: ListingFeatureField[];
 }

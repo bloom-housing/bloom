@@ -24,6 +24,7 @@ import {
   simplifiedDCMap,
 } from './seed-helpers/map-layer-factory';
 import { ValidationMethod } from '../src/enums/multiselect-questions/validation-method-enum';
+import { ListingFeaturesConfiguration } from '../src/dtos/jurisdictions/listing-features-config.dto';
 import { householdMemberFactorySingle } from './seed-helpers/household-member-factory';
 import { createAllFeatureFlags } from './seed-helpers/feature-flag-factory';
 import { FeatureFlagEnum } from '../src/enums/feature-flags/feature-flags-enum';
@@ -43,6 +44,30 @@ export const stagingSeed = async (
 ) => {
   // Seed feature flags
   await createAllFeatureFlags(prismaClient);
+  const defaultListingFeatureConfiguration: ListingFeaturesConfiguration = {
+    fields: [
+      { id: 'wheelchairRamp' },
+      { id: 'elevator' },
+      { id: 'serviceAnimalsAllowed' },
+      { id: 'accessibleParking' },
+      { id: 'parkingOnSite' },
+      { id: 'inUnitWasherDryer' },
+      { id: 'laundryInBuilding' },
+      { id: 'barrierFreeEntrance' },
+      { id: 'rollInShower' },
+      { id: 'grabBars' },
+      { id: 'heatingInUnit' },
+      { id: 'acInUnit' },
+      { id: 'hearing' },
+      { id: 'mobility' },
+      { id: 'visual' },
+      { id: 'barrierFreeUnitEntrance' },
+      { id: 'loweredLightSwitch' },
+      { id: 'barrierFreeBathroom' },
+      { id: 'wideDoorways' },
+      { id: 'loweredCabinets' },
+    ],
+  };
   // create main jurisdiction with as many feature flags turned on as possible
   const mainJurisdiction = await prismaClient.jurisdictions.create({
     data: jurisdictionFactory(jurisdictionName, {
@@ -87,8 +112,10 @@ export const stagingSeed = async (
         'rentalAssistance',
         'units',
       ],
+      listingFeaturesConfiguration: defaultListingFeatureConfiguration,
     }),
   });
+
   // jurisdiction with unit groups enabled
   const lakeviewJurisdiction = await prismaClient.jurisdictions.create({
     data: jurisdictionFactory('Lakeview', {
@@ -135,6 +162,7 @@ export const stagingSeed = async (
         LanguagesEnum.ar,
         LanguagesEnum.bn,
       ],
+      listingFeaturesConfiguration: defaultListingFeatureConfiguration,
     }),
   });
   // Basic configuration jurisdiction
@@ -152,6 +180,7 @@ export const stagingSeed = async (
         FeatureFlagEnum.enablePartnerSettings,
       ],
       languages: [LanguagesEnum.en, LanguagesEnum.es, LanguagesEnum.vi],
+      listingFeaturesConfiguration: defaultListingFeatureConfiguration,
     }),
   });
   // Jurisdiction with no feature flags enabled
@@ -226,6 +255,74 @@ export const stagingSeed = async (
         'rentalAssistance',
         'units',
       ],
+      listingFeaturesConfiguration: {
+        categories: [
+          {
+            id: 'mobility',
+            fields: [
+              { id: 'accessibleParking' },
+              { id: 'barrierFreePropertyEntrance' },
+              { id: 'barrierFreeUnitEntrance' },
+              { id: 'elevator' },
+              { id: 'frontControlsDishwasher' },
+              { id: 'frontControlsStoveCookTop' },
+              { id: 'kitchenCounterLowered' },
+              { id: 'leverHandlesOnDoors' },
+              { id: 'loweredLightSwitch' },
+              { id: 'mobility' },
+              { id: 'noEntryStairs' },
+              { id: 'noStairsToParkingSpots' },
+              { id: 'noStairsWithinUnit' },
+              { id: 'refrigeratorWithBottomDoorFreezer' },
+              { id: 'streetLevelEntrance' },
+              { id: 'wheelchairRamp' },
+            ],
+          },
+          {
+            id: 'bathroom',
+            fields: [
+              { id: 'accessibleHeightToilet' },
+              { id: 'barrierFreeBathroom' },
+              { id: 'bathGrabBarsOrReinforcements' },
+              { id: 'bathroomCounterLowered' },
+              { id: 'rollInShower' },
+              { id: 'toiletGrabBarsOrReinforcements' },
+              { id: 'turningCircleInBathrooms' },
+              { id: 'walkInShower' },
+              { id: 'wideDoorways' },
+            ],
+          },
+          {
+            id: 'flooring',
+            fields: [{ id: 'carpetInUnit' }, { id: 'hardFlooringInUnit' }],
+            required: true,
+          },
+          {
+            id: 'utility',
+            fields: [
+              { id: 'acInUnit' },
+              { id: 'fireSuppressionSprinklerSystem' },
+              { id: 'heatingInUnit' },
+              { id: 'inUnitWasherDryer' },
+              { id: 'laundryInBuilding' },
+              { id: 'leverHandlesOnFaucets' },
+            ],
+          },
+          {
+            id: 'hearingVision',
+            fields: [
+              { id: 'brailleSignageInBuilding' },
+              { id: 'carbonMonoxideDetectorWithStrobe' },
+              { id: 'extraAudibleCarbonMonoxideDetector' },
+              { id: 'extraAudibleSmokeDetector' },
+              { id: 'hearingAndVision' },
+              { id: 'nonDigitalKitchenAppliances' },
+              { id: 'smokeDetectorWithStrobe' },
+              { id: 'ttyAmplifiedPhone' },
+            ],
+          },
+        ],
+      },
     }),
   });
   // create super admin user

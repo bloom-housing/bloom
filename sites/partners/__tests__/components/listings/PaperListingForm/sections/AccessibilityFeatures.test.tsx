@@ -3,9 +3,13 @@ import { setupServer } from "msw/lib/node"
 import { render, screen, within } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import "@testing-library/jest-dom"
-import { listingFeatures, expandedAccessibilityFeatures } from "@bloom-housing/shared-helpers"
+import { listingFeatures } from "@bloom-housing/shared-helpers"
 import AccessibilityFeatures from "../../../../../src/components/listings/PaperListingForm/sections/AccessibilityFeatures"
 import { FormProviderWrapper, mockNextRouter } from "../../../../testUtils"
+import {
+  defaultListingFeaturesConfiguration,
+  expandedListingFeaturesConfiguration,
+} from "../../../../../../../shared-helpers/__tests__/testHelpers"
 
 const server = setupServer()
 
@@ -27,9 +31,9 @@ describe("AccessibilityFeatures", () => {
       <FormProviderWrapper>
         <AccessibilityFeatures
           enableAccessibilityFeatures={false}
-          enableExpandedAccessibilityFeatures={false}
           setAccessibilityFeatures={jest.fn()}
           existingFeatures={[]}
+          listingFeaturesConfiguration={null}
         />
       </FormProviderWrapper>
     )
@@ -44,9 +48,9 @@ describe("AccessibilityFeatures", () => {
       <FormProviderWrapper>
         <AccessibilityFeatures
           enableAccessibilityFeatures={true}
-          enableExpandedAccessibilityFeatures={false}
           setAccessibilityFeatures={jest.fn()}
           existingFeatures={["mobility", "visual"]}
+          listingFeaturesConfiguration={defaultListingFeaturesConfiguration}
         />
       </FormProviderWrapper>
     )
@@ -63,17 +67,22 @@ describe("AccessibilityFeatures", () => {
       .map((box) => (box as HTMLInputElement).value)
 
     expect(checkboxes).toHaveLength(listingFeatures.length)
-    expect(checkedValues).toEqual(expect.arrayContaining(["mobility", "visual"]))
+    expect(checkedValues).toEqual(
+      expect.arrayContaining([
+        "configurableAccessibilityFeatures.mobility",
+        "configurableAccessibilityFeatures.visual",
+      ])
+    )
   })
 
   it("renders accessibility features expanded detail summary with existing selections", () => {
     render(
       <FormProviderWrapper>
         <AccessibilityFeatures
-          enableAccessibilityFeatures={false}
-          enableExpandedAccessibilityFeatures={true}
+          enableAccessibilityFeatures={true}
           setAccessibilityFeatures={jest.fn()}
           existingFeatures={["wheelchairRamp", "hardFlooringInUnit"]}
+          listingFeaturesConfiguration={expandedListingFeaturesConfiguration}
         />
       </FormProviderWrapper>
     )
@@ -89,8 +98,8 @@ describe("AccessibilityFeatures", () => {
       screen.getByRole("heading", { level: 3, name: "Accessibility features summary" })
     ).toBeInTheDocument()
 
-    Object.keys(expandedAccessibilityFeatures).forEach((category) => {
-      expect(screen.getByTestId(`accessibility-features-${category}`)).toBeInTheDocument()
+    expandedListingFeaturesConfiguration.categories.forEach((category) => {
+      expect(screen.getByTestId(`accessibility-features-${category.id}`)).toBeInTheDocument()
     })
     expect(screen.getByText("Wheelchair ramp")).toBeInTheDocument()
     expect(screen.getByText("Hard flooring in unit")).toBeInTheDocument()
@@ -102,8 +111,8 @@ describe("AccessibilityFeatures", () => {
     render(
       <FormProviderWrapper>
         <AccessibilityFeatures
-          enableAccessibilityFeatures={false}
-          enableExpandedAccessibilityFeatures={true}
+          enableAccessibilityFeatures={true}
+          listingFeaturesConfiguration={expandedListingFeaturesConfiguration}
           setAccessibilityFeatures={setAccessibilityFeatures}
           existingFeatures={[]}
         />
@@ -135,8 +144,8 @@ describe("AccessibilityFeatures", () => {
     render(
       <FormProviderWrapper>
         <AccessibilityFeatures
-          enableAccessibilityFeatures={false}
-          enableExpandedAccessibilityFeatures={true}
+          enableAccessibilityFeatures={true}
+          listingFeaturesConfiguration={expandedListingFeaturesConfiguration}
           setAccessibilityFeatures={setAccessibilityFeatures}
           existingFeatures={[]}
         />

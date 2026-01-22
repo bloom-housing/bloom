@@ -1,7 +1,13 @@
 import React from "react"
 import { render, screen, within } from "@testing-library/react"
 import { AuthContext } from "@bloom-housing/shared-helpers"
-import { listing } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
+import {
+  defaultListingFeaturesConfiguration,
+  expandedListingFeaturesConfiguration,
+  jurisdiction,
+  listing,
+  user,
+} from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { ListingContext } from "../../../../../src/components/listings/ListingContext"
 import DetailAccessibilityFeatures from "../../../../../src/components/listings/PaperListingDetails/sections/DetailAccessibilityFeatures"
@@ -27,7 +33,9 @@ describe("DetailAccessibilityFeatures", () => {
             },
           }}
         >
-          <DetailAccessibilityFeatures />
+          <DetailAccessibilityFeatures
+            listingFeaturesConfiguration={defaultListingFeaturesConfiguration}
+          />
         </ListingContext.Provider>
       </AuthContext.Provider>
     )
@@ -57,7 +65,9 @@ describe("DetailAccessibilityFeatures", () => {
             },
           }}
         >
-          <DetailAccessibilityFeatures />
+          <DetailAccessibilityFeatures
+            listingFeaturesConfiguration={defaultListingFeaturesConfiguration}
+          />
         </ListingContext.Provider>
       </AuthContext.Provider>
     )
@@ -68,16 +78,16 @@ describe("DetailAccessibilityFeatures", () => {
 
     const list = screen.getByTestId("accessibility-features-list")
     const listItems = within(list).getAllByRole("listitem")
-    expect(listItems[0]).toHaveTextContent("Elevator")
-    expect(listItems[1]).toHaveTextContent("Wheelchair ramp")
-    expect(listItems[2]).toHaveTextContent("Accessible parking")
+    expect(listItems[0]).toHaveTextContent("Accessible parking")
+    expect(listItems[1]).toHaveTextContent("Elevator")
+    expect(listItems[2]).toHaveTextContent("Wheelchair ramp")
   })
   it("renders expanded accessibility features list with items in each category", () => {
     render(
       <AuthContext.Provider
         value={{
           doJurisdictionsHaveFeatureFlagOn: (flag) =>
-            flag === FeatureFlagEnum.enableExpandedAccessibilityFeatures,
+            flag === FeatureFlagEnum.enableAccessibilityFeatures,
         }}
       >
         <ListingContext.Provider
@@ -103,7 +113,9 @@ describe("DetailAccessibilityFeatures", () => {
             },
           }}
         >
-          <DetailAccessibilityFeatures />
+          <DetailAccessibilityFeatures
+            listingFeaturesConfiguration={expandedListingFeaturesConfiguration}
+          />
         </ListingContext.Provider>
       </AuthContext.Provider>
     )
@@ -121,9 +133,9 @@ describe("DetailAccessibilityFeatures", () => {
     ).toBeInTheDocument()
     const mobilityListItems = within(mobilityList).getAllByRole("listitem")
     expect(mobilityListItems).toHaveLength(3)
+    expect(mobilityListItems[2]).toHaveTextContent("Accessible parking")
     expect(mobilityListItems[0]).toHaveTextContent("Elevator")
     expect(mobilityListItems[1]).toHaveTextContent("Wheelchair ramp")
-    expect(mobilityListItems[2]).toHaveTextContent("Accessible parking")
 
     const bathroomList = screen.getByTestId("accessibility-features-bathroom")
     expect(
@@ -165,12 +177,12 @@ describe("DetailAccessibilityFeatures", () => {
       "Extra audible carbon monoxide detector - min. 85 db"
     )
   })
-  it("renders expanded accessibility features list with empty categories", () => {
+  it.only("renders expanded accessibility features list with empty categories", async () => {
     render(
       <AuthContext.Provider
         value={{
           doJurisdictionsHaveFeatureFlagOn: (flag) =>
-            flag === FeatureFlagEnum.enableExpandedAccessibilityFeatures,
+            flag === FeatureFlagEnum.enableAccessibilityFeatures,
         }}
       >
         <ListingContext.Provider
@@ -183,7 +195,9 @@ describe("DetailAccessibilityFeatures", () => {
             },
           }}
         >
-          <DetailAccessibilityFeatures />
+          <DetailAccessibilityFeatures
+            listingFeaturesConfiguration={expandedListingFeaturesConfiguration}
+          />
         </ListingContext.Provider>
       </AuthContext.Provider>
     )
@@ -192,7 +206,7 @@ describe("DetailAccessibilityFeatures", () => {
       screen.getByRole("heading", { level: 2, name: "Accessibility features" })
     ).toBeInTheDocument()
     expect(
-      screen.getByRole("heading", { level: 3, name: "Accessibility features summary" })
+      await screen.findByRole("heading", { level: 3, name: "Accessibility features summary" })
     ).toBeInTheDocument()
 
     const mobilityList = screen.getByTestId("accessibility-features-mobility")

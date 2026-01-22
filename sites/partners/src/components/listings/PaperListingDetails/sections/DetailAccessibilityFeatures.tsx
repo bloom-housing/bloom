@@ -1,18 +1,17 @@
 import React, { useContext } from "react"
 import { t } from "@bloom-housing/ui-components"
 import { FieldValue, Grid, Heading } from "@bloom-housing/ui-seeds"
-import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import {
-  AuthContext,
-  listingFeatures,
-  expandedAccessibilityFeatures,
-} from "@bloom-housing/shared-helpers"
+  FeatureFlagEnum,
+  ListingFeaturesConfiguration,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { AuthContext, listingFeatures } from "@bloom-housing/shared-helpers"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 import { ListingContext } from "../../ListingContext"
 import styles from "../../PaperListingForm/ListingForm.module.scss"
 
-const getAccessibilityFeaturesList = (featureSet: string[], listingFeatures: string[]) => {
-  const filteredFeatures = listingFeatures.filter((feature) => featureSet.includes(feature))
+const getAccessibilityFeaturesList = (possibleFeatures: string[], listingFeatures: string[]) => {
+  const filteredFeatures = possibleFeatures?.filter((field) => listingFeatures.includes(field))
   if (filteredFeatures.length === 0) return <>{t("t.none")}</>
   const listItems = filteredFeatures.map((feature) => {
     return <li key={feature}>{t(`eligibility.accessibility.${feature}`)}</li>
@@ -24,16 +23,24 @@ const getAccessibilityFeaturesList = (featureSet: string[], listingFeatures: str
   )
 }
 
-export const getExpandedAccessibilityFeatures = (listingFeatures: string[]) => {
-  return Object.entries(expandedAccessibilityFeatures).map(([category, features]) => {
+export const getExpandedAccessibilityFeatures = (
+  listingFeatures: string[],
+  configuration: ListingFeaturesConfiguration
+) => {
+  return configuration?.categories.map((category) => {
     return (
-      <Grid.Row key={category} className={styles["text-on-secondary"]}>
+      <Grid.Row key={category.id} className={styles["text-on-secondary"]}>
         <Grid.Cell>
-          <div data-testid={`accessibility-features-${category}`}>
+          <div data-testid={`accessibility-features-${category.id}`}>
             <Heading size={"md"} className={"seeds-p-b-4"} priority={4}>
-              {t(`eligibility.accessibility.categoryTitle.${category}`)}
+              {t(`eligibility.accessibility.categoryTitle.${category.id}`)}
             </Heading>
-            {getAccessibilityFeaturesList(features, listingFeatures)}
+            {getAccessibilityFeaturesList(
+              category.fields.map((feature) => {
+                return feature.id
+              }),
+              listingFeatures
+            )}
           </div>
         </Grid.Cell>
       </Grid.Row>
@@ -41,7 +48,11 @@ export const getExpandedAccessibilityFeatures = (listingFeatures: string[]) => {
   })
 }
 
-const DetailAccessibilityFeatures = () => {
+type DetailAccessibilityFeaturesProps = {
+  listingFeaturesConfiguration: ListingFeaturesConfiguration
+}
+
+const DetailAccessibilityFeatures = (props: DetailAccessibilityFeaturesProps) => {
   const listing = useContext(ListingContext)
   const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
 
@@ -50,10 +61,7 @@ const DetailAccessibilityFeatures = () => {
     listing.jurisdictions.id
   )
 
-  const enableExpandedAccessibilityFeatures = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableExpandedAccessibilityFeatures,
-    listing.jurisdictions.id
-  )
+  const hasCategories = props?.listingFeaturesConfiguration?.categories?.length > 0
 
   const featuresAsString = Object.keys(listing?.listingFeatures)
     .map((feature) => {
@@ -61,18 +69,18 @@ const DetailAccessibilityFeatures = () => {
     })
     .filter((feature) => feature !== null)
 
-  if (!enableAccessibilityFeatures && !enableExpandedAccessibilityFeatures) {
+  if (!enableAccessibilityFeatures) {
     return null
   }
 
   return (
     <SectionWithGrid heading={t("listings.sections.accessibilityFeatures")} inset>
-      {enableExpandedAccessibilityFeatures ? (
+      {hasCategories ? (
         <div>
           <Heading priority={3} size={"lg"}>
             {t("accessibility.summaryTitle")}
           </Heading>
-          {getExpandedAccessibilityFeatures(featuresAsString)}
+          {getExpandedAccessibilityFeatures(featuresAsString, props?.listingFeaturesConfiguration)}
         </div>
       ) : (
         <Grid.Row>

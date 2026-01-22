@@ -25,6 +25,7 @@ import {
   UnitType,
   User,
   MultiselectQuestionsStatusEnum,
+  ListingFeaturesConfiguration,
 } from "../src/types/backend-swagger"
 
 export const multiselectQuestionPreference: MultiselectQuestion = {
@@ -1224,4 +1225,98 @@ export const mockUser: User = {
   passwordValidForDays: 180,
   agreedToTermsOfService: true,
   listings: [],
+}
+
+export const defaultListingFeaturesConfiguration: ListingFeaturesConfiguration = {
+  fields: [
+    { id: "wheelchairRamp" },
+    { id: "elevator" },
+    { id: "serviceAnimalsAllowed" },
+    { id: "accessibleParking" },
+    { id: "parkingOnSite" },
+    { id: "inUnitWasherDryer" },
+    { id: "laundryInBuilding" },
+    { id: "barrierFreeEntrance" },
+    { id: "rollInShower" },
+    { id: "grabBars" },
+    { id: "heatingInUnit" },
+    { id: "acInUnit" },
+    { id: "hearing" },
+    { id: "mobility" },
+    { id: "visual" },
+    { id: "barrierFreeUnitEntrance" },
+    { id: "loweredLightSwitch" },
+    { id: "barrierFreeBathroom" },
+    { id: "wideDoorways" },
+    { id: "loweredCabinets" },
+  ],
+}
+
+export const expandedListingFeaturesConfiguration: ListingFeaturesConfiguration = {
+  categories: [
+    {
+      id: "mobility",
+      fields: [
+        { id: "accessibleParking" },
+        { id: "barrierFreePropertyEntrance" },
+        { id: "barrierFreeUnitEntrance" },
+        { id: "elevator" },
+        { id: "frontControlsDishwasher" },
+        { id: "frontControlsStoveCookTop" },
+        { id: "kitchenCounterLowered" },
+        { id: "leverHandlesOnDoors" },
+        { id: "loweredLightSwitch" },
+        { id: "mobility" },
+        { id: "noEntryStairs" },
+        { id: "noStairsToParkingSpots" },
+        { id: "noStairsWithinUnit" },
+        { id: "refrigeratorWithBottomDoorFreezer" },
+        { id: "streetLevelEntrance" },
+        { id: "wheelchairRamp" },
+      ],
+    },
+    {
+      id: "bathroom",
+      fields: [
+        { id: "accessibleHeightToilet" },
+        { id: "barrierFreeBathroom" },
+        { id: "bathGrabBarsOrReinforcements" },
+        { id: "bathroomCounterLowered" },
+        { id: "rollInShower" },
+        { id: "toiletGrabBarsOrReinforcements" },
+        { id: "turningCircleInBathrooms" },
+        { id: "walkInShower" },
+        { id: "wideDoorways" },
+      ],
+    },
+    {
+      id: "flooring",
+      fields: [{ id: "carpetInUnit" }, { id: "hardFlooringInUnit" }],
+      required: true,
+    },
+    {
+      id: "utility",
+      fields: [
+        { id: "acInUnit" },
+        { id: "fireSuppressionSprinklerSystem" },
+        { id: "heatingInUnit" },
+        { id: "inUnitWasherDryer" },
+        { id: "laundryInBuilding" },
+        { id: "leverHandlesOnFaucets" },
+      ],
+    },
+    {
+      id: "hearingVision",
+      fields: [
+        { id: "brailleSignageInBuilding" },
+        { id: "carbonMonoxideDetectorWithStrobe" },
+        { id: "extraAudibleCarbonMonoxideDetector" },
+        { id: "extraAudibleSmokeDetector" },
+        { id: "hearingAndVision" },
+        { id: "nonDigitalKitchenAppliances" },
+        { id: "smokeDetectorWithStrobe" },
+        { id: "ttyAmplifiedPhone" },
+      ],
+    },
+  ],
 }
