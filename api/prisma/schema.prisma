@@ -404,6 +404,7 @@ model Jurisdictions {
   requiredListingFields               String[]                    @default([]) @map("required_listing_fields")
   visibleNeighborhoodAmenities        NeighborhoodAmenitiesEnum[] @default([groceryStores, publicTransportation, schools, parksAndCommunityCenters, pharmacies, healthCareResources]) @map("visible_neighborhood_amenities")
   regions                             String[]                    @default([]) @map("regions")
+  listingFeaturesConfiguration        Json?                       @map("listing_features_configuration")
   properties                          Properties[]
 
   @@map("jurisdictions")
