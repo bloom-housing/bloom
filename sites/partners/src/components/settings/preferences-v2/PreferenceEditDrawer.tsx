@@ -66,7 +66,7 @@ type OptionForm = {
   mapLayerId?: string
 }
 
-const alphaNumericPattern = /^[A-Z][a-zA-Z0-9 ']+$/
+const alphaNumericPattern = /^[a-zA-Z0-9 '()]+$/
 
 const PreferenceEditDrawer = ({
   drawerType,
@@ -294,6 +294,76 @@ const PreferenceEditDrawer = ({
     void savePreference(
       !questionData || questionData?.status === MultiselectQuestionsStatusEnum.draft
     )
+  }
+
+  const saveOption = async () => {
+    const formData = getValues() as OptionForm
+    await trigger()
+    if (!formData.optionTitle || formData.optionTitle === "") {
+      setError("optionTitle", { message: t("errors.requiredFieldError") })
+      return
+    }
+    if (formState.errors.optionUrl) return
+    const existingOptionData = questionData?.multiselectOptions?.find(
+      (option) => optionData?.ordinal === option.ordinal
+    )
+    if (
+      Object.keys(formState.errors).some((field) =>
+        [
+          "shouldCollectAddress",
+          "shouldCollectName",
+          "shouldCollectRelationship",
+          "validationMethod",
+          "radiusSize",
+          "mapLayerId",
+        ].includes(field)
+      )
+    ) {
+      return
+    }
+
+    const getNewOrdinal = () => {
+      if (existingOptionData) return existingOptionData.ordinal
+      return questionData?.multiselectOptions?.length
+        ? questionData?.multiselectOptions.length + 1
+        : 1
+    }
+
+    const newOptionData: MultiselectOptionCreate = {
+      name: formData.optionTitle.trim(),
+      description: formData.optionDescription.trim(),
+      links: formData.optionUrl
+        ? [{ title: formData.optionLinkTitle, url: formData.optionUrl }]
+        : [],
+      ordinal: getNewOrdinal(),
+      shouldCollectAddress: formData.shouldCollectAddress === YesNoEnum.yes,
+      isOptOut: formData.canYouOptOut === YesNoEnum.yes,
+      text: "",
+    }
+    if (formData.shouldCollectAddress === YesNoEnum.yes) {
+      newOptionData.validationMethod = formData.validationMethod
+      newOptionData.shouldCollectRelationship = formData.shouldCollectRelationship === YesNoEnum.yes
+      newOptionData.shouldCollectName = formData.shouldCollectName === YesNoEnum.yes
+    }
+    if (formData.validationMethod === ValidationMethodEnum.radius && formData?.radiusSize) {
+      newOptionData.radiusSize = parseFloat(formData.radiusSize)
+    }
+    if (formData.validationMethod === ValidationMethodEnum.map && formData?.mapLayerId) {
+      newOptionData.mapLayerId = formData.mapLayerId
+    }
+
+    let newOptions = []
+    if (existingOptionData) {
+      newOptions = questionData.multiselectOptions.map((option) =>
+        option.ordinal === existingOptionData.ordinal ? newOptionData : option
+      )
+    } else {
+      newOptions = questionData?.multiselectOptions
+        ? [...questionData.multiselectOptions, newOptionData]
+        : [newOptionData]
+    }
+    setQuestionData({ ...questionData, multiselectOptions: newOptions })
+    setOptionDrawerOpen(null)
   }
 
   return (
@@ -533,8 +603,8 @@ const PreferenceEditDrawer = ({
           </Button>
           <Button type="button" variant="primary-outlined" onClick={toggleVisibility}>
             {!questionData || questionData?.status === MultiselectQuestionsStatusEnum.draft
-              ? "Show to Partners"
-              : "Hide from Partners"}
+              ? t("settings.preferenceShowToPartners")
+              : t("settings.preferenceHideFromPartners")}
           </Button>
           {drawerType === "edit" && (
             <Button
@@ -910,79 +980,7 @@ const PreferenceEditDrawer = ({
           <Button
             type="button"
             variant="primary"
-            onClick={async () => {
-              const formData = getValues() as OptionForm
-              await trigger()
-              if (!formData.optionTitle || formData.optionTitle === "") {
-                setError("optionTitle", { message: t("errors.requiredFieldError") })
-                return
-              }
-              if (formState.errors.optionUrl) return
-              const existingOptionData = questionData?.multiselectOptions?.find(
-                (option) => optionData?.ordinal === option.ordinal
-              )
-              if (
-                Object.keys(formState.errors).some((field) =>
-                  [
-                    "shouldCollectAddress",
-                    "shouldCollectName",
-                    "shouldCollectRelationship",
-                    "validationMethod",
-                    "radiusSize",
-                    "mapLayerId",
-                  ].includes(field)
-                )
-              ) {
-                return
-              }
-
-              const getNewOrdinal = () => {
-                if (existingOptionData) return existingOptionData.ordinal
-                return questionData?.multiselectOptions?.length
-                  ? questionData?.multiselectOptions.length + 1
-                  : 1
-              }
-
-              const newOptionData: MultiselectOptionCreate = {
-                name: formData.optionTitle.trim(),
-                description: formData.optionDescription.trim(),
-                links: formData.optionUrl
-                  ? [{ title: formData.optionLinkTitle, url: formData.optionUrl }]
-                  : [],
-                ordinal: getNewOrdinal(),
-                shouldCollectAddress: formData.shouldCollectAddress === YesNoEnum.yes,
-                isOptOut: formData.canYouOptOut === YesNoEnum.yes,
-                text: "",
-              }
-              if (formData.shouldCollectAddress === YesNoEnum.yes) {
-                newOptionData.validationMethod = formData.validationMethod
-                newOptionData.shouldCollectRelationship =
-                  formData.shouldCollectRelationship === YesNoEnum.yes
-                newOptionData.shouldCollectName = formData.shouldCollectName === YesNoEnum.yes
-              }
-              if (
-                formData.validationMethod === ValidationMethodEnum.radius &&
-                formData?.radiusSize
-              ) {
-                newOptionData.radiusSize = parseFloat(formData.radiusSize)
-              }
-              if (formData.validationMethod === ValidationMethodEnum.map && formData?.mapLayerId) {
-                newOptionData.mapLayerId = formData.mapLayerId
-              }
-
-              let newOptions = []
-              if (existingOptionData) {
-                newOptions = questionData.multiselectOptions.map((option) =>
-                  option.ordinal === existingOptionData.ordinal ? newOptionData : option
-                )
-              } else {
-                newOptions = questionData?.multiselectOptions
-                  ? [...questionData.multiselectOptions, newOptionData]
-                  : [newOptionData]
-              }
-              setQuestionData({ ...questionData, multiselectOptions: newOptions })
-              setOptionDrawerOpen(null)
-            }}
+            onClick={saveOption}
             id={"preference-option-save"}
           >
             {t("t.save")}

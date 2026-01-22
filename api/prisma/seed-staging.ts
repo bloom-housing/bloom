@@ -415,7 +415,7 @@ export const stagingSeed = async (
             {
               name: 'At least one member of my household is a city employee',
               collectAddress: false,
-              ordinal: 0,
+              ordinal: 1,
             },
           ],
         },
@@ -457,7 +457,7 @@ export const stagingSeed = async (
           options: [
             {
               name: 'At least one member of my household works in the city',
-              ordinal: 0,
+              ordinal: 1,
               collectAddress: true,
               collectName: true,
               collectRelationship: true,
@@ -466,7 +466,7 @@ export const stagingSeed = async (
             },
             {
               name: 'All members of the household work in the city',
-              ordinal: 1,
+              ordinal: 2,
               collectAddress: true,
               ValidationMethod: ValidationMethod.none,
               collectName: false,

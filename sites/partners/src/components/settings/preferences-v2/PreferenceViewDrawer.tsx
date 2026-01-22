@@ -109,7 +109,7 @@ const PreferenceViewDrawer = ({
                           view: {
                             content: (
                               <Button variant="text" onClick={() => setOptionData(item)}>
-                                View
+                                {t("t.view")}
                               </Button>
                             ),
                           },
