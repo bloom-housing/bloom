@@ -92,3 +92,8 @@
 .text-on-secondary {
   color: var(--seeds-input-text-highlight-color);
 }
+
+.no-gap-grid {
+  --grid-gap: 0;
+  --grid-gap-lg: 0;
+}

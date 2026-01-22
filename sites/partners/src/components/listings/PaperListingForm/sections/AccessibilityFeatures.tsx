@@ -8,7 +8,7 @@ import {
   AccessibilitySubcategoriesEnum,
   requiredAccessibilityFeaturesSections,
 } from "@bloom-housing/shared-helpers"
-import { addAsterisk } from "../../../../lib/helpers"
+import { addAsterisk, fieldHasError, getLabel } from "../../../../lib/helpers"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 import { getExpandedAccessibilityFeatures } from "../../PaperListingDetails/sections/DetailAccessibilityFeatures"
 import styles from "../ListingForm.module.scss"
@@ -96,35 +96,51 @@ const AccessibilityFeatures = (props: AccessibilityFeaturesProps) => {
       <SectionWithGrid
         heading={t("listings.sections.accessibilityFeatures")}
         subheading={t("listings.sections.accessibilityFeaturesSubtitle")}
+        className={styles["no-gap-grid"]}
       >
         {props.enableExpandedAccessibilityFeatures ? (
-          <Grid spacing="lg" className="grid-inset-section">
-            <Grid.Row>
-              <Grid.Cell>
-                {hasFeaturesSelected ? (
-                  <>
-                    <Heading priority={3} size={"lg"}>
-                      {t("accessibility.summaryTitle")}
-                    </Heading>
-                    {getExpandedAccessibilityFeatures(props.existingFeatures)}
-                  </>
-                ) : null}
-                <div className={hasFeaturesSelected ? "seeds-m-bs-4" : ""}>
-                  <Button
-                    id="addFeaturesButton"
-                    type="button"
-                    variant="primary-outlined"
-                    size="sm"
-                    onClick={() => setIsDrawerOpen(true)}
-                  >
-                    {hasFeaturesSelected
-                      ? t("accessibility.drawerTitleEdit")
-                      : t("accessibility.drawerTitleAdd")}
-                  </Button>
-                </div>
-              </Grid.Cell>
-            </Grid.Row>
-          </Grid>
+          <>
+            <div
+              className={`field-label ${styles["custom-label"]} ${
+                fieldHasError(errors?.listingFeatures) ? styles["label-error"] : ""
+              }`}
+            >
+              {getLabel(
+                "accessibilityFeatures",
+                requiredAccessibilityFeaturesSections.length > 0 ? ["accessibilityFeatures"] : [],
+                "Accessibility features"
+              )}
+            </div>
+            <Grid className={`grid-inset-section`}>
+              <Grid.Row>
+                <Grid.Cell>
+                  {hasFeaturesSelected ? (
+                    <>
+                      <Heading priority={3} size={"lg"}>
+                        {t("accessibility.summaryTitle")}
+                      </Heading>
+                      {getExpandedAccessibilityFeatures(props.existingFeatures)}
+                    </>
+                  ) : null}
+                  <div className={hasFeaturesSelected ? "seeds-m-bs-4" : ""}>
+                    <Button
+                      id="addFeaturesButton"
+                      type="button"
+                      variant={
+                        fieldHasError(errors?.listingFeatures) ? "alert" : "primary-outlined"
+                      }
+                      size="sm"
+                      onClick={() => setIsDrawerOpen(true)}
+                    >
+                      {hasFeaturesSelected
+                        ? t("accessibility.drawerTitleEdit")
+                        : t("accessibility.drawerTitleAdd")}
+                    </Button>
+                  </div>
+                </Grid.Cell>
+              </Grid.Row>
+            </Grid>
+          </>
         ) : (
           <Grid.Row>
             <FieldGroup
@@ -209,7 +225,9 @@ const AccessibilityFeatures = (props: AccessibilityFeaturesProps) => {
           <Button
             id="cancelFeaturesButton"
             type="button"
-            onClick={() => setIsDrawerOpen(false)}
+            onClick={() => {
+              setIsDrawerOpen(false)
+            }}
             size="sm"
             variant="primary-outlined"
           >
