@@ -136,11 +136,11 @@ describe("application edit page", () => {
       const statusSelect = await screen.findByLabelText("Status")
       await userEvent.selectOptions(statusSelect, ApplicationStatusEnum.waitlist)
 
-      const accessibleInput = screen.getByLabelText("Accessible unit waitlist (AUWL)")
+      const accessibleInput = screen.getByLabelText("Accessible unit wait list (AUWL)")
       await userEvent.clear(accessibleInput)
       await userEvent.type(accessibleInput, "3")
 
-      const conventionalInput = screen.getByLabelText("Conventional unit waitlist (CUWL)")
+      const conventionalInput = screen.getByLabelText("Conventional unit wait list (CUWL)")
       await userEvent.clear(conventionalInput)
       await userEvent.type(conventionalInput, "8")
 
@@ -181,10 +181,10 @@ describe("application edit page", () => {
         </AuthContext.Provider>
       )
 
-      const accessibleInput = await screen.findByLabelText("Accessible unit waitlist (AUWL)")
+      const accessibleInput = await screen.findByLabelText("Accessible unit wait list (AUWL)")
       await userEvent.clear(accessibleInput)
 
-      const conventionalInput = screen.getByLabelText("Conventional unit waitlist (CUWL)")
+      const conventionalInput = screen.getByLabelText("Conventional unit wait list (CUWL)")
       await userEvent.clear(conventionalInput)
 
       const saveButton = screen.getByRole("button", { name: "Save & exit" })

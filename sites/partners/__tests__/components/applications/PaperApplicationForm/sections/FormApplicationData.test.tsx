@@ -160,8 +160,8 @@ describe("<FormApplicationData>", () => {
       const statusSelect = screen.getByLabelText(/status/i)
       await userEvent.selectOptions(statusSelect, ApplicationStatusEnum.waitlist)
 
-      const auwlInput = screen.getByLabelText(/accessible unit waitlist \(AUWL\)/i)
-      const cuwlInput = screen.getByLabelText(/conventional unit waitlist \(CUWL\)/i)
+      const auwlInput = screen.getByLabelText(/accessible unit wait list \(AUWL\)/i)
+      const cuwlInput = screen.getByLabelText(/conventional unit wait list \(CUWL\)/i)
       expect(auwlInput).toBeInTheDocument()
       expect(cuwlInput).toBeInTheDocument()
       expect(auwlInput.closest(".hidden")).not.toBeInTheDocument()
@@ -179,8 +179,8 @@ describe("<FormApplicationData>", () => {
       const statusSelect = screen.getByLabelText(/status/i)
       await userEvent.selectOptions(statusSelect, ApplicationStatusEnum.waitlistDeclined)
 
-      const auwlInput = screen.getByLabelText(/accessible unit waitlist \(AUWL\)/i)
-      const cuwlInput = screen.getByLabelText(/conventional unit waitlist \(CUWL\)/i)
+      const auwlInput = screen.getByLabelText(/accessible unit wait list \(AUWL\)/i)
+      const cuwlInput = screen.getByLabelText(/conventional unit wait list \(CUWL\)/i)
       expect(auwlInput).toBeInTheDocument()
       expect(cuwlInput).toBeInTheDocument()
       expect(auwlInput.closest(".hidden")).not.toBeInTheDocument()
@@ -197,8 +197,8 @@ describe("<FormApplicationData>", () => {
       const statusSelect = screen.getByLabelText(/status/i)
       await userEvent.selectOptions(statusSelect, ApplicationStatusEnum.submitted)
 
-      const auwlInput = screen.getByLabelText(/accessible unit waitlist/i)
-      const cuwlInput = screen.getByLabelText(/conventional unit waitlist/i)
+      const auwlInput = screen.getByLabelText(/accessible unit wait list/i)
+      const cuwlInput = screen.getByLabelText(/conventional unit wait list/i)
 
       // Check if the closest Grid.Cell has the hidden class
       expect(auwlInput.closest(".hidden")).toBeInTheDocument()
