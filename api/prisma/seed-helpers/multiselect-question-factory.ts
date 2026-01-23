@@ -22,6 +22,9 @@ export const multiselectQuestionFactory = (
   const previousMultiselectQuestion = optionalParams?.multiselectQuestion || {};
   const name = optionalParams?.multiselectQuestion?.name || randomName();
   const text = optionalParams?.multiselectQuestion?.text || randomName();
+  const optionsV2 =
+    (optionalParams?.multiselectQuestion?.options as Prisma.MultiselectOptionsCreateManyMultiselectQuestionInput[]) ||
+    multiselectOptionFactoryV2(randomInt(1, 3));
   const baseFields = {
     applicationSection:
       optionalParams?.multiselectQuestion?.applicationSection ||
@@ -52,7 +55,7 @@ export const multiselectQuestionFactory = (
     isExclusive: optionalParams?.multiselectQuestion?.isExclusive ?? false,
     multiselectOptions: {
       createMany: {
-        data: multiselectOptionFactoryV2(randomInt(1, 3)),
+        data: optionsV2,
       },
     },
     name: name,

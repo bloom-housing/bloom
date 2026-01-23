@@ -412,6 +412,8 @@ export const stagingSeed = async (
       simplifiedDCMap,
     ),
   });
+  // NOTE: the previous V1 msq factory had a bug where options aren't actually used
+  // and random data is generated no matter what. I've only fixed this in V2 seeding.
   let cityEmployeeMsqData: Prisma.MultiselectQuestionsCreateInput;
   if (msqV2) {
     cityEmployeeMsqData = multiselectQuestionFactory(
@@ -426,7 +428,7 @@ export const stagingSeed = async (
           options: [
             {
               name: 'At least one member of my household is a city employee',
-              collectAddress: false,
+              shouldCollectAddress: false,
               ordinal: 1,
             },
           ],
@@ -470,19 +472,19 @@ export const stagingSeed = async (
             {
               name: 'At least one member of my household works in the city',
               ordinal: 1,
-              collectAddress: true,
-              collectName: true,
-              collectRelationship: true,
+              shouldCollectAddress: true,
+              shouldCollectName: true,
+              shouldCollectRelationship: true,
               mapLayerId: mapLayer.id,
               validationMethod: ValidationMethod.map,
             },
             {
               name: 'All members of the household work in the city',
               ordinal: 2,
-              collectAddress: true,
-              ValidationMethod: ValidationMethod.none,
-              collectName: false,
-              collectRelationship: false,
+              shouldCollectAddress: true,
+              validationMethod: ValidationMethod.none,
+              shouldCollectName: false,
+              shouldCollectRelationship: false,
             },
           ],
         },
