@@ -157,7 +157,6 @@ export class MultiselectQuestionService {
             })),
           });
         } else if (filter[MultiselectQuestionFilterKeys.status]) {
-          console.log(filter[MultiselectQuestionFilterKeys.status]);
           const builtFilter = buildFilter({
             $comparison: filter.$comparison,
             $include_nulls: false,

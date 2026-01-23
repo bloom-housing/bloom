@@ -67,7 +67,7 @@ resource "aws_secretsmanager_secret" "api_jwt_signing_key" {
     fi
 
     if ! aws secretsmanager put-secret-value \
-         --profile ${var.aws_profile} \
+         ${var.aws_profile != "" ? "--profile ${var.aws_profile}" : ""} \
          --region ${var.aws_region} \
          --secret-id ${self.id} \
          --secret-string "$s"

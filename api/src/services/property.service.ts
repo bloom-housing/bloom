@@ -17,6 +17,7 @@ import PropertyCreate from '../dtos/properties/property-create.dto';
 import { PropertyUpdate } from '../dtos/properties/property-update.dto';
 import { SuccessDTO } from '../dtos/shared/success.dto';
 import { Prisma } from '@prisma/client';
+import { buildFilter } from '../utilities/build-filter';
 
 @Injectable()
 export class PropertyService {
@@ -283,15 +284,29 @@ export class PropertyService {
       });
     }
 
-    if (params.jurisdiction) {
-      filters.push({
-        AND: {
-          jurisdictions: {
-            id: params.jurisdiction,
-          },
-        },
-      });
+    if (!params?.filter?.length) {
+      return {
+        AND: filters,
+      };
     }
+
+    params.filter.forEach((filter) => {
+      const builtFilter = buildFilter({
+        $comparison: filter.$comparison,
+        $include_nulls: false,
+        value: filter.jurisdiction,
+        key: 'jurisdiction',
+        caseSensitive: true,
+      });
+
+      filters.push({
+        OR: builtFilter.map((entry) => ({
+          jurisdictions: {
+            id: entry,
+          },
+        })),
+      });
+    });
 
     return {
       AND: filters,
