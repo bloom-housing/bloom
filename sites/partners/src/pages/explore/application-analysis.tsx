@@ -11,20 +11,23 @@ import PrimaryApplicantSection from "../../components/explore/applicantAndHouseh
 import ReportSummary from "../../components/explore/ReportSummary"
 import { FilteringSlideOut } from "../../components/explore/FilteringSlideOut"
 import {
-  ApiFilters,
-  IncomeHouseholdSizeCrossTab,
   defaultReport,
   lowIncomeAndYounger,
   highIncomeAndOlder,
   veryLowData,
   InsufficientNumberOfApplications,
+} from "../../lib/explore/exploreDataStubs"
+import {
+  ApiFilters,
+  IncomeHouseholdSizeCrossTab,
   ReportData,
-} from "../../lib/explore/data-explorer"
-import { FormValues } from "../../components/explore/filtering/mainForm"
+} from "../../lib/explore/exploreDataTypes"
+import { FormValues } from "../../lib/explore/filterTypes"
 import { useRouter } from "next/router"
 import { ReportProducts } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { AiPermissionModal } from "../../components/explore/aiPermissionModal"
 import { AiInsightsPanel } from "../../components/explore/AIInsightsPanel"
+import { DEFAULT_API_FILTERS, formValuesToApiFilters } from "../../lib/explore/filterDefaults"
 
 const ApplicationAnalysis = () => {
   const router = useRouter()
@@ -61,14 +64,10 @@ const ApplicationAnalysis = () => {
     totalProcessedApplications: 0,
     totalListings: 0,
   })
-  const [appliedFilters, setAppliedFilters] = useState<ApiFilters | undefined>(undefined)
+  const [showInsufficientDataWarning, setShowInsufficientDataWarning] = useState(false)
 
-  // Log applied filters for debugging
-  useEffect(() => {
-    if (appliedFilters) {
-      console.log("Current applied filters:", appliedFilters)
-    }
-  }, [appliedFilters])
+  // Initialize with default filter structure from centralized config
+  const [appliedFilters, setAppliedFilters] = useState<ApiFilters | undefined>(DEFAULT_API_FILTERS)
 
   const fetchData = React.useCallback(
     async (filters?: ApiFilters) => {
@@ -112,6 +111,7 @@ const ApplicationAnalysis = () => {
           }
         } else {
           // No override - fetch from API through the service
+
           const apiData = await dataExplorerService.generateReport({
             ...filters,
             jurisdictionId: profile?.jurisdictions?.[0]?.id,
@@ -125,6 +125,12 @@ const ApplicationAnalysis = () => {
             products: apiData.products,
             reportErrors: apiData.reportErrors || [],
           } as ReportData
+
+          // Check for insufficient data error
+          const hasInsufficientData = apiData.reportErrors?.some((error) =>
+            error.toLowerCase().includes("insufficient data")
+          )
+          setShowInsufficientDataWarning(hasInsufficientData || false)
         }
 
         setChartData({
@@ -146,18 +152,14 @@ const ApplicationAnalysis = () => {
         console.error("Error fetching report data:", error)
       }
     },
-    [dataExplorerService, dataOverride]
+    [dataExplorerService, dataOverride, profile?.jurisdictions]
   )
 
-  useEffect(() => {
-    void fetchData()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  // Refetch data when data override changes
+  // Fetch data on mount and when data override or applied filters change
   useEffect(() => {
     void fetchData(appliedFilters)
-  }, [dataOverride, appliedFilters, fetchData])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dataOverride, appliedFilters, dataExplorerService, profile?.jurisdictions])
 
   // Effect to disable body scroll when filter panel is open
   useEffect(() => {
@@ -174,44 +176,15 @@ const ApplicationAnalysis = () => {
   }, [isFilterPanelOpen])
 
   const handleApplyFilters = (filters: FormValues) => {
-    // Helper function to handle numeric fields - convert NaN to null, keep all other values
-    const getNumericValue = (num: number | null | undefined): number | null =>
-      num !== undefined && !isNaN(num) ? num : null
+    // Use centralized conversion function
+    const apiFilters = formValuesToApiFilters(filters)
 
-    // Helper function to handle string fields - convert empty strings to null
-    const getStringValue = (str: string | null | undefined): string | null =>
-      str && str.trim() !== "" ? str : null
+    setAppliedFilters(apiFilters)
 
-    // Convert FormValues to ApiFilters format - preserve all values, transform NaN and empty strings to null
-    const apiFilters: ApiFilters = {
-      householdSize: filters.householdSize,
-      minIncome: getNumericValue(filters.minIncome),
-      maxIncome: getNumericValue(filters.maxIncome),
-      amiLevels: filters.amiLevels,
-      voucherStatuses: filters.voucherStatuses,
-      accessibilityTypes: filters.accessibilityTypes,
-      races: filters.races,
-      ethnicities: filters.ethnicities,
-      applicantResidentialCounties: filters.applicantResidentialCounties,
-      applicantWorkCounties: filters.applicantWorkCounties,
-      minAge: getNumericValue(filters.minAge),
-      maxAge: getNumericValue(filters.maxAge),
-      startDate: getStringValue(filters.startDate),
-      endDate: getStringValue(filters.endDate),
-    }
-
-    // Remove undefined values
-    const cleanedFilters = Object.fromEntries(
-      Object.entries(apiFilters).filter(([, value]) => value !== undefined)
-    ) as ApiFilters
-
-    setAppliedFilters(cleanedFilters)
-    console.log("Applied filters:", cleanedFilters)
-    void fetchData(cleanedFilters)
     setIsFilterPanelOpen(false)
   }
 
-  const fetchAiInsights = async () => {
+  const fetchAiInsights = React.useCallback(async () => {
     if (!hasUserConsentedToAI || !chartData) {
       return
     }
@@ -220,13 +193,9 @@ const ApplicationAnalysis = () => {
     setInsightError(null)
 
     try {
-      // Send data products for AI analysis
-      // TODO: Optimize data size
       const response = await dataExplorerService.generateInsight({
         body: {
-          data: defaultReport.products,
-          prompt:
-            "Analyze this housing application data and provide key insights about demographics, income distribution, and accessibility needs. Focus on actionable insights for housing policy makers.",
+          data: defaultReport.products, // Using defaultReport data structure for AI insights
         },
       })
 
@@ -237,15 +206,14 @@ const ApplicationAnalysis = () => {
     } finally {
       setIsLoadingInsight(false)
     }
-  }
+  }, [hasUserConsentedToAI, chartData, dataExplorerService])
 
   // Fetch AI insights when panel opens and user has consented
   useEffect(() => {
     if (isAiInsightsPanelOpen && hasUserConsentedToAI && !aiInsight) {
       void fetchAiInsights()
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isAiInsightsPanelOpen, hasUserConsentedToAI, aiInsight])
+  }, [isAiInsightsPanelOpen, hasUserConsentedToAI, aiInsight, fetchAiInsights])
 
   const handleAIConsent = async () => {
     try {
@@ -286,6 +254,24 @@ const ApplicationAnalysis = () => {
               totalListings={filterInformation.totalListings}
             />
 
+            {/* Insufficient Data Warning */}
+            {showInsufficientDataWarning && (
+              <div className="mb-4 p-4 bg-yellow-50 border border-red-300 rounded-lg">
+                <div className="flex items-start">
+                  <div>
+                    <h3 className="text-sm font-semibold text-red-900 mb-1">
+                      Insufficient Data Available
+                    </h3>
+                    <p className="text-sm text-red-700">
+                      There is not enough data available for your current filter settings to
+                      generate a complete report. Please try widening your filter parameters to
+                      include more applications.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+
             {/* Test Data Override Dropdown */}
             <div className="mb-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
               <label
@@ -314,9 +300,9 @@ const ApplicationAnalysis = () => {
 
             {/* Dev AI Consent Override */}
             <div className="mb-4 p-4 bg-purple-50 border border-purple-200 rounded-lg">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <p className="block text-sm font-medium text-gray-700 mb-2">
                 👨‍💻 Dev: AI Consent Override
-              </label>
+              </p>
               <div className="flex gap-2">
                 <Button
                   variant="primary"
@@ -389,7 +375,7 @@ const ApplicationAnalysis = () => {
           {/* GenAI Insights Panel - Positioned alongside main content */}
           {isAiInsightsPanelOpen && (
             <div
-              className="flex-shrink-0 w-80 my-4 bg-white rounded-lg p-6 max-h-[calc(100vh-10rem)] overflow-y-auto sticky shadow top-4 animate-slide-in-right"
+              className="flex-shrink-0 w-80 my-4 bg-white rounded-lg p-6 max-h-[calc(100vh-10rem)] overflow-y-auto shadow top-4 animate-slide-in-right"
               style={{ height: "min-content" }}
             >
               <div className="relative">

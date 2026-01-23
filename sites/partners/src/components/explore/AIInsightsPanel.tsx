@@ -2,42 +2,11 @@ import { Button } from "@bloom-housing/ui-seeds"
 import Markdown from "markdown-to-jsx"
 
 interface AiInsightsPanelProps {
-  insight?: string
+  insight: string
   isLoading?: boolean
   error?: string | null
   onRegenerate?: () => void
 }
-
-const defaultMarkdownContent = `
-# Executive summary
-
-Significant housing-jobs mismatches exist among East Bay affordable housing applicants, with 52.7% commuting between different cities for work.
-
-## Key numbers:
-
-- **Cross-city commuters:** 7,005 applicants (52.7%)
-- **Oakland residential dominance:** 5,129 applicants (38.6%)
-- **Central Corridor employment concentration:** 3,663 workers (52.2%)
-
-# Data summary
-
-## Highest Demand:
-
-Central Corridor (Oakland-Berkeley-Alameda) with 5,997 applicants (45.4%)
-
-## Distribution patterns:
-
-- **Residential:** Central Corridor (45.1%), Peninsula Transition (10.0%), Southern Cluster (11.4%)
-- **Employment:** Central Corridor (52.2%), Southern Cluster (22.0%), Peninsula Transition (10.0%)
-- **Commute:** 52.7% work outside their residential city, 79.5% live in BART-accessible areas
-
-# Cross-analysis:
-
-- Same-city living and working: 6,288 applicants (47.3%)
-- Cross-cluster commuting: 4,278 applicants (32.2%)
-- Largest commute flow: 1,278 from Central Corridor to Southern Cluster
-- BART accessibility: 10,574 applicants (79.5%)
-`
 
 export const AiInsightsPanel = ({
   insight,
@@ -45,7 +14,7 @@ export const AiInsightsPanel = ({
   error,
   onRegenerate,
 }: AiInsightsPanelProps) => {
-  const markdownContent = insight || defaultMarkdownContent
+  const markdownContent = insight
 
   if (isLoading) {
     return (
@@ -99,35 +68,57 @@ export const AiInsightsPanel = ({
       )}
 
       {/* Markdown Content */}
-      <div className="markdown-content mb-6">
+      <div className="markdown-content mb-6 text-sm text-gray-700 leading-relaxed">
         <Markdown
           options={{
             overrides: {
               h1: {
                 component: "h3",
                 props: {
-                  className: "text-xl font-semibold text-gray-900 mb-4 mt-6 first:mt-0",
+                  className: "text-base font-semibold text-gray-900 mb-3 mt-4 first:mt-0",
                 },
               },
               h2: {
                 component: "h4",
                 props: {
-                  className: "text-base font-semibold text-gray-900 mb-3 mt-4",
+                  className: "text-sm font-semibold text-gray-900 mb-2 mt-3",
+                },
+              },
+              h3: {
+                component: "h5",
+                props: {
+                  className: "text-sm font-semibold text-gray-900 mb-2 mt-2",
                 },
               },
               p: {
                 props: {
-                  className: "text-sm text-gray-700 leading-relaxed mb-4",
+                  className: "text-sm text-gray-700 leading-relaxed mb-3",
                 },
               },
               ul: {
                 props: {
-                  className: "text-sm text-gray-700 space-y-2 mb-4",
+                  className: "text-sm text-gray-700 space-y-2 mb-3 list-disc pl-5",
+                },
+              },
+              ol: {
+                props: {
+                  className: "text-sm text-gray-700 space-y-2 mb-3 list-decimal pl-5",
                 },
               },
               li: {
                 props: {
-                  className: "ml-4",
+                  className: "text-sm text-gray-700 leading-relaxed",
+                  style: { display: "list-item" },
+                },
+              },
+              strong: {
+                props: {
+                  className: "font-semibold text-gray-900",
+                },
+              },
+              em: {
+                props: {
+                  className: "italic text-gray-700",
                 },
               },
             },
@@ -136,6 +127,10 @@ export const AiInsightsPanel = ({
           {markdownContent}
         </Markdown>
       </div>
+      <p className="text-xs font-semibold">
+        This content was created using Generative AI and may contain errors or incorrect
+        information.
+      </p>
     </div>
   )
 }

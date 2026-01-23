@@ -3,7 +3,7 @@ import React from "react"
 import { UseFormMethods } from "react-hook-form"
 import { Field as TextInputField, MultiSelectField } from "@bloom-housing/ui-components"
 import { dropdownOptions } from "./options"
-import { FormValues } from "./mainForm"
+import { FormValues } from "../../../lib/explore/filterTypes"
 import { HeadingGroup } from "@bloom-housing/ui-seeds"
 
 interface Props {

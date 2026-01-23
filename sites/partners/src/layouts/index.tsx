@@ -28,7 +28,7 @@ const Layout = (props) => {
     if (process.env.enableHousingReports) {
       // Add Data Explorer menu item
       menuLinks.push({
-        title: "Expore Data",
+        title: "Explore Data",
         href: "/explore",
       })
     }

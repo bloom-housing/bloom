@@ -16,15 +16,6 @@ export class GenerateInsightParams {
   data: ReportProducts;
 
   @Expose()
-  @ApiProperty({
-    type: String,
-    example: 'What are the key trends in this data?',
-    description: 'The prompt to send to the AI for generating insights',
-  })
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
-  prompt: string;
-
-  @Expose()
   @ApiPropertyOptional({
     type: String,
     example: 'jurisdictionId',

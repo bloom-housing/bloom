@@ -218,7 +218,6 @@ describe('DataExplorerService', () => {
         service.generateInsight(
           {
             data: mockProductsData,
-            prompt: 'Test prompt',
             jurisdictionId: 'test-jurisdiction',
           },
           {
@@ -235,7 +234,6 @@ describe('DataExplorerService', () => {
         service.generateInsight(
           {
             data: mockProductsData,
-            prompt: 'Test prompt',
             jurisdictionId: 'test-jurisdiction',
           },
           { user: { id: 'test-user' } } as any,
@@ -253,7 +251,6 @@ describe('DataExplorerService', () => {
       const result = await service.generateInsight(
         {
           data: mockProductsData,
-          prompt: 'Test prompt',
           jurisdictionId: 'test-jurisdiction',
         },
         { user: { id: 'test-user' } } as any,
@@ -276,7 +273,6 @@ describe('DataExplorerService', () => {
       const result = await service.generateInsight(
         {
           data: mockProductsData,
-          prompt: 'Test prompt',
         },
         { user: { id: 'test-user' } } as any,
       );

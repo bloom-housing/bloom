@@ -9,7 +9,7 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts"
-import { IncomeHouseholdSizeCrossTab } from "../../lib/explore/data-explorer"
+import { IncomeHouseholdSizeCrossTab } from "../../lib/explore/exploreDataTypes"
 
 interface HouseholdIncomeReportProps {
   chartData: {
@@ -51,9 +51,6 @@ export default function HouseholdIncomeReport({ chartData }: HouseholdIncomeRepo
     })
     return entry
   })
-
-  console.log("Bar Chart Data:", barChartData)
-  console.log("Chart Data:", chartData)
 
   // Transform data for DataTable with AMI ranges as rows and household sizes as columns
   const tableData = amiRanges.map((range) => {

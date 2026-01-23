@@ -101,24 +101,8 @@ export class DataExplorerService {
         );
       }
 
-      // Helper function to filter out placeholder values like "all", "any", empty strings, and zero
-      const filterPlaceholders = (
-        arr: any[] | undefined | null,
-      ): any[] | null => {
-        if (!arr || !Array.isArray(arr)) return null;
-        const filtered = arr.filter(
-          (val) => val !== 'all' && val !== 'any' && val !== '' && val !== 0,
-        );
-        return filtered.length > 0 ? filtered : null;
-      };
-
-      // Helper to check if a value is meaningful (not null, not 0, not empty string)
-      const isMeaningful = (val: any): boolean => {
-        return val !== null && val !== undefined && val !== '' && val !== 0;
-      };
-
       // Build filter object from params (exclude jurisdictionId and userId)
-      // Map flat structure to nested structure expected by FastAPI
+      // The params already have the nested structure from the DTO
       let filters = null;
       if (params) {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -126,124 +110,11 @@ export class DataExplorerService {
 
         // Only build filters if there are actual filter parameters
         if (Object.keys(filterParams).length > 0) {
-          const householdSizeArray = filterPlaceholders(
-            filterParams.householdSize,
-          );
-          const races = filterPlaceholders(filterParams.races);
-          const ethnicities = filterPlaceholders(filterParams.ethnicities);
-          const accessibilityTypes = filterPlaceholders(
-            filterParams.accessibilityTypes,
-          );
-          const residentialCounties = filterPlaceholders(
-            filterParams.applicantResidentialCounties,
-          );
-          const workCounties = filterPlaceholders(
-            filterParams.applicantWorkCounties,
-          );
-
-          // Convert household size array to HouseholdSize object {min, max}
-          let householdSize = null;
-          if (householdSizeArray && householdSizeArray.length > 0) {
-            const numericSizes = householdSizeArray
-              .map((s) => (typeof s === 'string' ? parseInt(s, 10) : s))
-              .filter((s) => !isNaN(s));
-            if (numericSizes.length > 0) {
-              householdSize = {
-                min: Math.min(...numericSizes),
-                max: Math.max(...numericSizes),
-              };
-            }
-          }
-
-          // Convert income to HouseholdIncome object {min, max}
-          let householdIncome = null;
-          if (
-            isMeaningful(filterParams.minIncome) ||
-            isMeaningful(filterParams.maxIncome)
-          ) {
-            householdIncome = {
-              min: isMeaningful(filterParams.minIncome)
-                ? filterParams.minIncome
-                : null,
-              max: isMeaningful(filterParams.maxIncome)
-                ? filterParams.maxIncome
-                : null,
-            };
-          }
-
-          // income_vouchers is a boolean - true if any voucher filters are present
-          const hasVoucherFilters = filterPlaceholders(
-            filterParams.voucherStatuses,
-          );
-          const incomeVouchers =
-            hasVoucherFilters && hasVoucherFilters.length > 0 ? true : null;
-
-          // Convert age filters to array format expected by FastAPI
-          let ageArray = null;
-          if (
-            isMeaningful(filterParams.minAge) ||
-            isMeaningful(filterParams.maxAge)
-          ) {
-            // Create age range strings
-            const minAge = filterParams.minAge;
-            const maxAge = filterParams.maxAge;
-            if (minAge && maxAge) {
-              ageArray = [`${minAge}-${maxAge}`];
-            } else if (minAge) {
-              ageArray = [`${minAge}+`];
-            } else if (maxAge) {
-              ageArray = [`0-${maxAge}`];
-            }
-          }
-
-          // Build Household object - only include if at least one field is present
-          let household = null;
-          if (
-            householdSize ||
-            householdIncome ||
-            incomeVouchers ||
-            accessibilityTypes
-          ) {
-            household = {
-              household_size: householdSize,
-              household_income: householdIncome,
-              income_vouchers: incomeVouchers,
-              accessibility: accessibilityTypes,
-            };
-          }
-
-          // Build Demographics object - only include if at least one field is present
-          let demographics = null;
-          if (races || ethnicities || ageArray) {
-            demographics = {
-              race: races,
-              ethnicity: ethnicities,
-              age: ageArray,
-            };
-          }
-
-          // Build Geography object - only include if at least one field is present
-          let geography = null;
-          if (residentialCounties || workCounties) {
-            geography = {
-              cities: residentialCounties,
-              census_tracts: null,
-              zip_codes: workCounties,
-            };
-          }
-
           filters = {
-            date_range:
-              isMeaningful(filterParams.startDate) ||
-              isMeaningful(filterParams.endDate)
-                ? {
-                    start_date: filterParams.startDate,
-                    end_date: filterParams.endDate,
-                  }
-                : null,
-            household: household,
-            demographics: demographics,
-            geography: geography,
+            date_range: filterParams.date_range || null,
+            household: filterParams.household || null,
+            demographics: filterParams.demographics || null,
+            geography: filterParams.geography || null,
           };
         }
       }
@@ -383,7 +254,6 @@ export class DataExplorerService {
         `${API_BASE_URL}/api/v1/secure/generate-insight`,
         {
           data: params.data,
-          prompt: params.prompt,
         },
         {
           headers: {

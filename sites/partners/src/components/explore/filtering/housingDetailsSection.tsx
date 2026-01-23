@@ -3,7 +3,7 @@ import React from "react"
 import { UseFormMethods } from "react-hook-form"
 import { MultiSelectField, Field as TextInputField } from "@bloom-housing/ui-components"
 import { dropdownOptions } from "./options"
-import { FormValues } from "./mainForm"
+import { FormValues } from "../../../lib/explore/filterTypes"
 import { HeadingGroup } from "@bloom-housing/ui-seeds"
 
 interface Props {
@@ -59,7 +59,12 @@ export function HouseholdDetailsSection({ form }: Props) {
             type="currency"
             prepend="$"
             validation={{
-              valueAsNumber: true,
+              setValueAs: (value: string) => {
+                if (!value || value === "") return null
+                // Remove commas and parse as number
+                const numericValue = parseFloat(value.toString().replace(/,/g, ""))
+                return isNaN(numericValue) ? null : numericValue
+              },
               validate: {
                 lessThanMax: (value: number) => {
                   const maxIncomeValue = getValues("maxIncome")
@@ -86,7 +91,12 @@ export function HouseholdDetailsSection({ form }: Props) {
             type="currency"
             prepend="$"
             validation={{
-              valueAsNumber: true,
+              setValueAs: (value: string) => {
+                if (!value || value === "") return null
+                // Remove commas and parse as number
+                const numericValue = parseFloat(value.toString().replace(/,/g, ""))
+                return isNaN(numericValue) ? null : numericValue
+              },
               validate: {
                 greaterThanMin: (value: number) => {
                   const minIncomeValue = getValues("minIncome")

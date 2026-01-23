@@ -2,7 +2,7 @@
 import React from "react"
 import { UseFormMethods } from "react-hook-form"
 import { DateField } from "@bloom-housing/ui-components"
-import { FormValues } from "./mainForm"
+import { FormValues } from "../../../lib/explore/filterTypes"
 import { HeadingGroup } from "@bloom-housing/ui-seeds"
 
 interface Props {
@@ -33,10 +33,8 @@ export function DateRangeSection({ form }: Props) {
             required={false}
             setValue={setValue}
             watch={watch}
+            error={errors?.startDate}
           />
-          {errors?.startDate && (
-            <span className="text-red-600 text-sm mt-1">{errors.startDate.message}</span>
-          )}
         </div>
 
         <div className="flex flex-col w-1/2">
@@ -48,10 +46,8 @@ export function DateRangeSection({ form }: Props) {
             required={false}
             setValue={setValue}
             watch={watch}
+            error={errors?.endDate}
           />
-          {errors?.endDate && (
-            <span className="text-red-600 text-sm mt-1">{errors.endDate.message}</span>
-          )}
         </div>
       </div>
     </section>

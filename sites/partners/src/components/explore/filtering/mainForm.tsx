@@ -5,23 +5,8 @@ import { ApplicationDemographicsSection } from "./applicationDemographicsSection
 import { GeographySection } from "./geographySection"
 import { DateRangeSection } from "./dateRangeSection"
 import { Button } from "@bloom-housing/ui-seeds"
-
-export type FormValues = {
-  householdSize: string[]
-  minIncome?: number
-  maxIncome?: number
-  amiLevels: string[]
-  voucherStatuses: string[]
-  accessibilityTypes: string[]
-  races: string[]
-  ethnicities: string[]
-  applicantResidentialCounties: string[]
-  applicantWorkCounties: string[]
-  minAge?: number
-  maxAge?: number
-  startDate?: string
-  endDate?: string
-}
+import { FORM_DEFAULT_VALUES } from "../../../lib/explore/filterDefaults"
+import { FormValues } from "../../../lib/explore/filterTypes"
 
 interface MainFormProps {
   onClose: () => void
@@ -31,52 +16,8 @@ interface MainFormProps {
 export const MainForm = ({ onClose, onApplyFilters }: MainFormProps) => {
   const methods = useForm<FormValues>({
     mode: "onChange",
-    defaultValues: {
-      householdSize: ["all"],
-      amiLevels: ["all"],
-      voucherStatuses: ["any"],
-      accessibilityTypes: ["all"],
-      races: ["all"],
-      ethnicities: ["all"],
-      applicantResidentialCounties: ["all"],
-      applicantWorkCounties: ["all"],
-      minAge: 18,
-      maxAge: undefined,
-      startDate: "",
-      endDate: "",
-      minIncome: undefined,
-      maxIncome: undefined,
-    },
+    defaultValues: FORM_DEFAULT_VALUES,
   })
-
-  // Add validation rules for date fields
-  React.useEffect(() => {
-    methods.register("startDate", {
-      validate: (value: string) => {
-        console.log("startDate", value)
-        if (!value) return true // Allow empty dates
-
-        const endDateValue = methods.getValues("endDate")
-        if (endDateValue && new Date(value) > new Date(endDateValue)) {
-          return "Start date must be before or equal to end date"
-        }
-        return true
-      },
-    })
-
-    methods.register("endDate", {
-      validate: (value: string) => {
-        console.log("endDate", value)
-        if (!value) return true // Allow empty dates
-
-        const startDateValue = methods.getValues("startDate")
-        if (startDateValue && new Date(value) < new Date(startDateValue)) {
-          return "End date must be after or equal to start date"
-        }
-        return true
-      },
-    })
-  }, [methods])
 
   const onSubmit = (data: FormValues) => {
     // Check if there are any validation errors
@@ -87,8 +28,6 @@ export const MainForm = ({ onClose, onApplyFilters }: MainFormProps) => {
       console.error("Form has validation errors:", methods.formState.errors)
       return
     }
-
-    console.log(data)
 
     if (onApplyFilters) {
       onApplyFilters(data)

@@ -3040,71 +3040,77 @@ export class LotteryService {
   }
 }
 
+export interface DateRangeFilter {
+  preset?: "day" | "week" | "month" | "year" | null
+  start_date?: string | null
+  end_date?: string | null
+}
+
+export interface HouseholdIncomeFilter {
+  min?: number | null
+  max?: number | null
+}
+
+export interface HouseholdFilter {
+  household_size?: string[] | null
+  household_income?: HouseholdIncomeFilter | null
+  household_ami?: string[] | null
+  income_vouchers?: boolean | null
+  accessibility?: string[] | null
+}
+
+export interface AgeFilter {
+  min?: number | null
+  max?: number | null
+}
+
+export interface DemographicsFilter {
+  race?: string[] | null
+  ethnicity?: string[] | null
+  age?: AgeFilter | null
+}
+
+export interface GeographyFilter {
+  cities?: string[] | null
+  census_tracts?: string[] | null
+  zip_codes?: string[] | null
+}
+
+export interface ReportFiltersParams {
+  jurisdictionId?: string
+  userId?: string
+  date_range?: DateRangeFilter | null
+  household?: HouseholdFilter | null
+  demographics?: DemographicsFilter | null
+  geography?: GeographyFilter | null
+}
+
 export class DataExplorerService {
   /**
    * Generate a report
    */
   generateReport(
-    params: {
-      /**  */
-      jurisdictionId?: string
-      /**  */
-      userId?: string
-      /** Filter by household size categories */
-      householdSize?: any | null[]
-      /** Minimum household income in USD */
-      minIncome?: number
-      /** Maximum household income in USD */
-      maxIncome?: number
-      /** Area Median Income level categories */
-      amiLevels?: any | null[]
-      /** Housing voucher or subsidy status */
-      voucherStatuses?: any | null[]
-      /** Accessibility accommodation types */
-      accessibilityTypes?: any | null[]
-      /** Racial categories for filtering */
-      races?: any | null[]
-      /** Ethnicity categories for filtering */
-      ethnicities?: any | null[]
-      /** Counties where applicants currently reside */
-      applicantResidentialCounties?: any | null[]
-      /** Counties where applicants work */
-      applicantWorkCounties?: any | null[]
-      /** Minimum age of applicant */
-      minAge?: number
-      /** Maximum age of applicant */
-      maxAge?: number
-      /** Start date for filtering applications (ISO 8601 format) */
-      startDate?: string
-      /** End date for filtering applications (ISO 8601 format) */
-      endDate?: string
-    } = {} as any,
+    params: ReportFiltersParams = {} as any,
     options: IRequestOptions = {}
   ): Promise<DataExplorerReport> {
     return new Promise((resolve, reject) => {
       let url = basePath + "/data-explorer/generate-report"
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-      configs.params = {
-        jurisdictionId: params["jurisdictionId"],
-        userId: params["userId"],
-        householdSize: params["householdSize"],
-        minIncome: params["minIncome"],
-        maxIncome: params["maxIncome"],
-        amiLevels: params["amiLevels"],
-        voucherStatuses: params["voucherStatuses"],
-        accessibilityTypes: params["accessibilityTypes"],
-        races: params["races"],
-        ethnicities: params["ethnicities"],
-        applicantResidentialCounties: params["applicantResidentialCounties"],
-        applicantWorkCounties: params["applicantWorkCounties"],
-        minAge: params["minAge"],
-        maxAge: params["maxAge"],
-        startDate: params["startDate"],
-        endDate: params["endDate"],
-      }
 
-      /** 适配ios13，get请求不允许带body */
+      // Build query parameters - serialize nested objects as JSON strings
+      configs.params = {}
+
+      if (params.jurisdictionId) configs.params.jurisdictionId = params.jurisdictionId
+      if (params.userId) configs.params.userId = params.userId
+
+      // Serialize nested filter objects as JSON strings for query parameters
+      if (params.date_range) configs.params.date_range = JSON.stringify(params.date_range)
+      if (params.household) configs.params.household = JSON.stringify(params.household)
+      if (params.demographics) configs.params.demographics = JSON.stringify(params.demographics)
+      if (params.geography) configs.params.geography = JSON.stringify(params.geography)
+
+      console.log({ configs })
 
       axios(configs, resolve, reject)
     })
@@ -8629,9 +8635,6 @@ export interface DataExplorerReport {
 export interface GenerateInsightParams {
   /** The current data object containing report products */
   data: CombinedDataTypes
-
-  /** The prompt to send to the AI for generating insights */
-  prompt: string
 
   /**  */
   jurisdictionId?: string
