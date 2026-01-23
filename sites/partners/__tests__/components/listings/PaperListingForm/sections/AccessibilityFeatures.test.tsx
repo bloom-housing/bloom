@@ -3,12 +3,12 @@ import { setupServer } from "msw/lib/node"
 import { render, screen, within } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import "@testing-library/jest-dom"
-import AccessibilityFeatures from "../../../../../src/components/listings/PaperListingForm/sections/AccessibilityFeatures"
-import { FormProviderWrapper, mockNextRouter } from "../../../../testUtils"
 import {
   defaultListingFeaturesConfiguration,
   expandedListingFeaturesConfiguration,
-} from "../../../../../../../shared-helpers/__tests__/testHelpers"
+} from "@bloom-housing/shared-helpers/__tests__/testHelpers"
+import AccessibilityFeatures from "../../../../../src/components/listings/PaperListingForm/sections/AccessibilityFeatures"
+import { FormProviderWrapper, mockNextRouter } from "../../../../testUtils"
 
 const server = setupServer()
 

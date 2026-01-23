@@ -5,7 +5,6 @@ import { mockNextRouter, waitFor, within } from "../../../partners/__tests__/tes
 import userEvent from "@testing-library/user-event"
 import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { defaultListingFeaturesConfiguration } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
-import { listing } from "../../../../shared-helpers/__tests__/testHelpers"
 
 window.scrollTo = jest.fn()
 

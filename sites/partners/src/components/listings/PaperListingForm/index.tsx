@@ -461,7 +461,8 @@ const ListingForm = ({
               const fieldName = errorMessage.split(" ")[0]
               const readableError = getReadableErrorMessage(errorMessage)
               if (readableError) {
-                setError(fieldName, { message: readableError })
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                setError(fieldName as any, { message: readableError })
                 if (fieldName === "buildingAddress" || fieldName === "buildingAddress.nested") {
                   const setIfEmpty = (
                     fieldName: string,
@@ -469,7 +470,8 @@ const ListingForm = ({
                     errorMessage: string
                   ) => {
                     if (!fieldValue) {
-                      setError(fieldName, { message: errorMessage })
+                      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                      setError(fieldName as any, { message: errorMessage })
                     }
                   }
                   const address = formData.listingsBuildingAddress
