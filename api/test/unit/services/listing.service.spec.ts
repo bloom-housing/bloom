@@ -6378,7 +6378,7 @@ describe('Testing listing service', () => {
   });
 
   describe('Test closeListings endpoint', () => {
-    it('should call the purge if listings needed to get processed', async () => {
+    it('should call the purge and retireMultiselectQuestions if listings needed to get processed', async () => {
       prisma.listings.findMany = jest.fn().mockResolvedValue([
         {
           id: 'example id1',
@@ -6449,6 +6449,9 @@ describe('Testing listing service', () => {
       expect(prisma.cronJob.findFirst).toHaveBeenCalled();
       expect(prisma.cronJob.update).toHaveBeenCalled();
       process.env.PROXY_URL = undefined;
+      expect(
+        multiselectQuestionServiceMock.retireMultiselectQuestions,
+      ).toHaveBeenCalled();
     });
 
     it('should not call the purge if no listings needed to get processed', async () => {

@@ -3006,6 +3006,7 @@ export class ListingService implements OnModuleInit {
       for (const listing of listingIds) {
         await this.setExpireAfterValueOnApplications(listing);
       }
+      void this.multiselectQuestionService.retireMultiselectQuestions();
     }
 
     return {

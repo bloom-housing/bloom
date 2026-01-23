@@ -176,13 +176,20 @@ describe('Listing Controller Tests', () => {
     'jurisdictions',
   ];
 
-  const constructFullListingData = async (
-    listingId?: string,
-    jurisdictionId?: string,
-    jurisdictionName?: string,
-    useUnitGroups?: boolean,
-    enableV2MSQ?: boolean,
-  ): Promise<ListingCreate | ListingUpdate> => {
+  const constructFullListingData = async (options: {
+    listingId?: string;
+    jurisdictionId?: string;
+    jurisdictionName?: string;
+    useUnitGroups?: boolean;
+    enableV2MSQ?: boolean;
+  }): Promise<ListingCreate | ListingUpdate> => {
+    const {
+      listingId,
+      jurisdictionId,
+      jurisdictionName,
+      useUnitGroups,
+      enableV2MSQ,
+    } = options;
     let jurisdictionA: IdDTO = { id: '' };
 
     if (jurisdictionId) {
@@ -251,7 +258,7 @@ describe('Listing Controller Tests', () => {
       leasingAgentEmail: 'leasingAgent@exygy.com',
       leasingAgentName: 'Leasing Agent',
       leasingAgentPhone: '520-750-8811',
-      name: 'example listing',
+      name: `example listing ${randomName()}`,
       paperApplication: false,
       referralOpportunity: false,
       rentalAssistance: 'rental assistance',
@@ -2196,7 +2203,10 @@ describe('Listing Controller Tests', () => {
         data: listingData,
       });
 
-      const val = await constructFullListingData(listing.id, jurisdictionA.id);
+      const val = await constructFullListingData({
+        listingId: listing.id,
+        jurisdictionId: jurisdictionA.id,
+      });
       val.listingsApplicationMailingAddress = undefined;
 
       const res = await request(app.getHttpServer())
@@ -2221,13 +2231,11 @@ describe('Listing Controller Tests', () => {
         data: listingData,
       });
 
-      const val = await constructFullListingData(
-        listing.id,
-        jurisdictionA.id,
-        undefined,
-        false,
-        true,
-      );
+      const val = await constructFullListingData({
+        listingId: listing.id,
+        jurisdictionId: jurisdictionA.id,
+        enableV2MSQ: true,
+      });
       val.listingsApplicationMailingAddress = undefined;
 
       const res = await request(app.getHttpServer())
@@ -2236,7 +2244,7 @@ describe('Listing Controller Tests', () => {
         .send(val)
         .set('Cookie', adminAccessToken)
         .expect(200);
-      console.log(res);
+
       expect(res.body.id).toEqual(listing.id);
       expect(res.body.name).toEqual(val.name);
       expect(res.body.listingMultiselectQuestions.length).toEqual(1);
@@ -2245,11 +2253,9 @@ describe('Listing Controller Tests', () => {
 
   describe('create endpoint', () => {
     it('should create listing', async () => {
-      const val = await constructFullListingData(
-        undefined,
-        undefined,
-        `create listing ${randomName()}`,
-      );
+      const val = await constructFullListingData({
+        jurisdictionName: `create listing ${randomName()}`,
+      });
 
       const res = await request(app.getHttpServer())
         .post('/listings')
@@ -2272,13 +2278,10 @@ describe('Listing Controller Tests', () => {
     });
 
     it('should create listing with enableV2MSQ as true', async () => {
-      const val = await constructFullListingData(
-        undefined,
-        undefined,
-        `create listing ${randomName()}`,
-        false,
-        true,
-      );
+      const val = await constructFullListingData({
+        jurisdictionName: `create listing ${randomName()}`,
+        enableV2MSQ: true,
+      });
 
       const res = await request(app.getHttpServer())
         .post('/listings')
@@ -2312,11 +2315,9 @@ describe('Listing Controller Tests', () => {
 
     describe('listing deposit type validation', () => {
       it("should create listing when deposit is 'fixedDeposit', and 'depositMin' and 'depositMax' are missing", async () => {
-        const val = await constructFullListingData(
-          undefined,
-          undefined,
-          `create listing ${randomName()}`,
-        );
+        const val = await constructFullListingData({
+          jurisdictionName: `create listing ${randomName()}`,
+        });
 
         const res = await request(app.getHttpServer())
           .post('/listings')
@@ -2346,11 +2347,9 @@ describe('Listing Controller Tests', () => {
       });
 
       it("should fail when deposit is 'fixedDeposit' but 'depositMin' and 'depositMax' are set", async () => {
-        const val = await constructFullListingData(
-          undefined,
-          undefined,
-          `create listing ${randomName()}`,
-        );
+        const val = await constructFullListingData({
+          jurisdictionName: `create listing ${randomName()}`,
+        });
 
         const res = await request(app.getHttpServer())
           .post('/listings')
@@ -2372,11 +2371,9 @@ describe('Listing Controller Tests', () => {
       });
 
       it("should create listing when deposit is 'rangeDeposit', and 'depositValue' is missing", async () => {
-        const val = await constructFullListingData(
-          undefined,
-          undefined,
-          `create listing ${randomName()}`,
-        );
+        const val = await constructFullListingData({
+          jurisdictionName: `create listing ${randomName()}`,
+        });
 
         const res = await request(app.getHttpServer())
           .post('/listings')
@@ -2406,11 +2403,9 @@ describe('Listing Controller Tests', () => {
       });
 
       it("should fail when deposit is 'rangeDeposit' but 'depositValue' is set", async () => {
-        const val = await constructFullListingData(
-          undefined,
-          undefined,
-          `create listing ${randomName()}`,
-        );
+        const val = await constructFullListingData({
+          jurisdictionName: `create listing ${randomName()}`,
+        });
 
         const res = await request(app.getHttpServer())
           .post('/listings')
@@ -2434,12 +2429,10 @@ describe('Listing Controller Tests', () => {
 
     describe('listing unit group rent type validation', () => {
       it("should create listing when unit group rent type is 'fixedRent' and the 'flatRentValueFrom' and 'flatRentValueFrom' are missing", async () => {
-        const val = await constructFullListingData(
-          undefined,
-          undefined,
-          `create listing ${randomName()}`,
-          true,
-        );
+        const val = await constructFullListingData({
+          jurisdictionName: `create listing ${randomName()}`,
+          useUnitGroups: true,
+        });
 
         const res = await request(app.getHttpServer())
           .post('/listings')
@@ -2473,12 +2466,10 @@ describe('Listing Controller Tests', () => {
       });
 
       it("should create listing when unit group rent type is 'rentRange' and the 'flatRentValueFrom' and 'flatRentValueFrom' are set", async () => {
-        const val = await constructFullListingData(
-          undefined,
-          undefined,
-          `create listing ${randomName()}`,
-          true,
-        );
+        const val = await constructFullListingData({
+          jurisdictionName: `create listing ${randomName()}`,
+          useUnitGroups: true,
+        });
 
         const res = await request(app.getHttpServer())
           .post('/listings')
@@ -2514,12 +2505,10 @@ describe('Listing Controller Tests', () => {
       });
 
       it("should fail to create listing when unit group rent type is 'fixedRent' but the 'flatRentValueFrom' and 'flatRentValueFrom' are set", async () => {
-        const val = await constructFullListingData(
-          undefined,
-          undefined,
-          `create listing ${randomName()}`,
-          true,
-        );
+        const val = await constructFullListingData({
+          jurisdictionName: `create listing ${randomName()}`,
+          useUnitGroups: true,
+        });
 
         const res = await request(app.getHttpServer())
           .post('/listings')
@@ -2542,12 +2531,10 @@ describe('Listing Controller Tests', () => {
       });
 
       it("should fail to create listing when unit group rent type is 'rentRange' but the 'flatRentValueFrom' and 'flatRentValueFrom' are missing", async () => {
-        const val = await constructFullListingData(
-          undefined,
-          undefined,
-          `create listing ${randomName()}`,
-          true,
-        );
+        const val = await constructFullListingData({
+          jurisdictionName: `create listing ${randomName()}`,
+          useUnitGroups: true,
+        });
 
         const res = await request(app.getHttpServer())
           .post('/listings')
@@ -2941,7 +2928,10 @@ describe('Listing Controller Tests', () => {
       const partnerAccessToken = res.header?.['set-cookie'].find((cookie) =>
         cookie.startsWith('access-token='),
       );
-      const val = await constructFullListingData(listing.id, jurisdictionA.id);
+      const val = await constructFullListingData({
+        listingId: listing.id,
+        jurisdictionId: jurisdictionA.id,
+      });
       val.status = ListingsStatusEnum.pendingReview;
       const putPendingApprovalResponse = await request(app.getHttpServer())
         .put(`/listings/${listing.id}`)
@@ -2978,7 +2968,10 @@ describe('Listing Controller Tests', () => {
     });
 
     it('update status to listing approved and notify appropriate users', async () => {
-      const val = await constructFullListingData(listing.id, jurisdictionA.id);
+      const val = await constructFullListingData({
+        listingId: listing.id,
+        jurisdictionId: jurisdictionA.id,
+      });
       val.status = ListingsStatusEnum.active;
       const putApprovedResponse = await request(app.getHttpServer())
         .put(`/listings/${listing.id}`)
@@ -3006,7 +2999,10 @@ describe('Listing Controller Tests', () => {
     });
 
     it('update status to changes requested and notify appropriate users', async () => {
-      const val = await constructFullListingData(listing.id, jurisdictionA.id);
+      const val = await constructFullListingData({
+        listingId: listing.id,
+        jurisdictionId: jurisdictionA.id,
+      });
       val.status = ListingsStatusEnum.changesRequested;
       const putChangesRequestedResponse = await request(app.getHttpServer())
         .put(`/listings/${listing.id}`)
