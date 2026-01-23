@@ -18,8 +18,7 @@ async function main() {
   const {
     values: { environment, jurisdictionName },
   } = parseArgs({ options });
-  // jurisdictionFactory provides a fallback base url if we pass it the empty string.
-  const publicSiteBaseURL = env.DBSEED_PUBLIC_SITE_BASE_URL ? env.DBSEED_PUBLIC_SITE_BASE_URL : ''
+  const publicSiteBaseURL = env.DBSEED_PUBLIC_SITE_BASE_URL
 
   switch (environment) {
     case 'production':
