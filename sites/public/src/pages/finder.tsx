@@ -8,7 +8,6 @@ import RentalsFinder from "../components/finder/RentalsFinder"
 import Layout from "../layouts/application"
 import { fetchJurisdictionByName, fetchMultiselectProgramData } from "../lib/hooks"
 import { isFeatureFlagOn } from "../lib/helpers"
-import { jurisdiction } from "../../../../shared-helpers/__tests__/testHelpers"
 
 export interface FinderProps {
   jurisdiction: Jurisdiction
@@ -27,7 +26,7 @@ export default function Finder(props: FinderProps) {
       <RentalsFinder
         activeFeatureFlags={activeFeatureFlags}
         multiselectData={props.multiselectData}
-        listingFeaturesConfiguration={jurisdiction.listingFeaturesConfiguration}
+        listingFeaturesConfiguration={props.jurisdiction.listingFeaturesConfiguration}
       />
     </Layout>
   )
