@@ -77,4 +77,4 @@ jobs:
           labels: |
             org.opencontainers.image.source=https://github.com/${{ github.repository }}
             bloom.git.built-from-branch=${{ github.ref_name }}
-            bloom.git.build-from-sha=${{ github.sha }}
+            bloom.git.built-from-sha=${{ github.sha }}
