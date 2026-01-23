@@ -88,29 +88,28 @@ const PreferenceEditDrawer = ({
   const { register, getValues, trigger, errors, clearErrors, setError, watch, formState } =
     useForm()
 
-  const { mapLayers } = useMapLayersList(watch("jurisdictionId"))
-
+  const jurisdictionId = watch("jurisdictionId")
+  const { mapLayers } = useMapLayersList(jurisdictionId)
   const isAdditionalDetailsEnabled = profile?.jurisdictions?.some(
     (jurisdiction) => jurisdiction.enableGeocodingPreferences
   )
-
+  const shouldCollectAddress = watch("shouldCollectAddress")
+  const validationMethod = watch("validationMethod")
   const shouldCollectAddressExpand =
-    ((optionData?.shouldCollectAddress && watch("shouldCollectAddress") === undefined) ||
-      watch("shouldCollectAddress") === YesNoEnum.yes) &&
+    ((optionData?.shouldCollectAddress && shouldCollectAddress === undefined) ||
+      shouldCollectAddress === YesNoEnum.yes) &&
     isAdditionalDetailsEnabled
   const isValidationRadiusVisible =
-    profile?.jurisdictions.find((juris) => juris.id === watch("jurisdictionId"))
+    profile?.jurisdictions.find((juris) => juris.id === jurisdictionId)
       ?.enableGeocodingRadiusMethod ||
     profile?.jurisdictions.every((juris) => juris.enableGeocodingRadiusMethod)
   const radiusExpand =
     (optionData?.validationMethod === ValidationMethodEnum.radius &&
-      watch("validationMethod") === undefined) ||
-    watch("validationMethod") === ValidationMethodEnum.radius
-
+      validationMethod === undefined) ||
+    validationMethod === ValidationMethodEnum.radius
   const mapExpand =
-    (optionData?.validationMethod === ValidationMethodEnum.map &&
-      watch("validationMethod") === undefined) ||
-    watch("validationMethod") === ValidationMethodEnum.map
+    (optionData?.validationMethod === ValidationMethodEnum.map && validationMethod === undefined) ||
+    validationMethod === ValidationMethodEnum.map
 
   // Update local state with dragged state
   useEffect(() => {
