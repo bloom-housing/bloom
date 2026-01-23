@@ -28,7 +28,7 @@ export class AgencyService {
    * @returns A paginated DTO containing the matching agencies and pagination metadata.
    */
   async list(params: AgencyQueryParams) {
-    const count = await this.prisma.agencies.count();
+    const count = await this.prisma.agency.count();
 
     let page = params.page;
 
@@ -38,7 +38,7 @@ export class AgencyService {
       }
     }
 
-    const agenciesRaw = await this.prisma.agencies.findMany({
+    const agenciesRaw = await this.prisma.agency.findMany({
       skip: calculateSkip(params.limit, page),
       take: calculateTake(params.limit),
       include: {
@@ -67,18 +67,7 @@ export class AgencyService {
       throw new BadRequestException('An agency ID must be provided');
     }
 
-    const agencyRaw = await this.prisma.agencies.findUnique({
-      where: {
-        id: agencyId,
-      },
-      include: {
-        jurisdictions: true,
-      },
-    });
-
-    if (!agencyRaw) {
-      throw new NotFoundException(`Agency with ID: ${agencyId} was not found`);
-    }
+    const agencyRaw = await this.findOrThrowAgency(agencyId);
 
     return mapTo(Agency, agencyRaw);
   }
@@ -96,22 +85,9 @@ export class AgencyService {
       throw new BadRequestException('A valid jurisdiction must be provided');
     }
 
-    const rawJurisdiction = await this.prisma.jurisdictions.findUnique({
-      select: {
-        id: true,
-      },
-      where: {
-        id: agencyDto.jurisdictions.id,
-      },
-    });
+    await this.findOrThrowJurisdiction(agencyDto.jurisdictions.id);
 
-    if (!rawJurisdiction) {
-      throw new NotFoundException(
-        `A jurisdiction with ID: ${agencyDto.jurisdictions.id} was not found`,
-      );
-    }
-
-    const rawAgency = await this.prisma.agencies.create({
+    const rawAgency = await this.prisma.agency.create({
       data: {
         ...agencyDto,
         jurisdictions: {
@@ -141,34 +117,11 @@ export class AgencyService {
       throw new BadRequestException('A valid jurisdiction must be provided');
     }
 
-    const rawJurisdiction = await this.prisma.jurisdictions.findUnique({
-      select: {
-        id: true,
-      },
-      where: {
-        id: agencyDto.jurisdictions.id,
-      },
-    });
+    await this.findOrThrowJurisdiction(agencyDto.jurisdictions.id);
 
-    if (!rawJurisdiction) {
-      throw new NotFoundException(
-        `A jurisdiction with ID: ${agencyDto.jurisdictions.id} was not found`,
-      );
-    }
+    await this.findOrThrowAgency(agencyDto.id);
 
-    const exitingAgency = await this.prisma.agencies.findUnique({
-      where: {
-        id: agencyDto.id,
-      },
-    });
-
-    if (!exitingAgency) {
-      throw new NotFoundException(
-        `An agency with id: ${agencyDto.id} was not found`,
-      );
-    }
-
-    const rawAgency = await this.prisma.agencies.update({
+    const rawAgency = await this.prisma.agency.update({
       data: {
         ...agencyDto,
         jurisdictions: {
@@ -200,22 +153,9 @@ export class AgencyService {
       throw new BadRequestException('A agency ID must be provided');
     }
 
-    const agencyData = await this.prisma.agencies.findUnique({
-      where: {
-        id: idDto.id,
-      },
-      include: {
-        jurisdictions: true,
-      },
-    });
+    await this.findOrThrowAgency(idDto.id);
 
-    if (!agencyData) {
-      throw new NotFoundException(
-        `The agency with ID: ${idDto.id} was not found`,
-      );
-    }
-
-    await this.prisma.agencies.delete({
+    await this.prisma.agency.delete({
       where: {
         id: idDto.id,
       },
@@ -224,5 +164,41 @@ export class AgencyService {
     return {
       success: true,
     } as SuccessDTO;
+  }
+
+  async findOrThrowJurisdiction(jurisdictionId: string): Promise<void> {
+    const rawJurisdiction = await this.prisma.jurisdictions.findUnique({
+      select: {
+        id: true,
+      },
+      where: {
+        id: jurisdictionId,
+      },
+    });
+
+    if (!rawJurisdiction) {
+      throw new NotFoundException(
+        `A jurisdiction with ID: ${jurisdictionId} was not found`,
+      );
+    }
+  }
+
+  async findOrThrowAgency(agencyId: string): Promise<Agency> {
+    const exitingAgency = await this.prisma.agency.findUnique({
+      where: {
+        id: agencyId,
+      },
+      include: {
+        jurisdictions: true,
+      },
+    });
+
+    if (!exitingAgency) {
+      throw new NotFoundException(
+        `An agency with id: ${agencyId} was not found`,
+      );
+    }
+
+    return exitingAgency;
   }
 }

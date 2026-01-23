@@ -174,12 +174,36 @@ class Listing extends AbstractDTO {
   region?: RegionEnum;
 
   @Expose()
+  @ValidateListingPublish('configurableRegion', {
+    groups: [ValidationsGroupsEnum.default],
+  })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  configurableRegion?: string;
+
+  @Expose()
   @ValidateListingPublish('petPolicy', {
     groups: [ValidationsGroupsEnum.default],
   })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   petPolicy?: string;
+
+  @Expose()
+  @ValidateListingPublish('allowsDogs', {
+    groups: [ValidationsGroupsEnum.default],
+  })
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  allowsDogs?: boolean;
+
+  @Expose()
+  @ValidateListingPublish('allowsCats', {
+    groups: [ValidationsGroupsEnum.default],
+  })
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  allowsCats?: boolean;
 
   @Expose()
   @ValidateListingPublish('smokingPolicy', {

@@ -1488,7 +1488,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
         },
       };
 
-      const res = await prisma.agencies.create({
+      const res = await prisma.agency.create({
         data: {
           name: agencyData.name,
           jurisdictions: {
@@ -1506,7 +1506,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
 
     it('should error as unauthorized  for list endpoint', async () => {
       await request(app.getHttpServer())
-        .get(`/agencies`)
+        .get(`/agency`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
         .expect(401);
@@ -1518,7 +1518,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
       }
 
       await request(app.getHttpServer())
-        .get(`/agencies/${agencyId}`)
+        .get(`/agency/${agencyId}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
         .expect(401);
@@ -1533,7 +1533,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
       };
 
       await request(app.getHttpServer())
-        .post('/agencies')
+        .post('/agency')
         .send(agencyData)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
@@ -1554,7 +1554,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
       };
 
       await request(app.getHttpServer())
-        .put(`/agencies`)
+        .put(`/agency`)
         .send(agencyUpdateData)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
@@ -1569,7 +1569,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
         },
       };
 
-      const res = await prisma.agencies.create({
+      const res = await prisma.agency.create({
         data: {
           name: agencyData.name,
           jurisdictions: {
@@ -1582,7 +1582,7 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
       const deleteId = res.id;
 
       await request(app.getHttpServer())
-        .delete(`/agencies`)
+        .delete(`/agency`)
         .send({
           id: deleteId,
         } as IdDTO)

@@ -12,7 +12,7 @@ import { stringify } from 'querystring';
 import { randomUUID } from 'crypto';
 import AgencyCreate from '../../src/dtos/agency/agency-create.dto';
 import { AgencyUpdate } from '../../src/dtos/agency/agency-update.dto';
-import { IdDTO } from 'src/dtos/shared/id.dto';
+import { IdDTO } from '../../src/dtos/shared/id.dto';
 
 describe('Agencies Controller Tests', () => {
   let app: INestApplication;
@@ -55,7 +55,7 @@ describe('Agencies Controller Tests', () => {
 
     jurisdictionId = jurisdiction.id;
 
-    const agencyA = await prisma.agencies.create({
+    const agencyA = await prisma.agency.create({
       data: {
         name: 'Agency A',
         jurisdictions: {
@@ -67,7 +67,7 @@ describe('Agencies Controller Tests', () => {
     });
     agencyAId = agencyA.id;
 
-    await prisma.agencies.create({
+    await prisma.agency.create({
       data: {
         name: 'Agency B',
         jurisdictions: {
@@ -87,7 +87,7 @@ describe('Agencies Controller Tests', () => {
   describe('list endpoint', () => {
     it('should get default list of agencies when no params are sent', async () => {
       const res = await request(app.getHttpServer())
-        .get('/agencies')
+        .get('/agency')
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
         .expect(200);
@@ -118,7 +118,7 @@ describe('Agencies Controller Tests', () => {
       };
 
       const res = await request(app.getHttpServer())
-        .get(`/agencies?${stringify(queryParams as any)}`)
+        .get(`/agency?${stringify(queryParams as any)}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
         .expect(200);
@@ -140,7 +140,7 @@ describe('Agencies Controller Tests', () => {
     it.skip('should throw error when agency is not found', async () => {
       const randomId = randomUUID();
       const res = await request(app.getHttpServer())
-        .get(`/agencies/${randomId}`)
+        .get(`/agency/${randomId}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
         .expect(404);
@@ -152,7 +152,7 @@ describe('Agencies Controller Tests', () => {
 
     it.skip('should return the agency entry by its ID', async () => {
       let res = await request(app.getHttpServer())
-        .get('/agencies?limit=1')
+        .get('/agency?limit=1')
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
         .expect(200);
@@ -163,7 +163,7 @@ describe('Agencies Controller Tests', () => {
       const { id, createdAt, updatedAt, ...expectedData } = res.body.items[0];
 
       res = await request(app.getHttpServer())
-        .get(`/agencies/${id}`)
+        .get(`/agency/${id}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
         .expect(200);
@@ -181,7 +181,7 @@ describe('Agencies Controller Tests', () => {
   describe('create endpoint', () => {
     it('should throw error when name field is missing', async () => {
       const res = await request(app.getHttpServer())
-        .post('/agencies')
+        .post('/agency')
         .send({})
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
@@ -193,7 +193,7 @@ describe('Agencies Controller Tests', () => {
 
     it('should throw error when jurisdiction ID is missing', async () => {
       const res = await request(app.getHttpServer())
-        .post('/agencies')
+        .post('/agency')
         .send({
           name: 'Agency C',
         })
@@ -207,7 +207,7 @@ describe('Agencies Controller Tests', () => {
     it('should throw error when jurisdiction is not found', async () => {
       const randomID = randomUUID();
       const res = await request(app.getHttpServer())
-        .post('/agencies')
+        .post('/agency')
         .send({
           name: 'Agency C',
           jurisdictions: {
@@ -232,7 +232,7 @@ describe('Agencies Controller Tests', () => {
       };
 
       const res = await request(app.getHttpServer())
-        .post('/agencies')
+        .post('/agency')
         .send(body)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
@@ -253,7 +253,7 @@ describe('Agencies Controller Tests', () => {
   describe('update endpoint', () => {
     it('should throw error when no agency ID is given', async () => {
       const res = await request(app.getHttpServer())
-        .put('/agencies')
+        .put('/agency')
         .send({
           name: 'Updated Name',
         })
@@ -267,7 +267,7 @@ describe('Agencies Controller Tests', () => {
 
     it('should throw error when jurisdiction is not given', async () => {
       const res = await request(app.getHttpServer())
-        .put('/agencies')
+        .put('/agency')
         .send({
           id: agencyAId,
           name: 'Updated Name',
@@ -282,7 +282,7 @@ describe('Agencies Controller Tests', () => {
     it('should throw error when jurisdiction is not found', async () => {
       const randomId = randomUUID();
       const res = await request(app.getHttpServer())
-        .put('/agencies')
+        .put('/agency')
         .send({
           id: agencyAId,
           name: 'Updated Name',
@@ -302,7 +302,7 @@ describe('Agencies Controller Tests', () => {
     it('should throw error when given ID does not exist', async () => {
       const randomId = randomUUID();
       const res = await request(app.getHttpServer())
-        .put('/agencies')
+        .put('/agency')
         .send({
           id: randomId,
           name: 'Updated Name',
@@ -329,7 +329,7 @@ describe('Agencies Controller Tests', () => {
       };
 
       const res = await request(app.getHttpServer())
-        .put('/agencies')
+        .put('/agency')
         .send(updateDto)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
@@ -349,7 +349,7 @@ describe('Agencies Controller Tests', () => {
   describe('delete endpoint', () => {
     it('should throw error when no agency ID is given', async () => {
       const res = await request(app.getHttpServer())
-        .delete('/agencies')
+        .delete('/agency')
         .send()
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
@@ -361,7 +361,7 @@ describe('Agencies Controller Tests', () => {
     it('should throw error when agency ID does not exist', async () => {
       const randId = randomUUID();
       const res = await request(app.getHttpServer())
-        .delete('/agencies')
+        .delete('/agency')
         .send({
           id: randId,
         })
@@ -370,13 +370,13 @@ describe('Agencies Controller Tests', () => {
         .expect(404);
 
       expect(res.body.message).toBe(
-        `The agency with ID: ${randId} was not found`,
+        `An agency with id: ${randId} was not found`,
       );
     });
 
     it('should succeed deleting a given agency entry', async () => {
       await request(app.getHttpServer())
-        .delete('/agencies')
+        .delete('/agency')
         .send({
           id: agencyAId,
         } as IdDTO)

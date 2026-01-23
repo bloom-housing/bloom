@@ -29,12 +29,12 @@ p, jurisdictionAdmin, properties, true, read
 p, limitedJurisdictionAdmin, properties, true, read
 p, partner, properties, true, read
 
-p, admin, agencies, true, .*
-p, supportAdmin, agencies, true, read
-p, jurisdictionAdmin, agencies, true, read
-p, limitedJurisdictionAdmin, agencies, true, read
-p, partner, agencies, true, read
-p, user, agencies, true, read,
+p, admin, agency, true, .*
+p, supportAdmin, agency, true, read
+p, jurisdictionAdmin, agency, true, read
+p, limitedJurisdictionAdmin, agency, true, read
+p, partner, agency, true, read
+p, user, agency, true, read,
 
 p, admin, applicationMethod, true, .*
 p, supportAdmin, applicationMethod, true, .*

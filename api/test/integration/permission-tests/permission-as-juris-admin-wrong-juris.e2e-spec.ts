@@ -1582,7 +1582,7 @@ describe('Testing Permissioning of endpoints as Jurisdictional Admin in the wron
         },
       };
 
-      const res = await prisma.agencies.create({
+      const res = await prisma.agency.create({
         data: {
           name: agencyData.name,
           jurisdictions: {
@@ -1600,7 +1600,7 @@ describe('Testing Permissioning of endpoints as Jurisdictional Admin in the wron
 
     it('should succeed for list endpoint', async () => {
       await request(app.getHttpServer())
-        .get(`/agencies`)
+        .get(`/agency`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
         .expect(200);
@@ -1612,7 +1612,7 @@ describe('Testing Permissioning of endpoints as Jurisdictional Admin in the wron
       }
 
       await request(app.getHttpServer())
-        .get(`/agencies/${agencyId}`)
+        .get(`/agency/${agencyId}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
         .expect(200);
@@ -1627,7 +1627,7 @@ describe('Testing Permissioning of endpoints as Jurisdictional Admin in the wron
       };
 
       await request(app.getHttpServer())
-        .post('/agencies')
+        .post('/agency')
         .send(agencyData)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
@@ -1648,7 +1648,7 @@ describe('Testing Permissioning of endpoints as Jurisdictional Admin in the wron
       };
 
       await request(app.getHttpServer())
-        .put(`/agencies`)
+        .put(`/agency`)
         .send(agencyUpdateData)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
@@ -1663,7 +1663,7 @@ describe('Testing Permissioning of endpoints as Jurisdictional Admin in the wron
         },
       };
 
-      const res = await prisma.agencies.create({
+      const res = await prisma.agency.create({
         data: {
           name: agencyData.name,
           jurisdictions: {
@@ -1676,7 +1676,7 @@ describe('Testing Permissioning of endpoints as Jurisdictional Admin in the wron
       const deleteId = res.id;
 
       await request(app.getHttpServer())
-        .delete(`/agencies`)
+        .delete(`/agency`)
         .send({
           id: deleteId,
         } as IdDTO)
