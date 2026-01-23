@@ -826,6 +826,8 @@ describe('Testing application service', () => {
       userId: requestingUser.id,
       confirmationCode: mockValue.confirmationCode,
       updatedAt: mockValue.updatedAt,
+      status: mockValue.status,
+      markedAsDuplicate: mockValue.markedAsDuplicate,
       listings: {
         id: randomUUID(),
         name: 'listing name',
@@ -846,6 +848,8 @@ describe('Testing application service', () => {
       userId: true,
       confirmationCode: true,
       updatedAt: true,
+      status: true,
+      markedAsDuplicate: true,
       applicationLotteryPositions: {
         select: {
           id: true,
@@ -1627,7 +1631,9 @@ describe('Testing application service', () => {
           jurisdictions: { include: { featureFlags: true } },
           listingsBuildingAddress: true,
           listingMultiselectQuestions: {
-            include: { multiselectQuestions: true },
+            include: {
+              multiselectQuestions: { include: { multiselectOptions: true } },
+            },
           },
           unitGroups: true,
         },
@@ -1859,7 +1865,9 @@ describe('Testing application service', () => {
           jurisdictions: { include: { featureFlags: true } },
           listingsBuildingAddress: true,
           listingMultiselectQuestions: {
-            include: { multiselectQuestions: true },
+            include: {
+              multiselectQuestions: { include: { multiselectOptions: true } },
+            },
           },
           unitGroups: true,
         },
@@ -2080,6 +2088,9 @@ describe('Testing application service', () => {
       prisma.applicationSelections.create = jest.fn().mockResolvedValue({
         id: randomUUID(),
       });
+      prisma.applicationSelectionOptions.update = jest
+        .fn()
+        .mockResolvedValue(null);
 
       const exampleAddress = addressFactory() as AddressCreate;
       const dto = mockCreateApplicationData(
@@ -2102,7 +2113,9 @@ describe('Testing application service', () => {
           jurisdictions: { include: { featureFlags: true } },
           listingsBuildingAddress: true,
           listingMultiselectQuestions: {
-            include: { multiselectQuestions: true },
+            include: {
+              multiselectQuestions: { include: { multiselectOptions: true } },
+            },
           },
           unitGroups: true,
         },
@@ -2376,7 +2389,9 @@ describe('Testing application service', () => {
           jurisdictions: { include: { featureFlags: true } },
           listingsBuildingAddress: true,
           listingMultiselectQuestions: {
-            include: { multiselectQuestions: true },
+            include: {
+              multiselectQuestions: { include: { multiselectOptions: true } },
+            },
           },
           unitGroups: true,
         },
@@ -2425,7 +2440,9 @@ describe('Testing application service', () => {
           jurisdictions: { include: { featureFlags: true } },
           listingsBuildingAddress: true,
           listingMultiselectQuestions: {
-            include: { multiselectQuestions: true },
+            include: {
+              multiselectQuestions: { include: { multiselectOptions: true } },
+            },
           },
           unitGroups: true,
         },
@@ -2480,7 +2497,9 @@ describe('Testing application service', () => {
           jurisdictions: { include: { featureFlags: true } },
           listingsBuildingAddress: true,
           listingMultiselectQuestions: {
-            include: { multiselectQuestions: true },
+            include: {
+              multiselectQuestions: { include: { multiselectOptions: true } },
+            },
           },
           unitGroups: true,
         },

@@ -42,6 +42,10 @@ export const getExportHeaders = (
     user.jurisdictions,
     FeatureFlagEnum.disableWorkInRegion,
   );
+  const enableApplicationStatus = doAnyJurisdictionHaveFeatureFlagSet(
+    user.jurisdictions,
+    FeatureFlagEnum.enableApplicationStatus,
+  );
 
   const headers: CsvHeader[] = [
     {
@@ -83,6 +87,34 @@ export const getExportHeaders = (
         format: (val: string): string =>
           formatLocalDate(val, dateFormat, timeZone ?? process.env.TIME_ZONE),
       },
+    ],
+  );
+
+  if (enableApplicationStatus) {
+    headers.push(
+      ...[
+        {
+          path: 'status',
+          label: 'Application Status',
+        },
+        {
+          path: 'manualLotteryPositionNumber',
+          label: 'Lottery Position Number',
+        },
+        {
+          path: 'accessibleUnitWaitlistNumber',
+          label: 'Waitlist Position (Accessible Unit)',
+        },
+        {
+          path: 'conventionalUnitWaitlistNumber',
+          label: 'Waitlist Position (Conventional Unit)',
+        },
+      ],
+    );
+  }
+
+  headers.push(
+    ...[
       {
         path: 'applicant.firstName',
         label: 'Primary Applicant First Name',

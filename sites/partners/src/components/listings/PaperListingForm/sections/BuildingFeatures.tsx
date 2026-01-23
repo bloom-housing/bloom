@@ -1,6 +1,6 @@
 import React, { useMemo, useEffect } from "react"
 import { useFormContext } from "react-hook-form"
-import { t, Textarea, FieldGroup } from "@bloom-housing/ui-components"
+import { t, Textarea, FieldGroup, Field } from "@bloom-housing/ui-components"
 import { Grid } from "@bloom-housing/ui-seeds"
 import { listingFeatures } from "@bloom-housing/shared-helpers"
 import { ListingFeaturesCreate } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -10,6 +10,8 @@ import styles from "../ListingForm.module.scss"
 
 type BuildingFeaturesProps = {
   enableAccessibilityFeatures?: boolean
+  enablePetPolicyCheckbox?: boolean
+  enableParkingFee?: boolean
   enableSmokingPolicyRadio?: boolean
   existingFeatures: ListingFeaturesCreate
   requiredFields: string[]
@@ -19,7 +21,7 @@ const BuildingFeatures = (props: BuildingFeaturesProps) => {
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, setValue, errors, clearErrors } = formMethods
+  const { register, setValue, errors, clearErrors, getValues } = formMethods
 
   const featureOptions = useMemo(() => {
     return listingFeatures.map((item) => ({
@@ -93,19 +95,43 @@ const BuildingFeatures = (props: BuildingFeaturesProps) => {
             />
           </Grid.Cell>
           <Grid.Cell>
-            <Textarea
-              fullWidth={true}
-              placeholder={""}
-              register={register}
-              maxLength={600}
-              {...defaultFieldProps(
-                "petPolicy",
-                t("t.petsPolicy"),
-                props.requiredFields,
-                errors,
-                clearErrors
-              )}
-            />
+            {props.enablePetPolicyCheckbox ? (
+              <FieldGroup
+                type="checkbox"
+                name="petPolicyPreferences"
+                groupLabel={t("listings.petPolicyQuestion")}
+                register={register}
+                fieldLabelClassName={styles["label-option"]}
+                fields={[
+                  {
+                    id: "allowsDogs",
+                    label: t("listings.allowsDogs"),
+                    value: "allowsDogs",
+                    defaultChecked: getValues("allowsDogs"),
+                  },
+                  {
+                    id: "allowsCats",
+                    label: t("listings.allowsCats"),
+                    value: "allowsCats",
+                    defaultChecked: getValues("allowsCats"),
+                  },
+                ]}
+              />
+            ) : (
+              <Textarea
+                fullWidth={true}
+                placeholder={""}
+                register={register}
+                maxLength={600}
+                {...defaultFieldProps(
+                  "petPolicy",
+                  t("t.petsPolicy"),
+                  props.requiredFields,
+                  errors,
+                  clearErrors
+                )}
+              />
+            )}
           </Grid.Cell>
         </Grid.Row>
         <Grid.Row>
@@ -173,6 +199,24 @@ const BuildingFeatures = (props: BuildingFeaturesProps) => {
             )}
           </Grid.Cell>
         </Grid.Row>
+        {props.enableParkingFee && (
+          <Grid.Row columns={3}>
+            <Grid.Cell>
+              <Field
+                register={register}
+                type={"currency"}
+                prepend={"$"}
+                {...defaultFieldProps(
+                  "parkingFee",
+                  t("t.parkingFee"),
+                  props.requiredFields,
+                  errors,
+                  clearErrors
+                )}
+              />
+            </Grid.Cell>
+          </Grid.Row>
+        )}
         {!props.enableAccessibilityFeatures ? null : (
           <Grid.Row>
             <FieldGroup

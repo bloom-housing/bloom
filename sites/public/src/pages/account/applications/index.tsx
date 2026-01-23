@@ -20,7 +20,15 @@ const AllApplications = ({ jurisdiction }: { jurisdiction: Jurisdiction }) => {
     }
   })
 
-  return <ApplicationsView filterType={ApplicationsIndexEnum.all} />
+  return (
+    <ApplicationsView
+      filterType={ApplicationsIndexEnum.all}
+      enableApplicationStatus={isFeatureFlagOn(
+        jurisdiction,
+        FeatureFlagEnum.enableApplicationStatus
+      )}
+    />
+  )
 }
 
 export default AllApplications

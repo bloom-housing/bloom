@@ -185,12 +185,34 @@ export const getUtilitiesIncluded = (listing: Listing) => {
 export const getFeatures = (
   listing: Listing,
   jurisdiction: Jurisdiction
-): { heading: string; subheading: string }[] => {
+): { heading: string; subheading?: string; content?: React.ReactNode }[] => {
   const features = []
   if (listing.yearBuilt) {
     features.push({ heading: t("t.built"), subheading: listing.yearBuilt })
   }
-  if (listing.petPolicy) {
+  const enablePetPolicyCheckbox = isFeatureFlagOn(
+    jurisdiction,
+    FeatureFlagEnum.enablePetPolicyCheckbox
+  )
+  if (enablePetPolicyCheckbox && (listing.allowsDogs || listing.allowsCats)) {
+    const petPolicy = []
+    if (listing.allowsDogs) petPolicy.push(t("listings.allowsDogs"))
+    if (listing.allowsCats) petPolicy.push(t("listings.allowsCats"))
+    if (petPolicy.length > 0) {
+      features.push({
+        heading: t("t.petsPolicy"),
+        content: (
+          <ul data-testid="pet-policy-list">
+            {petPolicy.map((petPolicyItem, index) => (
+              <li key={index} className={styles["list-item"]}>
+                {petPolicyItem}
+              </li>
+            ))}
+          </ul>
+        ),
+      })
+    }
+  } else if (listing.petPolicy) {
     features.push({ heading: t("t.petsPolicy"), subheading: listing.petPolicy })
   }
   if (listing.amenities) {
@@ -201,6 +223,12 @@ export const getFeatures = (
   }
   if (listing.servicesOffered) {
     features.push({ heading: t("t.servicesOffered"), subheading: listing.servicesOffered })
+  }
+  if (listing.parkingFee) {
+    features.push({
+      heading: t("t.parkingFee"),
+      subheading: `$${listing.parkingFee}`,
+    })
   }
   if (listing.smokingPolicy) {
     features.push({ heading: t("t.smokingPolicy"), subheading: listing.smokingPolicy })

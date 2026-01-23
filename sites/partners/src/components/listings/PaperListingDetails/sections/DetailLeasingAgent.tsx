@@ -27,14 +27,18 @@ const DetailLeasingAgent = () => {
 
   const leasingAgentTitleText = enableLeasingAgentAltText
     ? t("listings.sections.leasingAgentManagerPropTitle")
-    : t("listings.sections.leasingAgentTitle")
+    : t("leasingAgent.title")
 
   const leasingAgentAddressText = enableLeasingAgentAltText
     ? t("listings.leasingAgentAddressManagerProp")
     : t("listings.leasingAgentAddress")
 
+  const leasingAgentSectionTitleText = enableLeasingAgentAltText
+    ? t("listings.sections.leasingAgentManagerPropSectionTitle")
+    : t("listings.sections.leasingAgentTitle")
+
   return (
-    <SectionWithGrid heading={leasingAgentTitleText} inset>
+    <SectionWithGrid heading={leasingAgentSectionTitleText} inset>
       <Grid.Row>
         <Grid.Cell>
           <FieldValue id="leasingAgentName" label={leasingAgentNameText}>
@@ -56,7 +60,7 @@ const DetailLeasingAgent = () => {
       </Grid.Row>
       <Grid.Row columns={3}>
         <Grid.Cell>
-          <FieldValue id="leasingAgentTitle" label={t("leasingAgent.title")}>
+          <FieldValue id="leasingAgentTitle" label={leasingAgentTitleText}>
             {getDetailFieldString(listing.leasingAgentTitle)}
           </FieldValue>
         </Grid.Cell>

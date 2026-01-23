@@ -41,6 +41,7 @@ def run_subprocess(cmd, cwd=None, always_exit=False):
 
 def main():
     # Valid root modules and their AWS CLI profile names:
+    # TODO(https://github.com/bloom-housing/bloom/issues/5760): make this dynamic.
     mod_to_aws_profile = {
         "bloom_dev": "bloom-dev-deployer",
         "bloom_dev_deployer_permission_set_policy": "bloom-dev-iam-admin",

@@ -572,6 +572,17 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
             },
           ]
         : []),
+      ...(doAnyJurisdictionHaveFeatureFlagSet(
+        user.jurisdictions,
+        FeatureFlagEnum.enableConfigurableRegions,
+      )
+        ? [
+            {
+              path: 'configurableRegion',
+              label: 'Building Region',
+            },
+          ]
+        : []),
       {
         path: 'yearBuilt',
         label: 'Building Year Built',
@@ -851,10 +862,28 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
           path: 'unitAmenities',
           label: 'Unit Amenities',
         },
-        {
-          path: 'petPolicy',
-          label: 'Pets Policy',
-        },
+        ...(doAllJurisdictionHaveFeatureFlagSet(
+          user.jurisdictions,
+          FeatureFlagEnum.enablePetPolicyCheckbox,
+        )
+          ? [
+              {
+                path: 'allowsDogs',
+                label: 'Allows Dogs',
+                format: this.formatYesNo,
+              },
+              {
+                path: 'allowsCats',
+                label: 'Allows Cats',
+                format: this.formatYesNo,
+              },
+            ]
+          : [
+              {
+                path: 'petPolicy',
+                label: 'Pets Policy',
+              },
+            ]),
         {
           path: 'servicesOffered',
           label: 'Services Offered',
@@ -942,6 +971,18 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
         if (visibleAmenities.has(key)) {
           headers.push(amenityHeaderMap[key]);
         }
+      });
+    }
+
+    if (
+      doAnyJurisdictionHaveFeatureFlagSet(
+        user.jurisdictions,
+        FeatureFlagEnum.enableParkingFee,
+      )
+    ) {
+      headers.push({
+        path: 'parkingFee',
+        label: 'Parking Fee',
       });
     }
 

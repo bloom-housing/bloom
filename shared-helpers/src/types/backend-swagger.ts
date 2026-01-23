@@ -424,6 +424,27 @@ export class ListingsService {
       axios(configs, resolve, reject)
     })
   }
+  /**
+   * Get listings by assigned property ID
+   */
+  retrieveListingsByProperty(
+    params: {
+      /**  */
+      propertyId: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<IdDTO[]> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/listings/byProperty/{propertyId}"
+      url = url.replace("{propertyId}", params["propertyId"] + "")
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject)
+    })
+  }
 }
 
 export class ApplicationFlaggedSetsService {
@@ -3139,6 +3160,150 @@ export class DataExplorerService {
   }
 }
 
+export class PropertiesService {
+  /**
+   * Get a paginated set of properties
+   */
+  list(
+    params: {
+      /**  */
+      page?: number
+      /**  */
+      limit?: number | "all"
+      /**  */
+      search?: string
+      /**  */
+      filter?: any | null[]
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<PaginatedProperty> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/properties"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+      configs.params = {
+        page: params["page"],
+        limit: params["limit"],
+        search: params["search"],
+        filter: params["filter"],
+      }
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Add a new property entry
+   */
+  add(
+    params: {
+      /** requestBody */
+      body?: PropertyCreate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Property> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/properties"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Update an exiting property entry by id
+   */
+  update(
+    params: {
+      /** requestBody */
+      body?: PropertyUpdate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Property> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/properties"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Delete an property entry by ID
+   */
+  deleteById(
+    params: {
+      /** requestBody */
+      body?: IdDTO
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/properties"
+
+      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Get a property object by ID
+   */
+  getById(
+    params: {
+      /**  */
+      id: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/properties/{id}"
+      url = url.replace("{id}", params["id"] + "")
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Get a paginated filtered set of properties
+   */
+  filterableList(
+    params: {
+      /** requestBody */
+      body?: PropertyQueryParams
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<PaginatedProperty> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/properties/list"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+}
+
 export interface SuccessDTO {
   /**  */
   success: boolean
@@ -3201,6 +3366,9 @@ export interface ListingFilterParams {
 
   /**  */
   regions?: RegionEnum[]
+
+  /**  */
+  configurableRegions?: []
 
   /**  */
   reservedCommunityTypes?: string[]
@@ -3629,64 +3797,148 @@ export interface ListingFeatures {
   updatedAt: Date
 
   /**  */
-  elevator?: boolean
-
-  /**  */
-  wheelchairRamp?: boolean
-
-  /**  */
-  serviceAnimalsAllowed?: boolean
+  accessibleHeightToilet?: boolean
 
   /**  */
   accessibleParking?: boolean
 
   /**  */
-  parkingOnSite?: boolean
-
-  /**  */
-  inUnitWasherDryer?: boolean
-
-  /**  */
-  laundryInBuilding?: boolean
-
-  /**  */
-  barrierFreeEntrance?: boolean
-
-  /**  */
-  rollInShower?: boolean
-
-  /**  */
-  grabBars?: boolean
-
-  /**  */
-  heatingInUnit?: boolean
-
-  /**  */
   acInUnit?: boolean
-
-  /**  */
-  hearing?: boolean
-
-  /**  */
-  visual?: boolean
-
-  /**  */
-  mobility?: boolean
-
-  /**  */
-  barrierFreeUnitEntrance?: boolean
-
-  /**  */
-  loweredLightSwitch?: boolean
 
   /**  */
   barrierFreeBathroom?: boolean
 
   /**  */
-  wideDoorways?: boolean
+  barrierFreeEntrance?: boolean
+
+  /**  */
+  barrierFreePropertyEntrance?: boolean
+
+  /**  */
+  barrierFreeUnitEntrance?: boolean
+
+  /**  */
+  bathGrabBarsOrReinforcements?: boolean
+
+  /**  */
+  bathroomCounterLowered?: boolean
+
+  /**  */
+  brailleSignageInBuilding?: boolean
+
+  /**  */
+  carbonMonoxideDetectorWithStrobe?: boolean
+
+  /**  */
+  carpetInUnit?: boolean
+
+  /**  */
+  elevator?: boolean
+
+  /**  */
+  extraAudibleCarbonMonoxideDetector?: boolean
+
+  /**  */
+  extraAudibleSmokeDetector?: boolean
+
+  /**  */
+  fireSuppressionSprinklerSystem?: boolean
+
+  /**  */
+  frontControlsDishwasher?: boolean
+
+  /**  */
+  frontControlsStoveCookTop?: boolean
+
+  /**  */
+  grabBars?: boolean
+
+  /**  */
+  hardFlooringInUnit?: boolean
+
+  /**  */
+  hearing?: boolean
+
+  /**  */
+  hearingAndVision?: boolean
+
+  /**  */
+  heatingInUnit?: boolean
+
+  /**  */
+  inUnitWasherDryer?: boolean
+
+  /**  */
+  kitchenCounterLowered?: boolean
+
+  /**  */
+  laundryInBuilding?: boolean
+
+  /**  */
+  leverHandlesOnDoors?: boolean
+
+  /**  */
+  leverHandlesOnFaucets?: boolean
 
   /**  */
   loweredCabinets?: boolean
+
+  /**  */
+  loweredLightSwitch?: boolean
+
+  /**  */
+  mobility?: boolean
+
+  /**  */
+  noEntryStairs?: boolean
+
+  /**  */
+  nonDigitalKitchenAppliances?: boolean
+
+  /**  */
+  noStairsToParkingSpots?: boolean
+
+  /**  */
+  noStairsWithinUnit?: boolean
+
+  /**  */
+  parkingOnSite?: boolean
+
+  /**  */
+  refrigeratorWithBottomDoorFreezer?: boolean
+
+  /**  */
+  rollInShower?: boolean
+
+  /**  */
+  serviceAnimalsAllowed?: boolean
+
+  /**  */
+  smokeDetectorWithStrobe?: boolean
+
+  /**  */
+  streetLevelEntrance?: boolean
+
+  /**  */
+  toiletGrabBarsOrReinforcements?: boolean
+
+  /**  */
+  ttyAmplifiedPhone?: boolean
+
+  /**  */
+  turningCircleInBathrooms?: boolean
+
+  /**  */
+  visual?: boolean
+
+  /**  */
+  walkInShower?: boolean
+
+  /**  */
+  wheelchairRamp?: boolean
+
+  /**  */
+  wideDoorways?: boolean
 }
 
 export interface ListingUtilities {
@@ -4275,6 +4527,32 @@ export interface ListingNeighborhoodAmenities {
   busStops?: string
 }
 
+export interface Property {
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  name: string
+
+  /**  */
+  description?: string
+
+  /**  */
+  url?: string
+
+  /**  */
+  urlTitle?: string
+
+  /**  */
+  jurisdictions?: IdDTO
+}
+
 export interface Listing {
   /**  */
   id: string
@@ -4328,7 +4606,16 @@ export interface Listing {
   region?: RegionEnum
 
   /**  */
+  configurableRegion?: string
+
+  /**  */
   petPolicy?: string
+
+  /**  */
+  allowsDogs?: boolean
+
+  /**  */
+  allowsCats?: boolean
 
   /**  */
   smokingPolicy?: string
@@ -4440,6 +4727,9 @@ export interface Listing {
 
   /**  */
   name: string
+
+  /**  */
+  parkingFee?: string
 
   /**  */
   postmarkedApplicationsReceivedByDate?: Date
@@ -4656,6 +4946,9 @@ export interface Listing {
 
   /**  */
   lastUpdatedByUser?: IdDTO
+
+  /**  */
+  property?: Property
 }
 
 export interface PaginationMeta {
@@ -4780,64 +5073,148 @@ export interface ListingImageCreate {
 
 export interface ListingFeaturesCreate {
   /**  */
-  elevator?: boolean
-
-  /**  */
-  wheelchairRamp?: boolean
-
-  /**  */
-  serviceAnimalsAllowed?: boolean
+  accessibleHeightToilet?: boolean
 
   /**  */
   accessibleParking?: boolean
 
   /**  */
-  parkingOnSite?: boolean
-
-  /**  */
-  inUnitWasherDryer?: boolean
-
-  /**  */
-  laundryInBuilding?: boolean
-
-  /**  */
-  barrierFreeEntrance?: boolean
-
-  /**  */
-  rollInShower?: boolean
-
-  /**  */
-  grabBars?: boolean
-
-  /**  */
-  heatingInUnit?: boolean
-
-  /**  */
   acInUnit?: boolean
-
-  /**  */
-  hearing?: boolean
-
-  /**  */
-  visual?: boolean
-
-  /**  */
-  mobility?: boolean
-
-  /**  */
-  barrierFreeUnitEntrance?: boolean
-
-  /**  */
-  loweredLightSwitch?: boolean
 
   /**  */
   barrierFreeBathroom?: boolean
 
   /**  */
-  wideDoorways?: boolean
+  barrierFreeEntrance?: boolean
+
+  /**  */
+  barrierFreePropertyEntrance?: boolean
+
+  /**  */
+  barrierFreeUnitEntrance?: boolean
+
+  /**  */
+  bathGrabBarsOrReinforcements?: boolean
+
+  /**  */
+  bathroomCounterLowered?: boolean
+
+  /**  */
+  brailleSignageInBuilding?: boolean
+
+  /**  */
+  carbonMonoxideDetectorWithStrobe?: boolean
+
+  /**  */
+  carpetInUnit?: boolean
+
+  /**  */
+  elevator?: boolean
+
+  /**  */
+  extraAudibleCarbonMonoxideDetector?: boolean
+
+  /**  */
+  extraAudibleSmokeDetector?: boolean
+
+  /**  */
+  fireSuppressionSprinklerSystem?: boolean
+
+  /**  */
+  frontControlsDishwasher?: boolean
+
+  /**  */
+  frontControlsStoveCookTop?: boolean
+
+  /**  */
+  grabBars?: boolean
+
+  /**  */
+  hardFlooringInUnit?: boolean
+
+  /**  */
+  hearing?: boolean
+
+  /**  */
+  hearingAndVision?: boolean
+
+  /**  */
+  heatingInUnit?: boolean
+
+  /**  */
+  inUnitWasherDryer?: boolean
+
+  /**  */
+  kitchenCounterLowered?: boolean
+
+  /**  */
+  laundryInBuilding?: boolean
+
+  /**  */
+  leverHandlesOnDoors?: boolean
+
+  /**  */
+  leverHandlesOnFaucets?: boolean
 
   /**  */
   loweredCabinets?: boolean
+
+  /**  */
+  loweredLightSwitch?: boolean
+
+  /**  */
+  mobility?: boolean
+
+  /**  */
+  noEntryStairs?: boolean
+
+  /**  */
+  nonDigitalKitchenAppliances?: boolean
+
+  /**  */
+  noStairsToParkingSpots?: boolean
+
+  /**  */
+  noStairsWithinUnit?: boolean
+
+  /**  */
+  parkingOnSite?: boolean
+
+  /**  */
+  refrigeratorWithBottomDoorFreezer?: boolean
+
+  /**  */
+  rollInShower?: boolean
+
+  /**  */
+  serviceAnimalsAllowed?: boolean
+
+  /**  */
+  smokeDetectorWithStrobe?: boolean
+
+  /**  */
+  streetLevelEntrance?: boolean
+
+  /**  */
+  toiletGrabBarsOrReinforcements?: boolean
+
+  /**  */
+  ttyAmplifiedPhone?: boolean
+
+  /**  */
+  turningCircleInBathrooms?: boolean
+
+  /**  */
+  visual?: boolean
+
+  /**  */
+  walkInShower?: boolean
+
+  /**  */
+  wheelchairRamp?: boolean
+
+  /**  */
+  wideDoorways?: boolean
 }
 
 export interface UnitAmiChartOverrideCreate {
@@ -5168,7 +5545,16 @@ export interface ListingCreate {
   region?: RegionEnum
 
   /**  */
+  configurableRegion?: string
+
+  /**  */
   petPolicy?: string
+
+  /**  */
+  allowsDogs?: boolean
+
+  /**  */
+  allowsCats?: boolean
 
   /**  */
   smokingPolicy?: string
@@ -5280,6 +5666,9 @@ export interface ListingCreate {
 
   /**  */
   name: string
+
+  /**  */
+  parkingFee?: string
 
   /**  */
   postmarkedApplicationsReceivedByDate?: Date
@@ -5403,6 +5792,9 @@ export interface ListingCreate {
 
   /**  */
   lastUpdatedByUser?: IdDTO
+
+  /**  */
+  property?: Property
 
   /**  */
   listingMultiselectQuestions?: IdDTO[]
@@ -5725,64 +6117,148 @@ export interface ListingEventUpdate {
 
 export interface ListingFeaturesUpdate {
   /**  */
-  elevator?: boolean
-
-  /**  */
-  wheelchairRamp?: boolean
-
-  /**  */
-  serviceAnimalsAllowed?: boolean
+  accessibleHeightToilet?: boolean
 
   /**  */
   accessibleParking?: boolean
 
   /**  */
-  parkingOnSite?: boolean
-
-  /**  */
-  inUnitWasherDryer?: boolean
-
-  /**  */
-  laundryInBuilding?: boolean
-
-  /**  */
-  barrierFreeEntrance?: boolean
-
-  /**  */
-  rollInShower?: boolean
-
-  /**  */
-  grabBars?: boolean
-
-  /**  */
-  heatingInUnit?: boolean
-
-  /**  */
   acInUnit?: boolean
-
-  /**  */
-  hearing?: boolean
-
-  /**  */
-  visual?: boolean
-
-  /**  */
-  mobility?: boolean
-
-  /**  */
-  barrierFreeUnitEntrance?: boolean
-
-  /**  */
-  loweredLightSwitch?: boolean
 
   /**  */
   barrierFreeBathroom?: boolean
 
   /**  */
-  wideDoorways?: boolean
+  barrierFreeEntrance?: boolean
+
+  /**  */
+  barrierFreePropertyEntrance?: boolean
+
+  /**  */
+  barrierFreeUnitEntrance?: boolean
+
+  /**  */
+  bathGrabBarsOrReinforcements?: boolean
+
+  /**  */
+  bathroomCounterLowered?: boolean
+
+  /**  */
+  brailleSignageInBuilding?: boolean
+
+  /**  */
+  carbonMonoxideDetectorWithStrobe?: boolean
+
+  /**  */
+  carpetInUnit?: boolean
+
+  /**  */
+  elevator?: boolean
+
+  /**  */
+  extraAudibleCarbonMonoxideDetector?: boolean
+
+  /**  */
+  extraAudibleSmokeDetector?: boolean
+
+  /**  */
+  fireSuppressionSprinklerSystem?: boolean
+
+  /**  */
+  frontControlsDishwasher?: boolean
+
+  /**  */
+  frontControlsStoveCookTop?: boolean
+
+  /**  */
+  grabBars?: boolean
+
+  /**  */
+  hardFlooringInUnit?: boolean
+
+  /**  */
+  hearing?: boolean
+
+  /**  */
+  hearingAndVision?: boolean
+
+  /**  */
+  heatingInUnit?: boolean
+
+  /**  */
+  inUnitWasherDryer?: boolean
+
+  /**  */
+  kitchenCounterLowered?: boolean
+
+  /**  */
+  laundryInBuilding?: boolean
+
+  /**  */
+  leverHandlesOnDoors?: boolean
+
+  /**  */
+  leverHandlesOnFaucets?: boolean
 
   /**  */
   loweredCabinets?: boolean
+
+  /**  */
+  loweredLightSwitch?: boolean
+
+  /**  */
+  mobility?: boolean
+
+  /**  */
+  noEntryStairs?: boolean
+
+  /**  */
+  nonDigitalKitchenAppliances?: boolean
+
+  /**  */
+  noStairsToParkingSpots?: boolean
+
+  /**  */
+  noStairsWithinUnit?: boolean
+
+  /**  */
+  parkingOnSite?: boolean
+
+  /**  */
+  refrigeratorWithBottomDoorFreezer?: boolean
+
+  /**  */
+  rollInShower?: boolean
+
+  /**  */
+  serviceAnimalsAllowed?: boolean
+
+  /**  */
+  smokeDetectorWithStrobe?: boolean
+
+  /**  */
+  streetLevelEntrance?: boolean
+
+  /**  */
+  toiletGrabBarsOrReinforcements?: boolean
+
+  /**  */
+  ttyAmplifiedPhone?: boolean
+
+  /**  */
+  turningCircleInBathrooms?: boolean
+
+  /**  */
+  visual?: boolean
+
+  /**  */
+  walkInShower?: boolean
+
+  /**  */
+  wheelchairRamp?: boolean
+
+  /**  */
+  wideDoorways?: boolean
 
   /**  */
   id?: string
@@ -5905,7 +6381,16 @@ export interface ListingUpdate {
   region?: RegionEnum
 
   /**  */
+  configurableRegion?: string
+
+  /**  */
   petPolicy?: string
+
+  /**  */
+  allowsDogs?: boolean
+
+  /**  */
+  allowsCats?: boolean
 
   /**  */
   smokingPolicy?: string
@@ -6017,6 +6502,9 @@ export interface ListingUpdate {
 
   /**  */
   name: string
+
+  /**  */
+  parkingFee?: string
 
   /**  */
   postmarkedApplicationsReceivedByDate?: Date
@@ -6140,6 +6628,9 @@ export interface ListingUpdate {
 
   /**  */
   lastUpdatedByUser?: IdDTO
+
+  /**  */
+  property?: Property
 
   /**  */
   listingMultiselectQuestions?: IdDTO[]
@@ -6893,6 +7384,9 @@ export interface JurisdictionCreate {
 
   /**  */
   visibleNeighborhoodAmenities: NeighborhoodAmenitiesEnum[]
+
+  /**  */
+  regions: []
 }
 
 export interface JurisdictionUpdate {
@@ -6958,6 +7452,9 @@ export interface JurisdictionUpdate {
 
   /**  */
   visibleNeighborhoodAmenities: NeighborhoodAmenitiesEnum[]
+
+  /**  */
+  regions: []
 }
 
 export interface FeatureFlag {
@@ -7058,6 +7555,9 @@ export interface Jurisdiction {
 
   /**  */
   visibleNeighborhoodAmenities: NeighborhoodAmenitiesEnum[]
+
+  /**  */
+  regions: []
 }
 
 export interface MultiselectOptionCreate {
@@ -7649,38 +8149,6 @@ export interface HouseholdMemberUpdate {
 
   /**  */
   householdMemberWorkAddress?: AddressCreate
-}
-
-export interface AddressUpdate {
-  /**  */
-  placeName?: string
-
-  /**  */
-  city: string
-
-  /**  */
-  county?: string
-
-  /**  */
-  state: string
-
-  /**  */
-  street: string
-
-  /**  */
-  street2?: string
-
-  /**  */
-  zipCode: string
-
-  /**  */
-  latitude?: number
-
-  /**  */
-  longitude?: number
-
-  /**  */
-  id?: string
 }
 
 export interface ApplicationSelectionOptionCreate {
@@ -8657,6 +9125,73 @@ export interface GenerateInsightResponse {
   insight: string
 }
 
+export interface PropertyCreate {
+  /**  */
+  name: string
+
+  /**  */
+  description?: string
+
+  /**  */
+  url?: string
+
+  /**  */
+  urlTitle?: string
+
+  /**  */
+  jurisdictions?: IdDTO
+}
+
+export interface PropertyUpdate {
+  /**  */
+  id: string
+
+  /**  */
+  name: string
+
+  /**  */
+  description?: string
+
+  /**  */
+  url?: string
+
+  /**  */
+  urlTitle?: string
+
+  /**  */
+  jurisdictions?: IdDTO
+}
+
+export interface PropertyFilterParams {
+  /**  */
+  $comparison: EnumPropertyFilterParamsComparison
+
+  /**  */
+  jurisdiction?: string
+}
+
+export interface PropertyQueryParams {
+  /**  */
+  page?: number
+
+  /**  */
+  limit?: number | "all"
+
+  /**  */
+  search?: string
+
+  /**  */
+  filter?: string[]
+}
+
+export interface PaginatedProperty {
+  /**  */
+  items: Property[]
+
+  /**  */
+  meta: PaginationMeta
+}
+
 export enum FilterAvailabilityEnum {
   "closedWaitlist" = "closedWaitlist",
   "comingSoon" = "comingSoon",
@@ -8748,6 +9283,7 @@ export enum ListingFilterKeys {
   "name" = "name",
   "neighborhood" = "neighborhood",
   "regions" = "regions",
+  "configurableRegions" = "configurableRegions",
   "reservedCommunityTypes" = "reservedCommunityTypes",
   "section8Acceptance" = "section8Acceptance",
   "status" = "status",
@@ -9011,6 +9547,7 @@ export enum FeatureFlagEnum {
   "enableAdditionalResources" = "enableAdditionalResources",
   "enableApplicationStatus" = "enableApplicationStatus",
   "enableCompanyWebsite" = "enableCompanyWebsite",
+  "enableConfigurableRegions" = "enableConfigurableRegions",
   "enableCreditScreeningFee" = "enableCreditScreeningFee",
   "enableFullTimeStudentQuestion" = "enableFullTimeStudentQuestion",
   "enableGeocodingPreferences" = "enableGeocodingPreferences",
@@ -9033,8 +9570,10 @@ export enum FeatureFlagEnum {
   "enableNeighborhoodAmenities" = "enableNeighborhoodAmenities",
   "enableNeighborhoodAmenitiesDropdown" = "enableNeighborhoodAmenitiesDropdown",
   "enableNonRegulatedListings" = "enableNonRegulatedListings",
+  "enableParkingFee" = "enableParkingFee",
   "enablePartnerDemographics" = "enablePartnerDemographics",
   "enablePartnerSettings" = "enablePartnerSettings",
+  "enablePetPolicyCheckbox" = "enablePetPolicyCheckbox",
   "enableProperties" = "enableProperties",
   "enableReferralQuestionUnits" = "enableReferralQuestionUnits",
   "enableRegions" = "enableRegions",
@@ -9106,3 +9645,12 @@ export enum MfaType {
 }
 export type CombinedProductsTypes = ReportProducts
 export type CombinedDataTypes = ReportProducts
+export enum EnumPropertyFilterParamsComparison {
+  "=" = "=",
+  "<>" = "<>",
+  "IN" = "IN",
+  ">=" = ">=",
+  "<=" = "<=",
+  "LIKE" = "LIKE",
+  "NA" = "NA",
+}

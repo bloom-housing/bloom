@@ -39,10 +39,6 @@ jobs:
             docker_context: "{{defaultContext}}"
             dockerfile: Dockerfile.sites.public
             platforms: linux/amd64
-          - container: infra
-            docker_context: "{{defaultContext}}:infra"
-            dockerfile: Dockerfile
-            platforms: linux/amd64,linux/arm64
           - container: infra-dev
             docker_context: "{{defaultContext}}:infra"
             dockerfile: Dockerfile.dev
@@ -74,7 +70,7 @@ jobs:
           file: ${{ matrix.dockerfile }}
           platforms: ${{ matrix.platforms }}
           tags: |
-            ${{ env.image_base }}/${{ matrix.container }}:latest
+            ${{ env.image_base }}/${{ matrix.container }}:gitbranch-${{ github.ref_name }}-latest
             ${{ env.image_base }}/${{ matrix.container }}:gitsha-${{ github.sha }}
           # Connects the image to the repository: https://docs.github.com/en/packages/learn-github-packages/connecting-a-repository-to-a-package.
           labels: org.opencontainers.image.source=https://github.com/${{ github.repository }}
