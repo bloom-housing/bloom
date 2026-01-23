@@ -1,7 +1,7 @@
 import { IsString, ValidateNested, IsArray, IsBoolean } from 'class-validator';
 import { Type, Expose } from 'class-transformer';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { ValidationsGroupsEnum } from 'src/enums/shared/validation-groups-enum';
+import { ValidationsGroupsEnum } from '../../../src/enums/shared/validation-groups-enum';
 
 export class ListingFeatureField {
   @Expose()

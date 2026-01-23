@@ -24,9 +24,9 @@ import {
   TableHeaders,
 } from "@bloom-housing/ui-components"
 import {
+  allListingFeatures,
   cloudinaryPdfFromId,
   getOccupancyDescription,
-  listingFeatures,
   ListingFeaturesValues,
   listingUtilities,
   stackedOccupancyTable,
@@ -144,7 +144,7 @@ export const getAccessibilityFeatures = (listing: Listing) => {
   const enabledFeatures = Object.entries(listing?.listingFeatures ?? {})
     .filter(([_, value]) => value)
     .map((item) => item[0])
-    .filter((feature: ListingFeaturesValues) => listingFeatures.includes(feature))
+    .filter((feature: ListingFeaturesValues) => allListingFeatures?.includes(feature))
 
   const COLUMN_BREAKPOINT = 6
   if (enabledFeatures.length > 0) {

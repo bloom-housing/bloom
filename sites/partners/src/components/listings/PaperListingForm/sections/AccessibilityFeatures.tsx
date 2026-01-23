@@ -96,7 +96,6 @@ const AccessibilityFeatures = (props: AccessibilityFeaturesProps) => {
     const formData = getValues()
     let errors = false
     props.listingFeaturesConfiguration.categories?.forEach((category) => {
-      console.log({ formData })
       if (category.required && !formData.configurableAccessibilityFeatures?.[category.id].length) {
         setError(`configurableAccessibilityFeatures.${category.id}`, {
           message: t("errors.requiredFieldError"),

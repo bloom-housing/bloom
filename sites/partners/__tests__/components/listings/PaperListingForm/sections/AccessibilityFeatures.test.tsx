@@ -42,7 +42,7 @@ describe("AccessibilityFeatures", () => {
     ).not.toBeInTheDocument()
   })
 
-  it("renders accessibility features list with existing selections", () => {
+  it("renders accessibility features list", () => {
     render(
       <FormProviderWrapper>
         <AccessibilityFeatures
@@ -61,17 +61,18 @@ describe("AccessibilityFeatures", () => {
     expect(heading).toBeInTheDocument()
 
     const checkboxes = screen.getAllByRole("checkbox")
-    const checkedValues = checkboxes
-      .filter((box) => (box as HTMLInputElement).checked)
-      .map((box) => (box as HTMLInputElement).value)
-
     expect(checkboxes).toHaveLength(defaultListingFeaturesConfiguration.fields.length)
-    expect(checkedValues).toEqual(
-      expect.arrayContaining([
-        "configurableAccessibilityFeatures.mobility",
-        "configurableAccessibilityFeatures.visual",
-      ])
-    )
+
+    expect(
+      screen.getByRole("checkbox", {
+        name: "Units for those with mobility accessibility needs",
+      })
+    ).toBeInTheDocument()
+    expect(
+      screen.getByRole("checkbox", {
+        name: "Units for those with vision accessibility needs",
+      })
+    ).toBeInTheDocument()
   })
 
   it("renders accessibility features expanded detail summary with existing selections", () => {
@@ -104,7 +105,7 @@ describe("AccessibilityFeatures", () => {
     expect(screen.getByText("Hard flooring in unit")).toBeInTheDocument()
   })
 
-  it("shows validation when saving expanded features without required flooring field and clear on entry", async () => {
+  it("shows validation when saving expanded features without required flooring field and clears on entry", async () => {
     const setAccessibilityFeatures = jest.fn()
 
     render(

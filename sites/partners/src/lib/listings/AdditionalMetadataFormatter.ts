@@ -95,7 +95,10 @@ export default class AdditionalMetadataFormatter extends Formatter {
       })
     }
 
-    if (isStringArray(this.data.configurableAccessibilityFeatures)) {
+    if (
+      this.data.configurableAccessibilityFeatures &&
+      isStringArray(this.data.configurableAccessibilityFeatures)
+    ) {
       // No categories - form data is a string array
       const updatedFeatures = allListingFeatures.reduce((acc, current) => {
         const values = this.data.configurableAccessibilityFeatures as string[]

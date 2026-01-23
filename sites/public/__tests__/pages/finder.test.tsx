@@ -4,6 +4,8 @@ import { render, screen } from "../testUtils"
 import { mockNextRouter, waitFor, within } from "../../../partners/__tests__/testUtils"
 import userEvent from "@testing-library/user-event"
 import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { defaultListingFeaturesConfiguration } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
+import { listing } from "../../../../shared-helpers/__tests__/testHelpers"
 
 window.scrollTo = jest.fn()
 
@@ -20,6 +22,7 @@ describe("<RentalsFinder>", () => {
           FeatureFlagEnum.enableAccessibilityFeatures,
         ]}
         multiselectData={[]}
+        listingFeaturesConfiguration={defaultListingFeaturesConfiguration}
       />
     )
 
@@ -75,6 +78,7 @@ describe("<RentalsFinder>", () => {
         <RentalsFinder
           activeFeatureFlags={[FeatureFlagEnum.enableAccessibilityFeatures]}
           multiselectData={[]}
+          listingFeaturesConfiguration={defaultListingFeaturesConfiguration}
         />
       )
 
@@ -271,6 +275,7 @@ describe("<RentalsFinder>", () => {
           FeatureFlagEnum.enableAccessibilityFeatures,
         ]}
         multiselectData={[]}
+        listingFeaturesConfiguration={defaultListingFeaturesConfiguration}
       />
     )
 
@@ -597,6 +602,7 @@ describe("<RentalsFinder>", () => {
           FeatureFlagEnum.enableAccessibilityFeatures,
         ]}
         multiselectData={[]}
+        listingFeaturesConfiguration={defaultListingFeaturesConfiguration}
       />
     )
 
@@ -652,8 +658,8 @@ describe("<RentalsFinder>", () => {
     })
   })
 
-  describe("should navigate with filter querry", () => {
-    it("should nagvigate withouth query params when no option selected", async () => {
+  describe("should navigate with filter query", () => {
+    it("should nagvigate without query params when no option selected", async () => {
       const { pushMock } = mockNextRouter()
       render(
         <RentalsFinder
@@ -690,6 +696,7 @@ describe("<RentalsFinder>", () => {
             FeatureFlagEnum.enableAccessibilityFeatures,
           ]}
           multiselectData={[]}
+          listingFeaturesConfiguration={defaultListingFeaturesConfiguration}
         />
       )
 
