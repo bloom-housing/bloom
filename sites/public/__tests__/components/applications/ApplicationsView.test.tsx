@@ -467,4 +467,48 @@ describe("<ApplicationsView>", () => {
       expect(screen.queryByText("Duplicate")).not.toBeInTheDocument()
     })
   })
+
+  describe("Waitlist numbers", () => {
+    it("should display accessible waitlist number when all numbers are present", async () => {
+      const mockApps = getApplications(1, 0, 0)
+      mockApps.displayApplications[0].status = ApplicationStatusEnum.waitlist
+      mockApps.displayApplications[0].accessibleUnitWaitlistNumber = 10101
+      mockApps.displayApplications[0].conventionalUnitWaitlistNumber = 20202
+      mockApps.displayApplications[0].confirmationCode = "CONF-33333"
+
+      server.use(
+        rest.get("http://localhost:3100/applications/publicAppsView", (_req, res, ctx) => {
+          return res(ctx.json(mockApps))
+        })
+      )
+
+      renderApplicationsView(ApplicationsIndexEnum.all, true)
+
+      expect(await screen.findByText("Your accessible wait list number is:")).toBeInTheDocument()
+      expect(screen.getByText("10101")).toBeInTheDocument()
+      expect(screen.queryByText("Your conventional wait list number is:")).not.toBeInTheDocument()
+      expect(screen.queryByText("Your confirmation number is:")).not.toBeInTheDocument()
+    })
+
+    it("should display conventional waitlist number when accessible is missing", async () => {
+      const mockApps = getApplications(1, 0, 0)
+      mockApps.displayApplications[0].status = ApplicationStatusEnum.waitlistDeclined
+      mockApps.displayApplications[0].accessibleUnitWaitlistNumber = null
+      mockApps.displayApplications[0].conventionalUnitWaitlistNumber = 90909
+      mockApps.displayApplications[0].confirmationCode = "CONF-44444"
+
+      server.use(
+        rest.get("http://localhost:3100/applications/publicAppsView", (_req, res, ctx) => {
+          return res(ctx.json(mockApps))
+        })
+      )
+
+      renderApplicationsView(ApplicationsIndexEnum.all, true)
+
+      expect(await screen.findByText("Your conventional wait list number is:")).toBeInTheDocument()
+      expect(screen.getByText("90909")).toBeInTheDocument()
+      expect(screen.queryByText("Your accessible wait list number is:")).not.toBeInTheDocument()
+      expect(screen.queryByText("Your confirmation number is:")).not.toBeInTheDocument()
+    })
+  })
 })

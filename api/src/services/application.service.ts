@@ -427,6 +427,8 @@ export class ApplicationService {
         id: true,
         userId: true,
         confirmationCode: true,
+        accessibleUnitWaitlistNumber: true,
+        conventionalUnitWaitlistNumber: true,
         updatedAt: true,
         status: true,
         markedAsDuplicate: true,
