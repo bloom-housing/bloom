@@ -42,6 +42,30 @@ const DetailBuildingFeatures = () => {
     listing.jurisdictions.id
   )
 
+  const enablePetPolicyCheckbox = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enablePetPolicyCheckbox,
+    listing.jurisdictions.id
+  )
+
+  const getPetPolicy = () => {
+    const petPolicyStrings = []
+    if (listing.allowsDogs) petPolicyStrings.push(t("listings.allowsDogs"))
+    if (listing.allowsCats) petPolicyStrings.push(t("listings.allowsCats"))
+
+    if (petPolicyStrings.length > 0) {
+      return (
+        <ul className={"flex flex-wrap"} data-testid="pet-policy-list">
+          {petPolicyStrings.map((item, index) => (
+            <li className={"list-disc mx-5 mb-1 md:w-1/3 w-full grow"} key={index}>
+              {item}
+            </li>
+          ))}
+        </ul>
+      )
+    }
+    return <>{t("t.none")}</>
+  }
+
   return (
     <SectionWithGrid heading={t("listings.sections.buildingFeaturesTitle")} inset>
       <Grid.Row>
@@ -71,7 +95,7 @@ const DetailBuildingFeatures = () => {
       <Grid.Row>
         <Grid.Cell>
           <FieldValue id="petPolicy" label={t("t.petsPolicy")}>
-            {getDetailFieldString(listing.petPolicy)}
+            {enablePetPolicyCheckbox ? getPetPolicy() : getDetailFieldString(listing.petPolicy)}
           </FieldValue>
         </Grid.Cell>
       </Grid.Row>

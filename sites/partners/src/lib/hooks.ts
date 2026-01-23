@@ -717,7 +717,7 @@ export function usePropertiesList({ page, limit, search, jurisdictions }: UsePro
   }
 
   params.filter.push({
-    $comparison: EnumPropertyFilterParamsComparison["IN"],
+    $comparison: EnumPropertyFilterParamsComparison.IN,
     jurisdiction: jurisdictions && jurisdictions !== "" ? jurisdictions : undefined,
   })
 

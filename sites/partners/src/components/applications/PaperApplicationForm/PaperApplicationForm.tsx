@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect } from "react"
 import { useRouter } from "next/router"
 import { t, Form, AlertBox, LoadingOverlay } from "@bloom-housing/ui-components"
+import { Button, Dialog } from "@bloom-housing/ui-seeds"
 import { AuthContext, MessageContext, listingSectionQuestions } from "@bloom-housing/shared-helpers"
 import { useForm, FormProvider } from "react-hook-form"
 import {
@@ -28,6 +29,7 @@ import { Aside } from "../Aside"
 import { FormTypes } from "../../../lib/applications/FormTypes"
 import { StatusBar } from "../../../components/shared/StatusBar"
 import { ApplicationStatusTag } from "../../listings/PaperListingDetails/sections/helpers"
+import { AppStatusConfirmSections, buildAppStatusConfirmSections } from "../helpers"
 
 type ApplicationFormProps = {
   listingId: string
@@ -111,6 +113,15 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
   const [alert, setAlert] = useState<AlertErrorType | null>(null)
   const [loading, setLoading] = useState<boolean>(false)
   const [householdMembers, setHouseholdMembers] = useState<HouseholdMember[]>([])
+  const [confirmOpen, setConfirmOpen] = useState(false)
+  const [confirmSections, setConfirmSections] = useState<AppStatusConfirmSections>({
+    changes: [],
+    removals: [],
+  })
+  const [pendingSubmit, setPendingSubmit] = useState<{
+    data: FormTypes
+    redirect: "details" | "new"
+  } | null>(null)
 
   useEffect(() => {
     if (application?.householdMember) {
@@ -128,7 +139,24 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { handleSubmit, trigger, clearErrors, reset } = formMethods
 
-  const triggerSubmit = async (data: FormTypes) => onSubmit(data, "details")
+  const triggerSubmit = async (data: FormTypes) => {
+    if (!editMode || !enableApplicationStatus) {
+      await onSubmit(data, "details")
+      return
+    }
+
+    const sections = buildAppStatusConfirmSections(data, defaultValues)
+    const shouldConfirm = sections.changes.length > 0 || sections.removals.length > 0
+
+    if (!shouldConfirm) {
+      await onSubmit(data, "details")
+      return
+    }
+
+    setConfirmSections(sections)
+    setPendingSubmit({ data, redirect: "details" })
+    setConfirmOpen(true)
+  }
 
   const triggerSubmitAndRedirect = async () => {
     const validation = await trigger()
@@ -206,6 +234,19 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
     } catch (err) {
       setLoading(false)
       setAlert("api")
+    }
+  }
+
+  const closeConfirmDialog = () => {
+    setConfirmOpen(false)
+    setPendingSubmit(null)
+  }
+
+  const confirmSubmit = async () => {
+    const queuedSubmit = pendingSubmit
+    closeConfirmDialog()
+    if (queuedSubmit) {
+      await onSubmit(queuedSubmit.data, queuedSubmit.redirect)
     }
   }
 
@@ -311,6 +352,53 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
             </div>
           </section>
         </FormProvider>
+
+        <Dialog
+          isOpen={confirmOpen}
+          ariaLabelledBy="application-save-confirmation-header"
+          ariaDescribedBy="application-save-confirmation-content"
+          onClose={closeConfirmDialog}
+        >
+          <Dialog.Header id="application-save-confirmation-header">
+            {t("application.confirmation.header")}
+          </Dialog.Header>
+          <Dialog.Content id="application-save-confirmation-content">
+            {confirmSections.changes.length > 0 && (
+              <>
+                <p>{t("application.confirmation.changesIntro")}</p>
+                <ul className="list-disc pl-5">
+                  {confirmSections.changes.map((item) => (
+                    <li key={`${item.label}-${item.value}`}>
+                      {item.label}: {item.value}
+                    </li>
+                  ))}
+                </ul>
+              </>
+            )}
+            {confirmSections.removals.length > 0 && (
+              <>
+                <p className={confirmSections.changes.length > 0 ? "mt-6" : ""}>
+                  {t("application.confirmation.removalsIntro")}
+                </p>
+                <ul className="list-disc pl-5">
+                  {confirmSections.removals.map((item) => (
+                    <li key={`${item.label}-${item.value}`}>
+                      {item.label}: {item.value}
+                    </li>
+                  ))}
+                </ul>
+              </>
+            )}
+          </Dialog.Content>
+          <Dialog.Footer>
+            <Button variant="primary" size="sm" onClick={() => void confirmSubmit()}>
+              {t("application.add.saveAndExit")}
+            </Button>
+            <Button variant="primary-outlined" size="sm" onClick={closeConfirmDialog}>
+              {t("t.cancel")}
+            </Button>
+          </Dialog.Footer>
+        </Dialog>
       </>
     </LoadingOverlay>
   )

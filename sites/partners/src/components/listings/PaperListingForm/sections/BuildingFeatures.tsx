@@ -10,6 +10,7 @@ import styles from "../ListingForm.module.scss"
 
 type BuildingFeaturesProps = {
   enableAccessibilityFeatures?: boolean
+  enablePetPolicyCheckbox?: boolean
   enableParkingFee?: boolean
   enableSmokingPolicyRadio?: boolean
   existingFeatures: ListingFeaturesCreate
@@ -20,7 +21,7 @@ const BuildingFeatures = (props: BuildingFeaturesProps) => {
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, setValue, errors, clearErrors } = formMethods
+  const { register, setValue, errors, clearErrors, getValues } = formMethods
 
   const featureOptions = useMemo(() => {
     return listingFeatures.map((item) => ({
@@ -94,19 +95,43 @@ const BuildingFeatures = (props: BuildingFeaturesProps) => {
             />
           </Grid.Cell>
           <Grid.Cell>
-            <Textarea
-              fullWidth={true}
-              placeholder={""}
-              register={register}
-              maxLength={600}
-              {...defaultFieldProps(
-                "petPolicy",
-                t("t.petsPolicy"),
-                props.requiredFields,
-                errors,
-                clearErrors
-              )}
-            />
+            {props.enablePetPolicyCheckbox ? (
+              <FieldGroup
+                type="checkbox"
+                name="petPolicyPreferences"
+                groupLabel={t("listings.petPolicyQuestion")}
+                register={register}
+                fieldLabelClassName={styles["label-option"]}
+                fields={[
+                  {
+                    id: "allowsDogs",
+                    label: t("listings.allowsDogs"),
+                    value: "allowsDogs",
+                    defaultChecked: getValues("allowsDogs"),
+                  },
+                  {
+                    id: "allowsCats",
+                    label: t("listings.allowsCats"),
+                    value: "allowsCats",
+                    defaultChecked: getValues("allowsCats"),
+                  },
+                ]}
+              />
+            ) : (
+              <Textarea
+                fullWidth={true}
+                placeholder={""}
+                register={register}
+                maxLength={600}
+                {...defaultFieldProps(
+                  "petPolicy",
+                  t("t.petsPolicy"),
+                  props.requiredFields,
+                  errors,
+                  clearErrors
+                )}
+              />
+            )}
           </Grid.Cell>
         </Grid.Row>
         <Grid.Row>

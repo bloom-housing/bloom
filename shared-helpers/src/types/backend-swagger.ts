@@ -3673,64 +3673,148 @@ export interface ListingFeatures {
   updatedAt: Date
 
   /**  */
-  elevator?: boolean
-
-  /**  */
-  wheelchairRamp?: boolean
-
-  /**  */
-  serviceAnimalsAllowed?: boolean
+  accessibleHeightToilet?: boolean
 
   /**  */
   accessibleParking?: boolean
 
   /**  */
-  parkingOnSite?: boolean
-
-  /**  */
-  inUnitWasherDryer?: boolean
-
-  /**  */
-  laundryInBuilding?: boolean
-
-  /**  */
-  barrierFreeEntrance?: boolean
-
-  /**  */
-  rollInShower?: boolean
-
-  /**  */
-  grabBars?: boolean
-
-  /**  */
-  heatingInUnit?: boolean
-
-  /**  */
   acInUnit?: boolean
-
-  /**  */
-  hearing?: boolean
-
-  /**  */
-  visual?: boolean
-
-  /**  */
-  mobility?: boolean
-
-  /**  */
-  barrierFreeUnitEntrance?: boolean
-
-  /**  */
-  loweredLightSwitch?: boolean
 
   /**  */
   barrierFreeBathroom?: boolean
 
   /**  */
-  wideDoorways?: boolean
+  barrierFreeEntrance?: boolean
+
+  /**  */
+  barrierFreePropertyEntrance?: boolean
+
+  /**  */
+  barrierFreeUnitEntrance?: boolean
+
+  /**  */
+  bathGrabBarsOrReinforcements?: boolean
+
+  /**  */
+  bathroomCounterLowered?: boolean
+
+  /**  */
+  brailleSignageInBuilding?: boolean
+
+  /**  */
+  carbonMonoxideDetectorWithStrobe?: boolean
+
+  /**  */
+  carpetInUnit?: boolean
+
+  /**  */
+  elevator?: boolean
+
+  /**  */
+  extraAudibleCarbonMonoxideDetector?: boolean
+
+  /**  */
+  extraAudibleSmokeDetector?: boolean
+
+  /**  */
+  fireSuppressionSprinklerSystem?: boolean
+
+  /**  */
+  frontControlsDishwasher?: boolean
+
+  /**  */
+  frontControlsStoveCookTop?: boolean
+
+  /**  */
+  grabBars?: boolean
+
+  /**  */
+  hardFlooringInUnit?: boolean
+
+  /**  */
+  hearing?: boolean
+
+  /**  */
+  hearingAndVision?: boolean
+
+  /**  */
+  heatingInUnit?: boolean
+
+  /**  */
+  inUnitWasherDryer?: boolean
+
+  /**  */
+  kitchenCounterLowered?: boolean
+
+  /**  */
+  laundryInBuilding?: boolean
+
+  /**  */
+  leverHandlesOnDoors?: boolean
+
+  /**  */
+  leverHandlesOnFaucets?: boolean
 
   /**  */
   loweredCabinets?: boolean
+
+  /**  */
+  loweredLightSwitch?: boolean
+
+  /**  */
+  mobility?: boolean
+
+  /**  */
+  noEntryStairs?: boolean
+
+  /**  */
+  nonDigitalKitchenAppliances?: boolean
+
+  /**  */
+  noStairsToParkingSpots?: boolean
+
+  /**  */
+  noStairsWithinUnit?: boolean
+
+  /**  */
+  parkingOnSite?: boolean
+
+  /**  */
+  refrigeratorWithBottomDoorFreezer?: boolean
+
+  /**  */
+  rollInShower?: boolean
+
+  /**  */
+  serviceAnimalsAllowed?: boolean
+
+  /**  */
+  smokeDetectorWithStrobe?: boolean
+
+  /**  */
+  streetLevelEntrance?: boolean
+
+  /**  */
+  toiletGrabBarsOrReinforcements?: boolean
+
+  /**  */
+  ttyAmplifiedPhone?: boolean
+
+  /**  */
+  turningCircleInBathrooms?: boolean
+
+  /**  */
+  visual?: boolean
+
+  /**  */
+  walkInShower?: boolean
+
+  /**  */
+  wheelchairRamp?: boolean
+
+  /**  */
+  wideDoorways?: boolean
 }
 
 export interface ListingUtilities {
@@ -4401,6 +4485,12 @@ export interface Listing {
   petPolicy?: string
 
   /**  */
+  allowsDogs?: boolean
+
+  /**  */
+  allowsCats?: boolean
+
+  /**  */
   smokingPolicy?: string
 
   /**  */
@@ -4856,64 +4946,148 @@ export interface ListingImageCreate {
 
 export interface ListingFeaturesCreate {
   /**  */
-  elevator?: boolean
-
-  /**  */
-  wheelchairRamp?: boolean
-
-  /**  */
-  serviceAnimalsAllowed?: boolean
+  accessibleHeightToilet?: boolean
 
   /**  */
   accessibleParking?: boolean
 
   /**  */
-  parkingOnSite?: boolean
-
-  /**  */
-  inUnitWasherDryer?: boolean
-
-  /**  */
-  laundryInBuilding?: boolean
-
-  /**  */
-  barrierFreeEntrance?: boolean
-
-  /**  */
-  rollInShower?: boolean
-
-  /**  */
-  grabBars?: boolean
-
-  /**  */
-  heatingInUnit?: boolean
-
-  /**  */
   acInUnit?: boolean
-
-  /**  */
-  hearing?: boolean
-
-  /**  */
-  visual?: boolean
-
-  /**  */
-  mobility?: boolean
-
-  /**  */
-  barrierFreeUnitEntrance?: boolean
-
-  /**  */
-  loweredLightSwitch?: boolean
 
   /**  */
   barrierFreeBathroom?: boolean
 
   /**  */
-  wideDoorways?: boolean
+  barrierFreeEntrance?: boolean
+
+  /**  */
+  barrierFreePropertyEntrance?: boolean
+
+  /**  */
+  barrierFreeUnitEntrance?: boolean
+
+  /**  */
+  bathGrabBarsOrReinforcements?: boolean
+
+  /**  */
+  bathroomCounterLowered?: boolean
+
+  /**  */
+  brailleSignageInBuilding?: boolean
+
+  /**  */
+  carbonMonoxideDetectorWithStrobe?: boolean
+
+  /**  */
+  carpetInUnit?: boolean
+
+  /**  */
+  elevator?: boolean
+
+  /**  */
+  extraAudibleCarbonMonoxideDetector?: boolean
+
+  /**  */
+  extraAudibleSmokeDetector?: boolean
+
+  /**  */
+  fireSuppressionSprinklerSystem?: boolean
+
+  /**  */
+  frontControlsDishwasher?: boolean
+
+  /**  */
+  frontControlsStoveCookTop?: boolean
+
+  /**  */
+  grabBars?: boolean
+
+  /**  */
+  hardFlooringInUnit?: boolean
+
+  /**  */
+  hearing?: boolean
+
+  /**  */
+  hearingAndVision?: boolean
+
+  /**  */
+  heatingInUnit?: boolean
+
+  /**  */
+  inUnitWasherDryer?: boolean
+
+  /**  */
+  kitchenCounterLowered?: boolean
+
+  /**  */
+  laundryInBuilding?: boolean
+
+  /**  */
+  leverHandlesOnDoors?: boolean
+
+  /**  */
+  leverHandlesOnFaucets?: boolean
 
   /**  */
   loweredCabinets?: boolean
+
+  /**  */
+  loweredLightSwitch?: boolean
+
+  /**  */
+  mobility?: boolean
+
+  /**  */
+  noEntryStairs?: boolean
+
+  /**  */
+  nonDigitalKitchenAppliances?: boolean
+
+  /**  */
+  noStairsToParkingSpots?: boolean
+
+  /**  */
+  noStairsWithinUnit?: boolean
+
+  /**  */
+  parkingOnSite?: boolean
+
+  /**  */
+  refrigeratorWithBottomDoorFreezer?: boolean
+
+  /**  */
+  rollInShower?: boolean
+
+  /**  */
+  serviceAnimalsAllowed?: boolean
+
+  /**  */
+  smokeDetectorWithStrobe?: boolean
+
+  /**  */
+  streetLevelEntrance?: boolean
+
+  /**  */
+  toiletGrabBarsOrReinforcements?: boolean
+
+  /**  */
+  ttyAmplifiedPhone?: boolean
+
+  /**  */
+  turningCircleInBathrooms?: boolean
+
+  /**  */
+  visual?: boolean
+
+  /**  */
+  walkInShower?: boolean
+
+  /**  */
+  wheelchairRamp?: boolean
+
+  /**  */
+  wideDoorways?: boolean
 }
 
 export interface UnitAmiChartOverrideCreate {
@@ -5245,6 +5419,12 @@ export interface ListingCreate {
 
   /**  */
   petPolicy?: string
+
+  /**  */
+  allowsDogs?: boolean
+
+  /**  */
+  allowsCats?: boolean
 
   /**  */
   smokingPolicy?: string
@@ -5807,64 +5987,148 @@ export interface ListingEventUpdate {
 
 export interface ListingFeaturesUpdate {
   /**  */
-  elevator?: boolean
-
-  /**  */
-  wheelchairRamp?: boolean
-
-  /**  */
-  serviceAnimalsAllowed?: boolean
+  accessibleHeightToilet?: boolean
 
   /**  */
   accessibleParking?: boolean
 
   /**  */
-  parkingOnSite?: boolean
-
-  /**  */
-  inUnitWasherDryer?: boolean
-
-  /**  */
-  laundryInBuilding?: boolean
-
-  /**  */
-  barrierFreeEntrance?: boolean
-
-  /**  */
-  rollInShower?: boolean
-
-  /**  */
-  grabBars?: boolean
-
-  /**  */
-  heatingInUnit?: boolean
-
-  /**  */
   acInUnit?: boolean
-
-  /**  */
-  hearing?: boolean
-
-  /**  */
-  visual?: boolean
-
-  /**  */
-  mobility?: boolean
-
-  /**  */
-  barrierFreeUnitEntrance?: boolean
-
-  /**  */
-  loweredLightSwitch?: boolean
 
   /**  */
   barrierFreeBathroom?: boolean
 
   /**  */
-  wideDoorways?: boolean
+  barrierFreeEntrance?: boolean
+
+  /**  */
+  barrierFreePropertyEntrance?: boolean
+
+  /**  */
+  barrierFreeUnitEntrance?: boolean
+
+  /**  */
+  bathGrabBarsOrReinforcements?: boolean
+
+  /**  */
+  bathroomCounterLowered?: boolean
+
+  /**  */
+  brailleSignageInBuilding?: boolean
+
+  /**  */
+  carbonMonoxideDetectorWithStrobe?: boolean
+
+  /**  */
+  carpetInUnit?: boolean
+
+  /**  */
+  elevator?: boolean
+
+  /**  */
+  extraAudibleCarbonMonoxideDetector?: boolean
+
+  /**  */
+  extraAudibleSmokeDetector?: boolean
+
+  /**  */
+  fireSuppressionSprinklerSystem?: boolean
+
+  /**  */
+  frontControlsDishwasher?: boolean
+
+  /**  */
+  frontControlsStoveCookTop?: boolean
+
+  /**  */
+  grabBars?: boolean
+
+  /**  */
+  hardFlooringInUnit?: boolean
+
+  /**  */
+  hearing?: boolean
+
+  /**  */
+  hearingAndVision?: boolean
+
+  /**  */
+  heatingInUnit?: boolean
+
+  /**  */
+  inUnitWasherDryer?: boolean
+
+  /**  */
+  kitchenCounterLowered?: boolean
+
+  /**  */
+  laundryInBuilding?: boolean
+
+  /**  */
+  leverHandlesOnDoors?: boolean
+
+  /**  */
+  leverHandlesOnFaucets?: boolean
 
   /**  */
   loweredCabinets?: boolean
+
+  /**  */
+  loweredLightSwitch?: boolean
+
+  /**  */
+  mobility?: boolean
+
+  /**  */
+  noEntryStairs?: boolean
+
+  /**  */
+  nonDigitalKitchenAppliances?: boolean
+
+  /**  */
+  noStairsToParkingSpots?: boolean
+
+  /**  */
+  noStairsWithinUnit?: boolean
+
+  /**  */
+  parkingOnSite?: boolean
+
+  /**  */
+  refrigeratorWithBottomDoorFreezer?: boolean
+
+  /**  */
+  rollInShower?: boolean
+
+  /**  */
+  serviceAnimalsAllowed?: boolean
+
+  /**  */
+  smokeDetectorWithStrobe?: boolean
+
+  /**  */
+  streetLevelEntrance?: boolean
+
+  /**  */
+  toiletGrabBarsOrReinforcements?: boolean
+
+  /**  */
+  ttyAmplifiedPhone?: boolean
+
+  /**  */
+  turningCircleInBathrooms?: boolean
+
+  /**  */
+  visual?: boolean
+
+  /**  */
+  walkInShower?: boolean
+
+  /**  */
+  wheelchairRamp?: boolean
+
+  /**  */
+  wideDoorways?: boolean
 
   /**  */
   id?: string
@@ -5988,6 +6252,12 @@ export interface ListingUpdate {
 
   /**  */
   petPolicy?: string
+
+  /**  */
+  allowsDogs?: boolean
+
+  /**  */
+  allowsCats?: boolean
 
   /**  */
   smokingPolicy?: string
@@ -8973,6 +9243,7 @@ export enum FeatureFlagEnum {
   "enableParkingFee" = "enableParkingFee",
   "enablePartnerDemographics" = "enablePartnerDemographics",
   "enablePartnerSettings" = "enablePartnerSettings",
+  "enablePetPolicyCheckbox" = "enablePetPolicyCheckbox",
   "enableProperties" = "enableProperties",
   "enableReferralQuestionUnits" = "enableReferralQuestionUnits",
   "enableRegions" = "enableRegions",
