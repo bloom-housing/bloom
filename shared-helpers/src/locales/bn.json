@@ -690,6 +690,8 @@
   "listingFilters.program.Veterans": "প্রাক্তন সমরকর্মী",
   "listings.additionalInformation": "অতিরিক্ত তথ্য",
   "listings.additionalInformationEnvelope": "অতিরিক্ত তথ্যের খাম",
+  "listings.allowsDogs": "কুকুর রাখার অনুমতি আছে",
+  "listings.allowsCats": "বিড়ালদের অনুমতি দেয়",
   "listings.allUnits": "সকল ইউনিট",
   "listings.allUnitsReservedFor": "সমস্ত ইউনিট %{type} এর জন্য সংরক্ষিত",
   "listings.amenities.busStops": "বাস স্টপ",

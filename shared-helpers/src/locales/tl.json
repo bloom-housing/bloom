@@ -690,6 +690,8 @@
   "listingFilters.program.Veterans": "Mga beterano",
   "listings.additionalInformation": "Karagdagang impormasyon",
   "listings.additionalInformationEnvelope": "Karagdagang impormasyon na sobre",
+  "listings.allowsDogs": "Pinapayagan ang mga aso",
+  "listings.allowsCats": "Pinapayagan ang mga pusa",
   "listings.allUnits": "Lahat ng unit",
   "listings.allUnitsReservedFor": "Ang lahat ng unit ay nakareserba para sa %{type}",
   "listings.amenities.busStops": "Mga hintuan ng bus",

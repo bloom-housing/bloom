@@ -4491,6 +4491,12 @@ export interface Listing {
   petPolicy?: string
 
   /**  */
+  allowsDogs?: boolean
+
+  /**  */
+  allowsCats?: boolean
+
+  /**  */
   smokingPolicy?: string
 
   /**  */
@@ -5424,6 +5430,12 @@ export interface ListingCreate {
   petPolicy?: string
 
   /**  */
+  allowsDogs?: boolean
+
+  /**  */
+  allowsCats?: boolean
+
+  /**  */
   smokingPolicy?: string
 
   /**  */
@@ -6252,6 +6264,12 @@ export interface ListingUpdate {
 
   /**  */
   petPolicy?: string
+
+  /**  */
+  allowsDogs?: boolean
+
+  /**  */
+  allowsCats?: boolean
 
   /**  */
   smokingPolicy?: string
@@ -9248,6 +9266,7 @@ export enum FeatureFlagEnum {
   "enableParkingFee" = "enableParkingFee",
   "enablePartnerDemographics" = "enablePartnerDemographics",
   "enablePartnerSettings" = "enablePartnerSettings",
+  "enablePetPolicyCheckbox" = "enablePetPolicyCheckbox",
   "enableProperties" = "enableProperties",
   "enableReferralQuestionUnits" = "enableReferralQuestionUnits",
   "enableRegions" = "enableRegions",

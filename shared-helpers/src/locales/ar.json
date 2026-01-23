@@ -690,6 +690,8 @@
   "listingFilters.program.Veterans": "المحاربون القدامى",
   "listings.additionalInformation": "معلومات إضافية",
   "listings.additionalInformationEnvelope": "مظروف معلومات إضافية",
+  "listings.allowsDogs": "يُسمح باصطحاب الكلاب",
+  "listings.allowsCats": "يسمح للقطط",
   "listings.allUnits": "جميع الوحدات",
   "listings.allUnitsReservedFor": "جميع الوحدات محجوزة لـ %{type}",
   "listings.amenities.busStops": "محطات الحافلات",

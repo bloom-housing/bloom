@@ -688,6 +688,8 @@
   "listingFilters.program.Veterans": "Veterans",
   "listings.additionalInformation": "Additional information",
   "listings.additionalInformationEnvelope": "Additional information envelope",
+  "listings.allowsDogs": "Allows dogs",
+  "listings.allowsCats": "Allows cats",
   "listings.allUnits": "All units",
   "listings.allUnitsReservedFor": "All units reserved for %{type}",
   "listings.amenities.busStops": "Bus stops",

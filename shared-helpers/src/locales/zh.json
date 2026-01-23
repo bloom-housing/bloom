@@ -690,6 +690,8 @@
   "listingFilters.program.Veterans": "退伍军人",
   "listings.additionalInformation": "附加信息",
   "listings.additionalInformationEnvelope": "附加信息信封",
+  "listings.allowsDogs": "允许带狗",
+  "listings.allowsCats": "允许猫",
   "listings.allUnits": "所有单位",
   "listings.allUnitsReservedFor": "保留給 %{type} 的所有單位",
   "listings.amenities.busStops": "公車站",

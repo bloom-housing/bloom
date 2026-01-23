@@ -190,6 +190,22 @@ class Listing extends AbstractDTO {
   petPolicy?: string;
 
   @Expose()
+  @ValidateListingPublish('allowsDogs', {
+    groups: [ValidationsGroupsEnum.default],
+  })
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  allowsDogs?: boolean;
+
+  @Expose()
+  @ValidateListingPublish('allowsCats', {
+    groups: [ValidationsGroupsEnum.default],
+  })
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  allowsCats?: boolean;
+
+  @Expose()
   @ValidateListingPublish('smokingPolicy', {
     groups: [ValidationsGroupsEnum.default],
   })
