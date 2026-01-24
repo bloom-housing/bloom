@@ -1,0 +1,63 @@
+name: Docker Compose CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  check-docker-compose:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v6
+
+      - name: build
+        shell: bash
+        run: |
+          if ! docker compose build; then
+            echo 'ERROR: docker compose build failed'
+          fi
+
+      - name: dbreadonlycheck
+        shell: bash
+        run: |
+          if ! COMPOSE_PROFILES=ci docker compose up \
+               --exit-code-from dbreadonlycheck \
+               dbreadonlycheck
+          then
+            echo 'ERROR: dbreadonlycheck did not exit with 0'
+            exit 1
+          fi
+
+          if ! docker compose down; then
+            echo 'ERROR: docker compose down failed'
+          fi
+
+      - name: sites-smoke-test
+        shell: bash
+        run: |
+          if ! docker compose up --wait; then
+            echo 'ERROR: docker compose up --wait did not exit with 0'
+            exit 1
+          fi
+
+          if ! curl --fail http://127.0.0.1:3001; then
+            echo 'ERROR: partners site is not accessible'
+            exit 1
+          fi
+
+          if ! curl --fail http://127.0.0.1:3000; then
+            echo 'ERROR: public site is not accessible'
+            exit 1
+          fi
+
+          if ! docker compose down; then
+            echo 'ERROR: docker compose down failed'
+          fi
