@@ -69,7 +69,6 @@ services:
       PGUSER: "postgres"
       POSTGRES_USER: "postgres"
       POSTGRES_PASSWORD: "example"
-      POSTGRES_DB: "bloom_prisma"
     healthcheck:
       test: ["CMD-SHELL", "PGPASSWORD=example psql --host=127.0.0.1 --port=5432 --username=postgres --command='SELECT 1;'"]
       interval: "2s"
@@ -77,13 +76,27 @@ services:
       retries: 20
       start_period: "1s"
 
+  dbinit:
+    build:
+      context: ./api/dbinit
+      dockerfile: Dockerfile
+    restart: no
+    environment:
+      DB_HOSTNAME: "db"
+      DB_PORT: "5432"
+      DB_USERNAME: "postgres"
+      DB_PASSWORD: "example"
+    depends_on:
+      db:
+        condition: service_healthy
+
   dbseed:
     build:
       context: ./api
       dockerfile: Dockerfile.dbseed
     restart: no
     environment:
-      DATABASE_URL: "postgres://postgres:example@db:5432/bloom_prisma"
+      DATABASE_URL: "postgres://bloom_api:bloom_api_pw@db:5432/bloom_prisma"
     command:
     - "yarn"
     - "db:seed:staging"
@@ -106,7 +119,7 @@ services:
       PORT: 3100
       NODE_ENV: "production"
       APP_SECRET: "totally a secret"
-      DATABASE_URL: "postgres://postgres:example@db:5432/bloom_prisma"
+      DATABASE_URL: "postgres://bloom_api:bloom_api_pw@db:5432/bloom_prisma"
     healthcheck:
       test: ["CMD", "curl", "--fail", "http://127.0.0.1:3100/"]
       interval: "5s"
@@ -116,6 +129,8 @@ services:
     depends_on:
       db:
         condition: service_healthy
+      dbinit:
+        condition: service_completed_successfully
 
   partners:
     build:
