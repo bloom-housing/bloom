@@ -34,6 +34,7 @@ import MultiselectQuestion from '../dtos/multiselect-questions/multiselect-quest
 import { MultiselectOption } from '../dtos/multiselect-questions/multiselect-option.dto';
 import { AmiChartUpdateImportDTO } from '../dtos/script-runner/ami-chart-update-import.dto';
 import { calculateSkip, calculateTake } from '../utilities/pagination-helpers';
+import { ApplicationService } from './application.service';
 
 /**
   this is the service for running scripts
@@ -43,6 +44,7 @@ import { calculateSkip, calculateTake } from '../utilities/pagination-helpers';
 export class ScriptRunnerService {
   constructor(
     private amiChartService: AmiChartService,
+    private applicationService: ApplicationService,
     private emailService: EmailService,
     private featureFlagService: FeatureFlagService,
     private multiselectQuestionService: MultiselectQuestionService,
@@ -1032,6 +1034,76 @@ export class ScriptRunnerService {
     const rawJurisdictions = await this.prisma.jurisdictions.findMany();
     await this.markScriptAsComplete('example', requestingUser);
     return { success: !!rawJurisdictions.length };
+  }
+
+  /**
+    this is simply an example
+  */
+  async updateApplication(req: ExpressRequest): Promise<SuccessDTO> {
+    const requestingUser = mapTo(User, req['user']);
+    const res = await this.applicationService.update(
+      {
+        id: '4d30bd24-f381-4f6e-8ae2-bae33074d646',
+        listings: {
+          id: 'efb664be-4951-4f41-810f-aa30bd50adb8',
+        },
+        applicationSelections: [
+          {
+            // housing situation
+            multiselectQuestion: {
+              id: '00e9847e-facc-4433-821b-418028b8a24f',
+            },
+            selections: [
+              {
+                multiselectOption: {
+                  id: '74b1df6b-5390-4200-bf5c-b72e532569d1',
+                },
+              },
+            ],
+          },
+          {
+            // veteran
+            multiselectQuestion: {
+              id: 'd6fc7ef0-21d6-48ca-aad1-95783849b503',
+            },
+            selections: [
+              {
+                multiselectOption: {
+                  id: '078ddfdb-3aa9-4e95-bc8d-fd22b063b3e4',
+                },
+              },
+            ],
+          },
+          // {
+          //   // work in city
+          //   multiselectQuestion: {
+          //     id: '42ce0aa7-5a88-4aa4-8fef-a072b0dfd0ad',
+          //   },
+          //   selections: [],
+          // },
+          // {
+          //   // city employee
+          //   multiselectQuestion: {
+          //     id: '6e4c7b78-6f22-400d-9634-1a19314ec7d9',
+          //   },
+          //   selections: [],
+          // },
+        ],
+        accessibility: null,
+        alternateContact: null,
+        applicant: null,
+        applicationsMailingAddress: null,
+        applicationsAlternateAddress: null,
+        demographics: null,
+        householdMember: [],
+        preferredUnitTypes: [],
+        contactPreferences: [],
+        status: 'submitted',
+        submissionType: 'electronical',
+      },
+      requestingUser,
+    );
+    return { success: !!res };
   }
 
   // |------------------ HELPERS GO BELOW ------------------ | //

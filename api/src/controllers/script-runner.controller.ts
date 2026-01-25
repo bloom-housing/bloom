@@ -266,4 +266,14 @@ export class ScriptRunnerController {
   ): Promise<SuccessDTO> {
     return await this.scriptRunnerService.setIsNewestApplicationValues(req);
   }
+
+  @Put('updateApplication')
+  @ApiOperation({
+    summary: 'updatesAnApplication',
+    operationId: 'updateApplication',
+  })
+  @ApiOkResponse({ type: SuccessDTO })
+  async updateApplication(@Request() req: ExpressRequest): Promise<SuccessDTO> {
+    return await this.scriptRunnerService.updateApplication(req);
+  }
 }

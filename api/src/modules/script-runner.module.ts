@@ -7,10 +7,12 @@ import { EmailModule } from './email.module';
 import { MultiselectQuestionModule } from './multiselect-question.module';
 import { PermissionModule } from './permission.module';
 import { PrismaModule } from './prisma.module';
+import { ApplicationModule } from './application.module';
 
 @Module({
   imports: [
     AmiChartModule,
+    ApplicationModule,
     EmailModule,
     FeatureFlagModule,
     MultiselectQuestionModule,
