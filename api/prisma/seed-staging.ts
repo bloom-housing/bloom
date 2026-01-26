@@ -8,6 +8,7 @@ import {
   Prisma,
   PrismaClient,
   UserRoleEnum,
+  MultiselectQuestionsStatusEnum,
 } from '@prisma/client';
 import { jurisdictionFactory } from './seed-helpers/jurisdiction-factory';
 import { listingFactory } from './seed-helpers/listing-factory';
@@ -41,14 +42,17 @@ import dayjs from 'dayjs';
 export const stagingSeed = async (
   prismaClient: PrismaClient,
   jurisdictionName: string,
+  msqV2: boolean,
 ) => {
   // Seed feature flags
   await createAllFeatureFlags(prismaClient);
+  const optionalMainFlags = msqV2 ? [FeatureFlagEnum.enableV2MSQ] : [];
   // create main jurisdiction with as many feature flags turned on as possible
   const mainJurisdiction = await prismaClient.jurisdictions.create({
     data: jurisdictionFactory(jurisdictionName, {
       listingApprovalPermissions: [UserRoleEnum.admin],
       featureFlags: [
+        ...optionalMainFlags,
         FeatureFlagEnum.enableAccessibilityFeatures,
         FeatureFlagEnum.enableCompanyWebsite,
         FeatureFlagEnum.enableGeocodingPreferences,
@@ -408,8 +412,32 @@ export const stagingSeed = async (
       simplifiedDCMap,
     ),
   });
-  const cityEmployeeQuestion = await prismaClient.multiselectQuestions.create({
-    data: multiselectQuestionFactory(mainJurisdiction.id, {
+  // NOTE: the previous V1 msq factory had a bug where options aren't actually used
+  // and random data is generated no matter what. I've only fixed this in V2 seeding.
+  let cityEmployeeMsqData: Prisma.MultiselectQuestionsCreateInput;
+  if (msqV2) {
+    cityEmployeeMsqData = multiselectQuestionFactory(
+      mainJurisdiction.id,
+      {
+        multiselectQuestion: {
+          status: MultiselectQuestionsStatusEnum.active,
+          name: 'City Employees',
+          description: 'Employees of the local city.',
+          applicationSection:
+            MultiselectQuestionsApplicationSectionEnum.preferences,
+          options: [
+            {
+              name: 'At least one member of my household is a city employee',
+              shouldCollectAddress: false,
+              ordinal: 1,
+            },
+          ],
+        },
+      },
+      true,
+    );
+  } else {
+    cityEmployeeMsqData = multiselectQuestionFactory(mainJurisdiction.id, {
       multiselectQuestion: {
         text: 'City Employees',
         description: 'Employees of the local city.',
@@ -417,16 +445,54 @@ export const stagingSeed = async (
           MultiselectQuestionsApplicationSectionEnum.preferences,
         options: [
           {
-            text: 'At least one member of my household is a city employee',
+            name: 'At least one member of my household is a city employee',
             collectAddress: false,
             ordinal: 0,
           },
         ],
       },
-    }),
+    });
+  }
+  const cityEmployeeQuestion = await prismaClient.multiselectQuestions.create({
+    data: cityEmployeeMsqData,
   });
-  const workInCityQuestion = await prismaClient.multiselectQuestions.create({
-    data: multiselectQuestionFactory(mainJurisdiction.id, {
+  let workInCityMsqData: Prisma.MultiselectQuestionsCreateInput;
+  if (msqV2) {
+    workInCityMsqData = multiselectQuestionFactory(
+      mainJurisdiction.id,
+      {
+        optOut: true,
+        status: MultiselectQuestionsStatusEnum.active,
+        multiselectQuestion: {
+          name: 'Work in the city',
+          description: 'At least one member of my household works in the city',
+          applicationSection:
+            MultiselectQuestionsApplicationSectionEnum.preferences,
+          options: [
+            {
+              name: 'At least one member of my household works in the city',
+              ordinal: 1,
+              shouldCollectAddress: true,
+              shouldCollectName: true,
+              shouldCollectRelationship: true,
+              mapLayerId: mapLayer.id,
+              validationMethod: ValidationMethod.map,
+            },
+            {
+              name: 'All members of the household work in the city',
+              ordinal: 2,
+              shouldCollectAddress: true,
+              validationMethod: ValidationMethod.none,
+              shouldCollectName: false,
+              shouldCollectRelationship: false,
+            },
+          ],
+        },
+      },
+      true,
+    );
+  } else {
+    workInCityMsqData = multiselectQuestionFactory(mainJurisdiction.id, {
       optOut: true,
       multiselectQuestion: {
         text: 'Work in the city',
@@ -453,7 +519,10 @@ export const stagingSeed = async (
           },
         ],
       },
-    }),
+    });
+  }
+  const workInCityQuestion = await prismaClient.multiselectQuestions.create({
+    data: workInCityMsqData,
   });
   const veteranProgramQuestion = await prismaClient.multiselectQuestions.create(
     {
