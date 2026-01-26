@@ -7,7 +7,7 @@ import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum
 
 export class ApplicationSelectionCreate extends OmitType(
   ApplicationSelectionUpdate,
-  ['id', 'application', 'selections'],
+  ['id', 'selections'],
 ) {
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
