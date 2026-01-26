@@ -1043,17 +1043,17 @@ model UserAccounts {
   wasWarnedOfDeletion       Boolean?                @default(false) @map("was_warned_of_deletion")
 
   title                     String?
-  address                   Address?  @relation(fields: [addressId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  addressId                 String?   @map("address_id") @db.Uuid
-  phoneType                 String?   @map("phone_type")
-  phoneExtension            String?   @map("phone_extension")
-  additionalPhoneNumber     String?   @map("additional_phone_number")
-  additionalPhoneNumberType String?   @map("additional_phone_number_type")
-  additionalPhoneExtension  String?   @map("additional_phone_extension")
-  agency                    Agencies? @relation(fields: [agencyId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  agencyId                  String?   @map("agency_id") @db.Uuid
-  isApproved                Boolean   @default(false) @map("is_approved")
-  isAdvocate                Boolean   @default(false) @map("is_advocate")
+  address                   Address? @relation(fields: [addressId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  addressId                 String?  @map("address_id") @db.Uuid
+  phoneType                 String?  @map("phone_type")
+  phoneExtension            String?  @map("phone_extension")
+  additionalPhoneNumber     String?  @map("additional_phone_number")
+  additionalPhoneNumberType String?  @map("additional_phone_number_type")
+  additionalPhoneExtension  String?  @map("additional_phone_extension")
+  agency                    Agency?  @relation(fields: [agencyId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  agencyId                  String?  @map("agency_id") @db.Uuid
+  isApproved                Boolean  @default(false) @map("is_approved")
+  isAdvocate                Boolean  @default(false) @map("is_advocate")
 
   @@map("user_accounts")
 }
