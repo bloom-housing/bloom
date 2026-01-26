@@ -45,7 +45,7 @@ jobs:
         shell: bash
         run: |
           if ! docker compose up \
-               --edit-code-from dbreadonlycheck \
+               --exit-code-from dbreadonlycheck \
                dbreadonlycheck
           then
             echo 'ERROR: dbreadonlycheck did not exit with 0'
