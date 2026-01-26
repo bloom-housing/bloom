@@ -34,3 +34,20 @@ jobs:
             echo 'ERROR: not all tofu files are correctly formatted'
             exit 1
           fi
+
+  check-docker-compose:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v6
+
+      - name: dbreadonlycheck
+        shell: bash
+        run: |
+          if ! docker compose up \
+               --edit-code-from dbreadonlycheck \
+               dbreadonlycheck
+          then
+            echo 'ERROR: dbreadonlycheck did not exit with 0'
+            exit 1
+          fi

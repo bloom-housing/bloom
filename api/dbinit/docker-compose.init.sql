@@ -1,3 +1,6 @@
+-- Create bloom_prosma DB, bloom_api and bloom_readonly db users.
+\set ON_ERROR_STOP on
+
 CREATE DATABASE bloom_prisma;
 \c bloom_prisma
 

@@ -68,9 +68,9 @@ services:
     environment:
       PGUSER: "postgres"
       POSTGRES_USER: "postgres"
-      POSTGRES_PASSWORD: "example"
+      POSTGRES_PASSWORD: "postgres_pw"
     healthcheck:
-      test: ["CMD-SHELL", "PGPASSWORD=example psql --host=127.0.0.1 --port=5432 --username=postgres --command='SELECT 1;'"]
+      test: ["CMD-SHELL", "PGPASSWORD=postgres_pw psql --host=127.0.0.1 --port=5432 --username=postgres --command='SELECT 1;'"]
       interval: "2s"
       timeout: "1s"
       retries: 20
@@ -82,13 +82,43 @@ services:
       dockerfile: Dockerfile
     restart: no
     environment:
-      DB_HOSTNAME: "db"
-      DB_PORT: "5432"
-      DB_USERNAME: "postgres"
-      DB_PASSWORD: "example"
+      PGPASSWORD: "postgres_pw"
+    entrypoint: "psql"
+    command:
+      - "--host=db"
+      - "--port=5432"
+      - "--dbname=postgres"
+      - "--username=postgres"
+      - "--echo-queries"
+      - "--echo-hidden"
+      - "--file=docker-compose.init.sql"
     depends_on:
       db:
         condition: service_healthy
+
+  dbreadonlycheck:
+    build:
+      context: ./api/dbinit
+      dockerfile: Dockerfile
+    restart: no
+    environment:
+      PGPASSWORD: "bloom_readonly_pw"
+    entrypoint: "psql"
+    command:
+      - "--host=db"
+      - "--port=5432"
+      - "--dbname=bloom_prisma"
+      - "--username=bloom_readonly"
+      - "--echo-queries"
+      - "--echo-hidden"
+      - "--file=docker-compose.check.sql"
+    depends_on:
+      db:
+        condition: service_healthy
+      dbinit:
+        condition: service_completed_successfully
+      dbseed:
+        condition: service_completed_successfully
 
   dbseed:
     build:
@@ -112,7 +142,7 @@ services:
     expose:
       - "3100"
     deploy:
-      endpoint_mode: 'dnsrr'
+      endpoint_mode: "dnsrr"
       mode: replicated
       replicas: ${API_REPLICAS:-1}
     environment:
@@ -140,7 +170,7 @@ services:
     expose:
       - "3001"
     deploy:
-      endpoint_mode: 'dnsrr'
+      endpoint_mode: "dnsrr"
       mode: replicated
       replicas: ${PARTNERS_REPLICAS:-1}
     environment:
@@ -162,7 +192,7 @@ services:
     expose:
       - "3000"
     deploy:
-      endpoint_mode: 'dnsrr'
+      endpoint_mode: "dnsrr"
       mode: replicated
       replicas: ${PUBLIC_REPLICAS:-1}
     environment:
