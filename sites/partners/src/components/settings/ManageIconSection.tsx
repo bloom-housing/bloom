@@ -11,11 +11,12 @@ type IconContentProps = {
   deleteTestId?: string
   onEdit: () => void
   editTestId: string
+  align?: "end" | "start"
 }
 
-const ManageIconSection = (props: IconContentProps) => {
+const ManageIconSection = ({ align = "end", ...props }: IconContentProps) => {
   return (
-    <div className={"flex justify-end gap-5"}>
+    <div className={`flex justify-${align} gap-5`}>
       <button
         className="text-primary"
         onClick={props.onEdit}

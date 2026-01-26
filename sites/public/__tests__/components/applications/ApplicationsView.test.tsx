@@ -12,6 +12,7 @@ import {
   ListingsStatusEnum,
   LotteryStatusEnum,
   PublicAppsViewResponse,
+  ApplicationStatusEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { setupServer } from "msw/lib/node"
 import { rest } from "msw"
@@ -59,28 +60,28 @@ function getApplications(
     displayApplications: [
       ...(openCount &&
       (filterType === ApplicationsIndexEnum.all || filterType === ApplicationsIndexEnum.open)
-        ? Array(openCount).fill({
+        ? Array.from({ length: openCount }).map(() => ({
             ...application,
             listings: { ...listing, status: ListingsStatusEnum.active },
-          })
+          }))
         : []),
       ...(closedCount &&
       (filterType === ApplicationsIndexEnum.all || filterType === ApplicationsIndexEnum.closed)
-        ? Array(closedCount).fill({
+        ? Array.from({ length: closedCount }).map(() => ({
             ...application,
             listings: {
               ...listing,
               status: ListingsStatusEnum.pending,
               lotteryStatus: LotteryStatusEnum.publishedToPublic,
             },
-          })
+          }))
         : []),
       ...(lotteryCount &&
       (filterType === ApplicationsIndexEnum.all || filterType === ApplicationsIndexEnum.lottery)
-        ? Array(lotteryCount).fill({
+        ? Array.from({ length: lotteryCount }).map(() => ({
             ...application,
             listings: { ...listing, status: ListingsStatusEnum.closed },
-          })
+          }))
         : []),
     ],
     applicationsCount: {
@@ -92,7 +93,10 @@ function getApplications(
   }
 }
 
-function renderApplicationsView(filterType = ApplicationsIndexEnum.all) {
+function renderApplicationsView(
+  filterType = ApplicationsIndexEnum.all,
+  enableApplicationStatus = false
+) {
   return render(
     <AuthContext.Provider
       value={{
@@ -100,7 +104,7 @@ function renderApplicationsView(filterType = ApplicationsIndexEnum.all) {
         applicationsService: new ApplicationsService(),
       }}
     >
-      <ApplicationsView filterType={filterType} />
+      <ApplicationsView filterType={filterType} enableApplicationStatus={enableApplicationStatus} />
     </AuthContext.Provider>
   )
 }
@@ -145,7 +149,7 @@ describe("<ApplicationsView>", () => {
     // Dashboard heading
     expect(screen.getByRole("heading", { level: 1, name: /my applications/i })).toBeInTheDocument()
     expect(
-      screen.getByText("See lottery dates and listings for properties for which you've applied")
+      screen.getByText("See listings for properties for which you’ve applied.")
     ).toBeInTheDocument()
 
     // Application section (Missing fallback component)
@@ -169,7 +173,7 @@ describe("<ApplicationsView>", () => {
         screen.getByRole("heading", { level: 1, name: /my applications/i })
       ).toBeInTheDocument()
       expect(
-        screen.getByText("See lottery dates and listings for properties for which you've applied")
+        screen.getByText("See listings for properties for which you’ve applied.")
       ).toBeInTheDocument()
 
       // Application section (Missing fallback component)
@@ -189,13 +193,13 @@ describe("<ApplicationsView>", () => {
 
       const closedApplicationsTab = screen.getByTestId("closed-applications-tab")
       expect(
-        within(closedApplicationsTab).getByText("Applications closed", { selector: "span" })
+        within(closedApplicationsTab).getByText("Closed applications", { selector: "span" })
       ).toBeInTheDocument()
       expect(within(closedApplicationsTab).getByText("0")).toBeInTheDocument()
 
       const openApplicationsTab = screen.getByTestId("open-applications-tab")
       expect(
-        within(openApplicationsTab).getByText("Accepting applications", { selector: "span" })
+        within(openApplicationsTab).getByText("Open applications", { selector: "span" })
       ).toBeInTheDocument()
       expect(within(openApplicationsTab).getByText("0")).toBeInTheDocument()
 
@@ -380,6 +384,87 @@ describe("<ApplicationsView>", () => {
       await waitFor(() => {
         expect(pushMock).toHaveBeenCalledWith("/account/applications/lottery")
       })
+    })
+  })
+
+  describe("Application Status", () => {
+    const statusTestCases = [
+      { status: ApplicationStatusEnum.submitted, text: "Submitted" },
+      { status: ApplicationStatusEnum.declined, text: "Declined" },
+      { status: ApplicationStatusEnum.receivedUnit, text: "Received a unit" },
+      { status: ApplicationStatusEnum.waitlist, text: "Wait list" },
+      { status: ApplicationStatusEnum.waitlistDeclined, text: "Wait list - Declined" },
+    ]
+
+    // +1 for duplicate state
+    const filterTestCases = [
+      { filter: ApplicationsIndexEnum.all, countArgs: [statusTestCases.length, 1, 0] },
+      { filter: ApplicationsIndexEnum.open, countArgs: [statusTestCases.length + 1, 0, 0] },
+      { filter: ApplicationsIndexEnum.closed, countArgs: [0, statusTestCases.length + 1, 0] },
+      { filter: ApplicationsIndexEnum.lottery, countArgs: [0, 0, statusTestCases.length + 1] },
+    ]
+
+    filterTestCases.forEach(({ filter, countArgs }) => {
+      it(`should display all statuses correctly in ${ApplicationsIndexEnum[filter]} view`, async () => {
+        // Create an application for each status we want to test
+        const mockApps = getApplications(countArgs[0], countArgs[1], countArgs[2], filter)
+        // We will modify the first N applications to have our test statuses
+        mockApps.displayApplications.forEach((app, index) => {
+          if (index === statusTestCases.length) {
+            app.markedAsDuplicate = true
+          } else {
+            app.status = statusTestCases[index].status
+          }
+        })
+
+        server.use(
+          rest.get("http://localhost:3100/applications/publicAppsView", (_req, res, ctx) => {
+            return res(ctx.json(mockApps))
+          })
+        )
+
+        renderApplicationsView(filter, true)
+
+        // Check if all status texts are present
+        for (const { text } of statusTestCases) {
+          expect(await screen.findByText(text)).toBeInTheDocument()
+        }
+        expect(await screen.findByText("Duplicate")).toBeInTheDocument()
+      })
+    })
+
+    it("should not display application status when feature flag is disabled", async () => {
+      const mockApps = getApplications(1, 0, 0)
+      mockApps.displayApplications[0].status = ApplicationStatusEnum.submitted
+
+      server.use(
+        rest.get("http://localhost:3100/applications/publicAppsView", (_req, res, ctx) => {
+          return res(ctx.json(mockApps))
+        })
+      )
+
+      renderApplicationsView(ApplicationsIndexEnum.all, false)
+
+      // Should show "Accepting applications" (Open applications) instead of "Submitted"
+      expect(await screen.findByText("Open applications")).toBeInTheDocument()
+      expect(screen.queryByText("Submitted")).not.toBeInTheDocument()
+    })
+
+    it("should not display duplicate status when feature flag is disabled", async () => {
+      const mockApps = getApplications(1, 0, 0)
+      mockApps.displayApplications[0].markedAsDuplicate = true
+
+      server.use(
+        rest.get("http://localhost:3100/applications/publicAppsView", (_req, res, ctx) => {
+          return res(ctx.json(mockApps))
+        })
+      )
+
+      renderApplicationsView(ApplicationsIndexEnum.all, false)
+
+      // Should show "Accepting applications" (Open applications) instead of "Duplicate"
+      expect(await screen.findByText("Open applications")).toBeInTheDocument()
+      expect(screen.queryByText("Duplicate")).not.toBeInTheDocument()
     })
   })
 })

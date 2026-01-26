@@ -10,15 +10,7 @@ Cloud Native Computing Foundation.
 
 ## Structure
 
-- [tofu_root_modules](./tofu_root_modules): Contains all the OpenTofu root modules. A root module
-  is a set of resources that are all managed together. Each root module has a state file that
-  records the results of the latest apply operation.
-
-   - [bloom_dev](./tofu_root_modules/bloom_dev/README.md): Configures the bloom-dev AWS account.
-   - [bloom_dev_deployer_permission_set_policy](./tofu_root_modules/bloom_dev_deployer_permission_set_policy/main.tf):
-     Configures the bloom-dev-deployer permission set policy.
-   - [bloom_prod_deployer_permission_set_policy](./tofu_root_modules/bloom_prod_deployer_permission_set_policy/main.tf):
-     Configures the bloom-prod-deployer permission set policy.
+**Maintained in Bloom core repo, synced to forks:**
 
 - [tofu_importable_modules](./tofu_importable_modules): Contains all the OpenTofu importable
   modules. An importable module is a reusable set of resources configured through input
@@ -29,6 +21,13 @@ Cloud Native Computing Foundation.
    - [bloom_deployment](./tofu_importable_modules/bloom_deployment/): Configures all the resources
      needed for a Bloom deployment in a single AWS account.
 
+**Maintained in forks:**
+
+- [tofu_root_modules](./tofu_root_modules): Contains all the OpenTofu root modules. A root module
+  is a set of resources that are all managed together. Each root module has a state file that
+  records the results of the latest apply operation. See
+  https://github.com/bloom-housing/bloom-exygy/tree/main/infra/tofu_root_modules for an example root
+  module structure.
 
 ## Infrastructure-as-code mental model
 

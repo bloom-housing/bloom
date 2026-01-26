@@ -3,6 +3,7 @@ import {
   AddressCreate,
   ApplicationStatusEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { getApplicationStatusVariant } from "@bloom-housing/shared-helpers/src/utilities/applicationStatus"
 import { t } from "@bloom-housing/ui-components"
 import { FieldValue, Grid, Tag } from "@bloom-housing/ui-seeds"
 import dayjs from "dayjs"
@@ -35,23 +36,6 @@ export const getDetailFieldTime = (listingTime: Date) => {
 
 export const getDetailBoolean = (listingBool: boolean) => {
   return listingBool === true ? t("t.yes") : listingBool === false ? t("t.no") : t("t.n/a")
-}
-
-export const getApplicationStatusVariant = (status?: ApplicationStatusEnum) => {
-  switch (status) {
-    case ApplicationStatusEnum.submitted:
-      return "primary"
-    case ApplicationStatusEnum.declined:
-      return "highlight-warm"
-    case ApplicationStatusEnum.receivedUnit:
-      return "success"
-    case ApplicationStatusEnum.waitlist:
-      return "warn"
-    case ApplicationStatusEnum.waitlistDeclined:
-      return "highlight-warm"
-    default:
-      return "secondary"
-  }
 }
 
 type ApplicationStatusTagProps = {

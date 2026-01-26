@@ -989,6 +989,20 @@ export class ListingService implements OnModuleInit {
             })),
           });
         }
+        if (filter[ListingFilterKeys.configurableRegions]) {
+          const builtFilter = buildFilter({
+            $comparison: filter.$comparison,
+            $include_nulls: false,
+            value: filter[ListingFilterKeys.configurableRegions],
+            key: ListingFilterKeys.configurableRegions,
+            caseSensitive: true,
+          });
+          filters.push({
+            OR: builtFilter.map((filt) => ({
+              configurableRegion: filt,
+            })),
+          });
+        }
         if (filter[ListingFilterKeys.reservedCommunityTypes]) {
           const builtFilter = buildFilter({
             $comparison: filter.$comparison,
@@ -1634,6 +1648,13 @@ export class ListingService implements OnModuleInit {
             }
           : undefined,
         isVerified: !!dto.isVerified,
+        property: dto.property
+          ? {
+              connect: {
+                id: dto.property.id,
+              },
+            }
+          : undefined,
       },
     });
     if (rawListing.status === ListingsStatusEnum.pendingReview) {
@@ -2564,6 +2585,13 @@ export class ListingService implements OnModuleInit {
               },
             },
           },
+          property: incomingDto?.property
+            ? {
+                connect: {
+                  id: incomingDto.property.id,
+                },
+              }
+            : undefined,
         },
         include: includeViews.full,
         where: {
@@ -2743,6 +2771,32 @@ export class ListingService implements OnModuleInit {
         },
       },
     });
+    return mapTo(Listing, listingsRaw);
+  };
+
+  /**
+   * Retrieves all listings associated with a specific property.
+   * @param {string} propertyId - The unique identifier of the property for which to find listings
+   * @returns {Promise<Listing[]>} A promise that resolves to an array of Listing objects containing id and name
+   * @throws {BadRequestException} Throws an exception if propertyId is not provided or is empty
+   */
+  findListingsWithProperty = async (propertyId: string) => {
+    if (!propertyId) {
+      throw new BadRequestException({
+        message: 'A property ID must be provided',
+      });
+    }
+
+    const listingsRaw = await this.prisma.listings.findMany({
+      select: {
+        id: true,
+        name: true,
+      },
+      where: {
+        propertyId: propertyId,
+      },
+    });
+
     return mapTo(Listing, listingsRaw);
   };
 

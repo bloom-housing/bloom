@@ -63,6 +63,7 @@ import {
 import { ValidateListingDeposit } from '../../decorators/validate-listing-deposit.decorator';
 import { ListingDocuments } from './listing-documents.dto';
 import { ValidateListingImages } from '../../decorators/validate-listing-images.decorator';
+import Property from '../properties/property.dto';
 
 class Listing extends AbstractDTO {
   @Expose()
@@ -173,12 +174,36 @@ class Listing extends AbstractDTO {
   region?: RegionEnum;
 
   @Expose()
+  @ValidateListingPublish('configurableRegion', {
+    groups: [ValidationsGroupsEnum.default],
+  })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  configurableRegion?: string;
+
+  @Expose()
   @ValidateListingPublish('petPolicy', {
     groups: [ValidationsGroupsEnum.default],
   })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   petPolicy?: string;
+
+  @Expose()
+  @ValidateListingPublish('allowsDogs', {
+    groups: [ValidationsGroupsEnum.default],
+  })
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  allowsDogs?: boolean;
+
+  @Expose()
+  @ValidateListingPublish('allowsCats', {
+    groups: [ValidationsGroupsEnum.default],
+  })
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  allowsCats?: boolean;
 
   @Expose()
   @ValidateListingPublish('smokingPolicy', {
@@ -1173,6 +1198,15 @@ class Listing extends AbstractDTO {
     },
   )
   lastUpdatedByUser?: IdDTO;
+
+  @Expose()
+  @ValidateListingPublish('property', {
+    groups: [ValidationsGroupsEnum.default],
+  })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => Property)
+  @ApiPropertyOptional({ type: Property })
+  property?: Property;
 }
 
 export { Listing as default, Listing };

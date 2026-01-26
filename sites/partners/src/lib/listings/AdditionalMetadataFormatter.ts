@@ -125,6 +125,11 @@ export default class AdditionalMetadataFormatter extends Formatter {
       }, {})
     }
 
+    if (this.data.petPolicyPreferences) {
+      this.data.allowsDogs = this.data.petPolicyPreferences.includes("allowsDogs")
+      this.data.allowsCats = this.data.petPolicyPreferences.includes("allowsCats")
+    }
+
     if (!this.data.listingType || this.data.listingType === EnumListingListingType.regulated) {
       this.data.depositValue = undefined
     } else if (this.data.listingType === EnumListingListingType.nonRegulated) {
