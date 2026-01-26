@@ -176,7 +176,7 @@ const AccessibilityFeatures = (props: AccessibilityFeaturesProps) => {
               <div
                 className={`field-label text-xs ${styles["custom-label"]} ${styles["label-error"]} seeds-m-bs-2`}
               >
-                This section has some required fields
+                {t("errors.requiredFieldError")}
               </div>
             )}
           </>
