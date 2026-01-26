@@ -23,6 +23,6 @@ ON UPDATE NO ACTION ;
 ALTER TABLE "user_accounts" 
 ADD CONSTRAINT "user_accounts_agency_id_fkey" 
 FOREIGN KEY ("agency_id") 
-REFERENCES "agencies"("id") 
+REFERENCES "agency"("id") 
 ON DELETE NO ACTION 
 ON UPDATE NO ACTION ;
