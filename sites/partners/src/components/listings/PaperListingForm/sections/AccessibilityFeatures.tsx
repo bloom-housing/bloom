@@ -43,10 +43,10 @@ const AccessibilityFeatures = (props: AccessibilityFeaturesProps) => {
   useEffect(() => {
     if (isDrawerOpen) {
       props.listingFeaturesConfiguration?.categories?.forEach((category) => {
-        const categoryFeatures = props.existingFeatures.filter((feature) =>
+        const categoryFeatures = props.existingFeatures?.filter((feature) =>
           category.fields.some((field) => field.id === feature)
         )
-        categoryFeatures.forEach(() => {
+        categoryFeatures?.forEach(() => {
           setValue(`configurableAccessibilityFeatures.${category.id}`, categoryFeatures || [])
         })
       })

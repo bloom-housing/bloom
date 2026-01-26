@@ -1183,15 +1183,6 @@ class Listing extends AbstractDTO {
   listingNeighborhoodAmenities?: ListingNeighborhoodAmenities;
 
   @Expose()
-  requiredFields?: string[];
-
-  @Expose()
-  minimumImagesRequired?: number;
-
-  @Expose()
-  listingFeaturesConfiguration?: ListingFeaturesConfiguration;
-
-  @Expose()
   @ApiPropertyOptional()
   @Transform(
     (obj: any) => {
@@ -1213,6 +1204,16 @@ class Listing extends AbstractDTO {
   @Type(() => Property)
   @ApiPropertyOptional({ type: Property })
   property?: Property;
+
+  // These are meta fields used to validate required form data before publishing listings
+  @Expose()
+  requiredFields?: string[];
+
+  @Expose()
+  minimumImagesRequired?: number;
+
+  @Expose()
+  listingFeaturesConfiguration?: ListingFeaturesConfiguration;
 }
 
 export { Listing as default, Listing };

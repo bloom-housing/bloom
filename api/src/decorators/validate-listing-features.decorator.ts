@@ -8,7 +8,7 @@ import {
 } from 'class-validator';
 import { ListingFeaturesConfiguration } from '../../src/dtos/jurisdictions/listing-features-config.dto';
 
-const missingCategories = (
+export const missingCategories = (
   featuresConfiguration: ListingFeaturesConfiguration,
   value: ListingFeatures,
 ) => {
@@ -19,7 +19,9 @@ const missingCategories = (
     const missingCategories = [];
     requiredCategories.forEach((category) => {
       const atLeastOneField = category.fields.some((field) => {
-        return value[field.id] === true;
+        return (
+          Object.keys(value).includes(field.id) && value[field.id] === true
+        );
       });
       if (!atLeastOneField) missingCategories.push(category.id);
     });

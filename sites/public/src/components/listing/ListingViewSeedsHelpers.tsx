@@ -142,9 +142,8 @@ export const getHasNonReferralMethods = (listing: Listing) => {
 
 export const getAccessibilityFeatures = (listing: Listing) => {
   const enabledFeatures = Object.entries(listing?.listingFeatures ?? {})
-    .filter(([_, value]) => value)
+    .filter(([key, value]) => value && allListingFeatures?.includes(key as ListingFeaturesValues))
     .map((item) => item[0])
-    .filter((feature: ListingFeaturesValues) => allListingFeatures?.includes(feature))
 
   const COLUMN_BREAKPOINT = 6
   if (enabledFeatures.length > 0) {
@@ -168,9 +167,8 @@ export const getAccessibilityFeatures = (listing: Listing) => {
 
 export const getUtilitiesIncluded = (listing: Listing) => {
   const enabledUtilities = Object.entries(listing?.listingUtilities ?? {})
-    .filter(([_, value]) => value)
+    .filter(([key, value]) => value && listingUtilities.includes(key))
     .map((item) => item[0])
-    .filter((utility) => listingUtilities.includes(utility))
 
   if (enabledUtilities.length > 0) {
     return enabledUtilities.map((utility, index) => {
