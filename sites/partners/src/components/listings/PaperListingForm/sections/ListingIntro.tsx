@@ -50,11 +50,13 @@ const ListingIntro = (props: ListingIntroProps) => {
     jurisdictions: profile?.jurisdictions?.map((jurisdiction) => jurisdiction.id).toString(),
   })
 
+  const propertiesData = data?.items || []
+
   const propertiyOptions: SelectOption[] =
-    data?.items?.length !== 0
+    propertiesData.length !== 0
       ? [
           { label: "", value: "" },
-          ...data.items.map((property) => ({
+          ...propertiesData.map((property) => ({
             label: property.name,
             value: property.id,
           })),
@@ -153,7 +155,7 @@ const ListingIntro = (props: ListingIntroProps) => {
               </Grid.Cell>
             </Grid.Row>
           )}
-        {data?.items.length > 1 && (
+        {propertiesData.length > 1 && (
           <Grid.Row columns={3}>
             <Grid.Cell>
               <Select
