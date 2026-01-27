@@ -63,11 +63,13 @@ const DetailAccessibilityFeatures = (props: DetailAccessibilityFeaturesProps) =>
 
   const hasCategories = props?.listingFeaturesConfiguration?.categories?.length > 0
 
-  const featuresAsString = Object.keys(listing?.listingFeatures)
-    .map((feature) => {
-      return listing.listingFeatures[feature] === true ? feature : null
-    })
-    .filter((feature) => feature !== null)
+  const featuresAsString = listing?.listingFeatures
+    ? Object.keys(listing?.listingFeatures)
+        .map((feature) => {
+          return listing.listingFeatures[feature] === true ? feature : null
+        })
+        .filter((feature) => feature !== null)
+    : []
 
   if (!enableAccessibilityFeatures) {
     return null
