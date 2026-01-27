@@ -6,7 +6,6 @@ import {
   UnitAccessibilityPriorityType,
   Unit,
   ListingEventsTypeEnum,
-  ListingEvent,
   ListingUtilities,
   ListingFeatures,
   ApplicationMethodsTypeEnum,
@@ -16,13 +15,22 @@ import {
   ListingNeighborhoodAmenities,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
+export type CypressListingImage = {
+  fixtureName: string
+  altText?: string
+}
 export type CypressListing = Listing & {
   "jurisdiction.id": string
   events: CypressListingEvent[]
   dueDate?: CypressListingDateTime
   postmarkDate?: CypressListingDateTime
   editedName: string
-  cypressImages?: { fixtureName: string; altText?: string }[]
+  cypressImages?: CypressListingImage[]
+  listingsBuildingAddress: CypressAddress
+  listingsApplicationMailingAddress: CypressAddress
+  listingsLeasingAgentAddress: CypressAddress
+  cypressUtilities?: CypressListingFeatures[]
+  cypressFeatures?: CypressListingFeatures[]
 }
 
 export type CypressListingDateTime = {
@@ -33,13 +41,24 @@ export type CypressListingDateTime = {
   startMinutes: string
   endHours: string
   endMinutes: string
+  period: "am" | "pm"
 }
+
 export type CypressListingEvent = {
   type: ListingEventsTypeEnum
   dateTime: CypressListingDateTime
   note: string
   label: string
   url: string
+}
+
+export type CypressListingFeatures = {
+  key: string
+  translation: string
+}
+
+export type CypressAddress = Address & {
+  abbreviatedState?: string
 }
 
 export const bloomingtonListing: CypressListing = {
@@ -58,8 +77,9 @@ export const bloomingtonListing: CypressListing = {
     street: "548 Market St. #59930",
     city: "San Francisco",
     state: "California",
+    abbreviatedState: "CA",
     zipCode: "94104",
-  } as Address,
+  } as CypressAddress,
   neighborhood: "Basic Test Neighborhood",
   yearBuilt: 2021,
   reservedCommunityTypes: {
@@ -115,15 +135,17 @@ export const bloomingtonListing: CypressListing = {
     city: "San Francisco",
     zipCode: "94104",
     state: "California",
-  } as Address,
+    abbreviatedState: "CA",
+  } as CypressAddress,
   applicationMailingAddressType: undefined,
   listingsApplicationMailingAddress: {
     street: "123 Main St.",
     street2: "Apt 4B",
     city: "Bloomington",
-    state: "IN",
+    state: "Indiana",
     zipCode: "47408",
-  } as Address,
+    abbreviatedState: "IN",
+  } as CypressAddress,
   additionalApplicationSubmissionNotes: "Basic Additional Application Submission Notes",
   events: [
     {
@@ -136,6 +158,7 @@ export const bloomingtonListing: CypressListing = {
         startMinutes: "04",
         endHours: "11",
         endMinutes: "05",
+        period: "pm",
       },
 
       note: "Basic Note",
@@ -151,6 +174,7 @@ export const bloomingtonListing: CypressListing = {
     startMinutes: "00",
     endHours: "10",
     endMinutes: "00",
+    period: "pm",
   },
   listingEvents: [],
   editedName: "Basic Listing Edited Name",
@@ -159,11 +183,21 @@ export const bloomingtonListing: CypressListing = {
     trash: true,
     phone: true,
   } as ListingUtilities,
+  cypressUtilities: [
+    { key: "water", translation: "Water" },
+    { key: "trash", translation: "Trash" },
+    { key: "phone", translation: "Phone" },
+  ],
   listingFeatures: {
     elevator: true,
     mobility: true,
     visual: true,
   } as ListingFeatures,
+  cypressFeatures: [
+    { key: "elevator", translation: "Elevator" },
+    { key: "mobility", translation: "Units for those with mobility accessibility needs" },
+    { key: "visual", translation: "Units for those with vision accessibility needs" },
+  ],
   applicationMethods: [
     { type: ApplicationMethodsTypeEnum.Referral, phoneNumber: "520-245-8811" } as ApplicationMethod,
     {
@@ -187,6 +221,7 @@ export const bloomingtonListing: CypressListing = {
     startMinutes: "00",
     endHours: "10",
     endMinutes: "00",
+    period: "pm",
   },
   listingNeighborhoodAmenities: {
     publicTransportation: "Near bus stop",
