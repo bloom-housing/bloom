@@ -301,7 +301,7 @@ describe("Listing Management Tests", () => {
 
     fillRadio(cy, "unitTypes", "individual-units", listing.disableUnitsAccordion)
 
-    // TODO
+    // TODO - Test a waitlist listing
     if (
       listing.reviewOrderType === "firstComeFirstServe" ||
       listing.reviewOrderType === "lottery"
@@ -408,7 +408,7 @@ describe("Listing Management Tests", () => {
     fillIfDataExists(cy, "rentalHistory", listing.rentalHistory, "type")
     fillIfDataExists(cy, "criminalBackground", listing.criminalBackground, "type")
 
-    // TODO: Building selection criteria PDF
+    // TODO - Test building selection criteria PDF
     if (listing.buildingSelectionCriteria) {
       cy.getByID("addBuildingSelectionCriteriaButton")
         .contains("Add building selection criteria")
@@ -427,7 +427,6 @@ describe("Listing Management Tests", () => {
 
     if (listing.reviewOrderType === "firstComeFirstServe") {
       cy.getByID("reviewOrderFCFS").check()
-      // TODO - Do I need this??
       cy.getByID("waitlistOpenNo").check()
     } else if (listing.reviewOrderType === "lottery") {
       // TODO - Test a lottery listing and fill out date details
@@ -659,10 +658,6 @@ describe("Listing Management Tests", () => {
     )
     verifyDetailDataIfExists(cy, "buildingAddress.zipCode", listing.listingsBuildingAddress.zipCode)
     verifyDetailDataIfExists(cy, "yearBuilt", listing.yearBuilt?.toString())
-
-    // Hm idk how to do this
-    // cy.getByID("longitude").should("include.text", "-122")
-    // cy.getByID("latitude").should("include.text", "37.7")
 
     verifyDetailDataIfExists(cy, "reservedCommunityType", listing.reservedCommunityTypes?.id)
     verifyDetailDataIfExists(
@@ -1246,7 +1241,7 @@ describe("Listing Management Tests", () => {
       "type"
     )
 
-    // TODO Test Open house events
+    // TODO - Test Open house events
     if (listing.dueDate) {
       cy.getByID("applicationDueDateField.month").should("have.value", listing.dueDate.month)
       cy.getByID("applicationDueDateField.day").should("have.value", listing.dueDate.day)
