@@ -16,6 +16,7 @@ interface ListingIntroProps {
   enableNonRegulatedListings?: boolean
   jurisdictionName: string
   listingId: string
+  jurisdictionId?: string
   requiredFields: string[]
 }
 
@@ -42,7 +43,7 @@ const ListingIntro = (props: ListingIntroProps) => {
 
   const listingType = watch("listingType")
 
-  // TODO: get the props here and show them
+  // TODO: use jurisdictionId to get the properties
 
   const jurisdictionOptions: SelectOption[] =
     profile.jurisdictions.length !== 0
