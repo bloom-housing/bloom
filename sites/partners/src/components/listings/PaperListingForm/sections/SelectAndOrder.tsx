@@ -3,6 +3,7 @@ import { t, MinimalTable, Field, StandardTableData } from "@bloom-housing/ui-com
 import {
   MultiselectQuestion,
   MultiselectQuestionsApplicationSectionEnum,
+  PaginatedMultiselectQuestion,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { Button, Card, Drawer, Grid, Tag, Icon } from "@bloom-housing/ui-seeds"
 import { useFormContext } from "react-hook-form"
@@ -21,7 +22,7 @@ type SelectAndOrderProps = {
     jurisdiction?: string,
     applicationSection?: MultiselectQuestionsApplicationSectionEnum
   ) => {
-    data: SelectAndOrderSection[]
+    data: PaginatedMultiselectQuestion
     loading: boolean
     error: any
   }
@@ -168,10 +169,11 @@ const SelectAndOrder = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dragOrder])
 
-  const { data: fetchedData = [] } = dataFetcher(
+  const { data } = dataFetcher(
     jurisdiction,
     applicationSection as unknown as MultiselectQuestionsApplicationSectionEnum
   )
+  const fetchedData = data?.items ?? []
 
   const formTableHeaders = {
     order: "t.order",
