@@ -1284,22 +1284,25 @@ export class ListingService implements OnModuleInit {
         jurisdictionId: dto.jurisdictions.id,
       },
     );
+
     const rawJurisdiction = await this.prisma.jurisdictions.findUnique({
+      select: {
+        id: true,
+        featureFlags: true,
+        listingApprovalPermissions: true,
+      },
       where: {
         id: dto.jurisdictions.id,
-      },
-      include: {
-        featureFlags: true,
       },
     });
 
     const enableUnitGroups = doJurisdictionHaveFeatureFlagSet(
-      rawJurisdiction as Jurisdiction,
+      rawJurisdiction as unknown as Jurisdiction,
       FeatureFlagEnum.enableUnitGroups,
     );
 
     const enableV2MSQ = doJurisdictionHaveFeatureFlagSet(
-      rawJurisdiction as Jurisdiction,
+      rawJurisdiction as unknown as Jurisdiction,
       FeatureFlagEnum.enableV2MSQ,
     );
 
@@ -1329,8 +1332,15 @@ export class ListingService implements OnModuleInit {
     );
 
     // Remove requiredFields and minimumImagesRequired properties before saving to database
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { requiredFields, minimumImagesRequired, ...listingData } = dto;
+    const {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      requiredFields,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      minimumImagesRequired,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      listingFeaturesConfiguration,
+      ...listingData
+    } = dto;
 
     const rawListing = await this.prisma.listings.create({
       include: includeViews.full,
@@ -1774,7 +1784,7 @@ export class ListingService implements OnModuleInit {
     });
 
     const enableV2MSQ = doJurisdictionHaveFeatureFlagSet(
-      rawJurisdiction as Jurisdiction,
+      rawJurisdiction as unknown as Jurisdiction,
       FeatureFlagEnum.enableV2MSQ,
     );
 
@@ -2048,8 +2058,15 @@ export class ListingService implements OnModuleInit {
   */
   async update(dto: ListingUpdate, requestingUser: User): Promise<Listing> {
     // Remove requiredFields and minimumImagesRequired properties before saving to database
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { requiredFields, minimumImagesRequired, ...incomingDto } = dto;
+    const {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      requiredFields,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      minimumImagesRequired,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      listingFeaturesConfiguration,
+      ...incomingDto
+    } = dto;
     const storedListing = await this.findOrThrow(
       incomingDto.id,
       ListingViews.full,
@@ -2066,14 +2083,15 @@ export class ListingService implements OnModuleInit {
     );
 
     const rawJurisdiction = await this.prisma.jurisdictions.findUnique({
+      select: {
+        featureFlags: true,
+        listingApprovalPermissions: true,
+        id: true,
+      },
       where: {
         id: incomingDto.jurisdictions.id,
       },
-      include: {
-        featureFlags: true,
-      },
     });
-
     const enableUnitGroups = doJurisdictionHaveFeatureFlagSet(
       rawJurisdiction as Jurisdiction,
       FeatureFlagEnum.enableUnitGroups,

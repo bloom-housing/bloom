@@ -24,9 +24,10 @@ import {
   TableHeaders,
 } from "@bloom-housing/ui-components"
 import {
+  allListingFeatures,
   cloudinaryPdfFromId,
   getOccupancyDescription,
-  listingFeatures,
+  ListingFeaturesValues,
   listingUtilities,
   stackedOccupancyTable,
   stackedUnitGroupsOccupancyTable,
@@ -141,9 +142,8 @@ export const getHasNonReferralMethods = (listing: Listing) => {
 
 export const getAccessibilityFeatures = (listing: Listing) => {
   const enabledFeatures = Object.entries(listing?.listingFeatures ?? {})
-    .filter(([_, value]) => value)
+    .filter(([key, value]) => value && allListingFeatures?.includes(key as ListingFeaturesValues))
     .map((item) => item[0])
-    .filter((feature) => listingFeatures.includes(feature))
 
   const COLUMN_BREAKPOINT = 6
   if (enabledFeatures.length > 0) {
@@ -167,9 +167,8 @@ export const getAccessibilityFeatures = (listing: Listing) => {
 
 export const getUtilitiesIncluded = (listing: Listing) => {
   const enabledUtilities = Object.entries(listing?.listingUtilities ?? {})
-    .filter(([_, value]) => value)
+    .filter(([key, value]) => value && listingUtilities.includes(key))
     .map((item) => item[0])
-    .filter((utility) => listingUtilities.includes(utility))
 
   if (enabledUtilities.length > 0) {
     return enabledUtilities.map((utility, index) => {
@@ -643,9 +642,9 @@ export const getAdditionalInformation = (listing: Listing) => {
         <div>
           <ul>
             {Object.entries(listing.requiredDocumentsList).map(
-              ([key, value]) =>
+              ([key, value], index) =>
                 value && (
-                  <li className={"list-disc mx-5 mb-1 text-nowrap"}>
+                  <li className={"list-disc mx-5 mb-1 text-nowrap"} key={index}>
                     {t(`listings.requiredDocuments.${key}`)}
                   </li>
                 )
