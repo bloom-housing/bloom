@@ -453,6 +453,8 @@
   "application.timeout.afterMessage": "نحن نهتم بسلامتك. لقد أنهينا جلستك بسبب عدم النشاط. الرجاء بدء تطبيق جديد للمتابعة.",
   "application.timeout.text": "لحماية هويتك ، ستنتهي جلستك في دقيقة واحدة بسبب عدم النشاط. ستفقد أي معلومات غير محفوظة إذا اخترت عدم الرد.",
   "application.viewApplication": "مشاهدة التطبيق",
+  "application.yourAccessibleWaitlistNumber": "رقمك في قائمة الانتظار المتاحة هو",
+  "application.yourConventionalWaitlistNumber": "رقمك المعتاد في قائمة الانتظار هو",
   "application.yourLotteryNumber": "رقم التأكيد الخاص بك هو",
   "applications.addApplication": "إضافة تطبيق",
   "authentication.createAccount.accountConfirmed": "تم تأكيد حسابك بنجاح.",

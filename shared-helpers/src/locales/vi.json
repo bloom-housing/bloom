@@ -453,6 +453,8 @@
   "application.timeout.afterMessage": "Chúng tôi quan tâm đến sự bảo mật của quý vị. Chúng tôi đã chấm dứt phiên truy cập của quý vị do không có hoạt động nào. Vui lòng bắt đầu làm một đơn ghi danh mới để tiếp tục.",
   "application.timeout.text": "Để bảo vệ danh tính của quý vị, phiên truy cập của quý vị sẽ hết hạn sau một phút do không có hoạt động. Quý vị sẽ mất mọi thông tin chưa được lưu nếu quý vị lựa chọn không trả lời.",
   "application.viewApplication": "Xem ứng dụng",
+  "application.yourAccessibleWaitlistNumber": "Số thứ tự trong danh sách chờ dành cho người khuyết tật là",
+  "application.yourConventionalWaitlistNumber": "Số thứ tự trong danh sách chờ thông thường của bạn là",
   "application.yourLotteryNumber": "Số xác nhận của quý vị là",
   "applications.addApplication": "Thêm đơn đăng ký",
   "authentication.createAccount.accountConfirmed": "Tài khoản của quý vị đã được xác nhận.",
