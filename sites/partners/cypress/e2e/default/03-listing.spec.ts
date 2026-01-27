@@ -112,7 +112,7 @@ describe("Listing Management Tests", () => {
   //   )
   // })
 
-  it.only("full listing publish in Bloomington", () => {
+  it("full listing publish in Bloomington", () => {
     cy.visit("/")
 
     cy.get("button").contains("Add listing").click()
