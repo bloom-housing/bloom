@@ -1297,12 +1297,12 @@ export class ListingService implements OnModuleInit {
     });
 
     const enableUnitGroups = doJurisdictionHaveFeatureFlagSet(
-      rawJurisdiction as Jurisdiction,
+      rawJurisdiction as unknown as Jurisdiction,
       FeatureFlagEnum.enableUnitGroups,
     );
 
     const enableV2MSQ = doJurisdictionHaveFeatureFlagSet(
-      rawJurisdiction as Jurisdiction,
+      rawJurisdiction as unknown as Jurisdiction,
       FeatureFlagEnum.enableV2MSQ,
     );
 
@@ -1784,7 +1784,7 @@ export class ListingService implements OnModuleInit {
     });
 
     const enableV2MSQ = doJurisdictionHaveFeatureFlagSet(
-      rawJurisdiction as Jurisdiction,
+      rawJurisdiction as unknown as Jurisdiction,
       FeatureFlagEnum.enableV2MSQ,
     );
 
