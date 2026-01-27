@@ -9,6 +9,7 @@ import {
 import { defaultFieldProps, fieldHasError, fieldMessage } from "../../../../lib/helpers"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 import { AuthContext } from "@bloom-housing/shared-helpers"
+import { usePropertiesList } from "../../../../lib/hooks"
 
 interface ListingIntroProps {
   enableHousingDeveloperOwner?: boolean
@@ -43,7 +44,16 @@ const ListingIntro = (props: ListingIntroProps) => {
 
   const listingType = watch("listingType")
 
-  // TODO: use jurisdictionId to get the properties
+  const {
+    data: propertiesData,
+    loading,
+    cacheKey,
+  } = usePropertiesList({
+    page: 1,
+    limit: 10,
+    search: "search",
+    jurisdictions: profile?.jurisdictions?.map((jurisdiction) => jurisdiction.id).toString(),
+  })
 
   const jurisdictionOptions: SelectOption[] =
     profile.jurisdictions.length !== 0
