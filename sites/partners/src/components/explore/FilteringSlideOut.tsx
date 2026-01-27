@@ -1,6 +1,7 @@
 import React from "react"
 import { XMarkIcon } from "@heroicons/react/24/outline"
-import { MainForm, FormValues } from "./filtering/mainForm"
+import { MainForm } from "./filtering/mainForm"
+import { FormValues } from "../../lib/explore/filterTypes"
 
 interface FilteringSlideOutProps {
   isOpen: boolean
