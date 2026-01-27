@@ -43,24 +43,20 @@ const ListingIntro = (props: ListingIntroProps) => {
 
   const listingType = watch("listingType")
 
-  const {
-    data: propertiesData,
-    loading,
-    cacheKey,
-  } = usePropertiesList({
+  const { data: propertiesData } = usePropertiesList({
     page: 1,
     limit: 10,
     search: "search",
     jurisdictions: profile?.jurisdictions?.map((jurisdiction) => jurisdiction.id).toString(),
   })
 
-  const jurisdictionOptions: SelectOption[] =
-    profile.jurisdictions.length !== 0
+  const propertiyOptions: SelectOption[] =
+    propertiesData.items.length !== 0
       ? [
           { label: "", value: "" },
-          ...profile.jurisdictions.map((jurisdiction) => ({
-            label: jurisdiction.name,
-            value: jurisdiction.id,
+          ...propertiesData.items.map((property) => ({
+            label: property.name,
+            value: property.id,
           })),
         ]
       : []
@@ -155,7 +151,7 @@ const ListingIntro = (props: ListingIntroProps) => {
               </Grid.Cell>
             </Grid.Row>
           )}
-        {profile.jurisdictions.length > 1 && (
+        {propertiesData.items.length > 1 && (
           <Grid.Row columns={3}>
             <Grid.Cell>
               <Select
@@ -166,7 +162,7 @@ const ListingIntro = (props: ListingIntroProps) => {
                 controlClassName={"control"}
                 errorMessage={t("errors.requiredFieldError")}
                 keyPrefix={"jurisdictions"}
-                options={jurisdictionOptions}
+                options={propertiyOptions}
                 validation={{ required: true }}
               />
             </Grid.Cell>
