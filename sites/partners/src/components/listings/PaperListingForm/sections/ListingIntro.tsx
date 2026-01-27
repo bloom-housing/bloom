@@ -43,7 +43,7 @@ const ListingIntro = (props: ListingIntroProps) => {
 
   const listingType = watch("listingType")
 
-  const { data: propertiesData } = usePropertiesList({
+  const { data } = usePropertiesList({
     page: 1,
     limit: 10,
     search: "search",
@@ -51,15 +51,17 @@ const ListingIntro = (props: ListingIntroProps) => {
   })
 
   const propertiyOptions: SelectOption[] =
-    propertiesData.items.length !== 0
+    data?.items?.length !== 0
       ? [
           { label: "", value: "" },
-          ...propertiesData.items.map((property) => ({
+          ...data.items.map((property) => ({
             label: property.name,
             value: property.id,
           })),
         ]
       : []
+
+  console.log("property result", propertiyOptions)
 
   return (
     <>
@@ -151,17 +153,17 @@ const ListingIntro = (props: ListingIntroProps) => {
               </Grid.Cell>
             </Grid.Row>
           )}
-        {propertiesData.items.length > 1 && (
+        {data?.items.length > 1 && (
           <Grid.Row columns={3}>
             <Grid.Cell>
               <Select
-                id={"jurisdiction"}
-                name={"jurisdictions.id"}
+                id={"properties"}
+                name={"property.id"}
                 register={register}
-                error={fieldHasError(errors?.jurisdictions?.id)}
+                error={fieldHasError(errors?.properties?.id)}
                 controlClassName={"control"}
                 errorMessage={t("errors.requiredFieldError")}
-                keyPrefix={"jurisdictions"}
+                keyPrefix={"properties"}
                 options={propertiyOptions}
                 validation={{ required: true }}
               />
