@@ -1,6 +1,6 @@
-import React from "react"
+import React, { useContext } from "react"
 import { useFormContext } from "react-hook-form"
-import { t, Field, FieldGroup } from "@bloom-housing/ui-components"
+import { t, Field, FieldGroup, Select, SelectOption } from "@bloom-housing/ui-components"
 import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import {
   EnumListingListingType,
@@ -8,6 +8,7 @@ import {
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { defaultFieldProps, fieldHasError, fieldMessage } from "../../../../lib/helpers"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
+import { AuthContext } from "@bloom-housing/shared-helpers"
 
 interface ListingIntroProps {
   enableHousingDeveloperOwner?: boolean
@@ -32,6 +33,7 @@ const getDeveloperLabel = (
 
 const ListingIntro = (props: ListingIntroProps) => {
   const formMethods = useFormContext()
+  const { profile } = useContext(AuthContext)
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, clearErrors, errors, watch, getValues } = formMethods
@@ -40,15 +42,25 @@ const ListingIntro = (props: ListingIntroProps) => {
 
   const listingType = watch("listingType")
 
+  // TODO: get the props here and show them
+
+  const jurisdictionOptions: SelectOption[] =
+    profile.jurisdictions.length !== 0
+      ? [
+          { label: "", value: "" },
+          ...profile.jurisdictions.map((jurisdiction) => ({
+            label: jurisdiction.name,
+            value: jurisdiction.id,
+          })),
+        ]
+      : []
+
   return (
     <>
       {(props.listingId || props.jurisdictionName) && (
         <hr className="spacer-section-above spacer-section" />
       )}
-      <SectionWithGrid
-        heading={t("listings.sections.introTitle")}
-        subheading={t("listings.sections.introSubtitle")}
-      >
+      <SectionWithGrid heading={"testing"} subheading={t("listings.sections.introSubtitle")}>
         {props.enableNonRegulatedListings && (
           <Grid.Row columns={1}>
             <Grid.Cell>
@@ -133,6 +145,23 @@ const ListingIntro = (props: ListingIntroProps) => {
               </Grid.Cell>
             </Grid.Row>
           )}
+        {profile.jurisdictions.length > 1 && (
+          <Grid.Row columns={3}>
+            <Grid.Cell>
+              <Select
+                id={"jurisdiction"}
+                name={"jurisdictions.id"}
+                register={register}
+                error={fieldHasError(errors?.jurisdictions?.id)}
+                controlClassName={"control"}
+                errorMessage={t("errors.requiredFieldError")}
+                keyPrefix={"jurisdictions"}
+                options={jurisdictionOptions}
+                validation={{ required: true }}
+              />
+            </Grid.Cell>
+          </Grid.Row>
+        )}
       </SectionWithGrid>
     </>
   )
