@@ -41,12 +41,14 @@ import dayjs from 'dayjs';
 export const stagingSeed = async (
   prismaClient: PrismaClient,
   jurisdictionName: string,
+  publicSiteBaseURL: string,
 ) => {
   // Seed feature flags
   await createAllFeatureFlags(prismaClient);
   // create main jurisdiction with as many feature flags turned on as possible
   const mainJurisdiction = await prismaClient.jurisdictions.create({
     data: jurisdictionFactory(jurisdictionName, {
+      publicSiteBaseURL: publicSiteBaseURL,
       listingApprovalPermissions: [UserRoleEnum.admin],
       featureFlags: [
         FeatureFlagEnum.enableAccessibilityFeatures,
@@ -92,6 +94,7 @@ export const stagingSeed = async (
   // jurisdiction with unit groups enabled
   const lakeviewJurisdiction = await prismaClient.jurisdictions.create({
     data: jurisdictionFactory('Lakeview', {
+      publicSiteBaseURL: publicSiteBaseURL,
       featureFlags: [
         FeatureFlagEnum.disableJurisdictionalAdmin,
         FeatureFlagEnum.disableListingPreferences,
@@ -139,6 +142,7 @@ export const stagingSeed = async (
   // Basic configuration jurisdiction
   const bridgeBayJurisdiction = await prismaClient.jurisdictions.create({
     data: jurisdictionFactory('Bridge Bay', {
+      publicSiteBaseURL: publicSiteBaseURL,
       featureFlags: [
         FeatureFlagEnum.enableGeocodingPreferences,
         FeatureFlagEnum.enableGeocodingRadiusMethod,
@@ -155,12 +159,14 @@ export const stagingSeed = async (
   // Jurisdiction with no feature flags enabled
   const nadaHill = await prismaClient.jurisdictions.create({
     data: jurisdictionFactory('Nada Hill', {
+      publicSiteBaseURL: publicSiteBaseURL,
       featureFlags: [],
       requiredListingFields: ['name'],
     }),
   });
   const angelopolisJurisdiction = await prismaClient.jurisdictions.create({
     data: jurisdictionFactory('Angelopolis', {
+      publicSiteBaseURL: publicSiteBaseURL,
       featureFlags: [
         FeatureFlagEnum.disableBuildingSelectionCriteria,
         FeatureFlagEnum.disableListingPreferences,
