@@ -26,6 +26,7 @@ type SelectAndOrderProps = {
     error: any
   }
   drawerButtonText: string
+  drawerButtonId: string
   drawerSubtitle?: string
   drawerTitle: string
   editText: string
@@ -42,6 +43,7 @@ const SelectAndOrder = ({
   applicationSection,
   dataFetcher,
   drawerButtonText,
+  drawerButtonId,
   drawerSubtitle,
   drawerTitle,
   editText,
@@ -328,6 +330,7 @@ const SelectAndOrder = ({
                 onClick={() => {
                   setSelectDrawer(true)
                 }}
+                id={drawerButtonId}
               >
                 {drawerButtonText}
               </Button>
@@ -336,7 +339,7 @@ const SelectAndOrder = ({
         </Drawer.Content>
         <Drawer.Footer>
           <Button
-            id="selectAndOrderSaveButton"
+            id="select-and-order-save-button"
             type="button"
             variant="primary"
             size="sm"
@@ -393,7 +396,7 @@ const SelectAndOrder = ({
         </Drawer.Content>
         <Drawer.Footer>
           <Button
-            id="addPreferenceSaveButton"
+            id={`add-${applicationSection}-save-button`}
             type="button"
             variant="primary"
             onClick={() => {

@@ -1,0 +1,199 @@
+import {
+  HomeTypeEnum,
+  Listing,
+  Address,
+  UnitType,
+  UnitAccessibilityPriorityType,
+  Unit,
+  ListingEventsTypeEnum,
+  ListingEvent,
+  ListingUtilities,
+  ListingFeatures,
+  ApplicationMethodsTypeEnum,
+  ApplicationMethod,
+  ListingsStatusEnum,
+  ReviewOrderTypeEnum,
+  ListingNeighborhoodAmenities,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+
+export type CypressListing = Listing & {
+  "jurisdiction.id": string
+  events: CypressListingEvent[]
+  dueDate?: CypressListingDateTime
+  postmarkDate?: CypressListingDateTime
+  editedName: string
+  cypressImages?: { fixtureName: string; altText?: string }[]
+}
+
+export type CypressListingDateTime = {
+  day: string
+  month: string
+  year: string
+  startHours: string
+  startMinutes: string
+  endHours: string
+  endMinutes: string
+}
+export type CypressListingEvent = {
+  type: ListingEventsTypeEnum
+  dateTime: CypressListingDateTime
+  note: string
+  label: string
+  url: string
+}
+
+export const bloomingtonListing: CypressListing = {
+  id: "1",
+  createdAt: new Date(),
+  updatedAt: new Date(),
+  status: ListingsStatusEnum.pending,
+  displayWaitlistSize: false,
+  assets: [],
+  applicationLotteryTotals: [],
+  jurisdictions: { id: "Bloomington" },
+  "jurisdiction.id": "Bloomington",
+  name: "Basic Test Listing",
+  developer: "Basic Test Developer",
+  listingsBuildingAddress: {
+    street: "548 Market St. #59930",
+    city: "San Francisco",
+    state: "California",
+    zipCode: "94104",
+  } as Address,
+  neighborhood: "Basic Test Neighborhood",
+  yearBuilt: 2021,
+  reservedCommunityTypes: {
+    id: "Seniors",
+  },
+  reviewOrderType: ReviewOrderTypeEnum.firstComeFirstServe,
+  disableUnitsAccordion: true,
+  includeCommunityDisclaimer: true,
+  reservedCommunityDescription: "Basic Test Description",
+  communityDisclaimerTitle: "Basic Test Title",
+  communityDisclaimerDescription: "Basic Test Description",
+  homeType: HomeTypeEnum.apartment,
+  units: [
+    {
+      id: "unit-1",
+      number: "2",
+      unitTypes: { id: "One bedroom", numBedrooms: 1 } as UnitType,
+      numBathrooms: 2,
+      floor: 2,
+      sqFeet: "300",
+      minOccupancy: 2,
+      maxOccupancy: 2,
+      monthlyIncomeMin: "900",
+      monthlyRent: "1000",
+      unitAccessibilityPriorityTypes: { id: "Visual" } as UnitAccessibilityPriorityType,
+    } as Unit,
+  ],
+  applicationFee: "4",
+  depositMin: "2",
+  depositMax: "100",
+  costsNotIncluded: "Internet",
+  amenities: "Basic Amenity Info",
+  accessibility: "Basic Accessibility Info",
+  unitAmenities: "Basic Unit Amenity Info",
+  smokingPolicy: "No Thanks",
+  petPolicy: "Pets welcome. Please send in pictures, they aren't required, we just like pictures",
+  servicesOffered: "Basic Services",
+  creditHistory: "Basic Credit History",
+  rentalHistory: "Basic Rental History",
+  criminalBackground: "Basic Criminal Background",
+  buildingSelectionCriteria: "https://www.exygy.com",
+  requiredDocuments: "Basic Required Documents",
+  programRules: "Basic program rules",
+  specialNotes: "basic special notes",
+  leasingAgentName: "Basic Agent Name",
+  leasingAgentEmail: "basicagent@email.com",
+  leasingAgentPhone: "520-245-8811",
+  leasingAgentTitle: "Basic Agent Title",
+  leasingAgentOfficeHours: "Basic Agent Office Hours",
+  listingsLeasingAgentAddress: {
+    street: "548 Market St.",
+    street2: "#59930",
+    city: "San Francisco",
+    zipCode: "94104",
+    state: "California",
+  } as Address,
+  applicationMailingAddressType: undefined,
+  listingsApplicationMailingAddress: {
+    street: "123 Main St.",
+    street2: "Apt 4B",
+    city: "Bloomington",
+    state: "IN",
+    zipCode: "47408",
+  } as Address,
+  additionalApplicationSubmissionNotes: "Basic Additional Application Submission Notes",
+  events: [
+    {
+      type: ListingEventsTypeEnum.openHouse,
+      dateTime: {
+        month: "10",
+        day: "04",
+        year: "2022",
+        startHours: "10",
+        startMinutes: "04",
+        endHours: "11",
+        endMinutes: "05",
+      },
+
+      note: "Basic Note",
+      label: "Basic Label",
+      url: "https://www.exygy.com",
+    },
+  ],
+  postmarkDate: {
+    month: "11",
+    day: "15",
+    year: "2024",
+    startHours: "10",
+    startMinutes: "00",
+    endHours: "10",
+    endMinutes: "00",
+  },
+  listingEvents: [],
+  editedName: "Basic Listing Edited Name",
+  listingUtilities: {
+    water: true,
+    trash: true,
+    phone: true,
+  } as ListingUtilities,
+  listingFeatures: {
+    elevator: true,
+    mobility: true,
+    visual: true,
+  } as ListingFeatures,
+  applicationMethods: [
+    { type: ApplicationMethodsTypeEnum.Referral, phoneNumber: "520-245-8811" } as ApplicationMethod,
+    {
+      type: ApplicationMethodsTypeEnum.ExternalLink,
+      externalReference: "https://www.exygy.com",
+    } as ApplicationMethod,
+    {
+      type: ApplicationMethodsTypeEnum.Referral,
+      phoneNumber: "520-245-8811",
+    } as ApplicationMethod,
+  ],
+  cypressImages: [
+    { fixtureName: "cypress-automated-image-upload-071e2ab9-5a52-4f34-85f0-e41f696f4b96.jpg" },
+    { fixtureName: "cypress-automated-image-upload-46806882-b98d-49d7-ac83-8016ab4b2f08.jpg" },
+  ],
+  dueDate: {
+    month: "12",
+    day: "31",
+    year: "2024",
+    startHours: "10",
+    startMinutes: "00",
+    endHours: "10",
+    endMinutes: "00",
+  },
+  listingNeighborhoodAmenities: {
+    publicTransportation: "Near bus stop",
+    parksAndCommunityCenters: "Near park",
+    schools: "Near school",
+    groceryStores: "Near grocery store",
+    pharmacies: "Near pharmacy",
+    healthCareResources: "Near healthcare facility",
+  } as ListingNeighborhoodAmenities,
+}
