@@ -81,6 +81,7 @@
   "applications.duplicates.duplicateApplications": "Duplicate applications",
   "applications.duplicates.flaggedAsDuplicate": "Flagged as duplicate",
   "applications.duplicates.markedAsDuplicate": "Marked as duplicate",
+  "applications.duplicates.markedAsDuplicateAlert": "This application has been marked as a duplicate.",
   "applications.duplicates.validApplications": "Valid applications",
   "applications.duplicates.duplicateGroup": "Duplicate group",
   "applications.duplicates.primaryApplicant": "Primary applicant",
