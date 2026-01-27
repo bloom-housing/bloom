@@ -453,6 +453,8 @@
   "application.timeout.afterMessage": "我們關心您的網上安全。由於網頁閒置，我們已結束您的工作階段。請展開全新申請以便繼續。",
   "application.timeout.text": "為了保護您的身份，您的工作階段將因閒置而在一分鐘後到期。如果您選擇不回應，則將失去任何未經儲存的資料。",
   "application.viewApplication": "查看应用程序",
+  "application.yourAccessibleWaitlistNumber": "您可访问的候补名单号码是",
+  "application.yourConventionalWaitlistNumber": "您通常的候补名单号码是",
   "application.yourLotteryNumber": "您的確認號碼是",
   "applications.addApplication": "添加应用程序",
   "authentication.createAccount.accountConfirmed": "您的帳戶已成功確認。",

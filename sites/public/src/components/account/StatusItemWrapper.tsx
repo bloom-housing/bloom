@@ -5,6 +5,7 @@ import { getApplicationStatusVariant } from "@bloom-housing/shared-helpers/src/u
 import { StatusItem } from "./StatusItem"
 import {
   Application,
+  ApplicationStatusEnum,
   Listing,
   LotteryStatusEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -22,8 +23,29 @@ const StatusItemWrapper = (props: StatusItemWrapperProps) => {
   const lotteryStartDate = props.application?.listings?.listingEvents[0]?.startDate
   const lotteryLastPublishedAt = props.application?.listings?.lotteryLastPublishedAt
 
+  const confirmationNumber = props.application?.confirmationCode || props.application?.id
+  const accessibleUnitWaitlistNumber = props.application?.accessibleUnitWaitlistNumber
+  const conventionalUnitWaitlistNumber = props.application?.conventionalUnitWaitlistNumber
+
+  let displayNumber: string | number | undefined = confirmationNumber
+  let confirmationNumberLabel: string | undefined
   let applicationStatus
+
   if (props.enableApplicationStatus) {
+    const isWaitlistStatus =
+      props.application?.status === ApplicationStatusEnum.waitlist ||
+      props.application?.status === ApplicationStatusEnum.waitlistDeclined
+
+    if (isWaitlistStatus) {
+      if (accessibleUnitWaitlistNumber != undefined) {
+        displayNumber = accessibleUnitWaitlistNumber
+        confirmationNumberLabel = t("application.yourAccessibleWaitlistNumber")
+      } else if (conventionalUnitWaitlistNumber != undefined) {
+        displayNumber = conventionalUnitWaitlistNumber
+        confirmationNumberLabel = t("application.yourConventionalWaitlistNumber")
+      }
+    }
+
     if (props.application.markedAsDuplicate) {
       applicationStatus = {
         content: t("application.details.applicationStatus.duplicate"),
@@ -42,7 +64,8 @@ const StatusItemWrapper = (props: StatusItemWrapperProps) => {
     <StatusItem
       applicationDueDate={applicationDueDate && dayjs(applicationDueDate).format("MMM D, YYYY")}
       applicationURL={`/account/application/${props.application?.id}`}
-      confirmationNumber={props.application?.confirmationCode || props.application?.id}
+      confirmationNumber={displayNumber}
+      strings={confirmationNumberLabel ? { yourNumber: confirmationNumberLabel } : undefined}
       listingName={props.application?.listings?.name}
       listingURL={`/listing/${props.application?.listings?.id}`}
       listingStatus={props.application.listings.status}

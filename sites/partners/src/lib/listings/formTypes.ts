@@ -134,7 +134,7 @@ export const formDefaults: FormListing = {
   depositType: EnumListingDepositType.fixedDeposit,
   depositMax: "0",
   depositMin: "0",
-  depositHelperText: "or one month's rent may be higher for lower credit scores",
+  depositHelperText: "Deposit will not exceed one month's rent",
   disableUnitsAccordion: false,
   displayWaitlistSize: false,
   listingEvents: [],

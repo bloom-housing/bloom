@@ -453,6 +453,8 @@
   "application.timeout.afterMessage": "আমরা আপনার নিরাপত্তার কথা চিন্তা করি। নিষ্ক্রিয়তার কারণে আমরা আপনার সেশন শেষ করেছি। চালিয়ে যাওয়ার জন্য অনুগ্রহ করে একটি নতুন অ্যাপ্লিকেশন শুরু করুন।",
   "application.timeout.text": "আপনার পরিচয় রক্ষা করার জন্য, নিষ্ক্রিয়তার কারণে আপনার অধিবেশন এক মিনিটের মধ্যে শেষ হয়ে যাবে। যদি আপনি সাড়া না দেওয়া বেছে নেন তাহলে আপনি কোন সংরক্ষিত তথ্য হারাবেন।",
   "application.viewApplication": "আবেদন দেখুন",
+  "application.yourAccessibleWaitlistNumber": "আপনার অ্যাক্সেসযোগ্য অপেক্ষা তালিকার নম্বর হল",
+  "application.yourConventionalWaitlistNumber": "আপনার প্রচলিত অপেক্ষা তালিকার নম্বর হল",
   "application.yourLotteryNumber": "আপনার কনফার্মেশন নম্বর হল",
   "applications.addApplication": "অ্যাপ্লিকেশন যোগ করুন",
   "authentication.createAccount.accountConfirmed": "আপনার অ্যাকাউন্ট সফলভাবে নিশ্চিত করা হয়েছে।",
