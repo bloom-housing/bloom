@@ -17,7 +17,6 @@ interface ListingIntroProps {
   enableNonRegulatedListings?: boolean
   jurisdictionName: string
   listingId: string
-  jurisdictionId?: string
   requiredFields: string[]
 }
 
