@@ -13,6 +13,8 @@ import {
   FeatureFlagEnum,
   Jurisdiction,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+import "@testing-library/jest-dom"
 
 //Mock the jszip package used for Export
 const mockFile = jest.fn()
@@ -95,10 +97,7 @@ describe("listings", () => {
     window.URL.createObjectURL = jest.fn()
     document.cookie = "access-token-available=True"
     server.use(
-      rest.get("http://localhost:3100/listings", (_req, res, ctx) => {
-        return res(ctx.json({ items: [listing], meta: { totalItems: 1, totalPages: 1 } }))
-      }),
-      rest.get("http://localhost/api/adapter/listings", (_req, res, ctx) => {
+      rest.post("http://localhost/api/adapter/listings/list", (_req, res, ctx) => {
         return res(ctx.json({ items: [listing], meta: { totalItems: 1, totalPages: 1 } }))
       }),
       rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
@@ -111,7 +110,13 @@ describe("listings", () => {
       })
     )
 
-    const { findByText, queryByText } = render(<ListingsList />)
+    const queryClient = new QueryClient()
+
+    const { findByText, queryByText } = render(
+      <QueryClientProvider client={queryClient}>
+        <ListingsList />
+      </QueryClientProvider>
+    )
     const header = await findByText("Partners Portal")
     expect(header).toBeInTheDocument()
     const exportButton = queryByText("Export to CSV")
@@ -122,10 +127,7 @@ describe("listings", () => {
     window.URL.createObjectURL = jest.fn()
     document.cookie = "access-token-available=True"
     server.use(
-      rest.get("http://localhost:3100/listings", (_req, res, ctx) => {
-        return res(ctx.json({ items: [listing], meta: { totalItems: 1, totalPages: 1 } }))
-      }),
-      rest.get("http://localhost/api/adapter/listings", (_req, res, ctx) => {
+      rest.post("http://localhost/api/adapter/listings/list", (_req, res, ctx) => {
         return res(ctx.json({ items: [listing], meta: { totalItems: 1, totalPages: 1 } }))
       }),
       rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
@@ -141,42 +143,43 @@ describe("listings", () => {
       })
     )
 
+    const queryClient = new QueryClient()
+
     render(
-      <AuthContext.Provider
-        value={{
-          initialStateLoaded: true,
-          profile: {
-            ...mockUser,
-            jurisdictions: [
-              {
-                id: "id1",
-                featureFlags: [
-                  {
-                    name: FeatureFlagEnum.enableIsVerified,
-                    active: false,
-                  } as FeatureFlag,
-                ],
-              } as Jurisdiction,
-            ],
-          },
-          doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
-            mockJurisdictionsHaveFeatureFlagOn(featureFlag),
-        }}
-      >
-        <ListingsList />
-      </AuthContext.Provider>
+      <QueryClientProvider client={queryClient}>
+        <AuthContext.Provider
+          value={{
+            initialStateLoaded: true,
+            profile: {
+              ...mockUser,
+              jurisdictions: [
+                {
+                  id: "id1",
+                  featureFlags: [
+                    {
+                      name: FeatureFlagEnum.enableIsVerified,
+                      active: false,
+                    } as FeatureFlag,
+                  ],
+                } as Jurisdiction,
+              ],
+            },
+            doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
+              mockJurisdictionsHaveFeatureFlagOn(featureFlag),
+          }}
+        >
+          <ListingsList />
+        </AuthContext.Provider>
+      </QueryClientProvider>
     )
     expect(screen.queryByText("Verified")).toBeNull()
   })
 
-  it("should show is waitlist and available units columns if unit groups feature flag is off", () => {
+  it("should show is waitlist and available units columns if unit groups feature flag is off", async () => {
     window.URL.createObjectURL = jest.fn()
     document.cookie = "access-token-available=True"
     server.use(
-      rest.get("http://localhost:3100/listings", (_req, res, ctx) => {
-        return res(ctx.json({ items: [listing], meta: { totalItems: 1, totalPages: 1 } }))
-      }),
-      rest.get("http://localhost/api/adapter/listings", (_req, res, ctx) => {
+      rest.post("http://localhost/api/adapter/listings/list", (_req, res, ctx) => {
         return res(ctx.json({ items: [listing], meta: { totalItems: 1, totalPages: 1 } }))
       }),
       rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
@@ -192,32 +195,36 @@ describe("listings", () => {
       })
     )
 
+    const queryClient = new QueryClient()
+
     render(
-      <AuthContext.Provider
-        value={{
-          initialStateLoaded: true,
-          profile: {
-            ...mockUser,
-            jurisdictions: [
-              {
-                id: "id1",
-                featureFlags: [
-                  {
-                    name: FeatureFlagEnum.enableUnitGroups,
-                    active: false,
-                  } as FeatureFlag,
-                ],
-              } as Jurisdiction,
-            ],
-          },
-          doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
-            mockJurisdictionsHaveFeatureFlagOn(featureFlag, false, true, false),
-        }}
-      >
-        <ListingsList />
-      </AuthContext.Provider>
+      <QueryClientProvider client={queryClient}>
+        <AuthContext.Provider
+          value={{
+            initialStateLoaded: true,
+            profile: {
+              ...mockUser,
+              jurisdictions: [
+                {
+                  id: "id1",
+                  featureFlags: [
+                    {
+                      name: FeatureFlagEnum.enableUnitGroups,
+                      active: false,
+                    } as FeatureFlag,
+                  ],
+                } as Jurisdiction,
+              ],
+            },
+            doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
+              mockJurisdictionsHaveFeatureFlagOn(featureFlag, false, true, false),
+          }}
+        >
+          <ListingsList />
+        </AuthContext.Provider>
+      </QueryClientProvider>
     )
-    expect(screen.getByText("Available units")).toBeDefined()
+    expect(await screen.findByText("Available units")).toBeDefined()
     expect(screen.getByText("Open waitlist")).toBeDefined()
   })
 
@@ -225,10 +232,7 @@ describe("listings", () => {
     window.URL.createObjectURL = jest.fn()
     document.cookie = "access-token-available=True"
     server.use(
-      rest.get("http://localhost:3100/listings", (_req, res, ctx) => {
-        return res(ctx.json({ items: [listing], meta: { totalItems: 1, totalPages: 1 } }))
-      }),
-      rest.get("http://localhost/api/adapter/listings", (_req, res, ctx) => {
+      rest.post("http://localhost/api/adapter/listings/list", (_req, res, ctx) => {
         return res(ctx.json({ items: [listing], meta: { totalItems: 1, totalPages: 1 } }))
       }),
       rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
@@ -244,43 +248,44 @@ describe("listings", () => {
       })
     )
 
+    const queryClient = new QueryClient()
+
     render(
-      <AuthContext.Provider
-        value={{
-          initialStateLoaded: true,
-          profile: {
-            ...mockUser,
-            jurisdictions: [
-              {
-                id: "id1",
-                featureFlags: [
-                  {
-                    name: FeatureFlagEnum.enableUnitGroups,
-                    active: true,
-                  } as FeatureFlag,
-                ],
-              } as Jurisdiction,
-            ],
-          },
-          doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
-            mockJurisdictionsHaveFeatureFlagOn(featureFlag, true, false, true),
-        }}
-      >
-        <ListingsList />
-      </AuthContext.Provider>
+      <QueryClientProvider client={queryClient}>
+        <AuthContext.Provider
+          value={{
+            initialStateLoaded: true,
+            profile: {
+              ...mockUser,
+              jurisdictions: [
+                {
+                  id: "id1",
+                  featureFlags: [
+                    {
+                      name: FeatureFlagEnum.enableUnitGroups,
+                      active: true,
+                    } as FeatureFlag,
+                  ],
+                } as Jurisdiction,
+              ],
+            },
+            doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
+              mockJurisdictionsHaveFeatureFlagOn(featureFlag, true, false, true),
+          }}
+        >
+          <ListingsList />
+        </AuthContext.Provider>
+      </QueryClientProvider>
     )
     expect(screen.queryByText("Available units")).toBeNull()
     expect(screen.queryByText("Open waitlist")).toBeNull()
   })
 
-  it("should show is verified column if feature flag is on", () => {
+  it("should show is verified column if feature flag is on", async () => {
     window.URL.createObjectURL = jest.fn()
     document.cookie = "access-token-available=True"
     server.use(
-      rest.get("http://localhost:3100/listings", (_req, res, ctx) => {
-        return res(ctx.json({ items: [listing], meta: { totalItems: 1, totalPages: 1 } }))
-      }),
-      rest.get("http://localhost/api/adapter/listings", (_req, res, ctx) => {
+      rest.post("http://localhost/api/adapter/listings/list", (_req, res, ctx) => {
         return res(ctx.json({ items: [listing], meta: { totalItems: 1, totalPages: 1 } }))
       }),
       rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
@@ -296,42 +301,43 @@ describe("listings", () => {
       })
     )
 
+    const queryClient = new QueryClient()
+
     render(
-      <AuthContext.Provider
-        value={{
-          initialStateLoaded: true,
-          profile: {
-            ...mockUser,
-            jurisdictions: [
-              {
-                id: "id1",
-                featureFlags: [
-                  {
-                    name: FeatureFlagEnum.enableIsVerified,
-                    active: true,
-                  } as FeatureFlag,
-                ],
-              } as Jurisdiction,
-            ],
-          },
-          doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
-            mockJurisdictionsHaveFeatureFlagOn(featureFlag, true),
-        }}
-      >
-        <ListingsList />
-      </AuthContext.Provider>
+      <QueryClientProvider client={queryClient}>
+        <AuthContext.Provider
+          value={{
+            initialStateLoaded: true,
+            profile: {
+              ...mockUser,
+              jurisdictions: [
+                {
+                  id: "id1",
+                  featureFlags: [
+                    {
+                      name: FeatureFlagEnum.enableIsVerified,
+                      active: true,
+                    } as FeatureFlag,
+                  ],
+                } as Jurisdiction,
+              ],
+            },
+            doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
+              mockJurisdictionsHaveFeatureFlagOn(featureFlag, true),
+          }}
+        >
+          <ListingsList />
+        </AuthContext.Provider>
+      </QueryClientProvider>
     )
-    expect(screen.getByText("Verified")).toBeDefined()
+    expect(await screen.findByText("Verified")).toBeDefined()
   })
 
   it("should not show last updated column if feature flag is off", () => {
     window.URL.createObjectURL = jest.fn()
     document.cookie = "access-token-available=True"
     server.use(
-      rest.get("http://localhost:3100/listings", (_req, res, ctx) => {
-        return res(ctx.json({ items: [listing], meta: { totalItems: 1, totalPages: 1 } }))
-      }),
-      rest.get("http://localhost/api/adapter/listings", (_req, res, ctx) => {
+      rest.post("http://localhost/api/adapter/listings/list", (_req, res, ctx) => {
         return res(ctx.json({ items: [listing], meta: { totalItems: 1, totalPages: 1 } }))
       }),
       rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
@@ -346,43 +352,43 @@ describe("listings", () => {
         return res(ctx.json(""))
       })
     )
+    const queryClient = new QueryClient()
 
     render(
-      <AuthContext.Provider
-        value={{
-          initialStateLoaded: true,
-          profile: {
-            ...mockUser,
-            jurisdictions: [
-              {
-                id: "id1",
-                featureFlags: [
-                  {
-                    name: FeatureFlagEnum.enableListingUpdatedAt,
-                    active: false,
-                  } as FeatureFlag,
-                ],
-              } as Jurisdiction,
-            ],
-          },
-          doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
-            mockJurisdictionsHaveFeatureFlagOn(featureFlag, false, false),
-        }}
-      >
-        <ListingsList />
-      </AuthContext.Provider>
+      <QueryClientProvider client={queryClient}>
+        <AuthContext.Provider
+          value={{
+            initialStateLoaded: true,
+            profile: {
+              ...mockUser,
+              jurisdictions: [
+                {
+                  id: "id1",
+                  featureFlags: [
+                    {
+                      name: FeatureFlagEnum.enableListingUpdatedAt,
+                      active: false,
+                    } as FeatureFlag,
+                  ],
+                } as Jurisdiction,
+              ],
+            },
+            doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
+              mockJurisdictionsHaveFeatureFlagOn(featureFlag, false, false),
+          }}
+        >
+          <ListingsList />
+        </AuthContext.Provider>
+      </QueryClientProvider>
     )
     expect(screen.queryByText("Last updated")).toBeNull()
   })
 
-  it("should show is last updated column if feature flag is on", () => {
+  it("should show is last updated column if feature flag is on", async () => {
     window.URL.createObjectURL = jest.fn()
     document.cookie = "access-token-available=True"
     server.use(
-      rest.get("http://localhost:3100/listings", (_req, res, ctx) => {
-        return res(ctx.json({ items: [listing], meta: { totalItems: 1, totalPages: 1 } }))
-      }),
-      rest.get("http://localhost/api/adapter/listings", (_req, res, ctx) => {
+      rest.post("http://localhost/api/adapter/listings/list", (_req, res, ctx) => {
         return res(ctx.json({ items: [listing], meta: { totalItems: 1, totalPages: 1 } }))
       }),
       rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
@@ -397,33 +403,36 @@ describe("listings", () => {
         return res(ctx.json(""))
       })
     )
+    const queryClient = new QueryClient()
 
     render(
-      <AuthContext.Provider
-        value={{
-          initialStateLoaded: true,
-          profile: {
-            ...mockUser,
-            jurisdictions: [
-              {
-                id: "id1",
-                featureFlags: [
-                  {
-                    name: FeatureFlagEnum.enableListingUpdatedAt,
-                    active: true,
-                  } as FeatureFlag,
-                ],
-              } as Jurisdiction,
-            ],
-          },
-          doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
-            mockJurisdictionsHaveFeatureFlagOn(featureFlag),
-        }}
-      >
-        <ListingsList />
-      </AuthContext.Provider>
+      <QueryClientProvider client={queryClient}>
+        <AuthContext.Provider
+          value={{
+            initialStateLoaded: true,
+            profile: {
+              ...mockUser,
+              jurisdictions: [
+                {
+                  id: "id1",
+                  featureFlags: [
+                    {
+                      name: FeatureFlagEnum.enableListingUpdatedAt,
+                      active: true,
+                    } as FeatureFlag,
+                  ],
+                } as Jurisdiction,
+              ],
+            },
+            doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
+              mockJurisdictionsHaveFeatureFlagOn(featureFlag),
+          }}
+        >
+          <ListingsList />
+        </AuthContext.Provider>
+      </QueryClientProvider>
     )
-    expect(screen.getByText("Last updated")).toBeDefined()
+    expect(await screen.findByText("Last updated")).toBeDefined()
   })
   // Skipping for now until the CSV endpoints are created
   it.skip("should render the error text when listings csv api call fails", async () => {
@@ -433,7 +442,7 @@ describe("listings", () => {
       rest.get("http://localhost:3100/listings", (_req, res, ctx) => {
         return res(ctx.json({ items: [listing], meta: { totalItems: 1, totalPages: 1 } }))
       }),
-      rest.get("http://localhost/api/adapter/listings", (_req, res, ctx) => {
+      rest.post("http://localhost/api/adapter/listings/list", (_req, res, ctx) => {
         return res(ctx.json({ items: [listing], meta: { totalItems: 1, totalPages: 1 } }))
       }),
       rest.get("http://localhost/api/adapter/listings/csv", (_req, res, ctx) => {
@@ -510,29 +519,14 @@ describe("listings", () => {
     document.cookie = "access-token-available=True"
     const { pushMock } = mockNextRouter()
     server.use(
-      rest.get("http://localhost:3100/listings", (_req, res, ctx) => {
-        return res(ctx.json({ items: [listing], meta: { totalItems: 1, totalPages: 1 } }))
-      }),
-      rest.get("http://localhost/api/adapter/listings", (_req, res, ctx) => {
+      rest.post("http://localhost/api/adapter/listings/list", (_req, res, ctx) => {
         return res(ctx.json({ items: [listing], meta: { totalItems: 1, totalPages: 1 } }))
       }),
       rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
         return res(
           ctx.json({
             id: "user1",
-            userRoles: { id: "user1", isAdmin: true, isPartner: false },
-            jurisdictions: [
-              {
-                id: "id1",
-                name: "JurisdictionA",
-                featureFlags: [],
-              } as Jurisdiction,
-              {
-                id: "id2",
-                name: "JurisdictionB",
-                featureFlags: [],
-              } as Jurisdiction,
-            ],
+            roles: { id: "user1", isAdmin: true, isPartner: false },
           })
         )
       }),
@@ -540,8 +534,37 @@ describe("listings", () => {
         return res(ctx.json(""))
       })
     )
+    const queryClient = new QueryClient()
 
-    render(<ListingsList />)
+    render(
+      <QueryClientProvider client={queryClient}>
+        <AuthContext.Provider
+          value={{
+            initialStateLoaded: true,
+            profile: {
+              ...mockUser,
+              userRoles: { isAdmin: true, isPartner: false },
+              jurisdictions: [
+                {
+                  id: "id1",
+                  name: "JurisdictionA",
+                  featureFlags: [],
+                } as Jurisdiction,
+                {
+                  id: "id2",
+                  name: "JurisdictionB",
+                  featureFlags: [],
+                } as Jurisdiction,
+              ],
+            },
+            doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
+              mockJurisdictionsHaveFeatureFlagOn(featureFlag, false, false),
+          }}
+        >
+          <ListingsList />
+        </AuthContext.Provider>
+      </QueryClientProvider>
+    )
 
     const addListingButton = await screen.findByRole("button", { name: "Add listing" })
     expect(addListingButton).toBeInTheDocument()
@@ -573,10 +596,7 @@ describe("listings", () => {
     document.cookie = "access-token-available=True"
     const { pushMock } = mockNextRouter()
     server.use(
-      rest.get("http://localhost:3100/listings", (_req, res, ctx) => {
-        return res(ctx.json({ items: [listing], meta: { totalItems: 1, totalPages: 1 } }))
-      }),
-      rest.get("http://localhost/api/adapter/listings", (_req, res, ctx) => {
+      rest.post("http://localhost/api/adapter/listings/list", (_req, res, ctx) => {
         return res(ctx.json({ items: [listing], meta: { totalItems: 1, totalPages: 1 } }))
       }),
       rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
@@ -605,14 +625,20 @@ describe("listings", () => {
       })
     )
 
-    render(<ListingsList />)
+    const queryClient = new QueryClient()
+
+    render(
+      <QueryClientProvider client={queryClient}>
+        <ListingsList />
+      </QueryClientProvider>
+    )
 
     const addListingButton = await screen.findByRole("button", { name: "Add listing" })
     expect(addListingButton).toBeInTheDocument()
     await userEvent.click(addListingButton)
 
     expect(
-      screen.getByRole("heading", { level: 1, name: "Select Listing Type" })
+      screen.getByRole("heading", { level: 1, name: "Select listing type" })
     ).toBeInTheDocument()
     expect(
       screen.getByText("Once you create this listing, this selection cannot be changed.")
@@ -645,7 +671,7 @@ describe("listings", () => {
     document.cookie = "access-token-available=True"
     const { pushMock } = mockNextRouter()
     server.use(
-      rest.get("http://localhost:3100/listings", (_req, res, ctx) => {
+      rest.post("http://localhost/api/adapter/listings/list", (_req, res, ctx) => {
         return res(ctx.json({ items: [listing], meta: { totalItems: 1, totalPages: 1 } }))
       }),
       rest.get("http://localhost/api/adapter/listings", (_req, res, ctx) => {
@@ -681,8 +707,13 @@ describe("listings", () => {
         return res(ctx.json(""))
       })
     )
+    const queryClient = new QueryClient()
 
-    render(<ListingsList />)
+    render(
+      <QueryClientProvider client={queryClient}>
+        <ListingsList />
+      </QueryClientProvider>
+    )
 
     const addListingButton = await screen.findByRole("button", { name: "Add listing" })
     expect(addListingButton).toBeInTheDocument()
@@ -737,7 +768,7 @@ describe("listings", () => {
     document.cookie = "access-token-available=True"
     const { pushMock } = mockNextRouter()
     server.use(
-      rest.get("http://localhost:3100/listings", (_req, res, ctx) => {
+      rest.post("http://localhost/api/adapter/listings/list", (_req, res, ctx) => {
         return res(ctx.json({ items: [listing], meta: { totalItems: 1, totalPages: 1 } }))
       }),
       rest.get("http://localhost/api/adapter/listings", (_req, res, ctx) => {
@@ -762,8 +793,13 @@ describe("listings", () => {
         return res(ctx.json(""))
       })
     )
+    const queryClient = new QueryClient()
 
-    render(<ListingsList />)
+    render(
+      <QueryClientProvider client={queryClient}>
+        <ListingsList />
+      </QueryClientProvider>
+    )
 
     const addListingButton = await screen.findByRole("button", { name: "Add listing" })
     expect(addListingButton).toBeInTheDocument()

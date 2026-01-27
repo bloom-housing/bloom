@@ -2,7 +2,7 @@ describe("Application Management Tests", () => {
   beforeEach(() => {
     cy.loginApi()
     cy.visit("/")
-    cy.getByTestId("listing-status-cell-Hollywood Hills Heights").click()
+    cy.getByID("listing-status-cell-Hollywood Hills Heights").click()
   })
 
   afterEach(() => {
