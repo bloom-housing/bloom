@@ -34,6 +34,9 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
       user,
       database,
       password,
+      ssl: {
+        rejectUnauthorized: false // use SSL, but don't validate DB cert
+      }
     });
     super({ adapter: new PrismaPg(connPool) });
   }

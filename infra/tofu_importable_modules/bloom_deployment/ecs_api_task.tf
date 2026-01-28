@@ -32,9 +32,11 @@ resource "aws_ecs_task_definition" "bloom_api" {
       image = var.bloom_api_image
       environment = [for k, v in merge(local.api_default_env_vars, var.bloom_api_env_vars) : { name = k, value = v }]
       entrypoint = "bash"
+      # TODO: Once https://github.com/prisma/prisma/issues/7869 is implemented, get rid of the bash
+      # hack.
       command = [
         "-c",
-        "export PRISMA_MIGRATION_DB_URL=\"postgres://$${DB_USER}:$(node -e \"cost S=require('@aws-sdk/rds-signer');console.log(await (new S.Signer({hostname:'$${DB_HOST}',port:'$${DB_PORT}',username:'$${DB_USER}'})).getAuthToken());' && yarn db:migration:run && yarn start:prod",
+        "export PRISMA_MIGRATION_DB_URL=\"postgres://$${DB_USER}:$(node -e \"const S=require('@aws-sdk/rds-signer');(new S.Signer({hostname:'$${DB_HOST}',port:'$${DB_PORT}',username:'$${DB_USER}'})).getAuthToken().then(t=>console.log(encodeURIComponent(t)));\")@$${DB_HOST}:$${DB_PORT}/$${DB_DATABASE}\" && env && yarn db:migration:run && yarn start:prod",
       ]
       secrets = [
         {
