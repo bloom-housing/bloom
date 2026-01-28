@@ -40,6 +40,8 @@ const DetailListingIntro = () => {
     developerFieldTitle = t("listings.propertyManager")
   }
 
+  const propertyName = listing.property?.name ?? "None"
+
   return (
     <SectionWithGrid heading={t("listings.sections.introTitle")} inset>
       {enableListingFileNumber && (
@@ -89,7 +91,7 @@ const DetailListingIntro = () => {
       <Grid.Row>
         <Grid.Cell>
           <FieldValue id="properties" label={t("properties.drawer.nameLabel")}>
-            {listing.property?.name}
+            {propertyName}
           </FieldValue>
         </Grid.Cell>
       </Grid.Row>
