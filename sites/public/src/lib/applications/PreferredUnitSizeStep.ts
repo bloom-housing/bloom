@@ -12,6 +12,11 @@ export default class PreferredUnitSizeStep extends StepDefinition {
     if (!enableUnitGroups) {
       return false
     }
-    return getUniqueUnitGroupUnitTypes(this.conductor.listing?.unitGroups || []).length === 0
+    return (
+      getUniqueUnitGroupUnitTypes(
+        this.conductor.listing?.unitGroups || [],
+        this.conductor.listing?.listingType
+      ).length === 0
+    )
   }
 }

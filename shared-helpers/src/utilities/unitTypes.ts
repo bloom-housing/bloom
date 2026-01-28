@@ -1,5 +1,6 @@
 import {
   Application,
+  EnumListingListingType,
   Listing,
   Unit,
   UnitGroup,
@@ -61,12 +62,15 @@ export const getUniqueUnitTypes = (units: Unit[]): GetUnitTypeNamesReturn[] => {
   return sorted
 }
 
-export const getUniqueUnitGroupUnitTypes = (unitGroups?: UnitGroup[]): GetUnitTypeNamesReturn[] => {
+export const getUniqueUnitGroupUnitTypes = (
+  unitGroups?: UnitGroup[],
+  listingType?: EnumListingListingType
+): GetUnitTypeNamesReturn[] => {
   if (!unitGroups) return []
 
   const unitTypes = unitGroups.reduce((acc, group) => {
     const groupUnitTypes = group.unitTypes || []
-    if (!group.openWaitlist) return acc
+    if (listingType !== EnumListingListingType.nonRegulated && !group.openWaitlist) return acc
 
     groupUnitTypes.forEach((unitType: UnitType) => {
       const { id, name } = unitType || {}
@@ -85,7 +89,6 @@ export const getUniqueUnitGroupUnitTypes = (unitGroups?: UnitGroup[]): GetUnitTy
 
     return acc
   }, [] as GetUnitTypeNamesReturn[])
-
   const sorted = sortUnitTypes(unitTypes)
 
   return sorted
@@ -101,7 +104,7 @@ export const getPreferredUnitTypes = (
   returnName?: boolean
 ) => {
   const allListingUnitTypes = enableUnitGroups
-    ? getUniqueUnitGroupUnitTypes(listing?.unitGroups || [])
+    ? getUniqueUnitGroupUnitTypes(listing?.unitGroups || [], listing?.listingType)
     : getUniqueUnitTypes(listing?.units)
 
   const preferredUnits = application.preferredUnitTypes
