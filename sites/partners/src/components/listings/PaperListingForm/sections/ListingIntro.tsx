@@ -168,6 +168,7 @@ const ListingIntro = (props: ListingIntroProps) => {
           <Grid.Row columns={3}>
             <Grid.Cell>
               <Select
+                id="properties"
                 name={"properties"}
                 label={addAsterisk(t("properties.drawer.nameLabel"))}
                 register={register}

@@ -86,6 +86,13 @@ const DetailListingIntro = () => {
             </Grid.Cell>
           </Grid.Row>
         )}
+      <Grid.Row>
+        <Grid.Cell>
+          <FieldValue id="properties" label={t("properties.drawer.nameLabel")}>
+            {listing.property?.name}
+          </FieldValue>
+        </Grid.Cell>
+      </Grid.Row>
     </SectionWithGrid>
   )
 }
