@@ -158,6 +158,7 @@ const ListingIntro = (props: ListingIntroProps) => {
               <Select
                 id={"properties"}
                 name={"property.id"}
+                label={t("t.properties.drawer.nameLabel")}
                 register={register}
                 error={fieldHasError(errors?.properties?.id)}
                 controlClassName={"control"}
