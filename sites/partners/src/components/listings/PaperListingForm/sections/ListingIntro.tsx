@@ -6,7 +6,7 @@ import {
   EnumListingListingType,
   YesNoEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { defaultFieldProps, fieldHasError, fieldMessage } from "../../../../lib/helpers"
+import { addAsterisk, defaultFieldProps, fieldHasError, fieldMessage } from "../../../../lib/helpers"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import { usePropertiesList } from "../../../../lib/hooks"
@@ -158,7 +158,7 @@ const ListingIntro = (props: ListingIntroProps) => {
               <Select
                 id={"properties"}
                 name={"property.id"}
-                label={t("t.properties.drawer.nameLabel")}
+                label={addAsterisk(t("properties.drawer.nameLabel"))}
                 register={register}
                 error={fieldHasError(errors?.properties?.id)}
                 controlClassName={"control"}
