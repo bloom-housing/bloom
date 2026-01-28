@@ -58,7 +58,7 @@ const ListingIntro = (props: ListingIntroProps) => {
 
   const propertiesData = data?.items ?? []
 
-  const propertiyOptions: SelectOption[] =
+  const propertyOptions: SelectOption[] =
     propertiesData.length !== 0
       ? [
           { label: "", value: "" },
@@ -69,7 +69,7 @@ const ListingIntro = (props: ListingIntroProps) => {
         ]
       : []
 
-  const defaultPropName = props.property?.name ?? ""
+  const defaultProperpyName = props.property?.name ?? ""
 
   return (
     <>
@@ -168,16 +168,16 @@ const ListingIntro = (props: ListingIntroProps) => {
           <Grid.Row columns={3}>
             <Grid.Cell>
               <Select
-                id="properties"
-                name={"properties"}
+                id="property"
+                name={"property"}
                 label={addAsterisk(t("properties.drawer.nameLabel"))}
                 register={register}
-                defaultValue={defaultPropName}
-                error={fieldHasError(errors?.properties?.id)}
+                defaultValue={defaultProperpyName}
+                error={fieldHasError(errors?.property)}
                 controlClassName={"control"}
                 errorMessage={t("errors.requiredFieldError")}
-                keyPrefix={"properties"}
-                options={propertiyOptions}
+                keyPrefix={"property"}
+                options={propertyOptions}
                 validation={{ required: true }}
               />
             </Grid.Cell>

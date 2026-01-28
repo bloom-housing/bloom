@@ -90,7 +90,7 @@ const DetailListingIntro = () => {
         )}
       <Grid.Row>
         <Grid.Cell>
-          <FieldValue id="properties" label={t("properties.drawer.nameLabel")}>
+          <FieldValue id="property" label={t("properties.drawer.nameLabel")}>
             {propertyName}
           </FieldValue>
         </Grid.Cell>
