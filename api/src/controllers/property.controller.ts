@@ -61,7 +61,6 @@ export class PropertyController {
   @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
   @ApiOkResponse({ type: PaginatedPropertyDto })
   public async getPaginatedSet(@Query() queryParams: PropertyQueryParams) {
-    console.log('get properties', JSON.stringify(queryParams));
     return await this.propertyService.list(queryParams);
   }
 
@@ -73,7 +72,6 @@ export class PropertyController {
   public async getPropertyById(
     @Param('id', new ParseUUIDPipe({ version: '4' })) propertyId: string,
   ) {
-    console.log('by id result', propertyId);
     return await this.propertyService.findOne(propertyId);
   }
 
@@ -88,7 +86,6 @@ export class PropertyController {
   public async getFiltrablePaginatedSet(
     @Body() queryParams: PropertyQueryParams,
   ) {
-    console.log('params', queryParams);
     return await this.propertyService.list(queryParams);
   }
 
