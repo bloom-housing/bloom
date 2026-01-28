@@ -1,12 +1,11 @@
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["postgresqlExtensions", "views"]
+  previewFeatures = ["postgresqlExtensions", "views", "driverAdapters"]
 }
 
 datasource db {
   provider   = "postgresql"
-  url        = env("DATABASE_URL")
-  // directUrl  = env("DIRECT_URL")
+  url        = env("PRISMA_MIGRATION_DB_URL")
   extensions = [uuidOssp(map: "uuid-ossp")]
 }
 
