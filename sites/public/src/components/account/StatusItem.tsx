@@ -12,7 +12,7 @@ import { TagVariant } from "@bloom-housing/ui-seeds/src/text/Tag"
 interface StatusItemProps {
   applicationDueDate?: string
   applicationURL: string
-  confirmationNumber?: string
+  confirmationNumber?: string | number
   listingName: string
   listingURL: string
   listingStatus: ListingsStatusEnum

@@ -273,6 +273,11 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
         <FormProvider {...formMethods}>
           <section className="bg-primary-lighter py-5">
             <div className="max-w-screen-xl px-5 mx-auto">
+              {editMode && application?.markedAsDuplicate && (
+                <AlertBox className="mb-5" type="alert">
+                  {t("applications.duplicates.markedAsDuplicateAlert")}
+                </AlertBox>
+              )}
               {alert && (
                 <AlertBox className="mb-5" onClose={() => setAlert(null)} closeable type="alert">
                   {alert === "form"
@@ -286,6 +291,9 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
                   <div className="info-card md:w-9/12">
                     <FormApplicationData
                       enableApplicationStatus={enableApplicationStatus}
+                      disableApplicationStatusControls={
+                        enableApplicationStatus && editMode && application?.markedAsDuplicate
+                      }
                       reviewOrderType={listingDto?.reviewOrderType}
                     />
 

@@ -20,6 +20,7 @@ import { FeatureFlag } from '../feature-flags/feature-flag.dto';
 import { AbstractDTO } from '../shared/abstract.dto';
 import { IdDTO } from '../shared/id.dto';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
+import { ListingFeaturesConfiguration } from './listing-features-config.dto';
 
 export class Jurisdiction extends AbstractDTO {
   @Expose()
@@ -190,4 +191,10 @@ export class Jurisdiction extends AbstractDTO {
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty({ isArray: true })
   regions: string[];
+
+  @Expose()
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => ListingFeaturesConfiguration)
+  @ApiPropertyOptional({ type: ListingFeaturesConfiguration })
+  listingFeaturesConfiguration?: ListingFeaturesConfiguration;
 }
