@@ -67,7 +67,10 @@ const ListingIntro = (props: ListingIntroProps) => {
       {(props.listingId || props.jurisdictionName) && (
         <hr className="spacer-section-above spacer-section" />
       )}
-      <SectionWithGrid heading={"testing"} subheading={t("listings.sections.introSubtitle")}>
+      <SectionWithGrid
+        heading={t("listings.sections.introTitle")}
+        subheading={t("listings.sections.introSubtitle")}
+      >
         {props.enableNonRegulatedListings && (
           <Grid.Row columns={1}>
             <Grid.Cell>
