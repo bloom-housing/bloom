@@ -176,6 +176,7 @@ includeViews.full = {
   listingsApplicationDropOffAddress: true,
   listingsApplicationMailingAddress: true,
   requestedChangesUser: true,
+  property: true,
   requiredDocumentsList: true,
   units: {
     include: {

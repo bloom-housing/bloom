@@ -44,7 +44,7 @@ const ListingIntro = (props: ListingIntroProps) => {
   const { profile } = useContext(AuthContext)
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, clearErrors, errors, watch, getValues } = formMethods
+  const { register, clearErrors, errors, watch, getValues, setValue } = formMethods
 
   const listing = getValues()
 
@@ -68,8 +68,6 @@ const ListingIntro = (props: ListingIntroProps) => {
           })),
         ]
       : []
-
-  const defaultProperpyName = props.property?.name ?? ""
 
   return (
     <>
@@ -168,17 +166,27 @@ const ListingIntro = (props: ListingIntroProps) => {
           <Grid.Row columns={3}>
             <Grid.Cell>
               <Select
-                id="property"
-                name={"property"}
+                id="propertyId"
+                name={"propertyId"}
                 label={addAsterisk(t("properties.drawer.nameLabel"))}
                 register={register}
-                defaultValue={defaultProperpyName}
+                defaultValue={props.property?.id ?? ""}
                 error={fieldHasError(errors?.property)}
                 controlClassName={"control"}
                 errorMessage={t("errors.requiredFieldError")}
                 keyPrefix={"property"}
                 options={propertyOptions}
                 validation={{ required: true }}
+                inputProps={{
+                  onChange: (e) => {
+                    const selectedProperty = propertiesData.find(
+                      (property) => property.id === e.target.value
+                    )
+                    if (selectedProperty) {
+                      setValue("property", selectedProperty)
+                    }
+                  },
+                }}
               />
             </Grid.Cell>
           </Grid.Row>
