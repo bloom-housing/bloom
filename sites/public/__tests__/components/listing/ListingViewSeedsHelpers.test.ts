@@ -1,66 +1,483 @@
+import { cleanup } from "@testing-library/react"
 import {
   FeatureFlagEnum,
   Listing,
   MultiselectQuestionsApplicationSectionEnum,
   MultiselectQuestionsStatusEnum,
   UnitsSummarized,
+  ApplicationMethod,
+  ApplicationMethodsTypeEnum,
+  ListingMultiselectQuestion,
+  Asset,
+  LanguagesEnum,
+  PaperApplication,
+  ListingFeatures,
+  ListingUtilities,
+  Unit,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { jurisdiction, listing } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
-import { cleanup } from "@testing-library/react"
 import {
   getCurrencyFromArgumentString,
   getEligibilitySections,
   getStackedHmiData,
+  getFilteredMultiselectQuestions,
+  getMultiselectQuestionData,
+  hasMethod,
+  getMethod,
+  getPaperApplications,
+  getOnlineApplicationURL,
+  getHasNonReferralMethods,
+  getAccessibilityFeatures,
+  getUtilitiesIncluded,
+  getFeatures,
+  getAmiValues,
 } from "../../../src/components/listing/ListingViewSeedsHelpers"
 
 afterEach(cleanup)
 
 describe("ListingViewSeedsHelpers", () => {
   describe("getFilteredMultiselectQuestions", () => {
-    it.todo("tests")
+    it("should filter multiselect questions by application section", () => {
+      const mockQuestions: ListingMultiselectQuestion[] = [
+        {
+          multiselectQuestions: {
+            id: "1",
+            applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
+            hideFromListing: false,
+          },
+        } as ListingMultiselectQuestion,
+        {
+          multiselectQuestions: {
+            id: "2",
+            applicationSection: MultiselectQuestionsApplicationSectionEnum.preferences,
+            hideFromListing: false,
+          },
+        } as ListingMultiselectQuestion,
+      ]
+
+      const result = getFilteredMultiselectQuestions(
+        mockQuestions,
+        MultiselectQuestionsApplicationSectionEnum.programs
+      )
+
+      expect(result).toHaveLength(1)
+      expect(result[0].multiselectQuestions.id).toBe("1")
+    })
+
+    it("should exclude hidden questions", () => {
+      const mockQuestions: ListingMultiselectQuestion[] = [
+        {
+          multiselectQuestions: {
+            id: "1",
+            applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
+            hideFromListing: true,
+          },
+        } as ListingMultiselectQuestion,
+        {
+          multiselectQuestions: {
+            id: "2",
+            applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
+            hideFromListing: false,
+          },
+        } as ListingMultiselectQuestion,
+      ]
+
+      const result = getFilteredMultiselectQuestions(
+        mockQuestions,
+        MultiselectQuestionsApplicationSectionEnum.programs
+      )
+
+      expect(result).toHaveLength(1)
+      expect(result[0].multiselectQuestions.id).toBe("2")
+    })
   })
+
   describe("getMultiselectQuestionData", () => {
-    it.todo("tests")
+    it("should map multiselect questions to data format with ordinals", () => {
+      const mockQuestions: ListingMultiselectQuestion[] = [
+        {
+          multiselectQuestions: {
+            id: "1",
+            text: "Question 1",
+            description: "Description 1",
+            links: [{ title: "Link 1", url: "http://example.com" }],
+            applicationSection: MultiselectQuestionsApplicationSectionEnum.preferences,
+          },
+        } as ListingMultiselectQuestion,
+        {
+          multiselectQuestions: {
+            id: "2",
+            text: "Question 2",
+            description: "Description 2",
+            links: [],
+            applicationSection: MultiselectQuestionsApplicationSectionEnum.preferences,
+          },
+        } as ListingMultiselectQuestion,
+      ]
+
+      const result = getMultiselectQuestionData(mockQuestions)
+
+      expect(result).toHaveLength(2)
+      expect(result[0].ordinal).toBe(1)
+      expect(result[0].title).toBe("Question 1")
+      expect(result[0].description).toBe("Description 1")
+      expect(result[1].ordinal).toBe(2)
+      expect(result[1].title).toBe("Question 2")
+    })
   })
+
   describe("hasMethod", () => {
-    it.todo("tests")
+    it("should return true if application method type exists", () => {
+      const methods: ApplicationMethod[] = [
+        { type: ApplicationMethodsTypeEnum.Internal, externalReference: "" } as ApplicationMethod,
+        {
+          type: ApplicationMethodsTypeEnum.PaperPickup,
+          externalReference: "",
+        } as ApplicationMethod,
+      ]
+
+      const result = hasMethod(methods, ApplicationMethodsTypeEnum.Internal)
+      expect(result).toBe(true)
+    })
+
+    it("should return false for methods array that does not include", () => {
+      const result = hasMethod(
+        [
+          { type: ApplicationMethodsTypeEnum.Internal, externalReference: "" } as ApplicationMethod,
+          {
+            type: ApplicationMethodsTypeEnum.PaperPickup,
+            externalReference: "",
+          } as ApplicationMethod,
+        ],
+        ApplicationMethodsTypeEnum.Referral
+      )
+      expect(result).toBe(false)
+    })
+
+    it("should return false for empty methods array", () => {
+      const result = hasMethod([], ApplicationMethodsTypeEnum.Internal)
+      expect(result).toBe(false)
+    })
   })
+
   describe("getMethod", () => {
-    it.todo("tests")
+    it("should return the application method of specified type", () => {
+      const methods: ApplicationMethod[] = [
+        {
+          type: ApplicationMethodsTypeEnum.Internal,
+          externalReference: "http://example.com",
+        } as ApplicationMethod,
+        {
+          type: ApplicationMethodsTypeEnum.PaperPickup,
+          externalReference: "",
+        } as ApplicationMethod,
+      ]
+
+      const result = getMethod(methods, ApplicationMethodsTypeEnum.Internal)
+      expect(result?.type).toBe(ApplicationMethodsTypeEnum.Internal)
+      expect(result?.externalReference).toBe("http://example.com")
+    })
   })
+
   describe("getPaperApplications", () => {
-    it.todo("tests")
+    it("should return paper applications from FileDownload method", () => {
+      const methods: ApplicationMethod[] = [
+        {
+          type: ApplicationMethodsTypeEnum.FileDownload,
+          externalReference: "",
+          paperApplications: [
+            {
+              id: "1",
+              language: LanguagesEnum.en,
+              assets: { fileId: "123" } as Asset,
+            } as PaperApplication,
+            {
+              id: "2",
+              language: LanguagesEnum.es,
+              assets: { fileId: "456" } as Asset,
+            } as PaperApplication,
+          ],
+        } as ApplicationMethod,
+      ]
+
+      const result = getPaperApplications(methods)
+      expect(result).toHaveLength(2)
+    })
+
+    it("should put English language first in paper applications", () => {
+      const methods: ApplicationMethod[] = [
+        {
+          type: ApplicationMethodsTypeEnum.FileDownload,
+          externalReference: "",
+          paperApplications: [
+            {
+              id: "1",
+              language: LanguagesEnum.es,
+              assets: { fileId: "456" } as Asset,
+            } as PaperApplication,
+            {
+              id: "2",
+              language: LanguagesEnum.en,
+              assets: { fileId: "123" } as Asset,
+            } as PaperApplication,
+          ],
+        } as ApplicationMethod,
+      ]
+
+      const result = getPaperApplications(methods)
+      expect(result?.[0].languageString).toContain("English")
+    })
   })
+
   describe("getOnlineApplicationURL", () => {
-    it.todo("tests")
+    it("should return online application URL from ExternalLink method", () => {
+      const methods: ApplicationMethod[] = [
+        {
+          type: ApplicationMethodsTypeEnum.ExternalLink,
+          externalReference: "http://example.com/apply",
+        } as ApplicationMethod,
+      ]
+
+      const result = getOnlineApplicationURL(methods, "123", false)
+      expect(result.url).toBe("http://example.com/apply")
+    })
+
+    it.todo("should return online application URL from Internal method")
+
+    it("should return null if no ExternalLink method exists", () => {
+      const methods: ApplicationMethod[] = [
+        {
+          type: ApplicationMethodsTypeEnum.FileDownload,
+          externalReference: "",
+        } as ApplicationMethod,
+      ]
+
+      const result = getOnlineApplicationURL(methods, "123", false)
+      expect(result.url).toBeUndefined()
+    })
   })
+
   describe("getHasNonReferralMethods", () => {
-    it.todo("tests")
+    it("should return true if listing has non-referral application methods", () => {
+      const mockListing: Listing = {
+        ...listing,
+        applicationMethods: [
+          {
+            type: ApplicationMethodsTypeEnum.ExternalLink,
+            externalReference: "http://example.com",
+          } as ApplicationMethod,
+        ],
+      }
+
+      const result = getHasNonReferralMethods(mockListing)
+      expect(result).toBe(1)
+    })
+
+    it("should return false if listing has no application methods", () => {
+      const mockListing: Listing = {
+        ...listing,
+        applicationMethods: [],
+      }
+
+      const result = getHasNonReferralMethods(mockListing)
+      expect(result).toBe(0)
+    })
   })
+
   describe("getAccessibilityFeatures", () => {
-    it.todo("tests")
+    it("should return null if no features are enabled", () => {
+      const mockListing: Listing = {
+        ...listing,
+        listingFeatures: {
+          accessibleParking: false,
+          elevator: false,
+        } as ListingFeatures,
+      }
+
+      const config = { categories: [] }
+
+      const result = getAccessibilityFeatures(mockListing, config)
+      expect(result).toBeNull()
+    })
+
+    it("should return features organized by category when config has categories", () => {
+      const mockListing: Listing = {
+        ...listing,
+        listingFeatures: {
+          accessibleParking: true,
+          elevator: true,
+          barrierFreeBathroom: true,
+        } as ListingFeatures,
+      }
+
+      const config = {
+        categories: [
+          {
+            id: "mobility",
+            fields: [{ id: "accessibleParking" }, { id: "elevator" }],
+          },
+          {
+            id: "bathroom",
+            fields: [{ id: "barrierFreeBathroom" }],
+          },
+        ],
+      }
+
+      const result = getAccessibilityFeatures(mockListing, config)
+      expect(result).not.toBeNull()
+      expect(Array.isArray(result)).toBe(true)
+      expect(result).toHaveLength(2)
+    })
+
+    it("should return flat list of features when no categories in config", () => {
+      const mockListing: Listing = {
+        ...listing,
+        listingFeatures: {
+          accessibleParking: true,
+          elevator: true,
+        } as ListingFeatures,
+      }
+
+      const config = { categories: [] }
+
+      const result = getAccessibilityFeatures(mockListing, config)
+      expect(result).not.toBeNull()
+      expect(Array.isArray(result)).toBe(false)
+    })
   })
+
   describe("getUtilitiesIncluded", () => {
-    it.todo("tests")
+    it("should return array of enabled utilities", () => {
+      const mockListing: Listing = {
+        ...listing,
+        listingUtilities: {
+          water: true,
+          gas: false,
+          trash: true,
+        } as ListingUtilities,
+      }
+
+      const result = getUtilitiesIncluded(mockListing)
+      expect(result).toHaveLength(2)
+    })
+
+    it("should return empty array if no utilities are enabled", () => {
+      const mockListing: Listing = {
+        ...listing,
+        listingUtilities: {
+          water: false,
+          gas: false,
+        } as ListingUtilities,
+      }
+
+      const result = getUtilitiesIncluded(mockListing)
+      expect(result).toHaveLength(0)
+    })
+
+    it("should return empty array if listing utilities is undefined", () => {
+      const mockListing: Listing = {
+        ...listing,
+        listingUtilities: undefined,
+      }
+
+      const result = getUtilitiesIncluded(mockListing)
+      expect(result).toHaveLength(0)
+    })
   })
+
   describe("getFeatures", () => {
-    it.todo("tests")
+    it("should include year built when available", () => {
+      const mockListing: Listing = {
+        ...listing,
+        yearBuilt: 2020,
+      }
+
+      const result = getFeatures(mockListing, jurisdiction)
+      const builtFeature = result.find((f) => f.heading === "Built")
+      expect(builtFeature).toBeDefined()
+      expect(builtFeature?.subheading).toBe(2020)
+    })
+
+    it("should include amenities when available", () => {
+      const mockListing: Listing = {
+        ...listing,
+        amenities: "Pool, Gym",
+        unitAmenities: "Balcony, Dishwasher",
+      }
+
+      const result = getFeatures(mockListing, jurisdiction)
+      const amenitiesFeature = result.find((f) => f.heading === "Property amenities")
+      const unitAmenities = result.find((f) => f.heading === "Unit amenities")
+      expect(amenitiesFeature).toBeDefined()
+      expect(amenitiesFeature?.subheading).toBe("Pool, Gym")
+      expect(unitAmenities).toBeDefined()
+      expect(unitAmenities?.subheading).toBe("Balcony, Dishwasher")
+    })
+
+    it("should not include pet policy if no data", () => {
+      const mockListing: Listing = {
+        ...listing,
+        allowsDogs: false,
+        allowsCats: false,
+        petPolicy: undefined,
+      }
+
+      const result = getFeatures(mockListing, jurisdiction)
+      const petPolicyFeature = result.find((f) => f.heading === "Pet policy")
+      expect(petPolicyFeature).toBeUndefined()
+    })
   })
+
   describe("getAmiValues", () => {
-    it.todo("tests")
+    it("should extract AMI values from listing units", () => {
+      const mockListing: Listing = {
+        ...listing,
+        unitsSummarized: {
+          amiPercentages: ["30", "60", "80"],
+        } as UnitsSummarized,
+      }
+
+      const result = getAmiValues(mockListing)
+      expect(result).toEqual([30, 60, 80])
+    })
+
+    it("should handle listing with no units", () => {
+      const mockListing: Listing = {
+        ...listing,
+        unitsSummarized: {
+          amiPercentages: [],
+        } as UnitsSummarized,
+      }
+
+      const result = getAmiValues(mockListing)
+      expect(result).toEqual([])
+    })
   })
+
   describe("getHmiData", () => {
-    it.todo("tests")
+    it("should return standard table data for HMI", () => {
+      const mockListing: Listing = {
+        ...listing,
+        units: [{ amiPercentage: "30" } as Unit],
+      }
+
+      const result = getStackedHmiData(mockListing)
+      expect(result).toBeDefined()
+    })
   })
+
   describe("getAddress", () => {
     it.todo("tests")
   })
+
   describe("getReservedTitle", () => {
     it.todo("tests")
   })
+
   describe("getDateString", () => {
     it.todo("tests")
   })
+
   describe("getBuildingSelectionCriteria", () => {
     it.todo("tests")
   })
