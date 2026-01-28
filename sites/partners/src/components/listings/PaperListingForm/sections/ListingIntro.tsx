@@ -1,13 +1,21 @@
-import React from "react"
+import React, { useContext } from "react"
 import { useFormContext } from "react-hook-form"
-import { t, Field, FieldGroup } from "@bloom-housing/ui-components"
+import { t, Field, FieldGroup, Select, SelectOption } from "@bloom-housing/ui-components"
 import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import {
   EnumListingListingType,
+  Property,
   YesNoEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { defaultFieldProps, fieldHasError, fieldMessage } from "../../../../lib/helpers"
+import {
+  addAsterisk,
+  defaultFieldProps,
+  fieldHasError,
+  fieldMessage,
+} from "../../../../lib/helpers"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
+import { AuthContext } from "@bloom-housing/shared-helpers"
+import { usePropertiesList } from "../../../../lib/hooks"
 
 interface ListingIntroProps {
   enableHousingDeveloperOwner?: boolean
@@ -16,6 +24,7 @@ interface ListingIntroProps {
   jurisdictionName: string
   listingId: string
   requiredFields: string[]
+  property?: Property
 }
 
 const getDeveloperLabel = (
@@ -32,13 +41,33 @@ const getDeveloperLabel = (
 
 const ListingIntro = (props: ListingIntroProps) => {
   const formMethods = useFormContext()
+  const { profile } = useContext(AuthContext)
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, clearErrors, errors, watch, getValues } = formMethods
+  const { register, clearErrors, errors, watch, getValues, setValue } = formMethods
 
   const listing = getValues()
 
   const listingType = watch("listingType")
+
+  const { data } = usePropertiesList({
+    page: 1,
+    limit: 10,
+    jurisdictions: profile?.jurisdictions?.map((jurisdiction) => jurisdiction.id).toString(),
+  })
+
+  const propertiesData = data?.items ?? []
+
+  const propertyOptions: SelectOption[] =
+    propertiesData.length !== 0
+      ? [
+          { label: "", value: "" },
+          ...propertiesData.map((property) => ({
+            label: property.name,
+            value: property.id,
+          })),
+        ]
+      : []
 
   return (
     <>
@@ -133,6 +162,35 @@ const ListingIntro = (props: ListingIntroProps) => {
               </Grid.Cell>
             </Grid.Row>
           )}
+        {propertiesData.length > 1 && (
+          <Grid.Row columns={3}>
+            <Grid.Cell>
+              <Select
+                id="propertyId"
+                name={"propertyId"}
+                label={addAsterisk(t("properties.drawer.nameLabel"))}
+                register={register}
+                defaultValue={props.property?.id ?? ""}
+                error={fieldHasError(errors?.property)}
+                controlClassName={"control"}
+                errorMessage={t("errors.requiredFieldError")}
+                keyPrefix={"property"}
+                options={propertyOptions}
+                validation={{ required: true }}
+                inputProps={{
+                  onChange: (e) => {
+                    const selectedProperty = propertiesData.find(
+                      (property) => property.id === e.target.value
+                    )
+                    if (selectedProperty) {
+                      setValue("property", selectedProperty)
+                    }
+                  },
+                }}
+              />
+            </Grid.Cell>
+          </Grid.Row>
+        )}
       </SectionWithGrid>
     </>
   )
