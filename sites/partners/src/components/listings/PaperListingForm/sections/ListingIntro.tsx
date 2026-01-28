@@ -46,7 +46,6 @@ const ListingIntro = (props: ListingIntroProps) => {
   const { data } = usePropertiesList({
     page: 1,
     limit: 10,
-    search: "search",
     jurisdictions: profile?.jurisdictions?.map((jurisdiction) => jurisdiction.id).toString(),
   })
 
@@ -62,8 +61,6 @@ const ListingIntro = (props: ListingIntroProps) => {
           })),
         ]
       : []
-
-  console.log("property result", propertiyOptions)
 
   return (
     <>
