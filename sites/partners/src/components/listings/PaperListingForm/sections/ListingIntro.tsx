@@ -49,7 +49,7 @@ const ListingIntro = (props: ListingIntroProps) => {
     jurisdictions: profile?.jurisdictions?.map((jurisdiction) => jurisdiction.id).toString(),
   })
 
-  const propertiesData = data?.items || []
+  const propertiesData = data?.items ?? []
 
   const propertiyOptions: SelectOption[] =
     propertiesData.length !== 0
