@@ -406,6 +406,7 @@ model Jurisdictions {
   regions                             String[]                    @default([]) @map("regions")
   listingFeaturesConfiguration        Json?                       @map("listing_features_configuration")
   properties                          Properties[]
+  agency                              Agency[]
 
   @@map("jurisdictions")
 }
@@ -1138,8 +1139,6 @@ model UserPreferences {
 
 // END DETROIT SPECIFIC
 
-// START LA SPECIFIC
-
 model Properties {
   id             String         @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   createdAt      DateTime       @default(now()) @map("created_at") @db.Timestamp(6)
@@ -1157,7 +1156,16 @@ model Properties {
   @@map("properties")
 }
 
-// END LA SPECIFIC
+model Agency {
+  id              String         @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  createdAt       DateTime       @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt       DateTime       @updatedAt @map("updated_at") @db.Timestamp(6)
+  name            String
+  jurisdictions   Jurisdictions? @relation(fields: [jurisdictionsId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  jurisdictionsId String?        @map("jurisdictions_id") @db.Uuid
+
+  @@map("agency")
+}
 
 model ScriptRuns {
   id             String   @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
