@@ -29,52 +29,6 @@ const cloudinaryIds = [
   'dev/apartment_building_2_b7ujdd',
 ];
 
-type optionalFeatures = {
-  elevator?: boolean;
-  wheelchairRamp?: boolean;
-  serviceAnimalsAllowed?: boolean;
-  accessibleParking?: boolean;
-  parkingOnSite?: boolean;
-  inUnitWasherDryer?: boolean;
-  laundryInBuilding?: boolean;
-  barrierFreeEntrance?: boolean;
-  rollInShower?: boolean;
-  grabBars?: boolean;
-  heatingInUnit?: boolean;
-  acInUnit?: boolean;
-  hearing?: boolean;
-  visual?: boolean;
-  mobility?: boolean;
-  barrierFreeUnitEntrance?: boolean;
-  loweredLightSwitch?: boolean;
-  barrierFreeBathroom?: boolean;
-  wideDoorways?: boolean;
-  loweredCabinets?: boolean;
-};
-
-type requiredDocuments = {
-  socialSecurityCard?: boolean;
-  currentLandlordReference?: boolean;
-  birthCertificate?: boolean;
-  previousLandlordReference?: boolean;
-  governmentIssuedId?: boolean;
-  proofOfAssets?: boolean;
-  proofOfIncome?: boolean;
-  residencyDocuments?: boolean;
-  proofOfCustody?: boolean;
-};
-
-type optionalUtilities = {
-  water?: boolean;
-  gas?: boolean;
-  trash?: boolean;
-  sewer?: boolean;
-  electricity?: boolean;
-  cable?: boolean;
-  phone?: boolean;
-  internet?: boolean;
-};
-
 export const listingFactory = async (
   jurisdictionId: string,
   prismaClient: PrismaClient,
@@ -95,14 +49,14 @@ export const listingFactory = async (
     multiselectQuestions?: Partial<MultiselectQuestions>[];
     noImage?: boolean;
     numberOfUnits?: number;
-    optionalFeatures?: optionalFeatures;
-    optionalUtilities?: optionalUtilities;
+    optionalFeatures?: Prisma.ListingFeaturesCreateInput;
+    optionalUtilities?: Prisma.ListingUtilitiesCreateInput;
     reviewOrderType?: ReviewOrderTypeEnum;
     status?: ListingsStatusEnum;
     unitGroups?: Prisma.UnitGroupCreateWithoutListingsInput[];
     units?: Prisma.UnitsCreateWithoutListingsInput[];
     userAccounts?: Prisma.UserAccountsWhereUniqueInput[];
-    requiredDocumentsList?: requiredDocuments;
+    requiredDocumentsList?: Prisma.ListingDocumentsCreateInput;
   },
 ): Promise<Prisma.ListingsCreateInput> => {
   const previousListing = optionalParams?.listing || {};
@@ -307,7 +261,7 @@ const buildingFeatures = (includeBuildingFeatures: boolean) => {
 };
 
 export const listingsRequiredDocuments = (
-  requiredDocumentsList?: requiredDocuments,
+  requiredDocumentsList?: Prisma.ListingDocumentsCreateInput,
 ): {
   requiredDocumentsList;
 } => ({
@@ -328,48 +282,50 @@ export const listingsRequiredDocuments = (
 });
 
 export const featuresAndUtilites = (
-  optionalFeatures?: optionalFeatures,
-  optionalUtilities?: optionalUtilities,
+  optionalFeatures?: Prisma.ListingFeaturesCreateInput,
+  optionalUtilities?: Prisma.ListingUtilitiesCreateInput,
 ): {
   listingFeatures: Prisma.ListingFeaturesCreateNestedOneWithoutListingsInput;
   listingUtilities: Prisma.ListingUtilitiesCreateNestedOneWithoutListingsInput;
-} => ({
-  listingFeatures: {
-    create: {
-      elevator: randomBoolean(),
-      wheelchairRamp: randomBoolean(),
-      serviceAnimalsAllowed: randomBoolean(),
-      accessibleParking: randomBoolean(),
-      parkingOnSite: randomBoolean(),
-      inUnitWasherDryer: randomBoolean(),
-      laundryInBuilding: randomBoolean(),
-      barrierFreeEntrance: randomBoolean(),
-      rollInShower: randomBoolean(),
-      grabBars: randomBoolean(),
-      heatingInUnit: randomBoolean(),
-      acInUnit: randomBoolean(),
-      hearing: randomBoolean(),
-      visual: randomBoolean(),
-      mobility: randomBoolean(),
-      barrierFreeUnitEntrance: randomBoolean(),
-      loweredLightSwitch: randomBoolean(),
-      barrierFreeBathroom: randomBoolean(),
-      wideDoorways: randomBoolean(),
-      loweredCabinets: randomBoolean(),
-      ...optionalFeatures,
+} => {
+  return {
+    listingFeatures: {
+      create: {
+        elevator: randomBoolean(),
+        wheelchairRamp: randomBoolean(),
+        serviceAnimalsAllowed: randomBoolean(),
+        accessibleParking: randomBoolean(),
+        parkingOnSite: randomBoolean(),
+        inUnitWasherDryer: randomBoolean(),
+        laundryInBuilding: randomBoolean(),
+        barrierFreeEntrance: randomBoolean(),
+        rollInShower: randomBoolean(),
+        grabBars: randomBoolean(),
+        heatingInUnit: randomBoolean(),
+        acInUnit: randomBoolean(),
+        hearing: randomBoolean(),
+        visual: randomBoolean(),
+        mobility: randomBoolean(),
+        barrierFreeUnitEntrance: randomBoolean(),
+        loweredLightSwitch: randomBoolean(),
+        barrierFreeBathroom: randomBoolean(),
+        wideDoorways: randomBoolean(),
+        loweredCabinets: randomBoolean(),
+        ...optionalFeatures,
+      },
     },
-  },
-  listingUtilities: {
-    create: {
-      water: randomBoolean(),
-      gas: randomBoolean(),
-      trash: randomBoolean(),
-      sewer: randomBoolean(),
-      electricity: randomBoolean(),
-      cable: randomBoolean(),
-      phone: randomBoolean(),
-      internet: randomBoolean(),
-      ...optionalUtilities,
+    listingUtilities: {
+      create: {
+        water: randomBoolean(),
+        gas: randomBoolean(),
+        trash: randomBoolean(),
+        sewer: randomBoolean(),
+        electricity: randomBoolean(),
+        cable: randomBoolean(),
+        phone: randomBoolean(),
+        internet: randomBoolean(),
+        ...optionalUtilities,
+      },
     },
-  },
-});
+  };
+};

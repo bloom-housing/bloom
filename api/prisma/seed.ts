@@ -1,5 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import { parseArgs } from 'node:util';
+import { env } from 'node:process';
 import { jurisdictionFactory } from './seed-helpers/jurisdiction-factory';
 import { stagingSeed } from './seed-staging';
 import { devSeeding } from './seed-dev';
@@ -17,11 +18,13 @@ async function main() {
   const {
     values: { environment, jurisdictionName },
   } = parseArgs({ options });
+  const publicSiteBaseURL = env.DBSEED_PUBLIC_SITE_BASE_URL
+
   switch (environment) {
     case 'production':
       // Setting up a production database we would just need the bare minimum such as jurisdiction
       const jurisdictionId = await prisma.jurisdictions.create({
-        data: jurisdictionFactory(jurisdictionName as string),
+        data: jurisdictionFactory(jurisdictionName as string, { publicSiteBaseURL: publicSiteBaseURL }),
       });
       await unitTypeFactoryAll(prisma);
       await unitAccessibilityPriorityTypeFactoryAll(prisma);
@@ -30,7 +33,7 @@ async function main() {
     case 'staging':
       // Staging setup should have realistic looking data with a preset list of listings
       // along with all of the required tables (ami, users, etc)
-      stagingSeed(prisma, jurisdictionName as string);
+      stagingSeed(prisma, jurisdictionName as string, publicSiteBaseURL);
       break;
     case 'development':
     default:

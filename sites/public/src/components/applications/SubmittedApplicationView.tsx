@@ -4,6 +4,7 @@ import FormSummaryDetails from "../shared/FormSummaryDetails"
 import { CustomIconMap, listingSectionQuestions, AuthContext } from "@bloom-housing/shared-helpers"
 import {
   Application,
+  ApplicationStatusEnum,
   FeatureFlagEnum,
   Listing,
   MultiselectQuestionsApplicationSectionEnum,
@@ -28,6 +29,32 @@ const SubmittedApplicationView = ({
   const confirmationDate = useMemo(() => {
     return dayjs(application.submissionDate).format(DATE_FORMAT)
   }, [application.submissionDate])
+  const confirmationNumber = application?.confirmationCode || application?.id
+  const accessibleUnitWaitlistNumber = application?.accessibleUnitWaitlistNumber
+  const conventionalUnitWaitlistNumber = application?.conventionalUnitWaitlistNumber
+  const isWaitlistStatus =
+    application?.status === ApplicationStatusEnum.waitlist ||
+    application?.status === ApplicationStatusEnum.waitlistDeclined
+
+  const displayNumbers: { label: string; value: string | number }[] = []
+  if (isWaitlistStatus && accessibleUnitWaitlistNumber != undefined) {
+    displayNumbers.push({
+      label: t("application.yourAccessibleWaitlistNumber"),
+      value: accessibleUnitWaitlistNumber,
+    })
+  }
+  if (isWaitlistStatus && conventionalUnitWaitlistNumber != undefined) {
+    displayNumbers.push({
+      label: t("application.yourConventionalWaitlistNumber"),
+      value: conventionalUnitWaitlistNumber,
+    })
+  }
+  if (confirmationNumber) {
+    displayNumbers.push({
+      label: t("application.yourLotteryNumber"),
+      value: confirmationNumber,
+    })
+  }
 
   return (
     <>
@@ -51,10 +78,15 @@ const SubmittedApplicationView = ({
           </p>
         </Card.Section>
         <Card.Section divider={"inset"} className={"border-none"}>
-          <p>{`${t("application.yourLotteryNumber")}:`}</p>
-          <p className="font-semibold text-lg mt-3">
-            {application?.confirmationCode || application?.id}
-          </p>
+          {displayNumbers.map((item, index) => (
+            <div
+              key={item.label}
+              className={index === displayNumbers.length - 1 ? "" : "seeds-p-be-content"}
+            >
+              <p>{`${item.label}:`}</p>
+              <p className="font-semibold text-lg mt-3">{item.value}</p>
+            </div>
+          ))}
         </Card.Section>
         <FormSummaryDetails
           listing={listing}
