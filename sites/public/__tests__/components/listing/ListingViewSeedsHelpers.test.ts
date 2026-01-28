@@ -13,10 +13,10 @@ import {
   PaperApplication,
   ListingFeatures,
   ListingUtilities,
-  Unit,
   Address,
   ApplicationAddressTypeEnum,
   EnumListingListingType,
+  Jurisdiction,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { jurisdiction, listing } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import {
@@ -39,6 +39,7 @@ import {
   getDateString,
   getBuildingSelectionCriteria,
   getAdditionalInformation,
+  getMarketingFlyers,
 } from "../../../src/components/listing/ListingViewSeedsHelpers"
 
 afterEach(cleanup)
@@ -458,11 +459,76 @@ describe("ListingViewSeedsHelpers", () => {
       const petPolicyFeature = result.find((f) => f.heading === "Pet policy")
       expect(petPolicyFeature).toBeUndefined()
     })
-    it.todo("should show the correct bullets when enablePetPolicyCheckbox is true")
-    it.todo("should include parking fee when available")
-    it.todo(
-      "should not show accessibility features even if there is content is enableAccessibilityFeatures is false"
-    )
+    it("should show the correct bullets when enablePetPolicyCheckbox is true", () => {
+      const mockJurisdiction = {
+        ...jurisdiction,
+        featureFlags: [
+          {
+            name: FeatureFlagEnum.enablePetPolicyCheckbox,
+            active: true,
+          },
+        ],
+      } as Jurisdiction
+
+      const mockListing: Listing = {
+        ...listing,
+        allowsDogs: true,
+        allowsCats: true,
+      }
+
+      const result = getFeatures(mockListing, mockJurisdiction)
+      const petPolicyFeature = result.find((f) => f.heading === "Pets policy")
+      expect(petPolicyFeature).toBeDefined()
+      expect(petPolicyFeature?.content).toBeDefined()
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const elementList = petPolicyFeature.content as any
+      const petList = elementList.props.children
+      expect(petList.length).toBe(2)
+      expect(petList[0].props.children).toBe("Allows dogs")
+      expect(petList[1].props.children).toBe("Allows cats")
+    })
+    it("should include parking fee when available", () => {
+      const mockListing: Listing = {
+        ...listing,
+        parkingFee: "150",
+      }
+
+      const result = getFeatures(mockListing, jurisdiction)
+      const parkingFeeFeature = result.find((f) => f.heading === "Parking fee")
+      expect(parkingFeeFeature).toBeDefined()
+      expect(parkingFeeFeature?.subheading).toBe("$150")
+    })
+    it("should not show accessibility features even if there is content when enableAccessibilityFeatures is false", () => {
+      const mockJurisdiction = {
+        ...jurisdiction,
+        featureFlags: [
+          {
+            name: "enableAccessibilityFeatures",
+            active: false,
+          },
+        ],
+        listingFeaturesConfiguration: {
+          categories: [
+            {
+              id: "mobility",
+              fields: [{ id: "accessibleParking" }],
+            },
+          ],
+        },
+      } as Jurisdiction
+
+      const mockListing: Listing = {
+        ...listing,
+        listingFeatures: {
+          accessibleParking: true,
+        } as ListingFeatures,
+      }
+
+      const result = getFeatures(mockListing, mockJurisdiction)
+      const accessibilityFeature = result.find((f) => f.heading === "Accessibility")
+      expect(accessibilityFeature).toBeUndefined()
+    })
   })
 
   describe("getAmiValues", () => {
@@ -491,7 +557,122 @@ describe("ListingViewSeedsHelpers", () => {
     })
   })
 
-  it.todo("getMarketingFlyers")
+  describe("getMarketingFlyers", () => {
+    it("should return empty array when feature flag is disabled", () => {
+      const mockJurisdiction = {
+        ...jurisdiction,
+        featureFlags: [
+          {
+            name: FeatureFlagEnum.enableMarketingFlyer,
+            active: false,
+          },
+        ],
+      } as Jurisdiction
+
+      const mockListing: Listing = {
+        ...listing,
+        marketingFlyer: "http://example.com/flyer.pdf",
+      }
+
+      const result = getMarketingFlyers(mockListing, mockJurisdiction)
+      expect(result).toEqual([])
+    })
+
+    it("should return marketing flyer when feature flag is enabled and flyer exists", () => {
+      const mockJurisdiction = {
+        ...jurisdiction,
+        featureFlags: [
+          {
+            name: FeatureFlagEnum.enableMarketingFlyer,
+            active: true,
+          },
+        ],
+      } as Jurisdiction
+
+      const mockListing: Listing = {
+        ...listing,
+        marketingFlyer: "http://example.com/flyer.pdf",
+      }
+
+      const result = getMarketingFlyers(mockListing, mockJurisdiction)
+      expect(result).toHaveLength(1)
+      expect(result[0].url).toBe("http://example.com/flyer.pdf")
+      expect(result[0].label).toBe("Open marketing flyer")
+    })
+
+    it("should return both marketing and accessible flyer when both exist", () => {
+      const mockJurisdiction = {
+        ...jurisdiction,
+        featureFlags: [
+          {
+            name: FeatureFlagEnum.enableMarketingFlyer,
+            active: true,
+          },
+        ],
+      } as Jurisdiction
+
+      const mockListing: Listing = {
+        ...listing,
+        marketingFlyer: "http://example.com/flyer.pdf",
+        accessibleMarketingFlyer: "http://example.com/accessible-flyer.pdf",
+      }
+
+      const result = getMarketingFlyers(mockListing, mockJurisdiction)
+      expect(result).toHaveLength(2)
+      expect(result[0].url).toBe("http://example.com/flyer.pdf")
+      expect(result[1].url).toBe("http://example.com/accessible-flyer.pdf")
+      expect(result[1].label).toBe("Open accessible marketing flyer")
+    })
+
+    it("should use cloudinary URL when file asset exists", () => {
+      const mockJurisdiction = {
+        ...jurisdiction,
+        featureFlags: [
+          {
+            name: FeatureFlagEnum.enableMarketingFlyer,
+            active: true,
+          },
+        ],
+      } as Jurisdiction
+
+      const mockListing: Listing = {
+        ...listing,
+        listingsMarketingFlyerFile: {
+          id: "1",
+          fileId: "test-file-id",
+        } as Asset,
+      }
+
+      const result = getMarketingFlyers(mockListing, mockJurisdiction)
+      expect(result).toHaveLength(1)
+      expect(result[0].url).toBe(
+        "https://res.cloudinary.com/undefined/image/upload/test-file-id.pdf"
+      )
+    })
+
+    it("should return empty array when no flyers exist", () => {
+      const mockJurisdiction = {
+        ...jurisdiction,
+        featureFlags: [
+          {
+            name: FeatureFlagEnum.enableMarketingFlyer,
+            active: true,
+          },
+        ],
+      } as Jurisdiction
+
+      const mockListing: Listing = {
+        ...listing,
+        marketingFlyer: undefined,
+        accessibleMarketingFlyer: undefined,
+        listingsMarketingFlyerFile: undefined,
+        listingsAccessibleMarketingFlyerFile: undefined,
+      }
+
+      const result = getMarketingFlyers(mockListing, mockJurisdiction)
+      expect(result).toEqual([])
+    })
+  })
 
   describe("getAddress", () => {
     it("should return leasing agent address when addressType is leasingAgent", () => {
