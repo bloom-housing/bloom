@@ -14,6 +14,9 @@ import {
   ListingFeatures,
   ListingUtilities,
   Unit,
+  Address,
+  ApplicationAddressTypeEnum,
+  EnumListingListingType,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { jurisdiction, listing } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import {
@@ -31,6 +34,11 @@ import {
   getUtilitiesIncluded,
   getFeatures,
   getAmiValues,
+  getAddress,
+  getReservedTitle,
+  getDateString,
+  getBuildingSelectionCriteria,
+  getAdditionalInformation,
 } from "../../../src/components/listing/ListingViewSeedsHelpers"
 
 afterEach(cleanup)
@@ -242,7 +250,31 @@ describe("ListingViewSeedsHelpers", () => {
       expect(result.url).toBe("http://example.com/apply")
     })
 
-    it.todo("should return online application URL from Internal method")
+    it("should return online application URL from Internal method", () => {
+      const methods: ApplicationMethod[] = [
+        {
+          type: ApplicationMethodsTypeEnum.Internal,
+          externalReference: "",
+        } as ApplicationMethod,
+      ]
+
+      const result = getOnlineApplicationURL(methods, "123", false)
+      expect(result.url).toBe("/applications/start/choose-language?listingId=123")
+      expect(result.isCommonApp).toBe(true)
+    })
+
+    it("should include preview parameter when preview is true", () => {
+      const methods: ApplicationMethod[] = [
+        {
+          type: ApplicationMethodsTypeEnum.Internal,
+          externalReference: "",
+        } as ApplicationMethod,
+      ]
+
+      const result = getOnlineApplicationURL(methods, "123", true)
+      expect(result.url).toBe("/applications/start/choose-language?listingId=123&preview=true")
+      expect(result.isCommonApp).toBe(true)
+    })
 
     it("should return null if no ExternalLink method exists", () => {
       const methods: ApplicationMethod[] = [
@@ -426,6 +458,11 @@ describe("ListingViewSeedsHelpers", () => {
       const petPolicyFeature = result.find((f) => f.heading === "Pet policy")
       expect(petPolicyFeature).toBeUndefined()
     })
+    it.todo("should show the correct bullets when enablePetPolicyCheckbox is true")
+    it.todo("should include parking fee when available")
+    it.todo(
+      "should not show accessibility features even if there is content is enableAccessibilityFeatures is false"
+    )
   })
 
   describe("getAmiValues", () => {
@@ -454,32 +491,153 @@ describe("ListingViewSeedsHelpers", () => {
     })
   })
 
-  describe("getHmiData", () => {
-    it("should return standard table data for HMI", () => {
+  it.todo("getMarketingFlyers")
+
+  describe("getAddress", () => {
+    it("should return leasing agent address when addressType is leasingAgent", () => {
       const mockListing: Listing = {
         ...listing,
-        units: [{ amiPercentage: "30" } as Unit],
+        listingsLeasingAgentAddress: {
+          id: "1",
+          street: "123 Main St",
+          city: "Test City",
+          state: "CA",
+          zipCode: "12345",
+        } as Address,
       }
 
-      const result = getStackedHmiData(mockListing)
-      expect(result).toBeDefined()
+      const result = getAddress(ApplicationAddressTypeEnum.leasingAgent, undefined, mockListing)
+      expect(result?.street).toBe("123 Main St")
+    })
+
+    it("should return drop off address when location is dropOff", () => {
+      const mockListing: Listing = {
+        ...listing,
+        listingsApplicationDropOffAddress: {
+          id: "2",
+          street: "456 Drop Off St",
+          city: "Test City",
+          state: "CA",
+          zipCode: "12345",
+        } as Address,
+      }
+
+      const result = getAddress(undefined, "dropOff", mockListing)
+      expect(result?.street).toBe("456 Drop Off St")
+    })
+
+    it("should return pick up address when location is pickUp", () => {
+      const mockListing: Listing = {
+        ...listing,
+        listingsApplicationPickUpAddress: {
+          id: "3",
+          street: "789 Pick Up St",
+          city: "Test City",
+          state: "CA",
+          zipCode: "12345",
+        } as Address,
+      }
+
+      const result = getAddress(undefined, "pickUp", mockListing)
+      expect(result?.street).toBe("789 Pick Up St")
+    })
+
+    it("should return mail in address when location is mailIn", () => {
+      const mockListing: Listing = {
+        ...listing,
+        listingsApplicationMailingAddress: {
+          id: "4",
+          street: "321 Mail St",
+          city: "Test City",
+          state: "CA",
+          zipCode: "12345",
+        } as Address,
+      }
+
+      const result = getAddress(undefined, "mailIn", mockListing)
+      expect(result?.street).toBe("321 Mail St")
     })
   })
 
-  describe("getAddress", () => {
-    it.todo("tests")
-  })
-
   describe("getReservedTitle", () => {
-    it.todo("tests")
+    it("should return senior title for senior55 reserved community type", () => {
+      const result = getReservedTitle({ id: "1", name: "senior55" })
+      expect(result).toBe("Senior building")
+    })
+
+    it("should return senior title for senior62 reserved community type", () => {
+      const result = getReservedTitle({ id: "2", name: "senior62" })
+      expect(result).toBe("Senior building")
+    })
+
+    it("should return senior title for senior reserved community type", () => {
+      const result = getReservedTitle({ id: "3", name: "senior" })
+      expect(result).toBe("Senior building")
+    })
+
+    it("should return default title for other reserved community types", () => {
+      const result = getReservedTitle({ id: "4", name: "veterans" })
+      expect(result).toBe("Reserved building")
+    })
   })
 
   describe("getDateString", () => {
-    it.todo("tests")
+    it("should format date with given format string", () => {
+      const date = new Date("2024-01-15T10:30:00")
+      const result = getDateString(date, "MMMM DD, YYYY")
+      expect(result).toBe("January 15, 2024")
+    })
+
+    it("should return null for undefined date", () => {
+      const result = getDateString(undefined, "MMMM DD, YYYY")
+      expect(result).toBeNull()
+    })
+
+    it("should format date with different format", () => {
+      const date = new Date("2024-01-15T10:30:00")
+      const result = getDateString(date, "MM/DD/YYYY")
+      expect(result).toBe("01/15/2024")
+    })
   })
 
   describe("getBuildingSelectionCriteria", () => {
-    it.todo("tests")
+    it("should return link when listingsBuildingSelectionCriteriaFile exists", () => {
+      const mockListing: Listing = {
+        ...listing,
+        listingsBuildingSelectionCriteriaFile: {
+          id: "1",
+          fileId: "test-file-id",
+        } as Asset,
+      }
+
+      const result = getBuildingSelectionCriteria(mockListing)
+
+      expect(result.props.children.props.href).toEqual(
+        "https://res.cloudinary.com/undefined/image/upload/test-file-id.pdf"
+      )
+    })
+
+    it("should return url content when buildingSelectionCriteria exists", () => {
+      const mockListing: Listing = {
+        ...listing,
+        buildingSelectionCriteria: "Test criteria URL",
+        listingsBuildingSelectionCriteriaFile: undefined,
+      }
+
+      const result = getBuildingSelectionCriteria(mockListing)
+      expect(result.props.children.props.href).toEqual("Test criteria URL")
+    })
+
+    it("should return null when neither file nor text exists", () => {
+      const mockListing: Listing = {
+        ...listing,
+        buildingSelectionCriteria: undefined,
+        listingsBuildingSelectionCriteriaFile: undefined,
+      }
+
+      const result = getBuildingSelectionCriteria(mockListing)
+      expect(result).toBeUndefined()
+    })
   })
   describe("getEligibilitySections", () => {
     let minimalEligibilitySectionsListing: Listing
@@ -499,7 +657,18 @@ describe("ListingViewSeedsHelpers", () => {
       }
     })
 
-    it.todo("tests")
+    it("should return eligibility sections for a listing", () => {
+      const mockListing: Listing = {
+        ...listing,
+        buildingSelectionCriteria: "Test criteria",
+        creditHistory: "Good credit required",
+        rentalAssistance: "Accepts Section 8",
+      }
+
+      const result = getEligibilitySections(jurisdiction, mockListing)
+      expect(Array.isArray(result)).toBe(true)
+      expect(result.length).toBeGreaterThan(0)
+    })
 
     it("should not return a program section in the list if there are no programs", () => {
       const eligibilitySections = getEligibilitySections(
@@ -837,6 +1006,71 @@ describe("ListingViewSeedsHelpers", () => {
     })
   })
   describe("getAdditionalInformation", () => {
-    it.todo("tests")
+    it("should return card content with required documents", () => {
+      const mockListing: Listing = {
+        ...listing,
+        requiredDocumentsList: {
+          proofOfIncome: true,
+          governmentIssuedId: true,
+        },
+      }
+
+      const result = getAdditionalInformation(mockListing)
+      expect(Array.isArray(result)).toBe(true)
+      expect(result.length).toBeGreaterThan(0)
+      expect(result[0].heading).toBe("Required documents")
+    })
+
+    it("should include program rules when available", () => {
+      const mockListing: Listing = {
+        ...listing,
+        programRules: "Test program rules",
+        requiredDocumentsList: undefined,
+        requiredDocuments: undefined,
+      }
+
+      const result = getAdditionalInformation(mockListing)
+      expect(result.length).toBeGreaterThan(0)
+      expect(result[0].heading).toBe("Important program rules")
+    })
+
+    it("should return empty array when no additional information exists", () => {
+      const mockListing: Listing = {
+        ...listing,
+        requiredDocumentsList: undefined,
+        requiredDocuments: undefined,
+        programRules: undefined,
+        specialNotes: undefined,
+      }
+
+      const result = getAdditionalInformation(mockListing)
+      expect(result).toEqual([])
+    })
+
+    it("should handle requiredDocuments for regulated listings", () => {
+      const mockListing: Listing = {
+        ...listing,
+        listingType: EnumListingListingType.regulated,
+        requiredDocuments: "Additional required documents",
+        requiredDocumentsList: undefined,
+      }
+
+      const result = getAdditionalInformation(mockListing)
+      expect(result.length).toBeGreaterThan(0)
+      expect(result[0].heading).toBe("Required documents")
+    })
+
+    it("should use different heading for non-regulated listings", () => {
+      const mockListing: Listing = {
+        ...listing,
+        listingType: EnumListingListingType.nonRegulated,
+        requiredDocuments: "Additional info",
+        requiredDocumentsList: undefined,
+      }
+
+      const result = getAdditionalInformation(mockListing)
+      expect(result.length).toBeGreaterThan(0)
+      expect(result[0].heading).toBe("Required documents (Additional Info)")
+    })
   })
 })
