@@ -388,7 +388,6 @@ const ListingForm = ({
               enableUnitGroups,
             })
             const formattedData = await dataPipeline.run()
-            console.log("formattedData", formattedData.property)
             let result
             if (editMode) {
               result = await listingsService.update({
