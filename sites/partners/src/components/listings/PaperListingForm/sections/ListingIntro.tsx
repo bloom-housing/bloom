@@ -4,6 +4,7 @@ import { t, Field, FieldGroup, Select, SelectOption } from "@bloom-housing/ui-co
 import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import {
   EnumListingListingType,
+  Property,
   YesNoEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import {
@@ -23,6 +24,7 @@ interface ListingIntroProps {
   jurisdictionName: string
   listingId: string
   requiredFields: string[]
+  property?: Property
 }
 
 const getDeveloperLabel = (
@@ -66,6 +68,8 @@ const ListingIntro = (props: ListingIntroProps) => {
           })),
         ]
       : []
+
+  const defaultPropName = props.property?.name ?? ""
 
   return (
     <>
@@ -167,6 +171,7 @@ const ListingIntro = (props: ListingIntroProps) => {
                 name={"properties"}
                 label={addAsterisk(t("properties.drawer.nameLabel"))}
                 register={register}
+                defaultValue={defaultPropName}
                 error={fieldHasError(errors?.properties?.id)}
                 controlClassName={"control"}
                 errorMessage={t("errors.requiredFieldError")}
