@@ -191,9 +191,7 @@ const BuildingDetails = ({
     )
   }
 
-  const showInitialRegion =
-    (enableRegions || enableConfigurableRegions) &&
-    (listingType === EnumListingListingType.regulated || !enableNonRegulatedListings)
+  const eitherRegionEnabled = enableRegions || enableConfigurableRegions
 
   return (
     <>
@@ -325,7 +323,7 @@ const BuildingDetails = ({
             />
           </Grid.Cell>
           <Grid.Cell className="seeds-grid-span-2">
-            {showInitialRegion && enableRegions && (
+            {enableRegions && (
               <Select
                 register={register}
                 controlClassName="control"
@@ -339,7 +337,7 @@ const BuildingDetails = ({
                 {...defaultFieldProps("region", t("t.region"), requiredFields, errors, clearErrors)}
               />
             )}
-            {showInitialRegion && enableConfigurableRegions && (
+            {enableConfigurableRegions && (
               <Select
                 register={register}
                 controlClassName="control"
@@ -360,38 +358,40 @@ const BuildingDetails = ({
                 defaultValue={listing?.configurableRegion || ""}
               />
             )}
-            {!showInitialRegion && (
-              <Field
-                type={"number"}
-                register={register}
-                {...defaultFieldProps(
-                  "yearBuilt",
-                  t("listings.yearBuilt"),
-                  requiredFields,
-                  errors,
-                  clearErrors
-                )}
-              />
-            )}
+            {!eitherRegionEnabled &&
+              (listingType === EnumListingListingType.regulated || !enableNonRegulatedListings) && (
+                <Field
+                  type={"number"}
+                  register={register}
+                  {...defaultFieldProps(
+                    "yearBuilt",
+                    t("listings.yearBuilt"),
+                    requiredFields,
+                    errors,
+                    clearErrors
+                  )}
+                />
+              )}
           </Grid.Cell>
         </Grid.Row>
-        {showInitialRegion && (
-          <Grid.Row columns={3}>
-            <Grid.Cell>
-              <Field
-                type={"number"}
-                register={register}
-                {...defaultFieldProps(
-                  "yearBuilt",
-                  t("listings.yearBuilt"),
-                  requiredFields,
-                  errors,
-                  clearErrors
-                )}
-              />
-            </Grid.Cell>
-          </Grid.Row>
-        )}
+        {eitherRegionEnabled &&
+          (listingType === EnumListingListingType.regulated || !enableNonRegulatedListings) && (
+            <Grid.Row columns={3}>
+              <Grid.Cell>
+                <Field
+                  type={"number"}
+                  register={register}
+                  {...defaultFieldProps(
+                    "yearBuilt",
+                    t("listings.yearBuilt"),
+                    requiredFields,
+                    errors,
+                    clearErrors
+                  )}
+                />
+              </Grid.Cell>
+            </Grid.Row>
+          )}
         <Grid.Row columns={3}>
           <Grid.Cell className="seeds-grid-span-2">
             <FieldValue label={t("listings.mapPreview")} className={styles["custom-label"]}>
