@@ -1,5 +1,5 @@
 import {
-  listingFeatures,
+  allListingFeatures,
   listingRequiredDocumentsOptions,
   listingUtilities,
 } from "@bloom-housing/shared-helpers"
@@ -88,14 +88,51 @@ export default class AdditionalMetadataFormatter extends Formatter {
           : ReviewOrderTypeEnum.waitlist
     }
 
-    if (this.data.accessibilityFeatures) {
-      this.data.listingFeatures = listingFeatures.reduce((acc, current) => {
-        const isSelected = this.data.accessibilityFeatures.some((feature) => feature === current)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const isStringArray = (value: any): value is string[] => {
+      return Object.keys(value).every((key) => {
+        return !Array.isArray(value[key])
+      })
+    }
+
+    if (
+      this.data.configurableAccessibilityFeatures &&
+      isStringArray(this.data.configurableAccessibilityFeatures)
+    ) {
+      // No categories - form data is a string array
+      const updatedFeatures = allListingFeatures.reduce((acc, current) => {
+        const values = this.data.configurableAccessibilityFeatures as string[]
+        const isSelected = values.some((feature) => {
+          // Remove `configurableAccessibilityFeatures.` prefix from form
+          const prefixIndex = feature.indexOf(".") + 1
+          return feature.substring(prefixIndex) === current
+        })
         return {
           ...acc,
           [current]: isSelected,
         }
       }, {})
+      this.data.listingFeatures = updatedFeatures
+    } else if (this.data.configurableAccessibilityFeatures) {
+      // Categories - form data is an object of string arrays by category
+      const flattenedFeatures = Object.values(this.data.configurableAccessibilityFeatures).flat()
+      const updatedFeatures = allListingFeatures.reduce((acc, current) => {
+        const isSelected = flattenedFeatures.some((feature) => feature === current)
+        return {
+          ...acc,
+          [current]: isSelected,
+        }
+      }, {})
+      this.data.listingFeatures = updatedFeatures
+    }
+    if (!this.data.configurableAccessibilityFeatures) {
+      const updatedFeatures = allListingFeatures.reduce((acc, current) => {
+        return {
+          ...acc,
+          [current]: false,
+        }
+      }, {})
+      this.data.listingFeatures = updatedFeatures
     }
 
     if (

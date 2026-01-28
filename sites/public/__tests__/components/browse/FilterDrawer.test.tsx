@@ -12,6 +12,7 @@ import {
 import { mockNextRouter, render } from "../../testUtils"
 import { FilterDrawer } from "../../../src/components/browse/FilterDrawer"
 import { FilterData } from "../../../src/components/browse/FilterDrawerHelpers"
+import { defaultListingFeaturesConfiguration } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 
 describe("FilterDrawer", () => {
   beforeEach(() => {
@@ -65,7 +66,11 @@ describe("FilterDrawer", () => {
         onClear={() => {}}
         filterState={{}}
         multiselectData={mockMultiselect}
-        activeFeatureFlags={[FeatureFlagEnum.enableRegions]}
+        activeFeatureFlags={[
+          FeatureFlagEnum.enableRegions,
+          FeatureFlagEnum.enableAccessibilityFeatures,
+        ]}
+        listingFeaturesConfiguration={defaultListingFeaturesConfiguration}
       />
     )
     expect(screen.getByLabelText("Close")).toBeInTheDocument()
@@ -232,7 +237,11 @@ describe("FilterDrawer", () => {
         onClear={() => {}}
         filterState={filterState}
         multiselectData={mockMultiselect}
-        activeFeatureFlags={[FeatureFlagEnum.enableRegions]}
+        activeFeatureFlags={[
+          FeatureFlagEnum.enableRegions,
+          FeatureFlagEnum.enableAccessibilityFeatures,
+        ]}
+        listingFeaturesConfiguration={defaultListingFeaturesConfiguration}
       />
     )
     expect(screen.getByLabelText("Close")).toBeInTheDocument()
@@ -389,6 +398,7 @@ describe("FilterDrawer", () => {
         filterState={{}}
         multiselectData={mockMultiselect}
         activeFeatureFlags={[FeatureFlagEnum.enableUnitGroups]}
+        listingFeaturesConfiguration={defaultListingFeaturesConfiguration}
       />
     )
 
@@ -417,6 +427,7 @@ describe("FilterDrawer", () => {
         filterState={{}}
         multiselectData={mockMultiselect}
         activeFeatureFlags={[]}
+        listingFeaturesConfiguration={defaultListingFeaturesConfiguration}
       />
     )
 
@@ -433,6 +444,7 @@ describe("FilterDrawer", () => {
         filterState={{}}
         multiselectData={mockMultiselect}
         activeFeatureFlags={[FeatureFlagEnum.enableRegions]}
+        listingFeaturesConfiguration={defaultListingFeaturesConfiguration}
       />
     )
 
@@ -449,6 +461,7 @@ describe("FilterDrawer", () => {
         filterState={{}}
         multiselectData={mockMultiselect}
         activeFeatureFlags={[FeatureFlagEnum.enableConfigurableRegions]}
+        listingFeaturesConfiguration={defaultListingFeaturesConfiguration}
         regions={["East", "West", "North", "South"]}
       />
     )

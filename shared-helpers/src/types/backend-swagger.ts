@@ -3147,7 +3147,7 @@ export class PropertiesService {
       id: string
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<any> {
+  ): Promise<Property> {
     return new Promise((resolve, reject) => {
       let url = basePath + "/properties/{id}"
       url = url.replace("{id}", params["id"] + "")
@@ -3177,6 +3177,119 @@ export class PropertiesService {
       let data = params.body
 
       configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+}
+
+export class AgencyService {
+  /**
+   * Get a paginated set of agencies
+   */
+  list(
+    params: {
+      /**  */
+      page?: number
+      /**  */
+      limit?: number | "all"
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<PaginatedAgency> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/agency"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+      configs.params = { page: params["page"], limit: params["limit"] }
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Creates a new agency entry in the database
+   */
+  create(
+    params: {
+      /** requestBody */
+      body?: AgencyCreate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Agency> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/agency"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Updates an exiting agency entry in the database
+   */
+  update(
+    params: {
+      /** requestBody */
+      body?: AgencyUpdate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Agency> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/agency"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Deletes an agency entry from the database by its ID
+   */
+  deletes(
+    params: {
+      /** requestBody */
+      body?: IdDTO
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/agency"
+
+      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Get a single agency by its ID
+   */
+  getById(
+    params: {
+      /**  */
+      id: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Agency> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/agency/{id}"
+      url = url.replace("{id}", params["id"] + "")
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      /** 适配ios13，get请求不允许带body */
 
       axios(configs, resolve, reject)
     })
@@ -7452,6 +7565,30 @@ export interface UnitRentTypeUpdate {
   name: UnitRentTypeEnum
 }
 
+export interface ListingFeatureField {
+  /**  */
+  id: string
+}
+
+export interface ListingFeatureCategory {
+  /**  */
+  id: string
+
+  /**  */
+  fields: ListingFeatureField[]
+
+  /**  */
+  required?: boolean
+}
+
+export interface ListingFeaturesConfiguration {
+  /** Categorized features (use this or the flat list, not both) */
+  categories?: ListingFeatureCategory[]
+
+  /** Flat list of features (use this or the categories, not both) */
+  fields?: ListingFeatureField[]
+}
+
 export interface JurisdictionCreate {
   /**  */
   name: string
@@ -7515,6 +7652,9 @@ export interface JurisdictionCreate {
 
   /**  */
   regions: []
+
+  /**  */
+  listingFeaturesConfiguration?: ListingFeaturesConfiguration
 }
 
 export interface JurisdictionUpdate {
@@ -7583,6 +7723,9 @@ export interface JurisdictionUpdate {
 
   /**  */
   regions: []
+
+  /**  */
+  listingFeaturesConfiguration?: ListingFeaturesConfiguration
 }
 
 export interface FeatureFlag {
@@ -7686,6 +7829,9 @@ export interface Jurisdiction {
 
   /**  */
   regions: []
+
+  /**  */
+  listingFeaturesConfiguration?: ListingFeaturesConfiguration
 }
 
 export interface AddressInput {
@@ -8880,6 +9026,50 @@ export interface PropertyQueryParams {
 export interface PaginatedProperty {
   /**  */
   items: Property[]
+
+  /**  */
+  meta: PaginationMeta
+}
+
+export interface AgencyCreate {
+  /**  */
+  name: string
+
+  /**  */
+  jurisdictions: IdDTO
+}
+
+export interface Agency {
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  name: string
+
+  /**  */
+  jurisdictions: IdDTO
+}
+
+export interface AgencyUpdate {
+  /**  */
+  id: string
+
+  /**  */
+  name: string
+
+  /**  */
+  jurisdictions: IdDTO
+}
+
+export interface PaginatedAgency {
+  /**  */
+  items: Agency[]
 
   /**  */
   meta: PaginationMeta
