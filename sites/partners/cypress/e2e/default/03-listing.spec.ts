@@ -379,7 +379,7 @@ describe("Listing Management Tests", () => {
     if (listing.listingFeatures) {
       Object.keys(listing.listingFeatures).forEach((feature) => {
         if (listing.listingFeatures?.[feature as keyof typeof listing.listingFeatures] === true) {
-          cy.getByID(feature.toLowerCase()).check()
+          cy.getByID(`configurableAccessibilityFeatures.${feature.toLowerCase()}`).check()
         }
       })
     }
@@ -1058,7 +1058,7 @@ describe("Listing Management Tests", () => {
       Object.keys(listing.listingFeatures).forEach((feature) => {
         verifyDataIfExists(
           cy,
-          feature.toLowerCase(),
+          `configurableAccessibilityFeatures.${feature.toLowerCase()}`,
           listing.listingFeatures?.[feature as keyof typeof listing.listingFeatures] ? "true" : "",
           "check"
         )
