@@ -10,6 +10,7 @@ import {
   ApplicationOrderByKeys,
   EnumListingFilterParamsComparison,
   EnumMultiselectQuestionFilterParamsComparison,
+  EnumPropertyFilterParamsComparison,
   ListingViews,
   MultiselectQuestionFilterParams,
   MultiselectQuestionsApplicationSectionEnum,
@@ -51,6 +52,11 @@ type UseListingsDataProps = PaginationProps & {
   roles?: UserRole
   userJurisidctionIds?: string[]
   view?: ListingViews
+}
+
+type UsePropertiesListProps = PaginationProps & {
+  search?: string
+  jurisdictions?: string
 }
 
 export function useSingleListingData(listingId: string) {
@@ -694,4 +700,41 @@ export function useWatchOnFormNumberFieldsChange(
     return () => clearTimeout(timeoutId)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fieldToTriggerWatch.join(","), fieldValuesToWatch.join(","), trigger])
+}
+
+export function usePropertiesList({ page, limit, search, jurisdictions }: UsePropertiesListProps) {
+  const params = {
+    page,
+    limit,
+    search,
+    filter: [],
+  }
+
+  if (search?.length < 3) {
+    delete params.search
+  } else {
+    Object.assign(params, { search })
+  }
+
+  params.filter.push({
+    $comparison: EnumPropertyFilterParamsComparison.IN,
+    jurisdiction: jurisdictions && jurisdictions !== "" ? jurisdictions : undefined,
+  })
+
+  const paramsString = qs.stringify(params)
+
+  const { propertiesService } = useContext(AuthContext)
+
+  const fetcher = () => propertiesService.list(params)
+
+  const cacheKey = `/api/adapter/properties?${paramsString}`
+
+  const { data, error } = useSWR(cacheKey, fetcher)
+
+  return {
+    cacheKey,
+    data,
+    loading: !error && !data,
+    error,
+  }
 }

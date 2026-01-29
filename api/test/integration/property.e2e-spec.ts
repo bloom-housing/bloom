@@ -11,6 +11,7 @@ import { randomUUID } from 'crypto';
 import { userFactory } from '../../prisma/seed-helpers/user-factory';
 import { Login } from '../../src/dtos/auth/login.dto';
 import { jurisdictionFactory } from '../../prisma/seed-helpers/jurisdiction-factory';
+import { Compare } from '../../src/dtos/shared/base-filter.dto';
 
 describe('Properties Controller Tests', () => {
   let app: INestApplication;
@@ -112,10 +113,17 @@ describe('Properties Controller Tests', () => {
 
       expect(res.body.items.length).toBeGreaterThanOrEqual(2);
 
+      // The two expected properties might not be in the response because other tests could add more properties and
+      // make it so there are more than 10 meaning these two properties might be on page 2
       expect(res.body.items).toEqual(
         expect.arrayContaining([
-          expect.objectContaining(mockProperties[0]),
-          expect.objectContaining(mockProperties[1]),
+          expect.objectContaining({
+            name: expect.anything(),
+            description: expect.toBeOneOf([expect.any(String), null]),
+            url: expect.toBeOneOf([expect.any(String), null]),
+            urlTitle: expect.toBeOneOf([expect.any(String), null]),
+            jurisdictions: expect.anything(),
+          }),
         ]),
       );
       expect(res.body.meta).toEqual(
@@ -129,7 +137,7 @@ describe('Properties Controller Tests', () => {
       expect(res.body.meta.itemCount).toBeGreaterThanOrEqual(2);
     });
 
-    it('should get listings when pagination params are sent', async () => {
+    it('should get properties when pagination params are sent', async () => {
       const queryParams: PropertyQueryParams = {
         limit: 1,
         page: 3,
@@ -153,7 +161,7 @@ describe('Properties Controller Tests', () => {
       expect(res.body.items).toHaveLength(1);
     });
 
-    it('should get listings matching the search param', async () => {
+    it('should get properties matching the search param', async () => {
       const queryParams = {
         search: 'Creek',
       };
@@ -178,9 +186,14 @@ describe('Properties Controller Tests', () => {
       );
     });
 
-    it('should get listings matching the jurisdiction filters', async () => {
+    it('should get properties matching the jurisdiction filters', async () => {
       let queryParams: PropertyQueryParams = {
-        jurisdiction: jurisdictionBId,
+        filter: [
+          {
+            $comparison: Compare.IN,
+            jurisdiction: jurisdictionBId,
+          },
+        ],
       };
 
       let res = await request(app.getHttpServer())
@@ -203,7 +216,12 @@ describe('Properties Controller Tests', () => {
       );
 
       queryParams = {
-        jurisdiction: jurisdictionAId,
+        filter: [
+          {
+            $comparison: Compare.IN,
+            jurisdiction: jurisdictionAId,
+          },
+        ],
       };
 
       res = await request(app.getHttpServer())
@@ -282,7 +300,7 @@ describe('Properties Controller Tests', () => {
       expect(res.body.message[0]).toBe('name should not be null or undefined');
     });
 
-    it('should fail when no name field is missing', async () => {
+    it('should fail when name field is missing', async () => {
       const body: Partial<PropertyCreate> = {
         description:
           'A small villa placed with a beautiful view of the Toluca Lake',

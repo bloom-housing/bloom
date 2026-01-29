@@ -5,6 +5,7 @@ import {
   UserRoleEnum,
 } from '@prisma/client';
 import { randomName } from './word-generator';
+import { ListingFeaturesConfiguration } from '../../src/dtos/jurisdictions/listing-features-config.dto';
 
 export const jurisdictionFactory = (
   jurisdictionName = randomName(),
@@ -15,14 +16,19 @@ export const jurisdictionFactory = (
     requiredListingFields?: string[];
     languages?: LanguagesEnum[];
     visibleNeighborhoodAmenities?: NeighborhoodAmenitiesEnum[];
+    regions?: string[];
     minimumListingPublishImagesRequired?: number;
+    publicSiteBaseURL?: string;
+    listingFeaturesConfiguration?: ListingFeaturesConfiguration;
   },
 ): Prisma.JurisdictionsCreateInput => ({
   name: jurisdictionName,
   notificationsSignUpUrl: 'https://www.exygy.com',
   languages: optionalFields?.languages || [LanguagesEnum.en, LanguagesEnum.es],
   partnerTerms: 'Example Terms',
-  publicUrl: 'http://localhost:3000',
+  publicUrl: optionalFields?.publicSiteBaseURL
+    ? optionalFields.publicSiteBaseURL
+    : 'http://localhost:3000',
   emailFromAddress: 'Bloom <bloom-no-reply@exygy.dev>',
   rentalAssistanceDefault:
     'Housing Choice Vouchers, Section 8 and other valid rental assistance programs will be considered for this property. In the case of a valid rental subsidy, the required minimum income will be based on the portion of the rent that the tenant pays after use of the subsidy.',
@@ -51,6 +57,10 @@ export const jurisdictionFactory = (
     : undefined,
   requiredListingFields: optionalFields?.requiredListingFields || [],
   visibleNeighborhoodAmenities: optionalFields?.visibleNeighborhoodAmenities,
+  regions: optionalFields?.regions,
   minimumListingPublishImagesRequired:
     optionalFields?.minimumListingPublishImagesRequired,
+  listingFeaturesConfiguration: optionalFields?.listingFeaturesConfiguration
+    ? (optionalFields.listingFeaturesConfiguration as unknown as Prisma.JsonArray)
+    : undefined,
 });

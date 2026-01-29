@@ -4,6 +4,7 @@ import userEvent from "@testing-library/user-event"
 import {
   LanguagesEnum,
   ApplicationStatusEnum,
+  ReviewOrderTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { FormProviderWrapper } from "../../../../testUtils"
 import { FormApplicationData } from "../../../../../src/components/applications/PaperApplicationForm/sections/FormApplicationData"
@@ -145,6 +146,112 @@ describe("<FormApplicationData>", () => {
 
       await userEvent.selectOptions(statusSelect, ApplicationStatusEnum.waitlistDeclined)
       expect((statusSelect as HTMLSelectElement).value).toBe(ApplicationStatusEnum.waitlistDeclined)
+    })
+  })
+
+  describe("Application status fields", () => {
+    it("renders waitlist fields when status is waitlist", async () => {
+      render(
+        <FormProviderWrapper>
+          <FormApplicationData enableApplicationStatus={true} />
+        </FormProviderWrapper>
+      )
+
+      const statusSelect = screen.getByLabelText(/status/i)
+      await userEvent.selectOptions(statusSelect, ApplicationStatusEnum.waitlist)
+
+      const auwlInput = screen.getByLabelText(/accessible unit wait list \(AUWL\)/i)
+      const cuwlInput = screen.getByLabelText(/conventional unit wait list \(CUWL\)/i)
+      expect(auwlInput).toBeInTheDocument()
+      expect(cuwlInput).toBeInTheDocument()
+      expect(auwlInput.closest(".hidden")).not.toBeInTheDocument()
+      expect(cuwlInput.closest(".hidden")).not.toBeInTheDocument()
+      expect(screen.queryByLabelText(/lottery number/i)).not.toBeInTheDocument()
+    })
+
+    it("renders waitlist fields when status is waitlistDeclined", async () => {
+      render(
+        <FormProviderWrapper>
+          <FormApplicationData enableApplicationStatus={true} />
+        </FormProviderWrapper>
+      )
+
+      const statusSelect = screen.getByLabelText(/status/i)
+      await userEvent.selectOptions(statusSelect, ApplicationStatusEnum.waitlistDeclined)
+
+      const auwlInput = screen.getByLabelText(/accessible unit wait list \(AUWL\)/i)
+      const cuwlInput = screen.getByLabelText(/conventional unit wait list \(CUWL\)/i)
+      expect(auwlInput).toBeInTheDocument()
+      expect(cuwlInput).toBeInTheDocument()
+      expect(auwlInput.closest(".hidden")).not.toBeInTheDocument()
+      expect(cuwlInput.closest(".hidden")).not.toBeInTheDocument()
+    })
+
+    it("does not render waitlist fields when status is not waitlist and no numbers are present", async () => {
+      render(
+        <FormProviderWrapper>
+          <FormApplicationData enableApplicationStatus={true} />
+        </FormProviderWrapper>
+      )
+
+      const statusSelect = screen.getByLabelText(/status/i)
+      await userEvent.selectOptions(statusSelect, ApplicationStatusEnum.submitted)
+
+      const auwlInput = screen.getByLabelText(/accessible unit wait list/i)
+      const cuwlInput = screen.getByLabelText(/conventional unit wait list/i)
+
+      // Check if the closest Grid.Cell has the hidden class
+      expect(auwlInput.closest(".hidden")).toBeInTheDocument()
+      expect(cuwlInput.closest(".hidden")).toBeInTheDocument()
+    })
+
+    it("renders lottery position field when reviewOrderType is lottery", () => {
+      render(
+        <FormProviderWrapper>
+          <FormApplicationData
+            enableApplicationStatus={true}
+            reviewOrderType={ReviewOrderTypeEnum.lottery}
+          />
+        </FormProviderWrapper>
+      )
+
+      expect(screen.getByLabelText(/lottery number/i)).toBeInTheDocument()
+    })
+
+    it("shows disabled display fields when status controls are disabled", () => {
+      render(
+        <FormProviderWrapper>
+          <FormApplicationData
+            enableApplicationStatus={true}
+            disableApplicationStatusControls={true}
+            reviewOrderType={ReviewOrderTypeEnum.lottery}
+          />
+        </FormProviderWrapper>
+      )
+
+      const activeStatusSelect = screen.getByTestId("applicationStatusSelect")
+      const displayStatusSelect = screen.getByTestId("applicationStatusSelectDisplay")
+      expect(activeStatusSelect.closest(".hidden")).toBeInTheDocument()
+      expect(displayStatusSelect).toBeDisabled()
+
+      const activeAuwlInput = screen.getByTestId("applicationAccessibleUnitWaitlistNumber")
+      const displayAuwlInput = screen.getByTestId("applicationAccessibleUnitWaitlistNumberDisplay")
+      expect(activeAuwlInput.closest(".hidden")).toBeInTheDocument()
+      expect(displayAuwlInput).toBeDisabled()
+
+      const activeCuwlInput = screen.getByTestId("applicationConventionalUnitWaitlistNumber")
+      const displayCuwlInput = screen.getByTestId(
+        "applicationConventionalUnitWaitlistNumberDisplay"
+      )
+      expect(activeCuwlInput.closest(".hidden")).toBeInTheDocument()
+      expect(displayCuwlInput).toBeDisabled()
+
+      const activeLotteryInput = screen.getByTestId("applicationManualLotteryPositionNumber")
+      const displayLotteryInput = screen.getByTestId(
+        "applicationManualLotteryPositionNumberDisplay"
+      )
+      expect(activeLotteryInput.closest(".hidden")).toBeInTheDocument()
+      expect(displayLotteryInput).toBeDisabled()
     })
   })
 })

@@ -17,6 +17,13 @@ global.beforeEach(() => {
   })
 })
 
+const intersectionObserverMock = () => ({
+  observe: () => null,
+  disconnect: () => null,
+  unobserve: () => null,
+})
+window.IntersectionObserver = jest.fn().mockImplementation(intersectionObserverMock)
+
 // Need to set __next on base div to handle the overlay
 const portalRoot = document.createElement("div")
 portalRoot.setAttribute("id", "__next")

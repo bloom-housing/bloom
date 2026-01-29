@@ -1,14 +1,14 @@
 import React from "react"
-import { fireEvent, render } from "@testing-library/react"
-import userEvent from "@testing-library/user-event"
 import { rest } from "msw"
 import { setupServer } from "msw/node"
-import LotteryResults from "../../../../../src/components/listings/PaperListingForm/sections/LotteryResults"
-import { formDefaults } from "../../../../../src/lib/listings/formTypes"
+import { fireEvent, render } from "@testing-library/react"
+import userEvent from "@testing-library/user-event"
 import {
   ListingEvent,
   ListingEventsTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import LotteryResults from "../../../../../src/components/listings/PaperListingForm/sections/LotteryResults"
+import { formDefaults } from "../../../../../src/lib/listings/formTypes"
 import { FormProviderWrapper } from "../../../../testUtils"
 
 const server = setupServer()

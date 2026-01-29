@@ -1,11 +1,12 @@
 import {
   ApplicationMethodsTypeEnum,
   ListingsStatusEnum,
+  Prisma,
   ReviewOrderTypeEnum,
 } from '@prisma/client';
 import dayjs from 'dayjs';
 
-export const valleyHeightsSeniorCommunity = {
+export const valleyHeightsSeniorCommunity: Prisma.ListingsCreateInput = {
   additionalApplicationSubmissionNotes: null,
   digitalApplication: true,
   commonDigitalApplication: true,
@@ -43,8 +44,7 @@ export const valleyHeightsSeniorCommunity = {
   criminalBackground: null,
   depositMin: '0',
   depositMax: '0',
-  depositHelperText:
-    "or one month's rent may be higher for lower credit scores",
+  depositHelperText: "Deposit will not exceed one month's rent",
   disableUnitsAccordion: false,
   leasingAgentEmail: 'valleysenior@vpm.com',
   leasingAgentName: 'Valley Property Management',

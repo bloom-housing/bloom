@@ -11,9 +11,7 @@ import {
   ValidationPipe,
   Delete,
   UseGuards,
-  Request,
 } from '@nestjs/common';
-import { Request as ExpressRequest } from 'express';
 import {
   ApiExtraModels,
   ApiOkResponse,
@@ -36,13 +34,16 @@ import { PermissionGuard } from '../guards/permission.guard';
 import { PermissionAction } from '../decorators/permission-action.decorator';
 import { permissionActions } from '../enums/permissions/permission-actions-enum';
 import { ApiKeyGuard } from '../guards/api-key.guard';
+import { PropertyFilterParams } from '../dtos/properties/property-filter-params.dto';
 
 @Controller('properties')
 @ApiTags('properties')
 @ApiExtraModels(
   PropertyCreate,
   PropertyUpdate,
+  PropertyFilterParams,
   PropertyQueryParams,
+  PropertyFilterParams,
   PaginationMeta,
   IdDTO,
 )
@@ -58,7 +59,9 @@ export class PropertyController {
   })
   @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
   @ApiOkResponse({ type: PaginatedPropertyDto })
-  public async getPaginatedSet(@Query() queryParams: PropertyQueryParams) {
+  public async getPaginatedSet(
+    @Query() queryParams: PropertyQueryParams,
+  ): Promise<PaginatedPropertyDto> {
     return await this.propertyService.list(queryParams);
   }
 
@@ -67,9 +70,10 @@ export class PropertyController {
     summary: 'Get a property object by ID',
     operationId: 'getById',
   })
+  @ApiOkResponse({ type: Property })
   public async getPropertyById(
     @Param('id', new ParseUUIDPipe({ version: '4' })) propertyId: string,
-  ) {
+  ): Promise<Property> {
     return await this.propertyService.findOne(propertyId);
   }
 
@@ -83,7 +87,7 @@ export class PropertyController {
   @ApiOkResponse({ type: PaginatedPropertyDto })
   public async getFiltrablePaginatedSet(
     @Body() queryParams: PropertyQueryParams,
-  ) {
+  ): Promise<PaginatedPropertyDto> {
     return await this.propertyService.list(queryParams);
   }
 
@@ -95,9 +99,8 @@ export class PropertyController {
   @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
   @ApiOkResponse({ type: Property })
   public async addProperty(
-    @Request() req: ExpressRequest,
     @Body() propertyDto: PropertyCreate,
-  ) {
+  ): Promise<Property> {
     return await this.propertyService.create(propertyDto);
   }
 
@@ -109,9 +112,8 @@ export class PropertyController {
   @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
   @ApiOkResponse({ type: Property })
   public async updateProperty(
-    @Request() req: ExpressRequest,
     @Body() propertyDto: PropertyUpdate,
-  ) {
+  ): Promise<Property> {
     return await this.propertyService.update(propertyDto);
   }
 
@@ -122,10 +124,7 @@ export class PropertyController {
   })
   @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
   @ApiOkResponse({ type: SuccessDTO })
-  public async deleteById(
-    @Request() req: ExpressRequest,
-    @Body() idDto: IdDTO,
-  ) {
+  public async deleteById(@Body() idDto: IdDTO): Promise<SuccessDTO> {
     return await this.propertyService.deleteOne(idDto.id);
   }
 }

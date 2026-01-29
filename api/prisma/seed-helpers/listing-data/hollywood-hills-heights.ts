@@ -1,12 +1,12 @@
 import {
   ApplicationMethodsTypeEnum,
   ListingsStatusEnum,
+  Prisma,
   ReviewOrderTypeEnum,
 } from '@prisma/client';
-import dayjs from 'dayjs';
 import { yellowstoneAddress } from '../address-factory';
 
-export const hollywoodHillsHeights = {
+export const hollywoodHillsHeights: Prisma.ListingsCreateInput = {
   additionalApplicationSubmissionNotes: null,
   digitalApplication: true,
   commonDigitalApplication: true,
@@ -15,6 +15,7 @@ export const hollywoodHillsHeights = {
   assets: [],
   accessibility: null,
   amenities: null,
+  listingFileNumber: 'A-12345',
   buildingTotalUnits: 0,
   developer: 'Bloom',
   householdSizeMax: 0,
@@ -25,7 +26,7 @@ export const hollywoodHillsHeights = {
   unitAmenities: null,
   servicesOffered: null,
   yearBuilt: null,
-  applicationOpenDate: dayjs(new Date()).subtract(70, 'days').toDate(),
+  applicationOpenDate: null,
   applicationFee: null,
   applicationOrganization: null,
   applicationPickUpAddressOfficeHours: null,
@@ -44,8 +45,7 @@ export const hollywoodHillsHeights = {
   criminalBackground: null,
   depositMin: '0',
   depositMax: '0',
-  depositHelperText:
-    "or one month's rent may be higher for lower credit scores",
+  depositHelperText: "Deposit will not exceed one month's rent",
   disableUnitsAccordion: false,
   leasingAgentEmail: 'bloom@exygy.com',
   leasingAgentName: 'Bloom Bloomington',
@@ -85,15 +85,38 @@ export const hollywoodHillsHeights = {
   listingsApplicationMailingAddress: undefined,
   reservedCommunityTypes: undefined,
   listingImages: {
-    create: {
-      ordinal: 0,
-      assets: {
-        create: {
-          label: 'cloudinaryBuilding',
-          fileId: 'dev/apartment_building_2_b7ujdd',
+    create: [
+      {
+        ordinal: 0,
+        description: 'Building image 1',
+        assets: {
+          create: {
+            label: 'cloudinaryBuilding',
+            fileId: 'dev/apartment_building_2_b7ujdd',
+          },
         },
       },
-    },
+      {
+        ordinal: 1,
+        description: 'Building image 2',
+        assets: {
+          create: {
+            label: 'cloudinaryBuilding',
+            fileId: 'dev/krzysztof-hepner-V7Q0Oh3Az-c-unsplash_xoj7sr',
+          },
+        },
+      },
+      {
+        ordinal: 2,
+        description: 'Building image 3',
+        assets: {
+          create: {
+            label: 'cloudinaryBuilding',
+            fileId: 'dev/blake-wheeler-zBHU08hdzhY-unsplash_swqash',
+          },
+        },
+      },
+    ],
   },
   listingNeighborhoodAmenities: {
     create: {

@@ -904,7 +904,7 @@ describe('MultiselectQuestion Controller Tests', () => {
         );
       });
 
-      it('should throw error when retire endpoint is hit with an multiselectQuestion not in active status', async () => {
+      it('should throw error when retire endpoint is hit with a multiselectQuestion not in active status', async () => {
         const multiselectQuestion = await prisma.multiselectQuestions.create({
           data: multiselectQuestionFactory(jurisdictionId, {}, true),
         });
@@ -919,7 +919,7 @@ describe('MultiselectQuestion Controller Tests', () => {
           .expect(400);
 
         expect(res.body.message).toEqual(
-          "status 'draft' can only change to 'visible'",
+          "status 'visible' can only change to 'draft' or 'active'",
         );
       });
 

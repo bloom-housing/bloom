@@ -2,10 +2,10 @@ import React from "react"
 import { rest } from "msw"
 import { setupServer } from "msw/node"
 import { screen } from "@testing-library/react"
+import userEvent from "@testing-library/user-event"
+import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import CommunityType from "../../../../../src/components/listings/PaperListingForm/sections/CommunityType"
 import { FormProviderWrapper, mockNextRouter, render } from "../../../../testUtils"
-import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import userEvent from "@testing-library/user-event"
 
 const reservedCommunityTypes = [
   {

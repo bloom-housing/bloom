@@ -425,7 +425,7 @@ export class ListingsService {
     })
   }
   /**
-   * Get listings by assigned porperty ID
+   * Get listings by assigned property ID
    */
   retrieveListingsByProperty(
     params: {
@@ -620,6 +620,197 @@ export class ApplicationFlaggedSetsService {
       let data = params.body
 
       configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+}
+
+export class MultiselectQuestionsService {
+  /**
+   * List multiselect questions
+   */
+  list(
+    params: {
+      /**  */
+      page?: number
+      /**  */
+      limit?: number | "all"
+      /**  */
+      filter?: MultiselectQuestionFilterParams[]
+      /**  */
+      orderBy?: MultiselectQuestionOrderByKeys[]
+      /**  */
+      orderDir?: OrderByEnum[]
+      /**  */
+      search?: string
+      /**  */
+      view?: MultiselectQuestionViews
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<MultiselectQuestion[]> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/multiselectQuestions"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+      configs.params = {
+        page: params["page"],
+        limit: params["limit"],
+        filter: params["filter"],
+        orderBy: params["orderBy"],
+        orderDir: params["orderDir"],
+        search: params["search"],
+        view: params["view"],
+      }
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Create multiselect question
+   */
+  create(
+    params: {
+      /** requestBody */
+      body?: MultiselectQuestionCreate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<MultiselectQuestion> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/multiselectQuestions"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Update multiselect question
+   */
+  update(
+    params: {
+      /** requestBody */
+      body?: MultiselectQuestionUpdate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<MultiselectQuestion> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/multiselectQuestions"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Delete multiselect question by id
+   */
+  delete(
+    params: {
+      /** requestBody */
+      body?: IdDTO
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/multiselectQuestions"
+
+      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Re-activate a multiselect question
+   */
+  reActivate(
+    params: {
+      /** requestBody */
+      body?: IdDTO
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/multiselectQuestions/reActivate"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Retire a multiselect question
+   */
+  retire(
+    params: {
+      /** requestBody */
+      body?: IdDTO
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/multiselectQuestions/retire"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Trigger the retirement of multiselect questions cron job
+   */
+  retireMultiselectQuestions(options: IRequestOptions = {}): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/multiselectQuestions/retireMultiselectQuestions"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = null
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Get multiselect question by id
+   */
+  retrieve(
+    params: {
+      /**  */
+      multiselectQuestionId: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<MultiselectQuestion> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/multiselectQuestions/{multiselectQuestionId}"
+      url = url.replace("{multiselectQuestionId}", params["multiselectQuestionId"] + "")
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      /** 适配ios13，get请求不允许带body */
 
       axios(configs, resolve, reject)
     })
@@ -1278,197 +1469,6 @@ export class JurisdictionsService {
     return new Promise((resolve, reject) => {
       let url = basePath + "/jurisdictions/byName/{jurisdictionName}"
       url = url.replace("{jurisdictionName}", params["jurisdictionName"] + "")
-
-      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-
-      /** 适配ios13，get请求不允许带body */
-
-      axios(configs, resolve, reject)
-    })
-  }
-}
-
-export class MultiselectQuestionsService {
-  /**
-   * List multiselect questions
-   */
-  list(
-    params: {
-      /**  */
-      page?: number
-      /**  */
-      limit?: number | "all"
-      /**  */
-      filter?: MultiselectQuestionFilterParams[]
-      /**  */
-      orderBy?: MultiselectQuestionOrderByKeys[]
-      /**  */
-      orderDir?: OrderByEnum[]
-      /**  */
-      search?: string
-      /**  */
-      view?: MultiselectQuestionViews
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<MultiselectQuestion[]> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/multiselectQuestions"
-
-      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-      configs.params = {
-        page: params["page"],
-        limit: params["limit"],
-        filter: params["filter"],
-        orderBy: params["orderBy"],
-        orderDir: params["orderDir"],
-        search: params["search"],
-        view: params["view"],
-      }
-
-      /** 适配ios13，get请求不允许带body */
-
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Create multiselect question
-   */
-  create(
-    params: {
-      /** requestBody */
-      body?: MultiselectQuestionCreate
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<MultiselectQuestion> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/multiselectQuestions"
-
-      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Update multiselect question
-   */
-  update(
-    params: {
-      /** requestBody */
-      body?: MultiselectQuestionUpdate
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<MultiselectQuestion> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/multiselectQuestions"
-
-      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Delete multiselect question by id
-   */
-  delete(
-    params: {
-      /** requestBody */
-      body?: IdDTO
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<SuccessDTO> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/multiselectQuestions"
-
-      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Re-activate a multiselect question
-   */
-  reActivate(
-    params: {
-      /** requestBody */
-      body?: IdDTO
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<SuccessDTO> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/multiselectQuestions/reActivate"
-
-      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Retire a multiselect question
-   */
-  retire(
-    params: {
-      /** requestBody */
-      body?: IdDTO
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<SuccessDTO> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/multiselectQuestions/retire"
-
-      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Trigger the retirement of multiselect questions cron job
-   */
-  retireMultiselectQuestions(options: IRequestOptions = {}): Promise<SuccessDTO> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/multiselectQuestions/retireMultiselectQuestions"
-
-      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
-
-      let data = null
-
-      configs.data = data
-
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Get multiselect question by id
-   */
-  retrieve(
-    params: {
-      /**  */
-      multiselectQuestionId: string
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<MultiselectQuestion> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/multiselectQuestions/{multiselectQuestionId}"
-      url = url.replace("{multiselectQuestionId}", params["multiselectQuestionId"] + "")
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
 
@@ -3052,7 +3052,7 @@ export class PropertiesService {
       /**  */
       search?: string
       /**  */
-      filter?: any | null[]
+      filter?: PropertyFilterParams[]
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<PaginatedProperty> {
@@ -3147,7 +3147,7 @@ export class PropertiesService {
       id: string
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<any> {
+  ): Promise<Property> {
     return new Promise((resolve, reject) => {
       let url = basePath + "/properties/{id}"
       url = url.replace("{id}", params["id"] + "")
@@ -3177,6 +3177,119 @@ export class PropertiesService {
       let data = params.body
 
       configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+}
+
+export class AgencyService {
+  /**
+   * Get a paginated set of agencies
+   */
+  list(
+    params: {
+      /**  */
+      page?: number
+      /**  */
+      limit?: number | "all"
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<PaginatedAgency> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/agency"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+      configs.params = { page: params["page"], limit: params["limit"] }
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Creates a new agency entry in the database
+   */
+  create(
+    params: {
+      /** requestBody */
+      body?: AgencyCreate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Agency> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/agency"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Updates an exiting agency entry in the database
+   */
+  update(
+    params: {
+      /** requestBody */
+      body?: AgencyUpdate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Agency> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/agency"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Deletes an agency entry from the database by its ID
+   */
+  deletes(
+    params: {
+      /** requestBody */
+      body?: IdDTO
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/agency"
+
+      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Get a single agency by its ID
+   */
+  getById(
+    params: {
+      /**  */
+      id: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Agency> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/agency/{id}"
+      url = url.replace("{id}", params["id"] + "")
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      /** 适配ios13，get请求不允许带body */
 
       axios(configs, resolve, reject)
     })
@@ -3245,6 +3358,9 @@ export interface ListingFilterParams {
 
   /**  */
   regions?: RegionEnum[]
+
+  /**  */
+  configurableRegions?: []
 
   /**  */
   reservedCommunityTypes?: string[]
@@ -3673,64 +3789,148 @@ export interface ListingFeatures {
   updatedAt: Date
 
   /**  */
-  elevator?: boolean
-
-  /**  */
-  wheelchairRamp?: boolean
-
-  /**  */
-  serviceAnimalsAllowed?: boolean
+  accessibleHeightToilet?: boolean
 
   /**  */
   accessibleParking?: boolean
 
   /**  */
-  parkingOnSite?: boolean
-
-  /**  */
-  inUnitWasherDryer?: boolean
-
-  /**  */
-  laundryInBuilding?: boolean
-
-  /**  */
-  barrierFreeEntrance?: boolean
-
-  /**  */
-  rollInShower?: boolean
-
-  /**  */
-  grabBars?: boolean
-
-  /**  */
-  heatingInUnit?: boolean
-
-  /**  */
   acInUnit?: boolean
-
-  /**  */
-  hearing?: boolean
-
-  /**  */
-  visual?: boolean
-
-  /**  */
-  mobility?: boolean
-
-  /**  */
-  barrierFreeUnitEntrance?: boolean
-
-  /**  */
-  loweredLightSwitch?: boolean
 
   /**  */
   barrierFreeBathroom?: boolean
 
   /**  */
-  wideDoorways?: boolean
+  barrierFreeEntrance?: boolean
+
+  /**  */
+  barrierFreePropertyEntrance?: boolean
+
+  /**  */
+  barrierFreeUnitEntrance?: boolean
+
+  /**  */
+  bathGrabBarsOrReinforcements?: boolean
+
+  /**  */
+  bathroomCounterLowered?: boolean
+
+  /**  */
+  brailleSignageInBuilding?: boolean
+
+  /**  */
+  carbonMonoxideDetectorWithStrobe?: boolean
+
+  /**  */
+  carpetInUnit?: boolean
+
+  /**  */
+  elevator?: boolean
+
+  /**  */
+  extraAudibleCarbonMonoxideDetector?: boolean
+
+  /**  */
+  extraAudibleSmokeDetector?: boolean
+
+  /**  */
+  fireSuppressionSprinklerSystem?: boolean
+
+  /**  */
+  frontControlsDishwasher?: boolean
+
+  /**  */
+  frontControlsStoveCookTop?: boolean
+
+  /**  */
+  grabBars?: boolean
+
+  /**  */
+  hardFlooringInUnit?: boolean
+
+  /**  */
+  hearing?: boolean
+
+  /**  */
+  hearingAndVision?: boolean
+
+  /**  */
+  heatingInUnit?: boolean
+
+  /**  */
+  inUnitWasherDryer?: boolean
+
+  /**  */
+  kitchenCounterLowered?: boolean
+
+  /**  */
+  laundryInBuilding?: boolean
+
+  /**  */
+  leverHandlesOnDoors?: boolean
+
+  /**  */
+  leverHandlesOnFaucets?: boolean
 
   /**  */
   loweredCabinets?: boolean
+
+  /**  */
+  loweredLightSwitch?: boolean
+
+  /**  */
+  mobility?: boolean
+
+  /**  */
+  noEntryStairs?: boolean
+
+  /**  */
+  nonDigitalKitchenAppliances?: boolean
+
+  /**  */
+  noStairsToParkingSpots?: boolean
+
+  /**  */
+  noStairsWithinUnit?: boolean
+
+  /**  */
+  parkingOnSite?: boolean
+
+  /**  */
+  refrigeratorWithBottomDoorFreezer?: boolean
+
+  /**  */
+  rollInShower?: boolean
+
+  /**  */
+  serviceAnimalsAllowed?: boolean
+
+  /**  */
+  smokeDetectorWithStrobe?: boolean
+
+  /**  */
+  streetLevelEntrance?: boolean
+
+  /**  */
+  toiletGrabBarsOrReinforcements?: boolean
+
+  /**  */
+  ttyAmplifiedPhone?: boolean
+
+  /**  */
+  turningCircleInBathrooms?: boolean
+
+  /**  */
+  visual?: boolean
+
+  /**  */
+  walkInShower?: boolean
+
+  /**  */
+  wheelchairRamp?: boolean
+
+  /**  */
+  wideDoorways?: boolean
 }
 
 export interface ListingUtilities {
@@ -4398,7 +4598,16 @@ export interface Listing {
   region?: RegionEnum
 
   /**  */
+  configurableRegion?: string
+
+  /**  */
   petPolicy?: string
+
+  /**  */
+  allowsDogs?: boolean
+
+  /**  */
+  allowsCats?: boolean
 
   /**  */
   smokingPolicy?: string
@@ -4856,64 +5065,148 @@ export interface ListingImageCreate {
 
 export interface ListingFeaturesCreate {
   /**  */
-  elevator?: boolean
-
-  /**  */
-  wheelchairRamp?: boolean
-
-  /**  */
-  serviceAnimalsAllowed?: boolean
+  accessibleHeightToilet?: boolean
 
   /**  */
   accessibleParking?: boolean
 
   /**  */
-  parkingOnSite?: boolean
-
-  /**  */
-  inUnitWasherDryer?: boolean
-
-  /**  */
-  laundryInBuilding?: boolean
-
-  /**  */
-  barrierFreeEntrance?: boolean
-
-  /**  */
-  rollInShower?: boolean
-
-  /**  */
-  grabBars?: boolean
-
-  /**  */
-  heatingInUnit?: boolean
-
-  /**  */
   acInUnit?: boolean
-
-  /**  */
-  hearing?: boolean
-
-  /**  */
-  visual?: boolean
-
-  /**  */
-  mobility?: boolean
-
-  /**  */
-  barrierFreeUnitEntrance?: boolean
-
-  /**  */
-  loweredLightSwitch?: boolean
 
   /**  */
   barrierFreeBathroom?: boolean
 
   /**  */
-  wideDoorways?: boolean
+  barrierFreeEntrance?: boolean
+
+  /**  */
+  barrierFreePropertyEntrance?: boolean
+
+  /**  */
+  barrierFreeUnitEntrance?: boolean
+
+  /**  */
+  bathGrabBarsOrReinforcements?: boolean
+
+  /**  */
+  bathroomCounterLowered?: boolean
+
+  /**  */
+  brailleSignageInBuilding?: boolean
+
+  /**  */
+  carbonMonoxideDetectorWithStrobe?: boolean
+
+  /**  */
+  carpetInUnit?: boolean
+
+  /**  */
+  elevator?: boolean
+
+  /**  */
+  extraAudibleCarbonMonoxideDetector?: boolean
+
+  /**  */
+  extraAudibleSmokeDetector?: boolean
+
+  /**  */
+  fireSuppressionSprinklerSystem?: boolean
+
+  /**  */
+  frontControlsDishwasher?: boolean
+
+  /**  */
+  frontControlsStoveCookTop?: boolean
+
+  /**  */
+  grabBars?: boolean
+
+  /**  */
+  hardFlooringInUnit?: boolean
+
+  /**  */
+  hearing?: boolean
+
+  /**  */
+  hearingAndVision?: boolean
+
+  /**  */
+  heatingInUnit?: boolean
+
+  /**  */
+  inUnitWasherDryer?: boolean
+
+  /**  */
+  kitchenCounterLowered?: boolean
+
+  /**  */
+  laundryInBuilding?: boolean
+
+  /**  */
+  leverHandlesOnDoors?: boolean
+
+  /**  */
+  leverHandlesOnFaucets?: boolean
 
   /**  */
   loweredCabinets?: boolean
+
+  /**  */
+  loweredLightSwitch?: boolean
+
+  /**  */
+  mobility?: boolean
+
+  /**  */
+  noEntryStairs?: boolean
+
+  /**  */
+  nonDigitalKitchenAppliances?: boolean
+
+  /**  */
+  noStairsToParkingSpots?: boolean
+
+  /**  */
+  noStairsWithinUnit?: boolean
+
+  /**  */
+  parkingOnSite?: boolean
+
+  /**  */
+  refrigeratorWithBottomDoorFreezer?: boolean
+
+  /**  */
+  rollInShower?: boolean
+
+  /**  */
+  serviceAnimalsAllowed?: boolean
+
+  /**  */
+  smokeDetectorWithStrobe?: boolean
+
+  /**  */
+  streetLevelEntrance?: boolean
+
+  /**  */
+  toiletGrabBarsOrReinforcements?: boolean
+
+  /**  */
+  ttyAmplifiedPhone?: boolean
+
+  /**  */
+  turningCircleInBathrooms?: boolean
+
+  /**  */
+  visual?: boolean
+
+  /**  */
+  walkInShower?: boolean
+
+  /**  */
+  wheelchairRamp?: boolean
+
+  /**  */
+  wideDoorways?: boolean
 }
 
 export interface UnitAmiChartOverrideCreate {
@@ -5244,7 +5537,16 @@ export interface ListingCreate {
   region?: RegionEnum
 
   /**  */
+  configurableRegion?: string
+
+  /**  */
   petPolicy?: string
+
+  /**  */
+  allowsDogs?: boolean
+
+  /**  */
+  allowsCats?: boolean
 
   /**  */
   smokingPolicy?: string
@@ -5807,64 +6109,148 @@ export interface ListingEventUpdate {
 
 export interface ListingFeaturesUpdate {
   /**  */
-  elevator?: boolean
-
-  /**  */
-  wheelchairRamp?: boolean
-
-  /**  */
-  serviceAnimalsAllowed?: boolean
+  accessibleHeightToilet?: boolean
 
   /**  */
   accessibleParking?: boolean
 
   /**  */
-  parkingOnSite?: boolean
-
-  /**  */
-  inUnitWasherDryer?: boolean
-
-  /**  */
-  laundryInBuilding?: boolean
-
-  /**  */
-  barrierFreeEntrance?: boolean
-
-  /**  */
-  rollInShower?: boolean
-
-  /**  */
-  grabBars?: boolean
-
-  /**  */
-  heatingInUnit?: boolean
-
-  /**  */
   acInUnit?: boolean
-
-  /**  */
-  hearing?: boolean
-
-  /**  */
-  visual?: boolean
-
-  /**  */
-  mobility?: boolean
-
-  /**  */
-  barrierFreeUnitEntrance?: boolean
-
-  /**  */
-  loweredLightSwitch?: boolean
 
   /**  */
   barrierFreeBathroom?: boolean
 
   /**  */
-  wideDoorways?: boolean
+  barrierFreeEntrance?: boolean
+
+  /**  */
+  barrierFreePropertyEntrance?: boolean
+
+  /**  */
+  barrierFreeUnitEntrance?: boolean
+
+  /**  */
+  bathGrabBarsOrReinforcements?: boolean
+
+  /**  */
+  bathroomCounterLowered?: boolean
+
+  /**  */
+  brailleSignageInBuilding?: boolean
+
+  /**  */
+  carbonMonoxideDetectorWithStrobe?: boolean
+
+  /**  */
+  carpetInUnit?: boolean
+
+  /**  */
+  elevator?: boolean
+
+  /**  */
+  extraAudibleCarbonMonoxideDetector?: boolean
+
+  /**  */
+  extraAudibleSmokeDetector?: boolean
+
+  /**  */
+  fireSuppressionSprinklerSystem?: boolean
+
+  /**  */
+  frontControlsDishwasher?: boolean
+
+  /**  */
+  frontControlsStoveCookTop?: boolean
+
+  /**  */
+  grabBars?: boolean
+
+  /**  */
+  hardFlooringInUnit?: boolean
+
+  /**  */
+  hearing?: boolean
+
+  /**  */
+  hearingAndVision?: boolean
+
+  /**  */
+  heatingInUnit?: boolean
+
+  /**  */
+  inUnitWasherDryer?: boolean
+
+  /**  */
+  kitchenCounterLowered?: boolean
+
+  /**  */
+  laundryInBuilding?: boolean
+
+  /**  */
+  leverHandlesOnDoors?: boolean
+
+  /**  */
+  leverHandlesOnFaucets?: boolean
 
   /**  */
   loweredCabinets?: boolean
+
+  /**  */
+  loweredLightSwitch?: boolean
+
+  /**  */
+  mobility?: boolean
+
+  /**  */
+  noEntryStairs?: boolean
+
+  /**  */
+  nonDigitalKitchenAppliances?: boolean
+
+  /**  */
+  noStairsToParkingSpots?: boolean
+
+  /**  */
+  noStairsWithinUnit?: boolean
+
+  /**  */
+  parkingOnSite?: boolean
+
+  /**  */
+  refrigeratorWithBottomDoorFreezer?: boolean
+
+  /**  */
+  rollInShower?: boolean
+
+  /**  */
+  serviceAnimalsAllowed?: boolean
+
+  /**  */
+  smokeDetectorWithStrobe?: boolean
+
+  /**  */
+  streetLevelEntrance?: boolean
+
+  /**  */
+  toiletGrabBarsOrReinforcements?: boolean
+
+  /**  */
+  ttyAmplifiedPhone?: boolean
+
+  /**  */
+  turningCircleInBathrooms?: boolean
+
+  /**  */
+  visual?: boolean
+
+  /**  */
+  walkInShower?: boolean
+
+  /**  */
+  wheelchairRamp?: boolean
+
+  /**  */
+  wideDoorways?: boolean
 
   /**  */
   id?: string
@@ -5987,7 +6373,16 @@ export interface ListingUpdate {
   region?: RegionEnum
 
   /**  */
+  configurableRegion?: string
+
+  /**  */
   petPolicy?: string
+
+  /**  */
+  allowsDogs?: boolean
+
+  /**  */
+  allowsCats?: boolean
 
   /**  */
   smokingPolicy?: string
@@ -6802,352 +7197,6 @@ export interface AfsResolve {
   applications: IdDTO[]
 }
 
-export interface AmiChartQueryParams {
-  /**  */
-  jurisdictionId?: string
-}
-
-export interface AmiChartCreate {
-  /**  */
-  items: AmiChartItem[]
-
-  /**  */
-  name: string
-
-  /**  */
-  jurisdictions: IdDTO
-}
-
-export interface AmiChartUpdate {
-  /**  */
-  id: string
-
-  /**  */
-  items: AmiChartItem[]
-
-  /**  */
-  name: string
-}
-
-export interface ReservedCommunityTypeQueryParams {
-  /**  */
-  jurisdictionId?: string
-}
-
-export interface ReservedCommunityType {
-  /**  */
-  id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-
-  /**  */
-  name: string
-
-  /**  */
-  description?: string
-
-  /**  */
-  jurisdictions: IdDTO
-}
-
-export interface ReservedCommunityTypeCreate {
-  /**  */
-  name: string
-
-  /**  */
-  description?: string
-
-  /**  */
-  jurisdictions: IdDTO
-}
-
-export interface ReservedCommunityTypeUpdate {
-  /**  */
-  id: string
-
-  /**  */
-  name: string
-
-  /**  */
-  description?: string
-}
-
-export interface UnitTypeCreate {
-  /**  */
-  name: UnitTypeEnum
-
-  /**  */
-  numBedrooms: number
-}
-
-export interface UnitTypeUpdate {
-  /**  */
-  id: string
-
-  /**  */
-  name: UnitTypeEnum
-
-  /**  */
-  numBedrooms: number
-}
-
-export interface UnitAccessibilityPriorityTypeCreate {
-  /**  */
-  name: string
-}
-
-export interface UnitAccessibilityPriorityTypeUpdate {
-  /**  */
-  id: string
-
-  /**  */
-  name: string
-}
-
-export interface UnitRentTypeCreate {
-  /**  */
-  name: UnitRentTypeEnum
-}
-
-export interface UnitRentTypeUpdate {
-  /**  */
-  id: string
-
-  /**  */
-  name: UnitRentTypeEnum
-}
-
-export interface JurisdictionCreate {
-  /**  */
-  name: string
-
-  /**  */
-  notificationsSignUpUrl?: string
-
-  /**  */
-  languages: LanguagesEnum[]
-
-  /**  */
-  minimumListingPublishImagesRequired?: number
-
-  /**  */
-  partnerTerms?: string
-
-  /**  */
-  publicUrl: string
-
-  /**  */
-  emailFromAddress: string
-
-  /**  */
-  rentalAssistanceDefault: string
-
-  /**  */
-  whatToExpect: string
-
-  /**  */
-  whatToExpectAdditionalText: string
-
-  /**  */
-  whatToExpectUnderConstruction: string
-
-  /**  */
-  enablePartnerSettings?: boolean
-
-  /**  */
-  enablePartnerDemographics?: boolean
-
-  /**  */
-  enableGeocodingPreferences?: boolean
-
-  /**  */
-  enableGeocodingRadiusMethod?: boolean
-
-  /**  */
-  allowSingleUseCodeLogin: boolean
-
-  /**  */
-  listingApprovalPermissions: UserRoleEnum[]
-
-  /**  */
-  duplicateListingPermissions: UserRoleEnum[]
-
-  /**  */
-  requiredListingFields: []
-
-  /**  */
-  visibleNeighborhoodAmenities: NeighborhoodAmenitiesEnum[]
-}
-
-export interface JurisdictionUpdate {
-  /**  */
-  id: string
-
-  /**  */
-  name: string
-
-  /**  */
-  notificationsSignUpUrl?: string
-
-  /**  */
-  languages: LanguagesEnum[]
-
-  /**  */
-  minimumListingPublishImagesRequired?: number
-
-  /**  */
-  partnerTerms?: string
-
-  /**  */
-  publicUrl: string
-
-  /**  */
-  emailFromAddress: string
-
-  /**  */
-  rentalAssistanceDefault: string
-
-  /**  */
-  whatToExpect: string
-
-  /**  */
-  whatToExpectAdditionalText: string
-
-  /**  */
-  whatToExpectUnderConstruction: string
-
-  /**  */
-  enablePartnerSettings?: boolean
-
-  /**  */
-  enablePartnerDemographics?: boolean
-
-  /**  */
-  enableGeocodingPreferences?: boolean
-
-  /**  */
-  enableGeocodingRadiusMethod?: boolean
-
-  /**  */
-  allowSingleUseCodeLogin: boolean
-
-  /**  */
-  listingApprovalPermissions: UserRoleEnum[]
-
-  /**  */
-  duplicateListingPermissions: UserRoleEnum[]
-
-  /**  */
-  requiredListingFields: []
-
-  /**  */
-  visibleNeighborhoodAmenities: NeighborhoodAmenitiesEnum[]
-}
-
-export interface FeatureFlag {
-  /**  */
-  id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-
-  /**  */
-  name: FeatureFlagEnum
-
-  /**  */
-  description: string
-
-  /**  */
-  active: boolean
-
-  /**  */
-  jurisdictions: IdDTO[]
-}
-
-export interface Jurisdiction {
-  /**  */
-  id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-
-  /**  */
-  name: string
-
-  /**  */
-  notificationsSignUpUrl?: string
-
-  /**  */
-  languages: LanguagesEnum[]
-
-  /**  */
-  multiselectQuestions: IdDTO[]
-
-  /**  */
-  minimumListingPublishImagesRequired?: number
-
-  /**  */
-  partnerTerms?: string
-
-  /**  */
-  publicUrl: string
-
-  /**  */
-  emailFromAddress: string
-
-  /**  */
-  rentalAssistanceDefault: string
-
-  /**  */
-  whatToExpect: string
-
-  /**  */
-  whatToExpectAdditionalText: string
-
-  /**  */
-  whatToExpectUnderConstruction: string
-
-  /**  */
-  enablePartnerSettings?: boolean
-
-  /**  */
-  enablePartnerDemographics?: boolean
-
-  /**  */
-  enableGeocodingPreferences?: boolean
-
-  /**  */
-  enableGeocodingRadiusMethod?: boolean
-
-  /**  */
-  allowSingleUseCodeLogin: boolean
-
-  /**  */
-  listingApprovalPermissions: UserRoleEnum[]
-
-  /**  */
-  duplicateListingPermissions: UserRoleEnum[]
-
-  /**  */
-  featureFlags: FeatureFlag[]
-
-  /**  */
-  requiredListingFields: []
-
-  /**  */
-  visibleNeighborhoodAmenities: NeighborhoodAmenitiesEnum[]
-}
-
 export interface MultiselectOptionCreate {
   /**  */
   collectAddress?: boolean
@@ -7395,6 +7444,394 @@ export interface MultiselectQuestionFilterParams {
 
   /**  */
   status?: MultiselectQuestionsStatusEnum
+}
+
+export interface AmiChartQueryParams {
+  /**  */
+  jurisdictionId?: string
+}
+
+export interface AmiChartCreate {
+  /**  */
+  items: AmiChartItem[]
+
+  /**  */
+  name: string
+
+  /**  */
+  jurisdictions: IdDTO
+}
+
+export interface AmiChartUpdate {
+  /**  */
+  id: string
+
+  /**  */
+  items: AmiChartItem[]
+
+  /**  */
+  name: string
+}
+
+export interface ReservedCommunityTypeQueryParams {
+  /**  */
+  jurisdictionId?: string
+}
+
+export interface ReservedCommunityType {
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  name: string
+
+  /**  */
+  description?: string
+
+  /**  */
+  jurisdictions: IdDTO
+}
+
+export interface ReservedCommunityTypeCreate {
+  /**  */
+  name: string
+
+  /**  */
+  description?: string
+
+  /**  */
+  jurisdictions: IdDTO
+}
+
+export interface ReservedCommunityTypeUpdate {
+  /**  */
+  id: string
+
+  /**  */
+  name: string
+
+  /**  */
+  description?: string
+}
+
+export interface UnitTypeCreate {
+  /**  */
+  name: UnitTypeEnum
+
+  /**  */
+  numBedrooms: number
+}
+
+export interface UnitTypeUpdate {
+  /**  */
+  id: string
+
+  /**  */
+  name: UnitTypeEnum
+
+  /**  */
+  numBedrooms: number
+}
+
+export interface UnitAccessibilityPriorityTypeCreate {
+  /**  */
+  name: string
+}
+
+export interface UnitAccessibilityPriorityTypeUpdate {
+  /**  */
+  id: string
+
+  /**  */
+  name: string
+}
+
+export interface UnitRentTypeCreate {
+  /**  */
+  name: UnitRentTypeEnum
+}
+
+export interface UnitRentTypeUpdate {
+  /**  */
+  id: string
+
+  /**  */
+  name: UnitRentTypeEnum
+}
+
+export interface ListingFeatureField {
+  /**  */
+  id: string
+}
+
+export interface ListingFeatureCategory {
+  /**  */
+  id: string
+
+  /**  */
+  fields: ListingFeatureField[]
+
+  /**  */
+  required?: boolean
+}
+
+export interface ListingFeaturesConfiguration {
+  /** Categorized features (use this or the flat list, not both) */
+  categories?: ListingFeatureCategory[]
+
+  /** Flat list of features (use this or the categories, not both) */
+  fields?: ListingFeatureField[]
+}
+
+export interface JurisdictionCreate {
+  /**  */
+  name: string
+
+  /**  */
+  notificationsSignUpUrl?: string
+
+  /**  */
+  languages: LanguagesEnum[]
+
+  /**  */
+  minimumListingPublishImagesRequired?: number
+
+  /**  */
+  partnerTerms?: string
+
+  /**  */
+  publicUrl: string
+
+  /**  */
+  emailFromAddress: string
+
+  /**  */
+  rentalAssistanceDefault: string
+
+  /**  */
+  whatToExpect: string
+
+  /**  */
+  whatToExpectAdditionalText: string
+
+  /**  */
+  whatToExpectUnderConstruction: string
+
+  /**  */
+  enablePartnerSettings?: boolean
+
+  /**  */
+  enablePartnerDemographics?: boolean
+
+  /**  */
+  enableGeocodingPreferences?: boolean
+
+  /**  */
+  enableGeocodingRadiusMethod?: boolean
+
+  /**  */
+  allowSingleUseCodeLogin: boolean
+
+  /**  */
+  listingApprovalPermissions: UserRoleEnum[]
+
+  /**  */
+  duplicateListingPermissions: UserRoleEnum[]
+
+  /**  */
+  requiredListingFields: []
+
+  /**  */
+  visibleNeighborhoodAmenities: NeighborhoodAmenitiesEnum[]
+
+  /**  */
+  regions: []
+
+  /**  */
+  listingFeaturesConfiguration?: ListingFeaturesConfiguration
+}
+
+export interface JurisdictionUpdate {
+  /**  */
+  id: string
+
+  /**  */
+  name: string
+
+  /**  */
+  notificationsSignUpUrl?: string
+
+  /**  */
+  languages: LanguagesEnum[]
+
+  /**  */
+  minimumListingPublishImagesRequired?: number
+
+  /**  */
+  partnerTerms?: string
+
+  /**  */
+  publicUrl: string
+
+  /**  */
+  emailFromAddress: string
+
+  /**  */
+  rentalAssistanceDefault: string
+
+  /**  */
+  whatToExpect: string
+
+  /**  */
+  whatToExpectAdditionalText: string
+
+  /**  */
+  whatToExpectUnderConstruction: string
+
+  /**  */
+  enablePartnerSettings?: boolean
+
+  /**  */
+  enablePartnerDemographics?: boolean
+
+  /**  */
+  enableGeocodingPreferences?: boolean
+
+  /**  */
+  enableGeocodingRadiusMethod?: boolean
+
+  /**  */
+  allowSingleUseCodeLogin: boolean
+
+  /**  */
+  listingApprovalPermissions: UserRoleEnum[]
+
+  /**  */
+  duplicateListingPermissions: UserRoleEnum[]
+
+  /**  */
+  requiredListingFields: []
+
+  /**  */
+  visibleNeighborhoodAmenities: NeighborhoodAmenitiesEnum[]
+
+  /**  */
+  regions: []
+
+  /**  */
+  listingFeaturesConfiguration?: ListingFeaturesConfiguration
+}
+
+export interface FeatureFlag {
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  name: FeatureFlagEnum
+
+  /**  */
+  description: string
+
+  /**  */
+  active: boolean
+
+  /**  */
+  jurisdictions: IdDTO[]
+}
+
+export interface Jurisdiction {
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  name: string
+
+  /**  */
+  notificationsSignUpUrl?: string
+
+  /**  */
+  languages: LanguagesEnum[]
+
+  /**  */
+  multiselectQuestions: IdDTO[]
+
+  /**  */
+  minimumListingPublishImagesRequired?: number
+
+  /**  */
+  partnerTerms?: string
+
+  /**  */
+  publicUrl: string
+
+  /**  */
+  emailFromAddress: string
+
+  /**  */
+  rentalAssistanceDefault: string
+
+  /**  */
+  whatToExpect: string
+
+  /**  */
+  whatToExpectAdditionalText: string
+
+  /**  */
+  whatToExpectUnderConstruction: string
+
+  /**  */
+  enablePartnerSettings?: boolean
+
+  /**  */
+  enablePartnerDemographics?: boolean
+
+  /**  */
+  enableGeocodingPreferences?: boolean
+
+  /**  */
+  enableGeocodingRadiusMethod?: boolean
+
+  /**  */
+  allowSingleUseCodeLogin: boolean
+
+  /**  */
+  listingApprovalPermissions: UserRoleEnum[]
+
+  /**  */
+  duplicateListingPermissions: UserRoleEnum[]
+
+  /**  */
+  featureFlags: FeatureFlag[]
+
+  /**  */
+  requiredListingFields: []
+
+  /**  */
+  visibleNeighborhoodAmenities: NeighborhoodAmenitiesEnum[]
+
+  /**  */
+  regions: []
+
+  /**  */
+  listingFeaturesConfiguration?: ListingFeaturesConfiguration
 }
 
 export interface AddressInput {
@@ -7737,38 +8174,6 @@ export interface HouseholdMemberUpdate {
 
   /**  */
   householdMemberWorkAddress?: AddressCreate
-}
-
-export interface AddressUpdate {
-  /**  */
-  placeName?: string
-
-  /**  */
-  city: string
-
-  /**  */
-  county?: string
-
-  /**  */
-  state: string
-
-  /**  */
-  street: string
-
-  /**  */
-  street2?: string
-
-  /**  */
-  zipCode: string
-
-  /**  */
-  latitude?: number
-
-  /**  */
-  longitude?: number
-
-  /**  */
-  id?: string
 }
 
 export interface ApplicationSelectionOptionCreate {
@@ -8581,6 +8986,9 @@ export interface PropertyUpdate {
   id: string
 
   /**  */
+  name: string
+
+  /**  */
   description?: string
 
   /**  */
@@ -8591,9 +8999,14 @@ export interface PropertyUpdate {
 
   /**  */
   jurisdictions?: IdDTO
+}
+
+export interface PropertyFilterParams {
+  /**  */
+  $comparison: EnumPropertyFilterParamsComparison
 
   /**  */
-  name?: string
+  jurisdiction?: string
 }
 
 export interface PropertyQueryParams {
@@ -8610,17 +9023,53 @@ export interface PropertyQueryParams {
   filter?: string[]
 }
 
-export interface PropertyFilterParams {
-  /**  */
-  $comparison: EnumPropertyFilterParamsComparison
-
-  /**  */
-  jurisdiction?: string
-}
-
 export interface PaginatedProperty {
   /**  */
   items: Property[]
+
+  /**  */
+  meta: PaginationMeta
+}
+
+export interface AgencyCreate {
+  /**  */
+  name: string
+
+  /**  */
+  jurisdictions: IdDTO
+}
+
+export interface Agency {
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  name: string
+
+  /**  */
+  jurisdictions: IdDTO
+}
+
+export interface AgencyUpdate {
+  /**  */
+  id: string
+
+  /**  */
+  name: string
+
+  /**  */
+  jurisdictions: IdDTO
+}
+
+export interface PaginatedAgency {
+  /**  */
+  items: Agency[]
 
   /**  */
   meta: PaginationMeta
@@ -8717,6 +9166,7 @@ export enum ListingFilterKeys {
   "name" = "name",
   "neighborhood" = "neighborhood",
   "regions" = "regions",
+  "configurableRegions" = "configurableRegions",
   "reservedCommunityTypes" = "reservedCommunityTypes",
   "section8Acceptance" = "section8Acceptance",
   "status" = "status",
@@ -8945,6 +9395,26 @@ export enum HouseholdMemberRelationship {
   "other" = "other",
 }
 export type AllExtraDataTypes = BooleanInput | TextInput | AddressInput
+export enum MultiselectQuestionOrderByKeys {
+  "jurisdiction" = "jurisdiction",
+  "name" = "name",
+  "status" = "status",
+  "updatedAt" = "updatedAt",
+}
+
+export enum MultiselectQuestionViews {
+  "base" = "base",
+  "fundamentals" = "fundamentals",
+}
+export enum EnumMultiselectQuestionFilterParamsComparison {
+  "=" = "=",
+  "<>" = "<>",
+  "IN" = "IN",
+  ">=" = ">=",
+  "<=" = "<=",
+  "LIKE" = "LIKE",
+  "NA" = "NA",
+}
 export enum UserRoleEnum {
   "user" = "user",
   "partner" = "partner",
@@ -8980,6 +9450,7 @@ export enum FeatureFlagEnum {
   "enableAdditionalResources" = "enableAdditionalResources",
   "enableApplicationStatus" = "enableApplicationStatus",
   "enableCompanyWebsite" = "enableCompanyWebsite",
+  "enableConfigurableRegions" = "enableConfigurableRegions",
   "enableCreditScreeningFee" = "enableCreditScreeningFee",
   "enableFullTimeStudentQuestion" = "enableFullTimeStudentQuestion",
   "enableGeocodingPreferences" = "enableGeocodingPreferences",
@@ -9005,6 +9476,7 @@ export enum FeatureFlagEnum {
   "enableParkingFee" = "enableParkingFee",
   "enablePartnerDemographics" = "enablePartnerDemographics",
   "enablePartnerSettings" = "enablePartnerSettings",
+  "enablePetPolicyCheckbox" = "enablePetPolicyCheckbox",
   "enableProperties" = "enableProperties",
   "enableReferralQuestionUnits" = "enableReferralQuestionUnits",
   "enableRegions" = "enableRegions",
@@ -9024,26 +9496,6 @@ export enum FeatureFlagEnum {
   "swapCommunityTypeWithPrograms" = "swapCommunityTypeWithPrograms",
 }
 
-export enum MultiselectQuestionOrderByKeys {
-  "jurisdiction" = "jurisdiction",
-  "name" = "name",
-  "status" = "status",
-  "updatedAt" = "updatedAt",
-}
-
-export enum MultiselectQuestionViews {
-  "base" = "base",
-  "fundamentals" = "fundamentals",
-}
-export enum EnumMultiselectQuestionFilterParamsComparison {
-  "=" = "=",
-  "<>" = "<>",
-  "IN" = "IN",
-  ">=" = ">=",
-  "<=" = "<=",
-  "LIKE" = "LIKE",
-  "NA" = "NA",
-}
 export enum InputType {
   "boolean" = "boolean",
   "text" = "text",

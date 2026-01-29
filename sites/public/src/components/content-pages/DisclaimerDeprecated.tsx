@@ -4,7 +4,7 @@ import Markdown from "markdown-to-jsx"
 import { PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../../lib/constants"
 import Layout from "../../layouts/application"
-import pageContent from "../../md_content/disclaimer_deprecated.md"
+import pageContent from "../../md_content/generic_content.md"
 
 const DisclaimerDeprecated = () => {
   const { profile } = useContext(AuthContext)

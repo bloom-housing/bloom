@@ -61,9 +61,11 @@ import {
   ValidateOnlyUnitsOrUnitGroups,
 } from '../../decorators/validate-units-required.decorator';
 import { ValidateListingDeposit } from '../../decorators/validate-listing-deposit.decorator';
+import { ValidateListingFeatures } from '../../decorators/validate-listing-features.decorator';
 import { ListingDocuments } from './listing-documents.dto';
 import { ValidateListingImages } from '../../decorators/validate-listing-images.decorator';
 import Property from '../properties/property.dto';
+import { ListingFeaturesConfiguration } from '../jurisdictions/listing-features-config.dto';
 
 class Listing extends AbstractDTO {
   @Expose()
@@ -174,12 +176,36 @@ class Listing extends AbstractDTO {
   region?: RegionEnum;
 
   @Expose()
+  @ValidateListingPublish('configurableRegion', {
+    groups: [ValidationsGroupsEnum.default],
+  })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  configurableRegion?: string;
+
+  @Expose()
   @ValidateListingPublish('petPolicy', {
     groups: [ValidationsGroupsEnum.default],
   })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   petPolicy?: string;
+
+  @Expose()
+  @ValidateListingPublish('allowsDogs', {
+    groups: [ValidationsGroupsEnum.default],
+  })
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  allowsDogs?: boolean;
+
+  @Expose()
+  @ValidateListingPublish('allowsCats', {
+    groups: [ValidationsGroupsEnum.default],
+  })
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  allowsCats?: boolean;
 
   @Expose()
   @ValidateListingPublish('smokingPolicy', {
@@ -941,6 +967,7 @@ class Listing extends AbstractDTO {
   })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => ListingFeatures)
+  @ValidateListingFeatures({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional({ type: ListingFeatures })
   listingFeatures?: ListingFeatures;
 
@@ -1156,12 +1183,6 @@ class Listing extends AbstractDTO {
   listingNeighborhoodAmenities?: ListingNeighborhoodAmenities;
 
   @Expose()
-  requiredFields?: string[];
-
-  @Expose()
-  minimumImagesRequired?: number;
-
-  @Expose()
   @ApiPropertyOptional()
   @Transform(
     (obj: any) => {
@@ -1183,6 +1204,16 @@ class Listing extends AbstractDTO {
   @Type(() => Property)
   @ApiPropertyOptional({ type: Property })
   property?: Property;
+
+  // These are meta fields used to validate required form data before publishing listings
+  @Expose()
+  requiredFields?: string[];
+
+  @Expose()
+  minimumImagesRequired?: number;
+
+  @Expose()
+  listingFeaturesConfiguration?: ListingFeaturesConfiguration;
 }
 
 export { Listing as default, Listing };

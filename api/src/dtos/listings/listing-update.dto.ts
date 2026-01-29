@@ -22,6 +22,7 @@ import {
 } from '../../decorators/validate-units-required.decorator';
 import { ValidateListingImages } from '../../decorators/validate-listing-images.decorator';
 import { ValidateListingPublish } from '../../decorators/validate-listing-publish.decorator';
+import { ValidateListingFeatures } from '../../decorators/validate-listing-features.decorator';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 
 export class ListingUpdate extends OmitType(Listing, [
@@ -227,6 +228,7 @@ export class ListingUpdate extends OmitType(Listing, [
   listingEvents: ListingEventUpdate[];
 
   @Expose()
+  @ValidateListingFeatures({ groups: [ValidationsGroupsEnum.default] })
   @ValidateListingPublish('listingFeatures', {
     groups: [ValidationsGroupsEnum.default],
   })

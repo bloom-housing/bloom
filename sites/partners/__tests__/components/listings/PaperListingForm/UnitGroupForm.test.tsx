@@ -9,6 +9,7 @@ import {
   unitGroup,
   unitTypes,
 } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
+import { EnumListingListingType } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import {
   render,
   screen,
@@ -19,7 +20,6 @@ import {
 } from "../../../testUtils"
 import { TempUnitGroup } from "../../../../src/lib/listings/formTypes"
 import UnitGroupForm from "../../../../src/components/listings/PaperListingForm/UnitGroupForm"
-import { EnumListingListingType } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 const server = setupServer()
 

@@ -403,7 +403,10 @@ model Jurisdictions {
   duplicateListingPermissions         UserRoleEnum[]              @map("duplicate_listing_permissions")
   requiredListingFields               String[]                    @default([]) @map("required_listing_fields")
   visibleNeighborhoodAmenities        NeighborhoodAmenitiesEnum[] @default([groceryStores, publicTransportation, schools, parksAndCommunityCenters, pharmacies, healthCareResources]) @map("visible_neighborhood_amenities")
+  regions                             String[]                    @default([]) @map("regions")
+  listingFeaturesConfiguration        Json?                       @map("listing_features_configuration")
   properties                          Properties[]
+  agency                              Agency[]
 
   @@map("jurisdictions")
 }
@@ -439,30 +442,58 @@ model ListingEvents {
 }
 
 model ListingFeatures {
-  id                      String    @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  createdAt               DateTime  @default(now()) @map("created_at") @db.Timestamp(6)
-  updatedAt               DateTime  @updatedAt @map("updated_at") @db.Timestamp(6)
-  elevator                Boolean?
-  wheelchairRamp          Boolean?  @map("wheelchair_ramp")
-  serviceAnimalsAllowed   Boolean?  @map("service_animals_allowed")
-  accessibleParking       Boolean?  @map("accessible_parking")
-  parkingOnSite           Boolean?  @map("parking_on_site")
-  inUnitWasherDryer       Boolean?  @map("in_unit_washer_dryer")
-  laundryInBuilding       Boolean?  @map("laundry_in_building")
-  barrierFreeEntrance     Boolean?  @map("barrier_free_entrance")
-  rollInShower            Boolean?  @map("roll_in_shower")
-  grabBars                Boolean?  @map("grab_bars")
-  heatingInUnit           Boolean?  @map("heating_in_unit")
-  acInUnit                Boolean?  @map("ac_in_unit")
-  hearing                 Boolean?
-  visual                  Boolean?
-  mobility                Boolean?
-  barrierFreeUnitEntrance Boolean?  @map("barrier_free_unit_entrance")
-  loweredLightSwitch      Boolean?  @map("lowered_light_switch")
-  barrierFreeBathroom     Boolean?  @map("barrier_free_bathroom")
-  wideDoorways            Boolean?  @map("wide_doorways")
-  loweredCabinets         Boolean?  @map("lowered_cabinets")
-  listings                Listings?
+  id                                 String    @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  createdAt                          DateTime  @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt                          DateTime  @updatedAt @map("updated_at") @db.Timestamp(6)
+  accessibleHeightToilet             Boolean?  @map("accessible_height_toilet")
+  accessibleParking                  Boolean?  @map("accessible_parking")
+  acInUnit                           Boolean?  @map("ac_in_unit")
+  barrierFreeBathroom                Boolean?  @map("barrier_free_bathroom")
+  barrierFreeEntrance                Boolean?  @map("barrier_free_entrance")
+  barrierFreePropertyEntrance        Boolean?  @map("barrier_free_property_entrance")
+  barrierFreeUnitEntrance            Boolean?  @map("barrier_free_unit_entrance")
+  bathGrabBarsOrReinforcements       Boolean?  @map("bath_grab_bars_or_reinforcements")
+  bathroomCounterLowered             Boolean?  @map("bathroom_counter_lowered")
+  brailleSignageInBuilding           Boolean?  @map("braille_signage_in_building")
+  carbonMonoxideDetectorWithStrobe   Boolean?  @map("carbon_monoxide_detector_with_strobe")
+  carpetInUnit                       Boolean?  @map("carpet_in_unit")
+  elevator                           Boolean?
+  extraAudibleCarbonMonoxideDetector Boolean?  @map("extra_audible_carbon_monoxide_detector")
+  extraAudibleSmokeDetector          Boolean?  @map("extra_audible_smoke_detector")
+  fireSuppressionSprinklerSystem     Boolean?  @map("fire_suppression_sprinkler_system")
+  frontControlsDishwasher            Boolean?  @map("front_controls_dishwasher")
+  frontControlsStoveCookTop          Boolean?  @map("front_controls_stove_cook_top")
+  grabBars                           Boolean?  @map("grab_bars")
+  hardFlooringInUnit                 Boolean?  @map("hard_flooring_in_unit")
+  hearing                            Boolean?
+  hearingAndVision                   Boolean?  @map("hearing_and_vision")
+  heatingInUnit                      Boolean?  @map("heating_in_unit")
+  inUnitWasherDryer                  Boolean?  @map("in_unit_washer_dryer")
+  kitchenCounterLowered              Boolean?  @map("kitchen_counter_lowered")
+  laundryInBuilding                  Boolean?  @map("laundry_in_building")
+  leverHandlesOnDoors                Boolean?  @map("lever_handles_on_doors")
+  leverHandlesOnFaucets              Boolean?  @map("lever_handles_on_faucets")
+  loweredCabinets                    Boolean?  @map("lowered_cabinets")
+  loweredLightSwitch                 Boolean?  @map("lowered_light_switch")
+  mobility                           Boolean?
+  noEntryStairs                      Boolean?  @map("no_entry_stairs")
+  nonDigitalKitchenAppliances        Boolean?  @map("non_digital_kitchen_appliances")
+  noStairsToParkingSpots             Boolean?  @map("no_stairs_to_parking_spots")
+  noStairsWithinUnit                 Boolean?  @map("no_stairs_within_unit")
+  parkingOnSite                      Boolean?  @map("parking_on_site")
+  refrigeratorWithBottomDoorFreezer  Boolean?  @map("refrigerator_with_bottom_door_freezer")
+  rollInShower                       Boolean?  @map("roll_in_shower")
+  serviceAnimalsAllowed              Boolean?  @map("service_animals_allowed")
+  smokeDetectorWithStrobe            Boolean?  @map("smoke_detector_with_strobe")
+  streetLevelEntrance                Boolean?  @map("street_level_entrance")
+  toiletGrabBarsOrReinforcements     Boolean?  @map("toilet_grab_bars_or_reinforcements")
+  ttyAmplifiedPhone                  Boolean?  @map("tty_amplified_phone")
+  turningCircleInBathrooms           Boolean?  @map("turning_circle_in_bathrooms")
+  visual                             Boolean?
+  walkInShower                       Boolean?  @map("walk_in_shower")
+  wheelchairRamp                     Boolean?  @map("wheelchair_ramp")
+  wideDoorways                       Boolean?  @map("wide_doorways")
+  listings                           Listings?
 
   @@map("listing_features")
 }
@@ -597,6 +628,8 @@ model Listings {
   householdSizeMin                      Int?                          @map("household_size_min")
   neighborhood                          String?
   petPolicy                             String?                       @map("pet_policy")
+  allowsDogs                            Boolean?                      @map("allows_dogs")
+  allowsCats                            Boolean?                      @map("allows_cats")
   smokingPolicy                         String?                       @map("smoking_policy")
   unitsAvailable                        Int?                          @map("units_available")
   unitAmenities                         String?                       @map("unit_amenities")
@@ -701,6 +734,7 @@ model Listings {
   homeType                              HomeTypeEnum?                 @map("home_type")
   listingNeighborhoodAmenities          ListingNeighborhoodAmenities? @relation(fields: [neighborhoodAmenitiesId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   region                                RegionEnum?
+  configurableRegion                    String?                       @map("configurable_region")
   // END DETROIT SPECIFIC
   applicationFlaggedSet                 ApplicationFlaggedSet[]
   applicationMethods                    ApplicationMethods[]
@@ -1105,8 +1139,6 @@ model UserPreferences {
 
 // END DETROIT SPECIFIC
 
-// START LA SPECIFIC
-
 model Properties {
   id             String         @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   createdAt      DateTime       @default(now()) @map("created_at") @db.Timestamp(6)
@@ -1124,7 +1156,16 @@ model Properties {
   @@map("properties")
 }
 
-// END LA SPECIFIC
+model Agency {
+  id              String         @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  createdAt       DateTime       @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt       DateTime       @updatedAt @map("updated_at") @db.Timestamp(6)
+  name            String
+  jurisdictions   Jurisdictions? @relation(fields: [jurisdictionsId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  jurisdictionsId String?        @map("jurisdictions_id") @db.Uuid
+
+  @@map("agency")
+}
 
 model ScriptRuns {
   id             String   @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid

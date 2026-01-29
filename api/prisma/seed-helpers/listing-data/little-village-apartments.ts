@@ -1,11 +1,12 @@
 import {
   ApplicationMethodsTypeEnum,
   ListingsStatusEnum,
+  Prisma,
   ReviewOrderTypeEnum,
 } from '@prisma/client';
 import dayjs from 'dayjs';
 
-export const littleVillageApartments = {
+export const littleVillageApartments: Prisma.ListingsCreateInput = {
   additionalApplicationSubmissionNotes: null,
   digitalApplication: true,
   commonDigitalApplication: false,
@@ -43,8 +44,7 @@ export const littleVillageApartments = {
   criminalBackground: null,
   depositMin: '0',
   depositMax: '0',
-  depositHelperText:
-    "or one month's rent may be higher for lower credit scores",
+  depositHelperText: "Deposit will not exceed one month's rent",
   disableUnitsAccordion: false,
   leasingAgentEmail: 'joe@smith.com',
   leasingAgentName: 'Joe Smith',
