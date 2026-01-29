@@ -1,11 +1,11 @@
 locals {
   api_default_env_vars = {
-    PORT     = "3100"
-    NODE_ENV = "production"
-    DB_HOST  = aws_db_instance.bloom.endpoint
-    DB_PORT = "5432"
-    DB_USER  = "bloom_api"
-    DB_DATABASE = "bloom_prisma"
+    PORT                = "3100"
+    NODE_ENV            = "production"
+    DB_HOST             = aws_db_instance.bloom.endpoint
+    DB_PORT             = "5432"
+    DB_USER             = "bloom_api"
+    DB_DATABASE         = "bloom_prisma"
     DB_USE_RDS_IAM_AUTH = "1"
   }
 }
@@ -28,10 +28,10 @@ resource "aws_ecs_task_definition" "bloom_api" {
 
   container_definitions = jsonencode([
     {
-      Name  = "bloom-api"
-      image = var.bloom_api_image
+      Name        = "bloom-api"
+      image       = var.bloom_api_image
       environment = [for k, v in merge(local.api_default_env_vars, var.bloom_api_env_vars) : { name = k, value = v }]
-      entrypoint = "bash"
+      entrypoint  = "bash"
       # TODO: Once https://github.com/prisma/prisma/issues/7869 is implemented, get rid of the bash
       # hack.
       command = [
