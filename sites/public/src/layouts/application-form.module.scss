@@ -101,7 +101,8 @@
 }
 
 .application-form-image-card-section {
-  figure {
+  figure,
+  .image-container {
     height: 340px;
     background-color: var(--seeds-bg-color-canvas);
   }
@@ -112,7 +113,8 @@
   }
 
   @media (max-width: theme("screens.md")) {
-    figure {
+    figure,
+    .image-container {
       height: 240px;
     }
   }

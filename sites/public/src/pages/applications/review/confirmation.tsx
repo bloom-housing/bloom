@@ -99,7 +99,11 @@ const ApplicationConfirmation = () => {
             </Heading>
           </CardSection>
 
-          {imageUrl && <img src={imageUrl} alt={listing?.name} />}
+          <div className={styles["application-form-image-card-section"]}>
+            <div className={styles["image-container"]}>
+              {imageUrl && <img src={imageUrl} alt={listing?.name} />}
+            </div>
+          </div>
 
           <CardSection divider={"inset"}>
             <Heading priority={2} size="lg">
