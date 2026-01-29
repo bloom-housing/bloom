@@ -1,5 +1,6 @@
 import {
   Address,
+  Jurisdiction,
   Listing,
   ListingEventsTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -9,7 +10,6 @@ export type CypressListingImage = {
   altText?: string
 }
 export type CypressListing = Listing & {
-  "jurisdiction.id": string
   events: CypressListingEvent[]
   dueDate?: CypressListingDateTime
   postmarkDate?: CypressListingDateTime
@@ -20,6 +20,7 @@ export type CypressListing = Listing & {
   listingsLeasingAgentAddress: CypressAddress
   cypressUtilities?: CypressListingFeatures[]
   cypressFeatures?: CypressListingFeatures[]
+  jurisdiction: Jurisdiction
 }
 
 export type CypressListingDateTime = {
