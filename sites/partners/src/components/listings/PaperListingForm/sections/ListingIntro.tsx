@@ -190,7 +190,7 @@ const ListingIntro = (props: ListingIntroProps) => {
                 )}
                 validation={{ required: true }}
                 inputProps={{
-                  onChange: (e) => {
+                  onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
                     const selectedProperty = propertiesData.find(
                       (property) => property.id === e.target.value
                     )
