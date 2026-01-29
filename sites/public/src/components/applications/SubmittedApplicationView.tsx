@@ -59,8 +59,8 @@ const SubmittedApplicationView = ({
   return (
     <>
       <ApplicationListingCard
-        listingName={application.listings.name}
-        listingId={application.listings.id}
+        listingName={application.listings?.name}
+        listingId={application.listings?.id}
       />
       <Card spacing={"lg"} className={"mb-6"}>
         <Card.Section divider={"inset"}>
