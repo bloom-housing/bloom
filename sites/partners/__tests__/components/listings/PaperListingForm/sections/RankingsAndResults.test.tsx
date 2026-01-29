@@ -1,7 +1,10 @@
-import React from "react"
-import { setupServer } from "msw/node"
+import {
+  Listing,
+  ReviewOrderTypeEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { screen, within } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
+import { setupServer } from "msw/node"
 import RankingsAndResults from "../../../../../src/components/listings/PaperListingForm/sections/RankingsAndResults"
 import { formDefaults } from "../../../../../src/lib/listings/formTypes"
 import {
@@ -10,10 +13,6 @@ import {
   mockTipTapEditor,
   render,
 } from "../../../../testUtils"
-import {
-  Listing,
-  ReviewOrderTypeEnum,
-} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 const server = setupServer()
 beforeAll(() => {
