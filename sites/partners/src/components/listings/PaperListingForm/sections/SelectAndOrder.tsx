@@ -3,6 +3,7 @@ import { t, MinimalTable, Field, StandardTableData } from "@bloom-housing/ui-com
 import {
   MultiselectQuestion,
   MultiselectQuestionsApplicationSectionEnum,
+  PaginatedMultiselectQuestion,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { Button, Card, Drawer, Grid, Tag, Icon } from "@bloom-housing/ui-seeds"
 import { useFormContext } from "react-hook-form"
@@ -10,8 +11,6 @@ import InformationCircleIcon from "@heroicons/react/24/solid/InformationCircleIc
 import LinkComponent from "../../../../components/core/LinkComponent"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 import styles from "../ListingForm.module.scss"
-
-type SelectAndOrderSection = MultiselectQuestion
 
 type SelectAndOrderProps = {
   formKey: string
@@ -21,7 +20,7 @@ type SelectAndOrderProps = {
     jurisdiction?: string,
     applicationSection?: MultiselectQuestionsApplicationSectionEnum
   ) => {
-    data: SelectAndOrderSection[]
+    data: PaginatedMultiselectQuestion
     loading: boolean
     error: any
   }
@@ -30,8 +29,8 @@ type SelectAndOrderProps = {
   drawerTitle: string
   editText: string
   jurisdiction: string
-  listingData: SelectAndOrderSection[]
-  setListingData: (listingData: SelectAndOrderSection[]) => void
+  listingData: MultiselectQuestion[]
+  setListingData: (listingData: MultiselectQuestion[]) => void
   subNote?: string
   subtitle: string
   title: string
@@ -55,7 +54,7 @@ const SelectAndOrder = ({
 }: SelectAndOrderProps) => {
   const [tableDrawer, setTableDrawer] = useState<boolean | null>(null)
   const [selectDrawer, setSelectDrawer] = useState<boolean | null>(null)
-  const [draftListingData, setDraftListingData] = useState<SelectAndOrderSection[]>(listingData)
+  const [draftListingData, setDraftListingData] = useState<MultiselectQuestion[]>(listingData)
   const [dragOrder, setDragOrder] = useState([])
   const [openPreviews, setOpenPreviews] = useState<number[]>([])
 
@@ -64,7 +63,7 @@ const SelectAndOrder = ({
   const { register, getValues, setValue } = formMethods
 
   const deleteItem = useCallback(
-    (item: SelectAndOrderSection, setRootData?: boolean) => {
+    (item: MultiselectQuestion, setRootData?: boolean) => {
       const editedListingData = [...draftListingData]
       editedListingData.splice(editedListingData.indexOf(item), 1)
       if (setRootData) {
@@ -168,10 +167,11 @@ const SelectAndOrder = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dragOrder])
 
-  const { data: fetchedData = [] } = dataFetcher(
+  const { data } = dataFetcher(
     jurisdiction,
     applicationSection as unknown as MultiselectQuestionsApplicationSectionEnum
   )
+  const fetchedData = data?.items ?? []
 
   const formTableHeaders = {
     order: "t.order",
