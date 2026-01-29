@@ -12,8 +12,6 @@ import LinkComponent from "../../../../components/core/LinkComponent"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 import styles from "../ListingForm.module.scss"
 
-type SelectAndOrderSection = MultiselectQuestion
-
 type SelectAndOrderProps = {
   formKey: string
   addText: string
@@ -31,8 +29,8 @@ type SelectAndOrderProps = {
   drawerTitle: string
   editText: string
   jurisdiction: string
-  listingData: SelectAndOrderSection[]
-  setListingData: (listingData: SelectAndOrderSection[]) => void
+  listingData: MultiselectQuestion[]
+  setListingData: (listingData: MultiselectQuestion[]) => void
   subNote?: string
   subtitle: string
   title: string
@@ -56,7 +54,7 @@ const SelectAndOrder = ({
 }: SelectAndOrderProps) => {
   const [tableDrawer, setTableDrawer] = useState<boolean | null>(null)
   const [selectDrawer, setSelectDrawer] = useState<boolean | null>(null)
-  const [draftListingData, setDraftListingData] = useState<SelectAndOrderSection[]>(listingData)
+  const [draftListingData, setDraftListingData] = useState<MultiselectQuestion[]>(listingData)
   const [dragOrder, setDragOrder] = useState([])
   const [openPreviews, setOpenPreviews] = useState<number[]>([])
 
@@ -65,7 +63,7 @@ const SelectAndOrder = ({
   const { register, getValues, setValue } = formMethods
 
   const deleteItem = useCallback(
-    (item: SelectAndOrderSection, setRootData?: boolean) => {
+    (item: MultiselectQuestion, setRootData?: boolean) => {
       const editedListingData = [...draftListingData]
       editedListingData.splice(editedListingData.indexOf(item), 1)
       if (setRootData) {
