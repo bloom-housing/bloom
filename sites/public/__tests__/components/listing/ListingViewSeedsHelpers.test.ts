@@ -2,6 +2,7 @@ import {
   FeatureFlagEnum,
   Listing,
   MultiselectQuestionsApplicationSectionEnum,
+  MultiselectQuestionsStatusEnum,
   UnitsSummarized,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { jurisdiction, listing } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
@@ -131,6 +132,7 @@ describe("ListingViewSeedsHelpers", () => {
                 text: "Families",
                 jurisdictions: [],
                 applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
+                status: MultiselectQuestionsStatusEnum.active,
               },
             },
           ],
@@ -174,6 +176,7 @@ describe("ListingViewSeedsHelpers", () => {
                 text: "Families",
                 jurisdictions: [],
                 applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
+                status: MultiselectQuestionsStatusEnum.active,
               },
             },
           ],

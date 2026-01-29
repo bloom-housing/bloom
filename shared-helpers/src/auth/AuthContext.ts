@@ -35,6 +35,7 @@ import {
   LotteryService,
   LanguagesEnum,
   FeatureFlagsService,
+  PropertiesService,
 } from "../types/backend-swagger"
 import { getListingRedirectUrl } from "../utilities/getListingRedirectUrl"
 import { useRouter } from "next/router"
@@ -44,6 +45,7 @@ type ContextProps = {
   applicationsService: ApplicationsService
   applicationFlaggedSetsService: ApplicationFlaggedSetsService
   listingsService: ListingsService
+  propertiesService: PropertiesService
   jurisdictionsService: JurisdictionsService
   userService: UserService
   authService: AuthService
@@ -223,6 +225,7 @@ export const AuthProvider: FunctionComponent<React.PropsWithChildren> = ({ child
     applicationsService: new ApplicationsService(),
     applicationFlaggedSetsService: new ApplicationFlaggedSetsService(),
     listingsService: new ListingsService(),
+    propertiesService: new PropertiesService(),
     jurisdictionsService: new JurisdictionsService(),
     userService: new UserService(),
     authService: new AuthService(),

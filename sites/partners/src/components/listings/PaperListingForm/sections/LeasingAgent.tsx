@@ -163,7 +163,7 @@ const LeasingAgent = (props: LeasingAgentProps) => {
             />
           </Grid.Cell>
         </Grid.Row>
-        <SectionWithGrid.HeadingRow>{t(leasingAgentAddressText)}</SectionWithGrid.HeadingRow>
+        <SectionWithGrid.HeadingRow>{leasingAgentAddressText}</SectionWithGrid.HeadingRow>
         <Grid.Row columns={3}>
           <Grid.Cell className="seeds-grid-span-2">
             <Field

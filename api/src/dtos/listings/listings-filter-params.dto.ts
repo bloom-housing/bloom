@@ -187,6 +187,13 @@ export class ListingFilterParams extends BaseFilter {
 
   @Expose()
   @ApiPropertyOptional({
+    isArray: true,
+  })
+  @IsArray({ groups: [ValidationsGroupsEnum.default] })
+  [ListingFilterKeys.configurableRegions]?: string[];
+
+  @Expose()
+  @ApiPropertyOptional({
     type: Array,
     example: ['Seniors'],
   })

@@ -9,7 +9,8 @@ terraform {
 
 variable "aws_profile" {
   type        = string
-  description = "AWS CLI profile to use when running aws commands in local-exec provisioners."
+  description = "Optional AWS CLI profile to use when running aws commands in local-exec provisioners. IMPORTANT: if not specified, you must authenticate the AWS CLI some other way like with environment variables."
+  default     = ""
 }
 variable "aws_account_number" {
   type        = number

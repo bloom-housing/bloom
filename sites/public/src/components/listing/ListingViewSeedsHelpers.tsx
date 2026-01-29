@@ -24,9 +24,10 @@ import {
   TableHeaders,
 } from "@bloom-housing/ui-components"
 import {
+  allListingFeatures,
   cloudinaryPdfFromId,
   getOccupancyDescription,
-  listingFeatures,
+  ListingFeaturesValues,
   listingUtilities,
   stackedOccupancyTable,
   stackedUnitGroupsOccupancyTable,
@@ -141,9 +142,8 @@ export const getHasNonReferralMethods = (listing: Listing) => {
 
 export const getAccessibilityFeatures = (listing: Listing) => {
   const enabledFeatures = Object.entries(listing?.listingFeatures ?? {})
-    .filter(([_, value]) => value)
+    .filter(([key, value]) => value && allListingFeatures?.includes(key as ListingFeaturesValues))
     .map((item) => item[0])
-    .filter((feature) => listingFeatures.includes(feature))
 
   const COLUMN_BREAKPOINT = 6
   if (enabledFeatures.length > 0) {
@@ -167,9 +167,8 @@ export const getAccessibilityFeatures = (listing: Listing) => {
 
 export const getUtilitiesIncluded = (listing: Listing) => {
   const enabledUtilities = Object.entries(listing?.listingUtilities ?? {})
-    .filter(([_, value]) => value)
+    .filter(([key, value]) => value && listingUtilities.includes(key))
     .map((item) => item[0])
-    .filter((utility) => listingUtilities.includes(utility))
 
   if (enabledUtilities.length > 0) {
     return enabledUtilities.map((utility, index) => {
@@ -185,12 +184,34 @@ export const getUtilitiesIncluded = (listing: Listing) => {
 export const getFeatures = (
   listing: Listing,
   jurisdiction: Jurisdiction
-): { heading: string; subheading: string }[] => {
+): { heading: string; subheading?: string; content?: React.ReactNode }[] => {
   const features = []
   if (listing.yearBuilt) {
     features.push({ heading: t("t.built"), subheading: listing.yearBuilt })
   }
-  if (listing.petPolicy) {
+  const enablePetPolicyCheckbox = isFeatureFlagOn(
+    jurisdiction,
+    FeatureFlagEnum.enablePetPolicyCheckbox
+  )
+  if (enablePetPolicyCheckbox && (listing.allowsDogs || listing.allowsCats)) {
+    const petPolicy = []
+    if (listing.allowsDogs) petPolicy.push(t("listings.allowsDogs"))
+    if (listing.allowsCats) petPolicy.push(t("listings.allowsCats"))
+    if (petPolicy.length > 0) {
+      features.push({
+        heading: t("t.petsPolicy"),
+        content: (
+          <ul data-testid="pet-policy-list">
+            {petPolicy.map((petPolicyItem, index) => (
+              <li key={index} className={styles["list-item"]}>
+                {petPolicyItem}
+              </li>
+            ))}
+          </ul>
+        ),
+      })
+    }
+  } else if (listing.petPolicy) {
     features.push({ heading: t("t.petsPolicy"), subheading: listing.petPolicy })
   }
   if (listing.amenities) {
@@ -621,9 +642,9 @@ export const getAdditionalInformation = (listing: Listing) => {
         <div>
           <ul>
             {Object.entries(listing.requiredDocumentsList).map(
-              ([key, value]) =>
+              ([key, value], index) =>
                 value && (
-                  <li className={"list-disc mx-5 mb-1 text-nowrap"}>
+                  <li className={"list-disc mx-5 mb-1 text-nowrap"} key={index}>
                     {t(`listings.requiredDocuments.${key}`)}
                   </li>
                 )

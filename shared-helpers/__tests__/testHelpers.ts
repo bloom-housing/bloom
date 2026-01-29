@@ -24,6 +24,8 @@ import {
   EnumUnitGroupAmiLevelMonthlyRentDeterminationType,
   UnitType,
   User,
+  MultiselectQuestionsStatusEnum,
+  ListingFeaturesConfiguration,
 } from "../src/types/backend-swagger"
 
 export const multiselectQuestionPreference: MultiselectQuestion = {
@@ -34,6 +36,7 @@ export const multiselectQuestionPreference: MultiselectQuestion = {
   createdAt: new Date("2022-09-14T22:53:09.982Z"),
   updatedAt: new Date("2022-09-15T22:53:09.982Z"),
   description: "At least one household member lives or works in County",
+  status: MultiselectQuestionsStatusEnum.active,
   links: [
     {
       title: "Live/Work in County Link Title",
@@ -53,8 +56,18 @@ export const multiselectQuestionPreference: MultiselectQuestion = {
         },
       ],
       collectAddress: false,
+      id: "id",
+      createdAt: new Date(),
+      updatedAt: new Date(),
     },
-    { text: "Work in County", ordinal: 1, collectAddress: false },
+    {
+      text: "Work in County",
+      ordinal: 1,
+      collectAddress: false,
+      id: "id",
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
   ],
   applicationSection: MultiselectQuestionsApplicationSectionEnum.preferences,
 }
@@ -697,6 +710,9 @@ export const jurisdiction: Jurisdiction = {
     },
   ],
   allowSingleUseCodeLogin: false,
+  whatToExpectUnderConstruction: "",
+  visibleNeighborhoodAmenities: [],
+  regions: [],
 }
 
 export const listing: Listing = {
@@ -859,6 +875,9 @@ export const listing: Listing = {
   leasingAgentPhone: "(408) 217-8562",
   leasingAgentTitle: "",
   listingFeatures: {
+    id: "id",
+    createdAt: new Date(),
+    updatedAt: new Date(),
     elevator: true,
     wheelchairRamp: true,
     serviceAnimalsAllowed: true,
@@ -870,6 +889,9 @@ export const listing: Listing = {
   },
   servicesOffered: "Services offered description",
   listingUtilities: {
+    id: "id",
+    createdAt: new Date(),
+    updatedAt: new Date(),
     water: true,
     gas: true,
     electricity: true,
@@ -883,12 +905,16 @@ export const listing: Listing = {
         updatedAt: new Date(),
         text: "Preference 1",
         jurisdictions: [],
+        status: MultiselectQuestionsStatusEnum.active,
         applicationSection: MultiselectQuestionsApplicationSectionEnum.preferences,
         options: [
           {
             name: "option_1",
             text: "Option 1",
             ordinal: 1,
+            id: "id",
+            createdAt: new Date(),
+            updatedAt: new Date(),
           },
         ],
       },
@@ -901,12 +927,16 @@ export const listing: Listing = {
         updatedAt: new Date(),
         text: "Preference 2",
         jurisdictions: [],
+        status: MultiselectQuestionsStatusEnum.active,
         applicationSection: MultiselectQuestionsApplicationSectionEnum.preferences,
         options: [
           {
             name: "option_1",
             text: "Option 1",
             ordinal: 1,
+            id: "id",
+            createdAt: new Date(),
+            updatedAt: new Date(),
           },
         ],
       },
@@ -919,12 +949,16 @@ export const listing: Listing = {
         updatedAt: new Date(),
         text: "Families",
         jurisdictions: [],
+        status: MultiselectQuestionsStatusEnum.active,
         applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
         options: [
           {
             name: "option_1",
             text: "Option 1",
             ordinal: 1,
+            id: "id",
+            createdAt: new Date(),
+            updatedAt: new Date(),
           },
         ],
       },
@@ -937,12 +971,16 @@ export const listing: Listing = {
         updatedAt: new Date(),
         text: "Veterans",
         jurisdictions: [],
+        status: MultiselectQuestionsStatusEnum.active,
         applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
         options: [
           {
             name: "option_1",
             text: "Option 1",
             ordinal: 1,
+            id: "id",
+            createdAt: new Date(),
+            updatedAt: new Date(),
           },
         ],
       },
@@ -1168,6 +1206,9 @@ export const mockBaseJurisdiction: Jurisdiction = {
   allowSingleUseCodeLogin: false,
   featureFlags: [],
   requiredListingFields: [],
+  whatToExpectUnderConstruction: "",
+  visibleNeighborhoodAmenities: [],
+  regions: [],
 }
 
 export const mockUser: User = {
@@ -1184,4 +1225,98 @@ export const mockUser: User = {
   passwordValidForDays: 180,
   agreedToTermsOfService: true,
   listings: [],
+}
+
+export const defaultListingFeaturesConfiguration: ListingFeaturesConfiguration = {
+  fields: [
+    { id: "wheelchairRamp" },
+    { id: "elevator" },
+    { id: "serviceAnimalsAllowed" },
+    { id: "accessibleParking" },
+    { id: "parkingOnSite" },
+    { id: "inUnitWasherDryer" },
+    { id: "laundryInBuilding" },
+    { id: "barrierFreeEntrance" },
+    { id: "rollInShower" },
+    { id: "grabBars" },
+    { id: "heatingInUnit" },
+    { id: "acInUnit" },
+    { id: "hearing" },
+    { id: "mobility" },
+    { id: "visual" },
+    { id: "barrierFreeUnitEntrance" },
+    { id: "loweredLightSwitch" },
+    { id: "barrierFreeBathroom" },
+    { id: "wideDoorways" },
+    { id: "loweredCabinets" },
+  ],
+}
+
+export const expandedListingFeaturesConfiguration: ListingFeaturesConfiguration = {
+  categories: [
+    {
+      id: "mobility",
+      fields: [
+        { id: "accessibleParking" },
+        { id: "barrierFreePropertyEntrance" },
+        { id: "barrierFreeUnitEntrance" },
+        { id: "elevator" },
+        { id: "frontControlsDishwasher" },
+        { id: "frontControlsStoveCookTop" },
+        { id: "kitchenCounterLowered" },
+        { id: "leverHandlesOnDoors" },
+        { id: "loweredLightSwitch" },
+        { id: "mobility" },
+        { id: "noEntryStairs" },
+        { id: "noStairsToParkingSpots" },
+        { id: "noStairsWithinUnit" },
+        { id: "refrigeratorWithBottomDoorFreezer" },
+        { id: "streetLevelEntrance" },
+        { id: "wheelchairRamp" },
+      ],
+    },
+    {
+      id: "bathroom",
+      fields: [
+        { id: "accessibleHeightToilet" },
+        { id: "barrierFreeBathroom" },
+        { id: "bathGrabBarsOrReinforcements" },
+        { id: "bathroomCounterLowered" },
+        { id: "rollInShower" },
+        { id: "toiletGrabBarsOrReinforcements" },
+        { id: "turningCircleInBathrooms" },
+        { id: "walkInShower" },
+        { id: "wideDoorways" },
+      ],
+    },
+    {
+      id: "flooring",
+      fields: [{ id: "carpetInUnit" }, { id: "hardFlooringInUnit" }],
+      required: true,
+    },
+    {
+      id: "utility",
+      fields: [
+        { id: "acInUnit" },
+        { id: "fireSuppressionSprinklerSystem" },
+        { id: "heatingInUnit" },
+        { id: "inUnitWasherDryer" },
+        { id: "laundryInBuilding" },
+        { id: "leverHandlesOnFaucets" },
+      ],
+    },
+    {
+      id: "hearingVision",
+      fields: [
+        { id: "brailleSignageInBuilding" },
+        { id: "carbonMonoxideDetectorWithStrobe" },
+        { id: "extraAudibleCarbonMonoxideDetector" },
+        { id: "extraAudibleSmokeDetector" },
+        { id: "hearingAndVision" },
+        { id: "nonDigitalKitchenAppliances" },
+        { id: "smokeDetectorWithStrobe" },
+        { id: "ttyAmplifiedPhone" },
+      ],
+    },
+  ],
 }

@@ -93,6 +93,10 @@ export type FormListing = Omit<Listing, "countyCode" | "listingFeatures" | "list
   selectedRequiredDocuments?: string[]
   listingFeatures?: ListingFeaturesCreate
   listingUtilities?: ListingUtilitiesCreate
+  allowsDogs?: boolean
+  allowsCats?: boolean
+  petPolicyPreferences?: string[]
+  configurableAccessibilityFeatures?: unknown
 }
 
 export const addressTypes = {
@@ -131,7 +135,7 @@ export const formDefaults: FormListing = {
   depositType: EnumListingDepositType.fixedDeposit,
   depositMax: "0",
   depositMin: "0",
-  depositHelperText: "or one month's rent may be higher for lower credit scores",
+  depositHelperText: "Deposit will not exceed one month's rent",
   disableUnitsAccordion: false,
   displayWaitlistSize: false,
   listingEvents: [],
@@ -174,16 +178,21 @@ export const formDefaults: FormListing = {
   neighborhood: undefined,
   region: undefined,
   petPolicy: "",
+  allowsDogs: null,
+  allowsCats: null,
+  petPolicyPreferences: [],
   smokingPolicy: "",
   unitsAvailable: 0,
   unitAmenities: "",
   servicesOffered: "",
   yearBuilt: null,
+  configurableRegion: "",
   // urlSlug: undefined,
   // showWaitlist: false,
   reviewOrderType: null,
   unitsSummary: [],
   applicationLotteryTotals: [],
+  configurableAccessibilityFeatures: null,
 }
 
 export type TempUnit = Unit & {

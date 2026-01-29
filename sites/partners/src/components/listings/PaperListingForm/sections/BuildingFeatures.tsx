@@ -1,18 +1,16 @@
-import React, { useMemo, useEffect } from "react"
+import React from "react"
 import { useFormContext } from "react-hook-form"
 import { t, Textarea, FieldGroup, Field } from "@bloom-housing/ui-components"
 import { Grid } from "@bloom-housing/ui-seeds"
-import { listingFeatures } from "@bloom-housing/shared-helpers"
-import { ListingFeaturesCreate } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 import { defaultFieldProps, getLabel } from "../../../../lib/helpers"
 import styles from "../ListingForm.module.scss"
 
 type BuildingFeaturesProps = {
   enableAccessibilityFeatures?: boolean
+  enablePetPolicyCheckbox?: boolean
   enableParkingFee?: boolean
   enableSmokingPolicyRadio?: boolean
-  existingFeatures: ListingFeaturesCreate
   requiredFields: string[]
 }
 
@@ -20,23 +18,7 @@ const BuildingFeatures = (props: BuildingFeaturesProps) => {
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, setValue, errors, clearErrors } = formMethods
-
-  const featureOptions = useMemo(() => {
-    return listingFeatures.map((item) => ({
-      id: item,
-      label: t(`eligibility.accessibility.${item}`),
-      defaultChecked: props.existingFeatures ? props.existingFeatures[item] : false,
-      register,
-    }))
-  }, [register, props.existingFeatures])
-
-  useEffect(() => {
-    // clear the utilities values if the new jurisdiction doesn't have utilities included functionality
-    if (!props.enableAccessibilityFeatures) {
-      setValue("accessibilityFeatures", undefined)
-    }
-  }, [props.enableAccessibilityFeatures, setValue])
+  const { register, errors, clearErrors, getValues } = formMethods
 
   return (
     <>
@@ -94,19 +76,43 @@ const BuildingFeatures = (props: BuildingFeaturesProps) => {
             />
           </Grid.Cell>
           <Grid.Cell>
-            <Textarea
-              fullWidth={true}
-              placeholder={""}
-              register={register}
-              maxLength={600}
-              {...defaultFieldProps(
-                "petPolicy",
-                t("t.petsPolicy"),
-                props.requiredFields,
-                errors,
-                clearErrors
-              )}
-            />
+            {props.enablePetPolicyCheckbox ? (
+              <FieldGroup
+                type="checkbox"
+                name="petPolicyPreferences"
+                groupLabel={t("listings.petPolicyQuestion")}
+                register={register}
+                fieldLabelClassName={styles["label-option"]}
+                fields={[
+                  {
+                    id: "allowsDogs",
+                    label: t("listings.allowsDogs"),
+                    value: "allowsDogs",
+                    defaultChecked: getValues("allowsDogs"),
+                  },
+                  {
+                    id: "allowsCats",
+                    label: t("listings.allowsCats"),
+                    value: "allowsCats",
+                    defaultChecked: getValues("allowsCats"),
+                  },
+                ]}
+              />
+            ) : (
+              <Textarea
+                fullWidth={true}
+                placeholder={""}
+                register={register}
+                maxLength={600}
+                {...defaultFieldProps(
+                  "petPolicy",
+                  t("t.petsPolicy"),
+                  props.requiredFields,
+                  errors,
+                  clearErrors
+                )}
+              />
+            )}
           </Grid.Cell>
         </Grid.Row>
         <Grid.Row>
@@ -190,19 +196,6 @@ const BuildingFeatures = (props: BuildingFeaturesProps) => {
                 )}
               />
             </Grid.Cell>
-          </Grid.Row>
-        )}
-        {!props.enableAccessibilityFeatures ? null : (
-          <Grid.Row>
-            <FieldGroup
-              type="checkbox"
-              name="accessibilityFeatures"
-              groupLabel={t("listings.sections.accessibilityFeatures")}
-              fields={featureOptions}
-              register={register}
-              fieldGroupClassName="grid grid-cols-3 mt-2 gap-x-4"
-              fieldLabelClassName={styles["label-option"]}
-            />
           </Grid.Row>
         )}
       </SectionWithGrid>

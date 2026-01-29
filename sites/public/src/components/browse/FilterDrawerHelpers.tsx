@@ -3,6 +3,7 @@ import {
   FilterAvailabilityEnum,
   HomeTypeEnum,
   ListingFeatures,
+  ListingFeaturesConfiguration,
   ListingFilterKeys,
   ListingFilterParams,
   RegionEnum,
@@ -34,6 +35,7 @@ export interface FilterData {
   listingFeatures?: { [K in keyof ListingFeatures]?: BooleanOrBooleanString }
   monthlyRent?: { [K in "maxRent" | "minRent"]?: string }
   regions?: { [K in RegionEnum]: BooleanOrBooleanString }
+  configurableRegions?: string
   section8Acceptance?: BooleanOrBooleanString
   reservedCommunityTypes?: { [K in ReservedCommunityTypes]?: BooleanOrBooleanString }
   multiselectQuestions?: Record<string, BooleanOrBooleanString>
@@ -74,6 +76,7 @@ const arrayFilters: ListingFilterKeys[] = [
   ListingFilterKeys.homeTypes,
   ListingFilterKeys.listingFeatures,
   ListingFilterKeys.regions,
+  ListingFilterKeys.configurableRegions,
   ListingFilterKeys.reservedCommunityTypes,
   ListingFilterKeys.availabilities,
   ListingFilterKeys.multiselectQuestions,
@@ -190,7 +193,7 @@ export const CheckboxGroup = (props: CheckboxGroupProps) => {
       <legend className={styles["filter-section-label"]}>{props.groupLabel}</legend>
       <Grid spacing="sm">
         <Grid.Row columns={props.customColumnNumber ?? 2}>
-          {props.fields.map((field) => {
+          {props.fields?.map((field) => {
             return (
               <Grid.Cell key={`${field.key}-cell`}>
                 <Field
@@ -496,4 +499,14 @@ export const removeUnselectedFilterData = (data: FilterData): FilterData => {
     }
   })
   return cleanedFilterData
+}
+
+export const getAccessibilityFeatureKeys = (config: ListingFeaturesConfiguration) => {
+  if (config?.categories?.length > 0) {
+    return config.categories
+      .flatMap((category) => category.fields.map((field) => field.id))
+      .sort((a, b) => a.localeCompare(b))
+  } else {
+    return config?.fields?.map((field) => field.id).sort((a, b) => a.localeCompare(b)) || []
+  }
 }

@@ -12,6 +12,7 @@ export enum FeatureFlagEnum {
   enableAdditionalResources = 'enableAdditionalResources',
   enableApplicationStatus = 'enableApplicationStatus',
   enableCompanyWebsite = 'enableCompanyWebsite',
+  enableConfigurableRegions = 'enableConfigurableRegions',
   enableCreditScreeningFee = 'enableCreditScreeningFee',
   enableFullTimeStudentQuestion = 'enableFullTimeStudentQuestion',
   enableGeocodingPreferences = 'enableGeocodingPreferences',
@@ -37,6 +38,7 @@ export enum FeatureFlagEnum {
   enableParkingFee = 'enableParkingFee',
   enablePartnerDemographics = 'enablePartnerDemographics',
   enablePartnerSettings = 'enablePartnerSettings',
+  enablePetPolicyCheckbox = 'enablePetPolicyCheckbox',
   enableProperties = 'enableProperties',
   enableReferralQuestionUnits = 'enableReferralQuestionUnits',
   enableRegions = 'enableRegions',
@@ -111,6 +113,11 @@ export const featureFlagMap: {
     name: FeatureFlagEnum.enableCompanyWebsite,
     description:
       'When true, allows partners to add company website information',
+  },
+  {
+    name: FeatureFlagEnum.enableConfigurableRegions,
+    description:
+      'When true, allows for configurable regions per jurisdiction enabled on partners and public',
   },
   {
     name: FeatureFlagEnum.enableCreditScreeningFee,
@@ -229,6 +236,11 @@ export const featureFlagMap: {
   {
     name: FeatureFlagEnum.enablePartnerSettings,
     description: "When true, the 'settings' tab in the partner site is visible",
+  },
+  {
+    name: FeatureFlagEnum.enablePetPolicyCheckbox,
+    description:
+      'When true, the pet policy field in the listing form is displayed as checkboxes instead of a text area',
   },
   {
     name: FeatureFlagEnum.enableProperties,

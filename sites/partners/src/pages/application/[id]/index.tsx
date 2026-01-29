@@ -50,6 +50,11 @@ const ApplicationsList = () => {
     listingDto?.jurisdictions.id
   )
 
+  const enableApplicationStatus = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableApplicationStatus,
+    listingDto?.jurisdictions.id
+  )
+
   const swapCommunityTypeWithPrograms = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.swapCommunityTypeWithPrograms,
     listingDto?.jurisdictions.id
@@ -123,7 +128,10 @@ const ApplicationsList = () => {
 
             <div className="flex flex-row flex-wrap ">
               <div className="info-card md:w-9/12">
-                <DetailsApplicationData />
+                <DetailsApplicationData
+                  enableApplicationStatus={enableApplicationStatus}
+                  reviewOrderType={listingDto?.reviewOrderType}
+                />
 
                 <DetailsPrimaryApplicant
                   enableFullTimeStudentQuestion={enableFullTimeStudentQuestion}

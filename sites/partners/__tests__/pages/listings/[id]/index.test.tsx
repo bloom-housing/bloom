@@ -1,12 +1,11 @@
 /* eslint-disable import/no-named-as-default */
 import React from "react"
 import { setupServer } from "msw/lib/node"
-import { fireEvent, mockNextRouter, queryByText, render, screen, within } from "../../../testUtils"
+import { fireEvent, mockNextRouter, render, screen, within } from "../../../testUtils"
 import { ListingContext } from "../../../../src/components/listings/ListingContext"
 import { jurisdiction, listing, user } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import DetailListingData from "../../../../src/components/listings/PaperListingDetails/sections/DetailListingData"
 import DetailListingIntro from "../../../../src/components/listings/PaperListingDetails/sections/DetailListingIntro"
-import DetailBuildingDetails from "../../../../src/components/listings/PaperListingDetails/sections/DetailBuildingDetails"
 import DetailCommunityType from "../../../../src/components/listings/PaperListingDetails/sections/DetailCommunityType"
 import DetailUnits from "../../../../src/components/listings/PaperListingDetails/sections/DetailUnits"
 import DetailPreferences from "../../../../src/components/listings/PaperListingDetails/sections/DetailPreferences"
@@ -20,7 +19,6 @@ import {
   ListingsStatusEnum,
   MultiselectQuestionsApplicationSectionEnum,
   MultiselectQuestionsStatusEnum,
-  RegionEnum,
   ReviewOrderTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import DetailAdditionalFees from "../../../../src/components/listings/PaperListingDetails/sections/DetailAdditionalFees"
@@ -368,74 +366,6 @@ describe("listing data", () => {
           expect(imageElement).toHaveAttribute("src", "asset_file_id")
           expect(imageElement).toHaveAttribute("alt", "Listing photos")
         })
-      })
-    })
-
-    describe("should display Building Details section", () => {
-      it("should display Building Details section - without region", () => {
-        render(
-          <ListingContext.Provider value={{ ...listing, region: RegionEnum.Southwest }}>
-            <DetailBuildingDetails />
-          </ListingContext.Provider>
-        )
-
-        expect(screen.getByText("Building details")).toBeInTheDocument()
-        expect(screen.getByText("Building address")).toBeInTheDocument()
-        expect(screen.getByText("Street address")).toBeInTheDocument()
-        expect(screen.getByText("98 Archer Street")).toBeInTheDocument()
-        expect(screen.getByText("City")).toBeInTheDocument()
-        expect(screen.getByText("San Jose")).toBeInTheDocument()
-        expect(screen.getByText("Longitude")).toBeInTheDocument()
-        expect(screen.getByText("-121.91071")).toBeInTheDocument()
-        expect(screen.getByText("State")).toBeInTheDocument()
-        expect(screen.getByText("CA")).toBeInTheDocument()
-        expect(screen.getByText("Latitude")).toBeInTheDocument()
-        expect(screen.getByText("37.36537")).toBeInTheDocument()
-        expect(screen.getByText("Zip code")).toBeInTheDocument()
-        expect(screen.getByText("95112")).toBeInTheDocument()
-        expect(screen.getByText("Neighborhood")).toBeInTheDocument()
-        expect(screen.getByText("Rosemary Gardens Park")).toBeInTheDocument()
-        expect(screen.getByText("Year built")).toBeInTheDocument()
-        expect(screen.getByText("2012")).toBeInTheDocument()
-        expect(screen.queryByText("Region")).not.toBeInTheDocument()
-        expect(screen.queryByText("Southwest")).not.toBeInTheDocument()
-      })
-
-      it("should display Building Details section - with region", () => {
-        render(
-          <AuthContext.Provider
-            value={{
-              profile: { ...user, jurisdictions: [], listings: [] },
-              doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
-                mockJurisdictionsHaveFeatureFlagOn(featureFlag),
-            }}
-          >
-            <ListingContext.Provider value={{ ...listing, region: RegionEnum.Southwest }}>
-              <DetailBuildingDetails />
-            </ListingContext.Provider>
-          </AuthContext.Provider>
-        )
-
-        expect(screen.getByText("Building details")).toBeInTheDocument()
-        expect(screen.getByText("Building address")).toBeInTheDocument()
-        expect(screen.getByText("Street address")).toBeInTheDocument()
-        expect(screen.getByText("98 Archer Street")).toBeInTheDocument()
-        expect(screen.getByText("City")).toBeInTheDocument()
-        expect(screen.getByText("San Jose")).toBeInTheDocument()
-        expect(screen.getByText("Longitude")).toBeInTheDocument()
-        expect(screen.getByText("-121.91071")).toBeInTheDocument()
-        expect(screen.getByText("State")).toBeInTheDocument()
-        expect(screen.getByText("CA")).toBeInTheDocument()
-        expect(screen.getByText("Latitude")).toBeInTheDocument()
-        expect(screen.getByText("37.36537")).toBeInTheDocument()
-        expect(screen.getByText("Zip code")).toBeInTheDocument()
-        expect(screen.getByText("95112")).toBeInTheDocument()
-        expect(screen.getByText("Neighborhood")).toBeInTheDocument()
-        expect(screen.getByText("Rosemary Gardens Park")).toBeInTheDocument()
-        expect(screen.getByText("Year built")).toBeInTheDocument()
-        expect(screen.getByText("2012")).toBeInTheDocument()
-        expect(screen.getByText("Region")).toBeInTheDocument()
-        expect(screen.getByText("Southwest")).toBeInTheDocument()
       })
     })
 
@@ -796,122 +726,6 @@ describe("listing data", () => {
           "Resident responsible for PG&E, internet and phone. Owner pays for water, trash, and sewage."
         )
       ).toBeInTheDocument()
-    })
-
-    describe("should display Building Features section", () => {
-      it("should display data with no accessibility features", () => {
-        render(
-          <ListingContext.Provider
-            value={{
-              ...listing,
-              servicesOffered: "Professional Help",
-            }}
-          >
-            <DetailBuildingFeatures />
-          </ListingContext.Provider>
-        )
-
-        expect(screen.getByText("Building features")).toBeInTheDocument()
-        expect(screen.getByText("Property amenities")).toBeInTheDocument()
-        expect(
-          screen.getByText(
-            "Community Room, Laundry Room, Assigned Parking, Bike Storage, Roof Top Garden, Part-time Resident Service Coordinator"
-          )
-        ).toBeInTheDocument()
-        expect(screen.getByText("Unit amenities")).toBeInTheDocument()
-        expect(screen.getByText("Dishwasher")).toBeInTheDocument()
-        expect(screen.getByText("Additional accessibility")).toBeInTheDocument()
-        expect(
-          screen.getByText(
-            "There is a total of 5 ADA units in the complex, all others are adaptable. Exterior Wheelchair ramp (front entry)"
-          )
-        ).toBeInTheDocument()
-        expect(screen.getByText("Smoking policy")).toBeInTheDocument()
-        expect(screen.getByText("Non-smoking building")).toBeInTheDocument()
-        expect(screen.getByText("Pets policy")).toBeInTheDocument()
-        expect(
-          screen.getByText(
-            "No pets allowed. Accommodation animals may be granted to persons with disabilities via a reasonable accommodation request."
-          )
-        ).toBeInTheDocument()
-        expect(screen.getByText("Services offered")).toBeInTheDocument()
-        expect(screen.getByText("Services offered")).toBeInTheDocument()
-        expect(screen.getByText("Professional Help")).toBeInTheDocument()
-      })
-
-      it("should display accessibility features", () => {
-        document.cookie = "access-token-available=True"
-        server.use(
-          rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
-            return res(ctx.json(user))
-          })
-        )
-
-        render(
-          <AuthContext.Provider
-            value={{
-              profile: {
-                ...user,
-                jurisdictions: [],
-                listings: [],
-              },
-              doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
-                mockJurisdictionsHaveFeatureFlagOn(featureFlag),
-            }}
-          >
-            <ListingContext.Provider
-              value={{
-                ...listing,
-                listingFeatures: {
-                  elevator: true,
-                  wheelchairRamp: true,
-                  serviceAnimalsAllowed: true,
-                  accessibleParking: true,
-                  parkingOnSite: true,
-                  inUnitWasherDryer: true,
-                  laundryInBuilding: true,
-                  barrierFreeEntrance: true,
-                  rollInShower: true,
-                  grabBars: true,
-                  heatingInUnit: true,
-                  acInUnit: true,
-                  hearing: true,
-                  visual: true,
-                  mobility: true,
-                  barrierFreeUnitEntrance: true,
-                  loweredLightSwitch: true,
-                  barrierFreeBathroom: true,
-                  wideDoorways: true,
-                  loweredCabinets: true,
-                },
-              }}
-            >
-              <DetailBuildingFeatures />
-            </ListingContext.Provider>
-          </AuthContext.Provider>
-        )
-
-        expect(screen.getByText("Elevator")).toBeInTheDocument()
-        expect(screen.getByText("Wheelchair ramp")).toBeInTheDocument()
-        expect(screen.getByText("Service animals allowed")).toBeInTheDocument()
-        expect(screen.getByText("Accessible parking spots")).toBeInTheDocument()
-        expect(screen.getByText("Parking on site")).toBeInTheDocument()
-        expect(screen.getByText("In-unit washer/dryer")).toBeInTheDocument()
-        expect(screen.getByText("Laundry in building")).toBeInTheDocument()
-        expect(screen.getByText("Barrier-free (no-step) property entrance")).toBeInTheDocument()
-        expect(screen.getByText("Roll-in showers")).toBeInTheDocument()
-        expect(screen.getByText("Grab bars in bathrooms")).toBeInTheDocument()
-        expect(screen.getByText("Heating in unit")).toBeInTheDocument()
-        expect(screen.getByText("AC in unit")).toBeInTheDocument()
-        expect(screen.getByText("Units for those with hearing disabilities")).toBeInTheDocument()
-        expect(screen.getByText("Units for those with visual disabilities")).toBeInTheDocument()
-        expect(screen.getByText("Units for those with mobility disabilities")).toBeInTheDocument()
-        expect(screen.getByText("Lowered cabinets and countertops")).toBeInTheDocument()
-        expect(screen.getByText("Lowered light switches")).toBeInTheDocument()
-        expect(screen.getByText("Wide unit doorways for wheelchairs")).toBeInTheDocument()
-        expect(screen.getByText("Barrier-free bathrooms")).toBeInTheDocument()
-        expect(screen.getByText("Barrier-free (no-step) unit entrances"))
-      })
     })
 
     describe("should display Additional Eligibility Rules section", () => {
