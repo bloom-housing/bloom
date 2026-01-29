@@ -32,7 +32,6 @@ const AccountApplication = () => {
           listingsService
             ?.retrieve({ id: app.listings.id, view: ListingViews.base })
             .then((retrievedListing) => {
-              console.log({ retrievedListing })
               setListing(retrievedListing)
               setLoading(false)
             })
@@ -54,8 +53,6 @@ const AccountApplication = () => {
         })
     }
   }, [profile, applicationId, applicationsService, listingsService])
-
-  console.log({ application })
 
   return (
     <>
