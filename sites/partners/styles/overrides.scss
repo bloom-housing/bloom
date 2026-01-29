@@ -23,6 +23,29 @@
   .seeds-button[data-variant="primary"] {
     color: white; // AG grid styling from UIC was messing up our primary button
   }
+
+  .card-icon {
+    color: var(--seeds-color-primary);
+    background-color: var(--seeds-bg-color-surface-primary);
+    border-radius: var(--seeds-rounded-full);
+    padding: var(--seeds-s2);
+    svg {
+      fill: none;
+      stroke-width: 1px;
+    }
+  }
+
+  .seeds-large-heading {
+    font-family: var(--seeds-font-alt-sans);
+    font-weight: var(--seeds-font-weight-semibold);
+    font-size: var(--seeds-font-size-2xl);
+  }
+
+  .seeds-medium-heading {
+    font-family: var(--seeds-font-alt-sans);
+    font-weight: var(--seeds-font-weight-semibold);
+    font-size: var(--seeds-font-size-xl);
+  }
 }
 
 .section-with-grid hgroup p {
