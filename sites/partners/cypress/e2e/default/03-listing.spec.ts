@@ -2,7 +2,8 @@ import {
   ApplicationAddressTypeEnum,
   ApplicationMethodsTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { bloomingtonListing, CypressListing } from "../../fixtures/bloomingtonListing"
+import { bloomingtonListing } from "../../fixtures/bloomingtonListing"
+import { CypressListing } from "../../fixtures/cypressListingHelpers"
 
 describe("Listing Management Tests", () => {
   beforeEach(() => {
@@ -13,104 +14,104 @@ describe("Listing Management Tests", () => {
     cy.signOutApi()
   })
 
-  // it("error messaging & save dialogs", () => {
-  //   // Test to check that the appropriate error messages happen on submit
-  //   cy.visit("/")
-  //   cy.get("button").contains("Add listing").click()
-  //   cy.getByID("jurisdiction").select("Bloomington")
-  //   cy.get("button").contains("Get started").click()
-  //   cy.contains("New listing")
-  //   // Save an empty listing as a draft and should show errors for appropriate fields
-  //   cy.getByID("saveDraftButton").contains("Save as draft").click()
-  //   cy.contains("Please resolve any errors before saving or publishing your listing.")
-  //   cy.getByID("name-error").contains("This field is required")
-  //   // Fill out minimum fields and errors get removed
-  //   cy.getByID("name").type("Test - error messaging")
-  //   cy.getByID("name-error").should("to.be.empty")
-  //   cy.getByID("saveDraftButton").contains("Save as draft").click()
-  //   cy.contains("Test - error messaging")
-  //   cy.contains("Listing data")
-  //   // Try to publish a listing and should show errors for appropriate fields
-  //   cy.getByID("listingEditButton").contains("Edit").click()
-  //   cy.getByID("reservedCommunityTypes.id").select(1)
-  //   cy.getByID("includeCommunityDisclaimerYes").check()
-  //   cy.getByID("publishButton").contains("Publish").click()
-  //   cy.getByID("publishButtonConfirm").contains("Publish").click()
-  //   cy.contains("Please resolve any errors before saving or publishing your listing.")
-  //   cy.getByID("developer-error").contains("This field is required")
-  //   cy.getByID("photos-error").contains("At least 1 image is required")
-  //   cy.getByID("listingsBuildingAddress.street-error").contains("Cannot enter a partial address")
-  //   cy.getByID("listingsBuildingAddress.city-error").contains("Cannot enter a partial address")
-  //   cy.getByID("listingsBuildingAddress.state-error").contains("Cannot enter a partial address")
-  //   cy.getByID("listingsBuildingAddress.zipCode-error").contains("Cannot enter a partial address")
-  //   cy.get(`[data-variant="alert"`).should(($alertButtons) => {
-  //     expect($alertButtons).to.have.length(2)
-  //     expect($alertButtons[0]).to.have.id("add-photos-button")
-  //     expect($alertButtons[1]).to.have.id("addUnitsButton")
-  //   })
-  //   cy.getByID("units-error").contains("This field is required")
-  //   cy.getByID("communityDisclaimerTitle-error").contains("This field is required")
-  //   cy.get(".textarea-error-message").contains("This field is required")
-  //   cy.getByID("applicationProcessButton").contains("Application process").click()
-  //   cy.getByID("leasingAgentName-error").contains("This field is required")
-  //   cy.getByID("leasingAgentEmail-error").contains("This field is required")
-  //   cy.getByID("leasingAgentPhone-error").contains("This field is required")
-  //   cy.getByID("digitalApplicationChoice-error").contains("This field is required")
-  //   cy.getByID("paperApplicationChoice-error").contains("This field is required")
-  //   cy.getByID("referralOpportunityChoice-error").contains("This field is required")
-  //   // Verify the behavior of Exit discard & confirm
-  //   cy.contains("Listing details").click()
-  //   cy.getByID("name").clear()
-  //   cy.getByID("name").type("Test - error messaging DISCARD")
-  //   cy.getByID("listingsExitButton").click()
-  //   cy.getByID("listing-save-before-exit-dialog-content").contains(
-  //     "Do you want to save your changes before you exit?"
-  //   )
-  //   cy.getByID("saveBeforeExitDiscard").click()
-  //   cy.contains("Test - error messaging")
-  //   cy.getByID("listingEditButton").contains("Edit").click()
-  //   cy.getByID("name").clear()
-  //   cy.getByID("name").type("Test - error messaging DISCARD")
-  //   cy.getByID("listingsExitButton").click()
-  //   cy.getByID("saveBeforeExitConfirm").click()
-  //   cy.contains("Test - error messaging DISCARD")
-  //   // Test save button
-  //   cy.getByID("listingEditButton").contains("Edit").click()
-  //   cy.getByID("saveAndContinueButton").contains("Save").click()
-  //   cy.getByID("name").should("have.value", "Test - error messaging DISCARD")
-  // })
+  it("error messaging & save dialogs", () => {
+    // Test to check that the appropriate error messages happen on submit
+    cy.visit("/")
+    cy.get("button").contains("Add listing").click()
+    cy.getByID("jurisdiction").select("Bloomington")
+    cy.get("button").contains("Get started").click()
+    cy.contains("New listing")
+    // Save an empty listing as a draft and should show errors for appropriate fields
+    cy.getByID("saveDraftButton").contains("Save as draft").click()
+    cy.contains("Please resolve any errors before saving or publishing your listing.")
+    cy.getByID("name-error").contains("This field is required")
+    // Fill out minimum fields and errors get removed
+    cy.getByID("name").type("Test - error messaging")
+    cy.getByID("name-error").should("to.be.empty")
+    cy.getByID("saveDraftButton").contains("Save as draft").click()
+    cy.contains("Test - error messaging")
+    cy.contains("Listing data")
+    // Try to publish a listing and should show errors for appropriate fields
+    cy.getByID("listingEditButton").contains("Edit").click()
+    cy.getByID("reservedCommunityTypes.id").select(1)
+    cy.getByID("includeCommunityDisclaimerYes").check()
+    cy.getByID("publishButton").contains("Publish").click()
+    cy.getByID("publishButtonConfirm").contains("Publish").click()
+    cy.contains("Please resolve any errors before saving or publishing your listing.")
+    cy.getByID("developer-error").contains("This field is required")
+    cy.getByID("photos-error").contains("At least 1 image is required")
+    cy.getByID("listingsBuildingAddress.street-error").contains("Cannot enter a partial address")
+    cy.getByID("listingsBuildingAddress.city-error").contains("Cannot enter a partial address")
+    cy.getByID("listingsBuildingAddress.state-error").contains("Cannot enter a partial address")
+    cy.getByID("listingsBuildingAddress.zipCode-error").contains("Cannot enter a partial address")
+    cy.get(`[data-variant="alert"`).should(($alertButtons) => {
+      expect($alertButtons).to.have.length(2)
+      expect($alertButtons[0]).to.have.id("add-photos-button")
+      expect($alertButtons[1]).to.have.id("addUnitsButton")
+    })
+    cy.getByID("units-error").contains("This field is required")
+    cy.getByID("communityDisclaimerTitle-error").contains("This field is required")
+    cy.get(".textarea-error-message").contains("This field is required")
+    cy.getByID("applicationProcessButton").contains("Application process").click()
+    cy.getByID("leasingAgentName-error").contains("This field is required")
+    cy.getByID("leasingAgentEmail-error").contains("This field is required")
+    cy.getByID("leasingAgentPhone-error").contains("This field is required")
+    cy.getByID("digitalApplicationChoice-error").contains("This field is required")
+    cy.getByID("paperApplicationChoice-error").contains("This field is required")
+    cy.getByID("referralOpportunityChoice-error").contains("This field is required")
+    // Verify the behavior of Exit discard & confirm
+    cy.contains("Listing details").click()
+    cy.getByID("name").clear()
+    cy.getByID("name").type("Test - error messaging DISCARD")
+    cy.getByID("listingsExitButton").click()
+    cy.getByID("listing-save-before-exit-dialog-content").contains(
+      "Do you want to save your changes before you exit?"
+    )
+    cy.getByID("saveBeforeExitDiscard").click()
+    cy.contains("Test - error messaging")
+    cy.getByID("listingEditButton").contains("Edit").click()
+    cy.getByID("name").clear()
+    cy.getByID("name").type("Test - error messaging DISCARD")
+    cy.getByID("listingsExitButton").click()
+    cy.getByID("saveBeforeExitConfirm").click()
+    cy.contains("Test - error messaging DISCARD")
+    // Test save button
+    cy.getByID("listingEditButton").contains("Edit").click()
+    cy.getByID("saveAndContinueButton").contains("Save").click()
+    cy.getByID("name").should("have.value", "Test - error messaging DISCARD")
+  })
 
-  // it("error messaging publish with minimal fields", () => {
-  //   cy.visit("/")
-  //   cy.get("button").contains("Add listing").click()
-  //   cy.getByID("jurisdiction").select("Lakeview")
-  //   cy.get("button").contains("Get started").click()
-  //   cy.contains("New listing")
-  //   // Try to publish a listing and should show errors for appropriate fields
-  //   cy.getByID("publishButton").contains("Publish").click()
-  //   cy.getByID("publishButtonConfirm").contains("Publish").click()
-  //   cy.contains("Please resolve any errors before saving or publishing your listing.")
-  //   cy.getByID("name-error").contains("This field is required")
-  //   cy.getByID("developer-error").contains("This field is required").should("not.exist")
-  //   cy.getByID("listingsBuildingAddress.street-error").contains("Cannot enter a partial address")
-  //   cy.getByID("listingsBuildingAddress.city-error").contains("Cannot enter a partial address")
-  //   cy.getByID("listingsBuildingAddress.state-error").contains("Cannot enter a partial address")
-  //   cy.getByID("listingsBuildingAddress.zipCode-error").contains("Cannot enter a partial address")
-  //   cy.getByID("units-error").should("not.exist")
-  //   cy.getByID("applicationProcessButton").contains("Application process").click()
-  //   cy.getByID("leasingAgentName-error").contains("This field is required").should("not.exist")
-  //   cy.getByID("leasingAgentEmail-error").contains("This field is required").should("not.exist")
-  //   cy.getByID("leasingAgentPhone-error").should("not.exist")
-  //   cy.getByID("digitalApplicationChoice-error").should(
-  //     "not.include.text",
-  //     "This field is required"
-  //   )
-  //   cy.getByID("paperApplicationChoice-error").should("not.include.text", "This field is required")
-  //   cy.getByID("referralOpportunityChoice-error").should(
-  //     "not.include.text",
-  //     "This field is required"
-  //   )
-  // })
+  it("error messaging publish with minimal fields", () => {
+    cy.visit("/")
+    cy.get("button").contains("Add listing").click()
+    cy.getByID("jurisdiction").select("Lakeview")
+    cy.get("button").contains("Get started").click()
+    cy.contains("New listing")
+    // Try to publish a listing and should show errors for appropriate fields
+    cy.getByID("publishButton").contains("Publish").click()
+    cy.getByID("publishButtonConfirm").contains("Publish").click()
+    cy.contains("Please resolve any errors before saving or publishing your listing.")
+    cy.getByID("name-error").contains("This field is required")
+    cy.getByID("developer-error").contains("This field is required").should("not.exist")
+    cy.getByID("listingsBuildingAddress.street-error").contains("Cannot enter a partial address")
+    cy.getByID("listingsBuildingAddress.city-error").contains("Cannot enter a partial address")
+    cy.getByID("listingsBuildingAddress.state-error").contains("Cannot enter a partial address")
+    cy.getByID("listingsBuildingAddress.zipCode-error").contains("Cannot enter a partial address")
+    cy.getByID("units-error").should("not.exist")
+    cy.getByID("applicationProcessButton").contains("Application process").click()
+    cy.getByID("leasingAgentName-error").contains("This field is required").should("not.exist")
+    cy.getByID("leasingAgentEmail-error").contains("This field is required").should("not.exist")
+    cy.getByID("leasingAgentPhone-error").should("not.exist")
+    cy.getByID("digitalApplicationChoice-error").should(
+      "not.include.text",
+      "This field is required"
+    )
+    cy.getByID("paperApplicationChoice-error").should("not.include.text", "This field is required")
+    cy.getByID("referralOpportunityChoice-error").should(
+      "not.include.text",
+      "This field is required"
+    )
+  })
 
   it("full listing publish in Bloomington", () => {
     cy.visit("/")
@@ -1269,20 +1270,20 @@ describe("Listing Management Tests", () => {
     cy.getByID("saveAlreadyLiveListingButtonConfirm").contains("Save").click()
     cy.getByTestId("page-header").should("have.text", listing["editedName"])
   }
-  // it("as admin user, should be able to download listings export zip", () => {
-  //   const convertToString = (value: number) => {
-  //     return value < 10 ? `0${value}` : `${value}`
-  //   }
-  //   cy.visit("/")
-  //   cy.getByID("export-listings").click()
-  //   const now = new Date()
-  //   const dateString = `${now.getFullYear()}-${convertToString(
-  //     now.getMonth() + 1
-  //   )}-${convertToString(now.getDate())}`
-  //   const timeString = `${convertToString(now.getHours())}-${convertToString(now.getMinutes())}`
-  //   const zipName = `${dateString}_${timeString}-complete-listing-data.zip`
-  //   const downloadFolder = Cypress.config("downloadsFolder")
-  //   const completeZipPath = `${downloadFolder}/${zipName}`
-  //   cy.readFile(completeZipPath)
-  // })
+  it("as admin user, should be able to download listings export zip", () => {
+    const convertToString = (value: number) => {
+      return value < 10 ? `0${value}` : `${value}`
+    }
+    cy.visit("/")
+    cy.getByID("export-listings").click()
+    const now = new Date()
+    const dateString = `${now.getFullYear()}-${convertToString(
+      now.getMonth() + 1
+    )}-${convertToString(now.getDate())}`
+    const timeString = `${convertToString(now.getHours())}-${convertToString(now.getMinutes())}`
+    const zipName = `${dateString}_${timeString}-complete-listing-data.zip`
+    const downloadFolder = Cypress.config("downloadsFolder")
+    const completeZipPath = `${downloadFolder}/${zipName}`
+    cy.readFile(completeZipPath)
+  })
 })
