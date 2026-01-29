@@ -568,6 +568,11 @@ const ListingForm = ({
                                 ? selectedJurisdictionData?.name
                                 : null
                             }
+                            jurisdictionId={
+                              profile?.jurisdictions?.length > 1
+                                ? selectedJurisdictionData?.id
+                                : null
+                            }
                             listingId={listing?.id}
                             requiredFields={requiredFields}
                           />

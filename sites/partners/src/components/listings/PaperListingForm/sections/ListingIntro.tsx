@@ -23,6 +23,7 @@ interface ListingIntroProps {
   enableListingFileNumber?: boolean
   enableNonRegulatedListings?: boolean
   jurisdictionName: string
+  jurisdictionId?: string
   listingId: string
   requiredFields: string[]
   property?: Property
@@ -51,7 +52,7 @@ const ListingIntro = (props: ListingIntroProps) => {
 
   const enableProperties = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableProperties,
-    listing.jurisdictions.id
+    props.jurisdictionId
   )
 
   const listingType = watch("listingType")
@@ -64,6 +65,8 @@ const ListingIntro = (props: ListingIntroProps) => {
 
   const propertiesData = data?.items ?? []
   const showPropertiesDropDown = propertiesData.length > 1 && enableProperties
+  console.log("enableProperties", enableProperties)
+  console.log("jurisdictionName", props.jurisdictionName)
 
   const propertyOptions: SelectOption[] =
     propertiesData.length !== 0
