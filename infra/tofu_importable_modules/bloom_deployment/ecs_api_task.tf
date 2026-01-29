@@ -2,7 +2,7 @@ locals {
   api_default_env_vars = {
     PORT                = "3100"
     NODE_ENV            = "production"
-    DB_HOST             = aws_db_instance.bloom.endpoint
+    DB_HOST             = aws_db_instance.bloom.address
     DB_PORT             = "5432"
     DB_USER             = "bloom_api"
     DB_DATABASE         = "bloom_prisma"
