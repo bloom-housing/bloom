@@ -3,7 +3,7 @@ import { render, fireEvent, waitFor, act } from "@testing-library/react"
 import { useRouter } from "next/router"
 import { MessageContext, AuthContext } from "@bloom-housing/shared-helpers"
 import { jurisdiction } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
-import { User, UserService } from "../../../../shared-helpers/src/types/backend-swagger"
+import { User, UserService } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { SignIn as SignInComponent } from "../../src/pages/sign-in"
 import { Verify } from "../../src/pages/verify"
 

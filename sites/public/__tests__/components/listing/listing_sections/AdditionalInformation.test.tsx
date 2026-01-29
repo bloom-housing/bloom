@@ -106,7 +106,8 @@ describe("<AdditionalInformation>", () => {
       within(additionalDocumentsCard).getByText("Test additional documents info")
     ).toBeInTheDocument()
   })
-  it("shows documents partial list for non-regualted listings", () => {
+
+  it("shows documents partial list for non-regulated listings", () => {
     render(
       <AdditionalInformation
         additionalInformation={getAdditionalInformation({

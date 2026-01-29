@@ -23,7 +23,7 @@ export const Features = ({ children, features }: FeaturesProps) => {
       <div className={`${styles["mobile-inline-collapse-padding"]} seeds-m-bs-section`}>
         {features.map((feature, index) => {
           return (
-            <>
+            <div key={index}>
               <HeadingGroup
                 heading={feature.heading}
                 subheading={feature.subheading}
@@ -31,10 +31,9 @@ export const Features = ({ children, features }: FeaturesProps) => {
                 className={`${styles["heading-group"]} ${
                   !feature.content ? "seeds-m-be-section" : "seeds-m-be-label"
                 }`}
-                key={index}
               />
               <div className={"seeds-m-be-section"}>{feature.content}</div>
-            </>
+            </div>
           )
         })}
         {children}
