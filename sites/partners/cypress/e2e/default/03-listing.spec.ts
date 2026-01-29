@@ -1,3 +1,10 @@
+import {
+  ApplicationAddressTypeEnum,
+  ApplicationMethodsTypeEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { bloomingtonListing } from "../../fixtures/bloomingtonListing"
+import { CypressListing } from "../../fixtures/cypressListingHelpers"
+
 describe("Listing Management Tests", () => {
   beforeEach(() => {
     cy.loginApi()
@@ -7,668 +14,1246 @@ describe("Listing Management Tests", () => {
     cy.signOutApi()
   })
 
-  // it("error messaging & save dialogs", () => {
-  //   // Test to check that the appropriate error messages happen on submit
-  //   cy.visit("/")
-  //   cy.get("button").contains("Add listing").click()
-  //   cy.getByID("jurisdiction").select("Bloomington")
-  //   cy.get("button").contains("Get started").click()
-  //   cy.contains("New listing")
-  //   // Save an empty listing as a draft and should show errors for appropriate fields
-  //   cy.getByID("saveDraftButton").contains("Save as draft").click()
-  //   cy.contains("Please resolve any errors before saving or publishing your listing.")
-  //   cy.getByID("name-error").contains("This field is required")
-  //   // Fill out minimum fields and errors get removed
-  //   cy.getByID("name").type("Test - error messaging")
-  //   cy.getByID("name-error").should("to.be.empty")
-  //   cy.getByID("saveDraftButton").contains("Save as draft").click()
-  //   cy.contains("Test - error messaging")
-  //   cy.contains("Listing data")
-  //   // Try to publish a listing and should show errors for appropriate fields
-  //   cy.getByID("listingEditButton").contains("Edit").click()
-  //   cy.getByID("reservedCommunityTypes.id").select(1)
-  //   cy.getByID("includeCommunityDisclaimerYes").check()
-  //   cy.getByID("publishButton").contains("Publish").click()
-  //   cy.getByID("publishButtonConfirm").contains("Publish").click()
-  //   cy.contains("Please resolve any errors before saving or publishing your listing.")
-  //   cy.getByID("developer-error").contains("This field is required")
-  //   cy.getByID("photos-error").contains("At least 1 image is required")
-  //   cy.getByID("listingsBuildingAddress.street-error").contains("Cannot enter a partial address")
-  //   cy.getByID("listingsBuildingAddress.city-error").contains("Cannot enter a partial address")
-  //   cy.getByID("listingsBuildingAddress.state-error").contains("Cannot enter a partial address")
-  //   cy.getByID("listingsBuildingAddress.zipCode-error").contains("Cannot enter a partial address")
-  //   cy.get(`[data-variant="alert"`).should(($alertButtons) => {
-  //     expect($alertButtons).to.have.length(2)
-  //     expect($alertButtons[0]).to.have.id("add-photos-button")
-  //     expect($alertButtons[1]).to.have.id("addUnitsButton")
-  //   })
-  //   cy.getByID("units-error").contains("This field is required")
-  //   cy.getByID("communityDisclaimerTitle-error").contains("This field is required")
-  //   cy.get(".textarea-error-message").contains("This field is required")
-  //   cy.getByID("applicationProcessButton").contains("Application process").click()
-  //   cy.getByID("leasingAgentName-error").contains("This field is required")
-  //   cy.getByID("leasingAgentEmail-error").contains("This field is required")
-  //   cy.getByID("leasingAgentPhone-error").contains("This field is required")
-  //   cy.getByID("digitalApplicationChoice-error").contains("This field is required")
-  //   cy.getByID("paperApplicationChoice-error").contains("This field is required")
-  //   cy.getByID("referralOpportunityChoice-error").contains("This field is required")
-  //   // Verify the behavior of Exit discard & confirm
-  //   cy.contains("Listing details").click()
-  //   cy.getByID("name").clear()
-  //   cy.getByID("name").type("Test - error messaging DISCARD")
-  //   cy.getByID("listingsExitButton").click()
-  //   cy.getByID("listing-save-before-exit-dialog-content").contains(
-  //     "Do you want to save your changes before you exit?"
-  //   )
-  //   cy.getByID("saveBeforeExitDiscard").click()
-  //   cy.contains("Test - error messaging")
-  //   cy.getByID("listingEditButton").contains("Edit").click()
-  //   cy.getByID("name").clear()
-  //   cy.getByID("name").type("Test - error messaging DISCARD")
-  //   cy.getByID("listingsExitButton").click()
-  //   cy.getByID("saveBeforeExitConfirm").click()
-  //   cy.contains("Test - error messaging DISCARD")
-  //   // Test save button
-  //   cy.getByID("listingEditButton").contains("Edit").click()
-  //   cy.getByID("saveAndContinueButton").contains("Save").click()
-  //   cy.getByID("name").should("have.value", "Test - error messaging DISCARD")
-  // })
-
-  // it("error messaging publish with minimal fields", () => {
-  //   cy.visit("/")
-  //   cy.get("button").contains("Add listing").click()
-  //   cy.getByID("jurisdiction").select("Lakeview")
-  //   cy.get("button").contains("Get started").click()
-  //   cy.contains("New listing")
-  //   // Try to publish a listing and should show errors for appropriate fields
-  //   cy.getByID("publishButton").contains("Publish").click()
-  //   cy.getByID("publishButtonConfirm").contains("Publish").click()
-  //   cy.contains("Please resolve any errors before saving or publishing your listing.")
-  //   cy.getByID("name-error").contains("This field is required")
-  //   cy.getByID("developer-error").contains("This field is required").should("not.exist")
-  //   cy.getByID("listingsBuildingAddress.street-error").contains("Cannot enter a partial address")
-  //   cy.getByID("listingsBuildingAddress.city-error").contains("Cannot enter a partial address")
-  //   cy.getByID("listingsBuildingAddress.state-error").contains("Cannot enter a partial address")
-  //   cy.getByID("listingsBuildingAddress.zipCode-error").contains("Cannot enter a partial address")
-  //   cy.getByID("units-error").should("not.exist")
-  //   cy.getByID("applicationProcessButton").contains("Application process").click()
-  //   cy.getByID("leasingAgentName-error").contains("This field is required").should("not.exist")
-  //   cy.getByID("leasingAgentEmail-error").contains("This field is required").should("not.exist")
-  //   cy.getByID("leasingAgentPhone-error").should("not.exist")
-  //   cy.getByID("digitalApplicationChoice-error").should(
-  //     "not.include.text",
-  //     "This field is required"
-  //   )
-  //   cy.getByID("paperApplicationChoice-error").should("not.include.text", "This field is required")
-  //   cy.getByID("referralOpportunityChoice-error").should(
-  //     "not.include.text",
-  //     "This field is required"
-  //   )
-  // })
-
-  it("full listing publish", () => {
+  it("error messaging & save dialogs", () => {
+    // Test to check that the appropriate error messages happen on submit
     cy.visit("/")
-
-    cy.fixture("listing").then((listing) => {
-      cy.get("button").contains("Add listing").click()
-      cy.getByID("jurisdiction").select(listing["jurisdiction.id"])
-      cy.get("button").contains("Get started").click()
-      cy.contains("New listing")
-      fillOutListing(cy, listing)
-      verifyDetails(cy, listing)
-      verifyAutofill(cy, listing)
-      verifyOpenListingWarning(cy, listing)
+    cy.get("button").contains("Add listing").click()
+    cy.getByID("jurisdiction").select("Bloomington")
+    cy.get("button").contains("Get started").click()
+    cy.contains("New listing")
+    // Save an empty listing as a draft and should show errors for appropriate fields
+    cy.getByID("saveDraftButton").contains("Save as draft").click()
+    cy.contains("Please resolve any errors before saving or publishing your listing.")
+    cy.getByID("name-error").contains("This field is required")
+    // Fill out minimum fields and errors get removed
+    cy.getByID("name").type("Test - error messaging")
+    cy.getByID("name-error").should("to.be.empty")
+    cy.getByID("saveDraftButton").contains("Save as draft").click()
+    cy.contains("Test - error messaging")
+    cy.contains("Listing data")
+    // Try to publish a listing and should show errors for appropriate fields
+    cy.getByID("listingEditButton").contains("Edit").click()
+    cy.getByID("reservedCommunityTypes.id").select(1)
+    cy.getByID("includeCommunityDisclaimerYes").check()
+    cy.getByID("publishButton").contains("Publish").click()
+    cy.getByID("publishButtonConfirm").contains("Publish").click()
+    cy.contains("Please resolve any errors before saving or publishing your listing.")
+    cy.getByID("developer-error").contains("This field is required")
+    cy.getByID("photos-error").contains("At least 1 image is required")
+    cy.getByID("listingsBuildingAddress.street-error").contains("Cannot enter a partial address")
+    cy.getByID("listingsBuildingAddress.city-error").contains("Cannot enter a partial address")
+    cy.getByID("listingsBuildingAddress.state-error").contains("Cannot enter a partial address")
+    cy.getByID("listingsBuildingAddress.zipCode-error").contains("Cannot enter a partial address")
+    cy.get(`[data-variant="alert"`).should(($alertButtons) => {
+      expect($alertButtons).to.have.length(2)
+      expect($alertButtons[0]).to.have.id("add-photos-button")
+      expect($alertButtons[1]).to.have.id("addUnitsButton")
     })
+    cy.getByID("units-error").contains("This field is required")
+    cy.getByID("communityDisclaimerTitle-error").contains("This field is required")
+    cy.get(".textarea-error-message").contains("This field is required")
+    cy.getByID("applicationProcessButton").contains("Application process").click()
+    cy.getByID("leasingAgentName-error").contains("This field is required")
+    cy.getByID("leasingAgentEmail-error").contains("This field is required")
+    cy.getByID("leasingAgentPhone-error").contains("This field is required")
+    cy.getByID("digitalApplicationChoice-error").contains("This field is required")
+    cy.getByID("paperApplicationChoice-error").contains("This field is required")
+    cy.getByID("referralOpportunityChoice-error").contains("This field is required")
+    // Verify the behavior of Exit discard & confirm
+    cy.contains("Listing details").click()
+    cy.getByID("name").clear()
+    cy.getByID("name").type("Test - error messaging DISCARD")
+    cy.getByID("listingsExitButton").click()
+    cy.getByID("listing-save-before-exit-dialog-content").contains(
+      "Do you want to save your changes before you exit?"
+    )
+    cy.getByID("saveBeforeExitDiscard").click()
+    cy.contains("Test - error messaging")
+    cy.getByID("listingEditButton").contains("Edit").click()
+    cy.getByID("name").clear()
+    cy.getByID("name").type("Test - error messaging DISCARD")
+    cy.getByID("listingsExitButton").click()
+    cy.getByID("saveBeforeExitConfirm").click()
+    cy.contains("Test - error messaging DISCARD")
+    // Test save button
+    cy.getByID("listingEditButton").contains("Edit").click()
+    cy.getByID("saveAndContinueButton").contains("Save").click()
+    cy.getByID("name").should("have.value", "Test - error messaging DISCARD")
   })
 
+  it("error messaging publish with minimal fields", () => {
+    cy.visit("/")
+    cy.get("button").contains("Add listing").click()
+    cy.getByID("jurisdiction").select("Lakeview")
+    cy.get("button").contains("Get started").click()
+    cy.contains("New listing")
+    // Try to publish a listing and should show errors for appropriate fields
+    cy.getByID("publishButton").contains("Publish").click()
+    cy.getByID("publishButtonConfirm").contains("Publish").click()
+    cy.contains("Please resolve any errors before saving or publishing your listing.")
+    cy.getByID("name-error").contains("This field is required")
+    cy.getByID("developer-error").contains("This field is required").should("not.exist")
+    cy.getByID("listingsBuildingAddress.street-error").contains("Cannot enter a partial address")
+    cy.getByID("listingsBuildingAddress.city-error").contains("Cannot enter a partial address")
+    cy.getByID("listingsBuildingAddress.state-error").contains("Cannot enter a partial address")
+    cy.getByID("listingsBuildingAddress.zipCode-error").contains("Cannot enter a partial address")
+    cy.getByID("units-error").should("not.exist")
+    cy.getByID("applicationProcessButton").contains("Application process").click()
+    cy.getByID("leasingAgentName-error").contains("This field is required").should("not.exist")
+    cy.getByID("leasingAgentEmail-error").contains("This field is required").should("not.exist")
+    cy.getByID("leasingAgentPhone-error").should("not.exist")
+    cy.getByID("digitalApplicationChoice-error").should(
+      "not.include.text",
+      "This field is required"
+    )
+    cy.getByID("paperApplicationChoice-error").should("not.include.text", "This field is required")
+    cy.getByID("referralOpportunityChoice-error").should(
+      "not.include.text",
+      "This field is required"
+    )
+  })
+
+  it("full listing publish in Bloomington", () => {
+    cy.visit("/")
+
+    cy.get("button").contains("Add listing").click()
+    cy.getByID("jurisdiction").select(bloomingtonListing.jurisdictions.id)
+    cy.get("button").contains("Get started").click()
+    cy.contains("New listing")
+    fillOutListing(cy, bloomingtonListing)
+    verifyDetails(cy, bloomingtonListing)
+    verifyAutofill(cy, bloomingtonListing)
+    verifyOpenListingWarning(cy, bloomingtonListing)
+  })
+
+  const fillIfDataExists = (
+    cy: Cypress.cy,
+    id: string,
+    listingValue: string | undefined,
+    entryType: "type" | "select" | "check"
+  ) => {
+    if (listingValue !== undefined && listingValue !== "") {
+      switch (entryType) {
+        case "type":
+          cy.getByID(id).type(listingValue)
+          break
+        case "select":
+          cy.getByID(id).select(listingValue)
+          break
+        case "check":
+          cy.getByID(id).check()
+          break
+      }
+    }
+  }
+
+  const verifyDataIfExists = (
+    cy: Cypress.cy,
+    id: string,
+    listingValue: string | undefined,
+    entryType: "type" | "select" | "check"
+  ) => {
+    if (listingValue !== undefined && listingValue !== "") {
+      switch (entryType) {
+        case "type":
+          cy.getByID(id).should("have.value", listingValue)
+          break
+        case "select":
+          cy.getByID(id).find("option:selected").should("have.text", listingValue)
+          break
+        case "check":
+          cy.getByID(id).should("be.checked")
+          break
+      }
+    }
+  }
+
+  const verifyDetailDataIfExists = (
+    cy: Cypress.cy,
+    id: string,
+    listingValue: string | undefined
+  ) => {
+    if (listingValue !== undefined && listingValue !== "") {
+      cy.getByID(id).contains(listingValue)
+    }
+  }
+
+  const verifyRadioIfExists = (
+    cy: Cypress.cy,
+    idTrue: string,
+    idFalse: string,
+    listingValue: boolean | undefined
+  ) => {
+    if (listingValue !== undefined) {
+      cy.getByID(listingValue ? idTrue : idFalse).should("be.checked")
+    }
+  }
+
+  const fillRadio = (
+    cy: Cypress.cy,
+    idTrue: string,
+    idFalse: string,
+    listingValue: boolean | undefined
+  ) => {
+    if (listingValue !== undefined) {
+      cy.getByID(listingValue ? idTrue : idFalse).check()
+    }
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  function fillOutListing(cy: Cypress.cy, listing: any): void {
+  function fillOutListing(cy: Cypress.cy, listing: CypressListing): void {
     cy.intercept("GET", "/geocoding/v5/**", { fixture: "address" })
     cy.intercept("POST", "https://api.cloudinary.com/v1_1/exygy/upload", {
       fixture: "cypressUpload",
     })
-    cy.intercept(
-      "GET",
-      "https://res.cloudinary.com/exygy/image/upload/w_400,c_limit,q_65/dev/cypress-automated-image-upload-071e2ab9-5a52-4f34-85f0-e41f696f4b96.jpg",
-      {
-        fixture: "cypress-automated-image-upload-071e2ab9-5a52-4f34-85f0-e41f696f4b96.jpeg",
-      }
-    )
-    cy.getByID("name").type(listing["name"])
-    cy.getByID("developer").type(listing["developer"])
+
+    fillIfDataExists(cy, "name", listing.name, "type")
+    fillIfDataExists(cy, "developer", listing.developer, "type")
+
     // Test photo upload
-    cy.getByID("add-photos-button").contains("Add photo").click()
-    cy.getByTestId("dropzone-input").attachFile(
-      "cypress-automated-image-upload-071e2ab9-5a52-4f34-85f0-e41f696f4b96.jpeg",
-      {
-        subjectType: "drag-n-drop",
-      }
-    )
-    cy.getByTestId("drawer-photos-table")
-      .find("img")
-      .should("have.attr", "src")
-      .should("include", "cypress-automated-image-upload-071e2ab9-5a52-4f34-85f0-e41f696f4b96")
-    cy.getByID("listing-photo-uploaded").contains("Save").click()
-    cy.getByTestId("photos-table")
-      .find("img")
-      .should("have.attr", "src")
-      .should("include", "cypress-automated-image-upload-071e2ab9-5a52-4f34-85f0-e41f696f4b96")
+    if (listing.cypressImages?.length) {
+      listing.cypressImages.forEach((cypressImage, index) => {
+        cy.intercept(
+          "GET",
+          `https://res.cloudinary.com/exygy/image/upload/w_400,c_limit,q_65/dev/${cypressImage.fixtureName}`,
+          {
+            fixture: cypressImage.fixtureName,
+          }
+        )
+        cy.intercept("POST", "https://api.cloudinary.com/v1_1/exygy/upload", {
+          public_id: `dev/${cypressImage.fixtureName.replace(".jpg", "")}`,
+        })
+        cy.getByID("add-photos-button")
+          .contains(index > 0 ? "Edit photos" : "Add photo")
+          .click()
+        cy.getByTestId("dropzone-input").attachFile(cypressImage.fixtureName, {
+          subjectType: "drag-n-drop",
+        })
 
-    cy.intercept("POST", "https://api.cloudinary.com/v1_1/exygy/upload", {
-      public_id: "dev/cypress-automated-image-upload-46806882-b98d-49d7-ac83-8016ab4b2f08",
-    })
-    cy.intercept(
-      "GET",
-      "https://res.cloudinary.com/exygy/image/upload/w_400,c_limit,q_65/dev/cypress-automated-image-upload-46806882-b98d-49d7-ac83-8016ab4b2f08.jpg",
-      {
-        fixture: "cypress-automated-image-upload-46806882-b98d-49d7-ac83-8016ab4b2f08.jpg",
-      }
-    )
-    cy.getByID("add-photos-button").contains("Edit photos").click()
-    cy.getByTestId("dropzone-input").attachFile(
-      "cypress-automated-image-upload-46806882-b98d-49d7-ac83-8016ab4b2f08.jpg",
-      {
-        subjectType: "drag-n-drop",
-      }
-    )
-    cy.getByTestId("drawer-photos-table")
-      .find("img")
-      .eq(1)
-      .should("have.attr", "src")
-      .should("include", "cypress-automated-image-upload-46806882-b98d-49d7-ac83-8016ab4b2f08")
-    cy.getByID("listing-photo-uploaded").contains("Save").click()
-    cy.getByTestId("photos-table")
-      .find("img")
-      .eq(1)
-      .should("have.attr", "src")
-      .should("include", "cypress-automated-image-upload-46806882-b98d-49d7-ac83-8016ab4b2f08")
-    cy.getByTestId("photos-table").get("tbody > tr").should("have.length", 2)
-    cy.getByTestId("photos-table")
-      .get("tbody > tr:nth-of-type(2)")
-      .should("not.contain", "Primary photo")
-    cy.getByID("listingsBuildingAddress.street").type(listing["buildingAddress.street"])
-    cy.getByID("neighborhood").type(listing["neighborhood"])
-    cy.getByID("listingsBuildingAddress.city").type(listing["buildingAddress.city"])
-    cy.getByID("listingsBuildingAddress.state").select(listing["buildingAddress.state"])
-    cy.getByID("listingsBuildingAddress.zipCode").type(listing["buildingAddress.zipCode"])
-    cy.getByID("yearBuilt").type(listing["yearBuilt"])
-    cy.getByID("map-address-popup").contains(listing["buildingAddress.street"])
-    cy.getByID("reservedCommunityTypes.id").select(listing["reservedCommunityType.id"], {
-      force: true,
-    })
-    cy.getByID("reservedCommunityDescription").type(listing["reservedCommunityDescription"])
-    cy.getByID("includeCommunityDisclaimerYes").check()
-    cy.getByID("communityDisclaimerTitle").type(listing["communityDisclaimerTitle"])
-    cy.getByID("communityDisclaimerDescription").type(listing["communityDisclaimerDescription"])
-    cy.getByTestId("unit-types").check()
-    cy.getByTestId("listingAvailability.availableUnits").check()
-    if (listing["homeType"]) {
-      cy.getByID("homeType").select(listing["homeType"])
+        if (cypressImage.altText) {
+          cy.getByID("image-description").type(cypressImage.altText)
+          cy.getByID("save-alt-text-button").contains("Save").click()
+        }
+        cy.getByID(`listing-drawer-image-${index}`)
+          .should("have.attr", "src")
+          .should("include", cypressImage.fixtureName.replace(".jpg", ""))
+        cy.getByID("listing-photo-uploaded").contains("Save").click()
+        cy.getByID(`listing-detail-image-${index}`)
+          .should("have.attr", "src")
+          .should("include", cypressImage.fixtureName.replace(".jpg", ""))
+      })
+
+      cy.getByTestId("photos-table")
+        .get("tbody > tr")
+        .should("have.length", listing.cypressImages?.length)
     }
-    cy.getByID("addUnitsButton").contains("Add unit").click()
-    cy.getByID("number").type(listing["number"])
-    cy.getByID("unitTypes.id").select(listing["unitType.id"])
-    cy.getByID("numBathrooms").select(listing["numBathrooms"])
-    cy.getByID("floor").select(listing["floor"])
-    cy.getByID("sqFeet").type(listing["sqFeet"])
-    cy.getByID("minOccupancy").select(listing["minOccupancy"])
-    cy.getByID("maxOccupancy").select(listing["maxOccupancy"])
-    cy.getByID("fixed").check({ force: true })
-    cy.getByID("monthlyIncomeMin").type(listing["monthlyIncomeMin"])
-    cy.getByID("monthlyRent").type(listing["monthlyRent"])
-    cy.getByID("unitAccessibilityPriorityTypes.id").select(listing["priorityType.id"])
-    cy.get("button").contains("Save & exit").click()
-    cy.getByID("amiChart.id").find("option").should("have.length", 3)
-    cy.getByID("amiChart.id").select(1).trigger("change")
-    cy.getByID("amiPercentage").select(1)
-    cy.get("button").contains("Save & exit").click()
-    cy.get("#add-preferences-button").contains("Add preference").click()
-    cy.get(".seeds-card-section > .seeds-button").contains("Select preferences").click()
-    cy.get(
-      ":nth-child(1) > .seeds-grid > .seeds-grid-row > .seeds-grid-cell > .field > div > .label"
+
+    fillIfDataExists(
+      cy,
+      "listingsBuildingAddress.street",
+      listing.listingsBuildingAddress.street,
+      "type"
     )
-      .contains("Work in the city")
-      .click()
-    cy.getByID("addPreferenceSaveButton").contains("Save").click()
-    cy.getByID("selectAndOrderSaveButton").contains("Save").click()
-    cy.getByID("applicationFee").type(listing["applicationFee"])
-    cy.getByID("depositMin").clear().type(listing["depositMin"])
-    cy.getByID("depositMax").clear().type(listing["depositMax"])
-    cy.getByID("costsNotIncluded").type(listing["costsNotIncluded"])
-    if (listing["utilities"]) {
-      listing["utilities"].forEach((utility: string) => {
-        cy.getByID(utility.toLowerCase()).check()
+    fillIfDataExists(cy, "neighborhood", listing.neighborhood, "type")
+    fillIfDataExists(
+      cy,
+      "listingsBuildingAddress.city",
+      listing.listingsBuildingAddress.city,
+      "type"
+    )
+    fillIfDataExists(
+      cy,
+      "listingsBuildingAddress.state",
+      listing.listingsBuildingAddress.state,
+      "select"
+    )
+    fillIfDataExists(
+      cy,
+      "listingsBuildingAddress.zipCode",
+      listing.listingsBuildingAddress.zipCode,
+      "type"
+    )
+    fillIfDataExists(cy, "yearBuilt", listing.yearBuilt?.toString(), "type")
+
+    cy.getByID("map-address-popup").contains(listing.listingsBuildingAddress.street)
+
+    fillIfDataExists(cy, "reservedCommunityTypes.id", listing.reservedCommunityTypes?.id, "select")
+    fillIfDataExists(
+      cy,
+      "reservedCommunityDescription",
+      listing.reservedCommunityDescription,
+      "type"
+    )
+
+    fillRadio(
+      cy,
+      "includeCommunityDisclaimerYes",
+      "includeCommunityDisclaimerNo",
+      listing.includeCommunityDisclaimer
+    )
+
+    fillIfDataExists(cy, "communityDisclaimerTitle", listing.communityDisclaimerTitle, "type")
+    fillIfDataExists(
+      cy,
+      "communityDisclaimerDescription",
+      listing.communityDisclaimerDescription,
+      "type"
+    )
+
+    fillRadio(cy, "unitTypes", "individual-units", listing.disableUnitsAccordion)
+
+    // TODO - Test a waitlist listing
+    if (
+      listing.reviewOrderType === "firstComeFirstServe" ||
+      listing.reviewOrderType === "lottery"
+    ) {
+      cy.getByID("availableUnits").check()
+    } else {
+      cy.getByID("openWaitlist").check()
+    }
+
+    fillIfDataExists(cy, "homeType", listing.homeType, "select")
+
+    listing.units.forEach((unit) => {
+      cy.getByID("addUnitsButton").contains("Add unit").click()
+      fillIfDataExists(cy, "number", unit.number, "type")
+      fillIfDataExists(cy, "unitTypes.id", unit?.unitTypes?.id, "select")
+      fillIfDataExists(cy, "numBathrooms", unit.numBathrooms?.toString(), "select")
+      fillIfDataExists(cy, "floor", unit.floor?.toString(), "select")
+      fillIfDataExists(cy, "sqFeet", unit.sqFeet, "type")
+      fillIfDataExists(cy, "minOccupancy", unit.minOccupancy?.toString(), "select")
+      fillIfDataExists(cy, "maxOccupancy", unit.maxOccupancy?.toString(), "select")
+
+      fillIfDataExists(
+        cy,
+        "unitAccessibilityPriorityTypes.id",
+        unit?.unitAccessibilityPriorityTypes?.id,
+        "select"
+      )
+
+      if (unit.monthlyRentAsPercentOfIncome) {
+        cy.getByID("percentage").check({ force: true })
+        fillIfDataExists(
+          cy,
+          "monthlyRentAsPercentOfIncome",
+          unit.monthlyRentAsPercentOfIncome,
+          "type"
+        )
+      } else {
+        cy.getByID("fixed").check({ force: true })
+        fillIfDataExists(cy, "monthlyIncomeMin", unit.monthlyIncomeMin, "type")
+        fillIfDataExists(cy, "monthlyRent", unit.monthlyRent, "type")
+      }
+      // TODO - Vary AMI chart selections
+      cy.getByID("amiChart.id").find("option").should("have.length", 3)
+      cy.getByID("amiChart.id").select(1).trigger("change")
+      cy.getByID("amiPercentage").select(1)
+      cy.get("button").contains("Save & exit").click()
+    })
+
+    // TODO - Allow for dynamic preferences & programs
+    cy.getByID("add-preferences-button").contains("Add preference").click()
+    cy.getByID("select-preferences-button").contains("Select preferences").click()
+    cy.contains("label", "Work in the city").click()
+    cy.getByID("add-preferences-save-button").contains("Save").click()
+    cy.getByID("select-and-order-save-button").contains("Save").click()
+
+    cy.getByID("add-programs-button").contains("Add program").click()
+    cy.getByID("select-programs-button").contains("Select programs").click()
+    cy.contains("label", "Veteran").click()
+    cy.getByID("add-programs-save-button").contains("Save").click()
+    cy.getByID("select-and-order-save-button").contains("Save").click()
+
+    fillIfDataExists(cy, "applicationFee", listing.applicationFee, "type")
+    fillIfDataExists(cy, "depositMin", listing.depositMin, "type")
+    fillIfDataExists(cy, "depositMax", listing.depositMax, "type")
+    fillIfDataExists(cy, "costsNotIncluded", listing.costsNotIncluded, "type")
+
+    if (listing.listingUtilities) {
+      Object.keys(listing.listingUtilities).forEach((utility) => {
+        if (listing.listingUtilities?.[utility as keyof typeof listing.listingUtilities] === true) {
+          cy.getByID(utility.toLowerCase()).check()
+        }
       })
     }
-    cy.getByID("amenities").type(listing["amenities"])
-    cy.getByID("accessibility").type(listing["accessibility"])
-    cy.getByID("unitAmenities").type(listing["unitAmenities"])
-    cy.getByID("smokingPolicy").type(listing["smokingPolicy"])
-    cy.getByID("petPolicy").type(listing["petPolicy"])
-    cy.getByID("servicesOffered").type(listing["servicesOffered"])
 
-    cy.getByID("listingNeighborhoodAmenities.publicTransportation").type(
-      listing["listingNeighborhoodAmenities.publicTransportation"]
-    )
-    cy.getByID("listingNeighborhoodAmenities.parksAndCommunityCenters").type(
-      listing["listingNeighborhoodAmenities.parksAndCommunityCenters"]
-    )
-    cy.getByID("listingNeighborhoodAmenities.schools").type(
-      listing["listingNeighborhoodAmenities.schools"]
-    )
-    cy.getByID("listingNeighborhoodAmenities.groceryStores").type(
-      listing["listingNeighborhoodAmenities.groceryStores"]
-    )
-    cy.getByID("listingNeighborhoodAmenities.pharmacies").type(
-      listing["listingNeighborhoodAmenities.pharmacies"]
-    )
-    cy.getByID("listingNeighborhoodAmenities.healthCareResources").type(
-      listing["listingNeighborhoodAmenities.healthCareResources"]
-    )
-
-    if (listing["accessibilityFeatures"]) {
-      // here
-      listing["accessibilityFeatures"].forEach((feature: string[]) => {
-        cy.getByID(`configurableAccessibilityFeatures.${feature[0]}`).check()
+    if (listing.listingFeatures) {
+      Object.keys(listing.listingFeatures).forEach((feature) => {
+        if (listing.listingFeatures?.[feature as keyof typeof listing.listingFeatures] === true) {
+          cy.getByID(`configurableAccessibilityFeatures.${feature.toLowerCase()}`).check()
+        }
       })
     }
-    cy.getByID("creditHistory").type(listing["creditHistory"])
-    cy.getByID("rentalHistory").type(listing["rentalHistory"])
-    cy.getByID("criminalBackground").type(listing["criminalBackground"])
-    cy.getByID("addBuildingSelectionCriteriaButton")
-      .contains("Add building selection criteria")
-      .click()
-    cy.getByID("criteriaAttachTypeURL").check()
-    cy.getByID("buildingSelectionCriteriaURL").type(listing["buildingSelectionCriteriaURL"])
-    cy.getByID("saveBuildingSelectionCriteriaButton").contains("Save").click()
-    cy.getByID("requiredDocuments").type(listing["requiredDocuments"])
-    cy.getByID("programRules").type(listing["programRules"])
-    cy.getByID("specialNotes").type(listing["specialNotes"])
+
+    if (listing.listingNeighborhoodAmenities) {
+      Object.keys(listing.listingNeighborhoodAmenities).forEach((amenity) => {
+        fillIfDataExists(
+          cy,
+          `listingNeighborhoodAmenities.${amenity}`,
+          listing.listingNeighborhoodAmenities?.[
+            amenity as keyof typeof listing.listingNeighborhoodAmenities
+          ] as string,
+          "type"
+        )
+      })
+    }
+
+    fillIfDataExists(cy, "amenities", listing.amenities, "type")
+    fillIfDataExists(cy, "accessibility", listing.accessibility, "type")
+    fillIfDataExists(cy, "unitAmenities", listing.unitAmenities, "type")
+    fillIfDataExists(cy, "smokingPolicy", listing.smokingPolicy, "type")
+    fillIfDataExists(cy, "petPolicy", listing.petPolicy, "type")
+    fillIfDataExists(cy, "servicesOffered", listing.servicesOffered, "type")
+
+    fillIfDataExists(cy, "creditHistory", listing.creditHistory, "type")
+    fillIfDataExists(cy, "rentalHistory", listing.rentalHistory, "type")
+    fillIfDataExists(cy, "criminalBackground", listing.criminalBackground, "type")
+
+    // TODO - Test building selection criteria PDF
+    if (listing.buildingSelectionCriteria) {
+      cy.getByID("addBuildingSelectionCriteriaButton")
+        .contains("Add building selection criteria")
+        .click()
+      cy.getByID("criteriaAttachTypeURL").check()
+      cy.getByID("buildingSelectionCriteriaURL").type(listing.buildingSelectionCriteria)
+      cy.getByID("saveBuildingSelectionCriteriaButton").contains("Save").click()
+    }
+
+    fillIfDataExists(cy, "requiredDocuments", listing.requiredDocuments, "type")
+    fillIfDataExists(cy, "programRules", listing.programRules, "type")
+    fillIfDataExists(cy, "specialNotes", listing.specialNotes, "type")
+
+    // Second tab
     cy.get("button").contains("Application process").click()
-    cy.getByID("reviewOrderFCFS").check()
-    cy.getByID("waitlistOpenNo").check()
-    cy.getByID("whatToExpect").children().first().clear()
-    cy.getByID("whatToExpect").type("Custom unformatted text")
-    cy.getByID("whatToExpect").type("{enter}Item A")
-    cy.getByID("whatToExpect")
-      .parent()
-      .within(() => {
-        cy.getByID("editor-bullet-list").click()
-      })
-    cy.getByID("whatToExpect").click()
-    cy.getByID("whatToExpect").type("{enter}Item B{enter}Item C")
-    cy.getByID("leasingAgentName").type(listing["leasingAgentName"])
-    cy.getByID("leasingAgentEmail").type(listing["leasingAgentEmail"])
-    cy.getByID("leasingAgentPhone").type(listing["leasingAgentPhone"])
-    cy.getByID("leasingAgentTitle").type(listing["leasingAgentTitle"])
-    cy.getByID("leasingAgentOfficeHours").type(listing["leasingAgentOfficeHours"])
-    cy.getByID("digitalApplicationChoiceYes").check()
-    cy.getByID("commonDigitalApplicationChoiceNo").check()
-    cy.getByID("customOnlineApplicationUrl").type(listing["url"])
-    cy.getByID("paperApplicationNo").check()
-    cy.getByID("referralOpportunityYes").check()
-    cy.getByID("referralContactPhone").type(listing["referralContactPhone"])
-    cy.getByID("referralSummary").type(listing["referralSummary"])
 
-    cy.getByID("listingsLeasingAgentAddress.street").type(listing["leasingAgentAddress.street"])
-    cy.getByID("listingsLeasingAgentAddress.street2").type(listing["leasingAgentAddress.street2"])
-    cy.getByID("listingsLeasingAgentAddress.city").type(listing["leasingAgentAddress.city"])
-    cy.getByID("listingsLeasingAgentAddress.zipCode").type(listing["leasingAgentAddress.zipCode"])
-    cy.getByID("listingsLeasingAgentAddress.state").select(listing["leasingAgentAddress.state"])
+    if (listing.reviewOrderType === "firstComeFirstServe") {
+      cy.getByID("reviewOrderFCFS").check()
+      cy.getByID("waitlistOpenNo").check()
+    } else if (listing.reviewOrderType === "lottery") {
+      // TODO - Test a lottery listing and fill out date details
+      cy.getByID("reviewOrderLottery").check()
+    }
+
+    if (listing.whatToExpect) {
+      fillIfDataExists(cy, "whatToExpect", listing.whatToExpect, "type")
+    } else {
+      // Testing rich text editor if data is null
+      cy.getByID("whatToExpect").children().first().clear()
+      cy.getByID("whatToExpect").type("Custom unformatted text")
+      cy.getByID("whatToExpect").type("{enter}Item A")
+      cy.getByID("whatToExpect")
+        .parent()
+        .within(() => {
+          cy.getByID("editor-bullet-list").click()
+        })
+      cy.getByID("whatToExpect").click()
+      cy.getByID("whatToExpect").type("{enter}Item B{enter}Item C")
+    }
+
+    fillIfDataExists(cy, "leasingAgentName", listing.leasingAgentName, "type")
+    fillIfDataExists(cy, "leasingAgentEmail", listing.leasingAgentEmail, "type")
+    fillIfDataExists(cy, "leasingAgentPhone", listing.leasingAgentPhone, "type")
+    fillIfDataExists(cy, "leasingAgentTitle", listing.leasingAgentTitle, "type")
+    fillIfDataExists(cy, "leasingAgentOfficeHours", listing.leasingAgentOfficeHours, "type")
+
+    const internalMethod = listing.applicationMethods.find(
+      (method) => method.type === ApplicationMethodsTypeEnum.Internal
+    )
+
+    const externalMethod = listing.applicationMethods.find(
+      (method) => method.type === ApplicationMethodsTypeEnum.ExternalLink
+    )
+
+    const referralMethod = listing.applicationMethods.find(
+      (method) => method.type === ApplicationMethodsTypeEnum.Referral
+    )
+
+    if (internalMethod || externalMethod) {
+      cy.getByID("digitalApplicationChoiceYes").check()
+    }
+
+    if (externalMethod) {
+      cy.getByID("commonDigitalApplicationChoiceNo").check()
+      fillIfDataExists(cy, "customOnlineApplicationUrl", externalMethod.externalReference, "type")
+    } else {
+      cy.getByID("commonDigitalApplicationChoiceYes").check()
+    }
+
+    // TODO - Test paper application upload
+    cy.getByID("paperApplicationNo").check()
+
+    if (referralMethod) {
+      cy.getByID("referralOpportunityYes").check()
+      fillIfDataExists(cy, "referralContactPhone", referralMethod.phoneNumber, "type")
+    }
+
+    fillIfDataExists(
+      cy,
+      "listingsLeasingAgentAddress.street",
+      listing.listingsLeasingAgentAddress?.street,
+      "type"
+    )
+    fillIfDataExists(
+      cy,
+      "listingsLeasingAgentAddress.street2",
+      listing.listingsLeasingAgentAddress?.street2,
+      "type"
+    )
+    fillIfDataExists(
+      cy,
+      "listingsLeasingAgentAddress.city",
+      listing.listingsLeasingAgentAddress?.city,
+      "type"
+    )
+    fillIfDataExists(
+      cy,
+      "listingsLeasingAgentAddress.zipCode",
+      listing.listingsLeasingAgentAddress?.zipCode,
+      "type"
+    )
+    fillIfDataExists(
+      cy,
+      "listingsLeasingAgentAddress.state",
+      listing.listingsLeasingAgentAddress?.state,
+      "select"
+    )
 
     cy.getByID("applicationsMailedInYes").check()
     cy.getByID("mailInAnotherAddress").check()
-    cy.getByTestId("mailing-address-street").type(listing["leasingAgentAddress.street"])
-    cy.getByTestId("mailing-address-street2").type(listing["leasingAgentAddress.street2"])
-    cy.getByTestId("mailing-address-city").type(listing["leasingAgentAddress.city"])
-    cy.getByTestId("mailing-address-zip").type(listing["leasingAgentAddress.zipCode"])
-    cy.getByTestId("mailing-address-state").select(listing["leasingAgentAddress.state"])
-
-    cy.getByID("applicationsPickedUpNo").check()
-    cy.getByID("applicationsDroppedOffNo").check()
-    cy.getByID("postmarksConsideredYes").check()
-    cy.getByTestId("postmark-date-field-month").type("12")
-    cy.getByTestId("postmark-date-field-day").type("17")
-    cy.getByTestId("postmark-date-field-year").type("2022")
-    cy.getByTestId("postmark-time-field-hours").type("5")
-    cy.getByTestId("postmark-time-field-minutes").type("45")
-    cy.getByTestId("postmark-time-field-period").select("PM")
-    cy.getByID("additionalApplicationSubmissionNotes").type(
-      listing["additionalApplicationSubmissionNotes"]
+    fillIfDataExists(
+      cy,
+      "listingsApplicationMailingAddress.street",
+      listing.listingsApplicationMailingAddress?.street,
+      "type"
+    )
+    fillIfDataExists(
+      cy,
+      "listingsApplicationMailingAddress.street2",
+      listing.listingsApplicationMailingAddress?.street2,
+      "type"
+    )
+    fillIfDataExists(
+      cy,
+      "listingsApplicationMailingAddress.city",
+      listing.listingsApplicationMailingAddress?.city,
+      "type"
+    )
+    fillIfDataExists(
+      cy,
+      "listingsApplicationMailingAddress.zipCode",
+      listing.listingsApplicationMailingAddress?.zipCode,
+      "type"
+    )
+    fillIfDataExists(
+      cy,
+      "listingsApplicationMailingAddress.state",
+      listing.listingsApplicationMailingAddress?.state,
+      "select"
     )
 
-    cy.getByID("addOpenHouseButton").contains("Add open house").click()
+    // TODO - Testing pick up and drop off addresses
+    cy.getByID("applicationsPickedUpNo").check()
+    cy.getByID("applicationsDroppedOffNo").check()
+    if (listing.postmarkDate) {
+      cy.getByID("postmarksConsideredYes").check()
+      cy.getByTestId("postmark-date-field-month").type(listing.postmarkDate.month)
+      cy.getByTestId("postmark-date-field-day").type(listing.postmarkDate.day)
+      cy.getByTestId("postmark-date-field-year").type(listing.postmarkDate.year)
+      cy.getByTestId("postmark-time-field-hours").type(listing.postmarkDate.startHours)
+      cy.getByTestId("postmark-time-field-minutes").type(listing.postmarkDate.startMinutes)
+      cy.getByTestId("postmark-time-field-period").select(listing.postmarkDate.period.toUpperCase())
+    } else {
+      cy.getByID("postmarksConsideredNo").check()
+    }
 
-    cy.getByID("date.month").type(listing["date.month"])
-    cy.getByID("date.day").type(listing["date.day"])
-    cy.getByID("date.year").type(listing["date.year"])
-    cy.getByID("label").type(listing["label"])
-    cy.getByID("url").type(listing["url"])
-    cy.getByID("startTime.hours").type(listing["startTime.hours"])
-    cy.getByID("startTime.minutes").type(listing["startTime.minutes"])
-    cy.getByID("endTime.hours").type(listing["endTime.hours"])
-    cy.getByID("endTime.minutes").type(listing["endTime.minutes"])
-    cy.getByID("note").type(listing["note"])
-    cy.getByID("startTime.period").select("AM")
-    cy.getByID("endTime.period").select("PM")
-    cy.getByID("saveOpenHouseFormButton").contains("Save").click()
+    fillIfDataExists(
+      cy,
+      "additionalApplicationSubmissionNotes",
+      listing.additionalApplicationSubmissionNotes,
+      "type"
+    )
 
-    cy.getByID("applicationDueDateField.month").type(listing["date.month"])
-    cy.getByID("applicationDueDateField.day").type(listing["date.day"])
-    cy.getByID("applicationDueDateField.year").type((new Date().getFullYear() + 1).toString())
-    cy.getByID("applicationDueTimeField.hours").type(listing["startTime.hours"])
-    cy.getByID("applicationDueTimeField.minutes").type(listing["startTime.minutes"])
-    cy.getByID("applicationDueTimeField.period").select("PM")
+    // TODO Type as listing events
+    const openHouseEvents = listing.events.filter((e) => e.type === "openHouse")
+    if (openHouseEvents.length > 0) {
+      openHouseEvents.forEach((event) => {
+        cy.getByID("addOpenHouseButton").contains("Add open house").click()
+        cy.getByID("date.month").type(event.dateTime.month)
+        cy.getByID("date.day").type(event.dateTime.day)
+        cy.getByID("date.year").type(event.dateTime.year)
+        cy.getByID("label").type(event.label)
+        cy.getByID("url").type(event.url)
+        cy.getByID("startTime.hours").type(event.dateTime.startHours)
+        cy.getByID("startTime.minutes").type(event.dateTime.startMinutes)
+        cy.getByID("endTime.hours").type(event.dateTime.endHours)
+        cy.getByID("endTime.minutes").type(event.dateTime.endMinutes)
+        cy.getByID("note").type(event.note)
+        cy.getByID("startTime.period").select(event.dateTime.period)
+        cy.getByID("endTime.period").select(event.dateTime.period)
+        cy.getByID("saveOpenHouseFormButton").contains("Save").click()
+      })
+    }
+
+    if (listing.dueDate) {
+      cy.getByID("applicationDueDateField.month").type(listing.dueDate.month)
+      cy.getByID("applicationDueDateField.day").type(listing.dueDate.day)
+      cy.getByID("applicationDueDateField.year").type(listing.dueDate.year)
+      cy.getByID("applicationDueTimeField.hours").type(listing.dueDate.startHours)
+      cy.getByID("applicationDueTimeField.minutes").type(listing.dueDate.startMinutes)
+      cy.getByID("applicationDueTimeField.period").select(listing.dueDate.period)
+    }
+
     cy.getByID("publishButton").contains("Publish").click()
 
     cy.getByID("publishButtonConfirm").contains("Publish").click()
     cy.get("[data-testid=page-header]").should("be.visible")
-    cy.getByTestId("page-header").should("have.text", listing["name"])
+    cy.getByTestId("page-header").should("have.text", listing.name)
+  }
+
+  const capitalizeFirstLetter = (value: string | undefined) => {
+    if (!value) return "" // Handle empty or null strings
+    return value.charAt(0).toUpperCase() + value.slice(1)
+  }
+
+  const formatPhoneNumber = (phone: string | undefined): string => {
+    if (!phone) return ""
+    // Remove all non-digit characters
+    const cleaned = phone.replace(/\D/g, "")
+    // Match the digits: 3 for area code, 3 for exchange, 4 for subscriber
+    const match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/)
+
+    if (match) {
+      return `(${match[1]}) ${match[2]}-${match[3]}`
+    }
+
+    // Return original if not 10 digits
+    return phone
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  function verifyDetails(cy: Cypress.cy, listing: any): void {
-    cy.findAndOpenListing(listing["name"])
+  function verifyDetails(cy: Cypress.cy, listing: CypressListing): void {
+    cy.findAndOpenListing(listing.name)
     cy.getByID("jurisdictions.name").contains(listing["jurisdiction.id"])
-    cy.getByID("name").contains(listing["name"])
-    cy.getByID("developer").contains(listing["developer"])
+    verifyDetailDataIfExists(cy, "name", listing.name)
+    verifyDetailDataIfExists(cy, "developer", listing.developer)
+
     cy.get('[data-label="Preview"]')
       .find("img")
       .should("have.attr", "src")
       .should("include", "cypress-automated-image-upload-071e2ab9-5a52-4f34-85f0-e41f696f4b96")
-    cy.getByID("buildingAddress.street").contains(listing["buildingAddress.street"])
-    cy.getByID("neighborhood").contains(listing.neighborhood)
-    cy.getByID("neighborhood").contains(listing.neighborhood)
-    cy.getByID("buildingAddress.city").contains(listing["buildingAddress.city"])
-    cy.getByID("buildingAddress.state").contains("CA")
-    cy.getByID("buildingAddress.zipCode").contains(listing["buildingAddress.zipCode"])
-    cy.getByID("yearBuilt").contains(listing["yearBuilt"])
-    cy.getByID("longitude").should("include.text", "-122")
-    cy.getByID("latitude").should("include.text", "37.7")
-    cy.getByID("reservedCommunityType").contains(listing["reservedCommunityType.id"])
-    cy.getByID("reservedCommunityDescription").contains(listing["reservedCommunityDescription"])
-    cy.getByID("includeCommunityDisclaimer").contains("Yes")
-    cy.getByID("communityDisclaimerTitle").contains(listing["communityDisclaimerTitle"])
-    cy.getByID("communityDisclaimerDescription").contains(listing["communityDisclaimerDescription"])
-    if (listing["homeType"]) {
-      cy.getByID("homeType").contains(listing["homeType"])
+
+    if (listing.cypressImages?.length) {
+      listing.cypressImages.forEach((cypressImage, index) => {
+        cy.getByID(`listing-detail-image-${index}`)
+          .should("have.attr", "src")
+          .should("include", cypressImage.fixtureName.replace(".jpg", ""))
+      })
     }
-    cy.getByTestId("unit-types-or-individual").contains("Unit types")
-    cy.getByTestId("listing-availability-question").contains("Available units")
-    cy.getByID("unitTable").contains(listing["number"])
-    cy.getByID("unitTable").contains(listing["monthlyRent"])
-    cy.getByID("unitTable").contains(listing["sqFeet"])
-    cy.getByID("unitTable").contains(listing["priorityType.id"])
+    verifyDetailDataIfExists(cy, "buildingAddress.street", listing.listingsBuildingAddress.street)
+    verifyDetailDataIfExists(cy, "neighborhood", listing.neighborhood)
+    verifyDetailDataIfExists(cy, "buildingAddress.city", listing.listingsBuildingAddress.city)
+    verifyDetailDataIfExists(
+      cy,
+      "buildingAddress.state",
+      listing.listingsBuildingAddress.abbreviatedState
+    )
+    verifyDetailDataIfExists(cy, "buildingAddress.zipCode", listing.listingsBuildingAddress.zipCode)
+    verifyDetailDataIfExists(cy, "yearBuilt", listing.yearBuilt?.toString())
+
+    verifyDetailDataIfExists(cy, "reservedCommunityType", listing.reservedCommunityTypes?.id)
+    verifyDetailDataIfExists(
+      cy,
+      "reservedCommunityDescription",
+      listing.reservedCommunityDescription
+    )
+    verifyDetailDataIfExists(
+      cy,
+      "includeCommunityDisclaimer",
+      listing.includeCommunityDisclaimer ? "Yes" : "No"
+    )
+
+    verifyDetailDataIfExists(cy, "communityDisclaimerTitle", listing.communityDisclaimerTitle)
+    verifyDetailDataIfExists(
+      cy,
+      "communityDisclaimerDescription",
+      listing.communityDisclaimerDescription
+    )
+
+    verifyDetailDataIfExists(cy, "homeType", capitalizeFirstLetter(listing.homeType))
+
+    verifyDetailDataIfExists(
+      cy,
+      "unitTypesOrIndividual",
+      listing.disableUnitsAccordion ? "Unit types" : "Individual units"
+    )
+
+    verifyDetailDataIfExists(
+      cy,
+      "listings.listingAvailabilityQuestion",
+      listing.reviewOrderType === "firstComeFirstServe" || listing.reviewOrderType === "lottery"
+        ? "Available units"
+        : "Open waitlist"
+    )
+
+    listing.units?.forEach((unit) => {
+      verifyDetailDataIfExists(cy, "unitTable", unit.number)
+      verifyDetailDataIfExists(cy, "unitTable", unit.sqFeet)
+      verifyDetailDataIfExists(cy, "unitTable", unit.monthlyRent)
+      verifyDetailDataIfExists(cy, "unitTable", unit.unitAccessibilityPriorityTypes?.id)
+    })
+
+    // TODO - Allow for dynamic preferences & programs
     cy.getByID("preferenceTable").contains("1")
     cy.getByID("preferenceTable").contains("Work in the city")
     cy.getByID("preferenceTable").contains("At least one member of my household works in the city")
-    cy.getByID("applicationFee").contains(listing["applicationFee"])
-    cy.getByID("depositMin").contains(listing["depositMin"])
-    cy.getByID("depositMax").contains(listing["depositMax"])
-    cy.getByID("costsNotIncluded").contains(listing["costsNotIncluded"])
-    if (listing["utilities"]) {
-      listing["utilities"].forEach((utility: string) => {
-        cy.getByID("utilities").contains(utility)
+
+    verifyDetailDataIfExists(cy, "programTable", "1")
+    verifyDetailDataIfExists(cy, "programTable", "Veteran")
+    verifyDetailDataIfExists(
+      cy,
+      "programTable",
+      "Have you or anyone in your household served in the US military?"
+    )
+
+    verifyDetailDataIfExists(cy, "applicationFee", listing.applicationFee)
+    verifyDetailDataIfExists(cy, "depositMin", listing.depositMin)
+    verifyDetailDataIfExists(cy, "depositMax", listing.depositMax)
+    verifyDetailDataIfExists(cy, "costsNotIncluded", listing.costsNotIncluded)
+
+    if (listing.cypressUtilities) {
+      listing.cypressUtilities.forEach((utility) => {
+        cy.getByID("utilities").contains(utility.translation)
       })
     }
-    cy.getByID("amenities").contains(listing["amenities"])
-    cy.getByID("unitAmenities").contains(listing["unitAmenities"])
-    cy.getByID("accessibility").contains(listing["accessibility"])
-    cy.getByID("smokingPolicy").contains(listing["smokingPolicy"])
-    cy.getByID("petPolicy").contains(listing["petPolicy"])
-    cy.getByID("servicesOffered").contains(listing["servicesOffered"])
-    cy.getByID("neighborhoodAmenities.publicTransportation").contains(
-      listing["listingNeighborhoodAmenities.publicTransportation"]
-    )
-    cy.getByID("neighborhoodAmenities.parksAndCommunityCenters").contains(
-      listing["listingNeighborhoodAmenities.parksAndCommunityCenters"]
-    )
-    cy.getByID("neighborhoodAmenities.schools").contains(
-      listing["listingNeighborhoodAmenities.schools"]
-    )
-    cy.getByID("neighborhoodAmenities.groceryStores").contains(
-      listing["listingNeighborhoodAmenities.groceryStores"]
-    )
-    cy.getByID("neighborhoodAmenities.pharmacies").contains(
-      listing["listingNeighborhoodAmenities.pharmacies"]
-    )
-    cy.getByID("neighborhoodAmenities.healthCareResources").contains(
-      listing["listingNeighborhoodAmenities.healthCareResources"]
-    )
-    if (listing["accessibilityFeatures"]) {
-      listing["accessibilityFeatures"].forEach((feature: string[]) => {
-        cy.getByID("accessibilityFeatures").contains(feature[1])
+
+    if (listing.listingNeighborhoodAmenities) {
+      Object.keys(listing.listingNeighborhoodAmenities).forEach((amenity) => {
+        verifyDetailDataIfExists(
+          cy,
+          `neighborhoodAmenities.${amenity}`,
+          listing.listingNeighborhoodAmenities?.[
+            amenity as keyof typeof listing.listingNeighborhoodAmenities
+          ] as string
+        )
       })
     }
-    cy.getByID("creditHistory").contains(listing["creditHistory"])
-    cy.getByID("rentalHistory").contains(listing["rentalHistory"])
-    cy.getByID("criminalBackground").contains(listing["criminalBackground"])
-    cy.getByID("rentalAssistance").contains(
+
+    if (listing.cypressFeatures) {
+      listing.cypressFeatures.forEach((feature) => {
+        cy.getByID("accessibilityFeatures").contains(feature.translation)
+      })
+    }
+
+    verifyDetailDataIfExists(cy, "amenities", listing.amenities)
+    verifyDetailDataIfExists(cy, "unitAmenities", listing.unitAmenities)
+    verifyDetailDataIfExists(cy, "accessibility", listing.accessibility)
+    verifyDetailDataIfExists(cy, "smokingPolicy", listing.smokingPolicy)
+    verifyDetailDataIfExists(cy, "petPolicy", listing.petPolicy)
+    verifyDetailDataIfExists(cy, "servicesOffered", listing.servicesOffered)
+
+    verifyDetailDataIfExists(cy, "creditHistory", listing["creditHistory"])
+    verifyDetailDataIfExists(cy, "rentalHistory", listing["rentalHistory"])
+    verifyDetailDataIfExists(cy, "criminalBackground", listing["criminalBackground"])
+    // TODO - Allow for dynamic rental assistance text
+    verifyDetailDataIfExists(
+      cy,
+      "rentalAssistance",
       "Housing Choice Vouchers, Section 8 and other valid rental assistance programs will be considered for this property. In the case of a valid rental subsidy, the required minimum income will be based on the portion of the rent that the tenant pays after use of the subsidy."
     )
-    cy.getByID("buildingSelectionCriteriaTable").contains(listing["buildingSelectionCriteriaURL"])
-    cy.getByID("requiredDocuments").contains(listing["requiredDocuments"])
-    cy.getByID("programRules").contains(listing["programRules"])
-    cy.getByID("specialNotes").contains(listing["specialNotes"])
-    cy.getByID("reviewOrderQuestion").contains("First come first serve")
-    cy.getByID("whatToExpect").contains("Custom unformatted text")
-    cy.getByID("whatToExpect").contains("li", "Item A")
-    cy.getByID("whatToExpect").contains("li", "Item B")
-    cy.getByID("whatToExpect").contains("li", "Item C")
-    cy.getByID("leasingAgentName").contains(listing["leasingAgentName"])
-    cy.getByID("leasingAgentEmail").contains(listing["leasingAgentEmail"].toLowerCase())
-    cy.getByID("leasingAgentPhone").contains("(520) 245-8811")
-    cy.getByID("leasingAgentOfficeHours").contains(listing["leasingAgentOfficeHours"])
-    cy.getByID("leasingAgentTitle").contains(listing["leasingAgentTitle"])
-    cy.getByID("digitalApplication").contains("Yes")
-    cy.getByID("digitalMethod.type").contains("No")
-    cy.getByID("customOnlineApplicationUrl").contains(listing["url"])
+
+    verifyDetailDataIfExists(
+      cy,
+      "buildingSelectionCriteriaTable",
+      listing["buildingSelectionCriteria"]
+    )
+    verifyDetailDataIfExists(cy, "requiredDocuments", listing["requiredDocuments"])
+    verifyDetailDataIfExists(cy, "programRules", listing["programRules"])
+    verifyDetailDataIfExists(cy, "specialNotes", listing["specialNotes"])
+
+    verifyDetailDataIfExists(
+      cy,
+      "reviewOrderQuestion",
+      listing.reviewOrderType === "firstComeFirstServe"
+        ? "First come first serve"
+        : listing.reviewOrderType === "lottery"
+        ? "Lottery"
+        : "Waitlist"
+    )
+    if (listing.whatToExpect) {
+      verifyDetailDataIfExists(cy, "whatToExpect", listing.whatToExpect)
+    } else {
+      cy.getByID("whatToExpect").contains("Custom unformatted text")
+      cy.getByID("whatToExpect").contains("li", "Item A")
+      cy.getByID("whatToExpect").contains("li", "Item B")
+      cy.getByID("whatToExpect").contains("li", "Item C")
+    }
+
+    verifyDetailDataIfExists(cy, "leasingAgentName", listing.leasingAgentName)
+    verifyDetailDataIfExists(cy, "leasingAgentEmail", listing.leasingAgentEmail?.toLowerCase())
+    verifyDetailDataIfExists(cy, "leasingAgentPhone", formatPhoneNumber(listing.leasingAgentPhone))
+    verifyDetailDataIfExists(cy, "leasingAgentOfficeHours", listing.leasingAgentOfficeHours)
+    verifyDetailDataIfExists(cy, "leasingAgentTitle", listing.leasingAgentTitle)
+
+    const internalMethod = listing.applicationMethods.find(
+      (method) => method.type === ApplicationMethodsTypeEnum.Internal
+    )
+
+    const externalMethod = listing.applicationMethods.find(
+      (method) => method.type === ApplicationMethodsTypeEnum.ExternalLink
+    )
+
+    const referralMethod = listing.applicationMethods.find(
+      (method) => method.type === ApplicationMethodsTypeEnum.Referral
+    )
+    if (internalMethod || externalMethod) {
+      cy.getByID("digitalApplication").contains("Yes")
+    } else {
+      cy.getByID("digitalApplication").contains("No")
+    }
+
+    if (externalMethod) {
+      cy.getByID("digitalMethod.type").contains("No")
+
+      if (externalMethod.externalReference) {
+        cy.getByID("customOnlineApplicationUrl").contains(externalMethod.externalReference)
+      }
+    } else if (internalMethod) {
+      cy.getByID("digitalMethod.type").contains("Yes")
+    }
+
+    // TODO - Test paper application upload
     cy.getByID("paperApplication").contains("No")
-    cy.getByID("referralOpportunity").contains("Yes")
-    cy.getByID("referralContactPhone").contains("(520) 245-8811")
-    cy.getByID("referralSummary").contains(listing["referralSummary"])
-    cy.getByID("leasingAgentAddress.street").contains(listing["leasingAgentAddress.street"])
-    cy.getByID("leasingAgentAddress.street2").contains(listing["leasingAgentAddress.street2"])
-    cy.getByID("leasingAgentAddress.city").contains(listing["leasingAgentAddress.city"])
-    cy.getByID("leasingAgentAddress.state").contains("CA")
-    cy.getByID("leasingAgentAddress.zipCode").contains(listing["leasingAgentAddress.zipCode"])
+
+    if (referralMethod) {
+      cy.getByID("referralOpportunity").contains("Yes")
+      verifyDetailDataIfExists(
+        cy,
+        "referralContactPhone",
+        formatPhoneNumber(referralMethod.phoneNumber)
+      )
+    } else {
+      cy.getByID("referralOpportunity").contains("No")
+    }
+
+    verifyDetailDataIfExists(
+      cy,
+      "leasingAgentAddress.street",
+      listing.listingsLeasingAgentAddress?.street
+    )
+    verifyDetailDataIfExists(
+      cy,
+      "leasingAgentAddress.street2",
+      listing.listingsLeasingAgentAddress?.street2
+    )
+    verifyDetailDataIfExists(
+      cy,
+      "leasingAgentAddress.city",
+      listing.listingsLeasingAgentAddress?.city
+    )
+    verifyDetailDataIfExists(
+      cy,
+      "leasingAgentAddress.state",
+      listing.listingsLeasingAgentAddress?.abbreviatedState
+    )
+    verifyDetailDataIfExists(
+      cy,
+      "leasingAgentAddress.zipCode",
+      listing.listingsLeasingAgentAddress?.zipCode
+    )
+
+    // TODO - Allow for dynamic pick up and drop off addresses
     cy.getByID("applicationPickupQuestion").contains("No")
-    cy.getByID("applicationMailingSection").contains("Yes")
-    cy.getByTestId("applicationMailingAddress.street").contains(
-      listing["leasingAgentAddress.street"]
-    )
-    cy.getByTestId("applicationMailingAddress.street2").contains(
-      listing["leasingAgentAddress.street2"]
-    )
-    cy.getByTestId("applicationMailingAddress.city").contains(listing["leasingAgentAddress.city"])
-    cy.getByTestId("applicationMailingAddress.zipCode").contains(
-      listing["leasingAgentAddress.zipCode"]
-    )
-    cy.getByTestId("applicationMailingAddress.state").contains("CA")
     cy.getByID("applicationDropOffQuestion").contains("No")
-    cy.getByID("postmarksConsideredQuestion").contains("Yes")
-    cy.getByTestId("postmark-date").contains("12")
-    cy.getByTestId("postmark-date").contains("17")
-    cy.getByTestId("postmark-date").contains("2022")
-    cy.getByTestId("postmark-time").contains("5")
-    cy.getByTestId("postmark-time").contains("45")
-    cy.getByTestId("postmark-time").contains("PM")
-    cy.getByID("additionalApplicationSubmissionNotes").contains(
-      listing["additionalApplicationSubmissionNotes"]
+
+    if (listing.listingsApplicationMailingAddress) {
+      cy.getByID("applicationMailingSection").contains("Yes")
+      verifyDetailDataIfExists(
+        cy,
+        "applicationMailingAddress.street",
+        listing.listingsApplicationMailingAddress?.street
+      )
+      verifyDetailDataIfExists(
+        cy,
+        "applicationMailingAddress.street2",
+        listing.listingsApplicationMailingAddress?.street2
+      )
+      verifyDetailDataIfExists(
+        cy,
+        "applicationMailingAddress.city",
+        listing.listingsApplicationMailingAddress?.city
+      )
+      verifyDetailDataIfExists(
+        cy,
+        "applicationMailingAddress.zipCode",
+        listing.listingsApplicationMailingAddress?.zipCode
+      )
+      verifyDetailDataIfExists(
+        cy,
+        "applicationMailingAddress.state",
+        listing.listingsApplicationMailingAddress?.abbreviatedState
+      )
+    } else {
+      cy.getByID("applicationMailingSection").contains("No")
+    }
+    cy.getByID("applicationMailingSection").contains("Yes")
+
+    if (listing.postmarkDate) {
+      cy.getByID("postmarksConsideredQuestion").contains("Yes")
+      cy.getByTestId("postmark-date").contains(listing.postmarkDate.day)
+      cy.getByTestId("postmark-date").contains(listing.postmarkDate.month)
+      cy.getByTestId("postmark-date").contains(listing.postmarkDate.year)
+      cy.getByTestId("postmark-time").contains(listing.postmarkDate.startHours)
+      cy.getByTestId("postmark-time").contains(listing.postmarkDate.startMinutes)
+      cy.getByTestId("postmark-time").contains(listing.postmarkDate.period.toUpperCase())
+    } else {
+      cy.getByID("postmarksConsideredQuestion").contains("No")
+    }
+
+    verifyDetailDataIfExists(
+      cy,
+      "additionalApplicationSubmissionNotes",
+      listing.additionalApplicationSubmissionNotes
     )
-    cy.getByID("openhouseHeader").contains("10/04/2022")
-    cy.getByID("openhouseHeader").contains("10:04 AM")
-    cy.getByID("openhouseHeader").contains("11:05 PM")
+
+    const openHouseEvents = listing.events.filter((e) => e.type === "openHouse")
+    if (openHouseEvents.length > 0) {
+      openHouseEvents.forEach((event) => {
+        cy.getByID("openhouseHeader").contains(
+          `${event.dateTime.month}/${event.dateTime.day}/${event.dateTime.year}`
+        )
+        cy.getByID("openhouseHeader").contains(
+          `${event.dateTime.startHours}:${
+            event.dateTime.startMinutes
+          } ${event.dateTime.period.toUpperCase()}`
+        )
+        cy.getByID("openhouseHeader").contains(
+          `${event.dateTime.endHours}:${
+            event.dateTime.endMinutes
+          } ${event.dateTime.period.toUpperCase()}`
+        )
+      })
+    }
+
+    if (listing.dueDate) {
+      cy.getByID("applicationDeadline").contains(
+        `${listing.dueDate.month}/${listing.dueDate.day}/${listing.dueDate.year}`
+      )
+      cy.getByID("applicationDueTime").contains(
+        `${listing.dueDate.startHours}:${
+          listing.dueDate.startMinutes
+        } ${listing.dueDate.period.toUpperCase()}`
+      )
+    }
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  function verifyAutofill(cy: Cypress.cy, listing: any): void {
-    cy.findAndOpenListing(listing["name"])
+  function verifyAutofill(cy: Cypress.cy, listing: CypressListing): void {
+    cy.findAndOpenListing(listing.name)
     cy.getByID("listingEditButton").contains("Edit").click()
 
-    cy.getByID("name").should("have.value", listing["name"])
-    cy.getByID("developer").should("have.value", listing["developer"])
-    cy.getByID("listingsBuildingAddress.street").should(
-      "have.value",
-      listing["buildingAddress.street"]
+    verifyDataIfExists(cy, "name", listing.name, "type")
+    verifyDataIfExists(cy, "developer", listing.developer, "type")
+    verifyDataIfExists(
+      cy,
+      "listingsBuildingAddress.street",
+      listing.listingsBuildingAddress.street,
+      "type"
     )
-    cy.getByID("neighborhood").should("have.value", listing["neighborhood"])
-    cy.getByID("listingsBuildingAddress.city").should("have.value", listing["buildingAddress.city"])
-    cy.getByID("listingsBuildingAddress.state")
-      .find("option:selected")
-      .should("have.text", listing["buildingAddress.state"])
-    cy.getByID("listingsBuildingAddress.zipCode").should(
-      "have.value",
-      listing["buildingAddress.zipCode"]
+    verifyDataIfExists(cy, "neighborhood", listing.neighborhood, "type")
+    verifyDataIfExists(
+      cy,
+      "listingsBuildingAddress.city",
+      listing.listingsBuildingAddress.city,
+      "type"
     )
-    cy.getByID("yearBuilt").should("have.value", listing["yearBuilt"])
-    cy.getByID("reservedCommunityTypes.id")
-      .find("option:selected")
-      .should("have.text", listing["reservedCommunityType.id"])
-
-    cy.getByID("reservedCommunityDescription").should(
-      "have.value",
-      listing["reservedCommunityDescription"]
+    verifyDataIfExists(
+      cy,
+      "listingsBuildingAddress.state",
+      listing.listingsBuildingAddress.state,
+      "select"
     )
-    cy.getByID("includeCommunityDisclaimerYes").should("be.checked")
-    cy.getByID("communityDisclaimerTitle").should("have.value", listing["communityDisclaimerTitle"])
-    cy.getByID("communityDisclaimerDescription").should(
-      "have.value",
-      listing["communityDisclaimerDescription"]
+    verifyDataIfExists(
+      cy,
+      "listingsBuildingAddress.zipCode",
+      listing.listingsBuildingAddress.zipCode,
+      "type"
     )
-    cy.getByTestId("unit-types").should("be.checked")
-    cy.getByTestId("listingAvailability.availableUnits").should("be.checked")
-    if (listing["homeType"]) {
-      cy.getByID("homeType").find("option:selected").should("have.text", listing["homeType"])
+    verifyDataIfExists(cy, "yearBuilt", listing.yearBuilt?.toString(), "type")
+    cy.getByID("yearBuilt").should("have.value", listing.yearBuilt)
+    if (listing.reservedCommunityTypes) {
+      verifyDataIfExists(
+        cy,
+        "reservedCommunityTypes.id",
+        listing.reservedCommunityTypes.id,
+        "select"
+      )
     }
+
+    verifyDataIfExists(
+      cy,
+      "reservedCommunityDescription",
+      listing.reservedCommunityDescription,
+      "type"
+    )
+
+    verifyRadioIfExists(
+      cy,
+      "includeCommunityDisclaimerYes",
+      "includeCommunityDisclaimerNo",
+      listing.includeCommunityDisclaimer
+    )
+
+    verifyDataIfExists(cy, "communityDisclaimerTitle", listing.communityDisclaimerTitle, "type")
+    verifyDataIfExists(
+      cy,
+      "communityDisclaimerDescription",
+      listing.communityDisclaimerDescription,
+      "type"
+    )
+
+    verifyRadioIfExists(cy, "unitTypes", "individual-units", listing.disableUnitsAccordion)
+
+    verifyRadioIfExists(
+      cy,
+      "availableUnits",
+      "openWaitlist",
+      listing.reviewOrderType === "firstComeFirstServe" || listing.reviewOrderType === "lottery"
+    )
+
+    verifyDataIfExists(cy, "homeType", capitalizeFirstLetter(listing.homeType), "select")
+
     // TODO Test unit drawer
     // TODO Test preferences
-    cy.getByID("applicationFee").should("have.value", listing["applicationFee"])
-    cy.getByID("depositMin").should("have.value", listing["depositMin"])
-    cy.getByID("depositMax").should("have.value", listing["depositMax"])
-    cy.getByID("costsNotIncluded").should("have.value", listing["costsNotIncluded"])
-    if (listing["utilities"]) {
-      listing["utilities"].forEach((utility: string) => {
-        cy.getByID(utility.toLowerCase()).should("be.checked")
+    // TODO Test programs
+    verifyDataIfExists(cy, "applicationFee", listing.applicationFee, "type")
+    verifyDataIfExists(cy, "depositMin", listing.depositMin, "type")
+    verifyDataIfExists(cy, "depositMax", listing.depositMax, "type")
+    verifyDataIfExists(cy, "costsNotIncluded", listing.costsNotIncluded, "type")
+    if (listing.listingUtilities) {
+      Object.keys(listing.listingUtilities).forEach((utility) => {
+        verifyDataIfExists(
+          cy,
+          utility.toLowerCase(),
+          listing.listingUtilities?.[utility as keyof typeof listing.listingUtilities]
+            ? "true"
+            : "",
+          "check"
+        )
       })
     }
-    cy.getByID("amenities").should("have.value", listing["amenities"])
-    cy.getByID("accessibility").should("have.value", listing["accessibility"])
-    cy.getByID("unitAmenities").should("have.value", listing["unitAmenities"])
-    cy.getByID("smokingPolicy").should("have.value", listing["smokingPolicy"])
-    cy.getByID("petPolicy").should("have.value", listing["petPolicy"])
-    cy.getByID("servicesOffered").should("have.value", listing["servicesOffered"])
-    cy.getByID("listingNeighborhoodAmenities.publicTransportation").should(
-      "have.value",
-      listing["listingNeighborhoodAmenities.publicTransportation"]
-    )
-    cy.getByID("listingNeighborhoodAmenities.parksAndCommunityCenters").should(
-      "have.value",
-      listing["listingNeighborhoodAmenities.parksAndCommunityCenters"]
-    )
-    cy.getByID("listingNeighborhoodAmenities.schools").should(
-      "have.value",
-      listing["listingNeighborhoodAmenities.schools"]
-    )
-    cy.getByID("listingNeighborhoodAmenities.groceryStores").should(
-      "have.value",
-      listing["listingNeighborhoodAmenities.groceryStores"]
-    )
-    cy.getByID("listingNeighborhoodAmenities.pharmacies").should(
-      "have.value",
-      listing["listingNeighborhoodAmenities.pharmacies"]
-    )
-    cy.getByID("listingNeighborhoodAmenities.healthCareResources").should(
-      "have.value",
-      listing["listingNeighborhoodAmenities.healthCareResources"]
-    )
-    if (listing["accessibilityFeatures"]) {
-      listing["accessibilityFeatures"].forEach((feature: string[]) => {
-        cy.getByID(`configurableAccessibilityFeatures.${feature[0]}`).should("be.checked")
+
+    if (listing.listingNeighborhoodAmenities) {
+      Object.keys(listing.listingNeighborhoodAmenities).forEach((amenity) => {
+        verifyDataIfExists(
+          cy,
+          `listingNeighborhoodAmenities.${amenity}`,
+          listing.listingNeighborhoodAmenities?.[
+            amenity as keyof typeof listing.listingNeighborhoodAmenities
+          ] as string,
+          "type"
+        )
       })
     }
-    cy.getByID("creditHistory").should("have.value", listing["creditHistory"])
-    cy.getByID("rentalHistory").should("have.value", listing["rentalHistory"])
-    cy.getByID("criminalBackground").should("have.value", listing["criminalBackground"])
-    cy.getByID("buildingSelectionCriteriaTable").contains(listing["buildingSelectionCriteriaURL"])
-    cy.getByID("requiredDocuments").should("have.value", listing["requiredDocuments"])
-    cy.getByID("programRules").should("have.value", listing["programRules"])
-    cy.getByID("specialNotes").should("have.value", listing["specialNotes"])
+
+    if (listing.listingFeatures) {
+      Object.keys(listing.listingFeatures).forEach((feature) => {
+        verifyDataIfExists(
+          cy,
+          `configurableAccessibilityFeatures.${feature.toLowerCase()}`,
+          listing.listingFeatures?.[feature as keyof typeof listing.listingFeatures] ? "true" : "",
+          "check"
+        )
+      })
+    }
+    verifyDataIfExists(cy, "amenities", listing.amenities, "type")
+    verifyDataIfExists(cy, "accessibility", listing.accessibility, "type")
+    verifyDataIfExists(cy, "unitAmenities", listing.unitAmenities, "type")
+    verifyDataIfExists(cy, "smokingPolicy", listing.smokingPolicy, "type")
+    verifyDataIfExists(cy, "petPolicy", listing.petPolicy, "type")
+    verifyDataIfExists(cy, "servicesOffered", listing.servicesOffered, "type")
+    verifyDataIfExists(cy, "creditHistory", listing.creditHistory, "type")
+    verifyDataIfExists(cy, "rentalHistory", listing.rentalHistory, "type")
+    verifyDataIfExists(cy, "criminalBackground", listing.criminalBackground, "type")
+    verifyDataIfExists(cy, "rentalAssistance", listing.rentalAssistance, "type")
+
+    verifyDetailDataIfExists(
+      cy,
+      "buildingSelectionCriteriaTable",
+      listing["buildingSelectionCriteria"]
+    )
+    verifyDataIfExists(cy, "requiredDocuments", listing.requiredDocuments, "type")
+    verifyDataIfExists(cy, "programRules", listing.programRules, "type")
+    verifyDataIfExists(cy, "specialNotes", listing.specialNotes, "type")
+
+    // Second tab
     cy.get("button").contains("Application process").click()
-    cy.getByID("reviewOrderFCFS").should("be.checked")
-    cy.getByID("waitlistOpenNo").should("be.checked")
-    cy.getByID("leasingAgentName").should("have.value", listing["leasingAgentName"])
-    cy.getByID("leasingAgentEmail").should("have.value", listing["leasingAgentEmail"])
-    cy.getByID("leasingAgentPhone").should("have.value", "(520) 245-8811")
-    cy.getByID("leasingAgentTitle").should("have.value", listing["leasingAgentTitle"])
-    cy.getByID("leasingAgentOfficeHours").should("have.value", listing["leasingAgentOfficeHours"])
-    cy.getByID("digitalApplicationChoiceYes").should("be.checked")
-    cy.getByID("commonDigitalApplicationChoiceNo").should("be.checked")
-    cy.getByID("customOnlineApplicationUrl").should("have.value", listing["url"])
+
+    verifyRadioIfExists(
+      cy,
+      "reviewOrderFCFS",
+      "reviewOrderLottery",
+      listing.reviewOrderType === "firstComeFirstServe"
+    )
+
+    if (listing.whatToExpect) {
+      verifyDataIfExists(cy, "whatToExpect", listing.whatToExpect, "type")
+    } else {
+      // Testing rich text editor if data is null - idk if this will work
+      cy.getByID("whatToExpect").should("have.text", "Custom unformatted textItem AItem BItem C")
+    }
+    verifyRadioIfExists(cy, "waitlistOpenNo", "waitlistOpenYes", listing.isWaitlistOpen)
+    verifyDataIfExists(cy, "leasingAgentName", listing.leasingAgentName, "type")
+    verifyDataIfExists(cy, "leasingAgentEmail", listing.leasingAgentEmail, "type")
+    verifyDataIfExists(
+      cy,
+      "leasingAgentPhone",
+      formatPhoneNumber(listing.leasingAgentPhone),
+      "type"
+    )
+    verifyDataIfExists(cy, "leasingAgentTitle", listing.leasingAgentTitle, "type")
+    verifyDataIfExists(cy, "leasingAgentOfficeHours", listing.leasingAgentOfficeHours, "type")
+
+    const internalMethod = listing.applicationMethods.find(
+      (method) => method.type === ApplicationMethodsTypeEnum.Internal
+    )
+
+    const externalMethod = listing.applicationMethods.find(
+      (method) => method.type === ApplicationMethodsTypeEnum.ExternalLink
+    )
+
+    const referralMethod = listing.applicationMethods.find(
+      (method) => method.type === ApplicationMethodsTypeEnum.Referral
+    )
+
+    if (internalMethod || externalMethod) {
+      cy.getByID("digitalApplicationChoiceYes").should("be.checked")
+    }
+
+    if (externalMethod) {
+      cy.getByID("commonDigitalApplicationChoiceNo").should("be.checked")
+      verifyDataIfExists(cy, "customOnlineApplicationUrl", externalMethod.externalReference, "type")
+    } else {
+      cy.getByID("commonDigitalApplicationChoiceYes").should("be.checked")
+    }
+
+    // TODO - Test paper application upload
     cy.getByID("paperApplicationNo").should("be.checked")
-    cy.getByID("referralOpportunityYes").should("be.checked")
-    cy.getByID("referralContactPhone").should("have.value", "(520) 245-8811")
-    cy.getByID("referralSummary").should("have.value", listing["referralSummary"])
-    cy.getByID("listingsLeasingAgentAddress.street").should(
-      "have.value",
-      listing["leasingAgentAddress.street"]
+
+    if (referralMethod) {
+      verifyRadioIfExists(cy, "referralOpportunityYes", "referralOpportunityNo", true)
+      verifyDataIfExists(
+        cy,
+        "referralContactPhone",
+        formatPhoneNumber(referralMethod.phoneNumber),
+        "type"
+      )
+    }
+
+    verifyDataIfExists(
+      cy,
+      "listingsLeasingAgentAddress.street",
+      listing.listingsLeasingAgentAddress?.street,
+      "type"
     )
-    cy.getByID("listingsLeasingAgentAddress.street2").should(
-      "have.value",
-      listing["leasingAgentAddress.street2"]
+    verifyDataIfExists(
+      cy,
+      "listingsLeasingAgentAddress.street2",
+      listing.listingsLeasingAgentAddress?.street2,
+      "type"
     )
-    cy.getByID("listingsLeasingAgentAddress.city").should(
-      "have.value",
-      listing["leasingAgentAddress.city"]
+    verifyDataIfExists(
+      cy,
+      "listingsLeasingAgentAddress.city",
+      listing.listingsLeasingAgentAddress?.city,
+      "type"
     )
-    cy.getByID("listingsLeasingAgentAddress.zipCode").should(
-      "have.value",
-      listing["leasingAgentAddress.zipCode"]
+    verifyDataIfExists(
+      cy,
+      "listingsLeasingAgentAddress.zipCode",
+      listing.listingsLeasingAgentAddress?.zipCode,
+      "type"
     )
-    cy.getByID("listingsLeasingAgentAddress.state")
-      .find("option:selected")
-      .should("have.text", listing["leasingAgentAddress.state"])
-    cy.getByID("applicationsMailedInYes").should("be.checked")
-    cy.getByID("mailInAnotherAddress").should("be.checked")
-    cy.getByTestId("mailing-address-street").should(
-      "have.value",
-      listing["leasingAgentAddress.street"]
+    verifyDataIfExists(
+      cy,
+      "listingsLeasingAgentAddress.state",
+      listing.listingsLeasingAgentAddress?.state,
+      "select"
     )
-    cy.getByTestId("mailing-address-street2").should(
-      "have.value",
-      listing["leasingAgentAddress.street2"]
+    if (listing.listingsApplicationMailingAddress) {
+      cy.getByID("applicationsMailedInYes").should("be.checked")
+    }
+    if (listing.applicationMailingAddressType !== ApplicationAddressTypeEnum.leasingAgent) {
+      cy.getByID("mailInAnotherAddress").should("be.checked")
+    }
+    verifyDataIfExists(
+      cy,
+      "listingsApplicationMailingAddress.street",
+      listing.listingsApplicationMailingAddress?.street,
+      "type"
     )
-    cy.getByTestId("mailing-address-city").should("have.value", listing["leasingAgentAddress.city"])
-    cy.getByTestId("mailing-address-zip").should(
-      "have.value",
-      listing["leasingAgentAddress.zipCode"]
+    verifyDataIfExists(
+      cy,
+      "listingsApplicationMailingAddress.street2",
+      listing.listingsApplicationMailingAddress?.street2,
+      "type"
     )
-    cy.getByTestId("mailing-address-state")
-      .find("option:selected")
-      .should("have.text", listing["leasingAgentAddress.state"])
+    verifyDataIfExists(
+      cy,
+      "listingsApplicationMailingAddress.city",
+      listing.listingsApplicationMailingAddress?.city,
+      "type"
+    )
+    verifyDataIfExists(
+      cy,
+      "listingsApplicationMailingAddress.zipCode",
+      listing.listingsApplicationMailingAddress?.zipCode,
+      "type"
+    )
+    verifyDataIfExists(
+      cy,
+      "listingsApplicationMailingAddress.state",
+      listing.listingsApplicationMailingAddress?.state,
+      "select"
+    )
+
+    // TODO - Testing pick up and drop off addresses
     cy.getByID("applicationsPickedUpNo").should("be.checked")
     cy.getByID("applicationsDroppedOffNo").should("be.checked")
-    cy.getByID("postmarksConsideredYes").should("be.checked")
-    cy.getByTestId("postmark-date-field-month").should("have.value", "12")
-    cy.getByTestId("postmark-date-field-day").should("have.value", "17")
-    cy.getByTestId("postmark-date-field-year").should("have.value", "2022")
-    cy.getByTestId("postmark-time-field-hours").should("have.value", "05")
-    cy.getByTestId("postmark-time-field-minutes").should("have.value", "45")
-    cy.getByTestId("postmark-time-field-period").should("have.value", "pm")
-    cy.getByID("additionalApplicationSubmissionNotes").should(
-      "have.value",
-      listing["additionalApplicationSubmissionNotes"]
+
+    if (listing.postmarkDate) {
+      cy.getByID("postmarksConsideredYes").should("be.checked")
+      cy.getByTestId("postmark-date-field-month").should("have.value", listing.postmarkDate.month)
+      cy.getByTestId("postmark-date-field-day").should("have.value", listing.postmarkDate.day)
+      cy.getByTestId("postmark-date-field-year").should("have.value", listing.postmarkDate.year)
+      cy.getByTestId("postmark-time-field-hours").should(
+        "have.value",
+        listing.postmarkDate.startHours
+      )
+      cy.getByTestId("postmark-time-field-minutes").should(
+        "have.value",
+        listing.postmarkDate.startMinutes
+      )
+      cy.getByTestId("postmark-time-field-period").should("have.value", listing.postmarkDate.period)
+    }
+    verifyDataIfExists(
+      cy,
+      "additionalApplicationSubmissionNotes",
+      listing.additionalApplicationSubmissionNotes,
+      "type"
     )
-    // TODO Test Open house events
-    cy.getByID("applicationDueDateField.month").should("have.value", listing["date.month"])
-    cy.getByID("applicationDueDateField.day").should("have.value", listing["date.day"])
-    cy.getByID("applicationDueDateField.year").should(
-      "have.value",
-      (new Date().getFullYear() + 1).toString()
-    )
-    cy.getByID("applicationDueTimeField.hours").should("have.value", listing["startTime.hours"])
-    cy.getByID("applicationDueTimeField.minutes").should("have.value", listing["startTime.minutes"])
-    cy.getByID("applicationDueTimeField.period").should("have.value", "pm")
+
+    // TODO - Test Open house events
+    if (listing.dueDate) {
+      cy.getByID("applicationDueDateField.month").should("have.value", listing.dueDate.month)
+      cy.getByID("applicationDueDateField.day").should("have.value", listing.dueDate.day)
+      cy.getByID("applicationDueDateField.year").should("have.value", listing.dueDate.year)
+      cy.getByID("applicationDueTimeField.hours").should("have.value", listing.dueDate.startHours)
+      cy.getByID("applicationDueTimeField.minutes").should(
+        "have.value",
+        listing.dueDate.startMinutes
+      )
+      cy.getByID("applicationDueTimeField.period").should("have.value", listing.dueDate.period)
+    }
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -685,20 +1270,20 @@ describe("Listing Management Tests", () => {
     cy.getByID("saveAlreadyLiveListingButtonConfirm").contains("Save").click()
     cy.getByTestId("page-header").should("have.text", listing["editedName"])
   }
-  // it("as admin user, should be able to download listings export zip", () => {
-  //   const convertToString = (value: number) => {
-  //     return value < 10 ? `0${value}` : `${value}`
-  //   }
-  //   cy.visit("/")
-  //   cy.getByID("export-listings").click()
-  //   const now = new Date()
-  //   const dateString = `${now.getFullYear()}-${convertToString(
-  //     now.getMonth() + 1
-  //   )}-${convertToString(now.getDate())}`
-  //   const timeString = `${convertToString(now.getHours())}-${convertToString(now.getMinutes())}`
-  //   const zipName = `${dateString}_${timeString}-complete-listing-data.zip`
-  //   const downloadFolder = Cypress.config("downloadsFolder")
-  //   const completeZipPath = `${downloadFolder}/${zipName}`
-  //   cy.readFile(completeZipPath)
-  // })
+  it("as admin user, should be able to download listings export zip", () => {
+    const convertToString = (value: number) => {
+      return value < 10 ? `0${value}` : `${value}`
+    }
+    cy.visit("/")
+    cy.getByID("export-listings").click()
+    const now = new Date()
+    const dateString = `${now.getFullYear()}-${convertToString(
+      now.getMonth() + 1
+    )}-${convertToString(now.getDate())}`
+    const timeString = `${convertToString(now.getHours())}-${convertToString(now.getMinutes())}`
+    const zipName = `${dateString}_${timeString}-complete-listing-data.zip`
+    const downloadFolder = Cypress.config("downloadsFolder")
+    const completeZipPath = `${downloadFolder}/${zipName}`
+    cy.readFile(completeZipPath)
+  })
 })
