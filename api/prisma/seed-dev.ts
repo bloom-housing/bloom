@@ -2,7 +2,6 @@ import {
   LanguagesEnum,
   ListingsStatusEnum,
   MultiselectQuestionsApplicationSectionEnum,
-  PrismaClient,
 } from '@prisma/client';
 import { userFactory } from './seed-helpers/user-factory';
 import { jurisdictionFactory } from './seed-helpers/jurisdiction-factory';
@@ -18,12 +17,13 @@ import { reservedCommunityTypeFactoryAll } from './seed-helpers/reserved-communi
 import { householdMemberFactoryMany } from './seed-helpers/household-member-factory';
 import { APPLICATIONS_PER_LISTINGS, LISTINGS_TO_SEED } from './constants';
 import { featureFlagFactory } from './seed-helpers/feature-flag-factory';
+import { PrismaService } from '../src/services/prisma.service';
 
 const listingStatusEnumArray = Object.values(ListingsStatusEnum);
 
 const createMultiselect = async (
   jurisdictionId: string,
-  prismaClient: PrismaClient,
+  prismaClient: PrismaService,
 ) => {
   const multiSelectQuestions = [...new Array(4)].map(async (_, index) => {
     return await prismaClient.multiselectQuestions.create({
@@ -43,7 +43,7 @@ const createMultiselect = async (
 };
 
 export const devSeeding = async (
-  prismaClient: PrismaClient,
+  prismaClient: PrismaService,
   jurisdictionName?: string,
 ) => {
   const jurisdiction = await prismaClient.jurisdictions.create({

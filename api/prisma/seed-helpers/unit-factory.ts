@@ -1,14 +1,9 @@
-import {
-  AmiChart,
-  Prisma,
-  PrismaClient,
-  UnitTypeEnum,
-  UnitTypes,
-} from '@prisma/client';
+import { AmiChart, Prisma, UnitTypeEnum, UnitTypes } from '@prisma/client';
 import { unitTypeFactorySingle } from './unit-type-factory';
 import { unitAccessibilityPriorityTypeFactorySingle } from './unit-accessibility-priority-type-factory';
 import { unitRentTypeFactory } from './unit-rent-type-factory';
 import { randomInt } from 'crypto';
+import { PrismaService } from '../../src/services/prisma.service';
 
 const unitTypes = Object.values(UnitTypeEnum);
 
@@ -51,7 +46,7 @@ export const unitFactorySingle = (
 
 export const unitFactoryMany = async (
   numberToMake: number,
-  prismaClient: PrismaClient,
+  prismaClient: PrismaService,
   optionalParams?: {
     randomizePriorityType?: boolean;
     amiChart?: AmiChart;

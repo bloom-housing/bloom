@@ -1,7 +1,8 @@
-import { PrismaClient, UnitTypeEnum, UnitTypes } from '@prisma/client';
+import { UnitTypeEnum, UnitTypes } from '@prisma/client';
+import { PrismaService } from '../../src/services/prisma.service';
 
 export const unitTypeFactorySingle = async (
-  prismaClient: PrismaClient,
+  prismaClient: PrismaService,
   type: UnitTypeEnum,
 ): Promise<UnitTypes> => {
   const unitType = await prismaClient.unitTypes.findFirst({
@@ -20,7 +21,7 @@ export const unitTypeFactorySingle = async (
 // All unit types should only be created once. This function checks if they have been created
 // before putting all types in the database
 export const unitTypeFactoryAll = async (
-  prismaClient: PrismaClient,
+  prismaClient: PrismaService,
 ): Promise<UnitTypes[]> => {
   const all = await prismaClient.unitTypes.findMany({});
   const unitTypes = Object.values(UnitTypeEnum);

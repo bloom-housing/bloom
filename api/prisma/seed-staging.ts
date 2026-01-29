@@ -4,7 +4,6 @@ import {
   LanguagesEnum,
   MonthlyRentDeterminationTypeEnum,
   MultiselectQuestionsApplicationSectionEnum,
-  PrismaClient,
   UserRoleEnum,
 } from '@prisma/client';
 import dayjs from 'dayjs';
@@ -36,9 +35,10 @@ import { littleVillageApartments } from './seed-helpers/listing-data/little-vill
 import { elmVillage } from './seed-helpers/listing-data/elm-village';
 import { lakeviewVilla } from './seed-helpers/listing-data/lakeview-villa';
 import { sunshineFlats } from './seed-helpers/listing-data/sunshine-flats';
+import { PrismaService } from '../src/services/prisma.service';
 
 export const stagingSeed = async (
-  prismaClient: PrismaClient,
+  prismaClient: PrismaService,
   jurisdictionName: string,
   publicSiteBaseURL: string,
 ) => {
