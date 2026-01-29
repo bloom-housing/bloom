@@ -172,7 +172,7 @@ resource "aws_security_group" "secrets_manager_endpoint" {
 }
 resource "aws_vpc_security_group_ingress_rule" "bloom_service_tasks" {
   for_each = {
-    "api" = aws_security_group.api.id
+    "api"    = aws_security_group.api.id
     "dbinit" = aws_security_group.dbinit.id
 
     # If/when the sites need secrets:
@@ -199,7 +199,7 @@ resource "aws_security_group" "db" {
 }
 resource "aws_vpc_security_group_ingress_rule" "db" {
   for_each = {
-    "api" = aws_security_group.api.id
+    "api"    = aws_security_group.api.id
     "dbinit" = aws_security_group.dbinit.id
   }
   region                       = var.aws_region
