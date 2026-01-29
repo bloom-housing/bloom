@@ -58,7 +58,7 @@
     "react-hook-form": "^6.15.5",
     "react-map-gl": "^8.1.0",
     "swr": "^2.1.2",
-    "tailwindcss": "2.2.10"
+    "tailwindcss": "4.1.12"
   },
   "devDependencies": {
     "@axe-core/watcher": "^3.22.0",
