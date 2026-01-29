@@ -18,13 +18,15 @@ async function main() {
   const {
     values: { environment, jurisdictionName },
   } = parseArgs({ options });
-  const publicSiteBaseURL = env.DBSEED_PUBLIC_SITE_BASE_URL
+  const publicSiteBaseURL = env.DBSEED_PUBLIC_SITE_BASE_URL;
 
   switch (environment) {
     case 'production':
       // Setting up a production database we would just need the bare minimum such as jurisdiction
       const jurisdictionId = await prisma.jurisdictions.create({
-        data: jurisdictionFactory(jurisdictionName as string, { publicSiteBaseURL: publicSiteBaseURL }),
+        data: jurisdictionFactory(jurisdictionName as string, {
+          publicSiteBaseURL: publicSiteBaseURL,
+        }),
       });
       await unitTypeFactoryAll(prisma);
       await unitAccessibilityPriorityTypeFactoryAll(prisma);
