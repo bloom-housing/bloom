@@ -185,7 +185,9 @@ const ListingIntro = (props: ListingIntroProps) => {
                 controlClassName={"control"}
                 errorMessage={t("errors.requiredFieldError")}
                 keyPrefix={"property"}
-                options={propertyOptions}
+                options={propertyOptions.sort((a, b) =>
+                  a.label.toLowerCase() < b.label.toLowerCase() ? -1 : 1
+                )}
                 validation={{ required: true }}
                 inputProps={{
                   onChange: (e) => {
