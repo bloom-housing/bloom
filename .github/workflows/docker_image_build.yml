@@ -31,6 +31,10 @@ jobs:
             docker_context: "{{defaultContext}}:api"
             dockerfile: Dockerfile.dbseed
             platforms: linux/amd64
+          - container: dbinit
+            docker_context: "{{defaultContext}}:api/dbinit"
+            dockerfile: Dockerfile
+            platforms: linux/amd64
           - container: partners
             docker_context: "{{defaultContext}}"
             dockerfile: Dockerfile.sites.partners
