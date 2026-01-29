@@ -149,12 +149,7 @@ services:
       PORT: 3100
       NODE_ENV: "production"
       APP_SECRET: "totally a secret"
-      DB_HOST: "db"
-      DB_PORT: "5432"
-      DB_USER: "bloom_api"
-      DB_PASSWORD: "bloom_api_pw"
-      DB_DATABASE: "bloom_prisma"
-      PRISMA_MIGRATION_DB_URL: "postgres://bloom_api:bloom_api_pw@db:5432/bloom_prisma"
+      DATABASE_URL: "postgres://bloom_api:bloom_api_pw@db:5432/bloom_prisma"
     healthcheck:
       test: ["CMD", "curl", "--fail", "http://127.0.0.1:3100/"]
       interval: "5s"

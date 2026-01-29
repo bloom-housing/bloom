@@ -36,7 +36,7 @@ resource "aws_ecs_task_definition" "bloom_api" {
       # hack.
       command = [
         "-c",
-        "export PRISMA_MIGRATION_DB_URL=\"postgres://$${DB_USER}:$(node -e \"const S=require('@aws-sdk/rds-signer');(new S.Signer({hostname:'$${DB_HOST}',port:'$${DB_PORT}',username:'$${DB_USER}'})).getAuthToken().then(t=>console.log(encodeURIComponent(t)));\")@$${DB_HOST}:$${DB_PORT}/$${DB_DATABASE}\" && env && yarn db:migration:run && yarn start:prod",
+        "export PRISMA_MIGRATION_DB_URL=\"postgres://$${DB_USER}:$(node -e \"const S=require('@aws-sdk/rds-signer');(new S.Signer({hostname:'$${DB_HOST}',port:'$${DB_PORT}',username:'$${DB_USER}'})).getAuthToken().then(t=>console.log(encodeURIComponent(t)));\")@$${DB_HOST}:$${DB_PORT}/$${DB_DATABASE}\" && yarn db:migration:run && yarn start:prod",
       ]
       secrets = [
         {
