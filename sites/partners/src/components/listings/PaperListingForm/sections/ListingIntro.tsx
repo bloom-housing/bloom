@@ -4,6 +4,7 @@ import { t, Field, FieldGroup, Select, SelectOption } from "@bloom-housing/ui-co
 import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import {
   EnumListingListingType,
+  FeatureFlagEnum,
   Property,
   YesNoEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -41,12 +42,17 @@ const getDeveloperLabel = (
 
 const ListingIntro = (props: ListingIntroProps) => {
   const formMethods = useFormContext()
-  const { profile } = useContext(AuthContext)
+  const { profile, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, clearErrors, errors, watch, getValues, setValue } = formMethods
 
   const listing = getValues()
+
+  const enableProperties = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableProperties,
+    listing.jurisdictions.id
+  )
 
   const listingType = watch("listingType")
 
@@ -57,6 +63,7 @@ const ListingIntro = (props: ListingIntroProps) => {
   })
 
   const propertiesData = data?.items ?? []
+  const showPropertiesDropDown = propertiesData.length > 1 && enableProperties
 
   const propertyOptions: SelectOption[] =
     propertiesData.length !== 0
@@ -162,7 +169,7 @@ const ListingIntro = (props: ListingIntroProps) => {
               </Grid.Cell>
             </Grid.Row>
           )}
-        {propertiesData.length > 1 && (
+        {showPropertiesDropDown && (
           <Grid.Row columns={3}>
             <Grid.Cell>
               <Select
