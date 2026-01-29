@@ -111,6 +111,10 @@ locals {
   ecs_logs_retention_days = var.ecs_logs_retention_days != null ? var.ecs_logs_retention_days : (local.is_prod ? 30 : 3)
 }
 
+variable "bloom_dbinit_image" {
+  type        = string
+  description = "Container image for the Bloom dbinit image."
+}
 variable "bloom_api_image" {
   type        = string
   description = "Container image for the Bloom API."

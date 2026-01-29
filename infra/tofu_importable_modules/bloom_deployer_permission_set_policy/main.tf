@@ -305,7 +305,7 @@ data "aws_iam_policy_document" "deployer" {
         "arn:aws:servicediscovery:${local.region_account}:*/*"
       ],
       flatten(
-        [for name in ["api", "site-partners", "site-public"] : [
+        [for name in ["dbinit", "api", "site-partners", "site-public"] : [
           "arn:aws:ecs:${local.region_account}:service-deployment/bloom/bloom-${name}/*",
           "arn:aws:ecs:${local.region_account}:service/bloom/bloom-${name}",
           "arn:aws:ecs:${local.region_account}:task-definition/bloom-${name}:*",

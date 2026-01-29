@@ -22,6 +22,7 @@ resource "aws_service_discovery_http_namespace" "bloom" {
 # Create logs groups.
 resource "aws_cloudwatch_log_group" "task_logs" {
   for_each = toset([
+    "bloom-dbinit",
     "bloom-api",
     "bloom-site-partners",
     "bloom-site-public"
@@ -81,6 +82,24 @@ resource "aws_secretsmanager_secret" "api_jwt_signing_key" {
 
 locals {
   roles = {
+    "dbinit" = {
+      task_execution_policy_extra_statements = [
+        {
+          Action   = "secretsmanager:GetSecretValue"
+          Effect   = "Allow"
+          Resource = one([for s in aws_db_instance.bloom.master_user_secret : s.secret_arn if s.secret_status == "active"])
+        },
+      ]
+      container_policy = jsonencode({
+        Version = "2012-10-17"
+        Statement = [{
+          Action   = "*"
+          Effect   = "Deny"
+          Resource = "*"
+        }]
+      })
+    }
+
     "api" = {
       task_execution_policy_extra_statements = [
         {

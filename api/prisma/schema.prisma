@@ -5,7 +5,12 @@ generator client {
 
 datasource db {
   provider   = "postgresql"
+
+  // url is only used by `prisma migrate` commands.
+  // See api/src/services/prisma.service.ts for how the API constructs its connection.
   url        = env("DATABASE_URL")
+  // directUrl  = env("DIRECT_URL")
+
   extensions = [uuidOssp(map: "uuid-ossp")]
 }
 
