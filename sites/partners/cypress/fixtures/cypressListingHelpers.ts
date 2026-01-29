@@ -17,6 +17,8 @@ export type CypressListing = Listing & {
   cypressImages?: CypressListingImage[]
   listingsBuildingAddress: CypressAddress
   listingsApplicationMailingAddress: CypressAddress
+  listingsApplicationPickUpAddress?: CypressAddress
+  listingsApplicationDropOffAddress?: CypressAddress
   listingsLeasingAgentAddress: CypressAddress
   cypressUtilities?: CypressListingFeatures[]
   cypressFeatures?: CypressListingFeatures[]

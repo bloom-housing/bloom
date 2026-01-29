@@ -57,6 +57,7 @@ export const bloomingtonListing: CypressListing = {
     featureFlags: [
       { name: FeatureFlagEnum.enableUtilitiesIncluded, active: true } as FeatureFlag,
       { name: FeatureFlagEnum.enableNeighborhoodAmenities, active: true } as FeatureFlag,
+      { name: FeatureFlagEnum.enableHomeType, active: true } as FeatureFlag,
     ],
     listingFeaturesConfiguration: listingFeaturesConfiguration,
   } as Jurisdiction,
@@ -80,12 +81,14 @@ export const bloomingtonListing: CypressListing = {
       multiselectQuestions: {
         name: "Work in the city",
         applicationSection: MultiselectQuestionsApplicationSectionEnum.preferences,
+        description: "At least one member of my household works in the city",
       },
     } as ListingMultiselectQuestion,
     {
       multiselectQuestions: {
         name: "Veteran",
         applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
+        description: "Have you or anyone in your household served in the US military?",
       },
     } as ListingMultiselectQuestion,
   ],

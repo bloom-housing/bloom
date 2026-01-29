@@ -108,6 +108,7 @@ export const angelopolisListing: CypressListing = {
       { name: FeatureFlagEnum.enableConfigurableRegions, active: true } as FeatureFlag,
       { name: FeatureFlagEnum.enableCreditScreeningFee, active: true } as FeatureFlag,
       { name: FeatureFlagEnum.enableMarketingFlyer, active: true } as FeatureFlag,
+      { name: FeatureFlagEnum.enableListingImageAltText, active: true } as FeatureFlag,
     ],
     listingFeaturesConfiguration: listingFeaturesConfiguration,
   } as Jurisdiction,
