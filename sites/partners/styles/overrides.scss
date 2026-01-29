@@ -34,17 +34,22 @@
       stroke-width: 1px;
     }
   }
-
   .seeds-large-heading {
-    font-family: var(--seeds-font-alt-sans);
-    font-weight: var(--seeds-font-weight-semibold);
+    font-family: var(--heading-override-font-family);
+    font-weight: var(--heading-override-font-weight);
     font-size: var(--seeds-font-size-2xl);
+    @media (--sm-only) {
+      font-size: var(--seeds-font-size-xl);
+    }
   }
 
   .seeds-medium-heading {
-    font-family: var(--seeds-font-alt-sans);
-    font-weight: var(--seeds-font-weight-semibold);
+    font-family: var(--heading-override-font-family);
+    font-weight: var(--heading-override-font-weight);
     font-size: var(--seeds-font-size-xl);
+    @media (--sm-only) {
+      font-size: var(--seeds-font-size-lg);
+    }
   }
 }
 
