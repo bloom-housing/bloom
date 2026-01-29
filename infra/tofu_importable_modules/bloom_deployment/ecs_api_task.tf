@@ -31,7 +31,7 @@ resource "aws_ecs_task_definition" "bloom_api" {
       Name        = "bloom-api"
       image       = var.bloom_api_image
       environment = [for k, v in merge(local.api_default_env_vars, var.bloom_api_env_vars) : { name = k, value = v }]
-      entrypoint  = "bash"
+      entrypoint  = [ "bash" ]
       # TODO: Once https://github.com/prisma/prisma/issues/7869 is implemented, get rid of the bash hack.
       command = [
         "-c",
