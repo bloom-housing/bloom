@@ -84,7 +84,7 @@ export const PropertyDeleteModal = ({ property, onClose }: PreferenceDeleteModal
     >
       <Dialog.Header id="property-delete-modal-header">{t("t.areYouSure")}</Dialog.Header>
       <Dialog.Content id="property-delete-modal-description">
-        {t("properties.propertyDeleteConfirmationn")}
+        {t("properties.propertyDeleteConfirmation")}
       </Dialog.Content>
       <Dialog.Footer>
         <Button type="button" variant="alert" onClick={deletePreference} size="sm">
