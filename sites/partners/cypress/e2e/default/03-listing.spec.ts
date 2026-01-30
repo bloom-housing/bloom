@@ -116,36 +116,30 @@ describe("Listing Management Tests", () => {
     )
   })
 
-  // Publishes a listing in Bloomington using all possible fields
-  it("full listing publish in Bloomington", () => {
+  const setupListingPublish = (listing: CypressListing) => {
     cy.visit("/")
-
     cy.get("button").contains("Add listing").click()
-    cy.getByID("jurisdiction").select(bloomingtonListing.jurisdictions.id)
+    cy.getByID("jurisdiction").select(listing.jurisdictions.id)
     cy.get("button").contains("Get started").click()
     cy.contains("New listing")
+  }
+
+  it("full listing publish in Bloomington", () => {
+    setupListingPublish(bloomingtonListing)
     fillOutListing(cy, bloomingtonListing)
     verifyDetails(cy, bloomingtonListing)
     verifyAutofill(cy, bloomingtonListing)
     verifyOpenListingWarning(cy, bloomingtonListing)
   })
 
-  // Publishes a listing in Angelopolis using minimal core fields but all toggled on or customization fields and features for this jurisdiction
   it("full listing publish in Angelopolis", () => {
-    cy.visit("/")
-
-    cy.get("button").contains("Add listing").click()
-    cy.getByID("jurisdiction").select(angelopolisListing.jurisdictions.id)
-    cy.get("button").contains("Get started").click()
-    cy.contains("New listing")
+    setupListingPublish(angelopolisListing)
     fillOutListing(cy, angelopolisListing)
     verifyDetails(cy, angelopolisListing)
     verifyAutofill(cy, angelopolisListing)
-    verifyOpenListingWarning(cy, angelopolisListing)
   })
 
   // TODO - Full listing publish in Lakeview
-  // Publishes a listing in Lakeview using minimal core fields but all toggled on or customization fields and features for this jurisdiction
 
   const getFlagActive = (listing: CypressListing, flagName: FeatureFlagEnum) => {
     return listing.jurisdiction.featureFlags?.find((flag) => flag.name === flagName && flag.active)
