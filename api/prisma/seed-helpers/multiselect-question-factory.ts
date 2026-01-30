@@ -60,7 +60,7 @@ export const multiselectQuestionFactory = (
     },
     name: name,
     subText: `sub text for ${name}`,
-    status: optionalParams?.status || MultiselectQuestionsStatusEnum.draft,
+    status: optionalParams?.status || MultiselectQuestionsStatusEnum.visible,
     // TODO: Can be removed after MSQ refactor
     text: name,
   };

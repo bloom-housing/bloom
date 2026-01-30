@@ -31,7 +31,7 @@ const SettingsPreferences = () => {
   const columns = useMemo(() => {
     return [
       {
-        headerName: t("t.preference"),
+        headerName: t("settings.preference"),
         field: "name",
         flex: 1.5,
       },
@@ -132,7 +132,7 @@ const SettingsPreferences = () => {
         <Head>
           <title>{`Preferences - ${t("nav.siteTitlePartners")}`}</title>
         </Head>
-        <NavigationHeader className="relative" title={t("t.preferences")} />
+        <NavigationHeader className="relative" title={t("settings.preferences")} />
         <TabView
           hideTabs={!enableProperties}
           tabs={getSettingsTabs(SettingsIndexEnum.preferences, router, true)}

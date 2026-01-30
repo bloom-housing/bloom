@@ -77,7 +77,7 @@ export const unitGroupFactoryMany = async (
 ): Promise<Prisma.UnitGroupCreateWithoutListingsInput[]> => {
   const createArray: Promise<Prisma.UnitGroupCreateWithoutListingsInput>[] = [
     ...new Array(numberToMake),
-  ].map(async (_, index) => {
+  ].map(async () => {
     const unitType = await unitTypeFactorySingle(
       prismaClient,
       unitTypes[randomInt(unitTypes.length)],
