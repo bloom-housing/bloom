@@ -233,7 +233,7 @@ const SettingsProperties = () => {
         <PropertyDeleteModal
           property={deleteConfirmModalOpen}
           onClose={() => {
-            setSelectedProperty(null)
+            setDeleteConfirmModalOpen(null)
             void mutate(cacheKey)
           }}
         />
@@ -242,7 +242,7 @@ const SettingsProperties = () => {
         <PropertyEditModal
           property={editConfirmModalOpen}
           onClose={() => {
-            setSelectedProperty(null)
+            setEditConfirmModalOpen(null)
             void mutate(cacheKey)
           }}
           onEdit={() => {
