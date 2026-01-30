@@ -49,15 +49,18 @@ jobs:
           fi
 
           if ! curl --fail http://127.0.0.1:3001; then
-            echo 'ERROR: partners site is not accessible'
+            echo 'ERROR: partners site is not accessible. Logs:'
+            docker compose logs partners
             exit 1
           fi
 
           if ! curl --fail http://127.0.0.1:3000; then
-            echo 'ERROR: public site is not accessible'
+            echo 'ERROR: public site is not accessible. Logs:'
+            docker compose logs public
             exit 1
           fi
 
           if ! docker compose down; then
             echo 'ERROR: docker compose down failed'
+            exit 1
           fi
