@@ -1,4 +1,4 @@
-import React, { useContext } from "react"
+import React, { useContext, useMemo } from "react"
 import { MinimalTable, t } from "@bloom-housing/ui-components"
 import { Button, Dialog, Link } from "@bloom-housing/ui-seeds"
 import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
@@ -18,13 +18,17 @@ export const PropertyDeleteModal = ({ property, onClose }: PreferenceDeleteModal
     view: ListingViews.name,
   })
 
-  const listing = listingDtos?.items.find((listing) => listing.property?.id === property?.id)
+  const listing = listingDtos?.items.filter((listing) => listing.property?.id === property?.id)
 
-  const listingsTableData = {
-    name: {
-      content: <Link href={`/listings/${listing?.id}`}>{listing?.name}</Link>,
-    },
-  }
+  const listingsTableData = useMemo(
+    () =>
+      listing?.map((listing) => ({
+        name: {
+          content: <Link href={`/listings/${listing.id}`}>{listing.name}</Link>,
+        },
+      })),
+    [listing]
+  )
 
   if (listingsLoading) {
     return null
@@ -45,7 +49,7 @@ export const PropertyDeleteModal = ({ property, onClose }: PreferenceDeleteModal
       })
   }
 
-  if (listing?.property) {
+  if (listing.length > 0) {
     return (
       <Dialog
         isOpen={!!property}
@@ -62,7 +66,7 @@ export const PropertyDeleteModal = ({ property, onClose }: PreferenceDeleteModal
           </div>
           <MinimalTable
             headers={{ name: "listings.listingName" }}
-            data={[listingsTableData]}
+            data={listingsTableData}
             cellClassName={" "}
           />
         </Dialog.Content>
