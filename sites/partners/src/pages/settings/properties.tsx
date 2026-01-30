@@ -19,6 +19,8 @@ import ManageIconSection from "../../components/settings/ManageIconSection"
 import { ColDef, ColGroupDef } from "ag-grid-community"
 import { PropertyDrawer } from "../../components/settings/PropertyDrawer"
 import { useSWRConfig } from "swr"
+import { PropertyDeleteModal } from "../../components/settings/PropertyDeleteModal"
+import { PropertyEditModal } from "../../components/settings/PropertyEditModal"
 
 const SettingsProperties = () => {
   const router = useRouter()
@@ -28,6 +30,7 @@ const SettingsProperties = () => {
   const { mutate: createProperty, isLoading: isCreateLoading } = useMutate()
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const [selectedProperty, setSelectedProperty] = useState<Property | null>(null)
+  const [editConfirmModalOpen, setEditConfirmModalOpen] = useState<Property | null>(null)
   const { addToast } = useContext(MessageContext)
   const { profile, propertiesService, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
   const enableProperties = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableProperties)
@@ -110,7 +113,7 @@ const SettingsProperties = () => {
                 setSelectedProperty(data)
               }}
               editTestId={`property-edit-icon: ${data.name}`}
-              onDelete={() => console.log("Copy: ", data.name)}
+              onDelete={() => setSelectedProperty(data)}
               deleteTestId={`property-delete-icon: ${data.name}`}
               align="start"
             />
@@ -222,6 +225,29 @@ const SettingsProperties = () => {
         saveQuestion={handleSave}
         isLoading={isCreateLoading || isUpdateLoading}
       />
+      {selectedProperty && (
+        <PropertyDeleteModal
+          property={selectedProperty}
+          onClose={() => {
+            setSelectedProperty(null)
+            void mutate(cacheKey)
+          }}
+        />
+      )}
+      {/* {editConfirmModalOpen && (
+        <PropertyEditModal
+          properties={propertiesData?.items}
+          selectedPropertyId={selectedProperty?.id}
+          onClose={() => {
+            setSelectedProperty(null)
+            void mutate(cacheKey)
+          }}
+          onEdit={() => {
+            setQuestionData(editConfirmModalOpen)
+            setPreferenceDrawerOpen("edit")
+          }}
+        />
+      )} */}
     </>
   )
 }
