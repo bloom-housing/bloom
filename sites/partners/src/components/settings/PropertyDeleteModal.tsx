@@ -18,16 +18,18 @@ export const PropertyDeleteModal = ({ property, onClose }: PreferenceDeleteModal
     view: ListingViews.name,
   })
 
-  const listing = listingDtos?.items.filter((listing) => listing.property?.id === property?.id)
+  const listingsWithProperty = listingDtos?.items.filter(
+    (listing) => listing.property?.id === property?.id
+  )
 
   const listingsTableData = useMemo(
     () =>
-      listing?.map((listing) => ({
+      listingsWithProperty?.map((listing) => ({
         name: {
           content: <Link href={`/listings/${listing.id}`}>{listing.name}</Link>,
         },
       })),
-    [listing]
+    [listingsWithProperty]
   )
 
   if (listingsLoading) {
@@ -49,7 +51,7 @@ export const PropertyDeleteModal = ({ property, onClose }: PreferenceDeleteModal
       })
   }
 
-  if (listing.length > 0) {
+  if (listingsWithProperty.length > 0) {
     return (
       <Dialog
         isOpen={!!property}
