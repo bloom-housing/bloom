@@ -16,8 +16,6 @@ export const PreferenceDeleteModal = ({
 }: PreferenceDeleteModalProps) => {
   const { multiselectQuestionsService } = useContext(AuthContext)
   const { addToast } = useContext(MessageContext)
-  // THIS IS LOOKIN FOR THE LISTING THAT IS ASSOCITED WITH THE QUESTION
-  // I NEED THAT LISTING TO SHOW THE MODAL
   const { data, loading } = useListingsMultiselectQuestionList(multiselectQuestion.id)
 
   const listingsTableData = useMemo(
