@@ -36,7 +36,12 @@ async function main() {
     case 'staging':
       // Staging setup should have realistic looking data with a preset list of listings
       // along with all of the required tables (ami, users, etc)
-      stagingSeed(prisma, jurisdictionName as string, publicSiteBaseURL, msqV2 as boolean);
+      stagingSeed(
+        prisma,
+        jurisdictionName as string,
+        publicSiteBaseURL,
+        msqV2 as boolean,
+      );
       break;
     case 'development':
     default:
