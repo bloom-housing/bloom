@@ -1,34 +1,40 @@
 import React, { useMemo } from "react"
 import { MinimalTable, t } from "@bloom-housing/ui-components"
 import { Button, Dialog, Link } from "@bloom-housing/ui-seeds"
-import { Property } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { ListingViews, Property } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { useListingsData } from "../../lib/hooks"
 
 type PropertyEditModalProps = {
   onClose: () => void
   onEdit: () => void
-  properties: Property[]
-  selectedPropertyId: string
+  property: Property
 }
 
-export const PropertyEditModal = ({
-  properties,
-  selectedPropertyId,
-  onClose,
-  onEdit,
-}: PropertyEditModalProps) => {
-  const property = properties.find((property) => property?.id === selectedPropertyId)
+export const PropertyEditModal = ({ property, onClose, onEdit }: PropertyEditModalProps) => {
+  const { listingDtos, listingsLoading } = useListingsData({
+    limit: "all",
+    view: ListingViews.name,
+  })
+
+  const listingsWithProperty = listingDtos?.items.filter(
+    (listing) => listing.property?.id === property?.id
+  )
 
   const listingsTableData = useMemo(
     () =>
-      [property]?.map((listing) => ({
+      listingsWithProperty?.map((listing) => ({
         name: {
-          content: <Link href={`/listings/${listing?.id}`}>{listing?.name}</Link>,
+          content: <Link href={`/listings/${listing.id}`}>{listing.name}</Link>,
         },
       })),
-    [property]
+    [listingsWithProperty]
   )
 
-  if (properties?.length === 0) {
+  if (listingsLoading) {
+    return null
+  }
+
+  if (listingsWithProperty?.length === 0) {
     onEdit()
     onClose()
     return null
@@ -36,17 +42,17 @@ export const PropertyEditModal = ({
 
   return (
     <Dialog
-      isOpen={properties.length > 1}
+      isOpen={listingsWithProperty.length > 1}
       onClose={onClose}
-      ariaLabelledBy="preference-changes-modal-header"
-      ariaDescribedBy="preference-changes-modal-description"
+      ariaLabelledBy="property-changes-modal-header"
+      ariaDescribedBy="property-changes-modal-description"
     >
-      <Dialog.Header id="preference-changes-modal-header">
-        {t("settings.preferenceChangesRequiredEdit")}
+      <Dialog.Header id="property-changes-modal-header">
+        {t("proerties.propertyChangesRequiredEdit")}
       </Dialog.Header>
       <Dialog.Content>
-        <div className="pb-3" id="preference-changes-modal-description">
-          {t("settings.preferenceEditError")}
+        <div className="pb-3" id="property-changes-modal-description">
+          {t("properties.propertyEditError")}
         </div>
         <MinimalTable
           headers={{ name: "listings.listingName" }}

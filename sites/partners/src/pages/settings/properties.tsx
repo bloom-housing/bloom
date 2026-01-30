@@ -21,6 +21,7 @@ import { PropertyDrawer } from "../../components/settings/PropertyDrawer"
 import { useSWRConfig } from "swr"
 import { PropertyDeleteModal } from "../../components/settings/PropertyDeleteModal"
 import { PropertyEditModal } from "../../components/settings/PropertyEditModal"
+import { DrawerType } from "./preferences"
 
 const SettingsProperties = () => {
   const router = useRouter()
@@ -31,6 +32,7 @@ const SettingsProperties = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const [selectedProperty, setSelectedProperty] = useState<Property | null>(null)
   const [editConfirmModalOpen, setEditConfirmModalOpen] = useState<Property | null>(null)
+  const [preferenceDrawerOpen, setPreferenceDrawerOpen] = useState<DrawerType | null>(null)
   const { addToast } = useContext(MessageContext)
   const { profile, propertiesService, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
   const enableProperties = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableProperties)
@@ -110,7 +112,7 @@ const SettingsProperties = () => {
               copyTestId={`property-copy-icon: ${data.name}`}
               onEdit={() => {
                 setIsDrawerOpen(true)
-                setSelectedProperty(data)
+                setEditConfirmModalOpen(data)
               }}
               editTestId={`property-edit-icon: ${data.name}`}
               onDelete={() => setSelectedProperty(data)}
@@ -125,7 +127,7 @@ const SettingsProperties = () => {
   )
 
   const handleSave = (propertyData: PropertyCreate) => {
-    if (selectedProperty) {
+    if (selectedProperty && preferenceDrawerOpen !== "edit") {
       void updateProperty(() =>
         propertiesService
           .update({
@@ -234,20 +236,18 @@ const SettingsProperties = () => {
           }}
         />
       )}
-      {/* {editConfirmModalOpen && (
+      {editConfirmModalOpen && (
         <PropertyEditModal
-          properties={propertiesData?.items}
-          selectedPropertyId={selectedProperty?.id}
+          property={selectedProperty}
           onClose={() => {
             setSelectedProperty(null)
             void mutate(cacheKey)
           }}
           onEdit={() => {
-            setQuestionData(editConfirmModalOpen)
             setPreferenceDrawerOpen("edit")
           }}
         />
-      )} */}
+      )}
     </>
   )
 }
