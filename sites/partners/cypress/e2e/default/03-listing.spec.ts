@@ -116,6 +116,7 @@ describe("Listing Management Tests", () => {
     )
   })
 
+  // Publishes a listing in Bloomington using all possible fields
   it("full listing publish in Bloomington", () => {
     cy.visit("/")
 
@@ -129,18 +130,22 @@ describe("Listing Management Tests", () => {
     verifyOpenListingWarning(cy, bloomingtonListing)
   })
 
-  it.only("full listing publish in Angelopolis", () => {
+  // Publishes a listing in Angelopolis using minimal core fields but all toggled on or customization fields and features for this jurisdiction
+  it("full listing publish in Angelopolis", () => {
     cy.visit("/")
 
-    // cy.get("button").contains("Add listing").click()
-    // cy.getByID("jurisdiction").select(angelopolisListing.jurisdictions.id)
-    // cy.get("button").contains("Get started").click()
-    // cy.contains("New listing")
-    // fillOutListing(cy, angelopolisListing)
+    cy.get("button").contains("Add listing").click()
+    cy.getByID("jurisdiction").select(angelopolisListing.jurisdictions.id)
+    cy.get("button").contains("Get started").click()
+    cy.contains("New listing")
+    fillOutListing(cy, angelopolisListing)
     verifyDetails(cy, angelopolisListing)
     verifyAutofill(cy, angelopolisListing)
     verifyOpenListingWarning(cy, angelopolisListing)
   })
+
+  // TODO - Full listing publish in Lakeview
+  // Publishes a listing in Lakeview using minimal core fields but all toggled on or customization fields and features for this jurisdiction
 
   const getFlagActive = (listing: CypressListing, flagName: FeatureFlagEnum) => {
     return listing.jurisdiction.featureFlags?.find((flag) => flag.name === flagName && flag.active)
@@ -170,7 +175,7 @@ describe("Listing Management Tests", () => {
   const verifyDataIfExists = (
     cy: Cypress.cy,
     id: string,
-    listingValue: string | undefined,
+    listingValue: string | boolean | undefined,
     entryType: "type" | "select" | "check"
   ) => {
     if (listingValue !== undefined && listingValue !== "") {
@@ -1061,7 +1066,6 @@ describe("Listing Management Tests", () => {
       getFlagActive(listing, FeatureFlagEnum.enableAccessibilityFeatures) &&
       listing.cypressFeatures
     ) {
-      // TODO Test configurable features here when enabled and ensure headings and lists show
       listing.cypressFeatures.forEach((feature) => {
         cy.getByID("accessibilityFeatures").contains(feature.translation)
       })
@@ -1102,7 +1106,6 @@ describe("Listing Management Tests", () => {
 
     // ----------
     // Section - Neighborhood amenities
-    // TODO - Test both toggles here like we did above
     if (listing.listingNeighborhoodAmenities) {
       Object.keys(listing.listingNeighborhoodAmenities).forEach((amenity) => {
         verifyDetailDataIfExists(
@@ -1537,16 +1540,25 @@ describe("Listing Management Tests", () => {
 
     // ----------
     // Section - Accessibility features
-    // TODO Also handle if the features were configurable, so need to open the drawer and check the fields inside then close it
-    if (listing.listingFeatures) {
+    if (
+      getFlagActive(listing, FeatureFlagEnum.enableAccessibilityFeatures) &&
+      listing.listingFeatures
+    ) {
+      const hasDrawer = listing.jurisdiction.listingFeaturesConfiguration?.categories?.length
+      if (hasDrawer) {
+        cy.getByID("addFeaturesButton").contains("Edit features").click()
+      }
       Object.keys(listing.listingFeatures).forEach((feature) => {
         verifyDataIfExists(
           cy,
-          `configurableAccessibilityFeatures.${feature.toLowerCase()}`,
+          `${hasDrawer ? "" : "configurableAccessibilityFeatures."}${feature}`,
           listing.listingFeatures?.[feature as keyof typeof listing.listingFeatures] ? "true" : "",
           "check"
         )
       })
+      if (hasDrawer) {
+        cy.getByID("saveFeaturesButton").contains("Save").click()
+      }
     }
 
     // ----------
@@ -1895,8 +1907,47 @@ describe("Listing Management Tests", () => {
       )
       cy.getByID("applicationDueTimeField.period").should("have.value", listing.dueDate.period)
     }
-    // TODO - Test Open house events
-    // TODO - Test marketing flyer PDFs
+
+    const openHouseEvents = listing.events.filter((e) => e.type === "openHouse")
+    if (openHouseEvents.length > 0) {
+      openHouseEvents.forEach((event, index) => {
+        cy.getByID(`editOpenHouseButton-${index}`).contains("Edit").click()
+        cy.getByID("date.month").should("have.value", event.dateTime.month)
+        cy.getByID("date.day").should("have.value", event.dateTime.day)
+        cy.getByID("date.year").should("have.value", event.dateTime.year)
+        verifyDataIfExists(cy, "label", event.label, "type")
+        verifyDataIfExists(cy, "url", event.url, "type")
+        cy.getByID("startTime.hours").should("have.value", event.dateTime.startHours)
+        cy.getByID("startTime.minutes").should("have.value", event.dateTime.startMinutes)
+        cy.getByID("endTime.hours").should("have.value", event.dateTime.endHours)
+        cy.getByID("endTime.minutes").should("have.value", event.dateTime.endMinutes)
+        verifyDataIfExists(cy, "note", event.note, "type")
+        cy.getByID("startTime.period").should("have.value", event.dateTime.period)
+        cy.getByID("endTime.period").should("have.value", event.dateTime.period)
+        cy.getByID("saveOpenHouseFormButton").contains("Save").click()
+      })
+    }
+
+    if (getFlagActive(listing, FeatureFlagEnum.enableMarketingFlyer)) {
+      const hasAnyFlyer = listing.marketingFlyer || listing.accessibleMarketingFlyer
+      if (hasAnyFlyer) {
+        cy.getByID("addMarketingFlyerButton").contains("Edit marketing flyer").click()
+        if (listing.marketingFlyer) {
+          cy.getByID("marketingFlyerAttachTypeURL").should("be.checked")
+          verifyDataIfExists(cy, "marketingFlyerURL", listing.marketingFlyer, "type")
+        }
+        if (listing.accessibleMarketingFlyer) {
+          cy.getByID("accessibleMarketingFlyerAttachTypeURL").should("be.checked")
+          verifyDataIfExists(
+            cy,
+            "accessibleMarketingFlyerURL",
+            listing.accessibleMarketingFlyer,
+            "type"
+          )
+        }
+        cy.getByID("saveMarketingFlyerButton").contains("Save").click()
+      }
+    }
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
