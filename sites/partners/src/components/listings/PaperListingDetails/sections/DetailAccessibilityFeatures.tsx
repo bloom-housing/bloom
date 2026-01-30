@@ -78,7 +78,7 @@ const DetailAccessibilityFeatures = (props: DetailAccessibilityFeaturesProps) =>
   return (
     <SectionWithGrid heading={t("listings.sections.accessibilityFeatures")} inset>
       {hasCategories ? (
-        <div>
+        <div id="accessibilityFeatures">
           <Heading priority={3} size={"lg"}>
             {t("accessibility.summaryTitle")}
           </Heading>

@@ -116,7 +116,7 @@ describe("Listing Management Tests", () => {
     )
   })
 
-  it.only("full listing publish in Bloomington", () => {
+  it("full listing publish in Bloomington", () => {
     cy.visit("/")
 
     cy.get("button").contains("Add listing").click()
@@ -129,14 +129,14 @@ describe("Listing Management Tests", () => {
     verifyOpenListingWarning(cy, bloomingtonListing)
   })
 
-  it("full listing publish in Angelopolis", () => {
+  it.only("full listing publish in Angelopolis", () => {
     cy.visit("/")
 
-    cy.get("button").contains("Add listing").click()
-    cy.getByID("jurisdiction").select(angelopolisListing.jurisdictions.id)
-    cy.get("button").contains("Get started").click()
-    cy.contains("New listing")
-    fillOutListing(cy, angelopolisListing)
+    // cy.get("button").contains("Add listing").click()
+    // cy.getByID("jurisdiction").select(angelopolisListing.jurisdictions.id)
+    // cy.get("button").contains("Get started").click()
+    // cy.contains("New listing")
+    // fillOutListing(cy, angelopolisListing)
     verifyDetails(cy, angelopolisListing)
     verifyAutofill(cy, angelopolisListing)
     verifyOpenListingWarning(cy, angelopolisListing)
@@ -257,7 +257,10 @@ describe("Listing Management Tests", () => {
           subjectType: "drag-n-drop",
         })
 
-        if (cypressImage.altText) {
+        if (
+          getFlagActive(listing, FeatureFlagEnum.enableListingImageAltText) &&
+          cypressImage.altText
+        ) {
           cy.getByID("image-description").type(cypressImage.altText)
           cy.getByID("save-alt-text-button").contains("Save").click()
         }
@@ -341,6 +344,10 @@ describe("Listing Management Tests", () => {
 
     // ----------
     // Section - Listing units
+
+    if (getFlagActive(listing, FeatureFlagEnum.enableHomeType)) {
+      fillIfDataExists(cy, "homeType", listing.homeType, "select")
+    }
     fillRadio(cy, "unitTypes", "individual-units", listing.disableUnitsAccordion)
 
     // TODO - Test a waitlist listing
@@ -351,10 +358,6 @@ describe("Listing Management Tests", () => {
       cy.getByID("availableUnits").check()
     } else {
       cy.getByID("openWaitlist").check()
-    }
-
-    if (getFlagActive(listing, FeatureFlagEnum.enableHomeType)) {
-      fillIfDataExists(cy, "homeType", listing.homeType, "select")
     }
 
     listing.units.forEach((unit) => {
@@ -448,9 +451,7 @@ describe("Listing Management Tests", () => {
     }
 
     if (
-      listing.jurisdiction.featureFlags?.some(
-        (flag) => flag.name === FeatureFlagEnum.enableUtilitiesIncluded && flag.active
-      ) &&
+      getFlagActive(listing, FeatureFlagEnum.enableUtilitiesIncluded) &&
       listing.listingUtilities
     ) {
       Object.keys(listing.listingUtilities).forEach((utility) => {
@@ -462,7 +463,10 @@ describe("Listing Management Tests", () => {
 
     // ----------
     // Section - Accessibility features
-    if (listing.listingFeatures) {
+    if (
+      getFlagActive(listing, FeatureFlagEnum.enableAccessibilityFeatures) &&
+      listing.listingFeatures
+    ) {
       const hasDrawer = listing.jurisdiction.listingFeaturesConfiguration?.categories?.length
       if (hasDrawer) {
         cy.getByID("addFeaturesButton").contains("Add features").click()
@@ -935,7 +939,11 @@ describe("Listing Management Tests", () => {
 
     if (getFlagActive(listing, FeatureFlagEnum.enableRegions)) {
       if (getFlagActive(listing, FeatureFlagEnum.enableConfigurableRegions)) {
-        verifyDetailDataIfExists(cy, "configurableRegion", listing.configurableRegion)
+        verifyDetailDataIfExists(
+          cy,
+          "buildingAddress.configurableRegion",
+          listing.configurableRegion
+        )
       } else {
         verifyDetailDataIfExists(cy, "region", listing.region)
       }
@@ -1007,395 +1015,396 @@ describe("Listing Management Tests", () => {
           }
         })
       }
+    }
 
-      // ----------
-      // Section - Housing programs
-
-      const listingPrograms =
-        listing.listingMultiselectQuestions?.filter(
-          (q) =>
-            q.multiselectQuestions.applicationSection ===
-            MultiselectQuestionsApplicationSectionEnum.programs
-        ) || []
-      if (listingPrograms.length > 0) {
-        listingPrograms.forEach((program, index) => {
-          if (program.multiselectQuestions.name) {
-            cy.getByID("programTable").contains(index + 1)
-            cy.getByID("programTable").contains(program.multiselectQuestions.name)
-            cy.getByID("programTable").contains(program.multiselectQuestions.description || "")
-          }
-        })
-
-        // ----------
-        // Section - Additional fees
-        verifyDetailDataIfExists(cy, "applicationFee", listing.applicationFee)
-        verifyDetailDataIfExists(cy, "depositMin", listing.depositMin)
-        verifyDetailDataIfExists(cy, "depositMax", listing.depositMax)
-        verifyDetailDataIfExists(cy, "costsNotIncluded", listing.costsNotIncluded)
-
-        if (getFlagActive(listing, FeatureFlagEnum.enableCreditScreeningFee)) {
-          verifyDetailDataIfExists(cy, "creditScreeningFee", listing.creditScreeningFee)
+    // ----------
+    // Section - Housing programs / Community types
+    const listingPrograms =
+      listing.listingMultiselectQuestions?.filter(
+        (q) =>
+          q.multiselectQuestions.applicationSection ===
+          MultiselectQuestionsApplicationSectionEnum.programs
+      ) || []
+    if (listingPrograms.length > 0) {
+      listingPrograms.forEach((program, index) => {
+        if (program.multiselectQuestions.name) {
+          cy.getByID("programTable").contains(index + 1)
+          cy.getByID("programTable").contains(program.multiselectQuestions.name)
+          cy.getByID("programTable").contains(program.multiselectQuestions.description || "")
         }
+      })
+    }
 
-        if (listing.cypressUtilities) {
-          listing.cypressUtilities.forEach((utility) => {
-            cy.getByID("utilities").contains(utility.translation)
-          })
-        }
+    // ----------
+    // Section - Additional fees
+    verifyDetailDataIfExists(cy, "applicationFee", listing.applicationFee)
+    verifyDetailDataIfExists(cy, "depositMin", listing.depositMin)
+    verifyDetailDataIfExists(cy, "depositMax", listing.depositMax)
+    verifyDetailDataIfExists(cy, "costsNotIncluded", listing.costsNotIncluded)
 
-        // ----------
-        // Section - Accessibility features
-        if (listing.cypressFeatures) {
-          listing.cypressFeatures.forEach((feature) => {
-            cy.getByID("accessibilityFeatures").contains(feature.translation)
-          })
-        }
-        // TODO - If configurable features are enabled, ensure we see the lists and headings
+    if (getFlagActive(listing, FeatureFlagEnum.enableCreditScreeningFee)) {
+      verifyDetailDataIfExists(cy, "creditScreeningFee", listing.creditScreeningFee)
+    }
 
-        // ----------
-        // Section - Building features
-        verifyDetailDataIfExists(cy, "amenities", listing.amenities)
-        verifyDetailDataIfExists(cy, "unitAmenities", listing.unitAmenities)
-        verifyDetailDataIfExists(cy, "accessibility", listing.accessibility)
+    if (
+      getFlagActive(listing, FeatureFlagEnum.enableUtilitiesIncluded) &&
+      listing.cypressUtilities
+    ) {
+      listing.cypressUtilities.forEach((utility) => {
+        cy.getByID("utilities").contains(utility.translation)
+      })
+    }
 
-        if (getFlagActive(listing, FeatureFlagEnum.enablePetPolicyCheckbox)) {
-          if (listing.allowsDogs) {
-            cy.getByID("petPolicy").contains("Dogs allowed")
-          }
-          if (listing.allowsCats) {
-            cy.getByID("petPolicy").contains("Cats allowed")
-          }
-        } else {
-          verifyDetailDataIfExists(cy, "petPolicy", listing.petPolicy)
-        }
+    // ----------
+    // Section - Accessibility features
+    if (
+      getFlagActive(listing, FeatureFlagEnum.enableAccessibilityFeatures) &&
+      listing.cypressFeatures
+    ) {
+      // TODO Test configurable features here when enabled and ensure headings and lists show
+      listing.cypressFeatures.forEach((feature) => {
+        cy.getByID("accessibilityFeatures").contains(feature.translation)
+      })
+    }
 
-        if (getFlagActive(listing, FeatureFlagEnum.enableParkingFee)) {
-          verifyDetailDataIfExists(cy, "parkingFee", listing.parkingFee)
-        }
+    // ----------
+    // Section - Building features
+    verifyDetailDataIfExists(cy, "amenities", listing.amenities)
+    verifyDetailDataIfExists(cy, "unitAmenities", listing.unitAmenities)
+    verifyDetailDataIfExists(cy, "accessibility", listing.accessibility)
 
-        verifyDetailDataIfExists(cy, "servicesOffered", listing.servicesOffered)
+    if (getFlagActive(listing, FeatureFlagEnum.enablePetPolicyCheckbox)) {
+      if (listing.allowsDogs) {
+        cy.getByID("petPolicy").contains("Allows dogs")
+      }
+      if (listing.allowsCats) {
+        cy.getByID("petPolicy").contains("Allows cats")
+      }
+    } else {
+      verifyDetailDataIfExists(cy, "petPolicy", listing.petPolicy)
+    }
 
-        if (getFlagActive(listing, FeatureFlagEnum.enableSmokingPolicyRadio)) {
-          verifyDetailDataIfExists(
-            cy,
-            "smokingPolicy",
-            listing.smokingPolicy === "Smoking allowed" ? "Smoking allowed" : "Non-smoking"
-          )
-        } else {
-          verifyDetailDataIfExists(cy, "smokingPolicy", listing.smokingPolicy)
-        }
+    if (getFlagActive(listing, FeatureFlagEnum.enableParkingFee)) {
+      verifyDetailDataIfExists(cy, "parkingFee", listing.parkingFee)
+    }
 
-        // ----------
-        // Section - Neighborhood amenities
-        // TODO - Test both toggles here like we did above
-        if (listing.listingNeighborhoodAmenities) {
-          Object.keys(listing.listingNeighborhoodAmenities).forEach((amenity) => {
-            verifyDetailDataIfExists(
-              cy,
-              `neighborhoodAmenities.${amenity}`,
-              listing.listingNeighborhoodAmenities?.[
-                amenity as keyof typeof listing.listingNeighborhoodAmenities
-              ] as string
-            )
-          })
-        }
+    verifyDetailDataIfExists(cy, "servicesOffered", listing.servicesOffered)
 
-        // ----------
-        // Section - Additional eligibility rules
-        verifyDetailDataIfExists(cy, "creditHistory", listing["creditHistory"])
-        verifyDetailDataIfExists(cy, "rentalHistory", listing["rentalHistory"])
-        verifyDetailDataIfExists(cy, "criminalBackground", listing["criminalBackground"])
-        // TODO - Allow for dynamic rental assistance text
+    if (getFlagActive(listing, FeatureFlagEnum.enableSmokingPolicyRadio)) {
+      verifyDetailDataIfExists(
+        cy,
+        "smokingPolicy",
+        listing.smokingPolicy === "Smoking allowed" ? "Smoking allowed" : "Non-smoking"
+      )
+    } else {
+      verifyDetailDataIfExists(cy, "smokingPolicy", listing.smokingPolicy)
+    }
+
+    // ----------
+    // Section - Neighborhood amenities
+    // TODO - Test both toggles here like we did above
+    if (listing.listingNeighborhoodAmenities) {
+      Object.keys(listing.listingNeighborhoodAmenities).forEach((amenity) => {
         verifyDetailDataIfExists(
           cy,
-          "rentalAssistance",
-          "Housing Choice Vouchers, Section 8 and other valid rental assistance programs will be considered for this property. In the case of a valid rental subsidy, the required minimum income will be based on the portion of the rent that the tenant pays after use of the subsidy."
+          `neighborhoodAmenities.${amenity}`,
+          listing.listingNeighborhoodAmenities?.[
+            amenity as keyof typeof listing.listingNeighborhoodAmenities
+          ] as string
         )
+      })
+    }
 
-        // ----------
-        // Section - Building selection criteria
-        if (!getFlagActive(listing, FeatureFlagEnum.disableBuildingSelectionCriteria)) {
-          verifyDetailDataIfExists(
-            cy,
-            "buildingSelectionCriteriaTable",
-            listing["buildingSelectionCriteria"]
-          )
-        }
+    // ----------
+    // Section - Additional eligibility rules
+    verifyDetailDataIfExists(cy, "creditHistory", listing["creditHistory"])
+    verifyDetailDataIfExists(cy, "rentalHistory", listing["rentalHistory"])
+    verifyDetailDataIfExists(cy, "criminalBackground", listing["criminalBackground"])
+    // TODO - Allow for dynamic rental assistance text
+    verifyDetailDataIfExists(
+      cy,
+      "rentalAssistance",
+      "Housing Choice Vouchers, Section 8 and other valid rental assistance programs will be considered for this property. In the case of a valid rental subsidy, the required minimum income will be based on the portion of the rent that the tenant pays after use of the subsidy."
+    )
 
-        // ----------
-        // Section - Additional details
-        verifyDetailDataIfExists(cy, "requiredDocuments", listing["requiredDocuments"])
-        verifyDetailDataIfExists(cy, "programRules", listing["programRules"])
-        verifyDetailDataIfExists(cy, "specialNotes", listing["specialNotes"])
+    // ----------
+    // Section - Building selection criteria
+    if (!getFlagActive(listing, FeatureFlagEnum.disableBuildingSelectionCriteria)) {
+      verifyDetailDataIfExists(
+        cy,
+        "buildingSelectionCriteriaTable",
+        listing["buildingSelectionCriteria"]
+      )
+    }
 
-        // ----------
-        // Section - Rankings and results
-        verifyDetailDataIfExists(
-          cy,
-          "reviewOrderQuestion",
-          listing.reviewOrderType === "firstComeFirstServe"
-            ? "First come first serve"
-            : listing.reviewOrderType === "lottery"
-            ? "Lottery"
-            : "Waitlist"
+    // ----------
+    // Section - Additional details
+    verifyDetailDataIfExists(cy, "requiredDocuments", listing["requiredDocuments"])
+    verifyDetailDataIfExists(cy, "programRules", listing["programRules"])
+    verifyDetailDataIfExists(cy, "specialNotes", listing["specialNotes"])
+
+    // ----------
+    // Section - Rankings and results
+    verifyDetailDataIfExists(
+      cy,
+      "reviewOrderQuestion",
+      listing.reviewOrderType === "firstComeFirstServe"
+        ? "First come first serve"
+        : listing.reviewOrderType === "lottery"
+        ? "Lottery"
+        : "Waitlist"
+    )
+    if (listing.whatToExpect) {
+      verifyDetailDataIfExists(cy, "whatToExpect", listing.whatToExpect)
+    } else {
+      cy.getByID("whatToExpect").contains("Custom unformatted text")
+      cy.getByID("whatToExpect").contains("li", "Item A")
+      cy.getByID("whatToExpect").contains("li", "Item B")
+      cy.getByID("whatToExpect").contains("li", "Item C")
+    }
+
+    // ----------
+    // Section - Leasing agent
+    verifyDetailDataIfExists(cy, "leasingAgentName", listing.leasingAgentName)
+    verifyDetailDataIfExists(cy, "leasingAgentEmail", listing.leasingAgentEmail?.toLowerCase())
+    verifyDetailDataIfExists(cy, "leasingAgentPhone", formatPhoneNumber(listing.leasingAgentPhone))
+    verifyDetailDataIfExists(cy, "leasingAgentOfficeHours", listing.leasingAgentOfficeHours)
+    verifyDetailDataIfExists(cy, "leasingAgentTitle", listing.leasingAgentTitle)
+    verifyDetailDataIfExists(cy, "managementWebsite", listing.managementWebsite)
+
+    verifyDetailDataIfExists(
+      cy,
+      "leasingAgentAddress.street",
+      listing.listingsLeasingAgentAddress?.street
+    )
+    verifyDetailDataIfExists(
+      cy,
+      "leasingAgentAddress.street2",
+      listing.listingsLeasingAgentAddress?.street2
+    )
+    verifyDetailDataIfExists(
+      cy,
+      "leasingAgentAddress.city",
+      listing.listingsLeasingAgentAddress?.city
+    )
+    verifyDetailDataIfExists(
+      cy,
+      "leasingAgentAddress.state",
+      listing.listingsLeasingAgentAddress?.abbreviatedState
+    )
+    verifyDetailDataIfExists(
+      cy,
+      "leasingAgentAddress.zipCode",
+      listing.listingsLeasingAgentAddress?.zipCode
+    )
+
+    // ----------
+    // Section - Application types
+    const internalMethod = listing.applicationMethods.find(
+      (method) => method.type === ApplicationMethodsTypeEnum.Internal
+    )
+
+    const externalMethod = listing.applicationMethods.find(
+      (method) => method.type === ApplicationMethodsTypeEnum.ExternalLink
+    )
+
+    const referralMethod = listing.applicationMethods.find(
+      (method) => method.type === ApplicationMethodsTypeEnum.Referral
+    )
+    if (internalMethod || externalMethod) {
+      cy.getByID("digitalApplication").contains("Yes")
+    } else {
+      cy.getByID("digitalApplication").contains("No")
+    }
+
+    if (externalMethod) {
+      cy.getByID("digitalMethod.type").contains("No")
+
+      if (externalMethod.externalReference) {
+        cy.getByID("customOnlineApplicationUrl").contains(externalMethod.externalReference)
+      }
+    } else if (internalMethod) {
+      cy.getByID("digitalMethod.type").contains("Yes")
+    }
+
+    // TODO - Test paper application upload
+    cy.getByID("paperApplication").contains("No")
+
+    if (referralMethod) {
+      cy.getByID("referralOpportunity").contains("Yes")
+      verifyDetailDataIfExists(
+        cy,
+        "referralContactPhone",
+        formatPhoneNumber(referralMethod.phoneNumber)
+      )
+      verifyDetailDataIfExists(
+        cy,
+        "referralSummary",
+        formatPhoneNumber(referralMethod.externalReference)
+      )
+    } else {
+      cy.getByID("referralOpportunity").contains("No")
+    }
+
+    // ----------
+    // Section - Application address
+
+    if (listing.listingsApplicationMailingAddress) {
+      cy.getByID("applicationMailingSection").contains("Yes")
+      verifyDetailDataIfExists(
+        cy,
+        "applicationMailingAddress.street",
+        listing.listingsApplicationMailingAddress?.street
+      )
+      verifyDetailDataIfExists(
+        cy,
+        "applicationMailingAddress.street2",
+        listing.listingsApplicationMailingAddress?.street2
+      )
+      verifyDetailDataIfExists(
+        cy,
+        "applicationMailingAddress.city",
+        listing.listingsApplicationMailingAddress?.city
+      )
+      verifyDetailDataIfExists(
+        cy,
+        "applicationMailingAddress.zipCode",
+        listing.listingsApplicationMailingAddress?.zipCode
+      )
+      verifyDetailDataIfExists(
+        cy,
+        "applicationMailingAddress.state",
+        listing.listingsApplicationMailingAddress?.abbreviatedState
+      )
+    } else {
+      cy.getByID("applicationMailingSection").contains("No")
+    }
+    if (listing.listingsApplicationPickUpAddress) {
+      cy.getByID("applicationPickupQuestion").contains("Yes")
+      verifyDetailDataIfExists(
+        cy,
+        "applicationPickUpAddress.street",
+        listing.listingsApplicationPickUpAddress?.street
+      )
+      verifyDetailDataIfExists(
+        cy,
+        "applicationPickUpAddress.street2",
+        listing.listingsApplicationPickUpAddress?.street2
+      )
+      verifyDetailDataIfExists(
+        cy,
+        "applicationPickUpAddress.city",
+        listing.listingsApplicationPickUpAddress?.city
+      )
+      verifyDetailDataIfExists(
+        cy,
+        "applicationPickUpAddress.zipCode",
+        listing.listingsApplicationPickUpAddress?.zipCode
+      )
+      verifyDetailDataIfExists(
+        cy,
+        "applicationPickUpAddress.state",
+        listing.listingsApplicationPickUpAddress?.abbreviatedState
+      )
+      verifyDetailDataIfExists(
+        cy,
+        "applicationPickUpAddressOfficeHours",
+        listing.applicationPickUpAddressOfficeHours
+      )
+    } else {
+      cy.getByID("applicationPickupQuestion").contains("No")
+    }
+    if (listing.listingsApplicationDropOffAddress) {
+      cy.getByID("applicationDropOffQuestion").contains("Yes")
+      verifyDetailDataIfExists(
+        cy,
+        "applicationDropOffAddress.street",
+        listing.listingsApplicationDropOffAddress?.street
+      )
+      verifyDetailDataIfExists(
+        cy,
+        "applicationDropOffAddress.street2",
+        listing.listingsApplicationDropOffAddress?.street2
+      )
+      verifyDetailDataIfExists(
+        cy,
+        "applicationDropOffAddress.city",
+        listing.listingsApplicationDropOffAddress?.city
+      )
+      verifyDetailDataIfExists(
+        cy,
+        "applicationDropOffAddress.zipCode",
+        listing.listingsApplicationDropOffAddress?.zipCode
+      )
+      verifyDetailDataIfExists(
+        cy,
+        "applicationDropOffAddress.state",
+        listing.listingsApplicationDropOffAddress?.abbreviatedState
+      )
+      verifyDetailDataIfExists(
+        cy,
+        "applicationDropOffAddressOfficeHours",
+        listing.applicationDropOffAddressOfficeHours
+      )
+    } else {
+      cy.getByID("applicationDropOffQuestion").contains("No")
+    }
+
+    if (listing.postmarkDate) {
+      cy.getByID("postmarksConsideredQuestion").contains("Yes")
+      cy.getByTestId("postmark-date").contains(listing.postmarkDate.day)
+      cy.getByTestId("postmark-date").contains(listing.postmarkDate.month)
+      cy.getByTestId("postmark-date").contains(listing.postmarkDate.year)
+      cy.getByTestId("postmark-time").contains(listing.postmarkDate.startHours)
+      cy.getByTestId("postmark-time").contains(listing.postmarkDate.startMinutes)
+      cy.getByTestId("postmark-time").contains(listing.postmarkDate.period.toUpperCase())
+    } else {
+      cy.getByID("postmarksConsideredQuestion").contains("No")
+    }
+
+    verifyDetailDataIfExists(
+      cy,
+      "additionalApplicationSubmissionNotes",
+      listing.additionalApplicationSubmissionNotes
+    )
+
+    // ----------
+    // Section - Application dates
+    if (listing.dueDate) {
+      cy.getByID("applicationDeadline").contains(
+        `${listing.dueDate.month}/${listing.dueDate.day}/${listing.dueDate.year}`
+      )
+      cy.getByID("applicationDueTime").contains(
+        `${listing.dueDate.startHours}:${
+          listing.dueDate.startMinutes
+        } ${listing.dueDate.period.toUpperCase()}`
+      )
+    }
+    const openHouseEvents = listing.events.filter((e) => e.type === "openHouse")
+    if (openHouseEvents.length > 0) {
+      openHouseEvents.forEach((event) => {
+        cy.getByID("openhouseHeader").contains(
+          `${event.dateTime.month}/${event.dateTime.day}/${event.dateTime.year}`
         )
-        if (listing.whatToExpect) {
-          verifyDetailDataIfExists(cy, "whatToExpect", listing.whatToExpect)
-        } else {
-          cy.getByID("whatToExpect").contains("Custom unformatted text")
-          cy.getByID("whatToExpect").contains("li", "Item A")
-          cy.getByID("whatToExpect").contains("li", "Item B")
-          cy.getByID("whatToExpect").contains("li", "Item C")
-        }
-
-        verifyDetailDataIfExists(
-          cy,
-          "additionalApplicationSubmissionNotes",
-          listing.additionalApplicationSubmissionNotes
+        cy.getByID("openhouseHeader").contains(
+          `${event.dateTime.startHours}:${
+            event.dateTime.startMinutes
+          } ${event.dateTime.period.toUpperCase()}`
         )
-
-        // ----------
-        // Section - Leasing agent
-        verifyDetailDataIfExists(cy, "leasingAgentName", listing.leasingAgentName)
-        verifyDetailDataIfExists(cy, "leasingAgentEmail", listing.leasingAgentEmail?.toLowerCase())
-        verifyDetailDataIfExists(
-          cy,
-          "leasingAgentPhone",
-          formatPhoneNumber(listing.leasingAgentPhone)
+        cy.getByID("openhouseHeader").contains(
+          `${event.dateTime.endHours}:${
+            event.dateTime.endMinutes
+          } ${event.dateTime.period.toUpperCase()}`
         )
-        verifyDetailDataIfExists(cy, "leasingAgentOfficeHours", listing.leasingAgentOfficeHours)
-        verifyDetailDataIfExists(cy, "leasingAgentTitle", listing.leasingAgentTitle)
-        verifyDetailDataIfExists(cy, "managementWebsite", listing.managementWebsite)
+      })
+    }
 
-        verifyDetailDataIfExists(
-          cy,
-          "leasingAgentAddress.street",
-          listing.listingsLeasingAgentAddress?.street
-        )
-        verifyDetailDataIfExists(
-          cy,
-          "leasingAgentAddress.street2",
-          listing.listingsLeasingAgentAddress?.street2
-        )
-        verifyDetailDataIfExists(
-          cy,
-          "leasingAgentAddress.city",
-          listing.listingsLeasingAgentAddress?.city
-        )
-        verifyDetailDataIfExists(
-          cy,
-          "leasingAgentAddress.state",
-          listing.listingsLeasingAgentAddress?.abbreviatedState
-        )
-        verifyDetailDataIfExists(
-          cy,
-          "leasingAgentAddress.zipCode",
-          listing.listingsLeasingAgentAddress?.zipCode
-        )
-
-        // ----------
-        // Section - Application types
-        const internalMethod = listing.applicationMethods.find(
-          (method) => method.type === ApplicationMethodsTypeEnum.Internal
-        )
-
-        const externalMethod = listing.applicationMethods.find(
-          (method) => method.type === ApplicationMethodsTypeEnum.ExternalLink
-        )
-
-        const referralMethod = listing.applicationMethods.find(
-          (method) => method.type === ApplicationMethodsTypeEnum.Referral
-        )
-        if (internalMethod || externalMethod) {
-          cy.getByID("digitalApplication").contains("Yes")
-        } else {
-          cy.getByID("digitalApplication").contains("No")
-        }
-
-        if (externalMethod) {
-          cy.getByID("digitalMethod.type").contains("No")
-
-          if (externalMethod.externalReference) {
-            cy.getByID("customOnlineApplicationUrl").contains(externalMethod.externalReference)
-          }
-        } else if (internalMethod) {
-          cy.getByID("digitalMethod.type").contains("Yes")
-        }
-
-        // TODO - Test paper application upload
-        cy.getByID("paperApplication").contains("No")
-
-        if (referralMethod) {
-          cy.getByID("referralOpportunity").contains("Yes")
-          verifyDetailDataIfExists(
-            cy,
-            "referralContactPhone",
-            formatPhoneNumber(referralMethod.phoneNumber)
-          )
-          verifyDetailDataIfExists(
-            cy,
-            "referralSummary",
-            formatPhoneNumber(referralMethod.externalReference)
-          )
-        } else {
-          cy.getByID("referralOpportunity").contains("No")
-        }
-
-        // ----------
-        // Section - Application address
-
-        if (listing.listingsApplicationMailingAddress) {
-          cy.getByID("applicationMailingSection").contains("Yes")
-          verifyDetailDataIfExists(
-            cy,
-            "applicationMailingAddress.street",
-            listing.listingsApplicationMailingAddress?.street
-          )
-          verifyDetailDataIfExists(
-            cy,
-            "applicationMailingAddress.street2",
-            listing.listingsApplicationMailingAddress?.street2
-          )
-          verifyDetailDataIfExists(
-            cy,
-            "applicationMailingAddress.city",
-            listing.listingsApplicationMailingAddress?.city
-          )
-          verifyDetailDataIfExists(
-            cy,
-            "applicationMailingAddress.zipCode",
-            listing.listingsApplicationMailingAddress?.zipCode
-          )
-          verifyDetailDataIfExists(
-            cy,
-            "applicationMailingAddress.state",
-            listing.listingsApplicationMailingAddress?.abbreviatedState
-          )
-        } else {
-          cy.getByID("applicationMailingSection").contains("No")
-        }
-        if (listing.listingsApplicationPickUpAddress) {
-          cy.getByID("applicationPickupQuestion").contains("Yes")
-          verifyDetailDataIfExists(
-            cy,
-            "applicationPickUpAddress.street",
-            listing.listingsApplicationPickUpAddress?.street
-          )
-          verifyDetailDataIfExists(
-            cy,
-            "applicationPickUpAddress.street2",
-            listing.listingsApplicationPickUpAddress?.street2
-          )
-          verifyDetailDataIfExists(
-            cy,
-            "applicationPickUpAddress.city",
-            listing.listingsApplicationPickUpAddress?.city
-          )
-          verifyDetailDataIfExists(
-            cy,
-            "applicationPickUpAddress.zipCode",
-            listing.listingsApplicationPickUpAddress?.zipCode
-          )
-          verifyDetailDataIfExists(
-            cy,
-            "applicationPickUpAddress.state",
-            listing.listingsApplicationPickUpAddress?.abbreviatedState
-          )
-          verifyDetailDataIfExists(
-            cy,
-            "applicationPickUpAddressOfficeHours",
-            listing.applicationPickUpAddressOfficeHours
-          )
-        } else {
-          cy.getByID("applicationPickupQuestion").contains("No")
-        }
-        if (listing.listingsApplicationDropOffAddress) {
-          cy.getByID("applicationDropOffQuestion").contains("Yes")
-          verifyDetailDataIfExists(
-            cy,
-            "applicationDropOffAddress.street",
-            listing.listingsApplicationDropOffAddress?.street
-          )
-          verifyDetailDataIfExists(
-            cy,
-            "applicationDropOffAddress.street2",
-            listing.listingsApplicationDropOffAddress?.street2
-          )
-          verifyDetailDataIfExists(
-            cy,
-            "applicationDropOffAddress.city",
-            listing.listingsApplicationDropOffAddress?.city
-          )
-          verifyDetailDataIfExists(
-            cy,
-            "applicationDropOffAddress.zipCode",
-            listing.listingsApplicationDropOffAddress?.zipCode
-          )
-          verifyDetailDataIfExists(
-            cy,
-            "applicationDropOffAddress.state",
-            listing.listingsApplicationDropOffAddress?.abbreviatedState
-          )
-          verifyDetailDataIfExists(
-            cy,
-            "applicationDropOffAddressOfficeHours",
-            listing.applicationDropOffAddressOfficeHours
-          )
-        } else {
-          cy.getByID("applicationDropOffQuestion").contains("No")
-        }
-
-        if (listing.postmarkDate) {
-          cy.getByID("postmarksConsideredQuestion").contains("Yes")
-          cy.getByTestId("postmark-date").contains(listing.postmarkDate.day)
-          cy.getByTestId("postmark-date").contains(listing.postmarkDate.month)
-          cy.getByTestId("postmark-date").contains(listing.postmarkDate.year)
-          cy.getByTestId("postmark-time").contains(listing.postmarkDate.startHours)
-          cy.getByTestId("postmark-time").contains(listing.postmarkDate.startMinutes)
-          cy.getByTestId("postmark-time").contains(listing.postmarkDate.period.toUpperCase())
-        } else {
-          cy.getByID("postmarksConsideredQuestion").contains("No")
-        }
-
-        // ----------
-        // Section - Application dates
-        if (listing.dueDate) {
-          cy.getByID("applicationDeadline").contains(
-            `${listing.dueDate.month}/${listing.dueDate.day}/${listing.dueDate.year}`
-          )
-          cy.getByID("applicationDueTime").contains(
-            `${listing.dueDate.startHours}:${
-              listing.dueDate.startMinutes
-            } ${listing.dueDate.period.toUpperCase()}`
-          )
-        }
-        const openHouseEvents = listing.events.filter((e) => e.type === "openHouse")
-        if (openHouseEvents.length > 0) {
-          openHouseEvents.forEach((event) => {
-            cy.getByID("openhouseHeader").contains(
-              `${event.dateTime.month}/${event.dateTime.day}/${event.dateTime.year}`
-            )
-            cy.getByID("openhouseHeader").contains(
-              `${event.dateTime.startHours}:${
-                event.dateTime.startMinutes
-              } ${event.dateTime.period.toUpperCase()}`
-            )
-            cy.getByID("openhouseHeader").contains(
-              `${event.dateTime.endHours}:${
-                event.dateTime.endMinutes
-              } ${event.dateTime.period.toUpperCase()}`
-            )
-          })
-        }
-
-        if (getFlagActive(listing, FeatureFlagEnum.enableMarketingFlyer)) {
-          if (listing.marketingFlyer) {
-            cy.getByID("Marketing flyer url").contains(listing.marketingFlyer)
-          }
-          if (listing.accessibleMarketingFlyer) {
-            cy.getByID("Accessible marketing flyer url").contains(listing.accessibleMarketingFlyer)
-          }
-        }
+    if (getFlagActive(listing, FeatureFlagEnum.enableMarketingFlyer)) {
+      if (listing.marketingFlyer) {
+        cy.getByID("Marketing flyer url").contains(listing.marketingFlyer)
+      }
+      if (listing.accessibleMarketingFlyer) {
+        cy.getByID("Accessible marketing flyer url").contains(listing.accessibleMarketingFlyer)
       }
     }
   }
@@ -1528,6 +1537,7 @@ describe("Listing Management Tests", () => {
 
     // ----------
     // Section - Accessibility features
+    // TODO Also handle if the features were configurable, so need to open the drawer and check the fields inside then close it
     if (listing.listingFeatures) {
       Object.keys(listing.listingFeatures).forEach((feature) => {
         verifyDataIfExists(
@@ -1654,6 +1664,38 @@ describe("Listing Management Tests", () => {
     )
     verifyDataIfExists(cy, "leasingAgentTitle", listing.leasingAgentTitle, "type")
     verifyDataIfExists(cy, "leasingAgentOfficeHours", listing.leasingAgentOfficeHours, "type")
+    verifyDataIfExists(cy, "managementWebsite", listing.managementWebsite, "type")
+
+    verifyDataIfExists(
+      cy,
+      "listingsLeasingAgentAddress.street",
+      listing.listingsLeasingAgentAddress?.street,
+      "type"
+    )
+    verifyDataIfExists(
+      cy,
+      "listingsLeasingAgentAddress.street2",
+      listing.listingsLeasingAgentAddress?.street2,
+      "type"
+    )
+    verifyDataIfExists(
+      cy,
+      "listingsLeasingAgentAddress.city",
+      listing.listingsLeasingAgentAddress?.city,
+      "type"
+    )
+    verifyDataIfExists(
+      cy,
+      "listingsLeasingAgentAddress.zipCode",
+      listing.listingsLeasingAgentAddress?.zipCode,
+      "type"
+    )
+    verifyDataIfExists(
+      cy,
+      "listingsLeasingAgentAddress.state",
+      listing.listingsLeasingAgentAddress?.state,
+      "select"
+    )
 
     // ----------
     // Section - Application types
@@ -1695,36 +1737,6 @@ describe("Listing Management Tests", () => {
 
     // ----------
     // Section - Application address
-    verifyDataIfExists(
-      cy,
-      "listingsLeasingAgentAddress.street",
-      listing.listingsLeasingAgentAddress?.street,
-      "type"
-    )
-    verifyDataIfExists(
-      cy,
-      "listingsLeasingAgentAddress.street2",
-      listing.listingsLeasingAgentAddress?.street2,
-      "type"
-    )
-    verifyDataIfExists(
-      cy,
-      "listingsLeasingAgentAddress.city",
-      listing.listingsLeasingAgentAddress?.city,
-      "type"
-    )
-    verifyDataIfExists(
-      cy,
-      "listingsLeasingAgentAddress.zipCode",
-      listing.listingsLeasingAgentAddress?.zipCode,
-      "type"
-    )
-    verifyDataIfExists(
-      cy,
-      "listingsLeasingAgentAddress.state",
-      listing.listingsLeasingAgentAddress?.state,
-      "select"
-    )
     if (listing.listingsApplicationMailingAddress) {
       cy.getByID("applicationsMailedInYes").should("be.checked")
     }
@@ -1762,9 +1774,89 @@ describe("Listing Management Tests", () => {
       "select"
     )
 
-    // TODO - Testing pick up and drop off addresses
-    cy.getByID("applicationsPickedUpNo").should("be.checked")
-    cy.getByID("applicationsDroppedOffNo").should("be.checked")
+    if (listing.listingsApplicationPickUpAddress) {
+      cy.getByID("applicationsPickedUpYes").should("be.checked")
+      verifyDataIfExists(
+        cy,
+        "listingsApplicationPickUpAddress.street",
+        listing.listingsApplicationPickUpAddress?.street,
+        "type"
+      )
+      verifyDataIfExists(
+        cy,
+        "listingsApplicationPickUpAddress.street2",
+        listing.listingsApplicationPickUpAddress?.street2,
+        "type"
+      )
+      verifyDataIfExists(
+        cy,
+        "listingsApplicationPickUpAddress.city",
+        listing.listingsApplicationPickUpAddress?.city,
+        "type"
+      )
+      verifyDataIfExists(
+        cy,
+        "listingsApplicationPickUpAddress.zipCode",
+        listing.listingsApplicationPickUpAddress?.zipCode,
+        "type"
+      )
+      verifyDataIfExists(
+        cy,
+        "listingsApplicationPickUpAddress.state",
+        listing.listingsApplicationPickUpAddress?.state,
+        "select"
+      )
+      verifyDataIfExists(
+        cy,
+        "applicationPickUpAddressOfficeHours",
+        listing.applicationPickUpAddressOfficeHours,
+        "type"
+      )
+    } else {
+      cy.getByID("applicationsPickedUpNo").should("be.checked")
+    }
+
+    if (listing.listingsApplicationDropOffAddress) {
+      cy.getByID("applicationsDroppedOffYes").should("be.checked")
+      verifyDataIfExists(
+        cy,
+        "listingsApplicationDropOffAddress.street",
+        listing.listingsApplicationDropOffAddress?.street,
+        "type"
+      )
+      verifyDataIfExists(
+        cy,
+        "listingsApplicationDropOffAddress.street2",
+        listing.listingsApplicationDropOffAddress?.street2,
+        "type"
+      )
+      verifyDataIfExists(
+        cy,
+        "listingsApplicationDropOffAddress.city",
+        listing.listingsApplicationDropOffAddress?.city,
+        "type"
+      )
+      verifyDataIfExists(
+        cy,
+        "listingsApplicationDropOffAddress.zipCode",
+        listing.listingsApplicationDropOffAddress?.zipCode,
+        "type"
+      )
+      verifyDataIfExists(
+        cy,
+        "listingsApplicationDropOffAddress.state",
+        listing.listingsApplicationDropOffAddress?.state,
+        "select"
+      )
+      verifyDataIfExists(
+        cy,
+        "applicationDropOffAddressOfficeHours",
+        listing.applicationDropOffAddressOfficeHours,
+        "type"
+      )
+    } else {
+      cy.getByID("applicationsDroppedOffNo").should("be.checked")
+    }
 
     if (listing.postmarkDate) {
       cy.getByID("postmarksConsideredYes").should("be.checked")
@@ -1780,6 +1872,8 @@ describe("Listing Management Tests", () => {
         listing.postmarkDate.startMinutes
       )
       cy.getByTestId("postmark-time-field-period").should("have.value", listing.postmarkDate.period)
+    } else {
+      cy.getByID("postmarksConsideredNo").should("be.checked")
     }
     verifyDataIfExists(
       cy,
@@ -1787,9 +1881,6 @@ describe("Listing Management Tests", () => {
       listing.additionalApplicationSubmissionNotes,
       "type"
     )
-
-    // TODO - Test Open house events
-    // TODO - Test marketing flyer PDFs
 
     // ----------
     // Section - Application dates
@@ -1804,6 +1895,8 @@ describe("Listing Management Tests", () => {
       )
       cy.getByID("applicationDueTimeField.period").should("have.value", listing.dueDate.period)
     }
+    // TODO - Test Open house events
+    // TODO - Test marketing flyer PDFs
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
