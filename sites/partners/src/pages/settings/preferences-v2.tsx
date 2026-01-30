@@ -101,7 +101,7 @@ const SettingsPreferences = () => {
 
   const items = useMemo(
     () =>
-      (data || [])
+      (data?.items || [])
         .sort((a, b) => {
           const aChar = a.text.toUpperCase()
           const bChar = b.text.toUpperCase()
