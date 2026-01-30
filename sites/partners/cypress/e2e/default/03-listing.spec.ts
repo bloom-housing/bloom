@@ -1557,32 +1557,6 @@ describe("Listing Management Tests", () => {
 
     // ----------
     // Section - Building features
-    if (listing.listingNeighborhoodAmenities) {
-      if (getFlagActive(listing, FeatureFlagEnum.enableNeighborhoodAmenitiesDropdown)) {
-        Object.keys(listing.listingNeighborhoodAmenities).forEach((amenity) => {
-          verifyDataIfExists(
-            cy,
-            `listingNeighborhoodAmenities.${amenity}`,
-            listing.listingNeighborhoodAmenities?.[
-              amenity as keyof typeof listing.listingNeighborhoodAmenities
-            ] as string,
-            "select"
-          )
-        })
-      } else {
-        Object.keys(listing.listingNeighborhoodAmenities).forEach((amenity) => {
-          verifyDataIfExists(
-            cy,
-            `listingNeighborhoodAmenities.${amenity}`,
-            listing.listingNeighborhoodAmenities?.[
-              amenity as keyof typeof listing.listingNeighborhoodAmenities
-            ] as string,
-            "type"
-          )
-        })
-      }
-    }
-
     verifyDataIfExists(cy, "amenities", listing.amenities, "type")
     verifyDataIfExists(cy, "accessibility", listing.accessibility, "type")
     verifyDataIfExists(cy, "unitAmenities", listing.unitAmenities, "type")
@@ -1613,7 +1587,31 @@ describe("Listing Management Tests", () => {
 
     // ----------
     // Section - Neighborhood amenities
-    // Handled in Building features section above
+    if (listing.listingNeighborhoodAmenities) {
+      if (getFlagActive(listing, FeatureFlagEnum.enableNeighborhoodAmenitiesDropdown)) {
+        Object.keys(listing.listingNeighborhoodAmenities).forEach((amenity) => {
+          verifyDataIfExists(
+            cy,
+            `listingNeighborhoodAmenities.${amenity}`,
+            listing.listingNeighborhoodAmenities?.[
+              amenity as keyof typeof listing.listingNeighborhoodAmenities
+            ] as string,
+            "select"
+          )
+        })
+      } else {
+        Object.keys(listing.listingNeighborhoodAmenities).forEach((amenity) => {
+          verifyDataIfExists(
+            cy,
+            `listingNeighborhoodAmenities.${amenity}`,
+            listing.listingNeighborhoodAmenities?.[
+              amenity as keyof typeof listing.listingNeighborhoodAmenities
+            ] as string,
+            "type"
+          )
+        })
+      }
+    }
 
     // ----------
     // Section - Additional eligibility rules
