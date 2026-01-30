@@ -1,6 +1,5 @@
-import { Prisma, ReservedCommunityTypes } from '@prisma/client';
+import { Prisma, PrismaClient, ReservedCommunityTypes } from '@prisma/client';
 import { randomInt } from 'crypto';
-import { PrismaService } from '../../src/services/prisma.service';
 
 const reservedCommunityTypeOptions = [
   'specialNeeds',
@@ -33,7 +32,7 @@ export const reservedCommunityTypeFactory = (
 
 export const reservedCommunityTypeFactoryAll = async (
   jurisdictionId: string,
-  prismaClient: PrismaService,
+  prismaClient: PrismaClient,
 ) => {
   await prismaClient.reservedCommunityTypes.createMany({
     data: reservedCommunityTypeOptions.map((value) => ({
@@ -44,7 +43,7 @@ export const reservedCommunityTypeFactoryAll = async (
 };
 
 export const reservedCommunityTypeFactoryGet = async (
-  prismaClient: PrismaService,
+  prismaClient: PrismaClient,
   jurisdictionId?: string,
   name?: string,
 ): Promise<ReservedCommunityTypes> => {
@@ -78,7 +77,7 @@ export const reservedCommunityTypeFactoryGet = async (
 
 export const reservedCommunityTypesFindOrCreate = async (
   jurisdictionId: string,
-  prismaClient: PrismaService,
+  prismaClient: PrismaClient,
 ): Promise<ReservedCommunityTypes> => {
   const reservedCommunityType = await reservedCommunityTypeFactoryGet(
     prismaClient,

@@ -6,14 +6,14 @@ import { devSeeding } from './seed-dev';
 import { unitTypeFactoryAll } from './seed-helpers/unit-type-factory';
 import { unitAccessibilityPriorityTypeFactoryAll } from './seed-helpers/unit-accessibility-priority-type-factory';
 import { reservedCommunityTypeFactoryAll } from './seed-helpers/reserved-community-type-factory';
-import { PrismaService } from '../src/services/prisma.service';
+import { PrismaClient } from '@prisma/client';
 
 const options: { [name: string]: { type: 'string' | 'boolean' } } = {
   environment: { type: 'string' },
   jurisdictionName: { type: 'string' },
 };
 
-const prisma = new PrismaService();
+const prisma = new PrismaClient();
 async function main() {
   const {
     values: { environment, jurisdictionName },

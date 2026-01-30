@@ -1,9 +1,8 @@
-import { UnitAccessibilityPriorityTypes } from '@prisma/client';
+import { PrismaClient, UnitAccessibilityPriorityTypes } from '@prisma/client';
 import { randomInt } from 'crypto';
-import { PrismaService } from '../../src/services/prisma.service';
 
 export const unitAccessibilityPriorityTypeFactorySingle = async (
-  prismaClient: PrismaService,
+  prismaClient: PrismaClient,
   type?: string,
 ): Promise<UnitAccessibilityPriorityTypes> => {
   const chosenType =
@@ -24,7 +23,7 @@ export const unitAccessibilityPriorityTypeFactorySingle = async (
 };
 
 export const unitAccessibilityPriorityTypeFactoryAll = async (
-  prismaClient: PrismaService,
+  prismaClient: PrismaClient,
 ) => {
   await prismaClient.unitAccessibilityPriorityTypes.createMany({
     data: unitAccesibilityPriorityTypeAsArray.map((value) => ({ name: value })),

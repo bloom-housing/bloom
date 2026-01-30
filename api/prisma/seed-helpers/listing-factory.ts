@@ -8,6 +8,7 @@ import {
   ReservedCommunityTypes,
   ReviewOrderTypeEnum,
   ListingTypeEnum,
+  PrismaClient,
 } from '@prisma/client';
 import { randomInt } from 'crypto';
 import dayjs from 'dayjs';
@@ -16,7 +17,6 @@ import { addressFactory } from './address-factory';
 import { reservedCommunityTypesFindOrCreate } from './reserved-community-type-factory';
 import { unitFactoryMany } from './unit-factory';
 import { randomBoolean } from './boolean-generator';
-import { PrismaService } from '../../src/services/prisma.service';
 
 const cloudinaryIds = [
   'dev/blake-wheeler-zBHU08hdzhY-unsplash_swqash',
@@ -31,7 +31,7 @@ const cloudinaryIds = [
 
 export const listingFactory = async (
   jurisdictionId: string,
-  prismaClient: PrismaService,
+  prismaClient: PrismaClient,
   optionalParams?: {
     afsLastRunSetInPast?: boolean;
     amiChart?: AmiChart;
