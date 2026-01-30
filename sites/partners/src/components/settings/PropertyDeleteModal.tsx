@@ -11,7 +11,7 @@ type PreferenceDeleteModalProps = {
 }
 
 export const PropertyDeleteModal = ({ property, onClose }: PreferenceDeleteModalProps) => {
-  const { multiselectQuestionsService } = useContext(AuthContext)
+  const { propertiesService } = useContext(AuthContext)
   const { addToast } = useContext(MessageContext)
   const { listingDtos, listingsLoading } = useListingsData({
     limit: "all",
@@ -30,9 +30,9 @@ export const PropertyDeleteModal = ({ property, onClose }: PreferenceDeleteModal
     return null
   }
 
-  const deletePreference = () => {
-    multiselectQuestionsService
-      .delete({
+  const deleteProperty = () => {
+    propertiesService
+      .deleteById({
         body: { id: property.id },
       })
       .then(() => {
@@ -87,7 +87,7 @@ export const PropertyDeleteModal = ({ property, onClose }: PreferenceDeleteModal
         {t("properties.propertyDeleteConfirmation")}
       </Dialog.Content>
       <Dialog.Footer>
-        <Button type="button" variant="alert" onClick={deletePreference} size="sm">
+        <Button type="button" variant="alert" onClick={deleteProperty} size="sm">
           {t("t.delete")}
         </Button>
         <Button
