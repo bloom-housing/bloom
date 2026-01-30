@@ -1,4 +1,4 @@
-import React, { useContext, useMemo } from "react"
+import React, { useContext } from "react"
 import { MinimalTable, t } from "@bloom-housing/ui-components"
 import { Button, Dialog, Link } from "@bloom-housing/ui-seeds"
 import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
@@ -20,15 +20,11 @@ export const PropertyDeleteModal = ({ property, onClose }: PreferenceDeleteModal
 
   const listing = listingDtos?.items.find((listing) => listing.property?.id === property?.id)
 
-  const listingsTableData = useMemo(
-    () =>
-      [listing]?.map((listing) => ({
-        name: {
-          content: <Link href={`/listings/${listing?.id}`}>{listing?.name}</Link>,
-        },
-      })),
-    [listing]
-  )
+  const listingsTableData = {
+    name: {
+      content: <Link href={`/listings/${listing?.id}`}>{listing?.name}</Link>,
+    },
+  }
 
   if (listingsLoading) {
     return null
@@ -40,7 +36,7 @@ export const PropertyDeleteModal = ({ property, onClose }: PreferenceDeleteModal
         body: { id: property.id },
       })
       .then(() => {
-        addToast(t("settings.preferenceAlertDeleted"), { variant: "success" })
+        addToast(t("properties.propertyAlertDeleted"), { variant: "success" })
         onClose()
       })
       .catch((e) => {
@@ -54,19 +50,19 @@ export const PropertyDeleteModal = ({ property, onClose }: PreferenceDeleteModal
       <Dialog
         isOpen={!!property}
         onClose={onClose}
-        ariaLabelledBy="preference-changes-modal-header"
-        ariaDescribedBy="preference-changes-modal-description"
+        ariaLabelledBy="property-changes-modal-header"
+        ariaDescribedBy="property-changes-modal-description"
       >
-        <Dialog.Header id="preference-changes-modal-header">
-          {t("settings.preferenceChangesRequired")}
+        <Dialog.Header id="property-changes-modal-header">
+          {t("properties.propertyChangesRequired")}
         </Dialog.Header>
         <Dialog.Content>
-          <div className="pb-3" id="preference-changes-modal-description">
-            {t("settings.preferenceDeleteError")}
+          <div className="pb-3" id="property-changes-modal-description">
+            {t("properties.propertyDeleteError")}
           </div>
           <MinimalTable
             headers={{ name: "listings.listingName" }}
-            data={listingsTableData}
+            data={[listingsTableData]}
             cellClassName={" "}
           />
         </Dialog.Content>
@@ -83,12 +79,12 @@ export const PropertyDeleteModal = ({ property, onClose }: PreferenceDeleteModal
     <Dialog
       isOpen={!!property}
       onClose={onClose}
-      ariaLabelledBy="preference-delete-modal-header"
-      ariaDescribedBy="preference-delete-modal-description"
+      ariaLabelledBy="property-delete-modal-header"
+      ariaDescribedBy="property-delete-modal-description"
     >
-      <Dialog.Header id="preference-delete-modal-header">{t("t.areYouSure")}</Dialog.Header>
-      <Dialog.Content id="preference-delete-modal-description">
-        {t("settings.preferenceDeleteConfirmation")}
+      <Dialog.Header id="property-delete-modal-header">{t("t.areYouSure")}</Dialog.Header>
+      <Dialog.Content id="property-delete-modal-description">
+        {t("properties.propertyDeleteConfirmationn")}
       </Dialog.Content>
       <Dialog.Footer>
         <Button type="button" variant="alert" onClick={deletePreference} size="sm">
