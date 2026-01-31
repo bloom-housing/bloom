@@ -234,6 +234,7 @@ const SettingsProperties = () => {
         onDrawerClose={() => {
           setIsDrawerOpen(false)
           setSelectedProperty(null)
+          setEditConfirmModalOpen(null)
         }}
         editedProperty={editConfirmModalOpen}
         saveQuestion={handleSave}
