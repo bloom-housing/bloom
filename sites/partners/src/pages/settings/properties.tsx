@@ -5,6 +5,7 @@ import { AgTable, t, useAgTable, useMutate } from "@bloom-housing/ui-components"
 import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
 import {
   FeatureFlagEnum,
+  ListingViews,
   Property,
   PropertyCreate,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -13,7 +14,7 @@ import Layout from "../../layouts"
 import { NavigationHeader } from "../../components/shared/NavigationHeader"
 import { getSettingsTabs, SettingsIndexEnum } from "../../components/settings/SettingsViewHelpers"
 import { Button } from "@bloom-housing/ui-seeds"
-import { usePropertiesList } from "../../lib/hooks"
+import { useListingsData, usePropertiesList } from "../../lib/hooks"
 import dayjs from "dayjs"
 import ManageIconSection from "../../components/settings/ManageIconSection"
 import { ColDef, ColGroupDef } from "ag-grid-community"
@@ -46,6 +47,11 @@ const SettingsProperties = () => {
   if (profile?.userRoles?.isPartner || profile?.userRoles?.isSupportAdmin || !enableProperties) {
     void router.push("/unauthorized")
   }
+
+  const { listingDtos, listingsLoading } = useListingsData({
+    limit: "all",
+    view: ListingViews.name,
+  })
 
   const {
     data: propertiesData,
@@ -127,6 +133,10 @@ const SettingsProperties = () => {
     ],
     [profile?.jurisdictions]
   )
+
+  if (listingsLoading) {
+    return null
+  }
 
   const handleSave = (propertyData: PropertyCreate) => {
     if (selectedProperty && propertyDrawerType !== "edit") {
@@ -232,6 +242,7 @@ const SettingsProperties = () => {
       {deleteConfirmModalOpen && (
         <PropertyDeleteModal
           property={deleteConfirmModalOpen}
+          listings={listingDtos?.items}
           onClose={() => {
             setDeleteConfirmModalOpen(null)
             void mutate(cacheKey)
@@ -241,6 +252,7 @@ const SettingsProperties = () => {
       {editConfirmModalOpen && (
         <PropertyEditModal
           property={editConfirmModalOpen}
+          listings={listingDtos?.items}
           onClose={() => {
             setEditConfirmModalOpen(null)
             void mutate(cacheKey)

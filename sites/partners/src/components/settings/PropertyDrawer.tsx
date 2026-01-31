@@ -1,4 +1,8 @@
-import { Property, PropertyCreate } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  Listing,
+  Property,
+  PropertyCreate,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import SectionWithGrid from "../../components/shared/SectionWithGrid"
 import { Button, Card, Drawer, Grid } from "@bloom-housing/ui-seeds"
 import { Field, Select, SelectOption, t, Textarea } from "@bloom-housing/ui-components"
@@ -11,6 +15,7 @@ type PropertyDrawerProps = {
   drawerOpen: boolean
   editedProperty: Property | null
   isLoading?: boolean
+  listings?: Listing[]
   onDrawerClose: () => void
   saveQuestion: (formattedData: PropertyCreate) => void
 }
@@ -28,6 +33,7 @@ type PropertyFormTypes = {
 export const PropertyDrawer = ({
   drawerOpen,
   editedProperty,
+  listings,
   isLoading,
   onDrawerClose,
   saveQuestion,
@@ -35,6 +41,9 @@ export const PropertyDrawer = ({
   const { profile } = useContext(AuthContext)
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, errors, clearErrors, trigger, getValues } = useForm<PropertyFormTypes>()
+  const propretyHasListing = listings?.find(
+    (listing) => listing.property?.id === editedProperty?.id
+  )
 
   const handleSave = useCallback(async () => {
     const validated = await trigger()
@@ -61,7 +70,7 @@ export const PropertyDrawer = ({
     : null
 
   return (
-    <Drawer isOpen={drawerOpen} onClose={onDrawerClose}>
+    <Drawer isOpen={drawerOpen && !propretyHasListing} onClose={onDrawerClose}>
       <Drawer.Header>
         {t(editedProperty ? "properties.drawer.editTitle" : "properties.drawer.addTitle")}
       </Drawer.Header>
