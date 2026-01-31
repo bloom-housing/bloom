@@ -267,7 +267,7 @@ describe("settings", () => {
         })
       )
 
-      const { findByText, findByRole, findAllByRole, container } = render(
+      const { findByText, findByRole, findAllByRole } = render(
         <ToastProvider>
           <SettingsPreferences />
         </ToastProvider>
