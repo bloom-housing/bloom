@@ -32,10 +32,10 @@ beforeEach(() => {
       return res(ctx.json([]))
     }),
     rest.get("http://localhost:3100/multiselectQuestions", (_req, res, ctx) => {
-      return res(ctx.json([multiselectQuestionPreferenceV2]))
+      return res(ctx.json({ items: [multiselectQuestionPreferenceV2] }))
     }),
     rest.get("http://localhost/api/adapter/multiselectQuestions", (_req, res, ctx) => {
-      return res(ctx.json([multiselectQuestionPreferenceV2]))
+      return res(ctx.json({ items: [multiselectQuestionPreferenceV2] }))
     }),
     rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
       return res(
@@ -254,13 +254,15 @@ describe("settings", () => {
       server.use(
         rest.get("http://localhost/api/adapter/multiselectQuestions", (_req, res, ctx) => {
           return res(
-            ctx.json([
-              {
-                ...multiselectQuestionPreferenceV2,
-                jurisdiction: { id: "jurisdiction1", name: "jurisdictionWithJurisdictionAdmin" },
-                status: MultiselectQuestionsStatusEnum.active,
-              },
-            ])
+            ctx.json({
+              items: [
+                {
+                  ...multiselectQuestionPreferenceV2,
+                  jurisdiction: { id: "jurisdiction1", name: "jurisdictionWithJurisdictionAdmin" },
+                  status: MultiselectQuestionsStatusEnum.active,
+                },
+              ],
+            })
           )
         })
       )
