@@ -22,7 +22,6 @@ import { PropertyDrawer } from "../../components/settings/PropertyDrawer"
 import { useSWRConfig } from "swr"
 import { PropertyDeleteModal } from "../../components/settings/PropertyDeleteModal"
 import { PropertyEditModal } from "../../components/settings/PropertyEditModal"
-import { DrawerType } from "./preferences"
 
 const SettingsProperties = () => {
   const router = useRouter()
@@ -31,10 +30,8 @@ const SettingsProperties = () => {
   const { mutate: updateProperty, isLoading: isUpdateLoading } = useMutate()
   const { mutate: createProperty, isLoading: isCreateLoading } = useMutate()
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
-  const [selectedProperty, setSelectedProperty] = useState<Property | null>(null)
   const [editConfirmModalOpen, setEditConfirmModalOpen] = useState<Property | null>(null)
   const [deleteConfirmModalOpen, setDeleteConfirmModalOpen] = useState<Property | null>(null)
-  const [propertyDrawerType, setpropertyDrawerType] = useState<DrawerType | null>(null)
   const { addToast } = useContext(MessageContext)
   const { profile, propertiesService, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
   const enableProperties = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableProperties)
@@ -113,7 +110,6 @@ const SettingsProperties = () => {
         resizable: false,
         maxWidth: 150,
         cellRendererFramework: ({ data }) => {
-          setSelectedProperty(data)
           return (
             <ManageIconSection
               onCopy={() => console.log("Copy: ", data.name)}
@@ -139,13 +135,13 @@ const SettingsProperties = () => {
   }
 
   const handleSave = (propertyData: PropertyCreate) => {
-    if (selectedProperty && propertyDrawerType !== "edit") {
+    if (editConfirmModalOpen) {
       void updateProperty(() =>
         propertiesService
           .update({
             body: {
               ...propertyData,
-              id: selectedProperty.id,
+              id: editConfirmModalOpen.id,
             },
           })
           .then(() => {
@@ -157,7 +153,7 @@ const SettingsProperties = () => {
           })
           .finally(() => {
             setIsDrawerOpen(false)
-            setSelectedProperty(null)
+            setEditConfirmModalOpen(null)
             void mutate(cacheKey)
           })
       )
@@ -233,7 +229,6 @@ const SettingsProperties = () => {
         drawerOpen={isDrawerOpen}
         onDrawerClose={() => {
           setIsDrawerOpen(false)
-          setSelectedProperty(null)
           setEditConfirmModalOpen(null)
         }}
         editedProperty={editConfirmModalOpen}
@@ -257,9 +252,6 @@ const SettingsProperties = () => {
           onClose={() => {
             setEditConfirmModalOpen(null)
             void mutate(cacheKey)
-          }}
-          onEdit={() => {
-            setpropertyDrawerType("edit")
           }}
         />
       )}

@@ -5,17 +5,11 @@ import { Listing, Property } from "@bloom-housing/shared-helpers/src/types/backe
 
 type PropertyEditModalProps = {
   onClose: () => void
-  onEdit: () => void
   property: Property
   listings: Listing[]
 }
 
-export const PropertyEditModal = ({
-  property,
-  listings,
-  onClose,
-  onEdit,
-}: PropertyEditModalProps) => {
+export const PropertyEditModal = ({ property, listings, onClose }: PropertyEditModalProps) => {
   const listingsWithProperty = listings?.filter((listing) => listing.property?.id === property?.id)
 
   const listingsTableData = useMemo(
@@ -27,12 +21,6 @@ export const PropertyEditModal = ({
       })),
     [listingsWithProperty]
   )
-
-  if (listingsWithProperty?.length === 0) {
-    onEdit()
-    onClose()
-    return null
-  }
 
   return (
     <Dialog
