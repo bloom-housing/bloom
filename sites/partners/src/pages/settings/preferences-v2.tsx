@@ -33,11 +33,18 @@ const SettingsPreferences = () => {
       {
         headerName: t("settings.preference"),
         field: "name",
-        flex: 1.5,
+        flex: 2,
+        sortable: true,
+        // disable frontend sorting
+        comparator: () => 0,
       },
       {
         headerName: t("application.status"),
-        field: "",
+        field: "status",
+        flex: 1,
+        sortable: true,
+        // disable frontend sorting
+        comparator: () => 0,
         cellRendererFramework: ({ data }) => {
           let variant = null
           switch (data.status) {
@@ -54,14 +61,24 @@ const SettingsPreferences = () => {
         },
       },
       {
-        headerName: t("t.jurisdictions"),
-        field: "jurisdictions",
+        headerName: t("t.jurisdiction"),
+        field: "jurisdiction",
         flex: 1.5,
+        sortable: true,
+        // disable frontend sorting
+        comparator: () => 0,
       },
-      { headerName: t("t.lastUpdated"), field: "updatedAt" },
+      {
+        headerName: t("t.lastUpdated"),
+        field: "updatedAt",
+        sortable: true,
+        // disable frontend sorting
+        comparator: () => 0,
+      },
       {
         headerName: "actions",
         field: "",
+        flex: 0.75,
         cellRendererFramework: ({ data }) => {
           const { preference, id } = data
 
@@ -96,29 +113,27 @@ const SettingsPreferences = () => {
 
   const { data, loading, cacheKey } = useJurisdictionalMultiselectQuestionList(
     profile?.jurisdictions?.map((jurisdiction) => jurisdiction.id).toString(),
-    MultiselectQuestionsApplicationSectionEnum.preferences
+    MultiselectQuestionsApplicationSectionEnum.preferences,
+    {
+      sort: tableOptions.sort.sortOptions,
+      page: tableOptions.pagination.currentPage,
+      limit: tableOptions.pagination.itemsPerPage,
+      search: tableOptions.filter.filterValue,
+    }
   )
 
   const items = useMemo(
     () =>
-      (data?.items || [])
-        .sort((a, b) => {
-          const aChar = a.text.toUpperCase()
-          const bChar = b.text.toUpperCase()
-          if (aChar === bChar)
-            return a.updatedAt > b.updatedAt ? -1 : a.updatedAt < b.updatedAt ? 1 : 0
-          return aChar.localeCompare(bChar)
-        })
-        .map((preference) => {
-          const { name, status, jurisdictions, updatedAt } = preference
-          return {
-            name,
-            status,
-            jurisdictions: jurisdictions.map((jurisdiction) => jurisdiction.name).join(", "),
-            updatedAt: dayjs(updatedAt).format("MM/DD/YYYY"),
-            preference,
-          }
-        }),
+      (data?.items || []).map((preference) => {
+        const { name, status, jurisdictions, updatedAt } = preference
+        return {
+          name,
+          status,
+          jurisdiction: jurisdictions.map((jurisdiction) => jurisdiction.name).join(", "),
+          updatedAt: dayjs(updatedAt).format("MM/DD/YYYY"),
+          preference,
+        }
+      }),
     [data]
   )
 
@@ -154,12 +169,14 @@ const SettingsPreferences = () => {
                 data={{
                   items,
                   loading: loading,
-                  totalItems: 2,
-                  totalPages: 1,
+                  totalItems: items.length, // TODO
+                  totalPages: 1, // TODO
                 }}
                 search={{
-                  showSearch: false,
-                  setSearch: tableOptions.filter.setFilterValue, // currently not used
+                  setSearch: tableOptions.filter.setFilterValue,
+                }}
+                sort={{
+                  setSort: tableOptions.sort.setSortOptions,
                 }}
                 headerContent={
                   <>
