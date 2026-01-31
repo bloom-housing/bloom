@@ -483,6 +483,14 @@ export const stagingSeed = async (
       lakeviewJurisdiction.name,
     ),
   });
+  const angelopolisAmiChart = await prismaClient.amiChart.create({
+    data: amiChartFactory(
+      8,
+      angelopolisJurisdiction.id,
+      null,
+      angelopolisJurisdiction.name,
+    ),
+  });
   await prismaClient.amiChart.create({
     data: amiChartFactory(
       8,
@@ -735,7 +743,7 @@ export const stagingSeed = async (
             numBedrooms: 0,
             number: '101',
             sqFeet: '750.00',
-            amiChart: { connect: { id: amiChart.id } },
+            amiChart: { connect: { id: angelopolisAmiChart.id } },
             unitTypes: {
               connect: {
                 id: unitTypes[0].id,
@@ -752,7 +760,7 @@ export const stagingSeed = async (
             numBedrooms: 1,
             number: '101',
             sqFeet: '750.00',
-            amiChart: { connect: { id: amiChart.id } },
+            amiChart: { connect: { id: angelopolisAmiChart.id } },
             unitTypes: {
               connect: {
                 id: unitTypes[1].id,
