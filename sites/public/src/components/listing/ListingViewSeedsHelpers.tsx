@@ -1,7 +1,7 @@
 import React from "react"
 import { UseFormMethods } from "react-hook-form"
 import dayjs from "dayjs"
-import { Button, Dialog, Link } from "@bloom-housing/ui-seeds"
+import { Button, Dialog, Heading, Link } from "@bloom-housing/ui-seeds"
 import {
   ApplicationAddressTypeEnum,
   ApplicationMethod,
@@ -14,6 +14,7 @@ import {
   Listing,
   ListingMultiselectQuestion,
   MultiselectQuestionsApplicationSectionEnum,
+  ListingFeaturesConfiguration,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import {
   FieldGroup,
@@ -140,26 +141,47 @@ export const getHasNonReferralMethods = (listing: Listing) => {
   return nonReferralMethods.length
 }
 
-export const getAccessibilityFeatures = (listing: Listing) => {
+export const getAccessibilityFeatures = (
+  listing: Listing,
+  config: ListingFeaturesConfiguration
+) => {
   const enabledFeatures = Object.entries(listing?.listingFeatures ?? {})
     .filter(([key, value]) => value && allListingFeatures?.includes(key as ListingFeaturesValues))
     .map((item) => item[0])
 
-  const COLUMN_BREAKPOINT = 6
-  if (enabledFeatures.length > 0) {
+  const getList = (list: string[], spacing: boolean) => {
     return (
-      <ul className={enabledFeatures.length > COLUMN_BREAKPOINT ? styles["two-column-list"] : ""}>
-        {enabledFeatures
-          .sort((a, b) =>
-            t(`eligibility.accessibility.${a}`).localeCompare(t(`eligibility.accessibility.${b}`))
-          )
-          .map((feature, index) => (
-            <li key={index} className={styles["list-item"]}>
-              {t(`eligibility.accessibility.${feature}`)}
-            </li>
-          ))}
+      <ul className={`${styles["two-column-list"]} ${spacing ? "seeds-m-be-text" : ""}`}>
+        {list.map((feature, index) => (
+          <li key={index} className={styles["list-item"]}>
+            {t(`eligibility.accessibility.${feature}`)}
+          </li>
+        ))}
       </ul>
     )
+  }
+
+  if (config?.categories?.length) {
+    return config.categories.map((category, index) => {
+      const categoryFeatures = enabledFeatures
+        .filter((feature) => category.fields.some((field) => field.id === feature))
+        .sort((a, b) =>
+          t(`eligibility.accessibility.${a}`).localeCompare(t(`eligibility.accessibility.${b}`))
+        )
+      if (!categoryFeatures.length) return null
+      return (
+        <div key={index}>
+          <Heading priority={4} size={"md"} className={styles["category-heading"]}>
+            {t(`eligibility.accessibility.categoryTitle.${category.id}`)}
+          </Heading>
+          {getList(categoryFeatures, index < config.categories.length - 1)}
+        </div>
+      )
+    })
+  }
+
+  if (enabledFeatures.length > 0) {
+    return getList(enabledFeatures, false)
   }
 
   return null
@@ -232,7 +254,10 @@ export const getFeatures = (
   if (listing.smokingPolicy) {
     features.push({ heading: t("t.smokingPolicy"), subheading: listing.smokingPolicy })
   }
-  const accessibilityFeatures = getAccessibilityFeatures(listing)
+  const accessibilityFeatures = getAccessibilityFeatures(
+    listing,
+    jurisdiction.listingFeaturesConfiguration
+  )
   const enableAccessibilityFeatures = jurisdiction?.featureFlags?.some(
     (flag) => flag.name === "enableAccessibilityFeatures" && flag.active
   )

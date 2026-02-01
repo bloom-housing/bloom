@@ -23,7 +23,7 @@ const AccountApplication = () => {
   const [loading, setLoading] = useState(null)
 
   useEffect(() => {
-    if (profile && !application && loading === null) {
+    if (profile && !application && loading === null && !!applicationId) {
       setLoading(true)
       applicationsService
         .retrieve({ applicationId })

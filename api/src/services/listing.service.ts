@@ -2821,10 +2821,11 @@ export class ListingService implements OnModuleInit {
   */
   addUnitsSummarized = async (listing: Listing) => {
     if (Array.isArray(listing.units) && listing.units.length > 0) {
+      const unitsWithCharts = listing.units.filter((unit) => unit.amiChart?.id);
       const amiChartsRaw = await this.prisma.amiChart.findMany({
         where: {
           id: {
-            in: listing.units.map((unit) => unit.amiChart?.id),
+            in: unitsWithCharts.map((unit) => unit.amiChart?.id),
           },
         },
       });
