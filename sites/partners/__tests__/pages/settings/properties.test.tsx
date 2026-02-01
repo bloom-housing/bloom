@@ -6,6 +6,7 @@ import { AuthContext, MessageContext, MessageProvider } from "@bloom-housing/sha
 import { Toast } from "@bloom-housing/ui-seeds"
 import {
   FeatureFlagEnum,
+  ListingsService,
   PropertiesService,
   Property,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -318,6 +319,9 @@ describe("<SettingsProperties>", () => {
           })
         )
       }),
+      rest.get("http://localhost:3100/listings", (_req, res, ctx) => {
+        return res(ctx.json({ items: [] }))
+      }),
       rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
         return res(ctx.json(user))
       })
@@ -333,6 +337,7 @@ describe("<SettingsProperties>", () => {
             ],
             listings: [],
           },
+          listingsService: new ListingsService(),
           propertiesService: new PropertiesService(),
           doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
             featureFlag === FeatureFlagEnum.enableProperties,
@@ -485,6 +490,9 @@ describe("<SettingsProperties>", () => {
       rest.put("http://localhost/api/adapter/properties", (_req, res, ctx) => {
         return res(ctx.json(updatedProperty))
       }),
+      rest.get("http://localhost:3100/listings", (_req, res, ctx) => {
+        return res(ctx.json({ items: [] }))
+      }),
       rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
         return res(ctx.json(user))
       })
@@ -499,6 +507,7 @@ describe("<SettingsProperties>", () => {
               jurisdictions: [{ ...jurisdiction, id: "jurisdiction1", name: "Test Jurisdiction" }],
               listings: [],
             },
+            listingsService: new ListingsService(),
             propertiesService: new PropertiesService(),
             doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
               featureFlag === FeatureFlagEnum.enableProperties,
