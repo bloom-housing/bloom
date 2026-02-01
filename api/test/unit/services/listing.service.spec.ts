@@ -633,6 +633,7 @@ describe('Testing listing service', () => {
               assets: true,
             },
           },
+          property: true,
           lastUpdatedByUser: true,
           listingMultiselectQuestions: {
             include: {
