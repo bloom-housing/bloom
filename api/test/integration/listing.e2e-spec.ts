@@ -1977,7 +1977,7 @@ describe('Listing Controller Tests', () => {
           id: jurisdictionB.id,
           name: jurisdictionB.name,
         },
-        property: expect.anything(),
+        property: null,
         showWaitlist: false,
         urlSlug: expect.anything(),
         whatToExpect: null,
