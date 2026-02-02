@@ -1,19 +1,20 @@
 import { Form, t } from "@bloom-housing/ui-components"
 import { Button, Drawer } from "@bloom-housing/ui-seeds"
 import { useForm } from "react-hook-form"
-import { listingFeatures } from "@bloom-housing/shared-helpers"
 import {
   RegionEnum,
   HomeTypeEnum,
   ListingFilterKeys,
   MultiselectQuestion,
   FeatureFlagEnum,
+  ListingFeaturesConfiguration,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import styles from "./FilterDrawer.module.scss"
 import {
   buildDefaultFilterFields,
   CheckboxGroup,
   FilterData,
+  getAccessibilityFeatureKeys,
   getAvailabilityValues,
   RentSection,
   SearchSection,
@@ -28,6 +29,7 @@ export interface FilterDrawerProps {
   activeFeatureFlags?: FeatureFlagEnum[]
   filterState: FilterData
   isOpen: boolean
+  listingFeaturesConfiguration?: ListingFeaturesConfiguration
   multiselectData: MultiselectQuestion[]
   onClear: (resetFilters: (data: FilterData) => void) => void
   onClose: () => void
@@ -58,6 +60,10 @@ const FilterDrawer = (props: FilterDrawerProps) => {
 
   const enableConfigurableRegions = props.activeFeatureFlags?.some(
     (entry) => entry === FeatureFlagEnum.enableConfigurableRegions
+  )
+
+  const enableAccessibilityFeatures = props.activeFeatureFlags?.some(
+    (entry) => entry === FeatureFlagEnum.enableAccessibilityFeatures
   )
 
   const availabilityLabels = getAvailabilityValues(enableUnitGroups).map((key) =>
@@ -158,16 +164,19 @@ const FilterDrawer = (props: FilterDrawerProps) => {
               register={register}
             />
           )}
-          <CheckboxGroup
-            groupLabel={t("eligibility.accessibility.title")}
-            fields={buildDefaultFilterFields(
-              ListingFilterKeys.listingFeatures,
-              "eligibility.accessibility",
-              listingFeatures,
-              props.filterState
-            )}
-            register={register}
-          />
+          {enableAccessibilityFeatures && props.listingFeaturesConfiguration && (
+            <CheckboxGroup
+              groupLabel={t("eligibility.accessibility.title")}
+              fields={buildDefaultFilterFields(
+                ListingFilterKeys.listingFeatures,
+                "eligibility.accessibility",
+                getAccessibilityFeatureKeys(props.listingFeaturesConfiguration),
+                props.filterState
+              )}
+              register={register}
+            />
+          )}
+
           <SearchSection register={register} nameState={props.filterState?.name} />
           {props.multiselectData?.length > 0 && (
             <CheckboxGroup

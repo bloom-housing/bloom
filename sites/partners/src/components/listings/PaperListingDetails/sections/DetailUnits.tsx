@@ -184,7 +184,6 @@ const DetailUnits = ({ setUnitDrawer }: DetailUnitsProps) => {
           <Grid.Cell>
             <FieldValue
               id="unitTypesOrIndividual"
-              testId={"unit-types-or-individual"}
               label={t("listings.unitTypesOrIndividual")}
               children={
                 listing.disableUnitsAccordion
@@ -196,7 +195,6 @@ const DetailUnits = ({ setUnitDrawer }: DetailUnitsProps) => {
           <Grid.Cell>
             <FieldValue
               id="listings.listingAvailabilityQuestion"
-              testId={"listing-availability-question"}
               label={t("listings.listingAvailabilityQuestion")}
               children={listingAvailabilityText}
             />

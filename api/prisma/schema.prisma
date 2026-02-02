@@ -64,6 +64,7 @@ model Address {
   leasingAgentAddress          Listings[]                   @relation("leasing_agent_address")
   applicationPickUpAddress     Listings[]                   @relation("application_pick_up_address")
   buildingAddress              Listings[]                   @relation("building_address")
+  userAccounts                 UserAccounts[]
 
   @@map("address")
 }
@@ -404,7 +405,9 @@ model Jurisdictions {
   requiredListingFields               String[]                    @default([]) @map("required_listing_fields")
   visibleNeighborhoodAmenities        NeighborhoodAmenitiesEnum[] @default([groceryStores, publicTransportation, schools, parksAndCommunityCenters, pharmacies, healthCareResources]) @map("visible_neighborhood_amenities")
   regions                             String[]                    @default([]) @map("regions")
+  listingFeaturesConfiguration        Json?                       @map("listing_features_configuration")
   properties                          Properties[]
+  agency                              Agency[]
 
   @@map("jurisdictions")
 }
@@ -1040,6 +1043,19 @@ model UserAccounts {
   lastUpdatedListingsByUser Listings[]              @relation("last_updated_by_user")
   wasWarnedOfDeletion       Boolean?                @default(false) @map("was_warned_of_deletion")
 
+  title                     String?
+  address                   Address? @relation(fields: [addressId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  addressId                 String?  @map("address_id") @db.Uuid
+  phoneType                 String?  @map("phone_type")
+  phoneExtension            String?  @map("phone_extension")
+  additionalPhoneNumber     String?  @map("additional_phone_number")
+  additionalPhoneNumberType String?  @map("additional_phone_number_type")
+  additionalPhoneExtension  String?  @map("additional_phone_extension")
+  agency                    Agency?  @relation(fields: [agencyId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  agencyId                  String?  @map("agency_id") @db.Uuid
+  isApproved                Boolean  @default(false) @map("is_approved")
+  isAdvocate                Boolean  @default(false) @map("is_advocate")
+
   @@map("user_accounts")
 }
 
@@ -1137,8 +1153,6 @@ model UserPreferences {
 
 // END DETROIT SPECIFIC
 
-// START LA SPECIFIC
-
 model Properties {
   id             String         @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   createdAt      DateTime       @default(now()) @map("created_at") @db.Timestamp(6)
@@ -1156,7 +1170,17 @@ model Properties {
   @@map("properties")
 }
 
-// END LA SPECIFIC
+model Agency {
+  id              String         @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  createdAt       DateTime       @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt       DateTime       @updatedAt @map("updated_at") @db.Timestamp(6)
+  name            String
+  jurisdictions   Jurisdictions? @relation(fields: [jurisdictionsId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  jurisdictionsId String?        @map("jurisdictions_id") @db.Uuid
+  userAccounts    UserAccounts[]
+
+  @@map("agency")
+}
 
 model ScriptRuns {
   id             String   @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid

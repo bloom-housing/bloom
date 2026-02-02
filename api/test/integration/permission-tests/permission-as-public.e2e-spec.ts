@@ -1546,4 +1546,119 @@ describe('Testing Permissioning of endpoints as public user', () => {
         .expect(403);
     });
   });
+
+  describe('Testing agencies endpoints', () => {
+    let agencyId: string;
+
+    beforeAll(async () => {
+      const agencyData = {
+        name: 'Test Agency',
+        jurisdictions: {
+          id: jurisdictionId,
+        },
+      };
+
+      const res = await prisma.agency.create({
+        data: {
+          name: agencyData.name,
+          jurisdictions: {
+            connect: {
+              id: agencyData.jurisdictions.id,
+            },
+          },
+        },
+      });
+
+      if (res.id) {
+        agencyId = res.id;
+      }
+    });
+
+    it('should succeed for list endpoint', async () => {
+      await request(app.getHttpServer())
+        .get(`/agency`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .expect(200);
+    });
+
+    it('should succeed for retrieve endpoint', async () => {
+      if (!agencyId) {
+        throw new Error('Agency ID not set up for test');
+      }
+
+      await request(app.getHttpServer())
+        .get(`/agency/${agencyId}`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .expect(200);
+    });
+
+    it('should error as forbidden for create endpoint', async () => {
+      const agencyData = {
+        name: 'New Test Agency',
+        jurisdictions: {
+          id: jurisdictionId,
+        },
+      };
+
+      await request(app.getHttpServer())
+        .post('/agency')
+        .send(agencyData)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .expect(403);
+    });
+
+    it('should error as forbidden for update endpoint', async () => {
+      if (!agencyId) {
+        throw new Error('Agency ID not set up for test');
+      }
+
+      const agencyUpdateData = {
+        id: agencyId,
+        name: 'Updated Test Agency',
+        jurisdictions: {
+          id: jurisdictionId,
+        },
+      };
+
+      await request(app.getHttpServer())
+        .put(`/agency`)
+        .send(agencyUpdateData)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .expect(403);
+    });
+
+    it('should error as forbidden for delete endpoint', async () => {
+      const agencyData = {
+        name: 'Agency to Delete',
+        jurisdictions: {
+          id: jurisdictionId,
+        },
+      };
+
+      const res = await prisma.agency.create({
+        data: {
+          name: agencyData.name,
+          jurisdictions: {
+            connect: {
+              id: agencyData.jurisdictions.id,
+            },
+          },
+        },
+      });
+      const deleteId = res.id;
+
+      await request(app.getHttpServer())
+        .delete(`/agency`)
+        .send({
+          id: deleteId,
+        } as IdDTO)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .expect(403);
+    });
+  });
 });

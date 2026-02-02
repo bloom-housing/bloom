@@ -51,8 +51,7 @@ export const blueSkyApartments: Prisma.ListingsCreateInput = {
   criminalBackground: null,
   depositMin: '0',
   depositMax: '50',
-  depositHelperText:
-    "or one month's rent may be higher for lower credit scores",
+  depositHelperText: "Deposit will not exceed one month's rent",
   disableUnitsAccordion: false,
   homeType: HomeTypeEnum.apartment,
   leasingAgentEmail: 'joe@smithrealty.com',
