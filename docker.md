@@ -28,7 +28,7 @@ The following containers are defined in the [docker-compose.yml](./docker-compos
   required to run multiple replicas of these containers.
 - `db`: the postgres database.
 - `dbinit`: runs a [db init script](./api/dbinit)
-- `dbseed`: runs a [db seed script](./api/Dockerfile.dbseed.dev).
+- `dbseed`: runs a [db seed script](./api/Dockerfile.dbseed).
 - `api`: the [api](./api).
 - `partners`: the [partners site](./sites/partners).
 - `public`: the [public site](./sites/public).
