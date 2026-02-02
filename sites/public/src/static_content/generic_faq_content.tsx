@@ -1,20 +1,7 @@
-import { Link } from "@bloom-housing/ui-seeds"
 import Markdown from "markdown-to-jsx"
+import { Link } from "@bloom-housing/ui-seeds"
+import { FaqCategory, FaqContent } from "../patterns/FrequentAskedQuestions"
 import { getJurisdictionFaqContent } from "./jurisdiction_faq_content"
-
-export type FaqPageItem = {
-  question: React.ReactNode | string
-  answer: React.ReactNode | string
-}
-
-export type FaqCategory = {
-  title: React.ReactNode
-  faqs: FaqPageItem[]
-}
-
-export type FaqContent = {
-  categories: FaqCategory[]
-}
 
 export const getFaqContent = (): FaqContent => {
   const faqContentSection: FaqCategory = {
