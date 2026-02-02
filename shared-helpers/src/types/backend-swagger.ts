@@ -9401,6 +9401,7 @@ export enum HouseholdMemberRelationship {
   "inLaw" = "inLaw",
   "friend" = "friend",
   "other" = "other",
+  "aideOrAttendant" = "aideOrAttendant",
 }
 export type AllExtraDataTypes = BooleanInput | TextInput | AddressInput
 export enum MultiselectQuestionOrderByKeys {
