@@ -12,8 +12,6 @@ import {
   multiselectQuestionFormat,
   unitTypeToReadable,
 } from '../../../src/utilities/application-export-helpers';
-import { User } from '../../../src/dtos/users/user.dto';
-import { FeatureFlagEnum } from '../../../src/enums/feature-flags/feature-flags-enum';
 
 describe('Testing application export helpers', () => {
   const address = {
@@ -364,29 +362,10 @@ describe('Testing application export helpers', () => {
   });
 
   describe('Testing getExportHeaders', () => {
-    it('tests getCsvHeaders with no houshold members, multiselect questions or demographics', async () => {
-      const requestingUser = {
-        jurisdictions: [
-          {
-            id: 'juris id',
-            featureFlags: [
-              {
-                name: FeatureFlagEnum.enableAdaOtherOption,
-                description: '',
-                active: true,
-                jurisdictions: [],
-              },
-            ],
-          },
-        ],
-      } as unknown as User;
-
-      const headers = await getExportHeaders(
-        0,
-        [],
-        process.env.TIME_ZONE,
-        requestingUser,
-      );
+    it('tests getCsvHeaders with no household members, multiselect questions or demographics', async () => {
+      const headers = getExportHeaders(0, [], process.env.TIME_ZONE, {
+        enableAdaOtherOption: true,
+      });
       const testHeaders = [
         ...getCsvHeader(),
         {
@@ -409,28 +388,9 @@ describe('Testing application export helpers', () => {
     });
 
     it('tests getCsvHeaders with household members and no multiselect questions or demographics', async () => {
-      const requestingUser = {
-        jurisdictions: [
-          {
-            id: 'juris id',
-            featureFlags: [
-              {
-                name: FeatureFlagEnum.enableAdaOtherOption,
-                description: '',
-                active: true,
-                jurisdictions: [],
-              },
-            ],
-          },
-        ],
-      } as unknown as User;
-
-      const headers = await getExportHeaders(
-        3,
-        [],
-        process.env.TIME_ZONE,
-        requestingUser,
-      );
+      const headers = getExportHeaders(3, [], process.env.TIME_ZONE, {
+        enableAdaOtherOption: true,
+      });
 
       const testHeaders = [
         ...getCsvHeader(),
@@ -455,34 +415,10 @@ describe('Testing application export helpers', () => {
     });
 
     it('tests getCsvHeaders with household members with no work in region', async () => {
-      const requestingUser = {
-        jurisdictions: [
-          {
-            id: 'juris id',
-            featureFlags: [
-              {
-                name: FeatureFlagEnum.enableAdaOtherOption,
-                description: '',
-                active: true,
-                jurisdictions: [],
-              },
-              {
-                name: FeatureFlagEnum.disableWorkInRegion,
-                description: '',
-                active: true,
-                jurisdictions: [],
-              },
-            ],
-          },
-        ],
-      } as User;
-
-      const headers = await getExportHeaders(
-        3,
-        [],
-        process.env.TIME_ZONE,
-        requestingUser,
-      );
+      const headers = getExportHeaders(3, [], process.env.TIME_ZONE, {
+        disableWorkInRegion: true,
+        enableAdaOtherOption: true,
+      });
 
       const testHeaders = [
         ...getCsvHeader(true),

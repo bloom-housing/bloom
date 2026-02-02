@@ -1,4 +1,9 @@
 import { randomUUID } from 'crypto';
+import { Request as ExpressRequest, Response } from 'express';
+import { HttpModule } from '@nestjs/axios';
+import { Logger } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { SchedulerRegistry } from '@nestjs/schedule';
 import { Test, TestingModule } from '@nestjs/testing';
 import {
   ListingEventsTypeEnum,
@@ -7,30 +12,25 @@ import {
   MultiselectQuestionsApplicationSectionEnum,
   ReviewOrderTypeEnum,
 } from '@prisma/client';
-import { HttpModule } from '@nestjs/axios';
-import { Request as ExpressRequest, Response } from 'express';
-import { PrismaService } from '../../../src/services/prisma.service';
-import { ApplicationExporterService } from '../../../src/services/application-exporter.service';
-import { MultiselectQuestionService } from '../../../src/services/multiselect-question.service';
-import { User } from '../../../src/dtos/users/user.dto';
 import { mockApplicationSet } from './application.service.spec';
 import { mockMultiselectQuestion } from './multiselect-question.service.spec';
-import { ListingService } from '../../../src/services/listing.service';
-import { PermissionService } from '../../../src/services/permission.service';
-import { TranslationService } from '../../../src/services/translation.service';
-import { ApplicationFlaggedSetService } from '../../../src/services/application-flagged-set.service';
-import { EmailService } from '../../../src/services/email.service';
-import { ConfigService } from '@nestjs/config';
-import { Logger } from '@nestjs/common';
-import { SchedulerRegistry } from '@nestjs/schedule';
-import { GoogleTranslateService } from '../../../src/services/google-translate.service';
 import { Application } from '../../../src/dtos/applications/application.dto';
-import MultiselectQuestion from '../../../src/dtos/multiselect-questions/multiselect-question.dto';
-import { OrderByEnum } from '../../../src/enums/shared/order-by-enum';
-import { LotteryService } from '../../../src/services/lottery.service';
 import { ListingLotteryStatus } from '../../../src/dtos/listings/listing-lottery-status.dto';
+import MultiselectQuestion from '../../../src/dtos/multiselect-questions/multiselect-question.dto';
+import { User } from '../../../src/dtos/users/user.dto';
 import { permissionActions } from '../../../src/enums/permissions/permission-actions-enum';
+import { OrderByEnum } from '../../../src/enums/shared/order-by-enum';
+import { ApplicationExporterService } from '../../../src/services/application-exporter.service';
+import { ApplicationFlaggedSetService } from '../../../src/services/application-flagged-set.service';
 import { CronJobService } from '../../../src/services/cron-job.service';
+import { EmailService } from '../../../src/services/email.service';
+import { GoogleTranslateService } from '../../../src/services/google-translate.service';
+import { ListingService } from '../../../src/services/listing.service';
+import { LotteryService } from '../../../src/services/lottery.service';
+import { MultiselectQuestionService } from '../../../src/services/multiselect-question.service';
+import { PermissionService } from '../../../src/services/permission.service';
+import { PrismaService } from '../../../src/services/prisma.service';
+import { TranslationService } from '../../../src/services/translation.service';
 
 const canOrThrowMock = jest.fn();
 const lotteryReleasedMock = jest.fn();
@@ -372,6 +372,9 @@ describe('Testing lottery service', () => {
       canOrThrowMock.mockResolvedValue(true);
       prisma.listings.findUnique = jest.fn().mockResolvedValue({
         id: listingId,
+        jurisdictions: {
+          featureFlags: [],
+        },
         lotteryLastRunAt: null,
         lotteryStatus: null,
         status: ListingsStatusEnum.closed,
@@ -425,6 +428,7 @@ describe('Testing lottery service', () => {
       expect(prisma.listings.findUnique).toHaveBeenCalledWith({
         select: {
           id: true,
+          jurisdictions: true,
           lotteryStatus: true,
         },
         where: {
@@ -435,12 +439,6 @@ describe('Testing lottery service', () => {
       expect(prisma.applications.findMany).toHaveBeenCalledWith({
         select: {
           id: true,
-          preferences: true,
-          householdMember: {
-            select: {
-              id: true,
-            },
-          },
           applicationLotteryPositions: {
             select: {
               ordinal: true,
@@ -453,6 +451,16 @@ describe('Testing lottery service', () => {
               ordinal: OrderByEnum.DESC,
             },
           },
+          applicationSelections: {
+            select: { hasOptedOut: true, multiselectQuestionId: true },
+          },
+          householdMember: {
+            select: {
+              id: true,
+            },
+          },
+          // TODO: remove after MSQ refactor
+          preferences: true,
         },
         where: {
           listingId: listingId,
@@ -488,6 +496,9 @@ describe('Testing lottery service', () => {
       canOrThrowMock.mockResolvedValue(true);
       prisma.listings.findUnique = jest.fn().mockResolvedValue({
         id: listingId,
+        jurisdictions: {
+          featureFlags: [],
+        },
         lotteryLastRunAt: new Date(),
         lotteryStatus: LotteryStatusEnum.ran,
         status: ListingsStatusEnum.closed,
@@ -543,6 +554,7 @@ describe('Testing lottery service', () => {
       expect(prisma.listings.findUnique).toHaveBeenCalledWith({
         select: {
           id: true,
+          jurisdictions: true,
           lotteryStatus: true,
         },
         where: {

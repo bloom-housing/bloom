@@ -1,40 +1,39 @@
 import { randomUUID } from 'crypto';
 import { PassThrough } from 'stream';
+import { HttpModule } from '@nestjs/axios';
+import { Logger } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { SchedulerRegistry } from '@nestjs/schedule';
 import { Test, TestingModule } from '@nestjs/testing';
 import { MultiselectQuestionsApplicationSectionEnum } from '@prisma/client';
-import { HttpModule } from '@nestjs/axios';
-import { PrismaService } from '../../../src/services/prisma.service';
-import { ApplicationCsvQueryParams } from '../../../src/dtos/applications/application-csv-query-params.dto';
-import { User } from '../../../src/dtos/users/user.dto';
-import MultiselectQuestion from '../../../src/dtos/multiselect-questions/multiselect-question.dto';
-import { ApplicationExporterService } from '../../../src/services/application-exporter.service';
-import { MultiselectQuestionService } from '../../../src/services/multiselect-question.service';
 import {
   mockApplication,
   mockApplicationSet,
 } from './application.service.spec';
 import { mockMultiselectQuestion } from './multiselect-question.service.spec';
-import { ListingService } from '../../../src/services/listing.service';
-import { PermissionService } from '../../../src/services/permission.service';
-import { TranslationService } from '../../../src/services/translation.service';
+import { ApplicationCsvQueryParams } from '../../../src/dtos/applications/application-csv-query-params.dto';
+import MultiselectQuestion from '../../../src/dtos/multiselect-questions/multiselect-question.dto';
+import { User } from '../../../src/dtos/users/user.dto';
+import { FeatureFlagEnum } from '../../../src/enums/feature-flags/feature-flags-enum';
+import { ApplicationExporterService } from '../../../src/services/application-exporter.service';
 import { ApplicationFlaggedSetService } from '../../../src/services/application-flagged-set.service';
+import { CronJobService } from '../../../src/services/cron-job.service';
 import { EmailService } from '../../../src/services/email.service';
-import { ConfigService } from '@nestjs/config';
-import { Logger } from '@nestjs/common';
-import { SchedulerRegistry } from '@nestjs/schedule';
 import { GoogleTranslateService } from '../../../src/services/google-translate.service';
+import { ListingService } from '../../../src/services/listing.service';
+import { MultiselectQuestionService } from '../../../src/services/multiselect-question.service';
+import { PermissionService } from '../../../src/services/permission.service';
+import { PrismaService } from '../../../src/services/prisma.service';
+import { TranslationService } from '../../../src/services/translation.service';
 import {
-  constructMultiselectQuestionHeaders,
+  constructSpecificMultiselectQuestionHeaders,
   getExportHeaders,
   unitTypeToReadable,
 } from '../../../src/utilities/application-export-helpers';
-import { FeatureFlagEnum } from '../../../src/enums/feature-flags/feature-flags-enum';
-import { CronJobService } from '../../../src/services/cron-job.service';
 
 describe('Testing application export service', () => {
   let service: ApplicationExporterService;
   let prisma: PrismaService;
-  let permissionService: PermissionService;
 
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -67,28 +66,15 @@ describe('Testing application export service', () => {
       ApplicationExporterService,
     );
     prisma = module.get<PrismaService>(PrismaService);
-    permissionService = module.get<PermissionService>(PermissionService);
   });
 
   describe('csvExport', () => {
     it('should build csv without demographics', async () => {
       const requestingUser = {
+        id: 'requesting id',
         firstName: 'requesting fName',
         lastName: 'requesting lName',
         email: 'requestingUser@email.com',
-        jurisdictions: [
-          {
-            id: 'juris id',
-            featureFlags: [
-              {
-                name: FeatureFlagEnum.enableAdaOtherOption,
-                description: '',
-                active: true,
-                jurisdictions: [],
-              },
-            ],
-          },
-        ],
       } as unknown as User;
 
       const applications = mockApplicationSet(5, new Date(), 1);
@@ -96,14 +82,12 @@ describe('Testing application export service', () => {
       prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue({
         featureFlags: [
           {
-            id: 'flag id',
-            name: FeatureFlagEnum.enableFullTimeStudentQuestion,
-            active: false,
+            id: 'enableAdaOtherOption',
+            name: FeatureFlagEnum.enableAdaOtherOption,
+            active: true,
           },
         ],
       });
-      prisma.listings.findUnique = jest.fn().mockResolvedValue({});
-      permissionService.canOrThrow = jest.fn().mockResolvedValue(true);
 
       prisma.multiselectQuestions.findMany = jest.fn().mockReturnValue([
         {
@@ -129,7 +113,7 @@ describe('Testing application export service', () => {
 
       const exportResponse = await service.csvExport(
         {
-          listingId: randomUUID(),
+          id: randomUUID(),
           includeDemographics: false,
         } as unknown as ApplicationCsvQueryParams,
         requestingUser,
@@ -159,28 +143,23 @@ describe('Testing application export service', () => {
 
     it('should build csv with demographics', async () => {
       const requestingUser = {
+        id: 'requesting id',
         firstName: 'requesting fName',
         lastName: 'requesting lName',
         email: 'requestingUser@email.com',
-        jurisdictions: [
-          {
-            id: 'juris id',
-            featureFlags: [
-              {
-                name: FeatureFlagEnum.enableAdaOtherOption,
-                description: '',
-                active: true,
-                jurisdictions: [],
-              },
-            ],
-          },
-        ],
       } as unknown as User;
 
       const applications = mockApplicationSet(3, new Date());
       prisma.applications.findMany = jest.fn().mockReturnValue(applications);
-      prisma.listings.findUnique = jest.fn().mockResolvedValue({});
-      permissionService.canOrThrow = jest.fn().mockResolvedValue(true);
+      prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue({
+        featureFlags: [
+          {
+            id: 'enableAdaOtherOption',
+            name: FeatureFlagEnum.enableAdaOtherOption,
+            active: true,
+          },
+        ],
+      });
 
       prisma.multiselectQuestions.findMany = jest
         .fn()
@@ -199,7 +178,7 @@ describe('Testing application export service', () => {
 
       const exportResponse = await service.csvExport(
         {
-          listingId: 'test',
+          id: 'test',
           includeDemographics: true,
         } as unknown as ApplicationCsvQueryParams,
         requestingUser,
@@ -225,27 +204,19 @@ describe('Testing application export service', () => {
       expect(readable).toContain(firstApp);
     });
 
-    it('should build csv without other ADA accesbility option', async () => {
+    it('should build csv without other ADA accessibility option', async () => {
       const requestingUser = {
+        id: 'requesting id',
         firstName: 'requesting fName',
         lastName: 'requesting lName',
         email: 'requestingUser@email.com',
-        jurisdictions: [],
       } as unknown as User;
 
       const applications = mockApplicationSet(5, new Date(), 1);
       prisma.applications.findMany = jest.fn().mockReturnValue(applications);
       prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue({
-        featureFlags: [
-          {
-            id: 'flag id',
-            name: FeatureFlagEnum.enableFullTimeStudentQuestion,
-            active: false,
-          },
-        ],
+        featureFlags: [],
       });
-      prisma.listings.findUnique = jest.fn().mockResolvedValue({});
-      permissionService.canOrThrow = jest.fn().mockResolvedValue(true);
 
       prisma.multiselectQuestions.findMany = jest.fn().mockReturnValue([
         {
@@ -271,7 +242,7 @@ describe('Testing application export service', () => {
 
       const exportResponse = await service.csvExport(
         {
-          listingId: randomUUID(),
+          id: randomUUID(),
           includeDemographics: false,
         } as unknown as ApplicationCsvQueryParams,
         requestingUser,
@@ -305,28 +276,23 @@ describe('Testing application export service', () => {
       jest.setSystemTime(new Date('2024-01-01'));
 
       const requestingUser = {
+        id: 'requesting id',
         firstName: 'requesting fName',
         lastName: 'requesting lName',
         email: 'requestingUser@email.com',
-        jurisdictions: [
-          {
-            id: 'juris id',
-            featureFlags: [
-              {
-                name: FeatureFlagEnum.enableAdaOtherOption,
-                description: '',
-                active: true,
-                jurisdictions: [],
-              },
-            ],
-          },
-        ],
       } as unknown as User;
 
-      const applications = mockApplicationSet(5, new Date());
+      const applications = mockApplicationSet(5, new Date(), 1);
       prisma.applications.findMany = jest.fn().mockReturnValue(applications);
-      prisma.listings.findUnique = jest.fn().mockResolvedValue({});
-      permissionService.canOrThrow = jest.fn().mockResolvedValue(true);
+      prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue({
+        featureFlags: [
+          {
+            id: 'enableAdaOtherOption',
+            name: FeatureFlagEnum.enableAdaOtherOption,
+            active: true,
+          },
+        ],
+      });
 
       prisma.multiselectQuestions.findMany = jest.fn().mockReturnValue([
         {
@@ -354,7 +320,7 @@ describe('Testing application export service', () => {
         .spyOn({ unitTypeToReadable }, 'unitTypeToReadable')
         .mockReturnValue('Studio');
       const exportResponse = await service.csvExport(
-        { listingId: randomUUID() } as unknown as ApplicationCsvQueryParams,
+        { id: randomUUID() } as unknown as ApplicationCsvQueryParams,
         requestingUser,
       );
 
@@ -379,28 +345,23 @@ describe('Testing application export service', () => {
       jest.setSystemTime(new Date('2024-01-01'));
 
       const requestingUser = {
+        id: 'requesting id',
         firstName: 'requesting fName',
         lastName: 'requesting lName',
         email: 'requestingUser@email.com',
-        jurisdictions: [
-          {
-            id: 'juris id',
-            featureFlags: [
-              {
-                name: FeatureFlagEnum.enableAdaOtherOption,
-                description: '',
-                active: true,
-                jurisdictions: [],
-              },
-            ],
-          },
-        ],
       } as unknown as User;
 
-      const applications = mockApplicationSet(5, new Date());
+      const applications = mockApplicationSet(5, new Date(), 1);
       prisma.applications.findMany = jest.fn().mockReturnValue(applications);
-      prisma.listings.findUnique = jest.fn().mockResolvedValue({});
-      permissionService.canOrThrow = jest.fn().mockResolvedValue(true);
+      prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue({
+        featureFlags: [
+          {
+            id: 'enableAdaOtherOption',
+            name: FeatureFlagEnum.enableAdaOtherOption,
+            active: true,
+          },
+        ],
+      });
 
       prisma.multiselectQuestions.findMany = jest.fn().mockReturnValue([
         {
@@ -429,7 +390,7 @@ describe('Testing application export service', () => {
         .mockReturnValue('Studio');
       const exportResponse = await service.csvExport(
         {
-          listingId: randomUUID(),
+          id: randomUUID(),
           timeZone: 'America/New_York',
         } as unknown as ApplicationCsvQueryParams,
         requestingUser,
@@ -456,31 +417,23 @@ describe('Testing application export service', () => {
       jest.setSystemTime(new Date('2024-01-01'));
 
       const requestingUser = {
+        id: 'requesting id',
         firstName: 'requesting fName',
         lastName: 'requesting lName',
         email: 'requestingUser@email.com',
-        jurisdictions: [
-          {
-            id: 'juris id',
-            featureFlags: [
-              {
-                name: FeatureFlagEnum.enableAdaOtherOption,
-                description: '',
-                active: true,
-                jurisdictions: [],
-              },
-            ],
-          },
-        ],
       } as unknown as User;
 
-      const applications = mockApplicationSet(5, new Date());
-      applications.forEach((app) => {
-        app.programs = null;
-      });
+      const applications = mockApplicationSet(5, new Date(), 1);
       prisma.applications.findMany = jest.fn().mockReturnValue(applications);
-      prisma.listings.findUnique = jest.fn().mockResolvedValue({});
-      permissionService.canOrThrow = jest.fn().mockResolvedValue(true);
+      prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue({
+        featureFlags: [
+          {
+            id: 'enableAdaOtherOption',
+            name: FeatureFlagEnum.enableAdaOtherOption,
+            active: true,
+          },
+        ],
+      });
 
       prisma.multiselectQuestions.findMany = jest.fn().mockReturnValue([
         {
@@ -509,7 +462,7 @@ describe('Testing application export service', () => {
         .mockReturnValue('Studio');
       const exportResponse = await service.csvExport(
         {
-          listingId: randomUUID(),
+          id: randomUUID(),
           timeZone: 'America/New_York',
         } as unknown as ApplicationCsvQueryParams,
         requestingUser,
@@ -544,6 +497,7 @@ describe('Testing application export service', () => {
             new Date(),
             MultiselectQuestionsApplicationSectionEnum.preferences,
           ),
+          jurisdictions: [],
         },
         {
           ...mockMultiselectQuestion(
@@ -551,6 +505,7 @@ describe('Testing application export service', () => {
             new Date(),
             MultiselectQuestionsApplicationSectionEnum.preferences,
           ),
+          jurisdictions: [],
         },
         {
           ...mockMultiselectQuestion(
@@ -558,6 +513,7 @@ describe('Testing application export service', () => {
             new Date(),
             MultiselectQuestionsApplicationSectionEnum.programs,
           ),
+          jurisdictions: [],
           options: [{ id: 1, text: 'text' }],
         },
       ] as MultiselectQuestion[];
@@ -588,31 +544,9 @@ describe('Testing application export service', () => {
 
   describe('populateDataForEachHeader', () => {
     it('should populate the data for each header and output a string', async () => {
-      const requestingUser = {
-        firstName: 'requesting fName',
-        lastName: 'requesting lName',
-        email: 'requestingUser@email.com',
-        jurisdictions: [
-          {
-            id: 'juris id',
-            featureFlags: [
-              {
-                name: FeatureFlagEnum.enableAdaOtherOption,
-                description: '',
-                active: true,
-                jurisdictions: [],
-              },
-            ],
-          },
-        ],
-      } as unknown as User;
-
-      const headers = await getExportHeaders(
-        0,
-        [],
-        'America/Los_Angeles',
-        requestingUser,
-      );
+      const headers = getExportHeaders(0, [], 'America/Los_Angeles', {
+        enableAdaOtherOption: true,
+      });
       const id = randomUUID();
       const application = mockApplication({
         date: new Date('December 5, 2024 03:24:00 PST'),
@@ -620,40 +554,22 @@ describe('Testing application export service', () => {
         id,
         includeFlagSets: true,
       });
-      const { stringData, objectData } =
-        await service.populateDataForEachHeader(headers, application, '');
+      const { stringData, objectData } = service.populateDataForEachHeader(
+        headers,
+        application,
+        { stringData: '' },
+      );
 
       expect(objectData).toBe(undefined);
       expect(stringData).toEqual(
         `"${id.toString()}","confirmationCode 1","electronic","12-05-2024 03:24:00AM PST","application 1 firstName","application 1 middleName","application 1 lastName","application 1 birthDay","application 1 birthMonth","application 1 birthYear","application 1 emailaddress","application 1 phoneNumber","application 1 phoneNumberType","additionalPhoneNumber 1",,"yes","application 1 applicantAddress street","application 1 applicantAddress street2","application 1 applicantAddress city","application 1 applicantAddress state","application 1 applicantAddress zipCode","application 1 mailingAddress street","application 1 mailingAddress street2","application 1 mailingAddress city","application 1 mailingAddress state","application 1 mailingAddress zipCode","application 1 applicantWorkAddress street","application 1 applicantWorkAddress street2","application 1 applicantWorkAddress city","application 1 applicantWorkAddress state","application 1 applicantWorkAddress zipCode","application 1 alternateContact firstName","application 1 alternateContact lastName","application 1 alternateContact type","application 1 alternateContact agency","application 1 alternateContact otherType","application 1 alternatecontact emailaddress","application 1 alternateContact phoneNumber","application 1 alternateContact address street","application 1 alternateContact address street2","application 1 alternateContact address city","application 1 alternateContact address state","application 1 alternateContact address zipCode","income 1","per month",,,,,"true","true","true","Studio,One Bedroom","1","true","true"`,
       );
     });
-    it('should populate the data for each header and output a string', async () => {
-      const requestingUser = {
-        firstName: 'requesting fName',
-        lastName: 'requesting lName',
-        email: 'requestingUser@email.com',
-        jurisdictions: [
-          {
-            id: 'juris id',
-            featureFlags: [
-              {
-                name: FeatureFlagEnum.enableAdaOtherOption,
-                description: '',
-                active: true,
-                jurisdictions: [],
-              },
-            ],
-          },
-        ],
-      } as unknown as User;
 
-      const headers = await getExportHeaders(
-        0,
-        [],
-        'America/Los_Angeles',
-        requestingUser,
-      );
+    it('should populate the data for each header and output a string', async () => {
+      const headers = getExportHeaders(0, [], 'America/Los_Angeles', {
+        enableAdaOtherOption: true,
+      });
       const id = randomUUID();
       const application = mockApplication({
         date: new Date('December 5, 2024 03:24:00 PST'),
@@ -661,13 +577,11 @@ describe('Testing application export service', () => {
         id,
         includeFlagSets: true,
       });
-      const { stringData, objectData } =
-        await service.populateDataForEachHeader(
-          headers,
-          application,
-          undefined,
-          {},
-        );
+      const { stringData, objectData } = service.populateDataForEachHeader(
+        headers,
+        application,
+        { objectData: {} },
+      );
 
       expect(objectData).toEqual({
         'accessibility.hearing': '',
@@ -770,6 +684,9 @@ describe('Testing application export service', () => {
             collectAddress: true,
             collectName: true,
             collectRelationship: true,
+            id: '',
+            createdAt: undefined,
+            updatedAt: undefined,
           },
           {
             text: 'option 2. text',
@@ -777,10 +694,20 @@ describe('Testing application export service', () => {
             collectAddress: true,
             collectName: true,
             collectRelationship: true,
+            id: '',
+            createdAt: undefined,
+            updatedAt: undefined,
           },
-          { text: 'option 3 text', ordinal: 2 },
+          {
+            text: 'option 3 text',
+            ordinal: 2,
+            id: '',
+            createdAt: undefined,
+            updatedAt: undefined,
+          },
         ],
         optOutText: 'I am opting out',
+        status: 'draft',
       };
       const multiselectQuestion2: MultiselectQuestion = {
         id: multiselectQuestionId2,
@@ -794,11 +721,15 @@ describe('Testing application export service', () => {
           {
             text: 'not selected',
             ordinal: 1,
+            id: '',
+            createdAt: undefined,
+            updatedAt: undefined,
           },
         ],
         optOutText: 'I am opting out!',
+        status: 'draft',
       };
-      const headers = await constructMultiselectQuestionHeaders(
+      const headers = constructSpecificMultiselectQuestionHeaders(
         'preferences',
         'Preference',
         [multiselectQuestion, multiselectQuestion2],
@@ -845,8 +776,11 @@ describe('Testing application export service', () => {
           },
         ],
       };
-      const { stringData, objectData } =
-        await service.populateDataForEachHeader(headers, application, '');
+      const { stringData, objectData } = service.populateDataForEachHeader(
+        headers,
+        application,
+        { stringData: '' },
+      );
 
       expect(objectData).toBe(undefined);
       expect(stringData).toEqual(

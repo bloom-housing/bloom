@@ -61,7 +61,7 @@ includeViews.csv = {
     include: {
       multiselectQuestions: {
         select: {
-          text: true,
+          name: true,
         },
       },
     },
@@ -180,7 +180,7 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
 
     // Add unit groups summarized to listings
     // should be removed when unit summarized stored in db
-    await addUnitGroupsSummarized(listings as unknown as Listing[]);
+    addUnitGroupsSummarized(listings as unknown as Listing[]);
 
     await this.createCsv(listingFilePath, queryParams, {
       listings: listings as unknown as Listing[],
@@ -609,7 +609,7 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
                       question.multiselectQuestions.applicationSection ===
                       'programs',
                   )
-                  .map((question) => question.multiselectQuestions.text)
+                  .map((question) => question.multiselectQuestions.name)
                   .join(',');
               },
             },
@@ -781,7 +781,7 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
                   question.multiselectQuestions.applicationSection ===
                   'preferences',
               )
-              .map((question) => question.multiselectQuestions.text)
+              .map((question) => question.multiselectQuestions.name)
               .join(',');
           },
         },
@@ -800,7 +800,7 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
                         question.multiselectQuestions.applicationSection ===
                         'programs',
                     )
-                    .map((question) => question.multiselectQuestions.text)
+                    .map((question) => question.multiselectQuestions.name)
                     .join(',');
                 },
               },

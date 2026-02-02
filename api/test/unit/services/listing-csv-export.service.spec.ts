@@ -64,6 +64,7 @@ describe('Testing listing csv export service', () => {
     duplicateListingPermissions: [],
     requiredListingFields: [],
     visibleNeighborhoodAmenities: [],
+    regions: [],
   };
 
   const mockBaseUnit: Unit = {
