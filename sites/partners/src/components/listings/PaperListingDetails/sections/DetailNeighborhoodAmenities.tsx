@@ -35,20 +35,28 @@ const DetailNeighborhoodAmenities = () => {
 
   return (
     <SectionWithGrid heading={t("listings.sections.neighborhoodAmenitiesTitle")} inset>
-      {visibleAmenities.map((amenity) => {
-        return (
-          <Grid.Row key={amenity}>
-            <Grid.Cell>
-              <FieldValue
-                id={`neighborhoodAmenities.${amenity}`}
-                label={t(`listings.amenities.${amenity}`)}
-              >
-                {getDetailFieldString(listing.listingNeighborhoodAmenities?.[amenity])}
-              </FieldValue>
-            </Grid.Cell>
-          </Grid.Row>
-        )
-      })}
+      {visibleAmenities.length === 0 ? (
+        <Grid.Row>
+          <Grid.Cell>{t("t.none")}</Grid.Cell>
+        </Grid.Row>
+      ) : (
+        <>
+          {visibleAmenities.map((amenity) => {
+            return (
+              <Grid.Row key={amenity}>
+                <Grid.Cell>
+                  <FieldValue
+                    id={`neighborhoodAmenities.${amenity}`}
+                    label={t(`listings.amenities.${amenity}`)}
+                  >
+                    {getDetailFieldString(listing.listingNeighborhoodAmenities?.[amenity])}
+                  </FieldValue>
+                </Grid.Cell>
+              </Grid.Row>
+            )
+          })}
+        </>
+      )}
     </SectionWithGrid>
   )
 }
