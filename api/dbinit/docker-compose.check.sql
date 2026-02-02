@@ -1,4 +1,4 @@
 -- Test the bloom_readonly expected permissions.
 \set ON_ERROR_STOP on
 
-SELECT 1;
+SELECT id FROM jurisdictions;

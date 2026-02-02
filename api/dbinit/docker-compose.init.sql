@@ -12,15 +12,29 @@ REVOKE ALL ON DATABASE bloom_prisma FROM PUBLIC;
 
 -- Roles
 -- bloom_api
-CREATE USER bloom_api PASSWORD 'bloom_api_pw';
-GRANT CONNECT ON DATABASE bloom_prisma TO bloom_api;
-GRANT ALL PRIVILEGES ON DATABASE bloom_prisma TO bloom_api;
-GRANT ALL PRIVILEGES ON SCHEMA public TO bloom_api;
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT FROM pg_roles WHERE rolname = 'bloom_api') THEN
+        CREATE USER bloom_api PASSWORD 'bloom_api_pw';
+        GRANT CONNECT ON DATABASE bloom_prisma TO bloom_api;
+        GRANT ALL PRIVILEGES ON DATABASE bloom_prisma TO bloom_api;
+        GRANT ALL PRIVILEGES ON SCHEMA public TO bloom_api;
+    END IF;
+END
+$$;
+
+
 -- bloom_readonly
-CREATE USER bloom_readonly PASSWORD 'bloom_readonly_pw';
-GRANT CONNECT ON DATABASE bloom_prisma TO bloom_readonly;
-GRANT USAGE ON SCHEMA public TO bloom_readonly;
-GRANT USAGE ON ALL SEQUENCES IN SCHEMA public TO bloom_readonly;
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT FROM pg_roles WHERE rolname = 'bloom_readonly') THEN
+        CREATE USER bloom_readonly PASSWORD 'bloom_readonly_pw';
+        GRANT CONNECT ON DATABASE bloom_prisma TO bloom_readonly;
+        GRANT USAGE ON SCHEMA public TO bloom_readonly;
+        GRANT USAGE ON ALL SEQUENCES IN SCHEMA public TO bloom_readonly;
+    END IF;
+END
+$$;
 
 -- Set local role within transation.
 BEGIN;

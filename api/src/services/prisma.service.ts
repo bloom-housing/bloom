@@ -31,13 +31,11 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
       config.password = async function () {
         return await signer.getAuthToken();
       };
+      const connPool = new Pool(config);
+      super({ adapter: new PrismaPg(connPool) });
     } else if (process.env.DATABASE_URL) {
-      // Maintain compatibility with existing deployments of Bloom API.
-      config.connectionString = `${process.env.DATABASE_URL}`;
+      super();
     }
-
-    const connPool = new Pool(config);
-    super({ adapter: new PrismaPg(connPool) });
   }
 
   async onModuleInit() {
