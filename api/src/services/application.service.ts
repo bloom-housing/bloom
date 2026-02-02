@@ -1198,8 +1198,7 @@ export class ApplicationService {
     }
 
     const mappedListing = mapTo(Listing, listing);
-    const contactEmail =
-      listing.leasingAgentEmail || listing.jurisdictions?.emailFromAddress;
+    const contactEmail = listing.leasingAgentEmail;
 
     await this.emailService.applicationUpdateEmail(
       mappedListing,
