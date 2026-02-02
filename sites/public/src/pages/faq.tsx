@@ -6,10 +6,10 @@ import { Button, Card, Heading } from "@bloom-housing/ui-seeds"
 import { UserStatus } from "../lib/constants"
 import Layout from "../layouts/application"
 import { PageHeaderLayout } from "../patterns/PageHeaderLayout"
+import FrequentlyAskedQuestions from "../patterns/FrequentlyAskedQuestions"
 import { getFaqContent } from "../static_content/generic_faq_content"
 import pageStyles from "../components/content-pages/FaqPage.module.scss"
 import styles from "../patterns/PageHeaderLayout.module.scss"
-import FrequentlyAskedQuestions from "../patterns/FrequentlyAskedQuestions"
 
 const FaqPage = () => {
   const { profile } = useContext(AuthContext)
@@ -33,9 +33,7 @@ const FaqPage = () => {
         className={pageStyles["faq-page"]}
       >
         <div className={styles["markdown"]}>
-          {content.categories.map((category, index) => (
-            <FrequentlyAskedQuestions key={index} content={{ categories: [category] }} />
-          ))}
+          <FrequentlyAskedQuestions content={content} />
         </div>
         <Card className={pageStyles["faq-card"]}>
           <Card.Header>
