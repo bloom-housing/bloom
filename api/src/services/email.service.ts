@@ -14,7 +14,6 @@ import { JurisdictionService } from './jurisdiction.service';
 import { SendGridService } from './sendgrid.service';
 import { TranslationService } from './translation.service';
 import { Application } from '../dtos/applications/application.dto';
-import { ApplicationCreate } from '../dtos/applications/application-create.dto';
 import { Jurisdiction } from '../dtos/jurisdictions/jurisdiction.dto';
 import { Listing } from '../dtos/listings/listing.dto';
 import { IdDTO } from '../dtos/shared/id.dto';
@@ -22,6 +21,7 @@ import { User } from '../dtos/users/user.dto';
 import { FeatureFlagEnum } from '../enums/feature-flags/feature-flags-enum';
 import { doJurisdictionHaveFeatureFlagSet } from '../utilities/feature-flag-utilities';
 import { getPublicEmailURL } from '../utilities/get-public-email-url';
+import type { ApplicationStatusChangeItem } from '../utilities/applicationStatusChanges';
 dayjs.extend(utc);
 dayjs.extend(tz);
 dayjs.extend(advanced);
@@ -452,6 +452,72 @@ export class EmailService {
         nextStepsUrl:
           nextStepsUrl != 'confirmation.nextStepsUrl' ? nextStepsUrl : null,
         user,
+      }),
+    );
+  }
+
+  public async applicationUpdateEmail(
+    listing: Listing,
+    application: Application,
+    changes: ApplicationStatusChangeItem[],
+    appUrl: string,
+    contactEmail?: string,
+  ) {
+    const jurisdiction = await this.getJurisdiction([listing.jurisdictions]);
+    void (await this.loadTranslations(jurisdiction, application.language));
+
+    const summaryItems = changes.map((change) => {
+      if (change.type === 'status') {
+        const fromLabel = this.polyglot.t(
+          `applicationUpdate.applicationStatus.${change.from}`,
+        );
+        const toLabel = this.polyglot.t(
+          `applicationUpdate.applicationStatus.${change.to}`,
+        );
+        return new Handlebars.SafeString(
+          this.polyglot.t('applicationUpdate.statusChange', {
+            from: `<strong>${fromLabel}</strong>`,
+            to: `<strong>${toLabel}</strong>`,
+          }),
+        );
+      }
+      if (change.type === 'accessibleWaitlist') {
+        return new Handlebars.SafeString(
+          this.polyglot.t('applicationUpdate.accessibleWaitListChange', {
+            value: `<strong>${change.value}</strong>`,
+          }),
+        );
+      }
+      return new Handlebars.SafeString(
+        this.polyglot.t('applicationUpdate.conventionalWaitListChange', {
+          value: `<strong>${change.value}</strong>`,
+        }),
+      );
+    });
+
+    const applicantName = [
+      application.applicant.firstName,
+      application.applicant.lastName,
+    ]
+      .filter(Boolean)
+      .join(' ');
+    const subject = this.polyglot.t('applicationUpdate.subject', {
+      listingName: listing.name,
+    });
+    const loginUrl = appUrl ? `${appUrl}/sign-in` : '';
+
+    await this.send(
+      application.applicant.emailAddress,
+      jurisdiction.emailFromAddress,
+      subject,
+      this.template('application-update')({
+        appOptions: {
+          listingName: listing.name,
+          applicantName,
+        },
+        summaryItems,
+        loginUrl,
+        contactEmail: contactEmail,
       }),
     );
   }

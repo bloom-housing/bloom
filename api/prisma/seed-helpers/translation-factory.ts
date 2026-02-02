@@ -61,6 +61,32 @@ const translations = (
         onChangeEmailMessage:
           'To confirm the change to your email address, please click the link below:',
       },
+      applicationUpdate: {
+        subject: 'Application update for %{listingName}',
+        title: 'Your application has been updated for %{listingName}',
+        greeting: 'Hello',
+        updateNotice:
+          'An update has been made to your housing application for %{listingName}.',
+        summaryTitle: 'Summary of changes:',
+        statusChange:
+          'Your application status has changed from %{from} to %{to}',
+        accessibleWaitListChange:
+          'Your Accessible wait list number is %{value}',
+        conventionalWaitListChange:
+          'Your Conventional wait list number is %{value}',
+        statusLabel: 'Application status',
+        contactNotice:
+          'No further action is required at this time. If you have questions regarding this update, please reach out at',
+        viewPrompt: 'To view your application, please click the link below:',
+        viewLink: 'View my application',
+        applicationStatus: {
+          submitted: 'Submitted',
+          declined: 'Declined',
+          receivedUnit: 'Received a unit',
+          waitlist: 'Wait list',
+          waitlistDeclined: 'Wait list - Declined',
+        },
+      },
       confirmation: {
         subject: 'Your Application Confirmation',
         eligible: {
@@ -280,6 +306,32 @@ const translations = (
         confirmMyAccount: 'Confirmar mi cuenta',
         toConfirmAccountMessage:
           'Para completar la creación de su cuenta, haga clic en el siguiente enlace:',
+      },
+      applicationUpdate: {
+        subject: 'Actualización de la aplicación para %{listingName}',
+        title: 'Su aplicación ha sido actualizada para %{listingName}',
+        greeting: 'Hola',
+        updateNotice:
+          'Se ha realizado una actualización en su solicitud de vivienda para %{listingName}.',
+        summaryTitle: 'Resumen de cambios:',
+        statusChange:
+          'El estado de su solicitud ha cambiado de %{from} a %{to}',
+        accessibleWaitListChange:
+          'Su número de lista de espera accesible es %{value}',
+        conventionalWaitListChange:
+          'Su número de lista de espera convencional es %{value}',
+        statusLabel: 'Estado de la solicitud',
+        contactNotice:
+          'No se requiere ninguna acción adicional en este momento. Si tiene alguna pregunta sobre esta actualización, comuníquese con nosotros en',
+        viewPrompt: 'Para ver su solicitud, haga clic en el siguiente enlace:',
+        viewLink: 'Ver mi solicitud',
+        applicationStatus: {
+          submitted: 'Enviada',
+          declined: 'Rechazada',
+          receivedUnit: 'Unidad recibida',
+          waitlist: 'Lista de espera',
+          waitlistDeclined: 'Lista de espera - Rechazada',
+        },
       },
     };
   }
