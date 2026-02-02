@@ -34,6 +34,10 @@
       stroke-width: 1px;
     }
   }
+
+  --heading-override-font-family: var(--seeds-font-alt-sans);
+  --heading-override-font-weight: var(--seeds-font-weight-semibold);
+
   .seeds-large-heading {
     font-family: var(--heading-override-font-family);
     font-weight: var(--heading-override-font-weight);
