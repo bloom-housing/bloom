@@ -6,16 +6,16 @@
       background-color: var(--seeds-bg-color-surface);
       border-radius: var(--seeds-rounded);
       width: 100%;
-      text-align: left;
-      border-bottom: 1px solid var(--seeds-border-color);
+      text-align: start;
+      border-block-end: 1px solid var(--seeds-border-color);
       display: flex;
       justify-content: space-between;
     }
 
     .faq-item-container {
-      margin-bottom: var(--seeds-s4);
+      margin-block-end: var(--seeds-s4);
       @media (--md-down) {
-        margin-bottom: var(--seeds-s2);
+        margin-block-end: var(--seeds-s2);
       }
       .collapsed {
         border: 0;
@@ -46,13 +46,13 @@
       }
 
       .content-expanded {
-        border-top: 0;
-        border-top-left-radius: 0;
-        border-top-right-radius: 0;
+        border-block-start: 0;
+        border-start-start-radius: 0;
+        border-start-end-radius: 0;
       }
 
       .faq-answer-container {
-        border-top: 0;
+        border-block-start: 0;
         .faq-answer {
           padding: var(--seeds-spacer-content);
         }

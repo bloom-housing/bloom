@@ -1,6 +1,6 @@
-import { t } from "@bloom-housing/ui-components"
 import { Link } from "@bloom-housing/ui-seeds"
 import Markdown from "markdown-to-jsx"
+import { getJurisdictionFaqContent } from "./jurisdiction_faq_content"
 
 export type FaqPageItem = {
   question: React.ReactNode | string
@@ -82,7 +82,9 @@ export const getFaqContent = (): FaqContent => {
       },
     ],
   }
-  return {
+  const jurisdictionContent = getJurisdictionFaqContent()
+  const genericContent = {
     categories: [faqContentSection, faqContentSection, faqContentSection],
   }
+  return jurisdictionContent || genericContent
 }

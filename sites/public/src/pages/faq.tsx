@@ -1,4 +1,5 @@
 import React, { useEffect, useContext, useState } from "react"
+import Markdown from "markdown-to-jsx"
 import ChevronDownIcon from "@heroicons/react/24/solid/ChevronDownIcon"
 import ChevronUpIcon from "@heroicons/react/24/solid/ChevronUpIcon"
 import { t } from "@bloom-housing/ui-components"
@@ -10,7 +11,6 @@ import { PageHeaderLayout } from "../patterns/PageHeaderLayout"
 import { FaqCategory, getFaqContent } from "../static_content/generic_faq_content"
 import pageStyles from "../components/content-pages/FaqPage.module.scss"
 import styles from "../patterns/PageHeaderLayout.module.scss"
-import Markdown from "markdown-to-jsx"
 
 interface QuestionsProps {
   category: FaqCategory
