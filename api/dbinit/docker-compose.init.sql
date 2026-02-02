@@ -3,7 +3,9 @@
 
 \set ON_ERROR_STOP on
 
-CREATE DATABASE bloom_prisma;
+-- Database
+SELECT 'CREATE DATABASE bloom_prisma'
+WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = 'bloom_prisma')\gexec
 \c bloom_prisma
 
 -- Revoke public privleges
