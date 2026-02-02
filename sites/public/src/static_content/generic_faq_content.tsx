@@ -53,18 +53,7 @@ export const getFaqContent = (): FaqContent => {
         question:
           "How does this typically function in practice, and what does the overall experience usually involve?",
         answer: (
-          <Markdown>
-            A design approach is a general philosophy that may or may not include a guide for
-            specific methods. Some are to guide the overall goal of the design. Other approaches are
-            to guide the tendencies of the designer. A combination of approaches may be used if they
-            don't conflict. A design approach is a general philosophy that may or may not include a
-            guide for specific methods. Some are to guide the overall goal of the design. Other
-            approaches are to guide the tendencies of the designer. A combination of approaches may
-            be used if they don't conflict. A design approach is a general philosophy that may or
-            may not include a guide for specific methods. Some are to guide the overall goal of the
-            design. Other approaches are to guide the tendencies of the designer. A combination of
-            approaches may be used if they don't conflict.
-          </Markdown>
+          <Markdown>A combination of approaches may be used if they don't conflict.</Markdown>
         ),
       },
     ],
