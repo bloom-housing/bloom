@@ -95,7 +95,7 @@ describe('MultiselectQuestion Controller Tests', () => {
           .set('Cookie', cookies)
           .expect(200);
 
-        expect(res.body.length).toBeGreaterThanOrEqual(2);
+        expect(res.body.items.length).toBeGreaterThanOrEqual(2);
       });
 
       it('should get multiselect questions from list endpoint when params are sent', async () => {
@@ -122,8 +122,8 @@ describe('MultiselectQuestion Controller Tests', () => {
           .set('Cookie', cookies)
           .expect(200);
 
-        expect(res.body.length).toBeGreaterThanOrEqual(2);
-        const multiselectQuestions = res.body.map((value) => value.text);
+        expect(res.body.items.length).toBeGreaterThanOrEqual(2);
+        const multiselectQuestions = res.body.items.map((value) => value.text);
         expect(multiselectQuestions).toContain(multiselectQuestion.text);
         expect(multiselectQuestions).toContain(multiselectQuestionB.text);
       });
@@ -452,8 +452,8 @@ describe('MultiselectQuestion Controller Tests', () => {
           .set('Cookie', cookies)
           .expect(200);
 
-        expect(res.body.length).toEqual(2);
-        const multiselectQuestions = res.body.map((value) => value.name);
+        expect(res.body.items.length).toEqual(2);
+        const multiselectQuestions = res.body.items.map((value) => value.name);
         expect(multiselectQuestions).toContain(multiselectQuestionA.name);
         expect(multiselectQuestions).toContain(multiselectQuestionB.name);
       });
@@ -514,8 +514,8 @@ describe('MultiselectQuestion Controller Tests', () => {
           .set('Cookie', cookies)
           .expect(200);
 
-        expect(res.body.length).toBeGreaterThanOrEqual(1);
-        const multiselectQuestions = res.body.map((value) => value.name);
+        expect(res.body.items.length).toBeGreaterThanOrEqual(1);
+        const multiselectQuestions = res.body.items.map((value) => value.name);
         expect(multiselectQuestions).not.toContain(multiselectQuestionA.name);
         expect(multiselectQuestions).not.toContain(multiselectQuestionB.name);
         expect(multiselectQuestions).toContain(multiselectQuestionC.name);
@@ -575,10 +575,10 @@ describe('MultiselectQuestion Controller Tests', () => {
           .set('Cookie', cookies)
           .expect(200);
 
-        expect(res.body.length).toEqual(3);
-        expect(res.body[0].name).toEqual(multiselectQuestionC.name);
-        expect(res.body[1].name).toEqual(multiselectQuestionB.name);
-        expect(res.body[2].name).toEqual(multiselectQuestionA.name);
+        expect(res.body.items.length).toEqual(3);
+        expect(res.body.items[0].name).toEqual(multiselectQuestionC.name);
+        expect(res.body.items[1].name).toEqual(multiselectQuestionB.name);
+        expect(res.body.items[2].name).toEqual(multiselectQuestionA.name);
       });
     });
 
