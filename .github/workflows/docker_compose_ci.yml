@@ -25,6 +25,29 @@ jobs:
             echo 'ERROR: docker compose build failed'
           fi
 
+      - name: dbinitcheck
+        shell: bash
+        run: |
+          if ! docker compose up \
+               --exit-code-from dbinit \
+               db dbinit
+          then
+            echo 'ERROR: dbinit first execution did not exit with 0'
+            exit 1
+          fi
+
+          if ! docker compose up \
+               --exit-code-from dbinit \
+               db dbinit
+          then
+            echo 'ERROR: dbinit second execution did not exit with 0'
+            exit 1
+          fi
+
+          if ! docker compose down; then
+            echo 'ERROR: docker compose down failed'
+          fi
+
       - name: dbreadonlycheck
         shell: bash
         run: |
