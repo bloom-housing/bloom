@@ -9,7 +9,7 @@ import { PageHeaderLayout } from "../patterns/PageHeaderLayout"
 import { getFaqContent } from "../static_content/generic_faq_content"
 import pageStyles from "../components/content-pages/FaqPage.module.scss"
 import styles from "../patterns/PageHeaderLayout.module.scss"
-import FrequentlyAskedQuestions from "../patterns/FrequentAskedQuestions"
+import FrequentlyAskedQuestions from "../patterns/FrequentlyAskedQuestions"
 
 const FaqPage = () => {
   const { profile } = useContext(AuthContext)

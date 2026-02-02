@@ -1,6 +1,6 @@
 import Markdown from "markdown-to-jsx"
 import { Link } from "@bloom-housing/ui-seeds"
-import { FaqCategory, FaqContent } from "../patterns/FrequentAskedQuestions"
+import { FaqCategory, FaqContent } from "../patterns/FrequentlyAskedQuestions"
 import { getJurisdictionFaqContent } from "./jurisdiction_faq_content"
 
 export const getFaqContent = (): FaqContent => {
