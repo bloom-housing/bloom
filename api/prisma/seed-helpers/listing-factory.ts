@@ -5,10 +5,10 @@ import {
   LotteryStatusEnum,
   MultiselectQuestions,
   Prisma,
-  PrismaClient,
   ReservedCommunityTypes,
   ReviewOrderTypeEnum,
   ListingTypeEnum,
+  PrismaClient,
 } from '@prisma/client';
 import { randomInt } from 'crypto';
 import dayjs from 'dayjs';

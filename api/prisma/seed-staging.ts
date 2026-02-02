@@ -4,8 +4,8 @@ import {
   LanguagesEnum,
   MonthlyRentDeterminationTypeEnum,
   MultiselectQuestionsApplicationSectionEnum,
-  PrismaClient,
   UserRoleEnum,
+  PrismaClient,
 } from '@prisma/client';
 import dayjs from 'dayjs';
 import { jurisdictionFactory } from './seed-helpers/jurisdiction-factory';
