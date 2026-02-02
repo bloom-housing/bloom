@@ -36,12 +36,15 @@ The following containers are defined in the [docker-compose.yml](./docker-compos
 The following containers will be started if `COMPOSE_PROFILES=pgadmin`:
 
 - `pgadmin`: runs https://www.pgadmin.org/ pre-configured to connect to the `db` as the
-  `bloom_readonly` user. Log in to pgadmin with:
+  `bloom_readonly` user. Log in to pgadmin at http://localhost:3200 with:
 
      - Username: `admin@example.com`
      - Password: `abcdef`
 
     Log into the `db` using password `bloom_readonly_pw`.
+
+    Alternativly, if the compose stack is already running without `COMPOSE_PROFILES=pgadmin`, you
+    can start pgadmin by running `docker compose up pgadmin` in a separate shell.
 
 Build, start, and tear down containers with the following commands. Each command takes an optional
 list of containers to operate on. By default the command operates on all containers.
