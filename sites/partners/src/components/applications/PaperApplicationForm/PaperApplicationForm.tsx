@@ -392,9 +392,7 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
                 <p>{t("application.confirmation.changesIntro")}</p>
                 <ul className="list-disc pl-5">
                   {confirmSections.changes.map((item) => (
-                    <li key={`${item.label}-${item.value}`}>
-                      {item.value ? `${item.label}: ${item.value}` : item.label}
-                    </li>
+                    <li key={`${item.label}-${item.value}`}>{`${item.label}: ${item.value}`}</li>
                   ))}
                 </ul>
               </>
@@ -406,9 +404,7 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
                 </p>
                 <ul className="list-disc pl-5">
                   {confirmSections.removals.map((item) => (
-                    <li key={`${item.label}-${item.value}`}>
-                      {item.value ? `${item.label}: ${item.value}` : item.label}
-                    </li>
+                    <li key={`${item.label}-${item.value}`}>{`${item.label}: ${item.value}`}</li>
                   ))}
                 </ul>
               </>
