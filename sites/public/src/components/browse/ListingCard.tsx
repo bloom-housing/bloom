@@ -156,7 +156,9 @@ export const ListingCard = ({
                 className={styles["image-background"]}
                 style={{ backgroundImage: `url(${imageUrl})` }}
                 role="img"
-                aria-label={t("listings.buildingImageAltText")}
+                aria-label={
+                  listing.listingImages?.[0]?.description || t("listings.buildingImageAltText")
+                }
               />
             </div>
           </div>
