@@ -157,6 +157,7 @@ export const PropertyDrawer = ({
                     <Select
                       id={"jurisdiction"}
                       defaultValue={defaultJurisdiction}
+                      disabled={!!editedProperty}
                       name={"jurisdictions.id"}
                       label={addAsterisk(t("t.jurisdiction"))}
                       register={register}
