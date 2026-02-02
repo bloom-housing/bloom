@@ -8,6 +8,7 @@ import {
   FeatureFlagEnum,
   PropertiesService,
   Property,
+  ListingsService,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { mockNextRouter, render } from "../../testUtils"
 import SettingsProperties from "../../../src/pages/settings/properties"
@@ -320,6 +321,14 @@ describe("<SettingsProperties>", () => {
       }),
       rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
         return res(ctx.json(user))
+      }),
+      rest.get("http://localhost/api/adapter/listings", (_req, res, ctx) => {
+        return res(
+          ctx.json({
+            items: [],
+            meta: { totalItems: 0, totalPages: 0 },
+          })
+        )
       })
     )
     render(
@@ -333,6 +342,7 @@ describe("<SettingsProperties>", () => {
             ],
             listings: [],
           },
+          listingsService: new ListingsService(),
           propertiesService: new PropertiesService(),
           doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
             featureFlag === FeatureFlagEnum.enableProperties,
@@ -487,6 +497,14 @@ describe("<SettingsProperties>", () => {
       }),
       rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
         return res(ctx.json(user))
+      }),
+      rest.get("http://localhost/api/adapter/listings", (_req, res, ctx) => {
+        return res(
+          ctx.json({
+            items: [],
+            meta: { totalItems: 0, totalPages: 0 },
+          })
+        )
       })
     )
 
@@ -499,6 +517,7 @@ describe("<SettingsProperties>", () => {
               jurisdictions: [{ ...jurisdiction, id: "jurisdiction1", name: "Test Jurisdiction" }],
               listings: [],
             },
+            listingsService: new ListingsService(),
             propertiesService: new PropertiesService(),
             doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
               featureFlag === FeatureFlagEnum.enableProperties,
