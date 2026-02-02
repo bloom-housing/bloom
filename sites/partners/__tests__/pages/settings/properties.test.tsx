@@ -319,7 +319,7 @@ describe("<SettingsProperties>", () => {
           })
         )
       }),
-      rest.get("http://localhost:3100/listings", (_req, res, ctx) => {
+      rest.get(/\/listings/, (_req, res, ctx) => {
         return res(ctx.json({ items: [] }))
       }),
       rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
@@ -490,7 +490,7 @@ describe("<SettingsProperties>", () => {
       rest.put("http://localhost/api/adapter/properties", (_req, res, ctx) => {
         return res(ctx.json(updatedProperty))
       }),
-      rest.get("http://localhost:3100/listings", (_req, res, ctx) => {
+      rest.get(/\/listings/, (_req, res, ctx) => {
         return res(ctx.json({ items: [] }))
       }),
       rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {

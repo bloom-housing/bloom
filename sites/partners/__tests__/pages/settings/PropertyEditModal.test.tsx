@@ -1,11 +1,24 @@
 import React from "react"
-import { Property, Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { mockNextRouter, render, screen, within } from "../../testUtils"
+import { setupServer } from "msw/node"
+import { rest } from "msw"
+import { AuthContext } from "@bloom-housing/shared-helpers"
+import {
+  Property,
+  Listing,
+  ListingsService,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { mockNextRouter, render, screen, waitFor, within } from "../../testUtils"
 import { PropertyEditModal } from "../../../src/components/settings/PropertyEditModal"
+import { user } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
+
+const server = setupServer()
 
 beforeAll(() => {
+  server.listen()
   mockNextRouter()
 })
+afterEach(() => server.resetHandlers())
+afterAll(() => server.close())
 
 const mockProperty: Property = {
   id: "property1",
@@ -33,53 +46,45 @@ const mockListingWithoutProperty: Listing = {
   property: null,
 } as Listing
 
+const renderWithAuth = (ui: React.ReactElement) => {
+  return render(
+    <AuthContext.Provider
+      value={{
+        profile: {
+          ...user,
+          jurisdictions: [],
+          listings: [],
+        },
+        listingsService: new ListingsService(),
+      }}
+    >
+      {ui}
+    </AuthContext.Provider>
+  )
+}
+
 describe("Testing the PropertyEditModal component", () => {
-  it("should call onEdit immediately when no listings are associated with the property", () => {
+  it("should show warning modal when listings are associated with the property", async () => {
+    server.use(
+      rest.get("http://localhost:3100/listings", (_req, res, ctx) => {
+        return res(
+          ctx.json({
+            items: [mockListingWithProperty],
+            meta: { totalItems: 1, totalPages: 1 },
+          })
+        )
+      })
+    )
+
     const onClose = jest.fn()
     const onEdit = jest.fn()
 
-    render(
-      <PropertyEditModal property={mockProperty} listings={[]} onClose={onClose} onEdit={onEdit} />
-    )
+    renderWithAuth(<PropertyEditModal property={mockProperty} onClose={onClose} onEdit={onEdit} />)
 
-    expect(onEdit).toHaveBeenCalledTimes(1)
-    expect(screen.queryByRole("dialog")).not.toBeInTheDocument()
-  })
-
-  it("should call onEdit when listings exist but none are associated with the property", () => {
-    const onClose = jest.fn()
-    const onEdit = jest.fn()
-
-    render(
-      <PropertyEditModal
-        property={mockProperty}
-        listings={[mockListingWithoutProperty]}
-        onClose={onClose}
-        onEdit={onEdit}
-      />
-    )
-
-    expect(onEdit).toHaveBeenCalledTimes(1)
-    expect(screen.queryByRole("dialog")).not.toBeInTheDocument()
-  })
-
-  it("should show warning modal when listings are associated with the property", () => {
-    const onClose = jest.fn()
-    const onEdit = jest.fn()
-
-    render(
-      <PropertyEditModal
-        property={mockProperty}
-        listings={[mockListingWithProperty]}
-        onClose={onClose}
-        onEdit={onEdit}
-      />
-    )
+    const dialog = await screen.findByRole("dialog")
+    expect(dialog).toBeInTheDocument()
 
     expect(onEdit).not.toHaveBeenCalled()
-
-    const dialog = screen.getByRole("dialog")
-    expect(dialog).toBeInTheDocument()
 
     expect(
       within(dialog).getByRole("heading", { name: /changes required before editing/i })
@@ -91,51 +96,65 @@ describe("Testing the PropertyEditModal component", () => {
       )
     ).toBeInTheDocument()
 
-    expect(within(dialog).getByText("Test Listing")).toBeInTheDocument()
+    expect(await within(dialog).findByText("Test Listing")).toBeInTheDocument()
     expect(within(dialog).getByRole("link", { name: "Test Listing" })).toHaveAttribute(
       "href",
       "/listings/listing1"
     )
   })
 
-  it("should show multiple listings in the table when multiple are associated", () => {
-    const onClose = jest.fn()
-    const onEdit = jest.fn()
-
+  it("should show multiple listings in the table when multiple are associated", async () => {
     const anotherListingWithProperty: Listing = {
       id: "listing3",
       name: "Another Listing",
       property: mockProperty,
     } as Listing
 
-    render(
-      <PropertyEditModal
-        property={mockProperty}
-        listings={[mockListingWithProperty, anotherListingWithProperty, mockListingWithoutProperty]}
-        onClose={onClose}
-        onEdit={onEdit}
-      />
+    server.use(
+      rest.get("http://localhost:3100/listings", (_req, res, ctx) => {
+        return res(
+          ctx.json({
+            items: [
+              mockListingWithProperty,
+              anotherListingWithProperty,
+              mockListingWithoutProperty,
+            ],
+            meta: { totalItems: 3, totalPages: 1 },
+          })
+        )
+      })
     )
 
-    const dialog = screen.getByRole("dialog")
-    expect(within(dialog).getByText("Test Listing")).toBeInTheDocument()
-    expect(within(dialog).getByText("Another Listing")).toBeInTheDocument()
-    expect(within(dialog).queryByText("Other Listing")).not.toBeInTheDocument()
-  })
-
-  it("should not render dialog when property is null", () => {
     const onClose = jest.fn()
     const onEdit = jest.fn()
 
-    render(
-      <PropertyEditModal
-        property={null}
-        listings={[mockListingWithProperty]}
-        onClose={onClose}
-        onEdit={onEdit}
-      />
+    renderWithAuth(<PropertyEditModal property={mockProperty} onClose={onClose} onEdit={onEdit} />)
+
+    const dialog = await screen.findByRole("dialog")
+    expect(await within(dialog).findByText("Test Listing")).toBeInTheDocument()
+    expect(await within(dialog).findByText("Another Listing")).toBeInTheDocument()
+    expect(within(dialog).queryByText("Other Listing")).not.toBeInTheDocument()
+  })
+
+  it("should not render dialog when property is null", async () => {
+    server.use(
+      rest.get("http://localhost:3100/listings", (_req, res, ctx) => {
+        return res(
+          ctx.json({
+            items: [mockListingWithProperty],
+            meta: { totalItems: 1, totalPages: 1 },
+          })
+        )
+      })
     )
 
-    expect(screen.queryByRole("dialog")).not.toBeInTheDocument()
+    const onClose = jest.fn()
+    const onEdit = jest.fn()
+
+    renderWithAuth(<PropertyEditModal property={null} onClose={onClose} onEdit={onEdit} />)
+
+    await waitFor(() => {
+      expect(screen.queryByRole("dialog")).not.toBeInTheDocument()
+    })
   })
 })
