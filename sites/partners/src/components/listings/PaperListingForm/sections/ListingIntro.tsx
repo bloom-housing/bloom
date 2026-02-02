@@ -65,8 +65,6 @@ const ListingIntro = (props: ListingIntroProps) => {
 
   const propertiesData = data?.items ?? []
   const showPropertiesDropDown = propertiesData.length > 1 && enableProperties
-  console.log("enableProperties", enableProperties)
-  console.log("jurisdictionName", props.jurisdictionName)
 
   const propertyOptions: SelectOption[] =
     propertiesData.length !== 0
