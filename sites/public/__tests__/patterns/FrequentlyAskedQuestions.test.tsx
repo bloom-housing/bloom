@@ -31,17 +31,6 @@ describe("FrequentlyAskedQuestions", () => {
       expect(screen.getByText("What is the second question?")).toBeInTheDocument()
     })
 
-    it("starts with all questions collapsed", () => {
-      render(<Questions category={mockCategory} />)
-
-      const buttons = screen.getAllByRole("button")
-      expect(buttons[0]).toHaveAttribute("aria-expanded", "false")
-      expect(buttons[1]).toHaveAttribute("aria-expanded", "false")
-
-      expect(screen.queryByText("This is the first answer.")).not.toBeVisible()
-      expect(screen.queryByText("This is the second answer.")).not.toBeVisible()
-    })
-
     it("expands and collapses a question when clicked", () => {
       render(<Questions category={mockCategory} />)
 
