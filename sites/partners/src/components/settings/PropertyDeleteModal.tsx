@@ -2,23 +2,25 @@ import React, { useContext, useMemo } from "react"
 import { MinimalTable, t } from "@bloom-housing/ui-components"
 import { Button, Dialog, Link } from "@bloom-housing/ui-seeds"
 import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
-import { Listing, Property } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { ListingViews, Property } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { useListingsData } from "../../lib/hooks"
 
 type PreferenceDeleteModalProps = {
   onClose: () => void
   property: Property
-  listings: Listing[]
 }
 
-export const PropertyDeleteModal = ({
-  property,
-  listings,
-  onClose,
-}: PreferenceDeleteModalProps) => {
+export const PropertyDeleteModal = ({ property, onClose }: PreferenceDeleteModalProps) => {
   const { propertiesService } = useContext(AuthContext)
   const { addToast } = useContext(MessageContext)
+  const { listingDtos, listingsLoading } = useListingsData({
+    limit: "all",
+    view: ListingViews.name,
+  })
 
-  const listingsWithProperty = listings.filter((listing) => listing.property?.id === property?.id)
+  const listingsWithProperty = listingDtos?.items.filter(
+    (listing) => listing.property?.id === property?.id
+  )
 
   const listingsTableData = useMemo(
     () =>
@@ -29,6 +31,10 @@ export const PropertyDeleteModal = ({
       })),
     [listingsWithProperty]
   )
+
+  if (listingsLoading) {
+    return null
+  }
 
   const deleteProperty = () => {
     propertiesService

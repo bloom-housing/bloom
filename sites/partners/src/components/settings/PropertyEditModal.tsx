@@ -1,22 +1,24 @@
 import React, { useMemo } from "react"
 import { MinimalTable, t } from "@bloom-housing/ui-components"
 import { Button, Dialog, Link } from "@bloom-housing/ui-seeds"
-import { Listing, Property } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { ListingViews, Property } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { useListingsData } from "../../lib/hooks"
 
 type PropertyEditModalProps = {
   onClose: () => void
   onEdit: () => void
   property: Property
-  listings: Listing[]
 }
 
-export const PropertyEditModal = ({
-  property,
-  listings,
-  onClose,
-  onEdit,
-}: PropertyEditModalProps) => {
-  const listingsWithProperty = listings?.filter((listing) => listing.property?.id === property?.id)
+export const PropertyEditModal = ({ property, onClose, onEdit }: PropertyEditModalProps) => {
+  const { listingDtos, listingsLoading } = useListingsData({
+    limit: "all",
+    view: ListingViews.name,
+  })
+
+  const listingsWithProperty = listingDtos?.items.filter(
+    (listing) => listing.property?.id === property?.id
+  )
 
   const listingsTableData = useMemo(
     () =>
@@ -27,7 +29,9 @@ export const PropertyEditModal = ({
       })),
     [listingsWithProperty]
   )
-
+  if (listingsLoading) {
+    return null
+  }
   if (listingsWithProperty?.length === 0) {
     onEdit()
     return null
