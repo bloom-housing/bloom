@@ -1,4 +1,4 @@
-import { FaqContent } from "./generic_faq_content"
+import { FaqContent } from "../patterns/FrequentAskedQuestions"
 
 export const getJurisdictionFaqContent = (): FaqContent => {
   return null
