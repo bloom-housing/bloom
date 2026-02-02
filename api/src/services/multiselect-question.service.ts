@@ -19,6 +19,7 @@ import { MultiselectQuestion } from '../dtos/multiselect-questions/multiselect-q
 import { MultiselectQuestionCreate } from '../dtos/multiselect-questions/multiselect-question-create.dto';
 import { MultiselectQuestionUpdate } from '../dtos/multiselect-questions/multiselect-question-update.dto';
 import { MultiselectQuestionQueryParams } from '../dtos/multiselect-questions/multiselect-question-query-params.dto';
+import { PaginatedMultiselectQuestionDto } from '../dtos/multiselect-questions/paginated-multiselect-question.dto';
 import { SuccessDTO } from '../dtos/shared/success.dto';
 import { User } from '../dtos/users/user.dto';
 import { FeatureFlagEnum } from '../enums/feature-flags/feature-flags-enum';
@@ -29,7 +30,11 @@ import { buildFilter } from '../utilities/build-filter';
 import { buildOrderByForMultiselectQuestions } from '../utilities/build-order-by';
 import { doJurisdictionHaveFeatureFlagSet } from '../utilities/feature-flag-utilities';
 import { mapTo } from '../utilities/mapTo';
-import { calculateSkip, calculateTake } from '../utilities/pagination-helpers';
+import {
+  buildPaginationMetaInfo,
+  calculateSkip,
+  calculateTake,
+} from '../utilities/pagination-helpers';
 
 export const includeViews: Partial<
   Record<MultiselectQuestionViews, Prisma.MultiselectQuestionsInclude>
@@ -75,7 +80,7 @@ export class MultiselectQuestionService {
   */
   async list(
     params: MultiselectQuestionQueryParams,
-  ): Promise<MultiselectQuestion[]> {
+  ): Promise<PaginatedMultiselectQuestionDto> {
     const whereClause = this.buildWhere(params);
 
     const count = await this.prisma.multiselectQuestions.count({
@@ -116,7 +121,22 @@ export class MultiselectQuestionService {
         };
       },
     );
-    return mapTo(MultiselectQuestion, multiselectQuestionsWithJurisdictions);
+
+    const multiselectQuestions = mapTo(
+      MultiselectQuestion,
+      multiselectQuestionsWithJurisdictions,
+    );
+
+    const paginationInfo = buildPaginationMetaInfo(
+      params,
+      count,
+      multiselectQuestions.length,
+    );
+
+    return {
+      items: multiselectQuestions,
+      meta: paginationInfo,
+    };
   }
 
   /*

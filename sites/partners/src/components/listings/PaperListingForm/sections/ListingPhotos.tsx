@@ -133,7 +133,13 @@ const ListingPhotoEditor = ({
         </Card>
       </Drawer.Content>
       <Drawer.Footer>
-        <Button variant="primary" type="button" size="sm" onClick={handleSave}>
+        <Button
+          variant="primary"
+          type="button"
+          size="sm"
+          onClick={handleSave}
+          id="save-alt-text-button"
+        >
           {t("t.save")}
         </Button>
       </Drawer.Footer>
@@ -225,7 +231,11 @@ const ListingPhotos = (props: ListingPhotosProps) => {
       preview: {
         content: (
           <TableThumbnail>
-            <img src={getUrlForListingImage(image.assets)} alt={image.description || ""} />
+            <img
+              src={getUrlForListingImage(image.assets)}
+              alt={image.description || ""}
+              id={`listing-detail-image-${index}`}
+            />
           </TableThumbnail>
         ),
       },
@@ -287,7 +297,11 @@ const ListingPhotos = (props: ListingPhotosProps) => {
         preview: {
           content: (
             <TableThumbnail>
-              <img src={getUrlForListingImage(image)} alt={item.description || ""} />
+              <img
+                src={getUrlForListingImage(image)}
+                alt={item.description || ""}
+                id={`listing-drawer-image-${index}`}
+              />
             </TableThumbnail>
           ),
         },

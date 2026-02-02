@@ -39,10 +39,20 @@ describe("settings", () => {
     it("should render `none` when no preferences exist", async () => {
       server.use(
         rest.get("http://localhost:3100/multiselectQuestions", (_req, res, ctx) => {
-          return res(ctx.json([]))
+          return res(
+            ctx.json({
+              items: [],
+              meta: { totalItems: 0, totalPages: 0 },
+            })
+          )
         }),
         rest.get("http://localhost:3100/multiselectQuestions", (_req, res, ctx) => {
-          return res(ctx.json([multiselectQuestionPreference]))
+          return res(
+            ctx.json({
+              items: [],
+              meta: { totalItems: 0, totalPages: 0 },
+            })
+          )
         }),
         rest.get(
           "http://localhost/api/adapter/multiselectQuestions/listings/id1",
@@ -66,10 +76,20 @@ describe("settings", () => {
       document.cookie = "access-token-available=True"
       server.use(
         rest.get("http://localhost:3100/multiselectQuestions", (_req, res, ctx) => {
-          return res(ctx.json([multiselectQuestionPreference]))
+          return res(
+            ctx.json({
+              items: [multiselectQuestionPreference],
+              meta: { totalItems: 1, totalPages: 1 },
+            })
+          )
         }),
         rest.get("http://localhost/api/adapter/multiselectQuestions", (_req, res, ctx) => {
-          return res(ctx.json([multiselectQuestionPreference]))
+          return res(
+            ctx.json({
+              items: [multiselectQuestionPreference],
+              meta: { totalItems: 1, totalPages: 1 },
+            })
+          )
         }),
         rest.get(
           "http://localhost/api/adapter/multiselectQuestions/listings/id1",
@@ -111,10 +131,20 @@ describe("settings", () => {
       document.cookie = "access-token-available=True"
       server.use(
         rest.get("http://localhost:3100/multiselectQuestions", (_req, res, ctx) => {
-          return res(ctx.json([multiselectQuestionPreference]))
+          return res(
+            ctx.json({
+              items: [multiselectQuestionPreference],
+              meta: { totalItems: 1, totalPages: 1 },
+            })
+          )
         }),
         rest.get("http://localhost/api/adapter/multiselectQuestions", (_req, res, ctx) => {
-          return res(ctx.json([multiselectQuestionPreference]))
+          return res(
+            ctx.json({
+              items: [multiselectQuestionPreference],
+              meta: { totalItems: 1, totalPages: 1 },
+            })
+          )
         }),
         rest.get(
           "http://localhost/api/adapter/multiselectQuestions/listings/id1",
@@ -156,10 +186,20 @@ describe("settings", () => {
       document.cookie = "access-token-available=True"
       server.use(
         rest.get("http://localhost:3100/multiselectQuestions", (_req, res, ctx) => {
-          return res(ctx.json([multiselectQuestionPreference]))
+          return res(
+            ctx.json({
+              items: [multiselectQuestionPreference],
+              meta: { totalItems: 1, totalPages: 1 },
+            })
+          )
         }),
         rest.get("http://localhost/api/adapter/multiselectQuestions", (_req, res, ctx) => {
-          return res(ctx.json([multiselectQuestionPreference]))
+          return res(
+            ctx.json({
+              items: [multiselectQuestionPreference],
+              meta: { totalItems: 1, totalPages: 1 },
+            })
+          )
         }),
         rest.get(
           "http://localhost/api/adapter/multiselectQuestions/listings/id1",
@@ -229,10 +269,20 @@ describe("settings", () => {
           }
         ),
         rest.get("http://localhost:3100/multiselectQuestions", (_req, res, ctx) => {
-          return res(ctx.json([multiselectQuestionPreference]))
+          return res(
+            ctx.json({
+              items: [multiselectQuestionPreference],
+              meta: { totalItems: 1, totalPages: 1 },
+            })
+          )
         }),
         rest.get("http://localhost/api/adapter/multiselectQuestions", (_req, res, ctx) => {
-          return res(ctx.json([multiselectQuestionPreference]))
+          return res(
+            ctx.json({
+              items: [multiselectQuestionPreference],
+              meta: { totalItems: 1, totalPages: 1 },
+            })
+          )
         }),
         rest.delete("http://localhost/api/adapter/multiselectQuestions", (_req, res, ctx) => {
           return res(ctx.json({}))
@@ -293,10 +343,20 @@ describe("settings", () => {
           )
         }),
         rest.get("http://localhost:3100/multiselectQuestions", (_req, res, ctx) => {
-          return res(ctx.json([multiselectQuestionPreference]))
+          return res(
+            ctx.json({
+              items: [multiselectQuestionPreference],
+              meta: { totalItems: 1, totalPages: 1 },
+            })
+          )
         }),
         rest.get("http://localhost/api/adapter/multiselectQuestions", (_req, res, ctx) => {
-          return res(ctx.json([multiselectQuestionPreference]))
+          return res(
+            ctx.json({
+              items: [multiselectQuestionPreference],
+              meta: { totalItems: 1, totalPages: 1 },
+            })
+          )
         }),
         rest.get(
           "http://localhost/api/adapter/listings/byMultiselectQuestion/id1",
@@ -345,10 +405,20 @@ describe("settings", () => {
           )
         }),
         rest.get("http://localhost:3100/multiselectQuestions", (_req, res, ctx) => {
-          return res(ctx.json([multiselectQuestionPreference]))
+          return res(
+            ctx.json({
+              items: [multiselectQuestionPreference],
+              meta: { totalItems: 1, totalPages: 1 },
+            })
+          )
         }),
         rest.get("http://localhost/api/adapter/multiselectQuestions", (_req, res, ctx) => {
-          return res(ctx.json([multiselectQuestionPreference]))
+          return res(
+            ctx.json({
+              items: [multiselectQuestionPreference],
+              meta: { totalItems: 1, totalPages: 1 },
+            })
+          )
         }),
         rest.get(
           "http://localhost/api/adapter/multiselectQuestions/listings/id1",
@@ -379,10 +449,20 @@ describe("settings", () => {
       document.cookie = "access-token-available=True"
       server.use(
         rest.get("http://localhost:3100/multiselectQuestions", (_req, res, ctx) => {
-          return res(ctx.json([multiselectQuestionPreference]))
+          return res(
+            ctx.json({
+              items: [multiselectQuestionPreference],
+              meta: { totalItems: 1, totalPages: 1 },
+            })
+          )
         }),
         rest.get("http://localhost/api/adapter/multiselectQuestions", (_req, res, ctx) => {
-          return res(ctx.json([multiselectQuestionPreference]))
+          return res(
+            ctx.json({
+              items: [multiselectQuestionPreference],
+              meta: { totalItems: 1, totalPages: 1 },
+            })
+          )
         }),
         rest.get(
           "http://localhost/api/adapter/multiselectQuestions/listings/id1",

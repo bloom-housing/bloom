@@ -104,101 +104,110 @@ describe('Testing multiselect question service', () => {
         .fn()
         .mockResolvedValue(mockedValue);
 
-      expect(await service.list({})).toEqual([
-        {
-          id: mockedValue[0].id,
-          createdAt: date,
-          updatedAt: date,
-          text: 'text 0',
-          subText: 'subText 0',
-          description: 'description 0',
-          links: [],
-          options: [],
-          optOutText: 'optOutText 0',
-          hideFromListing: false,
-          applicationSection:
-            MultiselectQuestionsApplicationSectionEnum.programs,
-          jurisdiction: {
-            id: mockedValue[0].jurisdiction.id,
-            name: 'jurisdiction0',
-            ordinal: undefined,
-          },
-          jurisdictions: [
-            {
+      expect(await service.list({})).toEqual({
+        items: [
+          {
+            id: mockedValue[0].id,
+            createdAt: date,
+            updatedAt: date,
+            text: 'text 0',
+            subText: 'subText 0',
+            description: 'description 0',
+            links: [],
+            options: [],
+            optOutText: 'optOutText 0',
+            hideFromListing: false,
+            applicationSection:
+              MultiselectQuestionsApplicationSectionEnum.programs,
+            jurisdiction: {
               id: mockedValue[0].jurisdiction.id,
               name: 'jurisdiction0',
               ordinal: undefined,
             },
-          ],
-          multiselectOptions: [],
-          // Because enableMSQV2 is off
-          isExclusive: false,
-          name: 'text 0',
-          status: MultiselectQuestionsStatusEnum.draft,
-        },
-        {
-          id: mockedValue[1].id,
-          createdAt: date,
-          updatedAt: date,
-          text: 'text 1',
-          subText: 'subText 1',
-          description: 'description 1',
-          links: [],
-          options: [],
-          optOutText: 'optOutText 1',
-          hideFromListing: false,
-          applicationSection:
-            MultiselectQuestionsApplicationSectionEnum.programs,
-          jurisdiction: {
-            id: mockedValue[1].jurisdiction.id,
-            name: 'jurisdiction1',
-            ordinal: undefined,
+            jurisdictions: [
+              {
+                id: mockedValue[0].jurisdiction.id,
+                name: 'jurisdiction0',
+                ordinal: undefined,
+              },
+            ],
+            multiselectOptions: [],
+            // Because enableMSQV2 is off
+            isExclusive: false,
+            name: 'text 0',
+            status: MultiselectQuestionsStatusEnum.draft,
           },
-          jurisdictions: [
-            {
+          {
+            id: mockedValue[1].id,
+            createdAt: date,
+            updatedAt: date,
+            text: 'text 1',
+            subText: 'subText 1',
+            description: 'description 1',
+            links: [],
+            options: [],
+            optOutText: 'optOutText 1',
+            hideFromListing: false,
+            applicationSection:
+              MultiselectQuestionsApplicationSectionEnum.programs,
+            jurisdiction: {
               id: mockedValue[1].jurisdiction.id,
               name: 'jurisdiction1',
               ordinal: undefined,
             },
-          ],
-          multiselectOptions: [],
-          // Because enableMSQV2 is off
-          isExclusive: false,
-          name: 'text 1',
-          status: MultiselectQuestionsStatusEnum.draft,
-        },
-        {
-          id: mockedValue[2].id,
-          createdAt: date,
-          updatedAt: date,
-          text: 'text 2',
-          subText: 'subText 2',
-          description: 'description 2',
-          links: [],
-          options: [],
-          optOutText: 'optOutText 2',
-          hideFromListing: false,
-          applicationSection:
-            MultiselectQuestionsApplicationSectionEnum.programs,
-          jurisdiction: {
-            id: mockedValue[2].jurisdiction.id,
-            name: 'jurisdiction2',
-            ordinal: undefined,
+            jurisdictions: [
+              {
+                id: mockedValue[1].jurisdiction.id,
+                name: 'jurisdiction1',
+                ordinal: undefined,
+              },
+            ],
+            multiselectOptions: [],
+            // Because enableMSQV2 is off
+            isExclusive: false,
+            name: 'text 1',
+            status: MultiselectQuestionsStatusEnum.draft,
           },
-          jurisdictions: [
-            {
+          {
+            id: mockedValue[2].id,
+            createdAt: date,
+            updatedAt: date,
+            text: 'text 2',
+            subText: 'subText 2',
+            description: 'description 2',
+            links: [],
+            options: [],
+            optOutText: 'optOutText 2',
+            hideFromListing: false,
+            applicationSection:
+              MultiselectQuestionsApplicationSectionEnum.programs,
+            jurisdiction: {
               id: mockedValue[2].jurisdiction.id,
               name: 'jurisdiction2',
               ordinal: undefined,
             },
-          ],
-          multiselectOptions: [],
-          // Because enableMSQV2 is off
-          isExclusive: false,
-          name: 'text 2',
-          status: MultiselectQuestionsStatusEnum.draft,
+            jurisdictions: [
+              {
+                id: mockedValue[2].jurisdiction.id,
+                name: 'jurisdiction2',
+                ordinal: undefined,
+              },
+            ],
+            multiselectOptions: [],
+            // Because enableMSQV2 is off
+            isExclusive: false,
+            name: 'text 2',
+            status: MultiselectQuestionsStatusEnum.draft,
+          },
+        ],
+        meta: {
+          currentPage: 1,
+          itemCount: 3,
+          itemsPerPage: 3,
+          totalItems: 3,
+          totalPages: 1,
         },
-      ]);
+      });
 
       expect(prisma.multiselectQuestions.findMany).toHaveBeenCalledWith({
         include: {
@@ -237,101 +246,110 @@ describe('Testing multiselect question service', () => {
         ],
       };
 
-      expect(await service.list(params)).toEqual([
-        {
-          id: mockedValue[0].id,
-          createdAt: date,
-          updatedAt: date,
-          text: 'text 0',
-          subText: 'subText 0',
-          description: 'description 0',
-          links: [],
-          options: [],
-          optOutText: 'optOutText 0',
-          hideFromListing: false,
-          applicationSection:
-            MultiselectQuestionsApplicationSectionEnum.programs,
-          jurisdiction: {
-            id: mockedValue[0].jurisdiction.id,
-            name: 'jurisdiction0',
-            ordinal: undefined,
-          },
-          jurisdictions: [
-            {
+      expect(await service.list(params)).toEqual({
+        items: [
+          {
+            id: mockedValue[0].id,
+            createdAt: date,
+            updatedAt: date,
+            text: 'text 0',
+            subText: 'subText 0',
+            description: 'description 0',
+            links: [],
+            options: [],
+            optOutText: 'optOutText 0',
+            hideFromListing: false,
+            applicationSection:
+              MultiselectQuestionsApplicationSectionEnum.programs,
+            jurisdiction: {
               id: mockedValue[0].jurisdiction.id,
               name: 'jurisdiction0',
               ordinal: undefined,
             },
-          ],
-          multiselectOptions: [],
-          // Because enableMSQV2 is off
-          isExclusive: false,
-          name: 'text 0',
-          status: MultiselectQuestionsStatusEnum.draft,
-        },
-        {
-          id: mockedValue[1].id,
-          createdAt: date,
-          updatedAt: date,
-          text: 'text 1',
-          subText: 'subText 1',
-          description: 'description 1',
-          links: [],
-          options: [],
-          optOutText: 'optOutText 1',
-          hideFromListing: false,
-          applicationSection:
-            MultiselectQuestionsApplicationSectionEnum.programs,
-          jurisdiction: {
-            id: mockedValue[1].jurisdiction.id,
-            name: 'jurisdiction1',
-            ordinal: undefined,
+            jurisdictions: [
+              {
+                id: mockedValue[0].jurisdiction.id,
+                name: 'jurisdiction0',
+                ordinal: undefined,
+              },
+            ],
+            multiselectOptions: [],
+            // Because enableMSQV2 is off
+            isExclusive: false,
+            name: 'text 0',
+            status: MultiselectQuestionsStatusEnum.draft,
           },
-          jurisdictions: [
-            {
+          {
+            id: mockedValue[1].id,
+            createdAt: date,
+            updatedAt: date,
+            text: 'text 1',
+            subText: 'subText 1',
+            description: 'description 1',
+            links: [],
+            options: [],
+            optOutText: 'optOutText 1',
+            hideFromListing: false,
+            applicationSection:
+              MultiselectQuestionsApplicationSectionEnum.programs,
+            jurisdiction: {
               id: mockedValue[1].jurisdiction.id,
               name: 'jurisdiction1',
               ordinal: undefined,
             },
-          ],
-          multiselectOptions: [],
-          // Because enableMSQV2 is off
-          isExclusive: false,
-          name: 'text 1',
-          status: MultiselectQuestionsStatusEnum.draft,
-        },
-        {
-          id: mockedValue[2].id,
-          createdAt: date,
-          updatedAt: date,
-          text: 'text 2',
-          subText: 'subText 2',
-          description: 'description 2',
-          links: [],
-          options: [],
-          optOutText: 'optOutText 2',
-          hideFromListing: false,
-          applicationSection:
-            MultiselectQuestionsApplicationSectionEnum.programs,
-          jurisdiction: {
-            id: mockedValue[2].jurisdiction.id,
-            name: 'jurisdiction2',
-            ordinal: undefined,
+            jurisdictions: [
+              {
+                id: mockedValue[1].jurisdiction.id,
+                name: 'jurisdiction1',
+                ordinal: undefined,
+              },
+            ],
+            multiselectOptions: [],
+            // Because enableMSQV2 is off
+            isExclusive: false,
+            name: 'text 1',
+            status: MultiselectQuestionsStatusEnum.draft,
           },
-          jurisdictions: [
-            {
+          {
+            id: mockedValue[2].id,
+            createdAt: date,
+            updatedAt: date,
+            text: 'text 2',
+            subText: 'subText 2',
+            description: 'description 2',
+            links: [],
+            options: [],
+            optOutText: 'optOutText 2',
+            hideFromListing: false,
+            applicationSection:
+              MultiselectQuestionsApplicationSectionEnum.programs,
+            jurisdiction: {
               id: mockedValue[2].jurisdiction.id,
               name: 'jurisdiction2',
               ordinal: undefined,
             },
-          ],
-          multiselectOptions: [],
-          // Because enableMSQV2 is off
-          isExclusive: false,
-          name: 'text 2',
-          status: MultiselectQuestionsStatusEnum.draft,
+            jurisdictions: [
+              {
+                id: mockedValue[2].jurisdiction.id,
+                name: 'jurisdiction2',
+                ordinal: undefined,
+              },
+            ],
+            multiselectOptions: [],
+            // Because enableMSQV2 is off
+            isExclusive: false,
+            name: 'text 2',
+            status: MultiselectQuestionsStatusEnum.draft,
+          },
+        ],
+        meta: {
+          currentPage: 1,
+          itemCount: 3,
+          itemsPerPage: 10,
+          totalItems: 3,
+          totalPages: 1,
         },
-      ]);
+      });
 
       expect(prisma.multiselectQuestions.findMany).toHaveBeenCalledWith({
         include: {

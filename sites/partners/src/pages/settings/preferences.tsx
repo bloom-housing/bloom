@@ -64,7 +64,7 @@ const SettingsPreferences = () => {
   )
 
   const tableData = useMemo(() => {
-    return data
+    return data?.items
       ?.sort((a, b) => {
         const aChar = a.text.toUpperCase()
         const bChar = b.text.toUpperCase()
@@ -162,10 +162,10 @@ const SettingsPreferences = () => {
   }
 
   const getCardContent = () => {
-    if (!loading && data?.length === 0) return null
+    if (!loading && data?.meta.totalItems === 0) return null
     return (
       <>
-        {data?.length ? (
+        {data?.meta.totalItems ? (
           <MinimalTable
             headers={{
               name: "t.name",

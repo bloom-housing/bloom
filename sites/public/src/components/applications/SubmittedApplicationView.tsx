@@ -100,15 +100,21 @@ const SubmittedApplicationView = ({
               ?.length === 0
           }
           editMode={false}
-          enableUnitGroups={doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableUnitGroups)}
+          enableUnitGroups={doJurisdictionsHaveFeatureFlagOn(
+            FeatureFlagEnum.enableUnitGroups,
+            listing?.jurisdictions.id
+          )}
           enableFullTimeStudentQuestion={doJurisdictionsHaveFeatureFlagOn(
-            FeatureFlagEnum.enableFullTimeStudentQuestion
+            FeatureFlagEnum.enableFullTimeStudentQuestion,
+            listing?.jurisdictions.id
           )}
           enableAdaOtherOption={doJurisdictionsHaveFeatureFlagOn(
-            FeatureFlagEnum.enableAdaOtherOption
+            FeatureFlagEnum.enableAdaOtherOption,
+            listing?.jurisdictions.id
           )}
           swapCommunityTypeWithPrograms={doJurisdictionsHaveFeatureFlagOn(
-            FeatureFlagEnum.swapCommunityTypeWithPrograms
+            FeatureFlagEnum.swapCommunityTypeWithPrograms,
+            listing?.jurisdictions.id
           )}
         />
         <Card.Section>

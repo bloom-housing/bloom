@@ -35,6 +35,7 @@ const ProgramsAndPreferences = ({
       applicationSection={MultiselectQuestionsApplicationSectionEnum.programs}
       dataFetcher={useJurisdictionalMultiselectQuestionList}
       drawerButtonText={t("listings.selectPrograms")}
+      drawerButtonId="select-programs-button"
       drawerTitle={t("listings.addPrograms")}
       editText={t("listings.editPrograms")}
       formKey={"program"}
@@ -50,6 +51,7 @@ const ProgramsAndPreferences = ({
       applicationSection={MultiselectQuestionsApplicationSectionEnum.programs}
       dataFetcher={useJurisdictionalMultiselectQuestionList}
       drawerButtonText={t("listings.selectCommunityTypes")}
+      drawerButtonId="select-community-types-button"
       drawerTitle={t("listings.addCommunityTypes")}
       editText={t("listings.editCommunities")}
       formKey={"program"}
@@ -70,6 +72,7 @@ const ProgramsAndPreferences = ({
           applicationSection={MultiselectQuestionsApplicationSectionEnum.preferences}
           dataFetcher={useJurisdictionalMultiselectQuestionList}
           drawerButtonText={t("listings.selectPreferences")}
+          drawerButtonId="select-preferences-button"
           drawerSubtitle={
             process.env.showLottery && listing?.lotteryOptIn
               ? t("listings.lotteryPreferenceSubtitle")
