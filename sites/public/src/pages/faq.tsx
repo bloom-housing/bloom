@@ -7,7 +7,7 @@ import { Button, Card, Heading, Icon } from "@bloom-housing/ui-seeds"
 import { UserStatus } from "../lib/constants"
 import Layout from "../layouts/application"
 import { PageHeaderLayout } from "../patterns/PageHeaderLayout"
-import { FaqCategory, faqContent } from "../static_content/generic_faq_content"
+import { FaqCategory, getFaqContent } from "../static_content/generic_faq_content"
 import pageStyles from "../components/content-pages/FaqPage.module.scss"
 import styles from "../patterns/PageHeaderLayout.module.scss"
 import Markdown from "markdown-to-jsx"
@@ -16,7 +16,7 @@ interface QuestionsProps {
   category: FaqCategory
 }
 
-const Questions = (props: QuestionsProps) => {
+export const Questions = (props: QuestionsProps) => {
   const [isExpanded, setIsExpanded] = useState<boolean[]>(props.category.faqs.map(() => false))
   return (
     <div className={pageStyles["questions-container"]}>
@@ -80,6 +80,8 @@ const FaqPage = () => {
     })
   }, [profile])
 
+  const content = getFaqContent()
+
   return (
     <Layout pageTitle={t("pageTitle.faq")}>
       <PageHeaderLayout
@@ -89,7 +91,7 @@ const FaqPage = () => {
         className={pageStyles["faq-page"]}
       >
         <div className={styles["markdown"]}>
-          {faqContent.categories.map((category, index) => (
+          {content.categories.map((category, index) => (
             <section key={index} className="seeds-m-be-8">
               <Heading priority={2} className={"seeds-m-be-content"}>
                 {category.title}
