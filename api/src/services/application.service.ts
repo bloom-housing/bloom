@@ -1175,16 +1175,19 @@ export class ApplicationService {
             ? {
                 create: dto.householdMember.map((member) => ({
                   ...member,
+                  id: undefined,
                   sameAddress: member.sameAddress || YesNoEnum.no,
                   workInRegion: member.workInRegion || YesNoEnum.no,
                   householdMemberAddress: {
                     create: {
                       ...member.householdMemberAddress,
+                      id: undefined,
                     },
                   },
                   householdMemberWorkAddress: {
                     create: {
                       ...member.householdMemberWorkAddress,
+                      id: undefined,
                     },
                   },
                   firstName: member.firstName?.trim(),
