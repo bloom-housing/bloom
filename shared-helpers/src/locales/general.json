@@ -177,6 +177,7 @@
   "application.details.applicationStatus.submitted": "Submitted",
   "application.details.applicationStatus.waitlist": "Wait list",
   "application.details.applicationStatus.waitlistDeclined": "Wait list - Declined",
+  "application.details.applicationStatusFaqLink": "What does my application status mean?",
   "application.edited": "Edited",
   "application.financial.income.instruction1": "Add up your total gross (pre-tax) household income from wages, benefits and other sources from all household members.",
   "application.financial.income.instruction2": "You only need to provide an estimated total right now. The actual total will be calculated if you are selected.",

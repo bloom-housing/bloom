@@ -16,6 +16,13 @@
     flex-direction: column;
     gap: var(--seeds-s4);
   }
+
+  .application-faq-link {
+    margin-inline-end: var(--seeds-s8);
+    @media (max-width: theme("screens.sm")) {
+      margin-inline-end: 0;
+    }
+  }
 }
 
 .account-card-applications-section {

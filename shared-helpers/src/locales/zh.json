@@ -178,6 +178,7 @@
   "application.details.applicationStatus.submitted": "已提交",
   "application.details.applicationStatus.waitlist": "候補名單",
   "application.details.applicationStatus.waitlistDeclined": "候補名單 - 已拒絕",
+  "application.details.applicationStatusFaqLink": "我的申请状态是什么意思？",
   "application.edited": "已修改",
   "application.financial.income.instruction1": "請將所有家庭成員的工資、福利和其他收入來源相加，得出您的家庭總收入（稅前）。",
   "application.financial.income.instruction2": "您現在只需要提供估計的總額。如果您被選中，您將需計算實際總數。",

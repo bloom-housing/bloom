@@ -178,6 +178,7 @@
   "application.details.applicationStatus.submitted": "Enviada",
   "application.details.applicationStatus.waitlist": "Lista de espera",
   "application.details.applicationStatus.waitlistDeclined": "Lista de espera - Rechazada",
+  "application.details.applicationStatusFaqLink": "¿Qué significa el estado de mi solicitud?",
   "application.edited": "Editada",
   "application.financial.income.instruction1": "Sume los ingresos brutos totales (antes de impuestos) provenientes de salarios, beneficios y otras fuentes de todos los miembros del hogar.",
   "application.financial.income.instruction2": "En este momento solo tiene que proporcionar un total aproximado. El total real será calculado si usted es seleccionado(a).",
