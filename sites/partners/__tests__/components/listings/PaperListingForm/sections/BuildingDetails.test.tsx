@@ -1,10 +1,9 @@
-import React from "react"
-import "@testing-library/jest-dom"
-import { setupServer } from "msw/node"
-import { screen, within } from "@testing-library/react"
-import { FormProviderWrapper, mockNextRouter, render } from "../../../../testUtils"
-import BuildingDetails from "../../../../../src/components/listings/PaperListingForm/sections/BuildingDetails"
 import { EnumListingListingType } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import "@testing-library/jest-dom"
+import { screen, within } from "@testing-library/react"
+import { setupServer } from "msw/node"
+import BuildingDetails from "../../../../../src/components/listings/PaperListingForm/sections/BuildingDetails"
+import { FormProviderWrapper, mockNextRouter, render } from "../../../../testUtils"
 
 const server = setupServer()
 

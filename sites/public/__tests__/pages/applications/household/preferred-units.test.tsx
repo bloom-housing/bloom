@@ -1,9 +1,3 @@
-import React from "react"
-import { setupServer } from "msw/lib/node"
-import { mockNextRouter, render, screen, within } from "../../../testUtils"
-import ApplicationPreferredUnits from "../../../../src/pages/applications/household/preferred-units"
-import ApplicationConductor from "../../../../src/lib/applications/ApplicationConductor"
-import { AppSubmissionContext } from "../../../../src/lib/applications/AppSubmissionContext"
 import { AuthProvider, blankApplication } from "@bloom-housing/shared-helpers"
 import {
   EnumListingListingType,
@@ -13,6 +7,11 @@ import {
   Unit,
   UnitGroup,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { setupServer } from "msw/lib/node"
+import ApplicationConductor from "../../../../src/lib/applications/ApplicationConductor"
+import { AppSubmissionContext } from "../../../../src/lib/applications/AppSubmissionContext"
+import ApplicationPreferredUnits from "../../../../src/pages/applications/household/preferred-units"
+import { mockNextRouter, render, screen, within } from "../../../testUtils"
 
 window.scrollTo = jest.fn()
 
