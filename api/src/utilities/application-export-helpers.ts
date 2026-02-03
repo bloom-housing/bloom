@@ -438,9 +438,15 @@ export const constructMultiselectQuestionHeaders = (
       MultiselectQuestionsApplicationSectionEnum.preferences
     ) {
       labelString = 'Preference';
-    } else if (swapCommunityTypeWithPrograms) {
+    } else if (
+      applicationSection ===
+        MultiselectQuestionsApplicationSectionEnum.programs &&
+      swapCommunityTypeWithPrograms
+    ) {
       labelString = 'Community Type';
-    } else {
+    } else if (
+      applicationSection === MultiselectQuestionsApplicationSectionEnum.programs
+    ) {
       labelString = 'Program';
     }
 

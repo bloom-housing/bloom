@@ -566,7 +566,7 @@ describe('Testing application export service', () => {
       );
     });
 
-    it('should populate the data for each header and output a string', async () => {
+    it('should populate the data for each header and output a object', async () => {
       const headers = getExportHeaders(0, [], 'America/Los_Angeles', {
         enableAdaOtherOption: true,
       });
