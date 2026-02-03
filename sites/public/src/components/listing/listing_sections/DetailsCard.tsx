@@ -17,7 +17,7 @@ export const DetailsCard = ({ heading, linkText, linkUrl, children }: PropertyDe
           {heading}
         </Heading>
         {children}
-        <Link href={linkUrl ?? ""} className={"seeds-m-bs-4"} newWindowTarget={true}>
+        <Link href={linkUrl} className={"seeds-m-bs-4"} newWindowTarget={true}>
           {linkText}
         </Link>
       </Card.Section>
