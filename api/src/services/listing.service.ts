@@ -177,6 +177,7 @@ includeViews.full = {
   listingsApplicationMailingAddress: true,
   requestedChangesUser: true,
   requiredDocumentsList: true,
+  parkingTypes: true,
   units: {
     include: {
       unitAmiChartOverrides: true,
@@ -1183,6 +1184,9 @@ export class ListingService implements OnModuleInit {
     if (listing.listingUtilities) {
       listing.utilities = listing.listingUtilities;
     }
+    if (listing.parkingType) {
+      listing.parkingType = listing.parkingType;
+    }
     if (listing.listingFeatures) {
       listing.features = listing.listingFeatures;
     }
@@ -1469,6 +1473,13 @@ export class ListingService implements OnModuleInit {
           ? {
               create: {
                 ...dto.listingUtilities,
+              },
+            }
+          : undefined,
+        parkingTypes: dto.parkingTypes
+          ? {
+              create: {
+                ...dto.parkingTypes,
               },
             }
           : undefined,
@@ -2195,6 +2206,7 @@ export class ListingService implements OnModuleInit {
 
     const previousFeaturesId = storedListing.listingFeatures?.id;
     const previousUtilitiesId = storedListing.listingUtilities?.id;
+    const previousParkingTypeId = storedListing.parkingTypes?.id;
     const previousNeighborhoodAmenitiesId =
       storedListing.listingNeighborhoodAmenities?.id;
 
@@ -2441,6 +2453,21 @@ export class ListingService implements OnModuleInit {
                   },
                   update: {
                     ...incomingDto.listingUtilities,
+                  },
+                },
+              }
+            : undefined,
+          parkingTypes: incomingDto.parkingTypes
+            ? {
+                upsert: {
+                  where: {
+                    id: previousParkingTypeId,
+                  },
+                  create: {
+                    ...incomingDto.parkingTypes,
+                  },
+                  update: {
+                    ...incomingDto.parkingTypes,
                   },
                 },
               }
