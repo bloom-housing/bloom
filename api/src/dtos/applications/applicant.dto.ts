@@ -1,4 +1,8 @@
+import { Address } from '../addresses/address.dto';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { EnforceLowerCase } from '../../decorators/enforce-lower-case.decorator';
 import { Expose, Type } from 'class-transformer';
+import { IdOnlyDTO } from '../shared/id-only.dto';
 import {
   IsBoolean,
   IsDefined,
@@ -9,14 +13,10 @@ import {
   MinLength,
   ValidateNested,
 } from 'class-validator';
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { YesNoEnum } from '@prisma/client';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
-import { AbstractDTO } from '../shared/abstract.dto';
-import { Address } from '../addresses/address.dto';
-import { EnforceLowerCase } from '../../decorators/enforce-lower-case.decorator';
+import { YesNoEnum } from '@prisma/client';
 
-export class Applicant extends AbstractDTO {
+export class Applicant extends IdOnlyDTO {
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(64, { groups: [ValidationsGroupsEnum.default] })

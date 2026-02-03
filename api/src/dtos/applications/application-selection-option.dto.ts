@@ -1,17 +1,17 @@
+import { Address } from '../addresses/address.dto';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Expose, Type } from 'class-transformer';
+import { IdDTO } from '../shared/id.dto';
+import { IdOnlyDTO } from '../shared/id-only.dto';
 import {
   IsString,
   ValidateNested,
   IsBoolean,
   IsDefined,
 } from 'class-validator';
-import { AbstractDTO } from '../shared/abstract.dto';
-import { IdDTO } from '../shared/id.dto';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
-import { Address } from '../addresses/address.dto';
 
-export class ApplicationSelectionOption extends AbstractDTO {
+export class ApplicationSelectionOption extends IdOnlyDTO {
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
