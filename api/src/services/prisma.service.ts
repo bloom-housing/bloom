@@ -10,8 +10,6 @@ import { Signer } from '@aws-sdk/rds-signer';
 @Injectable()
 export class PrismaService extends PrismaClient implements OnModuleInit {
   constructor() {
-    let adapter = undefined;
-
     if (process.env.DB_USE_RDS_IAM_AUTH) {
       // Users of RDS IAM authentication are required to pass in variables separately to avoid
       // potential issues with parsing the connection string.
@@ -38,10 +36,11 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
           rejectUnauthorized: false, // use SSL, but don't validate DB cert
         },
       });
-      adapter = new PrismaPg(pool);
+      super({ adapter: new PrismaPg(pool) });
+    } else {
+      // Maintain backwards-compatibility for non-RDS IAM deployments.
+      super();
     }
-
-    super({ adapter });
   }
 
   async onModuleInit() {
