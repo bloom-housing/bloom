@@ -266,13 +266,13 @@ const ListingForm = ({
   )
 
   useEffect(() => {
-    if (enableNonRegulatedListings) {
+    if (enableNonRegulatedListings && !listing?.listingType) {
       setValue(
         "listingType",
         isNonRegulated ? EnumListingListingType.nonRegulated : EnumListingListingType.regulated
       )
     }
-  }, [enableNonRegulatedListings, isNonRegulated, setValue])
+  }, [enableNonRegulatedListings, isNonRegulated, listing?.listingType, setValue])
 
   useEffect(() => {
     if (listing && listing.listingFeatures && accessibilityFeatures === null) {
