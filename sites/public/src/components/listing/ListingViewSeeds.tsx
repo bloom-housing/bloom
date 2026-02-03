@@ -322,7 +322,7 @@ export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: Li
           </div>
         </div>
         <div className={`${styles["right-bar"]} ${styles["hide-mobile"]}`}>
-          {isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableProperties) && (
+          {isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableProperties) && listing?.property && (
             <DetailsCard
               heading="Property details"
               linkText={listing?.property?.urlTitle}
