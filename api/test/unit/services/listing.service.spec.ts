@@ -51,6 +51,7 @@ import { GeocodingService } from '../../../src/services/geocoding.service';
 import { FilterAvailabilityEnum } from '../../../src/enums/listings/filter-availability-enum';
 import { CronJobService } from '../../../src/services/cron-job.service';
 import { MultiselectQuestionService } from '../../../src/services/multiselect-question.service';
+import { create } from 'domain';
 
 /*
   generates a super simple mock listing for us to test logic with
@@ -481,12 +482,6 @@ describe('Testing listing service', () => {
       listingsApplicationDropOffAddress: exampleAddress,
       listingsLeasingAgentAddress: exampleAddress,
       listingsBuildingSelectionCriteriaFile: exampleAsset,
-      parkingTypes: {
-        onStreet: true,
-        offStreet: false,
-        garage: false,
-        carport: false,
-      },
       listingsResult: exampleAsset,
       marketingFlyer: 'https://example.com/marketing-flyer.pdf',
       accessibleMarketingFlyer: undefined,
@@ -579,6 +574,12 @@ describe('Testing listing service', () => {
         wideDoorways: true,
         loweredCabinets: false,
       },
+      parkingTypes: {
+        onStreet: false,
+        offStreet: false,
+        garage: false,
+        carport: false,
+      },
       listingUtilities: {
         water: false,
         gas: true,
@@ -670,6 +671,7 @@ describe('Testing listing service', () => {
           listingsApplicationPickUpAddress: true,
           listingsApplicationDropOffAddress: true,
           listingsApplicationMailingAddress: true,
+          parkingTypes: true,
           units: {
             include: {
               unitAmiChartOverrides: true,
@@ -2433,11 +2435,11 @@ describe('Testing listing service', () => {
             },
           },
           listingsResult: true,
-          parkingTypes: true,
           listingsLeasingAgentAddress: true,
           listingsApplicationPickUpAddress: true,
           listingsApplicationDropOffAddress: true,
           listingsApplicationMailingAddress: true,
+          parkingTypes: true,
           units: {
             include: {
               unitAmiChartOverrides: true,
@@ -2953,11 +2955,11 @@ describe('Testing listing service', () => {
             },
           },
           listingsResult: true,
-          parkingTypes: true,
           listingsLeasingAgentAddress: true,
           listingsApplicationPickUpAddress: true,
           listingsApplicationDropOffAddress: true,
           listingsApplicationMailingAddress: true,
+          parkingTypes: true,
           units: {
             include: {
               unitAmiChartOverrides: true,
@@ -3228,10 +3230,10 @@ describe('Testing listing service', () => {
           listingsAccessibleMarketingFlyerFile: true,
           listingsLeasingAgentAddress: true,
           listingsResult: true,
-          parkingTypes: true,
           requestedChangesUser: true,
           reservedCommunityTypes: true,
           requiredDocumentsList: true,
+          parkingTypes: true,
           units: {
             include: {
               amiChart: {
@@ -3357,10 +3359,10 @@ describe('Testing listing service', () => {
           listingsAccessibleMarketingFlyerFile: true,
           listingsLeasingAgentAddress: true,
           listingsResult: true,
-          parkingTypes: true,
           requestedChangesUser: true,
           reservedCommunityTypes: true,
           requiredDocumentsList: true,
+          parkingTypes: true,
           units: {
             include: {
               amiChart: {
@@ -3499,6 +3501,14 @@ describe('Testing listing service', () => {
               cable: true,
               phone: false,
               internet: true,
+            },
+          },
+          parkingTypes: {
+            create: {
+              carport: false,
+              garage: false,
+              offStreet: false,
+              onStreet: false,
             },
           },
           listingsApplicationMailingAddress: {
@@ -3738,10 +3748,10 @@ describe('Testing listing service', () => {
           listingsAccessibleMarketingFlyerFile: true,
           listingsLeasingAgentAddress: true,
           listingsResult: true,
-          parkingTypes: true,
           requestedChangesUser: true,
           reservedCommunityTypes: true,
           requiredDocumentsList: true,
+          parkingTypes: true,
           units: {
             include: {
               amiChart: {
@@ -3881,10 +3891,10 @@ describe('Testing listing service', () => {
           listingsAccessibleMarketingFlyerFile: true,
           listingsLeasingAgentAddress: true,
           listingsResult: true,
-          parkingTypes: true,
           requestedChangesUser: true,
           reservedCommunityTypes: true,
           requiredDocumentsList: true,
+          parkingTypes: true,
           units: {
             include: {
               amiChart: {
@@ -4021,6 +4031,14 @@ describe('Testing listing service', () => {
               cable: true,
               phone: false,
               internet: true,
+            },
+          },
+          parkingTypes: {
+            create: {
+              carport: false,
+              garage: false,
+              offStreet: false,
+              onStreet: false,
             },
           },
           listingsApplicationMailingAddress: {
@@ -4225,10 +4243,10 @@ describe('Testing listing service', () => {
           listingsAccessibleMarketingFlyerFile: true,
           listingsLeasingAgentAddress: true,
           listingsResult: true,
-          parkingTypes: true,
           requestedChangesUser: true,
           reservedCommunityTypes: true,
           requiredDocumentsList: true,
+          parkingTypes: true,
           units: {
             include: {
               amiChart: {
@@ -4367,6 +4385,14 @@ describe('Testing listing service', () => {
               cable: true,
               phone: false,
               internet: true,
+            },
+          },
+          parkingTypes: {
+            create: {
+              carport: false,
+              garage: false,
+              offStreet: false,
+              onStreet: false,
             },
           },
           listingsApplicationMailingAddress: {
@@ -4625,10 +4651,10 @@ describe('Testing listing service', () => {
           listingsApplicationMailingAddress: true,
           listingsLeasingAgentAddress: true,
           listingsResult: true,
-          parkingTypes: true,
           requestedChangesUser: true,
           reservedCommunityTypes: true,
           requiredDocumentsList: true,
+          parkingTypes: true,
           units: {
             include: {
               amiChart: {
@@ -4741,10 +4767,10 @@ describe('Testing listing service', () => {
           listingsApplicationMailingAddress: true,
           listingsLeasingAgentAddress: true,
           listingsResult: true,
-          parkingTypes: true,
           requestedChangesUser: true,
           reservedCommunityTypes: true,
           requiredDocumentsList: true,
+          parkingTypes: true,
           units: {
             include: {
               amiChart: {
@@ -4844,10 +4870,10 @@ describe('Testing listing service', () => {
           listingsApplicationMailingAddress: true,
           listingsLeasingAgentAddress: true,
           listingsResult: true,
-          parkingTypes: true,
           requestedChangesUser: true,
           reservedCommunityTypes: true,
           requiredDocumentsList: true,
+          parkingTypes: true,
           units: {
             include: {
               amiChart: {
@@ -5284,10 +5310,10 @@ describe('Testing listing service', () => {
           listingsApplicationMailingAddress: true,
           listingsLeasingAgentAddress: true,
           listingsResult: true,
-          parkingTypes: true,
           requestedChangesUser: true,
           reservedCommunityTypes: true,
           requiredDocumentsList: true,
+          parkingTypes: true,
           units: {
             include: {
               amiChart: {
@@ -5834,10 +5860,10 @@ describe('Testing listing service', () => {
           listingsApplicationMailingAddress: true,
           listingsLeasingAgentAddress: true,
           listingsResult: true,
-          parkingTypes: true,
           requestedChangesUser: true,
           reservedCommunityTypes: true,
           requiredDocumentsList: true,
+          parkingTypes: true,
           units: {
             include: {
               amiChart: {
@@ -6110,10 +6136,10 @@ describe('Testing listing service', () => {
           listingsApplicationMailingAddress: true,
           listingsLeasingAgentAddress: true,
           listingsResult: true,
-          parkingTypes: true,
           requestedChangesUser: true,
           reservedCommunityTypes: true,
           requiredDocumentsList: true,
+          parkingTypes: true,
           units: {
             include: {
               amiChart: {
