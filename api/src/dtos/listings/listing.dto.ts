@@ -66,6 +66,7 @@ import { ListingDocuments } from './listing-documents.dto';
 import { ValidateListingImages } from '../../decorators/validate-listing-images.decorator';
 import Property from '../properties/property.dto';
 import { ListingFeaturesConfiguration } from '../jurisdictions/listing-features-config.dto';
+import { ListingParkingTypes } from './listing-parking-types.dto';
 
 class Listing extends AbstractDTO {
   @Expose()
@@ -563,6 +564,12 @@ class Listing extends AbstractDTO {
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   parkingFee?: string;
+
+  @Expose()
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => ListingParkingTypes)
+  @ApiPropertyOptional({ type: ListingParkingTypes })
+  parkingTypes?: ListingParkingTypes;
 
   @Expose()
   @ValidateListingPublish('postmarkedApplicationsReceivedByDate', {

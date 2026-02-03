@@ -24,6 +24,7 @@ import { ValidateListingImages } from '../../decorators/validate-listing-images.
 import { ValidateListingPublish } from '../../decorators/validate-listing-publish.decorator';
 import { ValidateListingFeatures } from '../../decorators/validate-listing-features.decorator';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
+import { ListingParkingTypesUpdate } from './listing-parking-types-update.dto';
 
 export class ListingUpdate extends OmitType(Listing, [
   // fields get their type changed
@@ -44,6 +45,7 @@ export class ListingUpdate extends OmitType(Listing, [
   'listingsMarketingFlyerFile',
   'listingsResult',
   'listingUtilities',
+  'parkingTypes',
   'requestedChangesUser',
   'unitGroups',
   'units',
@@ -245,6 +247,15 @@ export class ListingUpdate extends OmitType(Listing, [
   @Type(() => ListingUtilitiesUpdate)
   @ApiPropertyOptional({ type: ListingUtilitiesUpdate })
   listingUtilities?: ListingUtilitiesUpdate;
+
+  @Expose()
+  @ValidateListingPublish('parkingTypes', {
+    groups: [ValidationsGroupsEnum.default],
+  })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @Type(() => ListingParkingTypesUpdate)
+  @ApiPropertyOptional({ type: ListingParkingTypesUpdate })
+  parkingTypes?: ListingParkingTypesUpdate;
 
   @Expose()
   @ApiPropertyOptional()
