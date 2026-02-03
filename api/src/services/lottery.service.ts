@@ -123,7 +123,7 @@ export class LotteryService {
 
     try {
       const enableV2MSQ = doJurisdictionHaveFeatureFlagSet(
-        listing.jurisdictions as Jurisdiction,
+        listing.jurisdictions as unknown as Jurisdiction,
         FeatureFlagEnum.enableV2MSQ,
       );
 
