@@ -3453,6 +3453,29 @@ export interface IdDTO {
   ordinal?: number
 }
 
+export interface ListingParkingTypes {
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  onStreet?: boolean
+
+  /**  */
+  offStreet?: boolean
+
+  /**  */
+  garage?: boolean
+
+  /**  */
+  carport?: boolean
+}
+
 export interface ListingDocuments {
   /**  */
   socialSecurityCard?: boolean
@@ -4724,6 +4747,9 @@ export interface Listing {
   parkingFee?: string
 
   /**  */
+  parkingTypes?: ListingParkingTypes
+
+  /**  */
   postmarkedApplicationsReceivedByDate?: Date
 
   /**  */
@@ -5207,6 +5233,20 @@ export interface ListingFeaturesCreate {
 
   /**  */
   wideDoorways?: boolean
+}
+
+export interface ListingParkingTypesCreate {
+  /**  */
+  onStreet?: boolean
+
+  /**  */
+  offStreet?: boolean
+
+  /**  */
+  garage?: boolean
+
+  /**  */
+  carport?: boolean
 }
 
 export interface UnitAmiChartOverrideCreate {
@@ -5816,6 +5856,9 @@ export interface ListingCreate {
   listingFeatures?: ListingFeaturesCreate
 
   /**  */
+  parkingTypes?: ListingParkingTypesCreate
+
+  /**  */
   requestedChangesUser?: IdDTO
 
   /**  */
@@ -6285,6 +6328,23 @@ export interface ListingUtilitiesUpdate {
   id?: string
 }
 
+export interface ListingParkingTypesUpdate {
+  /**  */
+  onStreet?: boolean
+
+  /**  */
+  offStreet?: boolean
+
+  /**  */
+  garage?: boolean
+
+  /**  */
+  carport?: boolean
+
+  /**  */
+  id?: string
+}
+
 export interface ListingNeighborhoodAmenitiesUpdate {
   /**  */
   groceryStores?: string
@@ -6680,6 +6740,9 @@ export interface ListingUpdate {
 
   /**  */
   listingUtilities?: ListingUtilitiesUpdate
+
+  /**  */
+  parkingTypes?: ListingParkingTypesUpdate
 
   /**  */
   requestedChangesUser?: IdDTO
@@ -9498,6 +9561,7 @@ export enum FeatureFlagEnum {
   "enableWaitlistAdditionalFields" = "enableWaitlistAdditionalFields",
   "enableWaitlistLottery" = "enableWaitlistLottery",
   "enableWhatToExpectAdditionalField" = "enableWhatToExpectAdditionalField",
+  "enableParkingType" = "enableParkingType",
   "enableV2MSQ" = "enableV2MSQ",
   "example" = "example",
   "hideCloseListingButton" = "hideCloseListingButton",
