@@ -426,12 +426,14 @@ export function useJurisdictionalMultiselectQuestionList(
     orderDir: OrderByEnum[]
     search?: string
     limit?: number
+    page?: number
   } = {
     filter: [],
     orderBy: [],
     orderDir: [],
     search: undefined,
     limit: undefined,
+    page: undefined,
   }
   params.filter.push({
     $comparison: EnumMultiselectQuestionFilterParamsComparison["IN"],
@@ -459,6 +461,9 @@ export function useJurisdictionalMultiselectQuestionList(
   }
   if (tableSettings?.limit) {
     params.limit = tableSettings.limit
+  }
+  if (tableSettings?.page) {
+    params.page = tableSettings.page
   }
   if (applicationSection) {
     params.filter.push({
