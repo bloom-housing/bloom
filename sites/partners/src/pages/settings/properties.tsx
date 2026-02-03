@@ -107,7 +107,10 @@ const SettingsProperties = () => {
             <ManageIconSection
               onCopy={() => console.log("Copy: ", data.name)}
               copyTestId={`property-copy-icon: ${data.name}`}
-              onEdit={() => setEditConfirmModalOpen(data)}
+              onEdit={() => {
+                setEditConfirmModalOpen(data)
+                setIsDrawerOpen(true)
+              }}
               editTestId={`property-edit-icon: ${data.name}`}
               onDelete={() => setDeleteConfirmModalOpen(data)}
               deleteTestId={`property-delete-icon: ${data.name}`}
