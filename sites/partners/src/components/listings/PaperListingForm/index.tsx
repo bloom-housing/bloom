@@ -562,6 +562,10 @@ const ListingForm = ({
                               FeatureFlagEnum.enableListingFileNumber,
                               jurisdictionId
                             )}
+                            enableProperties={doJurisdictionsHaveFeatureFlagOn(
+                              FeatureFlagEnum.enableProperties,
+                              jurisdictionId
+                            )}
                             property={listing?.property}
                             jurisdictionName={
                               profile?.jurisdictions?.length > 1

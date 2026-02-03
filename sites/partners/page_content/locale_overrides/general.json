@@ -655,7 +655,6 @@
   "properties.propertyAlertCreated": "Property created",
   "properties.propertyAlertDeleted": "Property removed",
   "properties.propetyAlertUpdated": "Property updated",
-  "proerties.propertyChangesRequiredEdit": "Changes required before editing",
   "properties.propertyEditError": "This property is already attached to a listing and needs to be removed before it can be edited.",
   "t.actions": "Actions",
   "t.add": "Add",

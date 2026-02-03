@@ -4,7 +4,6 @@ import { t, Field, FieldGroup, Select, SelectOption } from "@bloom-housing/ui-co
 import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import {
   EnumListingListingType,
-  FeatureFlagEnum,
   Property,
   YesNoEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -22,6 +21,7 @@ interface ListingIntroProps {
   enableHousingDeveloperOwner?: boolean
   enableListingFileNumber?: boolean
   enableNonRegulatedListings?: boolean
+  enableProperties?: boolean
   jurisdictionName: string
   jurisdictionId?: string
   listingId: string
@@ -43,17 +43,12 @@ const getDeveloperLabel = (
 
 const ListingIntro = (props: ListingIntroProps) => {
   const formMethods = useFormContext()
-  const { profile, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
+  const { profile } = useContext(AuthContext)
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, clearErrors, errors, watch, getValues, setValue } = formMethods
 
   const listing = getValues()
-
-  const enableProperties = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableProperties,
-    props.jurisdictionId
-  )
 
   const listingType = watch("listingType")
 
@@ -64,7 +59,7 @@ const ListingIntro = (props: ListingIntroProps) => {
   })
 
   const propertiesData = data?.items ?? []
-  const showPropertiesDropDown = propertiesData.length > 1 && enableProperties
+  const showPropertiesDropDown = propertiesData.length > 1 && props.enableProperties
 
   const filteredProperties = propertiesData.filter(
     (property) => property.jurisdictions.id === props.jurisdictionId

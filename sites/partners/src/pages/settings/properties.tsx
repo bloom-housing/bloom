@@ -20,7 +20,6 @@ import { ColDef, ColGroupDef } from "ag-grid-community"
 import { PropertyDrawer } from "../../components/settings/PropertyDrawer"
 import { useSWRConfig } from "swr"
 import { PropertyDeleteModal } from "../../components/settings/PropertyDeleteModal"
-import { PropertyEditModal } from "../../components/settings/PropertyEditModal"
 
 const SettingsProperties = () => {
   const router = useRouter()
@@ -229,16 +228,6 @@ const SettingsProperties = () => {
             setDeleteConfirmModalOpen(null)
             void mutate(cacheKey)
           }}
-        />
-      )}
-      {editConfirmModalOpen && (
-        <PropertyEditModal
-          property={editConfirmModalOpen}
-          onClose={() => {
-            setEditConfirmModalOpen(null)
-            void mutate(cacheKey)
-          }}
-          onEdit={() => setIsDrawerOpen(true)}
         />
       )}
     </>
