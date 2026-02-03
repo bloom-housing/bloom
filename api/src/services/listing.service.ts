@@ -1868,8 +1868,13 @@ export class ListingService implements OnModuleInit {
         id: question.multiselectQuestionId,
         ordinal: question.ordinal,
       })),
-      listingsMarketingFlyerFile,
-      listingsAccessibleMarketingFlyerFile,
+      listingsMarketingFlyerFile: mappedListing.listingsMarketingFlyerFile
+        ? listingsMarketingFlyerFile
+        : undefined,
+      listingsAccessibleMarketingFlyerFile:
+        mappedListing.listingsAccessibleMarketingFlyerFile
+          ? listingsAccessibleMarketingFlyerFile
+          : undefined,
       lotteryLastRunAt: undefined,
       lotteryLastPublishedAt: undefined,
       lotteryStatus: undefined,
