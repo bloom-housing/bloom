@@ -653,8 +653,6 @@ describe('Application Controller Tests', () => {
         },
         demographics: {
           id: expect.any(String),
-          createdAt: expect.any(String),
-          updatedAt: expect.any(String),
           ethnicity: 'example ethnicity',
           gender: 'example gender',
           sexualOrientation: 'example sexual orientation',
@@ -1109,8 +1107,6 @@ describe('Application Controller Tests', () => {
         },
         demographics: {
           id: expect.any(String),
-          createdAt: expect.any(String),
-          updatedAt: expect.any(String),
           ethnicity: 'example ethnicity',
           gender: 'example gender',
           sexualOrientation: 'example sexual orientation',
