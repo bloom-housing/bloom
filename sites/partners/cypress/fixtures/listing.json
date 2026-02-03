@@ -30,8 +30,8 @@
   "amenities": "Basic Amenity Info",
   "accessibility": "Basic Accessibility Info",
   "unitAmenities": "Basic Unit Amenity Info",
-  "smokingPolicy": "No Thanks",
-  "petPolicy": "Pets welcome. Please send in pictures, they aren't required, we just like pictures",
+  "smokingPolicy": "Basic smoking policy",
+  "petPolicy": "Basic pets policy",
   "servicesOffered": "Basic Services",
   "creditHistory": "Basic Credit History",
   "rentalHistory": "Basic Rental History",
@@ -68,5 +68,12 @@
     ["mobility", "Units for those with mobility accessibility needs"],
     ["visual", "Units for those with vision accessibility needs"]
   ],
-  "referralContactPhone": "520-245-8811"
+  "referralContactPhone": "520-245-8811",
+  "listingNeighborhoodAmenities.publicTransportation": "Near bus stop",
+  "listingNeighborhoodAmenities.parksAndCommunityCenters": "Near park",
+  "listingNeighborhoodAmenities.schools": "Near school",
+  "listingNeighborhoodAmenities.groceryStores": "Near grocery store",
+  "listingNeighborhoodAmenities.pharmacies": "Near pharmacy",
+  "listingNeighborhoodAmenities.healthCareResources": "Near healthcare facility",
+  "referralSummary": "Basic referral summary"
 }

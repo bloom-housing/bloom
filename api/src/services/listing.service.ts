@@ -1284,22 +1284,25 @@ export class ListingService implements OnModuleInit {
         jurisdictionId: dto.jurisdictions.id,
       },
     );
+
     const rawJurisdiction = await this.prisma.jurisdictions.findUnique({
+      select: {
+        id: true,
+        featureFlags: true,
+        listingApprovalPermissions: true,
+      },
       where: {
         id: dto.jurisdictions.id,
-      },
-      include: {
-        featureFlags: true,
       },
     });
 
     const enableUnitGroups = doJurisdictionHaveFeatureFlagSet(
-      rawJurisdiction as Jurisdiction,
+      rawJurisdiction as unknown as Jurisdiction,
       FeatureFlagEnum.enableUnitGroups,
     );
 
     const enableV2MSQ = doJurisdictionHaveFeatureFlagSet(
-      rawJurisdiction as Jurisdiction,
+      rawJurisdiction as unknown as Jurisdiction,
       FeatureFlagEnum.enableV2MSQ,
     );
 
@@ -1329,8 +1332,15 @@ export class ListingService implements OnModuleInit {
     );
 
     // Remove requiredFields and minimumImagesRequired properties before saving to database
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { requiredFields, minimumImagesRequired, ...listingData } = dto;
+    const {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      requiredFields,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      minimumImagesRequired,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      listingFeaturesConfiguration,
+      ...listingData
+    } = dto;
 
     const rawListing = await this.prisma.listings.create({
       include: includeViews.full,
@@ -1774,7 +1784,7 @@ export class ListingService implements OnModuleInit {
     });
 
     const enableV2MSQ = doJurisdictionHaveFeatureFlagSet(
-      rawJurisdiction as Jurisdiction,
+      rawJurisdiction as unknown as Jurisdiction,
       FeatureFlagEnum.enableV2MSQ,
     );
 
@@ -1807,6 +1817,16 @@ export class ListingService implements OnModuleInit {
         ),
       }),
     );
+
+    const listingsMarketingFlyerFile = {
+      fileId: mappedListing.listingsMarketingFlyerFile?.fileId,
+      label: mappedListing.listingsMarketingFlyerFile?.label,
+    };
+
+    const listingsAccessibleMarketingFlyerFile = {
+      fileId: mappedListing.listingsAccessibleMarketingFlyerFile?.fileId,
+      label: mappedListing.listingsAccessibleMarketingFlyerFile?.label,
+    };
 
     if (!dto.includeUnits) {
       delete mappedListing['units'];
@@ -1848,6 +1868,13 @@ export class ListingService implements OnModuleInit {
         id: question.multiselectQuestionId,
         ordinal: question.ordinal,
       })),
+      listingsMarketingFlyerFile: mappedListing.listingsMarketingFlyerFile
+        ? listingsMarketingFlyerFile
+        : undefined,
+      listingsAccessibleMarketingFlyerFile:
+        mappedListing.listingsAccessibleMarketingFlyerFile
+          ? listingsAccessibleMarketingFlyerFile
+          : undefined,
       lotteryLastRunAt: undefined,
       lotteryLastPublishedAt: undefined,
       lotteryStatus: undefined,
@@ -2048,8 +2075,15 @@ export class ListingService implements OnModuleInit {
   */
   async update(dto: ListingUpdate, requestingUser: User): Promise<Listing> {
     // Remove requiredFields and minimumImagesRequired properties before saving to database
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { requiredFields, minimumImagesRequired, ...incomingDto } = dto;
+    const {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      requiredFields,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      minimumImagesRequired,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      listingFeaturesConfiguration,
+      ...incomingDto
+    } = dto;
     const storedListing = await this.findOrThrow(
       incomingDto.id,
       ListingViews.full,
@@ -2066,14 +2100,15 @@ export class ListingService implements OnModuleInit {
     );
 
     const rawJurisdiction = await this.prisma.jurisdictions.findUnique({
+      select: {
+        featureFlags: true,
+        listingApprovalPermissions: true,
+        id: true,
+      },
       where: {
         id: incomingDto.jurisdictions.id,
       },
-      include: {
-        featureFlags: true,
-      },
     });
-
     const enableUnitGroups = doJurisdictionHaveFeatureFlagSet(
       rawJurisdiction as Jurisdiction,
       FeatureFlagEnum.enableUnitGroups,
@@ -2801,10 +2836,11 @@ export class ListingService implements OnModuleInit {
   */
   addUnitsSummarized = async (listing: Listing) => {
     if (Array.isArray(listing.units) && listing.units.length > 0) {
+      const unitsWithCharts = listing.units.filter((unit) => unit.amiChart?.id);
       const amiChartsRaw = await this.prisma.amiChart.findMany({
         where: {
           id: {
-            in: listing.units.map((unit) => unit.amiChart?.id),
+            in: unitsWithCharts.map((unit) => unit.amiChart?.id),
           },
         },
       });
