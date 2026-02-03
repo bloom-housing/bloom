@@ -187,6 +187,7 @@ The tests require the TIME_ZONE environment variable to be set. Create a `.env` 
 
 ```bash
 echo 'TIME_ZONE=America/Los_Angeles' > .env
+echo 'CLOUDINARY_CLOUD_NAME=exygy' >> .env
 ```
 
 Running the following will run all unit tests: `yarn test`
