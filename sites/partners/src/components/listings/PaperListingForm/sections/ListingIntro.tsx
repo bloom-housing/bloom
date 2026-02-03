@@ -66,11 +66,15 @@ const ListingIntro = (props: ListingIntroProps) => {
   const propertiesData = data?.items ?? []
   const showPropertiesDropDown = propertiesData.length > 1 && enableProperties
 
+  const filteredProperties = propertiesData.filter(
+    (property) => property.jurisdictions.id === props.jurisdictionId
+  )
+
   const propertyOptions: SelectOption[] =
     propertiesData.length !== 0
       ? [
           { label: "", value: "" },
-          ...propertiesData.map((property) => ({
+          ...filteredProperties.map((property) => ({
             label: property.name,
             value: property.id,
           })),
