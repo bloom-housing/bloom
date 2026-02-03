@@ -1,6 +1,7 @@
 import {
   ApplicationSubmissionTypeEnum,
   MultiselectQuestionsApplicationSectionEnum,
+  ValidationMethodEnum,
 } from '@prisma/client';
 import { Address } from '../dtos/addresses/address.dto';
 import { ApplicationFlaggedSet } from '../dtos/application-flagged-sets/application-flagged-set.dto';
@@ -375,7 +376,7 @@ export const getExportHeaders = (
   // add household member headers to csv
   if (maxHouseholdMembers) {
     headers.push(
-      ...getHouseholdCsvHeaders(
+      ...constructHouseholdHeaders(
         maxHouseholdMembers,
         enableFullTimeStudentQuestion,
         disableWorkInRegion,
@@ -415,6 +416,131 @@ export const getExportHeaders = (
       },
     );
   }
+  return headers;
+};
+
+/**
+ *
+ * @param address the address to convert to a string
+ * @returns a string representation of the address
+ */
+export const addressToString = (address: Address): string => {
+  return `${address.street}${address.street2 ? ' ' + address.street2 : ''} ${
+    address.city
+  }, ${address.state} ${address.zipCode}`;
+};
+
+/**
+ *
+ * @param selection the application selection made
+ * @param optionId the option to consider selected
+ * @param key the field on the ApplicationSelectionOption to format
+ * @returns the string representation of the multiselect format
+ */
+export const applicationSelectionDataFormatter = (
+  selection: ApplicationSelection,
+  optionId: string,
+  key: string,
+): string => {
+  if (!selection) return '';
+  const selectedOption = selection.selections.find(
+    (selectedOption) => selectedOption.multiselectOption.id === optionId,
+  );
+  const value = selectedOption[key];
+  if (key === 'addressHolderAddress') {
+    return addressToString(value);
+  }
+  if (key === 'isGeocodingVerified') {
+    return value === null ? 'Needs Manual Verification' : value.toString();
+  }
+  return value;
+};
+
+/**
+ *
+ * @param maxHouseholdMembers the maximum number of household members across all applications
+ * @param enableFullTimeStudentQuestion should the 'Full-time Student' column be included from the headers
+ * @param disableWorkInRegion should the `Work In Region` columns be excluded from the headers
+ * @returns the headers and formatters for the household member columns
+ */
+export const constructHouseholdHeaders = (
+  maxHouseholdMembers: number,
+  enableFullTimeStudentQuestion?: boolean,
+  disableWorkInRegion?: boolean,
+): CsvHeader[] => {
+  const headers = [];
+  for (let i = 0; i < maxHouseholdMembers; i++) {
+    const j = i + 1;
+    headers.push(
+      {
+        path: `householdMember.${i}.firstName`,
+        label: `Household Member (${j}) First Name`,
+      },
+      {
+        path: `householdMember.${i}.middleName`,
+        label: `Household Member (${j}) Middle Name`,
+      },
+      {
+        path: `householdMember.${i}.lastName`,
+        label: `Household Member (${j}) Last Name`,
+      },
+      {
+        path: `householdMember.${i}.birthDay`,
+        label: `Household Member (${j}) Birth Day`,
+      },
+      {
+        path: `householdMember.${i}.birthMonth`,
+        label: `Household Member (${j}) Birth Month`,
+      },
+      {
+        path: `householdMember.${i}.birthYear`,
+        label: `Household Member (${j}) Birth Year`,
+      },
+      {
+        path: `householdMember.${i}.relationship`,
+        label: `Household Member (${j}) Relationship`,
+      },
+      {
+        path: `householdMember.${i}.sameAddress`,
+        label: `Household Member (${j}) Same as Primary Applicant`,
+      },
+    );
+    if (!disableWorkInRegion) {
+      headers.push({
+        path: `householdMember.${i}.workInRegion`,
+        label: `Household Member (${j}) Work in Region`,
+      });
+    }
+    if (enableFullTimeStudentQuestion) {
+      headers.push({
+        path: `householdMember.${i}.fullTimeStudent`,
+        label: `Household Member (${j}) Full-Time Student`,
+      });
+    }
+    headers.push(
+      {
+        path: `householdMember.${i}.householdMemberAddress.street`,
+        label: `Household Member (${j}) Street`,
+      },
+      {
+        path: `householdMember.${i}.householdMemberAddress.street2`,
+        label: `Household Member (${j}) Street 2`,
+      },
+      {
+        path: `householdMember.${i}.householdMemberAddress.city`,
+        label: `Household Member (${j}) City`,
+      },
+      {
+        path: `householdMember.${i}.householdMemberAddress.state`,
+        label: `Household Member (${j}) State`,
+      },
+      {
+        path: `householdMember.${i}.householdMemberAddress.zipCode`,
+        label: `Household Member (${j}) Zip Code`,
+      },
+    );
+  }
+
   return headers;
 };
 
@@ -497,7 +623,7 @@ export const constructMultiselectQuestionHeaders = (
       if (option.shouldCollectRelationship) {
         headers.push({
           path: `multiselectQuestion.${question.id}.${option.id}.addressHolderRelationship`,
-          label: `${labelString} ${question.text} - ${option.text} - Relationship to Address Holder`,
+          label: `${labelString} ${question.name} - ${option.name} - Relationship to Address Holder`,
           format: (val: ApplicationSelection): string => {
             return applicationSelectionDataFormatter(
               val,
@@ -507,7 +633,10 @@ export const constructMultiselectQuestionHeaders = (
           },
         });
       }
-      if (option.validationMethod) {
+      if (
+        option.validationMethod &&
+        option.validationMethod !== ValidationMethodEnum.none
+      ) {
         headers.push({
           path: `multiselectQuestion.${question.id}.${option.id}.isGeocodingVerified`,
           label: `${labelString} ${question.name} - ${option.name} - Passed Address Check`,
@@ -631,162 +760,6 @@ export const constructSpecificMultiselectQuestionHeaders = (
 
 /**
  *
- * @param question the multiselect question to format
- * @param optionText the option to consider selected
- * @param key additional formatting (address or geocodingVerified)
- * @returns the string representation of the multiselect format
- */
-export const multiselectQuestionFormat = (
-  question: ApplicationMultiselectQuestion,
-  optionText: string,
-  key: string,
-): string => {
-  if (!question) return '';
-  const selectedOption = question.options.find(
-    (option) => option.key === optionText,
-  );
-  const extraData = selectedOption?.extraData?.find((data) => data.key === key);
-  if (!extraData) {
-    return '';
-  }
-  if (key === 'address') {
-    return addressToString(extraData.value as Address);
-  }
-  if (key === 'geocodingVerified') {
-    return extraData.value === 'unknown'
-      ? 'Needs Manual Verification'
-      : extraData.value.toString();
-  }
-  return extraData.value as string;
-};
-
-/**
- *
- * @param selection the application selection made
- * @param optionId the option to consider selected
- * @param key the field on the ApplicationSelectionOption to format
- * @returns the string representation of the multiselect format
- */
-export const applicationSelectionDataFormatter = (
-  selection: ApplicationSelection,
-  optionId: string,
-  key: string,
-): string => {
-  if (!selection) return '';
-  const selectedOption = selection.selections.find(
-    (selectedOption) => selectedOption.multiselectOption.id === optionId,
-  );
-  const value = selectedOption[key];
-  if (key === 'addressHolderAddress') {
-    return addressToString(value);
-  }
-  if (key === 'isGeocodingVerified') {
-    return value === null ? 'Needs Manual Verification' : value.toString();
-  }
-  return value;
-};
-
-/**
- *
- * @param address the address to convert to a string
- * @returns a string representation of the address
- */
-export const addressToString = (address: Address): string => {
-  return `${address.street}${address.street2 ? ' ' + address.street2 : ''} ${
-    address.city
-  }, ${address.state} ${address.zipCode}`;
-};
-
-/**
- *
- * @param maxHouseholdMembers the maximum number of household members across all applications
- * @param enableFullTimeStudentQuestion should the 'Full-time Student' column be included from the headers
- * @param disableWorkInRegion should the `Work In Region` columns be excluded from the headers
- * @returns the headers and formatters for the household member columns
- */
-export const getHouseholdCsvHeaders = (
-  maxHouseholdMembers: number,
-  enableFullTimeStudentQuestion?: boolean,
-  disableWorkInRegion?: boolean,
-): CsvHeader[] => {
-  const headers = [];
-  for (let i = 0; i < maxHouseholdMembers; i++) {
-    const j = i + 1;
-    headers.push(
-      {
-        path: `householdMember.${i}.firstName`,
-        label: `Household Member (${j}) First Name`,
-      },
-      {
-        path: `householdMember.${i}.middleName`,
-        label: `Household Member (${j}) Middle Name`,
-      },
-      {
-        path: `householdMember.${i}.lastName`,
-        label: `Household Member (${j}) Last Name`,
-      },
-      {
-        path: `householdMember.${i}.birthDay`,
-        label: `Household Member (${j}) Birth Day`,
-      },
-      {
-        path: `householdMember.${i}.birthMonth`,
-        label: `Household Member (${j}) Birth Month`,
-      },
-      {
-        path: `householdMember.${i}.birthYear`,
-        label: `Household Member (${j}) Birth Year`,
-      },
-      {
-        path: `householdMember.${i}.relationship`,
-        label: `Household Member (${j}) Relationship`,
-      },
-      {
-        path: `householdMember.${i}.sameAddress`,
-        label: `Household Member (${j}) Same as Primary Applicant`,
-      },
-    );
-    if (!disableWorkInRegion) {
-      headers.push({
-        path: `householdMember.${i}.workInRegion`,
-        label: `Household Member (${j}) Work in Region`,
-      });
-    }
-    if (enableFullTimeStudentQuestion) {
-      headers.push({
-        path: `householdMember.${i}.fullTimeStudent`,
-        label: `Household Member (${j}) Full-Time Student`,
-      });
-    }
-    headers.push(
-      {
-        path: `householdMember.${i}.householdMemberAddress.street`,
-        label: `Household Member (${j}) Street`,
-      },
-      {
-        path: `householdMember.${i}.householdMemberAddress.street2`,
-        label: `Household Member (${j}) Street 2`,
-      },
-      {
-        path: `householdMember.${i}.householdMemberAddress.city`,
-        label: `Household Member (${j}) City`,
-      },
-      {
-        path: `householdMember.${i}.householdMemberAddress.state`,
-        label: `Household Member (${j}) State`,
-      },
-      {
-        path: `householdMember.${i}.householdMemberAddress.zipCode`,
-        label: `Household Member (${j}) Zip Code`,
-      },
-    );
-  }
-
-  return headers;
-};
-
-/**
- *
  * @param type takes in the demographic string
  * @returns outputs the readable version of the string
  */
@@ -819,6 +792,37 @@ export const convertDemographicRaceToReadable = (type: string): string => {
     white: 'White',
   };
   return typeMap[rootKey] ?? rootKey;
+};
+
+/**
+ *
+ * @param question the multiselect question to format
+ * @param optionText the option to consider selected
+ * @param key additional formatting (address or geocodingVerified)
+ * @returns the string representation of the multiselect format
+ */
+export const multiselectQuestionFormat = (
+  question: ApplicationMultiselectQuestion,
+  optionText: string,
+  key: string,
+): string => {
+  if (!question) return '';
+  const selectedOption = question.options.find(
+    (option) => option.key === optionText,
+  );
+  const extraData = selectedOption?.extraData?.find((data) => data.key === key);
+  if (!extraData) {
+    return '';
+  }
+  if (key === 'address') {
+    return addressToString(extraData.value as Address);
+  }
+  if (key === 'geocodingVerified') {
+    return extraData.value === 'unknown'
+      ? 'Needs Manual Verification'
+      : extraData.value.toString();
+  }
+  return extraData.value as string;
 };
 
 export const typeMap = {
