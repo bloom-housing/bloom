@@ -773,11 +773,26 @@ model Listings {
   lastUpdatedByUserId                   String?                       @map("last_updated_by_user_id") @db.Uuid
   lastUpdatedByUser                     UserAccounts?                 @relation("last_updated_by_user", fields: [lastUpdatedByUserId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   parkingFee                            String?                       @map("parking_fee")
+  parkingTypes                          ListingParkingTypes?          @relation(fields: [parkingTypesId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  parkingTypesId                        String?                       @unique @map("parking_types_id") @db.Uuid
   property                              Properties?                   @relation(fields: [propertyId], references: [id])
   propertyId                            String?                       @map("property_id") @db.Uuid
 
   @@index([jurisdictionId])
   @@map("listings")
+}
+
+model ListingParkingTypes {
+  id        String    @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt DateTime  @updatedAt @map("updated_at") @db.Timestamp(6)
+  onStreet  Boolean?  @map("on_street")
+  offStreet Boolean?  @map("off_street")
+  garage    Boolean?  @map("garage")
+  carport   Boolean?  @map("carport")
+  listing   Listings?
+
+  @@map("parking_types")
 }
 
 model MapLayers {
