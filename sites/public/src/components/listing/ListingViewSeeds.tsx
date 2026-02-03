@@ -49,7 +49,7 @@ import { UnitSummaries } from "./listing_sections/UnitSummaries"
 import styles from "./ListingViewSeeds.module.scss"
 import { ReadMore } from "../../patterns/ReadMore"
 import { OtherFeatures } from "./listing_sections/OtherFeatures"
-import { DetailsCard } from "./listing_sections/PropertyDetailsCard"
+import { DetailsCard } from "./listing_sections/DetailsCard"
 
 interface ListingProps {
   listing: Listing
@@ -325,10 +325,11 @@ export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: Li
           {isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableProperties) && (
             <DetailsCard
               heading="Property details"
-              description={listing?.property?.description}
               linkText={listing?.property?.urlTitle}
               linkUrl={listing?.property?.url}
-            />
+            >
+              {listing?.property?.description}
+            </DetailsCard>
           )}
           <Availability listing={listing} jurisdiction={jurisdiction} />
           {ApplyBar}
