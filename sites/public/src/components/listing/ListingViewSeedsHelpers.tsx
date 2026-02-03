@@ -29,6 +29,7 @@ import {
   cloudinaryPdfFromId,
   getOccupancyDescription,
   ListingFeaturesValues,
+  listingParkingTypes,
   listingUtilities,
   stackedOccupancyTable,
   stackedUnitGroupsOccupancyTable,
@@ -215,6 +216,9 @@ export const getFeatures = (
     jurisdiction,
     FeatureFlagEnum.enablePetPolicyCheckbox
   )
+
+  const enableParkingTypes = isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableParkingType)
+
   if (enablePetPolicyCheckbox && (listing.allowsDogs || listing.allowsCats)) {
     const petPolicy = []
     if (listing.allowsDogs) petPolicy.push(t("listings.allowsDogs"))
@@ -251,6 +255,7 @@ export const getFeatures = (
       subheading: `$${listing.parkingFee}`,
     })
   }
+
   if (listing.smokingPolicy) {
     features.push({ heading: t("t.smokingPolicy"), subheading: listing.smokingPolicy })
   }
@@ -269,6 +274,19 @@ export const getFeatures = (
   }
   if (listing.accessibility) {
     features.push({ heading: t("t.additionalAccessibility"), subheading: listing.accessibility })
+  }
+
+  if (enableParkingTypes) {
+    const parking = Object.keys(listing?.parkingTypes ?? {})
+      .filter((entry) => listingParkingTypes.includes(entry) && listing?.parkingTypes[entry])
+      .map((entry) => t(`listings.parkingTypeOptions.${entry}`))
+
+    if (parking.length) {
+      features.push({
+        heading: t("t.parkingTypes"),
+        subheading: parking.join(", "),
+      })
+    }
   }
 
   return features
