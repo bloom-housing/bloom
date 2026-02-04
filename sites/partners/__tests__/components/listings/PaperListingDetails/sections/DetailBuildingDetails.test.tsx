@@ -2,6 +2,7 @@ import React from "react"
 import { render, screen } from "@testing-library/react"
 import { listing } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import {
+  EnumListingListingType,
   RegionEnum,
   ReviewOrderTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -110,7 +111,6 @@ describe("DetailBuildingDetails", () => {
     expect(screen.getByText("Year built")).toBeInTheDocument()
     expect(screen.getAllByText("n/a", { exact: false })).toHaveLength(2)
   })
-
   it("should render with no address", () => {
     render(
       <ListingContext.Provider
@@ -132,5 +132,49 @@ describe("DetailBuildingDetails", () => {
 
     expect(screen.getByText("Building address")).toBeInTheDocument()
     expect(screen.getByText("None")).toBeInTheDocument()
+  })
+  it("should not render year built when non-regulated and regions", () => {
+    render(
+      <ListingContext.Provider
+        value={{
+          ...listing,
+          createdAt: new Date("2023-01-01T10:00:00Z"),
+          jurisdictions: { name: "Bloomington", id: "1" },
+          id: "1234",
+          reviewOrderType: ReviewOrderTypeEnum.waitlist,
+          unitGroups: [],
+          region: RegionEnum.Eastside,
+          listingType: EnumListingListingType.nonRegulated,
+        }}
+      >
+        <DetailBuildingDetails enableConfigurableRegions={false} enableRegions={true} />
+      </ListingContext.Provider>
+    )
+
+    expect(screen.getByRole("heading", { level: 2, name: "Building details" })).toBeInTheDocument()
+    expect(screen.getByText("Region")).toBeInTheDocument()
+    expect(screen.queryByText("Year built")).not.toBeInTheDocument()
+  })
+  it("should not render year built when non-regulated and no regions", () => {
+    render(
+      <ListingContext.Provider
+        value={{
+          ...listing,
+          createdAt: new Date("2023-01-01T10:00:00Z"),
+          jurisdictions: { name: "Bloomington", id: "1" },
+          id: "1234",
+          reviewOrderType: ReviewOrderTypeEnum.waitlist,
+          unitGroups: [],
+          region: RegionEnum.Eastside,
+          listingType: EnumListingListingType.nonRegulated,
+        }}
+      >
+        <DetailBuildingDetails enableConfigurableRegions={false} enableRegions={false} />
+      </ListingContext.Provider>
+    )
+
+    expect(screen.getByRole("heading", { level: 2, name: "Building details" })).toBeInTheDocument()
+    expect(screen.queryByText("Region")).not.toBeInTheDocument()
+    expect(screen.queryByText("Year built")).not.toBeInTheDocument()
   })
 })
