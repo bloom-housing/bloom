@@ -36,6 +36,8 @@ class AutofillCleaner {
     this.application.status = ApplicationStatusEnum.submitted
     this.application.preferences = []
     this.application.programs = []
+    this.application.accessibleUnitWaitlistNumber = null
+    this.application.conventionalUnitWaitlistNumber = null
 
     return this
   }
