@@ -14,12 +14,12 @@ import {
   listingSectionQuestions,
 } from "@bloom-housing/shared-helpers"
 import {
+  EnumListingListingType,
   FeatureFlagEnum,
   Jurisdiction,
   Listing,
   ListingCreate,
   ListingEventsTypeEnum,
-  ListingTypeEnum,
   ListingUpdate,
   ListingsStatusEnum,
   MarketingTypeEnum,
@@ -266,13 +266,13 @@ const ListingForm = ({
   )
 
   useEffect(() => {
-    if (enableNonRegulatedListings) {
+    if (enableNonRegulatedListings && !listing?.listingType) {
       setValue(
         "listingType",
-        isNonRegulated ? ListingTypeEnum.nonRegulated : ListingTypeEnum.regulated
+        isNonRegulated ? EnumListingListingType.nonRegulated : EnumListingListingType.regulated
       )
     }
-  }, [enableNonRegulatedListings, isNonRegulated, setValue])
+  }, [enableNonRegulatedListings, isNonRegulated, listing?.listingType, setValue])
 
   useEffect(() => {
     if (listing && listing.listingFeatures && accessibilityFeatures === null) {
@@ -578,6 +578,12 @@ const ListingForm = ({
                                 : null
                             }
                             listingId={listing?.id}
+                            listingType={
+                              listing?.listingType ||
+                              (isNonRegulated &&
+                                enableNonRegulatedListings &&
+                                EnumListingListingType.nonRegulated)
+                            }
                             requiredFields={requiredFields}
                           />
                           <ListingPhotos
