@@ -234,7 +234,7 @@ const ApplicationsView = (props: ApplicationsViewProps) => {
                   })}
                   {!applications?.length && !loading && noApplicationsSection()}
                 </LoadingState>
-                <Card.Section className={styles["pagination-section"]}>
+                <div className={styles["pagination-section"]}>
                   <div className={styles["pagination-content-wrapper"]}>
                     <div className={styles["previous-button"]}>
                       {paginationMeta?.currentPage > 1 && (
@@ -275,7 +275,7 @@ const ApplicationsView = (props: ApplicationsViewProps) => {
                       )}
                     </div>
                   </div>
-                </Card.Section>
+                </div>
               </>
             </BloomCard>
           </div>

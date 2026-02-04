@@ -51,7 +51,7 @@
   padding: var(--seeds-s6) var(--seeds-s12);
   background-color: var(--seeds-bg-color-canvas);
 
-  @media (max-width: theme("screens.sm")) {
+  @media (--sm-only) {
     padding: var(--seeds-s4);
   }
 }
