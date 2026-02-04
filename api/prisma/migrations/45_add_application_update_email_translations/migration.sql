@@ -15,15 +15,15 @@ SET translations = jsonb_set(
     "statusLabel": "Application status",
     "contactNotice": "No further action is required at this time. If you have questions regarding this update, please reach out at",
     "viewPrompt": "To view your application, please click the link below:",
-    "viewLink": "View my application"
+    "viewLink": "View my application",
     "applicationStatus": {
       "submitted": "Submitted",
       "declined": "Declined",
-      "receivedUnit": "Received a unit"
+      "receivedUnit": "Received a unit",
       "waitlist": "Wait list",
-      "waitlistDeclined": "Wait list - Declined",
-    },
-    }'
+      "waitlistDeclined": "Wait list - Declined"
+    }
+    }'::jsonb
 )
 WHERE language = 'en';
 
@@ -49,9 +49,9 @@ SET translations = jsonb_set(
       "declined": "Rechazada",
       "receivedUnit": "Unidad recibida",
       "waitlist": "Lista de espera",
-      "waitlistDeclined": "Lista de espera - Rechazada",
-    },
-    }'
+      "waitlistDeclined": "Lista de espera - Rechazada"
+    }
+    }'::jsonb
 )
 WHERE language = 'es';
 
@@ -77,9 +77,9 @@ SET translations = jsonb_set(
       "declined": "Tinanggihan",
       "receivedUnit": "Nakatanggap ng unit",
       "waitlist": "Waitlist",
-      "waitlistDeclined": "Waitlist - Tinanggihan",
-    },
-    }'
+      "waitlistDeclined": "Waitlist - Tinanggihan"
+    }
+    }'::jsonb
 )
 WHERE language = 'tl';
 
@@ -105,9 +105,9 @@ SET translations = jsonb_set(
       "declined": "Đã từ chối",
       "receivedUnit": "Đã nhận đơn vị",
       "waitlist": "Danh sách chờ",
-      "waitlistDeclined": "Danh sách chờ - Đã từ chối",
-    },
-    }'
+      "waitlistDeclined": "Danh sách chờ - Đã từ chối"
+    }
+    }'::jsonb
 )
 WHERE language = 'vi';
 
@@ -133,9 +133,9 @@ SET translations = jsonb_set(
       "declined": "已拒絕",
       "receivedUnit": "已獲配單位",
       "waitlist": "候補名單",
-      "waitlistDeclined": "候補名單 - 已拒絕",
-    },
-    }'
+      "waitlistDeclined": "候補名單 - 已拒絕"
+    }
+    }'::jsonb
 )
 WHERE language = 'zh';
 
@@ -161,9 +161,9 @@ SET translations = jsonb_set(
       "declined": "مرفوض",
       "receivedUnit": "استلم وحدة",
       "waitlist": "قائمة الانتظار",
-      "waitlistDeclined": "قائمة الانتظار - مرفوض",
-    },
-    }'
+      "waitlistDeclined": "قائمة الانتظار - مرفوض"
+    }
+    }'::jsonb
 )
 WHERE language = 'ar';
 
@@ -189,8 +189,8 @@ SET translations = jsonb_set(
       "declined": "প্রত্যাখ্যান করা হয়েছে",
       "receivedUnit": "একটি ইউনিট পেয়েছি",
       "waitlist": "অপেক্ষা তালিকা",
-      "waitlistDeclined": "অপেক্ষা তালিকা - প্রত্যাখ্যান করা হয়েছে",
-    },
-    }'
+      "waitlistDeclined": "অপেক্ষা তালিকা - প্রত্যাখ্যান করা হয়েছে"
+    }
+    }'::jsonb
 )
 WHERE language = 'bn';
