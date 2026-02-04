@@ -453,9 +453,21 @@ export class ApplicationService {
       whereClause,
     );
 
-    const displayCount = await this.prisma.applications.count({
-      where: displayWhereClause,
-    });
+    let displayCount = totalCount;
+    switch (params.filterType) {
+      case ApplicationsFilterEnum.open:
+        displayCount = openCount;
+        break;
+      case ApplicationsFilterEnum.closed:
+        displayCount = closedCount;
+        break;
+      case ApplicationsFilterEnum.lottery:
+        displayCount = lotteryCount;
+        break;
+      default:
+        displayCount = totalCount;
+        break;
+    }
 
     const limit = params.limit ?? 10;
     let page = params.page ?? 1;
