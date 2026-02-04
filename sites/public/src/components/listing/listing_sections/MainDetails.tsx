@@ -21,6 +21,7 @@ import { Availability } from "./Availability"
 import listingStyles from "../ListingViewSeeds.module.scss"
 import styles from "./MainDetails.module.scss"
 import { isFeatureFlagOn } from "../../../lib/helpers"
+import { PropertyDetailsCard } from "./PropertyDetailsCard"
 
 type MainDetailsProps = {
   listing: Listing
@@ -206,6 +207,15 @@ export const MainDetails = ({
       </div>
 
       <div className={`${listingStyles["hide-desktop"]} seeds-m-bs-content`}>
+        {isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableProperties) && listing?.property && (
+          <PropertyDetailsCard
+            heading="Property details"
+            linkText={"Visit the property website"}
+            linkUrl={listing.property.url}
+          >
+            {listing.property.description}
+          </PropertyDetailsCard>
+        )}
         <Availability listing={listing} jurisdiction={jurisdiction} />
       </div>
     </div>
