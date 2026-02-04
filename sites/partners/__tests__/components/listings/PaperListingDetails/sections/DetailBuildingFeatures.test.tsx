@@ -107,7 +107,7 @@ describe("DetailBuildingFeatures", () => {
       </AuthContext.Provider>
     )
 
-    expect(screen.getByText("Parking yypes")).toBeInTheDocument()
+    expect(screen.getByText("Parking types")).toBeInTheDocument()
     const list = screen.getByTestId("parking-types-list")
     const listItems = within(list).getAllByRole("listitem")
     expect(listItems[0]).toHaveTextContent("On street")
