@@ -15,7 +15,7 @@ describe("Testing PropertyDetailsCard", () => {
         <p>Listing content</p>
       </PropertyDetailsCard>
     )
-    expect(view.getByText("Property Information")).toBeDefined()
+    expect(view.getByText("Property details")).toBeDefined()
     expect(view.getByRole("heading", { level: 2 })).toHaveTextContent("Property details")
   })
 
@@ -44,7 +44,7 @@ describe("Testing PropertyDetailsCard", () => {
         <p>Listing property content</p>
       </PropertyDetailsCard>
     )
-    const link = view.getByRole("link", { name: "External Link" })
+    const link = view.getByRole("link", { name: "Visit the property website" })
     expect(link).toHaveAttribute("target", "_blank")
   })
 
@@ -66,7 +66,7 @@ describe("Testing PropertyDetailsCard", () => {
     expect(view.getByText("Pool")).toBeDefined()
     expect(view.getByText("Gym")).toBeDefined()
     expect(view.getByText("Parking")).toBeDefined()
-    const link = view.getByRole("link", { name: "View All Amenities" })
+    const link = view.getByRole("link", { name: "Visit the property website" })
     expect(link).toHaveAttribute("href", "https://amenities.example.com")
     expect(link).toHaveAttribute("target", "_blank")
   })
