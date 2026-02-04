@@ -456,7 +456,7 @@ describe("<ListingViewSeeds>", () => {
     ).not.toBeInTheDocument()
   })
 
-  it("doesn't render the parking types in features section when non are available", () => {
+  it("doesn't render the parking types in features section when none are available", () => {
     render(
       <AuthContext.Provider
         value={{
