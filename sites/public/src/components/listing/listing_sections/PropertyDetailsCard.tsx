@@ -9,7 +9,12 @@ type PropertyDetailsCardProps = {
   linkText: string
 }
 
-export const PropertyDetailsCard = ({ heading, linkText, linkUrl, children }: PropertyDetailsCardProps) => {
+export const PropertyDetailsCard = ({
+  heading,
+  linkText,
+  linkUrl,
+  children,
+}: PropertyDetailsCardProps) => {
   return (
     <Card className={`${styles["mobile-full-width-card"]} ${styles["mobile-no-bottom-border"]}`}>
       <Card.Section>
