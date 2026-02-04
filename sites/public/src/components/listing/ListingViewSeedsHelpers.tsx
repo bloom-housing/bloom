@@ -277,14 +277,24 @@ export const getFeatures = (
   }
 
   if (enableParkingTypes) {
+    let parkingTypesAvailable = false
     const parking = Object.keys(listing?.parkingTypes ?? {})
-      .filter((entry) => listingParkingTypes.includes(entry) && listing?.parkingTypes[entry])
-      .map((entry) => t(`listings.parkingTypeOptions.${entry}`))
+      .filter((feature) => listingParkingTypes.includes(feature))
+      .map((entry) => {
+        if (listing?.parkingTypes[entry]) {
+          parkingTypesAvailable = true
+          return (
+            <li key={entry} className={styles["list-item"]}>
+              {t(`listings.parkingTypeOptions.${entry}`)}
+            </li>
+          )
+        }
+      })
 
-    if (parking.length) {
+    if (parkingTypesAvailable) {
       features.push({
         heading: t("t.parkingTypes"),
-        subheading: parking.join(", "),
+        content: <ul className={`${styles["two-column-list"]}`}>{parking}</ul>,
       })
     }
   }
