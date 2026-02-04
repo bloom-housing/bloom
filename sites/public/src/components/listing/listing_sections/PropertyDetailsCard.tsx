@@ -23,7 +23,7 @@ export const PropertyDetailsCard = ({
         </Heading>
         <div className={"seeds-m-bs-2"}>{children}</div>
         <p className="mt-3">
-          <a href={linkUrl} className={"pr-2"}>
+          <a href={linkUrl} className={"pr-2"} target="_blank">
             {linkText}
           </a>
         </p>
