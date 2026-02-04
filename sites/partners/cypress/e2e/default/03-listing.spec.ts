@@ -307,11 +307,11 @@ describe("Listing Management Tests", () => {
     fillIfDataExists(cy, "yearBuilt", listing.yearBuilt?.toString(), "type")
 
     if (getFlagActive(listing, FeatureFlagEnum.enableRegions)) {
-      if (getFlagActive(listing, FeatureFlagEnum.enableConfigurableRegions)) {
-        fillIfDataExists(cy, "configurableRegion", listing.configurableRegion, "select")
-      } else {
-        fillIfDataExists(cy, "region", listing.region, "select")
-      }
+      fillIfDataExists(cy, "region", listing.region, "select")
+    }
+
+    if (getFlagActive(listing, FeatureFlagEnum.enableConfigurableRegions)) {
+      fillIfDataExists(cy, "configurableRegion", listing.configurableRegion, "select")
     }
 
     cy.getByID("map-address-popup").contains(listing.listingsBuildingAddress.street)
