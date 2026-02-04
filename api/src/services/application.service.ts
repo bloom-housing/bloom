@@ -422,6 +422,50 @@ export class ApplicationService {
       throw new ForbiddenException();
     }
     const whereClause = this.buildWhereClause(params);
+
+    const buildCountWhereClause = (filterType: ApplicationsFilterEnum) =>
+      this.buildPublicAppsViewWhereClause(
+        {
+          ...params,
+          filterType,
+        },
+        whereClause,
+      );
+
+    const [openCount, closedCount, lotteryCount] = await Promise.all([
+      this.prisma.applications.count({
+        where: buildCountWhereClause(ApplicationsFilterEnum.open),
+      }),
+      this.prisma.applications.count({
+        where: buildCountWhereClause(ApplicationsFilterEnum.closed),
+      }),
+      params.includeLotteryApps
+        ? this.prisma.applications.count({
+            where: buildCountWhereClause(ApplicationsFilterEnum.lottery),
+          })
+        : Promise.resolve(0),
+    ]);
+
+    const totalCount = openCount + closedCount + lotteryCount;
+
+    const displayWhereClause = this.buildPublicAppsViewWhereClause(
+      params,
+      whereClause,
+    );
+
+    const displayCount = await this.prisma.applications.count({
+      where: displayWhereClause,
+    });
+
+    const limit = params.limit ?? 10;
+    let page = params.page ?? 1;
+
+    if (displayCount && limit && page > 1) {
+      if (Math.ceil(displayCount / limit) < page) {
+        page = 1;
+      }
+    }
+
     const rawApps = await this.prisma.applications.findMany({
       select: {
         id: true,
@@ -454,7 +498,12 @@ export class ApplicationService {
           },
         },
       },
-      where: whereClause,
+      where: displayWhereClause,
+      skip: calculateSkip(limit, page),
+      take: calculateTake(limit),
+      orderBy: {
+        updatedAt: 'desc',
+      },
     });
 
     await Promise.all(
@@ -468,39 +517,82 @@ export class ApplicationService {
       }),
     );
 
-    //filter for display applications and status counts
-    let displayApplications = [];
-    const total = rawApps.length ?? 0;
-    let lottery = 0,
-      closed = 0,
-      open = 0;
-    rawApps.forEach((app) => {
-      if (app.listings.status === ListingsStatusEnum.active) {
-        open++;
-        if (params.filterType === ApplicationsFilterEnum.open)
-          displayApplications.push(app);
-      } else if (
-        app.listings?.lotteryStatus === LotteryStatusEnum.publishedToPublic &&
-        params.includeLotteryApps
-      ) {
-        lottery++;
-        if (params.filterType === ApplicationsFilterEnum.lottery) {
-          displayApplications.push(app);
-        }
-      } else {
-        closed++;
-        if (params.filterType === ApplicationsFilterEnum.closed)
-          displayApplications.push(app);
-      }
-    });
-
-    if (params.filterType === ApplicationsFilterEnum.all)
-      displayApplications = rawApps;
-
     return mapTo(PublicAppsViewResponse, {
-      displayApplications,
-      applicationsCount: { total, lottery, closed, open },
+      items: rawApps,
+      meta: buildPaginationInfo(limit, page, displayCount, rawApps.length),
+      applicationsCount: {
+        total: totalCount,
+        lottery: lotteryCount,
+        closed: closedCount,
+        open: openCount,
+      },
     });
+  }
+
+  buildPublicAppsViewWhereClause(
+    params: PublicAppsViewQueryParams,
+    baseWhereClause: Prisma.ApplicationsWhereInput,
+  ): Prisma.ApplicationsWhereInput {
+    const conditions: Prisma.ApplicationsWhereInput[] = Array.isArray(
+      baseWhereClause.AND,
+    )
+      ? baseWhereClause.AND.flatMap((condition) =>
+          Array.isArray(condition.AND) ? condition.AND : [condition],
+        )
+      : [baseWhereClause];
+
+    if (params.filterType === ApplicationsFilterEnum.open) {
+      conditions.push({
+        listings: {
+          is: {
+            status: ListingsStatusEnum.active,
+          },
+        },
+      });
+    }
+
+    if (params.filterType === ApplicationsFilterEnum.lottery) {
+      conditions.push({
+        listings: {
+          is: {
+            status: { not: ListingsStatusEnum.active },
+            lotteryStatus: LotteryStatusEnum.publishedToPublic,
+          },
+        },
+      });
+    }
+
+    if (params.filterType === ApplicationsFilterEnum.closed) {
+      if (params.includeLotteryApps) {
+        conditions.push({
+          listings: {
+            is: {
+              status: { not: ListingsStatusEnum.active },
+              OR: [
+                {
+                  lotteryStatus: { not: LotteryStatusEnum.publishedToPublic },
+                },
+                {
+                  lotteryStatus: null,
+                },
+              ],
+            },
+          },
+        });
+      } else {
+        conditions.push({
+          listings: {
+            is: {
+              status: { not: ListingsStatusEnum.active },
+            },
+          },
+        });
+      }
+    }
+
+    return {
+      AND: conditions,
+    };
   }
 
   /*

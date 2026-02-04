@@ -3,8 +3,9 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsBoolean, IsEnum, IsOptional, IsString } from 'class-validator';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 import { ApplicationsFilterEnum } from '../../enums/applications/filter-enum';
+import { PaginationQueryParams } from '../shared/pagination.dto';
 
-export class PublicAppsViewQueryParams {
+export class PublicAppsViewQueryParams extends PaginationQueryParams {
   @Expose()
   @ApiProperty({
     type: String,
