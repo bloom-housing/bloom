@@ -107,11 +107,11 @@ describe("DetailBuildingFeatures", () => {
       </AuthContext.Provider>
     )
 
-    expect(screen.getByText("Parking Types")).toBeInTheDocument()
+    expect(screen.getByText("Parking yypes")).toBeInTheDocument()
     const list = screen.getByTestId("parking-types-list")
     const listItems = within(list).getAllByRole("listitem")
-    expect(listItems[0]).toHaveTextContent("On Street")
-    expect(listItems[1]).toHaveTextContent("Off Street")
+    expect(listItems[0]).toHaveTextContent("On street")
+    expect(listItems[1]).toHaveTextContent("Off street")
     expect(listItems[2]).toHaveTextContent("Garage")
     expect(listItems[3]).toHaveTextContent("Carport")
   })
@@ -142,15 +142,15 @@ describe("DetailBuildingFeatures", () => {
       </AuthContext.Provider>
     )
 
-    const parkingTypesSectionHeader = screen.getByText("Parking Types")
+    const parkingTypesSectionHeader = screen.getByText("Parking types")
     expect(parkingTypesSectionHeader).toBeInTheDocument()
     expect(within(parkingTypesSectionHeader.parentElement).getByText("None")).toBeInTheDocument()
     expect(screen.queryByTestId("parking-types-list")).not.toBeInTheDocument()
     expect(
-      within(parkingTypesSectionHeader.parentElement).queryByText("On Street")
+      within(parkingTypesSectionHeader.parentElement).queryByText("On street")
     ).not.toBeInTheDocument()
     expect(
-      within(parkingTypesSectionHeader.parentElement).queryByText("Off Street")
+      within(parkingTypesSectionHeader.parentElement).queryByText("Off street")
     ).not.toBeInTheDocument()
     expect(
       within(parkingTypesSectionHeader.parentElement).queryByText("Garage")

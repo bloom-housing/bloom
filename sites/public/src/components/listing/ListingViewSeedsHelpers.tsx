@@ -294,7 +294,11 @@ export const getFeatures = (
     if (parkingTypesAvailable) {
       features.push({
         heading: t("t.parkingTypes"),
-        content: <ul className={`${styles["two-column-list"]}`}>{parking}</ul>,
+        content: (
+          <ul data-testid="parking-types-list" className={`${styles["two-column-list"]}`}>
+            {parking}
+          </ul>
+        ),
       })
     }
   }

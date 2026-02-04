@@ -70,10 +70,10 @@ describe("BuildingFeatures", () => {
     const parkingTypesGroup = screen.getByRole("group", { name: /parking types/i })
     expect(parkingTypesGroup).toBeInTheDocument()
     expect(
-      within(parkingTypesGroup).getByRole("checkbox", { name: "On Street" })
+      within(parkingTypesGroup).getByRole("checkbox", { name: "On street" })
     ).toBeInTheDocument()
     expect(
-      within(parkingTypesGroup).getByRole("checkbox", { name: "Off Street" })
+      within(parkingTypesGroup).getByRole("checkbox", { name: "Off street" })
     ).toBeInTheDocument()
     expect(within(parkingTypesGroup).getByRole("checkbox", { name: "Garage" })).toBeInTheDocument()
     expect(within(parkingTypesGroup).getByRole("checkbox", { name: "Carport" })).toBeInTheDocument()

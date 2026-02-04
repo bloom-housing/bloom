@@ -543,10 +543,11 @@ describe("<ListingViewSeeds>", () => {
         name: /^parking types$/i,
       })
     ).toBeInTheDocument()
-    expect(
-      await screen.findByText(
-        /^(?=.*\bOn Street\b)(?=.*\bOff Street\b)(?=.*\bGarage\b)(?=.*\bCarport\b).*$/
-      )
-    ).toBeInTheDocument()
+    const parkingTypeList = screen.getByTestId("parking-types-list")
+    expect(parkingTypeList).toBeInTheDocument()
+    expect(within(parkingTypeList).getByText("On street")).toBeInTheDocument()
+    expect(within(parkingTypeList).getByText("Off street")).toBeInTheDocument()
+    expect(within(parkingTypeList).getByText("Garage")).toBeInTheDocument()
+    expect(within(parkingTypeList).getByText("Carport")).toBeInTheDocument()
   })
 })
