@@ -27,10 +27,24 @@ The following containers are defined in the [docker-compose.yml](./docker-compos
 - `lb`: a nginx load balancer that fronts the `api`, `partners`, and `public` containers. A LB is
   required to run multiple replicas of these containers.
 - `db`: the postgres database.
-- `dbseed`: runs a [db seed script](./api/Dockerfile.dbseed.dev).
+- `dbinit`: runs a [db init script](./api/dbinit)
+- `dbseed`: runs a [db seed script](./api/Dockerfile.dbseed).
 - `api`: the [api](./api).
 - `partners`: the [partners site](./sites/partners).
 - `public`: the [public site](./sites/public).
+
+The following containers will be started if `COMPOSE_PROFILES=pgadmin`:
+
+- `pgadmin`: runs https://www.pgadmin.org/ pre-configured to connect to the `db` as the
+  `bloom_readonly` user. Log in to pgadmin at http://localhost:3200 with:
+
+     - Username: `admin@example.com`
+     - Password: `abcdef`
+
+    Log into the `db` using password `bloom_readonly_pw`.
+
+    Alternativly, if the compose stack is already running without `COMPOSE_PROFILES=pgadmin`, you
+    can start pgadmin by running `docker compose up pgadmin` in a separate shell.
 
 Build, start, and tear down containers with the following commands. Each command takes an optional
 list of containers to operate on. By default the command operates on all containers.
@@ -44,6 +58,11 @@ For example, to rebuild just the api and partners site docker images, run:
 ```bash
 docker compose build api partners
 ```
+
+## CI
+
+The compose stack is tested in the
+[docker_compose_ci.yml](./.github/workflows/docker_compose_ci.yml) GitHub workflow.
 
 ### Multiple replicas
 
