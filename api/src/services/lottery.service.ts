@@ -200,6 +200,7 @@ export class LotteryService {
    * @param listingId listing id we are going to randomize
    * @param applications set of applications to generate lottery ranks for
    * @param preferencesOnListing the set of preferences on the listing
+   * @param enableV2MSQ when true, the new multiselectQuestion logic will be used
    * @description creates a random rank for the applications on this lottery as well as the preference specific ranks
    */
   async lotteryRandomizer(
