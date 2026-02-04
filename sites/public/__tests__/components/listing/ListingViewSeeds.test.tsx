@@ -499,7 +499,7 @@ describe("<ListingViewSeeds>", () => {
     ).not.toBeInTheDocument()
   })
 
-  it("renders the parking types in feature section when available", async () => {
+  it("renders the parking types in feature section when available", () => {
     render(
       <AuthContext.Provider
         value={{
