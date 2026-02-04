@@ -390,6 +390,7 @@ describe("Listing Management Tests", () => {
         fillIfDataExists(
           cy,
           `listingNeighborhoodAmenities.${amenity}`,
+          // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
           listing.listingNeighborhoodAmenities?.[
             amenity as keyof typeof listing.listingNeighborhoodAmenities
           ] as string,
@@ -731,6 +732,7 @@ describe("Listing Management Tests", () => {
         verifyDetailDataIfExists(
           cy,
           `neighborhoodAmenities.${amenity}`,
+          // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
           listing.listingNeighborhoodAmenities?.[
             amenity as keyof typeof listing.listingNeighborhoodAmenities
           ] as string
@@ -1047,6 +1049,7 @@ describe("Listing Management Tests", () => {
         verifyDataIfExists(
           cy,
           `listingNeighborhoodAmenities.${amenity}`,
+          // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
           listing.listingNeighborhoodAmenities?.[
             amenity as keyof typeof listing.listingNeighborhoodAmenities
           ] as string,
