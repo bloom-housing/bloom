@@ -1,6 +1,5 @@
 import * as React from "react"
 import { Card, Heading } from "@bloom-housing/ui-seeds"
-import styles from "../ListingViewSeeds.module.scss"
 
 type PropertyDetailsCardProps = {
   heading: string
