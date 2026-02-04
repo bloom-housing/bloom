@@ -24,6 +24,7 @@ interface ListingIntroProps {
   jurisdictionName: string
   jurisdictionId?: string
   listingId: string
+  listingType?: EnumListingListingType
   requiredFields: string[]
   properties: Property[]
 }
@@ -44,11 +45,9 @@ const ListingIntro = (props: ListingIntroProps) => {
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, clearErrors, errors, watch, getValues } = formMethods
+  const { register, clearErrors, errors, getValues } = formMethods
 
   const listing = getValues()
-
-  const listingType = watch("listingType")
 
   const showPropertiesDropDown = props.properties?.length > 1 && props.enableProperties
 
@@ -76,7 +75,7 @@ const ListingIntro = (props: ListingIntroProps) => {
           <Grid.Row columns={1}>
             <Grid.Cell>
               <FieldValue id="listingType" label={t("listings.listingTypeTitle")}>
-                {listing.listingType === EnumListingListingType.nonRegulated
+                {props.listingType === EnumListingListingType.nonRegulated
                   ? t("listings.nonRegulated")
                   : t("listings.regulated")}
               </FieldValue>
@@ -119,7 +118,7 @@ const ListingIntro = (props: ListingIntroProps) => {
               register={register}
               {...defaultFieldProps(
                 "developer",
-                getDeveloperLabel(listingType, props.enableHousingDeveloperOwner),
+                getDeveloperLabel(props.listingType, props.enableHousingDeveloperOwner),
                 props.requiredFields,
                 errors,
                 clearErrors
@@ -127,7 +126,7 @@ const ListingIntro = (props: ListingIntroProps) => {
             />
           </Grid.Cell>
         </Grid.Row>
-        {listingType === EnumListingListingType.nonRegulated &&
+        {props.listingType === EnumListingListingType.nonRegulated &&
           props.enableNonRegulatedListings && (
             <Grid.Row columns={1}>
               <Grid.Cell>

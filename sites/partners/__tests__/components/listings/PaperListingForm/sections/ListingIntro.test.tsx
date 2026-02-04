@@ -152,7 +152,7 @@ describe("ListingIntro", () => {
 
   it("should render the ListingIntro section with non-regulated fields when feature flag is on and listing is non-regulated", () => {
     render(
-      <FormProviderWrapper values={{ listingType: EnumListingListingType.nonRegulated }}>
+      <FormProviderWrapper>
         <ListingIntro
           requiredFields={[]}
           enableNonRegulatedListings={true}
@@ -160,6 +160,7 @@ describe("ListingIntro", () => {
           enableListingFileNumber={false}
           jurisdictionName={"JurisdictionA"}
           listingId={"1234"}
+          listingType={EnumListingListingType.nonRegulated}
         />
       </FormProviderWrapper>
     )
