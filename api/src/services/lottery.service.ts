@@ -100,7 +100,7 @@ export class LotteryService {
     const listing = await this.prisma.listings.findUnique({
       select: {
         id: true,
-        jurisdictions: true,
+        jurisdictions: { select: { featureFlags: true } },
         lotteryStatus: true,
       },
       where: {
@@ -143,7 +143,7 @@ export class LotteryService {
             },
           },
           applicationSelections: {
-            select: { hasOptedOut: true, multiselectQuestionId: true },
+            include: { multiselectQuestion: true },
           },
           householdMember: {
             select: {

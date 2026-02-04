@@ -14,10 +14,12 @@ import {
 } from '@prisma/client';
 import { mockApplicationSet } from './application.service.spec';
 import { mockMultiselectQuestion } from './multiselect-question.service.spec';
+import { randomNoun } from '../../../prisma/seed-helpers/word-generator';
 import { Application } from '../../../src/dtos/applications/application.dto';
 import { ListingLotteryStatus } from '../../../src/dtos/listings/listing-lottery-status.dto';
 import MultiselectQuestion from '../../../src/dtos/multiselect-questions/multiselect-question.dto';
 import { User } from '../../../src/dtos/users/user.dto';
+import { ValidationMethod } from '../../../src/enums/multiselect-questions/validation-method-enum';
 import { permissionActions } from '../../../src/enums/permissions/permission-actions-enum';
 import { OrderByEnum } from '../../../src/enums/shared/order-by-enum';
 import { ApplicationExporterService } from '../../../src/services/application-exporter.service';
@@ -31,8 +33,6 @@ import { MultiselectQuestionService } from '../../../src/services/multiselect-qu
 import { PermissionService } from '../../../src/services/permission.service';
 import { PrismaService } from '../../../src/services/prisma.service';
 import { TranslationService } from '../../../src/services/translation.service';
-import { ValidationMethod } from '../../../src/enums/multiselect-questions/validation-method-enum';
-import { randomNoun } from '../../../prisma/seed-helpers/word-generator';
 
 const canOrThrowMock = jest.fn();
 const lotteryReleasedMock = jest.fn();
@@ -679,7 +679,7 @@ describe('Testing lottery service', () => {
             },
           },
           applicationSelections: {
-            select: { hasOptedOut: true, multiselectQuestionId: true },
+            include: { multiselectQuestionId: true },
           },
           householdMember: {
             select: {
