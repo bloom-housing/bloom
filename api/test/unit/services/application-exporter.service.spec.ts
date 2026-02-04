@@ -15,6 +15,7 @@ import { ApplicationCsvQueryParams } from '../../../src/dtos/applications/applic
 import MultiselectQuestion from '../../../src/dtos/multiselect-questions/multiselect-question.dto';
 import { User } from '../../../src/dtos/users/user.dto';
 import { FeatureFlagEnum } from '../../../src/enums/feature-flags/feature-flags-enum';
+import { ValidationMethod } from '../../../src/enums/multiselect-questions/validation-method-enum';
 import { ApplicationExporterService } from '../../../src/services/application-exporter.service';
 import { ApplicationFlaggedSetService } from '../../../src/services/application-flagged-set.service';
 import { CronJobService } from '../../../src/services/cron-job.service';
@@ -26,6 +27,7 @@ import { PermissionService } from '../../../src/services/permission.service';
 import { PrismaService } from '../../../src/services/prisma.service';
 import { TranslationService } from '../../../src/services/translation.service';
 import {
+  constructMultiselectQuestionHeaders,
   constructSpecificMultiselectQuestionHeaders,
   getExportHeaders,
   unitTypeToReadable,
@@ -566,7 +568,7 @@ describe('Testing application export service', () => {
       );
     });
 
-    it('should populate the data for each header and output a object', async () => {
+    it('should populate the data for each header and output an object', async () => {
       const headers = getExportHeaders(0, [], 'America/Los_Angeles', {
         enableAdaOtherOption: true,
       });
@@ -666,6 +668,148 @@ describe('Testing application export service', () => {
       });
       expect(stringData).toEqual(undefined);
     });
+
+    it('should parse multiselectQuestion data', async () => {
+      const multiselectQuestionId = randomUUID();
+      const multiselectQuestionId2 = randomUUID();
+
+      const multiselectOptionId1 = randomUUID();
+      const multiselectOptionId2 = randomUUID();
+      const multiselectOptionId3 = randomUUID();
+      const multiselectOptionId4 = randomUUID();
+
+      const multiselectQuestion: MultiselectQuestion = {
+        id: multiselectQuestionId,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        jurisdictions: [{ id: randomUUID() }],
+        applicationSection:
+          MultiselectQuestionsApplicationSectionEnum.preferences,
+        multiselectOptions: [
+          {
+            id: multiselectOptionId1,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            name: 'option 1 name',
+            ordinal: 0,
+            shouldCollectAddress: true,
+            shouldCollectName: true,
+            shouldCollectRelationship: true,
+            // TODO: Can be removed after MSQ refactor
+            text: '',
+            validationMethod: ValidationMethod.none,
+          },
+          {
+            id: multiselectOptionId2,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            name: 'option 2 name',
+            ordinal: 1,
+            shouldCollectAddress: true,
+            shouldCollectName: true,
+            shouldCollectRelationship: true,
+            // TODO: Can be removed after MSQ refactor
+            text: '',
+            validationMethod: ValidationMethod.none,
+          },
+          {
+            id: multiselectOptionId3,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            name: 'option 3 name',
+            ordinal: 3,
+            // TODO: Can be removed after MSQ refactor
+            text: '',
+            validationMethod: ValidationMethod.none,
+          },
+        ],
+        name: 'first preference title',
+        status: 'draft',
+        text: '',
+      };
+      const multiselectQuestion2: MultiselectQuestion = {
+        id: multiselectQuestionId2,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        jurisdictions: [{ id: randomUUID() }],
+        applicationSection:
+          MultiselectQuestionsApplicationSectionEnum.preferences,
+        multiselectOptions: [
+          {
+            id: multiselectOptionId4,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            isOptOut: true,
+            name: 'opt out option',
+            ordinal: 3,
+            // TODO: Can be removed after MSQ refactor
+            text: '',
+            validationMethod: ValidationMethod.none,
+          },
+        ],
+        optOutText: 'I am opting out!',
+        name: 'second preference title',
+        status: 'draft',
+        text: '',
+      };
+      const headers = constructMultiselectQuestionHeaders([
+        multiselectQuestion,
+        multiselectQuestion2,
+      ]);
+      const application = {
+        applicationSelections: [
+          {
+            multiselectQuestionId: multiselectQuestionId,
+            selections: [
+              {
+                addressHolderAddress: {
+                  city: 'West Glacier',
+                  state: 'MT',
+                  county: 'Glacier County',
+                  street: '64 Grinnell Dr',
+                  zipCode: '59936',
+                  latitude: 53.7487218,
+                  longitude: -142.0251025,
+                  placeName: 'Glacier National Park',
+                },
+                multiselectOption: {
+                  id: multiselectOptionId2,
+                  name: 'option 2 name',
+                },
+              },
+              {
+                multiselectOption: {
+                  id: multiselectOptionId3,
+                  name: 'option 3 name',
+                },
+              },
+            ],
+          },
+          {
+            multiselectQuestionId: multiselectQuestionId2,
+            selections: [
+              {
+                multiselectOption: {
+                  id: multiselectOptionId4,
+                  name: 'opt out option',
+                },
+              },
+            ],
+          },
+        ],
+      };
+      const { stringData, objectData } = service.populateDataForEachHeader(
+        headers,
+        application,
+        { stringData: '' },
+      );
+
+      expect(objectData).toBe(undefined);
+      expect(stringData).toEqual(
+        '"option 2 name, option 3 name",,,,"64 Grinnell Dr West Glacier, MT 59936",,,"opt out option"',
+      );
+    });
+
     it('should parse the preference data', async () => {
       const multiselectQuestionId = randomUUID();
       const multiselectQuestionId2 = randomUUID();

@@ -1,9 +1,14 @@
 import { randomUUID } from 'crypto';
-import { ApplicationFlaggedSet } from '../../../src/dtos/application-flagged-sets/application-flagged-set.dto';
+import { MultiselectQuestionsApplicationSectionEnum } from '@prisma/client';
+import { randomNoun } from '../../../prisma/seed-helpers/word-generator';
+import { ApplicationSelection } from '../../../src/dtos/applications/application-selection.dto';
 import { ApplicationMultiselectQuestion } from '../../../src/dtos/applications/application-multiselect-question.dto';
-import { CsvHeader } from '../../../src/types/CsvExportInterface';
+import { ApplicationFlaggedSet } from '../../../src/dtos/application-flagged-sets/application-flagged-set.dto';
+import MultiselectQuestion from '../../../src/dtos/multiselect-questions/multiselect-question.dto';
 import { UnitType } from '../../../src/dtos/unit-types/unit-type.dto';
+import { ValidationMethod } from '../../../src/enums/multiselect-questions/validation-method-enum';
 import { InputType } from '../../../src/enums/shared/input-type-enum';
+import { CsvHeader } from '../../../src/types/CsvExportInterface';
 import {
   addressToString,
   applicationSelectionDataFormatter,
@@ -14,11 +19,6 @@ import {
   multiselectQuestionFormat,
   unitTypeToReadable,
 } from '../../../src/utilities/application-export-helpers';
-import { ApplicationSelection } from '../../../src/dtos/applications/application-selection.dto';
-import { MultiselectQuestionsApplicationSectionEnum } from '@prisma/client';
-import MultiselectQuestion from '../../../src/dtos/multiselect-questions/multiselect-question.dto';
-import { randomNoun } from '../../../prisma/seed-helpers/word-generator';
-import { ValidationMethod } from '../../../src/enums/multiselect-questions/validation-method-enum';
 
 describe('Testing application export helpers', () => {
   const address = {

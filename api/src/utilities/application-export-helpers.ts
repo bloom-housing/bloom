@@ -446,6 +446,7 @@ export const applicationSelectionDataFormatter = (
   const selectedOption = selection.selections.find(
     (selectedOption) => selectedOption.multiselectOption.id === optionId,
   );
+  if (!selectedOption) return '';
   const value = selectedOption[key];
   if (key === 'addressHolderAddress') {
     return addressToString(value);
