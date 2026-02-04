@@ -992,7 +992,7 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
     }
 
     if (
-      doAllJurisdictionHaveFeatureFlagSet(
+      doAnyJurisdictionHaveFeatureFlagSet(
         user.jurisdictions,
         FeatureFlagEnum.enableParkingType,
       )
