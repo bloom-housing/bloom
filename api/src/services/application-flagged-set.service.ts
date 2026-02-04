@@ -468,7 +468,7 @@ export class ApplicationFlaggedSetService implements OnModuleInit {
     listingId?: string,
     forceProcess?: boolean,
   ): Promise<SuccessDTO> {
-    this.logger.warn('running the Application flagged sets version 2 cron job');
+    this.logger.warn('running the Application flagged sets cron job');
     await this.cronJobService.markCronJobAsStarted(CRON_JOB_NAME);
     const outOfDateListings = await this.prisma.listings.findMany({
       select: {
