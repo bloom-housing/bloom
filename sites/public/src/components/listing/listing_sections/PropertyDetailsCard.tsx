@@ -16,14 +16,14 @@ export const PropertyDetailsCard = ({
   children,
 }: PropertyDetailsCardProps) => {
   return (
-    <Card className={`${styles["mobile-full-width-card"]} ${styles["mobile-no-bottom-border"]}`}>
+    <Card>
       <Card.Section>
         <Heading size={"lg"} priority={2} className={"seeds-m-be-header"}>
           {heading}
         </Heading>
         <div className={"seeds-m-bs-2"}>{children}</div>
         <p className="mt-3">
-          <a href={linkUrl} className={"pr-2"} target="_blank">
+          <a href={linkUrl} target="_blank" className={"pr-2"}>
             {linkText}
           </a>
         </p>
