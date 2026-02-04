@@ -38,6 +38,7 @@ import {
 } from "../../../lib/listings/formTypes"
 import ListingDataPipeline from "../../../lib/listings/ListingDataPipeline"
 import { StatusBar } from "../../../components/shared/StatusBar"
+import { usePropertiesList } from "../../../lib/hooks"
 import { EditorExtensions } from "../../shared/TextEditor"
 import ListingFormActions, { ListingFormActionsType } from "../ListingFormActions"
 import { cleanRichText, getReadableErrorMessage } from "../PaperListingDetails/sections/helpers"
@@ -202,6 +203,12 @@ const ListingForm = ({
     content:
       listing?.whatToExpectAdditionalText || selectedJurisdictionData?.whatToExpectAdditionalText,
     immediatelyRender: true,
+  })
+
+  const { data: properties } = usePropertiesList({
+    page: null,
+    limit: null,
+    jurisdictions: jurisdictionId,
   })
 
   useEffect(() => {
@@ -566,7 +573,6 @@ const ListingForm = ({
                               FeatureFlagEnum.enableProperties,
                               jurisdictionId
                             )}
-                            property={listing?.property}
                             jurisdictionName={
                               profile?.jurisdictions?.length > 1
                                 ? selectedJurisdictionData?.name
@@ -585,6 +591,7 @@ const ListingForm = ({
                                 EnumListingListingType.nonRegulated)
                             }
                             requiredFields={requiredFields}
+                            properties={properties?.items}
                           />
                           <ListingPhotos
                             enableListingImageAltText={enableListingImageAltText}

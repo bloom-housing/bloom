@@ -73,6 +73,9 @@ export default class AdditionalMetadataFormatter extends Formatter {
       this.data.communityDisclaimerTitle = ""
       this.data.communityDisclaimerDescription = ""
     }
+    if (!this.data.property?.id) {
+      this.data.property = null
+    }
     this.data.reviewOrderType =
       this.data.reviewOrderQuestion === "reviewOrderLottery"
         ? ReviewOrderTypeEnum.lottery
