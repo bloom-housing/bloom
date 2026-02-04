@@ -168,7 +168,7 @@ export default class AdditionalMetadataFormatter extends Formatter {
       this.data.allowsCats = this.data.petPolicyPreferences.includes("allowsCats")
     }
 
-    if (this.data.parkingTypes) {
+    if (this.data.parking) {
       this.data.parkingTypes = listingParkingTypes.reduce((acc, current) => {
         const isSelected = this.data.parking.some((parking) => parking === current)
         return {
