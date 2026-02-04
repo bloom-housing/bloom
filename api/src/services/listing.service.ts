@@ -2695,10 +2695,16 @@ export class ListingService implements OnModuleInit {
               },
             },
           },
-          property: incomingDto?.property
+          property: incomingDto.property
             ? {
                 connect: {
                   id: incomingDto.property.id,
+                },
+              }
+            : storedListing.property
+            ? {
+                disconnect: {
+                  id: storedListing.property.id,
                 },
               }
             : undefined,
