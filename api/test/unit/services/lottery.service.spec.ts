@@ -655,7 +655,7 @@ describe('Testing lottery service', () => {
       expect(prisma.listings.findUnique).toHaveBeenCalledWith({
         select: {
           id: true,
-          jurisdictions: true,
+          jurisdictions: { select: { featureFlags: true } },
           lotteryStatus: true,
         },
         where: {
@@ -679,7 +679,7 @@ describe('Testing lottery service', () => {
             },
           },
           applicationSelections: {
-            include: { multiselectQuestionId: true },
+            include: { multiselectQuestion: true },
           },
           householdMember: {
             select: {
@@ -781,7 +781,7 @@ describe('Testing lottery service', () => {
       expect(prisma.listings.findUnique).toHaveBeenCalledWith({
         select: {
           id: true,
-          jurisdictions: true,
+          jurisdictions: { select: { featureFlags: true } },
           lotteryStatus: true,
         },
         where: {
