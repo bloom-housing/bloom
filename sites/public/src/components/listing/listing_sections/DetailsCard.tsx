@@ -16,10 +16,12 @@ export const DetailsCard = ({ heading, linkText, linkUrl, children }: PropertyDe
         <Heading size={"lg"} priority={2} className={"seeds-m-be-header"}>
           {heading}
         </Heading>
-        {children}
-        <Link href={linkUrl} className={"seeds-m-bs-4"} newWindowTarget={true}>
-          {linkText}
-        </Link>
+        <div className={"seeds-m-bs-2"}>{children}</div>
+        <p className="mt-3">
+          <a href={linkUrl} className={"pr-2"}>
+            {linkText}
+          </a>
+        </p>
       </Card.Section>
     </Card>
   )
