@@ -1,5 +1,5 @@
 import * as React from "react"
-import { Card, Heading, Link } from "@bloom-housing/ui-seeds"
+import { Card, Heading } from "@bloom-housing/ui-seeds"
 import styles from "../ListingViewSeeds.module.scss"
 
 type PropertyDetailsCardProps = {
@@ -9,7 +9,7 @@ type PropertyDetailsCardProps = {
   linkText: string
 }
 
-export const DetailsCard = ({ heading, linkText, linkUrl, children }: PropertyDetailsCardProps) => {
+export const PropertyDetailsCard = ({ heading, linkText, linkUrl, children }: PropertyDetailsCardProps) => {
   return (
     <Card className={`${styles["mobile-full-width-card"]} ${styles["mobile-no-bottom-border"]}`}>
       <Card.Section>
