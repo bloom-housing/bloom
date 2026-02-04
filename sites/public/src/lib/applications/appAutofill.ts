@@ -38,6 +38,7 @@ class AutofillCleaner {
     this.application.programs = []
     this.application.accessibleUnitWaitlistNumber = null
     this.application.conventionalUnitWaitlistNumber = null
+    this.application.manualLotteryPositionNumber = null
 
     return this
   }
