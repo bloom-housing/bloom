@@ -1450,12 +1450,12 @@ describe('Testing Permissioning of endpoints as public user', () => {
       }
     });
 
-    it('should error as forbidden for list endpoint', async () => {
+    it('should succeed for list endpoint', async () => {
       await request(app.getHttpServer())
         .get(`/properties?`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
-        .expect(201);
+        .expect(200);
     });
 
     it('should succeed for retrieve endpoint', async () => {
@@ -1467,7 +1467,7 @@ describe('Testing Permissioning of endpoints as public user', () => {
         .get(`/properties/${propertyId}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
-        .expect(201);
+        .expect(200);
     });
 
     it('should error as forbidden for create endpoint', async () => {
