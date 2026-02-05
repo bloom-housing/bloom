@@ -198,6 +198,7 @@
   "application.financial.vouchers.title": "Do you or anyone on this application receive any of the following?",
   "application.form.general.saveAndFinishLater": "Save and finish later",
   "application.form.general.saveAndReturn": "Save and return to review",
+  "application.form.options.relationship.aideOrAttendant": "Aide or Attendant",
   "application.form.options.relationship.aunt": "Aunt",
   "application.form.options.relationship.child": "Child",
   "application.form.options.relationship.cousin": "Cousin",
