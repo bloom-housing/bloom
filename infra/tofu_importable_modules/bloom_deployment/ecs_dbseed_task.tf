@@ -1,12 +1,12 @@
 locals {
   dbseed_env_vars = {
-    PORT                = "3100"
-    NODE_ENV            = "production"
-    DB_HOST             = aws_db_instance.bloom.address
-    DB_PORT             = "5432"
-    DB_USER             = "bloom_api"
-    DB_DATABASE         = "bloom_prisma"
-    DB_USE_RDS_IAM_AUTH = "1"
+    PORT                        = "3100"
+    NODE_ENV                    = "production"
+    DB_HOST                     = aws_db_instance.bloom.address
+    DB_PORT                     = "5432"
+    DB_USER                     = "bloom_api"
+    DB_DATABASE                 = "bloom_prisma"
+    DB_USE_RDS_IAM_AUTH         = "1"
     DBSEED_PUBLIC_SITE_BASE_URL = "https://${var.domain_name}"
   }
 }
@@ -27,13 +27,13 @@ resource "aws_ecs_task_definition" "bloom_dbseed" {
   execution_role_arn = aws_iam_role.bloom_ecs["dbseed"].arn
   task_role_arn      = aws_iam_role.bloom_container["dbseed"].arn
 
-  cpu    = 1024  # 1 vCPU
+  cpu    = 1024     # 1 vCPU
   memory = 4 * 1024 # 4 GiB in MiB
 
   container_definitions = jsonencode([
     {
-      name  = "bloom-dbseed"
-      image = var.bloom_dbseed_image
+      name        = "bloom-dbseed"
+      image       = var.bloom_dbseed_image
       environment = [for k, v in local.dbseed_env_vars : { name = k, value = v }]
 
       logConfiguration = {
