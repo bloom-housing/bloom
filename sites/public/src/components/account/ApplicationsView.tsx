@@ -253,10 +253,12 @@ const ApplicationsView = (props: ApplicationsViewProps) => {
                       )}
                     </div>
                     <div className={styles["page-info"]}>
-                      {t("listings.browseListings.pageInfo", {
-                        currentPage: paginationMeta?.currentPage,
-                        totalPages: paginationMeta?.totalPages ?? 1,
-                      })}
+                      {paginationMeta?.currentPage !== undefined &&
+                        paginationMeta?.totalPages !== undefined &&
+                        t("listings.browseListings.pageInfo", {
+                          currentPage: paginationMeta?.currentPage,
+                          totalPages: paginationMeta?.totalPages ? paginationMeta?.totalPages : 1,
+                        })}
                     </div>
                     <div className={styles["next-button"]}>
                       {paginationMeta?.currentPage < paginationMeta?.totalPages && (
