@@ -111,6 +111,27 @@ locals {
   ecs_logs_retention_days = var.ecs_logs_retention_days != null ? var.ecs_logs_retention_days : (local.is_prod ? 30 : 3)
 }
 
+variable "bloom_dbinit_image" {
+  type        = string
+  description = "Container image for the Bloom dbinit process."
+}
+variable "bloom_dbinit_run_number" {
+  type = number
+  description = "The run number is used to trigger additional runs of the dbinit procoess. The dbinit process will not be re-triggered unless the run number is changed."
+  default = 1
+}
+
+variable "bloom_dbseed_image" {
+  type        = string
+  description = "Container image for the Bloom dbseed process. Leave empty to disable running the dbseed process."
+  default     = ""
+}
+variable "bloom_dbseed_run_number" {
+  type = number
+  description = "The run number is used to trigger additional runs of the dbseed procoess. The dbseed process will not be re-triggered unless the run number is changed."
+  default = 1
+}
+
 variable "bloom_api_image" {
   type        = string
   description = "Container image for the Bloom API."

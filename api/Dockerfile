@@ -3,7 +3,6 @@
 # IMPORTANT: keep the 'run' layer below in sync.
 FROM node:22@sha256:23c24e85395992be118734a39903e08c8f7d1abc73978c46b6bda90060091a49 AS build
 
-
 # Create a non-root user to build (principle of least privilege).
 WORKDIR /build
 RUN groupadd --gid 2002 build && useradd --gid 2002 --uid 2002 --home /build build

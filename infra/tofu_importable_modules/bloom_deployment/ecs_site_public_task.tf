@@ -30,7 +30,7 @@ resource "aws_ecs_task_definition" "bloom_site_public" {
 
   # https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_definition_parameters.html#task_size
   cpu    = 2048     # 2 vCPU
-  memory = 6 * 1024 # 6 GiB in MiB
+  memory = 8 * 1024 # 8 GiB in MiB
 
   container_definitions = jsonencode([
     {

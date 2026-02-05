@@ -1,9 +1,12 @@
 locals {
   api_default_env_vars = {
-    PORT     = "3100"
-    NODE_ENV = "production"
-    DB_USER  = aws_db_instance.bloom.username
-    DB_HOST  = aws_db_instance.bloom.endpoint
+    PORT                = "3100"
+    NODE_ENV            = "production"
+    DB_HOST             = aws_db_instance.bloom.address
+    DB_PORT             = "5432"
+    DB_USER             = "bloom_api"
+    DB_DATABASE         = "bloom_prisma"
+    DB_USE_RDS_IAM_AUTH = "1"
   }
 }
 resource "aws_ecs_task_definition" "bloom_api" {
@@ -25,31 +28,22 @@ resource "aws_ecs_task_definition" "bloom_api" {
 
   container_definitions = jsonencode([
     {
-      Name  = "bloom-api"
-      image = var.bloom_api_image
+      Name        = "bloom-api"
+      image       = var.bloom_api_image
+      environment = [for k, v in merge(local.api_default_env_vars, var.bloom_api_env_vars) : { name = k, value = v }]
+      entryPoint  = ["bash"]
+      # TODO: Once https://github.com/prisma/prisma/issues/7869 is implemented, get rid of the bash
+      # hack for the prisma migrate command.
       command = [
-        "/bin/bash",
         "-c",
-        "export DATABASE_URL=postgres://$DB_USER:$(node -e 'console.log(encodeURIComponent(process.argv[1]))' $DB_PASSWORD)@$DB_HOST/bloomprisma && env && yarn db:migration:run && yarn start:prod",
+        "export DATABASE_URL=\"postgres://$${DB_USER}:$(node -e \"const S=require('@aws-sdk/rds-signer');(new S.Signer({hostname:'$${DB_HOST}',port:'$${DB_PORT}',username:'$${DB_USER}'})).getAuthToken().then(t=>console.log(encodeURIComponent(t)));\")@$${DB_HOST}:$${DB_PORT}/$${DB_DATABASE}\" && yarn db:migration:run && yarn start:prod",
       ]
       secrets = [
-        {
-          # TODO: replace with IAM authentication https://github.com/bloom-housing/bloom/issues/5451
-          name = "DB_PASSWORD"
-          # The master_user_secret tofu attribute is a block, so it is exposed as a list even though
-          # there is only one element.
-          #
-          # The RDS managed secret has a username key and a password key. Docs for how to read
-          # a specific key out of a secret:
-          # https://docs.aws.amazon.com/AmazonECS/latest/developerguide/secrets-envvar-secrets-manager.html#secrets-envvar-secrets-manager-update-container-definition
-          valueFrom = "${aws_db_instance.bloom.master_user_secret[0].secret_arn}:password::"
-        },
         {
           name      = "APP_SECRET",
           valueFrom = aws_secretsmanager_secret.api_jwt_signing_key.arn
         }
       ]
-      environment = [for k, v in merge(local.api_default_env_vars, var.bloom_api_env_vars) : { name = k, value = v }]
       portMappings = [
         {
           name          = "http"
@@ -87,6 +81,7 @@ resource "aws_ecs_service" "bloom_api" {
     aws_db_instance.bloom,
     aws_vpc_endpoint.secrets_manager,
     aws_route_table_association.private_subnet,
+    null_resource.bloom_dbinit_run,
   ]
   wait_for_steady_state         = true # if tofu waits for the triggered deployment to complete.
   region                        = var.aws_region
