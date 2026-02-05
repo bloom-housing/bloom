@@ -234,6 +234,9 @@ describe("Listing Management Tests", () => {
     if (getFlagActive(listing, FeatureFlagEnum.enableListingFileNumber)) {
       fillIfDataExists(cy, "listingFileNumber", listing.listingFileNumber, "type")
     }
+    if (getFlagActive(listing, FeatureFlagEnum.enableProperties)) {
+      fillIfDataExists(cy, "property", listing.property?.id, "select")
+    }
 
     // ----------
     // Section - Listing photos
