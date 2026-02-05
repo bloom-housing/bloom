@@ -49,7 +49,7 @@ const ListingIntro = (props: ListingIntroProps) => {
 
   const listing = getValues()
 
-  const showPropertiesDropDown = props.properties?.length > 1 && props.enableProperties
+  const showPropertiesDropDown = props.properties?.length > 0 && props.enableProperties
 
   const propertyOptions: SelectOption[] =
     props.properties && props.properties?.length !== 0
