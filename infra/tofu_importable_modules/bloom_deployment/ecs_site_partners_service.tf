@@ -20,7 +20,7 @@ resource "aws_ecs_task_definition" "bloom_site_partners" {
   task_role_arn      = aws_iam_role.bloom_container["site-partners"].arn
 
   # Keep in sync with docker-compose.yml
-  cpu    = 2048     # 2 vCPU
+  cpu    = 2 * 1024 # 2 vCPU
   memory = 4 * 1024 # 4 GiB in MiB
 
   container_definitions = jsonencode([

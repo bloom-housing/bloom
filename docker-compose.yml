@@ -264,7 +264,7 @@ services:
       resources:
         # Keep in sync with infra/tofu_importable_modules/bloom_deployment/ecs_public_service.tf
         limits:
-          cpus: '2'
+          cpus: '4'
           memory: '6144mb'
     environment:
       NODE_ENV: "production"
