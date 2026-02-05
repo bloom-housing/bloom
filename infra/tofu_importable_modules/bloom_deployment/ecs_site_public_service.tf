@@ -29,7 +29,7 @@ resource "aws_ecs_task_definition" "bloom_site_public" {
   task_role_arn      = aws_iam_role.bloom_container["site-public"].arn
 
   # Keep in sync with docker-compose.yml
-  cpu    = 2048     # 2 vCPU
+  cpu    = 4 * 1024 # 4 vCPU
   memory = 6 * 1024 # 6 GiB in MiB
 
   container_definitions = jsonencode([
