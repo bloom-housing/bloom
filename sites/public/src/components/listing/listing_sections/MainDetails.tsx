@@ -6,6 +6,7 @@ import {
   Listing,
   MarketingTypeEnum,
   MultiselectQuestionsApplicationSectionEnum,
+  Property,
   ReviewOrderTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { Heading, Link, Tag, Icon } from "@bloom-housing/ui-seeds"
@@ -21,6 +22,7 @@ import { Availability } from "./Availability"
 import listingStyles from "../ListingViewSeeds.module.scss"
 import styles from "./MainDetails.module.scss"
 import { isFeatureFlagOn } from "../../../lib/helpers"
+import { PropertyDetailsCard } from "./PropertyDetailsCard"
 
 type MainDetailsProps = {
   listing: Listing
@@ -29,6 +31,7 @@ type MainDetailsProps = {
   setListingFavorited?: Dispatch<SetStateAction<boolean>>
   showFavoriteButton?: boolean
   showHomeType?: boolean
+  property?: Property
 }
 
 type ListingTag = {
@@ -125,6 +128,7 @@ export const MainDetails = ({
   setListingFavorited,
   showFavoriteButton,
   showHomeType,
+  property,
 }: MainDetailsProps) => {
   if (!listing) return
 
@@ -206,6 +210,15 @@ export const MainDetails = ({
       </div>
 
       <div className={`${listingStyles["hide-desktop"]} seeds-m-bs-content`}>
+        {isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableProperties) && property && (
+          <PropertyDetailsCard
+            heading="Property details"
+            linkText={"Visit the property website"}
+            linkUrl={property.url}
+          >
+            {property.description}
+          </PropertyDetailsCard>
+        )}
         <Availability listing={listing} jurisdiction={jurisdiction} />
       </div>
     </div>
