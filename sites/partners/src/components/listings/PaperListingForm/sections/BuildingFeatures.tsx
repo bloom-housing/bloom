@@ -6,7 +6,7 @@ import SectionWithGrid from "../../../shared/SectionWithGrid"
 import { defaultFieldProps, getLabel } from "../../../../lib/helpers"
 import styles from "../ListingForm.module.scss"
 import { listingParkingTypes } from "@bloom-housing/shared-helpers"
-import { ListingParkingTypesCreate } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { ListingParkingTypeCreate } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 type BuildingFeaturesProps = {
   enableAccessibilityFeatures?: boolean
@@ -14,7 +14,7 @@ type BuildingFeaturesProps = {
   enableParkingFee?: boolean
   enableSmokingPolicyRadio?: boolean
   enableParkingType?: boolean
-  existingParkingTypes?: ListingParkingTypesCreate
+  existingParkingTypes?: ListingParkingTypeCreate
   requiredFields: string[]
 }
 
