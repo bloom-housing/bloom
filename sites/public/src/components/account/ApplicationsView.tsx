@@ -234,50 +234,52 @@ const ApplicationsView = (props: ApplicationsViewProps) => {
                   })}
                   {!applications?.length && !loading && noApplicationsSection()}
                 </LoadingState>
-                <div className={styles["pagination-section"]}>
-                  <div className={styles["pagination-content-wrapper"]}>
-                    <div className={styles["previous-button"]}>
-                      {paginationMeta?.currentPage > 1 && (
-                        <Button
-                          onClick={() => {
-                            void router.push({
-                              pathname: router.pathname,
-                              query: `page=${(paginationMeta?.currentPage - 1).toString()}`,
-                            })
-                          }}
-                          variant="primary-outlined"
-                          size="sm"
-                        >
-                          {t("t.previous")}
-                        </Button>
-                      )}
-                    </div>
-                    <div className={styles["page-info"]}>
-                      {paginationMeta?.currentPage !== undefined &&
-                        paginationMeta?.totalPages !== undefined &&
-                        t("listings.browseListings.pageInfo", {
-                          currentPage: paginationMeta?.currentPage,
-                          totalPages: paginationMeta?.totalPages ? paginationMeta?.totalPages : 1,
-                        })}
-                    </div>
-                    <div className={styles["next-button"]}>
-                      {paginationMeta?.currentPage < paginationMeta?.totalPages && (
-                        <Button
-                          onClick={() => {
-                            void router.push({
-                              pathname: router.pathname,
-                              query: `page=${(paginationMeta?.currentPage + 1).toString()}`,
-                            })
-                          }}
-                          variant="primary-outlined"
-                          size="sm"
-                        >
-                          {t("t.next")}
-                        </Button>
-                      )}
+                {applications?.length > 0 && (
+                  <div className={styles["pagination-section"]}>
+                    <div className={styles["pagination-content-wrapper"]}>
+                      <div className={styles["previous-button"]}>
+                        {paginationMeta?.currentPage > 1 && (
+                          <Button
+                            onClick={() => {
+                              void router.push({
+                                pathname: router.pathname,
+                                query: `page=${(paginationMeta?.currentPage - 1).toString()}`,
+                              })
+                            }}
+                            variant="primary-outlined"
+                            size="sm"
+                          >
+                            {t("t.previous")}
+                          </Button>
+                        )}
+                      </div>
+                      <div className={styles["page-info"]}>
+                        {paginationMeta?.currentPage !== undefined &&
+                          paginationMeta?.totalPages !== undefined &&
+                          t("listings.browseListings.pageInfo", {
+                            currentPage: paginationMeta?.currentPage,
+                            totalPages: paginationMeta?.totalPages,
+                          })}
+                      </div>
+                      <div className={styles["next-button"]}>
+                        {paginationMeta?.currentPage < paginationMeta?.totalPages && (
+                          <Button
+                            onClick={() => {
+                              void router.push({
+                                pathname: router.pathname,
+                                query: `page=${(paginationMeta?.currentPage + 1).toString()}`,
+                              })
+                            }}
+                            variant="primary-outlined"
+                            size="sm"
+                          >
+                            {t("t.next")}
+                          </Button>
+                        )}
+                      </div>
                     </div>
                   </div>
-                </div>
+                )}
               </>
             </BloomCard>
           </div>
