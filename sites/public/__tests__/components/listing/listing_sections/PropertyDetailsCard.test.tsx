@@ -67,7 +67,7 @@ describe("Testing PropertyDetailsCard", () => {
     expect(view.getByText("Gym")).toBeDefined()
     expect(view.getByText("Parking")).toBeDefined()
     const link = view.getByRole("link", { name: "Visit the property website" })
-    expect(link).toHaveAttribute("href", "https://amenities.example.com")
+    expect(link).toHaveAttribute("href", "https://property.example.com")
     expect(link).toHaveAttribute("target", "_blank")
   })
 })
