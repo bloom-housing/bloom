@@ -51,7 +51,7 @@ describe("Testing PropertyDetailsCard", () => {
   it("renders all elements together correctly", () => {
     const view = render(
       <PropertyDetailsCard
-        heading="Building Amenities"
+        heading="Property Details"
         linkUrl="https://property.example.com"
         linkText="Visit the property website"
       >
@@ -62,7 +62,7 @@ describe("Testing PropertyDetailsCard", () => {
         </ul>
       </PropertyDetailsCard>
     )
-    expect(view.getByText("Building Amenities")).toBeDefined()
+    expect(view.getByText("Property Details")).toBeDefined()
     expect(view.getByText("Pool")).toBeDefined()
     expect(view.getByText("Gym")).toBeDefined()
     expect(view.getByText("Parking")).toBeDefined()
