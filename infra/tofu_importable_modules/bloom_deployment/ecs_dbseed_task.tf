@@ -90,7 +90,7 @@ resource "null_resource" "bloom_dbseed_run" {
 
       task_arn="$(
         aws ecs run-task \
-          --profile ${var.aws_profile} \
+           ${var.aws_profile != "" ? "--profile ${var.aws_profile}" : ""} \
           --region ${var.aws_region} \
           --cluster ${aws_ecs_cluster.bloom.arn} \
           --launch-type FARGATE \
@@ -108,14 +108,14 @@ resource "null_resource" "bloom_dbseed_run" {
       echo "Task ARN: $task_arn"
       echo "Waiting for task to stop..."
       aws ecs wait tasks-stopped \
-        --profile ${var.aws_profile} \
+        ${var.aws_profile != "" ? "--profile ${var.aws_profile}" : ""} \
         --region ${var.aws_region} \
         --cluster ${aws_ecs_cluster.bloom.arn} \
         --tasks "$task_arn"
 
       exit_code="$(
         aws ecs describe-tasks \
-          --profile ${var.aws_profile} \
+          ${var.aws_profile != "" ? "--profile ${var.aws_profile}" : ""} \
           --region ${var.aws_region} \
           --cluster ${aws_ecs_cluster.bloom.arn} \
           --tasks "$task_arn" \
@@ -126,7 +126,7 @@ resource "null_resource" "bloom_dbseed_run" {
       if [ "$exit_code" != "0" ]; then
         reason="$(
           aws ecs describe-tasks \
-            --profile ${var.aws_profile} \
+            ${var.aws_profile != "" ? "--profile ${var.aws_profile}" : ""} \
             --region ${var.aws_region} \
             --cluster ${aws_ecs_cluster.bloom.arn} \
             --tasks "$task_arn" \
