@@ -19,6 +19,7 @@ import ManageIconSection from "../../components/settings/ManageIconSection"
 import { ColDef, ColGroupDef } from "ag-grid-community"
 import { PropertyDrawer } from "../../components/settings/PropertyDrawer"
 import { useSWRConfig } from "swr"
+import { PropertyDeleteModal } from "../../components/settings/PropertyDeleteModal"
 
 const SettingsProperties = () => {
   const router = useRouter()
@@ -27,7 +28,8 @@ const SettingsProperties = () => {
   const { mutate: updateProperty, isLoading: isUpdateLoading } = useMutate()
   const { mutate: createProperty, isLoading: isCreateLoading } = useMutate()
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
-  const [selectedProperty, setSelectedProperty] = useState<Property | null>(null)
+  const [editConfirmModalOpen, setEditConfirmModalOpen] = useState<Property | null>(null)
+  const [deleteConfirmModalOpen, setDeleteConfirmModalOpen] = useState<Property | null>(null)
   const { addToast } = useContext(MessageContext)
   const { profile, propertiesService, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
   const enableProperties = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableProperties)
@@ -106,11 +108,11 @@ const SettingsProperties = () => {
               onCopy={() => console.log("Copy: ", data.name)}
               copyTestId={`property-copy-icon: ${data.name}`}
               onEdit={() => {
+                setEditConfirmModalOpen(data)
                 setIsDrawerOpen(true)
-                setSelectedProperty(data)
               }}
               editTestId={`property-edit-icon: ${data.name}`}
-              onDelete={() => console.log("Copy: ", data.name)}
+              onDelete={() => setDeleteConfirmModalOpen(data)}
               deleteTestId={`property-delete-icon: ${data.name}`}
               align="start"
             />
@@ -122,13 +124,13 @@ const SettingsProperties = () => {
   )
 
   const handleSave = (propertyData: PropertyCreate) => {
-    if (selectedProperty) {
+    if (editConfirmModalOpen) {
       void updateProperty(() =>
         propertiesService
           .update({
             body: {
               ...propertyData,
-              id: selectedProperty.id,
+              id: editConfirmModalOpen.id,
             },
           })
           .then(() => {
@@ -140,7 +142,7 @@ const SettingsProperties = () => {
           })
           .finally(() => {
             setIsDrawerOpen(false)
-            setSelectedProperty(null)
+            setEditConfirmModalOpen(null)
             void mutate(cacheKey)
           })
       )
@@ -216,12 +218,21 @@ const SettingsProperties = () => {
         drawerOpen={isDrawerOpen}
         onDrawerClose={() => {
           setIsDrawerOpen(false)
-          setSelectedProperty(null)
+          setEditConfirmModalOpen(null)
         }}
-        editedProperty={selectedProperty}
+        editedProperty={editConfirmModalOpen}
         saveQuestion={handleSave}
         isLoading={isCreateLoading || isUpdateLoading}
       />
+      {deleteConfirmModalOpen && (
+        <PropertyDeleteModal
+          property={deleteConfirmModalOpen}
+          onClose={() => {
+            setDeleteConfirmModalOpen(null)
+            void mutate(cacheKey)
+          }}
+        />
+      )}
     </>
   )
 }
