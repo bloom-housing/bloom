@@ -3453,7 +3453,7 @@ export interface IdDTO {
   ordinal?: number
 }
 
-export interface ListingParkingTypes {
+export interface ListingParkingType {
   /**  */
   id: string
 
@@ -4747,7 +4747,7 @@ export interface Listing {
   parkingFee?: string
 
   /**  */
-  parkingTypes?: ListingParkingTypes
+  parkType?: ListingParkingType
 
   /**  */
   postmarkedApplicationsReceivedByDate?: Date
@@ -5235,7 +5235,7 @@ export interface ListingFeaturesCreate {
   wideDoorways?: boolean
 }
 
-export interface ListingParkingTypesCreate {
+export interface ListingParkingTypeCreate {
   /**  */
   onStreet?: boolean
 
@@ -5856,7 +5856,7 @@ export interface ListingCreate {
   listingFeatures?: ListingFeaturesCreate
 
   /**  */
-  parkingTypes?: ListingParkingTypesCreate
+  parkType?: ListingParkingTypeCreate
 
   /**  */
   requestedChangesUser?: IdDTO
@@ -6328,7 +6328,7 @@ export interface ListingUtilitiesUpdate {
   id?: string
 }
 
-export interface ListingParkingTypesUpdate {
+export interface ListingParkingTypeUpdate {
   /**  */
   onStreet?: boolean
 
@@ -6742,7 +6742,7 @@ export interface ListingUpdate {
   listingUtilities?: ListingUtilitiesUpdate
 
   /**  */
-  parkingTypes?: ListingParkingTypesUpdate
+  parkType?: ListingParkingTypeUpdate
 
   /**  */
   requestedChangesUser?: IdDTO

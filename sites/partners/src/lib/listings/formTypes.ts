@@ -11,7 +11,7 @@ import {
   MultiselectQuestion,
   PaperApplication,
   PaperApplicationCreate,
-  ListingParkingTypesCreate,
+  ListingParkingTypeCreate,
   Unit,
   UnitGroup,
   UnitGroupAmiLevel,
@@ -25,7 +25,7 @@ export enum AnotherAddressEnum {
 
 export type FormListing = Omit<
   Listing,
-  "countyCode" | "listingFeatures" | "listingUtilities" | "parkingTypes"
+  "countyCode" | "listingFeatures" | "listingUtilities" | "parkType"
 > & {
   applicationDueDateField?: {
     month: string
@@ -99,7 +99,7 @@ export type FormListing = Omit<
   listingUtilities?: ListingUtilitiesCreate
   allowsDogs?: boolean
   allowsCats?: boolean
-  parkingTypes?: ListingParkingTypesCreate
+  parkType?: ListingParkingTypeCreate
   parking?: string[]
   petPolicyPreferences?: string[]
   configurableAccessibilityFeatures?: unknown

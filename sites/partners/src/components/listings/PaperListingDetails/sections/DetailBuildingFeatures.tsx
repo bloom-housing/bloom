@@ -52,10 +52,10 @@ const DetailBuildingFeatures = () => {
 
   const getParkingTypes = () => {
     let parkingTypesAvailable = false
-    const parking = Object.keys(listing?.parkingTypes ?? {})
+    const parking = Object.keys(listing?.parkType ?? {})
       .filter((feature) => listingParkingTypes.includes(feature))
       .map((entry) => {
-        if (listing?.parkingTypes[entry]) {
+        if (listing?.parkType[entry]) {
           parkingTypesAvailable = true
           return (
             <li key={entry} className={"list-disc mx-5 mb-1 md:w-1/3 w-full grow"}>

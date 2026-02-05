@@ -193,7 +193,7 @@ describe('Testing listing csv export service', () => {
     marketingSeason: MarketingSeasonEnum.summer,
     marketingMonth: MonthEnum.july,
     marketingYear: 2025,
-    parkingTypes: {
+    parkType: {
       id: 'parking_types_id',
       createdAt: timestamp,
       updatedAt: timestamp,

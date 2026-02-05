@@ -177,7 +177,7 @@ includeViews.full = {
   listingsApplicationMailingAddress: true,
   requestedChangesUser: true,
   requiredDocumentsList: true,
-  parkingTypes: true,
+  parkType: true,
   units: {
     include: {
       unitAmiChartOverrides: true,
@@ -1476,10 +1476,10 @@ export class ListingService implements OnModuleInit {
               },
             }
           : undefined,
-        parkingTypes: dto.parkingTypes
+        parkType: dto.parkType
           ? {
               create: {
-                ...dto.parkingTypes,
+                ...dto.parkType,
               },
             }
           : undefined,
@@ -2223,7 +2223,7 @@ export class ListingService implements OnModuleInit {
 
     const previousFeaturesId = storedListing.listingFeatures?.id;
     const previousUtilitiesId = storedListing.listingUtilities?.id;
-    const previousParkingTypeId = storedListing.parkingTypes?.id;
+    const previousParkingTypeId = storedListing.parkType?.id;
     const previousNeighborhoodAmenitiesId =
       storedListing.listingNeighborhoodAmenities?.id;
 
@@ -2474,17 +2474,17 @@ export class ListingService implements OnModuleInit {
                 },
               }
             : undefined,
-          parkingTypes: incomingDto.parkingTypes
+          parkType: incomingDto.parkType
             ? {
                 upsert: {
                   where: {
                     id: previousParkingTypeId,
                   },
                   create: {
-                    ...incomingDto.parkingTypes,
+                    ...incomingDto.parkType,
                   },
                   update: {
-                    ...incomingDto.parkingTypes,
+                    ...incomingDto.parkType,
                   },
                 },
               }

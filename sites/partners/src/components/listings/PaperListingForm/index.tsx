@@ -658,7 +658,7 @@ const ListingForm = ({
                               FeatureFlagEnum.enableParkingType,
                               jurisdictionId
                             )}
-                            existingParkingTypes={listing?.parkingTypes}
+                            existingParkingTypes={listing?.parkType}
                             requiredFields={requiredFields}
                           />
                           <NeighborhoodAmenities

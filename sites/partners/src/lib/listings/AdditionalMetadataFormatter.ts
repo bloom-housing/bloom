@@ -169,7 +169,7 @@ export default class AdditionalMetadataFormatter extends Formatter {
     }
 
     if (this.data.parking) {
-      this.data.parkingTypes = listingParkingTypes.reduce((acc, current) => {
+      this.data.parkType = listingParkingTypes.reduce((acc, current) => {
         const isSelected = this.data.parking.some((parking) => parking === current)
         return {
           ...acc,

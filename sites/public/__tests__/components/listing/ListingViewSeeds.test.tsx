@@ -423,7 +423,7 @@ describe("<ListingViewSeeds>", () => {
         <ListingViewSeeds
           listing={{
             ...listing,
-            parkingTypes: {
+            parkType: {
               id: "parking_types_id",
               createdAt: new Date(),
               updatedAt: new Date(),
@@ -466,7 +466,7 @@ describe("<ListingViewSeeds>", () => {
         <ListingViewSeeds
           listing={{
             ...listing,
-            parkingTypes: {
+            parkType: {
               id: "parking_types_id",
               createdAt: new Date(),
               updatedAt: new Date(),
@@ -509,7 +509,7 @@ describe("<ListingViewSeeds>", () => {
         <ListingViewSeeds
           listing={{
             ...listing,
-            parkingTypes: {
+            parkType: {
               id: "parking_types_id",
               createdAt: new Date(),
               updatedAt: new Date(),

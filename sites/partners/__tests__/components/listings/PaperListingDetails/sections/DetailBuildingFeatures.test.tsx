@@ -91,7 +91,7 @@ describe("DetailBuildingFeatures", () => {
         <ListingContext.Provider
           value={{
             ...listing,
-            parkingTypes: {
+            parkType: {
               id: "testId",
               createdAt: new Date(),
               updatedAt: new Date(),
@@ -126,7 +126,7 @@ describe("DetailBuildingFeatures", () => {
         <ListingContext.Provider
           value={{
             ...listing,
-            parkingTypes: {
+            parkType: {
               id: "testId",
               createdAt: new Date(),
               updatedAt: new Date(),

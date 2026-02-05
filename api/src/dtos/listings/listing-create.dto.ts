@@ -17,7 +17,7 @@ import {
 } from '../../decorators/validate-units-required.decorator';
 import { ValidateListingPublish } from '../../decorators/validate-listing-publish.decorator';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
-import { ListingParkingTypesCreate } from './listing-parking-types-create.dto';
+import { ListingParkingTypeCreate } from './listing-parking-type-create.dto';
 
 export class ListingCreate extends OmitType(ListingUpdate, [
   'applicationMethods',
@@ -150,9 +150,9 @@ export class ListingCreate extends OmitType(ListingUpdate, [
     groups: [ValidationsGroupsEnum.default],
   })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @Type(() => ListingParkingTypesCreate)
-  @ApiPropertyOptional({ type: ListingParkingTypesCreate })
-  parkingTypes?: ListingParkingTypesCreate;
+  @Type(() => ListingParkingTypeCreate)
+  @ApiPropertyOptional({ type: ListingParkingTypeCreate })
+  parkType?: ListingParkingTypeCreate;
 
   @Expose()
   @ValidateListingPublish('listingNeighborhoodAmenities', {

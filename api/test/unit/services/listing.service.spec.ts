@@ -574,7 +574,7 @@ describe('Testing listing service', () => {
         wideDoorways: true,
         loweredCabinets: false,
       },
-      parkingTypes: {
+      parkType: {
         onStreet: false,
         offStreet: false,
         garage: false,
@@ -671,7 +671,7 @@ describe('Testing listing service', () => {
           listingsApplicationPickUpAddress: true,
           listingsApplicationDropOffAddress: true,
           listingsApplicationMailingAddress: true,
-          parkingTypes: true,
+          parkType: true,
           units: {
             include: {
               unitAmiChartOverrides: true,
@@ -2439,7 +2439,7 @@ describe('Testing listing service', () => {
           listingsApplicationPickUpAddress: true,
           listingsApplicationDropOffAddress: true,
           listingsApplicationMailingAddress: true,
-          parkingTypes: true,
+          parkType: true,
           units: {
             include: {
               unitAmiChartOverrides: true,
@@ -2959,7 +2959,7 @@ describe('Testing listing service', () => {
           listingsApplicationPickUpAddress: true,
           listingsApplicationDropOffAddress: true,
           listingsApplicationMailingAddress: true,
-          parkingTypes: true,
+          parkType: true,
           units: {
             include: {
               unitAmiChartOverrides: true,
@@ -3233,7 +3233,7 @@ describe('Testing listing service', () => {
           requestedChangesUser: true,
           reservedCommunityTypes: true,
           requiredDocumentsList: true,
-          parkingTypes: true,
+          parkType: true,
           units: {
             include: {
               amiChart: {
@@ -3362,7 +3362,7 @@ describe('Testing listing service', () => {
           requestedChangesUser: true,
           reservedCommunityTypes: true,
           requiredDocumentsList: true,
-          parkingTypes: true,
+          parkType: true,
           units: {
             include: {
               amiChart: {
@@ -3503,7 +3503,7 @@ describe('Testing listing service', () => {
               internet: true,
             },
           },
-          parkingTypes: {
+          parkType: {
             create: {
               carport: false,
               garage: false,
@@ -3751,7 +3751,7 @@ describe('Testing listing service', () => {
           requestedChangesUser: true,
           reservedCommunityTypes: true,
           requiredDocumentsList: true,
-          parkingTypes: true,
+          parkType: true,
           units: {
             include: {
               amiChart: {
@@ -3894,7 +3894,7 @@ describe('Testing listing service', () => {
           requestedChangesUser: true,
           reservedCommunityTypes: true,
           requiredDocumentsList: true,
-          parkingTypes: true,
+          parkType: true,
           units: {
             include: {
               amiChart: {
@@ -4033,7 +4033,7 @@ describe('Testing listing service', () => {
               internet: true,
             },
           },
-          parkingTypes: {
+          parkType: {
             create: {
               carport: false,
               garage: false,
@@ -4246,7 +4246,7 @@ describe('Testing listing service', () => {
           requestedChangesUser: true,
           reservedCommunityTypes: true,
           requiredDocumentsList: true,
-          parkingTypes: true,
+          parkType: true,
           units: {
             include: {
               amiChart: {
@@ -4387,7 +4387,7 @@ describe('Testing listing service', () => {
               internet: true,
             },
           },
-          parkingTypes: {
+          parkType: {
             create: {
               carport: false,
               garage: false,
@@ -4654,7 +4654,7 @@ describe('Testing listing service', () => {
           requestedChangesUser: true,
           reservedCommunityTypes: true,
           requiredDocumentsList: true,
-          parkingTypes: true,
+          parkType: true,
           units: {
             include: {
               amiChart: {
@@ -4770,7 +4770,7 @@ describe('Testing listing service', () => {
           requestedChangesUser: true,
           reservedCommunityTypes: true,
           requiredDocumentsList: true,
-          parkingTypes: true,
+          parkType: true,
           units: {
             include: {
               amiChart: {
@@ -4873,7 +4873,7 @@ describe('Testing listing service', () => {
           requestedChangesUser: true,
           reservedCommunityTypes: true,
           requiredDocumentsList: true,
-          parkingTypes: true,
+          parkType: true,
           units: {
             include: {
               amiChart: {
@@ -5313,7 +5313,7 @@ describe('Testing listing service', () => {
           requestedChangesUser: true,
           reservedCommunityTypes: true,
           requiredDocumentsList: true,
-          parkingTypes: true,
+          parkType: true,
           units: {
             include: {
               amiChart: {
@@ -5863,7 +5863,7 @@ describe('Testing listing service', () => {
           requestedChangesUser: true,
           reservedCommunityTypes: true,
           requiredDocumentsList: true,
-          parkingTypes: true,
+          parkType: true,
           units: {
             include: {
               amiChart: {
@@ -6139,7 +6139,7 @@ describe('Testing listing service', () => {
           requestedChangesUser: true,
           reservedCommunityTypes: true,
           requiredDocumentsList: true,
-          parkingTypes: true,
+          parkType: true,
           units: {
             include: {
               amiChart: {

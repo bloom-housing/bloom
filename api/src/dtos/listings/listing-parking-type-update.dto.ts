@@ -1,10 +1,10 @@
 import { ApiPropertyOptional, OmitType } from '@nestjs/swagger';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
-import { ListingParkingTypes } from './listing-parking-types.dto';
+import { ListingParkingType } from './listing-parking-type.dto';
 import { Expose } from 'class-transformer';
 import { IsString, IsUUID } from 'class-validator';
 
-export class ListingParkingTypesUpdate extends OmitType(ListingParkingTypes, [
+export class ListingParkingTypeUpdate extends OmitType(ListingParkingType, [
   'createdAt',
   'id',
   'updatedAt',

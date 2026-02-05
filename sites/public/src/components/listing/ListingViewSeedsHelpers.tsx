@@ -278,10 +278,10 @@ export const getFeatures = (
 
   if (enableParkingTypes) {
     let parkingTypesAvailable = false
-    const parking = Object.keys(listing?.parkingTypes ?? {})
+    const parking = Object.keys(listing?.parkType ?? {})
       .filter((feature) => listingParkingTypes.includes(feature))
       .map((entry) => {
-        if (listing?.parkingTypes[entry]) {
+        if (listing?.parkType[entry]) {
           parkingTypesAvailable = true
           return (
             <li key={entry} className={styles["list-item"]}>

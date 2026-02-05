@@ -66,7 +66,7 @@ import { ListingDocuments } from './listing-documents.dto';
 import { ValidateListingImages } from '../../decorators/validate-listing-images.decorator';
 import Property from '../properties/property.dto';
 import { ListingFeaturesConfiguration } from '../jurisdictions/listing-features-config.dto';
-import { ListingParkingTypes } from './listing-parking-types.dto';
+import { ListingParkingType } from './listing-parking-type.dto';
 
 class Listing extends AbstractDTO {
   @Expose()
@@ -567,9 +567,9 @@ class Listing extends AbstractDTO {
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => ListingParkingTypes)
-  @ApiPropertyOptional({ type: ListingParkingTypes })
-  parkingTypes?: ListingParkingTypes;
+  @Type(() => ListingParkingType)
+  @ApiPropertyOptional({ type: ListingParkingType })
+  parkType?: ListingParkingType;
 
   @Expose()
   @ValidateListingPublish('postmarkedApplicationsReceivedByDate', {
