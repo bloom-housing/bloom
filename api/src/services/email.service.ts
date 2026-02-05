@@ -511,10 +511,8 @@ export class EmailService {
       jurisdiction.emailFromAddress,
       subject,
       this.template('application-update')({
-        appOptions: {
-          listingName: listing.name,
-          applicantName,
-        },
+        appOptions: { listingName: listing.name },
+        applicantName,
         summaryItems,
         loginUrl,
         contactEmail: contactEmail,
