@@ -99,6 +99,12 @@ services:
       context: ./api/dbinit
       dockerfile: Dockerfile
     restart: no
+    deploy:
+      resources:
+        # Keep in sync with infra/tofu_importable_modules/bloom_deployment/ecs_dbinit_task.tf
+        limits:
+          cpus: '0.25'
+          memory: '512mb'
     environment:
       PGPASSWORD: "postgres_pw"
     entrypoint: "psql"
@@ -144,6 +150,12 @@ services:
       context: ./api
       dockerfile: Dockerfile.dbseed
     restart: no
+    deploy:
+      resources:
+        # Keep in sync with infra/tofu_importable_modules/bloom_deployment/ecs_dbseed_task.tf
+        limits:
+          cpus: '1'
+          memory: '4096mb'
     environment:
       DATABASE_URL: "postgres://bloom_api:bloom_api_pw@db:5432/bloom_prisma"
     command:
@@ -181,6 +193,11 @@ services:
       endpoint_mode: "dnsrr"
       mode: replicated
       replicas: ${API_REPLICAS:-1}
+      resources:
+        # Keep in sync with infra/tofu_importable_modules/bloom_deployment/ecs_api_service.tf
+        limits:
+          cpus: '1'
+          memory: '2048mb'
     environment:
       PORT: 3100
       NODE_ENV: "production"
@@ -209,6 +226,11 @@ services:
       endpoint_mode: "dnsrr"
       mode: replicated
       replicas: ${PARTNERS_REPLICAS:-1}
+      resources:
+        # Keep in sync with infra/tofu_importable_modules/bloom_deployment/ecs_partners_service.tf
+        limits:
+          cpus: '2'
+          memory: '4096mb'
     environment:
       NODE_ENV: "production"
       NEXTJS_PORT: 3001
@@ -239,6 +261,11 @@ services:
       endpoint_mode: "dnsrr"
       mode: replicated
       replicas: ${PUBLIC_REPLICAS:-1}
+      resources:
+        # Keep in sync with infra/tofu_importable_modules/bloom_deployment/ecs_public_service.tf
+        limits:
+          cpus: '2'
+          memory: '6144mb'
     environment:
       NODE_ENV: "production"
       NEXTJS_PORT: 3000

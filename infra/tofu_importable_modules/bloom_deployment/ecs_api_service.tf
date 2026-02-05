@@ -22,7 +22,7 @@ resource "aws_ecs_task_definition" "bloom_api" {
   execution_role_arn = aws_iam_role.bloom_ecs["api"].arn
   task_role_arn      = aws_iam_role.bloom_container["api"].arn
 
-  # https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_definition_parameters.html#task_size
+  # Keep in sync with docker-compose.yml
   cpu    = 1024     # 1 vCPU
   memory = 2 * 1024 # 2 GiB in MiB
 
