@@ -37,7 +37,14 @@ const FormSignIn = ({
   const createAccountUrl = getListingRedirectUrl(listingIdRedirect, "/create-account")
 
   return (
-    <BloomCard iconSymbol="profile" title={t("nav.signIn")} headingPriority={1}>
+    <BloomCard
+      iconSymbol="userCircle"
+      title={t("nav.signIn")}
+      headingPriority={1}
+      iconClass={"card-icon"}
+      iconOutlined={true}
+      headingClass="seeds-large-heading"
+    >
       <>
         <FormSignInErrorBox
           errors={errors}
@@ -51,9 +58,9 @@ const FormSignIn = ({
             <Heading
               priority={2}
               size="2xl"
-              className={
+              className={`${
                 process.env.showPwdless ? styles["pwdless-header"] : styles["default-header"]
-              }
+              } seeds-medium-heading`}
             >
               {t("authentication.createAccount.noAccount")}
             </Heading>

@@ -29,7 +29,7 @@ const DetailNeighborhoodAmenities = () => {
     )
   }, [jurisdictionData?.visibleNeighborhoodAmenities])
 
-  if (!enableNeighborhoodAmenities) {
+  if (!enableNeighborhoodAmenities || visibleAmenities.length === 0) {
     return <></>
   }
 

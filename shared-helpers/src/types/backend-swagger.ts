@@ -1840,6 +1840,31 @@ export class ApplicationsService {
       axios(configs, resolve, reject)
     })
   }
+  /**
+   * Send application update email by id
+   */
+  notifyUpdate(
+    params: {
+      /**  */
+      id: string
+      /** requestBody */
+      body?: ApplicationUpdateEmail
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/applications/{id}/notify-update"
+      url = url.replace("{id}", params["id"] + "")
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
 }
 
 export class AssetsService {
@@ -8470,6 +8495,17 @@ export interface ApplicationUpdate {
 
   /**  */
   preferredUnitTypes: IdDTO[]
+}
+
+export interface ApplicationUpdateEmail {
+  /**  */
+  previousStatus?: ApplicationStatusEnum
+
+  /**  */
+  previousAccessibleUnitWaitlistNumber?: number
+
+  /**  */
+  previousConventionalUnitWaitlistNumber?: number
 }
 
 export interface CreatePresignedUploadMetadata {

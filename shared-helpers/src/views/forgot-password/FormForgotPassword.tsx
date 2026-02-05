@@ -42,7 +42,12 @@ const FormForgotPassword = ({
   const router = useRouter()
 
   return (
-    <BloomCard title={t("authentication.forgotPassword.sendEmail")} iconSymbol={"profile"}>
+    <BloomCard
+      title={t("authentication.forgotPassword.sendEmail")}
+      iconSymbol={"userCircle"}
+      iconClass={"card-icon"}
+      headingClass={"seeds-large-heading"}
+    >
       <>
         {Object.entries(errors).length > 0 && !networkError.error && (
           <AlertBox type="alert" inverted closeable>
@@ -73,7 +78,7 @@ const FormForgotPassword = ({
               errorMessage={errors.email ? t("authentication.signIn.loginError") : undefined}
               register={register}
               onChange={() => networkError.reset()}
-              labelClassName={"text__caps-spaced"}
+              labelClassName={`text__caps-spaced ${styles["field-weight"]}`}
             />
             <Button type="submit" className={styles["forgot-password-submit-button"]}>
               {t("authentication.forgotPassword.sendEmailButton")}
