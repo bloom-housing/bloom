@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react"
 import { t, MinimalTable, Field, StandardTableData } from "@bloom-housing/ui-components"
 import {
+  MultiselectOption,
   MultiselectQuestion,
   MultiselectQuestionsApplicationSectionEnum,
+  MultiselectQuestionsStatusEnum,
   PaginatedMultiselectQuestion,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { Button, Card, Drawer, Grid, Tag, Icon } from "@bloom-housing/ui-seeds"
@@ -11,19 +13,12 @@ import InformationCircleIcon from "@heroicons/react/24/solid/InformationCircleIc
 import LinkComponent from "../../../../components/core/LinkComponent"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 import styles from "../ListingForm.module.scss"
+import { useJurisdictionalMultiselectQuestionList } from "../../../../lib/hooks"
 
 type SelectAndOrderProps = {
   formKey: string
   addText: string
   applicationSection: MultiselectQuestionsApplicationSectionEnum
-  dataFetcher: (
-    jurisdiction?: string,
-    applicationSection?: MultiselectQuestionsApplicationSectionEnum
-  ) => {
-    data: PaginatedMultiselectQuestion
-    loading: boolean
-    error: any
-  }
   drawerButtonText: string
   drawerButtonId: string
   drawerSubtitle?: string
@@ -40,7 +35,6 @@ type SelectAndOrderProps = {
 const SelectAndOrder = ({
   addText,
   applicationSection,
-  dataFetcher,
   drawerButtonText,
   drawerButtonId,
   drawerSubtitle,
@@ -97,10 +91,13 @@ const SelectAndOrder = ({
   const draggableTableData: StandardTableData = useMemo(
     () =>
       draftListingData.map((item) => ({
-        name: { content: item.text },
+        name: { content: item.name || item.text },
         additionalFields: {
           content: (
-            <>{item?.options?.some((item) => item.collectAddress) && additionalFieldsTag()}</>
+            <>
+              {item?.options?.some((item) => item.shouldCollectAddress || item.collectAddress) &&
+                additionalFieldsTag()}
+            </>
           ),
         },
         action: {
@@ -128,10 +125,13 @@ const SelectAndOrder = ({
     () =>
       listingData.map((item, index) => ({
         order: { content: index + 1 },
-        name: { content: item.text },
+        name: { content: item.name || item.text },
         additionalFields: {
           content: (
-            <>{item?.options?.some((item) => item.collectAddress) && additionalFieldsTag()}</>
+            <>
+              {item?.options?.some((item) => item.shouldCollectAddress || item.collectAddress) &&
+                additionalFieldsTag()}
+            </>
           ),
         },
         action: {
@@ -161,7 +161,9 @@ const SelectAndOrder = ({
       const newDragOrder = []
       dragOrder.forEach((item) => {
         newDragOrder.push(
-          draftListingData.filter((draftItem) => draftItem.text === item.name.content)[0]
+          draftListingData.filter(
+            (draftItem) => (draftItem.name || draftItem.text) === item.name.content
+          )[0]
         )
       })
       setDraftListingData(newDragOrder)
@@ -169,9 +171,10 @@ const SelectAndOrder = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dragOrder])
 
-  const { data } = dataFetcher(
+  const { data } = useJurisdictionalMultiselectQuestionList(
     jurisdiction,
-    applicationSection as unknown as MultiselectQuestionsApplicationSectionEnum
+    applicationSection as unknown as MultiselectQuestionsApplicationSectionEnum,
+    [MultiselectQuestionsStatusEnum.active] // TODO: this should be a feature flag
   )
   const fetchedData = data?.items ?? []
 
@@ -197,12 +200,12 @@ const SelectAndOrder = ({
     optionIndex: number,
     item: MultiselectQuestion
   ) => {
-    const getInfoSection = (option, index) => {
+    const getInfoSection = (option: MultiselectQuestion | MultiselectOption, index: number) => {
       const isNotLastItem = index < item.options?.length - 1
       return (
         <div key={index} className={isNotLastItem ? "mb-5" : "mb-1"}>
           <div className={"font-semibold mb-1 text-gray-800"}>
-            <span>{option.text}</span>
+            <span>{option.name || option.text}</span>
           </div>
           {option.description && (
             <div
@@ -227,7 +230,7 @@ const SelectAndOrder = ({
               })}
             </div>
           )}
-          {option.collectAddress && (
+          {(option["shouldCollectAddress"] || option["collectAddress"]) && (
             <div
               className={`${
                 isNotLastItem && (option.description || option.links?.length > 0) ? "-mt-4" : "mt-0"
@@ -241,7 +244,7 @@ const SelectAndOrder = ({
     }
     return (
       <div className="ml-8 -mt-6 mb-4 text-sm">
-        {item.options?.some((option) => option.collectAddress) && (
+        {item.options?.some((option) => option.shouldCollectAddress || option.collectAddress) && (
           <div className="mt-6 mb-2">{additionalFieldsTag()}</div>
         )}
         <div>
@@ -368,6 +371,18 @@ const SelectAndOrder = ({
             <Card.Section>
               {fetchedData.map((item, index) => {
                 const previewShown = openPreviews.some((preview) => preview === index)
+                let variant = null
+                switch (item.status) {
+                  case MultiselectQuestionsStatusEnum.active:
+                    variant = "success"
+                    break
+                  case MultiselectQuestionsStatusEnum.toRetire:
+                  case MultiselectQuestionsStatusEnum.retired:
+                    variant = "highlight-warm"
+                    break
+                }
+                const statusText = `${item.status.charAt(0).toUpperCase()}${item.status.slice(1)}`
+
                 return (
                   <Grid key={index}>
                     <Grid.Row>
@@ -377,7 +392,11 @@ const SelectAndOrder = ({
                           id={`${formKey}.${item.id}`}
                           name={`${formKey}.${item.id}`}
                           type="checkbox"
-                          label={item.text}
+                          label={
+                            <>
+                              <span>{item.name || item.text}</span> <Tag variant={variant}>{statusText}</Tag>
+                            </>
+                          }
                           register={register}
                           inputProps={{
                             defaultChecked: draftListingData.some(

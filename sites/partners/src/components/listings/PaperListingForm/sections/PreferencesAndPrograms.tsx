@@ -5,7 +5,6 @@ import {
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { t } from "@bloom-housing/ui-components"
 import SelectAndOrder from "./SelectAndOrder"
-import { useJurisdictionalMultiselectQuestionList } from "../../../../lib/hooks"
 import { FormListing } from "../../../../lib/listings/formTypes"
 
 type ProgramsAndPreferencesProps = {
@@ -33,7 +32,6 @@ const ProgramsAndPreferences = ({
     <SelectAndOrder
       addText={t("listings.addProgram")}
       applicationSection={MultiselectQuestionsApplicationSectionEnum.programs}
-      dataFetcher={useJurisdictionalMultiselectQuestionList}
       drawerButtonText={t("listings.selectPrograms")}
       drawerButtonId="select-programs-button"
       drawerTitle={t("listings.addPrograms")}
@@ -49,7 +47,6 @@ const ProgramsAndPreferences = ({
     <SelectAndOrder
       addText={t("listings.addCommunityTypes")}
       applicationSection={MultiselectQuestionsApplicationSectionEnum.programs}
-      dataFetcher={useJurisdictionalMultiselectQuestionList}
       drawerButtonText={t("listings.selectCommunityTypes")}
       drawerButtonId="select-community-types-button"
       drawerTitle={t("listings.addCommunityTypes")}
@@ -70,7 +67,6 @@ const ProgramsAndPreferences = ({
         <SelectAndOrder
           addText={t("listings.addPreference")}
           applicationSection={MultiselectQuestionsApplicationSectionEnum.preferences}
-          dataFetcher={useJurisdictionalMultiselectQuestionList}
           drawerButtonText={t("listings.selectPreferences")}
           drawerButtonId="select-preferences-button"
           drawerSubtitle={
