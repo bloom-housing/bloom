@@ -13,7 +13,7 @@
       gap: var(--seeds-s4);
 
       @media (--md-and-up) {
-        width: var(--seeds-width-2-3rd);
+        width: var(--seeds-width-2-3rd); 
       }
     }
 
@@ -55,21 +55,21 @@
     display: flex;
     flex-direction: column;
     gap: var(--seeds-spacer-content);
-
+  
     .contact-card-subsection {
       display: flex;
       flex-direction: column;
       gap: var(--seeds-s4);
     }
-
+  
     .contact-card-title {
       font-weight: var(--seeds-font-weight-semibold);
     }
-
+  
     .contact-card-description {
       color: var(--seeds-text-color-light);
     }
-
+  
     .contact-card-info {
       font-weight: var(--seeds-font-weight-bold);
     }

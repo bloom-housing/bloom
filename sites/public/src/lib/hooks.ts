@@ -16,7 +16,6 @@ import {
   MultiselectQuestionFilterParams,
   OrderByEnum,
   PaginatedListing,
-  Property,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { ParsedUrlQuery } from "querystring"
 import { AppSubmissionContext } from "./applications/AppSubmissionContext"
@@ -356,22 +355,4 @@ export async function fetchMultiselectProgramData(req: any, jurisdictionId: stri
   } catch (error) {
     console.log("error = ", error)
   }
-}
-
-export function useProperty(propertyId: string) {
-  const { propertiesService } = useContext(AuthContext)
-  const [loading, setLoading] = useState(!!propertyId)
-  const [property, setProperty] = useState<Property | undefined>(undefined)
-  const [error, setError] = useState<Error | undefined>(undefined)
-
-  useEffect(() => {
-    if (loading && propertyId) {
-      propertiesService
-        .getById({ id: propertyId })
-        .then((res) => setProperty(res))
-        .catch((err) => setError(err))
-        .finally(() => setLoading(false))
-    }
-  }, [propertyId, loading, propertiesService])
-  return { property, loading, error }
 }
