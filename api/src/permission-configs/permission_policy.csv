@@ -59,6 +59,7 @@ p, supportAdmin, property, true, .*
 p, jurisdictionAdmin, property, true, .*
 p, limitedJurisdictionAdmin, property, true, .*
 p, partner, property, true, read
+p, anonymous, property, true, read
 
 p, admin, propertyGroup, true, .*
 p, supportAdmin, propertyGroup, true, .*
