@@ -10,6 +10,7 @@ import {
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 import {
   Accessibility,
+  EnumListingListingType,
   Unit,
   UnitGroup,
   UnitType,
@@ -24,6 +25,7 @@ type FormHouseholdDetailsProps = {
   enableOtherAdaOption?: boolean
   enableUnitGroups?: boolean
   enableFullTimeStudentQuestion?: boolean
+  listingType?: EnumListingListingType
 }
 
 const FormHouseholdDetails = ({
@@ -34,13 +36,14 @@ const FormHouseholdDetails = ({
   enableOtherAdaOption,
   enableUnitGroups,
   enableFullTimeStudentQuestion,
+  listingType,
 }: FormHouseholdDetailsProps) => {
   const formMethods = useFormContext()
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register } = formMethods
 
   const unitTypes = getUniqueUnitTypes(listingUnits)
-  const unitGroupUnitTypes = getUniqueUnitGroupUnitTypes(listingUnitGroups)
+  const unitGroupUnitTypes = getUniqueUnitGroupUnitTypes(listingUnitGroups, listingType)
 
   const preferredUnitOptions = unitTypes?.map((item) => {
     const isChecked = !!applicationUnitTypes?.find((unit) => unit.id === item.id)

@@ -50,7 +50,7 @@ const ApplicationPreferredUnits = () => {
   }
 
   const unitTypes = enableUnitGroups
-    ? getUniqueUnitGroupUnitTypes(listing?.unitGroups)
+    ? getUniqueUnitGroupUnitTypes(listing?.unitGroups, listing?.listingType)
     : getUniqueUnitTypes(listing?.units)
 
   const preferredUnitOptions = unitTypes?.map((item) => ({

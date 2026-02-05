@@ -27,6 +27,7 @@ import { ApplicationCreate } from '../dtos/applications/application-create.dto';
 import { ApplicationQueryParams } from '../dtos/applications/application-query-params.dto';
 import { ApplicationSelectionCreate } from '../dtos/applications/application-selection-create.dto';
 import { ApplicationUpdate } from '../dtos/applications/application-update.dto';
+import { ApplicationUpdateEmailDto } from '../dtos/applications/application-update-email.dto';
 import { MostRecentApplicationQueryParams } from '../dtos/applications/most-recent-application-query-params.dto';
 import { PaginatedApplicationDto } from '../dtos/applications/paginated-application.dto';
 import { PublicAppsViewQueryParams } from '../dtos/applications/public-apps-view-params.dto';
@@ -46,6 +47,7 @@ import { buildPaginationInfo } from '../utilities/build-pagination-meta';
 import { doJurisdictionHaveFeatureFlagSet } from '../utilities/feature-flag-utilities';
 import { mapTo } from '../utilities/mapTo';
 import { calculateSkip, calculateTake } from '../utilities/pagination-helpers';
+import { buildApplicationStatusChanges } from '../utilities/applicationStatusChanges';
 
 export const view: Partial<
   Record<ApplicationViews, Prisma.ApplicationsInclude>
@@ -1250,6 +1252,69 @@ export class ApplicationService {
 
     await this.updateListingApplicationEditTimestamp(rawApplication.listingId);
     return application;
+  }
+
+  async sendApplicationUpdateEmail(
+    applicationId: string,
+    dto: ApplicationUpdateEmailDto,
+    requestingUser: User,
+  ): Promise<SuccessDTO> {
+    const rawApplication = await this.findOrThrow(
+      applicationId,
+      ApplicationViews.base,
+    );
+
+    await this.authorizeAction(
+      requestingUser,
+      rawApplication.listingId,
+      permissionActions.update,
+    );
+
+    const application = mapTo(Application, rawApplication);
+    if (!application?.applicant?.emailAddress) {
+      return { success: false };
+    }
+
+    const listing = await this.prisma.listings.findUnique({
+      where: { id: rawApplication.listingId },
+      include: {
+        jurisdictions: true,
+      },
+    });
+
+    if (!listing) {
+      throw new NotFoundException('listing not found');
+    }
+
+    const changes = buildApplicationStatusChanges({
+      initialStatus: dto.previousStatus,
+      nextStatus: application.status,
+      initialAccessibleUnitWaitlistNumber:
+        dto.previousAccessibleUnitWaitlistNumber,
+      nextAccessibleUnitWaitlistNumber:
+        application.accessibleUnitWaitlistNumber,
+      initialConventionalUnitWaitlistNumber:
+        dto.previousConventionalUnitWaitlistNumber,
+      nextConventionalUnitWaitlistNumber:
+        application.conventionalUnitWaitlistNumber,
+    });
+
+    if (changes.length === 0) {
+      return { success: false };
+    }
+
+    const mappedListing = mapTo(Listing, listing);
+    const contactEmail = listing.leasingAgentEmail;
+
+    await this.emailService.applicationUpdateEmail(
+      mappedListing,
+      application,
+      changes,
+      listing.jurisdictions?.publicUrl,
+      contactEmail,
+    );
+
+    return { success: true };
   }
 
   /*

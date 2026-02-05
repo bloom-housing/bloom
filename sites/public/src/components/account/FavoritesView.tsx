@@ -83,7 +83,8 @@ const FavoritesView = ({ jurisdiction }: FavoritesViewProps) => {
                 variant="block"
                 title={t("account.noFavorites")}
                 headingPriority={2}
-                altHeading
+                iconClass="card-icon"
+                headingClass="seeds-large-heading"
               >
                 <Card.Section>
                   <p>

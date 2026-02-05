@@ -216,7 +216,9 @@ const ApplicationsView = (props: ApplicationsViewProps) => {
               </Tabs.TabList>
             </Tabs>
             <BloomCard
-              iconSymbol="application"
+              iconSymbol="listBullet"
+              iconClass={"card-icon"}
+              headingClass={"seeds-large-heading"}
               title={title}
               subtitle={subtitle}
               headingPriority={1}

@@ -107,7 +107,13 @@ const CreateAccount = () => {
           </div>
         )}
         <div className={signUpCopy ? signUpBenefitsStyles["benefits-form-container"] : undefined}>
-          <BloomCard iconSymbol="profile" title={t("account.createAccount")} headingPriority={1}>
+          <BloomCard
+            iconSymbol="userCircle"
+            title={t("account.createAccount")}
+            headingPriority={1}
+            iconClass={"card-icon"}
+            headingClass="seeds-large-heading"
+          >
             <>
               {requestError && (
                 <AlertBox onClose={() => setRequestError(undefined)} type="alert">
@@ -273,7 +279,7 @@ const CreateAccount = () => {
                   divider={"inset"}
                   className={accountCardStyles["account-card-settings-section"]}
                 >
-                  <Heading priority={2} size="2xl" className="mb-6">
+                  <Heading priority={2} size="2xl" className="mb-6 seeds-medium-heading">
                     {t("account.haveAnAccount")}
                   </Heading>
                   <Button href="/sign-in" variant="primary-outlined">
