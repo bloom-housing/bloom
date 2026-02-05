@@ -329,6 +329,7 @@ describe("add listing", () => {
   it.todo("should open the live confirmation dialog when listing is already active")
   it.todo("should open the listing approval dialog when submitting for approval")
   it.todo("should open the request changes dialog when requesting changes")
+  it.todo("should properly set listingType")
 
   it("without selected jurisdiction, show asterisks only on always-required fields", () => {
     window.URL.createObjectURL = jest.fn()

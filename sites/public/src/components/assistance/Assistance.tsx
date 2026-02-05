@@ -25,7 +25,7 @@ const Assistance = () => {
               iconOutlined={true}
               variant={"block"}
               className={styles["item"]}
-              iconClass={styles["item-icon"]}
+              iconClass="card-icon"
             >
               <Card.Section className={styles["item-link"]}>
                 <Link href={"/housing-basics"}>{t("assistance.applyToHousingLink")}</Link>
@@ -39,7 +39,7 @@ const Assistance = () => {
               iconOutlined={true}
               variant={"block"}
               className={styles["item"]}
-              iconClass={styles["item-icon"]}
+              iconClass="card-icon"
             >
               <Card.Section className={styles["item-link"]}>
                 <Link href={"/additional-resources"}>{t("assistance.additionalHousingLink")}</Link>

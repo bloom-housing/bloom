@@ -47,7 +47,7 @@ const PreviewMarketingFlyer = ({
         data={[
           {
             url: {
-              content: url,
+              content: <div id={`${label} url`}>{url}</div>,
             },
           },
         ]}

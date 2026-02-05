@@ -53,7 +53,7 @@ const ApplicationDates = ({
   }
 
   const openHouseTableData = useMemo(() => {
-    return openHouseEvents.map((event) => {
+    return openHouseEvents.map((event, index) => {
       const { startTime, endTime, url } = event
 
       return {
@@ -72,6 +72,7 @@ const ApplicationDates = ({
                 className={"font-semibold darker-link"}
                 onClick={() => setDrawerOpenHouse(event)}
                 variant="text"
+                id={`editOpenHouseButton-${index}`}
               >
                 {t("t.edit")}
               </Button>
