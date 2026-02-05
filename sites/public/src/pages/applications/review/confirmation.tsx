@@ -93,7 +93,7 @@ const ApplicationConfirmation = () => {
       <BloomCard>
         <>
           <CardSection divider={"flush"}>
-            <Heading priority={1} size={"2xl"}>
+            <Heading priority={1} size={"2xl"} className={"seeds-large-heading"}>
               {t("application.review.confirmation.title")}
               {listing?.name}
             </Heading>
@@ -106,11 +106,7 @@ const ApplicationConfirmation = () => {
               {t("application.review.confirmation.lotteryNumber")}
             </Heading>
 
-            <p
-              id="confirmationCode"
-              className="font-serif text-2xl my-3"
-              data-testid={"app-confirmation-id"}
-            >
+            <p id="confirmationCode" className="text-2xl my-3" data-testid={"app-confirmation-id"}>
               {application.confirmationCode || application.id}
             </p>
             <p>{t("application.review.confirmation.pleaseWriteNumber")}</p>

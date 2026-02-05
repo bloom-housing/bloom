@@ -29,7 +29,7 @@ export const HomeResources = (props: HomeResourcesProps) => {
               variant={"block"}
               headingPriority={3}
               className={styles["resource"]}
-              iconClass={styles["resource-icon"]}
+              iconClass={"card-icon"}
             >
               <Card.Section>
                 <Button
@@ -51,7 +51,7 @@ export const HomeResources = (props: HomeResourcesProps) => {
             variant={"block"}
             headingPriority={3}
             className={styles["resource"]}
-            iconClass={styles["resource-icon"]}
+            iconClass={"card-icon"}
           >
             <Card.Section>
               <Button

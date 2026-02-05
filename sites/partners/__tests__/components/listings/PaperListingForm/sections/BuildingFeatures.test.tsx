@@ -12,7 +12,6 @@ describe("BuildingFeatures", () => {
           enableSmokingPolicyRadio={false}
           enableParkingFee={false}
           enableAccessibilityFeatures={false}
-          existingFeatures={{}}
           requiredFields={[]}
         />
       </FormProviderWrapper>
@@ -35,11 +34,7 @@ describe("BuildingFeatures", () => {
   it("should render pet policy checkboxes when enablePetPolicyCheckbox is true", () => {
     render(
       <FormProviderWrapper>
-        <BuildingFeatures
-          enablePetPolicyCheckbox={true}
-          existingFeatures={{}}
-          requiredFields={[]}
-        />
+        <BuildingFeatures enablePetPolicyCheckbox={true} requiredFields={[]} />
       </FormProviderWrapper>
     )
 
@@ -54,11 +49,7 @@ describe("BuildingFeatures", () => {
   it("should render smoking policy radio buttons when enableSmokingPolicyRadio is true", () => {
     render(
       <FormProviderWrapper>
-        <BuildingFeatures
-          enableSmokingPolicyRadio={true}
-          existingFeatures={{}}
-          requiredFields={[]}
-        />
+        <BuildingFeatures enableSmokingPolicyRadio={true} requiredFields={[]} />
       </FormProviderWrapper>
     )
 
