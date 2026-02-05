@@ -12,6 +12,7 @@ resource "aws_ecs_task_definition" "bloom_dbinit" {
   execution_role_arn = aws_iam_role.bloom_ecs["dbinit"].arn
   task_role_arn      = aws_iam_role.bloom_container["dbinit"].arn
 
+  # Keep in sync with docker-compose.yml
   cpu    = 256 # 0.25 vCPU
   memory = 512 # MiB
 

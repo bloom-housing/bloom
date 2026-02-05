@@ -27,6 +27,7 @@ resource "aws_ecs_task_definition" "bloom_dbseed" {
   execution_role_arn = aws_iam_role.bloom_ecs["dbseed"].arn
   task_role_arn      = aws_iam_role.bloom_container["dbseed"].arn
 
+  # Keep in sync with docker-compose.yml
   cpu    = 1024     # 1 vCPU
   memory = 4 * 1024 # 4 GiB in MiB
 
