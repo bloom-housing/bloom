@@ -2,14 +2,13 @@ import React from "react"
 import {
   Field,
   Form,
-  FormCard,
   t,
   FormSignInErrorBox,
   NetworkStatus,
   FormSignInControl,
 } from "@bloom-housing/ui-components"
-import { Button, Icon } from "@bloom-housing/ui-seeds"
-import { CustomIconMap } from "@bloom-housing/shared-helpers"
+import { Button, Card } from "@bloom-housing/ui-seeds"
+import { BloomCard } from "@bloom-housing/shared-helpers"
 
 export enum RequestType {
   email = "email",
@@ -57,24 +56,30 @@ const FormSignInMFACode = ({
   }
 
   return (
-    <FormCard>
-      <div className="form-card__lead text-center">
-        <Icon size="2xl">{CustomIconMap.profile}</Icon>
-        <h2 className="form-card__title is-borderless">{t("nav.signInMFA.verifyTitle")}</h2>
-        <p className="form-card__sub-title">
-          {mfaType === RequestType.sms
-            ? t("nav.signInMFA.haveSentCodeToPhone")
-            : t("nav.signInMFA.haveSentCodeToEmail")}
-        </p>
-      </div>
-      <FormSignInErrorBox
-        errors={errors}
-        networkStatus={networkError}
-        errorMessageId={"mfa-code"}
-      />
-
-      <div className="form-card__group pt-0">
-        <Form id="sign-in-mfa" className="mt-10" onSubmit={handleSubmit(onSubmit, onError)}>
+    <BloomCard
+      iconSymbol="userCircle"
+      title={t("nav.signInMFA.verifyTitle")}
+      headingPriority={1}
+      iconClass={"card-icon"}
+      iconOutlined={true}
+      headingClass="seeds-large-heading"
+      subtitle={
+        mfaType === RequestType.sms
+          ? t("nav.signInMFA.haveSentCodeToPhone")
+          : t("nav.signInMFA.haveSentCodeToEmail")
+      }
+    >
+      <Form id="sign-in-mfa" onSubmit={handleSubmit(onSubmit, onError)}>
+        <Card.Section>
+          {networkError?.content?.error && (
+            <div className={"seeds-m-be-6"}>
+              <FormSignInErrorBox
+                errors={errors}
+                networkStatus={networkError}
+                errorMessageId={"mfa-code"}
+              />
+            </div>
+          )}
           <Field
             caps={true}
             name="mfaCode"
@@ -86,14 +91,14 @@ const FormSignInMFACode = ({
             dataTestId="sign-in-mfa-code-field"
             note={note}
           />
-          <div className="text-center mt-10">
-            <Button type="submit" variant="primary" id="verify-and-sign-in">
-              {t("nav.signInMFA.signIn")}
-            </Button>
-          </div>
-        </Form>
-      </div>
-    </FormCard>
+        </Card.Section>
+        <Card.Section className={"primary-bg seeds-m-bs-section"}>
+          <Button type="submit" variant="primary" id="verify-and-sign-in">
+            {t("nav.signInMFA.signIn")}
+          </Button>
+        </Card.Section>
+      </Form>
+    </BloomCard>
   )
 }
 

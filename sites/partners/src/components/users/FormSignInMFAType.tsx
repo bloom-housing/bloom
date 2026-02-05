@@ -1,15 +1,8 @@
 import React from "react"
-import {
-  Field,
-  Form,
-  FormCard,
-  t,
-  FormSignInErrorBox,
-  NetworkStatus,
-} from "@bloom-housing/ui-components"
-import { Button, Icon } from "@bloom-housing/ui-seeds"
 import type { UseFormMethods } from "react-hook-form"
-import { CustomIconMap } from "@bloom-housing/shared-helpers"
+import { Field, Form, t, FormSignInErrorBox, NetworkStatus } from "@bloom-housing/ui-components"
+import { Button, Card } from "@bloom-housing/ui-seeds"
+import { BloomCard } from "@bloom-housing/shared-helpers"
 
 export type FormSignInMFAProps = {
   control: FormSignInMFAControl
@@ -38,26 +31,27 @@ const FormSignInMFAType = ({
   }
 
   return (
-    <FormCard>
-      <div className="form-card__lead text-center">
-        <Icon size="2xl">{CustomIconMap.profile}</Icon>
-        <h2 className="form-card__title is-borderless">
-          {t("nav.signInMFA.verificationChoiceMainTitle")}
-        </h2>
-        {process.env.showSmsMfa && (
-          <p className="form-card__sub-title">
-            {t("nav.signInMFA.verificationChoiceSecondaryTitle")}
-          </p>
-        )}
-      </div>
-      <FormSignInErrorBox
-        errors={errors}
-        networkStatus={networkError}
-        errorMessageId={"mfa-type"}
-      />
+    <BloomCard
+      iconSymbol="userCircle"
+      title={t("nav.signInMFA.verificationChoiceMainTitle")}
+      headingPriority={1}
+      iconClass={"card-icon"}
+      iconOutlined={true}
+      headingClass="seeds-large-heading"
+      subtitle={t("nav.signInMFA.verificationChoiceSecondaryTitle")}
+    >
+      <Form id="sign-in-mfa" onSubmit={handleSubmit(onSubmit, onError)}>
+        <Card.Section>
+          {(Object.keys(errors).length > 0 || networkError?.content?.error) && (
+            <div className={"seeds-m-be-6"}>
+              <FormSignInErrorBox
+                errors={errors}
+                networkStatus={networkError}
+                errorMessageId={"mfa-type"}
+              />
+            </div>
+          )}
 
-      <div className="form-card__group pt-0">
-        <Form id="sign-in-mfa" className="mt-10" onSubmit={handleSubmit(onSubmit, onError)}>
           <Field
             caps={true}
             name="mfaType"
@@ -68,20 +62,19 @@ const FormSignInMFAType = ({
             register={register}
             dataTestId="sign-in-mfaType-field"
             hidden={true}
+            className="sr-only"
           />
 
-          <div className="text-center mt-6">
-            <Button
-              type="submit"
-              variant="primary-outlined"
-              id="verify-by-email"
-              onClick={emailOnClick}
-            >
-              {t("nav.signInMFA.verifyByEmail")}
-            </Button>
-          </div>
+          <Button
+            type="submit"
+            variant="primary-outlined"
+            id="verify-by-email"
+            onClick={emailOnClick}
+          >
+            {t("nav.signInMFA.verifyByEmail")}
+          </Button>
           {process.env.showSmsMfa && (
-            <div className="text-center mt-6">
+            <div className={"seeds-m-bs-4"}>
               <Button
                 type="submit"
                 variant="primary-outlined"
@@ -92,9 +85,9 @@ const FormSignInMFAType = ({
               </Button>
             </div>
           )}
-        </Form>
-      </div>
-    </FormCard>
+        </Card.Section>
+      </Form>
+    </BloomCard>
   )
 }
 
