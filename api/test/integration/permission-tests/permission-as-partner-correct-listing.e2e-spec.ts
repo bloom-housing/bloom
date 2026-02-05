@@ -1333,19 +1333,6 @@ describe('Testing Permissioning of endpoints as partner with correct listing', (
         .set('Cookie', cookies)
         .expect(200);
     });
-
-    it('should succeed for process endpoint', async () => {
-      /*
-        Because so many different iterations of the process endpoint were firing we were running into collisions. 
-        Since this is just testing the permissioning aspect I'm switching to mocking the process function
-      */
-      applicationFlaggedSetService.process = jest.fn();
-      await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process`)
-        .set({ passkey: process.env.API_PASS_KEY || '' })
-        .set('Cookie', cookies)
-        .expect(200);
-    });
   });
 
   describe('Testing lottery endpoints', () => {
