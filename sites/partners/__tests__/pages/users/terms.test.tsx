@@ -63,9 +63,7 @@ describe("User Terms", () => {
     expect(await findByText("You must agree to the terms in order to continue")).toBeInTheDocument()
     fireEvent.click(agreeCheckbox)
     // Check if the error will disappear after user checks the agreement
-    expect(
-      await findByText("You must agree to the terms in order to continue")
-    ).not.toBeInTheDocument()
+    expect(queryByText("You must agree to the terms in order to continue")).not.toBeInTheDocument()
   })
 
   it("should navigate to dashboard on submit", async () => {
