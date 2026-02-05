@@ -11,11 +11,12 @@ import { UserStatus } from "../lib/constants"
 import Layout from "../layouts/application"
 import { PageHeaderLayout } from "../patterns/PageHeaderLayout"
 import FrequentlyAskedQuestions from "../patterns/FrequentlyAskedQuestions"
-import { getFaqContent } from "../static_content/generic_faq_content"
+import { getGenericFaqContent } from "../static_content/generic_faq_content"
 import pageStyles from "../components/content-pages/FaqPage.module.scss"
 import styles from "../patterns/PageHeaderLayout.module.scss"
 import { fetchJurisdictionByName } from "../lib/hooks"
 import { isFeatureFlagOn } from "../lib/helpers"
+import { getJurisdictionFaqContent } from "../static_content/jurisdiction_faq_content"
 
 const FaqPage = ({ jurisdiction }: { jurisdiction: Jurisdiction }) => {
   const { profile } = useContext(AuthContext)
@@ -28,7 +29,7 @@ const FaqPage = ({ jurisdiction }: { jurisdiction: Jurisdiction }) => {
     })
   }, [profile])
 
-  const content = getFaqContent()
+  const content = getJurisdictionFaqContent() || getGenericFaqContent()
 
   const enableResources = isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableResources)
 

@@ -2,9 +2,8 @@ import Markdown from "markdown-to-jsx"
 import { Link } from "@bloom-housing/ui-seeds"
 import { t } from "@bloom-housing/ui-components"
 import { FaqCategory, FaqContent } from "../patterns/FrequentlyAskedQuestions"
-import { getJurisdictionFaqContent } from "./jurisdiction_faq_content"
 
-export const getFaqContent = (): FaqContent => {
+export const getGenericFaqContent = (): FaqContent => {
   const faqContentSection: FaqCategory = {
     title: t("faq.genericHeading"),
     faqs: [
@@ -43,9 +42,8 @@ export const getFaqContent = (): FaqContent => {
       },
     ],
   }
-  const jurisdictionContent = getJurisdictionFaqContent()
-  const genericContent = {
+
+  return {
     categories: [faqContentSection, faqContentSection, faqContentSection],
   }
-  return jurisdictionContent || genericContent
 }
