@@ -50,6 +50,7 @@ import styles from "./ListingViewSeeds.module.scss"
 import { ReadMore } from "../../patterns/ReadMore"
 import { OtherFeatures } from "./listing_sections/OtherFeatures"
 import { PropertyDetailsCard } from "./listing_sections/PropertyDetailsCard"
+import { useProperty } from "../../lib/hooks"
 
 interface ListingProps {
   listing: Listing
@@ -61,6 +62,7 @@ interface ListingProps {
 export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: ListingProps) => {
   const { userService } = useContext(AuthContext)
   const { addToast } = useContext(MessageContext)
+  const { property } = useProperty(listing?.property?.propertyId)
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, watch } = useForm()
@@ -322,13 +324,13 @@ export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: Li
           </div>
         </div>
         <div className={`${styles["right-bar"]} ${styles["hide-mobile"]}`}>
-          {isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableProperties) && listing?.property && (
+          {isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableProperties) && property && (
             <PropertyDetailsCard
               heading="Property details"
               linkText={"Visit the property website"}
-              linkUrl={listing.property.url}
+              linkUrl={property.url}
             >
-              {listing.property.description}
+              {property.description}
             </PropertyDetailsCard>
           )}
           <Availability listing={listing} jurisdiction={jurisdiction} />
