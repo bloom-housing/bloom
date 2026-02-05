@@ -74,6 +74,7 @@ const ApplicationFormLayout = (props: ApplicationFormLayoutProps) => {
         className={`${styles["application-form-body"]} ${
           props.hideBorder && styles["application-form-header-no-border"]
         }`}
+        headingClass={"seeds-large-heading"}
       >
         <>
           {props.children}

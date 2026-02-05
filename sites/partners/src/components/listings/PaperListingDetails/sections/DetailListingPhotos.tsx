@@ -42,7 +42,11 @@ const DetailListingPhotos = () => {
       ...(enableListingImageAltText
         ? {
             description: {
-              content: listing.listingImages[index].description || "",
+              content: (
+                <div id={`listing-alt-text-${index}`}>
+                  {listing.listingImages[index].description || ""}
+                </div>
+              ),
             },
           }
         : {}),

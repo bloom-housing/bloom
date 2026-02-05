@@ -23,6 +23,38 @@
   .seeds-button[data-variant="primary"] {
     color: white; // AG grid styling from UIC was messing up our primary button
   }
+
+  .card-icon {
+    color: var(--seeds-color-primary);
+    background-color: var(--seeds-bg-color-surface-primary);
+    border-radius: var(--seeds-rounded-full);
+    padding: var(--seeds-s2);
+    svg {
+      fill: none;
+      stroke-width: 1px;
+    }
+  }
+
+  --heading-override-font-family: var(--seeds-font-alt-sans);
+  --heading-override-font-weight: var(--seeds-font-weight-semibold);
+
+  .seeds-large-heading {
+    font-family: var(--heading-override-font-family);
+    font-weight: var(--heading-override-font-weight);
+    font-size: var(--seeds-font-size-2xl);
+    @media (--sm-only) {
+      font-size: var(--seeds-font-size-xl);
+    }
+  }
+
+  .seeds-medium-heading {
+    font-family: var(--heading-override-font-family);
+    font-weight: var(--heading-override-font-weight);
+    font-size: var(--seeds-font-size-xl);
+    @media (--sm-only) {
+      font-size: var(--seeds-font-size-lg);
+    }
+  }
 }
 
 .section-with-grid hgroup p {
