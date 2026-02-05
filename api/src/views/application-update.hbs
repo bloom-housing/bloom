@@ -1,0 +1,43 @@
+{{#> layout_default }}
+  <h1>{{t "applicationUpdate.title" appOptions}}</h1>
+  <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+    <tbody>
+      <tr>
+        <td align="left">
+          <p>
+            {{t "applicationUpdate.greeting"}}{{#if applicantName}} {{applicantName}}{{/if}},
+          </p>
+          <p>
+            {{t "applicationUpdate.updateNotice" appOptions}}
+          </p>
+          <p><strong>{{t "applicationUpdate.summaryTitle"}}</strong></p>
+          <ul>
+            {{#each summaryItems}}
+              <li>{{this}}</li>
+            {{/each}}
+          </ul>
+          <p>
+            {{t "applicationUpdate.contactNotice"}}
+            <a href="mailto:{{contactEmail}}">{{contactEmail}}</a>.
+          </p>
+          <p><strong>{{t "applicationUpdate.viewPrompt"}}</strong></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+    <tbody>
+      <tr>
+        <td align="center">
+          <a
+            class="btn btn-primary"
+            href="{{loginUrl}}"
+            target="_blank"
+            style="color:white"
+            >{{t "applicationUpdate.viewLink"}}</a
+          >
+        </td>
+      </tr>
+    </tbody>
+  </table>
+{{/layout_default }}
