@@ -89,6 +89,7 @@ export const stagingSeed = async (
         FeatureFlagEnum.enableNeighborhoodAmenities,
         FeatureFlagEnum.enablePartnerDemographics,
         FeatureFlagEnum.enablePartnerSettings,
+        FeatureFlagEnum.enableResources,
         FeatureFlagEnum.enableSection8Question,
         FeatureFlagEnum.enableSingleUseCode,
         FeatureFlagEnum.enableSupportAdmin,
@@ -144,6 +145,7 @@ export const stagingSeed = async (
         FeatureFlagEnum.enablePartnerDemographics,
         FeatureFlagEnum.enablePartnerSettings,
         FeatureFlagEnum.enableRegions,
+        FeatureFlagEnum.enableResources,
         FeatureFlagEnum.enableSection8Question,
         FeatureFlagEnum.enableSingleUseCode,
         FeatureFlagEnum.enableUnderConstructionHome,
@@ -215,6 +217,7 @@ export const stagingSeed = async (
         FeatureFlagEnum.enablePetPolicyCheckbox,
         FeatureFlagEnum.enableProperties,
         FeatureFlagEnum.enableReferralQuestionUnits,
+        FeatureFlagEnum.enableResources,
         FeatureFlagEnum.enableSmokingPolicyRadio,
       ],
       visibleNeighborhoodAmenities: [

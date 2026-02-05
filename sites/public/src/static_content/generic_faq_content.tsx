@@ -1,37 +1,26 @@
 import Markdown from "markdown-to-jsx"
 import { Link } from "@bloom-housing/ui-seeds"
+import { t } from "@bloom-housing/ui-components"
 import { FaqCategory, FaqContent } from "../patterns/FrequentlyAskedQuestions"
 import { getJurisdictionFaqContent } from "./jurisdiction_faq_content"
 
 export const getFaqContent = (): FaqContent => {
   const faqContentSection: FaqCategory = {
-    title: "Title for a category of frequently asked questions",
+    title: t("faq.genericHeading"),
     faqs: [
       {
-        question: "How does this work?",
+        question: t("faq.howDoesThisWork"),
         answer: (
-          <Markdown>
-            A design approach is a general philosophy that may or may not include a guide for
-            specific methods. Some are to guide the overall goal of the design. Other approaches are
-            to guide the tendencies of the designer. A combination of approaches may be used if they
-            don't conflict. A design approach is a general philosophy that may or may not include a
-            guide for specific methods. Some are to guide the overall goal of the design. Other
-            approaches are to guide the tendencies of the designer. A combination of approaches may
-            be used if they don't conflict. A design approach is a general philosophy that may or
-            may not include a guide for specific methods. Some are to guide the overall goal of the
-            design. Other approaches are to guide the tendencies of the designer. A combination of
-            approaches may be used if they don't conflict.
-          </Markdown>
+          <Markdown>{`${t("content.genericParagraph")} ${t("content.genericParagraph")} ${t(
+            "content.genericParagraph"
+          )}`}</Markdown>
         ),
       },
       {
-        question: "What happens next?",
+        question: t("faq.whatHappensNext"),
         answer: (
           <>
-            Firstly, a design approach is a general philosophy that may or may not include a guide
-            for specific methods. Some are to guide the overall goal of the design. Other approaches
-            are to guide the tendencies of the designer. A combination of approaches may be used if
-            they don't conflict.
+            {t("content.genericParagraph")}
             <ul>
               <li>List item one </li>
               <li>List item two </li>
@@ -40,21 +29,17 @@ export const getFaqContent = (): FaqContent => {
                 <Link href={"/"}>Linked list item four </Link>
               </li>
               <li>
-                List item five demonstrates multi-line list elements: A design approach is a general
-                philosophy that may or may not include a guide for specific methods. Some are to
-                guide the overall goal of the design. Other approaches are to guide the tendencies
-                of the designer. A combination of approaches may be used if they don't conflict.
+                {`List item five demonstrates multi-line list elements: ${t(
+                  "content.genericParagraph"
+                )}`}
               </li>
             </ul>
           </>
         ),
       },
       {
-        question:
-          "How does this typically function in practice, and what does the overall experience usually involve?",
-        answer: (
-          <Markdown>A combination of approaches may be used if they don't conflict.</Markdown>
-        ),
+        question: t("faq.howDoesThisFunction"),
+        answer: t("content.genericParagraph"),
       },
     ],
   }

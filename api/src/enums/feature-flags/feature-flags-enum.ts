@@ -42,6 +42,7 @@ export enum FeatureFlagEnum {
   enableProperties = 'enableProperties',
   enableReferralQuestionUnits = 'enableReferralQuestionUnits',
   enableRegions = 'enableRegions',
+  enableResources = 'enableResources',
   enableSection8Question = 'enableSection8Question',
   enableSingleUseCode = 'enableSingleUseCode',
   enableSmokingPolicyRadio = 'enableSmokingPolicyRadio',
@@ -254,6 +255,11 @@ export const featureFlagMap: {
     name: FeatureFlagEnum.enableRegions,
     description:
       'When true, the region can be defined for the building address',
+  },
+  {
+    name: FeatureFlagEnum.enableResources,
+    description:
+      'When true, the public site displays links to resources on various pages',
   },
   {
     name: FeatureFlagEnum.enableSection8Question,
