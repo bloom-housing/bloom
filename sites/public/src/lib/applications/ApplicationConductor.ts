@@ -4,6 +4,7 @@
 // eslint-disable-next-line import/no-named-as-default
 import Router from "next/router"
 import { blankApplication } from "@bloom-housing/shared-helpers"
+import { Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { ApplicationFormConfig, StepRoute } from "./configInterfaces"
 import StepDefinition from "./StepDefinition"
 import AlternateContactStep from "./AlternateContactStep"
@@ -14,7 +15,7 @@ import PreferencesAllStep from "./PreferencesAllStep"
 import PreferredUnitSizeStep from "./PreferredUnitSizeStep"
 import ProgramsStep from "./ProgramsStep"
 import CommunityTypesStep from "./CommunityTypesStep"
-import { Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { getStepStringConfig } from "./ApplicationStringConfig"
 
 export const loadApplicationFromAutosave = () => {
   if (typeof window !== "undefined") {
@@ -141,6 +142,7 @@ export default class ApplicationConductor {
     languages: [],
     steps: [],
     featureFlags: [],
+    applicationStringConfig: {},
   }
   private _listing: Listing
 
@@ -166,9 +168,19 @@ export default class ApplicationConductor {
     this.steps = this._config.steps.map((step) => {
       const route = this.constructor["routes"][step.name] as StepRoute
       if (route?.definition) {
-        return new route.definition(this, step, route?.url)
+        return new route.definition(
+          this,
+          step,
+          route?.url,
+          getStepStringConfig(step.name, this._config.applicationStringConfig) || {}
+        )
       } else {
-        return new StepDefinition(this, step, route?.url)
+        return new StepDefinition(
+          this,
+          step,
+          route?.url,
+          getStepStringConfig(step.name, this._config.applicationStringConfig) || {}
+        )
       }
     })
   }

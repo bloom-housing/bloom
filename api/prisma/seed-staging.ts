@@ -256,6 +256,22 @@ export const stagingSeed = async (
         'units',
         'property',
       ],
+      applicationStringConfig: {
+        strings: {
+          whatToExpect: {
+            fcfsFinePrint:
+              'application.start.whatToExpect.fcfs.finePrint.yourHousehold',
+            waitlistFinePrint:
+              'application.start.whatToExpect.waitlist.finePrint.yourHousehold',
+            baseFinePrint:
+              'application.start.whatToExpect.base.finePrint.yourHousehold',
+            lotteryFinePrint:
+              'application.start.whatToExpect.lottery.finePrint.yourHousehold',
+            waitlistLotteryFinePrint:
+              'application.start.whatToExpect.waitlistLottery.finePrint.yourHousehold',
+          },
+        },
+      },
       listingFeaturesConfiguration: {
         categories: [
           {

@@ -1,5 +1,6 @@
 import { FeatureFlag } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import StepDefinition from "./StepDefinition"
+import { JurisdictionApplicationStringConfig } from "./ApplicationStringConfig"
 
 export interface StepRoute {
   url: string
@@ -16,4 +17,5 @@ export interface ApplicationFormConfig {
   languages: string[]
   steps: StepConfig[]
   featureFlags: FeatureFlag[]
+  applicationStringConfig: JurisdictionApplicationStringConfig
 }

@@ -56,6 +56,7 @@ const loadListing = async (
     ...applicationConfig,
     languages: jurisdictionResponse.languages,
     featureFlags: jurisdictionResponse.featureFlags,
+    applicationStringConfig: jurisdictionResponse.applicationStringConfig,
   }
   stateFunction(conductor.listing)
   context.syncListing(conductor.listing)

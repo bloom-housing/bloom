@@ -6,6 +6,7 @@ import {
 } from '@prisma/client';
 import { randomName } from './word-generator';
 import { ListingFeaturesConfiguration } from '../../src/dtos/jurisdictions/listing-features-config.dto';
+import { ApplicationStringConfig } from '../../src/dtos/jurisdictions/application-string-config';
 
 export const jurisdictionFactory = (
   jurisdictionName = randomName(),
@@ -20,6 +21,7 @@ export const jurisdictionFactory = (
     minimumListingPublishImagesRequired?: number;
     publicSiteBaseURL?: string;
     listingFeaturesConfiguration?: ListingFeaturesConfiguration;
+    applicationStringConfig?: ApplicationStringConfig;
   },
 ): Prisma.JurisdictionsCreateInput => ({
   name: jurisdictionName,
@@ -62,5 +64,8 @@ export const jurisdictionFactory = (
     optionalFields?.minimumListingPublishImagesRequired,
   listingFeaturesConfiguration: optionalFields?.listingFeaturesConfiguration
     ? (optionalFields.listingFeaturesConfiguration as unknown as Prisma.JsonArray)
+    : undefined,
+  applicationStringConfig: optionalFields?.applicationStringConfig
+    ? (optionalFields.applicationStringConfig as unknown as Prisma.JsonArray)
     : undefined,
 });

@@ -4,11 +4,13 @@ export default class StepDefinition {
   conductor: ApplicationConductor
   step: Record<string, any>
   url: string
+  strings: Record<string, string>
 
-  constructor(conductor, step, url) {
+  constructor(conductor, step, url, strings) {
     this.step = step
     this.conductor = conductor
     this.url = url
+    this.strings = strings
   }
 
   get name() {

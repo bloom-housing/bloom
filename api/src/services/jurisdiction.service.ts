@@ -30,7 +30,17 @@ export class JurisdictionService {
     const rawJurisdictions = await this.prisma.jurisdictions.findMany({
       include: view,
     });
-    return mapTo(Jurisdiction, rawJurisdictions);
+    const mapped = mapTo(Jurisdiction, rawJurisdictions);
+
+    // Manually preserve applicationStringConfig for each jurisdiction
+    mapped.forEach((jurisdiction, index) => {
+      if (rawJurisdictions[index].applicationStringConfig) {
+        jurisdiction.applicationStringConfig = rawJurisdictions[index]
+          .applicationStringConfig as Record<string, any>;
+      }
+    });
+
+    return mapped;
   }
 
   /*
@@ -82,7 +92,15 @@ export class JurisdictionService {
       );
     }
 
-    return mapTo(Jurisdiction, rawJurisdiction);
+    const mapped = mapTo(Jurisdiction, rawJurisdiction);
+
+    // Manually preserve applicationStringConfig
+    if (rawJurisdiction.applicationStringConfig) {
+      mapped.applicationStringConfig =
+        rawJurisdiction.applicationStringConfig as Record<string, any>;
+    }
+
+    return mapped;
   }
 
   /*
@@ -94,6 +112,8 @@ export class JurisdictionService {
         ...incomingData,
         listingFeaturesConfiguration:
           incomingData.listingFeaturesConfiguration as unknown as Prisma.JsonArray,
+        applicationStringConfig:
+          incomingData.applicationStringConfig as unknown as Prisma.InputJsonValue,
       },
       include: view,
     });
@@ -114,6 +134,8 @@ export class JurisdictionService {
         id: undefined,
         listingFeaturesConfiguration:
           incomingData.listingFeaturesConfiguration as unknown as Prisma.JsonArray,
+        applicationStringConfig:
+          incomingData.applicationStringConfig as unknown as Prisma.InputJsonValue,
       },
       where: {
         id: incomingData.id,

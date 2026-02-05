@@ -30,25 +30,25 @@ const ApplicationWhatToExpect = () => {
         if (isUnitGroupAppWaitlist(listing, conductor.config)) {
           return {
             steps: t("application.start.whatToExpect.waitlist.steps"),
-            finePrint: t("application.start.whatToExpect.waitlist.finePrint"),
+            finePrint: t(conductor.currentStep.strings?.waitlistFinePrint),
           }
         }
         if (isUnitGroupAppBase(listing, conductor.config)) {
           return {
             steps: "",
-            finePrint: t("application.start.whatToExpect.base.finePrint"),
+            finePrint: t(conductor.currentStep.strings?.baseFinePrint),
           }
         }
         return {
           steps: t("application.start.whatToExpect.fcfs.steps"),
-          finePrint: t("application.start.whatToExpect.fcfs.finePrint"),
+          finePrint: t(conductor.currentStep.strings?.fcfsFinePrint),
         }
       case ReviewOrderTypeEnum.lottery:
       case ReviewOrderTypeEnum.waitlist:
       case ReviewOrderTypeEnum.waitlistLottery:
         return {
           steps: t(`application.start.whatToExpect.${listing.reviewOrderType}.steps`),
-          finePrint: t(`application.start.whatToExpect.${listing.reviewOrderType}.finePrint`),
+          finePrint: t(conductor.currentStep.strings?.[`${listing.reviewOrderType}FinePrint`]),
         }
       default:
         return { steps: "", finePrint: "" }

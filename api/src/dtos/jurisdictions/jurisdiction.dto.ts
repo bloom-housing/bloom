@@ -21,6 +21,7 @@ import { AbstractDTO } from '../shared/abstract.dto';
 import { IdDTO } from '../shared/id.dto';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 import { ListingFeaturesConfiguration } from './listing-features-config.dto';
+import { ApplicationStringConfig } from './application-string-config';
 
 export class Jurisdiction extends AbstractDTO {
   @Expose()
@@ -197,4 +198,10 @@ export class Jurisdiction extends AbstractDTO {
   @Type(() => ListingFeaturesConfiguration)
   @ApiPropertyOptional({ type: ListingFeaturesConfiguration })
   listingFeaturesConfiguration?: ListingFeaturesConfiguration;
+
+  @Expose()
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => ApplicationStringConfig)
+  @ApiPropertyOptional({ type: ApplicationStringConfig })
+  applicationStringConfig?: ApplicationStringConfig;
 }
