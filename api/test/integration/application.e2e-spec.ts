@@ -60,11 +60,16 @@ describe('Application Controller Tests', () => {
   const testEmailService = {
     /* eslint-disable @typescript-eslint/no-empty-function */
     applicationConfirmation: async () => {},
+    applicationUpdateEmail: async () => {},
   };
 
   const mockApplicationConfirmation = jest.spyOn(
     testEmailService,
     'applicationConfirmation',
+  );
+  const mockApplicationUpdateEmail = jest.spyOn(
+    testEmailService,
+    'applicationUpdateEmail',
   );
 
   const createMultiselectQuestion = async (
@@ -1841,6 +1846,53 @@ describe('Application Controller Tests', () => {
       expect(res.body.message).toEqual(
         `applicationId ${id} was requested but not found`,
       );
+    });
+  });
+
+  describe('notify update endpoint', () => {
+    it('should send application update email when changes exist', async () => {
+      const unitTypeA = await unitTypeFactorySingle(
+        prisma,
+        UnitTypeEnum.oneBdrm,
+      );
+      const jurisdiction = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(),
+      });
+      await reservedCommunityTypeFactoryAll(jurisdiction.id, prisma);
+      const listing = await prisma.listings.create({
+        data: await listingFactory(jurisdiction.id, prisma),
+      });
+
+      const appData = await applicationFactory({
+        unitTypeId: unitTypeA.id,
+        listingId: listing.id,
+      });
+      const application = await prisma.applications.create({
+        data: appData,
+        include: { applicant: true },
+      });
+      await prisma.applications.update({
+        where: { id: application.id },
+        data: {
+          status: ApplicationStatusEnum.waitlist,
+          accessibleUnitWaitlistNumber: 2,
+          conventionalUnitWaitlistNumber: 5,
+        },
+      });
+
+      const res = await request(app.getHttpServer())
+        .post(`/applications/${application.id}/notify-update`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({
+          previousStatus: ApplicationStatusEnum.submitted,
+          previousAccessibleUnitWaitlistNumber: 1,
+          previousConventionalUnitWaitlistNumber: 3,
+        })
+        .set('Cookie', adminCookies)
+        .expect(201);
+
+      expect(res.body).toEqual({ success: true });
+      expect(mockApplicationUpdateEmail).toHaveBeenCalledTimes(1);
     });
   });
 

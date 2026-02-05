@@ -58,7 +58,10 @@ const SubmittedApplicationView = ({
 
   return (
     <>
-      <ApplicationListingCard listingName={listing?.name} listingId={listing?.id} />
+      <ApplicationListingCard
+        listingName={application.listings?.name}
+        listingId={application.listings?.id}
+      />
       <Card spacing={"lg"} className={"mb-6"}>
         <Card.Section divider={"inset"}>
           <Button
@@ -69,7 +72,7 @@ const SubmittedApplicationView = ({
           >
             {t("t.back")}
           </Button>
-          <Heading priority={2} size={"2xl"} className="mt-6">
+          <Heading priority={2} size={"2xl"} className="mt-6 seeds-large-heading">
             {t("application.confirmation.informationSubmittedTitle")}
           </Heading>
           <p className="field-note mt-4">

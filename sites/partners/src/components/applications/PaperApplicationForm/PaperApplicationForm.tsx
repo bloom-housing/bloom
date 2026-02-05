@@ -42,7 +42,7 @@ type AlertErrorType = "api" | "form"
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormProps) => {
   const { listingDto } = useSingleListingData(listingId)
-  const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
+  const { doJurisdictionsHaveFeatureFlagOn, applicationsService } = useContext(AuthContext)
 
   const preferences = listingSectionQuestions(
     listingDto,
@@ -107,7 +107,6 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
 
   const router = useRouter()
 
-  const { applicationsService } = useContext(AuthContext)
   const { addToast } = useContext(MessageContext)
 
   const [alert, setAlert] = useState<AlertErrorType | null>(null)
@@ -172,10 +171,23 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
     }
   }
 
-  /*
-    @data: form data comes from the react-hook-form
-    @redirect: open application details or reset form
-  */
+  async function notifyApplicationUpdate(applicationId: string) {
+    if (!applicationsService || !application) return
+
+    try {
+      await applicationsService.notifyUpdate({
+        id: applicationId,
+        body: {
+          previousStatus: application.status,
+          previousAccessibleUnitWaitlistNumber: application.accessibleUnitWaitlistNumber,
+          previousConventionalUnitWaitlistNumber: application.conventionalUnitWaitlistNumber,
+        },
+      })
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
   const onSubmit = async (data: FormTypes, redirect: "details" | "new") => {
     setAlert(null)
     setLoading(true)
@@ -214,6 +226,10 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
       setLoading(false)
 
       if (result) {
+        if (editMode && enableApplicationStatus) {
+          void notifyApplicationUpdate(result.id)
+        }
+
         addToast(
           editMode
             ? t("application.add.applicationUpdated")
@@ -376,9 +392,7 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
                 <p>{t("application.confirmation.changesIntro")}</p>
                 <ul className="list-disc pl-5">
                   {confirmSections.changes.map((item) => (
-                    <li key={`${item.label}-${item.value}`}>
-                      {item.label}: {item.value}
-                    </li>
+                    <li key={`${item.label}-${item.value}`}>{`${item.label}: ${item.value}`}</li>
                   ))}
                 </ul>
               </>
@@ -390,9 +404,7 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
                 </p>
                 <ul className="list-disc pl-5">
                   {confirmSections.removals.map((item) => (
-                    <li key={`${item.label}-${item.value}`}>
-                      {item.label}: {item.value}
-                    </li>
+                    <li key={`${item.label}-${item.value}`}>{`${item.label}: ${item.value}`}</li>
                   ))}
                 </ul>
               </>

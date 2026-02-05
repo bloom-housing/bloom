@@ -216,10 +216,12 @@ const Edit = () => {
     <RequireLogin signInPath="/sign-in" signInMessage={t("t.loginIsRequired")}>
       <FormsLayout pageTitle={t("account.accountSettings")}>
         <BloomCard
-          iconSymbol="profile"
+          iconSymbol="userCircle"
+          iconClass={"card-icon"}
           title={t("account.accountSettings")}
           subtitle={t("account.accountSettingsSubtitle")}
           headingPriority={1}
+          headingClass={"seeds-large-heading"}
         >
           <LoadingState loading={loading}>
             <Card.Section divider="inset" className={styles["account-card-settings-section"]}>
