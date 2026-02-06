@@ -134,7 +134,7 @@
   "application.confirmation.viewOriginalListing": "Ver el listado original",
   "application.contact.additionalPhoneNumber": "Tengo un número telefónico adicional",
   "application.contact.address": "Dirección",
-  "application.contact.addressWhereYouCurrentlyLive": "Necesitamos saber cuál es la dirección en donde vive actualmente. Si no tiene hogar, ingrese ya sea la dirección del refugio o una dirección cercana a donde se esté quedando.",
+  "application.contact.addressWhereYouCurrentlyLive": "Necesitamos la dirección donde reside actualmente. Si se encuentra en situación de sinhogarismo, por favor, indique la dirección del albergue o una dirección cercana al lugar donde se aloja.",
   "application.contact.apt": "# de Apto o unidad",
   "application.contact.city": "Ciudad",
   "application.contact.cityName": "Nombre de la ciudad",

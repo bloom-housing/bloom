@@ -59,7 +59,7 @@ describe("applications pages", () => {
       expect(screen.getByRole("group", { name: /your address/i })).toBeInTheDocument()
       expect(
         screen.getByText(
-          /we need the address where you currently live. If you are homeless, enter either the shelter address or an address close to where you stay./i
+          "We need the address where you currently live. If you are experiencing homelessness, please enter the shelter address or an address close to where you stay."
         )
       ).toBeInTheDocument()
       expect(screen.getByRole("textbox", { name: /street address/i })).toBeInTheDocument()
@@ -178,7 +178,7 @@ describe("applications pages", () => {
       expect(screen.getByRole("group", { name: /your address/i })).toBeInTheDocument()
       expect(
         screen.getByText(
-          /we need the address where you currently live. If you are homeless, enter either the shelter address or an address close to where you stay./i
+          "We need the address where you currently live. If you are experiencing homelessness, please enter the shelter address or an address close to where you stay."
         )
       ).toBeInTheDocument()
       expect(screen.getByRole("textbox", { name: /street address/i })).toBeInTheDocument()
