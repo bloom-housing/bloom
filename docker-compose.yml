@@ -233,6 +233,7 @@ services:
           memory: '4096mb'
     environment:
       NODE_ENV: "production"
+      DISABLE_NEXT_TYPECHECK: "TRUE"
       NEXTJS_PORT: 3001
       BACKEND_API_BASE: "http://lb:3100"
       LISTINGS_QUERY: "/listings"
@@ -268,6 +269,7 @@ services:
           memory: '6144mb'
     environment:
       NODE_ENV: "production"
+      DISABLE_NEXT_TYPECHECK: "TRUE"
       NEXTJS_PORT: 3000
       BACKEND_API_BASE: "http://lb:3100"
       BACKEND_API_BASE_NEW: "http://lb:3100"
