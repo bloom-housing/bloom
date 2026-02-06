@@ -88,13 +88,13 @@
       }
     }
     h3 {
-      font-size: (--seeds-type-heading-size-2xl);
+      font-size: var(--seeds-type-heading-size-2xl);
       @media (--md-down) {
         font-size: var(--seeds-type-heading-size-2xl-mobile);
       }
     }
     h4 {
-      font-size: (--seeds-font-size-xl);
+      font-size: var(--seeds-font-size-xl);
       @media (--md-down) {
         font-size: var(--seeds-type-heading-size-lg);
       }
