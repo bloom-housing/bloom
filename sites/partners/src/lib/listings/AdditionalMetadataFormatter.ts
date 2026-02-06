@@ -2,6 +2,7 @@ import {
   allListingFeatures,
   listingRequiredDocumentsOptions,
   listingUtilities,
+  listingParkingTypes,
 } from "@bloom-housing/shared-helpers"
 import {
   ReviewOrderTypeEnum,
@@ -168,6 +169,16 @@ export default class AdditionalMetadataFormatter extends Formatter {
     if (this.data.petPolicyPreferences) {
       this.data.allowsDogs = this.data.petPolicyPreferences.includes("allowsDogs")
       this.data.allowsCats = this.data.petPolicyPreferences.includes("allowsCats")
+    }
+
+    if (this.data.parking) {
+      this.data.parkType = listingParkingTypes.reduce((acc, current) => {
+        const isSelected = this.data.parking.some((parking) => parking === current)
+        return {
+          ...acc,
+          [current]: isSelected,
+        }
+      }, {})
     }
 
     if (!this.data.listingType || this.data.listingType === EnumListingListingType.regulated) {

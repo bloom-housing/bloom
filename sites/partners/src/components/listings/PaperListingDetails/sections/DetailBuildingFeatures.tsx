@@ -1,7 +1,7 @@
 import React, { useContext } from "react"
 import { t } from "@bloom-housing/ui-components"
 import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
-import { AuthContext } from "@bloom-housing/shared-helpers"
+import { AuthContext, listingParkingTypes } from "@bloom-housing/shared-helpers"
 import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 import { ListingContext } from "../../ListingContext"
@@ -14,6 +14,11 @@ const DetailBuildingFeatures = () => {
   const enableParkingFee = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableParkingFee,
     listing?.jurisdictions?.id
+  )
+
+  const enableParkingType = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableParkingType,
+    listing.jurisdictions.id
   )
 
   const enableSmokingPolicyRadio = doJurisdictionsHaveFeatureFlagOn(
@@ -43,6 +48,30 @@ const DetailBuildingFeatures = () => {
       )
     }
     return <>{t("t.none")}</>
+  }
+
+  const getParkingTypes = () => {
+    let parkingTypesAvailable = false
+    const parking = Object.keys(listing?.parkType ?? {})
+      .filter((feature) => listingParkingTypes.includes(feature))
+      .map((entry) => {
+        if (listing?.parkType[entry]) {
+          parkingTypesAvailable = true
+          return (
+            <li key={entry} className={"list-disc mx-5 mb-1 md:w-1/3 w-full grow"}>
+              {t(`listings.parkingTypeOptions.${entry}`)}
+            </li>
+          )
+        }
+      })
+
+    return parkingTypesAvailable ? (
+      <ul className={"flex flex-wrap"} data-testid="parking-types-list">
+        {parking}
+      </ul>
+    ) : (
+      <>{t("t.none")}</>
+    )
   }
 
   return (
@@ -101,6 +130,15 @@ const DetailBuildingFeatures = () => {
           <Grid.Cell>
             <FieldValue id="parkingFee" label={t("t.parkingFee")}>
               {getDetailFieldString(listing.parkingFee)}
+            </FieldValue>
+          </Grid.Cell>
+        </Grid.Row>
+      )}
+      {enableParkingType && (
+        <Grid.Row>
+          <Grid.Cell>
+            <FieldValue id="parkingTypes" label={t("t.parkingTypes")}>
+              {getParkingTypes()}
             </FieldValue>
           </Grid.Cell>
         </Grid.Row>
