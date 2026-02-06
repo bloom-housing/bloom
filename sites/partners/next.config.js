@@ -36,6 +36,10 @@ const tailwindVars = require("@bloom-housing/ui-components/tailwind.tosass.js")(
 // https://www.npmjs.com/package/next-transpile-modules
 module.exports = withBundleAnalyzer(
   withTM({
+    typescript: {
+      // don't typecheck during next build. We typecheck in other CI.
+      ignoreBuildErrors: true,
+    },
     experimental: {
       webpackBuildWorker: true,
       // Uncomment line below before building when using symlink for UI-C
