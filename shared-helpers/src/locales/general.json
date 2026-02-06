@@ -196,6 +196,7 @@
   "application.financial.vouchers.rentalSubsidies.strong": "Rental subsidies",
   "application.financial.vouchers.rentalSubsidies.text": "like VASH, HSA, HOPWA, Catholic Charities, AIDS Foundation, etc.",
   "application.financial.vouchers.title": "Do you or anyone on this application receive any of the following?",
+  "application.form.general.advocateWarning": "You are applying on behalf of a client; please enter your client’s information, <strong>not your own</strong>.",
   "application.form.general.saveAndFinishLater": "Save and finish later",
   "application.form.general.saveAndReturn": "Save and return to review",
   "application.form.options.relationship.aunt": "Aunt",
