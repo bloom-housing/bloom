@@ -8,27 +8,27 @@ import {
   MultiselectQuestionUpdate,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { t } from "@bloom-housing/ui-components"
-import PreferenceEditDrawer from "./PreferenceEditDrawer"
-import { PreferenceDeleteModal } from "./PreferenceDeleteModal"
-import PreferenceViewDrawer from "./PreferenceViewDrawer"
+import MultiselectQuestionEditDrawer from "./MultiselectQuestionEditDrawer"
+import MultiselectQuestionDeleteModal from "./MultiselectQuestionDeleteModal"
+import MultiselectQuestionViewDrawer from "./MultiselectQuestionViewDrawer"
 
 export type DrawerType = "add" | "edit" | "view"
 
-interface EditPreferenceProps {
+interface EditMultiselectQuestionProps {
   cacheKey: string
-  preferenceDrawerOpen: DrawerType
-  setPreferenceDrawerOpen: React.Dispatch<React.SetStateAction<DrawerType>>
+  multiselectQuestionDrawerOpen: DrawerType
+  setMultiselectQuestionDrawerOpen: React.Dispatch<React.SetStateAction<DrawerType>>
   questionData: MultiselectQuestion
   setQuestionData: React.Dispatch<React.SetStateAction<MultiselectQuestion>>
 }
 
-const EditPreference = ({
+const EditMultiselectQuestion = ({
   cacheKey,
-  preferenceDrawerOpen,
-  setPreferenceDrawerOpen,
+  multiselectQuestionDrawerOpen,
+  setMultiselectQuestionDrawerOpen,
   questionData,
   setQuestionData,
-}: EditPreferenceProps) => {
+}: EditMultiselectQuestionProps) => {
   const { mutate } = useSWRConfig()
 
   const { multiselectQuestionsService } = useContext(AuthContext)
@@ -78,7 +78,7 @@ const EditPreference = ({
             console.log(e)
           })
           .finally(() => {
-            setPreferenceDrawerOpen(null)
+            setMultiselectQuestionDrawerOpen(null)
             void mutate(cacheKey)
           })
       )
@@ -101,7 +101,7 @@ const EditPreference = ({
             console.log(e)
           })
           .finally(() => {
-            setPreferenceDrawerOpen(null)
+            setMultiselectQuestionDrawerOpen(null)
             void mutate(cacheKey)
           })
       )
@@ -110,13 +110,13 @@ const EditPreference = ({
 
   return (
     <>
-      <PreferenceEditDrawer
-        drawerOpen={!!preferenceDrawerOpen && preferenceDrawerOpen != "view"}
+      <MultiselectQuestionEditDrawer
+        drawerOpen={!!multiselectQuestionDrawerOpen && multiselectQuestionDrawerOpen != "view"}
         questionData={questionData}
         setQuestionData={setQuestionData}
-        drawerType={preferenceDrawerOpen}
+        drawerType={multiselectQuestionDrawerOpen}
         onDrawerClose={() => {
-          setPreferenceDrawerOpen(null)
+          setMultiselectQuestionDrawerOpen(null)
           void mutate(cacheKey)
         }}
         saveQuestion={saveQuestion}
@@ -125,19 +125,19 @@ const EditPreference = ({
         isLoading={isCreateLoading || isUpdateLoading}
       />
 
-      <PreferenceViewDrawer
-        drawerOpen={preferenceDrawerOpen === "view"}
+      <MultiselectQuestionViewDrawer
+        drawerOpen={multiselectQuestionDrawerOpen === "view"}
         questionData={questionData}
         questionsService={multiselectQuestionsService}
         copyQuestion={copyQuestion}
         cacheKey={cacheKey}
         onDrawerClose={() => {
-          setPreferenceDrawerOpen(null)
+          setMultiselectQuestionDrawerOpen(null)
         }}
       />
 
       {deleteConfirmModalOpen && (
-        <PreferenceDeleteModal
+        <MultiselectQuestionDeleteModal
           multiselectQuestion={deleteConfirmModalOpen}
           onClose={() => {
             setDeleteConfirmModalOpen(null)
@@ -149,4 +149,4 @@ const EditPreference = ({
   )
 }
 
-export default EditPreference
+export default EditMultiselectQuestion

@@ -184,7 +184,7 @@ const SettingsPreferences = () => {
   ) {
     void router.push("/unauthorized")
   }
-  if (v2Preferences) void router.push("/settings/preferences-v2")
+  if (v2Preferences) void router.push("/settings/multiselectquestions/preferences")
 
   return (
     <>
@@ -193,32 +193,34 @@ const SettingsPreferences = () => {
           <title>{`Settings - Preferences - ${t("nav.siteTitlePartners")}`}</title>
         </Head>
         <NavigationHeader className="relative" title={t("t.settings")} />
-        <TabView
-          hideTabs={!enableProperties}
-          tabs={getSettingsTabs(SettingsIndexEnum.preferences, router, v2Preferences)}
-        >
-          <LoadingOverlay isLoading={loading}>
-            <StandardCard
-              title={t("t.preferences")}
-              emptyStateMessage={t("t.none")}
-              footer={
-                <Button
-                  size="sm"
-                  onClick={() => {
-                    setQuestionData(null)
-                    setPreferenceDrawerOpen("add")
-                  }}
-                  id={"preference-add-item"}
-                  disabled={loading}
-                >
-                  {t("t.addItem")}
-                </Button>
-              }
-            >
-              {getCardContent()}
-            </StandardCard>
-          </LoadingOverlay>
-        </TabView>
+        {!v2Preferences && (
+          <TabView
+            hideTabs={!enableProperties}
+            tabs={getSettingsTabs(SettingsIndexEnum.preferences, router, v2Preferences)}
+          >
+            <LoadingOverlay isLoading={loading}>
+              <StandardCard
+                title={t("t.preferences")}
+                emptyStateMessage={t("t.none")}
+                footer={
+                  <Button
+                    size="sm"
+                    onClick={() => {
+                      setQuestionData(null)
+                      setPreferenceDrawerOpen("add")
+                    }}
+                    id={"preference-add-item"}
+                    disabled={loading}
+                  >
+                    {t("t.addItem")}
+                  </Button>
+                }
+              >
+                {getCardContent()}
+              </StandardCard>
+            </LoadingOverlay>
+          </TabView>
+        )}
       </Layout>
 
       <PreferenceDrawer

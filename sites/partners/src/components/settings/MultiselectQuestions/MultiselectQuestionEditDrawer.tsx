@@ -31,12 +31,12 @@ import {
   YesNoEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import ManageIconSection from "../ManageIconSection"
-import { DrawerType } from "./EditPreference"
+import { DrawerType } from "./EditMultiselectQuestion"
 import SectionWithGrid from "../../shared/SectionWithGrid"
-import s from "./PreferenceEditDrawer.module.scss"
+import s from "./MultiselectQuestionEditDrawer.module.scss"
 import { useMapLayersList } from "../../../lib/hooks"
 
-type PreferenceEditDrawerProps = {
+type MultiselectQuestionEditDrawerProps = {
   drawerOpen: boolean
   questionData: MultiselectQuestion
   setQuestionData: React.Dispatch<React.SetStateAction<MultiselectQuestion>>
@@ -68,7 +68,7 @@ type OptionForm = {
 
 const alphaNumericPattern = /^[a-zA-Z0-9 '()]+$/
 
-const PreferenceEditDrawer = ({
+const MultiselectQuestionEditDrawer = ({
   drawerType,
   questionData,
   setQuestionData,
@@ -78,7 +78,7 @@ const PreferenceEditDrawer = ({
   copyQuestion,
   setDeleteConfirmModalOpen,
   isLoading,
-}: PreferenceEditDrawerProps) => {
+}: MultiselectQuestionEditDrawerProps) => {
   const [optionDrawerOpen, setOptionDrawerOpen] = useState<DrawerType | null>(null)
   const [optionData, setOptionData] = useState<MultiselectOption>(null)
   const [dragOrder, setDragOrder] = useState([])
@@ -239,7 +239,7 @@ const PreferenceEditDrawer = ({
   /**
    * Saves the preference and the associated options
    */
-  const savePreference = async (forceToVisible: boolean = null) => {
+  const saveMultiselectQuestion = async (forceToVisible: boolean = null) => {
     const validation = await trigger()
     if (!questionData || !questionData?.multiselectOptions?.length) {
       setError("questions", { message: t("errors.requiredFieldError") })
@@ -290,7 +290,7 @@ const PreferenceEditDrawer = ({
   }
 
   const toggleVisibility = () => {
-    void savePreference(
+    void saveMultiselectQuestion(
       !questionData || questionData?.status === MultiselectQuestionsStatusEnum.draft
     )
   }
@@ -595,7 +595,7 @@ const PreferenceEditDrawer = ({
             type="button"
             variant="primary"
             loadingMessage={isLoading && t("t.formSubmitted")}
-            onClick={() => savePreference()}
+            onClick={() => saveMultiselectQuestion()}
             id={"preference-save-button"}
           >
             {t("t.save")}
@@ -990,4 +990,4 @@ const PreferenceEditDrawer = ({
   )
 }
 
-export default PreferenceEditDrawer
+export default MultiselectQuestionEditDrawer

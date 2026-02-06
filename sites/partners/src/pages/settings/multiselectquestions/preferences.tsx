@@ -1,5 +1,4 @@
-import React, { useContext, useState, useMemo } from "react"
-import { useRouter } from "next/router"
+import React, { useContext, useMemo, useState } from "react"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import {
   FeatureFlagEnum,
@@ -11,21 +10,28 @@ import { AgTable, t, useAgTable } from "@bloom-housing/ui-components"
 import { Button, Tag } from "@bloom-housing/ui-seeds"
 import dayjs from "dayjs"
 import Head from "next/head"
-import Layout from "../../layouts"
-import { NavigationHeader } from "../../components/shared/NavigationHeader"
-import { useJurisdictionalMultiselectQuestionList } from "../../lib/hooks"
-import EditPreference, { DrawerType } from "../../components/settings/preferences-v2/EditPreference"
-import styles from "./preferences-v2.module.scss"
-import TabView from "../../layouts/TabView"
-import { getSettingsTabs, SettingsIndexEnum } from "../../components/settings/SettingsViewHelpers"
+import { useRouter } from "next/router"
+import EditMultiselectQuestion, {
+  DrawerType,
+} from "../../../components/settings/MultiselectQuestions/EditMultiselectQuestion"
+import {
+  getSettingsTabs,
+  SettingsIndexEnum,
+} from "../../../components/settings/SettingsViewHelpers"
+import { NavigationHeader } from "../../../components/shared/NavigationHeader"
+import Layout from "../../../layouts"
+import TabView from "../../../layouts/TabView"
+import { useJurisdictionalMultiselectQuestionList } from "../../../lib/hooks"
+import styles from "./preferences.module.scss"
 
-const SettingsPreferences = () => {
+const MultiselectQuestionsPreferences = () => {
   const { profile, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
   const router = useRouter()
   const tableOptions = useAgTable()
   const enableProperties = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableProperties)
 
-  const [preferenceDrawerOpen, setPreferenceDrawerOpen] = useState<DrawerType | null>(null)
+  const [multiselectQuestionDrawerOpen, setMultiselectQuestionDrawerOpen] =
+    useState<DrawerType | null>(null)
   const [questionData, setQuestionData] = useState<MultiselectQuestion>(null)
 
   const columns = useMemo(() => {
@@ -71,7 +77,7 @@ const SettingsPreferences = () => {
               variant="text"
               onClick={() => {
                 setQuestionData(preference)
-                setPreferenceDrawerOpen("edit")
+                setMultiselectQuestionDrawerOpen("edit")
               }}
               id={`preference-link-${id}`}
             >
@@ -82,7 +88,7 @@ const SettingsPreferences = () => {
               variant="text"
               onClick={() => {
                 setQuestionData(preference)
-                setPreferenceDrawerOpen("view")
+                setMultiselectQuestionDrawerOpen("view")
               }}
               id={`preference-link-${id}`}
             >
@@ -96,7 +102,13 @@ const SettingsPreferences = () => {
 
   const { data, loading, cacheKey } = useJurisdictionalMultiselectQuestionList(
     profile?.jurisdictions?.map((jurisdiction) => jurisdiction.id).toString(),
-    MultiselectQuestionsApplicationSectionEnum.preferences
+    MultiselectQuestionsApplicationSectionEnum.preferences,
+    [
+      MultiselectQuestionsStatusEnum.draft,
+      MultiselectQuestionsStatusEnum.visible,
+      MultiselectQuestionsStatusEnum.active,
+      MultiselectQuestionsStatusEnum.toRetire,
+    ]
   )
 
   const items = useMemo(
@@ -170,7 +182,7 @@ const SettingsPreferences = () => {
                         size="sm"
                         onClick={() => {
                           setQuestionData(null)
-                          setPreferenceDrawerOpen("add")
+                          setMultiselectQuestionDrawerOpen("add")
                         }}
                         id={"add-preference"}
                       >
@@ -185,10 +197,10 @@ const SettingsPreferences = () => {
         </TabView>
       </Layout>
 
-      <EditPreference
+      <EditMultiselectQuestion
         cacheKey={cacheKey}
-        preferenceDrawerOpen={preferenceDrawerOpen}
-        setPreferenceDrawerOpen={setPreferenceDrawerOpen}
+        multiselectQuestionDrawerOpen={multiselectQuestionDrawerOpen}
+        setMultiselectQuestionDrawerOpen={setMultiselectQuestionDrawerOpen}
         questionData={questionData}
         setQuestionData={setQuestionData}
       />
@@ -196,4 +208,4 @@ const SettingsPreferences = () => {
   )
 }
 
-export default SettingsPreferences
+export default MultiselectQuestionsPreferences

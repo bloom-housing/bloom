@@ -555,7 +555,7 @@ export const stagingSeed = async (
           MultiselectQuestionsApplicationSectionEnum.preferences,
         options: [
           {
-            name: 'At least one member of my household is a city employee',
+            text: 'At least one member of my household is a city employee',
             collectAddress: false,
             ordinal: 0,
           },

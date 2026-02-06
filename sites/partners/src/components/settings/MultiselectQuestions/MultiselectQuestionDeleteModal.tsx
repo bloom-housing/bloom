@@ -4,19 +4,19 @@ import { Button, Dialog } from "@bloom-housing/ui-seeds"
 import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
 import { MultiselectQuestion } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
-type PreferenceDeleteModalProps = {
+type MultiselectQuestionDeleteModalProps = {
   onClose: () => void
   multiselectQuestion: MultiselectQuestion
 }
 
-export const PreferenceDeleteModal = ({
+const MultiselectQuestionDeleteModal = ({
   multiselectQuestion,
   onClose,
-}: PreferenceDeleteModalProps) => {
+}: MultiselectQuestionDeleteModalProps) => {
   const { multiselectQuestionsService } = useContext(AuthContext)
   const { addToast } = useContext(MessageContext)
 
-  const deletePreference = () => {
+  const deleteMultiselectQuestion = () => {
     multiselectQuestionsService
       .delete({
         body: { id: multiselectQuestion.id },
@@ -43,7 +43,7 @@ export const PreferenceDeleteModal = ({
         {t("settings.preferenceDeleteConfirmation")}
       </Dialog.Content>
       <Dialog.Footer>
-        <Button type="button" variant="alert" onClick={deletePreference} size="sm">
+        <Button type="button" variant="alert" onClick={deleteMultiselectQuestion} size="sm">
           {t("t.delete")}
         </Button>
         <Button
@@ -59,3 +59,5 @@ export const PreferenceDeleteModal = ({
     </Dialog>
   )
 }
+
+export default MultiselectQuestionDeleteModal

@@ -1,10 +1,5 @@
 import React from "react"
-import { setupServer } from "msw/lib/node"
-import { fireEvent, waitFor, within } from "@testing-library/react"
-import userEvent from "@testing-library/user-event"
-import { rest } from "msw"
 import { MessageContext, MessageProvider } from "@bloom-housing/shared-helpers"
-import { Toast } from "@bloom-housing/ui-seeds"
 import {
   listing,
   multiselectQuestionPreferenceV2,
@@ -13,8 +8,13 @@ import {
   FeatureFlagEnum,
   MultiselectQuestionsStatusEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { mockNextRouter, render } from "../../testUtils"
-import SettingsPreferences from "../../../src/pages/settings/preferences-v2"
+import { Toast } from "@bloom-housing/ui-seeds"
+import { fireEvent, waitFor, within } from "@testing-library/react"
+import userEvent from "@testing-library/user-event"
+import { rest } from "msw"
+import { setupServer } from "msw/lib/node"
+import MultiselectQuestionsPreferences from "../../../../src/pages/settings/multiselectquestions/preferences"
+import { mockNextRouter, render } from "../../../testUtils"
 
 const server = setupServer()
 
@@ -90,7 +90,7 @@ describe("settings", () => {
           }
         )
       )
-      const { getByText, findByText, findByRole } = render(<SettingsPreferences />)
+      const { getByText, findByText, findByRole } = render(<MultiselectQuestionsPreferences />)
 
       expect(getByText("Preferences")).toBeInTheDocument()
 
@@ -126,7 +126,7 @@ describe("settings", () => {
 
       const { findByText, findByRole, queryAllByText } = render(
         <ToastProvider>
-          <SettingsPreferences />
+          <MultiselectQuestionsPreferences />
         </ToastProvider>
       )
 
@@ -187,7 +187,7 @@ describe("settings", () => {
         getAllByLabelText,
       } = render(
         <ToastProvider>
-          <SettingsPreferences />
+          <MultiselectQuestionsPreferences />
         </ToastProvider>
       )
 
@@ -269,7 +269,7 @@ describe("settings", () => {
 
       const { findByText, findByRole, findAllByRole } = render(
         <ToastProvider>
-          <SettingsPreferences />
+          <MultiselectQuestionsPreferences />
         </ToastProvider>
       )
 

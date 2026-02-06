@@ -13,7 +13,7 @@ import SectionWithGrid from "../../shared/SectionWithGrid"
 import { useSWRConfig } from "swr"
 import { useMapLayersList } from "../../../lib/hooks"
 
-type PreferenceViewDrawerProps = {
+type MultiselectQuestionViewDrawerProps = {
   drawerOpen: boolean
   questionData: MultiselectQuestion
   questionsService: MultiselectQuestionsService
@@ -22,14 +22,14 @@ type PreferenceViewDrawerProps = {
   onDrawerClose: () => void
 }
 
-const PreferenceViewDrawer = ({
+const MultiselectQuestionViewDrawer = ({
   drawerOpen,
   questionData,
   questionsService,
   copyQuestion,
   cacheKey,
   onDrawerClose,
-}: PreferenceViewDrawerProps) => {
+}: MultiselectQuestionViewDrawerProps) => {
   const { mutate } = useSWRConfig()
   const [optionData, setOptionData] = useState<MultiselectOption>(null)
 
@@ -250,4 +250,4 @@ const PreferenceViewDrawer = ({
   )
 }
 
-export default PreferenceViewDrawer
+export default MultiselectQuestionViewDrawer

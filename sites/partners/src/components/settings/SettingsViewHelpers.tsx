@@ -11,7 +11,7 @@ export enum SettingsIndexEnum {
 export const getSettingsTabs = (
   selectedIndex: SettingsIndexEnum,
   router: NextRouter,
-  v2Preferences: boolean
+  enableV2MSQ: boolean
 ) => {
   const baseUrl = "/settings/"
 
@@ -20,7 +20,7 @@ export const getSettingsTabs = (
       verticalSidebar
       onSelect={(index) => {
         let subpath = SettingsIndexEnum[index]
-        if (v2Preferences && subpath === "preferences") subpath = `${subpath}-v2`
+        if (enableV2MSQ && subpath === "preferences") subpath = `multiselectquestions/${subpath}`
         void router.push(`${baseUrl}/${subpath}`)
       }}
       selectedIndex={selectedIndex}
