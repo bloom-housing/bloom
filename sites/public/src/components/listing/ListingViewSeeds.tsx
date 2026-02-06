@@ -280,6 +280,7 @@ export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: Li
           <MainDetails
             listing={listing}
             jurisdiction={jurisdiction}
+            property={property}
             showFavoriteButton={
               profile && isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableListingFavoriting)
             }
