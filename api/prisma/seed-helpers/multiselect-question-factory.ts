@@ -15,12 +15,17 @@ export const multiselectQuestionFactory = (
   optionalParams?: {
     optOut?: boolean;
     multiselectQuestion?: Partial<Prisma.MultiselectQuestionsCreateInput>;
+    status?: MultiselectQuestionsStatusEnum;
   },
   version2 = false,
 ): Prisma.MultiselectQuestionsCreateInput => {
   const previousMultiselectQuestion = optionalParams?.multiselectQuestion || {};
   const name = optionalParams?.multiselectQuestion?.name || randomName();
   const text = optionalParams?.multiselectQuestion?.text || randomName();
+  const optionsV2 =
+    (optionalParams?.multiselectQuestion
+      ?.options as Prisma.MultiselectOptionsCreateManyMultiselectQuestionInput[]) ||
+    multiselectOptionFactoryV2(randomInt(1, 3));
   const baseFields = {
     applicationSection:
       optionalParams?.multiselectQuestion?.applicationSection ||
@@ -51,12 +56,12 @@ export const multiselectQuestionFactory = (
     isExclusive: optionalParams?.multiselectQuestion?.isExclusive ?? false,
     multiselectOptions: {
       createMany: {
-        data: multiselectOptionFactoryV2(randomInt(1, 3)),
+        data: optionsV2,
       },
     },
     name: name,
     subText: `sub text for ${name}`,
-    status: MultiselectQuestionsStatusEnum.visible,
+    status: optionalParams?.status || MultiselectQuestionsStatusEnum.visible,
     // TODO: Can be removed after MSQ refactor
     text: name,
   };
