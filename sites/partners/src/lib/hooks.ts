@@ -14,6 +14,7 @@ import {
   ListingViews,
   MultiselectQuestionFilterParams,
   MultiselectQuestionsApplicationSectionEnum,
+  MultiselectQuestionsStatusEnum,
   OrderByEnum,
   UserRole,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -407,7 +408,8 @@ export function useMultiselectQuestionList() {
 
 export function useJurisdictionalMultiselectQuestionList(
   jurisdictionId: string,
-  applicationSection?: MultiselectQuestionsApplicationSectionEnum
+  applicationSection?: MultiselectQuestionsApplicationSectionEnum,
+  statuses?: MultiselectQuestionsStatusEnum[]
 ) {
   const { multiselectQuestionsService } = useContext(AuthContext)
 
@@ -424,6 +426,12 @@ export function useJurisdictionalMultiselectQuestionList(
     params.filter.push({
       $comparison: EnumMultiselectQuestionFilterParamsComparison["="],
       applicationSection,
+    })
+  }
+  if (statuses) {
+    params.filter.push({
+      $comparison: EnumMultiselectQuestionFilterParamsComparison["IN"],
+      status: statuses.join(",") as MultiselectQuestionsStatusEnum,
     })
   }
 
