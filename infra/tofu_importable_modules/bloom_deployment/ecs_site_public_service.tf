@@ -63,6 +63,7 @@ resource "aws_ecs_service" "bloom_site_public" {
   depends_on = [
     aws_ecs_service.bloom_api,
     aws_route_table_association.private_subnet,
+    null_resource.bloom_dbseed_run,
   ]
   region                = var.aws_region
   cluster               = aws_ecs_cluster.bloom.arn
