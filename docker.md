@@ -11,6 +11,16 @@ start the deployment. The sites are available at:
 - partners: http://localhost:3001
 - public: http://localhost:3000
 
+Optionally, start pgadmin for looking around the database:
+
+`COMPOSE_PROFILES=pgadmin docker compose up` or `docker compose start pgadmin`:
+
+- pgadmin: http://localhost:3200
+   - username: `admin@example.com`
+   - password: `abcdef`
+   - database user: `bloom_readonly`
+   - database password: `bloom_readonly_pw`
+
 > [!NOTE]
 > If running on mac apple silicon, docker and podman run a linux VM where the images are build and
 > run. We have hit issues when the VM does not have enough disk space and memory. We've found the
@@ -33,19 +43,6 @@ The following containers are defined in the [docker-compose.yml](./docker-compos
 - `partners`: the [partners site](./sites/partners).
 - `public`: the [public site](./sites/public).
 
-The following containers will be started if `COMPOSE_PROFILES=pgadmin`:
-
-- `pgadmin`: runs https://www.pgadmin.org/ pre-configured to connect to the `db` as the
-  `bloom_readonly` user. Log in to pgadmin at http://localhost:3200 with:
-
-     - Username: `admin@example.com`
-     - Password: `abcdef`
-
-    Log into the `db` using password `bloom_readonly_pw`.
-
-    Alternativly, if the compose stack is already running without `COMPOSE_PROFILES=pgadmin`, you
-    can start pgadmin by running `docker compose up pgadmin` in a separate shell.
-
 Build, start, and tear down containers with the following commands. Each command takes an optional
 list of containers to operate on. By default the command operates on all containers.
 
@@ -58,6 +55,52 @@ For example, to rebuild just the api and partners site docker images, run:
 ```bash
 docker compose build api partners
 ```
+
+### api
+
+Resources:
+- vCPU: 1
+- memory: 2 GiB
+
+### partners
+
+Node JS:
+-  `NODE_OPTIONS='--max-semi-space-size=64 --max-old-space-size=2048'`
+
+Resources:
+- vCPU: 2
+- memory: 4 GiB
+
+### public
+
+Node JS:
+-  `NODE_OPTIONS='--max-semi-space-size=128 --max-old-space-size=4096'`
+
+Resources:
+- vCPU: 2
+- memory: 6 GiB
+
+### Resource Settings
+
+The container vCPU and memory limits were set by starting with the smallest [AWS ECS Fargate
+limits](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_definition_parameters.html#task_size)
+then increasing when the container needed more during testing.
+
+The Node JS memory settings were set by manually testing different settings combinations. There are
+likely more optimal configurations, that require a more analytical testing approach to find.
+
+The default memory limits are described in
+https://developers.redhat.com/articles/2025/10/10/nodejs-20-memory-management-containers. The limits
+were increased for the Next js sites because they run `next build` at container start time. The
+current `next build` requires access to a deployed Bloom api and database to succeed. The current
+container resource usage pattern is to spike to the limit during `next build` then decrease to
+minimal usage after starting serving the server.
+
+Hacking the next build process was explored in
+https://github.com/bloom-housing/bloom/issues/5437#issuecomment-3434286013. Configuring a [shared
+build cache](https://nextjs.org/docs/15/pages/guides/self-hosting#configuring-caching) is the
+current planned workaround to reducing container start latency and resource utilization but not yet
+implemented.
 
 ## CI
 
