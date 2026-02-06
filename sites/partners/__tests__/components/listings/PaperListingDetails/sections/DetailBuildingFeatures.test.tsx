@@ -80,4 +80,83 @@ describe("DetailBuildingFeatures", () => {
     expect(listItems[0]).toHaveTextContent("Allows dogs")
     expect(listItems[1]).toHaveTextContent("Allows cats")
   })
+
+  it("should render full parking types list when enableParkingTypes feature flag is true", () => {
+    render(
+      <AuthContext.Provider
+        value={{
+          doJurisdictionsHaveFeatureFlagOn: (flag) => flag === FeatureFlagEnum.enableParkingType,
+        }}
+      >
+        <ListingContext.Provider
+          value={{
+            ...listing,
+            parkType: {
+              id: "testId",
+              createdAt: new Date(),
+              updatedAt: new Date(),
+              onStreet: true,
+              offStreet: true,
+              garage: true,
+              carport: true,
+            },
+          }}
+        >
+          <DetailBuildingFeatures />
+        </ListingContext.Provider>
+      </AuthContext.Provider>
+    )
+
+    expect(screen.getByText("Parking types")).toBeInTheDocument()
+    const list = screen.getByTestId("parking-types-list")
+    const listItems = within(list).getAllByRole("listitem")
+    expect(listItems[0]).toHaveTextContent("On street")
+    expect(listItems[1]).toHaveTextContent("Off street")
+    expect(listItems[2]).toHaveTextContent("Garage")
+    expect(listItems[3]).toHaveTextContent("Carport")
+  })
+
+  it("should render None for parking types list when enableParkingTypes feature flag is true and no parking types are set", () => {
+    render(
+      <AuthContext.Provider
+        value={{
+          doJurisdictionsHaveFeatureFlagOn: (flag) => flag === FeatureFlagEnum.enableParkingType,
+        }}
+      >
+        <ListingContext.Provider
+          value={{
+            ...listing,
+            parkType: {
+              id: "testId",
+              createdAt: new Date(),
+              updatedAt: new Date(),
+              onStreet: false,
+              offStreet: false,
+              garage: false,
+              carport: false,
+            },
+          }}
+        >
+          <DetailBuildingFeatures />
+        </ListingContext.Provider>
+      </AuthContext.Provider>
+    )
+
+    const parkingTypesSectionHeader = screen.getByText("Parking types")
+    expect(parkingTypesSectionHeader).toBeInTheDocument()
+    expect(within(parkingTypesSectionHeader.parentElement).getByText("None")).toBeInTheDocument()
+    expect(screen.queryByTestId("parking-types-list")).not.toBeInTheDocument()
+    expect(
+      within(parkingTypesSectionHeader.parentElement).queryByText("On street")
+    ).not.toBeInTheDocument()
+    expect(
+      within(parkingTypesSectionHeader.parentElement).queryByText("Off street")
+    ).not.toBeInTheDocument()
+    expect(
+      within(parkingTypesSectionHeader.parentElement).queryByText("Garage")
+    ).not.toBeInTheDocument()
+    expect(
+      within(parkingTypesSectionHeader.parentElement).queryByText("Carport")
+    ).not.toBeInTheDocument()
+  })
 })

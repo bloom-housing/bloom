@@ -1223,6 +1223,7 @@ model Listings {
   ownerCompany                         String?                     @map("owner_company")
   paperApplication                     Boolean?                    @map("paper_application")
   parkingFee                           String?                     @map("parking_fee")
+  parkingTypeId                        String?                     @unique @map("parking_type_id") @db.Uuid
   petPolicy                            String?                     @map("pet_policy")
   phoneNumber                          String?                     @map("phone_number")
   postmarkedApplicationsReceivedByDate DateTime?                   @map("postmarked_applications_received_by_date") @db.Timestamptz(6)
@@ -1285,6 +1286,7 @@ model Listings {
   listingsMarketingFlyerFile            Assets?                       @relation("marketing_flyer_file", fields: [marketingFlyerFileId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   listingsResult                        Assets?                       @relation("listings_result", fields: [resultId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   listingUtilities                      ListingUtilities?             @relation(fields: [utilitiesId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  parkType                              ListingParkingType?           @relation(fields: [parkingTypeId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   property                              Properties?                   @relation(fields: [propertyId], references: [id])
   requestedChangesUser                  UserAccounts?                 @relation("requested_changes_user", fields: [requestedChangesUserId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   requiredDocumentsList                 ListingDocuments?             @relation(fields: [documentsId], references: [id], onDelete: NoAction, onUpdate: NoAction)
@@ -1298,6 +1300,19 @@ model Listings {
 
   @@index([jurisdictionId])
   @@map("listings")
+}
+
+model ListingParkingType {
+  id        String    @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt DateTime  @updatedAt @map("updated_at") @db.Timestamp(6)
+  onStreet  Boolean?  @map("on_street")
+  offStreet Boolean?  @map("off_street")
+  garage    Boolean?  @map("garage")
+  carport   Boolean?  @map("carport")
+  listing   Listings?
+
+  @@map("listing_parking_type")
 }
 
 model ListingSnapshot {

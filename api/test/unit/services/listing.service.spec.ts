@@ -51,6 +51,7 @@ import { GeocodingService } from '../../../src/services/geocoding.service';
 import { FilterAvailabilityEnum } from '../../../src/enums/listings/filter-availability-enum';
 import { CronJobService } from '../../../src/services/cron-job.service';
 import { MultiselectQuestionService } from '../../../src/services/multiselect-question.service';
+import { create } from 'domain';
 
 /*
   generates a super simple mock listing for us to test logic with
@@ -573,6 +574,12 @@ describe('Testing listing service', () => {
         wideDoorways: true,
         loweredCabinets: false,
       },
+      parkType: {
+        onStreet: false,
+        offStreet: false,
+        garage: false,
+        carport: false,
+      },
       listingUtilities: {
         water: false,
         gas: true,
@@ -666,6 +673,7 @@ describe('Testing listing service', () => {
           listingsApplicationPickUpAddress: true,
           listingsApplicationDropOffAddress: true,
           listingsApplicationMailingAddress: true,
+          parkType: true,
           units: {
             include: {
               unitAmiChartOverrides: true,
@@ -2435,6 +2443,7 @@ describe('Testing listing service', () => {
           listingsApplicationPickUpAddress: true,
           listingsApplicationDropOffAddress: true,
           listingsApplicationMailingAddress: true,
+          parkType: true,
           units: {
             include: {
               unitAmiChartOverrides: true,
@@ -2955,6 +2964,7 @@ describe('Testing listing service', () => {
           listingsApplicationPickUpAddress: true,
           listingsApplicationDropOffAddress: true,
           listingsApplicationMailingAddress: true,
+          parkType: true,
           units: {
             include: {
               unitAmiChartOverrides: true,
@@ -3229,6 +3239,7 @@ describe('Testing listing service', () => {
           requestedChangesUser: true,
           reservedCommunityTypes: true,
           requiredDocumentsList: true,
+          parkType: true,
           units: {
             include: {
               amiChart: {
@@ -3358,6 +3369,7 @@ describe('Testing listing service', () => {
           requestedChangesUser: true,
           reservedCommunityTypes: true,
           requiredDocumentsList: true,
+          parkType: true,
           units: {
             include: {
               amiChart: {
@@ -3496,6 +3508,14 @@ describe('Testing listing service', () => {
               cable: true,
               phone: false,
               internet: true,
+            },
+          },
+          parkType: {
+            create: {
+              carport: false,
+              garage: false,
+              offStreet: false,
+              onStreet: false,
             },
           },
           listingsApplicationMailingAddress: {
@@ -3739,6 +3759,7 @@ describe('Testing listing service', () => {
           requestedChangesUser: true,
           reservedCommunityTypes: true,
           requiredDocumentsList: true,
+          parkType: true,
           units: {
             include: {
               amiChart: {
@@ -3882,6 +3903,7 @@ describe('Testing listing service', () => {
           requestedChangesUser: true,
           reservedCommunityTypes: true,
           requiredDocumentsList: true,
+          parkType: true,
           units: {
             include: {
               amiChart: {
@@ -4018,6 +4040,14 @@ describe('Testing listing service', () => {
               cable: true,
               phone: false,
               internet: true,
+            },
+          },
+          parkType: {
+            create: {
+              carport: false,
+              garage: false,
+              offStreet: false,
+              onStreet: false,
             },
           },
           listingsApplicationMailingAddress: {
@@ -4226,6 +4256,7 @@ describe('Testing listing service', () => {
           requestedChangesUser: true,
           reservedCommunityTypes: true,
           requiredDocumentsList: true,
+          parkType: true,
           units: {
             include: {
               amiChart: {
@@ -4364,6 +4395,14 @@ describe('Testing listing service', () => {
               cable: true,
               phone: false,
               internet: true,
+            },
+          },
+          parkType: {
+            create: {
+              carport: false,
+              garage: false,
+              offStreet: false,
+              onStreet: false,
             },
           },
           listingsApplicationMailingAddress: {
@@ -4626,6 +4665,7 @@ describe('Testing listing service', () => {
           requestedChangesUser: true,
           reservedCommunityTypes: true,
           requiredDocumentsList: true,
+          parkType: true,
           units: {
             include: {
               amiChart: {
@@ -4742,6 +4782,7 @@ describe('Testing listing service', () => {
           requestedChangesUser: true,
           reservedCommunityTypes: true,
           requiredDocumentsList: true,
+          parkType: true,
           units: {
             include: {
               amiChart: {
@@ -4845,6 +4886,7 @@ describe('Testing listing service', () => {
           requestedChangesUser: true,
           reservedCommunityTypes: true,
           requiredDocumentsList: true,
+          parkType: true,
           units: {
             include: {
               amiChart: {
@@ -5285,6 +5327,7 @@ describe('Testing listing service', () => {
           requestedChangesUser: true,
           reservedCommunityTypes: true,
           requiredDocumentsList: true,
+          parkType: true,
           units: {
             include: {
               amiChart: {
@@ -5835,6 +5878,7 @@ describe('Testing listing service', () => {
           requestedChangesUser: true,
           reservedCommunityTypes: true,
           requiredDocumentsList: true,
+          parkType: true,
           units: {
             include: {
               amiChart: {
@@ -6111,6 +6155,7 @@ describe('Testing listing service', () => {
           requestedChangesUser: true,
           reservedCommunityTypes: true,
           requiredDocumentsList: true,
+          parkType: true,
           units: {
             include: {
               amiChart: {
