@@ -7596,11 +7596,6 @@ export interface ListingFeaturesConfiguration {
   fields?: ListingFeatureField[]
 }
 
-export interface ApplicationStringConfig {
-  /**  */
-  strings?: object
-}
-
 export interface JurisdictionCreate {
   /**  */
   name: string
@@ -7669,7 +7664,7 @@ export interface JurisdictionCreate {
   listingFeaturesConfiguration?: ListingFeaturesConfiguration
 
   /**  */
-  applicationStringConfig?: ApplicationStringConfig
+  applicationConfig?: string
 }
 
 export interface JurisdictionUpdate {
@@ -7743,7 +7738,7 @@ export interface JurisdictionUpdate {
   listingFeaturesConfiguration?: ListingFeaturesConfiguration
 
   /**  */
-  applicationStringConfig?: ApplicationStringConfig
+  applicationConfig?: string
 }
 
 export interface FeatureFlag {
@@ -7852,7 +7847,7 @@ export interface Jurisdiction {
   listingFeaturesConfiguration?: ListingFeaturesConfiguration
 
   /**  */
-  applicationStringConfig?: ApplicationStringConfig
+  applicationConfig?: string
 }
 
 export interface AddressInput {

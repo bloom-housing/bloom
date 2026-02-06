@@ -1,2 +1,2 @@
 -- AlterTable
-ALTER TABLE "jurisdictions" ADD COLUMN     "application_string_config" JSONB;
+ALTER TABLE "jurisdictions" ADD COLUMN     "application_config" JSONB;

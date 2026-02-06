@@ -256,7 +256,7 @@ export const stagingSeed = async (
         'units',
         'property',
       ],
-      applicationStringConfig: {
+      applicationConfig: {
         strings: {
           whatToExpect: {
             fcfsFinePrint:

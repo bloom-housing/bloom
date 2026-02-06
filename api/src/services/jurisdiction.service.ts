@@ -32,11 +32,11 @@ export class JurisdictionService {
     });
     const mapped = mapTo(Jurisdiction, rawJurisdictions);
 
-    // Manually preserve applicationStringConfig for each jurisdiction
+    // Manually preserve applicationConfig for each jurisdiction
     mapped.forEach((jurisdiction, index) => {
-      if (rawJurisdictions[index].applicationStringConfig) {
-        jurisdiction.applicationStringConfig = rawJurisdictions[index]
-          .applicationStringConfig as Record<string, any>;
+      if (rawJurisdictions[index].applicationConfig) {
+        jurisdiction.applicationConfig = rawJurisdictions[index]
+          .applicationConfig as string;
       }
     });
 
@@ -94,10 +94,9 @@ export class JurisdictionService {
 
     const mapped = mapTo(Jurisdiction, rawJurisdiction);
 
-    // Manually preserve applicationStringConfig
-    if (rawJurisdiction.applicationStringConfig) {
-      mapped.applicationStringConfig =
-        rawJurisdiction.applicationStringConfig as Record<string, any>;
+    // Manually preserve applicationConfig
+    if (rawJurisdiction.applicationConfig) {
+      mapped.applicationConfig = rawJurisdiction.applicationConfig as string;
     }
 
     return mapped;
@@ -112,8 +111,8 @@ export class JurisdictionService {
         ...incomingData,
         listingFeaturesConfiguration:
           incomingData.listingFeaturesConfiguration as unknown as Prisma.JsonArray,
-        applicationStringConfig:
-          incomingData.applicationStringConfig as unknown as Prisma.InputJsonValue,
+        applicationConfig:
+          incomingData.applicationConfig as unknown as Prisma.InputJsonValue,
       },
       include: view,
     });
@@ -134,8 +133,8 @@ export class JurisdictionService {
         id: undefined,
         listingFeaturesConfiguration:
           incomingData.listingFeaturesConfiguration as unknown as Prisma.JsonArray,
-        applicationStringConfig:
-          incomingData.applicationStringConfig as unknown as Prisma.InputJsonValue,
+        applicationConfig:
+          incomingData.applicationConfig as unknown as Prisma.InputJsonValue,
       },
       where: {
         id: incomingData.id,
