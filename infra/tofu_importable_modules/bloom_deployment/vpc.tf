@@ -276,18 +276,6 @@ resource "aws_vpc_security_group_egress_rule" "dbseed_to_db" {
     Name = "allow-db"
   }
 }
-resource "aws_vpc_security_group_egress_rule" "dbseed_to_api" {
-  count                        = var.bloom_dbseed_image == "" ? 0 : 1
-  region                       = var.aws_region
-  security_group_id            = aws_security_group.dbseed[0].id
-  referenced_security_group_id = aws_security_group.api.id
-  ip_protocol                  = "tcp"
-  from_port                    = 3100
-  to_port                      = 3100
-  tags = {
-    Name = "allow-api"
-  }
-}
 resource "aws_vpc_security_group_egress_rule" "dbseed_to_nat" {
   count             = var.bloom_dbseed_image == "" ? 0 : 1
   region            = var.aws_region
@@ -350,12 +338,10 @@ resource "aws_security_group" "api" {
   description = "Rules for Bloom API tasks."
 }
 resource "aws_vpc_security_group_ingress_rule" "api" {
-  for_each = merge({
+  for_each = {
     "site-partners" = aws_security_group.site_partners.id
     "site-public"   = aws_security_group.site_public.id
-    }, var.bloom_dbseed_image == "" ? {} : {
-    "dbseed" = aws_security_group.dbseed[0].id
-  })
+  }
   region                       = var.aws_region
   security_group_id            = aws_security_group.api.id
   referenced_security_group_id = each.value
