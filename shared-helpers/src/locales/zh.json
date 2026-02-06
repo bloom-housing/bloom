@@ -134,7 +134,7 @@
   "application.confirmation.viewOriginalListing": "查看原來上市名單",
   "application.contact.additionalPhoneNumber": "我還有另一個電話號碼",
   "application.contact.address": "地址",
-  "application.contact.addressWhereYouCurrentlyLive": "我們需要您目前居住的地址。如果您無家可歸，請填寫收容所地址或您所待地點附近的地址。",
+  "application.contact.addressWhereYouCurrentlyLive": "我們需要您目前的居住地址。如果您無家可歸，請填寫收容所地址或您經常停留地點附近的地址。",
   "application.contact.apt": "公寓或單位號碼",
   "application.contact.city": "城市",
   "application.contact.cityName": "城市名称",

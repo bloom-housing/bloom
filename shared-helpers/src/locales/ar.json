@@ -134,7 +134,7 @@
   "application.confirmation.viewOriginalListing": "عرض القائمة الأصلية",
   "application.contact.additionalPhoneNumber": "لدي رقم هاتف إضافي",
   "application.contact.address": "تبوك",
-  "application.contact.addressWhereYouCurrentlyLive": "نحتاج إلى العنوان الذي تعيش فيه حاليًا. إذا كنت بلا مأوى ، أدخل إما عنوان المأوى أو عنوانًا قريبًا من مكان إقامتك.",
+  "application.contact.addressWhereYouCurrentlyLive": "ننحتاج إلى عنوان مكان إقامتك الحالي. إذا كنت تعاني من التشرد، فيرجى إدخال عنوان المأوى أو عنوان قريب من المكان الذي تقيم فيه.",
   "application.contact.apt": "شقة أو وحدة #",
   "application.contact.city": "مدينة",
   "application.contact.cityName": "اسم المدينة",
