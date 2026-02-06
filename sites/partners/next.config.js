@@ -37,8 +37,7 @@ const tailwindVars = require("@bloom-housing/ui-components/tailwind.tosass.js")(
 module.exports = withBundleAnalyzer(
   withTM({
     typescript: {
-      // don't typecheck during next build. We typecheck in other CI.
-      ignoreBuildErrors: true,
+      ignoreBuildErrors: process.env.DISABLE_NEXT_TYPECHECK === "TRUE",
     },
     experimental: {
       webpackBuildWorker: true,

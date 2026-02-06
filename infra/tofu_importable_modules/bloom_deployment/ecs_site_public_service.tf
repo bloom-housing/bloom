@@ -1,6 +1,7 @@
 locals {
   site_public_default_env_vars = {
     NODE_ENV                      = "production"
+    DISABLE_NEXT_TYPECHECK        = "TRUE"
     NEXTJS_PORT                   = "3000"
     BACKEND_API_BASE              = "http://bloom-api:3100"
     BACKEND_API_BASE_NEW          = "http://bloom-api:3100"
