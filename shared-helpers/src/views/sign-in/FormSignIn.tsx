@@ -15,6 +15,7 @@ export type FormSignInProps = {
   networkStatus: NetworkStatus
   showRegisterBtn?: boolean
   children: React.ReactNode
+  createAccountAction?: () => void
 }
 
 export type FormSignInControl = {
@@ -30,6 +31,7 @@ const FormSignIn = ({
   children,
   networkStatus,
   showRegisterBtn,
+  createAccountAction,
   control: { errors },
 }: FormSignInProps) => {
   const router = useRouter()
@@ -69,7 +71,16 @@ const FormSignIn = ({
                 {t("authentication.signIn.pwdless.createAccountCopy")}
               </div>
             )}
-            <Button variant="primary-outlined" href={createAccountUrl}>
+            <Button
+              variant="primary-outlined"
+              onClick={() => {
+                if (createAccountAction) {
+                  createAccountAction()
+                } else {
+                  void router.push(createAccountUrl)
+                }
+              }}
+            >
               {t("account.createAccount")}
             </Button>
           </CardSection>

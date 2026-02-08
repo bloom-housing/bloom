@@ -19,6 +19,7 @@ import {
   FormSignInPwdless,
   NetworkErrorMessage,
   useMutate,
+  getListingRedirectUrl,
 } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../lib/constants"
 import { PasswordExpiredModal } from "../components/account/PasswordExpiredModal"
@@ -30,7 +31,8 @@ import {
 import SignUpBenefits from "../components/account/SignUpBenefits"
 import signUpBenefitsStyles from "../../styles/sign-up-benefits.module.scss"
 import SignUpBenefitsHeadingGroup from "../components/account/SignUpBenefitsHeadingGroup"
-import { setFeatureFlagLocalStorage } from "../lib/helpers"
+import { isFeatureFlagOn, setFeatureFlagLocalStorage } from "../lib/helpers"
+import { AccountTypeDialog } from "../components/account/AccountTypeDialog"
 
 interface SignInProps {
   jurisdiction: Jurisdiction
@@ -43,6 +45,11 @@ const SignIn = (props: SignInProps) => {
   const { login, requestSingleUseCode, userService } = useContext(AuthContext)
   const signUpCopy = process.env.showMandatedAccounts
   const reCaptchaEnabled = !!process.env.reCaptchaKey
+
+  const enableHousingAdvocate = isFeatureFlagOn(
+    props.jurisdiction,
+    FeatureFlagEnum.enableHousingAdvocate
+  )
 
   /* Form Handler */
   // This is causing a linting issue with unbound-method, see open issue as of 10/21/2020:
@@ -60,6 +67,7 @@ const SignIn = (props: SignInProps) => {
     message: NetworkStatusContent
     type: NetworkStatusType
   }>()
+  const [accountTypeDialog, setAccountTypeDialog] = useState<boolean>(false)
 
   type LoginType = "pwd" | "code"
   const loginType = router.query?.loginType as LoginType
@@ -301,6 +309,18 @@ const SignIn = (props: SignInProps) => {
               }}
               showRegisterBtn={true}
               control={{ errors }}
+              createAccountAction={() => {
+                if (enableHousingAdvocate) {
+                  setAccountTypeDialog(true)
+                } else {
+                  const listingIdRedirect = router.query?.listingId as string
+                  const createAccountUrl = getListingRedirectUrl(
+                    listingIdRedirect,
+                    "/create-account"
+                  )
+                  void router.push(createAccountUrl)
+                }
+              }}
             >
               {process.env.showPwdless ? (
                 <FormSignInPwdless
@@ -354,6 +374,7 @@ const SignIn = (props: SignInProps) => {
         onSubmit={(email) => onResendConfirmationSubmit(email)}
         loadingMessage={isResendConfirmationLoading && t("t.formSubmitted")}
       />
+      <AccountTypeDialog isOpen={accountTypeDialog} onClose={() => setAccountTypeDialog(false)} />
       {reCaptchaEnabled && (
         <GoogleReCaptcha onVerify={onVerify} refreshReCaptcha={refreshReCaptcha} action={"login"} />
       )}

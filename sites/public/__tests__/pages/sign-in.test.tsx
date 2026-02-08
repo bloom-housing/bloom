@@ -1,9 +1,13 @@
 import React from "react"
-import { render, fireEvent, waitFor, act } from "@testing-library/react"
+import { render, fireEvent, waitFor, act, screen } from "@testing-library/react"
 import { useRouter } from "next/router"
 import { MessageContext, AuthContext } from "@bloom-housing/shared-helpers"
 import { jurisdiction } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
-import { User, UserService } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  FeatureFlagEnum,
+  User,
+  UserService,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { SignIn as SignInComponent } from "../../src/pages/sign-in"
 import { Verify } from "../../src/pages/verify"
 
@@ -38,6 +42,61 @@ describe("Sign In Page", () => {
     ;(useRouter as jest.Mock).mockReturnValue("")
   })
 
+  it("opens account type dialog when housing advocate feature flag is enabled", async () => {
+    const advocateJurisdiction = {
+      ...jurisdiction,
+      featureFlags: [
+        ...(jurisdiction.featureFlags || []),
+        {
+          name: FeatureFlagEnum.enableHousingAdvocate,
+          id: "flag-id",
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          active: true,
+          description: "",
+          jurisdictions: [],
+        },
+      ],
+    }
+
+    render(<SignInComponent jurisdiction={advocateJurisdiction} />)
+
+    fireEvent.click(screen.getByRole("button", { name: "Create account" }))
+
+    expect(await screen.findByText("Choose an account type")).toBeInTheDocument()
+  })
+
+  it("does not open account type dialog when housing advocate feature flag is disabled", () => {
+    const mockRouter = {
+      query: {},
+      push: jest.fn(),
+    }
+    ;(useRouter as jest.Mock).mockReturnValue(mockRouter)
+    const advocateJurisdiction = {
+      ...jurisdiction,
+      featureFlags: [
+        ...(jurisdiction.featureFlags || []),
+        {
+          name: FeatureFlagEnum.enableHousingAdvocate,
+          id: "flag-id",
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          active: false,
+          description: "",
+          jurisdictions: [],
+        },
+      ],
+    }
+
+    render(<SignInComponent jurisdiction={advocateJurisdiction} />)
+
+    fireEvent.click(screen.getByRole("button", { name: "Create account" }))
+
+    expect(mockRouter.push).toHaveBeenCalledWith("/create-account")
+
+    expect(screen.queryByText("Choose an account type")).not.toBeInTheDocument()
+  })
+
   it("renders all page elements including fields, buttons and links", () => {
     const { getByText, getByTestId, getByLabelText, getByRole } = renderSignInPage()
 
@@ -50,7 +109,7 @@ describe("Sign In Page", () => {
     expect(getByRole("button", { name: /sign in/i })).toBeInTheDocument()
 
     expect(getByText("Don't have an account?", { selector: "h2" })).toBeInTheDocument()
-    expect(getByRole("link", { name: /create account/i })).toBeInTheDocument()
+    expect(getByRole("button", { name: /create account/i })).toBeInTheDocument()
   })
 
   it("shows success toast with user's first name on successful login", async () => {
@@ -197,7 +256,7 @@ describe("Passwordless Sign In page", () => {
     expect(
       getByText("Sign up quickly with no need to remember any passwords.", { selector: "div" })
     ).toBeInTheDocument()
-    expect(getByRole("link", { name: /create account/i })).toBeInTheDocument()
+    expect(getByRole("button", { name: /create account/i })).toBeInTheDocument()
   })
 
   it("shows error alert and email validation error after clicking 'Get code to sign in' button without filling out email field", async () => {
@@ -367,7 +426,7 @@ describe("Mandated accounts", () => {
       expect(getByRole("link", { name: /forgot password/i })).toBeInTheDocument()
 
       expect(getByText("Don't have an account?", { selector: "h2" })).toBeInTheDocument()
-      expect(getByRole("link", { name: /create account/i })).toBeInTheDocument()
+      expect(getByRole("button", { name: /create account/i })).toBeInTheDocument()
     })
 
     it("redirects to application page with listing ID after successful sign-in", async () => {
@@ -449,7 +508,7 @@ describe("Mandated accounts", () => {
         expect(getByRole("link", { name: /forgot password/i })).toBeInTheDocument()
 
         expect(getByText("Don't have an account?", { selector: "h2" })).toBeInTheDocument()
-        expect(getByRole("link", { name: /create account/i })).toBeInTheDocument()
+        expect(getByRole("button", { name: /create account/i })).toBeInTheDocument()
       })
 
       it("shows success toast after successful login with password", async () => {
