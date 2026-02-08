@@ -844,6 +844,19 @@ describe('Testing application service', () => {
     }));
   };
 
+  const publicAppsBaseWhere = {
+    AND: [
+      {
+        userAccounts: {
+          id: userId,
+        },
+      },
+      {
+        deletedAt: null,
+      },
+    ],
+  };
+
   const publicAppsFindManyCalledWith = {
     select: {
       id: true,
@@ -876,18 +889,90 @@ describe('Testing application service', () => {
         },
       },
     },
-    where: {
-      AND: [
-        {
-          userAccounts: {
-            id: userId,
-          },
-        },
-        {
-          deletedAt: null,
-        },
-      ],
+    where: publicAppsBaseWhere,
+    skip: 0,
+    take: 10,
+    orderBy: {
+      updatedAt: 'desc',
     },
+  };
+
+  const buildPublicAppsExpectedWhere = (
+    filterType: ApplicationsFilterEnum,
+    includeLotteryApps: boolean,
+  ) => {
+    if (filterType === ApplicationsFilterEnum.open) {
+      return {
+        AND: [
+          ...publicAppsBaseWhere.AND,
+          {
+            listings: {
+              is: {
+                status: ListingsStatusEnum.active,
+              },
+            },
+          },
+        ],
+      };
+    }
+
+    if (filterType === ApplicationsFilterEnum.lottery) {
+      return {
+        AND: [
+          ...publicAppsBaseWhere.AND,
+          {
+            listings: {
+              is: {
+                status: { not: ListingsStatusEnum.active },
+                lotteryStatus: LotteryStatusEnum.publishedToPublic,
+              },
+            },
+          },
+        ],
+      };
+    }
+
+    if (filterType === ApplicationsFilterEnum.closed) {
+      if (includeLotteryApps) {
+        return {
+          AND: [
+            ...publicAppsBaseWhere.AND,
+            {
+              listings: {
+                is: {
+                  status: { not: ListingsStatusEnum.active },
+                  OR: [
+                    {
+                      lotteryStatus: {
+                        not: LotteryStatusEnum.publishedToPublic,
+                      },
+                    },
+                    {
+                      lotteryStatus: null,
+                    },
+                  ],
+                },
+              },
+            },
+          ],
+        };
+      }
+
+      return {
+        AND: [
+          ...publicAppsBaseWhere.AND,
+          {
+            listings: {
+              is: {
+                status: { not: ListingsStatusEnum.active },
+              },
+            },
+          },
+        ],
+      };
+    }
+
+    return publicAppsBaseWhere;
   };
 
   describe('listing endpoint', () => {
@@ -992,6 +1077,12 @@ describe('Testing application service', () => {
       prisma.applications.findMany = jest
         .fn()
         .mockResolvedValue(getPublicAppsFindManyMock(mockedValuesWithListing));
+      prisma.applications.count = jest
+        .fn()
+        .mockResolvedValueOnce(1) // open
+        .mockResolvedValueOnce(1) // closed
+        .mockResolvedValueOnce(1) // lottery
+        .mockResolvedValueOnce(3); // total
 
       const params: PublicAppsViewQueryParams = {
         userId: requestingUser.id,
@@ -1003,7 +1094,7 @@ describe('Testing application service', () => {
         user: requestingUser,
       } as unknown as ExpressRequest);
 
-      expect(res.displayApplications.length).toEqual(3);
+      expect(res.items.length).toEqual(3);
       expect(res.applicationsCount).toEqual({
         total: 3,
         open: 1,
@@ -1011,9 +1102,10 @@ describe('Testing application service', () => {
         lottery: 1,
       });
 
-      expect(prisma.applications.findMany).toHaveBeenCalledWith(
-        publicAppsFindManyCalledWith,
-      );
+      expect(prisma.applications.findMany).toHaveBeenCalledWith({
+        ...publicAppsFindManyCalledWith,
+        where: buildPublicAppsExpectedWhere(ApplicationsFilterEnum.all, true),
+      });
     });
 
     it('should get publicAppsView() info when there are lottery listings but includeLottery is false and filter type is all', async () => {
@@ -1035,6 +1127,11 @@ describe('Testing application service', () => {
       prisma.applications.findMany = jest
         .fn()
         .mockResolvedValue(getPublicAppsFindManyMock(mockedValuesWithListing));
+      prisma.applications.count = jest
+        .fn()
+        .mockResolvedValueOnce(1) // open
+        .mockResolvedValueOnce(2) // closed
+        .mockResolvedValueOnce(3); // displayCount
 
       const params: PublicAppsViewQueryParams = {
         userId: requestingUser.id,
@@ -1046,7 +1143,7 @@ describe('Testing application service', () => {
         user: requestingUser,
       } as unknown as ExpressRequest);
 
-      expect(res.displayApplications.length).toEqual(3);
+      expect(res.items.length).toEqual(3);
       expect(res.applicationsCount).toEqual({
         total: 3,
         open: 1,
@@ -1054,9 +1151,10 @@ describe('Testing application service', () => {
         lottery: 0,
       });
 
-      expect(prisma.applications.findMany).toHaveBeenCalledWith(
-        publicAppsFindManyCalledWith,
-      );
+      expect(prisma.applications.findMany).toHaveBeenCalledWith({
+        ...publicAppsFindManyCalledWith,
+        where: buildPublicAppsExpectedWhere(ApplicationsFilterEnum.all, false),
+      });
     });
 
     it('should get publicAppsView() info when applications are available and filterType is open', async () => {
@@ -1077,7 +1175,19 @@ describe('Testing application service', () => {
       });
       prisma.applications.findMany = jest
         .fn()
-        .mockResolvedValue(getPublicAppsFindManyMock(mockedValuesWithListing));
+        .mockResolvedValue(
+          getPublicAppsFindManyMock(
+            mockedValuesWithListing.filter(
+              (app) => app.listings.status === ListingsStatusEnum.active,
+            ),
+          ),
+        );
+      prisma.applications.count = jest
+        .fn()
+        .mockResolvedValueOnce(2) // open
+        .mockResolvedValueOnce(0) // closed
+        .mockResolvedValueOnce(1) // lottery
+        .mockResolvedValueOnce(2); // displayCount
 
       const params: PublicAppsViewQueryParams = {
         userId: requestingUser.id,
@@ -1089,7 +1199,7 @@ describe('Testing application service', () => {
         user: requestingUser,
       } as unknown as ExpressRequest);
 
-      expect(res.displayApplications.length).toEqual(2);
+      expect(res.items.length).toEqual(2);
       expect(res.applicationsCount).toEqual({
         total: 3,
         open: 2,
@@ -1097,9 +1207,10 @@ describe('Testing application service', () => {
         lottery: 1,
       });
 
-      expect(prisma.applications.findMany).toHaveBeenCalledWith(
-        publicAppsFindManyCalledWith,
-      );
+      expect(prisma.applications.findMany).toHaveBeenCalledWith({
+        ...publicAppsFindManyCalledWith,
+        where: buildPublicAppsExpectedWhere(ApplicationsFilterEnum.open, true),
+      });
     });
 
     it('should get publicAppsView() info when applications are available and filterType is closed', async () => {
@@ -1120,7 +1231,22 @@ describe('Testing application service', () => {
       });
       prisma.applications.findMany = jest
         .fn()
-        .mockResolvedValue(getPublicAppsFindManyMock(mockedValuesWithListing));
+        .mockResolvedValue(
+          getPublicAppsFindManyMock(
+            mockedValuesWithListing.filter(
+              (app) =>
+                app.listings.status !== ListingsStatusEnum.active &&
+                app.listings.lotteryStatus !==
+                  LotteryStatusEnum.publishedToPublic,
+            ),
+          ),
+        );
+      prisma.applications.count = jest
+        .fn()
+        .mockResolvedValueOnce(0) // open
+        .mockResolvedValueOnce(2) // closed
+        .mockResolvedValueOnce(1) // lottery
+        .mockResolvedValueOnce(2); // displayCount
 
       const params: PublicAppsViewQueryParams = {
         userId: requestingUser.id,
@@ -1132,7 +1258,7 @@ describe('Testing application service', () => {
         user: requestingUser,
       } as unknown as ExpressRequest);
 
-      expect(res.displayApplications.length).toEqual(2);
+      expect(res.items.length).toEqual(2);
       expect(res.applicationsCount).toEqual({
         total: 3,
         open: 0,
@@ -1140,9 +1266,13 @@ describe('Testing application service', () => {
         lottery: 1,
       });
 
-      expect(prisma.applications.findMany).toHaveBeenCalledWith(
-        publicAppsFindManyCalledWith,
-      );
+      expect(prisma.applications.findMany).toHaveBeenCalledWith({
+        ...publicAppsFindManyCalledWith,
+        where: buildPublicAppsExpectedWhere(
+          ApplicationsFilterEnum.closed,
+          true,
+        ),
+      });
     });
 
     it('should get publicAppsView() info when applications are available and filterType is lottery', async () => {
@@ -1166,7 +1296,22 @@ describe('Testing application service', () => {
       });
       prisma.applications.findMany = jest
         .fn()
-        .mockResolvedValue(getPublicAppsFindManyMock(mockedValuesWithListing));
+        .mockResolvedValue(
+          getPublicAppsFindManyMock(
+            mockedValuesWithListing.filter(
+              (app) =>
+                app.listings.status !== ListingsStatusEnum.active &&
+                app.listings.lotteryStatus ===
+                  LotteryStatusEnum.publishedToPublic,
+            ),
+          ),
+        );
+      prisma.applications.count = jest
+        .fn()
+        .mockResolvedValueOnce(1) // open
+        .mockResolvedValueOnce(0) // closed
+        .mockResolvedValueOnce(2) // lottery
+        .mockResolvedValueOnce(2); // displayCount
 
       const params: PublicAppsViewQueryParams = {
         userId: requestingUser.id,
@@ -1178,7 +1323,7 @@ describe('Testing application service', () => {
         user: requestingUser,
       } as unknown as ExpressRequest);
 
-      expect(res.displayApplications.length).toEqual(2);
+      expect(res.items.length).toEqual(2);
       expect(res.applicationsCount).toEqual({
         total: 3,
         open: 1,
@@ -1186,15 +1331,25 @@ describe('Testing application service', () => {
         lottery: 2,
       });
 
-      expect(prisma.applications.findMany).toHaveBeenCalledWith(
-        publicAppsFindManyCalledWith,
-      );
+      expect(prisma.applications.findMany).toHaveBeenCalledWith({
+        ...publicAppsFindManyCalledWith,
+        where: buildPublicAppsExpectedWhere(
+          ApplicationsFilterEnum.lottery,
+          true,
+        ),
+      });
     });
 
     it('should not error when publicAppsView() is called when applications are unavailable', async () => {
       prisma.applications.findMany = jest
         .fn()
         .mockResolvedValue(getPublicAppsFindManyMock([]));
+      prisma.applications.count = jest
+        .fn()
+        .mockResolvedValueOnce(0) // open
+        .mockResolvedValueOnce(0) // closed
+        .mockResolvedValueOnce(0) // lottery
+        .mockResolvedValueOnce(0); // displayCount
 
       const params: PublicAppsViewQueryParams = {
         userId: requestingUser.id,
@@ -1206,7 +1361,7 @@ describe('Testing application service', () => {
         user: requestingUser,
       } as unknown as ExpressRequest);
 
-      expect(res.displayApplications.length).toEqual(0);
+      expect(res.items.length).toEqual(0);
       expect(res.applicationsCount).toEqual({
         total: 0,
         open: 0,
@@ -1214,9 +1369,10 @@ describe('Testing application service', () => {
         lottery: 0,
       });
 
-      expect(prisma.applications.findMany).toHaveBeenCalledWith(
-        publicAppsFindManyCalledWith,
-      );
+      expect(prisma.applications.findMany).toHaveBeenCalledWith({
+        ...publicAppsFindManyCalledWith,
+        where: buildPublicAppsExpectedWhere(ApplicationsFilterEnum.all, true),
+      });
     });
   });
 
