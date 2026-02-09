@@ -1,4 +1,5 @@
 import React from "react"
+import Markdown from "markdown-to-jsx"
 import { BloomCard, CustomIconMap } from "@bloom-housing/shared-helpers"
 import { Button, Heading, Icon, Message } from "@bloom-housing/ui-seeds"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
@@ -81,7 +82,7 @@ const ApplicationFormLayout = (props: ApplicationFormLayoutProps) => {
         <>
           {props.conductor?.config?.isAdvocate && (
             <Message fullwidth variant="warn">
-              {t("application.form.general.advocateWarning")}
+              <Markdown>{t("application.form.general.advocateWarning")}</Markdown>
             </Message>
           )}
           {props.children}
