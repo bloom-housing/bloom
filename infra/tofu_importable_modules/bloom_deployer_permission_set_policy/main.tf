@@ -272,6 +272,7 @@ data "aws_iam_policy_document" "deployer" {
       "ecs:DescribeClusters",
       "ecs:DescribeServiceDeployments",
       "ecs:DescribeServices",
+      "ecs:DescribeTasks",
       "ecs:ListServiceDeployments",
       "ecs:ListTagsForResource",
       "ecs:RegisterTaskDefinition",
@@ -301,11 +302,12 @@ data "aws_iam_policy_document" "deployer" {
     resources = concat(
       [
         "arn:aws:ecs:${local.region_account}:cluster/bloom",
+        "arn:aws:ecs:${local.region_account}:task/bloom/*",
         "arn:aws:logs:${local.region_account}:log-group::log-stream:",
         "arn:aws:servicediscovery:${local.region_account}:*/*"
       ],
       flatten(
-        [for name in ["api", "site-partners", "site-public"] : [
+        [for name in ["dbinit", "dbseed", "api", "site-partners", "site-public"] : [
           "arn:aws:ecs:${local.region_account}:service-deployment/bloom/bloom-${name}/*",
           "arn:aws:ecs:${local.region_account}:service/bloom/bloom-${name}",
           "arn:aws:ecs:${local.region_account}:task-definition/bloom-${name}:*",
@@ -314,6 +316,16 @@ data "aws_iam_policy_document" "deployer" {
           "arn:aws:logs:${local.region_account}:log-group:bloom-${name}*",
         ]]
     ))
+  }
+  statement {
+    sid = "RunECSTask"
+    actions = [
+      "ecs:RunTask",
+    ]
+    resources = [
+      "arn:aws:ecs:${local.region_account}:task-definition/bloom-dbinit:*",
+      "arn:aws:ecs:${local.region_account}:task-definition/bloom-dbseed:*",
+    ]
   }
   statement {
     sid = "APIJWTKeySecret"
