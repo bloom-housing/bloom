@@ -46,3 +46,51 @@
 .application-hide-tab {
   display: none;
 }
+
+.pagination-section {
+  padding: var(--seeds-s4) var(--seeds-s12);
+  background-color: var(--seeds-bg-color-canvas);
+
+  @media (--sm-only) {
+    padding: var(--seeds-s4);
+  }
+}
+
+.pagination-content-wrapper {
+  margin-inline: auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+
+  @media (--md-down) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.previous-button {
+  @media (--md-down) {
+    grid-row-start: 2;
+  }
+}
+
+.page-info {
+  display: inline;
+  justify-self: center;
+  align-self: center;
+  color: var(--seeds-text-color);
+  font-weight: var(--seeds-font-weight-bold);
+
+  @media (--md-down) {
+    grid-row-start: 1;
+    justify-self: start;
+    align-self: center;
+    padding-block-end: var(--seeds-spacer-content);
+  }
+}
+
+.next-button {
+  justify-self: end;
+
+  @media (--md-down) {
+    grid-row-start: 2;
+  }
+}

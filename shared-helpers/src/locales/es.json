@@ -199,6 +199,7 @@
   "application.financial.vouchers.title": "¿Recibe usted o alguna otra persona de esta solicitud alguno de los siguientes?",
   "application.form.general.saveAndFinishLater": "Guardar y terminar más tarde",
   "application.form.general.saveAndReturn": "Guardar y regresar a revisión",
+  "application.form.options.relationship.aideOrAttendant": "Asistente o asistente",
   "application.form.options.relationship.aunt": "Tía",
   "application.form.options.relationship.child": "Niño(a)",
   "application.form.options.relationship.cousin": "Primo(a)",

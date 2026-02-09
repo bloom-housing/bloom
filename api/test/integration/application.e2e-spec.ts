@@ -2146,6 +2146,8 @@ describe('Application Controller Tests', () => {
         userId: user.id,
         filterType: ApplicationsFilterEnum.all,
         includeLotteryApps: true,
+        page: 1,
+        limit: 10,
       };
       const query = stringify(queryParams as any);
 
@@ -2160,8 +2162,11 @@ describe('Application Controller Tests', () => {
       expect(res.body.applicationsCount.closed).toEqual(1);
       expect(res.body.applicationsCount.open).toEqual(1);
 
-      expect(res.body.displayApplications.length).toBe(3);
-      expect(res.body.displayApplications[0].id).not.toBeNull();
+      expect(res.body.items.length).toBe(3);
+      expect(res.body.items[0].id).not.toBeNull();
+      expect(res.body.meta.currentPage).toEqual(1);
+      expect(res.body.meta.totalItems).toEqual(3);
+      expect(res.body.meta.totalPages).toEqual(1);
     });
 
     it('should not retrieve applications nor error when none exist', async () => {
@@ -2173,6 +2178,8 @@ describe('Application Controller Tests', () => {
         userId: userA.id,
         filterType: ApplicationsFilterEnum.all,
         includeLotteryApps: true,
+        page: 1,
+        limit: 10,
       };
       const query = stringify(queryParams as any);
 
@@ -2183,7 +2190,9 @@ describe('Application Controller Tests', () => {
         .expect(200);
 
       expect(res.body.applicationsCount.total).toEqual(0);
-      expect(res.body.displayApplications.length).toEqual(0);
+      expect(res.body.items.length).toEqual(0);
+      expect(res.body.meta.currentPage).toEqual(1);
+      expect(res.body.meta.totalItems).toEqual(0);
     });
   });
 
