@@ -24,6 +24,7 @@ import {
   unitTypeUnitGroupsMapping,
 } from "./FilterDrawerHelpers"
 import { isTrue } from "../../lib/helpers"
+import { listingParkingTypes } from "@bloom-housing/shared-helpers"
 
 export interface FilterDrawerProps {
   activeFeatureFlags?: FeatureFlagEnum[]
@@ -109,6 +110,16 @@ const FilterDrawer = (props: FilterDrawerProps) => {
               ListingFilterKeys.homeTypes,
               "listings.homeType",
               Object.keys(HomeTypeEnum),
+              props.filterState
+            )}
+            register={register}
+          />
+          <CheckboxGroup
+            groupLabel={t("t.parkingTypes")}
+            fields={buildDefaultFilterFields(
+              ListingFilterKeys.parkingType,
+              "listings.homeType",
+              Object.keys(listingParkingTypes),
               props.filterState
             )}
             register={register}
