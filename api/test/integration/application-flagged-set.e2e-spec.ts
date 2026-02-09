@@ -627,7 +627,7 @@ describe('Application flagged set Controller Tests', () => {
         .expect(200);
 
       expect(logger.warn).toBeCalledWith(
-        'running the Application flagged sets version 2 cron job',
+        'running the Application flagged sets cron job',
       );
       expect(logger.warn).toBeCalledWith(
         expect.stringContaining('running duplicates check on'),
