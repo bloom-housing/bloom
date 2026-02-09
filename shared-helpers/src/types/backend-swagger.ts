@@ -1595,6 +1595,10 @@ export class ApplicationsService {
   publicAppsView(
     params: {
       /**  */
+      page?: number
+      /**  */
+      limit?: number
+      /**  */
       userId: string
       /**  */
       filterType?: ApplicationsFilterEnum
@@ -1608,6 +1612,8 @@ export class ApplicationsService {
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
       configs.params = {
+        page: params["page"],
+        limit: params["limit"],
         userId: params["userId"],
         filterType: params["filterType"],
         includeLotteryApps: params["includeLotteryApps"],
@@ -3478,6 +3484,29 @@ export interface IdDTO {
   ordinal?: number
 }
 
+export interface ListingParkingType {
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  onStreet?: boolean
+
+  /**  */
+  offStreet?: boolean
+
+  /**  */
+  garage?: boolean
+
+  /**  */
+  carport?: boolean
+}
+
 export interface ListingDocuments {
   /**  */
   socialSecurityCard?: boolean
@@ -4544,32 +4573,6 @@ export interface ListingNeighborhoodAmenities {
   busStops?: string
 }
 
-export interface Property {
-  /**  */
-  id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-
-  /**  */
-  name: string
-
-  /**  */
-  description?: string
-
-  /**  */
-  url?: string
-
-  /**  */
-  urlTitle?: string
-
-  /**  */
-  jurisdictions?: IdDTO
-}
-
 export interface Listing {
   /**  */
   id: string
@@ -4747,6 +4750,9 @@ export interface Listing {
 
   /**  */
   parkingFee?: string
+
+  /**  */
+  parkType?: ListingParkingType
 
   /**  */
   postmarkedApplicationsReceivedByDate?: Date
@@ -4965,7 +4971,7 @@ export interface Listing {
   lastUpdatedByUser?: IdDTO
 
   /**  */
-  property?: Property
+  property?: IdDTO
 }
 
 export interface PaginationMeta {
@@ -5232,6 +5238,20 @@ export interface ListingFeaturesCreate {
 
   /**  */
   wideDoorways?: boolean
+}
+
+export interface ListingParkingTypeCreate {
+  /**  */
+  onStreet?: boolean
+
+  /**  */
+  offStreet?: boolean
+
+  /**  */
+  garage?: boolean
+
+  /**  */
+  carport?: boolean
 }
 
 export interface UnitAmiChartOverrideCreate {
@@ -5811,7 +5831,7 @@ export interface ListingCreate {
   lastUpdatedByUser?: IdDTO
 
   /**  */
-  property?: Property
+  property?: IdDTO
 
   /**  */
   listingMultiselectQuestions?: IdDTO[]
@@ -5839,6 +5859,9 @@ export interface ListingCreate {
 
   /**  */
   listingFeatures?: ListingFeaturesCreate
+
+  /**  */
+  parkType?: ListingParkingTypeCreate
 
   /**  */
   requestedChangesUser?: IdDTO
@@ -6310,6 +6333,23 @@ export interface ListingUtilitiesUpdate {
   id?: string
 }
 
+export interface ListingParkingTypeUpdate {
+  /**  */
+  onStreet?: boolean
+
+  /**  */
+  offStreet?: boolean
+
+  /**  */
+  garage?: boolean
+
+  /**  */
+  carport?: boolean
+
+  /**  */
+  id?: string
+}
+
 export interface ListingNeighborhoodAmenitiesUpdate {
   /**  */
   groceryStores?: string
@@ -6647,7 +6687,7 @@ export interface ListingUpdate {
   lastUpdatedByUser?: IdDTO
 
   /**  */
-  property?: Property
+  property?: IdDTO
 
   /**  */
   listingMultiselectQuestions?: IdDTO[]
@@ -6705,6 +6745,9 @@ export interface ListingUpdate {
 
   /**  */
   listingUtilities?: ListingUtilitiesUpdate
+
+  /**  */
+  parkType?: ListingParkingTypeUpdate
 
   /**  */
   requestedChangesUser?: IdDTO
@@ -8055,7 +8098,10 @@ export interface PublicAppsCount {
 
 export interface PublicAppsViewResponse {
   /**  */
-  displayApplications: PublicAppsFiltered[]
+  items: PublicAppsFiltered[]
+
+  /**  */
+  meta: PaginationMeta
 
   /**  */
   applicationsCount: PublicAppsCount
@@ -9070,6 +9116,32 @@ export interface PropertyQueryParams {
   filter?: string[]
 }
 
+export interface Property {
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  name: string
+
+  /**  */
+  description?: string
+
+  /**  */
+  url?: string
+
+  /**  */
+  urlTitle?: string
+
+  /**  */
+  jurisdictions?: IdDTO
+}
+
 export interface PaginatedProperty {
   /**  */
   items: Property[]
@@ -9440,6 +9512,7 @@ export enum HouseholdMemberRelationship {
   "inLaw" = "inLaw",
   "friend" = "friend",
   "other" = "other",
+  "aideOrAttendant" = "aideOrAttendant",
 }
 export type AllExtraDataTypes = BooleanInput | TextInput | AddressInput
 export enum MultiselectQuestionOrderByKeys {
@@ -9503,6 +9576,7 @@ export enum FeatureFlagEnum {
   "enableGeocodingPreferences" = "enableGeocodingPreferences",
   "enableGeocodingRadiusMethod" = "enableGeocodingRadiusMethod",
   "enableHomeType" = "enableHomeType",
+  "enableHousingAdvocate" = "enableHousingAdvocate",
   "enableHousingDeveloperOwner" = "enableHousingDeveloperOwner",
   "enableIsVerified" = "enableIsVerified",
   "enableLimitedHowDidYouHear" = "enableLimitedHowDidYouHear",
@@ -9537,6 +9611,7 @@ export enum FeatureFlagEnum {
   "enableWaitlistAdditionalFields" = "enableWaitlistAdditionalFields",
   "enableWaitlistLottery" = "enableWaitlistLottery",
   "enableWhatToExpectAdditionalField" = "enableWhatToExpectAdditionalField",
+  "enableParkingType" = "enableParkingType",
   "enableV2MSQ" = "enableV2MSQ",
   "example" = "example",
   "hideCloseListingButton" = "hideCloseListingButton",

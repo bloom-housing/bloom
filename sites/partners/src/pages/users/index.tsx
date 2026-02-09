@@ -1,9 +1,14 @@
 import React, { useContext, useMemo, useState } from "react"
 import Head from "next/head"
+import { useRouter } from "next/router"
 import dayjs from "dayjs"
 import { useSWRConfig } from "swr"
 import { AgTable, useAgTable, t, AlertBox } from "@bloom-housing/ui-components"
-import { ListingViews, User } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  FeatureFlagEnum,
+  ListingViews,
+  User,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { Button, Icon } from "@bloom-housing/ui-seeds"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import Layout from "../../layouts"
@@ -11,6 +16,8 @@ import { useUserList, useListingsData, useUsersExport } from "../../lib/hooks"
 import { FormUserManage } from "../../components/users/FormUserManage"
 import { NavigationHeader } from "../../components/shared/NavigationHeader"
 import DocumentArrowDownIcon from "@heroicons/react/24/solid/DocumentArrowDownIcon"
+import { getUsersTabs, UsersIndexEnum } from "../../components/users/UsersViewHelpers"
+import TabView from "../../layouts/TabView"
 
 type UserDrawerValue = {
   type: "add" | "edit"
@@ -18,7 +25,8 @@ type UserDrawerValue = {
 }
 
 const Users = () => {
-  const { profile } = useContext(AuthContext)
+  const router = useRouter()
+  const { profile, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
   const { mutate } = useSWRConfig()
   const [userDrawer, setUserDrawer] = useState<UserDrawerValue | null>(null)
   const [errorAlert, setErrorAlert] = useState(false)
@@ -130,6 +138,10 @@ const Users = () => {
     view: ListingViews.name,
   })
 
+  const enableHousingAdvocate = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableHousingAdvocate
+  )
+
   if (error) return <div>{t("t.errorOccurred")}</div>
 
   return (
@@ -138,74 +150,79 @@ const Users = () => {
         <title>{`Users - ${t("nav.siteTitlePartners")}`}</title>
       </Head>
       <NavigationHeader className="relative" title={t("nav.users")} />
-      <section>
-        <article className="flex-row flex-wrap relative max-w-screen-xl mx-auto py-8 px-4">
-          {errorAlert && (
-            <AlertBox
-              className="mb-8"
-              onClose={() => setErrorAlert(false)}
-              closeable
-              type="alert"
-              inverted
-            >
-              {t("account.settings.alerts.genericError")}
-            </AlertBox>
-          )}
-          <AgTable
-            id="users-table"
-            pagination={{
-              perPage: tableOptions.pagination.itemsPerPage,
-              setPerPage: tableOptions.pagination.setItemsPerPage,
-              currentPage: tableOptions.pagination.currentPage,
-              setCurrentPage: tableOptions.pagination.setCurrentPage,
-            }}
-            config={{
-              columns,
-              totalItemsLabel: t("users.totalUsers"),
-            }}
-            data={{
-              items: userList?.items,
-              loading: loading,
-              totalItems: userList?.meta.totalItems,
-              totalPages: userList?.meta.totalPages,
-            }}
-            search={{
-              setSearch: tableOptions.filter.setFilterValue,
-            }}
-            headerContent={
-              <div className="flex gap-2 items-center">
-                <Button
-                  variant="primary"
-                  size="sm"
-                  onClick={() => setUserDrawer({ type: "add" })}
-                  disabled={!listingDtos}
-                  id={"add-user"}
-                >
-                  {t("users.addUser")}
-                </Button>
-                {(profile?.userRoles?.isAdmin || profile?.userRoles?.isJurisdictionalAdmin) && (
+      <TabView
+        hideTabs={!enableHousingAdvocate}
+        tabs={getUsersTabs(UsersIndexEnum.partners, router)}
+      >
+        <section>
+          <article className="flex-row flex-wrap relative max-w-screen-xl mx-auto py-8 px-4">
+            {errorAlert && (
+              <AlertBox
+                className="mb-8"
+                onClose={() => setErrorAlert(false)}
+                closeable
+                type="alert"
+                inverted
+              >
+                {t("account.settings.alerts.genericError")}
+              </AlertBox>
+            )}
+            <AgTable
+              id="users-table"
+              pagination={{
+                perPage: tableOptions.pagination.itemsPerPage,
+                setPerPage: tableOptions.pagination.setItemsPerPage,
+                currentPage: tableOptions.pagination.currentPage,
+                setCurrentPage: tableOptions.pagination.setCurrentPage,
+              }}
+              config={{
+                columns,
+                totalItemsLabel: t("users.totalUsers"),
+              }}
+              data={{
+                items: userList?.items,
+                loading: loading,
+                totalItems: userList?.meta.totalItems,
+                totalPages: userList?.meta.totalPages,
+              }}
+              search={{
+                setSearch: tableOptions.filter.setFilterValue,
+              }}
+              headerContent={
+                <div className="flex gap-2 items-center">
                   <Button
-                    variant="primary-outlined"
+                    variant="primary"
                     size="sm"
-                    leadIcon={
-                      !csvExportLoading ? (
-                        <Icon>
-                          <DocumentArrowDownIcon />
-                        </Icon>
-                      ) : null
-                    }
-                    onClick={() => onExport()}
-                    loadingMessage={csvExportLoading && t("t.formSubmitted")}
-                    id={"export-users"}
+                    onClick={() => setUserDrawer({ type: "add" })}
+                    disabled={!listingDtos}
+                    id={"add-user"}
                   >
-                    {t("t.exportToCSV")}
+                    {t("users.addUser")}
                   </Button>
-                )}
-              </div>
-            }
-          />
-        </article>
-      </section>
+                  {(profile?.userRoles?.isAdmin || profile?.userRoles?.isJurisdictionalAdmin) && (
+                    <Button
+                      variant="primary-outlined"
+                      size="sm"
+                      leadIcon={
+                        !csvExportLoading ? (
+                          <Icon>
+                            <DocumentArrowDownIcon />
+                          </Icon>
+                        ) : null
+                      }
+                      onClick={() => onExport()}
+                      loadingMessage={csvExportLoading && t("t.formSubmitted")}
+                      id={"export-users"}
+                    >
+                      {t("t.exportToCSV")}
+                    </Button>
+                  )}
+                </div>
+              }
+            />
+          </article>
+        </section>
+      </TabView>
 
       {userDrawer && (
         <FormUserManage

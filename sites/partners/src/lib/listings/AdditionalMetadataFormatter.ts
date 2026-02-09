@@ -2,6 +2,7 @@ import {
   allListingFeatures,
   listingRequiredDocumentsOptions,
   listingUtilities,
+  listingParkingTypes,
 } from "@bloom-housing/shared-helpers"
 import {
   ReviewOrderTypeEnum,
@@ -72,6 +73,9 @@ export default class AdditionalMetadataFormatter extends Formatter {
     } else if (this.data.includeCommunityDisclaimerQuestion === YesNoEnum.no) {
       this.data.communityDisclaimerTitle = ""
       this.data.communityDisclaimerDescription = ""
+    }
+    if (!this.data.property?.id) {
+      this.data.property = null
     }
     this.data.reviewOrderType =
       this.data.reviewOrderQuestion === "reviewOrderLottery"
@@ -165,6 +169,16 @@ export default class AdditionalMetadataFormatter extends Formatter {
     if (this.data.petPolicyPreferences) {
       this.data.allowsDogs = this.data.petPolicyPreferences.includes("allowsDogs")
       this.data.allowsCats = this.data.petPolicyPreferences.includes("allowsCats")
+    }
+
+    if (this.data.parking) {
+      this.data.parkType = listingParkingTypes.reduce((acc, current) => {
+        const isSelected = this.data.parking.some((parking) => parking === current)
+        return {
+          ...acc,
+          [current]: isSelected,
+        }
+      }, {})
     }
 
     if (!this.data.listingType || this.data.listingType === EnumListingListingType.regulated) {

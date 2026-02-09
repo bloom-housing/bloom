@@ -77,6 +77,7 @@ export const selectViews: Partial<Record<ListingViews, Prisma.ListingsSelect>> =
     name: {
       name: true,
       id: true,
+      property: true,
       jurisdictions: {
         select: {
           id: true,
@@ -176,7 +177,9 @@ includeViews.full = {
   listingsApplicationDropOffAddress: true,
   listingsApplicationMailingAddress: true,
   requestedChangesUser: true,
+  property: true,
   requiredDocumentsList: true,
+  parkType: true,
   units: {
     include: {
       unitAmiChartOverrides: true,
@@ -1183,6 +1186,9 @@ export class ListingService implements OnModuleInit {
     if (listing.listingUtilities) {
       listing.utilities = listing.listingUtilities;
     }
+    if (listing.parkingType) {
+      listing.parkingType = listing.parkingType;
+    }
     if (listing.listingFeatures) {
       listing.features = listing.listingFeatures;
     }
@@ -1469,6 +1475,13 @@ export class ListingService implements OnModuleInit {
           ? {
               create: {
                 ...dto.listingUtilities,
+              },
+            }
+          : undefined,
+        parkType: dto.parkType
+          ? {
+              create: {
+                ...dto.parkType,
               },
             }
           : undefined,
@@ -2212,6 +2225,7 @@ export class ListingService implements OnModuleInit {
 
     const previousFeaturesId = storedListing.listingFeatures?.id;
     const previousUtilitiesId = storedListing.listingUtilities?.id;
+    const previousParkingTypeId = storedListing.parkType?.id;
     const previousNeighborhoodAmenitiesId =
       storedListing.listingNeighborhoodAmenities?.id;
 
@@ -2462,6 +2476,21 @@ export class ListingService implements OnModuleInit {
                 },
               }
             : undefined,
+          parkType: incomingDto.parkType
+            ? {
+                upsert: {
+                  where: {
+                    id: previousParkingTypeId,
+                  },
+                  create: {
+                    ...incomingDto.parkType,
+                  },
+                  update: {
+                    ...incomingDto.parkType,
+                  },
+                },
+              }
+            : undefined,
           listingsApplicationMailingAddress: mailAddress
             ? {
                 connect: {
@@ -2693,10 +2722,16 @@ export class ListingService implements OnModuleInit {
               },
             },
           },
-          property: incomingDto?.property
+          property: incomingDto.property
             ? {
                 connect: {
                   id: incomingDto.property.id,
+                },
+              }
+            : storedListing.property
+            ? {
+                disconnect: {
+                  id: storedListing.property.id,
                 },
               }
             : undefined,

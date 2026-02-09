@@ -17,6 +17,7 @@ import { unitAccessibilityPriorityTypeFactoryAll } from './seed-helpers/unit-acc
 import { multiselectQuestionFactory } from './seed-helpers/multiselect-question-factory';
 import { applicationFactory } from './seed-helpers/application-factory';
 import { translationFactory } from './seed-helpers/translation-factory';
+import { propertyFactory } from './seed-helpers/property-factory';
 import { reservedCommunityTypeFactoryAll } from './seed-helpers/reserved-community-type-factory';
 import {
   mapLayerFactory,
@@ -201,6 +202,7 @@ export const stagingSeed = async (
         FeatureFlagEnum.enableApplicationStatus,
         FeatureFlagEnum.enableConfigurableRegions,
         FeatureFlagEnum.enableCreditScreeningFee,
+        FeatureFlagEnum.enableHousingAdvocate,
         FeatureFlagEnum.enableHousingDeveloperOwner,
         FeatureFlagEnum.enableLeasingAgentAltText,
         FeatureFlagEnum.enableListingFileNumber,
@@ -216,6 +218,7 @@ export const stagingSeed = async (
         FeatureFlagEnum.enableProperties,
         FeatureFlagEnum.enableReferralQuestionUnits,
         FeatureFlagEnum.enableSmokingPolicyRadio,
+        FeatureFlagEnum.enableParkingType,
       ],
       visibleNeighborhoodAmenities: [
         NeighborhoodAmenitiesEnum.groceryStores,
@@ -253,6 +256,7 @@ export const stagingSeed = async (
         'referralOpportunity',
         'rentalAssistance',
         'units',
+        'property',
       ],
       listingFeaturesConfiguration: {
         categories: [
@@ -502,6 +506,18 @@ export const stagingSeed = async (
       angelopolisJurisdiction.name,
     ),
   });
+  const angelopolisProperty1 = await prismaClient.properties.create({
+    data: propertyFactory(
+      angelopolisJurisdiction.name,
+      angelopolisJurisdiction.id,
+    ),
+  });
+  await prismaClient.properties.create({
+    data: propertyFactory(
+      angelopolisJurisdiction.name,
+      angelopolisJurisdiction.id,
+    ),
+  });
   // Create map layers
   await prismaClient.mapLayers.create({
     data: mapLayerFactory(
@@ -661,6 +677,7 @@ export const stagingSeed = async (
       prismaClient,
       {
         listing: hollywoodHillsHeights,
+        propertyId: angelopolisProperty1.id,
         units: [
           {
             amiPercentage: '30',
@@ -1233,6 +1250,7 @@ export const stagingSeed = async (
       afsLastRunSetInPast: true,
       userAccounts: listingParams.userAccounts,
       optionalFeatures: listingParams.optionalFeatures,
+      propertyId: listingParams.propertyId,
     });
     const savedListing = await prismaClient.listings.create({
       data: listing,

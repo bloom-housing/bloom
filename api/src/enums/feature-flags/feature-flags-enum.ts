@@ -18,6 +18,7 @@ export enum FeatureFlagEnum {
   enableGeocodingPreferences = 'enableGeocodingPreferences',
   enableGeocodingRadiusMethod = 'enableGeocodingRadiusMethod',
   enableHomeType = 'enableHomeType',
+  enableHousingAdvocate = 'enableHousingAdvocate',
   enableHousingDeveloperOwner = 'enableHousingDeveloperOwner',
   enableIsVerified = 'enableIsVerified',
   enableLimitedHowDidYouHear = 'enableLimitedHowDidYouHear',
@@ -52,6 +53,7 @@ export enum FeatureFlagEnum {
   enableWaitlistAdditionalFields = 'enableWaitlistAdditionalFields',
   enableWaitlistLottery = 'enableWaitlistLottery',
   enableWhatToExpectAdditionalField = 'enableWhatToExpectAdditionalField',
+  enableParkingType = 'enableParkingType',
   enableV2MSQ = 'enableV2MSQ',
   example = 'example', // sample feature flag for testing purposes
   hideCloseListingButton = 'hideCloseListingButton',
@@ -141,6 +143,10 @@ export const featureFlagMap: {
   {
     name: FeatureFlagEnum.enableHomeType,
     description: 'When true, home type feature is turned on',
+  },
+  {
+    name: FeatureFlagEnum.enableHousingAdvocate,
+    description: 'When true, partners can view housing advocate users',
   },
   {
     name: FeatureFlagEnum.enableHousingDeveloperOwner,
@@ -301,6 +307,11 @@ export const featureFlagMap: {
     name: FeatureFlagEnum.enableWhatToExpectAdditionalField,
     description:
       'When true, the what to expect additional field is displayed in listing creation/edit form on the partner site',
+  },
+  {
+    name: FeatureFlagEnum.enableParkingType,
+    description:
+      'When true, the parking type field is visible in the listing form',
   },
   {
     name: FeatureFlagEnum.enableV2MSQ,

@@ -1,5 +1,5 @@
 import React from "react"
-import { render, screen } from "@testing-library/react"
+import { render, screen, within } from "@testing-library/react"
 import { FormProviderWrapper } from "../../../../testUtils"
 import BuildingFeatures from "../../../../../src/components/listings/PaperListingForm/sections/BuildingFeatures"
 
@@ -58,5 +58,24 @@ describe("BuildingFeatures", () => {
     expect(screen.getByLabelText("Smoking allowed")).toBeInTheDocument()
     expect(screen.getByLabelText("No smoking allowed")).toBeInTheDocument()
     expect(screen.getByLabelText("Policy unknown")).toBeInTheDocument()
+  })
+
+  it("should render parking types checkbox buttons when enableParkingTypes feature flag is true", () => {
+    render(
+      <FormProviderWrapper>
+        <BuildingFeatures enableParkingType={true} requiredFields={[]} />
+      </FormProviderWrapper>
+    )
+
+    const parkingTypesGroup = screen.getByRole("group", { name: /parking types/i })
+    expect(parkingTypesGroup).toBeInTheDocument()
+    expect(
+      within(parkingTypesGroup).getByRole("checkbox", { name: "On street" })
+    ).toBeInTheDocument()
+    expect(
+      within(parkingTypesGroup).getByRole("checkbox", { name: "Off street" })
+    ).toBeInTheDocument()
+    expect(within(parkingTypesGroup).getByRole("checkbox", { name: "Garage" })).toBeInTheDocument()
+    expect(within(parkingTypesGroup).getByRole("checkbox", { name: "Carport" })).toBeInTheDocument()
   })
 })

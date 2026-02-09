@@ -234,6 +234,15 @@ describe("Listing Management Tests", () => {
     if (getFlagActive(listing, FeatureFlagEnum.enableListingFileNumber)) {
       fillIfDataExists(cy, "listingFileNumber", listing.listingFileNumber, "type")
     }
+    if (getFlagActive(listing, FeatureFlagEnum.enableProperties)) {
+      cy.getByID("property.id")
+        .find("option")
+        .eq(1)
+        .invoke("val")
+        .then((val) => {
+          cy.getByID("property.id").select(val as string)
+        })
+    }
 
     // ----------
     // Section - Listing photos
