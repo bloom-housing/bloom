@@ -154,7 +154,15 @@ const ApplicationChooseLanguage = () => {
         void router.push(conductor.determineNextUrl(), null, { locale: language })
       })
     },
-    [conductor, context, listingId, router, listingsService, jurisdictionsService]
+    [
+      conductor,
+      context,
+      listingId,
+      listingsService,
+      jurisdictionsService,
+      profile?.isAdvocate,
+      router,
+    ]
   )
 
   return (
