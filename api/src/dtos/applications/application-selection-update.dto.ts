@@ -9,6 +9,7 @@ export class ApplicationSelectionUpdate extends OmitType(ApplicationSelection, [
   'id',
   'createdAt',
   'updatedAt',
+  'application',
   'selections',
 ]) {
   @Expose()
