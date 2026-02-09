@@ -584,6 +584,7 @@
   "eligibility.accessibility.walkInShower": "Walk-in shower",
   "eligibility.accessibility.wheelchairRamp": "Wheelchair ramp",
   "eligibility.accessibility.wideDoorways": "Wide unit doorways for wheelchairs",
+  "errors.advocateEmailAddressError": "It looks like this email is associated with your account; please enter your client's email instead.",
   "errors.agreeError": "You must agree to the terms in order to continue",
   "errors.alert.applicationSubmissionVerificationError": "Your application is missing required fields. Please go back and correct this before submitting.",
   "errors.alert.badRequest": "Looks like something went wrong. Please try again. \n\nContact your housing department if you're still experiencing issues.",

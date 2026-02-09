@@ -21,6 +21,7 @@ const ApplicationName = () => {
   const { profile } = useContext(AuthContext)
   const { conductor, application, listing } = useFormConductor("primaryApplicantName")
   const [autofilled, setAutofilled] = useState(false)
+  const isAdvocate = conductor?.config?.isAdvocate
 
   const currentPageSection = 1
 
@@ -49,6 +50,10 @@ const ApplicationName = () => {
   const noEmail: boolean = watch("applicant.noEmail")
   const clientLoaded = OnClientSide()
   if (!autofilled && clientLoaded && application.autofilled) setAutofilled(true)
+  const emailErrorMessage =
+    errors.applicant?.emailAddress?.type === "advocateEmail"
+      ? t("errors.advocateEmailAddressError")
+      : t("errors.emailAddressError")
 
   const LockIcon = () => {
     return (
@@ -196,9 +201,18 @@ const ApplicationName = () => {
               label={t("application.name.yourEmailAddress")}
               readerOnly={true}
               defaultValue={application.applicant.emailAddress}
-              validation={{ required: !noEmail, pattern: emailRegex }}
+              validation={{
+                required: !noEmail,
+                pattern: emailRegex,
+                validate: {
+                  advocateEmail: (value: string) => {
+                    if (!isAdvocate || !value || !profile?.email) return true
+                    return value.trim().toLowerCase() !== profile.email.trim().toLowerCase()
+                  },
+                },
+              }}
               error={errors.applicant?.emailAddress}
-              errorMessage={t("errors.emailAddressError")}
+              errorMessage={emailErrorMessage}
               register={register}
               disabled={clientLoaded && (noEmail || autofilled)}
               dataTestId={"app-primary-email"}
