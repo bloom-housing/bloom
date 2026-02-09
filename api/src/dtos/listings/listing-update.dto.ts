@@ -50,6 +50,7 @@ export class ListingUpdate extends OmitType(Listing, [
   'unitGroups',
   'units',
   'unitsSummary',
+  'property',
 
   // fields removed entirely
   'afsLastRunAt',
@@ -274,4 +275,13 @@ export class ListingUpdate extends OmitType(Listing, [
   @Type(() => ListingNeighborhoodAmenitiesUpdate)
   @ApiPropertyOptional({ type: ListingNeighborhoodAmenitiesUpdate })
   listingNeighborhoodAmenities?: ListingNeighborhoodAmenitiesUpdate;
+
+  @Expose()
+  @ValidateListingPublish('property', {
+    groups: [ValidationsGroupsEnum.default],
+  })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => IdDTO)
+  @ApiPropertyOptional({ type: IdDTO })
+  property?: IdDTO;
 }

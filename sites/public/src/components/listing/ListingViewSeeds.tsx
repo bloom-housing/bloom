@@ -49,7 +49,6 @@ import { UnitSummaries } from "./listing_sections/UnitSummaries"
 import styles from "./ListingViewSeeds.module.scss"
 import { ReadMore } from "../../patterns/ReadMore"
 import { OtherFeatures } from "./listing_sections/OtherFeatures"
-import { useProperty } from "../../lib/hooks"
 import { PropertyDetailsCard } from "./listing_sections/PropertyDetailsCard"
 
 interface ListingProps {
@@ -62,7 +61,6 @@ interface ListingProps {
 export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: ListingProps) => {
   const { userService } = useContext(AuthContext)
   const { addToast } = useContext(MessageContext)
-  const { property } = useProperty(listing?.property?.id)
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, watch } = useForm()
@@ -280,7 +278,7 @@ export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: Li
           <MainDetails
             listing={listing}
             jurisdiction={jurisdiction}
-            property={property}
+            property={listing.property}
             showFavoriteButton={
               profile && isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableListingFavoriting)
             }
@@ -325,13 +323,13 @@ export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: Li
           </div>
         </div>
         <div className={`${styles["right-bar"]} ${styles["hide-mobile"]}`}>
-          {isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableProperties) && property && (
+          {isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableProperties) && listing.property && (
             <PropertyDetailsCard
               heading={t("listings.propertyCardTitle")}
-              linkText={property.name}
-              linkUrl={property.url}
+              linkText={listing.property.name}
+              linkUrl={listing.property.url}
             >
-              {property.description}
+              {listing.property.description}
             </PropertyDetailsCard>
           )}
           <Availability listing={listing} jurisdiction={jurisdiction} />
