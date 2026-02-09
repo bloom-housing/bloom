@@ -80,7 +80,7 @@ const ApplicationFormLayout = (props: ApplicationFormLayoutProps) => {
         headingClass={"seeds-large-heading"}
       >
         <>
-          {props.conductor?.config?.isAdvocate && (
+          {isAdvocate && (
             <Message fullwidth variant="warn">
               <Markdown>{t("application.form.general.advocateWarning")}</Markdown>
             </Message>
