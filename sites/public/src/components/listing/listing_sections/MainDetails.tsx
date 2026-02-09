@@ -212,7 +212,7 @@ export const MainDetails = ({
       <div className={`${listingStyles["hide-desktop"]} seeds-m-bs-content`}>
         {isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableProperties) && property && (
           <PropertyDetailsCard
-            heading="Property details"
+            heading={t("listings.propertyCardTitle")}
             linkText={"Visit the property website"}
             linkUrl={property.url}
           >
