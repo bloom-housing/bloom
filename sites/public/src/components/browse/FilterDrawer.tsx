@@ -118,8 +118,8 @@ const FilterDrawer = (props: FilterDrawerProps) => {
             groupLabel={t("t.parkingTypes")}
             fields={buildDefaultFilterFields(
               ListingFilterKeys.parkingType,
-              "listings.homeType",
-              Object.keys(listingParkingTypes),
+              "listings.parkingTypeOptions",
+              Object.values(listingParkingTypes),
               props.filterState
             )}
             register={register}
