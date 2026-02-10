@@ -1298,6 +1298,7 @@ model Listings {
   userAccountFavorites                  UserAccounts[]                @relation("favorite_listings")
   userAccounts                          UserAccounts[]
   userPreferences                       UserPreferences[]
+  userAccountSnapshot                   UserAccountSnapshot[]
 
   @@index([jurisdictionId])
   @@map("listings")
@@ -1473,7 +1474,6 @@ model ListingSnapshot {
   unitGroup                             UnitGroupSnapshot[]
   unit                                  UnitSnapshot[]
   unitsSummary                          UnitsSummarySnapshot[]
-  userAccount                           UserAccountSnapshot[]
 
   @@index([jurisdictionId])
   @@map("listing_snapshot")
@@ -2112,7 +2112,7 @@ model UserAccountSnapshot {
   address      AddressSnapshot?  @relation(fields: [addressSnapshotId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   agency       Agency?           @relation(fields: [agencyId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   jurisdiction Jurisdictions[]
-  listing      ListingSnapshot[]
+  listing      Listings[]
   userRole     UserRoleSnapshot?
 
   @@map("user_account_snapshot")

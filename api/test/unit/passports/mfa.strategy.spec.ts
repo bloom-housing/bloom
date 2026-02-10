@@ -6,13 +6,14 @@ import { MfaStrategy } from '../../../src/passports/mfa.strategy';
 import { MfaType } from '../../../src/enums/mfa/mfa-type-enum';
 import { Login } from '../../../src/dtos/auth/login.dto';
 import { passwordToHash } from '../../../src/utilities/password-helpers';
+import { SnapshotCreateService } from '../../../src/services/snapshot-create.service';
 
 describe('Testing mfa strategy', () => {
   let strategy: MfaStrategy;
   let prisma: PrismaService;
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [MfaStrategy, PrismaService],
+      providers: [MfaStrategy, PrismaService, SnapshotCreateService],
     }).compile();
 
     strategy = module.get<MfaStrategy>(MfaStrategy);
@@ -556,6 +557,14 @@ describe('Testing mfa strategy', () => {
       singleUseCode: 'zyxwv',
       singleUseCodeUpdatedAt: new Date(),
     });
+    prisma.userAccounts.findUnique = jest.fn().mockResolvedValue({
+      id: id,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    });
+    prisma.userAccountSnapshot.create = jest.fn().mockResolvedValue({
+      id: id,
+    });
 
     prisma.userAccounts.update = jest.fn().mockResolvedValue({ id });
 
@@ -581,6 +590,25 @@ describe('Testing mfa strategy', () => {
       },
     });
 
+    expect(prisma.userAccounts.findUnique).toHaveBeenCalledWith({
+      where: {
+        id,
+      },
+      include: {
+        address: true,
+        agency: true,
+        jurisdictions: true,
+        listings: true,
+        userRoles: true,
+      },
+    });
+    expect(prisma.userAccountSnapshot.create).toHaveBeenCalledWith({
+      data: {
+        originalCreatedAt: expect.anything(),
+        originalId: id,
+        updatedAt: expect.anything(),
+      },
+    });
     expect(prisma.userAccounts.update).toHaveBeenCalledWith({
       data: {
         singleUseCode: null,

@@ -9,7 +9,7 @@ import {
   Inject,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { Prisma } from '@prisma/client';
+import { Prisma, PrismaClient } from '@prisma/client';
 import dayjs from 'dayjs';
 import advancedFormat from 'dayjs/plugin/advancedFormat';
 import crypto from 'crypto';
@@ -53,6 +53,7 @@ import { UserFavoriteListing } from '../dtos/users/user-favorite-listing.dto';
 import { ModificationEnum } from '../enums/shared/modification-enum';
 import { CronJobService } from './cron-job.service';
 import { ApplicationService } from './application.service';
+import { SnapshotCreateService } from './snapshot-create.service';
 
 /*
   this is the service for users
@@ -101,6 +102,7 @@ export class UserService {
     @Inject(Logger)
     private logger = new Logger(UserService.name),
     private cronJobService: CronJobService,
+    private snapshotCreateService: SnapshotCreateService,
   ) {
     dayjs.extend(advancedFormat);
   }
@@ -252,6 +254,9 @@ export class UserService {
         dto.newEmail,
       );
     }
+    const transactions = [];
+
+    await this.snapshotCreateService.createUserSnapshot(dto.id);
 
     // only update userRoles if something has changed
     if (dto.userRoles && storedUser.userRoles) {
@@ -264,80 +269,153 @@ export class UserService {
           dto.userRoles.isPartner === storedUser.userRoles.isPartner
         )
       ) {
-        await this.prisma.userRoles.update({
-          data: {
-            ...dto.userRoles,
-          },
-          where: {
-            userId: storedUser.id,
-          },
+        transactions.push(async (transaction: PrismaClient) => {
+          return transaction.userRoles.update({
+            data: {
+              ...dto.userRoles,
+            },
+            where: {
+              userId: storedUser.id,
+            },
+          });
         });
       }
     }
 
-    // disconnect existing connected listings/jurisdictions
-    if (storedUser.listings?.length) {
-      await this.prisma.userAccounts.update({
-        data: {
-          listings: {
-            disconnect: storedUser.listings.map((listing) => ({
-              id: listing.id,
-            })),
-          },
-        },
-        where: {
-          id: dto.id,
-        },
-      });
-    }
-    if (storedUser.jurisdictions?.length) {
-      await this.prisma.userAccounts.update({
-        data: {
-          jurisdictions: {
-            disconnect: storedUser.jurisdictions.map((jurisdiction) => ({
-              id: jurisdiction.id,
-            })),
-          },
-        },
-        where: {
-          id: dto.id,
-        },
-      });
+    // handle listings
+    if (dto.listings?.length || storedUser.listings?.length) {
+      // if the listing is stored in the db but not on the incoming dto, mark as to be removed
+      const toRemove = storedUser.listings?.reduce((acc, curr) => {
+        if (!dto.listings?.some((elem) => elem.id === curr.id)) {
+          acc.push(curr.id);
+        }
+        return acc;
+      }, []);
+      if (toRemove?.length) {
+        transactions.push(async (transaction: PrismaClient) => {
+          return transaction.userAccounts.update({
+            where: {
+              id: dto.id,
+            },
+            data: {
+              listings: {
+                disconnect: toRemove.map((elem) => ({
+                  id: elem,
+                })),
+              },
+            },
+          });
+        });
+      }
+
+      // if listing is on dto but not in db, we need to store it
+      const toAdd = dto.listings?.reduce((acc, curr) => {
+        if (!storedUser.listings?.some((elem) => elem.id === curr.id)) {
+          acc.push(curr.id);
+        }
+        return acc;
+      }, []);
+      if (toAdd?.length) {
+        transactions.push(async (transaction: PrismaClient) => {
+          return transaction.userAccounts.update({
+            where: {
+              id: dto.id,
+            },
+            data: {
+              listings: {
+                connect: toAdd.map((elem) => ({
+                  id: elem,
+                })),
+              },
+            },
+          });
+        });
+      }
     }
 
-    const res = await this.prisma.userAccounts.update({
-      include: views.full,
-      data: {
-        email: dto.email,
-        agreedToTermsOfService: dto.agreedToTermsOfService,
-        passwordHash: passwordHash ?? undefined,
-        passwordUpdatedAt: passwordUpdatedAt ?? undefined,
-        confirmationToken: confirmationToken ?? undefined,
-        firstName: dto.firstName,
-        middleName: dto.middleName,
-        lastName: dto.lastName,
-        dob: dto.dob,
-        phoneNumber: dto.phoneNumber,
-        language: dto.language,
-        listings: dto.listings
-          ? {
-              connect: dto.listings.map((listing) => ({ id: listing.id })),
-            }
-          : undefined,
-        jurisdictions: dto.jurisdictions
-          ? {
-              connect: dto.jurisdictions.map((jurisdiction) => ({
-                id: jurisdiction.id,
-              })),
-            }
-          : undefined,
-      },
-      where: {
-        id: dto.id,
-      },
+    // handle jurisdictions
+    if (dto.jurisdictions?.length || storedUser.jurisdictions?.length) {
+      // if the jurisdiction is stored in the db but not on the incoming dto, mark as to be removed
+      const toRemove = storedUser.jurisdictions?.reduce((acc, curr) => {
+        if (!dto.jurisdictions?.some((elem) => elem.id === curr.id)) {
+          acc.push(curr.id);
+        }
+        return acc;
+      }, []);
+      if (toRemove?.length) {
+        transactions.push(async (transaction: PrismaClient) => {
+          return transaction.userAccounts.update({
+            where: {
+              id: dto.id,
+            },
+            data: {
+              jurisdictions: {
+                disconnect: toRemove.map((elem) => ({
+                  id: elem,
+                })),
+              },
+            },
+          });
+        });
+      }
+
+      // if jurisdiction is on dto but not in db, we need to store it
+      const toAdd = dto.jurisdictions?.reduce((acc, curr) => {
+        if (!storedUser.jurisdictions?.some((elem) => elem.id === curr.id)) {
+          acc.push(curr.id);
+        }
+        return acc;
+      }, []);
+      if (toAdd?.length) {
+        transactions.push(async (transaction: PrismaClient) => {
+          return transaction.userAccounts.update({
+            where: {
+              id: dto.id,
+            },
+            data: {
+              jurisdictions: {
+                connect: toAdd.map((elem) => ({
+                  id: elem,
+                })),
+              },
+            },
+          });
+        });
+      }
+    }
+
+    transactions.push(async (transaction: PrismaClient) => {
+      return transaction.userAccounts.update({
+        include: views.full,
+        data: {
+          email: dto.email,
+          agreedToTermsOfService: dto.agreedToTermsOfService,
+          passwordHash: passwordHash ?? undefined,
+          passwordUpdatedAt: passwordUpdatedAt ?? undefined,
+          confirmationToken: confirmationToken ?? undefined,
+          firstName: dto.firstName,
+          middleName: dto.middleName,
+          lastName: dto.lastName,
+          dob: dto.dob,
+          phoneNumber: dto.phoneNumber,
+          language: dto.language,
+        },
+        where: {
+          id: dto.id,
+        },
+      });
     });
 
-    return mapTo(User, res);
+    const prismaTransactions = await this.prisma.$transaction(
+      async (transaction) =>
+        await Promise.all(
+          transactions.map((asyncCall) => asyncCall(transaction)),
+        ),
+    );
+
+    const rawUser = prismaTransactions[prismaTransactions.length - 1];
+
+    return mapTo(User, rawUser);
   }
 
   /*
@@ -569,6 +647,7 @@ export class UserService {
     if (existingUser) {
       // if attempting to recreate an existing user
       if (!existingUser.userRoles && 'userRoles' in dto) {
+        await this.snapshotCreateService.createUserSnapshot(existingUser.id);
         // existing user && public user && user will get roles -> trying to grant partner access to a public user
         const res = await this.prisma.userAccounts.update({
           include: views.full,
@@ -605,7 +684,7 @@ export class UserService {
         const listings = existingUser.listings
           .map((juris) => ({ id: juris.id }))
           .concat(dto.listings);
-
+        await this.snapshotCreateService.createUserSnapshot(existingUser.id);
         const res = await this.prisma.userAccounts.update({
           include: views.full,
           data: {
@@ -1175,6 +1254,7 @@ export class UserService {
       for (const user of users) {
         try {
           await this.emailService.warnOfAccountRemoval(mapTo(User, user));
+          await this.snapshotCreateService.createUserSnapshot(user.id);
           await this.prisma.userAccounts.update({
             data: { wasWarnedOfDeletion: true },
             where: { id: user.id },
