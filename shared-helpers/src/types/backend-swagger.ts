@@ -8633,9 +8633,6 @@ export interface User {
   listings: IdDTO[]
 
   /**  */
-  isAdvocate?: boolean
-
-  /**  */
   userRoles?: UserRole
 
   /**  */
