@@ -3,6 +3,7 @@ import { Unit } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { t } from "@bloom-housing/ui-components"
 import { Button, Card, Drawer, FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { getRentType } from "../../../lib/helpers"
+import { getAccessibilityPriorityTypeKey } from "@bloom-housing/shared-helpers"
 import { useSingleAmiChartData } from "../../../lib/hooks"
 import SectionWithGrid from "../../shared/SectionWithGrid"
 
@@ -157,9 +158,14 @@ const DetailUnitDrawer = ({ unit, setUnitDrawer }: UnitDrawerProps) => {
               <Grid.Row columns={4}>
                 <Grid.Cell>
                   <FieldValue
-                    id="unit.unitAccessibilityPriorityTypes"
+                    id="unit.accessibilityPriorityType"
                     label={t("listings.unit.accessibilityPriorityType")}
-                    children={unit?.unitAccessibilityPriorityTypes?.name || t("t.n/a")}
+                    children={(() => {
+                      const accessibilityKey = getAccessibilityPriorityTypeKey(
+                        unit?.accessibilityPriorityType
+                      )
+                      return accessibilityKey ? t(accessibilityKey) : t("t.n/a")
+                    })()}
                   />
                 </Grid.Cell>
               </Grid.Row>

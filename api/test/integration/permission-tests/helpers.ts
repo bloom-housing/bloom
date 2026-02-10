@@ -13,6 +13,7 @@ import {
   MultiselectQuestionsStatusEnum,
   Prisma,
   ReviewOrderTypeEnum,
+  UnitAccessibilityPriorityTypeEnum,
   UnitTypeEnum,
   YesNoEnum,
 } from '@prisma/client';
@@ -41,7 +42,6 @@ import {
 import { ReservedCommunityTypeCreate } from '../../../src/dtos/reserved-community-types/reserved-community-type-create.dto';
 import { ReservedCommunityTypeUpdate } from '../../../src/dtos/reserved-community-types/reserved-community-type-update.dto';
 import { unitRentTypeFactory } from '../../../prisma/seed-helpers/unit-rent-type-factory';
-import { unitAccessibilityPriorityTypeFactorySingle } from '../../../prisma/seed-helpers/unit-accessibility-priority-type-factory';
 import { multiselectQuestionFactory } from '../../../prisma/seed-helpers/multiselect-question-factory';
 import { ListingCreate } from '../../../src/dtos/listings/listing-create.dto';
 import { ListingUpdate } from '../../../src/dtos/listings/listing-update.dto';
@@ -475,7 +475,7 @@ export const constructFullListingData = async (
     data: amiChartFactory(10, jurisdictionA.id),
   });
   const unitAccessibilityPriorityType =
-    await unitAccessibilityPriorityTypeFactorySingle(prisma);
+    UnitAccessibilityPriorityTypeEnum.mobility;
   const rentType = await prisma.unitRentTypes.create({
     data: unitRentTypeFactory(),
   });
@@ -538,9 +538,7 @@ export const constructFullListingData = async (
         amiChart: {
           id: amiChart.id,
         },
-        unitAccessibilityPriorityTypes: {
-          id: unitAccessibilityPriorityType.id,
-        },
+        accessibilityPriorityType: unitAccessibilityPriorityType,
         unitRentTypes: {
           id: rentType.id,
         },
@@ -585,9 +583,7 @@ export const constructFullListingData = async (
         floorMax: 10,
         sqFeetMin: '11',
         sqFeetMax: '12',
-        unitAccessibilityPriorityTypes: {
-          id: unitAccessibilityPriorityType.id,
-        },
+        accessibilityPriorityType: unitAccessibilityPriorityType,
         totalCount: 13,
         totalAvailable: 14,
       },

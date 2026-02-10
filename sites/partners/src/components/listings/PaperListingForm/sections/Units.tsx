@@ -17,7 +17,11 @@ import {
   ReviewOrderTypeEnum,
   YesNoEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
+import {
+  AuthContext,
+  MessageContext,
+  getAccessibilityPriorityTypeKey,
+} from "@bloom-housing/shared-helpers"
 import UnitForm from "../UnitForm"
 import { useFormContext, useWatch } from "react-hook-form"
 import { TempUnit, TempUnitGroup } from "../../../../lib/listings/formTypes"
@@ -153,7 +157,7 @@ const FormUnits = ({
         amiPercentage: "t.ami",
         monthlyRent: "listings.unit.rent",
         sqFeet: "listings.unit.sqft",
-        unitAccessibilityPriorityTypes: "listings.unit.priorityType",
+        accessibilityPriorityType: "listings.unit.accessibilityPriorityType",
         action: "",
       }
 
@@ -333,7 +337,12 @@ const FormUnits = ({
         amiPercentage: { content: unit.amiPercentage },
         monthlyRent: { content: unit.monthlyRent },
         sqFeet: { content: unit.sqFeet },
-        unitAccessibilityPriorityTypes: { content: unit.unitAccessibilityPriorityTypes?.name },
+        accessibilityPriorityType: {
+          content: (() => {
+            const accessibilityKey = getAccessibilityPriorityTypeKey(unit.accessibilityPriorityType)
+            return accessibilityKey ? t(accessibilityKey) : t("t.n/a")
+          })(),
+        },
         action: {
           content: getTableActionItems({
             onEdit: () => editUnit(unit.tempId),

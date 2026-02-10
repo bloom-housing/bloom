@@ -1,18 +1,17 @@
-import React, { useEffect, useState, useContext } from "react"
+import React, { useEffect, useState, useContext, useMemo } from "react"
 import { t, Field, Select, FieldGroup, Form, numberOptions } from "@bloom-housing/ui-components"
 import { Button, Card, Drawer, Grid } from "@bloom-housing/ui-seeds"
-import { AuthContext } from "@bloom-housing/shared-helpers"
+import { AuthContext, accessibilityPriorityTypeOptions } from "@bloom-housing/shared-helpers"
 import { useWatch, useForm } from "react-hook-form"
 import { TempUnit } from "../../../lib/listings/formTypes"
 import {
   AmiChart,
   AmiChartItem,
-  UnitAccessibilityPriorityType,
   UnitType,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import {
   useAmiChartList,
-  useUnitPriorityList,
+  useJurisdiction,
   useUnitTypeList,
   useWatchOnFormNumberFieldsChange,
 } from "../../../lib/hooks"
@@ -40,7 +39,6 @@ const UnitForm = ({
   const { amiChartsService } = useContext(AuthContext)
 
   const [amiChartsOptions, setAmiChartsOptions] = useState([])
-  const [unitPrioritiesOptions, setUnitPrioritiesOptions] = useState([])
   const [unitTypesOptions, setUnitTypesOptions] = useState([])
   const [isAmiPercentageDirty, setIsAmiPercentageDirty] = useState(false)
   const [loading, setLoading] = useState(true)
@@ -65,8 +63,17 @@ const UnitForm = ({
    * fetch form options
    */
   const { data: amiCharts = [] } = useAmiChartList(jurisdiction)
-  const { data: unitPriorities = [] } = useUnitPriorityList()
   const { data: unitTypes = [] } = useUnitTypeList()
+  const { data: jurisdictionData } = useJurisdiction(jurisdiction)
+
+  const unitPrioritiesOptions = useMemo(() => {
+    const visibleTypes = jurisdictionData?.visibleAccessibilityPriorityTypes || []
+    return accessibilityPriorityTypeOptions(visibleTypes).map((option) => ({
+      id: option.value,
+      value: option.value,
+      label: option.labelKey ? t(option.labelKey) : option.value,
+    }))
+  }, [jurisdictionData?.visibleAccessibilityPriorityTypes])
 
   const numberOccupancyOptions = 11
 
@@ -245,13 +252,8 @@ const UnitForm = ({
       delete data.monthlyRent
     }
 
-    if (data.unitAccessibilityPriorityTypes?.id) {
-      const priority = unitPriorities.find(
-        (priority) => priority.id === data.unitAccessibilityPriorityTypes.id
-      )
-      data.unitAccessibilityPriorityTypes = priority
-    } else {
-      delete data.unitAccessibilityPriorityTypes
+    if (!data.accessibilityPriorityType) {
+      delete data.accessibilityPriorityType
     }
 
     if (data.unitTypes?.id) {
@@ -384,14 +386,6 @@ const UnitForm = ({
     if (amiCharts.length === 0 || amiChartsOptions.length) return
     setAmiChartsOptions(arrayToFormOptions<AmiChart>(amiCharts, "name", "id"))
   }, [amiCharts, amiChartsOptions])
-
-  // sets the options for the unit priorities
-  useEffect(() => {
-    if (unitPriorities.length === 0 || unitPrioritiesOptions.length) return
-    setUnitPrioritiesOptions(
-      arrayToFormOptions<UnitAccessibilityPriorityType>(unitPriorities, "name", "id")
-    )
-  }, [unitPrioritiesOptions, unitPriorities, defaultUnit, setValue])
 
   // sets the options for the unit types
   useEffect(() => {
@@ -632,8 +626,8 @@ const UnitForm = ({
                 <Grid.Row columns={4}>
                   <Grid.Cell>
                     <Select
-                      id="unitAccessibilityPriorityTypes.id"
-                      name="unitAccessibilityPriorityTypes.id"
+                      id="accessibilityPriorityType"
+                      name="accessibilityPriorityType"
                       label={t("listings.unit.accessibilityPriorityType")}
                       placeholder={t("listings.unit.accessibilityPriorityType")}
                       register={register}

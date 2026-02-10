@@ -1,6 +1,6 @@
 import {
   UnitType,
-  UnitAccessibilityPriorityType,
+  UnitAccessibilityPriorityTypeEnum,
   Unit,
   ListingEventsTypeEnum,
   ListingFeatures,
@@ -151,7 +151,7 @@ export const angelopolisListing: CypressListing = {
       maxOccupancy: 2,
       monthlyIncomeMin: "900",
       monthlyRent: "1000",
-      unitAccessibilityPriorityTypes: { id: "Visual" } as UnitAccessibilityPriorityType,
+      accessibilityPriorityType: UnitAccessibilityPriorityTypeEnum.vision,
     } as Unit,
   ],
   applicationFee: "4",

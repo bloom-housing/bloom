@@ -11,6 +11,7 @@ import {
   MultiselectQuestionsStatusEnum,
   RegionEnum,
   ReviewOrderTypeEnum,
+  UnitAccessibilityPriorityTypeEnum,
   UnitTypeEnum,
   UserRoleEnum,
 } from '@prisma/client';
@@ -51,7 +52,6 @@ import { GeocodingService } from '../../../src/services/geocoding.service';
 import { FilterAvailabilityEnum } from '../../../src/enums/listings/filter-availability-enum';
 import { CronJobService } from '../../../src/services/cron-job.service';
 import { MultiselectQuestionService } from '../../../src/services/multiselect-question.service';
-import { create } from 'domain';
 
 /*
   generates a super simple mock listing for us to test logic with
@@ -379,9 +379,8 @@ describe('Testing listing service', () => {
               amiChart: {
                 id: randomUUID(),
               },
-              unitAccessibilityPriorityTypes: {
-                id: randomUUID(),
-              },
+              accessibilityPriorityType:
+                UnitAccessibilityPriorityTypeEnum.mobility,
               unitRentTypes: {
                 id: randomUUID(),
               },
@@ -469,9 +468,8 @@ describe('Testing listing service', () => {
               floorMax: 10,
               sqFeetMin: '11',
               sqFeetMax: '12',
-              unitAccessibilityPriorityTypes: {
-                id: randomUUID(),
-              },
+              accessibilityPriorityType:
+                UnitAccessibilityPriorityTypeEnum.mobility,
               totalCount: 13,
               totalAvailable: 14,
             },
@@ -679,7 +677,6 @@ describe('Testing listing service', () => {
               unitAmiChartOverrides: true,
               unitTypes: true,
               unitRentTypes: true,
-              unitAccessibilityPriorityTypes: true,
               amiChart: {
                 include: {
                   jurisdictions: true,
@@ -2449,7 +2446,6 @@ describe('Testing listing service', () => {
               unitAmiChartOverrides: true,
               unitTypes: true,
               unitRentTypes: true,
-              unitAccessibilityPriorityTypes: true,
               amiChart: {
                 include: {
                   jurisdictions: true,
@@ -2970,7 +2966,6 @@ describe('Testing listing service', () => {
               unitAmiChartOverrides: true,
               unitTypes: true,
               unitRentTypes: true,
-              unitAccessibilityPriorityTypes: true,
               amiChart: {
                 include: {
                   jurisdictions: true,
@@ -3248,7 +3243,6 @@ describe('Testing listing service', () => {
                   unitGroupAmiLevels: true,
                 },
               },
-              unitAccessibilityPriorityTypes: true,
               unitAmiChartOverrides: true,
               unitRentTypes: true,
               unitTypes: true,
@@ -3378,7 +3372,6 @@ describe('Testing listing service', () => {
                   unitGroupAmiLevels: true,
                 },
               },
-              unitAccessibilityPriorityTypes: true,
               unitAmiChartOverrides: true,
               unitRentTypes: true,
               unitTypes: true,
@@ -3621,11 +3614,8 @@ describe('Testing listing service', () => {
                     ],
                   },
                 },
-                unitAccessibilityPriorityTypes: {
-                  connect: {
-                    id: expect.anything(),
-                  },
-                },
+                accessibilityPriorityType:
+                  UnitAccessibilityPriorityTypeEnum.mobility,
                 unitRentTypes: {
                   connect: {
                     id: expect.anything(),
@@ -3660,11 +3650,8 @@ describe('Testing listing service', () => {
                     id: expect.anything(),
                   },
                 },
-                unitAccessibilityPriorityTypes: {
-                  connect: {
-                    id: expect.anything(),
-                  },
-                },
+                accessibilityPriorityType:
+                  UnitAccessibilityPriorityTypeEnum.mobility,
               },
             ],
           },
@@ -3768,7 +3755,6 @@ describe('Testing listing service', () => {
                   unitGroupAmiLevels: true,
                 },
               },
-              unitAccessibilityPriorityTypes: true,
               unitAmiChartOverrides: true,
               unitRentTypes: true,
               unitTypes: true,
@@ -3912,7 +3898,6 @@ describe('Testing listing service', () => {
                   unitGroupAmiLevels: true,
                 },
               },
-              unitAccessibilityPriorityTypes: true,
               unitAmiChartOverrides: true,
               unitRentTypes: true,
               unitTypes: true,
@@ -4265,7 +4250,6 @@ describe('Testing listing service', () => {
                   unitGroupAmiLevels: true,
                 },
               },
-              unitAccessibilityPriorityTypes: true,
               unitAmiChartOverrides: true,
               unitRentTypes: true,
               unitTypes: true,
@@ -4508,11 +4492,8 @@ describe('Testing listing service', () => {
                     ],
                   },
                 },
-                unitAccessibilityPriorityTypes: {
-                  connect: {
-                    id: expect.anything(),
-                  },
-                },
+                accessibilityPriorityType:
+                  UnitAccessibilityPriorityTypeEnum.mobility,
                 unitRentTypes: {
                   connect: {
                     id: expect.anything(),
@@ -4547,11 +4528,8 @@ describe('Testing listing service', () => {
                     id: expect.anything(),
                   },
                 },
-                unitAccessibilityPriorityTypes: {
-                  connect: {
-                    id: expect.anything(),
-                  },
-                },
+                accessibilityPriorityType:
+                  UnitAccessibilityPriorityTypeEnum.mobility,
               },
             ],
           },
@@ -4674,7 +4652,6 @@ describe('Testing listing service', () => {
                   unitGroupAmiLevels: true,
                 },
               },
-              unitAccessibilityPriorityTypes: true,
               unitAmiChartOverrides: true,
               unitRentTypes: true,
               unitTypes: true,
@@ -4791,7 +4768,6 @@ describe('Testing listing service', () => {
                   unitGroupAmiLevels: true,
                 },
               },
-              unitAccessibilityPriorityTypes: true,
               unitAmiChartOverrides: true,
               unitRentTypes: true,
               unitTypes: true,
@@ -4895,7 +4871,6 @@ describe('Testing listing service', () => {
                   unitGroupAmiLevels: true,
                 },
               },
-              unitAccessibilityPriorityTypes: true,
               unitAmiChartOverrides: true,
               unitRentTypes: true,
               unitTypes: true,
@@ -5336,7 +5311,6 @@ describe('Testing listing service', () => {
                   unitGroupAmiLevels: true,
                 },
               },
-              unitAccessibilityPriorityTypes: true,
               unitAmiChartOverrides: true,
               unitRentTypes: true,
               unitTypes: true,
@@ -5887,7 +5861,6 @@ describe('Testing listing service', () => {
                   unitGroupAmiLevels: true,
                 },
               },
-              unitAccessibilityPriorityTypes: true,
               unitAmiChartOverrides: true,
               unitRentTypes: true,
               unitTypes: true,
@@ -6164,7 +6137,6 @@ describe('Testing listing service', () => {
                   unitGroupAmiLevels: true,
                 },
               },
-              unitAccessibilityPriorityTypes: true,
               unitAmiChartOverrides: true,
               unitRentTypes: true,
               unitTypes: true,

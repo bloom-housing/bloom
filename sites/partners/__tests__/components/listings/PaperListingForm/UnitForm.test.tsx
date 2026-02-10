@@ -9,6 +9,7 @@ import {
   unit,
   unitTypes,
 } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
+import { UnitAccessibilityPriorityTypeEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { mockNextRouter, render, screen, within } from "../../../testUtils"
 import UnitForm from "../../../../src/components/listings/PaperListingForm/UnitForm"
 import { TempUnit } from "../../../../src/lib/listings/formTypes"
@@ -29,13 +30,16 @@ describe("UnitForm", () => {
     rest.get("http://localhost:3100/unitTypes", (_req, res, ctx) => {
       return res(ctx.json(unitTypes))
     }),
-    rest.get("http://localhost:3100/unitAccessibilityPriorityTypes", (_req, res, ctx) => {
+    rest.get("http://localhost/api/adapter/jurisdictions/:id", (req, res, ctx) => {
       return res(
-        ctx.json([
-          { id: randomUUID(), name: "Mobility" },
-          { id: randomUUID(), name: "Hearing" },
-          { id: randomUUID(), name: "Mobility and Hearing" },
-        ])
+        ctx.json({
+          id: req.params.id,
+          visibleAccessibilityPriorityTypes: [
+            UnitAccessibilityPriorityTypeEnum.mobility,
+            UnitAccessibilityPriorityTypeEnum.hearing,
+            UnitAccessibilityPriorityTypeEnum.mobilityAndHearing,
+          ],
+        })
       )
     }),
     rest.get("http://localhost:3100/amiCharts", (_req, res, ctx) => {
@@ -211,7 +215,7 @@ describe("UnitForm", () => {
       within(priorityTypeSelector).getByRole("option", { name: "Hearing" })
     ).toBeInTheDocument()
     expect(
-      within(priorityTypeSelector).getByRole("option", { name: "Mobility and Hearing" })
+      within(priorityTypeSelector).getByRole("option", { name: "Mobility and hearing" })
     ).toBeInTheDocument()
 
     // Action buttons

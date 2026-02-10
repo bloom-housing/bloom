@@ -25,7 +25,6 @@ import {
   MultiselectQuestionsService,
   RequestMfaCodeResponse,
   ReservedCommunityTypesService,
-  UnitAccessibilityPriorityTypesService,
   UnitTypesService,
   User,
   UserCreate,
@@ -53,7 +52,6 @@ type ContextProps = {
   unitTypesService: UnitTypesService
   featureFlagService: FeatureFlagsService
   reservedCommunityTypeService: ReservedCommunityTypesService
-  unitPriorityService: UnitAccessibilityPriorityTypesService
   mapLayersService: MapLayersService
   lotteryService: LotteryService
   loadProfile: (redirect?: string) => void
@@ -75,8 +73,8 @@ type ContextProps = {
   forgotPassword: (email: string, listingIdRedirect?: string) => Promise<boolean | undefined>
   createUser: (user: UserCreate, listingIdRedirect?: string) => Promise<User | undefined>
   resendConfirmation: (email: string, listingIdRedirect?: string) => Promise<boolean | undefined>
-  initialStateLoaded: boolean
-  loading: boolean
+  initialStateLoaded: boolean | undefined
+  loading: boolean | undefined
   profile?: User
   requestMfaCode: (
     email: string,
@@ -215,10 +213,10 @@ export const AuthProvider: FunctionComponent<React.PropsWithChildren> = ({ child
 
   // Load our profile as soon as we have an access token available
   useEffect(() => {
-    if (!state.profile && !state.loading && !state.initialStateLoaded) {
+    if (!state?.profile && !state?.loading && !state?.initialStateLoaded) {
       void loadProfile()
     }
-  }, [state.profile, apiUrl, userService, state.loading, loadProfile, state.initialStateLoaded])
+  }, [state?.profile, apiUrl, userService, state?.loading, loadProfile, state?.initialStateLoaded])
 
   const contextValues: ContextProps = {
     amiChartsService: new AmiChartsService(),
@@ -233,12 +231,11 @@ export const AuthProvider: FunctionComponent<React.PropsWithChildren> = ({ child
     mapLayersService: new MapLayersService(),
     lotteryService: new LotteryService(),
     reservedCommunityTypeService: new ReservedCommunityTypesService(),
-    unitPriorityService: new UnitAccessibilityPriorityTypesService(),
     unitTypesService: new UnitTypesService(),
     featureFlagService: new FeatureFlagsService(),
-    loading: state.loading,
-    initialStateLoaded: state.initialStateLoaded,
-    profile: state.profile,
+    loading: state?.loading,
+    initialStateLoaded: state?.initialStateLoaded,
+    profile: state?.profile,
     loadProfile,
     login: async (
       email,
@@ -400,7 +397,7 @@ export const AuthProvider: FunctionComponent<React.PropsWithChildren> = ({ child
       jurisdictionId?: string,
       onlyIfAllJurisdictionsHaveItEnabled?: boolean
     ) => {
-      let jurisdictions = state.profile?.jurisdictions || []
+      let jurisdictions = state?.profile?.jurisdictions || []
       if (jurisdictionId) {
         jurisdictions = jurisdictions?.filter((j) => j.id === jurisdictionId)
       }
@@ -416,7 +413,7 @@ export const AuthProvider: FunctionComponent<React.PropsWithChildren> = ({ child
       )
     },
     getJurisdictionLanguages: (jurisdictionId: string) => {
-      const jurisdictions = state.profile?.jurisdictions || []
+      const jurisdictions = state?.profile?.jurisdictions || []
       return jurisdictions.find((j) => j.id === jurisdictionId)?.languages || []
     },
   }

@@ -378,12 +378,7 @@ describe("Listing Management Tests", () => {
       fillIfDataExists(cy, "minOccupancy", unit.minOccupancy?.toString(), "select")
       fillIfDataExists(cy, "maxOccupancy", unit.maxOccupancy?.toString(), "select")
 
-      fillIfDataExists(
-        cy,
-        "unitAccessibilityPriorityTypes.id",
-        unit?.unitAccessibilityPriorityTypes?.id,
-        "select"
-      )
+      fillIfDataExists(cy, "accessibilityPriorityType", unit?.accessibilityPriorityType, "select")
 
       if (unit.monthlyRentAsPercentOfIncome) {
         cy.getByID("percentage").check({ force: true })
@@ -1002,7 +997,7 @@ describe("Listing Management Tests", () => {
       verifyDetailDataIfExists(cy, "unitTable", unit.number)
       verifyDetailDataIfExists(cy, "unitTable", unit.sqFeet)
       verifyDetailDataIfExists(cy, "unitTable", unit.monthlyRent)
-      verifyDetailDataIfExists(cy, "unitTable", unit.unitAccessibilityPriorityTypes?.id)
+      verifyDetailDataIfExists(cy, "unitTable", unit.accessibilityPriorityType)
     })
 
     // ----------

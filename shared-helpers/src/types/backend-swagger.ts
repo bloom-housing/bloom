@@ -1143,113 +1143,6 @@ export class UnitTypesService {
   }
 }
 
-export class UnitAccessibilityPriorityTypesService {
-  /**
-   * List unitAccessibilityPriorityTypes
-   */
-  list(options: IRequestOptions = {}): Promise<UnitAccessibilityPriorityType[]> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/unitAccessibilityPriorityTypes"
-
-      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-
-      /** 适配ios13，get请求不允许带body */
-
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Create unitAccessibilityPriorityType
-   */
-  create(
-    params: {
-      /** requestBody */
-      body?: UnitAccessibilityPriorityTypeCreate
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<UnitAccessibilityPriorityType> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/unitAccessibilityPriorityTypes"
-
-      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Delete unitAccessibilityPriorityType by id
-   */
-  delete(
-    params: {
-      /** requestBody */
-      body?: IdDTO
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<SuccessDTO> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/unitAccessibilityPriorityTypes"
-
-      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Get unitAccessibilityPriorityType by id
-   */
-  retrieve(
-    params: {
-      /**  */
-      unitAccessibilityPriorityTypeId: string
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<UnitAccessibilityPriorityType> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/unitAccessibilityPriorityTypes/{unitAccessibilityPriorityTypeId}"
-      url = url.replace(
-        "{unitAccessibilityPriorityTypeId}",
-        params["unitAccessibilityPriorityTypeId"] + ""
-      )
-
-      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-
-      /** 适配ios13，get请求不允许带body */
-
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Update unitAccessibilityPriorityType
-   */
-  update(
-    params: {
-      /** requestBody */
-      body?: UnitAccessibilityPriorityTypeUpdate
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<UnitAccessibilityPriorityType> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/unitAccessibilityPriorityTypes/{unitAccessibilityPriorityTypeId}"
-
-      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-
-      axios(configs, resolve, reject)
-    })
-  }
-}
-
 export class UnitRentTypesService {
   /**
    * List unitRentTypes
@@ -4084,20 +3977,6 @@ export interface UnitRentType {
   name: UnitRentTypeEnum
 }
 
-export interface UnitAccessibilityPriorityType {
-  /**  */
-  id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-
-  /**  */
-  name: string
-}
-
 export interface UnitAmiChartOverride {
   /**  */
   id: string
@@ -4174,7 +4053,7 @@ export interface Unit {
   unitRentTypes?: UnitRentType
 
   /**  */
-  unitAccessibilityPriorityTypes?: UnitAccessibilityPriorityType
+  accessibilityPriorityType?: UnitAccessibilityPriorityTypeEnum
 
   /**  */
   unitAmiChartOverrides?: UnitAmiChartOverride
@@ -4262,7 +4141,7 @@ export interface UnitGroup {
   rentType?: RentTypeEnum
 
   /**  */
-  unitAccessibilityPriorityTypes?: UnitAccessibilityPriorityType
+  accessibilityPriorityType?: UnitAccessibilityPriorityTypeEnum
 
   /**  */
   unitGroupAmiLevels?: UnitGroupAmiLevel[]
@@ -4334,7 +4213,7 @@ export interface UnitsSummarized {
   unitTypes: UnitType[]
 
   /**  */
-  priorityTypes: UnitAccessibilityPriorityType[]
+  priorityTypes: UnitAccessibilityPriorityTypeEnum[]
 
   /**  */
   amiPercentages: string[]
@@ -4494,7 +4373,7 @@ export interface UnitsSummary {
   sqFeetMax?: string
 
   /**  */
-  unitAccessibilityPriorityTypes?: IdDTO
+  accessibilityPriorityType?: UnitAccessibilityPriorityTypeEnum
 
   /**  */
   totalCount?: number
@@ -5062,7 +4941,7 @@ export interface UnitsSummaryCreate {
   sqFeetMax?: string
 
   /**  */
-  unitAccessibilityPriorityTypes?: IdDTO
+  accessibilityPriorityType?: UnitAccessibilityPriorityTypeEnum
 
   /**  */
   totalCount?: number
@@ -5309,7 +5188,7 @@ export interface UnitCreate {
   amiChart?: IdDTO
 
   /**  */
-  unitAccessibilityPriorityTypes?: IdDTO
+  accessibilityPriorityType?: UnitAccessibilityPriorityTypeEnum
 
   /**  */
   unitRentTypes?: IdDTO
@@ -5382,7 +5261,7 @@ export interface UnitGroupCreate {
   rentType?: RentTypeEnum
 
   /**  */
-  unitAccessibilityPriorityTypes?: IdDTO
+  accessibilityPriorityType?: UnitAccessibilityPriorityTypeEnum
 
   /**  */
   unitTypes?: IdDTO[]
@@ -5972,7 +5851,7 @@ export interface UnitUpdate {
   amiChart?: IdDTO
 
   /**  */
-  unitAccessibilityPriorityTypes?: IdDTO
+  accessibilityPriorityType?: UnitAccessibilityPriorityTypeEnum
 
   /**  */
   unitRentTypes?: IdDTO
@@ -6051,7 +5930,7 @@ export interface UnitGroupUpdate {
   id?: string
 
   /**  */
-  unitAccessibilityPriorityTypes?: IdDTO
+  accessibilityPriorityType?: UnitAccessibilityPriorityTypeEnum
 
   /**  */
   unitTypes?: IdDTO[]
@@ -7615,19 +7494,6 @@ export interface UnitTypeUpdate {
   numBedrooms: number
 }
 
-export interface UnitAccessibilityPriorityTypeCreate {
-  /**  */
-  name: string
-}
-
-export interface UnitAccessibilityPriorityTypeUpdate {
-  /**  */
-  id: string
-
-  /**  */
-  name: string
-}
-
 export interface UnitRentTypeCreate {
   /**  */
   name: UnitRentTypeEnum
@@ -7727,6 +7593,9 @@ export interface JurisdictionCreate {
   visibleNeighborhoodAmenities: NeighborhoodAmenitiesEnum[]
 
   /**  */
+  visibleAccessibilityPriorityTypes: UnitAccessibilityPriorityTypeEnum[]
+
+  /**  */
   regions: []
 
   /**  */
@@ -7796,6 +7665,9 @@ export interface JurisdictionUpdate {
 
   /**  */
   visibleNeighborhoodAmenities: NeighborhoodAmenitiesEnum[]
+
+  /**  */
+  visibleAccessibilityPriorityTypes: UnitAccessibilityPriorityTypeEnum[]
 
   /**  */
   regions: []
@@ -7902,6 +7774,9 @@ export interface Jurisdiction {
 
   /**  */
   visibleNeighborhoodAmenities: NeighborhoodAmenitiesEnum[]
+
+  /**  */
+  visibleAccessibilityPriorityTypes: UnitAccessibilityPriorityTypeEnum[]
 
   /**  */
   regions: []
@@ -9368,6 +9243,16 @@ export enum UnitTypeEnum {
 export enum UnitRentTypeEnum {
   "fixed" = "fixed",
   "percentageOfIncome" = "percentageOfIncome",
+}
+
+export enum UnitAccessibilityPriorityTypeEnum {
+  "mobility" = "mobility",
+  "hearing" = "hearing",
+  "vision" = "vision",
+  "hearingAndVision" = "hearingAndVision",
+  "mobilityAndHearing" = "mobilityAndHearing",
+  "mobilityAndVision" = "mobilityAndVision",
+  "mobilityHearingAndVision" = "mobilityHearingAndVision",
 }
 
 export enum RentTypeEnum {

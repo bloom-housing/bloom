@@ -6,6 +6,7 @@ import {
 } from '@prisma/client';
 import { randomName } from './word-generator';
 import { ListingFeaturesConfiguration } from '../../src/dtos/jurisdictions/listing-features-config.dto';
+import { UnitAccessibilityPriorityTypeEnum } from '../../src/enums/units/accessibility-priority-type-enum';
 
 export const jurisdictionFactory = (
   jurisdictionName = randomName(),
@@ -16,6 +17,7 @@ export const jurisdictionFactory = (
     requiredListingFields?: string[];
     languages?: LanguagesEnum[];
     visibleNeighborhoodAmenities?: NeighborhoodAmenitiesEnum[];
+    visibleAccessibilityPriorityTypes?: UnitAccessibilityPriorityTypeEnum[];
     regions?: string[];
     minimumListingPublishImagesRequired?: number;
     publicSiteBaseURL?: string;
@@ -57,6 +59,9 @@ export const jurisdictionFactory = (
     : undefined,
   requiredListingFields: optionalFields?.requiredListingFields || [],
   visibleNeighborhoodAmenities: optionalFields?.visibleNeighborhoodAmenities,
+  visibleAccessibilityPriorityTypes:
+    optionalFields?.visibleAccessibilityPriorityTypes ||
+    Object.values(UnitAccessibilityPriorityTypeEnum),
   regions: optionalFields?.regions,
   minimumListingPublishImagesRequired:
     optionalFields?.minimumListingPublishImagesRequired,
