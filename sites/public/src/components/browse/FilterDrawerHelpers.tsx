@@ -82,6 +82,7 @@ const arrayFilters: ListingFilterKeys[] = [
   ListingFilterKeys.reservedCommunityTypes,
   ListingFilterKeys.availabilities,
   ListingFilterKeys.multiselectQuestions,
+  ListingFilterKeys.parkingType,
 ]
 
 const booleanFilters: ListingFilterKeys[] = [
