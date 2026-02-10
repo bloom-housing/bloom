@@ -24,3 +24,6 @@ ALTER TABLE "_ListingsToUserAccountSnapshot" ADD CONSTRAINT "_ListingsToUserAcco
 
 -- AddForeignKey
 ALTER TABLE "_ListingsToUserAccountSnapshot" ADD CONSTRAINT "_ListingsToUserAccountSnapshot_B_fkey" FOREIGN KEY ("B") REFERENCES "user_account_snapshot"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- DropIndex
+DROP INDEX "user_account_snapshot_email_key";

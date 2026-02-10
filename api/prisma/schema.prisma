@@ -2085,7 +2085,7 @@ model UserAccountSnapshot {
   confirmationToken         String?        @map("confirmation_token") @db.VarChar
   confirmedAt               DateTime?      @map("confirmed_at") @db.Timestamptz(6)
   dob                       DateTime?      @db.Timestamp(6)
-  email                     String         @unique() @db.VarChar
+  email                     String         @db.VarChar
   failedLoginAttemptsCount  Int            @default(0) @map("failed_login_attempts_count")
   firstName                 String         @map("first_name") @db.VarChar
   hitConfirmationUrl        DateTime?      @map("hit_confirmation_url") @db.Timestamptz(6)
