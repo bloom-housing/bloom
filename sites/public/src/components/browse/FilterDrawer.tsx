@@ -8,6 +8,7 @@ import {
   MultiselectQuestion,
   FeatureFlagEnum,
   ListingFeaturesConfiguration,
+  ParkingTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import styles from "./FilterDrawer.module.scss"
 import {
@@ -24,8 +25,6 @@ import {
   unitTypeUnitGroupsMapping,
 } from "./FilterDrawerHelpers"
 import { isTrue } from "../../lib/helpers"
-import { listingParkingTypes } from "@bloom-housing/shared-helpers"
-
 export interface FilterDrawerProps {
   activeFeatureFlags?: FeatureFlagEnum[]
   filterState: FilterData
@@ -119,7 +118,7 @@ const FilterDrawer = (props: FilterDrawerProps) => {
             fields={buildDefaultFilterFields(
               ListingFilterKeys.parkingType,
               "listings.parkingTypeOptions",
-              Object.values(listingParkingTypes),
+              Object.keys(ParkingTypeEnum),
               props.filterState
             )}
             register={register}
