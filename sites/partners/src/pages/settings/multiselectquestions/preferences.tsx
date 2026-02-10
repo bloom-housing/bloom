@@ -181,8 +181,8 @@ const MultiselectQuestionsPreferences = () => {
                 data={{
                   items,
                   loading: loading,
-                  totalItems: items.length, // TODO
-                  totalPages: 1, // TODO
+                  totalItems: data?.meta?.totalItems,
+                  totalPages: data?.meta?.totalPages,
                 }}
                 search={{
                   setSearch: tableOptions.filter.setFilterValue,
