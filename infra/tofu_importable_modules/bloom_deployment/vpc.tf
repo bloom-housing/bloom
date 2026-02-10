@@ -172,7 +172,8 @@ resource "aws_security_group" "secrets_manager_endpoint" {
 }
 resource "aws_vpc_security_group_ingress_rule" "bloom_service_tasks" {
   for_each = {
-    "api" = aws_security_group.api.id
+    "api"    = aws_security_group.api.id
+    "dbinit" = aws_security_group.dbinit.id
 
     # If/when the sites need secrets:
     # "site-partners" = aws_security_group.site_partners.id
@@ -197,14 +198,94 @@ resource "aws_security_group" "db" {
   description = "Rules for Bloom database."
 }
 resource "aws_vpc_security_group_ingress_rule" "db" {
+  for_each = merge({
+    "api"    = aws_security_group.api.id
+    "dbinit" = aws_security_group.dbinit.id
+    }, var.bloom_dbseed_image == "" ? {} : {
+    "dbseed" = aws_security_group.dbseed[0].id
+  })
   region                       = var.aws_region
   security_group_id            = aws_security_group.db.id
-  referenced_security_group_id = aws_security_group.api.id
+  referenced_security_group_id = each.value
   ip_protocol                  = "tcp"
   from_port                    = 5432
   to_port                      = 5432
   tags = {
-    Name = "api-allow"
+    Name = "${each.key}-allow"
+  }
+}
+
+# Create security group for dbinit ECS task.
+resource "aws_security_group" "dbinit" {
+  region      = var.aws_region
+  vpc_id      = aws_vpc.bloom.id
+  name        = "bloom-dbinit"
+  description = "Rules for Bloom DB init tasks."
+}
+resource "aws_vpc_security_group_egress_rule" "dbinit_to_db" {
+  region                       = var.aws_region
+  security_group_id            = aws_security_group.dbinit.id
+  referenced_security_group_id = aws_security_group.db.id
+  ip_protocol                  = "tcp"
+  from_port                    = 5432
+  to_port                      = 5432
+  tags = {
+    Name = "allow-db"
+  }
+}
+resource "aws_vpc_security_group_egress_rule" "dbinit_to_secretsmanager" {
+  region                       = var.aws_region
+  security_group_id            = aws_security_group.dbinit.id
+  referenced_security_group_id = aws_security_group.secrets_manager_endpoint.id
+  ip_protocol                  = "tcp"
+  from_port                    = 443
+  to_port                      = 443
+  tags = {
+    Name = "allow-secretsmanager"
+  }
+}
+resource "aws_vpc_security_group_egress_rule" "dbinit_to_nat" {
+  region            = var.aws_region
+  security_group_id = aws_security_group.dbinit.id
+  cidr_ipv4         = "0.0.0.0/0"
+  ip_protocol       = "tcp"
+  from_port         = 443
+  to_port           = 443
+  tags = {
+    Name = "allow-nat-https"
+  }
+}
+
+# Create security group for dbseed ECS task.
+resource "aws_security_group" "dbseed" {
+  count       = var.bloom_dbseed_image == "" ? 0 : 1
+  region      = var.aws_region
+  vpc_id      = aws_vpc.bloom.id
+  name        = "bloom-dbseed"
+  description = "Rules for Bloom DB seed tasks."
+}
+resource "aws_vpc_security_group_egress_rule" "dbseed_to_db" {
+  count                        = var.bloom_dbseed_image == "" ? 0 : 1
+  region                       = var.aws_region
+  security_group_id            = aws_security_group.dbseed[0].id
+  referenced_security_group_id = aws_security_group.db.id
+  ip_protocol                  = "tcp"
+  from_port                    = 5432
+  to_port                      = 5432
+  tags = {
+    Name = "allow-db"
+  }
+}
+resource "aws_vpc_security_group_egress_rule" "dbseed_to_nat" {
+  count             = var.bloom_dbseed_image == "" ? 0 : 1
+  region            = var.aws_region
+  security_group_id = aws_security_group.dbseed[0].id
+  cidr_ipv4         = "0.0.0.0/0"
+  ip_protocol       = "tcp"
+  from_port         = 443
+  to_port           = 443
+  tags = {
+    Name = "allow-nat-https"
   }
 }
 

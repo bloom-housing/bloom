@@ -11,12 +11,13 @@ import { reservedCommunityTypeFactoryAll } from './seed-helpers/reserved-communi
 const options: { [name: string]: { type: 'string' | 'boolean' } } = {
   environment: { type: 'string' },
   jurisdictionName: { type: 'string' },
+  msqV2: { type: 'boolean' },
 };
 
 const prisma = new PrismaService();
 async function main() {
   const {
-    values: { environment, jurisdictionName },
+    values: { environment, jurisdictionName, msqV2 },
   } = parseArgs({ options });
   const publicSiteBaseURL = env.DBSEED_PUBLIC_SITE_BASE_URL;
 
@@ -35,7 +36,12 @@ async function main() {
     case 'staging':
       // Staging setup should have realistic looking data with a preset list of listings
       // along with all of the required tables (ami, users, etc)
-      stagingSeed(prisma, jurisdictionName as string, publicSiteBaseURL);
+      stagingSeed(
+        prisma,
+        jurisdictionName as string,
+        publicSiteBaseURL,
+        msqV2 as boolean,
+      );
       break;
     case 'development':
     default:
