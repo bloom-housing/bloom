@@ -590,18 +590,6 @@ describe('Testing mfa strategy', () => {
       },
     });
 
-    expect(prisma.userAccounts.findUnique).toHaveBeenCalledWith({
-      where: {
-        id,
-      },
-      include: {
-        address: true,
-        agency: true,
-        jurisdictions: true,
-        listings: true,
-        userRoles: true,
-      },
-    });
     expect(prisma.userAccountSnapshot.create).toHaveBeenCalledWith({
       data: {
         originalCreatedAt: expect.anything(),

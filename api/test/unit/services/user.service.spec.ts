@@ -2096,6 +2096,7 @@ describe('Testing user service', () => {
       expect(prisma.userAccountSnapshot.create).toHaveBeenCalledWith({
         data: {
           originalId: id,
+          confirmationToken: expect.anything(),
         },
       });
     });
