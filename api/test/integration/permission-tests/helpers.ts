@@ -13,7 +13,6 @@ import {
   MultiselectQuestionsStatusEnum,
   Prisma,
   ReviewOrderTypeEnum,
-  UnitAccessibilityPriorityTypeEnum,
   UnitTypeEnum,
   YesNoEnum,
 } from '@prisma/client';
@@ -51,6 +50,7 @@ import { UserCreate } from '../../../src/dtos/users/user-create.dto';
 import { UserInvite } from '../../../src/dtos/users/user-invite.dto';
 import { AlternateContactRelationship } from '../../../src/enums/applications/alternate-contact-relationship-enum';
 import { HouseholdMemberRelationship } from '../../../src/enums/applications/household-member-relationship-enum';
+import { UnitAccessibilityPriorityTypeEnum } from '../../../src/enums/units/accessibility-priority-type-enum';
 
 export const generateJurisdiction = async (
   prisma: PrismaService,
@@ -117,6 +117,7 @@ export const buildJurisdictionCreateMock = (
     requiredListingFields: [],
     visibleNeighborhoodAmenities: [],
     regions: [],
+    visibleAccessibilityPriorityTypes: [],
   };
 };
 
@@ -143,6 +144,7 @@ export const buildJurisdictionUpdateMock = (
     requiredListingFields: [],
     visibleNeighborhoodAmenities: [],
     regions: [],
+    visibleAccessibilityPriorityTypes: [],
   };
 };
 

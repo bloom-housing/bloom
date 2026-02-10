@@ -12,6 +12,10 @@ import { UnitAccessibilityPriorityTypeEnum } from '../../src/enums/units/accessi
 
 const unitTypes = Object.values(UnitTypeEnum);
 
+const unitAccessibilityPriorityTypeValues = Object.values(
+  UnitAccessibilityPriorityTypeEnum,
+);
+
 export const unitGroupFactorySingle = (
   unitType: UnitTypes,
   optionalParams?: {
@@ -101,7 +105,3 @@ export const unitGroupFactoryMany = async (
   });
   return await Promise.all(createArray);
 };
-
-const unitAccessibilityPriorityTypeValues = Object.values(
-  UnitAccessibilityPriorityTypeEnum,
-);

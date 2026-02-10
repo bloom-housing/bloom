@@ -528,6 +528,76 @@ describe('Testing Permissioning of endpoints as Support Admin User', () => {
     });
   });
 
+  describe('Testing reserved community types endpoints', () => {
+    it('should succeed for list endpoint', async () => {
+      await request(app.getHttpServer())
+        .get(`/reservedCommunityTypes`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .expect(200);
+    });
+
+    it('should succeed for retrieve endpoint', async () => {
+      const reservedCommunityTypeA = await reservedCommunityTypeFactoryGet(
+        prisma,
+        jurisdictionId,
+      );
+
+      await request(app.getHttpServer())
+        .get(`/reservedCommunityTypes/${reservedCommunityTypeA.id}`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .expect(200);
+    });
+
+    it('should error as forbiddens for create endpoint', async () => {
+      await request(app.getHttpServer())
+        .post('/reservedCommunityTypes')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send(buildReservedCommunityTypeCreateMock(jurisdictionId))
+        .set('Cookie', cookies)
+        .expect(403);
+    });
+
+    it('should error as forbiddens for update endpoint', async () => {
+      const newJurisdiction = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(),
+      });
+      await reservedCommunityTypeFactoryAll(newJurisdiction.id, prisma);
+      const reservedCommunityTypeA = await reservedCommunityTypeFactoryGet(
+        prisma,
+        newJurisdiction.id,
+      );
+
+      await request(app.getHttpServer())
+        .put(`/reservedCommunityTypes/${reservedCommunityTypeA.id}`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send(buildReservedCommunityTypeUpdateMock(reservedCommunityTypeA.id))
+        .set('Cookie', cookies)
+        .expect(403);
+    });
+
+    it('should error as forbiddens for delete endpoint', async () => {
+      const newJurisdiction = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(),
+      });
+      await reservedCommunityTypeFactoryAll(newJurisdiction.id, prisma);
+      const reservedCommunityTypeA = await reservedCommunityTypeFactoryGet(
+        prisma,
+        newJurisdiction.id,
+      );
+
+      await request(app.getHttpServer())
+        .delete(`/reservedCommunityTypes`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({
+          id: reservedCommunityTypeA.id,
+        } as IdDTO)
+        .set('Cookie', cookies)
+        .expect(403);
+    });
+  });
+
   describe('Testing unit rent types endpoints', () => {
     it('should succeed for list endpoint', async () => {
       await request(app.getHttpServer())

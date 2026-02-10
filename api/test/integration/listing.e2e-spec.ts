@@ -16,7 +16,6 @@ import {
   RegionEnum,
   RentTypeEnum,
   ReviewOrderTypeEnum,
-  UnitAccessibilityPriorityTypeEnum,
   UnitTypeEnum,
   UserRoleEnum,
 } from '@prisma/client';
@@ -53,6 +52,7 @@ import { AddressCreate } from '../../src/dtos/addresses/address-create.dto';
 import { EmailService } from '../../src/services/email.service';
 import { userFactory } from '../../prisma/seed-helpers/user-factory';
 import { unitFactorySingle } from '../../prisma/seed-helpers/unit-factory';
+import { UnitAccessibilityPriorityTypeEnum } from '../../src/enums/units/accessibility-priority-type-enum';
 import { FilterAvailabilityEnum } from '../../src/enums/listings/filter-availability-enum';
 import { unitGroupFactorySingle } from '../../prisma/seed-helpers/unit-group-factory';
 import { randomName } from '../../prisma/seed-helpers/word-generator';

@@ -11,7 +11,6 @@ import {
   MultiselectQuestionsStatusEnum,
   RegionEnum,
   ReviewOrderTypeEnum,
-  UnitAccessibilityPriorityTypeEnum,
   UnitTypeEnum,
   UserRoleEnum,
 } from '@prisma/client';
@@ -52,6 +51,7 @@ import { GeocodingService } from '../../../src/services/geocoding.service';
 import { FilterAvailabilityEnum } from '../../../src/enums/listings/filter-availability-enum';
 import { CronJobService } from '../../../src/services/cron-job.service';
 import { MultiselectQuestionService } from '../../../src/services/multiselect-question.service';
+import { UnitAccessibilityPriorityTypeEnum } from '../../../src/enums/units/accessibility-priority-type-enum';
 
 /*
   generates a super simple mock listing for us to test logic with
@@ -666,7 +666,6 @@ describe('Testing listing service', () => {
             },
           },
           listingsResult: true,
-          property: true,
           listingsLeasingAgentAddress: true,
           listingsApplicationPickUpAddress: true,
           listingsApplicationDropOffAddress: true,

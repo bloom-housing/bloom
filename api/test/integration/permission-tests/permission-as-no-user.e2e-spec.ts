@@ -38,6 +38,9 @@ import { ConfirmationRequest } from '../../../src/dtos/users/confirmation-reques
 import { UserService } from '../../../src/services/user.service';
 import { EmailService } from '../../../src/services/email.service';
 import { AfsResolve } from '../../../src/dtos/application-flagged-sets/afs-resolve.dto';
+import { unitRentTypeFactory } from '../../../prisma/seed-helpers/unit-rent-type-factory';
+import { UnitRentTypeCreate } from '../../../src/dtos/unit-rent-types/unit-rent-type-create.dto';
+import { UnitRentTypeUpdate } from '../../../src/dtos/unit-rent-types/unit-rent-type-update.dto';
 import {
   generateJurisdiction,
   buildAmiChartCreateMock,
@@ -496,6 +499,71 @@ describe('Testing Permissioning of endpoints as logged out user', () => {
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send({
           id: reservedCommunityTypeA.id,
+        } as IdDTO)
+        .set('Cookie', cookies)
+        .expect(401);
+    });
+  });
+
+  describe('Testing unit rent types endpoints', () => {
+    it('should error as unauthorized for list endpoint', async () => {
+      await request(app.getHttpServer())
+        .get(`/unitRentTypes?`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .expect(401);
+    });
+
+    it('should error as unauthorized for retrieve endpoint', async () => {
+      const unitRentTypeA = await prisma.unitRentTypes.create({
+        data: unitRentTypeFactory(),
+      });
+
+      await request(app.getHttpServer())
+        .get(`/unitRentTypes/${unitRentTypeA.id}`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .expect(401);
+    });
+
+    it('should error as unauthorized for create endpoint', async () => {
+      const name = unitRentTypeFactory().name;
+      await request(app.getHttpServer())
+        .post('/unitRentTypes')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({
+          name: name,
+        } as UnitRentTypeCreate)
+        .set('Cookie', cookies)
+        .expect(401);
+    });
+
+    it('should error as unauthorized for update endpoint', async () => {
+      const unitRentTypeA = await prisma.unitRentTypes.create({
+        data: unitRentTypeFactory(),
+      });
+      const name = unitRentTypeFactory().name;
+      await request(app.getHttpServer())
+        .put(`/unitRentTypes/${unitRentTypeA.id}`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({
+          id: unitRentTypeA.id,
+          name: name,
+        } as UnitRentTypeUpdate)
+        .set('Cookie', cookies)
+        .expect(401);
+    });
+
+    it('should error as unauthorized for delete endpoint', async () => {
+      const unitRentTypeA = await prisma.unitRentTypes.create({
+        data: unitRentTypeFactory(),
+      });
+
+      await request(app.getHttpServer())
+        .delete(`/unitRentTypes`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({
+          id: unitRentTypeA.id,
         } as IdDTO)
         .set('Cookie', cookies)
         .expect(401);
