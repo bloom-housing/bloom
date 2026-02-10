@@ -20,6 +20,7 @@ import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum
 import { FilterAvailabilityEnum } from '../../enums/listings/filter-availability-enum';
 import { ListingFilterKeys } from '../../enums/listings/filter-key-enum';
 import { FixLargeObjectArray } from '../../decorators/fix-large-object-array';
+import { ParkingTypeEnum } from '../../enums/listings/filter-parking-type-enum';
 
 export class ListingFilterParams extends BaseFilter {
   @Expose()
@@ -230,4 +231,12 @@ export class ListingFilterParams extends BaseFilter {
     example: 'regulated',
   })
   [ListingFilterKeys.listingType]?: ListingTypeEnum;
+
+  @Expose()
+  @ApiPropertyOptional({
+    enum: ParkingTypeEnum,
+    enumName: 'ParkingTypeEnum',
+    example: 'carportted',
+  })
+  [ListingFilterKeys.parkingType]?: ParkingTypeEnum;
 }

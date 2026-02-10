@@ -1,4 +1,4 @@
-export enum ParkingType {
+export enum ParkingTypeEnum {
   onStreet = 'onStreet',
   offStreet = 'offStreet',
   garage = 'garage',
