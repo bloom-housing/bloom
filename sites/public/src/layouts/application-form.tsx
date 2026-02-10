@@ -24,6 +24,7 @@ interface ApplicationFormLayoutProps {
   }
   conductor?: ApplicationConductor
   hideBorder?: boolean
+  overrideIsAdvocate?: boolean
 }
 
 const ApplicationFormLayout = (props: ApplicationFormLayoutProps) => {
@@ -43,7 +44,7 @@ const ApplicationFormLayout = (props: ApplicationFormLayoutProps) => {
 
   if (!props.progressNavProps.mounted) return
 
-  const isAdvocate = props.conductor?.config?.isAdvocate
+  const isAdvocate = props.overrideIsAdvocate ?? props.conductor?.config?.isAdvocate
 
   return (
     <>
