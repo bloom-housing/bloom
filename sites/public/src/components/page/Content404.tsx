@@ -14,6 +14,7 @@ export const Content404 = () => {
           {t("errors.backToHome")}
         </Button>
       }
+      fullHeight={true}
     />
   )
 }
