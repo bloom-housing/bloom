@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useMemo } from "react"
+import React, { useContext, useEffect, useMemo, useState } from "react"
 import { useRouter } from "next/router"
 import Markdown from "markdown-to-jsx"
 import { t, ApplicationTimeline } from "@bloom-housing/ui-components"
@@ -20,6 +20,7 @@ import styles from "../../../layouts/application-form.module.scss"
 import { AppSubmissionContext } from "../../../lib/applications/AppSubmissionContext"
 import { UserStatus } from "../../../lib/constants"
 import { isFeatureFlagOn, isUnitGroupAppBase, isUnitGroupAppWaitlist } from "../../../lib/helpers"
+import { AccountTypeDialog } from "../../../components/account/AccountTypeDialog"
 
 const ApplicationConfirmation = () => {
   const { application, listing, conductor } = useContext(AppSubmissionContext)
@@ -30,6 +31,8 @@ const ApplicationConfirmation = () => {
     conductor.config,
     FeatureFlagEnum.disableListingPreferences
   )
+
+  const [accountTypeDialog, setAccountTypeDialog] = useState<boolean>(false)
 
   const imageUrl = imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize))[0]
 
@@ -85,95 +88,106 @@ const ApplicationConfirmation = () => {
   }, [profile])
 
   return (
-    <FormsLayout
-      pageTitle={`${t("account.application.confirmation")} - ${t("listings.apply.applyOnline")} - ${
-        listing?.name
-      }`}
-    >
-      <BloomCard>
-        <>
-          <CardSection divider={"flush"}>
-            <Heading priority={1} size={"2xl"} className={"seeds-large-heading"}>
-              {t("application.review.confirmation.title")}
-              {listing?.name}
-            </Heading>
-          </CardSection>
+    <>
+      <FormsLayout
+        pageTitle={`${t("account.application.confirmation")} - ${t(
+          "listings.apply.applyOnline"
+        )} - ${listing?.name}`}
+      >
+        <BloomCard>
+          <>
+            <CardSection divider={"flush"}>
+              <Heading priority={1} size={"2xl"} className={"seeds-large-heading"}>
+                {t("application.review.confirmation.title")}
+                {listing?.name}
+              </Heading>
+            </CardSection>
 
-          <div className={styles["application-form-image-card-section"]}>
-            <div className={styles["image-container"]}>
-              {imageUrl && <img src={imageUrl} alt={listing?.name} />}
+            <div className={styles["application-form-image-card-section"]}>
+              <div className={styles["image-container"]}>
+                {imageUrl && <img src={imageUrl} alt={listing?.name} />}
+              </div>
             </div>
-          </div>
 
-          <CardSection divider={"inset"}>
-            <Heading priority={2} size="lg">
-              {t("application.review.confirmation.lotteryNumber")}
-            </Heading>
+            <CardSection divider={"inset"}>
+              <Heading priority={2} size="lg">
+                {t("application.review.confirmation.lotteryNumber")}
+              </Heading>
 
-            <p id="confirmationCode" className="text-2xl my-3" data-testid={"app-confirmation-id"}>
-              {application.confirmationCode || application.id}
-            </p>
-            <p>{t("application.review.confirmation.pleaseWriteNumber")}</p>
-          </CardSection>
+              <p
+                id="confirmationCode"
+                className="text-2xl my-3"
+                data-testid={"app-confirmation-id"}
+              >
+                {application.confirmationCode || application.id}
+              </p>
+              <p>{t("application.review.confirmation.pleaseWriteNumber")}</p>
+            </CardSection>
 
-          <CardSection divider={"inset"}>
-            <div className="markdown markdown-informational">
-              <ApplicationTimeline />
+            <CardSection divider={"inset"}>
+              <div className="markdown markdown-informational">
+                <ApplicationTimeline />
 
-              <Markdown options={{ disableParsingRawHTML: true }}>{content.text}</Markdown>
-            </div>
-          </CardSection>
+                <Markdown options={{ disableParsingRawHTML: true }}>{content.text}</Markdown>
+              </div>
+            </CardSection>
 
-          <CardSection divider={"inset"}>
-            <div className="markdown markdown-informational">
-              <Markdown options={{ disableParsingRawHTML: true }}>
-                {t("application.review.confirmation.needToMakeUpdates", {
-                  agentName: listing?.leasingAgentName || "",
-                  agentPhone: listing?.leasingAgentPhone || "",
-                  agentEmail: listing?.leasingAgentEmail || "",
-                  agentOfficeHours: listing?.leasingAgentOfficeHours || "",
-                })}
-              </Markdown>
-            </div>
-          </CardSection>
-
-          {initialStateLoaded && !profile && (
-            <CardSection divider={"flush"} className={"border-none"}>
+            <CardSection divider={"inset"}>
               <div className="markdown markdown-informational">
                 <Markdown options={{ disableParsingRawHTML: true }}>
-                  {t("application.review.confirmation.createAccount")}
+                  {t("application.review.confirmation.needToMakeUpdates", {
+                    agentName: listing?.leasingAgentName || "",
+                    agentPhone: listing?.leasingAgentPhone || "",
+                    agentEmail: listing?.leasingAgentEmail || "",
+                    agentOfficeHours: listing?.leasingAgentOfficeHours || "",
+                  })}
                 </Markdown>
               </div>
             </CardSection>
-          )}
 
-          {initialStateLoaded && !profile && (
-            <CardSection
-              className={`${styles["application-form-action-footer"]} border-none`}
-              divider={"flush"}
-            >
-              <Button
-                variant={"primary"}
-                onClick={() => {
-                  void router.push("/create-account")
-                }}
-                id={"app-confirmation-create-account"}
+            {initialStateLoaded && !profile && (
+              <CardSection divider={"flush"} className={"border-none"}>
+                <div className="markdown markdown-informational">
+                  <Markdown options={{ disableParsingRawHTML: true }}>
+                    {t("application.review.confirmation.createAccount")}
+                  </Markdown>
+                </div>
+              </CardSection>
+            )}
+
+            {initialStateLoaded && !profile && (
+              <CardSection
+                className={`${styles["application-form-action-footer"]} border-none`}
+                divider={"flush"}
               >
-                {t("account.createAccount")}
-              </Button>
+                <Button
+                  variant={"primary"}
+                  onClick={() => {
+                    if (isFeatureFlagOn(conductor.config, FeatureFlagEnum.enableHousingAdvocate)) {
+                      setAccountTypeDialog(true)
+                    } else {
+                      void router.push("/create-account")
+                    }
+                  }}
+                  id={"app-confirmation-create-account"}
+                >
+                  {t("account.createAccount")}
+                </Button>
+              </CardSection>
+            )}
+
+            <CardSection divider={"flush"}>
+              <Link href="/listings">{t("application.review.confirmation.browseMore")}</Link>
             </CardSection>
-          )}
 
-          <CardSection divider={"flush"}>
-            <Link href="/listings">{t("application.review.confirmation.browseMore")}</Link>
-          </CardSection>
-
-          <CardSection>
-            <Link href="/applications/view">{t("application.review.confirmation.print")}</Link>
-          </CardSection>
-        </>
-      </BloomCard>
-    </FormsLayout>
+            <CardSection>
+              <Link href="/applications/view">{t("application.review.confirmation.print")}</Link>
+            </CardSection>
+          </>
+        </BloomCard>
+      </FormsLayout>
+      <AccountTypeDialog isOpen={accountTypeDialog} onClose={() => setAccountTypeDialog(false)} />
+    </>
   )
 }
 
