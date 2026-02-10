@@ -29,15 +29,15 @@ describe("Create advocate page", () => {
     expect(screen.getByText("Housing advocate")).toBeInTheDocument()
 
     expect(screen.getByText("Your name", { selector: "legend" })).toBeInTheDocument()
-    expect(screen.getByLabelText("First or given name")).toBeInTheDocument()
-    expect(screen.getByLabelText("Middle name (optional)")).toBeInTheDocument()
-    expect(screen.getByLabelText("Last or family name")).toBeInTheDocument()
+    expect(screen.getByRole("textbox", { name: "First or given name" })).toBeInTheDocument()
+    expect(screen.getByRole("textbox", { name: "Middle name (optional)" })).toBeInTheDocument()
+    expect(screen.getByRole("textbox", { name: "Last or family name" })).toBeInTheDocument()
 
     expect(screen.getByText("Your organization")).toBeInTheDocument()
-    expect(screen.getByLabelText("Agency")).toBeInTheDocument()
+    expect(screen.getByRole("combobox", { name: "Agency" })).toBeInTheDocument()
     expect(screen.getByText("Contact support if your agency is not listed")).toBeInTheDocument()
 
-    expect(screen.getByLabelText("Your email address")).toBeInTheDocument()
+    expect(screen.getByRole("textbox", { name: "Your email address" })).toBeInTheDocument()
     expect(screen.getByText("Register with your work email address")).toBeInTheDocument()
     expect(screen.getByText("For example: example@mail.com")).toBeInTheDocument()
 

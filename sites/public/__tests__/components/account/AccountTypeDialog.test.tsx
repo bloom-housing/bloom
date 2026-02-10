@@ -2,7 +2,7 @@ import React from "react"
 import { useRouter } from "next/router"
 import userEvent from "@testing-library/user-event"
 import { AccountTypeDialog } from "../../../src/components/account/AccountTypeDialog"
-import { render, screen } from "../../testUtils"
+import { render, screen, within } from "../../testUtils"
 
 jest.mock("next/router", () => ({
   useRouter: jest.fn(),
@@ -27,12 +27,22 @@ describe("AccountTypeDialog", () => {
       screen.getByRole("heading", { name: "Choose an account type", level: 1 })
     ).toBeInTheDocument()
     expect(screen.getByText("Which describes you?")).toBeInTheDocument()
-    expect(screen.getByLabelText("Housing applicant / tenant")).toBeInTheDocument()
-    expect(screen.getByText("Create an account to apply for housing")).toBeInTheDocument()
-    expect(screen.getByLabelText("Housing advocate")).toBeInTheDocument()
+    const describeYouQuestion = screen.getByRole("group", { name: "Which describes you?" })
     expect(
-      screen.getByText("Create an account to apply on behalf of a housing client")
+      within(describeYouQuestion).getByRole("radio", { name: "Housing applicant / tenant" })
     ).toBeInTheDocument()
+    expect(
+      within(describeYouQuestion).getByRole("radio", { name: "Housing advocate" })
+    ).toBeInTheDocument()
+    expect(
+      within(describeYouQuestion).getByText("Create an account to apply for housing")
+    ).toBeInTheDocument()
+    expect(
+      within(describeYouQuestion).getByText(
+        "Create an account to apply on behalf of a housing client"
+      )
+    ).toBeInTheDocument()
+    expect(screen.getByRole("button", { name: "Get started" })).toBeInTheDocument()
   })
 
   it("routes by default to create account for applicant selection", async () => {

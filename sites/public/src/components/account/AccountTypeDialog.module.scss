@@ -1,7 +1,4 @@
 .account-type-option {
-  > {
-    border: 1px solid red;
-  }
   &:not(:last-of-type) {
     margin-right: var(--seeds-s4);
     @media (--sm-only) {

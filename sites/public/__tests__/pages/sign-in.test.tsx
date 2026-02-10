@@ -63,7 +63,9 @@ describe("Sign In Page", () => {
 
     fireEvent.click(screen.getByRole("button", { name: "Create account" }))
 
-    expect(await screen.findByText("Choose an account type")).toBeInTheDocument()
+    expect(
+      await screen.findByRole("dialog", { name: "Choose an account type" })
+    ).toBeInTheDocument()
   })
 
   it("does not open account type dialog when housing advocate feature flag is disabled", () => {
