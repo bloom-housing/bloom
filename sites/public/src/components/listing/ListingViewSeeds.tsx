@@ -65,8 +65,7 @@ export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: Li
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, watch } = useForm()
 
-  const showPropertyCard =
-    !!listing?.property?.urlTitle && !!listing?.property?.url && !!listing?.property?.description
+  const showPropertyCard = !!listing?.property?.urlTitle && !!listing?.property?.url
 
   const [showDownloadModal, setShowDownloadModal] = useState(false)
   const [listingFavorited, setListingFavorited] = useState(false)

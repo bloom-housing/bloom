@@ -142,7 +142,7 @@ export const MainDetails = ({
     isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableIsVerified),
     isFeatureFlagOn(jurisdiction, FeatureFlagEnum.swapCommunityTypeWithPrograms)
   )
-  const showPropertyCard = !!property?.urlTitle && !!property?.url && !!property?.description
+  const showPropertyCard = !!property?.urlTitle && !!property?.url
   return (
     <div>
       <ImageCard
