@@ -37,7 +37,8 @@ const loadListing = async (
   context,
   language,
   listingsService: ListingsService,
-  jurisdictionsService: JurisdictionsService
+  jurisdictionsService: JurisdictionsService,
+  isAdvocate: boolean
 ) => {
   const listingResponse = await listingsService.retrieve(
     { id: listingId },
@@ -58,6 +59,7 @@ const loadListing = async (
     ...applicationConfig,
     languages: jurisdictionResponse.languages,
     featureFlags: jurisdictionResponse.featureFlags,
+    isAdvocate,
   }
   stateFunction(conductor.listing)
   context.syncListing(conductor.listing)
@@ -99,7 +101,9 @@ const ApplicationChooseLanguage = () => {
         context,
         "en",
         listingsService,
-        jurisdictionsService
+        jurisdictionsService,
+        // TODO: switch below to sth like profile?.isAdvocate ?? false when available
+        false
       )
     } else {
       conductor.listing = context.listing
@@ -148,12 +152,14 @@ const ApplicationChooseLanguage = () => {
         context,
         language,
         listingsService,
-        jurisdictionsService
+        jurisdictionsService,
+        // TODO: switch below to sth like profile?.isAdvocate ?? false when available
+        false
       ).then(() => {
         void router.push(conductor.determineNextUrl(), null, { locale: language })
       })
     },
-    [conductor, context, listingId, router, listingsService, jurisdictionsService]
+    [conductor, context, listingId, listingsService, jurisdictionsService, router]
   )
 
   return (
