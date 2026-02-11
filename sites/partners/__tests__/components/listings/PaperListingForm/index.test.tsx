@@ -5,6 +5,7 @@ import { rest } from "msw"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import {
   jurisdiction,
+  listing,
   mockBaseJurisdiction,
   mockUser,
 } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
@@ -99,66 +100,151 @@ afterEach(() => {
 
 afterAll(() => server.close())
 
-describe("add listing", () => {
-  it("should render the add listing page", () => {
-    window.URL.createObjectURL = jest.fn()
-    document.cookie = "access-token-available=True"
-    server.use(
-      rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
-        return res(
-          ctx.json({ id: "user1", userRoles: { id: "user1", isAdmin: true, isPartner: false } })
-        )
-      }),
-      rest.get("http://localhost:3100/reservedCommunityTypes", (_req, res, ctx) => {
-        return res(ctx.json([]))
-      }),
-      rest.get("http://localhost:3100/multiselectQuestions", (_req, res, ctx) => {
-        return res(ctx.json([]))
+describe("PaperListingForm", () => {
+  describe("add listing", () => {
+    it("should render the add listing form", () => {
+      window.URL.createObjectURL = jest.fn()
+      document.cookie = "access-token-available=True"
+      server.use(
+        rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
+          return res(
+            ctx.json({ id: "user1", userRoles: { id: "user1", isAdmin: true, isPartner: false } })
+          )
+        }),
+        rest.get("http://localhost:3100/reservedCommunityTypes", (_req, res, ctx) => {
+          return res(ctx.json([]))
+        }),
+        rest.get("http://localhost:3100/multiselectQuestions", (_req, res, ctx) => {
+          return res(ctx.json([]))
+        }),
+        rest.get("http://localhost:3100/properties", (_req, res, ctx) => {
+          return res(ctx.json([]))
+        })
+      )
+      render(<ListingForm jurisdictionId={"Bloomington"} />)
+
+      // Listing Details Tab
+      expect(screen.getByRole("tab", { name: "Listing details" })).toBeInTheDocument()
+      const listingDetailsContent = screen.getByRole("tabpanel", { name: "Listing details" })
+      expect(
+        within(listingDetailsContent).getByRole("heading", { level: 2, name: "Listing intro" })
+      ).toBeInTheDocument()
+      expect(
+        within(listingDetailsContent).getByRole("heading", { level: 2, name: "Listing photos" })
+      ).toBeInTheDocument()
+      expect(
+        within(listingDetailsContent).getByRole("heading", { level: 2, name: "Building details" })
+      ).toBeInTheDocument()
+      expect(
+        within(listingDetailsContent).getByRole("heading", { level: 2, name: "Listing units" })
+      ).toBeInTheDocument()
+      expect(
+        within(listingDetailsContent).getByRole("heading", {
+          level: 2,
+          name: "Housing preferences",
+        })
+      ).toBeInTheDocument()
+      expect(
+        within(listingDetailsContent).getByRole("heading", { level: 2, name: "Housing programs" })
+      ).toBeInTheDocument()
+      expect(
+        within(listingDetailsContent).getByRole("heading", { level: 2, name: "Additional fees" })
+      ).toBeInTheDocument()
+      expect(
+        within(listingDetailsContent).getByRole("heading", { level: 2, name: "Building features" })
+      ).toBeInTheDocument()
+      expect(
+        within(listingDetailsContent).getByRole("heading", {
+          level: 2,
+          name: "Additional eligibility rules",
+        })
+      ).toBeInTheDocument()
+      expect(
+        within(listingDetailsContent).getByRole("heading", { level: 2, name: "Additional details" })
+      ).toBeInTheDocument()
+
+      // Application Process tab
+      expect(screen.getByRole("tab", { name: "Application process" })).toBeInTheDocument()
+      const applicationProcessContent = screen.getByRole("tabpanel", {
+        name: "Application process",
       })
-    )
-    render(
-      <AuthContext.Provider
-        value={{
-          doJurisdictionsHaveFeatureFlagOn: (featureFlag: FeatureFlagEnum) => {
-            switch (featureFlag) {
-              case FeatureFlagEnum.swapCommunityTypeWithPrograms:
-                return false
-              default:
-                return false
-            }
-          },
-          getJurisdictionLanguages: () => [],
-        }}
-      >
-        <ListingForm jurisdictionId={"Bloomington"} />
-      </AuthContext.Provider>
-    )
+      expect(
+        within(applicationProcessContent).getByRole("heading", {
+          level: 2,
+          name: "Rankings & results",
+        })
+      ).toBeInTheDocument()
+      expect(
+        within(applicationProcessContent).getByRole("heading", { level: 2, name: "Leasing agent" })
+      ).toBeInTheDocument()
+      expect(
+        within(applicationProcessContent).getByRole("heading", {
+          level: 2,
+          name: "Application types",
+        })
+      ).toBeInTheDocument()
+      expect(
+        within(applicationProcessContent).getByRole("heading", {
+          level: 2,
+          name: "Application address",
+        })
+      ).toBeInTheDocument()
+      expect(
+        within(applicationProcessContent).getByRole("heading", {
+          level: 2,
+          name: "Application dates",
+        })
+      ).toBeInTheDocument()
 
-    // Listing Details Tab
-    expect(screen.getByRole("button", { name: "Listing details" }))
-    expect(screen.getByRole("heading", { level: 2, name: "Listing intro" }))
-    expect(screen.getByRole("heading", { level: 2, name: "Listing photos" }))
-    expect(screen.getByRole("heading", { level: 2, name: "Building details" }))
-    expect(screen.getByRole("heading", { level: 2, name: "Listing units" }))
-    expect(screen.getByRole("heading", { level: 2, name: "Housing preferences" }))
-    expect(screen.getByRole("heading", { level: 2, name: "Housing programs" }))
-    expect(screen.getByRole("heading", { level: 2, name: "Additional fees" }))
-    expect(screen.getByRole("heading", { level: 2, name: "Building features" }))
-    expect(screen.getByRole("heading", { level: 2, name: "Additional eligibility rules" }))
-    expect(screen.getByRole("heading", { level: 2, name: "Additional details" }))
+      // Action buttons
+      expect(screen.getByRole("button", { name: "Publish" })).toBeInTheDocument()
+      expect(screen.getByRole("button", { name: "Save as draft" })).toBeInTheDocument()
+      expect(screen.getByRole("button", { name: "Exit" })).toBeInTheDocument()
+    })
+  })
 
-    // Application Process tab
-    expect(screen.getByRole("button", { name: "Application process" }))
-    expect(screen.getByRole("heading", { level: 2, name: "Rankings & results" }))
-    expect(screen.getByRole("heading", { level: 2, name: "Leasing agent" }))
-    expect(screen.getByRole("heading", { level: 2, name: "Application types" }))
-    expect(screen.getByRole("heading", { level: 2, name: "Application address" }))
-    expect(screen.getByRole("heading", { level: 2, name: "Application dates" }))
+  describe("edit listing", () => {
+    it("should render the edit listing form with data populated", () => {
+      window.URL.createObjectURL = jest.fn()
+      document.cookie = "access-token-available=True"
+      server.use(
+        rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
+          return res(
+            ctx.json({
+              id: "user1",
+              userRoles: { id: "user1", isAdmin: true, isPartner: false },
+            })
+          )
+        }),
+        rest.get("http://localhost:3100/reservedCommunityTypes", (_req, res, ctx) => {
+          return res(ctx.json([]))
+        }),
+        rest.get("http://localhost:3100/multiselectQuestions", (_req, res, ctx) => {
+          return res(ctx.json([]))
+        }),
+        rest.get("http://localhost:3100/properties", (_req, res, ctx) => {
+          return res(ctx.json([]))
+        })
+      )
+      render(<ListingForm jurisdictionId={"Bloomington"} listing={listing} />)
 
-    // Action buttons
-    expect(screen.getByRole("button", { name: "Publish" }))
-    expect(screen.getByRole("button", { name: "Save as draft" }))
-    expect(screen.getByRole("button", { name: "Exit" }))
+      // Preferences
+      expect(
+        screen.getByRole("row", { name: "Order Name Additional fields Actions" })
+      ).toBeInTheDocument()
+      expect(screen.getByRole("row", { name: "1 Preference 1 Delete" })).toBeInTheDocument()
+      expect(screen.getByRole("row", { name: "2 Preference 2 Delete" })).toBeInTheDocument()
+      expect(screen.getByRole("button", { name: "Edit preferences" })).toBeInTheDocument()
+
+      // units
+      expect(
+        screen.getByRole("row", { name: "Unit # Unit type AMI Rent SQ FT ADA Actions" })
+      ).toBeInTheDocument()
+      expect(
+        screen.getAllByRole("row", { name: "Studio 45.0 1104.0 285 Edit Delete" }).length
+      ).toBeGreaterThan(0)
+      expect(screen.getByRole("button", { name: "Add unit" })).toBeInTheDocument()
+    })
   })
 
   it("should render rich text field", async () => {
