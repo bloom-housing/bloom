@@ -21,11 +21,21 @@
 # 10.0.1.64/26  |  c   | public
 # ...
 #
+#
+# Requesting a VPC peering to an existing VPC is supported. This is used in scenerios where an
+# existing database exists and will be used to import to the Bloom database. If this functionality
+# is used, Bloom must be deployed into the same region as the existing VPC due to limitations of
+# referencing security groups defined in the peered VPC [2].
+#
 # [1]:
 #   From https://aws.amazon.com/vpc/faqs/:
 #
-#   > Amazon reserves the first four (4) IP addresses and the last one (1) IP address of every subnet for IP networking purposes.
-#   > The minimum size of a subnet is a /28 (or 14 IP addresses.)
+#   > Amazon reserves the first four (4) IP addresses and the last one (1) IP address of every
+#   > subnet for IP networking purposes. The minimum size of a subnet is a /28 (or 14 IP addresses.)
+# [2]:
+#   From https://docs.aws.amazon.com/vpc/latest/peering/vpc-peering-security-groups.html
+#
+#   > You can't reference the security group of a peer VPC that's in a different Region.
 data "aws_availability_zones" "zones" {
   region = var.aws_region
   state  = "available"
@@ -50,6 +60,33 @@ resource "aws_vpc" "bloom" {
     Name = "bloom"
   }
 }
+
+# Set up the VPC peering connection if specified.
+resource "aws_vpc_peering_connection" "to_existing_vpc" {
+  count = var.vpc_peering_settings == null ? 0 : 1
+
+  region = var.aws_region
+  vpc_id = aws_vpc.bloom.id
+
+  peer_owner_id = var.vpc_peering_settings.aws_account_number
+  peer_vpc_id   = var.vpc_peering_settings.vpc_id
+
+  tags = {
+    Name = "to-existing-vpc"
+  }
+}
+data "aws_vpc_peering_connection" "to_existing_vpc" {
+  count  = var.vpc_peering_settings == null ? 0 : 1
+  vpc_id = aws_vpc.bloom.id
+  id     = aws_vpc_peering_connection.to_existing_vpc[0].id
+  lifecycle {
+    postcondition {
+      condition     = self.status == "active"
+      error_message = "VPC peering not accepted. Skipping creation of dependent resources."
+    }
+  }
+}
+
 locals {
   # VPC range is a /22, each subnet gets a /26
   newbits = 26 - 22
@@ -83,7 +120,7 @@ resource "aws_subnet" "public" {
     Name = "bloom-public-${each.key}"
   }
 }
-resource "aws_route_table" "internet_gateway" {
+resource "aws_route_table" "public" {
   region = var.aws_region
   vpc_id = aws_vpc.bloom.id
   route {
@@ -91,14 +128,14 @@ resource "aws_route_table" "internet_gateway" {
     gateway_id = aws_internet_gateway.bloom.id
   }
   tags = {
-    Name = "bloom-internet-gateway"
+    Name = "bloom-public"
   }
 }
 resource "aws_route_table_association" "public_subnet" {
   for_each       = aws_subnet.public
   region         = var.aws_region
   subnet_id      = each.value.id
-  route_table_id = aws_route_table.internet_gateway.id
+  route_table_id = aws_route_table.public.id
 }
 # ECS tasks in the private subnets still need access to the internet. This is provided by a NAT
 # gateway. A NAT gateway is a zonal resource so provision one in each availability zone. Each
@@ -131,23 +168,33 @@ resource "aws_subnet" "private" {
     Name = "bloom-private-${each.key}"
   }
 }
-resource "aws_route_table" "nat_gateway" {
+resource "aws_route_table" "private" {
   for_each = aws_subnet.private
   region   = var.aws_region
   vpc_id   = aws_vpc.bloom.id
-  route {
-    cidr_block     = "0.0.0.0/0"
-    nat_gateway_id = aws_nat_gateway.bloom[each.key].id
-  }
   tags = {
-    Name = "bloom-nat-gateway-${each.key}"
+    Name = "bloom-private-${each.key}"
   }
 }
 resource "aws_route_table_association" "private_subnet" {
   for_each       = aws_subnet.private
   region         = var.aws_region
   subnet_id      = each.value.id
-  route_table_id = aws_route_table.nat_gateway[each.key].id
+  route_table_id = aws_route_table.private[each.key].id
+}
+resource "aws_route" "private_nat" {
+  for_each               = aws_subnet.private
+  region                 = var.aws_region
+  route_table_id         = aws_route_table.private[each.key].id
+  destination_cidr_block = "0.0.0.0/0"
+  nat_gateway_id         = aws_nat_gateway.bloom[each.key].id
+}
+resource "aws_route" "vpc_peer" {
+  for_each                  = var.vpc_peering_settings == null ? {} : aws_subnet.private
+  region                    = var.aws_region
+  route_table_id            = aws_route_table.private[each.key].id
+  destination_cidr_block    = var.vpc_peering_settings.allowed_cidr_range
+  vpc_peering_connection_id = aws_vpc_peering_connection.to_existing_vpc[0].id
 }
 
 # Create PrivateLink endpoints for AWS services to be accessed via. This keeps the traffic internal
@@ -212,6 +259,19 @@ resource "aws_vpc_security_group_ingress_rule" "db" {
   to_port                      = 5432
   tags = {
     Name = "${each.key}-allow"
+  }
+}
+resource "aws_vpc_security_group_ingress_rule" "vpc_peering_to_db" {
+  count                        = var.vpc_peering_settings == null ? 0 : 1
+  depends_on                   = [data.aws_vpc_peering_connection.to_existing_vpc[0]]
+  region                       = var.aws_region
+  security_group_id            = aws_security_group.db.id
+  referenced_security_group_id = "${var.vpc_peering_settings.aws_account_number}/${var.vpc_peering_settings.allowed_security_group_id}"
+  ip_protocol                  = "tcp"
+  from_port                    = 5432
+  to_port                      = 5432
+  tags = {
+    Name = "vpc-peering-allow"
   }
 }
 
