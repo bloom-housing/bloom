@@ -26,7 +26,9 @@ const ApplicationName = () => {
   const currentPageSection = 1
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, handleSubmit, watch, errors, trigger } = useForm<Record<string, any>>({
+  const { register, handleSubmit, watch, errors, trigger, clearErrors } = useForm<
+    Record<string, any>
+  >({
     shouldFocusError: false,
     defaultValues: {
       "applicant.emailAddress": application.applicant.emailAddress,
@@ -227,6 +229,9 @@ const ApplicationName = () => {
               primary={true}
               register={register}
               disabled={clientLoaded && (emailPresent?.length > 0 || autofilled)}
+              onChange={(e) => {
+                if (e.target.checked) clearErrors("applicant.emailAddress")
+              }}
               inputProps={{
                 defaultChecked: clientLoaded && noEmail,
               }}
