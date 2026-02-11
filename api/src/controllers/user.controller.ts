@@ -68,6 +68,9 @@ import { PartnerUserInvite } from '../dtos/users/partner-user-invite.dto';
   PublicUserCreate,
   PartnerUserCreate,
   AdvocateUserCreate,
+  PublicUserUpdate,
+  PartnerUserUpdate,
+  AdvocateUserUpdate,
   PartnerUserInvite,
 )
 @UseGuards(ApiKeyGuard)
