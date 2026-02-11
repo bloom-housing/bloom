@@ -1,5 +1,6 @@
 import * as React from "react"
 import { Card, Heading, Link } from "@bloom-housing/ui-seeds"
+import listingStyles from "../ListingViewSeeds.module.scss"
 
 type PropertyDetailsCardProps = {
   heading: string
@@ -15,7 +16,9 @@ export const PropertyDetailsCard = ({
   propertyDescription,
 }: PropertyDetailsCardProps) => {
   return (
-    <Card>
+    <Card
+      className={`${listingStyles["mobile-full-width-card"]} ${listingStyles["mobile-no-bottom-border"]}`}
+    >
       <Card.Section>
         <Heading size={"lg"} priority={2} className={"seeds-m-be-header"}>
           {heading}
