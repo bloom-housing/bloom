@@ -126,7 +126,7 @@ const CreateAccount = () => {
                   className={accountCardStyles["account-card-settings-section"]}
                 >
                   <fieldset id="userName">
-                    <legend className={styles["create-account-header"]}>
+                    <legend className={"text__caps-spaced"}>
                       {t("application.name.yourName")}
                     </legend>
 
