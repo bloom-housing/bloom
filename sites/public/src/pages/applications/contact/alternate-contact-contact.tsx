@@ -73,7 +73,9 @@ const ApplicationAlternateContactContact = () => {
     //     zipCode: profile.address.zipCode || "",
     //   }
     // }
-  }, [isAdvocate, profile, application])
+
+    conductor.sync()
+  }, [isAdvocate, profile, application, conductor])
 
   const LockIcon = () => {
     return (
