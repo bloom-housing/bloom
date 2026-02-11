@@ -119,6 +119,7 @@
   "application.alternateContact.contact.title": "Let us know how to reach your alternate contact.",
   "application.alternateContact.name.alternateContactFormLabel": "Name of alternate contact",
   "application.alternateContact.name.caseManagerAgencyFormLabel": "Where does your case manager or housing counselor work?",
+  "application.alternateContact.name.caseManagerAgencyFormLabelAdvocate": "Where does your case manager or housing advocate work?",
   "application.alternateContact.name.caseManagerAgencyFormPlaceHolder": "Agency",
   "application.alternateContact.name.caseManagerAgencyValidationErrorMessage": "Please enter an agency",
   "application.alternateContact.name.title": "Who is your alternate contact?",

@@ -102,7 +102,7 @@ const ApplicationChooseLanguage = () => {
         "en",
         listingsService,
         jurisdictionsService,
-        // TODO: switch below to sth like profile?.isAdvocate ?? false when available
+        // TODO (Advocate): switch below to sth like profile?.isAdvocate ?? false when available
         false
       )
     } else {
@@ -153,8 +153,8 @@ const ApplicationChooseLanguage = () => {
         language,
         listingsService,
         jurisdictionsService,
-        // TODO: switch below to sth like profile?.isAdvocate ?? false when available
-        false
+        // TODO (Advocate): switch below to sth like profile?.isAdvocate ?? false when available
+        true
       ).then(() => {
         void router.push(conductor.determineNextUrl(), null, { locale: language })
       })

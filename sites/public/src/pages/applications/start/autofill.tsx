@@ -37,6 +37,7 @@ const Autofill = () => {
   let useDetails = false
 
   const mounted = OnClientSide()
+  const isAdvocate = conductor.config?.isAdvocate
 
   const enableUnitGroups = isFeatureFlagOn(conductor.config, FeatureFlagEnum.enableUnitGroups)
   const preferredUnits = getPreferredUnitTypes(application, listing, enableUnitGroups)
@@ -85,6 +86,10 @@ const Autofill = () => {
 
   useEffect(() => {
     if (!previousApplication && initialStateLoaded) {
+      if (isAdvocate) {
+        onSubmit()
+        return
+      }
       if (profile) {
         void applicationsService
           .mostRecentlyCreated({
@@ -101,7 +106,7 @@ const Autofill = () => {
         onSubmit()
       }
     }
-  }, [profile, applicationsService, onSubmit, previousApplication, initialStateLoaded])
+  }, [profile, applicationsService, onSubmit, previousApplication, initialStateLoaded, isAdvocate])
 
   return previousApplication ? (
     <FormsLayout
