@@ -126,6 +126,7 @@
   "application.alternateContact.type.description": "By providing alternate contact, you are allowing us to discuss information on your application with them.",
   "application.alternateContact.type.label": "Alternate contact",
   "application.alternateContact.type.options.caseManager": "Case manager or housing counselor",
+  "application.alternateContact.type.options.caseManagerAdvocate": "Case manager or housing advocate",
   "application.alternateContact.type.options.familyMember": "Family member",
   "application.alternateContact.type.options.friend": "Friend",
   "application.alternateContact.type.options.noContact": "I don't have an alternate contact",
