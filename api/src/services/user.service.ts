@@ -28,7 +28,6 @@ import { buildOrderBy } from '../utilities/build-order-by';
 import { UserQueryParams } from '../dtos/users/user-query-param.dto';
 import { PaginatedUserDto } from '../dtos/users/paginated-user.dto';
 import { OrderByEnum } from '../enums/shared/order-by-enum';
-import { UserUpdate } from '../dtos/users/user-update.dto';
 import {
   isPasswordOutdated,
   isPasswordValid,
@@ -38,8 +37,7 @@ import { SuccessDTO } from '../dtos/shared/success.dto';
 import { EmailAndAppUrl } from '../dtos/users/email-and-app-url.dto';
 import { ConfirmationRequest } from '../dtos/users/confirmation-request.dto';
 import { IdDTO } from '../dtos/shared/id.dto';
-import { UserInvite } from '../dtos/users/user-invite.dto';
-import { UserCreate } from '../dtos/users/user-create.dto';
+import { PartnerUserInvite } from '../dtos/users/partner-user-invite.dto';
 import { EmailService } from './email.service';
 import { PermissionService } from './permission.service';
 import { permissionActions } from '../enums/permissions/permission-actions-enum';
@@ -53,6 +51,12 @@ import { UserFavoriteListing } from '../dtos/users/user-favorite-listing.dto';
 import { ModificationEnum } from '../enums/shared/modification-enum';
 import { CronJobService } from './cron-job.service';
 import { ApplicationService } from './application.service';
+import { PublicUserUpdate } from 'src/dtos/users/public-user-update.dto';
+import { PartnerUserUpdate } from 'src/dtos/users/partner-user-update.dto';
+import { AdvocateUserUpdate } from 'src/dtos/users/advocate-user-update.dto';
+import { PublicUserCreate } from 'src/dtos/users/public-user-create.dto';
+import { PartnerUserCreate } from 'src/dtos/users/partner-user-create.dto';
+import { AdvocateUserCreate } from 'src/dtos/users/advocate-user-create.dto';
 
 /*
   this is the service for users
@@ -173,7 +177,7 @@ export class UserService {
     this will update a user or error if no user is found with the Id
   */
   async update(
-    dto: UserUpdate,
+    dto: PublicUserUpdate | PartnerUserUpdate | AdvocateUserUpdate,
     requestingUser: User,
     jurisdictionName: string,
   ): Promise<User> {
@@ -254,7 +258,7 @@ export class UserService {
     }
 
     // only update userRoles if something has changed
-    if (dto.userRoles && storedUser.userRoles) {
+    if (dto?.userRoles && storedUser.userRoles) {
       if (
         this.isUserRoleChangeAllowed(requestingUser, dto.userRoles) &&
         !(
@@ -314,7 +318,7 @@ export class UserService {
         passwordUpdatedAt: passwordUpdatedAt ?? undefined,
         confirmationToken: confirmationToken ?? undefined,
         firstName: dto.firstName,
-        middleName: dto.middleName,
+        middleName: dto?.middleName ?? storedUser.middleName,
         lastName: dto.lastName,
         dob: dto.dob,
         phoneNumber: dto.phoneNumber,
@@ -529,36 +533,15 @@ export class UserService {
   }
 
   /*
-    creates a new user
-    takes in either the dto for creating a public user or the dto for creating a partner user
-    if forPartners is true then we are creating a partner, otherwise we are creating a public user
-    if sendWelcomeEmail is true then we are sending a public user a welcome email
+    Checks if creation should update an existing user to a new role instead of creating a new entry
   */
-  async create(
-    dto: UserCreate | UserInvite,
-    forPartners: boolean,
-    sendWelcomeEmail = false,
-    req: Request,
-  ): Promise<User> {
-    const requestingUser = mapTo(User, req['user']);
-    const jurisdictionName = (req.headers['jurisdictionname'] as string) || '';
-
-    if (
-      this.containsInvalidCharacters(dto.firstName) ||
-      this.containsInvalidCharacters(dto.lastName)
-    ) {
-      throw new ForbiddenException(
-        `${dto.firstName} ${dto.lastName} was found to be invalid`,
-      );
-    }
-
-    if (forPartners) {
-      await this.authorizeAction(
-        requestingUser,
-        mapTo(User, dto),
-        permissionActions.confirm,
-      );
-    }
+  async handleExistingUser(
+    dto:
+      | PublicUserCreate
+      | PartnerUserCreate
+      | AdvocateUserCreate
+      | PartnerUserInvite,
+  ): Promise<User | null> {
     const existingUser = await this.prisma.userAccounts.findUnique({
       include: views.full,
       where: {
@@ -628,16 +611,39 @@ export class UserService {
       }
     }
 
-    let passwordHash = '';
-    if (forPartners) {
-      passwordHash = await passwordToHash(
-        crypto.randomBytes(8).toString('hex'),
+    return null;
+  }
+
+  /*
+    creates a public user, and sends a welcome email with a confirmation link
+  */
+  async createPublicUser(
+    dto: PublicUserCreate,
+    sendWelcomeEmail = false,
+    req: Request,
+  ): Promise<User> {
+    const jurisdictionName = (req.headers['jurisdictionname'] as string) || '';
+
+    if (
+      this.containsInvalidCharacters(dto.firstName) ||
+      (dto.middleName && this.containsInvalidCharacters(dto.middleName)) ||
+      this.containsInvalidCharacters(dto.lastName)
+    ) {
+      throw new ForbiddenException(
+        `${dto.firstName}${dto.middleName ? ` ${dto.middleName} ` : ' '}${
+          dto.lastName
+        } was found to be invalid`,
       );
-    } else {
-      passwordHash = await passwordToHash((dto as UserCreate).password);
     }
 
-    let jurisdictions:
+    const recreatedUser = await this.handleExistingUser(dto);
+    if (recreatedUser !== null) {
+      return recreatedUser;
+    }
+
+    const passwordHash = await passwordToHash(dto.password);
+
+    const jurisdictions:
       | {
           jurisdictions: Prisma.JurisdictionsCreateNestedManyWithoutUser_accountsInput;
         }
@@ -651,16 +657,6 @@ export class UserService {
         }
       : {};
 
-    if (!forPartners && jurisdictionName) {
-      jurisdictions = {
-        jurisdictions: {
-          connect: {
-            name: jurisdictionName,
-          },
-        },
-      };
-    }
-
     let newUser = await this.prisma.userAccounts.create({
       data: {
         passwordHash: passwordHash,
@@ -669,18 +665,7 @@ export class UserService {
         middleName: dto.middleName,
         lastName: dto.lastName,
         dob: dto.dob,
-        phoneNumber: dto.phoneNumber,
-        language: dto.language,
-        mfaEnabled: forPartners,
         ...jurisdictions,
-        userRoles:
-          'userRoles' in dto
-            ? {
-                create: {
-                  ...dto.userRoles,
-                },
-              }
-            : undefined,
         listings: dto.listings
           ? {
               connect: dto.listings.map((listing) => ({
@@ -705,8 +690,7 @@ export class UserService {
       },
     });
 
-    // Public user that needs email
-    if (!forPartners && sendWelcomeEmail) {
+    if (sendWelcomeEmail) {
       const fullJurisdiction = await this.prisma.jurisdictions.findFirst({
         where: {
           name: jurisdictionName as string,
@@ -727,22 +711,219 @@ export class UserService {
           confirmationUrl,
         );
       }
-    } else if (forPartners) {
-      const confirmationUrl = this.getPartnersConfirmationUrl(
-        this.configService.get('PARTNERS_PORTAL_URL'),
-        confirmationToken,
-      );
-      await this.emailService.invitePartnerUser(
-        dto.jurisdictions,
-        mapTo(User, newUser),
-        this.configService.get('PARTNERS_PORTAL_URL'),
-        confirmationUrl,
+    }
+
+    await this.connectUserWithExistingApplications(newUser.email, newUser.id);
+
+    return mapTo(User, newUser);
+  }
+
+  /* 
+    creates a partner user
+  */
+  async createPartnerUser(
+    dto: PartnerUserCreate | PartnerUserInvite,
+    req: Request,
+  ) {
+    const requestingUser = mapTo(User, req['user']);
+
+    if (
+      this.containsInvalidCharacters(dto.firstName) ||
+      this.containsInvalidCharacters(dto.lastName)
+    ) {
+      throw new ForbiddenException(
+        `${dto.firstName} ${dto.lastName} was found to be invalid`,
       );
     }
 
-    if (!forPartners) {
-      await this.connectUserWithExistingApplications(newUser.email, newUser.id);
+    await this.authorizeAction(
+      requestingUser,
+      mapTo(User, dto),
+      permissionActions.confirm,
+    );
+
+    const recreatedUser = await this.handleExistingUser(dto);
+    if (recreatedUser !== null) {
+      return recreatedUser;
     }
+
+    const passwordHash = await passwordToHash(
+      crypto.randomBytes(8).toString('hex'),
+    );
+
+    const jurisdictions:
+      | {
+          jurisdictions: Prisma.JurisdictionsCreateNestedManyWithoutUser_accountsInput;
+        }
+      | Record<string, never> = dto.jurisdictions
+      ? {
+          jurisdictions: {
+            connect: dto.jurisdictions.map((juris) => ({
+              id: juris.id,
+            })),
+          },
+        }
+      : {};
+
+    let newUser = await this.prisma.userAccounts.create({
+      data: {
+        passwordHash: passwordHash,
+        email: dto.email,
+        firstName: dto.firstName,
+        lastName: dto.lastName,
+        mfaEnabled: true,
+        ...jurisdictions,
+        userRoles: {
+          create: {
+            isPartner: true,
+          },
+        },
+        listings: dto.listings
+          ? {
+              connect: dto.listings.map((listing) => ({
+                id: listing.id,
+              })),
+            }
+          : undefined,
+      },
+    });
+
+    const confirmationToken = this.createConfirmationToken(
+      newUser.id,
+      newUser.email,
+    );
+    newUser = await this.prisma.userAccounts.update({
+      include: views.full,
+      data: {
+        confirmationToken: confirmationToken,
+      },
+      where: {
+        id: newUser.id,
+      },
+    });
+
+    const confirmationUrl = this.getPartnersConfirmationUrl(
+      this.configService.get('PARTNERS_PORTAL_URL'),
+      confirmationToken,
+    );
+
+    await this.emailService.invitePartnerUser(
+      dto.jurisdictions,
+      mapTo(User, newUser),
+      this.configService.get('PARTNERS_PORTAL_URL'),
+      confirmationUrl,
+    );
+
+    return mapTo(User, newUser);
+  }
+
+  /*
+    creates an advocate user, and sends a welcome email with a confirmation link
+   */
+  async createAdvocateUser(
+    dto: AdvocateUserCreate,
+    sendWelcomeEmail = false,
+    req: Request,
+  ) {
+    const jurisdictionName = (req.headers['jurisdictionname'] as string) || '';
+
+    if (
+      this.containsInvalidCharacters(dto.firstName) ||
+      (dto.middleName && this.containsInvalidCharacters(dto.middleName)) ||
+      this.containsInvalidCharacters(dto.lastName)
+    ) {
+      throw new ForbiddenException(
+        `${dto.firstName}${dto.middleName ? ` ${dto.middleName} ` : ' '}${
+          dto.lastName
+        } was found to be invalid`,
+      );
+    }
+
+    const recreatedUser = await this.handleExistingUser(dto);
+    if (recreatedUser !== null) {
+      return recreatedUser;
+    }
+
+    const passwordHash = await passwordToHash(
+      crypto.randomBytes(8).toString('hex'),
+    );
+
+    const jurisdictions:
+      | {
+          jurisdictions: Prisma.JurisdictionsCreateNestedManyWithoutUser_accountsInput;
+        }
+      | Record<string, never> = dto.jurisdictions
+      ? {
+          jurisdictions: {
+            connect: dto.jurisdictions.map((juris) => ({
+              id: juris.id,
+            })),
+          },
+        }
+      : {};
+
+    let newUser = await this.prisma.userAccounts.create({
+      data: {
+        passwordHash: passwordHash,
+        email: dto.email,
+        firstName: dto.firstName,
+        middleName: dto.middleName,
+        lastName: dto.lastName,
+        agency: {
+          connect: {
+            id: dto.agency.id,
+          },
+        },
+        isAdvocate: true,
+        ...jurisdictions,
+        listings: dto.listings
+          ? {
+              connect: dto.listings.map((listing) => ({
+                id: listing.id,
+              })),
+            }
+          : undefined,
+      },
+    });
+
+    const confirmationToken = this.createConfirmationToken(
+      newUser.id,
+      newUser.email,
+    );
+    newUser = await this.prisma.userAccounts.update({
+      include: views.full,
+      data: {
+        confirmationToken: confirmationToken,
+      },
+      where: {
+        id: newUser.id,
+      },
+    });
+
+    if (sendWelcomeEmail) {
+      const fullJurisdiction = await this.prisma.jurisdictions.findFirst({
+        where: {
+          name: jurisdictionName as string,
+        },
+      });
+
+      if (fullJurisdiction?.allowSingleUseCodeLogin) {
+        this.requestSingleUseCode(dto, req);
+      } else {
+        const confirmationUrl = this.getPublicConfirmationUrl(
+          dto.appUrl,
+          confirmationToken,
+        );
+        await this.emailService.welcome(
+          jurisdictionName,
+          mapTo(User, newUser),
+          dto.appUrl,
+          confirmationUrl,
+        );
+      }
+    }
+
+    await this.connectUserWithExistingApplications(newUser.email, newUser.id);
 
     return mapTo(User, newUser);
   }
