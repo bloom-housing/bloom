@@ -142,7 +142,6 @@ export const MainDetails = ({
     isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableIsVerified),
     isFeatureFlagOn(jurisdiction, FeatureFlagEnum.swapCommunityTypeWithPrograms)
   )
-  const showPropertyCard = !!property?.urlTitle && !!property?.url
   return (
     <div>
       <ImageCard
@@ -211,14 +210,14 @@ export const MainDetails = ({
       </div>
 
       <div className={`${listingStyles["hide-desktop"]} seeds-m-bs-content`}>
-        {isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableProperties) && showPropertyCard ? (
+        {isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableProperties) && (
           <PropertyDetailsCard
             heading={t("listings.propertyCardTitle")}
             linkText={property.urlTitle}
             linkUrl={property.url}
             propertyDescription={property.description}
           />
-        ) : null}
+        )}
         <Availability listing={listing} jurisdiction={jurisdiction} />
       </div>
     </div>

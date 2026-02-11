@@ -65,8 +65,6 @@ export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: Li
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, watch } = useForm()
 
-  const showPropertyCard = !!listing?.property?.urlTitle && !!listing?.property?.url
-
   const [showDownloadModal, setShowDownloadModal] = useState(false)
   const [listingFavorited, setListingFavorited] = useState(false)
 
@@ -325,16 +323,14 @@ export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: Li
           </div>
         </div>
         <div className={`${styles["right-bar"]} ${styles["hide-mobile"]}`}>
-          {isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableProperties)
-            ? showPropertyCard && (
-                <PropertyDetailsCard
-                  heading={t("listings.propertyCardTitle")}
-                  linkText={listing.property.urlTitle}
-                  linkUrl={listing.property.url}
-                  propertyDescription={listing.property.description}
-                />
-              )
-            : null}
+          {isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableProperties) && (
+            <PropertyDetailsCard
+              heading={t("listings.propertyCardTitle")}
+              linkText={listing.property.urlTitle}
+              linkUrl={listing.property.url}
+              propertyDescription={listing.property.description}
+            />
+          )}
           <Availability listing={listing} jurisdiction={jurisdiction} />
           {ApplyBar}
         </div>

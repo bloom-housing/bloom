@@ -15,18 +15,23 @@ export const PropertyDetailsCard = ({
   linkUrl,
   propertyDescription,
 }: PropertyDetailsCardProps) => {
+  const hasLink = linkText && linkUrl
+  if (!hasLink && !propertyDescription) return null
+
   return (
     <Card
       className={`${listingStyles["mobile-full-width-card"]} ${listingStyles["mobile-no-bottom-border"]}`}
     >
       <Card.Section>
-        <Heading size={"lg"} priority={2} className={"seeds-m-be-header"}>
+        <Heading size="lg" priority={2} className="seeds-m-be-header">
           {heading}
         </Heading>
-        <div className={"seeds-m-bs-2"}>{propertyDescription}</div>
-        <p className={"seeds-m-bs-text"}>
-          <Link href={linkUrl}>{linkText}</Link>
-        </p>
+        {propertyDescription && <div className="seeds-m-bs-2">{propertyDescription}</div>}
+        {hasLink && (
+          <p className="seeds-m-bs-text">
+            <Link href={linkUrl}>{linkText}</Link>
+          </p>
+        )}
       </Card.Section>
     </Card>
   )
