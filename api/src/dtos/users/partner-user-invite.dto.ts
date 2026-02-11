@@ -1,30 +1,21 @@
 import { ApiProperty, OmitType } from '@nestjs/swagger';
 import { Expose, Type } from 'class-transformer';
-import {
-  ArrayMinSize,
-  IsArray,
-  IsEmail,
-  ValidateNested,
-} from 'class-validator';
-import { UserUpdate } from './user-update.dto';
+import { ArrayMinSize, IsArray, ValidateNested } from 'class-validator';
 
-import { EnforceLowerCase } from '../../decorators/enforce-lower-case.decorator';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 import { IdDTO } from '../shared/id.dto';
+import { PartnerUserUpdate } from './partner-user-update.dto';
 
-export class UserInvite extends OmitType(UserUpdate, [
+export class PartnerUserInvite extends OmitType(PartnerUserUpdate, [
   'id',
   'password',
   'currentPassword',
-  'email',
   'agreedToTermsOfService',
   'jurisdictions',
 ]) {
-  @Expose()
-  @ApiProperty()
-  @IsEmail({}, { groups: [ValidationsGroupsEnum.default] })
-  @EnforceLowerCase()
-  email: string;
+  /* Fields inherited from User:
+   * - email (inherited as required from User)
+   **/
 
   @Expose()
   @Type(() => IdDTO)
