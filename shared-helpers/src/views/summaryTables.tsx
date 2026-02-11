@@ -18,7 +18,6 @@ import {
   EnumListingListingType,
 } from "../types/backend-swagger"
 import { numberOrdinal } from "../utilities/numberOrdinal"
-import { getAccessibilityPriorityTypeKey } from "../utilities/accessibilityPriorityTypes"
 
 const getTranslationFromCurrencyString = (value: string) => {
   if (value.startsWith("t.")) return getTranslationWithArguments(value)
@@ -706,10 +705,9 @@ export const getUnitTableData = (units: Unit[], unitSummary: UnitSummary) => {
       },
       floor: { content: <strong>{unit.floor}</strong> },
       accessibilityType: {
-        content: (() => {
-          const accessibilityKey = getAccessibilityPriorityTypeKey(unit.accessibilityPriorityType)
-          return accessibilityKey ? t(accessibilityKey) : t("t.n/a")
-        })(),
+        content: unit.accessibilityPriorityType
+          ? t(`listings.unit.accessibilityType.${unit.accessibilityPriorityType}`)
+          : t("t.n/a"),
       },
     }
   })
@@ -783,12 +781,9 @@ export const getStackedUnitTableData = (units: Unit[], unitSummary: UnitSummary)
       if (!noA11yTypes) {
         unitFormatted = {
           accessibilityType: {
-            cellText: (() => {
-              const accessibilityKey = getAccessibilityPriorityTypeKey(
-                unit.accessibilityPriorityType
-              )
-              return accessibilityKey ? t(accessibilityKey) : t("t.n/a")
-            })(),
+            cellText: unit.accessibilityPriorityType
+              ? t(`listings.unit.accessibilityType.${unit.accessibilityPriorityType}`)
+              : t("t.n/a"),
           },
         }
         adjustedHeaders = { accessibilityType: "listings.unit.accessibilityType" }

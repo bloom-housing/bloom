@@ -1,7 +1,7 @@
 import React, { useContext, useMemo } from "react"
 import { t, MinimalTable } from "@bloom-housing/ui-components"
 import { Button, FieldValue, Grid } from "@bloom-housing/ui-seeds"
-import { AuthContext, getAccessibilityPriorityTypeKey } from "@bloom-housing/shared-helpers"
+import { AuthContext } from "@bloom-housing/shared-helpers"
 import {
   EnumListingListingType,
   EnumUnitGroupAmiLevelMonthlyRentDeterminationType,
@@ -138,10 +138,9 @@ const DetailUnits = ({ setUnitDrawer }: DetailUnitsProps) => {
         monthlyRent: { content: unit.monthlyRent },
         sqFeet: { content: unit.sqFeet },
         accessibilityPriorityType: {
-          content: (() => {
-            const accessibilityKey = getAccessibilityPriorityTypeKey(unit.accessibilityPriorityType)
-            return accessibilityKey ? t(accessibilityKey) : t("t.n/a")
-          })(),
+          content: unit.accessibilityPriorityType
+            ? t(`listings.unit.accessibilityType.${unit.accessibilityPriorityType}`)
+            : t("t.n/a"),
         },
         action: {
           content: (
