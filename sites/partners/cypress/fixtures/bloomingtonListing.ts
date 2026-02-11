@@ -2,7 +2,6 @@ import {
   HomeTypeEnum,
   UnitType,
   UnitAccessibilityPriorityTypeEnum,
-  Unit,
   ListingEventsTypeEnum,
   ListingUtilities,
   ListingFeatures,
@@ -18,7 +17,7 @@ import {
   Jurisdiction,
   ListingFeaturesConfiguration,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { CypressAddress, CypressListing } from "./cypressListingHelpers"
+import { CypressAddress, CypressListing, CypressUnit } from "./cypressListingHelpers"
 
 const listingFeaturesConfiguration: ListingFeaturesConfiguration = {
   fields: [
@@ -112,7 +111,8 @@ export const bloomingtonListing: CypressListing = {
       monthlyIncomeMin: "900",
       monthlyRent: "1000",
       accessibilityPriorityType: UnitAccessibilityPriorityTypeEnum.vision,
-    } as Unit,
+      accessibilityPriorityTypeLabel: "Vision",
+    } as CypressUnit,
   ],
   applicationFee: "4",
   depositMin: "2",

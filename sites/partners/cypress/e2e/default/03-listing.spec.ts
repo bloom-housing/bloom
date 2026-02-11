@@ -5,7 +5,7 @@ import {
   MultiselectQuestionsApplicationSectionEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { bloomingtonListing } from "../../fixtures/bloomingtonListing"
-import { CypressListing } from "../../fixtures/cypressListingHelpers"
+import { CypressListing, CypressUnit } from "../../fixtures/cypressListingHelpers"
 import { angelopolisListing } from "../../fixtures/angelopolisListing"
 
 describe("Listing Management Tests", () => {
@@ -993,11 +993,11 @@ describe("Listing Management Tests", () => {
         : "Open waitlist"
     )
 
-    listing.units?.forEach((unit) => {
+    listing.units?.forEach((unit: CypressUnit) => {
       verifyDetailDataIfExists(cy, "unitTable", unit.number)
       verifyDetailDataIfExists(cy, "unitTable", unit.sqFeet)
       verifyDetailDataIfExists(cy, "unitTable", unit.monthlyRent)
-      verifyDetailDataIfExists(cy, "unitTable", unit.accessibilityPriorityType)
+      verifyDetailDataIfExists(cy, "unitTable", unit.accessibilityPriorityTypeLabel)
     })
 
     // ----------

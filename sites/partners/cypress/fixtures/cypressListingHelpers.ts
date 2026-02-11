@@ -3,6 +3,7 @@ import {
   Jurisdiction,
   Listing,
   ListingEventsTypeEnum,
+  Unit,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 export type CypressListingImage = {
@@ -23,6 +24,7 @@ export type CypressListing = Listing & {
   cypressUtilities?: CypressListingFeatures[]
   cypressFeatures?: CypressListingFeatures[]
   jurisdiction: Jurisdiction
+  units: CypressUnit[]
 }
 
 export type CypressListingDateTime = {
@@ -51,4 +53,8 @@ export type CypressListingFeatures = {
 
 export type CypressAddress = Address & {
   abbreviatedState?: string
+}
+
+export type CypressUnit = Unit & {
+  accessibilityPriorityTypeLabel?: string
 }

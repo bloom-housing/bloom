@@ -1,5 +1,4 @@
 import React from "react"
-import { randomUUID } from "crypto"
 import { rest } from "msw"
 import { setupServer } from "msw/lib/node"
 import userEvent from "@testing-library/user-event"
@@ -30,7 +29,7 @@ describe("UnitForm", () => {
     rest.get("http://localhost:3100/unitTypes", (_req, res, ctx) => {
       return res(ctx.json(unitTypes))
     }),
-    rest.get("http://localhost/api/adapter/jurisdictions/:id", (req, res, ctx) => {
+    rest.get("http://localhost:3100/jurisdictions/123", (req, res, ctx) => {
       return res(
         ctx.json({
           id: req.params.id,
@@ -55,7 +54,7 @@ describe("UnitForm", () => {
   it("should render the unit form without any selection", async () => {
     render(
       <UnitForm
-        jurisdiction={randomUUID()}
+        jurisdiction="123"
         onClose={jest.fn()}
         onSubmit={jest.fn()}
         draft={true}
@@ -228,7 +227,7 @@ describe("UnitForm", () => {
   it("should render the AMI chart options after AMI chart selection", async () => {
     render(
       <UnitForm
-        jurisdiction={randomUUID()}
+        jurisdiction={"123"}
         onClose={jest.fn()}
         onSubmit={jest.fn()}
         draft={true}

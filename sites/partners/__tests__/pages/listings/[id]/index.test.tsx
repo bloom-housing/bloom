@@ -568,14 +568,14 @@ describe("listing data", () => {
       expect(screen.getByText("AMI")).toBeInTheDocument()
       expect(screen.getByText("Rent")).toBeInTheDocument()
       expect(screen.getByText("SQ FT")).toBeInTheDocument()
-      expect(screen.getByText("ADA")).toBeInTheDocument()
+      expect(screen.getByText("Accessibility priority type")).toBeInTheDocument()
 
       expect(screen.getAllByText(/#[1-9]/i)).toHaveLength(6)
       expect(screen.getAllByText("Studio")).toHaveLength(6)
       expect(screen.getAllByText("45.0")).toHaveLength(6)
       expect(screen.getAllByText("1104.0")).toHaveLength(6)
       expect(screen.getAllByText("285")).toHaveLength(6)
-      expect(screen.getAllByText(/Test ADA_\d{1}/)).toHaveLength(6)
+      expect(screen.getAllByText("Mobility")).toHaveLength(6)
       expect(screen.getAllByText("View")).toHaveLength(6)
 
       expect(
@@ -2086,7 +2086,7 @@ describe("listing data", () => {
     expect(
       within(accessibilitySection).getByText("Accessibility priority type")
     ).toBeInTheDocument()
-    expect(within(accessibilitySection).getByText("Test ADA_1")).toBeInTheDocument()
+    expect(within(accessibilitySection).getByText("Mobility")).toBeInTheDocument()
 
     // Should close on done
     const doneButton = within(unitDrawer).getByText("Done", {
