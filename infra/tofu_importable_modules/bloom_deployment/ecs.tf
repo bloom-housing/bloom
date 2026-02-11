@@ -21,11 +21,14 @@ resource "aws_service_discovery_http_namespace" "bloom" {
 
 # Create logs groups.
 resource "aws_cloudwatch_log_group" "task_logs" {
-  for_each = toset([
-    "bloom-api",
-    "bloom-site-partners",
-    "bloom-site-public"
-  ])
+  for_each = toset(
+    concat([
+      "bloom-dbinit",
+      "bloom-api",
+      "bloom-site-partners",
+      "bloom-site-public"
+      ], var.bloom_dbseed_image == "" ? [] : ["bloom-dbseed"]
+  ))
   region            = var.aws_region
   name              = each.value
   log_group_class   = "STANDARD"
@@ -80,28 +83,76 @@ resource "aws_secretsmanager_secret" "api_jwt_signing_key" {
 }
 
 locals {
-  roles = {
-    "api" = {
+  roles = merge({
+    "dbinit" = {
       task_execution_policy_extra_statements = [
         {
           Action   = "secretsmanager:GetSecretValue"
           Effect   = "Allow"
           Resource = one([for s in aws_db_instance.bloom.master_user_secret : s.secret_arn if s.secret_status == "active"])
         },
+      ]
+      container_policy = jsonencode({
+        Version = "2012-10-17"
+        Statement = [{
+          Action   = "*"
+          Effect   = "Deny"
+          Resource = "*"
+        }]
+      })
+    }
+    "api" = {
+      task_execution_policy_extra_statements = [
         {
           Action   = "secretsmanager:GetSecretValue"
           Effect   = "Allow"
           Resource = aws_secretsmanager_secret.api_jwt_signing_key.arn
         }
       ]
+      container_policy = jsonencode({
+        Version = "2012-10-17"
+        Statement = [{
+          Action   = "rds-db:connect"
+          Effect   = "Allow"
+          Resource = "arn:aws:rds-db:${var.aws_region}:${var.aws_account_number}:dbuser:${aws_db_instance.bloom.id}/bloom_api"
+        }]
+      })
     }
     "site-partners" = {
       task_execution_policy_extra_statements = []
+      container_policy = jsonencode({
+        Version = "2012-10-17"
+        Statement = [{
+          Action   = "*"
+          Effect   = "Deny"
+          Resource = "*"
+        }]
+      })
     }
     "site-public" = {
       task_execution_policy_extra_statements = []
+      container_policy = jsonencode({
+        Version = "2012-10-17"
+        Statement = [{
+          Action   = "*"
+          Effect   = "Deny"
+          Resource = "*"
+        }]
+      })
     }
-  }
+    }, var.bloom_dbseed_image == "" ? {} : {
+    "dbseed" = {
+      task_execution_policy_extra_statements = []
+      container_policy = jsonencode({
+        Version = "2012-10-17"
+        Statement = [{
+          Action   = "rds-db:connect"
+          Effect   = "Allow"
+          Resource = "arn:aws:rds-db:${var.aws_region}:${var.aws_account_number}:dbuser:${aws_db_instance.bloom.id}/bloom_api"
+        }]
+      })
+    }
+  })
 }
 
 # Create roles for the ECS task executor and the tasks.
@@ -178,12 +229,5 @@ resource "aws_iam_role_policy" "bloom_container" {
   for_each = local.roles
   name     = "bloom-${each.key}-container"
   role     = aws_iam_role.bloom_container[each.key].id
-  policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [{
-      Action   = "*"
-      Effect   = "Deny"
-      Resource = "*"
-    }]
-  })
+  policy   = each.value.container_policy
 }

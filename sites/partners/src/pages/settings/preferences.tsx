@@ -2,16 +2,10 @@ import React, { useContext, useState, useMemo, useEffect } from "react"
 import Head from "next/head"
 import { useRouter } from "next/router"
 import { useSWRConfig } from "swr"
-import {
-  LoadingOverlay,
-  MinimalTable,
-  StandardCard,
-  t,
-  useMutate,
-} from "@bloom-housing/ui-components"
+import { LoadingOverlay, MinimalTable, StandardCard, t } from "@bloom-housing/ui-components"
 import { Button, Dialog } from "@bloom-housing/ui-seeds"
 import dayjs from "dayjs"
-import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
+import { AuthContext, MessageContext, useMutate } from "@bloom-housing/shared-helpers"
 import Layout from "../../layouts"
 import PreferenceDrawer from "../../components/settings/PreferenceDrawer"
 import { useJurisdictionalMultiselectQuestionList } from "../../lib/hooks"
@@ -62,6 +56,7 @@ const SettingsPreferences = () => {
     null,
     true
   )
+  const v2Preferences = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableV2MSQ)
 
   const tableData = useMemo(() => {
     return data?.items
@@ -189,6 +184,7 @@ const SettingsPreferences = () => {
   ) {
     void router.push("/unauthorized")
   }
+  if (v2Preferences) void router.push("/settings/multiselectquestions/preferences")
 
   return (
     <>
@@ -197,32 +193,34 @@ const SettingsPreferences = () => {
           <title>{`Settings - Preferences - ${t("nav.siteTitlePartners")}`}</title>
         </Head>
         <NavigationHeader className="relative" title={t("t.settings")} />
-        <TabView
-          hideTabs={!(atLeastOneJurisdictionEnablesPreferences && enableProperties)}
-          tabs={getSettingsTabs(SettingsIndexEnum.preferences, router)}
-        >
-          <LoadingOverlay isLoading={loading}>
-            <StandardCard
-              title={t("t.preferences")}
-              emptyStateMessage={t("t.none")}
-              footer={
-                <Button
-                  size="sm"
-                  onClick={() => {
-                    setQuestionData(null)
-                    setPreferenceDrawerOpen("add")
-                  }}
-                  id={"preference-add-item"}
-                  disabled={loading}
-                >
-                  {t("t.addItem")}
-                </Button>
-              }
-            >
-              {getCardContent()}
-            </StandardCard>
-          </LoadingOverlay>
-        </TabView>
+        {!v2Preferences && (
+          <TabView
+            hideTabs={!enableProperties}
+            tabs={getSettingsTabs(SettingsIndexEnum.preferences, router, v2Preferences)}
+          >
+            <LoadingOverlay isLoading={loading}>
+              <StandardCard
+                title={t("t.preferences")}
+                emptyStateMessage={t("t.none")}
+                footer={
+                  <Button
+                    size="sm"
+                    onClick={() => {
+                      setQuestionData(null)
+                      setPreferenceDrawerOpen("add")
+                    }}
+                    id={"preference-add-item"}
+                    disabled={loading}
+                  >
+                    {t("t.addItem")}
+                  </Button>
+                }
+              >
+                {getCardContent()}
+              </StandardCard>
+            </LoadingOverlay>
+          </TabView>
+        )}
       </Layout>
 
       <PreferenceDrawer

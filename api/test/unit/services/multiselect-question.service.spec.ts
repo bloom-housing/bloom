@@ -721,6 +721,7 @@ describe('Testing multiselect question service', () => {
       expect(prisma.multiselectQuestions.create).toHaveBeenCalledWith({
         data: {
           ...params,
+          options: undefined,
           jurisdiction: {
             connect: { id: mockedMultiselectQuestion.jurisdiction.id },
           },
