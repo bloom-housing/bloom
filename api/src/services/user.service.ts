@@ -775,7 +775,7 @@ export class UserService {
         ...jurisdictions,
         userRoles: {
           create: {
-            isPartner: true,
+            ...dto.userRoles,
           },
         },
         listings: dto.listings
