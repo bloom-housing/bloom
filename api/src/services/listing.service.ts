@@ -824,6 +824,7 @@ export class ListingService implements OnModuleInit {
           });
         }
         if (filter[ListingFilterKeys.homeTypes]) {
+          console.log('entered this check homeTypes');
           const builtFilter = buildFilter({
             $comparison: filter.$comparison,
             $include_nulls: false,
@@ -834,6 +835,20 @@ export class ListingService implements OnModuleInit {
           filters.push({
             OR: builtFilter.map((filt) => ({
               homeType: filt,
+            })),
+          });
+        }
+        if (filter[ListingFilterKeys.parkingType]) {
+          const parkingTypes = Array.isArray(
+            filter[ListingFilterKeys.parkingType],
+          )
+            ? filter[ListingFilterKeys.parkingType]
+            : [filter[ListingFilterKeys.parkingType]];
+          filters.push({
+            OR: parkingTypes.map((type) => ({
+              parkType: {
+                [type]: true,
+              },
             })),
           });
         }
