@@ -824,7 +824,6 @@ export class ListingService implements OnModuleInit {
           });
         }
         if (filter[ListingFilterKeys.homeTypes]) {
-          console.log('entered this check homeTypes');
           const builtFilter = buildFilter({
             $comparison: filter.$comparison,
             $include_nulls: false,
