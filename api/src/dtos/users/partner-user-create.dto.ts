@@ -3,7 +3,7 @@ import { PartnerUserUpdate } from './partner-user-update.dto';
 import { Expose } from 'class-transformer';
 import { IsEmail, IsString, Matches, MaxLength } from 'class-validator';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
-import { passwordRegex } from 'src/utilities/password-regex';
+import { passwordRegex } from '../../utilities/password-regex';
 import { Match } from '../../decorators/match-decorator';
 import { EnforceLowerCase } from '../../decorators/enforce-lower-case.decorator';
 
