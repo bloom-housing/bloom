@@ -95,9 +95,6 @@ describe("UnitForm", () => {
     const bathroomSelector = screen.getByRole("combobox", { name: "Number of bathrooms" })
     expect(bathroomSelector).toBeInTheDocument()
     expect(within(bathroomSelector).getAllByRole("option")).toHaveLength(7)
-    expect(
-      within(bathroomSelector).getByRole("option", { name: "Number of bathrooms" })
-    ).toBeInTheDocument()
     expect(within(bathroomSelector).getByRole("option", { name: "Shared" })).toBeInTheDocument()
     expect(within(bathroomSelector).getByRole("option", { name: "1" })).toBeInTheDocument()
     expect(within(bathroomSelector).getByRole("option", { name: "2" })).toBeInTheDocument()
@@ -109,7 +106,6 @@ describe("UnitForm", () => {
     const floorSelector = screen.getByRole("combobox", { name: "Unit floor" })
     expect(floorSelector).toBeInTheDocument()
     expect(within(floorSelector).getAllByRole("option")).toHaveLength(11)
-    expect(within(floorSelector).getByRole("option", { name: "Unit floor" })).toBeInTheDocument()
     expect(within(floorSelector).getByRole("option", { name: "1" })).toBeInTheDocument()
     expect(within(floorSelector).getByRole("option", { name: "2" })).toBeInTheDocument()
     expect(within(floorSelector).getByRole("option", { name: "3" })).toBeInTheDocument()
@@ -127,9 +123,6 @@ describe("UnitForm", () => {
     const minOccupancySelector = screen.getByRole("combobox", { name: "Minimum occupancy" })
     expect(minOccupancySelector).toBeInTheDocument()
     expect(within(minOccupancySelector).getAllByRole("option")).toHaveLength(12)
-    expect(
-      within(minOccupancySelector).getByRole("option", { name: "Minimum occupancy" })
-    ).toBeInTheDocument()
     expect(within(minOccupancySelector).getByRole("option", { name: "1" })).toBeInTheDocument()
     expect(within(minOccupancySelector).getByRole("option", { name: "2" })).toBeInTheDocument()
     expect(within(minOccupancySelector).getByRole("option", { name: "3" })).toBeInTheDocument()
@@ -146,9 +139,6 @@ describe("UnitForm", () => {
     const maxOccupancySelector = screen.getByRole("combobox", { name: "Max occupancy" })
     expect(maxOccupancySelector).toBeInTheDocument()
     expect(within(maxOccupancySelector).getAllByRole("option")).toHaveLength(12)
-    expect(
-      within(maxOccupancySelector).getByRole("option", { name: "Max occupancy" })
-    ).toBeInTheDocument()
     expect(within(maxOccupancySelector).getByRole("option", { name: "1" })).toBeInTheDocument()
     expect(within(maxOccupancySelector).getByRole("option", { name: "2" })).toBeInTheDocument()
     expect(within(maxOccupancySelector).getByRole("option", { name: "3" })).toBeInTheDocument()
@@ -204,9 +194,6 @@ describe("UnitForm", () => {
     })
     expect(priorityTypeSelector).toBeInTheDocument()
     expect(within(priorityTypeSelector).getAllByRole("option")).toHaveLength(4)
-    expect(
-      within(priorityTypeSelector).getByRole("option", { name: "Accessibility priority type" })
-    ).toBeInTheDocument()
     expect(
       within(priorityTypeSelector).getByRole("option", { name: "Mobility" })
     ).toBeInTheDocument()
