@@ -154,7 +154,7 @@ const ApplicationChooseLanguage = () => {
         listingsService,
         jurisdictionsService,
         // TODO (Advocate): switch below to sth like profile?.isAdvocate ?? false when available
-        true
+        false
       ).then(() => {
         void router.push(conductor.determineNextUrl(), null, { locale: language })
       })
