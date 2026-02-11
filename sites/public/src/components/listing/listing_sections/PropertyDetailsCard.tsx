@@ -1,18 +1,18 @@
 import * as React from "react"
-import { Card, Heading } from "@bloom-housing/ui-seeds"
+import { Card, Heading, Link } from "@bloom-housing/ui-seeds"
 
 type PropertyDetailsCardProps = {
   heading: string
-  children: React.ReactNode
-  linkUrl: string
-  linkText: string
+  linkUrl?: string
+  linkText?: string
+  propertyDescription?: string
 }
 
 export const PropertyDetailsCard = ({
   heading,
   linkText,
   linkUrl,
-  children,
+  propertyDescription,
 }: PropertyDetailsCardProps) => {
   return (
     <Card>
@@ -20,11 +20,9 @@ export const PropertyDetailsCard = ({
         <Heading size={"lg"} priority={2} className={"seeds-m-be-header"}>
           {heading}
         </Heading>
-        <div className={"seeds-m-bs-2"}>{children}</div>
-        <p className={"seeds-m-bs-3"}>
-          <a href={linkUrl} target="_blank">
-            {linkText}
-          </a>
+        <div className={"seeds-m-bs-2"}>{propertyDescription}</div>
+        <p className={"seeds-m-bs-text"}>
+          <Link href={linkUrl}>{linkText}</Link>
         </p>
       </Card.Section>
     </Card>
