@@ -216,6 +216,7 @@ const ApplicationName = () => {
               error={errors.applicant?.emailAddress}
               errorMessage={emailErrorMessage}
               register={register}
+              onChange={() => clearErrors("applicant.emailAddress")}
               disabled={clientLoaded && (noEmail || autofilled)}
               dataTestId={"app-primary-email"}
               subNote={"example@mail.com"}
