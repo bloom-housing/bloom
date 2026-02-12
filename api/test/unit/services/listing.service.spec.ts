@@ -5720,7 +5720,6 @@ describe('Testing listing service', () => {
     it('should process duplicates and expire applications on listing close', async () => {
       jest.useFakeTimers().setSystemTime(new Date('2025-11-22T12:25:00.000Z'));
       process.env.APPLICATION_DAYS_TILL_EXPIRY = '90';
-      process.env.DUPLICATES_CLOSE_DATE = '2024-06-28 00:00 -08:00';
       const listingId = randomUUID();
       prisma.listings.findUnique = jest.fn().mockResolvedValue({
         id: listingId,

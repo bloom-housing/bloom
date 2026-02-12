@@ -1,10 +1,10 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Expose, Type } from 'class-transformer';
+import { IdOnlyDTO } from '../shared/id-only.dto';
 import { IsNumber, IsDefined, IsString, MaxLength } from 'class-validator';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
-import { AbstractDTO } from '../shared/abstract.dto';
 
-export class Address extends AbstractDTO {
+export class Address extends IdOnlyDTO {
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(64, { groups: [ValidationsGroupsEnum.default] })

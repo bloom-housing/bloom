@@ -658,8 +658,6 @@ describe('Application Controller Tests', () => {
         },
         demographics: {
           id: expect.any(String),
-          createdAt: expect.any(String),
-          updatedAt: expect.any(String),
           ethnicity: 'example ethnicity',
           gender: 'example gender',
           sexualOrientation: 'example sexual orientation',
@@ -1073,8 +1071,6 @@ describe('Application Controller Tests', () => {
         applicationSelections: [
           {
             id: expect.any(String),
-            createdAt: expect.any(String),
-            updatedAt: expect.any(String),
             hasOptedOut: false,
             multiselectQuestion: {
               id: multiselectQuestion.id,
@@ -1083,8 +1079,6 @@ describe('Application Controller Tests', () => {
             selections: [
               {
                 id: expect.any(String),
-                createdAt: expect.any(String),
-                updatedAt: expect.any(String),
                 addressHolderAddress: {
                   ...exampleAddress,
                   id: expect.any(String),
@@ -1114,8 +1108,6 @@ describe('Application Controller Tests', () => {
         },
         demographics: {
           id: expect.any(String),
-          createdAt: expect.any(String),
-          updatedAt: expect.any(String),
           ethnicity: 'example ethnicity',
           gender: 'example gender',
           sexualOrientation: 'example sexual orientation',

@@ -533,7 +533,7 @@ describe("Listing Management Tests", () => {
             `listingNeighborhoodAmenities.${amenity}`,
             listing.listingNeighborhoodAmenities?.[
               amenity as keyof typeof listing.listingNeighborhoodAmenities
-            ] as string,
+            ],
             "select"
           )
         })
@@ -544,7 +544,7 @@ describe("Listing Management Tests", () => {
             `listingNeighborhoodAmenities.${amenity}`,
             listing.listingNeighborhoodAmenities?.[
               amenity as keyof typeof listing.listingNeighborhoodAmenities
-            ] as string,
+            ],
             "type"
           )
         })
@@ -1116,7 +1116,7 @@ describe("Listing Management Tests", () => {
           `neighborhoodAmenities.${amenity}`,
           listing.listingNeighborhoodAmenities?.[
             amenity as keyof typeof listing.listingNeighborhoodAmenities
-          ] as string
+          ]
         )
       })
     }
@@ -1604,7 +1604,7 @@ describe("Listing Management Tests", () => {
             `listingNeighborhoodAmenities.${amenity}`,
             listing.listingNeighborhoodAmenities?.[
               amenity as keyof typeof listing.listingNeighborhoodAmenities
-            ] as string,
+            ],
             "select"
           )
         })
@@ -1615,7 +1615,7 @@ describe("Listing Management Tests", () => {
             `listingNeighborhoodAmenities.${amenity}`,
             listing.listingNeighborhoodAmenities?.[
               amenity as keyof typeof listing.listingNeighborhoodAmenities
-            ] as string,
+            ],
             "type"
           )
         })
