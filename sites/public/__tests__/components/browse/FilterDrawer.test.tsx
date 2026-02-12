@@ -69,6 +69,7 @@ describe("FilterDrawer", () => {
         activeFeatureFlags={[
           FeatureFlagEnum.enableRegions,
           FeatureFlagEnum.enableAccessibilityFeatures,
+          FeatureFlagEnum.enableParkingType,
         ]}
         listingFeaturesConfiguration={defaultListingFeaturesConfiguration}
       />
@@ -250,6 +251,7 @@ describe("FilterDrawer", () => {
         activeFeatureFlags={[
           FeatureFlagEnum.enableRegions,
           FeatureFlagEnum.enableAccessibilityFeatures,
+          FeatureFlagEnum.enableParkingType,
         ]}
         listingFeaturesConfiguration={defaultListingFeaturesConfiguration}
       />
