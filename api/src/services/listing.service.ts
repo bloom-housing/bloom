@@ -838,18 +838,16 @@ export class ListingService implements OnModuleInit {
           });
         }
         if (filter[ListingFilterKeys.parkingType]) {
-          const parkingTypes = Array.isArray(
-            filter[ListingFilterKeys.parkingType],
-          )
-            ? filter[ListingFilterKeys.parkingType]
-            : [filter[ListingFilterKeys.parkingType]];
-          filters.push({
-            OR: parkingTypes.map((type) => ({
-              parkType: {
-                [type]: true,
-              },
-            })),
-          });
+          if (Array.isArray(filter[ListingFilterKeys.parkingType])) {
+            const parkingTypes = filter[ListingFilterKeys.parkingType];
+            filters.push({
+              OR: parkingTypes.map((type) => ({
+                parkType: {
+                  [type]: true,
+                },
+              })),
+            });
+          }
         }
         if (filter[ListingFilterKeys.ids]) {
           const builtFilter = buildFilter({

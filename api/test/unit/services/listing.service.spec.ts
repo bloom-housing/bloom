@@ -1940,30 +1940,6 @@ describe('Testing listing service', () => {
       });
     });
 
-    it('should return a where clause for filter parkingType with single value', () => {
-      const filter = [
-        {
-          $comparison: '=',
-          parkingType: 'garage',
-        } as ListingFilterParams,
-      ];
-      const whereClause = service.buildWhereClause(filter, '');
-
-      expect(whereClause).toStrictEqual({
-        AND: [
-          {
-            OR: [
-              {
-                parkType: {
-                  garage: true,
-                },
-              },
-            ],
-          },
-        ],
-      });
-    });
-
     it('should return a where clause for filter ids', () => {
       const uuids = [randomUUID(), randomUUID()];
       const filter = [
