@@ -51,7 +51,6 @@ import { GeocodingService } from '../../../src/services/geocoding.service';
 import { FilterAvailabilityEnum } from '../../../src/enums/listings/filter-availability-enum';
 import { CronJobService } from '../../../src/services/cron-job.service';
 import { MultiselectQuestionService } from '../../../src/services/multiselect-question.service';
-import { create } from 'domain';
 
 /*
   generates a super simple mock listing for us to test logic with
@@ -668,7 +667,6 @@ describe('Testing listing service', () => {
             },
           },
           listingsResult: true,
-          property: true,
           listingsLeasingAgentAddress: true,
           listingsApplicationPickUpAddress: true,
           listingsApplicationDropOffAddress: true,
@@ -1904,6 +1902,60 @@ describe('Testing listing service', () => {
               {
                 homeType: {
                   in: homeTypes,
+                },
+              },
+            ],
+          },
+        ],
+      });
+    });
+
+    it('should return a where clause for filter parkingType', () => {
+      const parkingTypes = ['garage', 'offStreet'];
+      const filter = [
+        {
+          $comparison: '=',
+          parkingType: parkingTypes,
+        } as unknown as ListingFilterParams,
+      ];
+      const whereClause = service.buildWhereClause(filter, '');
+
+      expect(whereClause).toStrictEqual({
+        AND: [
+          {
+            OR: [
+              {
+                parkType: {
+                  garage: true,
+                },
+              },
+              {
+                parkType: {
+                  offStreet: true,
+                },
+              },
+            ],
+          },
+        ],
+      });
+    });
+
+    it('should return a where clause for filter parkingType with single value', () => {
+      const filter = [
+        {
+          $comparison: '=',
+          parkingType: 'garage',
+        } as ListingFilterParams,
+      ];
+      const whereClause = service.buildWhereClause(filter, '');
+
+      expect(whereClause).toStrictEqual({
+        AND: [
+          {
+            OR: [
+              {
+                parkType: {
+                  garage: true,
                 },
               },
             ],
