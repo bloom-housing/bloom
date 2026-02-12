@@ -12,10 +12,10 @@ import {
 } from 'class-validator';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 import Agency from '../agency/agency.dto';
-import { Address } from '../addresses/address.dto';
 import { User } from './user.dto';
 import { EnforceLowerCase } from '../../decorators/enforce-lower-case.decorator';
 import { passwordRegex } from '../../utilities/password-regex';
+import { AddressUpdate } from '../addresses/address-update.dto';
 
 export class AdvocateUserUpdate extends OmitType(User, [
   'createdAt',
@@ -47,9 +47,9 @@ export class AdvocateUserUpdate extends OmitType(User, [
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => Address)
-  @ApiProperty({ type: Address })
-  address: Address;
+  @Type(() => AddressUpdate)
+  @ApiProperty({ type: AddressUpdate })
+  address: AddressUpdate;
 
   @Expose()
   @IsPhoneNumber('US', { groups: [ValidationsGroupsEnum.default] })
