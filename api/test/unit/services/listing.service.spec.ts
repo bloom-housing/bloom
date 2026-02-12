@@ -1940,6 +1940,31 @@ describe('Testing listing service', () => {
       });
     });
 
+    it('should return a where clause for filter parkingType single value', () => {
+      const parkingTypes = ['carport'];
+      const filter = [
+        {
+          $comparison: '=',
+          parkingType: parkingTypes,
+        } as unknown as ListingFilterParams,
+      ];
+      const whereClause = service.buildWhereClause(filter, '');
+
+      expect(whereClause).toStrictEqual({
+        AND: [
+          {
+            OR: [
+              {
+                parkType: {
+                  carport: true,
+                },
+              },
+            ],
+          },
+        ],
+      });
+    });
+
     it('should return a where clause for filter ids', () => {
       const uuids = [randomUUID(), randomUUID()];
       const filter = [
