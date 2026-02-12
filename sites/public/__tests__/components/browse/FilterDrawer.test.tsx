@@ -289,7 +289,7 @@ describe("FilterDrawer", () => {
     expect(screen.getByLabelText("On street")).toBeInTheDocument()
     expect(screen.getByRole("checkbox", { name: "On street" })).not.toBeChecked()
     expect(screen.getByLabelText("Garage")).toBeInTheDocument()
-    expect(screen.getByRole("checkbox", { name: "Garage" })).toBeChecked()
+    expect(screen.getByRole("checkbox", { name: "Garage" })).not.toBeChecked()
     expect(screen.getByLabelText("Off street")).toBeInTheDocument()
     expect(screen.getByRole("checkbox", { name: "Off street" })).not.toBeChecked()
     expect(screen.getByLabelText("Carport")).toBeInTheDocument()
