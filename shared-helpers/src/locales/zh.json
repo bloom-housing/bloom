@@ -602,6 +602,7 @@
   "eligibility.accessibility.walkInShower": "步入式淋浴间",
   "eligibility.accessibility.wheelchairRamp": "轮椅坡道",
   "eligibility.accessibility.wideDoorways": "宽敞的单元门道，方便轮椅通行",
+  "errors.advocateEmailAddressError": "此邮箱似乎与您的账户关联；请改为输入您客户的邮箱。",
   "errors.agreeError": "您必須同意有關條款才能繼續",
   "errors.alert.applicationSubmissionVerificationError": "您的申请缺少必填字段。请在提交前返回并更正此问题。",
   "errors.alert.badRequest": "糟糕！好像出了點問題。請再試一次。如果您仍然遇到问题，请联系您的住房部门。",

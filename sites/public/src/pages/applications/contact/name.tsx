@@ -21,11 +21,14 @@ const ApplicationName = () => {
   const { profile } = useContext(AuthContext)
   const { conductor, application, listing } = useFormConductor("primaryApplicantName")
   const [autofilled, setAutofilled] = useState(false)
+  const isAdvocate = conductor?.config?.isAdvocate
 
   const currentPageSection = 1
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, handleSubmit, watch, errors, trigger } = useForm<Record<string, any>>({
+  const { register, handleSubmit, watch, errors, trigger, clearErrors } = useForm<
+    Record<string, any>
+  >({
     shouldFocusError: false,
     defaultValues: {
       "applicant.emailAddress": application.applicant.emailAddress,
@@ -49,6 +52,10 @@ const ApplicationName = () => {
   const noEmail: boolean = watch("applicant.noEmail")
   const clientLoaded = OnClientSide()
   if (!autofilled && clientLoaded && application.autofilled) setAutofilled(true)
+  const emailErrorMessage =
+    errors.applicant?.emailAddress?.type === "advocateEmail"
+      ? t("errors.advocateEmailAddressError")
+      : t("errors.emailAddressError")
 
   const LockIcon = () => {
     return (
@@ -196,10 +203,20 @@ const ApplicationName = () => {
               label={t("application.name.yourEmailAddress")}
               readerOnly={true}
               defaultValue={application.applicant.emailAddress}
-              validation={{ required: !noEmail, pattern: emailRegex }}
+              validation={{
+                required: !noEmail,
+                pattern: emailRegex,
+                validate: {
+                  advocateEmail: (value: string) => {
+                    if (!isAdvocate || !value || !profile?.email) return true
+                    return value.trim().toLowerCase() !== profile.email.trim().toLowerCase()
+                  },
+                },
+              }}
               error={errors.applicant?.emailAddress}
-              errorMessage={t("errors.emailAddressError")}
+              errorMessage={emailErrorMessage}
               register={register}
+              onChange={() => clearErrors("applicant.emailAddress")}
               disabled={clientLoaded && (noEmail || autofilled)}
               dataTestId={"app-primary-email"}
               subNote={"example@mail.com"}
@@ -213,6 +230,9 @@ const ApplicationName = () => {
               primary={true}
               register={register}
               disabled={clientLoaded && (emailPresent?.length > 0 || autofilled)}
+              onChange={(e) => {
+                if (e.target.checked) clearErrors("applicant.emailAddress")
+              }}
               inputProps={{
                 defaultChecked: clientLoaded && noEmail,
               }}

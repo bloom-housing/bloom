@@ -602,6 +602,7 @@
   "eligibility.accessibility.walkInShower": "Walk-in shower",
   "eligibility.accessibility.wheelchairRamp": "Rampa ng wheelchair",
   "eligibility.accessibility.wideDoorways": "Malawak na unit doorways para sa mga wheelchair",
+  "errors.advocateEmailAddressError": "Mukhang nauugnay ang email na ito sa iyong account; pakilagay na lang ang email ng iyong kliyente.",
   "errors.agreeError": "Dapat kang sumang-ayon sa mga tuntunin upang magpatuloy",
   "errors.alert.applicationSubmissionVerificationError": "Walang kinakailangang field ang iyong aplikasyon. Mangyaring bumalik at itama ito bago isumite.",
   "errors.alert.badRequest": "Mukhang nagkaproblema. Pakisubukan muli. \n\nMakipag-ugnayan sa iyong departamento ng pabahay kung nakakaranas ka pa rin ng mga isyu.",
