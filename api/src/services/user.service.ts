@@ -57,6 +57,7 @@ import { AdvocateUserUpdate } from 'src/dtos/users/advocate-user-update.dto';
 import { PublicUserCreate } from 'src/dtos/users/public-user-create.dto';
 import { PartnerUserCreate } from 'src/dtos/users/partner-user-create.dto';
 import { AdvocateUserCreate } from 'src/dtos/users/advocate-user-create.dto';
+import { AgencyService } from './agency.service';
 
 /*
   this is the service for users
@@ -102,6 +103,7 @@ export class UserService {
     private readonly configService: ConfigService,
     private permissionService: PermissionService,
     private applicationService: ApplicationService,
+    private agencyService: AgencyService,
     @Inject(Logger)
     private logger = new Logger(UserService.name),
     private cronJobService: CronJobService,
@@ -279,6 +281,28 @@ export class UserService {
       }
     }
 
+    //handle address for advocated users
+    let newAddressId: string | undefined;
+    if (dto?.address) {
+      if (dto.address?.id) {
+        await this.prisma.address.update({
+          data: {
+            ...dto.address,
+          },
+          where: {
+            id: dto.address.id,
+          },
+        });
+      } else {
+        const newAddress = await this.prisma.address.create({
+          data: {
+            ...dto.address,
+          },
+        });
+        newAddressId = newAddress.id;
+      }
+    }
+
     // disconnect existing connected listings/jurisdictions
     if (storedUser.listings?.length) {
       await this.prisma.userAccounts.update({
@@ -318,11 +342,31 @@ export class UserService {
         passwordUpdatedAt: passwordUpdatedAt ?? undefined,
         confirmationToken: confirmationToken ?? undefined,
         firstName: dto.firstName,
-        middleName: dto?.middleName ?? storedUser.middleName,
+        middleName: dto.middleName,
         lastName: dto.lastName,
         dob: dto.dob,
         phoneNumber: dto.phoneNumber,
+        title: dto.title,
+        phoneType: dto.phoneType,
+        phoneExtension: dto.phoneExtension,
+        additionalPhoneNumber: dto.additionalPhoneNumber,
+        additionalPhoneNumberType: dto.additionalPhoneNumberType,
+        additionalPhoneExtension: dto.additionalPhoneExtension,
         language: dto.language,
+        agency: dto?.agency?.id
+          ? {
+              connect: {
+                id: dto.agency.id,
+              },
+            }
+          : undefined,
+        address: newAddressId
+          ? {
+              connect: {
+                id: newAddressId,
+              },
+            }
+          : undefined,
         listings: dto.listings
           ? {
               connect: dto.listings.map((listing) => ({ id: listing.id })),
