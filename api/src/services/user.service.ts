@@ -51,12 +51,12 @@ import { UserFavoriteListing } from '../dtos/users/user-favorite-listing.dto';
 import { ModificationEnum } from '../enums/shared/modification-enum';
 import { CronJobService } from './cron-job.service';
 import { ApplicationService } from './application.service';
-import { PublicUserUpdate } from 'src/dtos/users/public-user-update.dto';
-import { PartnerUserUpdate } from 'src/dtos/users/partner-user-update.dto';
-import { AdvocateUserUpdate } from 'src/dtos/users/advocate-user-update.dto';
-import { PublicUserCreate } from 'src/dtos/users/public-user-create.dto';
-import { PartnerUserCreate } from 'src/dtos/users/partner-user-create.dto';
-import { AdvocateUserCreate } from 'src/dtos/users/advocate-user-create.dto';
+import { PublicUserUpdate } from '../dtos/users/public-user-update.dto';
+import { PartnerUserUpdate } from '../dtos/users/partner-user-update.dto';
+import { AdvocateUserUpdate } from '../dtos/users/advocate-user-update.dto';
+import { PublicUserCreate } from '../dtos/users/public-user-create.dto';
+import { PartnerUserCreate } from '../dtos/users/partner-user-create.dto';
+import { AdvocateUserCreate } from '../dtos/users/advocate-user-create.dto';
 import { AgencyService } from './agency.service';
 
 /*
