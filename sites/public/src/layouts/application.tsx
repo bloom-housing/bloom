@@ -180,8 +180,8 @@ const getHeaderLinks = (
           label: t("nav.signOut"),
           onClick: () => {
             const signOutFxn = async () => {
-              await router.push("/sign-in")
               await signOut()
+              await router.push("/sign-in")
               addToast(t(`authentication.signOut.success`), { variant: "primary" })
             }
             void signOutFxn()
