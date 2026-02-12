@@ -66,6 +66,10 @@ const FilterDrawer = (props: FilterDrawerProps) => {
     (entry) => entry === FeatureFlagEnum.enableAccessibilityFeatures
   )
 
+  const enableParkingType = props.activeFeatureFlags?.some(
+    (entry) => entry === FeatureFlagEnum.enableParkingType
+  )
+
   const availabilityLabels = getAvailabilityValues(enableUnitGroups).map((key) =>
     t(`listings.availability.${key}`)
   )
@@ -113,16 +117,19 @@ const FilterDrawer = (props: FilterDrawerProps) => {
             )}
             register={register}
           />
-          <CheckboxGroup
-            groupLabel={t("t.parkingTypes")}
-            fields={buildDefaultFilterFields(
-              ListingFilterKeys.parkingType,
-              "listings.parkingTypeOptions",
-              Object.keys(ParkingTypeEnum),
-              props.filterState
-            )}
-            register={register}
-          />
+          {enableParkingType && (
+            <CheckboxGroup
+              groupLabel={t("t.parkingTypes")}
+              fields={buildDefaultFilterFields(
+                ListingFilterKeys.parkingType,
+                "listings.parkingTypeOptions",
+                Object.keys(ParkingTypeEnum),
+                props.filterState
+              )}
+              register={register}
+            />
+          )}
+
           <CheckboxGroup
             groupLabel={t("listings.unitTypes.bedroomSize")}
             fields={buildDefaultFilterFields(
