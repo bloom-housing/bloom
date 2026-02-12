@@ -326,9 +326,9 @@ export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: Li
           {isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableProperties) && (
             <PropertyDetailsCard
               heading={t("listings.propertyCardTitle")}
-              linkText={listing.property.urlTitle}
-              linkUrl={listing.property.url}
-              propertyDescription={listing.property.description}
+              linkText={listing.property?.urlTitle}
+              linkUrl={listing.property?.url}
+              propertyDescription={listing.property?.description}
             />
           )}
           <Availability listing={listing} jurisdiction={jurisdiction} />
