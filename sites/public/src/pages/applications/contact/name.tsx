@@ -2,19 +2,18 @@ import React, { useContext, useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { DOBField, Field, Form, t } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
-import { Alert, Icon } from "@bloom-housing/ui-seeds"
+import { Alert } from "@bloom-housing/ui-seeds"
 import {
   OnClientSide,
   PageView,
   pushGtmEvent,
   AuthContext,
-  CustomIconMap,
   emailRegex,
 } from "@bloom-housing/shared-helpers"
 import FormsLayout from "../../../layouts/forms"
 import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
-import ApplicationFormLayout from "../../../layouts/application-form"
+import ApplicationFormLayout, { LockIcon } from "../../../layouts/application-form"
 import styles from "../../../layouts/application-form.module.scss"
 
 const ApplicationName = () => {
@@ -49,16 +48,6 @@ const ApplicationName = () => {
   const noEmail: boolean = watch("applicant.noEmail")
   const clientLoaded = OnClientSide()
   if (!autofilled && clientLoaded && application.autofilled) setAutofilled(true)
-
-  const LockIcon = () => {
-    return (
-      autofilled && (
-        <Icon className="ml-2 text-primary" size="md">
-          {CustomIconMap.lockClosed}
-        </Icon>
-      )
-    )
-  }
 
   useEffect(() => {
     pushGtmEvent<PageView>({
@@ -105,8 +94,8 @@ const ApplicationName = () => {
                 <legend
                   className={`text__caps-spaced ${errors.applicant?.firstName ? "text-alert" : ""}`}
                 >
+                  <LockIcon locked={autofilled} />
                   {t("application.name.yourName")}
-                  <LockIcon />
                 </legend>
 
                 <Field
@@ -173,8 +162,8 @@ const ApplicationName = () => {
               errorMessage={t("errors.dateOfBirthErrorAge")}
               label={
                 <>
+                  <LockIcon locked={autofilled} />
                   {t("application.name.yourDateOfBirth")}
-                  <LockIcon />
                 </>
               }
             />
@@ -184,8 +173,8 @@ const ApplicationName = () => {
             <legend
               className={`text__caps-spaced ${errors.applicant?.emailAddress ? "text-alert" : ""}`}
             >
+              <LockIcon locked={autofilled} />
               {t("application.name.yourEmailAddress")}
-              <LockIcon />
             </legend>
 
             <p className="field-note mb-4">{t("application.name.emailPrivacy")}</p>

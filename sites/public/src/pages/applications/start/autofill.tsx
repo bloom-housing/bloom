@@ -85,11 +85,11 @@ const Autofill = () => {
   }, [profile])
 
   useEffect(() => {
+    if (isAdvocate) {
+      onSubmit()
+      return
+    }
     if (!previousApplication && initialStateLoaded) {
-      if (isAdvocate) {
-        onSubmit()
-        return
-      }
       if (profile) {
         void applicationsService
           .mostRecentlyCreated({

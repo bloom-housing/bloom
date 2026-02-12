@@ -2,20 +2,14 @@ import React, { useContext, useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { Form, Field, t } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
-import { Alert, Icon } from "@bloom-housing/ui-seeds"
-import {
-  OnClientSide,
-  PageView,
-  pushGtmEvent,
-  AuthContext,
-  CustomIconMap,
-} from "@bloom-housing/shared-helpers"
+import { Alert } from "@bloom-housing/ui-seeds"
+import { OnClientSide, PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
 import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import FormsLayout from "../../../layouts/forms"
 import { isFeatureFlagOn } from "../../../lib/helpers"
 import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
-import ApplicationFormLayout from "../../../layouts/application-form"
+import ApplicationFormLayout, { LockIcon } from "../../../layouts/application-form"
 import styles from "../../../layouts/application-form.module.scss"
 
 const ApplicationAlternateContactName = () => {
@@ -56,16 +50,6 @@ const ApplicationAlternateContactName = () => {
     application.alternateContact.agency = "agency"
     conductor.sync()
   }, [isAdvocate, profile, application, conductor])
-
-  const LockIcon = () => {
-    return (
-      isAdvocate && (
-        <Icon className="ml-2 text-primary" size="md">
-          {CustomIconMap.lockClosed}
-        </Icon>
-      )
-    )
-  }
 
   useEffect(() => {
     pushGtmEvent<PageView>({
@@ -109,8 +93,8 @@ const ApplicationAlternateContactName = () => {
           <CardSection divider={"flush"} className={"border-none"}>
             <fieldset>
               <legend className="text__caps-spaced">
+                <LockIcon locked={isAdvocate} />
                 {t("application.alternateContact.name.alternateContactFormLabel")}
-                <LockIcon />
               </legend>
               <Field
                 id="firstName"
@@ -147,10 +131,10 @@ const ApplicationAlternateContactName = () => {
               {application.alternateContact.type === "caseManager" && (
                 <div className="mt-6">
                   <p className="text__caps-spaced">
+                    <LockIcon locked={isAdvocate} />
                     {enableHousingAdvocate
                       ? t("application.alternateContact.name.caseManagerAgencyFormLabelAdvocate")
                       : t("application.alternateContact.name.caseManagerAgencyFormLabel")}
-                    <LockIcon />
                   </p>
                   <Field
                     id="agency"
