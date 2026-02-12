@@ -236,7 +236,7 @@ export class ListingFilterParams extends BaseFilter {
   @ApiPropertyOptional({
     enum: ParkingTypeEnum,
     enumName: 'ParkingTypeEnum',
-    example: 'carportted',
+    example: 'carport',
   })
   [ListingFilterKeys.parkingType]?: ParkingTypeEnum;
 }
