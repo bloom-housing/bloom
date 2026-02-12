@@ -2,7 +2,7 @@ import React from "react"
 import { render, fireEvent, waitFor, act, screen } from "@testing-library/react"
 import { useRouter } from "next/router"
 import { MessageContext, AuthContext } from "@bloom-housing/shared-helpers"
-import { jurisdiction } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
+import { jurisdiction, user } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import {
   FeatureFlagEnum,
   User,
@@ -112,6 +112,31 @@ describe("Sign In Page", () => {
 
     expect(getByText("Don't have an account?", { selector: "h2" })).toBeInTheDocument()
     expect(getByRole("button", { name: /create account/i })).toBeInTheDocument()
+  })
+
+  it("redirects to the dashboard when a profile is already loaded", async () => {
+    const mockRouter = {
+      query: {},
+      push: jest.fn(),
+    }
+    ;(useRouter as jest.Mock).mockReturnValue(mockRouter)
+
+    render(
+      <AuthContext.Provider
+        value={{
+          profile: { ...user, listings: [], jurisdictions: [] },
+          login: jest.fn(),
+          requestSingleUseCode: jest.fn(),
+          userService: new UserService(),
+        }}
+      >
+        <MessageContext.Provider value={TOAST_MESSAGE}>
+          <SignInComponent jurisdiction={jurisdiction} />
+        </MessageContext.Provider>
+      </AuthContext.Provider>
+    )
+
+    await waitFor(() => expect(mockRouter.push).toHaveBeenCalledWith("/account/dashboard"))
   })
 
   it("shows success toast with user's first name on successful login", async () => {
