@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from "react"
 import ChevronDown from "@heroicons/react/20/solid/ChevronDownIcon"
 import ChevronUp from "@heroicons/react/20/solid/ChevronUpIcon"
 import MenuIcon from "@heroicons/react/20/solid/Bars3Icon"
+import Language from "@heroicons/react/20/solid/LanguageIcon"
 import { Button, Icon, Link } from "@bloom-housing/ui-seeds"
 import { t } from "@bloom-housing/ui-components"
 import LinkComponent from "../components/core/LinkComponent"
@@ -33,6 +34,8 @@ const toggleSubmenu = (
 export interface HeaderLink {
   /** Link URL, will use an anchor element */
   href?: string
+  /** Icon to display alongside the link label */
+  icon?: React.ReactNode
   /** Link label */
   label: string
   /** Button onClick, will use a button element */
@@ -42,6 +45,8 @@ export interface HeaderLink {
 }
 
 interface HeaderLinkProps {
+  /** Additional class name for the link container  */
+  className?: string
   /** Assigned to the submenu, used to determine if a user clicks off of it in order to close it  */
   clickRef: React.RefObject<HTMLUListElement>
   /** The window's current path, used to set aria-current on links  */
@@ -130,7 +135,9 @@ const HeaderLink = (props: HeaderLinkProps) => {
   if (props.link.submenuLinks?.length) {
     // Navigation item contains a submenu
     return (
-      <li className={styles["dropdown-link-container"]}>
+      <li
+        className={`${styles["dropdown-link-container"]} ${props.className ? props.className : ""}`}
+      >
         <button
           className={`${styles["link"]} ${
             openSubMenu ? styles["show-submenu-button"] : styles["hide-submenu-button"]
@@ -169,10 +176,17 @@ const HeaderLink = (props: HeaderLinkProps) => {
           }}
           data-testid={`${props.link.label}`}
         >
-          {props.link.label}
-          <Icon size={"md"} className={styles["dropdown-icon"]}>
-            {openSubMenu ? <ChevronUp /> : <ChevronDown />}
-          </Icon>
+          <span className={styles["link-label"]}>
+            {props.link.icon && (
+              <Icon size={"md"} className={styles["link-icon"]}>
+                {props.link.icon}
+              </Icon>
+            )}
+            {props.link.label}
+            <Icon size={"md"} className={styles["dropdown-icon"]}>
+              {openSubMenu ? <ChevronUp /> : <ChevronDown />}
+            </Icon>
+          </span>
         </button>
         {openSubMenu && (
           <ul
@@ -315,6 +329,7 @@ export type Language = {
 
 interface SiteHeaderProps {
   className?: string
+  languageDropdown?: boolean
   languages: Language[]
   links: HeaderLink[]
   logo?: React.ReactNode
@@ -329,6 +344,7 @@ interface SiteHeaderProps {
 
 export const SiteHeader = (props: SiteHeaderProps) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [mobileLanguageOpen, setMobileLanguageOpen] = useState(false)
   const [openSubmenu, setOpenSubmenu] = useState<string>(null)
   const [currentPath, setCurrentPath] = useState(null)
   const submenuRef = useRef(null)
@@ -349,6 +365,7 @@ export const SiteHeader = (props: SiteHeaderProps) => {
       if ((clickOutsideSubmenu && !mobileRef?.current) || clickOutsideMobile) {
         setOpenSubmenu(null)
         setMobileMenuOpen(false)
+        setMobileLanguageOpen(false)
       }
     }
 
@@ -362,6 +379,36 @@ export const SiteHeader = (props: SiteHeaderProps) => {
     }
   }, [])
 
+  const LanguageDesktopLink = (
+    <HeaderLink
+      className={styles["language-dropdown"]}
+      clickRef={submenuRef}
+      currentPath={currentPath}
+      firstItem={false}
+      key={"language"}
+      index={props.links?.length}
+      lastItem={true}
+      link={{
+        label: props.languages.filter((language) => language.active)[0]?.label || t("t.language"),
+        icon: <Language />,
+        submenuLinks: props.languages
+          .filter((language) => !language.active)
+          .map((language) => {
+            return {
+              label: language.label,
+              onClick: () => {
+                language.onClick()
+                setOpenSubmenu(null)
+              },
+            }
+          }),
+      }}
+      openSubmenu={openSubmenu}
+      setMobileMenuOpen={setMobileMenuOpen}
+      setOpenSubmenu={setOpenSubmenu}
+    />
+  )
+
   return (
     <header
       className={`${styles["site-header-container"]} ${props.className ? props.className : ""}`}
@@ -371,20 +418,22 @@ export const SiteHeader = (props: SiteHeaderProps) => {
           {t("t.skipToMainContent")}
         </a>
       )}
-      <HeadingWrapper className={styles["language-wrapper"]}>
-        <div className={styles["language-container"]}>
-          {props.languages?.map((language, index) => {
-            return (
-              <LanguageButton
-                active={language.active}
-                key={index}
-                label={language.label}
-                onClick={language.onClick}
-              />
-            )
-          })}
-        </div>
-      </HeadingWrapper>
+      {!props.languageDropdown && props.languages?.length > 0 && (
+        <HeadingWrapper className={styles["language-wrapper"]}>
+          <div className={styles["language-container"]}>
+            {props.languages?.map((language, index) => {
+              return (
+                <LanguageButton
+                  active={language.active}
+                  key={index}
+                  label={language.label}
+                  onClick={language.onClick}
+                />
+              )
+            })}
+          </div>
+        </HeadingWrapper>
+      )}
       {props.showMessageBar && (
         <HeadingWrapper className={styles["message-wrapper"]}>
           <div className={styles["message-container"]}>{props.message ?? ""}</div>
@@ -421,7 +470,7 @@ export const SiteHeader = (props: SiteHeaderProps) => {
                     firstItem={index === 0}
                     key={index}
                     index={index}
-                    lastItem={index === props.links?.length - 1}
+                    lastItem={!props.languageDropdown ? index === props.links?.length - 1 : false}
                     link={link}
                     openSubmenu={openSubmenu}
                     setMobileMenuOpen={setMobileMenuOpen}
@@ -429,6 +478,7 @@ export const SiteHeader = (props: SiteHeaderProps) => {
                   />
                 )
               })}
+              {props.languageDropdown && props.languages?.length > 0 ? LanguageDesktopLink : null}
             </ul>
             <div className={`${styles["links-container-mobile"]}`}>
               <Button
@@ -437,6 +487,7 @@ export const SiteHeader = (props: SiteHeaderProps) => {
                 size={"sm"}
                 onClick={(event) => {
                   event.stopPropagation()
+                  setMobileLanguageOpen(false)
                   setMobileMenuOpen(!mobileMenuOpen)
                 }}
                 tailIcon={
@@ -450,6 +501,7 @@ export const SiteHeader = (props: SiteHeaderProps) => {
             </div>
           </div>
         </HeadingWrapper>
+
         {mobileMenuOpen && (
           <div
             className={`${styles["submenu-container"]} ${styles["mobile-submenu-container"]}`}
@@ -480,6 +532,65 @@ export const SiteHeader = (props: SiteHeaderProps) => {
           </div>
         )}
       </nav>
+      {props.languageDropdown && props.languages?.length > 0 && (
+        <button
+          onClick={(event) => {
+            event.stopPropagation()
+            setMobileMenuOpen(false)
+            setMobileLanguageOpen(!mobileLanguageOpen)
+          }}
+          className={`${styles["language-dropdown-button"]} ${
+            mobileLanguageOpen ? styles["language-dropdown-button-open"] : ""
+          }`}
+        >
+          <div className={`${styles["language-container-mobile"]}`}>
+            <Icon size={"md"} className={styles["link-icon"]}>
+              <Language />
+            </Icon>
+
+            {props.languages?.filter((language) => language.active)[0]?.label || t("t.language")}
+            <Icon size={"md"} className={styles["dropdown-icon"]}>
+              {mobileLanguageOpen ? <ChevronUp /> : <ChevronDown />}
+            </Icon>
+          </div>
+        </button>
+      )}
+
+      {mobileLanguageOpen && (
+        <div
+          className={`${styles["submenu-container"]} ${styles["mobile-submenu-container"]}`}
+          ref={mobileRef}
+        >
+          <ul>
+            {props.languages
+              ?.filter((language) => !language.active)
+              .map((link, index) => {
+                return (
+                  <HeaderLink
+                    clickRef={null}
+                    currentPath={currentPath}
+                    firstItem={index === 0}
+                    key={index}
+                    lastItem={
+                      index === props.languages?.filter((language) => !language.active).length - 1
+                    }
+                    index={index}
+                    link={{
+                      label: link.label,
+                      onClick: () => {
+                        setMobileLanguageOpen(false)
+                        link.onClick()
+                      },
+                    }}
+                    openSubmenu={openSubmenu}
+                    setMobileMenuOpen={setMobileMenuOpen}
+                    setOpenSubmenu={setOpenSubmenu}
+                  />
+                )
+              })}
+          </ul>
+        </div>
+      )}
     </header>
   )
 }

@@ -8,6 +8,9 @@ const vietnameseTranslations = require("../locales/vi.json")
 const tagalogTranslations = require("../locales/tl.json")
 const arabicTranslations = require("../locales/ar.json")
 const bengaliTranslations = require("../locales/bn.json")
+const koreanTranslations = require("../locales/ko.json")
+const armenianTranslations = require("../locales/hy.json")
+const farsiTranslations = require("../locales/fa.json")
 
 function main() {
   type TranslationsType = {
@@ -21,6 +24,9 @@ function main() {
     { translationKeys: tagalogTranslations, language: "Tagalog" },
     { translationKeys: arabicTranslations, language: "Arabic" },
     { translationKeys: bengaliTranslations, language: "Bengali" },
+    { translationKeys: koreanTranslations, language: "Korean" },
+    { translationKeys: armenianTranslations, language: "Armenian" },
+    { translationKeys: farsiTranslations, language: "Farsi" },
   ]
 
   const getUnusedForeignKeys = (

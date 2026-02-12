@@ -170,6 +170,28 @@
     }
   }
 
+  .link-icon {
+    margin-inline-end: var(--seeds-s3);
+  }
+
+  .dropdown-link-container.language-dropdown {
+    .link {
+      color: var(--seeds-color-primary-darker);
+      .link-label {
+        background-color: var(--seeds-color-primary-light);
+        padding-block: var(--seeds-s1);
+        margin-block: calc(var(--seeds-s1) * -1);
+        padding-inline: var(--seeds-s2);
+        margin-inline: calc(var(--seeds-s2) * -1);
+        border-radius: var(--seeds-rounded-md);
+        margin-inline-start: auto;
+      }
+    }
+    ul {
+      min-width: 135px;
+    }
+  }
+
   .dropdown-link-container {
     position: relative;
   }
@@ -206,10 +228,6 @@
         color: var(--seeds-color-primary);
       }
     }
-
-    .dropdown-icon {
-      margin-inline-start: var(--seeds-s1);
-    }
   }
 
   @media (--sm-only) {
@@ -221,12 +239,6 @@
     }
     .show-submenu-button {
       border-inline-start: var(--seeds-s1) solid var(--seeds-color-primary);
-    }
-  }
-
-  .mobile-submenu-container {
-    li:not(:last-child) {
-      border-block-end: var(--seeds-border-1) solid var(--seeds-border-color);
     }
   }
 
@@ -274,6 +286,41 @@
         }
       }
     }
+  }
+
+  .mobile-submenu-container {
+    border: 2px solid var(--seeds-color-primary);
+    border-block-start: 0px;
+    background-color: var(--seeds-bg-color-muted);
+    li:not(:last-child) {
+      border-block-end: var(--seeds-border-1) solid var(--seeds-border-color);
+    }
+    .link {
+      padding-block: var(--seeds-s3);
+    }
+  }
+}
+
+.dropdown-icon {
+  margin-inline-start: var(--seeds-s1);
+}
+
+.language-dropdown-button {
+  width: 100%;
+  display: none;
+  @media (--sm-only) {
+    display: flex;
+  }
+  .language-container-mobile {
+    background-color: var(--seeds-color-primary-light);
+    color: var(--seeds-color-primary-darker);
+    padding-block: var(--seeds-s2);
+    padding-inline: var(--seeds-s4);
+    display: flex;
+    align-items: center;
+    width: 100%;
+    justify-content: flex-end;
+    font-weight: var(--seeds-font-weight-semibold);
   }
 }
 
