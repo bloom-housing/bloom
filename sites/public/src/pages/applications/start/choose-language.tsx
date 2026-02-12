@@ -59,7 +59,8 @@ const loadListing = async (
     ...applicationConfig,
     languages: jurisdictionResponse.languages,
     featureFlags: jurisdictionResponse.featureFlags,
-    isAdvocate,
+    isAdvocate:
+      isFeatureFlagOn(jurisdictionResponse, FeatureFlagEnum.enableHousingAdvocate) && isAdvocate,
   }
   stateFunction(conductor.listing)
   context.syncListing(conductor.listing)
