@@ -102,6 +102,16 @@ describe("FilterDrawer", () => {
     expect(screen.getByLabelText("Townhome")).toBeInTheDocument()
     expect(screen.getByRole("checkbox", { name: "Townhome" })).not.toBeChecked()
 
+    expect(screen.getByRole("group", { name: "Parking types" })).toBeInTheDocument()
+    expect(screen.getByLabelText("On street")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "On street" })).not.toBeChecked()
+    expect(screen.getByLabelText("Garage")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Garage" })).not.toBeChecked()
+    expect(screen.getByLabelText("Off street")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Off street" })).not.toBeChecked()
+    expect(screen.getByLabelText("Carport")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Carport" })).not.toBeChecked()
+
     expect(screen.getByRole("group", { name: "Bedroom size" })).toBeInTheDocument()
     expect(screen.getByLabelText("Studio")).toBeInTheDocument()
     expect(screen.getByRole("checkbox", { name: "Studio" })).not.toBeChecked()
@@ -272,6 +282,16 @@ describe("FilterDrawer", () => {
     expect(screen.getByRole("checkbox", { name: "Single family house" })).not.toBeChecked()
     expect(screen.getByLabelText("Townhome")).toBeInTheDocument()
     expect(screen.getByRole("checkbox", { name: "Townhome" })).not.toBeChecked()
+
+    expect(screen.getByRole("group", { name: "Parking types" })).toBeInTheDocument()
+    expect(screen.getByLabelText("On street")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "On street" })).toBeChecked()
+    expect(screen.getByLabelText("Garage")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Garage" })).toBeChecked()
+    expect(screen.getByLabelText("Off street")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Off street" })).not.toBeChecked()
+    expect(screen.getByLabelText("Carport")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Carport" })).not.toBeChecked()
 
     expect(screen.getByRole("group", { name: "Bedroom size" })).toBeInTheDocument()
     expect(screen.getByLabelText("Studio")).toBeInTheDocument()
