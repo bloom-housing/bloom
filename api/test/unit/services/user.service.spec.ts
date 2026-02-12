@@ -14,13 +14,13 @@ import { OrderByEnum } from '../../../src/enums/shared/order-by-enum';
 import { UserViews } from '../../../src/enums/user/view-enum';
 import { ApplicationService } from '../../../src/services/application.service';
 import { CronJobService } from '../../../src/services/cron-job.service';
+import { EmailProvider } from '../../../src/services/email-provider.service';
 import { EmailService } from '../../../src/services/email.service';
 import { GeocodingService } from '../../../src/services/geocoding.service';
 import { GoogleTranslateService } from '../../../src/services/google-translate.service';
 import { JurisdictionService } from '../../../src/services/jurisdiction.service';
 import { PermissionService } from '../../../src/services/permission.service';
 import { PrismaService } from '../../../src/services/prisma.service';
-import { SendGridService } from '../../../src/services/sendgrid.service';
 import { TranslationService } from '../../../src/services/translation.service';
 import { UserService } from '../../../src/services/user.service';
 import { passwordToHash } from '../../../src/utilities/password-helpers';
@@ -72,7 +72,7 @@ describe('Testing user service', () => {
     return toReturn;
   };
 
-  const SendGridServiceMock = {
+  const EmailProviderMock = {
     send: jest.fn(),
   };
   const googleTranslateServiceMock = {
@@ -94,7 +94,7 @@ describe('Testing user service', () => {
         PrismaService,
         EmailService,
         ConfigService,
-        SendGridService,
+        EmailProvider,
         TranslationService,
         JurisdictionService,
         ApplicationService,
@@ -103,8 +103,8 @@ describe('Testing user service', () => {
         CronJobService,
         SnapshotCreateService,
         {
-          provide: SendGridService,
-          useValue: SendGridServiceMock,
+          provide: EmailProvider,
+          useValue: EmailProviderMock,
         },
         {
           provide: GoogleTranslateService,
