@@ -289,7 +289,7 @@
   }
 
   .mobile-submenu-container {
-    border: 2px solid var(--seeds-color-primary);
+    border: 1px solid var(--seeds-color-primary-darker);
     border-block-start: 0px;
     background-color: var(--seeds-bg-color-muted);
     li:not(:last-child) {
