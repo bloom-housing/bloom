@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { Field, Form, PhoneField, Select, t } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
-import { Alert, Icon } from "@bloom-housing/ui-seeds"
+import { Alert } from "@bloom-housing/ui-seeds"
 import {
   OnClientSide,
   PageView,
@@ -10,11 +10,10 @@ import {
   stateKeys,
   AuthContext,
   emailRegex,
-  CustomIconMap,
 } from "@bloom-housing/shared-helpers"
 import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
-import ApplicationFormLayout from "../../../layouts/application-form"
+import ApplicationFormLayout, { LockIcon } from "../../../layouts/application-form"
 import FormsLayout from "../../../layouts/forms"
 import styles from "../../../layouts/application-form.module.scss"
 
@@ -77,16 +76,6 @@ const ApplicationAlternateContactContact = () => {
     conductor.sync()
   }, [isAdvocate, profile, application, conductor])
 
-  const LockIcon = () => {
-    return (
-      isAdvocate && (
-        <Icon className="ml-2 text-primary" size="md">
-          {CustomIconMap.lockClosed}
-        </Icon>
-      )
-    )
-  }
-
   useEffect(() => {
     pushGtmEvent<PageView>({
       event: "pageView",
@@ -130,8 +119,8 @@ const ApplicationAlternateContactContact = () => {
 
           <CardSection divider={"inset"}>
             <label className="text__caps-spaced" htmlFor="phoneNumber">
+              <LockIcon locked={isAdvocate} />
               {t("application.alternateContact.contact.phoneNumberFormLabel")}
-              <LockIcon />
             </label>
             <PhoneField
               id="phoneNumber"
@@ -150,10 +139,10 @@ const ApplicationAlternateContactContact = () => {
             />
           </CardSection>
           <CardSection divider={"inset"}>
-            <h3 className="text__caps-spaced">
+            <label className="text__caps-spaced" htmlFor="emailAddress">
+              <LockIcon locked={isAdvocate} />
               {t("application.alternateContact.contact.emailAddressFormLabel")}
-              <LockIcon />
-            </h3>
+            </label>
             <Field
               id="emailAddress"
               name="emailAddress"
@@ -173,8 +162,8 @@ const ApplicationAlternateContactContact = () => {
           <CardSection divider={"flush"} className={"border-none"}>
             <fieldset>
               <legend className="text__caps-spaced">
+                <LockIcon locked={isAdvocate} />
                 {t("application.alternateContact.contact.contactMailingAddressLabel")}
-                <LockIcon />
               </legend>
               <p className="field-note mb-4">
                 {t("application.alternateContact.contact.contactMailingAddressHelperText")}
