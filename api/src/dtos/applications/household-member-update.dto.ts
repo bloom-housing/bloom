@@ -1,30 +1,30 @@
+import { AddressUpdate } from '../addresses/address-update.dto';
 import { ApiProperty, ApiPropertyOptional, OmitType } from '@nestjs/swagger';
 import { Expose, Type } from 'class-transformer';
-import { ValidateNested } from 'class-validator';
-import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
-import { AddressCreate } from '../addresses/address-create.dto';
 import { HouseholdMember } from './household-member.dto';
+import { IsString, IsUUID, ValidateNested } from 'class-validator';
+import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 
 export class HouseholdMemberUpdate extends OmitType(HouseholdMember, [
   'id',
-  'createdAt',
-  'updatedAt',
   'householdMemberAddress',
   'householdMemberWorkAddress',
 ]) {
   @Expose()
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @IsUUID(4, { groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   id?: string;
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => AddressCreate)
-  @ApiProperty({ type: AddressCreate })
-  householdMemberAddress: AddressCreate;
+  @Type(() => AddressUpdate)
+  @ApiProperty({ type: AddressUpdate })
+  householdMemberAddress: AddressUpdate;
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => AddressCreate)
-  @ApiPropertyOptional({ type: AddressCreate })
-  householdMemberWorkAddress?: AddressCreate;
+  @Type(() => AddressUpdate)
+  @ApiPropertyOptional({ type: AddressUpdate })
+  householdMemberWorkAddress?: AddressUpdate;
 }
