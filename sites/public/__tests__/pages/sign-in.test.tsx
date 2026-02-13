@@ -114,31 +114,6 @@ describe("Sign In Page", () => {
     expect(getByRole("button", { name: /create account/i })).toBeInTheDocument()
   })
 
-  it("redirects to the dashboard when a profile is already loaded", async () => {
-    const mockRouter = {
-      query: {},
-      push: jest.fn(),
-    }
-    ;(useRouter as jest.Mock).mockReturnValue(mockRouter)
-
-    render(
-      <AuthContext.Provider
-        value={{
-          profile: { ...user, listings: [], jurisdictions: [] },
-          login: jest.fn(),
-          requestSingleUseCode: jest.fn(),
-          userService: new UserService(),
-        }}
-      >
-        <MessageContext.Provider value={TOAST_MESSAGE}>
-          <SignInComponent jurisdiction={jurisdiction} />
-        </MessageContext.Provider>
-      </AuthContext.Provider>
-    )
-
-    await waitFor(() => expect(mockRouter.push).toHaveBeenCalledWith("/account/dashboard"))
-  })
-
   it("shows success toast with user's first name on successful login", async () => {
     const mockUser = { firstName: "User", id: "user-123" }
     const mockLogin = jest.fn().mockResolvedValue(mockUser)

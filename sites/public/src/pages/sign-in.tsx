@@ -42,7 +42,7 @@ const SignIn = (props: SignInProps) => {
   const { addToast } = useContext(MessageContext)
   const router = useRouter()
 
-  const { login, requestSingleUseCode, userService, profile } = useContext(AuthContext)
+  const { login, requestSingleUseCode, userService } = useContext(AuthContext)
   const signUpCopy = process.env.showMandatedAccounts
   const reCaptchaEnabled = !!process.env.reCaptchaKey
 
@@ -83,10 +83,6 @@ const SignIn = (props: SignInProps) => {
     reset: resetResendConfirmation,
     isLoading: isResendConfirmationLoading,
   } = useMutate<SuccessDTO>()
-
-  useEffect(() => {
-    if (profile) void router.push("/account/dashboard")
-  }, [profile, router])
 
   useEffect(() => {
     pushGtmEvent<PageView>({
