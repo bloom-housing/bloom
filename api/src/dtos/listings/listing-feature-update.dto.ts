@@ -4,11 +4,7 @@ import { IsString, IsUUID } from 'class-validator';
 import { ListingFeatures } from './listing-feature.dto';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 
-export class ListingFeaturesUpdate extends OmitType(ListingFeatures, [
-  'createdAt',
-  'id',
-  'updatedAt',
-]) {
+export class ListingFeaturesUpdate extends OmitType(ListingFeatures, ['id']) {
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @IsUUID(4, { groups: [ValidationsGroupsEnum.default] })

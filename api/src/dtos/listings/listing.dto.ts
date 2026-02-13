@@ -66,6 +66,7 @@ import { ListingDocuments } from './listing-documents.dto';
 import { ValidateListingImages } from '../../decorators/validate-listing-images.decorator';
 import { ListingFeaturesConfiguration } from '../jurisdictions/listing-features-config.dto';
 import { ListingParkingType } from './listing-parking-type.dto';
+import { Property } from '../properties/property.dto';
 
 class Listing extends AbstractDTO {
   @Expose()
@@ -1207,9 +1208,9 @@ class Listing extends AbstractDTO {
     groups: [ValidationsGroupsEnum.default],
   })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => IdDTO)
-  @ApiPropertyOptional({ type: IdDTO })
-  property?: IdDTO;
+  @Type(() => Property)
+  @ApiPropertyOptional({ type: Property })
+  property?: Property;
 
   // These are meta fields used to validate required form data before publishing listings
   @Expose()

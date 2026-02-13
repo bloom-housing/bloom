@@ -46,6 +46,33 @@ variable "vpc_cidr_range" {
     error_message = "Must be a /22."
   }
 }
+variable "vpc_peering_settings" {
+  type = object({
+    aws_account_number        = number
+    vpc_id                    = string
+    allowed_security_group_id = string
+    allowed_cidr_range        = string
+  })
+  description = "Details of an existing VPC. If not null, a VPC peering request from the Bloom VPC will be created. Processes in the allowed_cidr_range and allowed_security_group_id in the existing VPC will be allowed to send traffic to the Bloom database."
+  default     = null
+  validation {
+    condition = var.vpc_peering_settings == null || (
+      var.vpc_peering_settings.aws_account_number != 0 &&
+      var.vpc_peering_settings.vpc_id != "" &&
+      var.vpc_peering_settings.allowed_security_group_id != "" &&
+      var.vpc_peering_settings.allowed_cidr_range != ""
+    )
+    error_message = "All fields of vpc_peering_settings must be set to non-empty values."
+  }
+  validation {
+    condition = var.vpc_peering_settings == null || (
+      cidrcontains("10.0.0.0/8", var.vpc_peering_settings.allowed_cidr_range) ||
+      cidrcontains("172.16.0.0/12", var.vpc_peering_settings.allowed_cidr_range) ||
+      cidrcontains("192.168.0.0/16", var.vpc_peering_settings.allowed_cidr_range)
+    )
+    error_message = "CIDR range in peered VPC must be in the RFC 1918 private IP space."
+  }
+}
 variable "high_availability" {
   type        = bool
   description = "Deploy the Bloom services in a highly-available manner. If true, a minimum of 2 instances will be running for each Bloom service."

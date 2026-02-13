@@ -111,8 +111,10 @@ graph TB
 2. Validate the AWS managed certificate:
 
    The `tofu apply` command from step 1 will output the DNS records that need to be added for AWS to
-   issue the certificate. Add the two required CNAME records in your DNS provider. For example, the
-   following records need to be added for the following output:
+   issue the certificate. Add the two required CNAME records in your DNS provider then wait for AWS
+   to validate the certificate (can take a few minutes).
+
+   For example, the following records need to be added for the following output:
 
    Type | Name | Content
    ---|---|---
@@ -179,8 +181,10 @@ graph TB
 2. Validate the AWS managed certificate:
 
    The `tofu apply` command from step 1 will output the DNS records that need to be added for AWS to
-   issue the certificate. Add the two required CNAME records in your DNS provider. For example, the
-   following records need to be added for the following output:
+   issue the certificate. Add the two required CNAME records in your DNS provider then wait for AWS
+   to validate the certificate (can take a few minutes).
+
+   For example, the following records need to be added for the following output:
 
    Type | Name | Content
    ---|---|---
@@ -235,6 +239,66 @@ graph TB
 
    aws_lb_dns_name = "bloom-1787634238.us-west-2.elb.amazonaws.com"
    ```
+
+### 3. (Optional) Create a VPC peering connection to an existing VPC
+
+Some users of Bloom have an existing database they will import data from. The bloom_deployment
+module supports creating a VPC peering connection to an existing AWS VPC to support this use-case.
+
+Bloom must be deployed to the same region the existing VPC is in. Processes that import data must
+run in the existing VPC in a known security group. They are expected to connect directly to the
+Bloom database. The CIDR range used for the Bloom VPC must not overlap with any CIDR ranges used by
+the existing VPC. To create the VPC peering:
+
+1. Set the `vpc_peering_settings` parameter in the `module "bloom_deployment"` with:
+    1. The AWS project number where the existing database lives.
+    2. The VPC id where the existing database lives.
+    3. The security group that the data import process will run with.
+    4. The CIDR range for the subnet the data import process will run in.
+2. Apply the Bloom deployment root module:
+
+   ```bash
+   docker run --rm -it ghcr.io/<YOUR_GITHUB_ORG>/bloom/infra:gitsha-SOMESHA <bloom_dev|bloom_prod> apply
+   ```
+
+   The apply will create the peering connection then return an expected error "VPC peering not accepted. Skipping creation of dependent
+   resources".
+
+3. Accept the peering request in the existing VPC:
+   1. Log in to the AWS account with the existing VPC and go to the 'VPC > Peering connections'
+      page. Select the connection and click the 'Actions > Accept request' button.
+    2. Go to the Route table associated with the subnet the data import process will run in. Add
+       a route with the Bloom VPC CIDR range (the default in 10.0.0.0/22) as the Destination and the
+       peering connection as the Target.
+    3. Ensure the security group the data import process will run with can send traffic to the Bloom
+       VPC CIDR range on port 5432.
+4. Apply the Bloom deployment root module again once the peering connection shows 'Active' in both
+   VPCs. The rest of the required resources will be created in the Bloom AWS account.
+5. Run the data migration script. The Bloom database DNS name is output from the apply. For example:
+
+   ```
+   Outputs:
+
+   aws_db_dns_name = "bloom.czkyasygafrh.us-west-2.rds.amazonaws.com"
+   ```
+
+   Connect as either the `master` database user or the `bloom_api` database user.
+
+   - `master`: Log in to the Bloom AWS account and go to the 'Aurora and RDS > Databases > bloom'
+     page. On the 'Connectivity & security' tab, click the 'Secret Manager Copy view in Secrets
+     Manager' button to copy the password. Once the migration script has run, rotate the master user
+     secret.
+
+   - `bloom_api`: Generate a password with `aws rds generate-db-auth-token --hostname
+     <aws_db_dns_name> --port 5432 --username bloom_api`. The password is valid for 15 minutes.
+
+   The Bloom tables are in the `bloom_prisma` database.
+
+6. Once the data has been migrated, remove the VPC peering. Delete the `vpc_peering_settings`
+   parameter in the `module "bloom_deployment"` and apply the root module. Remove the route in the
+   existing VPC subnet route table. Remove the security group egress rule in the existing VPC
+   security group if added.
+
 
 ## After these steps
 

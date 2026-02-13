@@ -3788,12 +3788,6 @@ export interface Address {
   id: string
 
   /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-
-  /**  */
   placeName?: string
 
   /**  */
@@ -3835,12 +3829,6 @@ export interface ListingImage {
 export interface ListingFeatures {
   /**  */
   id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
 
   /**  */
   accessibleHeightToilet?: boolean
@@ -3990,12 +3978,6 @@ export interface ListingFeatures {
 export interface ListingUtilities {
   /**  */
   id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
 
   /**  */
   water?: boolean
@@ -4531,12 +4513,6 @@ export interface ListingNeighborhoodAmenities {
   id: string
 
   /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-
-  /**  */
   groceryStores?: string
 
   /**  */
@@ -4571,6 +4547,32 @@ export interface ListingNeighborhoodAmenities {
 
   /**  */
   busStops?: string
+}
+
+export interface Property {
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  name: string
+
+  /**  */
+  description?: string
+
+  /**  */
+  url?: string
+
+  /**  */
+  urlTitle?: string
+
+  /**  */
+  jurisdictions?: IdDTO
 }
 
 export interface Listing {
@@ -4971,7 +4973,7 @@ export interface Listing {
   lastUpdatedByUser?: IdDTO
 
   /**  */
-  property?: IdDTO
+  property?: Property
 }
 
 export interface PaginationMeta {
@@ -5831,9 +5833,6 @@ export interface ListingCreate {
   lastUpdatedByUser?: IdDTO
 
   /**  */
-  property?: IdDTO
-
-  /**  */
   listingMultiselectQuestions?: IdDTO[]
 
   /**  */
@@ -5865,6 +5864,9 @@ export interface ListingCreate {
 
   /**  */
   requestedChangesUser?: IdDTO
+
+  /**  */
+  property?: IdDTO
 
   /**  */
   units?: UnitCreate[]
@@ -6687,9 +6689,6 @@ export interface ListingUpdate {
   lastUpdatedByUser?: IdDTO
 
   /**  */
-  property?: IdDTO
-
-  /**  */
   listingMultiselectQuestions?: IdDTO[]
 
   /**  */
@@ -6754,17 +6753,14 @@ export interface ListingUpdate {
 
   /**  */
   listingNeighborhoodAmenities?: ListingNeighborhoodAmenitiesUpdate
+
+  /**  */
+  property?: IdDTO
 }
 
 export interface Accessibility {
   /**  */
   id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
 
   /**  */
   mobility?: boolean
@@ -6782,12 +6778,6 @@ export interface Accessibility {
 export interface Demographic {
   /**  */
   id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
 
   /**  */
   ethnicity?: string
@@ -6808,12 +6798,6 @@ export interface Demographic {
 export interface Applicant {
   /**  */
   id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
 
   /**  */
   firstName?: string
@@ -6866,12 +6850,6 @@ export interface AlternateContact {
   id: string
 
   /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-
-  /**  */
   type?: AlternateContactRelationship
 
   /**  */
@@ -6899,12 +6877,6 @@ export interface AlternateContact {
 export interface HouseholdMember {
   /**  */
   id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
 
   /**  */
   orderId?: number
@@ -6951,12 +6923,6 @@ export interface ApplicationSelectionOption {
   id: string
 
   /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-
-  /**  */
   addressHolderAddress: Address
 
   /**  */
@@ -6978,12 +6944,6 @@ export interface ApplicationSelectionOption {
 export interface ApplicationSelection {
   /**  */
   id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
 
   /**  */
   application: IdDTO
@@ -8107,7 +8067,38 @@ export interface PublicAppsViewResponse {
   applicationsCount: PublicAppsCount
 }
 
-export interface AccessibilityUpdate {
+export interface ApplicationSelectionOptionCreate {
+  /**  */
+  addressHolderName?: string
+
+  /**  */
+  addressHolderRelationship?: string
+
+  /**  */
+  isGeocodingVerified?: boolean
+
+  /**  */
+  multiselectOption: IdDTO
+
+  /**  */
+  applicationSelection?: IdDTO
+
+  /**  */
+  addressHolderAddress?: AddressCreate
+}
+
+export interface ApplicationSelectionCreate {
+  /**  */
+  hasOptedOut?: boolean
+
+  /**  */
+  multiselectQuestion: IdDTO
+
+  /**  */
+  selections: ApplicationSelectionOptionCreate[]
+}
+
+export interface AccessibilityCreate {
   /**  */
   mobility?: boolean
 
@@ -8121,7 +8112,7 @@ export interface AccessibilityUpdate {
   other?: boolean
 }
 
-export interface AlternateContactUpdate {
+export interface AlternateContactCreate {
   /**  */
   type?: AlternateContactRelationship
 
@@ -8147,7 +8138,7 @@ export interface AlternateContactUpdate {
   address: AddressCreate
 }
 
-export interface ApplicantUpdate {
+export interface ApplicantCreate {
   /**  */
   firstName?: string
 
@@ -8194,7 +8185,7 @@ export interface ApplicantUpdate {
   applicantWorkAddress: AddressCreate
 }
 
-export interface DemographicUpdate {
+export interface DemographicCreate {
   /**  */
   ethnicity?: string
 
@@ -8211,7 +8202,7 @@ export interface DemographicUpdate {
   race: string[]
 }
 
-export interface HouseholdMemberUpdate {
+export interface HouseholdMemberCreate {
   /**  */
   orderId?: number
 
@@ -8246,44 +8237,10 @@ export interface HouseholdMemberUpdate {
   fullTimeStudent?: YesNoEnum
 
   /**  */
-  id?: string
-
-  /**  */
   householdMemberAddress: AddressCreate
 
   /**  */
   householdMemberWorkAddress?: AddressCreate
-}
-
-export interface ApplicationSelectionOptionCreate {
-  /**  */
-  addressHolderName?: string
-
-  /**  */
-  addressHolderRelationship?: string
-
-  /**  */
-  isGeocodingVerified?: boolean
-
-  /**  */
-  multiselectOption: IdDTO
-
-  /**  */
-  addressHolderAddress?: AddressUpdate
-
-  /**  */
-  applicationSelection?: IdDTO
-}
-
-export interface ApplicationSelectionCreate {
-  /**  */
-  hasOptedOut?: boolean
-
-  /**  */
-  multiselectQuestion: IdDTO
-
-  /**  */
-  selections: ApplicationSelectionOptionCreate[]
 }
 
 export interface ApplicationCreate {
@@ -8366,13 +8323,19 @@ export interface ApplicationCreate {
   isNewest?: boolean
 
   /**  */
-  accessibility: AccessibilityUpdate
+  preferredUnitTypes: IdDTO[]
 
   /**  */
-  alternateContact: AlternateContactUpdate
+  applicationSelections?: ApplicationSelectionCreate[]
 
   /**  */
-  applicant: ApplicantUpdate
+  accessibility: AccessibilityCreate
+
+  /**  */
+  alternateContact: AlternateContactCreate
+
+  /**  */
+  applicant: ApplicantCreate
 
   /**  */
   applicationsMailingAddress: AddressCreate
@@ -8381,16 +8344,106 @@ export interface ApplicationCreate {
   applicationsAlternateAddress: AddressCreate
 
   /**  */
-  demographics: DemographicUpdate
+  demographics: DemographicCreate
 
   /**  */
-  householdMember: HouseholdMemberUpdate[]
+  householdMember: HouseholdMemberCreate[]
+}
+
+export interface AccessibilityUpdate {
+  /**  */
+  mobility?: boolean
 
   /**  */
-  preferredUnitTypes: IdDTO[]
+  vision?: boolean
 
   /**  */
-  applicationSelections?: ApplicationSelectionCreate[]
+  hearing?: boolean
+
+  /**  */
+  other?: boolean
+
+  /**  */
+  id?: string
+}
+
+export interface AlternateContactUpdate {
+  /**  */
+  type?: AlternateContactRelationship
+
+  /**  */
+  otherType?: string
+
+  /**  */
+  firstName?: string
+
+  /**  */
+  lastName?: string
+
+  /**  */
+  agency?: string
+
+  /**  */
+  phoneNumber?: string
+
+  /**  */
+  emailAddress?: string
+
+  /**  */
+  id?: string
+
+  /**  */
+  address: AddressUpdate
+}
+
+export interface ApplicantUpdate {
+  /**  */
+  firstName?: string
+
+  /**  */
+  middleName?: string
+
+  /**  */
+  lastName?: string
+
+  /**  */
+  birthMonth?: string
+
+  /**  */
+  birthDay?: string
+
+  /**  */
+  birthYear?: string
+
+  /**  */
+  emailAddress?: string
+
+  /**  */
+  noEmail?: boolean
+
+  /**  */
+  phoneNumber?: string
+
+  /**  */
+  phoneNumberType?: string
+
+  /**  */
+  noPhone?: boolean
+
+  /**  */
+  workInRegion?: YesNoEnum
+
+  /**  */
+  fullTimeStudent?: YesNoEnum
+
+  /**  */
+  id?: string
+
+  /**  */
+  applicantAddress: AddressUpdate
+
+  /**  */
+  applicantWorkAddress: AddressUpdate
 }
 
 export interface ApplicationSelectionOptionUpdate {
@@ -8431,6 +8484,70 @@ export interface ApplicationSelectionUpdate {
 
   /**  */
   selections: ApplicationSelectionOptionUpdate[]
+}
+
+export interface DemographicUpdate {
+  /**  */
+  ethnicity?: string
+
+  /**  */
+  gender?: string
+
+  /**  */
+  sexualOrientation?: string
+
+  /**  */
+  howDidYouHear: string[]
+
+  /**  */
+  race: string[]
+
+  /**  */
+  id?: string
+}
+
+export interface HouseholdMemberUpdate {
+  /**  */
+  orderId?: number
+
+  /**  */
+  firstName?: string
+
+  /**  */
+  middleName?: string
+
+  /**  */
+  lastName?: string
+
+  /**  */
+  birthMonth?: string
+
+  /**  */
+  birthDay?: string
+
+  /**  */
+  birthYear?: string
+
+  /**  */
+  sameAddress?: YesNoEnum
+
+  /**  */
+  relationship?: HouseholdMemberRelationship
+
+  /**  */
+  workInRegion?: YesNoEnum
+
+  /**  */
+  fullTimeStudent?: YesNoEnum
+
+  /**  */
+  id?: string
+
+  /**  */
+  householdMemberAddress: AddressUpdate
+
+  /**  */
+  householdMemberWorkAddress?: AddressUpdate
 }
 
 export interface ApplicationUpdate {
@@ -8528,10 +8645,10 @@ export interface ApplicationUpdate {
   applicationSelections?: ApplicationSelectionUpdate[]
 
   /**  */
-  applicationsMailingAddress: AddressCreate
+  applicationsMailingAddress: AddressUpdate
 
   /**  */
-  applicationsAlternateAddress: AddressCreate
+  applicationsAlternateAddress: AddressUpdate
 
   /**  */
   demographics: DemographicUpdate
@@ -9111,32 +9228,6 @@ export interface PropertyQueryParams {
 
   /**  */
   filter?: string[]
-}
-
-export interface Property {
-  /**  */
-  id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-
-  /**  */
-  name: string
-
-  /**  */
-  description?: string
-
-  /**  */
-  url?: string
-
-  /**  */
-  urlTitle?: string
-
-  /**  */
-  jurisdictions?: IdDTO
 }
 
 export interface PaginatedProperty {
